@@ -1,0 +1,31 @@
+.custom-menu-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-menu-list {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 100%;
+    left: -132px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 5px 0;
+    list-style: none;
+    width: 200px;
+    z-index: 1000;
+}
+
+.custom-menu-item {
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+    display: block;
+}
+
+.custom-menu-item:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}

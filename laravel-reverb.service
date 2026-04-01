@@ -1,0 +1,14 @@
+[Unit]
+Description=Laravel Reverb WebSocket Server
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+Restart=always
+ExecStart=/usr/bin/php /var/www/laravel_projects/ticket/artisan reverb:start
+WorkingDirectory=/var/www/laravel_projects/ticket
+
+[Install]
+WantedBy=multi-user.target
+

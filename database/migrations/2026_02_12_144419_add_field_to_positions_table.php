@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('positions', function (Blueprint $table) {
+            if (!Schema::hasColumn('positions', 'qualification')) {
+                $table->string('qualification')->nullable()->after('position');
+            }
+
+            if (!Schema::hasColumn('positions', 'price')) {
+                $table->decimal('price', 10, 2)->nullable()->after('qualification');
+            }
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('positions', function (Blueprint $table) {
+            if (Schema::hasColumn('positions', 'price')) {
+                $table->dropColumn('price');
+            }
+
+            if (Schema::hasColumn('positions', 'qualification')) {
+                $table->dropColumn('qualification');
+            }
+        });
+    }
+};

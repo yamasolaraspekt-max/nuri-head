@@ -1,0 +1,139 @@
+.fc-daygrid-event {
+    display: block;
+    width: 100%;
+    background-color: #f8f9fa;
+    /* border-left: 4px solid #0fba7f;    */
+    padding: 2px ;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+
+.fc-daygrid-event:hover {
+    background-color: #e9ecef;
+}
+
+.custom-event {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.custom-event-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.custom-event-status {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #28a745;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+}
+
+.custom-event-status i {
+    margin-right: 5px;
+}
+
+.custom-event-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.custom-event-product {
+       display: flex;
+    justify-content: flex-start;
+    font-size: 0.9rem;
+    color: #007bff;
+}
+
+.custom-event-product-status {
+    font-weight: 600;
+}
+
+.custom-event-time {
+    font-size: 0.8rem;
+    color: #666;
+}.menu-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.custom-dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    z-index: 100;
+    padding: 10px;
+    right: 10px;
+}
+
+.custom-dropdown-menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.custom-dropdown-menu ul li {
+    padding: 8px 15px;
+    cursor: pointer;
+}
+
+.custom-dropdown-menu ul li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Icon animation */
+#bellIcon {
+    animation: zoomAndColorChange 1s ease-in-out infinite;
+}
+
+@keyframes zoomAndColorChange {
+    0% {
+        transform: scale(1);
+        color: inherit;
+    }
+    100% {
+        transform: scale(1.2);
+        color: red;
+    }
+}
+
+/* Change the mouse pointer to a grab when dragging or resizing an event */
+.fc-event {
+    cursor:grab;
+}
+
+.fc-event.fc-resizing,
+.fc-event.fc-dragging {
+    cursor: grab;
+}
+
+/* Ensure resizable handlers are visible */
+.fc-event-resizable:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background-color: #000;
+    cursor: se-resize;
+}
+
+#calendar{
+    background-color: #f2f2f2 !important;
+}
+
+
+ 

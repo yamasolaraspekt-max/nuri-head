@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe InDesign 5.0 SVG Export Plug-in, SVG Library version: 6.0 build 100 -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0pt" y="0pt"
+	 width="41.953pt" height="26.079pt" xml:space="preserve">
+<clipPath id="clp1" fill="none">
+	<path shape-rendering="crispEdges" stroke="#000000" d="M0,0h41.953v26.079H0z"/>
+</clipPath>
+<g clip-path="url(#clp1)" fill="none">
+	<g transform="matrix(0.7071 0.7071 -0.7071 0.7071 26.3699 55.1329)">
+		<path fill="#73B1D4" d="M-28.782-23.241v-4.16h11.188v-2.783h-11.188v-4.16l-9.614,5.552L-28.782-23.241z"/>
+	</g>
+	<g transform="matrix(1 0 0 1 30.7492 48.324)">
+		<path fill="#73B1D4" d="M2.659-31.114v-14.052h-24.58v17.582h19.359l-1.907-1.907h-15.59v-13.768H0.796v10.282L2.659-31.114z"/>
+	</g>
+</g>
+</svg>

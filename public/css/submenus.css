@@ -1,0 +1,354 @@
+
+.active_menu {
+    color: #8dc53d !important;
+    font-weight: bold;
+
+}
+.active_menu .menu-items h6 {
+     color: #8dc53d !important;
+}
+
+ 
+ 
+
+#menu {
+    display: flex ;
+    align-items: center;
+    justify-content: center;
+}
+
+#menu:hover {
+    /* background: var(--success-color); */
+    /* border: 10px solid var(--danger-color); */
+    color: #8fc73e;
+}
+
+ 
+
+
+
+
+#menu:hover h6 {
+    color: #8fc73e;
+}
+.menu-items>h6 {
+    color: #74b2d4;
+    font-size: 1rem;
+    font-weight: bolder; 
+    text-wrap: balance;
+}
+ 
+
+#menu>.menu-items>p {
+    color: white;
+    font-size: 10px;
+    text-wrap: balance;
+}
+
+.menu-items {
+  
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#container_new {
+     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    max-height: 200px;
+    gap: 1px;
+    justify-content: space-evenly;
+}
+
+#container_new::-webkit-scrollbar {
+    display: none;
+}
+
+#container_items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    width: 100%;
+    max-height: 342px;
+    gap: 160px;
+    justify-content: center;
+}
+
+.nav-item {
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 84%;
+    transform: translateX(-50%);
+    background: #f1f1f1;
+    border-bottom: 1px solid #73b1d4;
+    border-top: 1px solid #73b1d4;
+    padding-top: 8px;
+    left: 50%;
+    /* z-index: 500; */
+    border-radius: 6px;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto; 
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.submenu.show {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+.submenu ul {
+    height: 28px !important;
+}
+
+#sub_menu {
+    text-align: center;
+    width: 10vw;
+    height: 10vw;
+    max-width: 50px;
+    max-height: 50px;
+    transition: all 0.3s ease;
+}
+
+#sub_menu:hover {
+    width: 12vw;
+    height: 12vw;
+    max-width: 60px;
+    max-height: 60px;
+}
+
+
+
+.item_lists {
+    font-size: 26px;
+    margin-right: 15px;
+    margin-top: -1px;
+}
+.submenu ul {
+    list-style: none; 
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+
+.submenu {
+        border-radius: 0 !important;
+
+}
+.submenu ul li a {
+    color: #73b1d4 !important;
+}
+.submenu ul li a:hover {
+    color:  #8fc73e !important;
+}
+
+.content-wrapper {
+    margin-top: 0.2rem !important;
+}
+
+
+.mobile_menu{
+    width:30px !important;
+}
+.nav-has-submenu a{
+      color: #ffffff !important;
+}
+.sidebar a {
+      color: #ffffff !important;
+}  
+        /* Mobile Dropdown */
+        #mobile_container_new {
+            display: none;
+            position: relative;
+        }
+        #mobile_container_new button {
+            background: #333;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: #444;
+            width: 100%;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .dropdown-content a {
+            color: white;
+            padding: 12px;
+            display: block;
+            text-decoration: none;
+        }
+        .dropdown-content a:hover {
+            background: #555;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        /* Submenu Styling */
+        .submenu {
+            display: none;
+            list-style: none;
+            padding-left: 20px;
+        }
+        .submenu li {
+            padding: 5px 0;
+        }
+        .has-submenu:hover .submenu {
+            display: block;
+        }
+
+        /* Responsive Handling */
+      /* Default: Show `container_new` and hide `project_menus` */
+  
+        #project_menus {
+            display: none; /* Hidden by default */
+        }
+
+        /* On screens 768px and below (Tablets & Mobiles) */
+        @media (max-width: 768px) {
+            #container_new {
+                display: none; /* Hide on smaller screens */
+            }
+            #project_menus {
+                display: block; /* Show on smaller screens */
+            }
+        }
+
+
+           @media (max-width: 768px) {
+            #pin-button {
+                display: none;
+            }
+             
+        }
+
+
+
+
+.menu-items img {
+    width:25px !important;
+}
+
+
+/* Dropdown Container */
+        .projectmenuDrop {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        /* Dropdown Button */
+        .projectmenuDrop > button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .projectmenuDrop > button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Dropdown Content */
+        .projectmenu-content {
+            display: none;
+            position: absolute;
+            background: white;
+            width: 100%;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            max-height: 0;
+        }
+
+        .projectmenu-content a {
+            display: block;
+            padding: 12px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .projectmenu-content a:hover {
+            background: #f0f0f0;
+        }
+
+        /* Project SubMenu Styling */
+        .projectSubMenu {
+            display: none;
+            background: #f8f9fa;
+            padding-left: 20px;
+            border-left: 3px solid #3498db;
+            transition: max-height 0.3s ease-in-out;
+        }
+
+        .projectSubMenu a {
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        /* Active Classes */
+        .projectmenu-content.show {
+            display: block;
+            max-height: 500px;
+        }
+
+        .projectSubMenu.show {
+            display: block;
+            max-height: 500px;
+        }
+
+        /* Submenu Button */
+        .projectSubMenu-button {
+            background: none;
+            border: none;
+            color: #3498db;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            padding: 12px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .projectSubMenu-button:hover {
+            color: #2980b9;
+        }
+
+
+        .navbar-container .search-input.open {
+    position: absolute;
+    left: -394px;
+    background: #fff;
+    right: 84px;
+    width: 735%;
+    z-index: 1000;
+    border-radius: 0.5rem;
+}

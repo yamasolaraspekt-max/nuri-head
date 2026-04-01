@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('handover_tos', function (Blueprint $table) {
+            $table->id();
+            $table->integer('handover_id');
+            $table->string('handover_to');
+            $table->string('handover_from');
+            $table->string('handover_by')->nullable();
+            $table->date('handover_date');
+            $table->longText('purpose')->nullable();
+            $table->string('status')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('handover_tos');
+    }
+};

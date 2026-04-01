@@ -1,0 +1,88 @@
+  .progress-container {
+            display: flex;
+            width: 100%;
+            position: relative;
+            height: 40px;
+            font-family: Arial, sans-serif;
+        }
+        .progress-item {
+            position: relative;
+            flex: 1;
+            text-align: center;
+            line-height: 40px;
+            color: white;
+            background-color: #2b4290;
+            border: 1px solid #f8f8f8;
+            transition: background-color 0.3s ease;
+            height: 42px;
+            margin-right:10px;
+             
+        }
+        
+        .progress-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -31px;
+            width: 0;
+            height: 13px;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 20px solid #f8f8f8;
+            z-index: 1;
+        }
+        .progress-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -19px;
+            width: 0;
+            height: 13px;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 20px solid #2b4290;
+            z-index: 1;
+        }
+  
+       
+        .progress-item:first-child::before {
+            display: none;
+        }
+        .progress-item:hover {
+            background-color: #f0ad4e;
+        }
+        .progress-item:hover::after {
+            border-left-color: #f0ad4e;
+        }
+        .progress-item:hover::before {
+            border-right-color: #f0ad4e;
+        }
+        .progress-item:nth-child(1) {
+            background-color: #95c11f;
+        }
+        .progress-item:nth-child(1)::after {
+            border-left-color: #95c11f;
+        }
+        .progress-item:nth-child(2) {
+            background-color: #f0ad4e;
+        }
+        .progress-item:nth-child(2)::after {
+            border-left-color: #f0ad4e;
+        }
+      
+        .progress-item:last-child::after {
+            display: none;
+        }
+           /* Ensure horizontal scrolling works on smaller screens */
+    @media (max-width: 768px) {
+        .progress-container {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .progress-item {
+            font-size: 1em;
+            line-height: 1.5em;
+            height: 88px;
+            padding: 10px 20px;
+        }
+    }

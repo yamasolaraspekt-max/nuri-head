@@ -1,0 +1,124 @@
+#notificationSidebar {
+  position: fixed;
+  top: 0;
+  right: -700px;
+  width: 700px;
+  height: 100vh;
+  background-color: #ffffff;
+  z-index: 1051;
+  border-left: 1px solid #ddd;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  transition: right 0.3s ease-in-out;
+}
+
+#notificationSidebar.active {
+  right: 0;
+}
+
+#notificationBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1050;
+  display: none;
+}
+
+#notificationBackdrop.active {
+  display: block;
+}
+
+/* Header */
+#notificationSidebar .sidebar-header {
+  background-color: #343a40;
+  color: #ffffff;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #444;
+}
+
+#notificationSidebar .sidebar-header h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+#notificationSidebar .sidebar-header .close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+/* Cards */
+#notificationSidebar .card {
+  border: none;
+  border-bottom: 1px solid #f1f1f1;
+  background-color: #fff;
+  margin: 0;
+}
+
+#notificationSidebar .card-header {
+  background-color: #f8f9fa;
+  padding: 0;
+}
+
+#notificationSidebar .card-header button {
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #212529;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  border: none;
+}
+
+#notificationSidebar .card-header button:hover {
+  background-color: #e9ecef;
+}
+
+/* Collapse Content */
+#notificationSidebar .collapse {
+  background-color: #ffffff;
+}
+
+#notificationSidebar .list-group {
+  margin-bottom: 0;
+}
+
+#notificationSidebar .list-group-item {
+  font-size: 0.9rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-top: 1px solid #f1f1f1;
+  cursor: pointer;
+}
+
+#notificationSidebar .list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* Unread Notification Highlight */
+#notificationSidebar .list-group-item.font-weight-bold {
+  font-weight: 600;
+  background-color: #eaf4ff;
+}
+
+/* Badge Style */
+#notificationSidebar .badge {
+  font-size: 0.75rem;
+  padding: 0.35em 0.6em;
+  border-radius: 10rem;
+}

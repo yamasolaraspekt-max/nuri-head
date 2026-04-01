@@ -1,0 +1,198 @@
+/* === Kanban Container === */
+.kanban-container {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+}
+
+/* === Kanban Column === */
+.column {
+    background: #f9f9f9;
+    padding: 10px;
+    width: 300px;
+    min-width: 300px;
+    max-height: 85vh;
+    overflow-y: auto;
+    border-right: 2px dashed #d3d3d3;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 6px;
+}
+
+/* === Column Header === */
+.column h3 {
+    text-align: center;
+    background: #95c11f;
+    color: #fff;
+    padding: 10px;
+    margin: -10px -10px 10px;
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 4px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* === Kanban Card === */
+.card {
+    background: #ffffff;
+    padding: 12px 14px;
+    margin: 10px 4px;
+    border-left: 4px solid #74b2d4;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    cursor: grab;
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.01);
+}
+
+/* === Card Header === */
+.card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 13px;
+    color: #333;
+    text-transform: uppercase;
+    position: relative;
+}
+
+/* === Circle Badge in Card Header === */
+.card .circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #b0d5f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 11px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    color: #333;
+}
+
+/* === Selected Card === */
+.card.selected {
+    background-color: #eefcf9;
+    border-left: 5px solid #17a2b8;
+}
+
+/* === Card Actions === */
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 5px;
+}
+
+.card-actions button {
+    background: none;
+    border: none;
+    color: #74b2d4;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.card-actions button:hover {
+    color: #95c11f;
+}
+
+/* === Employee Avatar List === */
+.employeeList {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.employeeList img {
+    border-radius: 50%;
+    height: 26px;
+    width: 26px;
+    object-fit: cover;
+    border: 2px solid #d1d1d1;
+}
+
+/* === Progress Bar === */
+.custom-progress {
+    width: 100%;
+    background-color: #e6e6e6;
+    border-radius: 5px;
+    height: 14px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.custom-progress-bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+    border-radius: 5px;
+    transition: width 0.3s ease-in-out;
+}
+
+/* === Responsive Fixes for Mobile (768px and below) === */
+@media (max-width: 768px) {
+    .kanban-container {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .column {
+        width: 80vw;
+        min-width: 280px;
+        max-width: 320px;
+        border-bottom: none;
+        border-right: 2px dashed #d3d3d3;
+    }
+
+    .card {
+        margin: 8px 0;
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .card .card-header {
+        font-size: 12px;
+    }
+
+    .card .circle {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+    }
+
+    .employeeList img {
+        height: 22px;
+        width: 22px;
+    }
+
+    .custom-progress {
+        height: 12px;
+    }
+
+    .custom-progress-bar {
+        font-size: 9px;
+        padding-right: 3px;
+    }
+}

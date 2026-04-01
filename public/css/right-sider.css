@@ -1,0 +1,14 @@
+
+#notification_icon {
+      display: flex !important;
+    flex-direction: column !important;
+    position: absolute !important;
+    right: -13px;
+    top: 54px;
+}
+
+@media (max-width: 768px) {
+    .present_employee, .absent_employee, .nav-search {
+        display: none !important;
+    }
+}

@@ -1,0 +1,430 @@
+    body {
+        margin: 0;
+    }
+
+    .sb-title {
+        position: relative;
+        top: -12px;
+        font-family: Roboto, sans-serif;
+        font-weight: 500;
+    }
+
+    .sb-title-icon {
+        position: relative;
+        top: -5px;
+    }
+
+    .card-container {
+        display: flex;
+        height: 500px;
+        width: 600px;
+    }
+
+    .panel {
+        background: white;
+        width: 300px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    .half-input-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .half-input {
+        max-width: 120px;
+    }
+
+    .map {
+        width: 300px;
+    }
+
+    h2 {
+        margin: 0;
+        font-family: Roboto, sans-serif;
+    }
+
+    input {
+        height: 30px;
+    }
+
+    input {
+        border: 0;
+        border-bottom: 1px solid black;
+        font-size: 14px;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+    }
+
+    input:focus::placeholder {
+        color: white;
+    }
+
+    .star-rating {
+        font-size: 2rem;
+        cursor: pointer;
+    }
+
+    .star {
+        color: #ccc;
+    }
+
+    .star.selected,
+    .star.hovered {
+        color: #9cc136;
+    }
+
+    body {
+        margin: 0;
+    }
+
+    input[type="text"].textbox {
+        padding-right: 30px;
+        /* Adjust padding to accommodate the pink rectangle */
+        border-radius: 0;
+        /* Ensure border-radius is set to 0 */
+    }
+
+    h4 {
+        font-size: 1rem !important;
+    }
+
+    h3 {
+
+        font-size: 1rem !important;
+    }
+
+    .title {
+        font-size: 30px !important;
+        font-weight: bold !important;
+    }
+
+    /* Customer Product Selection: Start */
+    .product_card {
+        /* border-radius: 71px;
+            background: #f1f1f1 !important; */
+    }
+
+    #product_card_details {
+        background: #bbb8b8 !important;
+        border-radius: 83px;
+        color: white;
+    }
+
+    .products.selected {
+        background: #cfe09b !important;
+        color: white !important;
+        border-radius: 71px;
+    }
+
+    .products.selected #product_card_details {
+        background: #95c11f !important;
+    }
+
+    .products.selected .product_card {
+        /* background: #cfe09b !important; */
+    }
+
+    .heart-icon.selected {
+        color: #95c11f !important;
+        font-size: 25px !important;
+    }
+
+    .btns-primary {
+        background: #cfe09b !important;
+    }
+
+    .menu-button {
+        color: #828282 !important;
+    }
+
+    /* Customer Product Selection: End */
+
+
+
+    .products {
+        cursor: pointer;
+    }
+
+    .sb-title {
+        position: relative;
+        top: -12px;
+        font-family: Roboto, sans-serif;
+        font-weight: 500;
+    }
+
+    .sb-title-icon {
+        position: relative;
+        top: -5px;
+    }
+
+    .card-container {
+        display: flex;
+        height: 500px;
+        width: 600px;
+    }
+
+    .panel {
+        background: white;
+        width: 300px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    .half-input-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .half-input {
+        max-width: 120px;
+    }
+
+    .map {
+        width: 300px;
+    }
+
+    h2 {
+        margin: 0;
+        font-family: Roboto, sans-serif;
+    }
+
+    input {
+        height: 30px;
+    }
+
+    input {
+        border: 0;
+        border-bottom: 1px solid black;
+        font-size: 14px;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+    }
+
+    input:focus::placeholder {
+        color: white;
+    }
+
+    .star-rating {
+        font-size: 2rem;
+        cursor: pointer;
+    }
+
+    .star {
+        color: #ccc;
+    }
+
+    .star.selected,
+    .star.hovered {
+        color: #9cc136;
+    }
+
+    .flex_me {
+        display: flex !important;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
+    .img-flag {
+        width: 60px !important;
+        top: 200px;
+    }
+
+    #roof {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #select2-selection__rendered span {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    .select2-selection {
+        border: 2px !important;
+        width: 100% !important;
+        background: #efeded !important;
+        height: 70px !important;
+    }
+
+    .select2-container .select2-selection--single .select2-selection__arrow {
+        display: none;
+        /* Hides the arrow */
+    }
+
+    .custom-control-label::before,
+    .custom-control-label::after {
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+        top: 0.03rem !important;
+        border: 3px solid #73b1d4 !important;
+        border-radius: 50% !important;
+    }
+
+    .custom-control-label {
+        font-size: 16px !important;
+    }
+
+    .d-inline-block {
+        width: 158px !important;
+    }
+
+    .list-unstyled {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+
+    #submit_form {
+        float: right;
+        position: fixed;
+        top: 819px;
+        right: 9px;
+        z-index: 100;
+    }
+
+    .form-reset {
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+
+    .form-reset input,
+    .form-reset select,
+    .form-reset textarea,
+    .form-reset button {
+        margin: 0;
+        padding: 0;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        background: none;
+        font: inherit;
+        color: inherit;
+    }
+
+    .form-reset input[type="checkbox"],
+    .form-reset input[type="radio"] {
+        display: inline-block;
+        width: auto;
+        height: auto;
+    }
+
+    .form-reset button {
+        background: none;
+        cursor: pointer;
+    }
+
+    .buttons {
+        width: 40px !important;
+        height: 40px !important;
+        padding: 0 !important;
+    }
+
+    .icons {
+        font-size: 30px !important;
+    }
+
+    /* Textbox validation style: start */
+    .textbox-container {
+        position: relative;
+    }
+
+    .indicator {
+        width: 15px;
+        height: 100%;
+        background-color: #e50056;
+        display: inline-block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        display: none;
+    }
+
+    .textbox-container.empty .indicator {
+        display: inline-block;
+    }
+
+    /* Textbox Validation: end */
+
+
+    .progress {
+
+        height: 23px !important;
+        border: 1px solid gray !important;
+        border-radius: 6px !important;
+
+    }
+
+    .progress-bar {
+        width: 60%;
+        height: 23px;
+        border-radius: 0 !important;
+        background-color: #e50056 !important;
+    }
+
+
+    .checklist-container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .checklist-container h4 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .checklist-container .form-check {
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .checklist-container .form-check-label {
+        font-weight: 500;
+        flex-grow: 1;
+        margin-right: 15px;
+    }
+
+    .vs-checkbox-con {
+        display: flex;
+        align-items: center;
+    }
+
+    .vs-checkbox {
+        margin-right: 10px;
+    }
+
+    .vs-icon {
+        font-size: 1.5em;
+    }
+
+    .form-check {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .custom-control-prev-icon,
+    .custom-control-next-icon {
+        background-color: #e50056 !important;
+    }
+    .card-header {
+            border: 0;
+        background: transparent;
+    }

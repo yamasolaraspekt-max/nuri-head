@@ -1,0 +1,68 @@
+  .line-clock {
+
+    width: 104%;
+    height: 42px;
+    border-left: 2px solid #d5d5d5;
+
+    }
+
+ 
+
+.clock .start_container:hover p,
+.clock .start_container:hover i {
+  color: #ea5555 !important; 
+  cursor: pointer;
+}
+
+
+  .clock .start_container{
+      display: flex; 
+    }
+
+    #start_clock {
+      width: 27px;
+    height: 27px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 26px;
+    color: #90c63f;
+    }
+
+  #pause_clock {
+      width: 27px;
+    height: 27px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 26px;
+    color: #90c63f;
+    }
+
+
+    .blinking-icon {
+    animation: blink 1s infinite;
+}
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+}
+
+.clock {
+      margin-right: 20px;
+}
+
+#clock-section {
+  
+ position: absolute;
+  right: 65px;
+  top: 73px;
+  background: white;
+  padding: 12px;
+  border-radius: 20px;
+  box-shadow: 1px 2px 8px gray;
+
+
+}
+
+#clock-section {
+  display:none;
+}

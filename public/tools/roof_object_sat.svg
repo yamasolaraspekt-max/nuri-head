@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1 Basic//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-basic.dtd">
+<svg version="1.1" baseProfile="basic" id="Ebene_1"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="70.9px" height="70.9px"
+	 viewBox="0 0 70.9 70.9" xml:space="preserve">
+<g>
+	<defs>
+		<rect id="SVGID_1_" x="0" y="0" width="70.9" height="70.9"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  overflow="visible"/>
+	</clipPath>
+	<g clip-path="url(#SVGID_2_)">
+		<g transform="matrix(1 0 0 1 299.6308 478.5922)">
+			<path fill="none" stroke="#B1B2B3" stroke-width="2.3287" d="M-267.6-445v24.7"/>
+		</g>
+		<g transform="matrix(1 0 0 1 -69.7319 102.4294)">
+			<path fill="#C5C6C6" d="M102-60.1c6.1,0,11-6.601,11-14.7c0-8.101-4.9-14.7-11-14.7c-6.101,0-11,6.6-11,14.7
+				C91-66.7,95.9-60.1,102-60.1z"/>
+		</g>
+		<image overflow="visible" width="33" height="31" xlink:href="6387CAA8.png"  transform="matrix(1 0 0 1 20.95 12.95)">
+		</image>
+	</g>
+</g>
+</svg>

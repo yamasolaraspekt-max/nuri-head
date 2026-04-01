@@ -1,0 +1,112 @@
+/* Base styles */
+.progress-container {
+    display: flex;
+    width: 100%;
+    position: relative;
+    height: 40px;
+    font-family: Arial, sans-serif;
+}
+
+.progress-item {
+    position: relative;
+    flex: 1;
+    text-align: center;
+    line-height: 40px;
+    color: black;
+    background-color: #e7f3ff;
+    border: 1px solid #ffffff;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    height: 42px;
+    cursor: pointer; /* Indicate clickability */
+}
+
+.progress-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -19px;
+    width: 0;
+    height: 13px;
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+    border-left: 20px solid #e7f3ff;
+    z-index: 1;
+}
+
+.progress-item:hover {
+    background-color: #5cb85c; /* Green on hover */
+}
+
+.progress-item:hover::after {
+    border-left-color: #5cb85c;
+}
+
+.progress-item.active {
+    background-color: #b9d47a;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for active items */
+}
+
+.progress-item.active::after {
+    border-left-color: #b9d47a;
+}
+
+.progress-item.active:hover {
+    background-color: orange; /* Orange on hover over active */
+}
+
+.progress-item.active:hover::after {
+    border-left-color: orange; /* Orange arrow for active hover */
+}
+
+.progress-item:last-child::after {
+    display: none;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .progress-container {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    .progress-item {
+        font-size: 1em;
+        line-height: 1.5em;
+        height: 88px;
+        padding: 10px 20px;
+    }
+}
+
+
+    .button-plan {
+            background: #94c11f;
+            border: 9px solid #cfe09b;
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;  
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bolder;
+            color: white;
+        
+    }
+    .button-plan:hover{
+           background: #55a6d4;
+            border: 9px solid #8bbdda;
+            color: white;
+
+    }
+
+    .table-hover-animation thead th{
+        background-color: #dee9bc !important;
+    }
+     .card-header .btn-link {
+            text-decoration: none;
+            color: inherit;
+        }
+        .icon-toggle {
+            font-size: 1.25rem;
+        }

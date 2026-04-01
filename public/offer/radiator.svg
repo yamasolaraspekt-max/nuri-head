@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>03_radiator@1x</title>
+    <desc>Created with Sketch.</desc>
+    <g id="V05" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="assets:-25.05." transform="translate(-185.000000, -576.000000)">
+            <rect fill="#FFFFFF" x="0" y="0" width="1317" height="2235"></rect>
+            <g id="03_radiator" transform="translate(191.000000, 584.000000)">
+                <g id="Icon_line" transform="translate(0.750000, 1.000000)" stroke="#007bc0" stroke-width="2">
+                    <rect id="Rectangle" x="4.25" y="0" width="30" height="30"></rect>
+                    <line x1="10.25" y1="5" x2="10.25" y2="25" id="Path"></line>
+                    <line x1="16.25" y1="5" x2="16.25" y2="25" id="Path"></line>
+                    <line x1="22.25" y1="5" x2="22.25" y2="25" id="Path"></line>
+                    <line x1="28.25" y1="5" x2="28.25" y2="25" id="Path"></line>
+                    <line x1="0.25" y1="2" x2="0.25" y2="4" id="Path" stroke-linecap="square"></line>
+                </g>
+                <g id="Icon_contour" fill="#007bc0" fill-rule="nonzero">
+                    <path d="M36,32 L4,32 L4,0 L36,0 L36,32 Z M6,30 L34,30 L34,2 L6,2 L6,30 Z M12,6 L10,6 L10,26 L12,26 L12,6 Z M18,6 L16,6 L16,26 L18,26 L18,6 Z M24,6 L22,6 L22,26 L24,26 L24,6 Z M30,6 L28,6 L28,26 L30,26 L30,6 Z M2,2 L0,2 L0,6 L2,6 L2,2 Z" id="Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
