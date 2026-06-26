@@ -15,7 +15,7 @@
 </form>
 
 <script>
-const ACCESS_TOKEN = 'pk.eyJ1Ijoic29sYXItYXNwZWt0IiwiYSI6ImNscmFpaHhuczBmanAyaXAxNjlqdDhlcXYifQ.BQwTUj7_eoMXlg0m2_aVfQ';
+const ACCESS_TOKEN = '{{ config('mapbox.mapbox_token') }}';
 
 const script = document.createElement('script');
 script.src = 'path-to-your-mapbox-address-autofill-script.js';  // Adjust the path to your script
