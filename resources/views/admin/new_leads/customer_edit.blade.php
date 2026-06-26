@@ -1,1679 +1,2237 @@
 @extends('admin.layouts.app')
 
-@section('title') KUNDEN UND OBJEKTDATEN @endsection
-@push('style')
-<!-- Include stylesheet -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" type="text/css" href="{{ asset('css/select2.min.css')}}">
-
-
-<style>
-     
-body {
-    margin: 0;
-}
- 
-.sb-title {
-    position: relative;
-    top: -12px;
-    font-family: Roboto, sans-serif;
-    font-weight: 500;
-}
-
-.sb-title-icon {
-    position: relative;
-    top: -5px;
-}
-
-.card-container {
-    display: flex;
-    height: 500px;
-    width: 600px;
-}
-
-.panel {
-    background: white;
-    width: 300px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.half-input-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.half-input {
-    max-width: 120px;
-}
-
-.map {
-    width: 300px;
-}
-
-h2 {
-    margin: 0;
-    font-family: Roboto, sans-serif;
-}
-
-input {
-    height: 30px;
-}
-
-input {
-    border: 0;
-    border-bottom: 1px solid black;
-    font-size: 14px;
-    font-family: Roboto, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-}
-
-input:focus::placeholder {
-    color: white;
-}
-
- 
-
-body {
-    margin: 0;
-}
-
-input[type="text"].textbox {
-    padding-right: 30px;
-    /* Adjust padding to accommodate the pink rectangle */
-    border-radius: 0;
-    /* Ensure border-radius is set to 0 */
-}
-
-h4 {
-    font-size: 1rem !important;
-}
-
-h3 {
-
-    font-size: 1rem !important;
-}
-
-.title {
-    font-size: 10px !important;
-    font-weight: bold !important;
-}
-
- 
- 
- 
-.selected_heart {
-    background: #95c11f !important;
-    color:white; 
-}
-
-.btns-primary {
-    background: #cfe09b !important;
-}
-
-.menu-button {
-    color: #828282 !important;
-}
-
-/* Customer Product Selection: End */
-
-
-
-.products {
-    cursor: pointer;
-}
-
-.sb-title {
-    position: relative;
-    top: -12px;
-    font-family: Roboto, sans-serif;
-    font-weight: 500;
-}
-
-.sb-title-icon {
-    position: relative;
-    top: -5px;
-}
-
-.card-container {
-    display: flex;
-    height: 500px;
-    width: 600px;
-}
-
-.panel {
-    background: white;
-    width: 300px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.half-input-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.half-input {
-    max-width: 120px;
-}
-
-.map {
-    width: 300px;
-}
-
-h2 {
-    margin: 0;
-    font-family: Roboto, sans-serif;
-}
-
-input {
-    height: 30px;
-}
-
-input {
-    border: 0;
-    border-bottom: 1px solid black;
-    font-size: 14px;
-    font-family: Roboto, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-}
-
-input:focus::placeholder {
-    color: white;
-}
-
-.star-rating {
-    font-size: 2rem;
-    cursor: pointer;
-}
-
-.star {
-    color: #ccc;
-}
-
-.star.selected,
-.star.hovered {
-    color: #9cc136;
-}
-
-.flex_me {
-    display: flex !important;
-    flex-wrap: nowrap;
-    align-items: center;
-}
-
-.img-flag {
-    width: 60px !important;
-    top: 200px;
-}
-
-#roof {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#select2-selection__rendered span {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-}
-
-.select2-selection { 
-    /* width: 100% !important;  */
-    /* height: 40px !important; */
-    background: transparent !important;
-    /* color: white; */
-    box-shadow: none !important;
-    /* border:1px solid #73b1d4 !important; */
-    border:0 !important;
-    padding:0 !important;
-    text-align: left !important;
-    font-size: 11px !important;
-}
-
- 
-
-.custom-control-label::before,
-.custom-control-label::after {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
-    top: 0.03rem !important;
-    border: 3px solid #73b1d4 !important;
-    border-radius: 50% !important;
-}
-
-.custom-control-label {
-    font-size: 16px !important;
-}
-
-.d-inline-block {
-    width: 158px !important;
-}
-
-.list-unstyled {
-    display: flex;
-    flex-wrap: nowrap;
-}
-
-#submit_form {
-    float: right;
-    position: fixed;
-    top: 819px;
-    right: 9px;
-    z-index: 100;
-}
-
-.form-reset {
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-
-.form-reset input,
-.form-reset select,
-.form-reset textarea,
-.form-reset button {
-    margin: 0;
-    padding: 0;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    background: none;
-    font: inherit;
-    color: inherit;
-}
-
-.form-reset input[type="checkbox"],
-.form-reset input[type="radio"] {
-    display: inline-block;
-    width: auto;
-    height: auto;
-}
-
-.form-reset button {
-    background: none;
-    cursor: pointer;
-}
-
-.buttons {
-    width: 25px !important;
-    height: 25px !important;
-    padding: 0 !important;
-}
-
-.icons {
-    font-size: 15px !important;
-}
-
-/* Textbox validation style: start */
-.textbox-container {
-    position: relative;
-}
-
-.indicator {
-    width: 15px;
-    height: 100%;
-    background-color: #e50056;
-    display: inline-block;
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    display: none;
-}
-
-.textbox-container.empty .indicator {
-    display: inline-block;
-}
-
-/* Textbox Validation: end */
-
-
-.progress {
-
-    height: 23px !important;
-    border: 1px solid gray !important;
-    border-radius: 6px !important;
-
-}
-
-.progress-bar {
-    width: 60%;
-    height: 23px;
-    border-radius: 0 !important;
-    background-color: #e50056 !important;
-}
-
-
-.checklist-container {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.checklist-container h4 {
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.checklist-container .form-check {
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.checklist-container .form-check-label {
-    font-weight: 500;
-    flex-grow: 1;
-    margin-right: 15px;
-}
-
-.vs-checkbox-con {
-    display: flex;
-    align-items: center;
-}
-
-.vs-checkbox {
-    margin-right: 10px;
-}
-
-.vs-icon {
-    font-size: 1.5em;
-}
-
-.form-check {
-    display: flex;
-    justify-content: flex-start;
-}
-
-.custom-control-prev-icon,
-.custom-control-next-icon {
-    background-color: #e50056 !important;
-}
-.card-header {
-        border: 0;
-    background: transparent;
-}
- 
-
-.card{
-    width: 100%;
-} 
-span {
-    font-size:13px !important;
-}
- 
-</style>
-
-<style>
-    .card-fixed {
-      width: 200px;
-      height: 100vh;
-      position: sticky;
-      top: 0;
-      background-color: #f1f1f1;
-      overflow-y: auto;
-
-      padding: 10px;
-    }
-    .card-scrollable {
-      flex: 1;
-      height: 100vh;
-      overflow-y: auto;
-      background-color: transparent;
-  
-      padding: 10px;
+@section('title', 'KUNDEN UND OBJEKTDATEN')
+
+@php
+    $safeAlternative = $alternative ?? null;
+
+    $initialAddress = trim(
+        collect([
+            optional($safeAlternative)->street,
+            trim((optional($safeAlternative)->postcode ?? '') . ' ' . (optional($safeAlternative)->city ?? '')),
+        ])->filter()->implode(', ')
+    );
+
+    if (!$initialAddress) {
+        $initialAddress = trim(
+            collect([
+                $leads->street ?? null,
+                trim(($leads->postcode ?? '') . ' ' . ($leads->city ?? '')),
+            ])->filter()->implode(', ')
+        );
     }
 
-     .text {
-            border: 0;
-            border-right: 1px solid gray;
-            border-radius: 0;
-            }
-    .card {
-        box-shadow: 0 0 !important;
-        background: #f1f1f1 !important;
-    }
- 
+    $initialLat = old('latitude', optional($safeAlternative)->lat);
+    $initialLng = old('longitude', optional($safeAlternative)->lon);
 
-      .energy-header:hover {
-        background: #8fc63f  !important;
-    }
-</style>
+    $productRowsCount = is_countable($product_list ?? []) ? count($product_list) : collect($product_list ?? [])->count();
+    $servicesCount = is_countable($services ?? []) ? count($services) : collect($services ?? [])->count();
+    $productsCount = is_countable($products ?? []) ? count($products) : collect($products ?? [])->count();
+    $departmentsCount = is_countable($departments ?? []) ? count($departments) : collect($departments ?? [])->count();
+
+    $googleMapsKey = config('services.google.maps_key', 'AIzaSyByZgrvtQbWdEfRWf9hXRk4ZWiEP2mLFMk');
+@endphp
+
+@once
+    @push('style')
+            <link rel="stylesheet" type="text/css" href="{{ asset('css/select2.min.css') }}">
+
+            <style>
+                :root {
+                    --app-bg:#f3f4f6;
+                    --card-bg:#ffffff;
+                    --text-main:#1f2937;
+                    --text-muted:#6b7280;
+                    --border:#e5e7eb;
+                    --primary:#93c21c;
+                    --primary-hover:#7baa18;
+                    --primary-light:#f4fae7;
+                    --blue:#74b2d4;
+                    --blue-light:#eff6ff;
+                    --success:#10b981;
+                    --success-light:#ecfdf5;
+                    --warning:#f59e0b;
+                    --warning-light:#fffbeb;
+                    --danger:#ef4444;
+                    --danger-light:#fef2f2;
+                    --gray:#6b7280;
+                    --gray-light:#f3f4f6;
+                    --shadow-sm:0 1px 2px 0 rgb(0 0 0 / .05);
+                    --shadow:0 10px 25px -10px rgb(0 0 0 / .25), 0 4px 8px -4px rgb(0 0 0 / .12);
+                    --radius:16px;
+                    --transition:all .2s ease-in-out;
+                }
+
+                .oc-wrap {
+                        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+                    color: var(--text-main);
+                    margin: 20px auto;
+                    padding-right: 79px;
+                }
+
+                .oc-header {
+                    margin-bottom:18px; 
+                }
+
+                .oc-titlebar {
+                    display:flex;
+                    align-items:flex-end;
+                    justify-content:space-between;
+                    gap:12px;
+                    margin-bottom:16px;
+                    flex-wrap:wrap;
+                }
+
+                .oc-title {
+                    font-size:26px;
+                    font-weight:900;
+                    letter-spacing:-.025em;
+                    color:#111827;
+                    text-transform:uppercase;
+                }
+
+                .oc-sub {
+                    font-size:14px;
+                    color:var(--text-muted);
+                    margin-top:4px;
+                }
+
+                .oc-breadcrumb {
+                    display:flex;
+                    align-items:center;
+                    flex-wrap:wrap;
+                    gap:8px;
+                    margin-top:10px;
+                    font-size:13px;
+                    color:var(--text-muted);
+                }
+
+                .oc-breadcrumb a {
+                    color:var(--text-muted);
+                    text-decoration:none;
+                    font-weight:800;
+                }
+
+                .oc-breadcrumb a:hover {
+                    color:var(--text-main);
+                }
+
+                .oc-breadcrumb span.current {
+                    color:#111827;
+                    font-weight:900;
+                }
+
+                .oc-btn {
+                    background:var(--primary);
+                    color:#fff;
+                    border:none;
+                    padding:10px 16px;
+                    border-radius:10px;
+                    font-weight:900;
+                    cursor:pointer;
+                    transition:var(--transition);
+                    display:inline-flex;
+                    align-items:center;
+                    justify-content:center;
+                    gap:8px;
+                    text-decoration:none;
+                    line-height:1.2;
+                }
+
+                .oc-btn:hover {
+                    background:var(--primary-hover);
+                    color:#fff;
+                    text-decoration:none;
+                }
+
+                .oc-btn-soft {
+                    background:#fff;
+                    color:var(--text-main);
+                    border:1px solid var(--border);
+                    padding:10px 14px;
+                    border-radius:10px;
+                    font-weight:800;
+                    cursor:pointer;
+                    transition:var(--transition);
+                    text-decoration:none;
+                    display:inline-flex;
+                    align-items:center;
+                    justify-content:center;
+                    gap:8px;
+                }
+
+                .oc-btn-soft:hover {
+                    background:#f9fafb;
+                    color:var(--text-main);
+                    text-decoration:none;
+                }
+
+                .oc-btn-ic {
+                    width:38px;
+                    height:38px;
+                    border-radius:10px;
+                    border:1px solid var(--border);
+                    background:#fff;
+                    display:inline-flex;
+                    align-items:center;
+                    justify-content:center;
+                    color:var(--text-muted);
+                    cursor:pointer;
+                    transition:var(--transition);
+                    text-decoration:none;
+                    flex:0 0 auto;
+                }
+
+                .oc-btn-ic:hover {
+                    background:#f9fafb;
+                    color:var(--text-main);
+                    border-color:#d1d5db;
+                    text-decoration:none;
+                }
+
+                .oc-btn-ic.primary {
+                    color:var(--primary);
+                    border-color:var(--primary-light);
+                    background:var(--primary-light);
+                }
+
+                .oc-btn-ic.danger {
+                    color:var(--danger);
+                    border-color:rgba(239,68,68,.18);
+                    background:var(--danger-light);
+                }
+
+                .oc-analytics {
+                    display:grid;
+                    grid-template-columns:repeat(4, minmax(0,1fr));
+                    gap:14px;
+                    margin-bottom:18px;
+                }
+
+                @media(max-width:1200px) {
+                    .oc-analytics {
+                        grid-template-columns:repeat(2, minmax(0,1fr));
+                    }
+                }
+
+                @media(max-width:700px) {
+                    .oc-analytics {
+                        grid-template-columns:1fr;
+                    }
+                }
+
+                .oc-stat {
+                    background:var(--card-bg);
+                    border:1px solid var(--border);
+                    border-radius:16px;
+                    padding:16px;
+                    box-shadow:var(--shadow-sm);
+                    display:flex;
+                    align-items:center;
+                    gap:12px;
+                    min-height:92px;
+                }
+
+                .oc-stat-icon {
+                    width:48px;
+                    height:48px;
+                    border-radius:14px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    flex:0 0 auto;
+                }
+
+                .oc-stat-icon.total { background:var(--blue-light); color:var(--blue); }
+                .oc-stat-icon.products { background:var(--success-light); color:var(--success); }
+                .oc-stat-icon.services { background:var(--warning-light); color:#d97706; }
+                .oc-stat-icon.department { background:var(--gray-light); color:var(--gray); }
+
+                .oc-stat-label {
+                    font-size:11px;
+                    font-weight:900;
+                    color:var(--text-muted);
+                    text-transform:uppercase;
+                    letter-spacing:.06em;
+                }
+
+                .oc-stat-value {
+                    font-size:24px;
+                    font-weight:900;
+                    color:#111827;
+                    line-height:1.1;
+                    margin-top:4px;
+                }
+
+                .oc-stat-sub {
+                    font-size:12px;
+                    color:var(--text-muted);
+                    margin-top:4px;
+                }
+
+                .oc-card {
+                    background:#fff;
+                    border:1px solid var(--border);
+                    border-radius:16px;
+                    box-shadow:var(--shadow-sm);
+                    overflow:hidden;
+                    margin-bottom:18px;
+                }
+
+                .oc-card-header {
+                    padding:16px 18px;
+                    border-bottom:1px solid var(--border);
+                    background:#fafafa;
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:12px;
+                    flex-wrap:wrap;
+                }
+
+                .oc-card-title {
+                    margin:0;
+                    font-size:16px;
+                    font-weight:900;
+                    color:#111827;
+                    text-transform:uppercase;
+                }
+
+                .oc-card-sub {
+                    font-size:12px;
+                    color:var(--text-muted);
+                    margin-top:4px;
+                }
+
+                .oc-card-body {
+                    padding:18px;
+                }
+
+                .oc-grid {
+                    display:grid;
+                    grid-template-columns:420px minmax(0,1fr);
+                    gap:18px;
+                    align-items:start;
+                }
+
+                @media(max-width:1200px) {
+                    .oc-grid {
+                        grid-template-columns:1fr;
+                    }
+                }
+
+                .oc-info-list {
+                    display:grid;
+                    grid-template-columns:repeat(2, minmax(0,1fr));
+                    gap:12px;
+                }
+
+                @media(max-width:700px) {
+                    .oc-info-list {
+                        grid-template-columns:1fr;
+                    }
+                }
+
+                .oc-info {
+                    background:#f9fafb;
+                    border:1px solid var(--border);
+                    border-radius:14px;
+                    padding:12px;
+                    min-width:0;
+                }
+
+                .oc-info-label {
+                    font-size:11px;
+                    font-weight:900;
+                    color:var(--text-muted);
+                    text-transform:uppercase;
+                    letter-spacing:.06em;
+                    margin-bottom:5px;
+                }
+
+                .oc-info-value {
+                    font-size:13px;
+                    font-weight:800;
+                    color:#111827;
+                    line-height:1.45;
+                    word-break:break-word;
+                }
+
+                .oc-progress-wrap {
+                    margin-top:16px;
+                    padding:14px;
+                    border:1px solid var(--border);
+                    background:#fff;
+                    border-radius:14px;
+                }
+
+                .oc-progress-top {
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:10px;
+                    margin-bottom:8px;
+                    font-size:12px;
+                    font-weight:900;
+                    color:#111827;
+                }
+
+                .oc-progress {
+                    width:100%;
+                    height:22px;
+                    background:#f3f4f6;
+                    border:1px solid var(--border);
+                    border-radius:999px;
+                    overflow:hidden;
+                }
+
+                .oc-progress-bar {
+                    height:100%;
+                    width:0%;
+                    background:var(--primary);
+                    color:#fff;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    font-size:11px;
+                    font-weight:900;
+                    transition:width .25s ease;
+                }
+
+                .oc-form-grid {
+                    display:grid;
+                    grid-template-columns:repeat(2, minmax(0,1fr));
+                    gap:16px;
+                }
+
+                @media(max-width:900px) {
+                    .oc-form-grid {
+                        grid-template-columns:1fr;
+                    }
+                }
+
+                .oc-form-group {
+                    min-width:0;
+                }
+
+                .oc-label {
+                    display:block;
+                    font-size:12px;
+                    font-weight:900;
+                    color:var(--text-muted);
+                    text-transform:uppercase;
+                    letter-spacing:.05em;
+                    margin-bottom:7px;
+                }
+
+                .oc-input-form,
+                .oc-select,
+                .oc-textarea {
+                    width:100%;
+                    padding:11px 12px;
+                    border-radius:10px;
+                    border:1px solid var(--border);
+                    background:#fff;
+                    color:#111827;
+                    font-size:14px;
+                    outline:none;
+                    transition:var(--transition);
+                    min-height:42px;
+                }
+
+                .oc-textarea {
+                    min-height:104px;
+                    resize:vertical;
+                }
+
+                .oc-input-form:focus,
+                .oc-select:focus,
+                .oc-textarea:focus {
+                    border-color:var(--primary);
+                    box-shadow:0 0 0 3px var(--primary-light);
+                }
+
+                .oc-address-row {
+                    display:flex;
+                    gap:10px;
+                    align-items:center;
+                }
+
+                .oc-address-row .oc-input-form {
+                    flex:1;
+                }
+
+                .oc-map-box {
+                    height:440px;
+                    width:100%;
+                    border-radius:16px;
+                    overflow:hidden;
+                    border:1px solid var(--border);
+                    background:#e5e7eb;
+                    position:relative;
+                }
+
+                #gmp-map {
+                    width:100%;
+                    height:100%;
+                }
+
+                .oc-map-actions {
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:10px;
+                    flex-wrap:wrap;
+                    margin-top:12px;
+                }
+
+                .oc-map-hint {
+                    font-size:12px;
+                    color:var(--text-muted);
+                    line-height:1.45;
+                }
+
+                #screenshot-preview img {
+                    width:100%;
+                    max-height:240px;
+                    object-fit:cover;
+                    border:1px solid var(--border);
+                    border-radius:14px;
+                    margin-top:12px;
+                    background:#fff;
+                }
+
+                .oc-table-wrap {
+                    overflow-x:auto;
+                }
+
+                .oc-table {
+                    width:100%;
+                    border-collapse:separate;
+                    border-spacing:0 10px;
+                    min-width:1100px;
+                }
+
+                .oc-table thead th {
+                    font-size:11px;
+                    font-weight:900;
+                    color:var(--text-muted);
+                    text-transform:uppercase;
+                    letter-spacing:.06em;
+                    padding:8px 10px;
+                    border:0;
+                    white-space:nowrap;
+                    text-align:left;
+                }
+
+                .oc-table tbody tr {
+                    background:#fff;
+                    border:1px solid var(--border);
+                    box-shadow:var(--shadow-sm);
+                }
+
+                .oc-table tbody td {
+                    padding:10px;
+                    border-top:1px solid var(--border);
+                    border-bottom:1px solid var(--border);
+                    vertical-align:middle;
+                    background:#fff;
+                }
+
+                .oc-table tbody td:first-child {
+                    border-left:1px solid var(--border);
+                    border-radius:14px 0 0 14px;
+                }
+
+                .oc-table tbody td:last-child {
+                    border-right:1px solid var(--border);
+                    border-radius:0 14px 14px 0;
+                }
+
+                .select2-container {
+                    width:100% !important;
+                    font-size:13px;
+                }
+
+                .select2-container--default .select2-selection--single {
+                    height:42px;
+                    border:1px solid var(--border);
+                    border-radius:10px;
+                    display:flex;
+                    align-items:center;
+                    background:#fff;
+                }
+
+                .select2-container--default .select2-selection--single .select2-selection__rendered {
+                    line-height:40px;
+                    color:#111827;
+                    padding-left:12px;
+                    padding-right:30px;
+                    font-size:13px;
+                    font-weight:700;
+                }
+
+                .select2-container--default .select2-selection--single .select2-selection__arrow {
+                    height:40px;
+                    right:6px;
+                }
 
 
 
-<style>
-    .wizard-nav {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 30px;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
+                .pac-container {
+                    z-index: 999999 !important;
+                    border-radius: 12px !important;
+                    box-shadow: var(--shadow) !important;
+                    border: 1px solid var(--border) !important;
+                    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+                }
 
-    .wizard-step {
-        flex: 1;
-        text-align: center;
-        padding: 10px 5px;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        color: #666;
-        font-weight: normal;
-    }
+                .pac-container.oc-pac-force-hidden {
+                    display: none !important;
+                    opacity: 0 !important;
+                    visibility: hidden !important;
+                    pointer-events: none !important;
+                }
 
-    .wizard-step img {
-        width: 90px;
-        margin-bottom: 5px;
-        transition: transform 0.3s ease;
-    }
+                .oc-savebar {
+                    position:sticky;
+                    bottom:16px;
+                    z-index:80;
+                    display:flex;
+                    justify-content:flex-end;
+                    pointer-events:none;
+                    margin-top:18px;
+                }
 
-    .wizard-step.active {
-        color: #8fc73e;
-        font-weight: bold;
-    }
+                .oc-savebar-inner {
+                    pointer-events:auto;
+                    background:rgba(255,255,255,.92);
+                    border:1px solid var(--border);
+                    border-radius:16px;
+                    box-shadow:var(--shadow);
+                    padding:10px;
+                    display:flex;
+                    align-items:center;
+                    gap:10px;
+                    backdrop-filter:blur(10px);
+                }
 
-    .wizard-step.active .wizard-progress-count {
-        color: #8fc73e;
-        font-weight: bold;
-    }
+                .oc-toast-wrap {
+                    position:fixed;
+                    right:20px;
+                    bottom:20px;
+                    z-index:9999;
+                    display:flex;
+                    flex-direction:column;
+                    gap:10px;
+                    pointer-events:none;
+                }
 
-    .wizard-step:hover img {
-        transform: scale(1.05);
-    }
+                .oc-toast {
+                    pointer-events:auto;
+                    min-width:280px;
+                    max-width:380px;
+                    background:#fff;
+                    border:1px solid var(--border);
+                    border-radius:14px;
+                    box-shadow:var(--shadow);
+                    padding:12px;
+                    display:flex;
+                    gap:10px;
+                    align-items:flex-start;
+                    animation:ocToastIn .3s cubic-bezier(.175,.885,.32,1.275) forwards;
+                }
 
-    .wizard-progress-count {
-        display: block;
-        font-size: 0.8rem;
-        color: #aaa;
-        font-weight: normal;
-    }
+                @keyframes ocToastIn {
+                    from { transform:translateX(100%); opacity:0; }
+                    to { transform:translateX(0); opacity:1; }
+                }
 
-    .tab-pane .row {
-        padding: 0 20px;
-    }
-</style>
-             
-@endpush
+                .oc-toast-ic {
+                    width:34px;
+                    height:34px;
+                    border-radius:12px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    flex:0 0 auto;
+                }
+
+                .oc-toast-ic.ok { background:var(--success-light); color:var(--success); }
+                .oc-toast-ic.bad { background:var(--danger-light); color:var(--danger); }
+                .oc-toast-ic.warn { background:var(--warning-light); color:#d97706; }
+
+                .oc-toast-ttl {
+                    font-weight:900;
+                    font-size:13px;
+                    margin:0;
+                    color:#111827;
+                }
+
+                .oc-toast-msg {
+                    font-size:12px;
+                    color:#374151;
+                    margin:4px 0 0 0;
+                    line-height:1.4;
+                }
+
+                .oc-toast-x {
+                    margin-left:auto;
+                    background:transparent;
+                    border:none;
+                    cursor:pointer;
+                    color:var(--text-muted);
+                    font-size:18px;
+                    line-height:1;
+                }
+
+                @media(max-width:768px) {
+                    .oc-wrap {
+                        padding:18px;
+                        margin:0;
+                    }
+
+                    .oc-header {
+                        margin-top:70px;
+                    }
+
+                    .oc-title {
+                        font-size:21px;
+                    }
+
+                    .oc-card-body {
+                        padding:14px;
+                    }
+
+                    .oc-map-box {
+                        height:360px;
+                    }
+
+                    .oc-savebar {
+                        bottom:8px;
+                    }
+
+                    .oc-savebar-inner {
+                        width:100%;
+                    }
+
+                    .oc-savebar-inner .oc-btn {
+                        width:100%;
+                    }
+                }
+            </style>
+    @endpush
+@endonce
+
 @section('content')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<!-- BEGIN: Content-->
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
-    <div class="content-wrapper">
-         <div class="content-header row">
-            <div class="content-header-left col-md-9 col-12 mb-2">
-                <div class="row breadcrumbs-top">
-                    <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">KUNDE</h2>
-                        <div class="breadcrumb-wrapper col-12">
-                               <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ url('/employee_dashboard') }}">HOME</a>
-                                </li>
-                                 <li class="breadcrumb-item active"><a href="{{ url('/employee_dashboard') }}">Bearbeiten</a>
-                                </li>
-                            </ol>
+    <div class="oc-wrap">
+        <form
+            class="form form-horizontal custom-file-upload"
+            method="POST"
+            id="customer_form"
+            action="{{ route('new.lead.update') }}"
+            enctype="multipart/form-data"
+        >
+            @csrf
+
+            <input type="hidden" value="{{ $id }}" name="id">
+            <input type="hidden" value="{{ $id }}" name="lead_id">
+            <input type="hidden" name="alternative_id" value="{{ request()->alternative }}">
+
+            <input id="input_name" type="hidden" name="name" value="{{ $leads->name }}">
+            <input id="input_lastname" type="hidden" name="lastname" value="{{ $leads->lastname }}">
+
+            <input type="hidden" name="answer_input" id="answer_input" value="0">
+            <input type="hidden" name="total_number_input" id="total_number_input" value="0">
+
+            <div class="oc-header">
+                <div class="oc-titlebar">
+                    <div>
+                        <div class="oc-title">Kunden und Objektdaten</div>
+                        <div class="oc-sub">
+                            Kundendaten prüfen, Objektadresse exakt auf der Karte setzen und Produkt-/Dienstleistungsdaten bearbeiten.
+                        </div> 
+                         
+                    </div>
+
+                    <div>
+                        <button type="submit" class="oc-btn">
+                            <i class="feather icon-arrow-right"></i>
+                            Nächste
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="oc-analytics">
+                <div class="oc-stat">
+                    <div class="oc-stat-icon total">
+                        <i class="feather icon-user"></i>
+                    </div>
+                    <div>
+                        <div class="oc-stat-label">Kunde</div>
+                        <div class="oc-stat-value">{{ $leads->customer_no ?: '—' }}</div>
+                        <div class="oc-stat-sub">{{ $leads->customer_type ?: 'Kundendaten' }}</div>
+                    </div>
+                </div>
+
+                <div class="oc-stat">
+                    <div class="oc-stat-icon products">
+                        <i class="feather icon-package"></i>
+                    </div>
+                    <div>
+                        <div class="oc-stat-label">Produkte</div>
+                        <div class="oc-stat-value">{{ $productsCount }}</div>
+                        <div class="oc-stat-sub">{{ $productRowsCount }} ausgewählt</div>
+                    </div>
+                </div>
+
+                <div class="oc-stat">
+                    <div class="oc-stat-icon services">
+                        <i class="feather icon-layers"></i>
+                    </div>
+                    <div>
+                        <div class="oc-stat-label">Dienstleistungen</div>
+                        <div class="oc-stat-value">{{ $servicesCount }}</div>
+                        <div class="oc-stat-sub">Verfügbare Services</div>
+                    </div>
+                </div>
+
+                <div class="oc-stat">
+                    <div class="oc-stat-icon department">
+                        <i class="feather icon-briefcase"></i>
+                    </div>
+                    <div>
+                        <div class="oc-stat-label">Abteilungen</div>
+                        <div class="oc-stat-value">{{ $departmentsCount }}</div>
+                        <div class="oc-stat-sub">Für Mitarbeiterzuordnung</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="oc-grid">
+                <div class="oc-card">
+                    <div class="oc-card-header">
+                        <div>
+                            <h3 class="oc-card-title">Kunde</h3>
+                            <div class="oc-card-sub">Basisdaten und Kontaktinformationen</div>
+                        </div>
+                    </div>
+
+                    <div class="oc-card-body">
+                        @php
+$user_name = DB::table('employees')
+    ->join('users', 'users.name', '=', 'employees.id')
+    ->select('employees.name', 'employees.lastname')
+    ->where('users.name', '=', $leads->contact_person)
+    ->first();
+                        @endphp
+
+                        <div class="oc-info-list">
+                            <div class="oc-info">
+                                <div class="oc-info-label">Kunde-Typ</div>
+                                <div class="oc-info-value">{{ $leads->customer_type ?: '—' }}</div>
+                            </div>
+
+                            <div class="oc-info">
+                                <div class="oc-info-label">Kunde-Nr.</div>
+                                <div class="oc-info-value">{{ $leads->customer_no ?: '—' }}</div>
+                            </div>
+
+                            <div class="oc-info">
+                                <div class="oc-info-label">Firma</div>
+                                <div class="oc-info-value">{{ $leads->firma ?: '—' }}</div>
+                            </div>
+
+                            <div class="oc-info">
+                                <div class="oc-info-label">Kunde</div>
+                                <div class="oc-info-value">
+                                    {{ trim(($leads->title ?? '') . ' ' . ($leads->name ?? '') . ' ' . ($leads->lastname ?? '')) ?: '—' }}
+                                </div>
+                            </div>
+
+                            <div class="oc-info" style="grid-column:1 / -1;">
+                                <div class="oc-info-label">Adresse</div>
+                                <div class="oc-info-value">
+                                    {{ trim(($leads->street ?? '') . ' ' . ($leads->postcode ?? '') . ', ' . ($leads->city ?? '')) ?: '—' }}
+                                </div>
+                            </div>
+
+                            <div class="oc-info">
+                                <div class="oc-info-label">Quelle</div>
+                                <div class="oc-info-value">{{ $leads->source ?: '—' }}</div>
+                            </div>
+
+                            <div class="oc-info">
+                                <div class="oc-info-label">Info</div>
+                                <div class="oc-info-value">{{ $leads->info ?: '—' }}</div>
+                            </div>
+
+                            <div class="oc-info" style="grid-column:1 / -1;">
+                                <div class="oc-info-label">Erste Kontaktperson</div>
+                                <div class="oc-info-value">
+                                    @if($user_name)
+                                        {{ $user_name->name }} {{ $user_name->lastname }}
+                                    @else
+                                        —
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="oc-info" style="grid-column:1 / -1;">
+                                <div class="oc-info-label">Kontakt</div>
+                                <div class="oc-info-value">
+                                    <div><i class="feather icon-phone-call"></i> {{ $leads->telephone ?: '—' }}</div>
+                                    <div><i class="feather icon-smartphone"></i> {{ $leads->phone ?: '—' }}</div>
+                                    <div><i class="feather icon-mail"></i> {{ $leads->email ?: '—' }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="oc-progress-wrap">
+                            <div class="oc-progress-top">
+                                <span>Formularfortschritt</span>
+                                <span><span id="answered_number">0</span> / <span id="total_number">0</span></span>
+                            </div>
+
+                            <div class="oc-progress">
+                                <div class="oc-progress-bar" id="progress_bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                    <span id="percent">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="oc-card">
+                    <div class="oc-card-header">
+                        <div>
+                            <h3 class="oc-card-title">Objektdaten</h3>
+                            <div class="oc-card-sub">Adresse, Priorität und Karte</div>
+                        </div>
+                    </div>
+
+                    <div class="oc-card-body">
+                        <div class="oc-form-grid">
+                            <div class="oc-form-group">
+                                <label class="oc-label">Anfrage-Datum</label>
+                                <input
+                                    type="date"
+                                    class="oc-input-form form-element"
+                                    name="request_date"
+                                    value="{{ optional($safeAlternative)->request_date ? \Carbon\Carbon::parse(optional($safeAlternative)->request_date)->format('Y-m-d') : '' }}"
+                                >
+                            </div>
+
+                            <div class="oc-form-group">
+                                <label class="oc-label">Objektname</label>
+                                <input
+                                    type="text"
+                                    class="oc-input-form form-element"
+                                    name="object_name"
+                                    value="{{ old('object_name', optional($safeAlternative)->object_name ?? '') }}"
+                                >
+                            </div>
+
+                            <div class="oc-form-group">
+                                <label class="oc-label">Dringlichkeit</label>
+                                <select name="periority" class="oc-select form-element">
+                                    <option value="Normal" @selected((optional($inquiry ?? null)->periority ?? '') === 'Normal')>Normal</option>
+                                    <option value="Dringend" @selected((optional($inquiry ?? null)->periority ?? '') === 'Dringend')>Dringend</option>
+                                    <option value="Sehr dringend" @selected((optional($inquiry ?? null)->periority ?? '') === 'Sehr dringend')>Sehr dringend</option>
+                                </select>
+                            </div>
+
+                            <div class="oc-form-group">
+                                <label class="oc-label">Betrieb</label>
+                                <select name="branch_id" class="oc-select form-element">
+                                    @foreach ($branch as $br)
+                                        <option
+                                            value="{{ $br->id }}"
+                                            @selected(
+        (isset($inquiry) && (string) $inquiry->branch_id === (string) $br->id)
+        || ((string) ($leads->branch ?? '') === (string) $br->id)
+    )
+                                        >
+                                            {{ $br->branch }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="oc-form-group" style="grid-column:1 / -1;">
+                                <label class="oc-label">STR. / NR. / PLZ. / ORT</label>
+
+                                <div class="oc-address-row">
+                                    <input
+                                        id="full_address"
+                                        type="text"
+                                        class="oc-input-form form-element"
+                                        placeholder="Adresse eingeben und aus Google auswählen"
+                                        name="full_address"
+                                        autocomplete="off"
+                                        value="{{ old('full_address', $initialAddress) }}"
+                                    >
+
+                                    <button type="button" class="oc-btn-ic primary" id="show_map" title="Adresse auf Karte anzeigen">
+                                        <i class="feather icon-map"></i>
+                                    </button>
+                                </div>
+
+                                <input type="hidden" id="latitude-input" name="latitude" value="{{ $initialLat }}">
+                                <input type="hidden" id="longitude-input" name="longitude" value="{{ $initialLng }}">
+                                <input type="hidden" id="elevation-input" name="elevation" value="{{ old('elevation', optional($safeAlternative)->elevation) }}">
+                                <input type="hidden" id="postal_code-input" name="postcode" value="{{ old('postcode', optional($safeAlternative)->postcode) }}">
+                                <input type="hidden" id="locality-input" name="city" value="{{ old('city', optional($safeAlternative)->city) }}">
+                                <input type="hidden" id="street-input" name="street" value="{{ old('street', optional($safeAlternative)->street) }}">
+                                <input type="hidden" id="street-name-input" name="street_name" value="{{ old('street_name', optional($safeAlternative)->street_name ?? '') }}">
+                                <input type="hidden" id="street-number-input" name="street_number" value="{{ old('street_number', optional($safeAlternative)->street_number ?? '') }}">
+                            </div>
+
+                            <div class="oc-form-group" style="grid-column:1 / -1;">
+                                <label class="oc-label">Notizen</label>
+                                <textarea name="note" rows="4" class="oc-textarea form-element">{{ old('note', optional($safeAlternative)->note ?? '') }}</textarea>
+                            </div>
+
+                            <div class="oc-form-group" style="grid-column:1 / -1;">
+                                <label class="oc-label">Karte</label>
+
+                                <div class="oc-map-box">
+                                    <div
+                                        id="gmp-map"
+                                        data-initial-lat="{{ $initialLat }}"
+                                        data-initial-lng="{{ $initialLng }}"
+                                        data-initial-address="{{ $initialAddress }}"
+                                    ></div>
+                                </div>
+
+                                <div class="oc-map-actions">
+                                    <div class="oc-map-hint">
+                                        Adresse auswählen oder den Marker verschieben. Die Karte wird automatisch stark genug zum Haus gezoomt.
+                                    </div>
+
+                                    <button type="button" class="oc-btn-soft" id="screenshot-btn">
+                                        <i class="feather icon-camera"></i>
+                                        Screenshot
+                                    </button>
+                                </div>
+
+                                <div id="screenshot-preview"></div>
+                                <input type="file" class="d-none" id="screenshot-file-input" name="screenshot_file">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-             
-        </div>
-        <div class="content-body">
-            
-            <form class="form form-horizontal custom-file-upload" method="post" id="customer_form"
-                action="{{ action('App\Http\Controllers\NewLeadsController@update') }}"
-                enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" value="{{$id}}" name="id">  
-                <input type="hidden" name="alternative_id" value="{{ request()->alternative }}">
-                @php
-                    $imagePath = 'images/employee/';
-                    $male = 'images/gender/male.png';
-                    $female = 'images/gender/female.png';
-                @endphp 
-            
-            
-                    <div class="row match-height"> 
-                        <div class="col-xl-4 col-sm-4 col-md-4   ">
-                            <div class="row">  
-                                
-                                <input type="hidden" value="{{$id}}" name="lead_id"> 
-                                <div class="card">
-                                    <div class="row p-1 mb-2">
-                                        <div class="col-6"> 
-                                            <div class="col-12 mb-1"> 
-                                                <div class="col-md-12">
-                                                    <span class="font-bold">Kunde-typ: </span> 
-                                                    {{ $leads->customer_type }}
-                                                </div> 
-                                            </div>
 
-                                            <!-- Additional form fields go here -->
-                                            <div class="col-12 mb-1"> 
-                                                <div class="col-md-12">
-                                                    <span class="font-bold">Kunde-Nr:</span> 
-                                                    {{ $leads->customer_no }}
-                                                </div> 
-                                            </div>
-                                            <div class="col-12 mb-1 " id="firma-container"> 
-                                                <div class="col-md-12">
-                                                    <span class="font-bold">Firma:</span> 
-                                                    {{ $leads->firma ?? Null }}
-                                                </div> 
-                                            </div> 
-                                            <div class="col-12 mb-1"> 
-                                                <div class="col-md-12">
-                                                    <span  class="font-bold">Kunde</span> 
-                                                        {{ $leads->title }}   {{ $leads->name }} {{ $leads->lastname }}
-                                                </div> 
-                                            </div>
-
-                                            <input id="input_name" type="hidden" name="name" value="{{ $leads->name }}">
-                                            <input id="input_lastname" type="hidden" name="lastname" value="{{ $leads->lastname }}">
-
-
-
-                                            <div class="col-12 mb-1"> 
-                                                <div class="col-md-12">
-                                                    <span class="font-bold">Adresse:</span> 
-                                                    {{ $leads->street }}  {{ $leads->postcode }},  {{ $leads->city }}
-                                                </div> 
-                                            </div>
-                                            
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="row">
-                                                
-                                                <div class="col-12"> 
-                                                    <div class="col-md-12">
-                                                        <span class="font-bold">Quelle</span> 
-                                                        {{ $leads->source }}
-                                                    </div> 
-                                                </div>
-                                                <div class="col-12"> 
-                                                    <div class="col-md-12">
-                                                        <span class="font-bold">Info:</span> 
-                                                        {{ $leads->info }}
-                                                    </div> 
-                                                </div> 
-                                                @php
-                                                $user_name = DB::table('employees')
-                                                ->join('users', 'users.name', '=', 'employees.id')
-                                                ->select('employees.name', 'employees.lastname')
-                                                ->where('users.name', '=', $leads->contact_person)
-                                                ->first()
-                                                @endphp
-
-                                                @php
-                                                $employee = DB::table('employees')
-                                                ->select('employees.id','employees.name', 'employees.lastname')
-                                                ->get()
-                                                @endphp
-                                                <div class="col-12"> 
-                                                        <div class="col-md-12">
-                                                            <span class="font-bold">erste Kontaktperson</span> 
-                                                            @if($user_name)
-                                                            {{ $user_name->name }} {{ $user_name->lastname }}
-                                                            @else
-                                                            <div class="alert alert-danger" role="alert">
-                                                                <h4 class="alert-heading">Info</h4>
-                                                                <p class="mb-0">
-                                                                    There is no Employee in the system!
-                                                                </p>
-                                                            </div>
-                                                            @endif 
-                                                        </div> 
-                                                </div>
-
-                                                    <div class="col-12 mb-1 p-2"> 
-                                                    <div class="col-md-12">
-                                                        <span class="font-bold">Kontakt:</span> 
-                                                        <p style="margin:0; line-height:1px" class="mb-1"><i class="feather icon-phone-call" ></i> {{ $leads->telephone }}</p>
-                                                        <p style="margin:0; line-height:1px" class="mb-1"><i class="feather icon-smartphone" ></i> {{ $leads->phone }} 
-                                                        <p style="margin:0; line-height:1px"><i class="feather icon-mail" ></i> {{ $leads->email }}</p>
-                                                    </div> 
-                                                </div>  
-                                            </div> 
-                                        </div> 
-                                    </div>
-                                </div> 
-
-                                <div class="col-8 mb-2"> 
-                                    <input type="hidden" name="answer_input" id="answer_input" value="0">
-                                    <input type="hidden" name="total_number_input" id="total_number_input" value="30">
-                                    <label for="" id="answered_number">0</label> / <label for="" id="total_number">30</label>
-                                    
-                                    <div class="progress progress-bar-primary progress-lg">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-                                            <span id="percent">0%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> 
-                        </div>  
-
-                        <div class="col-xl-8 col-sm-8 col-md-8  ">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="col-12">
-                                        <div class="form-group row form-element">
-                                            <div class="col-md-12">
-                                                <span>Anfrage-Datum</span>
-                                            </div>
-                                            <div class="col-md-12 p-0">
-                                            <input type="date" class="form-control text form-element" name="request_date"
-                                                value="{{ $alternative && $alternative->request_date ? \Carbon\Carbon::parse($alternative->request_date)->format('Y-m-d') : '' }}"> 
-                                            </div>
-                                        </div>
-                                    </div>
-                              
-                                    <div class="col-12">
-                                        <div class="form-group row form-element">
-                                            <div class="col-md-12">
-                                                <span>Objektname</span>
-                                            </div>
-                                            <div class="col-md-12 p-0">
-                                                <input type="text" class="form-control text form-element" name="object_name" value="{{ $alternative->object_name ?? '' }}"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-12">
-                                        <div class="form-group row form-element">
-                                            <div class="col-md-12">
-                                                <span>Dringlichkeit</span>
-                                            </div>
-                                            <div class="col-md-12 p-0">
-                                                <select name="periority" id="" class="form-control text form-element"> 
-                                                    <Option value="Normal" @if(isset($inquiry->periority) && $inquiry->periority == 'Normal') selected @endif>Normal</Option>
-                                                    <Option value="Dringend" @if(isset($inquiry->periority) && $inquiry->periority == 'Dringend') selected @endif>Dringend</Option>
-                                                    <Option value="Sehr dringend" @if(isset($inquiry->periority) && $inquiry->periority == 'Sehr dringend') selected @endif>Sehr dringend</Option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                     
-                                    <div class="col-12">
-                                        <div class="form-group row form-element">
-                                            <div class="col-md-12">
-                                                <span>Betrieb</span>
-                                            </div>
-                                            <div class="col-md-12 p-0">
-                                                <select name="branch_id" id="" class="form-control text form-element">  
-                                                    @foreach ($branch as $br)
-                                                    <Option value="{{ $br->id }}"@if(isset($inquiry->branch_id) && $inquiry->branch_id == $br->id) selected @elseif($leads->branch == $br->id) selected  @endif >
-                                                        {{ $br->branch }}
-                                                    </Option> 
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <div class="form-group row form-element">
-                                            <div class="col-md-12">
-                                                <span>STR./NR./PLZ./ORT</span>
-                                            </div>
-                                            <div class="col-md-12 p-0">
-                                                <div class="d-flex align-items-center">
-                                                    <input id="full_address" type="text" class="form-control text form-element"
-                                                        placeholder="Adresse eingeben" name="full_address"
-                                                        value="{{ $alternative->street }}, {{ $alternative->postcode}} {{ $alternative->city }}">                                                    
-                                                    <button type="button" class="btn btn-icon rounded-circle btn-warning ml-1" id="show_map">
-                                                        <i class="feather icon-map"></i>
-                                                    </button>
-                                                </div>
-
-                                                <input type="hidden" id="latitude-input" name="latitude"
-                                                    value="{{ old('latitude', optional($alternative)->lat) }}">
-
-                                                <input type="hidden" id="longitude-input" name="longitude"
-                                                    value="{{ old('longitude', optional($alternative)->lon) }}">
-
-                                                <input type="hidden" id="elevation-input" placeholder="Elevation in meters" name="elevation"
-                                                    value="{{ old('elevation', optional($alternative)->elevation) }}">
-
-                                                <input type="hidden" class="form-control text form-element"
-                                                    value="{{ old('postcode', optional($alternative)->postcode) }}" name="postcode" id="postal_code-input">
-
-                                                <input type="hidden" class="form-control text form-element"
-                                                    value="{{ old('city', optional($alternative)->city) }}" name="city" id="locality-input">
-
-                                                <input type="hidden" class="form-control text form-element"
-                                                    value="{{ old('street', optional($alternative)->street) }}" name="street" id="street-input">
-                                            </div>
-                                        </div>
-                                    </div> 
-
-                                    <div class="col-12">
-                                        <div class="form-group row form-element">
-                                            <div class="col-md-12">
-                                                <span>Notizen</span>
-                                            </div>
-                                            <div class="col-md-12 p-0">
-                                                    <textarea name="note" id="" cols="30" rows="3" class="form-control">
-                                                     {{ old('note',$alternative->note ?? '') }} 
-                                                    </textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                  
-                                </div> 
-                                <div class="col-6">
-                                    <div class="col-12">
-                                        <!-- {{-- Map Start --}} -->
-                                        <div class="card"> 
-                                            <div class="card-content">
-                                                <div class="card-body"> 
-                                                    <div class="map" id="gmp-map" style="width: 100%; position: relative; overflow: hidden; height: 356px;"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- {{-- Map End --}} -->
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <a class="btn btn-outline-primary square mr-1 mb-1 waves-effect waves-light" id="screenshot-btn"  >
-                                            <i class="feather icon-camera"></i> Screenshot
-                                        </a> 
-                                    </div> 
-                                    <div id="screenshot-preview"></div>
-
-                                    <!-- Hidden file input to store the screenshot data -->
-                                    <input type="file" class="d-none" id="screenshot-file-input" name="screenshot_file" class="form-control text" />
-                                </div>
-                            </div>
-                        </div>
-                    </div> 
-                    <div class="row match-height"> 
-                        <div class="col-xl-12 col-sm-12 col-md-12">
-                            <div class="row mt-2">
-                                <div class="card mb-1 shadow-sm">
-                                    <div class="card-header  d-flex justify-content-between align-items-center mb-2">
-                                        <h2 class="content-header-title float-left primary ">PRODUKT & DIENSTLEISTUNG</h2>
-                                        <button type="button" class="btn btn-primary" id="addRow">
-                                            <i class="feather icon-plus"></i> 
-                                        </button>
-                                    </div>
-                                    <div class="card-body p-0">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-hover mb-0" id="inquiryProductTable">
-                                                <thead class="thead-light text-center">
-                                                        <tr>
-                                                            <th>
-                                                                <img src="{{ asset('images/icons/produkt.svg') }}" alt="" style="width: 62px;"> <br>
-                                                                    Produkt</th>
-                                                            <th>
-                                                            <img src="{{ asset('images/icons/dienstleistung.svg') }}" alt="" style="width: 62px;"> <br>
-                                                                Dienstleistung</th>
-                                                            <th>
-                                                                <img src="{{ asset('images/icons/abteilung.svg') }}" alt="" style="width: 62px;"> <br>
-                                                                Abteilung</th>
-                                                            <th>
-                                                                <img src="{{ asset('images/icons/mitarbeiter.svg') }}" alt="" style="width: 62px;"> <br>
-                                                                Innendienst
-                                                            </th>
-                                                            <th>
-                                                                <img src="{{ asset('images/icons/mitarbeiter.svg') }}" alt="" style="width: 62px;"> <br>
-                                                                Außendienst
-                                                            </th>
-
-                                                            <th>
-                                                                <img src="{{ asset('images/icons/kaufinteresse.svg') }}" alt="" style="width: 56px;"> <br>
-                                                                Interesse
-                                                            </th>
-
-                                                            <th>
-                                                                <img src="{{ asset('images/icons/zaehler.svg') }}" alt="" style="width: 56px;"> <br>
-                                                                    Realisierungszeit
-                                                            </th>
-                                                            <th>
-                                                            <img src="{{ asset('images/icons/aktion.svg') }}" alt="" style="width: 56px;"> <br>
-                                                                Aktion</th>
-                                                        </tr>
-                                                    </thead>
-                                                <tbody>
-                                                    <!-- JS will append rows here -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  
-                
-                <div class="col-md-2" style=" position: fixed; top: 85%; right: 20px; ">  
-                    <div id="status-icon" class="text-right mt-3">
-                        <!-- Status icon will be displayed here -->
+            <div class="oc-card">
+                <div class="oc-card-header">
+                    <div>
+                        <h3 class="oc-card-title">Produkt & Dienstleistung</h3>
+                        <div class="oc-card-sub">Produkte, Services, Abteilungen und zuständige Mitarbeiter verwalten</div>
                     </div>
-                    <div class="button">
-                        <button type="submit" class="btn btn-primary round mr-1 mb-1 waves-effect waves-light float-right"><i class="feather icon-arrow-right"></i> Nächste</button>
-                    </div>     
-                </div> 
-            </form> 
-        </div>
-    </div>
-</div> 
-<!-- END: Content-->
 
+                    <button type="button" class="oc-btn" id="addRow">
+                        <i class="feather icon-plus"></i>
+                        Zeile hinzufügen
+                    </button>
+                </div>
+
+                <div class="oc-card-body">
+                    <div class="oc-table-wrap">
+                        <table class="oc-table" id="inquiryProductTable">
+                            <thead>
+                                <tr>
+                                    <th>Produkt</th>
+                                    <th>Dienstleistung</th>
+                                    <th>Abteilung</th>
+                                    <th>Innendienst</th>
+                                    <th>Außendienst</th>
+                                    <th>Interesse</th>
+                                    <th>Realisierungszeit</th>
+                                    <th style="text-align:center;">Aktion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{-- JS appends rows --}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="oc-savebar">
+                <div class="oc-savebar-inner">
+                    <div id="status-icon"></div>
+                    <button type="submit" class="oc-btn">
+                        <i class="feather icon-arrow-right"></i>
+                        Speichern & Nächste
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="oc-toast-wrap" id="toast-wrap"></div>
 @endsection
+
+@once
+    @push('scripts')
+        <script src="{{ asset('js/select2.min.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
+
+        <script>
+            window.ocToast = function(kind, title, msg) {
+                const wrap = document.getElementById('toast-wrap');
+                if (!wrap) return;
+
+                const icons = {
+                    ok: `<i class="feather icon-check"></i>`,
+                    bad: `<i class="feather icon-x"></i>`,
+                    warn: `<i class="feather icon-alert-triangle"></i>`
+                };
+
+                const el = document.createElement('div');
+                el.className = 'oc-toast';
+                el.innerHTML = `
+                    <div class="oc-toast-ic ${kind}">${icons[kind] || icons.ok}</div>
+                    <div style="flex:1;">
+                        <p class="oc-toast-ttl">${title || ''}</p>
+                        <p class="oc-toast-msg">${msg || ''}</p>
+                    </div>
+                    <button class="oc-toast-x" type="button" onclick="this.parentElement.remove()">×</button>
+                `;
+
+                wrap.appendChild(el);
+
+                if (window.feather) {
+                    window.feather.replace();
+                }
+
+                setTimeout(() => {
+                    try { el.remove(); } catch(e) {}
+                }, 4500);
+            };
+
+            window.ocEscape = function(value) {
+                return String(value ?? '')
+                    .replaceAll('&', '&amp;')
+                    .replaceAll('<', '&lt;')
+                    .replaceAll('>', '&gt;')
+                    .replaceAll('"', '&quot;')
+                    .replaceAll("'", '&#039;');
+            };
+
+            @if(session('update_msg') || session('updated_msg'))
+                ocToast('ok', 'Aktualisiert', @json(session('update_msg') ?? session('updated_msg')));
+            @endif
+
+            @if(session('save_msg'))
+                ocToast('ok', 'Gespeichert', @json(session('save_msg')));
+            @endif
+
+            @if(session('delete_msg'))
+                ocToast('bad', 'Gelöscht', @json(session('delete_msg')));
+            @endif
+        </script>
+
+        <script>
+        "use strict";
+
+        const STAGE           = @json($stage ?? 'lead');
+        const IMG_PRODUCT     = "{{ asset('images/articles') }}";
+        const IMG_EMPLOYEE    = "{{ asset('images/employee') }}";
+        const CSRF_TOKEN      = @json(csrf_token());
+        const ROUTE_EMPLOYEES = @json(route('inquiry.department.employees'));
+
+        $(function () {
+            if (typeof $.fn.select2 === 'undefined') {
+                console.error('Select2 is not loaded.');
+                ocToast('bad', 'Select2 fehlt', 'Bitte select2.min.js korrekt laden.');
+                return;
+            }
+
+            let rowIndex = 0;
+
+            const SERVICES     = @json($services ?? []);
+            const PRODUCTS     = @json($products ?? []);
+            const DEPARTMENTS  = @json($departments ?? []);
+            const PRODUCT_LIST = @json($product_list ?? []);
+
+            function translateService(s) {
+                if (!s) return '';
+                const key = String(s).toLowerCase();
+                const map = {
+                    complete:    'Komplettlösung',
+                    montage:     'Montage',
+                    product:     'Produkt',
+                    plan:        'Planung',
+                    maintenance: 'Wartung',
+                    repair:      'Reparatur',
+                    emergency:   'Notdienst',
+                    others:      'Sonstiges'
+                };
+                return map[key] || s;
+            }
+
+            function inqFormatEmployee(opt) {
+                if (!opt.id) return opt.text;
+
+                const $el = $(opt.element);
+                const imgFile = $el.data('img');
+                const img = imgFile ? `${IMG_EMPLOYEE}/${imgFile}` : '';
+                const pos = $el.data('positions') || '';
+
+                return `
+                    <div style="display:flex;align-items:center;gap:9px;">
+                        ${
+                            img
+                                ? `<img src="${ocEscape(img)}" style="width:34px;height:34px;object-fit:cover;border-radius:999px;border:1px solid #e5e7eb;">`
+                                : `<div style="width:34px;height:34px;border-radius:999px;background:#e5e7eb;border:1px solid #d1d5db;"></div>`
+                        }
+                        <div style="min-width:0;">
+                            <div style="font-weight:800;font-size:13px;color:#111827;">${ocEscape(opt.text)}</div>
+                            <div style="font-size:11px;color:#6b7280;">${ocEscape(pos)}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function inqFormatEmployeeSelection(opt) {
+                return opt && opt.text ? opt.text : '';
+            }
+
+            function addRow(item = {}) {
+                rowIndex++;
+                const idx = rowIndex;
+
+                const productOptions = PRODUCTS.map(p => `
+                    <option
+                        value="${ocEscape(p.id)}"
+                        data-img="${ocEscape(p.image || '')}"
+                        ${String(p.id) === String(item.product_id || '') ? 'selected' : ''}
+                    >
+                        ${ocEscape(p.article_group)}
+                    </option>
+                `).join('');
+
+                const serviceOptions = item.product_id
+                    ? SERVICES
+                        .filter(s => String(s.product_id) === String(item.product_id))
+                        .map(s => `
+                            <option value="${ocEscape(s.id)}" ${String(s.id) === String(item.service_id || '') ? 'selected' : ''}>
+                                ${ocEscape(translateService(s.phase_section))}
+                            </option>
+                        `).join('')
+                    : '';
+
+                const departmentOptions = DEPARTMENTS.map(d => `
+                    <option value="${ocEscape(d.id)}" ${String(d.id) === String(item.department_id || '') ? 'selected' : ''}>
+                        ${ocEscape(d.department_name)}
+                    </option>
+                `).join('');
+
+                const employeeOption = item.employee_id
+                    ? `
+                        <option
+                            value="${ocEscape(item.employee_id)}"
+                            selected
+                            data-img="${ocEscape(item.eimage || '')}"
+                            data-positions="${ocEscape(item.positions || '')}"
+                        >
+                            ${ocEscape((item.ename || '') + ' ' + (item.elastname || ''))}
+                        </option>
+                    `
+                    : '<option value="">Innendienst wählen</option>';
+
+                const fieldEmployeeOption = item.field_employee
+                    ? `
+                        <option
+                            value="${ocEscape(item.field_employee)}"
+                            selected
+                            data-img="${ocEscape(item.feimage || '')}"
+                            data-positions="${ocEscape(item.fepositions || '')}"
+                        >
+                            ${ocEscape((item.fename || '') + ' ' + (item.felastname || ''))}
+                        </option>
+                    `
+                    : '<option value="">Außendienst wählen</option>';
+
+                const html = `
+                    <tr data-index="${idx}">
+                        <td>
+                            <select class="product-select form-element" name="product_id[]" data-index="${idx}" style="width:100%">
+                                <option value="">Produkt wählen</option>
+                                ${productOptions}
+                            </select>
+                        </td>
+
+                        <td>
+                            <select class="service-select form-element" name="service_id[]" data-index="${idx}" style="width:100%">
+                                <option value="">Dienstleistung wählen</option>
+                                ${serviceOptions}
+                            </select>
+                        </td>
+
+                        <td>
+                            <select class="department-select form-element" name="department_id[]" data-index="${idx}" style="width:100%">
+                                <option value="">Abteilung wählen</option>
+                                ${departmentOptions}
+                            </select>
+                        </td>
+
+                        <td>
+                            <select class="employee-select form-element" name="employee_id[]" data-index="${idx}" style="width:100%">
+                                ${employeeOption}
+                            </select>
+                        </td>
+
+                        <td>
+                            <select class="field-employee-select form-element" name="field_employee[]" data-index="${idx}" style="width:100%">
+                                ${fieldEmployeeOption}
+                            </select>
+                        </td>
+
+                        <td>
+                            <select class="interest-select form-element" name="interest[]" data-index="${idx}" style="width:100%">
+                                <option value="intent" ${item.interest === 'intent' ? 'selected' : ''}>Kaufabsicht</option>
+                                <option value="interest" ${item.interest === 'interest' ? 'selected' : ''}>Kaufinteresse</option>
+                                <option value="option" ${item.interest === 'option' ? 'selected' : ''}>Kaufoption</option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <select class="realization-select form-element" name="realization_time[]" data-index="${idx}" style="width:100%">
+                                <option value="">Bitte auswählen</option>
+                                <option value="soon" ${item.realization_time === 'soon' ? 'selected' : ''}>Schnellstmöglich</option>
+                                <option value="3" ${String(item.realization_time || '') === '3' ? 'selected' : ''}>3 Monate</option>
+                                <option value="6" ${String(item.realization_time || '') === '6' ? 'selected' : ''}>6 Monate</option>
+                                <option value="other" ${item.realization_time === 'other' ? 'selected' : ''}>Sonstiges</option>
+                            </select>
+                        </td>
+
+                        <td style="text-align:center;">
+                            <button type="button" class="oc-btn-ic danger removeRow" title="Entfernen">
+                                <i class="feather icon-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+
+                $('#inquiryProductTable tbody').append(html);
+                initSelects(idx, item);
+
+                if (window.feather) {
+                    window.feather.replace();
+                }
+
+                window.updateInquiryProgress?.();
+            }
+
+            function initSelects(idx, item = {}) {
+                const $product  = $(`.product-select[data-index="${idx}"]`);
+                const $service  = $(`.service-select[data-index="${idx}"]`);
+                const $dept     = $(`.department-select[data-index="${idx}"]`);
+                const $emp      = $(`.employee-select[data-index="${idx}"]`);
+                const $field    = $(`.field-employee-select[data-index="${idx}"]`);
+                const $interest = $(`.interest-select[data-index="${idx}"]`);
+                const $real     = $(`.realization-select[data-index="${idx}"]`);
+
+                [$product, $service, $dept, $interest, $real].forEach($s => {
+                    if ($s.length && !$s.data('select2')) {
+                        $s.select2({
+                            width: '100%',
+                            dropdownAutoWidth: true
+                        });
+                    }
+                });
+
+                [$emp, $field].forEach($s => {
+                    if ($s.length && !$s.data('select2')) {
+                        $s.select2({
+                            width: '100%',
+                            templateResult: inqFormatEmployee,
+                            templateSelection: inqFormatEmployeeSelection,
+                            escapeMarkup: m => m
+                        });
+                    }
+                });
+
+                $product.off('change.inquiry').on('change.inquiry', () => {
+                    loadServices(idx);
+                    loadEmployees(idx, { autofill: true });
+                    window.updateInquiryProgress?.();
+                });
+
+                $service.off('change.inquiry').on('change.inquiry', () => {
+                    loadEmployees(idx, { autofill: false });
+                    window.updateInquiryProgress?.();
+                });
+
+                $dept.off('change.inquiry').on('change.inquiry', () => {
+                    loadEmployees(idx, { autofill: false });
+                    window.updateInquiryProgress?.();
+                });
+
+                [$emp, $field, $interest, $real].forEach($s => {
+                    $s.off('change.progress').on('change.progress', () => window.updateInquiryProgress?.());
+                });
+
+                if (item && item.product_id) {
+                    loadEmployees(idx, {
+                        autofill: false,
+                        presetEmployeeId: item.employee_id || null,
+                        presetFieldEmployeeId: item.field_employee || null
+                    });
+                }
+            }
+
+            function loadServices(idx) {
+                const pid = $(`.product-select[data-index="${idx}"]`).val();
+                const $srv = $(`.service-select[data-index="${idx}"]`);
+
+                $srv.empty().append('<option value="">Dienstleistung wählen</option>');
+
+                if (!pid) {
+                    $srv.val('').trigger('change.select2');
+                    return;
+                }
+
+                const list = SERVICES.filter(s => String(s.product_id) === String(pid));
+
+                list.forEach(s => {
+                    $srv.append(`<option value="${ocEscape(s.id)}">${ocEscape(translateService(s.phase_section))}</option>`);
+                });
+
+                if (list.length === 1) {
+                    $srv.val(String(list[0].id)).trigger('change.select2');
+                } else {
+                    $srv.val('').trigger('change.select2');
+                }
+            }
+
+            function loadEmployees(idx, options = {}) {
+                const autofill = options.autofill === true;
+
+                const $product = $(`.product-select[data-index="${idx}"]`);
+                const $dept    = $(`.department-select[data-index="${idx}"]`);
+                const $service = $(`.service-select[data-index="${idx}"]`);
+                const $emp     = $(`.employee-select[data-index="${idx}"]`);
+                const $field   = $(`.field-employee-select[data-index="${idx}"]`);
+
+                const pid = $product.val();
+                let did = $dept.val();
+                let sid = $service.val();
+
+                if (!pid) {
+                    clearEmployees($emp, $field);
+                    return;
+                }
+
+                const prevEmpId = options.presetEmployeeId || $emp.val();
+                const prevFieldId = options.presetFieldEmployeeId || $field.val();
+
+                $.post(ROUTE_EMPLOYEES, {
+                    _token: CSRF_TOKEN,
+                    product_id: pid,
+                    department_id: did || null,
+                    service_id: sid || null,
+                    stage: STAGE
+                })
+                .done(res => {
+                    let internalEmployees = [];
+                    let externalEmployees = [];
+
+                    if (Array.isArray(res)) {
+                        internalEmployees = res;
+                        externalEmployees = res;
+                    } else {
+                        if (autofill && !did && res.department_id) {
+                            did = res.department_id;
+                            $dept.val(String(did)).trigger('change.select2');
+                        }
+
+                        if (autofill && !sid && res.service_id) {
+                            sid = res.service_id;
+
+                            if (!$service.find(`option[value="${sid}"]`).length) {
+                                loadServices(idx);
+                            }
+
+                            if ($service.find(`option[value="${sid}"]`).length) {
+                                $service.val(String(sid)).trigger('change.select2');
+                            }
+                        }
+
+                        internalEmployees = res.internal_employees || [];
+                        externalEmployees = res.external_employees || [];
+                    }
+
+                    updateEmployeeSelect($emp, internalEmployees, 'Innendienst wählen', prevEmpId);
+                    updateEmployeeSelect($field, externalEmployees, 'Außendienst wählen', prevFieldId);
+                })
+                .fail(xhr => {
+                    console.error('loadEmployees error:', xhr);
+                    clearEmployees($emp, $field);
+                    ocToast('bad', 'Fehler', 'Mitarbeiter konnten nicht geladen werden.');
+                });
+            }
+
+            function updateEmployeeSelect($select, employees, placeholder, prevId) {
+                $select.empty().append(`<option value="">${ocEscape(placeholder)}</option>`);
+
+                employees.forEach(emp => {
+                    const positions = Array.isArray(emp.positions) ? emp.positions.join(', ') : (emp.positions || '');
+
+                    $select.append(`
+                        <option
+                            value="${ocEscape(emp.id)}"
+                            data-img="${ocEscape(emp.image || '')}"
+                            data-positions="${ocEscape(positions)}"
+                        >
+                            ${ocEscape((emp.name || '') + ' ' + (emp.lastname || ''))}
+                        </option>
+                    `);
+                });
+
+                if (prevId && $select.find(`option[value="${prevId}"]`).length) {
+                    $select.val(String(prevId)).trigger('change.select2');
+                } else {
+                    $select.val('').trigger('change.select2');
+                }
+
+                window.updateInquiryProgress?.();
+            }
+
+            function clearEmployees($emp, $field) {
+                updateEmployeeSelect($emp, [], 'Innendienst wählen', null);
+                updateEmployeeSelect($field, [], 'Außendienst wählen', null);
+            }
+
+            $(document).on('click', '#addRow', function(e) {
+                e.preventDefault();
+                addRow();
+            });
+
+            $(document).on('click', '.removeRow', function() {
+                const $row = $(this).closest('tr');
+                $row.find('select').each(function() {
+                    if ($(this).data('select2')) {
+                        $(this).select2('destroy');
+                    }
+                });
+
+                $row.fadeOut(120, function() {
+                    $(this).remove();
+                    window.updateInquiryProgress?.();
+                });
+            });
+
+            if (Array.isArray(PRODUCT_LIST) && PRODUCT_LIST.length) {
+                PRODUCT_LIST.forEach(item => addRow(item));
+            } else {
+                addRow();
+            }
+        });
+        </script>
+
+        <script>
+        "use strict";
+
+        (function () {
+            let map = null;
+            let marker = null;
+            let autocomplete = null;
+            let geocoder = null;
+            let elevationService = null;
+            let streetView = null;
+
+            const HOUSE_ZOOM = 20;
+            const FALLBACK_CENTER = { lat: 51.5136, lng: 7.4653 };
+
+            window.initMayarGoogleMap = function () {
+                const mapEl = document.getElementById('gmp-map');
+                const addressInput = document.getElementById('full_address');
+
+                if (!mapEl || !window.google || !google.maps) {
+                    return;
+                }
+
+                geocoder = new google.maps.Geocoder();
+                elevationService = new google.maps.ElevationService();
+
+                const savedLat = parseFloat(document.getElementById('latitude-input')?.value || mapEl.dataset.initialLat || '');
+                const savedLng = parseFloat(document.getElementById('longitude-input')?.value || mapEl.dataset.initialLng || '');
+                const savedAddress = addressInput?.value?.trim() || mapEl.dataset.initialAddress || '';
+
+                const hasSavedCoords = Number.isFinite(savedLat) && Number.isFinite(savedLng);
+                const initialCenter = hasSavedCoords ? { lat: savedLat, lng: savedLng } : FALLBACK_CENTER;
+
+                map = new google.maps.Map(mapEl, {
+                    center: initialCenter,
+                    zoom: hasSavedCoords ? HOUSE_ZOOM : 13,
+                    mapTypeId: google.maps.MapTypeId.SATELLITE,
+                    tilt: 0,
+                    streetViewControl: true,
+                    mapTypeControl: true,
+                    fullscreenControl: true,
+                    zoomControl: true,
+                    gestureHandling: 'greedy'
+                });
+
+                streetView = map.getStreetView();
+
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: initialCenter,
+                    draggable: true,
+                    visible: hasSavedCoords,
+                    title: 'Objektstandort'
+                });
+
+                if (hasSavedCoords) {
+                    setLatLng(savedLat, savedLng);
+                    getElevation(savedLat, savedLng);
+                    map.panTo(initialCenter);
+                    map.setZoom(HOUSE_ZOOM);
+                } else if (savedAddress) {
+                    geocodeAddress(savedAddress, true);
+                }
+
+                if (addressInput && google.maps.places) {
+                    autocomplete = new google.maps.places.Autocomplete(addressInput, {
+                        fields: ['address_components', 'formatted_address', 'geometry', 'name'],
+                        types: ['address'],
+                        componentRestrictions: { country: ['de'] }
+                    });
+
+                    autocomplete.addListener('place_changed', function () {
+                        const place = autocomplete.getPlace();
+
+                        if (!place || !place.geometry || !place.geometry.location) {
+                            closeGoogleAutocomplete(addressInput);
+                            geocodeAddress(addressInput.value, true);
+                            return;
+                        }
+
+                        applyPlace(place);
+
+                        setTimeout(function () {
+                            closeGoogleAutocomplete(addressInput);
+                        }, 80);
+                    });
+
+                    addressInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            closeGoogleAutocomplete(addressInput);
+                            geocodeAddress(addressInput.value, true);
+                        }
+                    });
+                }
+
+                marker.addListener('dragend', function () {
+                    const pos = marker.getPosition();
+                    if (!pos) return;
+
+                    const lat = pos.lat();
+                    const lng = pos.lng();
+
+                    setLatLng(lat, lng);
+                    getElevation(lat, lng);
+                    reverseGeocode(lat, lng);
+                    map.panTo({ lat, lng });
+                    map.setZoom(HOUSE_ZOOM);
+                });
+
+                document.getElementById('show_map')?.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const currentAddress = addressInput?.value?.trim();
+
+                    if (currentAddress) {
+                        geocodeAddress(currentAddress, true);
+                        return;
+                    }
+
+                    const lat = parseFloat(document.getElementById('latitude-input')?.value || '');
+                    const lng = parseFloat(document.getElementById('longitude-input')?.value || '');
+
+                    if (Number.isFinite(lat) && Number.isFinite(lng)) {
+                        setMapLocation(lat, lng, HOUSE_ZOOM, true);
+                    } else {
+                        ocToast('warn', 'Adresse fehlt', 'Bitte geben Sie zuerst eine Objektadresse ein.');
+                    }
+                });
+
+                document.getElementById('screenshot-btn')?.addEventListener('click', takeMapScreenshot);
+
+                setTimeout(() => {
+                    google.maps.event.trigger(map, 'resize');
+                    if (hasSavedCoords) {
+                        map.setCenter(initialCenter);
+                        map.setZoom(HOUSE_ZOOM);
+                    }
+                }, 300);
+            };
+
+            function applyPlace(place) {
+                const location = place.geometry.location;
+                const lat = location.lat();
+                const lng = location.lng();
+
+                const components = extractAddressComponents(place.address_components || [], place.formatted_address || '');
+                const street = [components.route, components.street_number].filter(Boolean).join(' ').trim();
+                const city = components.locality || components.postal_town || components.administrative_area_level_3 || components.administrative_area_level_2 || '';
+                const postcode = components.postal_code || '';
+
+                setValue('street-input', street || components.route);
+                setValue('street-name-input', components.route);
+                setValue('street-number-input', components.street_number);
+                setValue('locality-input', city);
+                setValue('postal_code-input', postcode);
+
+                if (place.formatted_address) {
+                    setValue('full_address', place.formatted_address);
+                } else if (street || postcode || city) {
+                    setValue('full_address', [street, [postcode, city].filter(Boolean).join(' ')].filter(Boolean).join(', '));
+                }
+
+                setMapLocation(lat, lng, HOUSE_ZOOM, true);
+                getElevation(lat, lng);
+                checkCustomer(street, postcode, lat, lng);
+                window.updateInquiryProgress?.();
+            }
+
+            function closeGoogleAutocomplete(input) {
+                if (!input) return;
+
+                input.blur();
+
+                setTimeout(function () {
+                    try { document.activeElement?.blur(); } catch (e) {}
+
+                    document.querySelectorAll('.pac-container').forEach(function (container) {
+                        container.classList.add('oc-pac-force-hidden');
+                        container.style.display = 'none';
+                        container.style.opacity = '0';
+                        container.style.visibility = 'hidden';
+                        container.style.pointerEvents = 'none';
+                    });
+                }, 40);
+
+                setTimeout(function () {
+                    document.querySelectorAll('.pac-container.oc-pac-force-hidden').forEach(function (container) {
+                        container.remove();
+                    });
+                }, 220);
+            }
+
+            function geocodeAddress(address, notifyIfFailed = false) {
+                if (!address || !geocoder) return;
+
+                geocoder.geocode(
+                    {
+                        address: address,
+                        componentRestrictions: { country: 'DE' }
+                    },
+                    function(results, status) {
+                        if (status !== 'OK' || !results || !results.length) {
+                            if (notifyIfFailed) {
+                                ocToast('warn', 'Adresse nicht gefunden', 'Bitte prüfen Sie die Adresse oder wählen Sie sie aus der Google-Liste.');
+                            }
+                            return;
+                        }
+
+                        const result = results[0];
+                        const location = result.geometry.location;
+                        const lat = location.lat();
+                        const lng = location.lng();
+
+                        const components = extractAddressComponents(result.address_components || [], result.formatted_address || address);
+                        const street = [components.route, components.street_number].filter(Boolean).join(' ').trim();
+                        const city = components.locality || components.postal_town || components.administrative_area_level_3 || components.administrative_area_level_2 || '';
+                        const postcode = components.postal_code || '';
+
+                        setValue('full_address', result.formatted_address || address);
+                        setValue('street-input', street || components.route);
+                        setValue('street-name-input', components.route);
+                        setValue('street-number-input', components.street_number);
+                        setValue('locality-input', city);
+                        setValue('postal_code-input', postcode);
+
+                        setMapLocation(lat, lng, HOUSE_ZOOM, true);
+                        getElevation(lat, lng);
+                        checkCustomer(street, postcode, lat, lng);
+                        window.updateInquiryProgress?.();
+                    }
+                );
+            }
+
+            function reverseGeocode(lat, lng) {
+                if (!geocoder) return;
+
+                geocoder.geocode(
+                    { location: { lat, lng } },
+                    function(results, status) {
+                        if (status !== 'OK' || !results || !results.length) return;
+
+                        const result = results[0];
+                        const components = extractAddressComponents(result.address_components || [], result.formatted_address || '');
+                        const street = [components.route, components.street_number].filter(Boolean).join(' ').trim();
+                        const city = components.locality || components.postal_town || components.administrative_area_level_3 || components.administrative_area_level_2 || '';
+                        const postcode = components.postal_code || '';
+
+                        setValue('full_address', result.formatted_address || '');
+                        setValue('street-input', street || components.route);
+                        setValue('street-name-input', components.route);
+                        setValue('street-number-input', components.street_number);
+                        setValue('locality-input', city);
+                        setValue('postal_code-input', postcode);
+
+                        checkCustomer(street, postcode, lat, lng);
+                        window.updateInquiryProgress?.();
+                    }
+                );
+            }
+
+            function setMapLocation(lat, lng, zoom = HOUSE_ZOOM, showMarker = true) {
+                if (!map || !marker) return;
+
+                const position = { lat, lng };
+
+                marker.setPosition(position);
+                marker.setVisible(showMarker);
+                map.setCenter(position);
+                map.setZoom(zoom);
+
+                setLatLng(lat, lng);
+            }
+
+            function setLatLng(lat, lng) {
+                setValue('latitude-input', Number(lat).toFixed(8));
+                setValue('longitude-input', Number(lng).toFixed(8));
+            }
+
+            function extractAddressComponents(components, formattedAddress = '') {
+                const data = {
+                    street_number: '',
+                    route: '',
+                    locality: '',
+                    postal_town: '',
+                    postal_code: '',
+                    administrative_area_level_3: '',
+                    administrative_area_level_2: ''
+                };
+
+                components.forEach(component => {
+                    const types = component.types || [];
+                    const longName = component.long_name || '';
+
+                    if (types.includes('street_number') && !data.street_number) data.street_number = longName;
+                    if (types.includes('route') && !data.route) data.route = longName;
+                    if (types.includes('locality') && !data.locality) data.locality = longName;
+                    if (types.includes('postal_town') && !data.postal_town) data.postal_town = longName;
+                    if (types.includes('postal_code') && !data.postal_code) data.postal_code = longName;
+                    if (types.includes('administrative_area_level_3') && !data.administrative_area_level_3) data.administrative_area_level_3 = longName;
+                    if (types.includes('administrative_area_level_2') && !data.administrative_area_level_2) data.administrative_area_level_2 = longName;
+                });
+
+                if ((!data.route || !data.street_number) && formattedAddress) {
+                    const fallback = splitStreetFromFormattedAddress(formattedAddress);
+                    data.route = data.route || fallback.route;
+                    data.street_number = data.street_number || fallback.street_number;
+                }
+
+                return data;
+            }
+
+            function splitStreetFromFormattedAddress(formattedAddress) {
+                const firstPart = String(formattedAddress || '').split(',')[0].trim();
+                const match = firstPart.match(/^(.+?)\s+(\d+[a-zA-Z]?(?:[\/\-]\d+[a-zA-Z]?)?)$/);
+
+                if (!match) {
+                    return { route: firstPart, street_number: '' };
+                }
+
+                return { route: match[1].trim(), street_number: match[2].trim() };
+            }
+
+            function setValue(id, value) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.value = value ?? '';
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                    el.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            }
+
+            function getElevation(lat, lng) {
+                if (!elevationService) return;
+
+                elevationService.getElevationForLocations(
+                    { locations: [{ lat, lng }] },
+                    function(results, status) {
+                        if (status === 'OK' && results && results[0]) {
+                            setValue('elevation-input', Number(results[0].elevation).toFixed(2));
+                        }
+                    }
+                );
+            }
+
+            function checkCustomer(street, postcode, lat, lng) {
+                const name = document.getElementById('input_name')?.value || 'Unbekannt';
+                const lastname = document.getElementById('input_lastname')?.value || 'Unbekannt';
+
+                if (!street || !postcode || !Number.isFinite(Number(lat)) || !Number.isFinite(Number(lng))) {
+                    return;
+                }
+
+                const url = `/check-new-leads/${encodeURIComponent(name)}/${encodeURIComponent(lastname)}/${encodeURIComponent(street)}/${encodeURIComponent(postcode)}/${encodeURIComponent(lat)}/${encodeURIComponent(lng)}`;
+
+                fetch(url, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(r => r.ok ? r.json() : null)
+                .then(data => {
+                    if (!data || !['duplicate', 'neighbor'].includes(data.status)) return;
+
+                    let tableHTML = `
+                        <div style="overflow-x:auto;">
+                            <table class="table table-bordered mt-3">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Nachname</th>
+                                        <th>Adresse</th>
+                                        <th>Radius (km)</th>
+                                        <th>Aktion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    `;
+
+                    if (data.status === 'duplicate' && data.customer) {
+                        const c = data.customer;
+                        tableHTML += `
+                            <tr>
+                                <td>${ocEscape(c.name)}</td>
+                                <td>${ocEscape(c.lastname)}</td>
+                                <td>${ocEscape(c.full_address)}</td>
+                                <td>—</td>
+                                <td><a href="/new_lead_profile/${encodeURIComponent(c.id)}" class="btn btn-primary">Profil anzeigen</a></td>
+                            </tr>
+                        `;
+                    }
+
+                    if (data.status === 'neighbor' && Array.isArray(data.customers)) {
+                        data.customers.forEach(c => {
+                            tableHTML += `
+                                <tr>
+                                    <td>${ocEscape(c.name)}</td>
+                                    <td>${ocEscape(c.lastname)}</td>
+                                    <td>${ocEscape(c.full_address)}</td>
+                                    <td>${Number(c.distance || 0).toFixed(2)}</td>
+                                    <td><a href="/new_lead_profile/${encodeURIComponent(c.id)}" class="btn btn-primary">Profil anzeigen</a></td>
+                                </tr>
+                            `;
+                        });
+                    }
+
+                    tableHTML += `</tbody></table></div>`;
+
+                    if (window.Swal) {
+                        Swal.fire({
+                            title: data.status === 'duplicate' ? 'Doppelter Eintrag gefunden!' : 'Nachbarn gefunden!',
+                            html: tableHTML,
+                            icon: 'info',
+                            width: '70%',
+                            showCloseButton: true,
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                })
+                .catch(e => console.error('Kundenprüfung fehlgeschlagen:', e));
+            }
+
+            function takeMapScreenshot() {
+                if (!map) {
+                    ocToast('bad', 'Karte fehlt', 'Die Karte ist noch nicht geladen.');
+                    return;
+                }
+
+                const apiKey = @json($googleMapsKey);
+
+                if (streetView && streetView.getVisible()) {
+                    const panoId = streetView.getPano();
+                    const pov = streetView.getPov();
+
+                    if (!panoId) {
+                        ocToast('warn', 'Street View', 'Kein Street-View-Panorama verfügbar.');
+                        return;
+                    }
+
+                    const url = `https://maps.googleapis.com/maps/api/streetview?size=900x500&pano=${encodeURIComponent(panoId)}&heading=${encodeURIComponent(pov.heading || 0)}&pitch=${encodeURIComponent(pov.pitch || 0)}&key=${encodeURIComponent(apiKey)}`;
+                    fetchScreenshot(url, 'street_view_screenshot.jpg');
+                    return;
+                }
+
+                const center = map.getCenter();
+
+                if (!center) {
+                    ocToast('bad', 'Karte fehlt', 'Kartenposition konnte nicht gelesen werden.');
+                    return;
+                }
+
+                const lat = center.lat();
+                const lng = center.lng();
+                const zoom = map.getZoom() || HOUSE_ZOOM;
+
+                const markerParam = marker && marker.getVisible()
+                    ? `&markers=color:red%7C${encodeURIComponent(lat + ',' + lng)}`
+                    : '';
+
+                const url = `https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(lat + ',' + lng)}&zoom=${encodeURIComponent(zoom)}&size=900x500&scale=2&maptype=satellite${markerParam}&key=${encodeURIComponent(apiKey)}`;
+                fetchScreenshot(url, 'satellite_screenshot.png');
+            }
+
+            function fetchScreenshot(url, filename) {
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Screenshot request failed.');
+                        return response.blob();
+                    })
+                    .then(blob => handleScreenshotBlob(blob, filename))
+                    .catch(error => {
+                        console.error('Screenshot failed:', error);
+                        ocToast('bad', 'Screenshot fehlgeschlagen', 'Bitte prüfen Sie den Google Maps API Key und die Static Maps/Street View API.');
+                    });
+            }
+
+            function handleScreenshotBlob(blob, filename) {
+                const file = new File([blob], filename, { type: blob.type || 'image/png' });
+
+                const fileInput = document.getElementById('screenshot-file-input');
+                const previewContainer = document.getElementById('screenshot-preview');
+
+                if (fileInput) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    fileInput.files = dataTransfer.files;
+                }
+
+                if (previewContainer) {
+                    const imgPreview = document.createElement('img');
+                    imgPreview.src = URL.createObjectURL(blob);
+                    imgPreview.alt = filename;
+
+                    previewContainer.innerHTML = '';
+                    previewContainer.appendChild(imgPreview);
+                }
+
+                ocToast('ok', 'Screenshot gespeichert', 'Der Screenshot wurde dem Formular hinzugefügt.');
+            }
+        })();
+        </script>
+
+        <script>
+        "use strict";
+
+        (function () {
+            window.updateInquiryProgress = function () {
+                const elements = Array.from(document.querySelectorAll('.form-element'));
+                const answeredNumberLabel = document.getElementById('answered_number');
+                const totalNumberLabel = document.getElementById('total_number');
+                const answerInput = document.getElementById('answer_input');
+                const totalInput = document.getElementById('total_number_input');
+                const progressBar = document.getElementById('progress_bar');
+                const percentSpan = document.getElementById('percent');
+
+                const countable = elements.filter(el => {
+                    if (!el.name && !el.id) return false;
+                    if (el.disabled) return false;
+                    return true;
+                });
+
+                const total = countable.length;
+                let answered = 0;
+
+                countable.forEach(el => {
+                    const tag = el.tagName.toLowerCase();
+                    const type = (el.type || '').toLowerCase();
+
+                    if ((type === 'checkbox' || type === 'radio') && el.checked) {
+                        answered++;
+                        return;
+                    }
+
+                    if (tag === 'select' || tag === 'textarea' || ['text', 'email', 'date', 'number', 'hidden'].includes(type)) {
+                        if (String(el.value || '').trim() !== '') {
+                            answered++;
+                        }
+                    }
+                });
+
+                const percentage = total > 0 ? Math.round((answered / total) * 100) : 0;
+
+                if (totalInput) totalInput.value = total;
+                if (answerInput) answerInput.value = answered;
+                if (totalNumberLabel) totalNumberLabel.textContent = total;
+                if (answeredNumberLabel) answeredNumberLabel.textContent = answered;
+
+                if (progressBar) {
+                    progressBar.style.width = `${percentage}%`;
+                    progressBar.setAttribute('aria-valuenow', percentage);
+                }
+
+                if (percentSpan) {
+                    percentSpan.textContent = `${percentage}%`;
+                }
+            };
+
+            document.addEventListener('input', function(e) {
+                if (e.target.closest('.form-element')) {
+                    window.updateInquiryProgress();
+                }
+            });
+
+            document.addEventListener('change', function(e) {
+                if (e.target.closest('.form-element')) {
+                    window.updateInquiryProgress();
+                }
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                window.updateInquiryProgress();
+            });
+        })();
+        </script>
+
+        <script>
+        "use strict";
+
+        $(function () {
+            $('#customer_form').on('submit', function (e) {
+                e.preventDefault();
+
+                const $form = $(this);
+                const $submitButtons = $form.find('button[type="submit"]');
+                const formData = new FormData(this);
+
+                $submitButtons.prop('disabled', true).addClass('disabled');
+
+                $.ajax({
+                    url: $form.attr('action'),
+                    type: $form.attr('method') || 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': CSRF_TOKEN,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function (response) {
+                        if (response && response.success) {
+                            if (window.Swal) {
+                                Swal.fire({
+                                    title: 'Gespeichert!',
+                                    text: response.message || 'Die Daten wurden erfolgreich gespeichert.',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    if (response.redirect) {
+                                        window.location.href = response.redirect;
+                                    }
+                                });
+                            } else {
+                                ocToast('ok', 'Gespeichert', response.message || 'Die Daten wurden erfolgreich gespeichert.');
+                                if (response.redirect) {
+                                    window.location.href = response.redirect;
+                                }
+                            }
+                            return;
+                        }
+
+                        const message = response?.message || 'Etwas ist schiefgelaufen.';
+                        if (window.Swal) {
+                            Swal.fire('Fehler', message, 'error');
+                        } else {
+                            ocToast('bad', 'Fehler', message);
+                        }
+                    },
+                    error: function (xhr) {
+                        const message =
+                            xhr.responseJSON?.message ||
+                            xhr.responseJSON?.errors
+                                ? Object.values(xhr.responseJSON.errors || {}).flat().join('<br>')
+                                : 'Ein Fehler ist aufgetreten.';
+
+                        if (window.Swal) {
+                            Swal.fire({
+                                title: 'Fehler',
+                                html: message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        } else {
+                            ocToast('bad', 'Fehler', String(message).replaceAll('<br>', ' '));
+                        }
+
+                        console.error(xhr.responseText || xhr);
+                    },
+                    complete: function () {
+                        $submitButtons.prop('disabled', false).removeClass('disabled');
+                    }
+                });
+            });
+
+            if (window.feather) {
+                window.feather.replace();
+            }
+        });
+        </script>
+
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key={{ $googleMapsKey }}&libraries=places&callback=initMayarGoogleMap"
+            async
+            defer
+        ></script>
+    @endpush
+
+
+@endonce
 
 @push('scripts')
 
-<!-- selecting Product with heart:start  -->
-<script>
-const STAGE           = @json($stage ?? 'lead');
-const IMG_PRODUCT     = "{{ asset('images/articles/') }}";
-const IMG_EMPLOYEE    = "{{ asset('images/employee/') }}";
-const CSRF_TOKEN      = '{{ csrf_token() }}';
-const ROUTE_EMPLOYEES = '{{ route("inquiry.department.employees") }}';
-
-$(function () {
-    console.log('Inquiry edit script init');
-
-    if (typeof $.fn.select2 === 'undefined') {
-        console.error('Select2 is not loaded – include js/select2.min.js before this script.');
-        return;
-    }
-
-    let rowIndex = 0;
-
-    const SERVICES     = @json($services);
-    const PRODUCTS     = @json($products);
-    const DEPARTMENTS  = @json($departments);
-    const PRODUCT_LIST = @json($product_list);
-
-    // ============================================
-    // Template functions (MUST be defined before use)
-    // ============================================
-    function inqFormatEmployee(opt) {
-        if (!opt.id) return opt.text;
-
-        const $el     = $(opt.element);
-        const imgFile = $el.data('img');
-        const img     = imgFile ? `${IMG_EMPLOYEE}/${imgFile}` : '';
-        const pos     = $el.data('positions') || '';
-
-        return `
-            <div style="display:flex;align-items:center;">
-                ${
-                    img
-                        ? `<img src="${img}" class="me-2 rounded-circle" style="width:36px;height:36px;object-fit:cover;">`
-                        : `<div class="me-2 rounded-circle" style="width:36px;height:36px;background:#e5e7eb;"></div>`
-                }
-                <div>
-                    <strong>${opt.text}</strong><br>
-                    <small>${pos}</small>
-                </div>
-            </div>
-        `;
-    }
-
-    function inqFormatEmployeeSelection(opt) {
-        return opt && opt.text ? opt.text : '';
-    }
-
-    // ============================================
-    // Load existing rows (edit mode)
-    // ============================================
-    if (Array.isArray(PRODUCT_LIST) && PRODUCT_LIST.length) {
-        console.log('Loading PRODUCT_LIST rows:', PRODUCT_LIST.length);
-        PRODUCT_LIST.forEach(item => addRow(item));
-    } else {
-        console.log('No PRODUCT_LIST rows; table body stays empty until + button.');
-    }
-
-    // ============================================
-    // Add new row
-    // ============================================
-    $(document).on('click', '#addRow', function (e) {
-        e.preventDefault();
-        console.log('addRow clicked');
-        addRow(); // always allow new row
-    });
-
-    // ============================================
-    // Add row (new or from existing product_list)
-    // ============================================
-    function addRow(item = {}) {
-        rowIndex++;
-        const idx = rowIndex;
-
-        console.log('addRow build rowIndex', idx, 'item:', item);
-
-        const html = `
-        <tr data-index="${idx}">
-            <td>
-                <select class="form-select product-select" name="product_id[]" data-index="${idx}" style="width:100%">
-                    <option value="">Produkt wählen</option>
-                    ${PRODUCTS.map(p => `
-                        <option value="${p.id}"
-                                data-img="${p.image || ''}"
-                                ${String(p.id) === String(item.product_id || '') ? 'selected' : ''}>
-                            ${p.article_group}
-                        </option>
-                    `).join('')}
-                </select>
-            </td>
-
-            <td>
-                <select class="form-select service-select" name="service_id[]" data-index="${idx}" style="width:100%">
-                    <option value="">Dienstleistung wählen</option>
-                    ${
-                        item.product_id
-                            ? SERVICES
-                                .filter(s => String(s.product_id) === String(item.product_id))
-                                .map(s => `
-                                    <option value="${s.id}"
-                                            ${String(s.id) === String(item.service_id || '') ? 'selected' : ''}>
-                                        ${translateService(s.phase_section)}
-                                    </option>
-                                `).join('')
-                            : ''
-                    }
-                </select>
-            </td>
-
-            <td>
-                <select class="form-select department-select" name="department_id[]" data-index="${idx}" style="width:100%">
-                    <option value="">Abteilung wählen</option>
-                    ${DEPARTMENTS.map(d => `
-                        <option value="${d.id}"
-                                ${String(d.id) === String(item.department_id || '') ? 'selected' : ''}>
-                            ${d.department_name}
-                        </option>
-                    `).join('')}
-                </select>
-            </td>
-
-            <td>
-                <select class="form-select employee-select" name="employee_id[]" data-index="${idx}" style="width:100%">
-                    ${
-                        item.employee_id
-                            ? `
-                                <option value="${item.employee_id}"
-                                        selected
-                                        data-img="${item.eimage || ''}"
-                                        data-positions="${item.positions || ''}">
-                                    ${item.ename || ''} ${item.elastname || ''}
-                                </option>
-                              `
-                            : '<option value="">Innendienst wählen</option>'
-                    }
-                </select>
-            </td>
-
-            <td>
-                <select class="form-select field-employee-select" name="field_employee[]" data-index="${idx}" style="width:100%">
-                    ${
-                        item.field_employee
-                            ? `
-                                <option value="${item.field_employee}"
-                                        selected
-                                        data-img="${item.feimage || ''}"
-                                        data-positions="${item.fepositions || ''}">
-                                    ${item.fename || ''} ${item.felastname || ''}
-                                </option>
-                              `
-                            : '<option value="">Außendienst wählen</option>'
-                    }
-                </select>
-            </td>
-
-            <td>
-                <select class="form-select interest-select" name="interest[]" data-index="${idx}" style="width:100%">
-                    <option value="intent"   ${item.interest === 'intent' ? 'selected' : ''}>Kaufabsicht</option>
-                    <option value="interest" ${item.interest === 'interest' ? 'selected' : ''}>Kaufinteresse</option>
-                    <option value="option"   ${item.interest === 'option' ? 'selected' : ''}>Kaufoption</option>
-                </select>
-            </td>
-
-            <td>
-                <select class="form-select realization-select" name="realization_time[]" data-index="${idx}" style="width:100%">
-                    <option value="">Bitte auswählen</option>
-                    <option value="soon"  ${item.realization_time === 'soon'  ? 'selected' : ''}>Schnellstmöglich</option>
-                    <option value="3"     ${item.realization_time === '3'     ? 'selected' : ''}>3 Monate</option>
-                    <option value="6"     ${item.realization_time === '6'     ? 'selected' : ''}>6 Monate</option>
-                    <option value="other" ${item.realization_time === 'other' ? 'selected' : ''}>Sonstiges</option>
-                </select>
-            </td>
-
-            <td class="text-center">
-                <button type="button" class="btn btn-outline-danger btn-sm removeRow" title="Entfernen">
-                    <i class="feather icon-trash"></i>
-                </button>
-            </td>
-        </tr>`;
-
-        $('#inquiryProductTable tbody').append(html);
-        initSelects(idx, item);
-    }
-
-    // ============================================
-    // Init Select2 + bind change events
-    // ============================================
-    function initSelects(idx, item = {}) {
-        console.log('initSelects for row', idx, item);
-
-        const $product = $(`.product-select[data-index="${idx}"]`);
-        const $service = $(`.service-select[data-index="${idx}"]`);
-        const $dept    = $(`.department-select[data-index="${idx}"]`);
-        const $emp     = $(`.employee-select[data-index="${idx}"]`);
-        const $field   = $(`.field-employee-select[data-index="${idx}"]`);
-        const $interest= $(`.interest-select[data-index="${idx}"]`);
-        const $real    = $(`.realization-select[data-index="${idx}"]`);
-
-        // basic select2
-        [$product, $service, $dept, $interest, $real].forEach($s => {
-            if ($s.length) {
-                $s.select2({ width: '100%' });
-            }
-        });
-
-        // employees with templates – init once
-        [$emp, $field].forEach($s => {
-            if ($s.length && !$s.data('select2')) {
-                $s.select2({
-                    width: '100%',
-                    templateResult:    inqFormatEmployee,
-                    templateSelection: inqFormatEmployeeSelection,
-                    escapeMarkup:      m => m
-                });
-            }
-        });
-
-        // Product change: reload services + employees (with auto-suggest dept/service)
-        $product.off('change.inquiry').on('change.inquiry', () => {
-            console.log('product changed row', idx, '->', $product.val());
-            loadServices(idx);
-            loadEmployees(idx, { autofill: true });
-        });
-
-        // Manual service/department change: reload employees only
-        $service.off('change.inquiry').on('change.inquiry', () => {
-            console.log('service changed row', idx, '->', $service.val());
-            loadEmployees(idx, { autofill: false });
-        });
-        $dept.off('change.inquiry').on('change.inquiry', () => {
-            console.log('department changed row', idx, '->', $dept.val());
-            loadEmployees(idx, { autofill: false });
-        });
-
-        // Preload employees in edit mode
-        if (item && item.product_id) {
-            loadEmployees(idx, {
-                autofill: false,
-                presetEmployeeId:      item.employee_id || null,
-                presetFieldEmployeeId: item.field_employee || null
-            });
-        }
-    }
-
-    // ============================================
-    // Load services for product
-    // ============================================
-    function loadServices(idx) {
-        const pid   = $(`.product-select[data-index="${idx}"]`).val();
-        const $srv  = $(`.service-select[data-index="${idx}"]`);
-
-        console.log('loadServices row', idx, 'product_id', pid);
-
-        $srv.empty().append('<option value="">Dienstleistung wählen</option>');
-
-        if (!pid) {
-            $srv.trigger('change');
-            return;
-        }
-
-        const list = SERVICES.filter(s => String(s.product_id) === String(pid));
-        list.forEach(s => {
-            $srv.append(`
-                <option value="${s.id}">
-                    ${translateService(s.phase_section)}
-                </option>
-            `);
-        });
-
-        if (list.length === 1) {
-            $srv.val(list[0].id).trigger('change');
-        } else {
-            $srv.trigger('change');
-        }
-    }
-
-    // ============================================
-    // Load employees (Innendienst + Außendienst)
-    // ============================================
-    function loadEmployees(idx, options = {}) {
-        const autofill = options.autofill === true;
-
-        const $product = $(`.product-select[data-index="${idx}"]`);
-        const $dept    = $(`.department-select[data-index="${idx}"]`);
-        const $service = $(`.service-select[data-index="${idx}"]`);
-        const $emp     = $(`.employee-select[data-index="${idx}"]`);
-        const $field   = $(`.field-employee-select[data-index="${idx}"]`);
-
-        const pid = $product.val();
-        let   did = $dept.val();
-        let   sid = $service.val();
-
-        if (!pid) {
-            clearEmployees($emp, $field);
-            return;
-        }
-
-        const prevEmpId   = options.presetEmployeeId      || $emp.val();
-        const prevFieldId = options.presetFieldEmployeeId || $field.val();
-
-        console.log('loadEmployees edit row', idx, {
-            product_id: pid,
-            department_id: did,
-            service_id: sid,
-            stage: STAGE
-        });
-
-        $.post(ROUTE_EMPLOYEES, {
-            _token:        CSRF_TOKEN,
-            product_id:    pid,
-            department_id: did || null,
-            service_id:    sid || null,
-            stage:         STAGE
-        })
-        .done(res => {
-            console.log('employees response edit row', idx, res);
-
-            let internalEmployees = [];
-            let externalEmployees = [];
-
-            if (Array.isArray(res)) {
-                internalEmployees = res;
-                externalEmployees = res;
-            } else {
-                if (autofill && !did && res.department_id) {
-                    did = res.department_id;
-                    $dept.val(did).trigger('change.select2');
-                }
-                if (autofill && !sid && res.service_id) {
-                    sid = res.service_id;
-                    if (!$service.find(`option[value="${sid}"]`).length) {
-                        loadServices(idx);
-                    }
-                    if ($service.find(`option[value="${sid}"]`).length) {
-                        $service.val(sid).trigger('change.select2');
-                    }
-                }
-
-                internalEmployees = res.internal_employees || [];
-                externalEmployees = res.external_employees || [];
-            }
-
-            updateEmployeeSelect($emp,   internalEmployees, 'Innendienst wählen', prevEmpId);
-            updateEmployeeSelect($field, externalEmployees, 'Außendienst wählen', prevFieldId);
-
-            if (!internalEmployees.length && !externalEmployees.length) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Keine Mitarbeiter gefunden',
-                    text: 'Für diese Auswahl existieren keine Mitarbeiter.',
-                    confirmButtonText: 'OK',
-                    customClass: { confirmButton: 'btn btn-warning' },
-                    buttonsStyling: false
-                });
-            }
-        })
-        .fail(xhr => {
-            console.error('loadEmployees error edit row', idx, xhr);
-            clearEmployees($emp, $field);
-            Swal.fire('Fehler', 'Mitarbeiter konnten nicht geladen werden.', 'error');
-        });
-    }
-
-    function updateEmployeeSelect($select, employees, placeholder, prevId) {
-        $select.empty().append(`<option value="">${placeholder}</option>`);
-
-        employees.forEach(emp => {
-            $select.append(`
-                <option value="${emp.id}"
-                        data-img="${emp.image || ''}"
-                        data-positions="${(emp.positions || []).join(', ')}">
-                    ${emp.name} ${emp.lastname}
-                </option>
-            `);
-        });
-
-        if (prevId && $select.find(`option[value="${prevId}"]`).length) {
-            $select.val(prevId).trigger('change.select2');
-        } else {
-            $select.val('').trigger('change.select2');
-        }
-    }
-
-    function clearEmployees($emp, $field) {
-        updateEmployeeSelect($emp,   [], 'Innendienst wählen', null);
-        updateEmployeeSelect($field, [], 'Außendienst wählen', null);
-    }
-
-    // ============================================
-    // Service translation helper
-    // ============================================
-    function translateService(s) {
-        if (!s) return '';
-        const key = String(s).toLowerCase();
-        const map = {
-            complete:    'Komplettlösung',
-            montage:     'Montage',
-            product:     'Produkt',
-            plan:        'Planung',
-            maintenance: 'Wartung',
-            repair:      'Reparatur',
-            emergency:   'Notdienst',
-            others:      'Sonstiges'
-        };
-        return map[key] || s;
-    }
-
-    // ============================================
-    // Remove row
-    // ============================================
-    $(document).on('click', '.removeRow', function () {
-        $(this).closest('tr').fadeOut(150, function () {
-            $(this).remove();
-        });
-    });
-});
-</script>
-
-    
-  
- <!-- html2canvas for screenshot -->
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
-
-<script>
-"use strict";
-
-let autocomplete, elevationService, streetView, map;
-let placeSelected = false;
-
-window.initAutocomplete = function () {
-    const mapContainer = document.getElementById("gmp-map");
-    if (!mapContainer) return;
-
-    map = new google.maps.Map(mapContainer, {
-        center: { lat: 50.1109, lng: 8.6821 },
-        zoom: 18,
-        mapTypeId: google.maps.MapTypeId.SATELLITE, // 👈 Satellite View by default
-
-        streetViewControl: true,
-    });
-
-    streetView = map.getStreetView();
-    elevationService = new google.maps.ElevationService();
-
-    // Center map to user location
-   // ✅ Try to center to user's current location
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const userPos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    map.setCenter(userPos);
-                    map.setZoom(17); // optional: zoom in
-                    // Optionally add a marker
-                    new google.maps.Marker({
-                        position: userPos,
-                        map: map,
-                        title: "Ihr Standort"
-                    });
+         <script>
+            window.GlobalBreadcrumbs = [
+                {
+                    label: 'Dashboard',
+                    url: "{{ url('/') }}"
                 },
-                (error) => {
-                    console.warn("Geolocation error:", error.message);
-                    showWarning("Standort konnte nicht abgerufen werden. Bitte Standortfreigabe prüfen.");
-                }
-            );
-        } else {
-            showWarning("Geolocation wird von diesem Browser nicht unterstützt.");
-        }
-
-
-    const addrInput = document.getElementById('full_address');
-    if (!addrInput) return;
-
-    autocomplete = new google.maps.places.Autocomplete(addrInput, {
-        fields: ['address_components', 'geometry'],
-        types: ['geocode']
-    });
-
-    autocomplete.addListener('place_changed', () => {
-        const place = autocomplete.getPlace();
-        if (!place.geometry) {
-            showWarning('Bitte wählen Sie eine Adresse aus der Liste aus!');
-            addrInput.value = '';
-            return;
-        }
-
-        placeSelected = true;
-
-        const location = place.geometry.location;
-        const lat = location.lat();
-        const lng = location.lng();
-
-        const components = extractAddressComponents(place.address_components);
-        const street = `${components.route} ${components.street_number}`.trim();
-        const city = components.locality;
-        const postcode = components.postal_code;
-
-        setValueIfExists('street-input', street);
-        setValueIfExists('locality-input', city);
-        setValueIfExists('postal_code-input', postcode);
-        setValueIfExists('latitude-input', lat);
-        setValueIfExists('longitude-input', lng);
-
-        getElevation(lat, lng);
-        checkCustomer(street, postcode, lat, lng);
-    });
-
-    addrInput.addEventListener('blur', () => {
-        if (!placeSelected) {
-            showWarning('Bitte wählen Sie eine Adresse aus der Liste aus!');
-            addrInput.value = '';
-        }
-    });
-};
-
-function extractAddressComponents(components) {
-    let data = { street_number: '', route: '', locality: '', postal_code: '' };
-    components.forEach(c => {
-        const type = c.types[0];
-        if (data.hasOwnProperty(type)) {
-            data[type] = c.long_name;
-        }
-    });
-    return data;
-}
-
-function setValueIfExists(id, val) {
-    const el = document.getElementById(id);
-    if (el) el.value = val;
-}
-
-function getElevation(lat, lng) {
-    elevationService.getElevationForLocations({ locations: [{ lat, lng }] }, (results, status) => {
-        if (status === "OK" && results[0]) {
-            setValueIfExists("elevation-input", results[0].elevation.toFixed(2));
-        }
-    });
-}
-
-function checkCustomer(street, postcode, lat, lng) {
-    const name = document.getElementById('input_name')?.value || 'Unbekannt';
-    const lastname = document.getElementById('input_lastname')?.value || 'Unbekannt';
-
-    const url = `/check-new-leads/${encodeURIComponent(name)}/${encodeURIComponent(lastname)}/${encodeURIComponent(street)}/${encodeURIComponent(postcode)}/${lat}/${lng}`;
-
-    fetch(url)
-        .then(r => r.json())
-        .then(data => {
-            if (data.status === 'duplicate' || data.status === 'neighbor') {
-                let tableHTML = `<table class="table table-bordered mt-3">
-                    <thead><tr><th>Name</th><th>Nachname</th><th>Adresse</th><th>Radius (km)</th><th>Aktion</th></tr></thead><tbody>`;
-
-                if (data.status === 'duplicate') {
-                    const c = data.customer;
-                    tableHTML += `<tr><td>${c.name}</td><td>${c.lastname}</td><td>${c.full_address}</td><td>-</td>
-                    <td><a href="/new_lead_profile/${c.id}" class="btn btn-primary">Profil anzeigen</a></td></tr>`;
-                }
-
-                if (data.status === 'neighbor') {
-                    data.customers.forEach(c => {
-                        tableHTML += `<tr><td>${c.name}</td><td>${c.lastname}</td><td>${c.full_address}</td>
-                        <td>${c.distance.toFixed(2)}</td><td><a href="/new_lead_profile/${c.id}" class="btn btn-primary">Profil anzeigen</a></td></tr>`;
-                    });
-                }
-
-                tableHTML += `</tbody></table>`;
-                Swal.fire({
-                    title: data.status === 'duplicate' ? 'Doppelter Eintrag gefunden!' : 'Nachbarn gefunden!',
-                    html: tableHTML,
-                    icon: 'info',
-                    width: '70%',
-                    showCloseButton: true,
-                });
-            }
-        })
-        .catch(e => console.error('Überprüfung fehlgeschlagen:', e));
-}
-
-function showWarning(msg) {
-    Swal.fire({ icon: 'warning', title: 'Fehler!', text: msg });
-}
-
-  // ✅ **Updated Street View Screenshot Function**
-  document.getElementById("screenshot-btn").addEventListener("click", function () {
-        if (streetView.getVisible()) {
-            // 📸 STREET VIEW Screenshot
-            const panoId = streetView.getPano();
-            const pov = streetView.getPov();
-            const heading = pov.heading;
-            const pitch = pov.pitch;
-
-            const streetViewImageUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x300&pano=${panoId}&heading=${heading}&pitch=${pitch}&key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo`;
-
-            fetch(streetViewImageUrl)
-                .then(response => response.blob())
-                .then(blob => handleScreenshotBlob(blob, "street_view_screenshot.jpg"))
-                .catch(error => console.error("❌ Street View screenshot failed:", error));
-
-        } else {
-            // 🛰️ SATELLITE VIEW Screenshot (fallback)
-            const center = map.getCenter();
-            const zoom = map.getZoom();
-            const mapType = 'satellite';
-
-            const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${center.lat()},${center.lng()}&zoom=${zoom}&size=600x300&maptype=${mapType}&key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo`;
-
-            fetch(staticMapUrl)
-                .then(response => response.blob())
-                .then(blob => handleScreenshotBlob(blob, "satellite_screenshot.png"))
-                .catch(error => console.error("❌ Satellite screenshot failed:", error));
-        }
-
-        function handleScreenshotBlob(blob, filename) {
-            const file = new File([blob], filename, { type: blob.type });
-
-            const fileInput = document.getElementById("screenshot-file-input");
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            fileInput.files = dataTransfer.files;
-
-            const imgPreview = document.createElement("img");
-            imgPreview.src = URL.createObjectURL(blob);
-            imgPreview.style = "max-width: 100%; margin-top: 10px; border: 1px solid #ccc;";
-
-            const previewContainer = document.getElementById("screenshot-preview");
-            previewContainer.innerHTML = "";
-            previewContainer.appendChild(imgPreview);
-
-            console.log("✅ Screenshot saved as file:", file.name);
-        }
-    });
-</script>
-
-<!-- ✅ Google Maps API loaded last -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo&libraries=places,marker,drawing&callback=initAutocomplete" async defer></script>
-
-
-
-<!-- SISSION AND SELECT2 -->
-
-<script src="{{ asset('js/select2.min.js') }}"></script> 
-<script>
-    $(document).ready(function() {
-        $('#product').select2();  
-        $('.service_select').select2();  
-        });
-        
-    $(document).ready(function() {
-        @if(Session::has('update_msg'))
-        toastr.success("{{ session('updated_msg') }}");
-        @endif
-        @if(Session::has('save_msg'))
-        toastr.success("{{ session('save_msg') }}");
-        @endif
-
-
-
-        @if(Session::has('delete_msg'))
-        toastr.error("{{ session('delete_msg') }}");
-        @endif
-    });
-</script> 
-
- 
- 
-<!-- The progress bar var  -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const elements = document.querySelectorAll('.form-element');
-        const answeredNumberLabel = document.getElementById('answered_number');
-        const totalNumberLabel = document.getElementById('total_number');
-        const answerInput = document.getElementById('answer_input');
-        const totalInput = document.getElementById('total_number_input');
-        const progressBar = document.querySelector('.progress-bar');
-        const percentSpan = document.getElementById('percent');
-        const totalElements = elements.length;
-
-        // Set total elements in hidden input and label
-        totalInput.value = totalElements;
-        totalNumberLabel.textContent = totalElements;
-
-        function updateProgressBar() {
-            let nonEmptyCount = 0;
-
-            elements.forEach(element => {
-                if ((element.type === 'checkbox' || element.type === 'radio') && element.checked) {
-                    nonEmptyCount++;
-                } else if (element.type === 'text' || element.type === 'email' || element.tagName.toLowerCase() === 'select') {
-                    if (element.value.trim() !== "") {
-                        nonEmptyCount++;
-                    }
-                }
-            });
-
-            const percentage = (nonEmptyCount / totalElements) * 100;
-            progressBar.style.width = `${percentage}%`;
-            progressBar.setAttribute('aria-valuenow', percentage);
-            percentSpan.textContent = `${Math.round(percentage)}%`;
-
-            // Update labels and hidden inputs
-            answerInput.value = nonEmptyCount;
-            answeredNumberLabel.textContent = nonEmptyCount;
-        }
-
-        // Attach event listeners
-        elements.forEach(element => {
-            element.addEventListener('input', updateProgressBar);
-            if (element.type === 'checkbox' || element.type === 'radio') {
-                element.addEventListener('change', updateProgressBar);
-            }
-        });
-
-        updateProgressBar(); // Initial call to set progress on page load
-    });
-
-</script> 
- 
-<!-- Save operation: start  -->
- <script>
-    $(document).ready(function () {
-        // Handle form submission
-        $('#customer_form').submit(function (e) {
-            e.preventDefault(); // Prevent the default form submission
-
-            // Collect all form data
-            const formData = new FormData(this);
-
-            $.ajax({
-                url: $(this).attr('action'), // Use the form's action attribute
-                type: $(this).attr('method'), // Use the form's method attribute
-                data: formData,
-                processData: false, // Prevent jQuery from automatically transforming the data into a query string
-                contentType: false, // Let the server set the Content-Type header
-                success: function (response) {
-                    if (response.success) {
-                        // SweetAlert for success
-                        Swal.fire({
-                            title: 'Success!',
-                            text: response.message,
-                            icon: 'success',
-                            confirmButtonText: 'OK',
-                        }).then(() => {
-                            // Redirect to the URL provided by the server
-                            window.location.href = response.redirect;
-                        });
-                    } else {
-                        // SweetAlert for generic error
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Something went wrong: ' + response.message,
-                            icon: 'error',
-                            confirmButtonText: 'OK',
-                        });
-                    }
+                {
+                    label: 'Kundeliste',
+                    url: "{{ url('/new_lead_view') }}"
                 },
-                error: function (xhr) {
-                    // SweetAlert for AJAX error
-                    Swal.fire({
-                        title: 'Error!',
-                        text: xhr.responseJSON?.message || 'An error occurred.',
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                    });
-                    console.error(xhr.responseText); // Log the error for debugging
+
+                 {
+                    label: "{{ trim(($leads->title ?? '') . ' ' . ($leads->name ?? '') . ' ' . ($leads->lastname ?? '')) ?: '—' }}",
+                    url: "{{ url('/new_lead_profile/'.$leads->id) }}"
                 },
-            });
-        });
-    });
-</script>
+                {
+                    label: 'Objekt-Bearbeiten',
+                    url: "{{ url()->current() }}",
+                    clickable: false
+                }
+            ];
 
-<!-- Save operation: end -->
-
- 
- 
-<script>
-    $(document).ready(function() {
-        $('#source').select2({
-            tags: true,
-            placeholder: "Quelle auswählen",
-            allowClear: true
-        });
-    });
-</script>
- 
-
- 
-
-
+            if (window.setGlobalBreadcrumbs) {
+                window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+            }
+        </script>
 @endpush

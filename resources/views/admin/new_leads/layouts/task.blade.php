@@ -41,25 +41,15 @@
   }
 
   /* ===== Surface ===== */
-  .kb-surface{
-    background:
-      radial-gradient(1200px 520px at 10% 0%, rgba(116,178,212,.22), transparent 60%),
-      radial-gradient(900px 480px at 90% 10%, rgba(147,194,28,.18), transparent 58%),
-      linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.75));
-    border: 1px solid var(--kb-border2);
-    border-radius: 22px;
-    padding: 14px;
-    box-shadow: var(--kb-shadow);
+  .kb-surface{  
+    padding: 8px; 
   }
 
   /* ===== Toolbar ===== */
   .kb-toolbar{
     display:flex; gap:12px; align-items:center; justify-content:space-between;
     padding: 12px;
-    background: rgba(255,255,255,.78);
-    border: 1px solid var(--kb-border2);
-    border-radius: var(--kb-radius);
-    box-shadow: 0 10px 24px rgba(15,23,42,.06);
+    background: rgba(255,255,255,.78); 
     margin-bottom: 14px;
   }
   .kb-search{

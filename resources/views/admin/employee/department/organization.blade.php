@@ -602,21 +602,8 @@ Organigramm
 @endsection
 
 @section('content')
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
-    <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="col-12">
-                <h2 class="content-header-title float-left mb-0">ABTEILUNGEN</h2>
-                <div class="breadcrumb-wrapper col-12">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/employee_dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active"><a href="{{ url('/employee_dashboard') }}">Organigramm</a></li>
-                    </ol>
-                </div>
-            </div>
-        </div>
+<div class="app-content"> 
+    <div class="content-wrapper"> 
 
         <div class="content-body">
             <div class="row">
@@ -2158,3 +2145,29 @@ Organigramm
     }
 </script>
 @endsection
+
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs = [
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            },
+            {
+                label: 'Abteilung Liste',
+                url: "{{ url('department_view')}}", 
+            },
+
+            {
+                label: 'Organigramm',
+                url: "{{ url()->current() }}",
+                clickable: false
+            }
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+@endpush

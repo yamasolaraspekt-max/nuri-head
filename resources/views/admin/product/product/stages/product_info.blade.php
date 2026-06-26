@@ -84,11 +84,7 @@
                             Bitte Hersteller wählen
                         </option>
                     </select>
-                    <button type="button"
-                            class="btn btn-outline-primary btn-icon"
-                            data-toggle="modal"
-                            data-target="#new_brand"
-                            title="Neue Marke hinzufügen">
+                    <button type="button" class="btn btn-outline-primary btn-icon js-open-brand-modal" title="Neue Marke hinzufügen">
                         <i class="feather icon-plus"></i>
                     </button>
                 </div>
@@ -115,15 +111,15 @@
                     </label>
 
                     @php
-                        $selectedArticleGroup = old('article_group', $product->article_group_id ?? $product->article_group ?? null);
-                        $selectedSubArticle   = old('sub_article', $product->sub_article_id ?? $product->sub_article ?? null);
+$selectedArticleGroup = old('article_group', $product->article_group_id ?? $product->article_group ?? null);
+$selectedSubArticle = old('sub_article', $product->sub_article_id ?? $product->sub_article ?? null);
                     @endphp
 
                     @if(count($article_groups))
                         <select id="article_group" name="article_group" class="form-control">
                             <option value="" {{ empty($selectedArticleGroup) ? 'selected' : '' }}>— optional —</option>
                             @foreach ($article_groups as $art_group)
-                                <option value="{{ $art_group->id }}" {{ (string)$selectedArticleGroup === (string)$art_group->id ? 'selected' : '' }}>
+                                <option value="{{ $art_group->id }}" {{ (string) $selectedArticleGroup === (string) $art_group->id ? 'selected' : '' }}>
                                     {{ $art_group->article_group }}
                                 </option>
                             @endforeach
@@ -149,8 +145,8 @@
 
                         @if(!empty($selectedArticleGroup) && !empty($sub_article_groups) && count($sub_article_groups))
                             @foreach($sub_article_groups as $sub)
-                                <option value="{{ $sub->id }}" {{ (string)$selectedSubArticle === (string)$sub->id ? 'selected' : '' }}>
-                                    {{ $sub->sub_article_group ?? $sub->name ?? $sub->title ?? ('#'.$sub->id) }}
+                                <option value="{{ $sub->id }}" {{ (string) $selectedSubArticle === (string) $sub->id ? 'selected' : '' }}>
+                                    {{ $sub->sub_article_group ?? $sub->name ?? $sub->title ?? ('#' . $sub->id) }}
                                 </option>
                             @endforeach
                         @endif

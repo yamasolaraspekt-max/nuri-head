@@ -3,772 +3,2734 @@
 
 @section('title', 'Wartungsverträge')
 
-@section('style')
-  {{-- FullCalendar --}}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css">
+@php
+  use Illuminate\Pagination\AbstractPaginator;
+  use Illuminate\Pagination\LengthAwarePaginator;
+  use Illuminate\Support\Carbon;
+  use Illuminate\Support\Facades\Route;
 
-  <style>
-    :root{
-      --mc-shell-bg:#f0f0f0;
-      --mc-border: rgba(148, 163, 184, 0.35);
-      --mc-border-soft: rgba(148, 163, 184, 0.18);
-      --mc-text:#0b1120;
-      --mc-muted:#424242;
-      --mc-accent:#74b2d4;
-      --mc-success:#93c21c;
-      --mc-danger:#f97373;
-      --mc-warning:#fbbf24;
-      --mc-radius-lg:18px;
-      --mc-radius-xl:22px;
+  $isPaginator = $contracts instanceof LengthAwarePaginator || $contracts instanceof AbstractPaginator;
+  $contractItems = $isPaginator ? collect($contracts->items()) : collect($contracts);
+
+  $statusOptions = [
+    'draft' => 'Entwurf',
+    'active' => 'Aktiv',
+    'inactive' => 'Inaktiv',
+    'cancelled' => 'Gekündigt',
+  ];
+
+  $statusColumns = [
+    'draft' => ['label' => 'Entwurf', 'icon' => 'fa-regular fa-pen-to-square'],
+    'active' => ['label' => 'Aktiv', 'icon' => 'fa-solid fa-circle-check'],
+    'inactive' => ['label' => 'Inaktiv', 'icon' => 'fa-regular fa-circle-pause'],
+    'cancelled' => ['label' => 'Gekündigt', 'icon' => 'fa-solid fa-ban'],
+  ];
+
+  $intervalOptions = [
+    'yearly' => 'Jährlich',
+    'monthly' => 'Monatlich',
+    'custom' => 'Individuell',
+  ];
+
+  $totalCount = $isPaginator ? $contracts->total() : $contractItems->count();
+  $activeCount = (int) $contractItems->where('status', 'active')->count();
+  $draftCount = (int) $contractItems->where('status', 'draft')->count();
+  $inactiveCount = (int) $contractItems->whereIn('status', ['inactive', 'cancelled'])->count();
+
+  $upcomingCount = (int) $contractItems->filter(function ($contract) {
+    $date = $contract->next_service_date ?? $contract->end_date ?? null;
+    if (!$date)
+      return false;
+
+    try {
+      return Carbon::parse($date)->between(now()->startOfDay(), now()->copy()->addDays(30)->endOfDay());
+    } catch (\Throwable $e) {
+      return false;
+    }
+  })->count();
+
+  $routeIndex = Route::has('admin.maintenance.contracts.index') ? route('admin.maintenance.contracts.index') : url('/admin/maintenance/contracts');
+  $routeCreate = Route::has('admin.maintenance.contracts.create') ? route('admin.maintenance.contracts.create') : url('/admin/maintenance/contracts/create');
+  $routeBulkStatus = Route::has('admin.maintenance.contracts.bulk-status') ? route('admin.maintenance.contracts.bulk-status') : null;
+  $routeBulkDelete = Route::has('admin.maintenance.contracts.bulk-delete') ? route('admin.maintenance.contracts.bulk-delete') : null;
+  $routeKanbanUpdate = Route::has('admin.maintenance.contracts.kanban-update') ? route('admin.maintenance.contracts.kanban-update') : null;
+  $routeKanbanFeed = Route::has('admin.maintenance.contracts.kanban_feed') ? route('admin.maintenance.contracts.kanban_feed') : null;
+  $routeCalendarFeed = Route::has('admin.maintenance.contracts.calendar_feed') ? route('admin.maintenance.contracts.calendar_feed') : null;
+  $routeIncoming = Route::has('admin.maintenance.contracts.incoming') ? route('admin.maintenance.contracts.incoming') : null;
+
+  $baseUrl = url('/admin/maintenance/contracts');
+
+  $contractPayload = $contractItems->map(function ($contract) use ($statusOptions, $baseUrl) {
+    $lead = $contract->lead ?? null;
+    $alt = $contract->alternative ?? null;
+    $asset = $contract->asset ?? null;
+    $resp = $contract->responsibleEmployee ?? null;
+
+    $customerName = null;
+    if ($lead) {
+      $customerName = $lead->firma
+        ?? trim(($lead->name ?? $lead->vorname ?? '') . ' ' . ($lead->lastname ?? $lead->nachname ?? ''));
+      $customerName = trim((string) $customerName) !== '' ? $customerName : null;
     }
 
-    .mc-page{ padding:18px 12px 30px; background:var(--mc-shell-bg); min-height:calc(100vh - 80px); }
-    .mc-container{ max-width: 100%; margin:0 auto; }
-    .mc-shell{ border-radius:var(--mc-radius-xl); padding:16px 18px 18px; }
-
-    .mc-header{ display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:14px; }
-    .mc-title{ font-size:1.15rem; font-weight:700; letter-spacing:-0.02em; color:var(--mc-text); }
-    .mc-subtitle{ font-size:0.78rem; color:var(--mc-muted); }
-
-    .mc-header-right{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
-    .mc-view-toggle{ display:inline-flex; border-radius:999px; border:1px solid var(--mc-border); overflow:hidden; font-size:0.75rem; background:#fff; }
-    .mc-view-toggle button{ border:none; background:transparent; color:var(--mc-muted); padding:6px 12px; cursor:pointer; display:inline-flex; gap:6px; align-items:center; }
-    .mc-view-toggle button.is-active{ background:var(--mc-success); color:#111827; }
-    .mc-btn{ border-radius:999px; border:1px solid transparent; padding:7px 14px; font-size:0.78rem; display:inline-flex; align-items:center; gap:6px; cursor:pointer; background:transparent; color:var(--mc-text); white-space:nowrap; }
-    .mc-btn-ghost{ border-color:var(--mc-border); background:#fff; color:var(--mc-muted); }
-    .mc-btn-primary{ border-color:var(--mc-accent); background:var(--mc-accent); color:#0b1120; }
-    .mc-btn-danger{ border-color:var(--mc-danger); background:rgba(249,115,115,0.12); color:#7f1d1d; }
-
-    .mc-toolbar{ display:grid; grid-template-columns: 2fr 1.7fr auto; gap:10px; margin-bottom:12px; align-items:center; }
-    @media (max-width: 992px){ .mc-toolbar{ grid-template-columns: 1fr; } }
-    .mc-input,.mc-select{ width:100%; border-radius:999px; border:1px solid var(--mc-border-soft); background:#fff; padding:7px 10px; font-size:0.78rem; color:var(--mc-muted); outline:none; }
-    .mc-input:focus,.mc-select:focus{ border-color:var(--mc-accent); }
-
-    .mc-views{ margin-top: 8px; }
-    .mc-view{ display:none; }
-    .mc-view.is-active{ display:block; }
-
-    /* List */
-    .mc-table-shell{ border-radius:var(--mc-radius-lg); border:1px solid var(--mc-border-soft); overflow:hidden; background:#fff; }
-    .mc-table{ width:100%; border-collapse:collapse; font-size:0.78rem; }
-    .mc-table th,.mc-table td{ padding:8px 10px; border-bottom:1px solid rgba(2,6,23,0.08); vertical-align:top; }
-    .mc-table th{ text-transform:uppercase; letter-spacing:0.08em; font-size:0.7rem; color:var(--mc-muted); white-space:nowrap; background:rgba(2,6,23,0.03); }
-    .mc-table tbody tr:hover{ background: rgba(147,194,28,0.10); }
-
-    .mc-row-title{ font-weight:700; color:#0b1120; }
-    .mc-row-sub{ font-size:0.73rem; color:var(--mc-muted); margin-top:2px; line-height:1.3; }
-
-    .mc-status-pill{ border-radius:999px; padding:2px 8px; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; display:inline-flex; align-items:center; gap:6px; }
-    .mc-status-draft{ background:rgba(148,163,184,0.22); color:#334155; }
-    .mc-status-active{ background:rgba(147,194,28,0.20); color:#365314; }
-    .mc-status-inactive{ background:rgba(251,191,36,0.20); color:#7c2d12; }
-    .mc-status-cancelled{ background:rgba(249,115,115,0.20); color:#7f1d1d; }
-
-    .mc-tag{ border-radius:999px; padding:2px 8px; font-size:0.68rem; border:1px solid var(--mc-border-soft); color:var(--mc-muted); background:#fff; display:inline-flex; gap:6px; align-items:center; }
-    .mc-dot{ width:7px; height:7px; border-radius:99px; background:var(--mc-accent); display:inline-block; }
-
-    .mc-pagination{ padding:8px 10px 4px; font-size:0.74rem; color:var(--mc-muted); display:flex; justify-content:space-between; align-items:center; gap:6px; }
-
-    /* Layout for Calendar + Right Sidebar */
-    .mc-calendar-grid{
-      display:grid;
-      grid-template-columns: 1fr 360px;
-      gap: 12px;
-      align-items:start;
-    }
-    @media(max-width: 1200px){
-      .mc-calendar-grid{ grid-template-columns:1fr; }
+    $addressText = null;
+    if ($alt) {
+      $addressText = $alt->full_address
+        ?? trim(($alt->street ?? '') . ', ' . ($alt->postcode ?? '') . ' ' . ($alt->city ?? ''));
+      $addressText = trim((string) $addressText) !== '' ? $addressText : null;
     }
 
-    .mc-card{
-      border-radius: var(--mc-radius-lg);
-      border: 1px solid var(--mc-border-soft);
-      background:#fff;
-      overflow:hidden;
+    if (!$addressText && $asset && is_array($asset->technical_data ?? null)) {
+      $addressText = $asset->technical_data['installationAddressText']
+        ?? ($asset->technical_data['installationLocation']['addressText'] ?? null)
+        ?? ($asset->technical_data['installationLocation']['notes'] ?? null);
+      $addressText = trim((string) $addressText) !== '' ? $addressText : null;
     }
-    .mc-card-hd{
-      padding:10px 12px;
-      border-bottom:1px solid rgba(2,6,23,0.08);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-    }
-    .mc-card-hd strong{ color:#0b1120; font-size:0.85rem; }
-    .mc-card-bd{ padding:10px 12px; }
 
-    .mw-upcoming-item{
-      border: 1px solid rgba(2,6,23,0.08);
-      border-radius: 14px;
-      padding: 10px;
-      background: #fff;
-      margin-bottom: 10px;
-      cursor:pointer;
+    if (!$addressText && $lead) {
+      $addressText = trim(($lead->street ?? '') . ', ' . ($lead->postcode ?? '') . ' ' . ($lead->city ?? ''));
+      $addressText = trim((string) $addressText) !== '' ? $addressText : null;
     }
-    .mw-upcoming-item:hover{ background: rgba(116,178,212,0.10); }
-    .mw-up-title{ font-weight:700; color:#0b1120; font-size:0.78rem; }
-    .mw-up-meta{ font-size:0.72rem; color:var(--mc-muted); margin-top:4px; line-height:1.35; }
-    .mw-badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      border-radius:999px;
-      padding:2px 8px;
-      font-size:0.68rem;
-      border:1px solid rgba(2,6,23,0.10);
-      background:#fff;
-      margin-top:6px;
-    }
-    .mw-badge.is-soon{ border-color: rgba(251,191,36,0.55); }
-    .mw-badge.is-overdue{ border-color: rgba(249,115,115,0.55); }
-    .mw-badge .mw-dot{ width:7px; height:7px; border-radius:99px; background: var(--mc-warning); }
-    .mw-badge.is-overdue .mw-dot{ background: var(--mc-danger); }
 
-    /* Modal */
-    .mw-modal{
-      position:fixed; inset:0;
-      display:none;
-      background: rgba(2,6,23,0.55);
-      z-index: 9999;
-      padding: 18px;
-      align-items:center;
-      justify-content:center;
+    $contractTitle = trim((string) ($contract->title ?? ''));
+    if ($contractTitle === '' && $asset)
+      $contractTitle = trim((string) ($asset->title ?? ''));
+    if ($contractTitle === '')
+      $contractTitle = $contract->contract_no ?? 'Wartungsvertrag';
+
+    $productParts = [];
+    if ($asset && ($asset->manufacturer_attach ?? null))
+      $productParts[] = $asset->manufacturer_attach;
+    if ($asset && ($asset->manufacturer ?? null))
+      $productParts[] = $asset->manufacturer;
+    if ($asset && ($asset->model ?? null))
+      $productParts[] = $asset->model;
+    if ($asset && ($asset->title ?? null))
+      $productParts[] = $asset->title;
+    $productLabel = trim(implode(' · ', array_filter($productParts)));
+
+    $nextService = $contract->next_service_date ?? $contract->end_date ?? null;
+    $nextServiceIso = null;
+    $nextServiceDisplay = '–';
+    $daysTo = null;
+
+    if ($nextService) {
+      try {
+        $date = Carbon::parse($nextService)->startOfDay();
+        $nextServiceIso = $date->toDateString();
+        $nextServiceDisplay = $date->format('d.m.Y');
+        $daysTo = now()->startOfDay()->diffInDays($date, false);
+      } catch (\Throwable $e) {
+        $nextServiceIso = null;
+      }
     }
-    .mw-modal.is-open{ display:flex; }
-    .mw-modal-card{
-      width: min(720px, 100%);
-      border-radius: 18px;
-      background:#fff;
-      border:1px solid rgba(2,6,23,0.12);
-      overflow:hidden;
+
+    $status = $contract->status ?: 'draft';
+    $price = null;
+    if (!is_null($contract->price ?? null)) {
+      $price = number_format((float) $contract->price, 2, ',', '.') . ' ' . ($contract->currency ?? 'EUR');
     }
-    .mw-modal-hd{
-      padding:12px 14px;
-      border-bottom:1px solid rgba(2,6,23,0.08);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-    }
-    .mw-modal-hd strong{ color:#0b1120; }
-    .mw-modal-bd{ padding: 12px 14px; }
-    .mw-close{
-      border:none;
-      background: rgba(2,6,23,0.06);
-      border-radius: 999px;
-      padding: 6px 10px;
-      cursor:pointer;
-      color:#0b1120;
-    }
-    .mw-modal-row{ display:grid; grid-template-columns: 150px 1fr; gap:10px; padding:6px 0; border-bottom:1px dashed rgba(2,6,23,0.10); }
-    .mw-modal-row:last-child{ border-bottom:none; }
-    .mw-k{ color:var(--mc-muted); font-size:0.72rem; }
-    .mw-v{ color:#0b1120; font-size:0.78rem; font-weight:600; }
-  </style>
-@endsection
+
+    return [
+      'id' => $contract->id,
+      'contract_no' => $contract->contract_no,
+      'title' => $contractTitle,
+      'customer' => $customerName ?: '–',
+      'customer_no' => $lead->customer_no ?? null,
+      'customer_profile_url' => $lead
+        ? (Route::has('customers.show')
+          ? route('customers.show', $lead->id)
+          : (Route::has('admin.customers.show')
+            ? route('admin.customers.show', $lead->id)
+            : (Route::has('customer.profile')
+              ? route('customer.profile', $lead->id)
+              : url('/customer/profile/' . $lead->id))))
+        : null,
+      'responsible' => ($resp->full_name ?? null) ?: ($resp->name ?? '–'),
+      'address' => $addressText ?: '–',
+      'product' => $productLabel ?: '–',
+      'interval_type' => $contract->interval_type ?: 'yearly',
+      'interval_months' => $contract->interval_months,
+      'next_service_date' => $nextServiceIso,
+      'next_service_display' => $nextServiceDisplay,
+      'days_to' => $daysTo,
+      'status' => $status,
+      'status_label' => $statusOptions[$status] ?? ucfirst($status),
+      'price' => $price,
+      'description' => $contract->description ?? null,
+      'show_url' => (Route::has('admin.maintenance.contracts.show') ? route('admin.maintenance.contracts.show', $contract->id) : $baseUrl . '/' . $contract->id),
+      'edit_url' => (Route::has('admin.maintenance.contracts.edit') ? route('admin.maintenance.contracts.edit', $contract->id) : $baseUrl . '/' . $contract->id . '/edit'),
+    ];
+  })->values();
+@endphp
+
+@once
+  @push('style')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css">
+    <style>
+      :root {
+        --mc-bg: #f3f4f6;
+        --mc-card: #fff;
+        --mc-text: #111827;
+        --mc-muted: #6b7280;
+        --mc-border: #e5e7eb;
+        --mc-primary: #93c21c;
+        --mc-primary-dark: #7baa18;
+        --mc-primary-soft: #f4fae7;
+        --mc-blue: #74b2d4;
+        --mc-blue-soft: #eff6ff;
+        --mc-green: #10b981;
+        --mc-green-soft: #ecfdf5;
+        --mc-yellow: #f59e0b;
+        --mc-yellow-soft: #fffbeb;
+        --mc-red: #ef4444;
+        --mc-red-soft: #fef2f2;
+        --mc-gray-soft: #f9fafb;
+        --mc-shadow: 0 18px 45px -24px rgba(15, 23, 42, .55);
+        --mc-shadow-soft: 0 1px 2px rgba(15, 23, 42, .06);
+        --mc-radius: 16px;
+      }
+
+      .mc-wrap {
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--mc-text);
+      }
+
+      .mc-titlebar {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+      }
+
+      .mc-title {
+        font-size: 27px;
+        font-weight: 900;
+        letter-spacing: -.035em;
+        margin: 0;
+      }
+
+      .mc-subtitle {
+        color: var(--mc-muted);
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      .mc-breadcrumb {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        color: var(--mc-muted);
+        font-size: 13px;
+      }
+
+      .mc-breadcrumb a {
+        color: var(--mc-muted);
+        text-decoration: none;
+        font-weight: 800;
+      }
+
+      .mc-breadcrumb a:hover {
+        color: var(--mc-text)
+      }
+
+      .mc-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .mc-btn,
+      .mc-btn-soft,
+      .mc-icon-btn {
+        border: 0;
+        text-decoration: none;
+        cursor: pointer;
+        font-weight: 900;
+        transition: .18s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .mc-btn {
+        background: var(--mc-primary);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 11px;
+        box-shadow: var(--mc-shadow-soft);
+      }
+
+      .mc-btn:hover {
+        background: var(--mc-primary-dark);
+        color: #fff;
+        text-decoration: none
+      }
+
+      .mc-btn-soft {
+        background: #fff;
+        color: #1f2937;
+        border: 1px solid var(--mc-border);
+        padding: 10px 14px;
+        border-radius: 11px;
+      }
+
+      .mc-btn-soft:hover {
+        background: #f9fafb;
+        color: #111827;
+        text-decoration: none
+      }
+
+      .mc-icon-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        border: 1px solid var(--mc-border);
+        background: #fff;
+        color: #6b7280;
+      }
+
+      .mc-icon-btn:hover {
+        background: #f9fafb;
+        color: #111827;
+        text-decoration: none
+      }
+
+      .mc-icon-btn.primary {
+        background: var(--mc-primary-soft);
+        border-color: #d8edaa;
+        color: #4d7c0f
+      }
+
+      .mc-icon-btn.warning {
+        background: var(--mc-yellow-soft);
+        border-color: #fde68a;
+        color: #b45309
+      }
+
+      .mc-icon-btn.danger {
+        background: var(--mc-red-soft);
+        border-color: #fecaca;
+        color: #b91c1c
+      }
+
+      .mc-view-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+        border: 1px solid var(--mc-border);
+        border-radius: 13px;
+        background: #fff;
+      }
+
+      .mc-view-toggle button {
+        border: 0;
+        border-radius: 10px;
+        background: transparent;
+        color: var(--mc-muted);
+        padding: 9px 13px;
+        font-weight: 900;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .mc-view-toggle button.is-active {
+        background: var(--mc-primary-soft);
+        color: #365314;
+      }
+
+      .mc-stats {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 16px;
+      }
+
+      @media(max-width:1300px) {
+        .mc-stats {
+          grid-template-columns: repeat(3, minmax(0, 1fr))
+        }
+      }
+
+      @media(max-width:850px) {
+        .mc-stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr))
+        }
+      }
+
+      @media(max-width:620px) {
+        .mc-stats {
+          grid-template-columns: 1fr
+        }
+      }
+
+      .mc-stat {
+        background: #fff;
+        border: 1px solid var(--mc-border);
+        border-radius: var(--mc-radius);
+        padding: 16px;
+        box-shadow: var(--mc-shadow-soft);
+        display: flex;
+        gap: 13px;
+        align-items: center;
+        min-height: 92px;
+      }
+
+      .mc-stat-ic {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        font-size: 18px;
+      }
+
+      .mc-stat-ic.total {
+        background: var(--mc-blue-soft);
+        color: var(--mc-blue)
+      }
+
+      .mc-stat-ic.active {
+        background: var(--mc-green-soft);
+        color: #047857
+      }
+
+      .mc-stat-ic.draft {
+        background: var(--mc-yellow-soft);
+        color: #b45309
+      }
+
+      .mc-stat-ic.inactive {
+        background: var(--mc-red-soft);
+        color: #b91c1c
+      }
+
+      .mc-stat-ic.upcoming {
+        background: #f3f4f6;
+        color: #4b5563
+      }
+
+      .mc-stat-label {
+        font-size: 11px;
+        color: var(--mc-muted);
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+      }
+
+      .mc-stat-value {
+        margin-top: 4px;
+        font-size: 24px;
+        line-height: 1;
+        font-weight: 950;
+      }
+
+      .mc-stat-sub {
+        margin-top: 5px;
+        color: var(--mc-muted);
+        font-size: 12px;
+      }
+
+      .mc-toolbar {
+        background: #fff;
+        border: 1px solid var(--mc-border);
+        border-radius: var(--mc-radius);
+        padding: 14px 16px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+        box-shadow: var(--mc-shadow-soft);
+      }
+
+      .mc-toolbar-left,
+      .mc-toolbar-right {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+      }
+
+      .mc-toolbar-left {
+        flex: 1
+      }
+
+      .mc-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 170px;
+      }
+
+      .mc-field.search {
+        flex: 1;
+        min-width: 260px;
+      }
+
+      .mc-label {
+        color: var(--mc-muted);
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+      }
+
+      .mc-input,
+      .mc-select {
+        width: 100%;
+        border: 1px solid var(--mc-border);
+        background: #fff;
+        border-radius: 10px;
+        padding: 10px 12px;
+        outline: none;
+        min-height: 42px;
+        font-size: 14px;
+      }
+
+      .mc-input {
+        padding-left: 36px;
+        background: #f9fafb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' /%3E%3C/svg%3E") no-repeat 11px center / 16px;
+      }
+
+      .mc-input:focus,
+      .mc-select:focus {
+        border-color: var(--mc-primary);
+        box-shadow: 0 0 0 3px var(--mc-primary-soft);
+        background-color: #fff;
+      }
+
+      .mc-bulkbar {
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        background: #111827;
+        color: #fff;
+        border-radius: 14px;
+        box-shadow: var(--mc-shadow);
+      }
+
+      .mc-bulkbar.is-visible {
+        display: flex
+      }
+
+      .mc-bulkbar select {
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, .22);
+        background: #fff;
+        color: #111827;
+        padding: 8px 10px;
+        min-height: 38px;
+      }
+
+      .mc-view {
+        display: none
+      }
+
+      .mc-view.is-active {
+        display: block
+      }
+
+      .mc-card {
+        background: #fff;
+        border: 1px solid var(--mc-border);
+        border-radius: var(--mc-radius);
+        overflow: hidden;
+        box-shadow: var(--mc-shadow-soft);
+      }
+
+      .mc-list-head,
+      .mc-row {
+        display: grid;
+        grid-template-columns: 44px minmax(240px, 1.45fr) minmax(170px, .95fr) minmax(150px, .8fr) minmax(220px, 1.2fr) 130px 150px 115px 110px 122px;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .mc-list-head {
+        padding: 15px 16px 10px;
+        color: var(--mc-muted);
+        font-size: 11px;
+        font-weight: 950;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+      }
+
+      .mc-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding-bottom: 16px
+      }
+
+      .mc-item {
+        margin: 0 16px;
+        border: 1px solid var(--mc-border);
+        border-radius: 14px;
+        background: #fff;
+        transition: .18s ease;
+        overflow: hidden;
+      }
+
+      .mc-item:hover {
+        border-color: var(--mc-primary);
+        box-shadow: var(--mc-shadow);
+      }
+
+      .mc-item.is-selected {
+        border-color: #111827;
+        box-shadow: 0 0 0 3px rgba(17, 24, 39, .08);
+      }
+
+      .mc-row {
+        padding: 16px
+      }
+
+      @media(max-width:1500px) {
+        .mc-list-head {
+          display: none
+        }
+
+        .mc-row {
+          grid-template-columns: 44px 1fr
+        }
+
+        .mc-cell:not(.mc-check-cell) {
+          grid-column: 2
+        }
+
+        .mc-actions-cell {
+          grid-column: 1 / -1
+        }
+      }
+
+      .mc-cell-title {
+        display: none;
+        color: var(--mc-muted);
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        margin-bottom: 4px;
+      }
+
+      @media(max-width:1500px) {
+        .mc-cell-title {
+          display: block
+        }
+      }
+
+      .mc-main-title {
+        font-size: 15px;
+        color: #111827;
+        font-weight: 950;
+        line-height: 1.25;
+      }
+
+      .mc-sub {
+        color: var(--mc-muted);
+        font-size: 13px;
+        line-height: 1.45;
+        margin-top: 4px;
+      }
+
+      .mc-line-clamp {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .mc-tag,
+      .mc-pill,
+      .mc-date,
+      .mc-reminder {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border-radius: 999px;
+        font-weight: 900;
+        width: max-content;
+        max-width: 100%;
+      }
+
+      .mc-tag {
+        background: var(--mc-blue-soft);
+        color: #256c91;
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
+      .mc-pill {
+        padding: 6px 10px;
+        font-size: 12px;
+        text-transform: capitalize;
+      }
+
+      .mc-pill.draft {
+        background: #f3f4f6;
+        color: #4b5563
+      }
+
+      .mc-pill.active {
+        background: var(--mc-green-soft);
+        color: #047857
+      }
+
+      .mc-pill.inactive {
+        background: var(--mc-yellow-soft);
+        color: #b45309
+      }
+
+      .mc-pill.cancelled {
+        background: var(--mc-red-soft);
+        color: #b91c1c
+      }
+
+      .mc-date {
+        border: 1px solid var(--mc-border);
+        background: #fff;
+        color: #111827;
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+
+      .mc-reminder {
+        margin-top: 8px;
+        padding: 5px 9px;
+        font-size: 12px;
+      }
+
+      .mc-reminder.ok {
+        background: var(--mc-green-soft);
+        color: #047857
+      }
+
+      .mc-reminder.soon {
+        background: var(--mc-yellow-soft);
+        color: #b45309
+      }
+
+      .mc-reminder.overdue {
+        background: var(--mc-red-soft);
+        color: #b91c1c
+      }
+
+      .mc-price {
+        font-weight: 950;
+        font-size: 14px;
+        color: #111827
+      }
+
+      .mc-row-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .mc-empty {
+        margin: 16px;
+        padding: 48px 20px;
+        border: 1px dashed var(--mc-border);
+        border-radius: 16px;
+        text-align: center;
+        color: var(--mc-muted);
+        background: #fff;
+      }
+
+      .mc-pagination {
+        margin-top: 16px;
+        background: #fff;
+        border: 1px solid var(--mc-border);
+        border-radius: 14px;
+        padding: 14px 16px;
+        box-shadow: var(--mc-shadow-soft);
+      }
+
+      .mc-pagination .pagination {
+        margin: 0;
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .mc-pagination .page-link {
+        border-radius: 10px !important;
+        border: 1px solid var(--mc-border) !important;
+        color: #111827;
+        box-shadow: none !important;
+        padding: 8px 12px;
+      }
+
+      .mc-pagination .active .page-link {
+        background: var(--mc-primary) !important;
+        border-color: var(--mc-primary) !important;
+        color: #fff !important;
+      }
+
+      .mc-panel {
+        background: #fff;
+        border: 1px solid var(--mc-border);
+        border-radius: var(--mc-radius);
+        box-shadow: var(--mc-shadow-soft);
+        overflow: hidden;
+      }
+
+      .mc-panel-head {
+        padding: 16px 18px;
+        background: #fafafa;
+        border-bottom: 1px solid var(--mc-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .mc-panel-title {
+        font-size: 16px;
+        font-weight: 950;
+        margin: 0;
+        color: #111827
+      }
+
+      .mc-panel-sub {
+        font-size: 12px;
+        color: var(--mc-muted);
+        margin-top: 3px
+      }
+
+      .mc-panel-body {
+        padding: 18px
+      }
+
+      .mc-calendar-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 370px;
+        gap: 16px;
+      }
+
+      @media(max-width:1200px) {
+        .mc-calendar-grid {
+          grid-template-columns: 1fr
+        }
+      }
+
+      #mc-calendar {
+        min-height: 720px
+      }
+
+      .mc-upcoming-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px
+      }
+
+      .mc-upcoming-item {
+        border: 1px solid var(--mc-border);
+        border-radius: 14px;
+        padding: 14px;
+        background: #fff;
+        cursor: pointer;
+        transition: .18s ease;
+      }
+
+      .mc-upcoming-item:hover {
+        border-color: var(--mc-primary);
+        background: #fcfdf8;
+        box-shadow: var(--mc-shadow-soft)
+      }
+
+      .mc-up-title {
+        font-size: 14px;
+        font-weight: 950;
+        color: #111827
+      }
+
+      .mc-up-meta {
+        font-size: 12px;
+        color: var(--mc-muted);
+        margin-top: 6px;
+        line-height: 1.55
+      }
+
+      .mc-up-badge {
+        display: inline-flex;
+        margin-top: 10px;
+        padding: 5px 9px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 900
+      }
+
+      .mc-up-badge.overdue {
+        background: var(--mc-red-soft);
+        color: #b91c1c
+      }
+
+      .mc-up-badge.soon {
+        background: var(--mc-yellow-soft);
+        color: #b45309
+      }
+
+      .mc-up-badge.ok {
+        background: var(--mc-green-soft);
+        color: #047857
+      }
+
+      .mc-kanban {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(250px, 1fr));
+        gap: 14px;
+        align-items: start;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+
+      .mc-kanban-col {
+        min-width: 250px;
+        background: #f9fafb;
+        border: 1px solid var(--mc-border);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      .mc-kanban-head {
+        padding: 13px 14px;
+        background: #fff;
+        border-bottom: 1px solid var(--mc-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .mc-kanban-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 950;
+        color: #111827;
+        font-size: 14px;
+      }
+
+      .mc-kanban-count {
+        background: #f3f4f6;
+        color: #374151;
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 950;
+      }
+
+      .mc-kanban-body {
+        min-height: 420px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .mc-kanban-body.drag-over {
+        background: var(--mc-primary-soft);
+        outline: 2px dashed var(--mc-primary);
+        outline-offset: -8px;
+      }
+
+      .mc-kanban-card {
+        background: #fff;
+        border: 1px solid var(--mc-border);
+        border-radius: 14px;
+        padding: 13px;
+        cursor: grab;
+        box-shadow: var(--mc-shadow-soft);
+        transition: .18s ease;
+      }
+
+      .mc-kanban-card:active {
+        cursor: grabbing
+      }
+
+      .mc-kanban-card.dragging {
+        opacity: .45;
+        transform: scale(.985)
+      }
+
+      .mc-kanban-card:hover {
+        border-color: var(--mc-primary);
+        box-shadow: var(--mc-shadow)
+      }
+
+      .mc-kanban-card-title {
+        font-size: 14px;
+        font-weight: 950;
+        color: #111827;
+        line-height: 1.25
+      }
+
+      .mc-kanban-card-meta {
+        font-size: 12px;
+        color: var(--mc-muted);
+        line-height: 1.5;
+        margin-top: 7px
+      }
+
+      .mc-kanban-card-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 10px;
+        flex-wrap: wrap
+      }
+
+      .mc-toast-wrap {
+        position: fixed;
+        right: 22px;
+        bottom: 22px;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 380px;
+        max-width: calc(100vw - 40px);
+        pointer-events: none;
+      }
+
+      .mc-toast {
+        pointer-events: auto;
+        background: #fff;
+        border: 1px solid #fde68a;
+        border-left: 5px solid var(--mc-yellow);
+        border-radius: 16px;
+        box-shadow: 0 22px 50px rgba(15, 23, 42, .2);
+        overflow: hidden;
+        animation: mcSlideIn .2s ease-out;
+      }
+
+      @keyframes mcSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px)
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0)
+        }
+      }
+
+      .mc-toast-head {
+        padding: 13px 15px;
+        background: var(--mc-yellow-soft);
+        color: #92400e;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        font-weight: 950;
+      }
+
+      .mc-toast-body {
+        padding: 13px 15px;
+        color: #111827;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .mc-toast-close {
+        border: 0;
+        background: transparent;
+        color: #92400e;
+        cursor: pointer;
+        font-weight: 950;
+        font-size: 18px;
+        line-height: 1;
+      }
+
+      .mc-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(17, 24, 39, .55);
+        backdrop-filter: blur(3px);
+        z-index: 99998;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+      }
+
+      .mc-modal-backdrop.is-open {
+        display: flex
+      }
+
+      .mc-modal {
+        width: 100%;
+        max-width: 760px;
+        background: #fff;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, .65);
+        box-shadow: 0 35px 80px rgba(15, 23, 42, .28);
+        overflow: hidden;
+      }
+
+      .mc-modal-head {
+        padding: 16px 18px;
+        background: #fafafa;
+        border-bottom: 1px solid var(--mc-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .mc-modal-title {
+        font-size: 16px;
+        font-weight: 950;
+        margin: 0
+      }
+
+      .mc-modal-body {
+        padding: 18px;
+        max-height: 70vh;
+        overflow: auto
+      }
+
+      .mc-modal-footer {
+        padding: 14px 18px;
+        border-top: 1px solid var(--mc-border);
+        background: #fafafa;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        flex-wrap: wrap
+      }
+
+      .mc-kv {
+        display: grid;
+        grid-template-columns: 165px 1fr;
+        gap: 10px 12px
+      }
+
+      .mc-k {
+        font-size: 12px;
+        font-weight: 950;
+        color: var(--mc-muted);
+        text-transform: uppercase;
+        letter-spacing: .05em
+      }
+
+      .mc-v {
+        font-size: 14px;
+        font-weight: 800;
+        color: #111827;
+        line-height: 1.5
+      }
+
+      @media(max-width:620px) {
+        .mc-kv {
+          grid-template-columns: 1fr
+        }
+      }
+
+      .fc .fc-toolbar-title {
+        font-size: 1.1rem;
+        font-weight: 950;
+        color: #111827
+      }
+
+      .fc .fc-button {
+        background: #fff !important;
+        border: 1px solid var(--mc-border) !important;
+        color: #374151 !important;
+        box-shadow: none !important;
+        border-radius: 10px !important;
+        font-weight: 900 !important;
+        padding: .45rem .8rem !important;
+      }
+
+      .fc .fc-button:hover {
+        background: #f9fafb !important
+      }
+
+      .fc .fc-button-active {
+        background: var(--mc-primary-soft) !important;
+        border-color: var(--mc-primary) !important;
+        color: #365314 !important
+      }
+
+      .fc-theme-standard td,
+      .fc-theme-standard th,
+      .fc-theme-standard .fc-scrollgrid {
+        border-color: #edf0f2 !important
+      }
+
+      .mc-list-head,
+      .mc-row {
+        grid-template-columns:
+          44px minmax(220px, 1.3fr) minmax(160px, .9fr) minmax(140px, .8fr) minmax(210px, 1fr) 120px 140px 105px 95px 190px;
+      }
+
+      .mc-actions-cell {
+        min-width: 190px;
+      }
+
+      .mc-row-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: nowrap;
+      }
+
+      .mc-icon-btn.success {
+        background: #ecfdf5;
+        border-color: #bbf7d0;
+        color: #15803d;
+      }
+
+      .mc-icon-btn.success:hover {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      @media(max-width:1500px) {
+        .mc-list-head {
+          display: none;
+        }
+
+        .mc-row {
+          grid-template-columns: 44px minmax(0, 1fr);
+        }
+
+        .mc-cell:not(.mc-check-cell) {
+          grid-column: 2;
+        }
+
+        .mc-actions-cell {
+          grid-column: 1 / -1;
+          min-width: 0;
+        }
+
+        .mc-row-actions {
+          justify-content: flex-start;
+          flex-wrap: wrap;
+          padding-left: 52px;
+        }
+      }
+
+      @media(max-width:650px) {
+        .mc-row {
+          grid-template-columns: 1fr;
+        }
+
+        .mc-check-cell,
+        .mc-cell:not(.mc-check-cell),
+        .mc-actions-cell {
+          grid-column: 1;
+        }
+
+        .mc-row-actions {
+          padding-left: 0;
+          justify-content: flex-start;
+        }
+
+        .mc-icon-btn {
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      /* ============================================================
+                         FIX: responsive list view + visible action buttons
+                         The previous grid was wider than the content area, so everything
+                         after price was clipped. This makes the action area sticky on wide
+                         screens and card-like on smaller screens.
+                      ============================================================ */
+
+      .mc-card {
+        overflow-x: auto;
+        overflow-y: visible;
+      }
+
+      .mc-list-head,
+      .mc-row {
+        min-width: 1420px;
+        grid-template-columns:
+          44px minmax(210px, 1.25fr) minmax(150px, .85fr) minmax(140px, .75fr) minmax(190px, 1fr) 110px 130px 100px 90px 220px !important;
+      }
+
+      .mc-list-head>div:last-child,
+      .mc-actions-cell {
+        position: sticky;
+        right: 0;
+        z-index: 5;
+        background: #fff;
+        box-shadow: -14px 0 22px -22px rgba(15, 23, 42, .65);
+      }
+
+      .mc-actions-cell {
+        min-width: 220px;
+      }
+
+      .mc-row-actions {
+        display: flex !important;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+      }
+
+      .mc-icon-btn {
+        flex: 0 0 38px;
+      }
+
+      .mc-icon-btn.success {
+        background: #ecfdf5;
+        border-color: #bbf7d0;
+        color: #15803d;
+      }
+
+      .mc-icon-btn.success:hover {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .mc-icon-btn.disabled,
+      .mc-icon-btn.is-disabled {
+        opacity: .45;
+        pointer-events: none;
+        filter: grayscale(1);
+      }
+
+      @media(max-width:1700px) {
+        .mc-card {
+          overflow-x: visible;
+        }
+
+        .mc-list-head {
+          display: none !important;
+        }
+
+        .mc-row {
+          min-width: 0;
+          grid-template-columns: 44px minmax(0, 1fr) !important;
+          align-items: start;
+        }
+
+        .mc-check-cell {
+          grid-column: 1;
+          grid-row: 1;
+        }
+
+        .mc-cell:not(.mc-check-cell) {
+          grid-column: 2;
+        }
+
+        .mc-actions-cell {
+          position: static;
+          grid-column: 1 / -1 !important;
+          min-width: 0;
+          box-shadow: none;
+          border-top: 1px solid var(--mc-border);
+          padding-top: 12px;
+          margin-top: 2px;
+        }
+
+        .mc-row-actions {
+          justify-content: flex-start !important;
+          flex-wrap: wrap !important;
+          padding-left: 52px;
+        }
+
+        .mc-cell-title {
+          display: block !important;
+        }
+      }
+
+      @media(max-width:650px) {
+        .mc-row {
+          grid-template-columns: 1fr !important;
+        }
+
+        .mc-check-cell,
+        .mc-cell:not(.mc-check-cell),
+        .mc-actions-cell {
+          grid-column: 1 !important;
+        }
+
+        .mc-row-actions {
+          padding-left: 0;
+          justify-content: flex-start !important;
+        }
+
+        .mc-icon-btn {
+          width: 40px;
+          height: 40px;
+          flex-basis: 40px;
+        }
+      }
+
+      /* ============================================================
+                 FINAL LIST COMPACT FIX:
+                 Kunde + Adresse + Verantwortlich + Produkt are one column.
+                 This prevents the row from being clipped before the action buttons.
+              ============================================================ */
+
+      .mc-list-head,
+      .mc-row {
+        min-width: 0 !important;
+        grid-template-columns:
+          44px minmax(210px, 1.15fr) minmax(320px, 1.8fr) 125px 145px 105px 100px 220px !important;
+      }
+
+      .mc-customer-object-cell {
+        min-width: 0;
+      }
+
+      .mc-customer-object-cell .mc-sub {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .mc-actions-cell {
+        min-width: 220px !important;
+      }
+
+      .mc-row-actions {
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: nowrap !important;
+        white-space: nowrap;
+      }
+
+      .mc-icon-btn {
+        flex: 0 0 38px;
+      }
+
+      .mc-icon-btn.success {
+        background: #ecfdf5;
+        border-color: #bbf7d0;
+        color: #15803d;
+      }
+
+      .mc-icon-btn.success:hover {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      @media(max-width:1250px) {
+        .mc-list-head {
+          display: none !important;
+        }
+
+        .mc-card {
+          overflow-x: visible !important;
+        }
+
+        .mc-row {
+          min-width: 0 !important;
+          grid-template-columns: 44px minmax(0, 1fr) !important;
+          align-items: start;
+        }
+
+        .mc-check-cell {
+          grid-column: 1;
+          grid-row: 1;
+        }
+
+        .mc-cell:not(.mc-check-cell) {
+          grid-column: 2;
+        }
+
+        .mc-actions-cell {
+          grid-column: 1 / -1 !important;
+          min-width: 0 !important;
+          position: static !important;
+          box-shadow: none !important;
+          border-top: 1px solid var(--mc-border);
+          padding-top: 12px;
+          margin-top: 2px;
+        }
+
+        .mc-row-actions {
+          justify-content: flex-start !important;
+          flex-wrap: wrap !important;
+          padding-left: 52px;
+        }
+
+        .mc-cell-title {
+          display: block !important;
+        }
+      }
+
+      @media(max-width:650px) {
+        .mc-row {
+          grid-template-columns: 1fr !important;
+        }
+
+        .mc-check-cell,
+        .mc-cell:not(.mc-check-cell),
+        .mc-actions-cell {
+          grid-column: 1 !important;
+        }
+
+        .mc-row-actions {
+          padding-left: 0 !important;
+          justify-content: flex-start !important;
+        }
+
+        .mc-icon-btn {
+          width: 40px;
+          height: 40px;
+          flex-basis: 40px;
+        }
+      }
+
+
+      /* ============================================================
+             ACTION MENU WITH LUCIDE ICONS
+             Replaces many small action icons with one clean dropdown menu.
+          ============================================================ */
+      .mc-row-menu-actions {
+        justify-content: flex-end !important;
+        position: relative;
+        overflow: visible;
+      }
+
+      .mc-action-menu {
+        position: relative;
+        display: inline-flex;
+        justify-content: flex-end;
+        min-width: 132px;
+      }
+
+      .mc-menu-btn {
+        border: 1px solid var(--mc-border);
+        background: #fff;
+        color: #111827;
+        border-radius: 12px;
+        min-height: 40px;
+        padding: 9px 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        font-weight: 950;
+        box-shadow: var(--mc-shadow-soft);
+        transition: .18s ease;
+        white-space: nowrap;
+      }
+
+      .mc-menu-btn:hover,
+      .mc-action-menu.is-open .mc-menu-btn {
+        border-color: var(--mc-primary);
+        background: var(--mc-primary-soft);
+        color: #365314;
+      }
+
+      .mc-lucide {
+        width: 17px;
+        height: 17px;
+        stroke-width: 2.25;
+        flex: 0 0 auto;
+      }
+
+      .mc-lucide.sm {
+        width: 15px;
+        height: 15px;
+      }
+
+      .mc-action-dropdown {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 2147483000;
+        width: 245px;
+        max-width: calc(100vw - 24px);
+        background: #fff;
+        border: 1px solid var(--mc-border);
+        border-radius: 15px;
+        box-shadow: 0 22px 55px rgba(15, 23, 42, .20);
+        padding: 7px;
+        display: none;
+        transform: translate3d(0, 0, 0);
+      }
+
+      .mc-action-menu.is-open .mc-action-dropdown {
+        display: block;
+      }
+
+      .mc-action-dropdown::before {
+        display: none;
+      }
+
+      .mc-action-item {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: #111827;
+        text-decoration: none;
+        border-radius: 11px;
+        padding: 10px 11px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 1.2;
+        text-align: left;
+      }
+
+      .mc-action-item:hover {
+        background: #f9fafb;
+        color: #111827;
+        text-decoration: none;
+      }
+
+      .mc-action-item.warning {
+        color: #b45309;
+      }
+
+      .mc-action-item.warning:hover {
+        background: var(--mc-yellow-soft);
+      }
+
+      .mc-action-item.is-disabled {
+        opacity: .45;
+        pointer-events: none;
+        filter: grayscale(1);
+      }
+
+      .mc-actions-cell,
+      .mc-card,
+      .mc-item {
+        overflow: visible !important;
+      }
+
+      @media(max-width:1250px) {
+        .mc-row-menu-actions {
+          justify-content: flex-start !important;
+        }
+      }
+    </style>
+  @endpush
+@endonce
 
 @section('content')
-<div class="app-content content">
-  <div class="content-overlay"></div>
-  <div class="header-navbar-shadow"></div>
+  <div class="mc-wrap">
+    <div class="mc-titlebar">
+      <div>
+        <h1 class="mc-title">WARTUNGSVERTRÄGE</h1>
+        <div class="mc-subtitle">Liste, Kalender, Kanban, nächste Wartungen und eingehende Vertrags-Erinnerungen an einem
+          Ort.</div>
+        <div class="mc-breadcrumb">
+          <a href="{{ url('/employee_dashboard') }}">Home</a>
+          <span>›</span>
+          <span>Wartungsverträge</span>
+        </div>
+      </div>
 
-  <div class="content-wrapper">
-    <div class="content-header row">
-      <div class="col-12">
-        <h2 class="content-header-title float-left mb-0">Wartungsverträge</h2>
-        <div class="breadcrumb-wrapper col-12">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ url('/employee_dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item active">Verträge &amp; Wartung</li>
-          </ol>
+      <div class="mc-actions">
+        <div class="mc-view-toggle" id="mc-view-toggle">
+          <button type="button" data-view="list" class="is-active"><i class="fa fa-list-ul"></i> Liste</button>
+          <button type="button" data-view="calendar"><i class="fa fa-calendar"></i> Kalender</button>
+          <button type="button" data-view="kanban"><i class="fa fa-columns"></i> Kanban</button>
+        </div>
+
+        <button type="button" class="mc-btn-soft" id="mc-refresh-btn">
+          <i class="fa fa-rotate"></i> Aktualisieren
+        </button>
+
+        <a href="{{ $routeCreate }}" class="mc-btn">
+          <i class="fa fa-plus"></i> Vertrag anlegen
+        </a>
+      </div>
+    </div>
+
+    @if(session('success'))
+      <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if(session('error'))
+      <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
+    <div class="mc-stats">
+      <div class="mc-stat">
+        <div class="mc-stat-ic total"><i class="fa fa-file-contract"></i></div>
+        <div>
+          <div class="mc-stat-label">Gesamt</div>
+          <div class="mc-stat-value">{{ $totalCount }}</div>
+          <div class="mc-stat-sub">Verträge insgesamt</div>
+        </div>
+      </div>
+
+      <div class="mc-stat">
+        <div class="mc-stat-ic active"><i class="fa fa-circle-check"></i></div>
+        <div>
+          <div class="mc-stat-label">Aktiv</div>
+          <div class="mc-stat-value">{{ $activeCount }}</div>
+          <div class="mc-stat-sub">Laufende Verträge</div>
+        </div>
+      </div>
+
+      <div class="mc-stat">
+        <div class="mc-stat-ic draft"><i class="fa fa-pen-to-square"></i></div>
+        <div>
+          <div class="mc-stat-label">Entwurf</div>
+          <div class="mc-stat-value">{{ $draftCount }}</div>
+          <div class="mc-stat-sub">Noch nicht freigegeben</div>
+        </div>
+      </div>
+
+      <div class="mc-stat">
+        <div class="mc-stat-ic inactive"><i class="fa fa-ban"></i></div>
+        <div>
+          <div class="mc-stat-label">Inaktiv / Gekündigt</div>
+          <div class="mc-stat-value">{{ $inactiveCount }}</div>
+          <div class="mc-stat-sub">Beendete Verträge</div>
+        </div>
+      </div>
+
+      <div class="mc-stat">
+        <div class="mc-stat-ic upcoming"><i class="fa fa-calendar-check"></i></div>
+        <div>
+          <div class="mc-stat-label">Nächste 30 Tage</div>
+          <div class="mc-stat-value" id="mc-stat-upcoming">{{ $upcomingCount }}</div>
+          <div class="mc-stat-sub">Anstehende Wartungen</div>
         </div>
       </div>
     </div>
 
-    <div class="content-body">
-      <div class="mc-page">
-        <div class="mc-container">
-          <div class="mc-shell">
+    <form method="GET" action="{{ $routeIndex }}" class="mc-toolbar" id="mc-filter-form">
+      <div class="mc-toolbar-left">
+        <div class="mc-field search">
+          <label class="mc-label">Suche</label>
+          <input type="text" name="search" value="{{ $filters['search'] ?? '' }}" class="mc-input"
+            placeholder="Vertragsnr., Titel, Kunde, Adresse, Produkt, Mitarbeiter">
+        </div>
 
-            {{-- Header --}}
-            <div class="mc-header">
-              <div>
-                <div class="mc-title">Wartungsverträge</div>
-                <div class="mc-subtitle">Liste, Kalender und anstehende Wartungen.</div>
-              </div>
+        <div class="mc-field">
+          <label class="mc-label">Status</label>
+          <select name="status" class="mc-select">
+            <option value="">Status (alle)</option>
+            @foreach($statusOptions as $value => $label)
+              <option value="{{ $value }}" @selected(($filters['status'] ?? '') === $value)>{{ $label }}</option>
+            @endforeach
+          </select>
+        </div>
 
-              <div class="mc-header-right">
-                <div class="mc-view-toggle" id="mc-view-toggle">
-                  <button type="button" data-view="list" class="is-active">
-                    <i class="fa fa-list-ul"></i><span>Liste</span>
-                  </button>
-                  <button type="button" data-view="calendar">
-                    <i class="fa fa-calendar"></i><span>Kalender</span>
-                  </button>
-                  <button type="button" data-view="kanban">
-                    <i class="fa fa-columns"></i><span>Kanban</span>
-                  </button>
+        <div class="mc-field">
+          <label class="mc-label">Intervall</label>
+          <select name="interval_type" class="mc-select">
+            <option value="">Intervall (alle)</option>
+            @foreach($intervalOptions as $value => $label)
+              <option value="{{ $value }}" @selected(($filters['intervalType'] ?? '') === $value)>{{ $label }}</option>
+            @endforeach
+          </select>
+        </div>
+
+        <div class="mc-field">
+          <label class="mc-label">Sortierung</label>
+          <select name="sort" class="mc-select">
+            <option value="next_service_asc" @selected(($filters['sort'] ?? '') === 'next_service_asc')>Nächste Wartung ↑
+            </option>
+            <option value="next_service_desc" @selected(($filters['sort'] ?? '') === 'next_service_desc')>Nächste Wartung ↓
+            </option>
+            <option value="start_asc" @selected(($filters['sort'] ?? '') === 'start_asc')>Vertragsbeginn ↑</option>
+            <option value="start_desc" @selected(($filters['sort'] ?? '') === 'start_desc')>Vertragsbeginn ↓</option>
+            <option value="created_desc" @selected(($filters['sort'] ?? '') === 'created_desc')>Neueste zuerst</option>
+            <option value="created_asc" @selected(($filters['sort'] ?? '') === 'created_asc')>Älteste zuerst</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mc-toolbar-right">
+        <button type="submit" class="mc-btn-soft"><i class="fa fa-filter"></i> Filtern</button>
+        <a href="{{ $routeIndex }}" class="mc-btn-soft"><i class="fa fa-xmark"></i> Zurücksetzen</a>
+      </div>
+    </form>
+
+    <div class="mc-bulkbar" id="mc-bulkbar">
+      <div><strong id="mc-selected-count">0</strong> Vertrag/Verträge ausgewählt</div>
+      <div class="mc-actions">
+        <select id="mc-bulk-status">
+          <option value="">Status ändern…</option>
+          @foreach($statusOptions as $value => $label)
+            <option value="{{ $value }}">{{ $label }}</option>
+          @endforeach
+        </select>
+        <button type="button" class="mc-btn-soft" id="mc-bulk-status-btn"><i class="fa fa-check"></i> Anwenden</button>
+        <button type="button" class="mc-btn-soft" id="mc-bulk-delete-btn"><i class="fa fa-trash"></i> Löschen</button>
+      </div>
+    </div>
+
+    <div class="mc-view is-active" id="mc-view-list">
+      <div class="mc-card">
+        <div class="mc-list-head">
+          <div><input type="checkbox" id="mc-select-all"></div>
+          <div>Vertrag</div>
+          <div>Kunde / Objekt</div>
+          <div>Intervall</div>
+          <div>Nächste Wartung</div>
+          <div>Status</div>
+          <div>Preis</div>
+          <div style="text-align:right">Aktionen</div>
+        </div>
+
+        <div class="mc-list" id="mc-list">
+          @forelse($contractPayload as $item)
+            <div class="mc-item" data-contract-id="{{ $item['id'] }}" data-status="{{ e($item['status']) }}"
+              data-title="{{ e($item['title']) }}" data-customer="{{ e($item['customer']) }}"
+              data-responsible="{{ e($item['responsible']) }}" data-address="{{ e($item['address']) }}"
+              data-product="{{ e($item['product']) }}" data-next-service="{{ e($item['next_service_date'] ?? '') }}"
+              data-show-url="{{ e($item['show_url']) }}" data-profile-url="{{ e($item['customer_profile_url'] ?? '') }}"
+              data-edit-url="{{ e($item['edit_url']) }}">
+              <div class="mc-row">
+                <div class="mc-check-cell">
+                  <input type="checkbox" class="mc-row-check" value="{{ $item['id'] }}">
+                </div>
+
+                <div class="mc-cell">
+                  <div class="mc-cell-title">Vertrag</div>
+                  <div class="mc-main-title">{{ $item['title'] }}</div>
+                  <div class="mc-sub"><span class="mc-tag">Nr.: {{ $item['contract_no'] ?? '–' }}</span></div>
+                </div>
+
+                <div class="mc-cell mc-customer-object-cell">
+                  <div class="mc-cell-title">Kunde / Objekt</div>
+
+                  <div class="mc-main-title" style="font-size:14px">
+                    <i class="fa fa-user" style="color:#93c21c;margin-right:6px;"></i>
+                    {{ $item['customer'] }}
+                  </div>
+
+                  <div class="mc-sub">
+                    <i class="fa fa-id-card" style="width:14px;"></i>
+                    {{ $item['customer_no'] ? 'Kundennr.: ' . $item['customer_no'] : 'Keine Kundennr.' }}
+                  </div>
+
+                  <div class="mc-sub mc-line-clamp">
+                    <i class="fa fa-location-dot" style="width:14px;"></i>
+                    {{ $item['address'] }}
+                  </div>
+
+                  <div class="mc-sub">
+                    <i class="fa fa-user-gear" style="width:14px;"></i>
+                    <strong>Verantwortlich:</strong> {{ $item['responsible'] }}
+                  </div>
+
+                  <div class="mc-sub mc-line-clamp">
+                    <i class="fa fa-screwdriver-wrench" style="width:14px;"></i>
+                    <strong>Produkt:</strong> {{ $item['product'] }}
+                  </div>
+                </div>
+
+                <div class="mc-cell">
+                  <div class="mc-cell-title">Intervall</div>
+                  <span class="mc-tag">
+                    {{ $intervalOptions[$item['interval_type']] ?? $item['interval_type'] }}
+                    @if($item['interval_months'])
+                      · {{ $item['interval_months'] }} Mon.
+                    @endif
+                  </span>
+                </div>
+
+                <div class="mc-cell">
+                  <div class="mc-cell-title">Nächste Wartung</div>
+                  <div class="mc-date"><i class="fa fa-calendar"></i> {{ $item['next_service_display'] }}</div>
+                  @if(!is_null($item['days_to']))
+                    @if($item['days_to'] < 0)
+                      <div class="mc-reminder overdue">Überfällig · {{ abs($item['days_to']) }} Tage</div>
+                    @elseif($item['days_to'] <= 14)
+                      <div class="mc-reminder soon">Bald · {{ $item['days_to'] }} Tage</div>
+                    @else
+                      <div class="mc-reminder ok">Geplant</div>
+                    @endif
+                  @endif
+                </div>
+
+                <div class="mc-cell">
+                  <div class="mc-cell-title">Status</div>
+                  <span class="mc-pill {{ $item['status'] }}">{{ $item['status_label'] }}</span>
+                </div>
+
+                <div class="mc-cell">
+                  <div class="mc-cell-title">Preis</div>
+                  <div class="mc-price">{{ $item['price'] ?? '–' }}</div>
+                </div>
+
+                <div class="mc-cell mc-actions-cell">
+                  <div class="mc-cell-title">Aktionen</div>
+
+                  <div class="mc-row-actions mc-row-menu-actions">
+                    <div class="mc-action-menu" data-action-menu-wrap>
+                      <button type="button" class="mc-menu-btn" data-action-menu-trigger aria-expanded="false"
+                        aria-haspopup="true">
+                        <i data-lucide="menu" class="mc-lucide"></i>
+                        <span>Menü</span>
+                        <i data-lucide="chevron-down" class="mc-lucide sm"></i>
+                      </button>
+
+                      <div class="mc-action-dropdown" data-action-menu>
+                        <button type="button" class="mc-action-item" data-open-modal="{{ $item['id'] }}">
+                          <i data-lucide="eye" class="mc-lucide"></i>
+                          <span>Schnellansicht</span>
+                        </button>
+
+                        <a href="{{ $item['show_url'] }}" class="mc-action-item">
+                          <i data-lucide="file-text" class="mc-lucide"></i>
+                          <span>Wartungsvertrag öffnen</span>
+                        </a>
+
+                        <a href="{{ $item['customer_profile_url'] ?: '#' }}"
+                          class="mc-action-item {{ empty($item['customer_profile_url']) ? 'is-disabled' : '' }}"
+                          title="{{ !empty($item['customer_profile_url']) ? 'Kundenprofil öffnen' : 'Kein Kunde verknüpft' }}">
+                          <i data-lucide="user-round" class="mc-lucide"></i>
+                          <span>Kundenprofil</span>
+                        </a>
+
+                        <a href="{{ $item['edit_url'] }}" class="mc-action-item warning">
+                          <i data-lucide="square-pen" class="mc-lucide"></i>
+                          <span>Bearbeiten</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+          @empty
+            <div class="mc-empty">
+              <div style="font-size:32px;margin-bottom:8px"><i class="fa fa-folder-open"></i></div>
+              Keine Wartungsverträge gefunden.
+            </div>
+          @endforelse
+        </div>
+      </div>
 
-            {{-- Toolbar --}}
-            <form method="GET" action="{{ route('admin.maintenance.contracts.index') }}">
-              <div class="mc-toolbar">
-                <div>
-                  <input type="text" name="search" value="{{ $filters['search'] ?? '' }}" class="mc-input"
-                         placeholder="Suche nach Vertragsnr., Titel, Kunde, Adresse, Produkt...">
-                </div>
+      @if($isPaginator && method_exists($contracts, 'links') && $contracts->hasPages())
+        <div class="mc-pagination">
+          <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap:12px;">
+            <div style="font-size:12px;color:#6b7280;">
+              Zeige <strong>{{ $contracts->firstItem() ?? 0 }}</strong>
+              bis <strong>{{ $contracts->lastItem() ?? 0 }}</strong>
+              von <strong>{{ $contracts->total() }}</strong> Einträgen
+            </div>
+            <div>{{ $contracts->appends(request()->query())->onEachSide(1)->links('pagination::bootstrap-4') }}</div>
+          </div>
+        </div>
+      @endif
+    </div>
 
-                <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                  <select name="status" class="mc-select" style="min-width: 180px;">
-                    <option value="">Status (alle)</option>
-                    @php $statusOptions = ['draft'=>'Entwurf','active'=>'Aktiv','inactive'=>'Inaktiv','cancelled'=>'Gekündigt']; @endphp
-                    @foreach($statusOptions as $value => $label)
-                      <option value="{{ $value }}" @selected(($filters['status'] ?? '') === $value)>{{ $label }}</option>
-                    @endforeach
-                  </select>
+    <div class="mc-view" id="mc-view-calendar">
+      <div class="mc-calendar-grid">
+        <div class="mc-panel">
+          <div class="mc-panel-head">
+            <div>
+              <h3 class="mc-panel-title">Kalenderansicht</h3>
+              <div class="mc-panel-sub">Alle Wartungstermine mit Klick zur Profilseite.</div>
+            </div>
+            <button type="button" class="mc-btn-soft" id="mc-calendar-reload"><i class="fa fa-rotate"></i> Neu
+              laden</button>
+          </div>
+          <div class="mc-panel-body">
+            <div id="mc-calendar"></div>
+          </div>
+        </div>
 
-                  <select name="interval_type" class="mc-select" style="min-width: 180px;">
-                    <option value="">Intervall (alle)</option>
-                    <option value="yearly" @selected(($filters['intervalType'] ?? '') === 'yearly')>Jährlich</option>
-                    <option value="monthly" @selected(($filters['intervalType'] ?? '') === 'monthly')>Monatlich</option>
-                    <option value="custom" @selected(($filters['intervalType'] ?? '') === 'custom')>Individuell</option>
-                  </select>
-
-                  <select name="sort" class="mc-select" style="min-width: 220px;">
-                    <option value="next_service_asc"  @selected(($filters['sort'] ?? '') === 'next_service_asc')>Sortierung: Nächste Wartung ↑</option>
-                    <option value="next_service_desc" @selected(($filters['sort'] ?? '') === 'next_service_desc')>Nächste Wartung ↓</option>
-                    <option value="start_asc"         @selected(($filters['sort'] ?? '') === 'start_asc')>Vertragsbeginn ↑</option>
-                    <option value="start_desc"        @selected(($filters['sort'] ?? '') === 'start_desc')>Vertragsbeginn ↓</option>
-                    <option value="created_desc"      @selected(($filters['sort'] ?? '') === 'created_desc')>Neueste zuerst</option>
-                    <option value="created_asc"       @selected(($filters['sort'] ?? '') === 'created_asc')>Älteste zuerst</option>
-                  </select>
-                </div>
-
-                <div style="display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap;">
-                  <button type="submit" class="mc-btn mc-btn-ghost"><i class="fa fa-filter"></i><span>Filter</span></button>
-                  <a href="{{ route('admin.maintenance.contracts.index') }}" class="mc-btn mc-btn-ghost"><i class="fa fa-rotate-right"></i><span>Reset</span></a>
-                  <a href="{{ route('admin.maintenance.contracts.create') }}" class="mc-btn mc-btn-primary"><i class="fa fa-plus-circle"></i><span>Vertrag anlegen</span></a>
-                </div>
-              </div>
-            </form>
-
-            {{-- Views --}}
-            <div class="mc-views">
-
-              {{-- LIST --}}
-              <div class="mc-view is-active" id="mc-view-list">
-                <div class="mc-table-shell">
-                  <table class="mc-table">
-                    <thead>
-                      <tr>
-                        <th>Vertrag</th>
-                        <th>Kunde</th>
-                        <th>Verantwortlich</th>
-                        <th>Anlage / Adresse</th>
-                        <th>Intervall</th>
-                        <th>Nächste Wartung</th>
-                        <th>Status</th>
-                        <th>Preis</th>
-                        <th style="width:70px;"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @forelse($contracts as $contract)
-                        @php
-                          $lead  = $contract->lead;
-                          $alt   = $contract->alternative;
-                          $asset = $contract->asset;
-
-                          // RESPONSIBLE (Contract -> responsibleEmployee)
-                          $resp = $contract->responsibleEmployee ?? null;
-                          $respName = $resp?->full_name ?: $resp?->name ?: null;
-
-                          // Kunde
-                          $customerName = null;
-                          if ($lead) {
-                            $customerName = $lead->firma
-                              ?? trim(($lead->name ?? $lead->vorname ?? '') . ' ' . ($lead->lastname ?? $lead->nachname ?? ''));
-                            $customerName = trim((string)$customerName) !== '' ? $customerName : null;
-                          }
-
-                          // Adresse
-                          $addressText = null;
-                          if ($alt) {
-                            $addressText = $alt->full_address
-                              ?? trim(($alt->street ?? '') . ', ' . ($alt->postcode ?? '') . ' ' . ($alt->city ?? ''));
-                            $addressText = trim((string)$addressText) !== '' ? $addressText : null;
-                          }
-
-                          if (!$addressText && $asset && is_array($asset->technical_data ?? null)) {
-                            $addressText = $asset->technical_data['installationAddressText']
-                              ?? ($asset->technical_data['installationLocation']['notes'] ?? null);
-                            $addressText = trim((string)$addressText) !== '' ? $addressText : null;
-                          }
-
-                          if (!$addressText && $lead) {
-                            $addressText = trim(($lead->street ?? '') . ', ' . ($lead->postcode ?? '') . ' ' . ($lead->city ?? ''));
-                            $addressText = trim((string)$addressText) !== '' ? $addressText : null;
-                          }
-
-                          // Titel
-                          $contractTitle = trim((string)($contract->title ?? ''));
-                          if ($contractTitle === '' && $asset) $contractTitle = trim((string)($asset->title ?? ''));
-                          if ($contractTitle === '') $contractTitle = $contract->contract_no ?? 'Wartungsvertrag';
-
-                          // Produktlabel
-                          $productParts = [];
-                          if ($asset && $asset->manufacturer_attach) $productParts[] = $asset->manufacturer_attach;
-                          if ($asset && $asset->manufacturer) $productParts[] = $asset->manufacturer;
-                          if ($asset && $asset->model) $productParts[] = $asset->model;
-                          if ($asset && $asset->title) $productParts[] = $asset->title;
-                          $productLabel = trim(implode(' · ', array_filter($productParts)));
-
-                          // Next service
-                          $nextService = $contract->next_service_date ?? null;
-                          if (!$nextService) $nextService = $contract->end_date ?? null;
-
-                          $nextServiceFmt = $nextService ? \Carbon\Carbon::parse($nextService)->format('d.m.Y') : '–';
-                          $status = $contract->status ?? 'draft';
-                          $statusClass = 'mc-status-' . $status;
-
-                          $daysTo = null;
-                          if ($nextService) {
-                            $daysTo = now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($nextService)->startOfDay(), false);
-                          }
-                        @endphp
-
-                        <tr
-                          data-id="{{ $contract->id }}"
-                          data-title="{{ e($contractTitle) }}"
-                          data-customer="{{ e($customerName ?? '') }}"
-                          data-responsible="{{ e($respName ?? '') }}"
-                          data-address="{{ e($addressText ?? '') }}"
-                          data-product="{{ e($productLabel) }}"
-                          data-next-service="{{ $nextService ? \Carbon\Carbon::parse($nextService)->toDateString() : '' }}"
-                          data-status="{{ e($status) }}"
-                        >
-                          <td>
-                            <div class="mc-row-title">{{ $contractTitle }}</div>
-                            <div class="mc-row-sub">
-                              <span class="mc-tag"><span class="mc-dot"></span>Nr.: {{ $contract->contract_no ?? '–' }}</span>
-                            </div>
-                          </td>
-
-                          <td>
-                            <div class="mc-row-title">{{ $customerName ?? '–' }}</div>
-                            @if($lead && ($lead->customer_no ?? null))
-                              <div class="mc-row-sub">Kundennr.: {{ $lead->customer_no }}</div>
-                            @endif
-                          </td>
-
-                          <td>
-                            @if($respName)
-                              <div class="mc-row-title">{{ $respName }}</div>
-                              <div class="mc-row-sub">Mitarbeiter</div>
-                            @else
-                              <span class="mc-row-sub">–</span>
-                            @endif
-                          </td>
-
-                          <td>
-                            @if($addressText)
-                              <div class="mc-row-sub">{{ $addressText }}</div>
-                            @endif
-                            @if($productLabel)
-                              <div class="mc-row-sub"><strong>Produkt:</strong> {{ $productLabel }}</div>
-                            @endif
-                          </td>
-
-                          <td>
-                            <span class="mc-tag">
-                              {{ $contract->interval_type ?? 'yearly' }}
-                              @if($contract->interval_months) · {{ $contract->interval_months }} Mon. @endif
-                            </span>
-                          </td>
-
-                          <td>
-                            <div class="mc-row-title">{{ $nextServiceFmt }}</div>
-                            @if(!is_null($daysTo))
-                              <div class="mc-row-sub">
-                                @if($daysTo < 0)
-                                  <span class="mw-badge is-overdue"><span class="mw-dot"></span>Überfällig ({{ abs($daysTo) }} Tage)</span>
-                                @elseif($daysTo <= 14)
-                                  <span class="mw-badge is-soon"><span class="mw-dot"></span>Bald ({{ $daysTo }} Tage)</span>
-                                @else
-                                  <span class="mw-badge"><span class="mw-dot" style="background: var(--mc-success);"></span>Geplant</span>
-                                @endif
-                              </div>
-                            @endif
-                          </td>
-
-                          <td>
-                            <span class="mc-status-pill {{ $statusClass }}"><i class="fa fa-circle"></i>{{ $status }}</span>
-                          </td>
-
-                          <td>
-                            @if(!is_null($contract->price))
-                              {{ number_format($contract->price, 2, ',', '.') }} {{ $contract->currency ?? 'EUR' }}
-                            @else
-                              <span class="mc-row-sub">–</span>
-                            @endif
-                          </td>
-
-                          <td style="text-align:right;">
-                            <a href="{{ route('admin.maintenance.contracts.show', $contract->id) }}" class="mc-btn" style="padding:4px 0;">
-                              <i class="fa fa-eye"></i>
-                            </a>
-                            <a href="{{ route('admin.maintenance.contracts.edit', $contract->id) }}" class="mc-btn" style="padding:4px 0;">
-                              <i class="fa fa-pen"></i>
-                            </a>
-                          </td>
-                        </tr>
-                      @empty
-                        <tr>
-                          <td colspan="9" style="text-align:center; padding:20px 0; color: var(--mc-muted);">
-                            Keine Verträge gefunden.
-                          </td>
-                        </tr>
-                      @endforelse
-                    </tbody>
-                  </table>
-
-                  <div class="mc-pagination">
-                    <div>
-                      @if($contracts->total() > 0)
-                        Zeige {{ $contracts->firstItem() }}–{{ $contracts->lastItem() }} von {{ $contracts->total() }}
-                      @endif
-                    </div>
-                    <div>{{ $contracts->links('pagination::bootstrap-4') }}</div>
-                  </div>
-                </div>
-              </div>
-
-              {{-- CALENDAR --}}
-              <div class="mc-view" id="mc-view-calendar">
-                <div class="mc-calendar-grid">
-                  <div class="mc-card">
-                    <div class="mc-card-hd">
-                      <strong>Kalenderansicht</strong>
-                      <span class="mc-row-sub">Nächste Wartungen (FullCalendar)</span>
-                    </div>
-                    <div class="mc-card-bd">
-                      <div id="mw-calendar" style="min-height: 720px;"></div>
-                    </div>
-                  </div>
-
-                  <div class="mc-card">
-                    <div class="mc-card-hd">
-                      <strong>Incoming Wartung</strong>
-                      <span class="mc-row-sub">nächste 30 Tage</span>
-                    </div>
-                    <div class="mc-card-bd" id="mw-upcoming-list">
-                      <div class="mc-row-sub">Lade…</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {{-- KANBAN --}}
-              <div class="mc-view" id="mc-view-kanban">
-                <div class="mc-card">
-                  <div class="mc-card-hd">
-                    <strong>Kanban</strong>
-                    <span class="mc-row-sub">Drag &amp; Drop Status</span>
-                  </div>
-                  <div class="mc-card-bd">
-                    <div style="color: var(--mc-muted); font-size:0.78rem;">
-                      Kanban-Ansicht unverändert lassen oder deinen bisherigen Kanban-Code hier einsetzen.
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+        <div class="mc-panel">
+          <div class="mc-panel-head">
+            <div>
+              <h3 class="mc-panel-title">Incoming Wartung</h3>
+              <div class="mc-panel-sub">Nächste 30 Tage und überfällige Verträge.</div>
+            </div>
+          </div>
+          <div class="mc-panel-body">
+            <div class="mc-upcoming-list" id="mc-upcoming-list">
+              <div class="mc-sub">Lade…</div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-{{-- Near-wartung modal --}}
-<div class="mw-modal" id="mw-near-modal" aria-hidden="true">
-  <div class="mw-modal-card">
-    <div class="mw-modal-hd">
-      <strong id="mw-near-modal-title">Wartung</strong>
-      <button type="button" class="mw-close" id="mw-near-modal-close">Schließen</button>
+    <div class="mc-view" id="mc-view-kanban">
+      <div class="mc-panel">
+        <div class="mc-panel-head">
+          <div>
+            <h3 class="mc-panel-title">Kanban</h3>
+            <div class="mc-panel-sub">Status per Drag & Drop ändern. Änderungen werden per AJAX gespeichert.</div>
+          </div>
+          <button type="button" class="mc-btn-soft" id="mc-kanban-reload"><i class="fa fa-rotate"></i> Kanban neu
+            laden</button>
+        </div>
+        <div class="mc-panel-body">
+          <div class="mc-kanban" id="mc-kanban">
+            @foreach($statusColumns as $status => $column)
+              <div class="mc-kanban-col" data-kanban-status="{{ $status }}">
+                <div class="mc-kanban-head">
+                  <div class="mc-kanban-title"><i class="{{ $column['icon'] }}"></i> {{ $column['label'] }}</div>
+                  <div class="mc-kanban-count" data-kanban-count="{{ $status }}">0</div>
+                </div>
+                <div class="mc-kanban-body" data-kanban-drop="{{ $status }}"></div>
+              </div>
+            @endforeach
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="mw-modal-bd" id="mw-near-modal-body"></div>
   </div>
-</div>
+
+  <div class="mc-toast-wrap" id="mc-toast-wrap"></div>
+
+  <div class="mc-modal-backdrop" id="mc-modal">
+    <div class="mc-modal">
+      <div class="mc-modal-head">
+        <h3 class="mc-modal-title" id="mc-modal-title">Wartungsvertrag</h3>
+        <button type="button" class="mc-icon-btn" id="mc-modal-close"><i class="fa fa-xmark"></i></button>
+      </div>
+      <div class="mc-modal-body" id="mc-modal-body"></div>
+      <div class="mc-modal-footer">
+        <a href="#" class="mc-btn" id="mc-modal-open"><i class="fa fa-arrow-up-right-from-square"></i> Profil öffnen</a>
+        <a href="#" class="mc-btn-soft" id="mc-modal-edit"><i class="fa fa-pen"></i> Bearbeiten</a>
+        <button type="button" class="mc-btn-soft" id="mc-modal-dismiss"><i class="fa fa-bell-slash"></i> Heute
+          ausblenden</button>
+      </div>
+    </div>
+  </div>
 @endsection
 
-@section('script')
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+@once
+  @push('scripts')
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script>
+      (function () {
+        "use strict";
 
-  <script>
-  (function () {
-    "use strict";
+        const CONTRACTS = @json($contractPayload);
+        const STATUS_COLUMNS = @json($statusColumns);
+        const URLS = {
+          base: @json($baseUrl),
+          bulkStatus: @json($routeBulkStatus),
+          bulkDelete: @json($routeBulkDelete),
+          kanbanUpdate: @json($routeKanbanUpdate),
+          kanbanFeed: @json($routeKanbanFeed),
+          calendarFeed: @json($routeCalendarFeed),
+          incoming: @json($routeIncoming),
+        };
 
-    const NEAR_DAYS = 14;
-    const UPCOMING_DAYS = 30;
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") || @json(csrf_token());
+        const viewToggle = document.getElementById("mc-view-toggle");
+        const views = {
+          list: document.getElementById("mc-view-list"),
+          calendar: document.getElementById("mc-view-calendar"),
+          kanban: document.getElementById("mc-view-kanban"),
+        };
 
-    const viewToggle = document.getElementById("mc-view-toggle");
-    const viewList   = document.getElementById("mc-view-list");
-    const viewCal    = document.getElementById("mc-view-calendar");
-    const viewKanban = document.getElementById("mc-view-kanban");
+        let calendarInstance = null;
+        let kanbanItems = [...CONTRACTS];
 
-    function setView(view) {
-      if (viewToggle) {
-        viewToggle.querySelectorAll('button[data-view]').forEach(b => {
-          b.classList.toggle("is-active", b.getAttribute("data-view") === view);
+        function qs(sel, ctx = document) { return ctx.querySelector(sel); }
+        function qsa(sel, ctx = document) { return Array.from(ctx.querySelectorAll(sel)); }
+
+
+        function refreshLucideIcons() {
+          if (window.lucide && typeof window.lucide.createIcons === "function") {
+            window.lucide.createIcons();
+          }
+        }
+
+        function closeAllActionMenus(exceptWrap = null) {
+          qsa("[data-action-menu-wrap].is-open").forEach(wrap => {
+            if (exceptWrap && wrap === exceptWrap) return;
+            wrap.classList.remove("is-open");
+            const trigger = qs("[data-action-menu-trigger]", wrap);
+            const menu = qs("[data-action-menu]", wrap);
+            if (trigger) trigger.setAttribute("aria-expanded", "false");
+            if (menu) {
+              menu.style.left = "0px";
+              menu.style.top = "0px";
+            }
+          });
+        }
+
+        function placeActionMenu(wrap) {
+          const trigger = qs("[data-action-menu-trigger]", wrap);
+          const menu = qs("[data-action-menu]", wrap);
+          if (!trigger || !menu) return;
+
+          const rect = trigger.getBoundingClientRect();
+          const gap = 8;
+          const safe = 12;
+          const menuWidth = Math.min(245, window.innerWidth - safe * 2);
+
+          menu.style.width = menuWidth + "px";
+          menu.style.left = "0px";
+          menu.style.top = "0px";
+
+          requestAnimationFrame(() => {
+            const menuHeight = menu.offsetHeight || 210;
+            let left = rect.right - menuWidth;
+            let top = rect.bottom + gap;
+
+            if (left < safe) left = safe;
+            if (left + menuWidth > window.innerWidth - safe) {
+              left = window.innerWidth - menuWidth - safe;
+            }
+
+            if (top + menuHeight > window.innerHeight - safe) {
+              top = rect.top - menuHeight - gap;
+            }
+            if (top < safe) top = safe;
+
+            menu.style.left = left + "px";
+            menu.style.top = top + "px";
+          });
+        }
+
+        document.addEventListener("click", function (e) {
+          const trigger = e.target.closest("[data-action-menu-trigger]");
+          if (trigger) {
+            e.preventDefault();
+            e.stopPropagation();
+            const wrap = trigger.closest("[data-action-menu-wrap]");
+            const willOpen = !wrap.classList.contains("is-open");
+            closeAllActionMenus(wrap);
+
+            qsa("[data-action-menu-wrap]").forEach(item => {
+              if (item !== wrap) item.classList.remove("is-open");
+            });
+
+            wrap.classList.toggle("is-open", willOpen);
+            trigger.setAttribute("aria-expanded", willOpen ? "true" : "false");
+            if (willOpen) placeActionMenu(wrap);
+            return;
+          }
+
+          if (!e.target.closest("[data-action-menu]")) {
+            closeAllActionMenus();
+          }
+        }, true);
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closeAllActionMenus();
         });
-      }
-      viewList.classList.toggle("is-active", view === "list");
-      viewCal.classList.toggle("is-active", view === "calendar");
-      viewKanban.classList.toggle("is-active", view === "kanban");
-      if (view === "calendar") initCalendarOnce();
-    }
 
-    if (viewToggle) {
-      viewToggle.addEventListener("click", (e) => {
-        const btn = e.target.closest('button[data-view]');
-        if (!btn) return;
-        setView(btn.getAttribute("data-view"));
-      });
-    }
+        window.addEventListener("resize", () => closeAllActionMenus());
+        window.addEventListener("scroll", () => closeAllActionMenus(), true);
 
-    function readContractsFromTable() {
-      const rows = Array.from(document.querySelectorAll("#mc-view-list tbody tr[data-id]"));
-      return rows.map(row => {
-        const id = row.getAttribute("data-id");
-        const title = row.getAttribute("data-title") || "Wartung";
-        const customer = row.getAttribute("data-customer") || "";
-        const responsible = row.getAttribute("data-responsible") || "";
-        const address = row.getAttribute("data-address") || "";
-        const product = row.getAttribute("data-product") || "";
-        const status = row.getAttribute("data-status") || "draft";
-        const dateStr = row.getAttribute("data-next-service") || "";
-        const date = dateStr ? new Date(dateStr + "T00:00:00") : null;
-        return { id, title, customer, responsible, address, product, status, dateStr, date };
-      }).filter(x => !!x.dateStr);
-    }
+        document.addEventListener("DOMContentLoaded", refreshLucideIcons);
 
-    function daysDiffFromToday(dateStr) {
-      if (!dateStr) return null;
-      const today = new Date(); today.setHours(0,0,0,0);
-      const d = new Date(dateStr + "T00:00:00"); d.setHours(0,0,0,0);
-      return Math.round((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-    }
+        function escapeHtml(value) {
+          return String(value ?? "")
+            .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
 
-    function escapeHtml(s) {
-      return String(s || "")
-        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-    }
+        function formatDE(iso) {
+          if (!iso) return "–";
+          const d = new Date(String(iso).slice(0, 10) + "T00:00:00");
+          if (isNaN(d.getTime())) return "–";
+          return String(d.getDate()).padStart(2, "0") + "." + String(d.getMonth() + 1).padStart(2, "0") + "." + d.getFullYear();
+        }
 
-    function formatDE(iso) {
-      if (!iso) return "–";
-      const d = new Date(iso + "T00:00:00");
-      return String(d.getDate()).padStart(2,"0") + "." + String(d.getMonth()+1).padStart(2,"0") + "." + d.getFullYear();
-    }
+        function daysTo(iso) {
+          if (!iso) return null;
+          const d = new Date(String(iso).slice(0, 10) + "T00:00:00");
+          if (isNaN(d.getTime())) return null;
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          d.setHours(0, 0, 0, 0);
+          return Math.round((d.getTime() - today.getTime()) / 86400000);
+        }
 
-    function renderUpcomingSidebar() {
-      const box = document.getElementById("mw-upcoming-list");
-      if (!box) return;
+        function normalizeIncomingItem(item) {
+          return {
+            id: item.id,
+            contract_no: item.contract_no || "",
+            title: item.title || "Wartung",
+            customer: item.customer || "–",
+            responsible: item.responsible || "–",
+            address: item.address || "–",
+            product: item.product || "–",
+            status: item.status || "draft",
+            status_label: item.status_label || STATUS_COLUMNS[item.status]?.label || item.status || "Entwurf",
+            next_service_date: item.next_service_date || "",
+            next_service_display: item.next_service_display || formatDE(item.next_service_date),
+            show_url: item.show_url || (URLS.base + "/" + item.id),
+            customer_profile_url: item.customer_profile_url || item.profile_url || "",
+            edit_url: item.edit_url || (URLS.base + "/" + item.id + "/edit"),
+            price: item.price || null,
+            interval_type: item.interval_type || "yearly",
+            interval_months: item.interval_months || null,
+          };
+        }
 
-      const items = readContractsFromTable()
-        .map(x => ({...x, daysTo: daysDiffFromToday(x.dateStr)}))
-        .filter(x => x.daysTo !== null && x.daysTo <= UPCOMING_DAYS)
-        .sort((a,b) => (a.daysTo - b.daysTo));
+        function findContract(id) {
+          id = String(id);
+          return normalizeIncomingItem((kanbanItems.find(x => String(x.id) === id) || CONTRACTS.find(x => String(x.id) === id) || {}));
+        }
 
-      if (!items.length) {
-        box.innerHTML = '<div class="mc-row-sub">Keine anstehenden Wartungen in den nächsten ' + UPCOMING_DAYS + ' Tagen.</div>';
-        return;
-      }
+        function setView(view) {
+          if (!views[view]) view = "list";
 
-      box.innerHTML = items.map(item => {
-        const badgeClass = item.daysTo < 0 ? "is-overdue" : (item.daysTo <= NEAR_DAYS ? "is-soon" : "");
-        const badgeText  = item.daysTo < 0 ? ("Überfällig (" + Math.abs(item.daysTo) + " Tage)") : ("In " + item.daysTo + " Tagen");
-        return (
-          '<div class="mw-upcoming-item" data-open-contract="' + item.id + '">' +
-            '<div class="mw-up-title">' + escapeHtml(item.title) + '</div>' +
-            '<div class="mw-up-meta">' +
-              (item.customer ? ('<div><strong>Kunde:</strong> ' + escapeHtml(item.customer) + '</div>') : '') +
-              (item.responsible ? ('<div><strong>Verantwortlich:</strong> ' + escapeHtml(item.responsible) + '</div>') : '') +
-              (item.address  ? ('<div><strong>Adresse:</strong> ' + escapeHtml(item.address) + '</div>') : '') +
-              (item.product  ? ('<div><strong>Produkt:</strong> ' + escapeHtml(item.product) + '</div>') : '') +
-              '<div><strong>Datum:</strong> ' + formatDE(item.dateStr) + '</div>' +
-            '</div>' +
-            '<div class="mw-badge ' + badgeClass + '"><span class="mw-dot"></span>' + badgeText + '</div>' +
-          '</div>'
-        );
-      }).join("");
+          Object.entries(views).forEach(([name, el]) => {
+            if (el) el.classList.toggle("is-active", name === view);
+          });
 
-      box.querySelectorAll("[data-open-contract]").forEach(el => {
-        el.addEventListener("click", () => {
-          const id = el.getAttribute("data-open-contract");
-          window.location.href = "{{ url('/admin/maintenance/contracts') }}/" + id;
+          qsa("button[data-view]", viewToggle).forEach(btn => {
+            btn.classList.toggle("is-active", btn.dataset.view === view);
+          });
+
+          const url = new URL(window.location.href);
+          url.searchParams.set("view", view);
+          window.history.replaceState({}, "", url.toString());
+
+          if (view === "calendar") initCalendar();
+          if (view === "kanban") renderKanban();
+        }
+
+        viewToggle?.addEventListener("click", function (e) {
+          const btn = e.target.closest("button[data-view]");
+          if (!btn) return;
+          setView(btn.dataset.view);
         });
-      });
-    }
 
-    const modal = document.getElementById("mw-near-modal");
-    const modalTitle = document.getElementById("mw-near-modal-title");
-    const modalBody  = document.getElementById("mw-near-modal-body");
-    const modalClose = document.getElementById("mw-near-modal-close");
+        document.getElementById("mc-refresh-btn")?.addEventListener("click", function () {
+          window.location.reload();
+        });
 
-    function openModal(item) {
-      if (!modal) return;
-      modalTitle.textContent = item.title || "Wartung";
-      modalBody.innerHTML =
-        '<div class="mw-modal-row"><div class="mw-k">Datum</div><div class="mw-v">' + formatDE(item.dateStr) + '</div></div>' +
-        '<div class="mw-modal-row"><div class="mw-k">Kunde</div><div class="mw-v">' + escapeHtml(item.customer || "–") + '</div></div>' +
-        '<div class="mw-modal-row"><div class="mw-k">Verantwortlich</div><div class="mw-v">' + escapeHtml(item.responsible || "–") + '</div></div>' +
-        '<div class="mw-modal-row"><div class="mw-k">Adresse</div><div class="mw-v">' + escapeHtml(item.address || "–") + '</div></div>' +
-        '<div class="mw-modal-row"><div class="mw-k">Produkt</div><div class="mw-v">' + escapeHtml(item.product || "–") + '</div></div>' +
-        '<div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">' +
-          '<a class="mc-btn mc-btn-primary" href="{{ url('/admin/maintenance/contracts') }}/' + item.id + '"><i class="fa fa-eye"></i><span>Öffnen</span></a>' +
-          '<button type="button" class="mc-btn mc-btn-ghost" id="mw-near-modal-dismiss"><i class="fa fa-bell-slash"></i><span>Heute nicht mehr anzeigen</span></button>' +
-        '</div>';
+        function openModal(item, allowDismiss = false) {
+          item = normalizeIncomingItem(item);
+          const modal = qs("#mc-modal");
+          const title = qs("#mc-modal-title");
+          const body = qs("#mc-modal-body");
+          const open = qs("#mc-modal-open");
+          const edit = qs("#mc-modal-edit");
+          const dismiss = qs("#mc-modal-dismiss");
 
-      modal.classList.add("is-open");
-      modal.setAttribute("aria-hidden", "false");
+          if (!modal || !body) return;
 
-      const dismiss = document.getElementById("mw-near-modal-dismiss");
-      if (dismiss) {
-        dismiss.addEventListener("click", () => {
-          rememberDismiss(item.id);
+          title.textContent = (item.contract_no ? item.contract_no + " · " : "") + item.title;
+          open.href = item.show_url;
+          edit.href = item.edit_url;
+          dismiss.style.display = allowDismiss ? "inline-flex" : "none";
+          dismiss.dataset.dismissId = item.id || "";
+
+          const diff = daysTo(item.next_service_date);
+          const reminder = diff === null ? "–" : (diff < 0 ? "Überfällig seit " + Math.abs(diff) + " Tagen" : (diff === 0 ? "Heute fällig" : "In " + diff + " Tagen"));
+
+          body.innerHTML = `
+                            <div class="mc-kv">
+                                <div class="mc-k">Kunde</div><div class="mc-v">${escapeHtml(item.customer)}</div>
+                                <div class="mc-k">Verantwortlich</div><div class="mc-v">${escapeHtml(item.responsible)}</div>
+                                <div class="mc-k">Adresse</div><div class="mc-v">${escapeHtml(item.address)}</div>
+                                <div class="mc-k">Produkt</div><div class="mc-v">${escapeHtml(item.product)}</div>
+                                <div class="mc-k">Nächste Wartung</div><div class="mc-v">${escapeHtml(item.next_service_display || formatDE(item.next_service_date))}</div>
+                                <div class="mc-k">Reminder</div><div class="mc-v">${escapeHtml(reminder)}</div>
+                                <div class="mc-k">Status</div><div class="mc-v"><span class="mc-pill ${escapeHtml(item.status)}">${escapeHtml(item.status_label)}</span></div>
+                                <div class="mc-k">Preis</div><div class="mc-v">${escapeHtml(item.price || "–")}</div>
+                            </div>
+                        `;
+
+          modal.classList.add("is-open");
+        }
+
+        function closeModal() {
+          qs("#mc-modal")?.classList.remove("is-open");
+        }
+
+        qs("#mc-modal-close")?.addEventListener("click", closeModal);
+        qs("#mc-modal")?.addEventListener("click", function (e) { if (e.target === this) closeModal(); });
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+
+        qs("#mc-modal-dismiss")?.addEventListener("click", function () {
+          const id = this.dataset.dismissId;
+          if (id) rememberDismiss(id);
           closeModal();
-        }, { once: true });
-      }
-    }
+        });
 
-    function closeModal() {
-      if (!modal) return;
-      modal.classList.remove("is-open");
-      modal.setAttribute("aria-hidden", "true");
-    }
+        qsa("[data-open-modal]").forEach(btn => {
+          btn.addEventListener("click", function () {
+            openModal(findContract(this.dataset.openModal));
+          });
+        });
 
-    if (modalClose) modalClose.addEventListener("click", closeModal);
-    if (modal) modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-
-    function rememberDismiss(contractId) {
-      try {
-        const key = "mw_wartung_dismissed_" + contractId;
-        const today = new Date();
-        const stamp = today.getFullYear() + "-" + String(today.getMonth()+1).padStart(2,"0") + "-" + String(today.getDate()).padStart(2,"0");
-        localStorage.setItem(key, stamp);
-      } catch(e) {}
-    }
-
-    function isDismissedToday(contractId) {
-      try {
-        const key = "mw_wartung_dismissed_" + contractId;
-        const v = localStorage.getItem(key);
-        if (!v) return false;
-        const today = new Date();
-        const stamp = today.getFullYear() + "-" + String(today.getMonth()+1).padStart(2,"0") + "-" + String(today.getDate()).padStart(2,"0");
-        return v === stamp;
-      } catch(e) {
-        return false;
-      }
-    }
-
-    function emitNearEvent(item, daysTo) {
-      const ev = new CustomEvent("mw:wartung-near", { detail: { item, daysTo } });
-      window.dispatchEvent(ev);
-    }
-
-    window.addEventListener("mw:wartung-near", (e) => {
-      const item = e.detail && e.detail.item ? e.detail.item : null;
-      const daysTo = e.detail && typeof e.detail.daysTo === "number" ? e.detail.daysTo : null;
-      if (!item || daysTo === null) return;
-      if (window.__mwNearModalShown) return;
-      window.__mwNearModalShown = true;
-      openModal(item);
-    });
-
-    let calendarInited = false;
-    function initCalendarOnce() {
-      if (calendarInited) return;
-      calendarInited = true;
-
-      const el = document.getElementById("mw-calendar");
-      if (!el || !window.FullCalendar) return;
-
-      const items = readContractsFromTable();
-
-      const events = items.map(item => ({
-        id: String(item.id),
-        title: item.title,
-        start: item.dateStr,
-        allDay: true,
-        extendedProps: {
-          customer: item.customer,
-          responsible: item.responsible,
-          address: item.address,
-          product: item.product,
-          status: item.status,
+        function todayKey() {
+          const d = new Date();
+          return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
         }
-      }));
 
-      const calendar = new FullCalendar.Calendar(el, {
-        initialView: "dayGridMonth",
-        height: "auto",
-        locale: "de",
-        firstDay: 1,
-        headerToolbar: {
-          left: "prev,next today",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,listWeek"
-        },
-        events: events,
-        eventClick: function(info) {
-          const id = info.event.id;
-          window.location.href = "{{ url('/admin/maintenance/contracts') }}/" + id;
-        },
-        eventDidMount: function(info) {
-          const p = info.event.extendedProps || {};
-          const lines = [];
-          if (p.customer) lines.push("Kunde: " + p.customer);
-          if (p.responsible) lines.push("Verantwortlich: " + p.responsible);
-          if (p.address)  lines.push("Adresse: " + p.address);
-          if (p.product)  lines.push("Produkt: " + p.product);
-          if (p.status)   lines.push("Status: " + p.status);
-          info.el.title = lines.join("\n");
+        function dismissKey(id) { return "maintenance_contract_incoming_dismissed_" + id; }
+        function rememberDismiss(id) { try { localStorage.setItem(dismissKey(id), todayKey()); } catch (e) { } }
+        function isDismissed(id) { try { return localStorage.getItem(dismissKey(id)) === todayKey(); } catch (e) { return false; } }
+
+        function showToast(item, autoOpen = false) {
+          item = normalizeIncomingItem(item);
+          if (!item.id || isDismissed(item.id)) return;
+
+          const wrap = qs("#mc-toast-wrap");
+          if (!wrap) return;
+
+          const diff = daysTo(item.next_service_date);
+          const text = diff < 0 ? "Überfällig seit " + Math.abs(diff) + " Tagen" : (diff === 0 ? "Heute fällig" : "In " + diff + " Tagen");
+
+          const node = document.createElement("div");
+          node.className = "mc-toast";
+          node.innerHTML = `
+                            <div class="mc-toast-head">
+                                <span>⚠️ Incoming Wartungsvertrag</span>
+                                <button type="button" class="mc-toast-close">×</button>
+                            </div>
+                            <div class="mc-toast-body">
+                                <strong>${escapeHtml(item.contract_no || "")} ${escapeHtml(item.title)}</strong>
+                                <div style="color:#6b7280;margin-top:4px">${escapeHtml(item.customer)}</div>
+                                <div style="color:#b45309;margin-top:6px;font-weight:900">${escapeHtml(text)} · ${escapeHtml(formatDE(item.next_service_date))}</div>
+                                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+                                    <a class="mc-btn" href="${escapeHtml(item.show_url)}">Profil öffnen</a>
+                                    <button type="button" class="mc-btn-soft mc-toast-detail">Details</button>
+                                    <button type="button" class="mc-btn-soft mc-toast-dismiss">Heute ausblenden</button>
+                                </div>
+                            </div>
+                        `;
+
+          node.querySelector(".mc-toast-close")?.addEventListener("click", () => node.remove());
+          node.querySelector(".mc-toast-detail")?.addEventListener("click", () => openModal(item, true));
+          node.querySelector(".mc-toast-dismiss")?.addEventListener("click", () => {
+            rememberDismiss(item.id);
+            node.remove();
+          });
+
+          wrap.appendChild(node);
+
+          if (autoOpen) openModal(item, true);
         }
-      });
 
-      calendar.render();
+        async function loadIncoming() {
+          let items = [...CONTRACTS];
+
+          if (URLS.incoming) {
+            try {
+              const res = await fetch(URLS.incoming + "?days=30", { headers: { "Accept": "application/json" } });
+              const data = await res.json();
+              if (data && Array.isArray(data.items)) {
+                items = data.items.map(normalizeIncomingItem);
+              }
+            } catch (e) {
+              console.warn("Incoming contracts feed failed", e);
+            }
+          }
+
+          const upcoming = items
+            .map(normalizeIncomingItem)
+            .map(x => ({ ...x, diff: daysTo(x.next_service_date) }))
+            .filter(x => x.diff !== null && x.diff <= 30)
+            .sort((a, b) => a.diff - b.diff);
+
+          renderUpcoming(upcoming);
+
+          const stat = qs("#mc-stat-upcoming");
+          if (stat) stat.textContent = upcoming.length;
+
+          const first = upcoming.find(x => x.diff <= 14 && !isDismissed(x.id));
+          if (first) showToast(first, false);
+        }
+
+        function renderUpcoming(items) {
+          const box = qs("#mc-upcoming-list");
+          if (!box) return;
+
+          if (!items.length) {
+            box.innerHTML = '<div class="mc-sub">Keine anstehenden Wartungen in den nächsten 30 Tagen.</div>';
+            return;
+          }
+
+          box.innerHTML = items.map(item => {
+            const diff = item.diff;
+            const cls = diff < 0 ? "overdue" : (diff <= 14 ? "soon" : "ok");
+            const label = diff < 0 ? "Überfällig · " + Math.abs(diff) + " Tage" : (diff === 0 ? "Heute fällig" : "In " + diff + " Tagen");
+            return `
+                                <div class="mc-upcoming-item" data-upcoming-id="${escapeHtml(item.id)}">
+                                    <div class="mc-up-title">${escapeHtml(item.contract_no || "")} ${escapeHtml(item.title)}</div>
+                                    <div class="mc-up-meta">
+                                        <div><strong>Kunde:</strong> ${escapeHtml(item.customer)}</div>
+                                        <div><strong>Verantwortlich:</strong> ${escapeHtml(item.responsible)}</div>
+                                        <div><strong>Adresse:</strong> ${escapeHtml(item.address)}</div>
+                                        <div><strong>Produkt:</strong> ${escapeHtml(item.product)}</div>
+                                        <div><strong>Datum:</strong> ${escapeHtml(formatDE(item.next_service_date))}</div>
+                                    </div>
+                                    <div class="mc-up-badge ${cls}">${escapeHtml(label)}</div>
+                                </div>
+                            `;
+          }).join("");
+
+          qsa("[data-upcoming-id]", box).forEach(el => {
+            el.addEventListener("click", () => openModal(findContract(el.dataset.upcomingId), true));
+          });
+        }
+
+        async function initCalendar(force = false) {
+          const el = qs("#mc-calendar");
+          if (!el || !window.FullCalendar) return;
+
+          if (calendarInstance && !force) {
+            setTimeout(() => calendarInstance.updateSize(), 100);
+            return;
+          }
+
+          if (calendarInstance) {
+            calendarInstance.destroy();
+            calendarInstance = null;
+          }
+
+          let events = CONTRACTS
+            .filter(x => x.next_service_date)
+            .map(x => ({
+              id: String(x.id),
+              title: (x.contract_no ? x.contract_no + " · " : "") + x.title,
+              start: x.next_service_date,
+              allDay: true,
+              url: x.show_url,
+              extendedProps: normalizeIncomingItem(x)
+            }));
+
+          if (URLS.calendarFeed) {
+            try {
+              const res = await fetch(URLS.calendarFeed, { headers: { "Accept": "application/json" } });
+              const data = await res.json();
+              if (Array.isArray(data)) {
+                events = data.map(ev => ({
+                  id: String(ev.id),
+                  title: ev.title || "Wartung",
+                  start: ev.start,
+                  allDay: ev.allDay !== false,
+                  url: ev.url || (URLS.base + "/" + ev.id),
+                  extendedProps: normalizeIncomingItem(ev.extendedProps || ev)
+                }));
+              }
+            } catch (e) {
+              console.warn("Calendar feed failed, fallback to current page data", e);
+            }
+          }
+
+          calendarInstance = new FullCalendar.Calendar(el, {
+            initialView: "dayGridMonth",
+            height: "auto",
+            locale: "de",
+            firstDay: 1,
+            headerToolbar: {
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,listWeek"
+            },
+            events,
+            eventClick: function (info) {
+              info.jsEvent.preventDefault();
+              const props = info.event.extendedProps || {};
+              if (props.show_url) window.location.href = props.show_url;
+              else if (info.event.url) window.location.href = info.event.url;
+            },
+            eventDidMount: function (info) {
+              const p = info.event.extendedProps || {};
+              info.el.title = [
+                p.customer ? "Kunde: " + p.customer : "",
+                p.responsible ? "Verantwortlich: " + p.responsible : "",
+                p.address ? "Adresse: " + p.address : "",
+                p.product ? "Produkt: " + p.product : "",
+                p.status ? "Status: " + p.status : ""
+              ].filter(Boolean).join("\n");
+            }
+          });
+
+          calendarInstance.render();
+        }
+
+        qs("#mc-calendar-reload")?.addEventListener("click", () => initCalendar(true));
+
+        async function getKanbanItems() {
+          if (!URLS.kanbanFeed) return [...CONTRACTS];
+
+          try {
+            const res = await fetch(URLS.kanbanFeed, { headers: { "Accept": "application/json" } });
+            const data = await res.json();
+            if (data && Array.isArray(data.items)) return data.items.map(normalizeIncomingItem);
+          } catch (e) {
+            console.warn("Kanban feed failed, fallback to current page data", e);
+          }
+
+          return [...CONTRACTS];
+        }
+
+        async function renderKanban(force = false) {
+          if (force || !kanbanItems.length) {
+            kanbanItems = await getKanbanItems();
+          }
+
+          Object.keys(STATUS_COLUMNS).forEach(status => {
+            const body = qs(`[data-kanban-drop="${status}"]`);
+            if (body) body.innerHTML = "";
+          });
+
+          kanbanItems.map(normalizeIncomingItem).forEach(item => {
+            const status = STATUS_COLUMNS[item.status] ? item.status : "draft";
+            const body = qs(`[data-kanban-drop="${status}"]`);
+            if (!body) return;
+            body.insertAdjacentHTML("beforeend", kanbanCardHtml(item));
+          });
+
+          bindKanbanCards();
+          updateKanbanCounts();
+          refreshLucideIcons();
+        }
+
+        function kanbanCardHtml(item) {
+          const diff = daysTo(item.next_service_date);
+          const reminderCls = diff === null ? "ok" : (diff < 0 ? "overdue" : (diff <= 14 ? "soon" : "ok"));
+          const reminder = diff === null ? "Kein Termin" : (diff < 0 ? "Überfällig · " + Math.abs(diff) + " Tage" : (diff === 0 ? "Heute" : "In " + diff + " Tagen"));
+
+          return `
+                            <div class="mc-kanban-card" draggable="true" data-kanban-card="${escapeHtml(item.id)}">
+                                <div class="mc-kanban-card-title">${escapeHtml(item.contract_no || "")} ${escapeHtml(item.title)}</div>
+                                <div class="mc-kanban-card-meta">
+                                    <div><strong>Kunde:</strong> ${escapeHtml(item.customer)}</div>
+                                    <div><strong>Verantwortlich:</strong> ${escapeHtml(item.responsible)}</div>
+                                    <div><strong>Produkt:</strong> ${escapeHtml(item.product)}</div>
+                                </div>
+                                <div class="mc-kanban-card-foot">
+                                    <span class="mc-reminder ${reminderCls}" style="margin-top:0">${escapeHtml(reminder)}</span>
+                                    <button type="button" class="mc-icon-btn primary" data-kanban-open="${escapeHtml(item.id)}" title="Öffnen"><i class="fa fa-eye"></i></button>
+                                </div>
+                            </div>
+                        `;
+        }
+
+        function bindKanbanCards() {
+          qsa("[data-kanban-card]").forEach(card => {
+            card.addEventListener("dragstart", e => {
+              card.classList.add("dragging");
+              e.dataTransfer.setData("text/plain", card.dataset.kanbanCard);
+            });
+
+            card.addEventListener("dragend", () => card.classList.remove("dragging"));
+          });
+
+          qsa("[data-kanban-open]").forEach(btn => {
+            btn.addEventListener("click", e => {
+              e.stopPropagation();
+              openModal(findContract(btn.dataset.kanbanOpen));
+            });
+          });
+
+          qsa("[data-kanban-drop]").forEach(drop => {
+            drop.addEventListener("dragover", e => {
+              e.preventDefault();
+              drop.classList.add("drag-over");
+              const dragging = qs(".mc-kanban-card.dragging");
+              const after = getDragAfterElement(drop, e.clientY);
+              if (!dragging) return;
+              if (!after) drop.appendChild(dragging);
+              else drop.insertBefore(dragging, after);
+            });
+
+            drop.addEventListener("dragleave", () => drop.classList.remove("drag-over"));
+
+            drop.addEventListener("drop", async e => {
+              e.preventDefault();
+              drop.classList.remove("drag-over");
+              const id = e.dataTransfer.getData("text/plain");
+              const status = drop.dataset.kanbanDrop;
+              await updateKanbanStatus(id, status);
+            });
+          });
+        }
+
+        function getDragAfterElement(container, y) {
+          const els = qsa(".mc-kanban-card:not(.dragging)", container);
+          return els.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) return { offset, element: child };
+            return closest;
+          }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        async function updateKanbanStatus(id, status) {
+          const item = kanbanItems.find(x => String(x.id) === String(id));
+          if (item) item.status = status;
+
+          updateKanbanCounts();
+
+          if (!URLS.kanbanUpdate) {
+            showToast({ id, title: "Kanban", customer: "Route kanban-update fehlt", next_service_date: null, show_url: URLS.base + "/" + id });
+            return;
+          }
+
+          const payload = collectKanbanPayload();
+
+          try {
+            const res = await fetch(URLS.kanbanUpdate, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": csrfToken
+              },
+              body: JSON.stringify({ items: payload, contracts: payload })
+            });
+
+            if (!res.ok) throw new Error("HTTP " + res.status);
+
+            const data = await res.json().catch(() => ({}));
+            if (data.ok === false || data.success === false) throw new Error(data.message || "Kanban update failed");
+          } catch (e) {
+            console.error(e);
+            alert("Kanban konnte nicht gespeichert werden. Bitte Route/Controller prüfen.");
+          }
+        }
+
+        function collectKanbanPayload() {
+          const payload = [];
+          qsa("[data-kanban-drop]").forEach(drop => {
+            const status = drop.dataset.kanbanDrop;
+            qsa("[data-kanban-card]", drop).forEach((card, index) => {
+              payload.push({
+                id: card.dataset.kanbanCard,
+                status: status,
+                position: index + 1
+              });
+            });
+          });
+          return payload;
+        }
+
+        function updateKanbanCounts() {
+          Object.keys(STATUS_COLUMNS).forEach(status => {
+            const count = qsa(`[data-kanban-drop="${status}"] [data-kanban-card]`).length;
+            const el = qs(`[data-kanban-count="${status}"]`);
+            if (el) el.textContent = count;
+          });
+        }
+
+        qs("#mc-kanban-reload")?.addEventListener("click", async () => {
+          kanbanItems = await getKanbanItems();
+          renderKanban(true);
+        });
+
+        function updateBulkBar() {
+          const checks = qsa(".mc-row-check:checked");
+          qs("#mc-selected-count").textContent = checks.length;
+          qs("#mc-bulkbar")?.classList.toggle("is-visible", checks.length > 0);
+          qsa(".mc-item").forEach(item => {
+            const id = item.dataset.contractId;
+            item.classList.toggle("is-selected", checks.some(c => c.value === id));
+          });
+        }
+
+        qs("#mc-select-all")?.addEventListener("change", function () {
+          qsa(".mc-row-check").forEach(c => c.checked = this.checked);
+          updateBulkBar();
+        });
+
+        qsa(".mc-row-check").forEach(c => c.addEventListener("change", updateBulkBar));
+
+        async function postBulk(url, payload) {
+          if (!url) {
+            alert("Die benötigte Route fehlt.");
+            return;
+          }
+
+          const res = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+              "X-CSRF-TOKEN": csrfToken
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          window.location.reload();
+        }
+
+        qs("#mc-bulk-status-btn")?.addEventListener("click", async function () {
+          const ids = qsa(".mc-row-check:checked").map(c => c.value);
+          const status = qs("#mc-bulk-status")?.value;
+          if (!ids.length) return alert("Bitte zuerst Verträge auswählen.");
+          if (!status) return alert("Bitte Status auswählen.");
+
+          try {
+            await postBulk(URLS.bulkStatus, { ids, status, contract_ids: ids });
+          } catch (e) {
+            console.error(e);
+            alert("Bulk-Status konnte nicht gespeichert werden.");
+          }
+        });
+
+        qs("#mc-bulk-delete-btn")?.addEventListener("click", async function () {
+          const ids = qsa(".mc-row-check:checked").map(c => c.value);
+          if (!ids.length) return alert("Bitte zuerst Verträge auswählen.");
+          if (!confirm("Ausgewählte Wartungsverträge wirklich löschen?")) return;
+
+          try {
+            await postBulk(URLS.bulkDelete, { ids, contract_ids: ids });
+          } catch (e) {
+            console.error(e);
+            alert("Bulk-Löschen konnte nicht ausgeführt werden.");
+          }
+        });
+
+        document.addEventListener("DOMContentLoaded", async function () {
+          const params = new URLSearchParams(window.location.search);
+          const requestedView = params.get("view") || "list";
+
+          renderKanban();
+          await loadIncoming();
+          refreshLucideIcons();
+
+          if (["list", "calendar", "kanban"].includes(requestedView)) {
+            setView(requestedView);
+          }
+        });
+      })();
+    </script>
+  @endpush
+@endonce
+
+@push('scripts')
+  <script>
+    window.GlobalBreadcrumbs = [
+      { label: "Dashboard", url: "{{ url('/') }}" },
+      { label: "Wartungsverträge", url: "{{ url()->current() }}", clickable: false }
+    ];
+
+    if (window.setGlobalBreadcrumbs) {
+      window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
     }
-
-    function checkNearWartung() {
-      const items = readContractsFromTable()
-        .map(x => ({...x, daysTo: daysDiffFromToday(x.dateStr)}))
-        .filter(x => x.daysTo !== null);
-
-      items.sort((a,b) => a.daysTo - b.daysTo);
-
-      const candidate = items.find(x => (x.daysTo <= NEAR_DAYS));
-      if (!candidate) return;
-      if (isDismissedToday(candidate.id)) return;
-
-      emitNearEvent(candidate, candidate.daysTo);
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-      renderUpcomingSidebar();
-      checkNearWartung();
-
-      const url = new URL(window.location.href);
-      const view = url.searchParams.get("view");
-      if (view === "calendar" || view === "kanban" || view === "list") {
-        setView(view);
-      }
-    });
-  })();
   </script>
-@endsection
+@endpush

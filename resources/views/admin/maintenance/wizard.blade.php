@@ -1,851 +1,895 @@
 {{-- resources/views/admin/maintenance/wizard.blade.php --}}
 @extends('admin.layouts.app')
-
 @section('title', 'Wartungsvertrag anlegen')
 
-@section('style')
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+@php
+    $storeAction = \Illuminate\Support\Facades\Route::has('admin.maintenance.contracts.store_simple')
+        ? route('admin.maintenance.contracts.store_simple')
+        : route('admin.maintenance.contracts.store');
 
-    <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
+    $contextCount = collect([
+        isset($lead) ? 1 : null,
+        isset($alternative) ? 1 : null,
+        isset($asset) ? 1 : null,
+    ])->filter()->count();
+@endphp
 
-    <style>
-        /* ============================================================
-           ENTERPRISE PALETTE (White/Black + Requested Accents)
-           ============================================================ */
-        :root{
-            --c-black: #0b0f14;
-            --c-black-2:#111827;
-            --c-white: #ffffff;
+@once
+@push('style')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
 
-            --c-primary: #74b2d4;   /* requested */
-            --c-primary-soft:#c0d8ea;/* requested */
-            --c-lime: #93c21c;      /* requested */
-            --c-lime-soft:#cfe09b;  /* requested */
-            --c-ice: #e3effb;       /* requested */
+<style>
+  :root {
+    --app-bg:#f3f4f6;
+    --card-bg:#ffffff;
+    --text-main:#1f2937;
+    --text-muted:#6b7280;
+    --border:#e5e7eb;
+    --primary:#93c21c;
+    --primary-hover:#7baa18;
+    --primary-light:#f4fae7;
+    --blue:#74b2d4;
+    --blue-light:#eff6ff;
+    --success:#10b981;
+    --success-light:#ecfdf5;
+    --warning:#f59e0b;
+    --warning-light:#fffbeb;
+    --danger:#ef4444;
+    --danger-light:#fef2f2;
+    --gray:#6b7280;
+    --gray-light:#f3f4f6;
+    --shadow-sm:0 1px 2px 0 rgb(0 0 0 / .05);
+    --shadow:0 10px 25px -10px rgb(0 0 0 / .25), 0 4px 8px -4px rgb(0 0 0 / .12);
+    --radius:14px;
+    --transition:all .2s ease-in-out;
+  }
 
-            /* text */
-            --t-strong:#0b0f14;
-            --t-main:#111827;
-            --t-muted:#334155;
+  .oc-wrap{
+    font-family:Inter, system-ui, -apple-system, sans-serif;
+    color:var(--text-main);
+    max-width:1500px;
+    margin:20px auto;
+    padding:39px;
+    padding-right:79px;
+  }
 
-            /* borders/shadows */
-            --b-strong: rgba(15,23,42,.20);
-            --b-soft: rgba(15,23,42,.12);
-            --shadow: 0 24px 70px rgba(0,0,0,.35);
+  .oc-header{margin-bottom:18px;margin-top:103px;}
+  .oc-titlebar{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  .oc-title{font-size:26px;font-weight:800;letter-spacing:-.025em;color:#111827}
+  .oc-sub{font-size:14px;color:var(--text-muted);margin-top:4px}
+  .oc-breadcrumb{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:10px;
+    font-size:13px;
+    color:var(--text-muted);
+  }
+  .oc-breadcrumb a{color:var(--text-muted);text-decoration:none;font-weight:700;}
+  .oc-breadcrumb a:hover{color:var(--text-main);}
+  .oc-breadcrumb span.current{color:#111827;font-weight:800;}
 
-            --radius-lg: 18px;
-            --radius-xl: 24px;
-        }
+  .oc-inline-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
 
-        /* ============================================================
-           Layout
-           ============================================================ */
-        .mw-shell{
-            border-radius: var(--radius-xl);
-            border: 1px solid rgba(255,255,255,.10);
-            overflow:hidden;
-          
-        }
+  .oc-btn{
+    background:var(--primary);
+    color:#fff;
+    border:none;
+    padding:10px 16px;
+    border-radius:10px;
+    font-weight:900;
+    cursor:pointer;
+    transition:var(--transition);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+  }
+  .oc-btn:hover{background:var(--primary-hover);color:#fff;text-decoration:none;}
 
-        .mw-shell-header{
-            padding:18px 18px;
-            display:flex;
-            gap:16px;
-            align-items:flex-start;
-            justify-content:space-between;
-            border-bottom:1px solid rgba(255,255,255,.10);
-            background:
-                linear-gradient(120deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-        }
+  .oc-btn-soft{
+    background:#fff;
+    color:var(--text-main);
+    border:1px solid var(--border);
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:800;
+    cursor:pointer;
+    transition:var(--transition);
+    text-decoration:none;
+  }
+  .oc-btn-soft:hover{background:#f9fafb;color:var(--text-main);text-decoration:none;}
 
-        .mw-shell-title{display:flex; gap:12px; align-items:flex-start;}
+  .oc-btn-ic{
+    width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:#fff;
+    display:inline-flex;align-items:center;justify-content:center;color:var(--text-muted);
+    cursor:pointer;transition:var(--transition);text-decoration:none;
+  }
+  .oc-btn-ic:hover{background:#f9fafb;color:var(--text-main);border-color:#d1d5db;text-decoration:none;}
+  .oc-btn-ic.primary{color:var(--primary);border-color:var(--primary-light);background:var(--primary-light)}
+  .oc-btn-ic.primary:hover{border-color:var(--primary)}
+  .oc-btn-ic.warning{color:#d97706;border-color:#fde7b0;background:#fffbeb}
+  .oc-btn-ic.warning:hover{border-color:#f59e0b}
+  .oc-btn-ic.success{color:var(--success);border-color:#c7f2df;background:var(--success-light)}
+  .oc-btn-ic.success:hover{border-color:var(--success)}
+  .oc-btn-ic.danger{color:var(--danger);border-color:rgba(239,68,68,.18);background:var(--danger-light)}
+  .oc-btn-ic.danger:hover{border-color:rgba(239,68,68,.35)}
 
-        .mw-logo-pill{
-            width:44px;height:44px;border-radius:16px;
-            display:flex;align-items:center;justify-content:center;
-            color: var(--c-white);
-            background:
-                radial-gradient(circle at 0% 0%, rgba(116,178,212,.35), transparent 60%),
-                radial-gradient(circle at 100% 100%, rgba(147,194,28,.30), transparent 60%),
-                rgba(255,255,255,.06);
-            border:1px solid rgba(255,255,255,.14);
-        }
+  .oc-analytics{
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0,1fr));
+    gap:14px;
+    margin-bottom:18px;
+  }
+  @media(max-width:1200px){ .oc-analytics{grid-template-columns:repeat(2, minmax(0,1fr));} }
+  @media(max-width:700px){ .oc-analytics{grid-template-columns:1fr;} }
 
-        .mw-title-main{
-            font-size:1.08rem;
-            font-weight:800;
-            letter-spacing:-.02em;
-            color: var(--c-white);
-            line-height:1.2;
-        }
+  .oc-stat{
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:16px;
+    box-shadow:var(--shadow-sm);
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-height:92px;
+  }
+  .oc-stat-icon{
+    width:48px;height:48px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  }
+  .oc-stat-icon.total{background:var(--blue-light);color:var(--blue)}
+  .oc-stat-icon.context{background:var(--success-light);color:var(--success)}
+  .oc-stat-icon.flow{background:var(--warning-light);color:#d97706}
+  .oc-stat-icon.safe{background:var(--gray-light);color:var(--gray)}
 
-        .mw-title-sub{
-            margin-top:4px;
-            font-size:.82rem;
-            color: rgba(255,255,255,.82);
-            max-width:760px;
-            line-height:1.45;
-        }
+  .oc-stat-meta{min-width:0}
+  .oc-stat-label{font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;}
+  .oc-stat-value{font-size:24px;font-weight:900;color:#111827;line-height:1.1;margin-top:4px;}
+  .oc-stat-sub{font-size:12px;color:var(--text-muted);margin-top:4px;}
 
-        .mw-shell-meta{
-            display:flex;
-            gap:10px;
-            flex-wrap:wrap;
-            align-items:center;
-            justify-content:flex-end;
-        }
+  .oc-alert{
+    border-radius:14px;
+    padding:14px 16px;
+    border:1px solid var(--border);
+    background:#fff;
+    color:var(--text-main);
+    font-size:14px;
+    line-height:1.5;
+    box-shadow:var(--shadow-sm);
+    margin-bottom:16px;
+  }
+  .oc-alert.danger{background:var(--danger-light);border-color:rgba(239,68,68,.18);color:#991b1b;}
+  .oc-alert.info{background:var(--blue-light);border-color:rgba(116,178,212,.25);}
+  .oc-alert.success{background:var(--success-light);border-color:rgba(16,185,129,.2);}
+  .oc-alert ul{margin:8px 0 0 18px;}
 
-        .mw-pill{
-            display:inline-flex;
-            gap:8px;
-            align-items:center;
-            padding:7px 12px;
-            border-radius:999px;
-            font-size:.74rem;
-            font-weight:700;
-            color: rgba(255,255,255,.92);
-            border:1px solid rgba(255,255,255,.14);
-            background: rgba(255,255,255,.06);
-        }
+  .oc-stepper{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:14px;
+    margin-bottom:18px;
+  }
+  @media(max-width:900px){ .oc-stepper{grid-template-columns:1fr;} }
 
-        .mw-page{padding:18px 16px 26px;}
-        .mw-container{max-width:1140px;margin:0 auto;}
+  .oc-step{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:14px 16px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    box-shadow:var(--shadow-sm);
+    opacity:.75;
+    transition:var(--transition);
+  }
+  .oc-step.is-active{
+    border-color:var(--primary);
+    background:#fcfdf8;
+    opacity:1;
+    box-shadow:var(--shadow);
+  }
+  .oc-step-circle{
+    width:40px;height:40px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--gray-light);color:var(--gray);font-weight:900;font-size:14px;
+    flex:0 0 auto;
+  }
+  .oc-step.is-active .oc-step-circle{
+    background:var(--primary-light);
+    color:#365314;
+  }
+  .oc-step-label-main{
+    font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;
+  }
+  .oc-step-label-sub{
+    font-size:14px;font-weight:900;color:#111827;margin-top:4px;line-height:1.35;
+  }
 
-        .mw-grid-2{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;}
-        .mw-grid-3{display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:12px;}
-        .mw-grid-2-compact{display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:12px;}
-        @media (max-width: 1023px){.mw-grid-2,.mw-grid-3{grid-template-columns:1fr;}}
-        @media (max-width: 640px){.mw-grid-2-compact{grid-template-columns:1fr;}}
+  .oc-grid-2{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;}
+  .oc-grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+  .oc-grid-2-compact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+  @media(max-width:1023px){.oc-grid-2,.oc-grid-3{grid-template-columns:1fr;}}
+  @media(max-width:640px){.oc-grid-2-compact{grid-template-columns:1fr;}}
 
-        /* ============================================================
-           Cards (clear text)
-           ============================================================ */
-        .mw-card{
-            background: var(--c-white);
-            border-radius: var(--radius-lg);
-            border:1px solid var(--b-strong);
-            padding:18px;
-        }
-        .mw-card-soft{
-            border-color: var(--b-soft);
-            background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-        }
-        .mw-card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-        .mw-card-icon{
-            width:34px;height:34px;border-radius:999px;
-            display:flex;align-items:center;justify-content:center;
-            font-size:.92rem;border:1px solid var(--b-soft);
-        }
-        .mw-icon-primary{background: var(--c-ice); color: #0a4d6a;}
-        .mw-icon-lime{background: rgba(207,224,155,.55); color: #3a5f00;}
-        .mw-icon-ice{background: var(--c-ice); color: #0f172a;}
+  .oc-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    box-shadow:var(--shadow-sm);
+    overflow:hidden;
+  }
+  .oc-card.soft{background:linear-gradient(180deg,#fff 0%,#fbfdff 100%);}
+  .oc-card-h{
+    display:flex;gap:12px;align-items:flex-start;justify-content:space-between;
+    padding:16px 18px;border-bottom:1px solid var(--border);background:#fafafa;
+  }
+  .oc-card-h-main{display:flex;gap:12px;align-items:flex-start;}
+  .oc-card-ic{
+    width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    background:var(--blue-light);color:var(--blue);flex:0 0 auto;
+  }
+  .oc-card-ic.success{background:var(--success-light);color:var(--success);}
+  .oc-card-ic.warning{background:var(--warning-light);color:#d97706;}
+  .oc-card-ttl{font-size:16px;font-weight:900;color:#111827;line-height:1.2;margin:0;}
+  .oc-card-sub{font-size:13px;color:var(--text-muted);margin-top:4px;line-height:1.5;}
+  .oc-card-b{padding:18px;}
 
-        .mw-card-title{
-            font-size:.95rem;
-            font-weight:900;
-            color: var(--t-strong);
-            line-height:1.15;
-        }
-        .mw-card-subtitle{
-            font-size:.78rem;
-            color: var(--t-muted);
-            margin-top:3px;
-            line-height:1.45;
-        }
+  .oc-label{
+    display:block;
+    font-size:12px;
+    font-weight:800;
+    color:var(--text-main);
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin-bottom:6px;
+  }
+  .oc-label .required{color:var(--danger);}
+  .oc-input,.oc-select,.oc-textarea{
+    width:100%;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:#fff;
+    font-size:14px;
+    outline:none;
+    transition:var(--transition);
+    color:#111827;
+  }
+  .oc-input:focus,.oc-select:focus,.oc-textarea:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px var(--primary-light);
+  }
+  .oc-textarea{min-height:110px;resize:vertical;}
+  .oc-help{font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.45;}
+  .oc-field-error{margin-top:6px;font-size:12px;color:#b91c1c;font-weight:800;}
+  .oc-input.is-invalid,.oc-select.is-invalid,.oc-textarea.is-invalid{
+    border-color:#fb7185;
+    box-shadow:0 0 0 3px rgba(251,113,133,.18);
+  }
 
-        /* ============================================================
-           Alerts (enterprise/clean)
-           ============================================================ */
-        .mw-alert{
-            border-radius:14px;
-            padding:12px 14px;
-            border:1px solid;
-            font-size:.80rem;
-            line-height:1.45;
-            color: var(--t-main);
-            background: var(--c-ice);
-            border-color: rgba(116,178,212,.45);
-        }
-        .mw-alert-danger{background:#fff1f2;border-color:#fecdd3;color:#7f1d1d;}
-        .mw-alert-success{background:#ecfdf5;border-color:#bbf7d0;color:#14532d;}
-        .mw-alert ul{margin:6px 0 0; padding-left:18px;}
+  .oc-chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+  .oc-chip{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 10px;border-radius:999px;
+    background:var(--blue-light);color:var(--blue);
+    border:1px solid rgba(116,178,212,.18);
+    font-size:12px;font-weight:800;
+  }
 
-        /* ============================================================
-           Stepper
-           ============================================================ */
-        .mw-stepper-shell{margin:14px 0 18px;}
-        .mw-stepper{display:flex;flex-direction:column;gap:10px;}
-        @media (min-width: 768px){.mw-stepper{flex-direction:row;align-items:flex-start;gap:10px;}}
+  .oc-summary{
+    display:grid;
+    gap:12px;
+    font-size:14px;
+    color:var(--text-main);
+  }
+  .oc-summary-block{
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:#fff;
+    padding:14px;
+  }
+  .oc-summary h4{
+    margin:0 0 8px 0;
+    font-size:13px;
+    font-weight:900;
+    color:#111827;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+  .oc-summary .row{display:grid;gap:6px;}
+  .oc-summary .muted{color:var(--text-muted);font-weight:800;}
 
-        .mw-step{
-            display:flex;align-items:center;gap:10px;
-            opacity:.55;
-            transition:opacity .18s ease,transform .18s ease;
-        }
-        .mw-step.is-active{opacity:1;transform:translateY(-1px);}
+  .oc-actions{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:16px;
+    flex-wrap:wrap;
+  }
 
-        .mw-step-circle{
-            width:34px;height:34px;border-radius:999px;
-            display:flex;align-items:center;justify-content:center;
-            font-size:.82rem;font-weight:900;
-            border:1px solid rgba(255,255,255,.22);
-            background: rgba(255,255,255,.10);
-            color: rgba(255,255,255,.90);
-        }
-        .mw-step.is-active .mw-step-circle{
-            border-color: rgba(255,255,255,.25);
-            background: var(--c-primary);
-            color: var(--c-black);
-        }
+  .wizard-step{display:none;}
+  .wizard-step.active{display:block;}
 
-        .mw-step-label-main{
-            font-size:.70rem;
-            font-weight:900;
-            text-transform:uppercase;
-            letter-spacing:.09em;
-            color: #93c21c;
-        }
-        .mw-step-label-sub{
-            font-size:.75rem;
-            color: #93c21c;
-            margin-top:2px;
-            max-width:360px;
-            line-height:1.45;
-        }
+  .mw-object-result{display:grid;gap:2px;font-size:.80rem;}
+  .mw-object-result-main{font-weight:900;color:#111827;display:flex;align-items:center;gap:8px;}
+  .mw-object-result-kno{
+    font-size:.70rem;padding:2px 8px;border-radius:999px;border:1px solid var(--border);
+    background:var(--blue-light);font-weight:900;color:var(--text-main);
+  }
+  .mw-object-result-sub,.mw-object-result-product{display:flex;align-items:center;gap:6px;color:var(--text-muted);}
+  .mw-object-result-icon{width:14px;text-align:center;}
+  .mw-object-result-badge{
+    display:inline-flex;align-items:center;padding:0 8px;border-radius:999px;font-size:.70rem;
+    border:1px solid rgba(15,23,42,.12);margin-left:6px;background:var(--primary-light);font-weight:900;color:#365314;
+  }
 
-        /* ============================================================
-           Forms (clear + high contrast)
-           ============================================================ */
-        .mw-label{
-            display:block;
-            font-size:.74rem;
-            font-weight:900;
-            color: var(--t-strong);
-            margin-bottom:4px;
-        }
-        .mw-label .required{color:#b91c1c;}
-
-        .mw-input,.mw-select,.mw-textarea{
-            width:100%;
-            box-sizing:border-box;
-            border-radius:12px;
-            border:1px solid rgba(15,23,42,.25);
-            background:#fff;
-            padding:10px 11px;
-            font-size:.82rem;
-            color: var(--t-main);
-            outline:none;
-            transition:border-color .15s ease, box-shadow .15s ease;
-        }
-        .mw-input:focus,.mw-select:focus,.mw-textarea:focus{
-            border-color: rgba(116,178,212,.95);
-            box-shadow:0 0 0 3px rgba(116,178,212,.25);
-        }
-        .mw-textarea{min-height:92px; resize:vertical;}
-        .mw-help{font-size:.74rem;color: var(--t-muted);margin-top:4px;line-height:1.45;}
-        .mw-field-error{margin-top:6px;font-size:.74rem;color:#b91c1c;font-weight:700;}
-        .mw-input.is-invalid,.mw-select.is-invalid,.mw-textarea.is-invalid{
-            border-color:#fb7185;
-            box-shadow:0 0 0 3px rgba(251,113,133,.18);
-        }
-
-        /* ============================================================
-           Buttons (primary: #74b2d4, success-accent: #93c21c)
-           ============================================================ */
-        .mw-actions{display:flex;justify-content:space-between;gap:10px;margin-top:16px;flex-wrap:wrap;}
-
-        .mw-btn{
-            display:inline-flex;align-items:center;justify-content:center;gap:8px;
-            border-radius:999px;
-            border:1px solid transparent;
-            padding:10px 18px;
-            font-size:.82rem;
-            font-weight:900;
-            cursor:pointer;
-            white-space:nowrap;
-            transition:transform .08s ease, filter .12s ease, background .12s ease, border-color .12s ease;
-        }
-        .mw-btn:active{transform:translateY(1px);}
-        .mw-btn-primary{background: var(--c-primary); color: var(--c-black);}
-        .mw-btn-primary:hover{filter:brightness(1.03);}
-        .mw-btn-secondary{background:#fff;border-color: rgba(15,23,42,.25);color: var(--c-black);}
-        .mw-btn-secondary:hover{background: var(--c-ice);}
-        .mw-btn-ghost{background:transparent;border-color: rgba(15,23,42,.25);color: var(--t-muted);}
-        .mw-btn-ghost:hover{background: var(--c-ice);color: var(--c-black);}
-
-        .mw-btn-success{background: var(--c-lime); color: var(--c-black);}
-        .mw-btn-success:hover{filter:brightness(1.03);}
-
-        .mw-btn[disabled]{opacity:.6;cursor:not-allowed;}
-        .mw-btn .mw-spinner{display:none;}
-        .mw-btn.is-loading .mw-spinner{display:inline-block;}
-        .mw-btn.is-loading .mw-btn-text{opacity:.9;}
-
-        /* Chips */
-        .mw-chip-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
-        .mw-chip{
-            border-radius:999px;
-            border:1px solid rgba(15,23,42,.20);
-            padding:4px 8px;
-            font-size:.72rem;
-            color: var(--t-main);
-            background: var(--c-ice);
-            font-weight:700;
-        }
-
-        /* Select2 polish */
-        .select2-container--default .select2-selection--single{
-            border-radius:12px;
-            border:1px solid rgba(15,23,42,.25);
-            height:40px;
-            padding:4px 6px;
-            font-size:.82rem;
-        }
-        .select2-container--default .select2-selection--single .select2-selection__rendered{line-height:30px;color:var(--t-main);}
-        .select2-container--default .select2-selection--single .select2-selection__arrow{height:34px;}
-
-        .mw-object-result{display:grid;gap:2px;font-size:.80rem;}
-        .mw-object-result-main{font-weight:900;color:var(--t-strong);display:flex;align-items:center;gap:8px;}
-        .mw-object-result-kno{
-            font-size:.70rem;
-            padding:2px 8px;
-            border-radius:999px;
-            border:1px solid rgba(15,23,42,.20);
-            background: var(--c-ice);
-            font-weight:900;
-            color: var(--t-main);
-        }
-        .mw-object-result-sub,.mw-object-result-product{display:flex;align-items:center;gap:6px;color:var(--t-muted);}
-        .mw-object-result-icon{width:14px;text-align:center;}
-        .mw-object-result-badge{
-            display:inline-flex;align-items:center;
-            padding:0 8px;
-            border-radius:999px;
-            font-size:.70rem;
-            border:1px solid rgba(15,23,42,.18);
-            margin-left:6px;
-            background: rgba(192,216,234,.55);
-            font-weight:900;
-            color: var(--t-strong);
-        }
-
-        /* Wizard */
-        .wizard-step{display:none;}
-        .wizard-step.active{display:block;}
-
-        .mw-summary{font-size:.80rem;display:grid;gap:8px;color:var(--t-main);}
-        .mw-summary h4{margin:0;font-size:.84rem;font-weight:900;color:var(--t-strong);}
-        .mw-summary .row{display:grid;gap:5px;}
-        .mw-summary .muted{color:var(--t-muted);font-weight:800;}
-    </style>
-@endsection
+  .select2-container--default .select2-selection--single{
+    border-radius:10px;border:1px solid var(--border);height:42px;padding:5px 6px;font-size:14px;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__rendered{
+    line-height:30px;color:#111827;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__arrow{height:38px;}
+  .select2-container--default .select2-selection--multiple{
+    border-radius:10px;border:1px solid var(--border);min-height:42px;padding:4px 6px;
+  }
+</style>
+@endpush
+@endonce
 
 @section('content')
-    @php
-        $storeAction = \Illuminate\Support\Facades\Route::has('admin.maintenance.contracts.store_simple')
-            ? route('admin.maintenance.contracts.store_simple')
-            : route('admin.maintenance.contracts.store');
-    @endphp
+<div class="oc-wrap">
+  <div class="oc-header">
+    <div class="oc-titlebar">
+      <div>
+        <div class="oc-title">WARTUNGSVERTRAG ANLEGEN</div>
+        <div class="oc-sub">Erstellen Sie neue Wartungsverträge mit Kundenbezug, Filiale, Verantwortlichen, Checkliste und Technikerplanung.</div>
 
-    <div class="app-content content">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-
-        <div class="content-wrapper">
-            <div class="content-header row">
-                <div class="col-12">
-                    <h2 class="content-header-title float-left mb-0">Wartungsvertrag anlegen</h2>
-                    <div class="breadcrumb-wrapper col-12">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ url('/employee_dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ url('/personal/task/' . auth()->user()->name) }}">Aufgabeliste</a></li>
-                            <li class="breadcrumb-item active">Neuer Wartungsvertrag</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-body">
-                <div class="mw-container">
-                    <div class="mw-shell">  
-                        <div class="mw-page">
-                            @if($errors->any())
-                                <div class="mw-alert mw-alert-danger" style="margin-bottom:14px;">
-                                    <strong>Speichern nicht möglich.</strong>
-                                    <div>Bitte die markierten Felder prüfen.</div>
-                                    <ul>
-                                        @foreach($errors->all() as $e) <li>{{ $e }}</li> @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
-                            @if(isset($lead) || isset($alternative) || isset($asset))
-                                <div class="mw-card mw-card-soft" style="margin-bottom:14px;">
-                                    <div class="mw-card-header">
-                                        <div class="mw-card-icon mw-icon-lime"><i class="fa-solid fa-circle-info"></i></div>
-                                        <div>
-                                            <div class="mw-card-title">Kontext (optional)</div>
-                                            <div class="mw-card-subtitle">Vorbelegte Daten aus Lead/Adresse/Asset.</div>
-                                        </div>
-                                    </div>
-
-                                    <div style="display:grid;gap:6px;">
-                                        @if(isset($lead))
-                                            <div style="font-size:.82rem;color:var(--t-main);">
-                                                <strong style="color:var(--t-strong);">Kunde:</strong>
-                                                {{ $lead->firma ?: trim(($lead->name ?? '').' '.($lead->lastname ?? '')) }}
-                                                <span style="color:var(--t-muted);">· {{ $lead->street }} · {{ $lead->postcode }} {{ $lead->city }}</span>
-                                            </div>
-                                        @endif
-                                        @if(isset($alternative))
-                                            <div style="font-size:.82rem;color:var(--t-main);">
-                                                <strong style="color:var(--t-strong);">Objekt:</strong>
-                                                {{ $alternative->object_name ?: 'Alternative Adresse' }}
-                                                <span style="color:var(--t-muted);">· {{ $alternative->street }} · {{ $alternative->postcode }} {{ $alternative->city }}</span>
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                    <div class="mw-chip-row">
-                                        @if(isset($lead)) <div class="mw-chip">Lead-ID: {{ $lead->id }}</div> @endif
-                                        @if(isset($alternative)) <div class="mw-chip">Adresse-ID: {{ $alternative->id }}</div> @endif
-                                        @if(isset($asset)) <div class="mw-chip">Asset-ID: {{ $asset->id }}</div> @endif
-                                    </div>
-                                </div>
-                            @endif
-
-                            <div class="mw-stepper-shell">
-                                <div class="mw-stepper">
-                                    <div class="mw-step is-active" data-step-indicator="1">
-                                        <div class="mw-step-circle">1</div>
-                                        <div>
-                                            <div class="mw-step-label-main">Kunde & Anlage</div>
-                                            <div class="mw-step-label-sub">Objekt/Produkt & Filiale wählen. Basisdaten werden übernommen.</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mw-step" data-step-indicator="2">
-                                        <div class="mw-step-circle">2</div>
-                                        <div>
-                                            <div class="mw-step-label-main">Vertrag</div>
-                                            <div class="mw-step-label-sub">Laufzeit, Preis, Verantwortliche Person und Notizen.</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mw-step" data-step-indicator="3">
-                                        <div class="mw-step-circle">3</div>
-                                        <div>
-                                            <div class="mw-step-label-main">Checkliste & Techniker</div>
-                                            <div class="mw-step-label-sub">Checkliste zuweisen + Haupt-/Zusatztechniker einplanen.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <form id="wizard-form" method="POST" action="{{ $storeAction }}" novalidate>
-                                @csrf
-
-                                <input type="hidden" id="mw-customer-id" name="lead_id" value="{{ old('lead_id', $lead->id ?? '') }}">
-                                <input type="hidden" id="mw-alternative-id" name="alternative_id" value="{{ old('alternative_id', $alternative->id ?? '') }}">
-                                <input type="hidden" id="mw-product-id" name="product_id" value="{{ old('product_id', $asset->product_id ?? '') }}">
-                                <input type="hidden" id="mw-branch-id" name="branch_id" value="{{ old('branch_id') }}">
-                                <input type="hidden"  id="mw-wizard-payload"  name="wizard_payload" value="{{ old('wizard_payload') }}">
-                                <input type="hidden" id="mw-asset-id" name="asset_id" value="{{ old('asset_id', $asset->id ?? '') }}">
-                                <input type="hidden" id="mw-lead-product-list-id" name="lead_product_list_id" value="{{ old('lead_product_list_id') }}">
-
-
-                                {{-- Step 1 --}}
-                                <section class="wizard-step active" data-step="1">
-                                    <div class="mw-grid-2">
-                                        <div>
-                                            <div class="mw-card">
-                                                <div class="mw-card-header">
-                                                    <div class="mw-card-icon mw-icon-lime"><i class="fa-solid fa-house-circle-check"></i></div>
-                                                    <div>
-                                                        <div class="mw-card-title">Kunde, Objekt & Anlage</div>
-                                                        <div class="mw-card-subtitle">Schnelle Suche nach Kunde/Adresse/Produkt. Pflichtfelder sind erforderlich.</div>
-                                                    </div>
-                                                </div>
-
-                                                <div style="margin-bottom:10px;">
-                                                    <label class="mw-label">Kunde / Objekt / Produkt <span class="required">*</span></label>
-                                                    <select id="mw-customer-search" class="mw-object-search-select" style="width:100%;"></select>
-                                                    <div class="mw-help">Mindestens 2 Zeichen eingeben (Name, Kundennr., Adresse oder Produkt).</div>
-                                                    <div class="mw-field-error" id="mw-err-customer" style="display:none;"></div>
-                                                </div>
-
-                                                <div class="mw-grid-2-compact" style="margin-top:10px;">
-                                                    <div>
-                                                        <label class="mw-label">Anlagentyp (intern)</label>
-                                                        <input type="hidden" id="mw-system-type-code" name="systemType" value="{{ old('systemType') }}">
-                                                        <input type="text" id="mw-system-type" class="mw-input" placeholder="Wird aus dem Produkt übernommen" readonly>
-                                                    </div>
-
-                                                    <div>
-                                                        <label class="mw-label">Anlagentyp (Klartext)</label>
-                                                        <input type="text" id="mw-system-type-label" name="systemTypeLabel" class="mw-input"
-                                                               value="{{ old('systemTypeLabel') }}"
-                                                               placeholder="z. B. Luft-Wasser-Wärmepumpe">
-                                                        @error('systemTypeLabel') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                    </div>
-
-                                                    <div>
-                                                        <label class="mw-label">Produkt / Modell <span class="required">*</span></label>
-                                                        <input type="text" id="mw-product-model" name="productModel" class="mw-input"
-                                                               value="{{ old('productModel') }}"
-                                                               placeholder="z. B. HP-12kW Pro">
-                                                        @error('productModel') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                    </div>
-
-                                                    <div>
-                                                        <label class="mw-label">Seriennummer(n)</label>
-                                                        <input type="text" id="mw-serial-numbers" name="serialNumbers" class="mw-input"
-                                                               value="{{ old('serialNumbers') }}"
-                                                               placeholder="z. B. SN12345, SN67890">
-                                                        <div class="mw-help">Mehrere Seriennummern per Komma trennen.</div>
-                                                        @error('serialNumbers') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div style="margin-top:12px;">
-                                                    <label class="mw-label">Anlagenadresse</label>
-                                                    <input type="text" id="mw-installation-address" name="installationAddressText" class="mw-input"
-                                                           value="{{ old('installationAddressText') }}"
-                                                           placeholder="Straße, PLZ, Ort">
-                                                    <div class="mw-help">Wird übernommen und kann angepasst werden.</div>
-                                                    @error('installationAddressText') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                </div>
-
-                                                <div class="mw-alert" style="margin-top:12px;">
-                                                    <strong>Hinweis:</strong> Ohne Kunden/Objekt und Produkt ist kein Speichern möglich.
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <div class="mw-card mw-card-soft">
-                                                <div class="mw-card-header">
-                                                    <div class="mw-card-icon mw-icon-primary"><i class="fa-solid fa-building-circle-check"></i></div>
-                                                    <div>
-                                                        <div class="mw-card-title">Zuständige Filiale</div>
-                                                        <div class="mw-card-subtitle">Steuert Zuständigkeiten, Servicegebiet und interne Kommunikation.</div>
-                                                    </div>
-                                                </div>
-
-                                                <div style="margin-bottom:10px;">
-                                                    <label class="mw-label">Filiale <span class="required">*</span></label>
-                                                    <select id="mw-branch-search" class="mw-object-search-select" style="width:100%;"></select>
-                                                    <div class="mw-help">Mindestens 1 Zeichen eingeben (Name, PLZ, Ort).</div>
-                                                    <div class="mw-field-error" id="mw-err-branch" style="display:none;"></div>
-                                                </div>
-
-                                                <div style="display:grid;gap:10px;font-size:.80rem;color:var(--t-main);">
-                                                    <div>
-                                                        <label class="mw-label">Filialname</label>
-                                                        <input type="text" id="mw-branch-name" class="mw-input" value="Keine Filiale ausgewählt" readonly>
-                                                    </div>
-
-                                                    <div>
-                                                        <label class="mw-label">Filialadresse</label>
-                                                        <div id="mw-branch-address" class="mw-help" style="line-height:1.45;">Noch keine Filiale gewählt.</div>
-                                                    </div>
-
-                                                    <div style="display:grid;gap:6px;">
-                                                        <div style="display:flex;align-items:center;gap:8px;">
-                                                            <i class="fa-regular fa-envelope" style="color:#0f172a;"></i>
-                                                            <span id="mw-branch-email">–</span>
-                                                        </div>
-                                                        <div style="display:flex;align-items:center;gap:8px;">
-                                                            <i class="fa-solid fa-phone" style="color:#0f172a;"></i>
-                                                            <span id="mw-branch-phone">–</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="mw-alert" style="background: rgba(192,216,234,.40); border-color: rgba(116,178,212,.55);">
-                                                        <strong>Hinweis:</strong>
-                                                        <span id="mw-branch-note">Die Filiale bestimmt SLA, Einsatzgebiet und Ansprechpartner.</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mw-actions">
-                                        <button type="button" class="mw-btn mw-btn-ghost" id="mw-reset-step1">
-                                            <i class="fa-solid fa-rotate-left"></i>
-                                            <span>Auswahl zurücksetzen</span>
-                                        </button>
-
-                                        <button type="button" class="mw-btn mw-btn-primary" data-action="next" data-step="1">
-                                            <span>Weiter</span>
-                                            <i class="fa-solid fa-arrow-right-long"></i>
-                                        </button>
-                                    </div>
-                                </section>
-
-                                {{-- Step 2 --}}
-                                <section class="wizard-step" data-step="2">
-                                    <div class="mw-grid-2">
-                                        <div>
-                                            <div class="mw-card">
-                                                <div class="mw-card-header">
-                                                    <div class="mw-card-icon mw-icon-primary"><i class="fa-solid fa-file-signature"></i></div>
-                                                    <div>
-                                                        <div class="mw-card-title">Vertragsdaten</div>
-                                                        <div class="mw-card-subtitle">Pflichtfelder müssen vollständig sein, bevor gespeichert wird.</div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="mw-grid-3">
-                                                    <div>
-                                                        <label class="mw-label">Vertragsnummer (intern)</label>
-                                                        <input type="text" name="contractNumber" class="mw-input"
-                                                               value="{{ old('contractNumber') }}"
-                                                               placeholder="z. B. WV-2026-0010">
-                                                        @error('contractNumber') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                    </div>
-
-                                                    <div>
-                                                        <label class="mw-label">Vertragsbeginn <span class="required">*</span></label>
-                                                        <input type="date" name="contractStartDate" class="mw-input"
-                                                               value="{{ old('contractStartDate') }}">
-                                                        @error('contractStartDate') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                    </div>
-
-                                                    <div>
-                                                        <label class="mw-label">Laufzeit (Monate) <span class="required">*</span></label>
-                                                        <input type="number" name="contractDurationMonths" class="mw-input" min="1"
-                                                               value="{{ old('contractDurationMonths') }}"
-                                                               placeholder="z. B. 12">
-                                                        @error('contractDurationMonths') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                    </div>
-
-                                                    <div>
-                                                        <label class="mw-label">Abrechnungsmodus <span class="required">*</span></label>
-                                                        <select name="billingMode" class="mw-select">
-                                                            <option value="">Bitte wählen</option>
-                                                            <option value="yearly" @selected(old('billingMode')==='yearly')>Jährlich pauschal</option>
-                                                            <option value="one_time" @selected(old('billingMode')==='one_time')>Einmalig</option>
-                                                            <option value="time_and_material" @selected(old('billingMode')==='time_and_material')>Nach Aufwand (Zeit/Material)</option>
-                                                        </select>
-                                                        @error('billingMode') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                    </div>
-
-                                                    <div>
-                                                        <label class="mw-label">Jährlicher Wartungspreis brutto (€)</label>
-                                                        <input type="number" step="0.01" min="0" name="yearlyPriceGross" class="mw-input"
-                                                               value="{{ old('yearlyPriceGross') }}"
-                                                               placeholder="z. B. 249,00">
-                                                        @error('yearlyPriceGross') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                    </div>
-
-                                                    <div>
-                                                        <label class="mw-label">Nächste vertragliche Wartung</label>
-                                                        <input type="date" name="nextScheduledServiceDate" class="mw-input"
-                                                               value="{{ old('nextScheduledServiceDate') }}">
-                                                        @error('nextScheduledServiceDate') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div style="margin-top:14px;">
-                                                    <label class="mw-label">Verantwortliche Person <span class="required">*</span></label>
-                                                    <select name="responsible_employee_id" id="mw-responsible-employee" class="mw-select" style="width:100%;"></select>
-                                                    <div class="mw-help">Ansprechpartner intern (und optional CC).</div>
-                                                    @error('responsible_employee_id') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                </div>
-
-                                                <div style="margin-top:12px;">
-                                                    <label class="mw-label">Interne Notizen</label>
-                                                    <textarea name="contractInternalNotes" class="mw-textarea"
-                                                              placeholder="Sonderkonditionen, Besonderheiten, Rückfragen...">{{ old('contractInternalNotes') }}</textarea>
-                                                    @error('contractInternalNotes') <div class="mw-field-error">{{ $message }}</div> @enderror
-                                                </div>
-                                            </div>
-
-                                            <div class="mw-card mw-card-soft" style="margin-top:14px;">
-                                                <div class="mw-card-header">
-                                                    <div class="mw-card-icon mw-icon-lime"><i class="fa-regular fa-envelope"></i></div>
-                                                    <div>
-                                                        <div class="mw-card-title">Bestätigungs-E-Mail (optional)</div>
-                                                        <div class="mw-card-subtitle">Kann beim Speichern automatisch ausgelöst werden.</div>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <label class="mw-label">Hinweistext für die Kunden-E-Mail</label>
-                                                    <textarea name="customerEmailNote" class="mw-textarea"
-                                                              placeholder="Zusätzlicher Hinweis für den Kunden...">{{ old('customerEmailNote') }}</textarea>
-                                                    @error('customerEmailNote') <div class="mw-field-error">{{ $message }}</div> @enderror
-
-                                                    <div class="mw-help" style="margin-top:8px;">
-                                                        Der Kunde erhält einen Link zur Einsicht/Bestätigung (sofern im Backend implementiert).
-                                                    </div>
-
-                                                    <label style="display:inline-flex;align-items:center;gap:10px;margin-top:12px;font-size:.80rem;color:var(--t-main);font-weight:900;">
-                                                        <input type="checkbox" name="sendEmail" value="1" @checked(old('sendEmail', '1')=='1')>
-                                                        <span>E-Mail nach dem Speichern senden</span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <div class="mw-card mw-card-soft">
-                                                <div class="mw-card-header">
-                                                    <div class="mw-card-icon mw-icon-primary"><i class="fa-solid fa-eye"></i></div>
-                                                    <div>
-                                                        <div class="mw-card-title">Review</div>
-                                                        <div class="mw-card-subtitle">Kontrolle vor dem Speichern (Live-Zusammenfassung).</div>
-                                                    </div>
-                                                </div>
-
-                                                <div id="mw-summary-preview" class="mw-summary">
-                                                    <div class="mw-alert">Die Zusammenfassung wird automatisch aktualisiert.</div>
-                                                </div>
-                                            </div>
-
-                                            <div class="mw-card" style="margin-top:14px;">
-                                                <div class="mw-card-header">
-                                                    <div class="mw-card-icon mw-icon-lime"><i class="fa-solid fa-lock"></i></div>
-                                                    <div>
-                                                        <div class="mw-card-title">Datenqualität</div>
-                                                        <div class="mw-card-subtitle">Pflichtfelder werden vor dem Speichern geprüft.</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mw-help">
-                                                    Wenn “Weiter” oder “Speichern” nicht funktioniert, fehlen meist:
-                                                    <strong>Kunde/Objekt</strong>, <strong>Filiale</strong>, <strong>Produkt/Modell</strong> oder <strong>Verantwortliche Person</strong>.
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mw-actions">
-                                        <button type="button" class="mw-btn mw-btn-secondary" data-action="prev" data-step="2">
-                                            <i class="fa-solid fa-arrow-left-long"></i>
-                                            <span>Zurück</span>
-                                        </button>
-
-                                        <button type="submit" class="mw-btn mw-btn-success" id="mw-submit-btn">
-                                            <span class="mw-spinner"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
-                                            <span class="mw-btn-text"><i class="fa-solid fa-check"></i> Vertrag speichern</span>
-                                        </button>
-                                    </div>
-                                </section>
-
-
-                                {{-- Step 3 --}}
-                                <section class="wizard-step" data-step="3">
-                                    <div class="mw-grid-2">
-                                        <div>
-                                            <div class="mw-card">
-                                                <div class="mw-card-header">
-                                                    <div class="mw-card-icon mw-icon-primary"><i class="fa-solid fa-list-check"></i></div>
-                                                    <div>
-                                                        <div class="mw-card-title">Wartungs-Checkliste zuweisen</div>
-                                                        <div class="mw-card-subtitle">Wähle eine aktive Checkliste. Items werden als Vorschau geladen.</div>
-                                                    </div>
-                                                </div>
-
-                                                <div style="margin-bottom:10px;">
-                                                    <label class="mw-label">Checkliste <span class="required">*</span></label>
-                                                    <select id="mw-checklist-search" class="mw-object-search-select" style="width:100%;"></select>
-                                                    <div class="mw-help">Suche nach Titel / Beschreibung.</div>
-                                                    <div class="mw-field-error" id="mw-err-checklist" style="display:none;"></div>
-                                                </div>
-
-                                                <div class="mw-card mw-card-soft" style="padding:14px;">
-                                                    <div class="mw-card-title" style="font-size:.85rem;">Vorschau (Items)</div>
-                                                    <div class="mw-help" id="mw-checklist-preview" style="margin-top:6px;">
-                                                        Keine Checkliste ausgewählt.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <div class="mw-card mw-card-soft">
-                                                <div class="mw-card-header">
-                                                    <div class="mw-card-icon mw-icon-lime"><i class="fa-solid fa-user-gear"></i></div>
-                                                    <div>
-                                                        <div class="mw-card-title">Techniker Planung</div>
-                                                        <div class="mw-card-subtitle">Haupttechniker + optionale Zusatztechniker.</div>
-                                                    </div>
-                                                </div>
-
-                                                <div style="margin-bottom:10px;">
-                                                    <label class="mw-label">Haupttechniker <span class="required">*</span></label>
-                                                    <select id="mw-main-technician" class="mw-select" style="width:100%;"></select>
-                                                    <div class="mw-field-error" id="mw-err-maintech" style="display:none;"></div>
-                                                </div>
-
-                                                <div style="margin-bottom:10px;">
-                                                    <label class="mw-label">Zusatztechniker (optional)</label>
-                                                    <select id="mw-additional-technicians" class="mw-select" multiple style="width:100%;"></select>
-                                                    <div class="mw-help">Mehrfachauswahl möglich.</div>
-                                                </div>
-
-                                                <div class="mw-grid-2-compact" style="margin-top:12px;">
-                                                    <div>
-                                                        <label class="mw-label">Geplantes Datum (optional)</label>
-                                                        <input type="date" id="mw-maintenance-date" class="mw-input">
-                                                    </div>
-                                                    <div>
-                                                        <label class="mw-label">Zeit (optional)</label>
-                                                        <div class="mw-grid-2-compact">
-                                                            <input type="time" id="mw-maintenance-time-from" class="mw-input" placeholder="Von">
-                                                            <input type="time" id="mw-maintenance-time-to" class="mw-input" placeholder="Bis">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="mw-card mw-card-soft" style="margin-top:14px;">
-                                                <div class="mw-card-header">
-                                                    <div class="mw-card-icon mw-icon-primary"><i class="fa-solid fa-eye"></i></div>
-                                                    <div>
-                                                        <div class="mw-card-title">Review</div>
-                                                        <div class="mw-card-subtitle">Letzte Kontrolle vor dem Speichern.</div>
-                                                    </div>
-                                                </div>
-                                                <div id="mw-summary-preview-step3" class="mw-summary">
-                                                    <div class="mw-alert">Die Zusammenfassung wird automatisch aktualisiert.</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mw-actions">
-                                        <button type="button" class="mw-btn mw-btn-secondary" data-action="prev" data-step="3">
-                                            <i class="fa-solid fa-arrow-left-long"></i>
-                                            <span>Zurück</span>
-                                        </button>
-
-                                        <button type="submit" class="mw-btn mw-btn-success" id="mw-submit-btn">
-                                            <span class="mw-spinner"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
-                                            <span class="mw-btn-text"><i class="fa-solid fa-check"></i> Vertrag speichern</span>
-                                        </button>
-                                    </div>
-                                </section>
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="oc-breadcrumb">
+          <a href="{{ url('/employee_dashboard') }}">Home</a>
+          <span>›</span>
+          <a href="{{ route('admin.maintenance.contracts.index') }}">Wartungsverträge</a>
+          <span>›</span>
+          <span class="current">Neuer Wartungsvertrag</span>
         </div>
+      </div>
+
+      <div class="oc-inline-actions">
+        <a href="{{ route('admin.maintenance.contracts.index') }}" class="oc-btn-soft">
+          <i class="fa-solid fa-arrow-left"></i>
+          Zur Übersicht
+        </a>
+      </div>
     </div>
+  </div>
+
+  <div class="oc-analytics">
+    <div class="oc-stat">
+      <div class="oc-stat-icon total"><i class="fa-solid fa-file-signature"></i></div>
+      <div class="oc-stat-meta">
+        <div class="oc-stat-label">Vorgang</div>
+        <div class="oc-stat-value">3</div>
+        <div class="oc-stat-sub">Schritte bis zum Speichern</div>
+      </div>
+    </div>
+
+    <div class="oc-stat">
+      <div class="oc-stat-icon context"><i class="fa-solid fa-diagram-project"></i></div>
+      <div class="oc-stat-meta">
+        <div class="oc-stat-label">Kontext</div>
+        <div class="oc-stat-value">{{ $contextCount }}</div>
+        <div class="oc-stat-sub">Vorbelegte Datensätze erkannt</div>
+      </div>
+    </div>
+
+    <div class="oc-stat">
+      <div class="oc-stat-icon flow"><i class="fa-solid fa-building"></i></div>
+      <div class="oc-stat-meta">
+        <div class="oc-stat-label">Pflichtlogik</div>
+        <div class="oc-stat-value">Filiale</div>
+        <div class="oc-stat-sub">Zwingend vor dem Speichern</div>
+      </div>
+    </div>
+
+    <div class="oc-stat">
+      <div class="oc-stat-icon safe"><i class="fa-solid fa-shield-halved"></i></div>
+      <div class="oc-stat-meta">
+        <div class="oc-stat-label">Validierung</div>
+        <div class="oc-stat-value">Aktiv</div>
+        <div class="oc-stat-sub">Frontend- und Backend-Prüfung</div>
+      </div>
+    </div>
+  </div>
+
+  @if($errors->any())
+    <div class="oc-alert danger">
+      <strong>Speichern nicht möglich.</strong>
+      <div>Bitte die markierten Felder prüfen.</div>
+      <ul>
+        @foreach($errors->all() as $e)
+          <li>{{ $e }}</li>
+        @endforeach
+      </ul>
+    </div>
+  @endif
+
+  @if(isset($lead) || isset($alternative) || isset($asset))
+    <div class="oc-alert info">
+      <strong>Kontext erkannt.</strong> Vorbelegte Daten aus Lead, Objekt oder Anlage wurden geladen.
+      <div class="oc-chip-row">
+        @if(isset($lead)) <div class="oc-chip">Lead-ID: {{ $lead->id }}</div> @endif
+        @if(isset($alternative)) <div class="oc-chip">Adresse-ID: {{ $alternative->id }}</div> @endif
+        @if(isset($asset)) <div class="oc-chip">Asset-ID: {{ $asset->id }}</div> @endif
+      </div>
+
+      <div style="margin-top:10px;display:grid;gap:6px;">
+        @if(isset($lead))
+          <div>
+            <strong>Kunde:</strong>
+            {{ $lead->firma ?: trim(($lead->name ?? '').' '.($lead->lastname ?? '')) }}
+            <span style="color:#6b7280;">· {{ $lead->street }} · {{ $lead->postcode }} {{ $lead->city }}</span>
+          </div>
+        @endif
+
+        @if(isset($alternative))
+          <div>
+            <strong>Objekt:</strong>
+            {{ $alternative->object_name ?: 'Alternative Adresse' }}
+            <span style="color:#6b7280;">· {{ $alternative->street }} · {{ $alternative->postcode }} {{ $alternative->city }}</span>
+          </div>
+        @endif
+      </div>
+    </div>
+  @endif
+
+  <div class="oc-stepper">
+    <div class="oc-step is-active" data-step-indicator="1">
+      <div class="oc-step-circle">1</div>
+      <div>
+        <div class="oc-step-label-main">Schritt 1</div>
+        <div class="oc-step-label-sub">Kunde & Anlage</div>
+      </div>
+    </div>
+
+    <div class="oc-step" data-step-indicator="2">
+      <div class="oc-step-circle">2</div>
+      <div>
+        <div class="oc-step-label-main">Schritt 2</div>
+        <div class="oc-step-label-sub">Vertrag</div>
+      </div>
+    </div>
+
+    <div class="oc-step" data-step-indicator="3">
+      <div class="oc-step-circle">3</div>
+      <div>
+        <div class="oc-step-label-main">Schritt 3</div>
+        <div class="oc-step-label-sub">Checkliste & Techniker</div>
+      </div>
+    </div>
+  </div>
+
+  <form id="wizard-form" method="POST" action="{{ $storeAction }}" novalidate>
+    @csrf
+
+    <input type="hidden" id="mw-customer-id" name="lead_id" value="{{ old('lead_id', $lead->id ?? '') }}">
+    <input type="hidden" id="mw-alternative-id" name="alternative_id" value="{{ old('alternative_id', $alternative->id ?? '') }}">
+    <input type="hidden" id="mw-product-id" name="product_id" value="{{ old('product_id', $asset->product_id ?? '') }}">
+    <input type="hidden" id="mw-branch-id" name="branch_id" value="{{ old('branch_id') }}">
+    <input type="hidden" id="mw-wizard-payload" name="wizard_payload" value="{{ old('wizard_payload') }}">
+    <input type="hidden" id="mw-asset-id" name="asset_id" value="{{ old('asset_id', $asset->id ?? '') }}">
+    <input type="hidden" id="mw-lead-product-list-id" name="lead_product_list_id" value="{{ old('lead_product_list_id') }}">
+
+    {{-- STEP 1 --}}
+    <section class="wizard-step active" data-step="1">
+      <div class="oc-grid-2">
+        <div>
+          <div class="oc-card">
+            <div class="oc-card-h">
+              <div class="oc-card-h-main">
+                <div class="oc-card-ic"><i class="fa-solid fa-house-circle-check"></i></div>
+                <div>
+                  <h3 class="oc-card-ttl">Kunde, Objekt & Anlage</h3>
+                  <div class="oc-card-sub">Schnelle Suche nach Kunde, Adresse und Produkt mit automatischer Vorbelegung.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="oc-card-b">
+              <div style="margin-bottom:14px;">
+                <label class="oc-label">Kunde / Objekt / Produkt <span class="required">*</span></label>
+                <select id="mw-customer-search" class="mw-object-search-select" style="width:100%;"></select>
+                <div class="oc-help">Mindestens 2 Zeichen eingeben: Name, Kundennummer, Adresse oder Produkt.</div>
+                <div class="oc-field-error" id="mw-err-customer" style="display:none;"></div>
+              </div>
+
+              <div class="oc-grid-2-compact">
+                <div>
+                  <label class="oc-label">Anlagentyp (intern)</label>
+                  <input type="hidden" id="mw-system-type-code" name="systemType" value="{{ old('systemType') }}">
+                  <input type="text" id="mw-system-type" class="oc-input" placeholder="Wird aus dem Produkt übernommen" readonly>
+                </div>
+
+                <div>
+                  <label class="oc-label">Anlagentyp (Klartext)</label>
+                  <input type="text" id="mw-system-type-label" name="systemTypeLabel" class="oc-input"
+                         value="{{ old('systemTypeLabel') }}" placeholder="z. B. Luft-Wasser-Wärmepumpe">
+                  @error('systemTypeLabel') <div class="oc-field-error">{{ $message }}</div> @enderror
+                </div>
+
+                <div>
+                  <label class="oc-label">Produkt / Modell <span class="required">*</span></label>
+                  <input type="text" id="mw-product-model" name="productModel" class="oc-input"
+                         value="{{ old('productModel') }}" placeholder="z. B. HP-12kW Pro">
+                  @error('productModel') <div class="oc-field-error">{{ $message }}</div> @enderror
+                </div>
+
+                <div>
+                  <label class="oc-label">Seriennummer(n)</label>
+                  <input type="text" id="mw-serial-numbers" name="serialNumbers" class="oc-input"
+                         value="{{ old('serialNumbers') }}" placeholder="z. B. SN12345, SN67890">
+                  <div class="oc-help">Mehrere Seriennummern per Komma trennen.</div>
+                  @error('serialNumbers') <div class="oc-field-error">{{ $message }}</div> @enderror
+                </div>
+              </div>
+
+              <div style="margin-top:14px;">
+                <label class="oc-label">Anlagenadresse</label>
+                <input type="text" id="mw-installation-address" name="installationAddressText" class="oc-input"
+                       value="{{ old('installationAddressText') }}" placeholder="Straße, PLZ, Ort">
+                <div class="oc-help">Wird übernommen und kann angepasst werden.</div>
+                @error('installationAddressText') <div class="oc-field-error">{{ $message }}</div> @enderror
+              </div>
+
+              <div class="oc-alert info" style="margin-top:14px;margin-bottom:0;">
+                <strong>Hinweis:</strong> Ohne Kunden- oder Objektbezug, Produkt/Modell und Filiale ist kein Speichern möglich.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="oc-card soft">
+            <div class="oc-card-h">
+              <div class="oc-card-h-main">
+                <div class="oc-card-ic success"><i class="fa-solid fa-building-circle-check"></i></div>
+                <div>
+                  <h3 class="oc-card-ttl">Zuständige Filiale</h3>
+                  <div class="oc-card-sub">Steuert Zuständigkeiten, Servicegebiet und interne Kommunikation.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="oc-card-b">
+              <div style="margin-bottom:14px;">
+                <label class="oc-label">Filiale <span class="required">*</span></label>
+                <select id="mw-branch-search" class="mw-object-search-select" style="width:100%;"></select>
+                <div class="oc-help">Mindestens 1 Zeichen eingeben: Name, PLZ oder Ort.</div>
+                <div class="oc-field-error" id="mw-err-branch" style="display:none;"></div>
+              </div>
+
+              <div style="display:grid;gap:14px;">
+                <div>
+                  <label class="oc-label">Filialname</label>
+                  <input type="text" id="mw-branch-name" class="oc-input" value="Keine Filiale ausgewählt" readonly>
+                </div>
+
+                <div>
+                  <label class="oc-label">Filialadresse</label>
+                  <div id="mw-branch-address" class="oc-help" style="font-size:14px;">Noch keine Filiale gewählt.</div>
+                </div>
+
+                <div class="oc-grid-2-compact">
+                  <div>
+                    <label class="oc-label">E-Mail</label>
+                    <div class="oc-help" id="mw-branch-email" style="font-size:14px;">–</div>
+                  </div>
+                  <div>
+                    <label class="oc-label">Telefon</label>
+                    <div class="oc-help" id="mw-branch-phone" style="font-size:14px;">–</div>
+                  </div>
+                </div>
+
+                <div class="oc-alert info" style="margin-bottom:0;">
+                  <strong>Hinweis:</strong> <span id="mw-branch-note">Die Filiale bestimmt SLA, Einsatzgebiet und Ansprechpartner.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="oc-actions">
+        <button type="button" class="oc-btn-soft" id="mw-reset-step1">
+          <i class="fa-solid fa-rotate-left"></i>
+          Auswahl zurücksetzen
+        </button>
+
+        <button type="button" class="oc-btn" data-action="next" data-step="1">
+          Weiter
+          <i class="fa-solid fa-arrow-right-long"></i>
+        </button>
+      </div>
+    </section>
+
+    {{-- STEP 2 --}}
+    <section class="wizard-step" data-step="2">
+      <div class="oc-grid-2">
+        <div>
+          <div class="oc-card">
+            <div class="oc-card-h">
+              <div class="oc-card-h-main">
+                <div class="oc-card-ic"><i class="fa-solid fa-file-signature"></i></div>
+                <div>
+                  <h3 class="oc-card-ttl">Vertragsdaten</h3>
+                  <div class="oc-card-sub">Pflichtfelder müssen vollständig sein, bevor gespeichert wird.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="oc-card-b">
+              <div class="oc-grid-3">
+                <div>
+                  <label class="oc-label">Vertragsnummer (intern)</label>
+                  <input type="text" name="contractNumber" class="oc-input" value="{{ old('contractNumber') }}" placeholder="z. B. WV-2026-0010">
+                  @error('contractNumber') <div class="oc-field-error">{{ $message }}</div> @enderror
+                </div>
+
+                <div>
+                  <label class="oc-label">Vertragsbeginn <span class="required">*</span></label>
+                  <input type="date" name="contractStartDate" class="oc-input" value="{{ old('contractStartDate') }}">
+                  @error('contractStartDate') <div class="oc-field-error">{{ $message }}</div> @enderror
+                </div>
+
+                <div>
+                  <label class="oc-label">Laufzeit (Monate) <span class="required">*</span></label>
+                  <input type="number" name="contractDurationMonths" class="oc-input" min="1" value="{{ old('contractDurationMonths') }}" placeholder="z. B. 12">
+                  @error('contractDurationMonths') <div class="oc-field-error">{{ $message }}</div> @enderror
+                </div>
+
+                <div>
+                  <label class="oc-label">Abrechnungsmodus <span class="required">*</span></label>
+                  <select name="billingMode" class="oc-select">
+                    <option value="">Bitte wählen</option>
+                    <option value="yearly" @selected(old('billingMode')==='yearly')>Jährlich pauschal</option>
+                    <option value="one_time" @selected(old('billingMode')==='one_time')>Einmalig</option>
+                    <option value="time_and_material" @selected(old('billingMode')==='time_and_material')>Nach Aufwand</option>
+                  </select>
+                  @error('billingMode') <div class="oc-field-error">{{ $message }}</div> @enderror
+                </div>
+
+                <div>
+                  <label class="oc-label">Jährlicher Wartungspreis brutto (€)</label>
+                  <input type="number" step="0.01" min="0" name="yearlyPriceGross" class="oc-input" value="{{ old('yearlyPriceGross') }}" placeholder="z. B. 249,00">
+                  @error('yearlyPriceGross') <div class="oc-field-error">{{ $message }}</div> @enderror
+                </div>
+
+                <div>
+                  <label class="oc-label">Nächste vertragliche Wartung</label>
+                  <input type="date" name="nextScheduledServiceDate" class="oc-input" value="{{ old('nextScheduledServiceDate') }}">
+                  @error('nextScheduledServiceDate') <div class="oc-field-error">{{ $message }}</div> @enderror
+                </div>
+              </div>
+
+              <div style="margin-top:14px;">
+                <label class="oc-label">Verantwortliche Person <span class="required">*</span></label>
+                <select name="responsible_employee_id" id="mw-responsible-employee" class="oc-select" style="width:100%;"></select>
+                <div class="oc-help">Interner Hauptansprechpartner.</div>
+                @error('responsible_employee_id') <div class="oc-field-error">{{ $message }}</div> @enderror
+              </div>
+
+              <div style="margin-top:14px;">
+                <label class="oc-label">Interne Notizen</label>
+                <textarea name="contractInternalNotes" class="oc-textarea" placeholder="Sonderkonditionen, Besonderheiten, Rückfragen...">{{ old('contractInternalNotes') }}</textarea>
+                @error('contractInternalNotes') <div class="oc-field-error">{{ $message }}</div> @enderror
+              </div>
+            </div>
+          </div>
+
+          <div class="oc-card soft" style="margin-top:16px;">
+            <div class="oc-card-h">
+              <div class="oc-card-h-main">
+                <div class="oc-card-ic success"><i class="fa-regular fa-envelope"></i></div>
+                <div>
+                  <h3 class="oc-card-ttl">Bestätigungs-E-Mail</h3>
+                  <div class="oc-card-sub">Optionaler Hinweistext für die automatische Nachricht.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="oc-card-b">
+              <label class="oc-label">Hinweistext für die Kunden-E-Mail</label>
+              <textarea name="customerEmailNote" class="oc-textarea" placeholder="Zusätzlicher Hinweis für den Kunden...">{{ old('customerEmailNote') }}</textarea>
+              @error('customerEmailNote') <div class="oc-field-error">{{ $message }}</div> @enderror
+
+              <div class="oc-help" style="margin-top:8px;">
+                Der Kunde erhält einen Link zur Einsicht oder Bestätigung, sofern das im Backend aktiv ist.
+              </div>
+
+              <label style="display:inline-flex;align-items:center;gap:10px;margin-top:12px;font-size:14px;color:var(--text-main);font-weight:800;">
+                <input type="checkbox" name="sendEmail" value="1" @checked(old('sendEmail', '1')=='1')>
+                <span>E-Mail nach dem Speichern senden</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="oc-card soft">
+            <div class="oc-card-h">
+              <div class="oc-card-h-main">
+                <div class="oc-card-ic warning"><i class="fa-solid fa-eye"></i></div>
+                <div>
+                  <h3 class="oc-card-ttl">Review</h3>
+                  <div class="oc-card-sub">Live-Zusammenfassung der bisherigen Eingaben.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="oc-card-b">
+              <div id="mw-summary-preview" class="oc-summary">
+                <div class="oc-alert info" style="margin-bottom:0;">Die Zusammenfassung wird automatisch aktualisiert.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="oc-card" style="margin-top:16px;">
+            <div class="oc-card-h">
+              <div class="oc-card-h-main">
+                <div class="oc-card-ic"><i class="fa-solid fa-lock"></i></div>
+                <div>
+                  <h3 class="oc-card-ttl">Datenqualität</h3>
+                  <div class="oc-card-sub">Pflichtfelder werden vor dem Speichern geprüft.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="oc-card-b">
+              <div class="oc-help" style="font-size:14px;">
+                Wenn „Weiter“ oder „Speichern“ nicht funktioniert, fehlen meist:
+                <strong>Kunde/Objekt</strong>, <strong>Filiale</strong>, <strong>Produkt/Modell</strong> oder <strong>Verantwortliche Person</strong>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="oc-actions">
+        <button type="button" class="oc-btn-soft" data-action="prev" data-step="2">
+          <i class="fa-solid fa-arrow-left-long"></i>
+          Zurück
+        </button>
+
+        <button type="button" class="oc-btn" data-action="next" data-step="2">
+          Weiter
+          <i class="fa-solid fa-arrow-right-long"></i>
+        </button>
+      </div>
+    </section>
+
+    {{-- STEP 3 --}}
+    <section class="wizard-step" data-step="3">
+      <div class="oc-grid-2">
+        <div>
+          <div class="oc-card">
+            <div class="oc-card-h">
+              <div class="oc-card-h-main">
+                <div class="oc-card-ic"><i class="fa-solid fa-list-check"></i></div>
+                <div>
+                  <h3 class="oc-card-ttl">Wartungs-Checkliste</h3>
+                  <div class="oc-card-sub">Wähle eine aktive Checkliste. Die Items werden zur Kontrolle geladen.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="oc-card-b">
+              <div style="margin-bottom:14px;">
+                <label class="oc-label">Checkliste <span class="required">*</span></label>
+                <select id="mw-checklist-search" class="mw-object-search-select" style="width:100%;"></select>
+                <div class="oc-help">Suche nach Titel oder Beschreibung.</div>
+                <div class="oc-field-error" id="mw-err-checklist" style="display:none;"></div>
+              </div>
+
+              <div class="oc-alert info" style="margin-bottom:0;">
+                <strong>Vorschau (Items)</strong>
+                <div id="mw-checklist-preview" class="oc-help" style="margin-top:8px;">Keine Checkliste ausgewählt.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="oc-card soft">
+            <div class="oc-card-h">
+              <div class="oc-card-h-main">
+                <div class="oc-card-ic success"><i class="fa-solid fa-user-gear"></i></div>
+                <div>
+                  <h3 class="oc-card-ttl">Techniker Planung</h3>
+                  <div class="oc-card-sub">Haupttechniker und optionale Zusatztechniker.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="oc-card-b">
+              <div style="margin-bottom:14px;">
+                <label class="oc-label">Haupttechniker <span class="required">*</span></label>
+                <select id="mw-main-technician" class="oc-select" style="width:100%;"></select>
+                <div class="oc-field-error" id="mw-err-maintech" style="display:none;"></div>
+              </div>
+
+              <div style="margin-bottom:14px;">
+                <label class="oc-label">Zusatztechniker (optional)</label>
+                <select id="mw-additional-technicians" class="oc-select" multiple style="width:100%;"></select>
+                <div class="oc-help">Mehrfachauswahl möglich.</div>
+              </div>
+
+              <div class="oc-grid-2-compact">
+                <div>
+                  <label class="oc-label">Geplantes Datum</label>
+                  <input type="date" id="mw-maintenance-date" class="oc-input">
+                </div>
+                <div>
+                  <label class="oc-label">Zeitfenster</label>
+                  <div class="oc-grid-2-compact">
+                    <input type="time" id="mw-maintenance-time-from" class="oc-input">
+                    <input type="time" id="mw-maintenance-time-to" class="oc-input">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="oc-card soft" style="margin-top:16px;">
+            <div class="oc-card-h">
+              <div class="oc-card-h-main">
+                <div class="oc-card-ic warning"><i class="fa-solid fa-eye"></i></div>
+                <div>
+                  <h3 class="oc-card-ttl">Finale Kontrolle</h3>
+                  <div class="oc-card-sub">Letzte Prüfung vor dem Speichern.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="oc-card-b">
+              <div id="mw-summary-preview-step3" class="oc-summary">
+                <div class="oc-alert info" style="margin-bottom:0;">Die Zusammenfassung wird automatisch aktualisiert.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="oc-actions">
+        <button type="button" class="oc-btn-soft" data-action="prev" data-step="3">
+          <i class="fa-solid fa-arrow-left-long"></i>
+          Zurück
+        </button>
+
+        <button type="submit" class="oc-btn js-mw-submit">
+          <span class="mw-spinner" style="display:none;"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+          <span class="mw-btn-text"><i class="fa-solid fa-check"></i> Vertrag speichern</span>
+        </button>
+      </div>
+    </section>
+  </form>
+</div>
 @endsection
 
- 
-
 @section('script')
-    {{-- Select2 --}}
-    <script src="{{ asset('js/select2.min.js') }}"></script>
- <script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
+
+<script>
 (function () {
   "use strict";
 
@@ -902,24 +946,11 @@
     el.classList.toggle("is-invalid", !!invalid);
   }
 
-  // -------------------------------------------------------------------------
-  // STATE (checklist + technicians)
-  // -------------------------------------------------------------------------
   const State = {
-    checklist: {
-      id: null,
-      title: null,
-      items: []
-    },
-    technicians: {
-      mainId: null,
-      additionalIds: []
-    }
+    checklist: { id: null, title: null, items: [] },
+    technicians: { mainId: null, additionalIds: [] }
   };
 
-  // -------------------------------------------------------------------------
-  // Wizard Core
-  // -------------------------------------------------------------------------
   const Wizard = (function () {
     let currentStepIndex = 1;
     const maxStepIndex = 3;
@@ -938,6 +969,7 @@
       });
 
       renderSummaryPreview();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function validateStep1() {
@@ -945,7 +977,6 @@
       const altId    = getValById("mw-alternative-id");
       const branchId = getValById("mw-branch-id");
       const productModel = getValById("mw-product-model");
-
       let ok = true;
 
       if (!leadId && !altId) { ok = false; showInlineError("mw-err-customer", "Bitte Kunde oder Objekt auswählen."); }
@@ -957,18 +988,12 @@
       markInvalid("#mw-product-model", !productModel);
       if (!productModel) ok = false;
 
-      if (!ok) window.scrollTo({ top: 0, behavior: "smooth" });
       return ok;
     }
 
     function validateStep2() {
-      // responsible employee is required in your UI
       const responsibleId = getValById("mw-responsible-employee");
-      let ok = true;
-
-      if (!responsibleId) ok = false;
-
-      return ok;
+      return !!responsibleId;
     }
 
     function validateStep3() {
@@ -989,6 +1014,15 @@
       }
 
       return ok;
+    }
+
+    function summaryBlock(title, rows){
+      return (
+        '<div class="oc-summary-block">' +
+          '<h4>' + esc(title) + '</h4>' +
+          '<div class="row">' + rows.join('') + '</div>' +
+        '</div>'
+      );
     }
 
     function renderSummaryPreview() {
@@ -1021,30 +1055,26 @@
       const tTo = getVal("#mw-maintenance-time-to") || "–";
 
       const html =
-        '<div class="row">' +
-          "<h4>Kunde & Anlage</h4>" +
-          '<div><span class="muted">Kunde/Objekt:</span> ' + esc(customerText) + "</div>" +
-          '<div><span class="muted">Adresse:</span> ' + esc(address) + "</div>" +
-          '<div><span class="muted">Produkt:</span> ' + esc(productModel) + "</div>" +
-        "</div>" +
-        '<div class="row" style="margin-top:10px;">' +
-          "<h4>Filiale</h4>" +
-          '<div><span class="muted">Filialname:</span> ' + esc(branchName) + "</div>" +
-        "</div>" +
-        '<div class="row" style="margin-top:10px;">' +
-          "<h4>Vertrag</h4>" +
-          '<div><span class="muted">Vertragsnummer:</span> ' + esc(contractNumber) + "</div>" +
-          '<div><span class="muted">Beginn:</span> ' + esc(start) + "</div>" +
-          '<div><span class="muted">Laufzeit:</span> ' + esc(duration) + " Monate</div>" +
-          '<div><span class="muted">Nächste Wartung:</span> ' + esc(nextService) + "</div>" +
-          '<div><span class="muted">Verantwortlich:</span> ' + esc(responsibleText) + "</div>" +
-        "</div>" +
-        '<div class="row" style="margin-top:10px;">' +
-          "<h4>Checkliste & Techniker</h4>" +
-          '<div><span class="muted">Checkliste:</span> ' + esc(checklistTitle) + "</div>" +
-          '<div><span class="muted">Haupttechniker:</span> ' + esc(mainTechText) + "</div>" +
-          '<div><span class="muted">Planung:</span> ' + esc(date) + " · " + esc(tFrom) + "–" + esc(tTo) + "</div>" +
-        "</div>";
+        summaryBlock("Kunde & Anlage", [
+          '<div><span class="muted">Kunde/Objekt:</span> ' + esc(customerText) + '</div>',
+          '<div><span class="muted">Adresse:</span> ' + esc(address) + '</div>',
+          '<div><span class="muted">Produkt:</span> ' + esc(productModel) + '</div>'
+        ]) +
+        summaryBlock("Filiale", [
+          '<div><span class="muted">Filialname:</span> ' + esc(branchName) + '</div>'
+        ]) +
+        summaryBlock("Vertrag", [
+          '<div><span class="muted">Vertragsnummer:</span> ' + esc(contractNumber) + '</div>',
+          '<div><span class="muted">Beginn:</span> ' + esc(start) + '</div>',
+          '<div><span class="muted">Laufzeit:</span> ' + esc(duration) + ' Monate</div>',
+          '<div><span class="muted">Nächste Wartung:</span> ' + esc(nextService) + '</div>',
+          '<div><span class="muted">Verantwortlich:</span> ' + esc(responsibleText) + '</div>'
+        ]) +
+        summaryBlock("Checkliste & Techniker", [
+          '<div><span class="muted">Checkliste:</span> ' + esc(checklistTitle) + '</div>',
+          '<div><span class="muted">Haupttechniker:</span> ' + esc(mainTechText) + '</div>',
+          '<div><span class="muted">Planung:</span> ' + esc(date) + ' · ' + esc(tFrom) + '–' + esc(tTo) + '</div>'
+        ]);
 
       if (box2) box2.innerHTML = html;
       if (box3) box3.innerHTML = html;
@@ -1087,7 +1117,6 @@
           assetId: assetId ? Number(assetId) : null,
           branchId: branchId ? Number(branchId) : null
         },
-
         installation: {
           systemType: systemTypeCode || null,
           systemTypeLabel: systemTypeLabel || null,
@@ -1097,7 +1126,6 @@
           installationLocation: { roomOrArea: null, notes: addressText || null },
           installationDate: null
         },
-
         maintenanceCurrent: {
           date: maintenanceDate || null,
           timeFrom: timeFrom || null,
@@ -1105,23 +1133,20 @@
           mainTechnician: State.technicians.mainId ? { employeeId: Number(State.technicians.mainId) } : null,
           additionalTechnicians: (State.technicians.additionalIds || []).map(id => ({ employeeId: Number(id) }))
         },
-
-        // ✅ checklists array (store() expects checklist[0].checklistId)
         checklist: State.checklist.id ? [{
           checklistId: Number(State.checklist.id),
           title: State.checklist.title || null,
           items: State.checklist.items || []
         }] : [],
-
         contract: {
           contractNumber: contractNumber || null,
           startDate: startDate || null,
           durationMonths: durationMonths ? Number(durationMonths) : null,
           billingMode: billingMode || null,
           nextScheduledServiceDate: nextScheduledServiceDate || null,
-          internalNotes: internalNotes || null
+          internalNotes: internalNotes || null,
+          responsibleEmployeeId: responsibleEmployeeId ? Number(responsibleEmployeeId) : null
         },
-
         summary: {
           nextServiceDateRecommended: nextScheduledServiceDate || null,
           summaryForCustomer: null,
@@ -1129,12 +1154,9 @@
           recommendedIntervalMonths: null,
           statusOverall: null
         },
-
         system: { version: 1 },
-
         product: { productId: productId ? Number(productId) : null },
         leadProduct: { leadProductListId: leadProductListId ? Number(leadProductListId) : null },
-
         price: {
           yearlyPriceGross: yearlyPriceGross ? Number(String(yearlyPriceGross).replace(",", ".")) : null,
           currency: "EUR"
@@ -1161,9 +1183,8 @@
       watch.forEach(sel => {
         const el = qs(sel);
         if (!el) return;
-        const fn = () => renderSummaryPreview();
-        el.addEventListener("input", fn);
-        el.addEventListener("change", fn);
+        el.addEventListener("input", renderSummaryPreview);
+        el.addEventListener("change", renderSummaryPreview);
       });
 
       if (window.jQuery) {
@@ -1175,22 +1196,22 @@
 
     function attachSubmitGuard() {
       const form = document.getElementById("wizard-form");
-      const btn  = document.getElementById("mw-submit-btn");
       const payloadInput = document.getElementById("mw-wizard-payload");
+      const submitButtons = qsa(".js-mw-submit");
       if (!form) return;
 
       form.addEventListener("submit", function (e) {
-        // validate all steps
         if (!validateStep1()) { e.preventDefault(); setActiveStep(1); return; }
         if (!validateStep2()) { e.preventDefault(); setActiveStep(2); return; }
         if (!validateStep3()) { e.preventDefault(); setActiveStep(3); return; }
 
         if (payloadInput) payloadInput.value = JSON.stringify(buildWizardPayload());
 
-        if (btn) {
-          btn.classList.add("is-loading");
+        submitButtons.forEach(btn => {
           btn.setAttribute("disabled", "disabled");
-        }
+          const spinner = btn.querySelector(".mw-spinner");
+          if (spinner) spinner.style.display = "inline-block";
+        });
       });
     }
 
@@ -1248,9 +1269,6 @@
     return { init, renderSummaryPreview };
   })();
 
-  // -------------------------------------------------------------------------
-  // Select2 + AJAX
-  // -------------------------------------------------------------------------
   function initSelect2($) {
     if (!$) return;
 
@@ -1259,26 +1277,23 @@
       branchSearch:   @json(route('admin.maintenance.contracts.branch_search')),
       technicians:    @json(route('admin.maintenance.contracts.technicians')),
       checklistIndex: @json(route('admin.maintenance.contracts.checklists.ajax_index')),
-      checklistShowBase: @json(url('/admin/maintenance/contracts/checklists')) // + /{id}
+      checklistShowBase: @json(url('/admin/maintenance/contracts/checklists'))
     };
 
     const ctx = {
       $customerSearch: $("#mw-customer-search"),
       $branchSearch: $("#mw-branch-search"),
-
       $leadId: $("#mw-customer-id"),
       $altId: $("#mw-alternative-id"),
       $productId: $("#mw-product-id"),
       $leadProductListId: $("#mw-lead-product-list-id"),
       $branchId: $("#mw-branch-id"),
-
       $systemTypeCode: $("#mw-system-type-code"),
       $systemType: $("#mw-system-type"),
       $systemTypeLabel: $("#mw-system-type-label"),
       $productModel: $("#mw-product-model"),
       $serialNumbers: $("#mw-serial-numbers"),
       $installationAddress: $("#mw-installation-address"),
-
       $branchName: $("#mw-branch-name"),
       $branchAddress: $("#mw-branch-address"),
       $branchEmail: $("#mw-branch-email"),
@@ -1295,27 +1310,21 @@
       const productGroup = data.product_group || "";
 
       let html = '<div class="mw-object-result">';
-      html += '<div class="mw-object-result-main">';
-      html += "<span>" + esc(customer) + "</span>";
-      if (customerNo) html += '<span class="mw-object-result-kno">' + esc(customerNo) + "</span>";
-      html += "</div>";
+      html += '<div class="mw-object-result-main"><span>' + esc(customer) + '</span>';
+      if (customerNo) html += '<span class="mw-object-result-kno">' + esc(customerNo) + '</span>';
+      html += '</div>';
 
       if (address) {
-        html += '<div class="mw-object-result-sub">';
-        html += '<i class="fa-solid fa-location-dot mw-object-result-icon"></i>';
-        html += "<span>" + esc(address) + "</span>";
-        html += "</div>";
+        html += '<div class="mw-object-result-sub"><i class="fa-solid fa-location-dot mw-object-result-icon"></i><span>' + esc(address) + '</span></div>';
       }
 
       if (productName || productGroup) {
-        html += '<div class="mw-object-result-product">';
-        html += '<i class="fa-solid fa-box-open mw-object-result-icon"></i>';
-        html += "<span>" + esc(productName);
-        if (productGroup) html += '<span class="mw-object-result-badge">' + esc(productGroup) + "</span>";
-        html += "</span></div>";
+        html += '<div class="mw-object-result-product"><i class="fa-solid fa-box-open mw-object-result-icon"></i><span>' + esc(productName);
+        if (productGroup) html += '<span class="mw-object-result-badge">' + esc(productGroup) + '</span>';
+        html += '</span></div>';
       }
 
-      html += "</div>";
+      html += '</div>';
       return html;
     }
 
@@ -1328,27 +1337,20 @@
       const phone = data.phone || "";
 
       let html = '<div class="mw-object-result">';
-      html += '<div class="mw-object-result-main"><span>' + esc(name) + "</span></div>";
+      html += '<div class="mw-object-result-main"><span>' + esc(name) + '</span></div>';
 
       if (city || postcode) {
-        html += '<div class="mw-object-result-sub">';
-        html += '<i class="fa-solid fa-location-dot mw-object-result-icon"></i>';
-        html += "<span>" + esc([postcode, city].filter(Boolean).join(" ")) + "</span>";
-        html += "</div>";
+        html += '<div class="mw-object-result-sub"><i class="fa-solid fa-location-dot mw-object-result-icon"></i><span>' + esc([postcode, city].filter(Boolean).join(" ")) + '</span></div>';
       }
 
       if (email || phone) {
-        html += '<div class="mw-object-result-product">';
-        html += '<i class="fa-regular fa-envelope mw-object-result-icon"></i>';
-        html += "<span>" + esc([email, phone].filter(Boolean).join(" · ")) + "</span>";
-        html += "</div>";
+        html += '<div class="mw-object-result-product"><i class="fa-regular fa-envelope mw-object-result-icon"></i><span>' + esc([email, phone].filter(Boolean).join(" · ")) + '</span></div>';
       }
 
-      html += "</div>";
+      html += '</div>';
       return html;
     }
 
-    // Customer/Object/Product
     if (ctx.$customerSearch.length) {
       ctx.$customerSearch.select2({
         placeholder: "Kunde / Objekt / Produkt suchen…",
@@ -1408,19 +1410,16 @@
         ctx.$altId.val("");
         ctx.$productId.val("");
         ctx.$leadProductListId.val("");
-
         ctx.$systemTypeCode.val("");
         ctx.$systemType.val("");
         ctx.$systemTypeLabel.val("");
         ctx.$productModel.val("");
         ctx.$serialNumbers.val("");
         ctx.$installationAddress.val("");
-
         if (window.__mw_renderSummaryPreview) window.__mw_renderSummaryPreview();
       });
     }
 
-    // Branch
     if (ctx.$branchSearch.length) {
       ctx.$branchSearch.select2({
         placeholder: "Filiale suchen…",
@@ -1476,17 +1475,14 @@
         ctx.$branchEmail.text("–");
         ctx.$branchPhone.text("–");
         ctx.$branchNote.text("Die Filiale bestimmt SLA, Einsatzgebiet und Ansprechpartner.");
-
         if (window.__mw_renderSummaryPreview) window.__mw_renderSummaryPreview();
       });
     }
 
-    // Load technicians once -> fill responsible + main + additional
     $.ajax({ url: ROUTES.technicians, type: "GET", dataType: "json" })
       .done(function (resp) {
         const employees = (resp && resp.employees) ? resp.employees : [];
 
-        // Responsible (step2)
         const $respSel = $("#mw-responsible-employee");
         if ($respSel.length) {
           $respSel.empty().append('<option value="">Bitte wählen</option>');
@@ -1497,7 +1493,6 @@
           if (oldVal) $respSel.val(String(oldVal)).trigger("change");
         }
 
-        // Main technician (step3)
         const $main = $("#mw-main-technician");
         if ($main.length) {
           $main.empty().append('<option value="">Bitte wählen</option>');
@@ -1510,7 +1505,6 @@
           });
         }
 
-        // Additional technicians (step3)
         const $add = $("#mw-additional-technicians");
         if ($add.length) {
           $add.empty();
@@ -1528,7 +1522,6 @@
         $("#mw-main-technician").html('<option value="">Mitarbeiter konnten nicht geladen werden</option>');
       });
 
-    // Checklist select2 + load items
     const $check = $("#mw-checklist-search");
     if ($check.length) {
       $check.select2({
@@ -1557,10 +1550,8 @@
         const d = e.params.data || {};
         State.checklist.id = d.id;
         State.checklist.title = d.text;
-
         showInlineError("mw-err-checklist", "");
 
-        // load items
         const url = ROUTES.checklistShowBase + "/" + encodeURIComponent(d.id);
         $.getJSON(url).done(function (resp) {
           const items = (resp && resp.items) ? resp.items : [];
@@ -1602,5 +1593,4 @@
   });
 })();
 </script>
-
 @endsection

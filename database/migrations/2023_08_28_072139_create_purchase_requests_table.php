@@ -11,40 +11,87 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchase_requests', function (Blueprint $table) {
+       Schema::create('purchase_requests', function (Blueprint $table) {
             $table->id();
-            $table->integer('brand')->nullabl();
+
+            $table->foreignId('brand')
+                ->nullable()
+                ->constrained('brands')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+
             $table->string('new_brand')->nullable();
-            $table->integer('distributor_id')->nullable();
+
+            $table->foreignId('distributor_id')
+                ->nullable()
+                ->constrained('distributors')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+
             $table->string('new_distributor')->nullable();
+
             $table->string('product');
             $table->string('model')->nullable();
             $table->string('color')->nullable();
-            $table->integer('request_from')->nullable();
-            $table->integer('request_to')->nullable();
+
+            $table->foreignId('request_from')
+                ->nullable()
+                ->constrained('employees')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+
+            $table->foreignId('request_to')
+                ->nullable()
+                ->constrained('employees')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
 
             $table->string('measure_unit')->nullable();
             $table->string('price_unit')->nullable();
-            $table->float('retail_price',10,1)->nullable();
+
+            $table->decimal('retail_price', 12, 2)->nullable();
             $table->string('retail_discount_type')->nullable();
-            $table->integer('retail_discount')->nullable();
-            $table->float('purchase_price', 10,1)->nullable();
+            $table->decimal('retail_discount', 12, 2)->nullable();
+
+            $table->decimal('purchase_price', 12, 2)->nullable();
+
             $table->longText('short_description')->nullable();
             $table->string('used')->nullable();
-            $table->integer('customer_id')->nullable();
-            $table->integer('employee_id')->nullable();
-            $table->integer('problem_id')->nullable();
+
+            $table->foreignId('customer_id')
+                ->nullable()
+                ->constrained('customers')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+
+            $table->foreignId('employee_id')
+                ->nullable()
+                ->constrained('employees')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+
+            $table->unsignedBigInteger('problem_id')->nullable();
+
             $table->string('link')->nullable();
             $table->string('image')->nullable();
-            $table->string('quantity')->nullable();
-            $table->string('status')->nullable();
+
+            $table->decimal('quantity', 12, 2)->nullable();
+
+            $table->string('status')->default('Unpublished');
+
             $table->string('add_by')->nullable();
-            $table->date('add_date')->nullable();
+            $table->dateTime('add_date')->nullable();
+
             $table->string('edit_by')->nullable();
-            $table->date('edit_date')->nullable();
+            $table->dateTime('edit_date')->nullable();
+
             $table->string('delete_by')->nullable();
-            $table->date('delete_date')->nullable();
+            $table->dateTime('delete_date')->nullable();
+
             $table->timestamps();
+
+            $table->index(['status', 'created_at']);
+            $table->index(['brand', 'distributor_id']);
         });
     }
 

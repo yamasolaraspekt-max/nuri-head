@@ -32,7 +32,7 @@
                                                                 <span aria-hidden="true">×</span>
                                                             </button>
                                                         </div>
-                                                        <form novalidate action="{{ action('App\Http\Controllers\EmployeeAddressController@store')}}" method="post"  class="custom-file-upload" enctype="multipart/form-data" >
+                                                        <form novalidate action="{{ route('emp.address.save')}}" method="post"  class="custom-file-upload" enctype="multipart/form-data" >
                                                             @csrf
                                                             <input type="hidden" name="active_tab" id="active_tab" value="address"> 
                                                             <div class="modal-body"> 
@@ -253,7 +253,7 @@
                                                                 <span aria-hidden="true">×</span>
                                                             </button>
                                                         </div>
-                                                        <form novalidate action="{{ action('App\Http\Controllers\EmergencyContactController@store')}}" method="post"  class="custom-file-upload" enctype="multipart/form-data" >
+                                                        <form novalidate action="{{ route('emergency.save')}}" method="post"  class="custom-file-upload" enctype="multipart/form-data" >
                                                             @csrf
                                                             <input type="hidden" name="active_tab" id="active_tab" value="address"> 
                                                             <div class="modal-body"> 

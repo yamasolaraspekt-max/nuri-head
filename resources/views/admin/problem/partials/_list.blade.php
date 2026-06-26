@@ -1,176 +1,212 @@
-{{-- resources/views/admin/tickets/partials/list.blade.php --}}
 @php
-  $ERROR_TYPE_DE = [
-    'complaint'=>'Reklamation','emergency_service'=>'Notdienst','repair'=>'Reparatur','maintenance'=>'Wartung',
-    'malfunction'=>'Störung','installation'=>'Installation','configuration_error'=>'Konfiguration','system_outage'=>'Systemausfall',
-    'security_issue'=>'Sicherheitsproblem','user_error'=>'Bedienungsfehler','network_problem'=>'Netzwerkfehler','software_bug'=>'Softwarefehler',
-    'hardware_defect'=>'Hardwarefehler','spare_part_request'=>'Ersatzteilanfrage','timeout'=>'Zeitüberschreitung',
-    'communication_failure'=>'Kommunikationsproblem','power_outage'=>'Energieausfall','update_failure'=>'Updatefehler',
-    'access_issue'=>'Zugriffsproblem','other'=>'Sonstiges',
-  ];
-  $SOURCE_DE = [
-    'Kunde'=>'Kunde','Mitarbeiter'=>'Mitarbeiter','System'=>'System','Telefonisch'=>'Telefonisch','E-Mail'=>'E-Mail','Vor Ort'=>'Vor Ort',
-    'Intern'=>'Intern','Extern'=>'Extern','Webformular'=>'Webformular','Support-Portal'=>'Support-Portal','Live-Chat'=>'Live-Chat','API'=>'API',
-    'Monitoring'=>'Monitoring','Social Media'=>'Social Media','WhatsApp'=>'WhatsApp','Fax'=>'Fax','Slack'=>'Slack','Teams'=>'Teams','Besuch'=>'Besuch',
-    'Manuell erstellt'=>'Manuell erstellt','Weitergeleitet'=>'Weitergeleitet',
-  ];
-  $norm = fn($v) => trim((string)$v);
+    $statusKey = function ($status) {
+        $status = strtolower(trim((string) $status));
+
+        return match ($status) {
+            'open' => 'offen',
+            'in_bearbeitung' => 'process',
+            'done', 'beendet', 'ended' => 'end',
+            default => $status ?: 'offen',
+        };
+    };
+
+    $statusLabel = function ($status) use ($statusKey) {
+        return match ($statusKey($status)) {
+            'offen' => 'Offen',
+            'process' => 'In Bearbeitung',
+            'end' => 'Beendet',
+            'junk' => 'Junk',
+            default => ucfirst($status ?: 'offen'),
+        };
+    };
+
+    $statusClass = function ($status) use ($statusKey) {
+        return match ($statusKey($status)) {
+            'offen' => 'open',
+            'process' => 'process',
+            'end' => 'end',
+            'junk' => 'junk',
+            default => 'open',
+        };
+    };
+
+    $priorityClass = function ($priority) {
+        return match (strtolower(trim((string) $priority))) {
+            'high', 'dringend', 'sehr dringend', 'sehr_dringend' => 'high',
+            'medium', 'mittel' => 'medium',
+            'low', 'normal' => 'low',
+            default => '',
+        };
+    };
+
+    $priorityLabel = function ($priority) {
+        return match (strtolower(trim((string) $priority))) {
+            'high' => 'Hoch',
+            'medium' => 'Mittel',
+            'low' => 'Niedrig',
+            'dringend' => 'Dringend',
+            'sehr dringend', 'sehr_dringend' => 'Sehr dringend',
+            'normal' => 'Normal',
+            default => $priority ?: '—',
+        };
+    };
+
+    $errorTypeLabel = function ($type) {
+        $type = strtolower(trim((string) $type));
+
+        return match ($type) {
+            'complaint' => 'Reklamation',
+            'emergency_service' => 'Notdienst',
+            'repair' => 'Reparatur',
+            'maintenance' => 'Wartung',
+            'malfunction' => 'Störung',
+            'installation' => 'Installation',
+            'configuration_error' => 'Konfiguration',
+            'system_outage' => 'Systemausfall',
+            'security_issue' => 'Sicherheitsproblem',
+            'user_error' => 'Bedienungsfehler',
+            'network_problem' => 'Netzwerkfehler',
+            'software_bug' => 'Softwarefehler',
+            'hardware_defect' => 'Hardwarefehler',
+            'spare_part_request' => 'Ersatzteilanfrage',
+            'timeout' => 'Zeitüberschreitung',
+            'communication_failure' => 'Kommunikationsproblem',
+            'power_outage' => 'Energieausfall',
+            'update_failure' => 'Updatefehler',
+            'access_issue' => 'Zugriffsproblem',
+            'other' => 'Sonstiges',
+
+            default => $type
+            ? ucfirst(str_replace(['_', '-'], ' ', $type))
+            : 'Kein Fehlertyp',
+        };
+    };
+
+    $customerName = function ($ticket) {
+        return trim(
+            ($ticket->firma ?? '') . ' ' .
+            ($ticket->name ?? '') . ' ' .
+            ($ticket->lastname ?? '')
+        ) ?: 'Kein Kunde';
+    };
+
+    $ticketDate = function ($date, $format = 'd.m.Y') {
+        return $date
+            ? \Carbon\Carbon::parse($date)->format($format)
+            : '—';
+    };
 @endphp
 
-<div class="shell">
-  <div class="shell-head">
-    <div style="font-weight:950;color:var(--t-ink);">Liste</div>
-    <div style="font-size:12px;font-weight:900;color:var(--t-muted);">Tipp: Strg/⌘ + K für Suche</div>
-  </div>
+<div class="oc-list-head oc-list-head-compact">
+    <div>Ticket</div>
+    <div>Ticketdaten</div>
+    <div>Status</div>
+    <div>Priorität</div>
+    <div>Datum</div>
+    <div style="text-align:right;">Aktionen</div>
+</div>
 
-  <div class="overflow-x-auto">
-    <table class="w-full text-left">
-      <thead class="bg-white/70 border-b border-[var(--t-border)]">
-        <tr class="text-xs font-black text-slate-600">
-          <th class="p-3">TICKET</th>
-          <th class="p-3">KUNDE</th>
-          <th class="p-3">PRODUKT</th>
-          <th class="p-3">TICKETTYP</th>
-          <th class="p-3">QUELLE</th>
-          <th class="p-3">STATUS</th>
-          <th class="p-3">ZUSTÄNDIGE</th>
-          <th class="p-3">AUDIT</th>
-          <th class="p-3">FEHLER</th>
-          <th class="p-3">AKTUALISIERT</th>
-          <th class="p-3 text-right">AKTION</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        @forelse($tickets as $t)
-          @php
-            $st = strtolower($t->status ?? 'offen');
-
-            $pill = $st==='process' ? 's-proc' : ($st==='junk' ? 's-junk' : ($st==='end' ? 's-end' : 's-open'));
-            $profileUrl = url('problem/profile/'.$t->id);
-
-            $errorTypeKey = $norm($t->error_type);
-            $errorTypeDe  = $ERROR_TYPE_DE[$errorTypeKey] ?? ($errorTypeKey ?: '—');
-
-            $sourceKey = $norm($t->source ?? '');
-            $sourceDe  = $SOURCE_DE[$sourceKey] ?? ($sourceKey ?: '—');
-
-            $ticketJson = $t->ticket_json ?? [
-              'id'=>$t->id,
-              'ticket_no'=>$t->ticket_no,
-              'status'=>$t->status ?? 'offen',
-              'profile_url'=>$profileUrl,
-              'customer'=>trim(($t->firma ?: '').' '.($t->name ?: '').' '.($t->lastname ?: '')),
-              'product'=>$t->product ?? '',
-              'error_type'=>$errorTypeKey,
-              'source'=>$sourceKey,
-              'created_at'=>$t->created_at,
-              'updated_at'=>$t->updated_at,
-              'edit_date'=>$t->edit_date ?? null,
-              'end_date'=>$t->end_date ?? null,
-              'employees'=>$t->employees ?? [],
-              'errors'=>$t->errors ?? [],
-              'created_by_user'=>$t->created_by_user ?? null,
-              'updated_by_user'=>$t->updated_by_user ?? null,
-              'ended_by_user'=>$t->ended_by_user ?? null,
-              'current_user'=>$t->current_user ?? null,
-            ];
-          @endphp
-
-          <tr class="border-b border-[var(--t-border)] hover:bg-white/80">
-            <td class="p-3">
-              <a href="{{ $profileUrl }}" class="font-black text-[var(--t-ink)] hover:underline">#{{ $t->ticket_no }}</a>
-              <div class="text-[11px] font-extrabold text-slate-500">{{ $t->priority ?: '—' }}</div>
-            </td>
-
-            <td class="p-3">
-              <div class="text-sm font-black text-slate-800">
-                {{ trim(($t->firma ?: '').' '.($t->name ?: '').' '.($t->lastname ?: '')) }}
-              </div>
-              <div class="text-[11px] font-semibold text-slate-500">{{ $t->street }} · {{ $t->postcode }} {{ $t->alt_city }}</div>
-            </td>
-
-            <td class="p-3 text-sm font-extrabold text-slate-700">{{ $t->product }}</td>
-
-            <td class="p-3 text-sm font-black text-slate-700">{{ $errorTypeDe }}</td>
-            <td class="p-3 text-sm font-black text-slate-700">{{ $sourceDe }}</td>
-
-            <td class="p-3">
-              <span class="status-pill {{ $pill }}" data-pill-id="{{ $t->id }}">{{ strtoupper($t->status ?? 'offen') }}</span>
-              <div class="mt-2">
-                <select class="input" style="border-radius:999px;padding:.45rem .65rem;"
-                        data-ticket-status="1"
-                        data-ticket-id="{{ $t->id }}"
-                        data-ticket-no="{{ $t->ticket_no }}"
-                        data-ticket-json='@json($ticketJson)'
-                        data-prev-status="{{ $st }}">
-                  <option value="offen" @selected(($t->status ?? 'offen')==='offen')>OFFEN</option>
-                  <option value="process" @selected(($t->status ?? '')==='process')>IN BEARBEITUNG</option>
-                  <option value="end" @selected(($t->status ?? '')==='end')>BEENDET</option>
-                  <option value="junk" @selected(($t->status ?? '')==='junk')>JUNK</option>
-                </select>
-              </div>
-            </td>
-
-            <td class="p-3">
-              <div class="tk-avatars">
-                @foreach(collect($t->employees ?? [])->take(5) as $e)
-                  @php $img = $e['image'] ?? null; @endphp
-                  @if($img)
-                    <img class="avatar" src="{{ asset('images/employee/'.$img) }}" alt="">
-                  @else
-                    <div class="avatar"></div>
-                  @endif
-                @endforeach
-                @if(count($t->employees ?? []) > 5)
-                  <div class="avatar" style="display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:950;color:#374151;background:#fff;">
-                    +{{ count($t->employees ?? []) - 5 }}
-                  </div>
-                @endif
-              </div>
-            </td>
-
-            <td class="p-3">
-              <div class="audit-row" style="border:0;margin:0;padding:0;">
-                <div class="audit-item">
-                  <span class="k">ERSTELLT</span>
-                  <span class="v">{{ data_get($ticketJson,'created_by_user.name','—') }}</span>
-                  <span class="d">{{ $t->created_at ? \Carbon\Carbon::parse($t->created_at)->format('Y-m-d H:i') : '—' }}</span>
+<div class="oc-list oc-list-compact">
+    @forelse($tickets as $ticket)
+        <div class="oc-item oc-item-compact">
+            <div class="oc-item-row oc-item-row-compact">
+                <div class="oc-cell oc-ticket-cell">
+                    <div class="oc-cell-title">Ticket</div>
+                    <span class="oc-id-badge oc-id-badge-sm">
+                        #{{ $ticket->ticket_no ?? $ticket->id }}
+                    </span>
                 </div>
-                <div class="audit-item">
-                  <span class="k">BEARBEITET</span>
-                  <span class="v">{{ data_get($ticketJson,'updated_by_user.name','—') }}</span>
-                  <span class="d">
-                    @php $ed = $t->edit_date ?: $t->updated_at; @endphp
-                    {{ $ed ? \Carbon\Carbon::parse($ed)->format('Y-m-d H:i') : '—' }}
-                  </span>
+
+                <div class="oc-cell oc-main-cell">
+                    <div class="oc-cell-title">Ticketdaten</div>
+
+                    <div class="oc-compact-title">
+                        {{ $customerName($ticket) }}
+                    </div>
+
+                    <div class="oc-compact-meta">
+                        <span>
+                            <strong>Produkt:</strong>
+                            {{ $ticket->product ?: '—' }}
+                        </span>
+
+                        <span>
+                            <strong>Fehler:</strong>
+                            {{ $errorTypeLabel($ticket->error_type) }}
+                            @if(!empty($ticket->error_code))
+                                · {{ $ticket->error_code }}
+                            @endif
+                        </span>
+
+                        @if(!empty($ticket->street))
+                            <span>
+                                <strong>Adresse:</strong>
+                                {{ $ticket->street }}
+                                @if(!empty($ticket->postcode) || !empty($ticket->alt_city))
+                                    , {{ trim(($ticket->postcode ?? '') . ' ' . ($ticket->alt_city ?? '')) }}
+                                @endif
+                            </span>
+                        @endif
+                    </div>
                 </div>
-              </div>
-            </td>
 
-            <td class="p-3">
-              <button class="tk-btn" type="button" style="padding:.28rem .7rem;"
-                data-open-errors="1"
-                data-ticket-no="{{ $t->ticket_no }}"
-                data-errors-json='@json($t->errors ?? [])'>
-                FEHLER ({{ count($t->errors ?? []) }})
-              </button>
-            </td>
+                <div class="oc-cell oc-badge-cell">
+                    <div class="oc-cell-title">Status</div>
+                    <span class="oc-status-pill oc-fixed-badge {{ $statusClass($ticket->status) }}">
+                        {{ $statusLabel($ticket->status) }}
+                    </span>
+                </div>
 
-            <td class="p-3 text-[11px] font-black text-slate-500">
-              {{ \Carbon\Carbon::parse($t->updated_at)->diffForHumans() }}
-            </td>
+                <div class="oc-cell oc-badge-cell">
+                    <div class="oc-cell-title">Priorität</div>
+                    <span class="oc-priority oc-fixed-badge {{ $priorityClass($ticket->priority) }}">
+                        {{ $priorityLabel($ticket->priority) }}
+                    </span>
+                </div>
 
-            <td class="p-3 text-right">
-              <a href="{{ $profileUrl }}" class="tk-btn tk-btn-primary" style="padding:.28rem .7rem;">ÖFFNEN</a>
-            </td>
-          </tr>
-        @empty
-          <tr>
-            <td colspan="11" class="p-8 text-center text-sm font-black text-slate-500">Keine Tickets gefunden.</td>
-          </tr>
-        @endforelse
-      </tbody>
-    </table>
-  </div>
+                <div class="oc-cell oc-date-cell">
+                    <div class="oc-cell-title">Datum</div>
+                    <div class="oc-date-main">
+                        {{ $ticketDate($ticket->start_date) }}
+                    </div>
+                    <div class="oc-date-sub">
+                        Update: {{ $ticketDate($ticket->updated_at, 'd.m.Y H:i') }}
+                    </div>
+                </div>
+
+                <div class="oc-cell oc-action-cell">
+                    <div class="oc-cell-title">Aktionen</div>
+
+                    <div class="oc-actions oc-actions-compact">
+                        <a href="{{ url('problem/profile/' . $ticket->id) }}" class="oc-btn-ic primary" title="Anzeigen">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </a>
+
+                        <a href="{{ url('problem_edit/' . $ticket->id) }}" class="oc-btn-ic warning" title="Bearbeiten">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                        </a>
+
+                        <a href="{{ url('problem_destroy/' . $ticket->id) }}" class="oc-btn-ic danger" title="Löschen"
+                            onclick="return confirm('Möchten Sie dieses Ticket wirklich löschen?')">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @empty
+        <div class="oc-empty">Keine Tickets gefunden.</div>
+    @endforelse
 </div>

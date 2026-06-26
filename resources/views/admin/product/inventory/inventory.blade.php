@@ -2,61 +2,61 @@
 @section('title', 'Inventory')
 
 @php
-    $productsJson = collect($products ?? [])->map(function ($p) {
-        return [
-            'id' => $p->id,
-            'product' => $p->product,
-            'model' => $p->model,
-            'article_no' => $p->article_no,
-            'ean' => $p->ean,
-            'brand_name' => $p->brand?->name ?? $p->brand_name ?? null,
-            'image_url' => !empty($p->firstImage?->image)
-                ? asset('images/products/' . ltrim($p->firstImage->image, '/'))
-                : ($p->image_url ?? null),
-        ];
-    })->values();
+$productsJson = collect($products ?? [])->map(function ($p) {
+    return [
+        'id' => $p->id,
+        'product' => $p->product,
+        'model' => $p->model,
+        'article_no' => $p->article_no,
+        'ean' => $p->ean,
+        'brand_name' => $p->brand?->name ?? $p->brand_name ?? null,
+        'image_url' => !empty($p->firstImage?->image)
+            ? asset('images/products/' . ltrim($p->firstImage->image, '/'))
+            : ($p->image_url ?? null),
+    ];
+})->values();
 
-    $responsibleJson = collect($responsible ?? [])->map(function ($r) {
-        return [
-            'id' => $r->id,
-            'name' => trim(($r->name ?? '') . ' ' . ($r->lastname ?? '')),
-        ];
-    })->values();
+$responsibleJson = collect($responsible ?? [])->map(function ($r) {
+    return [
+        'id' => $r->id,
+        'name' => trim(($r->name ?? '') . ' ' . ($r->lastname ?? '')),
+    ];
+})->values();
 
-    $branchesJson = collect($branches ?? [])->map(function ($b) {
-        return [
-            'id' => $b->id,
-            'branch' => $b->branch,
-        ];
-    })->values();
+$branchesJson = collect($branches ?? [])->map(function ($b) {
+    return [
+        'id' => $b->id,
+        'branch' => $b->branch,
+    ];
+})->values();
 
-    $customersJson = collect($customers ?? [])->map(function ($c) {
-        return [
-            'id' => $c->id,
-            'name' => trim(($c->firma ?? '') . ' ' . ($c->name ?? '') . ' ' . ($c->lastname ?? '')),
-        ];
-    })->values();
+$customersJson = collect($customers ?? [])->map(function ($c) {
+    return [
+        'id' => $c->id,
+        'name' => trim(($c->firma ?? '') . ' ' . ($c->name ?? '') . ' ' . ($c->lastname ?? '')),
+    ];
+})->values();
 
-    $inventoryCategories = collect($inventoryCategories ?? [])->filter()->values();
-    $quantityUnits = collect($quantityUnits ?? [
-        'Stk',
-        'Pcs',
-        'm',
-        'cm',
-        'mm',
-        'm²',
-        'm³',
-        'kg',
-        'g',
-        't',
-        'l',
-        'ml',
-        'Pack',
-        'Set',
-        'Rolle',
-        'Karton',
-        'Palette',
-    ])->filter()->values();
+$inventoryCategories = collect($inventoryCategories ?? [])->filter()->values();
+$quantityUnits = collect($quantityUnits ?? [
+    'Stk',
+    'Pcs',
+    'm',
+    'cm',
+    'mm',
+    'm²',
+    'm³',
+    'kg',
+    'g',
+    't',
+    'l',
+    'ml',
+    'Pack',
+    'Set',
+    'Rolle',
+    'Karton',
+    'Palette',
+])->filter()->values();
 @endphp
 
 @once
@@ -94,13 +94,10 @@
 
 .iv-wrap{
     font-family:Inter,system-ui,-apple-system,sans-serif;
-    color:var(--text-main);
-    max-width:1600px;
-    margin:20px auto;
-    padding:56px 32px;
+    color:var(--text-main); 
 }
 
-.iv-header{margin:95px 0 18px;}
+.iv-header{margin: 18px;}
 .iv-titlebar{
     display:flex;
     align-items:flex-end;
@@ -875,7 +872,7 @@
                         <option value="">Alle Produkte</option>
                         @foreach($products as $p)
                             <option value="{{ $p->id }}">
-                                {{ $p->product }}{{ $p->model ? ' - '.$p->model : '' }}{{ $p->article_no ? ' - '.$p->article_no : '' }}
+                                {{ $p->product }}{{ $p->model ? ' - ' . $p->model : '' }}{{ $p->article_no ? ' - ' . $p->article_no : '' }}
                             </option>
                         @endforeach
                     </select>
@@ -1055,7 +1052,7 @@
                             <option value="">Produkt wählen</option>
                             @foreach($products as $p)
                                 <option value="{{ $p->id }}">
-                                    {{ $p->product }}{{ $p->model ? ' - '.$p->model : '' }}{{ $p->article_no ? ' - '.$p->article_no : '' }}
+                                    {{ $p->product }}{{ $p->model ? ' - ' . $p->model : '' }}{{ $p->article_no ? ' - ' . $p->article_no : '' }}
                                 </option>
                             @endforeach
                         </select>
@@ -2237,3 +2234,26 @@ const INVENTORY_QUANTITY_UNITS = @json($quantityUnits->values());
 </script>
 @endpush
 @endonce
+
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs = [
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            },
+            {
+                label: 'Inventorie Liste',
+                url: "{{ url()->current()}}",
+                clickable: false
+
+            }
+
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+@endpush

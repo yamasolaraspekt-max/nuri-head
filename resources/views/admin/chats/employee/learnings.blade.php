@@ -325,41 +325,9 @@
 @endsection
 
 @section('content')
-<div class="app-content content">
+<div class="app-content">
     <div class="content-wrapper">
-        {{-- HEADER --}}
-        <div class="content-header row">
-            <div class="content-header-left col-md-8 col-12 mb-1">
-                <h2 class="content-header-title float-left mb-0 d-flex align-items-center">
-                    <i class="feather icon-book-open mr-50"></i>
-                    Learning Chat Topics
-                </h2>
-                <div class="breadcrumb-wrapper col-12">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{ url('/employee_dashboard') }}">
-                                <i class="feather icon-home"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ url('/chat_dashboard') }}">
-                                <i class="feather icon-message-circle"></i> Chat
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item active">
-                            Learning topics
-                        </li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="content-header-right col-md-4 col-12 d-flex align-items-center justify-content-md-end justify-content-start mb-1">
-                <span class="learning-header-pill">
-                    <i class="feather icon-layers"></i>
-                    Curated guides to train employees inside chat.
-                </span>
-            </div>
-        </div>
+        {{-- HEADER --}} 
 
         {{-- BODY --}}
         <div class="content-body mt-1">
@@ -1262,3 +1230,25 @@
     })();
 </script>
 @endsection
+
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs = [
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            },
+            {
+                label: 'Learning Chat Topics',
+                url: "{{ url()->current() }}",
+                clickable: false
+
+            }
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+@endpush

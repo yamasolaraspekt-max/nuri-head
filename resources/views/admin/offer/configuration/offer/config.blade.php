@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<!-- OFFER_CALC_FIX_V3: fixed virtual logistics section editing/delete/drop crash + safe section deletion -->
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartQuote Direct - Professional</title>
+    <title>SADESK - Smart Angebot</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Tailwind CSS -->
@@ -12,8 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <!-- ✅ ADD THIS IN <head> (Quill) -->
-    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+     <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
 
@@ -25,10 +25,50 @@
         // Inject user preferences straight from the database
         window.ServerUserPrefs = {!! auth()->user()->preference ? auth()->user()->preference->toJson() : 'null' !!};
     </script>
+
+    <script>
+        @php
+            $branchProfilesForJs = ($branches ?? collect())->mapWithKeys(function ($branch) {
+                $key = (string) $branch->id;
+                $logoUrl = $branch->logo_url ?: ($branch->image ? asset('storage/' . ltrim($branch->image, '/')) : '');
+
+                return [
+                    $key => [
+                        'id' => (int) $branch->id,
+                        'slug' => (string) ($branch->slug ?? ''),
+                        'name' => (string) ($branch->branch ?? ''),
+                        'branch' => (string) ($branch->branch ?? ''),
+                        'street' => (string) ($branch->street ?? ''),
+                        'postcode' => (string) ($branch->postcode ?? ''),
+                        'city' => (string) ($branch->city ?? ''),
+                        'country' => (string) ($branch->country ?? ''),
+                        'email' => (string) ($branch->email ?? ''),
+                        'phone' => (string) ($branch->phone ?? ''),
+                        'whatsapp' => (string) ($branch->whatsapp ?? ''),
+                        'web' => (string) ($branch->web ?? ''),
+                        'bank' => (string) ($branch->bank ?? ''),
+                        'iban' => (string) ($branch->iban ?? ''),
+                        'bic' => (string) ($branch->bic ?? ''),
+                        'register' => (string) ($branch->register ?? ''),
+                        'tax' => (string) ($branch->tax ?? ''),
+                        'vat' => (string) ($branch->vat ?? ''),
+                        'gf' => (string) ($branch->gf ?? ''),
+                        'contactPerson' => (string) ($branch->contact_person ?? ''),
+                        'logoUrl' => (string) $logoUrl,
+                        'color' => (string) ($branch->color ?: '#93c21c'),
+                        'secondColor' => (string) ($branch->second_color ?: ($branch->color ?: '#93c21c')),
+                    ],
+                ];
+            });
+        @endphp
+        window.BranchProfiles = @json($branchProfilesForJs);
+        window.DefaultBranchProfileKey = Object.keys(window.BranchProfiles || {})[0] || 'solar-aspekt';
+    </script>
     <style>
     :root{
             --brand-color:#93c21c;
             --second-color:#93c21c;
+            --offer-process-soft-bg:#edf1df;
         }
 
     /* =========================
@@ -70,7 +110,7 @@
     ========================= */
     body{
         background-color:#cbd5e1;
-        color:#334155;
+        color:#0f0f0f;
         height:100vh;
         display:flex;
         flex-direction:column;
@@ -109,7 +149,7 @@
 
     .btn-primary{ @apply bg-[#93c21c] text-white shadow hover:brightness-105 transition-all active:scale-95 px-4 py-2 rounded font-bold; }
     .btn-disabled{ @apply bg-slate-300 text-white cursor-not-allowed shadow-none; }
-    .sidebar-tab{ @apply flex-1 py-3 text-center text-xs font-bold text-dark-600 hover:text-[#93c21c] border-b-2 border-transparent transition cursor-pointer; }
+    .sidebar-tab{ @apply flex-1 py-3 text-center text-xs font-bold text-[#000000] hover:text-[#93c21c] border-b-2 border-transparent transition cursor-pointer; }
     .sidebar-tab.active{ @apply text-[#93c21c] border-[#93c21c] bg-slate-50; }
 
     .view-section{
@@ -135,7 +175,7 @@
         max-height: 297mm; /* WICHTIG: Verhindert endloses Dehnen der Seite */
         background: #fff;
         margin: 0 auto 40px auto;
-        padding: 17mm 14mm 16mm 14mm;
+        padding: 17mm 14mm 8mm 14mm;
         position: relative;
         display: flex;
         flex-direction: column;
@@ -435,11 +475,11 @@
     .pos-header-grid {
             display:grid;
             /* 6 Columns: Pos | Article | Qty | Unit | EP | GP */
-            grid-template-columns: 52px minmax(0, 1fr) 78px 68px 100px 110px;
-            gap:10px;
+            grid-template-columns: 28px minmax(0, 1fr) 65px 36px 59px 141px;
+            gap:14px;
             font-size:10px;
             font-weight:500;
-            color:#64748b;
+            color:#1c1c1c;
             border-bottom:1px solid #cbd5e1;
             padding-bottom:8px;
             margin-bottom:14px;
@@ -489,7 +529,7 @@
 
     .pdf-desc-block{
         font-size:10px;
-        color:#334155;
+        color:#0f0f0f;
         line-height:1.6;
     }
 
@@ -556,7 +596,7 @@
 
     .pdf-labor-table thead th{
         background:#f8fafc;
-        color:#64748b;
+        color:#1c1c1c;
         font-size:10px;
         text-transform:uppercase;
         letter-spacing:.04em;
@@ -568,7 +608,7 @@
     .pdf-labor-table tbody td{
         padding:8px 10px;
         border-bottom:1px solid #edf2f7;
-        color:#334155;
+        color:#0f0f0f;
     }
 
     .pdf-labor-table tbody tr:last-child td{
@@ -593,7 +633,7 @@
         grid-template-columns:2.5rem 1fr 3rem 2.5rem 5rem 5rem 1.5rem;
         gap:.75rem;
         font-size:.75rem;
-        color:#64748b;
+        color:#1c1c1c;
         padding:.25rem 0;
         border-bottom:1px dotted #e2e8f0;
         align-items:center;
@@ -611,7 +651,7 @@
     }
 
     .sidebar-tab{
-        @apply flex-1 py-3 text-center text-xs font-bold text-dark-600 hover:text-[#93c21c] border-b-2 border-transparent transition cursor-pointer;
+        @apply flex-1 py-3 text-center text-xs font-bold text-[#000000] hover:text-[#93c21c] border-b-2 border-transparent transition cursor-pointer;
     }
 
     .sidebar-tab.active{
@@ -680,7 +720,7 @@
 
     .lib-subtab-inactive{
         background:transparent;
-        color:#64748b;
+        color:#1c1c1c;
     }
 
     /* =========================
@@ -869,7 +909,7 @@
     .tool-handle {
         position: absolute;
         background: #fff;
-        color: #334155;
+        color: #0f0f0f;
         border: 1px solid #cbd5e1;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         width: 24px;
@@ -978,7 +1018,7 @@
         font-weight:600;
         text-transform:uppercase;
         letter-spacing:.12em;
-        color:#64748b;
+        color:#1c1c1c;
     }
 
     .list-toolbar-subtitle{
@@ -1124,7 +1164,7 @@
     .list-pill-green{ background:#ecfccb; color:#4d7c0f; }
     .list-pill-blue{ background:#dbeafe; color:#1d4ed8; }
     .list-pill-orange{ background:#ffedd5; color:#c2410c; }
-    .list-pill-slate{ background:#e2e8f0; color:#334155; }
+    .list-pill-slate{ background:#e2e8f0; color:#0f0f0f; }
     .list-pill-red{ background:#fee2e2; color:#b91c1c; }
     .list-pill-indigo{ background:#e0e7ff; color:#4338ca; }
     .list-pill-yellow{ background:#fef9c3; color:#a16207; }
@@ -1182,7 +1222,7 @@
         padding:.45rem .25rem;
         border-bottom:1px solid #f1f5f9;
         font-size:.75rem;
-        color:#334155;
+        color:#0f0f0f;
     }
 
     .list-colpicker-item:last-child{
@@ -1198,7 +1238,7 @@
         border-radius:.85rem;
         border:1px solid #dbe4ee;
         background:#fff;
-        color:#334155;
+        color:#0f0f0f;
         font-size:.72rem;
         font-weight:600;
         transition:all .18s ease;
@@ -1219,7 +1259,7 @@
         border-radius:.75rem;
         border:1px solid #e2e8f0;
         background:#fff;
-        color:#64748b;
+        color:#1c1c1c;
         transition:all .18s ease;
     }
 
@@ -1274,18 +1314,22 @@
     .ql-snow .ql-picker-options {
         z-index: 1000 !important;
     }
-
+ 
     /* Fix Tailwind resetting the text styles inside the dropdowns */
     .ql-snow .ql-picker.ql-size .ql-picker-item::before {
         content: attr(data-value);
     }
-    .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="12px"]::before { font-size: 10px; }
+    /* 👇 Added smaller sizes here 👇 */
+    .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="6px"]::before { font-size: 6px; }
+    .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="8px"]::before { font-size: 8px; }
+    .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="10px"]::before { font-size: 10px; }
+    
+    .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="12px"]::before { font-size: 12px; }
     .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before { font-size: 14px; }
     .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="16px"]::before { font-size: 16px; }
     .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before { font-size: 18px; }
     .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="24px"]::before { font-size: 24px; }
     .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="32px"]::before { font-size: 32px; }
-    
     /* Fallback for the empty "normal" option if no data-value is present */
     .ql-snow .ql-picker.ql-size .ql-picker-item:not([data-value])::before {
         content: 'Normal';
@@ -1297,6 +1341,18 @@
     }
     .ql-snow .ql-picker.ql-font .ql-picker-item:not([data-value])::before {
         content: 'Sans Serif';
+    }
+    .ql-snow .ql-picker.ql-lineHeight .ql-picker-label::before,
+    .ql-snow .ql-picker.ql-lineHeight .ql-picker-item::before {
+        content: attr(data-value) 'x Abstand';
+    }
+    .ql-snow .ql-picker.ql-lineHeight .ql-picker-label:not([data-value])::before,
+    .ql-snow .ql-picker.ql-lineHeight .ql-picker-item:not([data-value])::before {
+        content: 'Zeilenabstand';
+    }
+
+    .ql-snow .ql-picker.ql-lineHeight {
+        width: 125px;
     }
 
     /* Optional: Ensure the labels update to reflect the selection */
@@ -1314,7 +1370,7 @@
         border:1px dashed #dbe4ee;
         border-radius:.75rem;
         background:#fff;
-        color:#334155;
+        color:#0f0f0f;
         line-height:1.55;
     }
 
@@ -1324,7 +1380,7 @@
         border:1px dashed #dbe4ee;
         border-radius:.75rem;
         background:#fff;
-        color:#334155;
+        color:#0f0f0f;
         line-height:1.55;
     }
 
@@ -1398,7 +1454,7 @@
 
         .sq-side-main-tabs{
             display:grid;
-            grid-template-columns:1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap:.5rem;
         }
 
@@ -1411,7 +1467,7 @@
             border-radius:1rem;
             border:1px solid #dbe4ee;
             background:#fff;
-            color:#64748b;
+            color:#1c1c1c;
             font-size:.78rem;
             font-weight:600;
             transition:all .2s ease;
@@ -1488,7 +1544,7 @@
             border-radius:.85rem;
             font-size:.69rem;
             font-weight:600;
-            color:#64748b;
+            color:#1c1c1c;
             transition:all .18s ease;
             text-align:center;
         }
@@ -1507,7 +1563,7 @@
 
         .lib-subtab-inactive{
             background:transparent !important;
-            color:#64748b !important;
+            color:#1c1c1c !important;
             border:1px solid transparent;
         }
 
@@ -1554,7 +1610,7 @@
 
         .sq-tool-tip{
             font-size:.72rem;
-            color:#64748b;
+            color:#1c1c1c;
             line-height:1.5;
             padding:0 .1rem;
         }
@@ -1633,6 +1689,1070 @@
         }
 
   
+
+    /* =========================
+       ENTERPRISE OFFER LIBRARY SIDEBAR
+       Fixes: deep collapsible scroll traps, hidden content while scrolling,
+       old cramped sidebar list, and hard-to-reach info actions.
+    ========================= */
+    .enterprise-lib-header{
+        padding:1rem;
+        border-bottom:1px solid #e2e8f0;
+        background:
+            radial-gradient(circle at top right, rgba(147,194,28,.16), transparent 38%),
+            linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
+        flex-shrink:0;
+    }
+
+    .enterprise-lib-brand-row{
+        display:flex;
+        align-items:center;
+        gap:.85rem;
+        margin-bottom:1rem;
+    }
+
+    .enterprise-lib-icon{
+        width:2.75rem;
+        height:2.75rem;
+        border-radius:1rem;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:linear-gradient(135deg,var(--brand-color),#74b2d4);
+        color:white;
+        box-shadow:0 14px 28px rgba(15,23,42,.12);
+        flex-shrink:0;
+    }
+
+    .enterprise-lib-kicker{
+        font-size:10px;
+        font-weight:900;
+        text-transform:uppercase;
+        letter-spacing:.16em;
+        color:#94a3b8;
+    }
+
+    .enterprise-lib-title{
+        font-size:1rem;
+        font-weight:950;
+        color:#0f172a;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+
+    .enterprise-main-tabs{
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:.5rem;
+    }
+
+    .enterprise-main-tab{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:.45rem;
+        min-height:44px;
+        padding:.65rem .5rem;
+        border-radius:1rem;
+        border:1px solid #dbe4ee;
+        background:#fff;
+        color:#334155;
+        font-size:.74rem;
+        font-weight:900;
+        transition:all .18s ease;
+        box-shadow:0 2px 6px rgba(15,23,42,.03);
+    }
+
+    .enterprise-main-tab:hover{
+        border-color:var(--brand-color);
+        color:#6b8e12;
+        background:#fbfff5;
+    }
+
+    .enterprise-main-tab.active{
+        background:linear-gradient(180deg,var(--brand-color),#7fa916);
+        color:#fff;
+        border-color:var(--brand-color);
+        box-shadow:0 12px 22px rgba(147,194,28,.22);
+    }
+
+    .enterprise-lib-toolbar{
+        position:sticky;
+        top:0;
+        z-index:30;
+        padding:1rem;
+        border-bottom:1px solid #e2e8f0;
+        background:rgba(255,255,255,.94);
+        backdrop-filter:blur(14px);
+        display:flex;
+        flex-direction:column;
+        gap:.8rem;
+        flex-shrink:0;
+    }
+
+    .enterprise-search-wrap{
+        position:relative;
+    }
+
+    .enterprise-search-input{
+        width:100%;
+        border:1px solid #dbe4ee;
+        background:#f8fafc;
+        color:#0f172a;
+        border-radius:1rem;
+        padding:.82rem 2.5rem .82rem 2.7rem;
+        font-size:.84rem;
+        font-weight:700;
+        outline:none;
+        transition:all .18s ease;
+    }
+
+    .enterprise-search-input:focus{
+        border-color:var(--brand-color);
+        box-shadow:0 0 0 4px rgba(147,194,28,.11);
+        background:#fff;
+    }
+
+    .enterprise-search-icon{
+        position:absolute;
+        left:1rem;
+        top:50%;
+        transform:translateY(-50%);
+        color:#94a3b8;
+        font-size:.85rem;
+        pointer-events:none;
+    }
+
+    .enterprise-search-clear{
+        position:absolute;
+        right:.6rem;
+        top:50%;
+        transform:translateY(-50%);
+        width:1.8rem;
+        height:1.8rem;
+        border-radius:.7rem;
+        color:#94a3b8;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        transition:all .16s ease;
+    }
+
+    .enterprise-search-clear:hover{
+        color:#dc2626;
+        background:#fef2f2;
+    }
+
+    .enterprise-segmented-tabs{
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:.4rem;
+        background:#f1f5f9;
+        padding:.35rem;
+        border-radius:1rem;
+        border:1px solid #e2e8f0;
+    }
+
+    .enterprise-segmented-btn{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:.25rem;
+        min-height:58px;
+        border-radius:.85rem;
+        font-size:.66rem;
+        line-height:1.15;
+        font-weight:950;
+        color:#475569;
+        text-align:center;
+        transition:all .18s ease;
+        border:1px solid transparent;
+    }
+
+    .enterprise-segmented-btn:hover{
+        background:#fff;
+        color:#6b8e12;
+    }
+
+    .enterprise-segmented-btn.lib-subtab-active,
+    .enterprise-segmented-btn.active{
+        background:#fff !important;
+        color:#6b8e12 !important;
+        border-color:rgba(147,194,28,.22) !important;
+        box-shadow:0 10px 20px rgba(15,23,42,.07);
+    }
+
+    .enterprise-lib-hint{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:.5rem;
+        color:#64748b;
+        font-size:10px;
+        font-weight:900;
+        white-space:nowrap;
+    }
+
+    .enterprise-lib-hint span{
+        display:inline-flex;
+        align-items:center;
+        gap:.3rem;
+    }
+
+    .enterprise-lib-content{
+        flex:1;
+        min-height:0;
+        overflow-y:auto;
+        padding:1rem;
+        display:flex;
+        flex-direction:column;
+        gap:.85rem;
+        background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%);
+    }
+
+    .enterprise-empty-state,
+    .enterprise-loading-state{
+        border:1px dashed #cbd5e1;
+        border-radius:1.25rem;
+        background:#fff;
+        padding:1.25rem;
+        text-align:center;
+        color:#64748b;
+        font-size:.78rem;
+        font-weight:800;
+    }
+
+    .enterprise-lib-card{
+        position:relative;
+        display:flex;
+        gap:.85rem;
+        border:1px solid #dbe4ee;
+        background:#fff;
+        border-radius:1.25rem;
+        padding:.85rem;
+        box-shadow:0 10px 22px rgba(15,23,42,.055);
+        transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+        cursor:grab;
+        user-select:none;
+    }
+
+    .enterprise-lib-card:hover{
+        transform:translateY(-1px);
+        border-color:rgba(147,194,28,.70);
+        box-shadow:0 18px 34px rgba(15,23,42,.10);
+    }
+
+    .enterprise-lib-card:active{ cursor:grabbing; }
+
+    .enterprise-card-img{
+        width:4rem;
+        height:4rem;
+        border-radius:1rem;
+        border:1px solid #e2e8f0;
+        background:#f8fafc;
+        object-fit:cover;
+        flex-shrink:0;
+        overflow:hidden;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#94a3b8;
+    }
+
+    .enterprise-card-title{
+        color:#0f172a;
+        font-size:.84rem;
+        font-weight:950;
+        line-height:1.25;
+        display:-webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
+    }
+
+    .enterprise-card-subtitle{
+        color:#64748b;
+        font-size:.71rem;
+        line-height:1.45;
+        margin-top:.25rem;
+        display:-webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
+    }
+
+    .enterprise-chip-row{
+        display:flex;
+        flex-wrap:wrap;
+        gap:.35rem;
+        margin-top:.55rem;
+    }
+
+    .enterprise-chip{
+        display:inline-flex;
+        align-items:center;
+        gap:.28rem;
+        border-radius:999px;
+        padding:.25rem .5rem;
+        background:#f1f5f9;
+        color:#475569;
+        font-size:.62rem;
+        font-weight:950;
+        line-height:1;
+        max-width:100%;
+    }
+
+    .enterprise-chip.brand{
+        background:#f7fee7;
+        color:#4d7c0f;
+    }
+
+    .enterprise-chip.blue{
+        background:#eff6ff;
+        color:#1d4ed8;
+    }
+
+    .enterprise-chip.orange{
+        background:#fff7ed;
+        color:#c2410c;
+    }
+
+    .enterprise-card-actions{
+        display:flex;
+        flex-direction:column;
+        align-items:flex-end;
+        gap:.42rem;
+        flex-shrink:0;
+    }
+
+    .enterprise-action-btn{
+        width:2rem;
+        height:2rem;
+        border-radius:.8rem;
+        border:1px solid #e2e8f0;
+        background:#fff;
+        color:#64748b;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        transition:all .15s ease;
+    }
+
+    .enterprise-action-btn:hover{
+        border-color:var(--brand-color);
+        color:#6b8e12;
+        background:#f7fee7;
+    }
+
+    .enterprise-action-btn.primary{
+        background:var(--brand-color);
+        border-color:var(--brand-color);
+        color:#fff;
+        box-shadow:0 10px 18px rgba(147,194,28,.22);
+    }
+
+    .enterprise-action-btn.primary:hover{
+        color:#fff;
+        filter:brightness(.97);
+        transform:translateY(-1px);
+    }
+
+    .enterprise-price-tag{
+        font-size:.68rem;
+        font-weight:950;
+        color:#0f172a;
+        text-align:right;
+        white-space:nowrap;
+    }
+
+    .enterprise-load-more{
+        width:100%;
+        margin-top:.25rem;
+        padding:.8rem 1rem;
+        border-radius:1rem;
+        border:1px solid #dbe4ee;
+        background:#fff;
+        color:#334155;
+        font-size:.74rem;
+        font-weight:950;
+        transition:all .18s ease;
+    }
+
+    .enterprise-load-more:hover{
+        border-color:var(--brand-color);
+        color:#6b8e12;
+        box-shadow:0 10px 20px rgba(147,194,28,.10);
+    }
+
+    .ql-rich-preview,
+    #modal-desc.ql-rich-preview{
+        white-space:normal;
+    }
+
+    .ql-rich-preview p{ margin:.25rem 0; }
+    .ql-rich-preview ul,
+    .ql-rich-preview ol{ padding-left:1.25rem; margin:.35rem 0; }
+    .ql-rich-preview strong,
+    .ql-rich-preview b{ font-weight:800; }
+    .ql-rich-preview img{ max-width:100%; height:auto; border-radius:.5rem; }
+
+    @media (max-width: 1200px){
+        #sidebar-left{ width:350px !important; }
+        .enterprise-lib-hint{ display:none; }
+    }
+
+
+
+    /* =========================
+       ROOF LAYOUT / DACHBELEGUNG PAGE + CANVAS EDITOR
+    ========================= */
+    .roof-layout-page {
+        color: #3f3f3f;
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .roof-layout-title {
+        color: var(--brand-color);
+        font-weight: 950;
+        font-size: 21px;
+        text-transform: uppercase;
+        letter-spacing: -.02em;
+        line-height: 1.1;
+    }
+
+    .roof-layout-line {
+        height: 2px;
+        background: #b8b2aa;
+        width: 100%;
+    }
+
+    .roof-layout-note {
+        margin-top: auto;
+        color: #333;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .roof-layout-footer {
+        display: none !important;
+    }
+
+    .roof-layout-body {
+        width: 100%;
+    }
+
+    .roof-layout-main-area {
+        width: 100%;
+    }
+
+    .roof-settings-card {
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+    }
+
+    .roof-canvas-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+
+    .roof-canvas-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .roof-canvas-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        color: #334155;
+        border-radius: 12px;
+        padding: 9px 12px;
+        min-height: 38px;
+        font-size: 12px;
+        font-weight: 950;
+        cursor: pointer;
+        transition: all .16s ease;
+        user-select: none;
+    }
+
+    .roof-canvas-btn:hover {
+        border-color: var(--brand-color);
+        color: var(--brand-color);
+        background: #fdf4ff;
+    }
+
+    .roof-canvas-btn.primary {
+        border-color: var(--brand-color);
+        background: var(--brand-color);
+        color: #fff;
+        box-shadow: 0 12px 22px rgba(147, 194, 28, .18);
+    }
+
+    .roof-canvas-btn.primary:hover {
+        color: #fff;
+        filter: brightness(.96);
+    }
+
+    .roof-canvas-btn.green {
+        border-color: var(--brand-color);
+        background: var(--brand-color);
+        color: #fff;
+    }
+
+    .roof-canvas-btn.danger {
+        border-color: #fecaca;
+        background: #fff5f5;
+        color: #dc2626;
+    }
+
+    .roof-canvas-btn.danger:hover {
+        border-color: #ef4444;
+        background: #fef2f2;
+        color: #b91c1c;
+    }
+
+    .roof-direction-toolbar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+        gap: 10px;
+    }
+
+    .roof-direction-tool-btn {
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 10px;
+        background: #fff;
+        cursor: pointer;
+        transition: all .15s ease;
+        min-height: 105px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .roof-direction-tool-btn:hover {
+        border-color: var(--brand-color);
+        box-shadow: 0 12px 22px rgba(147, 194, 28, .10);
+        transform: translateY(-1px);
+        background: #fdf4ff;
+    }
+
+    .roof-direction-tool-btn.is-selected {
+        border-color: var(--brand-color);
+        background: #fdf4ff;
+    }
+
+    .roof-direction-tool-btn img {
+        width: 54px;
+        height: 54px;
+        object-fit: contain;
+    }
+
+    .roof-direction-tool-btn span {
+        font-size: 10px;
+        line-height: 1.12;
+        font-weight: 950;
+        color: #334155;
+        text-transform: uppercase;
+    }
+
+    .roof-canvas-wrap {
+        width: 100%;
+        overflow: auto;
+        border: 1px solid #cbd5e1;
+        border-radius: 18px;
+        background:
+            linear-gradient(45deg, rgba(148, 163, 184, .16) 25%, transparent 25%),
+            linear-gradient(-45deg, rgba(148, 163, 184, .16) 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, rgba(148, 163, 184, .16) 75%),
+            linear-gradient(-45deg, transparent 75%, rgba(148, 163, 184, .16) 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        padding: 16px;
+    }
+
+    .roof-design-canvas {
+        width: 1000px;
+        height: 700px;
+        position: relative;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, .12);
+        background-image:
+            linear-gradient(rgba(148,163,184,.14) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(148,163,184,.14) 1px, transparent 1px);
+        background-size: 25px 25px;
+    }
+
+    .roof-design-canvas::before {
+        content: 'Dachbelegung Canvas 1000 × 700';
+        position: absolute;
+        left: 12px;
+        bottom: 10px;
+        color: rgba(100, 116, 139, .45);
+        font-size: 11px;
+        font-weight: 900;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .roof-canvas-empty {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 13px;
+        font-weight: 800;
+        pointer-events: none;
+        padding: 40px;
+    }
+
+    .roof-canvas-item {
+        position: absolute;
+        transform-origin: center center;
+        user-select: none;
+        cursor: grab;
+    }
+
+    .roof-canvas-item:active { cursor: grabbing; }
+
+    .roof-canvas-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .roof-canvas-item.is-selected {
+        outline: 2px dashed var(--brand-color);
+        outline-offset: 2px;
+        z-index: 999 !important;
+    }
+
+    .roof-canvas-item-label {
+        position: absolute;
+        left: 50%;
+        top: -22px;
+        transform: translateX(-50%);
+        background: rgba(147, 194, 28, .92);
+        color: #fff;
+        border-radius: 999px;
+        padding: 3px 8px;
+        font-size: 10px;
+        line-height: 1;
+        font-weight: 950;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .12s ease;
+    }
+
+    .roof-canvas-item:hover .roof-canvas-item-label,
+    .roof-canvas-item.is-selected .roof-canvas-item-label {
+        opacity: 1;
+    }
+
+    .roof-canvas-handle {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid #cbd5e1;
+        color: #334155;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        box-shadow: 0 8px 14px rgba(15, 23, 42, .14);
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    .roof-canvas-item.is-selected .roof-canvas-handle { display: flex; }
+    .roof-canvas-handle:hover { color: var(--brand-color); border-color: var(--brand-color); }
+    .roof-canvas-move { left: -13px; top: -13px; cursor: grab; }
+    .roof-canvas-resize { right: -13px; bottom: -13px; cursor: nwse-resize; }
+    .roof-canvas-rotate { left: 50%; top: -38px; transform: translateX(-50%); cursor: grab; }
+    .roof-canvas-delete { right: -13px; top: -13px; background: #ef4444; border-color: #ef4444; color: #fff; }
+    .roof-canvas-delete:hover { background: #dc2626; color: #fff; border-color: #dc2626; }
+
+
+    .roof-canvas-text {
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        min-width: 28px;
+        min-height: 24px;
+        padding: 4px 6px;
+        margin: 0;
+        outline: none;
+        border-radius: 6px;
+        overflow: hidden;
+        line-height: 1.25;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        word-break: normal;
+        background: transparent;
+        cursor: text;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    .roof-canvas-text:focus {
+        background: rgba(255,255,255,.72);
+        box-shadow: inset 0 0 0 1px rgba(139,40,125,.22);
+    }
+
+    .roof-text-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        border-radius: 14px;
+        padding: 10px;
+        margin: 10px 0 14px;
+        box-shadow: 0 10px 20px rgba(15,23,42,.05);
+    }
+
+    .roof-text-toolbar input[type="text"],
+    .roof-text-toolbar input[type="number"] {
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 7px 9px;
+        font-size: 12px;
+        font-weight: 800;
+        outline: none;
+    }
+
+    .roof-text-toolbar input[type="color"] {
+        width: 42px;
+        height: 36px;
+        padding: 2px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        background: #fff;
+    }
+
+    .roof-text-toolbar-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 36px;
+        height: 36px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        background: #fff;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 950;
+    }
+
+    .roof-text-toolbar-btn.active {
+        border-color: #8b287d;
+        background: #fdf4ff;
+        color: #8b287d;
+    }
+
+    #roof-text-toolbar-inline {
+        min-height: 62px;
+    }
+
+    #roof-text-toolbar-modal {
+        width: 100%;
+        max-width: 1000px;
+        min-height: 62px;
+        flex-shrink: 0;
+    }
+
+
+    .roof-canvas-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        background: rgba(15, 23, 42, .92);
+        backdrop-filter: blur(6px);
+    }
+
+    .roof-canvas-modal.hidden { display: none !important; }
+
+    .roof-canvas-modal-header {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 18px;
+        color: #fff;
+        border-bottom: 1px solid rgba(255,255,255,.12);
+        background: rgba(15, 23, 42, .96);
+    }
+
+    .roof-canvas-modal-body {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 14px;
+    }
+
+    .roof-canvas-modal .roof-design-canvas {
+        flex-shrink: 0;
+        box-shadow: 0 30px 70px rgba(0,0,0,.30);
+    }
+
+    .roof-a4-canvas {
+        position: relative;
+        width: 100%;
+        height: 152mm;
+        margin: 4mm auto 0 auto;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .roof-a4-canvas-item {
+        position: absolute;
+        transform-origin: center center;
+    }
+
+    .roof-a4-canvas-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    .roof-compass-wrap,
+    .roof-compass-upload-box {
+        position: relative;
+        width: 90mm;
+        height: 90mm;
+        margin-left: auto;
+    }
+
+    .roof-compass-upload-box {
+        width: 320px;
+        height: 320px;
+        margin: 0 auto;
+        border-radius: 999px;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .roof-compass-wrap img.roof-compass-img,
+    .roof-compass-upload-box img.roof-compass-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    .roof-compass-center {
+        position: absolute;
+        left: 49%;
+        top: 51%;
+        width: 47mm;
+        height: 45mm;
+        transform: translate(-50%, -50%);
+        border-radius: 999px;
+        overflow: hidden;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .roof-compass-center img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .roof-compass-center-empty {
+        color: #b8b2aa;
+        font-size: 10px;
+        font-weight: 800;
+        text-align: center;
+        padding: 8px;
+        line-height: 1.25;
+    }
+
+
+    /* A4/PDF: fixed compass position like the reference PDF: top-right, not in the canvas flow */
+    .roof-fixed-compass-a4 {
+        position: absolute;
+        top: 0mm;
+        right: 0;
+        width: 82mm;
+        height: 82mm;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .roof-fixed-compass-a4 .roof-compass-wrap {
+        width: 82mm;
+        height: 82mm;
+        margin: 0;
+    }
+
+    .roof-fixed-compass-a4 .roof-compass-center {
+        left: 49%;
+        top: 51%;
+        width: 47mm;
+        height: 45mm;
+    }
+
+    .roof-icon-grid {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 14mm 10mm;
+        align-items: start;
+        margin-top: 20mm;
+    }
+
+    .roof-icon-card {
+        min-height: 29mm;
+        text-align: center;
+        opacity: .33;
+        filter: grayscale(.35);
+        transition: opacity .15s ease, filter .15s ease;
+    }
+
+    .roof-icon-card.is-active,
+    .roof-icon-card.show-all-active {
+        opacity: 1;
+        filter: none;
+    }
+
+    .roof-icon-card img {
+        width: 23mm;
+        height: 23mm;
+        object-fit: contain;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .roof-icon-card .roof-icon-label {
+        color: var(--brand-color);
+        font-size: 10px;
+        font-weight: 950;
+        text-transform: uppercase;
+        line-height: 1.05;
+        margin-bottom: 2mm;
+        min-height: 8mm;
+        white-space: pre-line;
+    }
+
+
+/* =========================
+   OFFER PAGE LIBRARY
+========================= */
+.page-library-shell{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(340px,.8fr);gap:18px;align-items:start;}
+.page-library-card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;box-shadow:0 14px 32px rgba(15,23,42,.06);overflow:hidden;}
+.page-library-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;border-bottom:1px solid #e2e8f0;background:linear-gradient(180deg,#fff,#f8fafc);}
+.page-library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;padding:18px;}
+.page-library-item{border:1px solid #e2e8f0;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 18px rgba(15,23,42,.05);transition:.16s ease;}
+.page-library-item:hover{transform:translateY(-1px);border-color:var(--brand-color);box-shadow:0 18px 34px rgba(15,23,42,.10);}
+.page-library-thumb{height:240px;background:#f8fafc;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #eef2f7;}
+.page-library-thumb img{width:100%;height:100%;object-fit:contain;background:#fff;}
+.page-library-selected-list{display:flex;flex-direction:column;gap:10px;padding:18px;}
+.page-library-selected-row{display:grid;grid-template-columns:28px 54px minmax(0,1fr);gap:12px;border:1px solid #e2e8f0;border-radius:16px;background:#fff;padding:10px;align-items:center;box-shadow:0 8px 18px rgba(15,23,42,.04);cursor:grab;}
+.page-library-selected-row:active{cursor:grabbing;}
+.page-library-selected-row.sortable-ghost{opacity:.45;background:#f7fee7;border-color:var(--brand-color);}
+.page-library-selected-row.sortable-chosen{box-shadow:0 18px 35px rgba(15,23,42,.16);}
+.page-library-drag-handle{width:28px;height:76px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;color:#94a3b8;display:flex;align-items:center;justify-content:center;cursor:grab;}
+.page-library-drag-handle:hover{border-color:var(--brand-color);color:var(--brand-color);background:#f7fee7;}
+.page-library-filter-panel{border:1px solid #e2e8f0;background:linear-gradient(180deg,#fff,#f8fafc);border-radius:18px;padding:14px;margin:14px 18px;display:flex;flex-direction:column;gap:12px;}
+.page-library-filter-search{position:relative;}
+.page-library-filter-search i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:13px;pointer-events:none;}
+.page-library-filter-search input{width:100%;min-height:44px;border:1px solid #dbe4ee;border-radius:14px;background:#fff;color:#0f172a;padding:10px 12px 10px 38px;font-size:13px;font-weight:700;outline:none;transition:all .16s ease;}
+.page-library-filter-search input:focus{border-color:var(--brand-color);box-shadow:0 0 0 4px rgba(147,194,28,.11);}
+.page-library-filter-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
+.page-library-filter-grid label{display:flex;flex-direction:column;gap:5px;min-width:0;}
+.page-library-filter-grid span{font-size:10px;font-weight:950;color:#64748b;text-transform:uppercase;letter-spacing:.08em;}
+.page-library-filter-hint{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;color:#64748b;background:#f1f5f9;border-radius:12px;padding:8px 10px;}
+@media (max-width:1200px){.page-library-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media (max-width:760px){.page-library-filter-grid{grid-template-columns:1fr;}}
+.page-library-global-note{display:flex;align-items:flex-start;gap:10px;border:1px solid #dbeafe;background:#eff6ff;color:#1e40af;border-radius:16px;padding:12px 14px;font-size:12px;font-weight:800;line-height:1.45;margin:14px 18px 0 18px;}
+.page-library-mini-order-note{border:1px dashed #cbd5e1;background:#f8fafc;border-radius:14px;padding:10px 12px;font-size:11px;color:#475569;font-weight:800;}
+.page-library-selected-row.is-disabled{opacity:.52;background:#f8fafc;}
+.page-library-selected-row img{width:54px;height:76px;object-fit:contain;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;}
+.page-library-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid #e2e8f0;background:#fff;color:#334155;border-radius:12px;padding:9px 12px;min-height:38px;font-size:12px;font-weight:900;cursor:pointer;transition:.16s ease;}
+.page-library-btn:hover{border-color:var(--brand-color);color:var(--brand-color);background:#f7fee7;}
+.page-library-btn.primary{background:var(--brand-color);border-color:var(--brand-color);color:#fff;box-shadow:0 12px 20px rgba(147,194,28,.18);}
+.page-library-btn.dark{background:#0f172a;border-color:#0f172a;color:#fff;}
+.page-library-btn.danger{border-color:#fecaca;background:#fff5f5;color:#dc2626;}
+.page-library-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:950;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;}
+.page-library-badge.green{background:#ecfccb;color:#4d7c0f;border-color:#bef264;}
+.page-library-badge.red{background:#fee2e2;color:#b91c1c;border-color:#fecaca;}
+.page-library-input,.page-library-select{width:100%;border:1px solid #cbd5e1;border-radius:12px;background:#fff;padding:10px 12px;font-size:13px;outline:none;}
+.page-library-input:focus,.page-library-select:focus{border-color:var(--brand-color);box-shadow:0 0 0 4px rgba(147,194,28,.12);}
+.page-library-dropzone{border:2px dashed #cbd5e1;border-radius:20px;background:linear-gradient(180deg,#fff,#f8fafc);min-height:230px;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;transition:.16s ease;cursor:pointer;}
+.page-library-dropzone.is-dragover{border-color:var(--brand-color);background:#f7fee7;}
+.page-library-upload-preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin-top:14px;}
+.page-library-upload-preview img{width:100%;height:150px;object-fit:contain;border:1px solid #e2e8f0;border-radius:14px;background:#fff;}
+.page-library-modal{position:fixed;inset:0;z-index:10050;display:none;background:rgba(15,23,42,.78);backdrop-filter:blur(6px);padding:28px;}
+.page-library-modal.is-open{display:flex;align-items:center;justify-content:center;}
+.page-library-window{width:min(1180px,96vw);max-height:92vh;background:#fff;border-radius:26px;box-shadow:0 30px 90px rgba(15,23,42,.35);display:flex;flex-direction:column;overflow:hidden;}
+.page-library-window-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid #e2e8f0;background:linear-gradient(180deg,#fff,#f8fafc);}
+.page-library-window-body{padding:20px;overflow:auto;}
+.page-library-full-page-image{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.page-library-full-page-image img{width:100%;height:100%;object-fit:contain;display:block;}
+@media (max-width:1200px){.page-library-shell{grid-template-columns:1fr;}}
+@media print{.page-library-modal,.page-library-btn,.page-library-window{display:none!important;}}
+
+
+    @media print {
+        .roof-layout-page .no-print,
+        .roof-settings-card,
+        .roof-direction-tool-btn input,
+        .roof-canvas-modal,
+        .roof-canvas-handle,
+        .roof-canvas-item-label {
+            display: none !important;
+        }
+        .roof-layout-page {
+            page-break-after: always !important;
+            break-after: page !important;
+        }
+    }
+
     /* =========================
     PRINT
     ========================= */
@@ -1681,7 +2801,7 @@
             max-height: 297mm !important;
             min-height: 297mm !important;
             margin: 0 !important;
-            padding: 17mm 14mm 16mm 14mm !important;
+            padding: 17mm 14mm 8mm 14mm !important;
             box-shadow: none !important;
             border: none !important;
             
@@ -1775,7 +2895,7 @@
     }
 
     .pdf-blue-title {
-        color: var(--second-color, var(--brand-color));
+        color: var(--second-color, var(--brand-color)) !important; /* <--- Add !important here */
         font-weight: 800;
         text-transform: uppercase;
         font-size: 13px;
@@ -1784,16 +2904,15 @@
         letter-spacing: .01em;
     }
 
-    .pdf-main-title{
-        color:#4c4c4c;
-        font-weight:700;
-        font-size:13px;
-        line-height:1.3;
-        margin-left:-20px;
-        width:291px;
+    .pdf-main-title {
+        color: #4c4c4c; /* <--- Set back to gray */
+        font-weight: 800; /* (oder 700 bei der zweiten) */
+        font-size: 15px; /* (oder 13px bei der zweiten) */
+        line-height: 1.25;
+        margin-left: -20px;
     }
 
-.pos-row-top {
+    .pos-row-top {
         display:grid;
         /* 6 Columns: Pos | Article | Qty | Unit | EP | GP */
         grid-template-columns: 52px minmax(0, 1fr) 78px 68px 100px 110px;
@@ -1809,8 +2928,8 @@
     }
 
     .pos-row-top.compact {
-        grid-template-columns: 52px minmax(0, 1fr) 78px 68px 100px 110px;
-        font-size:12px;
+        grid-template-columns: 47px minmax(0, 1fr) 16px 68px 100px 110px;
+        font-size:13px;
         padding-bottom:5px;
         margin-bottom:8px;
     }
@@ -1825,7 +2944,7 @@
 
     .pos-row-bottom.no-image {
         display: block;
-        padding-left: 62px; 
+        padding-left: 39px; 
         width: 100%;
     }
 
@@ -1841,7 +2960,7 @@
     }
 
     .pdf-subitem .pos-row-bottom.no-image {
-        padding-left: 62px;
+        padding-left:39px;
     }
 
     /* Slightly smaller image for sub-positions so they nest nicely */
@@ -1849,37 +2968,38 @@
         width: 90px;
         height: 90px;
     }
-.pdf-desc-block{
-    width:100%;
-    min-width:0;
-    font-size:11px;
-    line-height:1.55;
-    color:#475569;
-}
 
-.pdf-desc-block p{
-    margin:0 0 2px 0;
-}
+    .pdf-desc-block{
+        width:100%;
+        min-width:0;
+        font-size:11px;
+        line-height:1.55;
+        color:#000000;
+    }
 
-.pdf-desc-block p:last-child{
-    margin-bottom:0;
-}
+    .pdf-desc-block p{
+        margin:0 0 2px 0;
+    }
 
-.pdf-desc-block ul,
-.pdf-desc-block ol{
-    margin:0 0 8px 18px;
-    padding:0;
-}
+    .pdf-desc-block p:last-child{
+        margin-bottom:0;
+    }
 
-.pdf-desc-block li{
-    margin:0 0 4px 0;
-}
+    .pdf-desc-block ul,
+    .pdf-desc-block ol{
+        margin:0 0 8px 18px;
+        padding:0;
+    }
 
-.pdf-desc-block strong,
-.pdf-desc-block b{
-    font-weight:700;
-    color:#1f2937;
-}
+    .pdf-desc-block li{
+        margin:0 0 4px 0;
+    }
+
+    .pdf-desc-block strong,
+    .pdf-desc-block b{
+        font-weight:700;
+        color:#1f2937;
+    }
 
 .pdf-item-card{
     width:100%;
@@ -1891,7 +3011,7 @@
 }
 
 .pdf-pos-no{
-    color:#64748b;
+    color:#1c1c1c;
     font-weight:700;
     white-space:nowrap;
 }
@@ -1910,7 +3030,7 @@
     border-collapse:collapse;
     table-layout:fixed;
     font-size:11px;
-    color:#334155;
+    color:#0f0f0f;
     background:transparent;
 }
 
@@ -2016,6 +3136,219 @@
     }
 }
     
+
+/* =========================
+   IDS / OCI SUPPLIER SEARCH IN OFFER LIST
+========================= */
+.list-mini-btn-supplier{
+    border-color:rgba(147,194,28,.35) !important;
+    background:linear-gradient(135deg, #93c21c 0%, #7fa916 100%) !important;
+    color:#fff !important;
+    box-shadow:0 10px 22px rgba(147,194,28,.22);
+    position:relative;
+    overflow:hidden;
+}
+
+.list-mini-btn-supplier::after{
+    content:'';
+    position:absolute;
+    inset:-40% auto -40% -40%;
+    width:36%;
+    transform:rotate(18deg);
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+    animation:supplierBtnShine 2.8s ease-in-out infinite;
+}
+
+.list-mini-btn-supplier:hover{
+    color:#fff !important;
+    border-color:#93c21c !important;
+    box-shadow:0 14px 28px rgba(147,194,28,.26) !important;
+    transform:translateY(-1px);
+}
+
+@keyframes supplierBtnShine{
+    0%, 35%{ left:-40%; opacity:0; }
+    50%{ opacity:1; }
+    100%{ left:120%; opacity:0; }
+}
+
+.supplier-import-row-flash{
+    animation:supplierRowFlash 2.6s ease-in-out 1;
+    position:relative;
+}
+
+.supplier-import-row-flash::before{
+    content:'Neu vom Lieferant';
+    position:absolute;
+    top:6px;
+    right:8px;
+    z-index:30;
+    padding:4px 8px;
+    border-radius:999px;
+    background:#93c21c;
+    color:#fff;
+    font-size:10px;
+    font-weight:900;
+    box-shadow:0 12px 24px rgba(147,194,28,.25);
+}
+
+@keyframes supplierRowFlash{
+    0%{ transform:translateY(-8px) scale(.99); opacity:.35; box-shadow:0 0 0 rgba(147,194,28,0); }
+    18%{ transform:translateY(0) scale(1); opacity:1; box-shadow:0 0 0 5px rgba(147,194,28,.20), 0 18px 42px rgba(147,194,28,.20); background:#f7fee7; }
+    55%{ box-shadow:0 0 0 3px rgba(147,194,28,.12), 0 14px 30px rgba(147,194,28,.10); background:#fbfff1; }
+    100%{ box-shadow:none; background:white; }
+}
+
+.supplier-modal-card{
+    animation:supplierModalIn .22s ease-out;
+}
+
+@keyframes supplierModalIn{
+    from{ transform:translateY(10px) scale(.985); opacity:0; }
+    to{ transform:translateY(0) scale(1); opacity:1; }
+}
+
+.supplier-live-toast{
+    position:fixed;
+    right:22px;
+    bottom:22px;
+    z-index:10020;
+    max-width:440px;
+    border-radius:18px;
+    border:1px solid rgba(147,194,28,.25);
+    background:#fff;
+    box-shadow:0 24px 60px rgba(15,23,42,.18);
+    padding:14px 16px;
+    display:none;
+    align-items:flex-start;
+    gap:12px;
+    animation:supplierToastIn .22s ease-out;
+}
+
+.supplier-live-toast.is-visible{
+    display:flex;
+}
+
+.supplier-live-toast-icon{
+    width:38px;
+    height:38px;
+    border-radius:14px;
+    background:#f7fee7;
+    color:#6b8e12;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+}
+
+.supplier-live-toast-title{
+    font-weight:950;
+    color:#0f172a;
+    font-size:13px;
+    margin-bottom:2px;
+}
+
+.supplier-live-toast-text{
+    color:#64748b;
+    font-size:12px;
+    line-height:1.45;
+    font-weight:700;
+}
+
+@keyframes supplierToastIn{
+    from{ transform:translateY(8px) scale(.98); opacity:0; }
+    to{ transform:translateY(0) scale(1); opacity:1; }
+}
+
+@media(max-width: 900px){
+    .list-toolbar > .flex{ flex-wrap:wrap; justify-content:flex-start; }
+    .list-mini-btn-supplier{ width:100%; }
+}
+
+
+/* =========================
+   SUPPLIER POSITION HISTORY
+========================= */
+.list-mini-btn-history{
+    border-color:rgba(59,130,246,.22) !important;
+    background:linear-gradient(135deg, #ffffff 0%, #eff6ff 100%) !important;
+    color:#1d4ed8 !important;
+    box-shadow:0 8px 18px rgba(59,130,246,.10);
+}
+
+.list-mini-btn-history:hover{
+    border-color:#3b82f6 !important;
+    color:#1e40af !important;
+    background:#eff6ff !important;
+    transform:translateY(-1px);
+}
+
+.supplier-history-card{
+    animation:supplierModalIn .22s ease-out;
+}
+
+.supplier-history-item{
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    background:#fff;
+    padding:12px;
+    transition:all .16s ease;
+}
+
+.supplier-history-item:hover{
+    border-color:rgba(147,194,28,.55);
+    box-shadow:0 14px 28px rgba(15,23,42,.08);
+    transform:translateY(-1px);
+}
+
+.supplier-history-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    border-radius:999px;
+    background:#f1f5f9;
+    color:#475569;
+    padding:4px 8px;
+    font-size:10px;
+    font-weight:900;
+}
+
+.supplier-history-readd-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:8px 10px;
+    border-radius:13px;
+    background:#93c21c;
+    color:#fff;
+    font-size:12px;
+    font-weight:950;
+    transition:all .16s ease;
+}
+
+.supplier-history-readd-btn:hover{
+    filter:brightness(.96);
+    transform:translateY(-1px);
+}
+
+.supplier-history-delete-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:34px;
+    height:34px;
+    border-radius:13px;
+    border:1px solid #fecaca;
+    background:#fff;
+    color:#dc2626;
+    transition:all .16s ease;
+}
+
+.supplier-history-delete-btn:hover{
+    background:#fef2f2;
+}
+
 </style>
 
 <style>
@@ -2196,7 +3529,7 @@
     border:1px solid #d6e0ea;
     border-radius:12px;
     background:#fff;
-    color:#334155;
+    color:#0f0f0f;
     font-size:12px;
     font-weight:700;
     outline:none;
@@ -2254,7 +3587,7 @@
     padding:0 10px;
     font-size:12px;
     font-weight:700;
-    color:#334155;
+    color:#0f0f0f;
 }
 
 .mat-addon-text{
@@ -2275,7 +3608,7 @@
     border:1px solid #d7e1ea;
     border-radius:12px;
     background:#fff;
-    color:#64748b;
+    color:#1c1c1c;
     display:inline-flex;
     align-items:center;
     justify-content:center;
@@ -2334,7 +3667,7 @@
     border-radius:10px;
     border:1px solid #c5c5c5;
     background:#cfe09b00;
-    color:#64748b;
+    color:#1c1c1c;
     transition:.16s ease;
 }
 
@@ -2349,7 +3682,7 @@
     .pdf-offer-closing{
         margin-top:24px;
         font-size:12px;
-        color:#334155;
+        color:#0f0f0f;
         line-height:1.45;
     }
 
@@ -2363,7 +3696,7 @@
 
     .pdf-offer-closing-intro{
         font-size:11px;
-        color:#334155;
+        color:#0f0f0f;
         margin-bottom:12px;
     }
 
@@ -2391,13 +3724,13 @@
         margin-bottom:2px;
     }
 
-    .pdf-offer-step-head-blue{
-        color:#74b2d4;
+    .pdf-offer-step-head-blue { 
+        color: var(--second-color, var(--brand-color)) !important; 
     }
 
     .pdf-offer-step-text{
         font-size:10px;
-        color:#334155;
+        color:#0f0f0f;
         line-height:1.35;
     }
 
@@ -2414,7 +3747,7 @@
 
     .pdf-offer-info-text{
         font-size:10px;
-        color:#334155;
+        color:#0f0f0f;
         line-height:1.35;
     }
 
@@ -2429,7 +3762,7 @@
 
     .pdf-offer-sign-text{
         font-size:10px;
-        color:#334155;
+        color:#0f0f0f;
         line-height:1.35;
         margin-bottom:18px;
     }
@@ -2455,13 +3788,13 @@
 
     .pdf-offer-sign-caption{
         font-size:10px;
-        color:#334155;
+        color:#0f0f0f;
         margin-bottom:22px;
     }
 
     .pdf-offer-remark-label{
         font-size:10px;
-        color:#334155;
+        color:#0f0f0f;
     }
 
     .pdf-offer-sign-note{
@@ -2506,7 +3839,7 @@
     .pdf-offer-closing-intro{
         font-size:12px;
         line-height:1.55;
-        color:#334155;
+        color:#0f0f0f;
     }
 
     .pdf-offer-section-headline{
@@ -2534,14 +3867,14 @@
         margin-bottom:2px;
     }
 
-    .pdf-offer-step-title-blue{
-        color:#74b2d4;
+    .pdf-offer-step-title-blue { 
+        color: var(--second-color, var(--brand-color)) !important; 
     }
 
     .pdf-offer-step-desc{
         font-size:11px;
         line-height:1.45;
-        color:#334155;
+        color:#0f0f0f;
     }
 
     .pdf-offer-info-stack{
@@ -2564,7 +3897,7 @@
     .pdf-offer-info-text{
         font-size:12px;
         line-height:1.5;
-        color:#334155;
+        color:#0f0f0f;
     }
 
     .pdf-offer-info-highlight{
@@ -2592,7 +3925,7 @@
 
     .pdf-offer-signature-line{
         height:34px;
-        border-bottom:2px solid #64748b;
+        border-bottom:2px solid #1c1c1c;
         max-width:420px;
         width:100%;
     }
@@ -2600,13 +3933,13 @@
     .pdf-offer-signature-caption{
         margin-top:4px;
         font-size:12px;
-        color:#334155;
+        color:#0f0f0f;
     }
 
     .pdf-offer-remark-title{
         margin-top:28px;
         font-size:12px;
-        color:#334155;
+        color:#0f0f0f;
     }
 
     .pdf-offer-remark-line{
@@ -2645,7 +3978,7 @@
 .pdf-offer-closing--a4{
     width:100%;
     max-width:100%;
-    color:#334155;
+    color:#0f0f0f;
     font-size:11px;
     line-height:1.45;
 }
@@ -2658,7 +3991,7 @@
 .pdf-offer-closing-intro.compact{
     font-size:11px;
     line-height:1.55;
-    color:#475569;
+    color:#000000;
     margin-bottom:12px;
 }
 
@@ -2693,13 +4026,13 @@
 }
 
 .pdf-offer-step-title-alt{
-    color:#64748b;
+    color:#1c1c1c;
 }
 
 .pdf-offer-step-desc{
     font-size:10.5px;
     line-height:1.5;
-    color:#475569;
+    color:#000000;
 }
  
 /* =========================
@@ -2709,7 +4042,7 @@
     width:100%;
     max-width:100%;
     margin-top:10px;
-    color:#334155;
+    color:#0f0f0f;
     font-size:10px;
     line-height:1.38;
     break-inside:avoid;
@@ -2727,7 +4060,7 @@
 .pdf-offer-final-intro{
     font-size:10px;
     line-height:1.45;
-    color:#334155;
+    color:#0f0f0f;
     margin-bottom:8px;
 }
 
@@ -2749,7 +4082,7 @@
 }
 
 .pdf-offer-process-step.is-soft{
-    background:#edf1df;
+    background:var(--offer-process-soft-bg, #edf1df);
     padding:6px 8px;
 }
 
@@ -2765,14 +4098,14 @@
     margin-bottom:2px;
 }
 
-.pdf-offer-process-step-title.alt{
-    color:#74b2d4;
+.pdf-offer-process-step-title.alt { 
+    color: var(--second-color, var(--brand-color)) !important; 
 }
 
 .pdf-offer-process-step-text{
     font-size:9.6px;
     line-height:1.35;
-    color:#334155;
+    color:#0f0f0f;
 }
 
 /* =========================
@@ -2862,7 +4195,7 @@
     justify-content:space-between;
     gap:10px;
     font-size:13px;
-    color:#475569;
+    color:#000000;
 }
 
 
@@ -2903,14 +4236,14 @@
     margin-bottom:2px;
 }
 
-.pdf-offer-final-info-title.alt{
-    color:#74b2d4;
+.pdf-offer-final-info-title.alt { 
+    color: var(--second-color, var(--brand-color)) !important; 
 }
 
 .pdf-offer-final-info-text{
     font-size:9.7px;
     line-height:1.38;
-    color:#334155;
+    color:#0f0f0f;
 }
 
 /* =========================
@@ -2927,7 +4260,7 @@
 
 .pdf-offer-sign-text{
     font-size:9.7px;
-    color:#334155;
+    color:#0f0f0f;
     line-height:1.35;
     margin-bottom:12px;
 }
@@ -2953,13 +4286,13 @@
 
 .pdf-offer-sign-caption{
     font-size:9.5px;
-    color:#334155;
+    color:#0f0f0f;
     margin-bottom:16px;
 }
 
 .pdf-offer-remark-label{
     font-size:9.5px;
-    color:#334155;
+    color:#0f0f0f;
     margin-bottom:2px;
 }
 
@@ -2975,18 +4308,18 @@
     align-self:flex-end;
 }
 
-.pdf-offer-sign-note-head{
-    font-size:9.5px;
-    font-weight:600;
-    color:#74b2d4;
-    margin-bottom:2px;
+.pdf-offer-sign-note-head { 
+    color: var(--second-color, var(--brand-color)) !important; 
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 2px;
 }
 
-.pdf-offer-sign-note-text{
-    font-size:9.5px;
-    line-height:1.3;
-    font-weight:800;
-    color:#74b2d4;
+.pdf-offer-sign-note-text { 
+    color: var(--second-color, var(--brand-color)) !important;
+    font-size: 11px;
+    line-height: 1.35;
+    font-weight: 800;
 }
 
 .pdf-offer-bottom-line{
@@ -3042,7 +4375,7 @@
     border:1px solid #cbd5e1;
     border-radius:10px;
     background:#fff;
-    color:#475569;
+    color:#000000;
     transition:.2s ease;
 }
 
@@ -3064,7 +4397,7 @@
 </style>
 <style>
     .select2-container--default .select2-selection--single .select2-selection__clear {
-        color: #64748b;
+        color: #1c1c1c;
         font-weight: 700;
         margin-right: 8px;
     }
@@ -3106,7 +4439,115 @@
     body.is-locked-snapshot button[onclick*="addPosition"] {
         display: none !important;
     }
+
+    /* =========================
+       CALCULATION SIDEBAR RESIZE
+    ========================= */
+    #sidebar-right {
+        position: relative;
+        width: 320px; /* Default starting width */
+        transition: width 0.3s cubic-bezier(.4,0,.2,1);
+        container-type: inline-size;
+        container-name: calcSidebar;
+    }
+
+    #sidebar-right.sidebar-collapsed {
+        width: 0 !important;
+        border: none !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .calc-resizer {
+        position: absolute;
+        left: -3px; /* Handle sits exactly on the left edge */
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        cursor: ew-resize;
+        background: transparent;
+        z-index: 50;
+        transition: background 0.2s;
+    }
+
+    .calc-resizer:hover, .calc-resizer.active {
+        background: var(--brand-color);
+    }
+
+    /* Hidden by default, shows up when sidebar is > 400px wide */
+    .sidebar-pos-img { display: none; }
+    
+    @container calcSidebar (min-width: 420px) {
+        .sidebar-pos-img { display: block; }
+    }
 </style>
+<style > 
+    /* =========================
+       ATTACHMENT SIDEBAR
+    ========================= */
+    .sidebar-attachments {
+        width: 320px;
+        transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+        flex-shrink: 0;
+        z-index: 45;
+        order: -1; /* Zwingt die Sidebar im Flex-Container nach ganz links */
+    }
+    .sidebar-attachments.collapsed {
+        transform: translateX(-100%); /* Fährt nun nach LINKS aus dem Bild */
+        width: 0 !important;
+        border: none !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+    .sidebar-attachments.unpinned {
+        position: absolute;
+        left: 0; /* An der LINKEN Seite fixieren */
+        top: 0;
+        bottom: 0;
+        box-shadow: 10px 0 20px rgba(15,23,42,0.1); /* Schatten fällt nun nach rechts */
+    }
+    .sidebar-attachments.pinned {
+        position: relative;
+        box-shadow: none;
+    }
+    .attachment-resizer {
+        position: absolute;
+        right: -3px; /* Anfasser ist nun an der RECHTEN Kante der Sidebar */
+        left: auto;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        cursor: ew-resize;
+        background: transparent;
+        z-index: 50;
+        transition: background 0.2s;
+    }
+    .attachment-resizer:hover, .attachment-resizer.active {
+        background: var(--brand-color);
+    }
+</style>
+
+<script>
+    // IDS / OCI offer supplier bridge config.
+    // This is available before Vite loads, so resources/js/ids-listener.js can subscribe to Reverb immediately.
+    window.OfferSupplierConfig = window.OfferSupplierConfig || {};
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        const folderId = Number(params.get('offer_folder_id') || params.get('folder_id') || window.OfferSupplierConfig.folderId || 0);
+        const offerId = Number(params.get('offer_id') || window.OfferSupplierConfig.offerId || 0);
+
+        window.OfferSupplierConfig.folderId = folderId || window.OfferSupplierConfig.folderId || null;
+        window.OfferSupplierConfig.offerId = offerId || window.OfferSupplierConfig.offerId || null;
+        window.OfferSupplierConfig.returnMode = 'review_then_reverb';
+    })();
+</script>
+
+@vite(['resources/js/app.js'])
+
+<script>
+    // Store the User ID globally so Reverb can use it
+    window.currentUserId = {{ auth()->id() }};
+</script>
 
 </head>
 <body>
@@ -3120,7 +4561,7 @@
     <div id="view-start" class="view-section active bg-slate-100 flex items-center justify-center p-6">
         <div class="max-w-4xl w-full bg-white rounded-2xl shadow-2xl overflow-visible flex flex-col md:flex-row min-h-[550px] z-50">
             <div class="w-full md:w-5/12 bg-[#93c21c] p-10 text-white flex flex-col justify-between relative overflow-hidden rounded-l-2xl">
-                <div class="relative z-10"><div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-[#93c21c] font-bold text-3xl shadow mb-8">S</div><h1 class="text-4xl font-bold mb-4">Start</h1><p class="text-white/90 text-sm leading-relaxed">Erstellen Sie professionelle Angebote und Kostenvoranschläge.</p></div>
+                <div class="relative z-10"><div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-[#93c21c] font-bold text-3xl shadow mb-8">SA</div><h1 class="text-4xl font-bold mb-4">Angebot</h1><p class="text-white/90 text-sm leading-relaxed">Erstellen Sie Angebote und Kostenvoranschläge.</p></div>
                 <div class="absolute -bottom-10 -right-10 opacity-20 transform"><i class="fa-regular fa-sun text-[250px]"></i></div>
             </div>
             <div class="w-full md:w-7/12 p-10 flex flex-col">
@@ -3129,73 +4570,77 @@
                         <label class="flex items-center gap-3 cursor-pointer">
                             <input type="checkbox" id="wiz-template-mode" onchange="App.Wizard.toggleTemplateMode(this.checked)" class="w-5 h-5 accent-[#93c21c]">
                             <div>
-                                <span class="block text-sm font-black text-slate-700">Als Vorlage erstellen</span>
-                                <span class="block text-[11px] text-dark-600">Kein Kunde/Objekt notwendig. Dokument wird nur als Template gespeichert.</span>
+                                <span class="block text-sm font-black text-[#000000]">Als Vorlage erstellen</span>
+                                <span class="block text-[11px] text-[#000000]">Kein Kunde/Objekt notwendig. Dokument wird nur als Template gespeichert.</span>
                             </div>
                         </label>
                     </div>
                     <div class="relative">
-                        <label class="block text-sm font-bold text-slate-700 mb-2">1. Kunde</label>
+                        <label class="block text-sm font-bold text-[#000000] mb-2">1. Kunde</label>
                         <div class="relative">
                             <input type="text" id="wiz-customer-search" oninput="App.Wizard.filterCustomers()" onfocus="App.Wizard.filterCustomers()" placeholder="Suche..." class="w-full border border-slate-300 rounded-lg p-3 pl-10 text-sm outline-none focus:border-[#93c21c]"><div id="wiz-customer-dropdown" class="absolute w-full bg-white border border-slate-200 rounded-b-lg shadow-lg z-50 hidden max-h-40 overflow-y-auto">
                             </div>
                         </div>
                         <div id="wiz-customer-selected" class="hidden mt-2 p-3 bg-[#f7fee7] rounded-lg border border-[#93c21c]/30 flex justify-between items-center">
                             <div>
-                                <div class="font-bold text-slate-800" id="wiz-sel-cust-name"></div>
-                                <div class="text-xs text-dark-600" id="wiz-sel-cust-addr"></div>
+                                <div class="font-bold text-[#000000]" id="wiz-sel-cust-name"></div>
+                                <div class="text-xs text-[#000000]" id="wiz-sel-cust-addr"></div>
                             </div>
-                            <button onclick="App.Wizard.clearCustomer()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-times"></i></button>
+                            <button onclick="App.Wizard.clearCustomer()" class="text-[#000000] hover:text-red-500"><i class="fa-solid fa-times"></i></button>
                         </div>
                     </div>
                     <div class="relative opacity-50 pointer-events-none transition-opacity" id="wiz-step-2">
-                        <label class="block text-sm font-bold text-slate-700 mb-2">2. Objekt</label>
+                        <label class="block text-sm font-bold text-[#000000] mb-2">2. Gewerk</label>
                         <!-- ✅ 3) Replace your select markup (remove size="6") -->
                         <select id="wiz-object-select" multiple onchange="App.Wizard.selectObject()"
                         class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none focus:border-[#93c21c] bg-white">
                         </select>
 
-                        <div class="mt-2 text-xs text-dark-600">
+                        <div class="mt-2 text-xs text-[#000000]">
                             Ausgewählt: <span id="wiz-object-count" class="font-bold">0</span>
                         </div>
                     </div>
-                    <div class="relative opacity-50 pointer-events-none transition-opacity" id="wiz-step-3"><label class="block text-sm font-bold text-slate-700 mb-2">3. Datum</label><input type="date" id="wiz-date" class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none focus:border-[#93c21c]"></div>
-                    <div class="relative opacity-50 pointer-events-none transition-opacity" id="wiz-step-4"><label class="block text-sm font-bold text-slate-700 mb-2">4. Typ</label><div class="flex gap-4"><label class="flex-1 border p-3 rounded cursor-pointer hover:border-[#93c21c] flex items-center gap-2"><input type="radio" name="wiz-doc-type" value="Angebot" checked class="accent-[#93c21c]"><span class="text-sm font-bold">Angebot</span></label><label class="flex-1 border p-3 rounded cursor-pointer hover:border-[#93c21c] flex items-center gap-2"><input type="radio" name="wiz-doc-type" value="Kostenvoranschlag" class="accent-[#93c21c]"><span class="text-sm font-bold">Kostenvoranschlag</span></label></div></div>
+                    <div class="relative opacity-50 pointer-events-none transition-opacity" id="wiz-step-3"><label class="block text-sm font-bold text-[#000000] mb-2">3. Datum</label><input type="date" id="wiz-date" class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none focus:border-[#93c21c]"></div>
+                    <div class="relative opacity-50 pointer-events-none transition-opacity" id="wiz-step-4"><label class="block text-sm font-bold text-[#000000] mb-2">4. Typ</label><div class="flex gap-4"><label class="flex-1 border p-3 rounded cursor-pointer hover:border-[#93c21c] flex items-center gap-2"><input type="radio" name="wiz-doc-type" value="Angebot" checked class="accent-[#93c21c]"><span class="text-sm font-bold">Angebot</span></label><label class="flex-1 border p-3 rounded cursor-pointer hover:border-[#93c21c] flex items-center gap-2"><input type="radio" name="wiz-doc-type" value="Kostenvoranschlag" class="accent-[#93c21c]"><span class="text-sm font-bold">Kostenvoranschlag</span></label></div></div>
                      
                     <div class="relative border-t pt-4">
-                        <label class="block text-sm font-bold text-slate-700 mb-2">5. Filiale / Firma wählen</label>
+                        <label class="block text-sm font-bold text-[#000000] mb-2">5. Filiale / Firma wählen</label>
                         
-                        <select id="wiz-company-select" onchange="App.selectBranch(this.value)" class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:border-[#93c21c] outline-none mb-4 bg-white shadow-sm font-bold text-slate-800">
-                            <option value="solar-aspekt">SOLAR ASPEKT GmbH</option>
-                            <option value="werk-studio">Werk-Studio GmbH</option>
+                        <select id="wiz-company-select" onchange="App.selectBranch(this.value)" class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:border-[#93c21c] outline-none mb-4 bg-white shadow-sm font-bold text-[#000000]">
+                            @forelse(($branches ?? collect()) as $branch)
+                                <option value="{{ $branch->id }}">{{ $branch->branch }}</option>
+                            @empty
+                                <option value="solar-aspekt">SOLAR ASPEKT GmbH</option>
+                                <option value="werk-studio">Werk-Studio GmbH</option>
+                            @endforelse
                         </select>
 
                         <details class="group bg-slate-50 border border-slate-200 rounded-lg">
-                            <summary class="text-xs text-slate-600 font-bold p-3 cursor-pointer hover:text-[#93c21c] flex justify-between items-center outline-none">
+                            <summary class="text-xs text-[#000000] font-bold p-3 cursor-pointer hover:text-[#93c21c] flex justify-between items-center outline-none">
                                 <span>Erweiterte Design-Einstellungen (Farbe, Logo)</span>
                                 <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180"></i>
                             </summary>
                             
                             <div class="grid grid-cols-2 gap-4 p-4 border-t border-slate-200">
                                 <div class="col-span-2">
-                                    <label class="text-xs text-dark-600 block mb-1">Logo-Typ</label>
+                                    <label class="text-xs text-[#000000] block mb-1">Logo-Typ</label>
                                     <div class="flex flex-wrap gap-3">
-                                        <label class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer">
+                                        <label class="inline-flex items-center gap-2 text-sm font-bold text-[#000000] cursor-pointer">
                                             <input type="radio" name="wiz-brand-mode" value="text" checked class="accent-[#93c21c]" onchange="App.updateBranding()"> Logo-Text
                                         </label>
-                                        <label class="inline-flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer">
+                                        <label class="inline-flex items-center gap-2 text-sm font-bold text-[#000000] cursor-pointer">
                                             <input type="radio" name="wiz-brand-mode" value="image" class="accent-[#93c21c]" onchange="App.updateBranding()"> Logo-Bild
                                         </label>
                                     </div>
                                 </div>
 
                                 <div id="brand-text-wrap" class="col-span-2">
-                                    <label class="text-xs text-dark-600 block mb-1">Firmenname (Logo)</label>
+                                    <label class="text-xs text-[#000000] block mb-1">Firmenname (Logo)</label>
                                     <input type="text" id="wiz-brand-name" value="SOLAR ASPEKT GmbH" oninput="App.updateBranding()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:border-[#93c21c] outline-none bg-white">
                                 </div>
 
                                 <div id="brand-logo-wrap" class="col-span-2 hidden">
-                                    <label class="text-xs text-dark-600 block mb-1">Logo-URL / Auswahl</label>
+                                    <label class="text-xs text-[#000000] block mb-1">Logo-URL / Auswahl</label>
                                     <div class="flex gap-2 items-center">
                                         <select id="wiz-brand-logo" onchange="App.updateBranding()" class="flex-1 border border-slate-300 rounded-lg p-2 text-sm focus:border-[#93c21c] outline-none bg-white">
                                             <option value="{{ asset('logo/logo.png') }}">Solar-Aspekt</option>
@@ -3208,10 +4653,10 @@
                                 </div>
 
                                 <div class="col-span-2">
-                                    <label class="text-xs text-dark-600 block mb-1">Hauptfarbe</label>
+                                    <label class="text-xs text-[#000000] block mb-1">Hauptfarbe</label>
                                     <div class="flex items-center gap-2">
                                         <input type="color" id="wiz-brand-color" value="#93c21c" oninput="App.updateBranding()" class="w-10 h-10 p-1 rounded cursor-pointer border bg-white">
-                                        <span id="color-hex-label" class="text-xs font-bold text-dark-600">#93c21c</span>
+                                        <span id="color-hex-label" class="text-xs font-bold text-[#000000]">#93c21c</span>
                                     </div>
                                 </div>
                             </div>
@@ -3235,42 +4680,33 @@
     <div id="view-editor" class="view-section flex-1 overflow-hidden relative bg-slate-100">
         <header class="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 shrink-0 z-50 shadow-sm no-print">
             <div class="flex items-center gap-4">
-                <button onclick="App.toggleSidebar('left')" class="text-slate-400 hover:text-[#93c21c] w-8 h-8 rounded hover:bg-slate-100 flex items-center justify-center border border-transparent hover:border-slate-300"><i class="fa-solid fa-bars"></i></button>
+                <button onclick="App.toggleSidebar('left')" class="text-[#000000] hover:text-[#93c21c] w-8 h-8 rounded hover:bg-slate-100 flex items-center justify-center border border-transparent hover:border-slate-300"><i class="fa-solid fa-bars"></i></button>
                 <div class="h-6 w-px bg-slate-200"></div>
-                <div class="font-bold text-slate-700 flex items-center gap-2">
+                <div class="font-bold text-[#000000] flex items-center gap-2">
                     <span id="editor-doc-type-label" class="text-[#93c21c]">Angebot</span>
-                    <span class="text-xs text-slate-400 font-normal">| <span id="lbl-total-pages">1</span> Seiten</span> 
+                    <span class="text-xs text-[#000000] font-normal">| <span id="lbl-total-pages">1</span> Seiten</span> 
                 </div>
             </div>
 
-            <!-- MAIN TABS (A4 / LIST) -->
+            <!-- MAIN TABS (compact: Liste / Druck / Vorlagen) -->
             <div class="flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200">
-            <button id="main-tab-list"
-                    class="px-3 py-1.5 rounded-lg text-xs font-black text-slate-600 hover:text-[#93c21c]"
-                    onclick="App.Tabs.switch('list')">
-                <i class="fa-solid fa-list-check mr-2"></i>Listenansicht
-            </button>
-            <button id="main-tab-a4"
-                    class="px-3 py-1.5 rounded-lg text-xs font-black text-slate-600 hover:text-[#93c21c] bg-white shadow"
-                    onclick="App.Tabs.switch('a4')"> Druckansicht
-                <i class="fa-solid fa-file-lines mr-2"></i>
-            </button>
-            
-            <button id="main-tab-settings" class="px-3 py-1.5 rounded-lg text-xs font-black text-slate-600 hover:text-[#93c21c]" onclick="App.Tabs.switch('settings')">
-                <i class="fa-solid fa-sliders mr-2"></i>Einstellung
-            </button>
+                <button id="main-tab-list"
+                        class="px-3 py-1.5 rounded-lg text-xs font-black text-[#000000] hover:text-[#93c21c]"
+                        onclick="App.Tabs.switch('list')">
+                    <i class="fa-solid fa-list-check mr-2"></i>Liste
+                </button>
 
-            <button id="main-tab-templates"
-                    class="px-3 py-1.5 rounded-lg text-xs font-black text-slate-600 hover:text-[#93c21c]"
-                    onclick="App.Tabs.switch('templates')">
-                <i class="fa-solid fa-layer-group mr-2"></i>Vorlagen
-            </button>
+                <button id="main-tab-a4"
+                        class="px-3 py-1.5 rounded-lg text-xs font-black text-[#000000] hover:text-[#93c21c] bg-white shadow"
+                        onclick="App.Tabs.switch('a4')">
+                    <i class="fa-solid fa-file-lines mr-2"></i>Druck
+                </button>
 
-            <button id="main-tab-bio"
-                    class="px-3 py-1.5 rounded-lg text-xs font-black text-slate-600 hover:text-[#93c21c]"
-                    onclick="App.Tabs.switch('bio')">
-                <i class="fa-solid fa-clock-rotate-left mr-2"></i>Biografie
-            </button>
+                <button id="main-tab-templates"
+                        class="px-3 py-1.5 rounded-lg text-xs font-black text-[#000000] hover:text-[#93c21c]"
+                        onclick="App.Tabs.switch('templates')">
+                    <i class="fa-solid fa-layer-group mr-2"></i>Vorlagen
+                </button>
             </div>
 
             <div class="flex items-center gap-3" >
@@ -3279,7 +4715,7 @@
                         <button type="button"
                         id="editor-actions-menu-btn"
                         onclick="App.toggleEditorActionsMenu()"
-                        class="bg-white border border-slate-300 hover:border-[#93c21c] px-3 py-1.5 rounded-xl text-sm font-bold text-slate-600 hover:text-[#93c21c] flex items-center gap-2 transition-colors shadow-sm">
+                        class="bg-white border border-slate-300 hover:border-[#93c21c] px-3 py-1.5 rounded-xl text-sm font-bold text-[#000000] hover:text-[#93c21c] flex items-center gap-2 transition-colors shadow-sm">
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                             <span>Aktionen</span>
                             <i class="fa-solid fa-chevron-down text-[11px]"></i>
@@ -3289,44 +4725,98 @@
                             class="hidden absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden z-[80]">
                             
                             <div class="px-4 py-3 border-b border-slate-100 bg-slate-50">
-                                <div class="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Editor Menü</div>
-                                <div class="text-sm font-black text-slate-800">Seiten & Ansicht</div>
+                                <div class="text-[10px] font-black uppercase tracking-[0.18em] text-[#000000]">Editor Menü</div>
+                                <div class="text-sm font-black text-[#000000]">Seiten & Ansicht</div>
                             </div>
 
                             <div class="p-2">
 
                                 <button type="button"
                                         onclick="App.loadBackWizard(); App.closeEditorActionsMenu();"
-                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#000000] hover:bg-orange-50 hover:text-orange-600 transition-colors">
                                     <span class="w-9 h-9 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center">
                                         <i class="fa-solid fa-magic-wand-sparkles"></i>
                                     </span>
                                     <span class="flex-1 text-left">
                                         <span class="block font-bold">Wizard öffnen</span>
-                                        <span class="block text-[11px] text-slate-400 font-medium">Kunde & Projekt-Basis ändern</span>
+                                        <span class="block text-[11px] text-[#000000] font-medium">Kunde & Projekt-Basis ändern</span>
                                     </span>
                                 </button>
                                 <button type="button"
                                         onclick="App.addPageAfterCurrent(); App.closeEditorActionsMenu();"
-                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-[#f7fee7] hover:text-[#7ca816] transition-colors">
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#000000] hover:bg-[#f7fee7] hover:text-[#7ca816] transition-colors">
                                     <span class="w-9 h-9 rounded-xl bg-[#f7fee7] text-[#7ca816] flex items-center justify-center">
                                         <i class="fa-solid fa-file-circle-plus"></i>
                                     </span>
                                     <span class="flex-1 text-left">
                                         <span class="block font-bold">Neue Seite</span>
-                                        <span class="block text-[11px] text-slate-400 font-medium">Seite nach der aktuellen Seite einfügen</span>
+                                        <span class="block text-[11px] text-[#000000] font-medium">Seite nach der aktuellen Seite einfügen</span>
                                     </span>
                                 </button>
 
                                 <button type="button"
                                         onclick="App.addSection(); App.closeEditorActionsMenu();"
-                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-[#f7fee7] hover:text-[#7ca816] transition-colors">
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#000000] hover:bg-[#f7fee7] hover:text-[#7ca816] transition-colors">
                                     <span class="w-9 h-9 rounded-xl bg-[#f7fee7] text-[#7ca816] flex items-center justify-center">
                                         <i class="fa-solid fa-folder-plus"></i>
                                     </span>
                                     <span class="flex-1 text-left">
                                         <span class="block font-bold">Abschnitt</span>
-                                        <span class="block text-[11px] text-slate-400 font-medium">Neuen Abschnitt im Angebot anlegen</span>
+                                        <span class="block text-[11px] text-[#000000] font-medium">Neuen Abschnitt im Angebot anlegen</span>
+                                    </span>
+                                </button>
+
+                                <div class="mx-2 my-2 h-px bg-slate-100"></div>
+
+                                <div class="px-3 pt-1 pb-2">
+                                    <div class="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">Weitere Bereiche</div>
+                                </div>
+
+                                <button id="main-tab-roof-layout" type="button"
+                                        onclick="App.Tabs.switch('roof-layout'); App.closeEditorActionsMenu();"
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#000000] hover:bg-[#f7fee7] hover:text-[#7ca816] transition-colors">
+                                    <span class="w-9 h-9 rounded-xl bg-[#f7fee7] text-[#7ca816] flex items-center justify-center">
+                                        <i class="fa-solid fa-compass"></i>
+                                    </span>
+                                    <span class="flex-1 text-left">
+                                        <span class="block font-bold">Dachbelegung</span>
+                                        <span class="block text-[11px] text-[#000000] font-medium">Kompass, Dachseiten & Belegung</span>
+                                    </span>
+                                </button>
+
+                                <button id="main-tab-page-library" type="button"
+                                        onclick="App.Tabs.switch('page-library'); App.closeEditorActionsMenu();"
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#000000] hover:bg-[#f7fee7] hover:text-[#7ca816] transition-colors">
+                                    <span class="w-9 h-9 rounded-xl bg-[#f7fee7] text-[#7ca816] flex items-center justify-center">
+                                        <i class="fa-regular fa-images"></i>
+                                    </span>
+                                    <span class="flex-1 text-left">
+                                        <span class="block font-bold">Library</span>
+                                        <span class="block text-[11px] text-[#000000] font-medium">Globale Zusatzseiten verwalten</span>
+                                    </span>
+                                </button>
+
+                                <button id="main-tab-settings" type="button"
+                                        onclick="App.Tabs.switch('settings'); App.closeEditorActionsMenu();"
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#000000] hover:bg-slate-50 transition-colors">
+                                    <span class="w-9 h-9 rounded-xl bg-slate-100 text-[#000000] flex items-center justify-center">
+                                        <i class="fa-solid fa-sliders"></i>
+                                    </span>
+                                    <span class="flex-1 text-left">
+                                        <span class="block font-bold">Einstellung</span>
+                                        <span class="block text-[11px] text-[#000000] font-medium">Kalkulation & Dokumentoptionen</span>
+                                    </span>
+                                </button>
+
+                                <button id="main-tab-bio" type="button"
+                                        onclick="App.Tabs.switch('bio'); App.closeEditorActionsMenu();"
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#000000] hover:bg-slate-50 transition-colors">
+                                    <span class="w-9 h-9 rounded-xl bg-slate-100 text-[#000000] flex items-center justify-center">
+                                        <i class="fa-solid fa-clock-rotate-left"></i>
+                                    </span>
+                                    <span class="flex-1 text-left">
+                                        <span class="block font-bold">Biografie</span>
+                                        <span class="block text-[11px] text-[#000000] font-medium">Änderungen & Historie</span>
                                     </span>
                                 </button>
 
@@ -3334,22 +4824,22 @@
 
                                 <button type="button"
                                         onclick="App.UserPrefsModal.open(); App.closeEditorActionsMenu();"
-                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
-                                    <span class="w-9 h-9 rounded-xl bg-slate-100 text-dark-600 flex items-center justify-center">
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#000000] hover:bg-slate-50 transition-colors">
+                                    <span class="w-9 h-9 rounded-xl bg-slate-100 text-[#000000] flex items-center justify-center">
                                         <i class="fa-solid fa-display"></i>
                                     </span>
                                     <span class="flex-1 text-left">
                                         <span class="block font-bold">Ansicht anpassen</span>
-                                        <span class="block text-[11px] text-slate-400 font-medium">Spalten & Start-Tab einstellen</span>
+                                        <span class="block text-[11px] text-[#000000] font-medium">Spalten & Start-Tab einstellen</span>
                                     </span>
                                 </button>
                                 <label class="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
-                                    <span class="w-9 h-9 rounded-xl bg-slate-100 text-dark-600 flex items-center justify-center">
+                                    <span class="w-9 h-9 rounded-xl bg-slate-100 text-[#000000] flex items-center justify-center">
                                         <i class="fa-solid fa-eye"></i>
                                     </span>
                                     <span class="flex-1">
-                                        <span class="block text-sm font-bold text-slate-700">Versteckte anzeigen</span>
-                                        <span class="block text-[11px] text-slate-400 font-medium">Ausgeblendete Positionen sichtbar machen</span>
+                                        <span class="block text-sm font-bold text-[#000000]">Versteckte anzeigen</span>
+                                        <span class="block text-[11px] text-[#000000] font-medium">Ausgeblendete Positionen sichtbar machen</span>
                                     </span>
                                     <input type="checkbox"
                                         id="show-hidden-toggle"
@@ -3359,12 +4849,12 @@
                                 </label>
 
                                 <label class="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
-                                    <span class="w-9 h-9 rounded-xl bg-slate-100 text-dark-600 flex items-center justify-center">
+                                    <span class="w-9 h-9 rounded-xl bg-slate-100 text-[#000000] flex items-center justify-center">
                                         <i class="fa-solid fa-images"></i>
                                     </span>
                                     <span class="flex-1">
-                                        <span class="block text-sm font-bold text-slate-700">Miniaturseiten anzeigen</span>
-                                        <span class="block text-[11px] text-slate-400 font-medium">Linke Seitenvorschau ein-/ausblenden</span>
+                                        <span class="block text-sm font-bold text-[#000000]">Miniaturseiten anzeigen</span>
+                                        <span class="block text-[11px] text-[#000000] font-medium">Linke Seitenvorschau ein-/ausblenden</span>
                                     </span>
                                     <input type="checkbox"
                                         id="toggle-thumbnails"
@@ -3394,8 +4884,16 @@
                         <i class="fa-solid fa-floppy-disk"></i>
                         <span>Speichern</span>
                     </button>
+                    <button id="btn-refresh-master-sets"
+                            type="button"
+                            onclick="App.refreshMasterSets()"
+                            class="bg-white border border-amber-300 text-amber-700 hover:bg-amber-50 hover:border-amber-400 px-4 py-1.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow-sm"
+                            title="Master Sets neu aus der Datenbank laden und fehlende EK-/Unterpositionsdaten reparieren">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        <span>Master Sets neu laden</span>
+                    </button>
                     <button onclick="App.Navigation.exitEditor()"
-                            class="bg-white border border-slate-300 text-slate-600 hover:text-red-600 hover:border-red-200 px-4 py-1.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow-sm">
+                            class="bg-white border border-slate-300 text-[#000000] hover:text-red-600 hover:border-red-200 px-4 py-1.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow-sm">
                         <i class="fa-solid fa-xmark"></i>
                         <span>Beenden</span>
                     </button>
@@ -3407,79 +4905,117 @@
                 </div>
                 <button id="calc-sidebar-toggle-btn"
                         onclick="App.toggleSidebar('right')"
-                        class="bg-white border border-slate-300 hover:border-[#93c21c] px-3 py-1.5 rounded text-sm font-bold text-slate-600 hover:text-[#93c21c] flex items-center gap-2 transition-colors">
+                        class="bg-white border border-slate-300 hover:border-[#93c21c] px-3 py-1.5 rounded text-sm font-bold text-[#000000] hover:text-[#93c21c] flex items-center gap-2 transition-colors">
                     <i class="fa-solid fa-calculator"></i>
                     <span id="calc-sidebar-toggle-label">Kalkulation öffnen</span>
                 </button>
+                
             </div>
         </header>
 
         <div class="flex h-full overflow-hidden relative">
             <!-- LEFT SIDEBAR -->
-            <aside id="sidebar-left" class="w-[360px] bg-white border-r border-slate-200 flex flex-col z-20 shadow-xl flex-shrink-0 sidebar-panel no-print overflow-hidden">
-    
-                <!-- Sidebar Header -->
-                <div class="sq-side-top">
-                    <div class="sq-side-brand">
-                        <div class="sq-side-brand-icon">
+            <aside id="sidebar-left" class="w-[390px] bg-white border-r border-slate-200 flex flex-col z-20 shadow-xl flex-shrink-0 sidebar-panel no-print overflow-hidden">
+
+                <!-- Enterprise Library Header -->
+                <div class="enterprise-lib-header">
+                    <div class="enterprise-lib-brand-row">
+                        <div class="enterprise-lib-icon">
                             <i class="fa-solid fa-layer-group"></i>
                         </div>
-                        <div class="min-w-0">
-                            <div class="sq-side-kicker">Editor Panel</div>
-                            <div class="sq-side-title">Bibliothek & Tools</div>
+                        <div class="min-w-0 flex-1">
+                            <div class="enterprise-lib-kicker">Angebot Editor</div>
+                            <div class="enterprise-lib-title">Enterprise Bibliothek</div>
                         </div>
                     </div>
 
-                    <div class="sq-side-main-tabs">
-                        <button id="tab-lib" class="sq-side-main-tab active" onclick="App.switchSidebarTab('lib')">
+                    <div class="enterprise-main-tabs">
+                        <button id="tab-lib" class="enterprise-main-tab active" onclick="App.switchSidebarTab('lib')">
                             <i class="fa-solid fa-books"></i>
                             <span>Bibliothek</span>
                         </button>
 
-                        <button id="tab-tools" class="sq-side-main-tab" onclick="App.switchSidebarTab('tools')">
+                        <button id="tab-tools" class="enterprise-main-tab" onclick="App.switchSidebarTab('tools')">
                             <i class="fa-solid fa-screwdriver-wrench"></i>
                             <span>Tools</span>
+                        </button>
+
+                        <button id="tab-attachments" class="enterprise-main-tab relative" onclick="App.Attachments.toggle()">
+                            <i class="fa-solid fa-paperclip"></i>
+                            <span>Dokumente</span>
+                            <span id="badge-attachments" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full hidden shadow-sm border border-white">0</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- LIBRARY -->
-                <div id="sidebar-content-lib" class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50">
-                    <div class="sq-side-toolbar">
-                        <div class="relative">
+                <div id="sidebar-content-lib" class="flex-1 flex flex-col min-h-0 bg-slate-50" onclick="App.handleLibrarySidebarClick(event)">
+                    <div class="enterprise-lib-toolbar">
+                        <div class="enterprise-search-wrap">
+                            <i class="fa-solid fa-magnifying-glass enterprise-search-icon"></i>
                             <input type="text"
                                 id="sidebar-search"
-                                oninput="App.renderSidebar()"
-                                placeholder="Bibliothek durchsuchen..."
-                                class="sq-side-search">
-                            <i class="fa-solid fa-magnifying-glass sq-side-search-icon"></i>
+                                oninput="State.libraryPage=1; App.renderSidebar()"
+                                placeholder="Group Set, Master Set oder Produkt suchen..."
+                                class="enterprise-search-input">
+                            <button type="button" class="enterprise-search-clear" onclick="document.getElementById('sidebar-search').value=''; State.libraryPage=1; App.renderSidebar();" title="Suche leeren">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
                         </div>
 
-                        <div class="sq-lib-mode-wrap">
+                        <div class="enterprise-segmented-tabs">
                             <button id="lib-subtab-group"
-                                    class="sq-lib-mode-btn"
+                                    class="enterprise-segmented-btn"
                                     onclick="App.switchLibraryMode('group_sets')">
                                 <i class="fa-solid fa-layer-group"></i>
                                 <span>Group Sets</span>
                             </button>
 
                             <button id="lib-subtab-sets"
-                                    class="sq-lib-mode-btn"
+                                    class="enterprise-segmented-btn"
                                     onclick="App.switchLibraryMode('sets')">
                                 <i class="fa-solid fa-cubes"></i>
-                                <span>Sets</span>
+                                <span>Master Sets</span>
                             </button>
 
                             <button id="lib-subtab-products"
-                                    class="sq-lib-mode-btn"
+                                    class="enterprise-segmented-btn"
                                     onclick="App.switchLibraryMode('products')">
                                 <i class="fa-solid fa-box-open"></i>
                                 <span>Produkte</span>
                             </button>
                         </div>
+
+                        <div class="enterprise-lib-hint">
+                            <span><i class="fa-solid fa-grip-vertical"></i> Drag & Drop</span>
+                            <span><i class="fa-solid fa-plus"></i> Sofort hinzufügen</span>
+                            <span><i class="fa-solid fa-circle-info"></i> Details</span>
+                        </div>
+
+                        <button type="button"
+                                id="btn-library-reload"
+                                onclick="event.stopPropagation(); App.reloadLibrarySidebar(true)"
+                                class="enterprise-fullscreen-btn"
+                                title="Bibliothek neu laden">
+                            <span class="inline-flex items-center gap-2">
+                                <i class="fa-solid fa-rotate-right"></i>
+                                Neu laden
+                            </span>
+                            <span class="text-[10px] opacity-80">Sets + Produkte</span>
+                        </button>
+
+                        <button type="button"
+                                onclick="App.LibraryPicker.open()"
+                                class="enterprise-fullscreen-btn">
+                            <span class="inline-flex items-center gap-2">
+                                <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                                Vollbild Bibliothek
+                            </span>
+                            <span class="text-[10px] opacity-80">Tabelle + Warenkorb</span>
+                        </button>
                     </div>
 
-                    <div class="sq-side-content scroller" id="sidebar-list"></div>
+                    <div class="enterprise-lib-content scroller" id="sidebar-list"></div>
                 </div>
 
                 <!-- TOOLS -->
@@ -3488,7 +5024,7 @@
                         <div class="sq-tool-hero">
                             <div>
                                 <div class="sq-side-kicker">Werkzeuge</div>
-                                <div class="text-sm font-black text-slate-800">Sticker, Logos & freie Bilder</div>
+                                <div class="text-sm font-black text-[#000000]">Sticker, Logos & freie Bilder</div>
                             </div>
 
                             <button onclick="document.getElementById('tool-upload-input').click()"
@@ -3525,11 +5061,11 @@
                                 </div>
 
                                 <div>
-                                    <div class="text-[9px] text-slate-400 underline decoration-slate-300 underline-offset-2 mb-6 editable-field w-fit" contenteditable="true" id="doc-company-header">
+                                    <div class="text-[9px] text-[#000000] mb-6 editable-field w-fit" contenteditable="true" id="doc-company-header">
                                         SOLAR ASPEKT GmbH • Am Kappengraben 10 • 61273 Wehrheim
                                     </div>
 
-                                    <div class="text-[13px] leading-relaxed text-slate-800">
+                                    <div class="text-[13px] leading-relaxed text-[#000000]">
                                         <div class="font-bold mb-1 editable-field w-fit" contenteditable="true">Herr</div>
                                         <div id="doc-cust-name" class="font-bold mb-1 editable-field w-fit" contenteditable="true">Max Mustermann</div>
                                         <div id="doc-cust-addr" class="editable-field w-fit whitespace-pre-line" contenteditable="true">
@@ -3551,8 +5087,8 @@
                                         Ihr Ansprechpartner
                                     </div>
                                     <div class="pr-3 py-1" style="border-right:2px solid var(--brand-color);">
-                                        <div id="doc-contact-name" class="font-bold text-sm text-slate-800 editable-field" contenteditable="true">Herr Yama Nuri</div>
-                                        <div id="doc-contact-details" class="text-[11px] text-slate-600 mt-1 editable-field" contenteditable="true">
+                                        <div id="doc-contact-name" class="font-bold text-sm text-[#000000] editable-field" contenteditable="true">Herr Yama Nuri</div>
+                                        <div id="doc-contact-details" class="text-[11px] text-[#000000] mt-1 editable-field" contenteditable="true">
                                             Tel: 0 60 81/68 288 78<br>E-Mail: anfrage@solar-aspekt.de
                                         </div>
                                     </div>
@@ -3560,22 +5096,26 @@
                             </div>
                         </div>
                         <div class="mb-10 flex justify-between items-end pb-4">
-                            <div><div class="text-[11px] text-slate-400 uppercase tracking-wide font-bold mb-1" id="lbl-doc-id-name">Angebotsnummer</div><div class="text-lg font-bold text-slate-600  rounded px-2 py-1 w-40"><input type="text" id="doc-offer-id" value="SA-AG25342" oninput="App.syncDocData('offerId', this.value)" class="bg-transparent outline-none w-full text-slate-800 font-bold"></div></div>
-                            <div class="text-right"><div class="text-[11px] text-slate-400 uppercase tracking-wide font-bold mb-1">Kundennummer</div><div class="text-sm font-bold text-slate-600   rounded px-2 py-1 w-32 inline-block"><input type="text" id="doc-cust-id" value="KD-1005" oninput="App.syncDocData('custId', this.value)" class="bg-transparent outline-none w-full text-right"></div><div class="text-[12px] text-slate-600 mt-2 editable-field" contenteditable="true" id="doc-date-line">Wehrheim, 27.08.2025</div></div>
+                            <div><div class="text-[11px] text-[#000000] uppercase tracking-wide font-bold mb-1" id="lbl-doc-id-name">Angebotsnummer</div><div class="text-lg font-bold text-[#000000]  rounded py-1 w-40"><input type="text" id="doc-offer-id" value="SA-AG25342" oninput="App.syncDocData('offerId', this.value)" class="bg-transparent outline-none w-full text-[#000000] font-bold"></div></div>
+                            <div class="text-right"><div class="text-[11px] text-[#000000] uppercase tracking-wide font-bold mb-1">Kundennummer</div><div class="text-sm font-bold text-[#000000]   rounded py-1 w-32 inline-block"><input type="text" id="doc-cust-id" value="KD-1005" oninput="App.syncDocData('custId', this.value)" class="bg-transparent outline-none w-full text-right"></div><div class="text-[12px] text-[#000000] editable-field" contenteditable="true" id="doc-date-line">Wehrheim, 27.08.2025</div></div>
                         </div>
-                        <div class="mb-8"><div class="text-xl font-bold text-[#93c21c] uppercase leading-tight editable-field" contenteditable="true" id="doc-main-title">Unverbindliches Angebot...</div></div>
+                        <div class="mb-8">
+                            <div id="doc-main-title" class="p-2 -ml-2 rounded border border-dashed border-transparent hover:border-[#93c21c] hover:bg-slate-50 cursor-pointer transition editable-field" style="font-size: 20px; font-weight: bold; color: var(--brand-color); text-transform: uppercase; line-height: 1.2;" onclick="App.openMainTitleModal()">
+                                 
+                            </div>
+                        </div> 
                         <div id="doc-cover-text"
-                            class="text-[13px] text-slate-700 leading-relaxed space-y-4 p-2 hover:bg-slate-50 rounded -ml-2 border border-dashed border-transparent hover:border-[#93c21c] cursor-pointer transition"
+                            class="text-[13px] text-[#000000] leading-relaxed space-y-4 p-2 hover:bg-slate-50 rounded -ml-2 border border-dashed border-transparent hover:border-[#93c21c] cursor-pointer transition"
                             onclick="App.openCoverTextModal()">
                             <p>Sehr geehrter Herr <span id="doc-cust-lastname">Mustermann</span>,</p>
                             <p>wir freuen uns, Ihnen dieses Dokument unterbreiten zu dürfen.</p>
                             <p>Mit sonnigen Grüßen<br><span class="font-bold" id="doc-team-name">Ihr SOLAR-ASPEKT-Team</span></p>
                         </div>
-                        <div class="mt-auto border-t-2  pt-4 grid grid-cols-4 gap-4 text-[9px] text-dark-600 leading-tight" style="border-top-color: var(--brand-color);">
-                            <div class="editable-field" contenteditable="true" id="footer-col-1"><span class="font-bold text-slate-700" id="footer-company">SOLAR ASPEKT GmbH</span><br>Am Kappengraben 10<br>61273 Wehrheim</div>
-                            <div class="editable-field" contenteditable="true" id="footer-col-2"><span class="font-bold text-slate-700"></span><br>Tel. 0 60 81/68 288 78<br>hallo@solar-aspekt.de</div>
-                            <div class="editable-field" contenteditable="true" id="footer-col-3"><span class="font-bold text-slate-700"></span><br>Volksbank Frankfurt<br>IBAN: DE12 3456...</div>
-                            <div class="editable-field" contenteditable="true" id="footer-col-4"><span class="font-bold text-slate-700"></span><br>AG Bad Homburg HRB 12036<br>GF: Yama Nuri</div>
+                        <div class="mt-auto border-t-2  pt-4 grid grid-cols-4 gap-2 text-[9px] text-[#000000] leading-tight" style="border-top-color: var(--brand-color);">
+                            <div class="editable-field" contenteditable="true" id="footer-col-1"><span class="font-bold text-[#000000]" id="footer-company">SOLAR ASPEKT GmbH</span><br>Am Kappengraben 10<br>61273 Wehrheim</div>
+                            <div class="editable-field" contenteditable="true" id="footer-col-2"><span class="font-bold text-[#000000]"></span><br>Tel. 0 60 81/68 288 78<br>hallo@solar-aspekt.de</div>
+                            <div class="editable-field" contenteditable="true" id="footer-col-3"><span class="font-bold text-[#000000]"></span><br>Volksbank Frankfurt<br>IBAN: DE12 3456...</div>
+                            <div class="editable-field" contenteditable="true" id="footer-col-4"><span class="font-bold text-[#000000]"></span><br>AG Bad Homburg HRB 12036<br>GF: Yama Nuri</div>
                         </div>
                     </div>
                     <!-- Dynamic Page Container -->
@@ -3591,12 +5131,58 @@
                     </div>
                 </main>
 
-                <main id="panel-settings" class="hidden flex-1 h-full overflow-y-auto scroller bg-slate-100/50 p-6">
+                <main id="panel-roof-layout" class="hidden flex-1 h-full overflow-y-auto scroller bg-slate-100/50 p-6">
+                    <div class="max-w-7xl mx-auto space-y-4">
+                        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                            <div class="p-4 border-b border-slate-200 flex items-center justify-between gap-4">
+                                <div>
+                                    <div class="text-xs font-black text-[#000000] uppercase tracking-wider">Konfiguration</div>
+                                    <div class="text-lg font-black text-[#000000] flex items-center gap-2">
+                                        <i class="fa-solid fa-compass text-[var(--brand-color)]"></i>
+                                        Dachbelegung / Kompass-Seite
+                                    </div>
+                                </div>
+                                <button type="button" onclick="App.RoofLayout?.toggleEnabledFromHeader?.()" class="px-4 py-2 rounded-xl bg-[var(--brand-color)] text-white text-xs font-black shadow hover:brightness-105">
+                                    <i class="fa-solid fa-eye mr-2"></i>Seite ein/aus
+                                </button>
+                            </div>
+                            <div id="roof-layout-settings-root" class="p-6"></div>
+                        </div>
+                    </div>
+                </main>
+
+<main id="panel-page-library" class="hidden flex-1 h-full overflow-y-auto scroller bg-slate-100/50 p-6">
+    <div class="max-w-7xl mx-auto space-y-4">
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="p-4 border-b border-slate-200 flex items-center justify-between gap-4">
+                <div>
+                    <div class="text-xs font-black text-[#000000] uppercase tracking-wider">Seiten-Bibliothek</div>
+                    <div class="text-lg font-black text-[#000000] flex items-center gap-2">
+                        <i class="fa-regular fa-images text-[var(--brand-color)]"></i>
+                        Bibliothek für zusätzliche A4-Seiten
+                    </div>
+                    <div class="text-xs text-slate-500 mt-1">Bilder hochladen, nach Gewerk/Produkt speichern, aktivieren und im Ausdruck anordnen.</div>
+                </div>
+                <div class="flex gap-2 flex-wrap justify-end">
+                    <button type="button" onclick="App.PageLibrary?.load?.(true)" class="page-library-btn">
+                        <i class="fa-solid fa-rotate"></i>Neu laden
+                    </button>
+                    <button type="button" onclick="App.PageLibrary?.openUploadModal?.()" class="page-library-btn primary">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>Seite hochladen
+                    </button>
+                </div>
+            </div>
+            <div id="page-library-root" class="p-6"></div>
+        </div>
+    </div>
+</main>
+
+                                <main id="panel-settings" class="hidden flex-1 h-full overflow-y-auto scroller bg-slate-100/50 p-6">
                     <div class="max-w-7xl mx-auto space-y-4">
                         <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
                             <div class="p-4 border-b border-slate-200">
-                                <div class="text-xs font-black text-dark-600 uppercase tracking-wider">Konfiguration</div>
-                                <div class="text-lg font-black text-slate-800">Kalkulations-Einstellungen</div>
+                                <div class="text-xs font-black text-[#000000] uppercase tracking-wider">Konfiguration</div>
+                                <div class="text-lg font-black text-[#000000]">Kalkulations-Einstellungen</div>
                             </div>
                             <div id="settings-root" class="p-6"></div>
                         </div>
@@ -3607,8 +5193,8 @@
                     <div class="max-w-7xl mx-auto space-y-4">
                         <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
                             <div class="p-4 border-b border-slate-200">
-                                <div class="text-xs font-black text-dark-600 uppercase tracking-wider">Vorlagen</div>
-                                <div class="text-lg font-black text-slate-800">Angebot aus Vorlage erstellen</div>
+                                <div class="text-xs font-black text-[#000000] uppercase tracking-wider">Vorlagen</div>
+                                <div class="text-lg font-black text-[#000000]">Angebot aus Vorlage erstellen</div>
                             </div>
 
                             <div id="templates-root" class="p-6"></div>
@@ -3620,8 +5206,8 @@
                     <div class="max-w-6xl mx-auto space-y-4">
                         <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
                             <div class="p-4 border-b border-slate-200">
-                                <div class="text-xs font-black text-dark-600 uppercase tracking-wider">Historie</div>
-                                <div class="text-lg font-black text-slate-800">Biografie & Online-Bearbeiter</div>
+                                <div class="text-xs font-black text-[#000000] uppercase tracking-wider">Historie</div>
+                                <div class="text-lg font-black text-[#000000]">Biografie & Online-Bearbeiter</div>
                             </div>
                             <div id="bio-root" class="p-6"></div>
                         </div>
@@ -3632,37 +5218,192 @@
             </div>
 
             <!-- RIGHT SIDEBAR -->
-            <aside id="sidebar-right" class="w-80 bg-white border-l border-slate-200 flex flex-col z-20 shadow-lg flex-shrink-0 sidebar-panel sidebar-collapsed no-print">
+            <aside id="sidebar-right"
+                class="bg-white border-l border-slate-200 flex flex-col z-20 shadow-lg flex-shrink-0 sidebar-panel sidebar-collapsed no-print">
+                <div class="calc-resizer" id="calc-resizer"></div>
                 <div class="p-4 border-b border-slate-200 bg-[#f7fee7] flex justify-between items-center">
                 <h3 class="font-bold text-[#6b8e12] text-sm uppercase tracking-wide flex items-center gap-2">
                     <i class="fa-solid fa-calculator"></i>
                     Kalkulations-Sidebar
                 </h3>
-                <div class="flex items-center gap-1"><span class="text-[10px] font-bold text-slate-400">MwSt</span><input type="number" id="global-tax" value="19" onchange="App.updateTaxRate(this.value)" class="w-10 text-xs border rounded text-center font-bold text-slate-700"><span class="text-[10px] text-slate-400">%</span></div></div>
+                <div class="flex items-center gap-1"><span class="text-[10px] font-bold text-[#000000]">MwSt</span><input type="number" id="global-tax" value="19" onchange="App.updateTaxRate(this.value)" class="w-10 text-xs border rounded text-center font-bold text-[#000000]"><span class="text-[10px] text-[#000000]">%</span></div></div>
                 <div class="flex-1 overflow-y-auto p-4 space-y-4 scroller bg-slate-50/50" id="calc-sidebar-content"></div>
-                <div class="p-6 bg-white border-t border-slate-200"><div class="flex justify-between items-end mb-1"><span class="text-xs text-dark-600 uppercase font-bold">Netto</span><span class="text-sm  text-slate-600" id="sidebar-grand-net">0,00 €</span></div><div class="flex justify-between items-end mb-4"><span class="text-xs text-dark-600 uppercase font-bold">MwSt (<span id="lbl-tax-rate">19</span>%)</span><span class="text-sm  text-slate-600" id="sidebar-grand-gross">0,00 €</span></div><div class="pt-4 border-t border-slate-100"><div class="text-xs text-[#93c21c] font-bold uppercase mb-1">Gesamtinvestition</div><div class="text-3xl font-bold text-slate-800  tracking-tight" id="sidebar-grand-total">0,00 €</div></div></div>
+                <div class="p-6 bg-white border-t border-slate-200"><div class="flex justify-between items-end mb-1"><span class="text-xs text-[#000000] uppercase font-bold">Netto</span><span class="text-sm  text-[#000000]" id="sidebar-grand-net">0,00 €</span></div><div class="flex justify-between items-end mb-4"><span class="text-xs text-[#000000] uppercase font-bold">MwSt (<span id="lbl-tax-rate">19</span>%)</span><span class="text-sm  text-[#000000]" id="sidebar-grand-gross">0,00 €</span></div><div class="pt-4 border-t border-slate-100"><div class="text-xs text-[#93c21c] font-bold uppercase mb-1">Gesamtinvestition</div><div class="text-3xl font-bold text-[#000000]  tracking-tight" id="sidebar-grand-total">0,00 €</div></div></div>
             </aside>
+
+            <aside id="sidebar-attachments"
+    class="bg-white border-l border-slate-200 flex flex-col sidebar-attachments collapsed unpinned no-print">
+    <div class="attachment-resizer" id="attachment-resizer"></div>
+
+    <div class="p-4 border-b border-slate-200 bg-[#f8fafc] flex justify-between items-center shrink-0">
+        <h3 class="font-bold text-[#000000] text-sm uppercase tracking-wide flex items-center gap-2">
+            <i class="fa-solid fa-paperclip text-[#93c21c]"></i> Dokumente
+        </h3>
+        <div class="flex items-center gap-1">
+            <button onclick="App.Attachments.togglePin()" id="btn-pin-attachments"
+                class="w-8 h-8 flex items-center justify-center rounded text-slate-400 hover:bg-slate-200 hover:text-[#93c21c] transition-colors"
+                title="Sidebar anheften/lösen">
+                <i class="fa-solid fa-thumbtack"></i>
+            </button>
+            <button onclick="App.Attachments.toggle()"
+                class="w-8 h-8 flex items-center justify-center rounded text-slate-400 hover:bg-red-100 hover:text-red-500 transition-colors"
+                title="Schließen">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="inline-attachment-viewer" class="hidden flex-col bg-slate-800 text-white border-b border-slate-700 p-3 shrink-0 relative resize-y overflow-auto" style="min-height: 250px; max-height: 60vh;">
+        <div class="flex justify-between items-center mb-2">
+            <span id="inline-viewer-title" class="text-xs font-bold truncate pr-4 text-slate-200"></span>
+            <button onclick="document.getElementById('inline-attachment-viewer').classList.add('hidden')" class="text-slate-400 hover:text-red-400 transition-colors bg-white/10 hover:bg-white/20 w-6 h-6 rounded-full flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-times text-xs"></i>
+            </button>
+        </div>
+        <div id="inline-viewer-content" class="w-full flex-1 rounded shadow-inner bg-black/50 flex items-center justify-center overflow-hidden">
+        </div>
+    </div>
+
+    <div class="p-3 border-b border-slate-100 bg-white shrink-0">
+        <div class="relative">
+            <input type="text" id="attachment-search" oninput="App.Attachments.filterList()" placeholder="Dokumente durchsuchen..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 pl-9 text-xs font-bold text-[#000000] outline-none focus:border-[#93c21c] transition-colors">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+        </div>
+    </div>
+
+    <div class="p-4 border-b border-slate-100 bg-white shrink-0">
+        <input type="file" id="attachment-file-input" class="hidden" multiple accept=".pdf,.jpg,.jpeg,.png,.webp">
+        <div onclick="document.getElementById('attachment-file-input').click()"
+            ondragover="event.preventDefault(); this.classList.add('border-[#93c21c]', 'bg-[#f7fee7]')"
+                        ondragleave="this.classList.remove('border-[#93c21c]', 'bg-[#f7fee7]')"
+                        ondrop="App.Attachments.handleDrop(event)"
+                        class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center cursor-pointer hover:border-[#93c21c] hover:bg-[#f7fee7] transition-all">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-300 mb-2"></i>
+                        <div class="text-sm font-bold text-[#000000]">Dateien ablegen oder klicken</div>
+                        <div class="text-[10px] text-slate-500 mt-1">Bilder & PDFs (Max 20MB)</div>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-4 space-y-3 scroller bg-slate-50/50" id="attachment-list">
+                </div>
+            </aside>
+
+
+            <div id="clipboard-sidebar" class="fixed right-0 top-1/4 w-72 bg-white border border-slate-200 shadow-2xl rounded-l-2xl z-[150] transition-transform transform translate-x-full">
+                <div class="bg-[#93c21c] text-white p-3 rounded-tl-2xl flex justify-between items-center cursor-pointer" onclick="App.Clipboard.toggle()">
+                    <h3 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-paste"></i> Zwischenablage</h3>
+                    <button onclick="App.Clipboard.clear()" class="text-xs bg-white/20 px-2 py-1 rounded hover:bg-white/40 transition">Leeren</button>
+                </div>
+                <div id="clipboard-items" class="p-3 max-h-96 overflow-y-auto space-y-2 bg-slate-50">
+                    <div class="text-xs text-[#000000] text-center py-4">Zwischenablage ist leer</div>
+                </div>
+            </div>
+
+            <button onclick="App.Clipboard.toggle()" class="fixed right-0 top-1/3 bg-[#93c21c] text-white w-14 h-12 flex items-center justify-center rounded-l-xl shadow-lg z-[140] hover:w-16 transition-all">
+                <i class="fa-solid fa-clipboard text-xl pl-1"></i>
+                
+                <span id="clipboard-badge" class="absolute -top-2 -left-2 bg-red-500 text-white text-[11px] font-black min-w-[24px] h-[24px] flex items-center justify-center rounded-full hidden shadow-md border-2 border-white">
+                    0
+                </span>
+            </button>
+
         </div>
     </div>
 
     <!-- PRINT PREVIEW OVERLAY -->
-    <div id="print-preview-modal" class="fixed inset-0 z-[200] hidden bg-slate-900/95 backdrop-blur-sm flex flex-col">
+    <div id="print-preview-modal" class="fixed inset-0 z-[9999] hidden bg-slate-900/95 backdrop-blur-sm flex flex-col" role="dialog" aria-modal="true" aria-labelledby="print-preview-title" tabindex="-1">
         <div class="h-16 bg-slate-800 flex items-center justify-between px-6 text-white shrink-0 shadow-md no-print">
-            <h3 class="font-bold text-lg flex items-center gap-2"><i class="fa-solid fa-print"></i> Druckvorschau (Aktive Positionen)</h3>
-            <div class="flex gap-4">
-                <button onclick="window.print()" class="bg-[#93c21c] hover:brightness-110 px-6 py-2 rounded font-bold text-sm shadow transition">Drucken</button>
-                <button onclick="App.closePrintPreview()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-times text-2xl"></i></button>            </div>
+            <h3 id="print-preview-title" class="font-bold text-lg flex items-center gap-2"><i class="fa-solid fa-print"></i> Druckvorschau (Aktive Positionen)</h3>
+            <div class="flex gap-3 items-center">
+                <button type="button" onclick="window.print()" class="bg-[#93c21c] hover:brightness-110 px-6 py-2 rounded font-bold text-sm shadow transition">Drucken</button>
+                <button type="button" onclick="App.closePrintPreview()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition shadow" title="Druckvorschau schließen (Esc)" aria-label="Druckvorschau schließen">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
         </div>
         <div class="flex-1 overflow-y-auto p-8 flex flex-col items-center gap-8" id="print-preview-content"></div>
     </div>
 
-    <!-- MODALS (Settings, Badges, Sets) -->
-    <div id="pos-settings-modal" class="fixed inset-0 z-[110] hidden"><div class="absolute inset-0 modal-overlay" onclick="App.closePosSettings()"></div><div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl w-[450px] overflow-hidden animate-fadeIn"><div class="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center"><h3 class="font-bold text-slate-800">Position bearbeiten</h3><button onclick="App.closePosSettings()" class="text-slate-400"><i class="fa-solid fa-times"></i></button></div><div class="p-4 space-y-4"><div class="grid grid-cols-2 gap-4"><div><label class="block text-xs font-bold text-dark-600 mb-1">Menge</label><input type="number" step="0.01" id="setting-qty" class="w-full border rounded p-2 text-sm" oninput="App.calcPosSettings()"></div>
+<div id="page-library-modal" class="page-library-modal" role="dialog" aria-modal="true" aria-labelledby="page-library-modal-title">
+    <div class="page-library-window">
+        <div class="page-library-window-head">
             <div>
-                <label class="block text-xs font-bold text-dark-600 mb-1">Einheit</label>
+                <div class="text-xs font-black uppercase tracking-wider text-slate-500">Neue Seite in Bibliothek speichern</div>
+                <div id="page-library-modal-title" class="text-xl font-black text-slate-900">Bildseite hochladen</div>
+            </div>
+            <button type="button" onclick="App.PageLibrary?.closeUploadModal?.()" class="page-library-btn danger">
+                <i class="fa-solid fa-xmark"></i>Schließen
+            </button>
+        </div>
+        <div class="page-library-window-body">
+            <div class="grid grid-cols-1 lg:grid-cols-[380px_minmax(0,1fr)] gap-5">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-black text-slate-500 uppercase mb-1">Gewerk / Article Group</label>
+                        <select id="page-library-upload-article-group" class="page-library-select" onchange="App.PageLibrary?.loadProductsForUpload?.()"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black text-slate-500 uppercase mb-1">Produkt optional</label>
+                        <select id="page-library-upload-product" class="page-library-select"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black text-slate-500 uppercase mb-1">Titel</label>
+                        <input id="page-library-upload-title" class="page-library-input" placeholder="z. B. Zusatzblatt Wechselrichter">
+                    </div>
+                    <label class="flex items-center justify-between gap-3 border border-slate-200 rounded-2xl p-3 cursor-pointer">
+                        <span class="text-sm font-black text-slate-700">Aktiv in Bibliothek</span>
+                        <input id="page-library-upload-active" type="checkbox" checked class="w-5 h-5 accent-[#93c21c]">
+                    </label>
+                    <label class="flex items-center justify-between gap-3 border border-slate-200 rounded-2xl p-3 cursor-pointer">
+                        <span class="text-sm font-black text-slate-700">Nach Upload direkt ins Angebot einfügen</span>
+                        <input id="page-library-upload-attach" type="checkbox" checked class="w-5 h-5 accent-[#93c21c]">
+                    </label>
+                    <div>
+                        <label class="block text-xs font-black text-slate-500 uppercase mb-1">Druckposition</label>
+                        <select id="page-library-upload-position" class="page-library-select">
+                            <option value="after_roof">Nach Dachbelegung</option>
+                            <option value="after_cover">Nach Deckblatt</option>
+                            <option value="before_positions">Vor Positionen</option>
+                            <option value="after_positions">Nach Positionen</option>
+                            <option value="before_final">Vor Schlusstext</option>
+                            <option value="end">Ganz am Ende</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div id="page-library-dropzone" class="page-library-dropzone" onclick="document.getElementById('page-library-file-input')?.click()">
+                        <div>
+                            <div class="w-16 h-16 rounded-2xl bg-[var(--brand-color)] text-white flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                            </div>
+                            <div class="text-lg font-black text-slate-800">Bilder hier hineinziehen</div>
+                            <div class="text-sm text-slate-500 mt-1">oder klicken, um Dateien auszuwählen</div>
+                            <div class="text-xs text-slate-400 mt-2">JPG, PNG, WEBP, GIF, SVG bis 30 MB</div>
+                            <div class="text-[11px] font-black text-slate-500 mt-2 leading-relaxed">Empfohlen für volle A4-Seite: <span class="text-slate-900">2480 × 3508 px</span> oder mindestens <span class="text-slate-900">1240 × 1754 px</span>.</div>
+                        </div>
+                    </div>
+                    <input id="page-library-file-input" type="file" accept="image/*,.svg" multiple class="hidden" onchange="App.PageLibrary?.handleFileInput?.(event)">
+                    <div id="page-library-upload-preview" class="page-library-upload-preview"></div>
+                    <div class="flex justify-end gap-2 mt-5">
+                        <button type="button" onclick="App.PageLibrary?.clearUploadFiles?.()" class="page-library-btn">Auswahl leeren</button>
+                        <button type="button" onclick="App.PageLibrary?.uploadSelectedFiles?.()" class="page-library-btn primary">
+                            <i class="fa-solid fa-floppy-disk"></i>Speichern
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- MODALS (Settings, Badges, Sets) -->
+    <div id="pos-settings-modal" class="fixed inset-0 z-[110] hidden"><div class="absolute inset-0 modal-overlay" onclick="App.closePosSettings()"></div><div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl w-[450px] overflow-hidden animate-fadeIn"><div class="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center"><h3 class="font-bold text-[#000000]">Position bearbeiten</h3><button onclick="App.closePosSettings()" class="text-[#000000]"><i class="fa-solid fa-times"></i></button></div><div class="p-4 space-y-4"><div class="grid grid-cols-2 gap-4"><div><label class="block text-xs font-bold text-[#000000] mb-1">Menge</label><input type="number" step="0.01" id="setting-qty" class="w-full border rounded p-2 text-sm" oninput="App.calcPosSettings()"></div>
+            <div>
+                <label class="block text-xs font-bold text-[#000000] mb-1">Einheit</label>
                 <select id="setting-unit" class="w-full border rounded p-2 text-sm bg-white"></select>
             </div>
-        <div><label class="block text-xs font-bold text-dark-600 mb-1">Einkaufspreis (EK)</label><input type="number" id="setting-ek" class="w-full border rounded p-2 text-sm" oninput="App.calcPosSettings()"></div><div><label class="block text-xs font-bold text-dark-600 mb-1">Marge (%)</label><input type="number" id="setting-margin" class="w-full border rounded p-2 text-sm" oninput="App.calcPosSettings()"></div></div><div class="bg-[#f0fdf4] p-3 rounded border border-[#93c21c]"><div class="flex justify-between items-center"><span class="text-xs font-bold text-[#93c21c]">Verkaufspreis (VK) pro Einheit</span><input type="number" id="setting-vk" class="w-24 text-right bg-transparent font-bold  outline-none" oninput="App.calcPosSettings(true)"></div></div><div class="space-y-2 pt-2 border-t border-slate-100"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-pauschal" class="accent-[#93c21c]"> <span>Als Pauschalposition</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-hide-price" class="accent-[#93c21c]"> <span>Preise ausblenden</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-hide-numbering" class="accent-[#93c21c]"> <span>Nummerierung ausblenden</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-hide-image" class="accent-[#93c21c]"> <span>Bild ausblenden</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-active" class="accent-[#93c21c]"> <span>Position Aktiv</span></label></div><button onclick="App.savePosSettings()" class="w-full bg-[#93c21c] text-white rounded py-2 font-bold text-sm">Speichern</button></div></div></div>    <!-- ✅ Set Modal (rewritten, clean + readable, same IDs/hooks kept) -->
+        <div><label class="block text-xs font-bold text-[#000000] mb-1">Einkaufspreis (EK)</label><input type="number" id="setting-ek" class="w-full border rounded p-2 text-sm" oninput="App.calcPosSettings()"></div><div><label class="block text-xs font-bold text-[#000000] mb-1">Marge (%)</label><input type="number" id="setting-margin" class="w-full border rounded p-2 text-sm" oninput="App.calcPosSettings()"></div></div><div class="bg-[#f0fdf4] p-3 rounded border border-[#93c21c]"><div class="flex justify-between items-center"><span class="text-xs font-bold text-[#93c21c]">Verkaufspreis (VK) pro Einheit</span><input type="number" id="setting-vk" class="w-24 text-right bg-transparent font-bold  outline-none" oninput="App.calcPosSettings(true)"></div></div><div class="space-y-2 pt-2 border-t border-slate-100"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-pauschal" class="accent-[#93c21c]"> <span>Als Pauschalposition</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-hide-price" class="accent-[#93c21c]"> <span>Preise ausblenden</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-hide-numbering" class="accent-[#93c21c]"> <span>Nummerierung ausblenden</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-hide-image" class="accent-[#93c21c]"> <span>Bild ausblenden</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-active" class="accent-[#93c21c]"> <span>Position Aktiv</span></label></div><button onclick="App.savePosSettings()" class="w-full bg-[#93c21c] text-white rounded py-2 font-bold text-sm">Speichern</button></div></div></div>    <!-- ✅ Set Modal (rewritten, clean + readable, same IDs/hooks kept) -->
         <div id="set-modal" class="fixed inset-0 z-[100] hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <!-- Overlay -->
         <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px]" onclick="App.closeModal()"></div>
@@ -3685,7 +5426,7 @@
                     Produkt Name
                 </h3>
 
-                <p class="text-sm text-slate-600 mt-1 line-clamp-2" id="modal-desc">
+                <p class="text-sm text-[#000000] mt-1 line-clamp-2" id="modal-desc">
                     Beschreibung
                 </p>
                 </div>
@@ -3693,8 +5434,8 @@
                 <button
                 type="button"
                 onclick="App.closeModal()"
-                class="shrink-0 w-9 h-9 rounded-full bg-white text-dark-600
-                        border border-slate-200 shadow-sm hover:bg-slate-50 hover:text-slate-700
+                class="shrink-0 w-9 h-9 rounded-full bg-white text-[#000000]
+                        border border-slate-200 shadow-sm hover:bg-slate-50 hover:text-[#000000]
                         active:scale-[0.98] transition flex items-center justify-center"
                 aria-label="Modal schließen"
                 >
@@ -3708,13 +5449,13 @@
             <!-- Materials -->
             <div class="mb-6">
                 <div class="flex items-center justify-between mb-2">
-                <h4 class="text-sm font-bold text-slate-800">Komponenten</h4>
-                <span class="text-xs text-dark-600">Material</span>
+                <h4 class="text-sm font-bold text-[#000000]">Komponenten</h4>
+                <span class="text-xs text-[#000000]">Material</span>
                 </div>
 
                 <div class="overflow-hidden rounded-xl border border-slate-200">
                     <table class="w-full text-sm text-left">
-                        <thead class="bg-slate-50 text-slate-600 font-bold text-xs uppercase">
+                        <thead class="bg-slate-50 text-[#000000] font-bold text-xs uppercase">
                         <tr>
                             <th class="px-4 py-2">Komponenten</th>
                             <th class="px-4 py-2">Lieferant</th>
@@ -3731,13 +5472,13 @@
             <!-- Labor -->
             <div>
                 <div class="flex items-center justify-between mb-2">
-                <h4 class="text-sm font-bold text-slate-800">Dienstleistung</h4>
-                <span class="text-xs text-dark-600">Arbeitszeit</span>
+                <h4 class="text-sm font-bold text-[#000000]">Dienstleistung</h4>
+                <span class="text-xs text-[#000000]">Arbeitszeit</span>
                 </div>
 
                 <div class="overflow-hidden rounded-xl border border-slate-200">
                 <table class="w-full text-sm text-left">
-                    <thead class="bg-slate-50 text-slate-600 font-bold text-xs uppercase">
+                    <thead class="bg-slate-50 text-[#000000] font-bold text-xs uppercase">
                         <tr>
                             <th class="px-4 py-2">Dienstleistung</th>
                             <th class="px-4 py-2">Qualifikation</th>
@@ -3757,7 +5498,7 @@
             <!-- Footer -->
             <div class="px-6 py-5 border-t border-slate-200 bg-slate-50">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div class="text-xs text-dark-600">
+                <div class="text-xs text-[#000000]">
                 Tipp: Klick außerhalb schließt das Fenster.
                 </div>
 
@@ -3765,7 +5506,7 @@
                 <button
                     type="button"
                     onclick="App.closeModal()"
-                    class="px-4 py-2 rounded-xl text-slate-600 font-semibold
+                    class="px-4 py-2 rounded-xl text-[#000000] font-semibold
                         border border-slate-200 bg-white hover:bg-slate-50
                         active:scale-[0.98] transition"
                 >
@@ -3788,7 +5529,8 @@
         </div>
         </div>
 
-    <!-- ✅ ADD THIS MODAL (place it near your other modals, before </body>) -->
+    <!-- ✅ ADD THIS MODAL (place it near your other modals, before 
+) -->
     <div id="desc-modal" class="fixed inset-0 z-[120] hidden">
     <div class="absolute inset-0 modal-overlay" onclick="App.closeDescModal()"></div>
 
@@ -3796,9 +5538,9 @@
         <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
         <div>
             <div class="text-[10px] font-bold text-[#93c21c] uppercase tracking-wider">Beschreibung</div>
-            <div class="font-bold text-slate-800" id="desc-modal-title">Position bearbeiten</div>
+            <div class="font-bold text-[#000000]" id="desc-modal-title">Position bearbeiten</div>
         </div>
-        <button onclick="App.closeDescModal()" class="text-slate-400 hover:text-slate-700">
+        <button onclick="App.closeDescModal()" class="text-[#000000] hover:text-[#000000]">
             <i class="fa-solid fa-times"></i>
         </button>
         </div>
@@ -3806,11 +5548,11 @@
         <div class="p-4">
         <div id="desc-quill" class="bg-white"></div>
         <div class="flex items-center justify-between mt-3">
-            <div class="text-xs text-slate-400">
+            <div class="text-xs text-[#000000]">
             Tipp: Inhalte werden als HTML gespeichert (für Angebot).
             </div>
             <div class="flex gap-2">
-            <button onclick="App.closeDescModal()" class="px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 font-bold text-sm">Abbrechen</button>
+            <button onclick="App.closeDescModal()" class="px-4 py-2 rounded-lg text-[#000000] hover:bg-slate-100 font-bold text-sm">Abbrechen</button>
             <button onclick="App.saveDescModal()" class="px-5 py-2 rounded-lg bg-[#93c21c] text-white font-bold text-sm shadow hover:brightness-105">
                 Speichern
             </button>
@@ -3832,8 +5574,8 @@
             <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
             <div class="min-w-0">
-            <div id="toast-confirm-title" class="font-black text-slate-800">Löschen?</div>
-            <div id="toast-confirm-msg" class="text-sm text-slate-600 mt-1">
+            <div id="toast-confirm-title" class="font-black text-[#000000]">Löschen?</div>
+            <div id="toast-confirm-msg" class="text-sm text-[#000000] mt-1">
                 Diese Aktion kann nicht rückgängig gemacht werden.
             </div>
             </div>
@@ -3841,7 +5583,7 @@
 
         <div class="px-4 pb-4 flex items-center justify-end gap-2">
             <button id="toast-confirm-cancel"
-            class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm">
+            class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#000000] font-bold text-sm">
             Abbrechen
             </button>
             <button id="toast-confirm-ok"
@@ -3859,10 +5601,10 @@
         
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl w-[420px] overflow-hidden animate-fadeIn">
             <div class="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
+                <h3 class="text-lg font-black text-[#000000] flex items-center gap-2">
                     <i class="fa-solid fa-cloud-arrow-up text-[#93c21c]"></i> Dokument Speichern
                 </h3>
-                <button onclick="document.getElementById('save-quote-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-700">
+                <button onclick="document.getElementById('save-quote-modal').classList.add('hidden')" class="text-[#000000] hover:text-[#000000]">
                     <i class="fa-solid fa-times text-lg"></i>
                 </button>
             </div>
@@ -3870,7 +5612,7 @@
             <div class="p-6 space-y-5">
                 <div>
                     <div>
-                        <label class="block text-xs font-bold text-dark-600 uppercase tracking-wide mb-1.5">Speichern als...</label>
+                        <label class="block text-xs font-bold text-[#000000] uppercase tracking-wide mb-1.5">Speichern als...</label>
                         <div id="save-mode-notice" class="hidden text-[10px] text-orange-500 mb-2 font-bold italic">
                             * Dokument wurde ohne Kunde gestartet, Speichern nur als Vorlage möglich.
                         </div>
@@ -3880,56 +5622,56 @@
                     <div class="flex gap-3 flex-wrap">
                         <label id="save-mode-offer-wrap" class="flex-1 border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-[#93c21c] flex items-center gap-2 bg-white has-[:checked]:border-[#93c21c] has-[:checked]:bg-[#f7fee7] transition-all">
                             <input type="radio" name="save_mode" value="offer" checked class="accent-[#93c21c]" onchange="document.getElementById('template-name-wrap').classList.add('hidden')">
-                            <span class="text-sm font-bold text-slate-700">Kunden-Angebot</span>
+                            <span class="text-sm font-bold text-[#000000]">Kunden-Angebot</span>
                         </label>
                         
                         <label id="save-mode-update-wrap" class="hidden flex-1 border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-[#93c21c] flex flex-col justify-center gap-0.5 bg-white has-[:checked]:border-[#93c21c] has-[:checked]:bg-[#f7fee7] transition-all">
                             <div class="flex items-center gap-2">
                                 <input type="radio" name="save_mode" id="radio-update-template" value="update_template" class="accent-[#93c21c]" onchange="document.getElementById('template-name-wrap').classList.add('hidden')">
-                                <span class="text-sm font-bold text-slate-700">Aktualisieren</span>
+                                <span class="text-sm font-bold text-[#000000]">Aktualisieren</span>
                             </div>
-                            <span id="lbl-loaded-template-name" class="text-[10px] text-dark-600 font-bold ml-6 truncate w-32" title=""></span>
+                            <span id="lbl-loaded-template-name" class="text-[10px] text-[#000000] font-bold ml-6 truncate w-32" title=""></span>
                         </label>
 
                         <label class="flex-1 border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-[#93c21c] flex items-center gap-2 bg-white has-[:checked]:border-[#93c21c] has-[:checked]:bg-[#f7fee7] transition-all">
                             <input type="radio" name="save_mode" id="radio-new-template" value="template" class="accent-[#93c21c]" onchange="document.getElementById('template-name-wrap').classList.remove('hidden')">
-                            <span class="text-sm font-bold text-slate-700">Neu als Vorlage</span>
+                            <span class="text-sm font-bold text-[#000000]">Neu als Vorlage</span>
                         </label>
                     </div>
                 </div>
 
                 <div id="template-name-wrap" class="hidden flex flex-col gap-4 mt-4 border-t border-slate-200 pt-4">
                     <div>
-                        <label class="block text-xs font-bold text-dark-600 uppercase tracking-wide mb-1.5">Name der Vorlage *</label>
+                        <label class="block text-xs font-bold text-[#000000] uppercase tracking-wide mb-1.5">Name der Vorlage *</label>
                         <input type="text" id="save-template-name" placeholder="z.B. PV-Standard Paket 10kWp" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:border-[#93c21c] outline-none">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-dark-600 uppercase tracking-wide mb-1.5">Beschreibung</label>
+                        <label class="block text-xs font-bold text-[#000000] uppercase tracking-wide mb-1.5">Beschreibung</label>
                         <textarea id="save-template-desc" placeholder="Kurze Beschreibung der Vorlage..." class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:border-[#93c21c] outline-none resize-none h-20"></textarea>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-dark-600 uppercase tracking-wide mb-1.5">Abteilung (Department)</label>
+                            <label class="block text-xs font-bold text-[#000000] uppercase tracking-wide mb-1.5">Abteilung (Department)</label>
                             <select id="save-template-department" class="w-full template-select2">
                                 <option value="">Bitte wählen...</option>
                                 </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-dark-600 uppercase tracking-wide mb-1.5">Gewerk</label>
+                            <label class="block text-xs font-bold text-[#000000] uppercase tracking-wide mb-1.5">Gewerk</label>
                             <select id="save-template-article-group" class="w-full template-select2">
                                 <option value="">Bitte wählen...</option>
                                 </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-dark-600 uppercase tracking-wide mb-1.5">Marke (Brand)</label>
+                            <label class="block text-xs font-bold text-[#000000] uppercase tracking-wide mb-1.5">Marke (Brand)</label>
                             <select id="save-template-brand" class="w-full template-select2">
                                 <option value="">Bitte wählen...</option>
                                 </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-dark-600 uppercase tracking-wide mb-1.5">Lieferant (Distributor)</label>
+                            <label class="block text-xs font-bold text-[#000000] uppercase tracking-wide mb-1.5">Lieferant (Distributor)</label>
                             <select id="save-template-distributor" class="w-full template-select2">
                                 <option value="">Bitte wählen...</option>
                                 </select>
@@ -3937,13 +5679,13 @@
                     </div>
                 </div>
                 
-                <div id="save-loading-indicator" class="hidden text-sm text-dark-600 flex items-center gap-2 justify-center py-2">
+                <div id="save-loading-indicator" class="hidden text-sm text-[#000000] flex items-center gap-2 justify-center py-2">
                     <i class="fa-solid fa-circle-notch fa-spin text-[#93c21c]"></i> Speichervorgang läuft...
                 </div>
             </div>
 
             <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
-                <button onclick="document.getElementById('save-quote-modal').classList.add('hidden')" class="px-5 py-2.5 rounded-xl text-slate-600 font-bold hover:bg-slate-200 transition-colors text-sm">Abbrechen</button>
+                <button onclick="document.getElementById('save-quote-modal').classList.add('hidden')" class="px-5 py-2.5 rounded-xl text-[#000000] font-bold hover:bg-slate-200 transition-colors text-sm">Abbrechen</button>
                 <button id="btn-perform-save" onclick="App.performSave()" class="px-6 py-2.5 rounded-xl bg-[#93c21c] text-white font-black shadow-md hover:brightness-105 transition-all text-sm flex items-center gap-2">
                     <i class="fa-solid fa-check"></i> Jetzt Speichern
                 </button>
@@ -3959,21 +5701,21 @@
             <div class="w-full max-w-lg rounded-3xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
                 <div class="px-6 py-5 border-b border-slate-100 bg-red-50">
                     <div class="text-[11px] font-black uppercase tracking-[0.18em] text-red-500">Zugriff gesperrt</div>
-                    <div class="text-xl font-black text-slate-800 mt-1">Dieses Angebot wird bereits bearbeitet</div>
+                    <div class="text-xl font-black text-[#000000] mt-1">Dieses Angebot wird bereits bearbeitet</div>
                 </div>
 
                 <div class="p-6">
                     <div id="offer-lock-user-box" class="flex items-center gap-4 p-4 rounded-2xl border border-slate-200 bg-slate-50">
                         <img id="offer-lock-user-avatar" src="{{ asset('images/gender/male.png') }}" class="w-14 h-14 rounded-full object-cover border border-slate-200" alt="avatar">
                         <div>
-                            <div class="text-sm text-dark-600">Aktiver Benutzer</div>
-                            <div id="offer-lock-user-name" class="text-lg font-black text-slate-800">-</div>
+                            <div class="text-sm text-[#000000]">Aktiver Benutzer</div>
+                            <div id="offer-lock-user-name" class="text-lg font-black text-[#000000]">-</div>
                         </div>
                     </div>
 
-                    <div class="mt-5 text-sm text-slate-600 leading-7">
+                    <div class="mt-5 text-sm text-[#000000] leading-7">
                         Sie können momentan nicht arbeiten, weil
-                        <span id="offer-lock-inline-name" class="font-black text-slate-800">-</span>
+                        <span id="offer-lock-inline-name" class="font-black text-[#000000]">-</span>
                         dieses Angebot bereits geöffnet hat.
                     </div>
 
@@ -3996,12 +5738,12 @@
         <div class="p-5 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
             <div>
                 <div class="text-[10px] font-black uppercase tracking-[0.18em] text-[#93c21c]">Vorlage verwenden</div>
-                <div class="text-lg font-black text-slate-800" id="template-apply-title">Vorlage übernehmen</div>
+                <div class="text-lg font-black text-[#000000]" id="template-apply-title">Vorlage übernehmen</div>
             </div>
 
             <button type="button"
                     onclick="App.TemplateTab.closeApplyModal()"
-                    class="text-slate-400 hover:text-slate-700">
+                    class="text-[#000000] hover:text-[#000000]">
                 <i class="fa-solid fa-times text-lg"></i>
             </button>
         </div>
@@ -4009,13 +5751,13 @@
         <div class="p-6 space-y-6">
             <div class="rounded-2xl border border-[#93c21c]/20 bg-[#f7fee7] p-4">
                 <div class="text-xs font-black uppercase tracking-wider text-[#6b8e12]">Ausgewählte Vorlage</div>
-                <div id="template-apply-name" class="text-lg font-black text-slate-800 mt-1">—</div>
-                <div id="template-apply-meta" class="text-sm text-dark-600 mt-1">—</div>
+                <div id="template-apply-name" class="text-lg font-black text-[#000000] mt-1">—</div>
+                <div id="template-apply-meta" class="text-sm text-[#000000] mt-1">—</div>
             </div>
 
             <!-- Kunde -->
             <div>
-                <label class="block text-sm font-bold text-slate-700 mb-2">1. Kunde</label>
+                <label class="block text-sm font-bold text-[#000000] mb-2">1. Kunde</label>
 
                 <div class="relative">
                     <input type="text"
@@ -4024,7 +5766,7 @@
                            onfocus="App.TemplateTab.filterCustomers()"
                            placeholder="Kunde suchen..."
                            class="w-full border border-slate-300 rounded-xl p-3 pl-10 text-sm outline-none focus:border-[#93c21c] bg-white">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[#000000]"></i>
 
                     <div id="template-customer-dropdown"
                          class="absolute w-full bg-white border border-slate-200 rounded-b-xl shadow-xl z-50 hidden max-h-52 overflow-y-auto mt-1">
@@ -4034,13 +5776,13 @@
                 <div id="template-customer-selected"
                      class="hidden mt-3 p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between gap-3">
                     <div class="min-w-0">
-                        <div id="template-sel-cust-name" class="font-black text-slate-800 truncate"></div>
-                        <div id="template-sel-cust-addr" class="text-xs text-dark-600 truncate"></div>
+                        <div id="template-sel-cust-name" class="font-black text-[#000000] truncate"></div>
+                        <div id="template-sel-cust-addr" class="text-xs text-[#000000] truncate"></div>
                     </div>
 
                     <button type="button"
                             onclick="App.TemplateTab.clearCustomer()"
-                            class="text-slate-400 hover:text-red-500 shrink-0">
+                            class="text-[#000000] hover:text-red-500 shrink-0">
                         <i class="fa-solid fa-times"></i>
                     </button>
                 </div>
@@ -4048,7 +5790,7 @@
 
             <!-- Objekt -->
             <div id="template-object-step" class="opacity-50 pointer-events-none transition-opacity">
-                <label class="block text-sm font-bold text-slate-700 mb-2">2. Objekt / Produkt</label>
+                <label class="block text-sm font-bold text-[#000000] mb-2">2. Objekt / Produkt</label>
 
                 <select id="template-object-select"
                         multiple
@@ -4056,7 +5798,7 @@
                         class="w-full border border-slate-300 rounded-xl p-3 text-sm outline-none focus:border-[#93c21c] bg-white">
                 </select>
 
-                <div class="mt-2 text-xs text-dark-600">
+                <div class="mt-2 text-xs text-[#000000]">
                     Ausgewählt:
                     <span id="template-object-count" class="font-bold">0</span>
                 </div>
@@ -4066,7 +5808,7 @@
         <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-end gap-2">
             <button type="button"
                     onclick="App.TemplateTab.closeApplyModal()"
-                    class="px-5 py-2.5 rounded-xl text-slate-600 font-bold hover:bg-slate-200 transition-colors text-sm">
+                    class="px-5 py-2.5 rounded-xl text-[#000000] font-bold hover:bg-slate-200 transition-colors text-sm">
                 Abbrechen
             </button>
 
@@ -4088,10 +5830,10 @@
     
     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl w-[500px] max-h-[90vh] flex flex-col animate-fadeIn">
         <div class="p-5 border-b border-slate-100 bg-slate-50 flex justify-between items-center rounded-t-2xl">
-            <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
+            <h3 class="text-lg font-black text-[#000000] flex items-center gap-2">
                 <i class="fa-solid fa-display text-[#93c21c]"></i> Meine Ansicht-Einstellungen
             </h3>
-            <button onclick="App.UserPrefsModal.close()" class="text-slate-400 hover:text-slate-700">
+            <button onclick="App.UserPrefsModal.close()" class="text-[#000000] hover:text-[#000000]">
                 <i class="fa-solid fa-times text-lg"></i>
             </button>
         </div>
@@ -4099,35 +5841,35 @@
         <div class="p-6 space-y-6 overflow-y-auto scroller">
             
             <div>
-                <label class="block text-xs font-bold text-dark-600 uppercase tracking-wide mb-2">Standard-Ansicht beim Start</label>
+                <label class="block text-xs font-bold text-[#000000] uppercase tracking-wide mb-2">Standard-Ansicht beim Start</label>
                 <div class="flex gap-3">
                     <label class="flex-1 border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-[#93c21c] flex items-center gap-2 bg-white has-[:checked]:border-[#93c21c] has-[:checked]:bg-[#f7fee7] transition-all">
                         <input type="radio" name="pref_default_tab" value="list" class="accent-[#93c21c]">
-                        <span class="text-sm font-bold text-slate-700">Listenansicht</span>
+                        <span class="text-sm font-bold text-[#000000]">Listenansicht</span>
                     </label>
                     <label class="flex-1 border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-[#93c21c] flex items-center gap-2 bg-white has-[:checked]:border-[#93c21c] has-[:checked]:bg-[#f7fee7] transition-all">
                         <input type="radio" name="pref_default_tab" value="a4" class="accent-[#93c21c]">
-                        <span class="text-sm font-bold text-slate-700">Druckansicht (A4)</span>
+                        <span class="text-sm font-bold text-[#000000]">Druckansicht (A4)</span>
                     </label>
                 </div>
             </div>
 
             <div>
-                <label class="block text-xs font-bold text-dark-600 uppercase tracking-wide mb-2">Panel-Sichtbarkeit</label>
+                <label class="block text-xs font-bold text-[#000000] uppercase tracking-wide mb-2">Panel-Sichtbarkeit</label>
                 <div class="space-y-2">
                     <label class="flex items-center justify-between p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
-                        <span class="text-sm font-bold text-slate-700">Miniaturansicht (Links) immer einblenden</span>
+                        <span class="text-sm font-bold text-[#000000]">Miniaturansicht (Links) immer einblenden</span>
                         <input type="checkbox" id="pref_show_thumbnails" class="w-4 h-4 accent-[#93c21c]">
                     </label>
                     <label class="flex items-center justify-between p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
-                        <span class="text-sm font-bold text-slate-700">Kalkulations-Sidebar (Rechts) immer einblenden</span>
+                        <span class="text-sm font-bold text-[#000000]">Kalkulations-Sidebar (Rechts) immer einblenden</span>
                         <input type="checkbox" id="pref_show_sidebar" class="w-4 h-4 accent-[#93c21c]">
                     </label>
                 </div>
             </div>
 
             <div>
-                <label class="block text-xs font-bold text-dark-600 uppercase tracking-wide mb-2">Sichtbare Spalten (Listenansicht)</label>
+                <label class="block text-xs font-bold text-[#000000] uppercase tracking-wide mb-2">Sichtbare Spalten (Listenansicht)</label>
                 <div class="grid grid-cols-2 gap-2 bg-slate-50 p-4 rounded-xl border border-slate-200" id="pref-columns-container">
                     </div>
             </div>
@@ -4135,7 +5877,7 @@
         </div>
 
         <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2 rounded-b-2xl">
-            <button onclick="App.UserPrefsModal.close()" class="px-5 py-2.5 rounded-xl text-slate-600 font-bold hover:bg-slate-200 transition-colors text-sm">Abbrechen</button>
+            <button onclick="App.UserPrefsModal.close()" class="px-5 py-2.5 rounded-xl text-[#000000] font-bold hover:bg-slate-200 transition-colors text-sm">Abbrechen</button>
             <button onclick="App.UserPrefsModal.save()" class="px-6 py-2.5 rounded-xl bg-[#93c21c] text-white font-black shadow-md hover:brightness-105 transition-all text-sm flex items-center gap-2">
                 <i class="fa-solid fa-floppy-disk"></i> Speichern
             </button>
@@ -4153,8 +5895,8 @@
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
             
-            <h3 class="text-2xl font-black text-slate-800 mb-2">Nicht gespeichert!</h3>
-            <p class="text-dark-600 leading-relaxed">
+            <h3 class="text-2xl font-black text-[#000000] mb-2">Nicht gespeichert!</h3>
+            <p class="text-[#000000] leading-relaxed">
                 Sie haben Änderungen am Angebot vorgenommen. Wenn Sie jetzt gehen, werden diese <span class="font-bold text-red-500">unwiderruflich gelöscht</span>.
             </p>
         </div>
@@ -4168,7 +5910,7 @@
             
             <div class="flex gap-3">
                 <button onclick="App.Navigation.cancel()"
-                        class="flex-1 bg-white border border-slate-200 text-slate-600 font-bold py-3 rounded-2xl hover:bg-slate-100 transition-all text-sm">
+                        class="flex-1 bg-white border border-slate-200 text-[#000000] font-bold py-3 rounded-2xl hover:bg-slate-100 transition-all text-sm">
                     Weiterarbeiten
                 </button>
                 <button id="btn-confirm-leave"
@@ -4180,17 +5922,134 @@
     </div>
 </div>
 
+<div id="product-modal" class="fixed inset-0 z-[120] hidden">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="App.closeProductModal()"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div class="p-5 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+            <div class="min-w-0">
+                <div class="text-[10px] font-bold text-[#93c21c] uppercase tracking-wider mb-1">Produkt-Details</div>
+                <h3 class="font-bold text-[#000000] text-lg truncate" id="pm-title">Lade...</h3>
+            </div>
+            <button onclick="App.closeProductModal()" class="text-[#000000] hover:text-[#000000] w-8 h-8 rounded-full border border-slate-200 bg-white shadow-sm flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-6 scroller flex flex-col md:flex-row gap-6">
+            <div class="w-full md:w-1/3 shrink-0">
+                <div class="rounded-xl border border-slate-200 overflow-hidden bg-slate-50 aspect-square flex items-center justify-center p-2">
+                    <img id="pm-image" src="" class="max-w-full max-h-full object-contain">
+                </div>
+            </div>
+            <div class="w-full md:w-2/3 space-y-4">
+                <div>
+                    <div class="text-xs text-[#000000] uppercase tracking-wide font-bold">Artikelnummer</div>
+                    <div class="text-sm font-bold text-[#000000]" id="pm-artno">-</div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-[10px] text-[#000000] uppercase font-bold">Marke</div>
+                        <div class="text-sm font-bold text-[#000000] truncate" id="pm-brand">-</div>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-[10px] text-[#000000] uppercase font-bold">Lieferant</div>
+                        <div class="text-sm font-bold text-[#000000] truncate" id="pm-dist">-</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4">
+                    <div>
+                        <div class="text-[10px] text-[#000000] uppercase font-bold">EK Preis</div>
+                        <div class="text-lg font-black text-[#000000]" id="pm-ek">0,00 €</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-[#000000] uppercase font-bold">VK Preis (Kalkuliert)</div>
+                        <div class="text-lg font-black text-[#93c21c]" id="pm-vk">0,00 €</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-5 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
+            <button onclick="App.closeProductModal()" class="px-5 py-2.5 rounded-xl text-[#000000] font-bold hover:bg-slate-200 transition-colors text-sm">Schließen</button>
+            <button id="pm-add-btn" class="px-6 py-2.5 rounded-xl bg-[#93c21c] text-white font-black shadow-md hover:brightness-105 transition-all text-sm flex items-center gap-2">
+                <i class="fa-solid fa-plus"></i> Zum Angebot hinzufügen
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="attachment-viewer-modal" class="fixed inset-0 z-[1500] hidden flex flex-col bg-slate-900/95 backdrop-blur-sm">
+    <div class="h-16 flex justify-between items-center px-6 bg-slate-900 text-white shrink-0 shadow-lg">
+        <div class="font-bold flex items-center gap-3 text-lg">
+            <i class="fa-solid fa-file-lines text-[#93c21c]"></i> 
+            <span id="viewer-title">Dokumentenansicht</span>
+        </div>
+        <button onclick="App.Attachments.closeViewer()" class="text-slate-300 hover:text-red-400 transition-colors bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center">
+            <i class="fa-solid fa-times text-xl"></i>
+        </button>
+    </div>
+    <div class="flex-1 overflow-hidden relative flex justify-center items-center p-6" id="viewer-content">
+        </div>
+</div>
 
 
 <script>
     window.currentEmployeeId = {{ auth()->user()->name }};
 </script>
 
+
+@php
+    $routeFolderParam = request()->route('folder');
+    $offerDocumentBootstrapFolder = null;
+
+    if ($routeFolderParam instanceof \App\Models\OfferFolder) {
+        $offerDocumentBootstrapFolder = $routeFolderParam;
+        try {
+            $offerDocumentBootstrapFolder->loadMissing(['offer.customer', 'offer.alternative', 'offer.product', 'detail']);
+        } catch (\Throwable $e) {
+            // Keep the blade resilient if a relation name is different in one installation.
+        }
+    } elseif (is_numeric($routeFolderParam)) {
+        try {
+            $offerDocumentBootstrapFolder = \App\Models\OfferFolder::query()
+                ->with(['offer.customer', 'offer.alternative', 'offer.product', 'detail'])
+                ->find((int) $routeFolderParam);
+        } catch (\Throwable $e) {
+            $offerDocumentBootstrapFolder = null;
+        }
+    }
+
+    $offerDocumentBootstrapOffer = $offerDocumentBootstrapFolder?->offer;
+    $offerDocumentBootstrapDetail = $offerDocumentBootstrapFolder?->detail;
+
+    $offerDocumentBootstrap = [
+        'offer_id' => $offerDocumentBootstrapFolder?->offer_id ?: $offerDocumentBootstrapOffer?->id,
+        'offer_folder_id' => $offerDocumentBootstrapFolder?->id,
+        'folder_id' => $offerDocumentBootstrapFolder?->id,
+        'offer_detail_id' => $offerDocumentBootstrapDetail?->id,
+        'customer_id' => $offerDocumentBootstrapFolder?->customer_id ?: $offerDocumentBootstrapOffer?->customer_id,
+        'alternative_id' => $offerDocumentBootstrapFolder?->alternative_id ?: $offerDocumentBootstrapOffer?->alternative_id,
+        'product_id' => $offerDocumentBootstrapFolder?->product_id ?: $offerDocumentBootstrapOffer?->product_id,
+        'offer_no' => $offerDocumentBootstrapOffer?->offer_no,
+        'customer' => $offerDocumentBootstrapOffer?->customer ? [
+            'id' => $offerDocumentBootstrapOffer->customer->id,
+            'customer_no' => $offerDocumentBootstrapOffer->customer->customer_no ?? null,
+            'display_name' => trim($offerDocumentBootstrapOffer->customer->firma ?: (($offerDocumentBootstrapOffer->customer->name ?? '') . ' ' . ($offerDocumentBootstrapOffer->customer->lastname ?? ''))),
+            'name' => $offerDocumentBootstrapOffer->customer->name ?? null,
+            'lastname' => $offerDocumentBootstrapOffer->customer->lastname ?? null,
+            'firma' => $offerDocumentBootstrapOffer->customer->firma ?? null,
+            'street' => $offerDocumentBootstrapOffer->customer->street ?? null,
+            'postcode' => $offerDocumentBootstrapOffer->customer->postcode ?? null,
+            'city' => $offerDocumentBootstrapOffer->customer->city ?? null,
+        ] : null,
+    ];
+@endphp
 <script>
     // --- CONFIGURATION ---
     const API_BASE = '/offers';
+    window.OfferDocumentBootstrap = window.OfferDocumentBootstrap || @json($offerDocumentBootstrap);
 
     const State = {
+            libraryPage: 1,
+            libraryLastPage: 1,
             selectedItems: new Set(),
             hasUnsavedChanges: false,
             docStatus: '',
@@ -4201,16 +6060,46 @@
             docType: 'Angebot',
             sections: [],
             coverTextHtml: '',
+            mainTitleHtml: '',
             offerId: 'NEW',
             custId: '-',
             placedImages: [],
             toolsImages: [],
-            taxRate: 19,
-            coverTextHtml: '',
+            taxRate: 19, 
             companyName: 'SOLAR ASPEKT',
             brandColor: '#93c21c',
             brandMode: 'text',          // 'text' | 'image'
             brandLogoUrl: '',           // selected logo url
+            selectedBranchId: null,
+            selectedBranch: null,
+            companyFooter: {},
+            roofLayout: {
+                enabled: false,
+                title: 'BELEGUNG DER DACHFLÄCHE',
+                offerNumber: '',
+                systemPowerKwp: '',
+                moduleCount: '',
+                modulePowerWp: '',
+                note: 'Die Belegung ist vorläufig. Nach Feinaufmaß, aber auch noch während der Montage können sich ggfs. Änderungen ergeben, z. B. aufgrund verdeckter Montagehindernisse.',
+                footerCompany: '',
+                selectedRoofs: [],
+                showAllIcons: true,
+                compassImagePath: '',
+                compassImageUrl: '',
+                canvasLayout: [],
+                canvasDesignWidth: 1000,
+                canvasDesignHeight: 700,
+                meta: {}
+            },
+            pageLibrary: {
+                items: [],
+                pages: [],
+                articleGroups: [],
+                products: [],
+                context: {},
+                withInactive: false,
+                defaultPosition: 'after_roof'
+            },
             editingBadge: null,
             editingImage: null,
             dragState: null,
@@ -4220,9 +6109,11 @@
             selectedTemplate: null, 
             loadedTemplateId: null,    
             loadedTemplateName: null,   
+            loadedTemplateMeta: {},
             prefill: {
                 offer_id: null,
                 offer_folder_id: null,
+                offer_detail_id: null,
                 customer_id: null,
                 alternative_id: null,
                 product_id: null,
@@ -4283,9 +6174,14 @@
     };
 
     State.libraryMode = 'group_sets'; // ✅ default active tab
+    State.libraryPage = State.libraryPage || 1;
+    State.libraryLastPage = State.libraryLastPage || 1;
+    State.libraryIsLoading = false;
+    State.libraryLastReloadAt = 0;
+    State.libraryAutoReloadDelay = 2500; // ms - prevents too many reloads while clicking around
 
 
-    // --- PRICE HELPERS (EK/VK auto pick) ---
+    
     
     // ============================================================
         // Helpers
@@ -4372,13 +6268,13 @@
 
             // quantity / measure
             qty: 1,
-            unit: "Stk",
-            measure: "Stk",
+            unit: "Stk.",
+            measure: "Stk.",
 
             // NEW: pricing basis
             price_unit_value: 1,     // e.g. 100
-            price_unit_label: "Stk", // e.g. m
-            price_unit_text: "1 Stk",
+            price_unit_label: "Stk.", // e.g. m
+            price_unit_text: "1 Stk.",
 
             vpe: 1,
 
@@ -4388,7 +6284,7 @@
             hideNumbering: false,
             isPauschal: false,
             print_hidden: (overrides.depth || 0) > 0,       
-            print_hidden_labor: (overrides.depth || 0) > 0,
+            print_hidden_labor: true,
 
             creator_id: null,
             creator_name: null,
@@ -4397,6 +6293,14 @@
             is_locked: 1,
 
             subItems: [],
+
+            // Enterprise rule: rows coming from library/master-set/product are type locked.
+            // Only manual rows may switch between Artikel / Lohn / Hinweis.
+            origin_type: "library",
+            source_type: "library",
+            type_locked: true,
+            _manual: false,
+
             ...overrides,
         });
         const ensureLaborSectionIndex = () => {
@@ -4471,15 +6375,564 @@
             };
         };
 
+
+        const parseOfferUnitInfo = (unitRaw, fallback = 'Stk') => {
+            if (typeof window.App?.parsePriceUnit === 'function') {
+                return window.App.parsePriceUnit(unitRaw || fallback, fallback);
+            }
+
+            const raw = (unitRaw || fallback || 'Stk').toString().trim();
+            const match = raw.match(/^(\d+(?:[.,]\d+)?)\s*(.+)$/);
+
+            if (match) {
+                return {
+                    value: parseFloat(match[1].replace(',', '.')) || 1,
+                    label: match[2].trim() || fallback,
+                    text: raw,
+                };
+            }
+
+            return {
+                value: 1,
+                label: raw || fallback,
+                text: `1 ${raw || fallback}`,
+            };
+        };
+
+        const resolveOfferEkValue = (src = {}) => {
+            const dp = src?.distributor_price || src?.distributorPrice || {};
+            const values = [
+                src?.purchase_price,
+                src?.ek,
+                src?.cost,
+                src?.buying_price,
+                src?.cost_price,
+                dp?.purchase_price,
+                dp?.discount_price,
+                dp?.price,
+            ];
+
+            for (const value of values) {
+                const n = safeNum(value, NaN);
+                if (Number.isFinite(n) && n > 0) return n;
+            }
+
+            for (const value of values) {
+                const n = safeNum(value, NaN);
+                if (Number.isFinite(n)) return n;
+            }
+
+            return 0;
+        };
+
+        const resolveOfferVkValue = (src = {}) => {
+            const values = [src?.unit_price, src?.price, src?.vk, src?.sale_price, src?.rate];
+
+            for (const value of values) {
+                const n = safeNum(value, NaN);
+                if (Number.isFinite(n) && n > 0) return n;
+            }
+
+            for (const value of values) {
+                const n = safeNum(value, NaN);
+                if (Number.isFinite(n)) return n;
+            }
+
+            return 0;
+        };
+
+        const lineValueFromItem = (item, field = 'price') => {
+            const qty = safeNum(item?.qty, 1);
+            const unitValue = Math.max(0.000001, safeNum(item?.price_unit_value, 1));
+            const value = field === 'ek'
+                ? resolveOfferEkValue(item)
+                : safeNum(item?.price ?? item?.rate ?? item?.unit_price, 0);
+
+            return (qty / unitValue) * value;
+        };
+
+        const buildMasterSetQuoteItem = (rawId, payload = {}, existing = {}) => {
+            const data = payload?.data || payload || {};
+            const masterSetId = safeNum(data.id || existing.master_set_id || existing.productId || existing.product_id || rawId, null);
+
+            const setItem = buildBaseItem({
+                item_type: 'master_set',
+                source_type: 'master_set',
+                origin_type: 'master_set',
+                master_set_id: masterSetId,
+                productId: masterSetId,
+                product_id: masterSetId,
+
+                name: safeStr(data.name || existing.name, `Set #${rawId}`),
+                desc_html: pickDescHtml(data) || existing.desc_html || '',
+                desc: pickDescText(data) || existing.desc || '',
+
+                qty: safeNum(existing.qty, 1),
+                unit: 'Set',
+                measure: 'Set',
+                price_unit_value: 1,
+                price_unit_label: 'Set',
+                price_unit_text: '1 Set',
+
+                img: App.pickImage(data, existing.img || App.placeholderImg(data.name || existing.name || 'SET')),
+                showImage: true,
+                hideImage: existing.hideImage ?? false,
+
+                price: 0,
+                unit_price: 0,
+                ek: 0,
+                purchase_price: 0,
+                cost: 0,
+                buying_price: 0,
+
+                margin: safeNum(existing.margin ?? existing.marginPercent, 0),
+                marginPercent: safeNum(existing.marginPercent ?? existing.margin, 0),
+                active: existing.active !== undefined ? existing.active : true,
+                status: existing.status || 'normal',
+                lineType: existing.lineType || 'standard',
+                kind: 'article',
+                componentType: 'haupt',
+                component_type: 'haupt',
+                depth: safeNum(existing.depth, 0),
+                subItems: [],
+            });
+
+            const makeComponentItem = (node, depth = 1, parentNode = null) => {
+                const unitInfo = parseOfferUnitInfo(node?.price_unit || node?.unit || node?.measure || 'Stk');
+                const qty = safeNum(node?.qty, 1);
+                const ek = resolveOfferEkValue(node);
+
+                let margin = parseFloat(node?.margin ?? node?.marginPercent ?? 0) || 0;
+                if (margin <= 0) margin = window.App?.getDefaultMargin?.('article') ?? 20;
+
+                let vk = resolveOfferVkValue(node);
+                if (ek > 0) vk = window.App?.vkFromEkMargin?.(ek, margin) ?? vk;
+
+                const parentComponentId = parentNode?.id ?? node?.parent_id ?? null;
+                const typeName = depth > 1 ? 'unter' : 'haupt';
+
+                return buildBaseItem({
+                    item_type: 'master_set_component',
+                    source_type: 'master_set',
+                    origin_type: 'master_set',
+                    master_set_id: masterSetId,
+
+                    productId: safeNum(node?.product_id, null),
+                    product_id: safeNum(node?.product_id, null),
+                    component_id: node?.id || null,
+                    master_set_component_id: node?.id || null,
+                    parent_component_id: parentComponentId,
+                    parent_id: parentComponentId,
+                    source_parent_component_id: parentComponentId,
+
+                    name: safeStr(node?.name, depth > 1 ? 'Unterkomponente' : 'Komponente'),
+                    desc_html: pickDescHtml(node),
+                    desc: pickDescText(node),
+
+                    qty: qty,
+                    unit: node?.unit || node?.measure || unitInfo.label || 'Stk',
+                    measure: node?.measure || node?.unit || unitInfo.label || 'Stk',
+                    price_unit_value: safeNum(node?.price_unit_value, unitInfo.value || 1),
+                    price_unit_label: unitInfo.label || node?.unit || 'Stk',
+                    price_unit_text: unitInfo.text || `1 ${unitInfo.label || 'Stk'}`,
+                    vpe: safeNum(node?.vpe, 1),
+
+                    price: vk,
+                    unit_price: vk,
+                    ek: ek,
+                    purchase_price: ek,
+                    cost: ek,
+                    buying_price: ek,
+                    cost_price_unit_value: safeNum(node?.cost_price_unit_value, safeNum(node?.price_unit_value, unitInfo.value || 1)),
+                    margin: margin,
+                    marginPercent: margin,
+
+                    img: App.pickImage(node),
+                    showImage: true,
+                    hideImage: false,
+
+                    depth: depth,
+                    componentType: typeName,
+                    component_type: typeName,
+                    type: typeName,
+                    kind: 'article',
+                    lineType: 'standard',
+                    status: 'normal',
+                    active: true,
+                    print_hidden: true,
+
+                    article_no: node?.article_no || '',
+                    distributor_article_no: node?.distributor_article_no || node?.distributor_price?.article_no || node?.distributorPrice?.article_no || '',
+                    distributor_name: node?.distributor?.name || node?.distributor_name || node?.supplier || '',
+                    distributor_id: node?.distributor?.id || node?.distributor_id || null,
+                    distributor_price_id: node?.distributor_price?.id || node?.distributorPrice?.id || node?.distributor_price_id || null,
+                    skonto: node?.skonto ?? node?.distributor?.cash_discount ?? 0,
+                    payment_terms: node?.payment_terms ?? node?.distributor?.payment_terms ?? 14,
+                    availability: node?.availability ?? true,
+                    sort_order: safeNum(node?.sort_order, 0),
+                    is_stammartikel: !!node?.is_stammartikel,
+                    is_favorite: !!node?.is_favorite,
+                });
+            };
+
+            const sourceItems = Array.isArray(data.items) ? data.items : [];
+            let setVkTotal = 0;
+            let setEkTotal = 0;
+
+            sourceItems.forEach((node) => {
+                if (!node || node.type === 'labor') return;
+                if (node.type !== 'component' && node.item_type !== 'component') return;
+
+                const isTopLevel = !node.parent_id;
+                const component = makeComponentItem(node, isTopLevel ? 1 : 2, null);
+                setItem.subItems.push(component);
+                setVkTotal += lineValueFromItem(component, 'price');
+                setEkTotal += lineValueFromItem(component, 'ek');
+
+                const children = Array.isArray(node.children) ? node.children : [];
+                children.forEach((childNode) => {
+                    const childComponent = makeComponentItem(childNode, 2, node);
+                    setItem.subItems.push(childComponent);
+                    setVkTotal += lineValueFromItem(childComponent, 'price');
+                    setEkTotal += lineValueFromItem(childComponent, 'ek');
+                });
+            });
+
+            sourceItems.forEach((node) => {
+                if (!node || node.type !== 'labor') return;
+
+                const laborRows = Array.isArray(node.children) && node.children.length > 0 ? node.children : [node];
+                let laborEkTotal = 0;
+                let laborVkTotal = 0;
+                let laborQtyTotal = 0;
+
+                const mappedRows = laborRows.map((row) => {
+                    const qty = safeNum(row.hours || row.qty, 1);
+                    const ek = resolveOfferEkValue(row) || safeNum(row.qualification_price, 0);
+                    const rate = resolveOfferVkValue(row) || safeNum(row.hourly_rate, 0);
+
+                    laborEkTotal += ek * qty;
+                    laborVkTotal += rate * qty;
+                    laborQtyTotal += qty;
+
+                    return {
+                        id: Date.now() + Math.floor(Math.random() * 100000),
+                        qualification_id: row.qualification_id || null,
+                        qualification_name: row.qualification_name || row.name || 'Dienstleistung',
+                        qty: qty,
+                        unit: 'Std',
+                        ek: ek,
+                        purchase_price: ek,
+                        cost: ek,
+                        margin_percent: safeNum(row.margin_percent, window.App?.getDefaultMargin?.('labor') ?? 50),
+                        rate: rate,
+                        price: rate,
+                        total: safeNum(row.total, qty * rate),
+                    };
+                });
+
+                const laborCarrier = buildBaseItem({
+                    item_type: 'labor',
+                    source_type: 'master_set',
+                    origin_type: 'master_set',
+                    master_set_id: masterSetId,
+                    kind: 'labor',
+                    name: node.name || 'Arbeitsleistung',
+                    qty: mappedRows.length || 1,
+                    unit: 'Stk',
+                    measure: 'Stk',
+                    showImage: false,
+                    hideImage: true,
+                    depth: 1,
+                    componentType: 'haupt',
+                    component_type: 'haupt',
+                    price: mappedRows.length > 0 ? laborVkTotal / mappedRows.length : 0,
+                    unit_price: mappedRows.length > 0 ? laborVkTotal / mappedRows.length : 0,
+                    ek: mappedRows.length > 0 ? laborEkTotal / mappedRows.length : 0,
+                    purchase_price: mappedRows.length > 0 ? laborEkTotal / mappedRows.length : 0,
+                    cost: mappedRows.length > 0 ? laborEkTotal / mappedRows.length : 0,
+                    labor_rows: mappedRows,
+                    print_hidden: true,
+                });
+
+                setItem.subItems.push(laborCarrier);
+                setVkTotal += laborQtyTotal > 0 ? laborVkTotal : 0;
+                setEkTotal += laborQtyTotal > 0 ? laborEkTotal : 0;
+            });
+
+            setItem.price = setVkTotal;
+            setItem.unit_price = setVkTotal;
+            setItem.ek = setEkTotal;
+            setItem.purchase_price = setEkTotal;
+            setItem.cost = setEkTotal;
+            setItem.buying_price = setEkTotal;
+
+            if (setEkTotal > 0) {
+                const margin = ((setVkTotal - setEkTotal) / setEkTotal) * 100;
+                setItem.margin = margin;
+                setItem.marginPercent = margin;
+            }
+
+            return setItem;
+        };
+
+    window.State = State;
+
     window.App = {
- 
+         safeRichHtml: (html) => {
+            const raw = (html || '').toString();
+            const box = document.createElement('div');
+            box.innerHTML = raw;
+
+            box.querySelectorAll('script, iframe, object, embed, style, link, meta').forEach(el => el.remove());
+
+            box.querySelectorAll('*').forEach(el => {
+                [...el.attributes].forEach(attr => {
+                    const name = attr.name.toLowerCase();
+                    const value = String(attr.value || '').trim().toLowerCase();
+
+                    if (name.startsWith('on')) el.removeAttribute(attr.name);
+                    if ((name === 'href' || name === 'src') && value.startsWith('javascript:')) {
+                        el.removeAttribute(attr.name);
+                    }
+                });
+            });
+
+            return box.innerHTML;
+        },
+
+        richTextToPlain: (html) => {
+            const box = document.createElement('div');
+            box.innerHTML = (html || '').toString();
+            return (box.textContent || box.innerText || '').replace(/\s+/g, ' ').trim();
+        },
+
+        showToast: (title, text = '', type = 'success') => {
+            const root = document.getElementById('supplier-live-toast');
+            if (!root) {
+                if (text) alert(`${title}\n${text}`);
+                else alert(title || 'Info');
+                return;
+            }
+
+            const iconWrap = root.querySelector('.supplier-live-toast-icon');
+            const titleEl = document.getElementById('supplier-live-toast-title');
+            const textEl = document.getElementById('supplier-live-toast-text');
+
+            if (titleEl) titleEl.innerText = title || 'Info';
+            if (textEl) textEl.innerText = text || '';
+
+            if (iconWrap) {
+                const icon = type === 'error' ? 'fa-circle-xmark' : (type === 'warning' ? 'fa-triangle-exclamation' : 'fa-circle-check');
+                iconWrap.innerHTML = `<i class="fa-solid ${icon}"></i>`;
+            }
+
+            root.classList.add('is-visible');
+            clearTimeout(root._hideTimer);
+            root._hideTimer = setTimeout(() => root.classList.remove('is-visible'), 3500);
+        },
+
+        resolveItemEk: (item) => {
+            if (!item) return 0;
+
+            // This helper lives near the top of the blade, before the later
+            // calculation layer defines its own `toNumber`. Keep it self-contained
+            // so the page never crashes during early render/load.
+            const parseMoney = (value, fallback = 0) => {
+                if (value === null || value === undefined || value === '') return fallback;
+
+                if (typeof value === 'number') {
+                    return Number.isFinite(value) ? value : fallback;
+                }
+
+                if (typeof value === 'string') {
+                    let clean = value
+                        .replace(/ /g, ' ')
+                        .replace(/€/g, '')
+                        .replace(/EUR/gi, '')
+                        .trim();
+
+                    // German money format: 1.234,56 -> 1234.56
+                    if (clean.includes(',') && clean.includes('.')) {
+                        clean = clean.replace(/\./g, '').replace(',', '.');
+                    } else if (clean.includes(',')) {
+                        clean = clean.replace(',', '.');
+                    }
+
+                    const n = Number(clean);
+                    return Number.isFinite(n) ? n : fallback;
+                }
+
+                const n = Number(value);
+                return Number.isFinite(n) ? n : fallback;
+            };
+
+            const values = [
+                item.purchase_price,
+                item.ek,
+                item.cost,
+                item.buying_price,
+                item.cost_price,
+                item.distributor_price?.purchase_price,
+                item.distributor_price?.discount_price,
+                item.distributor_price?.price,
+            ];
+
+            // Prefer a real positive EK. This fixes old rows where purchase_price=0 but ek>0.
+            for (const value of values) {
+                const n = parseMoney(value, NaN);
+                if (Number.isFinite(n) && n > 0) return n;
+            }
+
+            // Fallback: allow zero if all fields are empty/zero.
+            for (const value of values) {
+                const n = parseMoney(value, NaN);
+                if (Number.isFinite(n)) return n;
+            }
+
+            return 0;
+        },
+
+        refreshMasterSets: async () => {
+            if (typeof App.isLockedSnapshot === 'function' && App.isLockedSnapshot()) {
+                App.showToast('Dokument gesperrt', 'Dieses Angebot ist ein Auftrag/Snapshot und kann nicht neu aufgebaut werden.', 'warning');
+                return;
+            }
+
+            const btn = document.getElementById('btn-refresh-master-sets');
+            const oldHtml = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('opacity-70', 'cursor-wait');
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Master Sets laden...</span>';
+            }
+
+            let refreshed = 0;
+            let failed = 0;
+
+            const isMasterSetItem = (item) => {
+                const itemType = String(item?.item_type || '').toLowerCase();
+                return itemType === 'master_set';
+            };
+
+            const refreshOneItem = async (item) => {
+                if (!item) return item;
+
+                if (isMasterSetItem(item)) {
+                    const masterSetId = item.master_set_id || item.productId || item.product_id || item.id;
+
+                    if (!masterSetId) return item;
+
+                    try {
+                        const resp = await fetchJson(new URL(`${API_BASE}/master-sets/${masterSetId}?context=angebot&refresh=1&_=${Date.now()}`, window.location.origin));
+                        const fresh = buildMasterSetQuoteItem(masterSetId, resp?.data || resp || {}, item);
+                        refreshed++;
+                        return fresh;
+                    } catch (error) {
+                        console.error('Master Set reload failed', masterSetId, error);
+                        failed++;
+                        return item;
+                    }
+                }
+
+                if (Array.isArray(item.subItems) && item.subItems.length > 0) {
+                    const rebuiltChildren = [];
+                    for (const child of item.subItems) {
+                        rebuiltChildren.push(await refreshOneItem(child));
+                    }
+                    item.subItems = rebuiltChildren;
+                }
+
+                return item;
+            };
+
+            for (let sIdx = 0; sIdx < State.sections.length; sIdx++) {
+                const section = State.sections[sIdx];
+                if (!section || !Array.isArray(section.items)) continue;
+
+                const rebuilt = [];
+                for (const item of section.items) {
+                    rebuilt.push(await refreshOneItem(item));
+                }
+                section.items = rebuilt;
+            }
+
+            State.hasUnsavedChanges = true;
+            App.renderSidebar?.();
+            App.renderQuotePage();
+            if (App.Tabs?.current === 'list') App.ListView?.render?.();
+
+            if (btn) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-70', 'cursor-wait');
+                btn.innerHTML = oldHtml;
+            }
+
+            if (refreshed > 0 && failed === 0) {
+                App.showToast('Master Sets aktualisiert', `${refreshed} Master Set(s) wurden neu geladen und EK/Unterpositionen wurden repariert.`, 'success');
+            } else if (refreshed > 0 && failed > 0) {
+                App.showToast('Teilweise aktualisiert', `${refreshed} Master Set(s) aktualisiert, ${failed} konnte(n) nicht geladen werden.`, 'warning');
+            } else {
+                App.showToast('Keine Master Sets gefunden', 'In diesem Angebot gibt es aktuell keine Master Sets zum Neuladen.', 'warning');
+            }
+        },
+
+
+        openProductModal: async (id) => {
+            const modal = document.getElementById('product-modal');
+            if (!modal) return;
+
+            const titleEl = document.getElementById('pm-title');
+            const imgEl = document.getElementById('pm-image');
+            const addBtn = document.getElementById('pm-add-btn');
+
+            titleEl.textContent = 'Lade...';
+            imgEl.src = App.placeholderImg('Lade...');
+            document.getElementById('pm-artno').textContent = '-';
+            document.getElementById('pm-brand').textContent = '-';
+            document.getElementById('pm-dist').textContent = '-';
+            document.getElementById('pm-ek').textContent = '0,00 €';
+            document.getElementById('pm-vk').textContent = '0,00 €';
+
+            modal.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`${API_BASE}/products/${id}?context=angebot`, { headers: { Accept: 'application/json' } });
+                if (!res.ok) throw new Error('HTTP Error');
+                const data = await res.json();
+
+                titleEl.textContent = data.name || data.product || 'Produkt';
+                imgEl.src = data.image || data.image_url || App.placeholderImg(data.name);
+                imgEl.onerror = () => { imgEl.src = App.placeholderImg(data.name); };
+
+                document.getElementById('pm-artno').textContent = data.article_no || '-';
+                document.getElementById('pm-brand').textContent = data.brand_name || '-';
+                document.getElementById('pm-dist').textContent = data.distributor_name || '-';
+                document.getElementById('pm-ek').textContent = App.money(data.ek || data.purchase_price || 0) + ' €';
+                document.getElementById('pm-vk').textContent = App.money(data.price || data.unit_price || 0) + ' €';
+
+                addBtn.onclick = () => {
+                    let sIdx = State.sections.findIndex(s => s && !s._pageBreak && !s.isLocked);
+                    if (sIdx === -1) sIdx = App.addSection();
+                    App.handleItemAdd(sIdx, id, 'product');
+                    App.closeProductModal();
+                };
+            } catch (e) {
+                console.error('Failed to load product details', e);
+                titleEl.textContent = 'Fehler beim Laden';
+            }
+        },
+
+        closeProductModal: () => {
+            document.getElementById('product-modal')?.classList.add('hidden');
+        },
         isDeal: () => {
             if (State.isSnapshot) return false; 
             
             const s = String(State.docStatus || '').trim().toLowerCase();
             return s === 'deal' || s === 'auftrag';
         },
-       CompanyProfiles: {
+        CompanyProfiles: {
             'solar-aspekt': {
                 name: 'SOLAR ASPEKT GmbH',
                 street: 'Am Kappengraben 10',
@@ -4491,57 +6944,508 @@
                 email: 'hallo@solar-aspekt.de',
                 web: 'www.solar-aspekt.de',
                 bank: 'Frankfurter Volksbank',
-                iban: 'DE83501900006401405966',
+                iban: 'DE83 5019 0000 6401 4059 66',
                 bic: 'FFVBDEFF',
                 register: 'AG Bad Homburg HRB 12036',
                 tax: '003/243/5213/0',
                 vat: 'DE278340406',
-                gf: 'Yama Nuri',
+                gf: 'Geschäftsführer: Yama Nuri',
                 contactPerson: 'Herr Yama Nuri',
                 logoUrl: "{{ asset('logo/logo.png') }}"
             },
             'werk-studio': {
-                name: 'Werk-Studio GmbH',
+                name: 'WERK STUDIO Baukonzept GmbH',
                 street: 'Am Kappengraben 10', 
                 city: '61273 Wehrheim',
                 color: '#a79e86',
                 secondColor: '#672866', 
                 phone: '0 60 81 / 53 25',
-                whatsapp: '0 60 81/68 288 72',
-                email: 'kontact@werk-studio.de',
+                whatsapp: '',
+                email: 'kontakt@werk-studio.de',
                 web: 'www.werk-studio.de',
                 bank: 'Frankfurter Volksbank',
-                iban: 'DE52501900006501401593',
+                iban: 'DE52 5019 0000 6501 4015 93',
                 bic: 'FFVBDEFF',
-                register: 'AG Bad homburg HRB 13039',
+                register: 'AG Bad Homburg HRB 13039',
                 tax: 'DE297503456',
                 vat: '',
-                gf: 'Kathrin Nuri',
+                gf: 'Geschäftsführerin: Kathrin Nuri',
                 contactPerson: 'Frau Kathrin Nuri',
                 logoUrl: "{{ asset('logo/werk-studio.png') }}"
             }
         },
 
+        Attachments: {
+            isPinned: false,
+            items: [],
+            folderId: null,
+            _sortable: null,
+            filterQuery: '',
+
+            init() {
+                // Initialize Resizer
+                const resizer = document.getElementById('attachment-resizer');
+                const sidebar = document.getElementById('sidebar-attachments');
+                let startX, startWidth;
+
+                resizer.addEventListener('mousedown', (e) => {
+                    startX = e.clientX;
+                    startWidth = sidebar.getBoundingClientRect().width;
+                    document.documentElement.addEventListener('mousemove', doDrag, false);
+                    document.documentElement.addEventListener('mouseup', stopDrag, false);
+                    resizer.classList.add('active');
+                });
+
+                const doDrag = (e) => {
+                    // Because sidebar is on the right, dragging left increases width
+                    let newWidth = startWidth + (e.clientX - startX);
+                    if (newWidth < 280) newWidth = 280;
+                    if (newWidth > 1200) newWidth = 1200;
+                    sidebar.style.width = newWidth + 'px';
+                    sidebar.style.transition = 'none';
+                };
+
+                const stopDrag = () => {
+                    document.documentElement.removeEventListener('mousemove', doDrag, false);
+                    document.documentElement.removeEventListener('mouseup', stopDrag, false);
+                    resizer.classList.remove('active');
+                    sidebar.style.transition = '';
+                };
+
+                // Hidden File Input Change
+                document.getElementById('attachment-file-input').addEventListener('change', (e) => {
+                    if (e.target.files.length) this.uploadFiles(e.target.files);
+                    e.target.value = '';
+                });
+            },
+
+           toggle() {
+                const el = document.getElementById('sidebar-attachments');
+                if (el.classList.contains('collapsed')) {
+                    el.classList.remove('collapsed');
+                    if (this.isPinned) el.classList.add('pinned');
+                    this.loadFolderData(); // Loads ID and fetches files!
+                } else {
+                    el.classList.add('collapsed');
+                }
+            },
+
+            togglePin() {
+                this.isPinned = !this.isPinned;
+                const el = document.getElementById('sidebar-attachments');
+                const btn = document.getElementById('btn-pin-attachments');
+
+                if (this.isPinned) {
+                    el.classList.add('pinned');
+                    el.classList.remove('unpinned');
+                    btn.classList.add('text-[#93c21c]', 'bg-slate-100');
+                    btn.classList.remove('text-slate-400');
+                } else {
+                    el.classList.add('unpinned');
+                    el.classList.remove('pinned');
+                    btn.classList.remove('text-[#93c21c]', 'bg-slate-100');
+                    btn.classList.add('text-slate-400');
+                }
+            },
+
+            loadFolderData() {
+                if (!this.folderId && State.prefill && State.prefill.offer_folder_id) {
+                    this.folderId = State.prefill.offer_folder_id;
+                }
+
+                // UNCOMMENTED AND FIXED: Always fetch if we have an ID
+                if (this.folderId) {
+                    this.fetchAttachments();
+                }
+            },
+
+            handleDrop(e) {
+                e.preventDefault();
+                e.currentTarget.classList.remove('border-[#93c21c]', 'bg-[#f7fee7]');
+                if (e.dataTransfer.files.length) {
+                    this.uploadFiles(e.dataTransfer.files);
+                }
+            },
+
+            async uploadFiles(files) {
+                this.loadFolderData();
+                if (!this.folderId) {
+                    alert("Achtung: Angebot muss erst gespeichert werden, damit ein Ordner für Dateien existiert.");
+                    return;
+                }
+
+                const formData = new FormData();
+                Array.from(files).forEach(f => formData.append('files[]', f));
+                if (State.offerId && State.offerId !== 'NEW') {
+                    formData.append('offer_id', State.prefill.offer_id);
+                }
+
+                const list = document.getElementById('attachment-list');
+                const loadingHtml = `<div id="att-loading" class="text-sm font-bold text-center text-[#93c21c] py-4"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Lade Dateien hoch...</div>`;
+                list.insertAdjacentHTML('afterbegin', loadingHtml);
+
+                try {
+                    const res = await fetch(`/admin/offers/folders/${this.folderId}/attachments/upload`, {
+                        method: 'POST',
+                        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' },
+                        body: formData
+                    });
+
+                    const data = await res.json();
+                    if (data.success) {
+                        this.items = data.attachments || [];
+                        this.renderList();
+                    } else {
+                        alert(data.message || 'Fehler beim Upload');
+                    }
+                } catch (e) {
+                    console.error("Upload error", e);
+                    alert("Netzwerkfehler beim Upload.");
+                } finally {
+                    document.getElementById('att-loading')?.remove();
+                }
+            },
+
+            async fetchAttachments() {
+                if (!this.folderId) return;
+                try {
+                    // Only fetch if your backend has an endpoint for it. If not, the list will just populate on upload.
+                    const res = await fetch(`/admin/offers/folders/${this.folderId}/attachments`, { headers: { 'Accept': 'application/json' } });
+                    if (res.ok) {
+                        const data = await res.json();
+                        this.items = data.attachments || data || [];
+                        this.renderList();
+                    }
+                } catch (e) {
+                    console.log("No fetch endpoint provided. Waiting for manual uploads.", e);
+                }
+            },
+
+            async deleteAttachment(id) {
+                if (!confirm("Möchten Sie diese Datei wirklich unwiderruflich löschen?")) return;
+                try {
+                    const res = await fetch(`/admin/offers/folders/${this.folderId}/attachments/${id}`, {
+                        method: 'DELETE',
+                        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' }
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        this.items = data.attachments || [];
+                        this.renderList();
+                    }
+                } catch (e) { console.error(e); }
+            },
+
+            viewFile(url, type, name) {
+                // Update to target the INLINE viewer instead of the modal
+                const viewer = document.getElementById('inline-attachment-viewer');
+                const titleEl = document.getElementById('inline-viewer-title');
+                const contentEl = document.getElementById('inline-viewer-content');
+
+                titleEl.innerText = name;
+
+                if (type === 'pdf') {
+                    contentEl.innerHTML = `<iframe src="${url}" class="w-full h-full bg-white border-0"></iframe>`;
+                } else {
+                    contentEl.innerHTML = `<img src="${url}" class="max-w-full max-h-full object-contain">`;
+                }
+
+                // Reveal the inline viewer
+                viewer.classList.remove('hidden');
+                viewer.classList.add('flex');
+            },
+
+            closeViewer() {
+                document.getElementById('attachment-viewer-modal').classList.add('hidden');
+                document.getElementById('viewer-content').innerHTML = '';
+            },
+
+            updateBadge() {
+                const badge = document.getElementById('badge-attachments');
+                if (!badge) return;
+                const count = this.items ? this.items.length : 0;
+
+                if (count > 0) {
+                    badge.innerText = count;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            },
+
+            // NEW: Method triggered by the search input
+            filterList() {
+                const input = document.getElementById('attachment-search');
+                if (input) {
+                    this.filterQuery = input.value.toLowerCase();
+                    this.renderList(); // Re-render with active filter
+                }
+            },
+
+            renderList() {
+                this.updateBadge(); // Update the counter first
+                
+                const list = document.getElementById('attachment-list');
+                if (!this.items || this.items.length === 0) {
+                    list.innerHTML = `<div class="text-sm font-bold text-center text-slate-400 py-10"><i class="fa-solid fa-folder-open text-2xl mb-2 block"></i> Ordner ist leer.</div>`;
+                    return;
+                }
+
+                // Filter items based on the search input
+                const filteredItems = this.items.filter(it => 
+                    (it.original_name || '').toLowerCase().includes(this.filterQuery)
+                );
+
+                if (filteredItems.length === 0) {
+                    list.innerHTML = `<div class="text-xs text-center text-slate-400 font-bold py-10">Keine Dokumente für "${App.escapeHtml(this.filterQuery)}" gefunden.</div>`;
+                    return;
+                }
+
+                list.innerHTML = filteredItems.map(it => `
+                    <div data-id="${it.id}" class="bg-white border border-slate-200 rounded-xl p-3 shadow-sm flex items-center justify-between group cursor-pointer hover:border-[#93c21c] transition-colors" onclick="App.Attachments.viewFile('${it.file_url}', '${it.file_type}', '${it.original_name}')">
+                        <div class="flex items-center gap-3 overflow-hidden">
+                            <div class="cursor-grab text-slate-300 hover:text-[#000000] p-1"><i class="fa-solid fa-grip-vertical"></i></div>
+                            <div class="w-10 h-10 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 text-slate-500">
+                                ${it.file_type === 'pdf' ? '<i class="fa-solid fa-file-pdf text-red-500 text-xl"></i>' : '<i class="fa-solid fa-file-image text-blue-500 text-xl"></i>'}
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-xs font-bold text-[#000000] truncate" title="${it.original_name}">${it.original_name}</div>
+                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${(it.file_size / 1024).toFixed(1)} KB</div>
+                            </div>
+                        </div>
+                        <button onclick="event.stopPropagation(); App.Attachments.deleteAttachment(${it.id})" class="text-slate-300 hover:text-red-500 p-2 opacity-0 group-hover:opacity-100 transition-all rounded-lg hover:bg-red-50">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+
+                // Initialize Sortable for Drag and Drop (Only enable if NOT currently searching)
+                if (this._sortable) this._sortable.destroy();
+                if (!this.filterQuery) {
+                    this._sortable = new Sortable(list, {
+                        animation: 150,
+                        handle: '.fa-grip-vertical',
+                        onEnd: async (evt) => {
+                            const ids = Array.from(list.children).map(el => el.dataset.id).filter(id => id);
+                            await fetch(`/admin/offers/folders/${this.folderId}/attachments/sort`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' },
+                                body: JSON.stringify({ ids: ids })
+                            });
+                        }
+                    });
+                }
+            }
+        },
         // This must be directly under App, NOT inside CompanyProfiles
         selectBranch: function(key) {
-            const profile = App.CompanyProfiles[key];
+            const profile = App.getCompanyProfile(key);
             if (!profile) return;
 
-            // Update UI Inputs
+            State.selectedBranch = profile;
+            State.selectedBranchId = profile.id || null;
+            State.companyName = profile.name || profile.branch || 'SOLAR ASPEKT';
+            State.brandLogoUrl = profile.logoUrl || '';
+            State.brandColor = profile.color || '#93c21c';
+            State.secondColor = profile.secondColor || State.brandColor;
+            State.brandMode = State.brandLogoUrl ? 'image' : 'text';
+            State.companyFooter = App.getCompanyFooterSnapshot(profile);
+
             const colorInput = document.getElementById('wiz-brand-color');
             const nameInput = document.getElementById('wiz-brand-name');
-            const logoSelect = document.getElementById('wiz-brand-logo');
+            const logoInput = document.getElementById('wiz-brand-logo');
 
-            if (colorInput) colorInput.value = profile.color;
-            if (nameInput) nameInput.value = profile.name;
-            if (logoSelect) logoSelect.value = profile.logoUrl;
+            if (colorInput) colorInput.value = State.brandColor;
+            if (nameInput) nameInput.value = State.companyName;
+            if (logoInput) logoInput.value = State.brandLogoUrl;
 
-            // Force image mode if a logo is present
-            const modeRadio = document.querySelector('input[name="wiz-brand-mode"][value="image"]');
+            const modeRadio = document.querySelector(`input[name="wiz-brand-mode"][value="${State.brandMode}"]`);
             if (modeRadio) modeRadio.checked = true;
 
-            // Apply visual changes instantly!
+            document.documentElement.style.setProperty('--brand-color', State.brandColor);
+            document.documentElement.style.setProperty('--second-color', State.secondColor);
+            App.applyOfferProcessSoftBg(profile);
+
+            App.updateCompanyFooter(profile);
             App.updateBranding();
+        },
+
+        applyLoadedTemplateMetaToSaveModal: () => {
+            const meta = State.loadedTemplateMeta || {};
+
+            if (!State.loadedTemplateId && !Object.keys(meta).length) {
+                return;
+            }
+
+            const setInput = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined && value !== null) {
+                    el.value = value;
+                }
+            };
+
+            const setSelect = (id, value) => {
+                const el = document.getElementById(id);
+                if (!el || value === undefined || value === null || value === '') return;
+
+                const val = String(value);
+                if (!Array.from(el.options).some(opt => String(opt.value) === val)) {
+                    const opt = document.createElement('option');
+                    opt.value = val;
+                    opt.textContent = meta[id.replace('save-template-', '') + '_name'] || val;
+                    el.appendChild(opt);
+                }
+
+                el.value = val;
+                if (window.jQuery && $.fn.select2) {
+                    $('#' + id).val(val).trigger('change.select2');
+                }
+            };
+
+            setInput('save-template-name', State.loadedTemplateName || meta.name || '');
+            setInput('save-template-desc', meta.description || '');
+
+            setSelect('save-template-department', meta.department_id);
+            setSelect('save-template-article-group', meta.article_group_id);
+            setSelect('save-template-brand', meta.brand_id);
+            setSelect('save-template-distributor', meta.distributor_id);
+        },
+
+        loadTemplateForEditingFromUrl: async () => {
+            const params = new URLSearchParams(window.location.search);
+            const templateId = params.get('template_id') || params.get('edit_template_id') || params.get('template');
+            const requestedTemplateMode = params.get('mode') === 'template' || params.get('edit_template') === '1' || !!templateId;
+
+            if (!templateId || !requestedTemplateMode) {
+                return false;
+            }
+
+            const checkbox = document.getElementById('wiz-template-mode');
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+
+            const startBtn = document.getElementById('wiz-btn-start');
+            if (startBtn) {
+                startBtn.disabled = true;
+                startBtn.classList.add('btn-disabled');
+                startBtn.querySelector('span') && (startBtn.querySelector('span').innerText = 'Vorlage wird geladen...');
+            }
+
+            try {
+                const response = await fetch(`/offers/templates/${templateId}`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'same-origin'
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || (!data.success && !data.template && !data.sections)) {
+                    throw new Error(data.message || 'Vorlage konnte nicht geladen werden.');
+                }
+
+                const template = data.template || data;
+                const loadedSections = template.sections || data.sections || [];
+                const loadedImages = template.placed_images || data.placed_images || [];
+
+                State.loadedTemplateId = Number(template.id || templateId);
+                State.loadedTemplateName = template.name || `Vorlage #${templateId}`;
+                State.loadedTemplateMeta = {
+                    id: State.loadedTemplateId,
+                    name: State.loadedTemplateName,
+                    description: template.description || '',
+                    department_id: template.department_id || null,
+                    article_group_id: template.article_group_id || null,
+                    brand_id: template.brand_id || null,
+                    distributor_id: template.distributor_id || null,
+                    department_name: template.department_name || '',
+                    article_group_name: template.article_group_name || '',
+                    brand_name: template.brand_name || '',
+                    distributor_name: template.distributor_name || ''
+                };
+
+                State.sections = JSON.parse(JSON.stringify(Array.isArray(loadedSections) ? loadedSections : []));
+                State.placedImages = JSON.parse(JSON.stringify(Array.isArray(loadedImages) ? loadedImages : []));
+                State.selectedItems = new Set();
+
+                State.coverTextHtml = template.cover_text_html || template.cover_text || '';
+                State.mainTitleHtml = template.main_title || template.main_title_html || '';
+                State.brandColor = template.brand_color || State.brandColor || '#93c21c';
+                State.brandMode = template.brand_mode || State.brandMode || 'text';
+                State.brandLogoUrl = template.brand_logo_url || State.brandLogoUrl || '';
+                State.companyName = template.company_name || State.companyName || 'SOLAR ASPEKT';
+                State.taxRate = Number(template.tax_rate || State.taxRate || 19);
+
+                State.prefill = {
+                    ...(State.prefill || {}),
+                    offer_id: null,
+                    offer_folder_id: null,
+                    offer_detail_id: null,
+                    customer_id: null,
+                    alternative_id: null,
+                    product_id: template.article_group_id || null,
+                    autoApplied: true
+                };
+
+                State.customer = {
+                    name: 'Vorlage',
+                    lastname: State.loadedTemplateName,
+                    customer_no: 'TEMPLATE'
+                };
+
+                State.object = {
+                    name: 'Vorlagenbearbeitung',
+                    items: []
+                };
+
+                const updateEl = (id, prop, value) => {
+                    const el = document.getElementById(id);
+                    if (el && value !== undefined && value !== null) el[prop] = value;
+                };
+
+                updateEl('doc-cover-text', 'innerHTML', State.coverTextHtml);
+                updateEl('doc-main-title', 'innerHTML', State.mainTitleHtml);
+                updateEl('wiz-brand-color', 'value', State.brandColor);
+                updateEl('wiz-brand-name', 'value', State.companyName);
+                updateEl('wiz-brand-logo', 'value', State.brandLogoUrl);
+
+                const modeRadio = document.querySelector(`input[name="wiz-brand-mode"][value="${State.brandMode}"]`);
+                if (modeRadio) modeRadio.checked = true;
+
+                document.documentElement.style.setProperty('--brand-color', State.brandColor);
+                document.documentElement.style.setProperty('--second-color', State.secondColor || State.brandColor);
+
+                if (typeof App.Wizard?.toggleTemplateMode === 'function') {
+                    App.Wizard.toggleTemplateMode(true);
+                }
+
+                if (typeof App.updateBranding === 'function') App.updateBranding();
+                if (typeof App.startQuote === 'function') App.startQuote();
+                if (App.Tabs && typeof App.Tabs.switch === 'function') App.Tabs.switch('list');
+                if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+                if (App.ListView && typeof App.ListView.render === 'function') App.ListView.render();
+
+                State.hasUnsavedChanges = false;
+
+                if (App.Bio && typeof App.Bio.addEntry === 'function') {
+                    App.Bio.addEntry('Vorlage geöffnet', `Die Vorlage "${State.loadedTemplateName}" wurde im Konfigurator geladen.`);
+                }
+
+                return true;
+            } catch (error) {
+                console.error('loadTemplateForEditingFromUrl failed:', error);
+                alert(error.message || 'Vorlage konnte nicht geladen werden.');
+                return false;
+            } finally {
+                if (startBtn) {
+                    startBtn.disabled = false;
+                    startBtn.classList.remove('btn-disabled');
+                    startBtn.querySelector('span') && (startBtn.querySelector('span').innerText = 'Starten');
+                }
+            }
         },
 
         init: () => {
@@ -4550,7 +7454,9 @@
 
             // --- 2. STANDARD INITIALISIERUNG ---
             document.getElementById('wiz-date').valueAsDate = new Date();
+            App.selectBranch(document.getElementById('wiz-company-select')?.value || window.DefaultBranchProfileKey || 'solar-aspekt');
             App.updateBranding();
+            App.Attachments.init();
             
             // Kurzer Timeout für Library-Modus
             setTimeout(() => App.switchLibraryMode('group_sets'), 0);
@@ -4602,8 +7508,15 @@
             // --- 4. DATA LOADING ---
             App.loadLaborOptions().catch(() => {});
             
-            App.applyWizardPrefillFromUrl()
-                .then(() => App.loadSavedDocumentIfAvailable())
+            App.loadTemplateForEditingFromUrl()
+                .then((templateLoaded) => {
+                    if (templateLoaded) {
+                        return null;
+                    }
+
+                    return App.applyWizardPrefillFromUrl()
+                        .then(() => App.loadSavedDocumentIfAvailable());
+                })
                 .catch(console.error);
         },
         isLockedSnapshot: () => {
@@ -4744,8 +7657,8 @@
             document.getElementById('save-quote-modal')?.classList.remove('hidden');
             const templateNameInput = document.getElementById('save-template-name');
             const templateDescInput = document.getElementById('save-template-desc');
-            if (templateNameInput) templateNameInput.value = '';
-            if (templateDescInput) templateDescInput.value = '';
+            if (templateNameInput) templateNameInput.value = State.loadedTemplateId ? (State.loadedTemplateName || State.loadedTemplateMeta?.name || '') : '';
+            if (templateDescInput) templateDescInput.value = State.loadedTemplateId ? (State.loadedTemplateMeta?.description || '') : '';
             
             // Lade-Indikator und Button zurücksetzen
             document.getElementById('save-loading-indicator')?.classList.add('hidden');
@@ -4776,6 +7689,7 @@
                         $('#save-template-distributor').html(buildOptions(responseData.distributors, 'id', 'name'));
 
                         window._templateOptionsLoaded = true;
+                        App.applyLoadedTemplateMetaToSaveModal();
                     }
                 } catch (err) {
                     console.error("Failed fetching dropdown data for save modal", err);
@@ -4794,8 +7708,164 @@
                         width: '100%',
                         dropdownParent: $('#save-quote-modal')
                     });
+
+                    App.applyLoadedTemplateMetaToSaveModal();
                 }
             }, 50);
+        },
+
+
+        resolveSaveContext: () => {
+            const params = new URLSearchParams(window.location.search);
+            const boot = window.OfferDocumentBootstrap || {};
+            const supplier = window.OfferSupplierConfig || {};
+            const prefill = State.prefill || {};
+            const objectItem = State.object?.items?.[0] || {};
+
+            const firstFilled = (...values) => {
+                for (const value of values) {
+                    if (value === null || value === undefined || value === '') continue;
+
+                    if (typeof value === 'number' && Number.isFinite(value) && value > 0) {
+                        return value;
+                    }
+
+                    const str = String(value).trim();
+                    if (!str || str === 'null' || str === 'undefined' || str === '-') continue;
+
+                    const parsed = Number(str);
+                    if (Number.isFinite(parsed) && parsed > 0) {
+                        return parsed;
+                    }
+
+                    return str;
+                }
+
+                return null;
+            };
+
+            const byName = (name) => document.querySelector(`[name="${name}"]`)?.value || null;
+            const byId = (id) => document.getElementById(id)?.value || null;
+
+            const customerId = firstFilled(
+                State.customer?.id,
+                State.customer_id,
+                State.custId,
+                prefill.customer_id,
+                boot.customer_id,
+                boot.customer?.id,
+                byId('customer_id'),
+                byId('wiz-customer-id'),
+                byId('selected_customer_id'),
+                byName('customer_id'),
+                params.get('customer_id')
+            );
+
+            const alternativeId = firstFilled(
+                objectItem.alternative_id,
+                State.object?.alternative_id,
+                State.object?.id,
+                State.alternative_id,
+                prefill.alternative_id,
+                boot.alternative_id,
+                byId('alternative_id'),
+                byId('object_id'),
+                byId('wiz-alternative-id'),
+                byId('selected_alternative_id'),
+                byName('alternative_id'),
+                byName('object_id'),
+                params.get('alternative_id'),
+                params.get('object_id')
+            );
+
+            const productId = firstFilled(
+                objectItem.product_id,
+                State.object?.product_id,
+                State.product_id,
+                prefill.product_id,
+                boot.product_id,
+                byId('product_id'),
+                byId('wiz-product-id'),
+                byId('selected_product_id'),
+                byName('product_id'),
+                params.get('product_id'),
+                params.get('article_group_id')
+            );
+
+            const offerId = firstFilled(
+                State.offerId !== 'NEW' ? State.offerId : null,
+                prefill.offer_id,
+                boot.offer_id,
+                supplier.offerId,
+                byId('offer_id'),
+                byId('doc-offer-id'),
+                byName('offer_id'),
+                params.get('offer_id')
+            );
+
+            const offerFolderId = firstFilled(
+                prefill.offer_folder_id,
+                boot.offer_folder_id,
+                boot.folder_id,
+                supplier.folderId,
+                byId('offer_folder_id'),
+                byId('doc-offer-folder-id'),
+                byName('offer_folder_id'),
+                params.get('offer_folder_id'),
+                params.get('folder_id')
+            );
+
+            const hasObjectInState = !!(State.object && Array.isArray(State.object.items) && State.object.items.length);
+
+            return {
+                offer_id: offerId,
+                offer_folder_id: offerFolderId,
+                offer_detail_id: firstFilled(prefill.offer_detail_id, boot.offer_detail_id, byId('offer_detail_id'), byName('offer_detail_id'), params.get('offer_detail_id'), params.get('detail_id')),
+                customer_id: customerId,
+                alternative_id: alternativeId,
+                product_id: productId,
+                hasCustomer: !!customerId,
+                hasObject: hasObjectInState || !!alternativeId || !!productId,
+                hasStateObject: hasObjectInState
+            };
+        },
+
+        syncSaveContextIntoState: () => {
+            const ctx = App.resolveSaveContext();
+
+            if (ctx.customer_id && (!State.customer || !State.customer.id)) {
+                State.customer = {
+                    ...(State.customer || {}),
+                    id: ctx.customer_id,
+                    display_name: State.customer?.display_name || State.customer?.name || 'Kunde #' + ctx.customer_id
+                };
+            }
+
+            if ((ctx.alternative_id || ctx.product_id) && (!State.object || !Array.isArray(State.object.items) || !State.object.items.length)) {
+                State.object = {
+                    ...(State.object || {}),
+                    id: ctx.alternative_id || State.object?.id || null,
+                    alternative_id: ctx.alternative_id || State.object?.alternative_id || null,
+                    product_id: ctx.product_id || State.object?.product_id || null,
+                    items: [{
+                        ...(State.object?.items?.[0] || {}),
+                        alternative_id: ctx.alternative_id || State.object?.items?.[0]?.alternative_id || null,
+                        product_id: ctx.product_id || State.object?.items?.[0]?.product_id || null
+                    }]
+                };
+            }
+
+            State.prefill = {
+                ...(State.prefill || {}),
+                offer_id: ctx.offer_id || State.prefill?.offer_id || null,
+                offer_folder_id: ctx.offer_folder_id || State.prefill?.offer_folder_id || null,
+                offer_detail_id: ctx.offer_detail_id || State.prefill?.offer_detail_id || null,
+                customer_id: ctx.customer_id || State.prefill?.customer_id || null,
+                alternative_id: ctx.alternative_id || State.prefill?.alternative_id || null,
+                product_id: ctx.product_id || State.prefill?.product_id || null
+            };
+
+            return App.resolveSaveContext();
         },
 
         performSave: async () => {
@@ -4829,9 +7899,19 @@
                 return;
             }
 
+            const saveContext = App.syncSaveContextIntoState();
+
             if (!isTemplate && !isUpdatingTemplate && !isWizardInTemplateMode) {
-                if (!State.customer || !State.object || !State.object.items?.length) {
-                    alert('Fehler: Für ein Angebot muss ein Kunde und ein Objekt im Start-Tab ausgewählt sein.');
+                if (!saveContext.hasCustomer || !saveContext.hasObject) {
+                    console.warn('[Offer Save] Missing save context', {
+                        saveContext,
+                        prefill: State.prefill,
+                        customer: State.customer,
+                        object: State.object,
+                        url: window.location.href
+                    });
+
+                    alert('Fehler: Für ein Angebot muss ein Kunde und ein Objekt ausgewählt sein. IDs wurden nicht vollständig gefunden.');
                     return;
                 }
             }
@@ -4855,29 +7935,34 @@
                 template_name: templateName.trim(),
                 template_description: templateDesc.trim(),
                 
-                department_id: $('#save-template-department').val() || null,
-                article_group_id: $('#save-template-article-group').val() || null,
-                brand_id: $('#save-template-brand').val() || null,
-                distributor_id: $('#save-template-distributor').val() || null,
+                department_id: $('#save-template-department').val() || State.loadedTemplateMeta?.department_id || null,
+                article_group_id: $('#save-template-article-group').val() || State.loadedTemplateMeta?.article_group_id || null,
+                brand_id: $('#save-template-brand').val() || State.loadedTemplateMeta?.brand_id || null,
+                distributor_id: $('#save-template-distributor').val() || State.loadedTemplateMeta?.distributor_id || null,
                 
                 // 🛑 CRITICAL FIX: Strip the Offer ID if we are saving as a template so the backend cannot overwrite the Auftrag!
-                offer_id: (isTemplate || isUpdatingTemplate) ? null : (State.prefill?.offer_id || null),
-                offer_folder_id: (isTemplate || isUpdatingTemplate) ? null : (State.prefill?.offer_folder_id || null),
-                customer_id: State.customer?.id || null,
-                product_id: State.object?.items?.[0]?.product_id || null,
-                alternative_id: State.object?.items?.[0]?.alternative_id || null,
+                offer_id: (isTemplate || isUpdatingTemplate) ? null : (saveContext.offer_id || null),
+                offer_folder_id: (isTemplate || isUpdatingTemplate) ? null : (saveContext.offer_folder_id || null),
+                offer_detail_id: (isTemplate || isUpdatingTemplate) ? null : (saveContext.offer_detail_id || State.prefill?.offer_detail_id || null),
+                customer_id: saveContext.customer_id || null,
+                product_id: saveContext.product_id || null,
+                alternative_id: saveContext.alternative_id || null,
                 
                 service: State.docType,
+                main_title: State.mainTitleHtml,
                 cover_text: State.coverTextHtml,
                 sections: State.sections,
                 canvas_images: State.placedImages,
                 biography: State.biographyItems,
+                roof_layout: App.RoofLayout?.payload?.() || State.roofLayout || null,
 
                 branding: {
                     color: State.brandColor,
                     mode: State.brandMode,
                     logo: State.brandLogoUrl,
-                    company: State.companyName
+                    company: State.companyName,
+                    branch_id: State.selectedBranchId || document.getElementById('wiz-company-select')?.value || null,
+                    footer: State.companyFooter || App.getCompanyFooterSnapshot()
                 },
                 total_net: totals.salesNet,
                 tax_rate: State.taxRate,
@@ -4909,6 +7994,14 @@
 
                 if (!response.ok || !result.success) {
                     throw new Error(result.message || 'Server-Fehler beim Speichern');
+                }
+
+                if (App.RoofLayout && typeof App.RoofLayout.persistAfterSave === 'function') {
+                    await App.RoofLayout.persistAfterSave(result, payload, {
+                        isTemplate,
+                        isUpdatingTemplate,
+                        templateName: templateName.trim()
+                    });
                 }
 
                 // 7. Post-Save State Cleanup
@@ -5138,7 +8231,8 @@
             State.sections[sIdx].items.push({
                 name: 'Wichtiger Hinweis', desc: 'Bitte beachten Sie folgende Information...',
                 price: 0, ek: 0, marginPercent: 0, qty: 0, unit: '',
-                kind: 'note', status: 'normal', subItems: [], active: true, print_hidden: true
+                kind: 'note', status: 'normal', subItems: [], active: true, print_hidden: true,
+                origin_type: 'manual', source_type: 'manual', type_locked: false, _manual: true
             });
             App.renderQuotePage();
         },
@@ -5166,10 +8260,15 @@
             if (key === 'print_hidden_labor') target.print_hidden_labor = val;
             
             if (key === 'kind') {
+                if (App.canChangeItemKind && !App.canChangeItemKind(target)) {
+                    App.showToast ? App.showToast('Typ gesperrt', 'Dieser Artikel kommt aus einem Master Set, Group Set oder Produktkatalog. Der Typ kann nur bei manuellen Positionen geändert werden.', 'warning') : alert('Dieser Artikeltyp ist gesperrt. Nur manuelle Positionen können zu Lohn oder Hinweis geändert werden.');
+                    App.renderQuotePage(false);
+                    return;
+                }
                 target.kind = val;
                 // AUTO-APPLY DEFAULT MARGINS WHEN SWITCHING TYPE
                 target.marginPercent = App.getDefaultMargin(val);
-                target.unit = val === 'labor' ? 'Std' : 'Stk';
+                target.unit = val === 'labor' ? 'Std.' : 'Stk.';
                 
                 // ✅ NEW: Initialize labor structure if switched to Lohn
                 if (val === 'labor') {
@@ -5181,7 +8280,7 @@
                             qualification_id: null,
                             qualification_name: 'Neue Arbeitsleistung',
                             qty: 1,
-                            unit: 'Std',
+                            unit: 'Std.',
                             ek: 0,
                             margin_percent: App.getDefaultMargin('labor'),
                             rate: 0,
@@ -5206,7 +8305,7 @@
                     target.unit = 'Pauschal';
                     target.qty = 1;
                 } else {
-                    target.unit = target.kind === 'labor' ? 'Std' : 'Stk';
+                    target.unit = target.kind === 'labor' ? 'Std.' : 'Stk.';
                 }
             }
             App.renderQuotePage();
@@ -5280,7 +8379,8 @@
             setBtn(btnS, State.libraryMode === 'sets');
             setBtn(btnP, State.libraryMode === 'products');
 
-            App.renderSidebar();
+            State.libraryPage = 1;
+            App.reloadLibrarySidebar(false);
         },
 
         // -------------------------
@@ -5315,6 +8415,7 @@
                 return true;
                 },
                 onEnd: () => {
+                App.PageLibrary?.applyMiniThumbOrderFromNav?.();
                 App.applyThumbOrderToPages();
                 }
             });
@@ -5329,6 +8430,8 @@
         },
 
         pickImage: (obj, fallback = null) => {
+        if (obj?._imageRemoved === true || obj?.image_removed === true || obj?.removeImage === true) return '';
+
         const tryKeys = [
             'image', 'image_url', 'img', 'img_url',
             'photo', 'photo_url', 'thumbnail', 'thumb',
@@ -5358,39 +8461,38 @@
         if (!nav || !cont) return;
 
         // thumbs -> desired order (position pages only)
-        const desired = Array.from(nav.querySelectorAll('.thumb-wrapper'))
-            .map(w => Number(w.dataset.page || 0))
-            .filter(n => n >= 2); // exclude cover
+        const desired = Array.from(nav.querySelectorAll('.thumb-wrapper[data-page-kind="content"]'))
+            .map(w => Number(w.dataset.contentOrder || -1))
+            .filter(n => n >= 0);
 
-        // current pages in DOM
-        const pages = Array.from(cont.querySelectorAll('.a4-page.dynamic-page'));
-        // map current pageNo -> element (pageNo is based on current DOM order: 2..)
-        const byPageNo = new Map();
-        pages.forEach((el, idx) => byPageNo.set(idx + 2, el));
+        // Only normal offer content pages are handled here.
+        // Roof and Library pages have their own saved position/order and must not corrupt State.sections.
+        const pages = Array.from(cont.querySelectorAll('.a4-page.dynamic-page:not(.page-library-a4-page):not(.roof-layout-page)'))
+            .filter(el => !el.querySelector('.pdf-offer-sign-title'));
+        const byContentOrder = new Map();
+        pages.forEach((el, idx) => byContentOrder.set(idx, el));
 
-        // 1) reorder DOM pages to match desired order
         const fragment = document.createDocumentFragment();
-        desired.forEach(pageNo => {
-            const el = byPageNo.get(pageNo);
+        desired.forEach(orderNo => {
+            const el = byContentOrder.get(orderNo);
             if (el) fragment.appendChild(el);
         });
-        // append any leftover pages (safety)
         pages.forEach(el => { if (!fragment.contains(el)) fragment.appendChild(el); });
 
-        cont.appendChild(fragment);
+        if (fragment.childNodes.length) cont.appendChild(fragment);
 
         // 2) persist order in State.sections by moving "segments" (split by _pageBreak)
         // current segments in State.sections correspond to current logical pages (2..)
         const segs = App._buildPageSegments(); // already exists in your code
 
-        // build mapping oldPageNo -> segment
-        // pageNo 2 => segs[0], pageNo 3 => segs[1], ...
-        const segByPageNo = new Map();
-        segs.forEach((seg, i) => segByPageNo.set(i + 2, seg));
+        // build mapping contentOrder -> segment
+        // contentOrder 0 => segs[0], contentOrder 1 => segs[1], ...
+        const segByContentOrder = new Map();
+        segs.forEach((seg, i) => segByContentOrder.set(i, seg));
 
         // create reordered segments list
         const newSegs = desired
-            .map(pn => segByPageNo.get(pn))
+            .map(orderNo => segByContentOrder.get(orderNo))
             .filter(Boolean);
 
         // rebuild sections array with breaks between segments (no leading break)
@@ -5713,6 +8815,33 @@
                 document.getElementById('desc-modal')?.classList.remove('hidden');
             },
 
+            openMainTitleModal: () => {
+                const titleEl = document.getElementById('desc-modal-title');
+                if (titleEl) titleEl.innerText = 'Dokumententitel bearbeiten';
+
+                const quill = App.initDescQuill();
+
+                let html = (State.mainTitleHtml || '').toString().trim();
+
+                // Fallback to reading the DOM if state is empty
+                if (!html) {
+                    const domEl = document.getElementById('doc-main-title');
+                    html = domEl ? domEl.innerHTML.trim() : '';
+                }
+
+                quill.setContents([]);
+                if (html) {
+                    quill.clipboard.dangerouslyPasteHTML(html);
+                } else {
+                    quill.setText('');
+                }
+
+                App._richEditorMode = 'main_title';
+                App._descEditing = null;
+
+                document.getElementById('desc-modal')?.classList.remove('hidden');
+            },
+
             openCoverTextModal: () => {
                 const titleEl = document.getElementById('desc-modal-title');
                 if (titleEl) titleEl.innerText = 'Anschreiben / Kundentext bearbeiten';
@@ -5750,6 +8879,21 @@
 
                 let html = (App._descQuill.root.innerHTML || '').trim();
                 if (html === '<p><br></p>') html = '';
+ 
+               // MAIN TITLE MODE
+                if (App._richEditorMode === 'main_title') {
+                    State.mainTitleHtml = html;
+                    
+                    // FIX: Actively push the saved HTML into the static Page 1 element!
+                    const mainTitleEl = document.getElementById('doc-main-title');
+                    if (mainTitleEl) {
+                        mainTitleEl.innerHTML = html || 'TITEL EINGEBEN...';
+                    }
+
+                    App.closeDescModal();
+                    App.renderQuotePage();
+                    return;
+                }
 
                 // COVER LETTER MODE
                 if (App._richEditorMode === 'cover') {
@@ -5789,6 +8933,7 @@
             initDescQuill: () => {
                 if (App._descQuill) return App._descQuill;
 
+                // 1. Register Custom Fonts
                 const Font = Quill.import('formats/font');
                 Font.whitelist = [
                     'sans-serif',
@@ -5800,10 +8945,20 @@
                 ];
                 Quill.register(Font, true);
 
+                // 2. Register Custom Font Sizes
                 const Size = Quill.import('attributors/style/size');
-                Size.whitelist = ['12px', '14px', '16px', '18px', '24px', '32px'];
+                Size.whitelist = ['6px', '8px', '10px', '12px', '14px', '16px', '18px', '24px', '32px'];
                 Quill.register(Size, true);
 
+                // 3. Register Custom Line Spacing (Line Height)
+                const Parchment = Quill.import('parchment');
+                const LineHeightStyle = new Parchment.Attributor.Style('lineHeight', 'line-height', {
+                    scope: Parchment.Scope.BLOCK,
+                    whitelist: ['1.0', '1.2', '1.5', '1.8', '2.0', '2.5', '3.0']
+                });
+                Quill.register(LineHeightStyle, true);
+
+                // 4. Initialize Quill Editor
                 App._descQuill = new Quill('#desc-quill', {
                     theme: 'snow',
                     placeholder: 'Text eingeben …',
@@ -5812,6 +8967,7 @@
                             container: [
                                 [{ font: Font.whitelist }],
                                 [{ size: Size.whitelist }],
+                                [{ lineHeight: LineHeightStyle.whitelist }], // <-- New Line Spacing Dropdown
                                 [{ header: [1, 2, 3, 4, false] }],
                                 ['bold', 'italic', 'underline', 'strike'],
                                 [{ color: [] }, { background: [] }],
@@ -5840,7 +8996,6 @@
 
                 return App._descQuill;
             },
-
             
         // --- WIZARD API LOGIC ---
        
@@ -5896,18 +9051,21 @@
                 const gsId = detailsEl.dataset.gsId;
                 if (!gsId) return;
 
-                // prevent double-load
-                if (detailsEl.dataset.loaded === '1') return;
+                // prevent double-load, unless the library was explicitly reloaded
+                const forceReload = detailsEl.dataset.forceReload === '1' || State.libraryForceReload === true;
+                if (detailsEl.dataset.loaded === '1' && !forceReload) return;
+                detailsEl.dataset.forceReload = '0';
 
                 const box = detailsEl.querySelector(`#gs-sets-${gsId}`);
                 if (!box) return;
 
-                box.innerHTML = `<div class="text-xs text-slate-400 flex items-center gap-2">
+                box.innerHTML = `<div class="text-xs text-[#000000] flex items-center gap-2">
                     <i class="fa-solid fa-spinner fa-spin"></i> Lade Sets…
                 </div>`;
 
                 const url = new URL(`${API_BASE}/master-set-groups/${gsId}`, window.location.origin);
                 url.searchParams.set('context', 'angebot');
+                url.searchParams.set('_', Date.now());
 
                 const res = await fetch(url.toString(), { headers: { Accept: 'application/json' } });
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -5946,15 +9104,15 @@
                         <div class="flex-1 min-w-0">
                             <div class="flex items-start justify-between gap-2">
                             <div class="min-w-0">
-                                <div class="text-[11px] font-bold text-slate-800 truncate">${esc(ms.name || `Set #${ms.id}`)}</div>
-                                <div class="text-[10px] text-dark-600 mt-0.5 line-clamp-2">${esc(preview(ms.description || '', 140))}</div>
+                                <div class="text-[11px] font-bold text-[#000000] truncate">${esc(ms.name || `Set #${ms.id}`)}</div>
+                                <div class="text-[10px] text-[#000000] mt-0.5 line-clamp-2">${esc(preview(ms.description || '', 140))}</div>
                             </div>
                             <button type="button" onclick="App.openSetModal('${ms.id}')"
                                 class="text-slate-300 hover:text-[#93c21c]" title="Set anzeigen">
                                 <i class="fa-solid fa-circle-info"></i>
                             </button>
                             </div>
-                            <div class="flex items-center gap-2 text-[10px] text-dark-600 mt-1">
+                            <div class="flex items-center gap-2 text-[10px] text-[#000000] mt-1">
                             <span class="text-[9px] font-black text-[#93c21c]">SET</span>
                             </div>
                         </div>
@@ -5963,7 +9121,7 @@
                     };
  
                 if (!sets.length) {
-                    box.innerHTML = `<div class="text-xs text-slate-400">Keine Sets in dieser Gruppe.</div>`;
+                    box.innerHTML = `<div class="text-xs text-[#000000]">Keine Sets in dieser Gruppe.</div>`;
                 } else {
                     box.innerHTML = sets
                         .slice()
@@ -5998,7 +9156,7 @@
                         data.items.forEach(c => {
                             const div = document.createElement('div');
                             div.className = "dropdown-item p-2 hover:bg-[#f4f9e8] cursor-pointer border-b border-slate-50 last:border-0";
-                            div.innerHTML = `<div class="font-bold text-slate-800 text-sm">${c.display_name}</div><div class="text-xs text-dark-600">${c.street || ''}, ${c.city || ''}</div>`;
+                            div.innerHTML = `<div class="font-bold text-[#000000] text-sm">${c.display_name}</div><div class="text-xs text-[#000000]">${c.street || ''}, ${c.city || ''}</div>`;
                             div.onclick = () => App.Wizard.selectCustomer(c);
                             drop.appendChild(div);
                         });
@@ -6221,12 +9379,14 @@
         },
 
         // --- EDITOR LOGIC ---
-        renderSidebar: async () => {
+        renderSidebar: async (isAppending = false, forceReload = false) => {
             const list = document.getElementById('sidebar-list');
-            const q = (document.getElementById('sidebar-search')?.value || '').trim();
+            if (!list) return;
 
-            // UX: require 2 chars for search (but allow empty => show all)
-            if (q.length > 0 && q.length < 2) return;
+            if (!isAppending && State.libraryIsLoading) return;
+            if (!isAppending) State.libraryIsLoading = true;
+
+            const q = (document.getElementById('sidebar-search')?.value || '').trim();
 
             const esc = (s) => (s ?? '').toString()
                 .replaceAll('&', '&amp;')
@@ -6235,343 +9395,348 @@
                 .replaceAll('"', '&quot;')
                 .replaceAll("'", '&#039;');
 
-            const img = (src) => esc(src || 'https://placehold.co/100?text=IMG');
+            const jsArg = (v) => JSON.stringify(String(v ?? '')).replace(/</g, '\\u003C');
 
-            const stripHtml = (html) => (html ?? '').toString()
-                .replace(/<[^>]*>/g, ' ')
-                .replace(/\s+/g, ' ')
-                .trim();
-
-            const preview = (txt, max = 120) => {
-                const t = stripHtml(txt);
-                if (!t) return '';
-                return t.length > max ? (t.slice(0, max - 1) + '…') : t;
+            const stripHtml = (html) => {
+                const div = document.createElement('div');
+                div.innerHTML = (html ?? '').toString();
+                return (div.textContent || div.innerText || '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
             };
 
-            // one renderer for a draggable “card”
-            const card = ({ type, id, title, subtitle, badge, iconHtml, imageSrc, rightHtml }) => `
-                <div draggable="true"
-                    ondragstart="App.dragStart(event, '${id}', '${type}')"
-                    class="relative bg-white border border-slate-200 p-2 rounded shadow-sm cursor-grab hover:border-[#93c21c] flex items-start gap-2">
-                <div class="w-8 h-8 rounded bg-slate-100 flex-shrink-0 overflow-hidden mt-0.5 flex items-center justify-center">
-                    ${
-                    imageSrc
-                        ? `<img src="${img(imageSrc)}" class="w-full h-full object-cover">`
-                        : (iconHtml || `<i class="fa-solid fa-box text-slate-400"></i>`)
-                    }
-                </div>
+            const preview = (txt, max = 118) => {
+                const t = stripHtml(txt);
+                if (!t) return '';
+                return t.length > max ? `${t.slice(0, max - 1)}…` : t;
+            };
 
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-start justify-between gap-2">
-                    <div class="min-w-0">
-                        <div class="text-[11px] font-bold text-slate-800 truncate">${esc(title)}</div>
-                        ${subtitle ? `<div class="text-[10px] text-dark-600 mt-0.5 line-clamp-2">${esc(subtitle)}</div>` : ``}
-                    </div>
-                    ${rightHtml || ``}
-                    </div>
+            const money = (n) => {
+                const v = Number(n);
+                if (!Number.isFinite(v) || v <= 0) return '';
+                return v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+            };
 
-                    <div class="flex items-center gap-2 text-[10px] text-dark-600 mt-1">
-                    ${badge ? `<span class="text-[9px] font-black text-[#93c21c]">${esc(badge)}</span>` : ``}
+            const imageUrl = (item, fallback = null) => {
+                const src = App.pickImage ? App.pickImage(item, fallback) : (item?.image || item?.image_url || fallback || '');
+                return src || '';
+            };
+
+            const renderCard = ({ type, id, title, subtitle = '', imageSrc = '', chips = [], price = '', infoType = null }) => {
+                const canInfo = infoType === 'master_set' || infoType === 'product';
+                const infoAction = infoType === 'master_set'
+                    ? `App.openSetModal(${jsArg(id)})`
+                    : (infoType === 'product' ? `App.openProductModal(${jsArg(id)})` : '');
+
+                const chipHtml = chips
+                    .filter(Boolean)
+                    .slice(0, 4)
+                    .map(chip => `<span class="enterprise-chip ${esc(chip.tone || '')}">${chip.icon ? `<i class="${esc(chip.icon)}"></i>` : ''}${esc(chip.label || chip)}</span>`)
+                    .join('');
+
+                const imgHtml = imageSrc
+                    ? `<img src="${esc(imageSrc)}" class="enterprise-card-img" onerror="this.outerHTML='<div class=&quot;enterprise-card-img&quot;><i class=&quot;fa-solid fa-box&quot;></i></div>'">`
+                    : `<div class="enterprise-card-img"><i class="fa-solid ${type === 'master_set_group' ? 'fa-layer-group' : (type === 'master_set' ? 'fa-cubes' : 'fa-box-open')}"></i></div>`;
+
+                return `
+                    <div class="enterprise-lib-card"
+                         draggable="true"
+                         ondragstart='App.dragStart(event, ${jsArg(id)}, ${jsArg(type)})'>
+                        ${imgHtml}
+                        <div class="flex-1 min-w-0">
+                            <div class="enterprise-card-title">${esc(title || `${type} #${id}`)}</div>
+                            ${subtitle ? `<div class="enterprise-card-subtitle">${esc(subtitle)}</div>` : ''}
+                            ${chipHtml ? `<div class="enterprise-chip-row">${chipHtml}</div>` : ''}
+                        </div>
+                        <div class="enterprise-card-actions">
+                            ${price ? `<div class="enterprise-price-tag">${esc(price)}</div>` : ''}
+                            <button type="button"
+                                    class="enterprise-action-btn primary"
+                                    title="Zum Angebot hinzufügen"
+                                    onclick='event.stopPropagation(); App.handleQuickLibraryAdd(${jsArg(id)}, ${jsArg(type)})'>
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                            ${canInfo ? `
+                                <button type="button"
+                                        class="enterprise-action-btn"
+                                        title="Details anzeigen"
+                                        onclick='event.stopPropagation(); ${infoAction}'>
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </button>` : ''}
+                        </div>
                     </div>
-                </div>
-                </div>
-            `;
+                `;
+            };
+
+            if (q.length > 0 && q.length < 2) {
+                list.innerHTML = `
+                    <div class="enterprise-empty-state">
+                        <i class="fa-solid fa-keyboard text-xl text-slate-300 mb-2 block"></i>
+                        Bitte mindestens 2 Zeichen eingeben.
+                    </div>
+                `;
+                if (!isAppending) State.libraryIsLoading = false;
+                return;
+            }
 
             try {
-                list.innerHTML = `
-                <div class="text-xs text-slate-400 p-2">
-                    <i class="fa-solid fa-spinner fa-spin mr-2"></i> Lade Bibliothek...
-                </div>
-                `;
+                if (!isAppending) {
+                    list.innerHTML = `
+                        <div class="enterprise-loading-state">
+                            <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Bibliothek wird geladen...
+                        </div>
+                    `;
+                }
 
-                // Decide endpoint based on libraryMode
-               const mode = (State.libraryMode || 'group_sets'); // 'group_sets' | 'sets' | 'products'
+                const mode = State.libraryMode || 'group_sets';
+                let endpoint = `${API_BASE}/wizard/products`;
 
-                let endpoint = `${API_BASE}/wizard/products`; // fallback
                 if (mode === 'group_sets') endpoint = `${API_BASE}/wizard/group-sets`;
-                if (mode === 'sets') endpoint = `${API_BASE}/wizard/products`;      // your old mixed endpoint (sets+products grouped)
-                if (mode === 'products') endpoint = `${API_BASE}/wizard/products-list`; // NEW: flat product list w/ brand+distributor+price
-
+                if (mode === 'sets') endpoint = `${API_BASE}/wizard/products`;
+                if (mode === 'products') endpoint = `${API_BASE}/wizard/products-list`;
 
                 const url = new URL(endpoint, window.location.origin);
                 url.searchParams.set('q', q);
                 url.searchParams.set('context', 'angebot');
+                url.searchParams.set('page', State.libraryPage || 1);
+                url.searchParams.set('_', Date.now());
+                if (forceReload) url.searchParams.set('force_reload', '1');
 
-                const response = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
+                const response = await fetch(url.toString(), { headers: { Accept: 'application/json' } });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 const data = await response.json();
-                // ------------------------------
-                // MODE A) GROUP SETS TAB
-                // Each GROUP SET is collapsible, not article_group.
-                // Supports:
-                // - Drag whole group set (type: master_set_group) via drag-handle
-                // - Drag single set inside (type: master_set)
-                // Lazy-load sets on first expand if not provided by API.
-                // ------------------------------
-                if (mode === 'group_sets') {
-                    // Your current backend shape is:
-                    // { groups: [ { article_group, image, group_sets:[ {id,name,color,description,master_sets_count, master_sets?[]} ] } ] }
-                    // We'll flatten it into group_sets[] and keep article_group only as a small label.
-                    const apiGroups = Array.isArray(data.groups) ? data.groups : [];
+                State.libraryLastPage = Number(data.last_page || 1);
 
+                const applyHtmlWithPagination = (html) => {
+                    if (isAppending) {
+                        list.querySelector('#btn-load-more')?.remove();
+                        list.insertAdjacentHTML('beforeend', html);
+                    } else {
+                        list.innerHTML = html;
+                    }
+
+                    if ((State.libraryPage || 1) < State.libraryLastPage) {
+                        list.insertAdjacentHTML('beforeend', `
+                            <button id="btn-load-more" type="button" onclick="State.libraryPage++; App.renderSidebar(true)" class="enterprise-load-more">
+                                <i class="fa-solid fa-chevron-down mr-2"></i> Mehr laden
+                            </button>
+                        `);
+                    }
+                };
+
+                let html = '';
+
+                if (mode === 'group_sets') {
+                    const apiGroups = Array.isArray(data.groups) ? data.groups : [];
                     const flat = [];
-                    apiGroups.forEach(g => {
-                        const ag = (g.article_group || 'Ohne Gruppe').trim();
-                        const groupImage = g.image || null;
-                        const groupSets = Array.isArray(g.group_sets) ? g.group_sets : [];
+
+                    apiGroups.forEach(group => {
+                        const articleGroup = (group.article_group || 'Ohne Gewerk').toString().trim();
+                        const groupImage = group.image || null;
+                        const groupSets = Array.isArray(group.group_sets) ? group.group_sets : [];
 
                         groupSets.forEach(gs => {
                             flat.push({
                                 id: gs.id,
-                                name: gs.name || `Group #${gs.id}`,
+                                name: gs.name || `Group Set #${gs.id}`,
                                 description: gs.description || '',
                                 color: gs.color || '',
-                                article_group: ag,
+                                article_group: articleGroup,
                                 image: groupImage,
-                                master_sets_count: Number(gs.master_sets_count || 0),
-                                master_sets: Array.isArray(gs.master_sets) ? gs.master_sets : null // may be null -> lazy load
+                                master_sets_count: Number(gs.master_sets_count || (Array.isArray(gs.master_sets) ? gs.master_sets.length : 0)),
+                                master_sets: Array.isArray(gs.master_sets) ? gs.master_sets : []
                             });
                         });
                     });
 
-                    // search filter (extra safety, since API also filters)
-                    const qLow = (q || '').toLowerCase();
+                    const qLow = q.toLowerCase();
                     const filtered = qLow
-                        ? flat.filter(x =>
-                            (x.name || '').toLowerCase().includes(qLow) ||
-                            (stripHtml(x.description || '').toLowerCase().includes(qLow)) ||
-                            (x.article_group || '').toLowerCase().includes(qLow)
+                        ? flat.filter(item =>
+                            (item.name || '').toLowerCase().includes(qLow) ||
+                            stripHtml(item.description || '').toLowerCase().includes(qLow) ||
+                            (item.article_group || '').toLowerCase().includes(qLow)
                         )
                         : flat;
 
-                    filtered.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'de'));
+                    filtered.sort((a, b) => (a.article_group || '').localeCompare(b.article_group || '', 'de') || (a.name || '').localeCompare(b.name || '', 'de'));
 
-                    if (filtered.length === 0) {
-                        list.innerHTML = `<div class="text-xs text-slate-400 p-3">Keine Treffer.</div>`;
-                        return;
-                    }
-
-                    const renderSetCard = (ms, groupImage) => {
-                        const infoBtn = `
-                            <button type="button"
-                                    onclick="App.openSetModal('${ms.id}')"
-                                    class="text-slate-300 hover:text-[#93c21c]"
-                                    title="Set anzeigen">
-                                <i class="fa-solid fa-circle-info"></i>
-                            </button>
-                        `;
-
-                        return card({
-                            type: 'master_set',
-                            id: ms.id,
-                            title: ms.name || `Set #${ms.id}`,
-                            subtitle: preview(ms.description || '', 140),
-                            badge: `SET`,
-                            imageSrc: App.pickImage(ms, groupImage),
-
-                            rightHtml: infoBtn
+                    html = filtered.map(gs => {
+                        const previewSets = (gs.master_sets || []).slice(0, 2).map(ms => ms.name || `Set #${ms.id}`).join(' • ');
+                        return renderCard({
+                            type: 'master_set_group',
+                            id: gs.id,
+                            title: gs.name,
+                            subtitle: preview(gs.description || previewSets || 'Komplettes Group Set direkt in das Angebot übernehmen.', 140),
+                            imageSrc: imageUrl(gs, gs.image),
+                            chips: [
+                                { label: gs.article_group, tone: 'brand', icon: 'fa-solid fa-tag' },
+                                { label: `${gs.master_sets_count || 0} Sets`, tone: 'blue', icon: 'fa-solid fa-cubes' },
+                                previewSets ? { label: previewSets, tone: '', icon: 'fa-solid fa-list' } : null
+                            ],
+                            infoType: null
                         });
-                    };
+                    }).join('');
+                }
 
-                    list.innerHTML = filtered.map(gs => {
-                        const setsBoxId = `gs-sets-${gs.id}`;
-                        const hasInlineSets = Array.isArray(gs.master_sets);
+                if (mode === 'sets') {
+                    const apiGroups = Array.isArray(data.groups) ? data.groups : [];
+                    const flatSets = [];
 
-                        // header right: drag handle for whole group set
-                        const headRight = `
-                            <div class="flex items-center gap-2">
-                                ${gs.color ? `<span class="w-3 h-3 rounded-full border border-slate-200" style="background:${esc(gs.color)}"></span>` : ``}
-                                <span class="text-[10px] text-slate-400">${Number(gs.master_sets_count || 0)} Sets</span>
+                    apiGroups.forEach(group => {
+                        const groupName = (group.article_group || 'Ohne Gewerk').toString().trim();
+                        const groupImage = group.image || null;
+                        (Array.isArray(group.master_sets) ? group.master_sets : []).forEach(ms => {
+                            flatSets.push({ ...ms, article_group: groupName, group_image: groupImage });
+                        });
+                    });
 
-                                <!-- drag whole group set -->
-                                <span draggable="true"
-                                    ondragstart="App.dragStart(event, '${gs.id}', 'master_set_group')"
-                                    class="ml-1 inline-flex items-center justify-center w-7 h-7 rounded border border-slate-200 bg-white text-slate-400 hover:text-[#93c21c] cursor-grab"
-                                    title="Ganzes Group Set ziehen">
-                                    <i class="fa-solid fa-grip-vertical text-xs"></i>
-                                </span>
+                    flatSets.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'de'));
+
+                    html = flatSets.map(ms => renderCard({
+                        type: 'master_set',
+                        id: ms.id,
+                        title: ms.name || `Master Set #${ms.id}`,
+                        subtitle: preview(ms.description || '', 140),
+                        imageSrc: imageUrl(ms, ms.group_image),
+                        chips: [
+                            { label: ms.article_group || 'Gewerk', tone: 'brand', icon: 'fa-solid fa-tag' },
+                            { label: `${Number(ms.components_count || ms.items_count || 0)} Teile`, tone: 'blue', icon: 'fa-solid fa-boxes-stacked' }
+                        ],
+                        infoType: 'master_set'
+                    })).join('');
+                }
+
+                if (mode === 'products') {
+                    const items = Array.isArray(data.items) ? data.items : [];
+
+                    html = items.map(product => {
+                        const brand = (product.brand_name || '').trim();
+                        const distributor = (product.distributor_name || '').trim();
+                        const articleGroup = (product.article_group || product.article_group_name || product.group_name || product.articleGroup?.article_group || '').toString().trim();
+                        const bestPrice = money(product.best_price || product.price || product.unit_price || product.ek || product.purchase_price);
+
+                        return renderCard({
+                            type: 'product',
+                            id: product.id,
+                            title: `${product.product || product.name || ('Produkt #' + product.id)}${product.model ? ' • ' + product.model : ''}`,
+                            subtitle: preview([product.article_no, product.short_description, product.description].filter(Boolean).join(' • '), 140),
+                            imageSrc: imageUrl(product, null),
+                            chips: [
+                                articleGroup ? { label: articleGroup, tone: 'brand', icon: 'fa-solid fa-tag' } : null,
+                                brand ? { label: brand, tone: 'orange', icon: 'fa-solid fa-copyright' } : null,
+                                distributor ? { label: distributor, tone: 'blue', icon: 'fa-solid fa-truck' } : null,
+                                product.article_no ? { label: product.article_no, tone: '', icon: 'fa-solid fa-barcode' } : null
+                            ],
+                            price: bestPrice,
+                            infoType: 'product'
+                        });
+                    }).join('');
+                }
+
+                if (!html.trim()) {
+                    if (!isAppending) {
+                        list.innerHTML = `
+                            <div class="enterprise-empty-state">
+                                <i class="fa-solid fa-folder-open text-xl text-slate-300 mb-2 block"></i>
+                                Keine Treffer gefunden.
                             </div>
                         `;
-
-                        const groupLabel = gs.article_group
-                            ? `<div class="text-[10px] text-slate-400 font-bold uppercase tracking-wide">${esc(gs.article_group)}</div>`
-                            : '';
-
-                        // initial body
-                        const bodyHtml = hasInlineSets
-                            ? (
-                                gs.master_sets.length
-                                    ? gs.master_sets
-                                        .slice()
-                                        .sort((a, b) => (a.name || '').localeCompare(b.name || '', 'de'))
-                                        .map(ms => renderSetCard(ms, gs.image))
-                                        .join('')
-                                    : `<div class="text-xs text-slate-400">Keine Sets in dieser Gruppe.</div>`
-                            )
-                            : `<div class="text-xs text-slate-400 flex items-center gap-2">
-                                    <i class="fa-solid fa-spinner fa-spin"></i> Öffnen zum Laden…
-                            </div>`;
-
-                        return `
-                            <details class="bg-white/60 border border-slate-200 rounded-lg overflow-hidden"
-                                    data-gs-id="${gs.id}"
-                                    ${hasInlineSets ? '' : `ontoggle="App.onGroupSetToggle(this)"`}>
-                                <summary class="cursor-pointer select-none px-3 py-2 bg-slate-50 flex items-center justify-between gap-3">
-                                    <div class="min-w-0">
-                                        ${groupLabel}
-                                        <div class="font-black text-slate-800 text-xs truncate">${esc(gs.name)}</div>
-                                        ${gs.description ? `<div class="text-[10px] text-dark-600 mt-0.5 line-clamp-1">${esc(preview(gs.description, 90))}</div>` : ''}
-                                    </div>
-                                    ${headRight}
-                                </summary>
-
-                                <div class="p-3 space-y-2 bg-slate-50/50 max-h-[350px] overflow-y-auto scroller" id="${setsBoxId}">
-                                    ${bodyHtml}
-                                </div>
-                            </details>
-                        `;
-                    }).join('');
-
+                    }
                     return;
                 }
 
-                // ------------------------------
-                // MODE C) PRODUCTS LIST (flat list, with brand + distributor + price + image)
-                // Expected API shape:
-                // { items: [ {id, product, model, article_no, image, brand_name, distributor_name, best_price, currency} ] }
-                // ------------------------------
-                if (mode === 'products') {
-                const items = Array.isArray(data.items) ? data.items : [];
-
-                if (!items.length) {
-                    list.innerHTML = `<div class="text-xs text-slate-400 p-3">Keine Treffer.</div>`;
-                    return;
-                }
-
-                const fmt = (n) => {
-                    const v = Number(n);
-                    if (!Number.isFinite(v)) return '-';
-                    return v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
-                };
-
-                list.innerHTML = items.map(p => {
-                    const brand = (p.brand_name || '').trim();
-                    const dist  = (p.distributor_name || '').trim();
-                    const price = fmt(p.best_price);
-
-                    const subtitleParts = [];
-                    if (brand) subtitleParts.push(`Brand: ${brand}`);
-                    if (dist) subtitleParts.push(`Lieferant: ${dist}`);
-                    subtitleParts.push(`EK: ${price}`);
-
-                    const rightHtml = `
-                    <div class="flex flex-col items-end gap-1">
-                        <span class="text-[10px] font-black text-slate-700">${price}</span>
-                        <span class="text-[9px] font-bold text-slate-400">${dist ? dist : '—'}</span>
-                    </div>
-                    `;
-
-                    return card({
-                    type: 'product',
-                    id: p.id,
-                    title: `${p.product || p.name || ('Produkt #' + p.id)}${p.model ? ' • ' + p.model : ''}`,
-                    subtitle: subtitleParts.join(' • '),
-                    badge: 'PROD',
-                    imageSrc: App.pickImage(p, null),
-                    rightHtml
-                    });
-                }).join('');
-
-                return;
-                }
-
-
-
-
-                // ------------------------------
-                // MODE B) PRODUCTS TAB (existing grouped by article_group)
-                // Expected API shape:
-                // { groups: [ { article_group, image, master_sets:[], products:[] } ] }
-                // ------------------------------
-                const apiGroups = Array.isArray(data.groups) ? data.groups : [];
-                const groups = apiGroups.map(g => ({
-                groupName: (g.article_group || 'Ohne Gruppe').trim(),
-                groupImage: g.image || null,
-                masterSets: Array.isArray(g.master_sets) ? g.master_sets : [],
-                products: Array.isArray(g.products) ? g.products : [],
-                }));
-
-                groups.sort((a, b) => a.groupName.localeCompare(b.groupName, 'de'));
-
-                if (groups.length === 0) {
-                list.innerHTML = `<div class="text-xs text-slate-400 p-3">Keine Treffer.</div>`;
-                return;
-                }
-
-                list.innerHTML = groups.map(g => {
-                const masterSets = g.masterSets
-                    .slice()
-                    .sort((a, b) => (b.id || 0) - (a.id || 0))
-                    .map(p => {
-                    const infoBtn = `
-                        <button type="button"
-                                onclick="App.openSetModal('${p.id}')"
-                                class="text-slate-300 hover:text-[#93c21c]"
-                                title="Set anzeigen">
-                        <i class="fa-solid fa-circle-info"></i>
-                        </button>
-                    `;
-
-                    return card({
-                        type: 'master_set',
-                        id: p.id,
-                        title: p.name,
-                        subtitle: preview(p.description || '', 140),
-                        badge: `SET • ${(p.components_count || 0)} Teile`,
-                        imageSrc: App.pickImage(p, g.groupImage),
-                        rightHtml: infoBtn
-                    });
-                    }).join('');
-
-                const products = g.products
-                    .slice()
-                    .sort((a, b) => (b.id || 0) - (a.id || 0))
-                    .map(p => card({
-                    type: 'product',
-                    id: p.id,
-                    title: p.name,
-                    subtitle: `${(p.article_no || '')}${p.model ? ` • ${p.model}` : ''}`.trim(),
-                    badge: 'ART',
-                    imageSrc: App.pickImage(p, g.groupImage),
-                    })).join('');
-
-                const totalCount = (g.masterSets.length + g.products.length);
-                const rows = [masterSets, products].filter(Boolean).join('');
-
-                return `
-                    <details class="bg-white/60 border border-slate-200 rounded-lg overflow-hidden">
-                    <summary class="cursor-pointer select-none px-3 py-2 bg-slate-50 flex items-center justify-between">
-                        <div class="font-bold text-slate-700 text-xs uppercase tracking-wide">${esc(g.groupName)}</div>
-                        <div class="text-[10px] text-slate-400">${totalCount}</div>
-                    </summary>
-                    <div class="p-3 space-y-2 bg-slate-50/50 max-h-[350px] overflow-y-auto scroller">
-                        ${rows || `<div class="text-xs text-slate-400">Keine Einträge</div>`}
-                    </div>
-                    </details>
-                `;
-                }).join('');
-
+                applyHtmlWithPagination(html);
             } catch (err) {
-                console.error("Catalog search failed", err);
-                list.innerHTML = `
-                <div class="text-xs text-red-500 p-3">
-                    Fehler beim Laden der Bibliothek.
-                </div>
+                console.error('Catalog search failed', err);
+                if (!isAppending) {
+                    list.innerHTML = `
+                        <div class="enterprise-empty-state text-red-500">
+                            <i class="fa-solid fa-triangle-exclamation text-xl mb-2 block"></i>
+                            Fehler beim Laden der Bibliothek.
+                        </div>
+                    `;
+                }
+            } finally {
+                if (!isAppending) State.libraryIsLoading = false;
+            }
+        },
+
+        reloadLibrarySidebar: async (showToast = false) => {
+            const btn = document.getElementById('btn-library-reload');
+            const oldHtml = btn ? btn.innerHTML : '';
+
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('opacity-70', 'cursor-wait');
+                btn.innerHTML = `
+                    <span class="inline-flex items-center gap-2">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                        Lade neu
+                    </span>
+                    <span class="text-[10px] opacity-80">Bitte warten</span>
                 `;
             }
-            },
- 
+
+            try {
+                State.libraryPage = 1;
+                State.libraryForceReload = true;
+                State.libraryLastReloadAt = Date.now();
+
+                document.querySelectorAll('#sidebar-list details[data-gs-id]').forEach(details => {
+                    details.dataset.loaded = '0';
+                    details.dataset.forceReload = '1';
+                });
+
+                await App.renderSidebar(false, true);
+
+                if (showToast && typeof App.showToast === 'function') {
+                    App.showToast('Bibliothek aktualisiert', 'Group Sets, Master Sets und Produkte wurden neu vom Server geladen.', 'success');
+                }
+            } catch (error) {
+                console.error('Library reload failed', error);
+                if (showToast && typeof App.showToast === 'function') {
+                    App.showToast('Fehler', 'Bibliothek konnte nicht neu geladen werden.', 'error');
+                }
+            } finally {
+                State.libraryForceReload = false;
+                if (btn) {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-70', 'cursor-wait');
+                    btn.innerHTML = oldHtml;
+                }
+            }
+        },
+
+        handleLibrarySidebarClick: (event) => {
+            const target = event?.target;
+            if (!target) return;
+
+            // Do not reload while user is typing, pressing buttons, dragging cards, opening details, or adding items.
+            if (target.closest('input, textarea, select, button, a, [draggable="true"], .enterprise-card-actions')) {
+                return;
+            }
+
+            const now = Date.now();
+            if ((now - (State.libraryLastReloadAt || 0)) < (State.libraryAutoReloadDelay || 2500)) {
+                return;
+            }
+
+            App.reloadLibrarySidebar(false);
+        },
+
+        handleQuickLibraryAdd: async (id, type) => {
+            let sIdx = State.sections.findIndex(section => section && !section._pageBreak && !section.isLocked);
+            if (sIdx === -1) {
+                sIdx = typeof App.addSection === 'function' ? App.addSection() : 0;
+            }
+
+            await App.handleItemAdd(sIdx, id, type);
+
+            State.hasUnsavedChanges = true;
+            if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+            if (App.Tabs?.current === 'list' && App.ListView?.render) App.ListView.render();
+        },
 
         dragStart: (ev, id, type) => {
             ev.dataTransfer.setData("text", id);
@@ -6586,168 +9751,98 @@
             App.startDragMode();
         },
 
-        
-
         handleItemAdd: async function(sIdx, id, typeFromDrag = null) {
             ensureSection(sIdx);
             const type = resolveType(typeFromDrag);
             const rawId = id;
 
-            const parseUnitInfo = (unitRaw, fallback = 'Stk') => {
-                if (typeof App?.parsePriceUnit === 'function') return App.parsePriceUnit(unitRaw || fallback, fallback);
-                const match = (unitRaw || '').toString().match(/^(\d+(?:[.,]\d+)?)\s*(.+)$/);
-                if (match) return { value: parseFloat(match[1].replace(',', '.')) || 1, label: match[2].trim(), text: unitRaw };
-                return { value: 1, label: unitRaw || fallback, text: `1 ${unitRaw || fallback}` };
-            };
+            const parseUnitInfo = (unitRaw, fallback = 'Stk') => parseOfferUnitInfo(unitRaw, fallback);
 
             try {
                 // --- MODE: MASTER SET GROUP (Recursive) ---
                 if (type === "master_set_group") {
-                    const data = await fetchJson(new URL(`${API_BASE}/master-set-groups/${rawId}?context=angebot`, window.location.origin));
+                    const data = await fetchJson(new URL(`${API_BASE}/master-set-groups/${rawId}?context=angebot&_=${Date.now()}`, window.location.origin));
                     const sets = data?.master_sets || data?.sets || [];
+
                     for (const ms of sets) {
                         if (ms?.id) await this.handleItemAdd(sIdx, ms.id, "master_set");
                     }
+
                     return;
                 }
 
                 // --- MODE: MASTER SET ---
                 if (type === "master_set") {
-                    const resp = await fetchJson(new URL(`${API_BASE}/master-sets/${rawId}?context=angebot`, window.location.origin));
+                    const resp = await fetchJson(new URL(`${API_BASE}/master-sets/${rawId}?context=angebot&_=${Date.now()}`, window.location.origin));
                     const data = resp?.data || resp || {};
+                    const setItem = buildMasterSetQuoteItem(rawId, data);
 
-                    const setItem = buildBaseItem({
-                        item_type: "master_set",
-                        productId: safeNum(data.id || rawId),
-                        name: safeStr(data.name, `Set #${rawId}`),
-                        desc_html: pickDescHtml(data),
-                        desc: pickDescText(data),
-                        qty: 1,
-                        unit: "Set",
-                        price_unit_label: "Set",
-                        img: App.pickImage(data, App.placeholderImg(data.name || 'SET')),
-                        subItems: [],
-                        price: 0
-                    });
-
-                    const sourceItems = Array.isArray(data.items) ? data.items : [];
-                    let setVkTotal = 0;
-
-                    sourceItems.forEach(node => {
-                        if (node.type === 'component') {
-                            const ek = safeNum(node.purchase_price ?? node.ek, 0);
-                            const margin = App.getDefaultMargin('article');
-                            const vk = ek > 0 ? App.vkFromEkMargin(ek, margin) : safeNum(node.unit_price, 0);
-                            const uInfo = parseUnitInfo(node.price_unit || node.unit);
-
-                            // INSIDE App.handleItemAdd -> if (type === "master_set") { ...
-                            const component = buildBaseItem({
-                                item_type: "master_set_component",
-                                component_id: node.id,
-                                name: node.name || "Komponente",
-                                desc_html: pickDescHtml(node),
-                                qty: safeNum(node.qty, 1),
-                                unit: node.unit || "Stk",
-                                price_unit_value: safeNum(node.price_unit_value, uInfo.value),
-                                price: vk,
-                                ek: ek,
-                                marginPercent: margin,
-                                img: App.pickImage(node),
-                                depth: 1,
-
-                                // 👇 ADD THESE LINES 👇
-                                article_no: node.article_no || '',
-                                distributor_article_no: node.distributor_article_no || '',
-                                distributor_name: node.distributor?.name || node.distributor_name || '',
-                                distributor_id: node.distributor?.id || node.distributor_id || null,
-                                skonto: node.skonto ?? node.distributor?.cash_discount ?? 0,
-                                payment_terms: node.payment_terms ?? node.distributor?.payment_terms ?? 14,
-                            });
-                            setVkTotal += (component.qty / component.price_unit_value) * component.price;
-                            setItem.subItems.push(component);
-                        }
-                       else if (node.type === 'labor') {
-                            const laborRows = Array.isArray(node.children) ? node.children : [node];
-                            
-                            let laborEkTotal = 0;
-                            let laborVkTotal = 0;
-                            let laborQtyTotal = 0;
-
-                            const mappedRows = laborRows.map(l => {
-                                const qty = safeNum(l.hours || l.qty, 1);
-                                const ek = safeNum(l.ek || l.qualification_price, 0);
-                                const rate = safeNum(l.hourly_rate || l.rate || l.price, 0);
-                                
-                                laborEkTotal += (ek * qty);
-                                laborVkTotal += (rate * qty);
-                                laborQtyTotal += qty;
-
-                                return {
-                                    id: Date.now() + Math.floor(Math.random() * 1000),
-                                    qualification_id: l.qualification_id || null,
-                                    qualification_name: l.qualification_name || l.name || 'Dienstleistung',
-                                    qty: qty,
-                                    unit: 'Std',
-                                    ek: ek,
-                                    margin_percent: safeNum(l.margin_percent, App.getDefaultMargin('labor')),
-                                    rate: rate,
-                                    total: safeNum(l.total, qty * rate)
-                                };
-                            });
-
-                            const laborCarrier = buildBaseItem({
-                                item_type: "labor", kind: "labor", name: node.name || "Arbeitsleistung",
-                                qty: laborQtyTotal || 1, unit: "Std", showImage: false, depth: 1,
-                                price: laborQtyTotal > 0 ? (laborVkTotal / laborQtyTotal) : 0,
-                                ek: laborQtyTotal > 0 ? (laborEkTotal / laborQtyTotal) : 0,
-                                labor_rows: mappedRows // Explicitly attach the mapped rows!
-                            });
-                            
-                            setVkTotal += laborQtyTotal > 0 ? laborVkTotal : 0;
-                            setItem.subItems.push(laborCarrier);
-                        }
-                    });
-
-                    setItem.price = setVkTotal;
                     pushItem(sIdx, setItem);
+
+                    const insertedIndex = State.sections[sIdx].items.length - 1;
+                    App.syncParentTotals?.(sIdx, insertedIndex);
+                    App.renderQuotePage();
+
+                    return;
                 }
+
                 // --- MODE: SINGLE PRODUCT ---
-                else {
-                    const data = await fetchJson(new URL(`${API_BASE}/products/${rawId}?context=angebot`, window.location.origin));
-                    const p = data?.data || data || {};
-                    const uInfo = parseUnitInfo(p.price_unit || p.unit);
-                    const ek = safeNum(p.ek ?? p.purchase_price ?? 0);
-                    const margin = App.getDefaultMargin('article');
+                const data = await fetchJson(new URL(`${API_BASE}/products/${rawId}?context=angebot&_=${Date.now()}`, window.location.origin));
+                const p = data?.data || data || {};
+                const uInfo = parseUnitInfo(p.price_unit || p.unit || p.measure);
 
-                   // INSIDE App.handleItemAdd -> else { // (Single Product logic)
-                    const item = buildBaseItem({
-                        item_type: "product",
-                        productId: safeNum(p.id || rawId),
-                        name: safeStr(p.name ?? p.product, `Produkt #${rawId}`),
-                        desc_html: pickDescHtml(p),
-                        img: App.pickImage(p),
-                        price: ek > 0 ? App.vkFromEkMargin(ek, margin) : safeNum(p.price || p.vk, 0),
-                        ek: ek,
-                        marginPercent: margin,
-                        qty: 1,
-                        unit: uInfo.label,
-                        price_unit_value: safeNum(p.price_unit_value, uInfo.value),
-                        subItems: [],
+                const ek = resolveOfferEkValue(p);
+                let vk = resolveOfferVkValue(p);
+                let margin = parseFloat(p.margin ?? p.marginPercent ?? 0) || 0;
 
-                        // 👇 ADD THESE LINES 👇
-                        article_no: p.article_no || '',
-                        distributor_article_no: p.distributor_price?.article_no || '',
-                        distributor_name: p.distributor_name || p.distributor?.name || '',
-                        distributor_id: p.distributor_id || p.distributor?.id || null,
-                        skonto: p.skonto ?? p.distributor?.cash_discount ?? 0,
-                        payment_terms: p.payment_terms ?? p.distributor?.payment_terms ?? 14,
-                    });
-                    pushItem(sIdx, item);
+                if (margin <= 0) {
+                    margin = App.getDefaultMargin('article');
                 }
 
+                if (ek > 0) {
+                    vk = App.vkFromEkMargin(ek, margin);
+                }
+
+                const item = buildBaseItem({
+                    item_type: "product",
+                    productId: safeNum(p.id || rawId),
+                    product_id: safeNum(p.id || rawId),
+                    name: safeStr(p.name ?? p.product, `Produkt #${rawId}`),
+                    desc_html: pickDescHtml(p),
+                    desc: pickDescText(p),
+                    img: App.pickImage(p),
+
+                    price: vk,
+                    unit_price: vk,
+                    ek: ek,
+                    purchase_price: ek,
+                    cost: ek,
+                    buying_price: ek,
+                    marginPercent: margin,
+                    margin: margin,
+
+                    qty: 1,
+                    unit: uInfo.label,
+                    measure: p.measure || p.unit || uInfo.label,
+                    price_unit_value: safeNum(p.price_unit_value, uInfo.value || 1),
+                    price_unit_label: uInfo.label,
+                    price_unit_text: uInfo.text,
+                    subItems: [],
+
+                    article_no: p.article_no || '',
+                    distributor_article_no: p.distributor_price?.article_no || p.distributorPrice?.article_no || p.distributor_article_no || '',
+                    distributor_name: p.distributor_name || p.distributor?.name || '',
+                    distributor_id: p.distributor_id || p.distributor?.id || null,
+                    distributor_price_id: p.distributor_price_id || p.distributor_price?.id || p.distributorPrice?.id || null,
+                    skonto: p.skonto ?? p.distributor?.cash_discount ?? 0,
+                    payment_terms: p.payment_terms ?? p.distributor?.payment_terms ?? 14,
+                });
+
+                pushItem(sIdx, item);
                 App.renderQuotePage();
             } catch (err) {
                 console.error("handleItemAdd failed:", err);
+                App.showToast?.('Artikel konnte nicht geladen werden', err?.message || 'Bitte erneut versuchen.', 'error');
             }
         },
 
@@ -6768,17 +9863,44 @@
                 const data = json?.data ?? json ?? {};
 
                 if (typeFromDrag === 'master_set') {
-                    // Add Master Set as a Sub-Group
                     let setMatTotal = 0;
                     let setEkTotal = 0;
 
                     (data.items || []).forEach(it => {
                         if (it.type === 'component') {
                             const ek = safeNum(it.purchase_price ?? it.ek, 0);
-                            const vk = App.vkFromEkMargin(ek, App.getDefaultMargin('article'));
+                            let vk = safeNum(it.unit_price ?? it.price, 0);
+                            let margin = parseFloat(it.margin) || 0;
+
+                            // RULE: If record has margin, use it. Otherwise hardcode 20%
+                            if (margin <= 0) {
+                                margin = App.getDefaultMargin('article');
+                            }
+                            if (ek > 0) {
+                                vk = App.vkFromEkMargin(ek, margin);
+                            }
+
                             setMatTotal += (safeNum(it.qty, 1) * vk);
                             setEkTotal += (safeNum(it.qty, 1) * ek);
-                       } else if (it.type === 'labor') {
+
+                            if (Array.isArray(it.children)) {
+                                it.children.forEach(child => {
+                                    const cEk = safeNum(child.purchase_price ?? child.ek, 0);
+                                    let cVk = safeNum(child.unit_price ?? child.price, 0);
+                                    let cMargin = parseFloat(child.margin) || 0;
+
+                                    if (cMargin <= 0) {
+                                        cMargin = App.getDefaultMargin('article');
+                                    }
+                                    if (cEk > 0) {
+                                        cVk = App.vkFromEkMargin(cEk, cMargin);
+                                    }
+
+                                    setMatTotal += (safeNum(child.qty, 1) * cVk);
+                                    setEkTotal += (safeNum(child.qty, 1) * cEk);
+                                });
+                            }
+                        } else if (it.type === 'labor') {
                             const laborRows = Array.isArray(it.children) ? it.children : [it];
                             
                             let laborEkTotal = 0;
@@ -6809,16 +9931,15 @@
 
                             const laborCarrier = buildBaseItem({
                                 item_type: "labor", kind: "labor", name: it.name || "Arbeitsleistung",
-                                qty: laborQtyTotal || 1, unit: "Std", showImage: false, depth: 1,
-                                price: laborQtyTotal > 0 ? (laborVkTotal / laborQtyTotal) : 0,
-                                ek: laborQtyTotal > 0 ? (laborEkTotal / laborQtyTotal) : 0,
-                                labor_rows: mappedRows // Attach the rows
+                                qty: mappedRows.length || 1, unit: "Stk", showImage: false, depth: 1,
+                                price: mappedRows.length > 0 ? (laborVkTotal / mappedRows.length) : 0,
+                                ek: mappedRows.length > 0 ? (laborEkTotal / mappedRows.length) : 0,
+                                labor_rows: mappedRows
                             });
                             
-                            // Safely update the parent totals
                             setMatTotal += laborQtyTotal > 0 ? laborVkTotal : 0;
                             setEkTotal += laborQtyTotal > 0 ? laborEkTotal : 0;
-                            parent.subItems.push(laborCarrier); // Correct parent reference
+                            parent.subItems.push(laborCarrier);
                         }
                     });
 
@@ -6830,7 +9951,7 @@
                         qty: 1,
                         unit: 'Set',
                         depth: 1,
-                        active: false,// Hidden in print by default per requirements
+                        active: false,
 
                         article_no: data.article_no || '',
                         distributor_article_no: data.distributor_price?.article_no || '',
@@ -6841,21 +9962,32 @@
                 } else {
                     // Add Single Product as Sub-Position
                     const ek = safeNum(data.ek ?? data.purchase_price ?? 0);
-                    const margin = App.getDefaultMargin('article');
+                    let vk = safeNum(data.price ?? data.vk ?? data.unit_price ?? 0);
+                    let margin = parseFloat(data.margin) || 0;
 
-                   // INSIDE App.addLibraryItemAsSubPosition -> else { // (Single Product as Sub-Position)
+                    // RULE: If record has margin, use it. Otherwise hardcode 20%
+                    if (margin <= 0) {
+                        margin = App.getDefaultMargin('article');
+                    }
+                    if (ek > 0) {
+                        vk = App.vkFromEkMargin(ek, margin);
+                    }
+
                     parent.subItems.push(buildBaseItem({
                         item_type: 'sub_product',
                         name: data.name || data.product || 'Produkt',
                         desc_html: pickDescHtml(data),
-                        price: ek > 0 ? App.vkFromEkMargin(ek, margin) : safeNum(data.price || data.vk, 0),
+                        price: vk,
                         ek: ek,
+                        purchase_price: ek,
+                        cost: ek,
+                        buying_price: ek,
                         qty: 1,
                         unit: data.unit || 'Stk',
                         depth: 1,
                         active: true,
+                        marginPercent: margin,
 
-                        // 👇 ADD THESE LINES 👇
                         article_no: data.article_no || '',
                         distributor_article_no: data.distributor_price?.article_no || '',
                         distributor_name: data.distributor_name || data.distributor?.name || '',
@@ -6865,7 +9997,6 @@
                     }));
                 }
 
-                // Recalculate parent total and refresh UI
                 App.syncParentTotals(targetSIdx, targetIIdx);
                 App.renderQuotePage();
             } catch (err) {
@@ -6918,8 +10049,8 @@
             // Start by adding the Textbox button
             c.innerHTML=`
                 <div draggable="true" ondragstart="App.dragStartToolText(event)" class="bg-white border rounded p-2 cursor-grab flex flex-col items-center justify-center hover:border-[#93c21c] transition-colors" style="min-height: 80px;">
-                    <i class="fa-solid fa-font text-2xl text-slate-400 mb-2"></i>
-                    <span class="text-xs font-bold text-slate-600">Neues Textfeld</span>
+                    <i class="fa-solid fa-font text-2xl text-[#000000] mb-2"></i>
+                    <span class="text-xs font-bold text-[#000000]">Neues Textfeld</span>
                 </div>
             `; 
             
@@ -6928,22 +10059,145 @@
                 c.innerHTML+=`<div draggable="true" ondragstart="App.dragStartTool(event,'${src}')" class="bg-white border rounded p-2 cursor-grab"><img src="${src}" class="w-full h-16 object-contain"></div>`; 
             }); 
         },        
+        getCompanyProfile: (key = null) => {
+            const selectedKey = key || document.getElementById('wiz-company-select')?.value || window.DefaultBranchProfileKey || 'solar-aspekt';
+            return (window.BranchProfiles && window.BranchProfiles[selectedKey])
+                || App.CompanyProfiles[selectedKey]
+                || App.CompanyProfiles['solar-aspekt']
+                || Object.values(window.BranchProfiles || {})[0]
+                || null;
+        },
+
+        getOfferProcessSoftBg: (profile = null) => {
+            const p = profile || State.selectedBranch || App.getCompanyProfile();
+            const text = [p?.slug, p?.name, p?.branch, State.companyName]
+                .filter(Boolean)
+                .join(' ')
+                .toLowerCase();
+
+            // Werkstudio needs its own soft background on the last process page.
+            if (text.includes('werkstudio') || text.includes('werk studio') || text.includes('werk')) {
+                return '#a79d843b';
+            }
+
+            // Solar Aspekt and all other branches keep the existing green soft tone.
+            return '#edf1df';
+        },
+
+        applyOfferProcessSoftBg: (profile = null) => {
+            document.documentElement.style.setProperty(
+                '--offer-process-soft-bg',
+                App.getOfferProcessSoftBg(profile)
+            );
+        },
+
+        getCompanyFooterSnapshot: (profile = null) => {
+            const p = profile || State.selectedBranch || App.getCompanyProfile();
+            if (!p) return {};
+
+            return {
+                branch_id: p.id || null,
+                company: p.name || p.branch || '',
+                street: p.street || '',
+                postcode: p.postcode || '',
+                city: p.city || '',
+                country: p.country || '',
+                phone: p.phone || '',
+                whatsapp: p.whatsapp || '',
+                email: p.email || '',
+                web: p.web || '',
+                bank: p.bank || '',
+                iban: p.iban || '',
+                bic: p.bic || '',
+                register: p.register || '',
+                tax: p.tax || '',
+                vat: p.vat || '',
+                gf: p.gf || '',
+                contact_person: p.contactPerson || p.contact_person || ''
+            };
+        },
+
+        updateCompanyFooter: (profile = null) => {
+            const p = profile || State.selectedBranch || App.getCompanyProfile();
+            if (!p) return;
+
+            const esc = App.escapeHtml || ((value) => String(value ?? '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;'));
+
+            const rows = (...items) => items.filter(v => String(v ?? '').trim() !== '').join('<br>');
+            const line = (...items) => items.filter(v => String(v ?? '').trim() !== '').map(esc).join(' ');
+            const company = p.name || p.branch || '';
+            const cityLine = line(p.postcode, p.city);
+            const gf = String(p.gf || '').replace(/^Geschäftsführer:\s*/i, '').trim();
+
+            const fCol1 = document.getElementById('footer-col-1');
+            if (fCol1) {
+                fCol1.innerHTML = rows(
+                    `<span class="font-bold text-[#000000]" id="footer-company" style="color: var(--brand-color);">${esc(company)}</span>`,
+                    esc(p.street || ''),
+                    cityLine
+                );
+            }
+
+            const fCol2 = document.getElementById('footer-col-2');
+            if (fCol2) {
+                fCol2.innerHTML = rows(
+                    p.phone ? `Tel. ${esc(p.phone)}` : '',
+                    p.whatsapp ? `WhatsApp: ${esc(p.whatsapp)}` : '',
+                    p.email ? esc(p.email) : '',
+                    p.web ? esc(p.web) : ''
+                );
+            }
+
+            const fCol3 = document.getElementById('footer-col-3');
+            if (fCol3) {
+                fCol3.innerHTML = rows(
+                    p.bank ? esc(p.bank) : '',
+                    p.iban ? `IBAN: ${esc(p.iban)}` : '',
+                    p.bic ? `BIC: ${esc(p.bic)}` : ''
+                );
+            }
+
+            const fCol4 = document.getElementById('footer-col-4');
+            if (fCol4) {
+                fCol4.innerHTML = rows(
+                    p.register ? esc(p.register) : '',
+                    p.tax ? `St.-Nr. ${esc(p.tax)}` : '',
+                    p.vat ? `USt-IdNr. ${esc(p.vat)}` : '',
+                    gf ? `Geschäftsführer: ${esc(gf)}` : ''
+                );
+            }
+
+            State.selectedBranch = p;
+            State.selectedBranchId = p.id || null;
+            State.companyFooter = App.getCompanyFooterSnapshot(p);
+        },
+
         updateBranding: () => {
             const color = document.getElementById('wiz-brand-color')?.value || '#93c21c';
             const mode = document.querySelector('input[name="wiz-brand-mode"]:checked')?.value || 'text';
             const name = document.getElementById('wiz-brand-name')?.value || 'SOLAR ASPEKT';
             const logoUrl = document.getElementById('wiz-brand-logo')?.value || '';
 
-            // Pull secondColor from the active profile
-            const profileKey = document.getElementById('wiz-company-select')?.value || 'solar-aspekt';
-            const profile = App.CompanyProfiles[profileKey] || App.CompanyProfiles['solar-aspekt'];
-            const secondColor = profile.secondColor || color;
+            // Pull secondColor from the selected branch/profile
+            const profileKey = document.getElementById('wiz-company-select')?.value || window.DefaultBranchProfileKey || 'solar-aspekt';
+            const profile = App.getCompanyProfile(profileKey);
+            const secondColor = profile?.secondColor || color;
 
             State.brandColor = color;
             State.secondColor = secondColor; // Add to state
             State.brandMode = mode;
             State.companyName = name;
             State.brandLogoUrl = logoUrl;
+            if (profile) {
+                State.selectedBranch = { ...profile, name, color, logoUrl, secondColor };
+                State.selectedBranchId = profile.id || null;
+                App.updateCompanyFooter(State.selectedBranch);
+            }
 
             // update UI toggles
             const textWrap = document.getElementById('brand-text-wrap');
@@ -6963,6 +10217,7 @@
             // set CSS variables so entire layout updates
             document.documentElement.style.setProperty('--brand-color', color);
             document.documentElement.style.setProperty('--second-color', secondColor); // Apply second color
+            App.applyOfferProcessSoftBg(State.selectedBranch || profile);
             document.getElementById('color-hex-label').innerText = color;
 
             // If already in editor, re-render to apply changes everywhere
@@ -6976,6 +10231,21 @@
         startQuote: () => {
             // 1. Detect mode
             const isTemplateMode = document.getElementById('wiz-template-mode')?.checked || false;
+            const isExistingDocumentContext = !!(
+                State.loadedSavedDetail ||
+                State.prefill?.offer_id ||
+                State.prefill?.offer_folder_id ||
+                State.prefill?.offer_detail_id
+            );
+
+            // When the wizard is used for a truly fresh Angebot, never keep rows from a previous template/offer in memory.
+            if (!isTemplateMode && !isExistingDocumentContext && !State.hasUnsavedChanges) {
+                State.sections = [];
+                State.placedImages = [];
+                State.selectedItems = new Set();
+                State.loadedTemplateId = null;
+                State.loadedTemplateName = null;
+            }
 
             // 2. Read wizard values
             State.projectDate = document.getElementById('wiz-date')?.value || '';
@@ -7009,13 +10279,18 @@
             }
 
             if (mainTitleEl) {
-                // Ensure we only override default titles so we don't wipe out custom texts
-                const txt = mainTitleEl.innerText;
-                if (txt.includes('Unverbindliches') || txt.includes('Kostenvoranschlag') || txt.includes('Auftrag für')) {
-                    if (isDeal) {
-                        mainTitleEl.innerText = `Auftrag für...`;
-                    } else {
-                        mainTitleEl.innerText = `Unverbindliches ${State.docType} für...`;
+                // FIX: If we have a saved custom title, ALWAYS use it!
+                if (State.mainTitleHtml) {
+                    mainTitleEl.innerHTML = State.mainTitleHtml;
+                } else {
+                    // Fallback default logic
+                    const txt = mainTitleEl.innerText;
+                    if (txt.includes('Unverbindliches') || txt.includes('Kostenvoranschlag') || txt.includes('Auftrag für') || txt.trim() === '') {
+                        if (isDeal) {
+                            mainTitleEl.innerText = `Auftrag für...`;
+                        } else {
+                            mainTitleEl.innerText = `Unverbindliches ${State.docType} für...`;
+                        }
                     }
                 }
             }
@@ -7115,53 +10390,56 @@
             }
 
             // 7. Company Profile & Branding Injection
-            const profileKey = document.getElementById('wiz-company-select')?.value || 'solar-aspekt';
-            const profile = App.CompanyProfiles[profileKey] || App.CompanyProfiles['solar-aspekt'];
+            const profileKey = document.getElementById('wiz-company-select')?.value || window.DefaultBranchProfileKey || 'solar-aspekt';
+            const profile = App.getCompanyProfile(profileKey);
 
-            // FORCE state override so the image, text, and color stay perfectly consistent
-            State.companyName = profile.name;
-            State.brandLogoUrl = profile.logoUrl;
-            State.brandColor = profile.color;
-            State.secondColor = profile.secondColor || profile.color;
-            
-            document.documentElement.style.setProperty('--brand-color', profile.color);
-            document.documentElement.style.setProperty('--second-color', State.secondColor);
+            if (profile) {
+                State.selectedBranch = profile;
+                State.selectedBranchId = profile.id || null;
+                State.companyName = profile.name || profile.branch || State.companyName || 'SOLAR ASPEKT';
+                State.brandLogoUrl = profile.logoUrl || State.brandLogoUrl || '';
+                State.brandColor = profile.color || State.brandColor || '#93c21c';
+                State.secondColor = profile.secondColor || State.brandColor;
+                State.brandMode = State.brandLogoUrl ? 'image' : State.brandMode;
+                State.companyFooter = App.getCompanyFooterSnapshot(profile);
+            }
+
+            document.documentElement.style.setProperty('--brand-color', State.brandColor);
+            document.documentElement.style.setProperty('--second-color', State.secondColor || State.brandColor);
+            App.applyOfferProcessSoftBg(State.selectedBranch || profile);
+
             // A) Update Logo Texts (Fallback if text mode is used)
             document.querySelectorAll('.pdf-logo-text').forEach((el) => {
-                el.innerText = profile.name;
+                el.innerText = State.companyName;
             });
             const logoTextEl = document.getElementById('doc-logo-text');
-            if (logoTextEl) logoTextEl.innerText = profile.name;
+            if (logoTextEl) logoTextEl.innerText = State.companyName;
 
             // B) Update Header Address Line
             const compHeaderEl = document.getElementById('doc-company-header');
-            if (compHeaderEl) {
-                compHeaderEl.innerText = `${profile.name} • ${profile.street} • ${profile.city}`;
+            if (compHeaderEl && profile) {
+                const cityLine = [profile.postcode, profile.city].filter(Boolean).join(' ');
+                compHeaderEl.innerText = [State.companyName, profile.street, cityLine].filter(Boolean).join(' • ');
             }
 
             // C) Update Contact Person Block
             const contactNameEl = document.getElementById('doc-contact-name');
-            if (contactNameEl) contactNameEl.innerText = profile.contactPerson;
+            if (contactNameEl && profile) contactNameEl.innerText = profile.contactPerson || profile.contact_person || '';
             const contactDetailsEl = document.getElementById('doc-contact-details');
-            if (contactDetailsEl) contactDetailsEl.innerHTML = `Tel: ${profile.phone}<br>E-Mail: ${profile.email}`;
+            if (contactDetailsEl && profile) {
+                contactDetailsEl.innerHTML = [
+                    profile.phone ? `Tel: ${App.escapeHtml(profile.phone)}` : '',
+                    profile.email ? `E-Mail: ${App.escapeHtml(profile.email)}` : ''
+                ].filter(Boolean).join('<br>');
+            }
 
-            // D) Update Footer Columns
-            const fCol1 = document.getElementById('footer-col-1');
-            if (fCol1) fCol1.innerHTML = `<span class="font-bold text-slate-700" id="footer-company">${profile.name}</span><br>${profile.street}<br>${profile.city}`;
-
-            const fCol2 = document.getElementById('footer-col-2');
-            if (fCol2) fCol2.innerHTML = `<span class="font-bold text-slate-700"></span><br>Tel. ${profile.phone}<br>WhatsApp: ${profile.whatsapp}<br>${profile.email}<br>${profile.web}`;
-
-            const fCol3 = document.getElementById('footer-col-3');
-            if (fCol3) fCol3.innerHTML = `<span class="font-bold text-slate-700"></span><br>${profile.bank}<br>IBAN: ${profile.iban}<br>BIC: ${profile.bic}`;
-
-            const fCol4 = document.getElementById('footer-col-4');
-            if (fCol4) fCol4.innerHTML = `<span class="font-bold text-slate-700"></span><br>${profile.register}<br>St.-Nr. ${profile.tax}<br>USt-IdNr. ${profile.vat}<br>Geschäftsführer: ${profile.gf}`;
+            // D) Update Footer Columns from selected Branch
+            if (profile) App.updateCompanyFooter(profile);
 
             // E) Update Team Name in Cover Letter
             const teamNameEl = document.getElementById('doc-team-name');
             if (teamNameEl) {
-                teamNameEl.innerText = `Ihr ${profile.name}-Team`;
+                teamNameEl.innerText = `Ihr ${State.companyName}-Team`;
             }
 
             // 8. Apply visual branding
@@ -7258,7 +10536,7 @@
                     <div class="flex justify-between items-end pb-1" style="border-bottom:2px solid var(--brand-color);">
                         <div class="font-bold" style="color:var(--brand-color);">
                             ${headerBadge}
-                            <span class="sync-offer-id text-slate-600 ml-1" style="font-size: 10px; font-weight: 300;">${offerId}</span>
+                            <span class="sync-offer-id text-[#000000] ml-1" style="font-size: 10px; font-weight: 300;">${offerId}</span>
                         </div>
                     </div>
                 </div>
@@ -7267,12 +10545,12 @@
 
                 <div class="page-content flex-1 relative"></div>
 
-                <div class="mt-auto pt-2 text-[13px] text-slate-400 text-center mb-4" style="border-top:1px solid var(--brand-color);">
+                <div class="mt-auto pt-2 text-[13px] text-[#000000] text-center mb-4" style="border-top:1px solid var(--brand-color);">
                     Seite ${idx}
                 </div>
             `;
-
-            // 4. Update the Letterhead content dynamically on Page 1
+ 
+           // 4. Update the Letterhead content dynamically on Page 1
             if (idx === 1) {
                 // We add a listener to rebuild the header so it doesn't get wiped out.
                 setTimeout(() => {
@@ -7280,8 +10558,9 @@
                     if (idLabelEl) idLabelEl.innerText = idLabelText;
 
                     const mainTitleEl = div.querySelector('#doc-main-title');
-                    if (mainTitleEl && mainTitleEl.innerText.includes('Unverbindliches') || mainTitleEl && mainTitleEl.innerText.includes('Auftrag')) {
-                         mainTitleEl.innerText = mainTitleText;
+                    if (mainTitleEl) {
+                        // FIX: Use the saved title if it exists, otherwise fallback to the default text
+                        mainTitleEl.innerHTML = State.mainTitleHtml ? State.mainTitleHtml : mainTitleText;
                     }
                 }, 0);
             }
@@ -7513,10 +10792,29 @@
                 document.getElementById('nav-pane').innerHTML = '';
             }
 
-            const showHidden = forPrint ? false : document.getElementById('show-hidden-toggle').checked;
+            const showHidden = forPrint ? false : document.getElementById('show-hidden-toggle')?.checked;
 
             // 2. Pagination State
-            let pageIndex = 2; // Page 1 is the cover letter
+            // Dynamic pages start after the static cover page.
+            let pageIndex = 2;
+
+            if (App.PageLibrary?.appendPagesToContainer) {
+                pageIndex = App.PageLibrary.appendPagesToContainer(container, 'after_cover', pageIndex, forPrint);
+            }
+
+            if (App.RoofLayout?.isEnabled?.()) {
+                const roofPage = App.RoofLayout.createPage(pageIndex, forPrint);
+                if (roofPage) {
+                    container.appendChild(roofPage);
+                    pageIndex++;
+                }
+            }
+
+            if (App.PageLibrary?.appendPagesToContainer) {
+                pageIndex = App.PageLibrary.appendPagesToContainer(container, 'after_roof', pageIndex, forPrint);
+                pageIndex = App.PageLibrary.appendPagesToContainer(container, 'before_positions', pageIndex, forPrint);
+            }
+
             let currentPage = App.createPage(pageIndex, forPrint);
             container.appendChild(currentPage);
             let contentBox = currentPage.querySelector('.page-content');
@@ -7558,15 +10856,16 @@
          // 4. Recursive Row Renderer (Handles Level 1, 2, 3...)
             const createRowHtml = (item, context, level, posNumberString) => {
                 const { sIdx, iIdx, subIdx } = context;
-                const section = State.sections?.[sIdx];
-                const isLocked = !!section?.isLocked;
+                const section = context?.section || State.sections?.[sIdx] || {};
+                const isLocked = !!(section?.isLocked || item?._virtual);
+                const isReadOnlyRow = forPrint || isLocked;
                 
                 const subArg = (subIdx === null || subIdx === undefined || subIdx === 'null') ? 'null' : subIdx;
                 const isSub = subArg !== 'null';
 
                 let rowClasses = `item-group group relative`;
-                let posColor = level === 1 ? "text-dark-600" : (level >= 2 ? "text-slate-400" : "text-slate-700");
-                let namePrefix = level >= 2 ? `<i class="fa-solid fa-turn-up rotate-90 mr-2 text-[8px] text-slate-400"></i>` : "";
+                let posColor = level === 1 ? "text-[#000000]" : (level >= 2 ? "text-[#000000]" : "text-[#000000]");
+                let namePrefix = level >= 2 ? `<i class="fa-solid fa-turn-up rotate-90 mr-2 text-[8px] text-[#000000]"></i>` : "";
 
                 const itemStatus = item.status || 'normal';
                 const isItemOpt = itemStatus === 'optional';
@@ -7575,7 +10874,7 @@
                 if (!item.active) rowClasses += ' pos-inactive';
 
                 const total = App.calcItemGross(item);
-                const hidePrices = (item.isPauschal || item.hidePrices || State.sections[sIdx].config.hidePrices);
+                const hidePrices = (item.isPauschal || item.hidePrices || !!(section?.config?.hidePrices));
                 const ctxFn = (level === 0) ? `App.updateItemDetails(${sIdx},${iIdx},` : `App.updateSubItemDetails(${sIdx},${iIdx},${subArg},`;
 
                 let inlineBadge = '';
@@ -7591,23 +10890,23 @@
                     handleHtml = `<span class="drag-handle absolute -left-7 top-[-2px] no-print" draggable="true" ondragstart="App.dragStartPos(event, ${sIdx}, ${iIdx}, ${subArg})" title="Verschieben"><i class="fa-solid fa-grip-lines"></i></span>`;
                 }
 
-                const nameVal = forPrint
+                const nameVal = isReadOnlyRow
                     ? `<div class="flex items-baseline">${namePrefix}<span>${App.escapeHtml(item.name)}</span>${inlineBadge}</div>`
                     : `<div class="flex items-center w-full">
                         ${namePrefix}
-                        <input class="clean-input font-bold text-slate-800 w-auto flex-1 min-w-[50px] border-b border-transparent hover:border-dashed hover:border-[#93c21c] focus:border-solid focus:border-[#93c21c] transition-colors" value="${App.escapeHtml(item.name)}" onchange="${ctxFn}'name',this.value)">
+                        <input class="clean-input font-bold text-[#000000] w-auto flex-1 min-w-[50px] border-b border-transparent hover:border-dashed hover:border-[#93c21c] focus:border-solid focus:border-[#93c21c] transition-colors" value="${App.escapeHtml(item.name)}" onchange="${ctxFn}'name',this.value)">
                         ${inlineBadge}
                     </div>`;
 
                 // ✅ SEPARATED QUANTITY
-                const qtyHtml = forPrint 
-                    ? `<div class="text-right font-bold text-slate-800">${App.escapeHtml(item.qty)}</div>`
-                    : `<div class="text-right flex items-center justify-end"><input type="number" step="0.01" class="clean-input text-right font-bold text-slate-800 w-12 border-b border-transparent hover:border-dashed hover:border-[#93c21c] focus:border-solid focus:border-[#93c21c] transition-colors" value="${App.escapeHtml(item.qty)}" onchange="${ctxFn}'qty',this.value)"></div>`;
+                const qtyHtml = isReadOnlyRow 
+                    ? `<div class="text-right font-bold text-[#000000]">${App.escapeHtml(item.qty)}</div>`
+                    : `<div class="text-right flex items-center justify-end"><input type="number" step="0.01" class="clean-input text-right font-bold text-[#000000] w-12 border-b border-transparent hover:border-dashed hover:border-[#93c21c] focus:border-solid focus:border-[#93c21c] transition-colors" value="${App.escapeHtml(item.qty)}" onchange="${ctxFn}'qty',this.value)"></div>`;
                 
                 // ✅ SEPARATED UNIT
-                const unitHtml = forPrint
-                    ? `<div class="text-left font-bold text-slate-600">${App.escapeHtml(item.measure || item.unit || 'Stk')}</div>`
-                    : `<div class="text-left flex items-center justify-start"><select class="clean-input text-left bg-transparent text-dark-600 w-auto border-b border-transparent hover:border-dashed hover:border-[#93c21c] focus:border-solid focus:border-[#93c21c] transition-colors appearance-none cursor-pointer" onchange="${isSub ? `App.updateSubItemUnit(${sIdx},${iIdx},${subArg},this.value)` : `App.updateItemUnit(${sIdx},${iIdx},this.value)`}">${App.renderUnitOptions(item.measure || item.unit || 'Stk')}</select></div>`;
+                const unitHtml = isReadOnlyRow
+                    ? `<div class="text-left font-bold text-[#000000]">${App.escapeHtml(item.measure || item.unit || 'Stk.')}</div>`
+                    : `<div class="text-left flex items-center justify-start"><select class="clean-input text-left bg-transparent text-[#000000] w-auto border-b border-transparent hover:border-dashed hover:border-[#93c21c] focus:border-solid focus:border-[#93c21c] transition-colors appearance-none cursor-pointer" onchange="${isSub ? `App.updateSubItemUnit(${sIdx},${iIdx},${subArg},this.value)` : `App.updateItemUnit(${sIdx},${iIdx},this.value)`}">${App.renderUnitOptions(item.measure || item.unit || 'Stk')}</select></div>`;
                 
                 const formatPrice = (val) => {
                     const str = val.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR';
@@ -7616,22 +10915,39 @@
 
                 const epDisplay = hidePrices ? '-' : formatPrice(item.price);
                 const gpDisplay = hidePrices ? '-' : formatPrice(total);
-
+ 
                 const descHtml = App.getItemDescHtml(item);
                 const hasLaborRows = Array.isArray(item.labor_rows) && item.labor_rows.length > 0;
-                const laborTableHtml = hasLaborRows ? App.renderLaborRowsTable(item, forPrint, sIdx, iIdx, subIdx) : '';
 
+                // NEW: Safely evaluate the database value. Default to TRUE (hidden) if undefined/null.
+                const isLaborHidden = (item.print_hidden_labor === undefined || item.print_hidden_labor === null) 
+                    ? true 
+                    : (item.print_hidden_labor === true || item.print_hidden_labor === '1' || item.print_hidden_labor === 1);
+
+                let renderLabor = hasLaborRows;
+                if (isLaborHidden) {
+                    if (forPrint || !showHidden) {
+                        renderLabor = false;
+                    }
+                }
+                const laborTableHtml = renderLabor ? App.renderLaborRowsTable(item, forPrint, sIdx, iIdx, subIdx) : '';
                 const formattedDescHtml = App.formatDescHtmlForPdf(descHtml, '');
                 
                 let descVal = '';
-                if (forPrint) {
+                if (forPrint || isLocked) {
                     descVal = formattedDescHtml + laborTableHtml;
                 } else {
+                    // UX Bonus: Show a small warning in the editor if the table is hidden for print
+                    const hiddenWarning = (item.print_hidden_labor === true && renderLabor) 
+                        ? `<div class="text-[10px] text-red-500 font-bold mt-1 mb-1 no-print"><i class="fa-solid fa-eye-slash"></i> Lohndetails werden im Druck ausgeblendet</div>` 
+                        : '';
+                        
                     if (formattedDescHtml) {
                         descVal = `
                             <div class="editable-field border border-transparent hover:border-dashed hover:border-[#93c21c] cursor-pointer transition-colors" onclick="App.openDescModal(${sIdx},${iIdx},${subArg})">
                                 ${formattedDescHtml}
                             </div>
+                            ${hiddenWarning}
                             ${laborTableHtml}
                         `;
                     } else {
@@ -7639,6 +10955,7 @@
                             <div class="text-[10px] text-slate-300 italic cursor-pointer hover:text-[#93c21c] no-print mt-1 inline-block transition-colors" onclick="App.openDescModal(${sIdx},${iIdx},${subArg})">
                                 <i class="fa-solid fa-plus"></i> Beschreibung hinzufügen
                             </div>
+                            ${hiddenWarning}
                             ${laborTableHtml}
                         `;
                     }
@@ -7655,14 +10972,22 @@
 
                const imgW = item.imgWidth || 119;
                 const imgH = item.imgHeight || 135;
+                const itemImageSrc = App.pickImage ? App.pickImage(item, '') : (item.img || '');
+                const imageWasRemoved = item._imageRemoved === true || item.image_removed === true;
+                const shouldShowImage = !imageWasRemoved && !item.hideImage && item.showImage !== false && !!itemImageSrc;
 
-                const imgHtml = (item.hideImage || item.showImage === false) ? ''
-                    : `<div class="prod-img-container" style="width: ${imgW}px; height: ${imgH}px;" 
-                            onclick="${!forPrint ? `App.handleImageClick(event, ${sIdx},${iIdx},${subArg})` : ''}"
-                            onmouseup="${!forPrint ? `App.saveImageSize(this, ${sIdx},${iIdx},${subArg})` : ''}">
-                            <img src="${item.img || 'https://placehold.co/150?text='}" class="w-full h-full object-cover bg-white">
+                const imgHtml = !shouldShowImage ? ''
+                    : `<div class="prod-img-container has-position-image" style="width: ${imgW}px; height: ${imgH}px;" 
+                            onclick="${(!forPrint && !isLocked) ? `App.handleImageClick(event, ${sIdx},${iIdx},${subArg})` : ''}"
+                            onmouseup="${(!forPrint && !isLocked) ? `App.saveImageSize(this, ${sIdx},${iIdx},${subArg})` : ''}">
+                            <img src="${itemImageSrc}" class="w-full h-full object-cover bg-white">
+                            ${(!forPrint && !isLocked) ? `<button type="button" class="js-clear-item-image a4-image-delete-btn no-print" onclick="App.clearItemImage(event, ${sIdx},${iIdx},${subArg})" title="Bild entfernen"><i class="fa-solid fa-xmark"></i></button>` : ''}
                             ${badgeHtml}
                         </div>`;
+
+                const emptyImageControl = (!forPrint && !isLocked && ((item.kind || (item.item_type === 'labor' ? 'labor' : 'article')) !== 'labor') && !shouldShowImage)
+                    ? `<button type="button" class="a4-image-empty-control no-print" onclick="App.handleImageClick(event, ${sIdx},${iIdx},${subArg})" title="Bild hinzufügen"><i class="fa-solid fa-image"></i><span>Bild hinzufügen</span></button>`
+                    : '';
                 const isHiddenPrint = item.print_hidden !== false;
                 const eyeClass = isHiddenPrint ? 'text-red-500' : 'text-green-500';
                 const eyeIcon = isHiddenPrint ? 'fa-eye-slash' : 'fa-eye';
@@ -7680,7 +11005,7 @@
                 if (currentKind === 'note') {
                     const noteNameVal = forPrint
                         ? `<div class="pdf-note-title">${App.escapeHtml(item.name)}</div>`
-                        : `<input class="clean-input font-bold text-slate-800 w-full text-base mb-2 border-b border-transparent hover:border-dashed hover:border-[#93c21c] transition-colors" value="${App.escapeHtml(item.name)}" onchange="${ctxFn}'name',this.value)" placeholder="Hinweistitel...">`;
+                        : `<input class="clean-input font-bold text-[#000000] w-full text-base mb-2 border-b border-transparent hover:border-dashed hover:border-[#93c21c] transition-colors" value="${App.escapeHtml(item.name)}" onchange="${ctxFn}'name',this.value)" placeholder="Hinweistitel...">`;
 
                     return `
                         <div id="a4-pos-row-${sIdx}-${iIdx}-${subArg}" class="pdf-note-box group ${item.active ? '' : 'pos-inactive'}" ${dragAttrs}>
@@ -7694,7 +11019,7 @@
                     `;
                 }
 
-                const bodyClass = (item.hideImage || item.showImage === false) ? 'pos-row-bottom no-image' : 'pos-row-bottom';
+                const bodyClass = shouldShowImage ? 'pos-row-bottom' : 'pos-row-bottom no-image';
                 const wrapperClass = `pdf-item-card ${level > 0 ? 'pdf-subitem' : ''}`;
 
                 let extensionCheckbox = '';
@@ -7719,11 +11044,11 @@
                             <div class="pdf-main-title">${nameVal}</div>
                             ${qtyHtml}
                             ${unitHtml}
-                            <div class="text-right font-bold text-slate-800">${epDisplay}</div>
-                            <div class="text-right font-bold text-slate-800">${gpDisplay}</div>
+                            <div class="text-right font-bold text-[#000000]">${epDisplay}</div>
+                            <div class="text-right font-bold text-[#000000]">${gpDisplay}</div>
                         </div>
                         <div class="${bodyClass} relative">
-                            ${(item.hideImage || item.showImage === false) ? '' : imgHtml}
+                            ${shouldShowImage ? imgHtml : emptyImageControl}
                             <div class="flex-1 min-w-0 relative">
                                 <div class="pdf-desc-block ${hasLaborRows ? 'w-full' : ''}">
                                     ${descVal}
@@ -7739,7 +11064,11 @@
             let totalNet = 0;
             let activeTotal = 0;
 
-            (App.getRenderableSections() || []).forEach((sec, sIdx) => {
+            (App.getRenderableSections(forPrint) || []).forEach((sec, sIdx) => {
+                if (!sec) return;
+                sec.config = sec.config || { mode: 'standard', pauschalPrice: 0, type: 'standard', hidePrices: false, margin: { value: 0, type: 'fixed' } };
+                sec.items = Array.isArray(sec.items) ? sec.items : [];
+                const sectionLocked = !!sec.isLocked || !!sec._virtualSection;
                 const isPauschalSection = sec.config.mode === 'pauschal';
                 const isOptSection = sec.config.type === 'optional';
                 const isAltSection = sec.config.type === 'alternative';
@@ -7766,21 +11095,25 @@
                     return;
                 }
 
-                let deleteBtn = !forPrint ? `<button onclick="App.removeSection(${sIdx})" class="ml-auto text-slate-300 hover:text-red-500 p-1 rounded hover:bg-red-50 transition-colors"><i class="fa-solid fa-trash"></i></button>` : '';
+               let deleteBtn = (!forPrint && !sectionLocked) ? `<button onclick="App.removeSection(${sIdx})" class="ml-auto text-slate-300 hover:text-red-500 p-1 rounded hover:bg-red-50 transition-colors"><i class="fa-solid fa-trash"></i></button>` : '';
 
-                header.innerHTML = forPrint
-                    ? `<div class="text-lg font-bold text-brand-primary uppercase">${setLabel}${App.escapeHtml(sec.title)} ${secBadges}</div><div class="text-sm text-slate-600">${sec.description}</div>`
-                    : `<div class="flex items-center">
-                        ${setLabel}
-                        <input value="${App.escapeHtml(sec.title)}" oninput="App.updateSectionMeta(${sIdx},'title',this.value)" class="text-lg font-bold text-brand-primary w-full bg-transparent outline-none">
-                        <span class="text-xs text-slate-400 ml-2 whitespace-nowrap">${secBadges}</span>
+                // FIX: locked/virtual sections are rendered read-only so their index never writes into State.sections.
+                header.innerHTML = (forPrint || sectionLocked)
+                ? `<div class="flex items-center">
+                        <div class="text-lg font-bold text-[#4c4c4c] uppercase">${setLabel}${App.escapeHtml(sec.title || '')} ${secBadges}</div>
+                        ${sectionLocked && !forPrint ? '<span class="ml-2 text-[10px] font-black uppercase tracking-wider text-slate-400">Auto</span>' : ''}
+                   </div>
+                   <div class="text-sm text-[#000000]">${App.escapeHtml(sec.description || '')}</div>`
+                : `<div class="flex items-center">
+                    ${setLabel}
+                    <input value="${App.escapeHtml(sec.title || '')}" oninput="App.updateSectionMeta(${sIdx},'title',this.value)" class="text-lg font-bold text-[#4c4c4c] w-full bg-transparent outline-none">
+                        <span class="text-xs text-[#000000] ml-2 whitespace-nowrap">${secBadges}</span>
                         ${deleteBtn}
                     </div>
-                    <textarea oninput="App.updateSectionMeta(${sIdx},'description',this.value)" class="text-sm text-dark-600 w-full bg-transparent resize-none outline-none h-auto">${sec.description}</textarea>`;
-
+                    <textarea oninput="App.updateSectionMeta(${sIdx},'description',this.value)" class="text-sm text-[#000000] w-full bg-transparent resize-none outline-none h-auto">${sec.description || ''}</textarea>`;
                 addToPage(header);
 
-                if (!forPrint) {
+                if (!forPrint && !sectionLocked) {
                     header.classList.add('rounded', 'transition-colors');
 
                     header.ondragover = (e) => {
@@ -7806,7 +11139,7 @@
                 }
 
                 // 5b. Drop Zone (Global Section)
-                if (!forPrint) {
+                if (!forPrint && !sectionLocked) {
                     let dz = document.createElement('div');
                     dz.className = 'section-drop-zone';
                     dz.ondragover = e => e.preventDefault();
@@ -7838,7 +11171,8 @@
                         const currentContext = {
                             sIdx: sIdx,
                             iIdx: (level === 0) ? idx : parentContext.iIdx,
-                            subIdx: (level === 0) ? null : idx
+                            subIdx: (level === 0) ? null : idx,
+                            section: sec
                         };
 
                         // --- Price Calc ---
@@ -7871,10 +11205,10 @@
                         rowEl.innerHTML = createRowHtml(item, currentContext, (item.depth || level), currentPosStr);
                         addToPage(rowEl.firstElementChild);
 
-                        if (!forPrint && level === 0) {
+                        if (!forPrint && !sectionLocked && level === 0) {
                             const intoParentZone = document.createElement('div');
                             // Klasse 'section-drop-zone' hinzugefügt, statische border entfernt
-                            intoParentZone.className = 'section-drop-zone ml-12 mb-2 px-3 py-2 text-[10px] text-slate-400 bg-slate-50 no-print';
+                            intoParentZone.className = 'section-drop-zone ml-12 mb-2 px-3 py-2 text-[10px] text-[#000000] bg-slate-50 no-print';
                             intoParentZone.innerHTML = '<i class="fa-solid fa-level-down-alt mr-1"></i> Hier ablegen, um als Unterposition hinzuzufügen';
                             intoParentZone.ondragover = (e) => {
                                 e.preventDefault();
@@ -7903,10 +11237,10 @@
                             addToPage(intoParentZone);
                         }
 
-                       if (!forPrint) {
+                       if (!forPrint && !sectionLocked) {
                             const toMainZone = document.createElement('div');
                             // Klasse 'section-drop-zone' hinzugefügt, statische border entfernt
-                            toMainZone.className = 'section-drop-zone mb-3 px-3 py-2 text-[10px] text-slate-400 bg-white no-print';
+                            toMainZone.className = 'section-drop-zone mb-3 px-3 py-2 text-[10px] text-[#000000] bg-white no-print';
                             toMainZone.innerHTML = '<i class="fa-solid fa-arrow-up mr-1"></i> Hier ablegen, um als Hauptposition einzufügen';
                             toMainZone.ondragover = (e) => {
                                 e.preventDefault();
@@ -7946,7 +11280,7 @@
                                 if (forPrint && isSubHidden) return;
 
                                 const subPosStr = sub.hideNumbering ? '' : `${parentStrForChildren}.${sIdx2 + 1}`;
-                                const subContext = { sIdx: sIdx, iIdx: idx, subIdx: sIdx2 };
+                                const subContext = { sIdx: sIdx, iIdx: idx, subIdx: sIdx2, section: sec };
 
                                 const subRowEl = document.createElement('div');
                                 subRowEl.innerHTML = createRowHtml(sub, subContext, subLevel, subPosStr);
@@ -7962,7 +11296,7 @@
                 // 5e. Flat Rate (Pauschal) & Add Buttons per Section
                if (isPauschalSection) {
                     const pr = document.createElement('div');
-                    pr.className = "flex justify-end mt-2 pr-16 font-bold text-slate-800 text-sm border-t border-slate-300 pt-2";
+                    pr.className = "flex justify-end mt-2 pr-16 font-bold text-[#000000] text-sm border-t border-slate-300 pt-2";
                     pr.innerHTML = `<span>Pauschalpreis:</span><span class="ml-8 ">${sec.config.pauschalPrice.toLocaleString('de-DE')} €</span>`;
                     addToPage(pr);
                     totalNet += sec.config.pauschalPrice;
@@ -7972,7 +11306,7 @@
             // 6. Global Drop Zone & Totals
             if (!forPrint) {
                 let dzG = document.createElement('div');
-                dzG.className = 'section-drop-zone border-2 border-dashed border-slate-300 rounded flex items-center justify-center text-slate-400 text-xs py-6 mt-4';
+                dzG.className = 'section-drop-zone border-2 border-dashed border-slate-300 rounded flex items-center justify-center text-[#000000] text-xs py-6 mt-4';
                 dzG.innerText = 'Abschnitt'; // "New Section"
                 dzG.ondragover = e => {
                     e.preventDefault();
@@ -8013,6 +11347,14 @@
                 }
             }
 
+            if (App.PageLibrary?.appendPagesToContainer) {
+                const afterPositionsNext = App.PageLibrary.appendPagesToContainer(container, 'after_positions', pageIndex + 1, forPrint);
+                pageIndex = Math.max(pageIndex, afterPositionsNext - 1);
+
+                const beforeFinalNext = App.PageLibrary.appendPagesToContainer(container, 'before_final', pageIndex + 1, forPrint);
+                pageIndex = Math.max(pageIndex, beforeFinalNext - 1);
+            }
+
             // ✅ 2. RENDER FINAL TEXT & SIGNATURE (FORCED NEW PAGE)
             if (State.docType === 'Angebot') {
                 const finalPageHtml = App.renderOfferFinalPage();
@@ -8047,6 +11389,11 @@
                 });
             }
             
+            if (App.PageLibrary?.appendPagesToContainer) {
+                const endNext = App.PageLibrary.appendPagesToContainer(container, 'end', pageIndex + 1, forPrint);
+                pageIndex = Math.max(pageIndex, endNext - 1);
+            }
+
             // 7. Update UI Stats & Generate Thumbnails
             if (!forPrint) {
                 const totals = App.computeSectionSummary();
@@ -8168,9 +11515,9 @@
                 State.unlockedParentMargins = State.unlockedParentMargins || {};
                 const isParentUnlocked = State.unlockedParentMargins[`${sIdx}-${iIdx}`];
 
-                const isEkReadonly = (hasChildren && !isPauschal) ? 'readonly disabled class="w-full border border-transparent bg-transparent text-right font-bold text-slate-600"' : 'class="w-full border border-slate-300 rounded px-1 py-0.5 text-right  focus:border-brand-primary outline-none"';
-                const isVkReadonly = (hasChildren && !isPauschal && !isParentUnlocked) ? 'readonly disabled class="w-full border border-transparent bg-transparent text-right font-bold text-slate-600"' : 'class="w-full border border-slate-300 rounded px-1 py-0.5 text-right  focus:border-brand-primary outline-none bg-yellow-50"';
-                const isSelectReadonly = (hasChildren && !isPauschal && !isParentUnlocked) ? 'disabled class="outline-none bg-transparent font-bold text-slate-400 cursor-not-allowed"' : 'class="outline-none bg-transparent font-bold text-brand-primary cursor-pointer"';
+                const isEkReadonly = (hasChildren && !isPauschal) ? 'readonly disabled class="w-full border border-transparent bg-transparent text-right font-bold text-[#000000]"' : 'class="w-full border border-slate-300 rounded px-1 py-0.5 text-right  focus:border-brand-primary outline-none"';
+                const isVkReadonly = (hasChildren && !isPauschal && !isParentUnlocked) ? 'readonly disabled class="w-full border border-transparent bg-transparent text-right font-bold text-[#000000]"' : 'class="w-full border border-slate-300 rounded px-1 py-0.5 text-right  focus:border-brand-primary outline-none bg-yellow-50"';
+                const isSelectReadonly = (hasChildren && !isPauschal && !isParentUnlocked) ? 'disabled class="outline-none bg-transparent font-bold text-[#000000] cursor-not-allowed"' : 'class="outline-none bg-transparent font-bold text-brand-primary cursor-pointer"';
 
                 const marginHandler = (hasChildren && !isPauschal)
                     ? `App.applyGeneralMargin(${sIdx}, ${iIdx}, this.value)`
@@ -8181,34 +11528,44 @@
                     : `App.updatePosPriceCalc(${sIdx},${iIdx},${subIdxArg},'marginType',this.value)`;
 
                 const indentClass = isSub ? 'border-l-4 border-brand-primary/40 bg-slate-50' : 'bg-white';
-                const titleSize = isSub ? 'text-[11px] text-slate-600' : 'text-xs text-slate-800';
+                const titleSize = isSub ? 'text-[11px] text-[#000000]' : 'text-xs text-[#000000]';
                 const bgClass = status !== 'normal' ? 'opacity-75' : '';
+
+                // Extract image safely (Removed the hiding CSS class so it always shows)
+                const imgSrc = App.pickImage(dataObj);
+                const imageHtml = imgSrc && !dataObj.hideImage ? `<div class="w-6 h-6 rounded shrink-0 overflow-hidden bg-white border border-slate-200"><img src="${imgSrc}" class="w-full h-full object-cover"></div>` : '';
 
                 return `
                 <details id="sb-item-${sIdx}-${iIdx}-${subIdxArg}" class="group/item ${bgClass} border border-slate-200 rounded mb-3 shadow-sm ${indentClass}">
-                    <summary onclick="App.focusListViewRow(${sIdx}, ${iIdx}, ${subIdxArg})" class="cursor-pointer select-none p-2 font-bold flex justify-between items-center outline-none hover:bg-slate-100 transition-colors rounded group-open/item:rounded-b-none group-open/item:bg-slate-50 group-open/item:border-b border-slate-200">
-                        <div class="flex items-center gap-2 truncate pr-2">
-                            <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform group-open/item:rotate-90"></i>
+                    <summary class="cursor-pointer select-none p-2 font-bold flex justify-between items-center outline-none hover:bg-slate-100 transition-colors rounded group-open/item:rounded-b-none group-open/item:bg-slate-50 group-open/item:border-b border-slate-200">
+                        <div class="flex items-center gap-2 truncate pr-2" onclick="App.focusListViewRow(${sIdx}, ${iIdx}, ${subIdxArg})">
+                            <i class="fa-solid fa-chevron-right text-[10px] text-[#000000] transition-transform group-open/item:rotate-90"></i>
+                            ${imageHtml}
                             <span class="truncate ${titleSize}" title="${App.escapeHtml(dataObj.name || 'Position')}">${prefix} ${App.escapeHtml(dataObj.name || 'Position')}</span>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
-                            <span class=" text-[10px] text-slate-600">${totalVK.toLocaleString('de-DE', {minimumFractionDigits:2})} €</span>
-                            <span class="text-[9px] bg-brand-light px-1 rounded text-dark-600">${percent}</span>
+                            <span class="text-[10px] text-[#000000]" onclick="App.focusListViewRow(${sIdx}, ${iIdx}, ${subIdxArg})">${totalVK.toLocaleString('de-DE', {minimumFractionDigits:2})} €</span>
+                            <span class="text-[9px] bg-brand-light px-1 rounded text-[#000000]" onclick="App.focusListViewRow(${sIdx}, ${iIdx}, ${subIdxArg})">${percent}</span>
+                            
+                            <div class="flex gap-1 items-center ml-1 border-l border-slate-200 pl-2">
+                                <button type="button" onclick="event.stopPropagation(); App.openPosSettings(${sIdx}, ${iIdx}, ${subIdxArg})" class="text-slate-400 hover:text-[#93c21c] p-1 rounded transition-colors" title="Bearbeiten"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button type="button" onclick="event.stopPropagation(); App.removeItem(${sIdx}, ${iIdx}, ${subIdxArg})" class="text-slate-400 hover:text-red-500 p-1 rounded transition-colors" title="Löschen"><i class="fa-solid fa-trash"></i></button>
+                            </div>
                         </div>
                     </summary>
                     
                     <div class="p-3 bg-white/50 rounded-b">
                         <div class="grid grid-cols-3 gap-2 mb-3 bg-slate-100/50 p-2 rounded text-xs">
                             <div>
-                                <div class="text-[9px] text-slate-400 mb-0.5">EK / Einheit</div>
+                                <div class="text-[9px] text-[#000000] mb-0.5">EK / Einheit</div>
                                 <input data-sb-focus="ek:${focusKeyBase}" type="number" step="0.01" value="${ek.toFixed(2)}" onchange="App.updatePosPriceCalc(${sIdx},${iIdx},${subIdxArg},'ek',this.value)" ${isEkReadonly}>
                             </div>
                             <div>
-                                <div class="text-[9px] text-slate-400 mb-0.5 flex justify-between items-center">
+                                <div class="text-[9px] text-[#000000] mb-0.5 flex justify-between items-center">
                                     <span class="flex items-center gap-1">
                                         Marge
                                         ${(hasChildren && !isPauschal) ? `
-                                            <button type="button" onclick="event.stopPropagation(); App.toggleParentMarginLock(${sIdx}, ${iIdx})" class="text-slate-400 hover:text-[#93c21c] transition-colors" title="Sperre aufheben, um Marge auf alle Unterpositionen zu verteilen">
+                                            <button type="button" onclick="event.stopPropagation(); App.toggleParentMarginLock(${sIdx}, ${iIdx})" class="text-[#000000] hover:text-[#93c21c] transition-colors" title="Sperre aufheben, um Marge auf alle Unterpositionen zu verteilen">
                                                 <i class="fa-solid ${isParentUnlocked ? 'fa-lock-open text-[#93c21c]' : 'fa-lock'}"></i>
                                             </button>
                                         ` : ''}
@@ -8221,15 +11578,15 @@
                                 <input data-sb-focus="margin:${focusKeyBase}" type="number" step="0.01" value="${mVal.toFixed(2)}" onchange="${marginHandler}" ${isVkReadonly}>
                             </div>
                             <div>
-                                <div class="text-[9px] text-slate-400 mb-0.5">VK / Einheit</div>
+                                <div class="text-[9px] text-[#000000] mb-0.5">VK / Einheit</div>
                                 <input data-sb-focus="price:${focusKeyBase}" type="number" step="0.01" value="${vk.toFixed(2)}" onchange="App.updatePosPriceCalc(${sIdx},${iIdx},${subIdxArg},'price',this.value)" ${isVkReadonly}>
                             </div>
                         </div>
                         
-                        <div class="grid grid-cols-2 gap-y-1 text-[10px] text-dark-600 mb-3 border-t border-slate-200 pt-2">
+                        <div class="grid grid-cols-2 gap-y-1 text-[10px] text-[#000000] mb-3 border-t border-slate-200 pt-2">
                             <span>EK Gesamt:</span><span class="text-right">${totalEK.toLocaleString('de-DE', {minimumFractionDigits:2})} €</span>
                             <span>DB1 Gesamt:</span><span class="text-right text-brand-primary">${marginTotal.toLocaleString('de-DE', {minimumFractionDigits:2})} €</span>
-                            <span class="font-bold text-xs text-slate-800">VK Gesamt:</span><span class="text-right font-bold text-xs text-slate-800">${totalVK.toLocaleString('de-DE', {minimumFractionDigits:2})} €</span>
+                            <span class="font-bold text-xs text-[#000000]">VK Gesamt:</span><span class="text-right font-bold text-xs text-[#000000]">${totalVK.toLocaleString('de-DE', {minimumFractionDigits:2})} €</span>
                         </div>
                         
                         <div class="flex items-center gap-2 mb-2 text-xs">
@@ -8296,21 +11653,20 @@
                 // 4. Calculate the percentage of the global total
                 const secPercent = (totalNet > 0) ? ((secTotalVK / totalNet) * 100).toFixed(1) + '%' : '0.0%';
 
-                // Added id="sb-sec-..." to parent section details
                 fullHtml += `
                 <details id="sb-sec-${sIdx}" class="mb-4 bg-slate-50 border border-slate-200 rounded-xl shadow-sm group" open>
-                    <summary class="cursor-pointer select-none p-3 font-bold text-slate-700 text-xs uppercase tracking-wide flex justify-between items-center outline-none bg-slate-100 rounded-t-xl group-open:border-b border-slate-200 transition-colors hover:bg-slate-200/50">
+                    <summary class="cursor-pointer select-none p-3 font-bold text-[#000000] text-xs uppercase tracking-wide flex justify-between items-center outline-none bg-slate-100 rounded-t-xl group-open:border-b border-slate-200 transition-colors hover:bg-slate-200/50">
                         <div class="flex items-center gap-2 truncate pr-2">
-                            <i class="fa-solid fa-chevron-right transition-transform group-open:rotate-90 text-slate-400"></i>
+                            <i class="fa-solid fa-chevron-right transition-transform group-open:rotate-90 text-[#000000]"></i>
                             <span class="truncate">${sIdx+1}. ${setLabel}${App.escapeHtml(sec.title || 'Sektion')}</span>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
-                            <span class=" text-[10px] text-slate-600">${secTotalVK.toLocaleString('de-DE', {minimumFractionDigits:2})} €</span>
+                            <span class=" text-[10px] text-[#000000]">${secTotalVK.toLocaleString('de-DE', {minimumFractionDigits:2})} €</span>
                             <span class="text-[10px] bg-brand-primary text-white px-1.5 py-0.5 rounded" style="background-color: var(--brand-color);">${secPercent}</span>
                         </div>
                     </summary>
                     <div class="p-3 bg-slate-50 border-x border-b border-slate-200 rounded-b-xl overflow-hidden">
-                        ${secHtml || '<div class="text-xs text-slate-400 text-center py-4">Keine Positionen vorhanden</div>'}
+                        ${secHtml || '<div class="text-xs text-[#000000] text-center py-4">Keine Positionen vorhanden</div>'}
                     </div>
                 </details>
                 `;
@@ -8416,15 +11772,23 @@
         },
         // --- NEW DELETE SECTION FUNCTION ---
         removeSection: (sIdx) => {
+            const section = State.sections?.[sIdx];
+            if (!section || section._virtualSection || section.isLocked) {
+                console.warn('[Offer] Ungültige oder gesperrte Sektion kann nicht gelöscht werden:', sIdx);
+                return;
+            }
+
+            const sectionTitle = section.title || `Sektion ${Number(sIdx) + 1}`;
+
             App.toastConfirmShow({
                 title: 'Sektion löschen?',
                 message: 'Wenn Sie diese Sektion löschen, werden alle enthaltenen Positionen ebenfalls gelöscht.<br>Fortfahren?',
                 okText: 'Ja, Sektion löschen',
                 cancelText: 'Abbrechen',
                 onOk: () => {
-                State.sections.splice(sIdx, 1);
-                App.renderQuotePage();
-                App.Bio.addEntry('Sektion gelöscht', `Sektion "${State.sections[sIdx].title}" wurde entfernt.`);
+                    State.sections.splice(sIdx, 1);
+                    App.Bio.addEntry('Sektion gelöscht', `Sektion "${sectionTitle}" wurde entfernt.`);
+                    App.renderQuotePage();
                 }
             });
             },
@@ -8610,7 +11974,7 @@
                             <div class="text-settings-float no-print">
                                 <input type="color" value="${item.color}" oninput="App.updateFloatingTextStyle(${item.id}, 'color', this.value)" style="width: 24px; height: 24px; padding: 0; border: none; cursor: pointer; border-radius: 4px;" title="Textfarbe">
                                 <input type="number" value="${item.fontSize}" oninput="App.updateFloatingTextStyle(${item.id}, 'fontSize', this.value)" style="width: 50px; height: 24px; font-size: 10px; border: 1px solid #cbd5e1; text-align: center; border-radius: 4px; outline: none;" title="Schriftgröße (px)">
-                                <span style="font-size: 10px; color: #64748b;">px</span>
+                                <span style="font-size: 10px; color: #1c1c1c;">px</span>
                             </div>
                         `;
                     }
@@ -8745,16 +12109,17 @@
                 marginPercent: defaultMargin,
                 margin: defaultMargin,
                 qty:1,
-                unit:'Stk',
-                measure:'Stk',
+                unit:'Stk.',
+                measure:'Stk.',
                 price_unit_value: 1,
-                price_unit_label: 'Stk',
-                price_unit_text: '1 Stk',
+                price_unit_label: 'Stk.',
+                price_unit_text: '1 Stk.',
                 kind: 'article',
                 status: 'normal',
                 print_hidden: false,
                 hideImage: true,
-                subItems:[]
+                subItems:[],
+                origin_type: 'manual', source_type: 'manual', type_locked: false, _manual: true
             });
             App.renderQuotePage();
         },
@@ -8780,7 +12145,7 @@
                 kind: 'labor',
                 status: 'normal',
                 print_hidden: false,
-                print_hidden_labor: false,
+                print_hidden_labor: true,
                 subItems: [],
                 active: true,
                 showImage: false,
@@ -8796,7 +12161,8 @@
                         rate: 0,
                         total: 0
                     }
-                ]
+                ],
+                origin_type: 'manual', source_type: 'manual', type_locked: false, _manual: true
             });
 
             App.renderQuotePage();
@@ -8886,14 +12252,15 @@
                 margin: defaultMargin,
                 active:false,
                 qty:1,
-                unit:'Stk',
-                measure:'Stk',
+                unit:'Stk.',
+                measure:'Stk.',
                 price_unit_value: 1,
-                price_unit_label: 'Stk',
-                price_unit_text: '1 Stk',
+                price_unit_label: 'Stk.',
+                price_unit_text: '1 Stk.',
                 kind: 'article',
                 hideImage: true,
-                status: 'normal'
+                status: 'normal',
+                origin_type: 'manual', source_type: 'manual', type_locked: false, _manual: true
             });
             App.renderQuotePage();
         },
@@ -8982,9 +12349,12 @@
             const showLoading = () => {
                 modal.classList.remove('hidden');
                 if (titleEl) titleEl.textContent = 'Lade…';
-                if (descEl)  descEl.textContent  = '';
-                if (matBody) matBody.innerHTML = `<tr><td class="px-4 py-3 text-slate-400 text-sm" colspan="2">Lade Komponenten…</td></tr>`;
-                if (labBody) labBody.innerHTML = `<tr><td class="px-4 py-3 text-slate-400 text-sm" colspan="3">Lade Dienstleistungen…</td></tr>`;
+                if (descEl) {
+                    descEl.innerHTML = '';
+                    descEl.classList.remove('ql-rich-preview');
+                }
+                if (matBody) matBody.innerHTML = `<tr><td class="px-4 py-3 text-[#000000] text-sm" colspan="2">Lade Komponenten…</td></tr>`;
+                if (labBody) labBody.innerHTML = `<tr><td class="px-4 py-3 text-[#000000] text-sm" colspan="3">Lade Dienstleistungen…</td></tr>`;
                 if (addBtn) addBtn.onclick = null;
             };
 
@@ -9099,7 +12469,7 @@
                 if (!matBody) return;
 
                 if (!Array.isArray(comps) || comps.length === 0) {
-                    matBody.innerHTML = `<tr><td class="px-4 py-3 text-slate-400 text-sm" colspan="3">Keine Komponenten</td></tr>`;
+                    matBody.innerHTML = `<tr><td class="px-4 py-3 text-[#000000] text-sm" colspan="3">Keine Komponenten</td></tr>`;
                     return;
                 }
 
@@ -9138,13 +12508,13 @@
                     rows.push(`
                         <tr>
                             <td class="px-4 py-3">
-                                <div class="font-bold text-slate-800 text-sm">${escapeHtml(c?.name || 'Komponente')}</div>
-                                <div class="text-xs text-slate-400">${escapeHtml(c?.unit || 'Stk')} • ${escapeHtml(qty)}</div>
+                                <div class="font-bold text-[#000000] text-sm">${escapeHtml(c?.name || 'Komponente')}</div>
+                                <div class="text-xs text-[#000000]">${escapeHtml(c?.unit || 'Stk')} • ${escapeHtml(qty)}</div>
                             </td>
 
-                            <td class="px-4 py-3 text-sm text-slate-600">
+                            <td class="px-4 py-3 text-sm text-[#000000]">
                                 <div class="font-semibold">${distributor}</div>
-                                <div class="text-[11px] text-slate-400 mt-1">
+                                <div class="text-[11px] text-[#000000] mt-1">
                                     Skonto: ${skonto.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%
                                     • Zahlungsziel: ${paymentTerms} Tage
                                 </div>
@@ -9188,13 +12558,13 @@
                         rows.push(`
                             <tr class="bg-slate-50/50">
                                 <td class="px-4 py-3">
-                                    <div class="font-semibold text-slate-700 text-sm">↳ ${escapeHtml(ch?.name || 'Unterkomponente')}</div>
-                                    <div class="text-xs text-slate-400">${escapeHtml(ch?.unit || 'Stk')} • ${escapeHtml(q2)}</div>
+                                    <div class="font-semibold text-[#000000] text-sm">↳ ${escapeHtml(ch?.name || 'Unterkomponente')}</div>
+                                    <div class="text-xs text-[#000000]">${escapeHtml(ch?.unit || 'Stk')} • ${escapeHtml(q2)}</div>
                                 </td>
 
-                                <td class="px-4 py-3 text-sm text-dark-600">
+                                <td class="px-4 py-3 text-sm text-[#000000]">
                                     <div class="font-medium">${childDistributor}</div>
-                                    <div class="text-[11px] text-slate-400 mt-1">
+                                    <div class="text-[11px] text-[#000000] mt-1">
                                         ${childSkonto > 0 ? `Skonto: ${childSkonto.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%` : ''}
                                         ${childSkonto > 0 && childPaymentTerms !== null ? ' • ' : ''}
                                         ${childPaymentTerms !== null ? `Zahlungsziel: ${childPaymentTerms} Tage` : ''}
@@ -9215,7 +12585,7 @@
                 if (!labBody) return;
 
                 if (!Array.isArray(labor) || labor.length === 0) {
-                    labBody.innerHTML = `<tr><td class="px-4 py-3 text-slate-400 text-sm" colspan="4">Keine Dienstleistungen</td></tr>`;
+                    labBody.innerHTML = `<tr><td class="px-4 py-3 text-[#000000] text-sm" colspan="4">Keine Dienstleistungen</td></tr>`;
                     return;
                 }
 
@@ -9226,8 +12596,8 @@
 
                     return `
                         <tr>
-                            <td class="px-4 py-3 font-bold text-slate-800 text-sm">${escapeHtml(l?.name || 'Dienstleistung')}</td>
-                            <td class="px-4 py-3 text-sm text-slate-600">${escapeHtml(l?.qualification_name || '-')}</td>
+                            <td class="px-4 py-3 font-bold text-[#000000] text-sm">${escapeHtml(l?.name || 'Dienstleistung')}</td>
+                            <td class="px-4 py-3 text-sm text-[#000000]">${escapeHtml(l?.qualification_name || '-')}</td>
                             <td class="px-4 py-3 text-center  text-sm">${hrs}</td>
                             <td class="px-4 py-3 text-right  text-sm">${money(tot)} €</td>
                         </tr>
@@ -9253,7 +12623,10 @@
                 console.log('labor?', raw?.labor);
 
                 if (titleEl) titleEl.textContent = setName;
-                if (descEl)  descEl.textContent  = setDesc;
+                if (descEl) {
+                    descEl.innerHTML = App.safeRichHtml(setDesc || '');
+                    descEl.classList.add('ql-rich-preview');
+                }
 
                 renderComponents(comps);
                 renderLabor(labor);
@@ -9276,7 +12649,10 @@
             } catch (e) {
                 console.error('openSetModal failed', e);
                 if (titleEl) titleEl.textContent = `Set #${setId}`;
-                if (descEl)  descEl.textContent  = '';
+                if (descEl) {
+                    descEl.innerHTML = '';
+                    descEl.classList.remove('ql-rich-preview');
+                }
                 if (matBody) matBody.innerHTML = `<tr><td class="px-4 py-3 text-red-500 text-sm" colspan="2">Fehler beim Laden</td></tr>`;
                 if (labBody) labBody.innerHTML = `<tr><td class="px-4 py-3 text-red-500 text-sm" colspan="3">Fehler beim Laden</td></tr>`;
             }
@@ -9290,14 +12666,104 @@
          save: () => alert("Angebot gespeichert (Not implemented in this demo)"),
 
         // Badges
+        getItemRef: (sIdx, iIdx, subIdx = null) => {
+            const section = State.sections?.[Number(sIdx)];
+            const mainItem = section?.items?.[Number(iIdx)];
+            if (!mainItem) return null;
+
+            const normalizedSubIdx = (subIdx === null || subIdx === undefined || subIdx === 'null' || subIdx === '')
+                ? null
+                : Number(subIdx);
+
+            if (normalizedSubIdx !== null && Number.isFinite(normalizedSubIdx)) {
+                return mainItem.subItems?.[normalizedSubIdx] || null;
+            }
+
+            return mainItem;
+        },
+
+        clearImageFields: (target) => {
+            if (!target) return;
+
+            // Clear every possible image key because pickImage() checks multiple fallbacks.
+            target.img = '';
+            target.image = '';
+            target.image_url = '';
+            target.imageUrl = '';
+            target.img_url = '';
+            target.thumbnail = '';
+            target.thumb = '';
+            target.photo = '';
+            target.photo_url = '';
+            target.logo = '';
+            target.logo_url = '';
+            target.url = '';
+            target.media = null;
+            target.images = [];
+            target.files = [];
+
+            // This flag tells App.pickImage() not to resurrect a fallback/product image.
+            target._imageRemoved = true;
+            target.image_removed = true;
+            target.has_custom_image = false;
+            target.hideImage = true;
+            target.showImage = false;
+        },
+
+        applyItemImage: (target, src) => {
+            if (!target || !src) return;
+
+            target.img = src;
+            target.image = src;
+            target.image_url = src;
+            target.imageUrl = src;
+            target.img_url = src;
+
+            target._imageRemoved = false;
+            target.image_removed = false;
+            target.has_custom_image = true;
+            target.hideImage = false;
+            target.showImage = true;
+        },
+
+        refreshAfterImageChange: () => {
+            if (typeof App.markDirty === 'function') App.markDirty();
+            else State.hasUnsavedChanges = true;
+
+            if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+            if (App.Tabs?.current === 'list' && App.ListView?.render) App.ListView.render();
+            if (typeof App.rebuildThumbnails === 'function') App.rebuildThumbnails();
+        },
+
+        clearItemImage: (e, sIdx, iIdx, subIdx = null) => {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            const target = App.getItemRef(sIdx, iIdx, subIdx);
+            if (!target) return;
+
+            App.clearImageFields(target);
+            App.refreshAfterImageChange();
+
+            if (typeof App.showToast === 'function') {
+                App.showToast('Bild entfernt', 'Die Position bleibt ohne Bild gespeichert.', 'success');
+            }
+        },
+
         handleImageClick: (e, sIdx, iIdx, subIdx = null) => { 
+            if (e?.target?.closest?.('.js-clear-item-image')) return;
+
             // Prevent opening the upload dialog if the user was just dragging the resize handle
-            const rect = e.currentTarget.getBoundingClientRect();
-            const isResize = (e.clientX > rect.right - 18) && (e.clientY > rect.bottom - 18);
-            if (isResize) return;
+            const rect = e.currentTarget?.getBoundingClientRect?.();
+            if (rect) {
+                const isResize = (e.clientX > rect.right - 18) && (e.clientY > rect.bottom - 18);
+                if (isResize) return;
+            }
 
             App.editingImage = { sIdx, iIdx, subIdx }; 
-            document.getElementById('img-upload-input').click(); 
+            document.getElementById('img-upload-input')?.click(); 
         },
         saveImageSize: (el, sIdx, iIdx, subIdx = null) => {
             let target = subIdx !== null ? State.sections[sIdx].items[iIdx].subItems[subIdx] : State.sections[sIdx].items[iIdx];
@@ -9350,16 +12816,26 @@
 
    App.getWizardPrefillFromUrl = function () {
         const params = new URLSearchParams(window.location.search);
+        const boot = window.OfferDocumentBootstrap || {};
+        const supplier = window.OfferSupplierConfig || {};
+
+        const positiveInt = (...values) => {
+            for (const value of values) {
+                if (value === null || value === undefined || value === '') continue;
+                const parsed = Number(value);
+                if (Number.isFinite(parsed) && parsed > 0) return parseInt(parsed, 10);
+            }
+            return null;
+        };
 
         return {
-            offer_id: params.get('offer_id') ? parseInt(params.get('offer_id'), 10) : null,
-            offer_folder_id: params.get('offer_folder_id') ? parseInt(params.get('offer_folder_id'), 10) : null,
-            customer_id: params.get('customer_id') ? parseInt(params.get('customer_id'), 10) : null,
-            alternative_id: params.get('alternative_id') ? parseInt(params.get('alternative_id'), 10) : null,
-            product_id: params.get('product_id') ? parseInt(params.get('product_id'), 10) : null,
-            
-            // 👇 ADD THIS LINE
-            load_snapshot: params.get('load_snapshot') === '1' 
+            offer_id: positiveInt(params.get('offer_id'), boot.offer_id, supplier.offerId),
+            offer_folder_id: positiveInt(params.get('offer_folder_id'), params.get('folder_id'), boot.offer_folder_id, boot.folder_id, supplier.folderId),
+            offer_detail_id: positiveInt(params.get('offer_detail_id'), params.get('detail_id'), boot.offer_detail_id),
+            customer_id: positiveInt(params.get('customer_id'), params.get('lead_id'), boot.customer_id, boot.customer?.id),
+            alternative_id: positiveInt(params.get('alternative_id'), params.get('object_id'), boot.alternative_id),
+            product_id: positiveInt(params.get('product_id'), params.get('article_group_id'), boot.product_id),
+            load_snapshot: params.get('load_snapshot') === '1'
         };
     };
 
@@ -9370,7 +12846,13 @@
             ...prefill
         };
 
-        // Save offer/folder IDs into state immediately
+        // Keep save/update working even when the Start-Tab objects are not hydrated yet.
+        if (typeof App.syncSaveContextIntoState === 'function') {
+            App.syncSaveContextIntoState();
+        }
+
+        // Save offer/folder/detail IDs into state immediately. This also supports /admin/offers/folders/{folder}
+        // where the IDs come from the route model instead of query parameters.
         if (prefill.offer_id) {
             State.offerId = String(prefill.offer_id);
 
@@ -9378,7 +12860,19 @@
             if (offerInput) offerInput.value = String(prefill.offer_id);
         }
 
+        if (prefill.offer_folder_id || prefill.offer_id) {
+            window.OfferSupplierConfig = window.OfferSupplierConfig || {};
+            if (prefill.offer_folder_id) window.OfferSupplierConfig.folderId = prefill.offer_folder_id;
+            if (prefill.offer_id) window.OfferSupplierConfig.offerId = prefill.offer_id;
+        }
+
         if (!prefill.customer_id || State.prefill.autoApplied) return;
+
+        const bootCustomer = window.OfferDocumentBootstrap?.customer || null;
+        if (bootCustomer && bootCustomer.id && Number(bootCustomer.id) === Number(prefill.customer_id)) {
+            State.customer = { ...bootCustomer, id: Number(bootCustomer.id) };
+            State.custId = bootCustomer.customer_no || State.custId || '-';
+        }
 
         try {
             // 1) load customer by id
@@ -9408,10 +12902,2111 @@
             State.prefill.autoApplied = true;
         } catch (e) {
             console.error('applyWizardPrefillFromUrl failed', e);
+
+            // Do not block save/update only because the async Start-Tab hydration failed.
+            if (typeof App.syncSaveContextIntoState === 'function') {
+                App.syncSaveContextIntoState();
+            }
         }
     };
 
      
+
+    App.RoofLayout = {
+        apiBase: '/offers/roof-layout',
+        selectedCanvasItemId: null,
+        modalOpen: false,
+        directions: [
+            { key: 'nord', label: 'NORD\nDACH', icon: '/images/direction/haus-nord-dach.svg' },
+            { key: 'nord_west', label: 'NORD-WEST\nDACH', icon: '/images/direction/haus-nord-west-dach.svg' },
+            { key: 'west', label: 'WEST\nDACH', icon: '/images/direction/haus-west-dach.svg' },
+            { key: 'nord_ost', label: 'NORD-OST\nDACH', icon: '/images/direction/haus-nord-ost-dach.svg' },
+            { key: 'ost', label: 'OST\nDACH', icon: '/images/direction/haus-ost-dach.svg' },
+            { key: 'flachdach', label: 'FLACHDACH', icon: '/images/direction/haus-flachdach.svg' },
+            { key: 'sued', label: 'SÜD\nDACH', icon: '/images/direction/haus-sued-dach.svg' },
+            { key: 'sued_ost', label: 'SÜD-OST\nDACH', icon: '/images/direction/haus-sued-ost-dach.svg' },
+            { key: 'sued_west', label: 'SÜD-WEST\nDACH', icon: '/images/direction/haus-sued-west-dach.svg' },
+        ],
+
+        ensure() {
+            State.roofLayout = State.roofLayout || {};
+            const cfg = State.roofLayout;
+            cfg.enabled = !!cfg.enabled;
+            cfg.title = cfg.title || 'BELEGUNG DER DACHFLÄCHE';
+            cfg.note = cfg.note || 'Die Belegung ist vorläufig. Nach Feinaufmaß, aber auch noch während der Montage können sich ggfs. Änderungen ergeben, z. B. aufgrund verdeckter Montagehindernisse.';
+            cfg.selectedRoofs = Array.isArray(cfg.selectedRoofs) ? cfg.selectedRoofs : [];
+            cfg.canvasLayout = Array.isArray(cfg.canvasLayout) ? cfg.canvasLayout : [];
+            cfg.canvasDesignWidth = Number(cfg.canvasDesignWidth || 1000);
+            cfg.canvasDesignHeight = Number(cfg.canvasDesignHeight || 700);
+            if (cfg.showAllIcons === undefined) cfg.showAllIcons = true;
+            if (cfg.showCompass === undefined) cfg.showCompass = true;
+            cfg._dirty = !!cfg._dirty;
+
+            // The Dachbelegung page must always use the current Angebot-/Auftragsnummer
+            // from the main document. It is not edited separately here.
+            cfg.offerNumber = this.currentDocumentNumber ? this.currentDocumentNumber() : (State.offerId || document.getElementById('doc-offer-id')?.value || '');
+
+            // This page uses the standard document footer from App.createPage().
+            // No separate/custom roof footer is rendered anymore.
+            cfg.footerCompany = State.companyFooter?.company || State.companyName || '';
+
+            // COMPASS CENTER FIX:
+            // Older versions stored the compass center image as a movable canvas object
+            // (kind: compass_center_image). That made the image float around the canvas.
+            // We migrate that value back into the fixed compass ring and remove it from
+            // draggable canvas elements.
+            const legacyCompassCenter = cfg.canvasLayout.find(item => {
+                if (!item || typeof item !== 'object') return false;
+                return String(item.kind || item.type || '') === 'compass_center_image'
+                    && String(item.src || item.url || item.image_url || '').trim() !== '';
+            });
+
+            if (legacyCompassCenter && !cfg.compassImageUrl) {
+                cfg.compassImageUrl = String(legacyCompassCenter.src || legacyCompassCenter.url || legacyCompassCenter.image_url || '');
+                cfg.compassImagePath = String(legacyCompassCenter.path || legacyCompassCenter.image_path || cfg.compassImagePath || '');
+            }
+
+            cfg.canvasLayout = cfg.canvasLayout
+                .map(item => this.normalizeCanvasItem(item))
+                .filter(item => item && !['compass_center_image', 'compass'].includes(String(item.kind || '')));
+
+            return cfg;
+        },
+
+        normalizeCanvasItem(item) {
+            if (!item || typeof item !== 'object') return null;
+            const kind = String(item.kind || item.type || 'image');
+            const isText = kind === 'text';
+            const src = String(item.src || item.url || item.image_url || item.icon || '').trim();
+            const rawText = item.text ?? item.content ?? item.html ?? '';
+
+            if (!isText && !src) return null;
+            if (isText && String(rawText).trim() === '') {
+                item.text = 'Text';
+            }
+
+            return {
+                id: String(item.id || this.uid()),
+                kind,
+                roof_type: item.roof_type || item.roofType || null,
+                label: String(item.label || (isText ? 'Text' : '')),
+                src,
+                path: item.path || '',
+                text: String(item.text ?? item.content ?? item.html ?? (isText ? 'Text' : '')),
+                x: this.number(item.x, isText ? 120 : 60),
+                y: this.number(item.y, isText ? 120 : 60),
+                width: Math.max(20, this.number(item.width, isText ? 240 : 120)),
+                height: Math.max(20, this.number(item.height, isText ? 70 : 120)),
+                rotation: this.number(item.rotation, 0),
+                zIndex: parseInt(item.zIndex || item.z_index || 1, 10) || 1,
+                opacity: Math.min(1, Math.max(0.05, this.number(item.opacity, 1))),
+                objectFit: item.objectFit || item.object_fit || 'contain',
+                color: String(item.color || '#111827'),
+                fontSize: Math.max(6, this.number(item.fontSize || item.font_size, 24)),
+                fontWeight: String(item.fontWeight || item.font_weight || '700'),
+                fontStyle: String(item.fontStyle || item.font_style || 'normal'),
+                textDecoration: String(item.textDecoration || item.text_decoration || 'none'),
+                textAlign: String(item.textAlign || item.text_align || 'left'),
+                backgroundColor: String(item.backgroundColor || item.background_color || 'transparent'),
+                lineHeight: this.number(item.lineHeight || item.line_height, 1.25)
+            };
+        },
+
+        number(value, fallback = 0) {
+            if (value === null || value === undefined || value === '') return fallback;
+            if (typeof value === 'number' && Number.isFinite(value)) return value;
+            const parsed = parseFloat(String(value).replace(',', '.'));
+            return Number.isFinite(parsed) ? parsed : fallback;
+        },
+
+        uid() {
+            return 'roof_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+        },
+
+        direction(key) {
+            return this.directions.find(d => d.key === key) || null;
+        },
+
+        pushCanvasItem(rawItem, select = true) {
+            const cfg = this.ensure();
+            const item = this.normalizeCanvasItem(rawItem);
+
+            // Text objects do not have an image src. Icons/images still need src.
+            if (!item || !item.id || (item.kind !== 'text' && !item.src)) {
+                console.warn('[RoofLayout] Canvas item could not be added:', rawItem);
+                return null;
+            }
+
+            cfg.canvasLayout.push(item);
+
+            if (select) {
+                this.selectedCanvasItemId = item.id;
+            }
+
+            return item;
+        },
+
+        isEnabled() {
+            return !!this.ensure().enabled;
+        },
+
+        payload() {
+            const cfg = this.ensure();
+            return {
+                enabled: !!cfg.enabled,
+                title: cfg.title || 'BELEGUNG DER DACHFLÄCHE',
+                offer_number: this.currentDocumentNumber ? this.currentDocumentNumber() : (State.offerId || ''),
+                system_power_kwp: cfg.systemPowerKwp || '',
+                module_count: cfg.moduleCount || '',
+                module_power_wp: cfg.modulePowerWp || '',
+                note: cfg.note || '',
+                footer_company: State.companyFooter?.company || State.companyName || '',
+                selected_roofs: Array.isArray(cfg.selectedRoofs) ? cfg.selectedRoofs : [],
+                show_all_icons: !!cfg.showAllIcons,
+                show_compass: cfg.showCompass !== false,
+                compass_image_path: cfg.compassImagePath || '',
+                compass_image_url: cfg.compassImageUrl || '',
+                canvas_layout: Array.isArray(cfg.canvasLayout) ? cfg.canvasLayout : [],
+                canvas_design_width: cfg.canvasDesignWidth || 1000,
+                canvas_design_height: cfg.canvasDesignHeight || 700,
+                meta: cfg.meta || {}
+            };
+        },
+
+        init() {
+            this.ensure();
+            this.loadFromServer().finally(() => {
+                this.renderPanel();
+                if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+            });
+        },
+
+        async loadFromServer() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const ctx = App.resolveSaveContext ? App.resolveSaveContext() : {};
+                const query = new URLSearchParams();
+                const templateId = State.loadedTemplateId || params.get('template_id') || '';
+
+                if (templateId) query.set('offer_template_id', templateId);
+                if (ctx.offer_detail_id) query.set('offer_detail_id', ctx.offer_detail_id);
+                if (ctx.offer_folder_id) query.set('offer_folder_id', ctx.offer_folder_id);
+                if (ctx.offer_id) query.set('offer_id', ctx.offer_id);
+                if (![...query.keys()].length) return;
+
+                const res = await fetch(`${this.apiBase}?${query.toString()}`, {
+                    headers: { 'Accept': 'application/json' },
+                    credentials: 'same-origin'
+                });
+
+                if (!res.ok) return;
+                const data = await res.json();
+                if (!data?.success || !data?.configuration) return;
+                this.applyServerPayload(data.configuration);
+            } catch (error) {
+                console.warn('[RoofLayout] load skipped:', error);
+            }
+        },
+
+        applyServerPayload(row) {
+            if (!row) return;
+            State.roofLayout = {
+                ...(State.roofLayout || {}),
+                id: row.id || null,
+                enabled: !!row.enabled,
+                title: row.title || 'BELEGUNG DER DACHFLÄCHE',
+                offerNumber: this.currentDocumentNumber ? this.currentDocumentNumber() : (State.offerId || ''),
+                systemPowerKwp: row.system_power_kwp || '',
+                moduleCount: row.module_count || '',
+                modulePowerWp: row.module_power_wp || '',
+                note: row.note || '',
+                footerCompany: State.companyFooter?.company || State.companyName || '',
+                selectedRoofs: Array.isArray(row.selected_roofs) ? row.selected_roofs : [],
+                showAllIcons: row.show_all_icons !== false,
+                showCompass: row.show_compass !== false,
+                compassImagePath: row.compass_image_path || '',
+                compassImageUrl: row.compass_image_url || '',
+                canvasLayout: Array.isArray(row.canvas_layout) ? row.canvas_layout : [],
+                canvasDesignWidth: Number(row.canvas_design_width || 1000),
+                canvasDesignHeight: Number(row.canvas_design_height || 700),
+                meta: row.meta || {},
+                _dirty: false,
+                lastSavedAt: row.updated_at || row.created_at || new Date().toISOString()
+            };
+            this.ensure();
+        },
+
+        schedulePageRender(delay = 450) {
+            clearTimeout(this._pageRenderTimer);
+            this._pageRenderTimer = setTimeout(() => {
+                App.renderQuotePage?.(false);
+            }, delay);
+        },
+
+        updateSaveStatusButton() {
+            const status = this.saveStatus();
+            document.querySelectorAll('[data-roof-save-status-btn]').forEach(btn => {
+                btn.className = `inline-flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-black ${status.cls}`;
+                btn.innerHTML = `<i class="fa-solid ${status.icon}"></i>${status.label}`;
+            });
+        },
+
+        markChanged(renderPage = true, renderCanvas = true) {
+            const cfg = this.ensure();
+            cfg._dirty = true;
+            App.markDirty?.();
+            this.updateSaveStatusButton();
+            if (renderCanvas) {
+                this.renderCanvas('roof-design-canvas-inline', true);
+                if (this.modalOpen) this.renderCanvas('roof-design-canvas-modal', true);
+            }
+            if (renderPage) this.schedulePageRender();
+        },
+
+        toggleEnabledFromHeader() {
+            const cfg = this.ensure();
+            cfg.enabled = !cfg.enabled;
+            this.renderPanel();
+            this.markChanged();
+        },
+
+        set(key, value, options = {}) {
+            const cfg = this.ensure();
+            cfg[key] = value;
+
+            const shouldRenderPanel = options.renderPanel === true
+                || ['enabled', 'showCompass', 'showAllIcons'].includes(String(key));
+
+            if (shouldRenderPanel) {
+                this.renderPanel();
+                this.markChanged(true);
+                return;
+            }
+
+            // Important: do NOT re-render the settings panel while typing.
+            // Otherwise the input/textarea loses cursor position on every keypress.
+            this.markChanged(false, false);
+            this.schedulePageRender();
+        },
+
+        toggleRoof(key) {
+            const cfg = this.ensure();
+            const arr = new Set(cfg.selectedRoofs || []);
+            const isActivating = !arr.has(key);
+            if (isActivating) arr.add(key); else arr.delete(key);
+            cfg.selectedRoofs = Array.from(arr);
+            if (isActivating) this.addRoofIcon(key, { silent: true });
+            this.renderPanel();
+            this.markChanged();
+        },
+
+        addRoofIcon(key, options = {}) {
+            const cfg = this.ensure();
+            const direction = this.direction(key);
+            if (!direction) {
+                console.warn('[RoofLayout] Unknown roof direction:', key);
+                return;
+            }
+
+            const offset = (cfg.canvasLayout.length % 8) * 26;
+            const item = this.pushCanvasItem({
+                id: this.uid(),
+                kind: 'roof_icon',
+                roof_type: key,
+                label: direction.label.replace(/\n/g, ' '),
+                src: direction.icon,
+                x: 80 + offset,
+                y: 360 + offset,
+                width: key === 'flachdach' ? 120 : 110,
+                height: key === 'flachdach' ? 78 : 118,
+                rotation: 0,
+                zIndex: this.nextZIndex(),
+                opacity: 1,
+                objectFit: 'contain'
+            }, true);
+
+            if (!item) return;
+
+            if (!options.silent) {
+                this.renderPanel();
+                this.markChanged();
+            }
+        },
+
+        addText() {
+            const cfg = this.ensure();
+            const offset = (cfg.canvasLayout.length % 8) * 24;
+            const item = this.pushCanvasItem({
+                id: this.uid(),
+                kind: 'text',
+                label: 'Text',
+                text: 'Neuer Text',
+                x: 120 + offset,
+                y: 120 + offset,
+                width: 280,
+                height: 84,
+                rotation: 0,
+                zIndex: this.nextZIndex(),
+                opacity: 1,
+                color: '#111827',
+                fontSize: 26,
+                fontWeight: '700',
+                fontStyle: 'normal',
+                textDecoration: 'none',
+                textAlign: 'left',
+                backgroundColor: 'transparent',
+                lineHeight: 1.25
+            }, true);
+
+            if (!item) return;
+
+            // Re-render once so the toolbar is visible, then focus the new text box.
+            this.renderPanel();
+            this.markChanged(true, false);
+            setTimeout(() => this.focusTextItem(item.id), 120);
+        },
+
+        focusTextItem(id) {
+            const safeId = (window.CSS && CSS.escape) ? CSS.escape(id) : String(id).replace(/"/g, '\"');
+            const containers = ['roof-design-canvas-modal', 'roof-design-canvas-inline'];
+            for (const containerId of containers) {
+                const canvas = document.getElementById(containerId);
+                if (!canvas) continue;
+                const textEl = canvas.querySelector(`[data-roof-canvas-id="${safeId}"] .roof-canvas-text`);
+                if (!textEl) continue;
+                textEl.focus({ preventScroll: true });
+                const range = document.createRange();
+                range.selectNodeContents(textEl);
+                range.collapse(false);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+                return true;
+            }
+            return false;
+        },
+
+        selectedTextItem() {
+            const item = this.selectedItem();
+            return item && item.kind === 'text' ? item : null;
+        },
+
+        updateSelectedText(patch = {}, options = {}) {
+            const item = this.selectedTextItem();
+            if (!item) return;
+            Object.assign(item, patch || {});
+            if (patch.color) item.color = this.normalizeHexColor(patch.color, item.color || '#111827');
+            if (patch.fontSize !== undefined) item.fontSize = Math.max(6, this.number(patch.fontSize, item.fontSize || 24));
+            this.renderCanvas('roof-design-canvas-inline', true);
+            if (this.modalOpen) this.renderCanvas('roof-design-canvas-modal', true);
+            if (options.renderPanel) this.renderPanel();
+            this.markChanged(true, false);
+        },
+
+        updateSelectedTextValue(value) {
+            const item = this.selectedTextItem();
+            if (!item) return;
+            item.text = String(value ?? '');
+            this.markChanged(false, false);
+            this.schedulePageRender();
+        },
+
+        toggleSelectedTextStyle(style) {
+            const item = this.selectedTextItem();
+            if (!item) return;
+            if (style === 'bold') {
+                item.fontWeight = String(item.fontWeight || '700') === '700' ? '400' : '700';
+            } else if (style === 'italic') {
+                item.fontStyle = item.fontStyle === 'italic' ? 'normal' : 'italic';
+            } else if (style === 'underline') {
+                item.textDecoration = item.textDecoration === 'underline' ? 'none' : 'underline';
+            }
+            this.renderCanvas('roof-design-canvas-inline', true);
+            if (this.modalOpen) this.renderCanvas('roof-design-canvas-modal', true);
+            this.refreshTextToolbar();
+            this.markChanged(true, false);
+        },
+
+        normalizeHexColor(value, fallback = '#111827') {
+            let v = String(value || '').trim();
+            if (!v) return fallback;
+            if (!v.startsWith('#')) v = '#' + v;
+            if (/^#[0-9a-fA-F]{3}$/.test(v)) {
+                v = '#' + v.slice(1).split('').map(ch => ch + ch).join('');
+            }
+            return /^#[0-9a-fA-F]{6}$/.test(v) ? v.toLowerCase() : fallback;
+        },
+
+        renderSelectedTextToolbar() {
+            const item = this.selectedTextItem();
+            if (!item) return '';
+            const color = this.normalizeHexColor(item.color || '#111827');
+            const boldActive = String(item.fontWeight || '700') === '700';
+            const italicActive = item.fontStyle === 'italic';
+            const underlineActive = item.textDecoration === 'underline';
+            return `
+                <div class="roof-text-toolbar">
+                    <span class="text-xs font-black text-slate-500 uppercase tracking-[.12em]">Text</span>
+                    <input type="color" value="${color}" oninput="App.RoofLayout.updateSelectedText({color:this.value})" title="Textfarbe">
+                    <input type="text" value="${color}" maxlength="7" class="w-[92px]" oninput="App.RoofLayout.updateSelectedText({color:this.value})" title="HEX Farbe">
+                    <input type="number" value="${Number(item.fontSize || 24)}" min="6" max="120" class="w-[76px]" oninput="App.RoofLayout.updateSelectedText({fontSize:this.value})" title="Schriftgröße">
+                    <button type="button" class="roof-text-toolbar-btn ${boldActive ? 'active' : ''}" onclick="App.RoofLayout.toggleSelectedTextStyle('bold')"><b>B</b></button>
+                    <button type="button" class="roof-text-toolbar-btn ${italicActive ? 'active' : ''}" onclick="App.RoofLayout.toggleSelectedTextStyle('italic')"><i>I</i></button>
+                    <button type="button" class="roof-text-toolbar-btn ${underlineActive ? 'active' : ''}" onclick="App.RoofLayout.toggleSelectedTextStyle('underline')"><u>U</u></button>
+                    <button type="button" class="roof-canvas-btn danger" onclick="App.RoofLayout.deleteSelected()"><i class="fa-solid fa-trash"></i>Text löschen</button>
+                </div>
+            `;
+        },
+
+        refreshTextToolbar() {
+            const html = this.renderSelectedTextToolbar();
+            const inline = document.getElementById('roof-text-toolbar-inline');
+            const modal = document.getElementById('roof-text-toolbar-modal');
+            if (inline) inline.innerHTML = html;
+            if (modal) modal.innerHTML = html;
+        },
+
+        addCompass() {
+            const cfg = this.ensure();
+            cfg.showCompass = true;
+            cfg.canvasLayout = (cfg.canvasLayout || []).filter(item => item && !['compass', 'compass_center_image'].includes(String(item.kind || '')));
+            this.renderPanel();
+            this.markChanged();
+        },
+
+        toggleCompass() {
+            const cfg = this.ensure();
+            cfg.showCompass = !cfg.showCompass;
+            cfg.canvasLayout = (cfg.canvasLayout || []).filter(item => item && !['compass', 'compass_center_image'].includes(String(item.kind || '')));
+            this.renderPanel();
+            this.markChanged();
+        },
+
+        async uploadCanvasImage(input, options = {}) {
+            const file = input?.files?.[0];
+            if (!file) return;
+            const cfg = this.ensure();
+            let src = '';
+            let path = '';
+
+            try {
+                const fd = new FormData();
+                fd.append('image', file);
+                const token = document.querySelector('meta[name="csrf-token"]')?.content || '';
+                const res = await fetch(`${this.apiBase}/image`, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': token, 'Accept': 'application/json' },
+                    credentials: 'same-origin',
+                    body: fd
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    path = data.path || '';
+                    src = data.url || (path ? `/storage/${String(path).replace(/^public\//, '')}` : '');
+                }
+            } catch (_) {}
+
+            if (!src) {
+                src = await new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = e => resolve(e.target?.result || '');
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            if (!src) return;
+
+            const offset = (cfg.canvasLayout.length % 8) * 30;
+            const item = this.pushCanvasItem({
+                id: this.uid(),
+                kind: options.kind || 'image',
+                label: options.label || file.name || 'Bild',
+                src,
+                path,
+                x: 180 + offset,
+                y: 150 + offset,
+                width: 230,
+                height: 165,
+                rotation: 0,
+                zIndex: this.nextZIndex(),
+                opacity: 1,
+                objectFit: 'contain'
+            }, true);
+
+            if (!item) return;
+
+            if (input) input.value = '';
+            this.renderPanel();
+            this.markChanged();
+        },
+
+        async uploadCompassImage(input) {
+            const file = input?.files?.[0];
+            if (!file) return;
+            const cfg = this.ensure();
+
+            try {
+                const fd = new FormData();
+                fd.append('image', file);
+                const token = document.querySelector('meta[name="csrf-token"]')?.content || '';
+                const res = await fetch(`${this.apiBase}/image`, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': token, 'Accept': 'application/json' },
+                    credentials: 'same-origin',
+                    body: fd
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    cfg.compassImagePath = data.path || '';
+                    cfg.compassImageUrl = data.url || data.path || '';
+                } else {
+                    throw new Error('upload route missing');
+                }
+            } catch (error) {
+                cfg.compassImagePath = '';
+                cfg.compassImageUrl = await new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = e => resolve(e.target?.result || '');
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // Keep the compass-center picture locked inside the compass ring.
+            // Do NOT add it as a draggable canvas item, otherwise it floats around.
+            cfg.canvasLayout = (cfg.canvasLayout || []).filter(item => item && !['compass', 'compass_center_image'].includes(String(item.kind || '')));
+            if (this.selectedCanvasItemId && !cfg.canvasLayout.some(item => item.id === this.selectedCanvasItemId)) {
+                this.selectedCanvasItemId = null;
+            }
+
+            if (input) input.value = '';
+            this.renderPanel();
+            this.markChanged();
+        },
+
+        clearCompassImage() {
+            const cfg = this.ensure();
+            cfg.compassImagePath = '';
+            cfg.compassImageUrl = '';
+            cfg.canvasLayout = (cfg.canvasLayout || []).filter(item => item && !['compass', 'compass_center_image'].includes(String(item.kind || '')));
+            if (this.selectedCanvasItemId && !cfg.canvasLayout.some(item => item.id === this.selectedCanvasItemId)) {
+                this.selectedCanvasItemId = null;
+            }
+            this.renderPanel();
+            this.markChanged();
+        },
+
+        nextZIndex() {
+            const cfg = this.ensure();
+            const max = cfg.canvasLayout.reduce((m, item) => Math.max(m, parseInt(item.zIndex || 0, 10) || 0), 0);
+            return max + 1;
+        },
+
+        selectedItem() {
+            const cfg = this.ensure();
+            return cfg.canvasLayout.find(item => item.id === this.selectedCanvasItemId) || null;
+        },
+
+        selectCanvasItem(id, options = {}) {
+            const previous = this.selectedCanvasItemId;
+            this.selectedCanvasItemId = id || null;
+
+            if (!options.keepDom) {
+                this.renderCanvas('roof-design-canvas-inline', true);
+                if (this.modalOpen) this.renderCanvas('roof-design-canvas-modal', true);
+            }
+
+            if (previous !== this.selectedCanvasItemId) {
+                this.refreshTextToolbar();
+            }
+        },
+
+        deleteSelected() {
+            const cfg = this.ensure();
+            if (!this.selectedCanvasItemId) return;
+            cfg.canvasLayout = cfg.canvasLayout.filter(item => item.id !== this.selectedCanvasItemId);
+            this.selectedCanvasItemId = null;
+            this.renderPanel();
+            this.markChanged();
+        },
+
+        duplicateSelected() {
+            const cfg = this.ensure();
+            const item = this.selectedItem();
+            if (!item) return;
+            const copy = {
+                ...JSON.parse(JSON.stringify(item)),
+                id: this.uid(),
+                x: (item.x || 0) + 24,
+                y: (item.y || 0) + 24,
+                zIndex: this.nextZIndex()
+            };
+            cfg.canvasLayout.push(copy);
+            this.selectedCanvasItemId = copy.id;
+            this.renderPanel();
+            this.markChanged();
+        },
+
+        normalizeCanvasZIndexes() {
+            const cfg = this.ensure();
+            cfg.canvasLayout
+                .slice()
+                .sort((a, b) => (Number(a.zIndex || 1) - Number(b.zIndex || 1)))
+                .forEach((item, index) => { item.zIndex = index + 1; });
+        },
+
+        bringForward() {
+            return this.bringSelectedToFront();
+        },
+
+        sendBackward() {
+            return this.sendSelectedToBack();
+        },
+
+        bringSelectedToFront() {
+            const item = this.selectedItem();
+            if (!item) return;
+            item.zIndex = this.nextZIndex();
+            this.normalizeCanvasZIndexes();
+            this.markChanged(true, true);
+        },
+
+        sendSelectedToBack() {
+            const item = this.selectedItem();
+            if (!item) return;
+            item.zIndex = 0;
+            this.normalizeCanvasZIndexes();
+            this.markChanged(true, true);
+        },
+
+        moveSelectedForward() {
+            const cfg = this.ensure();
+            const item = this.selectedItem();
+            if (!item) return;
+            this.normalizeCanvasZIndexes();
+            const sorted = cfg.canvasLayout.slice().sort((a, b) => Number(a.zIndex || 1) - Number(b.zIndex || 1));
+            const idx = sorted.findIndex(x => x.id === item.id);
+            if (idx < 0 || idx >= sorted.length - 1) return;
+            const next = sorted[idx + 1];
+            const z = item.zIndex;
+            item.zIndex = next.zIndex;
+            next.zIndex = z;
+            this.markChanged(true, true);
+        },
+
+        moveSelectedBackward() {
+            const cfg = this.ensure();
+            const item = this.selectedItem();
+            if (!item) return;
+            this.normalizeCanvasZIndexes();
+            const sorted = cfg.canvasLayout.slice().sort((a, b) => Number(a.zIndex || 1) - Number(b.zIndex || 1));
+            const idx = sorted.findIndex(x => x.id === item.id);
+            if (idx <= 0) return;
+            const prev = sorted[idx - 1];
+            const z = item.zIndex;
+            item.zIndex = prev.zIndex;
+            prev.zIndex = z;
+            this.markChanged(true, true);
+        },
+
+        rotateSelected(delta) {
+            const item = this.selectedItem();
+            if (!item) return;
+            item.rotation = (Number(item.rotation || 0) + delta) % 360;
+            this.markChanged();
+        },
+
+        resetCanvas() {
+            if (!confirm('Canvas wirklich leeren?')) return;
+            const cfg = this.ensure();
+            cfg.canvasLayout = [];
+            cfg.selectedRoofs = [];
+            this.selectedCanvasItemId = null;
+            this.renderPanel();
+            this.markChanged();
+        },
+
+        openCanvasModal() {
+            this.modalOpen = true;
+            this.renderPanel();
+            setTimeout(() => {
+                const modal = document.getElementById('roof-canvas-modal');
+                if (modal) modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+                this.renderCanvas('roof-design-canvas-modal', true);
+            }, 0);
+        },
+
+        closeCanvasModal() {
+            this.modalOpen = false;
+            const modal = document.getElementById('roof-canvas-modal');
+            if (modal) modal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+            this.renderCanvas('roof-design-canvas-inline', true);
+        },
+
+        async persistAfterSave(result, savePayload, mode = {}) {
+            const cfg = this.payload();
+            const token = document.querySelector('meta[name="csrf-token"]')?.content || '';
+            const body = {
+                ...cfg,
+                offer_id: result.offer_id || savePayload.offer_id || null,
+                offer_folder_id: result.folder_id || savePayload.offer_folder_id || null,
+                offer_detail_id: result.offer_detail_id || savePayload.offer_detail_id || null,
+                offer_template_id: result.template_id || result.template?.id || State.loadedTemplateId || null,
+            };
+
+            const hasTarget = body.offer_id || body.offer_folder_id || body.offer_detail_id || body.offer_template_id;
+            if (!hasTarget) return;
+
+            try {
+                const res = await fetch(this.apiBase, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify(body)
+                });
+
+                if (!res.ok) throw new Error('Dachbelegung konnte nicht gespeichert werden.');
+                const data = await res.json();
+                if (data?.configuration) this.applyServerPayload(data.configuration);
+                const fresh = this.ensure();
+                fresh._dirty = false;
+                fresh.lastSavedAt = data?.configuration?.updated_at || new Date().toISOString();
+                this.renderPanel();
+            } catch (error) {
+                console.warn('[RoofLayout] persist failed:', error);
+            }
+        },
+
+        branchProfile() {
+            if (State.selectedBranch) return State.selectedBranch;
+            if (typeof App.getCompanyProfile === 'function') return App.getCompanyProfile();
+            const key = document.getElementById('wiz-company-select')?.value || window.DefaultBranchProfileKey;
+            return (window.BranchProfiles && window.BranchProfiles[key]) || Object.values(window.BranchProfiles || {})[0] || {};
+        },
+
+        branchLogoUrl() {
+            const profile = this.branchProfile() || {};
+            return String(profile.logoUrl || profile.logo_url || profile.logo || '').trim();
+        },
+
+        branchCompanyName() {
+            const profile = this.branchProfile() || {};
+            return String(profile.name || profile.branch || State.companyFooter?.company || State.companyName || '').trim();
+        },
+
+        currentDocumentNumber() {
+            const fieldValue = document.getElementById('doc-offer-id')?.value;
+            const number = String(fieldValue || State.offerId || '').trim();
+
+            if (number && State.offerId !== number) {
+                State.offerId = number;
+            }
+
+            return number;
+        },
+
+        saveStatus() {
+            const cfg = this.ensure();
+            if (cfg.id && !cfg._dirty) {
+                return { cls: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: 'fa-circle-check', label: 'Dachbelegung gespeichert', detail: cfg.lastSavedAt ? ('Zuletzt gespeichert: ' + cfg.lastSavedAt) : 'Diese Dachbelegung ist im Angebot gespeichert.' };
+            }
+            if (cfg.id && cfg._dirty) {
+                return { cls: 'bg-amber-50 text-amber-700 border-amber-200', icon: 'fa-triangle-exclamation', label: 'Geändert – noch nicht gespeichert', detail: 'Speichere das Angebot, damit die Dachbelegung aktualisiert wird.' };
+            }
+            return { cls: 'bg-slate-50 text-slate-700 border-slate-200', icon: 'fa-circle-info', label: 'Noch nicht gespeichert', detail: 'Speichere das Angebot zuerst, damit die Dachbelegung im Angebot gespeichert wird.' };
+        },
+
+        showSaveStatus() {
+            const status = this.saveStatus();
+            if (typeof App.toast === 'function') App.toast(status.detail || status.label, status.label.includes('gespeichert') ? 'success' : 'info');
+            else alert(status.detail || status.label);
+        },
+
+        renderPanel() {
+            const root = document.getElementById('roof-layout-settings-root');
+            if (!root) return;
+            const cfg = this.ensure();
+            const selected = new Set(cfg.selectedRoofs || []);
+            const compassUrl = cfg.compassImageUrl || (cfg.compassImagePath ? `/storage/${String(cfg.compassImagePath).replace(/^public\//, '')}` : '');
+            const itemCount = cfg.canvasLayout.length;
+            const saveStatus = this.saveStatus();
+            const branchLogo = this.branchLogoUrl();
+            const branchName = this.branchCompanyName();
+
+            root.innerHTML = `
+                <div class="space-y-5">
+                    <div class="roof-settings-card">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <div class="flex flex-col gap-3">
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="checkbox" class="accent-[var(--brand-color)] w-5 h-5" ${cfg.enabled ? 'checked' : ''} onchange="App.RoofLayout.set('enabled', this.checked)">
+                                    <div>
+                                        <div class="font-black text-slate-900">Dachbelegungs-Seite anzeigen</div>
+                                        <div class="text-xs text-slate-500 font-semibold">Die Canvas-Seite wird automatisch nach der ersten A4-Seite eingefügt.</div>
+                                    </div>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="checkbox" class="accent-[var(--brand-color)] w-5 h-5" ${cfg.showCompass !== false ? 'checked' : ''} onchange="App.RoofLayout.set('showCompass', this.checked)">
+                                    <div>
+                                        <div class="font-black text-slate-900">Kompass anzeigen</div>
+                                        <div class="text-xs text-slate-500 font-semibold">Der Kompass bleibt fest oben rechts. Er ist kein Canvas-Objekt.</div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="flex flex-col items-end gap-2">
+                                <button type="button" onclick="App.RoofLayout.showSaveStatus()" data-roof-save-status-btn class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-black ${saveStatus.cls}">
+                                    <i class="fa-solid ${saveStatus.icon}"></i>${saveStatus.label}
+                                </button>
+                                <div class="flex items-center gap-2 text-[11px] text-slate-500 font-bold">
+                                    ${branchLogo ? `<img src="${branchLogo}" class="w-8 h-8 object-contain rounded bg-white border border-slate-200" alt="${App.escapeHtml(branchName)}">` : `<span class="w-8 h-8 rounded bg-slate-100 border border-slate-200 inline-flex items-center justify-center"><i class="fa-solid fa-building"></i></span>`}
+                                    <span>${App.escapeHtml(branchName || 'Keine Filiale')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="roof-settings-card grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                        <div class="xl:col-span-2">
+                            <label class="block text-xs font-black text-slate-500 mb-1 uppercase">Titel</label>
+                            <input class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold" value="${App.escapeHtml(cfg.title)}" oninput="App.RoofLayout.set('title', this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-500 mb-1 uppercase">Angebot-/Auftragsnummer</label>
+                            <div class="w-full border border-slate-200 rounded-xl p-3 text-sm font-black bg-slate-50 text-slate-700 flex items-center justify-between gap-3">
+                                <span data-roof-current-number>${App.escapeHtml(App.RoofLayout.currentDocumentNumber ? App.RoofLayout.currentDocumentNumber() : (State.offerId || ''))}</span>
+                                <span class="text-[10px] font-black text-slate-400 uppercase">Automatisch</span>
+                            </div>
+                            <div class="mt-1 text-[11px] font-semibold text-slate-400">Wird von der aktuellen Angebots-/Auftragsnummer übernommen.</div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-500 mb-1 uppercase">Solar-Anlage kWp</label>
+                            <input class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold" placeholder="z.B. 11,11" value="${App.escapeHtml(cfg.systemPowerKwp)}" oninput="App.RoofLayout.set('systemPowerKwp', this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-500 mb-1 uppercase">Module</label>
+                            <input type="number" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold" placeholder="22" value="${App.escapeHtml(cfg.moduleCount)}" oninput="App.RoofLayout.set('moduleCount', this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-500 mb-1 uppercase">Wp / Modul</label>
+                            <input type="number" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold" placeholder="540" value="${App.escapeHtml(cfg.modulePowerWp)}" oninput="App.RoofLayout.set('modulePowerWp', this.value)">
+                        </div>
+
+                        <div class="md:col-span-2 xl:col-span-4">
+                            <label class="block text-xs font-black text-slate-500 mb-1 uppercase">Hinweistext</label>
+                            <textarea class="w-full border border-slate-300 rounded-xl p-3 text-sm min-h-[74px]" oninput="App.RoofLayout.set('note', this.value)">${App.escapeHtml(cfg.note)}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="roof-settings-card">
+                        <div class="roof-canvas-toolbar">
+                            <div>
+                                <div class="font-black text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-vector-square text-[var(--brand-color)]"></i>
+                                    Dachbelegung Canvas
+                                </div>
+                                <div class="text-xs text-slate-500 font-semibold">${itemCount} Element(e). Icons/Bilder frei bewegen, drehen, skalieren und speichern.</div>
+                            </div>
+                            <div class="roof-canvas-actions">
+                                <button type="button" class="roof-canvas-btn primary" onclick="App.RoofLayout.openCanvasModal()">
+                                    <i class="fa-solid fa-up-right-and-down-left-from-center"></i>Vollbild Editor
+                                </button>
+                                <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.addText()">
+                                    <i class="fa-solid fa-font"></i>Text hinzufügen
+                                </button>
+                                <label class="roof-canvas-btn green cursor-pointer">
+                                    <i class="fa-solid fa-image"></i>Bild hinzufügen
+                                    <input id="roof-layout-canvas-upload-inline" type="file" accept="image/*" class="hidden" onchange="App.RoofLayout.uploadCanvasImage(this)">
+                                </label>
+                                <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.duplicateSelected()">
+                                    <i class="fa-regular fa-copy"></i>Kopieren
+                                </button>
+                                <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.bringSelectedToFront()">
+                                    <i class="fa-solid fa-angles-up"></i>Ganz vorne
+                                </button>
+                                <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.sendSelectedToBack()">
+                                    <i class="fa-solid fa-angles-down"></i>Ganz hinten
+                                </button>
+                                <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.moveSelectedForward()">
+                                    <i class="fa-solid fa-arrow-up"></i>Eine Ebene vor
+                                </button>
+                                <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.moveSelectedBackward()">
+                                    <i class="fa-solid fa-arrow-down"></i>Eine Ebene zurück
+                                </button>
+                                <button type="button" class="roof-canvas-btn danger" onclick="App.RoofLayout.deleteSelected()">
+                                    <i class="fa-solid fa-trash"></i>Löschen
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="text-xs font-black text-slate-500 uppercase tracking-wide mb-2">Dach-Icon hinzufügen</div>
+                            <div class="roof-direction-toolbar">
+                                ${this.directions.map(d => `
+                                    <button type="button" class="roof-direction-tool-btn ${selected.has(d.key) ? 'is-selected' : ''}" onclick="App.RoofLayout.toggleRoof('${d.key}')">
+                                        <img src="${d.icon}" alt="${App.escapeHtml(d.label)}">
+                                        <span>${App.escapeHtml(d.label).replace(/\\n/g, '<br>')}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div id="roof-text-toolbar-inline">${this.renderSelectedTextToolbar()}</div>
+
+                        <div class="roof-canvas-wrap">
+                            <div id="roof-design-canvas-inline" class="roof-design-canvas"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-5">
+                        <div class="roof-settings-card">
+                            <div class="font-black text-slate-900 mb-2">Kompass-Mitte / Ring-Bild</div>
+                            <div class="text-xs text-slate-500 font-semibold mb-4">Dieses Bild bleibt fest im Kreis des Kompasses. Es ist kein frei bewegbares Canvas-Element.</div>
+                            <div class="flex flex-wrap gap-2">
+                                <input id="roof-layout-compass-upload" type="file" accept="image/*" class="hidden" onchange="App.RoofLayout.uploadCompassImage(this)">
+                                <button type="button" class="roof-canvas-btn primary" onclick="document.getElementById('roof-layout-compass-upload')?.click()">
+                                    <i class="fa-solid fa-circle-plus"></i>Ring-Bild hinzufügen/ändern
+                                </button>
+                                ${compassUrl ? `<button type="button" class="roof-canvas-btn danger" onclick="App.RoofLayout.clearCompassImage()"><i class="fa-solid fa-trash"></i>Ring-Bild löschen</button>` : ''}
+                                <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.toggleCompass()"><i class="fa-regular fa-compass"></i>${cfg.showCompass !== false ? 'Kompass ausblenden' : 'Kompass anzeigen'}</button>
+                                <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.bringSelectedToFront()"><i class="fa-solid fa-angles-up"></i>Canvas ganz vorne</button>
+                                <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.sendSelectedToBack()"><i class="fa-solid fa-angles-down"></i>Canvas ganz hinten</button>
+                                <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.rotateSelected(-15)"><i class="fa-solid fa-rotate-left"></i>-15°</button>
+                                <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.rotateSelected(15)"><i class="fa-solid fa-rotate-right"></i>+15°</button>
+                                <button type="button" class="roof-canvas-btn danger" onclick="App.RoofLayout.resetCanvas()"><i class="fa-solid fa-broom"></i>Canvas leeren</button>
+                            </div>
+                        </div>
+
+                        <div class="roof-settings-card">
+                            <div class="font-black text-slate-900 mb-2">Ring Vorschau</div>
+                            <div class="roof-compass-upload-box ${cfg.showCompass === false ? 'opacity-40 grayscale' : ''}">
+                                <img src="/images/direction/kompass.svg" class="roof-compass-img w-full h-full object-contain" alt="Kompass">
+                                <div class="roof-compass-center border border-slate-200">
+                                    ${compassUrl ? `<img src="${compassUrl}" alt="Dachbild">` : `<div class="roof-compass-center-empty">Bild in der Mitte</div>`}
+                                </div>
+                                ${compassUrl ? `<button type="button" onclick="App.RoofLayout.clearCompassImage()" class="absolute top-2 right-2 w-9 h-9 rounded-full bg-red-500 text-white shadow-lg hover:bg-red-600" title="Ring-Bild löschen"><i class="fa-solid fa-trash"></i></button>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="roof-canvas-modal" class="roof-canvas-modal ${this.modalOpen ? '' : 'hidden'}">
+                    <div class="roof-canvas-modal-header">
+                        <div>
+                            <div class="text-xs uppercase tracking-[.18em] font-black text-white/60">Dachbelegung</div>
+                            <div class="text-lg font-black flex items-center gap-2"><i class="fa-solid fa-vector-square text-[#c084fc]"></i>Canvas Editor</div>
+                        </div>
+                        <div class="roof-canvas-actions">
+                            <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.addText()"><i class="fa-solid fa-font"></i>Text</button>
+                            <label class="roof-canvas-btn green cursor-pointer">
+                                <i class="fa-solid fa-image"></i>Bild hinzufügen
+                                <input id="roof-layout-canvas-upload-modal" type="file" accept="image/*" class="hidden" onchange="App.RoofLayout.uploadCanvasImage(this)">
+                            </label>
+                            <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.duplicateSelected()"><i class="fa-regular fa-copy"></i>Kopieren</button>
+                            <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.bringSelectedToFront()"><i class="fa-solid fa-angles-up"></i>Ganz vorne</button>
+                            <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.sendSelectedToBack()"><i class="fa-solid fa-angles-down"></i>Ganz hinten</button>
+                            <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.moveSelectedForward()"><i class="fa-solid fa-arrow-up"></i>Vor</button>
+                            <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.moveSelectedBackward()"><i class="fa-solid fa-arrow-down"></i>Zurück</button>
+                            <button type="button" class="roof-canvas-btn" onclick="App.RoofLayout.rotateSelected(15)"><i class="fa-solid fa-rotate-right"></i>Drehen</button>
+                            <button type="button" class="roof-canvas-btn danger" onclick="App.RoofLayout.deleteSelected()"><i class="fa-solid fa-trash"></i>Löschen</button>
+                            <button type="button" class="roof-canvas-btn primary" onclick="App.RoofLayout.closeCanvasModal()"><i class="fa-solid fa-xmark"></i>Schließen</button>
+                        </div>
+                    </div>
+                    <div class="px-5 py-3 border-b border-white/10 bg-slate-900/70">
+                        <div class="roof-direction-toolbar">
+                            ${this.directions.map(d => `
+                                <button type="button" class="roof-direction-tool-btn ${selected.has(d.key) ? 'is-selected' : ''}" onclick="App.RoofLayout.toggleRoof('${d.key}')">
+                                    <img src="${d.icon}" alt="${App.escapeHtml(d.label)}">
+                                    <span>${App.escapeHtml(d.label).replace(/\\n/g, '<br>')}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="roof-canvas-modal-body">
+                        <div id="roof-text-toolbar-modal">${this.renderSelectedTextToolbar()}</div>
+                        <div id="roof-design-canvas-modal" class="roof-design-canvas"></div>
+                    </div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                this.renderCanvas('roof-design-canvas-inline', true);
+                if (this.modalOpen) this.renderCanvas('roof-design-canvas-modal', true);
+            }, 0);
+        },
+
+        cleanCanvasText(value) {
+            return String(value ?? '')
+                .replace(/\u00a0/g, ' ')
+                .replace(/\r\n?/g, '\n')
+                .split('\n')
+                .map(line => line.replace(/^[\t ]+/g, '').replace(/[\t ]+$/g, ''))
+                .join('\n')
+                .replace(/^\n+|\n+$/g, '');
+        },
+
+        canvasItemHtml(item, editable = true) {
+            const label = App.escapeHtml(item.label || item.roof_type || item.kind || 'Element');
+            const fit = item.objectFit || 'contain';
+            const commonStyle = `left:${item.x}px;top:${item.y}px;width:${item.width}px;height:${item.height}px;transform:rotate(${item.rotation || 0}deg);z-index:${item.zIndex || 1};opacity:${item.opacity ?? 1};`;
+            const handles = editable ? `
+                <button type="button" class="roof-canvas-handle roof-canvas-move" title="Verschieben"><i class="fa-solid fa-arrows-up-down-left-right"></i></button>
+                <button type="button" class="roof-canvas-handle roof-canvas-rotate" title="Drehen"><i class="fa-solid fa-rotate"></i></button>
+                <button type="button" class="roof-canvas-handle roof-canvas-resize" title="Skalieren"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
+                <button type="button" class="roof-canvas-handle roof-canvas-delete" title="Löschen"><i class="fa-solid fa-trash"></i></button>
+            ` : '';
+
+            if (item.kind === 'text') {
+                const color = this.normalizeHexColor(item.color || '#111827');
+                const cleanText = this.cleanCanvasText(item.text || 'Text');
+                const text = App.escapeHtml(cleanText).replace(/\n/g, '<br>');
+                return `<div class="roof-canvas-item ${this.selectedCanvasItemId === item.id ? 'is-selected' : ''}" data-roof-canvas-id="${App.escapeHtml(item.id)}" style="${commonStyle}"><div class="roof-canvas-item-label">${label}</div><div class="roof-canvas-text" ${editable ? 'contenteditable="true" spellcheck="false"' : ''} style="color:${color};font-size:${Number(item.fontSize || 24)}px;font-weight:${item.fontWeight || '700'};font-style:${item.fontStyle || 'normal'};text-decoration:${item.textDecoration || 'none'};text-align:${item.textAlign || 'left'};background:${item.backgroundColor || 'transparent'};line-height:${Number(item.lineHeight || 1.25)};">${text || 'Text'}</div>${handles}</div>`;
+            }
+
+            return `
+                <div class="roof-canvas-item ${this.selectedCanvasItemId === item.id ? 'is-selected' : ''}"
+                     data-roof-canvas-id="${App.escapeHtml(item.id)}"
+                     style="${commonStyle}">
+                    <div class="roof-canvas-item-label">${label}</div>
+                    <img src="${item.src}" alt="${label}" style="object-fit:${fit};">
+                    ${handles}
+                </div>
+            `;
+        },
+
+        renderCanvas(containerId, editable = true) {
+            const canvas = document.getElementById(containerId);
+            if (!canvas) return;
+            const cfg = this.ensure();
+            canvas.innerHTML = cfg.canvasLayout.length
+                ? cfg.canvasLayout
+                    .slice()
+                    .sort((a, b) => (a.zIndex || 1) - (b.zIndex || 1))
+                    .map(item => this.canvasItemHtml(item, editable))
+                    .join('')
+                : `<div class="roof-canvas-empty">Noch leer. Wähle ein Dach-Icon, lade ein Bild hoch oder füge Text hinzu.</div>`;
+
+            if (!editable) return;
+
+            canvas.querySelectorAll('.roof-canvas-item').forEach(el => {
+                const id = el.dataset.roofCanvasId;
+                const item = cfg.canvasLayout.find(x => x.id === id);
+                if (!item) return;
+
+                el.addEventListener('pointerdown', (event) => {
+                    if (event.target.closest('.roof-canvas-handle')) return;
+                    if (event.target.closest('.roof-canvas-text')) {
+                        event.stopPropagation();
+                        this.selectCanvasItem(id, { keepDom: true });
+                        el.classList.add('is-selected');
+                        return;
+                    }
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.selectCanvasItem(id);
+                    this.startMove(event, containerId, id);
+                });
+
+                const textEl = el.querySelector('.roof-canvas-text');
+                if (textEl) {
+                    textEl.addEventListener('input', event => {
+                        const current = cfg.canvasLayout.find(x => x.id === id);
+                        if (!current) return;
+                        current.text = this.cleanCanvasText(event.currentTarget.innerText || '');
+                        this.markChanged(false, false);
+                        this.schedulePageRender();
+                    });
+                    textEl.addEventListener('blur', () => {
+                        this.refreshTextToolbar();
+                        this.schedulePageRender(120);
+                    });
+                }
+
+                el.querySelector('.roof-canvas-move')?.addEventListener('pointerdown', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.selectCanvasItem(id);
+                    this.startMove(event, containerId, id);
+                });
+
+                el.querySelector('.roof-canvas-resize')?.addEventListener('pointerdown', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.selectCanvasItem(id);
+                    this.startResize(event, containerId, id);
+                });
+
+                el.querySelector('.roof-canvas-rotate')?.addEventListener('pointerdown', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.selectCanvasItem(id);
+                    this.startRotate(event, containerId, id);
+                });
+
+                el.querySelector('.roof-canvas-delete')?.addEventListener('click', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.selectedCanvasItemId = id;
+                    this.deleteSelected();
+                });
+            });
+
+            canvas.addEventListener('pointerdown', event => {
+                if (event.target !== canvas) return;
+                this.selectCanvasItem(null);
+            }, { once: true });
+        },
+
+        startMove(event, containerId, id) {
+            const cfg = this.ensure();
+            const item = cfg.canvasLayout.find(x => x.id === id);
+            const canvas = document.getElementById(containerId);
+            const el = canvas?.querySelector(`[data-roof-canvas-id="${CSS.escape(id)}"]`);
+            if (!item || !canvas || !el) return;
+
+            const startX = event.clientX;
+            const startY = event.clientY;
+            const startLeft = Number(item.x || 0);
+            const startTop = Number(item.y || 0);
+            const maxLeft = () => Math.max(0, canvas.clientWidth - Number(item.width || 0));
+            const maxTop = () => Math.max(0, canvas.clientHeight - Number(item.height || 0));
+
+            const onMove = ev => {
+                item.x = Math.min(maxLeft(), Math.max(0, startLeft + (ev.clientX - startX)));
+                item.y = Math.min(maxTop(), Math.max(0, startTop + (ev.clientY - startY)));
+                el.style.left = item.x + 'px';
+                el.style.top = item.y + 'px';
+            };
+            const onUp = () => {
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
+                this.markChanged();
+            };
+            window.addEventListener('pointermove', onMove);
+            window.addEventListener('pointerup', onUp, { once: true });
+        },
+
+        startResize(event, containerId, id) {
+            const cfg = this.ensure();
+            const item = cfg.canvasLayout.find(x => x.id === id);
+            const canvas = document.getElementById(containerId);
+            const el = canvas?.querySelector(`[data-roof-canvas-id="${CSS.escape(id)}"]`);
+            if (!item || !canvas || !el) return;
+
+            const startX = event.clientX;
+            const startY = event.clientY;
+            const startWidth = Number(item.width || 100);
+            const startHeight = Number(item.height || 100);
+            const onMove = ev => {
+                item.width = Math.max(28, Math.min(canvas.clientWidth - item.x, startWidth + (ev.clientX - startX)));
+                item.height = Math.max(28, Math.min(canvas.clientHeight - item.y, startHeight + (ev.clientY - startY)));
+                el.style.width = item.width + 'px';
+                el.style.height = item.height + 'px';
+            };
+            const onUp = () => {
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
+                this.markChanged();
+            };
+            window.addEventListener('pointermove', onMove);
+            window.addEventListener('pointerup', onUp, { once: true });
+        },
+
+        startRotate(event, containerId, id) {
+            const cfg = this.ensure();
+            const item = cfg.canvasLayout.find(x => x.id === id);
+            const canvas = document.getElementById(containerId);
+            const el = canvas?.querySelector(`[data-roof-canvas-id="${CSS.escape(id)}"]`);
+            if (!item || !canvas || !el) return;
+
+            const rect = el.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const onMove = ev => {
+                const angle = Math.atan2(ev.clientY - centerY, ev.clientX - centerX) * 180 / Math.PI;
+                item.rotation = Math.round(angle + 90);
+                el.style.transform = `rotate(${item.rotation}deg)`;
+            };
+            const onUp = () => {
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
+                this.markChanged();
+            };
+            window.addEventListener('pointermove', onMove);
+            window.addEventListener('pointerup', onUp, { once: true });
+        },
+
+        createPage(pageNo = 2, forPrint = false) {
+            const cfg = this.ensure();
+            if (!cfg.enabled) return null;
+
+            // Sync the main document number before using the standard header.
+            cfg.offerNumber = this.currentDocumentNumber ? this.currentDocumentNumber() : (State.offerId || '');
+
+            // Use the exact same header, logo and footer renderer as the other A4 pages.
+            // isClosing=true hides the position table header, but keeps document header/footer.
+            const page = typeof App.createPage === 'function'
+                ? App.createPage(pageNo, forPrint, true)
+                : document.createElement('div');
+
+            page.classList.add('roof-layout-page');
+            page.id = forPrint ? 'print-page-roof-layout' : 'page-roof-layout';
+
+            const contentBox = page.querySelector('.page-content') || page;
+            contentBox.innerHTML = this.renderPageHtml(forPrint);
+
+            return page;
+        },
+
+        renderCanvasForA4() {
+            const cfg = this.ensure();
+            const w = Number(cfg.canvasDesignWidth || 1000);
+            const h = Number(cfg.canvasDesignHeight || 700);
+            const items = Array.isArray(cfg.canvasLayout) ? cfg.canvasLayout : [];
+            if (!items.length) return '';
+            return `
+                <div class="roof-a4-canvas">
+                    ${items.slice().sort((a,b) => (a.zIndex || 1) - (b.zIndex || 1)).map(item => {
+                        const left = ((Number(item.x || 0) / w) * 100).toFixed(4);
+                        const top = ((Number(item.y || 0) / h) * 100).toFixed(4);
+                        const width = ((Number(item.width || 100) / w) * 100).toFixed(4);
+                        const height = ((Number(item.height || 100) / h) * 100).toFixed(4);
+                        if (item.kind === 'text') {
+                            const color = this.normalizeHexColor(item.color || '#111827');
+                            return `<div class="roof-a4-canvas-item" style="left:${left}%;top:${top}%;width:${width}%;height:${height}%;transform:rotate(${Number(item.rotation || 0)}deg);z-index:${item.zIndex || 1};opacity:${item.opacity ?? 1};">
+                                <div style="width:100%;height:100%;box-sizing:border-box;padding:6px 8px;color:${color};font-size:${Number(item.fontSize || 24)}px;font-weight:${item.fontWeight || '700'};font-style:${item.fontStyle || 'normal'};text-decoration:${item.textDecoration || 'none'};text-align:${item.textAlign || 'left'};background:${item.backgroundColor || 'transparent'};line-height:${Number(item.lineHeight || 1.25)};white-space:pre-wrap;word-break:break-word;overflow:hidden;">${App.escapeHtml(this.cleanCanvasText(item.text || '')).replace(/\n/g, '<br>')}</div>
+                            </div>`;
+                        }
+                        return `<div class="roof-a4-canvas-item" style="left:${left}%;top:${top}%;width:${width}%;height:${height}%;transform:rotate(${Number(item.rotation || 0)}deg);z-index:${item.zIndex || 1};opacity:${item.opacity ?? 1};">
+                            <img src="${item.src}" style="object-fit:${item.objectFit || 'contain'};" alt="">
+                        </div>`;
+                    }).join('')}
+                </div>
+            `;
+        },
+
+        renderFixedCompass(forPrint = false) {
+            const cfg = this.ensure();
+            if (cfg.showCompass === false) return '';
+            const compassUrl = cfg.compassImageUrl || (cfg.compassImagePath ? `/storage/${String(cfg.compassImagePath).replace(/^public\//, '')}` : '');
+            return `
+                <div class="roof-fixed-compass-a4">
+                    <div class="roof-compass-wrap">
+                        <img src="/images/direction/kompass.svg" class="roof-compass-img" alt="Kompass">
+                        <div class="roof-compass-center">
+                            ${compassUrl ? `<img src="${compassUrl}" alt="Dachbild">` : `<div class="roof-compass-center-empty">${forPrint ? '' : 'Dachbild'}</div>`}
+                        </div>
+                    </div>
+                </div>
+            `;
+        },
+
+        renderStaticFallback(forPrint = false) {
+            const cfg = this.ensure();
+            const selected = new Set(cfg.selectedRoofs || []);
+            const directions = cfg.showAllIcons ? this.directions : this.directions.filter(d => selected.has(d.key));
+            return `
+                <div class="roof-icon-grid">
+                    ${directions.map(d => {
+                        const active = selected.has(d.key);
+                        const cls = active ? 'is-active' : (cfg.showAllIcons ? '' : 'show-all-active');
+                        return `<div class="roof-icon-card ${cls}">
+                            <div class="roof-icon-label">${App.escapeHtml(d.label).replace(/\\n/g, '<br>')}</div>
+                            <img src="${d.icon}" alt="${App.escapeHtml(d.label)}">
+                        </div>`;
+                    }).join('')}
+                </div>
+            `;
+        },
+
+        renderPageHtml(forPrint = false) {
+            const cfg = this.ensure();
+            const systemPower = String(cfg.systemPowerKwp || '').trim();
+            const moduleCount = String(cfg.moduleCount || '').trim();
+            const modulePower = String(cfg.modulePowerWp || '').trim();
+            const canvasHtml = this.renderCanvasForA4();
+
+            return `
+                <div class="roof-layout-body flex flex-col h-full min-h-0 relative">
+                    <div class="mb-5 pr-[88mm]">
+                        <div class="roof-layout-title">${App.escapeHtml(cfg.title || 'BELEGUNG DER DACHFLÄCHE')}</div>
+                    </div>
+
+                    <div class="mb-4 pr-[88mm]">
+                        <div class="text-[21px] font-black text-[#4b4641] uppercase leading-tight">
+                            SOLAR-ANLAGE${systemPower ? ` MIT ${App.escapeHtml(systemPower)} kWp` : ''}
+                        </div>
+                        <div class="text-[14px] text-[#333] mt-3">
+                            ${moduleCount || modulePower ? `${App.escapeHtml(moduleCount || '-') } Module${modulePower ? ` mit ${App.escapeHtml(modulePower)} Wp` : ''}` : '&nbsp;'}
+                        </div>
+                    </div>
+
+                    ${this.renderFixedCompass(forPrint)}
+
+                    <div class="roof-layout-main-area flex-1 min-h-0 relative">
+                        ${canvasHtml || this.renderStaticFallback(forPrint)}
+                    </div>
+
+                    <div class="roof-layout-note">${App.escapeHtml(cfg.note || '').replace(/\n/g, '<br>')}</div>
+                </div>
+            `;
+        }
+    };
+
+    window.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            App.RoofLayout?.init?.();
+        }, 350);
+    });
+
+
+(function () {
+    const esc = (value) => {
+        if (window.App && typeof App.escapeHtml === 'function') return App.escapeHtml(value ?? '');
+        const div = document.createElement('div');
+        div.textContent = value ?? '';
+        return div.innerHTML;
+    };
+
+    window.App = window.App || {};
+
+    App.PageLibrary = {
+        loaded: false,
+        uploadFiles: [],
+        positions: [
+            { key: 'after_cover', label: 'Nach Deckblatt' },
+            { key: 'after_roof', label: 'Nach Dachbelegung' },
+            { key: 'before_positions', label: 'Vor Positionen' },
+            { key: 'after_positions', label: 'Nach Positionen' },
+            { key: 'before_final', label: 'Vor Schlusstext' },
+            { key: 'end', label: 'Ganz am Ende' },
+        ],
+
+        ensureState() {
+            State.pageLibrary = State.pageLibrary || {};
+            State.pageLibrary.items = Array.isArray(State.pageLibrary.items) ? State.pageLibrary.items : [];
+            State.pageLibrary.pages = Array.isArray(State.pageLibrary.pages) ? State.pageLibrary.pages : [];
+            State.pageLibrary.articleGroups = Array.isArray(State.pageLibrary.articleGroups) ? State.pageLibrary.articleGroups : [];
+            State.pageLibrary.products = Array.isArray(State.pageLibrary.products) ? State.pageLibrary.products : [];
+            State.pageLibrary.context = State.pageLibrary.context || {};
+            State.pageLibrary.search = String(State.pageLibrary.search || '');
+            State.pageLibrary.status = State.pageLibrary.status || 'active';
+            State.pageLibrary.withInactive = State.pageLibrary.status !== 'active';
+            State.pageLibrary.filterArticleGroupId = Number(State.pageLibrary.filterArticleGroupId || 0);
+            State.pageLibrary.filterProductId = Number(State.pageLibrary.filterProductId || 0);
+            State.pageLibrary.filterProducts = Array.isArray(State.pageLibrary.filterProducts) ? State.pageLibrary.filterProducts : [];
+            // Global by default: every user can reuse the same library in every offer.
+            // Filters only limit the visible list; they do NOT bind the library to one offer.
+            State.pageLibrary.filterCurrentProduct = false;
+            State.pageLibrary.defaultPosition = State.pageLibrary.defaultPosition || 'after_roof';
+            return State.pageLibrary;
+        },
+
+        folderId() {
+            return Number(
+                State.prefill?.offer_folder_id
+                || window.OfferDocumentBootstrap?.offer_folder_id
+                || window.OfferDocumentBootstrap?.folder_id
+                || 0
+            );
+        },
+
+        articleGroupId() {
+            const s = this.ensureState();
+            return Number(
+                s.context?.article_group_id
+                || State.prefill?.product_id
+                || window.OfferDocumentBootstrap?.product_id
+                || State.object?.product_id
+                || State.object?.items?.[0]?.product_id
+                || 0
+            );
+        },
+
+        baseUrl() {
+            const id = this.folderId();
+            return id ? `/admin/offers/folders/${id}/page-library` : '';
+        },
+
+        async load(force = false) {
+            const s = this.ensureState();
+            const base = this.baseUrl();
+            if (!base) {
+                this.renderError('Bitte Angebot/Ordner zuerst speichern, dann kann die Seiten-Bibliothek geladen werden.');
+                return;
+            }
+
+            if (this.loaded && !force) {
+                this.render();
+                return;
+            }
+
+            try {
+                const params = new URLSearchParams();
+                params.set('global', '1');
+                if (s.search) params.set('q', s.search);
+                if (s.filterArticleGroupId) params.set('filter_article_group_id', String(s.filterArticleGroupId));
+                if (s.filterProductId) params.set('filter_product_id', String(s.filterProductId));
+                if (s.status) params.set('status', s.status);
+                if (s.status !== 'active') params.set('with_inactive', '1');
+
+                const res = await fetch(`${base}/context?${params.toString()}`, {
+                    headers: { 'Accept': 'application/json' },
+                    credentials: 'same-origin',
+                });
+
+                if (!res.ok) throw new Error('Seiten-Bibliothek konnte nicht geladen werden.');
+                const data = await res.json();
+
+                s.context = data.context || {};
+                s.articleGroups = data.article_groups || [];
+                s.products = data.products || [];
+                s.filterProducts = data.filter_products || s.filterProducts || [];
+                s.items = data.items || [];
+                s.pages = data.pages || [];
+                if (Array.isArray(data.positions)) this.positions = data.positions;
+                this.loaded = true;
+                this.render();
+                if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+            } catch (error) {
+                console.error('[PageLibrary] load failed', error);
+                this.renderError(error.message || 'Seiten-Bibliothek konnte nicht geladen werden.');
+            }
+        },
+
+        async reloadPages() {
+            const base = this.baseUrl();
+            if (!base) return;
+            try {
+                const res = await fetch(`${base}/pages`, { headers: { 'Accept': 'application/json' }, credentials: 'same-origin' });
+                if (!res.ok) throw new Error('Seiten konnten nicht geladen werden.');
+                const data = await res.json();
+                this.ensureState().pages = data.pages || [];
+                this.render();
+                if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+            } catch (error) {
+                console.warn('[PageLibrary] reloadPages failed', error);
+            }
+        },
+
+        token() {
+            return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+        },
+
+        renderError(message) {
+            const root = document.getElementById('page-library-root');
+            if (!root) return;
+            root.innerHTML = `<div class="p-6 rounded-2xl border border-amber-200 bg-amber-50 text-amber-800 font-bold">${esc(message)}</div>`;
+        },
+
+        render() {
+            const root = document.getElementById('page-library-root');
+            if (!root) return;
+            const s = this.ensureState();
+            const activePages = s.pages.filter(p => p.is_enabled).length;
+
+            root.innerHTML = `
+                <div class="page-library-shell">
+                    <section class="page-library-card">
+                        <div class="page-library-head">
+                            <div>
+                                <div class="text-xs font-black uppercase tracking-wider text-slate-500">Bibliothek</div>
+                                <div class="text-lg font-black text-slate-900">Alle globalen Seiten</div>
+                                <div class="text-xs text-slate-500 mt-1">${s.items.length} gefundene Seite(n) · für jedes Angebot nutzbar</div>
+                            </div>
+                            <div class="flex gap-2 flex-wrap justify-end">
+                                <button type="button" class="page-library-btn" onclick="App.PageLibrary.clearFilters()">
+                                    <i class="fa-solid fa-rotate-left"></i>Filter löschen
+                                </button>
+                                <button type="button" class="page-library-btn primary" onclick="App.PageLibrary.openUploadModal()">
+                                    <i class="fa-solid fa-plus"></i>Neue Seite
+                                </button>
+                            </div>
+                        </div>
+                        ${this.renderFilters()}
+                        <div class="page-library-grid">
+                            ${s.items.length ? s.items.map(item => this.itemCard(item)).join('') : this.emptyLibraryHtml()}
+                        </div>
+                    </section>
+
+                    <section class="page-library-card">
+                        <div class="page-library-head">
+                            <div>
+                                <div class="text-xs font-black uppercase tracking-wider text-slate-500">Dieses Angebot</div>
+                                <div class="text-lg font-black text-slate-900">Druckseiten & Reihenfolge</div>
+                                <div class="text-xs text-slate-500 mt-1">${activePages} aktive Zusatzseite(n)</div>
+                            </div>
+                            <button type="button" class="page-library-btn" onclick="App.PageLibrary.saveOrder()">
+                                <i class="fa-solid fa-floppy-disk"></i>Reihenfolge speichern
+                            </button>
+                        </div>
+                        <div class="page-library-selected-list" id="page-library-selected-list">
+                            <div class="page-library-mini-order-note">
+                                <i class="fa-solid fa-grip-vertical mr-1"></i>
+                                Diese Liste ist per Drag & Drop sortierbar. Die Miniaturseiten links können ebenfalls gezogen werden; Library-Seiten speichern ihre Druckposition automatisch.
+                            </div>
+                            ${s.pages.length ? s.pages.map(page => this.selectedPageRow(page)).join('') : this.emptySelectedHtml()}
+                        </div>
+                    </section>
+                </div>
+            `;
+            this.bindSelectedSortable();
+        },
+
+        renderFilters() {
+            const s = this.ensureState();
+            return `
+                <div class="page-library-filter-panel">
+                    <div class="page-library-filter-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="search"
+                               value="${esc(s.search)}"
+                               placeholder="Alle Bibliotheksseiten durchsuchen: Titel, Beschreibung, Gewerk, Produkt, Ersteller..."
+                               oninput="App.PageLibrary.setSearch(this.value)">
+                    </div>
+                    <div class="page-library-filter-grid">
+                        <label>
+                            <span>Gewerk</span>
+                            <select class="page-library-select" onchange="App.PageLibrary.setArticleGroupFilter(this.value)">
+                                <option value="0">Alle Gewerke</option>
+                                ${s.articleGroups.map(ag => `<option value="${Number(ag.id)}" ${Number(s.filterArticleGroupId) === Number(ag.id) ? 'selected' : ''}>${esc(ag.name)}</option>`).join('')}
+                            </select>
+                        </label>
+                        <label>
+                            <span>Produkt</span>
+                            <select class="page-library-select" onchange="App.PageLibrary.setProductFilter(this.value)" ${s.filterArticleGroupId ? '' : 'disabled'}>
+                                <option value="0">${s.filterArticleGroupId ? 'Alle Produkte' : 'Erst Gewerk wählen'}</option>
+                                ${s.filterProducts.map(p => `<option value="${Number(p.id)}" ${Number(s.filterProductId) === Number(p.id) ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}
+                            </select>
+                        </label>
+                        <label>
+                            <span>Status</span>
+                            <select class="page-library-select" onchange="App.PageLibrary.setStatusFilter(this.value)">
+                                <option value="active" ${s.status === 'active' ? 'selected' : ''}>Nur aktive</option>
+                                <option value="all" ${s.status === 'all' ? 'selected' : ''}>Aktive + inaktive</option>
+                                <option value="inactive" ${s.status === 'inactive' ? 'selected' : ''}>Nur inaktive</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span>Druckposition</span>
+                            <select class="page-library-select" onchange="App.PageLibrary.setDefaultPosition(this.value)">
+                                ${this.positions.map(pos => `<option value="${esc(pos.key)}" ${pos.key === s.defaultPosition ? 'selected' : ''}>${esc(pos.label)}</option>`).join('')}
+                            </select>
+                        </label>
+                    </div>
+                    <div class="page-library-filter-hint">
+                        <i class="fa-solid fa-globe"></i>
+                        Es werden standardmäßig alle globalen Bibliotheksseiten geladen. Suche und Filter grenzen nur die Anzeige ein.
+                    </div>
+                </div>
+            `;
+        },
+
+        itemCard(item) {
+            const activeClass = item.is_active ? 'green' : 'red';
+            const activeLabel = item.is_active ? 'Aktiv' : 'Inaktiv';
+            return `
+                <div class="page-library-item">
+                    <div class="page-library-thumb"><img src="${esc(item.file_url)}" alt="${esc(item.title || 'Bibliotheksseite')}"></div>
+                    <div class="p-3 space-y-2">
+                        <div class="font-black text-sm text-slate-900 line-clamp-2">${esc(item.title || 'Bibliotheksseite #' + item.id)}</div>
+                        <div class="text-[11px] text-slate-500">${esc(item.article_group_name || 'Alle Gewerke')} ${item.product_name ? '• ' + esc(item.product_name) : ''}</div>
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="page-library-badge ${activeClass}">${activeLabel}</span>
+                            <span class="text-[10px] text-slate-400">von ${esc(item.creator_name || ('#' + (item.created_by || '-')))}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 pt-1">
+                            <button type="button" class="page-library-btn" onclick="App.PageLibrary.attach(${Number(item.id)})" ${item.is_active ? '' : 'disabled'}>
+                                <i class="fa-solid fa-file-circle-plus"></i>Einfügen
+                            </button>
+                            <button type="button" class="page-library-btn" onclick="App.PageLibrary.toggleItemActive(${Number(item.id)}, ${item.is_active ? 'false' : 'true'})">
+                                ${item.is_active ? 'Deaktivieren' : 'Aktivieren'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        },
+
+        selectedPageRow(page) {
+            return `
+                <div class="page-library-selected-row ${page.is_enabled ? '' : 'is-disabled'}" data-page-library-page-id="${Number(page.id)}">
+                    <button type="button" class="page-library-drag-handle" title="Ziehen zum Sortieren"><i class="fa-solid fa-grip-vertical"></i></button>
+                    <img src="${esc(page.file_url)}" alt="${esc(page.title || 'Zusatzseite')}">
+                    <div class="min-w-0 space-y-2">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <div class="font-black text-sm text-slate-900 truncate">${esc(page.title || 'Zusatzseite #' + page.id)}</div>
+                                <div class="text-[11px] text-slate-500">${this.positionLabel(page.page_position)} • Reihenfolge ${Number(page.sort_order || 0) + 1}</div>
+                            </div>
+                            <label class="inline-flex items-center gap-1 text-[11px] font-black text-slate-600">
+                                <input type="checkbox" ${page.is_enabled ? 'checked' : ''} onchange="App.PageLibrary.updatePage(${Number(page.id)}, {is_enabled:this.checked})" class="accent-[#93c21c]">
+                                Drucken
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-[1fr_auto_auto_auto] gap-2 items-center">
+                            <select class="page-library-select !py-2 !text-xs" onchange="App.PageLibrary.updatePage(${Number(page.id)}, {page_position:this.value})">
+                                ${this.positions.map(pos => `<option value="${esc(pos.key)}" ${pos.key === page.page_position ? 'selected' : ''}>${esc(pos.label)}</option>`).join('')}
+                            </select>
+                            <button type="button" class="page-library-btn !px-2" title="Nach oben" onclick="App.PageLibrary.movePage(${Number(page.id)}, -1)"><i class="fa-solid fa-arrow-up"></i></button>
+                            <button type="button" class="page-library-btn !px-2" title="Nach unten" onclick="App.PageLibrary.movePage(${Number(page.id)}, 1)"><i class="fa-solid fa-arrow-down"></i></button>
+                            <button type="button" class="page-library-btn danger !px-2" title="Entfernen" onclick="App.PageLibrary.removePage(${Number(page.id)})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        },
+
+        emptyLibraryHtml() {
+            return `<div class="col-span-full p-8 text-center border border-dashed border-slate-300 rounded-2xl text-slate-500 font-bold">Noch keine Seite in der globalen Bibliothek.</div>`;
+        },
+
+        emptySelectedHtml() {
+            return `<div class="p-8 text-center border border-dashed border-slate-300 rounded-2xl text-slate-500 font-bold">Noch keine Zusatzseite in diesem Angebot.</div>`;
+        },
+
+        positionLabel(key) {
+            return (this.positions.find(p => p.key === key)?.label) || key || 'Position';
+        },
+
+        setSearch(value) {
+            const s = this.ensureState();
+            s.search = String(value || '').trim();
+            clearTimeout(this._searchTimer);
+            this._searchTimer = setTimeout(() => {
+                this.loaded = false;
+                this.load(true);
+            }, 300);
+        },
+
+        async setArticleGroupFilter(value) {
+            const s = this.ensureState();
+            s.filterArticleGroupId = Number(value || 0);
+            s.filterProductId = 0;
+            await this.loadProductsForFilter();
+            this.loaded = false;
+            await this.load(true);
+        },
+
+        async setProductFilter(value) {
+            const s = this.ensureState();
+            s.filterProductId = Number(value || 0);
+            this.loaded = false;
+            await this.load(true);
+        },
+
+        async setStatusFilter(value) {
+            const s = this.ensureState();
+            s.status = ['active', 'all', 'inactive'].includes(value) ? value : 'active';
+            s.withInactive = s.status !== 'active';
+            this.loaded = false;
+            await this.load(true);
+        },
+
+        setDefaultPosition(value) {
+            const s = this.ensureState();
+            s.defaultPosition = value || 'after_roof';
+            this.render();
+        },
+
+        async clearFilters() {
+            const s = this.ensureState();
+            s.search = '';
+            s.status = 'active';
+            s.withInactive = false;
+            s.filterArticleGroupId = 0;
+            s.filterProductId = 0;
+            s.filterProducts = [];
+            this.loaded = false;
+            await this.load(true);
+        },
+
+        async loadProductsForFilter() {
+            const base = this.baseUrl();
+            const s = this.ensureState();
+            if (!base || !s.filterArticleGroupId) {
+                s.filterProducts = [];
+                return;
+            }
+            const res = await fetch(`${base}/products?article_group_id=${s.filterArticleGroupId}`, {headers:{'Accept':'application/json'}, credentials:'same-origin'});
+            const data = await res.json().catch(() => ({}));
+            s.filterProducts = data.items || [];
+        },
+
+        async toggleProductFilter(value) {
+            const s = this.ensureState();
+            s.filterArticleGroupId = value ? this.articleGroupId() : 0;
+            s.filterProductId = 0;
+            await this.loadProductsForFilter();
+            this.loaded = false;
+            await this.load(true);
+        },
+
+        async toggleInactive(value) {
+            const s = this.ensureState();
+            s.status = value ? 'all' : 'active';
+            s.withInactive = !!value;
+            this.loaded = false;
+            await this.load(true);
+        },
+
+        bindSelectedSortable() {
+            const list = document.getElementById('page-library-selected-list');
+            if (!list || typeof Sortable === 'undefined') return;
+
+            if (this._selectedSortable) {
+                try { this._selectedSortable.destroy(); } catch (e) {}
+                this._selectedSortable = null;
+            }
+
+            this._selectedSortable = new Sortable(list, {
+                animation: 160,
+                draggable: '.page-library-selected-row',
+                handle: '.page-library-drag-handle',
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                onEnd: () => this.applySelectedListOrder(),
+            });
+        },
+
+        applySelectedListOrder() {
+            const s = this.ensureState();
+            const list = document.getElementById('page-library-selected-list');
+            if (!list) return;
+
+            const ids = Array.from(list.querySelectorAll('.page-library-selected-row'))
+                .map(row => Number(row.dataset.pageLibraryPageId || 0))
+                .filter(Boolean);
+
+            if (!ids.length) return;
+
+            const byId = new Map(s.pages.map(page => [Number(page.id), page]));
+            const ordered = [];
+            ids.forEach((id, idx) => {
+                const page = byId.get(id);
+                if (!page) return;
+                page.sort_order = idx;
+                ordered.push(page);
+            });
+
+            s.pages.forEach(page => {
+                if (!ids.includes(Number(page.id))) ordered.push(page);
+            });
+
+            s.pages = ordered;
+            this.saveOrder();
+            if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+        },
+
+        async toggleItemActive(itemId, isActive) {
+            const base = this.baseUrl();
+            if (!base) return;
+            const res = await fetch(`${base}/items/${itemId}`, {
+                method: 'PATCH',
+                headers: {'Content-Type':'application/json','Accept':'application/json','X-CSRF-TOKEN':this.token()},
+                credentials: 'same-origin',
+                body: JSON.stringify({is_active: !!isActive}),
+            });
+            if (!res.ok) return alert('Status konnte nicht geändert werden.');
+            await this.load(true);
+        },
+
+        async attach(itemId, position = null) {
+            const base = this.baseUrl();
+            if (!base) return;
+            const res = await fetch(`${base}/items/${itemId}/attach`, {
+                method: 'POST',
+                headers: {'Content-Type':'application/json','Accept':'application/json','X-CSRF-TOKEN':this.token()},
+                credentials: 'same-origin',
+                body: JSON.stringify({page_position: position || this.ensureState().defaultPosition || 'after_roof', is_enabled: true}),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || data.success === false) return alert(data.message || 'Seite konnte nicht eingefügt werden.');
+            this.ensureState().pages = data.pages || this.ensureState().pages;
+            this.render();
+            if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+        },
+
+        async updatePage(pageId, patch) {
+            const base = this.baseUrl();
+            if (!base) return;
+            const res = await fetch(`${base}/pages/${pageId}`, {
+                method: 'PATCH',
+                headers: {'Content-Type':'application/json','Accept':'application/json','X-CSRF-TOKEN':this.token()},
+                credentials: 'same-origin',
+                body: JSON.stringify(patch || {}),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || data.success === false) return alert(data.message || 'Seite konnte nicht aktualisiert werden.');
+            this.ensureState().pages = data.pages || this.ensureState().pages;
+            this.render();
+            if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+        },
+
+        async removePage(pageId) {
+            if (!confirm('Diese Seite aus diesem Angebot entfernen?')) return;
+            const base = this.baseUrl();
+            if (!base) return;
+            const res = await fetch(`${base}/pages/${pageId}`, {
+                method: 'DELETE',
+                headers: {'Accept':'application/json','X-CSRF-TOKEN':this.token()},
+                credentials: 'same-origin',
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || data.success === false) return alert(data.message || 'Seite konnte nicht entfernt werden.');
+            this.ensureState().pages = data.pages || [];
+            this.render();
+            if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+        },
+
+        movePage(pageId, direction) {
+            const s = this.ensureState();
+            const idx = s.pages.findIndex(p => Number(p.id) === Number(pageId));
+            if (idx < 0) return;
+            const page = s.pages[idx];
+            const same = s.pages.filter(p => p.page_position === page.page_position);
+            const posIdx = same.findIndex(p => Number(p.id) === Number(pageId));
+            const other = same[posIdx + direction];
+            if (!other) return;
+            const a = s.pages.findIndex(p => Number(p.id) === Number(page.id));
+            const b = s.pages.findIndex(p => Number(p.id) === Number(other.id));
+            [s.pages[a].sort_order, s.pages[b].sort_order] = [s.pages[b].sort_order, s.pages[a].sort_order];
+            s.pages.sort((x,y) => this.positionOrder(x.page_position) - this.positionOrder(y.page_position) || Number(x.sort_order||0) - Number(y.sort_order||0) || Number(x.id) - Number(y.id));
+            this.render();
+            this.saveOrder();
+            if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+        },
+
+        positionOrder(key) {
+            const idx = this.positions.findIndex(p => p.key === key);
+            return idx < 0 ? 999 : idx;
+        },
+
+        async saveOrder() {
+            const base = this.baseUrl();
+            if (!base) return;
+            const pages = this.ensureState().pages.map((page, idx) => ({
+                id: page.id,
+                page_position: page.page_position || 'after_roof',
+                sort_order: idx,
+                is_enabled: !!page.is_enabled,
+            }));
+            const res = await fetch(`${base}/pages/reorder`, {
+                method: 'POST',
+                headers: {'Content-Type':'application/json','Accept':'application/json','X-CSRF-TOKEN':this.token()},
+                credentials: 'same-origin',
+                body: JSON.stringify({pages}),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || data.success === false) return alert(data.message || 'Reihenfolge konnte nicht gespeichert werden.');
+            this.ensureState().pages = data.pages || this.ensureState().pages;
+            this.render();
+            if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+        },
+
+        openUploadModal() {
+            this.ensureState();
+            this.fillUploadSelectors();
+            document.getElementById('page-library-modal')?.classList.add('is-open');
+            this.bindDropzone();
+        },
+
+        closeUploadModal() {
+            document.getElementById('page-library-modal')?.classList.remove('is-open');
+        },
+
+        fillUploadSelectors() {
+            const s = this.ensureState();
+            const agSelect = document.getElementById('page-library-upload-article-group');
+            const productSelect = document.getElementById('page-library-upload-product');
+            if (agSelect) {
+                const currentAg = this.articleGroupId();
+                agSelect.innerHTML = s.articleGroups.map(ag => `<option value="${Number(ag.id)}" ${Number(ag.id) === Number(currentAg) ? 'selected' : ''}>${esc(ag.name)}</option>`).join('');
+            }
+            if (productSelect) {
+                productSelect.innerHTML = `<option value="">Alle Produkte dieses Gewerks</option>` + s.products.map(p => `<option value="${Number(p.id)}">${esc(p.name)}</option>`).join('');
+            }
+        },
+
+        async loadProductsForUpload() {
+            const base = this.baseUrl();
+            if (!base) return;
+            const ag = Number(document.getElementById('page-library-upload-article-group')?.value || 0);
+            const res = await fetch(`${base}/products?article_group_id=${ag}`, {headers:{'Accept':'application/json'}, credentials:'same-origin'});
+            const data = await res.json().catch(() => ({}));
+            this.ensureState().products = data.items || [];
+            this.fillUploadSelectors();
+            const agSelect = document.getElementById('page-library-upload-article-group');
+            if (agSelect) agSelect.value = String(ag);
+        },
+
+        bindDropzone() {
+            const zone = document.getElementById('page-library-dropzone');
+            if (!zone || zone.dataset.bound === '1') return;
+            zone.dataset.bound = '1';
+            ['dragenter','dragover'].forEach(evt => zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.add('is-dragover'); }));
+            ['dragleave','drop'].forEach(evt => zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.remove('is-dragover'); }));
+            zone.addEventListener('drop', e => this.setUploadFiles(Array.from(e.dataTransfer?.files || [])));
+        },
+
+        handleFileInput(event) {
+            this.setUploadFiles(Array.from(event?.target?.files || []));
+            if (event?.target) event.target.value = '';
+        },
+
+        setUploadFiles(files) {
+            this.uploadFiles = files.filter(file => file && /^image\//.test(file.type || '') || /\.svg$/i.test(file?.name || ''));
+            this.renderUploadPreview();
+        },
+
+        clearUploadFiles() {
+            this.uploadFiles = [];
+            this.renderUploadPreview();
+        },
+
+        renderUploadPreview() {
+            const root = document.getElementById('page-library-upload-preview');
+            if (!root) return;
+            root.innerHTML = '';
+            this.uploadFiles.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const div = document.createElement('div');
+                    div.innerHTML = `<img src="${String(e.target?.result || '')}" alt="${esc(file.name)}"><div class="text-[11px] mt-1 truncate text-slate-500">${esc(file.name)}</div>`;
+                    root.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        },
+
+        async uploadSelectedFiles() {
+            if (!this.uploadFiles.length) return alert('Bitte zuerst Bilder auswählen.');
+            const base = this.baseUrl();
+            if (!base) return;
+            const articleGroupId = Number(document.getElementById('page-library-upload-article-group')?.value || 0);
+            if (!articleGroupId) return alert('Bitte Gewerk auswählen.');
+
+            const fd = new FormData();
+            fd.append('article_group_id', String(articleGroupId));
+            const productId = document.getElementById('page-library-upload-product')?.value || '';
+            if (productId) fd.append('product_id', productId);
+            fd.append('title', document.getElementById('page-library-upload-title')?.value || '');
+            fd.append('is_active', document.getElementById('page-library-upload-active')?.checked ? '1' : '0');
+            this.uploadFiles.forEach(file => fd.append('files[]', file));
+
+            const res = await fetch(`${base}/items`, {
+                method: 'POST',
+                headers: {'Accept':'application/json','X-CSRF-TOKEN':this.token()},
+                credentials: 'same-origin',
+                body: fd,
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || data.success === false) return alert(data.message || 'Upload fehlgeschlagen.');
+
+            const attach = document.getElementById('page-library-upload-attach')?.checked;
+            const position = document.getElementById('page-library-upload-position')?.value || 'after_roof';
+            this.closeUploadModal();
+            this.clearUploadFiles();
+            await this.load(true);
+            if (attach && Array.isArray(data.items)) {
+                for (const item of data.items) {
+                    await this.attach(item.id, position);
+                }
+            }
+        },
+
+        applyMiniThumbOrderFromNav() {
+            const nav = document.getElementById('nav-pane');
+            if (!nav) return;
+
+            const s = this.ensureState();
+            const thumbs = Array.from(nav.querySelectorAll('.thumb-wrapper'));
+            const libraryThumbs = thumbs.filter(t => t.dataset.pageKind === 'library' && t.dataset.pageLibraryPageId);
+            if (!libraryThumbs.length) return;
+
+            const byId = new Map(s.pages.map(page => [Number(page.id), page]));
+
+            const kindBefore = (index, kind) => thumbs.slice(0, index).some(t => t.dataset.pageKind === kind);
+            const kindAfter = (index, kind) => thumbs.slice(index + 1).some(t => t.dataset.pageKind === kind);
+
+            const resolvePosition = (index, currentPosition) => {
+                const prev = thumbs[index - 1]?.dataset.pageKind || '';
+                const next = thumbs[index + 1]?.dataset.pageKind || '';
+
+                if (next === 'roof') return 'after_cover';
+                if (prev === 'roof') return 'after_roof';
+                if (!kindBefore(index, 'content') && kindAfter(index, 'content')) return 'before_positions';
+                if (kindBefore(index, 'content') && next === 'final') return 'before_final';
+                if (prev === 'final') return 'end';
+                if (kindBefore(index, 'content') && !kindAfter(index, 'content')) return 'after_positions';
+
+                return currentPosition || 'after_roof';
+            };
+
+            libraryThumbs.forEach((thumb, idx) => {
+                const page = byId.get(Number(thumb.dataset.pageLibraryPageId || 0));
+                if (!page) return;
+                const absoluteIndex = thumbs.indexOf(thumb);
+                page.page_position = resolvePosition(absoluteIndex, page.page_position);
+                page.sort_order = idx;
+            });
+
+            s.pages.sort((a, b) => this.positionOrder(a.page_position) - this.positionOrder(b.page_position) || Number(a.sort_order || 0) - Number(b.sort_order || 0) || Number(a.id) - Number(b.id));
+            this.saveOrder();
+        },
+
+        pagesByPosition(position) {
+            return this.ensureState().pages
+                .filter(page => page.is_enabled && (page.page_position || 'after_roof') === position)
+                .sort((a,b) => Number(a.sort_order||0) - Number(b.sort_order||0) || Number(a.id) - Number(b.id));
+        },
+
+        appendPagesToContainer(container, position, startPageIndex, forPrint = false) {
+            if (!container) return startPageIndex;
+            let pageIndex = startPageIndex;
+            this.pagesByPosition(position).forEach(page => {
+                const node = this.createA4Page(page, pageIndex, forPrint);
+                if (node) {
+                    container.appendChild(node);
+                    pageIndex++;
+                }
+            });
+            return pageIndex;
+        },
+
+        createA4Page(page, pageNo, forPrint = false) {
+            const node = typeof App.createPage === 'function'
+                ? App.createPage(pageNo, forPrint, true)
+                : document.createElement('div');
+            node.classList.add('page-library-a4-page');
+            node.dataset.pageKind = 'library';
+            node.dataset.pageLibraryPageId = String(page.id || '');
+            node.dataset.pagePosition = page.page_position || 'after_roof';
+            const content = node.querySelector('.page-content') || node;
+            content.innerHTML = `
+                <div class="page-library-full-page-image">
+                    <img src="${esc(page.file_url)}" alt="${esc(page.title || 'Zusatzseite')}">
+                </div>
+            `;
+            return node;
+        },
+    };
+
+    window.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            App.PageLibrary?.load?.(true);
+        }, 900);
+    });
+})();
+
+
+
     App.Tabs = {
         current: 'list',
         switch(mode) {
@@ -9420,42 +15015,52 @@
             const a4 = document.getElementById('panel-a4');
             const list = document.getElementById('panel-list');
             const settings = document.getElementById('panel-settings');
+            const roofLayout = document.getElementById('panel-roof-layout');
             const bio = document.getElementById('panel-bio');
             const templates = document.getElementById('panel-templates');
+            const pageLibrary = document.getElementById('panel-page-library');
 
             const btnA4 = document.getElementById('main-tab-a4');
             const btnList = document.getElementById('main-tab-list');
             const btnSettings = document.getElementById('main-tab-settings');
+            const btnRoofLayout = document.getElementById('main-tab-roof-layout');
             const btnBio = document.getElementById('main-tab-bio');
             const btnTemplates = document.getElementById('main-tab-templates');
+            const btnPageLibrary = document.getElementById('main-tab-page-library');
 
             if (a4) a4.classList.toggle('hidden', mode !== 'a4');
             if (list) list.classList.toggle('hidden', mode !== 'list');
             if (settings) settings.classList.toggle('hidden', mode !== 'settings');
+            if (roofLayout) roofLayout.classList.toggle('hidden', mode !== 'roof-layout');
             if (bio) bio.classList.toggle('hidden', mode !== 'bio');
             if (templates) templates.classList.toggle('hidden', mode !== 'templates');
+            if (pageLibrary) pageLibrary.classList.toggle('hidden', mode !== 'page-library');
 
             const setActive = (btn, isActive) => {
                 if (!btn) return;
                 if (isActive) {
                     btn.classList.add('bg-white', 'shadow', 'text-[#93c21c]');
-                    btn.classList.remove('text-slate-600');
+                    btn.classList.remove('text-[#000000]');
                 } else {
                     btn.classList.remove('bg-white', 'shadow', 'text-[#93c21c]');
-                    btn.classList.add('text-slate-600');
+                    btn.classList.add('text-[#000000]');
                 }
             };
 
             setActive(btnA4, mode === 'a4');
             setActive(btnList, mode === 'list');
             setActive(btnSettings, mode === 'settings');
+            setActive(btnRoofLayout, mode === 'roof-layout');
             setActive(btnBio, mode === 'bio');
             setActive(btnTemplates, mode === 'templates');
+            setActive(btnPageLibrary, mode === 'page-library');
 
             if (mode === 'list') App.ListView.render();
             if (mode === 'settings') App.Settings.render();
+            if (mode === 'roof-layout') App.RoofLayout?.renderPanel?.();
             if (mode === 'bio') App.Bio.render();
             if (mode === 'templates') App.TemplateTab.render();
+            if (mode === 'page-library') App.PageLibrary?.load?.();
         }
     };
 
@@ -9511,15 +15116,15 @@
                 <div class="max-w-[1680px] mx-auto space-y-6 p-6">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
                         <div>
-                            <h2 class="text-xl font-black text-slate-800">Vorlagen-Bibliothek</h2>
-                            <p class="text-xs text-dark-600">Wählen Sie ein Template aus, um dessen Positionen dem aktuellen Angebot hinzuzufügen.</p>
+                            <h2 class="text-xl font-black text-[#000000]">Vorlagen-Bibliothek</h2>
+                            <p class="text-xs text-[#000000]">Wählen Sie ein Template aus, um dessen Positionen dem aktuellen Angebot hinzuzufügen.</p>
                         </div>
 
                         <div class="flex items-center gap-2">
                             <button
                                 type="button"
                                 onclick="App.TemplateTab.resetFilters()"
-                                class="px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 text-xs font-bold transition-all"
+                                class="px-4 py-2 rounded-xl border border-slate-200 bg-white text-[#000000] hover:bg-slate-50 text-xs font-bold transition-all"
                             >
                                 <i class="fa-solid fa-rotate-left mr-2"></i>Filter zurücksetzen
                             </button>
@@ -9548,14 +15153,14 @@
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                             <div>
-                                <div class="text-[11px] uppercase tracking-[0.25em] font-black text-slate-400">Filter</div>
-                                <p class="text-xs text-dark-600 mt-1">Mitarbeiter, Favoriten, Stemm und Verwendung gezielt filtern.</p>
+                                <div class="text-[11px] uppercase tracking-[0.25em] font-black text-[#000000]">Filter</div>
+                                <p class="text-xs text-[#000000] mt-1">Mitarbeiter, Favoriten, Stemm und Verwendung gezielt filtern.</p>
                             </div>
 
                             <button
                                 type="button"
                                 onclick="App.TemplateTab.clearFilterFields()"
-                                class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-600 transition-all hover:bg-slate-100"
+                                class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-[#000000] transition-all hover:bg-slate-100"
                             >
                                 <i class="fa-solid fa-eraser"></i>
                                 Filter leeren
@@ -9564,7 +15169,7 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-10 gap-4">
                             <div class="md:col-span-2">
-                                <label class="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1">Suche (Name/Text)</label>
+                                <label class="block text-[10px] font-black uppercase text-[#000000] mb-1 ml-1">Suche (Name/Text)</label>
                                 <div class="relative">
                                     <input
                                         type="text"
@@ -9572,37 +15177,37 @@
                                         placeholder="Suchen..."
                                         class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 pl-9 text-sm focus:border-[#93c21c] outline-none transition-all"
                                     >
-                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[#000000] text-xs"></i>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1">Mitarbeiter</label>
+                                <label class="block text-[10px] font-black uppercase text-[#000000] mb-1 ml-1">Mitarbeiter</label>
                                 <select id="tpl-filter-employee" class="tpl-select2-filter"></select>
                             </div>
 
                             <div>
-                                <label class="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1">Abteilung</label>
+                                <label class="block text-[10px] font-black uppercase text-[#000000] mb-1 ml-1">Abteilung</label>
                                 <select id="tpl-filter-dept" class="tpl-select2-filter"></select>
                             </div>
 
                             <div>
-                                <label class="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1">Gewerk</label>
+                                <label class="block text-[10px] font-black uppercase text-[#000000] mb-1 ml-1">Gewerk</label>
                                 <select id="tpl-filter-group" class="tpl-select2-filter"></select>
                             </div>
 
                             <div>
-                                <label class="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1">Marke</label>
+                                <label class="block text-[10px] font-black uppercase text-[#000000] mb-1 ml-1">Marke</label>
                                 <select id="tpl-filter-brand" class="tpl-select2-filter"></select>
                             </div>
 
                             <div>
-                                <label class="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1">Lieferant</label>
+                                <label class="block text-[10px] font-black uppercase text-[#000000] mb-1 ml-1">Lieferant</label>
                                 <select id="tpl-filter-dist" class="tpl-select2-filter"></select>
                             </div>
 
                             <div>
-                                <label class="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1">Favoriten</label>
+                                <label class="block text-[10px] font-black uppercase text-[#000000] mb-1 ml-1">Favoriten</label>
                                 <select id="tpl-filter-favorite" class="tpl-select2-filter">
                                     <option value=""></option>
                                     <option value="1">Nur Favoriten</option>
@@ -9611,7 +15216,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1">Stamm</label>
+                                <label class="block text-[10px] font-black uppercase text-[#000000] mb-1 ml-1">Stamm</label>
                                 <select id="tpl-filter-stamped" class="tpl-select2-filter">
                                     <option value=""></option>
                                     <option value="1">Nur Stamm</option>
@@ -9620,7 +15225,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1">Verwendung</label>
+                                <label class="block text-[10px] font-black uppercase text-[#000000] mb-1 ml-1">Verwendung</label>
                                 <select id="tpl-filter-usage" class="tpl-select2-filter">
                                     <option value=""></option>
                                     <option value="most_used">Meist verwendet</option>
@@ -9632,7 +15237,7 @@
                     </div>
 
                     <div id="template-results-container" class="min-h-[400px]">
-                        <div class="flex items-center justify-center py-20 text-slate-400">
+                        <div class="flex items-center justify-center py-20 text-[#000000]">
                             <i class="fa-solid fa-circle-notch fa-spin mr-3"></i> Lade Vorlagen...
                         </div>
                     </div>
@@ -9658,21 +15263,21 @@
                     <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
                         <div class="px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white flex items-start justify-between gap-4">
                             <div>
-                                <div class="text-[11px] uppercase tracking-[0.25em] font-black text-slate-400">Nutzungsübersicht</div>
-                                <h3 id="template-usage-modal-title" class="text-xl font-black text-slate-800 mt-1">Verwendungsdaten</h3>
-                                <p id="template-usage-modal-subtitle" class="text-sm text-dark-600 mt-1">Lade Daten...</p>
+                                <div class="text-[11px] uppercase tracking-[0.25em] font-black text-[#000000]">Nutzungsübersicht</div>
+                                <h3 id="template-usage-modal-title" class="text-xl font-black text-[#000000] mt-1">Verwendungsdaten</h3>
+                                <p id="template-usage-modal-subtitle" class="text-sm text-[#000000] mt-1">Lade Daten...</p>
                             </div>
                             <button
                                 type="button"
                                 onclick="App.TemplateTab.closeUsageModal()"
-                                class="w-10 h-10 rounded-xl border border-slate-200 text-dark-600 hover:text-slate-700 hover:bg-slate-50 transition-all"
+                                class="w-10 h-10 rounded-xl border border-slate-200 text-[#000000] hover:text-[#000000] hover:bg-slate-50 transition-all"
                             >
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
                         </div>
 
                         <div id="template-usage-modal-body" class="p-6 max-h-[70vh] overflow-y-auto">
-                            <div class="flex items-center justify-center py-16 text-slate-400">
+                            <div class="flex items-center justify-center py-16 text-[#000000]">
                                 <i class="fa-solid fa-circle-notch fa-spin mr-3"></i> Lade Verwendungsdaten...
                             </div>
                         </div>
@@ -9798,10 +15403,10 @@
 
             if (this.viewMode === 'card') {
                 cardBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold bg-white shadow text-[#93c21c]';
-                listBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold text-dark-600 hover:text-slate-800';
+                listBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold text-[#000000] hover:text-[#000000]';
             } else {
                 listBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold bg-white shadow text-[#93c21c]';
-                cardBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold text-dark-600 hover:text-slate-800';
+                cardBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold text-[#000000] hover:text-[#000000]';
             }
         },
 
@@ -9875,7 +15480,7 @@
 
             if (!State.templateItems || !State.templateItems.length) {
                 container.innerHTML = `
-                    <div class="py-20 text-center text-slate-400 bg-white rounded-2xl border border-dashed border-slate-200">
+                    <div class="py-20 text-center text-[#000000] bg-white rounded-2xl border border-dashed border-slate-200">
                         Keine Vorlagen gefunden.
                     </div>
                 `;
@@ -9907,7 +15512,7 @@
                 favorite: 'bg-yellow-100 text-yellow-700 border-yellow-200',
                 stamp: 'bg-indigo-100 text-indigo-700 border-indigo-200',
                 usage: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-                default: 'bg-slate-100 text-slate-700 border-slate-200'
+                default: 'bg-slate-100 text-[#000000] border-slate-200'
             };
 
             const style = classes[mode] || classes.default;
@@ -9942,7 +15547,7 @@
                         ? 'border-slate-200 bg-slate-100 text-slate-300 cursor-not-allowed'
                         : t.is_favorite
                             ? 'border-yellow-200 bg-yellow-50 text-yellow-500 hover:bg-yellow-100'
-                            : 'border-slate-200 bg-white text-slate-400 hover:text-yellow-500 hover:border-yellow-200'}"
+                            : 'border-slate-200 bg-white text-[#000000] hover:text-yellow-500 hover:border-yellow-200'}"
                     title="${locked
                         ? `Favorit ist gesperrt durch ${App.escapeHtml(t.favorite_by_employee_name || 'anderen Mitarbeiter')}`
                         : t.is_favorite ? 'Favorit entfernen' : 'Als Favorit markieren'}"
@@ -9964,7 +15569,7 @@
                         ? 'border-slate-200 bg-slate-100 text-slate-300 cursor-not-allowed'
                         : t.has_stamp
                             ? 'border-indigo-200 bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
-                            : 'border-slate-200 bg-white text-slate-400 hover:text-indigo-600 hover:border-indigo-200'}"
+                            : 'border-slate-200 bg-white text-[#000000] hover:text-indigo-600 hover:border-indigo-200'}"
                     title="${locked
                         ? `Stamm ist gesperrt durch ${App.escapeHtml(t.stamped_by_employee_name || 'anderen Mitarbeiter')}`
                         : t.has_stamp ? 'Stamm entfernen' : 'Stamm setzen'}"
@@ -10013,7 +15618,7 @@
 
         getUsageInfoHtml(t) {
             return `
-                <div class="flex items-center flex-wrap gap-4 mt-5 text-[10px] font-bold text-slate-400 border-t pt-4 border-slate-50">
+                <div class="flex items-center flex-wrap gap-4 mt-5 text-[10px] font-bold text-[#000000] border-t pt-4 border-slate-50">
                     <div class="flex items-center gap-1"><i class="fa-solid fa-layer-group"></i> ${t.section_count} Sektionen</div>
                     <div class="flex items-center gap-1"><i class="fa-solid fa-box"></i> ${t.item_count} Items</div>
                     <div class="flex items-center gap-1">
@@ -10037,7 +15642,7 @@
                                     ${this.getFavoriteButtonHtml(t)}
                                     ${this.getStampButtonHtml(t)}
                                     ${this.getUsageButtonHtml(t)}
-                                    <span class="text-[10px] font-black uppercase bg-slate-100 px-2 py-1 rounded text-dark-600 tracking-wider">
+                                    <span class="text-[10px] font-black uppercase bg-slate-100 px-2 py-1 rounded text-[#000000] tracking-wider">
                                         #${t.id}
                                     </span>
                                     <button
@@ -10056,14 +15661,14 @@
                                 ${this.getStampBadgeHtml(t)}
                             </div>
 
-                            <h4 class="font-black text-slate-800 text-base truncate">${App.escapeHtml(t.name)}</h4>
-                            <p class="text-xs text-dark-600 mt-2 line-clamp-2 min-h-[32px]" style="display:none">${App.escapeHtml(t.preview_text || 'Keine Beschreibung')}</p>
+                            <h4 class="font-black text-[#000000] text-base truncate">${App.escapeHtml(t.name)}</h4>
+                            <p class="text-xs text-[#000000] mt-2 line-clamp-2 min-h-[32px]" style="display:none">${App.escapeHtml(t.preview_text || 'Keine Beschreibung')}</p>
 
-                            <div class="mt-3 grid grid-cols-2 gap-2 text-[10px] text-dark-600 bg-slate-50 p-2 rounded-lg border border-slate-100">
-                                <div class="truncate"><b class="text-slate-700">Abt:</b> ${App.escapeHtml(t.department_name || '-')}</div>
-                                <div class="truncate"><b class="text-slate-700">Grp:</b> ${App.escapeHtml(t.article_group_name || '-')}</div>
-                                <div class="truncate"><b class="text-slate-700">Marke:</b> ${App.escapeHtml(t.brand_name || '-')}</div>
-                                <div class="truncate"><b class="text-slate-700">Lief:</b> ${App.escapeHtml(t.distributor_name || '-')}</div>
+                            <div class="mt-3 grid grid-cols-2 gap-2 text-[10px] text-[#000000] bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                <div class="truncate"><b class="text-[#000000]">Abt:</b> ${App.escapeHtml(t.department_name || '-')}</div>
+                                <div class="truncate"><b class="text-[#000000]">Grp:</b> ${App.escapeHtml(t.article_group_name || '-')}</div>
+                                <div class="truncate"><b class="text-[#000000]">Marke:</b> ${App.escapeHtml(t.brand_name || '-')}</div>
+                                <div class="truncate"><b class="text-[#000000]">Lief:</b> ${App.escapeHtml(t.distributor_name || '-')}</div>
                             </div>
 
                             ${this.getUsageInfoHtml(t)}
@@ -10072,7 +15677,7 @@
                                 <button
                                     type="button"
                                     onclick="App.TemplateTab.previewTemplate(${t.id})"
-                                    class="text-xs font-bold py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition-all"
+                                    class="text-xs font-bold py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-[#000000] transition-all"
                                 >
                                     Details
                                 </button>
@@ -10097,32 +15702,32 @@
                     <table class="w-full text-left border-collapse">
                         <thead class="bg-slate-50 border-b border-slate-200">
                             <tr>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-wider">Name & Beschreibung</th>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-wider">Klassifizierung</th>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-wider">Umfang</th>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-wider">Status</th>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-wider">Erstellt von</th>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-wider text-right">Aktionen</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-[#000000] tracking-wider">Name & Beschreibung</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-[#000000] tracking-wider">Klassifizierung</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-[#000000] tracking-wider">Umfang</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-[#000000] tracking-wider">Status</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-[#000000] tracking-wider">Erstellt von</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-[#000000] tracking-wider text-right">Aktionen</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
                             ${State.templateItems.map(t => `
                                 <tr class="hover:bg-slate-50 transition-colors">
                                     <td class="px-6 py-4">
-                                        <div class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                        <div class="font-bold text-[#000000] text-sm flex items-center gap-2">
                                             ${App.escapeHtml(t.name)}
                                             ${t.is_favorite ? '<i class="fa-solid fa-star text-yellow-500" title="Favorit"></i>' : ''}
                                             ${t.has_stamp ? '<i class="fa-solid fa-stamp text-indigo-600" title="Stamm"></i>' : ''}
                                         </div>
-                                        <div class="text-xs text-slate-400 truncate max-w-xs">${App.escapeHtml(t.preview_text || '')}</div>
+                                        <div class="text-xs text-[#000000] truncate max-w-xs">${App.escapeHtml(t.preview_text || '')}</div>
                                     </td>
 
                                     <td class="px-6 py-4">
-                                        <div class="text-xs font-bold text-slate-700 truncate w-48" title="Abteilung & Gruppe">
+                                        <div class="text-xs font-bold text-[#000000] truncate w-48" title="Abteilung & Gruppe">
                                             ${App.escapeHtml(t.department_name || '-')}
-                                            <span class="text-slate-400 font-normal">| ${App.escapeHtml(t.article_group_name || '-')}</span>
+                                            <span class="text-[#000000] font-normal">| ${App.escapeHtml(t.article_group_name || '-')}</span>
                                         </div>
-                                        <div class="text-[10px] text-dark-600 truncate w-48 mt-1" title="Marke & Lieferant">
+                                        <div class="text-[10px] text-[#000000] truncate w-48 mt-1" title="Marke & Lieferant">
                                             <i class="fa-solid fa-tag mr-1"></i>${App.escapeHtml(t.brand_name || '-')}
                                             <span class="mx-1">•</span>
                                             <i class="fa-solid fa-truck mr-1"></i>${App.escapeHtml(t.distributor_name || '-')}
@@ -10131,11 +15736,11 @@
 
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3 flex-wrap">
-                                            <span class="text-xs font-bold text-slate-600">${t.section_count} Abschnitte</span>
+                                            <span class="text-xs font-bold text-[#000000]">${t.section_count} Abschnitte</span>
                                             <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-                                            <span class="text-xs font-bold text-slate-600">${t.item_count} Positionen</span>
+                                            <span class="text-xs font-bold text-[#000000]">${t.item_count} Positionen</span>
                                             <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-                                            <span class="text-xs font-bold text-slate-600">${t.usage_count || 0}x verwendet</span>
+                                            <span class="text-xs font-bold text-[#000000]">${t.usage_count || 0}x verwendet</span>
                                             ${t.last_used_by_employee_name ? this.getEmployeeAvatar(t.last_used_by_employee_name, 'usage') : ''}
                                         </div>
                                     </td>
@@ -10148,8 +15753,8 @@
                                     </td>
 
                                     <td class="px-6 py-4">
-                                        <div class="text-xs font-bold text-slate-700">${App.escapeHtml(t.creator_name)}</div>
-                                        <div class="text-[10px] text-slate-400">${t.updated_at}</div>
+                                        <div class="text-xs font-bold text-[#000000]">${App.escapeHtml(t.creator_name)}</div>
+                                        <div class="text-[10px] text-[#000000]">${t.updated_at}</div>
                                     </td>
 
                                     <td class="px-6 py-4 text-right">
@@ -10159,7 +15764,7 @@
                                             <button
                                                 type="button"
                                                 onclick="App.TemplateTab.toggleFavorite(${t.id})"
-                                                class="p-2 rounded-lg ${t.is_favorite ? 'text-yellow-500 bg-yellow-50' : 'text-slate-400 hover:text-yellow-500'}"
+                                                class="p-2 rounded-lg ${t.is_favorite ? 'text-yellow-500 bg-yellow-50' : 'text-[#000000] hover:text-yellow-500'}"
                                                 title="Favorit"
                                             >
                                                 <i class="${t.is_favorite ? 'fa-solid' : 'fa-regular'} fa-star"></i>
@@ -10168,7 +15773,7 @@
                                             <button
                                                 type="button"
                                                 onclick="App.TemplateTab.toggleStamp(${t.id})"
-                                                class="p-2 rounded-lg ${t.has_stamp ? 'text-indigo-600 bg-indigo-50' : 'text-slate-400 hover:text-indigo-600'}"
+                                                class="p-2 rounded-lg ${t.has_stamp ? 'text-indigo-600 bg-indigo-50' : 'text-[#000000] hover:text-indigo-600'}"
                                                 title="Stamm"
                                             >
                                                 <i class="fa-solid fa-stamp"></i>
@@ -10177,7 +15782,7 @@
                                             <button
                                                 type="button"
                                                 onclick="App.TemplateTab.previewTemplate(${t.id})"
-                                                class="p-2 text-slate-400 hover:text-slate-600 transition-colors"
+                                                class="p-2 text-[#000000] hover:text-[#000000] transition-colors"
                                                 title="Details"
                                             >
                                                 <i class="fa-solid fa-eye"></i>
@@ -10320,7 +15925,7 @@
             title.textContent = item?.name || `Vorlage #${id}`;
             subtitle.textContent = 'Verwendungsdaten werden geladen...';
             body.innerHTML = `
-                <div class="flex items-center justify-center py-16 text-slate-400">
+                <div class="flex items-center justify-center py-16 text-[#000000]">
                     <i class="fa-solid fa-circle-notch fa-spin mr-3"></i> Lade Verwendungsdaten...
                 </div>
             `;
@@ -10346,11 +15951,11 @@
                 if (!rows.length) {
                     body.innerHTML = `
                         <div class="text-center py-16">
-                            <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mb-4">
+                            <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 text-[#000000] flex items-center justify-center mb-4">
                                 <i class="fa-solid fa-chart-line text-2xl"></i>
                             </div>
-                            <div class="text-lg font-black text-slate-700">Noch keine Verwendungsdaten</div>
-                            <div class="text-sm text-dark-600 mt-1">Diese Vorlage wurde bisher nicht verwendet.</div>
+                            <div class="text-lg font-black text-[#000000]">Noch keine Verwendungsdaten</div>
+                            <div class="text-sm text-[#000000] mt-1">Diese Vorlage wurde bisher nicht verwendet.</div>
                         </div>
                     `;
                     return;
@@ -10359,19 +15964,19 @@
                 body.innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                            <div class="text-[11px] font-black uppercase tracking-wider text-slate-400">Gesamt</div>
-                            <div class="text-2xl font-black text-slate-800 mt-1">${total}</div>
-                            <div class="text-xs text-dark-600 mt-1">Verwendungen</div>
+                            <div class="text-[11px] font-black uppercase tracking-wider text-[#000000]">Gesamt</div>
+                            <div class="text-2xl font-black text-[#000000] mt-1">${total}</div>
+                            <div class="text-xs text-[#000000] mt-1">Verwendungen</div>
                         </div>
                         <div class="rounded-2xl border border-yellow-200 bg-yellow-50 p-4">
                             <div class="text-[11px] font-black uppercase tracking-wider text-yellow-700">Favorit von</div>
-                            <div class="text-base font-black text-slate-800 mt-1">${App.escapeHtml(item?.favorite_by_employee_name || '—')}</div>
-                            <div class="text-xs text-dark-600 mt-1">${App.escapeHtml(item?.favorite_at || 'Keine Angabe')}</div>
+                            <div class="text-base font-black text-[#000000] mt-1">${App.escapeHtml(item?.favorite_by_employee_name || '—')}</div>
+                            <div class="text-xs text-[#000000] mt-1">${App.escapeHtml(item?.favorite_at || 'Keine Angabe')}</div>
                         </div>
                         <div class="rounded-2xl border border-indigo-200 bg-indigo-50 p-4">
                             <div class="text-[11px] font-black uppercase tracking-wider text-indigo-700">Stamm von</div>
-                            <div class="text-base font-black text-slate-800 mt-1">${App.escapeHtml(item?.stamped_by_employee_name || '—')}</div>
-                            <div class="text-xs text-dark-600 mt-1">${App.escapeHtml(item?.stamped_at || 'Keine Angabe')}</div>
+                            <div class="text-base font-black text-[#000000] mt-1">${App.escapeHtml(item?.stamped_by_employee_name || '—')}</div>
+                            <div class="text-xs text-[#000000] mt-1">${App.escapeHtml(item?.stamped_at || 'Keine Angabe')}</div>
                         </div>
                     </div>
 
@@ -10379,29 +15984,29 @@
                         <table class="w-full text-left">
                             <thead class="bg-slate-50 border-b border-slate-200">
                                 <tr>
-                                    <th class="px-5 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">#</th>
-                                    <th class="px-5 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">Mitarbeiter</th>
-                                    <th class="px-5 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">Datum</th>
-                                    <th class="px-5 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">Zeit</th>
-                                    <th class="px-5 py-3 text-[10px] font-black uppercase tracking-wider text-slate-400">Info</th>
+                                    <th class="px-5 py-3 text-[10px] font-black uppercase tracking-wider text-[#000000]">#</th>
+                                    <th class="px-5 py-3 text-[10px] font-black uppercase tracking-wider text-[#000000]">Mitarbeiter</th>
+                                    <th class="px-5 py-3 text-[10px] font-black uppercase tracking-wider text-[#000000]">Datum</th>
+                                    <th class="px-5 py-3 text-[10px] font-black uppercase tracking-wider text-[#000000]">Zeit</th>
+                                    <th class="px-5 py-3 text-[10px] font-black uppercase tracking-wider text-[#000000]">Info</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100">
                                 ${rows.map((row, idx) => `
                                     <tr class="hover:bg-slate-50/70">
-                                        <td class="px-5 py-4 text-sm font-bold text-dark-600">${idx + 1}</td>
+                                        <td class="px-5 py-4 text-sm font-bold text-[#000000]">${idx + 1}</td>
                                         <td class="px-5 py-4">
                                             <div class="flex items-center gap-3">
                                                 ${this.getEmployeeAvatar(row.employee_name, 'usage')}
                                                 <div>
-                                                    <div class="text-sm font-bold text-slate-800">${App.escapeHtml(row.employee_name || 'Unbekannt')}</div>
-                                                    <div class="text-[11px] text-slate-400">${App.escapeHtml(row.employee_email || '')}</div>
+                                                    <div class="text-sm font-bold text-[#000000]">${App.escapeHtml(row.employee_name || 'Unbekannt')}</div>
+                                                    <div class="text-[11px] text-[#000000]">${App.escapeHtml(row.employee_email || '')}</div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-5 py-4 text-sm font-semibold text-slate-700">${App.escapeHtml(row.used_date || '—')}</td>
-                                        <td class="px-5 py-4 text-sm text-dark-600">${App.escapeHtml(row.used_time || '—')}</td>
-                                        <td class="px-5 py-4 text-xs text-dark-600">${App.escapeHtml(row.note || 'Vorlage im Angebot verwendet')}</td>
+                                        <td class="px-5 py-4 text-sm font-semibold text-[#000000]">${App.escapeHtml(row.used_date || '—')}</td>
+                                        <td class="px-5 py-4 text-sm text-[#000000]">${App.escapeHtml(row.used_time || '—')}</td>
+                                        <td class="px-5 py-4 text-xs text-[#000000]">${App.escapeHtml(row.note || 'Vorlage im Angebot verwendet')}</td>
                                     </tr>
                                 `).join('')}
                             </tbody>
@@ -10530,32 +16135,52 @@
 
                 if (data.success || data.sections) {
                     const loadedSections = data.sections || data.template?.sections || [];
+                    const loadedImages = data.placed_images || data.template?.placed_images || [];
 
                     State.loadedTemplateId = template.id;
                     State.loadedTemplateName = template.name;
+
+                    const templatePayload = data.template || data || {};
+                    if (templatePayload.cover_text_html || templatePayload.cover_text) {
+                        State.coverTextHtml = templatePayload.cover_text_html || templatePayload.cover_text || '';
+                    }
+                    if (templatePayload.main_title || templatePayload.main_title_html) {
+                        State.mainTitleHtml = templatePayload.main_title || templatePayload.main_title_html || '';
+                    }
+                    if (templatePayload.brand_color) State.brandColor = templatePayload.brand_color;
+                    if (templatePayload.brand_mode) State.brandMode = templatePayload.brand_mode;
+                    if (templatePayload.brand_logo_url) State.brandLogoUrl = templatePayload.brand_logo_url;
+                    if (templatePayload.company_name) State.companyName = templatePayload.company_name;
 
                     if (loadedSections.length === 0) {
                         alert('Diese Vorlage enthält keine Positionen.');
                         return;
                     }
 
-                    if (State.sections.length === 1 && State.sections[0].items.length === 0) {
-                        State.sections = loadedSections;
-                    } else {
-                        State.sections.push(...loadedSections);
+                    // Enterprise behavior: using a template replaces the current offer rows.
+                    // This prevents old positions from staying visible after the user clicks "Vorlage".
+                    State.sections = JSON.parse(JSON.stringify(loadedSections));
+                    State.placedImages = JSON.parse(JSON.stringify(Array.isArray(loadedImages) ? loadedImages : []));
+                    State.selectedItems = new Set();
+                    State.hasUnsavedChanges = true;
+
+                    if (State.listViewPrefs && State.listViewPrefs.open) {
+                        State.listViewPrefs.open = {};
                     }
 
                     await this.markTemplateUsed(id);
 
                     App.Tabs.switch('list');
+                    if (typeof App.renderQuotePage === 'function') App.renderQuotePage(false);
+                    if (App.ListView && typeof App.ListView.render === 'function') App.ListView.render();
 
                     if (App.Bio) {
-                        App.Bio.addEntry('Vorlage eingefügt', `Die Vorlage "${template.name}" wurde dem Angebot hinzugefügt.`);
+                        App.Bio.addEntry('Vorlage übernommen', `Die Vorlage "${template.name}" hat die bisherigen Positionen ersetzt.`);
                     }
 
                     App.toastConfirmShow({
-                        title: 'Vorlage erfolgreich eingefügt',
-                        message: `Die Positionen aus "${template.name}" wurden an Ihr Angebot angehängt.`,
+                        title: 'Vorlage erfolgreich übernommen',
+                        message: `Die Positionen aus "${template.name}" wurden geladen. Alte Positionen wurden ersetzt, damit keine falschen Daten im Angebot bleiben.`,
                         okText: 'Weiter bearbeiten',
                         cancelText: '',
                         onOk: () => {}
@@ -10667,38 +16292,38 @@
                             </div>
 
                             <div class="min-w-0">
-                                <div class="font-bold text-slate-800 truncate">${App.escapeHtml(u.name || ('User #' + u.id))}</div>
-                                <div class="text-xs text-slate-400">aktiv im Angebot</div>
+                                <div class="font-bold text-[#000000] truncate">${App.escapeHtml(u.name || ('User #' + u.id))}</div>
+                                <div class="text-xs text-[#000000]">aktiv im Angebot</div>
                             </div>
                         </div>
 
                         <div class="text-xs font-bold text-green-600">online</div>
                     </div>
                 `).join('')
-                : `<div class="text-sm text-slate-400">Aktuell ist niemand online.</div>`;
+                : `<div class="text-sm text-[#000000]">Aktuell ist niemand online.</div>`;
 
              
             const bioHtml = (State.biographyItems || []).length
                 ? State.biographyItems.map(item => `
                     <div class="relative pl-6 pb-6 border-l-2 ${item.isLocal ? 'border-blue-200' : 'border-slate-200'}">
                         <div class="absolute -left-[7px] top-1 w-3 h-3 rounded-full ${item.isLocal ? 'bg-blue-500 animate-pulse' : 'bg-[#93c21c]'}"></div>
-                        <div class="text-sm font-black ${item.isLocal ? 'text-blue-700' : 'text-slate-800'}">
+                        <div class="text-sm font-black ${item.isLocal ? 'text-blue-700' : 'text-[#000000]'}">
                             ${item.isLocal ? '<i class="fa-solid fa-pen-nib mr-1 text-[10px]"></i>' : ''}
                             ${App.escapeHtml(item.title || '')}
                         </div>
-                        <div class="text-sm text-slate-600 mt-1">${App.escapeHtml(item.text || '')}</div>
-                        <div class="text-[10px] uppercase font-bold text-slate-400 mt-1 tracking-wider">${App.escapeHtml(item.date || '')}</div>
+                        <div class="text-sm text-[#000000] mt-1">${App.escapeHtml(item.text || '')}</div>
+                        <div class="text-[10px] uppercase font-bold text-[#000000] mt-1 tracking-wider">${App.escapeHtml(item.date || '')}</div>
                     </div>
                 `).join('')
-                : `<div class="text-sm text-slate-400">Keine Biografie vorhanden.</div>`;
+                : `<div class="text-sm text-[#000000]">Keine Biografie vorhanden.</div>`;
 
             root.innerHTML = `
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2">
                         <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden">
                             <div class="px-5 py-4 border-b border-slate-200">
-                                <div class="text-xs font-black uppercase tracking-wider text-dark-600">Angebotshistorie</div>
-                                <div class="text-lg font-black text-slate-800">Biografie</div>
+                                <div class="text-xs font-black uppercase tracking-wider text-[#000000]">Angebotshistorie</div>
+                                <div class="text-lg font-black text-[#000000]">Biografie</div>
                             </div>
                             <div class="p-5">
                                 ${bioHtml}
@@ -10709,8 +16334,8 @@
                     <div>
                         <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden">
                             <div class="px-5 py-4 border-b border-slate-200">
-                                <div class="text-xs font-black uppercase tracking-wider text-dark-600">Live</div>
-                                <div class="text-lg font-black text-slate-800">Online Bearbeiter</div>
+                                <div class="text-xs font-black uppercase tracking-wider text-[#000000]">Live</div>
+                                <div class="text-lg font-black text-[#000000]">Online Bearbeiter</div>
                             </div>
                             <div class="p-5 space-y-3">
                                 ${usersHtml}
@@ -10824,7 +16449,7 @@
             const offerId = State.prefill?.offer_id || null;
             const folderId = State.prefill?.offer_folder_id || null;
 
-            if (!offerId && !folderId) return;
+            if (!offerId && !folderId && !detailId) return;
 
             const payload = JSON.stringify({
                 offer_id: offerId,
@@ -10953,6 +16578,20 @@
             const wrap = document.createElement('div');
             wrap.className = 'thumb-wrapper';
             wrap.dataset.page = String(pageNo);
+
+            const pageKind = pageEl.dataset.pageKind
+                || (pageEl.classList.contains('page-library-a4-page') ? 'library'
+                    : (pageEl.classList.contains('roof-layout-page') ? 'roof'
+                        : (pageEl.querySelector('.pdf-offer-sign-title') ? 'final' : 'content')));
+
+            wrap.dataset.pageKind = pageKind;
+            if (pageKind === 'library') {
+                wrap.dataset.pageLibraryPageId = pageEl.dataset.pageLibraryPageId || '';
+                wrap.dataset.pagePosition = pageEl.dataset.pagePosition || '';
+            }
+            if (pageKind === 'content') {
+                wrap.dataset.contentOrder = String(Array.from(document.querySelectorAll('#position-pages-container .a4-page.dynamic-page:not(.page-library-a4-page):not(.roof-layout-page)')).filter(p => !p.querySelector('.pdf-offer-sign-title')).indexOf(pageEl));
+            }
 
             const thumbBox = document.createElement('div');
             thumbBox.className = 'thumb-scale-box';
@@ -11290,20 +16929,15 @@
                 const sec = State.sections[sIdx];
                 if (!sec || sec.isLocked) return;
 
-                // 1. Calculate the CURRENT section totals to determine the weighting scale factor
+                 // 1. Calculate the CURRENT section totals to determine the weighting scale factor
                 let oldVk = 0, oldEk = 0;
-                const sumUp = (items) => {
-                    items.forEach(it => {
-                        if (!it || it.active === false || it.kind === 'note') return;
-                        if (Array.isArray(it.subItems) && it.subItems.length > 0 && !it.isPauschal) {
-                            sumUp(it.subItems); // Drill down into active sub-items
-                        } else {
-                            oldVk += App.calcItemGross(it);
-                            oldEk += App.calcItemCost(it);
-                        }
-                    });
-                };
-                sumUp(sec.items || []);
+                // FIX: No need to recurse. The main items already hold the aggregated unit price
+                // of their children. Using calcItemGross at the top level automatically respects it.qty!
+                (sec.items || []).forEach(it => {
+                    if (!it || it.active === false || it.kind === 'note') return;
+                    oldVk += App.calcItemGross(it);
+                    oldEk += App.calcItemCost(it);
+                });
 
                 const oldMarginPct = oldEk > 0 ? ((oldVk - oldEk) / oldEk) * 100 : 0;
                 sec._prevSectionMargin = oldMarginPct; // Save for UI
@@ -11533,6 +17167,328 @@
                 App.ListView.render();
             },
 
+            parseSelectionKey(key) {
+                const parts = String(key || '').split(':');
+                return {
+                    key: String(key || ''),
+                    s: Number.parseInt(parts[0], 10),
+                    i: Number.parseInt(parts[1], 10),
+                    sub: parts[2] === 'null' || parts[2] === undefined ? null : Number.parseInt(parts[2], 10),
+                    level: Number.parseInt(parts[3] || '0', 10) || 0,
+                };
+            },
+
+            selectionKeyBase(row) {
+                if (!row) return '';
+                return `${row.s}:${row.i}:${row.sub === null ? 'null' : row.sub}`;
+            },
+
+            rowIdentity(sIdx, iIdx, subIdx = null) {
+                return `${Number(sIdx)}:${Number(iIdx)}:${subIdx === null || subIdx === undefined || subIdx === 'null' ? 'null' : Number(subIdx)}`;
+            },
+
+            componentRefValue(item) {
+                return item?.master_set_component_id
+                    || item?.component_id
+                    || item?.source_component_id
+                    || item?.product_id
+                    || item?.productId
+                    || item?.id
+                    || null;
+            },
+
+            normalizeAsChild(item, depth, parentItem = null, options = {}) {
+                if (!item) return item;
+
+                const nextDepth = Math.max(1, Number(depth || 1));
+                const parentRef = App.ListView.componentRefValue(parentItem);
+
+                item.depth = nextDepth;
+                item.componentType = 'unter';
+                item.component_type = 'unter';
+                item.is_sub_component = true;
+                item.is_main_component = false;
+
+                if (parentRef !== null && parentRef !== undefined && parentRef !== '') {
+                    item.parent_component_id = parentRef;
+                    item.parent_id = parentRef;
+                    item.source_parent_component_id = parentRef;
+                }
+
+                if (parentItem?.name) {
+                    item.parent_component_name = parentItem.name;
+                }
+
+                const ek = App.resolveItemEk ? App.resolveItemEk(item) : Number(item.purchase_price || item.ek || item.cost || item.buying_price || 0);
+                item.ek = ek;
+                item.purchase_price = ek;
+                item.cost = ek;
+                item.buying_price = ek;
+
+                if (options.clearNestedSubItems) {
+                    item.subItems = [];
+                }
+
+                return item;
+            },
+
+            normalizeAsMain(item) {
+                if (!item) return item;
+
+                item.depth = 0;
+                item.componentType = 'haupt';
+                item.component_type = 'haupt';
+                item.is_sub_component = false;
+                item.is_main_component = true;
+                item.parent_component_id = null;
+                item.parent_id = null;
+                item.source_parent_component_id = null;
+                item.parent_component_name = null;
+
+                const ek = App.resolveItemEk ? App.resolveItemEk(item) : Number(item.purchase_price || item.ek || item.cost || item.buying_price || 0);
+                item.ek = ek;
+                item.purchase_price = ek;
+                item.cost = ek;
+                item.buying_price = ek;
+
+                if (!Array.isArray(item.subItems)) item.subItems = [];
+                return item;
+            },
+
+            selectedRows() {
+                App.ListView.ensureStore();
+                return Array.from(State.selectedItems || [])
+                    .map(key => App.ListView.parseSelectionKey(key))
+                    .filter(row => Number.isFinite(row.s) && Number.isFinite(row.i));
+            },
+
+            getSubTreeEndIndex(subItems, startIndex) {
+                const arr = Array.isArray(subItems) ? subItems : [];
+                const root = arr[startIndex];
+                if (!root) return startIndex;
+
+                const rootDepth = Number(root.depth || 1);
+                let end = startIndex;
+
+                if (rootDepth <= 1) {
+                    for (let idx = startIndex + 1; idx < arr.length; idx++) {
+                        const d = Number(arr[idx]?.depth || 1);
+                        if (d <= 1) break;
+                        end = idx;
+                    }
+                }
+
+                return end;
+            },
+
+            buildMoveBundles(rows, targetIdentity = '') {
+                const bundles = [];
+                const consumed = new Set();
+                const selectedBase = new Set(rows.map(row => App.ListView.selectionKeyBase(row)));
+
+                const sorted = rows.slice().sort((a, b) => {
+                    if (a.s !== b.s) return a.s - b.s;
+                    if (a.i !== b.i) return a.i - b.i;
+                    if (a.sub === null && b.sub !== null) return -1;
+                    if (a.sub !== null && b.sub === null) return 1;
+                    return Number(a.sub || 0) - Number(b.sub || 0);
+                });
+
+                sorted.forEach(row => {
+                    const base = App.ListView.selectionKeyBase(row);
+                    if (!base || consumed.has(base) || base === targetIdentity) return;
+
+                    const sec = State.sections?.[row.s];
+                    if (!sec || sec.isLocked || sec._virtualSection || sec._pageBreak) return;
+
+                    if (row.sub === null) {
+                        const main = sec.items?.[row.i];
+                        if (!main || main.kind === 'note' || main.active === false) return;
+
+                        const nested = Array.isArray(main.subItems) ? main.subItems.slice() : [];
+                        main.subItems = [];
+
+                        bundles.push({
+                            source: { type: 'main', s: row.s, i: row.i, item: main },
+                            items: [main, ...nested],
+                        });
+
+                        consumed.add(base);
+                        return;
+                    }
+
+                    const main = sec.items?.[row.i];
+                    const subItems = Array.isArray(main?.subItems) ? main.subItems : [];
+                    const sub = subItems[row.sub];
+                    if (!sub || sub.kind === 'note' || sub.active === false) return;
+
+                    const end = App.ListView.getSubTreeEndIndex(subItems, row.sub);
+                    const moving = subItems.slice(row.sub, end + 1);
+
+                    for (let idx = row.sub; idx <= end; idx++) {
+                        consumed.add(`${row.s}:${row.i}:${idx}`);
+                    }
+
+                    bundles.push({
+                        source: { type: 'sub', s: row.s, i: row.i, start: row.sub, end, main, items: moving },
+                        items: moving,
+                    });
+                });
+
+                return bundles;
+            },
+
+            removeMoveBundlesFromSource(bundles) {
+                const subSources = [];
+                const mainSources = [];
+
+                bundles.forEach(bundle => {
+                    if (bundle.source?.type === 'sub') subSources.push(bundle.source);
+                    if (bundle.source?.type === 'main') mainSources.push(bundle.source);
+                });
+
+                subSources.sort((a, b) => {
+                    if (a.s !== b.s) return b.s - a.s;
+                    if (a.i !== b.i) return b.i - a.i;
+                    return b.start - a.start;
+                }).forEach(src => {
+                    const arr = State.sections?.[src.s]?.items?.[src.i]?.subItems;
+                    if (!Array.isArray(arr)) return;
+                    src.items.forEach(item => {
+                        const idx = arr.indexOf(item);
+                        if (idx >= 0) arr.splice(idx, 1);
+                    });
+                    App.syncParentTotals?.(src.s, src.i);
+                });
+
+                mainSources.sort((a, b) => {
+                    if (a.s !== b.s) return b.s - a.s;
+                    return b.i - a.i;
+                }).forEach(src => {
+                    const arr = State.sections?.[src.s]?.items;
+                    if (!Array.isArray(arr)) return;
+                    const idx = arr.indexOf(src.item);
+                    if (idx >= 0) arr.splice(idx, 1);
+                });
+            },
+
+            moveSelectedRowsUnderTarget(targetSIdx, targetIIdx, targetSubIdx = null) {
+                App.ListView.ensureStore();
+
+                const rows = App.ListView.selectedRows();
+                if (!rows.length) {
+                    App.showToast?.('Keine Position markiert', 'Bitte zuerst eine oder mehrere Positionen per Checkbox markieren.', 'warning');
+                    return;
+                }
+
+                const targetIdentity = App.ListView.rowIdentity(targetSIdx, targetIIdx, targetSubIdx);
+                const targetMainIdentity = App.ListView.rowIdentity(targetSIdx, targetIIdx, null);
+
+                if (rows.some(row => App.ListView.selectionKeyBase(row) === targetIdentity)) {
+                    App.showToast?.('Ziel ist markiert', 'Die Zielposition darf nicht gleichzeitig markiert sein.', 'warning');
+                    return;
+                }
+
+                if (targetSubIdx !== null && rows.some(row => App.ListView.selectionKeyBase(row) === targetMainIdentity)) {
+                    App.showToast?.('Nicht möglich', 'Du kannst eine Position nicht unter eine eigene Unterposition verschieben.', 'warning');
+                    return;
+                }
+
+                const sec = State.sections?.[targetSIdx];
+                const targetMain = sec?.items?.[targetIIdx];
+                const targetItem = targetSubIdx === null || targetSubIdx === undefined || targetSubIdx === 'null'
+                    ? targetMain
+                    : targetMain?.subItems?.[Number(targetSubIdx)];
+
+                if (!sec || sec.isLocked || !targetMain || !targetItem || targetItem.kind === 'note' || targetItem.kind === 'labor') {
+                    App.showToast?.('Ziel ungültig', 'Bitte eine normale Artikelposition als Ziel wählen.', 'warning');
+                    return;
+                }
+
+                const bundles = App.ListView.buildMoveBundles(rows, targetIdentity);
+                if (!bundles.length) {
+                    App.showToast?.('Keine passende Position', 'Die Auswahl konnte nicht verschoben werden.', 'warning');
+                    return;
+                }
+
+                App.ListView.removeMoveBundlesFromSource(bundles);
+
+                if (!Array.isArray(targetMain.subItems)) targetMain.subItems = [];
+                const destination = targetMain.subItems;
+                const targetDepth = targetSubIdx === null || targetSubIdx === undefined || targetSubIdx === 'null'
+                    ? 0
+                    : Math.max(1, Number(targetItem.depth || 1));
+
+                let insertAt = destination.length;
+                if (targetSubIdx !== null && targetSubIdx !== undefined && targetSubIdx !== 'null') {
+                    const targetCurrentIndex = destination.indexOf(targetItem);
+                    insertAt = targetCurrentIndex >= 0
+                        ? App.ListView.getSubTreeEndIndex(destination, targetCurrentIndex) + 1
+                        : destination.length;
+                }
+
+                const prepared = [];
+                bundles.forEach(bundle => {
+                    const root = bundle.items[0];
+                    if (!root) return;
+
+                    App.ListView.normalizeAsChild(root, targetDepth + 1, targetItem, { clearNestedSubItems: true });
+                    prepared.push(root);
+
+                    bundle.items.slice(1).forEach(child => {
+                        const parentForChild = targetDepth === 0 ? root : targetItem;
+                        App.ListView.normalizeAsChild(child, targetDepth === 0 ? 2 : targetDepth + 1, parentForChild, { clearNestedSubItems: true });
+                        prepared.push(child);
+                    });
+                });
+
+                destination.splice(insertAt, 0, ...prepared);
+
+                App.syncParentTotals?.(targetSIdx, targetIIdx);
+                State.selectedItems.clear();
+                App.renderQuotePage();
+                App.showToast?.('Unterkomponenten aktualisiert', `${prepared.length} Position(en) wurden der Zielposition zugeordnet.`, 'success');
+            },
+
+            promoteSelectedRowsToMain() {
+                App.ListView.ensureStore();
+
+                const rows = App.ListView.selectedRows().filter(row => row.sub !== null);
+                if (!rows.length) {
+                    App.showToast?.('Keine Unterposition markiert', 'Bitte zuerst Unterpositionen markieren.', 'warning');
+                    return;
+                }
+
+                const bundles = App.ListView.buildMoveBundles(rows, '');
+                if (!bundles.length) {
+                    App.showToast?.('Keine passende Position', 'Die Auswahl konnte nicht in Hauptpositionen umgewandelt werden.', 'warning');
+                    return;
+                }
+
+                App.ListView.removeMoveBundlesFromSource(bundles);
+
+                const insertBySection = new Map();
+                bundles.forEach(bundle => {
+                    const s = bundle.source?.s;
+                    if (!insertBySection.has(s)) insertBySection.set(s, []);
+                    const bucket = insertBySection.get(s);
+
+                    bundle.items.forEach(item => {
+                        App.ListView.normalizeAsMain(item);
+                        bucket.push(item);
+                    });
+                });
+
+                insertBySection.forEach((items, sIdx) => {
+                    const arr = State.sections?.[sIdx]?.items;
+                    if (Array.isArray(arr)) arr.push(...items);
+                });
+
+                State.selectedItems.clear();
+                App.renderQuotePage();
+                App.showToast?.('Hauptpositionen erstellt', `${bundles.reduce((n, b) => n + b.items.length, 0)} Position(en) wurden als Hauptposition eingefügt.`, 'success');
+            },
+
             bulkDelete() {
                 App.ListView.ensureStore();
                 if (State.selectedItems.size === 0) return;
@@ -11640,8 +17596,23 @@
                 const bulkToolbar = selectedCount > 0 ? `
                     <div class="flex items-center gap-2 bg-[#f7fee7] px-3 py-1.5 rounded-xl border border-[#93c21c]/30 mr-2 animate-fadeIn">
                         <span class="text-xs font-black text-[#6b8e12]">${selectedCount} markiert</span>
-                        <button class="list-mini-btn !py-1 !text-red-500 hover:!border-red-500" onclick="App.ListView.bulkDelete()"><i class="fa-solid fa-trash"></i> Löschen</button>
-                        <button class="list-mini-btn !py-1 !text-blue-600 hover:!border-blue-500" onclick="App.ListView.bulkMargin()"><i class="fa-solid fa-percent"></i> Marge</button>
+                        
+                        <button class="list-mini-btn !py-1 !text-yellow-600 hover:!border-yellow-500" onclick="App.Clipboard.copyBulk()">
+                            <i class="fa-regular fa-copy"></i> Kopieren
+                        </button>
+
+                        <button class="list-mini-btn !py-1 !text-blue-600 hover:!border-blue-500" onclick="App.ListView.bulkMargin()">
+                            <i class="fa-solid fa-percent"></i> Marge
+                        </button>
+                        <span class="hidden lg:inline-flex items-center gap-1 text-[10px] font-black text-[#6b8e12] bg-white/70 border border-[#93c21c]/20 rounded-lg px-2 py-1" title="Wähle Positionen per Checkbox und klicke danach bei der Ziel-Position auf den Sitemap-Button.">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i> Ziel wählen
+                        </span>
+                        <button class="list-mini-btn !py-1 !text-emerald-600 hover:!border-emerald-500" onclick="App.ListView.promoteSelectedRowsToMain()" title="Markierte Unterpositionen wieder zu Hauptpositionen machen">
+                            <i class="fa-solid fa-turn-up"></i> Hauptposition
+                        </button>
+                        <button class="list-mini-btn !py-1 !text-red-500 hover:!border-red-500" onclick="App.ListView.bulkDelete()">
+                            <i class="fa-solid fa-trash"></i> Löschen
+                        </button>
                     </div>
                 ` : '';
 
@@ -11656,12 +17627,14 @@
                     <div class="list-toolbar">
                         <div>
                             <div class="list-toolbar-title">Positionsübersicht</div>
-                            <div class="text-xs text-dark-600">Listenansicht</div>
+                            <div class="text-xs text-[#000000]">Listenansicht</div>
                         </div>
                         <div class="flex items-center gap-2">
                             ${bulkToolbar}
+                            <button class="list-mini-btn list-mini-btn-supplier" onclick="if(window.App && App.SupplierSearch){App.SupplierSearch.open();}else{console.error('SupplierSearch is not ready');}" title="IDS/OCI Lieferanten-Shop öffnen und Artikel direkt übernehmen"><i class="fa-solid fa-plug-circle-bolt"></i> Lieferant suchen</button>
                             <button class="list-mini-btn" onclick="App.addSection()"><i class="fa-solid fa-folder-plus"></i> Sektion</button>
                             <button class="list-mini-btn" onclick="App.addPositionQuick()"><i class="fa-solid fa-plus"></i> Position</button>
+                            <button class="list-mini-btn list-mini-btn-history" onclick="App.SupplierSearch && App.SupplierSearch.openHistory ? App.SupplierSearch.openHistory() : console.error('Supplier history is not ready')" title="Historie der übernommenen Lieferanten-Positionen anzeigen und erneut einfügen"><i class="fa-solid fa-clock-rotate-left"></i> Historie</button>
                             <details class="list-colpicker">
                                 <summary class="list-mini-btn"><i class="fa-solid fa-table-columns"></i> Spalten</summary>
                                 <div class="list-colpicker-menu" style="width:260px; max-height:420px; overflow-y:auto;">
@@ -11715,8 +17688,8 @@
                             </button>
                             <div class="flex-1 min-w-0 flex items-center gap-3">
                                 ${isLocked 
-                                    ? `<div class="bg-transparent outline-none font-black text-slate-800 w-auto text-[15px]">${App.escapeHtml(sec.title || '')}</div>` 
-                                    : `<input value="${App.escapeHtml(sec.title || '')}" onchange="App.updateSectionMeta(${sIdx},'title',this.value)" class="bg-transparent outline-none font-black text-slate-800 w-auto flex-1 text-[15px]">`
+                                    ? `<div class="bg-transparent outline-none font-black text-[#000000] w-auto text-[15px]">${App.escapeHtml(sec.title || '')}</div>` 
+                                    : `<input value="${App.escapeHtml(sec.title || '')}" onchange="App.updateSectionMeta(${sIdx},'title',this.value)" class="bg-transparent outline-none font-black text-[#000000] w-auto flex-1 text-[15px]">`
                                 }
                                 
                                 ${!isVirtual && !isLocked ? `
@@ -11727,19 +17700,19 @@
                                             <option value="Set" ${isSet ? 'selected' : ''}>Set</option>
                                         </select>
                                     </div>
-                                ` : (isSet ? `<span class="text-xs font-bold text-slate-700 bg-white/50 px-2 py-1 rounded">${secQty} Set(s)</span>` : '')}
+                                ` : (isSet ? `<span class="text-xs font-bold text-[#000000] bg-white/50 px-2 py-1 rounded">${secQty} Set(s)</span>` : '')}
                             </div>
 
                             ${!isVirtual && !isLocked ? `
                                 <div class="flex items-center gap-2 bg-white rounded-xl border border-slate-200 px-3 py-1.5 shadow-sm mr-4">
-                                    <span class="text-[10px] font-black text-dark-600 uppercase tracking-wide mr-2" title="Aktuelle durchschnittliche Marge">Ø Marge: ${secMarginPct.toFixed(1)}%</span>
+                                    <span class="text-[10px] font-black text-[#000000] uppercase tracking-wide mr-2" title="Aktuelle durchschnittliche Marge">Ø Marge: ${secMarginPct.toFixed(1)}%</span>
                                     <div class="w-px h-5 bg-slate-200"></div>
                                     <div class="flex items-center pl-2">
-                                        <input type="number" step="0.1" id="sec-margin-input-${sIdx}" class="w-14 text-center text-xs font-black text-slate-700 outline-none bg-slate-50 border border-slate-200 hover:border-[#93c21c] focus:border-[#93c21c] rounded px-1 transition-colors" placeholder="Neu %" onchange="App.ListView.applySectionMargin(${sIdx}, this.value)">
+                                        <input type="number" step="0.1" id="sec-margin-input-${sIdx}" class="w-14 text-center text-xs font-black text-[#000000] outline-none bg-slate-50 border border-slate-200 hover:border-[#93c21c] focus:border-[#93c21c] rounded px-1 transition-colors" placeholder="Neu %" onchange="App.ListView.applySectionMargin(${sIdx}, this.value)">
                                     </div>
                                     ${hasPrevState ? `
                                         <div class="w-px h-5 bg-slate-200 mx-1"></div>
-                                        <button onclick="App.ListView.restoreSectionMargin(${sIdx})" class="text-slate-400 hover:text-red-500 px-1 transition-colors flex items-center gap-1" title="Zurücksetzen">
+                                        <button onclick="App.ListView.restoreSectionMargin(${sIdx})" class="text-[#000000] hover:text-red-500 px-1 transition-colors flex items-center gap-1" title="Zurücksetzen">
                                             <i class="fa-solid fa-rotate-left text-[11px]"></i>
                                             <span class="text-[9px] font-bold">Zu ${prevMarginText}%</span>
                                         </button>
@@ -11834,11 +17807,11 @@
                 const isParentUnlocked = State.unlockedParentMargins[`${sIdx}-${iIdx}`];
 
                 const isEkReadonly = (hasChildren && !isPauschal) 
-                    ? 'readonly disabled class="mat-addon-input text-right bg-transparent text-dark-600 font-bold"' 
+                    ? 'readonly disabled class="mat-addon-input text-right bg-transparent text-[#000000] font-bold"' 
                     : 'class="mat-addon-input text-right"';
                 
                 const isVkReadonly = (hasChildren && !isPauschal && !isParentUnlocked) 
-                    ? 'readonly disabled class="mat-addon-input text-right bg-transparent text-dark-600 font-bold"' 
+                    ? 'readonly disabled class="mat-addon-input text-right bg-transparent text-[#000000] font-bold"' 
                     : 'class="mat-addon-input text-right"';
                 
                 const isSelectReadonly = (hasChildren && !isPauschal && !isParentUnlocked) 
@@ -11921,11 +17894,34 @@
                                 break;
 
                             case 'image':
-                                cells += cellWrap(it.hideImage || isLabor ? `<div class="w-12 h-12 mx-auto bg-transparent"></div>` : `<div class="w-12 h-12 mx-auto overflow-hidden bg-transparent cursor-pointer" onclick="App.handleImageClick(${sIdx},${iIdx},${subArg})" title="Bild öffnen"><img src="${it.img || App.placeholderImg(it.name)}" class="w-full h-full object-cover"></div>`, alignClass);
+                                const rowImageSrc = App.pickImage ? App.pickImage(it, '') : (it.img || '');
+                                const rowImageRemoved = it._imageRemoved === true || it.image_removed === true;
+                                const rowHasImage = !isLabor && !rowImageRemoved && !it.hideImage && it.showImage !== false && !!rowImageSrc;
+
+                                if (isLabor) {
+                                    cells += cellWrap(`<div class="w-12 h-12 mx-auto bg-transparent"></div>`, alignClass);
+                                } else if (rowHasImage) {
+                                    cells += cellWrap(`
+                                        <div class="lv-image-cell mx-auto">
+                                            <button type="button" class="lv-image-thumb" onclick="App.handleImageClick(event, ${sIdx}, ${iIdx}, ${subArg})" title="Bild ersetzen">
+                                                <img src="${rowImageSrc}" class="w-full h-full object-cover">
+                                            </button>
+                                            <button type="button" class="js-clear-item-image lv-image-remove" onclick="App.clearItemImage(event, ${sIdx}, ${iIdx}, ${subArg})" title="Bild entfernen">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </button>
+                                        </div>
+                                    `, alignClass);
+                                } else {
+                                    cells += cellWrap(`
+                                        <button type="button" class="lv-image-empty mx-auto" onclick="App.handleImageClick(event, ${sIdx}, ${iIdx}, ${subArg})" title="Bild hinzufügen">
+                                            <i class="fa-solid fa-image"></i>
+                                        </button>
+                                    `, alignClass);
+                                }
                                 break;
 
                             case 'articleNumber':
-                                cells += cellWrap(isLabor ? `<div class="mat-ctrl bg-slate-50 flex items-center px-2 text-slate-400 w-full">—</div>` : `<input value="${App.escapeHtml(it.article_no || it.articleNumber || '')}" onchange="${ctxText('article_no')}" class="mat-ctrl mat-input w-full" placeholder="Art.-Nr." ${isLocked ? 'readonly' : ''}>`, alignClass);
+                                cells += cellWrap(isLabor ? `<div class="mat-ctrl bg-slate-50 flex items-center px-2 text-[#000000] w-full">—</div>` : `<input value="${App.escapeHtml(it.article_no || it.articleNumber || '')}" onchange="${ctxText('article_no')}" class="mat-ctrl mat-input w-full" placeholder="Art.-Nr." ${isLocked ? 'readonly' : ''}>`, alignClass);
                                 break;
 
                             case 'title':
@@ -11943,7 +17939,7 @@
                             case 'supplier':
                                 const skontoVal = Number(it.skonto || 0);
                                 const paymentDays = Number(it.payment_terms || 14);
-                                cells += cellWrap(isLabor ? `<div class="text-slate-400 text-xs font-bold">—</div>` : `
+                                cells += cellWrap(isLabor ? `<div class="text-[#000000] text-xs font-bold">—</div>` : `
                                     <div class="flex flex-col gap-2 w-full">
                                         <input value="${App.escapeHtml(it.distributor_name || it.supplier || '')}" onchange="${ctxText('distributor_name')}" placeholder="Lieferant" class="mat-ctrl mat-input w-full" ${isLocked ? 'readonly' : ''}>
                                         <input value="${App.escapeHtml(it.distributor_article_no || '')}" onchange="${ctxText('distributor_article_no')}" placeholder="Lief.-Nr." class="mat-ctrl mat-input w-full" ${isLocked ? 'readonly' : ''}>
@@ -11959,18 +17955,28 @@
                                 const docs = Array.isArray(it.docs) ? it.docs : [];
                                 cells += cellWrap(`
                                     <div class="flex flex-col items-start gap-2 w-full">
-                                        ${docs.length ? docs.map(doc => `<button type="button" class="mat-chip w-full justify-start gap-2 text-[#78b2ce] border-[#78b2ce]/20 bg-[#78b2ce]/10"><i class="fas fa-file-alt w-3 h-3 shrink-0"></i><span class="truncate">${App.escapeHtml(doc?.name || 'Dokument')}</span></button>`).join('') : `<span class="text-[10px] text-slate-400 italic flex items-center gap-1 font-bold"><i class="fas fa-minus w-3 h-3"></i> Keine Dokumente</span>`}
+                                        ${docs.length ? docs.map(doc => `<button type="button" class="mat-chip w-full justify-start gap-2 text-[#78b2ce] border-[#78b2ce]/20 bg-[#78b2ce]/10"><i class="fas fa-file-alt w-3 h-3 shrink-0"></i><span class="truncate">${App.escapeHtml(doc?.name || 'Dokument')}</span></button>`).join('') : `<span class="text-[10px] text-[#000000] italic flex items-center gap-1 font-bold"><i class="fas fa-minus w-3 h-3"></i> Keine Dokumente</span>`}
                                     </div>
                                 `, alignClass);
                                 break;
 
                             case 'type':
-                                cells += cellWrap(hasLaborRows ? `<div class="mat-ctrl bg-white border-dark-400 flex items-center justify-center font-black text-dark-400 w-full">Lohn</div>` : `
-                                    <select onchange="App.updatePosConfig(${sIdx},${iIdx},${subArg},'kind',this.value)" class="mat-ctrl mat-input-center w-full" ${isLocked || !!extra.isVirtualSection ? 'disabled' : ''}>
-                                        <option value="article" ${currentKind === 'article' ? 'selected' : ''}>Artikel</option>
-                                        <option value="labor" ${currentKind === 'labor' ? 'selected' : ''}>Lohn</option>
-                                        <option value="note" ${currentKind === 'note' ? 'selected' : ''}>Hinweis</option>
-                                    </select>
+                                const canChangeKind = App.canChangeItemKind ? App.canChangeItemKind(it) : false;
+                                const lockedKindTitle = canChangeKind
+                                    ? 'Typ ändern'
+                                    : 'Typ gesperrt: kommt aus Master Set, Group Set oder Produktkatalog';
+                                const lockedBadge = !canChangeKind
+                                    ? `<div class="mt-1 text-[9px] font-black text-slate-400 flex items-center justify-center gap-1"><i class="fa-solid fa-lock"></i> Katalog</div>`
+                                    : `<div class="mt-1 text-[9px] font-black text-emerald-600 flex items-center justify-center gap-1"><i class="fa-solid fa-pen"></i> Manuell</div>`;
+                                cells += cellWrap(hasLaborRows ? `<div><div class="mat-ctrl bg-white border-dark-400 flex items-center justify-center font-black text-dark-400 w-full">Lohn</div>${lockedBadge}</div>` : `
+                                    <div class="w-full" title="${lockedKindTitle}">
+                                        <select onchange="App.updatePosConfig(${sIdx},${iIdx},${subArg},'kind',this.value)" class="mat-ctrl mat-input-center w-full ${!canChangeKind ? 'bg-slate-50 text-slate-400 cursor-not-allowed' : ''}" ${(isLocked || !!extra.isVirtualSection || !canChangeKind) ? 'disabled' : ''}>
+                                            <option value="article" ${currentKind === 'article' ? 'selected' : ''}>Artikel</option>
+                                            <option value="labor" ${currentKind === 'labor' ? 'selected' : ''}>Lohn</option>
+                                            <option value="note" ${currentKind === 'note' ? 'selected' : ''}>Hinweis</option>
+                                        </select>
+                                        ${lockedBadge}
+                                    </div>
                                 `, alignClass);
                                 break;
 
@@ -11989,9 +17995,9 @@
                                 const incFn = isSub ? `App.updateSubItemDetails(${sIdx},${iIdx},${subArg},'qty', ${qty} + 1)` : `App.updateItemDetails(${sIdx},${iIdx},'qty', ${qty} + 1)`;
                                 cells += cellWrap(isLabor ? `<div class="mat-ctrl bg-white border-dark-400 flex items-center justify-center font-black text-dark-400 w-full">${qty.toFixed(2)}</div>` : `
                                     <div class="flex items-center h-[25px] border border-[#d6e0ea] rounded-xl bg-white overflow-hidden focus-within:border-[#93c21c] focus-within:ring-4 focus-within:ring-[#93c21c]/15 w-full">
-                                        <button type="button" ${isLocked ? 'disabled' : ''} onclick="${decFn}" class="w-9 h-full flex items-center justify-center text-dark-600 hover:bg-slate-50 hover:text-[#93c21c] transition-colors shrink-0" title="Verringern"><i class="fa-solid fa-minus text-[10px]"></i></button>
-                                        <input data-lv-focus="qty:${focusKeyBase}" type="number" step="0.01" value="${qty}" onchange="${ctxText('qty')}" class="flex-1 w-full h-full text-center text-xs font-black text-slate-800 outline-none bg-transparent" ${isLocked ? 'readonly' : ''}>
-                                        <button type="button" ${isLocked ? 'disabled' : ''} onclick="${incFn}" class="w-9 h-full flex items-center justify-center text-dark-600 hover:bg-slate-50 hover:text-[#93c21c] transition-colors shrink-0" title="Erhöhen"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                                        <button type="button" ${isLocked ? 'disabled' : ''} onclick="${decFn}" class="w-9 h-full flex items-center justify-center text-[#000000] hover:bg-slate-50 hover:text-[#93c21c] transition-colors shrink-0" title="Verringern"><i class="fa-solid fa-minus text-[10px]"></i></button>
+                                        <input data-lv-focus="qty:${focusKeyBase}" type="number" step="0.01" value="${qty}" onchange="${ctxText('qty')}" class="flex-1 w-full h-full text-center text-xs font-black text-[#000000] outline-none bg-transparent" ${isLocked ? 'readonly' : ''}>
+                                        <button type="button" ${isLocked ? 'disabled' : ''} onclick="${incFn}" class="w-9 h-full flex items-center justify-center text-[#000000] hover:bg-slate-50 hover:text-[#93c21c] transition-colors shrink-0" title="Erhöhen"><i class="fa-solid fa-plus text-[10px]"></i></button>
                                     </div>
                                 `, alignClass);
                                 break;
@@ -12002,9 +18008,9 @@
                                 const baseQty = qty; 
                                 const calculatedTotalQty = baseQty * parentQty * multiplier;
                                 
-                                cells += cellWrap(isLabor ? `<div class="mat-ctrl bg-slate-50 border-transparent flex items-center justify-center font-black text-slate-400 w-full">${calculatedTotalQty.toFixed(2)}</div>` : `
+                                cells += cellWrap(isLabor ? `<div class="mat-ctrl bg-slate-50 border-transparent flex items-center justify-center font-black text-[#000000] w-full">${calculatedTotalQty.toFixed(2)}</div>` : `
                                     <div class="flex items-center h-[25px] border border-transparent rounded-xl bg-slate-50 overflow-hidden w-full">
-                                        <div class="flex-1 w-full h-full text-center text-xs font-black text-dark-600 flex items-center justify-center">${calculatedTotalQty.toFixed(2)}</div>
+                                        <div class="flex-1 w-full h-full text-center text-xs font-black text-[#000000] flex items-center justify-center">${calculatedTotalQty.toFixed(2)}</div>
                                     </div>
                                 `, alignClass);
                                 break;
@@ -12018,7 +18024,7 @@
                                 break;
 
                             case 'pe':
-                                cells += cellWrap(isLabor ? `<div class="mat-ctrl bg-slate-50 flex items-center justify-center font-black text-slate-400 w-full">—</div>` : `<input type="number" step="1" min="1" value="${pPe}" onchange="${ctxText('price_unit_value')}" class="mat-ctrl mat-input-center w-full" ${isLocked ? 'readonly' : ''}>`, alignClass);
+                                cells += cellWrap(isLabor ? `<div class="mat-ctrl bg-slate-50 flex items-center justify-center font-black text-[#000000] w-full">—</div>` : `<input type="number" step="1" min="1" value="${pPe}" onchange="${ctxText('price_unit_value')}" class="mat-ctrl mat-input-center w-full" ${isLocked ? 'readonly' : ''}>`, alignClass);
                                 break;
 
                             case 'ek':
@@ -12031,7 +18037,7 @@
                                 break;
 
                             case 'ek_total':
-                                cells += cellWrap(`<div class=" text-slate-800 font-black text-[13px]">${App.money(totalEK)} €</div>`, alignClass);
+                                cells += cellWrap(`<div class=" text-[#000000] font-black text-[13px]">${App.money(totalEK)} €</div>`, alignClass);
                                 break;
 
                             case 'margin': 
@@ -12040,7 +18046,7 @@
                                 cells += cellWrap(isLabor ? `<div class="mat-ctrl bg-white border-dark-400 flex items-center justify-end px-2 font-black text-dark-400 w-full">${margin.toFixed(1)} %</div>` : `
                                     <div class="w-full flex flex-col justify-end">
                                         ${(hasChildren && !isPauschal && !isSub && isParentUnlocked && it._prevMargin !== undefined) ? `
-                                            <div class="text-[10px] text-dark-600 flex justify-end mb-0.5 pr-1">
+                                            <div class="text-[10px] text-[#000000] flex justify-end mb-0.5 pr-1">
                                                 <button type="button" onclick="event.stopPropagation(); App.resetGeneralMargin(${sIdx}, ${iIdx})" class="hover:text-red-500 transition-colors flex items-center gap-1 font-bold" title="Auf vorherigen Wert zurücksetzen">
                                                     <i class="fa-solid fa-rotate-left"></i> ${prevMarginText}%
                                                 </button>
@@ -12049,7 +18055,7 @@
                                         <div class="mat-addon-wrap w-full relative">
                                             ${(hasChildren && !isPauschal && !isSub) ? `
                                                 <div class="absolute left-2 top-1/2 -translate-y-1/2 flex items-center z-10">
-                                                    <button type="button" onclick="event.stopPropagation(); App.toggleParentMarginLock(${sIdx}, ${iIdx})" class="text-slate-400 hover:text-[#93c21c] transition-colors" title="${isParentUnlocked ? 'Wieder sperren' : 'Sperre aufheben'}">
+                                                    <button type="button" onclick="event.stopPropagation(); App.toggleParentMarginLock(${sIdx}, ${iIdx})" class="text-[#000000] hover:text-[#93c21c] transition-colors" title="${isParentUnlocked ? 'Wieder sperren' : 'Sperre aufheben'}">
                                                         <i class="fa-solid ${isParentUnlocked ? 'fa-lock-open text-[#93c21c]' : 'fa-lock'} text-[11px]"></i>
                                                     </button>
                                                 </div>
@@ -12070,7 +18076,7 @@
                                 
                                 const isVkDisabled = (hasChildren && !isPauschal && !isVkUnlocked);
                                 const vkReadonlyAttrs = isVkDisabled 
-                                    ? 'readonly disabled class="mat-addon-input text-right bg-transparent text-dark-600 font-bold"' 
+                                    ? 'readonly disabled class="mat-addon-input text-right bg-transparent text-[#000000] font-bold"' 
                                     : `class="mat-addon-input text-right ${hasChildren && !isPauschal ? 'bg-blue-50' : ''}"`;
                                 
                                 const prevVkText = it._prevVk !== undefined ? App.money(it._prevVk) : '?';
@@ -12082,7 +18088,7 @@
                                 cells += cellWrap(isLabor ? `<div class="mat-ctrl bg-white border-dark-400 flex items-center justify-end px-2 font-black text-dark-400 w-full">${App.money(vk)} €</div>` : `
                                     <div class="w-full flex flex-col justify-end">
                                         ${(hasChildren && !isPauschal && !isSub && isVkUnlocked && it._prevVk !== undefined) ? `
-                                            <div class="text-[10px] text-dark-600 flex justify-end mb-0.5 pr-1">
+                                            <div class="text-[10px] text-[#000000] flex justify-end mb-0.5 pr-1">
                                                 <button type="button" onclick="event.stopPropagation(); App.resetGeneralMargin(${sIdx}, ${iIdx}); State.unlockedParentVk['${sIdx}-${iIdx}'] = false; App.ListView.render();" class="hover:text-red-500 transition-colors flex items-center gap-1 font-bold" title="Auf vorherigen Wert zurücksetzen">
                                                     <i class="fa-solid fa-rotate-left"></i> ${prevVkText} €
                                                 </button>
@@ -12091,7 +18097,7 @@
                                         <div class="mat-addon-wrap w-full relative">
                                             ${(hasChildren && !isPauschal && !isSub) ? `
                                                 <div class="absolute left-2 top-1/2 -translate-y-1/2 flex items-center z-10">
-                                                    <button type="button" onclick="event.stopPropagation(); App.ListView.toggleParentVkLock(${sIdx}, ${iIdx})" class="text-slate-400 hover:text-blue-500 transition-colors" title="${isVkUnlocked ? 'Wieder sperren' : 'Sperre aufheben'}">
+                                                    <button type="button" onclick="event.stopPropagation(); App.ListView.toggleParentVkLock(${sIdx}, ${iIdx})" class="text-[#000000] hover:text-blue-500 transition-colors" title="${isVkUnlocked ? 'Wieder sperren' : 'Sperre aufheben'}">
                                                         <i class="fa-solid ${isVkUnlocked ? 'fa-lock-open text-blue-500' : 'fa-lock'} text-[11px]"></i>
                                                     </button>
                                                 </div>
@@ -12109,7 +18115,7 @@
                                 break;
 
                             case 'vk_total':
-                                cells += cellWrap(`<div class=" text-slate-800 font-black text-[13px]">${App.money(totalVK)} €</div>`, alignClass);
+                                cells += cellWrap(`<div class=" text-[#000000] font-black text-[13px]">${App.money(totalVK)} €</div>`, alignClass);
                                 break;
 
                             case 'db_total':
@@ -12121,11 +18127,11 @@
                                 cells += cellWrap(`
                                     <div class="flex flex-col gap-2 w-full">
                                         <div class="flex flex-col gap-1">
-                                            <div class="flex justify-between items-center text-[10px]"><span class="text-dark-600 font-bold">Kosten</span><span class="font-black text-slate-700">${weightEKText}%</span></div>
+                                            <div class="flex justify-between items-center text-[10px]"><span class="text-[#000000] font-bold">Kosten</span><span class="font-black text-[#000000]">${weightEKText}%</span></div>
                                             <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-500 rounded-full" style="width:${safeWeightEK}%"></div></div>
                                         </div>
                                         <div class="flex flex-col gap-1">
-                                            <div class="flex justify-between items-center text-[10px]"><span class="text-dark-600 font-bold">DB</span><span class="font-black text-[#4f8aa7]">${weightDBText}%</span></div>
+                                            <div class="flex justify-between items-center text-[10px]"><span class="text-[#000000] font-bold">DB</span><span class="font-black text-[#4f8aa7]">${weightDBText}%</span></div>
                                             <div class="w-full h-2 bg-[#78b2ce]/10 rounded-full overflow-hidden"><div class="h-full bg-[#78b2ce] rounded-full" style="width:${safeWeightDB}%"></div></div>
                                         </div>
                                     </div>
@@ -12133,7 +18139,7 @@
                                 break;
 
                             case 'total':
-                                cells += cellWrap(`<div class=" text-slate-800 font-black  text-[13px]">${App.money(totalVK)} €</div>`, alignClass);
+                                cells += cellWrap(`<div class=" text-[#000000] font-black  text-[13px]">${App.money(totalVK)} €</div>`, alignClass);
                                 break;
 
                             case 'actions':
@@ -12141,7 +18147,11 @@
                                 cells += cellWrap(`
                                     <div class="flex items-center gap-1 justify-end w-full">
                                         ${(!extra.isVirtualSection) ? `<button onclick="App.updatePosConfig(${sIdx},${iIdx},${subArg},'print_hidden', ${!isHiddenPrint})" class="mat-btn-icon ${isHiddenPrint ? 'text-red-500 hover:!border-red-500 hover:bg-red-50' : 'text-green-500 hover:!border-green-500 hover:bg-green-50'}" title="Im Druck anzeigen/verbergen"><i class="fa-solid ${isHiddenPrint ? 'fa-eye-slash' : 'fa-eye'}"></i></button>` : ''}
+                                        
+                                        ${(!extra.isVirtualSection) ? `<button onclick="App.Clipboard.copyRow(${sIdx},${iIdx},${subArg})" class="mat-btn-icon text-yellow-500 hover:!border-yellow-500 hover:bg-yellow-50" title="Kopieren in Zwischenablage"><i class="fa-regular fa-copy"></i></button>` : ''}
+                                        
                                         ${(!isLocked && !extra.isVirtualSection) ? `<button onclick="App.insertPositionAfter(${sIdx},${iIdx},${subArg})" class="mat-btn-icon text-blue-500 hover:!border-blue-500 hover:bg-blue-50" title="Neue Position darunter einfügen"><i class="fa-solid fa-plus"></i><i class="fa-solid fa-arrow-down text-[8px] -ml-0.5"></i></button>` : ''}
+                                        ${(!isLocked && !isNote && !hasLaborRows && !extra.isVirtualSection && State.selectedItems && State.selectedItems.size > 0 && !State.selectedItems.has(focusKeyBase)) ? `<button onclick="App.ListView.moveSelectedRowsUnderTarget(${sIdx},${iIdx},${subArg})" class="mat-btn-icon text-emerald-600 hover:!border-emerald-500 hover:bg-emerald-50" title="Markierte Positionen als Unterkomponenten dieser Position zuordnen"><i class="fa-solid fa-sitemap"></i></button>` : ''}
                                         ${(!isLocked && !isSub && !isNote && !hasLaborRows && !extra.isVirtualSection) ? `<button onclick="App.addSubItem(${sIdx},${iIdx})" class="mat-btn-icon" title="Unterposition hinzufügen"><i class="fa-solid fa-level-down-alt"></i></button>` : ''}
                                         ${!extra.isVirtualSection ? `<button onclick="App.openPosSettings(${sIdx},${iIdx},${subArg})" class="mat-btn-icon" title="Einstellungen"><i class="fa-solid fa-sliders"></i></button>` : ''}
                                         ${(!isLocked && !extra.isVirtualSection) ? `<button onclick="App.removeItem(${sIdx},${iIdx},${subArg})" class="mat-btn-icon text-red-500" title="Löschen"><i class="fa-solid fa-trash"></i></button>` : ''}
@@ -12162,7 +18172,7 @@
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center gap-3">
                                     <div class="text-sm font-black uppercase tracking-wide text-[#93c21c]">Arbeitsleistungsdetails</div>
-                                    <button onclick="App.updatePosConfig(${sIdx},${iIdx},${subArg},'print_hidden_labor', ${!isHiddenPrint}); App.ListView.render();" class="text-slate-400 hover:text-slate-600 transition-colors" title="Details im Druck anzeigen/verbergen"><i class="fa-solid ${eyeIcon}"></i></button>
+                                    <button onclick="App.updatePosConfig(${sIdx},${iIdx},${subArg},'print_hidden_labor', ${!isHiddenPrint}); App.ListView.render();" class="text-[#000000] hover:text-[#000000] transition-colors" title="Details im Druck anzeigen/verbergen"><i class="fa-solid ${eyeIcon}"></i></button>
                                 </div>
                                 <button type="button" onclick="App.addLaborRow(${sIdx},${iIdx},${subArg})" class="lv-desc-btn !bg-white !border-dark-400 !text-dark-400"><i class="fa-solid fa-plus mr-1"></i> Zeile hinzufügen</button>
                             </div>
@@ -12188,11 +18198,11 @@
                                             <td class="py-1.5 px-2"><input type="number" step="0.01" class="w-full text-right bg-white outline-none border border-[#e7d7aa] hover:border-amber-300 focus:border-[#d4a72c] rounded-xl p-2 font-bold" value="${Number(row.ek || 0).toFixed(2)}" onchange="App.updateLaborRowField(${sIdx},${iIdx},${subArg},${rowIdx},'ek',this.value)"></td>
                                             <td class="py-1.5 px-2"><input type="number" step="0.1" class="w-full text-right bg-white outline-none border border-[#e7d7aa] hover:border-amber-300 focus:border-[#d4a72c] rounded-xl p-2 font-bold" value="${Number(row.margin_percent ?? App.getDefaultMargin('labor')).toFixed(1)}" onchange="App.updateLaborRowField(${sIdx},${iIdx},${subArg},${rowIdx},'margin_percent',this.value)"></td>
                                             <td class="py-1.5 px-2"><input type="number" step="0.01" class="w-full text-right bg-white outline-none border border-[#e7d7aa] hover:border-amber-300 focus:border-[#d4a72c] rounded-xl p-2 font-bold" value="${Number(row.rate || 0).toFixed(2)}" onchange="App.updateLaborRowField(${sIdx},${iIdx},${subArg},${rowIdx},'rate',this.value)"></td>
-                                            <td class="py-1.5 pl-2 text-right font-black text-slate-800">${App.money(Number(row.qty || 0) * Number(row.rate || 0))} €</td>
+                                            <td class="py-1.5 pl-2 text-right font-black text-[#000000]">${App.money(Number(row.qty || 0) * Number(row.rate || 0))} €</td>
                                             <td class="py-1.5 text-right"><button type="button" onclick="App.removeLaborRow(${sIdx},${iIdx},${subArg},${rowIdx})" class="text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1" title="Zeile löschen"><i class="fa-solid fa-trash"></i></button></td>
                                         </tr>
                                     `).join('')}
-                                    ${(!Array.isArray(it.labor_rows) || it.labor_rows.length === 0) ? `<tr><td colspan="8" class="py-6 text-center text-dark-600 text-xs italic bg-white/40 rounded-xl">Keine Dienstleistungs-Details hinterlegt.<br>Klicken Sie oben auf <b>"Zeile hinzufügen"</b>.</td></tr>` : ''}
+                                    ${(!Array.isArray(it.labor_rows) || it.labor_rows.length === 0) ? `<tr><td colspan="8" class="py-6 text-center text-[#000000] text-xs italic bg-white/40 rounded-xl">Keine Dienstleistungs-Details hinterlegt.<br>Klicken Sie oben auf <b>"Zeile hinzufügen"</b>.</td></tr>` : ''}
                                 </tbody>
                             </table>
                         </div>
@@ -12201,7 +18211,7 @@
 
                 // Add 'group item-group' classes globally to ensure hover works correctly
                 return `
-                    <div id="lv-row-${sIdx}-${iIdx}-${subArg}" class="mat-data-row group item-group ${visualMeta.rowClass} ${isSub ? 'is-sub-row' : 'is-main-row'}" ${dragAttrs}>
+                    <div id="lv-row-${sIdx}-${iIdx}-${subArg}" class="mat-data-row group item-group ${visualMeta.rowClass} ${it._supplierJustImported ? 'supplier-import-row-flash' : ''} ${isSub ? 'is-sub-row' : 'is-main-row'}" ${dragAttrs}>
                         <div class="mat-data-grid" style="display:grid; grid-template-columns:${gridTemplate};">
                             ${cells}
                         </div>
@@ -12260,11 +18270,17 @@
                     (sec.items || []).forEach(row => {
                         if (!row || row.active === false || (row.kind || '') === 'note') return;
                         const hasSubItems = Array.isArray(row.subItems) && row.subItems.length > 0 && !row.isPauschal;
+                        
+                        // FIX: Grab the parent quantity to scale sub-item values
+                        const parentQty = Number(row.qty || 1);
+
                         if (hasSubItems) {
                             row.subItems.forEach(sub => {
                                 if (!sub || sub.active === false || (sub.kind || '') === 'note' || ((sub.lineType || sub.status || 'standard') !== 'standard' && (sub.status || 'normal') !== 'normal')) return;
-                                const subVK = App.calcItemGross(sub) * multiplier;
-                                const subEK = App.calcItemCost(sub) * multiplier;
+                                
+                                // FIX: Multiply by parentQty
+                                const subVK = App.calcItemGross(sub) * multiplier * parentQty;
+                                const subEK = App.calcItemCost(sub) * multiplier * parentQty;
                                 acc.ek += subEK; acc.vk += subVK; acc.db += (subVK - subEK);
                             });
                         } else {
@@ -12287,16 +18303,16 @@
                 defs.forEach((col) => {
                     switch (col.key) {
                         case 'pos':
-                            cells += cellWrap(`<div class="font-black text-xs uppercase tracking-[0.14em] text-dark-600">Gesamt</div>`, 'mat-grid-cell-center mat-total-cell');
+                            cells += cellWrap(`<div class="font-black text-xs uppercase tracking-[0.14em] text-[#000000]">Gesamt</div>`, 'mat-grid-cell-center mat-total-cell');
                             break;
                         case 'ek_total':
-                            cells += cellWrap(`<div class="w-full flex flex-col items-end"><div class="text-[10px] uppercase tracking-[0.12em] font-black text-dark-600">EK gesamt</div><div class="text-sm font-black text-slate-800">${App.money(totals.ek)} €</div></div>`, 'mat-grid-cell-right mat-total-cell');
+                            cells += cellWrap(`<div class="w-full flex flex-col items-end"><div class="text-[10px] uppercase tracking-[0.12em] font-black text-[#000000]">EK gesamt</div><div class="text-sm font-black text-[#000000]">${App.money(totals.ek)} €</div></div>`, 'mat-grid-cell-right mat-total-cell');
                             break;
                         case 'margin': 
                             cells += cellWrap(`
                                 <div class="w-full flex flex-col items-end">
-                                    <div class="text-[10px] uppercase tracking-[0.12em] font-black text-dark-600">Ø Marge</div>
-                                    <div class="text-sm font-black text-slate-800">${totalMarginPct.toFixed(1)} %</div>
+                                    <div class="text-[10px] uppercase tracking-[0.12em] font-black text-[#000000]">Ø Marge</div>
+                                    <div class="text-sm font-black text-[#000000]">${totalMarginPct.toFixed(1)} %</div>
                                 </div>
                             `, 'mat-grid-cell-right mat-total-cell');
                             break;
@@ -12385,11 +18401,11 @@
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-2 mt-2 mx-2">
                         <div class="bg-slate-100 p-3 border-b border-slate-200 flex justify-between items-center cursor-pointer hover:bg-slate-200 transition-colors"
                             onclick="App.ListView.toggleOpen('${key}')">
-                            <h3 class="font-bold text-slate-700 text-sm flex items-center gap-2 uppercase tracking-wide">
+                            <h3 class="font-bold text-[#000000] text-sm flex items-center gap-2 uppercase tracking-wide">
                                 <i class="fa-solid fa-chart-line w-4 h-4 text-blue-600"></i>
                                 Analyse &amp; Controlling
                             </h3>
-                            <i class="fa-solid fa-chevron-up w-4 h-4 text-dark-600 transition-transform ${chevronCls}"></i>
+                            <i class="fa-solid fa-chevron-up w-4 h-4 text-[#000000] transition-transform ${chevronCls}"></i>
                         </div>
 
                         <div class="${isPanelOpen ? '' : 'hidden'}">
@@ -12398,37 +18414,37 @@
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                                     <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-                                        <h5 class="font-bold text-slate-700 mb-3 flex items-center gap-2 text-sm uppercase">
+                                        <h5 class="font-bold text-[#000000] mb-3 flex items-center gap-2 text-sm uppercase">
                                             <i class="fa-solid fa-chart-pie w-4 h-4 text-blue-600"></i>
                                             Split-Analyse
                                         </h5>
 
                                         <div class="mb-3 pb-3 border-b border-slate-100">
-                                            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                                            <div class="flex justify-between text-xs font-semibold text-[#000000] mb-1">
                                                 <span>Material &amp; Sonst.</span>
                                                 <span>${money(matSales + otherSales)}</span>
                                             </div>
-                                            <div class="flex justify-between text-[10px] text-slate-400">
+                                            <div class="flex justify-between text-[10px] text-[#000000]">
                                                 <span>Anteil am Umsatz: ${pct(matShare + otherShare)}</span>
                                             </div>
                                         </div>
 
                                         <div>
-                                            <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                                            <div class="flex justify-between text-xs font-semibold text-[#000000] mb-1">
                                                 <span>Lohn &amp; Montage</span>
                                                 <span>${money(laborSales)}</span>
                                             </div>
-                                            <div class="flex justify-between text-[10px] text-slate-400">
+                                            <div class="flex justify-between text-[10px] text-[#000000]">
                                                 <span>Anteil am Umsatz: ${pct(laborShare)}</span>
                                             </div>
                                         </div>
 
                                         <div class="mt-3 pt-3 border-t border-slate-100 space-y-2">
-                                            <div class="flex justify-between text-xs font-bold text-slate-700 bg-slate-50 p-1 rounded">
+                                            <div class="flex justify-between text-xs font-bold text-[#000000] bg-slate-50 p-1 rounded">
                                                 <span>DB 1</span>
                                                 <div class="text-right">
                                                     <div>${money(db1)}</div>
-                                                    <div class="text-[9px] font-normal text-slate-400">${pct(db1Pct)}</div>
+                                                    <div class="text-[9px] font-normal text-[#000000]">${pct(db1Pct)}</div>
                                                 </div>
                                             </div>
 
@@ -12445,24 +18461,24 @@
                                     </div>
 
                                     <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-                                        <h5 class="font-bold text-slate-700 mb-3 flex items-center gap-2 text-sm uppercase">
+                                        <h5 class="font-bold text-[#000000] mb-3 flex items-center gap-2 text-sm uppercase">
                                             <i class="fa-solid fa-clock w-4 h-4 text-orange-600"></i>
                                             Stunden-Performance
                                         </h5>
 
                                         <div class="space-y-3">
                                             <div class="flex justify-between items-center bg-orange-50 p-2 rounded">
-                                                <span class="text-xs text-slate-600">Gesamtstunden</span>
+                                                <span class="text-xs text-[#000000]">Gesamtstunden</span>
                                                 <span class="font-bold">${hours.toFixed(1)} h</span>
                                             </div>
 
                                             <div>
-                                                <div class="flex justify-between text-xs text-dark-600 mb-1">
+                                                <div class="flex justify-between text-xs text-[#000000] mb-1">
                                                     Umsatz pro Stunde (Netto)
                                                 </div>
                                                 <div class="flex justify-between items-baseline">
-                                                    <span class="text-xs text-slate-400">Ø Satz</span>
-                                                    <span class="font-bold text-slate-800">${money(salesPerHour)} /h</span>
+                                                    <span class="text-xs text-[#000000]">Ø Satz</span>
+                                                    <span class="font-bold text-[#000000]">${money(salesPerHour)} /h</span>
                                                 </div>
                                             </div>
 
@@ -12471,7 +18487,7 @@
                                                     Reingewinn pro Stunde (DB3)
                                                 </div>
                                                 <div class="flex justify-between items-baseline">
-                                                    <span class="text-xs text-slate-400">Nach Risiko/Zins</span>
+                                                    <span class="text-xs text-[#000000]">Nach Risiko/Zins</span>
                                                     <span class="font-bold ${profitHourTextClass}">
                                                         ${money(profitPerHour)} /h
                                                     </span>
@@ -12481,27 +18497,27 @@
                                     </div>
 
                                     <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200 ring-1 ring-blue-100">
-                                        <h5 class="font-bold text-slate-700 mb-3 flex items-center gap-2 text-sm uppercase">
+                                        <h5 class="font-bold text-[#000000] mb-3 flex items-center gap-2 text-sm uppercase">
                                             <i class="fa-solid fa-money-bill-wave w-4 h-4 text-green-600"></i>
                                             Finanz-Dashboard
                                         </h5>
 
                                         <div class="space-y-1 text-sm">
                                             <div class="flex justify-between">
-                                                <span class="text-dark-600 text-xs">Umsatz Netto</span>
+                                                <span class="text-[#000000] text-xs">Umsatz Netto</span>
                                                 <span class="font-medium">${money(sales)}</span>
                                             </div>
 
                                             <div class="flex justify-between text-xs mt-1">
-                                                <span class="text-slate-400">./. EK Listenpreis</span>
-                                                <span class="text-slate-400">-${money(ekSum)}</span>
+                                                <span class="text-[#000000]">./. EK Listenpreis</span>
+                                                <span class="text-[#000000]">-${money(ekSum)}</span>
                                             </div>
 
                                             <div class="border-t border-slate-100 my-1 pt-1"></div>
 
                                             <div class="bg-slate-50 p-2 rounded border border-slate-100 mt-2">
                                                 <div class="flex justify-between items-center mb-1">
-                                                    <span class="font-bold text-slate-700 text-xs uppercase">DB 3 (EBIT)</span>
+                                                    <span class="font-bold text-[#000000] text-xs uppercase">DB 3 (EBIT)</span>
                                                     <span class="font-bold ${isDb3Bad ? 'text-red-600' : 'text-green-600'}">
                                                         ${money(db3)}
                                                     </span>
@@ -12512,7 +18528,7 @@
                                                         <span>Netto-Gewinn</span>
                                                         <span>${money(netProfit)}</span>
                                                     </div>
-                                                    <div class="flex justify-between text-[10px] text-dark-600 mt-1">
+                                                    <div class="flex justify-between text-[10px] text-[#000000] mt-1">
                                                         <span>Ertragssteuer</span>
                                                         <span>${money(taxVal)}</span>
                                                     </div>
@@ -12527,7 +18543,7 @@
 
                                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between shadow-sm">
                                         <div class="flex items-center justify-between mb-2">
-                                            <h6 class="text-[10px] font-bold text-dark-600 uppercase flex items-center gap-1">
+                                            <h6 class="text-[10px] font-bold text-[#000000] uppercase flex items-center gap-1">
                                                 <i class="fa-solid fa-arrow-trend-up w-3 h-3"></i> Ertrags-Wasserfall
                                             </h6>
                                             <span class="text-[10px] text-blue-600">Umsatz/Profit</span>
@@ -12536,30 +18552,30 @@
                                         <div class="flex items-end gap-2 h-20 w-full mt-2">
                                             <div class="flex-1 flex flex-col items-center gap-1 group">
                                                 <div class="w-full rounded-t transition-all duration-500 bg-slate-300" title="Umsatz: ${money(sales)}" style="height:${barHeight(sales)};"></div>
-                                                <span class="text-[8px] text-slate-400 uppercase truncate w-full text-center">Umsatz</span>
+                                                <span class="text-[8px] text-[#000000] uppercase truncate w-full text-center">Umsatz</span>
                                             </div>
                                             <div class="flex-1 flex flex-col items-center gap-1 group">
                                                 <div class="w-full rounded-t transition-all duration-500 bg-slate-300" title="Kosten (EK): ${money(ekSum)}" style="height:${barHeight(ekSum)};"></div>
-                                                <span class="text-[8px] text-slate-400 uppercase truncate w-full text-center">Kosten</span>
+                                                <span class="text-[8px] text-[#000000] uppercase truncate w-full text-center">Kosten</span>
                                             </div>
                                             <div class="flex-1 flex flex-col items-center gap-1 group">
                                                 <div class="w-full rounded-t transition-all duration-500 bg-slate-300" title="DB1: ${money(db1)}" style="height:${barHeight(db1)};"></div>
-                                                <span class="text-[8px] text-slate-400 uppercase truncate w-full text-center">DB1</span>
+                                                <span class="text-[8px] text-[#000000] uppercase truncate w-full text-center">DB1</span>
                                             </div>
                                             <div class="flex-1 flex flex-col items-center gap-1 group">
                                                 <div class="w-full rounded-t transition-all duration-500 ${db2BarClass}" title="DB2: ${money(db2)}" style="height:${barHeight(db2)};"></div>
-                                                <span class="text-[8px] text-slate-400 uppercase truncate w-full text-center">DB2</span>
+                                                <span class="text-[8px] text-[#000000] uppercase truncate w-full text-center">DB2</span>
                                             </div>
                                             <div class="flex-1 flex flex-col items-center gap-1 group">
                                                 <div class="w-full rounded-t transition-all duration-500 ${netBarClass}" title="Netto: ${money(netProfit)}" style="height:${barHeight(netProfit)};"></div>
-                                                <span class="text-[8px] text-slate-400 uppercase truncate w-full text-center">Netto</span>
+                                                <span class="text-[8px] text-[#000000] uppercase truncate w-full text-center">Netto</span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
                                         <div class="flex items-center justify-between mb-1">
-                                            <h6 class="text-[10px] font-bold text-dark-600 uppercase flex items-center gap-1">
+                                            <h6 class="text-[10px] font-bold text-[#000000] uppercase flex items-center gap-1">
                                                 <i class="fa-solid fa-box-open w-3 h-3"></i> Umsatz-Mix
                                             </h6>
                                             <i class="fa-solid fa-bolt w-3 h-3 text-yellow-500"></i>
@@ -12572,29 +18588,29 @@
                                                 <circle cx="16" cy="16" r="14" fill="transparent" stroke="#f59e0b" stroke-width="4" stroke-dasharray="${dashC} 100" stroke-dashoffset="-${dashA + dashB}"></circle>
                                             </svg>
                                             <div class="absolute inset-0 flex items-center justify-center flex-col">
-                                                <span class="text-[10px] font-bold text-slate-700">${pct(matShare)}</span>
-                                                <span class="text-[7px] text-slate-400 uppercase">Material</span>
+                                                <span class="text-[10px] font-bold text-[#000000]">${pct(matShare)}</span>
+                                                <span class="text-[7px] text-[#000000] uppercase">Material</span>
                                             </div>
                                         </div>
 
-                                        <div class="mt-3 space-y-1 text-[10px] text-slate-600">
-                                            <div class="flex justify-between"><span class="text-dark-600">Material</span><span>${money(matSales)}</span></div>
-                                            <div class="flex justify-between"><span class="text-dark-600">Lohn</span><span>${money(laborSales)}</span></div>
-                                            <div class="flex justify-between"><span class="text-dark-600">Sonst.</span><span>${money(otherSales)}</span></div>
+                                        <div class="mt-3 space-y-1 text-[10px] text-[#000000]">
+                                            <div class="flex justify-between"><span class="text-[#000000]">Material</span><span>${money(matSales)}</span></div>
+                                            <div class="flex justify-between"><span class="text-[#000000]">Lohn</span><span>${money(laborSales)}</span></div>
+                                            <div class="flex justify-between"><span class="text-[#000000]">Sonst.</span><span>${money(otherSales)}</span></div>
                                         </div>
                                     </div>
 
                                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                                         <div class="flex items-center justify-between mb-4">
-                                            <h6 class="text-[10px] font-bold text-dark-600 uppercase flex items-center gap-1">
+                                            <h6 class="text-[10px] font-bold text-[#000000] uppercase flex items-center gap-1">
                                                 <i class="fa-solid fa-bullseye w-3 h-3"></i> Margen-Monitor
                                             </h6>
                                             <div class="w-2 h-2 rounded-full animate-pulse ${isMarginBad ? 'bg-red-500' : 'bg-emerald-500'}"></div>
                                         </div>
 
                                         <div class="flex-1 flex flex-col items-center justify-center">
-                                            <div class="text-2xl font-bold text-slate-800">${pct(marginTotalPct)}</div>
-                                            <div class="text-[9px] text-slate-400 text-center uppercase tracking-tighter mt-1">
+                                            <div class="text-2xl font-bold text-[#000000]">${pct(marginTotalPct)}</div>
+                                            <div class="text-[9px] text-[#000000] text-center uppercase tracking-tighter mt-1">
                                                 Gesamtmarge vs. ${targetMargin.toFixed(0)}% Ziel
                                             </div>
 
@@ -12610,7 +18626,7 @@
 
                                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                                         <div class="flex items-center justify-between mb-2">
-                                            <h6 class="text-[10px] font-bold text-dark-600 uppercase flex items-center gap-1">
+                                            <h6 class="text-[10px] font-bold text-[#000000] uppercase flex items-center gap-1">
                                                 <i class="fa-solid fa-chart-column w-3 h-3"></i> Effizienz-Index
                                             </h6>
                                         </div>
@@ -12618,7 +18634,7 @@
                                         <div class="space-y-3 mt-1">
                                             <div>
                                                 <div class="flex justify-between text-[9px] mb-1">
-                                                    <span class="text-dark-600 uppercase">Umsatz / h</span>
+                                                    <span class="text-[#000000] uppercase">Umsatz / h</span>
                                                     <span class="font-bold">${money(salesPerHour)}</span>
                                                 </div>
                                                 <div class="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
@@ -12628,7 +18644,7 @@
 
                                             <div>
                                                 <div class="flex justify-between text-[9px] mb-1">
-                                                    <span class="text-dark-600 uppercase">Gewinn / h</span>
+                                                    <span class="text-[#000000] uppercase">Gewinn / h</span>
                                                     <span class="font-bold ${profitHourTextClass}">${money(profitPerHour)}</span>
                                                 </div>
                                                 <div class="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
@@ -12636,8 +18652,8 @@
                                                 </div>
                                             </div>
 
-                                            <div class="pt-2 border-t border-slate-200 text-[10px] text-dark-600">
-                                                DB3: <b class=" ${isDb3Bad ? 'text-red-600' : 'text-slate-700'}">${money(db3)}</b>
+                                            <div class="pt-2 border-t border-slate-200 text-[10px] text-[#000000]">
+                                                DB3: <b class=" ${isDb3Bad ? 'text-red-600' : 'text-[#000000]'}">${money(db3)}</b>
                                                 <span class="text-slate-300 mx-1">•</span>
                                                 Netto: <b class=" ${isProfitBad ? 'text-blue-600' : 'text-green-600'}">${money(netProfit)}</b>
                                             </div>
@@ -12677,7 +18693,7 @@
                 const sectionEntries = App.ListView.getRenderableSectionEntries();
 
                 if (!sectionEntries.length) {
-                    html += `<div class="p-12 text-center text-slate-400 font-black">Keine Sektionen vorhanden.</div>`;
+                    html += `<div class="p-12 text-center text-[#000000] font-black">Keine Sektionen vorhanden.</div>`;
                 } else {
                     sectionEntries.forEach((entry, visualSectionIdx) => {
                         const sec = entry.section;
@@ -12802,6 +18818,248 @@
         }
     };
 
+
+    // --- Clipboard 
+
+    // Ensure we have the actual user ID for the websocket channel
+        const currentUserId = {{ auth()->id() }}; 
+
+        App.Clipboard = {
+            isOpen: false,
+            items: [],
+
+            init: function() {
+                // 1. Initial load
+                this.loadFromServer(false);
+
+                // 2. WebSocket Listener
+                setTimeout(() => {
+                    if (window.Echo) {
+                        window.Echo.private(`user.clipboard.${window.currentUserId}`)
+                            .listen('.clipboard.updated', (e) => {
+                                console.log("Clipboard ping received! Fetching fresh data...");
+                                // ✅ Fetch fresh data from server instead of relying on the websocket payload
+                                this.loadFromServer(true);
+                            });
+                    }
+                }, 1000);
+            },
+
+            // ✅ NEW HELPER METHOD: Grabs the data from the backend
+            loadFromServer: function(shouldFlash = false) {
+                fetch('/clipboard', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if(data.success) {
+                        this.items = data.items;
+                        this.render();
+                        if (shouldFlash) this.flashSidebar();
+                    }
+                })
+                .catch(err => console.warn("Clipboard Load Error:", err));
+            },
+
+            toggle: function() {
+                this.isOpen = !this.isOpen;
+                const el = document.getElementById('clipboard-sidebar');
+                if (el) {
+                    if (this.isOpen) el.classList.remove('translate-x-full');
+                    else el.classList.add('translate-x-full');
+                }
+            },
+
+            flashSidebar: function() {
+                const btn = document.querySelector('button[onclick="App.Clipboard.toggle()"]');
+                if(!btn) return;
+                btn.classList.add('bg-yellow-400', 'scale-110');
+                setTimeout(() => btn.classList.remove('bg-yellow-400', 'scale-110'), 500);
+            },
+
+            // --- NEW: Bulk Copy ---
+            copyBulk: function() {
+                if (!State.selectedItems || State.selectedItems.size === 0) return;
+
+                let itemsToCopy = [];
+                
+                // Loop through the selected items in the List View
+                State.selectedItems.forEach(key => {
+                    const parts = key.split(':');
+                    const s = parseInt(parts[0]);
+                    const i = parseInt(parts[1]);
+                    const sub = parts[2] === 'null' ? null : parseInt(parts[2]);
+
+                    let item = sub !== null 
+                        ? State.sections[s]?.items[i]?.subItems[sub] 
+                        : State.sections[s]?.items[i];
+
+                    if (item) {
+                        const clone = JSON.parse(JSON.stringify(item));
+                        clone.id = 'copy_' + Date.now() + Math.random();
+                        itemsToCopy.push(clone);
+                    }
+                });
+
+                if (itemsToCopy.length === 0) return;
+
+                // Wrap in a Bulk object
+                const bulkPayload = {
+                    is_bulk: true,
+                    name: `${itemsToCopy.length} Positionen (Multi-Copy)`,
+                    kind: 'bulk',
+                    price: itemsToCopy.reduce((sum, it) => sum + (Number(it.price) || 0), 0),
+                    items: itemsToCopy
+                };
+
+                this._sendCopyRequest(bulkPayload);
+                
+                // Deselect items after copying
+                if(App.ListView) App.ListView.toggleSelectAll(false);
+            },
+
+            copyRow: function(sIdx, iIdx, subIdx = null) {
+                let item = subIdx !== null && subIdx !== 'null' && subIdx !== undefined
+                    ? State.sections[sIdx].items[iIdx].subItems[subIdx]
+                    : State.sections[sIdx].items[iIdx];
+
+                if(!item) return;
+
+                const clone = JSON.parse(JSON.stringify(item));
+                clone.id = 'copy_' + Date.now();
+
+                this._sendCopyRequest(clone);
+            },
+
+            // Helper to send data to Laravel
+            _sendCopyRequest: function(payload) {
+                fetch('/clipboard/copy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ item: payload })
+                }).then(r => r.json()).then(data => {
+                    if(data.success) {
+                        this.items = data.items;
+                        this.render();
+                        if(!this.isOpen) this.toggle();
+                    }
+                });
+            },
+
+            pasteItem: function(clipboardIndex, targetSIdx = -1) {
+                if (!this.items || !this.items[clipboardIndex]) return;
+                const clipboardEntry = JSON.parse(JSON.stringify(this.items[clipboardIndex]));
+                
+                // Find valid section if target is missing
+                let sIdx = parseInt(targetSIdx, 10);
+                if (isNaN(sIdx) || !State.sections[sIdx] || State.sections[sIdx]._virtualSection || State.sections[sIdx].isLocked) {
+                    sIdx = State.sections.findIndex(s => s && !s._pageBreak && !s._virtualSection && !s.isLocked);
+                    if (sIdx === -1) sIdx = App.addSection('Eingefügte Positionen', false);
+                }
+
+                const regenerateIds = (node) => {
+                    node.id = 'pasted_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+                    if (Array.isArray(node.subItems)) node.subItems.forEach(regenerateIds);
+                    if (Array.isArray(node.labor_rows)) node.labor_rows.forEach(l => l.id = Date.now() + Math.floor(Math.random() * 10000));
+                };
+
+                if (!Array.isArray(State.sections[sIdx].items)) State.sections[sIdx].items = [];
+
+                // --- NEW: Handle Bulk Paste ---
+                if (clipboardEntry.is_bulk && Array.isArray(clipboardEntry.items)) {
+                    clipboardEntry.items.forEach(it => {
+                        regenerateIds(it);
+                        State.sections[sIdx].items.push(it);
+                    });
+                } else {
+                    // Handle Single Paste
+                    regenerateIds(clipboardEntry);
+                    State.sections[sIdx].items.push(clipboardEntry);
+                }
+                
+                App.renderQuotePage();
+                if (App.Tabs.current === 'list') App.ListView.render();
+                this.toggle(); 
+            },
+
+            clear: function() {
+                fetch('/clipboard/clear', {
+                    method: 'DELETE',
+                    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+                }).then(() => {
+                    this.items = [];
+                    this.render();
+                });
+            },
+
+            render: function() {
+                const container = document.getElementById('clipboard-items');
+                const badge = document.getElementById('clipboard-badge'); // <-- Grab the badge
+
+                // --- NEW: Update the Badge ---
+                if (badge) {
+                    if (this.items.length > 0) {
+                        badge.innerText = this.items.length;
+                        badge.classList.remove('hidden'); // Show badge
+                    } else {
+                        badge.classList.add('hidden'); // Hide badge if empty
+                    }
+                }
+                // -----------------------------
+
+                if(!container) return;
+
+                if (this.items.length === 0) {
+                    container.innerHTML = '<div class="text-xs text-[#000000] text-center py-4">Zwischenablage ist leer</div>';
+                    return;
+                }
+
+                // Generate Dropdown options for all VALID sections
+                let sectionOptions = State.sections.map((s, idx) => {
+                    if(s && !s._pageBreak && !s._virtualSection && !s.isLocked) {
+                        return `<option value="${idx}">${App.escapeHtml(s.title || 'Abschnitt '+(idx+1))}</option>`;
+                    }
+                    return '';
+                }).join('');
+
+                // Fallback if there are no valid sections (e.g., a brand new empty document)
+                if (sectionOptions.trim() === '') {
+                    sectionOptions = `<option value="-1">+ Neuer Abschnitt</option>`;
+                }
+
+                container.innerHTML = this.items.map((item, idx) => `
+                    <div class="bg-white border border-slate-200 rounded p-2 shadow-sm relative group">
+                        <div class="text-xs font-bold text-[#000000] truncate pr-6">
+                            ${item.is_bulk ? '<i class="fa-solid fa-layer-group text-blue-500 mr-1"></i>' : ''}
+                            ${App.escapeHtml(item.name || 'Unbekannt')}
+                        </div>
+                        <div class="text-[10px] text-slate-500 mt-1 flex justify-between">
+                            <span>${App.escapeHtml(item.article_no || item.kind || 'Artikel')}</span>
+                            <span class="font-bold text-[#93c21c]">${Number(item.price || 0).toLocaleString('de-DE')} €</span>
+                        </div>
+                        <div class="mt-2 flex gap-1">
+                            <select id="paste-sec-${idx}" class="text-[10px] border border-slate-200 rounded px-1 flex-1 outline-none truncate">
+                                ${sectionOptions}
+                            </select>
+                            <button onclick="App.Clipboard.pasteItem(${idx}, document.getElementById('paste-sec-${idx}').value)" class="bg-[#f7fee7] text-[#6b8e12] border border-[#93c21c] px-2 py-1 rounded text-[10px] font-bold hover:bg-[#93c21c] hover:text-white transition">Einfügen</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        };
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            App.Clipboard.init();
+        });
+
+
 // Also update the browser-level protection to be more reliable
 App.Navigation = {
     pendingAction: null,
@@ -12899,26 +19157,37 @@ window.addEventListener('beforeunload', (e) => {
     };
 
         App.loadSavedDocumentIfAvailable = async function () {
-            // 1. Extract parameters safely from State
-            const { 
-                offer_id: offerId, 
-                offer_folder_id: folderId, 
-                load_snapshot: loadSnapshot 
+            const positiveInt = (...values) => {
+                for (const value of values) {
+                    if (value === null || value === undefined || value === '') continue;
+                    const parsed = Number(value);
+                    if (Number.isFinite(parsed) && parsed > 0) return parseInt(parsed, 10);
+                }
+                return null;
+            };
+
+            // Refresh prefill from URL + route bootstrap before loading.
+            State.prefill = {
+                ...(State.prefill || {}),
+                ...(typeof App.getWizardPrefillFromUrl === 'function' ? App.getWizardPrefillFromUrl() : {})
+            };
+
+            const {
+                offer_id: offerId,
+                offer_folder_id: folderId,
+                offer_detail_id: detailId,
+                load_snapshot: loadSnapshot
             } = State.prefill || {};
 
-            if (!offerId && !folderId) return;
+            if (!offerId && !folderId && !detailId) return;
 
             try {
-                // 2. Build URL with query parameters
                 const url = new URL('/offers/document/load', window.location.origin);
                 if (offerId) url.searchParams.set('offer_id', offerId);
                 if (folderId) url.searchParams.set('offer_folder_id', folderId);
-                if (loadSnapshot) url.searchParams.set('load_snapshot', '1');  
+                if (detailId) url.searchParams.set('offer_detail_id', detailId);
+                if (loadSnapshot || State.prefill?.load_snapshot) url.searchParams.set('load_snapshot', '1');
 
-                if (State.prefill?.load_snapshot) {
-                    url.searchParams.set('load_snapshot', '1');
-                }
-                // 3. Fetch Data
                 const res = await fetch(url.toString(), {
                     method: 'GET',
                     headers: { Accept: 'application/json' },
@@ -12931,72 +19200,188 @@ window.addEventListener('beforeunload', (e) => {
                 if (!json.success || !json.found || !json.data) return;
 
                 const data = json.data;
+                const offer = data.offer || {};
+                const folder = data.folder || data.offer_folder || data.folder_data || {};
+                const detail = data.detail || data.offer_detail || {};
+
+                const loadedFolderId = positiveInt(
+                    data.offer_folder_id,
+                    data.folder_id,
+                    detail.offer_folder_id,
+                    folder.id,
+                    folder.offer_folder_id
+                );
+
+                const loadedOfferId = positiveInt(
+                    data.offer_id,
+                    offer.id,
+                    detail.offer_id,
+                    folder.offer_id
+                );
+
+                const loadedDetailId = positiveInt(
+                    data.offer_detail_id,
+                    data.detail_id,
+                    detail.id
+                );
+
+                const loadedCustomerId = positiveInt(
+                    data.customer_id,
+                    offer.customer_id,
+                    folder.customer_id,
+                    offer.customer?.id,
+                    data.customer?.id,
+                    window.OfferDocumentBootstrap?.customer_id
+                );
+
+                const loadedAlternativeId = positiveInt(
+                    data.alternative_id,
+                    offer.alternative_id,
+                    folder.alternative_id,
+                    offer.alternative?.id,
+                    data.alternative?.id,
+                    window.OfferDocumentBootstrap?.alternative_id
+                );
+
+                const loadedProductId = positiveInt(
+                    data.product_id,
+                    offer.product_id,
+                    folder.product_id,
+                    offer.product?.id,
+                    data.product?.id,
+                    window.OfferDocumentBootstrap?.product_id
+                );
+
+                State.prefill = {
+                    ...(State.prefill || {}),
+                    offer_id: loadedOfferId || offerId || State.prefill?.offer_id || null,
+                    offer_folder_id: loadedFolderId || folderId || State.prefill?.offer_folder_id || null,
+                    offer_detail_id: loadedDetailId || detailId || State.prefill?.offer_detail_id || null,
+                    customer_id: loadedCustomerId || State.prefill?.customer_id || null,
+                    alternative_id: loadedAlternativeId || State.prefill?.alternative_id || null,
+                    product_id: loadedProductId || State.prefill?.product_id || null,
+                    load_snapshot: !!(loadSnapshot || State.prefill?.load_snapshot)
+                };
+
+                window.OfferSupplierConfig = window.OfferSupplierConfig || {};
+                if (State.prefill.offer_folder_id) window.OfferSupplierConfig.folderId = State.prefill.offer_folder_id;
+                if (State.prefill.offer_id) window.OfferSupplierConfig.offerId = State.prefill.offer_id;
 
                 State.docStatus = String(data.document_status || data.status || data.documentStatus || '').trim().toLowerCase();
                 State.isSnapshot = data.is_snapshot === true;
-                // 4. Update Global State
                 State.loadedSavedDetail = true;
-                State.sections = Array.isArray(data.sections) ? data.sections : [];
-                State.placedImages = Array.isArray(data.placed_images) ? data.placed_images : [];
+
+                const requestedFolderId = folderId ? Number(folderId) : null;
+                const requestedDetailId = detailId ? Number(detailId) : null;
+                const exactDetailMatched = !requestedDetailId || (loadedDetailId && loadedDetailId === requestedDetailId);
+                const exactFolderMatched = !requestedFolderId || (loadedFolderId && loadedFolderId === requestedFolderId);
+                const canLoadRows = !!loadSnapshot || exactDetailMatched && exactFolderMatched;
+
+                // Important: a new folder/detail must never inherit sections from another folder/version.
+                // If the backend returns a detail that does not match the requested folder/detail, start with a clean list.
+                State.sections = canLoadRows && Array.isArray(data.sections) ? data.sections : [];
+                State.placedImages = canLoadRows && Array.isArray(data.placed_images) ? data.placed_images : [];
+
+                if (!canLoadRows) {
+                    console.warn('[Offer Load] Ignored stale document rows because loaded detail/folder did not match current context.', {
+                        requestedFolderId,
+                        requestedDetailId,
+                        loadedFolderId,
+                        loadedDetailId
+                    });
+                }
+
+                State.sections.forEach(sec => {
+                    (sec.items || []).forEach(it => {
+                        if (it.kind === 'labor' && it.unit === 'Pers.') {
+                            it.unit = 'Stk';
+                            it.measure = 'Stk';
+                            it.price_unit_label = 'Stk';
+                        }
+                        (it.subItems || []).forEach(sub => {
+                            if (sub.kind === 'labor' && sub.unit === 'Pers.') {
+                                sub.unit = 'Stk';
+                                sub.measure = 'Stk';
+                                sub.price_unit_label = 'Stk';
+                            }
+                        });
+                    });
+                });
+
                 State.brandColor = data.brand_color || '#93c21c';
                 State.brandMode = data.brand_mode || 'text';
                 State.brandLogoUrl = data.brand_logo_url || '';
                 State.companyName = data.company_name || 'SOLAR ASPEKT';
                 State.taxRate = Number(data.tax_rate || 19);
                 State.coverTextHtml = data.cover_text_html || data.cover_text || '';
+                State.mainTitleHtml = data.main_title || data.main_title_html || '';
 
-                // Helper for safe DOM updates
                 const updateEl = (id, prop, value) => {
                     const el = document.getElementById(id);
                     if (el) el[prop] = value;
                 };
- 
-               // 5. Update Document ID (AUF-XXX vs Offer No vs Offer ID)
+
                 if (data.order_number && !State.isSnapshot) {
-                    // ✅ Live deal: Use Order Number (AUF-XXX)
                     State.offerId = String(data.order_number);
-                } else if (data.offer_no) {
-                    // ✅ Offer/Snapshot: Prefer offer_no (SA-AGXXXX)
-                    State.offerId = String(data.offer_no);
-                } else if (data.offer_id) {
-                    // ✅ Fallback: Just use the raw offer_id
-                    State.offerId = String(data.offer_id);
+                } else if (data.offer_no || offer.offer_no) {
+                    State.offerId = String(data.offer_no || offer.offer_no);
+                } else if (State.prefill.offer_id) {
+                    State.offerId = String(State.prefill.offer_id);
                 }
 
-                // Update the input field in the DOM
                 updateEl('doc-offer-id', 'value', State.offerId);
 
-                // 6. Update Customer Information
-                if (data.offer?.customer) {
-                    const cust = data.offer.customer;
-                    State.customer = cust;
-                    State.custId = cust.customer_no || '-';
+                const customerFromResponse = data.customer || offer.customer || window.OfferDocumentBootstrap?.customer || null;
+                if (customerFromResponse || loadedCustomerId) {
+                    const cust = customerFromResponse || { id: loadedCustomerId };
+                    State.customer = {
+                        ...(State.customer || {}),
+                        ...cust,
+                        id: positiveInt(cust.id, loadedCustomerId),
+                    };
+                    State.custId = State.customer.customer_no || State.custId || '-';
 
-                    updateEl('doc-cust-name', 'innerText', cust.display_name || cust.name || '');
-                    updateEl('doc-cust-addr', 'innerHTML', `${cust.street || ''}<br>${cust.postcode || ''} ${cust.city || ''}`);
+                    const displayName = State.customer.display_name
+                        || State.customer.firma
+                        || [State.customer.name, State.customer.lastname].filter(Boolean).join(' ').trim()
+                        || (loadedCustomerId ? `Kunde #${loadedCustomerId}` : '');
+
+                    updateEl('doc-cust-name', 'innerText', displayName);
+                    updateEl('doc-cust-addr', 'innerHTML', `${State.customer.street || ''}<br>${State.customer.postcode || ''} ${State.customer.city || ''}`);
                     updateEl('doc-cust-id', 'value', State.custId);
                 }
 
-                // 7. Update Cover Text & Branding Inputs
-                if (State.coverTextHtml) {
-                    updateEl('doc-cover-text', 'innerHTML', State.coverTextHtml);
+                if (loadedAlternativeId || loadedProductId) {
+                    const productLabel = offer.product?.article_group || offer.product?.name || offer.product?.title || data.product?.name || 'Ausgewähltes Gewerk';
+                    State.object = {
+                        ...(State.object || {}),
+                        id: loadedAlternativeId || State.object?.id || null,
+                        alternative_id: loadedAlternativeId || State.object?.alternative_id || null,
+                        product_id: loadedProductId || State.object?.product_id || null,
+                        items: [{
+                            ...(State.object?.items?.[0] || {}),
+                            alternative_id: loadedAlternativeId || State.object?.items?.[0]?.alternative_id || null,
+                            product_id: loadedProductId || State.object?.items?.[0]?.product_id || null,
+                            label: productLabel
+                        }],
+                        name: productLabel
+                    };
                 }
+
+                if (State.coverTextHtml) updateEl('doc-cover-text', 'innerHTML', State.coverTextHtml);
+                if (State.mainTitleHtml) updateEl('doc-main-title', 'innerHTML', State.mainTitleHtml);
 
                 updateEl('wiz-brand-color', 'value', State.brandColor);
                 updateEl('wiz-brand-name', 'value', State.companyName);
-                if (State.brandLogoUrl) {
-                    updateEl('wiz-brand-logo', 'value', State.brandLogoUrl);
-                }
+                if (State.brandLogoUrl) updateEl('wiz-brand-logo', 'value', State.brandLogoUrl);
 
                 const modeRadio = document.querySelector(`input[name="wiz-brand-mode"][value="${State.brandMode}"]`);
                 if (modeRadio) modeRadio.checked = true;
 
-                // 8. Trigger dependent UI updates
                 App.updateBranding();
                 App.startQuote();
                 App.startPresenceTracking();
                 App.applyLockState();
-
             } catch (error) {
                 console.error('loadSavedDocumentIfAvailable failed:', error);
             }
@@ -13408,20 +19793,20 @@ window.addEventListener('beforeunload', (e) => {
                     <h4 class="font-bold text-yellow-500 text-sm mb-2 flex items-center gap-2"><i class="fa-solid fa-gear"></i> Basis-Faktoren</h4>
                     <div class="space-y-2 text-xs">
                         <div class="bg-slate-800 p-2 rounded border border-slate-600 mb-2">
-                            <span class="block mb-1 text-slate-400">Umsatzsteuer-Modus:</span>
+                            <span class="block mb-1 text-[#000000]">Umsatzsteuer-Modus:</span>
                             <div class="flex gap-1">
                                 <button onclick="App.Settings.update('vatMode', 0)" class="flex-1 py-1 rounded text-[10px] ${c.vatMode === 0 ? 'bg-green-600 text-white' : 'bg-slate-700 text-slate-300'}">0% (PV)</button>
                                 <button onclick="App.Settings.update('vatMode', 19)" class="flex-1 py-1 rounded text-[10px] ${c.vatMode === 19 ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'}">19% (Std)</button>
                             </div>
                         </div>
                         <div class="flex justify-between items-center"><span>Gemeinkosten</span>
-                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.overhead}" onchange="App.Settings.update('overhead', this.value)"> %</div>
+                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.overhead}" onchange="App.Settings.update('overhead', this.value)"> %</div>
                         </div>
                         <div class="flex justify-between items-center"><span>Vertriebs-Provision</span>
-                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.commission}" onchange="App.Settings.update('commission', this.value)"> %</div>
+                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.commission}" onchange="App.Settings.update('commission', this.value)"> %</div>
                         </div>
                         <div class="flex justify-between items-center border-t border-slate-200 pt-2 mt-2"><span>Mindestgewinn</span>
-                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.minProfit}" onchange="App.Settings.update('minProfit', this.value)"> %</div>
+                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.minProfit}" onchange="App.Settings.update('minProfit', this.value)"> %</div>
                         </div>
                     </div>
                 </div>
@@ -13429,15 +19814,15 @@ window.addEventListener('beforeunload', (e) => {
                 <div>
                     <h4 class="font-bold text-indigo-400 text-sm mb-2 flex items-center gap-2"><i class="fa-solid fa-percent"></i> Standard-Margen</h4>
                     <div class="space-y-2 text-xs">
-                        <p class="text-[10px] text-slate-400 mb-2 italic">Standard-Vorgaben für neue Positionen.</p>
+                        <p class="text-[10px] text-[#000000] mb-2 italic">Standard-Vorgaben für neue Positionen.</p>
                         <div class="flex justify-between items-center"><span>Material</span>
-                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.margins?.material || 20}" onchange="App.Settings.update('marginMaterial', this.value)"> %</div>
+                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.margins?.material || 20}" onchange="App.Settings.update('marginMaterial', this.value)"> %</div>
                         </div>
                         <div class="flex justify-between items-center"><span>Lohn / Montage</span>
-                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.margins?.labor || 50}" onchange="App.Settings.update('marginLabor', this.value)"> %</div>
+                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.margins?.labor || 50}" onchange="App.Settings.update('marginLabor', this.value)"> %</div>
                         </div>
                         <div class="flex justify-between items-center"><span>Fremdleistung</span>
-                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.margins?.external || 15}" onchange="App.Settings.update('marginExternal', this.value)"> %</div>
+                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.margins?.external || 15}" onchange="App.Settings.update('marginExternal', this.value)"> %</div>
                         </div>
                     </div>
                 </div>
@@ -13450,13 +19835,13 @@ window.addEventListener('beforeunload', (e) => {
                         </div>
                         <div class="border-t border-slate-200 my-1 pt-1"></div>
                         <div class="flex justify-between items-center"><span class="flex items-center gap-1">Fracht/Logistik <input type="checkbox" class="accent-green-500" ${c.logistics?.freight?.active ? 'checked' : ''} onchange="App.Settings.update('freightActive', this.checked)"></span>
-                            <div class="flex items-center gap-1"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.logistics?.freight?.val || 0}" onchange="App.Settings.update('freightVal', this.value)"> €</div>
+                            <div class="flex items-center gap-1"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.logistics?.freight?.val || 0}" onchange="App.Settings.update('freightVal', this.value)"> €</div>
                         </div>
                         <div class="flex justify-between items-center"><span class="flex items-center gap-1">Fahrzeugpauschale <input type="checkbox" class="accent-green-500" ${c.logistics?.vehicle?.active ? 'checked' : ''} onchange="App.Settings.update('vehicleActive', this.checked)"></span>
-                            <div class="flex items-center gap-1"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.logistics?.vehicle?.val || 0}" onchange="App.Settings.update('vehicleVal', this.value)"> €</div>
+                            <div class="flex items-center gap-1"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.logistics?.vehicle?.val || 0}" onchange="App.Settings.update('vehicleVal', this.value)"> €</div>
                         </div>
                         <div class="flex justify-between items-center"><span class="flex items-center gap-1">Maschinenpauschale <input type="checkbox" class="accent-green-500" ${c.logistics?.machine?.active ? 'checked' : ''} onchange="App.Settings.update('machineActive', this.checked)"></span>
-                            <div class="flex items-center gap-1"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.logistics?.machine?.val || 0}" onchange="App.Settings.update('machineVal', this.value)"> €</div>
+                            <div class="flex items-center gap-1"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.logistics?.machine?.val || 0}" onchange="App.Settings.update('machineVal', this.value)"> €</div>
                         </div>
                     </div>
                 </div>
@@ -13465,10 +19850,10 @@ window.addEventListener('beforeunload', (e) => {
                     <h4 class="font-bold text-red-400 text-sm mb-2 flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> Risiko & Wagnis</h4>
                     <div class="space-y-2 text-xs">
                         <div class="flex justify-between items-center"><span>Kalk. Wagnis</span>
-                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.risk}" onchange="App.Settings.update('risk', this.value)"> %</div>
+                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.risk}" onchange="App.Settings.update('risk', this.value)"> %</div>
                         </div>
                         <div class="flex justify-between items-center"><span>Vorfinanzierung (Zins)</span>
-                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.finance}" onchange="App.Settings.update('finance', this.value)"> %</div>
+                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.finance}" onchange="App.Settings.update('finance', this.value)"> %</div>
                         </div>
                     </div>
                 </div>
@@ -13477,10 +19862,10 @@ window.addEventListener('beforeunload', (e) => {
                     <h4 class="font-bold text-blue-400 text-sm mb-2 flex items-center gap-2"><i class="fa-solid fa-landmark"></i> Steuern & Kunde</h4>
                     <div class="space-y-2 text-xs">
                         <div class="flex justify-between items-center"><span>Kalk. Ertragssteuer</span>
-                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.tax}" onchange="App.Settings.update('tax', this.value)"> %</div>
+                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.tax}" onchange="App.Settings.update('tax', this.value)"> %</div>
                         </div>
                         <div class="flex justify-between items-center pt-2 border-t border-slate-700 mt-1"><span>Kunden-Skonto</span>
-                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-slate-800" step="any" value="${c.custDiscount}" onchange="App.Settings.update('custDiscount', this.value)"> %</div>
+                            <div class="flex items-center"><input type="number" class="w-14 bg-white border border-slate-300 rounded px-2 py-1 text-right text-[#000000]" step="any" value="${c.custDiscount}" onchange="App.Settings.update('custDiscount', this.value)"> %</div>
                         </div>
                     </div>
                 </div>
@@ -13665,11 +20050,11 @@ window.addEventListener('beforeunload', (e) => {
             marginPercent: defaultMargin,
             margin: defaultMargin,
             qty: 1,
-            unit: 'Stk',
-            measure: 'Stk',
+            unit: 'Stk.',
+            measure: 'Stk.',
             price_unit_value: 1,
-            price_unit_label: 'Stk',
-            price_unit_text: '1 Stk',
+            price_unit_label: 'Stk.',
+            price_unit_text: '1 Stk.',
             kind: 'article',
             status: 'normal',
             active: true,         // Ensure it's visible
@@ -13705,11 +20090,11 @@ window.addEventListener('beforeunload', (e) => {
             marginPercent: defaultMargin,
             margin: defaultMargin,
             qty: 1,
-            unit: 'Stk',
-            measure: 'Stk',
+            unit: 'Stk.',
+            measure: 'Stk.',
             price_unit_value: 1,
-            price_unit_label: 'Stk',
-            price_unit_text: '1 Stk',
+            price_unit_label: 'Stk.',
+            price_unit_text: '1 Stk.',
             kind: 'article',
             status: 'normal',
             subItems: [],
@@ -13785,6 +20170,8 @@ window.addEventListener('beforeunload', (e) => {
                             itemGross += App.calcItemGross(sub);
                         }
                     });
+                    // FIX: Replaced the undefined 'num()' with standard 'Number()'
+                    itemGross *= Number(it.qty || 1);
                 } else {
                     itemGross = App.calcItemGross(it);
                 }
@@ -13831,9 +20218,9 @@ window.addEventListener('beforeunload', (e) => {
             <div class="flex items-center justify-between gap-4 py-2 border-b border-slate-100">
                 <div class="flex items-center gap-3 min-w-0">
                     <span class="list-pill list-pill-slate">Abschnitt</span>
-                    <span class="font-bold text-slate-800">${App.escapeHtml(sec.label)}</span>
+                    <span class="font-bold text-[#000000]">${App.escapeHtml(sec.label)}</span>
                 </div>
-                <span class=" font-bold text-slate-700">${App.money(sec.net)} €</span>
+                <span class=" font-bold text-[#000000]">${App.money(sec.net)} €</span>
             </div>
         `).join('');
 
@@ -13843,23 +20230,23 @@ window.addEventListener('beforeunload', (e) => {
         box.innerHTML = `
             <div class="rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden">
                 <div class="px-4 py-3 border-b border-slate-200 bg-white">
-                    <div class="text-xs font-black text-dark-600 uppercase tracking-wider">Zusammenstellung</div>
-                    <div class="text-lg font-black text-slate-800">Abschnitte</div>
+                    <div class="text-xs font-black text-[#000000] uppercase tracking-wider">Zusammenstellung</div>
+                    <div class="text-lg font-black text-[#000000]">Abschnitte</div>
                 </div>
 
                 <div class="p-4">
-                    ${rowHtml || `<div class="text-slate-400">Keine Abschnitte vorhanden</div>`}
+                    ${rowHtml || `<div class="text-[#000000]">Keine Abschnitte vorhanden</div>`}
 
                     <div class="mt-4 pt-4 border-t-2 border-slate-800 space-y-2">
                         <div class="flex justify-between font-black text-slate-900">
                             <span>Summe Zusammenstellung Abschnitte</span>
                             <span class="">${App.money(sum.subtotal)} €</span>
                         </div>
-                        <div class="flex justify-between text-slate-700">
+                        <div class="flex justify-between text-[#000000]">
                             <span>Nettogesamtpreis</span>
                             <span class="">${App.money(sum.netTotal)} €</span>
                         </div>
-                        <div class="flex justify-between text-slate-700">
+                        <div class="flex justify-between text-[#000000]">
                             <span>Umsatzsteuer ${sum.vatRate.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%</span>
                             <span class="">${App.money(sum.vatValue)} €</span>
                         </div>
@@ -14149,6 +20536,15 @@ window.addEventListener('beforeunload', (e) => {
                             lineMatSales += subVK;
                         }
                     });
+                    
+                    // FIX: Multiply the aggregated sub-item totals by the main item's quantity
+                    const mainQty = num(it.qty, 1);
+                    lineVK *= mainQty;
+                    lineEK *= mainQty;
+                    lineLaborSales *= mainQty;
+                    lineMatSales *= mainQty;
+                    lineHours *= mainQty;
+                    
                 } else {
                     const qty = it.isPauschal ? 1 : num(it.qty, 1);
                     const vk = num(it.price);
@@ -14331,11 +20727,11 @@ window.addEventListener('beforeunload', (e) => {
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-2 mt-2 mx-2">
                 <div class="bg-slate-100 p-3 border-b border-slate-200 flex justify-between items-center cursor-pointer hover:bg-slate-200 transition-colors"
                     onclick="App.ListView.toggleOpen('${key}')">
-                    <h3 class="font-bold text-slate-700 text-sm flex items-center gap-2 uppercase tracking-wide">
+                    <h3 class="font-bold text-[#000000] text-sm flex items-center gap-2 uppercase tracking-wide">
                         <i class="fa-solid fa-chart-line w-4 h-4 text-blue-600"></i>
                         Analyse &amp; Controlling
                     </h3>
-                    <i class="fa-solid fa-chevron-up w-4 h-4 text-dark-600 transition-transform ${chevronCls}"></i>
+                    <i class="fa-solid fa-chevron-up w-4 h-4 text-[#000000] transition-transform ${chevronCls}"></i>
                 </div>
 
                 <div class="${isPanelOpen ? '' : 'hidden'}">
@@ -14344,37 +20740,37 @@ window.addEventListener('beforeunload', (e) => {
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                             <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-                                <h5 class="font-bold text-slate-700 mb-3 flex items-center gap-2 text-sm uppercase">
+                                <h5 class="font-bold text-[#000000] mb-3 flex items-center gap-2 text-sm uppercase">
                                     <i class="fa-solid fa-chart-pie w-4 h-4 text-blue-600"></i>
                                     Split-Analyse
                                 </h5>
 
                                 <div class="mb-3 pb-3 border-b border-slate-100">
-                                    <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                                    <div class="flex justify-between text-xs font-semibold text-[#000000] mb-1">
                                         <span>Material &amp; Sonst.</span>
                                         <span>${money(matSales + otherSales)}</span>
                                     </div>
-                                    <div class="flex justify-between text-[10px] text-slate-400">
+                                    <div class="flex justify-between text-[10px] text-[#000000]">
                                         <span>Anteil am Umsatz: ${pct(matShare + otherShare)}</span>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                                    <div class="flex justify-between text-xs font-semibold text-[#000000] mb-1">
                                         <span>Lohn &amp; Montage</span>
                                         <span>${money(laborSales)}</span>
                                     </div>
-                                    <div class="flex justify-between text-[10px] text-slate-400">
+                                    <div class="flex justify-between text-[10px] text-[#000000]">
                                         <span>Anteil am Umsatz: ${pct(laborShare)}</span>
                                     </div>
                                 </div>
 
                                 <div class="mt-3 pt-3 border-t border-slate-100 space-y-2">
-                                    <div class="flex justify-between text-xs font-bold text-slate-700 bg-slate-50 p-1 rounded">
+                                    <div class="flex justify-between text-xs font-bold text-[#000000] bg-slate-50 p-1 rounded">
                                         <span>DB 1</span>
                                         <div class="text-right">
                                             <div>${money(db1)}</div>
-                                            <div class="text-[9px] font-normal text-slate-400">${pct(db1Pct)}</div>
+                                            <div class="text-[9px] font-normal text-[#000000]">${pct(db1Pct)}</div>
                                         </div>
                                     </div>
 
@@ -14391,24 +20787,24 @@ window.addEventListener('beforeunload', (e) => {
                             </div>
 
                             <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-                                <h5 class="font-bold text-slate-700 mb-3 flex items-center gap-2 text-sm uppercase">
+                                <h5 class="font-bold text-[#000000] mb-3 flex items-center gap-2 text-sm uppercase">
                                     <i class="fa-solid fa-clock w-4 h-4 text-orange-600"></i>
                                     Stunden-Performance
                                 </h5>
 
                                 <div class="space-y-3">
                                     <div class="flex justify-between items-center bg-orange-50 p-2 rounded">
-                                        <span class="text-xs text-slate-600">Gesamtstunden</span>
+                                        <span class="text-xs text-[#000000]">Gesamtstunden</span>
                                         <span class="font-bold">${hours.toFixed(1)} h</span>
                                     </div>
 
                                     <div>
-                                        <div class="flex justify-between text-xs text-dark-600 mb-1">
+                                        <div class="flex justify-between text-xs text-[#000000] mb-1">
                                             Umsatz pro Stunde (Netto)
                                         </div>
                                         <div class="flex justify-between items-baseline">
-                                            <span class="text-xs text-slate-400">Ø Satz</span>
-                                            <span class="font-bold text-slate-800">${money(salesPerHour)} /h</span>
+                                            <span class="text-xs text-[#000000]">Ø Satz</span>
+                                            <span class="font-bold text-[#000000]">${money(salesPerHour)} /h</span>
                                         </div>
                                     </div>
 
@@ -14417,7 +20813,7 @@ window.addEventListener('beforeunload', (e) => {
                                             Reingewinn pro Stunde (DB3)
                                         </div>
                                         <div class="flex justify-between items-baseline">
-                                            <span class="text-xs text-slate-400">Nach Risiko/Zins</span>
+                                            <span class="text-xs text-[#000000]">Nach Risiko/Zins</span>
                                             <span class="font-bold ${profitHourTextClass}">
                                                 ${money(profitPerHour)} /h
                                             </span>
@@ -14427,27 +20823,27 @@ window.addEventListener('beforeunload', (e) => {
                             </div>
 
                             <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200 ring-1 ring-blue-100">
-                                <h5 class="font-bold text-slate-700 mb-3 flex items-center gap-2 text-sm uppercase">
+                                <h5 class="font-bold text-[#000000] mb-3 flex items-center gap-2 text-sm uppercase">
                                     <i class="fa-solid fa-money-bill-wave w-4 h-4 text-green-600"></i>
                                     Finanz-Dashboard
                                 </h5>
 
                                 <div class="space-y-1 text-sm">
                                     <div class="flex justify-between">
-                                        <span class="text-dark-600 text-xs">Umsatz Netto</span>
+                                        <span class="text-[#000000] text-xs">Umsatz Netto</span>
                                         <span class="font-medium">${money(sales)}</span>
                                     </div>
 
                                     <div class="flex justify-between text-xs mt-1">
-                                        <span class="text-slate-400">./. EK Listenpreis</span>
-                                        <span class="text-slate-400">-${money(ekSum)}</span>
+                                        <span class="text-[#000000]">./. EK Listenpreis</span>
+                                        <span class="text-[#000000]">-${money(ekSum)}</span>
                                     </div>
 
                                     <div class="border-t border-slate-100 my-1 pt-1"></div>
 
                                     <div class="bg-slate-50 p-2 rounded border border-slate-100 mt-2">
                                         <div class="flex justify-between items-center mb-1">
-                                            <span class="font-bold text-slate-700 text-xs uppercase">DB 3 (EBIT)</span>
+                                            <span class="font-bold text-[#000000] text-xs uppercase">DB 3 (EBIT)</span>
                                             <span class="font-bold ${isDb3Bad ? 'text-red-600' : 'text-green-600'}">
                                                 ${money(db3)}
                                             </span>
@@ -14458,7 +20854,7 @@ window.addEventListener('beforeunload', (e) => {
                                                 <span>Netto-Gewinn</span>
                                                 <span>${money(netProfit)}</span>
                                             </div>
-                                            <div class="flex justify-between text-[10px] text-dark-600 mt-1">
+                                            <div class="flex justify-between text-[10px] text-[#000000] mt-1">
                                                 <span>Ertragssteuer</span>
                                                 <span>${money(taxVal)}</span>
                                             </div>
@@ -14473,7 +20869,7 @@ window.addEventListener('beforeunload', (e) => {
 
                             <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between shadow-sm">
                                 <div class="flex items-center justify-between mb-2">
-                                    <h6 class="text-[10px] font-bold text-dark-600 uppercase flex items-center gap-1">
+                                    <h6 class="text-[10px] font-bold text-[#000000] uppercase flex items-center gap-1">
                                         <i class="fa-solid fa-arrow-trend-up w-3 h-3"></i> Ertrags-Wasserfall
                                     </h6>
                                     <span class="text-[10px] text-blue-600">Umsatz/Profit</span>
@@ -14482,30 +20878,30 @@ window.addEventListener('beforeunload', (e) => {
                                 <div class="flex items-end gap-2 h-20 w-full mt-2">
                                     <div class="flex-1 flex flex-col items-center gap-1 group">
                                         <div class="w-full rounded-t transition-all duration-500 bg-slate-300" title="Umsatz: ${money(sales)}" style="height:${barHeight(sales)};"></div>
-                                        <span class="text-[8px] text-slate-400 uppercase truncate w-full text-center">Umsatz</span>
+                                        <span class="text-[8px] text-[#000000] uppercase truncate w-full text-center">Umsatz</span>
                                     </div>
                                     <div class="flex-1 flex flex-col items-center gap-1 group">
                                         <div class="w-full rounded-t transition-all duration-500 bg-slate-300" title="Kosten (EK): ${money(ekSum)}" style="height:${barHeight(ekSum)};"></div>
-                                        <span class="text-[8px] text-slate-400 uppercase truncate w-full text-center">Kosten</span>
+                                        <span class="text-[8px] text-[#000000] uppercase truncate w-full text-center">Kosten</span>
                                     </div>
                                     <div class="flex-1 flex flex-col items-center gap-1 group">
                                         <div class="w-full rounded-t transition-all duration-500 bg-slate-300" title="DB1: ${money(db1)}" style="height:${barHeight(db1)};"></div>
-                                        <span class="text-[8px] text-slate-400 uppercase truncate w-full text-center">DB1</span>
+                                        <span class="text-[8px] text-[#000000] uppercase truncate w-full text-center">DB1</span>
                                     </div>
                                     <div class="flex-1 flex flex-col items-center gap-1 group">
                                         <div class="w-full rounded-t transition-all duration-500 ${db2BarClass}" title="DB2: ${money(db2)}" style="height:${barHeight(db2)};"></div>
-                                        <span class="text-[8px] text-slate-400 uppercase truncate w-full text-center">DB2</span>
+                                        <span class="text-[8px] text-[#000000] uppercase truncate w-full text-center">DB2</span>
                                     </div>
                                     <div class="flex-1 flex flex-col items-center gap-1 group">
                                         <div class="w-full rounded-t transition-all duration-500 ${netBarClass}" title="Netto: ${money(netProfit)}" style="height:${barHeight(netProfit)};"></div>
-                                        <span class="text-[8px] text-slate-400 uppercase truncate w-full text-center">Netto</span>
+                                        <span class="text-[8px] text-[#000000] uppercase truncate w-full text-center">Netto</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
                                 <div class="flex items-center justify-between mb-1">
-                                    <h6 class="text-[10px] font-bold text-dark-600 uppercase flex items-center gap-1">
+                                    <h6 class="text-[10px] font-bold text-[#000000] uppercase flex items-center gap-1">
                                         <i class="fa-solid fa-box-open w-3 h-3"></i> Umsatz-Mix
                                     </h6>
                                     <i class="fa-solid fa-bolt w-3 h-3 text-yellow-500"></i>
@@ -14518,29 +20914,29 @@ window.addEventListener('beforeunload', (e) => {
                                         <circle cx="16" cy="16" r="14" fill="transparent" stroke="#f59e0b" stroke-width="4" stroke-dasharray="${dashC} 100" stroke-dashoffset="-${dashA + dashB}"></circle>
                                     </svg>
                                     <div class="absolute inset-0 flex items-center justify-center flex-col">
-                                        <span class="text-[10px] font-bold text-slate-700">${pct(matShare)}</span>
-                                        <span class="text-[7px] text-slate-400 uppercase">Material</span>
+                                        <span class="text-[10px] font-bold text-[#000000]">${pct(matShare)}</span>
+                                        <span class="text-[7px] text-[#000000] uppercase">Material</span>
                                     </div>
                                 </div>
 
-                                <div class="mt-3 space-y-1 text-[10px] text-slate-600">
-                                    <div class="flex justify-between"><span class="text-dark-600">Material</span><span>${money(matSales)}</span></div>
-                                    <div class="flex justify-between"><span class="text-dark-600">Lohn</span><span>${money(laborSales)}</span></div>
-                                    <div class="flex justify-between"><span class="text-dark-600">Sonst.</span><span>${money(otherSales)}</span></div>
+                                <div class="mt-3 space-y-1 text-[10px] text-[#000000]">
+                                    <div class="flex justify-between"><span class="text-[#000000]">Material</span><span>${money(matSales)}</span></div>
+                                    <div class="flex justify-between"><span class="text-[#000000]">Lohn</span><span>${money(laborSales)}</span></div>
+                                    <div class="flex justify-between"><span class="text-[#000000]">Sonst.</span><span>${money(otherSales)}</span></div>
                                 </div>
                             </div>
 
                             <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                                 <div class="flex items-center justify-between mb-4">
-                                    <h6 class="text-[10px] font-bold text-dark-600 uppercase flex items-center gap-1">
+                                    <h6 class="text-[10px] font-bold text-[#000000] uppercase flex items-center gap-1">
                                         <i class="fa-solid fa-bullseye w-3 h-3"></i> Margen-Monitor
                                     </h6>
                                     <div class="w-2 h-2 rounded-full animate-pulse ${isMarginBad ? 'bg-red-500' : 'bg-emerald-500'}"></div>
                                 </div>
 
                                 <div class="flex-1 flex flex-col items-center justify-center">
-                                    <div class="text-2xl font-bold text-slate-800">${pct(marginTotalPct)}</div>
-                                    <div class="text-[9px] text-slate-400 text-center uppercase tracking-tighter mt-1">
+                                    <div class="text-2xl font-bold text-[#000000]">${pct(marginTotalPct)}</div>
+                                    <div class="text-[9px] text-[#000000] text-center uppercase tracking-tighter mt-1">
                                         Gesamtmarge vs. ${targetMargin.toFixed(0)}% Ziel
                                     </div>
 
@@ -14556,7 +20952,7 @@ window.addEventListener('beforeunload', (e) => {
 
                             <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                                 <div class="flex items-center justify-between mb-2">
-                                    <h6 class="text-[10px] font-bold text-dark-600 uppercase flex items-center gap-1">
+                                    <h6 class="text-[10px] font-bold text-[#000000] uppercase flex items-center gap-1">
                                         <i class="fa-solid fa-chart-column w-3 h-3"></i> Effizienz-Index
                                     </h6>
                                 </div>
@@ -14564,7 +20960,7 @@ window.addEventListener('beforeunload', (e) => {
                                 <div class="space-y-3 mt-1">
                                     <div>
                                         <div class="flex justify-between text-[9px] mb-1">
-                                            <span class="text-dark-600 uppercase">Umsatz / h</span>
+                                            <span class="text-[#000000] uppercase">Umsatz / h</span>
                                             <span class="font-bold">${money(salesPerHour)}</span>
                                         </div>
                                         <div class="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
@@ -14574,7 +20970,7 @@ window.addEventListener('beforeunload', (e) => {
 
                                     <div>
                                         <div class="flex justify-between text-[9px] mb-1">
-                                            <span class="text-dark-600 uppercase">Gewinn / h</span>
+                                            <span class="text-[#000000] uppercase">Gewinn / h</span>
                                             <span class="font-bold ${profitHourTextClass}">${money(profitPerHour)}</span>
                                         </div>
                                         <div class="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
@@ -14582,8 +20978,8 @@ window.addEventListener('beforeunload', (e) => {
                                         </div>
                                     </div>
 
-                                    <div class="pt-2 border-t border-slate-200 text-[10px] text-dark-600">
-                                        DB3: <b class=" ${isDb3Bad ? 'text-red-600' : 'text-slate-700'}">${money(db3)}</b>
+                                    <div class="pt-2 border-t border-slate-200 text-[10px] text-[#000000]">
+                                        DB3: <b class=" ${isDb3Bad ? 'text-red-600' : 'text-[#000000]'}">${money(db3)}</b>
                                         <span class="text-slate-300 mx-1">•</span>
                                         Netto: <b class=" ${isProfitBad ? 'text-blue-600' : 'text-green-600'}">${money(netProfit)}</b>
                                     </div>
@@ -14827,13 +21223,12 @@ window.addEventListener('beforeunload', (e) => {
     };
 
 
-    App.recalcLaborParent = function (sIdx, iIdx, subIdx) {
+   App.recalcLaborParent = function (sIdx, iIdx, subIdx) {
         const parent = State.sections?.[sIdx]?.items?.[iIdx]?.subItems?.[subIdx];
         if (!parent || !Array.isArray(parent.labor_rows)) return;
 
         const rows = parent.labor_rows;
 
-        let totalQty = 0;
         let totalVk = 0;
         let totalEk = 0;
 
@@ -14842,17 +21237,20 @@ window.addEventListener('beforeunload', (e) => {
             const rate = Number(row.rate || 0);
             const ek = Number(row.ek || 0);
 
-            totalQty += qty;
             totalVk += qty * rate;
             totalEk += qty * ek;
 
             row.total = qty * rate;
         });
 
-        parent.qty = totalQty || 1;
-        parent.price = totalQty > 0 ? (totalVk / totalQty) : 0;
+        const rowCount = rows.length;
+        parent.qty = rowCount || 1;
+        // Setzt die Einheit dynamisch auf Personen, wenn es auf dem alten Std/Stk Fehler hing
+        parent.unit = 'Stk';
+        
+        parent.price = rowCount > 0 ? (totalVk / rowCount) : 0;
         parent.rate = parent.price;
-        parent.ek = totalQty > 0 ? (totalEk / totalQty) : 0;
+        parent.ek = rowCount > 0 ? (totalEk / rowCount) : 0;
         parent.purchase_price = parent.ek;
     };
 
@@ -15075,7 +21473,7 @@ window.addEventListener('beforeunload', (e) => {
             colContainer.innerHTML = Object.entries(this.colMap).map(([key, label]) => `
                 <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-slate-100 rounded">
                     <input type="checkbox" id="pref_col_${key}" class="accent-[#93c21c]" ${cols[key] ? 'checked' : ''}>
-                    <span class="text-xs text-slate-700">${label}</span>
+                    <span class="text-xs text-[#000000]">${label}</span>
                 </label>
             `).join('');
 
@@ -15134,14 +21532,14 @@ window.addEventListener('beforeunload', (e) => {
 </script>
 
 <script>
-App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk'){
+App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk.'){
     const raw = (priceUnit || '').toString().trim();
 
     if (!raw) {
         return {
             value: 1,
-            label: fallbackUnit || 'Stk',
-            text: `1 ${fallbackUnit || 'Stk'}`
+            label: fallbackUnit || 'Stk.',
+            text: `1 ${fallbackUnit || 'Stk.'}`
         };
     }
 
@@ -15177,6 +21575,11 @@ App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk'){
   App.pickImage = (obj, fallback = '') => {
     if (!obj) return App.normalizeImgUrl(fallback);
 
+    // When the user deletes a position image, do not fall back to product/catalog images.
+    if (obj._imageRemoved === true || obj.image_removed === true || obj.removeImage === true) {
+      return '';
+    }
+
     const candidates = [
       obj.image, obj.image_url, obj.imageUrl, obj.img, obj.img_url,
       obj.thumbnail, obj.thumb, obj.photo, obj.photo_url, obj.logo, obj.url,
@@ -15200,7 +21603,7 @@ App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk'){
 
 <script>
    App.UNIT_OPTIONS = [
-    'Stk',   // Stück
+    'Stk.',   // Stück
     'm',
     'lfm',   // laufender Meter
     'm²',
@@ -15216,7 +21619,8 @@ App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk'){
     'Woche',
     'Monat',
     'Pauschal',
-    'Set'
+    'Set',
+    'Pers.'
 ];
 
     App.renderUnitOptions = function(selected){
@@ -15333,11 +21737,10 @@ App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk'){
         row.total = (Number(row.qty || 0) * Number(row.rate || 0));
     };
 
-    App.recalcLaborCarrier = function (sIdx, iIdx, subIdx = null) {
+   App.recalcLaborCarrier = function (sIdx, iIdx, subIdx = null) {
         const carrier = App.resolveLaborCarrier(sIdx, iIdx, subIdx);
         if (!carrier || !Array.isArray(carrier.labor_rows)) return;
 
-        let totalQty = 0;
         let totalVk = 0;
         let totalEk = 0;
 
@@ -15348,22 +21751,21 @@ App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk'){
 
             row.total = qty * rate;
 
-            totalQty += qty;
             totalVk += qty * rate;
             totalEk += qty * ek;
         });
 
+        const rowCount = carrier.labor_rows.length;
         carrier.kind = 'labor';
-        carrier.qty = totalQty || 1;
-        carrier.unit = carrier.unit || 'Std';
-        carrier.measure = carrier.measure || 'Std';
+        carrier.qty = rowCount || 1;
+        carrier.unit = 'Stk';
+        carrier.measure = carrier.unit;
 
-        carrier.price = totalQty > 0 ? (totalVk / totalQty) : 0;      // VK per hour
+        carrier.price = rowCount > 0 ? (totalVk / rowCount) : 0;      // VK pro Person/Zeile
         carrier.rate = carrier.price;
-        carrier.ek = totalQty > 0 ? (totalEk / totalQty) : 0;         // EK per hour
+        carrier.ek = rowCount > 0 ? (totalEk / rowCount) : 0;         // EK pro Person/Zeile
         carrier.purchase_price = carrier.ek;
     };
-
     /**
      * qty            = actual needed quantity (e.g. 400)
      * pricePerBase   = price for the pricing base quantity (e.g. 20 €)
@@ -15432,7 +21834,7 @@ App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk'){
                 desc: "Dienstleistung / Montage", desc_html: "", qty: 1, unit: 'Std', measure: 'Std',
                 price: 0, rate: 0, ek: 0, purchase_price: 0,
                 active: true, showImage: false, depth: 0, labor_rows: [], subItems: [],
-                print_hidden: false, print_hidden_labor: false
+                print_hidden: false, print_hidden_labor: true
             };
             isNew = true;
         }
@@ -15487,6 +21889,13 @@ App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk'){
                 maximumFractionDigits: 2
             });
         };
+
+        // Safely evaluate again for the button state
+        const isLaborHidden = (item.print_hidden_labor === undefined || item.print_hidden_labor === null) 
+            ? true 
+            : (item.print_hidden_labor === true || item.print_hidden_labor === '1' || item.print_hidden_labor === 1);
+            
+        const eyeIcon = isLaborHidden ? 'fa-eye-slash' : 'fa-eye';
 
         let totalQty = 0;
         let totalEkAmount = 0;
@@ -15579,6 +21988,36 @@ App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk'){
         
         // 1. Handle Position Image Upload
         const imgInput = document.getElementById('img-upload-input');
+        // --- Kalkulations-Sidebar Resizer ---
+        const calcResizer = document.getElementById('calc-resizer');
+        const calcSidebar = document.getElementById('sidebar-right');
+        let cStartX, cStartWidth;
+
+        if (calcResizer && calcSidebar) {
+            calcResizer.addEventListener('mousedown', (e) => {
+                cStartX = e.clientX;
+                cStartWidth = calcSidebar.getBoundingClientRect().width;
+                document.documentElement.addEventListener('mousemove', doCalcDrag, false);
+                document.documentElement.addEventListener('mouseup', stopCalcDrag, false);
+                calcResizer.classList.add('active');
+            });
+
+            const doCalcDrag = (e) => {
+                // Dragging to the left increases the width because the sidebar is pinned to the right
+                let newWidth = cStartWidth - (e.clientX - cStartX);
+                if (newWidth < 280) newWidth = 280;
+                if (newWidth > 800) newWidth = 800; // Max width limit
+                calcSidebar.style.width = newWidth + 'px';
+                calcSidebar.style.transition = 'none'; // Disable smooth transition while actively dragging
+            };
+
+            const stopCalcDrag = () => {
+                document.documentElement.removeEventListener('mousemove', doCalcDrag, false);
+                document.documentElement.removeEventListener('mouseup', stopCalcDrag, false);
+                calcResizer.classList.remove('active');
+                calcSidebar.style.transition = ''; // Restore smooth transitions
+            };
+        }
         if (imgInput) {
             imgInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
@@ -15595,14 +22034,27 @@ App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk'){
                         : State.sections[sIdx].items[iIdx];
 
                     if (target) {
-                        // Apply the new image and ensure it's visible
-                        target.img = evt.target.result;
-                        target.hideImage = false;
-                        target.showImage = true;
+                        // Apply the new image and ensure it's visible.
+                        // Use the central helper so previously deleted images become visible again.
+                        if (typeof App.applyItemImage === 'function') {
+                            App.applyItemImage(target, evt.target.result);
+                        } else {
+                            target.img = evt.target.result;
+                            target.image = evt.target.result;
+                            target.image_url = evt.target.result;
+                            target._imageRemoved = false;
+                            target.image_removed = false;
+                            target.hideImage = false;
+                            target.showImage = true;
+                        }
 
-                        // Re-render the UI
-                        App.renderQuotePage();
-                        if (App.Tabs.current === 'list') App.ListView.render();
+                        if (typeof App.refreshAfterImageChange === 'function') {
+                            App.refreshAfterImageChange();
+                        } else {
+                            State.hasUnsavedChanges = true;
+                            App.renderQuotePage();
+                            if (App.Tabs.current === 'list') App.ListView.render();
+                        }
                     }
                 };
                 // Read the file as a data URL
@@ -15635,8 +22087,2978 @@ App.parsePriceUnit = function(priceUnit, fallbackUnit = 'Stk'){
         }
 
     });
+
+    // Add this inside document.addEventListener('DOMContentLoaded', () => { ... });
+
+    document.addEventListener('keydown', function(e) {
+        // 1. Ignore shortcuts if the user is typing inside an input, textarea, or Quill editor
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+        if (
+            activeTag === 'input' || 
+            activeTag === 'textarea' || 
+            activeTag === 'select' || 
+            document.activeElement.isContentEditable
+        ) {
+            return; // Let the browser do native text copy/paste
+        }
+
+        // 2. Check for Ctrl (Windows) or Cmd (Mac)
+        const isCmdOrCtrl = e.ctrlKey || e.metaKey;
+
+        // --- COPY (Ctrl + C) ---
+        if (isCmdOrCtrl && e.key.toLowerCase() === 'c') {
+            // If there are checked checkboxes in the List View, do a bulk copy
+            if (State.selectedItems && State.selectedItems.size > 0) {
+                e.preventDefault();
+                App.Clipboard.copyBulk();
+            }
+        }
+
+        // --- PASTE (Ctrl + V) ---
+        if (isCmdOrCtrl && e.key.toLowerCase() === 'v') {
+            // If the clipboard has items, paste the most recent one (index 0)
+            if (App.Clipboard.items && App.Clipboard.items.length > 0) {
+                e.preventDefault();
+                // Pass -1 so it automatically pastes into the first valid section
+                App.Clipboard.pasteItem(0, -1);
+                
+                // Show brief visual feedback on the clipboard icon
+                App.Clipboard.flashSidebar();
+            }
+        }
+    });
+
+
 </script>
 
+
+
+<!-- IDS / OCI Lieferanten-Suche Modal -->
+<div id="supplier-search-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4">
+    <div class="supplier-modal-card bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden border border-slate-200">
+        <div class="p-5 border-b border-slate-100 flex items-start justify-between gap-4 bg-gradient-to-br from-white to-[#f7fee7]">
+            <div>
+                <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
+                    <span class="w-10 h-10 rounded-2xl bg-[#93c21c] text-white inline-flex items-center justify-center shadow-lg shadow-lime-200">
+                        <i class="fa-solid fa-plug-circle-bolt"></i>
+                    </span>
+                    Lieferant suchen
+                </h3>
+                <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                    IDS/OCI Shop im neuen Tab öffnen. Nach der Lieferanten-Auswahl erscheint zuerst eine Prüfseite für Brand, Artikelgruppe, Untergruppe, Distributor und Einheit.
+                </p>
+            </div>
+
+            <button type="button"
+                    onclick="App.SupplierSearch.close()"
+                    class="w-10 h-10 rounded-2xl bg-white border border-slate-200 hover:bg-red-50 hover:text-red-600 transition flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="p-5 space-y-4">
+            <div id="supplier-search-alert" class="hidden rounded-2xl p-3 text-sm font-bold"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-black text-slate-700 mb-2">Lieferant / IDS-Shop</label>
+                    <select id="supplier-search-connection" class="w-full border border-slate-300 rounded-2xl px-3 py-3 text-sm outline-none focus:border-[#93c21c] bg-white">
+                        <option value="">Lieferanten werden geladen...</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black text-slate-700 mb-2">Ziel-Sektion</label>
+                    <select id="supplier-search-section" class="w-full border border-slate-300 rounded-2xl px-3 py-3 text-sm outline-none focus:border-[#93c21c] bg-white"></select>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-black text-slate-700 mb-2">Suchbegriff</label>
+                <div class="flex gap-2">
+                    <input id="supplier-search-query"
+                           type="text"
+                           class="flex-1 border border-slate-300 rounded-2xl px-3 py-3 text-sm outline-none focus:border-[#93c21c]"
+                           placeholder="z.B. Wärmepumpe, Rohr, Modul, Kabel..."
+                           onkeydown="if(event.key === 'Enter'){ event.preventDefault(); App.SupplierSearch.forward(); }">
+                    <button type="button"
+                            onclick="App.SupplierSearch.forward()"
+                            class="px-4 py-3 rounded-2xl bg-[#93c21c] text-white font-black text-sm hover:brightness-95 shadow whitespace-nowrap">
+                        Shop öffnen
+                    </button>
+                </div>
+            </div>
+
+            <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4 text-xs text-slate-600 leading-relaxed">
+                <div class="font-black text-slate-800 mb-1 flex items-center gap-2">
+                    <i class="fa-solid fa-rotate text-[#93c21c]"></i>
+                    Rückgabe mit Prüfung + Reverb
+                </div>
+                Nach dem Rücksprung öffnet Laravel eine Prüfseite. Dort wählst du Brand, Artikelgruppe, Untergruppe, Distributor und Einheit. Nach dem Speichern werden die Artikel per Reverb live in diese Liste eingefügt.
+            </div>
+        </div>
+
+        <div class="p-5 border-t border-slate-100 flex justify-between gap-2 bg-slate-50">
+            <button type="button"
+                    onclick="App.SupplierSearch.showWaitInfo()"
+                    class="px-4 py-2 rounded-2xl border border-[#93c21c]/30 bg-[#f7fee7] font-black text-sm text-[#6b8e12] hover:bg-white">
+                <i class="fa-solid fa-satellite-dish"></i> Reverb wartet
+            </button>
+
+            <button type="button"
+                    onclick="App.SupplierSearch.close()"
+                    class="px-4 py-2 rounded-2xl border border-slate-200 font-black text-sm text-slate-700 hover:bg-white">
+                Schließen
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="supplier-live-toast" class="supplier-live-toast">
+    <div class="supplier-live-toast-icon"><i class="fa-solid fa-circle-check"></i></div>
+    <div>
+        <div id="supplier-live-toast-title" class="supplier-live-toast-title">Lieferantenartikel eingefügt</div>
+        <div id="supplier-live-toast-text" class="supplier-live-toast-text">Die Positionen wurden übernommen.</div>
+    </div>
+</div>
+
+<!-- Lieferanten-Positionen Historie Modal -->
+<div id="supplier-history-modal" class="fixed inset-0 z-[10010] hidden items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4">
+    <div class="supplier-history-card bg-white rounded-3xl shadow-2xl w-full max-w-5xl overflow-hidden border border-slate-200">
+        <div class="p-5 border-b border-slate-100 flex items-start justify-between gap-4 bg-gradient-to-br from-white to-blue-50">
+            <div>
+                <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
+                    <span class="w-10 h-10 rounded-2xl bg-blue-600 text-white inline-flex items-center justify-center shadow-lg shadow-blue-200">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </span>
+                    Lieferanten-Positionen Historie
+                </h3>
+                <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                    Alle über Lieferanten/IDS/OCI übernommenen Positionen in diesem Angebotsordner. Du kannst sie jederzeit erneut in die aktuelle Ziel-Sektion einfügen.
+                </p>
+            </div>
+
+            <button type="button"
+                    onclick="App.SupplierSearch.closeHistory()"
+                    class="w-10 h-10 rounded-2xl bg-white border border-slate-200 hover:bg-red-50 hover:text-red-600 transition flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="p-5 border-b border-slate-100 bg-slate-50 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+            <div class="relative flex-1">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input id="supplier-history-search"
+                       type="text"
+                       oninput="App.SupplierSearch.renderHistory()"
+                       class="w-full border border-slate-300 rounded-2xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#93c21c] bg-white"
+                       placeholder="Suche nach Name, Artikelnummer, Lieferant...">
+            </div>
+
+            <div class="flex items-center gap-2">
+                <select id="supplier-history-section" class="border border-slate-300 rounded-2xl px-3 py-3 text-sm outline-none focus:border-[#93c21c] bg-white min-w-[220px]"></select>
+                <button type="button"
+                        onclick="App.SupplierSearch.clearHistory()"
+                        class="px-4 py-3 rounded-2xl border border-red-200 bg-white text-red-600 font-black text-sm hover:bg-red-50">
+                    <i class="fa-solid fa-trash"></i> Leeren
+                </button>
+            </div>
+        </div>
+
+        <div id="supplier-history-list" class="p-5 max-h-[62vh] overflow-y-auto bg-slate-50 space-y-3"></div>
+    </div>
+</div>
+
+<script>
+(function () {
+    function supplierUrlFolderId() {
+        try {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('offer_folder_id') || params.get('folder_id') || null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function bootSupplierSearch() {
+        if (!window.App || typeof State === 'undefined') {
+            setTimeout(bootSupplierSearch, 150);
+            return;
+        }
+
+        window.OfferSupplierConfig = window.OfferSupplierConfig || {};
+
+        App.SupplierSearch = {
+            connectionsLoaded: false,
+            pollTimer: null,
+            lastLogId: null,
+            popupRef: null,
+            processedImportKeys: new Set(),
+            processedItemKeys: new Set(),
+            historyReaddMode: false,
+
+            folderId() {
+                return State?.prefill?.offer_folder_id
+                    || window.OfferSupplierConfig?.folderId
+                    || supplierUrlFolderId()
+                    || null;
+            },
+
+            offerId() {
+                return State?.prefill?.offer_id
+                    || window.OfferSupplierConfig?.offerId
+                    || (new URLSearchParams(window.location.search)).get('offer_id')
+                    || null;
+            },
+
+            syncConfig() {
+                const folderId = this.folderId();
+                const offerId = this.offerId();
+
+                window.OfferSupplierConfig = window.OfferSupplierConfig || {};
+                window.OfferSupplierConfig.folderId = folderId ? Number(folderId) : null;
+                window.OfferSupplierConfig.offerId = offerId ? Number(offerId) : null;
+                window.OfferSupplierConfig.returnMode = this.isTemplateMode() && !folderId ? 'template_post_message' : 'review_then_reverb';
+                window.OfferSupplierConfig.contextKey = this.contextKey();
+                window.OfferSupplierConfig.templateSessionId = this.isTemplateMode() && !folderId ? this.templateSessionId() : window.OfferSupplierConfig.templateSessionId;
+
+                return window.OfferSupplierConfig;
+            },
+
+            isTemplateMode() {
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    return State?.loadedTemplateId
+                        || State?.templateMode
+                        || params.get('mode') === 'template'
+                        || params.get('edit_template') === '1'
+                        || params.get('template_id');
+                } catch (e) {
+                    return !!(State?.loadedTemplateId || State?.templateMode);
+                }
+            },
+
+            templateSessionId() {
+                window.OfferSupplierConfig = window.OfferSupplierConfig || {};
+
+                if (window.OfferSupplierConfig.templateSessionId) {
+                    return window.OfferSupplierConfig.templateSessionId;
+                }
+
+                let templateId = null;
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    templateId = State?.loadedTemplateId || params.get('template_id') || 'new';
+                } catch (e) {
+                    templateId = State?.loadedTemplateId || 'new';
+                }
+
+                const key = `tpl_${templateId}_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+                window.OfferSupplierConfig.templateSessionId = key;
+                return key;
+            },
+
+            contextKey() {
+                const folderId = this.folderId();
+
+                if (folderId) {
+                    return `folder_${folderId}`;
+                }
+
+                if (this.isTemplateMode()) {
+                    return `template_${this.templateSessionId()}`;
+                }
+
+                return 'draft_' + this.templateSessionId();
+            },
+
+            baseUrl() {
+                const folderId = this.folderId();
+
+                if (folderId) {
+                    return `/admin/offers/folders/${encodeURIComponent(folderId)}/supplier`;
+                }
+
+                if (this.isTemplateMode()) {
+                    return `/admin/offer-template-supplier?session=${encodeURIComponent(this.templateSessionId())}`;
+                }
+
+                return null;
+            },
+
+            open: async function () {
+                this.syncConfig();
+                this.bootReverbListener();
+
+                if (typeof App.isLockedSnapshot === 'function' && App.isLockedSnapshot()) {
+                    this.toast('Dieses Dokument ist gesperrt.', 'Im Auftrag/Snapshot können keine Lieferantenartikel eingefügt werden.', 'error');
+                    return;
+                }
+
+                if (!this.folderId() && !this.isTemplateMode()) {
+                    this.toast('Angebot zuerst speichern', 'Bitte speichere das Angebot zuerst, damit ein Angebotsordner existiert.', 'error');
+                    return;
+                }
+
+                const modal = document.getElementById('supplier-search-modal');
+                if (!modal) return;
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+
+                this.clearAlert();
+                this.renderSectionOptions();
+
+                if (!this.connectionsLoaded) {
+                    await this.loadConnections();
+                }
+
+                setTimeout(() => document.getElementById('supplier-search-query')?.focus(), 80);
+            },
+
+            close: function () {
+                const modal = document.getElementById('supplier-search-modal');
+                if (!modal) return;
+
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            },
+
+            alert: function (message, type = 'error') {
+                const box = document.getElementById('supplier-search-alert');
+                if (!box) return;
+
+                box.classList.remove('hidden');
+                box.textContent = message;
+                box.className = type === 'success'
+                    ? 'rounded-2xl p-3 text-sm font-bold bg-emerald-50 text-emerald-700 border border-emerald-200'
+                    : 'rounded-2xl p-3 text-sm font-bold bg-red-50 text-red-700 border border-red-200';
+            },
+
+            clearAlert: function () {
+                const box = document.getElementById('supplier-search-alert');
+                if (!box) return;
+                box.classList.add('hidden');
+                box.textContent = '';
+            },
+
+            toast: function (title, text, type = 'success') {
+                const toast = document.getElementById('supplier-live-toast');
+                if (!toast) return;
+
+                const icon = toast.querySelector('.supplier-live-toast-icon');
+                const titleEl = document.getElementById('supplier-live-toast-title');
+                const textEl = document.getElementById('supplier-live-toast-text');
+
+                if (titleEl) titleEl.textContent = title || '';
+                if (textEl) textEl.textContent = text || '';
+
+                if (icon) {
+                    icon.style.background = type === 'error' ? '#fef2f2' : '#f7fee7';
+                    icon.style.color = type === 'error' ? '#dc2626' : '#6b8e12';
+                    icon.innerHTML = type === 'error'
+                        ? '<i class="fa-solid fa-triangle-exclamation"></i>'
+                        : '<i class="fa-solid fa-circle-check"></i>';
+                }
+
+                toast.classList.add('is-visible');
+                clearTimeout(this._toastTimer);
+                this._toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 5200);
+            },
+
+            showWaitInfo: function () {
+                this.toast(
+                    'Reverb wartet',
+                    'Nach dem Speichern auf der Rückgabe-Prüfseite wird die Position automatisch live eingefügt.'
+                );
+            },
+
+            loadConnections: async function () {
+                const select = document.getElementById('supplier-search-connection');
+                const baseUrl = this.baseUrl();
+
+                if (!select || !baseUrl) return;
+
+                select.innerHTML = '<option value="">Lieferanten werden geladen...</option>';
+
+                try {
+                    const connectionsUrl = baseUrl.includes('?')
+                        ? `${baseUrl}&action=connections`
+                        : `${baseUrl}/connections`;
+
+                    const res = await fetch(connectionsUrl, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    const data = await res.json();
+
+                    if (!res.ok || !data.success) {
+                        throw new Error(data.message || 'Lieferanten konnten nicht geladen werden.');
+                    }
+
+                    const connections = data.connections || [];
+
+                    if (!connections.length) {
+                        select.innerHTML = '<option value="">Keine aktive IDS/OCI Schnittstelle gefunden</option>';
+                        this.alert('Keine aktive IDS/OCI Schnittstelle gefunden. Prüfe is_active=1 und connector_type=ids/oci.');
+                        return;
+                    }
+
+                    select.innerHTML = '<option value="">Lieferant auswählen...</option>';
+
+                    connections.forEach(c => {
+                        const opt = document.createElement('option');
+                        opt.value = c.id;
+
+                        let label = `${c.name} · ${c.connector_type || 'IDS/OCI'}`;
+
+                        if (c.distributor_name) {
+                            label += ` · ${c.distributor_name}`;
+                        }
+
+                        if (!c.has_endpoint) {
+                            label += ' · Endpoint fehlt';
+                            opt.disabled = true;
+                        }
+
+                        if (!c.has_distributor) {
+                            label += ' · Distributor wird auf Prüfseite gewählt';
+                        }
+
+                        opt.textContent = label;
+                        opt.dataset.hasEndpoint = c.has_endpoint ? '1' : '0';
+                        opt.dataset.hasDistributor = c.has_distributor ? '1' : '0';
+                        opt.dataset.warning = c.warning || '';
+                        select.appendChild(opt);
+                    });
+
+                    this.connectionsLoaded = true;
+                } catch (error) {
+                    console.error(error);
+                    select.innerHTML = '<option value="">Fehler beim Laden</option>';
+                    this.alert(error.message || 'Lieferanten konnten nicht geladen werden.');
+                }
+            },
+
+            renderSectionOptions: function () {
+                const select = document.getElementById('supplier-search-section');
+                if (!select) return;
+
+                select.innerHTML = '';
+                const sections = Array.isArray(State.sections) ? State.sections : [];
+
+                sections.forEach((section, index) => {
+                    if (!section || section._pageBreak || section._virtualSection || section.isLocked) return;
+
+                    const opt = document.createElement('option');
+                    opt.value = index;
+                    opt.textContent = section.title || section.name || `Sektion ${index + 1}`;
+                    select.appendChild(opt);
+                });
+
+                if (!select.options.length) {
+                    const opt = document.createElement('option');
+                    opt.value = '';
+                    opt.textContent = 'Neue Sektion: Lieferantenartikel';
+                    select.appendChild(opt);
+                }
+            },
+
+            forward: function () {
+                this.clearAlert();
+                this.syncConfig();
+                this.bootReverbListener();
+
+                const baseUrl = this.baseUrl();
+                const connectionSelect = document.getElementById('supplier-search-connection');
+                const selectedOption = connectionSelect?.selectedOptions?.[0];
+                const connectionId = connectionSelect?.value;
+                const query = document.getElementById('supplier-search-query')?.value?.trim();
+                const sectionValue = document.getElementById('supplier-search-section')?.value;
+
+                if (!baseUrl) {
+                    this.alert('Bitte Angebot zuerst speichern oder den Vorlagenmodus öffnen.');
+                    return;
+                }
+
+                if (!connectionId) {
+                    this.alert('Bitte zuerst einen Lieferanten auswählen.');
+                    return;
+                }
+
+                if (selectedOption && selectedOption.dataset.hasEndpoint !== '1') {
+                    this.alert('Dieser IDS/OCI Lieferant hat keine Endpoint URL.');
+                    return;
+                }
+
+                if (!query) {
+                    this.alert('Bitte einen Suchbegriff eingeben.');
+                    return;
+                }
+
+                const params = new URLSearchParams();
+                params.set('query', query);
+
+                if (sectionValue !== '' && sectionValue !== null && sectionValue !== undefined) {
+                    params.set('target_section_index', sectionValue);
+                }
+
+                const url = baseUrl.includes('?')
+                    ? `${baseUrl}&supplier_connection_id=${encodeURIComponent(connectionId)}&${params.toString()}`
+                    : `${baseUrl}/${encodeURIComponent(connectionId)}/forward?${params.toString()}`;
+
+                this.popupRef = window.open(
+                    url,
+                    `offer_supplier_${connectionId}_${Date.now()}`,
+                    'width=1320,height=880,scrollbars=yes,resizable=yes'
+                );
+
+                if (!this.popupRef) {
+                    this.alert('Popup wurde blockiert. Bitte Popups für diese Seite erlauben.');
+                    return;
+                }
+
+                this.alert(this.isTemplateMode() && !this.folderId()
+                    ? 'Lieferanten-Shop wurde im Vorlagenmodus geöffnet. Nach der Rückgabe werden die Artikel direkt in diese Vorlage eingefügt.'
+                    : 'Lieferanten-Shop wurde geöffnet. Nach der Auswahl erscheint eine Prüfseite; nach dem Speichern kommt der Artikel per Reverb hierher.', 'success');
+                this.toast('Lieferanten-Shop geöffnet', this.isTemplateMode() && !this.folderId()
+                    ? 'Warenkorb zurückgeben. Die Artikel werden in die Vorlage eingefügt und müssen danach als Vorlage gespeichert werden.'
+                    : 'Warenkorb zurückgeben, Daten prüfen und speichern. Das Angebot bleibt offen.');
+            },
+
+            startPolling: function () {
+                // New flow uses review page + Reverb. Kept as no-op for backward compatibility.
+                this.showWaitInfo();
+            },
+
+            checkLatestImport: async function (showMessage = false) {
+                if (showMessage) {
+                    this.showWaitInfo();
+                }
+            },
+
+            makeImportKey: function (payload = {}, items = []) {
+                const folderId = payload.folder_id || this.folderId() || this.contextKey() || '';
+                const logId = payload.log_id || payload.supplier_import_log_id || '';
+
+                if (logId) {
+                    return `log:${folderId}:${logId}`;
+                }
+
+                const itemKey = items
+                    .map(item => [
+                        item?._supplier_import_log_id || '',
+                        item?.distributor_price_id || '',
+                        item?.product_id || item?.productId || '',
+                        item?.distributor_article_no || '',
+                        item?.article_no || '',
+                        item?.name || ''
+                    ].join('|'))
+                    .join('::');
+
+                return `items:${folderId}:${itemKey}`;
+            },
+
+            hasProcessedImport: function (key) {
+                if (!key) return false;
+
+                window.__offerSupplierProcessedImportKeys = window.__offerSupplierProcessedImportKeys || new Set();
+
+                return this.processedImportKeys.has(key) || window.__offerSupplierProcessedImportKeys.has(key);
+            },
+
+            markProcessedImport: function (key) {
+                if (!key) return;
+
+                window.__offerSupplierProcessedImportKeys = window.__offerSupplierProcessedImportKeys || new Set();
+
+                this.processedImportKeys.add(key);
+                window.__offerSupplierProcessedImportKeys.add(key);
+
+                try {
+                    const storageKey = 'offer_supplier_processed_' + this.contextKey();
+                    const existing = JSON.parse(sessionStorage.getItem(storageKey) || '[]');
+                    if (!existing.includes(key)) {
+                        existing.push(key);
+                        sessionStorage.setItem(storageKey, JSON.stringify(existing.slice(-80)));
+                    }
+                } catch (e) {}
+            },
+
+            loadProcessedImports: function () {
+                try {
+                    const storageKey = 'offer_supplier_processed_' + this.contextKey();
+                    const existing = JSON.parse(sessionStorage.getItem(storageKey) || '[]');
+                    existing.forEach(key => this.markProcessedImport(key));
+                } catch (e) {}
+            },
+
+            makeItemKey: function (item = {}) {
+                return [
+                    item._supplier_import_log_id || '',
+                    item.distributor_price_id || '',
+                    item.product_id || item.productId || '',
+                    item.distributor_article_no || '',
+                    item.article_no || '',
+                    item.name || ''
+                ].join('|');
+            },
+
+            historyKey: function () {
+                return 'offer_supplier_position_history_' + this.contextKey();
+            },
+
+            escape: function (value) {
+                if (window.App && typeof App.escapeHtml === 'function') {
+                    return App.escapeHtml(value);
+                }
+
+                return String(value ?? '')
+                    .replaceAll('&', '&amp;')
+                    .replaceAll('<', '&lt;')
+                    .replaceAll('>', '&gt;')
+                    .replaceAll('"', '&quot;')
+                    .replaceAll("'", '&#039;');
+            },
+
+            loadHistory: function () {
+                try {
+                    const raw = localStorage.getItem(this.historyKey());
+                    const history = JSON.parse(raw || '[]');
+                    return Array.isArray(history) ? history : [];
+                } catch (e) {
+                    console.error('[Offer Supplier History] load failed:', e);
+                    return [];
+                }
+            },
+
+            saveHistory: function (history) {
+                try {
+                    localStorage.setItem(this.historyKey(), JSON.stringify((history || []).slice(0, 250)));
+                } catch (e) {
+                    console.error('[Offer Supplier History] save failed:', e);
+                }
+            },
+
+            pushHistory: function (items, meta = {}) {
+                if (!Array.isArray(items) || !items.length || meta.fromHistory) return;
+
+                const history = this.loadHistory();
+                const now = new Date();
+
+                const normalized = items.map(raw => this.normalizeOfferItem(raw)).filter(Boolean);
+
+                normalized.forEach(item => {
+                    const key = this.makeItemKey(item);
+
+                    const entry = {
+                        id: 'hist_' + Date.now() + '_' + Math.floor(Math.random() * 100000),
+                        key: key,
+                        item: item,
+                        folder_id: this.folderId(),
+                        offer_id: this.offerId(),
+                        log_id: meta.logId || item._supplier_import_log_id || null,
+                        import_key: meta.importKey || null,
+                        supplier: item.distributor_name || item.supplier || '',
+                        name: item.name || 'Lieferantenartikel',
+                        article_no: item.article_no || '',
+                        distributor_article_no: item.distributor_article_no || '',
+                        price: Number(item.price || item.unit_price || 0) || 0,
+                        ek: Number(item.ek || item.purchase_price || 0) || 0,
+                        unit: item.unit || item.measure || 'Stk',
+                        created_at: now.toISOString(),
+                        created_at_text: now.toLocaleString('de-DE')
+                    };
+
+                    const existingIndex = history.findIndex(row => row.key === key && String(row.log_id || '') === String(entry.log_id || ''));
+
+                    if (existingIndex >= 0) {
+                        history.splice(existingIndex, 1);
+                    }
+
+                    history.unshift(entry);
+                });
+
+                this.saveHistory(history);
+            },
+
+            openHistory: function () {
+                const modal = document.getElementById('supplier-history-modal');
+                if (!modal) {
+                    console.error('[Offer Supplier History] Modal not found.');
+                    return;
+                }
+
+                this.fillHistorySections();
+                this.renderHistory();
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            },
+
+            closeHistory: function () {
+                const modal = document.getElementById('supplier-history-modal');
+                if (!modal) return;
+
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            },
+
+            fillHistorySections: function () {
+                const select = document.getElementById('supplier-history-section');
+                if (!select) return;
+
+                const current = select.value;
+                select.innerHTML = '';
+
+                (State.sections || []).forEach((section, index) => {
+                    if (!section || section._pageBreak || section._virtualSection || section.isLocked) return;
+
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = section.title || section.name || ('Sektion ' + (index + 1));
+                    select.appendChild(option);
+                });
+
+                if (current && [...select.options].some(option => option.value === current)) {
+                    select.value = current;
+                }
+            },
+
+            renderHistory: function () {
+                const list = document.getElementById('supplier-history-list');
+                if (!list) return;
+
+                const query = String(document.getElementById('supplier-history-search')?.value || '').toLowerCase().trim();
+                const history = this.loadHistory();
+
+                const filtered = query
+                    ? history.filter(row => [
+                        row.name,
+                        row.article_no,
+                        row.distributor_article_no,
+                        row.supplier,
+                        row.created_at_text
+                    ].join(' ').toLowerCase().includes(query))
+                    : history;
+
+                if (!filtered.length) {
+                    list.innerHTML = `
+                        <div class="text-center py-14 bg-white border border-dashed border-slate-300 rounded-3xl">
+                            <div class="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 inline-flex items-center justify-center mb-3">
+                                <i class="fa-solid fa-clock-rotate-left text-xl"></i>
+                            </div>
+                            <div class="font-black text-slate-700">Keine Lieferanten-Historie gefunden</div>
+                            <div class="text-xs text-slate-500 mt-1">Sobald ein Lieferantenartikel übernommen wird, erscheint er hier.</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                list.innerHTML = filtered.map(row => {
+                    const name = this.escape(row.name || 'Lieferantenartikel');
+                    const supplier = this.escape(row.supplier || 'Lieferant');
+                    const art = this.escape(row.distributor_article_no || row.article_no || 'Keine Art.-Nr.');
+                    const date = this.escape(row.created_at_text || '');
+                    const price = Number(row.price || 0).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    const ek = Number(row.ek || 0).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    const unit = this.escape(row.unit || 'Stk');
+
+                    return `
+                        <div class="supplier-history-item" data-history-id="${this.escape(row.id)}">
+                            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                                <div class="min-w-0 flex-1">
+                                    <div class="font-black text-slate-900 truncate" title="${name}">${name}</div>
+                                    <div class="flex flex-wrap gap-2 mt-2">
+                                        <span class="supplier-history-pill"><i class="fa-solid fa-barcode"></i> ${art}</span>
+                                        <span class="supplier-history-pill"><i class="fa-solid fa-truck"></i> ${supplier}</span>
+                                        <span class="supplier-history-pill"><i class="fa-solid fa-tag"></i> VK ${price} € / ${unit}</span>
+                                        <span class="supplier-history-pill"><i class="fa-solid fa-coins"></i> EK ${ek} €</span>
+                                        <span class="supplier-history-pill"><i class="fa-regular fa-clock"></i> ${date}</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <button type="button" class="supplier-history-readd-btn" onclick="App.SupplierSearch.reAddHistory('${this.escape(row.id)}')">
+                                        <i class="fa-solid fa-plus"></i> Wieder einfügen
+                                    </button>
+                                    <button type="button" class="supplier-history-delete-btn" onclick="App.SupplierSearch.deleteHistory('${this.escape(row.id)}')" title="Eintrag löschen">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            },
+
+            selectedHistorySectionIndex: function () {
+                const select = document.getElementById('supplier-history-section');
+                const value = select ? Number(select.value) : NaN;
+                return Number.isInteger(value) ? value : null;
+            },
+
+            reAddHistory: function (historyId) {
+                const history = this.loadHistory();
+                const entry = history.find(row => String(row.id) === String(historyId));
+
+                if (!entry || !entry.item) {
+                    this.toast('Historie', 'Dieser Eintrag konnte nicht gefunden werden.', 'error');
+                    return;
+                }
+
+                const item = JSON.parse(JSON.stringify(entry.item));
+                item.id = `supplier_history_${item.product_id || item.productId || 'x'}_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+                item._source = 'supplier_history_readd';
+                item._supplierJustImported = true;
+
+                this.appendItems([item], this.selectedHistorySectionIndex(), {
+                    fromHistory: true,
+                    importKey: 'history:' + historyId + ':' + Date.now()
+                });
+
+                if (typeof App.markDirty === 'function') App.markDirty();
+                else State.hasUnsavedChanges = true;
+
+                this.toast('Position wieder eingefügt', entry.name || 'Lieferantenartikel wurde erneut eingefügt.');
+                this.closeHistory();
+            },
+
+            deleteHistory: function (historyId) {
+                const history = this.loadHistory().filter(row => String(row.id) !== String(historyId));
+                this.saveHistory(history);
+                this.renderHistory();
+            },
+
+            clearHistory: function () {
+                if (!confirm('Möchtest du die komplette Lieferanten-Positionen-Historie für diesen Angebotsordner löschen?')) return;
+                this.saveHistory([]);
+                this.renderHistory();
+            },
+
+            receiveImport: function (payload) {
+                if (!payload) return;
+
+                const hasOfferSupplierPayload =
+                    payload.type === 'offer_supplier_import_done' ||
+                    Array.isArray(payload.items);
+
+                if (!hasOfferSupplierPayload) return;
+
+                if (payload.folder_id && this.folderId() && Number(payload.folder_id) !== Number(this.folderId())) return;
+
+                if (payload.template_session_id && this.isTemplateMode() && String(payload.template_session_id) !== String(this.templateSessionId())) return;
+
+                const items = Array.isArray(payload.items) ? payload.items : [];
+
+                if (!items.length) {
+                    this.alert(payload.message || 'Keine Artikel wurden übernommen.');
+                    return;
+                }
+
+                const importKey = this.makeImportKey(payload, items);
+
+                if (this.hasProcessedImport(importKey)) {
+                    console.warn('[Offer Supplier] Duplicate import ignored:', importKey);
+                    return;
+                }
+
+                /*
+                 * IMPORTANT:
+                 * Mark BEFORE appendItems(), because the same payload can arrive almost at the same time
+                 * via Reverb, postMessage, localStorage and ids-listener.js.
+                 */
+                this.markProcessedImport(importKey);
+                this.lastLogId = payload.log_id || this.lastLogId;
+
+                this.appendItems(items, payload.target_section_index, {
+                    importKey: importKey,
+                    fromHistory: false,
+                    alreadyMarked: true,
+                    logId: payload.log_id || null
+                });
+
+                this.close();
+
+                clearInterval(this.pollTimer);
+                this.toast('Lieferantenartikel eingefügt', `${items.length} Position(en) wurden live in die Liste eingefügt.`);
+            },
+
+            appendItems: function (items, targetSectionIndex = null, options = {}) {
+                if (!Array.isArray(items) || !items.length) return;
+
+                const importKey = options.importKey || this.makeImportKey({}, items);
+
+                if (!options.fromHistory && !options.alreadyMarked && this.hasProcessedImport(importKey)) {
+                    console.warn('[Offer Supplier] Duplicate append ignored:', importKey);
+                    return;
+                }
+
+                if (!options.fromHistory && !options.alreadyMarked) {
+                    this.markProcessedImport(importKey);
+                }
+
+                if (!Array.isArray(State.sections)) State.sections = [];
+
+                const hadUnsavedChanges = !!State.hasUnsavedChanges;
+
+                let sIdx = Number.isInteger(Number(targetSectionIndex)) ? Number(targetSectionIndex) : -1;
+
+                if (
+                    sIdx < 0 ||
+                    !State.sections[sIdx] ||
+                    State.sections[sIdx]._pageBreak ||
+                    State.sections[sIdx]._virtualSection ||
+                    State.sections[sIdx].isLocked
+                ) {
+                    sIdx = State.sections.findIndex(s => s && !s._pageBreak && !s._virtualSection && !s.isLocked);
+                }
+
+                if (sIdx === -1) {
+                    sIdx = typeof App.addSection === 'function'
+                        ? App.addSection('Lieferantenartikel', false)
+                        : -1;
+
+                    if (sIdx === -1) {
+                        State.sections.push({
+                            id: 'supplier_section_' + Date.now(),
+                            title: 'Lieferantenartikel',
+                            name: 'Lieferantenartikel',
+                            description: 'Automatisch über Lieferanten-Schnittstelle eingefügt',
+                            config: { mode: 'standard', hidePrices: false, margin: { value: 0, type: 'fixed' }, qty: 1, unit: '' },
+                            items: []
+                        });
+                        sIdx = State.sections.length - 1;
+                    }
+                }
+
+                if (!Array.isArray(State.sections[sIdx].items)) State.sections[sIdx].items = [];
+
+                const createdIds = [];
+
+                const insertedItems = [];
+
+                items.forEach(raw => {
+                    const item = this.normalizeOfferItem(raw);
+                    const itemKey = this.makeItemKey(item);
+
+                    if (!options.fromHistory) {
+                        window.__offerSupplierProcessedItemKeys = window.__offerSupplierProcessedItemKeys || new Set();
+
+                        if (this.processedItemKeys.has(itemKey) || window.__offerSupplierProcessedItemKeys.has(itemKey)) {
+                            console.warn('[Offer Supplier] Duplicate item ignored:', itemKey);
+                            return;
+                        }
+
+                        this.processedItemKeys.add(itemKey);
+                        window.__offerSupplierProcessedItemKeys.add(itemKey);
+                    }
+
+                    item._supplierJustImported = true;
+                    State.sections[sIdx].items.push(item);
+                    createdIds.push(item.id);
+                    insertedItems.push(item);
+                });
+
+                if (!options.fromHistory && insertedItems.length) {
+                    this.pushHistory(insertedItems, {
+                        importKey: importKey,
+                        logId: options.logId || insertedItems[0]?._supplier_import_log_id || null,
+                        fromHistory: false
+                    });
+                }
+
+                // Normal offer mode: backend review page already saved supplier items, so preserve dirty state.
+                // Template mode: there is no offer folder/backend save, therefore the template must become dirty.
+                if (this.isTemplateMode() && !this.folderId()) {
+                    if (typeof App.markDirty === 'function') App.markDirty();
+                    else State.hasUnsavedChanges = true;
+                } else {
+                    State.hasUnsavedChanges = hadUnsavedChanges;
+                }
+
+                if (typeof App.renderQuotePage === 'function') App.renderQuotePage();
+                if (App.ListView && typeof App.ListView.render === 'function') App.ListView.render();
+                if (typeof App.rebuildThumbnails === 'function') App.rebuildThumbnails();
+
+                setTimeout(() => {
+                    createdIds.forEach(id => {
+                        State.sections.forEach(sec => (sec.items || []).forEach(it => {
+                            if (it && it.id === id) it._supplierJustImported = false;
+                        }));
+                    });
+                    document.querySelectorAll('.supplier-import-row-flash').forEach(el => el.classList.remove('supplier-import-row-flash'));
+                }, 3200);
+            },
+
+            normalizeOfferItem: function (raw) {
+                const now = Date.now();
+                const title = raw.name || raw.product || raw.title || raw.product_title || 'Lieferantenartikel';
+                const unit = raw.unit || raw.measure || raw.measure_unit || raw.price_unit_label || 'Stk';
+                const vk = Number(raw.price ?? raw.unit_price ?? raw.rate ?? raw.vk ?? 0) || 0;
+                const ek = Number(raw.purchase_price ?? raw.ek ?? raw.cost ?? 0) || 0;
+                const margin = ek > 0 ? ((vk - ek) / ek) * 100 : Number(raw.margin ?? raw.marginPercent ?? 20);
+
+                return {
+                    id: raw.id || `supplier_${raw.product_id || raw.productId || 'x'}_${now}_${Math.floor(Math.random() * 100000)}`,
+                    item_type: raw.item_type || 'product',
+                    kind: raw.kind || 'article',
+                    status: raw.status || 'normal',
+                    active: raw.active !== false,
+
+                    product_id: raw.product_id || raw.productId || null,
+                    productId: raw.productId || raw.product_id || null,
+
+                    name: title,
+                    desc_html: raw.desc_html || raw.description || raw.short_description || '',
+                    description: raw.description || raw.short_description || raw.desc_html || '',
+
+                    article_no: raw.article_no || raw.manufacturer_article_no || '',
+                    manufacturer_article_no: raw.manufacturer_article_no || raw.article_no || '',
+                    distributor_article_no: raw.distributor_article_no || raw.supplier_article_no || '',
+
+                    distributor_id: raw.distributor_id || null,
+                    distributor_price_id: raw.distributor_price_id || null,
+                    distributor_name: raw.distributor_name || raw.supplier || '',
+                    supplier: raw.supplier || raw.distributor_name || '',
+
+                    qty: Number(raw.qty || raw.quantity || 1) || 1,
+                    unit: unit,
+                    measure: unit,
+                    vpe: raw.vpe || raw.package_unit || '',
+
+                    price: vk,
+                    unit_price: vk,
+                    ek: ek,
+                    purchase_price: ek,
+                    margin: Number.isFinite(margin) ? Number(margin.toFixed(2)) : 20,
+                    marginPercent: Number.isFinite(margin) ? Number(margin.toFixed(2)) : 20,
+                    marginType: raw.marginType || 'percent',
+
+                    availability: raw.availability || '',
+                    skonto: Number(raw.skonto || 0) || 0,
+                    payment_terms: raw.payment_terms || '',
+
+                    price_unit_value: Number(raw.price_unit_value || 1) || 1,
+                    price_unit_label: raw.price_unit_label || unit,
+                    price_unit_text: raw.price_unit_text || `1 ${unit}`,
+
+                    img: raw.img || raw.image_url || raw.image || '',
+                    image_url: raw.image_url || raw.img || raw.image || '',
+
+                    subItems: Array.isArray(raw.subItems) ? raw.subItems : [],
+                    labor_rows: Array.isArray(raw.labor_rows) ? raw.labor_rows : [],
+                    hideImage: !!raw.hideImage,
+                    hidePrices: !!raw.hidePrices,
+                    hideNumbering: !!raw.hideNumbering,
+
+                    _source: raw._source || 'supplier_import',
+                    _supplier_connection_id: raw._supplier_connection_id || null,
+                    _supplier_import_log_id: raw._supplier_import_log_id || null
+                };
+            },
+
+            bootReverbListener: function () {
+                const folderId = Number(this.folderId() || 0);
+
+                if (!folderId) return;
+
+                window.OfferSupplierConfig = window.OfferSupplierConfig || {};
+                window.OfferSupplierConfig.folderId = folderId;
+                window.OfferSupplierConfig.offerId = this.offerId() ? Number(this.offerId()) : window.OfferSupplierConfig.offerId;
+                window.OfferSupplierConfig.returnMode = 'review_then_reverb';
+
+                // Same guard as resources/js/ids-listener.js, so there will be no duplicate listener.
+                if (window.__offerSupplierIdsListenerStarted === folderId) return;
+
+                if (!window.Echo) {
+                    setTimeout(() => this.bootReverbListener(), 500);
+                    return;
+                }
+
+                window.__offerSupplierIdsListenerStarted = folderId;
+
+                console.log('[Offer Supplier] Listening on private channel offer-folder.' + folderId);
+
+                window.Echo.private('offer-folder.' + folderId)
+                    .listen('.supplier.products.imported', (payload) => {
+                        console.log('[Offer Supplier] Reverb payload:', payload);
+                        App.SupplierSearch.receiveImport(payload);
+                    })
+                    .error((error) => {
+                        console.error('[Offer Supplier] Reverb channel error:', error);
+                    });
+            }
+        };
+
+        App.SupplierSearch.syncConfig();
+        App.SupplierSearch.loadProcessedImports();
+        App.SupplierSearch.bootReverbListener();
+        // Ensure the history button is always available even if an older toolbar template is cached/re-rendered.
+        App.SupplierSearch.ensureHistoryToolbarButton = function () {
+            setTimeout(() => {
+                const toolbar = document.querySelector('.list-toolbar .flex.items-center.gap-2');
+                if (!toolbar || toolbar.querySelector('.list-mini-btn-history')) return;
+
+                const positionBtn = [...toolbar.querySelectorAll('button')].find(btn => (btn.textContent || '').trim().includes('Position'));
+                if (!positionBtn) return;
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'list-mini-btn list-mini-btn-history';
+                btn.title = 'Historie der übernommenen Lieferanten-Positionen anzeigen und erneut einfügen';
+                btn.innerHTML = '<i class="fa-solid fa-clock-rotate-left"></i> Historie';
+                btn.onclick = () => App.SupplierSearch.openHistory();
+                positionBtn.insertAdjacentElement('afterend', btn);
+            }, 50);
+        };
+
+        if (App.ListView && typeof App.ListView.render === 'function' && !App.ListView.__historyButtonPatched) {
+            const originalRender = App.ListView.render.bind(App.ListView);
+            App.ListView.render = function () {
+                const result = originalRender(...arguments);
+                App.SupplierSearch.ensureHistoryToolbarButton();
+                return result;
+            };
+            App.ListView.__historyButtonPatched = true;
+        }
+
+        App.SupplierSearch.ensureHistoryToolbarButton();
+
+
+        window.addEventListener('message', function (event) {
+            if (event.origin !== window.location.origin) return;
+            App.SupplierSearch.receiveImport(event.data);
+        });
+
+        window.addEventListener('storage', function (event) {
+            if (event.key !== 'offer_supplier_import_' + App.SupplierSearch.contextKey()) return;
+            try {
+                App.SupplierSearch.receiveImport(JSON.parse(event.newValue || '{}'));
+            } catch (e) {
+                console.error(e);
+            }
+        });
+
+        try {
+            const cached = localStorage.getItem('offer_supplier_import_' + App.SupplierSearch.contextKey());
+            if (cached) App.SupplierSearch.receiveImport(JSON.parse(cached));
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bootSupplierSearch);
+    } else {
+        bootSupplierSearch();
+    }
+})();
+</script>
+
+<script>
+/* ============================================================================
+   OFFER_CALC_FIX_V3
+   Blade-only fix layer:
+   - One calculation source for A4, sidebar, list, settings, save payload.
+   - Respects price_unit_value for direct products and sub products.
+   - Calculates labor from labor_rows, not from fake row count.
+   - Shows real-time calculation analytics in Kalkulations-Einstellungen.
+   - Keeps backend payload shape unchanged: sections, total_net, tax_rate, total_gross.
+============================================================================ */
+(function () {
+    'use strict';
+
+    if (!window.App || !window.State) {
+        console.warn('[OFFER_CALC_FIX_V2] App/State not ready.');
+        return;
+    }
+
+    const App = window.App;
+    const State = window.State;
+
+    const toNumber = (value, fallback = 0) => {
+        if (value === null || value === undefined || value === '') return fallback;
+        if (typeof value === 'string') value = value.replace(',', '.');
+        const n = Number(value);
+        return Number.isFinite(n) ? n : fallback;
+    };
+
+    const money = (value) => {
+        const n = toNumber(value, 0);
+        return n.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    };
+
+    const pct = (value) => {
+        const n = toNumber(value, 0);
+        return n.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+    };
+
+    const safeDiv = (value, divisor) => {
+        const d = toNumber(divisor, 0);
+        return d > 0 ? toNumber(value, 0) / d : 0;
+    };
+
+    const blankAnalysis = () => ({
+        sales: 0,
+        cost: 0,
+        db: 0,
+        hours: 0,
+        materialSales: 0,
+        materialCost: 0,
+        laborSales: 0,
+        laborCost: 0,
+        externalSales: 0,
+        externalCost: 0,
+        logisticsSales: 0,
+        logisticsCost: 0,
+        optionalSales: 0,
+        alternativeSales: 0,
+        rows: 0
+    });
+
+    const addAnalysis = (target, source, multiplier = 1) => {
+        Object.keys(blankAnalysis()).forEach((key) => {
+            target[key] = toNumber(target[key], 0) + (toNumber(source[key], 0) * multiplier);
+        });
+        target.db = target.sales - target.cost;
+        return target;
+    };
+
+    App.num = function (value, fallback = 0) {
+        return toNumber(value, fallback);
+    };
+
+    App.money = function (value) {
+        const n = toNumber(value, 0);
+        return n.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+
+    App.calcScaledLineTotal = function (qty, pricePerBase, baseQty) {
+        const q = toNumber(qty, 0);
+        const p = toNumber(pricePerBase, 0);
+        const b = Math.max(0.000001, toNumber(baseQty, 1));
+        return (q / b) * p;
+    };
+
+    App.vkFromEkMargin = function (ek, marginPercent) {
+        const EK = toNumber(ek, 0);
+        const margin = toNumber(marginPercent, 0) / 100;
+        if (EK <= 0) return 0;
+        return EK * (1 + margin);
+    };
+
+    App.marginFromEkVk = function (ek, vk) {
+        const EK = toNumber(ek, 0);
+        const VK = toNumber(vk, 0);
+        return EK > 0 ? ((VK - EK) / EK) * 100 : 0;
+    };
+
+    App.resolveLineStatus = function (item) {
+        const raw = String(item?.lineType || item?.status || 'normal').toLowerCase().trim();
+        if (raw === 'standard') return 'normal';
+        if (raw === 'optional') return 'optional';
+        if (raw === 'alternative') return 'alternative';
+        return raw || 'normal';
+    };
+
+    App.resolveItemKind = function (item) {
+        const kind = String(item?.kind || '').toLowerCase().trim();
+        const itemType = String(item?.item_type || '').toLowerCase().trim();
+        const unit = String(item?.unit || item?.measure || '').toLowerCase().trim();
+
+        if (kind === 'note' || itemType === 'note') return 'note';
+        if (kind === 'labor' || itemType === 'labor' || unit === 'std' || unit === 'h' || unit === 'hour' || unit === 'stunden') return 'labor';
+        if (kind === 'external' || itemType === 'external' || itemType === 'fremdleistung') return 'external';
+        if (item?._virtualType === 'logistics' || itemType === 'logistics') return 'logistics';
+        return 'material';
+    };
+
+    App.isBillableStatus = function (item) {
+        return App.resolveLineStatus(item) === 'normal';
+    };
+
+    App.getItemMultiplier = function (item) {
+        if (item?.isPauschal) return 1;
+        const qty = (item?.qty === undefined || item?.qty === null || item?.qty === '') ? 1 : toNumber(item.qty, 0);
+        const baseQty = Math.max(0.000001, toNumber(item?.price_unit_value, 1));
+        return qty / baseQty;
+    };
+
+    App.calcLaborAnalysis = function (item, options = {}) {
+        const result = blankAnalysis();
+        const rows = Array.isArray(item?.labor_rows) ? item.labor_rows : [];
+
+        if (rows.length === 0) {
+            const multiplier = App.getItemMultiplier(item);
+            result.sales = toNumber(item?.price ?? item?.rate, 0) * multiplier;
+            result.cost = App.resolveItemEk(item) * multiplier;
+            result.hours = (item?.qty === undefined || item?.qty === null || item?.qty === '') ? 0 : toNumber(item.qty, 0);
+        } else {
+            rows.forEach((row) => {
+                const q = toNumber(row.qty, 0);
+                const ek = toNumber(row.ek, 0);
+                const rate = toNumber(row.rate, 0);
+                row.total = q * rate;
+                result.sales += q * rate;
+                result.cost += q * ek;
+                result.hours += q;
+                result.rows += 1;
+            });
+        }
+
+        result.laborSales = result.sales;
+        result.laborCost = result.cost;
+        result.db = result.sales - result.cost;
+        return result;
+    };
+
+    App.calcItemAnalysis = function (item, options = {}) {
+        const opts = Object.assign({ billableOnly: false }, options || {});
+        const result = blankAnalysis();
+
+        if (!item || item.active === false) return result;
+
+        const status = App.resolveLineStatus(item);
+        const kind = App.resolveItemKind(item);
+
+        if (kind === 'note') return result;
+
+        if (opts.billableOnly && status !== 'normal') {
+            const ghost = App.calcItemAnalysis(item, Object.assign({}, opts, { billableOnly: false }));
+            if (status === 'optional') result.optionalSales = ghost.sales;
+            if (status === 'alternative') result.alternativeSales = ghost.sales;
+            return result;
+        }
+
+        const hasChildren = Array.isArray(item.subItems) && item.subItems.length > 0 && !item.isPauschal;
+        let shouldCategorizeDirectLine = false;
+
+        if (item.isPauschal) {
+            result.sales = toNumber(item.price ?? item.rate, 0);
+            result.cost = App.resolveItemEk(item);
+            shouldCategorizeDirectLine = true;
+        } else if (kind === 'labor') {
+            addAnalysis(result, App.calcLaborAnalysis(item));
+        } else if (hasChildren) {
+            const childTotal = blankAnalysis();
+            item.subItems.forEach((sub) => {
+                addAnalysis(childTotal, App.calcItemAnalysis(sub, opts));
+            });
+            addAnalysis(result, childTotal, App.getItemMultiplier(item));
+        } else {
+            const multiplier = App.getItemMultiplier(item);
+            result.sales = toNumber(item.price ?? item.rate, 0) * multiplier;
+            result.cost = App.resolveItemEk(item) * multiplier;
+            shouldCategorizeDirectLine = true;
+        }
+
+        if (shouldCategorizeDirectLine) {
+            if (kind === 'material') {
+                result.materialSales += result.sales;
+                result.materialCost += result.cost;
+            } else if (kind === 'external') {
+                result.externalSales += result.sales;
+                result.externalCost += result.cost;
+            } else if (kind === 'logistics') {
+                result.logisticsSales += result.sales;
+                result.logisticsCost += result.cost;
+            }
+        }
+
+        result.db = result.sales - result.cost;
+        return result;
+    };
+
+    App.calcItemGross = function (item) {
+        return App.calcItemAnalysis(item, { billableOnly: false }).sales;
+    };
+
+    App.calcItemCost = function (item) {
+        return App.calcItemAnalysis(item, { billableOnly: false }).cost;
+    };
+
+    App.calcSectionAnalysis = function (section, options = {}) {
+        const result = blankAnalysis();
+        if (!section || section._pageBreak) return result;
+
+        const cfg = section.config || {};
+        const qty = Math.max(1, toNumber(cfg.qty, 1));
+        const unit = String(cfg.unit || '').toLowerCase().trim();
+        const multiplier = unit === 'set' ? qty : 1;
+
+        const rawItems = blankAnalysis();
+        (section.items || []).forEach((item) => {
+            addAnalysis(rawItems, App.calcItemAnalysis(item, options));
+        });
+
+        if (String(cfg.mode || 'standard').toLowerCase() === 'pauschal') {
+            addAnalysis(result, rawItems, multiplier);
+            result.sales = toNumber(cfg.pauschalPrice, 0) * multiplier;
+            result.db = result.sales - result.cost;
+            return result;
+        }
+
+        addAnalysis(result, rawItems, multiplier);
+        result.db = result.sales - result.cost;
+        return result;
+    };
+
+    App.computeSectionSummary = function (forPrint = false) {
+        const sectionRows = [];
+        let subtotal = 0;
+
+        (App.getRenderableSections(forPrint) || []).forEach((section, index) => {
+            if (!section || section._pageBreak) return;
+            const analysis = App.calcSectionAnalysis(section, { billableOnly: true });
+            sectionRows.push({
+                index,
+                label: section.title || `Sektion ${index + 1}`,
+                net: analysis.sales,
+                ek: analysis.cost,
+                db: analysis.db,
+                marginPct: safeDiv(analysis.db, analysis.cost) * 100,
+                sharePct: 0,
+                analysis
+            });
+            subtotal += analysis.sales;
+        });
+
+        sectionRows.forEach((row) => {
+            row.sharePct = safeDiv(row.net, subtotal) * 100;
+        });
+
+        const vatRate = toNumber(State.taxRate, 19);
+        const vatValue = subtotal * (vatRate / 100);
+        const gross = subtotal + vatValue;
+
+        return {
+            sections: sectionRows,
+            subtotal,
+            netTotal: subtotal,
+            vatRate,
+            vatValue,
+            gross
+        };
+    };
+
+    App.computeQuoteTotals = function (forPrint = false) {
+        const quote = blankAnalysis();
+        const sectionBreakdown = [];
+
+        (App.getRenderableSections(forPrint) || []).forEach((section, index) => {
+            if (!section || section._pageBreak) return;
+            const sectionAnalysis = App.calcSectionAnalysis(section, { billableOnly: true });
+            addAnalysis(quote, sectionAnalysis);
+            sectionBreakdown.push({
+                index,
+                title: section.title || `Sektion ${index + 1}`,
+                sales: sectionAnalysis.sales,
+                cost: sectionAnalysis.cost,
+                db: sectionAnalysis.db,
+                marginPct: safeDiv(sectionAnalysis.db, sectionAnalysis.cost) * 100,
+                sharePct: 0,
+                materialSales: sectionAnalysis.materialSales,
+                laborSales: sectionAnalysis.laborSales,
+                externalSales: sectionAnalysis.externalSales,
+                logisticsSales: sectionAnalysis.logisticsSales,
+                hours: sectionAnalysis.hours
+            });
+        });
+
+        sectionBreakdown.forEach((row) => {
+            row.sharePct = safeDiv(row.sales, quote.sales) * 100;
+        });
+
+        const cfg = State.config || {};
+        const overheadCost = quote.sales * (toNumber(cfg.overhead, 0) / 100);
+        const commissionCost = quote.sales * (toNumber(cfg.commission, 0) / 100);
+        const supplierDiscountValue = quote.cost * (toNumber(cfg.supplierDiscount, 0) / 100);
+        const riskCost = quote.cost * (toNumber(cfg.risk, 0) / 100);
+        const financeCost = quote.cost * (toNumber(cfg.finance, 0) / 100);
+        const customerDiscountValue = quote.sales * (toNumber(cfg.custDiscount, 0) / 100);
+
+        const db1 = quote.sales - quote.cost;
+        const db2 = db1 - overheadCost - commissionCost;
+        const db3 = db2 + supplierDiscountValue - riskCost - financeCost - customerDiscountValue;
+        const incomeTaxValue = Math.max(0, db3 * (toNumber(cfg.tax, 0) / 100));
+        const netProfit = db3 - incomeTaxValue;
+
+        const vatRate = toNumber(State.taxRate, toNumber(cfg.vatMode, 19));
+        const vatValue = quote.sales * (vatRate / 100);
+        const grossTotal = quote.sales + vatValue;
+
+        const totalGlobalCosts = overheadCost + commissionCost + riskCost + financeCost + customerDiscountValue - supplierDiscountValue;
+
+        const partBreakdown = [
+            { key: 'material', label: 'Material / Komponenten', sales: quote.materialSales, cost: quote.materialCost, icon: 'fa-boxes-stacked' },
+            { key: 'labor', label: 'Lohn / Montage', sales: quote.laborSales, cost: quote.laborCost, icon: 'fa-user-gear' },
+            { key: 'external', label: 'Fremdleistung', sales: quote.externalSales, cost: quote.externalCost, icon: 'fa-handshake-angle' },
+            { key: 'logistics', label: 'Logistik & Baustelle', sales: quote.logisticsSales, cost: quote.logisticsCost, icon: 'fa-truck' }
+        ].map((row) => ({
+            ...row,
+            db: row.sales - row.cost,
+            sharePct: safeDiv(row.sales, quote.sales) * 100,
+            marginPct: safeDiv(row.sales - row.cost, row.cost) * 100
+        }));
+
+        return {
+            salesNet: quote.sales,
+            sumEK: quote.cost,
+            sumLaborSales: quote.laborSales,
+            sumMatSales: quote.materialSales,
+            logisticsTotal: quote.logisticsSales,
+            totalHours: quote.hours,
+            db1,
+            db2,
+            db3,
+            overheadCost,
+            commissionCost,
+            supplierDiscountValue,
+            riskCost,
+            financeCost,
+            customerDiscountValue,
+            incomeTaxValue,
+            netProfit,
+            vatRate,
+            vatValue,
+            grossTotal,
+            laborShare: safeDiv(quote.laborSales, quote.sales) * 100,
+            matShare: safeDiv(quote.materialSales, quote.sales) * 100,
+            db1Pct: safeDiv(db1, quote.sales) * 100,
+            db2Pct: safeDiv(db2, quote.sales) * 100,
+            profitPct: safeDiv(netProfit, quote.sales) * 100,
+            salesPerHour: safeDiv(quote.sales, quote.hours),
+            profitPerHour: safeDiv(db3, quote.hours),
+            totalGlobalCosts,
+            totalCostFactor: safeDiv(totalGlobalCosts, quote.sales),
+            sectionBreakdown,
+            partBreakdown,
+            calculationSteps: [
+                { label: 'EK Material/Lohn gesamt', value: quote.cost, percentBase: quote.sales, type: 'base' },
+                { label: 'DB1 vor Gemeinkosten', value: db1, percentBase: quote.sales, type: 'profit' },
+                { label: 'Gemeinkosten', value: overheadCost, percentBase: quote.sales, type: 'cost' },
+                { label: 'Vertriebs-Provision', value: commissionCost, percentBase: quote.sales, type: 'cost' },
+                { label: 'Lieferanten-Skonto', value: -supplierDiscountValue, percentBase: quote.sales, type: 'credit' },
+                { label: 'Kalk. Wagnis', value: riskCost, percentBase: quote.sales, type: 'cost' },
+                { label: 'Vorfinanzierung', value: financeCost, percentBase: quote.sales, type: 'cost' },
+                { label: 'Kunden-Skonto', value: customerDiscountValue, percentBase: quote.sales, type: 'cost' },
+                { label: 'DB3 vor Ertragssteuer', value: db3, percentBase: quote.sales, type: 'profit' },
+                { label: 'Kalk. Ertragssteuer', value: incomeTaxValue, percentBase: quote.sales, type: 'cost' },
+                { label: 'Nettogewinn nach Steuer', value: netProfit, percentBase: quote.sales, type: 'profit' },
+                { label: `Umsatzsteuer ${pct(vatRate)}`, value: vatValue, percentBase: quote.sales, type: 'tax' }
+            ]
+        };
+    };
+
+    App.updateSidebarGrandTotals = function () {
+        const totals = App.computeQuoteTotals(false);
+        const netEl = document.getElementById('sidebar-grand-net');
+        const vatEl = document.getElementById('sidebar-grand-gross');
+        const totalEl = document.getElementById('sidebar-grand-total');
+        const lbl = document.getElementById('lbl-tax-rate');
+        if (netEl) netEl.innerText = money(totals.salesNet);
+        if (vatEl) vatEl.innerText = money(totals.vatValue);
+        if (totalEl) totalEl.innerText = money(totals.grossTotal);
+        if (lbl) lbl.innerText = toNumber(totals.vatRate, 19);
+    };
+
+    App.recalcLaborCarrier = function (sIdx, iIdx, subIdx = null) {
+        const carrier = typeof App.resolveLaborCarrier === 'function'
+            ? App.resolveLaborCarrier(sIdx, iIdx, subIdx)
+            : (subIdx !== null && subIdx !== undefined && subIdx !== 'null'
+                ? State.sections?.[sIdx]?.items?.[iIdx]?.subItems?.[subIdx]
+                : State.sections?.[sIdx]?.items?.[iIdx]);
+
+        if (!carrier || !Array.isArray(carrier.labor_rows)) return;
+
+        let totalVk = 0;
+        let totalEk = 0;
+        let totalQty = 0;
+
+        carrier.labor_rows.forEach((row) => {
+            const qty = toNumber(row.qty, 0);
+            const ek = toNumber(row.ek, 0);
+            const margin = toNumber(row.margin_percent, App.getDefaultMargin ? App.getDefaultMargin('labor') : 50);
+            if (!toNumber(row.rate, 0) && ek > 0) {
+                row.rate = App.vkFromEkMargin(ek, margin);
+            }
+            const rate = toNumber(row.rate, 0);
+            row.total = qty * rate;
+            totalVk += row.total;
+            totalEk += qty * ek;
+            totalQty += qty;
+        });
+
+        carrier.kind = 'labor';
+        carrier.item_type = carrier.item_type || 'labor';
+        carrier.qty = totalQty > 0 ? totalQty : 1;
+        carrier.unit = 'Std';
+        carrier.measure = 'Std';
+        carrier.price_unit_value = 1;
+        carrier.price_unit_label = 'Std';
+        carrier.price_unit_text = '1 Std';
+        carrier.price = totalQty > 0 ? totalVk / totalQty : 0;
+        carrier.rate = carrier.price;
+        carrier.ek = totalQty > 0 ? totalEk / totalQty : 0;
+        carrier.purchase_price = carrier.ek;
+        carrier.marginPercent = carrier.ek > 0 ? App.marginFromEkVk(carrier.ek, carrier.price) : toNumber(carrier.marginPercent, 0);
+        carrier.margin = carrier.marginPercent;
+    };
+
+    App.updatePosPriceCalc = function (sIdx, iIdx, subIdx, field, value) {
+        const isSub = subIdx !== null && subIdx !== undefined && subIdx !== 'null';
+        const item = isSub ? State.sections?.[sIdx]?.items?.[iIdx]?.subItems?.[subIdx] : State.sections?.[sIdx]?.items?.[iIdx];
+        if (!item) return;
+
+        const val = toNumber(value, 0);
+        let ek = toNumber(item.purchase_price ?? item.ek, 0);
+        let vk = toNumber(item.price ?? item.rate, 0);
+        let margin = toNumber(item.marginPercent ?? item.margin, 0);
+
+        if (field === 'ek' || field === 'purchase_price') {
+            item.ek = val;
+            item.purchase_price = val;
+            item.price = App.vkFromEkMargin(val, margin);
+            item.rate = item.price;
+        } else if (field === 'margin' || field === 'marginPercent') {
+            item.margin = val;
+            item.marginPercent = val;
+            item.price = App.vkFromEkMargin(ek, val);
+            item.rate = item.price;
+        } else if (field === 'price' || field === 'rate') {
+            item.price = val;
+            item.rate = val;
+            item.marginPercent = ek > 0 ? App.marginFromEkVk(ek, val) : 0;
+            item.margin = item.marginPercent;
+        } else if (field === 'qty') {
+            item.qty = val;
+        } else if (field === 'price_unit_value') {
+            item.price_unit_value = Math.max(0.000001, val);
+        } else if (field === 'marginType') {
+            item.marginType = value || 'percent';
+        }
+
+        if (item.kind === 'labor' && Array.isArray(item.labor_rows)) {
+            App.recalcLaborCarrier(sIdx, iIdx, isSub ? subIdx : null);
+        }
+
+        if (isSub && typeof App.syncParentTotals === 'function') {
+            App.syncParentTotals(sIdx, iIdx);
+        }
+
+        if (toNumber(item.marginPercent, 0) < toNumber(State.config?.minProfit, 10) && (field === 'margin' || field === 'marginPercent' || field === 'price')) {
+            if (typeof App.toastConfirmShow === 'function') {
+                App.toastConfirmShow({
+                    title: 'Achtung: Marge zu niedrig!',
+                    message: `Die errechnete Marge liegt bei ${pct(item.marginPercent)} und damit unter dem Mindestgewinn von ${pct(State.config?.minProfit || 10)}.`,
+                    okText: 'Verstanden',
+                    cancelText: ''
+                });
+                const cancel = document.getElementById('toast-confirm-cancel');
+                if (cancel) cancel.style.display = 'none';
+            }
+        }
+
+        App.renderQuotePage(false);
+    };
+
+    App.calcPosSettings = function (isVk) {
+        const ekEl = document.getElementById('setting-ek');
+        const marginEl = document.getElementById('setting-margin');
+        const vkEl = document.getElementById('setting-vk');
+        if (!ekEl || !marginEl || !vkEl) return;
+
+        const ek = toNumber(ekEl.value, 0);
+        const margin = toNumber(marginEl.value, 0);
+
+        if (isVk) {
+            const vk = toNumber(vkEl.value, 0);
+            marginEl.value = ek > 0 ? App.marginFromEkVk(ek, vk).toFixed(2) : '0.00';
+        } else {
+            vkEl.value = App.vkFromEkMargin(ek, margin).toFixed(2);
+        }
+
+        App.updatePosSettingsPreview();
+    };
+
+    App.updatePosSettingsPreview = function () {
+        const modal = document.getElementById('pos-settings-modal');
+        if (!modal || modal.classList.contains('hidden')) return;
+
+        let box = document.getElementById('setting-calc-preview');
+        const vkBox = document.getElementById('setting-vk')?.closest('.bg-\[\#f0fdf4\]');
+        if (!box && vkBox) {
+            box = document.createElement('div');
+            box.id = 'setting-calc-preview';
+            box.className = 'rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs space-y-1';
+            vkBox.insertAdjacentElement('afterend', box);
+        }
+        if (!box) return;
+
+        const qty = toNumber(document.getElementById('setting-qty')?.value, 1);
+        const ek = toNumber(document.getElementById('setting-ek')?.value, 0);
+        const vk = toNumber(document.getElementById('setting-vk')?.value, 0);
+        const margin = ek > 0 ? App.marginFromEkVk(ek, vk) : 0;
+        const ekTotal = qty * ek;
+        const vkTotal = qty * vk;
+        const db = vkTotal - ekTotal;
+
+        box.innerHTML = `
+            <div class="flex justify-between"><span>EK Gesamt</span><b>${money(ekTotal)}</b></div>
+            <div class="flex justify-between"><span>VK Gesamt</span><b>${money(vkTotal)}</b></div>
+            <div class="flex justify-between"><span>DB / Gewinn</span><b>${money(db)}</b></div>
+            <div class="flex justify-between"><span>Aufschlag</span><b>${pct(margin)}</b></div>
+        `;
+    };
+
+    App.openPosSettings = function (sIdx, iIdx, subIdx = null) {
+        const isSub = subIdx !== null && subIdx !== undefined && subIdx !== 'null';
+        const item = isSub ? State.sections?.[sIdx]?.items?.[iIdx]?.subItems?.[subIdx] : State.sections?.[sIdx]?.items?.[iIdx];
+        if (!item) return;
+
+        State.tempPosSettings = { sIdx, iIdx, subIdx: isSub ? Number(subIdx) : null };
+
+        const unitEl = document.getElementById('setting-unit');
+        if (unitEl && typeof App.renderUnitOptions === 'function') {
+            unitEl.innerHTML = App.renderUnitOptions(item.measure || item.unit || 'Stk');
+            unitEl.value = item.measure || item.unit || 'Stk';
+        }
+
+        const setVal = (id, value) => { const el = document.getElementById(id); if (el) el.value = value; };
+        const setChecked = (id, value) => { const el = document.getElementById(id); if (el) el.checked = !!value; };
+
+        setVal('setting-qty', item.qty ?? 1);
+        setVal('setting-ek', item.purchase_price ?? item.ek ?? 0);
+        setVal('setting-margin', item.marginPercent ?? item.margin ?? 0);
+        setVal('setting-vk', item.price ?? item.rate ?? 0);
+        setChecked('setting-pauschal', item.isPauschal);
+        setChecked('setting-hide-price', item.hidePrices);
+        setChecked('setting-hide-numbering', item.hideNumbering);
+        setChecked('setting-hide-image', item.hideImage);
+        setChecked('setting-active', item.active !== false);
+
+        const modal = document.getElementById('pos-settings-modal');
+        if (modal) modal.classList.remove('hidden');
+        App.updatePosSettingsPreview();
+    };
+
+    App.savePosSettings = function () {
+        if (!State.tempPosSettings) return;
+
+        const { sIdx, iIdx, subIdx } = State.tempPosSettings;
+        const isSub = subIdx !== null && subIdx !== undefined && subIdx !== 'null';
+        const item = isSub ? State.sections?.[sIdx]?.items?.[iIdx]?.subItems?.[subIdx] : State.sections?.[sIdx]?.items?.[iIdx];
+        if (!item) return;
+
+        item.qty = toNumber(document.getElementById('setting-qty')?.value, 1);
+        item.unit = document.getElementById('setting-unit')?.value || item.unit || 'Stk';
+        item.measure = item.unit;
+        item.ek = toNumber(document.getElementById('setting-ek')?.value, 0);
+        item.purchase_price = item.ek;
+        item.margin = toNumber(document.getElementById('setting-margin')?.value, 0);
+        item.marginPercent = item.margin;
+        item.price = toNumber(document.getElementById('setting-vk')?.value, 0);
+        item.rate = item.price;
+        item.isPauschal = !!document.getElementById('setting-pauschal')?.checked;
+        item.hidePrices = !!document.getElementById('setting-hide-price')?.checked;
+        item.hideNumbering = !!document.getElementById('setting-hide-numbering')?.checked;
+        item.hideImage = !!document.getElementById('setting-hide-image')?.checked;
+        item.active = !!document.getElementById('setting-active')?.checked;
+
+        if (item.kind === 'labor' && Array.isArray(item.labor_rows)) {
+            App.recalcLaborCarrier(sIdx, iIdx, isSub ? subIdx : null);
+        }
+
+        if (isSub && typeof App.syncParentTotals === 'function') {
+            App.syncParentTotals(sIdx, iIdx);
+        }
+
+        App.renderQuotePage(false);
+        App.closePosSettings();
+    };
+
+    App.Settings = App.Settings || {};
+
+    App.Settings.analyticsCard = function (label, value, sub, icon, extraClass = '') {
+        return `
+            <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm ${extraClass}">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <div class="text-[10px] font-black uppercase tracking-wider text-slate-500">${label}</div>
+                        <div class="mt-1 text-xl font-black text-slate-900">${value}</div>
+                        ${sub ? `<div class="mt-1 text-[11px] text-slate-500">${sub}</div>` : ''}
+                    </div>
+                    <div class="w-10 h-10 rounded-2xl bg-[#f7fee7] text-[#93c21c] flex items-center justify-center">
+                        <i class="fa-solid ${icon}"></i>
+                    </div>
+                </div>
+            </div>
+        `;
+    };
+
+    App.Settings.render = function () {
+        const root = document.getElementById('settings-root');
+        if (!root) return;
+
+        State.config = State.config || {};
+        State.config.logistics = State.config.logistics || {};
+        State.config.logistics.freight = State.config.logistics.freight || { active: false, val: 0 };
+        State.config.logistics.vehicle = State.config.logistics.vehicle || { active: false, val: 0 };
+        State.config.logistics.machine = State.config.logistics.machine || { active: false, val: 0 };
+        State.config.margins = State.config.margins || { material: 20, labor: 50, external: 15 };
+
+        const c = State.config;
+        const totals = App.computeQuoteTotals(false);
+        const markupOnEk = safeDiv(totals.salesNet - totals.sumEK, totals.sumEK) * 100;
+        const effectiveAddPct = safeDiv(totals.totalGlobalCosts, totals.salesNet) * 100;
+
+        const input = (key, value, suffix = '%', width = 'w-20') => `
+            <div class="flex items-center gap-1">
+                <input type="number" class="${width} bg-white border border-slate-300 rounded-xl px-2 py-1.5 text-right text-slate-900 font-bold outline-none focus:border-[#93c21c]" step="any" value="${toNumber(value, 0)}" onchange="App.Settings.update('${key}', this.value)">
+                <span class="text-slate-500 text-xs">${suffix}</span>
+            </div>
+        `;
+
+        const toggleInput = (keyActive, keyValue, active, value, label) => `
+            <div class="flex justify-between items-center gap-4 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                <label class="flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer">
+                    <input type="checkbox" class="accent-[#93c21c]" ${active ? 'checked' : ''} onchange="App.Settings.update('${keyActive}', this.checked)">
+                    ${label}
+                </label>
+                ${input(keyValue, value, '€', 'w-24')}
+            </div>
+        `;
+
+        const partRows = totals.partBreakdown.map((row) => `
+            <div class="rounded-xl border border-slate-200 bg-white p-3">
+                <div class="flex items-center justify-between gap-3 mb-2">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <span class="w-8 h-8 rounded-xl bg-slate-100 text-[#93c21c] flex items-center justify-center shrink-0"><i class="fa-solid ${row.icon}"></i></span>
+                        <div class="min-w-0">
+                            <div class="font-black text-slate-900 truncate">${row.label}</div>
+                            <div class="text-[11px] text-slate-500">Anteil am Netto: ${pct(row.sharePct)}</div>
+                        </div>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <div class="font-black text-slate-900">${money(row.sales)}</div>
+                        <div class="text-[11px] text-slate-500">EK ${money(row.cost)}</div>
+                    </div>
+                </div>
+                <div class="h-2 rounded-full bg-slate-100 overflow-hidden"><div class="h-full bg-[#93c21c]" style="width:${Math.max(0, Math.min(100, row.sharePct))}%"></div></div>
+                <div class="mt-2 grid grid-cols-2 text-[11px] text-slate-600 gap-2">
+                    <span>DB: <b class="text-slate-900">${money(row.db)}</b></span>
+                    <span class="text-right">Aufschlag: <b class="text-slate-900">${pct(row.marginPct)}</b></span>
+                </div>
+            </div>
+        `).join('');
+
+        const sectionRows = totals.sectionBreakdown.map((row) => `
+            <tr class="border-b border-slate-100 last:border-b-0">
+                <td class="py-2 pr-2 font-bold text-slate-800">${App.escapeHtml ? App.escapeHtml(row.title) : row.title}</td>
+                <td class="py-2 px-2 text-right">${money(row.sales)}</td>
+                <td class="py-2 px-2 text-right text-slate-500">${money(row.cost)}</td>
+                <td class="py-2 px-2 text-right font-bold ${row.db >= 0 ? 'text-emerald-700' : 'text-red-600'}">${money(row.db)}</td>
+                <td class="py-2 pl-2 text-right">${pct(row.sharePct)}</td>
+            </tr>
+        `).join('');
+
+        const stepRows = totals.calculationSteps.map((row) => {
+            const value = toNumber(row.value, 0);
+            const signClass = value < 0 ? 'text-emerald-700' : (row.type === 'cost' || row.type === 'tax' ? 'text-red-600' : 'text-slate-900');
+            return `
+                <tr class="border-b border-slate-100 last:border-b-0">
+                    <td class="py-2 pr-2 font-bold text-slate-700">${row.label}</td>
+                    <td class="py-2 px-2 text-right ${signClass}">${money(value)}</td>
+                    <td class="py-2 pl-2 text-right text-slate-500">${pct(safeDiv(Math.abs(value), row.percentBase) * 100)}</td>
+                </tr>
+            `;
+        }).join('');
+
+        root.innerHTML = `
+            <div class="grid grid-cols-1 2xl:grid-cols-[420px_1fr] gap-6">
+                <div class="space-y-4">
+                    <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                        <div class="p-4 border-b border-slate-200 bg-slate-50">
+                            <div class="text-xs font-black uppercase tracking-wider text-slate-500">Steuer & Basis</div>
+                            <div class="text-lg font-black text-slate-900">Kalkulations-Regeln</div>
+                        </div>
+                        <div class="p-4 space-y-4">
+                            <div class="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                <div class="text-[11px] font-black uppercase tracking-wider text-slate-500 mb-2">Umsatzsteuer-Modus</div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button type="button" onclick="App.Settings.update('vatMode', 0)" class="py-2 rounded-xl text-xs font-black ${toNumber(c.vatMode, 19) === 0 ? 'bg-[#93c21c] text-white' : 'bg-white text-slate-700 border border-slate-200'}">0% PV</button>
+                                    <button type="button" onclick="App.Settings.update('vatMode', 19)" class="py-2 rounded-xl text-xs font-black ${toNumber(c.vatMode, 19) === 19 ? 'bg-[#93c21c] text-white' : 'bg-white text-slate-700 border border-slate-200'}">19% Standard</button>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center"><span class="font-bold text-sm text-slate-700">Gemeinkosten</span>${input('overhead', c.overhead)}</div>
+                                <div class="flex justify-between items-center"><span class="font-bold text-sm text-slate-700">Vertriebs-Provision</span>${input('commission', c.commission)}</div>
+                                <div class="flex justify-between items-center"><span class="font-bold text-sm text-slate-700">Mindestgewinn</span>${input('minProfit', c.minProfit)}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                        <div class="p-4 border-b border-slate-200 bg-slate-50">
+                            <div class="text-xs font-black uppercase tracking-wider text-slate-500">Standard-Aufschläge</div>
+                            <div class="text-lg font-black text-slate-900">Neue Positionen</div>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <div class="flex justify-between items-center"><span class="font-bold text-sm text-slate-700">Material</span>${input('marginMaterial', c.margins.material)}</div>
+                            <div class="flex justify-between items-center"><span class="font-bold text-sm text-slate-700">Lohn / Montage</span>${input('marginLabor', c.margins.labor)}</div>
+                            <div class="flex justify-between items-center"><span class="font-bold text-sm text-slate-700">Fremdleistung</span>${input('marginExternal', c.margins.external)}</div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                        <div class="p-4 border-b border-slate-200 bg-slate-50">
+                            <div class="text-xs font-black uppercase tracking-wider text-slate-500">Baustelle</div>
+                            <div class="text-lg font-black text-slate-900">Logistik & Risiko</div>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <div class="flex justify-between items-center"><span class="font-bold text-sm text-slate-700">Lieferanten-Skonto</span>${input('supplierDiscount', c.supplierDiscount)}</div>
+                            ${toggleInput('freightActive', 'freightVal', c.logistics.freight.active, c.logistics.freight.val, 'Fracht / Logistik')}
+                            ${toggleInput('vehicleActive', 'vehicleVal', c.logistics.vehicle.active, c.logistics.vehicle.val, 'Fahrzeugpauschale')}
+                            ${toggleInput('machineActive', 'machineVal', c.logistics.machine.active, c.logistics.machine.val, 'Maschinenpauschale')}
+                            <div class="flex justify-between items-center"><span class="font-bold text-sm text-slate-700">Kalk. Wagnis</span>${input('risk', c.risk)}</div>
+                            <div class="flex justify-between items-center"><span class="font-bold text-sm text-slate-700">Vorfinanzierung</span>${input('finance', c.finance)}</div>
+                            <div class="flex justify-between items-center"><span class="font-bold text-sm text-slate-700">Kunden-Skonto</span>${input('custDiscount', c.custDiscount)}</div>
+                            <div class="flex justify-between items-center"><span class="font-bold text-sm text-slate-700">Kalk. Ertragssteuer</span>${input('tax', c.tax)}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                        ${App.Settings.analyticsCard('Netto Angebot', money(totals.salesNet), `Brutto ${money(totals.grossTotal)}`, 'fa-file-invoice-dollar')}
+                        ${App.Settings.analyticsCard('EK gesamt', money(totals.sumEK), `Material + Lohn + Fremdleistung`, 'fa-cart-shopping')}
+                        ${App.Settings.analyticsCard('DB1 / Aufschlag', money(totals.db1), `${pct(markupOnEk)} auf EK`, 'fa-chart-line')}
+                        ${App.Settings.analyticsCard('Nettogewinn', money(totals.netProfit), `${pct(totals.profitPct)} vom Netto`, 'fa-sack-dollar')}
+                    </div>
+
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                        <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                            <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center gap-4">
+                                <div>
+                                    <div class="text-xs font-black uppercase tracking-wider text-slate-500">Realtime Analytics</div>
+                                    <div class="text-lg font-black text-slate-900">Anteile je Bereich</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-[10px] text-slate-500 uppercase font-black">Zusatzkosten effektiv</div>
+                                    <div class="text-lg font-black text-slate-900">${pct(effectiveAddPct)}</div>
+                                </div>
+                            </div>
+                            <div class="p-4 space-y-3">${partRows || '<div class="text-sm text-slate-500">Noch keine Positionen vorhanden.</div>'}</div>
+                        </div>
+
+                        <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                            <div class="p-4 border-b border-slate-200 bg-slate-50">
+                                <div class="text-xs font-black uppercase tracking-wider text-slate-500">Kalkulations-Kette</div>
+                                <div class="text-lg font-black text-slate-900">Was wird prozentual addiert?</div>
+                            </div>
+                            <div class="p-4 overflow-x-auto">
+                                <table class="w-full text-xs">
+                                    <thead><tr class="text-slate-500 border-b border-slate-200"><th class="text-left py-2">Teil</th><th class="text-right py-2">Betrag</th><th class="text-right py-2">%</th></tr></thead>
+                                    <tbody>${stepRows}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                        <div class="p-4 border-b border-slate-200 bg-slate-50">
+                            <div class="text-xs font-black uppercase tracking-wider text-slate-500">Abschnittsanalyse</div>
+                            <div class="text-lg font-black text-slate-900">Totals je Abschnitt</div>
+                        </div>
+                        <div class="p-4 overflow-x-auto">
+                            <table class="w-full text-xs">
+                                <thead><tr class="text-slate-500 border-b border-slate-200"><th class="text-left py-2">Abschnitt</th><th class="text-right py-2">VK</th><th class="text-right py-2">EK</th><th class="text-right py-2">DB</th><th class="text-right py-2">Anteil</th></tr></thead>
+                                <tbody>${sectionRows || '<tr><td colspan="5" class="py-6 text-center text-slate-500">Noch keine Abschnitte vorhanden.</td></tr>'}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    };
+
+    App.Settings.update = function (key, value) {
+        const c = State.config = State.config || {};
+        c.logistics = c.logistics || {};
+        c.logistics.freight = c.logistics.freight || { active: false, val: 0 };
+        c.logistics.vehicle = c.logistics.vehicle || { active: false, val: 0 };
+        c.logistics.machine = c.logistics.machine || { active: false, val: 0 };
+        c.margins = c.margins || { material: 20, labor: 50, external: 15 };
+
+        const v = (value === true || value === false) ? value : toNumber(value, 0);
+
+        if (key === 'vatMode') {
+            c.vatMode = v;
+            State.taxRate = v;
+        } else if (key === 'overhead') c.overhead = v;
+        else if (key === 'commission') c.commission = v;
+        else if (key === 'minProfit') c.minProfit = v;
+        else if (key === 'supplierDiscount') c.supplierDiscount = v;
+        else if (key === 'risk') c.risk = v;
+        else if (key === 'finance') c.finance = v;
+        else if (key === 'tax') c.tax = v;
+        else if (key === 'custDiscount') c.custDiscount = v;
+        else if (key === 'freightActive') c.logistics.freight.active = v;
+        else if (key === 'freightVal') c.logistics.freight.val = v;
+        else if (key === 'vehicleActive') c.logistics.vehicle.active = v;
+        else if (key === 'vehicleVal') c.logistics.vehicle.val = v;
+        else if (key === 'machineActive') c.logistics.machine.active = v;
+        else if (key === 'machineVal') c.logistics.machine.val = v;
+        else if (key === 'marginMaterial') {
+            c.margins.material = v;
+            if (typeof App.applyGlobalMarginUpdate === 'function') App.applyGlobalMarginUpdate('article', v);
+        } else if (key === 'marginLabor') {
+            c.margins.labor = v;
+            if (typeof App.applyGlobalMarginUpdate === 'function') App.applyGlobalMarginUpdate('labor', v);
+        } else if (key === 'marginExternal') {
+            c.margins.external = v;
+            if (typeof App.applyGlobalMarginUpdate === 'function') App.applyGlobalMarginUpdate('external', v);
+        }
+
+        const lbl = document.getElementById('lbl-tax-rate');
+        if (lbl) lbl.innerText = toNumber(State.taxRate, 19);
+
+        App.renderQuotePage(false);
+        App.Settings.render();
+        if (App?.Tabs?.current === 'list' && App.ListView?.render) App.ListView.render();
+    };
+
+    const previousRenderQuotePage = App.renderQuotePage ? App.renderQuotePage.bind(App) : null;
+    if (previousRenderQuotePage && !App.__offerCalcFixRenderPatched) {
+        App.renderQuotePage = function (forPrint = false) {
+            const result = previousRenderQuotePage(forPrint);
+            if (!forPrint) {
+                App.updateSidebarGrandTotals();
+                if (App?.Tabs?.current === 'settings') App.Settings.render();
+            }
+            return result;
+        };
+        App.__offerCalcFixRenderPatched = true;
+    }
+
+    const previousTabSwitch = App.Tabs?.switch ? App.Tabs.switch.bind(App.Tabs) : null;
+    if (previousTabSwitch && !App.__offerCalcFixTabPatched) {
+        App.Tabs.switch = function (mode) {
+            const result = previousTabSwitch(mode);
+            if (mode === 'settings') App.Settings.render();
+            return result;
+        };
+        App.__offerCalcFixTabPatched = true;
+    }
+
+    window.addEventListener('DOMContentLoaded', function () {
+        App.updateSidebarGrandTotals();
+        if (document.getElementById('settings-root')) App.Settings.render();
+    });
+
+    console.info('[OFFER_CALC_FIX_V3] Blade calculation + virtual logistics section fixes loaded.');
+})();
+</script>
+
+<style>
+/* =========================
+   ENTERPRISE LIBRARY FULLSCREEN PICKER V3
+========================= */
+.enterprise-fullscreen-btn{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:.75rem;
+    padding:.78rem .95rem;
+    border-radius:1rem;
+    border:1px solid rgba(147,194,28,.28);
+    background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);
+    color:#fff;
+    font-size:.76rem;
+    font-weight:950;
+    box-shadow:0 16px 30px rgba(15,23,42,.14);
+    transition:all .18s ease;
+}
+.enterprise-fullscreen-btn:hover{ transform:translateY(-1px); box-shadow:0 18px 34px rgba(15,23,42,.18); }
+.lib-picker-modal{ position:fixed; inset:0; z-index:10010; display:none; }
+.lib-picker-modal.is-open{ display:block; }
+.lib-picker-backdrop{ position:absolute; inset:0; background:rgba(15,23,42,.70); backdrop-filter:blur(8px); }
+.lib-picker-shell{ position:absolute; inset:24px; display:flex; flex-direction:column; overflow:hidden; border-radius:28px; background:#f8fafc; border:1px solid rgba(255,255,255,.55); box-shadow:0 40px 110px rgba(15,23,42,.45); }
+.lib-picker-top{ height:76px; padding:0 22px; display:flex; align-items:center; justify-content:space-between; gap:1rem; background:linear-gradient(135deg,#ffffff 0%,#f1f5f9 100%); border-bottom:1px solid #e2e8f0; }
+.lib-picker-title{ font-size:1.05rem; font-weight:1000; color:#0f172a; line-height:1.15; }
+.lib-picker-sub{ font-size:.72rem; font-weight:800; color:#64748b; margin-top:.15rem; }
+.lib-picker-body{ flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) 380px; overflow:hidden; }
+.lib-picker-main{ min-width:0; display:flex; flex-direction:column; overflow:hidden; }
+.lib-picker-controls{ padding:14px 18px; display:grid; grid-template-columns:1.1fr 190px 220px auto; gap:10px; align-items:center; background:#fff; border-bottom:1px solid #e2e8f0; }
+.lib-picker-search{ height:42px; border:1px solid #dbe4ee; border-radius:14px; padding:0 14px; font-size:.85rem; font-weight:800; outline:none; background:#f8fafc; }
+.lib-picker-search:focus{ border-color:var(--brand-color); box-shadow:0 0 0 4px rgba(147,194,28,.10); background:white; }
+.lib-picker-select{ height:42px; border:1px solid #dbe4ee; border-radius:14px; padding:0 12px; font-size:.78rem; font-weight:900; outline:none; background:white; color:#0f172a; }
+.lib-picker-tabs{ display:flex; gap:8px; }
+.lib-picker-tab{ height:42px; padding:0 14px; border-radius:14px; border:1px solid #dbe4ee; background:#fff; color:#475569; font-size:.76rem; font-weight:950; transition:.16s ease; white-space:nowrap; }
+.lib-picker-tab:hover{ border-color:var(--brand-color); color:#6b8e12; }
+.lib-picker-tab.active{ background:var(--brand-color); color:white; border-color:var(--brand-color); box-shadow:0 12px 22px rgba(147,194,28,.22); }
+.lib-picker-table-wrap{ flex:1; min-height:0; overflow:auto; padding:16px 18px; }
+.lib-picker-table{ width:100%; min-width:920px; border-collapse:separate; border-spacing:0 8px; }
+.lib-picker-table th{ position:sticky; top:0; z-index:3; padding:10px 12px; background:#f8fafc; color:#64748b; font-size:.68rem; font-weight:1000; text-transform:uppercase; letter-spacing:.08em; text-align:left; }
+.lib-picker-row{ background:white; border:1px solid #e2e8f0; box-shadow:0 10px 20px rgba(15,23,42,.045); transition:.15s ease; }
+.lib-picker-row:hover{ transform:translateY(-1px); box-shadow:0 14px 28px rgba(15,23,42,.08); }
+.lib-picker-row td{ padding:12px; border-top:1px solid #e2e8f0; border-bottom:1px solid #e2e8f0; vertical-align:middle; font-size:.78rem; }
+.lib-picker-row td:first-child{ border-left:1px solid #e2e8f0; border-radius:16px 0 0 16px; }
+.lib-picker-row td:last-child{ border-right:1px solid #e2e8f0; border-radius:0 16px 16px 0; }
+.lib-picker-name{ font-weight:1000; color:#0f172a; line-height:1.25; }
+.lib-picker-desc{ color:#64748b; font-size:.72rem; margin-top:.2rem; max-width:560px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.lib-picker-badge{ display:inline-flex; align-items:center; gap:.35rem; padding:.3rem .58rem; border-radius:999px; background:#f1f5f9; color:#475569; font-size:.66rem; font-weight:1000; white-space:nowrap; }
+.lib-picker-badge.group{ background:#f7fee7; color:#4d7c0f; }
+.lib-picker-badge.blue{ background:#eff6ff; color:#1d4ed8; }
+.lib-picker-cart{ min-width:0; display:flex; flex-direction:column; border-left:1px solid #e2e8f0; background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%); }
+.lib-picker-cart-head{ padding:18px; border-bottom:1px solid #e2e8f0; }
+.lib-picker-cart-title{ font-size:.95rem; font-weight:1000; color:#0f172a; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.lib-picker-section-pill{ margin-top:10px; padding:10px 12px; border-radius:16px; background:#f7fee7; color:#4d7c0f; font-size:.76rem; font-weight:1000; display:flex; gap:.5rem; align-items:center; }
+.lib-picker-cart-list{ flex:1; min-height:0; overflow:auto; padding:14px; display:flex; flex-direction:column; gap:10px; }
+.lib-picker-cart-item{ display:flex; gap:10px; align-items:flex-start; padding:12px; border-radius:18px; border:1px solid #e2e8f0; background:#fff; box-shadow:0 10px 20px rgba(15,23,42,.055); cursor:grab; }
+.lib-picker-cart-item:active{ cursor:grabbing; }
+.lib-picker-cart-index{ width:24px; height:24px; border-radius:10px; background:#f1f5f9; color:#475569; display:flex; align-items:center; justify-content:center; font-size:.66rem; font-weight:1000; flex-shrink:0; }
+.lib-picker-cart-name{ font-size:.78rem; color:#0f172a; font-weight:1000; line-height:1.25; }
+.lib-picker-cart-meta{ font-size:.66rem; color:#64748b; font-weight:900; margin-top:.15rem; }
+.lib-picker-cart-foot{ padding:14px; border-top:1px solid #e2e8f0; background:white; display:flex; flex-direction:column; gap:10px; }
+.lib-picker-insert{ height:46px; border-radius:16px; background:var(--brand-color); color:white; font-size:.84rem; font-weight:1000; box-shadow:0 14px 28px rgba(147,194,28,.22); }
+.lib-picker-insert:disabled{ background:#cbd5e1; box-shadow:none; cursor:not-allowed; }
+.lib-picker-close{ width:42px; height:42px; border-radius:15px; border:1px solid #e2e8f0; background:#fff; color:#64748b; transition:.16s ease; }
+.lib-picker-close:hover{ color:#dc2626; border-color:#fecaca; background:#fef2f2; }
+.lib-picker-empty{ margin:30px auto; max-width:420px; padding:28px; border-radius:24px; border:1px dashed #cbd5e1; background:#fff; text-align:center; color:#64748b; font-weight:900; }
+@media(max-width:1100px){ .lib-picker-shell{ inset:10px; border-radius:20px; } .lib-picker-body{ grid-template-columns:1fr; } .lib-picker-cart{ min-height:320px; border-left:0; border-top:1px solid #e2e8f0; } .lib-picker-controls{ grid-template-columns:1fr; } .lib-picker-tabs{ overflow:auto; } }
+</style>
+
+<div id="library-picker-modal" class="lib-picker-modal no-print" aria-hidden="true">
+    <div class="lib-picker-backdrop" onclick="App.LibraryPicker.close()"></div>
+    <div class="lib-picker-shell">
+        <div class="lib-picker-top">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="enterprise-lib-icon !w-11 !h-11 !rounded-2xl"><i class="fa-solid fa-table-list"></i></div>
+                <div class="min-w-0">
+                    <div class="lib-picker-title">Vollbild Bibliothek</div>
+                    <div class="lib-picker-sub">Group Sets, Master Sets und Produkte im Tabellenmodus auswählen und geordnet einfügen.</div>
+                </div>
+            </div>
+            <button type="button" class="lib-picker-close" onclick="App.LibraryPicker.close()" title="Schließen"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="lib-picker-body">
+            <div class="lib-picker-main">
+                <div class="lib-picker-controls">
+                    <input id="lib-picker-search" class="lib-picker-search" type="text" placeholder="Suchen nach Name, Artikelgruppe, Lieferant, Artikelnummer..." oninput="App.LibraryPicker.search()">
+                    <select id="lib-picker-group-filter" class="lib-picker-select" onchange="App.LibraryPicker.renderTable()">
+                        <option value="">Alle Artikelgruppen</option>
+                    </select>
+                    <select id="lib-picker-section-select" class="lib-picker-select" onchange="App.LibraryPicker.setSection(this.value)"></select>
+                    <div class="lib-picker-tabs">
+                        <button type="button" id="lib-picker-tab-group_sets" class="lib-picker-tab active" onclick="App.LibraryPicker.switchMode('group_sets')"><i class="fa-solid fa-layer-group mr-1"></i>Group Sets</button>
+                        <button type="button" id="lib-picker-tab-sets" class="lib-picker-tab" onclick="App.LibraryPicker.switchMode('sets')"><i class="fa-solid fa-cubes mr-1"></i>Master Sets</button>
+                        <button type="button" id="lib-picker-tab-products" class="lib-picker-tab" onclick="App.LibraryPicker.switchMode('products')"><i class="fa-solid fa-box-open mr-1"></i>Produkte</button>
+                    </div>
+                </div>
+                <div id="lib-picker-table-wrap" class="lib-picker-table-wrap scroller"></div>
+            </div>
+            <aside class="lib-picker-cart">
+                <div class="lib-picker-cart-head">
+                    <div class="lib-picker-cart-title">
+                        <span><i class="fa-solid fa-cart-shopping mr-2 text-[#93c21c]"></i>Warenkorb</span>
+                        <span id="lib-picker-cart-count" class="lib-picker-badge blue">0</span>
+                    </div>
+                    <div id="lib-picker-section-name" class="lib-picker-section-pill"><i class="fa-solid fa-location-dot"></i><span>Keine Sektion gewählt</span></div>
+                </div>
+                <div id="lib-picker-cart-list" class="lib-picker-cart-list scroller"></div>
+                <div class="lib-picker-cart-foot">
+                    <button type="button" class="lib-picker-insert" id="lib-picker-insert-btn" onclick="App.LibraryPicker.insertSelected()">
+                        <i class="fa-solid fa-arrow-down-to-bracket mr-2"></i> Auswahl in Sektion einfügen
+                    </button>
+                    <button type="button" class="list-mini-btn justify-center" onclick="App.LibraryPicker.clearCart()">Warenkorb leeren</button>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    if (!window.App || !window.State) return;
+
+    App.canChangeItemKind = function(item){
+        if (!item) return false;
+        if (item._manual === true || item.origin_type === 'manual' || item.source_type === 'manual') return true;
+        if (item.type_locked === true) return false;
+
+        const itemType = String(item.item_type || '').toLowerCase();
+        if (['master_set','master_set_component','product','catalog_product','supplier_import','supplier_history_readd'].includes(itemType)) return false;
+        if (item.productId || item.product_id || item.component_id || item.master_set_id || item.distributor_price_id) return false;
+
+        return true;
+    };
+
+    // Normalize existing/new rows so imported rows are locked and old manual rows remain editable when they have no product/catalog ids.
+    App.normalizeTypeLockFlags = function(){
+        (State.sections || []).forEach(sec => {
+            (sec.items || []).forEach(it => {
+                if (!it) return;
+                if (it.type_locked === undefined) it.type_locked = !App.canChangeItemKind(it);
+                (it.subItems || []).forEach(sub => {
+                    if (!sub) return;
+                    if (sub.type_locked === undefined) sub.type_locked = !App.canChangeItemKind(sub);
+                });
+            });
+        });
+    };
+
+    const previousRenderQuotePageV3 = App.renderQuotePage ? App.renderQuotePage.bind(App) : null;
+    if (previousRenderQuotePageV3 && !App.__typeLockRenderPatchV3) {
+        App.renderQuotePage = function(forPrint = false){
+            App.normalizeTypeLockFlags();
+            return previousRenderQuotePageV3(forPrint);
+        };
+        App.__typeLockRenderPatchV3 = true;
+    }
+
+    const escapeHtml = (s) => String(s ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+    const stripHtml = (html) => { const d=document.createElement('div'); d.innerHTML=String(html||''); return (d.textContent||d.innerText||'').replace(/\s+/g,' ').trim(); };
+    const money = (n) => { const v=Number(n); return Number.isFinite(v) && v>0 ? v.toLocaleString('de-DE',{minimumFractionDigits:2, maximumFractionDigits:2})+' €' : '-'; };
+
+    App.LibraryPicker = {
+        mode: 'group_sets',
+        q: '',
+        allItems: [],
+        cart: [],
+        targetSectionIdx: 0,
+        _timer: null,
+        _cartSortable: null,
+
+        open(){
+            const modal = document.getElementById('library-picker-modal');
+            if (!modal) return;
+            this.mode = State.libraryMode || 'group_sets';
+            this.cart = [];
+            this.syncSections();
+            this.syncTabs();
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden','false');
+            document.body.style.overflow = 'hidden';
+            const search = document.getElementById('lib-picker-search');
+            if (search) search.value = document.getElementById('sidebar-search')?.value || '';
+            this.q = search?.value || '';
+            this.load();
+            this.renderCart();
+        },
+
+        close(){
+            const modal = document.getElementById('library-picker-modal');
+            if (!modal) return;
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden','true');
+            document.body.style.overflow = '';
+        },
+
+        syncTabs(){
+            ['group_sets','sets','products'].forEach(m => {
+                const btn = document.getElementById('lib-picker-tab-' + m);
+                if (btn) btn.classList.toggle('active', this.mode === m);
+            });
+        },
+
+        syncSections(){
+            const select = document.getElementById('lib-picker-section-select');
+            if (!select) return;
+            let editable = (State.sections || [])
+                .map((s, idx) => ({ s, idx }))
+                .filter(x => x.s && !x.s._pageBreak && !x.s.isLocked);
+            if (!editable.length) {
+                const newIdx = typeof App.addSection === 'function' ? App.addSection('Neue Sektion') : 0;
+                editable = [{ s: State.sections[newIdx], idx: newIdx }];
+            }
+            if (!editable.some(x => Number(x.idx) === Number(this.targetSectionIdx))) this.targetSectionIdx = editable[0].idx;
+            select.innerHTML = editable.map(x => `<option value="${x.idx}" ${Number(x.idx)===Number(this.targetSectionIdx)?'selected':''}>Einfügen in: ${escapeHtml(x.s.title || ('Sektion ' + (x.idx + 1)))}</option>`).join('');
+            this.updateSectionName();
+        },
+
+        updateSectionName(){
+            const el = document.getElementById('lib-picker-section-name');
+            const sec = State.sections?.[this.targetSectionIdx];
+            if (el) el.innerHTML = `<i class="fa-solid fa-location-dot"></i><span>${escapeHtml(sec?.title || 'Neue Sektion')}</span>`;
+        },
+
+        setSection(v){
+            this.targetSectionIdx = Number(v || 0);
+            this.updateSectionName();
+        },
+
+        switchMode(mode){
+            this.mode = ['group_sets','sets','products'].includes(mode) ? mode : 'group_sets';
+            this.syncTabs();
+            this.load();
+        },
+
+        search(){
+            clearTimeout(this._timer);
+            this._timer = setTimeout(() => {
+                this.q = document.getElementById('lib-picker-search')?.value || '';
+                this.load();
+            }, 250);
+        },
+
+        endpoint(){
+            if (this.mode === 'group_sets') return `${API_BASE}/wizard/group-sets`;
+            if (this.mode === 'sets') return `${API_BASE}/wizard/products`;
+            return `${API_BASE}/wizard/products-list`;
+        },
+
+        async load(){
+            const wrap = document.getElementById('lib-picker-table-wrap');
+            if (wrap) wrap.innerHTML = `<div class="lib-picker-empty"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Lade Bibliothek...</div>`;
+            try{
+                const url = new URL(this.endpoint(), window.location.origin);
+                url.searchParams.set('q', this.q || '');
+                url.searchParams.set('context','angebot');
+                url.searchParams.set('page', 1);
+                url.searchParams.set('per_page', 100);
+                const res = await fetch(url.toString(), { headers:{Accept:'application/json'}, credentials:'same-origin' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                this.allItems = this.flatten(data);
+                this.populateGroupFilter();
+                this.renderTable();
+            }catch(e){
+                console.error('LibraryPicker load failed', e);
+                if (wrap) wrap.innerHTML = `<div class="lib-picker-empty text-red-500"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Bibliothek konnte nicht geladen werden.</div>`;
+            }
+        },
+
+        flatten(data){
+            if (this.mode === 'group_sets') {
+                const flat=[];
+                (Array.isArray(data.groups) ? data.groups : []).forEach(group => {
+                    const ag = String(group.article_group || 'Ohne Gewerk').trim();
+                    const img = group.image || '';
+                    (Array.isArray(group.group_sets) ? group.group_sets : []).forEach(gs => {
+                        flat.push({
+                            type:'master_set_group', id:gs.id, name:gs.name || ('Group Set #' + gs.id),
+                            description:gs.description || '', article_group:ag, image:gs.image || img,
+                            count:Number(gs.master_sets_count || (Array.isArray(gs.master_sets) ? gs.master_sets.length : 0)),
+                            meta:`${Number(gs.master_sets_count || 0)} Sets`
+                        });
+                    });
+                });
+                return flat;
+            }
+
+            if (this.mode === 'sets') {
+                const flat=[];
+                (Array.isArray(data.groups) ? data.groups : []).forEach(group => {
+                    const ag = String(group.article_group || 'Ohne Gewerk').trim();
+                    (Array.isArray(group.master_sets) ? group.master_sets : []).forEach(ms => {
+                        flat.push({
+                            type:'master_set', id:ms.id, name:ms.name || ('Master Set #' + ms.id),
+                            description:ms.description || '', article_group:ms.article_group || ag, image:ms.image || group.image || '',
+                            count:Number(ms.components_count || ms.items_count || 0),
+                            price:ms.price || ms.total_price || 0,
+                            meta:`${Number(ms.components_count || ms.items_count || 0)} Teile`
+                        });
+                    });
+                });
+                return flat;
+            }
+
+            return (Array.isArray(data.items) ? data.items : []).map(p => ({
+                type:'product', id:p.id, name:p.product || p.name || ('Produkt #' + p.id),
+                description:[p.article_no, p.short_description, stripHtml(p.description || '')].filter(Boolean).join(' • '),
+                article_group:p.article_group || p.article_group_name || p.group_name || p.articleGroup?.article_group || 'Ohne Gewerk',
+                image:p.image || p.image_url || '',
+                brand:p.brand_name || p.brand?.name || '',
+                distributor:p.distributor_name || p.distributor?.name || '',
+                article_no:p.article_no || '',
+                price:p.best_price || p.price || p.unit_price || p.ek || p.purchase_price || 0,
+                meta:p.article_no || p.brand_name || ''
+            }));
+        },
+
+        populateGroupFilter(){
+            const select = document.getElementById('lib-picker-group-filter');
+            if (!select) return;
+            const current = select.value || '';
+            const groups = [...new Set((this.allItems || []).map(i => i.article_group).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'de'));
+            select.innerHTML = `<option value="">Alle Artikelgruppen</option>` + groups.map(g => `<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join('');
+            if (groups.includes(current)) select.value = current;
+        },
+
+        filteredItems(){
+            const group = document.getElementById('lib-picker-group-filter')?.value || '';
+            const q = String(this.q || '').toLowerCase().trim();
+            return (this.allItems || []).filter(item => {
+                if (group && item.article_group !== group) return false;
+                if (!q) return true;
+                return [item.name, item.description, item.article_group, item.brand, item.distributor, item.article_no].some(v => String(v || '').toLowerCase().includes(q));
+            });
+        },
+
+        key(item){ return `${item.type}:${item.id}`; },
+
+        renderTable(){
+            const wrap = document.getElementById('lib-picker-table-wrap');
+            if (!wrap) return;
+            const items = this.filteredItems();
+            if (!items.length) {
+                wrap.innerHTML = `<div class="lib-picker-empty"><i class="fa-solid fa-folder-open text-xl block mb-2 text-slate-300"></i>Keine Treffer gefunden.</div>`;
+                return;
+            }
+            const rows = items.map(item => {
+                const inCart = this.cart.some(c => this.key(c) === this.key(item));
+                const kindLabel = item.type === 'master_set_group' ? 'Group Set' : (item.type === 'master_set' ? 'Master Set' : 'Produkt');
+                return `<tr class="lib-picker-row">
+                    <td class="w-12 text-center"><input type="checkbox" class="w-4 h-4 accent-[#93c21c]" ${inCart?'checked':''} onchange="App.LibraryPicker.toggleItem('${escapeHtml(item.type)}','${escapeHtml(item.id)}', this.checked)"></td>
+                    <td>
+                        <div class="lib-picker-name">${escapeHtml(item.name)}</div>
+                        <div class="lib-picker-desc">${escapeHtml(stripHtml(item.description || ''))}</div>
+                    </td>
+                    <td><span class="lib-picker-badge group"><i class="fa-solid fa-tag"></i>${escapeHtml(item.article_group || 'Ohne Gewerk')}</span></td>
+                    <td><span class="lib-picker-badge blue">${kindLabel}</span></td>
+                    <td>${escapeHtml(item.meta || '-')}</td>
+                    <td class="text-right font-black text-slate-800">${money(item.price)}</td>
+                    <td class="text-right"><button type="button" class="enterprise-action-btn primary" onclick="App.LibraryPicker.addToCartByKey('${escapeHtml(item.type)}','${escapeHtml(item.id)}')"><i class="fa-solid fa-plus"></i></button></td>
+                </tr>`;
+            }).join('');
+
+            wrap.innerHTML = `<table class="lib-picker-table">
+                <thead><tr>
+                    <th></th><th>Name / Beschreibung</th><th>Artikelgruppe</th><th>Typ</th><th>Info</th><th class="text-right">Preis</th><th class="text-right">Aktion</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+        },
+
+        find(type,id){ return (this.allItems || []).find(i => String(i.type) === String(type) && String(i.id) === String(id)); },
+
+        toggleItem(type,id,checked){ checked ? this.addToCartByKey(type,id) : this.removeFromCart(type,id); },
+
+        addToCartByKey(type,id){
+            const item = this.find(type,id);
+            if (!item) return;
+            if (!this.cart.some(c => this.key(c) === this.key(item))) this.cart.push(JSON.parse(JSON.stringify(item)));
+            this.renderCart();
+            this.renderTable();
+        },
+
+        removeFromCart(type,id){
+            this.cart = this.cart.filter(c => !(String(c.type) === String(type) && String(c.id) === String(id)));
+            this.renderCart();
+            this.renderTable();
+        },
+
+        clearCart(){ this.cart = []; this.renderCart(); this.renderTable(); },
+
+        renderCart(){
+            const list = document.getElementById('lib-picker-cart-list');
+            const count = document.getElementById('lib-picker-cart-count');
+            const btn = document.getElementById('lib-picker-insert-btn');
+            if (count) count.textContent = String(this.cart.length);
+            if (btn) btn.disabled = this.cart.length === 0;
+            if (!list) return;
+            if (!this.cart.length) {
+                list.innerHTML = `<div class="lib-picker-empty !m-0"><i class="fa-solid fa-cart-shopping text-xl block mb-2 text-slate-300"></i>Wähle links mehrere Positionen aus. Die Reihenfolge hier bestimmt die Einfügung.</div>`;
+                return;
+            }
+            list.innerHTML = this.cart.map((item, idx) => `<div class="lib-picker-cart-item" data-cart-index="${idx}">
+                <div class="lib-picker-cart-index">${idx + 1}</div>
+                <div class="flex-1 min-w-0">
+                    <div class="lib-picker-cart-name">${escapeHtml(item.name)}</div>
+                    <div class="lib-picker-cart-meta">${escapeHtml(item.article_group || '-')} · ${item.type === 'master_set_group' ? 'Group Set' : item.type === 'master_set' ? 'Master Set' : 'Produkt'}</div>
+                </div>
+                <button type="button" class="enterprise-action-btn" onclick="App.LibraryPicker.removeFromCart('${escapeHtml(item.type)}','${escapeHtml(item.id)}')"><i class="fa-solid fa-xmark"></i></button>
+            </div>`).join('');
+
+            if (typeof Sortable !== 'undefined') {
+                if (this._cartSortable) { try { this._cartSortable.destroy(); } catch(e){} }
+                this._cartSortable = new Sortable(list, {
+                    animation:150,
+                    draggable:'.lib-picker-cart-item',
+                    onEnd:(evt)=>{
+                        const moved = this.cart.splice(evt.oldIndex,1)[0];
+                        this.cart.splice(evt.newIndex,0,moved);
+                        this.renderCart();
+                    }
+                });
+            }
+        },
+
+        async insertSelected(){
+            if (!this.cart.length) return;
+            this.syncSections();
+            const sIdx = Number(this.targetSectionIdx || 0);
+            const copy = [...this.cart];
+            const btn = document.getElementById('lib-picker-insert-btn');
+            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Wird eingefügt...'; }
+            try{
+                for (const item of copy) {
+                    await App.handleItemAdd(sIdx, item.id, item.type);
+                }
+                this.cart = [];
+                State.hasUnsavedChanges = true;
+                App.renderQuotePage(false);
+                if (App.Tabs?.current === 'list' && App.ListView?.render) App.ListView.render();
+                this.renderCart();
+                this.renderTable();
+                this.close();
+            } finally {
+                if (btn) { btn.innerHTML = '<i class="fa-solid fa-arrow-down-to-bracket mr-2"></i> Auswahl in Sektion einfügen'; btn.disabled = this.cart.length === 0; }
+            }
+        }
+    };
+
+    document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape' && document.getElementById('library-picker-modal')?.classList.contains('is-open')) {
+            App.LibraryPicker.close();
+        }
+    });
+
+    window.addEventListener('DOMContentLoaded', function(){
+        App.normalizeTypeLockFlags();
+    });
+})();
+</script>
+
+<script>
+    window.TemplateEditFromConfig = @json($templateEditPayload ?? null);
+    window.IsTemplateEditModeFromConfig = @json($isTemplateEditMode ?? false);
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const payload = window.TemplateEditFromConfig;
+
+        if (!window.IsTemplateEditModeFromConfig || !payload || !payload.id) {
+            return;
+        }
+
+        /*
+         * This page is the config page:
+         * admin.offer.configuration.offer.config
+         *
+         * The edit button opens:
+         * /offers/wizard?template_id=ID&mode=template&edit_template=1
+         *
+         * We keep the payload available for your existing config wizard.
+         */
+        sessionStorage.setItem('offer_template_edit_payload', JSON.stringify(payload));
+        sessionStorage.setItem('offer_template_edit_id', String(payload.id));
+        sessionStorage.setItem('offer_template_edit_mode', '1');
+
+        const templateModeInputs = [
+            '#wiz-template-mode',
+            '#template-mode',
+            '#is_template',
+            'input[name="is_template"]',
+            'input[name="mode"][value="template"]',
+            'input[name="save_mode"][value="template"]'
+        ];
+
+        templateModeInputs.forEach(function (selector) {
+            document.querySelectorAll(selector).forEach(function (el) {
+                if (el.type === 'checkbox' || el.type === 'radio') {
+                    el.checked = true;
+                    el.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+        });
+
+        /*
+         * Call whichever loader your config blade already has.
+         * These are safe: only existing functions will run.
+         */
+        const loaderCalls = [
+            () => window.loadTemplateForEdit?.(payload.id, payload),
+            () => window.loadTemplateForEditing?.(payload.id, payload),
+            () => window.loadTemplate?.(payload.id, payload),
+            () => window.importTemplate?.(payload.id, true, payload),
+            () => window.App?.loadTemplateForEdit?.(payload.id, payload),
+            () => window.App?.loadTemplateForEditing?.(payload.id, payload),
+            () => window.App?.Templates?.edit?.(payload.id, payload),
+            () => window.App?.Templates?.load?.(payload.id, payload),
+            () => window.OfferConfig?.loadTemplateForEdit?.(payload.id, payload),
+            () => window.OfferConfig?.openTemplateEditor?.(payload.id, payload)
+        ];
+
+        let handled = false;
+
+        for (const run of loaderCalls) {
+            try {
+                const result = run();
+                if (result !== undefined) {
+                    handled = true;
+                    break;
+                }
+            } catch (e) {
+                console.warn('Template edit loader failed:', e);
+            }
+        }
+
+        /*
+         * Fallback: if your config has a template select/list,
+         * select the template and click the first matching import/load button.
+         */
+        if (!handled) {
+            const select = document.querySelector('#template_id, #offer_template_id, select[name="template_id"], select[name="offer_template_id"]');
+            if (select) {
+                select.value = String(payload.id);
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
+            const importButton = document.querySelector(
+                '[data-template-id="' + payload.id + '"][data-action="edit"],' +
+                '[data-template-id="' + payload.id + '"][data-action="load"],' +
+                '[data-template-id="' + payload.id + '"][data-action="import"],' +
+                '[data-load-template="' + payload.id + '"],' +
+                '[data-edit-template="' + payload.id + '"],' +
+                '.js-import-template,' +
+                '.js-load-template,' +
+                '.js-edit-template'
+            );
+
+            if (importButton) {
+                importButton.click();
+            }
+        }
+    });
+</script>
+
+
+<script>
+/* OFFER_PRINT_PREVIEW_AND_LABOR_FIX_V4
+   - Esc closes print preview.
+   - Close button remains visible.
+   - A4 tab rebuilds after becoming visible, so all pages are rendered immediately.
+   - Master-set labor stays inside the parent/main position total and no virtual Montage/Dienstleistung section is created for print.
+*/
+(function () {
+    'use strict';
+
+    const ready = (fn) => {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', fn, { once: true });
+        } else {
+            fn();
+        }
+    };
+
+    ready(function () {
+        const App = window.App;
+        const State = window.State;
+        if (!App || !State) return;
+
+        const modal = document.getElementById('print-preview-modal');
+        const printRoot = document.getElementById('print-preview-content');
+
+        const isPreviewOpen = () => modal && !modal.classList.contains('hidden');
+
+        const baseActiveLogisticsItems = typeof App.getActiveLogisticsItems === 'function'
+            ? App.getActiveLogisticsItems.bind(App)
+            : function () { return []; };
+
+        App.getRenderableSections = function (forPrint = false) {
+            const baseSections = (State.sections || []).filter(function (section) {
+                return section && !section._pageBreak;
+            });
+
+            let sectionsToReturn = baseSections;
+            const logisticsItems = baseActiveLogisticsItems();
+
+            if (Array.isArray(logisticsItems) && logisticsItems.length) {
+                sectionsToReturn = [
+                    ...baseSections,
+                    {
+                        _virtualSection: true,
+                        id: '__logistics__',
+                        title: 'Logistik & Baustelle',
+                        description: 'Automatisch aus Einstellungen übernommen',
+                        config: {
+                            mode: 'standard',
+                            pauschalPrice: 0,
+                            type: 'standard',
+                            hidePrices: false,
+                            margin: { value: 0, type: 'fixed' }
+                        },
+                        items: logisticsItems,
+                        isLocked: true
+                    }
+                ];
+            }
+
+            /* Important:
+               Do NOT extract labor into a virtual print section.
+               Labor rows that belong to a master set stay as hidden sub-items of the set,
+               so their VK/EK is included in the parent/main component total without showing
+               a separate “Montage & Dienstleistungen” section in A4/print. */
+            if (forPrint) {
+                return JSON.parse(JSON.stringify(sectionsToReturn));
+            }
+
+            return sectionsToReturn;
+        };
+
+        App.closePrintPreview = function () {
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+
+            document.documentElement.classList.remove('print-preview-open');
+            document.body.classList.remove('overflow-hidden');
+
+            if (printRoot) printRoot.innerHTML = '';
+
+            if (typeof App.renderQuotePage === 'function') {
+                requestAnimationFrame(function () {
+                    App.renderQuotePage(false);
+                    if (App.Tabs?.current === 'a4') {
+                        App.forceA4Rebuild?.();
+                    }
+                });
+            }
+        };
+
+        App.openPrintPreview = function () {
+            if (!modal) return;
+
+            if (typeof App.renderQuotePage === 'function') {
+                App.renderQuotePage(false);
+            }
+
+            modal.classList.remove('hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            document.documentElement.classList.add('print-preview-open');
+            document.body.classList.add('overflow-hidden');
+            modal.focus({ preventScroll: true });
+
+            requestAnimationFrame(function () {
+                if (typeof App.buildPrintPreview === 'function') {
+                    App.buildPrintPreview();
+                }
+            });
+        };
+
+        App.buildPrintPreview = function () {
+            if (!printRoot) return;
+
+            printRoot.innerHTML = '';
+
+            const livePage1 = document.getElementById('page-1');
+            if (livePage1 && typeof App.buildStaticPageClone === 'function') {
+                const staticPage1 = App.buildStaticPageClone(livePage1);
+                if (staticPage1) {
+                    staticPage1.querySelectorAll('.floating-element').forEach(function (el) { el.remove(); });
+                    staticPage1.id = 'print-page-1';
+                    printRoot.appendChild(staticPage1);
+                }
+            }
+
+            if (typeof App.renderQuotePage === 'function') {
+                App.renderQuotePage(true);
+            }
+
+            Array.from(printRoot.children).forEach(function (page) {
+                if (page.id !== 'print-page-1' && typeof App.makeThumbnailStatic === 'function') {
+                    App.makeThumbnailStatic(page);
+                }
+            });
+
+            // Restore the live editor after preview pages are built.
+            requestAnimationFrame(function () {
+                if (typeof App.renderQuotePage === 'function') {
+                    App.renderQuotePage(false);
+                }
+            });
+        };
+
+        App.forceA4Rebuild = function () {
+            const panel = document.getElementById('panel-a4');
+            if (!panel || panel.classList.contains('hidden')) return;
+
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                    if (typeof App.renderQuotePage === 'function') {
+                        App.renderQuotePage(false);
+                    }
+                    if (typeof App.rebuildThumbnails === 'function') {
+                        App.rebuildThumbnails();
+                    }
+                });
+            });
+        };
+
+        if (App.Tabs && typeof App.Tabs.switch === 'function' && !App.__printLaborFixTabsPatched) {
+            const previousSwitch = App.Tabs.switch.bind(App.Tabs);
+            App.Tabs.switch = function (mode) {
+                const result = previousSwitch(mode);
+                if (mode === 'a4') {
+                    App.forceA4Rebuild();
+                }
+                return result;
+            };
+            App.__printLaborFixTabsPatched = true;
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && isPreviewOpen()) {
+                event.preventDefault();
+                event.stopPropagation();
+                App.closePrintPreview();
+            }
+        }, true);
+
+        // Extra safety for pages loaded directly into the A4 tab or restored from browser cache.
+        if (App.Tabs?.current === 'a4') {
+            App.forceA4Rebuild();
+        }
+
+        console.info('[OFFER_PRINT_PREVIEW_AND_LABOR_FIX_V4] loaded');
+    });
+})();
+</script>
+
+<style>
+#print-preview-modal:not(.hidden) {
+    display: flex !important;
+}
+#print-preview-modal .a4-page {
+    flex-shrink: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+.print-preview-open body,
+body.overflow-hidden {
+    overflow: hidden !important;
+}
+</style>
+
+<style>
+/* ============================================================
+   POSITION IMAGE DELETE / EMPTY STATE PATCH
+   - Works in A4 editor and List view
+   - Hidden during print / thumbnails because controls are no-print/buttons
+============================================================ */
+.prod-img-container.has-position-image {
+    position: relative;
+}
+
+.a4-image-delete-btn {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    border: 1px solid #fecaca;
+    background: #ef4444;
+    color: #fff;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    line-height: 1;
+    box-shadow: 0 8px 18px rgba(239, 68, 68, .28);
+    z-index: 50;
+}
+
+.prod-img-container:hover .a4-image-delete-btn {
+    display: inline-flex;
+}
+
+.a4-image-empty-control {
+    width: 119px;
+    min-height: 58px;
+    border: 1.5px dashed #cbd5e1;
+    border-radius: 14px;
+    background: rgba(248, 250, 252, .92);
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 900;
+    transition: all .16s ease;
+    flex-shrink: 0;
+}
+
+.a4-image-empty-control:hover {
+    border-color: var(--brand-color);
+    color: #6b8e12;
+    background: #f7fee7;
+}
+
+.lv-image-cell {
+    position: relative;
+    width: 48px;
+    height: 48px;
+}
+
+.lv-image-thumb {
+    width: 48px;
+    height: 48px;
+    display: block;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+}
+
+.lv-image-remove {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 21px;
+    height: 21px;
+    border-radius: 999px;
+    background: #ef4444;
+    color: #fff;
+    border: 1px solid #fecaca;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    box-shadow: 0 8px 16px rgba(239, 68, 68, .24);
+    z-index: 20;
+}
+
+.lv-image-cell:hover .lv-image-remove {
+    display: inline-flex;
+}
+
+.lv-image-empty {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    border: 1.5px dashed #cbd5e1;
+    background: #f8fafc;
+    color: #94a3b8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .16s ease;
+}
+
+.lv-image-empty:hover {
+    border-color: var(--brand-color);
+    color: #6b8e12;
+    background: #f7fee7;
+}
+
+@media print {
+    .a4-image-delete-btn,
+    .a4-image-empty-control,
+    .lv-image-remove,
+    .lv-image-empty {
+        display: none !important;
+    }
+}
+</style>
 
 </body>
 </html>

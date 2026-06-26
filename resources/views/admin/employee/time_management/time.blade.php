@@ -3,21 +3,9 @@
 @section('title') Mein Zeitmanagement @endsection
 
 @section('content')
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
+<div class="app-content"> 
 
-    <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-md-8 col-12 mb-2">
-                <h2 class="content-header-title mb-0">
-                    Zeitmanagement – {{ $employee->name }} {{ $employee->lastname }}
-                </h2>
-                <p class="mb-0 text-muted">
-                    Plane deine Arbeitszeiten und reiche sie zur Genehmigung ein.
-                </p>
-            </div>
-        </div>
+    <div class="content-wrapper"> 
 
         <div class="content-body">
             <section id="employee-plan-builder">
@@ -1151,3 +1139,26 @@ function showAlert(icon, title, text) {
 
 </script>
 @endsection
+
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs = [
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            }, 
+
+            {
+                label: 'Mein Zeitmanagement',
+                url: "{{ url()->current() }}",
+                clickable: false
+            },
+
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+@endpush

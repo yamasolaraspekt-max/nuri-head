@@ -1,0 +1,210 @@
+/* =========================================================
+   Object + Context Feed Collapse Scroll Fix
+   Put this AFTER your profile CSS and customer-context-feed.css
+========================================================= */
+
+/* ---------- Right note/context panel: keep header fixed, content scrollable ---------- */
+#customerNotesRightPanel,
+.right-panel#customerNotesRightPanel {
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+#customerNotesRightPanel #note-scroll-wrapper {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: .55rem .5rem 1rem !important;
+    scroll-behavior: smooth;
+}
+
+#customerNotesRightPanel #note-list {
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+}
+
+/* ---------- Context feed cards: the opened/collapsed body itself is scrollable ---------- */
+#note-list .ma-feed-card {
+    overflow: hidden !important;
+    border-radius: 18px !important;
+    border: 1px solid var(--ma-border, #c0d8ea) !important;
+    background: #fff !important;
+    transition: border-color .18s ease, background .18s ease, transform .14s ease;
+}
+
+#note-list .ma-feed-card.is-open {
+    border-color: var(--ma-heading, #74b2d4) !important;
+    background: #fff !important;
+}
+
+#note-list .ma-feed-head {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+#note-list .ma-feed-head::after {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid var(--ma-heading, #74b2d4);
+    border-bottom: 2px solid var(--ma-heading, #74b2d4);
+    transform: rotate(45deg);
+    transition: transform .18s ease;
+    margin-top: 6px;
+    flex: 0 0 auto;
+}
+
+#note-list .ma-feed-card.is-open > .ma-feed-head::after {
+    transform: rotate(-135deg);
+    margin-top: 10px;
+}
+
+#note-list .ma-feed-body {
+    display: none;
+    max-height: min(62vh, 620px);
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior: contain;
+    padding: .75rem !important;
+    border-top: 1px solid var(--ma-border, #c0d8ea) !important;
+    background: #f8fbfd !important;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ma-blue, #74b2d4) transparent;
+}
+
+#note-list .ma-feed-card.is-open > .ma-feed-body {
+    display: block !important;
+    animation: maCollapseIn .16s ease-out;
+}
+
+#note-list .ma-feed-body::-webkit-scrollbar,
+#customerNotesRightPanel #note-scroll-wrapper::-webkit-scrollbar,
+.customerSidebar::-webkit-scrollbar,
+.product-list::-webkit-scrollbar,
+.ma-product-list::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+#note-list .ma-feed-body::-webkit-scrollbar-thumb,
+#customerNotesRightPanel #note-scroll-wrapper::-webkit-scrollbar-thumb,
+.customerSidebar::-webkit-scrollbar-thumb,
+.product-list::-webkit-scrollbar-thumb,
+.ma-product-list::-webkit-scrollbar-thumb {
+    background: var(--ma-blue, #74b2d4);
+    border-radius: 999px;
+}
+
+#note-list .ma-feed-body::-webkit-scrollbar-track,
+#customerNotesRightPanel #note-scroll-wrapper::-webkit-scrollbar-track,
+.customerSidebar::-webkit-scrollbar-track,
+.product-list::-webkit-scrollbar-track,
+.ma-product-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* ---------- Object sidebar collapse/uncollapse styling ---------- */
+.customerSidebar .object-section {
+    position: relative;
+    margin-bottom: .85rem !important;
+}
+
+.customerSidebar .object-header {
+    position: relative;
+    padding-right: 2.1rem !important;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid var(--ma-border, #c0d8ea) !important;
+    border-radius: 18px !important;
+    background: #fff !important;
+    transition: background .18s ease, border-color .18s ease, transform .14s ease;
+}
+
+.customerSidebar .object-header:hover {
+    border-color: var(--ma-heading, #74b2d4) !important;
+    background: #f8fbfd !important;
+}
+
+.customerSidebar .object-header::after {
+    content: "";
+    position: absolute;
+    right: .75rem;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--ma-heading, #74b2d4);
+    border-bottom: 2px solid var(--ma-heading, #74b2d4);
+    transform: translateY(-65%) rotate(45deg);
+    transition: transform .18s ease;
+}
+
+.customerSidebar .object-header.is-open,
+.customerSidebar .object-header[aria-expanded="true"] {
+    border-color: var(--ma-heading, #74b2d4) !important;
+    background: #f8fbfd !important;
+}
+
+.customerSidebar .object-header.is-open::after,
+.customerSidebar .object-header[aria-expanded="true"]::after {
+    transform: translateY(-35%) rotate(-135deg);
+}
+
+.customerSidebar .product-list,
+.customerSidebar .ma-product-list {
+    display: none;
+    max-height: min(62vh, 620px);
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: .55rem .2rem .65rem .2rem !important;
+    margin-top: .45rem;
+    border-left: 3px solid var(--ma-blue-soft, #c0d8ea);
+    border-radius: 0 0 18px 18px;
+    scroll-behavior: smooth;
+}
+
+.customerSidebar .product-list.show,
+.customerSidebar .ma-product-list.show,
+.customerSidebar .product-list.is-open,
+.customerSidebar .ma-product-list.is-open {
+    display: block !important;
+    animation: maCollapseIn .16s ease-out;
+}
+
+.customerSidebar .object-section.is-open > .product-list,
+.customerSidebar .object-section.is-open > .ma-product-list {
+    display: block !important;
+}
+
+.customerSidebar .sub-nav,
+.customerSidebar .ma-sub-nav {
+    max-height: min(50vh, 460px);
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scroll-behavior: smooth;
+}
+
+@keyframes maCollapseIn {
+    from {
+        opacity: .55;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 991.98px) {
+    #note-list .ma-feed-body,
+    .customerSidebar .product-list,
+    .customerSidebar .ma-product-list,
+    .customerSidebar .sub-nav,
+    .customerSidebar .ma-sub-nav {
+        max-height: 56vh;
+    }
+}

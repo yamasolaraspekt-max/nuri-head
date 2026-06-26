@@ -550,15 +550,8 @@
     }
 </style>
 
-<div class="app-content content">
-    <div class="content-wrapper">
-
-        {{-- Header --}}
-        <div class="content-header row">
-            <div class="content-header-left col-md-9 col-12 mb-2">
-                <h2 class="content-header-title">GC Online Artikelsuche</h2>
-            </div>
-        </div>
+<div class="app-content">
+    <div class="content-wrapper"> 
 
         {{-- Body --}}
         <div class="content-body">
@@ -650,7 +643,7 @@
                         {{-- Local DB results for this search --}}
                             <div class="gc-local-results">
                                 <div class="gc-local-header">
-                                    <span>Lokale Treffer in IDS-Datenbank</span>
+                                    <span>Neueste IDS-Treffer</span>
                                     <button type="button"
                                             id="gcLocalRefreshBtn"
                                             style="border:none;background:none;color:#2563eb;font-size:11px;cursor:pointer;padding:0;">
@@ -755,6 +748,84 @@
         };
     }
 
+
+    function prependImportedItemsToLocalResults(importedItems) {
+        const box = document.getElementById("gcLocalResults");
+        if (!box || !Array.isArray(importedItems) || !importedItems.length) return;
+
+        const existingNodes = Array.from(box.querySelectorAll(".gc-local-item"));
+        const existingIds = new Set(
+            existingNodes
+                .map(node => node.getAttribute("data-imported-id"))
+                .filter(Boolean)
+        );
+
+        const newItems = importedItems.filter(item => !existingIds.has(String(item.id)));
+
+        if (!newItems.length) return;
+
+        // unsaved first, newest first
+        newItems.sort((a, b) => {
+            const aUnsaved = a.product_id ? 1 : 0;
+            const bUnsaved = b.product_id ? 1 : 0;
+
+            if (aUnsaved !== bUnsaved) {
+                return aUnsaved - bUnsaved; // null product_id first
+            }
+
+            return (b.id || 0) - (a.id || 0);
+        });
+
+        const html = newItems.map(i => {
+            const hasProduct = !!i.product_id;
+            const badgeHtml = hasProduct
+                ? '<span class="gc-local-badge">bereits im System</span>'
+                : '<span class="gc-local-badge" style="background:#fef3c7;color:#92400e;">neu / noch nicht übernommen</span>';
+
+            const disabledAttr = hasProduct ? "disabled" : "";
+            const btnText = hasProduct
+                ? "Bereits als Produkt angelegt"
+                : "Als Produkt übernehmen";
+
+            const articleNo = i.article_no ?? "";
+
+            const titleHtml = hasProduct
+                ? `<button type="button"
+                        class="gc-product-link"
+                        data-product-id="${i.product_id}"
+                        data-title="${articleNo}">
+                    ${articleNo}
+                </button>`
+                : articleNo;
+
+            return `
+                <div class="gc-local-item" data-imported-id="${i.id}">
+                    <strong>${titleHtml}</strong>
+                    ${badgeHtml}
+                    <br>
+                    ${i.short_text ?? ""}
+                    <br>
+                    <small>Batch: ${i.batch_id ?? "-"} · Menge: ${i.qty ?? 0} ${i.unit ?? ""}</small>
+                    <div style="margin-top:6px;">
+                        <button type="button"
+                                class="gc-local-add-btn"
+                                data-id="${i.id}"
+                                ${disabledAttr}>
+                            ${btnText}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+        const emptyState = box.querySelector(".gc-local-empty");
+        if (emptyState) {
+            box.innerHTML = html;
+            return;
+        }
+
+        box.insertAdjacentHTML("afterbegin", html);
+    }
     // -------------------- History helpers --------------------
     function loadHistory() {
         try {
@@ -981,10 +1052,10 @@
 
             const badgeHtml = hasProduct
                 ? '<span class="gc-local-badge">bereits im System</span>'
-                : "";
+                : '<span class="gc-local-badge" style="background:#fef3c7;color:#92400e;">neu / noch nicht übernommen</span>';
 
             const disabledAttr = hasProduct ? "disabled" : "";
-            const btnText      = hasProduct
+            const btnText = hasProduct
                 ? "Bereits als Produkt angelegt"
                 : "Als Produkt übernehmen";
 
@@ -992,15 +1063,15 @@
 
             const titleHtml = hasProduct
                 ? `<button type="button"
-                           class="gc-product-link"
-                           data-product-id="${i.product_id}"
-                           data-title="${articleNo}">
-                       ${articleNo}
-                   </button>`
+                        class="gc-product-link"
+                        data-product-id="${i.product_id}"
+                        data-title="${articleNo}">
+                    ${articleNo}
+                </button>`
                 : articleNo;
 
             html += `
-                <div class="gc-local-item">
+                <div class="gc-local-item" data-imported-id="${i.id}">
                     <strong>${titleHtml}</strong>
                     ${badgeHtml}
                     <br>
@@ -1017,22 +1088,22 @@
                 </div>
             `;
         });
+
         box.innerHTML = html;
     }
 
-    function loadLocalMatches(term) {
+    function loadLocalMatches(term = '') {
         term = (term || "").trim();
         const box = document.getElementById("gcLocalResults");
         if (!box) return;
 
-        if (!term) {
-            box.innerHTML = '<div class="gc-local-empty">Noch keine Suche ausgeführt.</div>';
-            return;
-        }
-
         box.innerHTML = '<div class="gc-local-empty">Suche lokale Daten…</div>';
 
-        fetch(IDS_LOCAL_SEARCH_URL + "?q=" + encodeURIComponent(term))
+        const url = term
+            ? IDS_LOCAL_SEARCH_URL + "?q=" + encodeURIComponent(term)
+            : IDS_LOCAL_SEARCH_URL;
+
+        fetch(url)
             .then(r => r.json())
             .then(data => {
                 renderLocalResults(Array.isArray(data) ? data : []);
@@ -1043,7 +1114,6 @@
                     '<div class="gc-local-empty">Fehler bei der lokalen Suche.</div>';
             });
     }
-
     const loadLocalMatchesDebounced = debounce(loadLocalMatches, 300);
 
     // -------------------- Drawer for remote IDS imports --------------------
@@ -1135,6 +1205,7 @@
 
         renderHistory();
         setupLocalPromoteHandler();
+       loadLocalMatches("");
 
         // LIVE local search: as you type in the field, search ImportedIdsItem first
         if (input) {
@@ -1144,9 +1215,12 @@
             });
         }
 
-        if (refreshBtn && input) {
+        if (refreshBtn) {
             refreshBtn.addEventListener("click", function () {
-                loadLocalMatches(input.value || "");
+                if (input) {
+                    input.value = "";
+                }
+                loadLocalMatches("");
             });
         }
 
@@ -1270,11 +1344,33 @@
         // Realtime IDS drawer via Echo
         if (window.Echo) {
             console.log("🔵 IDS listener active on this page…");
+
             window.Echo.channel("ids")
                 .listen("IdsItemsImported", function (e) {
                     console.log("📦 IDS event received:", e);
                     if (!e.batchId) return;
+
+                    // keep drawer behavior
                     loadIdsResults(e.batchId);
+
+                    // also inject newest imported rows into local area
+                    fetch(`/ids/results/${e.batchId}`)
+                        .then(response => response.json())
+                        .then(items => {
+                            prependImportedItemsToLocalResults(items);
+
+                            // optional: if the user already typed something,
+                            // re-run filtered search after prepend
+                            const input = document.getElementById("gcSearchInput");
+                            const currentTerm = input ? (input.value || "").trim() : "";
+
+                            if (currentTerm !== "") {
+                                loadLocalMatches(currentTerm);
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Fehler beim Nachladen der lokalen IDS-Items:", err);
+                        });
                 });
         } else {
             console.warn("Echo not available on this page – IDS realtime drawer disabled.");
@@ -1282,3 +1378,29 @@
     });
 </script>
 @endsection
+
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs = [
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            },
+            {
+                label: 'Produktliste',
+                url: "{{ url('product') }}", 
+            },
+            {
+                label: 'IDS - GC-Online',
+                url: "{{ url('product') }}",
+                clickable: false
+            },
+            
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+@endpush

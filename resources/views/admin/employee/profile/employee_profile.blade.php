@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title') Employee Profile @endsection
+@section('title') MITARBEITERPROFIL @endsection
 
 @section('style')
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css" rel="stylesheet" />
@@ -833,871 +833,859 @@
 @endsection
 
 @section('content')
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
+    <div class="app-content"> 
 
-    <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-md-9 col-12 mb-1">
-                <div class="row breadcrumbs-top">
-                    <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">MITARBEITERPROFIL</h2>
-                        <div class="breadcrumb-wrapper col-12">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ url('/') }}">HOME</a></li>
-                                <li class="breadcrumb-item"><a href="{{ url('/emp') }}">MITARBEITER</a></li>
-                                <li class="breadcrumb-item active">PROFIL</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="content-wrapper">
+             
+            <a href="{{ url('employee_cv/' . $data->id) }}"
+               class="btn btn-primary mr-1 mb-2 waves-effect waves-light">
+                <i class="feather icon-printer"></i> Lebenslauf
+            </a>
 
-        <a href="{{ url('employee_cv/'.$data->id) }}"
-           class="btn btn-primary mr-1 mb-2 waves-effect waves-light">
-            <i class="feather icon-printer"></i> Lebenslauf
-        </a>
-
-        <div class="content-body">
-            <div class="row">
-                <!-- LEFT COLUMN -->
-                <div class="col-xl-8 col-lg-7 col-md-12">
-                    <div class="row">
-                        <!-- PROFILE HEADER -->
-                        <div class="col-12 mb-1">
-                            <div class="ep-card">
-                                <div class="ep-card-header">
-                                    <div class="ep-card-title">
-                                        <span class="ep-card-title-dot"></span>
-                                        <span>Profil</span>
-                                    </div>
-                                </div>
-
-                                <div class="ep-card-body">
-                                    <div class="ep-card-profile">
-                                        <div>
-                                            <div class="ep-avatar-wrapper">
-                                                @if($data->gender=="Male" && !$data->image)
-                                                    <img src="{{ asset('images/gender/male.png') }}" class="ep-avatar-img" alt="profile image">
-                                                @elseif($data->gender=="Female" && !$data->image)
-                                                    <img src="{{ asset('images/gender/Female.png') }}" class="ep-avatar-img" alt="profile image">
-                                                @else
-                                                    <img src="{{ asset('images/employee/'.$data->image) }}" class="ep-avatar-img" alt="profile image">
-                                                @endif
-                                            </div>
+            <div class="content-body">
+                <div class="row">
+                    <!-- LEFT COLUMN -->
+                    <div class="col-xl-8 col-lg-7 col-md-12">
+                        <div class="row">
+                            <!-- PROFILE HEADER -->
+                            <div class="col-12 mb-1">
+                                <div class="ep-card">
+                                    <div class="ep-card-header">
+                                        <div class="ep-card-title">
+                                            <span class="ep-card-title-dot"></span>
+                                            <span>Profil</span>
                                         </div>
+                                    </div>
 
-                                        <div class="ep-profile-main">
-                                            {{-- Basic identity --}}
+                                    <div class="ep-card-body">
+                                        <div class="ep-card-profile">
                                             <div>
-                                                <div class="ep-name">{{ $data->name }} {{ $data->lastname }}</div>
-                                                <div class="ep-meta-line mt-25">
-                                                    {{ $data->branch ?? '' }}
-                                                </div>
-                                                <div class="ep-meta-line">
-                                                    {{ $data->contract_type ?? '' }}
-                                                </div>
-
-                                                <div class="mt-50">
-                                                    <span class="ep-tag">{{ $data->status ?? '–' }}</span>
-                                                </div>
-
-                                                <div class="mt-50" style="font-size:0.8rem;color:#6b7280;">
-                                                    @if($data->dob)
-                                                        Geboren am {{ \Carbon\Carbon::parse($data->dob)->isoFormat('DD.MM.YYYY') }}
+                                                <div class="ep-avatar-wrapper">
+                                                    @if($data->gender == "Male" && !$data->image)
+                                                        <img src="{{ asset('images/gender/male.png') }}" class="ep-avatar-img" alt="profile image">
+                                                    @elseif($data->gender == "Female" && !$data->image)
+                                                        <img src="{{ asset('images/gender/Female.png') }}" class="ep-avatar-img" alt="profile image">
+                                                    @else
+                                                        <img src="{{ asset('images/employee/' . $data->image) }}" class="ep-avatar-img" alt="profile image">
                                                     @endif
                                                 </div>
                                             </div>
 
-                                            {{-- Efficiency area --}}
-                                            <div class="ep-efficiency-wrap">
-                                                <div class="ep-eff-gauge-box">
-                                                    <div class="ep-eff-label">Effizienz</div>
-                                                    <div class="ep-eff-gauge-circle" id="epEffGauge">
-                                                        <div class="ep-eff-gauge-inner">
-                                                            <span class="ep-eff-percent" id="epEffPercent">--</span>
-                                                            <span class="ep-eff-percent-symbol">%</span>
-                                                            <div class="ep-eff-small-text" id="epEffRange">Letzte 30 Tage</div>
-                                                        </div>
+                                            <div class="ep-profile-main">
+                                                {{-- Basic identity --}}
+                                                <div>
+                                                    <div class="ep-name">{{ $data->name }} {{ $data->lastname }}</div>
+                                                    <div class="ep-meta-line mt-25">
+                                                        {{ $data->branch ?? '' }}
                                                     </div>
-                                                </div>
-
-                                                <div class="ep-eff-tiles">
-                                                    <div class="ep-eff-tile ep-eff-tile-blue">
-                                                        <span class="ep-eff-tile-title">Total in Arbeit</span>
-                                                        <span class="ep-eff-tile-sub">Aufgaben & Termine</span>
-                                                        <span class="ep-eff-tile-value" id="epEffTotalInProgress">0</span>
+                                                    <div class="ep-meta-line">
+                                                        {{ $data->contract_type ?? '' }}
                                                     </div>
 
-                                                    <div class="ep-eff-tile ep-eff-tile-green">
-                                                        <span class="ep-eff-tile-title">Abgeschlossen</span>
-                                                        <span class="ep-eff-tile-sub">Tasks & Tickets</span>
-                                                        <span class="ep-eff-tile-value" id="epEffTasksCompleted">0</span>
+                                                    <div class="mt-50">
+                                                        <span class="ep-tag">{{ $data->status ?? '–' }}</span>
                                                     </div>
 
-                                                    <div class="ep-eff-tile ep-eff-tile-red">
-                                                        <span class="ep-eff-tile-title">Mit Einwänden</span>
-                                                        <span class="ep-eff-tile-sub">Objections / Probleme</span>
-                                                        <span class="ep-eff-tile-value" id="epEffTasksObjections">0</span>
-                                                    </div>
-
-                                                    <div class="ep-eff-tile ep-eff-tile-muted">
-                                                        <span class="ep-eff-tile-title">Aktive Tage</span>
-                                                        <span class="ep-eff-tile-sub" id="epEffActiveDaysLabel">0 von 30</span>
-                                                        <span class="ep-eff-tile-value" id="epEffActiveDays">0</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div> {{-- /.ep-profile-main --}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                            <!-- PERSONAL NOTES -->
-                                                    <!-- PERSONAL NOTES -->
-                        <div class="col-12 mb-1">
-                            <div class="ep-card">
-                                <div class="ep-card-header">
-                                    <div class="ep-card-title">
-                                        <span class="ep-card-title-dot"></span>
-                                        <span>Persönliche Notizen</span>
-                                    </div>
-                                </div>
-
-                                <div class="ep-card-body">
-                                    <div class="ep-notes-wrap">
-                                        {{-- Add note --}}
-                                        <form method="POST"
-                                            action="{{ route('employee-notes.store', $data->id) }}"
-                                            class="ep-note-add-row">
-                                            @csrf
-
-                                            <input type="text"
-                                                name="title"
-                                                class="form-control form-control-sm"
-                                                placeholder="Titel (optional)">
-
-                                            <input type="text"
-                                                name="note"
-                                                class="form-control form-control-sm"
-                                                placeholder="Kurze Notiz">
-
-                                            <select name="category_id"
-                                                    class="form-control form-control-sm"
-                                                    style="max-width: 160px;">
-                                                <option value="">Kategorie</option>
-                                                @foreach($noteCategories as $cat)
-                                                    <option value="{{ $cat->id }}">
-                                                        {{ $cat->category_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-
-                                            <button type="submit"
-                                                    class="btn btn-sm btn-primary">
-                                                + Notiz
-                                            </button>
-                                        </form>
-
-                                        @php
-                                            $openNotes = $personalNotes->filter(function ($n) {
-                                                return !$n->is_done;
-                                            });
-                                            $doneNotes = $personalNotes->filter(function ($n) {
-                                                return $n->is_done;
-                                            });
-                                        @endphp
-
-                                        {{-- Tabs --}}
-                                        <div class="ep-note-tabs">
-                                            <button type="button"
-                                                    class="ep-note-tab is-active"
-                                                    data-target="epNotesOpen">
-                                                Offen
-                                                <span class="ep-note-tab-count">{{ $openNotes->count() }}</span>
-                                            </button>
-
-                                            <button type="button"
-                                                    class="ep-note-tab"
-                                                    data-target="epNotesDone">
-                                                Erledigt
-                                                <span class="ep-note-tab-count">{{ $doneNotes->count() }}</span>
-                                            </button>
-                                        </div>
-
-                                        {{-- OPEN notes --}}
-                                        <div id="epNotesOpen" class="ep-note-grid-group">
-                                            <div class="ep-note-grid">
-                                                @forelse($openNotes as $note)
-                                                    @php
-                                                        $bgColor = $note->color ?: ($note->category_color ?: '#fef9c3');
-                                                    @endphp
-                                                    <div class="ep-note"
-                                                        style="background: {{ $bgColor }};">
-                                                        <div class="ep-note-actions">
-                                                            {{-- toggle done --}}
-                                                            <form method="POST"
-                                                                action="{{ route('employee-notes.toggle-done', $note->id) }}">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <button type="submit" title="Als erledigt markieren">
-                                                                    ✔
-                                                                </button>
-                                                            </form>
-
-                                                            {{-- delete --}}
-                                                            <form method="POST"
-                                                                action="{{ route('employee-notes.destroy', $note->id) }}"
-                                                                onsubmit="return confirm('Notiz löschen?');">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" title="Löschen">
-                                                                    ✕
-                                                                </button>
-                                                            </form>
-                                                        </div>
-
-                                                        <div class="ep-note-title">
-                                                            {{ $note->title ?: 'Neue Notiz' }}
-                                                        </div>
-
-                                                        <div class="ep-note-body">
-                                                            {{ $note->note }}
-                                                        </div>
-
-                                                        <div class="ep-note-meta">
-                                                            <div>
-                                                                @if($note->category_name)
-                                                                    <span class="ep-note-color-pill"
-                                                                        style="background: {{ $note->category_color ?: '#fbbf24' }}"></span>
-                                                                    {{ $note->category_name }}
-                                                                @endif
-                                                            </div>
-                                                            <div>
-                                                                @if($note->deadline)
-                                                                    Fällig: {{ \Carbon\Carbon::parse($note->deadline)->isoFormat('DD.MM.YYYY') }}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @empty
-                                                    <div style="font-size:0.8rem;color:#6b7280;">
-                                                        Noch keine offenen Notizen.
-                                                    </div>
-                                                @endforelse
-                                            </div>
-                                        </div>
-
-                                        {{-- DONE notes --}}
-                                        <div id="epNotesDone" class="ep-note-grid-group d-none">
-                                            <div class="ep-note-grid">
-                                                @forelse($doneNotes as $note)
-                                                    @php
-                                                        $bgColor = $note->color ?: ($note->category_color ?: '#e5e7eb');
-                                                    @endphp
-                                                    <div class="ep-note done"
-                                                        style="background: {{ $bgColor }};">
-                                                        <div class="ep-note-actions">
-                                                            {{-- toggle back to open --}}
-                                                            <form method="POST"
-                                                                action="{{ route('employee-notes.toggle-done', $note->id) }}">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <button type="submit" title="Wieder öffnen">
-                                                                    ↺
-                                                                </button>
-                                                            </form>
-
-                                                            {{-- delete --}}
-                                                            <form method="POST"
-                                                                action="{{ route('employee-notes.destroy', $note->id) }}"
-                                                                onsubmit="return confirm('Notiz löschen?');">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" title="Löschen">
-                                                                    ✕
-                                                                </button>
-                                                            </form>
-                                                        </div>
-
-                                                        <div class="ep-note-title">
-                                                            {{ $note->title ?: 'Erledigte Notiz' }}
-                                                        </div>
-
-                                                        <div class="ep-note-body">
-                                                            {{ $note->note }}
-                                                        </div>
-
-                                                        <div class="ep-note-meta">
-                                                            <div>
-                                                                @if($note->category_name)
-                                                                    <span class="ep-note-color-pill"
-                                                                        style="background: {{ $note->category_color ?: '#9ca3af' }}"></span>
-                                                                    {{ $note->category_name }}
-                                                                @endif
-                                                            </div>
-                                                            <div>
-                                                                @if($note->done_date)
-                                                                    Erledigt: {{ \Carbon\Carbon::parse($note->done_date)->isoFormat('DD.MM.YYYY') }}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @empty
-                                                    <div style="font-size:0.8rem;color:#6b7280;">
-                                                        Noch keine erledigten Notizen.
-                                                    </div>
-                                                @endforelse
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- PERSONAL DATA + LEAVE / SICKNESS -->
-                        <div class="col-xl-6 col-md-12 mb-1">
-                            <div class="ep-card">
-                                <div class="ep-card-header">
-                                    <div class="ep-card-title">
-                                        <span class="ep-card-title-dot"></span>
-                                        <span>Persönliche Daten</span>
-                                    </div>
-
-                                    @if($data->id == auth()->id())
-                                        <div class="ep-edit-btn">
-                                            <button type="button"
-                                                    class="btn btn-flat-primary waves-effect waves-light"
-                                                    data-toggle="modal"
-                                                    data-target="#profile">
-                                                <i class="feather icon-edit"></i>
-                                            </button>
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <div class="ep-card-body">
-                                    <ul class="ep-keylist">
-                                        <li>
-                                            <span class="ep-keylist-label">Telefon</span>
-                                            <span class="ep-keylist-value">{{ $data->home_phone ?: '–' }}</span>
-                                        </li>
-                                        <li>
-                                            <span class="ep-keylist-label">Handy</span>
-                                            <span class="ep-keylist-value">{{ $data->phone ?: '–' }}</span>
-                                        </li>
-                                        <li>
-                                            <span class="ep-keylist-label">E-Mail</span>
-                                            <span class="ep-keylist-value">{{ $data->email ?: '–' }}</span>
-                                        </li>
-                                        <li>
-                                            <span class="ep-keylist-label">Angestellt seit</span>
-                                            <span class="ep-keylist-value">
-                                                {{ \Carbon\Carbon::parse($data->created_at)->isoFormat('DD.MM.YYYY') }}
-                                            </span>
-                                        </li>
-                                        @if(isset($department) && $department->count())
-                                            <li>
-                                                <span class="ep-keylist-label">Abteilung</span>
-                                                <span class="ep-keylist-value">
-                                                    {{ $department->pluck('department_name')->join(', ') }}
-                                                </span>
-                                            </li>
-                                        @endif
-                                        @if(isset($language) && $language->count())
-                                            <li>
-                                                <span class="ep-keylist-label">Sprachen</span>
-                                                <span class="ep-keylist-value">
-                                                    {{ $language->pluck('language')->join(', ') }}
-                                                </span>
-                                            </li>
-                                        @endif
-                                        <li>
-                                            <span class="ep-keylist-label">Kundenbeteiligung</span>
-                                            <span class="ep-keylist-value">
-                                                {{ $customerInvolvementCount ?? 0 }} Kunden
-                                            </span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-6 col-md-12 mb-1">
-                            <div class="ep-card">
-                                <div class="ep-card-header">
-                                    <div class="ep-card-title">
-                                        <span class="ep-card-title-dot"></span>
-                                        <span>Urlaub / Krankheit</span>
-                                    </div>
-                                </div>
-
-                                <div class="ep-card-body">
-                                    <div class="ep-pill-row">
-                                        <div class="ep-pill-metric">
-                                            <span>Gesamte Urlaubstage</span>
-                                            <span>{{ $leaveStats['total_leave_days'] ?? 0 }}</span>
-                                        </div>
-                                        <div class="ep-pill-metric">
-                                            <span>Krankheitstage gesamt</span>
-                                            <span>{{ $leaveStats['total_sick_days'] ?? 0 }}</span>
-                                        </div>
-                                        <div class="ep-pill-metric">
-                                            <span>Bevorstehende Abwesenheiten</span>
-                                            <span>
-                                                {{ $leaveStats['upcoming_count'] ?? 0 }}
-                                                @if(($leaveStats['upcoming_leave_days'] ?? 0) > 0)
-                                                    ({{ $leaveStats['upcoming_leave_days'] }} Tage)
-                                                @endif
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <ul class="ep-keylist mt-50">
-                                        @if($latestLeave ?? false)
-                                            <li>
-                                                <span class="ep-keylist-label">Letzter Urlaub</span>
-                                                <span class="ep-keylist-value">
-                                                    {{ \Carbon\Carbon::parse($latestLeave->start_date)->isoFormat('DD.MM.YYYY') }}
-                                                    – {{ \Carbon\Carbon::parse($latestLeave->end_date)->isoFormat('DD.MM.YYYY') }}
-                                                </span>
-                                            </li>
-                                        @endif
-
-                                        @if($nextLeave ?? false)
-                                            <li>
-                                                <span class="ep-keylist-label">Nächster Urlaub</span>
-                                                <span class="ep-keylist-value">
-                                                    {{ \Carbon\Carbon::parse($nextLeave->start_date)->isoFormat('DD.MM.YYYY') }}
-                                                    – {{ \Carbon\Carbon::parse($nextLeave->end_date)->isoFormat('DD.MM.YYYY') }}
-                                                </span>
-                                            </li>
-                                        @endif
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- QUALIFICATION + COMPETENCES -->
-                        <div class="col-xl-6 col-md-12 mb-1">
-                            <div class="ep-card">
-                                <div class="ep-card-header">
-                                    <div class="ep-card-title">
-                                        <span class="ep-card-title-dot"></span>
-                                        <span>Qualifikation</span>
-                                    </div>
-
-                                    @if($data->id == auth()->id())
-                                        <div class="ep-edit-btn">
-                                            <button type="button"
-                                                    class="btn btn-flat-primary waves-effect waves-light"
-                                                    data-toggle="modal"
-                                                    data-target="#qualificationModal">
-                                                <i class="feather icon-edit"></i>
-                                            </button>
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <div class="ep-card-body">
-                                    <div class="table-responsive">
-                                        <table class="ep-table">
-                                            <thead>
-                                            <tr>
-                                                <th>Abschluss</th>
-                                                <th>Institution</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($qualifications as $qualification)
-                                                <tr>
-                                                    <td>
-                                                        <strong>{{ $qualification->degree }}</strong>
-                                                        @if($qualification->major)
-                                                            <br>
-                                                            <span class="ep-chip-muted">{{ $qualification->major }}</span>
+                                                    <div class="mt-50" style="font-size:0.8rem;color:#6b7280;">
+                                                        @if($data->dob)
+                                                            Geboren am {{ \Carbon\Carbon::parse($data->dob)->isoFormat('DD.MM.YYYY') }}
                                                         @endif
-                                                        <br>
-                                                        <span class="text-muted">
-                                                            {{ \Carbon\Carbon::parse($qualification->q_start_year)->isoFormat('YYYY') }}
-                                                            –
-                                                            {{ \Carbon\Carbon::parse($qualification->q_end_year)->isoFormat('YYYY') }}
-                                                        </span>
-                                                    </td>
-                                                    <td>{{ $qualification->institution }}</td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <a href="#" class="ep-card-footer-link">Mehr anzeigen</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-6 col-md-12 mb-1">
-                            <div class="ep-card">
-                                <div class="ep-card-header">
-                                    <div class="ep-card-title">
-                                        <span class="ep-card-title-dot"></span>
-                                        <span>Kompetenzen</span>
-                                    </div>
-                                </div>
-
-                                <div class="ep-card-body">
-                                    <ul class="ep-skills-list">
-                                        @foreach ($feducation as $fedu)
-                                            <li>{{ $fedu->skill }}</li>
-                                        @endforeach
-                                        @foreach ($otherskill as $oskill)
-                                            <li>{{ $oskill->skills }} ({{ $oskill->proficiency }})</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- POSITIONS + HANDOVER -->
-                        <div class="col-xl-6 col-md-12 mb-1">
-                            <div class="ep-card">
-                                <div class="ep-card-header">
-                                    <div class="ep-card-title">
-                                        <span class="ep-card-title-dot"></span>
-                                        <span>Positionen & Abteilungen</span>
-                                    </div>
-                                </div>
-
-                                <div class="ep-card-body">
-                                    <div class="table-responsive">
-                                        <table class="ep-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Abteilung</th>
-                                                    <th>Position</th>
-                                                    <th>FTE %</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @forelse($roleAllocations as $alloc)
-                                                    <tr>
-                                                        <td>{{ $alloc->department_name ?? '–' }}</td>
-                                                        <td>
-                                                            {{ $alloc->position ?? '–' }}
-                                                            @if($alloc->main === 'yes' || $alloc->main === 1)
-                                                                <br><span class="ep-chip-muted">Hauptfunktion</span>
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            @if(!is_null($alloc->percent))
-                                                                {{ number_format($alloc->percent, 0) }} %
-                                                            @else
-                                                                –
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @empty
-                                                    <tr>
-                                                        <td colspan="3">Keine Zuordnung gefunden.</td>
-                                                    </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-6 col-md-12 mb-1">
-                            <div class="ep-card">
-                                <div class="ep-card-header">
-                                    <div class="ep-card-title">
-                                        <span class="ep-card-title-dot"></span>
-                                        <span>Übergabeliste</span>
-                                    </div>
-                                </div>
-
-                                <div class="ep-card-body">
-                                    <div class="table-responsive">
-                                        <table class="ep-table">
-                                            <tbody>
-                                            @foreach($handover as $item)
-                                                <tr>
-                                                    <td>
-                                                        <strong>{{ $item->item }}</strong>
-                                                        <br>
-                                                        <span class="ep-badge">
-                                                            <i class="feather icon-hash"></i>
-                                                            Seriennummer: {{ $item->serial_no }}
-                                                        </span>
-                                                        <br>
-                                                        <span class="ep-badge mt-25">
-                                                            <i class="feather icon-package"></i>
-                                                            Artikelnummer: {{ $item->article_no }}
-                                                        </span>
-                                                    </td>
-                                                    <td style="text-align:right; white-space:nowrap;">
-                                                        x {{ $item->quantity }}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            @if($handover->isEmpty())
-                                                <tr>
-                                                    <td colspan="2">Keine Übergaben erfasst.</td>
-                                                </tr>
-                                            @endif
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- RECURRING LEAVES -->
-                        <div class="col-12 mb-1">
-                            <div class="ep-card">
-                                <div class="ep-card-header">
-                                    <div class="ep-card-title">
-                                        <span class="ep-card-title-dot"></span>
-                                        <span>Wiederkehrende Abwesenheiten</span>
-                                    </div>
-                                </div>
-                                <div class="ep-card-body">
-                                    @forelse($recurringLeaves as $rl)
-                                        @php
-                                            $weekdays = [];
-                                            if ($rl->weekdays) {
-                                                $raw = json_decode($rl->weekdays, true);
-                                                $names = [
-                                                    1 => 'Mo', 2 => 'Di', 3 => 'Mi',
-                                                    4 => 'Do', 5 => 'Fr', 6 => 'Sa', 0 => 'So', 7 => 'So'
-                                                ];
-                                                foreach ($raw as $w) {
-                                                    $weekdays[] = $names[$w] ?? $w;
-                                                }
-                                            }
-                                        @endphp
-                                        <div style="margin-bottom:0.75rem;">
-                                            <strong>{{ $rl->title ?: 'Serien-Abwesenheit' }}</strong>
-                                            <div style="font-size:0.8rem;color:#6b7280;">
-                                                {{ ucfirst($rl->type) }}
-                                                @if($rl->frequency)
-                                                    • {{ $rl->frequency }}
-                                                @endif
-                                                @if(count($weekdays))
-                                                    • {{ implode(', ', $weekdays) }}
-                                                @endif
-                                            </div>
-                                            <div style="font-size:0.78rem;color:#6b7280;">
-                                                Von {{ \Carbon\Carbon::parse($rl->start_date)->isoFormat('DD.MM.YYYY') }}
-                                                @if($rl->end_date)
-                                                    bis {{ \Carbon\Carbon::parse($rl->end_date)->isoFormat('DD.MM.YYYY') }}
-                                                @else
-                                                    (offen)
-                                                @endif
-                                            </div>
-                                            @if(!$rl->all_day && $rl->start_time && $rl->end_time)
-                                                <div style="font-size:0.78rem;color:#6b7280;">
-                                                    {{ \Illuminate\Support\Str::substr($rl->start_time,0,5) }} – {{ \Illuminate\Support\Str::substr($rl->end_time,0,5) }} Uhr
+                                                    </div>
                                                 </div>
+
+                                                {{-- Efficiency area --}}
+                                                <div class="ep-efficiency-wrap">
+                                                    <div class="ep-eff-gauge-box">
+                                                        <div class="ep-eff-label">Effizienz</div>
+                                                        <div class="ep-eff-gauge-circle" id="epEffGauge">
+                                                            <div class="ep-eff-gauge-inner">
+                                                                <span class="ep-eff-percent" id="epEffPercent">--</span>
+                                                                <span class="ep-eff-percent-symbol">%</span>
+                                                                <div class="ep-eff-small-text" id="epEffRange">Letzte 30 Tage</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="ep-eff-tiles">
+                                                        <div class="ep-eff-tile ep-eff-tile-blue">
+                                                            <span class="ep-eff-tile-title">Total in Arbeit</span>
+                                                            <span class="ep-eff-tile-sub">Aufgaben & Termine</span>
+                                                            <span class="ep-eff-tile-value" id="epEffTotalInProgress">0</span>
+                                                        </div>
+
+                                                        <div class="ep-eff-tile ep-eff-tile-green">
+                                                            <span class="ep-eff-tile-title">Abgeschlossen</span>
+                                                            <span class="ep-eff-tile-sub">Tasks & Tickets</span>
+                                                            <span class="ep-eff-tile-value" id="epEffTasksCompleted">0</span>
+                                                        </div>
+
+                                                        <div class="ep-eff-tile ep-eff-tile-red">
+                                                            <span class="ep-eff-tile-title">Mit Einwänden</span>
+                                                            <span class="ep-eff-tile-sub">Objections / Probleme</span>
+                                                            <span class="ep-eff-tile-value" id="epEffTasksObjections">0</span>
+                                                        </div>
+
+                                                        <div class="ep-eff-tile ep-eff-tile-muted">
+                                                            <span class="ep-eff-tile-title">Aktive Tage</span>
+                                                            <span class="ep-eff-tile-sub" id="epEffActiveDaysLabel">0 von 30</span>
+                                                            <span class="ep-eff-tile-value" id="epEffActiveDays">0</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div> {{-- /.ep-profile-main --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                                <!-- PERSONAL NOTES -->
+                                                        <!-- PERSONAL NOTES -->
+                            <div class="col-12 mb-1">
+                                <div class="ep-card">
+                                    <div class="ep-card-header">
+                                        <div class="ep-card-title">
+                                            <span class="ep-card-title-dot"></span>
+                                            <span>Persönliche Notizen</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="ep-card-body">
+                                        <div class="ep-notes-wrap">
+                                            {{-- Add note --}}
+                                            <form method="POST"
+                                                action="{{ route('employee-notes.store', $data->id) }}"
+                                                class="ep-note-add-row">
+                                                @csrf
+
+                                                <input type="text"
+                                                    name="title"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="Titel (optional)">
+
+                                                <input type="text"
+                                                    name="note"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="Kurze Notiz">
+
+                                                <select name="category_id"
+                                                        class="form-control form-control-sm"
+                                                        style="max-width: 160px;">
+                                                    <option value="">Kategorie</option>
+                                                    @foreach($noteCategories as $cat)
+                                                        <option value="{{ $cat->id }}">
+                                                            {{ $cat->category_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-primary">
+                                                    + Notiz
+                                                </button>
+                                            </form>
+
+                                            @php
+$openNotes = $personalNotes->filter(function ($n) {
+    return !$n->is_done;
+});
+$doneNotes = $personalNotes->filter(function ($n) {
+    return $n->is_done;
+});
+                                            @endphp
+
+                                            {{-- Tabs --}}
+                                            <div class="ep-note-tabs">
+                                                <button type="button"
+                                                        class="ep-note-tab is-active"
+                                                        data-target="epNotesOpen">
+                                                    Offen
+                                                    <span class="ep-note-tab-count">{{ $openNotes->count() }}</span>
+                                                </button>
+
+                                                <button type="button"
+                                                        class="ep-note-tab"
+                                                        data-target="epNotesDone">
+                                                    Erledigt
+                                                    <span class="ep-note-tab-count">{{ $doneNotes->count() }}</span>
+                                                </button>
+                                            </div>
+
+                                            {{-- OPEN notes --}}
+                                            <div id="epNotesOpen" class="ep-note-grid-group">
+                                                <div class="ep-note-grid">
+                                                    @forelse($openNotes as $note)
+                                                        @php
+    $bgColor = $note->color ?: ($note->category_color ?: '#fef9c3');
+                                                        @endphp
+                                                        <div class="ep-note"
+                                                            style="background: {{ $bgColor }};">
+                                                            <div class="ep-note-actions">
+                                                                {{-- toggle done --}}
+                                                                <form method="POST"
+                                                                    action="{{ route('employee-notes.toggle-done', $note->id) }}">
+                                                                    @csrf
+                                                                    @method('PATCH')
+                                                                    <button type="submit" title="Als erledigt markieren">
+                                                                        ✔
+                                                                    </button>
+                                                                </form>
+
+                                                                {{-- delete --}}
+                                                                <form method="POST"
+                                                                    action="{{ route('employee-notes.destroy', $note->id) }}"
+                                                                    onsubmit="return confirm('Notiz löschen?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" title="Löschen">
+                                                                        ✕
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+
+                                                            <div class="ep-note-title">
+                                                                {{ $note->title ?: 'Neue Notiz' }}
+                                                            </div>
+
+                                                            <div class="ep-note-body">
+                                                                {{ $note->note }}
+                                                            </div>
+
+                                                            <div class="ep-note-meta">
+                                                                <div>
+                                                                    @if($note->category_name)
+                                                                        <span class="ep-note-color-pill"
+                                                                            style="background: {{ $note->category_color ?: '#fbbf24' }}"></span>
+                                                                        {{ $note->category_name }}
+                                                                    @endif
+                                                                </div>
+                                                                <div>
+                                                                    @if($note->deadline)
+                                                                        Fällig: {{ \Carbon\Carbon::parse($note->deadline)->isoFormat('DD.MM.YYYY') }}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @empty
+                                                        <div style="font-size:0.8rem;color:#6b7280;">
+                                                            Noch keine offenen Notizen.
+                                                        </div>
+                                                    @endforelse
+                                                </div>
+                                            </div>
+
+                                            {{-- DONE notes --}}
+                                            <div id="epNotesDone" class="ep-note-grid-group d-none">
+                                                <div class="ep-note-grid">
+                                                    @forelse($doneNotes as $note)
+                                                        @php
+    $bgColor = $note->color ?: ($note->category_color ?: '#e5e7eb');
+                                                        @endphp
+                                                        <div class="ep-note done"
+                                                            style="background: {{ $bgColor }};">
+                                                            <div class="ep-note-actions">
+                                                                {{-- toggle back to open --}}
+                                                                <form method="POST"
+                                                                    action="{{ route('employee-notes.toggle-done', $note->id) }}">
+                                                                    @csrf
+                                                                    @method('PATCH')
+                                                                    <button type="submit" title="Wieder öffnen">
+                                                                        ↺
+                                                                    </button>
+                                                                </form>
+
+                                                                {{-- delete --}}
+                                                                <form method="POST"
+                                                                    action="{{ route('employee-notes.destroy', $note->id) }}"
+                                                                    onsubmit="return confirm('Notiz löschen?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" title="Löschen">
+                                                                        ✕
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+
+                                                            <div class="ep-note-title">
+                                                                {{ $note->title ?: 'Erledigte Notiz' }}
+                                                            </div>
+
+                                                            <div class="ep-note-body">
+                                                                {{ $note->note }}
+                                                            </div>
+
+                                                            <div class="ep-note-meta">
+                                                                <div>
+                                                                    @if($note->category_name)
+                                                                        <span class="ep-note-color-pill"
+                                                                            style="background: {{ $note->category_color ?: '#9ca3af' }}"></span>
+                                                                        {{ $note->category_name }}
+                                                                    @endif
+                                                                </div>
+                                                                <div>
+                                                                    @if($note->done_date)
+                                                                        Erledigt: {{ \Carbon\Carbon::parse($note->done_date)->isoFormat('DD.MM.YYYY') }}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @empty
+                                                        <div style="font-size:0.8rem;color:#6b7280;">
+                                                            Noch keine erledigten Notizen.
+                                                        </div>
+                                                    @endforelse
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PERSONAL DATA + LEAVE / SICKNESS -->
+                            <div class="col-xl-6 col-md-12 mb-1">
+                                <div class="ep-card">
+                                    <div class="ep-card-header">
+                                        <div class="ep-card-title">
+                                            <span class="ep-card-title-dot"></span>
+                                            <span>Persönliche Daten</span>
+                                        </div>
+
+                                        @if($data->id == auth()->id())
+                                            <div class="ep-edit-btn">
+                                                <button type="button"
+                                                        class="btn btn-flat-primary waves-effect waves-light"
+                                                        data-toggle="modal"
+                                                        data-target="#profile">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="ep-card-body">
+                                        <ul class="ep-keylist">
+                                            <li>
+                                                <span class="ep-keylist-label">Telefon</span>
+                                                <span class="ep-keylist-value">{{ $data->home_phone ?: '–' }}</span>
+                                            </li>
+                                            <li>
+                                                <span class="ep-keylist-label">Handy</span>
+                                                <span class="ep-keylist-value">{{ $data->phone ?: '–' }}</span>
+                                            </li>
+                                            <li>
+                                                <span class="ep-keylist-label">E-Mail</span>
+                                                <span class="ep-keylist-value">{{ $data->email ?: '–' }}</span>
+                                            </li>
+                                            <li>
+                                                <span class="ep-keylist-label">Angestellt seit</span>
+                                                <span class="ep-keylist-value">
+                                                    {{ \Carbon\Carbon::parse($data->created_at)->isoFormat('DD.MM.YYYY') }}
+                                                </span>
+                                            </li>
+                                            @if(isset($department) && $department->count())
+                                                <li>
+                                                    <span class="ep-keylist-label">Abteilung</span>
+                                                    <span class="ep-keylist-value">
+                                                        {{ $department->pluck('department_name')->join(', ') }}
+                                                    </span>
+                                                </li>
                                             @endif
+                                            @if(isset($language) && $language->count())
+                                                <li>
+                                                    <span class="ep-keylist-label">Sprachen</span>
+                                                    <span class="ep-keylist-value">
+                                                        {{ $language->pluck('language')->join(', ') }}
+                                                    </span>
+                                                </li>
+                                            @endif
+                                            <li>
+                                                <span class="ep-keylist-label">Kundenbeteiligung</span>
+                                                <span class="ep-keylist-value">
+                                                    {{ $customerInvolvementCount ?? 0 }} Kunden
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 col-md-12 mb-1">
+                                <div class="ep-card">
+                                    <div class="ep-card-header">
+                                        <div class="ep-card-title">
+                                            <span class="ep-card-title-dot"></span>
+                                            <span>Urlaub / Krankheit</span>
                                         </div>
-                                    @empty
-                                        <div style="font-size:0.8rem;color:#6b7280;">
-                                            Keine wiederkehrenden Abwesenheiten hinterlegt.
+                                    </div>
+
+                                    <div class="ep-card-body">
+                                        <div class="ep-pill-row">
+                                            <div class="ep-pill-metric">
+                                                <span>Gesamte Urlaubstage</span>
+                                                <span>{{ $leaveStats['total_leave_days'] ?? 0 }}</span>
+                                            </div>
+                                            <div class="ep-pill-metric">
+                                                <span>Krankheitstage gesamt</span>
+                                                <span>{{ $leaveStats['total_sick_days'] ?? 0 }}</span>
+                                            </div>
+                                            <div class="ep-pill-metric">
+                                                <span>Bevorstehende Abwesenheiten</span>
+                                                <span>
+                                                    {{ $leaveStats['upcoming_count'] ?? 0 }}
+                                                    @if(($leaveStats['upcoming_leave_days'] ?? 0) > 0)
+                                                        ({{ $leaveStats['upcoming_leave_days'] }} Tage)
+                                                    @endif
+                                                </span>
+                                            </div>
                                         </div>
-                                    @endforelse
+
+                                        <ul class="ep-keylist mt-50">
+                                            @if($latestLeave ?? false)
+                                                <li>
+                                                    <span class="ep-keylist-label">Letzter Urlaub</span>
+                                                    <span class="ep-keylist-value">
+                                                        {{ \Carbon\Carbon::parse($latestLeave->start_date)->isoFormat('DD.MM.YYYY') }}
+                                                        – {{ \Carbon\Carbon::parse($latestLeave->end_date)->isoFormat('DD.MM.YYYY') }}
+                                                    </span>
+                                                </li>
+                                            @endif
+
+                                            @if($nextLeave ?? false)
+                                                <li>
+                                                    <span class="ep-keylist-label">Nächster Urlaub</span>
+                                                    <span class="ep-keylist-value">
+                                                        {{ \Carbon\Carbon::parse($nextLeave->start_date)->isoFormat('DD.MM.YYYY') }}
+                                                        – {{ \Carbon\Carbon::parse($nextLeave->end_date)->isoFormat('DD.MM.YYYY') }}
+                                                    </span>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- QUALIFICATION + COMPETENCES -->
+                            <div class="col-xl-6 col-md-12 mb-1">
+                                <div class="ep-card">
+                                    <div class="ep-card-header">
+                                        <div class="ep-card-title">
+                                            <span class="ep-card-title-dot"></span>
+                                            <span>Qualifikation</span>
+                                        </div>
+
+                                        @if($data->id == auth()->id())
+                                            <div class="ep-edit-btn">
+                                                <button type="button"
+                                                        class="btn btn-flat-primary waves-effect waves-light"
+                                                        data-toggle="modal"
+                                                        data-target="#qualificationModal">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="ep-card-body">
+                                        <div class="table-responsive">
+                                            <table class="ep-table">
+                                                <thead>
+                                                <tr>
+                                                    <th>Abschluss</th>
+                                                    <th>Institution</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($qualifications as $qualification)
+                                                    <tr>
+                                                        <td>
+                                                            <strong>{{ $qualification->degree }}</strong>
+                                                            @if($qualification->major)
+                                                                <br>
+                                                                <span class="ep-chip-muted">{{ $qualification->major }}</span>
+                                                            @endif
+                                                            <br>
+                                                            <span class="text-muted">
+                                                                {{ \Carbon\Carbon::parse($qualification->q_start_year)->isoFormat('YYYY') }}
+                                                                –
+                                                                {{ \Carbon\Carbon::parse($qualification->q_end_year)->isoFormat('YYYY') }}
+                                                            </span>
+                                                        </td>
+                                                        <td>{{ $qualification->institution }}</td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <a href="#" class="ep-card-footer-link">Mehr anzeigen</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 col-md-12 mb-1">
+                                <div class="ep-card">
+                                    <div class="ep-card-header">
+                                        <div class="ep-card-title">
+                                            <span class="ep-card-title-dot"></span>
+                                            <span>Kompetenzen</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="ep-card-body">
+                                        <ul class="ep-skills-list">
+                                            @foreach ($feducation as $fedu)
+                                                <li>{{ $fedu->skill }}</li>
+                                            @endforeach
+                                            @foreach ($otherskill as $oskill)
+                                                <li>{{ $oskill->skills }} ({{ $oskill->proficiency }})</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- POSITIONS + HANDOVER -->
+                            <div class="col-xl-6 col-md-12 mb-1">
+                                <div class="ep-card">
+                                    <div class="ep-card-header">
+                                        <div class="ep-card-title">
+                                            <span class="ep-card-title-dot"></span>
+                                            <span>Positionen & Abteilungen</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="ep-card-body">
+                                        <div class="table-responsive">
+                                            <table class="ep-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Abteilung</th>
+                                                        <th>Position</th>
+                                                        <th>FTE %</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse($roleAllocations as $alloc)
+                                                        <tr>
+                                                            <td>{{ $alloc->department_name ?? '–' }}</td>
+                                                            <td>
+                                                                {{ $alloc->position ?? '–' }}
+                                                                @if($alloc->main === 'yes' || $alloc->main === 1)
+                                                                    <br><span class="ep-chip-muted">Hauptfunktion</span>
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @if(!is_null($alloc->percent))
+                                                                    {{ number_format($alloc->percent, 0) }} %
+                                                                @else
+                                                                    –
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="3">Keine Zuordnung gefunden.</td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6 col-md-12 mb-1">
+                                <div class="ep-card">
+                                    <div class="ep-card-header">
+                                        <div class="ep-card-title">
+                                            <span class="ep-card-title-dot"></span>
+                                            <span>Übergabeliste</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="ep-card-body">
+                                        <div class="table-responsive">
+                                            <table class="ep-table">
+                                                <tbody>
+                                                @foreach($handover as $item)
+                                                    <tr>
+                                                        <td>
+                                                            <strong>{{ $item->item }}</strong>
+                                                            <br>
+                                                            <span class="ep-badge">
+                                                                <i class="feather icon-hash"></i>
+                                                                Seriennummer: {{ $item->serial_no }}
+                                                            </span>
+                                                            <br>
+                                                            <span class="ep-badge mt-25">
+                                                                <i class="feather icon-package"></i>
+                                                                Artikelnummer: {{ $item->article_no }}
+                                                            </span>
+                                                        </td>
+                                                        <td style="text-align:right; white-space:nowrap;">
+                                                            x {{ $item->quantity }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                @if($handover->isEmpty())
+                                                    <tr>
+                                                        <td colspan="2">Keine Übergaben erfasst.</td>
+                                                    </tr>
+                                                @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- RECURRING LEAVES -->
+                            <div class="col-12 mb-1">
+                                <div class="ep-card">
+                                    <div class="ep-card-header">
+                                        <div class="ep-card-title">
+                                            <span class="ep-card-title-dot"></span>
+                                            <span>Wiederkehrende Abwesenheiten</span>
+                                        </div>
+                                    </div>
+                                    <div class="ep-card-body">
+                                        @forelse($recurringLeaves as $rl)
+                                            @php
+    $weekdays = [];
+    if ($rl->weekdays) {
+        $raw = json_decode($rl->weekdays, true);
+        $names = [
+            1 => 'Mo',
+            2 => 'Di',
+            3 => 'Mi',
+            4 => 'Do',
+            5 => 'Fr',
+            6 => 'Sa',
+            0 => 'So',
+            7 => 'So'
+        ];
+        foreach ($raw as $w) {
+            $weekdays[] = $names[$w] ?? $w;
+        }
+    }
+                                            @endphp
+                                            <div style="margin-bottom:0.75rem;">
+                                                <strong>{{ $rl->title ?: 'Serien-Abwesenheit' }}</strong>
+                                                <div style="font-size:0.8rem;color:#6b7280;">
+                                                    {{ ucfirst($rl->type) }}
+                                                    @if($rl->frequency)
+                                                        • {{ $rl->frequency }}
+                                                    @endif
+                                                    @if(count($weekdays))
+                                                        • {{ implode(', ', $weekdays) }}
+                                                    @endif
+                                                </div>
+                                                <div style="font-size:0.78rem;color:#6b7280;">
+                                                    Von {{ \Carbon\Carbon::parse($rl->start_date)->isoFormat('DD.MM.YYYY') }}
+                                                    @if($rl->end_date)
+                                                        bis {{ \Carbon\Carbon::parse($rl->end_date)->isoFormat('DD.MM.YYYY') }}
+                                                    @else
+                                                        (offen)
+                                                    @endif
+                                                </div>
+                                                @if(!$rl->all_day && $rl->start_time && $rl->end_time)
+                                                    <div style="font-size:0.78rem;color:#6b7280;">
+                                                        {{ \Illuminate\Support\Str::substr($rl->start_time, 0, 5) }} – {{ \Illuminate\Support\Str::substr($rl->end_time, 0, 5) }} Uhr
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @empty
+                                            <div style="font-size:0.8rem;color:#6b7280;">
+                                                Keine wiederkehrenden Abwesenheiten hinterlegt.
+                                            </div>
+                                        @endforelse
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- RIGHT: CALENDAR + PERMISSIONS -->
-                <div class="col-xl-4 col-lg-5 col-md-12">
-                    <div class="ep-calendar-card">
-                        <div class="ep-calendar-header">
-                            <div>
-                                <div class="ep-calendar-header-title">Arbeitskalender</div>
-                                <div class="ep-calendar-header-sub">Aufgaben & Termine</div>
+                    <!-- RIGHT: CALENDAR + PERMISSIONS -->
+                    <div class="col-xl-4 col-lg-5 col-md-12">
+                        <div class="ep-calendar-card">
+                            <div class="ep-calendar-header">
+                                <div>
+                                    <div class="ep-calendar-header-title">Arbeitskalender</div>
+                                    <div class="ep-calendar-header-sub">Aufgaben & Termine</div>
+                                </div>
                             </div>
-                        </div>
 
-                        <input type="hidden" id="emp_id" value="{{ $data->id }}">
+                            <input type="hidden" id="emp_id" value="{{ $data->id }}">
 
-                        <div id="calendar"></div>
+                            <div id="calendar"></div>
 
-                        <div class="events-list">
-                            <!-- Filled by JS -->
-                        </div>
-
-                        <!-- ROLES & PERMISSIONS -->
-                        <div class="ep-permission-block">
-                            <div class="ep-calendar-header-title" style="border-bottom:none;">
-                                Rollen & Berechtigungen
+                            <div class="events-list">
+                                <!-- Filled by JS -->
                             </div>
-                            <div class="mt-50">
-                                @if(($userRoles ?? collect())->count())
-                                    @foreach($userRoles as $roleName)
-                                        <span class="ep-role-chip">{{ $roleName }}</span>
+
+                            <!-- ROLES & PERMISSIONS -->
+                            <div class="ep-permission-block">
+                                <div class="ep-calendar-header-title" style="border-bottom:none;">
+                                    Rollen & Berechtigungen
+                                </div>
+                                <div class="mt-50">
+                                    @if(($userRoles ?? collect())->count())
+                                        @foreach($userRoles as $roleName)
+                                            <span class="ep-role-chip">{{ $roleName }}</span>
+                                        @endforeach
+                                    @else
+                                        <span style="font-size:0.78rem;color:#9ca3af;">Keine Rollen zugewiesen.</span>
+                                    @endif
+                                </div>
+
+                                @if(isset($userPermissionsByModule) && $userPermissionsByModule->count())
+                                    @foreach($userPermissionsByModule as $module => $perms)
+                                        <div class="mt-50">
+                                            <div class="ep-permission-module-title">
+                                                {{ $module }}
+                                            </div>
+                                            <div>
+                                                @foreach($perms as $permLabel)
+                                                    <span class="ep-permission-chip">
+                                                        {{ $permLabel }}
+                                                    </span>
+                                                @endforeach
+                                            </div>
+                                        </div>
                                     @endforeach
                                 @else
-                                    <span style="font-size:0.78rem;color:#9ca3af;">Keine Rollen zugewiesen.</span>
+                                    <div class="mt-50" style="font-size:0.78rem;color:#9ca3af;">
+                                        Keine Berechtigungen gefunden oder nicht konfiguriert.
+                                    </div>
                                 @endif
                             </div>
+                        </div>
+                    </div>
 
-                            @if(isset($userPermissionsByModule) && $userPermissionsByModule->count())
-                                @foreach($userPermissionsByModule as $module => $perms)
-                                    <div class="mt-50">
-                                        <div class="ep-permission-module-title">
-                                            {{ $module }}
-                                        </div>
-                                        <div>
-                                            @foreach($perms as $permLabel)
-                                                <span class="ep-permission-chip">
-                                                    {{ $permLabel }}
-                                                </span>
-                                            @endforeach
-                                        </div>
+                </div> {{-- .row --}}
+            </div>
+        </div>
+
+        {{-- MODALS --}}
+        {{-- Qualification Modal --}}
+        <div class="modal fade text-left" id="qualificationModal" tabindex="-1" role="dialog" aria-labelledby="qualificationLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="max-width:1143px !important">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="qualificationLabel">Qualifikation</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <form novalidate
+                          action="{{ route('emp.qualification') }}"
+                          method="post"
+                          class="custom-file-upload"
+                          enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <table class="table" id="qualification_table">
+                                    <thead>
+                                    <tr>
+                                        <th>Degree</th>
+                                        <th>Datum</th>
+                                        <th>#</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <input type="hidden" name="qual[0][emp_id]" value="{{ $data->id }}">
+                                        <td>
+                                            <input type="text" class="form-control mb-1 required" placeholder="Degree" name="qual[0][degree]">
+                                            <input type="text" class="form-control mb-1 required" placeholder="Major" name="qual[0][major]">
+                                            <input type="text" class="form-control mb-1 required" placeholder="Institution" name="qual[0][institution]">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control mb-1" placeholder="Grade" name="qual[0][grade]">
+                                            <input type="date" class="form-control mb-1 required" placeholder="Startjahr" name="qual[0][q_start_year]">
+                                            <input type="date" class="form-control mb-1 required" placeholder="Abschlussdatum" name="qual[0][q_end_year]">
+                                        </td>
+                                        <td>
+                                            <button type="button"
+                                                    class="btn btn-icon rounded-circle btn-outline-primary mr-1 mb-1"
+                                                    id="add_qualification">
+                                                <i class="feather icon-plus"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary waves-effect waves-light" data-dismiss="modal">Abbrechen</button>
+                            <button type="submit" class="btn btn-primary waves-effect waves-light">Speichern</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Profile Modal --}}
+        <div class="modal fade text-left" id="profile" tabindex="-1" role="dialog" aria-labelledby="profileLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="profileLabel">Persönliche Daten</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+                    <form method="post" action="#">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="email">E-Mail</label>
+                                        <input type="text" name="email" value="{{ old('email', $data->email) }}" class="form-control">
                                     </div>
-                                @endforeach
-                            @else
-                                <div class="mt-50" style="font-size:0.78rem;color:#9ca3af;">
-                                    Keine Berechtigungen gefunden oder nicht konfiguriert.
                                 </div>
-                            @endif
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="phone">Handy</label>
+                                        <input type="text" name="phone" value="{{ old('phone', $data->phone) }}" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="home_phone">Telefon privat</label>
+                                        <input type="text" name="home_phone" value="{{ old('home_phone', $data->home_phone) }}" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="work_phone">Telefon geschäftlich</label>
+                                        <input type="text" name="work_phone" value="{{ old('work_phone', $data->work_phone) }}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-            </div> {{-- .row --}}
-        </div>
-    </div>
-
-    {{-- MODALS --}}
-    {{-- Qualification Modal --}}
-    <div class="modal fade text-left" id="qualificationModal" tabindex="-1" role="dialog" aria-labelledby="qualificationLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="max-width:1143px !important">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="qualificationLabel">Qualifikation</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <form novalidate
-                      action="{{ action('App\Http\Controllers\QualificationController@emp_qualification') }}"
-                      method="post"
-                      class="custom-file-upload"
-                      enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="table-responsive">
-                            <table class="table" id="qualification_table">
-                                <thead>
-                                <tr>
-                                    <th>Degree</th>
-                                    <th>Datum</th>
-                                    <th>#</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <input type="hidden" name="qual[0][emp_id]" value="{{ $data->id }}">
-                                    <td>
-                                        <input type="text" class="form-control mb-1 required" placeholder="Degree" name="qual[0][degree]">
-                                        <input type="text" class="form-control mb-1 required" placeholder="Major" name="qual[0][major]">
-                                        <input type="text" class="form-control mb-1 required" placeholder="Institution" name="qual[0][institution]">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control mb-1" placeholder="Grade" name="qual[0][grade]">
-                                        <input type="date" class="form-control mb-1 required" placeholder="Startjahr" name="qual[0][q_start_year]">
-                                        <input type="date" class="form-control mb-1 required" placeholder="Abschlussdatum" name="qual[0][q_end_year]">
-                                    </td>
-                                    <td>
-                                        <button type="button"
-                                                class="btn btn-icon rounded-circle btn-outline-primary mr-1 mb-1"
-                                                id="add_qualification">
-                                            <i class="feather icon-plus"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary waves-effect waves-light" data-dismiss="modal">Abbrechen</button>
+                            <button type="submit" class="btn btn-primary waves-effect waves-light">Speichern</button>
                         </div>
-                    </div>
+                    </form>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary waves-effect waves-light" data-dismiss="modal">Abbrechen</button>
-                        <button type="submit" class="btn btn-primary waves-effect waves-light">Speichern</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-
-    {{-- Profile Modal --}}
-    <div class="modal fade text-left" id="profile" tabindex="-1" role="dialog" aria-labelledby="profileLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="profileLabel">Persönliche Daten</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-
-                <form method="post" action="#">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="form-group">
-                                    <label for="email">E-Mail</label>
-                                    <input type="text" name="email" value="{{ old('email', $data->email) }}" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="form-group">
-                                    <label for="phone">Handy</label>
-                                    <input type="text" name="phone" value="{{ old('phone', $data->phone) }}" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="form-group">
-                                    <label for="home_phone">Telefon privat</label>
-                                    <input type="text" name="home_phone" value="{{ old('home_phone',$data->home_phone) }}" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="form-group">
-                                    <label for="work_phone">Telefon geschäftlich</label>
-                                    <input type="text" name="work_phone" value="{{ old('work_phone',$data->work_phone) }}" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary waves-effect waves-light" data-dismiss="modal">Abbrechen</button>
-                        <button type="submit" class="btn btn-primary waves-effect waves-light">Speichern</button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 @section('script')
@@ -2000,3 +1988,30 @@
     </script>
 
 @endsection
+
+
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs = [
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            },
+            {
+                label: 'Mitarbeiter-Profil',
+                url: "{{ url()->current() }}",
+                clickable: false
+            },
+            {
+                label: '{{ $data->name }} {{ $data->lastname }}',
+                url: "{{ url()->current() }}",
+                clickable: false
+            }
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+@endpush

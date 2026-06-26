@@ -329,6 +329,9 @@
         selbstbewohnteWE: Number(backendPreset.wohneinheitenBewohnt ?? 1),
         weUnter40k: Number(backendPreset.eigentuemerUnter40k ?? 0),
         plz: backendPreset.standortPlz || '',
+        fullAddress: backendPreset.objektadresse || customerData.object_full_address || customerData.customer_full_address || '',
+        street: backendPreset.objektstrasse || customerData.object_street || customerData.customer_street || '',
+        city: backendPreset.objektort || customerData.object_city || customerData.customer_city || '',
 
         dachseiten: [
           {
@@ -1376,7 +1379,7 @@
             placeholder="${placeholder}"
             ${disabled ? 'disabled' : ''}
             onchange="${onchange}"
-            class="w-full p-2 bg-white border border-slate-200 rounded-lg outline-none text-sm font-medium text-dark-600 transition-shadow placeholder:text-slate-400 focus-ring disabled:bg-slate-100"
+            class="w-full p-2 bg-white border border-slate-200 rounded-lg outline-none text-sm font-medium text-dark-600 transition-shadow placeholder:text-slate-400 focus-ring"
           />
         </div>
       `;
@@ -2108,7 +2111,7 @@
             </button>
           </div>
 
-          <div class="p-4 flex-1 space-y-4 overflow-y-auto custom-scroll">
+          <div id="sidebar-scroll-container" class="p-4 flex-1 space-y-4 overflow-y-auto custom-scroll">
 
             <div class="bg-white border border-slate-200 rounded-xl  overflow-hidden">
               <button onclick="toggleSidebarSection('kunde')" class="w-full flex justify-between items-center p-3.5 bg-white hover:bg-slate-100 transition-colors">
@@ -2562,8 +2565,7 @@
                   <div class="p-3 border border-slate-100 bg-white rounded-lg">
                     <h4 class="font-bold text-xs text-dark-600 mb-3 flex items-center gap-1"><span class="w-3.5 h-3.5">${Icons.sun()}</span> PV & Speicher</h4>
                     ${sidebarInput({ label:'Preis PV (Brutto)', type:'number', step:'1000', value:config.costPV, rightLabel:'€', onchange:`handleConfigChange('costPV', Number(this.value))` })}
-                    ${sidebarInput({ label:'Gesamt kWp (Manuell)', type:'number', step:'1', value:config.customPvKwp, rightLabel:`Empf: ${derivedParams.empfohlenePv} kWp`, placeholder:'Auto', disabled:derivedParams.manualPvKwpSum > 0, onchange:`handleConfigChange('customPvKwp', this.value)` })}
-                    ${sidebarInput({ label:'Kombi-Rabatt PV', type:'number', step:'100', value:config.discountPV, rightLabel:'€', placeholder:'750', onchange:`handleConfigChange('discountPV', this.value)` })}
+${sidebarInput({ label:'Gesamt kWp (Manuell)', type:'number', step:'1', value:config.customPvKwp, rightLabel:`Empf: ${derivedParams.empfohlenePv} kWp`, placeholder:'Auto', onchange:`handleConfigChange('customPvKwp', this.value)` })}                    ${sidebarInput({ label:'Kombi-Rabatt PV', type:'number', step:'100', value:config.discountPV, rightLabel:'€', placeholder:'750', onchange:`handleConfigChange('discountPV', this.value)` })}
                     ${sidebarInput({ label:'Zusätzl. Förderung PV', type:'number', step:'100', value:config.extraGrantPV, rightLabel:'€', placeholder:'0', onchange:`handleConfigChange('extraGrantPV', this.value)` })}
                     ${sidebarInput({ label:'Förderquelle PV', type:'text', value:config.extraGrantSourcePV, placeholder:'z.B. Kommune', onchange:`handleConfigChange('extraGrantSourcePV', this.value)` })}
                     <div class="mt-3 pt-3 border-t border-slate-200"></div>
@@ -2671,9 +2673,9 @@
                 </h1>
                 <div class="w-20 h-2 mx-auto rounded-full mb-10" style="background:${theme.primary}"></div>
                 <p class="text-2xl text-dark-600 font-medium mb-3">Für Familie ${config.name}</p>
-                <p class="text-base text-slate-400 flex items-center justify-center gap-2">
-                  <span class="w-4.5 h-4.5">${Icons.mapPin()}</span>
-                  Objektstandort: ${config.plz}
+                <p class="text-base text-slate-400 flex items-center justify-center gap-2 text-center">
+                   
+                   ${[config.street, config.plz, config.city].filter(Boolean).join(', ')}
                 </p>
               </div>
               <div class="mt-auto mb-16 text-center z-10">
@@ -2777,6 +2779,7 @@
  
             </div>
 
+            <!-- PAGE 1 -->
             <div class="a4-page flex flex-col relative bg-white overflow-hidden">
               ${ReportHeader('1. AUSGANGSLAGE')}
 
@@ -2963,7 +2966,7 @@
                           <tr>
                             <th class="p-2 font-semibold">Zeitraum</th>
                             <th class="p-2 font-semibold">Altsystem</th>
-                            ${showMiddleStep ? `<th class="p-2 font-semibold" Elektrisch</th>` : ''}
+                            ${showMiddleStep ? `<th class="p-2 font-semibold">Elektrisch</th>` : ''}
                             <th class="p-2 font-black" style="color:${theme.primary}">${showMiddleStep ? 'Neusystem' : 'Neues System'}</th>
                             <th class="p-2 font-black" style="color:${theme.primary}">Ersparnis</th>
                           </tr>
@@ -3004,6 +3007,17 @@
                 </div>
               </div>
 
+              ${ReportFooter()}
+            </div>
+
+            <!-- PAGE 2 -->
+            <div class="a4-page flex flex-col relative bg-white overflow-hidden">
+              ${ReportHeader('1. AUSGANGSLAGE')}
+
+              <h2 class="text-lg font-black mb-3" style="color:${theme.primary}">
+                1. AUSGANGSLAGE & ENERGIE-TRANSFORMATION
+              </h2>
+
               <div class="w-full mb-3">
                 <h4 class="font-bold text-[11px] mb-1 uppercase tracking-wide" style="color:${theme.primary}">
                   Ihre System-Dimensionierung
@@ -3013,7 +3027,7 @@
                 </p>
               </div>
 
-              <div class="w-full bg-white p-1 rounded-xl border border-slate-200">
+              <div class="w-full bg-white p-1 rounded-xl border border-slate-200 mb-3">
                 <div class="flex items-stretch gap-1">
 
                   <!-- LEFT: Verbrauch + Chart -->
@@ -3116,28 +3130,32 @@
               </div>
 
               ${(config.moduleWP || config.moduleWB) ? `
-              <div class="text-[11px] text-slate-400 mt-2 pt-2 border-t border-slate-200 leading-relaxed">
+              <div class="text-[11px] text-slate-400 mb-3 pt-2 border-t border-slate-200 leading-relaxed">
                 <strong>Hinweis zu §14a EnWG:</strong> Mit Wärmepumpe oder Wallbox profitieren Sie von reduzierten Netzentgelten. Das System berechnet automatisch das günstigste Modell. In Ihrer neuen Anlage beträgt die Netzentgelt-Ersparnis ${finance.ersparnis14a} € pro Jahr.
               </div>
               ` : ''}
 
-              <div class="flex items-end justify-between border-b border-slate-200 pb-1.5 mb-2">
-                <div>
-                  <h3 class="text-[13px] font-black text-dark-600 uppercase tracking-[0.16em]">
-                    Produktion vs. Verbrauch
-                  </h3>
-                  <p class="text-[11px] text-slate-500 mt-0.5">
-                    Überschüsse entstehen, wenn der Solarertrag höher als der Bedarf liegt.
-                  </p>
+              <div class="bg-white border border-slate-200 rounded-xl p-3 flex flex-col mb-auto">
+                <div class="flex items-end justify-between border-b border-slate-200 pb-1.5 mb-2">
+                  <div>
+                    <h3 class="text-[13px] font-black text-dark-600 uppercase tracking-[0.16em]">
+                      Produktion vs. Verbrauch
+                    </h3>
+                    <p class="text-[11px] text-slate-500 mt-0.5">
+                      Überschüsse entstehen, wenn der Solarertrag höher als der Bedarf liegt.
+                    </p>
+                  </div>
+                  <div class="text-[11px] font-bold px-2 py-0.5 rounded-full border"
+                      style="color:${theme.primary};background:${theme.bgLight};border-color:${theme.secondary}50">
+                    Monatsvergleich
+                  </div>
                 </div>
-                <div class="text-[11px] font-bold px-2 py-0.5 rounded-full border"
-                    style="color:${theme.primary};background:${theme.bgLight};border-color:${theme.secondary}50">
-                  Monatsvergleich
-                </div>
-              </div>
 
-              <div class="h-[150px] w-full mt-auto">
-                <div class="chart-wrap"><canvas id="monthlyCompareChart"></canvas></div>
+                <div class="h-[95px] w-full mt-auto">
+                  <div class="chart-wrap">
+                    <canvas id="monthlyCompareChart"></canvas>
+                  </div>
+                </div>
               </div>
 
               ${ReportFooter()}
@@ -3147,6 +3165,9 @@
               ${ReportHeader('2. LÖSUNGSARCHITEKTUR')}
 
               <div class="flex-1 flex flex-col min-h-0 pb-[18mm]">
+
+               
+                
                 <h2 class="text-[17px] font-black mb-2 leading-tight" style="color:${theme.primary}">
                   2. SYSTEMAUSLEGUNG & UNABHÄNGIGKEIT
                 </h2>
@@ -4856,22 +4877,35 @@
     // =========================================================
     // ROOT RENDER OVERRIDE
     // =========================================================
-    function renderApp() {
+   function renderApp() {
+      // 1. Capture scroll positions before re-render
+      const sidebarEl = document.getElementById('sidebar-scroll-container');
+      const sidebarScrollPos = sidebarEl ? sidebarEl.scrollTop : 0;
+      const windowScrollPos = window.scrollY;
+
       updateThemeCSS();
       const app = document.getElementById('app');
       if (!app) return;
 
+      // 2. Re-render DOM
       app.innerHTML = state.view === 'wizard'
         ? renderWizard()
         : renderDashboard();
 
+      // 3. Restore scroll positions and init charts
       if (state.view === 'dashboard') {
         requestAnimationFrame(() => {
           initDashboardCharts();
+          const newSidebarEl = document.getElementById('sidebar-scroll-container');
+          if (newSidebarEl) newSidebarEl.scrollTop = sidebarScrollPos;
+          window.scrollTo(0, windowScrollPos);
+        });
+      } else {
+        requestAnimationFrame(() => {
+          window.scrollTo(0, windowScrollPos);
         });
       }
     }
-
     renderApp();
   </script>
 </body>

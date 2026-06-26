@@ -330,34 +330,17 @@
 @endsection
 
 @section('content')
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
+<div class="app-content"> 
 
-    <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-md-8 col-12 mb-2">
-                <div class="row breadcrumbs-top">
-                    <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">Stempel-Artikel Listen</h2>
-                        <div class="breadcrumb-wrapper col-12">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ url('/') }}">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Stempel-Favoriten / Ordner</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="content-wrapper"> 
 
         <div class="content-body">
             <div class="stamp-layout">
 
                 <div class="stamp-header">
                     <div>
-                        <h2>Stempel-Listen & Sets</h2>
-                        <small>Erstellen Sie Sammlungen Ihrer Stempel-Artikel, z.B. nach Projekt, Serie oder Einsatz.</small>
+                        <h2>Stamm-Listen & Sets</h2>
+                        <small>Erstellen Sie Sammlungen Ihrer Stamm-Artikel, z.B. nach Projekt, Serie oder Einsatz.</small>
                     </div>
                     <div class="stamp-header-actions">
                         <span class="stamp-pill">
@@ -1010,3 +993,30 @@
     })(jQuery);
 </script>
 @endsection
+
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs = [
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            },
+            {
+                label: 'Produktliste',
+                url: "{{ url('product') }}"
+            },
+            {
+                label: 'Stamm-Artikel,',
+                url: "{{ url()->current() }}",
+                clickable: false
+            }
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+
+
+@endpush

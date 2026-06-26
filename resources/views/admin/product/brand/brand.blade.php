@@ -2,46 +2,46 @@
 @section('title', 'Hersteller')
 
 @php
-    use Illuminate\Pagination\AbstractPaginator;
-    use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-    $currentRoute = Route::currentRouteName();
+$currentRoute = Route::currentRouteName();
 
-    $pageTitle = match($currentRoute) {
-        'brand.index'          => 'HERSTELLER',
-        'brand.architect'      => 'ARCHITEKT',
-        'brand.sub.contractor' => 'NACH-UNTERNEHMER',
-        'brand.bank'           => 'BANK',
-        'brand.insurance'      => 'VERSICHERUNG',
-        'brand.contractor'     => 'GESCHÄFTSPARTNER',
-        'brand.other'          => 'WEITERE PARTNER',
-        default                => 'HERSTELLER',
-    };
+$pageTitle = match ($currentRoute) {
+  'brand.index' => 'HERSTELLER',
+  'brand.architect' => 'ARCHITEKT',
+  'brand.sub.contractor' => 'NACH-UNTERNEHMER',
+  'brand.bank' => 'BANK',
+  'brand.insurance' => 'VERSICHERUNG',
+  'brand.contractor' => 'GESCHÄFTSPARTNER',
+  'brand.other' => 'WEITERE PARTNER',
+  default => 'HERSTELLER',
+};
 
-    $purposes = [
-        'PHOTOVOLTAIK',
-        'BATTERIESPEICHER',
-        'WÄRMEPUMPE',
-        'WALLBOX',
-        'ELEKTRO',
-        'SANITÄR',
-        'BAD',
-        'BAUELEMENTE',
-        'KÜCHE',
-        'SOLAR CARPORT',
-        'SOFTWARE',
-        'HARDWARE',
-    ];
+$purposes = [
+  'PHOTOVOLTAIK',
+  'BATTERIESPEICHER',
+  'WÄRMEPUMPE',
+  'WALLBOX',
+  'ELEKTRO',
+  'SANITÄR',
+  'BAD',
+  'BAUELEMENTE',
+  'KÜCHE',
+  'SOLAR CARPORT',
+  'SOFTWARE',
+  'HARDWARE',
+];
 
-    $isPaginator = $data instanceof LengthAwarePaginator || $data instanceof AbstractPaginator;
-    $items = $isPaginator ? collect($data->items()) : collect($data);
+$isPaginator = $data instanceof LengthAwarePaginator || $data instanceof AbstractPaginator;
+$items = $isPaginator ? collect($data->items()) : collect($data);
 
-    $totalCount = $isPaginator ? $data->total() : $items->count();
-    $publishedCount = (int) $items->where('status', 'Published')->count();
-    $unpublishedCount = (int) $items->filter(fn($item) => ($item->status ?? '') !== 'Published')->count();
-    $typedCount = (int) $items->filter(fn($item) => !empty($item->type))->count();
+$totalCount = $isPaginator ? $data->total() : $items->count();
+$publishedCount = (int) $items->where('status', 'Published')->count();
+$unpublishedCount = (int) $items->filter(fn($item) => ($item->status ?? '') !== 'Published')->count();
+$typedCount = (int) $items->filter(fn($item) => !empty($item->type))->count();
 
-    $typeOptions = ['brand','architect','sub_contractor','contractor','bank','insurance','other'];
+$typeOptions = ['brand', 'architect', 'sub_contractor', 'contractor', 'bank', 'insurance', 'other'];
 @endphp
 
 @once
@@ -75,14 +75,10 @@
 
   .oc-wrap {
       font-family: Inter, system-ui, -apple-system, sans-serif;
-      color: var(--text-main);
-      max-width: 1500px;
-      margin: 20px auto;
-      padding: 39px;
-      padding-right: 79px;
+      color: var(--text-main); 
   }
 
-  .oc-header{margin-bottom:18px;margin-top:103px;}
+  .oc-header{margin-bottom:18px;}
   .oc-titlebar{
     display:flex;
     align-items:flex-end;
@@ -705,9 +701,9 @@
     <div class="oc-list">
       @forelse($data as $item)
         @php
-          $logo = $item->image ? asset('images/brand/'.$item->image) : asset('images/icons/placeholder.svg');
-          $statusClass = ($item->status ?? '') === 'Published' ? 'green' : 'orange';
-          $statusLabel = ($item->status ?? '') === 'Published' ? 'Veröffentlicht' : 'Unveröffentlicht';
+  $logo = $item->image ? asset('images/brand/' . $item->image) : asset('images/icons/placeholder.svg');
+  $statusClass = ($item->status ?? '') === 'Published' ? 'green' : 'orange';
+  $statusLabel = ($item->status ?? '') === 'Published' ? 'Veröffentlicht' : 'Unveröffentlicht';
         @endphp
 
         <div class="oc-item">
@@ -1086,3 +1082,23 @@
 </script>
 @endpush
 @endonce
+
+@push('scripts')
+  <script>
+    window.GlobalBreadcrumbs =[
+      {
+        label: 'Dashboard',
+        url: "{{ url('/') }}"
+      },
+      {
+        label: 'Hersteller',
+        url: "{{ url()->current() }}",
+        clickable: false
+      }
+    ];
+
+    if (window.setGlobalBreadcrumbs) {
+      window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+    }
+  </script>
+@endpush

@@ -26,8 +26,14 @@ class DatabaseSeeder extends Seeder
             EmployeeTimeScheduleSeeder::class,
             TimeManagementSeed::class,
             \Database\Seeders\SmartMountWp1PreInbetriebnahmeChecklistSeeder::class,
+            LeadStageSubStageSeeder::class,
 
-          
+
+
+        ]);
+
+        $this->call([
+            DashboardWidgetSeeder::class,
         ]);
     }
 }

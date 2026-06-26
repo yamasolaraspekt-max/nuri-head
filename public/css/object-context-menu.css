@@ -1,0 +1,292 @@
+/* =========================================================
+   Object Right Click Context Menu
+   Put this AFTER old profile CSS
+========================================================= */
+
+.ma-object-context-menu {
+    position: fixed;
+    z-index: 2147483647;
+    min-width: 238px;
+    max-width: min(300px, calc(100vw - 18px));
+    display: none;
+    padding: 8px;
+    border: 1px solid rgba(192, 216, 234, .95);
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 22px 58px rgba(15, 23, 42, .18) !important;
+    color: var(--ma-text, #374151);
+    transform: translateY(4px) scale(.98);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .12s ease, transform .12s ease;
+}
+
+.ma-object-context-menu.is-open {
+    display: block;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.ma-object-context-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 9px 10px;
+    border-bottom: 1px solid rgba(192, 216, 234, .75);
+    margin-bottom: 6px;
+}
+
+.ma-object-context-avatar {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--ma-blue-soft, #c0d8ea);
+    color: var(--ma-heading, #74b2d4);
+}
+
+.ma-object-context-title-wrap {
+    min-width: 0;
+}
+
+.ma-object-context-title {
+    font-size: 13px;
+    font-weight: 950;
+    color: var(--ma-heading, #74b2d4);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ma-object-context-subtitle {
+    margin-top: 2px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ma-muted, #6b7280);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ma-object-context-list {
+    display: grid;
+    gap: 4px;
+}
+
+.ma-object-context-item {
+    width: 100%;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border: 0;
+    border-radius: 13px;
+    background: transparent;
+    color: var(--ma-text, #374151);
+    text-align: left;
+    font-size: 13px;
+    font-weight: 850;
+    cursor: pointer;
+    box-shadow: none !important;
+}
+
+.ma-object-context-item:hover {
+    background: #f8fbfd;
+    color: var(--ma-heading, #74b2d4);
+}
+
+.ma-object-context-item svg,
+.ma-object-context-item i {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+}
+
+.ma-object-context-item.is-danger {
+    color: var(--ma-pink, #e50656);
+}
+
+.ma-object-context-item.is-danger:hover {
+    background: rgba(229, 6, 86, .08);
+    color: var(--ma-pink, #e50656);
+}
+
+.ma-object-context-item[disabled],
+.ma-object-context-item.is-disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.ma-object-context-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483646;
+    display: none;
+    background: transparent;
+}
+
+.ma-object-context-backdrop.is-open {
+    display: block;
+}
+
+/* Left click on screenshot thumbnail is disabled.
+   The thumbnail still works for hover preview, but screenshot sidebar opens only from context menu. */
+.object-thumb-link,
+.house-img a[data-alternative-id] {
+    cursor: default !important;
+}
+
+.object-thumb-link img,
+.house-img a[data-alternative-id] img {
+    pointer-events: none !important;
+}
+
+.object-header.ma-context-target,
+.house-header.ma-context-target,
+.object-section.ma-context-target > .object-header {
+    outline: 2px solid rgba(116, 178, 212, .28);
+    outline-offset: 2px;
+    background: #f8fbfd !important;
+}
+
+@media (max-width: 575.98px) {
+    .ma-object-context-menu {
+        left: 10px !important;
+        right: 10px !important;
+        width: auto;
+        max-width: none;
+    }
+}
+
+/* =========================================================
+   Object Context Menu FINAL Fix
+========================================================= */
+
+.ma-object-context-menu-final {
+    position: fixed;
+    z-index: 2147483647;
+    min-width: 260px;
+    display: none;
+    padding: 8px;
+    border: 1px solid var(--ma-border, #c0d8ea);
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, .18) !important;
+}
+
+.ma-object-context-menu-final.is-open {
+    display: block;
+    animation: maObjectContextIn .12s ease-out;
+}
+
+.ma-object-context-menu-final button {
+    width: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 0 !important;
+    border-radius: 14px !important;
+    background: transparent !important;
+    color: var(--ma-text, #374151) !important;
+    text-align: left;
+    box-shadow: none !important;
+    cursor: pointer;
+}
+
+.ma-object-context-menu-final button:hover {
+    background: #f8fbfd !important;
+}
+
+.ma-object-context-menu-final button.danger:hover {
+    background: rgba(229, 6, 86, .08) !important;
+}
+
+.ma-object-context-menu-final button:disabled {
+    opacity: .45;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.ma-object-context-menu-final strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--ma-heading, #74b2d4) !important;
+    line-height: 1.15;
+}
+
+.ma-object-context-menu-final small {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    color: var(--ma-muted, #6b7280) !important;
+    line-height: 1.2;
+}
+
+.ma-object-context-menu-final .danger strong {
+    color: var(--ma-pink, #e50656) !important;
+}
+
+.ma-ocm-icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: #ffffff !important;
+}
+
+.ma-ocm-icon.bg-blue {
+    background: #74b2d4;
+}
+
+.ma-ocm-icon.bg-green {
+    background: #93c21c;
+}
+
+.ma-ocm-icon.bg-orange {
+    background: #f8ac00;
+}
+
+.ma-ocm-icon.bg-pink {
+    background: #e50656;
+}
+
+.ma-ocm-separator {
+    height: 1px;
+    margin: 6px 4px;
+    background: rgba(192, 216, 234, .8);
+}
+
+.object-thumb-link[data-screenshot-left-click-disabled="1"],
+.has-house-screenshot[data-screenshot-left-click-disabled="1"] {
+    cursor: context-menu !important;
+}
+
+.object-thumb-link[data-screenshot-left-click-disabled="1"] img,
+.has-house-screenshot[data-screenshot-left-click-disabled="1"] img {
+    pointer-events: none !important;
+}
+
+@keyframes maObjectContextIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+

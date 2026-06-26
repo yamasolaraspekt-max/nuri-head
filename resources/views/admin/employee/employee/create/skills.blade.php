@@ -30,70 +30,64 @@
                                         @endif
                                         
                                         <!-- Table with outer spacing -->
-                                        <div class="table-responsive"> 
-                                            @if(DB::table('user_rolls')
-                                                ->where('user_rolls.user_id', '=', auth()->user()->name)
-                                                ->where('user_rolls.item_id', '=', 'Employee')
-                                                ->where('user_rolls.is_add', '=', 'on')
-                                                ->first()) 
-                                            
-                                            <form novalidate action="{{ action('App\Http\Controllers\SkillController@store')}}" method="post" class="custom-file-upload" enctype="multipart/form-data">
-                                                @csrf
-                                                <table class="table" id="skill_table" style="background:#0c4da2; color:white; display:none;"> 
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Mitarbeitername</th>
-                                                            <th>Gewerk</th>
-                                                            <th>Beratung</th>
-                                                            <th>Planung</th>
-                                                            <th>Kalkulation</th>
-                                                            <th>Montage</th>
-                                                            <th>Projektierung</th>
-                                                            <th>Bauleitung</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead> 
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="hidden" name="skill[0][emp_id]" value="{{$data->id}}">
-                                                                <input disabled type="text" class="form-control required" value="{{$data->name}} {{$data->lastname}}">
-                                                            </td>
-                                                            <td> 
-                                                                <select class="form-control" name="skill[0][product_id]">
-                                                                    @foreach ($products as $product)
-                                                                        <option value="{{$product->id}}">{{ $product->article_group }}</option> 
-                                                                    @endforeach 
-                                                                </select>
-                                                            </td>
-                                                            <td><select class="form-control" name="skill[0][advice]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
-                                                            <td><select class="form-control" name="skill[0][plan]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
-                                                            <td><select class="form-control" name="skill[0][calculation]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
-                                                            <td><select class="form-control" name="skill[0][montage]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
-                                                            <td><select class="form-control" name="skill[0][project_planing]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
-                                                            <td><select class="form-control" name="skill[0][site_management]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
-                                                            <td>
-                                                                <button type="button" class="btn btn-icon rounded-circle btn-outline-primary mr-1 mb-1" id="add_skill">
-                                                                    <i class="feather icon-plus"></i>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody> 
-                                                </table> 
+                                        <div class="table-responsive">  
 
-                                                <!-- Move buttons outside the table -->
-                                                <div class="col-8 mt-2">
-                                                    <div class="input-group">
-                                                        <button type="submit" class="btn btn-outline-primary mr-1 mb-1">
-                                                            <i class="feather icon-save"></i> Datensatz speichern
-                                                        </button>
-                                                        <button type="button" class="btn btn-icon rounded-circle btn-outline-primary mr-1 mb-1">
-                                                            <i id="button" class="fa fa-chevron-down"></i>
-                                                        </button>
+                                                <form novalidate action="{{ route('skills.save')}}" method="post" class="custom-file-upload" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <table class="table" id="skill_table" style="background:#0c4da2; color:white; display:none;"> 
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Mitarbeitername</th>
+                                                                <th>Gewerk</th>
+                                                                <th>Beratung</th>
+                                                                <th>Planung</th>
+                                                                <th>Kalkulation</th>
+                                                                <th>Montage</th>
+                                                                <th>Projektierung</th>
+                                                                <th>Bauleitung</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead> 
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="hidden" name="skill[0][emp_id]" value="{{$data->id}}">
+                                                                    <input disabled type="text" class="form-control required" value="{{$data->name}} {{$data->lastname}}">
+                                                                </td>
+                                                                <td> 
+                                                                    <select class="form-control" name="skill[0][product_id]">
+                                                                        @foreach ($products as $product)
+                                                                            <option value="{{$product->id}}">{{ $product->article_group }}</option> 
+                                                                        @endforeach 
+                                                                    </select>
+                                                                </td>
+                                                                <td><select class="form-control" name="skill[0][advice]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
+                                                                <td><select class="form-control" name="skill[0][plan]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
+                                                                <td><select class="form-control" name="skill[0][calculation]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
+                                                                <td><select class="form-control" name="skill[0][montage]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
+                                                                <td><select class="form-control" name="skill[0][project_planing]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
+                                                                <td><select class="form-control" name="skill[0][site_management]">@for ($i = 1; $i <= 5; $i++)<option value="{{$i}}">{{$i}}</option>@endfor</select></td>
+                                                                <td>
+                                                                    <button type="button" class="btn btn-icon rounded-circle btn-outline-primary mr-1 mb-1" id="add_skill">
+                                                                        <i class="feather icon-plus"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody> 
+                                                    </table> 
+
+                                                    <!-- Move buttons outside the table -->
+                                                    <div class="col-8 mt-2">
+                                                        <div class="input-group">
+                                                            <button type="submit" class="btn btn-outline-primary mr-1 mb-1">
+                                                                <i class="feather icon-save"></i> Datensatz speichern
+                                                            </button>
+                                                            <button type="button" class="btn btn-icon rounded-circle btn-outline-primary mr-1 mb-1">
+                                                                <i id="button" class="fa fa-chevron-down"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </form> 
-                                            @endif
+                                                </form>  
                                         </div>
                                         
                                         <!-- Display Existing Skills -->
@@ -146,13 +140,8 @@
 
                     </div>
                     <div class="tab-pane" id="settings-fill" role="tabpanel" aria-labelledby="settings-tab-fill">
-                        <div class="table-responsive">
-                            @if(DB::table('user_rolls')
-                                ->where('user_rolls.user_id', '=', auth()->user()->name)
-                                ->where('user_rolls.item_id', '=', 'Employee')
-                                ->where('user_rolls.is_add', '=', 'on')
-                                ->first())
-                                <form novalidate action="{{ action('App\Http\Controllers\OtherSkillController@store')}}" method="post" class="custom-file-upload" enctype="multipart/form-data">
+                        <div class="table-responsive"> 
+                                <form novalidate action="{{ route('skills.save')}}" method="post" class="custom-file-upload" enctype="multipart/form-data">
                                     @csrf
                                     <table class="table" id="other_skill_table" style="background:#0c4da2; color:white; display:none;">
                                         <thead>
@@ -201,8 +190,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                </form>
-                            @endif
+                                </form> 
                         </div>
 
                         <!-- Display Existing Other Skills -->

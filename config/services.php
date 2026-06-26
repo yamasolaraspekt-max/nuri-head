@@ -54,7 +54,7 @@ return [
         'url' => env('OVERPASS_URL', 'https://overpass-api.de/api/interpreter'),
     ],
     'google' => [
-        'maps_key' => env('AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo'),
+        'maps_key' => env('GOOGLE_MAPS_KEY'),
     ],
 
     'newsapi' => [

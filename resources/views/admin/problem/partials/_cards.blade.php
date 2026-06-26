@@ -1,154 +1,134 @@
-{{-- resources/views/admin/tickets/partials/cards.blade.php --}}
 @php
-  $ERROR_TYPE_DE = [
-    'complaint'=>'Reklamation','emergency_service'=>'Notdienst','repair'=>'Reparatur','maintenance'=>'Wartung',
-    'malfunction'=>'Störung','installation'=>'Installation','configuration_error'=>'Konfiguration','system_outage'=>'Systemausfall',
-    'security_issue'=>'Sicherheitsproblem','user_error'=>'Bedienungsfehler','network_problem'=>'Netzwerkfehler','software_bug'=>'Softwarefehler',
-    'hardware_defect'=>'Hardwarefehler','spare_part_request'=>'Ersatzteilanfrage','timeout'=>'Zeitüberschreitung',
-    'communication_failure'=>'Kommunikationsproblem','power_outage'=>'Energieausfall','update_failure'=>'Updatefehler',
-    'access_issue'=>'Zugriffsproblem','other'=>'Sonstiges',
-  ];
-  $SOURCE_DE = [
-    'Kunde'=>'Kunde','Mitarbeiter'=>'Mitarbeiter','System'=>'System','Telefonisch'=>'Telefonisch','E-Mail'=>'E-Mail','Vor Ort'=>'Vor Ort',
-    'Intern'=>'Intern','Extern'=>'Extern','Webformular'=>'Webformular','Support-Portal'=>'Support-Portal','Live-Chat'=>'Live-Chat','API'=>'API',
-    'Monitoring'=>'Monitoring','Social Media'=>'Social Media','WhatsApp'=>'WhatsApp','Fax'=>'Fax','Slack'=>'Slack','Teams'=>'Teams','Besuch'=>'Besuch',
-    'Manuell erstellt'=>'Manuell erstellt','Weitergeleitet'=>'Weitergeleitet',
-  ];
-  $norm = fn($v) => trim((string)$v);
+$statusLabel = function ($status) {
+    return match ($status) {
+        'offen' => 'Offen',
+        'process' => 'In Bearbeitung',
+        'end' => 'Beendet',
+        'junk' => 'Junk',
+        default => ucfirst($status ?: 'offen'),
+    };
+};
+
+$statusClass = function ($status) {
+    return match ($status) {
+        'offen' => 'open',
+        'process' => 'process',
+        'end' => 'end',
+        'junk' => 'junk',
+        default => 'open',
+    };
+};
+
+$priorityClass = function ($priority) {
+    return match (strtolower($priority ?? '')) {
+        'high' => 'high',
+        'medium' => 'medium',
+        'low' => 'low',
+        default => '',
+    };
+};
+
+$priorityLabel = function ($priority) {
+    return match (strtolower($priority ?? '')) {
+        'high' => 'Hoch',
+        'medium' => 'Mittel',
+        'low' => 'Niedrig',
+        default => $priority ?: '—',
+    };
+};
+
+$errorTypeLabel = function ($type) {
+    $type = strtolower(trim((string) $type));
+
+    return match ($type) {
+        'complaint' => 'Reklamation',
+        'emergency_service' => 'Notdienst',
+        'repair' => 'Reparatur',
+        'maintenance' => 'Wartung',
+        'malfunction' => 'Störung',
+        'installation' => 'Installation',
+        'configuration_error' => 'Konfiguration',
+        'system_outage' => 'Systemausfall',
+        'security_issue' => 'Sicherheitsproblem',
+        'user_error' => 'Bedienungsfehler',
+        'network_problem' => 'Netzwerkfehler',
+        'software_bug' => 'Softwarefehler',
+        'hardware_defect' => 'Hardwarefehler',
+        'spare_part_request' => 'Ersatzteilanfrage',
+        'timeout' => 'Zeitüberschreitung',
+        'communication_failure' => 'Kommunikationsproblem',
+        'power_outage' => 'Energieausfall',
+        'update_failure' => 'Updatefehler',
+        'access_issue' => 'Zugriffsproblem',
+        'other' => 'Sonstiges',
+
+        default => $type
+        ? ucfirst(str_replace(['_', '-'], ' ', $type))
+        : '—',
+    };
+};
 @endphp
+@if($tickets->count())
+    <div class="oc-card-grid">
+        @foreach($tickets as $ticket)
+            <div class="ticket-card">
+                <div class="ticket-card-top">
+                    <div>
+                        <div class="ticket-card-title">
+                            #{{ $ticket->ticket_no ?? $ticket->id }}
+                        </div>
+                        <div class="ticket-card-meta">
+                            {{ trim(($ticket->firma ?? '') . ' ' . ($ticket->name ?? '') . ' ' . ($ticket->lastname ?? '')) ?: 'Kein Kunde' }}
+                        </div>
+                    </div>
 
-<div class="tk-cards-grid">
-  @php $hasAny = false; @endphp
+                    <span class="oc-status-pill {{ $statusClass($ticket->status) }}">
+                        {{ $statusLabel($ticket->status) }}
+                    </span>
+                </div>
 
-  @foreach($tickets as $t)
-    @php
-      $st = strtolower($t->status ?? 'offen');
-      $hasAny = true;
+                <div class="ticket-card-section">
+                    <div class="ticket-card-label">Produkt</div>
+                    <div class="ticket-card-meta">{{ $ticket->product ?: '—' }}</div>
+                </div>
 
-      $pill = $st==='process' ? 's-proc' : ($st==='junk' ? 's-junk' : ($st==='end' ? 's-end' : 's-open'));
-      $profileUrl = url('problem/profile/'.$t->id);
+                <div class="ticket-card-section">
+                    <div class="ticket-card-label">Fehlertyp</div>
+                    <div class="ticket-card-meta">{{ $errorTypeLabel($ticket->error_type) }}</div>
+                </div>
 
-      $errorTypeKey = $norm($t->error_type);
-      $errorTypeDe  = $ERROR_TYPE_DE[$errorTypeKey] ?? ($errorTypeKey ?: '—');
+                <div class="ticket-card-section">
+                    <div class="ticket-card-label">Priorität</div>
+                    <span class="oc-priority {{ $priorityClass($ticket->priority) }}">
+                        {{ $priorityLabel($ticket->priority) }}
+                    </span>
+                </div>
 
-      $sourceKey = $norm($t->source ?? '');
-      $sourceDe  = $SOURCE_DE[$sourceKey] ?? ($sourceKey ?: '—');
+                <div class="ticket-card-section">
+                    <div class="ticket-card-label">Datum</div>
+                    <div class="ticket-card-meta">
+                        {{ $ticket->start_date ? \Carbon\Carbon::parse($ticket->start_date)->format('d.m.Y') : '—' }}
+                    </div>
+                </div>
 
-      $ticketJson = $t->ticket_json ?? [
-        'id'=>$t->id,
-        'ticket_no'=>$t->ticket_no,
-        'status'=>$t->status ?? 'offen',
-        'profile_url'=>$profileUrl,
-        'customer'=>trim(($t->firma ?: '').' '.($t->name ?: '').' '.($t->lastname ?: '')),
-        'product'=>$t->product ?? '',
-        'error_type'=>$errorTypeKey,
-        'source'=>$sourceKey,
-        'created_at'=>$t->created_at,
-        'updated_at'=>$t->updated_at,
-        'edit_date'=>$t->edit_date ?? null,
-        'end_date'=>$t->end_date ?? null,
-        'employees'=>$t->employees ?? [],
-        'errors'=>$t->errors ?? [],
-        'created_by_user'=>$t->created_by_user ?? null,
-        'updated_by_user'=>$t->updated_by_user ?? null,
-        'ended_by_user'=>$t->ended_by_user ?? null,
-        'current_user'=>$t->current_user ?? null,
-      ];
-    @endphp
+                <div class="ticket-card-actions">
+                    <a href="{{ url('problem/profile/' . $ticket->id) }}" class="oc-btn-ic primary" title="Anzeigen">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </a>
 
-    <div class="shell" style="padding:.9rem;">
-      <div class="flex items-start justify-between gap-2">
-        <a href="{{ $profileUrl }}" class="text-lg font-black text-[var(--t-ink)] hover:underline">#{{ $t->ticket_no }}</a>
-        <span class="status-pill {{ $pill }}" data-pill-id="{{ $t->id }}">{{ strtoupper($t->status ?? 'offen') }}</span>
-      </div>
-
-      <div class="mt-2 text-sm font-black text-slate-800">
-        {{ trim(($t->firma ?: '').' '.($t->name ?: '').' '.($t->lastname ?: '')) }}
-      </div>
-      <div class="text-xs font-semibold text-slate-500">{{ $t->street }} · {{ $t->postcode }} {{ $t->alt_city }}</div>
-
-      <div class="mt-3 flex flex-wrap gap-2">
-        <span class="rounded-full px-3 py-1 text-[11px] font-black border border-[var(--t-border)] bg-[rgba(147,194,28,.10)]">
-          {{ $errorTypeDe }}
-        </span>
-        <span class="rounded-full px-3 py-1 text-[11px] font-black border border-[var(--t-border)] bg-[rgba(116,178,212,.12)]">
-          Quelle: {{ $sourceDe }}
-        </span>
-        <span class="rounded-full px-3 py-1 text-[11px] font-black border border-[var(--t-border)] bg-[rgba(116,178,212,.12)]">
-          {{ $t->product }}
-        </span>
-        @if($t->priority)
-          <span class="rounded-full px-3 py-1 text-[11px] font-black border border-[var(--t-border)] bg-[rgba(226,88,62,.10)]">
-            {{ strtoupper($t->priority) }}
-          </span>
-        @endif
-      </div>
-
-      <div class="mt-4 flex items-center justify-between gap-2">
-        <div class="tk-avatars">
-          @foreach(collect($t->employees ?? [])->take(4) as $e)
-            @php $img = $e['image'] ?? null; @endphp
-            @if($img)
-              <img class="avatar" src="{{ asset('images/employee/'.$img) }}" alt="">
-            @else
-              <div class="avatar"></div>
-            @endif
-          @endforeach
-          @if(count($t->employees ?? []) > 4)
-            <div class="avatar" style="display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:950;color:#374151;background:#fff;">
-              +{{ count($t->employees ?? []) - 4 }}
+                    <a href="{{ url('problem/' . $ticket->id . '/edit') }}" class="oc-btn-ic warning" title="Bearbeiten">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
-          @endif
-        </div>
-
-        <button class="tk-btn" type="button" style="padding:.28rem .7rem;"
-          data-open-errors="1"
-          data-ticket-no="{{ $t->ticket_no }}"
-          data-errors-json='@json($t->errors ?? [])'>
-          FEHLER ({{ count($t->errors ?? []) }})
-        </button>
-      </div>
-
-      <div class="audit-row">
-        <div class="audit-item">
-          <span class="k">ERSTELLT</span>
-          <span class="v">{{ data_get($ticketJson,'created_by_user.name','—') }}</span>
-          <span class="d">{{ $t->created_at ? \Carbon\Carbon::parse($t->created_at)->format('Y-m-d H:i') : '—' }}</span>
-        </div>
-        <div class="audit-item">
-          <span class="k">BEARBEITET</span>
-          <span class="v">{{ data_get($ticketJson,'updated_by_user.name','—') }}</span>
-          <span class="d">
-            @php $ed = $t->edit_date ?: $t->updated_at; @endphp
-            {{ $ed ? \Carbon\Carbon::parse($ed)->format('Y-m-d H:i') : '—' }}
-          </span>
-        </div>
-      </div>
-
-      <div class="mt-3 flex items-center justify-between gap-2">
-        <select class="input"
-                style="border-radius:999px;padding:.45rem .65rem;font-size:11px;"
-                data-ticket-status="1"
-                data-ticket-id="{{ $t->id }}"
-                data-ticket-no="{{ $t->ticket_no }}"
-                data-ticket-json='@json($ticketJson)'
-                data-prev-status="{{ $st }}">
-          <option value="offen" @selected(($t->status ?? 'offen')==='offen')>OFFEN</option>
-          <option value="process" @selected(($t->status ?? '')==='process')>IN BEARBEITUNG</option>
-          <option value="end" @selected(($t->status ?? '')==='end')>BEENDET</option>
-          <option value="junk" @selected(($t->status ?? '')==='junk')>JUNK</option>
-        </select>
-
-        <a href="{{ $profileUrl }}" class="tk-btn tk-btn-primary" style="padding:.28rem .7rem;">ÖFFNEN</a>
-      </div>
-
-      <div class="mt-3 text-[11px] font-black text-slate-500">
-        Aktualisiert: {{ \Carbon\Carbon::parse($t->updated_at)->diffForHumans() }}
-      </div>
+        @endforeach
     </div>
-  @endforeach
-
-  @if(!$hasAny)
-    <div class="col-span-full p-10 text-center text-sm font-black text-slate-500">Keine Tickets gefunden.</div>
-  @endif
-</div>
+@else
+    <div class="oc-empty">Keine Tickets gefunden.</div>
+@endif

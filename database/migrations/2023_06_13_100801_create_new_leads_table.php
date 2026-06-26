@@ -45,9 +45,7 @@ return new class extends Migration
             $table->string('purchase_status')->nullable();
             $table->decimal('total_purchase',10,2)->default(0);
             $table->integer('default_project_minutes')->nullable();
-            $table->date('purchase_date')->nullable();
- 
-
+            $table->date('purchase_date')->nullable(); 
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('contact_person')->references('id')->on('employees')->onDelete('cascade'); 

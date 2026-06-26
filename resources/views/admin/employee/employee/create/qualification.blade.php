@@ -247,7 +247,7 @@
                                                                     <span aria-hidden="true">×</span>
                                                                 </button>
                                                             </div>
-                                                                <form id="create_further_education" action="{{ action('App\Http\Controllers\FurtherEducationController@store')}}" method="post"  class="custom-file-upload" enctype="multipart/form-data" >
+                                                                <form id="create_further_education" action="{{ route('f.education.store')}}" method="post"  class="custom-file-upload" enctype="multipart/form-data" >
                                                                     @csrf
                                                                     <div class="modal-body"> 
                                                                         <input type="hidden" name="active_tab" id="active_tab" value="qualification">

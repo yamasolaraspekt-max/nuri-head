@@ -41,25 +41,8 @@
 @endsection
 
 @section('content')
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
-    <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-md-9 col-12 mb-2">
-                <div class="row breadcrumbs-top">
-                    <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">Mitarbeiterkapazitätsstatus</h2>
-                        <div class="breadcrumb-wrapper col-12">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ url('/') }}">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Mitarbeiterlisten</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="app-content"> 
+    <div class="content-wrapper"> 
         <div class="content-body">
                 <div class="text-right mb-1">
                     <button id="toggleChartView" class="btn btn-outline-secondary btn-sm">
@@ -164,7 +147,7 @@
                                 <select id="filterEmployee" class="form-control select2 w-100">
                                     <option value="">Alle Mitarbeiter</option>
                                     @foreach ($employees as $emp)
-                                        <option value="{{ $emp->id }}" data-image="{{ asset('images/employee/'.$emp->image) }}">
+                                        <option value="{{ $emp->id }}" data-image="{{ asset('images/employee/' . $emp->image) }}">
                                             {{ $emp->name }} {{ $emp->lastname }}
                                         </option>
                                     @endforeach
@@ -645,3 +628,24 @@ $(document).ready(function () {
 
  
 @endsection
+
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs = [
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            },
+            {
+                label: 'Mitarbeiterkapazitätsstatus',
+                url: "{{ url()->current() }}",
+                clickable: false
+            },
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+@endpush

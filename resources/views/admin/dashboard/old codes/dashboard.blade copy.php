@@ -2,160 +2,69 @@
 
 @section('title') Employee Dashboard @endsection
 @section('style')
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css' rel='stylesheet' />
+<link rel="stylesheet" type="text/css" href="{{ asset('css/select2.min.css')}}">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<link href="{{ asset('css/icon.min.css')}}" rel="stylesheet" type="text/css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@5.3.0/main.global.min.js'></script>
+
 <style>
-    :root {
-        --primary-color: #569ad8;
-        --secondary-color: #9fbdd8;
-        --success-color: #94c11c;
-        --danger-color: #cfe09a;
-        --warning-color: #ffc107;
-        --info-color: #17a2b8;
-        --light-color: #f8f9fa;
-        --dark-color: #343a40;
-    }
-
-    hr {
-        border: none;
-        height: 2px;
-        background-color: var(--primary-color);
-    }
-
-    .card-container {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding: 10px;
-        gap: 10px;
-    }
-
-    #menu {
-        width: 170px;
-        height: 170px;
-        background: #569ad8;
-        border: 10px solid #9fbdd8;
-        border-radius: 50%;
-        place-content: center;
-        color: white;
-        position: relative;
-    }
-
-    #menu:hover {
-        background: var(--success-color);
-        border: 10px solid var(--danger-color);
-    }
-
-    #menu>.menu-items>h6 {
-        font-weight: bold;
-        color: white;
-        font-size: 16px;
-        text-wrap: balance;
-    }
-
-    #menu>.menu-items>p {
-        color: white;
-        font-size: 10px;
-        text-wrap: balance;
-    }
-
-    .menu-items {
-        padding: 19px;
-        border-radius: 50%;
-        top: 19px;
-        text-align: center;
-    }
-
-    #container_new {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-        width: 100%;
-        max-height: 200px;
-        gap: 21px;
-        justify-content: space-evenly; 
-         margin-top: 102px !important;
-        ::-webkit-scrollbar {
-        display: none;
-       
+.fc .fc-toolbar.fc-header-toolbar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
 }
+
+.fc .fc-toolbar-title {
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.fc-daygrid-event,
+.fc-timegrid-event {
+    border: none !important;
+}
+
+.fc-event {
+    padding: 2px 6px !important;
+    font-size: 12px !important;
+}
+
+@media (max-width: 640px) {
+    .fc .fc-toolbar.fc-header-toolbar {
+        flex-direction: column;
+        align-items: stretch;
     }
 
-    #container_items {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        /* overflow-x: auto; */
-        /* overflow-y: hidden; */
-        white-space: nowrap;
-        width: 100%;
-        max-height: 342px;
-        gap: 160px;
-        justify-content: center; 
+    .fc .fc-daygrid-day-frame {
+        padding: 6px;
     }
 
-    .nav-item {
-        flex-shrink: 0;
-        margin-right: 10px;
+    .fc .fc-scroller-harness {
+        overflow-x: auto;
     }
 
-    .menu-items {
-        text-align: center;
-        overflow: hidden;
-    }
-
-    .submenu {
-       display: none;
-        position: absolute;
-        top: 114%;
-        transform: translateX(-50%);
-        background: #f5f5f5;
-        border-bottom: 1px solid var(--primary-color);
-        padding: 10px;
-        left: 50%;
-        overflow: hidden;
-        z-index: 10000;
-        border-radius: 6px;
-        width: 100%; 
-    }
-
-    #sub_menu {
-        text-align: center;
-          width: 50px;
-    height: 50px;
-    }
-
-    #sub_menu:hover {
-        text-align: center;
-    
-    
-        width: 60px;
-        height: 60px;
-    }
-
-    canvas {
-        width: 100% !important;
-    }
-
-    .badge {
-        padding: 10px;
+    .fc .fc-timegrid-slot-label {
         font-size: 10px;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        font-weight: 800;
     }
 
-    .item_lists {
-            font-size: 26px;
-    margin-right: 15px;
-    margin-top: -1px;
+    .fc .fc-event-title {
+        font-size: 11px !important;
     }
-    .fc-daygrid-day-number{
-        padding: 4px 8px !important;
+
+    .fc-event {
+        padding: 2px 4px !important;
     }
+}
 </style>
+
 @endsection
 
 @section('content')
@@ -164,515 +73,797 @@
     <div class="header-navbar-shadow"></div>
     <div class="content-wrapper">
         <div class="content-header row">
-            <div class="col-12">
-                <h2 class="content-header-title float-left mb-0"> MEIN BEREICH</h2>
-                <div class="breadcrumb-wrapper col-12">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/') }}">DASHBOARD</a></li>
-                    </ol>
-                </div>
+            <div class="content-header-left col-md-9 col-12 mb-2">
+
             </div>
         </div>
+        <div class="content-body">
+            <div class="max-w-8xl mx-auto px-4 py-8">
+                <!-- KPI Cards Row -->
+                @php
+                $user = DB::table('employees')
+                ->select('name', 'lastname', 'image')
+                ->where('id', auth()->user()->name) // Double-check this!
+                ->first();
 
-        <div class="content-body"> 
-            <section id="dashboard-analytics">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12 col-sm-12">
-                            <div class="card bg-primary pt-2 text-white">
-                                <div class="card-content" id="banner">
-                                    <div class="card-body text-center">
-                                        <!-- <img src="{{ asset('app-assets/images/elements/decore-left.png')}}" class="img-left" alt="card-img-left">
-                                        <img src="{{ asset('app-assets/images/elements/decore-right.png')}}" class="img-right" alt="card-img-right"> -->
-                                        <div class="avatar avatar-xl bg-primary shadow mt-0">
-                                            <div class="avatar-content">
-                                                <span><img class="round"
-                                                        src="{{ asset('images/user/'.auth()->user()->image)}}"
-                                                        alt="avatar" height="40" width="40"></span>
-                                            </div>
-                                        </div>
-                                        <div class="text-center">
-                                            <h1 class="mb-2 text-white">Hallo
-                                                {{ DB::table('users')->join('employees', 'employees.id', '=', 'users.name' )->where('users.name', '=', auth()->user()->name)->select('employees.name')->pluck('name')->first() }}
-                                                {{ DB::table('users')->join('employees', 'employees.id', '=', 'users.name' )->where('users.name', '=', auth()->user()->name)->select('employees.lastname')->pluck('lastname')->first() }}
-                                            </h1>
-                                            <p class="m-auto w-75">Your login date is : {{ \Carbon\Carbon::now() }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                $full_name = $user ? $user->name . ' ' . $user->lastname : 'Benutzer';
+                $image_path = $user ? asset('images/employee/' . $user->image) : asset('images/default-user.png');
+                @endphp
 
-                       <div class="col-lg-4 col-md-6 col-12">
-                            <div class="card" style="background:#b0d5f2">
-                                <div class="card-header d-flex flex-column align-items-start pb-0">
-                                    @if(isset($weather['main']))
-                                    <h2 class="text-bold-700 mt-1 mb-25">
-                                        <span>
-                                            <img src="http://openweathermap.org/img/w/{{ $weather['weather'][0]['icon'] }}.png" 
-                                                alt="Weather Icon" style=" width: 110px;">
-                                        </span>
-                                       <span style="color:white;font-size: 50px;"> {{ $weather['main']['temp'] }} °C</span>
-                                    </h2>
-
-                                    <h6 class="mb-3">
-                                        <span class="mr-2 warning" style="font-size: 20px;"><i class="feather icon-chevron-down "></i> {{ $weather['main']['temp_min'] }} °C</span>
-                                        <span class="primary" style="font-size: 20px;"><i class="feather icon-chevron-up "></i> {{ $weather['main']['temp_max'] }} °C</span>
-                                    </h6> 
-                                    @else
-                                    <h2 class="text-bold-700 mt-1 mb-25">
-                                        <p>Unable to fetch weather data</p>
-                                    </h2>
-                                    @endif
-                                </div>
-                                <div class="card-content">
-                                    <div id="orders-received-chart"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card text-center" style="height:215px">
-                                <div class="card-content">
-                                    <div class="card-body mt-2">
-                                        <div class="avatar bg-rgba-info p-50 m-0 mb-1">
-                                            <div class="avatar-content">
-                                                <i class="feather icon-clock text-info font-medium-5"></i>
-                                            </div>
-                                        </div>
-                                        <h2 class="text-bold-700">STARTEN</h2>
-                                        <p class="mb-0 line-ellipsis">Clock in: {{ \Carbon\Carbon::parse(now())->isoFormat('HH:MM:SS')}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-8 text-center">
+                    <!-- User Welcome Card -->
+                    <div class="bg-white shadow rounded-xl py-6 px-4 flex flex-col items-center justify-center">
+                        <img src="{{ $image_path }}" alt="Profilbild" class="w-16 h-16 rounded-full mb-2 shadow">
+                        <h2 class="text-xl font-semibold text-gray-800">Willkommen, {{ $full_name }}!</h2>
+                        <p class="text-gray-500">Schön, dass Sie wieder da sind.</p>
                     </div>
 
-                    <section id="statistics-card">
-                    <div class="row">
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card text-center">
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div class="avatar bg-rgba-info p-50 m-0 mb-1">
-                                            <div class="avatar-content">
-                                                <i class="feather icon-eye text-info font-medium-5"></i>
-                                            </div>
-                                        </div>
-                                        <h2 class="text-bold-700">36.9k</h2>
-                                        <p class="mb-0 line-ellipsis">Views</p>
-                                    </div>
+                    <!-- Stat Cards -->
+                    <div class="bg-white shadow rounded-xl py-6 px-4 flex flex-col items-center justify-center">
+                        <h2 class="text-4xl font-bold text-red-600">38</h2>
+                        <p class="text-gray-600 mt-2">Laufend</p>
+                    </div>
+                    <div class="bg-white shadow rounded-xl py-6 px-4 flex flex-col items-center justify-center">
+                        <h2 class="text-4xl font-bold text-yellow-600">41</h2>
+                        <p class="text-gray-600 mt-2">In Bearbeitung</p>
+                    </div>
+                    <div class="bg-white shadow rounded-xl py-6 px-4 flex flex-col items-center justify-center">
+                        <h2 class="text-4xl font-bold text-green-600">40.8%</h2>
+                        <p class="text-gray-600 mt-2">Abgeschlossen</p>
+                    </div>
+                </div>
+
+
+                <!-- Circular Progress Chart + Goal -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-white shadow rounded-xl p-4 flex flex-col items-center justify-center">
+                        <canvas id="progressDonut" width="100" height="100"></canvas>
+                        <p class="mt-2 text-sm font-semibold text-gray-700">Tasks Summary</p>
+                        <button class="mt-1 text-xs bg-blue-500 text-white px-2 py-1 rounded">View Tasks</button>
+                    </div>
+                    <div class="col-span-2 bg-white shadow rounded-xl p-4">
+                        <p class="text-green-600 text-sm font-semibold mb-1">✅ Fast geschafft!</p>
+                        <p class="text-xs text-gray-600 mb-3">75% der Ziele sind erreicht – nur noch 25% fehlen!</p>
+                        <div id="goalList" class="space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300"
+                            style="max-height: 150px;">
+                            <div
+                                class="border-l-4 border-red-500 bg-white rounded p-1 flex items-center justify-between shadow">
+                                <div class="flex items-center gap-1">
+                                    <i data-feather="alert-circle" class="text-red-500 w-4 h-4"></i>
+                                    <input type="checkbox">
+                                    <span class="text-xs font-medium">Projektbericht abgeben</span>
                                 </div>
+                                <span class="text-xs px-2 py-0.5 bg-red-100 text-red-600 rounded-full">Task</span>
                             </div>
-                        </div>
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card text-center">
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div class="avatar bg-rgba-warning p-50 m-0 mb-1">
-                                            <div class="avatar-content">
-                                                <i class="feather icon-message-square text-warning font-medium-5"></i>
-                                            </div>
-                                        </div>
-                                        <h2 class="text-bold-700">12k</h2>
-                                        <p class="mb-0 line-ellipsis">Comments</p>
-                                    </div>
+                            <div
+                                class="border-l-4 border-yellow-500 bg-white rounded p-1 flex items-center justify-between shadow">
+                                <div class="flex items-center gap-1">
+                                    <i data-feather="tool" class="text-yellow-500 w-4 h-4"></i>
+                                    <input type="checkbox">
+                                    <span class="text-xs font-medium">Solaranlage installieren</span>
                                 </div>
+                                <span
+                                    class="text-xs px-2 py-0.5 bg-yellow-100 text-yellow-600 rounded-full">Project</span>
                             </div>
-                        </div>
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card text-center">
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div class="avatar bg-rgba-danger p-50 m-0 mb-1">
-                                            <div class="avatar-content">
-                                                <i class="feather icon-shopping-bag text-danger font-medium-5"></i>
-                                            </div>
-                                        </div>
-                                        <h2 class="text-bold-700">97.8k</h2>
-                                        <p class="mb-0 line-ellipsis">Orders</p>
-                                    </div>
+                            <div
+                                class="border-l-4 border-blue-500 bg-white rounded p-1 flex items-center justify-between shadow">
+                                <div class="flex items-center gap-1">
+                                    <i data-feather="edit" class="text-blue-500 w-4 h-4"></i>
+                                    <input type="checkbox">
+                                    <span class="text-xs font-medium">Kundenvorbereitung Feedback</span>
                                 </div>
+                                <span class="text-xs px-2 py-0.5 bg-blue-100 text-blue-600 rounded-full">Note</span>
                             </div>
-                        </div>
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card text-center">
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div class="avatar bg-rgba-primary p-50 m-0 mb-1">
-                                            <div class="avatar-content">
-                                                <i class="feather icon-heart text-primary font-medium-5"></i>
-                                            </div>
-                                        </div>
-                                        <h2 class="text-bold-700">26.8</h2>
-                                        <p class="mb-0 line-ellipsis">Bookmarks</p>
-                                    </div>
+
+                            <div
+                                class="border-l-4 border-yellow-500 bg-white rounded p-1 flex items-center justify-between shadow">
+                                <div class="flex items-center gap-1">
+                                    <i data-feather="tool" class="text-yellow-500 w-4 h-4"></i>
+                                    <input type="checkbox">
+                                    <span class="text-xs font-medium">Solaranlage installieren</span>
                                 </div>
+                                <span
+                                    class="text-xs px-2 py-0.5 bg-yellow-100 text-yellow-600 rounded-full">Project</span>
                             </div>
-                        </div>
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card text-center">
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div class="avatar bg-rgba-success p-50 m-0 mb-1">
-                                            <div class="avatar-content">
-                                                <i class="feather icon-award text-success font-medium-5"></i>
-                                            </div>
-                                        </div>
-                                        <h2 class="text-bold-700">689</h2>
-                                        <p class="mb-0 line-ellipsis">Reviews</p>
-                                    </div>
+                            <div
+                                class="border-l-4 border-blue-500 bg-white rounded p-1 flex items-center justify-between shadow">
+                                <div class="flex items-center gap-1">
+                                    <i data-feather="edit" class="text-blue-500 w-4 h-4"></i>
+                                    <input type="checkbox">
+                                    <span class="text-xs font-medium">Kundenvorbereitung Feedback</span>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-md-4 col-sm-6">
-                            <div class="card text-center">
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div class="avatar bg-rgba-danger p-50 m-0 mb-1">
-                                            <div class="avatar-content">
-                                                <i class="feather icon-truck text-danger font-medium-5"></i>
-                                            </div>
-                                        </div>
-                                        <h2 class="text-bold-700">2.1k</h2>
-                                        <p class="mb-0 line-ellipsis">Returns</p>
-                                    </div>
-                                </div>
+                                <span class="text-xs px-2 py-0.5 bg-blue-100 text-blue-600 rounded-full">Note</span>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="card">
-                                <div class="card-header d-flex align-items-start pb-0">
-                                    <div>
-                                        <h2 class="text-bold-700 mb-0">86%</h2>
-                                        <p>CPU Usage</p>
+                </div>
+                <!-- Inject Chart.js donut -->
+
+                <script>
+                const ctx = document.getElementById('progressDonut').getContext('2d');
+                const donutData = [30, 40, 30]; // active, completed, assigned
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Active', 'Completed', 'Assigned'],
+                        datasets: [{
+                            data: donutData,
+                            backgroundColor: ['#10b981', '#3b82f6', '#facc15'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        cutout: '85%',
+                        responsive: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            centerText: {
+                                display: true
+                            }
+                        }
+                    },
+                    plugins: [{
+                        id: 'centerText',
+                        beforeDraw(chart) {
+                            const {
+                                width,
+                                height,
+                                ctx
+                            } = chart;
+                            const total = donutData.reduce((a, b) => a + b, 0);
+                            const completed = donutData[1]; // 40
+                            const percent = Math.round((completed / total) * 100);
+
+                            ctx.save();
+                            ctx.font = 'bold 10px sans-serif';
+                            ctx.fillStyle = '#1f2937'; // dark-gray
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText(`${percent}%`, width / 2, height / 2);
+                            ctx.restore();
+                        }
+                    }]
+                });
+                </script>
+
+                <!-- Task, Appointment, Project, Offer, Note Tabs -->
+                    <div class="mt-10">
+                        <div id="tab-content">
+                            <div class="flex flex-col items-center justify-center mb-4">
+                                <!-- Tabs -->
+                                <ul class="flex flex-wrap justify-center text-sm font-medium text-center space-x-2 mb-2"
+                                    id="tabs">
+                                    <li>
+                                        <button class="tab-button border-b-2 border-blue-500 text-blue-600 px-4 py-2"
+                                            data-tab="all">
+                                            All <span class="ml-1 bg-gray-200 text-gray-700 rounded-full px-2 text-xs"
+                                                id="allCount">0</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="tab-button px-4 py-2" data-tab="tasks">
+                                            Tasks <span class="ml-1 bg-gray-200 text-gray-700 rounded-full px-2 text-xs"
+                                                id="taskCount">0</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="tab-button px-4 py-2" data-tab="appointments">
+                                            Appointments <span
+                                                class="ml-1 bg-gray-200 text-gray-700 rounded-full px-2 text-xs"
+                                                id="appointmentCount">0</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="tab-button px-4 py-2" data-tab="projects">
+                                            Projects <span class="ml-1 bg-gray-200 text-gray-700 rounded-full px-2 text-xs"
+                                                id="projectCount">0</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="tab-button px-4 py-2" data-tab="offers">
+                                            Offers <span class="ml-1 bg-gray-200 text-gray-700 rounded-full px-2 text-xs"
+                                                id="offerCount">0</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="tab-button px-4 py-2" data-tab="notes">
+                                            Notes <span class="ml-1 bg-gray-200 text-gray-700 rounded-full px-2 text-xs"
+                                                id="noteCount">0</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="tab-button px-4 py-2" data-tab="calendar">
+                                            Calendar <span class="ml-1 bg-gray-200 text-gray-700 rounded-full px-2 text-xs"
+                                                id="calendarCount">0</span>
+                                        </button>
+                                    </li>
+                                </ul>
+
+                                <!-- Search Bar -->
+                                <input type="text" id="searchBar" placeholder="Search..."
+                                    class="border rounded px-3 py-1 text-sm w-64 text-center">
+                            </div>
+
+
+                            <div class="tab-panel hidden" id="tab-calendar">
+                                <!-- Calendar Controls -->
+                                <div class="mb-4 flex flex-wrap items-center gap-4">
+
+                                    <!-- Date Filter -->
+                                    <div class="flex items-center gap-2">
+                                        <label for="calendarDatePicker" class="text-sm font-semibold text-gray-700">📅 Jump
+                                            to date:</label>
+                                        <input type="date" id="calendarDatePicker"
+                                            class="border rounded px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                        <button id="jumpToDateBtn"
+                                            class="bg-blue-500 text-white px-3 py-1 text-sm rounded shadow hover:bg-blue-600">Go</button>
                                     </div>
-                                    <div class="avatar bg-rgba-primary p-50 m-0">
-                                        <div class="avatar-content">
-                                            <i class="feather icon-cpu text-primary font-medium-5"></i>
+
+                                    <!-- Employee Dropdown -->
+                                    <div class="relative">
+                                        <button id="toggleDropdown"
+                                            class="bg-gray-100 border px-3 py-1 rounded text-sm shadow hover:bg-gray-200">
+                                            👥 Select Employees
+                                        </button>
+                                        <div id="employeeDropdown"
+                                            class="absolute mt-2 bg-white border rounded shadow w-64 p-2 hidden z-50 max-h-60 overflow-auto">
+                                            <!-- Employee checkboxes will be inserted by JS -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Selected Employee Avatars -->
+                                <div id="selectedEmployees" class="flex flex-wrap gap-2 mb-4"></div>
+
+                                <!-- Calendar itself -->
+                                <div id="calendar" class="bg-white rounded shadow p-4"></div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div id="tab-content">
+                            <div class="tab-panel" id="tab-all">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <!-- Cards for each tab -->
+                                    <!-- All previous cards moved here -->
+                                    <div class="bg-white rounded-xl shadow-md p-2">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="flex items-center gap-2 text-blue-600 font-semibold">
+                                                <i class="ri-checkbox-circle-line text-xl"></i> Task
+                                            </div>
+                                            <span class="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded">High</span>
+                                        </div>
+                                        <p class="text-gray-600">Fix API integration issues and update error handling.</p>
+                                        <div class="mt-3 text-sm text-gray-500 flex justify-between">
+                                            <span>🗓️ 20 Mar – 30 Nov 2024</span>
+                                            <span class="text-blue-600 font-medium">In Progress</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white rounded-xl shadow-md p-2">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="flex items-center gap-2 text-green-600 font-semibold">
+                                                <i class="ri-calendar-line text-xl"></i> Appointment
+                                            </div>
+                                            <span
+                                                class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">Confirmed</span>
+                                        </div>
+                                        <p class="text-gray-600">Senior team leader interview.</p>
+                                        <div class="mt-3 text-sm text-gray-500 flex justify-between">
+                                            <span>📅 15 Aug 2024</span>
+                                            <span>🕒 AM 10:15</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white rounded-xl shadow-md p-2">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="flex items-center gap-2 text-yellow-600 font-semibold">
+                                                <i class="ri-folder-2-line text-xl"></i> Project
+                                            </div>
+                                            <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">In
+                                                Progress</span>
+                                        </div>
+                                        <p class="text-gray-600">Bank Data Management – API and reporting implementation.
+                                        </p>
+                                        <div class="w-full bg-gray-100 h-2 rounded-full mt-3">
+                                            <div class="bg-yellow-400 h-2 rounded-full" style="width: 70%"></div>
+                                        </div>
+                                        <p class="text-xs text-right text-gray-400 mt-1">Progress: 70%</p>
+                                    </div>
+                                    <div class="bg-white rounded-xl shadow-md p-2">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="flex items-center gap-2 text-pink-600 font-semibold">
+                                                <i class="ri-price-tag-3-line text-xl"></i> Offer
+                                            </div>
+                                            <span
+                                                class="bg-pink-100 text-pink-700 text-xs px-2 py-0.5 rounded">Active</span>
+                                        </div>
+                                        <p class="text-gray-600">Exclusive: 25% off premium features for summer campaign.
+                                        </p>
+                                        <div class="mt-3 text-sm text-gray-500 flex justify-between">
+                                            <span>📆 Valid until: 30 June</span>
+                                            <span>💶 €2.500</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white rounded-xl shadow-md p-2">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="flex items-center gap-2 text-purple-600 font-semibold">
+                                                <i class="ri-sticky-note-line text-xl"></i> Note
+                                            </div>
+                                            <span
+                                                class="bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded">Reminder</span>
+                                        </div>
+                                        <p class="text-gray-600">Review July analytics, send team feedback summary.</p>
+                                        <div class="mt-3 text-sm text-right text-gray-500">🗓️ Last updated: 02 Jun 2025
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="card">
-                                <div class="card-header d-flex align-items-start pb-0">
-                                    <div>
-                                        <h2 class="text-bold-700 mb-0">1.2gb</h2>
-                                        <p>Memory Usage</p>
-                                    </div>
-                                    <div class="avatar bg-rgba-success p-50 m-0">
-                                        <div class="avatar-content">
-                                            <i class="feather icon-server text-success font-medium-5"></i>
+                            <div class="tab-panel hidden" id="tab-tasks">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div class="bg-white rounded-xl shadow-md p-2">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="flex items-center gap-2 text-blue-600 font-semibold">
+                                                <i class="ri-checkbox-circle-line text-xl"></i> Task
+                                            </div>
+                                            <span class="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded">High</span>
+                                        </div>
+                                        <p class="text-gray-600">Fix API integration issues and update error handling.</p>
+                                        <div class="mt-3 text-sm text-gray-500 flex justify-between">
+                                            <span>🗓️ 20 Mar – 30 Nov 2024</span>
+                                            <span class="text-blue-600 font-medium">In Progress</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="card">
-                                <div class="card-header d-flex align-items-start pb-0">
-                                    <div>
-                                        <h2 class="text-bold-700 mb-0">0.1%</h2>
-                                        <p>Downtime Ratio</p>
-                                    </div>
-                                    <div class="avatar bg-rgba-danger p-50 m-0">
-                                        <div class="avatar-content">
-                                            <i class="feather icon-activity text-danger font-medium-5"></i>
+                            <div class="tab-panel hidden" id="tab-appointments">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div class="bg-white rounded-xl shadow-md p-2">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="flex items-center gap-2 text-green-600 font-semibold">
+                                                <i class="ri-calendar-line text-xl"></i> Appointment
+                                            </div>
+                                            <span
+                                                class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">Confirmed</span>
+                                        </div>
+                                        <p class="text-gray-600">Senior team leader interview.</p>
+                                        <div class="mt-3 text-sm text-gray-500 flex justify-between">
+                                            <span>📅 15 Aug 2024</span>
+                                            <span>🕒 AM 10:15</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="card">
-                                <div class="card-header d-flex align-items-start pb-0">
-                                    <div>
-                                        <h2 class="text-bold-700 mb-0">13</h2>
-                                        <p>Issues Found</p>
+                            <div class="tab-panel hidden" id="tab-projects">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div class="bg-white rounded-xl shadow-md p-2">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="flex items-center gap-2 text-yellow-600 font-semibold">
+                                                <i class="ri-folder-2-line text-xl"></i> Project
+                                            </div>
+                                            <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">In
+                                                Progress</span>
+                                        </div>
+                                        <p class="text-gray-600">Bank Data Management – API and reporting implementation.
+                                        </p>
+                                        <div class="w-full bg-gray-100 h-2 rounded-full mt-3">
+                                            <div class="bg-yellow-400 h-2 rounded-full" style="width: 70%"></div>
+                                        </div>
+                                        <p class="text-xs text-right text-gray-400 mt-1">Progress: 70%</p>
                                     </div>
-                                    <div class="avatar bg-rgba-warning p-50 m-0">
-                                        <div class="avatar-content">
-                                            <i class="feather icon-alert-octagon text-warning font-medium-5"></i>
+                                </div>
+                            </div>
+                            <div class="tab-panel hidden" id="tab-offers">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div class="bg-white rounded-xl shadow-md p-2">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="flex items-center gap-2 text-pink-600 font-semibold">
+                                                <i class="ri-price-tag-3-line text-xl"></i> Offer
+                                            </div>
+                                            <span
+                                                class="bg-pink-100 text-pink-700 text-xs px-2 py-0.5 rounded">Active</span>
+                                        </div>
+                                        <p class="text-gray-600">Exclusive: 25% off premium features for summer campaign.
+                                        </p>
+                                        <div class="mt-3 text-sm text-gray-500 flex justify-between">
+                                            <span>📆 Valid until: 30 June</span>
+                                            <span>💶 €2.500</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>  
-                </section>
-                
-                <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="mb-0">Dispatched Orders</h4>
-                                </div>
-                                <div class="card-content">
-                                    <div class="table-responsive mt-1">
-                                        <table class="table table-hover-animation mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>ORDER</th>
-                                                    <th>STATUS</th>
-                                                    <th>OPERATORS</th>
-                                                    <th>LOCATION</th>
-                                                    <th>DISTANCE</th>
-                                                    <th>START DATE</th>
-                                                    <th>EST DEL. DT</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>#879985</td>
-                                                    <td><i class="fa fa-circle font-small-3 text-success mr-50"></i>Moving</td>
-                                                    <td class="p-1">
-                                                        <ul class="list-unstyled users-list m-0  d-flex align-items-center">
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Vinnie Mostowy" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-5.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Elicia Rieske" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-7.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Julee Rossignol" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-10.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Darcey Nooner" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-8.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                    <td>Anniston, Alabama</td>
-                                                    <td>
-                                                        <span>130 km</span>
-                                                        <div class="progress progress-bar-success mt-1 mb-0">
-                                                            <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </td>
-                                                    <td>14:58 26/07/2018</td>
-                                                    <td>28/07/2018</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#156897</td>
-                                                    <td><i class="fa fa-circle font-small-3 text-warning mr-50"></i>Pending</td>
-                                                    <td class="p-1">
-                                                        <ul class="list-unstyled users-list m-0  d-flex align-items-center">
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Trina Lynes" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-1.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Lilian Nenez" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-2.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Alberto Glotzbach" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-3.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                    <td>Cordova, Alaska</td>
-                                                    <td>
-                                                        <span>234 km</span>
-                                                        <div class="progress progress-bar-warning mt-1 mb-0">
-                                                            <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </td>
-                                                    <td>14:58 26/07/2018</td>
-                                                    <td>28/07/2018</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#568975</td>
-                                                    <td><i class="fa fa-circle font-small-3 text-success mr-50"></i>Moving</td>
-                                                    <td class="p-1">
-                                                        <ul class="list-unstyled users-list m-0  d-flex align-items-center">
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Lai Lewandowski" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-6.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Elicia Rieske" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-7.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Darcey Nooner" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-8.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Julee Rossignol" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-10.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Jeffrey Gerondale" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-9.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                    <td>Florence, Alabama</td>
-                                                    <td>
-                                                        <span>168 km</span>
-                                                        <div class="progress progress-bar-success mt-1 mb-0">
-                                                            <div class="progress-bar" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </td>
-                                                    <td>14:58 26/07/2018</td>
-                                                    <td>28/07/2018</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#245689</td>
-                                                    <td><i class="fa fa-circle font-small-3 text-danger mr-50"></i>Canceled</td>
-                                                    <td class="p-1">
-                                                        <ul class="list-unstyled users-list m-0  d-flex align-items-center">
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Vinnie Mostowy" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-5.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                            <li data-toggle="tooltip" data-popup="tooltip-custom" data-placement="bottom" data-original-title="Elicia Rieske" class="avatar pull-up">
-                                                                <img class="media-object rounded-circle" src="../../../app-assets/images/portrait/small/avatar-s-7.jpg" alt="Avatar" height="30" width="30">
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                    <td>Clifton, Arizona</td>
-                                                    <td>
-                                                        <span>125 km</span>
-                                                        <div class="progress progress-bar-danger mt-1 mb-0">
-                                                            <div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </td>
-                                                    <td>14:58 26/07/2018</td>
-                                                    <td>28/07/2018</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                            <div class="tab-panel hidden" id="tab-notes">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div class="bg-white rounded-xl shadow-md p-2">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="flex items-center gap-2 text-purple-600 font-semibold">
+                                                <i class="ri-sticky-note-line text-xl"></i> Note
+                                            </div>
+                                            <span
+                                                class="bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded">Reminder</span>
+                                        </div>
+                                        <p class="text-gray-600">Review July analytics, send team feedback summary.</p>
+                                        <div class="mt-3 text-sm text-right text-gray-500">🗓️ Last updated: 02 Jun 2025
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="tab-panel hidden" id="tab-calendar">
+                                <!-- Calendar Controls -->
+                                <div class="mb-4 flex flex-wrap items-center gap-1">
+
+                                    <!-- Date Filter -->
+                                    <div class="flex items-center gap-2">
+                                        <label for="calendarDatePicker" class="text-sm font-semibold text-gray-700">📅 Jump
+                                            to date:</label>
+                                        <input type="date" id="calendarDatePicker"
+                                            class="border rounded px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                        <button id="jumpToDateBtn"
+                                            class="bg-blue-500 text-white px-3 py-1 text-sm rounded shadow hover:bg-blue-600">Go</button>
+                                    </div>
+
+                                    <!-- Employee Dropdown -->
+                                    <div class="relative">
+                                        <button id="toggleDropdown"
+                                            class="bg-gray-100 border px-3 py-1 rounded text-sm shadow hover:bg-gray-200">
+                                            👥 Select Employees
+                                        </button>
+                                        <div id="employeeDropdown"
+                                            class="absolute mt-2 bg-white border rounded shadow w-64 p-2 hidden z-50 max-h-60 overflow-auto">
+                                            <!-- Employee checkboxes will be inserted by JS -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Selected Employee Avatars -->
+                                <div id="selectedEmployees" class="flex flex-wrap gap-2 mb-4"></div>
+
+                                <!-- Calendar itself -->
+                                <div id="calendar" class="bg-white rounded shadow p-1"></div>
+                            </div>
+
+
+
                         </div>
                     </div>
-                       
-                    <div class="row">
-                        <!-- permissions start -->
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header border-bottom mx-2 px-0">
-                                    <h6 class="border-bottom py-1 mb-0 font-medium-2"><i
-                                            class="feather icon-lock mr-50 "></i>Permission
-                                    </h6>
-                                </div>
-                                <div class="card-body px-75">
-                                    <div class="table-responsive users-view-permission">
-                                        <table class="table table-borderless">
-                                            <thead>
-                                                <tr>
-                                                    <th>Module</th>
-                                                    <th>Read</th>
-                                                    <th>Update</th>
-                                                    <th>Create</th>
-                                                    <th>Delete</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($premission as $pre)
-                                                @if($pre->user_id==auth()->user()->id)
-                                                <tr>
-                                                    <td>{{ $pre->item_id}}</td>
-                                                    <td>
-                                                        @if($pre->is_read=='on')
-                                                        <div class="custom-control custom-checkbox ml-50"><input
-                                                                type="checkbox" id="users-checkbox1"
-                                                                class="custom-control-input" disabled checked>
-                                                            <label class="custom-control-label"
-                                                                for="users-checkbox1"></label>
-                                                        </div>
-                                                        @else
-                                                        <div class="custom-control custom-checkbox ml-50"><input
-                                                                type="checkbox" id="users-checkbox1"
-                                                                class="custom-control-input" disabled unchecked>
-                                                            <label class="custom-control-label"
-                                                                for="users-checkbox1"></label>
-                                                        </div>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if($pre->is_update=='on')
-                                                        <div class="custom-control custom-checkbox ml-50"><input
-                                                                type="checkbox" id="users-checkbox1"
-                                                                class="custom-control-input" disabled checked>
-                                                            <label class="custom-control-label"
-                                                                for="users-checkbox1"></label>
-                                                        </div>
-                                                        @else
-                                                        <div class="custom-control custom-checkbox ml-50"><input
-                                                                type="checkbox" id="users-checkbox1"
-                                                                class="custom-control-input" disabled unchecked>
-                                                            <label class="custom-control-label"
-                                                                for="users-checkbox1"></label>
-                                                        </div>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if($pre->is_add=='on')
-                                                        <div class="custom-control custom-checkbox ml-50"><input
-                                                                type="checkbox" id="users-checkbox1"
-                                                                class="custom-control-input" disabled checked>
-                                                            <label class="custom-control-label"
-                                                                for="users-checkbox1"></label>
-                                                        </div>
-                                                        @else
-                                                        <div class="custom-control custom-checkbox ml-50"><input
-                                                                type="checkbox" id="users-checkbox1"
-                                                                class="custom-control-input" disabled unchecked>
-                                                            <label class="custom-control-label"
-                                                                for="users-checkbox1"></label>
-                                                        </div>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if($pre->is_delete=='on')
-                                                        <div class="custom-control custom-checkbox ml-50"><input
-                                                                type="checkbox" id="users-checkbox1"
-                                                                class="custom-control-input" disabled checked>
-                                                            <label class="custom-control-label"
-                                                                for="users-checkbox1"></label>
-                                                        </div>
-                                                        @else
-                                                        <div class="custom-control custom-checkbox ml-50"><input
-                                                                type="checkbox" id="users-checkbox1"
-                                                                class="custom-control-input" disabled unchecked>
-                                                            <label class="custom-control-label"
-                                                                for="users-checkbox1"></label>
-                                                        </div>
-                                                        @endif
-                                                    </td>
 
-                                                </tr>
-                                                @endif
-                                                @endforeach
+                <!-- Event Modal -->
+                <div id="eventModal"
+                    class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 items-center justify-center"
+                    onclick="outsideModalClick(event)">
+                    <div id="eventModalContent"
+                        class="bg-white rounded-xl shadow-xl w-full max-w-md mx-auto p-6 relative">
+                        <button onclick="closeEventModal()"
+                            class="absolute top-2 right-2 text-gray-400 hover:text-gray-700">
+                            <i class="ri-close-line text-2xl"></i>
+                        </button>
+                        <div class="flex items-center gap-1 mb-4">
+                            <img id="modalAvatar" src="" alt="Avatar"
+                                class="w-12 h-12 rounded-full object-cover border" />
 
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                            <div>
+                                <h2 id="modalTitle" class="text-lg font-bold text-gray-800"></h2>
+                                <p id="modalTime" class="text-sm text-gray-500"></p>
                             </div>
+                            <div id="modalPeople" class="flex flex-wrap gap-1 mt-3"></div>
+
+
                         </div>
-                        <!-- permissions end -->
+                        <div>
+                            <p id="modalDescription" class="text-gray-700 text-sm"></p>
+                        </div>
                     </div>
-                </section>
+                </div>
+
+
+            </div>
+
+
         </div>
     </div>
 </div>
 
+@endsection
+
+@section('script')
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@5.3.0/main.global.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const menus = document.querySelectorAll('.menu');
-    menus.forEach(menu => {
-        const submenu = menu.querySelector('.submenu');
-        menu.addEventListener("click", function() {
-            const isDisplayed = submenu.style.display === "block";
-            document.querySelectorAll('.submenu').forEach(sub => sub.style.display = "none");
-            submenu.style.display = isDisplayed ? "none" : "block";
+document.addEventListener("DOMContentLoaded", () => {
+    // Initialize feather icons
+    feather.replace();
+
+    // Initialize SortableJS
+    new Sortable(document.getElementById('goalList'), {
+        animation: 150,
+        ghostClass: 'bg-yellow-100'
+    });
+
+    // Tab Switching
+    const tabs = document.querySelectorAll('.tab-button');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    tabs.forEach(button => {
+        button.addEventListener('click', () => {
+            tabs.forEach(btn => btn.classList.remove('border-b-2', 'border-blue-500',
+                'text-blue-600'));
+            panels.forEach(panel => panel.classList.add('hidden'));
+
+            button.classList.add('border-b-2', 'border-blue-500', 'text-blue-600');
+            document.getElementById(`tab-${button.dataset.tab}`).classList.remove(
+                'hidden');
         });
     });
 
-    document.addEventListener("click", function(event) {
-        if (!event.target.closest('.menu')) {
-            document.querySelectorAll('.submenu').forEach(sub => sub.style.display = "none");
-        }
+    // Search Filter
+    const searchBar = document.getElementById('searchBar');
+    searchBar.addEventListener('input', () => {
+        const keyword = searchBar.value.toLowerCase();
+        document.querySelectorAll('.tab-panel:not(.hidden) .bg-white').forEach(card => {
+            const text = card.textContent.toLowerCase();
+            card.style.display = text.includes(keyword) ? 'block' : 'none';
+        });
     });
 });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const calendarEl = document.getElementById('calendar');
+    if (!calendarEl) return;
+
+    let selectedEmployeeIds = [];
+
+    const employees = [{
+            id: 1,
+            name: 'Alice',
+            avatar: 'https://i.pravatar.cc/100?img=1'
+        },
+        {
+            id: 2,
+            name: 'Bob',
+            avatar: 'https://i.pravatar.cc/100?img=2'
+        },
+        {
+            id: 3,
+            name: 'Charlie',
+            avatar: 'https://i.pravatar.cc/100?img=3'
+        },
+        {
+            id: 4,
+            name: 'Diana',
+            avatar: 'https://i.pravatar.cc/100?img=4'
+        },
+        {
+            id: 5,
+            name: 'Ethan',
+            avatar: 'https://i.pravatar.cc/100?img=5'
+        }
+    ];
+
+    const allCalendarEvents = [{
+            title: 'Quarterly Strategy Call',
+            start: '2025-06-17T15:00:00',
+            backgroundColor: '#f472b6',
+            extendedProps: {
+                description: 'Important high-level planning and review',
+                employeeIds: [1, 2, 3, 4, 5],
+                people: employees.map(e => e.avatar)
+            }
+        },
+        {
+            title: 'Check-in Call',
+            start: '2025-06-11T15:00:00',
+            backgroundColor: '#34d399',
+            extendedProps: {
+                description: 'Short sync with team',
+                employeeIds: [2],
+                people: [employees[1].avatar]
+            }
+        }
+    ];
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: window.innerWidth < 640 ? 'timeGridDay' : 'dayGridMonth',
+        height: 'auto',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: (info, successCallback) => {
+            const filtered = selectedEmployeeIds.length ?
+                allCalendarEvents.filter(e =>
+                    (e.extendedProps.employeeIds || []).some(id => selectedEmployeeIds.includes(id))
+                ) :
+                allCalendarEvents;
+            successCallback(filtered);
+        },
+        eventClick: function(info) {
+            info.jsEvent.preventDefault();
+            openEventModal(info.event);
+        },
+        eventContent: function(arg) {
+            const people = arg.event.extendedProps.people || [];
+            const visible = people.slice(0, 4);
+            const hiddenCount = people.length - visible.length;
+
+            const avatarHTML = visible.map(src =>
+                `<img src="${src}" class="avatar w-5 h-5 rounded-full border border-white -ml-2 first:ml-0" />`
+            ).join('');
+
+            const plusHTML = hiddenCount > 0 ?
+                `<div class="w-5 h-5 text-xs bg-gray-200 text-gray-600 rounded-full flex items-center justify-center -ml-2 border border-white">+${hiddenCount}</div>` :
+                '';
+
+            return {
+                html: `
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    background-color: ${arg.event.backgroundColor || '#3b82f6'};
+                    color: white;
+                    border-radius: 6px;
+                    padding: 2px 6px;
+                    font-size: 12px;
+                    max-width: 100%;
+                    overflow: hidden;">
+                    <div class="fc-event-title" style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                    ${arg.event.title}
+                    </div>
+                    <div class="flex ml-2">${avatarHTML}${plusHTML}</div>
+                </div>`
+            };
+        }
+    });
+
+    calendar.render();
+
+    // UI Setup
+    document.getElementById('calendarDatePicker').valueAsDate = new Date();
+    document.getElementById('jumpToDateBtn').addEventListener('click', () => {
+        const date = document.getElementById('calendarDatePicker').value;
+        if (date) calendar.gotoDate(date);
+    });
+
+    document.getElementById('toggleDropdown').addEventListener('click', () => {
+        document.getElementById('employeeDropdown').classList.toggle('hidden');
+    });
+
+    function renderEmployeeDropdown() {
+        const container = document.getElementById('employeeDropdown');
+        container.innerHTML = '';
+        employees.forEach(emp => {
+            const checked = selectedEmployeeIds.includes(emp.id) ? 'checked' : '';
+            container.innerHTML += `
+                <label class="flex items-center gap-2 py-1 cursor-pointer">
+                <input type="checkbox" ${checked} onchange="handleEmployeeSelection(${emp.id})">
+                <img src="${emp.avatar}" class="w-6 h-6 rounded-full border">
+                <span class="text-sm">${emp.name}</span>
+                </label>`;
+        });
+    }
+
+    function renderSelectedAvatars() {
+        const container = document.getElementById('selectedEmployees');
+        container.innerHTML = '';
+        employees.filter(emp => selectedEmployeeIds.includes(emp.id)).forEach(emp => {
+            container.innerHTML += `
+                <div class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded shadow">
+                <img src="${emp.avatar}" class="w-5 h-5 rounded-full border">
+                <span class="text-xs">${emp.name}</span>
+                </div>`;
+        });
+    }
+
+    window.handleEmployeeSelection = function(empId) {
+        const index = selectedEmployeeIds.indexOf(empId);
+        if (index > -1) {
+            selectedEmployeeIds.splice(index, 1);
+        } else {
+            selectedEmployeeIds.push(empId);
+        }
+        renderSelectedAvatars();
+        renderEmployeeDropdown();
+        calendar.refetchEvents();
+    };
+
+    function openEventModal(event) {
+        document.getElementById('modalTitle').textContent = event.title;
+        document.getElementById('modalTime').textContent = new Date(event.start).toLocaleString();
+        document.getElementById('modalDescription').textContent = event.extendedProps.description ||
+            'No description provided.';
+        document.getElementById('modalAvatar').src = event.extendedProps.people?. [0] ||
+            'https://i.pravatar.cc/100?u=default';
+
+        const peopleHTML = (event.extendedProps.people || []).map(src =>
+            `<img src="${src}" class="w-7 h-7 rounded-full border border-white shadow" />`
+        ).join('');
+        document.getElementById('modalPeople').innerHTML = peopleHTML;
+
+        document.getElementById('eventModal').classList.remove('hidden');
+        document.getElementById('eventModal').classList.add('flex');
+    }
+
+    function closeEventModal() {
+        document.getElementById('eventModal').classList.remove('flex');
+        document.getElementById('eventModal').classList.add('hidden');
+    }
+
+    window.outsideModalClick = function(event) {
+        const modalContent = document.getElementById('eventModalContent');
+        if (!modalContent.contains(event.target)) closeEventModal();
+    };
+
+    // Render on load
+    renderEmployeeDropdown();
+    renderSelectedAvatars();
+
+    // Responsive change view
+    window.addEventListener('resize', () => {
+        calendar.changeView(window.innerWidth < 640 ? 'timeGridDay' : 'dayGridMonth');
+    });
+
+    // Tab re-render fix
+    document.querySelector('[data-tab="calendar"]')?.addEventListener('click', () => {
+        setTimeout(() => calendar.render(), 100);
+    });
+});
+</script>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const tab = this.dataset.tab;
+            loadTabData(tab);
+        });
+    });
+
+    function loadTabData(tab) {
+        fetch("/dashboard/load-tab", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ tab: tab })
+        })
+        .then(res => res.text())
+        .then(html => {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.querySelector(`#tab-${tab}`).classList.remove('hidden');
+            document.querySelector(`#tab-${tab}`).innerHTML = html;
+        });
+    }
+
+    function updateTabCounts() {
+        fetch('/dashboard/tab-counts')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('taskCount').textContent = data.tasks;
+                document.getElementById('appointmentCount').textContent = data.appointments;
+                document.getElementById('projectCount').textContent = data.projects;
+                document.getElementById('offerCount').textContent = data.offers;
+                document.getElementById('noteCount').textContent = data.notes;
+                document.getElementById('allCount').textContent =
+                    data.tasks + data.appointments + data.projects + data.offers + data.notes;
+            });
+    }
+
+    updateTabCounts();
+});
+
 </script>
 @endsection

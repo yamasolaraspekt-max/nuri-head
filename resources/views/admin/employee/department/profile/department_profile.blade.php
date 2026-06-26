@@ -1,1551 +1,2461 @@
 @extends('admin.layouts.app')
-@section('title') Abteilungsprofil @endsection
+@section('title', 'Abteilungsprofil')
+
+@php
+    $departmentStatus = $department->status === 'Published' ? 'Aktiv' : 'Inaktiv';
+    $departmentStatusClass = $department->status === 'Published' ? 'is-active' : 'is-inactive';
+
+    $leaderImage = $department->emp_image
+        ? asset('images/employee/' . $department->emp_image)
+        : asset('images/gender/male.png');
+
+    $teamCount = isset($employees) ? $employees->count() : 0;
+@endphp
 
 @section('style')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js/dist/Chart.min.css">
+    <style>
+        :root {
+            --dpf-bg: #f3f4f6;
+            --dpf-card: #ffffff;
+            --dpf-text: #1f2937;
+            --dpf-heading: #111827;
+            --dpf-muted: #6b7280;
+            --dpf-border: #e5e7eb;
 
-<style>
+            --dpf-green: #93c21c;
+            --dpf-green-hover: #7baa18;
+            --dpf-green-soft: #f4fae7;
 
-  :root {
-    --dpb4-blue:      #74b2d4;
-    --dpb4-green:     #93c21c;
-    --dpb4-lightgreen:#cfe09b;
-    --dpb4-paleblue:  #c0d8ea;
-}
+            --dpf-blue: #74b2d4;
+            --dpf-blue-soft: #eff6ff;
 
-/* Ring / Hero */
-.dpb4-ring {
-    border-radius: 1.25rem;
-    background: linear-gradient(135deg, var(--dpb4-blue), var(--dpb4-green));
-    color: #fff;
-}
+            --dpf-success: #10b981;
+            --dpf-success-soft: #ecfdf5;
 
-/* Glass / Cards */
-.dpb4-glass {
-    background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.03));
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,.16);
-    border-radius: 1rem;
-}
+            --dpf-warning: #f59e0b;
+            --dpf-warning-soft: #fffbeb;
 
-.dpb4-soft-card {
-    background: var(--dpb4-paleblue);
-    border-radius: 1rem;
-    border: 1px solid rgba(148,163,184,.5);
-}
+            --dpf-danger: #ef4444;
+            --dpf-danger-soft: #fef2f2;
 
-/* Progressbars: use palette instead of random gradients */
-.progress-bar,
-#dpb4-exp-dist-bar {
-    background-color: var(--dpb4-blue) !important;
-    background-image: none !important;
-}
+            --dpf-purple: #6366f1;
+            --dpf-purple-soft: #eef2ff;
 
-/* Badges – tint with the palette */
-.dpb4-badge-info    { background: rgba(116,178,212,.15);  color:#074873; }
-.dpb4-badge-primary { background: rgba(116,178,212,.15);  color:#074873; }
-.dpb4-badge-success { background: rgba(147,194,28,.15);   color:#4a6e00; }
-.dpb4-badge-warning { background: rgba(207,224,155,.3);   color:#6b6b00; }
-.dpb4-badge-danger  { background: rgba(239,68,68,.15);    color:#991b1b; }
-.dpb4-badge-secondary { background: rgba(192,216,234,.4); color:#374151; }
+            --dpf-gray-soft: #f9fafb;
 
-    /* ==== GENERELLES LAYOUT / HINTERGRUND ==== */
-    .dpb4-aurora {
-        background:
-            radial-gradient(1200px 600px at 10% 10%, rgba(99,102,241,.12), transparent 40%),
-            radial-gradient(1000px 500px at 90% 0%, rgba(16,185,129,.12), transparent 40%),
-            radial-gradient(800px 400px at 50% 100%, rgba(236,72,153,.10), transparent 40%),
-            linear-gradient(180deg, #0b1020, #0b1020);
-        color: #e5e7eb;
-    }
+            --dpf-radius-sm: 10px;
+            --dpf-radius: 16px;
+            --dpf-radius-lg: 22px;
 
-    .dpb4-ring {
-        border-radius: 1.25rem;
-        background: linear-gradient(135deg, #93c21c, #cfe09b);
-        color: #fff;
-    }
+            --dpf-shadow-sm: 0 1px 2px rgba(15, 23, 42, .05);
+            --dpf-shadow: 0 14px 36px rgba(15, 23, 42, .08);
+            --dpf-shadow-lg: 0 24px 70px rgba(15, 23, 42, .14);
 
-    .dpb4-glass {
-        background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,.12);
-        border-radius: 1rem;
-    }
+            --dpf-transition: all .2s ease;
+        }
 
-    .dpb4-soft-card {
-        background: rgba(255,255,255,.06);
-        border-radius: 1rem;
-        border: 1px solid rgba(255,255,255,.16);
-    }
+        .dpf-wrap {
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--dpf-text);
+        }
 
-    .dpb4-dot {
-        width: .5rem;
-        height: .5rem;
-        border-radius: 9999px;
-        display: inline-block;
-    }
+        .dpf-topbar {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
 
-    .dpb4-btn-soft {
-        border: 1px solid rgba(255,255,255,.25);
-        background: rgba(255, 255, 255, 1);
-        color: #253c68ff;
-    }
+        .dpf-page-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--dpf-blue);
+            background: rgba(116, 178, 212, .12);
+            border: 1px solid rgba(116, 178, 212, .2);
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 8px;
+        }
 
-    .dpb4-btn-soft:hover {
-        background: rgba(255,255,255,.18);
-        color: #ffffff;
-    }
+        .dpf-page-title {
+            font-size: 28px;
+            font-weight: 950;
+            letter-spacing: -.035em;
+            color: var(--dpf-heading);
+            margin: 0;
+            line-height: 1.1;
+        }
 
-    .dpb4-badge-soft {
-        border-radius: 999px;
-        border: 1px solid rgba(255,255,255,.25);
-        background: rgba(255,255,255,.09);
-        font-size: .75rem;
-        padding: .15rem .55rem;
-    }
+        .dpf-page-subtitle {
+            color: var(--dpf-muted);
+            font-size: 14px;
+            margin-top: 6px;
+        }
 
-    .dpb4-badge-emerald {
-        background: rgba(16,185,129,.18);
-        color: #a7f3d0;
-        border-color: rgba(16,185,129,.35);
-    }
+        .dpf-actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
 
-    /* Avatare */
-    .dpb4-avatar-24 {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 1px solid rgba(255,255,255,.18);
-    }
+        .dpf-btn {
+            border: none;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 900;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--dpf-transition);
+            white-space: nowrap;
+        }
 
-    .dpb4-avatar-36 {
-        width: 36px;
-        height: 36px;
-        border-radius: .75rem;
-        object-fit: cover;
-        border: 1px solid rgba(255,255,255,.18);
-    }
+        .dpf-btn svg {
+            width: 17px;
+            height: 17px;
+        }
 
-    /* Tabellen */
-    .dpb4-table thead th {
-        background: rgba(15,23,42,0.9);
-        color: #e5e7eb;
-        border-color: rgba(148, 163, 184, 0.4);
-    }
+        .dpf-btn-primary {
+            background: var(--dpf-green);
+            color: #fff;
+            box-shadow: 0 10px 22px rgba(147, 194, 28, .22);
+        }
 
-    .dpb4-table td,
-    .dpb4-table th {
-        border-color: rgba(148, 163, 184, 0.35);
-        vertical-align: middle;
-    }
+        .dpf-btn-primary:hover {
+            background: var(--dpf-green-hover);
+            color: #fff;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
 
-    /* Kanban-ähnliches Grid für Projekte (falls genutzt) */
-    .dpb4-kanban {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        grid-gap: 1rem;
-    }
+        .dpf-btn-soft {
+            background: #fff;
+            color: var(--dpf-text);
+            border: 1px solid var(--dpf-border);
+        }
 
-    @media (max-width: 1199.98px) {
-        .dpb4-kanban {
+        .dpf-btn-soft:hover {
+            background: var(--dpf-gray-soft);
+            color: var(--dpf-heading);
+            text-decoration: none;
+        }
+
+        .dpf-btn-blue {
+            background: var(--dpf-blue);
+            color: #fff;
+            box-shadow: 0 10px 22px rgba(116, 178, 212, .24);
+        }
+
+        .dpf-btn-blue:hover {
+            background: #5f9fc5;
+            color: #fff;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+        .dpf-hero {
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at top right, rgba(116, 178, 212, .18), transparent 32%),
+                radial-gradient(circle at bottom left, rgba(147, 194, 28, .16), transparent 34%),
+                linear-gradient(135deg, #ffffff, #fbfdf7);
+            border: 1px solid var(--dpf-border);
+            border-radius: 26px;
+            box-shadow: var(--dpf-shadow);
+            margin-bottom: 18px;
+        }
+
+        .dpf-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(116, 178, 212, .06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(116, 178, 212, .06) 1px, transparent 1px);
+            background-size: 34px 34px;
+            pointer-events: none;
+            opacity: .55;
+        }
+
+        .dpf-hero-inner {
+            position: relative;
+            padding: 24px;
+        }
+
+        .dpf-hero-main {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 340px;
+            gap: 18px;
+            align-items: stretch;
+        }
+
+        @media (max-width: 1100px) {
+            .dpf-hero-main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dpf-department-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            min-width: 0;
+        }
+
+        @media (max-width: 640px) {
+            .dpf-department-head {
+                flex-direction: column;
+            }
+        }
+
+        .dpf-hero-mark {
+            width: 72px;
+            height: 72px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, var(--dpf-blue), var(--dpf-green));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 18px 38px rgba(116, 178, 212, .25);
+            flex: 0 0 auto;
+        }
+
+        .dpf-hero-mark svg {
+            width: 34px;
+            height: 34px;
+        }
+
+        .dpf-department-title-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .dpf-department-title {
+            font-size: 30px;
+            font-weight: 950;
+            color: var(--dpf-heading);
+            margin: 0;
+            letter-spacing: -.035em;
+            line-height: 1.15;
+        }
+
+        .dpf-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 950;
+            white-space: nowrap;
+        }
+
+        .dpf-status-pill::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: currentColor;
+        }
+
+        .dpf-status-pill.is-active {
+            background: var(--dpf-success-soft);
+            color: #047857;
+        }
+
+        .dpf-status-pill.is-inactive {
+            background: var(--dpf-danger-soft);
+            color: #b91c1c;
+        }
+
+        .dpf-description {
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.7;
+            max-width: 850px;
+            margin: 0 0 14px;
+        }
+
+        .dpf-meta-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .dpf-meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #374151;
+            background: rgba(255, 255, 255, .72);
+            border: 1px solid rgba(229, 231, 235, .9);
+            border-radius: 999px;
+            padding: 7px 10px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .dpf-meta-chip svg {
+            width: 15px;
+            height: 15px;
+            color: var(--dpf-blue);
+        }
+
+        .dpf-leader-card {
+            background: rgba(255, 255, 255, .84);
+            border: 1px solid rgba(229, 231, 235, .95);
+            backdrop-filter: blur(12px);
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: var(--dpf-shadow-sm);
+            height: 100%;
+        }
+
+        .dpf-leader-inner {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .dpf-avatar-lg {
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 1px var(--dpf-border), 0 10px 20px rgba(15, 23, 42, .08);
+            background: var(--dpf-gray-soft);
+            flex: 0 0 auto;
+        }
+
+        .dpf-avatar-md {
+            width: 42px;
+            height: 42px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px var(--dpf-border);
+            background: var(--dpf-gray-soft);
+            flex: 0 0 auto;
+        }
+
+        .dpf-avatar-sm {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px var(--dpf-border);
+            background: var(--dpf-gray-soft);
+        }
+
+        .dpf-label {
+            font-size: 11px;
+            font-weight: 950;
+            color: var(--dpf-muted);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+
+        .dpf-leader-name {
+            color: var(--dpf-heading);
+            font-size: 15px;
+            font-weight: 950;
+            line-height: 1.25;
+            margin-top: 3px;
+        }
+
+        .dpf-online {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #047857;
+            font-size: 12px;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .dpf-online::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #34d399;
+            box-shadow: 0 0 0 4px rgba(52, 211, 153, .12);
+        }
+
+        .dpf-leader-actions {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .dpf-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        @media (max-width: 1200px) {
+            .dpf-kpi-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 700px) {
+            .dpf-kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dpf-kpi {
+            background: #fff;
+            border: 1px solid var(--dpf-border);
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: var(--dpf-shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-width: 0;
+        }
+
+        .dpf-kpi-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+        }
+
+        .dpf-kpi-icon svg {
+            width: 23px;
+            height: 23px;
+        }
+
+        .dpf-kpi-icon.projects {
+            background: var(--dpf-blue-soft);
+            color: var(--dpf-blue);
+        }
+
+        .dpf-kpi-icon.tickets {
+            background: var(--dpf-warning-soft);
+            color: #d97706;
+        }
+
+        .dpf-kpi-icon.team {
+            background: var(--dpf-green-soft);
+            color: #5f8512;
+        }
+
+        .dpf-kpi-icon.calendar {
+            background: var(--dpf-purple-soft);
+            color: var(--dpf-purple);
+        }
+
+        .dpf-kpi-label {
+            font-size: 11px;
+            font-weight: 950;
+            color: var(--dpf-muted);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+
+        .dpf-kpi-value {
+            font-size: 27px;
+            font-weight: 950;
+            color: var(--dpf-heading);
+            line-height: 1.05;
+            margin-top: 4px;
+        }
+
+        .dpf-kpi-sub {
+            font-size: 12px;
+            color: var(--dpf-muted);
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dpf-tabs-shell {
+            position: sticky;
+            top: 76px;
+            z-index: 50;
+            background: rgba(255, 255, 255, .92);
+            border: 1px solid var(--dpf-border);
+            border-radius: 20px;
+            box-shadow: var(--dpf-shadow-sm);
+            padding: 8px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(14px);
+        }
+
+        .dpf-tabs-scroll {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+
+        .dpf-tab-btn {
+            border: none;
+            background: transparent;
+            color: #374151;
+            border-radius: 14px;
+            padding: 10px 13px;
+            font-size: 13px;
+            font-weight: 950;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: var(--dpf-transition);
+        }
+
+        .dpf-tab-btn svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .dpf-tab-btn:hover {
+            background: var(--dpf-gray-soft);
+        }
+
+        .dpf-tab-btn.active {
+            background: var(--dpf-green-soft);
+            color: #4d6d11;
+        }
+
+        .dpf-tab-count {
+            min-width: 22px;
+            height: 22px;
+            padding: 0 7px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border: 1px solid var(--dpf-border);
+            color: #374151;
+            font-size: 11px;
+            font-weight: 950;
+        }
+
+        .dpf-tab-tools {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 0 0 auto;
+        }
+
+        @media (max-width: 1000px) {
+            .dpf-tab-tools {
+                display: none;
+            }
+        }
+
+        .dpf-input,
+        .dpf-select {
+            height: 38px;
+            border: 1px solid var(--dpf-border);
+            border-radius: 12px;
+            background: #fff;
+            color: var(--dpf-text);
+            font-size: 13px;
+            font-weight: 700;
+            outline: none;
+            transition: var(--dpf-transition);
+        }
+
+        .dpf-input {
+            padding: 0 12px;
+            min-width: 230px;
+        }
+
+        .dpf-select {
+            padding: 0 34px 0 12px;
+            min-width: 165px;
+        }
+
+        .dpf-input:focus,
+        .dpf-select:focus {
+            border-color: var(--dpf-green);
+            box-shadow: 0 0 0 4px rgba(147, 194, 28, .12);
+        }
+
+        .dpf-panel {
+            background: #fff;
+            border: 1px solid var(--dpf-border);
+            border-radius: 22px;
+            box-shadow: var(--dpf-shadow-sm);
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+
+        .dpf-panel.d-none {
+            display: none !important;
+        }
+
+        .dpf-panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .dpf-section-title {
+            color: var(--dpf-heading);
+            font-size: 17px;
+            font-weight: 950;
+            margin: 0;
+        }
+
+        .dpf-section-sub {
+            color: var(--dpf-muted);
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 3px;
+        }
+
+        .dpf-filter-row {
+            display: flex;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .dpf-filter {
+            min-width: 180px;
+        }
+
+        .dpf-filter label {
+            display: block;
+            color: var(--dpf-muted);
+            font-size: 11px;
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 5px;
+        }
+
+        .dpf-card {
+            background: #fff;
+            border: 1px solid var(--dpf-border);
+            border-radius: 18px;
+            padding: 15px;
+            box-shadow: var(--dpf-shadow-sm);
+        }
+
+        .dpf-card-muted {
+            background: var(--dpf-gray-soft);
+            border: 1px solid var(--dpf-border);
+            border-radius: 16px;
+            padding: 14px;
+        }
+
+        .dpf-table-wrap {
+            border: 1px solid var(--dpf-border);
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .dpf-table {
+            width: 100%;
+            margin: 0;
+            border-collapse: collapse;
+        }
+
+        .dpf-table thead th {
+            background: var(--dpf-gray-soft);
+            color: var(--dpf-muted);
+            font-size: 11px;
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            border-bottom: 1px solid var(--dpf-border);
+            padding: 13px 14px;
+            white-space: nowrap;
+        }
+
+        .dpf-table tbody td {
+            padding: 14px;
+            border-bottom: 1px solid var(--dpf-border);
+            vertical-align: middle;
+        }
+
+        .dpf-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .dpf-table tbody tr:hover {
+            background: #fbfdff;
+        }
+
+        .dpf-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 999px;
+            padding: 5px 9px;
+            font-size: 12px;
+            font-weight: 950;
+            white-space: nowrap;
+        }
+
+        .dpf-pill.info {
+            background: rgba(59, 130, 246, .11);
+            color: #2563eb;
+        }
+
+        .dpf-pill.primary {
+            background: rgba(99, 102, 241, .11);
+            color: #4f46e5;
+        }
+
+        .dpf-pill.success {
+            background: rgba(16, 185, 129, .11);
+            color: #059669;
+        }
+
+        .dpf-pill.warning {
+            background: rgba(245, 158, 11, .13);
+            color: #b45309;
+        }
+
+        .dpf-pill.danger {
+            background: rgba(239, 68, 68, .12);
+            color: #b91c1c;
+        }
+
+        .dpf-pill.secondary {
+            background: rgba(148, 163, 184, .14);
+            color: #4b5563;
+        }
+
+        .dpf-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            display: inline-block;
+            flex: 0 0 auto;
+        }
+
+        .dpf-progress {
+            width: 100%;
+            height: 7px;
+            border-radius: 999px;
+            background: #eef2f7;
+            overflow: hidden;
+        }
+
+        .dpf-progress-bar {
+            height: 100%;
+            border-radius: 999px;
+            background: var(--dpf-blue);
+            transition: width .25s ease;
+        }
+
+        .dpf-ticket-card {
+            border: 1px solid var(--dpf-border);
+            border-radius: 18px;
+            padding: 14px;
+            background: #fff;
+            box-shadow: var(--dpf-shadow-sm);
+            margin-bottom: 10px;
+        }
+
+        .dpf-small-label {
+            color: #9ca3af;
+            font-size: 10px;
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 4px;
+        }
+
+        .dpf-team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        @media (max-width: 1200px) {
+            .dpf-team-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 760px) {
+            .dpf-team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dpf-team-card {
+            background: #fff;
+            border: 1px solid var(--dpf-border);
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: var(--dpf-shadow-sm);
+            transition: var(--dpf-transition);
+        }
+
+        .dpf-team-card:hover {
+            box-shadow: var(--dpf-shadow);
+            transform: translateY(-1px);
+        }
+
+        .dpf-team-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .dpf-team-name {
+            color: var(--dpf-heading);
+            font-size: 15px;
+            font-weight: 950;
+            line-height: 1.25;
+        }
+
+        .dpf-team-email {
+            color: var(--dpf-muted);
+            font-size: 12px;
+            margin-top: 4px;
+            word-break: break-word;
+        }
+
+        .dpf-team-metrics {
+            display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 13px;
         }
-    }
 
-    @media (max-width: 575.98px) {
-        .dpb4-kanban {
-            grid-template-columns: 1fr;
+        .dpf-team-metric {
+            background: var(--dpf-gray-soft);
+            border: 1px solid var(--dpf-border);
+            border-radius: 14px;
+            padding: 10px;
         }
-    }
 
-    /* Tabs */
-    .dpb4-tab-pane.d-none {
-        display: none !important;
-    }
+        .dpf-team-metric strong {
+            color: var(--dpf-heading);
+            font-size: 16px;
+            font-weight: 950;
+            display: block;
+        }
 
-    /* Kalender-Grid */
-    .dpb4-calendar-grid {
-        display: grid;
-        grid-template-columns: repeat(7, minmax(0, 1fr));
-        grid-gap: .5rem;
-        text-align: center;
-    }
+        .dpf-team-metric span {
+            color: var(--dpf-muted);
+            font-size: 11px;
+            font-weight: 800;
+        }
 
-    .dpb4-calendar-header {
-        font-weight: 600;
-        color: #6b7280;
-        font-size: .8rem;
-    }
+        .dpf-task-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 430px;
+            gap: 14px;
+        }
 
-    .day-cell {
-        padding: .25rem;
-        cursor: pointer;
-    }
+        @media (max-width: 1100px) {
+            .dpf-task-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
-    .dpb4-day-number {
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 999px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto;
-    }
+        .dpf-task-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
 
-    .dpb4-day-number-today {
-        border: 2px solid #4f46e5;
-        background: #fff;
-        color: #111827;
-    }
+        .dpf-task-item {
+            background: var(--dpf-gray-soft);
+            border: 1px solid var(--dpf-border);
+            border-radius: 16px;
+            padding: 13px;
+            margin-bottom: 10px;
+        }
 
-    .dpb4-day-number-has-events {
-        background: #3b82f6;
-        color: #fff;
-    }
+        .dpf-task-item:last-child {
+            margin-bottom: 0;
+        }
 
-    /* Events-Liste (Kalender rechts) */
-    #dayEventsPanel.d-none {
-        display: none !important;
-    }
+        .dpf-metric-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
 
-    .dpb4-event-card {
-        border-left: 4px solid #74b2d4; 
-        padding: .75rem;
-        background: rgba(255, 255, 255, 1);
-        margin-bottom: .5rem;
-    }
+        @media (max-width: 520px) {
+            .dpf-metric-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
 
-    /* Aufgaben / Sprint Snapshot Badges */
-    .dpb4-badge-info    { background: rgba(59,130,246,.12);  color:#2563eb;  border-radius:999px; padding:.15rem .5rem; }
-    .dpb4-badge-primary { background: rgba(79,70,229,.12);   color:#4f46e5;  border-radius:999px; padding:.15rem .5rem; }
-    .dpb4-badge-success { background: rgba(16,185,129,.12);  color:#059669;  border-radius:999px; padding:.15rem .5rem; }
-    .dpb4-badge-warning { background: rgba(245,158,11,.12);  color:#d97706;  border-radius:999px; padding:.15rem .5rem; }
-    .dpb4-badge-danger  { background: rgba(239,68,68,.12);   color:#b91c1c;  border-radius:999px; padding:.15rem .5rem; }
-    .dpb4-badge-secondary { background: rgba(148,163,184,.12); color:#4b5563; border-radius:999px; padding:.15rem .5rem; }
+        .dpf-mini-metric {
+            background: var(--dpf-gray-soft);
+            border: 1px solid var(--dpf-border);
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+        }
 
-    /* Kleine Helfer */
-    .dpb4-text-muted {
-        color: #646464ff;
-    }
+        .dpf-mini-metric strong {
+            display: block;
+            color: var(--dpf-heading);
+            font-size: 24px;
+            font-weight: 950;
+            line-height: 1.05;
+            margin-top: 7px;
+        }
 
-    .dpb4-text-black {
-        color: #e5e7eb;
-    }
+        .dpf-calendar-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 380px;
+            gap: 16px;
+        }
 
-    .dpb4-section-title {
-        font-weight: 600;
-        font-size: 1rem;
-    }
+        @media (max-width: 1100px) {
+            .dpf-calendar-layout {
+                grid-template-columns: 1fr;
+            }
+        }
 
-    /* Tickets – Toolbar + Filter-Layout */
-.dpb4-ticket-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: .75rem;
-}
+        .dpf-calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 8px;
+        }
 
-.dpb4-ticket-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5rem;
-}
+        .dpf-calendar-header {
+            color: var(--dpf-muted);
+            font-size: 12px;
+            font-weight: 950;
+            text-align: center;
+            text-transform: uppercase;
+            padding: 6px 0;
+        }
 
-.dpb4-ticket-filter {
-    min-width: 160px;
-}
+        .dpf-day-cell {
+            min-height: 58px;
+            border: 1px solid var(--dpf-border);
+            border-radius: 16px;
+            background: #fff;
+            cursor: pointer;
+            padding: 8px;
+            transition: var(--dpf-transition);
+        }
 
-@media (max-width: 767.98px) {
-    .dpb4-ticket-toolbar {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .dpb4-ticket-filters {
-        width: 100%;
-        flex-direction: column;
-    }
-    .dpb4-ticket-filter {
-        width: 100%;
-    }
-}
+        .dpf-day-cell:hover {
+            border-color: rgba(116, 178, 212, .45);
+            box-shadow: var(--dpf-shadow-sm);
+        }
 
-/* Mobile Kartenansicht für Tickets */
-  .dpb4-ticket-card {
-      border-radius: .75rem;
-      border: 1px solid rgba(148,163,184,.45);
-      background: rgba(15,23,42,.5);
-      padding: .75rem;
-  }
+        .dpf-day-cell.is-empty {
+            visibility: hidden;
+        }
 
-  .dpb4-ticket-card + .dpb4-ticket-card {
-      margin-top: .5rem;
-  }
+        .dpf-day-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dpf-heading);
+            font-size: 12px;
+            font-weight: 950;
+        }
 
-  .dpb4-ticket-card-label {
-      font-size: .7rem;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      color: #9ca3af;
-      margin-bottom: .15rem;
-  }
+        .dpf-day-cell.is-today .dpf-day-number {
+            background: var(--dpf-purple-soft);
+            color: var(--dpf-purple);
+        }
 
-  /* === TEAM TAB – OWN COLORS & CONTRAST === */
+        .dpf-day-cell.has-events {
+            background: linear-gradient(135deg, rgba(116, 178, 212, .09), rgba(147, 194, 28, .08));
+            border-color: rgba(116, 178, 212, .24);
+        }
 
-/* Background + base text in the Team tab */
-#dpb4-tab-team {
-    background: #f7fafc; /* very light */
-    color: #0b1020;
-}
+        .dpf-day-event-count {
+            margin-top: 8px;
+            font-size: 10px;
+            color: var(--dpf-blue);
+            font-weight: 950;
+        }
 
-/* Team filter buttons */
-#dpb4-tab-team .dpb4-btn-soft {
-    background: var(--dpb4-paleblue);
-    border-color: var(--dpb4-blue);
-    color: #074873;
-}
+        .dpf-event-panel {
+            background: var(--dpf-gray-soft);
+            border: 1px solid var(--dpf-border);
+            border-radius: 20px;
+            padding: 14px;
+            min-height: 280px;
+        }
 
-  #dpb4-tab-team .dpb4-btn-soft:hover,
-  #dpb4-tab-team .dpb4-btn-soft:focus {
-      background: #93c21c;
-      border-color: var(--dpb4-blue);
-      color: #ffffff;
-  }
+        .dpf-event-card {
+            border: 1px solid var(--dpf-border);
+            border-left: 4px solid var(--dpf-blue);
+            border-radius: 16px;
+            padding: 14px;
+            background: #fff;
+            box-shadow: var(--dpf-shadow-sm);
+            margin-bottom: 10px;
+        }
 
-  /* Team cards */
-  #dpb4-tab-team .dpb4-soft-card {
-      background: #ffffff;
-      border-color: var(--dpb4-paleblue);
-  }
+        .dpf-expense-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 16px;
+        }
 
-  /* Text colors inside cards */
-  #dpb4-tab-team .font-weight-bold,
-  #dpb4-tab-team .badge,
-  #dpb4-tab-team .small,
-  #dpb4-tab-team span {
-      color: #0b1020;
-  }
+        @media (max-width: 800px) {
+            .dpf-expense-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
-  #dpb4-tab-team .dpb4-text-muted {
-      color: #4b5563;
-  }
+        .dpf-expense-card {
+            border: 1px solid var(--dpf-border);
+            border-radius: 20px;
+            padding: 16px;
+            background: #fff;
+            box-shadow: var(--dpf-shadow-sm);
+        }
 
+        .dpf-expense-value {
+            color: var(--dpf-heading);
+            font-size: 26px;
+            font-weight: 950;
+            margin-top: 6px;
+        }
 
-</style>
+        .dpf-empty {
+            padding: 38px 18px;
+            text-align: center;
+            border: 1px dashed var(--dpf-border);
+            border-radius: 18px;
+            background: var(--dpf-gray-soft);
+            color: var(--dpf-muted);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .dpf-empty svg {
+            display: block;
+            width: 32px;
+            height: 32px;
+            margin: 0 auto 8px;
+            color: var(--dpf-blue);
+        }
+
+        @media (max-width: 767.98px) {
+            .dpf-filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .dpf-filter {
+                width: 100%;
+            }
+
+            .dpf-select,
+            .dpf-input {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .dpf-panel {
+                padding: 14px;
+                border-radius: 18px;
+            }
+
+            .dpf-hero-inner {
+                padding: 18px;
+            }
+
+            .dpf-department-title {
+                font-size: 24px;
+            }
+        }
+    </style>
 @endsection
 
 @section('content')
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
+    <div class="dpf-wrap">
 
-    <div class="content-wrapper">
-        {{-- Breadcrumbs --}}
-        <div class="content-header row">
-            <div class="content-header-left col-md-9 col-12 mb-2">
-                <div class="row breadcrumbs-top">
-                    <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">ABTEILUNG</h2>
-                        <div class="breadcrumb-wrapper col-12">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="{{ url('/') }}">Dashboard</a>
-                                </li>
-                                <li class="breadcrumb-item">
-                                    <a href="{{ url('/department') }}">Abteilungen</a>
-                                </li>
-                                <li class="breadcrumb-item active">
-                                    Abteilungsprofil
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
+        <div class="dpf-topbar">
+            <div>
+                <div class="dpf-page-kicker">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 21h18M6 21V4h12v17M9 8h6M9 12h6M9 16h6" />
+                    </svg>
+                    Abteilung
                 </div>
+
+                <h1 class="dpf-page-title">Abteilungsprofil</h1>
+                <div class="dpf-page-subtitle">Zentrale Übersicht für Projekte, Tickets, Team, Aufgaben, Kalender und
+                    Kosten.</div>
+            </div>
+
+            <div class="dpf-actions">
+                <a href="{{ url('department_view') }}" class="dpf-btn dpf-btn-soft">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                    Zurück
+                </a>
+
+                <button type="button" class="dpf-btn dpf-btn-blue" data-dpf-tab-jump="calendar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M8 7V3m8 4V3M5 11h14M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
+                    </svg>
+                    Kalender
+                </button>
             </div>
         </div>
 
-        {{-- INHALT --}}
-        <div class="content-body">
+        <section class="dpf-hero">
+            <div class="dpf-hero-inner">
+                <div class="dpf-hero-main">
+                    <div class="dpf-department-head">
+                        <div class="dpf-hero-mark">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <path d="M3 21h18M6 21V4h12v17M9 8h6M9 12h6M9 16h6" />
+                            </svg>
+                        </div>
 
-            {{-- HERO / HEADERBEREICH --}}
-            <div id="dpb4-hero" class="dpb4-ring mb-4">
-                <div class="p-2 p-lg-2">
-                    <div class="row align-items-center">
-                        {{-- Abteilungsinformationen --}}
-                        <div class="col-lg-8 d-flex align-items-start">
-                            <div class="mr-3">
-                                <div class="d-flex align-items-center justify-content-center"
-                                     style="width:64px;height:64px;border-radius:1rem;background:#1e3a8a;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="text-white" width="32" height="32" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M3 21h18M6 21V4h12v17M9 8h6M9 12h6M9 16h6" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        <div style="min-width:0;">
+                            <div class="dpf-department-title-row">
+                                <h2 class="dpf-department-title">{{ $department->department_name }}</h2>
+                                <span class="dpf-status-pill {{ $departmentStatusClass }}">{{ $departmentStatus }}</span>
+                            </div>
+
+                            <p class="dpf-description">
+                                {{ $department->description ?: 'Keine Beschreibung hinterlegt.' }}
+                            </p>
+
+                            <div class="dpf-meta-row">
+                                <span class="dpf-meta-chip">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 22s7-5.686 7-12a7 7 0 1 0-14 0c0 6.314 7 12 7 12z" />
+                                        <circle cx="12" cy="10" r="3" />
                                     </svg>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="d-flex align-items-center mb-1">
-                                    <h1 class="h3 mb-0 mr-2 text-white">{{ $department->department_name }}</h1>
-                                    <span class="dpb4-badge-soft dpb4-badge-emerald">
-                                        {{ $department->status == 'Published' ? 'Aktiv' : 'Inaktiv' }}
-                                    </span>
-                                </div>
-                                <p class="mt-1 mb-2 text-black">
-                                    {{ $department->description ?: 'Keine Beschreibung hinterlegt.' }}
-                                </p>
-                                <div class="small text-black">
-                                    <span class="mr-3 d-inline-flex align-items-center">
-                                        <svg class="mr-1" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                            <path d="M12 22s7-5.686 7-12a7 7 0 10-14 0c0 6.314 7 12 7 12z" stroke="currentColor" stroke-width="1.5"/>
-                                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/>
-                                        </svg>
-                                        {{ $department->branch }}
-                                    </span>
-                                    <span class="mr-3 d-inline-flex align-items-center">
-                                        <svg class="mr-1" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                            <path d="M3 21h18M6 21V4h12v17M9 8h6M9 12h6M9 16h6" stroke="currentColor" stroke-width="1.5"/>
-                                        </svg>
-                                        Abteilungs-ID: {{ $department->id }}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                                    {{ $department->branch ?: 'Kein Standort' }}
+                                </span>
 
-                        {{-- Abteilungsleiter --}}
-                        <div class="col-lg-4 mt-3 mt-lg-0">
-                            <div class="dpb4-glass p-3">
-                                <div class="d-flex align-items-center">
-                                    <img class="dpb4-avatar-36 mr-3"
-                                         src="{{ $department->emp_image ? asset('images/employee/' . $department->emp_image) : 'https://via.placeholder.com/36' }}"
-                                         alt="Abteilungsleiter">
-                                    <div>
-                                        <div class="text-uppercase small dpb4-text-muted">Abteilungsleiter</div>
-                                        <div class="h6 mb-1 text-white">
-                                            {{ $department->emp_name }} {{ $department->emp_lastname }}
-                                        </div>
-                                        <div class="small">
-                                            <span class="dpb4-dot" style="background:#34d399;"></span>
-                                            Verfügbar
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-3 d-flex">
-                                    <button class="btn btn-sm dpb4-btn-soft mr-2">Nachricht</button>
-                                    <button class="btn btn-sm dpb4-btn-soft mr-2">Termin planen</button>
-                                    <button class="btn btn-sm dpb4-btn-soft">Anrufen</button>
-                                </div>
+                                <span class="dpf-meta-chip">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 7h16M4 12h16M4 17h16" />
+                                    </svg>
+                                    ID: {{ $department->id }}
+                                </span>
+
+                                <span class="dpf-meta-chip">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    </svg>
+                                    {{ $teamCount }} Teammitglieder
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    {{-- KPI-Karten --}}
-                    <div class="row mt-4">
-                        <div class="col-6 col-sm-3 mb-2 mb-sm-0">
-                            <div class="dpb4-glass p-3 h-100">
-                                <div class="small dpb4-text-muted">Aktive Projekte</div>
-                                <div class="h3 mb-0">{{ $projectsCount ?? 0 }}</div>
-                                <div class="small text-success">+2 in diesem Monat</div>
+                    <aside class="dpf-leader-card">
+                        <div class="dpf-leader-inner">
+                            <img class="dpf-avatar-lg" src="{{ $leaderImage }}" alt="Abteilungsleiter"
+                                onerror="this.src='{{ asset('images/gender/male.png') }}'">
+
+                            <div style="min-width:0;">
+                                <div class="dpf-label">Abteilungsleiter</div>
+                                <div class="dpf-leader-name">
+                                    {{ trim(($department->emp_name ?? '') . ' ' . ($department->emp_lastname ?? '')) ?: 'Nicht zugeordnet' }}
+                                </div>
+                                <div class="dpf-online">Verfügbar</div>
                             </div>
                         </div>
-                        <div class="col-6 col-sm-3 mb-2 mb-sm-0">
-                            <div class="dpb4-glass p-3 h-100">
-                                <div class="small dpb4-text-muted">Offene Tickets</div>
-                                <div class="h3 mb-0">{{ $ticketsCount ?? 0 }}</div>
-                                <div class="small text-warning">SLA-Risiko: {{ $slaRiskCount ?? 0 }}</div>
-                            </div>
+
+                        <div class="dpf-leader-actions">
+                            <button type="button" class="dpf-btn dpf-btn-soft">Nachricht</button>
+                            <button type="button" class="dpf-btn dpf-btn-soft">Termin planen</button>
+                            <button type="button" class="dpf-btn dpf-btn-soft">Anrufen</button>
                         </div>
-                        <div class="col-6 col-sm-3 mt-2 mt-sm-0">
-                            <div class="dpb4-glass p-3 h-100">
-                                <div class="small dpb4-text-muted">Teammitglieder</div>
-                                <div class="h3 mb-0">{{ $employees->count() }}</div>
-                                <div class="small dpb4-text-muted">Mitarbeiter im Team</div>
-                            </div>
+                    </aside>
+                </div>
+
+                <div class="dpf-kpi-grid">
+                    <div class="dpf-kpi">
+                        <div class="dpf-kpi-icon projects">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 7h18M3 12h18M3 17h18" />
+                            </svg>
                         </div>
-                        <div class="col-6 col-sm-3 mt-2 mt-sm-0">
-                            <div class="dpb4-glass p-3 h-100">
-                                <div class="small dpb4-text-muted">Termine (7 Tage)</div>
-                                <div class="h3 mb-0">{{ $appointmentsCount ?? 0 }}</div>
-                                <div class="small" style="color:#f0abfc;">davon 3 extern</div>
-                            </div>
+                        <div style="min-width:0;">
+                            <div class="dpf-kpi-label">Aktive Projekte</div>
+                            <div class="dpf-kpi-value">{{ $projectsCount ?? 0 }}</div>
+                            <div class="dpf-kpi-sub">Aktuell in Bearbeitung</div>
+                        </div>
+                    </div>
+
+                    <div class="dpf-kpi">
+                        <div class="dpf-kpi-icon tickets">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10 6h4M10 12h4M10 18h4" />
+                                <path d="M4 4h16v16H4z" />
+                            </svg>
+                        </div>
+                        <div style="min-width:0;">
+                            <div class="dpf-kpi-label">Offene Tickets</div>
+                            <div class="dpf-kpi-value" id="dpf-kpi-ticket-value">{{ $ticketsCount ?? 0 }}</div>
+                            <div class="dpf-kpi-sub">SLA-Risiko: {{ $slaRiskCount ?? 0 }}</div>
+                        </div>
+                    </div>
+
+                    <div class="dpf-kpi">
+                        <div class="dpf-kpi-icon team">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                            </svg>
+                        </div>
+                        <div style="min-width:0;">
+                            <div class="dpf-kpi-label">Teammitglieder</div>
+                            <div class="dpf-kpi-value" id="dpf-kpi-team-value">{{ $teamCount }}</div>
+                            <div class="dpf-kpi-sub">Mitarbeiter im Team</div>
+                        </div>
+                    </div>
+
+                    <div class="dpf-kpi">
+                        <div class="dpf-kpi-icon calendar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M8 7V3m8 4V3M5 11h14M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
+                            </svg>
+                        </div>
+                        <div style="min-width:0;">
+                            <div class="dpf-kpi-label">Termine</div>
+                            <div class="dpf-kpi-value">{{ $appointmentsCount ?? 0 }}</div>
+                            <div class="dpf-kpi-sub">Kommende Termine</div>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            {{-- TABS --}}
-            <div id="dpb4-tabs" class="dpb4-glass mb-3 p-1">
-                <ul class="nav nav-pills align-items-center" id="dpb4-tab-nav">
-                    <li class="nav-item mr-2">
-                        <a href="#" class="nav-link py-2 px-3 dpb4-tab-link active" data-tab="projects">
-                            Projekte
-                            <span class="badge badge-light ml-2" id="dpb4-count-projects">{{ $projectsCount ?? 0 }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mr-2">
-                        <a href="#" class="nav-link py-2 px-3 dpb4-tab-link" data-tab="tickets">
-                            Tickets
-                            <span class="badge badge-light ml-2" id="dpb4-count-tickets">{{ $ticketsCount ?? 0 }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mr-2">
-                        <a href="#" class="nav-link py-2 px-3 dpb4-tab-link" data-tab="team">
-                            Team
-                            <span class="badge badge-light ml-2" id="dpb4-count-team">{{ $employees->count() }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mr-2">
-                        <a href="#" class="nav-link py-2 px-3 dpb4-tab-link" data-tab="tasks">
-                            Aufgaben
-                            <span class="badge badge-light ml-2" id="dpb4-count-tasks">0</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mr-2">
-                        <a href="#" class="nav-link py-2 px-3 dpb4-tab-link" data-tab="calendar">
-                            Kalender
-                            <span class="badge badge-light ml-2" id="dpb4-count-calendar">{{ $appointmentsCount ?? 0 }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mr-2">
-                        <a href="#" class="nav-link py-2 px-3 dpb4-tab-link" data-tab="expenses">
-                            Kosten
-                            <span class="badge badge-light ml-2" id="dpb4-count-expenses">0</span>
-                        </a>
-                    </li>
+        <nav class="dpf-tabs-shell">
+            <div class="dpf-tabs-scroll" id="dpf-tab-nav">
+                <button type="button" class="dpf-tab-btn active" data-tab="projects">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 7h18M3 12h18M3 17h18" />
+                    </svg>
+                    Projekte
+                    <span class="dpf-tab-count" id="dpf-count-projects">{{ $projectsCount ?? 0 }}</span>
+                </button>
 
-                    <li class="ml-auto d-none d-sm-flex align-items-center">
-                        <input type="text" class="form-control  mr-2" placeholder="Globale Suche…">
-                        <select class="form-control ">
-                            <option>Alle</option>
-                            <option>Aktiv</option>
-                            <option>Archiviert</option>
+                <button type="button" class="dpf-tab-btn" data-tab="tickets">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16v16H4z" />
+                        <path d="M9 9h6M9 15h6" />
+                    </svg>
+                    Tickets
+                    <span class="dpf-tab-count" id="dpf-count-tickets">{{ $ticketsCount ?? 0 }}</span>
+                </button>
+
+                <button type="button" class="dpf-tab-btn" data-tab="team">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                    </svg>
+                    Team
+                    <span class="dpf-tab-count" id="dpf-count-team">{{ $teamCount }}</span>
+                </button>
+
+                <button type="button" class="dpf-tab-btn" data-tab="tasks">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11l3 3L22 4" />
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                    </svg>
+                    Aufgaben
+                    <span class="dpf-tab-count" id="dpf-count-tasks">0</span>
+                </button>
+
+                <button type="button" class="dpf-tab-btn" data-tab="calendar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M8 7V3m8 4V3M5 11h14M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
+                    </svg>
+                    Kalender
+                    <span class="dpf-tab-count" id="dpf-count-calendar">{{ $appointmentsCount ?? 0 }}</span>
+                </button>
+
+                <button type="button" class="dpf-tab-btn" data-tab="expenses">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                    Kosten
+                    <span class="dpf-tab-count" id="dpf-count-expenses">0</span>
+                </button>
+
+                <div class="dpf-tab-tools">
+                    <input type="text" class="dpf-input" id="dpf-global-search" placeholder="Globale Suche…">
+                    <select class="dpf-select" id="dpf-global-filter">
+                        <option value="">Alle</option>
+                        <option value="active">Aktiv</option>
+                        <option value="archived">Archiviert</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+
+        <section id="dpf-tab-projects" class="dpf-panel dpf-tab-pane">
+            <div class="dpf-panel-head">
+                <div>
+                    <h3 class="dpf-section-title">Projekte</h3>
+                    <div class="dpf-section-sub">Projektübersicht der Abteilung.</div>
+                </div>
+            </div>
+
+            <div class="dpf-empty">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 7h18M3 12h18M3 17h18" />
+                </svg>
+                Projekte können hier später geladen oder direkt aus Ihrem Projektmodul eingebunden werden.
+            </div>
+        </section>
+
+        <section id="dpf-tab-tickets" class="dpf-panel dpf-tab-pane d-none">
+            <div class="dpf-panel-head">
+                <div>
+                    <h3 class="dpf-section-title">Tickets</h3>
+                    <div class="dpf-section-sub">Gefilterte Tickets mit Priorität, Status und SLA-Fortschritt.</div>
+                </div>
+
+                <div class="dpf-filter-row">
+                    <div class="dpf-filter">
+                        <label for="dpf-ticket-priority">Priorität</label>
+                        <select id="dpf-ticket-priority" class="dpf-select">
+                            <option value="">Alle Prioritäten</option>
+                            <option value="Critical">Kritisch</option>
+                            <option value="High">Hoch</option>
+                            <option value="Medium">Mittel</option>
+                            <option value="Low">Niedrig</option>
                         </select>
-                    </li>
-                </ul>
+                    </div>
+
+                    <div class="dpf-filter">
+                        <label for="dpf-ticket-status">Status</label>
+                        <select id="dpf-ticket-status" class="dpf-select">
+                            <option value="">Alle Status</option>
+                            <option value="Open">Offen</option>
+                            <option value="In Progress">In Bearbeitung</option>
+                            <option value="Waiting">Warten</option>
+                            <option value="Resolved">Gelöst</option>
+                        </select>
+                    </div>
+
+                    <div class="dpf-filter">
+                        <label for="dpf-ticket-sort">Sortierung</label>
+                        <select id="dpf-ticket-sort" class="dpf-select">
+                            <option value="sla">Nach SLA</option>
+                            <option value="priority">Nach Priorität</option>
+                            <option value="updated">Nach Aktualisierung</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-              <div class="row">
-                {{-- LINKE SPALTE --}}
-                <div class="col-12">
+            <div class="dpf-table-wrap d-none d-md-block">
+                <table class="dpf-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Betreff</th>
+                            <th>Anfragender</th>
+                            <th>Priorität</th>
+                            <th>Status</th>
+                            <th>SLA</th>
+                            <th class="text-right">Aktion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dpf-tickets-body">
+                        <tr>
+                            <td colspan="7">
+                                <div class="dpf-empty">Tickets werden geladen...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                    {{-- TAB: PROJEKTE (nur Platzhalter / statisch) --}}
-                    <div id="dpb4-tab-projects" class="dpb4-glass p-3 mb-3 dpb4-tab-pane">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div class="dpb4-section-title">Projekte</div>
-                        </div>
-                        <p class="mb-0 dpb4-text-muted">
-                             
-                        </p>
+            <div class="d-block d-md-none" id="dpf-tickets-cards">
+                <div class="dpf-empty">Tickets werden geladen...</div>
+            </div>
+        </section>
+
+        <section id="dpf-tab-team" class="dpf-panel dpf-tab-pane d-none">
+            <div class="dpf-panel-head">
+                <div>
+                    <h3 class="dpf-section-title">Team</h3>
+                    <div class="dpf-section-sub"><span id="dpf-team-count-label">{{ $teamCount }}</span> Teammitglieder in
+                        dieser Abteilung.</div>
+                </div>
+            </div>
+
+            <div class="dpf-team-grid" id="dpf-team-grid">
+                <div class="dpf-empty">Team wird geladen...</div>
+            </div>
+        </section>
+
+        <section id="dpf-tab-tasks" class="dpf-panel dpf-tab-pane d-none">
+            <div class="dpf-panel-head">
+                <div>
+                    <h3 class="dpf-section-title">Aufgaben</h3>
+                    <div class="dpf-section-sub">Aufgabenübersicht inklusive Sprint-Metriken.</div>
+                </div>
+
+                <div class="dpf-filter-row">
+                    <div class="dpf-filter">
+                        <label for="dpf-task-filter">Status</label>
+                        <select id="dpf-task-filter" class="dpf-select">
+                            <option value="">Alle</option>
+                            <option value="open">Offen</option>
+                            <option value="in_progress">In Bearbeitung</option>
+                            <option value="completed">Erledigt</option>
+                            <option value="rejected">Abgelehnt</option>
+                            <option value="junk">Junk</option>
+                        </select>
                     </div>
 
-                    {{-- TAB: TICKETS --}}
-                     <div id="dpb4-tab-tickets" class="dpb4-glass p-3 mb-3 dpb4-tab-pane d-none">
-                        {{-- Filter / Toolbar --}}
-                        <div class="dpb4-ticket-toolbar mb-3">
-                            <div class="dpb4-ticket-filters">
-                                <div class="dpb4-ticket-filter">
-                                    <label for="dpb4-ticket-priority" class="small dpb4-text-muted d-block mb-1">
-                                        Priorität
-                                    </label>
-                                    <select id="dpb4-ticket-priority" class="form-control ">
-                                        <option value="">Alle Prioritäten</option>
-                                        <option value="Critical">Kritisch</option>
-                                        <option value="High">Hoch</option>
-                                        <option value="Medium">Mittel</option>
-                                        <option value="Low">Niedrig</option>
-                                    </select>
-                                </div>
+                    <div class="dpf-filter">
+                        <label for="dpf-task-sort">Sortierung</label>
+                        <select id="dpf-task-sort" class="dpf-select">
+                            <option value="due">Nach Fälligkeit</option>
+                            <option value="priority">Nach Priorität</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-                                <div class="dpb4-ticket-filter">
-                                    <label for="dpb4-ticket-status" class="small dpb4-text-muted d-block mb-1">
-                                        Status
-                                    </label>
-                                    <select id="dpb4-ticket-status" class="form-control ">
-                                        <option value="">Alle Status</option>
-                                        <option value="Open">Offen</option>
-                                        <option value="In Progress">In Bearbeitung</option>
-                                        <option value="Waiting">Warten</option>
-                                        <option value="Resolved">Gelöst</option>
-                                    </select>
-                                </div>
-
-                                <div class="dpb4-ticket-filter">
-                                    <label for="dpb4-ticket-sort" class="small dpb4-text-muted d-block mb-1">
-                                        Sortierung
-                                    </label>
-                                    <select id="dpb4-ticket-sort" class="form-control ">
-                                        <option value="sla">Nach SLA sortieren</option>
-                                        <option value="priority">Nach Priorität sortieren</option>
-                                        <option value="updated">Nach Aktualisierung sortieren</option>
-                                    </select>
-                                </div>
-                            </div>
+            <div class="dpf-task-grid">
+                <div class="dpf-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <div class="dpf-label">Meine Aufgaben</div>
+                            <h4 class="dpf-section-title mt-1">Aufgabenliste</h4>
                         </div>
-
-                        {{-- Desktop: Tabelle --}}
-                        <div class="table-responsive d-none d-md-block">
-                            <table class="table table-hover dpb4-table mb-0">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Betreff</th>
-                                    <th>Anfragender</th>
-                                    <th>Priorität</th>
-                                    <th>Status</th>
-                                    <th>SLA</th>
-                                    <th class="text-right">Aktion</th>
-                                </tr>
-                                </thead>
-                                <tbody id="dpb4-tickets-body">
-                                {{-- wird per AJAX gefüllt --}}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {{-- Mobile: Kartenansicht --}}
-                        <div class="d-block d-md-none" id="dpb4-tickets-cards">
-                            {{-- wird per AJAX gefüllt --}}
-                        </div>
+                        <span class="dpf-pill secondary"><span id="dpf-task-count">0</span> Einträge</span>
                     </div>
 
-                   
-                    {{-- TAB: TEAM --}}
-                    <div id="dpb4-tab-team" class="dpb4-glass p-3 mb-3 dpb4-tab-pane d-none">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="dpb4-section-title">Team</div>
-                            <div class="small dpb4-text-muted">
-                                {{ $employees->count() }} Teammitglieder
-                            </div>
+                    <ul class="dpf-task-list" id="dpf-task-list">
+                        <li class="dpf-empty">Aufgaben werden geladen...</li>
+                    </ul>
+                </div>
+
+                <div class="dpf-card">
+                    <div class="dpf-label">Sprint-Übersicht</div>
+                    <h4 class="dpf-section-title mt-1 mb-3">Metriken</h4>
+
+                    <div class="dpf-metric-grid">
+                        <div class="dpf-mini-metric">
+                            <span class="dpf-pill info">Offen</span>
+                            <strong id="dpf-metric-open">0</strong>
                         </div>
 
-                        <div class="row" id="dpb4-team-grid">
-                            {{-- wird per AJAX gefüllt --}}
-                        </div>
-                    </div>
-
-
-                    {{-- TAB: AUFGABEN --}}
-                    <div id="dpb4-tab-tasks" class="dpb4-glass p-3 mb-3 dpb4-tab-pane d-none">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="dpb4-section-title">Aufgaben</div>
-                            <div class="d-flex">
-                                <select id="dpb4-task-filter" class="form-control  mr-2">
-                                  <option value="">Alle</option>
-                                  <option value="open">Offen</option>
-                                  <option value="in_progress">In Bearbeitung</option>
-                                  <option value="completed">Erledigt</option>
-                                  <option value="rejected">Abgelehnt</option>
-                                  <option value="junk">Junk</option>
-                              </select>
-
-                                <select id="dpb4-task-sort" class="form-control ">
-                                    <option value="due">Nach Fälligkeitsdatum sortieren</option>
-                                    <option value="priority">Nach Priorität sortieren</option>
-                                </select>
-                            </div>
+                        <div class="dpf-mini-metric">
+                            <span class="dpf-pill primary">In Arbeit</span>
+                            <strong id="dpf-metric-inprogress">0</strong>
                         </div>
 
-                        <div class="row">
-                            {{-- Liste links --}}
-                            <div class="col-md-6">
-                                <div class="dpb4-soft-card p-3 h-100">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="font-weight-bold">Meine Aufgaben</div>
-                                        <div class="small dpb4-text-muted">
-                                            <span id="dpb4-task-count">0</span> Einträge
-                                        </div>
-                                    </div>
+                        <div class="dpf-mini-metric">
+                            <span class="dpf-pill success">Erledigt</span>
+                            <strong id="dpf-metric-completed">0</strong>
+                        </div>
 
-                                    <ul class="list-unstyled mt-2 mb-0" id="dpb4-task-list">
-                                        {{-- wird per AJAX gefüllt --}}
-                                    </ul>
-                                </div>
-                            </div>
+                        <div class="dpf-mini-metric">
+                            <span class="dpf-pill warning">Abgelehnt</span>
+                            <strong id="dpf-metric-rejected">0</strong>
+                        </div>
 
-                            {{-- Snapshot rechts --}}
-                            <div class="col-md-6 mt-3 mt-md-0">
-                                <div class="dpb4-soft-card p-3 h-100">
-                                    <div class="font-weight-bold mb-2">Sprint-Übersicht</div>
+                        <div class="dpf-mini-metric">
+                            <span class="dpf-pill danger">Junk</span>
+                            <strong id="dpf-metric-junk">0</strong>
+                        </div>
 
-                                      <div class="row text-center mt-1">
-                                        <div class="col-4 mb-2">
-                                            <div class="dpb4-badge-info">Offen</div>
-                                            <div class="h3 mt-1 mb-0" id="dpb4-metric-open">0</div>
-                                        </div>
-                                        <div class="col-4 mb-2">
-                                            <div class="dpb4-badge-primary">In Bearbeitung</div>
-                                            <div class="h3 mt-1 mb-0" id="dpb4-metric-inprogress">0</div>
-                                        </div>
-                                        <div class="col-4 mb-2">
-                                            <div class="dpb4-badge-success">Erledigt</div>
-                                            <div class="h3 mt-1 mb-0" id="dpb4-metric-completed">0</div>
-                                        </div>
-                                        <div class="col-4 mt-3">
-                                            <div class="dpb4-badge-warning">Abgelehnt</div>
-                                            <div class="h3 mt-1 mb-0" id="dpb4-metric-rejected">0</div>
-                                        </div>
-                                        <div class="col-4 mt-3">
-                                            <div class="dpb4-badge-danger">Junk</div>
-                                            <div class="h3 mt-1 mb-0" id="dpb4-metric-junk">0</div>
-                                        </div>
-                                        <div class="col-4 mt-3">
-                                            <div class="dpb4-badge-secondary">Sonstige</div>
-                                            <div class="h3 mt-1 mb-0" id="dpb4-metric-other">0</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mt-3">
-                                        <div class="small dpb4-text-muted mb-1">Burndown</div>
-                                        <div class="progress" style="height:6px;">
-                                            <div id="dpb4-burndown-bar" class="progress-bar" role="progressbar"
-                                                 style="width:0%;background-image:linear-gradient(90deg,#3b82f6,#10b981);">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="dpf-mini-metric">
+                            <span class="dpf-pill secondary">Sonstige</span>
+                            <strong id="dpf-metric-other">0</strong>
                         </div>
                     </div>
 
-                    {{-- TAB: KALENDER --}}
-                    <div id="dpb4-tab-calendar" class="dpb4-glass p-3 mb-3 dpb4-tab-pane d-none">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="mb-0">Kalender</h5>
-                            <div>
-                                <button id="prevMonth" class="btn btn-sm dpb4-btn-soft mr-2">&laquo; Vorheriger Monat</button>
-                                <button id="nextMonth" class="btn btn-sm dpb4-btn-soft">Nächster Monat &raquo;</button>
-                            </div>
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="dpf-label">Burndown</span>
+                            <span class="dpf-label" id="dpf-burndown-label">0%</span>
                         </div>
-
-                        <h5 id="calendarTitle" class="mb-2"></h5>
-
-                        <div id="calendar" class="dpb4-calendar-grid mb-2">
-                            {{-- wird per JS aufgebaut --}}
-                        </div>
-
-                        <div id="dayEventsPanel" class="mt-2 d-none">
-                            <h6 class="font-weight-bold mb-1">
-                                <span id="selectedDate" class="text-dark"></span>
-                            </h6>
-                            <div id="eventCards"></div>
+                        <div class="dpf-progress">
+                            <div id="dpf-burndown-bar" class="dpf-progress-bar" style="width:0%;"></div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                {{-- RECHTE SPALTE: KOSTEN --}}  
-                  <div id="dpb4-tab-expenses" class="dpb4-glass p-3 mb-3 dpb4-tab-pane d-none"> 
-                      <h5 class="mb-3">Abteilungskosten – Übersicht</h5>
+        <section id="dpf-tab-calendar" class="dpf-panel dpf-tab-pane d-none">
+            <div class="dpf-panel-head">
+                <div>
+                    <h3 class="dpf-section-title">Kalender</h3>
+                    <div class="dpf-section-sub" id="calendarTitle">—</div>
+                </div>
 
-                      <div class="row text-center">
-                          <div class="col-12 col-md-4 mb-3">
-                              <div class="dpb4-soft-card p-3">
-                                  <div class="small dpb4-text-muted">Monatlich</div>
-                                  <div class="h4 text-primary" id="dpb4-exp-monthly">0 €</div>
-                              </div>
-                          </div>
-                          <div class="col-12 col-md-4 mb-3">
-                              <div class="dpb4-soft-card p-3">
-                                  <div class="small dpb4-text-muted">Quartal</div>
-                                  <div class="h4 text-info" id="dpb4-exp-quarterly">0 €</div>
-                              </div>
-                          </div>
-                          <div class="col-12 col-md-4 mb-3">
-                              <div class="dpb4-soft-card p-3">
-                                  <div class="small dpb4-text-muted">Jährlich</div>
-                                  <div class="h4 text-success" id="dpb4-exp-yearly">0 €</div>
-                              </div>
-                          </div>
-                      </div>
+                <div class="dpf-actions">
+                    <button id="prevMonth" type="button" class="dpf-btn dpf-btn-soft">‹ Vorheriger Monat</button>
+                    <button id="nextMonth" type="button" class="dpf-btn dpf-btn-soft">Nächster Monat ›</button>
+                </div>
+            </div>
 
-                      <div class="mt-3">
-                          <div class="small dpb4-text-muted mb-1">Verteilung (Monat / Jahr)</div>
-                          <div class="progress" style="height:8px;">
-                              <div id="dpb4-exp-dist-bar" class="progress-bar bg-primary" role="progressbar" style="width:0%;"></div>
-                          </div>
-                          <div class="d-flex justify-content-between small dpb4-text-muted mt-1">
-                              <span>Monat</span><span>Jahr</span>
-                          </div>
-                      </div>
+            <div class="dpf-calendar-layout">
+                <div>
+                    <div id="calendar" class="dpf-calendar-grid"></div>
+                </div>
 
-                      <div class="mt-4">
-                          <canvas id="expenseChart" height="140"></canvas>
-                      </div>
-                  </div>
-                 
-            </div> {{-- /row --}}
-        </div> {{-- /content-body --}}
+                <aside class="dpf-event-panel" id="dayEventsPanel">
+                    <div class="dpf-label">Ausgewählter Tag</div>
+                    <h4 class="dpf-section-title mt-1" id="selectedDate">Kein Tag ausgewählt</h4>
+                    <div id="eventCards" class="mt-3">
+                        <div class="dpf-empty">Wählen Sie einen Tag im Kalender aus.</div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section id="dpf-tab-expenses" class="dpf-panel dpf-tab-pane d-none">
+            <div class="dpf-panel-head">
+                <div>
+                    <h3 class="dpf-section-title">Abteilungskosten</h3>
+                    <div class="dpf-section-sub">Monatliche, quartalsweise und jährliche Kostenübersicht.</div>
+                </div>
+            </div>
+
+            <div class="dpf-expense-grid">
+                <div class="dpf-expense-card">
+                    <div class="dpf-label">Monatlich</div>
+                    <div class="dpf-expense-value" id="dpf-exp-monthly">0 €</div>
+                </div>
+
+                <div class="dpf-expense-card">
+                    <div class="dpf-label">Quartal</div>
+                    <div class="dpf-expense-value" id="dpf-exp-quarterly">0 €</div>
+                </div>
+
+                <div class="dpf-expense-card">
+                    <div class="dpf-label">Jährlich</div>
+                    <div class="dpf-expense-value" id="dpf-exp-yearly">0 €</div>
+                </div>
+            </div>
+
+            <div class="dpf-card">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="dpf-label">Verteilung Monat / Jahr</span>
+                    <span class="dpf-label" id="dpf-exp-dist-label">0%</span>
+                </div>
+
+                <div class="dpf-progress mb-4">
+                    <div id="dpf-exp-dist-bar" class="dpf-progress-bar" style="width:0%;"></div>
+                </div>
+
+                <canvas id="expenseChart" height="140"></canvas>
+            </div>
+        </section>
     </div>
-</div>
 @endsection
 
 @section('script')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-    const departmentId = {{ $department->id }};
-    let dpb4Tickets = [];
-    let dpb4Team = [];
-    let dpb4Tasks = [];
-    let dpb4Expenses = { monthly:0, quarterly:0, yearly:0 };
-    let dpb4ExpenseChart = null;
+    <script>
+        (function () {
+            'use strict';
 
-    /* ==== HELFER: BADGE-KLASSEN ==== */
-    function priorityBadgeClass(p) {
-        if (p === 'Critical') return 'badge badge-danger';
-        if (p === 'High')     return 'badge badge-warning';
-        if (p === 'Medium')   return 'badge badge-primary';
-        return 'badge badge-secondary';
-    }
+            const departmentId = @json($department->id);
 
-    function priorityDotStyle(p) {
-        if (p === 'Critical') return 'background:#f87171;';
-        if (p === 'High')     return 'background:#fbbf24;';
-        if (p === 'Medium')   return 'background:#818cf8;';
-        return 'background:#9ca3af;';
-    }
+            const routes = {
+                tickets: @json(url('get/department/ticket')) + '/' + departmentId,
+                team: @json(route('department.profile.json', ['id' => $department->id])),
+                tasks: @json(url('department')) + '/' + departmentId + '/tasks/json',
+                expenses: @json(url('department')) + '/' + departmentId + '/expense/json',
+                calendar: @json(route('department.calendar', ':id')).replace(':id', departmentId),
+                employeeImageBase: @json(asset('images/employee')),
+                defaultAvatar: @json(asset('images/gender/male.png')),
+                appointmentBase: @json(url('appointment_details')),
+                problemBase: @json(url('problem/profile')),
+            };
 
-    function statusBadgeClass(s) {
-        const v = (s || '').toString().toLowerCase();
+            const state = {
+                tickets: [],
+                team: [],
+                tasks: [],
+                expenses: { monthly: 0, quarterly: 0, yearly: 0 },
+                expenseChart: null,
+                events: [],
+                currentDate: new Date(),
+            };
 
-        if (['open', 'in_progress', 'in progress', 'new', 'offen'].includes(v)) {
-            return 'badge badge-info';
-        }
-        if (['review', 'pending', 'waiting'].includes(v)) {
-            return 'badge badge-warning';
-        }
-        if (['done', 'completed', 'resolved'].includes(v)) {
-            return 'badge badge-success';
-        }
-        if (['blocked', 'cancel', 'rejected', 'junk'].includes(v)) {
-            return 'badge badge-danger';
-        }
-        return 'badge badge-light';
-    }
+            const dom = {
+                ticketBody: document.getElementById('dpf-tickets-body'),
+                ticketCards: document.getElementById('dpf-tickets-cards'),
+                teamGrid: document.getElementById('dpf-team-grid'),
+                taskList: document.getElementById('dpf-task-list'),
+                calendar: document.getElementById('calendar'),
+                calendarTitle: document.getElementById('calendarTitle'),
+                dayEventsPanel: document.getElementById('dayEventsPanel'),
+                selectedDate: document.getElementById('selectedDate'),
+                eventCards: document.getElementById('eventCards'),
+            };
 
-    /* ==== TABS ==== */
-    function initTabs() {
-        $('.dpb4-tab-link').on('click', function (e) {
-            e.preventDefault();
-            const tab = $(this).data('tab');
-
-            $('.dpb4-tab-link').removeClass('active');
-            $(this).addClass('active');
-
-            $('.dpb4-tab-pane').addClass('d-none');
-            $('#dpb4-tab-' + tab).removeClass('d-none');
-        });
-    }
-
-    /* ==== TICKETS PER AJAX LADEN ==== */
-    function loadTickets() {
-        const url = "{{ url('get/department/ticket') }}/" + departmentId;
-
-        $.getJSON(url, function (res) {
-            if (!res || !res.tickets) {
-                return;
+            function escapeHtml(value) {
+                return String(value ?? '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
             }
 
-            dpb4Tickets = res.tickets.map(function (t) {
-                return {
-                    id: t.id,
-                    code: t.ticket_no ? '#' + t.ticket_no : '#' + t.id,
-                    subject: t.title || '(Kein Titel)',
-                    product: t.product || '',
-                    priority: t.priority || 'Medium',
-                    status: t.status || 'Open',
-                    sla: t.sla || '—',
-                    slaProgress: t.sla_progress || 0,
-                    deptCount: t.dept_employee_count || 0,
-                    requester: {
-                        name: (t.dept_employees && t.dept_employees.length)
-                            ? (t.dept_employees[0].name)
-                            : 'Unzugeordnet',
-                        avatar: (t.dept_employees && t.dept_employees.length && t.dept_employees[0].image)
-                            ? t.dept_employees[0].image
-                            : 'https://i.pravatar.cc/40?u=' + t.id
-                    },
-                    updated: t.updated_at || new Date().toISOString().slice(0, 10)
-                };
-            });
+            function toNumber(value) {
+                const number = Number(value ?? 0);
+                return Number.isFinite(number) ? number : 0;
+            }
 
-            $('#dpb4-count-tickets').text(dpb4Tickets.length);
-            renderTickets();
-        });
-    }
+            function formatMoney(value) {
+                return toNumber(value).toLocaleString('de-DE') + ' €';
+            }
 
-    function renderTickets() {
-        const priorityFilter = $('#dpb4-ticket-priority').val() || '';
-        const statusFilter   = $('#dpb4-ticket-status').val() || '';
-        const sortMode       = $('#dpb4-ticket-sort').val() || 'sla';
+            function formatDateKey(date) {
+                const y = date.getFullYear();
+                const m = String(date.getMonth() + 1).padStart(2, '0');
+                const d = String(date.getDate()).padStart(2, '0');
 
-        let list = dpb4Tickets.slice();
+                return `${y}-${m}-${d}`;
+            }
 
-        if (priorityFilter) {
-            list = list.filter(t => t.priority === priorityFilter);
-        }
-        if (statusFilter) {
-            list = list.filter(t => t.status === statusFilter);
-        }
+            function imageUrl(filename) {
+                if (!filename) return routes.defaultAvatar;
+                if (String(filename).startsWith('http')) return filename;
+                return routes.employeeImageBase + '/' + filename;
+            }
 
-        if (sortMode === 'priority') {
-            const order = { Critical: 0, High: 1, Medium: 2, Low: 3 };
-            list.sort((a, b) => (order[a.priority] || 9) - (order[b.priority] || 9));
-        } else if (sortMode === 'updated') {
-            list.sort((a, b) => new Date(b.updated) - new Date(a.updated));
-        } else {
-            list.sort((a, b) => b.slaProgress - a.slaProgress);
-        }
-
-        // Desktop: Tabellen-HTML
-        let htmlTable = '';
-        // Mobile: Karten-HTML
-        let htmlCards = '';
-
-        list.forEach(function (t) {
-            // Tabelle (md+)
-            htmlTable += `
-                <tr>
-                    <td class="text-muted">${t.code}</td>
-                    <td>
-                        <div class="font-weight-bold text-dark">${t.subject}</div>
-                        <div class="small text-muted">${t.product || '&nbsp;'}</div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <img src="${t.requester.avatar}" class="dpb4-avatar-24 mr-2" alt="">
-                            <span>${t.requester.name}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <span class="${priorityBadgeClass(t.priority)}">
-                            <span class="dpb4-dot mr-1" style="${priorityDotStyle(t.priority)}"></span>
-                            ${t.priority}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="${statusBadgeClass(t.status)}">${t.status}</span>
-                    </td>
-                    <td style="min-width:160px;">
-                        <div class="d-flex align-items-center">
-                            <div class="progress flex-grow-1 mr-2" style="height:6px;">
-                                <div class="progress-bar"
-                                    role="progressbar"
-                                    style="width:${t.slaProgress}%;background-image:linear-gradient(90deg,#f43f5e,#f59e0b);">
-                                </div>
-                            </div>
-                            <span class="small text-muted">${t.sla}</span>
-                        </div>
-                    </td>
-                    <td class="text-right">
-                        <a class="btn btn-outline-secondary btn-sm"
-                          href="/problem/profile/${t.id}">
-                            Details
-                        </a>
-                    </td>
-                </tr>
-            `;
-
-            // Kartenlayout (xs–sm)
-            htmlCards += `
-                <div class="dpb4-ticket-card">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <div class="small text-muted">${t.code}</div>
-                        <a href="/problem/profile/${t.id}" class="btn btn-xs btn-outline-secondary">
-                            Details
-                        </a>
-                    </div>
-
-                    <div class="mb-2">
-                        <div class="dpb4-ticket-card-label">Betreff</div>
-                        <div class="font-weight-bold text-white">${t.subject}</div>
-                        <div class="small text-muted">${t.product || ''}</div>
-                    </div>
-
-                    <div class="mb-2">
-                        <div class="dpb4-ticket-card-label">Anfragender</div>
-                        <div class="d-flex align-items-center">
-                            <img src="${t.requester.avatar}" class="dpb4-avatar-24 mr-2" alt="">
-                            <span class="small text-black">${t.requester.name}</span>
-                        </div>
-                    </div>
-
-                    <div class="d-flex flex-wrap justify-content-between mb-2">
-                        <div class="mr-2 mb-2">
-                            <div class="dpb4-ticket-card-label">Priorität</div>
-                            <span class="${priorityBadgeClass(t.priority)}">
-                                <span class="dpb4-dot mr-1" style="${priorityDotStyle(t.priority)}"></span>
-                                ${t.priority}
-                            </span>
-                        </div>
-                        <div class="mb-2">
-                            <div class="dpb4-ticket-card-label">Status</div>
-                            <span class="${statusBadgeClass(t.status)}">${t.status}</span>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="dpb4-ticket-card-label">SLA</div>
-                        <div class="d-flex align-items-center">
-                            <div class="progress flex-grow-1 mr-2" style="height:6px;">
-                                <div class="progress-bar"
-                                    role="progressbar"
-                                    style="width:${t.slaProgress}%;background-image:linear-gradient(90deg,#f43f5e,#f59e0b);">
-                                </div>
-                            </div>
-                            <span class="small text-muted">${t.sla}</span>
-                        </div>
-                    </div>
+            function emptyHtml(text, icon = 'M3 7h18M3 12h18M3 17h18') {
+                return `
+                <div class="dpf-empty">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="${icon}"/>
+                    </svg>
+                    ${escapeHtml(text)}
                 </div>
             `;
-        });
+            }
 
-        $('#dpb4-tickets-body').html(htmlTable);
-        $('#dpb4-tickets-cards').html(htmlCards);
-    }
- 
-    /* ==== TEAM PER AJAX LADEN ==== */
-       
-          function loadTeam() {
-            const url = "{{ route('department.profile.json', ['id' => $department->id]) }}";
+            function priorityBadgeClass(priority) {
+                const p = String(priority || '').toLowerCase();
 
-            console.log('[TEAM] Request URL:', url);
+                if (p === 'critical') return 'dpf-pill danger';
+                if (p === 'high') return 'dpf-pill warning';
+                if (p === 'medium') return 'dpf-pill primary';
 
-            $.getJSON(url)
-                .done(function (res) {
-                    console.log('[TEAM] API response:', res);
+                return 'dpf-pill secondary';
+            }
 
-                    if (!res || !res.employees) {
-                        console.warn('[TEAM] No employees in response');
-                        return;
-                    }
+            function priorityDotStyle(priority) {
+                const p = String(priority || '').toLowerCase();
 
-                    dpb4Team = res.employees.map(function (e) {
-                        console.log('[TEAM] Mapping employee:', e);
+                if (p === 'critical') return 'background:#ef4444;';
+                if (p === 'high') return 'background:#f59e0b;';
+                if (p === 'medium') return 'background:#6366f1;';
+
+                return 'background:#9ca3af;';
+            }
+
+            function statusBadgeClass(status) {
+                const s = String(status || '').toLowerCase().trim();
+
+                if (['open', 'new', 'offen', 'in_progress', 'in progress', 'progress', 'in bearbeitung'].includes(s)) {
+                    return 'dpf-pill info';
+                }
+
+                if (['review', 'pending', 'waiting', 'warten'].includes(s)) {
+                    return 'dpf-pill warning';
+                }
+
+                if (['done', 'completed', 'resolved', 'erledigt', 'gelöst'].includes(s)) {
+                    return 'dpf-pill success';
+                }
+
+                if (['blocked', 'cancel', 'cancelled', 'rejected', 'junk', 'abgelehnt'].includes(s)) {
+                    return 'dpf-pill danger';
+                }
+
+                return 'dpf-pill secondary';
+            }
+
+            function taskStatusLabel(status) {
+                const s = String(status || '').toLowerCase();
+
+                const labels = {
+                    open: 'Offen',
+                    in_progress: 'In Bearbeitung',
+                    completed: 'Erledigt',
+                    rejected: 'Abgelehnt',
+                    junk: 'Junk',
+                    other: 'Sonstige',
+                };
+
+                return labels[s] || 'Sonstige';
+            }
+
+            async function fetchJson(url) {
+                const response = await fetch(url, {
+                    headers: {
+                        Accept: 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    credentials: 'same-origin',
+                });
+
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+
+                return response.json();
+            }
+
+            function setCount(id, value) {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            }
+
+            function initTabs() {
+                document.querySelectorAll('.dpf-tab-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const tab = this.dataset.tab;
+                        activateTab(tab);
+                    });
+                });
+
+                document.querySelectorAll('[data-dpf-tab-jump]').forEach(button => {
+                    button.addEventListener('click', function () {
+                        activateTab(this.dataset.dpfTabJump);
+                    });
+                });
+            }
+
+            function activateTab(tab) {
+                if (!tab) return;
+
+                document.querySelectorAll('.dpf-tab-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.tab === tab);
+                });
+
+                document.querySelectorAll('.dpf-tab-pane').forEach(panel => {
+                    panel.classList.add('d-none');
+                });
+
+                const target = document.getElementById('dpf-tab-' + tab);
+                if (target) {
+                    target.classList.remove('d-none');
+                }
+            }
+
+            async function loadTickets() {
+                try {
+                    const res = await fetchJson(routes.tickets);
+
+                    const tickets = Array.isArray(res.tickets) ? res.tickets : [];
+
+                    state.tickets = tickets.map(t => {
+                        const employees = Array.isArray(t.dept_employees) ? t.dept_employees : [];
+                        const firstEmployee = employees[0] || {};
 
                         return {
-                            id: e.id,
-                            name: e.name + ' ' + e.lastname,
-                            role: e.position || '—',
-                            status: e.status === 'Active' ? 'online' : 'offline',
-                            email: e.email || '',
-                            avatar: e.image
-                                ? "{{ asset('images/employee') }}/" + e.image
-                                : '/images/default-avatar.svg',
-
-                            departmentCount:        e.department_count        || 0,
-                            positionCount:          e.position_count          || 0,
-                            leaveDays:              e.leave_days              || 0,
-                            sickDays:               e.sick_days               || 0,
-                            recurringRules:         e.recurring_rules         || 0,
-                            recurringWeeklyDays:    e.recurring_weekly_days   || 0,
+                            id: t.id,
+                            code: t.ticket_no ? '#' + t.ticket_no : '#' + t.id,
+                            subject: t.title || '(Kein Titel)',
+                            product: t.product || '',
+                            priority: t.priority || 'Medium',
+                            status: t.status || 'Open',
+                            sla: t.sla || '—',
+                            slaProgress: Math.min(Math.max(toNumber(t.sla_progress), 0), 100),
+                            deptCount: t.dept_employee_count || employees.length || 0,
+                            requester: {
+                                name: firstEmployee.name || 'Unzugeordnet',
+                                avatar: imageUrl(firstEmployee.image || null),
+                            },
+                            updated: t.updated_at || t.created_at || new Date().toISOString(),
                         };
                     });
 
-                    console.log('[TEAM] dpb4Team after mapping:', dpb4Team);
+                    setCount('dpf-count-tickets', state.tickets.length);
+                    setCount('dpf-kpi-ticket-value', state.tickets.length);
 
-                    $('#dpb4-count-team').text(dpb4Team.length);
-                    renderTeam();
-                })
-                .fail(function (jqXHR, textStatus, errorThrown) {
-                    console.error('[TEAM] API error:', textStatus, errorThrown);
-                    console.error('[TEAM] Response text:', jqXHR.responseText);
-                });
-        }
+                    renderTickets();
+                } catch (error) {
+                    console.error('Tickets konnten nicht geladen werden:', error);
 
+                    if (dom.ticketBody) {
+                        dom.ticketBody.innerHTML = `<tr><td colspan="7">${emptyHtml('Tickets konnten nicht geladen werden.')}</td></tr>`;
+                    }
 
-
-        function renderTeam() {
-            const list = dpb4Team.slice();
-
-            let html = '';
-            list.forEach(function (m) {
-                const statusText  = m.status === 'online' ? 'Online' : 'Offline';
-                const statusColor = m.status === 'online' ? '#34d399' : '#6b7280';
-
-                const recurringText = m.recurringRules > 0
-                    ? `<strong>${m.recurringWeeklyDays}</strong> Tage/Woche (wiederkehrend)`
-                    : 'Keine wiederkehrenden Abwesenheiten';
-
-                html += `
-                    <div class="col-sm-6 col-xl-4 mb-3">
-                        <div class="dpb4-soft-card p-2 h-100">
-                            <div class="d-flex">
-                                <img src="${m.avatar}" alt="${m.name}" class="dpb4-avatar-36 mr-3">
-                                <div class="flex-grow-1">
-                                    <div class="d-flex align-items-center mb-1">
-                                        <div class="font-weight-bold text-dark mr-2">${m.name}</div>
-                                        <span class="badge badge-light">${m.role}</span>
-                                    </div>
-                                    <div class="small dpb4-text-muted">${m.email}</div>
-                                    <div class="small mt-1">
-                                        <span class="dpb4-dot mr-1" style="background:${statusColor};"></span>
-                                        ${statusText}
-                                    </div>
-
-                                    <div class="small mt-2">
-                                        <div class="d-flex flex-wrap">
-                                            <span class="mr-3">
-                                                <strong>${m.departmentCount}</strong> Abteilungen
-                                            </span>
-                                            <span class="mr-3">
-                                                <strong>${m.positionCount}</strong> Positionen
-                                            </span>
-                                        </div>
-                                        <div class="d-flex flex-wrap mt-1">
-                                            <span class="mr-3">
-                                                <strong>${m.leaveDays}</strong> Urlaubstage
-                                            </span>
-                                            <span class="mr-3">
-                                                <strong>${m.sickDays}</strong> Kranktage
-                                            </span>
-                                        </div>
-                                        <div class="mt-1">
-                                            ${recurringText}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-3 d-flex justify-content-between align-items-center">
-                                <a class="btn btn-sm dpb4-btn-soft" href="/employee_profile/${m.id}">
-                                    Profil öffnen
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            $('#dpb4-team-grid').html(html);
-        }
-
-    /* ==== AUFGABEN PER AJAX LADEN ==== */
-      function loadTasks() {
-          const url = "{{ url('department') }}/" + departmentId + "/tasks/json";
-
-          $.getJSON(url, function (res) {
-              if (!res || !res.tasks) return;
-
-              dpb4Tasks = res.tasks.map(function (t) {
-                  const rawStatus = (t.status || '').toString().toLowerCase().trim();
-                  let status = 'open';
-
-                  if (['open', 'offen', 'new'].includes(rawStatus)) {
-                      status = 'open';
-                  } else if (['in progress', 'in_progress', 'progress', 'in bearbeitung'].includes(rawStatus)) {
-                      status = 'in_progress';
-                  } else if (['done', 'completed', 'erledigt'].includes(rawStatus)) {
-                      status = 'completed';
-                  } else if (['rejected', 'reject', 'abgelehnt'].includes(rawStatus)) {
-                      status = 'rejected';
-                  } else if (['junk', 'spam'].includes(rawStatus)) {
-                      status = 'junk';
-                  } else {
-                      status = 'other';
-                  }
-
-                  return {
-                      id: t.id,
-                      title: t.title,
-                      // normalized status used everywhere:
-                      status: status,
-                      priority: t.priority,
-                      start: t.start,
-                      due: t.due,
-                      assignees: t.assignees || []
-                  };
-              });
-
-              $('#dpb4-count-tasks').text(dpb4Tasks.length);
-              renderTasks();
-          });
-      }
-
-
-      function taskStatusLabel(status) {
-          switch ((status || '').toString().toLowerCase()) {
-              case 'open':
-                  return 'Offen';
-              case 'in_progress':
-                  return 'In Bearbeitung';
-              case 'completed':
-                  return 'Erledigt';
-              case 'rejected':
-                  return 'Abgelehnt';
-              case 'junk':
-                  return 'Junk';
-              default:
-                  return 'Sonstige';
-          }
-      }
-
-
-      function renderTasks() {
-          const statusFilter = $('#dpb4-task-filter').val() || '';
-          const sortMode     = $('#dpb4-task-sort').val() || 'priority';
-
-          // Work on a copy
-          let list = dpb4Tasks.slice();
-
-          // Filter by normalized status
-          if (statusFilter) {
-              list = list.filter(t => (t.status || '') === statusFilter);
-          }
-
-          // Sort
-          if (sortMode === 'priority') {
-              const order = { Critical: 0, High: 1, Medium: 2, Low: 3 };
-              list.sort((a, b) => (order[a.priority] || 9) - (order[b.priority] || 9));
-          } else if (sortMode === 'due') {
-              list.sort((a, b) => new Date(a.due) - new Date(b.due));
-          }
-
-          $('#dpb4-task-count').text(list.length);
-
-          // === Metrics über alle Tasks (nicht nur gefilterte Liste) ===
-          const all = dpb4Tasks;
-          const open       = all.filter(t => t.status === 'open').length;
-          const inProgress = all.filter(t => t.status === 'in_progress').length;
-          const completed  = all.filter(t => t.status === 'completed').length;
-          const rejected   = all.filter(t => t.status === 'rejected').length;
-          const junk       = all.filter(t => t.status === 'junk').length;
-          const other      = all.filter(t => !['open','in_progress','completed','rejected','junk'].includes(t.status)).length;
-
-          const total      = Math.max(all.length, 1);
-          const burndown   = Math.round((completed / total) * 100);
-
-          $('#dpb4-metric-open').text(open);
-          $('#dpb4-metric-inprogress').text(inProgress);
-          $('#dpb4-metric-completed').text(completed);
-          $('#dpb4-metric-rejected').text(rejected);
-          $('#dpb4-metric-junk').text(junk);
-          $('#dpb4-metric-other').text(other);
-          $('#dpb4-burndown-bar').css('width', burndown + '%');
-
-          // === List-HTML ===
-          let html = '';
-          list.forEach(function (task) {
-              const assigneesHtml = (task.assignees || []).map(a =>
-                  `<img src="${a.avatar}" class="dpb4-avatar-24 ml-1" alt="${a.name}">`
-              ).join('');
-
-              html += `
-                  <li class="dpb4-soft-card p-2 mb-2">
-                      <div class="d-flex justify-content-between">
-                          <div>
-                              <div class="d-flex align-items-center">
-                                  <div class="small text-dark mr-2">${task.title || 'Unbekannt'}</div>
-                                  <span class="${statusBadgeClass(task.status)}">
-                                      ${taskStatusLabel(task.status)}
-                                  </span>
-                              </div>
-                          </div>
-                          <div class="small text-muted">${task.due || ''}</div>
-                      </div>
-                      <div class="d-flex justify-content-between mt-2 small">
-                          <span class="${priorityBadgeClass(task.priority)}">
-                              <span class="dpb4-dot mr-1" style="${priorityDotStyle(task.priority)}"></span>
-                              ${task.priority || ''}
-                          </span>
-                          <div class="d-flex">
-                              ${assigneesHtml}
-                          </div>
-                      </div>
-                  </li>
-              `;
-          });
-
-          $('#dpb4-task-list').html(html);
-      }
-
-    /* ==== KOSTEN PER AJAX LADEN ==== */
-    function loadExpenses() {
-      const url = "{{ url('department') }}/" + departmentId + "/expense/json";
-      console.log('[EXP] Request URL:', url);
-
-      $.getJSON(url)
-          .done(function (res) {
-              console.log('[EXP] Raw response:', res);
-
-              if (!res) {
-                  console.warn('[EXP] No response object');
-                  return;
-              }
-
-              // Accept both shapes:
-              // 1) { expenses: { monthly:..., quarterly:..., yearly:... } }
-              // 2) { monthly:..., quarterly:..., yearly:... }
-              let exp = null;
-
-              if (res.expenses && typeof res.expenses === 'object') {
-                  exp = res.expenses;
-              } else if (typeof res === 'object') {
-                  exp = res;
-              }
-
-              if (!exp) {
-                  console.warn('[EXP] Could not find expenses structure in response');
-                  return;
-              }
-
-              dpb4Expenses = exp;
-
-              const m = Number(exp.monthly   ?? exp.month    ?? 0);
-              const q = Number(exp.quarterly ?? exp.quarter  ?? 0);
-              const y = Number(exp.yearly    ?? exp.year     ?? 0);
-
-              console.log('[EXP] Parsed values -> monthly:', m, 'quarterly:', q, 'yearly:', y);
-
-              $('#dpb4-exp-monthly').text(m.toLocaleString('de-DE') + ' €');
-              $('#dpb4-exp-quarterly').text(q.toLocaleString('de-DE') + ' €');
-              $('#dpb4-exp-yearly').text(y.toLocaleString('de-DE') + ' €');
-
-              // simple counter on the tab badge
-              $('#dpb4-count-expenses').text(y > 0 || m > 0 || q > 0 ? 1 : 0);
-
-              const dist = (y > 0) ? (m / y * 100) : 0;
-              $('#dpb4-exp-dist-bar').css('width', dist.toFixed(1) + '%');
-
-              initExpenseChart(m, q, y);
-          })
-          .fail(function (jqXHR, textStatus, errorThrown) {
-              console.error('[EXP] API error:', textStatus, errorThrown);
-              console.error('[EXP] Response text:', jqXHR.responseText);
-          });
-  }
-
-    function initExpenseChart(m, q, y) {
-      const ctx = document.getElementById('expenseChart');
-      if (!ctx) return;
-
-      if (dpb4ExpenseChart) {
-          dpb4ExpenseChart.destroy();
-      }
-
-      dpb4ExpenseChart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-              labels: ['Monat', 'Quartal', 'Jahr'],
-              datasets: [{
-                  label: 'Kosten (€)',
-                  data: [m, q, y],
-                  backgroundColor: [
-                      '#74b2d4', // Monat
-                      '#c0d8ea', // Quartal
-                      '#93c21c'  // Jahr
-                  ],
-                  borderRadius: 8
-              }]
-          },
-          options: {
-              responsive: true,
-              plugins: {
-                  legend: { display: false },
-                  tooltip: {
-                      callbacks: {
-                          label: function (ctx) {
-                              return ctx.raw.toLocaleString('de-DE') + ' €';
-                          }
-                      }
-                  }
-              },
-              scales: {
-                  y: {
-                      beginAtZero: true,
-                      ticks: {
-                          callback: function (val) {
-                              return val.toLocaleString('de-DE') + ' €';
-                          }
-                      },
-                      grid: {
-                          color: 'rgba(192,216,234,0.4)' // #c0d8ea
-                      }
-                  },
-                  x: {
-                      grid: { display: false }
-                  }
-              }
-          }
-      });
-  }
-
-
-    /* ==== KALENDER PER AJAX LADEN ==== */
-    let allEvents = [];
-    let currentDate = new Date();
-
-    function formatDate(date) {
-        return date.toISOString().split('T')[0];
-    }
-
-    function loadCalendar() {
-        const url = "{{ route('department.calendar', ':id') }}".replace(':id', departmentId);
-
-        $.getJSON(url, function (data) {
-            allEvents = data.data || [];
-            renderCalendar(currentDate, allEvents);
-        });
-    }
-
-    function renderCalendar(date, events) {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        $('#calendarTitle').text(
-            date.toLocaleDateString('de-DE', { month: 'long', year: 'numeric' })
-        );
-
-        const $cal = $('#calendar');
-        $cal.empty();
-
-        const weekdays = ['So','Mo','Di','Mi','Do','Fr','Sa'];
-        weekdays.forEach(function (d) {
-            $cal.append('<div class="dpb4-calendar-header">' + d + '</div>');
-        });
-
-        for (let i = 0; i < firstDay; i++) {
-            $cal.append('<div></div>');
-        }
-
-        for (let d = 1; d <= daysInMonth; d++) {
-            const thisDate = new Date(year, month, d);
-            const dateStr = formatDate(thisDate);
-            const eventsForDay = events.filter(ev => ev.start_date && ev.start_date.startsWith(dateStr));
-
-            let numberClass = 'dpb4-day-number';
-            if (formatDate(new Date()) === dateStr) {
-                numberClass += ' dpb4-day-number-today';
-            } else if (eventsForDay.length > 0) {
-                numberClass += ' dpb4-day-number-has-events';
+                    if (dom.ticketCards) {
+                        dom.ticketCards.innerHTML = emptyHtml('Tickets konnten nicht geladen werden.');
+                    }
+                }
             }
 
-            const inner = `<div class="${numberClass}">${d}</div>`;
-            const cell = `<div class="day-cell" data-date="${dateStr}">${inner}</div>`;
+            function renderTickets() {
+                const priorityFilter = document.getElementById('dpf-ticket-priority')?.value || '';
+                const statusFilter = document.getElementById('dpf-ticket-status')?.value || '';
+                const sortMode = document.getElementById('dpf-ticket-sort')?.value || 'sla';
 
-            $cal.append(cell);
-        }
+                let list = [...state.tickets];
 
-        $('#prevMonth').off('click').on('click', function () {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar(currentDate, allEvents);
-        });
+                if (priorityFilter) {
+                    list = list.filter(t => String(t.priority) === priorityFilter);
+                }
 
-        $('#nextMonth').off('click').on('click', function () {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar(currentDate, allEvents);
-        });
+                if (statusFilter) {
+                    list = list.filter(t => String(t.status) === statusFilter);
+                }
 
-        $cal.find('.day-cell[data-date]').on('click', function () {
-            const dateStr = $(this).data('date');
-            showDayEvents(dateStr);
-        });
-    }
+                if (sortMode === 'priority') {
+                    const order = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+                    list.sort((a, b) => (order[a.priority] ?? 9) - (order[b.priority] ?? 9));
+                } else if (sortMode === 'updated') {
+                    list.sort((a, b) => new Date(b.updated) - new Date(a.updated));
+                } else {
+                    list.sort((a, b) => b.slaProgress - a.slaProgress);
+                }
 
-    function showDayEvents(dateStr) {
-        const eventsForDay = allEvents.filter(ev => ev.start_date && ev.start_date.startsWith(dateStr));
-        const panel = document.getElementById('dayEventsPanel');
-        const selectedDateEl = document.getElementById('selectedDate');
-        const eventCards = document.getElementById('eventCards');
+                if (!list.length) {
+                    if (dom.ticketBody) {
+                        dom.ticketBody.innerHTML = `<tr><td colspan="7">${emptyHtml('Keine Tickets gefunden.')}</td></tr>`;
+                    }
 
-        if (!eventsForDay.length) {
-            panel.classList.add('d-none');
-            return;
-        }
+                    if (dom.ticketCards) {
+                        dom.ticketCards.innerHTML = emptyHtml('Keine Tickets gefunden.');
+                    }
 
-        panel.classList.remove('d-none');
+                    return;
+                }
 
-        selectedDateEl.textContent = new Date(dateStr).toLocaleDateString('de-DE', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
+                if (dom.ticketBody) {
+                    dom.ticketBody.innerHTML = list.map(t => `
+                    <tr>
+                        <td><strong class="text-muted">${escapeHtml(t.code)}</strong></td>
 
-        let html = `
-            <div class="p-2 mb-2">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h5 class=" font-weight-semibold mb-0">Termine</h5>
-                    <div class="d-flex">
-                        <input class="form-control  mr-2" placeholder="Suche…">
-                        <select class="form-control ">
-                            <option value="">Alle Typen</option>
-                            <option value="Task">Aufgabe</option>
-                            <option value="Appointment">Termin</option>
-                            <option value="Holiday">Feiertag</option>
-                            <option value="Sick">Krank</option>
-                        </select>
-                    </div>
-                </div>
-        `;
+                        <td>
+                            <div class="font-weight-bold text-dark">${escapeHtml(t.subject)}</div>
+                            <div class="small text-muted">${escapeHtml(t.product || '—')}</div>
+                        </td>
 
-        eventsForDay.forEach(function (ev) {
-            const color = ev.taskColor || '#74b2d4';
-            const startTime = ev.start_time || 'Ganztägig';
-            const endTime = ev.end_time ? '– ' + ev.end_time : '';
-            const desc = ev.description || 'Keine Beschreibung';
-
-            const employees = (ev.employees || []).map(emp => `
-                <img src="{{ asset('images/employee') }}/${emp.image}"
-                     class="dpb4-avatar-24 mr-1"
-                     title="${emp.name} ${emp.lastname}"
-                     alt="">
-            `).join('');
-
-            html += `
-                <div class="dpb4-event-card" style="border-color:${color};">
-                    <div class="d-flex justify-content-between">
-                        <div class="d-flex">
-                            <div class=""
-                                 style="width:40px;height:40px;border-radius:.5rem;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-muted">
-                                    <path d="M8 7V3m8 4V3M5 11h14M6 5h12a2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2z"
-                                          stroke="currentColor" stroke-width="1.5"/>
-                                </svg>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="${escapeHtml(t.requester.avatar)}" class="dpf-avatar-sm mr-2" alt="" onerror="this.src='${routes.defaultAvatar}'">
+                                <span>${escapeHtml(t.requester.name)}</span>
                             </div>
-                            <div>
-                                <div class="font-weight-bold text-white">${ev.title}</div>
-                                <div class="text-sm dpb4-text-muted">${desc}</div>
-                                <div class="text-xs dpb4-text-muted mt-1">
-                                    ${startTime} ${endTime}
+                        </td>
+
+                        <td>
+                            <span class="${priorityBadgeClass(t.priority)}">
+                                <span class="dpf-dot" style="${priorityDotStyle(t.priority)}"></span>
+                                ${escapeHtml(t.priority)}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="${statusBadgeClass(t.status)}">${escapeHtml(t.status)}</span>
+                        </td>
+
+                        <td style="min-width:170px;">
+                            <div class="d-flex align-items-center">
+                                <div class="dpf-progress mr-2">
+                                    <div class="dpf-progress-bar" style="width:${t.slaProgress}%;"></div>
                                 </div>
-                                <div class="mt-2 d-flex">
-                                    ${employees}
+                                <span class="small text-muted">${escapeHtml(t.sla)}</span>
+                            </div>
+                        </td>
+
+                        <td class="text-right">
+                            <a href="${routes.problemBase}/${encodeURIComponent(t.id)}" class="dpf-btn dpf-btn-soft" style="padding:7px 10px;">
+                                Details
+                            </a>
+                        </td>
+                    </tr>
+                `).join('');
+                }
+
+                if (dom.ticketCards) {
+                    dom.ticketCards.innerHTML = list.map(t => `
+                    <article class="dpf-ticket-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <strong class="text-muted">${escapeHtml(t.code)}</strong>
+                            <a href="${routes.problemBase}/${encodeURIComponent(t.id)}" class="dpf-btn dpf-btn-soft" style="padding:7px 10px;">Details</a>
+                        </div>
+
+                        <div class="mb-2">
+                            <div class="dpf-small-label">Betreff</div>
+                            <div class="font-weight-bold text-dark">${escapeHtml(t.subject)}</div>
+                            <div class="small text-muted">${escapeHtml(t.product || '—')}</div>
+                        </div>
+
+                        <div class="mb-2">
+                            <div class="dpf-small-label">Anfragender</div>
+                            <div class="d-flex align-items-center">
+                                <img src="${escapeHtml(t.requester.avatar)}" class="dpf-avatar-sm mr-2" alt="" onerror="this.src='${routes.defaultAvatar}'">
+                                <span>${escapeHtml(t.requester.name)}</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap justify-content-between mb-2">
+                            <span class="${priorityBadgeClass(t.priority)}">
+                                <span class="dpf-dot" style="${priorityDotStyle(t.priority)}"></span>
+                                ${escapeHtml(t.priority)}
+                            </span>
+
+                            <span class="${statusBadgeClass(t.status)}">${escapeHtml(t.status)}</span>
+                        </div>
+
+                        <div>
+                            <div class="dpf-small-label">SLA</div>
+                            <div class="d-flex align-items-center">
+                                <div class="dpf-progress mr-2">
+                                    <div class="dpf-progress-bar" style="width:${t.slaProgress}%;"></div>
+                                </div>
+                                <span class="small text-muted">${escapeHtml(t.sla)}</span>
+                            </div>
+                        </div>
+                    </article>
+                `).join('');
+                }
+            }
+
+            async function loadTeam() {
+                try {
+                    const res = await fetchJson(routes.team);
+                    const employees = Array.isArray(res.employees) ? res.employees : [];
+
+                    state.team = employees.map(e => ({
+                        id: e.id,
+                        name: `${e.name || ''} ${e.lastname || ''}`.trim() || 'Unbekannt',
+                        role: e.position || '—',
+                        status: String(e.status || '').toLowerCase() === 'active' ? 'online' : 'offline',
+                        email: e.email || '',
+                        avatar: imageUrl(e.image || null),
+                        departmentCount: e.department_count || 0,
+                        positionCount: e.position_count || 0,
+                        leaveDays: e.leave_days || 0,
+                        sickDays: e.sick_days || 0,
+                        recurringRules: e.recurring_rules || 0,
+                        recurringWeeklyDays: e.recurring_weekly_days || 0,
+                    }));
+
+                    setCount('dpf-count-team', state.team.length);
+                    setCount('dpf-team-count-label', state.team.length);
+                    setCount('dpf-kpi-team-value', state.team.length);
+
+                    renderTeam();
+                } catch (error) {
+                    console.error('Team konnte nicht geladen werden:', error);
+
+                    if (dom.teamGrid) {
+                        dom.teamGrid.innerHTML = emptyHtml('Team konnte nicht geladen werden.');
+                    }
+                }
+            }
+
+            function renderTeam() {
+                if (!dom.teamGrid) return;
+
+                if (!state.team.length) {
+                    dom.teamGrid.innerHTML = emptyHtml('Keine Teammitglieder gefunden.');
+                    return;
+                }
+
+                dom.teamGrid.innerHTML = state.team.map(member => {
+                    const statusText = member.status === 'online' ? 'Online' : 'Offline';
+                    const statusColor = member.status === 'online' ? '#34d399' : '#9ca3af';
+
+                    const recurringText = member.recurringRules > 0
+                        ? `${member.recurringWeeklyDays} Tage/Woche`
+                        : 'Keine Regeln';
+
+                    return `
+                    <article class="dpf-team-card">
+                        <div class="dpf-team-top">
+                            <img src="${escapeHtml(member.avatar)}" class="dpf-avatar-md" alt="${escapeHtml(member.name)}" onerror="this.src='${routes.defaultAvatar}'">
+
+                            <div style="min-width:0;flex:1;">
+                                <div class="d-flex align-items-center flex-wrap" style="gap:7px;">
+                                    <div class="dpf-team-name">${escapeHtml(member.name)}</div>
+                                    <span class="dpf-pill secondary">${escapeHtml(member.role)}</span>
+                                </div>
+
+                                <div class="dpf-team-email">${escapeHtml(member.email || 'Keine E-Mail')}</div>
+
+                                <div class="small mt-2 d-flex align-items-center">
+                                    <span class="dpf-dot mr-1" style="background:${statusColor};"></span>
+                                    <strong>${statusText}</strong>
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <a href="{{ url('appointment_details') }}/${ev.id}"
-                               class="btn btn-sm dpb4-btn-soft">
+
+                        <div class="dpf-team-metrics">
+                            <div class="dpf-team-metric">
+                                <strong>${member.departmentCount}</strong>
+                                <span>Abteilungen</span>
+                            </div>
+
+                            <div class="dpf-team-metric">
+                                <strong>${member.positionCount}</strong>
+                                <span>Positionen</span>
+                            </div>
+
+                            <div class="dpf-team-metric">
+                                <strong>${member.leaveDays}</strong>
+                                <span>Urlaubstage</span>
+                            </div>
+
+                            <div class="dpf-team-metric">
+                                <strong>${member.sickDays}</strong>
+                                <span>Kranktage</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 small text-muted">
+                            Wiederkehrend: <strong>${escapeHtml(recurringText)}</strong>
+                        </div>
+
+                        <div class="mt-3">
+                            <a href="/employee_profile/${encodeURIComponent(member.id)}" class="dpf-btn dpf-btn-soft">
+                                Profil öffnen
+                            </a>
+                        </div>
+                    </article>
+                `;
+                }).join('');
+            }
+
+            async function loadTasks() {
+                try {
+                    const res = await fetchJson(routes.tasks);
+                    const tasks = Array.isArray(res.tasks) ? res.tasks : [];
+
+                    state.tasks = tasks.map(t => {
+                        const raw = String(t.status || '').toLowerCase().trim();
+                        let status = 'other';
+
+                        if (['open', 'offen', 'new'].includes(raw)) status = 'open';
+                        else if (['in progress', 'in_progress', 'progress', 'in bearbeitung'].includes(raw)) status = 'in_progress';
+                        else if (['done', 'completed', 'erledigt'].includes(raw)) status = 'completed';
+                        else if (['rejected', 'reject', 'abgelehnt'].includes(raw)) status = 'rejected';
+                        else if (['junk', 'spam'].includes(raw)) status = 'junk';
+
+                        return {
+                            id: t.id,
+                            title: t.title || 'Unbekannte Aufgabe',
+                            status,
+                            priority: t.priority || 'Medium',
+                            start: t.start || '',
+                            due: t.due || '',
+                            assignees: Array.isArray(t.assignees) ? t.assignees : [],
+                        };
+                    });
+
+                    setCount('dpf-count-tasks', state.tasks.length);
+                    renderTasks();
+                } catch (error) {
+                    console.error('Aufgaben konnten nicht geladen werden:', error);
+
+                    if (dom.taskList) {
+                        dom.taskList.innerHTML = `<li>${emptyHtml('Aufgaben konnten nicht geladen werden.')}</li>`;
+                    }
+                }
+            }
+
+            function renderTasks() {
+                if (!dom.taskList) return;
+
+                const statusFilter = document.getElementById('dpf-task-filter')?.value || '';
+                const sortMode = document.getElementById('dpf-task-sort')?.value || 'due';
+
+                let list = [...state.tasks];
+
+                if (statusFilter) {
+                    list = list.filter(task => task.status === statusFilter);
+                }
+
+                if (sortMode === 'priority') {
+                    const order = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+                    list.sort((a, b) => (order[a.priority] ?? 9) - (order[b.priority] ?? 9));
+                } else {
+                    list.sort((a, b) => new Date(a.due || '2999-12-31') - new Date(b.due || '2999-12-31'));
+                }
+
+                const all = state.tasks;
+                const open = all.filter(t => t.status === 'open').length;
+                const inProgress = all.filter(t => t.status === 'in_progress').length;
+                const completed = all.filter(t => t.status === 'completed').length;
+                const rejected = all.filter(t => t.status === 'rejected').length;
+                const junk = all.filter(t => t.status === 'junk').length;
+                const other = all.filter(t => !['open', 'in_progress', 'completed', 'rejected', 'junk'].includes(t.status)).length;
+                const total = Math.max(all.length, 1);
+                const burndown = Math.round((completed / total) * 100);
+
+                setCount('dpf-task-count', list.length);
+                setCount('dpf-metric-open', open);
+                setCount('dpf-metric-inprogress', inProgress);
+                setCount('dpf-metric-completed', completed);
+                setCount('dpf-metric-rejected', rejected);
+                setCount('dpf-metric-junk', junk);
+                setCount('dpf-metric-other', other);
+                setCount('dpf-burndown-label', burndown + '%');
+
+                const burndownBar = document.getElementById('dpf-burndown-bar');
+                if (burndownBar) burndownBar.style.width = burndown + '%';
+
+                if (!list.length) {
+                    dom.taskList.innerHTML = `<li>${emptyHtml('Keine Aufgaben gefunden.')}</li>`;
+                    return;
+                }
+
+                dom.taskList.innerHTML = list.map(task => {
+                    const assignees = task.assignees.map(a => `
+                    <img src="${escapeHtml(a.avatar || routes.defaultAvatar)}"
+                         class="dpf-avatar-sm ml-1"
+                         title="${escapeHtml(a.name || '')}"
+                         alt=""
+                         onerror="this.src='${routes.defaultAvatar}'">
+                `).join('');
+
+                    return `
+                    <li class="dpf-task-item">
+                        <div class="d-flex justify-content-between align-items-start" style="gap:10px;">
+                            <div style="min-width:0;">
+                                <div class="font-weight-bold text-dark">${escapeHtml(task.title)}</div>
+                                <div class="mt-2">
+                                    <span class="${statusBadgeClass(task.status)}">${taskStatusLabel(task.status)}</span>
+                                </div>
+                            </div>
+
+                            <div class="small text-muted text-right">${escapeHtml(task.due || '—')}</div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="${priorityBadgeClass(task.priority)}">
+                                <span class="dpf-dot" style="${priorityDotStyle(task.priority)}"></span>
+                                ${escapeHtml(task.priority || '—')}
+                            </span>
+
+                            <div class="d-flex">${assignees}</div>
+                        </div>
+                    </li>
+                `;
+                }).join('');
+            }
+
+            async function loadExpenses() {
+                try {
+                    const res = await fetchJson(routes.expenses);
+                    const exp = res.expenses && typeof res.expenses === 'object' ? res.expenses : res;
+
+                    const monthly = toNumber(exp.monthly ?? exp.month);
+                    const quarterly = toNumber(exp.quarterly ?? exp.quarter);
+                    const yearly = toNumber(exp.yearly ?? exp.year);
+
+                    state.expenses = { monthly, quarterly, yearly };
+
+                    setCount('dpf-exp-monthly', formatMoney(monthly));
+                    setCount('dpf-exp-quarterly', formatMoney(quarterly));
+                    setCount('dpf-exp-yearly', formatMoney(yearly));
+                    setCount('dpf-count-expenses', yearly > 0 || monthly > 0 || quarterly > 0 ? 1 : 0);
+
+                    const distribution = yearly > 0 ? Math.min((monthly / yearly) * 100, 100) : 0;
+
+                    const distBar = document.getElementById('dpf-exp-dist-bar');
+                    const distLabel = document.getElementById('dpf-exp-dist-label');
+
+                    if (distBar) distBar.style.width = distribution.toFixed(1) + '%';
+                    if (distLabel) distLabel.textContent = distribution.toFixed(1) + '%';
+
+                    renderExpenseChart(monthly, quarterly, yearly);
+                } catch (error) {
+                    console.error('Kosten konnten nicht geladen werden:', error);
+                }
+            }
+
+            function renderExpenseChart(monthly, quarterly, yearly) {
+                const canvas = document.getElementById('expenseChart');
+                if (!canvas || !window.Chart) return;
+
+                if (state.expenseChart) {
+                    state.expenseChart.destroy();
+                }
+
+                state.expenseChart = new Chart(canvas, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Monat', 'Quartal', 'Jahr'],
+                        datasets: [{
+                            label: 'Kosten (€)',
+                            data: [monthly, quarterly, yearly],
+                            backgroundColor: ['#74b2d4', '#c0d8ea', '#93c21c'],
+                            borderRadius: 10,
+                            maxBarThickness: 52,
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: ctx => formatMoney(ctx.raw),
+                                },
+                            },
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: value => Number(value).toLocaleString('de-DE') + ' €',
+                                },
+                                grid: {
+                                    color: 'rgba(192,216,234,.4)',
+                                },
+                            },
+                            x: {
+                                grid: { display: false },
+                            },
+                        },
+                    },
+                });
+            }
+
+            async function loadCalendar() {
+                try {
+                    const res = await fetchJson(routes.calendar);
+                    state.events = Array.isArray(res.data) ? res.data : [];
+                    renderCalendar();
+                } catch (error) {
+                    console.error('Kalender konnte nicht geladen werden:', error);
+
+                    if (dom.calendar) {
+                        dom.calendar.innerHTML = emptyHtml('Kalender konnte nicht geladen werden.');
+                    }
+                }
+            }
+
+            function renderCalendar() {
+                if (!dom.calendar) return;
+
+                const date = state.currentDate;
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                if (dom.calendarTitle) {
+                    dom.calendarTitle.textContent = date.toLocaleDateString('de-DE', {
+                        month: 'long',
+                        year: 'numeric',
+                    });
+                }
+
+                const weekdays = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+
+                let html = weekdays.map(day => `<div class="dpf-calendar-header">${day}</div>`).join('');
+
+                for (let i = 0; i < firstDay; i++) {
+                    html += `<div class="dpf-day-cell is-empty"></div>`;
+                }
+
+                const todayKey = formatDateKey(new Date());
+
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const thisDate = new Date(year, month, d);
+                    const dateKey = formatDateKey(thisDate);
+                    const eventsForDay = state.events.filter(ev => ev.start_date && String(ev.start_date).startsWith(dateKey));
+
+                    const classes = [
+                        'dpf-day-cell',
+                        todayKey === dateKey ? 'is-today' : '',
+                        eventsForDay.length ? 'has-events' : '',
+                    ].filter(Boolean).join(' ');
+
+                    html += `
+                    <div class="${classes}" data-date="${dateKey}">
+                        <div class="dpf-day-number">${d}</div>
+                        ${eventsForDay.length ? `<div class="dpf-day-event-count">${eventsForDay.length} Termin${eventsForDay.length > 1 ? 'e' : ''}</div>` : ''}
+                    </div>
+                `;
+                }
+
+                dom.calendar.innerHTML = html;
+
+                dom.calendar.querySelectorAll('.dpf-day-cell[data-date]').forEach(cell => {
+                    cell.addEventListener('click', function () {
+                        showDayEvents(this.dataset.date);
+                    });
+                });
+            }
+
+            function showDayEvents(dateKey) {
+                const eventsForDay = state.events.filter(ev => ev.start_date && String(ev.start_date).startsWith(dateKey));
+
+                if (dom.selectedDate) {
+                    dom.selectedDate.textContent = new Date(dateKey + 'T00:00:00').toLocaleDateString('de-DE', {
+                        weekday: 'long',
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                    });
+                }
+
+                if (!dom.eventCards) return;
+
+                if (!eventsForDay.length) {
+                    dom.eventCards.innerHTML = emptyHtml('Für diesen Tag gibt es keine Termine.');
+                    return;
+                }
+
+                dom.eventCards.innerHTML = eventsForDay.map(ev => {
+                    const color = ev.taskColor || '#74b2d4';
+                    const startTime = ev.start_time || 'Ganztägig';
+                    const endTime = ev.end_time ? '– ' + ev.end_time : '';
+                    const desc = ev.description || 'Keine Beschreibung';
+
+                    const employees = Array.isArray(ev.employees) ? ev.employees.map(emp => `
+                    <img src="${routes.employeeImageBase}/${escapeHtml(emp.image || '')}"
+                         class="dpf-avatar-sm mr-1"
+                         title="${escapeHtml((emp.name || '') + ' ' + (emp.lastname || ''))}"
+                         alt=""
+                         onerror="this.src='${routes.defaultAvatar}'">
+                `).join('') : '';
+
+                    return `
+                    <article class="dpf-event-card" style="border-left-color:${escapeHtml(color)};">
+                        <div class="d-flex justify-content-between align-items-start" style="gap:12px;">
+                            <div style="min-width:0;">
+                                <div class="font-weight-bold text-dark">${escapeHtml(ev.title || 'Termin')}</div>
+                                <div class="small text-muted mt-1">${escapeHtml(desc)}</div>
+                                <div class="small text-muted mt-1">${escapeHtml(startTime)} ${escapeHtml(endTime)}</div>
+                                <div class="mt-2 d-flex flex-wrap">${employees}</div>
+                            </div>
+
+                            <a href="${routes.appointmentBase}/${encodeURIComponent(ev.id)}" class="dpf-btn dpf-btn-soft" style="padding:7px 10px;">
                                 Details
                             </a>
                         </div>
-                    </div>
-                </div>
-            `;
-        });
+                    </article>
+                `;
+                }).join('');
+            }
 
-        html += `</div>`;
-        eventCards.innerHTML = html;
-    }
+            function bindFilters() {
+                ['dpf-ticket-priority', 'dpf-ticket-status', 'dpf-ticket-sort'].forEach(id => {
+                    document.getElementById(id)?.addEventListener('change', renderTickets);
+                });
 
- 
+                ['dpf-task-filter', 'dpf-task-sort'].forEach(id => {
+                    document.getElementById(id)?.addEventListener('change', renderTasks);
+                });
 
-    /* ==== DOKUMENT READY ==== */
-    $(function () {
-        initTabs();  
-          // Force initial tab state (projects visible, others hidden)
-        $('#dpb4-tab-nav .dpb4-tab-link[data-tab="projects"]').trigger('click');
+                document.getElementById('prevMonth')?.addEventListener('click', function () {
+                    state.currentDate.setMonth(state.currentDate.getMonth() - 1);
+                    renderCalendar();
+                });
 
-        loadTickets();
-        loadTeam();
-        loadTasks();
-        loadExpenses();
-        loadCalendar(); 
-        
-        $('#dpb4-ticket-priority, #dpb4-ticket-status, #dpb4-ticket-sort').on('change', renderTickets);
-        $('#dpb4-task-filter, #dpb4-task-sort').on('change', renderTasks);
-    });
-</script>
+                document.getElementById('nextMonth')?.addEventListener('click', function () {
+                    state.currentDate.setMonth(state.currentDate.getMonth() + 1);
+                    renderCalendar();
+                });
+            }
+
+            function boot() {
+                initTabs();
+                bindFilters();
+
+                activateTab('projects');
+
+                loadTickets();
+                loadTeam();
+                loadTasks();
+                loadExpenses();
+                loadCalendar();
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', boot);
+            } else {
+                boot();
+            }
+        })();
+    </script>
 @endsection
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs = [
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            },
+            {
+                label: 'Abteilung Liste',
+                url: "{{ url('department_view') }}"
+            },
+            {
+                label: 'Abteilungsprofil',
+                url: "{{ url()->current() }}",
+                clickable: false
+            }
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+@endpush

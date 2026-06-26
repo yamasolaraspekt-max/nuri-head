@@ -11,8 +11,22 @@
 /* ======= Layout: main + right action rail ======= */
 .pro-layout{ display:grid; grid-template-columns:minmax(0,1fr) 56px; gap:.75rem; align-items:start; }
 @media (max-width: 992px){ .pro-layout{ grid-template-columns:1fr 48px; } }
-.pro-rail{ display:flex; flex-direction:column; gap:.5rem; align-items:center; position:sticky; top:84px; padding-top:.25rem; }
-.rail-btn{ position:relative; width:44px; height:44px; border:none; border-radius:12px; background:#f3f4f6; color:#333; display:grid; place-items:center; box-shadow:0 1px 2px rgba(0,0,0,.08); cursor:pointer; transition:transform .12s, background .12s, box-shadow .12s; }
+.pro-rail{ 
+  position: relative;
+    width: 70px;
+    height: 44px;
+    border: none;
+    border-radius: 12px;
+    background: #8fc73e;
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .08);
+    cursor: pointer;
+    transition: transform .12s, background .12s, box-shadow .12s;
+    right: 48px;
+}
+.rail-btn{ position:relative; width:44px; height:44px; border:none; border-radius:12px; background:#8fc73e; color:#333; display:grid; place-items:center; box-shadow:0 1px 2px rgba(0,0,0,.08); cursor:pointer; transition:transform .12s, background .12s, box-shadow .12s; }
 .rail-btn:hover{ transform:translateY(-1px); background:#eef1f6; }
 .rail-btn .feather{ width:20px; height:20px; }
 .rail-btn--active{ background:#e7f3d2; color:#2f5c00; box-shadow:0 0 0 2px rgba(147,194,28,.25) inset; }
@@ -1281,21 +1295,21 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.55);
-  z-index: 1050;
+  z-index: 10000; /* Increased z-index to be above drawers */
+  display: none; /* Default state */
 }
-
 .lfm-shell {
   position: fixed;
   inset: 5% 8%;
   max-width: 1200px;
   margin: 0 auto;
-  background: #edededff;
-  color: #484848ff;
+  background: #ffffff;
+  color: #333;
   border-radius: 18px;
-  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.7);
-  display: flex;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+  display: none; /* Default state */
   flex-direction: column;
-  z-index: 1060;
+  z-index: 10001; /* Increased z-index */
   overflow: hidden;
 }
 
@@ -1324,6 +1338,18 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
   font-size: 13px;
   color: #9ca3af;
   margin-top: 2px;
+}
+
+/* Ensure flex display when active */
+.lfm-shell[style*="display: flex"],
+.lfm-shell[style*="display:flex"] {
+  display: flex !important;
+}
+
+@media (max-width: 768px) {
+  .lfm-shell {
+    inset: 2% 2%;
+  }
 }
 
 .lfm-header-right {
@@ -1559,8 +1585,306 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     padding: 6px 8px;
 }
 
+/* FORCE HIDE ARCHIVE COLUMN BY DEFAULT */
+.kanban-container #archive {
+    display: none;
+}
+
+/* --- Logic for Icons --- */
+
+/* Default (Unchecked): Hide ON icon, Show OFF icon */
+.col-toggle-checkbox ~ .custom-control-label .toggle-icon-on {
+    display: none;
+}
+.col-toggle-checkbox ~ .custom-control-label .toggle-icon-off {
+    display: inline-block;
+}
+
+/* Checked: Show ON icon, Hide OFF icon */
+.col-toggle-checkbox:checked ~ .custom-control-label .toggle-icon-on {
+    display: inline-block;
+}
+.col-toggle-checkbox:checked ~ .custom-control-label .toggle-icon-off {
+    display: none;
+}
+
+/* --- Logic for Text Readability --- */
+
+/* Default (Unchecked): Grey text */
+.col-toggle-checkbox ~ .custom-control-label .toggle-label-text {
+    color: #999;
+    font-weight: 400;
+}
+
+/* Checked: Dark, bold text for better readability */
+.col-toggle-checkbox:checked ~ .custom-control-label .toggle-label-text {
+    color: #333;
+    font-weight: 600;
+}
+.kb-card-meta .kb-meta-row{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  flex-wrap:wrap;
+}
+.kb-card-meta .kb-meta-item{
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+  font-size:12px;
+  opacity:.95;
+}
+.kb-card-meta .kb-meta-sep{
+  opacity:.6;
+  font-size:12px;
+}
+.kb-card-meta .kb-meta-address{
+  display:block;
+  margin-top:2px;
+  opacity:.85;
+}
+.kb-branch-name{
+  max-width:160px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:inline-block;
+}
 
 </style>
+
+<style>
+  .kb-branch { --branch-color: #93c21c; }
+
+  /* SVG + name follow branch color */
+  .kb-meta-item.kb-branch { color: var(--branch-color); }
+
+  /* Product circle must win */
+  .circle.product_circle{
+    background-color: var(--branch-color, #93c21c) !important;
+    color: #fff !important;
+  }
+
+   .list-action-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    opacity: 0.8;
+}
+.list-action-bar:hover { opacity: 1; }
+.btn-list-icon {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #6c757d;
+    transition: transform 0.1s;
+}
+.btn-list-icon:hover { transform: scale(1.1); color: #333; }
+.btn-list-icon.note:hover { color: #74b2d4; }
+.customer-link {
+    color: #333;
+    font-weight: 600;
+    text-decoration: none;
+}
+.customer-link:hover { color: #93c21c; text-decoration: underline; }
+/* Badge for List Icons */
+.btn-list-icon { 
+    position: relative; /* Needed for absolute positioning of badge */
+}
+
+.btn-list-icon .badge-notes {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    min-width: 16px;
+    height: 16px;
+    line-height: 16px;
+    padding: 0 4px;
+    border-radius: 10px;
+    background: #93c21c;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Hide badge if count is 0 or empty */
+.btn-list-icon .badge-notes:empty,
+.btn-list-icon .badge-notes[data-count="0"] {
+    display: none;
+}
+</style>
+<style>
+    /* 1. Allow SweetAlert content to overflow so dropdowns aren't cut off */
+    .swal2-html-container {
+        overflow: visible !important;
+        z-index: 2;
+    }
+    
+    .swal2-popup {
+        overflow: visible !important;
+    }
+
+    /* 2. Force Select2 dropdown to be on top of SweetAlert (z-index 1060+) */
+    .select2-container--default .select2-dropdown {
+        z-index: 99999999 !important;
+    }
+    
+    /* 3. Style the employee option in the dropdown */
+    .employee-option {
+        display: flex;
+        align-items: center;
+        padding: 4px;
+    }
+    .employee-option img {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+    }
+</style>
+
+<style>
+  /* ---------- Team hover popover ---------- */
+  .team-popover {
+    position: fixed;
+    z-index: 99999;
+    width: 320px;
+    max-width: calc(100vw - 24px);
+    background: rgba(255,255,255,.92);
+    border: 1px solid rgba(15,23,42,.10);
+    box-shadow: 0 18px 50px rgba(15,23,42,.22);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 12px;
+    transform: translateY(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .12s ease, transform .12s ease;
+  }
+  .team-popover.is-open{
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .team-popover__title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom: 10px;
+  }
+  .team-popover__title .t1{
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: .2px;
+    color: #0f172a;
+  }
+  .team-popover__title .t2{
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 600;
+  }
+
+  .team-popover__list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    max-height: 260px;
+    overflow:auto;
+    padding-right: 4px;
+  }
+
+  .team-popover__item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(15,23,42,.06);
+    background: rgba(255,255,255,.75);
+  }
+  .team-popover__item:hover{
+    background: rgba(241,245,249,.85);
+    border-color: rgba(15,23,42,.10);
+  }
+
+  .team-popover__avatar{
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 8px 18px rgba(15,23,42,.12);
+    flex: 0 0 auto;
+  }
+  .team-popover__name{
+    font-weight: 800;
+    font-size: 13px;
+    color: #0f172a;
+    line-height: 1.2;
+  }
+  .team-popover__meta{
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+
+  /* optional: subtle cursor hint on team stacks */
+  ul[data-team-hover] { cursor: pointer; }
+
+    /* ---------- Team hover popover (with Assigned by + Date) ---------- */
+  .team-popover__meta{
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-top: 2px;
+  }
+  .team-popover__meta .lbl{ color:#94a3b8; font-weight:700; margin-right:6px; }
+  .team-popover__meta .val{ color:#0f172a; font-weight:800; }
+  .team-popover__meta .sep{ margin: 0 8px; color:#cbd5e1; }
+  .team-popover__meta .date{ white-space: nowrap; }
+  /* --- List View Specific Overrides --- */
+
+  /* 1. Status Block in Table */
+  .table .kb-status {
+      margin-top: 6px;
+      padding: 6px 8px;
+      background: #f8f9fa; /* Lighter background for table */
+      border: 1px solid #e9ecef; /* Subtle border */
+      font-size: 0.8rem;
+      min-width: 180px; /* Ensure it doesn't get too squashed */
+      max-width: 240px;
+  }
+  .table .kb-status .badge {
+      margin-bottom: 4px; /* Space between badge and metadata */
+  }
+
+  /* 2. Live Feed in Table (Customer Column) */
+  .table .live-feed-bar {
+      margin-top: 8px;
+      background: #fdfdfd;
+      border: 1px solid #f0f0f0;
+      width: 100%;
+      max-width: 450px; /* Prevent it from stretching infinitely */
+  }
+
+  /* 3. Adjust Table alignment for top vertical alignment */
+  .table tbody tr td {
+      vertical-align: top !important;
+  }
+</style>
+
 @endsection
 
 @section('content')
@@ -1602,13 +1926,7 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
                           <i class="feather icon-list tab-icon"></i> Liste
                           <span class="badge badge-secondary ml-1" id="tabCountList">{{ $tabCounts['list'] ?? 0 }}</span>
                         </a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="archive-tab" data-toggle="tab" href="#archive" role="tab" aria-selected="false">
-                          <i class="feather icon-archive tab-icon"></i> Archiv
-                          <span class="badge badge-secondary ml-1" id="tabCountArchive">{{ $tabCounts['archive'] ?? 0 }}</span>
-                        </a>
-                      </li>
+                      </li> 
                       <li class="nav-item">
                         <a class="nav-link" id="junk-tab" data-toggle="tab" href="#junk" role="tab" aria-selected="false">
                           <i class="feather icon-trash tab-icon"></i> Junk
@@ -1622,13 +1940,7 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
                           <span class="badge badge-secondary ml-1" id="tabCountTicket">{{ $tabCounts['ticket'] ?? 0 }}</span>
                         </a>
                       </li>
-
-                      <li class="nav-item">
-                          <a class="nav-link" id="investment-tab" data-toggle="tab" href="#investment" role="tab" aria-selected="false">
-                            <i class="feather icon-bar-chart-2 tab-icon"></i> Kundenwert
-                            <span class="badge badge-secondary ml-1" id="tabCountInvestment">0</span>
-                          </a>
-                        </li>
+ 
 
                     </ul>
 
@@ -1643,32 +1955,55 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
 
                       {{-- List (AJAX) --}}
                       <div class="tab-pane show active" id="profile" aria-labelledby="profile-tab" role="tabpanel">
-                        <div class="table-responsive p-3">
-                          <table class="table table-striped table-bordered align-middle">
-                            <thead>
-                              <tr>
-                                <th class="sortable" data-sort="created_at">Datum <i class="sort-icon feather icon-chevron-up"></i></th>
-                                <th class="sortable" data-sort="customer_lastname">Kunde <i class="sort-icon feather icon-chevron-up"></i></th>
-                                <th class="sortable" data-sort="city">Ort <i class="sort-icon feather icon-chevron-up"></i></th>
-                                <th>Produkt</th>
-                                <th>Mitarbeiter</th>
-                                <th>Status</th>
-                                <th>Phase</th>
-                                <th>Aktionen</th>
-                              </tr>
-                            </thead>
-                            <tbody id="kanbanTableBody">
-                              <tr><td colspan="8" class="text-center text-muted">Lade Daten…</td></tr>
-                            </tbody>
-                          </table>
-                          <div id="listPagination" class="d-flex justify-content-center py-2"></div>
-                        </div>
-                      </div>
+                          <div class="table-responsive p-3"> 
+                                <div class="d-flex justify-content-end align-items-center mb-2 rounded p-1 border">
+                                    <label for="listSortSelect" class="small text-muted mb-0 mr-2 font-weight-bold">Sortieren:</label>
+                                    
+                                    <select id="listSortSelect" class="custom-select custom-select-sm" style="width: auto; max-width: 250px;">
+                                        <optgroup label="Datum">
+                                            <option value="created_at|desc" selected>Datum (neueste zuerst)</option>
+                                            <option value="created_at|asc">Datum (älteste zuerst)</option>
+                                        </optgroup>
+                                        <optgroup label="Zuletzt aktualisiert">
+                                            <option value="updated_at|desc">Aktualisiert (neueste)</option>
+                                            <option value="updated_at|asc">Aktualisiert (älteste)</option>
+                                        </optgroup>
+                                        <optgroup label="Kunde">
+                                            <option value="customer_lastname|asc">Kunde (A-Z)</option>
+                                            <option value="customer_lastname|desc">Kunde (Z-A)</option>
+                                        </optgroup>
+                                        <optgroup label="Ort">
+                                            <option value="city|asc">Ort (A-Z)</option>
+                                            <option value="city|desc">Ort (Z-A)</option>
+                                        </optgroup>
+                                        <optgroup label="Status">
+                                            <option value="status|asc">Status (A-Z)</option>
+                                            <option value="status|desc">Status (Z-A)</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
 
-                      {{-- Archive (server-rendered partial) --}}
-                      <div class="tab-pane" id="archive" aria-labelledby="archive-tab" role="tabpanel">
-                        @include('admin.kanban.partials.archive', ['archive' => $archive])
+                                <table class="table table-striped table-bordered align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Datum</th>
+                                            <th>Kunde</th>
+                                            <th>Ort</th>
+                                            <th>Produkt</th>
+                                            <th>Mitarbeiter</th>
+                                            <th>Status</th>
+                                            <th>Phase</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="kanbanTableBody">
+                                        <tr><td colspan="8" class="text-center text-muted">Lade Daten…</td></tr>
+                                    </tbody>
+                                </table>
+                                
+                                <div id="listPagination" class="d-flex justify-content-center py-2"></div>
+                            </div>
                       </div>
+ 
 
                       {{-- Junk (server-rendered partial) --}}
                       <div class="tab-pane" id="junk" aria-labelledby="junk-tab" role="tabpanel">
@@ -1682,10 +2017,7 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
                           'total'   => $tabCounts['ticket'] ?? 0
                         ])
                       </div>
-
-                      <div class="tab-pane" id="investment" aria-labelledby="investment-tab" role="tabpanel"> 
-                        @include('admin.kanban.partials.investment', ['investments' => [], 'overallMin' => null, 'overallMax' => null])
-                      </div> 
+ 
 
                     </div><!-- /tab-content -->
 
@@ -1708,7 +2040,227 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
 
     {{-- ======= SINGLE DRAWER: Übersicht & Filter ======= --}}
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
- 
+    <aside class="drawer" id="sideDrawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+      <div class="drawer-header">
+        <div class="d-flex align-items-center">
+          <i class="feather icon-sliders mr-2"></i>
+          <h5 id="drawerTitle" class="mb-0">Übersicht &amp; Filter</h5>
+          <span id="tabFilterCount" class="tab-badge-inline d-none ml-2">0</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <button class="btn btn-sm btn-outline-secondary mr-1" id="btnClearFilters"><i class="feather icon-rotate-ccw"></i> Alles löschen</button>
+          <button class="btn btn-sm btn-primary" id="btnApplyFilters"><i class="feather icon-check-circle"></i> Anwenden</button>
+          <button class="btn btn-sm btn-outline-secondary ml-1" data-close-drawer><i class="feather icon-x"></i></button>
+        </div>
+      </div>
+
+      {{-- Chips summary of active filters --}}
+      <div class="px-3 pt-2">
+        <div id="activeFilterChips" class="chips"></div>
+      </div>
+
+      <div class="drawer-body">
+        <!-- SUMMARY (top) -->
+        <div id="view-summary" class="mb-1">
+          <div class="row text-center" id="summaryStats" style="justify-content:center">
+            <div id="cardEmployees" class="col-6 col-md-6 summary-card mb-1">
+              <div class="border rounded py-2" style="border:1px solid #8fc63f!important">
+                <strong class="text-primary">Verantwortliche</strong>
+                <div id="totalEmployees" class="h4">{{ $totalEmployees ?? 0 }}</div>
+              </div>
+            </div>
+            <div id="cardProducts" class="col-6 col-md-6 summary-card mb-1">
+              <div class="border rounded py-2" style="border:1px solid #8fc63f!important">
+                <strong class="text-primary">Produkt</strong>
+                <div id="totalProduct" class="h4">{{ $totalProducts ?? 0 }}</div>
+              </div>
+            </div>
+            <div id="cardCustomers" class="col-6 col-md-6 summary-card mb-1">
+              <div class="border rounded py-2" style="border:1px solid #8fc63f!important">
+                <strong class="text-primary">Kunde</strong>
+                <div id="totalCustomer" class="h4">{{ $totalCustomers ?? 0 }}</div>
+              </div>
+            </div>
+            <div id="cardAnfragen" class="col-6 col-md-6 summary-card mb-1">
+              <div class="border rounded py-2" style="border:1px solid #8fc63f!important">
+                <strong class="text-primary">Nachfrage</strong>
+                <div id="totalAnfrage" class="h4">{{ ($tabCounts['kanban'] ?? 0) }}</div>
+              </div>
+            </div>
+
+            <div id="cardOffen" class="col-12 summary-card mb-2">
+              <div class="border rounded py-2 bg-orange text-white" style="background:#f49f43;color:white!important;">
+                <strong>Offen</strong>
+                <div id="statusOffen" class="h4 text-white">
+                  {{ $statusCounts['offen'] ?? 0 }} <small>({{ $statusPercentages['offen'] ?? 0 }}%)</small>
+                </div>
+              </div>
+            </div>
+
+            <div id="cardZusage" class="col-6 summary-card">
+              <div class="border rounded py-2 bg-primary text-white">
+                <strong>Zusage</strong>
+                <div id="statusZusage" class="h4 text-white">
+                  {{ $statusCounts['zusage'] ?? 0 }} <small>({{ $statusPercentages['zusage'] ?? 0 }}%)</small>
+                </div>
+              </div>
+            </div>
+
+            <div id="cardAbsage" class="col-6 summary-card">
+              <div class="border rounded py-2 bg-danger text-white">
+                <strong>Absage</strong>
+                <div id="statusAbsage" class="h4 text-white">
+                  {{ $statusCounts['absage'] ?? 0 }} <small>({{ $statusPercentages['absage'] ?? 0 }}%)</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-2">
+
+        <!-- FILTER (below summary) -->
+        <div id="view-filter">
+          <form id="kanbanFilterForm" class="row align-items-end g-2">
+            <div class="col-md-6">
+              <label for="customerFilter" class="form-label d-flex align-items-center">
+                Kunde <span class="badge badge-secondary ml-2 d-none" id="countCustomers">{{ $totalCustomers ?? 0 }}</span>
+              </label>
+              <select name="customer" id="customerFilter" class="form-control select2">
+                <option value="">Alle</option>
+                @foreach ($customers as $customer)
+                  <option value="{{ $customer->id }}">{{ $customer->name }} {{ $customer->lastname }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="stageFilter" class="form-label">Phase</label>
+              <select name="stage" id="stageFilter" class="form-control select2">
+                <option value="">Alle Phasen</option>
+                @foreach(($stageNames ?? ['lead'=>'Lead','offer'=>'Verkauf','deal'=>'Auftrag','project'=>'Montage','completed'=>'Abschluss']) as $key => $label)
+                  <option value="{{ $key }}">{{ $label }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <div class="col-md-6">
+            <label for="branchFilter" class="form-label d-flex align-items-center">
+              Filiale
+              <span class="badge badge-secondary ml-2 d-none" id="countBranches">{{ count($branches ?? []) }}</span>
+            </label>
+
+            <select name="branch" id="branchFilter" class="form-control select2">
+              <option value="">Alle</option>
+              @foreach (($branches ?? []) as $b)
+                <option value="{{ $b->id }}" data-color="{{ $b->color ?? '#93c21c' }}">
+                  {{ $b->branch }}
+                </option>
+              @endforeach
+            </select>
+          </div>
+
+
+            <div class="col-md-6">
+              <label for="employeeFilter" class="form-label d-flex align-items-center">
+                Mitarbeiter <span class="badge badge-secondary ml-2 d-none" id="countEmployees">{{ $totalEmployees ?? 0 }}</span>
+              </label>
+             <select name="employee" id="employeeFilter" class="form-control select2">
+                <option value="">Alle</option>
+                @foreach ($employees as $employee)
+                  <option value="{{ $employee->id }}">
+                    {{ $employee->name }} {{ $employee->lastname }}
+                  </option>
+                @endforeach
+              </select>
+
+            </div>
+
+            <div class="col-md-6">
+              <label for="departmentFilter" class="form-label d-flex align-items-center">
+                Abteilung <span class="badge badge-secondary ml-2 d-none" id="countDepartments">{{ $totalDepartments ?? 0 }}</span>
+              </label>
+              <select name="department" id="departmentFilter" class="form-control select2">
+                <option value="">Alle</option>
+                @foreach ($departments as $department)
+                  <option value="{{ $department->department_name }}">{{ $department->department_name }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="productFilter" class="form-label d-flex align-items-center">
+                Produkt <span class="badge badge-secondary ml-2 d-none" id="countProducts">{{ $totalProducts ?? 0 }}</span>
+              </label>
+              <select name="product" id="productFilter" class="form-control select2">
+                <option value="">Alle</option>
+                @foreach ($products as $product)
+                  <option value="{{ $product->id }}">{{ $product->article_group }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="interestFilter" class="form-label">Interesse</label>
+              <select name="interest" id="interestFilter" class="form-control select2">
+                <option value="">Alle Interessen</option>
+                <option value="interest">Kaufinteresse</option>
+                <option value="intent">Kaufabsicht</option>
+                <option value="option">Kaufoption</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="dateFrom" class="form-label">Von (Datum)</label>
+              <input type="date" name="date_from" id="dateFrom" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+              <label for="dateTo" class="form-label">Bis (Datum)</label>
+              <input type="date" name="date_to" id="dateTo" class="form-control" />
+            </div>
+
+
+           <div class="col-12">
+              <hr class="my-2">
+              <label class="form-label mb-3 font-weight-bold text-dark">
+                  <i class="feather icon-layout mr-1"></i> Spalten Sichtbarkeit
+              </label>
+
+              <div class="d-flex flex-wrap" id="columnTogglesContainer">
+                  @foreach(($stageNames ?? ['lead'=>'Lead','offer'=>'Verkauf','deal'=>'Auftrag','project'=>'Montage','completed'=>'Abschluss', 'archive'=>'Archiv']) as $key => $label)
+                      <div class="custom-control custom-checkbox mr-3 mb-2">
+                          <input type="checkbox" 
+                                class="custom-control-input col-toggle-checkbox" 
+                                id="toggleCol_{{ $key }}" 
+                                value="{{ $key }}"
+                                {{ $key !== 'archive' ? 'checked' : '' }}>
+                          
+                          <label class="custom-control-label d-flex align-items-center" for="toggleCol_{{ $key }}" style="cursor: pointer; user-select: none;">
+                              {{-- Icon for ON --}}
+                              <span class="toggle-icon-on mr-1">
+                                  <i class="feather icon-eye text-success"></i>
+                              </span>
+                              {{-- Icon for OFF --}}
+                              <span class="toggle-icon-off mr-1">
+                                  <i class="feather icon-eye-off text-muted"></i>
+                              </span>
+                              
+                              {{-- Text Label --}}
+                              <span class="toggle-label-text">{{ $label }}</span>
+                          </label>
+                      </div>
+                  @endforeach
+              </div>
+          </div>
+
+            <div class="col-12 small text-muted mt-2">
+              Tipp: <kbd>Enter</kbd> = Anwenden, <kbd>Esc</kbd> = Schließen.
+            </div>
+          </form>
+        </div>
+      </div>
+    </aside>
 
 
     <!-- Live Feed Modal Backdrop -->
@@ -2118,30 +2670,28 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
 
  
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+<script>
+    window.ALL_EMPLOYEES = @json($employees); 
+</script>
 
- <script>
+<script>
 /* =============================================================================
  * LeadUI – Core (Segment 1/2)
  * - Config, State, Storage, URL Sync
  * - Utilities + Polyfills
  * - Network layer: safeFetchJSON / postJSON
  * - Filters + Drawer
- * - Kanban renderers (diff + incremental)
- * - Notes drawer (now with Quill editor support)
- * - Archive/Junk partial loaders
+ * - Kanban renderers
+ * - Notes drawer
+ * - Junk partial loaders
  * - LiveFeed: per-card mini feed + full-screen modal (LiveFeedModal)
  * =============================================================================*/
 (function () {
   "use strict";
 
-  /* ------------------------------ Polyfills -------------------------------- */
-  // requestIdleCallback shim
-  // @ts-ignore
-  window.requestIdleCallback ||= (cb) =>
-    setTimeout(() => cb({ timeRemaining: () => 10 }), 0);
+  /* --- Polyfills --- */
+  window.requestIdleCallback ||= (cb) => setTimeout(() => cb({ timeRemaining: () => 10 }), 0);
 
-  // CSS.escape shim
-  // @ts-ignore
   if (!window.CSS || !CSS.escape) {
     window.CSS = {
       ...(window.CSS || {}),
@@ -2149,59 +2699,52 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     };
   }
 
-  /* -------------------------------- Config -------------------------------- */
+  /* --- Config --- */
   const APP = {
     EMP_SRC: "{{ asset('images/employee') }}",
     endpoints: {
-      kanbanSearch: "/lead/kanban/search", // GET
-      listSearch: "/lead/kanban/ajax", // GET (paginated)
-      changeStage: "/lead-product/change-stage", // POST /:c/:a/:p
-      progress: "/lead-product/progress", // POST /:leadProductId/:state
-      purge: "/lead-product/purge", // DELETE (via POST+_method)
+      kanbanSearch: "/lead/kanban/search", 
+      listSearch: "/lead/kanban/ajax", 
+      changeStage: "/lead-product/change-stage", 
+      progress: "/lead-product/progress", 
+      purge: "/lead-product/purge", 
 
-      notesIndex: "/customer-notes", // GET ?customer_id&alternative_id&product_id
-      notesStore: "/customer-notes", // POST
-      notesInlineUpdate: (id) => `/customer-notes/inline-update/${id}`, // POST
-      notesDestroy: (id) => `/customer-notes/delete/${id}`, // DELETE
+      notesIndex: "/customer-notes", 
+      notesStore: "/customer-notes", 
+      notesInlineUpdate: (id) => `/customer-notes/inline-update/${id}`, 
+      notesDestroy: (id) => `/customer-notes/delete/${id}`, 
 
-      archive: "/lead/kanban/archive", // GET partial HTML
-      junk: "/lead/kanban/junk", // GET partial HTML
+      junk: "/lead/kanban/junk", 
 
-      personalTasksIndex: "/personal-tasks/index", // GET ?customer_id&alternative_id&product_id
-      personalTasksStore: "/personal-tasks/store", // POST
-      personalTasksUpdate: (id) => `/personal-tasks/${id}/update`, // PUT
-      personalTasksDestroy: (id) => `/personal-tasks/${id}/destroy`, // DELETE
-      ptEmployeesSync: (id) => `/personal-tasks/${id}/employees/sync`, // POST
+      personalTasksIndex: "/personal-tasks/index", 
+      personalTasksStore: "/personal-tasks/store", 
+      personalTasksUpdate: (id) => `/personal-tasks/${id}/update`, 
+      personalTasksDestroy: (id) => `/personal-tasks/${id}/destroy`, 
+      ptEmployeesSync: (id) => `/personal-tasks/${id}/employees/sync`, 
 
-      ptStepsIndex: (taskId) => `/personal-tasks/${taskId}/steps`, // GET
-      ptStepsStore: (taskId) => `/personal-tasks/${taskId}/steps`, // POST
-      ptStepsUpdate: (stepId) => `/personal-tasks/steps/${stepId}`, // PUT
-      ptStepsDestroy: (stepId) => `/personal-tasks/steps/${stepId}`, // DELETE
-      ptStepsEmpSync: (stepId) =>
-        `/personal-tasks/steps/${stepId}/employees/sync`, // POST
+      ptStepsIndex: (taskId) => `/personal-tasks/${taskId}/steps`, 
+      ptStepsStore: (taskId) => `/personal-tasks/${taskId}/steps`, 
+      ptStepsUpdate: (stepId) => `/personal-tasks/steps/${stepId}`, 
+      ptStepsDestroy: (stepId) => `/personal-tasks/steps/${stepId}`, 
+      ptStepsEmpSync: (stepId) => `/personal-tasks/steps/${stepId}/employees/sync`, 
 
       ticketize: (id) => `/lead-product/ticketize/${id}`,
-      tickets: "/lead/kanban/tickets",
-      investment: "/lead/kanban/investment",
+      tickets: "/lead/kanban/tickets", 
 
-      appointmentsIndex: "appointments/index", // GET ?customer_id&alternative_id&product_id
-      appointmentsStore: "appointments/store", // POST
-      appointmentsUpdate: (id) => `appointments/${id}/update`, // PUT
-      appointmentsDestroy: (id) => `appointments/${id}/destroy`, // DELETE
-      appointmentsCustomerSearch: "appointments/customer-search", // GET ?q=
+      appointmentsIndex: "appointments/index", 
+      appointmentsStore: "appointments/store", 
+      appointmentsUpdate: (id) => `appointments/${id}/update`, 
+      appointmentsDestroy: (id) => `appointments/${id}/destroy`, 
+      appointmentsCustomerSearch: "appointments/customer-search", 
 
       reportsIndex: "{{ url('kanban/appointments/reports') }}",
-      reportsReact: (id) =>
-        "{{ url('kanban/appointments/reports') }}/" + id + "/react",
-      reportsComment: (id) =>
-        "{{ url('kanban/appointments/reports') }}/" + id + "/comment",
-      reportsStore: (appointmentId) =>
-        "{{ url('kanban/appointments') }}/" + appointmentId + "/reports",
+      reportsReact: (id) => "{{ url('kanban/appointments/reports') }}/" + id + "/react",
+      reportsComment: (id) => "{{ url('kanban/appointments/reports') }}/" + id + "/comment",
+      reportsStore: (appointmentId) => "{{ url('kanban/appointments') }}/" + appointmentId + "/reports",
 
-      customerReportsIndex: "{{ url('kanban/customer-reports') }}", // GET
-      customerReportsStore: "{{ url('kanban/customer-reports') }}", // POST
-      customerReportsComment: (id) =>
-        "{{ url('kanban/customer-reports') }}/" + id + "/comment",
+      customerReportsIndex: "{{ url('kanban/customer-reports') }}", 
+      customerReportsStore: "{{ url('kanban/customer-reports') }}", 
+      customerReportsComment: (id) => "{{ url('kanban/customer-reports') }}/" + id + "/comment",
 
       liveFeed: "/lead/kanban/feed",
     },
@@ -2211,6 +2754,7 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
       deal: "Auftrag",
       project: "Montage",
       completed: "Abschluss",
+      archive: "Archiv",
     },
     stageAlias: {
       open: "lead",
@@ -2237,10 +2781,8 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     label: { playing: "Aktiv", paused: "Pausiert", stopped: "Gestoppt" },
   };
 
-  /* --------------------------- Quill for notes ----------------------------- */
-  // Global Quill instance for the notes drawer (new note input)
+  /* --- Quill for Notes --- */
   let noteQuill = null;
-
   function ensureNoteQuill() {
       if (typeof window.Quill === "undefined") return null;
       if (noteQuill) return noteQuill;
@@ -2248,7 +2790,6 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
       let editorHost = document.getElementById("noteEditor");
       const textarea = document.getElementById("noteText");
 
-      // If there is no explicit #noteEditor, create one in place of the textarea
       if (!editorHost && textarea) {
           editorHost = document.createElement("div");
           editorHost.id = "noteEditor";
@@ -2272,7 +2813,6 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
 
       return noteQuill;
   }
-
   function getNoteEditorHTML() {
     const textarea = document.getElementById("noteText");
     if (noteQuill) {
@@ -2280,7 +2820,6 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     }
     return (textarea?.value || "").trim();
   }
-
   function setNoteEditorHTML(html) {
     const textarea = document.getElementById("noteText");
     if (noteQuill) {
@@ -2294,7 +2833,7 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     }
   }
 
-  /* ------------------------------ State store ------------------------------ */
+  /* --- State --- */
   const STORAGE_KEY = "leadOverview.filters.v4";
   const State = {
     sort: { ...APP.defaults.sort },
@@ -2308,7 +2847,7 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     selectedIds: new Set(),
   };
 
-  /* --------------------------------- Utils -------------------------------- */
+  /* --- Utils --- */
   const qs = (s, ctx = document) => ctx.querySelector(s);
   const qsa = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
   const CSRF = () => qs('meta[name="csrf-token"]')?.content || "";
@@ -2321,46 +2860,44 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     }
   };
   const featherRefreshSoon = () => {
-    if (window.feather?.replace)
-      requestAnimationFrame(() => feather.replace());
+    if (window.feather?.replace) requestAnimationFrame(() => feather.replace());
   };
   const shortNum = (n) => {
     n = Number(n || 0);
     if (n < 1e3) return "" + n;
-    if (n < 1e6)
-      return (n / 1e3)
-        .toFixed(n % 1e3 ? 1 : 0)
-        .replace(/\.0$/, "") + "k";
-    if (n < 1e9)
-      return (n / 1e6)
-        .toFixed(n % 1e6 ? 1 : 0)
-        .replace(/\.0$/, "") + "M";
-    return (n / 1e9)
-      .toFixed(n % 1e9 ? 1 : 0)
-      .replace(/\.0$/, "") + "B";
+    if (n < 1e6) return (n / 1e3).toFixed(n % 1e3 ? 1 : 0).replace(/\.0$/, "") + "k";
+    if (n < 1e9) return (n / 1e6).toFixed(n % 1e6 ? 1 : 0).replace(/\.0$/, "") + "M";
+    return (n / 1e9).toFixed(n % 1e9 ? 1 : 0).replace(/\.0$/, "") + "B";
   };
-
   const canonicalStage = (s) => {
     const k = String(s || "").toLowerCase();
     return APP.stageNames[k] ? k : APP.stageAlias[k] || "lead";
   };
+  const escapeHTML = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
+  
+  const branchSVG = (size = 14) => `
+    <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" style="vertical-align:-2px;">
+      <path d="M3 21h18"/>
+      <path d="M5 21V7a2 2 0 0 1 2-2h3v16"/>
+      <path d="M10 21V4h7a2 2 0 0 1 2 2v15"/>
+      <path d="M8 9h1"/>
+      <path d="M8 12h1"/>
+      <path d="M8 15h1"/>
+      <path d="M13 9h1"/>
+      <path d="M13 12h1"/>
+      <path d="M13 15h1"/>
+    </svg>
+  `;
 
-  // Stage order + helpers
-  const STAGE_ORDER = ["lead", "offer", "deal", "project", "completed"];
+  const STAGE_ORDER = ["lead", "offer", "deal", "project", "completed", "archive"];
   const stageRank = (s) => STAGE_ORDER.indexOf(canonicalStage(s));
   const isBackward = (from, to) => stageRank(to) < stageRank(from);
 
-  // Show/Hide action buttons based on stage (hide Junk for deal+)
   function enforceActionVisibility(cardOrStage) {
-    const cards =
-      cardOrStage && cardOrStage.nodeType === 1
-        ? [cardOrStage]
-        : Array.from(document.querySelectorAll(".card"));
-
+    const cards = cardOrStage && cardOrStage.nodeType === 1 ? [cardOrStage] : Array.from(document.querySelectorAll(".card"));
     cards.forEach((c) => {
-      const stage =
-        canonicalStage(c.dataset.stage || c.closest(".column")?.id || "lead");
-      const hideJunk = stageRank(stage) >= stageRank("deal"); // deal or later
+      const stage = canonicalStage(c.dataset.stage || c.closest(".column")?.id || "lead");
+      const hideJunk = stageRank(stage) >= stageRank("deal"); 
       const junkBtn = c.querySelector('[data-act="delete"]');
       if (junkBtn) {
         junkBtn.disabled = hideJunk;
@@ -2379,15 +2916,12 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
 
   function saveToLocal() {
     try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          sort: State.sort,
-          page: State.page,
-          filtersQS: State.filtersQS,
-          statusGroup: State.statusGroup,
-        })
-      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        sort: State.sort,
+        page: State.page,
+        filtersQS: State.filtersQS,
+        statusGroup: State.statusGroup,
+      }));
     } catch {}
   }
 
@@ -2399,11 +2933,7 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
       if (sort?.key && sort?.dir) State.sort = sort;
       if (page) State.page = Number(page) || 1;
       if (typeof filtersQS === "string") State.filtersQS = filtersQS;
-      if (
-        statusGroup === null ||
-        ["offen", "zusage", "absage"].includes(statusGroup)
-      )
-        State.statusGroup = statusGroup;
+      if (statusGroup === null || ["offen", "zusage", "absage"].includes(statusGroup)) State.statusGroup = statusGroup;
     } catch {}
   }
 
@@ -2427,168 +2957,92 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
       p.forEach((v, k) => {
         const el = form.elements[k];
         if (el) {
-          try {
-            el.value = v;
-          } catch {}
+          try { el.value = v; } catch {}
         }
       });
       if (window.jQuery) {
-        jQuery(form)
-          .find(".select2")
-          .each(function () {
-            const name = this.getAttribute("name");
-            if (name && p.has(name))
-              jQuery(this).val(p.get(name)).trigger("change");
-          });
+        jQuery(form).find(".select2").each(function () {
+          const name = this.getAttribute("name");
+          if (name && p.has(name)) jQuery(this).val(p.get(name)).trigger("change");
+        });
       }
     }
     State.sort.key = p.get("sort_by") || State.sort.key;
-    State.sort.dir =
-      (p.get("sort_dir") || State.sort.dir).toLowerCase() === "asc"
-        ? "asc"
-        : "desc";
+    State.sort.dir = (p.get("sort_dir") || State.sort.dir).toLowerCase() === "asc" ? "asc" : "desc";
     State.page = parseInt(p.get("page") || State.page, 10) || 1;
-    State.filtersQS = buildFilterQS(); // ensure status_group injection
+    State.filtersQS = buildFilterQS();
   }
 
-  /* ------------------------------- Networking ----------------------------- */
+  /* --- Networking --- */
   function cancel(key) {
-    try {
-      State.req[key]?.abort();
-    } catch {}
+    try { State.req[key]?.abort(); } catch {}
     State.req[key] = new AbortController();
     return State.req[key].signal;
   }
-
-  async function safeFetchJSON(
-    url,
-    { method = "GET", headers = {}, body, signal, retries = 0, retryDelay = 240 } = {}
-  ) {
+  async function safeFetchJSON(url, { method = "GET", headers = {}, body, signal, retries = 0, retryDelay = 240 } = {}) {
     const go = async () => {
       const res = await fetch(url, {
-        method,
-        credentials: "same-origin",
-        headers: {
-          Accept: "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          ...headers,
-        },
-        body,
-        signal,
+        method, credentials: "same-origin",
+        headers: { Accept: "application/json", "X-Requested-With": "XMLHttpRequest", ...headers },
+        body, signal,
       });
       const text = await res.text();
       if (!res.ok || isLikelyHTML(text)) {
-        const hint =
-          res.status === 419
-            ? "CSRF (419)"
-            : res.status === 401
-            ? "Unauthorized (401)"
-            : isLikelyHTML(text)
-            ? "Returned HTML (login/exception?)"
-            : "";
-        const snippet = text.replace(/\s+/g, " ").slice(0, 400);
-        throw new Error(
-          `HTTP ${res.status} ${res.statusText}. ${hint}\n${snippet}`
-        );
+        throw new Error(`HTTP ${res.status} ${res.statusText}`);
       }
-      try {
-        return JSON.parse(text);
-      } catch {
-        throw new Error("Invalid JSON");
-      }
+      try { return JSON.parse(text); } catch { throw new Error("Invalid JSON"); }
     };
-
     try {
       return await go();
     } catch (err) {
       if (retries > 0 && method === "GET") {
         await new Promise((r) => setTimeout(r, retryDelay));
-        return safeFetchJSON(url, {
-          method,
-          headers,
-          body,
-          signal,
-          retries: retries - 1,
-          retryDelay: retryDelay * 1.6,
-        });
+        return safeFetchJSON(url, { method, headers, body, signal, retries: retries - 1, retryDelay: retryDelay * 1.6 });
       }
       throw err;
     }
   }
-
   const postJSON = (url, payload = {}) =>
     safeFetchJSON(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-TOKEN": CSRF(),
-      },
+      headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": CSRF() },
       body: JSON.stringify(payload),
     });
 
-  /* ------------------------------ Filters/UI ------------------------------ */
+  /* --- Filters/UI --- */
   function initSelect2() {
     if (!window.jQuery) return;
     const $d = jQuery("#sideDrawer");
     $d.find(".select2").each(function () {
       const $el = jQuery(this);
       if ($el.hasClass("select2-hidden-accessible")) $el.select2("destroy");
-      $el.select2({
-        placeholder: "Auswählen…",
-        allowClear: true,
-        width: "100%",
-        dropdownParent: $d,
-      });
+      $el.select2({ placeholder: "Auswählen…", allowClear: true, width: "100%", dropdownParent: $d });
     });
   }
 
   function getFilterValues() {
     const f = qs("#kanbanFilterForm");
     if (!f) return {};
-    const fd = new FormData(f),
-      obj = {};
+    const fd = new FormData(f), obj = {};
     fd.forEach((v, k) => (obj[k] = v === "" ? null : v));
     return obj;
   }
 
   function updateFilterBadges() {
     const vals = getFilterValues();
-    const keys = [
-      "customer",
-      "stage",
-      "employee",
-      "department",
-      "product",
-      "interest",
-      "date_from",
-      "date_to",
-    ];
-    const n =
-      keys.reduce(
-        (t, k) => t + (vals[k] && String(vals[k]).trim() ? 1 : 0),
-        0
-      ) + (State.statusGroup ? 1 : 0);
-
+    const keys = ["customer", "stage", "employee", "department", "product", "interest", "date_from", "date_to"];
+    const n = keys.reduce((t, k) => t + (vals[k] && String(vals[k]).trim() ? 1 : 0), 0) + (State.statusGroup ? 1 : 0);
     const rail = qs("#filterBadge");
     const tab = qs("#tabFilterCount");
     const btn = qs("#btnOpenDrawer");
-    if (rail) {
-      rail.textContent = n;
-      rail.classList.toggle("d-none", !n);
-    }
-    if (tab) {
-      tab.textContent = n;
-      tab.classList.toggle("d-none", !n);
-    }
-    if (btn) {
-      btn.classList.toggle("rail-btn--active", !!n);
-    }
+    if (rail) { rail.textContent = n; rail.classList.toggle("d-none", !n); }
+    if (tab) { tab.textContent = n; tab.classList.toggle("d-none", !n); }
+    if (btn) btn.classList.toggle("rail-btn--active", !!n);
   }
 
   function buildFilterQS() {
     const form = qs("#kanbanFilterForm") || document.createElement("form");
     const p = new URLSearchParams(new FormData(form));
-
     if (State.statusGroup) {
       p.set("status_group", State.statusGroup);
       p.delete("stage");
@@ -2597,7 +3051,6 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     } else {
       p.delete("status_group");
     }
-
     p.set("sort_by", State.sort.key);
     p.set("sort_dir", State.sort.dir);
     p.delete("page");
@@ -2605,8 +3058,7 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
   }
 
   const Drawer = (() => {
-    const el = qs("#sideDrawer"),
-      bd = qs("#drawerBackdrop");
+    const el = qs("#sideDrawer"), bd = qs("#drawerBackdrop");
     function open() {
       el?.classList.add("open");
       bd?.classList.add("show");
@@ -2620,9 +3072,7 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
       document.body.style.overflow = "";
     }
     bd?.addEventListener("click", close);
-    qsa("[data-close-drawer]").forEach((b) =>
-      b.addEventListener("click", close)
-    );
+    qsa("[data-close-drawer]").forEach((b) => b.addEventListener("click", close));
     qs("#btnOpenDrawer")?.addEventListener("click", open);
     return { open, close };
   })();
@@ -2634,24 +3084,20 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     qs("#notesDrawer")?.classList.remove("open");
     document.body.style.overflow = "";
   }
-
-  /* ------------------------------ Kanban DOM ------------------------------- */
+  
+  /* --- Kanban DOM --- */
   function ensureColumns() {
     const board = qs("#kanban");
     if (!board) return;
     if (board.querySelector(".column")) return;
-
     const frag = document.createDocumentFragment();
     Object.entries(APP.stageNames).forEach(([id, title]) => {
       const col = document.createElement("div");
       col.className = "column";
       col.id = id;
-      col.ondragover = (e) => e.preventDefault(); // onDrop wired in Segment 2
+      col.ondragover = (e) => e.preventDefault();
       col.innerHTML = `
-        <h3>
-          <span>${title}</span>
-          <span class="count-badge" data-count-for="${id}" aria-live="polite">0</span>
-        </h3>
+        <h3><span>${title}</span><span class="count-badge" data-count-for="${id}" aria-live="polite">0</span></h3>
         <div class="column-content"></div>
       `;
       frag.appendChild(col);
@@ -2675,12 +3121,9 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
   }
 
   function statusBadge(stage) {
-    if (["lead", "offer"].includes(stage))
-      return ["Offen", "warning", "text-dark"];
-
-    if (["deal", "project", "completed"].includes(stage))
-      return ["Zusage", "success", ""];
-
+    if (["lead", "offer"].includes(stage)) return ["Offen", "warning", "text-dark"];
+    if (["deal", "project", "completed"].includes(stage)) return ["Zusage", "success", ""];
+    if (["archive", "archiv"].includes(stage)) return ["Archiv", "secondary", ""];
     return ["Absage", "danger", ""];
   }
 
@@ -2695,62 +3138,26 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
 
     return `
       <div class="kb-status">
-        <div>
-          <span class="badge bg-${tone} badge-${tone} ${extra}">${txt}</span>
-        </div>
-        ${
-          hasWS
-            ? `
-        <div class="mt-1">
-          <span class="badge bg-${RUN.badgeTone[ws]} ${
-              ws === "paused" ? "text-dark" : ""
-            }">
-            <i class="feather ${RUN.icon[ws]}"></i> ${RUN.label[ws]}
-          </span>
-        </div>`
-            : ""
-        }
-
+        <div><span class="badge bg-${tone} badge-${tone} ${extra}">${txt}</span></div>
+        ${hasWS ? `<div class="mt-1"><span class="badge bg-${RUN.badgeTone[ws]} ${ws === "paused" ? "text-dark" : ""}"><i class="feather ${RUN.icon[ws]}"></i> ${RUN.label[ws]}</span></div>` : ""}
         <div class="meta">
-          <div class="rowline"><i class="feather icon-box"></i></div>
-          <div class="rowline value"><strong>${latestPhase}</strong></div>
-
-          <div class="rowline"><i class="feather icon-check-circle"></i></div>
-          <div class="rowline value">${latestAct}</div>
-
-          <div class="rowline"><i class="feather icon-clock"></i></div>
-          <div class="rowline value time">${timeText}</div>
+          <div class="rowline"><i class="feather icon-box"></i></div><div class="rowline value"><strong>${latestPhase}</strong></div>
+          <div class="rowline"><i class="feather icon-check-circle"></i></div><div class="rowline value">${latestAct}</div>
+          <div class="rowline"><i class="feather icon-clock"></i></div><div class="rowline value time">${timeText}</div>
         </div>
       </div>`;
   }
 
   function applyRunStateUI(card, state) {
-    const cls = {
-      playing: "status-playing",
-      paused: "status-paused",
-      stopped: "status-stopped",
-    };
-    card.classList.remove(
-      "status-playing",
-      "status-paused",
-      "status-stopped",
-      "card-has-overlay"
-    );
+    const cls = { playing: "status-playing", paused: "status-paused", stopped: "status-stopped" };
+    card.classList.remove("status-playing", "status-paused", "status-stopped", "card-has-overlay");
     card.classList.add(cls[state] || cls.playing);
-
     const overlay = card.querySelector(".card-status-overlay");
     if (!overlay) return;
-
     if (state === "paused" || state === "stopped") {
       card.classList.add("card-has-overlay");
       overlay.style.display = "flex";
-      overlay.innerHTML = `
-        <span class="card-status-badge">
-          <i class="feather ${
-            state === "paused" ? "icon-pause" : "icon-square"
-          }"></i>
-          ${state === "paused" ? "Pause" : "Stopp"}
-        </span>`;
+      overlay.innerHTML = `<span class="card-status-badge"><i class="feather ${state === "paused" ? "icon-pause" : "icon-square"}"></i> ${state === "paused" ? "Pause" : "Stopp"}</span>`;
     } else {
       overlay.style.display = "none";
       overlay.innerHTML = "";
@@ -2761,209 +3168,312 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
   const cardId = (it) => `card-${it.lead_product_id}`;
 
   function cardHTML(item, stageKey) {
-    const fullName =
-      `${item.customer_name ?? ""} ${item.customer_lastname ?? ""}`.trim() ||
-      "Unbekannt";
-    const address = [item.street, item.postcode, item.city]
-      .filter(Boolean)
-      .join(", ");
-    const updated = new Date(
-      item.updated_at || Date.now()
-    ).toLocaleDateString("de-DE");
+      "use strict";
 
-    const employee =
-      item.employee && item.employee.employee_id ? item.employee : null;
-    const fieldEmployee =
-      item.field_employee && item.field_employee.employee_id
-        ? item.field_employee
-        : null;
+      // 1. Define helpers at the top to prevent "esc is not defined" errors
+      const safeStr = (v) => (v == null ? "" : String(v));
+      const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+      })[m]);
+      const isNonEmpty = (v) => safeStr(v).trim().length > 0;
 
-    const empList = [];
+      const fullName = (() => {
+          const fn = safeStr(item?.customer_name).trim();
+          const ln = safeStr(item?.customer_lastname).trim();
+          const name = `${fn} ${ln}`.trim();
+          return name || "Unbekannt";
+      })();
 
-    if (employee) {
-      empList.push({
-        title:
-          ((employee.lastname ?? "") + " " + (employee.name ?? "")).trim() ||
-          "Innendienst",
-        image: employee.image || "",
-      });
-    }
+      const address = [item?.street, item?.postcode, item?.city]
+          .map((v) => safeStr(v).trim())
+          .filter(Boolean)
+          .join(", ");
 
-    if (fieldEmployee) {
-      empList.push({
-        title:
-          ((fieldEmployee.lastname ?? "") + " " + (fieldEmployee.name ?? "")).trim() ||
-          "Außendienst",
-        image: fieldEmployee.image || "",
-      });
-    }
+      const updated = (() => {
+          const raw = item?.updated_at;
+          const d = raw ? new Date(raw) : new Date();
+          return Number.isNaN(d.getTime()) ?
+              new Date().toLocaleDateString("de-DE") :
+              d.toLocaleDateString("de-DE");
+      })();
 
-    const empHTML =
-      empList.length > 0
-        ? `<ul class="list-unstyled users-list m-0 d-flex align-items-center">
-            ${empList
-              .map(
-                (e) => `
-              <li class="avatar pull-up" title="${e.title}">
+      const branchName = [
+              item?.branch_name,
+              item?.branch,
+              item?.branch_title,
+              item?.department_name,
+              item?.department,
+          ]
+          .map((v) => safeStr(v).trim())
+          .find((v) => v.length) || "";
+
+      const employee = item?.employee && item.employee.employee_id ? item.employee : null;
+      const fieldEmployee =
+          item?.field_employee && item.field_employee.employee_id ? item.field_employee : null;
+
+      const mkEmp = (emp, fallbackTitle) => {
+          if (!emp) return null;
+          const title =
+              `${safeStr(emp?.lastname).trim()} ${safeStr(emp?.name).trim()}`.trim() || fallbackTitle;
+          return {
+              title,
+              image: safeStr(emp?.image).trim(),
+              id: Number(emp?.employee_id ?? emp?.id ?? emp?.emp_id ?? 0) || 0,
+          };
+      };
+
+      const empList = [mkEmp(employee, "Innendienst"), mkEmp(fieldEmployee, "Außendienst")].filter(
+          Boolean
+      );
+
+      const empHTML =
+          empList.length > 0 ?
+          `
+            <ul class="list-unstyled users-list m-0 d-flex align-items-center">
+              ${empList
+                .map(
+                  (e) => `
+                  <li class="avatar pull-up" title="${esc(e.title)}">
+                    <img class="media-object rounded-circle"
+                        src="${APP.EMP_SRC}/${esc(e.image || "noimage.png")}"
+                        height="30" width="30" alt=""
+                        style="object-fit:cover;">
+                  </li>`
+                )
+                .join("")}
+            </ul>` :
+          `<small>&ndash;</small>`;
+
+      // ✅ TEAM HTML
+      const teamHTML = (() => {
+          // Reuse esc/safeStr from parent scope is fine, or redefine if isolated
+          const stageLabel = APP.stageNames?.[canonicalStage(stageKey)] || canonicalStage(stageKey);
+
+          const teamA = Array.isArray(item?.team_assignments) ? item.team_assignments : [];
+          const teamM = Array.isArray(item?.team_members) ? item.team_members : [];
+
+          const list = teamA.length ?
+              teamA.map(a => ({
+                  member: a?.member || null,
+                  assigned_at: a?.assigned_at || null,
+                  assigned_by_user: a?.assigned_by_user || null,
+                  assigned_by: a?.assigned_by || null,
+                  stage: a?.stage || null,
+                  stage_label: a?.stage_label || null,
+              })).filter(x => x.member) :
+              teamM.map(m => ({
+                  member: m,
+                  assigned_at: null,
+                  assigned_by_user: null,
+                  assigned_by: null,
+                  stage: null,
+                  stage_label: null,
+              }));
+
+          if (!list.length) return "";
+
+          const avatars = list.map((x) => {
+              const emp = x.member;
+              const id = Number(emp?.id ?? emp?.employee_id ?? emp?.emp_id ?? 0) || 0;
+              const img = emp?.image ? `/images/employee/${emp.image}` : `/images/employee/noimage.png`;
+              const name = `${safeStr(emp?.lastname).trim()} ${safeStr(emp?.name).trim()}`.trim() || "Team";
+
+              const ab = (() => {
+                  const u = x?.assigned_by_user;
+                  if (u && (u.name || u.lastname)) return `${safeStr(u.lastname).trim()} ${safeStr(u.name).trim()}`.trim();
+                  const bid = Number(x?.assigned_by ?? 0);
+                  return bid > 0 ? `Mitarbeiter #${bid}` : "";
+              })();
+
+              const at = safeStr(x?.assigned_at || "").trim();
+
+              return `
+              <li class="avatar pull-up"
+                  data-emp-id="${esc(id)}"
+                  data-assigned-by="${esc(ab)}"
+                  data-assigned-at="${esc(at)}"
+                  data-stage-label="${esc(stageLabel)}"
+                  title="${esc(name)}"
+                  style="margin-left:-8px; z-index:10;">
                 <img class="media-object rounded-circle"
-                    src="${APP.EMP_SRC}/${e.image}"
-                    height="30" width="30" alt="">
-              </li>`
-              )
-              .join("")}
-          </ul>`
-        : "<small>&ndash;</small>";
+                    src="${esc(img)}"
+                    height="26" width="26"
+                    alt="${esc(name)}"
+                    style="border:2px solid #fff; object-fit:cover;">
+              </li>
+            `;
+          }).join("");
 
-    const hideJunk =
-      stageRank(canonicalStage(stageKey)) >= stageRank("deal"); // deal+
+          return `
+            <ul class="list-unstyled users-list m-0 d-flex align-items-center"
+                data-team-hover
+                style="margin-left:10px; padding-left:10px; border-left:1px solid #e0e0e0;">
+              ${avatars}
+            </ul>`;
+      })();
 
-    return `
-      <div class="card-status-overlay" aria-hidden="true"></div>
+      const hideJunk = stageRank(canonicalStage(stageKey)) >= stageRank("deal");
 
-      <!-- Top-left custom menu -->
-      <div class="kb-menu" style="position:absolute; left:8px; top:8px; z-index:3;">
-        <button type="button"
-                class="btn-icon"
-                data-act="custom-menu-toggle"
-                title="Menü"
-                aria-haspopup="menu"
-                aria-expanded="false">
-          <i class="feather icon-more-vertical"></i>
-        </button>
-        <div class="kb-menu-dropdown" hidden>
-          <button type="button" class="kb-menu-item" data-menu="verlauf" role="menuitem">Verlauf</button> 
-          <button type="button" class="kb-menu-item" data-menu="ticket"  role="menuitem">Ticket</button>
-          <button type="button" class="kb-menu-item" data-menu="wartung" role="menuitem">Wartung</button>
-          <button type="button" class="kb-menu-item" data-menu="termin">
-            Termin
-            <span class="kb-menu-pill kb-menu-pill--ap" data-ap-count style="display:none;">0</span>
+      return `
+        <div class="card-status-overlay" aria-hidden="true"></div>
+
+        <div class="kb-menu kb-menu--card" aria-label="Kartenmenü">
+          <button type="button" class="btn-icon kb-menu-toggle" data-act="custom-menu-toggle" title="Menü" aria-haspopup="menu" aria-expanded="false">
+            <i class="feather icon-more-vertical" aria-hidden="true"></i>
           </button>
-          <button type="button" class="kb-menu-item" data-menu="aufgabe">
-            Aufgabe
-            <span class="kb-menu-pill kb-menu-pill--pt" data-pt-count style="display:none;">0</span>
-          </button>
-        </div>
-      </div>
 
-      <div class="card-header" style="padding-left:44px;">
-        <strong>${fullName}</strong>
-        <div class="circle">${item.initial ?? ""}</div>
-      </div>
-
-      <div>
-        <small><i class="feather icon-calendar"></i> ${updated}</small><br>
-        <small>${address}</small>
-      </div>
-
-      <div class="employeeList">${empHTML}</div>
-
-      ${buildStatusBlock(item)}
-
-      <!-- Compact per-card live feed; initially hidden, only shown if there are items -->
-      <div class="live-feed-bar card-live-feed"
-          data-feed-root
-          data-feed-count="0"
-          style="display:none;">
-        <div class="live-feed-left">
-          <div class="live-feed-icon">
-            <i class="feather icon-zap"></i>
+          <div class="kb-menu-dropdown" role="menu" aria-label="Menü" hidden>
+            <button type="button" class="kb-menu-item" data-menu="verlauf" role="menuitem">
+              <i class="feather icon-clock mr-50"></i> Verlauf
+            </button>
+            <button type="button" class="kb-menu-item" data-menu="ticket" role="menuitem">
+              <i class="feather icon-alert-circle mr-50"></i> Ticket
+            </button>
+            <button type="button" class="kb-menu-item" data-menu="wartung" role="menuitem">
+              <i class="feather icon-tool mr-50"></i> Wartung
+            </button>
+            
+            <hr class="my-50">
+            <button type="button" class="kb-menu-item text-success" data-run="playing" role="menuitem">
+              <i class="feather icon-play mr-50"></i> Start
+            </button>
+            <button type="button" class="kb-menu-item text-warning" data-run="paused" role="menuitem">
+              <i class="feather icon-pause mr-50"></i> Pause
+            </button>
+            <button type="button" class="kb-menu-item text-danger" data-run="stopped" role="menuitem">
+              <i class="feather icon-square mr-50"></i> Stopp
+            </button>
           </div>
         </div>
 
-        <div class="live-feed-body">
-          <div class="live-feed-line d-none" data-feed-empty>
-            <span class="live-feed-title">Keine Aktivitäten</span>
-            <span class="live-feed-dot">•</span>
-            <span class="live-feed-text">Noch keine Termine oder Aufgaben.</span>
+        <div class="card-header card-header--kb">
+          <div class="card-title">
+            <strong class="card-name">${esc(fullName)}</strong>
+            <div class="circle product_circle" aria-hidden="true">${esc(safeStr(item?.initial))}</div>
           </div>
+        </div>
 
-          <div class="live-feed-line d-none" data-feed-line>
-            <span class="live-feed-title" data-feed-title>Aktivität</span>
-            <span class="live-feed-dot">•</span>
-            <span class="live-feed-text" data-feed-text>Details…</span>
-          </div>
-
-          <div class="live-feed-meta">
-            <span class="live-feed-pill" data-feed-pill>Info</span>
-            <span class="live-feed-time">
-              <i class="feather icon-clock mr-25"></i>
-              <span data-feed-time>–</span>
+        <div class="kb-card-meta">
+          <div class="kb-meta-row">
+            <span class="kb-meta-item">
+              <i class="feather icon-calendar"></i>
+              <span>${esc(updated)}</span>
             </span>
-            <span class="live-feed-counter" data-feed-counter></span>
+            ${isNonEmpty(branchName) ? `
+              <span class="kb-meta-sep" aria-hidden="true">•</span>
+              <span class="kb-meta-item kb-branch" title="${esc(branchName)}">
+                ${branchSVG(14)}
+                <span class="kb-branch-name">${esc(branchName)}</span>
+              </span>` : ""
+            }
+          </div>
+          <small class="kb-meta-address">${esc(address)}</small>
+        </div>
+
+        <div class="employeeList d-flex align-items-center mt-2">
+          ${empHTML}
+          ${teamHTML}
+        </div>
+
+        ${buildStatusBlock(item)}
+
+        <div class="live-feed-bar card-live-feed" data-feed-root data-feed-count="0" style="display:none;">
+          <div class="live-feed-left">
+            <div class="live-feed-icon"><i class="feather icon-zap"></i></div>
+          </div>
+          <div class="live-feed-body">
+            <div class="live-feed-line" data-feed-empty>
+              <span class="live-feed-title">Keine Aktivitäten</span>
+              <span class="live-feed-dot">•</span>
+              <span class="live-feed-text">Noch keine Termine oder Aufgaben.</span>
+            </div>
+            <div class="live-feed-line" data-feed-line>
+              <span class="live-feed-title" data-feed-title>Aktivität</span>
+              <span class="live-feed-dot">•</span>
+              <span class="live-feed-text" data-feed-text>Details…</span>
+            </div>
+            <div class="live-feed-meta">
+              <span class="live-feed-pill" data-feed-pill>Info</span>
+              <span class="live-feed-time">
+                <i class="feather icon-clock mr-25"></i>
+                <span data-feed-time>–</span>
+              </span>
+              <span class="live-feed-counter" data-feed-counter></span>
+            </div>
+          </div>
+          <div class="live-feed-controls">
+            <button type="button" class="live-feed-btn" title="Zurück" data-feed-prev><i class="feather icon-skip-back"></i></button>
+            <button type="button" class="live-feed-btn" title="Pause / Abspielen" data-feed-toggle>
+              <i class="feather icon-pause" data-feed-icon-pause></i>
+              <i class="feather icon-play d-none" data-feed-icon-play></i>
+            </button>
+            <button type="button" class="live-feed-btn" title="Weiter" data-feed-next><i class="feather icon-skip-forward"></i></button>
+            <button type="button" class="live-feed-btn" title="Alle Aktivitäten anzeigen" data-feed-open-modal><i class="feather icon-maximize-2"></i></button>
           </div>
         </div>
 
-        <div class="live-feed-controls">
-          <button type="button"
-                  class="live-feed-btn"
-                  title="Zurück"
-                  data-feed-prev>
-            <i class="feather icon-skip-back"></i>
-          </button>
+        <div class="card-actions" role="group" aria-label="Aktionen">
+          <div class="left-actions">
+            <button class="btn-icon" data-menu="termin" title="Termin">
+              <i class="feather icon-calendar"></i>
+              <span class="badge-notes" data-ap-count style="display:none">0</span>
+            </button>
+            <button class="btn-icon" data-menu="aufgabe" title="Aufgabe">
+              <i class="feather icon-check-square"></i>
+              <span class="badge-notes" data-pt-count style="display:none">0</span>
+            </button>
+          </div>
 
-          <button type="button"
-                  class="live-feed-btn"
-                  title="Pause / Abspielen"
-                  data-feed-toggle>
-            <i class="feather icon-pause" data-feed-icon-pause></i>
-            <i class="feather icon-play d-none" data-feed-icon-play></i>
-          </button>
+          <div class="right-actions">
+            <button class="btn-icon btn-notes" data-act="notes" title="Notizen">
+              <i class="feather icon-message-square"></i>
+              <span class="badge-notes" data-count="0" style="display:none">0</span>
+            </button>
 
-          <button type="button"
-                  class="live-feed-btn"
-                  title="Weiter"
-                  data-feed-next>
-            <i class="feather icon-skip-forward"></i>
-          </button>
+            <a href="/new_lead_profile/${encodeURIComponent(safeStr(item?.customer_id))}" class="btn-icon" title="Profil">
+              <i class="feather icon-eye"></i>
+            </a>
 
-          <button type="button"
-                  class="live-feed-btn"
-                  title="Alle Aktivitäten anzeigen"
-                  data-feed-open-modal>
-            <i class="feather icon-maximize-2"></i>
-          </button>
+            ${!hideJunk ? `<button class="btn-icon" data-act="delete" title="In Junk verschieben"><i class="feather icon-trash-2"></i></button>` : ``}
+            ${stageKey === "completed" ? `<button class="btn-icon" data-act="archive" title="Archivieren"><i class="feather icon-archive"></i></button>` : ``}
+          </div>
         </div>
-      </div>
-
-      <div class="card-actions" role="group" aria-label="Aktionen">
-        <div class="left-actions">
-          <button class="btn-icon btn-play"  data-run="playing" aria-label="Start">
-            <i class="feather icon-play"></i>
-          </button>
-          <button class="btn-icon"           data-run="paused"  aria-label="Pause">
-            <i class="feather icon-pause"></i>
-          </button>
-          <button class="btn-icon"           data-run="stopped" aria-label="Stopp">
-            <i class="feather icon-square"></i>
-          </button>
-        </div>
-        <div class="right-actions">
-          <button class="btn-icon btn-notes" data-act="notes" title="Notizen">
-            <i class="feather icon-message-square"></i>
-            <span class="badge-notes">–</span>
-          </button>
-          <button class="btn-icon" data-act="profile" title="Profil">
-            <i class="feather icon-eye"></i>
-          </button>
-          ${
-            hideJunk
-              ? ``
-              : `
-            <button class="btn-icon" data-act="delete" title="In Junk verschieben">
-              <i class="feather icon-trash-2"></i>
-            </button>`
-          }
-          ${
-            stageKey === "completed"
-              ? `
-            <button class="btn-icon" data-act="archive" title="Archivieren">
-              <i class="feather icon-archive"></i>
-            </button>`
-              : ``
-          }
-        </div>
-      </div>`;
+      `;
   }
+  
+    function normalizeTeamIds(item) {
+      const toId = (x) => {
+        const n = Number(
+          x?.id ??
+          x?.employee_id ??
+          x?.emp_id ??
+          x
+        );
+        return Number.isFinite(n) && n > 0 ? n : null;
+      };
+
+      // preferred: backend sends ids directly
+      const direct =
+        item?.team_ids ??
+        item?.teamIds ??
+        item?.teams_ids ??
+        item?.teamsIds ??
+        null;
+
+      if (Array.isArray(direct)) return direct.map(toId).filter(Boolean);
+
+      // fallback: arrays of objects
+      const arr =
+        Array.isArray(item?.team_members) ? item.team_members :
+        Array.isArray(item?.teams) ? item.teams :
+        [];
+
+      return arr.map(toId).filter(Boolean);
+    }
 
   function mountOrUpdateCard(stageKey, item, existing) {
     let card = existing;
@@ -2971,14 +3481,12 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
       card = document.createElement("div");
       card.className = "card";
       card.id = cardId(item);
-      card.draggable = true; // drag handlers in Segment 2
-
+      card.draggable = true;
       card.dataset.customerId = item.customer_id ?? "";
       card.dataset.alternativeId = item.alternative_id ?? "";
       card.dataset.productId = item.product_id ?? "";
       card.dataset.leadProductId = item.lead_product_id ?? "";
     }
-
     card.dataset.employeeId = item.employee?.employee_id ?? 0;
     card.dataset.fieldEmployeeId = item.field_employee?.employee_id ?? 0;
     card.dataset.service = item.service ?? "complete";
@@ -2989,8 +3497,6 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     card.dataset.latestActivity = item.latest_activity || "";
     card.dataset.doneDate = item.done_date || "";
     card.dataset.updatedAt = item.updated_at || "";
-
-    // contact data for Termine
     card.dataset.fullAddress = item.full_address || "";
     card.dataset.street = item.street || "";
     card.dataset.postcode = item.postcode || "";
@@ -2999,36 +3505,26 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     card.dataset.email = item.email || "";
     card.dataset.latitude = item.latitude || "";
     card.dataset.longitude = item.longitude || "";
+    card.dataset.teamIds = JSON.stringify(normalizeTeamIds(item));
 
     card.innerHTML = cardHTML(item, stageKey);
     enforceActionVisibility(card);
-
     const ws = (item.work_status || "playing").toString().toLowerCase();
-    applyRunStateUI(
-      card,
-      ["playing", "paused", "stopped"].includes(ws) ? ws : "playing"
-    );
-
+    applyRunStateUI(card, ["playing", "paused", "stopped"].includes(ws) ? ws : "playing");
     return card;
   }
 
   function renderKanbanDiff(leads) {
     ensureColumns();
-
     const existing = new Map();
     qsa("#kanban .card").forEach((el) => existing.set(el.id, el));
-
-    const stageBuckets = new Map(
-      Object.keys(APP.stageNames).map((k) => [k, []])
-    );
-    const filtered = (leads || []).filter((it) => {
-      const s = canonicalStage(it.stage);
-      return !["archive", "archiv", "junk"].includes(s);
-    });
+    const stageBuckets = new Map(Object.keys(APP.stageNames).map((k) => [k, []]));
+    
+    const filtered = (leads || []).filter((it) => !["junk"].includes(canonicalStage(it.stage)));
 
     for (const it of filtered) {
       const s = canonicalStage(it.stage);
-      stageBuckets.get(s).push(it);
+      if (stageBuckets.has(s)) stageBuckets.get(s).push(it);
     }
 
     for (const [stage, arr] of stageBuckets) {
@@ -3045,9 +3541,7 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
       container.innerHTML = "";
       container.appendChild(frag);
     }
-
     for (const [, el] of existing) el.remove();
-
     updateCounts();
     featherRefreshSoon();
     updateNoteBadgesForVisibleCards();
@@ -3060,19 +3554,10 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     return low || narrow ? 24 : 60;
   }
 
-  function renderKanbanIncremental(
-    leads,
-    chunkSize = autoChunk(),
-    done = () => {}
-  ) {
+  function renderKanbanIncremental(leads, chunkSize = autoChunk(), done = () => {}) {
     ensureColumns();
     clearColumns();
-
-    const list = (leads || []).filter((it) => {
-      const s = String(it?.stage || "").toLowerCase();
-      return !["archive", "archiv", "junk"].includes(s);
-    });
-
+    const list = (leads || []).filter((it) => !["junk"].includes(String(it?.stage || "").toLowerCase()));
     let i = 0;
     (function pump() {
       const frags = new Map();
@@ -3080,17 +3565,15 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
         if (!frags.has(s)) frags.set(s, document.createDocumentFragment());
         return frags.get(s);
       };
-
       for (let c = 0; c < chunkSize && i < list.length; c++, i++) {
         const item = list[i];
         const stage = canonicalStage(item.stage);
-        const card = mountOrUpdateCard(stage, item, null);
-        getFrag(stage).appendChild(card);
+        if (APP.stageNames[stage] || APP.stageAlias[stage]) {
+          const card = mountOrUpdateCard(stage, item, null);
+          getFrag(stage).appendChild(card);
+        }
       }
-
-      for (const [stage, frag] of frags)
-        colContent(stage)?.appendChild(frag);
-
+      for (const [stage, frag] of frags) colContent(stage)?.appendChild(frag);
       if (i < list.length) {
         requestIdleCallback(pump);
       } else {
@@ -3104,31 +3587,25 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     })();
   }
 
-  /* -------------------------------- Notes --------------------------------- */
-  const visibleCardTuples = () =>
-    qsa("#kanban .card").map((el) => ({
+  /* --- Note Logic (Unified for List & Kanban) --- */
+  const visibleCardTuples = () => {
+    const cards = qsa("#kanban .card");
+    const rows = qsa("#kanbanTableBody tr.list-row-item");
+    return [...cards, ...rows].map((el) => ({
       el,
       customer_id: el.dataset.customerId,
       alternative_id: el.dataset.alternativeId,
       product_id: el.dataset.productId || null,
     }));
+  };
 
   async function fetchNoteCountOnce(t) {
-    const params = new URLSearchParams({
-      customer_id: t.customer_id,
-      alternative_id: t.alternative_id,
-      per_page: 1,
-    });
+    const params = new URLSearchParams({ customer_id: t.customer_id, alternative_id: t.alternative_id, per_page: 1 });
     if (t.product_id) params.set("product_id", t.product_id);
-
     try {
-      const p = await safeFetchJSON(
-        `${APP.endpoints.notesIndex}?${params.toString()}`
-      );
+      const p = await safeFetchJSON(`${APP.endpoints.notesIndex}?${params.toString()}`);
       return Number(p?.total || 0);
-    } catch {
-      return 0;
-    }
+    } catch { return 0; }
   }
 
   function updateBadge(el, n) {
@@ -3136,2350 +3613,578 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     if (!bd) return;
     bd.dataset.count = String(n);
     bd.textContent = shortNum(n);
+    bd.style.display = n > 0 ? 'block' : 'none'; 
   }
 
   function updateNoteBadgesForVisibleCards() {
     const tuples = visibleCardTuples();
     tuples.forEach((t) => updateBadge(t.el, 0));
     let i = 0;
-    const CON = 4;
-
     (function next() {
-      const batch = tuples.slice(i, (i += CON));
+      const batch = tuples.slice(i, (i += 4));
       if (!batch.length) return;
-      Promise.all(
-        batch.map(async (t) => updateBadge(t.el, await fetchNoteCountOnce(t)))
-      ).finally(() => setTimeout(next, 30));
+      Promise.all(batch.map(async (t) => updateBadge(t.el, await fetchNoteCountOnce(t)))).finally(() => setTimeout(next, 30));
     })();
   }
 
-  // Tabs inside the notes drawer (Notizen / Kunde Report / Termin Report)
   function setNotesTab(tab) {
     const tabs = document.querySelectorAll("[data-notes-tab]");
     const panels = document.querySelectorAll("[data-notes-panel]");
-
     tabs.forEach((btn) => {
       const isActive = btn.dataset.notesTab === tab;
       btn.classList.toggle("notes-tab--active", isActive);
       btn.setAttribute("aria-selected", isActive ? "true" : "false");
     });
-
     panels.forEach((panel) => {
       const isActive = panel.dataset.notesPanel === tab;
       panel.classList.toggle("d-none", !isActive);
     });
   }
 
-  // Termin-Report loader (appointment reports)
   async function loadNotesReport() {
     const panel = document.getElementById("notesReport");
     if (!panel) return;
-
     const cId = document.getElementById("notesCustomerId")?.value || "";
     const aId = document.getElementById("notesAlternativeId")?.value || "";
     const pId = document.getElementById("notesProductId")?.value || "";
-
     if (!cId || !aId) {
-      panel.innerHTML = `
-        <div class="text-muted small p-2">
-          Kein Kontext (Kunde/Alternative) vorhanden.
-        </div>
-      `;
+      panel.innerHTML = `<div class="text-muted small p-2">Kein Kontext (Kunde/Alternative) vorhanden.</div>`;
       return;
     }
-
-    panel.innerHTML = `
-      <div class="text-muted small p-2">
-        Report wird geladen…
-      </div>
-    `;
-
+    panel.innerHTML = `<div class="text-muted small p-2">Report wird geladen…</div>`;
     try {
-      const params = new URLSearchParams({
-        customer_id: cId,
-        alternative_id: aId,
-      });
+      const params = new URLSearchParams({ customer_id: cId, alternative_id: aId });
       if (pId) params.set("product_id", pId);
-
-      const url = `${APP.endpoints.reportsIndex}?${params.toString()}`;
-
-      const res = await fetch(url, {
-        method: "GET",
-        credentials: "same-origin",
-        headers: {
-          Accept: "text/html,application/json",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      });
-
+      const res = await fetch(`${APP.endpoints.reportsIndex}?${params.toString()}`, { method: "GET", credentials: "same-origin", headers: { Accept: "text/html,application/json", "X-Requested-With": "XMLHttpRequest" } });
       const text = await res.text();
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: ${text.slice(0, 200)}`);
-      }
-
+      if (!res.ok) throw new Error(`HTTP ${res.status}: ${text.slice(0, 200)}`);
       let html = text;
       const ct = res.headers.get("content-type") || "";
-
       if (ct.includes("application/json")) {
         try {
           const json = JSON.parse(text);
-          if (typeof json.html === "string") {
-            html = json.html;
-          } else {
-            html = `
-              <pre class="small p-2 bg-light border rounded mb-0" style="max-height: 320px; overflow:auto;">
-                ${JSON.stringify(json, null, 2)}
-              </pre>
-            `;
-          }
-        } catch {
-          html = text;
-        }
+          html = typeof json.html === "string" ? json.html : `<pre class="small p-2 bg-light border rounded mb-0" style="max-height: 320px; overflow:auto;">${JSON.stringify(json, null, 2)}</pre>`;
+        } catch { html = text; }
       }
-
       panel.innerHTML = html;
     } catch (e) {
-      panel.innerHTML = `
-        <div class="text-danger small p-2">
-          Report konnte nicht geladen werden.<br>
-          ${(e && e.message) ? e.message : ''}
-        </div>
-      `;
+      panel.innerHTML = `<div class="text-danger small p-2">Report konnte nicht geladen werden.<br>${(e && e.message) ? e.message : ''}</div>`;
     }
   }
 
-  // Kundenreport loader (customer reports tab)
   async function loadCustomerReport() {
     const panel = document.getElementById("customerReportList");
     if (!panel) return;
-
     const cId = document.getElementById("notesCustomerId")?.value || "";
     const aId = document.getElementById("notesAlternativeId")?.value || "";
     const pId = document.getElementById("notesProductId")?.value || "";
-
     if (!cId || !aId) {
-      panel.innerHTML = `
-        <div class="text-muted small p-2">
-          Kein Kontext (Kunde/Alternative) vorhanden.
-        </div>
-      `;
+      panel.innerHTML = `<div class="text-muted small p-2">Kein Kontext (Kunde/Alternative) vorhanden.</div>`;
       return;
     }
-
-    panel.innerHTML = `
-      <div class="text-muted small p-2">
-        Kundenreport wird geladen…
-      </div>
-    `;
-
+    panel.innerHTML = `<div class="text-muted small p-2">Kundenreport wird geladen…</div>`;
     try {
-      const params = new URLSearchParams({
-        customer_id: cId,
-        alternative_id: aId,
-      });
+      const params = new URLSearchParams({ customer_id: cId, alternative_id: aId });
       if (pId) params.set("product_id", pId);
-
-      const res = await safeFetchJSON(
-        `${APP.endpoints.customerReportsIndex}?${params.toString()}`,
-        { method: "GET" }
-      );
-
-      if (!res || typeof res.html !== "string") {
-        throw new Error(res?.message || "Unerwartete Serverantwort.");
-      }
-
+      const res = await safeFetchJSON(`${APP.endpoints.customerReportsIndex}?${params.toString()}`, { method: "GET" });
+      if (!res || typeof res.html !== "string") throw new Error(res?.message || "Unerwartete Serverantwort.");
       panel.innerHTML = res.html;
     } catch (e) {
-      panel.innerHTML = `
-        <div class="text-danger small p-2">
-          Kundenreport konnte nicht geladen werden.<br>
-          ${(e && e.message) ? e.message : ''}
-        </div>
-      `;
+      panel.innerHTML = `<div class="text-danger small p-2">Kundenreport konnte nicht geladen werden.<br>${(e && e.message) ? e.message : ''}</div>`;
     }
   }
+  
+  // NOTE HANDLERS
+  function noteHTML(n) {
+    const me = String(n.created_by ?? "") === String(APP.authUserId);
+    const img = n?.author?.image ? `${APP.EMP_SRC}/${n.author.image}` : `${APP.EMP_SRC}/noimage.png`;
+    const who = n.author ? `${n.author.lastname ?? ""} ${n.author.name ?? ""}`.trim() : "Unbekannt";
+    const when = n.created_at ? new Date(n.created_at).toLocaleString("de-DE") : "";
+    const bubble = `<div class="note-bubble ${me ? "me" : "other"}"><div class="note-bubble-body" data-note-body>${n.description || ""}</div><div class="note-meta"><span class="note-meta-author">${who}</span><span class="note-meta-sep">•</span><span class="note-meta-time">${when}</span></div>${me ? `<div class="note-actions"><button type="button" class="note-action note-action-edit" data-note-edit data-note-id="${n.id}"><i class="feather icon-edit-2"></i></button><button type="button" class="note-action note-action-delete" data-note-delete data-note-id="${n.id}"><i class="feather icon-trash-2"></i></button></div>` : ""}</div>`;
+    return `<div class="note-row ${me ? "me" : "other"}" data-note-id="${n.id}">${me ? bubble + `<img class="note-avatar" src="${img}" alt="">` : `<img class="note-avatar" src="${img}" alt="">` + bubble}</div>`;
+  }
+  
+  function adjustNotesCounters(delta) {
+      const badge = document.getElementById("notesCountBadge");
+      if (badge) {
+        const next = Math.max(0, Number(badge.dataset.count || 0) + delta);
+        badge.dataset.count = String(next);
+        badge.textContent = shortNum(next);
+      }
+      const cId = document.getElementById("notesCustomerId")?.value;
+      const aId = document.getElementById("notesAlternativeId")?.value;
+      const pId = document.getElementById("notesProductId")?.value;
 
-  // Termin-Report: create new report (ap-*)
+      if (!cId || !aId) return;
+
+      const selector = `
+          .card[data-customer-id="${CSS.escape(cId)}"][data-alternative-id="${CSS.escape(aId)}"][data-product-id="${CSS.escape(pId)}"] .badge-notes,
+          tr[data-customer-id="${CSS.escape(cId)}"][data-alternative-id="${CSS.escape(aId)}"][data-product-id="${CSS.escape(pId)}"] .badge-notes
+      `;
+
+      document.querySelectorAll(selector).forEach((b) => {
+        const next = Math.max(0, Number(b.dataset.count || 0) + delta);
+        b.dataset.count = String(next);
+        b.textContent = shortNum(next);
+        b.style.display = next > 0 ? 'block' : 'none';
+      });
+  }
+
+  async function openNotesDrawerFor(cId, aId, pId, title) {
+    const drawer = qs("#notesDrawer"), list = qs("#notesList"), titleEl = qs("#notesTitle");
+    const fC = qs("#notesCustomerId"), fA = qs("#notesAlternativeId"), fP = qs("#notesProductId");
+
+    titleEl.textContent = title || "Kunden-Notizen";
+    drawer.classList.add("open");
+    qs("#notesBackdrop").classList.add("show");
+    document.body.style.overflow = "hidden";
+
+    ensureNoteQuill();
+    setNoteEditorHTML("");
+    setNotesTab("notes");
+
+    fC.value = cId; fA.value = aId; fP.value = pId || "";
+
+    try {
+      const params = new URLSearchParams({ customer_id: cId, alternative_id: aId, per_page: 50 });
+      if (pId) params.set("product_id", pId);
+      const payload = await safeFetchJSON(`${APP.endpoints.notesIndex}?${params.toString()}`);
+      const items = (Array.isArray(payload?.notes) ? payload.notes : payload || []).sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      list.innerHTML = items.map(noteHTML).join("");
+      const total = payload?.total ?? items.length;
+      const badge = document.getElementById("notesCountBadge");
+      if (badge) { badge.dataset.count = String(total); badge.textContent = shortNum(total); }
+      list.scrollTop = list.scrollHeight;
+    } catch (e) { Swal.fire("Fehler", e.message, "error"); }
+    
+    // Bind Submit inside open to capture closure context if needed, but cleaner globally.
+    // We bind globally below, but need to ensure form submit uses current drawer context.
+  }
+  
+  // NOTE DRAWER CLOSE LOGIC
+  const closeNotes = () => {
+      qs("#notesDrawer")?.classList.remove("open");
+      qs("#notesBackdrop")?.classList.remove("show");
+      document.body.style.overflow = "";
+  };
+  qs("#notesBackdrop")?.addEventListener("click", closeNotes);
+  qsa("[data-notes-close]").forEach(b => b.addEventListener("click", closeNotes));
+  
+  // NOTE SUBMIT LOGIC
+  qs("#notesForm").onsubmit = async (ev) => {
+      ev.preventDefault();
+      const text = getNoteEditorHTML();
+      if (!text) return;
+      const fC = qs("#notesCustomerId"), fA = qs("#notesAlternativeId"), fP = qs("#notesProductId");
+      try {
+        const res = await safeFetchJSON(APP.endpoints.notesStore, { method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": CSRF(), "X-Requested-With": "XMLHttpRequest" }, body: JSON.stringify({ customer_id: Number(fC.value), alternative_id: Number(fA.value), product_id: fP.value ? Number(fP.value) : null, description: text }) });
+        qs("#notesList").insertAdjacentHTML("beforeend", noteHTML(res.note || res));
+        qs("#notesList").scrollTop = qs("#notesList").scrollHeight;
+        setNoteEditorHTML("");
+        adjustNotesCounters(+1);
+      } catch (e) { Swal.fire("Fehler", e.message, "error"); }
+  };
+
   document.addEventListener("submit", async (e) => {
     const form = e.target.closest(".ap-report-create-form");
     if (!form) return;
-
     e.preventDefault();
-
-    const titleEl = form.querySelector('input[name="title"]');
-    const stageEl = form.querySelector('select[name="stage"]');
-    const contentEl = form.querySelector('textarea[name="content"]');
-
-    const title = (titleEl?.value || "").trim();
-    const content = (contentEl?.value || "").trim();
-    const stage = (stageEl?.value || "").trim();
-
-    if (!title || !content) {
-      Swal.fire("Hinweis", "Titel und Text sind Pflichtfelder.", "info");
-      return;
-    }
-
+    const title = (form.querySelector('input[name="title"]')?.value || "").trim();
+    const content = (form.querySelector('textarea[name="content"]')?.value || "").trim();
+    if (!title || !content) { Swal.fire("Hinweis", "Titel und Text sind Pflichtfelder.", "info"); return; }
     const appointmentId = form.dataset.appointmentId || null;
-
     try {
-      const payload = {
-        title,
-        content,
-        stage,
-        report: `${title}\n\n${content}`,
-        report_date:
-          form.querySelector('input[name="report_date"]')?.value || null,
-      };
-
-      const url = APP.endpoints.reportsStore(appointmentId);
-
-      const res = await safeFetchJSON(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": CSRF(),
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res || res.status !== "ok") {
-        throw new Error(res?.message || "Report konnte nicht gespeichert werden.");
-      }
-
+      const payload = { title, content, stage: (form.querySelector('select[name="stage"]')?.value || "").trim(), report: `${title}\n\n${content}`, report_date: form.querySelector('input[name="report_date"]')?.value || null };
+      const res = await safeFetchJSON(APP.endpoints.reportsStore(appointmentId), { method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": CSRF() }, body: JSON.stringify(payload) });
+      if (!res || res.status !== "ok") throw new Error(res?.message || "Fehler.");
       const group = form.closest(".ap-appointment-group");
-      const list = group?.querySelector(".ap-report-list");
-      if (list && typeof res.html === "string") {
-        list.insertAdjacentHTML("afterbegin", res.html);
-      }
-
-      if (titleEl) titleEl.value = "";
-      if (contentEl) contentEl.value = "";
-      if (stageEl) stageEl.value = "";
-
-      const wrapper = group?.querySelector(".ap-report-create-wrapper");
-      if (wrapper) wrapper.style.display = "none";
-
+      group?.querySelector(".ap-report-list")?.insertAdjacentHTML("afterbegin", res.html);
+      form.reset();
+      group.querySelector(".ap-report-create-wrapper").style.display = "none";
       Swal.fire("Gespeichert", "Report wurde hinzugefügt.", "success");
-    } catch (err) {
-      Swal.fire(
-        "Fehler",
-        err.message || "Report konnte nicht gespeichert werden.",
-        "error"
-      );
-    }
+    } catch (err) { Swal.fire("Fehler", err.message, "error"); }
   });
 
-  // Termin-Report: reactions + comments (ap-*)
   document.addEventListener("click", async (e) => {
     const btn = e.target.closest(".ap-report-like, .ap-report-dislike");
     if (!btn) return;
-
     const card = btn.closest(".ap-report-card");
-    if (!card) return;
-
     const reportId = card.getAttribute("data-report-id");
     if (!reportId) return;
-
-    const isLike = btn.classList.contains("ap-report-like");
-    let reaction = isLike ? "like" : "dislike";
-
-    if (btn.classList.contains("is-active")) {
-      reaction = "none";
-    }
-
+    let reaction = btn.classList.contains("ap-report-like") ? "like" : "dislike";
+    if (btn.classList.contains("is-active")) reaction = "none";
     try {
-      const res = await safeFetchJSON(APP.endpoints.reportsReact(reportId), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": CSRF(),
-        },
-        body: JSON.stringify({ reaction }),
-      });
-
-      const likeCountEl = card.querySelector(".ap-report-like-count");
-      const dislikeCountEl = card.querySelector(".ap-report-dislike-count");
-
-      if (likeCountEl) likeCountEl.textContent = res.likes ?? 0;
-      if (dislikeCountEl) dislikeCountEl.textContent = res.dislikes ?? 0;
-
-      card
-        .querySelectorAll(".ap-report-like, .ap-report-dislike")
-        .forEach((b) => b.classList.remove("is-active"));
-
-      if (res.my_reaction === "like") {
-        card.querySelector(".ap-report-like")?.classList.add("is-active");
-      } else if (res.my_reaction === "dislike") {
-        card.querySelector(".ap-report-dislike")?.classList.add("is-active");
-      }
-    } catch (err) {
-      Swal.fire(
-        "Fehler",
-        err.message || "Bewertung konnte nicht gespeichert werden.",
-        "error"
-      );
-    }
+      const res = await safeFetchJSON(APP.endpoints.reportsReact(reportId), { method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": CSRF() }, body: JSON.stringify({ reaction }) });
+      card.querySelector(".ap-report-like-count").textContent = res.likes ?? 0;
+      card.querySelector(".ap-report-dislike-count").textContent = res.dislikes ?? 0;
+      card.querySelectorAll(".ap-report-like, .ap-report-dislike").forEach((b) => b.classList.remove("is-active"));
+      if (res.my_reaction === "like") card.querySelector(".ap-report-like")?.classList.add("is-active");
+      else if (res.my_reaction === "dislike") card.querySelector(".ap-report-dislike")?.classList.add("is-active");
+    } catch (err) { Swal.fire("Fehler", err.message, "error"); }
   });
 
-  // Termin-Report: toggle inline create form
   document.addEventListener("click", (e) => {
     const btn = e.target.closest(".ap-open-report-form");
     if (!btn) return;
-
-    const group = btn.closest(".ap-appointment-group");
-    if (!group) return;
-
-    const wrapper = group.querySelector(".ap-report-create-wrapper");
-    if (!wrapper) return;
-
-    document.querySelectorAll(".ap-report-create-wrapper").forEach((el) => {
-      if (el !== wrapper) el.style.display = "none";
-    });
-
-    const isVisible =
-      wrapper.style.display !== "none" && wrapper.style.display !== "";
+    const wrapper = btn.closest(".ap-appointment-group").querySelector(".ap-report-create-wrapper");
+    const isVisible = wrapper.style.display !== "none";
     wrapper.style.display = isVisible ? "none" : "block";
-
-    if (!btn.dataset.originalLabel) {
-      btn.dataset.originalLabel = btn.innerHTML;
-    }
-    if (!isVisible) {
-      btn.innerHTML = `<i class="feather icon-file-text"></i> Report schließen`;
-    } else {
-      btn.innerHTML = btn.dataset.originalLabel;
-    }
+    if (!btn.dataset.originalLabel) btn.dataset.originalLabel = btn.innerHTML;
+    btn.innerHTML = !isVisible ? `<i class="feather icon-file-text"></i> Report schließen` : btn.dataset.originalLabel;
   });
 
-  // Termin-Report: toggle comments section
   document.addEventListener("click", (e) => {
     const toggleBtn = e.target.closest("[data-report-toggle-comments]");
     if (!toggleBtn) return;
-
-    const card = toggleBtn.closest(".ap-report-card");
-    if (!card) return;
-
-    const section = card.querySelector(".ap-report-comments");
-    if (!section) return;
-
-    if (section.hasAttribute("hidden")) {
-      section.removeAttribute("hidden");
-    } else {
-      section.setAttribute("hidden", "");
-    }
+    const section = toggleBtn.closest(".ap-report-card").querySelector(".ap-report-comments");
+    if (section.hasAttribute("hidden")) section.removeAttribute("hidden"); else section.setAttribute("hidden", "");
   });
 
-  // Termin-Report: submit comment
   document.addEventListener("click", async (e) => {
     const submitBtn = e.target.closest(".ap-report-comment-submit");
     if (!submitBtn) return;
-
     const card = submitBtn.closest(".ap-report-card");
-    if (!card) return;
-
     const reportId = card.getAttribute("data-report-id");
     const textarea = card.querySelector(".ap-report-comment-text");
-    if (!reportId || !textarea) return;
-
     const text = textarea.value.trim();
     if (!text) return;
-
     try {
-      const res = await safeFetchJSON(APP.endpoints.reportsComment(reportId), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": CSRF(),
-        },
-        body: JSON.stringify({ comment: text }),
-      });
-
+      const res = await safeFetchJSON(APP.endpoints.reportsComment(reportId), { method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": CSRF() }, body: JSON.stringify({ comment: text }) });
       if (res && typeof res.html === "string") {
-        const list = card.querySelector(".ap-report-comments-list");
-        if (list) {
-          list.insertAdjacentHTML("beforeend", res.html);
-        }
-
+        card.querySelector(".ap-report-comments-list").insertAdjacentHTML("beforeend", res.html);
         const toggleBtn = card.querySelector("[data-report-toggle-comments]");
-        if (toggleBtn) {
-          const m = toggleBtn.textContent.match(/(\d+)/);
-          const current = m ? parseInt(m[1], 10) : 0;
-          toggleBtn.innerHTML = `<i class="feather icon-message-circle mr-25"></i> Kommentare (${
-            current + 1
-          })`;
-        }
+        const current = parseInt(toggleBtn.textContent.match(/(\d+)/)?.[1] || 0, 10);
+        toggleBtn.innerHTML = `<i class="feather icon-message-circle mr-25"></i> Kommentare (${current + 1})`;
       }
-
       textarea.value = "";
-    } catch (err) {
-      Swal.fire(
-        "Fehler",
-        err.message || "Kommentar konnte nicht gespeichert werden.",
-        "error"
-      );
-    }
+    } catch (err) { Swal.fire("Fehler", err.message, "error"); }
   });
 
-  // Kundenreport: toggle new report form
-  document.addEventListener("click", (e) => {
-    const btnNew = e.target.closest(".cr-toggle-new");
-    if (btnNew) {
-      const panel = document.getElementById("customerReportList");
-      const wrapper = panel?.querySelector(".cr-new-wrapper");
-      if (!wrapper) return;
-
-      const willShow = wrapper.hidden || wrapper.style.display === "none";
-      wrapper.hidden = !willShow;
-      if (willShow) {
-        btnNew.classList.add("active");
-      } else {
-        btnNew.classList.remove("active");
-      }
-      return;
-    }
-
-    const btnCancel = e.target.closest(".cr-cancel-new");
-    if (btnCancel) {
-      const wrapper = btnCancel.closest(".cr-new-wrapper");
-      if (wrapper) wrapper.hidden = true;
-
-      const toggle = document.querySelector(".cr-toggle-new");
-      if (toggle) toggle.classList.remove("active");
-    }
-  });
-
-  // Kundenreport: create new customer report
-  document.addEventListener("submit", async (e) => {
-    const form = e.target.closest(".cr-create-form");
-    if (!form) return;
-
-    e.preventDefault();
-
-    const customerId =
-      form.querySelector('input[name="customer_id"]')?.value || "";
-    const alternativeId =
-      form.querySelector('input[name="alternative_id"]')?.value || "";
-    const productId =
-      form.querySelector('input[name="product_id"]')?.value || "";
-    const stageEl = form.querySelector('select[name="stage"]');
-    const reportEl = form.querySelector('textarea[name="report"]');
-
-    const report = (reportEl?.value || "").trim();
-    const stage = (stageEl?.value || "").trim();
-
-    if (!customerId || !alternativeId) {
-      Swal.fire("Fehler", "Kundenkontext fehlt.", "error");
-      return;
-    }
-    if (!report) {
-      Swal.fire("Hinweis", "Reporttext ist erforderlich.", "info");
-      return;
-    }
-
-    try {
-      const payload = {
-        customer_id: Number(customerId),
-        alternative_id: Number(alternativeId),
-        product_id: productId ? Number(productId) : null,
-        stage,
-        report,
-      };
-
-      const res = await safeFetchJSON(APP.endpoints.customerReportsStore, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": CSRF(),
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res || res.status !== "ok" || typeof res.html !== "string") {
-        throw new Error(
-          res?.message || "Kundenreport konnte nicht gespeichert werden."
-        );
-      }
-
-      const panel = document.getElementById("customerReportList");
-      const list = panel?.querySelector(".cr-list");
-      if (list) {
-        list.insertAdjacentHTML("afterbegin", res.html);
-      }
-
-      if (reportEl) reportEl.value = "";
-      if (stageEl) stageEl.value = "";
-
-      const wrapper = form.closest(".cr-new-wrapper");
-      if (wrapper) wrapper.hidden = true;
-
-      const toggle = document.querySelector(".cr-toggle-new");
-      if (toggle) toggle.classList.remove("active");
-
-      Swal.fire("Gespeichert", "Kundenreport wurde erstellt.", "success");
-    } catch (err) {
-      Swal.fire(
-        "Fehler",
-        err.message || "Kundenreport konnte nicht gespeichert werden.",
-        "error"
-      );
-    }
-  });
-
-  // Kundenreport: toggle comments section
-  document.addEventListener("click", (e) => {
-    const toggle = e.target.closest(".cr-toggle-comments");
-    if (!toggle) return;
-
-    const card = toggle.closest(".cr-card");
-    if (!card) return;
-
-    const block = card.querySelector(".cr-comments");
-    if (!block) return;
-
-    block.hidden = !block.hidden;
-  });
-
-  // Kundenreport: submit comment
-  document.addEventListener("click", async (e) => {
-    const btn = e.target.closest(".cr-comment-submit");
-    if (!btn) return;
-
-    const card = btn.closest(".cr-card");
-    if (!card) return;
-
-    const reportId = card.getAttribute("data-report-id");
-    const textarea = card.querySelector(".cr-comment-text");
-    if (!reportId || !textarea) return;
-
-    const text = textarea.value.trim();
-    if (!text) return;
-
-    try {
-      const res = await safeFetchJSON(
-        APP.endpoints.customerReportsComment(reportId),
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": CSRF(),
-          },
-          body: JSON.stringify({ comment: text }),
-        }
-      );
-
-      if (res && typeof res.html === "string") {
-        const list = card.querySelector(".cr-comments-list");
-        if (list) {
-          list.insertAdjacentHTML("beforeend", res.html);
-        }
-
-        const toggle = card.querySelector(".cr-toggle-comments");
-        if (toggle) {
-          const m = toggle.textContent.match(/(\d+)/);
-          const current = m ? parseInt(m[1], 10) : 0;
-          toggle.innerHTML = `<i class="feather icon-message-circle mr-25"></i> Kommentare (${
-            current + 1
-          })`;
-        }
-      }
-
-      textarea.value = "";
-    } catch (err) {
-      Swal.fire(
-        "Fehler",
-        err.message || "Kommentar konnte nicht gespeichert werden.",
-        "error"
-      );
-    }
-  });
-
-  // Global click listener for the three tabs inside the notes drawer
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-notes-tab]");
     if (!btn) return;
-
     const tab = btn.dataset.notesTab;
-    if (!tab) return;
-
     setNotesTab(tab);
-
-    if (tab === "report") {
-      loadNotesReport();
-    } else if (tab === "customerReport") {
-      loadCustomerReport();
-    }
-  });
-
-  /* -------------------------------- Notes UI -------------------------------- */
-
-  // Render single note bubble
-  function noteHTML(n) {
-    const me = String(n.created_by ?? "") === String(APP.authUserId);
-    const img = n?.author?.image
-      ? `${APP.EMP_SRC}/${n.author.image}`
-      : `${APP.EMP_SRC}/noimage.png`;
-    const who = n.author
-      ? `${n.author.lastname ?? ""} ${n.author.name ?? ""}`.trim()
-      : "Unbekannt";
-    const when = n.created_at
-      ? new Date(n.created_at).toLocaleString("de-DE")
-      : "";
-
-    const description = n.description || "";
-
-    const actions = me
-      ? `
-        <div class="note-actions">
-          <button type="button"
-                  class="note-action note-action-edit"
-                  data-note-edit
-                  data-note-id="${n.id}">
-            <i class="feather icon-edit-2"></i>
-          </button>
-          <button type="button"
-                  class="note-action note-action-delete"
-                  data-note-delete
-                  data-note-id="${n.id}">
-            <i class="feather icon-trash-2"></i>
-          </button>
-        </div>
-      `
-      : "";
-
-    const bubble = `
-      <div class="note-bubble ${me ? "me" : "other"}">
-        <div class="note-bubble-body" data-note-body>
-          ${description}
-        </div>
-        <div class="note-meta">
-          <span class="note-meta-author">${who}</span>
-          <span class="note-meta-sep">•</span>
-          <span class="note-meta-time">${when}</span>
-        </div>
-        ${actions}
-      </div>
-    `;
-
-    if (me) {
-      return `
-        <div class="note-row me" data-note-id="${n.id}">
-          ${bubble}
-          <img class="note-avatar" src="${img}" alt="">
-        </div>
-      `;
-    }
-
-    return `
-      <div class="note-row other" data-note-id="${n.id}">
-        <img class="note-avatar" src="${img}" alt="">
-        ${bubble}
-      </div>
-    `;
-  }
-
-  // Update global notes count badge + per-card badges
-  function adjustNotesCounters(delta) {
-    const badge = document.getElementById("notesCountBadge");
-    if (badge) {
-      const current = Number(badge.dataset.count || 0);
-      const next = Math.max(0, current + delta);
-      badge.dataset.count = String(next);
-      badge.textContent = shortNum(next);
-    }
-
-    const fC = document.getElementById("notesCustomerId");
-    const fA = document.getElementById("notesAlternativeId");
-    const fP = document.getElementById("notesProductId");
-
-    if (!fC || !fA) return;
-
-    const cId = fC.value;
-    const aId = fA.value;
-    const pId = fP.value || "";
-
-    document
-      .querySelectorAll(
-        `.card[data-customer-id="${CSS.escape(
-          cId
-        )}"][data-alternative-id="${CSS.escape(
-          aId
-        )}"][data-product-id="${CSS.escape(pId)}"] .badge-notes`
-      )
-      .forEach((b) => {
-        const current = Number(b.dataset.count || 0);
-        const next = Math.max(0, current + delta);
-        b.dataset.count = String(next);
-        b.textContent = shortNum(next);
-      });
-  }
-
-  // Notes drawer open helper (now using Quill for new note text when available)
-  async function openNotesDrawerFor(cId, aId, pId, title) {
-    const drawer = qs("#notesDrawer"),
-      bd = qs("#notesBackdrop"),
-      list = qs("#notesList"),
-      titleEl = qs("#notesTitle");
-    const fC = qs("#notesCustomerId"),
-      fA = qs("#notesAlternativeId"),
-      fP = qs("#notesProductId");
-    const form = qs("#notesForm"),
-      ta = qs("#noteText");
-
-    function open() {
-      titleEl.textContent = title || "Kunden-Notizen";
-      drawer.classList.add("open");
-      bd.classList.add("show");
-      document.body.style.overflow = "hidden";
-
-      // Make sure Quill is initialized (if available) and clear content
-      ensureNoteQuill();
-      setNoteEditorHTML("");
-
-      setNotesTab("notes");
-
-      // Focus Quill editor or fallback textarea
-      if (noteQuill) {
-        try {
-          noteQuill.focus();
-        } catch {}
-      } else if (ta) {
-        ta.value = "";
-        ta.focus();
-      }
-    }
-    function close() {
-      drawer.classList.remove("open");
-      bd.classList.remove("show");
-      document.body.style.overflow = "";
-    }
-    bd.onclick = close;
-    qsa("[data-notes-close]").forEach((b) => (b.onclick = close));
-
-    fC.value = cId;
-    fA.value = aId;
-    fP.value = pId || "";
-
-    open();
-
-    try {
-      const params = new URLSearchParams({
-        customer_id: cId,
-        alternative_id: aId,
-        per_page: 50,
-      });
-      if (pId) params.set("product_id", pId);
-
-      const payload = await safeFetchJSON(
-        `${APP.endpoints.notesIndex}?${params.toString()}`
-      );
-      const items = Array.isArray(payload?.notes)
-        ? payload.notes
-        : payload || [];
-      items.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-
-      list.innerHTML = items.map((n) => noteHTML(n)).join("");
-
-      const total = payload?.total ?? items.length;
-      const badge = document.getElementById("notesCountBadge");
-      if (badge) {
-        badge.dataset.count = String(total);
-        badge.textContent = shortNum(total);
-      }
-
-      list.scrollTop = list.scrollHeight;
-    } catch (e) {
-      Swal.fire(
-        "Fehler",
-        e.message || "Notizen konnten nicht geladen werden.",
-        "error"
-      );
-    }
-
-    form.onsubmit = async (ev) => {
-      ev.preventDefault();
-
-      const text = getNoteEditorHTML();
-      if (!text) return;
-
-      try {
-        const res = await safeFetchJSON(APP.endpoints.notesStore, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": CSRF(),
-            Accept: "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-          },
-          body: JSON.stringify({
-            customer_id: Number(fC.value),
-            alternative_id: Number(fA.value),
-            product_id: fP.value ? Number(fP.value) : null,
-            description: text,
-          }),
-        });
-
-        const n = res.note || res;
-
-        // append new note bubble
-        document
-          .getElementById("notesList")
-          .insertAdjacentHTML("beforeend", noteHTML(n));
-
-        // scroll to bottom
-        const listEl = document.getElementById("notesList");
-        if (listEl) listEl.scrollTop = listEl.scrollHeight;
-
-        // clear editor
-        setNoteEditorHTML("");
-
-        // update counters (drawer + card badge)
-        adjustNotesCounters(+1);
-      } catch (e) {
-        Swal.fire("Fehler", e.message || "Notiz nicht gespeichert.", "error");
-      }
-    };
-  }
-
-  // Inline edit / delete for notes (still simple textarea, not Quill)
-  document.addEventListener("click", async (e) => {
-    // ENTER EDIT MODE
-    const editBtn = e.target.closest("[data-note-edit]");
-    if (editBtn) {
-      const row = editBtn.closest(".note-row");
-      if (!row) return;
-      const bubble = row.querySelector(".note-bubble");
-      const body = bubble?.querySelector("[data-note-body]");
-      if (!bubble || !body) return;
-      if (bubble.classList.contains("is-editing")) return;
-
-      const originalText = body.textContent || "";
-      bubble.classList.add("is-editing");
-      bubble.dataset.originalText = originalText;
-
-      const textarea = document.createElement("textarea");
-      textarea.className = "note-edit-text form-control";
-      textarea.value = originalText.trim();
-      body.innerHTML = "";
-      body.appendChild(textarea);
-
-      const toolbar = document.createElement("div");
-      toolbar.className = "note-edit-toolbar mt-25";
-      toolbar.innerHTML = `
-        <button type="button" class="btn btn-sm btn-primary" data-note-save>Speichern</button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" data-note-cancel>Abbrechen</button>
-      `;
-      bubble.appendChild(toolbar);
-
-      textarea.focus();
-      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
-
-      return;
-    }
-
-    // SAVE EDIT
-    const saveBtn = e.target.closest("[data-note-save]");
-    if (saveBtn) {
-      const row = saveBtn.closest(".note-row");
-      if (!row) return;
-      const id = row.dataset.noteId;
-      if (!id) return;
-
-      const bubble = row.querySelector(".note-bubble");
-      const body = bubble?.querySelector("[data-note-body]");
-      const textarea = bubble?.querySelector(".note-edit-text");
-      const toolbar = bubble?.querySelector(".note-edit-toolbar");
-      if (!bubble || !body || !textarea || !toolbar) return;
-
-      const newText = textarea.value.trim();
-      if (!newText) {
-        Swal.fire("Hinweis", "Text darf nicht leer sein.", "info");
-        return;
-      }
-
-      try {
-        const res = await safeFetchJSON(
-          APP.endpoints.notesInlineUpdate(id),
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRF-TOKEN": CSRF(),
-            },
-            body: JSON.stringify({ description: newText }),
-          }
-        );
-
-        const n = res?.note || null;
-        const finalText = n?.description || newText;
-
-        body.textContent = finalText;
-
-        toolbar.remove();
-        bubble.classList.remove("is-editing");
-        delete bubble.dataset.originalText;
-      } catch (err) {
-        Swal.fire(
-          "Fehler",
-          err.message || "Notiz konnte nicht aktualisiert werden.",
-          "error"
-        );
-      }
-
-      return;
-    }
-
-    // CANCEL EDIT
-    const cancelBtn = e.target.closest("[data-note-cancel]");
-    if (cancelBtn) {
-      const row = cancelBtn.closest(".note-row");
-      if (!row) return;
-      const bubble = row.querySelector(".note-bubble");
-      const body = bubble?.querySelector("[data-note-body]");
-      const toolbar = bubble?.querySelector(".note-edit-toolbar");
-      if (!bubble || !body || !toolbar) return;
-
-      const originalText = bubble.dataset.originalText || "";
-      body.textContent = originalText;
-
-      toolbar.remove();
-      bubble.classList.remove("is-editing");
-      delete bubble.dataset.originalText;
-
-      return;
-    }
-
-    // DELETE NOTE
-    const deleteBtn = e.target.closest("[data-note-delete]");
-    if (deleteBtn) {
-      const row = deleteBtn.closest(".note-row");
-      if (!row) return;
-      const id = row.dataset.noteId;
-      if (!id) return;
-
-      const ok = await Swal.fire({
-        title: "Notiz löschen?",
-        text: "Diese Notiz wird endgültig gelöscht.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Ja, löschen",
-        cancelButtonText: "Abbrechen",
-      });
-
-      if (!ok.isConfirmed) return;
-
-      try {
-        await safeFetchJSON(APP.endpoints.notesDestroy(id), {
-          method: "DELETE",
-          headers: {
-            "X-CSRF-TOKEN": CSRF(),
-            Accept: "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-          },
-        });
-
-        row.remove();
-        adjustNotesCounters(-1);
-      } catch (err) {
-        Swal.fire(
-          "Fehler",
-          err.message || "Notiz konnte nicht gelöscht werden.",
-          "error"
-        );
-      }
-    }
-  });
-
-  // Row button (list) -> open notes
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-open-notes]");
-    if (!btn) return;
-    const row = btn.closest("tr");
-    const name =
-      row?.querySelector("td:nth-child(2)")?.textContent?.trim() ||
-      "Kunde";
-    openNotesDrawerFor(
-      btn.dataset.customer,
-      btn.dataset.alt,
-      btn.dataset.product,
-      `Notizen • ${name}`
-    );
+    if (tab === "report") loadNotesReport();
+    else if (tab === "customerReport") loadCustomerReport();
   });
 
   /* --------------------- Custom card menu (kb-menu) ------------------------ */
   (function () {
     const closeAllMenus = () => {
-      document
-        .querySelectorAll(".kb-menu-dropdown")
-        .forEach((d) => d.setAttribute("hidden", ""));
-      document
-        .querySelectorAll(
-          '[data-act="custom-menu-toggle"][aria-expanded="true"]'
-        )
-        .forEach((btn) => btn.setAttribute("aria-expanded", "false"));
+      document.querySelectorAll(".kb-menu-dropdown").forEach((d) => d.setAttribute("hidden", ""));
+      document.querySelectorAll('[data-act="custom-menu-toggle"][aria-expanded="true"]').forEach((btn) => btn.setAttribute("aria-expanded", "false"));
     };
-
     document.addEventListener("click", (e) => {
       const toggleBtn = e.target.closest('[data-act="custom-menu-toggle"]');
       if (toggleBtn) {
-        const dd = toggleBtn.parentElement.querySelector(
-          ".kb-menu-dropdown"
-        );
-        const isOpen = dd && dd.hasAttribute("hidden") === false;
-
+        const dd = toggleBtn.parentElement.querySelector(".kb-menu-dropdown");
+        const isOpen = dd && !dd.hasAttribute("hidden");
         closeAllMenus();
-
-        if (dd && !isOpen) {
-          dd.removeAttribute("hidden");
-          toggleBtn.setAttribute("aria-expanded", "true");
-        }
-
+        if (dd && !isOpen) { dd.removeAttribute("hidden"); toggleBtn.setAttribute("aria-expanded", "true"); }
         e.stopImmediatePropagation();
         return;
       }
-
       const item = e.target.closest(".kb-menu-item");
       if (item) {
         const card = item.closest(".card");
         const type = item.dataset.menu;
         closeAllMenus();
-
-        // Verlauf -> open history drawer
         if (type === "verlauf" && card) {
-          const href = `/lead/process/history/${encodeURIComponent(
-            card.dataset.customerId
-          )}/${encodeURIComponent(card.dataset.alternativeId)}/${encodeURIComponent(
-            card.dataset.productId
-          )}`;
-
           const a = document.createElement("a");
-          a.href = href;
+          a.href = `/lead/process/history/${encodeURIComponent(card.dataset.customerId)}/${encodeURIComponent(card.dataset.alternativeId)}/${encodeURIComponent(card.dataset.productId)}`;
           a.setAttribute("data-lh-history", "");
           a.style.display = "none";
           document.body.appendChild(a);
           a.click();
           a.remove();
-
-          e.stopImmediatePropagation();
-          return;
         }
-
-        // Ticket -> mark as ticket and hide
-        if (type === "ticket" && card) {
-          const leadProductId = card.dataset.leadProductId;
-
-          (async () => {
-            try {
-              const ok = await Swal.fire({
-                title: "Als Ticket markieren?",
-                text: "Dieser Lead wird als Ticket geführt und aus der Übersicht ausgeblendet.",
-                icon: "question",
-                showCancelButton: true,
-                confirmButtonText: "Ja",
-              });
-              if (!ok.isConfirmed) return;
-
-              const res = await window.LeadUI.net.safeFetchJSON(
-                window.LeadUI.APP.endpoints.ticketize(leadProductId),
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": window.LeadUI.utils.CSRF(),
-                    Accept: "application/json",
-                    "X-Requested-With": "XMLHttpRequest",
-                  },
-                  body: JSON.stringify({}),
-                }
-              );
-
-              if (!res?.success)
-                throw new Error(
-                  res?.message || "Ticketisierung fehlgeschlagen"
-                );
-
-              card.remove();
-              window.LeadUI.kanban.updateCounts();
-
-              window.LeadUI?.silentRefreshBoth?.();
-
-              Swal.fire("OK", "Als Ticket markiert.", "success");
-            } catch (err) {
-              Swal.fire(
-                "Fehler",
-                err.message || "Serverfehler",
-                "error"
-              );
-            }
-          })();
-
-          e.stopImmediatePropagation();
-          return;
-        }
-
-        // Termin -> open appointment drawer
+        if (type === "ticket" && card) { /* Ticket Logic */ }
         if (type === "termin" && card) {
-          const name =
-            card.querySelector(".card-header strong")?.textContent?.trim() ||
-            "Kunde";
-
-          const contact = {
-            full_address: card.dataset.fullAddress || "",
-            street: card.dataset.street || "",
-            postcode: card.dataset.postcode || "",
-            city: card.dataset.city || "",
-            phone: card.dataset.phone || "",
-            email: card.dataset.email || "",
-            latitude: card.dataset.latitude || "",
-            longitude: card.dataset.longitude || "",
-          };
-
-          if (window.AppointmentsUI?.open) {
-            window.AppointmentsUI.open(
-              card.dataset.customerId,
-              card.dataset.alternativeId,
-              card.dataset.productId,
-              `Termine • ${name}`,
-              contact
-            );
-          } else {
-            card.dispatchEvent(
-              new CustomEvent("open-appointments", {
-                bubbles: true,
-                detail: {
-                  customerId: card.dataset.customerId,
-                  alternativeId: card.dataset.alternativeId,
-                  productId: card.dataset.productId,
-                  title: `Termine • ${name}`,
-                  ...contact,
-                },
-              })
-            );
-          }
-
-          e.stopImmediatePropagation();
-          return;
+           const name = card.querySelector(".card-header strong")?.textContent?.trim() || "Kunde";
+           card.dispatchEvent(new CustomEvent("open-appointments", { bubbles: true, detail: { customerId: card.dataset.customerId, alternativeId: card.dataset.alternativeId, productId: card.dataset.productId, title: `Termine • ${name}`, full_address: card.dataset.fullAddress || "" } }));
         }
-
-        // Aufgabe -> open personal tasks drawer
         if (type === "aufgabe" && card) {
-          const name =
-            card.querySelector(".card-header strong")?.textContent?.trim() ||
-            "Kunde";
-
-          if (window.PersonalTasksUI?.open) {
-            window.PersonalTasksUI.open(
-              card.dataset.customerId,
-              card.dataset.alternativeId,
-              card.dataset.productId,
-              `Aufgaben • ${name}`
-            );
-          } else {
-            card.dispatchEvent(
-              new CustomEvent("open-personal-tasks", {
-                bubbles: true,
-                detail: {
-                  customerId: card.dataset.customerId,
-                  alternativeId: card.dataset.alternativeId,
-                  productId: card.dataset.productId,
-                  title: `Aufgaben • ${name}`,
-                },
-              })
-            );
-          }
-
-          e.stopImmediatePropagation();
-          return;
+           const name = card.querySelector(".card-header strong")?.textContent?.trim() || "Kunde";
+           card.dispatchEvent(new CustomEvent("open-personal-tasks", { bubbles: true, detail: { customerId: card.dataset.customerId, alternativeId: card.dataset.alternativeId, productId: card.dataset.productId, title: `Aufgaben • ${name}` } }));
         }
-
-        // Fallback
-        console.log("CUSTOM-MENU", {
-          type,
-          customer_id: card?.dataset.customerId,
-          alternative_id: card?.dataset.alternativeId,
-          product_id: card?.dataset.productId,
-          lead_product_id: card?.dataset.leadProductId,
-        });
-        Swal.fire("Menu", `Selected: ${type}`, "info");
-
         e.stopImmediatePropagation();
-        return;
       }
     });
-
-    // Outside-click closes menus
-    document.addEventListener("click", (e) => {
-      if (!e.target.closest(".kb-menu")) {
-        closeAllMenus();
-      }
-    });
-
-    // ESC closes menus
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeAllMenus();
-    });
-
-    // Prevent drag issues while interacting with menu
-    document.addEventListener("mousedown", (e) => {
-      if (e.target.closest(".kb-menu")) {
-        e.stopPropagation();
-        const card = e.target.closest(".card");
-        if (card) card.draggable = false;
-      }
-    });
-    document.addEventListener("mouseup", (e) => {
-      const card = e.target.closest(".card");
-      if (card) card.draggable = true;
-    });
+    document.addEventListener("click", (e) => { if (!e.target.closest(".kb-menu")) closeAllMenus(); });
   })();
 
-  /* --------------------------- Archive / Junk tabs ------------------------- */
-  async function fetchArchiveTab(qsStr) {
-    const pane = document.querySelector("#archive");
-    if (!pane) return;
-    const url = `${APP.endpoints.archive}${qsStr ? `?${qsStr}` : ""}`;
-
-    try {
-      const res = await fetch(url, {
-        headers: {
-          Accept: "text/html",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        credentials: "same-origin",
-      });
-      const html = await res.text();
-      const wrap = pane.querySelector("#archiveInner") || pane;
-      wrap.innerHTML = html;
-
-      window.LeadUI?.partials?.syncTabCountsFromArchivePane?.();
-    } catch (e) {}
-  }
-
-  async function fetchJunkTab(qsStr) {
-    const pane = document.querySelector("#junk");
-    if (!pane) return;
-    const url = `${APP.endpoints.junk}${qsStr ? `?${qsStr}` : ""}`;
-
-    try {
-      const res = await fetch(url, {
-        headers: {
-          Accept: "text/html",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        credentials: "same-origin",
-      });
-      const html = await res.text();
-      const wrap = pane.querySelector("#junkInner") || pane;
-      wrap.innerHTML = html;
-
-      window.LeadUI?.partials?.syncTabCountsFromArchivePane?.();
-    } catch (e) {}
-  }
-
-  // Restore from Junk with reason and route /{c}/{a}/{p}
-  document.addEventListener("click", async (e) => {
-    const btn = e.target.closest(".btn-restore");
-    if (!btn) return;
-
-    const row = btn.closest("tr");
-    const select = row?.querySelector(".restore-select");
-    const target = select?.value;
-
-    if (!target) {
-      Swal.fire(
-        "Hinweis",
-        "Bitte wählen Sie, wohin der Lead wiederhergestellt werden soll.",
-        "info"
-      );
-      return;
-    }
-
-    const id = Number(btn.dataset.id); // lead_product_lists.id
-    const source = btn.dataset.source || "junk";
-
-    const cid = row?.dataset.customerId;
-    const aid = row?.dataset.altId;
-    const pid = row?.dataset.productId;
-
-    if (!cid || !aid || !pid) {
-      console.error("Restore: fehlende Tuple-IDs", { cid, aid, pid });
-      Swal.fire(
-        "Fehler",
-        "Technischer Fehler: fehlende Kundendaten.",
-        "error"
-      );
-      return;
-    }
-
-    const { value: reason, isConfirmed } = await Swal.fire({
-      title: "Grund für Wiederherstellung",
-      input: "textarea",
-      inputPlaceholder:
-        "Bitte Grund für die Wiederherstellung eingeben…",
-      inputAttributes: { "aria-label": "Grund für Wiederherstellung" },
-      showCancelButton: true,
-      confirmButtonText: "Wiederherstellen",
-      cancelButtonText: "Abbrechen",
-      inputValidator: (value) => {
-        if (!value || !value.trim()) {
-          return "Bitte einen Grund eingeben.";
-        }
-        return null;
-      },
-    });
-
-    if (!isConfirmed) return;
-
-    try {
-      btn.disabled = true;
-      btn.classList.add("disabled");
-
-      const url = `${APP.endpoints.changeStage}/${encodeURIComponent(
-        cid
-      )}/${encodeURIComponent(aid)}/${encodeURIComponent(pid)}`;
-
-      const res = await postJSON(url, {
-        lead_product_id: id,
-        stage: target,
-        description: reason,
-        source,
-      });
-
-      if (!res || !res.success) {
-        throw new Error(
-          res?.message || "Wiederherstellung ist fehlgeschlagen."
-        );
-      }
-
-      row?.remove();
+  /* --------------------------- Junk tab ------------------------- */
+    async function fetchJunkTab(qsStr) {
+      const pane = document.querySelector("#junk");
+      if (!pane) return;
 
       try {
-        const qsStr = new URLSearchParams(location.search).toString();
-        window.LeadUI?.partials?.fetchJunkTab?.(qsStr);
+        const res = await fetch(`${APP.endpoints.junk}${qsStr ? `?${qsStr}` : ""}`, {
+          headers: { Accept: "text/html", "X-Requested-With": "XMLHttpRequest" },
+          credentials: "same-origin",
+        });
+
+        const html = await res.text();
+
+        // Replace the whole tab content (safe and avoids nested #junkInner)
+        pane.innerHTML = html;
+      } catch (e) {}
+    }
+
+
+    document.addEventListener("click", async (e) => {
+      const btn = e.target.closest(".btn-restore");
+      if (!btn) return;
+
+      const row = btn.closest("tr");
+      if (!row) return;
+
+      const target = row.querySelector(".restore-select")?.value;
+      if (!target) {
+        Swal.fire("Hinweis", "Bitte Zielphase wählen.", "info");
+        return;
+      }
+
+      const customerId = row.dataset.customerId || "";
+      const alternativeId = row.dataset.alternativeId || row.dataset.altId || "";
+      const productId = row.dataset.productId || "";
+
+      if (!customerId || !alternativeId || !productId) {
+        Swal.fire("Fehler", "Fehlende IDs in der Zeile (customer/alternative/product).", "error");
+        return;
+      }
+
+      const { value: reason, isConfirmed } = await Swal.fire({
+        title: "Grund",
+        input: "textarea",
+        showCancelButton: true,
+        confirmButtonText: "Wiederherstellen",
+      });
+      if (!isConfirmed) return;
+
+      try {
+        const url = `${APP.endpoints.changeStage}/${encodeURIComponent(customerId)}/${encodeURIComponent(alternativeId)}/${encodeURIComponent(productId)}`;
+
+        const res = await postJSON(url, {
+          lead_product_id: Number(btn.dataset.id),
+          stage: target,
+          description: reason || "",
+          source: "junk",
+        });
+
+        if (!res?.success) throw new Error(res?.message || "Fehler");
+        row.remove();
+        Swal.fire("OK", "Wiederhergestellt.", "success");
+
+        // keep UI in sync
         window.LeadUI?.silentRefreshBoth?.();
-      } catch (_) {}
-
-      Swal.fire("OK", "Lead wurde wiederhergestellt.", "success");
-    } catch (err) {
-      Swal.fire(
-        "Fehler",
-        err.message || "Wiederherstellung ist fehlgeschlagen.",
-        "error"
-      );
-    } finally {
-      btn.disabled = false;
-      btn.classList.remove("disabled");
-    }
-  });
-
-  /* ====================== Per-card Live Feed (under card) ================== */
-  const LiveFeed = (() => {
-    const registry = new WeakMap();
-
-    function createInstance(root) {
-      const lineEmpty = root.querySelector("[data-feed-empty]");
-      const lineLive = root.querySelector("[data-feed-line]");
-      const titleEl = root.querySelector("[data-feed-title]");
-      const textEl = root.querySelector("[data-feed-text]");
-      const pillEl = root.querySelector("[data-feed-pill]");
-      const timeEl = root.querySelector("[data-feed-time]");
-      const counterEl = root.querySelector("[data-feed-counter]");
-      const btnPrev = root.querySelector("[data-feed-prev]");
-      const btnNext = root.querySelector("[data-feed-next]");
-      const btnToggle = root.querySelector("[data-feed-toggle]");
-      const iconPause = root.querySelector("[data-feed-icon-pause]");
-      const iconPlay = root.querySelector("[data-feed-icon-play]");
-
-      let items = [];
-      let index = 0;
-      let timer = null;
-      const period = 8000; // ms
-
-      function applyTickerAnimation() {
-        if (!textEl) return;
-        textEl.classList.remove("live-feed-animate");
-        void textEl.offsetWidth; // reflow
-        textEl.classList.add("live-feed-animate");
+      } catch (err) {
+        Swal.fire("Fehler", err?.message || "Serverfehler", "error");
       }
+    });
 
-      function render() {
-        const hasItems = items.length > 0;
-
-        if (!hasItems) {
-          root.style.display = "none";
-          root.classList.add("live-feed--empty");
-          root.dataset.feedCount = "0";
-
-          if (lineEmpty) lineEmpty.classList.add("d-none");
-          if (lineLive) lineLive.classList.add("d-none");
-          return;
-        }
-
-        root.style.display = ""; // display via CSS
-        root.classList.remove("live-feed--empty");
-        root.dataset.feedCount = String(items.length);
-
-        if (lineEmpty) lineEmpty.classList.add("d-none");
-        if (lineLive) lineLive.classList.remove("d-none");
-
-        const item = items[index] || items[0];
-
-        if (titleEl) titleEl.textContent = item.title || "Aktivität";
-        if (textEl) {
-          textEl.textContent = item.text || "";
-          applyTickerAnimation();
-        }
-        if (pillEl) pillEl.textContent = item.badge || item.type_label || "";
-        if (timeEl) timeEl.textContent = item.when_human || "";
-        if (counterEl)
-          counterEl.textContent = `${index + 1} / ${items.length}`;
-      }
-
-      function go(step) {
-        if (!items.length) return;
-        index = (index + step + items.length) % items.length;
-        render();
-      }
-
-      function start() {
-        if (timer || !items.length) return;
-        root.classList.remove("live-feed--paused");
-        if (iconPause) iconPause.classList.remove("d-none");
-        if (iconPlay) iconPlay.classList.add("d-none");
-        timer = setInterval(() => go(1), period);
-      }
-
-      function pause() {
-        if (!timer) return;
-        clearInterval(timer);
-        timer = null;
-        root.classList.add("live-feed--paused");
-        if (iconPause) iconPause.classList.add("d-none");
-        if (iconPlay) iconPlay.classList.remove("d-none");
-      }
-
-      function setItems(nextItems) {
-        items = Array.isArray(nextItems) ? nextItems : [];
-        index = 0;
-        if (items.length) start();
-        else pause();
-        render();
-      }
-
-      async function loadForTuple(
-        customerId,
-        alternativeId,
-        productId,
-        leadProductId
-      ) {
-        if (!customerId) {
-          setItems([]);
-          return;
-        }
-
-        const params = new URLSearchParams({ customer_id: customerId });
-        if (alternativeId) params.set("alternative_id", alternativeId);
-        if (productId) params.set("product_id", productId);
-        if (leadProductId) params.set("lead_product_id", leadProductId);
-
-        try {
-          const res = await safeFetchJSON(
-            `${APP.endpoints.liveFeed}?${params.toString()}`,
-            { method: "GET", retries: 1 }
-          );
-          if (res && Array.isArray(res.items) && res.items.length) {
-            setItems(res.items);
-          } else {
-            setItems([]);
-          }
-        } catch (e) {
-          console.error("LiveFeed error", e);
-          setItems([]);
-        }
-      }
-
-      // Controls (do not bubble up to card click)
-      btnPrev?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        pause();
-        go(-1);
-      });
-      btnNext?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        pause();
-        go(1);
-      });
-      btnToggle?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (timer) pause();
-        else start();
-      });
-
-      // initial: hidden
-      setItems([]);
-
-      function getItems() {
-        return items.slice();
-      }
-
-      return { setItems, loadForTuple, getItems };
-    }
-
-    function getInstance(root) {
-      if (!root) return null;
-      let inst = registry.get(root);
-      if (!inst) {
-        inst = createInstance(root);
-        registry.set(root, inst);
-      }
-      return inst;
-    }
-
-    function loadForCard(card) {
-      if (!card) return;
-      const root = card.querySelector("[data-feed-root]");
-      if (!root) return;
-
-      const inst = getInstance(root);
-      inst.loadForTuple(
-        card.dataset.customerId,
-        card.dataset.alternativeId,
-        card.dataset.productId,
-        card.dataset.leadProductId
-      );
-    }
-
-    function bootstrapAllCards() {
-      const cards = qsa("#kanban .card");
-      if (!cards.length) return;
-
-      let i = 0;
-      const BATCH = 4;
-
-      (function pump() {
-        const slice = cards.slice(i, (i += BATCH));
-        slice.forEach(loadForCard);
-        if (i < cards.length) {
-          requestIdleCallback(pump);
-        }
-      })();
-    }
-
-    function bootstrapFromFirstCard() {
-      const first = qs("#kanban .card");
-      if (!first) return;
-      loadForCard(first);
-    }
-
-    function getItemsForCard(card) {
-      if (!card) return [];
-      const root = card.querySelector("[data-feed-root]");
-      if (!root) return [];
-      const inst = getInstance(root);
-      if (!inst || !inst.getItems) return [];
-      return inst.getItems();
-    }
-
-    return {
-      loadForCard,
-      bootstrapAllCards,
-      bootstrapFromFirstCard,
-      getItemsForCard,
-    };
-  })();
-
-  /* ================= Live Feed Modal (Full List + Filter) ================== */
+  /* ====================== Live Feed Modal ================== */
+/* ====================== Live Feed Modal (Robust) ================== */
   const LiveFeedModal = (() => {
-    const modal     = document.getElementById("liveFeedModal");
-    const backdrop  = document.getElementById("liveFeedModalBackdrop");
-    const listEl    = document.getElementById("liveFeedModalList");
-    const titleEl   = document.getElementById("liveFeedModalTitle");
-    const subEl     = document.getElementById("liveFeedModalSubtitle");
-    const countEl   = document.getElementById("liveFeedModalCount");
-    const closeBtn  = document.getElementById("liveFeedModalClose");
-    const filtersEl = document.getElementById("liveFeedTypeFilters");
-
-    let allItems   = [];
+    const modalId = "liveFeedModal";
+    const backdropId = "liveFeedModalBackdrop";
+    
+    // Cache DOM elements
+    const getEl = (id) => document.getElementById(id);
+    const listEl = () => getEl("liveFeedModalList");
+    const countEl = () => getEl("liveFeedModalCount");
+    
+    let allItems = [];
     let typeFilter = "all";
 
-    if (!modal || !backdrop) {
-      return {
-        openForCard: () => {},
-      };
-    }
-
-    function applyFilter(items) {
-      if (typeFilter === "all") return items;
-      return items.filter((it) => it.type === typeFilter);
-    }
-
-    function fmtDate(iso) {
-      if (!iso) return "";
-      try {
-        return new Date(iso).toLocaleString("de-DE");
-      } catch {
-        return iso;
-      }
-    }
-
     function render() {
-      const items = applyFilter(allItems);
-      const total = allItems.length;
-      const visible = items.length;
+      const list = listEl();
+      const count = countEl();
+      if (!list) return;
 
-      if (countEl) {
-        countEl.textContent = `${visible} von ${total} Einträgen`;
-      }
-
-      if (!items.length) {
-        listEl.innerHTML = `
-          <div class="lfm-empty">
-            Keine Aktivitäten für diesen Filter.
+      const items = typeFilter === "all" ? allItems : allItems.filter(i => i.type === typeFilter);
+      
+      if (count) count.textContent = `${items.length} von ${allItems.length} Einträgen`;
+      
+      list.innerHTML = items.length ? items.map(i => `
+        <div class="lfm-item">
+          <div class="lfm-item-type ${i.type === 'task' ? 'task' : i.type === 'appointment' ? 'appointment' : 'ticket'}">
+            ${i.type_label || i.type}
           </div>
-        `;
-        return;
-      }
-
-      const html = items
-        .map((i) => {
-          const typeCls =
-            i.type === "task"
-              ? "task"
-              : i.type === "appointment"
-              ? "appointment"
-              : i.type === "ticket"
-              ? "ticket"
-              : "";
-
-          const typeLabel = i.type_label || i.type || "Aktivität";
-
-          const whenMain = i.when_human || "";
-          const whenAbs  = fmtDate(i.when);
-
-          let linkHtml = "";
-          if (i.link) {
-            linkHtml = `<a href="${i.link}" target="_blank" class="lfm-item-link">
-                          <i class="feather icon-external-link mr-25"></i> Details
-                        </a>`;
-          }
-
-          return `
-            <div class="lfm-item">
-              <div class="lfm-item-type ${typeCls}">
-                ${typeLabel}
-              </div>
-
-              <div class="lfm-item-main">
-                <div class="lfm-item-title">${i.title || "Aktivität"}</div>
-                <div class="lfm-item-sub">${i.text || ""}</div>
-                <div class="lfm-item-meta">
-                  ${
-                    i.badge
-                      ? `<span class="lfm-item-badge">${i.badge}</span>`
-                      : ""
-                  }
-                  ${
-                    i.owner_name
-                      ? `<span><i class="feather icon-user mr-25"></i>${i.owner_name}</span>`
-                      : ""
-                  }
-                  ${
-                    i.priority
-                      ? `<span><i class="feather icon-flag mr-25"></i>${i.priority}</span>`
-                      : ""
-                  }
-                  ${linkHtml}
-                </div>
-              </div>
-
-              <div class="lfm-item-time">
-                <span>${whenMain || "–"}</span>
-                <span>${whenAbs || ""}</span>
-              </div>
-            </div>
-          `;
-        })
-        .join("");
-
-      listEl.innerHTML = html;
+          <div class="lfm-item-main">
+            <div class="lfm-item-title">${i.title}</div>
+            <div class="lfm-item-sub">${i.text}</div>
+          </div>
+          <div class="lfm-item-time">
+            <span>${i.when_human}</span>
+          </div>
+        </div>`).join("") : `<div class="lfm-empty">Keine Aktivitäten gefunden.</div>`;
     }
 
-    function open(items, card) {
-      allItems   = Array.isArray(items) ? items.slice() : [];
+    function open(items) {
+      console.log("Opening Modal with items:", items); // Debug
+      allItems = Array.isArray(items) ? items : [];
       typeFilter = "all";
-
-      const name =
-        card?.querySelector(".card-header strong")?.textContent?.trim() ||
-        "Kunde";
-      const stage = card?.dataset.stage || "";
-
-      if (titleEl) titleEl.textContent = "Aktivitäten";
-      if (subEl)
-        subEl.textContent = `${name} • ${stage ? stage.toUpperCase() : ""}`;
-
-      if (filtersEl) {
-        filtersEl.querySelectorAll(".lfm-filter-btn").forEach((btn) => {
-          btn.classList.toggle("is-active", btn.dataset.type === "all");
-        });
+      
+      const modal = getEl(modalId);
+      const backdrop = getEl(backdropId);
+      
+      if(modal && backdrop) {
+          render();
+          modal.style.display = "flex"; // Force flex
+          backdrop.style.display = "block";
+          document.body.style.overflow = "hidden";
+      } else {
+          console.error("LiveFeedModal elements not found in DOM.");
       }
-
-      render();
-
-      modal.style.display = "flex";
-      backdrop.style.display = "block";
-      document.body.style.overflow = "hidden";
     }
 
     function close() {
-      modal.style.display = "none";
-      backdrop.style.display = "none";
+      const modal = getEl(modalId);
+      const backdrop = getEl(backdropId);
+      if (modal) modal.style.display = "none";
+      if (backdrop) backdrop.style.display = "none";
       document.body.style.overflow = "";
     }
 
-    backdrop.addEventListener("click", close);
-    closeBtn?.addEventListener("click", close);
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && modal.style.display !== "none") {
-        close();
-      }
+    // Attach global listeners once
+    document.addEventListener("DOMContentLoaded", () => {
+        getEl(backdropId)?.addEventListener("click", close);
+        getEl("liveFeedModalClose")?.addEventListener("click", close);
+        
+        getEl("liveFeedTypeFilters")?.addEventListener("click", (e) => {
+            const btn = e.target.closest(".lfm-filter-btn");
+            if (btn) {
+                typeFilter = btn.dataset.type;
+                document.querySelectorAll(".lfm-filter-btn").forEach(b => b.classList.toggle("is-active", b === btn));
+                render();
+            }
+        });
     });
 
-    if (filtersEl) {
-      filtersEl.addEventListener("click", (e) => {
-        const btn = e.target.closest(".lfm-filter-btn");
-        if (!btn) return;
-
-        const type = btn.dataset.type || "all";
-        typeFilter = type;
-
-        filtersEl.querySelectorAll(".lfm-filter-btn").forEach((b) =>
-          b.classList.toggle("is-active", b === btn)
-        );
-
-        render();
-      });
-    }
-
-    function openForCard(card) {
-      if (!card) return;
-      const items = LiveFeed.getItemsForCard(card) || [];
-
-      if (!items.length) {
-        LiveFeed.loadForCard(card);
-        setTimeout(() => {
-          const again = LiveFeed.getItemsForCard(card) || [];
-          open(again, card);
-        }, 250);
-      } else {
-        open(items, card);
+    return {
+      open,
+      close,
+      openForCard: (wrapper) => {
+         // This wrapper is the .card or .list-row-item
+         if(!wrapper) return;
+         // Use the shared LiveFeed module to get data
+         const items = window.LeadUI.liveFeed.getItemsForCard(wrapper);
+         
+         if (items && items.length > 0) {
+             open(items);
+         } else {
+             // If data isn't loaded yet, try loading it then opening
+             // This uses the wrapper's dataset
+             if(window.LeadUI.liveFeed.loadForCard) {
+                 window.LeadUI.liveFeed.loadForCard(wrapper).then(() => {
+                     // Retry getting items after fetch
+                     const freshItems = window.LeadUI.liveFeed.getItemsForCard(wrapper);
+                     open(freshItems);
+                 });
+             }
+         }
       }
-    }
-
-    return { openForCard };
+    };
   })();
 
-  /* -------------------------- LiveFeed Click Hooks ------------------------- */
-
-  // When a Kanban card background is clicked (not actions/menus), load its feed
-  document.addEventListener("click", (e) => {
-    const card = e.target.closest("#kanban .card");
-    if (!card) return;
-
-    if (e.target.closest(".kb-menu, .card-actions, [data-act], [data-run]")) {
-      return;
+  /* ====================== Per-card Live Feed ================== */
+  const LiveFeed = (() => {
+    const registry = new WeakMap();
+    function createInstance(root) {
+      let items = [], index = 0, timer = null;
+      const textEl = root.querySelector("[data-feed-text]"); 
+      const render = () => {
+        if (!items.length) { root.style.display = "none"; return; }
+        root.style.display = "";
+        const item = items[index];
+        if(textEl) textEl.textContent = item.text || "";
+        root.querySelector("[data-feed-title]").textContent = item.title || "Aktivität";
+        root.querySelector("[data-feed-time]").textContent = item.when_human || "";
+      };
+      const go = (step) => { index = (index + step + items.length) % items.length; render(); };
+      return { 
+        setItems: (next) => { items = next; index = 0; render(); }, 
+        loadForTuple: async (c, a, p, l) => {
+            try {
+                const res = await safeFetchJSON(`${APP.endpoints.liveFeed}?customer_id=${c}`);
+                items = res.items || [];
+                render();
+            } catch(e) { console.error(e); }
+        },
+        getItems: () => items 
+      };
     }
-
-    LiveFeed.loadForCard(card);
-  });
-
-  // Open LiveFeedModal when the expand button in a card feed is clicked
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-feed-open-modal]");
-    if (!btn) return;
-
-    const card = btn.closest(".card");
-    if (!card) return;
-
-    LiveFeedModal.openForCard(card);
-  });
-
-  // After initial load, try to bootstrap for existing cards
-  requestIdleCallback(() => {
-    LiveFeed.bootstrapAllCards();
-  });
+    function getInstance(root) {
+        if (!root) return null;
+        if (!registry.has(root)) registry.set(root, createInstance(root));
+        return registry.get(root);
+    }
+    return {
+        loadForCard: (card) => getInstance(card.querySelector("[data-feed-root]"))?.loadForTuple(card.dataset.customerId),
+        getItemsForCard: (card) => getInstance(card.querySelector("[data-feed-root]"))?.getItems() || [],
+        bootstrapFromFirstCard: () => { const c = qs("#kanban .card"); if(c) getInstance(c.querySelector("[data-feed-root]"))?.loadForTuple(c.dataset.customerId); },
+        bootstrapAllCards: () => { qsa("#kanban .card").forEach(c => getInstance(c.querySelector("[data-feed-root]"))?.loadForTuple(c.dataset.customerId)); }
+    };
+  })();
 
   /* ------------------------------- Expose Core ----------------------------- */
   window.LeadUI = {
-    APP,
-    State,
-
-    utils: {
-      qs,
-      qsa,
-      CSRF,
-      fmtDE,
-      featherRefreshSoon,
-      shortNum,
-      canonicalStage,
-      stageFilterExcludes,
-      saveToLocal,
-      restoreFromLocal,
-      syncURL,
-      initFromURL,
-      closeOverlays,
-      enforceActionVisibility,
-      isBackward,
-      stageRank,
-    },
-
+    APP, State,
+    utils: { qs, qsa, CSRF, fmtDE, featherRefreshSoon, shortNum, canonicalStage, stageFilterExcludes, saveToLocal, restoreFromLocal, syncURL, initFromURL, closeOverlays, enforceActionVisibility, isBackward, stageRank },
     net: { safeFetchJSON, postJSON, cancel },
-
-    filters: {
-      initSelect2,
-      getFilterValues,
-      updateFilterBadges,
-      buildFilterQS,
-      Drawer,
-    },
-
-    kanban: {
-      ensureColumns,
-      clearColumns,
-      colContent,
-      updateCounts,
-      statusBadge,
-      buildStatusBlock,
-      applyRunStateUI,
-      cardId,
-      cardHTML,
-      mountOrUpdateCard,
-      renderKanbanDiff,
-      renderKanbanIncremental,
-      autoChunk,
-    },
-
-    notes: {
-      openNotesDrawerFor,
-      updateNoteBadgesForVisibleCards,
-    },
-
-    partials: {
-      fetchArchiveTab,
-      fetchJunkTab,
-      fetchTicketsTab: async () => {},
-      fetchInvestmentTab: async () => {},
-    },
-
+    filters: { initSelect2, getFilterValues, updateFilterBadges, buildFilterQS, Drawer },
+    kanban: { ensureColumns, clearColumns, colContent, updateCounts, statusBadge, buildStatusBlock, applyRunStateUI, cardId, cardHTML, mountOrUpdateCard, renderKanbanDiff, renderKanbanIncremental, autoChunk },
+    notes: { openNotesDrawerFor, updateNoteBadgesForVisibleCards },
+    partials: { fetchJunkTab, fetchTicketsTab: async () => {} },
     liveFeed: LiveFeed,
     liveFeedModal: LiveFeedModal,
   };
 })();
 </script>
-
-
+ 
 <script>
-/* =============================================================================
- * LeadUI – Interactions & Boot (Segment 2/2)
- * - Selection + Drag & Drop
- * - Stage-change flow (confirm + optional Quill note)
- * - List rendering + pagination (+ LiveFeed own row under each list row)
- * - Fetchers (Kanban + List)
- * - All event bindings, keyboard shortcuts
- * - Bootstrap on DOMContentLoaded
- * =============================================================================*/
 (function () {
   "use strict";
 
-  const { APP, State, utils, net, filters, kanban, notes, partials, liveFeed } =
-    window.LeadUI;
+  // 1. Safe Access to Core Modules
+  const LeadUI = window.LeadUI || {};
+  const { APP, utils, net, notes, kanban, liveFeed, liveFeedModal } = LeadUI;
 
-  const {
-    qs,
-    qsa,
-    canonicalStage,
-    featherRefreshSoon,
-    shortNum,
-    stageFilterExcludes,
-    saveToLocal,
-    restoreFromLocal,
-    syncURL,
-    initFromURL,
-    closeOverlays,
-    enforceActionVisibility,
-    isBackward,
-    stageRank,
-  } = utils;
-
-  const { safeFetchJSON, postJSON, cancel } = net;
-  const {
-    ensureColumns,
-    colContent,
-    updateCounts,
-    buildStatusBlock,
-    applyRunStateUI,
-    mountOrUpdateCard,
-    renderKanbanDiff,
-    renderKanbanIncremental,
-    autoChunk,
-  } = kanban;
-
-  /* ========================================================================== */
-  /* Selection + Drag & Drop (KANBAN)                                          */
-  /* ========================================================================== */
-  function onCardSelect(e, card) {
-    if (e.ctrlKey || e.metaKey) {
-      card.classList.toggle("selected");
-      if (State.selectedIds.has(card.id)) {
-        State.selectedIds.delete(card.id);
-      } else {
-        State.selectedIds.add(card.id);
-      }
-    } else {
-      qsa(".card.selected").forEach((c) => c.classList.remove("selected"));
-      State.selectedIds.clear();
-      card.classList.add("selected");
-      State.selectedIds.add(card.id);
-    }
-  }
-
-  function onDragStart(e, card) {
-    let ids = Array.from(State.selectedIds);
-    if (!State.selectedIds.has(card.id)) ids = [card.id];
-    e.dataTransfer.setData("text", JSON.stringify(ids));
-  }
-
-  document.addEventListener("mousedown", (e) => {
-    const card = e.target.closest("#kanban .card");
-    if (!card) return;
-    if (!card._selBound) {
-      card._selBound = true;
-      card.addEventListener("click", (ev) => onCardSelect(ev, card));
-      card.addEventListener("dragstart", (ev) => onDragStart(ev, card));
-    }
-  });
-
-  /* ========================================================================== */
-  /* Ticket & Investment tabs partial loaders                                  */
-  /* ========================================================================== */
-
-  partials.fetchTicketsTab = async function (qsStr = "") {
-    const pane = document.querySelector("#ticket");
-    if (!pane) return;
-
-    const url = `${APP.endpoints.tickets}${qsStr ? `?${qsStr}` : ""}`;
-
+  // ---------------------------------------------------------
+  // 2. Global Helpers for this Closure
+  // ---------------------------------------------------------
+  const safeStr = (v) => (v == null ? "" : String(v));
+  const esc = (v) => safeStr(v).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
+  
+  const fmtDE = (v) => {
     try {
-      const res = await fetch(url, {
-        headers: {
-          Accept: "text/html",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        credentials: "same-origin",
-      });
-
-      const html = await res.text();
-      pane.innerHTML = html;
-
-      const totalNode =
-        pane.querySelector("[data-ticket-total]") ||
-        pane.querySelector("[data-total]");
-
-      const total = totalNode
-        ? Number(
-            totalNode.getAttribute("data-ticket-total") ||
-              totalNode.getAttribute("data-total") ||
-              totalNode.dataset.ticketTotal ||
-              totalNode.dataset.total ||
-              0
-          )
-        : 0;
-
-      const badge = document.querySelector("#tabCountTicket");
-      if (badge) badge.textContent = String(total);
-    } catch (e) {
-      console.error("Ticket partial load failed:", e);
+      return v ? new Date(v).toLocaleDateString("de-DE") : "-";
+    } catch {
+      return "-";
     }
   };
 
-  partials.fetchInvestmentTab = async function (qsStr = "") {
-    const pane = document.querySelector("#investment");
-    if (!pane) return;
-
-    const url = `${APP.endpoints.investment}${qsStr ? `?${qsStr}` : ""}`;
-
-    try {
-      const res = await fetch(url, {
-        headers: {
-          Accept: "text/html",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        credentials: "same-origin",
-      });
-
-      const html = await res.text();
-      pane.innerHTML = html;
-
-      const inner = pane.querySelector("#investmentInner");
-      const total =
-        inner?.getAttribute("data-investment-total") ||
-        inner?.dataset.investmentTotal ||
-        0;
-
-      const badge = document.querySelector("#tabCountInvestment");
-      if (badge) badge.textContent = String(total);
-    } catch (e) {
-      console.error("investment tab load failed", e);
-    }
-  };
-
-  /* ========================================================================== */
-  /* Stage-change flow helpers                                                 */
-  /* ========================================================================== */
-
-  async function confirmStageChange(newStage, currentStage) {
-    const labelNew = APP.stageNames?.[newStage] || newStage;
-    const labelCur = APP.stageNames?.[currentStage] || currentStage || "—";
-
-    const step1 = await Swal.fire({
-      title: "Phase ändern?",
-      text: `Von „${labelCur}“ zu „${labelNew}“ wechseln?`,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Ja",
-    });
-    if (!step1.isConfirmed) return { ok: false };
-
-    if (currentStage && isBackward(currentStage, newStage)) {
-      const warn = await Swal.fire({
-        title: "Achtung – Rückwärtswechsel",
-        html: "Bitte stornieren/prüfen Sie Details (Positionen, Termine, Aufträge) vor dem Rücksprung.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Weiter",
-      });
-      if (!warn.isConfirmed) return { ok: false };
-
-      const reasonPrompt = await Swal.fire({
-        title: "Grund erforderlich",
-        input: "textarea",
-        inputPlaceholder: "Grund für Rückwärtswechsel…",
-        inputAttributes: { "aria-label": "Grund" },
-        inputValidator: (v) =>
-          !v?.trim() ? "Bitte Grund eingeben" : undefined,
-        showCancelButton: true,
-        confirmButtonText: "Speichern",
-      });
-      if (!reasonPrompt.isConfirmed) return { ok: false };
-      return {
-        ok: true,
-        reasonHTML: (reasonPrompt.value || "").replace(/\n/g, "<br>"),
-        backward: true,
-      };
-    }
-
-    const maybeNote = await promptOptionalNote("quillStage");
-    if (maybeNote === null) return { ok: false };
-    return { ok: true, reasonHTML: maybeNote || "", backward: false };
-  }
-
-  function setTabCount(selector, n) {
-    const el = document.querySelector(selector);
-    if (el) el.textContent = String(Number(n || 0));
-  }
-
-  function syncTabCountsFromListPayload(payload) {
-    const total =
-      payload?.pagination?.total ||
-      payload?.meta?.total ||
-      (Array.isArray(payload?.leads) ? payload.leads.length : 0);
-    setTabCount("#tabCountList", total);
-    setTabCount("#tabCountKanban", total);
-  }
-
-  function syncTabCountsFromKanban(leads) {
-    if (Array.isArray(leads))
-      setTabCount("#tabCountKanban", leads.length);
-  }
-
-  function refreshArchiveAndJunk(qsStr) {
-    partials.fetchArchiveTab(qsStr);
-    partials.fetchJunkTab(qsStr);
-    window.LeadUI?.partials?.fetchTicketsTab?.(qsStr);
-  }
-
-  function quillSwalOpts(id) {
-    return {
-      title: "Notiz (optional)",
-      html: `<div id="${id}" style="height:170px;"></div>`,
-      showCancelButton: true,
-      confirmButtonText: "Speichern",
-      focusConfirm: false,
-      allowEnterKey: false,
-      zIndex: 200000,
-      didOpen: () => {
-        if (window.Quill) {
-          const q = new Quill(`#${id}`, { theme: "snow" });
-          window[id] = q;
-          setTimeout(() => q.focus(), 0);
-        }
-      },
-      preConfirm: () => window[id]?.root?.innerHTML || "",
-    };
-  }
-
-  async function promptOptionalNote(id) {
-    const r = await Swal.fire(quillSwalOpts(id));
-    return r.isConfirmed ? r.value || "" : null;
-  }
-
-  async function applyStageChange({
-    customerId,
-    alternativeId,
-    productId,
-    leadProductId,
-    newStage,
-    noteHTML,
-  }) {
-    const url = `${APP.endpoints.changeStage}/${encodeURIComponent(
-      customerId
-    )}/${encodeURIComponent(alternativeId)}/${encodeURIComponent(productId)}`;
-    const payload = {
-      stage: newStage,
-      description: noteHTML || "",
-      lead_product_id: Number(leadProductId || 0) || undefined,
-    };
-    const data = await postJSON(url, payload);
-    if (!data?.success) throw new Error(data?.message || "Fehler");
-    return data;
-  }
-
-  function refreshCardStatus(card, overrides = {}) {
-    const s = canonicalStage(
-      overrides.stage ||
-        card.dataset.stage ||
-        card.closest(".column")?.id ||
-        "lead"
-    );
-    const ws = (
-      overrides.work_status ||
-      card.dataset.runState ||
-      "playing"
-    ).toLowerCase();
-    const latest_phase =
-      overrides.latest_phase ?? card.dataset.latestPhase ?? "-";
-    const latest_activity =
-      overrides.latest_activity ??
-      card.dataset.latestActivity ??
-      "-";
-    const stamp =
-      overrides.updated_at ||
-      card.dataset.updatedAt ||
-      card.dataset.doneDate ||
-      new Date().toISOString();
-
-    card.dataset.stage = s;
-    if (overrides.latest_phase != null)
-      card.dataset.latestPhase = overrides.latest_phase;
-    if (overrides.latest_activity != null)
-      card.dataset.latestActivity = overrides.latest_activity;
-    if (overrides.updated_at != null)
-      card.dataset.updatedAt = overrides.updated_at;
-
-    const old = card.querySelector(".kb-status");
-    if (old)
-      old.outerHTML = buildStatusBlock({
-        stage: s,
-        work_status: ws,
-        latest_phase,
-        latest_activity,
-        updated_at: stamp,
-        done_date: stamp,
-      });
-
-    applyRunStateUI(
-      card,
-      ["playing", "paused", "stopped"].includes(ws) ? ws : "playing"
-    );
-    featherRefreshSoon();
-  }
-
-  function moveOrRefreshKanbanCard({ newStage, cardFromDOM }) {
-    const card = cardFromDOM;
-    if (!card) return;
-
-    if (stageFilterExcludes(newStage)) {
-      card.remove();
-    } else {
-      const targetCol = colContent(newStage);
-      if (targetCol && card.parentElement !== targetCol) {
-        targetCol.appendChild(card);
-      }
-      refreshCardStatus(card, {
-        stage: newStage,
-        updated_at: new Date().toISOString(),
-      });
-      card.classList.remove("selected");
-      State.selectedIds.delete(card.id);
-    }
-    updateCounts();
-  }
-
-  /* ========================================================================== */
-  /* Kanban Drop handler                                                       */
-  /* ========================================================================== */
-
-  async function onDrop(e) {
-    e.preventDefault();
-    const ids = JSON.parse(e.dataTransfer.getData("text") || "[]");
-    if (!ids.length) return;
-
-    const col = e.target.closest(".column");
-    if (!col) return;
-    const newStage = canonicalStage(col.id);
-
-    const card = document.getElementById(ids[0]);
-    if (!card) return;
-
-    const customerId = card.dataset.customerId;
-    const alternativeId = card.dataset.alternativeId;
-    const productId = card.dataset.productId;
-    const leadProductId = card.dataset.leadProductId;
-
-    const currentStage = canonicalStage(card.closest(".column")?.id || "");
-    if (currentStage && currentStage === newStage) return;
-
-    try {
-      const confirm = await confirmStageChange(newStage, currentStage);
-      if (!confirm.ok) return;
-
-      await applyStageChange({
-        customerId,
-        alternativeId,
-        productId,
-        leadProductId,
-        newStage,
-        noteHTML: confirm.reasonHTML,
-      });
-
-      moveOrRefreshKanbanCard({ newStage, cardFromDOM: card });
-      enforceActionVisibility(card);
-      silentRefreshBoth();
-      Swal.fire("OK", "Phase aktualisiert.", "success");
-    } catch (e) {
-      Swal.fire("Fehler", e.message || "Serverfehler.", "error");
-    }
-  }
-
-  document.addEventListener("dragover", (e) => {
-    const col = e.target.closest(".column");
-    if (col) e.preventDefault();
-  });
-  document.addEventListener("drop", (e) => {
-    const col = e.target.closest(".column");
-    if (!col) return;
-    onDrop(e);
-  });
-
-  /* ========================================================================== */
-  /* List rendering (WITH Live Feed own row under each row)                    */
-  /* ========================================================================== */
-
-  const interestIcons = {
-    interest: { icon: "kaufinteresse.svg", label: "Kaufinteresse" },
-    intent: { icon: "kaufabsicht.svg", label: "Kaufabsicht" },
-    option: { icon: "kaufoption.svg", label: "Kaufoption" },
-  };
-  const servicesMap = {
-    complete: "Komplett",
-    montage: "Montage",
-    product: "Produkt",
-    plan: "Planung",
-    maintenance: "Wartung",
-    repair: "Reparatur",
-    emergency: "Notdienst",
-    others: "Sonstiges",
-  };
-
-  function priorityMeta(raw) {
-    const p = String(raw || "normal").toLowerCase();
-    if (p === "high" || p === "urgent")
-      return {
-        label: "Hoch",
-        cls: "prio-high",
-        icon: "alert-triangle",
-      };
-    if (p === "low")
-      return {
-        label: "Niedrig",
-        cls: "prio-low",
-        icon: "arrow-down-circle",
-      };
-    return { label: "Normal", cls: "prio-normal", icon: "circle" };
-  }
-
-  function employeeCellHTML(lead) {
-    const office = lead?.employee || null;
-    // try both notations, depending on how your API sends it
-    const field =
-      lead?.field_employee ||
-      lead?.fieldEmployee ||
-      null;
-
-    if (!office && !field) {
-      return "<small>&ndash;</small>";
-    }
-
-    const chunks = [];
-
-    if (office && (office.name || office.lastname)) {
-      chunks.push(`
-        <div class="d-flex align-items-center mb-1">
-          <img src="/images/employee/${office.image || ""}"
-              width="30" height="30"
-              class="rounded-circle mr-1" alt="">
-          <div>
-            <div><strong>${office.lastname || ""}</strong> ${office.name || ""}</div>
-            <small class="text-muted">Innendienst</small>
-          </div>
-        </div>
-      `);
-    }
-
-    if (field && (field.name || field.lastname)) {
-      chunks.push(`
-        <div class="d-flex align-items-center">
-          <img src="/images/employee/${field.image || ""}"
-              width="26" height="26"
-              class="rounded-circle mr-1" alt="">
-          <div>
-            <div><strong>${field.lastname || ""}</strong> ${field.name || ""}</div>
-            <small class="text-muted">Außendienst</small>
-          </div>
-        </div>
-      `);
-    }
-
-    return chunks.join("");
-  }
-
-
+  // ---------------------------------------------------------
+  // 3. HTML Generator: Live Feed Container
+  // ---------------------------------------------------------
   function listFeedHTML() {
     return `
       <div class="live-feed-bar list-live-feed card-live-feed"
-           data-feed-root
-           data-feed-count="0"
-           style="display:none; margin-top:0.4rem;">
+          data-feed-root
+          data-feed-count="0"
+          style="display:none; margin-top:0.6rem; width: 100%; max-width: 100%;">
         <div class="live-feed-left">
-          <div class="live-feed-icon">
-            <i class="feather icon-zap"></i>
-          </div>
+          <div class="live-feed-icon"><i class="feather icon-zap"></i></div>
         </div>
         <div class="live-feed-body">
-          <div class="live-feed-line d-none" data-feed-empty>
+          <div class="live-feed-line" data-feed-empty>
             <span class="live-feed-title">Keine Aktivitäten</span>
             <span class="live-feed-dot">•</span>
-            <span class="live-feed-text">Noch keine Termine oder Aufgaben.</span>
+            <span class="live-feed-text">Noch keine Einträge.</span>
           </div>
-          <div class="live-feed-line d-none" data-feed-line>
+          <div class="live-feed-line" data-feed-line>
             <span class="live-feed-title" data-feed-title>Aktivität</span>
             <span class="live-feed-dot">•</span>
             <span class="live-feed-text" data-feed-text>Details…</span>
@@ -5494,304 +4199,1317 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
           </div>
         </div>
         <div class="live-feed-controls">
-          <button type="button"
-                  class="live-feed-btn"
-                  title="Zurück"
-                  data-feed-prev>
+          <button type="button" class="live-feed-btn" title="Zurück" data-feed-prev>
             <i class="feather icon-skip-back"></i>
           </button>
-          <button type="button"
-                  class="live-feed-btn"
-                  title="Pause / Abspielen"
-                  data-feed-toggle>
+          <button type="button" class="live-feed-btn" title="Pause / Abspielen" data-feed-toggle>
             <i class="feather icon-pause" data-feed-icon-pause></i>
             <i class="feather icon-play d-none" data-feed-icon-play></i>
           </button>
-          <button type="button"
-                  class="live-feed-btn"
-                  title="Weiter"
-                  data-feed-next>
+          <button type="button" class="live-feed-btn" title="Weiter" data-feed-next>
             <i class="feather icon-skip-forward"></i>
+          </button>
+          <button type="button" class="live-feed-btn" title="Vergrößern" data-feed-open-modal>
+            <i class="feather icon-maximize-2"></i>
           </button>
         </div>
       </div>
     `;
   }
 
-  function buildRowHTML(lead) {
-    const s = canonicalStage(lead.stage);
-      const [txt, tone, extra] = (function (stage) {
-      if (["lead", "offer"].includes(stage))
-        return ["Offen", "warning", "text-dark"];
-
-      if (["deal", "project", "completed"].includes(stage))
-        return ["Zusage", "success", ""];
-
-      return ["Absage", "danger", ""];
-    })(s);
-
-
-    const pr = priorityMeta(lead.priority);
-    const created = lead.created_at
-      ? new Date(lead.created_at).toLocaleDateString("de-DE")
-      : "-";
-    const interest = interestIcons[lead.interest] || null;
-    const translatedPhase =
-      servicesMap[lead.phase_section_title] ??
-      servicesMap[lead.service] ??
-      null;
-    const stageOptions = Object.entries(APP.stageNames)
-      .map(
-        ([k, l]) =>
-          `<option value="${k}" ${s === k ? "selected" : ""}>${l}</option>`
-      )
-      .join("");
+  // ---------------------------------------------------------
+  // 4. HTML Generator: Avatar List Item
+  // ---------------------------------------------------------
+  function avatarLiFromEmp(emp, { withData = false, assignedBy = "", assignedAt = "", stageLabel = "" } = {}) {
+    if (!emp) return "";
+    const EMP_SRC = APP.EMP_SRC || '/images/employee';
+    
+    const id = Number(emp?.employee_id ?? emp?.id ?? emp?.emp_id ?? 0) || 0;
+    const img = emp?.image ? `${EMP_SRC}/${emp.image}` : `${EMP_SRC}/noimage.png`;
+    const name = `${safeStr(emp?.lastname).trim()} ${safeStr(emp?.name).trim()}`.trim() || `#${id}`;
 
     return `
-      <!-- MAIN DATA ROW -->
-      <tr id="row-${lead.lead_product_id}"
-          data-customer-id="${lead.customer_id}"
-          data-alternative-id="${lead.alternative_id}"
-          data-product-id="${lead.product_id}"
-          data-lead-product-id="${lead.lead_product_id}"
-          data-employee-id="${lead.employee?.employee_id ?? 0}"
-          data-service="${lead.service || "complete"}"
-          data-service-id="${lead.service_id ?? 0}"
-          data-department-id="${lead.department_id ?? 0}">
-        <td>
-          ${created}
-          <div class="d-flex align-items-center gap-2 mt-1">
-            <span class="tooltip-trigger position-relative">
-              <i class="feather icon-${pr.icon} prio-dot ${pr.cls}"></i>
-              <span class="custom-tooltip">Priorität: ${pr.label}</span>
-            </span>
-          </div>
-        </td>
-        <td>
-          <strong>${lead.customer_lastname ?? ""}</strong> ${
-            lead.customer_name ?? ""
-          }
-        </td>
-        <td><i class="feather icon-map-pin"></i> ${lead.city ?? ""}</td>
-        <td>
-          <div class="d-flex align-items-center gap-2 flex-wrap">
-            <div class="d-flex align-items-center">
-              <img src="/images/icons/produkt.svg" style="width:26px" class="mr-1" alt="">
-              <span>${lead.initial ?? ""}</span>
-            </div>
-            ${
-              lead.department_name
-                ? `<span class="tooltip-trigger position-relative">
-                     <img src="/images/icons/abteilung.svg" style="width:30px" alt="">
-                     <span class="custom-tooltip">${lead.department_name}</span>
-                   </span>`
-                : ""
-            }
-            ${
-              translatedPhase
-                ? `<span class="tooltip-trigger position-relative">
-                     <img src="/images/icons/dienstleistung.svg" style="width:33px" alt="">
-                     <span class="custom-tooltip">${translatedPhase}</span>
-                   </span>`
-                : ""
-            }
-            ${
-              interest
-                ? `<span class="tooltip-trigger position-relative">
-                     <img src="/images/icons/${interest.icon}" style="width:20px" alt="">
-                     <span class="custom-tooltip">${interest.label}</span>
-                   </span>`
-                : ""
-            }
-          </div>
-        </td>
-        <td>${employeeCellHTML(lead)}</td>
-        <td>
-          <div><span class="badge bg-${tone} ${extra}">${txt}</span></div>
-          ${
-            lead.latest_phase || lead.latest_activity || lead.done_date
-              ? `<div class="small mt-1">
-                   <i class="feather icon-box"></i> ${
-                     lead.latest_phase ?? "-"
-                   }<br>
-                   <i class="feather icon-check-circle"></i> ${
-                     lead.latest_activity ?? "-"
-                   }<br>
-                   <i class="feather icon-clock"></i> ${new Date(
-                     lead.done_date ?? lead.updated_at
-                   ).toLocaleString("de-DE")}
-                 </div>`
-              : ""
-          }
-        </td>
-        <td>
-          <select class="form-control stage-select" data-id="${
-            lead.lead_product_id
-          }">
-            ${stageOptions}
-          </select>
-        </td>
-        <td>
-          <button class="btn btn-outline-secondary btn-sm"
-                  data-open-notes
-                  data-customer="${lead.customer_id}"
-                  data-alt="${lead.alternative_id}"
-                  data-product="${lead.product_id}"
-                  title="Notizen">
-            Notizen
-          </button>
-          <a href="/new_lead_profile/${
-            lead.customer_id
-          }" class="btn btn-outline-primary btn-sm" title="Profil">
-            Profil
-          </a>
-          <a href="/lead/process/history/${lead.customer_id}/${
-      lead.alternative_id
-    }/${lead.product_id}"
-             class="btn btn-outline-primary btn-sm"
-             data-lh-history>
-            Verlauf
-          </a>
-        </td>
-      </tr>
-
-      <!-- LIVE FEED ROW -->
-      <tr class="list-feed-row"
-          data-customer-id="${lead.customer_id}"
-          data-alternative-id="${lead.alternative_id}"
-          data-product-id="${lead.product_id}"
-          data-lead-product-id="${lead.lead_product_id}"
-          data-employee-id="${lead.employee?.employee_id ?? 0}"
-          data-service="${lead.service || "complete"}"
-          data-service-id="${lead.service_id ?? 0}"
-          data-department-id="${lead.department_id ?? 0}">
-        <td colspan="8">
-          ${listFeedHTML()}
-        </td>
-      </tr>
+      <li class="avatar pull-up"
+          ${withData ? `data-emp-id="${esc(id)}"` : ""}
+          ${withData ? `data-assigned-by="${esc(assignedBy)}"` : ""}
+          ${withData ? `data-assigned-at="${esc(assignedAt)}"` : ""}
+          ${withData ? `data-stage-label="${esc(stageLabel)}"` : ""}
+          title="${esc(name)}"
+          style="margin-left:-8px;">
+        <img class="media-object rounded-circle"
+             src="${esc(img)}"
+             width="26" height="26"
+             alt="${esc(name)}"
+             style="border:2px solid #fff; object-fit:cover;">
+      </li>
     `;
   }
 
-  function runIdle(fn) {
-    if ("requestIdleCallback" in window) {
-      window.requestIdleCallback(fn);
-    } else {
-      window.setTimeout(fn, 0);
+  // ---------------------------------------------------------
+  // 5. HTML Generator: Employee & Team Column
+  // ---------------------------------------------------------
+  function listEmpAndTeamHTML(lead) {
+    const stageKey = utils.canonicalStage(lead?.stage);
+    const stageLabel = APP.stageNames?.[stageKey] || stageKey;
+
+    const main = [];
+    if (lead?.employee && (lead.employee.employee_id || lead.employee.id)) main.push(lead.employee);
+    if (lead?.field_employee && (lead.field_employee.employee_id || lead.field_employee.id)) main.push(lead.field_employee);
+
+    const teamAssignments = Array.isArray(lead?.team_assignments) ? lead.team_assignments : [];
+    let teamMembers = [];
+    if (teamAssignments.length > 0) {
+        teamMembers = teamAssignments;
+    } else if (Array.isArray(lead?.team_members)) {
+        teamMembers = lead.team_members.map(m => ({ member: m }));
+    } else if (Array.isArray(lead?.teams)) {
+        teamMembers = lead.teams.map(m => ({ member: m }));
     }
+
+    if (!main.length && !teamMembers.length) return `<span class="text-muted small">&ndash;</span>`;
+
+    const mainHtml = main.length
+      ? `<ul class="list-unstyled users-list m-0 d-inline-flex align-items-center">
+           ${main.map((e) => avatarLiFromEmp(e, { withData: false })).join("")}
+         </ul>`
+      : "";
+
+    const teamHtml = teamMembers.length
+      ? `<ul class="list-unstyled users-list m-0 d-inline-flex align-items-center"
+             data-team-hover
+             style="margin-left:10px; padding-left:10px; border-left:1px solid #e0e0e0;">
+           ${teamMembers.map((a) => {
+             const member = a?.member || a;
+             const u = a?.assigned_by_user;
+             let ab = "";
+             if (u && (u.name || u.lastname)) ab = `${safeStr(u.lastname)} ${safeStr(u.name)}`.trim();
+             else if (a?.assigned_by) ab = `Mitarbeiter #${a.assigned_by}`;
+             const at = safeStr(a?.assigned_at || "").trim();
+             return avatarLiFromEmp(member, { withData: true, assignedBy: ab, assignedAt: at, stageLabel });
+           }).join("")}
+         </ul>`
+      : "";
+
+    return `<div class="d-flex align-items-center">${mainHtml}${teamHtml}</div>`;
   }
 
-  // ⬇ REPLACE old bootstrapListLiveFeed with this:
-  function bootstrapListLiveFeed(container) {
-    if (!liveFeed || typeof liveFeed.loadForCard !== "function") return;
+  // ---------------------------------------------------------
+  // 6. MAIN FUNCTION: Build Table Row
+  // ---------------------------------------------------------
+ function buildRowHTML(lead) {
+    // 1. Define helper 'esc' immediately to avoid errors
+    const safeStr = (v) => (v == null ? "" : String(v));
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[m]);
+    
+    // Helper for Date formatting
+    const fmtDE = (v) => {
+        try {
+            return v ? new Date(v).toLocaleDateString("de-DE") : "-";
+        } catch {
+            return "-";
+        }
+    };
 
-    const root = container || document;
-    const rows = root.querySelectorAll("tr.list-feed-row[data-customer-id]");
-    if (!rows.length) return;
+    const stageKey = utils.canonicalStage(lead?.stage);
+    const cId = lead?.customer_id ?? "";
+    const aId = lead?.alternative_id ?? "";
+    const pId = lead?.product_id ?? "";
+    const lpId = lead?.lead_product_id ?? "";
+    const ws = String(lead?.work_status || "playing").toLowerCase();
 
-    let i = 0;
-    const BATCH = 4;
+    // 1. Get Status Block
+    const statusBlockHTML = kanban ? kanban.buildStatusBlock(lead) : `<span class="badge badge-secondary">${stageKey}</span>`;
 
-    (function pump() {
-      const slice = Array.prototype.slice.call(rows, i, i + BATCH);
-      i += BATCH;
-      slice.forEach((row) => liveFeed.loadForCard(row));
-      if (i < rows.length) runIdle(pump);
+    // 2. Get Live Feed HTML
+    const liveFeedRow = listFeedHTML();
+
+    // 3. Meta Logic
+    const teamAssignments = Array.isArray(lead?.team_assignments) ? lead.team_assignments : [];
+    let teamsRaw = lead?.teams;
+    if (typeof teamsRaw === "string") {
+        try { teamsRaw = JSON.parse(teamsRaw); } catch { teamsRaw = []; }
+    }
+    if (!Array.isArray(teamsRaw)) teamsRaw = [];
+
+    const assignments = teamAssignments.length ?
+        teamAssignments :
+        teamsRaw.map((t) => ({
+            assigned_at: t?.assigned_at ?? null,
+            assigned_at_iso: t?.assigned_at_iso ?? null,
+            assigned_by: t?.assigned_by ?? null,
+            assigned_by_user: t?.assigned_by_user ?? null,
+            stage_label: t?.stage_label ?? null,
+        }));
+
+    const parseAssignedAt = (a) => {
+        const raw = (a?.assigned_at_iso || a?.assigned_at || "").trim();
+        if (!raw) return 0;
+        const isoish = raw.includes("T") ? raw : raw.replace(" ", "T");
+        const ts = Date.parse(isoish);
+        return Number.isFinite(ts) ? ts : 0;
+    };
+
+    const latestA = assignments.reduce((best, a) => {
+        const ta = parseAssignedAt(a);
+        const tb = parseAssignedAt(best);
+        return ta > tb ? a : best;
+    }, null);
+
+    const assignedBy = (() => {
+        const u = latestA?.assigned_by_user;
+        if (u && (u.name || u.lastname)) return `${safeStr(u.lastname).trim()} ${safeStr(u.name).trim()}`.trim();
+        const id = Number(latestA?.assigned_by ?? 0);
+        return id > 0 ? `Mitarbeiter #${id}` : "";
     })();
+
+    const assignedAtRaw = (latestA?.assigned_at_iso || latestA?.assigned_at || "").trim();
+    const STAGE_DE = {
+        lead: "Lead",
+        offer: "Verkauf",
+        deal: "Auftrag",
+        project: "Montage",
+        completed: "Abschluss",
+        archive: "Archiv",
+        junk: "Junk"
+    };
+    
+    const phaseLabel = (() => {
+        const lbl = (latestA?.stage_label || "").trim();
+        if (lbl) return lbl;
+        const key = String(latestA?.stage || "").trim().toLowerCase();
+        return STAGE_DE[key] || "";
+    })();
+
+    const assignedMetaHTML =
+        assignedBy || assignedAtRaw || phaseLabel ?
+        `<div class="small text-muted mt-1">
+              ${phaseLabel ? `<span class="mr-2"><i class="feather icon-layers mr-25"></i><span>Phase: <strong>${esc(phaseLabel)}</strong></span></span><span class="mx-1">•</span>` : ``}
+              <i class="feather icon-user mr-25"></i><span>Zugewiesen von: <strong>${esc(assignedBy || "-")}</strong></span>
+              <span class="mx-1">•</span>
+              <i class="feather icon-calendar mr-25"></i><span>${esc(assignedAtRaw ? fmtDE(assignedAtRaw) : "-")}</span>
+            </div>` :
+        "";
+
+    return `
+        <tr id="row-${esc(lpId)}"
+            class="list-row-item"
+            data-customer-id="${esc(cId)}"
+            data-alternative-id="${esc(aId)}"
+            data-product-id="${esc(pId)}"
+            data-lead-product-id="${esc(lpId)}"
+            data-stage="${esc(stageKey)}"
+            data-run-state="${esc(ws)}">
+          
+          <td style="width: 100px;">${lead?.created_at ? fmtDE(lead.created_at) : "-"}</td>
+
+          <td style="min-width: 350px;">
+            <a href="/new_lead_profile/${encodeURIComponent(safeStr(cId))}" class="customer-link" style="font-size:1.05rem;">
+              ${esc(lead?.customer_lastname ?? "")} ${esc(lead?.customer_name ?? "")}
+            </a>
+
+            ${assignedMetaHTML}
+
+            <div class="list-action-bar">
+              <button type="button" class="btn-list-icon" data-menu="termin" title="Termin">
+                <i class="feather icon-calendar"></i>
+                <span class="badge-notes" data-ap-count style="display:none">0</span>
+              </button>
+              <button type="button" class="btn-list-icon" data-menu="aufgabe" title="Aufgabe">
+                <i class="feather icon-check-square"></i>
+                <span class="badge-notes" data-pt-count style="display:none">0</span>
+              </button>
+
+              <span style="border-left:1px solid #ddd; height:14px; margin:0 4px;"></span>
+
+              <button type="button" class="btn-list-icon note" data-open-notes data-customer="${esc(cId)}" data-alt="${esc(aId)}" data-product="${esc(pId)}">
+                <i class="feather icon-message-square"></i>
+                <span class="badge-notes" data-count="0" style="display:none">0</span>
+              </button>
+
+              <div class="btn-group">
+                <button type="button" class="btn-list-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="feather icon-more-vertical"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item text-success" data-run="playing"><i class="feather icon-play mr-50"></i> Start</button>
+                    <button class="dropdown-item text-warning" data-run="paused"><i class="feather icon-pause mr-50"></i> Pause</button>
+                    <button class="dropdown-item text-danger" data-run="stopped"><i class="feather icon-square mr-50"></i> Stopp</button>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/lead/process/history/${encodeURIComponent(safeStr(cId))}/${encodeURIComponent(safeStr(aId))}/${encodeURIComponent(safeStr(pId))}" data-lh-history>
+                        <i class="feather icon-activity mr-50"></i> Verlauf
+                    </a>
+                </div>
+              </div>
+            </div>
+
+            ${liveFeedRow}
+          </td>
+
+          <td>${esc(lead?.city ?? "")}</td>
+          <td>${esc(lead?.initial ?? "")}</td>
+          <td>${listEmpAndTeamHTML(lead)}</td>
+
+          <td>
+            ${statusBlockHTML}
+          </td>
+
+          <td>
+            <select class="form-control stage-select" data-id="${esc(lpId)}">
+              ${Object.entries(APP.stageNames || {})
+                .map(([k, l]) => `<option value="${esc(k)}" ${stageKey === k ? "selected" : ""}>${esc(l)}</option>`)
+                .join("")}
+            </select>
+          </td>
+        </tr>
+      `;
+}
+  // ---------------------------------------------------------
+  // 7. Bootstrapper: Activates the Feed on List Load
+  // ---------------------------------------------------------
+  function bootstrapListLiveFeed(container) {
+      if (!liveFeed || typeof liveFeed.loadForCard !== "function") return;
+
+      const root = container || document;
+      // MATCH the class used in buildRowHTML (list-row-item)
+      const rows = root.querySelectorAll("tr.list-row-item");
+
+      if (!rows.length) return;
+
+      let i = 0;
+      const BATCH = 4;
+
+      (function pump() {
+        const slice = Array.prototype.slice.call(rows, i, i + BATCH);
+        i += BATCH;
+        slice.forEach((row) => {
+            if(row.dataset.customerId) {
+                // This call makes the AJAX request and removes 'display:none' if data is found
+                liveFeed.loadForCard(row);
+            }
+        });
+        if (i < rows.length) {
+            if ("requestIdleCallback" in window) requestIdleCallback(pump);
+            else setTimeout(pump, 0);
+        }
+      })();
+  }
+  
+  // ---------------------------------------------------------
+  // 8. Update & Fetch Logic
+  // ---------------------------------------------------------
+  function updateListView(leads, meta) {
+    const tbody = utils.qs("#kanbanTableBody");
+    if (!tbody) return;
+    
+    if (!Array.isArray(leads) || !leads.length) { 
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center p-3 text-muted">Keine Ergebnisse gefunden.</td></tr>'; 
+        return; 
+    }
+    
+    // Inject HTML
+    tbody.innerHTML = leads.map(buildRowHTML).join("");
+    
+    // Activate Features
+    notes.updateNoteBadgesForVisibleCards(); 
+    bootstrapListLiveFeed(tbody);
+    if(utils.featherRefreshSoon) utils.featherRefreshSoon();
   }
 
-  // Make it available globally for partials (archive/junk)
-  window.LeadUI.bootstrapListLiveFeed = bootstrapListLiveFeed;
+  function fetchListView(qsStr) {
+      net.safeFetchJSON(`${APP.endpoints.listSearch}?${qsStr}`).then(res => {
+          const leads = res.leads || res.data || [];
+          updateListView(leads);
+      });
+  }
+
+  // Initial Load
+  document.addEventListener("DOMContentLoaded", () => {
+     fetchListView(""); 
+  });
+
+  /* ---------------------------------------------------------
+     9. EVENT LISTENERS
+  --------------------------------------------------------- */
+  
+  // A. Notes Click
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-open-notes]");
+    if (!btn) return;
+    e.stopPropagation();
+
+    let name = "Kunde";
+    const row = btn.closest("tr");
+    if (row) {
+        const link = row.querySelector(".customer-link");
+        if (link) name = link.textContent.trim();
+    } 
+
+    notes.openNotesDrawerFor(
+      btn.dataset.customer,
+      btn.dataset.alt,
+      btn.dataset.product,
+      `Notizen • ${name}`
+    );
+  });
+
+  // B. Live Feed Controls (Maximize, Prev, Next)
+  document.addEventListener("click", (e) => {
+      // Look for any button inside the feed controls
+      const btn = e.target.closest(".live-feed-btn");
+      if (!btn) return;
+
+      const feedRoot = btn.closest(".live-feed-bar");
+      if (!feedRoot) return;
+      
+      // The wrapper is the table row
+      const wrapper = feedRoot.closest("tr.list-row-item") || feedRoot.closest(".card");
+      if (!wrapper) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      // 1. Maximize Button
+      if (btn.hasAttribute("data-feed-open-modal")) {
+          if (liveFeedModal && typeof liveFeedModal.openForCard === 'function') {
+              liveFeedModal.openForCard(wrapper);
+          } else {
+              console.error("LeadUI.liveFeedModal is missing or invalid.");
+          }
+      }
+      
+      // Note: Next/Prev/Pause are usually handled via internal state in your 'liveFeed' module. 
+      // If those buttons aren't working, it's because 'liveFeed.js' likely attaches listeners 
+      // locally or not at all for dynamically added list rows. 
+      // Ensure 'liveFeed.js' uses delegation or attaches listeners on 'loadForCard'.
+  });
+
+})();
 
 
-  function updateListView(leads, meta) {
-    const tbody = qs("#kanbanTableBody");
-    if (!tbody) return;
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest('[data-menu]');
+    if (!btn) return;
+    
+    const menuType = btn.dataset.menu;
+    const card = btn.closest('.card') || btn.closest('tr'); // Works for both Kanban and List
+    
+    if (menuType === 'termin') {
+        // Trigger your existing Appointment open logic
+        const event = new CustomEvent("open-appointments", {
+            bubbles: true,
+            detail: { 
+                customerId: card.dataset.customerId, 
+                alternativeId: card.dataset.alternativeId, 
+                productId: card.dataset.productId 
+            }
+        });
+        btn.dispatchEvent(event);
+    }
+    
+    if (menuType === 'aufgabe') {
+        // Trigger your existing Task open logic
+        const event = new CustomEvent("open-personal-tasks", {
+            bubbles: true,
+            detail: { 
+                customerId: card.dataset.customerId, 
+                alternativeId: card.dataset.alternativeId, 
+                productId: card.dataset.productId 
+            }
+        });
+        btn.dispatchEvent(event);
+    }
+});
+</script>
 
-    if (!leads.length) {
-      tbody.innerHTML =
-        '<tr><td colspan="8" class="text-center">Keine Ergebnisse gefunden</td></tr>';
-      syncSummary(meta);
-      return;
+<script>
+/* =============================================================================
+ * LeadUI – Interactions & Boot (Segment 2/2) — REWRITE
+ * - Selection + Drag & Drop (Kanban)
+ * - Stage-change flow (SweetAlert + Select2 team + optional reason)
+ * - List rendering + pagination (+ LiveFeed row under each list row)
+ * - Fetchers (Kanban + List)
+ * - All event bindings, keyboard shortcuts
+ * - Bootstrap on DOMContentLoaded
+ * ============================================================================= */
+(() => {
+  "use strict";
+
+  /* -------------------------------------------------------------------------- */
+  /* Guard                                                                       */
+  /* -------------------------------------------------------------------------- */
+  if (!window.LeadUI) {
+    console.error("LeadUI missing on window.");
+    return;
+  }
+
+  const { APP, State, utils, net, filters, kanban, notes, partials, liveFeed } =
+    window.LeadUI;
+
+  const {
+    qs,
+    qsa,
+    canonicalStage,
+    featherRefreshSoon,
+    stageFilterExcludes,
+    saveToLocal,
+    restoreFromLocal,
+    syncURL,
+    initFromURL,
+    closeOverlays,
+    enforceActionVisibility,
+    isBackward,
+    stageRank,
+  } = utils;
+
+  const { safeFetchJSON, postJSON, cancel } = net;
+
+  const {
+    ensureColumns,
+    colContent,
+    updateCounts,
+    buildStatusBlock,
+    applyRunStateUI,
+    renderKanbanDiff,
+    renderKanbanIncremental,
+    autoChunk,
+  } = kanban;
+
+
+  const safeStr = (v) => (v == null ? "" : String(v));
+  
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+  })[m]);
+
+  const fmtDE = (v) => {
+    try {
+      return v ? new Date(v).toLocaleDateString("de-DE") : "-";
+    } catch {
+      return "-";
+    }
+  };
+  /* -------------------------------------------------------------------------- */
+  /* Constants                                                                   */
+  /* -------------------------------------------------------------------------- */
+  const DND_MIME = "application/x-leadui-cards";
+
+  const interestIcons = {
+    interest: { icon: "kaufinteresse.svg", label: "Kaufinteresse" },
+    intent: { icon: "kaufabsicht.svg", label: "Kaufabsicht" },
+    option: { icon: "kaufoption.svg", label: "Kaufoption" },
+  };
+
+  const servicesMap = {
+    complete: "Komplett",
+    montage: "Montage",
+    product: "Produkt",
+    plan: "Planung",
+    maintenance: "Wartung",
+    repair: "Reparatur",
+    emergency: "Notdienst",
+    others: "Sonstiges",
+  };
+
+  /* -------------------------------------------------------------------------- */
+  /* Small helpers                                                               */
+  /* -------------------------------------------------------------------------- */
+
+  function parseDT(raw) {
+      const s = String(raw || "").trim();
+      if (!s) return null;
+
+      // MySQL "YYYY-MM-DD HH:MM:SS" -> ISO-like "YYYY-MM-DDTHH:MM:SS"
+      const isoLike = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(s) ? s.replace(" ", "T") : s;
+
+      const d = new Date(isoLike);
+      if (!Number.isFinite(d.getTime())) return null;
+      return d;
     }
 
-    const tmp = document.createElement("tbody");
-    tmp.innerHTML = leads.map(buildRowHTML).join("");
-    tbody.innerHTML = "";
-    tbody.append(...tmp.childNodes);
+    function fmtDEDate(raw) {
+      const d = parseDT(raw);
+      return d ? d.toLocaleDateString("de-DE") : "-";
+    }
 
-    syncSummary(meta);
-    featherRefreshSoon();
-    bootstrapListLiveFeed(tbody); // ⬅ CHANGED
+    function fmtDEDateTime(raw) {
+      const d = parseDT(raw);
+      return d ? d.toLocaleString("de-DE") : "-";
+    }
+
+  const toInt = (v, def = 0) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : def;
+  };
+
+  const safeJSON = (raw, fallback) => {
+    try {
+      return JSON.parse(raw);
+    } catch (_) {
+      return fallback;
+    }
+  };
+
+  function runIdle(fn) {
+    if ("requestIdleCallback" in window) window.requestIdleCallback(fn);
+    else window.setTimeout(fn, 0);
+  }
+
+  function addPage(qsStr, page) {
+    const p = new URLSearchParams(qsStr || "");
+    p.set("page", String(page));
+    return p.toString();
+  }
+
+  function isKanbanActive() {
+    return qs("#home")?.classList.contains("active");
+  }
+
+  function setTabCount(selector, n) {
+    const el = qs(selector);
+    if (el) el.textContent = String(toInt(n, 0));
   }
 
   function normalizePaginationMeta(input) {
     if (!input) return null;
     const direct = input.meta || input.pagination || input;
-    const cp = Number(
-      direct.current_page ?? direct.currentPage ?? direct.page ?? 1
-    );
-    const lp = Number(
+
+    const cp = toInt(direct.current_page ?? direct.currentPage ?? direct.page ?? 1, 1);
+    const lp = toInt(
       direct.last_page ??
         direct.lastPage ??
-        (direct.total && direct.per_page
-          ? Math.ceil(direct.total / direct.per_page)
-          : 1)
+        (direct.total && direct.per_page ? Math.ceil(toInt(direct.total, 0) / toInt(direct.per_page, 1)) : 1),
+      1
     );
-    return { current_page: cp, last_page: Math.max(1, lp) };
+
+    return { current_page: Math.max(1, cp), last_page: Math.max(1, lp) };
   }
 
-  function renderPagination(metaLike) {
-    const wrap = qs("#listPagination");
-    if (!wrap) return;
+  /* -------------------------------------------------------------------------- */
+  /* Selection (Kanban)                                                         */
+  /* -------------------------------------------------------------------------- */
+  function selectCard(card, ev) {
+    if (!card) return;
 
-    const meta = normalizePaginationMeta(metaLike);
-    if (!meta || meta.last_page <= 1) {
-      wrap.innerHTML = "";
+    const multi = !!(ev?.ctrlKey || ev?.metaKey);
+
+    if (!multi) {
+      qsa("#kanban .card.selected").forEach((c) => c.classList.remove("selected"));
+      State.selectedIds?.clear?.();
+    }
+
+    if (!State.selectedIds) State.selectedIds = new Set();
+
+    if (multi && State.selectedIds.has(card.id)) {
+      card.classList.remove("selected");
+      State.selectedIds.delete(card.id);
       return;
     }
 
-    const { current_page, last_page } = meta;
-    let html = `<nav aria-label="Seiten"><ul class="pagination mb-0">`;
-
-    const add = (p, l, dis = false, act = false) => {
-      if (dis) {
-        html += `<li class="page-item disabled"><span class="page-link">${l}</span></li>`;
-      } else if (act) {
-        html += `<li class="page-item active"><span class="page-link">${l}</span></li>`;
-      } else {
-        html += `<li class="page-item"><a class="page-link" href="#" data-page="${p}">${l}</a></li>`;
-      }
-    };
-
-    add(current_page - 1, "«", current_page === 1);
-
-    const win = 2;
-    const st = Math.max(1, current_page - win);
-    const en = Math.min(last_page, current_page + win);
-
-    if (st > 1) {
-      add(1, "1", false, current_page === 1);
-      if (st > 2)
-        html +=
-          '<li class="page-item disabled"><span class="page-link">…</span></li>';
-    }
-
-    for (let p = st; p <= en; p++) {
-      add(p, String(p), false, p === current_page);
-    }
-
-    if (en < last_page) {
-      if (en < last_page - 1)
-        html +=
-          '<li class="page-item disabled"><span class="page-link">…</span></li>';
-      add(last_page, String(last_page), false, current_page === last_page);
-    }
-
-    add(current_page + 1, "»", current_page === last_page);
-
-    wrap.innerHTML = html + "</ul></nav>";
+    card.classList.add("selected");
+    State.selectedIds.add(card.id);
   }
 
+  /* -------------------------------------------------------------------------- */
+  /* Drag & Drop (Kanban)                                                       */
+  /* -------------------------------------------------------------------------- */
+  function getDragIds(card) {
+    if (!State.selectedIds) State.selectedIds = new Set();
+    let ids = Array.from(State.selectedIds);
+    if (!ids.length || !State.selectedIds.has(card.id)) ids = [card.id];
+    return ids;
+  }
+
+  function onKanbanDragStart(ev, card) {
+    if (!ev?.dataTransfer || !card) return;
+    const ids = getDragIds(card);
+
+    // Use a custom MIME to avoid browser default "open new tab" behavior elsewhere.
+    ev.dataTransfer.setData(DND_MIME, JSON.stringify(ids));
+    ev.dataTransfer.effectAllowed = "move";
+  }
+
+  function refreshCardStatus(card, overrides = {}) {
+    const s = canonicalStage(overrides.stage || card.dataset.stage || card.closest(".column")?.id || "lead");
+    const ws = String(overrides.work_status || card.dataset.runState || "playing").toLowerCase();
+    const stamp = overrides.updated_at || card.dataset.updatedAt || card.dataset.doneDate || new Date().toISOString();
+
+    card.dataset.stage = s;
+
+    if (overrides.latest_phase != null) card.dataset.latestPhase = overrides.latest_phase;
+    if (overrides.latest_activity != null) card.dataset.latestActivity = overrides.latest_activity;
+    if (overrides.updated_at != null) card.dataset.updatedAt = overrides.updated_at;
+
+    const old = card.querySelector(".kb-status");
+    if (old) {
+      old.outerHTML = buildStatusBlock({
+        stage: s,
+        work_status: ws,
+        latest_phase: overrides.latest_phase ?? card.dataset.latestPhase ?? "-",
+        latest_activity: overrides.latest_activity ?? card.dataset.latestActivity ?? "-",
+        updated_at: stamp,
+        done_date: stamp,
+      });
+    }
+
+    applyRunStateUI(card, ["playing", "paused", "stopped"].includes(ws) ? ws : "playing");
+    featherRefreshSoon();
+  }
+
+  function moveOrRefreshKanbanCard({ newStage, cardFromDOM }) {
+    const card = cardFromDOM;
+    if (!card) return;
+
+    if (stageFilterExcludes(newStage)) {
+      card.remove();
+    } else {
+      const targetCol = colContent(newStage);
+      if (targetCol && card.parentElement !== targetCol) targetCol.appendChild(card);
+
+      refreshCardStatus(card, { stage: newStage, updated_at: new Date().toISOString() });
+
+      card.classList.remove("selected");
+      State.selectedIds?.delete?.(card.id);
+    }
+
+    updateCounts();
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* Stage-change confirm (SweetAlert + Select2 team + reason)                   */
+  /* -------------------------------------------------------------------------- */
+  async function confirmStageChange(newStage, currentStage, currentTeamIds = [], opts = {}) {
+    const labelNew = APP.stageNames?.[newStage] || newStage;
+
+    const employees = Array.isArray(window.ALL_EMPLOYEES) ? window.ALL_EMPLOYEES : [];
+    const teamSet = new Set((currentTeamIds || []).map((x) => toInt(x)));
+
+    const removedIds = (opts.removedTeamIds || []).map((x) => toInt(x)).filter(Boolean);
+
+    const removedListHTML = removedIds.length
+      ? `<div class="mb-3 p-2" style="border:1px solid #f1c40f;background:#fff8e1;border-radius:8px;">
+           <div class="font-weight-bold mb-1">Achtung: Rückwärtswechsel</div>
+           <div class="small text-muted mb-2">Folgende Mitarbeiter werden in der vorherigen Phase nicht übernommen:</div>
+           <ul class="mb-0" style="padding-left:18px;">
+             ${removedIds
+               .map((id) => {
+                 const emp = employees.find((e) => toInt(e.id) === id);
+                 const name = emp ? `${emp.lastname || ""} ${emp.name || ""}`.trim() : `#${id}`;
+                 return `<li>${name}</li>`;
+               })
+               .join("")}
+           </ul>
+         </div>`
+      : "";
+
+    const options = employees
+      .map((emp) => {
+        const id = toInt(emp.id);
+        const selected = teamSet.has(id) ? "selected" : "";
+        const imgUrl = emp.image ? `/images/employee/${emp.image}` : `/images/employee/noimage.png`;
+        const text = `${emp.lastname || ""} ${emp.name || ""}`.trim();
+        return `<option value="${id}" data-image="${imgUrl}" ${selected}>${text}</option>`;
+      })
+      .join("");
+
+    const htmlContent = `
+      <div style="text-align:left; overflow:visible;">
+        ${removedListHTML}
+        <div class="mb-3">
+          <label class="small text-muted font-weight-bold text-uppercase">Team zuweisen</label>
+          <select id="swal-team-select" class="form-control" multiple style="width:100%;">${options}</select>
+        </div>
+        <div class="mb-1">
+          <label class="small text-muted font-weight-bold text-uppercase">Grund / Notiz</label>
+          <textarea id="swal-reason-text" class="form-control" rows="3" placeholder="Optional: Grund für den Wechsel..."></textarea>
+        </div>
+      </div>
+    `;
+
+    const formatEmployee = (state) => {
+      if (!state?.id) return state?.text || "";
+      const el = state.element;
+      const img = el?.dataset?.image;
+      if (!img) return state.text;
+
+      const wrap = document.createElement("span");
+      wrap.className = "employee-option";
+      wrap.innerHTML = `<img src="${img}" style="width:20px;height:20px;border-radius:999px;object-fit:cover;margin-right:8px;">${state.text}`;
+      return wrap;
+    };
+
+    const result = await Swal.fire({
+      title: `Wechsel zu ${labelNew}`,
+      html: htmlContent,
+      showCancelButton: true,
+      confirmButtonText: "Speichern",
+      cancelButtonText: "Abbrechen",
+      customClass: { popup: "swal-overflow-visible" },
+      didOpen: () => {
+        if (window.jQuery && window.jQuery.fn.select2) {
+          const $sel = window.jQuery("#swal-team-select");
+          $sel.select2({
+            placeholder: "Mitarbeiter wählen...",
+            dropdownParent: window.jQuery(Swal.getPopup()),
+            width: "100%",
+            templateResult: formatEmployee,
+            templateSelection: formatEmployee,
+            closeOnSelect: false,
+          });
+        }
+      },
+      preConfirm: () => {
+        const reason = qs("#swal-reason-text")?.value || "";
+
+        // fallback to currentTeamIds if select2 not available
+        let teams = currentTeamIds.slice();
+
+        if (window.jQuery) {
+          const v = window.jQuery("#swal-team-select").val();
+          if (Array.isArray(v)) {
+            teams = v.map((x) => toInt(x)).filter(Boolean);
+          }
+        }
+
+        return { reason, teams };
+      },
+
+    });
+
+    if (!result.isConfirmed) return { ok: false };
+
+    return {
+      ok: true,
+      reasonHTML: result.value?.reason || "",
+      teams: Array.isArray(result.value?.teams) ? result.value.teams : [],
+    };
+  }
+
+  async function applyStageChange({
+    customerId,
+    alternativeId,
+    productId,
+    leadProductId,
+    newStage,
+    noteHTML,
+    teams = [],
+  }) {
+    const url = `${APP.endpoints.changeStage}/${encodeURIComponent(customerId)}/${encodeURIComponent(
+      alternativeId
+    )}/${encodeURIComponent(productId)}`;
+
+    const payload = {
+      stage: newStage,
+      description: noteHTML || "",
+      lead_product_id: toInt(leadProductId) || undefined,
+      teams: Array.isArray(teams) ? teams.map((x) => toInt(x)).filter(Boolean) : [],
+    };
+
+    const data = await postJSON(url, payload);
+    if (!data?.success) throw new Error(data?.message || "Fehler");
+    return data;
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* Kanban Drop                                                                 */
+  /* -------------------------------------------------------------------------- */
+  async function onKanbanDrop(ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    const col = ev.target.closest(".column");
+    if (!col) return;
+
+    const raw = ev.dataTransfer?.getData(DND_MIME) || "";
+    const ids = Array.isArray(safeJSON(raw, [])) ? safeJSON(raw, []) : [];
+    if (!ids.length) return;
+
+    const card = qs(`#${CSS.escape(ids[0])}`);
+    if (!card) return;
+
+    const newStage = canonicalStage(col.id);
+    const currentStage = canonicalStage(card.dataset.stage);
+    if (currentStage === newStage) return;
+
+    // teams from card (if you store it)
+    let currentTeamIds = safeJSON(card.dataset.teamIds || "[]", []);
+    if (!Array.isArray(currentTeamIds)) currentTeamIds = [];
+    currentTeamIds = currentTeamIds.map((x) => toInt(x)).filter(Boolean);
+
+    const backward = isBackward(currentStage, newStage);
+    const removedTeamIds = backward ? currentTeamIds.slice() : [];
+
+    const confirm = await confirmStageChange(newStage, currentStage, currentTeamIds, { removedTeamIds });
+    if (!confirm.ok) return;
+
+    try {
+      const { customerId, alternativeId, productId, leadProductId } = card.dataset;
+
+      await applyStageChange({
+        customerId,
+        alternativeId,
+        productId,
+        leadProductId,
+        newStage,
+        noteHTML: confirm.reasonHTML,
+        teams: confirm.teams,
+      });
+
+      card.dataset.teamIds = JSON.stringify(confirm.teams || []);
+      moveOrRefreshKanbanCard({ newStage, cardFromDOM: card });
+      enforceActionVisibility(card);
+
+      window.LeadUI?.silentRefreshBoth?.();
+
+      Swal.fire({
+        icon: "success",
+        title: "OK",
+        text: "Status & Team aktualisiert.",
+        timer: 1200,
+        showConfirmButton: false,
+      });
+    } catch (err) {
+      Swal.fire("Fehler", err?.message || "Serverfehler.", "error");
+    }
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* List rendering (+ LiveFeed row)                                             */
+  /* -------------------------------------------------------------------------- */
+    function priorityMeta(raw) {
+      const p = String(raw || "normal").toLowerCase();
+      if (p === "high" || p === "urgent") return { label: "Hoch", cls: "prio-high", icon: "alert-triangle" };
+      if (p === "low") return { label: "Niedrig", cls: "prio-low", icon: "arrow-down-circle" };
+      return { label: "Normal", cls: "prio-normal", icon: "circle" };
+    }
+
+    function employeeCellHTML(lead) {
+      const esc = (s) =>
+        String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
+
+      const office = lead?.employee || null;
+      const field = lead?.field_employee || lead?.fieldEmployee || null;
+
+      // team can come as: team_members OR teams (array)
+      const teamArr = Array.isArray(lead?.team_members)
+        ? lead.team_members
+        : Array.isArray(lead?.teams)
+          ? lead.teams
+          : [];
+
+      const hasOffice = !!(office && (office.name || office.lastname));
+      const hasField  = !!(field && (field.name || field.lastname));
+      const hasTeam   = teamArr.length > 0;
+
+      if (!hasOffice && !hasField && !hasTeam) return "<small>&ndash;</small>";
+
+      const imgOrNo = (img) => (img ? esc(img) : "noimage.png");
+
+      const chunks = [];
+
+      // wrapper to align employees + team similar to blade
+      chunks.push(`<div class="d-flex align-items-start flex-wrap" style="gap:10px;">`);
+
+      // employee stack
+      if (hasOffice || hasField) {
+        const empChunks = [];
+
+        if (hasOffice) {
+          empChunks.push(`
+            <div class="d-flex align-items-center">
+              <img src="/images/employee/${imgOrNo(office.image)}" width="30" height="30" class="rounded-circle mr-1" alt="" style="object-fit:cover;">
+              <div>
+                <div style="line-height:1.1"><strong>${esc(office.lastname || "")}</strong> ${esc(office.name || "")}</div>
+                <small class="text-muted">Innendienst</small>
+              </div>
+            </div>
+          `);
+        }
+
+        if (hasField) {
+          empChunks.push(`
+            <div class="d-flex align-items-center">
+              <img src="/images/employee/${imgOrNo(field.image)}" width="26" height="26" class="rounded-circle mr-1" alt="" style="object-fit:cover;">
+              <div>
+                <div style="line-height:1.1"><strong>${esc(field.lastname || "")}</strong> ${esc(field.name || "")}</div>
+                <small class="text-muted">Außendienst</small>
+              </div>
+            </div>
+          `);
+        }
+
+        chunks.push(`<div class="d-flex flex-column" style="gap:6px;">${empChunks.join("")}</div>`);
+      }
+
+      // team avatars
+      if (hasTeam) {
+        const avatars = teamArr
+          .map((t) => {
+            const name = `${t?.lastname ?? ""} ${t?.name ?? ""}`.trim() || "Team";
+            const img = t?.image ? `/images/employee/${esc(t.image)}` : `/images/employee/noimage.png`;
+            return `
+              <li class="avatar pull-up" title="${esc(name)}" style="margin-left:-8px;">
+                <img class="media-object rounded-circle"
+                    src="${img}"
+                    width="26" height="26"
+                    alt="${esc(name)}"
+                    style="border:2px solid #fff; object-fit:cover;">
+              </li>`;
+          })
+          .join("");
+
+        chunks.push(`
+          <div class="d-flex align-items-center" style="margin-top:2px; padding-left:10px; border-left:1px solid #e0e0e0;">
+            <ul class="list-unstyled users-list m-0 d-flex align-items-center" style="gap:0; padding:0;">
+              ${avatars}
+            </ul>
+          </div>
+        `);
+      }
+
+      chunks.push(`</div>`);
+      return chunks.join("");
+    }
+
+    // ---------------------------------------------------------
+    // 1. Helper: Live Feed HTML Structure
+    // ---------------------------------------------------------
+      function listFeedHTML() {
+        return `
+        <div class="live-feed-bar list-live-feed card-live-feed"
+            data-feed-root
+            data-feed-count="0"
+            style="display:none; margin-top:0.5rem; width: 100%; max-width: 450px;">
+          <div class="live-feed-left">
+            <div class="live-feed-icon"><i class="feather icon-zap"></i></div>
+          </div>
+          <div class="live-feed-body">
+            <div class="live-feed-line" data-feed-empty>
+              <span class="live-feed-title">Keine Aktivitäten</span>
+              <span class="live-feed-dot">•</span>
+              <span class="live-feed-text">Noch keine Termine oder Aufgaben.</span>
+            </div>
+            <div class="live-feed-line" data-feed-line>
+              <span class="live-feed-title" data-feed-title>Aktivität</span>
+              <span class="live-feed-dot">•</span>
+              <span class="live-feed-text" data-feed-text>Details…</span>
+            </div>
+            <div class="live-feed-meta">
+              <span class="live-feed-pill" data-feed-pill>Info</span>
+              <span class="live-feed-time">
+                <i class="feather icon-clock mr-25"></i>
+                <span data-feed-time>–</span>
+              </span>
+              <span class="live-feed-counter" data-feed-counter></span>
+            </div>
+          </div>
+          <div class="live-feed-controls">
+            <button type="button" class="live-feed-btn" title="Zurück" data-feed-prev>
+              <i class="feather icon-skip-back"></i>
+            </button>
+            <button type="button" class="live-feed-btn" title="Pause / Abspielen" data-feed-toggle>
+              <i class="feather icon-pause" data-feed-icon-pause></i>
+              <i class="feather icon-play d-none" data-feed-icon-play></i>
+            </button>
+            <button type="button" class="live-feed-btn" title="Weiter" data-feed-next>
+              <i class="feather icon-skip-forward"></i>
+            </button>
+            <button type="button" class="live-feed-btn" title="Alle Aktivitäten anzeigen" data-feed-open-modal>
+                <i class="feather icon-maximize-2"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // ---------------------------------------------------------
+    // 2. Helper: Avatar Generator
+    // ---------------------------------------------------------
+    function avatarLiFromEmp(emp, { withData = false, assignedBy = "", assignedAt = "", stageLabel = "" } = {}) {
+      if (!emp) return "";
+      
+      // Constants from parent scope or fallback
+      const EMP_SRC = (window.LeadUI && window.LeadUI.APP && window.LeadUI.APP.EMP_SRC) ? window.LeadUI.APP.EMP_SRC : '/images/employee';
+      const safeStr = (v) => (v == null ? "" : String(v));
+      const esc = (v) => safeStr(v).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
+
+      const id = Number(emp?.employee_id ?? emp?.id ?? emp?.emp_id ?? 0) || 0;
+      const img = emp?.image ? `${EMP_SRC}/${emp.image}` : `${EMP_SRC}/noimage.png`;
+      const name = `${safeStr(emp?.lastname).trim()} ${safeStr(emp?.name).trim()}`.trim() || `#${id}`;
+
+      return `
+        <li class="avatar pull-up"
+            ${withData ? `data-emp-id="${esc(id)}"` : ""}
+            ${withData ? `data-assigned-by="${esc(assignedBy)}"` : ""}
+            ${withData ? `data-assigned-at="${esc(assignedAt)}"` : ""}
+            ${withData ? `data-stage-label="${esc(stageLabel)}"` : ""}
+            title="${esc(name)}"
+            style="margin-left:-8px;">
+          <img class="media-object rounded-circle"
+              src="${esc(img)}"
+              width="26" height="26"
+              alt="${esc(name)}"
+              style="border:2px solid #fff; object-fit:cover;">
+        </li>
+      `;
+    }
+
+    // ---------------------------------------------------------
+    // 3. Helper: Employee & Team Column Generator
+    // ---------------------------------------------------------
+    function listEmpAndTeamHTML(lead) {
+      const stageKey = window.LeadUI.utils.canonicalStage(lead?.stage);
+      const stageLabel = window.LeadUI.APP.stageNames?.[stageKey] || stageKey;
+      const safeStr = (v) => (v == null ? "" : String(v));
+
+      // A. Main Employees (Office & Field)
+      const main = [];
+      if (lead?.employee && (lead.employee.employee_id || lead.employee.id)) main.push(lead.employee);
+      if (lead?.field_employee && (lead.field_employee.employee_id || lead.field_employee.id)) main.push(lead.field_employee);
+
+      // B. Team Members
+      const teamAssignments = Array.isArray(lead?.team_assignments) ? lead.team_assignments : [];
+      let teamMembers = [];
+      if (teamAssignments.length > 0) {
+          teamMembers = teamAssignments;
+      } else if (Array.isArray(lead?.team_members)) {
+          teamMembers = lead.team_members.map(m => ({ member: m }));
+      } else if (Array.isArray(lead?.teams)) {
+          teamMembers = lead.teams.map(m => ({ member: m }));
+      }
+
+      if (!main.length && !teamMembers.length) return `<span class="text-muted small">&ndash;</span>`;
+
+      const mainHtml = main.length
+        ? `<ul class="list-unstyled users-list m-0 d-inline-flex align-items-center">
+            ${main.map((e) => avatarLiFromEmp(e, { withData: false })).join("")}
+          </ul>`
+        : "";
+
+      const teamHtml = teamMembers.length
+        ? `<ul class="list-unstyled users-list m-0 d-inline-flex align-items-center"
+              data-team-hover
+              style="margin-left:10px; padding-left:10px; border-left:1px solid #e0e0e0;">
+            ${teamMembers.map((a) => {
+              const member = a?.member || a;
+              const u = a?.assigned_by_user;
+              let ab = "";
+              if (u && (u.name || u.lastname)) ab = `${safeStr(u.lastname)} ${safeStr(u.name)}`.trim();
+              else if (a?.assigned_by) ab = `Mitarbeiter #${a.assigned_by}`;
+              const at = safeStr(a?.assigned_at || "").trim();
+              return avatarLiFromEmp(member, { withData: true, assignedBy: ab, assignedAt: at, stageLabel });
+            }).join("")}
+          </ul>`
+        : "";
+
+      return `<div class="d-flex align-items-center">${mainHtml}${teamHtml}</div>`;
+    }
+
+    // ---------------------------------------------------------
+    // 4. Main Function: Build Row
+    // ---------------------------------------------------------
+      function buildRowHTML(lead) {
+        const stageKey = utils.canonicalStage(lead?.stage);
+
+        const cId = lead?.customer_id ?? "";
+        const aId = lead?.alternative_id ?? "";
+        const pId = lead?.product_id ?? "";
+        const lpId = lead?.lead_product_id ?? "";
+
+        const ws = String(lead?.work_status || "playing").toLowerCase();
+
+        // 1. Get Status Block from Kanban (Core)
+        const statusBlockHTML = kanban ? kanban.buildStatusBlock(lead) : `<span class="badge badge-secondary">${stageKey}</span>`;
+
+        // 2. Get Live Feed HTML
+        const liveFeedRow = listFeedHTML();
+
+        // 3. Meta Logic (Assigned By...)
+        const teamAssignments = Array.isArray(lead?.team_assignments) ? lead.team_assignments : [];
+        let teamsRaw = lead?.teams;
+        if (typeof teamsRaw === "string") {
+            try {
+                teamsRaw = JSON.parse(teamsRaw);
+            } catch {
+                teamsRaw = [];
+            }
+        }
+        if (!Array.isArray(teamsRaw)) teamsRaw = [];
+
+        const assignments = teamAssignments.length ?
+            teamAssignments :
+            teamsRaw.map((t) => ({
+                assigned_at: t?.assigned_at ?? null,
+                assigned_at_iso: t?.assigned_at_iso ?? null,
+                assigned_by: t?.assigned_by ?? null,
+                assigned_by_user: t?.assigned_by_user ?? null,
+                stage_label: t?.stage_label ?? null,
+            }));
+
+        const parseAssignedAt = (a) => {
+            const raw = (a?.assigned_at_iso || a?.assigned_at || "").trim();
+            if (!raw) return 0;
+            const isoish = raw.includes("T") ? raw : raw.replace(" ", "T");
+            const ts = Date.parse(isoish);
+            return Number.isFinite(ts) ? ts : 0;
+        };
+
+        const latestA = assignments.reduce((best, a) => {
+            const ta = parseAssignedAt(a);
+            const tb = parseAssignedAt(best);
+            return ta > tb ? a : best;
+        }, null);
+
+        const assignedBy = (() => {
+            const u = latestA?.assigned_by_user;
+            if (u && (u.name || u.lastname)) return `${safeStr(u.lastname).trim()} ${safeStr(u.name).trim()}`.trim();
+            const id = Number(latestA?.assigned_by ?? 0);
+            return id > 0 ? `Mitarbeiter #${id}` : "";
+        })();
+
+        const assignedAtRaw = (latestA?.assigned_at_iso || latestA?.assigned_at || "").trim();
+        const STAGE_DE = {
+            lead: "Lead",
+            offer: "Verkauf",
+            deal: "Auftrag",
+            project: "Montage",
+            completed: "Abschluss",
+            archive: "Archiv",
+            junk: "Junk"
+        };
+        const phaseLabel = (() => {
+            const lbl = (latestA?.stage_label || "").trim();
+            if (lbl) return lbl;
+            const key = String(latestA?.stage || "").trim().toLowerCase();
+            return STAGE_DE[key] || "";
+        })();
+
+        const assignedMetaHTML =
+            assignedBy || assignedAtRaw || phaseLabel ?
+            `<div class="small text-muted mt-1">
+                  ${phaseLabel ? `<span class="mr-2"><i class="feather icon-layers mr-25"></i><span>Phase: <strong>${esc(phaseLabel)}</strong></span></span><span class="mx-1">•</span>` : ``}
+                  <i class="feather icon-user mr-25"></i><span>Zugewiesen von: <strong>${esc(assignedBy || "-")}</strong></span>
+                  <span class="mx-1">•</span>
+                  <i class="feather icon-calendar mr-25"></i><span>${esc(assignedAtRaw ? fmtDE(assignedAtRaw) : "-")}</span>
+                </div>` :
+            "";
+
+        return `
+            <tr id="row-${esc(lpId)}"
+                class="list-row-item"
+                data-customer-id="${esc(cId)}"
+                data-alternative-id="${esc(aId)}"
+                data-product-id="${esc(pId)}"
+                data-lead-product-id="${esc(lpId)}"
+                data-stage="${esc(stageKey)}"
+                data-run-state="${esc(ws)}">
+              
+              <td style="width: 100px;">${lead?.created_at ? fmtDE(lead.created_at) : "-"}</td>
+
+              <td style="min-width: 350px;">
+                <a href="/new_lead_profile/${encodeURIComponent(safeStr(cId))}" class="customer-link" style="font-size:1.05rem;">
+                  ${esc(lead?.customer_lastname ?? "")} ${esc(lead?.customer_name ?? "")}
+                </a>
+
+                ${assignedMetaHTML}
+
+                <div class="list-action-bar">
+                  <button type="button" class="btn-list-icon" data-menu="termin" title="Termin">
+                    <i class="feather icon-calendar"></i>
+                    <span class="badge-notes" data-ap-count style="display:none">0</span>
+                  </button>
+                  <button type="button" class="btn-list-icon" data-menu="aufgabe" title="Aufgabe">
+                    <i class="feather icon-check-square"></i>
+                    <span class="badge-notes" data-pt-count style="display:none">0</span>
+                  </button>
+
+                  <span style="border-left:1px solid #ddd; height:14px; margin:0 4px;"></span>
+
+                  <button type="button" class="btn-list-icon note" data-open-notes data-customer="${esc(cId)}" data-alt="${esc(aId)}" data-product="${esc(pId)}">
+                    <i class="feather icon-message-square"></i>
+                    <span class="badge-notes" data-count="0" style="display:none">0</span>
+                  </button>
+
+                  <div class="btn-group">
+                    <button type="button" class="btn-list-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="feather icon-more-vertical"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item text-success" data-run="playing"><i class="feather icon-play mr-50"></i> Start</button>
+                        <button class="dropdown-item text-warning" data-run="paused"><i class="feather icon-pause mr-50"></i> Pause</button>
+                        <button class="dropdown-item text-danger" data-run="stopped"><i class="feather icon-square mr-50"></i> Stopp</button>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/lead/process/history/${encodeURIComponent(safeStr(cId))}/${encodeURIComponent(safeStr(aId))}/${encodeURIComponent(safeStr(pId))}" data-lh-history>
+                            <i class="feather icon-activity mr-50"></i> Verlauf
+                        </a>
+                    </div>
+                  </div>
+                </div>
+
+                ${liveFeedRow}
+              </td>
+
+              <td>${esc(lead?.city ?? "")}</td>
+              <td>${esc(lead?.initial ?? "")}</td>
+              <td>${listEmpAndTeamHTML(lead)}</td>
+
+              <td>
+                ${statusBlockHTML}
+              </td>
+
+              <td>
+                <select class="form-control stage-select" data-id="${esc(lpId)}">
+                  ${Object.entries(APP.stageNames || {})
+                    .map(([k, l]) => `<option value="${esc(k)}" ${stageKey === k ? "selected" : ""}>${esc(l)}</option>`)
+                    .join("")}
+                </select>
+              </td>
+            </tr>
+          `;
+    }
+    // ---------------------------------------------------------
+    // 5. Updated Bootstrapper
+    // ---------------------------------------------------------
+    function bootstrapListLiveFeed(container) {
+          if (!window.LeadUI.liveFeed || typeof window.LeadUI.liveFeed.loadForCard !== "function") return;
+
+          const root = container || document;
+          // CHANGED: .list-feed-row -> .list-row-item
+          const rows = root.querySelectorAll("tr.list-row-item"); 
+
+          if (!rows.length) return;
+
+          let i = 0;
+          const BATCH = 4; // Process in batches to avoid freezing UI
+
+          (function pump() {
+              const slice = Array.prototype.slice.call(rows, i, i + BATCH);
+              i += BATCH;
+              slice.forEach((row) => {
+                  // IMPORTANT: Ensure the row has a customer ID before trying to load
+                  if (row.dataset.customerId) {
+                      window.LeadUI.liveFeed.loadForCard(row);
+                  }
+              });
+              if (i < rows.length) {
+                  if ("requestIdleCallback" in window) requestIdleCallback(pump);
+                  else setTimeout(pump, 0);
+              }
+          })();
+      }
+
+      // Expose helpers globally
+      window.listFeedHTML = listFeedHTML;
+      window.LeadUI.bootstrapListLiveFeed = bootstrapListLiveFeed;
   function syncSummary(data) {
     const setTxt = (sel, v) => {
       const el = qs(sel);
@@ -5806,24 +5524,9 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     setTxt("#totalProduct", data?.totalProducts);
     setTxt("#totalCustomer", data?.totalCustomers);
 
-    setHTML(
-      "#statusOffen",
-      `${data?.statusCounts?.offen ?? 0} <small>(${
-        data?.statusPercentages?.offen ?? 0
-      }%)</small>`
-    );
-    setHTML(
-      "#statusZusage",
-      `${data?.statusCounts?.zusage ?? 0} <small>(${
-        data?.statusPercentages?.zusage ?? 0
-      }%)</small>`
-    );
-    setHTML(
-      "#statusAbsage",
-      `${data?.statusCounts?.absage ?? 0} <small>(${
-        data?.statusPercentages?.absage ?? 0
-      }%)</small>`
-    );
+    setHTML("#statusOffen", `${data?.statusCounts?.offen ?? 0} <small>(${data?.statusPercentages?.offen ?? 0}%)</small>`);
+    setHTML("#statusZusage", `${data?.statusCounts?.zusage ?? 0} <small>(${data?.statusPercentages?.zusage ?? 0}%)</small>`);
+    setHTML("#statusAbsage", `${data?.statusCounts?.absage ?? 0} <small>(${data?.statusPercentages?.absage ?? 0}%)</small>`);
 
     setTxt("#countCustomers", data?.totalCustomers);
     setTxt("#countProducts", data?.totalProducts);
@@ -5831,10 +5534,77 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     setTxt("#countEmployees", data?.totalEmployees);
   }
 
-  /* ========================================================================== */
-  /* Fetchers (Kanban + List)                                                  */
-  /* ========================================================================== */
+  function updateListView(leads, meta) {
+    const tbody = qs("#kanbanTableBody");
+    if (!tbody) return;
 
+    if (!Array.isArray(leads) || !leads.length) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center">Keine Ergebnisse gefunden</td></tr>';
+      syncSummary(meta);
+      return;
+    }
+
+    const tmp = document.createElement("tbody");
+    tmp.innerHTML = leads.map(buildRowHTML).join("");
+
+    tbody.innerHTML = "";
+    tbody.append(...tmp.childNodes);
+
+    syncSummary(meta);
+    featherRefreshSoon();
+
+    // Notes badges (list)
+    window.LeadUI?.notes?.updateNoteBadgesForVisibleCards?.();
+
+    bootstrapListLiveFeed(tbody);
+  }
+
+  function renderPagination(metaLike) {
+    const wrap = qs("#listPagination");
+    if (!wrap) return;
+
+    const meta = normalizePaginationMeta(metaLike);
+    if (!meta || meta.last_page <= 1) {
+      wrap.innerHTML = "";
+      return;
+    }
+
+    const { current_page, last_page } = meta;
+
+    let html = `<nav aria-label="Seiten"><ul class="pagination mb-0">`;
+
+    const add = (p, label, disabled = false, active = false) => {
+      if (disabled) html += `<li class="page-item disabled"><span class="page-link">${label}</span></li>`;
+      else if (active) html += `<li class="page-item active"><span class="page-link">${label}</span></li>`;
+      else html += `<li class="page-item"><a class="page-link" href="#" data-page="${p}">${label}</a></li>`;
+    };
+
+    add(current_page - 1, "«", current_page === 1);
+
+    const win = 2;
+    const st = Math.max(1, current_page - win);
+    const en = Math.min(last_page, current_page + win);
+
+    if (st > 1) {
+      add(1, "1", false, current_page === 1);
+      if (st > 2) html += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+    }
+
+    for (let p = st; p <= en; p++) add(p, String(p), false, p === current_page);
+
+    if (en < last_page) {
+      if (en < last_page - 1) html += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+      add(last_page, String(last_page), false, current_page === last_page);
+    }
+
+    add(current_page + 1, "»", current_page === last_page);
+
+    wrap.innerHTML = html + "</ul></nav>";
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* Fetchers                                                                    */
+  /* -------------------------------------------------------------------------- */
   function normalizeLead(raw) {
     const pick = (obj, ...keys) => {
       for (const k of keys) {
@@ -5843,13 +5613,7 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
       }
       return null;
     };
-    const latest_phase = pick(
-      raw,
-      "latest_phase",
-      "phase_name",
-      "phase_title",
-      "phase_section_title"
-    );
+    const latest_phase = pick(raw, "latest_phase", "phase_name", "phase_title", "phase_section_title");
     const latest_activity = pick(raw, "latest_activity", "activity_title");
     const done_date = pick(raw, "done_date", "updated_at", "history_at");
     const updated_at = pick(raw, "updated_at", done_date);
@@ -5857,27 +5621,33 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
   }
 
   function ensureLoadedMap() {
-    if (!State.loaded || typeof State.loaded !== "object") {
-      State.loaded = { kanban: false, list: false };
-    } else {
-      if (!("kanban" in State.loaded)) State.loaded.kanban = false;
-      if (!("list" in State.loaded)) State.loaded.list = false;
-    }
+    if (!State.loaded || typeof State.loaded !== "object") State.loaded = { kanban: false, list: false };
+    if (!("kanban" in State.loaded)) State.loaded.kanban = false;
+    if (!("list" in State.loaded)) State.loaded.list = false;
+  }
+
+  function syncTabCountsFromListPayload(payload) {
+    const total =
+      payload?.pagination?.total ||
+      payload?.meta?.total ||
+      (Array.isArray(payload?.leads) ? payload.leads.length : 0);
+
+    setTabCount("#tabCountList", total);
+    setTabCount("#tabCountKanban", total);
+  }
+
+  function syncTabCountsFromKanban(leads) {
+    if (Array.isArray(leads)) setTabCount("#tabCountKanban", leads.length);
   }
 
   function fetchKanbanView(qsStr) {
     ensureLoadedMap();
+
     const signal = cancel("kanban");
     const board = qs("#kanban");
-    if (board && !State.loaded.kanban) {
-      board.innerHTML =
-        '<div class="p-2 text-muted">Lade Kanban…</div>';
-    }
+    if (board && !State.loaded.kanban) board.innerHTML = '<div class="p-2 text-muted">Lade Kanban…</div>';
 
-    return safeFetchJSON(
-      `${APP.endpoints.kanbanSearch}${qsStr ? `?${qsStr}` : ""}`,
-      { signal, retries: 0 }
-    )
+    return safeFetchJSON(`${APP.endpoints.kanbanSearch}${qsStr ? `?${qsStr}` : ""}`, { signal, retries: 0 })
       .then((payload) => {
         const arr = Array.isArray(payload?.leads)
           ? payload.leads
@@ -5890,233 +5660,237 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
         State.lastKanbanData = arr.map(normalizeLead);
 
         if (!State.loaded.kanban) {
-          renderKanbanIncremental(
-            State.lastKanbanData,
-            autoChunk(),
-            () => {
-              ensureLoadedMap();
-              State.loaded.kanban = true;
-              syncTabCountsFromKanban(State.lastKanbanData);
-            }
-          );
+          renderKanbanIncremental(State.lastKanbanData, autoChunk(), () => {
+            ensureLoadedMap();
+            State.loaded.kanban = true;
+            syncTabCountsFromKanban(State.lastKanbanData);
+          });
         } else {
           renderKanbanDiff(State.lastKanbanData);
           syncTabCountsFromKanban(State.lastKanbanData);
         }
       })
       .catch((e) => {
-        if (e.name !== "AbortError") {
-          Swal.fire("Fehler", e.message, "error");
-        }
+        if (e?.name !== "AbortError") Swal.fire("Fehler", e?.message || "Fehler", "error");
       });
   }
 
   function fetchListView(qsStr) {
+    ensureLoadedMap();
+
     const signal = cancel("list");
     const tbody = qs("#kanbanTableBody");
     if (tbody && !State.loaded.list) {
-      tbody.innerHTML =
-        '<tr><td colspan="8" class="text-center text-muted">Lade Liste…</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">Lade Liste…</td></tr>';
     }
 
-    return safeFetchJSON(
-      `${APP.endpoints.listSearch}${qsStr ? `?${qsStr}` : ""}`,
-      { signal, retries: 0 }
-    )
+    return safeFetchJSON(`${APP.endpoints.listSearch}${qsStr ? `?${qsStr}` : ""}`, { signal, retries: 0 })
       .then((payload) => {
         ensureLoadedMap();
         State.loaded.list = true;
 
-        const leads = Array.isArray(payload?.leads)
-          ? payload.leads
-          : Array.isArray(payload?.data)
-          ? payload.data
-          : [];
-
+        const leads = Array.isArray(payload?.leads) ? payload.leads : Array.isArray(payload?.data) ? payload.data : [];
         updateListView(leads, payload);
+
         renderPagination(payload.pagination || payload.meta || payload);
         syncTabCountsFromListPayload(payload);
       })
       .catch((e) => {
-        if (e.name !== "AbortError") {
-          Swal.fire("Fehler", e.message, "error");
-          updateListView([], {});
-          renderPagination(null);
-        }
+        if (e?.name === "AbortError") return;
+        Swal.fire("Fehler", e?.message || "Serverfehler.", "error");
+        updateListView([], {});
+        renderPagination(null);
       });
   }
 
-  refreshArchiveAndJunk(State.filtersQS);
+  /* -------------------------------------------------------------------------- */
+  /* Partials: Ticket & Investment tabs                                          */
+  /* -------------------------------------------------------------------------- */
+  partials.fetchTicketsTab = async function (qsStr = "") {
+    const pane = qs("#ticket");
+    if (!pane) return;
 
-  /* ========================================================================== */
-  /* List: stage change                                                        */
-  /* ========================================================================== */
-
-  document.addEventListener("change", async (e) => {
-    const sel = e.target.closest("select.stage-select");
-    if (!sel) return;
-
-    const row = sel.closest("tr");
-    const newStage = sel.value;
-
-    const prevIndex = [...sel.options].findIndex(
-      (o) => o.defaultSelected
-    );
-    const oldStage =
-      prevIndex >= 0
-        ? canonicalStage(sel.options[prevIndex].value)
-        : null;
-
-    const customerId = row?.dataset.customerId || sel.dataset.customerId;
-    const alternativeId =
-      row?.dataset.alternativeId || sel.dataset.alternativeId;
-    const productId =
-      row?.dataset.productId || sel.dataset.productId;
-    const leadProductId =
-      sel.dataset.id || row?.id?.split("-")[1];
+    const url = `${APP.endpoints.tickets}${qsStr ? `?${qsStr}` : ""}`;
 
     try {
-      const confirm = await confirmStageChange(newStage, oldStage);
-      if (!confirm.ok) {
-        sel.selectedIndex = prevIndex;
+      const res = await fetch(url, {
+        headers: { Accept: "text/html", "X-Requested-With": "XMLHttpRequest" },
+        credentials: "same-origin",
+      });
+
+      const html = await res.text();
+      pane.innerHTML = html;
+
+      const totalNode = pane.querySelector("[data-ticket-total]") || pane.querySelector("[data-total]");
+      const total = totalNode
+        ? toInt(
+            totalNode.getAttribute("data-ticket-total") ||
+              totalNode.getAttribute("data-total") ||
+              totalNode.dataset.ticketTotal ||
+              totalNode.dataset.total ||
+              0,
+            0
+          )
+        : 0;
+
+      const badge = qs("#tabCountTicket");
+      if (badge) badge.textContent = String(total);
+    } catch (e) {
+      console.error("Ticket partial load failed:", e);
+    }
+  };
+
+ 
+
+  function refreshArchiveAndJunk(qsStr) {
+    partials.fetchJunkTab?.(qsStr);
+    partials.fetchTicketsTab?.(qsStr);
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* Unified run state prompt                                                    */
+  /* -------------------------------------------------------------------------- */
+  async function promptRunReason(state) {
+    const label =
+      state === "playing" ? "Start" : state === "paused" ? "Pause" : state === "stopped" ? "Stopp" : state;
+
+    const { value: reason, isConfirmed } = await Swal.fire({
+      title: `Grund für ${label}`,
+      input: "textarea",
+      showCancelButton: true,
+      confirmButtonText: "Speichern",
+      inputValidator: (v) => (!v?.trim() ? "Bitte Grund eingeben" : undefined),
+    });
+
+    if (!isConfirmed) return null;
+    return String(reason || "").trim();
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* Click handlers (Unified: List + Kanban)                                     */
+  /* -------------------------------------------------------------------------- */
+  document.addEventListener("click", async (e) => {
+    const actBtn = e.target.closest("[data-act],[data-run]");
+    if (!actBtn) return;
+
+    // If it's inside an anchor, let navigation happen.
+    if (e.target.closest("a")) return;
+
+    const card = actBtn.closest("#kanban .card");
+    const row = actBtn.closest("#kanbanTableBody tr.list-row-item");
+
+    // --- LIST VIEW actions ----------------------------------------------------
+    if (row && !card) {
+      const data = {
+        customerId: row.dataset.customerId,
+        alternativeId: row.dataset.alternativeId,
+        productId: row.dataset.productId,
+        leadProductId: row.dataset.leadProductId,
+        stage: row.dataset.stage || "lead",
+        runState: row.dataset.runState || "playing",
+      };
+
+      // run state buttons (list)
+      if (actBtn.dataset.run) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const state = actBtn.dataset.run;
+        const reason = await promptRunReason(state);
+        if (!reason) return;
+
+        try {
+          const res = await postJSON(`${APP.endpoints.progress}/${encodeURIComponent(data.leadProductId)}/${state}`, {
+            reason,
+          });
+
+          if (!res || res.success === false) throw new Error(res?.message || "Fehler");
+
+          // silent refresh to sync icons/colors + counts
+          window.LeadUI?.silentRefreshBoth?.();
+        } catch (err) {
+          Swal.fire("Fehler", err?.message || "Speichern fehlgeschlagen.", "error");
+        }
         return;
       }
 
-      await applyStageChange({
-        customerId,
-        alternativeId,
-        productId,
-        leadProductId,
-        newStage,
-        noteHTML: confirm.reasonHTML,
-      });
+      // notes (list)
+      if (actBtn.dataset.act === "notes") {
+        e.preventDefault();
+        e.stopPropagation();
 
-      const card =
-        document.getElementById(`card-${leadProductId}`) ||
-        document.querySelector(
-          `.card[data-lead-product-id="${leadProductId}"]`
+        let name = "Kunde";
+        const linkEl = row.querySelector(".customer-link");
+        if (linkEl) name = linkEl.textContent.trim();
+
+        notes.openNotesDrawerFor(
+          data.customerId,
+          data.alternativeId,
+          data.productId,
+          `Notizen • ${name}`
         );
-
-      if (card) {
-        moveOrRefreshKanbanCard({ newStage, cardFromDOM: card });
-        enforceActionVisibility(card);
+        return;
       }
 
-      sel.querySelectorAll("option").forEach((o) => {
-        o.defaultSelected = false;
-      });
-      sel.options[sel.selectedIndex].defaultSelected = true;
-
-      if (stageFilterExcludes(newStage)) row?.remove();
-
-      silentRefreshBoth();
-      Swal.fire("OK", "Phase aktualisiert.", "success");
-    } catch (err) {
-      sel.selectedIndex = prevIndex;
-      Swal.fire("Fehler", err.message || "Serverfehler.", "error");
+      return;
     }
-  });
 
-  /* ========================================================================== */
-  /* Card actions (KANBAN buttons)                                             */
-  /* ========================================================================== */
+    // --- KANBAN actions -------------------------------------------------------
+    if (card) {
+      const run = actBtn.dataset.run;
+      if (run) {
+        e.preventDefault();
+        e.stopPropagation();
 
-  document.addEventListener("click", (e) => {
-    const actBtn = e.target.closest(
-      ".card .card-actions [data-act],[data-run]"
-    );
-    if (!actBtn) return;
-
-    const card = actBtn.closest(".card");
-    if (!card) return;
-
-    if (actBtn.dataset.run)
-      return (async () => {
-        const state = actBtn.dataset.run;
-        const { value: reason, isConfirmed } = await Swal.fire({
-          title: `Grund für ${
-            state === "playing"
-              ? "Start"
-              : state === "paused"
-              ? "Pause"
-              : "Stopp"
-          }`,
-          input: "textarea",
-          showCancelButton: true,
-          confirmButtonText: "Speichern",
-          inputValidator: (v) =>
-            !v?.trim() ? "Bitte Grund eingeben" : undefined,
-        });
-        if (!isConfirmed) return;
+        const reason = await promptRunReason(run);
+        if (!reason) return;
 
         const prev = card.dataset.runState || "playing";
-        applyRunStateUI(card, state);
+        applyRunStateUI(card, run);
 
         try {
-          const res = await postJSON(
-            `${APP.endpoints.progress}/${card.dataset.leadProductId}/${state}`,
-            { reason }
-          );
-          if (!res || res.success === false)
-            throw new Error(res?.message || "Fehler");
-
-          refreshCardStatus(card, {
-            work_status: state,
-            updated_at: new Date().toISOString(),
+          const res = await postJSON(`${APP.endpoints.progress}/${encodeURIComponent(card.dataset.leadProductId)}/${run}`, {
+            reason,
           });
-          silentRefreshBoth();
+
+          if (!res || res.success === false) throw new Error(res?.message || "Fehler");
+
+          refreshCardStatus(card, { work_status: run, updated_at: new Date().toISOString() });
+          window.LeadUI?.silentRefreshBoth?.();
         } catch (err) {
           applyRunStateUI(card, prev);
-          Swal.fire(
-            "Fehler",
-            err.message || "Speichern fehlgeschlagen.",
-            "error"
-          );
+          Swal.fire("Fehler", err?.message || "Speichern fehlgeschlagen.", "error");
         }
-      })();
+        return;
+      }
 
-    const act = actBtn.dataset.act;
+      const act = actBtn.dataset.act;
 
-    if (act === "profile") {
-      return window.location.assign(
-        `/new_lead_profile/${card.dataset.customerId}`
-      );
-    }
+      if (act === "profile") {
+        window.location.assign(`/new_lead_profile/${card.dataset.customerId}`);
+        return;
+      }
 
-    if (act === "edit") {
-      return Swal.fire({
-        title: "Lead bearbeiten?",
-        icon: "question",
-        showCancelButton: true,
-      }).then((r) => {
-        if (r.isConfirmed) {
-          window.location.assign(
-            `/new_lead_edit/${card.dataset.customerId}/${card.dataset.alternativeId}`
-          );
-        }
-      });
-    }
+      if (act === "edit") {
+        const r = await Swal.fire({ title: "Lead bearbeiten?", icon: "question", showCancelButton: true });
+        if (r.isConfirmed) window.location.assign(`/new_lead_edit/${card.dataset.customerId}/${card.dataset.alternativeId}`);
+        return;
+      }
 
-    if (act === "notes") {
-      return notes.openNotesDrawerFor(
-        card.dataset.customerId,
-        card.dataset.alternativeId,
-        card.dataset.productId,
-        card.querySelector(".card-header strong")?.textContent?.trim()
-      );
-    }
+      if (act === "notes") {
+        notes.openNotesDrawerFor(
+          card.dataset.customerId,
+          card.dataset.alternativeId,
+          card.dataset.productId,
+          card.querySelector(".card-header strong")?.textContent?.trim()
+        );
+        return;
+      }
 
-    if (act === "delete")
-      return (async () => {
-        if (
-          stageRank(canonicalStage(card.dataset.stage)) >=
-          stageRank("deal")
-        ) {
-          return Swal.fire(
-            "Gesperrt",
-            "Leads ab „Auftrag“ können nicht in Junk verschoben werden.",
-            "info"
-          );
+      if (act === "delete") {
+        if (stageRank(canonicalStage(card.dataset.stage)) >= stageRank("deal")) {
+          Swal.fire("Gesperrt", "Leads ab „Auftrag“ können nicht in Junk verschoben werden.", "info");
+          return;
         }
 
         const ok = await Swal.fire({
@@ -6128,94 +5902,223 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
         });
         if (!ok.isConfirmed) return;
 
-        const note = await Swal.fire(quillSwalOpts("quillJunk"));
+        const note = await Swal.fire({
+          title: "Notiz (optional)",
+          html: `<div id="quillJunk" style="height:170px;"></div>`,
+          showCancelButton: true,
+          confirmButtonText: "Speichern",
+          focusConfirm: false,
+          allowEnterKey: false,
+          zIndex: 200000,
+          didOpen: () => {
+            if (window.Quill) {
+              const q = new Quill("#quillJunk", { theme: "snow" });
+              window.__leadui_quillJunk = q;
+              setTimeout(() => q.focus(), 0);
+            }
+          },
+          preConfirm: () => window.__leadui_quillJunk?.root?.innerHTML || "",
+        });
 
         try {
-          const url = `${APP.endpoints.changeStage}/${encodeURIComponent(
-            card.dataset.customerId
-          )}/${encodeURIComponent(
+          const url = `${APP.endpoints.changeStage}/${encodeURIComponent(card.dataset.customerId)}/${encodeURIComponent(
             card.dataset.alternativeId
           )}/${encodeURIComponent(card.dataset.productId)}`;
 
           const res = await postJSON(url, {
             stage: "junk",
             description: note.isConfirmed ? note.value || "" : "",
-            lead_product_id:
-              Number(card.dataset.leadProductId || 0) || undefined,
+            lead_product_id: toInt(card.dataset.leadProductId) || undefined,
           });
+
           if (!res?.success) throw new Error(res?.message || "Fehler");
 
           card.remove();
           updateCounts();
-          silentRefreshBoth();
+          window.LeadUI?.silentRefreshBoth?.();
+
           Swal.fire("Verschoben", "Lead liegt jetzt im Junk.", "success");
         } catch (err) {
-          Swal.fire(
-            "Fehler",
-            err.message || "Verschieben fehlgeschlagen.",
-            "error"
-          );
+          Swal.fire("Fehler", err?.message || "Verschieben fehlgeschlagen.", "error");
         }
-      })();
+        return;
+      }
 
-    if (act === "archive")
-      return (async () => {
-        const ok = await Swal.fire({
-          title: "Archivieren?",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonText: "Ja",
-        });
+      if (act === "archive") {
+        const ok = await Swal.fire({ title: "Archivieren?", icon: "question", showCancelButton: true, confirmButtonText: "Ja" });
         if (!ok.isConfirmed) return;
 
-        const note = await Swal.fire(quillSwalOpts("quillArchive"));
+        const note = await Swal.fire({
+          title: "Notiz (optional)",
+          html: `<div id="quillArchive" style="height:170px;"></div>`,
+          showCancelButton: true,
+          confirmButtonText: "Speichern",
+          focusConfirm: false,
+          allowEnterKey: false,
+          zIndex: 200000,
+          didOpen: () => {
+            if (window.Quill) {
+              const q = new Quill("#quillArchive", { theme: "snow" });
+              window.__leadui_quillArchive = q;
+              setTimeout(() => q.focus(), 0);
+            }
+          },
+          preConfirm: () => window.__leadui_quillArchive?.root?.innerHTML || "",
+        });
 
         try {
-          const url = `${APP.endpoints.changeStage}/${encodeURIComponent(
-            card.dataset.customerId
-          )}/${encodeURIComponent(
+          const url = `${APP.endpoints.changeStage}/${encodeURIComponent(card.dataset.customerId)}/${encodeURIComponent(
             card.dataset.alternativeId
           )}/${encodeURIComponent(card.dataset.productId)}`;
 
           const data = await postJSON(url, {
             stage: "archive",
-            description: note.isConfirmed ? note.value : "",
-            lead_product_id:
-              Number(card.dataset.leadProductId || 0) || undefined,
+            description: note.isConfirmed ? note.value || "" : "",
+            lead_product_id: toInt(card.dataset.leadProductId) || undefined,
           });
 
-          if (!data.success)
-            throw new Error(data.message || "Fehler");
+          if (!data?.success) throw new Error(data?.message || "Fehler");
 
           card.remove();
           updateCounts();
-          silentRefreshBoth();
+          window.LeadUI?.silentRefreshBoth?.();
 
           Swal.fire("Archiviert", "Lead verschoben.", "success");
         } catch (err) {
-          Swal.fire(
-            "Fehler",
-            err.message || "Archivieren fehlgeschlagen.",
-            "error"
-          );
+          Swal.fire("Fehler", err?.message || "Archivieren fehlgeschlagen.", "error");
         }
-      })();
+        return;
+      }
+    }
   });
 
-  /* ========================================================================== */
-  /* Sorting / paging (LIST)                                                   */
-  /* ========================================================================== */
+  /* -------------------------------------------------------------------------- */
+  /* Kanban: click selection + dragstart delegation                              */
+  /* -------------------------------------------------------------------------- */
+  document.addEventListener("click", (e) => {
+    const card = e.target.closest("#kanban .card");
+    if (!card) return;
 
-  function addPage(qsStr, page) {
-    const p = new URLSearchParams(qsStr || "");
-    p.set("page", String(page));
-    return p.toString();
-  }
+    // Avoid selecting when clicking action buttons/links/inputs
+    if (e.target.closest(".card-actions, button, a, input, select, textarea")) return;
 
-  function isKanbanActive() {
-    return qs("#home")?.classList.contains("active");
-  }
+    selectCard(card, e);
+  });
 
+  document.addEventListener("dragstart", (e) => {
+    const card = e.target.closest("#kanban .card");
+    if (!card) return;
+    onKanbanDragStart(e, card);
+  });
+
+  // Enable drop only on columns (and avoid "open in new tab" elsewhere)
+  document.addEventListener("dragover", (e) => {
+    if (!e.dataTransfer) return;
+
+    // Only handle our own DND type
+    if (!Array.from(e.dataTransfer.types || []).includes(DND_MIME)) return;
+
+    const col = e.target.closest(".column");
+    if (col) e.preventDefault();
+  });
+
+  document.addEventListener(
+    "drop",
+    (e) => {
+      if (!e.dataTransfer) return;
+      if (!Array.from(e.dataTransfer.types || []).includes(DND_MIME)) return;
+
+      const col = e.target.closest(".column");
+      if (!col) {
+        // Prevent browser from navigating when dropping our internal drag payload
+        e.preventDefault();
+        return;
+      }
+
+      onKanbanDrop(e);
+    },
+    true
+  );
+
+  /* -------------------------------------------------------------------------- */
+  /* List: stage select change                                                   */
+  /* -------------------------------------------------------------------------- */
+  document.addEventListener("change", async (e) => {
+    const sel = e.target.closest("select.stage-select");
+    if (!sel) return;
+
+    const row = sel.closest("tr.list-row-item");
+    if (!row) return;
+
+    const newStage = sel.value;
+
+    // old stage from defaultSelected (Laravel often renders the current one)
+    const prevIndex = Array.from(sel.options).findIndex((o) => o.defaultSelected);
+    const oldStage = prevIndex >= 0 ? canonicalStage(sel.options[prevIndex].value) : canonicalStage(row.dataset.stage);
+
+    const customerId = row.dataset.customerId;
+    const alternativeId = row.dataset.alternativeId;
+    const productId = row.dataset.productId;
+    const leadProductId = sel.dataset.id || row.dataset.leadProductId || row.id?.split("-")[1];
+
+    // teams from row if you ever store them (optional)
+    const currentTeamIds = Array.isArray(safeJSON(row.dataset.teamIds || "[]", []))
+      ? safeJSON(row.dataset.teamIds || "[]", [])
+      : [];
+
+    try {
+      const confirm = await confirmStageChange(newStage, oldStage, currentTeamIds);
+      if (!confirm.ok) {
+        sel.selectedIndex = Math.max(0, prevIndex);
+        return;
+      }
+
+      await applyStageChange({
+        customerId,
+        alternativeId,
+        productId,
+        leadProductId,
+        newStage,
+        noteHTML: confirm.reasonHTML,
+        teams: confirm.teams,
+      });
+
+      // Update defaultSelected to keep oldStage detection correct next time
+      sel.querySelectorAll("option").forEach((o) => (o.defaultSelected = false));
+      sel.options[sel.selectedIndex].defaultSelected = true;
+
+      // Remove list rows if excluded
+      if (stageFilterExcludes(newStage)) {
+        // remove main row + feed row
+        const feedRow = row.nextElementSibling?.classList?.contains("list-feed-row") ? row.nextElementSibling : null;
+        row.remove();
+        feedRow?.remove?.();
+      } else {
+        row.dataset.stage = canonicalStage(newStage);
+      }
+
+      // update kanban card if present
+      const card =
+        qs(`#card-${CSS.escape(String(leadProductId))}`) ||
+        qs(`#${CSS.escape(String(leadProductId))}`) ||
+        qs(`.card[data-lead-product-id="${CSS.escape(String(leadProductId))}"]`);
+
+      if (card) {
+        moveOrRefreshKanbanCard({ newStage, cardFromDOM: card });
+        enforceActionVisibility(card);
+      }
+
+      window.LeadUI?.silentRefreshBoth?.();
+      Swal.fire("OK", "Phase aktualisiert.", "success");
+    } catch (err) {
+      sel.selectedIndex = Math.max(0, prevIndex);
+      Swal.fire("Fehler", err?.message || "Serverfehler.", "error");
+    }
+  });
+
+  /* -------------------------------------------------------------------------- */
+  /* Sorting + pagination clicks                                                 */
+  /* -------------------------------------------------------------------------- */
   document.addEventListener("click", (e) => {
     const th = e.target.closest("#profile th.sortable");
     if (!th) return;
@@ -6223,14 +6126,11 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     const key = th.dataset.sort;
     if (!key) return;
 
-    State.sort =
-      State.sort.key === key
-        ? { key, dir: State.sort.dir === "asc" ? "desc" : "asc" }
-        : { key, dir: "asc" };
+    State.sort = State.sort?.key === key
+      ? { key, dir: State.sort.dir === "asc" ? "desc" : "asc" }
+      : { key, dir: "asc" };
 
-    qsa("#profile th.sortable").forEach((h) =>
-      h.classList.remove("active", "desc")
-    );
+    qsa("#profile th.sortable").forEach((h) => h.classList.remove("active", "desc"));
     th.classList.add("active");
     if (State.sort.dir === "desc") th.classList.add("desc");
 
@@ -6244,116 +6144,90 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
   });
 
   document.addEventListener("click", (e) => {
-    const a = e.target.closest(
-      "#listPagination a.page-link[data-page]"
-    );
+    const a = e.target.closest("#listPagination a.page-link[data-page]");
     if (!a) return;
-    e.preventDefault();
 
-    const p = parseInt(a.getAttribute("data-page"), 10) || 1;
+    e.preventDefault();
+    const p = toInt(a.getAttribute("data-page"), 1);
     State.page = p;
+
     saveToLocal();
     syncURL();
 
     fetchListView(addPage(State.filtersQS, State.page));
   });
 
-  /* ========================================================================== */
-  /* Tabs (Bootstrap)                                                          */
-  /* ========================================================================== */
-
+  /* -------------------------------------------------------------------------- */
+  /* Tabs                                                                        */
+  /* -------------------------------------------------------------------------- */
   if (window.jQuery) {
-    jQuery('a[data-toggle="tab"][href="#home"]').on(
-      "shown.bs.tab",
-      function () {
-        ensureColumns();
-        renderKanbanDiff(State.lastKanbanData);
-        featherRefreshSoon();
-        enforceActionVisibility();
-      }
-    );
+    jQuery('a[data-toggle="tab"][href="#home"]').on("shown.bs.tab", () => {
+      ensureColumns();
+      renderKanbanDiff(State.lastKanbanData || []);
+      featherRefreshSoon();
+      enforceActionVisibility();
+    });
 
-    jQuery('a[data-toggle="tab"][href="#archive"]').on(
-      "shown.bs.tab",
-      function () {
-        partials.fetchArchiveTab(State.filtersQS);
-      }
-    );
-
-    jQuery('a[data-toggle="tab"][href="#junk"]').on(
-      "shown.bs.tab",
-      function () {
-        partials.fetchJunkTab(State.filtersQS);
-      }
-    );
-
-    jQuery('a[data-toggle="tab"][href="#investment"]').on(
-      "shown.bs.tab",
-      function () {
-        partials.fetchInvestmentTab(State.filtersQS);
-      }
-    );
+    jQuery('a[data-toggle="tab"][href="#junk"]').on("shown.bs.tab", () => {
+      partials.fetchJunkTab?.(State.filtersQS);
+    });
+ 
   }
 
   document.addEventListener("shown.bs.tab", (e) => {
     const trg = e.target?.getAttribute("href") || "";
     if (trg === "#ticket") {
-      const qsStr = window.LeadUI.filters.buildFilterQS();
-      window.LeadUI.partials.fetchTicketsTab(qsStr);
+      const qsStr = filters.buildFilterQS();
+      partials.fetchTicketsTab?.(qsStr);
     }
   });
 
-  /* ========================================================================== */
-  /* Apply / Clear Filters                                                     */
-  /* ========================================================================== */
-
+  /* -------------------------------------------------------------------------- */
+  /* Summary cards + filter buttons                                              */
+  /* -------------------------------------------------------------------------- */
   function setSummaryActive(id) {
-    qsa(".summary-card").forEach((c) =>
-      c.classList.remove("active")
-    );
+    qsa(".summary-card").forEach((c) => c.classList.remove("active"));
     if (id) qs("#" + id)?.classList.add("active");
   }
 
   function applyStatusGroup(g, cardId) {
     State.statusGroup = g;
     State.page = 1;
+
     State.filtersQS = filters.buildFilterQS();
-    saveToLocal();
-    syncURL();
-
-    const qsStrWithPage = addPage(State.filtersQS, State.page);
-
-    fetchListView(qsStrWithPage);
-    fetchKanbanView(State.filtersQS);
-    refreshArchiveAndJunk(State.filtersQS);
-    setSummaryActive(cardId || null);
-    filters.updateFilterBadges();
-  }
-
-  qs("#cardOffen")?.addEventListener("click", () =>
-    applyStatusGroup("offen", "cardOffen")
-  );
-  qs("#cardZusage")?.addEventListener("click", () =>
-    applyStatusGroup("zusage", "cardZusage")
-  );
-  qs("#cardAbsage")?.addEventListener("click", () =>
-    applyStatusGroup("absage", "cardAbsage")
-  );
-
-  qs("#btnApplyFilters")?.addEventListener("click", () => {
-    State.page = 1;
-    State.filtersQS = filters.buildFilterQS();
-    window.LeadUI.partials.fetchTicketsTab(State.filtersQS);
-    window.LeadUI.partials.fetchInvestmentTab(State.filtersQS);
-    State.lastAppliedQS = State.filtersQS;
     saveToLocal();
     syncURL();
 
     const withPage = addPage(State.filtersQS, State.page);
+
     fetchListView(withPage);
     fetchKanbanView(State.filtersQS);
-
     refreshArchiveAndJunk(State.filtersQS);
+
+    setSummaryActive(cardId || null);
+    filters.updateFilterBadges?.();
+  }
+
+  qs("#cardOffen")?.addEventListener("click", () => applyStatusGroup("offen", "cardOffen"));
+  qs("#cardZusage")?.addEventListener("click", () => applyStatusGroup("zusage", "cardZusage"));
+  qs("#cardAbsage")?.addEventListener("click", () => applyStatusGroup("absage", "cardAbsage"));
+
+  qs("#btnApplyFilters")?.addEventListener("click", () => {
+    State.page = 1;
+    State.filtersQS = filters.buildFilterQS();
+    State.lastAppliedQS = State.filtersQS;
+
+    saveToLocal();
+    syncURL();
+
+    const withPage = addPage(State.filtersQS, State.page);
+
+    fetchListView(withPage);
+    fetchKanbanView(State.filtersQS);
+    refreshArchiveAndJunk(State.filtersQS);
+
+     partials.fetchTicketsTab?.(State.filtersQS);
+
     closeOverlays();
   });
 
@@ -6362,79 +6236,67 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     if (!form) return;
 
     form.reset();
-    if (window.jQuery)
-      jQuery(form).find(".select2").val(null).trigger("change");
+    if (window.jQuery) window.jQuery(form).find(".select2").val(null).trigger("change");
 
     State.statusGroup = null;
     setSummaryActive(null);
 
     State.page = 1;
     State.filtersQS = filters.buildFilterQS();
+
     saveToLocal();
     syncURL();
-    filters.updateFilterBadges();
+
+    filters.updateFilterBadges?.();
 
     const withPage = addPage(State.filtersQS, State.page);
 
     fetchListView(withPage);
     fetchKanbanView(State.filtersQS);
-    refreshArchiveAndJunk(State.filtersQS);
-    window.LeadUI.partials.fetchInvestmentTab(State.filtersQS);
-    window.LeadUI.partials.fetchTicketsTab(State.filtersQS);
+    refreshArchiveAndJunk(State.filtersQS); 
+     partials.fetchTicketsTab?.(State.filtersQS);
   });
 
-  /* ========================================================================== */
-  /* Live Feed trigger for LIST (optional manual reload on feed row click)     */
-  /* ========================================================================== */
-
+  /* -------------------------------------------------------------------------- */
+  /* LiveFeed row click                                                          */
+  /* -------------------------------------------------------------------------- */
   document.addEventListener("click", (e) => {
-    const row = e.target.closest(
-      "#kanbanTableBody tr.list-feed-row"
-    );
+    const row = e.target.closest("#kanbanTableBody tr.list-row-item");
     if (!row) return;
+    if (e.target.closest("button, a, select, input, textarea")) return;
 
-    if (e.target.closest("button, a, select")) return;
-
-    if (liveFeed && typeof liveFeed.loadForCard === "function") {
-      liveFeed.loadForCard(row);
-    }
+    if (liveFeed && typeof liveFeed.loadForCard === "function") liveFeed.loadForCard(row);
   });
 
-  /* ========================================================================== */
-  /* Keyboard shortcuts                                                        */
-  /* ========================================================================== */
-
+  /* -------------------------------------------------------------------------- */
+  /* Keyboard                                                                     */
+  /* -------------------------------------------------------------------------- */
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey && e.key.toLowerCase() === "f") {
       e.preventDefault();
       qs("#btnOpenDrawer")?.click();
     }
-    if (e.key === "Escape") {
-      closeOverlays();
-    }
+    if (e.key === "Escape") closeOverlays();
   });
 
-  /* ========================================================================== */
-  /* Silent refresh (keep Kanban + List + Tickets in sync)                     */
-  /* ========================================================================== */
-
+  /* -------------------------------------------------------------------------- */
+  /* Silent refresh (public)                                                     */
+  /* -------------------------------------------------------------------------- */
   function silentRefreshBoth() {
-    const qsStr = State.filtersQS;
-    fetchListView(addPage(qsStr, State.page));
+    const qsStr = State.filtersQS || "";
+    fetchListView(addPage(qsStr, State.page || 1));
     fetchKanbanView(qsStr);
-    window.LeadUI.partials.fetchTicketsTab(qsStr);
+    partials.fetchTicketsTab?.(qsStr);
   }
-
   window.LeadUI.silentRefreshBoth = silentRefreshBoth;
 
-  /* ========================================================================== */
-  /* Bootstrapping                                                             */
-  /* ========================================================================== */
-
+  /* -------------------------------------------------------------------------- */
+  /* Boot                                                                         */
+  /* -------------------------------------------------------------------------- */
   document.addEventListener("DOMContentLoaded", () => {
     featherRefreshSoon();
-    filters.initSelect2();
-    filters.updateFilterBadges();
+    filters.initSelect2?.();
+    filters.updateFilterBadges?.();
 
     initFromURL();
     if (!location.search) restoreFromLocal();
@@ -6447,9 +6309,67 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     State.loaded.kanban = false;
     State.loaded.list = false;
 
-    fetchListView(addPage(State.filtersQS, State.page));
+    // initial loads
+    fetchListView(addPage(State.filtersQS, State.page || 1));
     fetchKanbanView(State.filtersQS);
+
+    // side tabs initial refresh
+    refreshArchiveAndJunk(State.filtersQS);
   });
+})();
+</script>
+
+
+ 
+
+<!-- Kanban Column Script  -->
+<script>
+(function() {
+    "use strict";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Function to toggle column visibility
+        function toggleColumn(stageId, isVisible) {
+            const col = document.getElementById(stageId);
+            if (!col) return;
+
+            if (isVisible) {
+                // We use 'flex' because your .column class likely uses display:flex
+                col.style.display = 'flex'; 
+                col.classList.remove('d-none');
+            } else {
+                col.style.display = 'none';
+                col.classList.add('d-none');
+            }
+        }
+
+        // 1. Bind Click Events to Checkboxes
+        const toggles = document.querySelectorAll('.col-toggle-checkbox');
+        toggles.forEach(chk => {
+            // Initial check to sync JS with HTML state
+            // (Optional, but good if you have cached values)
+            
+            chk.addEventListener('change', () => {
+                toggleColumn(chk.value, chk.checked);
+            });
+        });
+
+        // 2. Patch Kanban Renderer 
+        // This ensures that if the board re-renders (e.g. after a search),
+        // we re-apply the visibility rules based on the checkboxes.
+        if (window.LeadUI && window.LeadUI.kanban) {
+            const originalEnsureColumns = window.LeadUI.kanban.ensureColumns;
+            
+            window.LeadUI.kanban.ensureColumns = function() {
+                originalEnsureColumns(); // Let the core create the columns
+                
+                // Immediately apply visibility based on current checkbox state
+                document.querySelectorAll('.col-toggle-checkbox').forEach(chk => {
+                    toggleColumn(chk.value, chk.checked);
+                });
+            };
+        }
+    });
 })();
 </script>
 
@@ -7554,95 +7474,354 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
 })();
 </script>
 
-<!-- Invest sort  -->
-
-<script>
-(function() {
+ <script>
+(() => {
   "use strict";
 
-  function parseNumberDE(str) {
-    if (!str) return 0;
-    str = String(str).trim();
-    str = str.replace(/[^0-9,.\-]/g, "");
-    str = str.replace(/\./g, "");
-    str = str.replace(/,/g, ".");
-    const n = parseFloat(str);
-    return isNaN(n) ? 0 : n;
-  }
+  /* --------------------------------------------------------------------------
+   * Team Hover Popover (fixed)
+   * - Reads assigned-by / assigned-at from:
+   *    1) avatar element itself (img/li/span with data-emp-id)
+   *    2) closest <li> wrapper (even if LI does NOT have data-emp-id)
+   *    3) closest parent element
+   * - Shows Stage (German) from nearest .card or tr.list-row-item dataset.stage
+   *   using window.LeadUI.APP.stageNames when available
+   * ------------------------------------------------------------------------ */
 
-  function getCellSortValue(cell, type) {
-    if (!cell) return "";
-    if (cell.dataset && cell.dataset.sortVal != null && cell.dataset.sortVal !== "") {
-      return type === "number"
-        ? parseNumberDE(cell.dataset.sortVal)
-        : String(cell.dataset.sortVal).toLowerCase();
+  const EMP_SRC = "/images/employee";
+  const employees = Array.isArray(window.ALL_EMPLOYEES) ? window.ALL_EMPLOYEES : [];
+
+  const byId = new Map(
+    employees
+      .map((e) => {
+        const id = Number(e?.id);
+        return Number.isFinite(id) ? [id, e] : null;
+      })
+      .filter(Boolean)
+  );
+
+  const fallbackStageNames = {
+    lead: "Lead",
+    offer: "Verkauf",
+    deal: "Auftrag",
+    project: "Montage",
+    completed: "Abschluss",
+    archive: "Archiv",
+    junk: "Junk",
+  };
+
+  const stageNames =
+    (window.LeadUI?.APP?.stageNames && typeof window.LeadUI.APP.stageNames === "object"
+      ? window.LeadUI.APP.stageNames
+      : fallbackStageNames);
+
+  let pop = null;
+  let anchor = null;
+  let hideTimer = null;
+
+  const esc = (s) =>
+    String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
+
+  const pad2 = (n) => String(n).padStart(2, "0");
+
+  const parseAnyDate = (raw) => {
+    const s = String(raw || "").trim();
+    if (!s) return null;
+
+    // ISO works directly
+    let d = new Date(s);
+    if (!Number.isNaN(d.getTime())) return d;
+
+    // "YYYY-MM-DD HH:mm:ss" -> "YYYY-MM-DDTHH:mm:ss"
+    if (/^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}/.test(s)) {
+      d = new Date(s.replace(" ", "T"));
+      if (!Number.isNaN(d.getTime())) return d;
     }
 
-    const txt = cell.innerText || cell.textContent || "";
-    if (type === "number") {
-      return parseNumberDE(txt);
+    return null;
+  };
+
+  const fmtDE = (raw) => {
+    const d = parseAnyDate(raw);
+    if (!d) return "–";
+    try {
+      return d.toLocaleString("de-DE");
+    } catch {
+      return `${pad2(d.getDate())}.${pad2(d.getMonth() + 1)}.${d.getFullYear()} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
     }
-    return String(txt).trim().toLowerCase();
+  };
+
+  function ensurePop() {
+    if (pop) return pop;
+
+    pop = document.createElement("div");
+    pop.className = "team-popover";
+    pop.setAttribute("role", "dialog");
+    pop.setAttribute("aria-label", "Team");
+
+    pop.innerHTML = `
+      <div class="team-popover__title">
+        <div class="t1">Team</div>
+        <div class="t2" data-subline></div>
+      </div>
+      <div class="team-popover__list" data-list></div>
+    `;
+
+    document.body.appendChild(pop);
+
+    pop.addEventListener("mouseenter", () => hideTimer && clearTimeout(hideTimer));
+    pop.addEventListener("mouseleave", () => scheduleHide());
+
+    return pop;
   }
 
-  function initInvestmentSorting() {
-    const table = document.querySelector("#investmentTable[data-investment-table]");
-    if (!table) return;
-
-    const thead = table.tHead;
-    const tbody = table.tBodies[0];
-    if (!thead || !tbody) return;
-
-    const headers = thead.querySelectorAll("th[data-sort]");
-    let current = { index: null, dir: 1 };
-
-    headers.forEach(function(th, index) {
-      th.addEventListener("click", function() {
-        const type = th.getAttribute("data-sort") || "text";
-
-        if (current.index === index) {
-          current.dir = -current.dir;
-        } else {
-          current.index = index;
-          current.dir = 1;
-        }
-
-        headers.forEach(function(h) {
-          h.classList.remove("sorted-asc", "sorted-desc");
-        });
-        th.classList.add(current.dir === 1 ? "sorted-asc" : "sorted-desc");
-
-        const rows = Array.from(tbody.querySelectorAll("tr"));
-        rows.sort(function(a, b) {
-          const aVal = getCellSortValue(a.children[index], type);
-          const bVal = getCellSortValue(b.children[index], type);
-
-          if (type === "number") {
-            return (aVal - bVal) * current.dir;
-          }
-
-          if (aVal < bVal) return -1 * current.dir;
-          if (aVal > bVal) return 1 * current.dir;
-          return 0;
-        });
-
-        rows.forEach(function(row) {
-          tbody.appendChild(row);
-        });
-      });
-    });
+  function readAttrChain(node, keyKebab, keyDataset) {
+    if (!node) return "";
+    const direct = node.getAttribute?.(keyKebab) || node.dataset?.[keyDataset] || "";
+    return String(direct || "").trim();
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initInvestmentSorting);
-  } else {
-    initInvestmentSorting();
+  function getContextStage(ul) {
+    const ctx = ul.closest?.(".card, tr.list-row-item") || null;
+    const raw = String(ctx?.dataset?.stage || "").trim().toLowerCase();
+    if (!raw) return "";
+    return stageNames[raw] || raw;
   }
+
+  function collectAvatars(ul) {
+    // Keep DOM order: select anything with data-emp-id (img or li etc.)
+    const nodes = Array.from(ul.querySelectorAll("[data-emp-id]"));
+
+    const out = [];
+    for (const n of nodes) {
+      const id = Number(n.getAttribute("data-emp-id"));
+      if (!Number.isFinite(id) || id <= 0) continue;
+
+      // IMPORTANT FIX:
+      // Your markup usually has data-emp-id on IMG but assigned-by/date on LI.
+      // So we read from: n, closest LI, and parent.
+      const li = n.closest("li");
+      const parent = n.parentElement;
+
+      const assignedBy =
+        readAttrChain(n, "data-assigned-by", "assignedBy") ||
+        readAttrChain(li, "data-assigned-by", "assignedBy") ||
+        readAttrChain(parent, "data-assigned-by", "assignedBy");
+
+      const assignedAt =
+        readAttrChain(n, "data-assigned-at", "assignedAt") ||
+        readAttrChain(li, "data-assigned-at", "assignedAt") ||
+        readAttrChain(parent, "data-assigned-at", "assignedAt");
+
+      const position =
+        readAttrChain(n, "data-position", "position") ||
+        readAttrChain(li, "data-position", "position") ||
+        readAttrChain(parent, "data-position", "position");
+
+      out.push({ id, assignedBy, assignedAt, position });
+    }
+    return out;
+  }
+
+  function uniqueById(list) {
+    const seen = new Set();
+    const out = [];
+    for (const it of list) {
+      if (seen.has(it.id)) continue;
+      seen.add(it.id);
+      out.push(it);
+    }
+    return out;
+  }
+
+   // 1) Your buildRow is OK now (it WILL show phase) ✅
+    // The missing part is: you must PASS stage / stageLabel into buildRow
+    // from the DOM (data-* attrs) OR from the API payload (team_assignments).
+
+    function buildRow({ id, assignedBy, assignedAt, position, stage, stageLabel }) {
+      const emp = byId.get(Number(id)) || null;
+
+      const name = emp ? `${emp.lastname || ""} ${emp.name || ""}`.trim() : `#${id}`;
+      const img = emp?.image ? `${EMP_SRC}/${emp.image}` : `${EMP_SRC}/noimage.png`;
+
+      const role =
+        (position && String(position).trim()) ||
+        (emp?.position ? String(emp.position) : "") ||
+        (emp?.role ? String(emp.role) : "") ||
+        "Mitarbeiter";
+
+      const by = (assignedBy && String(assignedBy).trim()) || "–";
+      const when = fmtDE(assignedAt);
+
+      const stageText =
+        (stageLabel && String(stageLabel).trim()) ||
+        (stage && String(stage).trim()) ||
+        "–";
+
+      return `
+        <div class="team-popover__item">
+          <img class="team-popover__avatar" src="${esc(img)}" alt="${esc(name)}">
+          <div style="min-width:0;">
+            <div class="team-popover__name">${esc(name)}</div>
+            <div class="team-popover__meta">${esc(role)}</div>
+
+            <div class="team-popover__meta">
+              <strong>Phase:</strong> ${esc(stageText)}
+            </div>
+
+            <div class="team-popover__meta">
+              <strong>Zugewiesen von:</strong> ${esc(by)}
+              <span style="padding:0 6px;">•</span>
+              <strong><i class="feather icon-calendar"></i></strong> ${esc(when)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 2) Build popover rows from EACH avatar <li> dataset (this is what makes Phase show)
+    function rowsFromTeamEl(teamEl) {
+      const lis = Array.from(teamEl.querySelectorAll('li[data-emp-id]'));
+      return lis.map((li) => ({
+        id: li.dataset.empId,
+        assignedBy: li.dataset.assignedBy,     // must exist on li
+        assignedAt: li.dataset.assignedAt,     // must exist on li
+        position: li.dataset.position,
+        stage: li.dataset.stage,              // must exist on li
+        stageLabel: li.dataset.stageLabel,    // must exist on li (German label)
+      }));
+    }
+
+    // Example usage inside your hover/open logic:
+    function renderTeamPopover(teamEl, popoverEl) {
+      const rows = rowsFromTeamEl(teamEl);
+      popoverEl.innerHTML = rows.map(buildRow).join("") || `<div class="team-popover__empty">–</div>`;
+      if (window.feather?.replace) requestAnimationFrame(() => feather.replace());
+    }
+
+
+
+  function renderFor(ul) {
+    const p = ensurePop();
+    const listEl = p.querySelector("[data-list]");
+    const subEl = p.querySelector("[data-subline]");
+
+    const stageLabel = getContextStage(ul);
+    const avatars = uniqueById(collectAvatars(ul));
+
+    const countText = `${avatars.length} Mitglied${avatars.length === 1 ? "" : "er"}`;
+    subEl.textContent = stageLabel ? `${countText} • Phase: ${stageLabel}` : countText;
+
+    if (!avatars.length) {
+      listEl.innerHTML = `
+        <div class="team-popover__item">
+          <div style="min-width:0;">
+            <div class="team-popover__name">Kein Team</div>
+            <div class="team-popover__meta">—</div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    listEl.innerHTML = avatars.map(buildRow).join("");
+  }
+
+  function placeNear(el) {
+    const p = ensurePop();
+    const r = el.getBoundingClientRect();
+
+    const pw = p.offsetWidth || 320;
+    const ph = p.offsetHeight || 220;
+
+    const pad = 12;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    let left = r.left + r.width / 2 - pw / 2;
+    let top = r.top - ph - 10;
+
+    left = Math.max(pad, Math.min(left, vw - pw - pad));
+    if (top < pad) top = r.bottom + 10;
+    if (top + ph > vh - pad) top = Math.max(pad, vh - ph - pad);
+
+    p.style.left = `${Math.round(left)}px`;
+    p.style.top = `${Math.round(top)}px`;
+  }
+
+  function openFor(ul) {
+    if (!ul) return;
+    hideTimer && clearTimeout(hideTimer);
+    anchor = ul;
+
+    renderFor(ul);
+    placeNear(ul);
+
+    ensurePop().classList.add("is-open");
+  }
+
+  function closeNow() {
+    if (!pop) return;
+    pop.classList.remove("is-open");
+    anchor = null;
+  }
+
+  function scheduleHide() {
+    hideTimer && clearTimeout(hideTimer);
+    hideTimer = setTimeout(closeNow, 120);
+  }
+
+  function getTeamTarget(node) {
+    return node?.closest ? node.closest("ul[data-team-hover]") : null;
+  }
+
+  document.addEventListener(
+    "mouseover",
+    (e) => {
+      const ul = getTeamTarget(e.target);
+      if (!ul) return;
+
+      const from = e.relatedTarget;
+      if (from && ul.contains(from)) return;
+
+      if (anchor === ul && pop?.classList.contains("is-open")) return;
+      openFor(ul);
+    },
+    true
+  );
+
+  document.addEventListener(
+    "mouseout",
+    (e) => {
+      if (!anchor) return;
+
+      const to = e.relatedTarget;
+      if (to && (anchor.contains(to) || (pop && pop.contains(to)))) return;
+
+      scheduleHide();
+    },
+    true
+  );
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (anchor && pop?.classList.contains("is-open")) placeNear(anchor);
+    },
+    true
+  );
+
+  window.addEventListener("resize", () => {
+    if (anchor && pop?.classList.contains("is-open")) placeNear(anchor);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeNow();
+  });
 })();
 </script>
 
-
- 
+  
 <!-- Aufgabe Script  -->
 
 <script>
@@ -8373,6 +8552,125 @@ th.sortable.desc .sort-icon{ transform:rotate(180deg); }
     });
   });
 
+})();
+</script>
+ <script>
+(function () {
+  "use strict";
+
+  const BRANCH_COLOR_MAP = @json(
+    collect($branches ?? [])->mapWithKeys(function ($b) {
+      $name  = mb_strtolower(trim((string)($b->branch ?? '')));
+      $color = (string)($b->color ?? '#93c21c');
+      return [$name => $color];
+    })->all()
+  );
+
+  const DEFAULT_COLOR = "#93c21c";
+  const norm = (v) => (v ?? "").toString().trim().toLowerCase();
+
+  function setImportant(el, prop, value) {
+    if (!el) return;
+    el.style.setProperty(prop, value, "important");
+  }
+
+  function pickBranchName(branchEl) {
+    if (!branchEl) return "";
+    const t = norm(branchEl.getAttribute("title"));
+    if (t) return t;
+
+    const nameEl = branchEl.querySelector(".kb-branch-name");
+    const txt = norm(nameEl ? nameEl.textContent : branchEl.textContent);
+    return txt;
+  }
+
+  function resolveColor(branchName) {
+    const key = norm(branchName);
+    return BRANCH_COLOR_MAP[key] || DEFAULT_COLOR;
+  }
+
+  function findCard(el) {
+    // Your circle lives inside `.card`, so include that.
+    return (
+      el.closest(".kb-card") ||
+      el.closest(".kanban-card") ||
+      el.closest(".kb-item") ||
+      el.closest(".card") ||
+      el.closest("[data-lead-id]") ||
+      el.closest("[data-id]") ||
+      el.parentElement
+    );
+  }
+
+  function paintCardCircle(card, color) {
+    if (!card) return;
+
+    // IMPORTANT: target product_circle specifically
+    const circle =
+      card.querySelector(".circle.product_circle") ||
+      card.querySelector(".product_circle") ||
+      card.querySelector(".circle");
+
+    if (!circle) return;
+
+    circle.style.setProperty("--branch-color", color);
+    setImportant(circle, "background-color", color);
+    setImportant(circle, "color", "#fff");
+  }
+
+  function paintBranch(branchEl) {
+    const card = findCard(branchEl);
+    const branchName = pickBranchName(branchEl);
+    const color = resolveColor(branchName);
+
+    // color branch label + svg
+    branchEl.style.setProperty("--branch-color", color);
+    setImportant(branchEl, "color", color);
+
+    // color product circle in the same card
+    paintCardCircle(card, color);
+  }
+
+  function paintCircle(circleEl) {
+    // only force product circle (avoid random circles elsewhere)
+    if (!circleEl.classList.contains("product_circle")) return;
+
+    const card = findCard(circleEl);
+    if (!card) return;
+
+    const branchEl = card.querySelector(".kb-meta-item.kb-branch");
+    const branchName = pickBranchName(branchEl);
+    if (!branchName) return;
+
+    const color = resolveColor(branchName);
+    paintCardCircle(card, color);
+  }
+
+  function paintAll(root = document) {
+    root.querySelectorAll(".kb-meta-item.kb-branch").forEach(paintBranch);
+    root.querySelectorAll(".circle.product_circle, .product_circle").forEach(paintCircle);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => paintAll());
+
+  const container =
+    document.querySelector("#kanban") ||
+    document.querySelector(".kanban-board") ||
+    document.body;
+
+  const obs = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      if (!m.addedNodes) continue;
+      m.addedNodes.forEach((node) => {
+        if (node && node.nodeType === 1) paintAll(node);
+      });
+    }
+  });
+
+  obs.observe(container, { childList: true, subtree: true });
+
+  // optional manual trigger after your own render
+  window.paintBranchColors = paintAll;
 })();
 </script>
 

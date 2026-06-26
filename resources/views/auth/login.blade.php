@@ -19,7 +19,8 @@
               night: "#050816"
             },
             boxShadow: {
-              glow: "0 0 40px rgba(147,194,28,0.35)"
+              glow: "0 4px 20px rgba(147,194,28,0.25)",
+              card: "0 10px 40px -10px rgba(0,0,0,0.08)"
             }
           }
         },
@@ -29,138 +30,70 @@
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Three.js -->
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-
   <style>
     html, body { height: 100%; }
 
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
-      background:
-        radial-gradient(900px 900px at 0% 0%, rgba(116,178,212,0.25), transparent 60%),
-        radial-gradient(900px 900px at 100% 100%, rgba(147,194,28,0.28), transparent 60%),
-        linear-gradient(135deg, #050816, #0b1020 50%, #050816);
+      background-color: #e3effb; /* Requested background color */
       overflow: hidden;
-      color: #e5e7eb;
+      color: #334155; /* Slate 700 for better readability on light theme */
     }
 
-    /* Subtle grid overlay */
+    /* Subtle grid overlay tailored for light theme */
     .grid-overlay {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.12;
+      opacity: 0.4;
       background-image:
-        linear-gradient(to right, rgba(148,163,184,0.35) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148,163,184,0.35) 1px, transparent 1px);
+        linear-gradient(to right, rgba(148,163,184,0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148,163,184,0.15) 1px, transparent 1px);
       background-size: 46px 46px;
-      mask-image: radial-gradient(circle at center, black, transparent 85%);
+      mask-image: radial-gradient(circle at center, black, transparent 90%);
+      -webkit-mask-image: radial-gradient(circle at center, black, transparent 90%);
+      z-index: 1;
     }
 
-    /* Card */
+    /* Light Theme Glass Card */
     .glass {
       position: relative;
-      border-radius: 26px;
-      background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.12), rgba(15,23,42,0.97));
-      box-shadow:
-        0 22px 55px rgba(15,23,42,0.9),
-        0 0 60px rgba(0,0,0,0.7);
-      border: 1px solid rgba(148,163,184,0.6);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-      overflow: hidden;
-    }
-
-    /* Animated gradient border ring */
-    .glass::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      border-radius: inherit;
-      padding: 1px;
-      background: conic-gradient(
-        from 160deg,
-        rgba(147,194,28,0.0),
-        rgba(147,194,28,0.65),
-        rgba(116,178,212,0.7),
-        rgba(147,194,28,0.0)
-      );
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-              mask-composite: exclude;
-      opacity: 0.85;
-      pointer-events: none;
-      animation: border-spin 16s linear infinite;
-    }
-
-    @keyframes border-spin {
-      0%   { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Inner shell to avoid gradient overlaying content */
-    .glass-inner {
-      position: relative;
       border-radius: 24px;
-      background:
-        radial-gradient(circle at 20% -20%, rgba(148,163,184,0.28), transparent 55%),
-        radial-gradient(circle at 110% 120%, rgba(147,194,28,0.32), transparent 60%),
-        linear-gradient(135deg, rgba(15,23,42,0.96), rgba(15,23,42,0.99));
-      box-shadow: inset 0 0 0 1px rgba(15,23,42,0.9);
+      background: rgba(255, 255, 255, 0.65);
+      box-shadow: 
+        0 10px 40px -10px rgba(0,0,0,0.08),
+        inset 0 0 0 1px rgba(255, 255, 255, 1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      z-index: 10;
+      transition: transform 0.1s ease-out;
     }
 
-    /* Background canvases */
-    #matrixCanvas, #cursorGlow {
-      position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none;
-    }
-
+    /* Cursor glow adapted for light mode */
     #cursorGlow {
-      mix-blend-mode: screen;
-      background: radial-gradient(220px 220px at var(--mx,50%) var(--my,50%), rgba(147,194,28,0.22), transparent 60%);
-      transition: background-position 0.06s linear;
+      position: fixed; 
+      inset: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      pointer-events: none;
+      z-index: 0;
+      /* Soft white center with a subtle green outer glow */
+      background: 
+        radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.8), transparent 40%),
+        radial-gradient(800px circle at var(--mx, 50%) var(--my, 50%), rgba(147, 194, 28, 0.12), transparent 50%);
     }
 
-    /* 3D avatar container */
-    .model-wrap {
-      position: relative;
-      border-radius: 999px;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 20% 0%, rgba(116,178,212,0.55), transparent 65%),
-        radial-gradient(circle at 80% 100%, rgba(147,194,28,0.55), transparent 60%);
-      box-shadow:
-        0 0 0 1px rgba(15,23,42,1),
-        0 0 0 1px rgba(148,163,184,0.5),
-        0 16px 35px rgba(15,23,42,0.9);
+    /* Icon Container Animation */
+    .icon-ring {
+      animation: pulse-ring 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
-
-    .model-wrap::after {
-      content: "";
-      position: absolute;
-      inset: 12%;
-      border-radius: inherit;
-      border: 1px solid rgba(255,255,255,0.28);
-      opacity: 0.8;
-    }
-
-    .model-wrap canvas {
-      position: absolute;
-      inset: 0;
-      width: 100% !important;
-      height: 100% !important;
-      display: block;
-    }
-
-    /* Tiny label pill */
-    .pill {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.4);
-      background: radial-gradient(circle at top left, rgba(148,163,184,0.25), rgba(15,23,42,0.96));
+    
+    @keyframes pulse-ring {
+      0% { transform: scale(0.9); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.1; }
+      100% { transform: scale(0.9); opacity: 0.5; }
     }
 
     @media (max-width: 640px) {
@@ -171,51 +104,60 @@
   </style>
 </head>
 
-<body class="relative text-slate-100">
+<body class="relative text-slate-800">
   <!-- Background effects -->
-  <canvas id="matrixCanvas"></canvas>
   <div id="cursorGlow"></div>
   <div class="grid-overlay"></div>
 
   <!-- Content -->
   <main class="relative z-10 min-h-screen flex items-center justify-center p-4">
     <section id="card" class="glass w-full max-w-md">
-      <div class="glass-inner p-6 sm:p-8">
+      <div class="p-8 sm:p-10">
         <!-- Brand / top row -->
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center justify-between mb-8">
           <div class="flex items-center gap-3">
-            <div class="h-9 w-9 rounded-2xl bg-slate-900/80 flex items-center justify-center shadow-glow border border-slate-500/70">
+            <div class="h-10 w-10 rounded-xl bg-white flex items-center justify-center shadow-sm border border-slate-200">
               <!-- Minimal “SA” logo -->
-              <span class="text-[11px] tracking-[0.18em] font-semibold uppercase text-accentSoft">SA</span>
+              <span class="text-[12px] tracking-[0.18em] font-bold uppercase text-accent">SA</span>
             </div>
             <div class="flex flex-col leading-tight">
-              <span class="text-[11px] tracking-[0.18em] uppercase text-slate-400">Solar Aspekt</span>
-              <span class="text-sm text-slate-200/90">Access Portal</span>
+              <span class="text-[11px] tracking-[0.18em] uppercase text-slate-500 font-semibold">Solar Aspekt</span>
+              <span class="text-sm text-slate-700 font-medium">Access Portal</span>
             </div>
           </div>
-          <div class="hidden sm:flex pill px-2.5 py-1 text-[10px] items-center gap-1.5 text-slate-200/90">
-            <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Online</span>
+          <div class="hidden sm:flex bg-white/60 border border-slate-200 shadow-sm px-3 py-1.5 rounded-full text-[10px] items-center gap-2 text-slate-600 font-medium">
+            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>System Online</span>
           </div>
         </div>
 
-        <!-- Profile + Title -->
-        <div class="flex flex-col items-center text-center gap-4">
-          <div class="model-wrap relative aspect-square w-24 sm:w-28 md:w-32"></div>
+        <!-- Profile + Title (Replaced 3D with Professional Icon) -->
+        <div class="flex flex-col items-center text-center gap-5">
+          <div class="relative flex items-center justify-center h-20 w-20">
+            <!-- Pulsing background ring -->
+            <div class="absolute inset-0 rounded-full bg-accent icon-ring"></div>
+            <!-- Clean white icon container -->
+            <div class="relative h-16 w-16 bg-white rounded-full shadow-md border border-slate-100 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+          </div>
 
-          <div class="space-y-1">
-            <h1 class="text-xl sm:text-2xl font-semibold tracking-tight">
-              Willkommen
+          <div class="space-y-1.5">
+            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-800">
+              Willkommen zurück
             </h1>
-            <p class="text-slate-300/80 text-xs sm:text-sm tracking-wide uppercase">
-              Solar Aspekt • Secure Login
+            <p class="text-slate-500 text-xs sm:text-sm tracking-wider uppercase font-medium">
+              Sicherer Login
             </p>
           </div>
         </div>
 
+        <!-- Laravel Error Handling -->
         @if ($errors->any())
-          <div class="mt-5 text-sm text-red-300 bg-red-900/35 border border-red-500/40 rounded-xl p-3.5">
-            <ul class="list-disc pl-5 space-y-0.5">
+          <div class="mt-6 text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
+            <ul class="list-disc pl-5 space-y-1">
               @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
               @endforeach
@@ -224,11 +166,11 @@
         @endif
 
         <!-- Login Form (Laravel) -->
-        <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-4">
+        <form method="POST" action="{{ route('login') }}" class="mt-8 space-y-5">
           @csrf
           <div>
-            <label class="block text-xs font-medium tracking-wide mb-1.5 text-slate-300" for="email">
-              E-Mail
+            <label class="block text-xs font-semibold tracking-wide mb-2 text-slate-600" for="email">
+              E-Mail Adresse
             </label>
             <input
               id="email"
@@ -236,18 +178,18 @@
               type="email"
               autocomplete="username"
               required
-              class="w-full rounded-xl bg-slate-950/70 border border-slate-700/70 px-4 py-3 text-sm outline-none
-                     focus:ring-2 focus:ring-accent/80 focus:border-accent/70 placeholder-slate-500"
-              placeholder="you@example.com"
+              class="w-full rounded-xl bg-white border border-slate-300 px-4 py-3.5 text-sm text-slate-900 shadow-sm outline-none
+                     focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all placeholder-slate-400"
+              placeholder="name@unternehmen.de"
               value="{{ old('email') }}"
             />
             @error('email')
-              <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
+              <p class="mt-1.5 text-xs text-red-600 font-medium">{{ $message }}</p>
             @enderror
           </div>
 
           <div>
-            <label class="block text-xs font-medium tracking-wide mb-1.5 text-slate-300" for="password">
+            <label class="block text-xs font-semibold tracking-wide mb-2 text-slate-600" for="password">
               Passwort
             </label>
             <div class="relative">
@@ -257,14 +199,14 @@
                 type="password"
                 autocomplete="current-password"
                 required
-                class="w-full rounded-xl bg-slate-950/70 border border-slate-700/70 px-4 py-3 pr-12 text-sm outline-none
-                       focus:ring-2 focus:ring-accent/80 focus:border-accent/70 placeholder-slate-500"
+                class="w-full rounded-xl bg-white border border-slate-300 px-4 py-3.5 pr-12 text-sm text-slate-900 shadow-sm outline-none
+                       focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all placeholder-slate-400"
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 id="togglePassword"
-                class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400/85 hover:text-slate-100 focus:outline-none"
+                class="absolute inset-y-0 right-0 px-4 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
                 aria-label="Passwort anzeigen/ausblenden"
                 aria-pressed="false"
               >
@@ -284,22 +226,27 @@
               </button>
             </div>
             @error('password')
-              <p class="mt-1 text-xs text-red-300">{{ $message }}</p>
+              <p class="mt-1.5 text-xs text-red-600 font-medium">{{ $message }}</p>
             @enderror
           </div>
 
-          <div class="flex items-center justify-between text-xs">
-            <label class="inline-flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="remember"
-                class="h-4 w-4 rounded border-slate-600/90 bg-slate-950/80 text-accent focus:ring-accent"
-              />
-              <span class="text-slate-300">Angemeldet bleiben</span>
+          <div class="flex items-center justify-between text-sm">
+            <label class="inline-flex items-center gap-2 cursor-pointer group">
+              <div class="relative flex items-center">
+                <input
+                  type="checkbox"
+                  name="remember"
+                  class="peer h-4 w-4 cursor-pointer appearance-none rounded border border-slate-300 bg-white checked:border-accent checked:bg-accent focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all"
+                />
+                <svg class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-3 w-3 pointer-events-none opacity-0 peer-checked:opacity-100 text-white stroke-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <span class="text-slate-600 group-hover:text-slate-800 transition-colors">Angemeldet bleiben</span>
             </label>
             <a
               href="{{ route('password.request') }}"
-              class="text-sky1 hover:text-sky1/90 hover:underline"
+              class="text-sky1 font-medium hover:text-sky1/80 hover:underline transition-colors"
             >
               Passwort vergessen?
             </a>
@@ -307,179 +254,77 @@
 
           <button
             type="submit"
-            class="w-full mt-1 rounded-xl bg-gradient-to-r from-accent via-accentSoft to-sky1
-                   text-slate-950 font-semibold text-sm py-3
-                   shadow-glow hover:brightness-105 transition
-                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-accent/80"
+            class="w-full mt-2 rounded-xl bg-gradient-to-r from-accent to-accentSoft
+                   text-slate-900 font-bold text-sm py-3.5
+                   shadow-glow hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200
+                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-accent"
           >
             Anmelden
           </button>
         </form>
 
         <!-- Footer -->
-        <div class="mt-6 flex items-center justify-between text-[10px] sm:text-xs text-slate-400/90">
+        <div class="mt-8 pt-6 border-t border-slate-200/60 flex items-center justify-between text-[11px] sm:text-xs text-slate-500 font-medium">
           <div class="flex items-center gap-1.5">
             <span>© {{ date('Y') }}</span>
-            <span>Solar Aspekt</span>
+            <span class="text-slate-700">Solar Aspekt</span>
           </div>
           <div class="flex items-center gap-1.5">
-            <span class="h-1.5 w-1.5 rounded-full bg-accentSoft"></span>
-            <span>v1 • Internal Use</span>
+            <span class="h-1.5 w-1.5 rounded-full bg-slate-300"></span>
+            <span>Interne Nutzung</span>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Interactions, Matrix, Three.js model, and password toggle -->
+  <!-- Interactions -->
   <script>
-    // Mouse glow + parallax tilt
+    // Mouse glow + subtle parallax tilt for a professional feel
     (function(){
       const card = document.getElementById('card');
       const glow = document.getElementById('cursorGlow');
       let w = window.innerWidth, h = window.innerHeight;
-      const clamp = (n,min,max)=> Math.max(min, Math.min(max, n));
+      
+      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+      
       function onMove(e){
         const x = e.clientX, y = e.clientY;
-        glow.style.setProperty('--mx', (x / w * 100) + '%');
-        glow.style.setProperty('--my', (y / h * 100) + '%');
-        const rx = clamp(((h/2 - y) / h) * 10, -10, 10);
-        const ry = clamp(((x - w/2) / w) * 10, -10, 10);
-        card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
+        
+        // Update glow position (using direct pixels for smoothness)
+        glow.style.setProperty('--mx', x + 'px');
+        glow.style.setProperty('--my', y + 'px');
+        
+        // Very subtle parallax effect suitable for business logic
+        const rx = clamp(((h/2 - y) / h) * 4, -4, 4);
+        const ry = clamp(((x - w/2) / w) * 4, -4, 4);
+        
+        // Only apply 3D tilt on larger screens
+        if(w > 640) {
+          card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
+        } else {
+          card.style.transform = 'none';
+        }
       }
+      
       window.addEventListener('mousemove', onMove);
-      window.addEventListener('resize', ()=>{ w = innerWidth; h = innerHeight; });
-    })();
-
-    // Matrix Rain (custom words)
-    (function(){
-      const canvas = document.getElementById('matrixCanvas');
-      const ctx = canvas.getContext('2d');
-      const WORDS = ["Ramin", "Sadid", "Solar", "Aspekt", "SA-CRM"]; 
-      let w, h, cols, fontSize, drops, mouse = {x:-9999,y:-9999};
-      function resize(){
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
-        fontSize = Math.max(14, Math.floor(w < 640 ? 12 : 16));
-        ctx.font = `${fontSize}px monospace`;
-        cols = Math.floor(w / fontSize);
-        drops = Array(cols).fill(0).map(()=> Math.floor(Math.random()*h));
-      }
-      function draw(){
-        ctx.fillStyle = "rgba(0, 0, 0, 0.10)";
-        ctx.fillRect(0,0,w,h);
-        for(let i=0; i<cols; i++){
-          const word = WORDS[Math.floor(Math.random()*WORDS.length)];
-          const ch = word[Math.floor(Math.random()*word.length)];
-          const x = i * fontSize;
-          const y = drops[i] * fontSize;
-          const dx = (x - mouse.x), dy = (y - mouse.y);
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          const near = dist < 140 ? 1 : 0;
-          ctx.fillStyle = near ? "rgba(255,255,255,0.95)" : "rgba(147,194,28,0.9)";
-          ctx.fillText(ch, x, y);
-          if(y > h || Math.random() > 0.975) drops[i] = 0;
-          const slow = near ? 0.45 : 1;
-          drops[i] += slow;
-        }
-        requestAnimationFrame(draw);
-      }
-      window.addEventListener('resize', resize);
-      window.addEventListener('mousemove', (e)=>{ mouse.x = e.clientX; mouse.y = e.clientY; });
-      resize(); draw();
-    })();
-
-    // Three.js rotating model (same logic, just styled holder)
-    (function () {
-      const wrap = document.querySelector('.model-wrap');
-      if (!wrap || typeof THREE === 'undefined') return;
-
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      renderer.setSize(16, 16, false);
-      wrap.appendChild(renderer.domElement);
-
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 100);
-      camera.position.set(0, 0.2, 3);
-
-      const hemi = new THREE.HemisphereLight(0xffffff, 0x223344, 0.8);
-      scene.add(hemi);
-      const key = new THREE.PointLight(0xffffff, 1.2, 0, 2);
-      key.position.set(2.5, 3, 4);
-      scene.add(key);
-      const rim = new THREE.PointLight(0x93c21c, 0.8, 0, 2);
-      rim.position.set(-3, -1, -2);
-      scene.add(rim);
-
-      const geo = new THREE.TorusKnotGeometry(0.7, 0.24, 180, 32, 2, 3);
-      const mat = new THREE.MeshPhysicalMaterial({
-        color: 0xffffff,
-        metalness: 0.65,
-        roughness: 0.18,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.08,
-        sheen: 0.5,
-        emissive: 0x1a2a0d,
-        emissiveIntensity: 0.28
+      window.addEventListener('resize', () => { w = innerWidth; h = innerHeight; });
+      
+      // Reset card tilt when mouse leaves window
+      document.addEventListener('mouseleave', () => {
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)`;
       });
-      const knot = new THREE.Mesh(geo, mat);
-      scene.add(knot);
-
-      function resizeRendererToDisplaySize() {
-        const rect = wrap.getBoundingClientRect();
-        let w = Math.max(1, Math.floor(rect.width));
-        let h = Math.max(1, Math.floor(rect.height));
-
-        const needResize = renderer.domElement.width !== Math.floor(w * renderer.getPixelRatio())
-          || renderer.domElement.height !== Math.floor(h * renderer.getPixelRatio());
-
-        if (needResize) {
-          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-          renderer.setSize(w, h, false);
-          camera.aspect = Math.max(1e-6, w / h);
-          camera.updateProjectionMatrix();
-        }
-      }
-
-      if ('ResizeObserver' in window) {
-        const ro = new ResizeObserver(() => resizeRendererToDisplaySize());
-        ro.observe(wrap);
-      } else {
-        window.addEventListener('resize', resizeRendererToDisplaySize, { passive: true });
-        window.addEventListener('orientationchange', () => setTimeout(resizeRendererToDisplaySize, 60), { passive: true });
-      }
-
-      let t = 0;
-      function animate() {
-        t += 0.01;
-        knot.rotation.x += 0.008;
-        knot.rotation.y += 0.011;
-
-        key.position.x = Math.cos(t * 0.8) * 3.0;
-        key.position.y = 2.2 + Math.sin(t * 0.6) * 1.2;
-        rim.position.z = -2 + Math.sin(t * 0.7);
-
-        resizeRendererToDisplaySize();
-        renderer.render(scene, camera);
-        requestAnimationFrame(animate);
-      }
-
-      const kick = () => { resizeRendererToDisplaySize(); };
-      kick(); setTimeout(kick, 0); setTimeout(kick, 120);
-
-      animate();
     })();
 
-    // Password show/hide
+    // Password show/hide toggle logic
     (function(){
       const btn = document.getElementById('togglePassword');
       const input = document.getElementById('password');
       const eyeOpen = document.getElementById('eyeOpen');
       const eyeClosed = document.getElementById('eyeClosed');
+      
       if (btn && input && eyeOpen && eyeClosed) {
-        btn.addEventListener('click', ()=>{
+        btn.addEventListener('click', () => {
           const show = input.type === 'password';
           input.type = show ? 'text' : 'password';
           btn.setAttribute('aria-pressed', String(show));

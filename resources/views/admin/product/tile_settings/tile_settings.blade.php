@@ -23,7 +23,7 @@
                                 
                         
                                 <div class="col-9">
-                                        <form action="{{action('App\Http\Controllers\TilesController@index')}}">
+                                        <form action="{{route('tiles.view')}}">
                                             <fieldset>
                                                 <div class="input-group">
                                                     <input type="text" name="search" class="form-control" placeholder="Search Form" aria-describedby="button-addon2">
@@ -51,7 +51,7 @@
                                                                 </button>
                                                             </div>
                                                                 <div class="modal-body">
-                                                                    <form class="form-horizontal" novalidate method="post" action="{{action('App\Http\Controllers\TilesController@store')}}" class="custom-file-upload" enctype="multipart/form-data">
+                                                                    <form class="form-horizontal" novalidate method="post" action="{{route('tiles.save')}}" class="custom-file-upload" enctype="multipart/form-data">
                                                                         @csrf
                                                                         <fieldset> 
                                                                             <div class="row">
@@ -168,7 +168,7 @@
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                            <form class="form-horizontal" novalidate method="post" action="{{action('App\Http\Controllers\TilesController@update')}}">
+                                                            <form class="form-horizontal" novalidate method="post" action="{{route('tiles.update')}}">
                                                                 @csrf
 
                                                                 <fieldset> 

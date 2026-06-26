@@ -6,39 +6,37 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('daily_report_time_customers', function (Blueprint $t) {
-            $t->id();
-            $t->unsignedBigInteger('report_time_id');
-            $t->unsignedBigInteger('customer_id');
-            // Either use share_hours OR share_percent. Prefer share_hours.
-            $t->decimal('share_hours', 5, 2)->nullable();    // e.g. 0.20
-            $t->decimal('share_percent', 5, 2)->nullable();  // e.g. 20.00
-            $t->text('note')->nullable();
-            $t->timestamps();
+        Schema::table('products', function (Blueprint $table) {
+            if (!Schema::hasColumn('products', 'retail_price')) {
+                $table->decimal('retail_price', 12, 2)->nullable()->after('noise_level_db');
+            }
 
-            $t->unique(['report_time_id','customer_id']); // one customer only once per block
-            $t->foreign('report_time_id')->references('id')->on('daily_report_times')->onDelete('cascade');
-            $t->foreign('customer_id')->references('id')->on('new_leads')->onDelete('cascade');
+            if (!Schema::hasColumn('products', 'purchase_price')) {
+                $table->decimal('purchase_price', 12, 2)->nullable()->after('retail_price');
+            }
+
+            if (!Schema::hasColumn('products', 'vat_percent')) {
+                $table->decimal('vat_percent', 5, 2)->default(19)->after('purchase_price');
+            }
         });
-
-          DB::statement("
-            INSERT INTO daily_report_time_customers (report_time_id, customer_id, share_hours, share_percent, created_at, updated_at)
-            SELECT id, customer_id, hours_spent, CASE WHEN hours_spent>0 THEN 100.0 ELSE NULL END, NOW(), NOW()
-            FROM daily_report_times
-            WHERE customer_id IS NOT NULL
-        ");
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('daily_report_time_customers');
+        Schema::table('products', function (Blueprint $table) {
+            if (Schema::hasColumn('products', 'vat_percent')) {
+                $table->dropColumn('vat_percent');
+            }
+
+            if (Schema::hasColumn('products', 'purchase_price')) {
+                $table->dropColumn('purchase_price');
+            }
+
+            if (Schema::hasColumn('products', 'retail_price')) {
+                $table->dropColumn('retail_price');
+            }
+        });
     }
 };

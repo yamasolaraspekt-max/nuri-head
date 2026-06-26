@@ -369,6 +369,316 @@
 
 
 
+                /* =========================================================
+                Chat Media / PDF Lightbox
+                ========================================================= */
+                .chat-media-modal {
+                    position: fixed;
+                    inset: 0;
+                    z-index: 100000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .chat-media-modal.hidden {
+                    display: none;
+                }
+
+                .chat-media-backdrop {
+                    position: absolute;
+                    inset: 0;
+                    background:
+                        radial-gradient(circle at top right, rgba(116, 178, 212, .28), transparent 35%),
+                        rgba(15, 23, 42, .82);
+                    backdrop-filter: blur(8px);
+                }
+
+                .chat-media-shell {
+                    position: relative;
+                    width: min(1120px, calc(100vw - 24px));
+                    height: min(820px, calc(100vh - 24px));
+                    border-radius: 26px;
+                    background: rgba(255, 255, 255, .96);
+                    border: 1px solid rgba(255, 255, 255, .55);
+                    box-shadow: 0 30px 90px rgba(15, 23, 42, .45);
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .chat-media-header {
+                    height: 62px;
+                    padding: 0 16px 0 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    border-bottom: 1px solid rgba(148, 163, 184, .28);
+                    background: linear-gradient(90deg, rgba(227, 239, 251, .95), rgba(255,255,255,.95));
+                }
+
+                .chat-media-title {
+                    font-weight: 800;
+                    font-size: 14px;
+                    color: #0f172a;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: min(680px, calc(100vw - 180px));
+                }
+
+                .chat-media-counter {
+                    margin-top: 2px;
+                    font-size: 11px;
+                    color: #64748b;
+                }
+
+                .chat-media-actions {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+                .chat-media-icon-btn {
+                    width: 38px;
+                    height: 38px;
+                    border-radius: 999px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #ffffff;
+                    border: 1px solid rgba(148, 163, 184, .45);
+                    color: #334155;
+                    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+                }
+
+                .chat-media-icon-btn:hover {
+                    transform: translateY(-1px);
+                    background: #f8fafc;
+                    border-color: #74b2d4;
+                }
+
+                .chat-media-body {
+                    flex: 1;
+                    min-height: 0;
+                    background:
+                        linear-gradient(135deg, rgba(192, 216, 234, .22), rgba(207, 224, 155, .18)),
+                        #f8fafc;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 18px;
+                }
+
+                .chat-media-body img {
+                    max-width: 100%;
+                    max-height: 100%;
+                    border-radius: 18px;
+                    object-fit: contain;
+                    box-shadow: 0 18px 60px rgba(15, 23, 42, .20);
+                    background: white;
+                }
+
+                .chat-media-body iframe {
+                    width: 100%;
+                    height: 100%;
+                    border: 0;
+                    border-radius: 18px;
+                    background: white;
+                    box-shadow: 0 18px 60px rgba(15, 23, 42, .18);
+                }
+
+                .chat-media-nav {
+                    position: absolute;
+                    top: 50%;
+                    z-index: 4;
+                    width: 48px;
+                    height: 48px;
+                    transform: translateY(-50%);
+                    border-radius: 999px;
+                    background: rgba(255, 255, 255, .92);
+                    border: 1px solid rgba(148, 163, 184, .5);
+                    color: #0f172a;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 12px 35px rgba(15, 23, 42, .22);
+                    transition: transform .15s ease, background .15s ease, opacity .15s ease;
+                }
+
+                .chat-media-nav:hover {
+                    transform: translateY(-50%) scale(1.04);
+                    background: #ffffff;
+                }
+
+                .chat-media-nav:disabled {
+                    opacity: .35;
+                    cursor: not-allowed;
+                }
+
+                .chat-media-prev {
+                    left: 18px;
+                }
+
+                .chat-media-next {
+                    right: 18px;
+                }
+
+                .chat-attachment-album {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    max-width: min(100%, 330px);
+                }
+
+                .chat-attachment-summary {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    width: fit-content;
+                    max-width: 100%;
+                    padding: 4px 9px;
+                    border-radius: 999px;
+                    background: rgba(255,255,255,.72);
+                    border: 1px solid rgba(148, 163, 184, .35);
+                    color: #475569;
+                    font-size: 11px;
+                    font-weight: 600;
+                }
+
+                .chat-image-grid {
+                    display: grid;
+                    gap: 4px;
+                    overflow: hidden;
+                    border-radius: 16px;
+                    border: 1px solid rgba(148, 163, 184, .45);
+                    background: rgba(255,255,255,.65);
+                    box-shadow: 0 8px 24px rgba(15, 23, 42, .12);
+                }
+
+                .chat-image-grid-one {
+                    grid-template-columns: minmax(180px, 260px);
+                }
+
+                .chat-image-grid-two {
+                    grid-template-columns: repeat(2, minmax(112px, 1fr));
+                }
+
+                .chat-image-grid-many {
+                    grid-template-columns: repeat(2, minmax(112px, 1fr));
+                }
+
+                .chat-image-tile {
+                    position: relative;
+                    display: block;
+                    min-width: 0;
+                    aspect-ratio: 1 / 1;
+                    overflow: hidden;
+                    background: #e2e8f0;
+                    cursor: zoom-in;
+                    border: 0;
+                    padding: 0;
+                }
+
+                .chat-image-grid-one .chat-image-tile {
+                    aspect-ratio: 4 / 3;
+                }
+
+                .chat-attachment-image {
+                    width: 100%;
+                    height: 100%;
+                    max-width: none;
+                    max-height: none;
+                    object-fit: cover;
+                    border-radius: 0;
+                    cursor: zoom-in;
+                    border: 0;
+                    box-shadow: none;
+                    transition: transform .15s ease, filter .15s ease;
+                }
+
+                .chat-image-tile:hover .chat-attachment-image {
+                    transform: scale(1.025);
+                    filter: brightness(.96);
+                }
+
+                .chat-image-more {
+                    position: absolute;
+                    inset: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: rgba(15, 23, 42, .54);
+                    color: #fff;
+                    font-size: 28px;
+                    font-weight: 800;
+                    backdrop-filter: blur(1px);
+                }
+
+                .chat-file-stack {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                }
+
+                .chat-attachment-file {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    max-width: 100%;
+                    padding: 8px 10px;
+                    border-radius: 14px;
+                    background: rgba(255,255,255,.75);
+                    border: 1px solid rgba(148, 163, 184, .45);
+                    color: #0f172a;
+                    font-size: 12px;
+                    text-align: left;
+                    cursor: pointer;
+                    transition: background .15s ease, border-color .15s ease;
+                }
+
+                .chat-attachment-file:hover {
+                    background: #ffffff;
+                    border-color: #74b2d4;
+                }
+
+                @media (max-width: 640px) {
+                    .chat-media-shell {
+                        width: 100vw;
+                        height: 100vh;
+                        border-radius: 0;
+                    }
+
+                    .chat-media-body {
+                        padding: 10px;
+                    }
+
+                    .chat-media-prev {
+                        left: 8px;
+                    }
+
+                    .chat-media-next {
+                        right: 8px;
+                    }
+
+                    .chat-media-nav {
+                        width: 42px;
+                        height: 42px;
+                    }
+
+                    .chat-media-title {
+                        max-width: calc(100vw - 160px);
+                    }
+                }
+
+                .direction-ltr,
+                    .message-content,
+                    .message-text {
+                        direction: ltr;
+                        text-align: left;
+                        unicode-bidi: plaintext;
+                    }
         </style>
 
 </head>
@@ -376,84 +686,118 @@
 
 
 @php
-    $emp = DB::table('employees')
-        ->select('name','lastname','image')
-        ->where('id', auth()->user()->name)
-        ->first();
+$emp = DB::table('employees')
+    ->select('name', 'lastname', 'image')
+    ->where('id', auth()->user()->name)
+    ->first();
 
-    $empImage = $emp->image ?? 'users.png';
-    $fullname = trim(($emp->name ?? '').' '.($emp->lastname ?? '')) ?: 'Ich';
+$empImage = $emp->image ?? 'users.png';
+$fullname = trim(($emp->name ?? '') . ' ' . ($emp->lastname ?? '')) ?: 'Ich';
 @endphp
 
 <div class="min-h-screen flex flex-col px-2 sm:px-4 py-4">
 
-    <!-- Top bar / navigation -->
-    <header class="mb-4">
-        <div class="rounded-2xl px-4 py-3" style="background: #e3effb">
-            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between text-white">
-                <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                    <div>
-                        <h1 class="text-2xl font-semibold text-[#93c21c]">SA-DESK</h1>
-                        <p class="text-sm text-gray-500">
-                            Schneller Wechsel zwischen Bereichen und direkter Austausch mit dem Team.
-                        </p>
-                    </div>
+   <!-- Top bar / navigation -->
+<header class="mb-4">
+    <!-- Mobile top bar -->
+    <div class="lg:hidden">
+        <div class="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-3 py-3 shadow-sm">
+            <a href="{{ url('/') }}"
+               class="inline-flex items-center gap-2 rounded-full bg-[#93c21c] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600">
+                <i data-feather="arrow-left" class="h-4 w-4"></i>
+                Dashboard
+            </a>
 
-                    <nav class="flex flex-wrap gap-2">
-                        <a href="{{url('/')}}"
-                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-100">
-                            <i data-feather="home" class="w-4 h-4"></i>
-                            DASHBOARD
-                        </a>
-                        <a href="{{ url('new_lead_view') }}"
-                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-100">
-                            <i data-feather="list" class="w-4 h-4"></i>
-                            KUNDEN-LISTE
-                        </a>
-                        <a href="{{url('lead/kanban')}}"
-                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-100">
-                            <i data-feather="folder" class="w-4 h-4"></i>
-                            KUNDEN ÜBERSICHT
-                        </a>
-
-                        @php 
-                            $row = $notification ?? null;  // <-- CHANGE this to your variable, e.g. $task, $message, etc.
-                        @endphp
-
-                        @if(
-                            $row
-                            && $row->item_id === 'Employee'
-                            && $row->is_read === 'on'
-                            && $row->user_id === auth()->user()->name
-                        )
-                            <a href="{{ url('emp') }}"
-                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-100">
-                                <i data-feather="users" class="w-4 h-4"></i>
-                                MITARBEITER
-                            </a>
-                        @endif
-
-
-                        <a href="{{url('admin/todo/personal?tab=my')}}"
-                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-100">
-                            <i data-feather="check-square" class="w-4 h-4"></i>
-                            AUFGABEN
-                        </a>
-                        <a href="{{url('tasks/calendar/personal')}}"
-                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-100">
-                            <i data-feather="calendar" class="w-4 h-4"></i>
-                            KALENDER
-                        </a>
-                        <a href=""
-                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-100">
-                            <i data-feather="settings" class="w-4 h-4"></i>
-                             EINSTELLUNGEN
-                        </a>
-                    </nav>
-                </div>
+            <div class="text-right">
+                <div class="text-sm font-bold text-slate-800">SA-DESK</div>
+                <div class="text-[11px] text-slate-500">Chat</div>
             </div>
         </div>
-    </header>
+    </div>
+
+    <!-- Desktop header: fixed one-line layout -->
+    <div class="hidden lg:block">
+        <div class="flex h-[70px] items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 shadow-sm">
+
+            <!-- Brand -->
+            <div class="flex shrink-0 items-center gap-3">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#93c21c] text-white shadow-sm">
+                    <i data-feather="message-circle" class="h-5 w-5"></i>
+                </div>
+
+                <div class="leading-tight">
+                    <h1 class="text-xl font-black tracking-tight text-slate-900">
+                        SA-DESK
+                    </h1>
+                    <p class="text-xs text-slate-500">
+                        Team Chat
+                    </p>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="ml-auto flex h-full min-w-0 items-center justify-end gap-1.5 overflow-x-auto whitespace-nowrap">
+                <a href="{{ url('/') }}"
+                   class="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#93c21c] px-3 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-600">
+                    <i data-feather="home" class="h-4 w-4 shrink-0"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{{ url('new_lead_view') }}"
+                   class="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-[#74b2d4] hover:bg-[#e3effb]">
+                    <i data-feather="list" class="h-4 w-4 shrink-0 text-[#74b2d4]"></i>
+                    <span>Kunden-Liste</span>
+                </a>
+
+                <a href="{{ url('lead/kanban') }}"
+                   class="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-[#74b2d4] hover:bg-[#e3effb]">
+                    <i data-feather="folder" class="h-4 w-4 shrink-0 text-[#74b2d4]"></i>
+                    <span>Kunden Übersicht</span>
+                </a>
+
+                @php 
+                    $row = $notification ?? null;
+                @endphp
+
+                @if(
+    $row
+    && $row->item_id === 'Employee'
+    && $row->is_read === 'on'
+    && $row->user_id === auth()->user()->name
+)
+                    <a href="{{ url('emp') }}"
+                       class="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-[#93c21c] hover:bg-[#f4f9e8]">
+                        <i data-feather="users" class="h-4 w-4 shrink-0 text-[#93c21c]"></i>
+                        <span>Mitarbeiter</span>
+                    </a>
+                @endif
+
+                <a href="{{ url('admin/todo/personal?tab=my') }}"
+                   class="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-[#93c21c] hover:bg-[#f4f9e8]">
+                    <i data-feather="check-square" class="h-4 w-4 shrink-0 text-[#93c21c]"></i>
+                    <span>Aufgaben</span>
+                </a>
+
+                <a href="{{ url('tasks/calendar/personal') }}"
+                   class="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-[#74b2d4] hover:bg-[#e3effb]">
+                    <i data-feather="calendar" class="h-4 w-4 shrink-0 text-[#74b2d4]"></i>
+                    <span>Kalender</span>
+                </a>
+
+                <a href="#"
+                   class="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-100">
+                    <i data-feather="settings" class="h-4 w-4 shrink-0 text-slate-500"></i>
+                    <span>Einstellungen</span>
+                </a>
+
+                <div class="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 text-xs font-semibold text-slate-600">
+                    <span class="h-2 w-2 shrink-0 rounded-full bg-[#93c21c]"></span>
+                    <span>Online</span>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
 
     <!-- Offline banner -->
     <div id="offlineBanner" class="hidden bg-amber-100 text-amber-900 px-4 py-2 text-sm rounded-md mb-3">
@@ -462,7 +806,7 @@
 
     <!-- MAIN CHAT SHELL -->
     <main class="flex-1 flex items-stretch justify-center">
-        <div class="flex w-full h-[calc(100vh-7rem)] bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200">
+        <div class="flex w-full h-[calc(100vh-5.5rem)] lg:h-[calc(100vh-7rem)] bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200">
 
             <!-- LEFT: Chats/Groups -->
             <aside
@@ -475,7 +819,7 @@
                     <div class="flex items-center gap-2 min-w-0">
                         <div class="relative">
                             <img
-                                src="{{ asset('images/employee/'.$empImage) }}"
+                                src="{{ asset('images/employee/' . $empImage) }}"
                                 class="w-9 h-9 rounded-full object-cover ring-2 ring-emerald-100"
                                 alt="Avatar {{ $fullname }}"
                             />
@@ -943,16 +1287,59 @@
 
 <!-- Drag & Drop overlay for file upload -->
 
+ 
 
-@php
-    $builderBio = "Ramin Sadid is an Afghan developer, writer, and youth activist, born in Kabul in 1992. During the Taliban regime his family moved to Iran, where he grew up and studied in several cities before graduating from Ali Soheili School in Yazd. In early 2012 he returned to Afghanistan and completed both his Bachelor’s and Master’s degrees in Computer Science.
+<!-- Chat Media / PDF Preview Modal -->
+<div id="chatMediaModal"
+     class="chat-media-modal hidden"
+     role="dialog"
+     aria-modal="true"
+     aria-label="Dateivorschau">
+    <div class="chat-media-backdrop" data-chat-media-close></div>
 
-Alongside building digital products like Zuhalify.io, Ramin works across different areas of information technology and is also a prolific fiction writer. His work includes the novel “Imaginary Kisses” and the books “Angels of the Earth”, “Sleep or Awake”, “Bloody Butterflies”, and “Hearts Without Borders”. Hundreds of his short stories have been published in magazines and shared widely on social media.
+    <div class="chat-media-shell">
+        <div class="chat-media-header">
+            <div class="min-w-0">
+                <div id="chatMediaTitle" class="chat-media-title">Vorschau</div>
+                <div id="chatMediaCounter" class="chat-media-counter"></div>
+            </div>
 
-Ramin is known for blending technology, storytelling, and social change. He often speaks and writes about the future of Afghan youth, creativity in exile, and how digital tools can open new doors for the next generation.";
-@endphp
+            <div class="chat-media-actions">
+                <a id="chatMediaDownload"
+                   href="#"
+                   target="_blank"
+                   rel="noopener"
+                   class="chat-media-icon-btn"
+                   title="In neuem Tab öffnen">
+                    <i data-feather="external-link" class="w-5 h-5"></i>
+                </a>
 
+                <button type="button"
+                        class="chat-media-icon-btn"
+                        data-chat-media-close
+                        title="Schließen">
+                    <i data-feather="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
 
+        <button type="button"
+                id="chatMediaPrev"
+                class="chat-media-nav chat-media-prev"
+                title="Zurück">
+            <i data-feather="chevron-left" class="w-7 h-7"></i>
+        </button>
+
+        <div id="chatMediaBody" class="chat-media-body"></div>
+
+        <button type="button"
+                id="chatMediaNext"
+                class="chat-media-nav chat-media-next"
+                title="Weiter">
+            <i data-feather="chevron-right" class="w-7 h-7"></i>
+        </button>
+    </div>
+</div>
 
 <!-- Notification Sound -->
 <audio id="notificationSound" src="{{ asset('notification/notification.mp3') }}" preload="auto"></audio>
@@ -1020,14 +1407,7 @@ Ramin is known for blending technology, storytelling, and social change. He ofte
         window.assetImages       = @json(asset('images'));
         window.notificationSound = @json(asset('notification/notification.mp3'));
 
-        // Builder profile (used for the fancy “who is the developer?” card)
-        window.builderProfile = {
-            name:    @json(env('BUILDER_NAME', 'Developer')),
-            product: @json(env('PRODUCT_NAME', '')),
-            link:    @json(env('BUILDER_LINK', '')),
-            avatar:  @json(asset(env('BUILDER_AVATAR_URL', 'images/gender/users.png'))),
-            bio:     @json($builderBio),
-        };
+         
     })();
 </script>
 

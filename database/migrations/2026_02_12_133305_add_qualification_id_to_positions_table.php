@@ -18,13 +18,29 @@ return new class extends Migration {
         }
 
         // Fix zero dates only if table exists
-        DB::statement("
-            UPDATE positions
-            SET
-              created_at = COALESCE(NULLIF(created_at, '0000-00-00 00:00:00'), NOW()),
-              updated_at = COALESCE(NULLIF(updated_at, '0000-00-00 00:00:00'), NOW()),
-              deleted_at = NULLIF(deleted_at, '0000-00-00 00:00:00')
-        ");
+       $oldSqlMode = DB::selectOne("SELECT @@SESSION.sql_mode AS sql_mode")->sql_mode ?? '';
+
+            DB::statement("SET SESSION sql_mode = ''");
+
+            DB::statement("
+                UPDATE positions
+                SET created_at = NOW()
+                WHERE created_at = '0000-00-00 00:00:00'
+            ");
+
+            DB::statement("
+                UPDATE positions
+                SET updated_at = NOW()
+                WHERE updated_at = '0000-00-00 00:00:00'
+            ");
+
+            DB::statement("
+                UPDATE positions
+                SET deleted_at = NULL
+                WHERE deleted_at = '0000-00-00 00:00:00'
+            ");
+
+            DB::statement("SET SESSION sql_mode = '" . str_replace("'", "''", $oldSqlMode) . "'");
 
         // 1) Add column first
         Schema::table('positions', function (Blueprint $table) {

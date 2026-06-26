@@ -1,6 +1,6 @@
  @extends('admin.layouts.app')
 
-@section('title') Arbeitsschritte Details @stop
+@section('title') Projekt-Struktur @stop
 
 @section('style')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -27,11 +27,9 @@
   .row, .col-12, .col-md-3, .col-md-9{ all: unset; }
   /* keep content wrapper structure from layout, only restyle inside */
   .stage-page{ padding: 10px 0 24px; }
-  .stage-shell{
-    background: radial-gradient(circle at top left, rgba(192,216,234,.35) 0, rgba(207,224,155,.28) 35%, rgba(255,255,255,.9) 70%);
+  .stage-shell{ 
     border-radius: 22px;
-    border: 1px solid rgba(15,23,42,.08);
-    box-shadow: 0 10px 40px rgba(15,23,42,.06);
+    border: 1px solid rgba(15,23,42,.08); 
     padding: 16px;
   }
 
@@ -312,22 +310,11 @@
 @endsection
 
 @section('content')
-<div class="app-content content stage-page">
-  <div class="content-overlay"></div>
-  <div class="header-navbar-shadow"></div>
+<div class="app-content stage-page"> 
 
   <div class="content-wrapper">
     <div class="content-body">
-      <div class="stage-shell">
-
-        <div class="stage-header">
-          <div class="stage-title">
-            <h2>Projektablauf</h2>
-            <div class="stage-breadcrumbs">
-              <a href="{{ url('/') }}">Dashboard</a> <span style="opacity:.6;">/</span> Projekt-Struktur
-            </div>
-          </div>
-        </div>
+      <div class="stage-shell"> 
 
         {{-- Filters --}}
         <div class="grid filters" style="margin-bottom:12px;">
@@ -1409,3 +1396,25 @@
 })();
 </script>
 @endsection
+
+
+@push('scripts')
+  <script>
+    window.GlobalBreadcrumbs = [
+      {
+        label: 'Dashboard',
+        url: "{{ url('/') }}"
+      },
+      {
+        label: 'Projekt-Struktur',
+         url: "{{ url()->current() }}",
+        clickable: false
+
+      }
+    ];
+
+    if (window.setGlobalBreadcrumbs) {
+      window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+    }
+  </script>
+@endpush

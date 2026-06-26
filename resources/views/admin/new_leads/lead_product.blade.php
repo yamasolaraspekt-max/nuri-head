@@ -444,7 +444,7 @@ input:focus::placeholder {
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <!-- BEGIN: Content-->
-<div class="app-content content">
+<div class="app-content">
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>
     <div class="content-wrapper">

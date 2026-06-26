@@ -1,1180 +1,1342 @@
-  
-                
-                <style>
-                .leave-sidebar {
-                    position: fixed;
-                    top: 0;
-                    right: -400px;
-                    width: 400px;
-                    height: 100%;
-                    background: #fff;
-                    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
-                    z-index: 9999;
-                    transition: right 0.3s ease-in-out;
-                    overflow-y: auto;
-                }
-                .leave-sidebar.active {
-                    right: 0;
-                }
-                #mentionSuggestions li {
-                    padding: 5px 10px;
-                    cursor: pointer;
-                }
-                #mentionSuggestions li:hover {
-                    background-color: #f1f1f1;
-                }
-                .note-item p span.mention {
-                    background: #e6f3ff;
-                    color: #007bff;
-                    font-weight: bold;
-                }
+@php
+  use Carbon\Carbon;
 
+  $employeeName = trim(($data->name ?? '') . ' ' . ($data->lastname ?? ''));
+  $employeeName = $employeeName !== '' ? $employeeName : 'Mitarbeiter #' . ($data->id ?? '');
 
-                /* Button */
-                            .action-toggle {
-                            background: transparent;
-                            border: none;
-                            cursor: pointer;
-                            padding: 4px;
-                            border-radius: 6px;
-                            }
-                            .action-toggle:hover {
-                            background: rgba(0,0,0,0.05);
-                            }
+  $leaveItems = collect($leaves ?? [])->map(function ($leave) {
+    return [
+      'id' => (int) $leave->id,
+      'emp_id' => (int) $leave->emp_id,
+      'year' => (int) ($leave->year ?: Carbon::parse($leave->start_date)->format('Y')),
+      'start_date' => optional(Carbon::parse($leave->start_date))->format('Y-m-d'),
+      'end_date' => optional(Carbon::parse($leave->end_date))->format('Y-m-d'),
+      'start_date_de' => optional(Carbon::parse($leave->start_date))->format('d.m.Y'),
+      'end_date_de' => optional(Carbon::parse($leave->end_date))->format('d.m.Y'),
+      'duration' => (int) ($leave->duration ?? 0),
+      'leave_day' => (int) ($leave->leave_day ?? 0),
+      'remaining_day' => (int) ($leave->remaining_day ?? 0),
+      'reason' => (string) ($leave->reason ?? ''),
+      'description' => (string) ($leave->description ?? ''),
+      'status' => (string) ($leave->status ?? 'Pending'),
+      'approved' => (string) ($leave->approved ?? ''),
+      'request_to' => $leave->request_to ?? null,
+      'created_at' => !empty($leave->created_at) ? Carbon::parse($leave->created_at)->format('d.m.Y H:i') : '',
+    ];
+  })->values();
 
-                            /* Menu list */
-                            .action-list {
-                            position: absolute;
-                            display: none;
-                            min-width: 180px;
-                            margin-top: 6px;
-                            padding: 6px 0;
-                            background: #fff;
-                            border: 1px solid #e2e8f0;
-                            border-radius: 8px;
-                            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-                            z-index: 999;
-                            }
-                            .action-list.show { display: block; }
+  $totalLeaveCount = $leaveItems->count();
+  $approvedLeaveCount = $leaveItems->filter(fn($l) => ($l['approved'] ?? '') === 'Yes' || in_array(strtolower($l['status'] ?? ''), ['accept', 'accepted', 'approved']))->count();
+  $pendingLeaveCount = $leaveItems->filter(fn($l) => in_array(strtolower($l['status'] ?? ''), ['pending', 'anfrage', 'zur überprüfung', 'zur ueberpruefung']))->count();
+  $usedDaysCount = $leaveItems->sum('duration');
 
-                            /* Items */
-                            .action-item {
-                            display: flex;
-                            align-items: center;
-                            padding: 6px 14px;
-                            font-size: 14px;
-                            color: #374151;
-                            text-decoration: none;
-                            transition: background 0.2s;
-                            }
-                            .action-item:hover {
-                            background: #f3f4f6;
-                            }
+  $mainDepartmentId = DB::table('department_positions')
+    ->where('employee_id', $data->id)
+    ->where(function ($q) {
+      $q->where('main', 'Yes')
+        ->orWhere('main', 'yes')
+        ->orWhere('main', '1')
+        ->orWhere('main', 1)
+        ->orWhere('main', 'active');
+    })
+    ->orderByDesc('id')
+    ->value('department_id');
+@endphp
 
-                </style>
+@once
+  @push('style')
+    <style>
+      :root {
+        --lv-bg: #f3f4f6;
+        --lv-card: #ffffff;
+        --lv-text: #1f2937;
+        --lv-muted: #6b7280;
+        --lv-border: #e5e7eb;
+        --lv-primary: #93c21c;
+        --lv-primary-dark: #7baa18;
+        --lv-primary-light: #f4fae7;
+        --lv-blue: #74b2d4;
+        --lv-blue-light: #eff6ff;
+        --lv-success: #10b981;
+        --lv-success-light: #ecfdf5;
+        --lv-warning: #f59e0b;
+        --lv-warning-light: #fffbeb;
+        --lv-danger: #ef4444;
+        --lv-danger-light: #fef2f2;
+        --lv-shadow-sm: 0 1px 2px rgba(15, 23, 42, .06);
+        --lv-shadow: 0 18px 45px rgba(15, 23, 42, .16);
+        --lv-radius: 16px;
+        --lv-transition: all .2s ease;
+      }
 
+      .lv-wrap {
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--lv-text);
+      }
 
+      .lv-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+      }
 
-                @if ($errors->leaveForm->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->leaveForm->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-               <div class="row">
-                    <div class="col-12">   
-                        @if(DB::table('user_rolls')
-                            ->where('user_rolls.user_id', '=', auth()->user()->name)
-                            ->where('user_rolls.item_id', '=', 'Employee')
-                            ->where('user_rolls.is_add', '=', 'on')
-                            ->first())
-                            <button type="button" class="btn btn-outline-primary  float-right new_leave"  ></i>Anfrage</button>
-                        @endif 
-                        <!-- Modal for creating a new leave -->
-                        <div class="modal fade" id="new_leave_modal" tabindex="-1" role="dialog" data-emp-id="{{ $data->id }}">
-                            <div class="modal-dialog modal-dialog-scrollable" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">{{ $data->name }} {{ $data->lastname }}</h4>
-                                        <button type="button" class="close" data-dismiss="modal">
-                                            <span>&times;</span>
-                                        </button>
-                                    </div>
-                                    <form class="form-horizontal" method="POST" action="{{ route('leave.store') }}">
-                                        @csrf
-                                        <div class="modal-body">
-                                            <input type="hidden" name="active_tab" value="leave">
-                                            <input type="hidden" name="emp_id" value="{{ $data->id }}">
+      .lv-title {
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: -.03em;
+        color: #111827;
+        margin: 0;
+      }
 
-                                            <div class="form-group">
-                                                <label>Jahr</label>
-                                                <select name="year" id="yearSelect" class="form-control">
-                                                    <option value="">Select Year</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Ab Datum</label>
-                                                <input type="date" class="form-control leave_start_date" name="start_date">
-                                            </div>
+      .lv-sub {
+        font-size: 14px;
+        color: var(--lv-muted);
+        margin-top: 4px;
+      }
 
-                                            <div class="form-group">
-                                                <label>Bis Datum</label>
-                                                <input type="date" class="form-control leave_end_date" name="end_date">
-                                            </div>
+      .lv-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
 
-                                            <div class="form-group">
-                                                <label>Urlaubstage</label>
-                                                <input type="number" class="form-control leave_day" name="leave_day">
-                                            </div>
+      .lv-btn {
+        border: none;
+        border-radius: 12px;
+        padding: 10px 15px;
+        font-weight: 900;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: var(--lv-transition);
+        height: 42px;
+        white-space: nowrap;
+      }
 
-                                            <div class="form-group">
-                                                <label>Resturlaubstage</label>
-                                                <input type="number" class="form-control remaining_day" name="remaining_day">
-                                            </div>
+      .lv-btn-primary {
+        background: var(--lv-primary);
+        color: #fff;
+        box-shadow: 0 10px 22px rgba(147, 194, 28, .22);
+      }
 
-                                            <div class="form-group">
-                                                <label>Urlaubstage letztes jahr</label>
-                                                <input type="number" class="form-control last_year_remainings" name="last_year_remainings" readonly>
-                                            </div>
+      .lv-btn-primary:hover {
+        background: var(--lv-primary-dark);
+        color: #fff;
+        transform: translateY(-1px);
+      }
 
-                                            <div class="form-group">
-                                                <label>Eingereichte Urlaubstage</label>
-                                                <input type="number" class="form-control leave_duration" name="duration">
-                                                <label class="duration_label" style="color:red; display:none;">Die Dauer überschreitet die zulässigen Urlaubstage</label>
-                                            </div>
+      .lv-btn-soft {
+        background: #fff;
+        color: var(--lv-text);
+        border: 1px solid var(--lv-border);
+      }
 
-                                            <div class="form-group">
-                                                <label>Grund</label>
-                                                <select class="form-control" name="reason">
-                                                    <option value="Urlaub" selected>Urlaub</option>
-                                                    <option value="Freizeitausgleich">Freizeitausgleich</option> 
-                                                    <option value="Vorjahresurlaub">Vorjahresurlaub</option> 
-                                                    <option value="Elternzeit">Elternzeit</option> 
-                                                    <option value="Schulung">Schulung</option> 
-                                                    <option value="Schule">Schule</option> 
-                                                    <option value="Unbezahte Urlaub">Unbezahte Urlaub</option> 
-                                                    <option value="Freigeschtilt">Freigeschtilt</option> 
-                                                </select>
-                                            </div>
+      .lv-btn-soft:hover {
+        background: #f9fafb;
+        color: var(--lv-text);
+        text-decoration: none;
+      }
 
-                                            <div class="form-group">
-                                                <label>Anfrage an</label>
-                                                @php
-                                                    $departments_id = DB::table('department_positions')
-                                                        ->where('employee_id', $data->id)
-                                                        ->where('main', 'active')
-                                                        ->pluck('department_id')
-                                                        ->first();
-                                                @endphp 
+      .lv-btn-danger {
+        background: var(--lv-danger);
+        color: #fff;
+      }
 
-                                                <input type="hidden" name="department_id" value="{{ $departments_id ?? '' }}">
+      .lv-btn-danger:hover {
+        background: #dc2626;
+        color: #fff;
+      }
 
-                                                <select class="form-control request_to" id="employee_leader_select" name="request_to" data-department="{{ $departments_id ?? '' }}" style="width:100%">
-                                                    <!-- Options will be dynamically populated via AJAX -->
-                                                </select>
-                                            </div>
+      .lv-btn-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        border: 1px solid var(--lv-border);
+        background: #fff;
+        color: var(--lv-muted);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--lv-transition);
+      }
 
+      .lv-btn-icon:hover {
+        border-color: var(--lv-blue);
+        color: var(--lv-blue);
+        background: #f0f7fb;
+      }
 
-                                            <div class="form-group">
-                                                <label>Beschreibung</label>
-                                                <textarea name="description" class="form-control"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary save_button">Speichern</button>
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-               </div>
-                
-                <div class="row">
-                     <div class="col-12"> 
-                            <div class="accordion" id="leaveAccordion">
-                                @php
-                                    $groupedLeaves = $leaves->groupBy(function($leave) {
-                                        return \Carbon\Carbon::parse($leave->start_date)->format('Y'); // Group by year
-                                    });
-                                @endphp
+      .lv-stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 18px;
+      }
 
-                                @foreach ($groupedLeaves as $year => $yearLeaves)
-                                    <div class="card">
-                                        <div class="card-header" id="heading{{ $year }}">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link text-dark font-weight-bold primary" type="button" data-toggle="collapse" data-target="#collapse{{ $year }}" aria-expanded="true" aria-controls="collapse{{ $year }}">
-                                                <i class="feather icon-arrow-right"></i> {{ $year }}
-                                                </button>
-                                            </h5>
-                                        </div>
+      @media(max-width:1200px) {
+        .lv-stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
 
-                                        <div id="collapse{{ $year }}" class="collapse show" aria-labelledby="heading{{ $year }}" data-parent="#leaveAccordion">
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Startdatum</th>
-                                                                <th>Enddatum</th> 
-                                                                <th>Urlaubstage</th> 
-                                                                <th>Grund</th> 
-                                                                <th>Beschreibung</th> 
-                                                                <th>Status</th>
-                                                                <th>Action</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($yearLeaves as $leave)
-                                                                <tr>
-                                                                    <td>{{ \Carbon\Carbon::parse($leave->start_date)->format('d.m.Y') }}</td>
-                                                                    <td>{{ \Carbon\Carbon::parse($leave->end_date)->format('d.m.Y') }}</td> 
-                                                                    <td>{{ $leave->duration}} Tag(e)</td>
-                                                                    <td>{{ $leave->reason }}</td>
+      @media(max-width:720px) {
+        .lv-stats {
+          grid-template-columns: 1fr;
+        }
+      }
 
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#description{{ $leave->id }}"><i class="fa fa-expand"></i></button>
+      .lv-stat {
+        background: #fff;
+        border: 1px solid var(--lv-border);
+        border-radius: 18px;
+        padding: 16px;
+        box-shadow: var(--lv-shadow-sm);
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        min-height: 92px;
+      }
 
-                                                                        <div class="modal fade" id="description{{ $leave->id }}" tabindex="-1" role="dialog" aria-labelledby="descLabel{{ $leave->id }}" aria-hidden="true">
-                                                                            <div class="modal-dialog modal-dialog-scrollable">
-                                                                                <div class="modal-content">
-                                                                                    <div class="modal-header">
-                                                                                        <h4 class="modal-title" id="descLabel{{ $leave->id }}">Beschreibung</h4>
-                                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                                    </div>
-                                                                                    <div class="modal-body">
-                                                                                        <p>{{ $leave->description }}</p>
-                                                                                    </div>
-                                                                                    <div class="modal-footer">
-                                                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-        
-                                                                    <td>
-                                                                    <p>
-                                                                            @if($leave->status != "Pending")
-                                                                            <div class="badge badge-primary"><i class="fa fa-times-circle"></i> Urlaub abgelaufen</div> 
-                                                                            @endif
-                                                                    </p>
-                                                                    <p>
-                                                                            @if($leave->approved == "Yes")
-                                                                                <div class="badge badge-success"><i class="feather icon-check-square"></i> Genehmigt</div>
-                                                                            @else
-                                                                                <div class="badge badge-danger"><i class="fa fa-times-circle"></i> nicht genehmigt</div>
-                                                                            @endif
-                                                                    </p>
-        
-                                                                    </td>
+      .lv-stat-ic {
+        width: 48px;
+        height: 48px;
+        border-radius: 15px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+      }
 
-                                                                    <td class="text-nowrap">
-                                                                        <!-- Wrapper -->
-                                                                            <div class="action-menu" data-id="{{ $leave->id }}">
-                                                                            <button class="btn btn-sm action-toggle" type="button">
-                                                                                <i class="feather icon-more-vertical"></i>
-                                                                            </button>
+      .lv-stat-ic.total {
+        background: var(--lv-blue-light);
+        color: var(--lv-blue)
+      }
 
-                                                                            <div class="action-list">
-                                                                                <!-- Delete -->
-                                                                                <a class="action-item text-danger delete-leave" href="javascript:void(0);" data-id="{{ $leave->id }}">
-                                                                                <i class="feather icon-trash-2 mr-1"></i> Löschen
-                                                                                </a>
+      .lv-stat-ic.ok {
+        background: var(--lv-success-light);
+        color: var(--lv-success)
+      }
 
-                                                                                <!-- Edit -->
-                                                                                <a class="action-item text-warning" href="#" data-toggle="modal" data-target="#leave_edit{{ $leave->id }}">
-                                                                                <i class="feather icon-edit mr-1"></i> Bearbeiten
-                                                                                </a>
+      .lv-stat-ic.warn {
+        background: var(--lv-warning-light);
+        color: #d97706
+      }
 
-                                                                                <!-- Approve -->
-                                                                                @if($leave->approved != "Yes")
-                                                                                <a class="action-item text-primary" href="{{ url('leave_approve/'.$leave->id) }}">
-                                                                                <i class="feather icon-check-square mr-1"></i> Genehmigen
-                                                                                </a>
-                                                                                @endif
+      .lv-stat-ic.days {
+        background: var(--lv-primary-light);
+        color: #4d7c0f
+      }
 
-                                                                                <!-- Conflict Check -->
-                                                                                <a class="action-item check-leave text-info" href="javascript:void(0);"
-                                                                                data-id="{{ $leave->id }}"
-                                                                                data-start-date="{{ $leave->start_date }}"
-                                                                                data-end-date="{{ $leave->end_date }}"
-                                                                                data-employee-id="{{ $leave->emp_id }}">
-                                                                                <i class="feather icon-calendar mr-1"></i> Konflikt prüfen
-                                                                                </a>
+      .lv-stat-label {
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--lv-muted);
+      }
 
-                                                                                <!-- Notes -->
-                                                                                <a class="action-item leave-notes text-primary" href="javascript:void(0);" data-id="{{ $leave->id }}">
-                                                                                <i class="feather icon-file-text mr-1"></i> Notizen
-                                                                                </a>
-                                                                            </div>
-                                                                            </div>
+      .lv-stat-value {
+        font-size: 24px;
+        font-weight: 900;
+        color: #111827;
+        line-height: 1.1;
+        margin-top: 4px;
+      }
 
-                                                                    </td>
+      .lv-stat-sub {
+        font-size: 12px;
+        color: var(--lv-muted);
+        margin-top: 4px;
+      }
 
-                                                                </tr>
+      .lv-toolbar {
+        background: #fff;
+        border: 1px solid var(--lv-border);
+        border-radius: var(--lv-radius);
+        padding: 14px 16px;
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        box-shadow: var(--lv-shadow-sm);
+        margin-bottom: 16px;
+      }
 
-                                                                <!-- Leave Edit Modal -->
-                                                                <div class="modal fade leave_edit" id="leave_edit{{ $leave->id }}" tabindex="-1" role="dialog" aria-labelledby="editLabel{{ $leave->id }}" aria-hidden="true">
-                                                                    <div class="modal-dialog modal-dialog-scrollable">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h4 class="modal-title" id="editLabel{{ $leave->id }}">Bearbeiten</h4>
-                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                            </div>
-                                                                            <div class="modal-body"> 
+      .lv-filter-left,
+      .lv-filter-right {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+      }
 
-                                                                                    <form method="post" action="{{ route('leave.update') }}">
-                                                                                    @csrf 
+      .lv-filter-left {
+        flex: 1;
+      }
 
-                                                                                    <div class="modal-body"> 
-                                                                                        <input type="hidden" name="active_tab" id="active_tab" value="leave">  
-                                                                                        <input type="hidden" name="id"   value="{{ $leave->id }}">  
-                                                                                        <input type="hidden" name="emp_id"   value="{{ $data->id }}">  
-                                                                                        <div class="row">  
-                                                                                            <div class="col-md-6">
-                                                                                                <div class="form-group">
-                                                                                                    <label for="Title">Ab Datum</label>
-                                                                                                    <input type="date" class="form-control required leave_start_date" placeholder="Startdatum" name="start_date" value="{{ old('start_date', $leave->start_date) }}" id="leave_start_date">
-                                                                                                    @if ($errors->has('start_date'))<p style="color:red;">{!! $errors->first('start_date') !!}</p>@endif
-                                                                                                </div>
-                                                                                            </div>
+      .lv-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 170px;
+      }
 
-                                                                                            <div class="col-md-6">
-                                                                                                <div class="form-group">
-                                                                                                    <label for="Title">Bis Datum</label>
-                                                                                                    <input type="date" class="form-control required leave_end_date" placeholder="Endtermin" name="end_date" value="{{ old('end_date', $leave->end_date) }}" id="leave_end_date">
-                                                                                                    @if ($errors->has('end_date'))<p style="color:red;">{!! $errors->first('end_date') !!}</p>@endif
-                                                                                                </div>
-                                                                                            </div>
+      .lv-field.search {
+        flex: 1;
+        min-width: 260px;
+      }
 
-                                                                                                <div class="col-md-6" id="personal">
-                                                                                                <div class="form-group">
-                                                                                                    <label for="Title">Urlaubstage</label> 
-                                                                                                    <input type="number" class="form-control required leave_day" value="{{ $leave->leave_day }}" id="leave_day" name="leave_day" readonly>
-                                                                                                </div>
-                                                                                            </div> 
+      .lv-label {
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--lv-muted);
+      }
 
-                                                                                            <div class="col-md-6" id="personal_remain">
-                                                                                                <div class="form-group">
-                                                                                                    <label for="Title">Verbleibende Tage</label>
-                                                                                                    <input type="number" class="form-control required remaining_day" name="remaining_day" id="remaining_day" value="" style="cursor: not-allowed;">
-                                                                                                </div>
-                                                                                            </div> 
+      .lv-input,
+      .lv-select,
+      .lv-textarea {
+        width: 100%;
+        border: 1px solid var(--lv-border);
+        border-radius: 11px;
+        background: #fff;
+        padding: 10px 12px;
+        font-size: 14px;
+        outline: none;
+        transition: var(--lv-transition);
+      }
 
-                                                                                            <div class="col-md-12">
-                                                                                                <div class="form-group">
-                                                                                                    <label for="Title">Dauer (Tag)</label>
-                                                                                                    <input type="number" class="form-control required leave_duration" placeholder="Dauer" name="duration" value="{{ old('duration', $leave->duration) }}" id="leave_duration">
-                                                                                                    @if ($errors->has('duration'))<p style="color:red;">{!! $errors->first('duration') !!}</p>@endif
-                                                                                                    <label id="duration_label" style="color:red; display:none;">Die Dauer überschreitet die zulässigen Urlaubstage</label>
-                                                                                                </div>
-                                                                                            </div> 
-                                                                                            <div class="col-md-12">
-                                                                                                <label for="Title">Grund</label>
-                                                                                                <select class="form-control" name="reason">
-                                                                                                    <option selected value="Persönlicher Urlaub" @if($leave->reason == "Persönlicher Urlaub" ) selected @endif >Persönlicher Urlaub</option>
-                                                                                                    <option value="Jahresurlaub" @if($leave->reason == "Jahresurlaub" ) selected @endif>Jahresurlaub</option> 
-                                                                                                    <option value="Elternzeit" @if($leave->reason == "Elternzeit" ) selected @endif>Elternzeit</option>
-                                                                                                    <option value="Trauerurlaub" @if($leave->reason == "Trauerurlaub" ) selected @endif>Trauerurlaub</option> 
-                                                                                                </select>
-                                                                                            </div> 
-                                                                                            <div class="col-md-12">
-                                                                                                <label for="Title">Beschreibung</label>
-                                                                                                <fieldset class="form-group">
-                                                                                                    <textarea name="description" class="form-control" required>{{ old('description', $leave->description) }}</textarea>
-                                                                                                </fieldset>
-                                                                                            </div>
+      .lv-input:focus,
+      .lv-select:focus,
+      .lv-textarea:focus {
+        border-color: var(--lv-primary);
+        box-shadow: 0 0 0 3px var(--lv-primary-light);
+      }
 
-                                                                                        </div> 
-                                                                                    </div>
-                                                                                    <div class="modal-footer">
-                                                                                        <button type="submit" class="btn btn-primary">speichern</button>
-                                                                                        <button type="button" class="btn btn-danger" data-dismiss="modal" >abbrechen</button>
-                                                                                    </div>
-                                                                                </form> 
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- End Leave Edit Modal -->
-                                                                
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                       </div>
-                </div>
-                 
+      .lv-textarea {
+        resize: vertical;
+        min-height: 96px;
+      }
 
-                <div id="leaveNotesSidebar" class="leave-sidebar p-3">
-                    <!-- Sidebar Header -->
-                    <div class="sidebar-header d-flex justify-content-between align-items-center mb-2" style="    background: #8fc73e;">
-                        <h5><i class="feather icon-edit-3"></i> Notizen</h5>
-                        <button onclick="closeLeaveSidebar()" class="btn btn-sm btn-danger">×</button>
-                    </div>
+      .lv-card {
+        background: #fff;
+        border: 1px solid var(--lv-border);
+        border-radius: 18px;
+        box-shadow: var(--lv-shadow-sm);
+        overflow: hidden;
+      }
 
-                    <!-- Existing Notes -->
-                    <div id="leaveNotesContent" class="mb-3"></div>
+      .lv-list-head {
+        display: grid;
+        grid-template-columns: 90px minmax(190px, 1fr) minmax(160px, .8fr) 130px 140px 150px 130px;
+        gap: 14px;
+        align-items: center;
+        padding: 16px 18px 10px;
+        color: var(--lv-muted);
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+      }
 
-                    <!-- New Note Input -->
-                    <div class="position-relative">
-                        <textarea id="newNoteText" class="form-control mb-2" rows="3" placeholder="Neue Notiz..."></textarea>
-                        <ul id="mentionSuggestions" class="list-group position-absolute bg-white border" style="top: 100%; left: 0; width: 100%; z-index: 9999; display: none;"></ul>
-                    </div>
+      .lv-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 0 16px;
+      }
 
-                    <!-- Save Button -->
-                    <button class="btn btn-primary btn-block mt-2" onclick="saveLeaveNote()">💾 Speichern</button>
-                </div>
+      .lv-row {
+        margin: 0 16px;
+        border: 1px solid var(--lv-border);
+        border-radius: 16px;
+        background: #fff;
+        transition: var(--lv-transition);
+        overflow: visible;
+      }
+
+      .lv-row:hover {
+        border-color: var(--lv-primary);
+        box-shadow: var(--lv-shadow);
+      }
+
+      .lv-row-inner {
+        display: grid;
+        grid-template-columns: 90px minmax(190px, 1fr) minmax(160px, .8fr) 130px 140px 150px 130px;
+        gap: 14px;
+        align-items: center;
+        padding: 16px;
+      }
+
+      @media(max-width:1280px) {
+        .lv-list-head {
+          display: none
+        }
+
+        .lv-row-inner {
+          grid-template-columns: 1fr
+        }
+
+        .lv-mobile-title {
+          display: block !important
+        }
+
+        .lv-row {
+          margin: 0 12px;
+        }
+      }
+
+      .lv-mobile-title {
+        display: none;
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: var(--lv-muted);
+        letter-spacing: .06em;
+        margin-bottom: 5px;
+      }
+
+      .lv-id {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 34px;
+        min-width: 58px;
+        padding: 0 10px;
+        border-radius: 10px;
+        background: var(--lv-blue-light);
+        color: var(--lv-blue);
+        font-weight: 900;
+        font-size: 13px;
+      }
+
+      .lv-main-title {
+        font-weight: 900;
+        color: #111827;
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+
+      .lv-main-sub {
+        font-size: 13px;
+        color: var(--lv-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 420px;
+      }
+
+      .lv-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+
+      .lv-pill.ok {
+        background: var(--lv-success-light);
+        color: #047857;
+      }
+
+      .lv-pill.warn {
+        background: var(--lv-warning-light);
+        color: #b45309;
+      }
+
+      .lv-pill.bad {
+        background: var(--lv-danger-light);
+        color: #b91c1c;
+      }
+
+      .lv-pill.gray {
+        background: #f3f4f6;
+        color: #374151;
+      }
+
+      .lv-desc-preview {
+        border: 1px solid var(--lv-border);
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 9px 10px;
+        font-size: 13px;
+        color: #374151;
+        line-height: 1.35;
+        max-width: 260px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+      }
+
+      .lv-desc-preview:hover {
+        background: #f0f7fb;
+        border-color: rgba(116, 178, 212, .5);
+      }
+
+      .lv-actions-cell {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        align-items: center;
+        position: relative;
+      }
+
+      @media(max-width:1280px) {
+        .lv-actions-cell {
+          justify-content: flex-start;
+        }
+      }
+
+      .lv-action-menu {
+        position: relative;
+        display: inline-flex;
+      }
+
+      .lv-action-list {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        min-width: 220px;
+        background: #fff;
+        border: 1px solid var(--lv-border);
+        border-radius: 14px;
+        box-shadow: var(--lv-shadow);
+        padding: 7px;
+        z-index: 50;
+        display: none;
+      }
+
+      .lv-action-list.show {
+        display: block;
+      }
+
+      .lv-action-item {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        text-decoration: none;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 10px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 800;
+        cursor: pointer;
+        text-align: left;
+      }
+
+      .lv-action-item:hover {
+        background: #f8fafc;
+        color: #111827;
+        text-decoration: none;
+      }
+
+      .lv-action-item.danger {
+        color: #dc2626;
+      }
+
+      .lv-action-item.success {
+        color: #047857;
+      }
+
+      .lv-empty {
+        margin: 16px;
+        padding: 46px 20px;
+        text-align: center;
+        color: var(--lv-muted);
+        border: 1px dashed var(--lv-border);
+        border-radius: 16px;
+        background: #fff;
+      }
+
+      .lv-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 1250;
+        background: rgba(17, 24, 39, .55);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .22s ease, visibility .22s ease;
+      }
+
+      .lv-modal-backdrop.open {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .lv-modal {
+        width: min(760px, 100%);
+        max-height: 90vh;
+        background: #fff;
+        border-radius: 20px;
+        border: 1px solid rgba(229, 231, 235, .95);
+        box-shadow: var(--lv-shadow);
+        overflow: hidden;
+        transform: translateY(14px) scale(.985);
+        transition: transform .22s ease;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .lv-modal-backdrop.open .lv-modal {
+        transform: translateY(0) scale(1);
+      }
+
+      .lv-modal-header {
+        display: grid;
+        grid-template-columns: 50px 1fr 38px;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--lv-border);
+        background: linear-gradient(135deg, #fff, #f8fcff);
+      }
+
+      .lv-modal-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 16px;
+        background: var(--lv-primary-light);
+        color: #4d7c0f;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .lv-modal-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 900;
+        color: #111827;
+      }
+
+      .lv-modal-sub {
+        font-size: 13px;
+        color: var(--lv-muted);
+        margin-top: 4px;
+      }
+
+      .lv-modal-body {
+        padding: 20px;
+        overflow: auto;
+      }
+
+      .lv-modal-footer {
+        border-top: 1px solid var(--lv-border);
+        padding: 14px 20px;
+        background: #fafafa;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
+
+      .lv-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      @media(max-width:760px) {
+        .lv-form-grid {
+          grid-template-columns: 1fr
+        }
+
+        .lv-modal-header {
+          grid-template-columns: 42px 1fr 36px
+        }
+
+        .lv-modal-icon {
+          width: 42px;
+          height: 42px;
+          border-radius: 14px
+        }
+
+        .lv-modal-footer .lv-btn {
+          width: 100%;
+        }
+      }
+
+      .lv-help {
+        font-size: 12px;
+        color: var(--lv-muted);
+        margin-top: 5px;
+      }
+
+      .lv-error {
+        display: none;
+        margin-top: 8px;
+        border-radius: 12px;
+        background: var(--lv-danger-light);
+        color: #991b1b;
+        padding: 10px 12px;
+        font-size: 13px;
+        font-weight: 800;
+        white-space: pre-wrap;
+      }
+
+      .lv-error.show {
+        display: block;
+      }
+
+      .lv-sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: min(460px, 100%);
+        height: 100%;
+        background: #fff;
+        z-index: 1300;
+        box-shadow: -10px 0 40px rgba(15, 23, 42, .18);
+        transform: translateX(105%);
+        transition: transform .25s ease;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .lv-sidebar.open {
+        transform: translateX(0);
+      }
+
+      .lv-sidebar-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--lv-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: linear-gradient(135deg, #fff, #f8fcff);
+      }
+
+      .lv-sidebar-body {
+        padding: 18px 20px;
+        overflow: auto;
+        flex: 1;
+      }
+
+      .lv-note-item {
+        display: flex;
+        gap: 10px;
+        border: 1px solid var(--lv-border);
+        border-radius: 14px;
+        padding: 10px;
+        margin-bottom: 10px;
+        background: #fff;
+      }
+
+      .lv-note-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex: 0 0 auto;
+      }
+
+      .lv-note-text {
+        font-size: 13px;
+        color: #374151;
+        line-height: 1.45;
+        white-space: pre-wrap;
+      }
+
+      .mention {
+        background: #e6f3ff;
+        color: #007bff;
+        font-weight: 800;
+        border-radius: 5px;
+        padding: 1px 4px;
+      }
+
+      #lvMentionSuggestions {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        z-index: 1400;
+        background: #fff;
+        border: 1px solid var(--lv-border);
+        border-radius: 12px;
+        box-shadow: var(--lv-shadow);
+        padding: 6px;
+        list-style: none;
+        margin: 4px 0 0;
+        max-height: 220px;
+        overflow: auto;
+      }
+
+      #lvMentionSuggestions li {
+        padding: 8px 10px;
+        border-radius: 9px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      #lvMentionSuggestions li:hover {
+        background: #f8fafc;
+      }
+
+      .lv-card {
+        background: #fff;
+        border: 1px solid var(--lv-border);
+        border-radius: 18px;
+        box-shadow: var(--lv-shadow-sm);
+        overflow: visible !important;
+        position: relative;
+        z-index: 1;
+      }
+
+      .lv-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 0 90px;
+        overflow: visible !important;
+      }
+
+      .lv-row {
+        margin: 0 16px;
+        border: 1px solid var(--lv-border);
+        border-radius: 16px;
+        background: #fff;
+        transition: var(--lv-transition);
+        overflow: visible !important;
+        position: relative;
+      }
+
+      .lv-row.menu-open {
+        z-index: 9999;
+      }
+
+      .lv-actions-cell {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        align-items: center;
+        position: relative;
+        overflow: visible !important;
+      }
+
+      .lv-action-menu {
+        position: relative;
+        display: inline-flex;
+        overflow: visible !important;
+      }
+
+      .lv-action-list {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        min-width: 220px;
+        background: #fff;
+        border: 1px solid var(--lv-border);
+        border-radius: 14px;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, .25);
+        padding: 7px;
+        z-index: 10000;
+        display: none;
+      }
+
+      .lv-action-list.show {
+        display: block;
+      }
+    </style>
+  @endpush
+@endonce
+
+<div class="lv-wrap" id="leave-app" data-employee-id="{{ $data->id }}"
+  data-department-id="{{ $mainDepartmentId ?? '' }}">
+  <div class="lv-header">
+    <div>
+      <h2 class="lv-title">Urlaub & Abwesenheiten</h2>
+      <div class="lv-sub">Anträge von {{ $employeeName }} verwalten, prüfen und ohne Seitenreload aktualisieren.</div>
+    </div>
+    <div class="lv-actions">
+      <button type="button" class="lv-btn lv-btn-soft" id="lv-refresh-btn"><i class="feather icon-refresh-cw"></i>
+        Aktualisieren</button>
+      <button type="button" class="lv-btn lv-btn-primary" id="lv-open-create"><i class="feather icon-plus"></i> Neue
+        Anfrage</button>
+    </div>
+  </div>
+
+  <div class="lv-stats">
+    <div class="lv-stat">
+      <div class="lv-stat-ic total"><i class="feather icon-layers"></i></div>
+      <div>
+        <div class="lv-stat-label">Gesamt</div>
+        <div class="lv-stat-value" id="lv-stat-total">{{ $totalLeaveCount }}</div>
+        <div class="lv-stat-sub">Urlaubsanträge</div>
+      </div>
+    </div>
+    <div class="lv-stat">
+      <div class="lv-stat-ic ok"><i class="feather icon-check-circle"></i></div>
+      <div>
+        <div class="lv-stat-label">Genehmigt</div>
+        <div class="lv-stat-value" id="lv-stat-approved">{{ $approvedLeaveCount }}</div>
+        <div class="lv-stat-sub">Freigegebene Anträge</div>
+      </div>
+    </div>
+    <div class="lv-stat">
+      <div class="lv-stat-ic warn"><i class="feather icon-clock"></i></div>
+      <div>
+        <div class="lv-stat-label">Offen</div>
+        <div class="lv-stat-value" id="lv-stat-pending">{{ $pendingLeaveCount }}</div>
+        <div class="lv-stat-sub">Warten auf Prüfung</div>
+      </div>
+    </div>
+    <div class="lv-stat">
+      <div class="lv-stat-ic days"><i class="feather icon-calendar"></i></div>
+      <div>
+        <div class="lv-stat-label">Genutzte Tage</div>
+        <div class="lv-stat-value" id="lv-stat-days">{{ $usedDaysCount }}</div>
+        <div class="lv-stat-sub">Aktuelle Liste</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lv-toolbar">
+    <div class="lv-filter-left">
+      <div class="lv-field search"><label class="lv-label">Suche</label><input class="lv-input" id="lv-search"
+          placeholder="Suche nach Grund, Beschreibung, Status oder Jahr"></div>
+      <div class="lv-field"><label class="lv-label">Jahr</label><select class="lv-select" id="lv-filter-year">
+          <option value="">Alle Jahre</option>
+        </select></div>
+      <div class="lv-field"><label class="lv-label">Status</label><select class="lv-select" id="lv-filter-status">
+          <option value="">Alle Status</option>
+          <option value="pending">Offen</option>
+          <option value="approved">Genehmigt</option>
+          <option value="rejected">Abgelehnt</option>
+        </select></div>
+    </div>
+    <div class="lv-filter-right">
+      <button type="button" class="lv-btn lv-btn-soft" id="lv-reset-filter"><i class="feather icon-x"></i> Filter
+        löschen</button>
+    </div>
+  </div>
+
+  <div class="lv-card">
+    <div class="lv-list-head">
+      <div>ID</div>
+      <div>Zeitraum</div>
+      <div>Grund</div>
+      <div>Dauer</div>
+      <div>Status</div>
+      <div>Beschreibung</div>
+      <div style="text-align:right;">Aktionen</div>
+    </div>
+    <div class="lv-list" id="lv-list"></div>
+  </div>
+
+  <div class="lv-modal-backdrop" id="lv-form-modal">
+    <div class="lv-modal">
+      <div class="lv-modal-header">
+        <div class="lv-modal-icon"><i class="feather icon-calendar"></i></div>
+        <div>
+          <h3 class="lv-modal-title" id="lv-form-title">Neue Urlaubsanfrage</h3>
+          <div class="lv-modal-sub" id="lv-form-sub">Urlaubszeitraum und Anfrageempfänger eintragen.</div>
+        </div>
+        <button type="button" class="lv-btn-icon" data-close-modal="lv-form-modal"><i
+            class="feather icon-x"></i></button>
+      </div>
+      <form id="lv-form">
+        @csrf
+        <input type="hidden" name="id" id="lv-id">
+        <input type="hidden" name="active_tab" value="leave">
+        <input type="hidden" name="emp_id" value="{{ $data->id }}">
+        <input type="hidden" name="department_id" value="{{ $mainDepartmentId ?? '' }}">
+        <div class="lv-modal-body">
+          <div class="lv-form-grid">
+            <div class="lv-field"><label class="lv-label">Jahr</label><select name="year" id="lv-year"
+                class="lv-select"></select></div>
+            <div class="lv-field"><label class="lv-label">Anfrage an</label><select name="request_to" id="lv-request-to"
+                class="lv-select" data-department="{{ $mainDepartmentId ?? '' }}">
+                <option value="">Abteilungsleiter wählen</option>
+              </select></div>
+            <div class="lv-field"><label class="lv-label">Ab Datum</label><input type="date" name="start_date"
+                id="lv-start" class="lv-input" required></div>
+            <div class="lv-field"><label class="lv-label">Bis Datum</label><input type="date" name="end_date"
+                id="lv-end" class="lv-input" required></div>
+            <div class="lv-field"><label class="lv-label">Urlaubstage</label><input type="number" name="leave_day"
+                id="lv-leave-day" class="lv-input" readonly></div>
+            <div class="lv-field"><label class="lv-label">Rest nach Antrag</label><input type="number"
+                name="remaining_day" id="lv-remaining" class="lv-input" readonly></div>
+            <div class="lv-field"><label class="lv-label">Vorjahresurlaub</label><input type="number"
+                name="last_year_remainings" id="lv-last-year" class="lv-input" readonly></div>
+            <div class="lv-field"><label class="lv-label">Eingereichte Tage</label><input type="number" name="duration"
+                id="lv-duration" class="lv-input" readonly>
+              <div class="lv-help" id="lv-duration-help">Wochenenden werden nicht mitgerechnet.</div>
+            </div>
+          </div>
+          <div class="lv-field" style="margin-top:14px;"><label class="lv-label">Grund</label><select name="reason"
+              id="lv-reason" class="lv-select">
+              <option value="Urlaub">Urlaub</option>
+              <option value="Freizeitausgleich">Freizeitausgleich</option>
+              <option value="Vorjahresurlaub">Vorjahresurlaub</option>
+              <option value="Elternzeit">Elternzeit</option>
+              <option value="Schulung">Schulung</option>
+              <option value="Schule">Schule</option>
+              <option value="Unbezahlter Urlaub">Unbezahlter Urlaub</option>
+              <option value="Freigestellt">Freigestellt</option>
+              <option value="Persönlicher Urlaub">Persönlicher Urlaub</option>
+              <option value="Jahresurlaub">Jahresurlaub</option>
+              <option value="Trauerurlaub">Trauerurlaub</option>
+            </select></div>
+          <div class="lv-field" style="margin-top:14px;"><label class="lv-label">Beschreibung</label><textarea
+              name="description" id="lv-description" class="lv-textarea" placeholder="Beschreibung optional"></textarea>
+          </div>
+          <div class="lv-error" id="lv-form-error"></div>
+        </div>
+        <div class="lv-modal-footer"><button type="button" class="lv-btn lv-btn-soft"
+            data-close-modal="lv-form-modal">Abbrechen</button><button type="submit" class="lv-btn lv-btn-primary"
+            id="lv-submit"><i class="feather icon-save"></i> Speichern</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="lv-modal-backdrop" id="lv-desc-modal">
+    <div class="lv-modal">
+      <div class="lv-modal-header">
+        <div class="lv-modal-icon"><i class="feather icon-file-text"></i></div>
+        <div>
+          <h3 class="lv-modal-title">Beschreibung</h3>
+          <div class="lv-modal-sub" id="lv-desc-sub"></div>
+        </div><button type="button" class="lv-btn-icon" data-close-modal="lv-desc-modal"><i
+            class="feather icon-x"></i></button>
+      </div>
+      <div class="lv-modal-body">
+        <div id="lv-desc-body" style="white-space:pre-wrap;line-height:1.6;color:#111827;"></div>
+      </div>
+      <div class="lv-modal-footer"><button type="button" class="lv-btn lv-btn-primary"
+          data-close-modal="lv-desc-modal">OK</button></div>
+    </div>
+  </div>
+
+  <div class="lv-sidebar" id="lv-notes-sidebar">
+    <div class="lv-sidebar-header">
+      <div>
+        <h5 style="margin:0;font-weight:900;">Notizen</h5><small class="text-muted">Interne Hinweise zum
+          Urlaubsantrag</small>
+      </div><button type="button" class="lv-btn-icon" id="lv-notes-close"><i class="feather icon-x"></i></button>
+    </div>
+    <div class="lv-sidebar-body">
+      <div id="lv-notes-content"></div>
+      <div style="position:relative;margin-top:14px;"><textarea id="lv-new-note" class="lv-textarea" rows="3"
+          placeholder="Neue Notiz mit @Mention..."></textarea>
+        <ul id="lvMentionSuggestions"></ul>
+      </div>
+      <button type="button" class="lv-btn lv-btn-primary" id="lv-save-note" style="width:100%;margin-top:10px;"><i
+          class="feather icon-save"></i> Notiz speichern</button>
+    </div>
+  </div>
+</div>
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
- 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    (function () {
+      const app = document.getElementById('leave-app');
+      if (!app || app.dataset.ready === '1') return;
+      app.dataset.ready = '1';
 
-<script>
-   document.addEventListener("DOMContentLoaded", function () {
-    
-    function submitLeaveRequest() {
-        const modal = document.querySelector("#new_leave_modal");
-        const form = modal.querySelector("form.form-horizontal");
-        const saveButton = modal.querySelector(".save_button");
+      const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+      const employeeId = app.dataset.employeeId;
+      const departmentId = app.dataset.departmentId;
+      const imageBase = @json(asset('images/employee'));
+      const defaultAvatar = @json(asset('images/gender/male.png'));
+      const initialLeaves = @json($leaveItems);
 
-        saveButton.addEventListener("click", function (event) {
-            event.preventDefault(); // Prevent default form submission
+      const API = {
+        store: @json(route('leave.store')),
+        update: @json(route('leave.update')),
+        deleteBase: @json(url('/leave_delete')),
+        approveBase: @json(url('/leave_approve')),
+        remainingBase: @json(url('/employee/remaining/days')),
+        leaderBase: @json(url('/getDepartment/leader')),
+        employeeNames: @json(route('leave.get.employee')),
+        checkBase: @json(url('/check/department-holidays')),
+        notesBase: @json(url('/leaves')),
+      };
 
-            let formData = new FormData(form);
-            let empId = formData.get("emp_id");
-            let startDate = formData.get("start_date");
-            let endDate = formData.get("end_date");
-            let requestTo = formData.get("request_to");
+      const el = {
+        list: document.getElementById('lv-list'), search: document.getElementById('lv-search'), yearFilter: document.getElementById('lv-filter-year'), statusFilter: document.getElementById('lv-filter-status'), resetFilter: document.getElementById('lv-reset-filter'), refresh: document.getElementById('lv-refresh-btn'),
+        statTotal: document.getElementById('lv-stat-total'), statApproved: document.getElementById('lv-stat-approved'), statPending: document.getElementById('lv-stat-pending'), statDays: document.getElementById('lv-stat-days'),
+        createBtn: document.getElementById('lv-open-create'), formModal: document.getElementById('lv-form-modal'), form: document.getElementById('lv-form'), formTitle: document.getElementById('lv-form-title'), formSub: document.getElementById('lv-form-sub'), formError: document.getElementById('lv-form-error'), submit: document.getElementById('lv-submit'),
+        id: document.getElementById('lv-id'), year: document.getElementById('lv-year'), requestTo: document.getElementById('lv-request-to'), start: document.getElementById('lv-start'), end: document.getElementById('lv-end'), leaveDay: document.getElementById('lv-leave-day'), remaining: document.getElementById('lv-remaining'), lastYear: document.getElementById('lv-last-year'), duration: document.getElementById('lv-duration'), reason: document.getElementById('lv-reason'), description: document.getElementById('lv-description'),
+        descModal: document.getElementById('lv-desc-modal'), descSub: document.getElementById('lv-desc-sub'), descBody: document.getElementById('lv-desc-body'), notesSidebar: document.getElementById('lv-notes-sidebar'), notesClose: document.getElementById('lv-notes-close'), notesContent: document.getElementById('lv-notes-content'), newNote: document.getElementById('lv-new-note'), saveNote: document.getElementById('lv-save-note'), mentionBox: document.getElementById('lvMentionSuggestions')
+      };
 
-            if (!startDate || !endDate || !requestTo) {
-                Swal.fire({
-                    title: "Fehlende Angaben",
-                    text: "Bitte füllen Sie alle erforderlichen Felder aus!",
-                    icon: "warning",
-                    confirmButtonText: "Okay"
-                });
-                return;
-            }
+      const state = { leaves: initialLeaves, mode: 'create', currentNoteId: null, employees: [] };
 
-            // Convert form data to JSON object
-            let jsonData = {};
-            formData.forEach((value, key) => {
-                jsonData[key] = value;
-            });
+      const esc = s => String(s ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+      const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ä/g, 'a').replace(/ö/g, 'o').replace(/ü/g, 'u').replace(/ß/g, 'ss').trim();
+      const fmtDE = s => { if (!s) return '—'; const d = new Date(String(s).replace(' ', 'T')); return Number.isNaN(d.getTime()) ? s : d.toLocaleDateString('de-DE'); };
+      const statusKey = l => { const a = String(l.approved || '').toLowerCase(); const s = String(l.status || '').toLowerCase(); if (a === 'yes' || ['accept', 'accepted', 'approved'].includes(s)) return 'approved'; if (['reject', 'rejected', 'declined'].includes(s)) return 'rejected'; return 'pending'; };
+      const statusBadge = l => { const k = statusKey(l); if (k === 'approved') return '<span class="lv-pill ok"><i class="feather icon-check"></i> Genehmigt</span>'; if (k === 'rejected') return '<span class="lv-pill bad"><i class="feather icon-x"></i> Abgelehnt</span>'; return '<span class="lv-pill warn"><i class="feather icon-clock"></i> Offen</span>'; };
+      const descShort = s => { const clean = String(s || '').replace(/\s+/g, ' ').trim(); return clean ? (clean.length > 80 ? clean.slice(0, 80) + '...' : clean) : 'Keine Beschreibung'; };
 
-            console.log("📡 Sending AJAX request:", jsonData);
+      function openModal(modal) { modal?.classList.add('open'); }
+      function closeModal(modal) { modal?.classList.remove('open'); }
+      document.addEventListener('click', e => {
+        const menuBtn = e.target.closest('[data-lv-action="menu"]');
 
-            fetch(form.action, {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(jsonData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Server Error: ${response.status} ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("✅ Leave request saved:", data);
-                
-                if (data.success) {
-                    // ✅ Store active tab in SESSION via AJAX
-                    fetch("{{ route('setActiveTab') }}", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ active_tab: "leave" }) // Store "leave" in session
-                    })
-                    .then(() => {
-                        Swal.fire({
-                            title: "Erfolgreich!",
-                            text: "Ihr Urlaubsantrag wurde erfolgreich eingereicht.",
-                            icon: "success", 
-                        }).then(() => {
-                            $("#new_leave_modal").modal("hide"); // Close modal
-                            form.reset(); // Reset form fields
-                            location.reload(); // ✅ Reload the page
-                        });
-                    });
-                }
-            })
-            .catch(error => {
-                console.error("❌ Error saving leave request:", error);
-                Swal.fire({
-                    title: "Fehler!",
-                    text: "Es gab ein Problem beim Speichern des Urlaubsantrags.",
-                    icon: "error",
-                    confirmButtonText: "Okay"
-                });
-            });
-        });
-    }
-
-    submitLeaveRequest(); // Initialize AJAX form submission
-});
-
-
-</script>
-
-<script>  
-document.addEventListener("DOMContentLoaded", function () {
-    
-    function populateYearDropdown() {
-        const yearSelect = document.getElementById("yearSelect");
-        const currentYear = new Date().getFullYear();
-        yearSelect.innerHTML = ""; 
-        
-        for (let i = currentYear - 5; i <= currentYear + 1; i++) {
-            let option = document.createElement("option");
-            option.value = i;
-            option.textContent = i;
-            yearSelect.appendChild(option);
-        }
-        yearSelect.value = currentYear;
-    }
-
-    function calculateWorkingDays(startDate, endDate) {
-        let start = new Date(startDate);
-        let end = new Date(endDate);
-        let count = 0;
-
-        while (start <= end) {
-            let dayOfWeek = start.getDay();
-            if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-                count++;
-            }
-            start.setDate(start.getDate() + 1);
-        }
-        return count;
-    }
-
-    function updateDurationAndRemainingDays(modal) {
-        if (!modal) {
-            console.error("❌ Modal not found.");
-            return;
-        }
-
-        const startDateInput = modal.querySelector(".leave_start_date");
-        const endDateInput = modal.querySelector(".leave_end_date");
-        const durationInput = modal.querySelector(".leave_duration");
-        const leaveDayInput = modal.querySelector(".leave_day");
-        const remainingDayInput = modal.querySelector(".remaining_day");
-        const durationLabel = modal.querySelector("#duration_label");
-        const saveButton = modal.querySelector(".save_button");
-
-        if (!startDateInput || !endDateInput || !leaveDayInput || !remainingDayInput || !durationInput) {
-            console.error("❌ One or more form fields not found in modal.");
-            return;
-        }
-
-        const startDate = startDateInput.value;
-        const endDate = endDateInput.value;
-        let leaveDays = parseInt(leaveDayInput.value) || 0;
-
-        if (startDate && endDate) {
-            const workingDays = calculateWorkingDays(startDate, endDate);
-            durationInput.value = workingDays;
-
-            console.log("🚀 Checking Leave Request:");
-            console.log("Total Leave Days:", leaveDays);
-            console.log("Requested Duration:", workingDays);
-
-            // ✅ Proper calculation: remaining leave days = leave_days - requested duration
-            let remainingDays = leaveDays - workingDays;
-            remainingDayInput.value = remainingDays >= 0 ? remainingDays : 0;
-
-            // ✅ Ensure `durationLabel` and `saveButton` exist before modifying them
-            if (durationLabel) {
-                durationLabel.style.display = workingDays > leaveDays ? "block" : "none";
-            }
-            if (saveButton) {
-                saveButton.style.display = workingDays > leaveDays ? "none" : "block";
-            }
-
-            // ✅ Show alert if leave request is too large
-            if (workingDays > leaveDays) {
-                Swal.fire({
-                    title: "Achtung!",
-                    text: "Sie haben mehr Urlaubstage als erlaubt beantragt. Zusätzliche Tage werden von Ihrem Gehalt abgezogen!",
-                    icon: "warning",
-                    confirmButtonText: "Verstanden"
-                });
-            }
-        }
-    }
-
-    function fetchRemainingLeaveDays(empId, year, modal) {
-        if (!empId) {
-            console.error("❌ Employee ID is missing.");
-            return;
-        }
-
-        console.log(`📡 Fetching remaining leave days for empId: ${empId}, Year: ${year}`);
-
-        fetch(`/employee/remaining/days/${empId}?year=${year}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Server Error: ${response.status} ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("✅ API Response:", data);
-
-                if (data.error) {
-                    console.error("❌ Error fetching leave data:", data.error);
-                    return;
-                }
-
-                const leaveDayInput = modal.querySelector(".leave_day");
-                const remainingDayInput = modal.querySelector(".remaining_day");
-
-                if (!leaveDayInput || !remainingDayInput) {
-                    console.error("❌ Form fields not found in modal.");
-                    return;
-                }
-
-                // ✅ Update leave days and remaining days in edit modal
-                leaveDayInput.value = data.total_leave_days || 0;
-                remainingDayInput.value = data.remaining_days || 0;
-
-                console.log("📌 Updated Form Fields:");
-                console.log("Total Leave Days:", leaveDayInput.value);
-                console.log("Remaining Days:", remainingDayInput.value);
-            })
-            .catch(error => {
-                console.error("❌ Error fetching leave data:", error);
-            });
-    }
-
-    function openLeaveModal() {
-        const modal = document.querySelector("#new_leave_modal");
-
-        if (!modal) {
-            console.error("❌ Modal #new_leave_modal not found.");
-            return;
-        }
-
-        console.log("✅ Opening modal: #new_leave_modal");
-
-        $("#new_leave_modal").modal("show");
-    }
-
-    document.querySelectorAll(".new_leave").forEach(button => {
-        button.addEventListener("click", function () {
-            const modal = document.querySelector("#new_leave_modal");
-            const empId = modal.getAttribute("data-emp-id");
-            const year = document.getElementById("yearSelect").value;
-            if (!empId || !year) {
-                console.error("❌ Employee ID or Year is missing.");
-                return;
-            }
-            fetchRemainingLeaveDays(empId, year, modal);
-            openLeaveModal();
-        });
-    });
-
-    document.querySelectorAll(".modal").forEach(modal => {
-        modal.addEventListener("change", function (event) {
-            if (
-                event.target.classList.contains("leave_start_date") || 
-                event.target.classList.contains("leave_end_date")
-            ) {
-                updateDurationAndRemainingDays(modal);
-            }
-        });
-    });
-
-    // ✅ Handle edit modal opening event - FIXED REMAINING DAYS IN EDIT MODAL
-    document.querySelectorAll(".leave_edit").forEach(modal => {
-        modal.addEventListener("show.bs.modal", function () {
-            const empId = modal.getAttribute("data-emp-id");
-            const year = new Date().getFullYear();
-            if (empId) {
-                fetchRemainingLeaveDays(empId, year, modal);
-            }
+        document.querySelectorAll('.lv-action-list.show').forEach(menu => {
+          if (!menuBtn || !menu.closest('.lv-action-menu').contains(menuBtn)) {
+            menu.classList.remove('show');
+            menu.closest('.lv-row')?.classList.remove('menu-open');
+          }
         });
 
-        modal.querySelectorAll(".leave_start_date, .leave_end_date").forEach(input => {
-            input.addEventListener("change", function () {
-                updateDurationAndRemainingDays(modal);
-            });
-        });
-    });
+        if (menuBtn) {
+          e.preventDefault();
+          e.stopPropagation();
 
-    populateYearDropdown();
-});
+          const row = menuBtn.closest('.lv-row');
+          const list = menuBtn.closest('.lv-action-menu')?.querySelector('.lv-action-list');
 
-</script>
-
-
-<script>
-    $(document).ready(function () {
-        $('.delete-leave').on('click', function () {
-            var leaveId = $(this).data('id');
-            var row = $(this).closest('tr');
-
-            Swal.fire({
-                title: "Bist du sicher?",
-                text: "Diese Aktion kann nicht rückgängig gemacht werden!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6",
-                confirmButtonText: "Ja, löschen!",
-                cancelButtonText: "Abbrechen"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "/leave_delete/" + leaveId,
-                        type: "DELETE",
-                        data: {
-                            "_token": "{{ csrf_token() }}"
-                        },
-                        success: function (response) {
-                            Swal.fire({
-                                title: "Gelöscht!",
-                                text: response.message,
-                                icon: "success",
-                                timer: 2000,
-                                showConfirmButton: false
-                            });
-
-                            row.fadeOut(500, function () {
-                                $(this).remove();
-                            });
-                        },
-                        error: function () {
-                            Swal.fire({
-                                title: "Fehler!",
-                                text: "Etwas ist schief gelaufen. Bitte versuche es erneut.",
-                                icon: "error"
-                            });
-                        }
-                    });
-                }
-            });
-        });
-    });
-</script>
-<script>
-   const path_image = "{{ asset('images/employee/')}}";
-
-</script>
- 
- <script>
-   $(document).ready(function () {
-
-
-    // Initialize Select2
-    $('#employee_leader_select').select2({
-        placeholder: "Abteilungsleiter",
-        allowClear: true,
-        width: '100%',
-        templateResult: formatEmployee,
-        templateSelection: formatEmployee
-    });
-
-    // Only run the department check when the modal is opened
-    $('#new_leave_modal').on('shown.bs.modal', function () {
-        let department_id = $('#employee_leader_select').attr('data-department');
-
-        if (!department_id) {
-            Swal.fire({
-                title: "Warnung!",
-                text: "Bitte geben Sie die Hauptfunktion dieses Mitarbeiters und die Abteilung an.",
-                icon: "warning"
-            });
-            return; // Stop execution if no department is assigned
+          if (list) {
+            list.classList.toggle('show');
+            row?.classList.toggle('menu-open', list.classList.contains('show'));
+          }
         }
+      });
 
-        checkDepartmentLeader(department_id);
-    });
+      function fillYears() {
+        const now = new Date().getFullYear();
+        const years = new Set(state.leaves.map(l => Number(l.year)).filter(Boolean));
+        for (let y = now - 5; y <= now + 1; y++) years.add(y);
+        const sorted = Array.from(years).sort((a, b) => b - a);
+        el.year.innerHTML = sorted.sort((a, b) => a - b).map(y => `<option value="${y}">${y}</option>`).join('');
+        el.year.value = now;
+        el.yearFilter.innerHTML = '<option value="">Alle Jahre</option>' + Array.from(years).sort((a, b) => b - a).map(y => `<option value="${y}">${y}</option>`).join('');
+      }
 
-    function checkDepartmentLeader(department_id) {
-        $.ajax({
-            url: `/getDepartment/leader/${department_id}`,
-            type: "GET",
-            dataType: "json",
-            success: function (response) {
-                if (response.length === 0) {
-                    Swal.fire({
-                        title: "Konfiguration erforderlich!",
-                        text: "Bitte konfigurieren Sie einen Abteilungsleiter, bevor Sie mit diesem Abschnitt fortfahren.",
-                        icon: "error",
-                        confirmButtonText: "Zur Abteilungsorganisation",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "/department_organization";
-                        }
-                    });
-                } else {
-                    // Populate select with department leader data
-                    $('#employee_leader_select').empty().append('<option></option>');
+      function calcWorkingDays(start, end) {
+        if (!start || !end) return 0;
+        const s = new Date(start); const e = new Date(end); let c = 0;
+        if (Number.isNaN(s.getTime()) || Number.isNaN(e.getTime()) || e < s) return 0;
+        while (s <= e) { const d = s.getDay(); if (d !== 0 && d !== 6) c++; s.setDate(s.getDate() + 1); }
+        return c;
+      }
 
-                    $.each(response, function (key, employee) {
-                        let imageUrl = employee.image ? `${path_image}/${employee.image}` : '/default-avatar.png';
-                        let newOption = new Option(
-                            `${employee.name} ${employee.lastname}`,
-                            employee.emp_id,
-                            false,
-                            false
-                        );
-                        $(newOption).attr('data-img', imageUrl);
-                        $('#employee_leader_select').append(newOption);
-                    });
+      async function jsonFetch(url, options = {}) {
+        const res = await fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': csrf, ...(options.headers || {}) }, ...options });
+        const txt = await res.text(); let data = {}; try { data = JSON.parse(txt || '{}'); } catch (_) { data = { message: txt }; }
+        if (!res.ok) { const err = new Error(data.message || 'Fehler'); err.data = data; err.status = res.status; throw err; }
+        return data;
+      }
 
-                    $('#employee_leader_select').trigger('change');
-                }
-            },
-            error: function (xhr) {
-                console.error("Error fetching department leader:", xhr.responseText);
+
+
+      async function fetchRemaining() {
+        if (!employeeId || !el.year.value) return;
+        try {
+          const d = await jsonFetch(`${API.remainingBase}/${employeeId}?year=${encodeURIComponent(el.year.value)}`);
+          el.leaveDay.value = d.total_leave_days ?? 0;
+          el.lastYear.value = d.last_year_remainings ?? 0;
+          calculateDates();
+        } catch (e) { console.error(e); }
+      }
+
+      function calculateDates() {
+        const days = calcWorkingDays(el.start.value, el.end.value);
+        const total = parseInt(el.leaveDay.value || '0', 10);
+        el.duration.value = days;
+        el.remaining.value = Math.max(total - days, 0);
+        el.submit.disabled = days > total || days <= 0;
+        document.getElementById('lv-duration-help').textContent = days > total ? 'Die Dauer überschreitet die verfügbaren Urlaubstage.' : 'Wochenenden werden nicht mitgerechnet.';
+      }
+
+      function normalizeLeaveFromResponse(data, fallback) {
+        const l = data.leave || data.data || {};
+        const base = { ...fallback, ...l };
+        base.id = Number(base.id || data.leave_id || fallback.id || 0);
+        base.emp_id = Number(base.emp_id || employeeId);
+        base.year = Number(base.year || (base.start_date ? new Date(base.start_date).getFullYear() : el.year.value));
+        base.duration = Number(base.duration || fallback.duration || 0);
+        base.leave_day = Number(base.leave_day || fallback.leave_day || 0);
+        base.remaining_day = Number(base.remaining_day || fallback.remaining_day || 0);
+        base.start_date_de = fmtDE(base.start_date);
+        base.end_date_de = fmtDE(base.end_date);
+        return base;
+      }
+
+      function renderStats(items) {
+        el.statTotal.textContent = items.length;
+        el.statApproved.textContent = items.filter(l => statusKey(l) === 'approved').length;
+        el.statPending.textContent = items.filter(l => statusKey(l) === 'pending').length;
+        el.statDays.textContent = items.reduce((s, l) => s + Number(l.duration || 0), 0);
+      }
+
+      function filteredLeaves() {
+        const q = norm(el.search.value); const y = el.yearFilter.value; const st = el.statusFilter.value;
+        return state.leaves.filter(l => {
+          const hay = norm(`${l.id} ${l.year} ${l.reason} ${l.description} ${l.status} ${l.approved}`);
+          if (q && !hay.includes(q)) return false;
+          if (y && String(l.year) !== String(y)) return false;
+          if (st && statusKey(l) !== st) return false;
+          return true;
+        }).sort((a, b) => String(b.start_date).localeCompare(String(a.start_date)));
+      }
+
+      function render() {
+        fillYears();
+        const items = filteredLeaves();
+        renderStats(items);
+        if (!items.length) { el.list.innerHTML = '<div class="lv-empty">Keine Urlaubsanträge gefunden.</div>'; return; }
+        el.list.innerHTML = items.map(l => `
+          <div class="lv-row" data-id="${l.id}">
+            <div class="lv-row-inner">
+              <div><div class="lv-mobile-title">ID</div><span class="lv-id">#${l.id}</span></div>
+              <div><div class="lv-mobile-title">Zeitraum</div><div class="lv-main-title">${esc(fmtDE(l.start_date))} → ${esc(fmtDE(l.end_date))}</div><div class="lv-main-sub">Jahr ${esc(l.year || '—')}</div></div>
+              <div><div class="lv-mobile-title">Grund</div><div class="lv-main-title">${esc(l.reason || '—')}</div><div class="lv-main-sub">${esc(l.created_at || '')}</div></div>
+              <div><div class="lv-mobile-title">Dauer</div><span class="lv-pill gray">${Number(l.duration || 0)} Tag(e)</span></div>
+              <div><div class="lv-mobile-title">Status</div>${statusBadge(l)}</div>
+              <div><div class="lv-mobile-title">Beschreibung</div><button type="button" class="lv-desc-preview" data-lv-action="desc" data-id="${l.id}">${esc(descShort(l.description))}</button></div>
+              <div class="lv-actions-cell"><div class="lv-action-menu"><button type="button" class="lv-btn-icon" data-lv-action="menu"><i class="feather icon-more-vertical"></i></button><div class="lv-action-list">
+                <button type="button" class="lv-action-item" data-lv-action="edit" data-id="${l.id}"><i class="feather icon-edit"></i> Bearbeiten</button>
+                ${statusKey(l) !== 'approved' ? `<button type="button" class="lv-action-item success" data-lv-action="approve" data-id="${l.id}"><i class="feather icon-check-square"></i> Genehmigen</button>` : ''}
+                <button type="button" class="lv-action-item" data-lv-action="check" data-id="${l.id}"><i class="feather icon-calendar"></i> Konflikt prüfen</button>
+                <button type="button" class="lv-action-item" data-lv-action="notes" data-id="${l.id}"><i class="feather icon-file-text"></i> Notizen</button>
+                <button type="button" class="lv-action-item danger" data-lv-action="delete" data-id="${l.id}"><i class="feather icon-trash-2"></i> Löschen</button>
+              </div></div></div>
+            </div>
+          </div>`).join('');
+      }
+
+      async function loadLeaders() {
+        if (!departmentId) return;
+        try {
+          const rows = await jsonFetch(`${API.leaderBase}/${departmentId}`);
+          const list = Array.isArray(rows) ? rows : [];
+          el.requestTo.innerHTML = '<option value="">Abteilungsleiter wählen</option>' + list.map(emp => `<option value="${esc(emp.emp_id || emp.id)}" data-img="${esc(emp.image ? imageBase + '/' + emp.image : defaultAvatar)}">${esc((emp.name || '') + ' ' + (emp.lastname || ''))}</option>`).join('');
+          if (list.length === 1) el.requestTo.value = list[0].emp_id || list[0].id;
+          if (window.jQuery && jQuery.fn.select2 && !jQuery(el.requestTo).data('select2')) jQuery(el.requestTo).select2({ width: '100%', dropdownParent: jQuery('#lv-form-modal'), placeholder: 'Abteilungsleiter' });
+        } catch (e) { console.error(e); }
+      }
+
+      function resetForm(mode, leave) {
+        state.mode = mode;
+        el.form.reset(); el.formError.classList.remove('show'); el.formError.textContent = ''; el.id.value = '';
+        const now = new Date().getFullYear(); el.year.value = now;
+        if (mode === 'edit' && leave) {
+          el.formTitle.textContent = 'Urlaubsantrag bearbeiten'; el.formSub.textContent = `Antrag #${leave.id} aktualisieren.`;
+          el.id.value = leave.id; el.year.value = leave.year || now; el.start.value = leave.start_date || ''; el.end.value = leave.end_date || ''; el.leaveDay.value = leave.leave_day || ''; el.remaining.value = leave.remaining_day || ''; el.duration.value = leave.duration || ''; el.reason.value = leave.reason || 'Urlaub'; el.description.value = leave.description || ''; if (leave.request_to) el.requestTo.value = leave.request_to;
+        } else {
+          el.formTitle.textContent = 'Neue Urlaubsanfrage'; el.formSub.textContent = 'Urlaubszeitraum und Anfrageempfänger eintragen.';
+          fetchRemaining();
+        }
+      }
+
+      el.createBtn.addEventListener('click', async () => { resetForm('create'); await loadLeaders(); openModal(el.formModal); });
+      [el.start, el.end].forEach(x => x.addEventListener('change', calculateDates));
+      el.year.addEventListener('change', fetchRemaining);
+      [el.search, el.yearFilter, el.statusFilter].forEach(x => x.addEventListener('input', render));
+      el.resetFilter.addEventListener('click', () => { el.search.value = ''; el.yearFilter.value = ''; el.statusFilter.value = ''; render(); });
+      el.refresh.addEventListener('click', render);
+
+      el.form.addEventListener('submit', async e => {
+        e.preventDefault();
+        const fd = new FormData(el.form); const payload = Object.fromEntries(fd.entries());
+        const url = state.mode === 'edit' ? API.update : API.store;
+        el.submit.disabled = true;
+        try {
+          const data = await jsonFetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          const fallback = { ...payload, id: payload.id, duration: el.duration.value, leave_day: el.leaveDay.value, remaining_day: el.remaining.value, status: 'Pending', approved: state.mode === 'edit' ? 'Pending' : '' };
+          const fresh = normalizeLeaveFromResponse(data, fallback);
+          const idx = state.leaves.findIndex(l => Number(l.id) === Number(fresh.id));
+          if (idx >= 0) state.leaves[idx] = { ...state.leaves[idx], ...fresh }; else state.leaves.unshift(fresh);
+
+          closeModal(el.formModal); render();
+          Swal.fire({ icon: 'success', title: 'Gespeichert', text: data.message || 'Urlaub wurde gespeichert.', timer: 1600, showConfirmButton: false });
+        } catch (err) {
+          const errors = err.data?.errors ? Object.values(err.data.errors).flat().join('\n') : (err.data?.error || err.data?.message || 'Speichern fehlgeschlagen.');
+          el.formError.textContent = errors; el.formError.classList.add('show');
+        } finally { el.submit.disabled = false; }
+      });
+
+      el.list.addEventListener('click', async e => {
+        const btn = e.target.closest('[data-lv-action]'); if (!btn) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const action = btn.dataset.lvAction;
+        const row = btn.closest('.lv-row'); const id = Number(btn.dataset.id || row?.dataset.id || 0);
+        const leave = state.leaves.find(l => Number(l.id) === id);
+        if (action === 'menu') { e.stopPropagation(); const m = btn.nextElementSibling; document.querySelectorAll('.lv-action-list.show').forEach(x => { if (x !== m) x.classList.remove('show'); }); m?.classList.toggle('show'); return; }
+        document.querySelectorAll('.lv-action-list.show').forEach(x => x.classList.remove('show'));
+        if (action === 'desc' && leave) { el.descSub.textContent = `${fmtDE(leave.start_date)} → ${fmtDE(leave.end_date)}`; el.descBody.textContent = leave.description || 'Keine Beschreibung vorhanden.'; openModal(el.descModal); }
+        if (action === 'edit' && leave) { resetForm('edit', leave); await loadLeaders(); openModal(el.formModal); }
+        if (action === 'delete' && leave) {
+          const r = await Swal.fire({
+            title: 'Löschen?',
+            text: 'Diese Urlaubsanfrage wirklich löschen?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ja, löschen',
+            cancelButtonText: 'Abbrechen'
+          });
+
+          if (r.isConfirmed) {
+            try {
+              await jsonFetch(`${API.deleteBase}/${id}`, { method: 'DELETE' });
+              state.leaves = state.leaves.filter(l => Number(l.id) !== id);
+              render();
+              Swal.fire({ icon: 'success', title: 'Gelöscht', text: 'Urlaubsanfrage wurde gelöscht.', timer: 1400, showConfirmButton: false });
+            } catch (err) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Fehler',
+                text: err.data?.message || err.message || 'Urlaubsanfrage konnte nicht gelöscht werden.'
+              });
             }
-        });
-    }
-
-    // Select2 custom rendering to show image
-    function formatEmployee(employee) {
-        if (!employee.id) {
-            return employee.text;
+          }
         }
-        var imageUrl = $(employee.element).attr("data-img") || "/default-avatar.png";
-        var $employee = $(
-            `<span><img src="${imageUrl}" class="rounded-circle" width="30" height="30" style="margin-right:10px;"> ${employee.text}</span>`
-        );
-        return $employee;
-    }
-});
+        if (action === 'approve') { window.location.href = `${API.approveBase}/${id}`; }
+        if (action === 'check' && leave) { checkConflict(leave); }
+        if (action === 'notes' && leave) { openNotes(id); }
+      });
 
- </script>
+      document.addEventListener('click', e => { if (!e.target.closest('.lv-action-menu')) document.querySelectorAll('.lv-action-list.show').forEach(x => x.classList.remove('show')); });
 
+      async function checkConflict(leave) {
+        try {
+          const data = await jsonFetch(`${API.checkBase}/${employeeId}/${leave.start_date}/${leave.end_date}`);
+          let html = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left"><div><h6>Im Urlaub (${data.conflict_count || 0})</h6><ul class="list-group">${(data.conflicts || []).map(x => `<li class="list-group-item"><b>${esc(x.name)} ${esc(x.lastname)}</b><br><small>${esc(x.department_name || '')}</small><br><small>${esc(x.start_date)} → ${esc(x.end_date)}</small></li>`).join('') || '<li class="list-group-item">Keine Konflikte</li>'}</ul></div><div><h6>Anwesend (${data.present_count || 0})</h6><ul class="list-group">${(data.present || []).map(x => `<li class="list-group-item"><b>${esc(x.name)} ${esc(x.lastname)}</b></li>`).join('') || '<li class="list-group-item">Keine Daten</li>'}</ul></div></div>`;
+          Swal.fire({ title: 'Abteilungsübersicht', html, width: '900px', confirmButtonText: 'Schließen' });
+        } catch (_) { Swal.fire('Fehler', 'Daten konnten nicht geladen werden.', 'error'); }
+      }
 
-<script>
-   $(document).on('click', '.check-leave', function () {
-    const employeeId = $(this).data('employee-id');
-    const startDate = $(this).data('start-date');
-    const endDate = $(this).data('end-date');
+      async function loadEmployees() { try { const d = await jsonFetch(API.employeeNames); state.employees = Array.isArray(d) ? d : (d.employees || []); } catch (_) { } }
+      async function openNotes(id) { state.currentNoteId = id; el.notesSidebar.classList.add('open'); await loadNotes(); }
+      el.notesClose.addEventListener('click', () => el.notesSidebar.classList.remove('open'));
+      async function loadNotes() { if (!state.currentNoteId) return; const notes = await jsonFetch(`${API.notesBase}/${state.currentNoteId}/notes`); renderNotes(Array.isArray(notes) ? notes : []); }
+      function renderNotes(notes) { el.notesContent.innerHTML = notes.length ? notes.map((n, i) => `<div class="lv-note-item"><img src="${esc(n.image ? imageBase + '/' + n.image : defaultAvatar)}" class="lv-note-avatar"><div style="flex:1"><div style="font-size:12px;color:#6b7280"><b>${esc(n.employee || 'Mitarbeiter')}</b> · ${esc(n.date || '')}</div><div class="lv-note-text">${n.text || ''}</div><div style="margin-top:7px"><button class="lv-btn-icon" onclick="window.lvEditNote(${i})"><i class="feather icon-edit"></i></button> <button class="lv-btn-icon" onclick="window.lvDeleteNote(${i})"><i class="feather icon-trash-2"></i></button></div></div></div>`).join('') : '<div class="lv-empty" style="margin:0;padding:25px">Keine Notizen vorhanden.</div>'; }
+      el.saveNote.addEventListener('click', async () => { const text = el.newNote.value.trim(); if (!text || !state.currentNoteId) return; const d = await jsonFetch(`${API.notesBase}/${state.currentNoteId}/notes/store`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) }); el.newNote.value = ''; renderNotes(d.notes || []); });
+      window.lvDeleteNote = async idx => { const r = await Swal.fire({ title: 'Löschen?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Ja' }); if (r.isConfirmed) { const d = await jsonFetch(`${API.notesBase}/${state.currentNoteId}/notes/delete/${idx}`, { method: 'DELETE' }); renderNotes(d.notes || []); } };
+      window.lvEditNote = async idx => { const text = prompt('Neue Notiz eingeben:'); if (!text) return; const d = await jsonFetch(`${API.notesBase}/${state.currentNoteId}/notes/update/${idx}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) }); renderNotes(d.notes || []); };
+      el.newNote.addEventListener('input', function () { const value = this.value; const caret = this.selectionStart; const match = value.substring(0, caret).match(/@([\w.\-]*)$/); if (!match) { el.mentionBox.style.display = 'none'; return; } const q = norm(match[1]); const names = state.employees.map(x => typeof x === 'string' ? x : `${x.name || ''} ${x.lastname || ''}`.trim()).filter(n => norm(n).includes(q)).slice(0, 6); el.mentionBox.innerHTML = names.map(n => `<li>${esc(n)}</li>`).join(''); el.mentionBox.style.display = names.length ? 'block' : 'none'; Array.from(el.mentionBox.children).forEach(li => li.onclick = () => { this.value = value.substring(0, caret - match[0].length) + '@' + li.textContent + ' ' + value.substring(caret); el.mentionBox.style.display = 'none'; this.focus(); }); });
 
-    $.ajax({
-        url: `/check/department-holidays/${employeeId}/${startDate}/${endDate}`,
-        type: 'GET',
-        success: function (data) {
-            let html = `
-            <div class="row" style="display:flex; gap:10px;">
-                <!-- Conflict Column -->
-                <div class="col" style="flex:1; max-height:420px; overflow-y:auto;">
-                    <h6 class="text-danger"><strong>${data.conflict_count}</strong> im Urlaub</h6>
-                    <ul class="list-group">`;
-
-            data.conflicts.forEach(item => {
-                html += `
-                    <li class="list-group-item">
-                        <div class="d-flex align-items-start">
-                            <img src="/images/employee/${item.image}" class="rounded-circle mr-2" width="50" height="50">
-                            <div>
-                                <strong>${item.name} ${item.lastname}</strong><br>
-                                <small>${item.position} – ${item.department_name}</small><br>
-                                <small>📅 ${item.start_date} → ${item.end_date}</small><br>
-                                <span class="badge badge-${getStatusColor(item.status)}">${item.status}</span>
-                            </div>
-                        </div>
-                    </li>`;
-            });
-
-            html += `</ul></div>`;
-
-            // Present Column
-            html += `
-                <div class="col" style="flex:1; max-height:420px; overflow-y:auto;">
-                    <h6 class="text-success"><strong>${data.present_count}</strong> anwesend</h6>
-                    <ul class="list-group">`;
-
-            data.present.forEach(item => {
-                html += `
-                    <li class="list-group-item">
-                        <div class="d-flex align-items-start">
-                            <img src="/images/employee/${item.image}" class="rounded-circle mr-2" width="50" height="50">
-                            <div>
-                                <strong>${item.name} ${item.lastname}</strong><br>`;
-                item.departments.forEach(dep => {
-                    html += `<small>${dep.position} – ${dep.department_name}</small><br>`;
-                });
-                html += `</div></div></li>`;
-            });
-
-            html += `</ul></div>`;
-
-            // Calendar
-            html += `
-                <div class="col text-center" style="flex:1;">
-                    <h6 class="mb-2">Kalender</h6>
-                    <div id="leave-calendar"></div>
-                </div>
-            </div>`;
-
-            Swal.fire({
-                title: 'Abteilungsübersicht',
-                html: html,
-                width: '95%',
-                didOpen: () => {
-                    new Litepicker({
-                        element: document.getElementById('leave-calendar'),
-                        inlineMode: true,
-                        singleMode: false,
-                        showTooltip: false,
-                        startDate: startDate,
-                        endDate: endDate,
-                        numberOfMonths: 1,
-                        numberOfColumns: 1
-                    });
-                },
-                confirmButtonText: 'Schließen'
-            });
-        },
-        error: function () {
-            Swal.fire('Fehler', 'Daten konnten nicht geladen werden.', 'error');
-        }
-    });
-
-    function getStatusColor(status) {
-        switch(status.toLowerCase()) {
-            case 'approved': return 'success';
-            case 'pending': return 'warning';
-            case 'rejected': return 'danger';
-            default: return 'secondary';
-        }
-    }
-});
-
-
-</script>
-
-<script>
-let currentLeaveId = null;
-let employeesList = [];
-
-// Fetch employee usernames once
-fetch('/get-employee-usernames')
-    .then(res => res.json())
-    .then(data => employeesList = data);
-
-// -------------------------------
-// 🟢 OPEN + CLOSE SIDEBAR
-// -------------------------------
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.leave-notes').forEach(btn => {
-        btn.addEventListener('click', function () {
-            currentLeaveId = this.dataset.id;
-            document.getElementById('leaveNotesSidebar').classList.add('active');
-            loadLeaveNotes();
-        });
-    });
-});
-
-function closeLeaveSidebar() {
-    document.getElementById('leaveNotesSidebar').classList.remove('active');
-    currentLeaveId = null;
-}
-
-// -------------------------------
-// 📦 LOAD NOTES
-// -------------------------------
-function loadLeaveNotes() {
-    fetch(`/leaves/${currentLeaveId}/notes`)
-        .then(res => res.json())
-        .then(notes => renderLeaveNotes(notes))
-        .catch(err => console.error('Fehler beim Laden der Notizen:', err));
-}
-
-// -------------------------------
-// ✏️ RENDER NOTES
-// -------------------------------
-function renderLeaveNotes(notes) {
-    const content = document.getElementById('leaveNotesContent');
-    content.innerHTML = '';
-
-    if (!Array.isArray(notes)) notes = [];
-
-    const baseUrl = window.location.origin; // 🔥 get the domain like https://example.com
-
-    notes.forEach((note, index) => {
-        const image = note.image ? `${baseUrl}/images/employee/${note.image}` : `${baseUrl}/images/gender/male.png`;
-
-        content.innerHTML += `
-            <div class="note-item border p-2 mb-2 d-flex">
-                <img src="${image}" 
-                    alt="${note.employee}" 
-                    class="rounded-circle mr-2" 
-                    style="width: 40px; height: 40px; object-fit: cover;">
-                <div class="flex-grow-1">
-                    <small><strong>${note.employee}</strong> - ${note.date}</small>
-                    <p class="mb-1">${note.text}</p>
-                    <button class="btn btn-sm btn-warning" onclick="editLeaveNote(${index})"><i class="feather icon-edit"></i></button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteLeaveNote(${index})"><i class="feather icon-trash"></i></button>
-                </div>
-            </div>`;
-    });
-}
-
-// -------------------------------
-// 💾 SAVE NOTE
-// -------------------------------
-function saveLeaveNote() {
-    const text = document.getElementById('newNoteText').value;
-    if (!text.trim()) return;
-
-    fetch(`/leaves/${currentLeaveId}/notes/store`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({ text })
-    })
-    .then(res => res.json())
-    .then(data => {
-        document.getElementById('newNoteText').value = '';
-        renderLeaveNotes(data.notes);
-    });
-}
-
-// -------------------------------
-// ❌ DELETE NOTE
-// -------------------------------
-function deleteLeaveNote(index) {
-    Swal.fire({
-        title: 'Löschen?',
-        text: 'Diese Notiz wirklich entfernen?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ja, löschen',
-        cancelButtonText: 'Abbrechen'
-    }).then(result => {
-        if (result.isConfirmed) {
-            fetch(`/leaves/${currentLeaveId}/notes/delete/${index}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            })
-            .then(res => res.json())
-            .then(data => renderLeaveNotes(data.notes));
-        }
-    });
-}
-
-// -------------------------------
-// 📝 EDIT NOTE
-// -------------------------------
-function editLeaveNote(index) {
-    const newText = prompt("Neue Notiz eingeben:");
-    if (!newText) return;
-
-    fetch(`/leaves/${currentLeaveId}/notes/update/${index}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({ text: newText })
-    })
-    .then(res => res.json())
-    .then(data => renderLeaveNotes(data.notes));
-}
-
-// -------------------------------
-// 🧠 @MENTION AUTOCOMPLETE
-// -------------------------------
-document.getElementById('newNoteText').addEventListener('input', function () {
-    const textarea = this;
-    const value = textarea.value;
-    const caretPos = textarea.selectionStart;
-    const mentionMatch = value.substring(0, caretPos).match(/@([\w\.]*)$/);
-    const suggestionBox = document.getElementById('mentionSuggestions');
-
-    if (mentionMatch) {
-        const searchTerm = mentionMatch[1].toLowerCase();
-        const matches = employeesList.filter(name => name.toLowerCase().includes(searchTerm)).slice(0, 5);
-
-        suggestionBox.innerHTML = '';
-        matches.forEach(name => {
-            const li = document.createElement('li');
-            li.textContent = name;
-            li.className = 'list-group-item';
-            li.onclick = () => {
-                const newVal = value.substring(0, caretPos - mentionMatch[0].length) + `@${name} ` + value.substring(caretPos);
-                textarea.value = newVal;
-                textarea.focus();
-                suggestionBox.style.display = 'none';
-            };
-            suggestionBox.appendChild(li);
-        });
-
-        const rect = textarea.getBoundingClientRect();
-        suggestionBox.style.top = `${rect.top + window.scrollY + textarea.offsetHeight}px`;
-        suggestionBox.style.left = `${rect.left + 10}px`;
-        suggestionBox.style.display = 'block';
-    } else {
-        suggestionBox.style.display = 'none';
-    }
-});
-</script>
-
-
-<script>
-    $(document).ready(function() {
-  // Toggle menu
-  $(document).on('click', '.action-toggle', function(e) {
-    e.stopPropagation();
-    const $menu = $(this).siblings('.action-list');
-    $('.action-list').not($menu).removeClass('show'); // close others
-    $menu.toggleClass('show');
-  });
-
-  // Close on outside click
-  $(document).on('click', function() {
-    $('.action-list').removeClass('show');
-  });
-
-  // Example actions
-  $(document).on('click', '.delete-leave', function() {
-    const id = $(this).data('id');
-    alert('Delete leave with ID: ' + id);
-    $('.action-list').removeClass('show');
-  });
-
-  $(document).on('click', '.check-leave', function() {
-    const id = $(this).data('id');
-    const start = $(this).data('start-date');
-    const end = $(this).data('end-date');
-    alert(`Checking conflict for leave ${id} (${start} → ${end})`);
-    $('.action-list').removeClass('show');
-  });
-
-  $(document).on('click', '.leave-notes', function() {
-    const id = $(this).data('id');
-    alert('Show notes for leave ID: ' + id);
-    $('.action-list').removeClass('show');
-  });
-});
-
-</script>
-
+      fillYears(); render(); loadLeaders(); loadEmployees();
+    })();
+  </script>
 @endpush

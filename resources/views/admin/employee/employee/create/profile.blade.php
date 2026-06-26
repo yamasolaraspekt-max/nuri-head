@@ -1,9 +1,11 @@
                         
-                                                    <input type="hidden" name="active_tab" id="active_tab" value="profile"> 
-                                               <form method="POST" action="{{ action('App\Http\Controllers\EmployeeController@profile_update') }}">
+                                                    <form method="POST" action="{{ route('emp.profile.update') }}" enctype="multipart/form-data">
                                                     @csrf
-                                                       <hr class="color-strip" id="colorStrip">
-                                                    <input type="hidden" name="id" value="{{ $data->id}}" >
+
+                                                    <input type="hidden" name="id" value="{{ $data->id }}">
+                                                    <input type="hidden" name="active_tab" id="active_tab" value="{{ session('active_tab', 'profile') }}">
+
+                                                    <hr class="color-strip" id="colorStrip">
                                                     <div class="content-body">
                                                         <section id="page-account-settings">
                                                             <div class="row">

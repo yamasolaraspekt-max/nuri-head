@@ -1,863 +1,1802 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuri Head: Full Architecture Mesh</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- React & ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- Babel for JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+@extends('admin.layouts.app')
 
+@section('title', 'Projektprofil')
+
+@php
+    $projectId = $projectId ?? request()->route('project');
+    $pageTitle = 'PROJEKT COCKPIT';
+    $pageSubtitle = 'Ausgewähltes Montage-Projekt mit Kunde, Objekt, Team, Aufgaben, Abhängigkeiten, Gantt, Historie und Organisationsübersicht.';
+
+    $profileConfig = $config ?? [];
+
+    $profileConfig = array_merge([
+        'projectId' => (int) $projectId,
+        'dataUrl' => Route::has('planner.projects.profile.data')
+            ? route('planner.projects.profile.data', ['project' => $projectId])
+            : url('/planner/projects/' . $projectId . '/profile/data'),
+        'backUrl' => Route::has('planner.projects') ? route('planner.projects') : url('/planner/projects'),
+        'syncUrl' => Route::has('planner.plans.sync') ? route('planner.plans.sync') : url('/planner/plans/sync'),
+        'boardUrl' => Route::has('planner.index') ? route('planner.index') : url('/planner'),
+        'historyUrl' => Route::has('planner.projects.history')
+            ? route('planner.projects.history', ['project' => $projectId])
+            : url('/planner/projects/' . $projectId . '/history'),
+    ], $profileConfig);
+@endphp
+
+@push('style')
     <style>
-        body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
-        .no-select { user-select: none; -webkit-user-select: none; }
-        
-        /* Animations */
-        @keyframes flowPulse {
-            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1.5); opacity: 0; box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-            100% { transform: scale(1); opacity: 0; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        :root {
+            --pc-bg: #f3f4f6;
+            --pc-card: #ffffff;
+            --pc-text: #111827;
+            --pc-muted: #6b7280;
+            --pc-border: #e5e7eb;
+            --pc-primary: #93c21c;
+            --pc-primary-dark: #7baa18;
+            --pc-primary-soft: #f4fae7;
+            --pc-blue: #74b2d4;
+            --pc-blue-soft: #eef7fb;
+            --pc-success: #10b981;
+            --pc-warning: #f59e0b;
+            --pc-danger: #ef4444;
+            --pc-purple: #8b5cf6;
+            --pc-shadow-sm: 0 1px 2px rgba(15, 23, 42, .06);
+            --pc-shadow: 0 18px 46px rgba(15, 23, 42, .12);
+            --pc-radius: 16px;
         }
-        .packet-pulse { animation: flowPulse 1s infinite; }
 
-        @keyframes dash { to { stroke-dashoffset: -20; } }
-        .line-active-green { stroke: #10b981; stroke-width: 3; stroke-dasharray: 6; animation: dash 0.5s linear infinite; opacity: 1 !important; }
-        .line-active-red   { stroke: #ef4444; stroke-width: 3; stroke-dasharray: 6; animation: dash 0.5s linear infinite; opacity: 1 !important; }
-        .line-active-blue  { stroke: #3b82f6; stroke-width: 3; stroke-dasharray: 6; animation: dash 0.5s linear infinite; opacity: 1 !important; }
-        .line-active-violet { stroke: #8b5cf6; stroke-width: 3; stroke-dasharray: 6; animation: dash 0.5s linear infinite; opacity: 1 !important; }
-        .line-selected     { stroke: #3b82f6; stroke-width: 3; opacity: 1 !important; }
-        
-        /* Node Highlight Animations */
-        .animate-pulse-green { border-color: #10b981; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.2); transition: all 0.2s; }
-        .animate-pulse-red   { border-color: #ef4444; box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.2); transition: all 0.2s; }
-        .animate-pulse-blue  { border-color: #3b82f6; box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.2); transition: all 0.2s; }
-        .animate-pulse-violet { border-color: #8b5cf6; box-shadow: 0 0 0 6px rgba(139, 92, 246, 0.2); transition: all 0.2s; }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-900 overflow-hidden">
-    <div id="root"></div>
+        .pc-wrap {
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--pc-text);
+        }
 
-    <script type="text/babel">
-        const { useState, useRef, useEffect, useMemo, useCallback } = React;
+        .pc-header {
+            margin-bottom: 18px;
+        }
 
-        // --- ICONS ---
-        const IconWrapper = ({ children, size = 18, className = "" }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                {children}
-            </svg>
-        );
+        .pc-titlebar {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
 
-        const Icons = {
-            Database: (p) => <IconWrapper {...p}><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></IconWrapper>,
-            Globe: (p) => <IconWrapper {...p}><circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></IconWrapper>,
-            Server: (p) => <IconWrapper {...p}><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></IconWrapper>,
-            Code: (p) => <IconWrapper {...p}><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></IconWrapper>,
-            Table: (p) => <IconWrapper {...p}><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></IconWrapper>,
-            Zap: (p) => <IconWrapper {...p}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></IconWrapper>,
-            Play: (p) => <IconWrapper {...p}><polygon points="5 3 19 12 5 21 5 3"/></IconWrapper>,
-            Search: (p) => <IconWrapper {...p}><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></IconWrapper>,
-            X: (p) => <IconWrapper {...p}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></IconWrapper>,
-            Maximize2: (p) => <IconWrapper {...p}><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></IconWrapper>,
-            Info: (p) => <IconWrapper {...p}><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></IconWrapper>,
-            Move: (p) => <IconWrapper {...p}><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" x2="22" y1="12" y2="12"/><line x1="12" x2="12" y1="2" y2="22"/></IconWrapper>,
-            ZoomIn: (p) => <IconWrapper {...p}><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="11" x2="11" y1="8" y2="14"/><line x1="8" x2="14" y1="11" y2="11"/></IconWrapper>,
-            ZoomOut: (p) => <IconWrapper {...p}><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="8" x2="14" y1="11" y2="11"/></IconWrapper>,
-            FileCode: (p) => <IconWrapper {...p}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="m9 13 3 3 3-3"/></IconWrapper>,
-            Mobile: (p) => <IconWrapper {...p}><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></IconWrapper>,
-            HardDrive: (p) => <IconWrapper {...p}><line x1="22" x2="2" y1="12" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" x2="6.01" y1="16" y2="16"/><line x1="10" x2="10.01" y1="16" y2="16"/></IconWrapper>,
-            Lock: (p) => <IconWrapper {...p}><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></IconWrapper>,
-            Shield: (p) => <IconWrapper {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></IconWrapper>,
-            Skull: (p) => <IconWrapper {...p}><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><path d="M8 20v2h8v-2"/><path d="m12.5 17-.5-1-.5 1h1z"/><path d="M16 20a2 2 0 0 0 1.56-3.25 8 8 0 1 0-11.12 0A2 2 0 0 0 8 20"/></IconWrapper>,
-            Upload: (p) => <IconWrapper {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></IconWrapper>,
-            Download: (p) => <IconWrapper {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></IconWrapper>,
-            Trash: (p) => <IconWrapper {...p}><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></IconWrapper>,
-            Link: (p) => <IconWrapper {...p}><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></IconWrapper>,
-            Copy: (p) => <IconWrapper {...p}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></IconWrapper>,
-            Check: (p) => <IconWrapper {...p}><polyline points="20 6 9 17 4 12"/></IconWrapper>,
-        };
+        .pc-title {
+            font-size: 27px;
+            font-weight: 950;
+            letter-spacing: -.035em;
+            text-transform: uppercase;
+            color: #0f172a;
+        }
 
-        // --- DOMAINS & ZONES ---
-        const domains = {
-            MOBILE: { title: "Mobile Ecosystem", bg: "bg-pink-50/50", border: "border-pink-200" },
-            WEB:    { title: "Website Ecosystem", bg: "bg-slate-50/50", border: "border-slate-200" },
-            SEC:    { title: "Security Layer", bg: "bg-red-50/50", border: "border-red-200" }
-        };
+        .pc-sub {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--pc-muted);
+            line-height: 1.45;
+            margin-top: 4px;
+            max-width: 860px;
+        }
 
-        const categories = {
-            MOBILE_VIEW: { color: '#db2777', label: 'Mobile View', icon: Icons.Mobile, domain: 'MOBILE' },
-            MOBILE_DATA: { color: '#be185d', label: 'Local Cache', icon: Icons.HardDrive, domain: 'MOBILE' },
-            WEB_VIEW:    { color: '#f59e0b', label: 'Blade View', icon: Icons.Code, domain: 'WEB' },
-            ROUTE:       { color: '#10b981', label: 'API Route', icon: Icons.Globe, domain: 'WEB' },
-            SECURITY:    { color: '#ef4444', label: 'Security', icon: Icons.Lock, domain: 'SEC' },
-            CONTROLLER:  { color: '#8b5cf6', label: 'Controller', icon: Icons.Server, domain: 'WEB' },
-            MODEL:       { color: '#3b82f6', label: 'Model', icon: Icons.FileCode, domain: 'WEB' },
-            MIGRATION:   { color: '#0ea5e9', label: 'DB Table', icon: Icons.Table, domain: 'WEB' },
-            SERVICE:     { color: '#6366f1', label: 'Service', icon: Icons.Zap, domain: 'WEB' },
-            ATTACKER:    { color: '#000000', label: 'Attacker', icon: Icons.Skull, domain: 'EXTERNAL' },
-        };
+        .pc-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--pc-muted);
+        }
 
-        // --- FULL ARCHITECTURE DEFINITION ---
-        const architecture = [
-            // --- TOP: MOBILE ECOSYSTEM ---
-            { id: 'mob_login', label: 'Login (PIN)', category: 'MOBILE_VIEW', x: 100, y: 100 },
-            { id: 'mob_dash', label: 'Dashboard', category: 'MOBILE_VIEW', x: 350, y: 100 },
-            { id: 'mob_active', label: 'Active Mode', category: 'MOBILE_VIEW', x: 600, y: 100 },
-            { id: 'mob_store', label: 'Local Storage', category: 'MOBILE_DATA', details: 'wf_tasks, wf_attendance_log', x: 300, y: 250 },
-            
-            // --- MIDDLE: SECURITY & API ---
-            { id: 'api_sync', label: 'POST /api/sync', category: 'ROUTE', x: 300, y: 450 },
-            { id: 'api_dnd', label: 'POST /planner/dnd', category: 'ROUTE', x: 800, y: 450 },
-            { id: 'api_wizard', label: 'POST /store-wizard', category: 'ROUTE', x: 1050, y: 450 },
-            { id: 'api_play', label: 'POST /item/play', category: 'ROUTE', x: 1300, y: 450 },
-            { id: 'svc_pusher', label: 'Pusher (Realtime)', category: 'SERVICE', x: 1200, y: 350 },
+        .pc-breadcrumb a {
+            color: var(--pc-muted);
+            text-decoration: none;
+        }
 
-            // Security
-            { id: 'sec_sanctum', label: 'Sanctum Auth', category: 'SECURITY', details: 'Validates Bearer Token', x: 550, y: 580 },
-            { id: 'sec_csrf', label: 'CSRF Protection', category: 'SECURITY', details: 'Validates _token', x: 900, y: 580 },
-            { id: 'sec_policy', label: 'Policy Gate', category: 'SECURITY', details: 'PlannerPolicy', x: 1200, y: 580 },
+        .pc-breadcrumb a:hover {
+            color: #0f172a;
+            text-decoration: none;
+        }
 
-            // --- BOTTOM: BACKEND ---
-            { id: 'web_planner', label: 'Planner UI', category: 'WEB_VIEW', x: 1050, y: 100 },
+        .pc-breadcrumb .current {
+            color: #0f172a;
+        }
 
-            // Controllers
-            { id: 'ctl_planner', label: 'PlannerPlanController', category: 'CONTROLLER', x: 700, y: 750 },
-            { id: 'ctl_state', label: 'ItemStateController', category: 'CONTROLLER', x: 950, y: 750 },
+        .pc-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-            // --- DATABASE: CRM ---
-            { id: 'mod_lead', label: 'NewLead', category: 'MODEL', x: 50, y: 900 },
-            { id: 'tab_lead', label: 'new_leads', category: 'MIGRATION', columns: ['id', 'customer_type', 'customer_no', 'title', 'academic_title', 'firma', 'lastname', 'name', 'full_address', 'street', 'latitude', 'longitude', 'polygon_height', 'polygon_width', 'polygon_area', 'elevation', 'postcode', 'city', 'phone', 'telephone', 'email', 'source', 'contact_person', 'branch', 'interest_rating', 'seriousness_rating', 'price_information', 'status', 'status_msg', 'info', 'purchase_status', 'total_purchase', 'default_project_minutes', 'purchase_date'], x: 50, y: 1050 },
-            
-            { id: 'mod_alt', label: 'LeadAlternative', category: 'MODEL', x: 250, y: 900 },
-            { id: 'tab_alt', label: 'lead_alternative_adds', category: 'MIGRATION', columns: ['id', 'lead_id', 'full_address', 'street', 'postcode', 'city', 'lat', 'lon', 'elevation', 'main', 'address_no', 'object_name', 'request_date', 'periority', 'document', 'note', 'appointment', 'appointment_by', 'objective', 'living_space', 'unusable_space', 'number_people', 'number_we', 'number_stories', 'installation_location', 'annual_consumption', 'roof_type', 'heating_system_type', 'electric_car', 'status', 'stage', 'project_date', 'object_type', 'building_condition', 'owner_count', 'income_taxed', 'investment_costs', 'calculated_subsidy', 'solar_module_kwp', 'battery_kwh'], x: 250, y: 1050 },
+        .pc-btn,
+        .pc-btn-soft,
+        .pc-icon-btn {
+            border-radius: 10px;
+            font-weight: 900;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: .16s ease;
+            white-space: nowrap;
+        }
 
-            { id: 'mod_lpl', label: 'LeadProductList', category: 'MODEL', x: 450, y: 900 },
-            { id: 'tab_lpl', label: 'lead_product_lists', category: 'MIGRATION', columns: ['id', 'customer_id', 'alternative_id', 'product_id', 'service_id', 'department_id', 'employee_id', 'field_employee', 'teams', 'service', 'status', 'work_status', 'interest', 'realization_time', 'stage_history', 'stage', 'price', 'project_minutes'], x: 450, y: 1050 },
+        .pc-btn {
+            border: 0;
+            background: var(--pc-primary);
+            color: #fff;
+            padding: 10px 16px;
+            box-shadow: 0 9px 18px rgba(147, 194, 28, .22);
+        }
 
-            { id: 'mod_art', label: 'ArticleGroup', category: 'MODEL', x: 650, y: 900 },
-            { id: 'tab_art', label: 'article_groups', category: 'MIGRATION', columns: ['id', 'article_group', 'initial', 'min_value', 'max_value', 'image'], x: 650, y: 1050 },
+        .pc-btn:hover {
+            background: var(--pc-primary-dark);
+            color: #fff;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
 
-            // --- DATABASE: CONFIG ---
-            { id: 'tab_stages', label: 'stages', category: 'MIGRATION', columns: ['id', 'stage', 'product_id', 'version', 'status', 'sort_order', 'default'], x: 50, y: 1250 },
-            { id: 'tab_psect', label: 'phase_sections', category: 'MIGRATION', columns: ['id', 'product_id', 'phase_section', 'status'], x: 250, y: 1250 },
-            { id: 'tab_tphase', label: 'task_phases', category: 'MIGRATION', columns: ['id', 'product_id', 'section_id', 'section_name', 'phase_name', 'stage', 'stage_id', 'version', 'status', 'order'], x: 450, y: 1250 },
-            { id: 'tab_pacts', label: 'phase_activities', category: 'MIGRATION', columns: ['id', 'phase_id', 'product_id', 'section_id', 'parent_id', 'copy_from', 'stage_id', 'title', 'duration', 'description', 'notes', 'status', 'priority', 'percent', 'usage_count'], x: 650, y: 1250 },
+        .pc-btn-soft {
+            border: 1px solid var(--pc-border);
+            background: #fff;
+            color: #334155;
+            padding: 10px 14px;
+        }
 
-            // --- DATABASE: OPS ---
-            { id: 'mod_appt', label: 'MainAppointment', category: 'MODEL', x: 850, y: 900 },
-            { id: 'tab_appt', label: 'main_appointments', category: 'MIGRATION', columns: ['id', 'created_by', 'name', 'execution_type', 'appointment_type', 'start_date', 'end_date', 'start_time', 'end_time', 'full_address', 'lat/long', 'customer_id', 'products', 'task_id', 'problem_id', 'contact_id', 'is_report', 'report_by'], x: 850, y: 1050 },
+        .pc-btn-soft:hover,
+        .pc-btn-soft.is-active {
+            background: var(--pc-primary-soft);
+            border-color: rgba(147, 194, 28, .45);
+            color: #365314;
+            text-decoration: none;
+        }
 
-            { id: 'mod_ptask', label: 'PersonalTask', category: 'MODEL', x: 1050, y: 900 },
-            { id: 'tab_ptask', label: 'personal_tasks', category: 'MIGRATION', columns: ['id', 'customer_id', 'alternative_id', 'product_id', 'is_customer', 'task_title', 'description', 'assigned_by', 'task_status', 'priority', 'due_date', 'due_time', 'controller_id'], x: 1050, y: 1050 },
+        .pc-icon-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--pc-border);
+            background: #fff;
+            color: #64748b;
+        }
 
-            { id: 'mod_prob', label: 'Problem', category: 'MODEL', x: 1250, y: 900 },
-            { id: 'tab_prob', label: 'problems', category: 'MIGRATION', columns: ['id', 'ticket_no', 'error_code', 'customer_id', 'product_id', 'responsible', 'problem', 'solution', 'progress', 'status', 'priority'], x: 1250, y: 1050 },
+        .pc-icon-btn:hover {
+            background: #f8fafc;
+            color: #0f172a;
+            text-decoration: none;
+        }
 
-            { id: 'mod_ttask', label: 'TicketTask', category: 'MODEL', x: 1450, y: 900 },
-            { id: 'tab_ttask', label: 'ticket_tasks', category: 'MIGRATION', columns: ['id', 'ticket_id', 'employee_id', 'title', 'status', 'solution', 'is_done'], x: 1450, y: 1050 },
+        .pc-icon-btn.info {
+            background: var(--pc-blue-soft);
+            border-color: rgba(116, 178, 212, .25);
+            color: #0369a1;
+        }
 
-            // --- DATABASE: PLANNER CORE ---
-            { id: 'mod_plan', label: 'PlannerPlan', category: 'MODEL', x: 1650, y: 900 },
-            { id: 'tab_plan', label: 'planner_plans', category: 'MIGRATION', columns: ['id', 'account_id', 'customer_id', 'project_id', 'stage', 'title', 'status', 'created_by', 'published_at', 'meta'], x: 1650, y: 1050 },
+        .pc-icon-btn.success {
+            background: #ecfdf5;
+            border-color: #bbf7d0;
+            color: #047857;
+        }
 
-            { id: 'mod_item', label: 'PlannerItem', category: 'MODEL', x: 1850, y: 900 },
-            { id: 'tab_item', label: 'planner_items', category: 'MIGRATION', columns: ['id', 'plan_id', 'client_uid', 'source_type', 'source_id', 'title', 'category', 'description', 'duration_minutes', 'status', 'planned_start_at', 'planned_end_at', 'sort_order'], x: 1850, y: 1050 },
+        .pc-icon-btn.warning {
+            background: #fffbeb;
+            border-color: #fde68a;
+            color: #b45309;
+        }
 
-            { id: 'tab_pie', label: 'planner_item_employees', category: 'MIGRATION', columns: ['id', 'planner_item_id', 'employee_id', 'role'], x: 2050, y: 1050 },
-            { id: 'tab_pid', label: 'planner_item_dependencies', category: 'MIGRATION', columns: ['id', 'planner_item_id', 'depends_on_item_id'], x: 2250, y: 1050 },
-            { id: 'tab_pia', label: 'planner_item_assets', category: 'MIGRATION', columns: ['id', 'planner_item_id', 'asset_id', 'qty', 'notes'], x: 2450, y: 1050 },
+        .pc-icon-btn.danger {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
 
-            // --- DATABASE: HR & ORG ---
-            { id: 'mod_emp', label: 'Employee', category: 'MODEL', x: 1650, y: 1250 },
-            { id: 'tab_emp', label: 'employees', category: 'MIGRATION', columns: ['id', 'title', 'name', 'lastname', 'branch', 'salary_per_hour', 'qualification_id', 'skill_id', 'supervisor', 'working_type', 'daily_start_time', 'daily_end_time', 'sick_leave', 'leave', 'email', 'phone', 'status'], x: 1650, y: 1350 },
+        .pc-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(360px, .85fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
 
-            { id: 'mod_branch', label: 'Branch', category: 'MODEL', x: 1850, y: 1250 },
-            { id: 'tab_branch', label: 'branches', category: 'MIGRATION', columns: ['id', 'branch', 'color', 'chairman', 'street', 'city', 'country', 'status'], x: 1850, y: 1350 },
-
-            { id: 'mod_dept', label: 'Department', category: 'MODEL', x: 2050, y: 1250 },
-            { id: 'tab_dept', label: 'departments', category: 'MIGRATION', columns: ['id', 'department_name', 'parent_id', 'branch_id', 'department_head'], x: 2050, y: 1350 },
-
-            { id: 'mod_asset', label: 'Asset', category: 'MODEL', x: 2250, y: 1250 },
-            { id: 'tab_asset', label: 'assets', category: 'MIGRATION', columns: ['id', 'serial_no', 'item', 'model', 'category', 'parent_id', 'purchase_price', 'leasing_from', 'location', 'status', 'handover_id', 'branch_id', 'used_for'], x: 2250, y: 1350 },
-
-            // Attacker
-            { id: 'attacker', label: 'Attacker', category: 'ATTACKER', x: 50, y: 450 },
-        ];
-
-        // Define initial layout mapping
-        const initialNodes = architecture.map(n => ({ ...n, x: n.x, y: n.y }));
-
-        const relationships = [
-            // Mobile Flow
-            { source: 'mob_dash', target: 'mob_store', label: 'save' },
-            { source: 'mob_store', target: 'api_sync', label: 'sync' },
-
-            // API & Security
-            { source: 'api_sync', target: 'sec_sanctum', label: 'Token' },
-            { source: 'sec_sanctum', target: 'ctl_planner', label: 'Auth OK' },
-            { source: 'attacker', target: 'sec_sanctum', label: 'Bad Token' },
-            
-            { source: 'web_planner', target: 'api_dnd', label: 'AJAX' },
-            { source: 'api_dnd', target: 'sec_csrf', label: 'CSRF' },
-            { source: 'sec_csrf', target: 'ctl_planner', label: 'Valid' },
-
-            // Controller Logic
-            { source: 'ctl_planner', target: 'mod_plan', label: 'manage' },
-            { source: 'ctl_planner', target: 'mod_item', label: 'manage' },
-            { source: 'ctl_planner', target: 'mod_lead', label: 'read' },
-            { source: 'ctl_planner', target: 'svc_pusher', label: 'event' },
-            
-            { source: 'svc_pusher', target: 'mob_dash', label: 'push', animated: true },
-
-            // ORM Mapping
-            { source: 'mod_lead', target: 'tab_lead', label: 'orm' },
-            { source: 'mod_alt', target: 'tab_alt', label: 'orm' },
-            { source: 'mod_lpl', target: 'tab_lpl', label: 'orm' },
-            { source: 'mod_art', target: 'tab_art', label: 'orm' },
-            { source: 'mod_appt', target: 'tab_appt', label: 'orm' },
-            { source: 'mod_ptask', target: 'tab_ptask', label: 'orm' },
-            { source: 'mod_prob', target: 'tab_prob', label: 'orm' },
-            { source: 'mod_ttask', target: 'tab_ttask', label: 'orm' },
-            { source: 'mod_plan', target: 'tab_plan', label: 'orm' },
-            { source: 'mod_item', target: 'tab_item', label: 'orm' },
-            { source: 'mod_emp', target: 'tab_emp', label: 'orm' },
-            { source: 'mod_branch', target: 'tab_branch', label: 'orm' },
-            { source: 'mod_dept', target: 'tab_dept', label: 'orm' },
-            { source: 'mod_asset', target: 'tab_asset', label: 'orm' },
-            
-            // Relationships
-            { source: 'tab_lpl', target: 'tab_leads', label: 'belongsTo' },
-            { source: 'tab_plans', target: 'tab_leads', label: 'belongsTo' },
-            { source: 'tab_items', target: 'tab_plans', label: 'belongsTo' },
-            { source: 'tab_pie', target: 'tab_items', label: 'belongsTo' },
-            { source: 'tab_pie', target: 'tab_emp', label: 'belongsTo' },
-            { source: 'tab_appt', target: 'tab_leads', label: 'belongsTo' },
-            { source: 'tab_prob', target: 'tab_leads', label: 'belongsTo' },
-            { source: 'tab_ttask', target: 'tab_prob', label: 'belongsTo' },
-        ];
-
-        // --- ZONES ---
-        const initialZones = [
-            { id: 'zone_mobile', label: 'MOBILE APP (OFFLINE)', domain: 'MOBILE', x: 0, y: 50, width: 1000, height: 320, styleClass: 'border-pink-300 bg-pink-50/30 text-pink-400' },
-            { id: 'zone_sec', label: 'SECURITY / API LAYER', domain: 'SEC', x: 250, y: 390, width: 1100, height: 220, styleClass: 'border-red-300 bg-red-50/20 text-red-300' },
-            { id: 'zone_web', label: 'WEBSITE / BACKEND', domain: 'WEB', x: 0, y: 630, width: 2800, height: 1000, styleClass: 'border-slate-300 bg-white/40 text-slate-300' },
-        ];
-
-        // --- SIMULATIONS ---
-        const simulations = [
-            {
-                id: 'sim_sync_up',
-                label: 'Sync: Upload Offline Data',
-                color: 'emerald',
-                type: 'green',
-                steps: [
-                    { from: 'mob_store', to: 'api_sync', msg: 'POST /sync [Payload]' },
-                    { from: 'api_sync', to: 'sec_sanctum', msg: 'Auth Check' },
-                    { from: 'sec_sanctum', to: 'ctl_planner', msg: 'Controller: sync()' },
-                    { from: 'ctl_planner', to: 'tab_items', msg: 'Batch Insert/Update' },
-                    { from: 'ctl_planner', to: 'svc_pusher', msg: 'Broadcast Update' },
-                ]
-            },
-            {
-                id: 'sim_sync_down',
-                label: 'Sync: Download Fresh Data',
-                color: 'emerald',
-                type: 'blue',
-                steps: [
-                    { from: 'mob_dash', to: 'api_sync', msg: 'GET /sync [Timestamp]' },
-                    { from: 'api_sync', to: 'sec_sanctum', msg: 'Auth Check' },
-                    { from: 'sec_sanctum', to: 'ctl_planner', msg: 'Controller: fetch()' },
-                    { from: 'ctl_planner', to: 'tab_items', msg: 'SELECT * WHERE updated > ?' },
-                    { from: 'tab_items', to: 'ctl_planner', msg: 'Results' },
-                    { from: 'ctl_planner', to: 'mob_store', msg: 'JSON Response' },
-                ]
-            },
-
-            // --- CRUD ---
-            {
-                id: 'sim_crud_create',
-                label: 'CRUD: Create Plan (Wizard)',
-                color: 'indigo',
-                type: 'violet',
-                steps: [
-                    { from: 'web_planner', to: 'api_wizard', msg: 'POST /wizard' },
-                    { from: 'api_wizard', to: 'sec_csrf', msg: 'Verify CSRF' },
-                    { from: 'sec_csrf', to: 'ctl_planner', msg: 'storeWizard()' },
-                    { from: 'ctl_planner', to: 'sec_policy', msg: 'Can Create?' },
-                    { from: 'sec_policy', to: 'mod_plan', msg: 'New PlannerPlan' },
-                    { from: 'mod_plan', to: 'tab_plans', msg: 'INSERT' },
-                    { from: 'ctl_planner', to: 'web_planner', msg: '201 Created' },
-                ]
-            },
-            {
-                id: 'sim_crud_update',
-                label: 'CRUD: Update (Drag & Drop)',
-                color: 'violet',
-                type: 'violet',
-                steps: [
-                    { from: 'web_planner', to: 'api_dnd', msg: 'POST /move' },
-                    { from: 'api_dnd', to: 'sec_csrf', msg: 'Verify CSRF' },
-                    { from: 'sec_csrf', to: 'ctl_planner', msg: 'move()' },
-                    { from: 'ctl_planner', to: 'mod_item', msg: 'Update Sort Order' },
-                    { from: 'mod_item', to: 'tab_items', msg: 'UPDATE' },
-                    { from: 'ctl_planner', to: 'svc_pusher', msg: 'Broadcast' },
-                ]
-            },
-            {
-                id: 'sim_crud_delete',
-                label: 'CRUD: Soft Delete Item',
-                color: 'orange',
-                type: 'orange',
-                steps: [
-                    { from: 'web_planner', to: 'ctl_planner', msg: 'DELETE /items/1' },
-                    { from: 'ctl_planner', to: 'sec_policy', msg: 'Can Delete?' },
-                    { from: 'sec_policy', to: 'mod_item', msg: 'delete()' },
-                    { from: 'mod_item', to: 'tab_items', msg: 'UPDATE deleted_at=NOW()' },
-                    { from: 'tab_items', to: 'web_planner', msg: '200 OK' },
-                ]
-            },
-
-            // --- SECURITY ---
-            {
-                id: 'sim_attack_token',
-                label: 'Sec: Token Hijack',
-                color: 'red',
-                type: 'red',
-                steps: [
-                    { from: 'attacker', to: 'api_sync', msg: 'POST /sync [Bad Token]' },
-                    { from: 'api_sync', to: 'sec_sanctum', msg: 'Validate...' },
-                    { from: 'sec_sanctum', to: 'attacker', msg: '401 UNAUTHORIZED' },
-                ]
-            },
-            {
-                id: 'sim_attack_csrf',
-                label: 'Sec: CSRF Exploit',
-                color: 'red',
-                type: 'red',
-                steps: [
-                    { from: 'attacker', to: 'api_wizard', msg: 'POST /wizard [No Token]' },
-                    { from: 'api_wizard', to: 'sec_csrf', msg: 'Check _token' },
-                    { from: 'sec_csrf', to: 'attacker', msg: '419 PAGE EXPIRED' },
-                ]
-            },
-            {
-                id: 'sim_attack_sql',
-                label: 'Sec: SQL Injection',
-                color: 'red',
-                type: 'red',
-                steps: [
-                    { from: 'attacker', to: 'web_planner', msg: 'Search: " OR 1=1; --' },
-                    { from: 'web_planner', to: 'ctl_planner', msg: 'GET /search' },
-                    { from: 'ctl_planner', to: 'mod_item', msg: 'Eloquent Binding' },
-                    { from: 'mod_item', to: 'tab_items', msg: 'SELECT ... WHERE col = ?' },
-                    { from: 'tab_items', to: 'attacker', msg: 'Safe Result (0 found)' },
-                ]
+        @media(max-width:1200px) {
+            .pc-hero {
+                grid-template-columns: 1fr;
             }
-        ];
+        }
 
-        function SchemaVisualizer() {
-            // Safe initialization
-            const [nodes, setNodes] = useState(initialNodes || []);
-            const [zones, setZones] = useState(initialZones || []);
-            const [viewState, setViewState] = useState({ x: 50, y: 50, scale: 0.45 });
-            const [searchTerm, setSearchTerm] = useState('');
-            const [selectedNode, setSelectedNode] = useState(null);
-            const [connectedNodes, setConnectedNodes] = useState([]);
-            
-            const [activePacket, setActivePacket] = useState(null); 
-            const [simulating, setSimulating] = useState(false);
-            const [activeEdge, setActiveEdge] = useState(null); 
-            const [copySuccess, setCopySuccess] = useState(false);
+        .pc-panel {
+            background: #fff;
+            border: 1px solid var(--pc-border);
+            border-radius: var(--pc-radius);
+            box-shadow: var(--pc-shadow-sm);
+            overflow: hidden;
+        }
 
-            const [draggingType, setDraggingType] = useState(null);
-            const [draggingId, setDraggingId] = useState(null);
-            const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-            const [initialPos, setInitialPos] = useState({ x: 0, y: 0 });
+        .pc-panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 15px 16px;
+            border-bottom: 1px solid var(--pc-border);
+            background: linear-gradient(135deg, #fff, #f8fafc);
+        }
 
-            // Filtering with Guard
-            const filteredNodes = useMemo(() => {
-                const current = nodes || [];
-                if (!searchTerm) return current;
-                const lower = searchTerm.toLowerCase();
-                return current.map(n => ({
-                    ...n,
-                    dimmed: !n.label.toLowerCase().includes(lower) && !n.category.toLowerCase().includes(lower)
-                }));
-            }, [searchTerm, nodes]);
+        .pc-panel-title {
+            font-size: 15px;
+            font-weight: 950;
+            color: #0f172a;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-            // Update connected nodes when selectedNode changes
-            useEffect(() => {
-                if (!selectedNode) {
-                    setConnectedNodes([]);
-                    return;
-                }
-                const related = relationships.filter(r => r.source === selectedNode.id || r.target === selectedNode.id);
-                setConnectedNodes(related);
-            }, [selectedNode]);
+        .pc-panel-sub {
+            font-size: 12px;
+            font-weight: 750;
+            color: var(--pc-muted);
+            margin-top: 3px;
+        }
 
+        .pc-panel-body {
+            padding: 16px;
+        }
 
-            // Handlers
-            const handleMouseDown = (e) => {
-                if(e.button !== 0) return;
-                setDraggingType('pan');
-                setDragStart({ x: e.clientX, y: e.clientY });
-                setInitialPos({ x: viewState.x, y: viewState.y });
-            };
+        .pc-project-main {
+            display: grid;
+            grid-template-columns: 74px minmax(0, 1fr);
+            gap: 14px;
+            align-items: flex-start;
+        }
 
-            const handleNodeMouseDown = (e, nodeId) => {
-                e.stopPropagation();
-                const node = nodes.find(n => n.id === nodeId);
-                if (node) {
-                    setDraggingType('node');
-                    setDraggingId(nodeId);
-                    setDragStart({ x: e.clientX, y: e.clientY });
-                    setInitialPos({ x: node.x, y: node.y });
-                    setSelectedNode(node);
-                }
-            };
+        .pc-project-avatar {
+            width: 74px;
+            height: 74px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--pc-blue-soft), var(--pc-primary-soft));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0369a1;
+            font-size: 28px;
+            font-weight: 950;
+            border: 1px solid #dbeafe;
+        }
 
-            const handleZoneMouseDown = (e, zoneId) => {
-                e.stopPropagation();
-                const zone = zones.find(z => z.id === zoneId);
-                if (zone) {
-                    setDraggingType('zone');
-                    setDraggingId(zoneId);
-                    setDragStart({ x: e.clientX, y: e.clientY });
-                    setInitialPos({ x: zone.x, y: zone.y });
-                }
-            };
+        .pc-project-title {
+            font-size: 22px;
+            font-weight: 950;
+            color: #0f172a;
+            line-height: 1.15;
+            margin-bottom: 4px;
+        }
 
-            const handleMouseMove = (e) => {
-                if (!draggingType) return;
+        .pc-project-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 9px;
+        }
 
-                const dx = (e.clientX - dragStart.x) / viewState.scale;
-                const dy = (e.clientY - dragStart.y) / viewState.scale;
-                const panDx = e.clientX - dragStart.x;
-                const panDy = e.clientY - dragStart.y;
+        .pc-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 28px;
+            padding: 0 10px;
+            border-radius: 999px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 900;
+        }
 
-                if (draggingType === 'node') {
-                    setNodes(prev => prev.map(n => n.id === draggingId ? { ...n, x: initialPos.x + dx, y: initialPos.y + dy } : n));
-                } else if (draggingType === 'zone') {
-                    const newZoneX = initialPos.x + dx;
-                    const newZoneY = initialPos.y + dy;
-                    const zone = zones.find(z => z.id === draggingId);
-                    const deltaX = newZoneX - zone.x;
-                    const deltaY = newZoneY - zone.y;
+        .pc-chip.green {
+            background: #ecfdf5;
+            border-color: #bbf7d0;
+            color: #047857;
+        }
 
-                    setZones(prev => prev.map(z => z.id === draggingId ? { ...z, x: newZoneX, y: newZoneY } : z));
-                    const domain = zone.domain;
-                    setNodes(prev => prev.map(n => {
-                        const cat = categories[n.category];
-                        if (cat && cat.domain === domain) {
-                             return { ...n, x: n.x + deltaX, y: n.y + deltaY };
-                        }
-                        return n;
-                    }));
-                } else if (draggingType === 'pan') {
-                    setViewState(prev => ({ ...prev, x: initialPos.x + panDx, y: initialPos.y + panDy }));
-                }
-            };
+        .pc-chip.blue {
+            background: var(--pc-blue-soft);
+            border-color: #cfe8f3;
+            color: #0369a1;
+        }
 
-            const handleMouseUp = () => { setDraggingType(null); setDraggingId(null); };
+        .pc-chip.orange {
+            background: #fffbeb;
+            border-color: #fde68a;
+            color: #b45309;
+        }
 
-            const handleWheel = (e) => {
-                if (e.ctrlKey || e.metaKey) {
-                    e.preventDefault();
-                    setViewState(prev => ({ ...prev, scale: Math.min(Math.max(0.1, prev.scale - e.deltaY * 0.001), 2) }));
-                }
-            };
+        .pc-chip.purple {
+            background: #f5f3ff;
+            border-color: #ddd6fe;
+            color: #6d28d9;
+        }
 
-            // Migration Generator
-            const generateMigrationCode = () => {
-                const migrations = nodes
-                    .filter(n => n.category === 'MIGRATION')
-                    .map(node => {
-                        let schema = `Schema::create('${node.label}', function (Blueprint $table) {\n`;
-                        if (node.columns) {
-                            node.columns.forEach(col => {
-                                let type = 'string';
-                                let extras = '->nullable()';
+        .pc-chip.red {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
 
-                                if (col === 'id') {
-                                    schema += `    $table->id();\n`;
-                                    return;
-                                }
-                                
-                                if (col.endsWith('_id') || col === 'created_by' || col === 'updated_by' || col === 'contact_person' || col === 'branch' || col === 'responsible') type = 'unsignedBigInteger';
-                                else if (col === 'id') type = 'id';
-                                else if (col.includes('json') || col === 'meta' || col === 'teams' || col === 'products') type = 'json';
-                                else if (col.includes('date') || col.endsWith('_at')) type = 'timestamp';
-                                else if (col.startsWith('is_') || col.startsWith('has_')) type = 'boolean';
-                                else if (col === 'description' || col === 'note' || col === 'problem' || col === 'solution') type = 'longText';
-                                else if (col.includes('price') || col.includes('cost') || col === 'total_purchase' || col === 'investment_costs') { type = 'decimal'; extras = ', 10, 2)->nullable()'; }
-                                else if (col.includes('count') || col === 'usage_count' || col === 'number_people' || col === 'number_we' || col === 'number_stories') type = 'integer';
-                                
-                                schema += `    $table->${type}('${col}')${extras};\n`;
-                            });
-                        }
-                        schema += `    $table->timestamps();\n`;
-                        schema += `    $table->softDeletes();\n`;
-                        schema += `});\n`;
-                        return schema;
-                    });
-                return migrations.join('\n');
-            };
+        .pc-info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 16px;
+        }
 
-            const handleCopyMigrations = () => {
-                const code = generateMigrationCode();
-                const textarea = document.createElement('textarea');
-                textarea.value = code;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                
-                setCopySuccess(true);
-                setTimeout(() => setCopySuccess(false), 2000);
-            };
+        @media(max-width:1000px) {
+            .pc-info-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
 
-            // Simulation Logic
-            const runSimulation = useCallback((sim) => {
-                if(simulating) return;
-                setSimulating(true);
-                setActiveEdge(null);
-                let stepIndex = 0;
+        @media(max-width:640px) {
+            .pc-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
-                const animateStep = () => {
-                    if (stepIndex >= sim.steps.length) {
-                        setSimulating(false);
-                        setActivePacket(null);
-                        setActiveEdge(null);
-                        return;
-                    }
-                    const step = sim.steps[stepIndex];
-                    const safeNodes = nodes || [];
-                    const startNode = safeNodes.find(n => n.id === step.from);
-                    const endNode = safeNodes.find(n => n.id === step.to);
+        .pc-info-box {
+            background: #f8fafc;
+            border: 1px solid var(--pc-border);
+            border-radius: 14px;
+            padding: 12px;
+            min-width: 0;
+        }
 
-                    if (!startNode || !endNode) { stepIndex++; animateStep(); return; }
+        .pc-info-label {
+            font-size: 10px;
+            font-weight: 950;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: var(--pc-muted);
+        }
 
-                    setActiveEdge({ source: step.from, target: step.to, type: sim.type });
+        .pc-info-value {
+            font-size: 13px;
+            font-weight: 950;
+            color: #0f172a;
+            margin-top: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
-                    const startX = startNode.x + 220; 
-                    const startY = startNode.y + 40; 
-                    const endX = endNode.x;
-                    const endY = endNode.y + 40;
+        .pc-info-help {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--pc-muted);
+            margin-top: 3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
-                    let progress = 0;
-                    const duration = 70; 
+        .pc-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
 
-                    const tick = () => {
-                        progress += 1 / duration;
-                        if (progress >= 1) {
-                            stepIndex++;
-                            // Pause for "Processing" visuals
-                            setTimeout(animateStep, 400);
-                        } else {
-                            const curX = startX + (endX - startX) * progress;
-                            const curY = startY + (endY - startY) * progress;
-                            setActivePacket({ x: curX, y: curY, msg: step.msg, type: sim.type });
-                            requestAnimationFrame(tick);
-                        }
-                    };
-                    tick();
-                };
-                animateStep();
-            }, [simulating, nodes]);
+        @media(max-width:1400px) {
+            .pc-stat-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
 
-            // Render Edges
-            const edgesSvg = useMemo(() => {
-                const currentNodes = nodes || [];
-                return (relationships || []).map((rel, idx) => {
-                    const sourceNode = currentNodes.find(n => n.id === rel.source);
-                    const targetNode = currentNodes.find(n => n.id === rel.target);
-                    if (!sourceNode || !targetNode) return null;
+        @media(max-width:800px) {
+            .pc-stat-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
 
-                    const startX = sourceNode.x + 220;
-                    const startY = sourceNode.y + 40;
-                    const endX = targetNode.x;
-                    const endY = targetNode.y + 40;
+        @media(max-width:560px) {
+            .pc-stat-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
-                    const isVertical = Math.abs(startY - endY) > 150;
-                    const controlOffset = isVertical ? 0 : 100;
-                    const path = `M ${startX} ${startY} C ${startX + controlOffset} ${startY}, ${endX - controlOffset} ${endY}, ${endX} ${endY}`;
+        .pc-stat {
+            background: #fff;
+            border: 1px solid var(--pc-border);
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: var(--pc-shadow-sm);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
 
-                    const isActive = activeEdge && activeEdge.source === rel.source && activeEdge.target === rel.target;
-                    const isSelected = selectedNode && (rel.source === selectedNode.id || rel.target === selectedNode.id);
-                    
-                    let strokeColor = '#94a3b8';
-                    let strokeClass = '';
-                    
-                    if (isActive) {
-                         if (activeEdge.type === 'red') { strokeColor = '#ef4444'; strokeClass = 'line-active-red'; }
-                         else if (activeEdge.type === 'blue') { strokeColor = '#3b82f6'; strokeClass = 'line-active-blue'; }
-                         else if (activeEdge.type === 'violet') { strokeColor = '#8b5cf6'; strokeClass = 'line-active-violet'; }
-                         else if (activeEdge.type === 'orange') { strokeColor = '#f97316'; strokeClass = 'line-active-orange'; }
-                         else { strokeColor = '#10b981'; strokeClass = 'line-active-green'; }
-                    } else if (isSelected) {
-                        strokeColor = '#3b82f6';
-                        strokeClass = 'line-selected';
-                    }
+        .pc-stat-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 950;
+            font-size: 18px;
+            flex: 0 0 auto;
+        }
 
-                    return (
-                        <g key={idx}>
-                            <path d={path} fill="none" stroke={strokeColor} strokeWidth={isActive?4:2} className={strokeClass} markerEnd="url(#arrowhead)" opacity={isActive ? 1 : 0.3} />
-                            {!isActive && <text x={(startX+endX)/2} y={(startY+endY)/2 - 5} textAnchor="middle" fill="#64748b" fontSize="10" fontWeight="bold">{rel.label}</text>}
-                        </g>
-                    );
-                });
-            }, [nodes, activeEdge, selectedNode]);
+        .pc-stat-icon.blue {
+            background: var(--pc-blue-soft);
+            color: #0369a1;
+        }
 
-            const NODE_WIDTH = 220;
-            const gridStyle = { backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: `${20 * viewState.scale}px ${20 * viewState.scale}px`, backgroundPosition: `${viewState.x}px ${viewState.y}px`, opacity: 0.5 };
-            const canvasStyle = { transform: `translate(${viewState.x}px, ${viewState.y}px) scale(${viewState.scale})`, width: '8000px', height: '8000px' };
-            const svgStyle = { overflow: 'visible' };
+        .pc-stat-icon.green {
+            background: #ecfdf5;
+            color: #047857;
+        }
 
-            return (
-                <div className="w-full h-screen bg-slate-100 flex flex-col font-sans overflow-hidden">
-                    {/* Header */}
-                    <div className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-sm z-20">
-                        <div className="flex items-center gap-3">
-                            <div className="bg-indigo-600 p-2 rounded-lg"><Icons.Zap className="text-white" /></div>
-                            <div>
-                                <h1 className="text-xl font-bold text-slate-800">Secure Architecture Mesh</h1>
-                                <p className="text-xs text-slate-500">Mobile Sync • Security • Database</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <div className="relative">
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><Icons.Search size={14} /></span>
-                                <input type="text" placeholder="Search..." className="pl-9 pr-4 py-1.5 bg-slate-100 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                            </div>
-                            <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-1">
-                                <button onClick={() => setViewState(p => ({...p, scale: Math.max(0.1, p.scale - 0.1)}))} className="p-1.5 hover:bg-white rounded shadow-sm text-slate-600"><Icons.ZoomOut size={16} /></button>
-                                <span className="text-xs w-12 text-center text-slate-500">{Math.round(viewState.scale * 100)}%</span>
-                                <button onClick={() => setViewState(p => ({...p, scale: Math.min(2, p.scale + 0.1)}))} className="p-1.5 hover:bg-white rounded shadow-sm text-slate-600"><Icons.ZoomIn size={16} /></button>
-                            </div>
-                        </div>
-                    </div>
+        .pc-stat-icon.orange {
+            background: #fffbeb;
+            color: #b45309;
+        }
 
-                    <div className="flex-1 relative flex overflow-hidden">
-                        <div 
-                            className="flex-1 h-full cursor-grab active:cursor-grabbing bg-slate-100 relative overflow-hidden"
-                            onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onWheel={handleWheel}
-                        >
-                            <div className="absolute inset-0 pointer-events-none" style={gridStyle} />
+        .pc-stat-icon.purple {
+            background: #f5f3ff;
+            color: #6d28d9;
+        }
 
-                            <div className="absolute origin-top-left transition-transform duration-75" style={canvasStyle}>
-                                
-                                {/* DRAGGABLE ZONES */}
-                                {zones.map(z => {
-                                    const zStyle = { left: z.x, top: z.y, width: z.width, height: z.height };
-                                    return (
-                                        <div key={z.id} className={`absolute border-2 border-dashed rounded-3xl flex flex-col items-center pt-4 group transition-colors hover:bg-opacity-30 ${z.styleClass}`} style={zStyle}>
-                                            <div className="absolute top-0 w-full h-12 cursor-grab active:cursor-grabbing bg-transparent hover:bg-black/5 rounded-t-3xl" onMouseDown={(e) => handleZoneMouseDown(e, z.id)} title="Drag Zone"></div>
-                                            <span className="font-black text-2xl opacity-50 pointer-events-none select-none uppercase tracking-widest">{z.label}</span>
-                                        </div>
-                                    );
-                                })}
+        .pc-stat-icon.red {
+            background: #fef2f2;
+            color: #b91c1c;
+        }
 
-                                <svg className="absolute top-0 left-0 w-[8000px] h-[8000px] pointer-events-none" style={svgStyle}>
-                                    <defs>
-                                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8" /></marker>
-                                        <marker id="arrowhead-active" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#10b981" /></marker>
-                                    </defs>
-                                    {edgesSvg}
-                                </svg>
+        .pc-stat-label {
+            font-size: 10px;
+            font-weight: 950;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: var(--pc-muted);
+        }
 
-                                {filteredNodes.map(node => {
-                                    const cat = categories[node.category];
-                                    const Icon = cat.icon;
-                                    const isSelected = selectedNode?.id === node.id;
-                                    const isDimmed = node.dimmed;
-                                    const isActive = activeEdge && (activeEdge.source === node.id || activeEdge.target === node.id);
-                                    
-                                    let pulseClass = '';
-                                    if(isActive) {
-                                        if (activeEdge.type === 'red') pulseClass = 'animate-pulse-red';
-                                        else if (activeEdge.type === 'blue') pulseClass = 'animate-pulse-blue';
-                                        else if (activeEdge.type === 'violet') pulseClass = 'animate-pulse-violet';
-                                        else if (activeEdge.type === 'orange') pulseClass = 'animate-pulse-orange';
-                                        else pulseClass = 'animate-pulse-green';
-                                    }
+        .pc-stat-value {
+            font-size: 24px;
+            font-weight: 950;
+            line-height: 1.1;
+            color: #0f172a;
+            margin-top: 4px;
+        }
 
-                                    const nodeStyle = { left: node.x, top: node.y, width: NODE_WIDTH, opacity: isDimmed ? 0.3 : 1 };
-                                    const headerStyle = { backgroundColor: cat.color };
+        .pc-stat-sub {
+            font-size: 12px;
+            font-weight: 750;
+            color: var(--pc-muted);
+            margin-top: 3px;
+        }
 
-                                    return (
-                                        <div
-                                            key={node.id}
-                                            onMouseDown={(e) => handleNodeMouseDown(e, node.id)}
-                                            className={`absolute rounded-lg bg-white shadow-lg border-2 flex flex-col group cursor-pointer w-[220px] ${isActive ? pulseClass : (isSelected ? 'border-blue-500 scale-105 z-10' : 'border-white hover:border-slate-300')}`}
-                                            style={nodeStyle}
-                                        >
-                                            <div className="px-3 py-2 text-white font-bold rounded-t-[5px] flex items-center gap-2 text-sm" style={headerStyle}>
-                                                <Icon size={14} />
-                                                <span className="truncate">{node.label}</span>
-                                            </div>
-                                            <div className="p-2 bg-slate-50 text-[10px] text-slate-500 rounded-b-lg font-bold">{cat.label}</div>
-                                        </div>
-                                    );
-                                })}
+        .pc-tabs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            background: #fff;
+            border: 1px solid var(--pc-border);
+            border-radius: 14px;
+            padding: 8px;
+            box-shadow: var(--pc-shadow-sm);
+        }
 
-                                {activePacket && (() => {
-                                    const packetStyle = { 
-                                        left: activePacket.x, 
-                                        top: activePacket.y,
-                                        transform: 'translate(-50%, -50%)' 
-                                    };
-                                    let colorBg = 'bg-emerald-500 shadow-emerald-500/50';
-                                    if(activePacket.type === 'red') colorBg = 'bg-red-500 shadow-red-500/50';
-                                    if(activePacket.type === 'blue') colorBg = 'bg-blue-500 shadow-blue-500/50';
-                                    if(activePacket.type === 'violet') colorBg = 'bg-violet-500 shadow-violet-500/50';
-                                    if(activePacket.type === 'orange') colorBg = 'bg-orange-500 shadow-orange-500/50';
+        .pc-tab {
+            border: 1px solid transparent;
+            background: transparent;
+            color: #64748b;
+            border-radius: 11px;
+            padding: 9px 12px;
+            font-size: 13px;
+            font-weight: 950;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
 
-                                    return (
-                                        <div 
-                                            className="absolute z-50 flex items-center justify-center pointer-events-none transition-all duration-75"
-                                            style={packetStyle}
-                                        >
-                                            <div className={`w-6 h-6 rounded-full shadow-lg border-2 border-white ${colorBg} packet-pulse`}></div>
-                                            <div className="absolute top-8 bg-slate-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-full whitespace-nowrap opacity-90 shadow-xl z-50">
-                                                {activePacket.msg}
-                                            </div>
-                                        </div>
-                                    );
-                                })()}
-                            </div>
-                        </div>
+        .pc-tab:hover {
+            background: #f8fafc;
+            color: #0f172a;
+        }
 
-                        {/* Sidebar Details / Simulation Dashboard */}
-                        <div className={`fixed top-16 bottom-0 right-0 w-96 bg-white border-l border-slate-200 shadow-2xl z-40 overflow-y-auto transform transition-transform duration-300 ${ 'translate-x-0' }`}>
-                            {selectedNode ? (
-                                <div className="p-6">
-                                    <div className="flex items-start justify-between mb-6">
-                                        <div>
-                                            {(() => {
-                                                const pillStyle = { backgroundColor: categories[selectedNode.category].color };
-                                                return <div className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold text-white mb-2" style={pillStyle}>{categories[selectedNode.category].label}</div>;
-                                            })()}
-                                            <h2 className="text-xl font-bold text-slate-800 break-all">{selectedNode.label}</h2>
-                                        </div>
-                                        <button onClick={() => setSelectedNode(null)} className="p-1 hover:bg-slate-100 rounded-full transition-colors"><Icons.X /></button>
-                                    </div>
-                                    
-                                    {/* Relationships Section (NEW) */}
-                                    {connectedNodes.length > 0 && (
-                                        <div className="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
-                                            <h3 className="text-sm font-bold text-blue-900 mb-3 flex items-center gap-2"><Icons.Link size={14} /> Connected Tables</h3>
-                                            <div className="space-y-2">
-                                                {connectedNodes.map((rel, idx) => {
-                                                    const isSource = rel.source === selectedNode.id;
-                                                    const otherId = isSource ? rel.target : rel.source;
-                                                    const otherNode = nodes.find(n => n.id === otherId);
-                                                    const direction = isSource ? '→' : '←';
-                                                    return (
-                                                        <div key={idx} className="flex items-center justify-between bg-white px-3 py-2 rounded border border-blue-200 text-xs shadow-sm">
-                                                            <span className="font-bold text-slate-600 truncate max-w-[120px]">{otherNode?.label || otherId}</span>
-                                                            <div className="flex items-center gap-2">
-                                                                <span className="text-slate-400 font-mono">{rel.label}</span>
-                                                                <span className="text-blue-500 font-bold">{direction}</span>
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    )}
+        .pc-tab.is-active {
+            background: var(--pc-primary-soft);
+            border-color: rgba(147, 194, 28, .45);
+            color: #365314;
+        }
 
-                                    <div className="space-y-6">
-                                        <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                                            <h3 className="text-sm font-bold text-slate-700 mb-2 flex items-center gap-2"><Icons.Info size={14} /> Description</h3>
-                                            <p className="text-sm text-slate-600 leading-relaxed">{selectedNode.details || "No details provided."}</p>
-                                        </div>
-                                        {selectedNode.input && <div><h3 className="text-sm font-bold text-slate-700 mb-2">Input Parameters</h3><div className="font-mono text-xs bg-slate-800 text-slate-200 p-3 rounded-lg overflow-x-auto shadow-inner">{selectedNode.input}</div></div>}
-                                        
-                                        {/* Structure / Columns */}
-                                        <div>
-                                            <h3 className="text-sm font-bold text-slate-700 mb-3 flex items-center justify-between"><span className="flex items-center gap-2"><Icons.Maximize2 size={14} /> Structure</span></h3>
-                                            <div className="space-y-1">
-                                                {selectedNode.columns && selectedNode.columns.map((col, idx) => (
-                                                    <div key={idx} className="px-3 py-2 text-sm rounded border flex justify-between items-center bg-white border-slate-100 text-slate-600 font-mono"><span>{col}</span></div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="p-6">
-                                    <h2 className="text-lg font-black text-slate-800 mb-1">SIMULATION LAB</h2>
-                                    <p className="text-xs text-slate-500 mb-6">Run architecture scenarios to test flow.</p>
-                                    <div className="space-y-8">
-                                        <div>
-                                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Sync & Data</h3>
-                                            <div className="space-y-2">
-                                                {simulations.slice(0, 3).map(sim => (
-                                                    <button key={sim.id} onClick={() => runSimulation(sim)} disabled={simulating} className={`w-full text-left px-4 py-3 rounded-xl border-2 font-bold text-xs flex items-center justify-between transition-all ${simulating ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02]'} ${sim.color === 'emerald' ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-blue-50 border-blue-100 text-blue-700'}`}>
-                                                        <span>{sim.label}</span><Icons.Play size={12} />
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">CRUD Operations</h3>
-                                            <div className="space-y-2">
-                                                {simulations.slice(3, 6).map(sim => (
-                                                    <button key={sim.id} onClick={() => runSimulation(sim)} disabled={simulating} className={`w-full text-left px-4 py-3 rounded-xl border-2 font-bold text-xs flex items-center justify-between transition-all ${simulating ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02]'} bg-white border-slate-200 text-slate-600 hover:border-indigo-300 hover:text-indigo-600`}>
-                                                        <span>{sim.label}</span><Icons.Zap size={12} />
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Security Tests</h3>
-                                            <div className="space-y-2">
-                                                {simulations.slice(6).map(sim => (
-                                                    <button key={sim.id} onClick={() => runSimulation(sim)} disabled={simulating} className={`w-full text-left px-4 py-3 rounded-xl border-2 font-bold text-xs flex items-center justify-between transition-all ${simulating ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02]'} bg-red-50 border-red-100 text-red-600 hover:bg-red-100`}>
-                                                        <span>{sim.label}</span><Icons.Shield size={12} />
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
+        .pc-view {
+            display: none;
+        }
 
-                                        {/* EXPORT SECTION */}
-                                        <div>
-                                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Tools</h3>
-                                            <button 
-                                                onClick={handleCopyMigrations}
-                                                className="w-full text-left px-4 py-3 rounded-xl border-2 font-bold text-xs flex items-center justify-between transition-all bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-slate-300"
-                                            >
-                                                <span>{copySuccess ? 'Copied to Clipboard!' : 'Copy All Migrations'}</span>
-                                                {copySuccess ? <Icons.Check size={12} /> : <Icons.Copy size={12} />}
-                                            </button>
-                                        </div>
+        .pc-view.is-active {
+            display: block;
+        }
 
-                                        <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-500">
-                                            <p className="font-bold mb-1">Instructions:</p>
-                                            <p>1. Drag zones (dashed borders) to reorganize.</p>
-                                            <p>2. Click nodes to see columns & connections.</p>
-                                            <p>3. Run simulations to see data flow.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+        .pc-board-grid {
+            display: grid;
+            grid-template-columns: 1.15fr .85fr;
+            gap: 16px;
+        }
+
+        @media(max-width:1200px) {
+            .pc-board-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pc-team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        @media(max-width:1300px) {
+            .pc-team-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media(max-width:760px) {
+            .pc-team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pc-employee-card {
+            border: 1px solid var(--pc-border);
+            border-radius: 16px;
+            background: #fff;
+            padding: 13px;
+            box-shadow: var(--pc-shadow-sm);
+        }
+
+        .pc-employee-top {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .pc-avatar,
+        .pc-avatar-initial {
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 4px rgba(15, 23, 42, .12);
+            background: #e5e7eb;
+            flex: 0 0 auto;
+        }
+
+        .pc-avatar {
+            object-fit: cover;
+        }
+
+        .pc-avatar-initial {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0f172a;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 950;
+        }
+
+        .pc-employee-name {
+            font-size: 14px;
+            font-weight: 950;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        .pc-employee-role {
+            font-size: 12px;
+            font-weight: 750;
+            color: var(--pc-muted);
+            margin-top: 2px;
+        }
+
+        .pc-workload {
+            margin-top: 11px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 7px;
+        }
+
+        .pc-workload div {
+            background: #f8fafc;
+            border: 1px solid var(--pc-border);
+            border-radius: 12px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .pc-workload strong {
+            display: block;
+            font-size: 15px;
+            font-weight: 950;
+            color: #0f172a;
+        }
+
+        .pc-workload span {
+            display: block;
+            font-size: 9px;
+            font-weight: 950;
+            color: var(--pc-muted);
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .pc-canvas-shell {
+            height: 620px;
+            background: #f8fafc;
+            border: 1px solid var(--pc-border);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pc-canvas-toolbar {
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            right: 12px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .pc-canvas-toolbar>* {
+            pointer-events: auto;
+        }
+
+        .pc-canvas-title {
+            background: rgba(255, 255, 255, .92);
+            border: 1px solid var(--pc-border);
+            border-radius: 13px;
+            padding: 8px 11px;
+            box-shadow: var(--pc-shadow-sm);
+        }
+
+        .pc-canvas-title strong {
+            font-size: 12px;
+            font-weight: 950;
+            color: #0f172a;
+            display: block;
+        }
+
+        .pc-canvas-title span {
+            font-size: 11px;
+            font-weight: 750;
+            color: var(--pc-muted);
+            display: block;
+            margin-top: 1px;
+        }
+
+        .pc-canvas-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, .92);
+            border: 1px solid var(--pc-border);
+            border-radius: 13px;
+            padding: 5px;
+            box-shadow: var(--pc-shadow-sm);
+        }
+
+        .pc-canvas-area {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            cursor: grab;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 22px 22px;
+        }
+
+        .pc-canvas-area:active {
+            cursor: grabbing;
+        }
+
+        .pc-canvas-stage {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3200px;
+            height: 2200px;
+            transform-origin: 0 0;
+        }
+
+        .pc-canvas-svg {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3200px;
+            height: 2200px;
+            overflow: visible;
+            pointer-events: none;
+        }
+
+        .pc-node {
+            position: absolute;
+            width: 220px;
+            background: #fff;
+            border: 2px solid #fff;
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, .12);
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+        }
+
+        .pc-node:hover,
+        .pc-node.is-active {
+            border-color: var(--pc-blue);
+            box-shadow: 0 18px 42px rgba(15, 23, 42, .17);
+            transform: translateY(-1px);
+        }
+
+        .pc-node-head {
+            padding: 10px 12px;
+            color: #fff;
+            font-weight: 950;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .pc-node-body {
+            padding: 10px 12px;
+            background: #fff;
+        }
+
+        .pc-node-body strong {
+            display: block;
+            font-size: 13px;
+            color: #0f172a;
+            line-height: 1.25;
+        }
+
+        .pc-node-body span {
+            display: block;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--pc-muted);
+            margin-top: 4px;
+            line-height: 1.35;
+        }
+
+        .pc-canvas-side {
+            position: absolute;
+            top: 72px;
+            right: 12px;
+            bottom: 12px;
+            width: 360px;
+            z-index: 18;
+            background: rgba(255, 255, 255, .96);
+            border: 1px solid var(--pc-border);
+            border-radius: 16px;
+            box-shadow: var(--pc-shadow);
+            overflow: auto;
+            display: none;
+        }
+
+        .pc-canvas-side.is-open {
+            display: block;
+        }
+
+        .pc-canvas-side-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px;
+            border-bottom: 1px solid var(--pc-border);
+            background: linear-gradient(135deg, #fff, #f8fafc);
+        }
+
+        .pc-canvas-side-body {
+            padding: 14px;
+        }
+
+        .pc-gantt-shell {
+            background: #fff;
+            border: 1px solid var(--pc-border);
+            border-radius: 16px;
+            overflow: auto;
+            box-shadow: var(--pc-shadow-sm);
+        }
+
+        .pc-gantt {
+            min-width: 980px;
+            padding: 16px;
+        }
+
+        .pc-gantt-row {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 12px;
+            align-items: center;
+            min-height: 48px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .pc-gantt-row:last-child {
+            border-bottom: 0;
+        }
+
+        .pc-gantt-label {
+            font-size: 13px;
+            font-weight: 950;
+            color: #0f172a;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pc-gantt-line {
+            position: relative;
+            height: 18px;
+            background: #f1f5f9;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .pc-gantt-bar {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--pc-blue), var(--pc-primary));
+            min-width: 8px;
+        }
+
+        .pc-gantt-date {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--pc-muted);
+            margin-top: 4px;
+        }
+
+        .pc-dep-list,
+        .pc-daily-list,
+        .pc-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .pc-dep-item,
+        .pc-day,
+        .pc-history-item {
+            background: #fff;
+            border: 1px solid var(--pc-border);
+            border-radius: 16px;
+            box-shadow: var(--pc-shadow-sm);
+            overflow: hidden;
+        }
+
+        .pc-dep-item {
+            padding: 14px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr);
+            gap: 12px;
+            align-items: center;
+        }
+
+        @media(max-width:800px) {
+            .pc-dep-item {
+                grid-template-columns: 1fr;
+            }
+
+            .pc-dep-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .pc-dep-box {
+            background: #f8fafc;
+            border: 1px solid var(--pc-border);
+            border-radius: 13px;
+            padding: 11px;
+            min-width: 0;
+        }
+
+        .pc-dep-title {
+            font-size: 13px;
+            font-weight: 950;
+            color: #0f172a;
+        }
+
+        .pc-dep-meta {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--pc-muted);
+            margin-top: 4px;
+        }
+
+        .pc-dep-arrow {
+            text-align: center;
+            color: var(--pc-blue);
+            font-weight: 950;
+        }
+
+        .pc-day-head {
+            width: 100%;
+            border: 0;
+            background: linear-gradient(135deg, #fff, #f8fafc);
+            padding: 14px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .pc-day-title {
+            font-size: 14px;
+            font-weight: 950;
+            color: #0f172a;
+        }
+
+        .pc-day-meta {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--pc-muted);
+            margin-top: 3px;
+        }
+
+        .pc-day-body {
+            display: none;
+            padding: 0 15px 15px;
+        }
+
+        .pc-day.is-open .pc-day-body {
+            display: block;
+        }
+
+        .pc-employee-group {
+            border: 1px solid var(--pc-border);
+            background: #fff;
+            border-radius: 14px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .pc-employee-group-head {
+            padding: 11px 12px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--pc-border);
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .pc-activity {
+            display: grid;
+            grid-template-columns: 88px minmax(0, 1fr) 120px;
+            gap: 10px;
+            padding: 11px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            align-items: center;
+        }
+
+        .pc-activity:last-child {
+            border-bottom: 0;
+        }
+
+        @media(max-width:760px) {
+            .pc-activity {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pc-activity-time {
+            font-size: 12px;
+            font-weight: 950;
+            color: #0369a1;
+        }
+
+        .pc-activity-title {
+            font-size: 13px;
+            font-weight: 950;
+            color: #0f172a;
+        }
+
+        .pc-activity-meta {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--pc-muted);
+            margin-top: 3px;
+        }
+
+        .pc-activity-status {
+            text-align: right;
+        }
+
+        @media(max-width:760px) {
+            .pc-activity-status {
+                text-align: left;
+            }
+        }
+
+        .pc-history-item {
+            position: relative;
+            padding: 14px 14px 14px 44px;
+        }
+
+        .pc-history-item:before {
+            content: "";
+            position: absolute;
+            left: 19px;
+            top: 18px;
+            width: 11px;
+            height: 11px;
+            border-radius: 999px;
+            background: var(--pc-primary);
+            box-shadow: 0 0 0 4px var(--pc-primary-soft);
+        }
+
+        .pc-history-item:after {
+            content: "";
+            position: absolute;
+            left: 24px;
+            top: 32px;
+            bottom: -18px;
+            width: 1px;
+            background: #dbeafe;
+        }
+
+        .pc-history-item:last-child:after {
+            display: none;
+        }
+
+        .pc-history-title {
+            font-size: 14px;
+            font-weight: 950;
+            color: #0f172a;
+        }
+
+        .pc-history-meta {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--pc-muted);
+            margin-top: 4px;
+        }
+
+        .pc-history-reason {
+            margin-top: 8px;
+            background: #f8fafc;
+            border: 1px solid var(--pc-border);
+            border-radius: 12px;
+            padding: 9px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #334155;
+        }
+
+        .pc-history-diff {
+            display: inline-flex;
+            margin-top: 8px;
+            border-radius: 999px;
+            background: var(--pc-blue-soft);
+            color: #0369a1;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 950;
+        }
+
+        .pc-empty {
+            background: #fff;
+            border: 1px dashed var(--pc-border);
+            border-radius: 16px;
+            padding: 42px;
+            text-align: center;
+            color: var(--pc-muted);
+            font-weight: 850;
+        }
+
+        .pc-loading {
+            background: #fff;
+            border: 1px solid var(--pc-border);
+            border-radius: 16px;
+            padding: 34px;
+            text-align: center;
+            color: var(--pc-muted);
+            font-weight: 900;
+        }
+
+        .pc-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            border-radius: 16px;
+            padding: 16px;
+            font-weight: 850;
+        }
+    </style>
+@endpush
+
+@section('content')
+    <div class="pc-wrap" id="projectProfileApp" data-config='@json($profileConfig)'>
+        <div class="pc-header">
+            <div class="pc-titlebar">
+                <div>
+                    <div class="pc-title">{{ $pageTitle }}</div>
+                    <div class="pc-sub">{{ $pageSubtitle }}</div>
+                    <div class="pc-breadcrumb">
+                        <a href="{{ $profileConfig['backUrl'] }}">Projektplanung</a>
+                        <span>/</span>
+                        <span class="current" id="pcBreadcrumbTitle">Projekt #{{ $projectId }}</span>
                     </div>
                 </div>
-            );
-        }
+                <div class="pc-actions">
+                    <a href="{{ $profileConfig['backUrl'] }}" class="pc-btn-soft">← Zurück</a>
+                    <button type="button" class="pc-btn-soft" id="pcRefreshBtn">Aktualisieren</button>
+                    <button type="button" class="pc-btn" id="pcSyncBtn">Plan synchronisieren</button>
+                </div>
+            </div>
+        </div>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<SchemaVisualizer />);
+        <div id="pcAlert"></div>
+
+        <div class="pc-hero">
+            <section class="pc-panel">
+                <div class="pc-panel-head">
+                    <div>
+                        <h3 class="pc-panel-title">Projektübersicht</h3>
+                        <div class="pc-panel-sub">Nur Daten des ausgewählten Kundenprodukts werden geladen.</div>
+                    </div>
+                    <span class="pc-chip green" id="pcStageChip">Lädt...</span>
+                </div>
+                <div class="pc-panel-body">
+                    <div class="pc-project-main">
+                        <div class="pc-project-avatar" id="pcProjectAvatar">P</div>
+                        <div>
+                            <div class="pc-project-title" id="pcProjectTitle">Projekt wird geladen...</div>
+                            <div class="pc-sub" id="pcProjectSubtitle">Bitte warten.</div>
+                            <div class="pc-project-meta" id="pcProjectMeta"></div>
+                        </div>
+                    </div>
+                    <div class="pc-info-grid" id="pcInfoGrid"></div>
+                </div>
+            </section>
+
+            <section class="pc-panel">
+                <div class="pc-panel-head">
+                    <div>
+                        <h3 class="pc-panel-title">Letzte Aktivität</h3>
+                        <div class="pc-panel-sub">Aktuellster Job und Statuswechsel im Projekt.</div>
+                    </div>
+                    <button type="button" class="pc-icon-btn info" data-pc-tab="history">↗</button>
+                </div>
+                <div class="pc-panel-body" id="pcLatestJob">
+                    <div class="pc-loading">Letzte Aktivität wird geladen...</div>
+                </div>
+            </section>
+        </div>
+
+        <div class="pc-stat-grid" id="pcStats"></div>
+
+        <nav class="pc-tabs" aria-label="Projekt Bereiche">
+            <button type="button" class="pc-tab is-active" data-pc-tab="overview">Cockpit</button>
+            <button type="button" class="pc-tab" data-pc-tab="canvas">Org-Canvas</button>
+            <button type="button" class="pc-tab" data-pc-tab="gantt">Gantt</button>
+            <button type="button" class="pc-tab" data-pc-tab="daily">Tagesliste</button>
+            <button type="button" class="pc-tab" data-pc-tab="dependencies">Abhängigkeiten</button>
+            <button type="button" class="pc-tab" data-pc-tab="history">Historie</button>
+        </nav>
+
+        <section class="pc-view is-active" id="pcView-overview">
+            <div class="pc-board-grid">
+                <section class="pc-panel">
+                    <div class="pc-panel-head">
+                        <div>
+                            <h3 class="pc-panel-title">Team & Arbeit</h3>
+                            <div class="pc-panel-sub">Wer macht was in diesem Projekt.</div>
+                        </div>
+                    </div>
+                    <div class="pc-panel-body">
+                        <div class="pc-team-grid" id="pcTeamGrid"></div>
+                    </div>
+                </section>
+                <section class="pc-panel">
+                    <div class="pc-panel-head">
+                        <div>
+                            <h3 class="pc-panel-title">Projektstruktur</h3>
+                            <div class="pc-panel-sub">Kunde, Plan, Aufgaben und operative Module.</div>
+                        </div>
+                    </div>
+                    <div class="pc-panel-body" id="pcStructureSummary"></div>
+                </section>
+            </div>
+        </section>
+
+        <section class="pc-view" id="pcView-canvas">
+            <div class="pc-canvas-shell">
+                <div class="pc-canvas-toolbar">
+                    <div class="pc-canvas-title">
+                        <strong>Organisations-Canvas</strong>
+                        <span>Knoten ziehen, zoomen und Details öffnen</span>
+                    </div>
+                    <div class="pc-canvas-actions">
+                        <button type="button" class="pc-icon-btn" id="pcCanvasZoomOut">−</button>
+                        <span class="pc-chip" id="pcCanvasZoomLabel">100%</span>
+                        <button type="button" class="pc-icon-btn" id="pcCanvasZoomIn">+</button>
+                        <button type="button" class="pc-icon-btn" id="pcCanvasReset">Reset</button>
+                    </div>
+                </div>
+                <div class="pc-canvas-area" id="pcCanvasArea">
+                    <div class="pc-canvas-stage" id="pcCanvasStage">
+                        <svg class="pc-canvas-svg" id="pcCanvasSvg"></svg>
+                        <div id="pcCanvasNodes"></div>
+                    </div>
+                </div>
+                <aside class="pc-canvas-side" id="pcCanvasSide">
+                    <div class="pc-canvas-side-head">
+                        <div>
+                            <h3 class="pc-panel-title" id="pcCanvasSideTitle">Details</h3>
+                            <div class="pc-panel-sub" id="pcCanvasSideSub">Knoteninformation</div>
+                        </div>
+                        <button type="button" class="pc-icon-btn" id="pcCanvasSideClose">×</button>
+                    </div>
+                    <div class="pc-canvas-side-body" id="pcCanvasSideBody"></div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="pc-view" id="pcView-gantt">
+            <div class="pc-gantt-shell">
+                <div class="pc-gantt" id="pcGantt"></div>
+            </div>
+        </section>
+
+        <section class="pc-view" id="pcView-daily">
+            <div class="pc-daily-list" id="pcDailyList"></div>
+        </section>
+
+        <section class="pc-view" id="pcView-dependencies">
+            <div class="pc-dep-list" id="pcDependencies"></div>
+        </section>
+
+        <section class="pc-view" id="pcView-history">
+            <div class="pc-history-list" id="pcHistory"></div>
+        </section>
+    </div>
+@endsection
+
+@push('scripts')
+    <script>
+        (function () {
+            'use strict';
+
+            const app = document.getElementById('projectProfileApp');
+            if (!app) return;
+
+            const config = JSON.parse(app.dataset.config || '{}');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+
+            const state = {
+                data: null,
+                canvas: { x: 60, y: 70, scale: 0.75, dragging: null, selected: null },
+                nodes: [],
+                edges: [],
+            };
+
+            const el = id => document.getElementById(id);
+            const esc = value => String(value ?? '').replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[c]));
+            const arr = value => Array.isArray(value) ? value : [];
+            const lower = value => String(value ?? '').toLowerCase();
+
+            function money(value) {
+                const n = Number(value || 0);
+                return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(n);
+            }
+
+            function fmtDate(value) {
+                if (!value) return '—';
+                try { return new Intl.DateTimeFormat('de-DE', { dateStyle: 'medium' }).format(new Date(value)); } catch (e) { return value; }
+            }
+
+            function fmtDateTime(value) {
+                if (!value) return '—';
+                try { return new Intl.DateTimeFormat('de-DE', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value)); } catch (e) { return value; }
+            }
+
+            function initials(name) {
+                return String(name || 'P').split(/\s+/).filter(Boolean).slice(0, 2).map(x => x.charAt(0).toUpperCase()).join('') || 'P';
+            }
+
+            function setAlert(type, message) {
+                const box = el('pcAlert');
+                if (!box) return;
+                if (!message) { box.innerHTML = ''; return; }
+                box.innerHTML = `<div class="${type === 'error' ? 'pc-error' : 'pc-loading'}" style="margin-bottom:16px;">${esc(message)}</div>`;
+            }
+
+            function normalizePayload(json) {
+                const data = json?.data || json || {};
+                const project = data.project || data.lead_product || data.lpl || {};
+                const customer = data.customer || project.customer || {};
+                const object = data.object || data.alternative || project.object || {};
+                const product = data.product || project.product || {};
+                const plan = data.plan || project.plan || {};
+                const items = arr(data.items || data.activities || data.planner_items);
+                const team = arr(data.team || data.employees || data.members);
+                const dependencies = arr(data.dependencies);
+                const history = arr(data.history || data.timeline);
+                const daily = arr(data.daily || data.daily_groups || data.calendar_groups);
+                const org = data.org || data.organization || {};
+                const stats = data.stats || data.summary || {};
+
+                return { project, customer, object, product, plan, items, team, dependencies, history, daily, org, stats };
+            }
+
+            async function loadProfile() {
+                setAlert('', '');
+                showLoading();
+
+                try {
+                    const res = await fetch(config.dataUrl, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } });
+                    const json = await res.json();
+                    if (!res.ok || json.ok === false) throw new Error(json.message || 'Projektprofil konnte nicht geladen werden.');
+                    state.data = normalizePayload(json);
+                    renderAll();
+                } catch (err) {
+                    setAlert('error', err.message || 'Projektprofil konnte nicht geladen werden.');
+                }
+            }
+
+            function showLoading() {
+                ['pcStats', 'pcTeamGrid', 'pcStructureSummary', 'pcGantt', 'pcDailyList', 'pcDependencies', 'pcHistory'].forEach(id => {
+                    if (el(id)) el(id).innerHTML = '<div class="pc-loading">Wird geladen...</div>';
+                });
+            }
+
+            function renderAll() {
+                renderHeader();
+                renderStats();
+                renderTeam();
+                renderStructure();
+                renderCanvas();
+                renderGantt();
+                renderDaily();
+                renderDependencies();
+                renderHistory();
+            }
+
+            function renderHeader() {
+                const d = state.data;
+                const project = d.project || {};
+                const customer = d.customer || {};
+                const object = d.object || {};
+                const product = d.product || {};
+                const plan = d.plan || {};
+                const customerName = project.customer_name || customer.name || customer.full_name || customer.firma || customer.company || `Kunde #${project.customer_id || ''}`;
+                const productName = project.product_name || product.name || product.article_group || `Produkt #${project.product_id || ''}`;
+                const objectName = project.object_name || object.name || object.object_name || 'Objekt';
+                const stageName = project.sub_stage_name || project.stage_name || project.stage || project.status || 'Projekt';
+
+                el('pcBreadcrumbTitle').textContent = `Projekt #${project.id || config.projectId}`;
+                el('pcProjectAvatar').textContent = initials(productName);
+                el('pcProjectTitle').textContent = `${customerName}`;
+                el('pcProjectSubtitle').textContent = `${productName} · ${objectName}`;
+                el('pcStageChip').textContent = stageName;
+
+                el('pcProjectMeta').innerHTML = [
+                    `<span class="pc-chip blue">#${esc(project.id || config.projectId)}</span>`,
+                    `<span class="pc-chip green">${esc(stageName)}</span>`,
+                    plan.id ? `<span class="pc-chip purple">Plan #${esc(plan.id)}</span>` : `<span class="pc-chip orange">Plan fehlt</span>`,
+                    project.price || project.price_latest ? `<span class="pc-chip">${esc(money(project.price_latest || project.price))}</span>` : '',
+                ].filter(Boolean).join('');
+
+                el('pcInfoGrid').innerHTML = [
+                    ['Kunde', customerName, customer.email || project.customer_email || customer.phone || project.customer_phone],
+                    ['Objekt', objectName, object.address || project.object_address || object.full_address],
+                    ['Produkt', productName, product.initial || project.product_initial || ''],
+                    ['Projektstatus', stageName, `Aktualisiert: ${fmtDateTime(project.updated_at)}`],
+                    ['Kundennummer', customer.customer_no || project.customer_no || '—', 'CRM Referenz'],
+                    ['Adresse', object.address || project.object_address || object.full_address || '—', object.city || project.object_city || ''],
+                    ['Service', project.service_name || project.service || '—', 'Phase / Bereich'],
+                    ['Projektzeit', project.project_minutes ? `${project.project_minutes} Min.` : '—', 'Geplante Dauer'],
+                ].map(([label, value, help]) => `
+                <div class="pc-info-box">
+                    <div class="pc-info-label">${esc(label)}</div>
+                    <div class="pc-info-value" title="${esc(value)}">${esc(value || '—')}</div>
+                    <div class="pc-info-help" title="${esc(help)}">${esc(help || '')}</div>
+                </div>
+            `).join('');
+
+                const latest = arr(d.history)[0] || arr(d.items).sort((a, b) => new Date(b.updated_at || b.created_at || 0) - new Date(a.updated_at || a.created_at || 0))[0];
+                el('pcLatestJob').innerHTML = latest ? `
+                <div class="pc-info-box" style="background:#fff;">
+                    <div class="pc-info-label">Neuester Job</div>
+                    <div class="pc-info-value" style="white-space:normal;">${esc(latest.title || latest.event || latest.action || latest.source_type || 'Aktivität')}</div>
+                    <div class="pc-info-help">${esc(fmtDateTime(latest.created_at || latest.updated_at || latest.when || latest.date))}</div>
+                    ${latest.reason || latest.description || latest.text ? `<div class="pc-history-reason">${esc(latest.reason || latest.description || latest.text)}</div>` : ''}
+                </div>
+            ` : '<div class="pc-empty">Noch keine Aktivität vorhanden.</div>';
+            }
+
+            function renderStats() {
+                const d = state.data;
+                const items = arr(d.items);
+                const team = arr(d.team);
+                const deps = arr(d.dependencies);
+                const history = arr(d.history);
+                const done = items.filter(i => ['done', 'completed', 'finished', 'erledigt'].includes(lower(i.status))).length;
+                const open = items.length - done;
+                const progress = items.length ? Math.round((done / items.length) * 100) : 0;
+
+                el('pcStats').innerHTML = [
+                    ['Aufgaben', items.length, `${open} offen`, 'blue'],
+                    ['Erledigt', done, `${progress}% Fortschritt`, 'green'],
+                    ['Mitarbeiter', team.length, 'im Projekt', 'purple'],
+                    ['Abhängigkeiten', deps.length, 'kritische Reihenfolge', 'orange'],
+                    ['Historie', history.length, 'Ereignisse', 'red'],
+                ].map(([label, value, sub, color]) => `
+                <div class="pc-stat">
+                    <div class="pc-stat-icon ${color}">${esc(String(label).charAt(0))}</div>
+                    <div>
+                        <div class="pc-stat-label">${esc(label)}</div>
+                        <div class="pc-stat-value">${esc(value)}</div>
+                        <div class="pc-stat-sub">${esc(sub)}</div>
+                    </div>
+                </div>
+            `).join('');
+            }
+
+            function renderTeam() {
+                const d = state.data;
+                const items = arr(d.items);
+                const team = arr(d.team);
+                const byEmployee = new Map();
+
+                items.forEach(item => {
+                    const members = arr(item.members || item.employees || item.assignees);
+                    if (item.lead) members.unshift(item.lead);
+                    members.forEach(m => {
+                        const id = m.id || m.employee_id;
+                        if (!id) return;
+                        if (!byEmployee.has(id)) byEmployee.set(id, { employee: m, items: [] });
+                        byEmployee.get(id).items.push(item);
+                    });
+                });
+
+                team.forEach(emp => {
+                    const id = emp.id || emp.employee_id;
+                    if (id && !byEmployee.has(id)) byEmployee.set(id, { employee: emp, items: [] });
+                });
+
+                const rows = Array.from(byEmployee.values());
+                el('pcTeamGrid').innerHTML = rows.length ? rows.map(row => {
+                    const emp = row.employee || {};
+                    const name = emp.full_name || [emp.name, emp.lastname].filter(Boolean).join(' ') || `Mitarbeiter #${emp.id || emp.employee_id || ''}`;
+                    const done = row.items.filter(i => ['done', 'completed', 'finished', 'erledigt'].includes(lower(i.status))).length;
+                    const planned = row.items.filter(i => ['planned', 'in_progress', 'progress'].includes(lower(i.status))).length;
+                    const avatar = emp.photo_url || emp.image_url || emp.image;
+                    return `
+                    <div class="pc-employee-card">
+                        <div class="pc-employee-top">
+                            ${avatar ? `<img class="pc-avatar" src="${esc(avatar)}" alt="${esc(name)}">` : `<div class="pc-avatar-initial">${esc(initials(name))}</div>`}
+                            <div style="min-width:0;">
+                                <div class="pc-employee-name">${esc(name)}</div>
+                                <div class="pc-employee-role">${esc(emp.role || emp.stage_label || 'Projektteam')}</div>
+                            </div>
+                        </div>
+                        <div class="pc-workload">
+                            <div><strong>${row.items.length}</strong><span>gesamt</span></div>
+                            <div><strong>${planned}</strong><span>geplant</span></div>
+                            <div><strong>${done}</strong><span>fertig</span></div>
+                        </div>
+                    </div>
+                `;
+                }).join('') : '<div class="pc-empty">Noch keine Mitarbeiter im Projekt.</div>';
+            }
+
+            function renderStructure() {
+                const d = state.data;
+                const plan = d.plan || {};
+                const items = arr(d.items);
+                const sourceCounts = {};
+                items.forEach(i => sourceCounts[i.source_type || i.category || 'manual'] = (sourceCounts[i.source_type || i.category || 'manual'] || 0) + 1);
+                el('pcStructureSummary').innerHTML = `
+                <div class="pc-info-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0;">
+                    <div class="pc-info-box"><div class="pc-info-label">Plan</div><div class="pc-info-value">${plan.id ? 'Plan #' + esc(plan.id) : 'Noch kein Plan'}</div><div class="pc-info-help">${esc(plan.title || '')}</div></div>
+                    <div class="pc-info-box"><div class="pc-info-label">Status</div><div class="pc-info-value">${esc(plan.status || 'active')}</div><div class="pc-info-help">PlannerPlan</div></div>
+                    ${Object.entries(sourceCounts).map(([key, total]) => `<div class="pc-info-box"><div class="pc-info-label">${esc(key)}</div><div class="pc-info-value">${esc(total)}</div><div class="pc-info-help">Einträge</div></div>`).join('')}
+                </div>
+            `;
+            }
+
+            function buildCanvasData() {
+                const d = state.data;
+                const project = d.project || {};
+                const customer = d.customer || {};
+                const object = d.object || {};
+                const product = d.product || {};
+                const plan = d.plan || {};
+                const items = arr(d.items);
+                const team = arr(d.team);
+                const deps = arr(d.dependencies);
+
+                if (d.org && arr(d.org.nodes).length) {
+                    return { nodes: arr(d.org.nodes), edges: arr(d.org.edges) };
+                }
+
+                const nodes = [
+                    { id: 'customer', type: 'customer', title: customer.name || project.customer_name || `Kunde #${project.customer_id || ''}`, subtitle: 'Kunde', x: 80, y: 130, color: '#74b2d4', detail: customer.email || customer.phone || '' },
+                    { id: 'object', type: 'object', title: object.name || project.object_name || 'Objekt', subtitle: object.address || project.object_address || 'Projektobjekt', x: 380, y: 130, color: '#8b5cf6', detail: object.address || '' },
+                    { id: 'product', type: 'product', title: product.name || project.product_name || 'Produkt', subtitle: 'Produkt / Gewerk', x: 680, y: 130, color: '#93c21c', detail: product.initial || '' },
+                    { id: 'plan', type: 'plan', title: plan.title || `Plan #${plan.id || '—'}`, subtitle: 'PlannerPlan', x: 980, y: 130, color: '#f59e0b', detail: `${items.length} Aufgaben` },
+                ];
+                const edges = [['customer', 'object', 'hat Objekt'], ['object', 'product', 'hat Produkt'], ['product', 'plan', 'erstellt Plan']];
+
+                team.slice(0, 10).forEach((emp, idx) => {
+                    const name = emp.full_name || [emp.name, emp.lastname].filter(Boolean).join(' ') || `Mitarbeiter #${emp.id || emp.employee_id}`;
+                    nodes.push({ id: `emp_${emp.id || emp.employee_id || idx}`, type: 'employee', title: name, subtitle: emp.role || 'Mitarbeiter', x: 160 + (idx % 4) * 260, y: 390 + Math.floor(idx / 4) * 180, color: '#3b82f6', detail: emp.email || emp.phone || '' });
+                    edges.push(['plan', `emp_${emp.id || emp.employee_id || idx}`, 'arbeitet an']);
+                });
+
+                items.slice(0, 16).forEach((item, idx) => {
+                    nodes.push({ id: `item_${item.id || idx}`, type: 'task', title: item.title || `Aufgabe #${item.id || idx + 1}`, subtitle: item.source_type || item.status || 'Aufgabe', x: 120 + (idx % 5) * 245, y: 780 + Math.floor(idx / 5) * 150, color: '#10b981', detail: item.description || item.status || '' });
+                    edges.push(['plan', `item_${item.id || idx}`, 'enthält']);
+                });
+
+                deps.slice(0, 20).forEach((dep, idx) => {
+                    const from = dep.from_item_id || dep.planner_item_id || dep.item_id;
+                    const to = dep.to_item_id || dep.depends_on_item_id || dep.depends_on_id;
+                    if (from && to) edges.push([`item_${from}`, `item_${to}`, dep.reason || 'abhängig']);
+                });
+
+                return { nodes, edges: edges.map(e => ({ from: e[0], to: e[1], label: e[2] })) };
+            }
+
+            function renderCanvas() {
+                const data = buildCanvasData();
+                state.nodes = data.nodes;
+                state.edges = data.edges;
+                updateCanvasTransform();
+                drawEdges();
+                drawNodes();
+            }
+
+            function updateCanvasTransform() {
+                const stage = el('pcCanvasStage');
+                if (!stage) return;
+                stage.style.transform = `translate(${state.canvas.x}px, ${state.canvas.y}px) scale(${state.canvas.scale})`;
+                el('pcCanvasZoomLabel').textContent = `${Math.round(state.canvas.scale * 100)}%`;
+            }
+
+            function drawEdges() {
+                const svg = el('pcCanvasSvg');
+                if (!svg) return;
+                const nodeMap = new Map(state.nodes.map(n => [n.id, n]));
+                svg.innerHTML = `
+                <defs><marker id="pcArrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8"></polygon></marker></defs>
+                ${state.edges.map(edge => {
+                    const a = nodeMap.get(edge.from); const b = nodeMap.get(edge.to);
+                    if (!a || !b) return '';
+                    const x1 = Number(a.x || 0) + 220; const y1 = Number(a.y || 0) + 42;
+                    const x2 = Number(b.x || 0); const y2 = Number(b.y || 0) + 42;
+                    const c = Math.max(80, Math.abs(x2 - x1) * .35);
+                    const path = `M ${x1} ${y1} C ${x1 + c} ${y1}, ${x2 - c} ${y2}, ${x2} ${y2}`;
+                    return `<path d="${path}" fill="none" stroke="#94a3b8" stroke-width="2" opacity=".45" marker-end="url(#pcArrow)"></path><text x="${(x1 + x2) / 2}" y="${(y1 + y2) / 2 - 6}" text-anchor="middle" fill="#64748b" font-size="11" font-weight="800">${esc(edge.label || '')}</text>`;
+                }).join('')}
+            `;
+            }
+
+            function drawNodes() {
+                const wrap = el('pcCanvasNodes');
+                if (!wrap) return;
+                wrap.innerHTML = state.nodes.map(n => `
+                <div class="pc-node" data-node-id="${esc(n.id)}" style="left:${Number(n.x || 0)}px;top:${Number(n.y || 0)}px;">
+                    <div class="pc-node-head" style="background:${esc(n.color || '#74b2d4')};"><span>●</span><span>${esc(n.title)}</span></div>
+                    <div class="pc-node-body"><strong>${esc(n.subtitle || n.type || '')}</strong><span>${esc(n.detail || '')}</span></div>
+                </div>
+            `).join('');
+
+                wrap.querySelectorAll('.pc-node').forEach(nodeEl => {
+                    nodeEl.addEventListener('mousedown', e => startNodeDrag(e, nodeEl.dataset.nodeId));
+                    nodeEl.addEventListener('click', e => openCanvasNode(nodeEl.dataset.nodeId));
+                });
+            }
+
+            function startNodeDrag(e, nodeId) {
+                e.stopPropagation();
+                const node = state.nodes.find(n => n.id === nodeId);
+                if (!node) return;
+                state.canvas.dragging = { type: 'node', nodeId, sx: e.clientX, sy: e.clientY, ox: Number(node.x || 0), oy: Number(node.y || 0) };
+            }
+
+            function startPan(e) {
+                if (e.target.closest('.pc-node') || e.target.closest('.pc-canvas-toolbar') || e.target.closest('.pc-canvas-side')) return;
+                state.canvas.dragging = { type: 'pan', sx: e.clientX, sy: e.clientY, ox: state.canvas.x, oy: state.canvas.y };
+            }
+
+            function moveCanvas(e) {
+                const d = state.canvas.dragging;
+                if (!d) return;
+                if (d.type === 'pan') {
+                    state.canvas.x = d.ox + (e.clientX - d.sx);
+                    state.canvas.y = d.oy + (e.clientY - d.sy);
+                    updateCanvasTransform();
+                }
+                if (d.type === 'node') {
+                    const node = state.nodes.find(n => n.id === d.nodeId);
+                    if (!node) return;
+                    node.x = d.ox + ((e.clientX - d.sx) / state.canvas.scale);
+                    node.y = d.oy + ((e.clientY - d.sy) / state.canvas.scale);
+                    drawEdges();
+                    drawNodes();
+                }
+            }
+
+            function stopCanvas() { state.canvas.dragging = null; }
+
+            function openCanvasNode(nodeId) {
+                const node = state.nodes.find(n => n.id === nodeId);
+                if (!node) return;
+                state.canvas.selected = node;
+                el('pcCanvasSide').classList.add('is-open');
+                el('pcCanvasSideTitle').textContent = node.title || 'Details';
+                el('pcCanvasSideSub').textContent = node.subtitle || node.type || '';
+                const related = state.edges.filter(e => e.from === node.id || e.to === node.id);
+                el('pcCanvasSideBody').innerHTML = `
+                <div class="pc-info-box" style="margin-bottom:12px;"><div class="pc-info-label">Beschreibung</div><div class="pc-info-value" style="white-space:normal;">${esc(node.detail || 'Keine Details')}</div></div>
+                <div class="pc-info-label" style="margin-bottom:8px;">Verbindungen</div>
+                ${related.length ? related.map(e => `<div class="pc-dep-box" style="margin-bottom:8px;"><div class="pc-dep-title">${esc(e.from)} → ${esc(e.to)}</div><div class="pc-dep-meta">${esc(e.label || '')}</div></div>`).join('') : '<div class="pc-empty" style="padding:22px;margin:0;">Keine Verbindungen</div>'}
+            `;
+            }
+
+            function renderGantt() {
+                const items = arr(state.data.items);
+                if (!items.length) { el('pcGantt').innerHTML = '<div class="pc-empty">Keine Gantt-Aufgaben vorhanden.</div>'; return; }
+                const dates = items.map(i => new Date(i.planned_start_at || i.start_at || i.created_at || Date.now()).getTime()).filter(Boolean);
+                const min = Math.min(...dates);
+                const max = Math.max(...items.map(i => new Date(i.planned_end_at || i.end_at || i.planned_start_at || i.created_at || Date.now()).getTime()).filter(Boolean), min + 86400000);
+                const span = Math.max(86400000, max - min);
+                el('pcGantt').innerHTML = items.map(item => {
+                    const s = new Date(item.planned_start_at || item.start_at || item.created_at || min).getTime();
+                    const e = new Date(item.planned_end_at || item.end_at || item.planned_start_at || item.created_at || s + 3600000).getTime();
+                    const left = Math.max(0, Math.min(100, ((s - min) / span) * 100));
+                    const width = Math.max(2, Math.min(100 - left, ((e - s) / span) * 100));
+                    return `
+                    <div class="pc-gantt-row">
+                        <div><div class="pc-gantt-label">${esc(item.title || 'Aufgabe')}</div><div class="pc-gantt-date">${fmtDateTime(item.planned_start_at || item.created_at)} – ${fmtDateTime(item.planned_end_at || item.updated_at)}</div></div>
+                        <div class="pc-gantt-line"><div class="pc-gantt-bar" style="left:${left}%;width:${width}%;"></div></div>
+                    </div>
+                `;
+                }).join('');
+            }
+
+            function renderDaily() {
+                let groups = arr(state.data.daily);
+                if (!groups.length) {
+                    const map = new Map();
+                    arr(state.data.items).forEach(item => {
+                        const day = (item.planned_start_at || item.created_at || '').slice(0, 10) || 'Ohne Datum';
+                        if (!map.has(day)) map.set(day, []);
+                        map.get(day).push(item);
+                    });
+                    groups = Array.from(map.entries()).map(([date, items]) => ({ date, items }));
+                }
+                el('pcDailyList').innerHTML = groups.length ? groups.map((group, idx) => {
+                    const items = arr(group.items || group.activities);
+                    const byEmp = new Map();
+                    items.forEach(item => {
+                        const people = arr(item.members || item.employees || item.assignees);
+                        const name = people[0]?.full_name || people[0]?.name || item.employee_name || 'Ohne Mitarbeiter';
+                        if (!byEmp.has(name)) byEmp.set(name, []);
+                        byEmp.get(name).push(item);
+                    });
+                    return `
+                    <article class="pc-day ${idx === 0 ? 'is-open' : ''}">
+                        <button type="button" class="pc-day-head">
+                            <div><div class="pc-day-title">${esc(fmtDate(group.date))}</div><div class="pc-day-meta">${items.length} Aktivitäten · ${byEmp.size} Mitarbeiter</div></div>
+                            <span class="pc-chip">öffnen</span>
+                        </button>
+                        <div class="pc-day-body">
+                            ${Array.from(byEmp.entries()).map(([name, empItems]) => `
+                                <div class="pc-employee-group">
+                                    <div class="pc-employee-group-head"><strong>${esc(name)}</strong><span class="pc-chip blue">${empItems.length}</span></div>
+                                    ${empItems.map(item => `<div class="pc-activity"><div class="pc-activity-time">${esc((item.planned_start_at || item.created_at || '').slice(11, 16) || '—')}</div><div><div class="pc-activity-title">${esc(item.title || 'Aktivität')}</div><div class="pc-activity-meta">${esc(item.source_type || item.description || '')}</div></div><div class="pc-activity-status"><span class="pc-chip ${['done', 'completed'].includes(lower(item.status)) ? 'green' : 'orange'}">${esc(item.status || 'offen')}</span></div></div>`).join('')}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </article>
+                `;
+                }).join('') : '<div class="pc-empty">Keine Tagesaktivitäten vorhanden.</div>';
+                document.querySelectorAll('.pc-day-head').forEach(btn => btn.addEventListener('click', () => btn.closest('.pc-day')?.classList.toggle('is-open')));
+            }
+
+            function renderDependencies() {
+                const deps = arr(state.data.dependencies);
+                const itemsById = new Map(arr(state.data.items).map(i => [String(i.id), i]));
+                el('pcDependencies').innerHTML = deps.length ? deps.map(dep => {
+                    const fromId = dep.from_item_id || dep.planner_item_id || dep.item_id;
+                    const toId = dep.to_item_id || dep.depends_on_item_id || dep.depends_on_id;
+                    const from = itemsById.get(String(fromId)) || dep.from || {};
+                    const to = itemsById.get(String(toId)) || dep.to || {};
+                    return `
+                    <div class="pc-dep-item">
+                        <div class="pc-dep-box"><div class="pc-dep-title">${esc(from.title || dep.from_title || 'Aufgabe')}</div><div class="pc-dep-meta">${esc(from.status || '')}</div></div>
+                        <div class="pc-dep-arrow">→</div>
+                        <div class="pc-dep-box"><div class="pc-dep-title">${esc(to.title || dep.to_title || dep.depends_on_title || 'Abhängig')}</div><div class="pc-dep-meta">${esc(dep.reason || 'Abhängigkeit')}</div></div>
+                    </div>
+                `;
+                }).join('') : '<div class="pc-empty">Keine Abhängigkeiten vorhanden.</div>';
+            }
+
+            function renderHistory() {
+                const history = arr(state.data.history);
+                el('pcHistory').innerHTML = history.length ? history.map((h, idx) => `
+                <article class="pc-history-item">
+                    <div class="pc-history-title">${esc(h.title || h.event || h.action || h.status || 'Ereignis')}</div>
+                    <div class="pc-history-meta">${esc(fmtDateTime(h.created_at || h.date || h.when))} ${h.user_name || h.employee_name ? ' · ' + esc(h.user_name || h.employee_name) : ''}</div>
+                    ${h.reason || h.description || h.text ? `<div class="pc-history-reason">${esc(h.reason || h.description || h.text)}</div>` : ''}
+                    ${h.diff_human || h.diff_from_previous ? `<span class="pc-history-diff">${esc(h.diff_human || h.diff_from_previous)}</span>` : idx > 0 ? `<span class="pc-history-diff">Abstand zum vorherigen Ereignis</span>` : ''}
+                </article>
+            `).join('') : '<div class="pc-empty">Noch keine Historie vorhanden.</div>';
+            }
+
+            async function syncPlan() {
+                const d = state.data || {};
+                const project = d.project || {};
+                const url = new URL(config.syncUrl, window.location.origin);
+                url.searchParams.set('customer_id', project.customer_id || d.customer?.id || '');
+                url.searchParams.set('project_id', project.id || config.projectId);
+                if (project.product_id) url.searchParams.set('product_id', project.product_id);
+
+                const res = await fetch(url.toString(), { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } });
+                const json = await res.json();
+                if (!res.ok || json.ok === false) throw new Error(json.message || 'Synchronisierung fehlgeschlagen.');
+                await loadProfile();
+            }
+
+            document.querySelectorAll('[data-pc-tab]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.dataset.pcTab;
+                    document.querySelectorAll('.pc-tab').forEach(x => x.classList.toggle('is-active', x.dataset.pcTab === tab));
+                    document.querySelectorAll('.pc-view').forEach(x => x.classList.toggle('is-active', x.id === `pcView-${tab}`));
+                    if (tab === 'canvas') setTimeout(() => { updateCanvasTransform(); drawEdges(); }, 60);
+                });
+            });
+
+            el('pcRefreshBtn')?.addEventListener('click', loadProfile);
+            el('pcSyncBtn')?.addEventListener('click', async () => {
+                try { await syncPlan(); } catch (e) { setAlert('error', e.message); }
+            });
+
+            el('pcCanvasArea')?.addEventListener('mousedown', startPan);
+            window.addEventListener('mousemove', moveCanvas);
+            window.addEventListener('mouseup', stopCanvas);
+            el('pcCanvasZoomIn')?.addEventListener('click', () => { state.canvas.scale = Math.min(2, state.canvas.scale + .1); updateCanvasTransform(); });
+            el('pcCanvasZoomOut')?.addEventListener('click', () => { state.canvas.scale = Math.max(.25, state.canvas.scale - .1); updateCanvasTransform(); });
+            el('pcCanvasReset')?.addEventListener('click', () => { state.canvas.x = 60; state.canvas.y = 70; state.canvas.scale = .75; updateCanvasTransform(); });
+            el('pcCanvasSideClose')?.addEventListener('click', () => el('pcCanvasSide')?.classList.remove('is-open'));
+            el('pcCanvasArea')?.addEventListener('wheel', e => {
+                if (!e.ctrlKey && !e.metaKey) return;
+                e.preventDefault();
+                state.canvas.scale = Math.max(.25, Math.min(2, state.canvas.scale - e.deltaY * .001));
+                updateCanvasTransform();
+            }, { passive: false });
+
+            loadProfile();
+        })();
     </script>
-</body>
-</html>
+@endpush

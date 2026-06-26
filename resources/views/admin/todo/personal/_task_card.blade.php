@@ -1,107 +1,105 @@
 {{-- resources/views/admin/todo/personal/_task_card.blade.php --}}
 
 @push('style')
-<style>
-  /* ============================
-     ACTION BUTTONS (BOARD CARD)
-     ============================ */
+  <style>
+    /* ============================
+       ACTION BUTTONS (BOARD CARD)
+       ============================ */
 
-  /* IMPORTANT: your base CSS has .pt-card-actions { gap:.25rem; }
-     keep but make it stronger */
-  .pt-card-actions{
-    display:flex;
-    align-items:center;
-    gap:.45rem !important;
-    flex-wrap:wrap;
-  }
+    /* IMPORTANT: your base CSS has .pt-card-actions { gap:.25rem; }
+       keep but make it stronger */
+    .pt-card-actions {
+      display: flex;
+      align-items: center;
+      gap: .45rem !important;
+      flex-wrap: wrap;
+    }
 
-  /* Your base CSS sets background #f9fafb and small padding.
-     Here we force visible size + contrast. */
-  .pt-icon-btn{
-    width:34px;
-    height:34px;
-    padding:0 !important;
-    border:1px solid #e5e7eb;
-    background:#ffffff !important;
-    border-radius:999px;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    color:#0f172a;
-    transition: background .12s ease, transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-  }
+    /* Your base CSS sets background #f9fafb and small padding.
+       Here we force visible size + contrast. */
+    .pt-icon-btn {
+      width: 34px;
+      height: 34px;
+      padding: 0 !important;
+      border: 1px solid #e5e7eb;
+      background: #ffffff !important;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #0f172a;
+      transition: background .12s ease, transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
 
-  .pt-icon-btn:hover{
-    background:#cfe09b !important;
-    border-color:#93c21c !important;
-    transform: translateY(-1px);
-    box-shadow:0 10px 22px rgba(15,23,42,.12);
-  }
+    .pt-icon-btn:hover {
+      background: #cfe09b !important;
+      border-color: #93c21c !important;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(15, 23, 42, .12);
+    }
 
-  /* Force SVG visibility (some themes set svg to width:0 or currentColor mismatch) */
-  .pt-icon-btn svg{
-    width:18px !important;
-    height:18px !important;
-    display:block !important;
-    stroke: currentColor !important;
-    fill: none !important;
-    stroke-width: 2.2 !important;
-    stroke-linecap: round !important;
-    stroke-linejoin: round !important;
-  }
+    /* Force SVG visibility (some themes set svg to width:0 or currentColor mismatch) */
+    .pt-icon-btn svg {
+      width: 18px !important;
+      height: 18px !important;
+      display: block !important;
+      stroke: currentColor !important;
+      fill: none !important;
+      stroke-width: 2.2 !important;
+      stroke-linecap: round !important;
+      stroke-linejoin: round !important;
+    }
 
-  /* If any icon uses fill (play triangle), allow fill */
-  .pt-icon-btn svg.is-fill{
-    fill: currentColor !important;
-    stroke: none !important;
-  }
+    /* If any icon uses fill (play triangle), allow fill */
+    .pt-icon-btn svg.is-fill {
+      fill: currentColor !important;
+      stroke: none !important;
+    }
 
-  /* Selected state (single click) */
-  .pt-card.is-selected{
-    outline:2px solid #93c21c;
-    box-shadow:0 0 0 6px rgba(147,194,28,.18);
-  }
+    /* Selected state (single click) */
+    .pt-card.is-selected {
+      outline: 2px solid #93c21c;
+      box-shadow: 0 0 0 6px rgba(147, 194, 28, .18);
+    }
 
-  /* Optional: make footer not cramped */
-  .pt-card-footer{
-    gap:.5rem;
-  }
-</style>
+    /* Optional: make footer not cramped */
+    .pt-card-footer {
+      gap: .5rem;
+    }
+  </style>
 @endpush
 
 @php
   use Carbon\Carbon;
 
-  $ageHours  = Carbon::now()->diffInHours($task->created_at);
+  $ageHours = Carbon::now()->diffInHours($task->created_at);
   $isOlder48 = $ageHours >= 48;
 
   $cardColor = $task->color ?: '#0f172a';
 
   $myPivot = $employeeId
-      ? $task->employees->firstWhere('id', $employeeId)
-      : null;
+    ? $task->employees->firstWhere('id', $employeeId)
+    : null;
 
-  $myStatus   = $myPivot && $myPivot->pivot ? $myPivot->pivot->status : null;
+  $myStatus = $myPivot && $myPivot->pivot ? $myPivot->pivot->status : null;
   $myAccepted = $myStatus === 'accepted';
 
   $rejectedEmployees = $task->employees->filter(function ($e) {
-      return $e->pivot && $e->pivot->status === 'rejected';
+    return $e->pivot && $e->pivot->status === 'rejected';
   });
 
   $hasControllers = method_exists($task, 'controllers') && $task->controllers && $task->controllers->count();
-  $isPublic       = (string) $task->public === '1';
-  $isDeleted      = method_exists($task, 'trashed') && $task->trashed();
+  $isPublic = (string) $task->public === '1';
+  $isDeleted = method_exists($task, 'trashed') && $task->trashed();
 
   $profileUrl = route('personal-tasks.profile', $task->id);
-  $editUrl    = route('personal.task.edit', $task->id);
+  $editUrl = route('personal.task.edit', $task->id);
 @endphp
 
 <div class="pt-card {{ $myAccepted ? '' : 'is-pending' }} {{ $isDeleted ? 'pt-card-deleted' : '' }}"
-     data-task-id="{{ $task->id }}"
-     data-profile-url="{{ $profileUrl }}"
-     draggable="{{ $isDeleted ? 'false' : 'true' }}"
-     style="--pt-card-color: {{ $cardColor }};">
+  data-task-id="{{ $task->id }}" data-profile-url="{{ $profileUrl }}" draggable="{{ $isDeleted ? 'false' : 'true' }}"
+  style="--pt-card-color: {{ $cardColor }};">
 
   {{-- HEADER --}}
   <div class="pt-card-header">
@@ -170,11 +168,8 @@
         </span>
       @endif
 
-      <input type="color"
-             class="js-task-color pt-card-color-picker"
-             value="{{ $cardColor }}"
-             data-task-id="{{ $task->id }}"
-             title="Farbe ändern">
+      <input type="color" class="js-task-color pt-card-color-picker" value="{{ $cardColor }}"
+        data-task-id="{{ $task->id }}" title="Farbe ändern">
     </div>
   </div>
 
@@ -221,10 +216,9 @@
         @foreach($task->controllers as $ctrl)
           <div class="pt-avatar" title="{{ $ctrl->name }} {{ $ctrl->lastname }}">
             @if($ctrl->image)
-              <img src="{{ asset('images/employee/'.$ctrl->image) }}" alt=""
-                   style="width:100%;height:100%;object-fit:cover;">
+              <img src="{{ asset('images/employee/' . $ctrl->image) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
             @else
-              {{ mb_substr($ctrl->name,0,1) }}{{ mb_substr($ctrl->lastname,0,1) }}
+              {{ mb_substr($ctrl->name, 0, 1) }}{{ mb_substr($ctrl->lastname, 0, 1) }}
             @endif
           </div>
         @endforeach
@@ -242,10 +236,9 @@
         @foreach($task->employees as $emp)
           <div class="pt-avatar" title="{{ $emp->name }} {{ $emp->lastname }}">
             @if($emp->image)
-              <img src="{{ asset('images/employee/'.$emp->image) }}" alt=""
-                   style="width:100%;height:100%;object-fit:cover;">
+              <img src="{{ asset('images/employee/' . $emp->image) }}" alt="" style="width:100%;height:100%;object-fit:cover;">
             @else
-              {{ mb_substr($emp->name,0,1) }}{{ mb_substr($emp->lastname,0,1) }}
+              {{ mb_substr($emp->name, 0, 1) }}{{ mb_substr($emp->lastname, 0, 1) }}
             @endif
           </div>
         @endforeach
@@ -355,39 +348,39 @@
 </div>
 
 @push('scripts')
-<script>
-  // Board card interaction:
-  // - single click: select card
-  // - double click: open profile
-  // - clicking action buttons should NOT trigger select/open
-  (function(){
-    const SELECTED_CLASS = 'is-selected';
+  <script>
+    // Board card interaction:
+    // - single click: select card
+    // - double click: open profile
+    // - clicking action buttons should NOT trigger select/open
+    (function () {
+      const SELECTED_CLASS = 'is-selected';
 
-    document.addEventListener('click', function(e){
-      const btn = e.target.closest('.pt-icon-btn, .pt-card-color-picker');
-      if (btn) return; // buttons shouldn't toggle selection
+      document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.pt-icon-btn, .pt-card-color-picker');
+        if (btn) return; // buttons shouldn't toggle selection
 
-      const card = e.target.closest('.pt-card');
-      if (!card) return;
+        const card = e.target.closest('.pt-card');
+        if (!card) return;
 
-      // clear previous selection
-      document.querySelectorAll('.pt-card.' + SELECTED_CLASS).forEach(el => {
-        if (el !== card) el.classList.remove(SELECTED_CLASS);
+        // clear previous selection
+        document.querySelectorAll('.pt-card.' + SELECTED_CLASS).forEach(el => {
+          if (el !== card) el.classList.remove(SELECTED_CLASS);
+        });
+
+        card.classList.toggle(SELECTED_CLASS);
       });
 
-      card.classList.toggle(SELECTED_CLASS);
-    });
+      document.addEventListener('dblclick', function (e) {
+        const btn = e.target.closest('.pt-icon-btn, .pt-card-color-picker');
+        if (btn) return;
 
-    document.addEventListener('dblclick', function(e){
-      const btn = e.target.closest('.pt-icon-btn, .pt-card-color-picker');
-      if (btn) return;
+        const card = e.target.closest('.pt-card');
+        if (!card) return;
 
-      const card = e.target.closest('.pt-card');
-      if (!card) return;
-
-      const url = card.getAttribute('data-profile-url');
-      if (url) window.location.href = url;
-    });
-  })();
-</script>
+        const url = card.getAttribute('data-profile-url');
+        if (url) window.location.href = url;
+      });
+    })();
+  </script>
 @endpush

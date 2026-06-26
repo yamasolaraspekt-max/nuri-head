@@ -2,29 +2,23 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartQuote Direct - Professional</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Solar Aspekt - Feinaufmaß & Material</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+    
+    <!-- Custom Colors Configuration -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
-                    colors: { 
+                    colors: {
                         brand: {
-                            primary: '#93c21c',
-                            textBlue: '#5a8fadd',
-                            light: '#f4f9e8',
-                            secondary: '#74b2d4',
-                            subtle: '#e2e8f0',
-                            pale: '#e3effb'
+                            blue: '#74b2d4',
+                            lightBlue: '#cde8ea',
+                            green: '#93c11c',
+                            lightGreen: '#cfe09b',
+                            orange: '#f8ac00'
                         }
                     }
                 }
@@ -32,586 +26,2469 @@
         }
     </script>
 
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- SortableJS für Drag und Drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    
     <style>
-        /* CORE STYLES */
-        body { background-color: #cbd5e1; color: #334155; height: 100vh; display: flex; flex-direction: column; overflow: hidden; font-family: 'Inter', sans-serif; }
+        body { -webkit-tap-highlight-color: transparent; }
+        .view-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* VIEW MANAGEMENT */
-        .view-section { display: none !important; height: 100%; flex-direction: column; animation: fadeIn 0.3s ease-in-out; }
-        .view-section.active { display: flex !important; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* A4 PAPER STYLES */
-        .a4-page { 
-            width: 210mm; height: 297mm; background: white; 
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); 
-            margin: 0 auto 40px auto; padding: 15mm 20mm; position: relative; 
-            display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0; box-sizing: border-box;
-            transform-origin: top center;
-        }
-        .page-content { flex: 1; display: flex; flex-direction: column; width: 100%; overflow: hidden; }
-
-        /* SIDEBAR TRANSITIONS */
-        .sidebar-panel { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s; overflow: hidden; }
-        .sidebar-collapsed { width: 0 !important; opacity: 0; padding: 0 !important; border: none !important; }
-
-        /* THUMBNAILS */
-        .thumb-container { width: 150px; background: #e2e8f0; border-right: 1px solid #cbd5e1; overflow-y: auto; padding: 1rem; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-        .thumb-wrapper { width: 100%; display: flex; justify-content: center; height: 160px; margin-bottom: 5px; cursor: pointer; transition: transform 0.2s; position: relative; overflow: hidden; border-radius: 4px; }
-        .thumb-wrapper:hover { transform: scale(1.05); z-index: 10; overflow: visible; }
-        .thumb-scale-box { width: 210mm; height: 297mm; transform: scale(0.13); transform-origin: top center; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); pointer-events: none; user-select: none; border: 1px solid #94a3b8; }
-        .thumb-label { position: absolute; bottom: 5px; right: 10px; background: rgba(0,0,0,0.7); color: white; font-size: 9px; padding: 2px 6px; border-radius: 10px; font-weight: bold; pointer-events: none; }
-
-        /* PDF STYLES */
-        .pdf-title-blue { color: #5298bc; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 0.1rem; }
-        .pdf-logo-text { font-weight: 900; color: #93c21c; letter-spacing: -0.02em; }
+        /* Custom Checkbox Styling using Brand Colors */
+        .custom-cb { @apply w-5 h-5 rounded border-slate-300 text-brand-blue focus:ring-brand-blue bg-white shrink-0; }
         
-        /* EDITABLE FIELDS */
-        .editable-field { border: 1px dashed transparent; transition: all 0.2s; padding: 0 2px; border-radius: 2px; }
-        .editable-field:hover { background-color: #f1f5f9; border-color: #cbd5e1; cursor: text; }
-        .editable-field:focus { outline: 2px solid #93c21c; background-color: white; border-color: transparent; }
-        .clean-input { width: 100%; background: transparent; border-bottom: 1px solid transparent; outline: none; transition: border-color 0.2s; padding: 0; }
-        .clean-input:focus { border-bottom-color: #93c21c; }
-        .clean-input:hover { border-bottom-color: #e2e8f0; }
+        /* Sticky Header Offset for scrolling */
+        .scroll-mt-offset { scroll-margin-top: 180px; }
 
-        /* IMAGES & BADGES */
-        .prod-img-container { position: relative; width: 5rem; height: 5rem; border-radius: 0.25rem; overflow: hidden; cursor: pointer; border: 1px solid #e2e8f0; background: #f8fafc; flex-shrink: 0; }
-        .prod-img-container:hover::after { content: '\f030'; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; inset: 0; background: rgba(0,0,0,0.3); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
-        .item-badge { position: absolute; z-index: 10; font-size: 0.5rem; font-weight: bold; text-transform: uppercase; padding: 1px 3px; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .badge-tl { top: 0; left: 0; } .badge-tr { top: 0; right: 0; } .badge-bl { bottom: 0; left: 0; } .badge-br { bottom: 0; right: 0; }
-
-        /* GRID LAYOUTS */
-        .pos-header-grid { display: grid; grid-template-columns: 2.5rem 1fr 3rem 2.5rem 5rem 5rem 1.5rem; gap: 0.75rem; font-size: 0.75rem; font-weight: 700; color: #334155; text-transform: uppercase; border-bottom: 2px solid #1e293b; padding-bottom: 0.5rem; margin-bottom: 1rem; align-items: center; }
-        .pos-row-top { display: grid; grid-template-columns: 2.5rem 1fr 3rem 2.5rem 5rem 5rem 1.5rem; gap: 0.75rem; font-size: 0.8rem; font-weight: bold; color: #1e293b; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.25rem; margin-bottom: 0.25rem; align-items: center; }
-        .pos-row-bottom { display: flex; gap: 1rem; padding-left: 2.5rem; margin-bottom: 0.5rem; }
-        
-        .sub-pos-container { margin-top: 0.5rem; padding-left: 2.5rem; }
-        .sub-pos-grid { display: grid; grid-template-columns: 2.5rem 1fr 3rem 2.5rem 5rem 5rem 1.5rem; gap: 0.75rem; font-size: 0.75rem; color: #64748b; padding: 0.25rem 0; border-bottom: 1px dotted #e2e8f0; align-items: center; }
-
-        /* UTILS */
-        .btn-primary { @apply bg-[#93c21c] text-white shadow hover:brightness-105 transition-all active:scale-95 px-4 py-2 rounded font-bold; }
-        .btn-disabled { @apply bg-slate-300 text-white cursor-not-allowed shadow-none; }
-        .modal-overlay { background-color: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); }
-        .sidebar-tab { @apply flex-1 py-3 text-center text-xs font-bold text-slate-500 hover:text-[#93c21c] border-b-2 border-transparent transition cursor-pointer; }
-        .sidebar-tab.active { @apply text-[#93c21c] border-[#93c21c] bg-slate-50; }
-        .scroller { overflow-y: auto; scrollbar-width: thin; }
-        .scroller::-webkit-scrollbar { width: 6px; }
-        .scroller::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 3px; }
-
-        /* DRAG & DROP */
-        .draggable-item { cursor: grab; user-select: none; }
-        .draggable-item:active { cursor: grabbing; }
-        .section-drop-zone { min-height: 50px; transition: all 0.2s; margin-bottom: 1rem; border: 2px dashed #e2e8f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
-        .section-drop-zone.drag-over { background-color: #f0fdf4; border-color: #93c21c; }
-        .section-drop-zone:empty::after { content: 'Produkte hierher ziehen'; color: #cbd5e1; font-size: 0.7rem; }
-        
-        .item-group { transition: all 0.2s; border: 1px solid transparent; border-radius: 4px; padding: 0.5rem; margin-bottom: 0.5rem; cursor: grab; }
-        .item-group:active { cursor: grabbing; }
-        .item-group:hover { background-color: #fafafa; border-color: #e2e8f0; }
-        
-        /* Drop Target Visuals */
-        .item-group.drag-over-sub { background-color: #eff6ff; border-color: #74b2d4; box-shadow: 0 4px 6px -1px rgba(116, 178, 212, 0.2); }
-        .item-group.drag-over-sub::after { content: '+ Unterposition hinzufügen'; position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.7rem; font-weight: bold; color: #74b2d4; background: rgba(255,255,255,0.9); padding: 2px 6px; border-radius: 4px; pointer-events: none; }
-        
-        .item-group.drag-over-sort { border-top: 3px solid #93c21c; background-color: #f4f9e8; opacity: 1 !important; }
-        
-        /* TOOLS */
-        .floating-element { position: absolute; cursor: grab; z-index: 50; }
-        .floating-element:active { cursor: grabbing; outline: 1px dashed #74b2d4; }
-        .delete-float { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; }
-        .floating-element:hover .delete-float { display: flex; }
-
-        /* STATUS STYLES */
-        .pos-inactive { opacity: 0.5; background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, #f1f5f9 10px, #f1f5f9 20px); }
-        .pos-optional .clean-input, .pos-optional .pdf-title-blue { color: #94a3b8; font-style: italic; }
-
-        /* PRINT */
-        @media print {
-            body { background: white; height: auto; overflow: visible; }
-            .no-print, .sidebar-panel, .thumb-container, header { display: none !important; }
-            .a4-page { margin: 0; box-shadow: none; page-break-after: always; width: 100%; height: 100%; border:none; }
-            .section-drop-zone, .delete-float { display: none !important; }
-            .item-group { border: none; padding: 0; margin-bottom: 1rem; cursor: default; }
-        }
+        /* Smooth sidebar transition */
+        .sidebar-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-900 font-sans h-screen overflow-hidden">
 
-    <!-- Hidden File Inputs -->
-    <input type="file" id="img-upload-input" accept="image/*" class="hidden">
-    <input type="file" id="badge-upload-input" accept="image/*" class="hidden">
-    <input type="file" id="tool-upload-input" accept="image/*" class="hidden">
-
-    <!-- VIEW 1: WIZARD -->
-    <div id="view-start" class="view-section active bg-slate-100 flex items-center justify-center p-6">
-        <div class="max-w-4xl w-full bg-white rounded-2xl shadow-2xl overflow-visible flex flex-col md:flex-row min-h-[550px] z-50">
-            <div class="w-full md:w-5/12 bg-[#93c21c] p-10 text-white flex flex-col justify-between relative overflow-hidden rounded-l-2xl">
-                <div class="relative z-10"><div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-[#93c21c] font-bold text-3xl shadow mb-8">S</div><h1 class="text-4xl font-bold mb-4">Start</h1><p class="text-white/90 text-sm leading-relaxed">Erstellen Sie professionelle Angebote und Kostenvoranschläge.</p></div>
-                <div class="absolute -bottom-10 -right-10 opacity-20 transform"><i class="fa-regular fa-sun text-[250px]"></i></div>
-            </div>
-            <div class="w-full md:w-7/12 p-10 flex flex-col">
-                <div class="flex-1 space-y-6">
-                    <div class="relative"><label class="block text-sm font-bold text-slate-700 mb-2">1. Kunde</label><div class="relative"><input type="text" id="wiz-customer-search" oninput="App.Wizard.filterCustomers()" onfocus="App.Wizard.filterCustomers()" placeholder="Suche..." class="w-full border border-slate-300 rounded-lg p-3 pl-10 text-sm outline-none focus:border-[#93c21c]"><div id="wiz-customer-dropdown" class="absolute w-full bg-white border border-slate-200 rounded-b-lg shadow-lg z-50 hidden max-h-40 overflow-y-auto"></div></div><div id="wiz-customer-selected" class="hidden mt-2 p-3 bg-[#f7fee7] rounded-lg border border-[#93c21c]/30 flex justify-between items-center"><div><div class="font-bold text-slate-800" id="wiz-sel-cust-name"></div><div class="text-xs text-slate-500" id="wiz-sel-cust-addr"></div></div><button onclick="App.Wizard.clearCustomer()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-times"></i></button></div></div>
-                    <div class="relative opacity-50 pointer-events-none transition-opacity" id="wiz-step-2"><label class="block text-sm font-bold text-slate-700 mb-2">2. Objekt</label><select id="wiz-object-select" onchange="App.Wizard.selectObject()" class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none focus:border-[#93c21c] bg-white"><option value="">-- Bitte wählen --</option></select></div>
-                    <div class="relative opacity-50 pointer-events-none transition-opacity" id="wiz-step-3"><label class="block text-sm font-bold text-slate-700 mb-2">3. Datum</label><input type="date" id="wiz-date" class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none focus:border-[#93c21c]"></div>
-                    <div class="relative opacity-50 pointer-events-none transition-opacity" id="wiz-step-4"><label class="block text-sm font-bold text-slate-700 mb-2">4. Typ</label><div class="flex gap-4"><label class="flex-1 border p-3 rounded cursor-pointer hover:border-[#93c21c] flex items-center gap-2"><input type="radio" name="wiz-doc-type" value="Angebot" checked class="accent-[#93c21c]"><span class="text-sm font-bold">Angebot</span></label><label class="flex-1 border p-3 rounded cursor-pointer hover:border-[#93c21c] flex items-center gap-2"><input type="radio" name="wiz-doc-type" value="Kostenvoranschlag" class="accent-[#93c21c]"><span class="text-sm font-bold">Kostenvoranschlag</span></label></div></div>
-                    
-                    <!-- BRANDING STEP -->
-                    <div class="relative border-t pt-4"><label class="block text-sm font-bold text-slate-700 mb-2">5. Branding</label>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="text-xs text-slate-500 block mb-1">Firmenname (Logo)</label><input type="text" id="wiz-brand-name" value="SOLAR ASPEKT" oninput="App.updateBranding()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:border-[#93c21c] outline-none"></div>
-                            <div><label class="text-xs text-slate-500 block mb-1">Hauptfarbe</label><div class="flex items-center gap-2"><input type="color" id="wiz-brand-color" value="#93c21c" oninput="App.updateBranding()" class="w-10 h-10 p-1 rounded cursor-pointer border"><span id="color-hex-label" class="text-xs text-slate-500 font-mono">#93c21c</span></div></div>
-                        </div>
-                    </div>
+    <!-- MAIN CONTENT AREA -->
+    <main class="h-full overflow-y-auto relative w-full scroll-smooth">
+        
+        <!-- ==================== VIEW: LIST (DEFAULT) ==================== -->
+        <section id="view-list" class="view-section active p-4 md:p-8 max-w-5xl mx-auto pb-24">
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 bg-slate-900 text-white p-6 rounded-3xl shadow-lg border-b-4 border-brand-orange gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-2"><i class="ph-fill ph-sun text-brand-orange"></i> Solar Aspekt</h1>
+                    <p class="text-slate-300 text-sm md:text-base mt-1">Alle Aufmaße im Überblick</p>
                 </div>
-                <div class="border-t border-slate-100 pt-8 mt-4 flex justify-end"><button id="wiz-btn-start" onclick="App.startQuote()" class="btn-primary btn-disabled flex items-center gap-3 text-lg px-8 py-3 transition-all" disabled><span>Starten</span> <i class="fa-solid fa-arrow-right"></i></button></div>
+                <button onclick="showTypeSelection()" class="bg-brand-blue hover:opacity-90 text-white px-4 py-3 rounded-xl font-bold flex items-center gap-2 transition active:scale-95 shadow-md w-full md:w-auto justify-center">
+                    <i class="ph-bold ph-plus text-xl"></i> <span>Neues Aufmaß</span>
+                </button>
+            </header>
+
+            <!-- SEARCH BAR -->
+            <div class="mb-6 relative">
+                <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-xl"></i>
+                <input type="text" id="search-input" oninput="renderList()" placeholder="Suchen nach Name, Ort, Straße, Firma..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-slate-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-brand-blue outline-none transition text-slate-700 font-medium">
             </div>
-        </div>
-    </div>
-
-    <!-- VIEW 2: EDITOR -->
-    <div id="view-editor" class="view-section flex-1 overflow-hidden relative bg-slate-100">
-        <header class="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 shrink-0 z-50 shadow-sm no-print">
-            <div class="flex items-center gap-4">
-                <button onclick="App.toggleSidebar('left')" class="text-slate-400 hover:text-[#93c21c] w-8 h-8 rounded hover:bg-slate-100 flex items-center justify-center border border-transparent hover:border-slate-300"><i class="fa-solid fa-bars"></i></button>
-                <div class="h-6 w-px bg-slate-200"></div>
-                <div class="font-bold text-slate-700 flex items-center gap-2"><span id="editor-doc-type-label" class="text-[#93c21c]">Angebot</span><span class="text-xs text-slate-400 font-normal">| <span id="lbl-total-pages">1</span> Seiten</span></div>
-            </div>
-            <div class="flex items-center gap-3">
-                <label class="flex items-center gap-2 text-xs text-slate-500 cursor-pointer mr-4 select-none"><input type="checkbox" id="show-hidden-toggle" onchange="App.renderQuotePage()" checked class="accent-[#93c21c]"> Versteckte anzeigen</label>
-                <button onclick="App.openPrintPreview()" class="bg-slate-800 text-white hover:bg-slate-700 px-3 py-1.5 rounded text-sm font-bold flex items-center gap-2 transition-colors"><i class="fa-solid fa-print"></i> Druck-Vorschau</button>
-                <button onclick="App.toggleSidebar('right')" class="text-slate-400 hover:text-[#93c21c] w-8 h-8 rounded hover:bg-slate-100 flex items-center justify-center border border-transparent hover:border-slate-300"><i class="fa-solid fa-calculator"></i></button>
-            </div>
-        </header>
-
-        <div class="flex h-full overflow-hidden relative">
-            <!-- LEFT SIDEBAR -->
-            <aside id="sidebar-left" class="w-80 bg-white border-r border-slate-200 flex flex-col z-20 shadow-lg flex-shrink-0 sidebar-panel no-print">
-                <div class="flex border-b border-slate-200"><div class="sidebar-tab active" onclick="App.switchSidebarTab('lib')" id="tab-lib">Bibliothek</div><div class="sidebar-tab" onclick="App.switchSidebarTab('tools')" id="tab-tools">Tools</div></div>
-                <div id="sidebar-content-lib" class="flex-1 flex flex-col h-full overflow-hidden">
-                    <div class="p-4 border-b border-slate-100"><div class="relative"><input type="text" id="sidebar-search" oninput="App.renderSidebar()" placeholder="Produkt suchen..." class="w-full pl-8 pr-2 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#93c21c] bg-slate-50"><i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-sm"></i></div></div>
-                    <div class="flex-1 overflow-y-auto p-4 space-y-3 scroller bg-slate-50/50" id="sidebar-list"></div>
-                </div>
-                <div id="sidebar-content-tools" class="flex-1 flex flex-col h-full overflow-hidden hidden">
-                    <div class="p-4 border-b border-slate-100"><button onclick="document.getElementById('tool-upload-input').click()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2 rounded text-xs border border-slate-300 border-dashed flex items-center justify-center gap-2"><i class="fa-solid fa-upload"></i> Bild/Sticker hochladen</button></div>
-                    <div class="flex-1 overflow-y-auto p-4 grid grid-cols-2 gap-2 scroller bg-slate-50/50" id="tools-list"></div>
-                </div>
-            </aside>
-
-            <!-- NAV & CANVAS -->
-            <div class="flex flex-1 overflow-hidden relative">
-                <div id="nav-pane" class="thumb-container no-print scroller"></div> <!-- Thumbnails -->
-                <main class="flex-1 relative flex flex-col h-full overflow-y-auto scroller items-center py-8 gap-8 bg-slate-100/50" id="document-scroll-area">
-                    <!-- Page 1 -->
-                    <div class="a4-page flex-shrink-0 group flex flex-col" id="page-1" ondrop="App.dropTool(event, 1)" ondragover="App.allowDrop(event)">
-                        <!-- Page 1 Content (Letterhead) -->
-                        <div class="flex justify-between items-start mb-12 pt-4">
-                            <div class="mt-2"><div class="text-[9px] text-slate-400 underline decoration-slate-300 underline-offset-2 mb-6 editable-field w-fit" contenteditable="true" id="doc-company-header">SOLAR ASPEKT GmbH • Am Kappengraben 10 • 61273 Wehrheim</div><div class="text-[13px] leading-relaxed text-slate-800"><div class="font-bold mb-1 editable-field w-fit" contenteditable="true">Herr</div><div id="doc-cust-name" class="font-bold mb-1 editable-field w-fit" contenteditable="true">Max Mustermann</div><div id="doc-cust-addr" class="editable-field w-fit whitespace-pre-line" contenteditable="true">Musterstraße 10<br>12345 Musterstadt</div></div></div>
-                            <div class="flex flex-col items-end"><div class="text-right mb-10"><div class="text-2xl font-black text-[#93c21c] tracking-tight" id="doc-logo-text">SOLAR ASPEKT</div></div><div class="text-right"><div class="text-[10px] font-bold text-[#93c21c] mb-1 uppercase tracking-wider">Ihr Ansprechpartner</div><div class="border-r-2 border-[#93c21c] pr-3 py-1"><div class="font-bold text-sm text-slate-800 editable-field" contenteditable="true">Herr Yama Nuri</div><div class="text-[11px] text-slate-600 mt-1 editable-field" contenteditable="true">Tel: 0 60 81/68 288 78<br>E-Mail: anfrage@solar-aspekt.de</div></div></div></div>
-                        </div>
-                        <div class="mb-10 flex justify-between items-end border-b-2 border-slate-100 pb-4">
-                            <div><div class="text-[11px] text-slate-400 uppercase tracking-wide font-bold mb-1" id="lbl-doc-id-name">Angebotsnummer</div><div class="text-lg font-bold text-slate-800 bg-slate-50 border border-dashed border-slate-300 rounded px-2 py-1 w-40"><input type="text" id="doc-offer-id" value="SA-AG25342" oninput="App.syncDocData('offerId', this.value)" class="bg-transparent outline-none w-full text-slate-800 font-bold"></div></div>
-                            <div class="text-right"><div class="text-[11px] text-slate-400 uppercase tracking-wide font-bold mb-1">Kundennummer</div><div class="text-sm font-bold text-slate-600 bg-slate-50 border border-dashed border-slate-300 rounded px-2 py-1 w-32 inline-block"><input type="text" id="doc-cust-id" value="KD-1005" oninput="App.syncDocData('custId', this.value)" class="bg-transparent outline-none w-full text-right"></div><div class="text-[12px] text-slate-600 mt-2 editable-field" contenteditable="true" id="doc-date-line">Wehrheim, 27.08.2025</div></div>
-                        </div>
-                        <div class="mb-8"><div class="text-xl font-bold text-[#93c21c] uppercase leading-tight editable-field" contenteditable="true" id="doc-main-title">Unverbindliches Angebot...</div></div>
-                        <div class="text-[13px] text-slate-700 leading-relaxed space-y-4 editable-field p-2 hover:bg-slate-50 rounded -ml-2" contenteditable="true"><p>Sehr geehrter Herr <span id="doc-cust-lastname">Mustermann</span>,</p><p>wir freuen uns, Ihnen dieses Dokument unterbreiten zu dürfen.</p><p>Mit sonnigen Grüßen<br><span class="font-bold" id="doc-team-name">Ihr SOLAR-ASPEKT-Team</span></p></div>
-                        <div class="mt-auto border-t-2 border-[#93c21c] pt-4 grid grid-cols-4 gap-4 text-[9px] text-slate-500 leading-tight">
-                            <div class="editable-field" contenteditable="true"><span class="font-bold text-slate-700" id="footer-company">SOLAR ASPEKT GmbH</span><br>Am Kappengraben 10<br>61273 Wehrheim</div>
-                            <div class="editable-field" contenteditable="true"><span class="font-bold text-slate-700">Kontakt</span><br>Tel. 0 60 81/68 288 78<br>hallo@solar-aspekt.de</div>
-                            <div class="editable-field" contenteditable="true"><span class="font-bold text-slate-700">Bankverbindung</span><br>Volksbank Frankfurt<br>IBAN: DE12 3456...</div>
-                            <div class="editable-field" contenteditable="true"><span class="font-bold text-slate-700">Registergericht</span><br>AG Bad Homburg HRB 12036<br>GF: Yama Nuri</div>
-                        </div>
-                    </div>
-                    <!-- Dynamic Page Container -->
-                    <div id="position-pages-container" class="flex flex-col gap-8 w-full items-center"></div>
-                </main>
-            </div>
-
-            <!-- RIGHT SIDEBAR -->
-            <aside id="sidebar-right" class="w-80 bg-white border-l border-slate-200 flex flex-col z-20 shadow-lg flex-shrink-0 sidebar-panel no-print">
-                <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center"><h3 class="font-bold text-slate-700 text-sm uppercase tracking-wide">Kalkulation</h3><div class="flex items-center gap-1"><span class="text-[10px] font-bold text-slate-400">MwSt</span><input type="number" id="global-tax" value="19" onchange="App.updateTaxRate(this.value)" class="w-10 text-xs border rounded text-center font-bold text-slate-700"><span class="text-[10px] text-slate-400">%</span></div></div>
-                <div class="flex-1 overflow-y-auto p-4 space-y-4 scroller bg-slate-50/50" id="calc-sidebar-content"></div>
-                <div class="p-6 bg-white border-t border-slate-200"><div class="flex justify-between items-end mb-1"><span class="text-xs text-slate-500 uppercase font-bold">Netto</span><span class="text-sm font-mono text-slate-600" id="sidebar-grand-net">0,00 €</span></div><div class="flex justify-between items-end mb-4"><span class="text-xs text-slate-500 uppercase font-bold">MwSt (<span id="lbl-tax-rate">19</span>%)</span><span class="text-sm font-mono text-slate-600" id="sidebar-grand-gross">0,00 €</span></div><div class="pt-4 border-t border-slate-100"><div class="text-xs text-[#93c21c] font-bold uppercase mb-1">Gesamtinvestition</div><div class="text-3xl font-bold text-slate-800 font-mono tracking-tight" id="sidebar-grand-total">0,00 €</div></div></div>
-            </aside>
-        </div>
-    </div>
-
-    <!-- PRINT PREVIEW OVERLAY -->
-    <div id="print-preview-modal" class="fixed inset-0 z-[200] hidden bg-slate-900/95 backdrop-blur-sm flex flex-col">
-        <div class="h-16 bg-slate-800 flex items-center justify-between px-6 text-white shrink-0 shadow-md">
-            <h3 class="font-bold text-lg flex items-center gap-2"><i class="fa-solid fa-print"></i> Druckvorschau (Aktive Positionen)</h3>
-            <div class="flex gap-4">
-                <button onclick="window.print()" class="bg-[#93c21c] hover:brightness-110 px-6 py-2 rounded font-bold text-sm shadow transition">Drucken</button>
-                <button onclick="document.getElementById('print-preview-modal').classList.add('hidden')" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-times text-2xl"></i></button>
-            </div>
-        </div>
-        <div class="flex-1 overflow-y-auto p-8 flex flex-col items-center gap-8" id="print-preview-content"></div>
-    </div>
-
-    <!-- MODALS (Settings, Badges, Sets) -->
-    <div id="pos-settings-modal" class="fixed inset-0 z-[110] hidden"><div class="absolute inset-0 modal-overlay" onclick="App.closePosSettings()"></div><div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl w-96 overflow-hidden animate-fadeIn"><div class="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center"><h3 class="font-bold text-slate-800">Position bearbeiten</h3><button onclick="App.closePosSettings()" class="text-slate-400"><i class="fa-solid fa-times"></i></button></div><div class="p-4 space-y-4"><div class="grid grid-cols-2 gap-4"><div><label class="block text-xs font-bold text-slate-500 mb-1">Einkaufspreis (EK)</label><input type="number" id="setting-ek" class="w-full border rounded p-2 text-sm" oninput="App.calcPosSettings()"></div><div><label class="block text-xs font-bold text-slate-500 mb-1">Marge (%)</label><input type="number" id="setting-margin" class="w-full border rounded p-2 text-sm" oninput="App.calcPosSettings()"></div></div><div class="bg-[#f0fdf4] p-3 rounded border border-[#93c21c]"><div class="flex justify-between items-center"><span class="text-xs font-bold text-[#93c21c]">Verkaufspreis (VK)</span><input type="number" id="setting-vk" class="w-24 text-right bg-transparent font-bold font-mono outline-none" oninput="App.calcPosSettings(true)"></div></div><div class="space-y-2 pt-2 border-t border-slate-100"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-pauschal" class="accent-[#93c21c]"> <span>Als Pauschalposition</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-hide-price" class="accent-[#93c21c]"> <span>Preise ausblenden</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="setting-active" class="accent-[#93c21c]"> <span>Position Aktiv</span></label></div><button onclick="App.savePosSettings()" class="w-full bg-[#93c21c] text-white rounded py-2 font-bold text-sm">Speichern</button></div></div></div>
-    <div id="badge-modal" class="fixed inset-0 z-[110] hidden"><div class="absolute inset-0 modal-overlay" onclick="App.closeBadgeModal()"></div><div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl w-80 overflow-hidden animate-fadeIn"><div class="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center"><h3 class="font-bold text-slate-800">Badge</h3><button onclick="App.closeBadgeModal()" class="text-slate-400"><i class="fa-solid fa-times"></i></button></div><div class="p-4 space-y-4"><div><label class="block text-xs font-bold text-slate-500 mb-1">Standard Badge</label><select id="badge-type-select" class="w-full border rounded p-2 text-sm"><option value="">-- Kein Badge --</option><option value="NEU">NEU</option><option value="BESTSELLER">BESTSELLER</option><option value="10 JAHRE GARANTIE">10 JAHRE GARANTIE</option><option value="image">Bild hochladen...</option></select></div><div><label class="block text-xs font-bold text-slate-500 mb-1">Position</label><div class="grid grid-cols-2 gap-2"><button onclick="App.setBadgePos('tl')" class="border rounded p-2 text-xs hover:bg-slate-100">Oben Links</button><button onclick="App.setBadgePos('tr')" class="border rounded p-2 text-xs hover:bg-slate-100">Oben Rechts</button><button onclick="App.setBadgePos('bl')" class="border rounded p-2 text-xs hover:bg-slate-100">Unten Links</button><button onclick="App.setBadgePos('br')" class="border rounded p-2 text-xs hover:bg-slate-100">Unten Rechts</button></div></div><button onclick="App.saveBadgeConfig()" class="w-full bg-[#93c21c] text-white rounded py-2 font-bold text-sm">Speichern</button></div></div></div>
-    <div id="set-modal" class="fixed inset-0 z-[100] hidden"><div class="absolute inset-0 modal-overlay" onclick="App.closeModal()"></div><div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden animate-fadeIn flex flex-col max-h-[85vh]"><div class="p-6 border-b border-slate-100 flex justify-between items-start bg-[#f7fee7]"><div><div class="text-[10px] font-bold text-[#93c21c] uppercase tracking-wider mb-1">Set-Inhalt</div><h3 class="text-2xl font-bold text-slate-800" id="modal-title">Produkt Name</h3><p class="text-sm text-slate-500 mt-1" id="modal-desc">Beschreibung</p></div><button onclick="App.closeModal()" class="text-slate-400 hover:text-slate-600 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-sm"><i class="fa-solid fa-times"></i></button></div><div class="flex-1 overflow-y-auto p-6 scroller"><table class="w-full text-sm text-left mb-6"><thead class="bg-slate-100 text-slate-500 font-bold text-xs uppercase"><tr><th class="px-4 py-2">Komponenten</th><th class="px-4 py-2 text-right">Wert</th></tr></thead><tbody id="modal-materials" class="divide-y divide-slate-100"></tbody></table><table class="w-full text-sm text-left"><thead class="bg-slate-100 text-slate-500 font-bold text-xs uppercase"><tr><th class="px-4 py-2">Dienstleistung</th><th class="px-4 py-2 text-center">Menge</th><th class="px-4 py-2 text-right">Wert</th></tr></thead><tbody id="modal-labor" class="divide-y divide-slate-100"></tbody></table></div><div class="p-6 border-t border-slate-100 bg-slate-50 flex justify-end gap-3"><button onclick="App.closeModal()" class="px-4 py-2 rounded-lg text-slate-500 font-medium hover:bg-slate-200 transition">Abbrechen</button><button id="modal-add-btn" class="px-6 py-2 rounded-lg bg-[#93c21c] text-white font-bold shadow-md hover:brightness-105 transition flex items-center gap-2"><i class="fa-solid fa-plus"></i> Zum Angebot</button></div></div></div>
-
-    <script>
-        const DB = {
-            customers: [{id:1,name:'Max Mustermann',street:'Musterstraße 10',city:'12345 Musterstadt',email:'max@muster.de',objects:[{id:101,name:'Einfamilienhaus',address:'Musterstraße 10'}]},{id:2,name:'Carlos von Donop',street:'An der Flurscheid 34',city:'61352 Bad Homburg',email:'carlos@donop.de',objects:[{id:201,name:'Wohnhaus',address:'An der Flurscheid 34'}]}],
-            products: [
-                {id:'p1',name:'SOLAR-ANLAGE MIT 13,095 kWp',type:'set',group:'Photovoltaik',desc:'27 Module mit 485 Wp.',img:'https://placehold.co/200x200/eee/999?text=PV-Modul',price:10332.81,unit:'Stk',materials:[{name:'MODUL LONGI HI-MO6',price:10332.81,unit:'Stk'}],labor:[{name:'Dach-Montage',price:85,qty:27,unit:'Stk'}]},
-                {id:'p2',name:'Batteriespeicher-System',type:'set',group:'Photovoltaik',desc:'FOX ESS 10.36 kWh',img:'https://placehold.co/200x200/eee/999?text=Batterie',price:7721.80,unit:'Stk',materials:[{name:'Wechselrichter H3 PRO 15',price:4000,unit:'Stk'},{name:'Speicher EK 11',price:3721.80,unit:'Stk'}],labor:[{name:'Elektrischer Anschluss',price:450,qty:1,unit:'Psch'}]}
-            ]
-        };
-
-        const State = { customer:null, object:null, projectDate:'', docType:'Angebot', sections:[], editingBadge:null, offerId:'SA-AG25342', custId:'KD-1005', toolsImages:[], placedImages:[], taxRate:19, tempPosSettings:null, companyName: 'SOLAR ASPEKT', brandColor: '#93c21c' };
-        const PAGE_MAX_HEIGHT_PX = 850; 
-
-        // SINGLE APP CONTROLLER
-        window.App = {
-            // -- WIZARD LOGIC --
-            Wizard: {
-                filterCustomers: () => {
-                    const val = document.getElementById('wiz-customer-search').value.toLowerCase();
-                    const drop = document.getElementById('wiz-customer-dropdown'); drop.innerHTML='';
-                    const filtered = DB.customers.filter(c=>c.name.toLowerCase().includes(val));
-                    if(filtered.length>0){ drop.classList.remove('hidden'); filtered.forEach(c=>drop.innerHTML+=`<div class="dropdown-item p-2 hover:bg-brand-light cursor-pointer" onclick="App.Wizard.selectCustomer(${c.id})"><div class="font-bold text-slate-800">${c.name}</div><div class="text-xs text-slate-500">${c.street}, ${c.city}</div></div>`); } else drop.classList.add('hidden');
-                },
-                selectCustomer: (id) => {
-                    const c = DB.customers.find(x=>x.id===id); if(!c) return;
-                    State.customer = c;
-                    document.getElementById('wiz-customer-search').parentElement.classList.add('hidden');
-                    document.getElementById('wiz-sel-cust-name').innerText = c.name; document.getElementById('wiz-sel-cust-addr').innerText = `${c.street}, ${c.city}`;
-                    document.getElementById('wiz-customer-selected').classList.remove('hidden');
-                    const sel = document.getElementById('wiz-object-select'); sel.innerHTML='<option value="">-- Bitte wählen --</option>';
-                    c.objects.forEach(o=>sel.innerHTML+=`<option value="${o.id}">${o.name}</option>`);
-                    document.getElementById('wiz-step-2').classList.remove('opacity-50','pointer-events-none');
-                },
-                clearCustomer: () => { State.customer=null; State.object=null; document.getElementById('wiz-customer-selected').classList.add('hidden'); document.getElementById('wiz-customer-search').parentElement.classList.remove('hidden'); document.getElementById('wiz-step-2').classList.add('opacity-50','pointer-events-none'); document.getElementById('wiz-step-3').classList.add('opacity-50','pointer-events-none'); document.getElementById('wiz-step-4').classList.add('opacity-50','pointer-events-none'); document.getElementById('wiz-btn-start').disabled=true; document.getElementById('wiz-btn-start').classList.add('btn-disabled'); },
-                selectObject: () => { State.object=State.customer.objects.find(o=>o.id==document.getElementById('wiz-object-select').value); if(State.object) { document.getElementById('wiz-step-3').classList.remove('opacity-50','pointer-events-none'); document.getElementById('wiz-step-4').classList.remove('opacity-50','pointer-events-none'); document.getElementById('wiz-btn-start').disabled=false; document.getElementById('wiz-btn-start').classList.remove('btn-disabled'); } }
-            },
-
-            init: () => {
-                document.getElementById('wiz-date').valueAsDate = new Date();
-                // Event Listeners
-                document.addEventListener('click', e => { if(!document.getElementById('wiz-customer-search').parentElement.contains(e.target)) document.getElementById('wiz-customer-dropdown').classList.add('hidden'); });
-                document.getElementById('img-upload-input').onchange = e => { const f=e.target.files[0]; if(f && App.editingImage) { const r=new FileReader(); r.onload=ev=>{ State.sections[App.editingImage.sIdx].items[App.editingImage.iIdx].img=ev.target.result; App.renderQuotePage(); }; r.readAsDataURL(f); } };
-                document.getElementById('badge-upload-input').onchange = e => { const f=e.target.files[0]; if(f && State.editingBadge) { const r=new FileReader(); r.onload=ev=>{ State.editingBadge.tempImg=ev.target.result; }; r.readAsDataURL(f); } };
-                document.getElementById('tool-upload-input').onchange = e => { const f=e.target.files[0]; if(f) { const r=new FileReader(); r.onload=ev=>{ State.toolsImages.push(ev.target.result); App.renderSidebarTools(); }; r.readAsDataURL(f); } };
-                App.updateBranding(); // Set initial brand
-            },
-
-            switchView: (view) => { document.querySelectorAll('.view-section').forEach(v=>v.classList.remove('active')); document.getElementById('view-'+view).classList.add('active'); },
-            toggleSidebar: (side) => { document.getElementById(side==='left'?'sidebar-left':'sidebar-right').classList.toggle('sidebar-collapsed'); },
-            switchSidebarTab: (tab) => { document.querySelectorAll('.sidebar-tab').forEach(t=>t.classList.remove('active')); document.getElementById('tab-'+tab).classList.add('active'); if(tab==='lib'){document.getElementById('sidebar-content-lib').classList.remove('hidden');document.getElementById('sidebar-content-tools').classList.add('hidden');}else{document.getElementById('sidebar-content-lib').classList.add('hidden');document.getElementById('sidebar-content-tools').classList.remove('hidden');App.renderSidebarTools();} },
-            renderSidebarTools: () => { const c=document.getElementById('tools-list'); c.innerHTML=''; [...['https://placehold.co/100x100/green/white?text=Geprüft'],...State.toolsImages].forEach(src=>{ c.innerHTML+=`<div draggable="true" ondragstart="App.dragStartTool(event,'${src}')" class="bg-white border rounded p-2 cursor-grab"><img src="${src}" class="w-full h-16 object-contain"></div>`; }); },
             
-            // --- CORE LOGIC ---
-            updateBranding: () => {
-                const name = document.getElementById('wiz-brand-name').value || 'SOLAR ASPEKT';
-                const color = document.getElementById('wiz-brand-color').value || '#93c21c';
-                State.companyName = name; State.brandColor = color;
-                document.documentElement.style.setProperty('--brand-color', color);
-                document.getElementById('color-hex-label').innerText = color;
-            },
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4" id="full-list-container">
+                <!-- Wird durch JS befüllt -->
+            </div>
 
-            startQuote: () => {
-                State.projectDate = document.getElementById('wiz-date').value;
-                const types = document.getElementsByName('wiz-doc-type'); types.forEach(t=>{if(t.checked)State.docType=t.value});
-                document.getElementById('doc-cust-name').innerText = State.customer.name;
-                document.getElementById('doc-cust-lastname').innerText = State.customer.name.split(' ').pop();
-                document.getElementById('doc-cust-addr').innerHTML = `${State.customer.street}<br>${State.customer.city}`;
-                document.getElementById('doc-date-line').innerText = `Wehrheim, ${new Date(State.projectDate).toLocaleDateString('de-DE')}`;
-                document.getElementById('editor-doc-type-label').innerText = State.docType;
-                document.getElementById('doc-main-title').innerText = `Unverbindliches ${State.docType} für...`;
-                document.getElementById('lbl-doc-id-name').innerText = State.docType==='Angebot'?'Angebotsnummer':'KVA-Nummer';
-                
-                // Update Logo Texts
-                document.querySelectorAll('.pdf-logo-text, #doc-logo-text').forEach(el => el.innerText = State.companyName);
-                document.getElementById('doc-team-name').innerText = `Ihr ${State.companyName}-Team`;
-                document.getElementById('footer-company').innerText = `${State.companyName} GmbH`;
-                document.getElementById('doc-company-header').innerText = `${State.companyName} GmbH • Am Kappengraben 10 • 61273 Wehrheim`;
+            <button onclick="showTypeSelection()" class="md:hidden fixed bottom-6 right-6 bg-brand-blue text-white p-4 rounded-full shadow-lg shadow-brand-blue/30 border-4 border-slate-50 transition active:scale-95 z-40">
+                <i class="ph-bold ph-plus text-2xl"></i>
+            </button>
+        </section>
 
-                if(State.sections.length === 0) App.addSection('1. Hauptpositionen', false);
-                App.renderSidebar(); App.renderQuotePage(); App.switchView('editor');
-            },
+        <!-- ==================== MODAL: TYPE SELECTION ==================== -->
+        <div id="modal-select-type" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+            <div class="bg-white rounded-3xl p-6 md:p-8 w-full max-w-md shadow-2xl transform scale-95 transition-transform duration-300" id="modal-content">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-slate-800">Was möchten Sie anlegen?</h2>
+                    <button onclick="closeTypeSelection()" class="text-slate-400 hover:text-slate-600 p-2 rounded-full hover:bg-slate-100 transition">
+                        <i class="ph-bold ph-x text-xl"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 gap-4">
+                    <button onclick="createNew('PV')" class="bg-slate-50 border border-slate-200 p-4 rounded-2xl shadow-sm hover:border-brand-orange hover:shadow-md transition active:scale-95 flex items-center gap-4 text-left group">
+                        <div class="p-3 bg-brand-orange/20 rounded-xl group-hover:bg-brand-orange transition">
+                            <i class="ph-fill ph-solar-panel text-brand-orange group-hover:text-white text-2xl transition"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">PV Anlage</h3>
+                            <p class="text-xs text-slate-500">Neues Photovoltaik Feinaufmaß</p>
+                        </div>
+                    </button>
+                    <button onclick="createNew('WP')" class="bg-slate-50 border border-slate-200 p-4 rounded-2xl shadow-sm hover:border-brand-green hover:shadow-md transition active:scale-95 flex items-center gap-4 text-left group">
+                        <div class="p-3 bg-brand-green/20 rounded-xl group-hover:bg-brand-green transition">
+                            <i class="ph-fill ph-thermometer text-brand-green group-hover:text-white text-2xl transition"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Wärmepumpe</h3>
+                            <p class="text-xs text-slate-500">Neues Wärmepumpen Aufmaß</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-            // --- PAGE RENDERER ---
-            createPage: (idx, forPrint) => {
-                const title = State.docType==='Angebot'?'ANGEBOT':'KOSTENVORANSCHLAG';
-                const div = document.createElement('div');
-                div.className = 'a4-page flex-shrink-0 dynamic-page relative';
-                if(!forPrint) { div.ondragover=e=>App.allowDrop(e); div.ondrop=e=>App.dropTool(e, idx); }
-                div.innerHTML = `<div class="pdf-logo-text absolute top-8 right-12 text-sm">${State.companyName}</div><div class="flex justify-between items-end border-b-2 border-slate-300 pb-2 mb-6 mt-16"><div class="font-bold text-sm text-slate-800">${title} <span class="sync-offer-id">${State.offerId}</span></div></div><div class="pos-header-grid pb-2"><div class="text-center">Pos.</div><div>Artikelbezeichnung</div><div class="text-center">Menge</div><div class="text-center">Einh.</div><div class="text-right">EP</div><div class="text-right">GP</div><div></div></div><div class="page-content flex-1 relative"></div><div class="mt-auto border-t border-slate-200 pt-2 text-[9px] text-slate-400 text-center mb-4">Seite ${idx} • ${State.docType} freibleibend</div>`;
-                return div;
-            },
+        <!-- ==================== MODAL: HISTORY ==================== -->
+        <div id="modal-history" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
+            <div class="bg-white rounded-3xl w-full max-w-2xl h-[80vh] flex flex-col shadow-2xl transform scale-95 transition-transform duration-300" id="modal-history-content">
+                <div class="p-5 md:p-6 rounded-t-3xl border-b border-slate-200 flex justify-between items-center shrink-0">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="ph-fill ph-clock-counter-clockwise text-brand-blue"></i> Änderungshistorie
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1" id="history-project-name">Lade...</p>
+                    </div>
+                    <button onclick="closeHistory()" class="text-slate-400 hover:text-slate-600 bg-slate-100 p-2 rounded-full hover:bg-slate-200 transition">
+                        <i class="ph-bold ph-x text-xl"></i>
+                    </button>
+                </div>
+                <div class="p-4 md:p-6 overflow-y-auto flex-1 bg-slate-50" id="history-list-container">
+                    <!-- History entries injected here -->
+                </div>
+            </div>
+        </div>
 
-            renderQuotePage: (forPrint = false) => {
-                const container = forPrint ? document.getElementById('print-preview-content') : document.getElementById('position-pages-container');
-                container.innerHTML = '';
-                if(!forPrint) document.getElementById('nav-pane').innerHTML = '';
-                const showHidden = forPrint ? false : document.getElementById('show-hidden-toggle').checked;
-                
-                let pageIndex = 2;
-                let currentPage = App.createPage(pageIndex, forPrint);
-                container.appendChild(currentPage);
-                if(!forPrint) { App.createThumbnail(1, 'Anschreiben'); App.createThumbnail(pageIndex, 'Positionen 1'); }
-                App.renderFloatingImages(currentPage, pageIndex, forPrint);
+        <!-- ==================== MODAL: MATERIAL LIST EDITOR ==================== -->
+        <div id="modal-materials" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
+            <div class="bg-slate-50 rounded-3xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl transform scale-95 transition-transform duration-300" id="modal-materials-content">
+                <div class="bg-white p-5 md:p-6 rounded-t-3xl border-b border-slate-200 flex justify-between items-center shrink-0">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="ph-fill ph-package text-brand-blue"></i> Material Bearbeiten
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1" id="material-project-name">Lade...</p>
+                    </div>
+                    <button onclick="closeMaterials()" class="text-slate-400 hover:text-slate-600 bg-slate-100 p-2 rounded-full hover:bg-slate-200 transition">
+                        <i class="ph-bold ph-x text-xl"></i>
+                    </button>
+                </div>
+                <div class="p-4 md:p-6 overflow-y-auto flex-1 bg-slate-50" id="materials-list-container">
+                    <!-- Material items will be injected here via JS -->
+                </div>
+            </div>
+        </div>
 
-                let contentBox = currentPage.querySelector('.page-content');
-                let posCounter = 1;
-                
-                const append = (el) => {
-                    contentBox.appendChild(el);
-                    // Use standard DOM check for height to be safe
-                    if (contentBox.scrollHeight > contentBox.clientHeight + 2) {
-                        contentBox.removeChild(el);
-                        pageIndex++;
-                        currentPage = App.createPage(pageIndex, forPrint);
-                        container.appendChild(currentPage);
-                        if(!forPrint) App.createThumbnail(pageIndex, `Positionen ${pageIndex-1}`);
-                        App.renderFloatingImages(currentPage, pageIndex, forPrint);
-                        contentBox = currentPage.querySelector('.page-content');
-                        contentBox.appendChild(el);
-                        return true;
-                    }
-                    return false;
-                };
-
-                State.sections.forEach((sec, sIdx) => {
-                    // Flags
-                    const isPauschal = sec.config.mode==='pauschal';
-                    const isOpt = sec.config.type==='optional';
-                    const isAlt = sec.config.type==='alternative';
-                    const hidePrices = sec.config.hidePrices; 
+        <!-- ==================== MODAL: IMAGES / FOTOS ==================== -->
+        <div id="modal-images" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
+            <div class="bg-white rounded-3xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl transform scale-95 transition-transform duration-300" id="modal-images-content">
+                <div class="p-5 md:p-6 rounded-t-3xl border-b border-slate-200 flex justify-between items-center shrink-0">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="ph-fill ph-camera text-brand-blue"></i> Projekt Fotos
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1" id="images-project-name">Lade...</p>
+                    </div>
+                    <button onclick="closeImages()" class="text-slate-400 hover:text-slate-600 bg-slate-100 p-2 rounded-full hover:bg-slate-200 transition">
+                        <i class="ph-bold ph-x text-xl"></i>
+                    </button>
+                </div>
+                <div class="p-4 md:p-6 overflow-y-auto flex-1 bg-slate-50">
+                    <!-- Upload Input (Hidden) & Trigger Button -->
+                    <input type="file" id="image-upload-input" accept="image/*" multiple capture="environment" class="hidden" onchange="handleImageUpload(event)">
                     
-                    const header = document.createElement('div'); header.className='mb-1 mt-4';
-                    let badges = isOpt ? '(Optional)' : (isAlt ? '(Alternativ)' : '');
-                    let titleHtml = forPrint ? `<div class="text-lg font-bold text-brand-primary uppercase">${sec.title} ${badges}</div><div class="text-sm text-slate-600">${sec.description}</div>` : `<div class="flex items-center"><input value="${sec.title}" oninput="App.updateSectionMeta(${sIdx},'title',this.value)" class="text-lg font-bold text-brand-primary w-full bg-transparent outline-none"><span class="text-xs text-slate-400 ml-2">${badges}</span></div><textarea oninput="App.updateSectionMeta(${sIdx},'description',this.value)" class="text-sm text-slate-500 w-full bg-transparent resize-none outline-none h-auto">${sec.description}</textarea>`;
-                    header.innerHTML = titleHtml; append(header);
+                    <button onclick="document.getElementById('image-upload-input').click()" class="w-full py-10 border-2 border-dashed border-brand-blue text-brand-blue rounded-2xl flex flex-col items-center justify-center hover:bg-brand-lightBlue/20 transition group bg-white shadow-sm mb-6">
+                        <i class="ph-bold ph-camera-plus text-5xl mb-3 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-lg">Fotos aufnehmen oder hochladen</span>
+                        <span class="text-sm text-slate-500 mt-1">Klicke hier, um die Kamera oder Galerie zu öffnen</span>
+                    </button>
 
-                    if(!forPrint) {
-                        let dz = document.createElement('div'); dz.className='section-drop-zone'; dz.ondragover=e=>e.preventDefault(); dz.ondrop=e=>{e.preventDefault();const id=e.dataTransfer.getData("text");if(id)App.handleItemAdd(sIdx,id);}; append(dz);
-                    }
+                    <div id="image-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <!-- Images injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    if(sec.items.length > 0) {
-                        sec.items.forEach((item, iIdx) => {
-                            if(!item.active && !showHidden) return;
-                            
-                            const total = item.price * item.qty;
-                            const posNum = String(posCounter++).padStart(3,'0');
-                            const opClass = !item.active ? 'pos-inactive' : ((isOpt||isAlt)?'opacity-60':'');
+        <!-- ==================== VIEW: PV FORM ==================== -->
+        <section id="view-form-pv" class="view-section p-4 md:p-6 max-w-6xl mx-auto pb-24">
+            
+            <!-- STICKY HEADER & PROGRESS BAR -->
+            <div class="sticky top-0 bg-slate-50/95 backdrop-blur z-30 pt-4 pb-4 -mx-4 px-4 md:mx-0 md:px-0 border-b border-slate-200/50">
+                <div class="flex items-center gap-4 mb-3">
+                    <button type="button" onclick="navigate('list')" class="p-2 bg-white rounded-full shadow-sm hover:bg-slate-100 transition">
+                        <i class="ph ph-arrow-left text-xl text-slate-600"></i>
+                    </button>
+                    <div class="flex flex-1 items-center gap-3">
+                        <div class="p-2 rounded-lg bg-brand-orange text-white"><i class="ph-fill ph-solar-panel text-xl"></i></div>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-800">PV Feinaufmaß</h2>
+                    </div>
+                    <button type="button" onclick="document.getElementById('btn-submit-pv').click()" class="bg-brand-orange hover:opacity-90 text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2 transition shadow-md">
+                        <i class="ph-bold ph-floppy-disk text-lg"></i> <span class="hidden md:inline">Speichern</span>
+                    </button>
+                </div>
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-200 h-2 mt-2 rounded-full overflow-hidden">
+                    <div id="pv-progress-fill" class="bg-brand-orange h-full w-0 transition-all duration-500 ease-out"></div>
+                </div>
+                <div class="flex justify-between text-xs text-slate-500 mt-1 font-bold">
+                    <span class="flex items-center gap-1"><i class="ph-bold ph-info"></i> Formular Fortschritt</span>
+                    <span id="pv-progress-text">0%</span>
+                </div>
+            </div>
 
-                            let epD = item.price.toLocaleString('de-DE') + ' €';
-                            let gpD = total.toLocaleString('de-DE') + ' €';
-                            if (isPauschal || item.hidePrices || sec.config.hidePrices) { epD='-'; gpD='-'; }
-                            else if (isOpt || isAlt) { gpD = `(${gpD})`; }
+            <div class="flex flex-col md:flex-row gap-6 mt-6 items-start relative">
+                
+                <!-- COLLAPSIBLE SIDEBAR HISTORY (DESKTOP) -->
+                <aside id="pv-sidebar" class="hidden md:flex flex-col w-20 shrink-0 sticky top-36 bg-white p-5 rounded-2xl shadow-sm border border-slate-200 sidebar-transition overflow-hidden">
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <h4 id="pv-sidebar-title" class="font-bold text-slate-800 whitespace-nowrap transition-opacity duration-300 opacity-0 hidden">Übersicht</h4>
+                        <button type="button" onclick="toggleSidebar('pv')" class="text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 p-1 rounded-lg transition shrink-0">
+                            <i id="pv-sidebar-icon" class="ph-bold ph-caret-right text-lg"></i>
+                        </button>
+                    </div>
+                    <ul class="space-y-4 relative before:absolute before:inset-y-0 before:left-[11px] before:w-0.5 before:bg-slate-100 before:-z-10 w-full">
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('pv-sec-kunden')">
+                            <div id="pv-nav-kunden" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="pv-navtext-kunden" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Kundendaten</span>
+                                <span id="pv-navcount-kunden" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('pv-sec-anlage')">
+                            <div id="pv-nav-anlage" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="pv-navtext-anlage" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Kunde bekommt</span>
+                                <span id="pv-navcount-anlage" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('pv-sec-daecher')">
+                            <div id="pv-nav-daecher" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="pv-navtext-daecher" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Objekt & Dächer</span>
+                                <span id="pv-navcount-daecher" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('pv-sec-absicherung')">
+                            <div id="pv-nav-absicherung" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="pv-navtext-absicherung" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Absicherung</span>
+                                <span id="pv-navcount-absicherung" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('pv-sec-elektro')">
+                            <div id="pv-nav-elektro" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="pv-navtext-elektro" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Zählerschrank</span>
+                                <span id="pv-navcount-elektro" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('pv-sec-notizen')">
+                            <div id="pv-nav-notizen" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="pv-navtext-notizen" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Notizen</span>
+                                <span id="pv-navcount-notizen" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                    </ul>
+                </aside>
 
-                            const row = document.createElement('div'); row.className=`item-group group ${opClass}`;
-                            if(!forPrint) { 
-                                row.draggable = true; // Enable drag on row
-                                row.ondragstart = e => App.dragStartPos(e, sIdx, iIdx);
-                                row.ondragover=e=>{e.preventDefault(); if(App.dragState && App.dragState.type==='pos') row.classList.add('item-group', 'drag-over-sort'); else { e.stopPropagation(); row.classList.add('drag-over-sub'); }}; 
-                                row.ondragleave=e=>{row.classList.remove('drag-over-sub', 'drag-over-sort');}; 
-                                row.ondrop=e=>{e.preventDefault(); row.classList.remove('drag-over-sub', 'drag-over-sort'); if(App.dragState && App.dragState.type==='pos') { App.moveItem(App.dragState.sIdx, App.dragState.iIdx, sIdx, iIdx); App.dragState=null; } else { e.stopPropagation(); const id=e.dataTransfer.getData("text");const p=DB.products.find(x=>x.id===id);if(p)App.addSubItemFromDrag(sIdx,iIdx,p); } }; 
-                            }
-
-                            let badgeHtml = '';
-                            if(item.badge) {
-                                const posCls = item.badge.pos==='tl'?'top-0 left-0':item.badge.pos==='tr'?'top-0 right-0':item.badge.pos==='bl'?'bottom-0 left-0':'bottom-0 right-0';
-                                badgeHtml = item.badge.type==='text' ? `<div class="absolute ${posCls} bg-brand-primary text-white text-[8px] font-bold px-1 rounded z-10">${item.badge.text}</div>` : `<img src="${item.badge.src}" class="absolute ${posCls} w-6 h-6 object-contain z-10">`;
-                            }
-                            if(!item.active) badgeHtml += `<div class="absolute top-0 right-0 bg-red-500 text-white text-[8px] px-1 rounded z-20">HIDDEN</div>`;
-
-                            const nameVal = forPrint ? item.name : `<input class="clean-input font-bold" value="${item.name}" onchange="App.updateItemDetails(${sIdx},${iIdx},'name',this.value)">`;
-                            const descVal = forPrint ? item.desc : `<div class="editable-field" contenteditable="true" onblur="App.updateItemDetails(${sIdx},${iIdx},'desc',this.innerText)">${item.desc}</div>`;
-                            const tools = forPrint ? '' : `<div class="mt-1 flex gap-2 no-print"><button onclick="App.addSubItem(${sIdx},${iIdx})" class="text-[9px] text-slate-400 hover:text-brand-primary"><i class="fa-solid fa-plus"></i> Sub</button><button onclick="App.openPosSettings(${sIdx},${iIdx})" class="text-[9px] text-slate-400 hover:text-brand-primary"><i class="fa-solid fa-cog"></i></button><button onclick="App.removeItem(${sIdx},${iIdx})" class="text-[9px] text-red-300 hover:text-red-500"><i class="fa-solid fa-trash"></i></button></div>`;
-
-                            row.innerHTML = `
+                <!-- FORM CONTENT -->
+                <form id="form-pv" onsubmit="saveRecord(event, 'PV')" class="flex-1 space-y-4 w-full min-w-0">
+                    <input type="hidden" name="id" id="pv-id">
+                    <div class="mb-2 text-sm text-slate-500 flex items-center gap-2"><span class="text-red-500 font-bold">*</span> markiert Pflichtfelder</div>
+                    
+                    <!-- KUNDENDATEN -->
+                    <div id="pv-sec-kunden" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="kunden">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('pv-content-kunden', 'pv-icon-kunden')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-user text-brand-orange"></i> Angaben des Kunden</span>
+                            <i id="pv-icon-kunden" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="pv-content-kunden" class="p-5">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                                 <div>
-                                    <div class="pos-row-top">
-                                        <div class="text-center">${posNum}</div>
-                                        <div>${nameVal}</div>
-                                        <div class="text-center">${item.qty}</div>
-                                        <div class="text-center text-[10px] text-slate-500">${item.unit}</div>
-                                        <div class="text-right font-mono text-[10px]">${epD}</div>
-                                        <div class="text-right font-mono text-[11px]">${gpD}</div>
-                                        <div><i class="fa-solid fa-grip-lines text-slate-300 cursor-grab no-print"></i></div>
-                                    </div>
-                                    <div class="pos-row-bottom">
-                                        <div class="prod-img-container" onclick="${!forPrint?`App.handleImageClick(${sIdx},${iIdx})`:''}"><img src="${item.img||'https://placehold.co/150?text='}" class="w-full h-full object-contain bg-white">${badgeHtml}</div>
-                                        <div class="flex-1"><div class="text-[11px] text-slate-500 leading-relaxed">${descVal}</div>${tools}</div>
-                                    </div>
-                                    <div id="sub-items-${sIdx}-${iIdx}"></div>
-                                </div>`;
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Firma <span class="text-slate-400 font-normal normal-case">(Optional)</span></label>
+                                    <input type="text" name="firma" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Vorname <span class="text-red-500">*</span></label>
+                                    <input type="text" name="name" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Nachname <span class="text-red-500">*</span></label>
+                                    <input type="text" name="lastname" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                </div>
+                            </div>
                             
-                            append(row);
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <div class="md:col-span-1">
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Straße & Nr. <span class="text-red-500">*</span></label>
+                                    <input type="text" name="street" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">PLZ <span class="text-red-500">*</span></label>
+                                    <input type="text" name="postcode" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Ort <span class="text-red-500">*</span></label>
+                                    <input type="text" name="city" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                </div>
+                            </div>
 
-                            // SUB ITEMS
-                            if(item.subItems && item.subItems.length > 0) {
-                                const subC = row.querySelector(`#sub-items-${sIdx}-${iIdx}`);
-                                item.subItems.forEach((sub, subIdx) => {
-                                    if(!sub.active && !showHidden) return;
-                                    const subTotal = sub.price * sub.qty;
-                                    let subGp = subTotal.toLocaleString('de-DE') + ' €';
-                                    if(isPauschal || sec.config.hidePrices || item.hidePrices) subGp='-'; else if(isOpt || isAlt) subGp=`(${subGp})`;
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Telefon <span class="text-slate-400 font-normal normal-case">(Optional)</span></label>
+                                    <input type="text" name="telephone" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Mobil <span class="text-slate-400 font-normal normal-case">(Optional)</span></label>
+                                    <input type="text" name="phone" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">E-Mail <span class="text-slate-400 font-normal normal-case">(Optional)</span></label>
+                                    <input type="email" name="email" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                </div>
+                            </div>
 
-                                    const subRow = document.createElement('div');
-                                    subRow.className = "sub-pos-container sub-pos-grid";
-                                    const sName = forPrint ? sub.name : `<input class="clean-input" value="${sub.name}" onchange="App.updateSubItemDetails(${sIdx},${iIdx},${subIdx},'name',this.value)">`;
-                                    subRow.innerHTML = `<div class="text-right pr-2">${posNum}.${subIdx+1}</div><div>${sName}</div><div class="text-center">${sub.qty}</div><div class="text-center">${sub.unit}</div><div class="text-right font-mono text-[9px]">${(!isPauschal&&!hidePrices)?sub.price.toLocaleString('de-DE'):'-'}</div><div class="text-right font-mono text-[9px]">${subGp}</div><div>${!forPrint?`<button onclick="App.removeItem(${sIdx},${iIdx},${subIdx})" class="text-red-300 hover:text-red-500"><i class="fa-solid fa-times"></i></button>`:''}</div>`;
-                                    subC.appendChild(subRow);
-                                });
-                            }
-                        });
-                    }
-                    if(isPauschal) { const pr = document.createElement('div'); pr.className="flex justify-end mt-2 pr-16 font-bold text-slate-800 text-sm border-t border-slate-300 pt-2"; pr.innerHTML=`<span>Pauschalpreis:</span><span class="ml-8 font-mono">${sec.config.pauschalPrice.toLocaleString('de-DE')} €</span>`; append(pr); }
-                    if(!forPrint) { const btn = document.createElement('div'); btn.className="pb-4 pl-8"; btn.innerHTML=`<button onclick="App.addManualItem(${sIdx})" class="text-[10px] font-bold text-brand-primary flex items-center gap-1 hover:bg-brand-light px-2 py-1 rounded border border-dashed border-brand-primary"><i class="fa-solid fa-plus"></i> Position</button>`; append(btn); }
-                });
+                            <div class="md:col-span-3 pt-4 border-t border-slate-100 mt-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Feinaufmaß durch (Name)</label>
+                                        <input type="text" name="contact_person" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Datum</label>
+                                        <input type="date" name="request_date" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                // Global Drop
-                let dzG = document.createElement('div'); dzG.className = 'section-drop-zone border-2 border-dashed border-slate-300 rounded flex items-center justify-center text-slate-400 text-xs py-6 mt-4'; dzG.innerText = 'Neue Sektion'; dzG.ondragover=e=>e.preventDefault(); dzG.ondrop=e=>{e.preventDefault();const id=e.dataTransfer.getData("text");if(id){const ni=App.addSection();App.handleItemAdd(ni,id);App.renderQuotePage();}}; append(dzG);
+                    <!-- KUNDE BEKOMMT -->
+                    <div id="pv-sec-anlage" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="anlage">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('pv-content-anlage', 'pv-icon-anlage')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-lightning text-brand-orange"></i> Kunde Bekommt</span>
+                            <i id="pv-icon-anlage" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        
+                        <div id="pv-content-anlage" class="p-5">
+                            <div class="mb-4">
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Projektart <span class="text-red-500">*</span></label>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <label class="flex items-center gap-2 p-3 border rounded-xl bg-slate-50 cursor-pointer hover:border-brand-orange transition"><input type="radio" name="objective" value="Neuanlage" required class="custom-cb focus:ring-brand-orange"> Neuanlage</label>
+                                    <label class="flex items-center gap-2 p-3 border rounded-xl bg-slate-50 cursor-pointer hover:border-brand-orange transition"><input type="radio" name="objective" value="Erweiterung" required class="custom-cb focus:ring-brand-orange"> Erweiterung</label>
+                                    <label class="flex items-center gap-2 p-3 border rounded-xl bg-slate-50 cursor-pointer hover:border-brand-orange transition"><input type="radio" name="objective" value="Demontage" required class="custom-cb focus:ring-brand-orange"> Demontage alt</label>
+                                </div>
+                                <div class="mt-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm">
+                                    <span class="font-bold text-slate-700">Bei Demontage:</span>
+                                    <div class="flex flex-wrap gap-4 mt-2">
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_demontageVerbleib" value="Kunde" class="custom-cb focus:ring-brand-orange"> Module beim Kunden lassen</label>
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_demontageVerbleib" value="Lager" class="custom-cb focus:ring-brand-orange"> mitnehmen zu uns ins Lager</label>
+                                    </div>
+                                </div>
+                            </div>
 
-                // Totals
-                let totalNet = 0; let activeTotal = 0;
-                State.sections.forEach(s => {
-                    if (s.config.type === 'standard') {
-                        let val = s.config.mode === 'pauschal' ? s.config.pauschalPrice : 0;
-                        if(s.config.mode !== 'pauschal') {
-                            s.items.forEach(i => { if(i.active) { val += i.price * i.qty; if(i.subItems) i.subItems.forEach(si => { if(si.active) val += si.price * si.qty; }); } });
-                            val += (s.config.margin.type === 'percent' ? val * (s.config.margin.value/100) : s.config.margin.value);
-                        }
-                        totalNet += val; activeTotal += val;
-                    }
-                });
-                const tax = totalNet * (State.taxRate / 100); const gross = totalNet + tax;
-                const sum = document.createElement('div'); sum.className="mt-8 p-6 bg-slate-50 rounded-lg border border-slate-200 break-inside-avoid";
-                sum.innerHTML=`<div class="flex justify-between mb-2 text-sm font-bold text-slate-600"><span>Gesamtpreis netto</span><span>${totalNet.toLocaleString('de-DE',{minimumFractionDigits:2})} EUR</span></div><div class="flex justify-between mb-2 text-sm text-slate-500"><span>Umsatzsteuer ${State.taxRate}%</span><span>${tax.toLocaleString('de-DE',{minimumFractionDigits:2})} EUR</span></div><div class="flex justify-between mt-4 pt-4 border-t border-slate-300 text-xl font-black text-brand-primary"><span>Gesamtinvestitionskosten</span><span>${gross.toLocaleString('de-DE',{minimumFractionDigits:2})} EUR</span></div>`;
-                append(sum);
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Anlagengröße (kWp) <span class="text-red-500">*</span></label>
+                                    <input type="number" step="0.1" name="kwp_size" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Anzahl Module <span class="text-red-500">*</span></label>
+                                    <input type="number" name="module_count" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Kabelführung</label>
+                                    <div class="flex items-center gap-2 p-3 border border-slate-200 rounded-xl bg-slate-50 h-[46px]">
+                                        <span class="text-xs">Ausreichend für weitere Kabel?</span>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm ml-auto"><input type="radio" name="note_kabelAusreichend" value="Ja" class="custom-cb focus:ring-brand-orange"> Ja</label>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_kabelAusreichend" value="Nein" class="custom-cb focus:ring-brand-orange"> Nein</label>
+                                    </div>
+                                </div>
+                            </div>
 
-                if(!forPrint) {
-                    document.getElementById('sidebar-grand-net').innerText = totalNet.toLocaleString('de-DE',{minimumFractionDigits:2})+' €';
-                    document.getElementById('sidebar-grand-gross').innerText = tax.toLocaleString('de-DE',{minimumFractionDigits:2})+' €';
-                    document.getElementById('sidebar-grand-total').innerText = gross.toLocaleString('de-DE',{minimumFractionDigits:2})+' €';
-                    document.getElementById('lbl-total-pages').innerText = pageIndex;
-                    App.renderCalculationSidebar(activeTotal);
-                }
-            },
+                            <div class="space-y-4 border-t border-slate-100 pt-4">
+                                <p class="text-xs font-bold text-slate-500 uppercase tracking-wide">Zusatz-Komponenten <span class="text-slate-400 font-normal normal-case">(Optional)</span></p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-brand-lightBlue transition">
+                                        <label class="flex items-center gap-2 font-bold mb-3 cursor-pointer"><input type="checkbox" name="storage_preference" value="Ja" class="custom-cb focus:ring-brand-orange"> Batteriespeicher</label>
+                                        <input type="text" name="note_battery_type" placeholder="Hersteller/Typ" class="w-full p-2 mb-2 border rounded-lg text-sm focus:ring-brand-orange outline-none">
+                                        <input type="text" name="note_battery_size" placeholder="geplante Größe" class="w-full p-2 mb-2 border rounded-lg text-sm focus:ring-brand-orange outline-none">
+                                        <input type="text" name="note_battery_location" placeholder="Aufstellort" class="w-full p-2 mb-2 border rounded-lg text-sm focus:ring-brand-orange outline-none">
+                                        <div class="flex gap-2">
+                                            <input type="number" name="note_batteryDistWrZs" placeholder="WR -> ZS (m)" class="w-1/2 p-2 border rounded-lg text-sm focus:ring-brand-orange outline-none">
+                                            <input type="number" name="note_batteryDistBaWr" placeholder="BA -> WR (m)" class="w-1/2 p-2 border rounded-lg text-sm focus:ring-brand-orange outline-none">
+                                        </div>
+                                    </div>
 
-            renderCalculationSidebar: (totalNet) => {
-                const c = document.getElementById('calc-sidebar-content'); c.innerHTML='';
-                State.sections.forEach((s, i) => {
-                    let secEK = 0; let secVK = 0;
-                    s.items.forEach(x => { if(x.active) { secEK+=x.ek*x.qty; secVK+=x.price*x.qty; if(x.subItems) x.subItems.forEach(y=>{if(y.active){secEK+=y.ek*y.qty; secVK+=y.price*y.qty;}}); } });
+                                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-brand-lightBlue transition">
+                                        <label class="flex items-center gap-2 font-bold mb-3 cursor-pointer"><input type="checkbox" name="note_wp_integration" value="Ja" class="custom-cb focus:ring-brand-orange"> Wärmepumpe (PV-Integration)</label>
+                                        <input type="text" name="note_wp_type" placeholder="Hersteller/Typ" class="w-full p-2 mb-2 border rounded-lg text-sm focus:ring-brand-orange outline-none">
+                                        <div class="flex gap-4 mb-2">
+                                            <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="note_wpStatus" value="vorhanden" class="custom-cb focus:ring-brand-orange"> vorhanden</label>
+                                            <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="note_wpStatus" value="geplant" class="custom-cb focus:ring-brand-orange"> geplant</label>
+                                        </div>
+                                        <div class="flex gap-4">
+                                            <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="checkbox" name="note_wp_heizstab" value="Ja" class="focus:ring-brand-orange"> Heizstab</label>
+                                            <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="checkbox" name="enwg_14a_ready" value="1" class="focus:ring-brand-orange"> SG Ready</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 hover:border-brand-lightBlue transition md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="flex items-center gap-2 font-bold mb-3 cursor-pointer"><input type="checkbox" name="wallbox_desired" value="1" class="custom-cb focus:ring-brand-orange"> Wallbox gewünscht</label>
+                                            <input type="text" name="wallbox_location" placeholder="Aufstellort" class="w-full p-2 mb-2 border rounded-lg text-sm focus:ring-brand-orange outline-none">
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <input type="number" name="note_wallbox_distance" placeholder="Entfernung zum ZS" class="flex-1 p-2 border rounded-lg text-sm focus:ring-brand-orange outline-none">
+                                                <span class="text-sm">m</span>
+                                            </div>
+                                            <label class="flex items-center gap-2 text-sm cursor-pointer mt-2"><input type="checkbox" name="note_wallboxKernbohrung" value="Ja" class="custom-cb focus:ring-brand-orange"> Kernbohrung Aussenw. WU-Beton</label>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-sm mb-2 text-slate-700">Erdarbeiten</h4>
+                                            <div class="flex items-center gap-3 mb-2">
+                                                <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="note_wbErdarbeiten" value="Ja" class="custom-cb focus:ring-brand-orange"> Ja</label>
+                                                <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="note_wbErdarbeiten" value="Nein" class="custom-cb focus:ring-brand-orange"> Nein</label>
+                                                <input type="text" name="note_wbErdarbeitenLaenge" placeholder="Länge (m)" class="w-24 p-1.5 border rounded outline-none focus:ring-brand-orange ml-auto">
+                                            </div>
+                                            <div class="flex flex-col gap-1">
+                                                <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="note_wbErdarbeitenDurch" value="Solar Aspekt" class="custom-cb focus:ring-brand-orange"> durch uns/Gala Bauer</label>
+                                                <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="note_wbErdarbeitenDurch" value="Kunde" class="custom-cb focus:ring-brand-orange"> Kunde/Gala-Bauer</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="md:col-span-2 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                        <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Sonstige Kundenwünsche</label>
+                                        <textarea name="note_sonstigeWunsche" rows="2" class="w-full p-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-orange outline-none resize-none"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DÄCHER -->
+                    <div id="pv-sec-daecher" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="daecher">
+                        <div class="flex justify-between items-center p-5 border-b border-slate-100 rounded-t-2xl hover:bg-slate-50 transition cursor-pointer" onclick="toggleSection('pv-content-daecher', 'pv-icon-daecher')">
+                            <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2"><i class="ph-fill ph-house text-brand-orange"></i> Objekt & Dächer</h3>
+                            <div class="flex items-center gap-4">
+                                <button type="button" onclick="event.stopPropagation(); addRoofUI()" class="text-brand-orange bg-brand-orange/10 hover:bg-brand-orange/20 px-3 py-1.5 rounded-lg text-sm font-bold flex items-center gap-1 transition">
+                                    <i class="ph-bold ph-plus"></i> Dach hinzufügen
+                                </button>
+                                <i id="pv-icon-daecher" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                            </div>
+                        </div>
+                        
+                        <div id="pv-content-daecher" class="p-5">
+                            <p class="text-xs text-slate-500 mb-4">Mindestens ein Dach muss angelegt werden <span class="text-red-500">*</span></p>
+                            <div id="roofs-container" class="space-y-6">
+                                <!-- Dächer werden hier dynamisch eingefügt -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ABSICHERUNG -->
+                    <div id="pv-sec-absicherung" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="absicherung">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('pv-content-absicherung', 'pv-icon-absicherung')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-shield-check text-brand-orange"></i> Absicherung</span>
+                            <i id="pv-icon-absicherung" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="pv-content-absicherung" class="p-5 space-y-4">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row gap-4 justify-between md:items-center">
+                                <span class="font-bold text-sm w-36">Fangschutzgitter</span>
+                                <div class="flex flex-wrap gap-3">
+                                    <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_fangschutz" value="möglich" class="custom-cb focus:ring-brand-orange"> möglich</label>
+                                    <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_fangschutz" value="teilweise" class="custom-cb focus:ring-brand-orange"> teilweise</label>
+                                    <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_fangschutz" value="nicht möglich" class="custom-cb focus:ring-brand-orange"> nicht möglich</label>
+                                </div>
+                                <input type="text" name="note_fangschutz_reason" placeholder="Begründung..." class="flex-1 p-2 border rounded-lg text-sm focus:ring-brand-orange outline-none">
+                            </div>
+
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col gap-2">
+                                <span class="font-bold text-sm">Gerüst</span>
+                                <div class="flex flex-col md:flex-row gap-4 justify-between md:items-center">
+                                    <div class="flex items-center gap-2">
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="checkbox" name="scaffold_usage" value="1" class="custom-cb focus:ring-brand-orange"> muss gestellt werden</label>
+                                    </div>
+                                    <input type="text" name="note_scaffold_reason" placeholder="Begründung..." class="flex-1 p-2 border rounded-lg text-sm focus:ring-brand-orange outline-none max-w-sm">
+                                </div>
+                                <div class="flex flex-col md:flex-row gap-4 justify-between md:items-center mt-2">
+                                    <div class="flex flex-wrap gap-3">
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_geruestMachbar" value="möglich" class="custom-cb focus:ring-brand-orange"> möglich</label>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_geruestMachbar" value="teilweise" class="custom-cb focus:ring-brand-orange"> teilweise</label>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_geruestMachbar" value="nicht möglich" class="custom-cb focus:ring-brand-orange"> nicht möglich</label>
+                                    </div>
+                                    <input type="text" name="note_geruestMachbar_reason" placeholder="Begründung..." class="flex-1 p-2 border rounded-lg text-sm focus:ring-brand-orange outline-none max-w-sm">
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col gap-2">
+                                <span class="font-bold text-sm">Aufzug</span>
+                                <div class="flex flex-col md:flex-row gap-4 justify-between md:items-center">
+                                    <div class="flex items-center gap-2">
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="checkbox" name="note_aufzugMuss" value="1" class="custom-cb focus:ring-brand-orange"> muss gestellt werden</label>
+                                    </div>
+                                    <input type="text" name="note_aufzug_reason" placeholder="Begründung..." class="flex-1 p-2 border rounded-lg text-sm focus:ring-brand-orange outline-none max-w-sm">
+                                </div>
+                                <div class="flex flex-col md:flex-row gap-4 justify-between md:items-center mt-2">
+                                    <div class="flex flex-wrap gap-3">
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_aufzugMachbar" value="möglich" class="custom-cb focus:ring-brand-orange"> möglich</label>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_aufzugMachbar" value="teilweise" class="custom-cb focus:ring-brand-orange"> teilweise</label>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_aufzugMachbar" value="nicht möglich" class="custom-cb focus:ring-brand-orange"> nicht möglich</label>
+                                    </div>
+                                    <input type="text" name="note_aufzugMachbar_reason" placeholder="Begründung..." class="flex-1 p-2 border rounded-lg text-sm focus:ring-brand-orange outline-none max-w-sm">
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col gap-2">
+                                <span class="font-bold text-sm">Kran</span>
+                                <div class="flex flex-col md:flex-row gap-4 justify-between md:items-center">
+                                    <div class="flex items-center gap-2">
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="checkbox" name="note_kranMuss" value="1" class="custom-cb focus:ring-brand-orange"> muss gestellt werden</label>
+                                    </div>
+                                    <input type="text" name="note_kran_reason" placeholder="Begründung..." class="flex-1 p-2 border rounded-lg text-sm focus:ring-brand-orange outline-none max-w-sm">
+                                </div>
+                                <div class="flex flex-col md:flex-row gap-4 justify-between md:items-center mt-2">
+                                    <div class="flex flex-wrap gap-3">
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_kranMachbar" value="möglich" class="custom-cb focus:ring-brand-orange"> möglich</label>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_kranMachbar" value="teilweise" class="custom-cb focus:ring-brand-orange"> teilweise</label>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_kranMachbar" value="nicht möglich" class="custom-cb focus:ring-brand-orange"> nicht möglich</label>
+                                    </div>
+                                    <input type="text" name="note_kranMachbar_reason" placeholder="Begründung..." class="flex-1 p-2 border rounded-lg text-sm focus:ring-brand-orange outline-none max-w-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ZÄHLERSCHRANK -->
+                    <div id="pv-sec-elektro" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="elektro">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('pv-content-elektro', 'pv-icon-elektro')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-box-arrow-down text-brand-orange"></i> Zählerschrank & Elektrik</span>
+                            <i id="pv-icon-elektro" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="pv-content-elektro" class="p-5">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6">
+                                <label class="flex items-center justify-between p-3 border rounded-xl bg-slate-50 cursor-pointer hover:border-brand-lightBlue transition"><span class="font-medium text-sm">AC-Überspannungsschutz vorh.</span> <input type="checkbox" name="ac_surge_protection" value="1" class="custom-cb focus:ring-brand-orange"></label>
+                                <label class="flex items-center justify-between p-3 border rounded-xl bg-slate-50 cursor-pointer hover:border-brand-lightBlue transition"><span class="font-medium text-sm">SLS Schalter vorhanden</span> <input type="checkbox" name="sls_switch" value="1" class="custom-cb focus:ring-brand-orange"></label>
+                                
+                                <div class="flex items-center justify-between p-3 border rounded-xl bg-slate-50">
+                                    <span class="font-medium text-sm">Anzahl WE:</span>
+                                    <input type="number" name="number_we" class="w-16 p-1 border rounded outline-none focus:ring-brand-orange">
+                                </div>
+                                <div class="flex items-center justify-between p-3 border rounded-xl bg-slate-50">
+                                    <span class="font-medium text-sm">Mieterstrommodell gew.:</span>
+                                    <div class="flex gap-2">
+                                        <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="tenant_model" value="1" class="custom-cb focus:ring-brand-orange"> Ja</label>
+                                        <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="tenant_model" value="0" class="custom-cb focus:ring-brand-orange"> Nein</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-col p-3 border rounded-xl bg-slate-50">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-medium text-sm">Zählerschrank Aktion:</span>
+                                    </div>
+                                    <div class="flex flex-col gap-2 text-sm">
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="meter_cabinet_action" value="neuer Zählerschrank notwendig" class="custom-cb focus:ring-brand-orange"> neuer ZS notwendig</label>
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="meter_cabinet_action" value="alter Zählerschrank wird zur Unterverteilung" class="custom-cb focus:ring-brand-orange"> alter ZS wird zur Unterverteilung</label>
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="meter_cabinet_action" value="zusätzliche Unterverteilung" class="custom-cb focus:ring-brand-orange"> zusätzliche Unterverteilung</label>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col p-3 border rounded-xl bg-slate-50">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-medium text-sm">Neuer ZS Größe:</span>
+                                    </div>
+                                    <div class="flex gap-3 text-sm mt-1">
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="cabinet_size" value="550" class="custom-cb focus:ring-brand-orange"> 550</label>
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="cabinet_size" value="800" class="custom-cb focus:ring-brand-orange"> 800</label>
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="cabinet_size" value="1100" class="custom-cb focus:ring-brand-orange"> 1100</label>
+                                    </div>
+                                </div>
+
+                                <div class="md:col-span-2 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                    <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-4">
+                                        <span class="font-medium text-sm w-full md:w-48">Zwischenzähler gewünscht:</span>
+                                        <div class="flex gap-3 w-full md:w-auto">
+                                            <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_zwischenzaehler" value="Ja" class="custom-cb focus:ring-brand-orange"> Ja</label>
+                                            <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_zwischenzaehler" value="Nein" class="custom-cb focus:ring-brand-orange"> Nein</label>
+                                        </div>
+                                        <div class="flex items-center gap-2 w-full md:w-auto"><span class="text-sm">Anz:</span><input type="number" name="meter_count" class="w-16 p-1 border rounded outline-none focus:ring-brand-orange"></div>
+                                    </div>
+                                    <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+                                        <span class="font-medium text-sm w-full md:w-48 text-slate-500 pl-4 border-l-2 border-slate-200"><i class="ph-bold ph-arrow-elbow-down-right"></i> für Wärmepumpe:</span>
+                                        <div class="flex gap-3 w-full md:w-auto">
+                                            <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_zwischenzaehlerWp" value="Ja" class="custom-cb focus:ring-brand-orange"> Ja</label>
+                                            <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_zwischenzaehlerWp" value="Nein" class="custom-cb focus:ring-brand-orange"> Nein</label>
+                                        </div>
+                                        <div class="flex items-center gap-2 w-full md:w-auto"><span class="text-sm">Anz:</span><input type="number" name="note_zwischenzaehlerWpCount" class="w-16 p-1 border rounded outline-none focus:ring-brand-orange"></div>
+                                    </div>
+                                </div>
+
+                                <div class="md:col-span-2 pt-4">
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Internet-Anbindung <span class="text-slate-400 font-normal normal-case">(Optional)</span></label>
+                                    <select name="network_wlan" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-orange">
+                                        <option value="">Bitte wählen...</option>
+                                        <option value="WLAN">WLAN (Standard)</option>
+                                        <option value="LAN">LAN</option>
+                                        <option value="Powerline">Powerline</option>
+                                        <option value="Dongle">Dongle</option>
+                                    </select>
+                                    <div class="flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-200 mt-3">
+                                        <label class="flex items-center gap-1 text-sm cursor-pointer font-medium"><input type="checkbox" name="note_internetSteckdose" class="custom-cb focus:ring-brand-orange"> Steckdose setzen</label>
+                                        <span class="text-sm text-slate-500">Entfernung zur nächsten:</span>
+                                        <input type="text" name="note_internetSteckdoseDist" class="w-24 p-1.5 border rounded outline-none focus:ring-brand-orange" placeholder="z.B. 2m">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ZUSÄTZLICHE NOTIZEN MIT DIKTIERFUNKTION -->
+                    <div id="pv-sec-notizen" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="notizen">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('pv-content-notizen', 'pv-icon-notizen')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-notebook text-brand-orange"></i> Zusätzliche Notizen</span>
+                            <i id="pv-icon-notizen" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="pv-content-notizen" class="p-5">
+                            <div class="relative group">
+                                <textarea id="pv-notes" name="info" rows="4" class="w-full p-4 pr-14 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-orange resize-none transition-shadow" placeholder="Tippen oder auf das Mikrofon klicken zum Diktieren..."></textarea>
+                                <button type="button" onclick="toggleDictation('pv-notes', 'pv-mic-icon')" class="absolute top-3 right-3 p-2 bg-white rounded-xl shadow-sm border border-slate-100 text-slate-400 hover:text-brand-orange hover:border-brand-orange/30 transition active:scale-95" title="Spracheingabe starten/stoppen">
+                                    <i id="pv-mic-icon" class="ph-bold ph-microphone text-2xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="btn-submit-pv" type="submit" class="w-full mt-4 bg-brand-orange hover:opacity-90 text-white p-4 rounded-2xl font-bold flex justify-center items-center gap-2 shadow-lg shadow-brand-orange/30 transition active:scale-95 text-lg">
+                        <i class="ph-bold ph-floppy-disk text-2xl"></i> PV Aufmaß Speichern
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW: WP FORM ==================== -->
+        <section id="view-form-wp" class="view-section p-4 md:p-6 max-w-6xl mx-auto pb-24">
+            
+            <!-- STICKY HEADER & PROGRESS BAR -->
+            <div class="sticky top-0 bg-slate-50/95 backdrop-blur z-30 pt-4 pb-4 -mx-4 px-4 md:mx-0 md:px-0 border-b border-slate-200/50">
+                <div class="flex items-center gap-4 mb-3">
+                    <button type="button" onclick="navigate('list')" class="p-2 bg-white rounded-full shadow-sm hover:bg-slate-100 transition">
+                        <i class="ph ph-arrow-left text-xl text-slate-600"></i>
+                    </button>
+                    <div class="flex flex-1 items-center gap-3">
+                        <div class="p-2 rounded-lg bg-brand-green text-white"><i class="ph-fill ph-thermometer text-xl"></i></div>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-800">WP Aufmaß</h2>
+                    </div>
+                    <button type="button" onclick="document.getElementById('btn-submit-wp').click()" class="bg-brand-green hover:opacity-90 text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2 transition shadow-md">
+                        <i class="ph-bold ph-floppy-disk text-lg"></i> <span class="hidden md:inline">Speichern</span>
+                    </button>
+                </div>
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-200 h-2 mt-2 rounded-full overflow-hidden">
+                    <div id="wp-progress-fill" class="bg-brand-green h-full w-0 transition-all duration-500 ease-out"></div>
+                </div>
+                <div class="flex justify-between text-xs text-slate-500 mt-1 font-bold">
+                    <span class="flex items-center gap-1"><i class="ph-bold ph-info"></i> Formular Fortschritt</span>
+                    <span id="wp-progress-text">0%</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-6 mt-6 items-start relative">
+                
+                <!-- COLLAPSIBLE SIDEBAR HISTORY (DESKTOP) -->
+                <aside id="wp-sidebar" class="hidden md:flex flex-col w-20 shrink-0 sticky top-36 bg-white p-5 rounded-2xl shadow-sm border border-slate-200 sidebar-transition overflow-hidden">
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <h4 id="wp-sidebar-title" class="font-bold text-slate-800 whitespace-nowrap transition-opacity duration-300 opacity-0 hidden">Übersicht</h4>
+                        <button type="button" onclick="toggleSidebar('wp')" class="text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 p-1 rounded-lg transition shrink-0">
+                            <i id="wp-sidebar-icon" class="ph-bold ph-caret-right text-lg"></i>
+                        </button>
+                    </div>
+                    <ul class="space-y-4 relative before:absolute before:inset-y-0 before:left-[11px] before:w-0.5 before:bg-slate-100 before:-z-10 w-full">
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('wp-sec-kunden')">
+                            <div id="wp-nav-kunden" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="wp-navtext-kunden" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Kunde & Berater</span>
+                                <span id="wp-navcount-kunden" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('wp-sec-gebaeude')">
+                            <div id="wp-nav-gebaeude" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="wp-navtext-gebaeude" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Gebäude</span>
+                                <span id="wp-navcount-gebaeude" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('wp-sec-heizung')">
+                            <div id="wp-nav-heizung" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="wp-navtext-heizung" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Aktuelle Heizung</span>
+                                <span id="wp-navcount-heizung" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('wp-sec-etagen')">
+                            <div id="wp-nav-etagen" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="wp-navtext-etagen" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Etagen & Zustand</span>
+                                <span id="wp-navcount-etagen" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('wp-sec-anlage')">
+                            <div id="wp-nav-anlage" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="wp-navtext-anlage" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Neue Anlage</span>
+                                <span id="wp-navcount-anlage" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('wp-sec-einbringung')">
+                            <div id="wp-nav-einbringung" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="wp-navtext-einbringung" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Einbringmaße</span>
+                                <span id="wp-navcount-einbringung" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('wp-sec-elektro')">
+                            <div id="wp-nav-elektro" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="wp-navtext-elektro" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Elektroinstallation</span>
+                                <span id="wp-navcount-elektro" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('wp-sec-sonstiges')">
+                            <div id="wp-nav-sonstiges" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="wp-navtext-sonstiges" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Sonstige Arbeiten</span>
+                                <span id="wp-navcount-sonstiges" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('wp-sec-schall')">
+                            <div id="wp-nav-schall" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="wp-navtext-schall" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Schallberechnung</span>
+                                <span id="wp-navcount-schall" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                        <li class="relative flex items-center gap-3 cursor-pointer group w-full" onclick="scrollToSection('wp-sec-notizen')">
+                            <div id="wp-nav-notizen" class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors"></div>
+                            <div id="wp-navtext-notizen" class="flex-1 flex justify-between items-center transition-all duration-300 opacity-0 hidden">
+                                <span class="text-sm text-slate-500 group-hover:text-slate-800 whitespace-nowrap">Notizen</span>
+                                <span id="wp-navcount-notizen" class="text-[10px] font-bold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 transition-colors">0/0</span>
+                            </div>
+                        </li>
+                    </ul>
+                </aside>
+
+                <!-- FORM CONTENT -->
+                <form id="form-wp" onsubmit="saveRecord(event, 'WP')" class="flex-1 space-y-4 w-full min-w-0">
+                    <input type="hidden" name="id" id="wp-id">
+                    <div class="mb-2 text-sm text-slate-500 flex items-center gap-2"><span class="text-red-500 font-bold">*</span> markiert Pflichtfelder</div>
                     
-                    let margin = s.config.margin.type==='percent' ? secVK*(s.config.margin.value/100) : s.config.margin.value;
-                    let finalVK = s.config.mode==='pauschal' ? s.config.pauschalPrice : secVK + margin;
-                    let percent = (s.config.type==='standard' && totalNet>0) ? ((finalVK/totalNet)*100).toFixed(1)+'%' : '-';
+                    <!-- KUNDENDATEN -->
+                    <div id="wp-sec-kunden" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="kunden">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('wp-content-kunden', 'wp-icon-kunden')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-users text-brand-green"></i> Kunde & Berater</span>
+                            <i id="wp-icon-kunden" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="wp-content-kunden" class="p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Kundenangaben -->
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Firma <span class="text-slate-400 font-normal normal-case">(Optional)</span></label>
+                                <input type="text" name="firma" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Vorname <span class="text-red-500">*</span></label>
+                                <input type="text" name="name" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nachname <span class="text-red-500">*</span></label>
+                                <input type="text" name="lastname" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                            </div>
 
-                    c.innerHTML += `<div class="bg-white border border-slate-200 rounded p-3 text-xs mb-3 shadow-sm ${s.config.type!=='standard'?'opacity-75 bg-slate-50':''}"><div class="font-bold text-slate-700 mb-2 truncate border-b pb-1 flex justify-between"><span>${s.title||'Sektion'}</span><span class="text-[10px] bg-brand-light px-1 rounded text-slate-500">${percent}</span></div>${s.config.mode==='standard' ? `<div class="grid grid-cols-2 gap-y-1 text-slate-500 mb-2 border-b border-slate-50 pb-2"><span>EK:</span><span class="text-right">${secEK.toLocaleString('de-DE')}€</span><span>+Marge:</span><span class="text-right text-brand-primary">${margin.toLocaleString('de-DE')}€</span><span class="font-bold">VK:</span><span class="text-right font-bold">${finalVK.toLocaleString('de-DE')}€</span></div>` : ''}<div class="mb-2"><select onchange="App.updateSectionConfig(${i},'type',this.value)" class="w-full border rounded text-xs p-1"><option value="standard" ${s.config.type==='standard'?'selected':''}>Standard</option><option value="optional" ${s.config.type==='optional'?'selected':''}>Optional</option><option value="alternative" ${s.config.type==='alternative'?'selected':''}>Alternativ</option></select></div><div class="flex gap-4 mb-2"><label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" ${s.config.hidePrices?'checked':''} onchange="App.updateSectionConfig(${i},'hidePrices',this.checked)"><span>Hide</span></label><label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" ${s.config.mode==='pauschal'?'checked':''} onchange="App.updateSectionConfig(${i},'mode',this.checked)"><span>Pausch</span></label></div>${s.config.mode==='pauschal' ? `<input type="number" value="${s.config.pauschalPrice}" onchange="App.updateSectionConfig(${i},'pauschalPrice',this.value)" class="w-full border rounded p-1 font-mono text-right font-bold">` : `<div class="mt-1 flex items-center gap-2"><span class="font-bold text-brand-primary">Marge</span><input type="number" value="${s.config.margin.value}" onchange="App.updateSectionConfig(${i},'marginVal',this.value)" class="w-12 border rounded px-1 text-right"><select onchange="App.updateSectionConfig(${i},'marginType',this.value)" class="border rounded"><option value="fixed" ${s.config.margin.type==='fixed'?'selected':''}>€</option><option value="percent" ${s.config.margin.type==='percent'?'selected':''}>%</option></select></div>`}</div>`;
+                            <div class="md:col-span-1">
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Straße & Nr. <span class="text-red-500">*</span></label>
+                                <input type="text" name="street" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">PLZ <span class="text-red-500">*</span></label>
+                                <input type="text" name="postcode" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Ort <span class="text-red-500">*</span></label>
+                                <input type="text" name="city" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Telefon <span class="text-slate-400 font-normal normal-case">(Optional)</span></label>
+                                <input type="text" name="telephone" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Mobil <span class="text-slate-400 font-normal normal-case">(Optional)</span></label>
+                                <input type="text" name="phone" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">E-Mail <span class="text-slate-400 font-normal normal-case">(Optional)</span></label>
+                                <input type="email" name="email" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                            </div>
+                            
+                            <div class="md:col-span-3">
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Berater/Monteur <span class="text-slate-400 font-normal normal-case">(Optional)</span></label>
+                                <input type="text" name="contact_person" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                            </div>
+
+                            <!-- Abweichender Standort -->
+                            <div class="md:col-span-3 mt-2 pt-4 border-t border-slate-100">
+                                <h4 class="text-xs font-bold text-slate-500 uppercase mb-3">Standort der Anlage (falls abweichend)</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <input type="text" name="alt_street" placeholder="Straße/Nr." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                    </div>
+                                    <div>
+                                        <input type="text" name="alt_postcode" placeholder="PLZ" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                    </div>
+                                    <div>
+                                        <input type="text" name="alt_city" placeholder="Ort" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GEBÄUDE -->
+                    <div id="wp-sec-gebaeude" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="gebaeude">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('wp-content-gebaeude', 'wp-icon-gebaeude')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-buildings text-brand-green"></i> Gebäudeeigenschaften</span>
+                            <i id="wp-icon-gebaeude" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="wp-content-gebaeude" class="p-5">
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                <div class="col-span-2 md:col-span-1">
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Gebäudeart <span class="text-red-500">*</span></label>
+                                    <select name="building_type" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                        <option value="">Bitte wählen...</option>
+                                        <option value="Einfamilienhaus">Einfamilienhaus</option>
+                                        <option value="Reihenmittelhaus">Reihenmittelhaus</option>
+                                        <option value="Doppelhaushälfte">Doppelhaushälfte</option>
+                                        <option value="Mehrfamilienhaus">Mehrfamilienhaus</option>
+                                        <option value="Gewerbe">Gewerbe</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Wohneinheiten (Anzahl)</label>
+                                    <input type="number" name="number_we" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Baujahr <span class="text-red-500">*</span></label>
+                                    <input type="number" name="house_year" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Wohnfläche (m²) <span class="text-red-500">*</span></label>
+                                    <input type="number" name="living_space" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nutzfläche (m²) <span class="text-slate-400 font-normal normal-case">(Optional)</span></label>
+                                    <input type="number" name="unusable_space" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Personen pro Haushalt</label>
+                                    <input type="number" name="number_people" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Anzahl Bäder</label>
+                                    <input type="number" name="bathroom_count" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                </div>
+                            </div>
+                            
+                            <!-- Badewanne / Schwimmbad -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-100">
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                    <h4 class="font-bold text-sm mb-2">Badewanne</h4>
+                                    <div class="flex items-center gap-4 mb-2">
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_bathtub" value="Nein" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_bathtub" value="Ja" class="custom-cb focus:ring-brand-green"> Ja, wie viele?</label>
+                                        <input type="number" name="bathtub_count" class="w-16 p-1 border rounded focus:ring-brand-green outline-none">
+                                    </div>
+                                    <input type="text" name="note_bathtubDim" placeholder="Abmessung" class="w-full p-2 border rounded-lg text-sm focus:ring-brand-green outline-none">
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                    <h4 class="font-bold text-sm mb-2">Schwimmbad</h4>
+                                    <div class="flex items-center gap-4">
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_pool" value="Nein" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_pool" value="Ja" class="custom-cb focus:ring-brand-green"> Ja, wie viel m³?</label>
+                                        <input type="number" name="note_poolVolume" class="w-20 p-1 border rounded focus:ring-brand-green outline-none">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AKTUELLE HEIZUNG -->
+                    <div id="wp-sec-heizung" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="heizung">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('wp-content-heizung', 'wp-icon-heizung')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-fire text-brand-green"></i> Aktuelle Heizung</span>
+                            <i id="wp-icon-heizung" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="wp-content-heizung" class="p-5">
+                            <div class="mb-4 flex items-center gap-4">
+                                <label class="text-xs font-bold text-slate-600 uppercase">Kamin vorhanden?</label>
+                                <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="fireplace" value="1" class="custom-cb focus:ring-brand-green"> Ja</label>
+                                <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="fireplace" value="0" class="custom-cb focus:ring-brand-green"> Nein</label>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Art <span class="text-red-500">*</span></label>
+                                    <select name="heating_system_type" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                        <option value="">Bitte wählen...</option><option value="Öl">Öl</option><option value="Gas">Gas</option><option value="Pellets">Pellets</option><option value="Sonstiges">Sonstiges</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Leistung (kW) <span class="text-red-500">*</span></label>
+                                    <input type="number" name="old_heating_power" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Aufstellort Geschoss</label>
+                                    <select name="installation_location" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                        <option value="">Wählen...</option>
+                                        <option value="KG">KG</option>
+                                        <option value="EG">EG</option>
+                                        <option value="OG">OG</option>
+                                        <option value="DG">DG</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Besonderheiten vorhanden</label>
+                                <input type="text" name="heating_notes" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                            </div>
+
+                            <!-- Leitungen -->
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 mt-4 mb-4">
+                                <h4 class="font-bold text-sm mb-3 text-slate-700">Welche Leitungen sind verlegt?</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                    <div><span class="block text-xs font-bold text-slate-500 uppercase mb-1">Heizung:</span>
+                                        <select name="pipe_system_material" class="w-full p-2 border rounded-lg mb-1 outline-none focus:border-brand-green"><option value="">Material...</option><option value="Kupfer">Kupfer</option><option value="Kunststoff">Kunststoff</option></select>
+                                        <input type="text" name="heating_pipe_dimension" placeholder="Dimension" class="w-full p-2 border rounded-lg outline-none focus:border-brand-green">
+                                    </div>
+                                    <div><span class="block text-xs font-bold text-slate-500 uppercase mb-1">Kalt-Wasser / Warm-Wasser:</span>
+                                        <input type="text" name="water_pipe_dimension" placeholder="Dimension" class="w-full p-2 border rounded-lg outline-none focus:border-brand-green mt-1">
+                                    </div>
+                                    <div><span class="block text-xs font-bold text-slate-500 uppercase mb-1">Zirkulation:</span>
+                                        <input type="text" name="circulation_pipe_dimension" placeholder="Dimension" class="w-full p-2 border rounded-lg outline-none focus:border-brand-green mt-1">
+                                    </div>
+                                </div>
+                                <div class="mt-4 flex items-center gap-4">
+                                    <label class="text-xs font-bold text-slate-600 uppercase">Ein-Rohr-System vorhanden?</label>
+                                    <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_einRohr" value="Ja" class="custom-cb focus:ring-brand-green"> Ja</label>
+                                    <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="note_einRohr" value="Nein" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                </div>
+                            </div>
+
+                            <!-- Solar & Warmwasser -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                    <h4 class="font-bold text-sm mb-3 text-slate-700">Thermische Solaranlage vorhanden?</h4>
+                                    <div class="flex items-center gap-4 mb-3">
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="solar_thermal" value="1" class="custom-cb focus:ring-brand-green"> Ja</label>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="solar_thermal" value="0" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold text-slate-500 uppercase">Anzahl Module/Fläche:</span>
+                                        <input type="number" name="solar_thermal_area" class="w-20 p-1.5 border rounded-lg outline-none focus:ring-brand-green">
+                                    </div>
+                                </div>
+                                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                    <h4 class="font-bold text-sm mb-3 text-slate-700">Warmwasser Aufbereitung</h4>
+                                    <div class="flex items-center gap-4 mb-3">
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="hot_water_generation" value="direkt" class="custom-cb focus:ring-brand-green"> direkt</label>
+                                        <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="hot_water_generation" value="indirekt" class="custom-cb focus:ring-brand-green"> indirekt</label>
+                                    </div>
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <span class="text-xs font-bold text-slate-500 uppercase">Fassungsvermögen (l):</span>
+                                        <input type="number" name="hot_water_tank_liters" class="w-24 p-1.5 border rounded-lg outline-none focus:ring-brand-green">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ETAGEN & ZUSTAND -->
+                    <div id="wp-sec-etagen" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="etagen">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('wp-content-etagen', 'wp-icon-etagen')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-thermometer-hot text-brand-green"></i> Heizkreise & Zustand</span>
+                            <i id="wp-icon-etagen" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="wp-content-etagen" class="p-5">
+                            
+                            <!-- ORIGINAL PDF KG/EG/OG/DG ETAGE GRID -->
+                            <h4 class="font-bold text-slate-700 mb-3 border-b border-slate-100 pb-2">Heizungen pro Etage</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div class="p-3 border rounded-xl bg-slate-50">
+                                    <h4 class="font-bold text-sm mb-2 text-brand-blue">Kellergeschoss (KG)</h4>
+                                    <div class="grid grid-cols-2 gap-2 text-sm">
+                                        <label class="cursor-pointer"><input type="radio" name="note_kgHeiz" value="beheizt" class="custom-cb focus:ring-brand-green"> beheizt</label>
+                                        <label class="cursor-pointer"><input type="radio" name="note_kgHeiz" value="nicht beheizt" class="custom-cb focus:ring-brand-green"> nicht beheizt</label>
+                                        <label class="cursor-pointer"><input type="checkbox" name="note_kgFbh" value="1" class="custom-cb focus:ring-brand-green"> Fussbodenheizung</label>
+                                        <label class="cursor-pointer"><input type="checkbox" name="note_kgHk" value="1" class="custom-cb focus:ring-brand-green"> Heizkörper</label>
+                                    </div>
+                                </div>
+                                <div class="p-3 border rounded-xl bg-slate-50">
+                                    <h4 class="font-bold text-sm mb-2 text-brand-blue">Erdgeschoss (EG)</h4>
+                                    <div class="grid grid-cols-2 gap-2 text-sm">
+                                        <label class="cursor-pointer"><input type="radio" name="note_egHeiz" value="beheizt" class="custom-cb focus:ring-brand-green"> beheizt</label>
+                                        <label class="cursor-pointer"><input type="radio" name="note_egHeiz" value="nicht beheizt" class="custom-cb focus:ring-brand-green"> nicht beheizt</label>
+                                        <label class="cursor-pointer"><input type="checkbox" name="note_egFbh" value="1" class="custom-cb focus:ring-brand-green"> Fussbodenheizung</label>
+                                        <label class="cursor-pointer"><input type="checkbox" name="note_egHk" value="1" class="custom-cb focus:ring-brand-green"> Heizkörper</label>
+                                    </div>
+                                </div>
+                                <div class="p-3 border rounded-xl bg-slate-50">
+                                    <h4 class="font-bold text-sm mb-2 text-brand-blue">Obergeschoss (OG)</h4>
+                                    <div class="grid grid-cols-2 gap-2 text-sm">
+                                        <label class="cursor-pointer"><input type="radio" name="note_ogHeiz" value="beheizt" class="custom-cb focus:ring-brand-green"> beheizt</label>
+                                        <label class="cursor-pointer"><input type="radio" name="note_ogHeiz" value="nicht beheizt" class="custom-cb focus:ring-brand-green"> nicht beheizt</label>
+                                        <label class="cursor-pointer"><input type="checkbox" name="note_ogFbh" value="1" class="custom-cb focus:ring-brand-green"> Fussbodenheizung</label>
+                                        <label class="cursor-pointer"><input type="checkbox" name="note_ogHk" value="1" class="custom-cb focus:ring-brand-green"> Heizkörper</label>
+                                    </div>
+                                </div>
+                                <div class="p-3 border rounded-xl bg-slate-50">
+                                    <h4 class="font-bold text-sm mb-2 text-brand-blue">Dachgeschoss (DG)</h4>
+                                    <div class="grid grid-cols-2 gap-2 text-sm">
+                                        <label class="cursor-pointer"><input type="radio" name="note_dgHeiz" value="beheizt" class="custom-cb focus:ring-brand-green"> beheizt</label>
+                                        <label class="cursor-pointer"><input type="radio" name="note_dgHeiz" value="nicht beheizt" class="custom-cb focus:ring-brand-green"> nicht beheizt</label>
+                                        <label class="cursor-pointer"><input type="checkbox" name="note_dgFbh" value="1" class="custom-cb focus:ring-brand-green"> Fussbodenheizung</label>
+                                        <label class="cursor-pointer"><input type="checkbox" name="note_dgHk" value="1" class="custom-cb focus:ring-brand-green"> Heizkörper</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-slate-500 uppercase w-24">Heizkreis 1 Vorlauf °C:</span>
+                                    <input type="number" name="flow_temperature" placeholder="Vorlauf °C" class="w-1/2 p-2 border rounded-lg focus:ring-brand-green outline-none">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-slate-500 uppercase w-24">Heizkreis 2 Vorlauf °C:</span>
+                                    <input type="number" name="note_flow_temperature_2" placeholder="Vorlauf °C" class="w-1/2 p-2 border rounded-lg focus:ring-brand-green outline-none">
+                                </div>
+                            </div>
+
+                            <h4 class="font-bold text-slate-700 mb-3 border-b border-slate-100 pb-2">Zustand Fussbodenheizung / Heizkörper</h4>
+                            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                    <span class="text-sm font-medium">Regler/Thermostate für Kühlung geeignet?</span>
+                                    <div class="flex gap-4">
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_reglerKuehlung" value="Ja" class="custom-cb focus:ring-brand-green"> ja</label>
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_reglerKuehlung" value="Nein" class="custom-cb focus:ring-brand-green"> nein</label>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                    <span class="text-sm font-medium">Heizkreisverteiler für hydr. Abgleich geeignet?</span>
+                                    <div class="flex gap-4">
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_hkvAbgleich" value="Ja" class="custom-cb focus:ring-brand-green"> ja</label>
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_hkvAbgleich" value="Nein" class="custom-cb focus:ring-brand-green"> nein</label>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                    <span class="text-sm font-medium">Stellantriebe für hydr. Abgleich geeignet?</span>
+                                    <div class="flex gap-4">
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_stellantriebAbgleich" value="Ja" class="custom-cb focus:ring-brand-green"> ja</label>
+                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_stellantriebAbgleich" value="Nein" class="custom-cb focus:ring-brand-green"> nein</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NEUE ANLAGE -->
+                    <div id="wp-sec-anlage" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="anlage">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('wp-content-anlage', 'wp-icon-anlage')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-package text-brand-green"></i> Neue Anlage / Aufstellmöglichkeit</span>
+                            <i id="wp-icon-anlage" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="wp-content-anlage" class="p-5">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Neue Wärmequelle <span class="text-red-500">*</span></label>
+                                    <select name="objective" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green">
+                                        <option value="">Bitte wählen...</option>
+                                        <option value="Luft-Wasser Wärmepumpe">Luft-Wasser Wärmepumpe</option>
+                                        <option value="Sole-Wasser Wärmepumpe">Sole-Wasser Wärmepumpe</option>
+                                        <option value="Abluft-Wärmepumpe">Abluft-Wärmepumpe</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-xs font-bold text-slate-600 uppercase">Interesse an Passiv-Kühlung?</span>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_passivKuehlung" value="Ja" class="custom-cb focus:ring-brand-green"> ja</label>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_passivKuehlung" value="Nein" class="custom-cb focus:ring-brand-green"> nein</label>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3 mb-4">
+                                <div class="flex flex-wrap items-center gap-4">
+                                    <span class="text-xs font-bold text-slate-600 uppercase w-20">Lüftung:</span>
+                                    <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="ventilation_type" value="vorhanden Ja" class="custom-cb focus:ring-brand-green"> vorhanden Ja</label>
+                                    <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="ventilation_type" value="Nein" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                    <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="ventilation_type" value="geplant zentral" class="custom-cb focus:ring-brand-green"> geplant zentral</label>
+                                    <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="ventilation_type" value="geplant dezentral" class="custom-cb focus:ring-brand-green"> geplant dezentral</label>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-xs font-bold text-slate-600 uppercase w-48">Platz für VVM 500 vorhanden?</span>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_platzVvm500" value="Ja" class="custom-cb focus:ring-brand-green"> Ja</label>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_platzVvm500" value="Nein" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-xs font-bold text-slate-600 uppercase w-48">Platz für WM S320 vorhanden?</span>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_platzWm320" value="Ja" class="custom-cb focus:ring-brand-green"> Ja</label>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_platzWm320" value="Nein" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-xs font-bold text-slate-600 uppercase w-48">Müssen Einzelkomp. verwendet werden?</span>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_einzelKomponenten" value="Ja" class="custom-cb focus:ring-brand-green"> Ja</label>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="note_einzelKomponenten" value="Nein" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EINBRINGMASSE & ZUWEGUNG -->
+                    <div id="wp-sec-einbringung" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="einbringung">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('wp-content-einbringung', 'wp-icon-einbringung')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-ruler text-brand-green"></i> Einbringmaße & Zuwegung</span>
+                            <i id="wp-icon-einbringung" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="wp-content-einbringung" class="p-5">
+                            
+                            <!-- ORIGINAL PDF EINBRINGMASSE -->
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-6">
+                                <h4 class="font-bold text-sm mb-3 flex items-center gap-4">
+                                    Einbringmaße Zuwegung Heizraum
+                                    <div class="flex gap-2">
+                                        <label class="font-normal text-sm cursor-pointer flex items-center gap-1"><input type="radio" name="note_zuwegungHeizraum" value="KG" class="custom-cb focus:ring-brand-green"> KG</label>
+                                        <label class="font-normal text-sm cursor-pointer flex items-center gap-1"><input type="radio" name="note_zuwegungHeizraum" value="EG" class="custom-cb focus:ring-brand-green"> EG</label>
+                                    </div>
+                                </h4>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-xs font-bold text-slate-500 uppercase">Min. Breite zur Installation:</span>
+                                    <input type="number" name="door_width_for_installation" placeholder="Breite (cm)" class="w-1/3 p-2 border rounded-lg focus:ring-brand-green outline-none">
+                                </div>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-3">
+                                    <div><span class="block text-[10px] text-slate-500">Türmaße (1)</span>
+                                        <div class="flex gap-1"><input type="number" name="note_t1Breite" placeholder="Br." class="w-1/2 p-1.5 border rounded outline-none"><input type="number" name="note_t1Hoehe" placeholder="H." class="w-1/2 p-1.5 border rounded outline-none"></div>
+                                    </div>
+                                    <div><span class="block text-[10px] text-slate-500">Türmaße (2)</span>
+                                        <div class="flex gap-1"><input type="number" name="note_t2Breite" placeholder="Br." class="w-1/2 p-1.5 border rounded outline-none"><input type="number" name="note_t2Hoehe" placeholder="H." class="w-1/2 p-1.5 border rounded outline-none"></div>
+                                    </div>
+                                    <div><span class="block text-[10px] text-slate-500">Türmaße (3)</span>
+                                        <div class="flex gap-1"><input type="number" name="note_t3Breite" placeholder="Br." class="w-1/2 p-1.5 border rounded outline-none"><input type="number" name="note_t3Hoehe" placeholder="H." class="w-1/2 p-1.5 border rounded outline-none"></div>
+                                    </div>
+                                    <div><span class="block text-[10px] text-slate-500">Türmaße (4)</span>
+                                        <div class="flex gap-1"><input type="number" name="note_t4Breite" placeholder="Br." class="w-1/2 p-1.5 border rounded outline-none"><input type="number" name="note_t4Hoehe" placeholder="H." class="w-1/2 p-1.5 border rounded outline-none"></div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-3 mt-4 border-t border-slate-200 pt-3">
+                                    <span class="text-xs font-bold text-slate-500 uppercase">Treppen:</span>
+                                    <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_treppen" value="Nein" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                    <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_treppen" value="Ja" class="custom-cb focus:ring-brand-green"> Ja / Art:</label>
+                                    <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_treppenArt" value="gradeläufig" class="custom-cb focus:ring-brand-green"> gradeläufig</label>
+                                    <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_treppenArt" value="L-Form" class="custom-cb focus:ring-brand-green"> L-Form</label>
+                                    <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_treppenArt" value="U-Form" class="custom-cb focus:ring-brand-green"> U-Form</label>
+                                    <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_treppenArt" value="Wendel" class="custom-cb focus:ring-brand-green"> Wendel</label>
+                                    <input type="number" name="note_treppenBreite" placeholder="Breite (cm)" class="w-24 p-1.5 border rounded-lg focus:ring-brand-green outline-none ml-2">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div class="flex flex-col gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                    <span class="text-xs font-bold text-slate-500 uppercase">Länge AE zu IE (Weg Länge):</span>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <input type="number" name="heat_pump_pipe_length" class="w-20 p-1.5 border rounded-lg focus:ring-brand-green outline-none"><span class="text-sm">m</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-2">
+                                        <span class="text-sm">Anschluss:</span>
+                                        <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_anschlussAussen" value="Wand" class="custom-cb focus:ring-brand-green"> Wand</label>
+                                        <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_anschlussAussen" value="Boden" class="custom-cb focus:ring-brand-green"> Boden</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="border border-brand-orange/30 bg-brand-orange/5 p-4 rounded-xl">
+                                <h4 class="font-bold text-sm mb-3 flex items-center gap-4 text-brand-orange">
+                                    Alternative Aufstellmöglichkeit
+                                    <div class="flex gap-2">
+                                        <label class="font-normal text-sm cursor-pointer flex items-center gap-1 text-slate-700"><input type="radio" name="note_alternativeAufstellung" value="Ja" class="custom-cb focus:ring-brand-green"> vorhanden Ja</label>
+                                        <label class="font-normal text-sm cursor-pointer flex items-center gap-1 text-slate-700"><input type="radio" name="note_alternativeAufstellung" value="Nein" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                    </div>
+                                </h4>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-xs font-bold text-slate-500 uppercase">Zuwegung Dachgeschoss:</span>
+                                    <input type="number" name="note_altBreite" placeholder="Breite (cm)" class="w-1/3 p-2 border rounded-lg focus:ring-brand-green outline-none bg-white">
+                                    <input type="number" name="note_altHoehe" placeholder="Höhe (cm)" class="w-1/3 p-2 border rounded-lg focus:ring-brand-green outline-none bg-white">
+                                </div>
+                                <div class="flex gap-4 text-sm mb-3">
+                                    <div><span class="block text-[10px] text-slate-500">Türmaße (1)</span>
+                                        <div class="flex gap-1"><input type="number" name="note_altT1Breite" placeholder="Br." class="w-20 p-1.5 border rounded outline-none bg-white"><input type="number" name="note_altT1Hoehe" placeholder="H." class="w-20 p-1.5 border rounded outline-none bg-white"></div>
+                                    </div>
+                                    <div><span class="block text-[10px] text-slate-500">Türmaße (2)</span>
+                                        <div class="flex gap-1"><input type="number" name="note_altT2Breite" placeholder="Br." class="w-20 p-1.5 border rounded outline-none bg-white"><input type="number" name="note_altT2Hoehe" placeholder="H." class="w-20 p-1.5 border rounded outline-none bg-white"></div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-3 border-t border-slate-200/50 pt-3">
+                                    <span class="text-xs font-bold text-slate-500 uppercase">Treppen:</span>
+                                    <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_altTreppen" value="Nein" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                    <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_altTreppen" value="Ja" class="custom-cb focus:ring-brand-green"> Ja / Art:</label>
+                                    <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_altTreppenArt" value="Wendeltreppe" class="custom-cb focus:ring-brand-green"> Wendeltreppe</label>
+                                    <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_altTreppenArt" value="geradeläufige Treppe" class="custom-cb focus:ring-brand-green"> geradeläufige Treppe</label>
+                                    <input type="number" name="note_altTreppenBreite" placeholder="Breite (cm)" class="w-24 p-1.5 border rounded-lg focus:ring-brand-green outline-none ml-2 bg-white">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ELEKTRO -->
+                    <div id="wp-sec-elektro" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="elektro">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('wp-content-elektro', 'wp-icon-elektro')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-plug text-brand-green"></i> Elektroinstallation</span>
+                            <i id="wp-icon-elektro" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="wp-content-elektro" class="p-5">
+                            <div class="grid grid-cols-1 gap-6">
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                        <span class="text-sm font-medium">Interesse an SG Ready Schnittstelle? (EnWG 14a)</span>
+                                        <div class="flex gap-3">
+                                            <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="enwg_14a_ready" value="1" class="custom-cb focus:ring-brand-green"> ja</label>
+                                            <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="enwg_14a_ready" value="0" class="custom-cb focus:ring-brand-green"> nein</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="text-sm font-medium">Internet am Aufstellort (WLAN/LAN)?</span>
+                                            <div class="flex gap-3">
+                                                <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="network_wlan" value="Ja" class="custom-cb focus:ring-brand-green"> Ja</label>
+                                                <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="network_wlan" value="Nein" class="custom-cb focus:ring-brand-green"> Nein</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-2">
+                                            <span class="text-sm font-medium w-48">Stromzähler Anzahl (WP Zähler vorh.?):</span>
+                                            <input type="number" name="meter_count" class="w-16 p-1 border rounded outline-none focus:ring-brand-green">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SONSTIGE ARBEITEN & BENÖTIGTE ELEMENTE -->
+                    <div id="wp-sec-sonstiges" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="sonstiges">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('wp-content-sonstiges', 'wp-icon-sonstiges')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-wrench text-brand-green"></i> Sonstige Arbeiten & Elemente</span>
+                            <i id="wp-icon-sonstiges" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="wp-content-sonstiges" class="p-5">
+                            <!-- Arbeiten -->
+                            <div class="space-y-4 mb-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="flex flex-col gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                        <span class="text-sm font-medium">Fundament & Erdarbeiten durch:</span>
+                                        <div class="flex gap-2">
+                                            <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="groundwork" value="Solar Aspekt" class="custom-cb focus:ring-brand-green"> Solar Aspekt</label>
+                                            <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="groundwork" value="Kunde" class="custom-cb focus:ring-brand-green"> Kunde</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                    <h4 class="font-bold text-sm mb-3">Kondenswasser AE</h4>
+                                    <div class="flex flex-wrap gap-4 mb-3">
+                                        <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_kondenswasser" value="Sickergrube" class="custom-cb focus:ring-brand-green"> Sickergrube</label>
+                                        <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_kondenswasser" value="Abflussrohr ins Erdreich" class="custom-cb focus:ring-brand-green"> Abflussrohr ins Erdreich</label>
+                                        <label class="cursor-pointer flex items-center gap-1 text-sm"><input type="radio" name="note_kondenswasser" value="Anschluss im Haus" class="custom-cb focus:ring-brand-green"> Anschluss im Haus</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SCHALLBERECHNUNG -->
+                    <div id="wp-sec-schall" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="schall">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('wp-content-schall', 'wp-icon-schall')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-waves text-brand-green"></i> Infos zur Schallberechnung</span>
+                            <i id="wp-icon-schall" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="wp-content-schall" class="p-5">
+                            <p class="text-xs text-slate-400 mb-4 uppercase tracking-wide">Speziell für Kunden in Bad Homburg bzw. nach regionalen Vorgaben</p>
+                            
+                            <div class="space-y-5">
+                                <div>
+                                    <h4 class="font-bold text-sm mb-2 text-slate-700">Aufstellgebiet:</h4>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallGebiet" value="Industriegebiet" class="custom-cb focus:ring-brand-green"> Industriegebiet</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallGebiet" value="urbanes Gebiet" class="custom-cb focus:ring-brand-green"> urbanes Gebiet</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallGebiet" value="Allg. Wohngebiet" class="custom-cb focus:ring-brand-green"> Allg. Wohngebiet / Kleinsiedlung</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallGebiet" value="Gewerbegebiet" class="custom-cb focus:ring-brand-green"> Gewerbegebiet</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallGebiet" value="Kern-, Dorf-, Mischgebiet" class="custom-cb focus:ring-brand-green"> Kern-, Dorf-, Mischgebiet</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallGebiet" value="reines Wohngebiet" class="custom-cb focus:ring-brand-green"> reines Wohngebiet</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm md:col-span-3"><input type="radio" name="note_schallGebiet" value="Kurgebiet" class="custom-cb focus:ring-brand-green"> Kurgebiet</label>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-bold text-sm mb-2 text-slate-700">Aufstellort (Distanz zu Wänden):</h4>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallOrt" value="Freistehend >3m" class="custom-cb focus:ring-brand-green"> Freistehend (&gt;3m von Wand)</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallOrt" value="Wand <3m" class="custom-cb focus:ring-brand-green"> An Wand (&lt;3m)</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallOrt" value="Ecke <3m" class="custom-cb focus:ring-brand-green"> In Ecke (&lt;3m)</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallOrt" value="Wand <5m" class="custom-cb focus:ring-brand-green"> An Wand (&lt;5m)</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallOrt" value="Zwischen Wänden <5m" class="custom-cb focus:ring-brand-green"> Zwischen Wänden (&lt;5m)</label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-bold text-sm mb-2 text-slate-700">Abschirmung:</h4>
+                                    <div class="flex flex-wrap gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallAbschirmung" value="Sichtkontakt" class="custom-cb focus:ring-brand-green"> Sichtkontakt</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallAbschirmung" value="kein Sichtkontakt" class="custom-cb focus:ring-brand-green"> kein Sichtkontakt</label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="radio" name="note_schallAbschirmung" value="auf abgewandter Seite" class="custom-cb focus:ring-brand-green"> auf abgewandter Seite</label>
+                                        <div class="flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0 md:ml-4">
+                                            <span class="text-xs">Maßgeblicher Immissionsort (m):</span>
+                                            <input type="number" name="note_schallImmissionOrt" class="w-20 p-1.5 border rounded outline-none focus:ring-brand-green">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ZUSÄTZLICHE NOTIZEN MIT DIKTIERFUNKTION -->
+                    <div id="wp-sec-notizen" class="bg-white rounded-2xl shadow-sm border border-slate-200 scroll-mt-offset" data-section="notizen">
+                        <h3 class="font-bold text-slate-800 text-lg p-5 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition rounded-t-2xl border-b border-slate-100" onclick="toggleSection('wp-content-notizen', 'wp-icon-notizen')">
+                            <span class="flex items-center gap-2"><i class="ph-fill ph-notebook text-brand-green"></i> Zusätzliche Notizen</span>
+                            <i id="wp-icon-notizen" class="ph-bold ph-caret-up text-slate-400 transition-transform"></i>
+                        </h3>
+                        <div id="wp-content-notizen" class="p-5">
+                            <div class="relative group">
+                                <textarea id="wp-notes" name="note" rows="4" class="w-full p-4 pr-14 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-green resize-none transition-shadow" placeholder="Tippen oder auf das Mikrofon klicken zum Diktieren..."></textarea>
+                                <button type="button" onclick="toggleDictation('wp-notes', 'wp-mic-icon')" class="absolute top-3 right-3 p-2 bg-white rounded-xl shadow-sm border border-slate-100 text-slate-400 hover:text-brand-green hover:border-brand-green/30 transition active:scale-95" title="Spracheingabe starten/stoppen">
+                                    <i id="wp-mic-icon" class="ph-bold ph-microphone text-2xl"></i>
+                                </button>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-2"><i class="ph-fill ph-info"></i> Nutze das Mikrofon, um Besonderheiten schnell einzusprechen.</p>
+                        </div>
+                    </div>
+
+                    <button id="btn-submit-wp" type="submit" class="w-full mt-4 bg-brand-green hover:opacity-90 text-white p-4 rounded-2xl font-bold flex justify-center items-center gap-2 shadow-lg shadow-brand-green/30 transition active:scale-95 text-lg">
+                        <i class="ph-bold ph-floppy-disk text-2xl"></i> WP Aufmaß Speichern
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- DATA STATE ---
+        const currentUser = "Monteur Max"; // Simulation eines eingeloggten Benutzers
+
+        // Mock JSON für die Materialliste
+        const sampleMaterialData = [
+            {
+                "id":"s1776933342479",
+                "title":"1. Hauptpositionen",
+                "items":[
+                    {
+                        "name":"MODUL LONGI HI-MOS10 LR7-54HJD MIT 495 W",
+                        "img":"https://placehold.co/150x150/74b2d4/fff?text=Modul",
+                        "qty":3,
+                        "unit":"Set",
+                        "subItems":[
+                            { "name":"alpex T-Stück reduziert 32 x 20 x 32", "img":"https://placehold.co/80x80/cde8ea/000?text=T-Stueck", "qty":3, "unit":"cm" },
+                            { "name":"alpex Übergang mit IG 20mm x 3/4\"", "img":"https://placehold.co/80x80/cde8ea/000?text=Uebergang", "qty":2, "unit":"cm" },
+                            { "name":"Bosch Membran-Ausdehnungsgefäß 50 l MAC50", "img":"https://placehold.co/80x80/cde8ea/000?text=MAG50", "qty":2, "unit":"cm" }
+                        ]
+                    },
+                    {
+                        "name":"Set Previums",
+                        "img":"https://placehold.co/150x150/74b2d4/fff?text=Set%20Previums",
+                        "qty":2,
+                        "unit":"Set",
+                        "subItems":[
+                            { "name":"NIBE Ladepumpe CPD 11-25/75", "img":"https://placehold.co/80x80/cde8ea/000?text=Ladepumpe", "qty":2, "unit":"Stk" },
+                            { "name":"COSMO Hochleistungsspeicher HL300", "img":"https://placehold.co/80x80/cde8ea/000?text=HL300", "qty":2, "unit":"Stk" },
+                            { "name":"COSMO Pufferspeicher Typ CPS 200", "img":"https://placehold.co/80x80/cde8ea/000?text=CPS200", "qty":2, "unit":"Stk" }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        let records = [
+            {
+                id: '1',
+                type: 'PV',
+                date: '2026-04-28T10:00:00Z',
+                customerName: 'Max Mustermann',
+                materials: JSON.parse(JSON.stringify(sampleMaterialData)), 
+                images: [],
+                history: [
+                    { action: 'Aufmaß erstellt', user: 'System Admin', date: '2026-04-28T10:00:00Z' }
+                ],
+                data: { name: 'Max', lastname: 'Mustermann', street: 'Musterstraße 1', city: 'Berlin', postcode: '12345', kwp_size: '10', module_count: '25', objective: 'Neuanlage', roofs: [
+                    { roof_type: 'Satteldach', roof_covering: 'Ziegel', roof_height: '5.5', rafter_reinforcement_needed: '0' }
+                ]}
+            },
+            {
+                id: '2',
+                type: 'WP',
+                date: '2026-04-29T09:30:00Z',
+                customerName: 'Erika Schmidt',
+                materials: JSON.parse(JSON.stringify(sampleMaterialData)),
+                images: [],
+                history: [
+                    { action: 'Aufmaß erstellt', user: 'System Admin', date: '2026-04-29T09:30:00Z' }
+                ],
+                data: { name: 'Erika', lastname: 'Schmidt', street: 'Waldweg 5', city: 'München', postcode: '67890', building_type: 'Einfamilienhaus', house_year: '2010', living_space: '150', objective: 'Luft-Wasser Wärmepumpe' }
+            }
+        ];
+
+        let currentRoofIndex = 0;
+        let currentRecordIdForMaterials = null;
+        let currentRecordIdForImages = null;
+        let currentRecordIdForHistory = null;
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderList();
+            initProgressListeners();
+        });
+
+        // --- HISTORY LOGIC ---
+        function addHistory(recordId, action) {
+            const r = records.find(x => x.id === recordId);
+            if (r) {
+                r.history = r.history || [];
+                r.history.unshift({ action: action, user: currentUser, date: new Date().toISOString() });
+            }
+        }
+
+        function openHistory(id) {
+            currentRecordIdForHistory = id;
+            const record = records.find(r => r.id === id);
+            if(!record) return;
+
+            const fullName = `${record.data.firma || ''} ${record.data.name || ''} ${record.data.lastname || ''}`.trim();
+            document.getElementById('history-project-name').innerText = `Projekt: ${fullName || 'Unbenannt'}`;
+            
+            const listContainer = document.getElementById('history-list-container');
+            listContainer.innerHTML = '';
+
+            if(!record.history || record.history.length === 0) {
+                listContainer.innerHTML = `<p class="text-center text-slate-500 py-10">Keine Historie vorhanden.</p>`;
+            } else {
+                let html = '<div class="relative border-l-2 border-brand-blue/30 ml-3 space-y-6 my-4">';
+                record.history.forEach(h => {
+                    const dateStr = new Date(h.date).toLocaleString('de-DE');
+                    html += `
+                        <div class="relative pl-6">
+                            <div class="absolute -left-[9px] top-1 w-4 h-4 bg-brand-blue rounded-full border-2 border-white shadow-sm"></div>
+                            <p class="text-sm font-bold text-slate-800">${h.action}</p>
+                            <p class="text-xs text-slate-500 mt-0.5"><i class="ph-fill ph-user"></i> ${h.user} &nbsp;&bull;&nbsp; <i class="ph-fill ph-clock"></i> ${dateStr}</p>
+                        </div>
+                    `;
                 });
-            },
+                html += '</div>';
+                listContainer.innerHTML = html;
+            }
 
-            // --- HELPERS ---
-            createThumbnail: (idx, label) => {
-                const nav = document.getElementById('nav-pane');
-                const wrap = document.createElement('div'); wrap.className = "thumb-wrapper";
-                const thumbBox = document.createElement('div'); thumbBox.className = "thumb-scale-box";
-                
-                let sourcePage;
-                if(idx === 1) sourcePage = document.getElementById('page-1');
-                else sourcePage = document.getElementById('position-pages-container').children[idx-2];
+            const modal = document.getElementById('modal-history');
+            const content = document.getElementById('modal-history-content');
+            modal.classList.remove('hidden');
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0');
+            modal.classList.add('opacity-100');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
 
-                if(sourcePage) {
-                    const clone = sourcePage.cloneNode(true);
-                    clone.removeAttribute('id');
-                    clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-                    const srcInputs = sourcePage.querySelectorAll('input, textarea, select');
-                    const dstInputs = clone.querySelectorAll('input, textarea, select');
-                    srcInputs.forEach((inp, i) => { if(dstInputs[i]) { dstInputs[i].value = inp.value; if(inp.checked) dstInputs[i].checked = true; } });
-                    thumbBox.appendChild(clone);
+        function closeHistory() {
+            const modal = document.getElementById('modal-history');
+            const content = document.getElementById('modal-history-content');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        // --- SPEECH TO TEXT (DICTATION) ---
+        let recognition = null;
+        let isRecording = false;
+        let activeInputId = null;
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = false;
+            recognition.lang = 'de-DE';
+
+            recognition.onresult = function(event) {
+                let finalTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript + ' ';
+                    }
                 }
+                if (activeInputId && finalTranscript) {
+                    const input = document.getElementById(activeInputId);
+                    input.value += (input.value ? ' ' : '') + finalTranscript;
+                    input.dispatchEvent(new Event('input')); // trigger forms progress logic
+                }
+            };
+
+            recognition.onend = function() {
+                resetMicIcons();
+                isRecording = false;
+                activeInputId = null;
+            };
+
+            recognition.onerror = function(event) {
+                console.error("Spracherkennung Fehler:", event.error);
+                resetMicIcons();
+                isRecording = false;
+                activeInputId = null;
+            };
+        }
+
+        function toggleDictation(inputId, iconId) {
+            if (!recognition) {
+                alert("Spracheingabe wird in diesem Browser/Gerät leider nicht unterstützt.");
+                return;
+            }
+
+            if (isRecording) {
+                recognition.stop();
+                return;
+            }
+
+            activeInputId = inputId;
+            try {
+                recognition.start();
+                isRecording = true;
                 
-                const lbl = document.createElement('div'); lbl.className = "thumb-label"; lbl.innerText = `Seite ${idx}`;
-                wrap.appendChild(thumbBox); wrap.appendChild(lbl);
-                wrap.onclick = () => { if(idx === 1) document.getElementById('page-1').scrollIntoView({behavior: 'smooth'}); else if(sourcePage) sourcePage.scrollIntoView({behavior: 'smooth'}); };
-                nav.appendChild(wrap);
-            },
-            
-            openPrintPreview: () => { document.getElementById('print-preview-modal').classList.remove('hidden'); App.renderQuotePage(true); },
-            addSection: (t, l) => { State.sections.push({ id: 's'+Date.now(), title: t||`${State.sections.length+1}. Neue Sektion`, description: l?'Dienstleistungen':'Beschreibung', config: { mode: 'standard', pauschalPrice: 0, type: 'standard', hidePrices: false, margin: { value: 0, type: 'fixed' } }, items: [], isLaborSection:l }); App.renderQuotePage(); return State.sections.length-1; },
-            renderSidebar: () => { const s=document.getElementById('sidebar-search').value.toLowerCase(); const c=document.getElementById('sidebar-list'); c.innerHTML=''; DB.products.filter(p=>p.name.toLowerCase().includes(s)).forEach(p=>{ const isSet=p.type==='set'; c.innerHTML+=`<div draggable="true" ondragstart="App.dragStart(event, '${p.id}')" class="bg-white border border-slate-200 p-2 rounded shadow-sm cursor-grab hover:border-brand-primary group relative flex items-center gap-2">${isSet?'<div class="absolute -top-1 -right-1 w-2 h-2 bg-brand-primary rounded-full"></div>':''}<div class="w-8 h-8 rounded bg-slate-100 flex-shrink-0 overflow-hidden"><img src="${p.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><div class="text-[10px] font-bold text-slate-800 truncate">${p.name}</div></div><button onclick="App.openSetModal('${p.id}')" class="text-slate-300 hover:text-brand-primary"><i class="fa-solid fa-info-circle"></i></button></div>`; }); },
-            switchSidebarTab: (tab) => { document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active')); document.getElementById('tab-' + tab).classList.add('active'); if(tab === 'lib') { document.getElementById('sidebar-content-lib').classList.remove('hidden'); document.getElementById('sidebar-content-tools').classList.add('hidden'); } else { document.getElementById('sidebar-content-lib').classList.add('hidden'); document.getElementById('sidebar-content-tools').classList.remove('hidden'); App.renderSidebarTools(); } },
-            renderSidebarTools: () => { const c = document.getElementById('tools-list'); c.innerHTML = ''; const defaults = ['https://placehold.co/100x100/green/white?text=Geprüft', 'https://placehold.co/100x100/red/white?text=Angebot', 'https://placehold.co/100x100/orange/white?text=Aktion']; [...defaults, ...State.toolsImages].forEach((src, idx) => { c.innerHTML += `<div draggable="true" ondragstart="App.dragStartTool(event, '${src}')" class="bg-white border rounded p-2 cursor-grab hover:shadow-md"><img src="${src}" class="w-full h-16 object-contain"></div>`; }); },
-            dragStart: (ev, id) => ev.dataTransfer.setData("text", id),
-            dragStartTool: (ev, src) => { ev.dataTransfer.setData("type", "tool"); ev.dataTransfer.setData("src", src); },
-            allowDrop: (ev) => { ev.preventDefault(); ev.currentTarget.classList.add('drag-over'); },
-            drop: (ev, sIdx) => { ev.preventDefault(); ev.currentTarget.classList.remove('drag-over'); const id = ev.dataTransfer.getData("text"); if(id) { App.handleItemAdd(sIdx, id); App.renderQuotePage(); } },
-            dropTool: (ev, pageIndex) => { ev.preventDefault(); const type = ev.dataTransfer.getData("type"); if(type !== 'tool') return; const src = ev.dataTransfer.getData("src"); const rect = ev.currentTarget.getBoundingClientRect(); State.placedImages.push({ id: Date.now(), src, pageIndex, x: ev.clientX - rect.left, y: ev.clientY - rect.top, width: 100 }); App.renderQuotePage(); },
-            removeToolImage: (id) => { State.placedImages = State.placedImages.filter(i => i.id !== id); App.renderQuotePage(); },
-            renderFloatingImages: (pageEl, pageIdx, forPrint) => { const images = State.placedImages.filter(img => img.pageIndex === pageIdx); images.forEach(img => { const el = document.createElement('div'); el.className = 'floating-element'; el.style.left = img.x + 'px'; el.style.top = img.y + 'px'; el.style.width = img.width + 'px'; el.innerHTML = `<img src="${img.src}" class="w-full h-auto">` + (forPrint?'':`<div class="delete-float" onclick="App.removeToolImage(${img.id})">x</div>`); if(!forPrint) { el.onmousedown = (e) => { e.stopPropagation(); let startX = e.clientX; let startY = e.clientY; let startLeft = img.x; let startTop = img.y; const onMove = (mv) => { el.style.left = (startLeft + mv.clientX - startX) + 'px'; el.style.top = (startTop + mv.clientY - startY) + 'px'; }; const onUp = (up) => { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); img.x = startLeft + up.clientX - startX; img.y = startTop + up.clientY - startY; }; document.addEventListener('mousemove', onMove); document.addEventListener('mouseup', onUp); }; } pageEl.appendChild(el); }); },
-            syncDocData: (field, value) => { if(field === 'offerId') State.offerId = value; if(field === 'custId') State.custId = value; document.querySelectorAll('.sync-offer-id').forEach(el => el.innerText = State.offerId); },
-            addManualItem: (sIdx) => { State.sections[sIdx].items.push({ name:'Neue Position', desc:'Beschreibung', price:0, ek:0, margin:0, qty:1, unit:'Stk', subItems:[] }); App.renderQuotePage(); },
-            handleItemAdd: (sIdx, id) => { const p=DB.products.find(x=>x.id===id); if(!p) return; if(p.type==='set') { const it={productId:id, name:p.name, desc:p.desc, img:p.img, price:p.price, ek:p.price*0.7, margin:30, active:true, qty:1, unit:p.unit, subItems:[]}; if(p.materials) p.materials.forEach(m=>it.subItems.push({...m,qty:1,ek:m.price*0.7,margin:30,active:true})); State.sections[sIdx].items.push(it); if(p.labor) { let lIdx=State.sections.findIndex(s=>s.isLaborSection); if(lIdx===-1) { lIdx=App.addSection('Montage & Dienstleistung', true); } State.sections[lIdx].items.push({name:`Montage: ${p.name}`, desc:'Fachgerechte Installation', price:0, ek:0, margin:0, active:true, qty:1, unit:'Psch', subItems:p.labor.map(l=>({...l, ek:l.price*0.8, margin:20, active:true}))}); } } else { State.sections[sIdx].items.push({name:p.name, desc:p.desc, img:p.img, price:p.price, ek:p.price*0.7, margin:30, active:true, qty:1, unit:p.unit, subItems:[]}); } App.renderQuotePage(); },
-            addSubItemFromDrag: (sIdx, iIdx, p) => { State.sections[sIdx].items[iIdx].subItems.push({name: p.name, price: p.price, qty: 1, unit: p.unit, ek: p.price*0.7, margin: 30, active: true}); App.renderQuotePage(); },
-            
-            // Drag Sort Handlers
-            dragStartPos: (ev, sIdx, iIdx) => { 
-                App.dragState = { type: 'pos', sIdx, iIdx };
-                ev.dataTransfer.effectAllowed = 'move';
-                // We set dummy text to ensure drag works in all browsers
-                ev.dataTransfer.setData("text/plain", JSON.stringify({type:'pos', sIdx, iIdx}));
-            },
-            
-            moveItem: (fromS, fromI, toS, toI) => {
-                if(fromS === toS && fromI === toI) return;
-                const item = State.sections[fromS].items[fromI];
-                State.sections[fromS].items.splice(fromI, 1);
-                // Adjust index if moving within same section downwards
-                if (fromS === toS && fromI < toI) { toI--; }
-                State.sections[toS].items.splice(toI, 0, item);
-                App.renderQuotePage();
-            },
+                resetMicIcons();
+                const icon = document.getElementById(iconId);
+                if (icon) {
+                    icon.classList.remove('ph-microphone', 'text-slate-400');
+                    icon.classList.add('ph-stop-circle', 'text-red-500', 'animate-pulse');
+                }
+            } catch(e) {
+                console.error("Konnte Spracherkennung nicht starten:", e);
+            }
+        }
 
-            // Updates
-            updateQty: (sIdx, iIdx, v, subIdx=null) => { if(subIdx!==null) State.sections[sIdx].items[iIdx].subItems[subIdx].qty=v; else State.sections[sIdx].items[iIdx].qty=v; App.renderQuotePage(); },
-            updateItemDetails: (sIdx, iIdx, f, v) => { const it=State.sections[sIdx].items[iIdx]; if(f==='price') it.price=parseFloat(v); else it[f]=v; App.renderQuotePage(); },
-            updateSubItemDetails: (sIdx, iIdx, subIdx, f, v) => { const s=State.sections[sIdx].items[iIdx].subItems[subIdx]; if(f==='price') s.price=parseFloat(v); else s.name=v; App.renderQuotePage(); },
-            updateSectionBenefit: (sIdx, f, v) => { if(f==='value') State.sections[sIdx].benefit.value=parseFloat(v)||0; else State.sections[sIdx].benefit.type=v; App.renderQuotePage(); },
-            updateSectionMeta: (sIdx, f, v) => { State.sections[sIdx][f]=v; App.renderCalculationSidebar(); },
-            updateSectionConfig: (sIdx, key, val) => { const conf = State.sections[sIdx].config; if(key === 'type') conf.type = val; else if (key === 'mode') conf.mode = val ? 'pauschal' : 'standard'; else if (key === 'hidePrices') conf.hidePrices = val; else if (key === 'pauschalPrice') conf.pauschalPrice = parseFloat(val) || 0; else if (key === 'marginVal') conf.margin.value = parseFloat(val) || 0; else if (key === 'marginType') conf.margin.type = val; App.renderQuotePage(); },
-            updateTaxRate: (v) => { State.taxRate = parseFloat(v) || 0; document.getElementById('lbl-tax-rate').innerText = State.taxRate; App.renderQuotePage(); },
-            removeItem: (sIdx, iIdx, subIdx=null) => { if(subIdx!==null) State.sections[sIdx].items[iIdx].subItems.splice(subIdx,1); else State.sections[sIdx].items.splice(iIdx,1); App.renderQuotePage(); },
-            addSubItem: (sIdx, iIdx) => { State.sections[sIdx].items[iIdx].subItems.push({name:"Position", price:0, ek:0, margin:0, active:true, qty:1, unit:'Stk'}); App.renderQuotePage(); },
-            
-            // Settings
-            openPosSettings: (sIdx, iIdx) => { const item = State.sections[sIdx].items[iIdx]; State.tempPosSettings = { sIdx, iIdx }; document.getElementById('setting-ek').value = item.ek; document.getElementById('setting-margin').value = item.margin; document.getElementById('setting-vk').value = item.price; document.getElementById('setting-pauschal').checked = item.isPauschal; document.getElementById('setting-hide-price').checked = item.hidePrices; document.getElementById('setting-active').checked = item.active; document.getElementById('pos-settings-modal').classList.remove('hidden'); },
-            closePosSettings: () => { State.tempPosSettings = null; document.getElementById('pos-settings-modal').classList.add('hidden'); },
-            calcPosSettings: (isVk) => { const ek = parseFloat(document.getElementById('setting-ek').value)||0; const m = parseFloat(document.getElementById('setting-margin').value)||0; if(isVk) { const vk=parseFloat(document.getElementById('setting-vk').value)||0; if(ek>0) document.getElementById('setting-margin').value = ((vk-ek)/ek*100).toFixed(2); } else { document.getElementById('setting-vk').value = (ek*(1+m/100)).toFixed(2); } },
-            savePosSettings: () => { if(!State.tempPosSettings) return; const {sIdx, iIdx} = State.tempPosSettings; const item = State.sections[sIdx].items[iIdx]; item.ek = parseFloat(document.getElementById('setting-ek').value)||0; item.margin = parseFloat(document.getElementById('setting-margin').value)||0; item.price = parseFloat(document.getElementById('setting-vk').value)||0; item.isPauschal = document.getElementById('setting-pauschal').checked; item.hidePrices = document.getElementById('setting-hide-price').checked; item.active = document.getElementById('setting-active').checked; App.renderQuotePage(); App.closePosSettings(); },
-            
-            // Modal
-            openSetModal: (id) => { const p=DB.products.find(x=>x.id===id); if(!p) return; document.getElementById('modal-title').innerText=p.name; document.getElementById('modal-desc').innerText=p.desc; const m=document.getElementById('modal-materials'); m.innerHTML=''; if(p.materials) p.materials.forEach(x=>m.innerHTML+=`<tr><td class="px-4 py-2">${x.name}</td><td class="px-4 py-2 text-right">${x.price}€</td></tr>`); const l=document.getElementById('modal-labor'); l.innerHTML=''; if(p.labor) p.labor.forEach(x=>l.innerHTML+=`<tr><td class="px-4 py-2">${x.name}</td><td class="px-4 py-2 text-center">${x.qty}</td><td class="px-4 py-2 text-right">${x.price}€</td></tr>`); document.getElementById('modal-add-btn').onclick=()=>{App.handleItemAdd(0, id); App.renderQuotePage(); App.closeModal();}; document.getElementById('set-modal').classList.remove('hidden'); },
-            closeModal: () => document.getElementById('set-modal').classList.add('hidden'),
-            save: () => alert("Angebot gespeichert"),
+        function resetMicIcons() {
+            ['pv-mic-icon', 'wp-mic-icon'].forEach(id => {
+                const icon = document.getElementById(id);
+                if (icon) {
+                    icon.classList.remove('ph-stop-circle', 'text-red-500', 'animate-pulse');
+                    icon.classList.add('ph-microphone', 'text-slate-400');
+                }
+            });
+        }
 
-            // Drag & Tools
-            dragStart: (ev, id) => ev.dataTransfer.setData("text", id),
-            dragStartTool: (ev, src) => { ev.dataTransfer.setData("type", "tool"); ev.dataTransfer.setData("src", src); },
-            allowDrop: (ev) => { ev.preventDefault(); ev.currentTarget.classList.add('drag-over'); },
-            drop: (ev, sIdx) => { ev.preventDefault(); ev.currentTarget.classList.remove('drag-over'); const id = ev.dataTransfer.getData("text"); if(id) { App.handleItemAdd(sIdx, id); App.renderQuotePage(); } },
-            dropTool: (ev, pageIndex) => { ev.preventDefault(); const type = ev.dataTransfer.getData("type"); if(type !== 'tool') return; const src = ev.dataTransfer.getData("src"); const rect = ev.currentTarget.getBoundingClientRect(); State.placedImages.push({ id: Date.now(), src, pageIndex, x: ev.clientX - rect.left, y: ev.clientY - rect.top, width: 100 }); App.renderQuotePage(); },
-            removeToolImage: (id) => { State.placedImages = State.placedImages.filter(i => i.id !== id); App.renderQuotePage(); },
-            renderFloatingImages: (pageEl, pageIdx, forPrint) => { const images = State.placedImages.filter(img => img.pageIndex === pageIdx); images.forEach(img => { const el = document.createElement('div'); el.className = 'floating-element'; el.style.left = img.x + 'px'; el.style.top = img.y + 'px'; el.style.width = img.width + 'px'; el.innerHTML = `<img src="${img.src}" class="w-full h-auto">` + (forPrint?'':`<div class="delete-float" onclick="App.removeToolImage(${img.id})">x</div>`); if(!forPrint) { el.onmousedown = (e) => { e.stopPropagation(); let startX = e.clientX; let startY = e.clientY; let startLeft = img.x; let startTop = img.y; const onMove = (mv) => { el.style.left = (startLeft + mv.clientX - startX) + 'px'; el.style.top = (startTop + mv.clientY - startY) + 'px'; }; const onUp = (up) => { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); img.x = startLeft + up.clientX - startX; img.y = startTop + up.clientY - startY; }; document.addEventListener('mousemove', onMove); document.addEventListener('mouseup', onUp); }; } pageEl.appendChild(el); }); },
-            
-            // Badges
-            handleImageClick: (sIdx, iIdx) => { App.editingImage = { sIdx, iIdx }; document.getElementById('img-upload-input').click(); },
-            handleBadgeClick: (sIdx, iIdx) => { State.editingBadge = { sIdx, iIdx, pos: 'tl', type: '', text: '' }; document.getElementById('badge-modal').classList.remove('hidden'); },
-            closeBadgeModal: () => document.getElementById('badge-modal').classList.add('hidden'),
-            setBadgePos: (pos) => { if(State.editingBadge) State.editingBadge.pos = pos; },
-            saveBadgeConfig: () => { if(!State.editingBadge) return; const { sIdx, iIdx, pos, tempImg } = State.editingBadge; const val = document.getElementById('badge-type-select').value; let badgeObj = null; if(val === 'image' && tempImg) badgeObj = { type: 'image', src: tempImg, pos: pos }; else if (val !== '' && val !== 'image') badgeObj = { type: 'text', text: val, pos: pos }; else if (val === 'image' && !tempImg) { document.getElementById('badge-upload-input').click(); return; } State.sections[sIdx].items[iIdx].badge = badgeObj; App.renderQuotePage(); App.closeBadgeModal(); },
-            syncDocData: (field, value) => { if(field === 'offerId') State.offerId = value; if(field === 'custId') State.custId = value; document.querySelectorAll('.sync-offer-id').forEach(el => el.innerText = State.offerId); }
-        };
+        // --- SIDEBAR TOGGLE ---
+        function toggleSidebar(type) {
+            const sidebar = document.getElementById(`${type}-sidebar`);
+            const title = document.getElementById(`${type}-sidebar-title`);
+            const icon = document.getElementById(`${type}-sidebar-icon`);
+            const texts = sidebar.querySelectorAll(`div[id^="${type}-navtext-"]`);
 
-        window.addEventListener('DOMContentLoaded', App.init);
+            if(sidebar.classList.contains('w-64')) {
+                // Collapse
+                sidebar.classList.replace('w-64', 'w-20');
+                title.classList.add('opacity-0', 'hidden');
+                icon.classList.replace('ph-caret-left', 'ph-caret-right');
+                texts.forEach(t => t.classList.add('opacity-0', 'hidden'));
+            } else {
+                // Expand
+                sidebar.classList.replace('w-20', 'w-64');
+                title.classList.remove('opacity-0', 'hidden');
+                icon.classList.replace('ph-caret-right', 'ph-caret-left');
+                texts.forEach(t => t.classList.remove('opacity-0', 'hidden'));
+            }
+        }
+
+        // --- UI LOGIC (COLLAPSE & SCROLL) ---
+        function toggleSection(contentId, iconId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(iconId);
+            if(content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.remove('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.add('rotate-180');
+            }
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if(el) {
+                const contentId = id.replace('-sec-', '-content-');
+                const iconId = id.replace('-sec-', '-icon-');
+                const content = document.getElementById(contentId);
+                const icon = document.getElementById(iconId);
+                if(content && content.classList.contains('hidden')) {
+                    content.classList.remove('hidden');
+                    icon.classList.remove('rotate-180');
+                }
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // --- PROGRESS ---
+        function initProgressListeners() {
+            ['form-pv', 'form-wp'].forEach(formId => {
+                const form = document.getElementById(formId);
+                if(form) {
+                    form.addEventListener('input', () => updateFormProgress(formId === 'form-pv' ? 'PV' : 'WP'));
+                    form.addEventListener('change', () => updateFormProgress(formId === 'form-pv' ? 'PV' : 'WP'));
+                }
+            });
+        }
+
+        function updateFormProgress(type) {
+            const form = document.getElementById(`form-${type.toLowerCase()}`);
+            const sections = form.querySelectorAll('[data-section]');
+            let totalReqFields = 0;
+            let filledReqFields = 0;
+
+            sections.forEach(sec => {
+                const secId = sec.getAttribute('data-section');
+                const reqElements = Array.from(sec.querySelectorAll('input[required], select[required]'));
+                
+                const reqGroups = {};
+                reqElements.forEach(el => {
+                    if (!reqGroups[el.name]) reqGroups[el.name] = [];
+                    reqGroups[el.name].push(el);
+                });
+
+                let secTotal = Object.keys(reqGroups).length;
+                let secFilled = 0;
+
+                for (const name in reqGroups) {
+                    const elements = reqGroups[name];
+                    let isFilled = false;
+                    elements.forEach(el => {
+                        if (el.type === 'radio' || el.type === 'checkbox') {
+                            if (el.checked) isFilled = true;
+                        } else {
+                            if (el.value.trim() !== '') isFilled = true;
+                        }
+                    });
+                    if (isFilled) secFilled++;
+                }
+
+                totalReqFields += secTotal;
+                filledReqFields += secFilled;
+
+                const navDot = document.getElementById(`${type.toLowerCase()}-nav-${secId}`);
+                const navCount = document.getElementById(`${type.toLowerCase()}-navcount-${secId}`);
+                
+                if(navDot) {
+                    if (secTotal === 0) {
+                         navDot.className = `w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors`;
+                         navDot.innerHTML = '';
+                    } else if (secFilled === secTotal) {
+                         const color = type === 'PV' ? 'bg-brand-orange' : 'bg-brand-green';
+                         navDot.className = `w-6 h-6 rounded-full ${color} text-white border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors shadow-sm`;
+                         navDot.innerHTML = '<i class="ph-bold ph-check text-xs"></i>';
+                    } else {
+                         navDot.className = `w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center z-10 shrink-0 transition-colors`;
+                         navDot.innerHTML = '';
+                    }
+                }
+
+                if(navCount) {
+                    if(secTotal > 0) {
+                        navCount.textContent = `${secFilled}/${secTotal}`;
+                        navCount.classList.remove('hidden');
+                        if (secFilled === secTotal) {
+                            const bgClass = type === 'PV' ? 'bg-brand-orange/10' : 'bg-brand-green/10';
+                            const textClass = type === 'PV' ? 'text-brand-orange' : 'text-brand-green';
+                            const borderClass = type === 'PV' ? 'border-brand-orange/30' : 'border-brand-green/30';
+                            navCount.className = `text-[10px] font-bold px-1.5 py-0.5 rounded border transition-colors ${bgClass} ${textClass} ${borderClass}`;
+                        } else {
+                            navCount.className = `text-[10px] font-bold px-1.5 py-0.5 rounded border transition-colors bg-slate-100 text-slate-500 border-slate-200`;
+                        }
+                    } else {
+                        navCount.textContent = 'Opt';
+                        navCount.className = `text-[10px] font-bold px-1.5 py-0.5 rounded border transition-colors bg-slate-50 text-slate-400 border-slate-100`;
+                    }
+                }
+            });
+
+            const percentage = totalReqFields === 0 ? 100 : Math.round((filledReqFields / totalReqFields) * 100);
+            const fillEl = document.getElementById(`${type.toLowerCase()}-progress-fill`);
+            const textEl = document.getElementById(`${type.toLowerCase()}-progress-text`);
+            if(fillEl) fillEl.style.width = `${percentage}%`;
+            if(textEl) textEl.innerText = `${percentage}%`;
+        }
+
+        // --- DYNAMIC ROOF LOGIC ---
+        function addRoofUI(roofData = null) {
+            const container = document.getElementById('roofs-container');
+            const idx = currentRoofIndex++;
+            const html = `
+                <div class="roof-entry border border-brand-lightBlue/50 rounded-2xl p-4 bg-slate-50 relative" data-index="${idx}">
+                    <button type="button" onclick="this.closest('.roof-entry').remove(); updateFormProgress('PV');" class="absolute top-4 right-4 text-red-500 hover:bg-red-100 p-2 rounded-lg transition" title="Dach löschen">
+                        <i class="ph-bold ph-trash text-lg"></i>
+                    </button>
+                    <h4 class="font-bold text-brand-blue mb-4 text-lg border-b border-brand-lightBlue/30 pb-2 pr-10">Dachfläche ${idx + 1}</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Dachform <span class="text-red-500">*</span></label>
+                            <select name="roof_${idx}_roof_type" required class="w-full p-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-brand-orange">
+                                <option value="">Bitte wählen...</option><option value="Satteldach">Satteldach</option><option value="Walmdach">Walmdach</option><option value="Flachdach">Flachdach</option><option value="Pultdach">Pultdach</option><option value="Carport">Carport</option><option value="mehrere">mehrere Dachflächen</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Höhe Traufe (m) <span class="text-red-500">*</span></label>
+                            <input type="number" step="0.1" name="roof_${idx}_roof_height" required class="w-full p-2.5 border rounded-xl outline-none focus:ring-2 focus:ring-brand-orange">
+                        </div>
+                    </div>
+
+                    <div class="mt-4 bg-white p-4 border border-slate-200 rounded-xl">
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Dacheindeckung</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-3">
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Ziegel" class="custom-cb focus:ring-brand-orange"> Ziegel</label>
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Schiefer" class="custom-cb focus:ring-brand-orange"> Schiefer</label>
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Biberschwanz" class="custom-cb focus:ring-brand-orange"> Biberschwanz</label>
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Trapezblech" class="custom-cb focus:ring-brand-orange"> Trapezblech</label>
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Stehfalz" class="custom-cb focus:ring-brand-orange"> Stehfalz</label>
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Welleternit" class="custom-cb focus:ring-brand-orange"> Welleternit</label>
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Beton" class="custom-cb focus:ring-brand-orange"> Beton</label>
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Ton" class="custom-cb focus:ring-brand-orange"> Ton</label>
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Bitumen" class="custom-cb focus:ring-brand-orange"> Bitumen</label>
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Folie" class="custom-cb focus:ring-brand-orange"> Folie</label>
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Kies" class="custom-cb focus:ring-brand-orange"> Kies</label>
+                            <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_roof_covering" value="Gründach" class="custom-cb focus:ring-brand-orange"> Gründach</label>
+                        </div>
+                        <label class="text-sm flex items-center gap-1 cursor-pointer border-t pt-2 mt-2"><input type="checkbox" name="roof_${idx}_solar_holding_tile_desired" value="1" class="custom-cb focus:ring-brand-orange"> Solarhalteziegel geplant</label>
+                        
+                        <div class="mt-4 border border-brand-orange/30 p-3 rounded-lg bg-brand-orange/5">
+                            <h5 class="text-xs font-bold text-slate-500 uppercase mb-2">Details Ziegel / Pfanne</h5>
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mb-3">
+                                <label class="text-xs flex flex-col items-center gap-1 cursor-pointer"><i class="ph ph-waves text-2xl text-slate-400"></i><div class="flex items-center gap-1"><input type="radio" name="roof_${idx}_roof_covering_model" value="2 Wellen" class="custom-cb focus:ring-brand-orange"> 2 Wellen</div></label>
+                                <label class="text-xs flex flex-col items-center gap-1 cursor-pointer"><i class="ph ph-wave-sine text-2xl text-slate-400"></i><div class="flex items-center gap-1"><input type="radio" name="roof_${idx}_roof_covering_model" value="1 Welle" class="custom-cb focus:ring-brand-orange"> 1 Welle</div></label>
+                                <label class="text-xs flex flex-col items-center gap-1 cursor-pointer"><i class="ph ph-rectangle text-2xl text-slate-400"></i><div class="flex items-center gap-1"><input type="radio" name="roof_${idx}_roof_covering_model" value="Flachziegel" class="custom-cb focus:ring-brand-orange"> Flach</div></label>
+                                <label class="text-xs flex flex-col items-center gap-1 cursor-pointer"><i class="ph ph-parallelogram text-2xl text-slate-400"></i><div class="flex items-center gap-1"><input type="radio" name="roof_${idx}_roof_covering_model" value="Schiefer" class="custom-cb focus:ring-brand-orange"> Schiefer</div></label>
+                                <label class="text-xs flex flex-col items-center gap-1 cursor-pointer"><i class="ph ph-shield text-2xl text-slate-400"></i><div class="flex items-center gap-1"><input type="radio" name="roof_${idx}_roof_covering_model" value="Biberschwanz" class="custom-cb focus:ring-brand-orange"> Biber</div></label>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div class="flex gap-2 items-center w-full">
+                                    <span class="text-xs font-bold">Eindeckmaß (B/H):</span>
+                                    <input type="text" name="roof_${idx}_roof_covering_dimensions_cm" placeholder="B x H in cm" class="w-full p-1.5 border rounded text-xs outline-none">
+                                </div>
+                                <input type="text" name="roof_${idx}_roof_covering_company" placeholder="Bezeichnung / Hersteller" class="w-full p-1.5 border rounded text-xs outline-none bg-white">
+                                <div class="flex items-center gap-2 text-xs flex-wrap md:col-span-2 mt-1">
+                                    <span class="font-bold">Farbe:</span>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_note_ziegelFarbe" value="schwarz" class="custom-cb focus:ring-brand-orange"> schwarz</label>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_note_ziegelFarbe" value="anthrazit" class="custom-cb focus:ring-brand-orange"> anthrazit</label>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_note_ziegelFarbe" value="hellgrau" class="custom-cb focus:ring-brand-orange"> hellgrau</label>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_note_ziegelFarbe" value="rot" class="custom-cb focus:ring-brand-orange"> rot</label>
+                                    <span class="mx-1 border-l h-4"></span>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_note_ziegelFinish" value="glasiert" class="custom-cb focus:ring-brand-orange"> glasiert</label>
+                                    <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_note_ziegelFinish" value="matt" class="custom-cb focus:ring-brand-orange"> matt</label>
+                                </div>
+                                <div class="flex items-center gap-2 mt-1 md:col-span-2">
+                                    <span class="text-xs font-bold">Anzahl vorrätiger Ziegel:</span>
+                                    <input type="number" name="roof_${idx}_note_ziegelVorrat" class="w-20 p-1 border rounded text-xs outline-none bg-white">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 border border-slate-200 rounded-xl">
+                            <h5 class="text-xs font-bold text-slate-500 uppercase mb-2">Sparren & Dämmung</h5>
+                            <div class="flex items-center gap-3 mb-2">
+                                <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="checkbox" name="roof_${idx}_rafter_reinforcement_needed" value="1" class="custom-cb focus:ring-brand-orange"> Verstärkung nötig</label>
+                            </div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-xs">Sparrenstärke:</span><input type="number" step="0.1" name="roof_${idx}_rafter_thickness" class="w-20 p-1 border rounded text-xs outline-none bg-slate-50">
+                            </div>
+                            <div class="flex gap-3 mb-3 border-b pb-3">
+                                <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="checkbox" name="roof_${idx}_note_denkmalschutz" value="1" class="custom-cb focus:ring-brand-orange"> Denkmalschutz</label>
+                                <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="checkbox" name="roof_${idx}_note_natursparren" value="1" class="custom-cb focus:ring-brand-orange"> "Natur" Sparren</label>
+                            </div>
+                            <span class="text-xs font-bold">Dämmung:</span>
+                            <div class="flex flex-col gap-1 mt-1">
+                                <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_between_rafter_insulation" value="Zwischensparren" class="custom-cb focus:ring-brand-orange"> Zwischensparrendämmung</label>
+                                <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_between_rafter_insulation" value="Aufdach" class="custom-cb focus:ring-brand-orange"> Aufdachdämmung</label>
+                                <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_between_rafter_insulation" value="Beides" class="custom-cb focus:ring-brand-orange"> beides</label>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-4 border border-slate-200 rounded-xl">
+                            <h5 class="text-xs font-bold text-slate-500 uppercase mb-2">Verlegung & Flachdach</h5>
+                            <span class="text-xs font-bold">Verlegung Solarkabel bis WR:</span>
+                            <div class="flex flex-col gap-1 mt-1 mb-3">
+                                <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_dc_cable_route" value="Kabelkanal Fassade" class="custom-cb focus:ring-brand-orange"> Kabelkanal/Fallrohr Fassade</label>
+                                <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_dc_cable_route" value="Leerrohr" class="custom-cb focus:ring-brand-orange"> vorhandenes Leerrohr</label>
+                                <label class="text-sm flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_dc_cable_route" value="Kamin" class="custom-cb focus:ring-brand-orange"> durch Kamin</label>
+                            </div>
+                            <div class="flex items-center gap-3 mb-3 border-b pb-3 text-sm">
+                                <span>mit Kunden abgestimmt/Freigabe?</span>
+                                <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_note_kabelAbgestimmt" value="Ja" class="custom-cb focus:ring-brand-orange"> Ja</label>
+                                <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="roof_${idx}_note_kabelAbgestimmt" value="Nein" class="custom-cb focus:ring-brand-orange"> Nein</label>
+                            </div>
+                            <span class="text-xs font-bold text-slate-500 uppercase">Nur bei Flachdach:</span>
+                            <div class="flex gap-2 items-center mt-1">
+                                <span class="text-xs">Attika Höhe:</span><input type="number" name="roof_${idx}_note_attikaHoehe" class="w-16 p-1 border rounded text-xs outline-none bg-slate-50">
+                                <span class="text-xs ml-2">Breite:</span><input type="number" name="roof_${idx}_note_attikaBreite" class="w-16 p-1 border rounded text-xs outline-none bg-slate-50">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 bg-white p-4 border border-slate-200 rounded-xl">
+                        <h5 class="text-xs font-bold text-slate-500 uppercase mb-3">Dachaufbauten</h5>
+                        <div class="space-y-3">
+                            <div class="flex flex-col sm:flex-row gap-2 justify-between">
+                                <span class="text-sm font-bold w-32">SAT-Schüssel:</span>
+                                <select name="roof_${idx}_note_satAktion" class="p-1.5 border rounded text-sm outline-none bg-slate-50 w-full sm:w-auto"><option value="">Wählen...</option><option value="bleibt">bleibt</option><option value="versetzen">versetzen</option><option value="Demontage">Demontage</option></select>
+                                <input type="text" name="roof_${idx}_note_satOrt" placeholder="neuer Montageort" class="p-1.5 border rounded text-sm outline-none flex-1">
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-2 justify-between">
+                                <span class="text-sm font-bold w-32">Antenne:</span>
+                                <select name="roof_${idx}_note_antenneAktion" class="p-1.5 border rounded text-sm outline-none bg-slate-50 w-full sm:w-auto"><option value="">Wählen...</option><option value="bleibt">bleibt</option><option value="versetzen">versetzen</option><option value="Demontage">Demontage</option></select>
+                                <input type="text" name="roof_${idx}_note_antenneOrt" placeholder="neuer Montageort" class="p-1.5 border rounded text-sm outline-none flex-1">
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-2 justify-between">
+                                <div class="flex items-center gap-1 w-full sm:w-32"><span class="text-sm font-bold">Trittstufen:</span><input type="number" name="roof_${idx}_note_trittstufenAnzahl" placeholder="Anz." class="w-10 p-1 text-xs border rounded ml-auto sm:ml-0"></div>
+                                <select name="roof_${idx}_note_trittstufenAktion" class="p-1.5 border rounded text-sm outline-none bg-slate-50 w-full sm:w-auto"><option value="">Wählen...</option><option value="bleibt">bleibt</option><option value="versetzen">versetzen</option><option value="Demontage">Demontage</option></select>
+                                <input type="text" name="roof_${idx}_note_trittstufenOrt" placeholder="neuer Montageort" class="p-1.5 border rounded text-sm outline-none flex-1">
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-2 justify-between">
+                                <div class="flex items-center gap-1 w-full sm:w-32"><span class="text-sm font-bold">Sanitärlüfter:</span><input type="number" name="roof_${idx}_note_luefterAnzahl" placeholder="Anz." class="w-10 p-1 text-xs border rounded ml-auto sm:ml-0"></div>
+                                <select name="roof_${idx}_note_luefterAktion" class="p-1.5 border rounded text-sm outline-none bg-slate-50 w-full sm:w-auto"><option value="">Wählen...</option><option value="bleibt">bleibt</option><option value="versetzen">versetzen</option><option value="kürzen">kürzen</option><option value="neuer Lüftungsziegel">neuer Lüftungsziegel einbauen</option></select>
+                                <input type="text" name="roof_${idx}_note_luefterNeuAnzahl" placeholder="Anzahl neue Ziegel" class="p-1.5 border rounded text-sm outline-none flex-1">
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-2 justify-between">
+                                <div class="flex items-center gap-1 w-full sm:w-32"><span class="text-sm font-bold">Solarthermie:</span><input type="number" name="roof_${idx}_note_thermieAnzahl" placeholder="Anz." class="w-10 p-1 text-xs border rounded ml-auto sm:ml-0"></div>
+                                <select name="roof_${idx}_note_thermieAktion" class="p-1.5 border rounded text-sm outline-none bg-slate-50 w-full sm:w-auto"><option value="">Wählen...</option><option value="bleibt">bleibt</option><option value="versetzen">versetzen</option><option value="Demontage">Demontage</option></select>
+                                <input type="text" name="roof_${idx}_note_thermieOrt" placeholder="neuer Montageort" class="p-1.5 border rounded text-sm outline-none flex-1">
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-2 items-center">
+                                <span class="text-sm font-bold w-full sm:w-32">Schneefanggitter:</span>
+                                <div class="flex gap-4">
+                                    <label class="flex items-center gap-1 text-sm"><input type="radio" name="roof_${idx}_note_schneeAktion" value="bleibt" class="custom-cb"> bleibt</label>
+                                    <label class="flex items-center gap-1 text-sm"><input type="radio" name="roof_${idx}_note_schneeAktion" value="Demontage" class="custom-cb"> Demontage</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-4 border-t border-slate-100 flex flex-wrap gap-x-6 gap-y-3">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-bold">Äußerer Blitzschutz vorh.:</span>
+                                <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="roof_${idx}_note_blitzschutz" value="Ja" class="custom-cb focus:ring-brand-orange"> ja</label>
+                                <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="roof_${idx}_note_blitzschutz" value="Nein" class="custom-cb focus:ring-brand-orange"> nein</label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-bold">Internet per Satellit vorh.:</span>
+                                <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="roof_${idx}_note_satInternet" value="Ja" class="custom-cb focus:ring-brand-orange"> ja</label>
+                                <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="roof_${idx}_note_satInternet" value="Nein" class="custom-cb focus:ring-brand-orange"> nein</label>
+                            </div>
+                            <div class="flex items-center gap-2 w-full">
+                                <span class="text-sm font-bold">Kabelführung über Dach sorgt für Verschattung:</span>
+                                <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="roof_${idx}_note_kabelVerschattung" value="Ja" class="custom-cb focus:ring-brand-orange"> ja</label>
+                                <label class="flex items-center gap-1 text-sm cursor-pointer"><input type="radio" name="roof_${idx}_note_kabelVerschattung" value="Nein" class="custom-cb focus:ring-brand-orange"> nein</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            if (roofData) {
+                const form = document.getElementById('form-pv');
+                for (const key in roofData) {
+                    const elName = `roof_${idx}_${key}`;
+                    if (form.elements[elName]) {
+                        if(form.elements[elName].type === 'checkbox' || form.elements[elName].type === 'radio' || (form.elements[elName].length && form.elements[elName][0].type === 'radio')) {
+                            if(form.elements[elName].length) { 
+                                Array.from(form.elements[elName]).forEach(radio => {
+                                    if(radio.value == roofData[key] || (radio.value === '1' && roofData[key] === true)) radio.checked = true;
+                                });
+                            } else {
+                                form.elements[elName].checked = (roofData[key] == '1' || roofData[key] === true);
+                            }
+                        } else {
+                            form.elements[elName].value = roofData[key];
+                        }
+                    }
+                }
+            }
+            updateFormProgress('PV');
+        }
+
+        function clearRoofs() {
+            document.getElementById('roofs-container').innerHTML = '';
+            currentRoofIndex = 0;
+            updateFormProgress('PV');
+        }
+
+        // --- MODALS (SELECTION, IMAGES, MATERIALS) ---
+        function showTypeSelection() {
+            const modal = document.getElementById('modal-select-type');
+            const content = document.getElementById('modal-content');
+            modal.classList.remove('hidden');
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0');
+            modal.classList.add('opacity-100');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
+
+        function closeTypeSelection() {
+            const modal = document.getElementById('modal-select-type');
+            const content = document.getElementById('modal-content');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        // === FOTOS / IMAGES LOGIC ===
+        function openImages(id) {
+            currentRecordIdForImages = id;
+            const record = records.find(r => r.id === id);
+            if(!record) return;
+
+            if(!record.images) record.images = [];
+            
+            const fullName = `${record.data.firma || ''} ${record.data.name || ''} ${record.data.lastname || ''}`.trim();
+            document.getElementById('images-project-name').innerText = `Projekt: ${fullName || 'Unbenannt'}`;
+            renderImages();
+
+            const modal = document.getElementById('modal-images');
+            const content = document.getElementById('modal-images-content');
+            modal.classList.remove('hidden');
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0');
+            modal.classList.add('opacity-100');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
+
+        function closeImages() {
+            const modal = document.getElementById('modal-images');
+            const content = document.getElementById('modal-images-content');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function handleImageUpload(event) {
+            const files = event.target.files;
+            if(!files || !currentRecordIdForImages) return;
+            const record = records.find(r => r.id === currentRecordIdForImages);
+            
+            Array.from(files).forEach(file => {
+                const url = URL.createObjectURL(file);
+                // Erfasse aktuellen Benutzer und Zeitpunkt
+                record.images.push({ 
+                    url, 
+                    name: file.name, 
+                    uploadedBy: currentUser, 
+                    uploadedAt: new Date().toISOString() 
+                });
+            });
+            
+            addHistory(currentRecordIdForImages, `${files.length} Foto(s) hochgeladen`);
+            renderImages();
+        }
+
+        function deleteImage(imgIndex) {
+            const record = records.find(r => r.id === currentRecordIdForImages);
+            if(confirm("Foto wirklich löschen?")) {
+                record.images.splice(imgIndex, 1);
+                addHistory(currentRecordIdForImages, `Ein Foto wurde gelöscht`);
+                renderImages();
+            }
+        }
+
+        function renderImages() {
+            const record = records.find(r => r.id === currentRecordIdForImages);
+            const grid = document.getElementById('image-grid');
+            grid.innerHTML = '';
+            
+            if(record.images.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-10 text-slate-400">Noch keine Fotos vorhanden.</div>`;
+                return;
+            }
+
+            record.images.forEach((img, idx) => {
+                grid.innerHTML += `
+                    <div class="relative group rounded-2xl overflow-hidden border border-slate-200 shadow-sm aspect-square bg-slate-100 flex flex-col">
+                        <img src="${img.url}" class="w-full h-full object-cover flex-1">
+                        
+                        <!-- Bild Info Overlay -->
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900/90 to-transparent p-3 pt-8 pointer-events-none">
+                            <p class="text-white text-xs font-bold truncate"><i class="ph-fill ph-user"></i> ${img.uploadedBy || 'Unbekannt'}</p>
+                            <p class="text-white/80 text-[10px]"><i class="ph-fill ph-clock"></i> ${new Date(img.uploadedAt).toLocaleString('de-DE')}</p>
+                        </div>
+
+                        <button onclick="deleteImage(${idx})" class="absolute top-2 right-2 bg-white/90 hover:bg-red-50 text-red-500 p-2 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition z-10">
+                            <i class="ph-bold ph-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        // === MATERIAL EDITOR LOGIC ===
+        function openMaterials(id) {
+            currentRecordIdForMaterials = id;
+            const record = records.find(r => r.id === id);
+            if(!record) return;
+
+            const fullName = `${record.data.firma || ''} ${record.data.name || ''} ${record.data.lastname || ''}`.trim();
+            document.getElementById('material-project-name').innerText = `Projekt: ${fullName || 'Unbenannt'}`;
+            renderMaterials();
+
+            const modal = document.getElementById('modal-materials');
+            const content = document.getElementById('modal-materials-content');
+            modal.classList.remove('hidden');
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0');
+            modal.classList.add('opacity-100');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
+
+        function closeMaterials() {
+            const modal = document.getElementById('modal-materials');
+            const content = document.getElementById('modal-materials-content');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function updateMatQty(catIdx, itemIdx, subIdx, value) {
+            const record = records.find(r => r.id === currentRecordIdForMaterials);
+            const num = parseFloat(value) || 0;
+            let itemName = '';
+            
+            if (subIdx !== null) {
+                record.materials[catIdx].items[itemIdx].subItems[subIdx].qty = num;
+                itemName = record.materials[catIdx].items[itemIdx].subItems[subIdx].name;
+            } else {
+                record.materials[catIdx].items[itemIdx].qty = num;
+                itemName = record.materials[catIdx].items[itemIdx].name;
+            }
+            
+            addHistory(currentRecordIdForMaterials, `Menge geändert: ${itemName} auf ${num}`);
+        }
+
+        function deleteMat(catIdx, itemIdx, subIdx) {
+            const record = records.find(r => r.id === currentRecordIdForMaterials);
+            let itemName = '';
+            if (subIdx !== null) {
+                itemName = record.materials[catIdx].items[itemIdx].subItems[subIdx].name;
+                record.materials[catIdx].items[itemIdx].subItems.splice(subIdx, 1);
+            } else {
+                itemName = record.materials[catIdx].items[itemIdx].name;
+                record.materials[catIdx].items.splice(itemIdx, 1);
+            }
+            addHistory(currentRecordIdForMaterials, `Material gelöscht/abgewählt: ${itemName}`);
+            renderMaterials(); 
+        }
+
+        function addCustomMaterial(catIdx) {
+            const record = records.find(r => r.id === currentRecordIdForMaterials);
+            const name = prompt("Name des neuen Artikels:");
+            if(!name) return;
+            const qty = prompt("Menge:", "1") || "1";
+            const unit = prompt("Einheit (z.B. Stk, m, Set):", "Stk") || "Stk";
+            
+            record.materials[catIdx].items.push({
+                name: name,
+                img: 'https://placehold.co/150x150/74b2d4/fff?text=Neu',
+                qty: parseFloat(qty),
+                unit: unit,
+                subItems: []
+            });
+            addHistory(currentRecordIdForMaterials, `Neues Material hinzugefügt: ${name}`);
+            renderMaterials();
+        }
+
+        function addCustomSubMaterial(catIdx, itemIdx) {
+            const record = records.find(r => r.id === currentRecordIdForMaterials);
+            const name = prompt("Name des neuen Unterartikels:");
+            if(!name) return;
+            const qty = prompt("Menge:", "1") || "1";
+            const unit = prompt("Einheit (z.B. Stk, m):", "Stk") || "Stk";
+            
+            if(!record.materials[catIdx].items[itemIdx].subItems) {
+                record.materials[catIdx].items[itemIdx].subItems = [];
+            }
+
+            record.materials[catIdx].items[itemIdx].subItems.push({
+                name: name,
+                img: 'https://placehold.co/80x80/cde8ea/000?text=Neu',
+                qty: parseFloat(qty),
+                unit: unit
+            });
+            addHistory(currentRecordIdForMaterials, `Neues Unter-Material hinzugefügt: ${name}`);
+            renderMaterials();
+        }
+
+        function renderMaterials() {
+            const record = records.find(r => r.id === currentRecordIdForMaterials);
+            const listContainer = document.getElementById('materials-list-container');
+            listContainer.innerHTML = '';
+
+            if(!record.materials || record.materials.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-16 text-slate-400">
+                        <i class="ph ph-package-x text-6xl mb-4 text-slate-300"></i>
+                        <p class="font-medium">Keine Materialien geplant.</p>
+                    </div>`;
+                return;
+            }
+
+            let html = '';
+            record.materials.forEach((category, cIdx) => {
+                html += `
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center border-b-2 border-brand-lightBlue pb-2 mb-4">
+                            <h3 class="text-lg font-bold text-brand-blue">${category.title}</h3>
+                            <button onclick="addCustomMaterial(${cIdx})" class="text-brand-blue bg-brand-lightBlue/30 hover:bg-brand-lightBlue p-1.5 rounded-lg text-sm font-bold flex items-center gap-1 transition">
+                                <i class="ph-bold ph-plus"></i> Artikel
+                            </button>
+                        </div>
+                        <div class="space-y-4 main-item-list" id="mat-cat-${cIdx}">
+                `;
+                
+                if(category.items && category.items.length > 0) {
+                    category.items.forEach((item, iIdx) => {
+                        html += `
+                            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden hover:border-brand-lightBlue transition">
+                                <div class="flex flex-col sm:flex-row gap-4 p-4">
+                                    <div class="shrink-0 flex items-center sm:items-start gap-3">
+                                        <i class="ph-bold ph-dots-six-vertical text-2xl text-slate-300 cursor-grab active:cursor-grabbing hover:text-brand-blue drag-handle-main mt-6 hidden sm:block"></i>
+                                        <div class="flex sm:flex-col justify-between items-center sm:items-start gap-4">
+                                            <img src="${item.img}" class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-xl border border-slate-100 shadow-sm" onerror="this.src='https://placehold.co/150x150?text=No+Image'">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <i class="ph-bold ph-dots-six-vertical text-xl text-slate-300 cursor-grab active:cursor-grabbing hover:text-brand-blue drag-handle-main sm:hidden"></i>
+                                                <h4 class="font-bold text-slate-800 text-base md:text-lg leading-tight">${item.name}</h4>
+                                            </div>
+                                            <button onclick="deleteMat(${cIdx}, ${iIdx}, null)" class="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition shrink-0" title="Löschen / Markieren">
+                                                <i class="ph-bold ph-trash"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Editable QTY -->
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <label class="text-xs font-bold text-slate-500 uppercase">Menge:</label>
+                                            <input type="number" min="0" step="0.1" value="${item.qty}" class="w-20 p-1.5 text-center font-bold text-brand-blue bg-brand-lightBlue/20 border border-brand-lightBlue rounded-lg outline-none focus:ring-2 focus:ring-brand-blue" onchange="updateMatQty(${cIdx}, ${iIdx}, null, this.value)">
+                                            <span class="text-sm font-bold text-brand-green">${item.unit}</span>
+                                        </div>
+                                        
+                                        <!-- Sub Items -->
+                                        <div class="mt-4 pt-3 border-t border-slate-100">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Beinhaltet:</p>
+                                                <button onclick="addCustomSubMaterial(${cIdx}, ${iIdx})" class="text-brand-green bg-brand-lightGreen/30 hover:bg-brand-lightGreen/50 px-2 py-1 rounded-md text-xs font-bold flex items-center gap-1 transition">
+                                                    <i class="ph-bold ph-plus"></i> Hinzufügen
+                                                </button>
+                                            </div>
+                                            <div class="space-y-2 sub-item-list" id="mat-sub-${cIdx}-${iIdx}">
+                                                ${(item.subItems && item.subItems.length > 0) ? item.subItems.map((sub, sIdx) => `
+                                                    <div class="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                                        <i class="ph-bold ph-dots-six-vertical text-lg text-slate-300 cursor-grab active:cursor-grabbing hover:text-brand-blue drag-handle-sub shrink-0"></i>
+                                                        <img src="${sub.img}" class="w-8 h-8 object-cover rounded-md border border-slate-200 shrink-0" onerror="this.src='https://placehold.co/80x80?text=Img'">
+                                                        <div class="flex-1 min-w-0">
+                                                            <p class="text-sm font-semibold text-slate-700 truncate" title="${sub.name}">${sub.name}</p>
+                                                        </div>
+                                                        <div class="flex items-center gap-1 shrink-0">
+                                                            <input type="number" min="0" step="0.1" value="${sub.qty}" class="w-16 p-1 text-center text-sm border rounded outline-none focus:border-brand-blue" onchange="updateMatQty(${cIdx}, ${iIdx}, ${sIdx}, this.value)">
+                                                            <span class="text-xs text-slate-500 w-6">${sub.unit}</span>
+                                                            <button onclick="deleteMat(${cIdx}, ${iIdx}, ${sIdx})" class="text-red-400 hover:text-red-600 p-1 rounded transition"><i class="ph-bold ph-trash"></i></button>
+                                                        </div>
+                                                    </div>
+                                                `).join('') : '<p class="text-xs text-slate-400 italic">Keine Unterartikel</p>'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += `<p class="text-slate-500 text-sm italic">Keine Artikel in dieser Kategorie.</p>`;
+                }
+                html += `</div></div>`;
+            });
+            listContainer.innerHTML = html;
+
+            // Initialize Sortable JS for Drag and Drop
+            record.materials.forEach((category, cIdx) => {
+                const catEl = document.getElementById(`mat-cat-${cIdx}`);
+                if(catEl) {
+                    new Sortable(catEl, {
+                        handle: '.drag-handle-main',
+                        animation: 150,
+                        onEnd: function(evt) {
+                            const movedItem = category.items.splice(evt.oldIndex, 1)[0];
+                            category.items.splice(evt.newIndex, 0, movedItem);
+                            addHistory(currentRecordIdForMaterials, `Sortierung Hauptartikel geändert`);
+                        }
+                    });
+                }
+
+                if(category.items) {
+                    category.items.forEach((item, iIdx) => {
+                        const subEl = document.getElementById(`mat-sub-${cIdx}-${iIdx}`);
+                        if(subEl) {
+                            new Sortable(subEl, {
+                                handle: '.drag-handle-sub',
+                                animation: 150,
+                                onEnd: function(evt) {
+                                    if(!item.subItems) item.subItems = [];
+                                    const movedSub = item.subItems.splice(evt.oldIndex, 1)[0];
+                                    item.subItems.splice(evt.newIndex, 0, movedSub);
+                                    addHistory(currentRecordIdForMaterials, `Sortierung Unterartikel geändert`);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        // --- NAVIGATION & CRUD ---
+        function navigate(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('view-' + viewId).classList.add('active');
+            if(viewId === 'list') renderList();
+            document.querySelector('main').scrollTo(0,0);
+        }
+
+        function createNew(type) {
+            closeTypeSelection();
+            let formId = type === 'PV' ? 'form-pv' : 'form-wp';
+            document.getElementById(formId).reset();
+            document.getElementById(type.toLowerCase() + '-id').value = ''; 
+            if(type === 'PV') {
+                clearRoofs();
+                addRoofUI();
+            }
+            
+            document.getElementById(formId).querySelectorAll('.hidden').forEach(el => {
+                if(el.id.includes('content')) {
+                    el.classList.remove('hidden');
+                    const iconId = el.id.replace('-content-', '-icon-');
+                    const icon = document.getElementById(iconId);
+                    if(icon) icon.classList.remove('rotate-180');
+                }
+            });
+
+            updateFormProgress(type);
+            navigate('form-' + type.toLowerCase());
+        }
+
+        function editRecord(id) {
+            const record = records.find(r => r.id === id);
+            if(!record) return;
+
+            let formId = record.type === 'PV' ? 'form-pv' : 'form-wp';
+            let form = document.getElementById(formId);
+            form.reset(); 
+            
+            document.getElementById(record.type.toLowerCase() + '-id').value = record.id;
+            
+            if(record.type === 'PV') clearRoofs();
+
+            for (const key in record.data) {
+                if (key === 'roofs' && record.type === 'PV') {
+                    record.data.roofs.forEach(roofData => addRoofUI(roofData));
+                } else if (form.elements[key]) {
+                    if (form.elements[key].type === 'checkbox' || form.elements[key].type === 'radio' || (form.elements[key].length && form.elements[key][0].type === 'radio')) {
+                        if(form.elements[key].length) { 
+                            Array.from(form.elements[key]).forEach(radio => {
+                                if(radio.value == record.data[key] || (radio.value === '1' && record.data[key] === true)) radio.checked = true;
+                            });
+                        } else {
+                            form.elements[key].checked = (record.data[key] == '1' || record.data[key] === true);
+                        }
+                    } else {
+                        form.elements[key].value = record.data[key];
+                    }
+                }
+            }
+            
+            updateFormProgress(record.type);
+            navigate('form-' + record.type.toLowerCase());
+        }
+
+        function saveRecord(event, type) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            if(type === 'PV' && currentRoofIndex === 0) {
+                alert("Bitte lege mindestens eine Dachfläche an.");
+                return;
+            }
+
+            const id = formData.get('id');
+            const customerNameFallback = formData.get('name') + ' ' + formData.get('lastname');
+            
+            let dataObj = {};
+            if(type === 'PV') dataObj.roofs = [];
+
+            for (let [key, value] of formData.entries()) {
+                if(key !== 'id') {
+                    if (type === 'PV' && key.startsWith('roof_')) {
+                        const parts = key.split('_');
+                        const idx = parseInt(parts[1]);
+                        const field = parts.slice(2).join('_');
+                        if (!dataObj.roofs[idx]) dataObj.roofs[idx] = {};
+                        dataObj.roofs[idx][field] = value;
+                    } else {
+                        dataObj[key] = value;
+                    }
+                }
+            }
+            
+            form.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                if (type === 'PV' && cb.name.startsWith('roof_')) {
+                    const parts = cb.name.split('_');
+                    const idx = parseInt(parts[1]);
+                    const field = parts.slice(2).join('_');
+                    if (!dataObj.roofs[idx]) dataObj.roofs[idx] = {};
+                    dataObj.roofs[idx][field] = cb.checked ? 1 : 0;
+                } else {
+                    dataObj[cb.name] = cb.checked ? 1 : 0;
+                }
+            });
+
+            if(type === 'PV') {
+                dataObj.roofs = dataObj.roofs.filter(r => r !== undefined);
+            }
+
+            if (id) {
+                const index = records.findIndex(r => r.id === id);
+                if(index > -1) {
+                    records[index].customerName = customerNameFallback;
+                    records[index].data = dataObj;
+                    addHistory(id, "Formular (Aufmaß) aktualisiert");
+                }
+            } else {
+                const newId = Date.now().toString();
+                records.unshift({
+                    id: newId,
+                    type: type,
+                    date: new Date().toISOString(),
+                    customerName: customerNameFallback,
+                    images: [],
+                    materials: JSON.parse(JSON.stringify(sampleMaterialData)), 
+                    history: [{ action: "Aufmaß neu erstellt", user: currentUser, date: new Date().toISOString() }],
+                    data: dataObj
+                });
+            }
+            navigate('list');
+        }
+
+        function deleteRecord(id) {
+            if(confirm('Möchten Sie dieses Aufmaß wirklich löschen?')) {
+                records = records.filter(r => r.id !== id);
+                renderList();
+            }
+        }
+
+        // --- RENDER LIST ---
+        function renderList() {
+            const listContainer = document.getElementById('full-list-container');
+            listContainer.innerHTML = '';
+            
+            // Search Filter Logic
+            const searchTerm = (document.getElementById('search-input')?.value || '').toLowerCase();
+            let filteredRecords = records;
+
+            if (searchTerm) {
+                filteredRecords = records.filter(r => {
+                    const searchStr = `${r.customerName} ${r.data.city || ''} ${r.data.street || ''} ${r.data.firma || ''} ${r.type}`.toLowerCase();
+                    return searchStr.includes(searchTerm);
+                });
+            }
+
+            if(filteredRecords.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="col-span-full text-center py-16 bg-white rounded-2xl border-2 border-dashed border-slate-200">
+                        <i class="ph ph-clipboard-text text-slate-300 text-5xl mb-3"></i>
+                        <p class="text-slate-500 font-medium">Keine Aufmaße gefunden.</p>
+                        ${searchTerm ? '' : `<button onclick="showTypeSelection()" class="mt-4 text-brand-blue text-sm font-semibold hover:underline">Neues Aufmaß anlegen</button>`}
+                    </div>
+                `;
+                return;
+            }
+
+            filteredRecords.forEach(r => {
+                const isPV = r.type === 'PV';
+                const dateStr = new Date(r.date).toLocaleDateString('de-DE');
+                
+                const icon = isPV ? 'ph-solar-panel text-brand-orange' : 'ph-thermometer text-brand-green';
+                const bg = isPV ? 'bg-brand-orange/20' : 'bg-brand-lightGreen/40';
+                const tagBg = isPV ? 'bg-brand-orange text-white' : 'bg-brand-green text-white';
+                const imgCount = r.images ? r.images.length : 0;
+                const fullName = `${r.data.firma || ''} ${r.data.name || ''} ${r.data.lastname || ''}`.trim();
+                
+                let detailsHtml = '';
+                if(r.data.street) detailsHtml += `<span class="col-span-2 truncate flex gap-2 items-center"><i class="ph ph-map-pin"></i> ${r.data.street}, ${r.data.city}</span>`;
+                if(isPV && r.data.kwp_size) detailsHtml += `<span><strong>${r.data.kwp_size}</strong> kWp</span>`;
+                if(isPV && r.data.roofs) detailsHtml += `<span><strong>${r.data.roofs.length}</strong> Dachfläche(n)</span>`;
+                if(!isPV && r.data.building_type) detailsHtml += `<span>${r.data.building_type}</span>`;
+                if(!isPV && r.data.objective) detailsHtml += `<span>${r.data.objective}</span>`;
+
+                listContainer.innerHTML += `
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-4 hover:shadow-md transition relative">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-3">
+                                <div class="p-3 rounded-xl ${bg}"><i class="ph-fill ${icon} text-2xl"></i></div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-lg">${fullName || 'Unbenannt'}</h3>
+                                    <span class="text-xs text-slate-500 flex items-center gap-1"><i class="ph ph-calendar-blank"></i> ${dateStr}</span>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-md shadow-sm ${tagBg}">${r.type}</span>
+                        </div>
+                        
+                        <div class="text-sm text-slate-600 grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            ${detailsHtml}
+                        </div>
+                        
+                        <div class="flex flex-wrap justify-end gap-2 pt-2 border-t border-slate-100">
+                            <button onclick="deleteRecord('${r.id}')" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition" title="Löschen">
+                                <i class="ph-bold ph-trash text-lg"></i>
+                            </button>
+                            
+                            <button onclick="openHistory('${r.id}')" class="px-3 py-2 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-200 transition flex items-center gap-1.5">
+                                <i class="ph-bold ph-clock-counter-clockwise text-lg text-slate-500"></i> Historie
+                            </button>
+
+                            <button onclick="openImages('${r.id}')" class="px-3 py-2 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-200 transition flex items-center gap-1.5">
+                                <i class="ph-bold ph-camera text-lg text-brand-blue"></i> Fotos
+                                ${imgCount > 0 ? `<span class="bg-brand-blue text-white text-[10px] px-1.5 py-0.5 rounded-full">${imgCount}</span>` : ''}
+                            </button>
+
+                            <button onclick="openMaterials('${r.id}')" class="px-3 py-2 bg-brand-lightBlue/30 text-brand-blue text-sm font-semibold rounded-xl hover:bg-brand-lightBlue/50 transition flex items-center gap-1.5">
+                                <i class="ph-bold ph-package text-lg"></i> Material
+                            </button>
+                            
+                            <button onclick="editRecord('${r.id}')" class="px-4 py-2 bg-slate-900 text-white text-sm font-semibold rounded-xl hover:bg-slate-800 transition flex items-center gap-1.5">
+                                <i class="ph-bold ph-pencil-simple text-lg"></i> Bearbeiten
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
     </script>
 </body>
 </html>

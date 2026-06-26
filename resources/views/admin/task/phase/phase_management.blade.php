@@ -1,2384 +1,1909 @@
- @extends('admin.layouts.app')
+@extends('admin.layouts.app')
 
-@section('title') Arbeitsschritte Details @stop
+@section('title') Lead Task Management @stop
 
 @section('style')
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/select/select2.min.css')}}">
-
-<style>
-    /* PAGE SHELL */
-    .phase-layout-shell {
-        background: radial-gradient(circle at top left, #f1f5f9 0, #ffffff 45%, #f9fafb 100%);
-        min-height: calc(100vh - 120px);
-        padding: 8px 0 24px;
-    }
-
-    .phase-card-shell {
-        border-radius: 18px;
-        border: 1px solid #e5e7eb;
-        background-color: #ffffff;
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-        padding: 16px;
-    }
-
-    @media (min-width: 992px) {
-        .phase-card-shell {
-            padding: 20px 22px;
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="{{ asset('app-assets/vendors/css/forms/select/select2.min.css') }}">
+    <style>
+        :root {
+            --ltm-bg: #f8fafc;
+            --ltm-card: #ffffff;
+            --ltm-border: #e5e7eb;
+            --ltm-text: #111827;
+            --ltm-muted: #6b7280;
+            --ltm-blue: #74b2d4;
+            --ltm-green: #93c21c;
+            --ltm-orange: #f8ac00;
+            --ltm-red: #ef4444;
+            --ltm-shadow: 0 20px 55px rgba(15, 23, 42, .14);
         }
-    }
 
-    /* HEADER */
-    .phase-page-header {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px 16px;
-        margin-bottom: 10px;
-    }
-
-    .phase-page-title {
-        font-size: 20px;
-        font-weight: 700;
-        letter-spacing: .03em;
-        text-transform: uppercase;
-        color: #111827;
-    }
-
-    .phase-page-subtitle {
-        font-size: 12px;
-        color: #6b7280;
-    }
-
-    /* LEFT SIDEBAR: STAGE / PHASE TREE */
-    .phase-sidebar {
-        border-radius: 16px;
-        background: linear-gradient(135deg, #f1f5f9, #ffffff);
-        border: 1px solid #e5e7eb;
-        padding: 10px 10px 12px;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-
-    .phase-sidebar-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
-    }
-
-    .phase-sidebar-title {
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: .06em;
-        color: #6b7280;
-    }
-
-    .phase-sidebar-meta {
-        font-size: 11px;
-        color: #9ca3af;
-    }
-
-    .scrollable-container {
-        max-height: calc(100vh - 220px);
-        overflow-y: auto;
-        padding-right: 4px;
-    }
-
-    .scrollable-container::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .scrollable-container::-webkit-scrollbar-thumb {
-        background-color: rgba(148, 163, 184, 0.7);
-        border-radius: 999px;
-    }
-
-    /* CARDS INSIDE SIDEBAR (STAGE GROUPS) */
-    .stage-card {
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        margin-bottom: 6px;
-        overflow: hidden;
-        background-color: #ffffff;
-    }
-
-    .stage-card-header {
-        cursor: pointer;
-        padding: 6px 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: linear-gradient(90deg, #f9fafb, #f3f4f6);
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .stage-name {
-        font-size: 12px;
-        font-weight: 600;
-        color: #111827;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .stage-badge {
-        font-size: 10px;
-        border-radius: 999px;
-        padding: 2px 6px;
-        background: rgba(59, 130, 246, 0.08);
-        color: #2563eb;
-        font-weight: 500;
-    }
-
-    .stage-chevron {
-        font-size: 14px;
-        color: #9ca3af;
-    }
-
-    /* PHASE ROWS IN SIDEBAR */
-    .sortable-phases {
-        padding: 4px 0;
-    }
-
-    .phase-item-row {
-        border-bottom: 1px dashed #e5e7eb;
-    }
-
-    .phase-item-row:last-child {
-        border-bottom: none;
-    }
-
-    .folder-toggle {
-        cursor: pointer;
-        user-select: none;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 10px;
-        position: relative;
-        transition: background 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .folder-toggle:hover {
-        background: #f9fafb;
-    }
-
-    .folder-toggle.active {
-        background: #eef2ff;
-        box-shadow: inset 2px 0 0 #4f46e5;
-    }
-
-    .folder-icon {
-        width: 20px;
-        text-align: center;
-        font-weight: 700;
-        font-size: 16px;
-        color: #9ca3af;
-    }
-
-    .folder-label {
-        font-size: 12px;
-        font-weight: 500;
-        color: #111827;
-    }
-
-    .folder-label.heading {
-        font-size: 12px;
-        font-weight: 600;
-        color: #93c21c;
-    }
-
-    .total-sub-tasks {
-        margin-left: auto;
-        font-size: 11px;
-        color: #6b7280;
-    }
-
-    .button-container {
-        display: none;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        position: absolute;
-        right: 6px;
-        top: 3px;
-        display: flex;
-        gap: 4px;
-    }
-
-    .folder-toggle:hover .button-container,
-    .folder-toggle.active .button-container {
-        opacity: 1;
-    }
-
-    .subfolder {
-        margin-left: 20px;
-        padding-left: 4px;
-        border-left: 1px dashed #e5e7eb;
-    }
-
-    @media (max-width: 576px) {
-        .subfolder {
-            margin-left: 10px;
+        .ltm-page {
+            min-height: calc(100vh - 120px);
+            padding: 14px 0 28px;
+            background: radial-gradient(circle at top left, rgba(116, 178, 212, .22), transparent 30%), radial-gradient(circle at bottom right, rgba(147, 194, 28, .16), transparent 30%), #f9fafb;
         }
-    }
 
-    /* BADGES */
-    .badge {
-        padding: 2px 6px;
-        font-size: 10px;
-        font-weight: 600;
-        border-radius: 999px;
-    }
+        .ltm-shell {
+            background: #fff;
+            border: 1px solid var(--ltm-border);
+            border-radius: 24px;
+            box-shadow: 0 16px 42px rgba(15, 23, 42, .08);
+            padding: 18px;
+        }
 
-    .badge-success {
-        background-color: #22c55e;
-        color: #fff;
-    }
+        .ltm-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 14px;
+            flex-wrap: wrap;
+            padding: 16px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(116, 178, 212, .18), rgba(147, 194, 28, .12)), #fff;
+            border: 1px solid rgba(116, 178, 212, .28);
+            margin-bottom: 16px;
+        }
 
-    .badge-secondary {
-        background-color: #6b7280;
-        color: #fff;
-    }
+        .ltm-title {
+            margin: 0;
+            font-size: 23px;
+            font-weight: 900;
+            color: var(--ltm-text);
+            text-transform: uppercase;
+            letter-spacing: -.02em;
+        }
 
-    .badge-primary {
-        background-color: #3b82f6;
-        color: #fff;
-    }
+        .ltm-subtitle {
+            margin-top: 4px;
+            font-size: 13px;
+            color: var(--ltm-muted);
+            font-weight: 700;
+        }
 
-    /* RIGHT PANEL: TABLE CARD */
-        .phase-detail-card {
+        .ltm-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .ltm-toolbar-left,
+        .ltm-toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .ltm-btn,
+        .ltm-btn-soft,
+        .ltm-btn-blue,
+        .ltm-btn-danger,
+        .ltm-btn-warning {
+            border: 0;
+            border-radius: 12px;
+            min-height: 40px;
+            padding: 9px 13px;
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all .18s ease;
+        }
+
+        .ltm-btn {
+            background: var(--ltm-green);
+            color: #fff;
+        }
+
+        .ltm-btn:hover {
+            background: #7baa18;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .ltm-btn-blue {
+            background: var(--ltm-blue);
+            color: #fff;
+        }
+
+        .ltm-btn-danger {
+            background: var(--ltm-red);
+            color: #fff;
+        }
+
+        .ltm-btn-warning {
+            background: var(--ltm-orange);
+            color: #111827;
+        }
+
+        .ltm-btn-soft {
+            background: #fff;
+            color: #374151;
+            border: 1px solid var(--ltm-border);
+        }
+
+        .ltm-icon-btn {
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            border-radius: 10px;
+            border: 1px solid var(--ltm-border);
+            background: #fff;
+            color: #374151;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .ltm-icon-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .ltm-icon-btn.danger {
+            background: #fef2f2;
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
+
+        .ltm-input,
+        .ltm-select,
+        .ltm-textarea {
+            width: 100%;
+            min-height: 40px;
+            border: 1px solid var(--ltm-border);
+            border-radius: 12px;
+            padding: 9px 11px;
+            outline: none;
+            color: var(--ltm-text);
+            background: #fff;
+            font-size: 14px;
+        }
+
+        .ltm-textarea {
+            min-height: 95px;
+            resize: vertical;
+        }
+
+        .ltm-input:focus,
+        .ltm-select:focus,
+        .ltm-textarea:focus {
+            border-color: var(--ltm-green);
+            box-shadow: 0 0 0 3px rgba(147, 194, 28, .16);
+        }
+
+        .ltm-layout {
+            display: grid;
+            grid-template-columns: 380px minmax(0, 1fr);
+            gap: 16px;
+            align-items: start;
+        }
+
+        .ltm-left-panel,
+        .ltm-detail {
+            border: 1px solid var(--ltm-border);
+            border-radius: 20px;
+            background: #fff;
+            min-height: 620px;
+            box-shadow: 0 8px 28px rgba(15, 23, 42, .05);
+            overflow: hidden;
+        }
+
+        .ltm-left-head,
+        .ltm-detail-head {
+            padding: 14px 16px;
+            background: #fafafa;
+            border-bottom: 1px solid var(--ltm-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .ltm-left-title,
+        .ltm-detail-title {
+            font-size: 15px;
+            font-weight: 900;
+            color: var(--ltm-text);
+        }
+
+        .ltm-left-sub,
+        .ltm-detail-sub {
+            margin-top: 3px;
+            font-size: 12px;
+            color: var(--ltm-muted);
+            font-weight: 700;
+        }
+
+        .ltm-stage-count {
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #075985;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .ltm-tree {
+            padding: 14px;
+            max-height: calc(100vh - 260px);
+            overflow: auto;
+        }
+
+        .ltm-stage-accordion {
+            border: 1px solid var(--ltm-border);
             border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            background: #fff;
+        }
+
+        .ltm-stage-accordion-head {
+            width: 100%;
+            border: 0;
+            background: #f8fafc;
+            color: var(--ltm-text);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .ltm-stage-name {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .ltm-stage-dot,
+        .ltm-lane-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            flex: 0 0 auto;
+            background: var(--ltm-blue);
+        }
+
+        .ltm-stage-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 0 0 auto;
+        }
+
+        .ltm-accordion-chevron {
+            transition: transform .18s ease;
+        }
+
+        .ltm-stage-accordion.is-closed .ltm-accordion-chevron {
+            transform: rotate(-90deg);
+        }
+
+        .ltm-stage-accordion-body {
+            padding: 10px;
+            background: #fff;
+        }
+
+        .ltm-stage-accordion.is-closed .ltm-stage-accordion-body {
+            display: none;
+        }
+
+        .ltm-lane {
             border: 1px solid #e5e7eb;
-            background-color: #ffffff;
-            box-shadow: 0 8px 28px rgba(15,23,42,0.05);
-            padding: 10px 10px 14px;
-            height: 100%;
+            background: #fff;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .ltm-lane-head {
+            border: 0;
+            width: 100%;
+            padding: 9px 10px;
+            background: #f9fafb;
+            border-bottom: 1px solid #eef2f7;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .ltm-lane-title {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            font-weight: 900;
+            color: #374151;
+            min-width: 0;
+        }
+
+        .ltm-lane-body {
+            padding: 8px;
+        }
+
+        .ltm-lane.is-closed .ltm-lane-body {
+            display: none;
+        }
+
+        .ltm-lane.is-closed .ltm-accordion-chevron {
+            transform: rotate(-90deg);
+        }
+
+        .ltm-task-list {
+            min-height: 52px;
+        }
+
+        .ltm-task-card {
+            border: 1px solid var(--ltm-border);
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, .06);
+            margin-bottom: 8px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .ltm-task-card:hover {
+            border-color: rgba(147, 194, 28, .55);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, .10);
+        }
+
+        .ltm-task-card.is-selected {
+            border-color: var(--ltm-green);
+            box-shadow: 0 0 0 3px rgba(147, 194, 28, .16);
+        }
+
+        .ltm-task-main {
+            padding: 10px;
+        }
+
+        .ltm-task-title-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .ltm-task-title {
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--ltm-text);
+            line-height: 1.35;
+        }
+
+        .ltm-task-actions {
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: .18s ease;
+        }
+
+        .ltm-task-card:hover .ltm-task-actions,
+        .ltm-task-card.is-selected .ltm-task-actions {
+            opacity: 1;
+        }
+
+        .ltm-task-meta {
+            margin-top: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            color: var(--ltm-muted);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .ltm-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .ltm-chip.green {
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .ltm-chip.red {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .ltm-activities {
+            border-top: 1px solid #f3f4f6;
+            padding: 8px 10px;
+            background: #fcfcfd;
+        }
+
+        .ltm-activity-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px dashed #e5e7eb;
+        }
+
+        .ltm-activity-row:last-child {
+            border-bottom: 0;
+        }
+
+        .ltm-activity-title {
+            font-size: 12px;
+            color: #111827;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+            cursor: pointer;
+        }
+
+        .ltm-child-activity {
+            margin-left: 16px;
+            color: #4b5563;
+        }
+
+        .ltm-empty {
+            padding: 16px;
+            text-align: center;
+            border: 1px dashed #d1d5db;
+            border-radius: 14px;
+            color: var(--ltm-muted);
+            font-size: 12px;
+            font-weight: 800;
+            background: #fafafa;
+        }
+
+        .ltm-loading {
+            padding: 35px;
+            text-align: center;
+            color: var(--ltm-muted);
+            font-weight: 900;
+        }
+
+        .ltm-placeholder {
+            min-height: 54px;
+            border: 2px dashed #93c5fd;
+            background: rgba(59, 130, 246, .08);
+            border-radius: 14px;
+            margin-bottom: 8px;
+        }
+
+        .ltm-detail {
+            position: sticky;
+            top: 88px;
             display: flex;
             flex-direction: column;
-            min-width: 0;               /* IMPORTANT for flex children */
         }
 
-        .sortable-placeholder{
+        .ltm-detail-head {
+            align-items: flex-start;
+        }
+
+        .ltm-detail-body {
+            padding: 16px;
+            overflow: auto;
+            max-height: calc(100vh - 210px);
+        }
+
+        .ltm-detail-section {
+            border: 1px solid var(--ltm-border);
+            border-radius: 16px;
+            padding: 13px;
+            margin-bottom: 12px;
+        }
+
+        .ltm-detail-kicker {
+            font-size: 11px;
+            color: var(--ltm-muted);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 7px;
+        }
+
+        .ltm-detail-text {
+            font-size: 13px;
+            color: var(--ltm-text);
+            line-height: 1.55;
+        }
+
+        .ltm-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background: rgba(15, 23, 42, .58);
+        }
+
+        .ltm-modal-backdrop.is-open {
+            display: flex;
+        }
+
+        .ltm-modal {
+            width: 100%;
+            max-width: 720px;
+            max-height: calc(100vh - 36px);
+            background: #fff;
+            border: 1px solid var(--ltm-border);
+            border-radius: 24px;
+            box-shadow: var(--ltm-shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .ltm-modal.sm {
+            max-width: 560px;
+        }
+
+        .ltm-modal-head {
+            padding: 17px 20px;
+            border-bottom: 1px solid var(--ltm-border);
+            background: #fafafa;
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .ltm-modal-title {
+            margin: 0;
+            font-size: 17px;
+            color: var(--ltm-text);
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .ltm-modal-sub {
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--ltm-muted);
+            font-weight: 700;
+        }
+
+        .ltm-modal-close {
+            width: 38px;
             height: 38px;
-            margin: 4px 8px;
-            border: 2px dashed #93c5fd;
-            background: rgba(59,130,246,0.08);
-            border-radius: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--ltm-border);
+            background: #fff;
+            color: var(--ltm-muted);
+            cursor: pointer;
+        }
+
+        .ltm-modal-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .ltm-modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--ltm-border);
+            background: #fafafa;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .ltm-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .ltm-form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .ltm-label {
+            display: block;
+            margin-bottom: 7px;
+            color: var(--ltm-muted);
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .ltm-check-card {
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border: 1px solid var(--ltm-border);
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .ltm-check-card input {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--ltm-green);
+        }
+
+        .ltm-error {
+            display: none;
+            margin-top: 12px;
+            padding: 11px 12px;
+            border-radius: 14px;
+            border: 1px solid #fecaca;
+            background: #fef2f2;
+            color: #991b1b;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: pre-line;
+        }
+
+        .ltm-error.is-visible {
+            display: block;
+        }
+
+        .ltm-admin-manager {
+            border-top: 1px solid var(--ltm-border);
+            margin-top: 12px;
+            padding-top: 12px;
+        }
+
+        .ltm-admin-stage {
+            border: 1px solid var(--ltm-border);
+            border-radius: 16px;
+            background: #fff;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .ltm-admin-stage-head {
+            display: grid;
+            grid-template-columns: 34px minmax(0, 1.2fr) minmax(0, .9fr) 80px 86px 86px 96px auto;
+            gap: 8px;
+            align-items: center;
+            padding: 10px;
+            background: #f9fafb;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .ltm-admin-sub-list {
+            padding: 10px;
+        }
+
+        .ltm-admin-sub {
+            display: grid;
+            grid-template-columns: 34px minmax(0, 1.4fr) minmax(0, .9fr) 80px 90px auto;
+            gap: 8px;
+            align-items: center;
+            padding: 8px;
+            border: 1px solid #eef2f7;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            background: #fcfcfd;
+        }
+
+        .ltm-drag-handle {
+            cursor: grab;
+            color: var(--ltm-muted);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+        }
+
+        .ltm-stage-admin-tools {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .ltm-admin-small {
+            font-size: 11px;
+            font-weight: 900;
+            color: var(--ltm-muted);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 1100px) {
+
+            .ltm-admin-stage-head,
+            .ltm-admin-sub {
+                grid-template-columns: 1fr;
             }
 
-            .sortable-phases, .sortable-activities{
-            min-height: 18px; /* allow dropping into empty lists */
+            .ltm-drag-handle {
+                justify-content: flex-start;
+            }
+        }
+
+        #ltmSelect2Portal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000060;
+            pointer-events: none;
+        }
+
+        #ltmSelect2Portal .select2-container {
+            pointer-events: auto;
+        }
+
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .select2-container--open {
+            z-index: 1000061 !important;
+        }
+
+        .select2-dropdown {
+            z-index: 1000062 !important;
+            border-radius: 12px !important;
+            overflow: hidden;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, .18);
+        }
+
+        @media (max-width:1200px) {
+            .ltm-layout {
+                grid-template-columns: 1fr;
             }
 
+            .ltm-detail {
+                position: static;
+                min-height: auto;
+            }
 
-    .phase-detail-header {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px 12px;
-        margin-bottom: 8px;
-    }
-
-    .phase-detail-title {
-        font-size: 14px;
-        font-weight: 600;
-        color: #111827;
-    }
-
-    .phase-detail-meta {
-        font-size: 11px;
-        color: #6b7280;
-    }
-
-    .table-responsive {
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        background: #ffffff;
-        display: block;
-        width: 100%;
-        max-width: 100%;
-        overflow-x: auto;           /* allow horizontal scroll */
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    #detailed_table thead {
-        background: #f3f4f6;
-    }
-
-    #detailed_table thead th {
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: .04em;
-        color: #6b7280 !important;
-        border-bottom-width: 1px !important;
-        white-space: nowrap;
-    }
-
-    #detailed_table tbody td {
-        font-size: 12px;
-        vertical-align: middle;
-    }
-
-    @media (max-width: 991.98px) {
-        .phase-card-shell {
-            padding: 12px;
+            .ltm-detail-body {
+                max-height: none;
+            }
         }
-        .phase-sidebar {
-            margin-bottom: 10px;
+
+        @media (max-width:768px) {
+
+            .ltm-toolbar-left,
+            .ltm-toolbar-right {
+                width: 100%;
+            }
+
+            .ltm-toolbar-left .ltm-input {
+                min-width: 0 !important;
+            }
+
+            .ltm-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ltm-form-group.full {
+                grid-column: auto;
+            }
         }
-        .table-responsive {
-            max-height: 420px;
-            overflow-y: auto;      /* vertical scroll as well */
+
+        @media (max-width: 1200px) {
+            .ltm-layout {
+                grid-template-columns: 320px minmax(0, 1fr);
+            }
         }
-    }
 
+        @media (max-width: 992px) {
+            .ltm-layout {
+                grid-template-columns: 1fr;
+            }
 
-    /* MINIMIZE BUTTON */
-    .minimize-button {
-        border-radius: 999px !important;
-        padding: 4px 8px !important;
-    }
-</style>
-
-<style>
-    /* ... Your existing styles ... */
-    .phase-layout-shell { background: radial-gradient(circle at top left, #f3f4f6 0, #ffffff 45%, #f9fafb 100%); min-height: calc(100vh - 120px); padding: 8px 0 24px; }
-    
-    /* MASTER SET DRAWER STYLES */
-    .master-set-drawer {
-        position: fixed;
-        top: 0; right: 0; bottom: 0; left: 0;
-        z-index: 999999 !important; /* Force on top of everything */
-        visibility: hidden;
-        pointer-events: none;
-    }
-
-    .master-set-drawer.open {
-        visibility: visible;
-        pointer-events: auto;
-    }
-
-    .master-set-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.5);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .master-set-drawer.open .master-set-overlay { opacity: 1; }
-
-    .master-set-panel {
-        position: absolute;
-        top: 0; right: 0; height: 100%; width: 1000px;
-        max-width: 90vw;
-        background: #ffffff;
-        box-shadow: -5px 0 25px rgba(0,0,0,0.2);
-        transform: translateX(100%);
-        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        display: flex; flex-direction: column;
-        z-index: 1000000;
-    }
-
-    .master-set-drawer.open .master-set-panel { transform: translateX(0); }
-
-    .master-set-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; }
-    .master-set-body { padding: 0; overflow-y: auto; flex: 1 1 auto; }
-
-    .set-item-btn { width: 100%; text-align: left; padding: 15px 20px; border: none; background: #fff; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background 0.15s; }
-    .set-item-btn:hover { background: #f0f9ff; }
-</style>
+            .ltm-detail {
+                min-height: auto;
+            }
+        }
+    </style>
 @endsection
 
 @section('content')
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
-    <div class="content-wrapper phase-layout-shell">
-        <div class="content-header row">
-            <div class="content-header-left col-md-9 col-12 mb-2">
-                <div class="row breadcrumbs-top">
-                    <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">ARBEITSSCHRITTE</h2>
-                        <div class="breadcrumb-wrapper col-12">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="{{ url('/employee_dashboard') }}">Dashboard</a>
-                                </li>
-                                 
-                                <li class="breadcrumb-item">
-                                    <a href="{{ url('task_phase' ) }}">
-                                        Arbeitsschritte
-                                    </a>
-                                </li>
+    <div class="app-content">
+        <div class="content-wrapper ltm-page">
+            <div class="content-body ltm-shell" id="leadTaskApp" data-product-id="{{ $section->product_id }}"
+                data-section-id="{{ $section->id }}">
 
-                                 <li class="breadcrumb-item active"> 
-                                        Liste 
-                                </li> 
-                            </ol>
+                <div class="ltm-topbar">
+                    <div>
+                        <h2 class="ltm-title">Lead Task Management</h2>
+                        <div class="ltm-subtitle">
+                            {{ $productModel->article_group ?? ('Produkt #' . $section->product_id) }} ·
+                            {{ $section->phase_section }} · Phasen als Collapse-Liste mit Detailansicht rechts.
                         </div>
                     </div>
+                    <a href="{{ route('task_phase.index', ['product' => $section->product_id]) }}" class="ltm-btn-soft">
+                        <i class="feather icon-arrow-left"></i> Zurück
+                    </a>
                 </div>
-            </div>
-        </div>
 
-        <div class="content-body phase-card-shell">
-            @if ($errors->any())
-                <div class="alert alert-danger mb-1">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li style="font-size: 12px;">{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            {{-- PAGE HEADER LINE --}}
-            <div class="phase-page-header">
-                <div>
-                    <div class="phase-page-title">Arbeitsschritte</div>
-                    <div class="phase-page-subtitle">
-                        Phasen & Aktivitäten je Stage und Version verwalten.
+                <div class="ltm-toolbar">
+                    <div class="ltm-toolbar-left">
+                        <input type="text" class="ltm-input" id="ltmSearch"
+                            placeholder="Phase, Aktivität oder Beschreibung suchen..." style="min-width:360px;">
+                        <button type="button" class="ltm-btn-blue" id="ltmSearchClear"><i
+                                class="feather icon-x"></i></button>
+                    </div>
+                    <div class="ltm-toolbar-right">
+                        <button type="button" class="ltm-btn-soft" id="btnExpandAll"><i class="feather icon-maximize-2"></i>
+                            Alle öffnen</button>
+                        <button type="button" class="ltm-btn-soft" id="btnCollapseAll"><i
+                                class="feather icon-minimize-2"></i> Alle schließen</button>
+                        <button type="button" class="ltm-btn-warning" id="btnOpenStageAdmin"><i
+                                class="feather icon-settings"></i> LeadStages verwalten</button>
+                        <button type="button" class="ltm-btn" id="btnCreateTask"><i class="feather icon-plus"></i> Neue
+                            Phase</button>
+                        <button type="button" class="ltm-btn-soft" id="btnReloadBoard"><i
+                                class="feather icon-refresh-cw"></i> Neu laden</button>
                     </div>
                 </div>
 
-                <div class="d-flex flex-wrap align-items-center justify-content-end">
-                    <button type="button"
-                            class="btn btn-icon btn-outline-primary mr-1 mb-1 waves-effect waves-light minimize-button">
-                        <i class="feather icon-minus"></i>
-                    </button>
-                </div>
-            </div>
+                <div class="ltm-layout">
+                    <section class="ltm-left-panel">
+                        <div class="ltm-left-head">
+                            <div>
+                                <div class="ltm-left-title">Phasen / Lead-Stages</div>
+                                <div class="ltm-left-sub">Alles in einer Spalte. Drag & Drop zwischen Stages und Sub-Stages
+                                    bleibt aktiv.</div>
+                            </div>
+                            <span class="ltm-stage-count" id="ltmTotalCount">0 Phasen</span>
+                        </div>
+                        <div class="ltm-tree" id="ltmTree">
+                            <div class="ltm-loading">Lade Phasen...</div>
+                        </div>
+                    </section>
 
-            {{-- SEARCH + VERSION --}}
-            <section id="basic-horizontal-layouts">
-                <div class="row align-items-center mb-1">
-                    <div class="col-md-5 mb-1 mb-md-0">
-                        <form action="{{ action('App\Http\Controllers\TaskPhaseController@index') }}">
-                            <div class="input-group input-group-sm">
-                                <input type="text" name="search" class="form-control" placeholder="Phase oder Produkt suchen" aria-describedby="search-btn">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit" id="search-btn">Go</button>
+                    <aside class="ltm-detail" id="ltmDetail">
+                        <div class="ltm-detail-head">
+                            <div>
+                                <div class="ltm-detail-title">Details</div>
+                                <div class="ltm-detail-sub">Klicke links auf eine Phase oder Aktivität.</div>
+                            </div>
+                        </div>
+                        <div class="ltm-detail-body" id="ltmDetailBody">
+                            <div class="ltm-empty">Noch nichts ausgewählt.</div>
+                        </div>
+                    </aside>
+                </div>
+
+                {{-- TASK MODAL --}}
+                <div class="ltm-modal-backdrop" id="taskModal" aria-hidden="true">
+                    <div class="ltm-modal sm" role="dialog" aria-modal="true">
+                        <form id="taskForm">
+                            <div class="ltm-modal-head">
+                                <div>
+                                    <h3 class="ltm-modal-title" id="taskModalTitle">Neue Phase</h3>
+                                    <div class="ltm-modal-sub">Phase direkt in eine Lead-Stage oder Sub-Stage speichern.
+                                    </div>
                                 </div>
+                                <button type="button" class="ltm-modal-close" data-close-ltm-modal>&times;</button>
+                            </div>
+                            <div class="ltm-modal-body">
+                                <input type="hidden" name="task_id" id="task_id">
+                                <input type="hidden" name="product_id" value="{{ $section->product_id }}">
+                                <input type="hidden" name="section_id" value="{{ $section->id }}">
+                                <div class="ltm-form-grid">
+                                    <div class="ltm-form-group full">
+                                        <label class="ltm-label">Titel *</label>
+                                        <input type="text" class="ltm-input" name="phase_name" id="task_title" required>
+                                    </div>
+                                    <div class="ltm-form-group">
+                                        <label class="ltm-label">Lead-Stage *</label>
+                                        <select class="ltm-select" name="lead_stage_id" id="task_lead_stage_id" required>
+                                            <option value="">Bitte wählen</option>
+                                            @foreach($leadStages as $stage)
+                                                <option value="{{ $stage->id }}">{{ $stage->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="ltm-form-group">
+                                        <label class="ltm-label">Sub-Stage</label>
+                                        <select class="ltm-select" name="lead_sub_stage_id" id="task_lead_sub_stage_id">
+                                            <option value="">Hauptstage</option>
+                                            @foreach($leadStages as $stage)
+                                                @foreach($stage->activeSubStages as $subStage)
+                                                    <option value="{{ $subStage->id }}" data-stage-id="{{ $stage->id }}">
+                                                        {{ $stage->name }} · {{ $subStage->name }}</option>
+                                                @endforeach
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="ltm-form-group">
+                                        <label class="ltm-label">Status</label>
+                                        <select class="ltm-select" name="status" id="task_status">
+                                            <option value="Published">Aktiv</option>
+                                            <option value="Unpublished">Inaktiv</option>
+                                        </select>
+                                    </div>
+                                    <div class="ltm-form-group full">
+                                        <label class="ltm-label">Beschreibung</label>
+                                        <textarea class="ltm-textarea" name="description" id="task_description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="ltm-error" id="taskError"></div>
+                            </div>
+                            <div class="ltm-modal-footer">
+                                <button type="button" class="ltm-btn-soft" data-close-ltm-modal>Abbrechen</button>
+                                <button type="submit" class="ltm-btn"><i class="feather icon-save"></i> Speichern</button>
                             </div>
                         </form>
                     </div>
-
-                    <div class="col-md-7 d-flex flex-wrap justify-content-end align-items-center">
-                        <div class="mr-1 mb-1">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#primary">
-                                Neue Phase
-                            </button>
-                        </div>
-
-                        <input type="hidden" id="filter_product_id" value="{{ request()->product }}">
-                        <input type="hidden" id="currentVersion" value="{{ $currentVersion ?? '' }}">
-                        <input type="hidden" name="section_id" id="section_id" value="{{ request()->section_id }}">
-
-                        <div class="stage-button">
-                            <div class="form-group row mb-0">
-                                <label class="col-md-4 col-form-label col-form-label-sm text-right">Version</label>
-                                <div class="col-md-8">
-                                    <select name="version" id="version_id" class="form-control form-control-sm select2">
-                                        <option value="">-- Bitte wählen --</option>
-                                        @foreach ($groupedStages as $version => $stagesInVersion)
-                                            <option value="{{ $version }}">
-                                                Version: {{ $version }} ({{ $stagesInVersion->count() }} Stages)
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
-                {{-- MODAL: NEUE PHASE --}}
-                @include('admin.task.phase.partials.modal-create-phase', [
-                    'section'       => $section,
-                    'groupedStages' => $groupedStages
-                ])
-
-                {{-- COPY MODAL --}}
-                @include('admin.task.phase.partials.modal-copy-activities')
-
-                {{-- MAIN TWO-COLUMN LAYOUT --}}
-                <div class="row match-height">
-                    {{-- LEFT SIDEBAR: TREE --}}
-                    <div class="col-lg-4 col-md-5 col-12 side-bar mb-1 mb-md-0">
-                        <div class="phase-sidebar">
-                            <div class="phase-sidebar-header">
-                                <div>
-                                    <div class="phase-sidebar-title">Stages & Phasen</div>
-                                    <div class="phase-sidebar-meta">
-                                        Produkt #{{ $section->product_id }} · Sektion: {{ $translatePhase[$section->phase_section] ?? $section->phase_section }}
-                                    </div>
-                                </div>
-                                <div class="badge badge-primary">
-                                    {{ $phases->count() }} Phasen
-                                </div>
-                            </div>
-
-                            <div id="folderStructure" class="scrollable-container">
-                                @include('admin.task.phase.partials.folder-structure-initial', [
-                                    'groupedStages'  => $groupedStages,
-                                    'phases'         => $phases ?? collect(),
-                                    'currentVersion' => $currentVersion
-                                ])
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- RIGHT PANEL: ACTIVITIES TABLE --}}
-                    <div class="col-lg-8 col-md-7 col-12 activity-page" id="activities">
-                        <div class="phase-detail-card">
-                            <div class="phase-detail-header">
-                                <div>
-                                    <div class="phase-detail-title">
-                                        Aktivitäten-Details
-                                    </div>
-                                    <div class="phase-detail-meta">
-                                        Klicken Sie links auf eine Phase oder Aktivität, um Details hier zu sehen.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="table-responsive">
-                                <table class="table table-striped mb-0" id="detailed_table">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Titel</th>
-                                            <th>Beschreibung</th>
-                                            <th>Produkt</th>
-                                            <th>Leistung</th>
-                                            <th>Abteilung</th>
-                                            <th>Qualifikation</th>
-                                            <th>Artikel</th>
-                                            <th>Phase</th>
-                                            <th>Hinweis</th>
-                                            <th>Dauer</th>
-                                            <th>Status</th>
-                                            <th>Aktionen</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{-- Aktivitäten werden per AJAX geladen --}}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="masterSetDrawer" class="master-set-drawer">
-                    <div class="master-set-overlay" id="masterSetDrawerOverlay"></div>
-                    <div class="master-set-panel">
-                        <div class="master-set-header">
-                            <h5 class="master-set-title mb-0 font-weight-bold">Master Set verknüpfen</h5>
-                            <button type="button" class="close" id="masterSetDrawerClose" style="font-size: 2rem;">&times;</button>
-                        </div>
-                        <div class="master-set-body" id="master-set-list-container"></div>
-                    </div>
-                </div>
-
-
-                @php
-                    $user = DB::table('employees')
-                        ->select('name', 'lastname', 'image')
-                        ->where('id', auth()->user()->name)
-                        ->first();
-                    $creator = $user->name . ' '. $user->lastname;
-                @endphp
 
                 {{-- ACTIVITY MODAL --}}
-                @include('admin.task.phase.partials.modal-activity', [
-                    'user'        => $user,
-                    'departments' => $departments,
-                    'positions'   => $positions,
-                    'articles'    => $articles
-                ])
+                <div class="ltm-modal-backdrop" id="activityModal" aria-hidden="true">
+                    <div class="ltm-modal" role="dialog" aria-modal="true">
+                        <form id="activityForm">
+                            <div class="ltm-modal-head">
+                                <div>
+                                    <h3 class="ltm-modal-title" id="activityModalTitle">Neue Aktivität</h3>
+                                    <div class="ltm-modal-sub">Einfache Task-Aktivität ohne Master Set.</div>
+                                </div>
+                                <button type="button" class="ltm-modal-close" data-close-ltm-modal>&times;</button>
+                            </div>
+                            <div class="ltm-modal-body">
+                                <input type="hidden" name="activity_id" id="activity_id">
+                                <input type="hidden" name="phase_id" id="activity_phase_id">
+                                <input type="hidden" name="parent_id" id="activity_parent_id">
+                                <div class="ltm-form-grid">
+                                    <div class="ltm-form-group full">
+                                        <label class="ltm-label">Titel *</label>
+                                        <input type="text" class="ltm-input" name="title" id="activity_title" required>
+                                    </div>
+                                    <div class="ltm-form-group">
+                                        <label class="ltm-label">Qualifikation</label>
+                                        <select class="ltm-select js-ltm-select2" name="qualification_ids[]"
+                                            id="activity_qualification_ids" multiple>
+                                            @foreach($positions as $position)
+                                                <option value="{{ $position->id }}">{{ $position->position }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="ltm-form-group">
+                                        <label class="ltm-label">Abteilung</label>
+                                        <select class="ltm-select js-ltm-select2" name="department_ids[]"
+                                            id="activity_department_ids" multiple>
+                                            @foreach($departments as $department)
+                                                <option value="{{ $department->id }}">
+                                                    {{ $department->department_name }}{{ $department->branch ? ' · ' . $department->branch : '' }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="ltm-form-group">
+                                        <label class="ltm-label">Dauer</label>
+                                        <input type="number" min="0" step="0.25" class="ltm-input" name="duration"
+                                            id="activity_duration">
+                                    </div>
+                                    <div class="ltm-form-group">
+                                        <label class="ltm-label">Einheit</label>
+                                        <select class="ltm-select" name="duration_type" id="activity_duration_type">
+                                            <option value="minutes">Minuten</option>
+                                            <option value="hours">Stunden</option>
+                                            <option value="days">Tage</option>
+                                        </select>
+                                    </div>
+                                    <div class="ltm-form-group">
+                                        <label class="ltm-label">Status</label>
+                                        <select class="ltm-select" name="status" id="activity_status">
+                                            <option value="Published">Aktiv</option>
+                                            <option value="Unpublished">Inaktiv</option>
+                                        </select>
+                                    </div>
+                                    <div class="ltm-form-group">
+                                        <label class="ltm-label">Foto</label>
+                                        <label class="ltm-check-card"><input type="checkbox" name="photo_required"
+                                                id="activity_photo_required" value="1"> Foto erforderlich</label>
+                                    </div>
+                                    <div class="ltm-form-group full">
+                                        <label class="ltm-label">Artikel optional</label>
+                                        <select class="ltm-select js-ltm-select2" name="article_ids[]"
+                                            id="activity_article_ids" multiple>
+                                            @foreach($articles as $article)
+                                                <option value="{{ $article->id }}">{{ $article->article_no }} ·
+                                                    {{ $article->product }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="ltm-form-group full">
+                                        <label class="ltm-label">Beschreibung</label>
+                                        <textarea class="ltm-textarea" name="description"
+                                            id="activity_description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="ltm-error" id="activityError"></div>
+                            </div>
+                            <div class="ltm-modal-footer">
+                                <button type="button" class="ltm-btn-soft" data-close-ltm-modal>Abbrechen</button>
+                                <button type="submit" class="ltm-btn"><i class="feather icon-save"></i> Speichern</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
-            </section>
+
+                {{-- LEAD STAGE ADMIN MODAL --}}
+                <div class="ltm-modal-backdrop" id="leadStageAdminModal" aria-hidden="true">
+                    <div class="ltm-modal" role="dialog" aria-modal="true" style="max-width:1100px;">
+                        <div class="ltm-modal-head">
+                            <div>
+                                <h3 class="ltm-modal-title">LeadStages verwalten</h3>
+                                <div class="ltm-modal-sub">
+                                    Nur Benutzer mit UserRoll <strong>Administrator</strong> dürfen diese Liste ändern.
+                                    LeadStages und Sub-Stages können per Drag & Drop sortiert werden.
+                                </div>
+                            </div>
+                            <button type="button" class="ltm-modal-close" data-close-ltm-modal>&times;</button>
+                        </div>
+
+                        <div class="ltm-modal-body">
+                            <div class="ltm-stage-admin-tools">
+                                <input type="text" class="ltm-input" id="adminStageName"
+                                    placeholder="Neue LeadStage, z. B. Angebot" style="max-width:260px;">
+                                <input type="color" class="ltm-input" id="adminStageColor" value="#74b2d4"
+                                    style="max-width:76px;padding:5px;">
+                                <input type="text" class="ltm-input" id="adminStageIcon" placeholder="Icon optional"
+                                    style="max-width:180px;">
+                                <label class="ltm-check-card" style="min-height:40px;">
+                                    <input type="checkbox" id="adminStageActive" checked> Aktiv
+                                </label>
+                                <button type="button" class="ltm-btn" id="btnCreateLeadStage">
+                                    <i class="feather icon-plus"></i> LeadStage erstellen
+                                </button>
+                                <button type="button" class="ltm-btn-soft" id="btnReloadLeadStages">
+                                    <i class="feather icon-refresh-cw"></i> Aktualisieren
+                                </button>
+                            </div>
+
+                            <div class="ltm-error" id="leadStageAdminError"></div>
+
+                            <div class="ltm-admin-manager">
+                                <div class="ltm-admin-small" style="margin-bottom:8px;">LeadStages</div>
+                                <div id="leadStageAdminList">
+                                    <div class="ltm-loading">Lade LeadStages...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ltm-modal-footer">
+                            <button type="button" class="ltm-btn-soft" data-close-ltm-modal>Schließen</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
-
-    {{-- EDIT PHASE MODAL --}}
-    @include('admin.task.phase.partials.modal-edit-phase', [
-        'groupedStages' => $groupedStages
-    ])
-</div>
-
-
 @endsection
 
-
- @section('script')
-
-<script src="{{ asset('app-assets/js/scripts/popover/popover.js')}}"></script>
-<script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js')}}"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script> <!-- REQUIRED for sortable -->
-
-<script>
-/**
- * Single, conflict-free script bootstrap:
- * - Keeps ALL your features
- * - Prevents double-binding
- * - Makes loadStagesAndPhases truly global
- * - Avoids "reload phases on every reload" by only autoloading if folderStructure is empty
- */
-(function () {
-    if (window.__PHASE_PAGE_BOOTSTRAPPED__) return;
-    window.__PHASE_PAGE_BOOTSTRAPPED__ = true;
-
-    // -----------------------------
-    // Helpers
-    // -----------------------------
-    function csrf() {
-        return $('meta[name="csrf-token"]').attr('content') || '{{ csrf_token() }}';
-    }
-
-    function isSelect2($el) {
-        return $el && $el.length && $el.hasClass('select2-hidden-accessible');
-    }
-
-    function safeSelect2($el, opts) {
-        if (!$el || !$el.length) return;
-        if (!isSelect2($el)) $el.select2(opts || {});
-    }
-
-    function folderStructureLooksEmpty() {
-        const $fs = $('#folderStructure');
-        if (!$fs.length) return true;
-        const html = ($fs.html() || '').trim();
-        if (!html) return true;
-        // common placeholder states
-        if (html.includes('Bitte wählen Sie eine Version')) return true;
-        if (html.includes('⚠️ Fehler beim Laden')) return true;
-        return false;
-    }
-
-    // -----------------------------
-    // Folder collapse + icons (works after AJAX too)
-    // -----------------------------
-    function wireFolderToggles(scope) {
-        const root = scope || document;
-
-        // bind collapse icon updates per collapse element (only once)
-        root.querySelectorAll('.folder-toggle').forEach(toggle => {
-            if (toggle.dataset.wired === '1') return;
-            toggle.dataset.wired = '1';
-
-            const targetId = toggle.getAttribute('data-target') || toggle.getAttribute('data-bs-target');
-            if (!targetId) return;
-
-            const collapseEl = root.querySelector(targetId);
-            if (!collapseEl) return;
-
-            const icon = toggle.querySelector('.folder-icon');
-
-            // update icon when collapse changes
-            if (icon && !collapseEl.dataset.iconWired) {
-                collapseEl.dataset.iconWired = '1';
-
-                collapseEl.addEventListener('show.bs.collapse', () => { icon.textContent = '−'; });
-                collapseEl.addEventListener('hide.bs.collapse', () => { icon.textContent = '+'; });
-
-                // initial state
-                icon.textContent = collapseEl.classList.contains('show') ? '−' : '+';
-            }
-
-            // click handler (manual bootstrap collapse)
-            toggle.addEventListener('click', (e) => {
-                // allow inner buttons/links to work without toggling
-                const prevent = e.target.closest('button,a,input,select,textarea,label');
-                if (prevent) return;
-
-                if (collapseEl.classList.contains('show')) {
-                    new bootstrap.Collapse(collapseEl, { toggle: false }).hide();
-                } else {
-                    new bootstrap.Collapse(collapseEl, { toggle: false }).show();
-                }
-            });
-        });
-    }
-
-    // delegated hover active state (keeps your behavior; works after AJAX)
-    function wireFolderHoverActive() {
-        let currentActive = null;
-
-        $('#folderStructure')
-            .off('mouseenter.folderActive', '.folder-toggle')
-            .on('mouseenter.folderActive', '.folder-toggle', function () {
-                if (currentActive && currentActive !== this) $(currentActive).removeClass('active');
-                $(this).addClass('active');
-                currentActive = this;
-            });
-    }
-   
-    function askMoveOrDuplicate(title, text) {
-        return Swal.fire({
-            title,
-            text,
-            icon: 'question',
-            showCancelButton: true,
-            showDenyButton: true,
-            confirmButtonText: 'Move',
-            denyButtonText: 'Duplicate',
-            cancelButtonText: 'Cancel',
-            reverseButtons: true
-        }).then(res => {
-            if (res.isConfirmed) return 'move';
-            if (res.isDenied) return 'duplicate';
-            return null;
-        });
-        }
-
-
-    // -----------------------------
-    // Sortables (phases + activities)
-    // -----------------------------
-   function initSortables(scope) {
-        const $scope = scope ? $(scope) : $(document);
-
-        function reloadTree() {
-            const productId = $('#filter_product_id').val();
-            const sectionId = $('#section_id').val();
-            const version   = $('#version_id').val() || $('#currentVersion').val();
-            window.loadStagesAndPhases(version, productId, sectionId);
-        }
-
-        // -------- ACTIVITIES (cross-phase) ----------
-        $scope.find('.sortable-activities').each(function () {
-            const $list = $(this);
-            if ($list.data('ui-sortable')) return;
-
-            $list.sortable({
-            handle: '.folder-label',
-            items: '> .sortable-item',
-            connectWith: '.sortable-activities',
-            placeholder: 'sortable-placeholder',
-            forcePlaceholderSize: true,
-            tolerance: 'pointer',
-            scroll: true,
-
-            start: function (e, ui) {
-                ui.item.data('__fromList', ui.item.parent());
-                ui.item.data('__fromPhaseId', ui.item.parent().data('phase-id'));
-            },
-
-            stop: async function (e, ui) {
-                const $toList   = ui.item.parent();
-                const $fromList = $(ui.item.data('__fromList'));
-
-                const activityId  = parseInt(ui.item.data('activity-id'), 10);
-                const fromPhaseId = parseInt(ui.item.data('__fromPhaseId'), 10);
-                const toPhaseId   = parseInt($toList.data('phase-id'), 10);
-
-                if (!activityId || !toPhaseId) {
-                return reloadTree();
-                }
-
-                // SAME PHASE => order only
-                if ($toList.is($fromList)) {
-                const orderedIds = $toList.children('.sortable-item').map(function () {
-                    return $(this).data('activity-id');
-                }).get();
-
-                return $.post('{{ route("phase.task.activity.order") }}', {
-                    _token: csrf(),
-                    phase_id: toPhaseId,
-                    activity_ids: orderedIds
-                }).fail(() => Swal.fire('Fehler', 'Aktualisierung fehlgeschlagen.', 'error'));
-                }
-
-                // CROSS PHASE => ask + transfer
-                const targetIndex = ui.item.index();
-                const mode = await askMoveOrDuplicate('Aktivität verschieben?', 'Move oder Duplicate?');
-
-                if (!mode) return reloadTree();
-
-                $.ajax({
-                url: '{{ route("task.activity.transfer") }}',
-                method: 'POST',
-                data: {
-                    _token: csrf(),
-                    mode,
-                    activity_id: activityId,
-                    from_phase_id: fromPhaseId,
-                    to_phase_id: toPhaseId,
-                    target_index: targetIndex,
-                    target_parent_id: null
-                }
-                }).done(() => reloadTree())
-                .fail((xhr) => {
-                    Swal.fire('Fehler', xhr.responseJSON?.message || 'Transfer fehlgeschlagen.', 'error');
-                    reloadTree();
-                });
-            }
-            });
-        });
-
-        // -------- PHASES (cross-stage) ----------
-        $scope.find('.sortable-phases').each(function () {
-            const $list = $(this);
-            if ($list.data('ui-sortable')) return;
-
-            $list.sortable({
-            handle: '.folder-label.heading',
-            items: '> .phase-item',
-            connectWith: '.sortable-phases',
-            placeholder: 'sortable-placeholder',
-            forcePlaceholderSize: true,
-            tolerance: 'pointer',
-            scroll: true,
-
-            start: function (e, ui) {
-                ui.item.data('__fromList', ui.item.parent());
-            },
-
-            stop: async function (e, ui) {
-                const $toList   = ui.item.parent();
-                const $fromList = $(ui.item.data('__fromList'));
-
-                const phaseId   = parseInt(ui.item.data('phase-id'), 10);
-                const toStageId = parseInt($toList.data('stage-id'), 10);
-
-                if (!phaseId || !toStageId) {
-                return reloadTree();
-                }
-
-                // SAME STAGE => order only
-                if ($toList.is($fromList)) {
-                const orderedIds = $toList.children('.phase-item').map(function () {
-                    return $(this).data('phase-id');
-                }).get();
-
-                return $.post('{{ route("task.phase.updateOrder") }}', {
-                    _token: csrf(),
-                    order: orderedIds
-                }).fail(() => Swal.fire('Fehler', 'Sortierung konnte nicht gespeichert werden.', 'error'));
-                }
-
-                // CROSS STAGE => ask + transfer
-                const targetIndex = ui.item.index();
-                const mode = await askMoveOrDuplicate('Phase verschieben?', 'Move oder Duplicate?');
-
-                if (!mode) return reloadTree();
-
-                $.ajax({
-                url: '{{ route("task.phase.transfer") }}',
-                method: 'POST',
-                data: {
-                    _token: csrf(),
-                    mode,
-                    phase_id: phaseId,
-                    to_stage_id: toStageId,
-                    target_index: targetIndex
-                }
-                }).done(() => reloadTree())
-                .fail((xhr) => {
-                    Swal.fire('Fehler', xhr.responseJSON?.message || 'Transfer fehlgeschlagen.', 'error');
-                    reloadTree();
-                });
-            }
-            });
-        });
-        }
-
-    // -----------------------------
-    // Global loader (must exist BEFORE any usage)
-    // -----------------------------
-    window.loadStagesAndPhases = function (version, productId, sectionId) {
-        Swal.fire({
-            title: 'Lade Phasen...',
-            allowOutsideClick: false,
-            didOpen: () => Swal.showLoading()
-        });
-
-        $.ajax({
-            url: '/get-phases-by-version',
-            method: 'GET',
-            data: { version: version, product_id: productId, section_id: sectionId },
-            success: function (html) {
-                Swal.close();
-                $('#folderStructure').html(html);
-
-                // rewire toggles/icons + hover + sortables after DOM replacement
-                wireFolderToggles(document);
-                wireFolderHoverActive();
-                initSortables(document);
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Fehler beim Laden',
-                    text: 'Die Phasen konnten nicht geladen werden. Bitte versuchen Sie es erneut.'
-                });
-                $('#folderStructure').html('<div class="text-danger p-2">⚠️ Fehler beim Laden der Phasen.</div>');
-            }
-        });
-    };
-
-    // -----------------------------
-    // Globals used by inline onclick
-    // -----------------------------
-    window.showPhaseModal = function () {
-        $('#phaseForm')[0].reset();
-        $('#phase_id').val('');
-        $('#phaseModal').modal('show');
-    };
-
-    window.showActivityModal = function (button) {
-        const $btn = $(button);
-
-        $('#activityForm')[0].reset();
-
-        const productId   = $btn.data('product-id');
-        const sectionId   = $btn.data('section-id');
-        const sectionName = $btn.data('section-name');
-        const phaseId     = $btn.data('phase-id');
-        const parentId    = $btn.data('parent-id') || '';
-
-        $('#activityModal #product_id').val(productId);
-        $('#activityModal #section_id').val(sectionId);
-        $('#activityModal #section_name').val(sectionName);
-        $('#activityModal #phase_id').val(phaseId);
-        $('#activityModal #parent_id').val(parentId);
-
-        $('#activityModal input[name="title"]').val('');
-        $('#activityModal input[name="duration"]').val('');
-        $('#activityModal textarea[name="description"]').val('');
-        $('#activityModal input[name="photo"]').prop('checked', false);
-        $('#activityModal select[name="answered_by"]').val('2');
-        $('#activityModal input[name="link"]').val('');
-        $('#activityModal textarea[name="note"]').val('');
-
-        $('#activityModal select[name="department_id[]"]').val(null).trigger('change');
-        $('#activityModal select[name="position_id[]"]').val(null).trigger('change');
-        $('#activityModal select[name="article_id[]"]').val(null).trigger('change');
-
-        $('#activityModal').attr('aria-hidden', 'false');
-        $('#activityModal').modal('show');
-    };
-
-    window.editActivity = function (id) {
-        $.ajax({
-            url: `/get/phase/activity/${id}`,
-            method: 'GET',
-            success: function (response) {
-                let data = response.data;
-
-                $('#activity_id').val(id);
-                $('input[name="title"]').val(data.title);
-                $('input[name="duration"]').val(data.duration);
-                $('textarea[name="description"]').val(data.description);
-                $('select[name="answered_by"]').val(data.answered_by);
-
-                $('input[name="product_id"]').val(data.product_id ?? '');
-                $('input[name="parent_id"]').val(data.parent_id ?? '');
-                $('input[name="phase_id"]').val(data.phase_id ?? '');
-                $('input[name="section_id"]').val(data.section_id ?? '');
-                $('input[name="section_name"]').val(data.section_name ?? '');
-                $('input[name="photo"]').prop('checked', data.photo === 'needed');
-                $('input[name="link"]').val(data.link || '');
-                $('textarea[name="note"]').val(data.note || '');
-
-                $('select[name="department_id[]"]').val(data.department_ids ?? []).trigger('change');
-                $('select[name="position_id[]"]').val(data.position_ids ?? []).trigger('change');
-                $('select[name="article_id[]"]').val(data.article_ids ?? []).trigger('change');
-
-                $('#activityModal').modal('show');
-            }
-        });
-    };
-
-    window.activePhase = function (btn) {
-        const phaseId = btn.dataset.phaseId;
-
-        fetch(`/phase/${phaseId}/toggle-status`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrf()
-            },
-            body: JSON.stringify({ id: phaseId })
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Status geändert',
-                    text: `Phase ist jetzt ${data.status === 'Published' ? 'Aktiv' : 'Inaktiv'}`,
-                    timer: 1000,
-                    showConfirmButton: false
-                }).then(() => location.reload());
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Fehler',
-                    text: data.message || 'Status konnte nicht geändert werden.'
-                });
-            }
-        });
-    };
-
-    // -----------------------------
-    // Render helpers for table
-    // -----------------------------
-    function translateSectionName(sectionName) {
-        const translations = {
-            'complete': 'Komplettlösung',
-            'montage': 'Montage',
-            'product': 'Produkt',
-            'plan': 'Planung',
-            'maintenance': 'Wartung',
-            'repair': 'Reparatur',
-            'others': 'Sonstiges'
-        };
-        return translations[sectionName] ?? sectionName;
-    }
-
-    function renderActivityRow(item, index) {
-        const statusOptions = `
-            <select class="status-dropdown form-control" data-id="${item.id}">
-                <option value="Published" ${item.status === 'Published' ? 'selected' : ''}>Aktiv</option>
-                <option value="Unpublished" ${item.status === 'Unpublished' ? 'selected' : ''}>Inaktiv</option>
-            </select>
-        `;
-
-        return `
-            <tr>
-                <td>${index}</td>
-                <td>${item.title || ''}</td>
-                <td>${item.description || ''}</td>
-                <td>${item.article_group || ''}</td>
-                <td>${translateSectionName(item.section_name)}</td>
-                <td>${item.departments || ''}</td>
-                <td>${item.positions || ''}</td>
-                <td>${item.articles || ''}</td>
-                <td>${item.phase_name || ''}</td>
-                <td>${item.note || '–'}</td>
-                <td>${item.duration || 0}</td>
-                <td>${statusOptions}</td>
-                <td>
-                    <div class="btn-group">
-                        <button class="btn btn-sm btn-primary" onclick="editActivity(${item.id})" title="Bearbeiten">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <span style="width: 5px;"></span>
-                        <button class="btn btn-sm btn-danger btn-delete-activity" data-id="${item.id}" title="Löschen">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        `;
-    }
-
-    // -----------------------------
-    // Document ready: keep ALL your behaviors but conflict-free
-    // -----------------------------
-    $(function () {
-
-        // 1) Open copy modal button (your original)
-        document.addEventListener('DOMContentLoaded', function () {
-            const btn = document.getElementById('openCopyModalBtn');
-            if (btn) {
-                btn.addEventListener('click', function () {
-                    const modal = new bootstrap.Modal(document.getElementById('copyModal'));
-                    modal.show();
-                });
-            }
-        });
-
-        // 2) Toastr session messages (your original)
-        @if(Session::has('update_msg'))
-            toastr.success("{{ session('updated_msg') }}");
-        @endif
-        @if(Session::has('save_msg'))
-            toastr.success("{{ session('save_msg') }}");
-        @endif
-        @if(Session::has('delete_msg'))
-            toastr.error("{{ session('delete_msg') }}");
-        @endif
-
-        // 3) Select2 tags + prevent duplicates + save new tag (your original)
-        (function initSelect2Tags() {
-            const $select = $('.select2-tags');
-            if (!$select.length) return;
-
-            safeSelect2($select, {
-                tags: true,
-                placeholder: 'Wählen',
-                allowClear: true,
-                width: '100%',
-                createTag: function (params) {
-                    const term = $.trim(params.term);
-                    if (term === '') return null;
-
-                    let exists = false;
-                    $select.find('option').each(function () {
-                        if ($.trim($(this).text()).toLowerCase() === term.toLowerCase()) {
-                            exists = true;
-                            return false;
-                        }
-                    });
-
-                    if (exists) return null;
-
-                    return { id: term, text: term, newTag: true };
+@section('script')
+    @php
+        $leadTaskBoardUrl = url('/task-phase/ajax/board/' . $section->product_id . '/' . $section->id);
+    @endphp
+
+    <script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script>
+        (function ($) {
+            'use strict';
+
+            if (window.__LEAD_TASK_MANAGER_ACCORDION__) return;
+            window.__LEAD_TASK_MANAGER_ACCORDION__ = true;
+
+            const app = $('#leadTaskApp');
+            const state = {
+                productId: parseInt(app.data('product-id'), 10),
+                sectionId: parseInt(app.data('section-id'), 10),
+                board: [],
+                selectedTask: null,
+                selectedActivity: null,
+                search: '',
+                closedStages: new Set(),
+                closedLanes: new Set()
+            };
+
+            const routes = {
+                board: @json($leadTaskBoardUrl),
+                taskStore: @json(url('/task-phase/ajax/tasks')),
+                taskUpdateBase: @json(url('/task-phase/ajax/tasks')) + '/',
+                taskDeleteBase: @json(url('/task-phase/ajax/tasks')) + '/',
+                taskCloneBase: @json(url('/task-phase/ajax/tasks')) + '/',
+                taskMoveFlat: @json(url('/task-phase/ajax/tasks/move')),
+                taskMoveParamBase: @json(url('/task-phase/ajax/tasks')) + '/',
+                taskReorder: @json(url('/task-phase/ajax/tasks/reorder')),
+                activityStore: @json(url('/task-phase/ajax/activities')),
+                activityUpdateBase: @json(url('/task-phase/ajax/activities')) + '/',
+                activityDeleteBase: @json(url('/task-phase/ajax/activities')) + '/',
+                activityCloneBase: @json(url('/task-phase/ajax/activities')) + '/',
+                activityMoveFlat: @json(url('/task-phase/ajax/activities/move')),
+                activityMoveParamBase: @json(url('/task-phase/ajax/activities')) + '/',
+                activityReorder: @json(url('/task-phase/ajax/activities/reorder')),
+                stageAdmin: {
+                    index: @json(route('task.phase.ajax.stage-admin.stages.index')),
+                    store: @json(route('task.phase.ajax.stage-admin.stages.store')),
+                    reorder: @json(route('task.phase.ajax.stage-admin.stages.reorder')),
+                    show: @json(route('task.phase.ajax.stage-admin.stages.show', ['leadStage' => '__STAGE_ID__'])),
+                    update: @json(route('task.phase.ajax.stage-admin.stages.update', ['leadStage' => '__STAGE_ID__'])),
+                    delete: @json(route('task.phase.ajax.stage-admin.stages.delete', ['leadStage' => '__STAGE_ID__'])),
+
+                    subStore: @json(route('task.phase.ajax.stage-admin.sub-stages.store', ['leadStage' => '__STAGE_ID__'])),
+                    subReorder: @json(route('task.phase.ajax.stage-admin.sub-stages.reorder', ['leadStage' => '__STAGE_ID__'])),
+                    subShow: @json(route('task.phase.ajax.stage-admin.sub-stages.show', ['subStage' => '__SUB_ID__'])),
+                    subUpdate: @json(route('task.phase.ajax.stage-admin.sub-stages.update', ['subStage' => '__SUB_ID__'])),
+                    subDelete: @json(route('task.phase.ajax.stage-admin.sub-stages.delete', ['subStage' => '__SUB_ID__'])),
                 },
-                templateResult: function (data) {
-                    const $result = $("<span></span>").text(data.text);
-                    if (data.newTag) $result.append(" <em>(Neue)</em>");
-                    return $result;
+            };
+
+            function routeUrl(template, replacements) {
+                let url = String(template);
+
+                Object.keys(replacements || {}).forEach(function (key) {
+                    url = url.replace(key, encodeURIComponent(replacements[key]));
+                });
+
+                return url;
+            }
+            function csrf() { return $('meta[name="csrf-token"]').attr('content') || @json(csrf_token()); }
+            function iconRefresh() { if (window.feather) feather.replace(); }
+            function esc(v) { return String(v ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
+            function notify(type, msg) { if (window.toastr && toastr[type]) toastr[type](msg); else console[type === 'error' ? 'error' : 'log'](msg); }
+            function swalAsk(opts) { if (window.Swal) return Swal.fire(opts); return Promise.resolve({ isConfirmed: confirm(opts.text || opts.title || 'OK') }); }
+            function apiError(xhr, fallback) { return xhr.responseJSON?.message || Object.values(xhr.responseJSON?.errors || {}).flat().join('\n') || fallback || 'Fehler'; }
+            function openModal(id) { $('#' + id).addClass('is-open').attr('aria-hidden', 'false'); $('body').css('overflow', 'hidden'); setTimeout(() => $('#' + id).find('input,select,textarea,button').filter(':visible:first').focus(), 60); }
+            function closeModal(id) { $('#' + id).removeClass('is-open').attr('aria-hidden', 'true'); if (!$('.ltm-modal-backdrop.is-open').length) $('body').css('overflow', ''); }
+            function closeAllModals() { $('.ltm-modal-backdrop').removeClass('is-open').attr('aria-hidden', 'true'); $('body').css('overflow', ''); }
+
+            function setupSelect2() {
+                if (!$.fn.select2) return;
+                if (!$('#ltmSelect2Portal').length) $('body').append('<div id="ltmSelect2Portal"></div>');
+                $('.js-ltm-select2').each(function () {
+                    if ($(this).hasClass('select2-hidden-accessible')) return;
+                    $(this).select2({ width: '100%', dropdownParent: $('#ltmSelect2Portal'), placeholder: 'Bitte wählen', allowClear: true });
+                });
+            }
+
+
+            function showStageAdminError(message) {
+                $('#leadStageAdminError').toggleClass('is-visible', !!message).text(message || '');
+            }
+
+            function adminBool(value) {
+                return value ? 'checked' : '';
+            }
+
+            function loadLeadStageAdmin() {
+                showStageAdminError('');
+                $('#leadStageAdminList').html('<div class="ltm-loading">Lade LeadStages...</div>');
+
+                return $.get(routes.stageAdmin.index)
+                    .done(function (res) {
+                        renderLeadStageAdmin(res.stages || []);
+                    })
+                    .fail(function (xhr) {
+                        $('#leadStageAdminList').html(
+                            '<div class="ltm-empty">' + esc(apiError(xhr, 'LeadStages konnten nicht geladen werden.')) + '</div>'
+                        );
+                    });
+            }
+
+            function renderLeadStageAdmin(stages) {
+                if (!stages.length) {
+                    $('#leadStageAdminList').html('<div class="ltm-empty">Keine LeadStages vorhanden.</div>');
+                    return;
                 }
-            });
 
-            $select.off('select2:select.positionTag').on('select2:select.positionTag', function (e) {
-                const data = e.params.data;
+                const html = stages.map(function (stage) {
+                    const subHtml = (stage.sub_stages || []).map(function (sub) {
+                        return `
+                                                    <div class="ltm-admin-sub" data-sub-stage-id="${sub.id}">
+                                                        <span class="ltm-drag-handle" title="Sub-Stage ziehen"><i class="feather icon-menu"></i></span>
+                                                        <input type="text" class="ltm-input js-admin-sub-name" value="${esc(sub.name)}" placeholder="Sub-Stage Name">
+                                                        <input type="text" class="ltm-input js-admin-sub-key" value="${esc(sub.key)}" placeholder="Key">
+                                                        <input type="color" class="ltm-input js-admin-sub-color" value="${esc(sub.color || '#93c21c')}" style="padding:5px;">
+                                                        <label class="ltm-check-card"><input type="checkbox" class="js-admin-sub-active" ${adminBool(sub.is_active)}> Aktiv</label>
+                                                        <div style="display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap;">
+                                                            <button type="button" class="ltm-icon-btn js-save-sub-stage" title="Speichern"><i class="feather icon-save"></i></button>
+                                                            <button type="button" class="ltm-icon-btn danger js-delete-sub-stage" title="Löschen"><i class="feather icon-trash"></i></button>
+                                                        </div>
+                                                    </div>
+                                                `;
+                    }).join('');
 
-                if (!data.newTag) return;
+                    return `
+                                                <div class="ltm-admin-stage" data-stage-id="${stage.id}">
+                                                    <div class="ltm-admin-stage-head">
+                                                        <span class="ltm-drag-handle" title="LeadStage ziehen"><i class="feather icon-menu"></i></span>
+                                                        <input type="text" class="ltm-input js-admin-stage-name" value="${esc(stage.name)}" placeholder="LeadStage Name">
+                                                        <input type="text" class="ltm-input js-admin-stage-key" value="${esc(stage.key)}" placeholder="Key">
+                                                        <input type="color" class="ltm-input js-admin-stage-color" value="${esc(stage.color || '#74b2d4')}" style="padding:5px;">
+                                                        <label class="ltm-check-card"><input type="checkbox" class="js-admin-stage-active" ${adminBool(stage.is_active)}> Aktiv</label>
+                                                        <label class="ltm-check-card"><input type="checkbox" class="js-admin-stage-default" ${adminBool(stage.is_default)}> Default</label>
+                                                        <span class="ltm-chip">${stage.usage_count || 0} Phasen</span>
+                                                        <div style="display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap;">
+                                                            <button type="button" class="ltm-icon-btn js-save-lead-stage" title="Speichern"><i class="feather icon-save"></i></button>
+                                                            <button type="button" class="ltm-icon-btn js-add-sub-stage" title="Sub-Stage hinzufügen"><i class="feather icon-plus"></i></button>
+                                                            <button type="button" class="ltm-icon-btn danger js-delete-lead-stage" title="Löschen"><i class="feather icon-trash"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ltm-admin-sub-list" data-stage-id="${stage.id}">
+                                                        ${subHtml || '<div class="ltm-empty">Keine Sub-Stages vorhanden.</div>'}
+                                                    </div>
+                                                </div>
+                                            `;
+                }).join('');
 
-                Swal.fire({
-                    title: 'Neue Position hinzufügen?',
-                    text: `"${data.text}" ist nicht in der Liste. Möchten Sie es speichern?`,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ja, speichern',
-                    cancelButtonText: 'Abbrechen',
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    showConfirmButton: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                $('#leadStageAdminList').html(html);
+                initLeadStageAdminSortables();
+                iconRefresh();
+            }
+
+            function initLeadStageAdminSortables() {
+                const stageList = $('#leadStageAdminList');
+
+                if (stageList.data('ui-sortable')) {
+                    stageList.sortable('destroy');
+                }
+
+                stageList.sortable({
+                    items: '> .ltm-admin-stage',
+                    handle: '> .ltm-admin-stage-head .ltm-drag-handle',
+                    placeholder: 'ltm-placeholder',
+                    forcePlaceholderSize: true,
+                    stop: function () {
+                        const items = stageList.children('.ltm-admin-stage').map(function () {
+                            return parseInt($(this).attr('data-stage-id'), 10);
+                        }).get().filter(Boolean);
+
                         $.ajax({
-                            url: '{{ route("position.store.json") }}',
+                            url: routes.stageAdmin.reorder,
                             method: 'POST',
-                            data: { _token: csrf(), position: data.text },
-                            success: function (response) {
-                                Swal.fire({
-                                    title: 'Gespeichert!',
-                                    text: `"${response.text}" wurde erfolgreich gespeichert.`,
-                                    icon: 'success',
-                                    timer: 1500,
-                                    showConfirmButton: false
-                                });
-
-                                const newOption = new Option(response.text, response.id, true, true);
-                                $select.append(newOption).trigger('change');
-                            },
-                            error: function () {
-                                Swal.fire({
-                                    title: 'Fehler!',
-                                    text: `"${data.text}" konnte nicht gespeichert werden.`,
-                                    icon: 'error',
-                                    timer: 1500,
-                                    showConfirmButton: false
-                                });
-
-                                let selected = $select.val() || [];
-                                selected = selected.filter(val => val !== data.id);
-                                $select.val(selected).trigger('change');
+                            data: {
+                                _token: csrf(),
+                                items: items
                             }
+                        }).done(function (res) {
+                            notify('success', res.message || 'LeadStages sortiert.');
+                            loadLeadStageAdmin();
+                            loadBoard();
+                        }).fail(function (xhr) {
+                            notify('error', apiError(xhr, 'LeadStage-Reihenfolge konnte nicht gespeichert werden.'));
+                            loadLeadStageAdmin();
                         });
-                    } else {
-                        let selected = $select.val() || [];
-                        selected = selected.filter(val => val !== data.id);
-                        $select.val(selected).trigger('change');
                     }
                 });
-            });
-        })();
 
-        // 4) Initial folder wiring (your original folder-toggle behavior, but stable)
-        wireFolderToggles(document);
-        wireFolderHoverActive();
+                $('.ltm-admin-sub-list').each(function () {
+                    const list = $(this);
 
-        // 5) Activity form submit (your original)
-        $('#activityForm')
-            .off('submit.activityForm')
-            .on('submit.activityForm', function (e) {
-                e.preventDefault();
-
-                let id  = $('#activity_id').val();
-                let url = id ? `/phase-activities/${id}/update` : '/phase-activities';
-                let data = $(this).serialize();
-
-                $.ajax({
-                    url: url,
-                    method: 'POST',
-                    data: data,
-                    headers: { 'X-CSRF-TOKEN': csrf() },
-                    success: function () {
-                        $('#activityModal').modal('hide');
-                        Swal.fire('Gespeichert!', '', 'success').then(() => location.reload());
-                    },
-                    error: function (xhr) {
-                        if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
-                            let errorMsg = Object.values(errors).flat().join('<br>');
-                            Swal.fire('Fehler beim Speichern', errorMsg, 'error');
-                        }
+                    if (list.data('ui-sortable')) {
+                        list.sortable('destroy');
                     }
-                });
-            });
 
-        // 6) Click on PHASE: load all activities (your original)
-        $(document)
-            .off('click.phaseDetails', '.folder-label.heading')
-            .on('click.phaseDetails', '.folder-label.heading', function (e) {
-                e.stopPropagation();
-                const phaseId = $(this).closest('.folder-toggle').data('phase-id');
-                if (!phaseId) return;
+                    list.sortable({
+                        items: '> .ltm-admin-sub',
+                        handle: '.ltm-drag-handle',
+                        placeholder: 'ltm-placeholder',
+                        forcePlaceholderSize: true,
+                        stop: function () {
+                            const stageId = parseInt(list.attr('data-stage-id'), 10);
 
-                $.ajax({
-                    url: `/get/phase/all/activity/${phaseId}`,
-                    method: 'GET',
-                    success: function (response) {
-                        let tbody = '';
-                        let totalDauer = 0;
-                        let activities = response.data;
+                            const items = list.children('.ltm-admin-sub').map(function () {
+                                return parseInt($(this).attr('data-sub-stage-id'), 10);
+                            }).get().filter(Boolean);
 
-                        if (activities.length > 0) {
-                            activities.forEach((item, index) => {
-                                tbody += renderActivityRow(item, index + 1);
-                                totalDauer += parseFloat(item.duration || 0);
+                            $.ajax({
+                                url: routeUrl(routes.stageAdmin.subReorder, {
+                                    '__STAGE_ID__': stageId
+                                }),
+                                method: 'POST',
+                                data: {
+                                    _token: csrf(),
+                                    items: items
+                                }
+                            }).done(function (res) {
+                                notify('success', res.message || 'Sub-Stages sortiert.');
+                                loadLeadStageAdmin();
+                                loadBoard();
+                            }).fail(function (xhr) {
+                                notify('error', apiError(xhr, 'Sub-Stage-Reihenfolge konnte nicht gespeichert werden.'));
+                                loadLeadStageAdmin();
                             });
-
-                            tbody += `
-                                <tr>
-                                    <td colspan="9" class="text-end"><strong>Gesamtdauer:</strong></td>
-                                    <td><strong>${totalDauer.toFixed(2)} Uhr</strong></td>
-                                    <td colspan="2"></td>
-                                </tr>
-                            `;
-                        } else {
-                            tbody = `<tr><td colspan="13" class="text-center text-muted">Keine Aktivitäten gefunden.</td></tr>`;
                         }
+                    });
+                });
+            }
 
-                        $('#detailed_table tbody').html(tbody);
-                    },
-                    error: function () {
-                        alert('Fehler beim Laden der Aktivitäten.');
+            function openLeadStageAdmin() {
+                openModal('leadStageAdminModal');
+                loadLeadStageAdmin();
+            }
+
+            $(document).on('click', '#btnOpenStageAdmin', function () {
+                openLeadStageAdmin();
+            });
+
+            $(document).on('click', '#btnReloadLeadStages', function () {
+                loadLeadStageAdmin();
+            });
+
+            $(document).on('click', '#btnCreateLeadStage', function () {
+                showStageAdminError('');
+
+                $.ajax({
+                    url: routes.stageAdmin.store,
+                    method: 'POST',
+                    data: {
+                        _token: csrf(),
+                        name: $('#adminStageName').val(),
+                        color: $('#adminStageColor').val(),
+                        icon: $('#adminStageIcon').val(),
+                        is_active: $('#adminStageActive').is(':checked') ? 1 : 0
                     }
+                }).done(function (res) {
+                    $('#adminStageName').val('');
+                    $('#adminStageIcon').val('');
+                    notify('success', res.message || 'LeadStage erstellt.');
+                    loadLeadStageAdmin();
+                    loadBoard();
+                }).fail(function (xhr) {
+                    showStageAdminError(apiError(xhr, 'LeadStage konnte nicht erstellt werden.'));
                 });
             });
 
-        // 7) Click on SUB-TASK: load single activity (your original)
-        $(document)
-            .off('click.subDetails', '.sub-data')
-            .on('click.subDetails', '.sub-data', function (e) {
+            $(document).on('click', '.js-save-lead-stage', function () {
+                const card = $(this).closest('.ltm-admin-stage');
+                const id = parseInt(card.attr('data-stage-id'), 10);
+
+                $.ajax({
+                    url: routeUrl(routes.stageAdmin.update, {
+                        '__STAGE_ID__': id
+                    }),
+                    method: 'PUT',
+                    data: {
+                        _token: csrf(),
+                        name: card.find('.js-admin-stage-name').val(),
+                        key: card.find('.js-admin-stage-key').val(),
+                        color: card.find('.js-admin-stage-color').val(),
+                        is_active: card.find('.js-admin-stage-active').is(':checked') ? 1 : 0,
+                        is_default: card.find('.js-admin-stage-default').is(':checked') ? 1 : 0
+                    }
+                }).done(function (res) {
+                    notify('success', res.message || 'LeadStage gespeichert.');
+                    loadLeadStageAdmin();
+                    loadBoard();
+                }).fail(function (xhr) {
+                    notify('error', apiError(xhr, 'LeadStage konnte nicht gespeichert werden.'));
+                });
+            });
+
+            $(document).on('click', '.js-delete-lead-stage', function () {
+                const id = parseInt($(this).closest('.ltm-admin-stage').attr('data-stage-id'), 10);
+
+                swalAsk({
+                    title: 'LeadStage löschen?',
+                    text: 'Die LeadStage kann nur gelöscht werden, wenn keine Phasen sie verwenden.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Löschen',
+                    cancelButtonText: 'Abbrechen'
+                }).then(function (result) {
+                    if (!result.isConfirmed) return;
+
+                    $.ajax({
+                        url: routeUrl(routes.stageAdmin.delete, {
+                            '__STAGE_ID__': id
+                        }),
+                        method: 'DELETE',
+                        headers: { 'X-CSRF-TOKEN': csrf() }
+                    }).done(function (res) {
+                        notify('success', res.message || 'LeadStage gelöscht.');
+                        loadLeadStageAdmin();
+                        loadBoard();
+                    }).fail(function (xhr) {
+                        notify('error', apiError(xhr, 'LeadStage konnte nicht gelöscht werden.'));
+                    });
+                });
+            });
+
+            $(document).on('click', '.js-add-sub-stage', function () {
+                const stageId = parseInt($(this).closest('.ltm-admin-stage').attr('data-stage-id'), 10);
+                const name = prompt('Name der neuen Sub-Stage:');
+
+                if (!name) return;
+
+                $.ajax({
+                    url: routeUrl(routes.stageAdmin.subStore, {
+                        '__STAGE_ID__': stageId
+                    }),
+                    method: 'POST',
+                    data: {
+                        _token: csrf(),
+                        name: name,
+                        color: '#93c21c',
+                        is_active: 1
+                    }
+                }).done(function (res) {
+                    notify('success', res.message || 'Sub-Stage erstellt.');
+                    loadLeadStageAdmin();
+                    loadBoard();
+                }).fail(function (xhr) {
+                    notify('error', apiError(xhr, 'Sub-Stage konnte nicht erstellt werden.'));
+                });
+            });
+
+            $(document).on('click', '.js-save-sub-stage', function () {
+                const row = $(this).closest('.ltm-admin-sub');
+                const stageCard = $(this).closest('.ltm-admin-stage');
+                const id = parseInt(row.attr('data-sub-stage-id'), 10);
+                const stageId = parseInt(stageCard.attr('data-stage-id'), 10);
+
+                $.ajax({
+                    url: routeUrl(routes.stageAdmin.subUpdate, {
+                        '__SUB_ID__': id
+                    }),
+                    method: 'PUT',
+                    data: {
+                        _token: csrf(),
+                        lead_stage_id: stageId,
+                        name: row.find('.js-admin-sub-name').val(),
+                        key: row.find('.js-admin-sub-key').val(),
+                        color: row.find('.js-admin-sub-color').val(),
+                        is_active: row.find('.js-admin-sub-active').is(':checked') ? 1 : 0
+                    }
+                }).done(function (res) {
+                    notify('success', res.message || 'Sub-Stage gespeichert.');
+                    loadLeadStageAdmin();
+                    loadBoard();
+                }).fail(function (xhr) {
+                    notify('error', apiError(xhr, 'Sub-Stage konnte nicht gespeichert werden.'));
+                });
+            });
+
+            $(document).on('click', '.js-delete-sub-stage', function () {
+                const id = parseInt($(this).closest('.ltm-admin-sub').attr('data-sub-stage-id'), 10);
+
+                swalAsk({
+                    title: 'Sub-Stage löschen?',
+                    text: 'Die Sub-Stage kann nur gelöscht werden, wenn keine Phasen sie verwenden.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Löschen',
+                    cancelButtonText: 'Abbrechen'
+                }).then(function (result) {
+                    if (!result.isConfirmed) return;
+
+                    $.ajax({
+                        url: routeUrl(routes.stageAdmin.subDelete, {
+                            '__SUB_ID__': id
+                        }),
+                        method: 'DELETE',
+                        headers: { 'X-CSRF-TOKEN': csrf() }
+                    }).done(function (res) {
+                        notify('success', res.message || 'Sub-Stage gelöscht.');
+                        loadLeadStageAdmin();
+                        loadBoard();
+                    }).fail(function (xhr) {
+                        notify('error', apiError(xhr, 'Sub-Stage konnte nicht gelöscht werden.'));
+                    });
+                });
+            });
+
+
+            function filterSubStageOptions(stageId) {
+                const select = $('#task_lead_sub_stage_id');
+                select.find('option').each(function () {
+                    const optionStageId = $(this).data('stage-id');
+                    if (!optionStageId) { $(this).prop('hidden', false); return; }
+                    $(this).prop('hidden', String(optionStageId) !== String(stageId));
+                });
+                const selected = select.find('option:selected');
+                if (selected.data('stage-id') && String(selected.data('stage-id')) !== String(stageId)) select.val('');
+            }
+
+            function textMatches(...values) {
+                const q = state.search.toLowerCase().trim();
+                if (!q) return true;
+                return values.join(' ').toLowerCase().includes(q);
+            }
+
+            function taskMatchesSearch(task) {
+                if (textMatches(task.title, task.description)) return true;
+                return (task.activities || []).some(a => activityMatchesSearch(a));
+            }
+
+            function activityMatchesSearch(activity) {
+                if (textMatches(activity.title, activity.description)) return true;
+                return (activity.children || []).some(child => activityMatchesSearch(child));
+            }
+
+            function filteredTasks(tasks) {
+                return (tasks || []).filter(taskMatchesSearch);
+            }
+
+            function countFilteredTasks(stage) {
+                return (stage.lanes || []).reduce((sum, lane) => sum + filteredTasks(lane.tasks || []).length, 0);
+            }
+
+            function renderActivity(activity, task, child) {
+                if (!activityMatchesSearch(activity)) return '';
+                return `
+                                            <div class="ltm-activity-row ${child ? 'ltm-child-activity' : ''}" data-activity-id="${activity.id}" data-phase-id="${task.id}">
+                                                <div class="ltm-activity-title js-show-activity-detail" data-activity-id="${activity.id}">
+                                                    <i class="feather ${child ? 'icon-corner-down-right' : 'icon-check-circle'}"></i>
+                                                    <span>${esc(activity.title)}</span>
+                                                    ${activity.photo_required ? '<span class="ltm-chip red">Foto</span>' : ''}
+                                                </div>
+                                                <div style="display:flex;gap:4px;">
+                                                    <button type="button" class="ltm-icon-btn js-create-child-activity" data-phase-id="${task.id}" data-parent-id="${activity.id}" title="Unteraktivität"><i class="feather icon-plus"></i></button>
+                                                    <button type="button" class="ltm-icon-btn js-edit-activity" data-activity-id="${activity.id}" title="Bearbeiten"><i class="feather icon-edit"></i></button>
+                                                    <button type="button" class="ltm-icon-btn js-clone-activity" data-activity-id="${activity.id}" title="Kopieren"><i class="feather icon-copy"></i></button>
+                                                    <button type="button" class="ltm-icon-btn danger js-delete-activity" data-activity-id="${activity.id}" title="Löschen"><i class="feather icon-trash"></i></button>
+                                                </div>
+                                            </div>
+                                            ${(activity.children || []).map(childActivity => renderActivity(childActivity, task, true)).join('')}
+                                        `;
+            }
+
+            function renderTask(task) {
+                if (!taskMatchesSearch(task)) return '';
+                const active = task.status === 'Published';
+                const selected = parseInt(state.selectedTask, 10) === parseInt(task.id, 10);
+                return `
+                                            <article class="ltm-task-card ${selected ? 'is-selected' : ''}" data-phase-id="${task.id}">
+                                                <div class="ltm-task-main js-show-task-detail" data-phase-id="${task.id}">
+                                                    <div class="ltm-task-title-row">
+                                                        <div class="ltm-task-title">${esc(task.title)}</div>
+                                                        <div class="ltm-task-actions">
+                                                            <button type="button" class="ltm-icon-btn js-create-activity" data-phase-id="${task.id}" title="Aktivität"><i class="feather icon-plus"></i></button>
+                                                            <button type="button" class="ltm-icon-btn js-edit-task" data-phase-id="${task.id}" title="Bearbeiten"><i class="feather icon-edit"></i></button>
+                                                            <button type="button" class="ltm-icon-btn js-clone-task" data-phase-id="${task.id}" title="Kopieren"><i class="feather icon-copy"></i></button>
+                                                            <button type="button" class="ltm-icon-btn danger js-delete-task" data-phase-id="${task.id}" title="Löschen"><i class="feather icon-trash"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ltm-task-meta">
+                                                        <span class="ltm-chip ${active ? 'green' : ''}">${active ? 'Aktiv' : 'Inaktiv'}</span>
+                                                        <span class="ltm-chip">${task.activities_count || 0} Aktivitäten</span>
+                                                    </div>
+                                                </div>
+                                                <div class="ltm-activities sortable-activities" data-phase-id="${task.id}">
+                                                    ${(task.activities || []).map(activity => renderActivity(activity, task, false)).join('') || '<div class="ltm-empty" style="padding:9px;">Keine Aktivität</div>'}
+                                                </div>
+                                            </article>
+                                        `;
+            }
+
+            function renderLane(stage, lane) {
+                const laneKey = `${stage.id}:${lane.id || 'main'}`;
+                const closed = state.closedLanes.has(laneKey);
+                const tasks = filteredTasks(lane.tasks || []);
+                if (state.search && tasks.length === 0) return '';
+                return `
+                                            <div class="ltm-lane ${closed ? 'is-closed' : ''}" data-lane-key="${esc(laneKey)}" data-lane-id="${lane.id || ''}">
+                                                <button type="button" class="ltm-lane-head js-toggle-lane" data-lane-key="${esc(laneKey)}">
+                                                    <div class="ltm-lane-title">
+                                                        <span class="ltm-lane-dot" style="background:${esc(lane.color || stage.color || '#74b2d4')}"></span>
+                                                        <span>${esc(lane.name || 'Hauptstage')}</span>
+                                                        <span class="ltm-chip">${tasks.length}</span>
+                                                    </div>
+                                                    <div style="display:flex;align-items:center;gap:8px;">
+                                                        <span class="ltm-accordion-chevron"><i class="feather icon-chevron-down"></i></span>
+                                                    </div>
+                                                </button>
+                                                <div class="ltm-lane-body">
+                                                    <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+                                                        <button type="button" class="ltm-btn-soft js-create-task-in-lane" data-stage-id="${stage.id}" data-sub-stage-id="${lane.id || ''}"><i class="feather icon-plus"></i> Phase</button>
+                                                    </div>
+                                                    <div class="ltm-task-list sortable-tasks" data-stage-id="${stage.id}" data-sub-stage-id="${lane.id || ''}">
+                                                        ${tasks.map(renderTask).join('') || '<div class="ltm-empty">Keine Phasen</div>'}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+            }
+
+            function renderBoard() {
+                let total = 0;
+                const html = state.board.map(stage => {
+                    const count = countFilteredTasks(stage);
+                    total += count;
+                    if (state.search && count === 0) return '';
+                    const closed = state.closedStages.has(String(stage.id));
+                    const lanes = (stage.lanes || []).map(lane => renderLane(stage, lane)).join('');
+                    return `
+                                                <section class="ltm-stage-accordion ${closed ? 'is-closed' : ''}" data-stage-id="${stage.id}">
+                                                    <button type="button" class="ltm-stage-accordion-head js-toggle-stage" data-stage-id="${stage.id}">
+                                                        <div class="ltm-stage-name">
+                                                            <span class="ltm-stage-dot" style="background:${esc(stage.color || '#74b2d4')}"></span>
+                                                            <span>${esc(stage.name)}</span>
+                                                        </div>
+                                                        <div class="ltm-stage-actions">
+                                                            <span class="ltm-stage-count">${count}</span>
+                                                            <span class="ltm-accordion-chevron"><i class="feather icon-chevron-down"></i></span>
+                                                        </div>
+                                                    </button>
+                                                    <div class="ltm-stage-accordion-body">
+                                                        ${lanes || '<div class="ltm-empty">Keine passenden Phasen</div>'}
+                                                    </div>
+                                                </section>
+                                            `;
+                }).join('');
+
+                $('#ltmTree').html(html || '<div class="ltm-empty">Keine passenden Phasen gefunden.</div>');
+                $('#ltmTotalCount').text(total + ' Phasen');
+                initSortables();
+                iconRefresh();
+            }
+
+            function loadBoard() {
+                $('#ltmTree').html('<div class="ltm-loading">Lade Phasen...</div>');
+                return $.get(routes.board, { product_id: state.productId, section_id: state.sectionId })
+                    .done(res => { state.board = res.board || []; renderBoard(); })
+                    .fail(xhr => { $('#ltmTree').html('<div class="ltm-empty">' + esc(apiError(xhr, 'Phasen konnten nicht geladen werden.')) + '</div>'); });
+            }
+
+            function findTask(taskId) {
+                for (const stage of state.board) for (const lane of stage.lanes || []) for (const task of lane.tasks || []) if (parseInt(task.id, 10) === parseInt(taskId, 10)) return task;
+                return null;
+            }
+
+            function findActivity(activityId) {
+                function walk(list) {
+                    for (const item of list || []) {
+                        if (parseInt(item.id, 10) === parseInt(activityId, 10)) return item;
+                        const found = walk(item.children || []);
+                        if (found) return found;
+                    }
+                    return null;
+                }
+                for (const stage of state.board) for (const lane of stage.lanes || []) for (const task of lane.tasks || []) {
+                    const found = walk(task.activities || []);
+                    if (found) return found;
+                }
+                return null;
+            }
+
+            function renderTaskDetail(task) {
+                if (!task) return;
+                state.selectedTask = task.id;
+                state.selectedActivity = null;
+                $('#ltmDetailBody').html(`
+                                            <div class="ltm-detail-section">
+                                                <div class="ltm-detail-kicker">Phase</div>
+                                                <div class="ltm-detail-text"><strong>${esc(task.title)}</strong></div>
+                                                <div class="ltm-detail-text" style="margin-top:8px;">${esc(task.description || 'Keine Beschreibung')}</div>
+                                            </div>
+                                            <div class="ltm-detail-section">
+                                                <div class="ltm-detail-kicker">Status</div>
+                                                <div class="ltm-detail-text">${task.status === 'Published' ? 'Aktiv' : 'Inaktiv'} · ${task.activities_count || 0} Aktivitäten</div>
+                                            </div>
+                                            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                                <button type="button" class="ltm-btn js-create-activity" data-phase-id="${task.id}"><i class="feather icon-plus"></i> Aktivität</button>
+                                                <button type="button" class="ltm-btn-soft js-edit-task" data-phase-id="${task.id}"><i class="feather icon-edit"></i> Bearbeiten</button>
+                                                <button type="button" class="ltm-btn-soft js-clone-task" data-phase-id="${task.id}"><i class="feather icon-copy"></i> Kopieren</button>
+                                            </div>
+                                        `);
+                renderBoard();
+                iconRefresh();
+            }
+
+            function renderActivityDetail(activity) {
+                if (!activity) return;
+                state.selectedActivity = activity.id;
+                $('#ltmDetailBody').html(`
+                                            <div class="ltm-detail-section">
+                                                <div class="ltm-detail-kicker">Aktivität</div>
+                                                <div class="ltm-detail-text"><strong>${esc(activity.title)}</strong></div>
+                                                <div class="ltm-detail-text" style="margin-top:8px;">${esc(activity.description || 'Keine Beschreibung')}</div>
+                                            </div>
+                                            <div class="ltm-detail-section">
+                                                <div class="ltm-detail-kicker">Planung</div>
+                                                <div class="ltm-detail-text">Dauer: ${esc(activity.duration || 0)} ${esc(activity.duration_type || '')}</div>
+                                                <div class="ltm-detail-text">Foto erforderlich: ${activity.photo_required ? 'Ja' : 'Nein'}</div>
+                                                <div class="ltm-detail-text">Status: ${activity.status === 'Published' ? 'Aktiv' : 'Inaktiv'}</div>
+                                            </div>
+                                            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                                <button type="button" class="ltm-btn-soft js-edit-activity" data-activity-id="${activity.id}"><i class="feather icon-edit"></i> Bearbeiten</button>
+                                                <button type="button" class="ltm-btn-soft js-clone-activity" data-activity-id="${activity.id}"><i class="feather icon-copy"></i> Kopieren</button>
+                                            </div>
+                                        `);
+                iconRefresh();
+            }
+
+            function resetTaskForm() { $('#taskForm')[0].reset(); $('#task_id').val(''); $('#taskError').removeClass('is-visible').text(''); filterSubStageOptions(''); }
+            function openTaskForm(task, defaults) {
+                resetTaskForm();
+                $('#taskModalTitle').text(task ? 'Phase bearbeiten' : 'Neue Phase');
+                if (task) {
+                    $('#task_id').val(task.id);
+                    $('#task_title').val(task.title);
+                    $('#task_description').val(task.description || '');
+                    $('#task_status').val(task.status || 'Published');
+                    $('#task_lead_stage_id').val(task.lead_stage_id);
+                    filterSubStageOptions(task.lead_stage_id);
+                    $('#task_lead_sub_stage_id').val(task.lead_sub_stage_id || '');
+                } else if (defaults) {
+                    $('#task_lead_stage_id').val(defaults.stageId || '');
+                    filterSubStageOptions(defaults.stageId || '');
+                    $('#task_lead_sub_stage_id').val(defaults.subStageId || '');
+                }
+                openModal('taskModal');
+            }
+
+            function resetActivityForm() { $('#activityForm')[0].reset(); $('#activity_id').val(''); $('#activity_parent_id').val(''); $('#activityError').removeClass('is-visible').text(''); $('.js-ltm-select2').val(null).trigger('change'); }
+            function openActivityForm(activity, defaults) {
+                resetActivityForm();
+                $('#activityModalTitle').text(activity ? 'Aktivität bearbeiten' : 'Neue Aktivität');
+                if (activity) {
+                    $('#activity_id').val(activity.id);
+                    $('#activity_phase_id').val(activity.phase_id);
+                    $('#activity_parent_id').val(activity.parent_id || '');
+                    $('#activity_title').val(activity.title || '');
+                    $('#activity_description').val(activity.description || '');
+                    $('#activity_duration').val(activity.duration || '');
+                    $('#activity_duration_type').val(activity.duration_type || 'minutes');
+                    $('#activity_status').val(activity.status || 'Published');
+                    $('#activity_photo_required').prop('checked', !!activity.photo_required);
+                    $('#activity_qualification_ids').val(activity.qualification_ids || []).trigger('change');
+                    $('#activity_department_ids').val(activity.department_ids || []).trigger('change');
+                    $('#activity_article_ids').val(activity.article_ids || []).trigger('change');
+                } else if (defaults) {
+                    $('#activity_phase_id').val(defaults.phaseId || '');
+                    $('#activity_parent_id').val(defaults.parentId || '');
+                }
+                openModal('activityModal');
+            }
+
+            function postMoveTask(phaseId, payload) {
+                return $.post(routes.taskMoveParamBase + phaseId + '/move', payload)
+                    .catch(xhr => xhr.status === 404 ? $.post(routes.taskMoveFlat, payload) : $.Deferred().reject(xhr).promise());
+            }
+
+            function initSortables() {
+                $('.sortable-tasks').each(function () {
+                    const list = $(this);
+                    if (list.data('ui-sortable')) return;
+                    list.sortable({
+                        items: '> .ltm-task-card',
+                        connectWith: '.sortable-tasks',
+                        placeholder: 'ltm-placeholder',
+                        forcePlaceholderSize: true,
+                        tolerance: 'pointer',
+                        scroll: true,
+                        start: function (e, ui) { ui.item.data('fromList', ui.item.parent()); },
+                        stop: function (e, ui) {
+                            const toList = ui.item.parent();
+                            const fromList = ui.item.data('fromList');
+                            const phaseId = ui.item.data('phase-id');
+                            const stageId = toList.data('stage-id');
+                            const subStageId = toList.data('sub-stage-id') || '';
+                            const ordered = toList.children('.ltm-task-card').map(function () { return $(this).data('phase-id'); }).get();
+
+                            if (toList.is(fromList)) {
+                                $.post(routes.taskReorder, { _token: csrf(), lead_stage_id: stageId, lead_sub_stage_id: subStageId, phase_ids: ordered })
+                                    .fail(xhr => notify('error', apiError(xhr, 'Sortierung fehlgeschlagen.')));
+                                return;
+                            }
+
+                            postMoveTask(phaseId, { _token: csrf(), phase_id: phaseId, lead_stage_id: stageId, lead_sub_stage_id: subStageId, target_index: ui.item.index() })
+                                .done(() => loadBoard())
+                                .fail(xhr => { notify('error', apiError(xhr, 'Verschieben fehlgeschlagen.')); loadBoard(); });
+                        }
+                    });
+                });
+            }
+
+            $(document).on('click', '[data-close-ltm-modal]', function () { closeAllModals(); });
+            $(document).on('click', '.ltm-modal-backdrop', function (e) { if (e.target === this) closeModal(this.id); });
+            $(document).on('keydown', function (e) { if (e.key === 'Escape') closeAllModals(); });
+
+            $(document).on('click', '.js-toggle-stage', function (e) {
+                if ($(e.target).closest('button:not(.js-toggle-stage)').length) return;
+                const id = String($(this).data('stage-id'));
+                state.closedStages.has(id) ? state.closedStages.delete(id) : state.closedStages.add(id);
+                renderBoard();
+            });
+
+            $(document).on('click', '.js-toggle-lane', function () {
+                const key = String($(this).data('lane-key'));
+                state.closedLanes.has(key) ? state.closedLanes.delete(key) : state.closedLanes.add(key);
+                renderBoard();
+            });
+
+            $('#btnExpandAll').on('click', function () { state.closedStages.clear(); state.closedLanes.clear(); renderBoard(); });
+            $('#btnCollapseAll').on('click', function () {
+                state.board.forEach(stage => {
+                    state.closedStages.add(String(stage.id));
+                    (stage.lanes || []).forEach(lane => state.closedLanes.add(`${stage.id}:${lane.id || 'main'}`));
+                });
+                renderBoard();
+            });
+
+            $('#btnCreateTask').on('click', () => openTaskForm(null, null));
+            $('#btnReloadBoard').on('click', () => loadBoard());
+            $('#ltmSearch').on('input', function () { state.search = $(this).val(); renderBoard(); });
+            $('#ltmSearchClear').on('click', function () { $('#ltmSearch').val(''); state.search = ''; renderBoard(); });
+            $('#task_lead_stage_id').on('change', function () { filterSubStageOptions($(this).val()); });
+
+            $(document).on('click', '.js-create-task-in-lane', function (e) { e.stopPropagation(); openTaskForm(null, { stageId: $(this).data('stage-id'), subStageId: $(this).data('sub-stage-id') || '' }); });
+            $(document).on('click', '.js-edit-task', function (e) { e.stopPropagation(); openTaskForm(findTask($(this).data('phase-id')), null); });
+            $(document).on('click', '.js-show-task-detail', function (e) { if ($(e.target).closest('button').length) return; renderTaskDetail(findTask($(this).data('phase-id'))); });
+            $(document).on('click', '.js-create-activity', function (e) { e.stopPropagation(); openActivityForm(null, { phaseId: $(this).data('phase-id') }); });
+            $(document).on('click', '.js-create-child-activity', function (e) { e.stopPropagation(); openActivityForm(null, { phaseId: $(this).data('phase-id'), parentId: $(this).data('parent-id') }); });
+            $(document).on('click', '.js-edit-activity', function (e) { e.stopPropagation(); openActivityForm(findActivity($(this).data('activity-id')), null); });
+            $(document).on('click', '.js-show-activity-detail', function (e) { e.stopPropagation(); renderActivityDetail(findActivity($(this).data('activity-id'))); });
+
+            $('#taskForm').on('submit', function (e) {
+                e.preventDefault();
+                const id = $('#task_id').val();
+                const url = id ? routes.taskUpdateBase + id : routes.taskStore;
+                $.ajax({ url, method: 'POST', data: $(this).serialize(), headers: { 'X-CSRF-TOKEN': csrf() } })
+                    .done(res => { closeAllModals(); notify('success', res.message || 'Gespeichert.'); loadBoard(); })
+                    .fail(xhr => $('#taskError').addClass('is-visible').text(apiError(xhr, 'Speichern fehlgeschlagen.')));
+            });
+
+            $('#activityForm').on('submit', function (e) {
+                e.preventDefault();
+                const id = $('#activity_id').val();
+                const url = id ? routes.activityUpdateBase + id : routes.activityStore;
+                $.ajax({ url, method: 'POST', data: $(this).serialize(), headers: { 'X-CSRF-TOKEN': csrf() } })
+                    .done(res => { closeAllModals(); notify('success', res.message || 'Gespeichert.'); loadBoard(); })
+                    .fail(xhr => $('#activityError').addClass('is-visible').text(apiError(xhr, 'Speichern fehlgeschlagen.')));
+            });
+
+            $(document).on('click', '.js-delete-task', function (e) {
                 e.stopPropagation();
-                let activityId = $(this).data('activity-id');
-
-                $.ajax({
-                    url: `/get/phase/activity/${activityId}`,
-                    method: 'GET',
-                    success: function (response) {
-                        let activity = response.data;
-                        let tbody = renderActivityRow(activity, 1);
-                        $('#detailed_table tbody').html(tbody);
-                    },
-                    error: function () {
-                        alert('Fehler beim Laden der Aktivität.');
-                    }
-                });
+                const id = $(this).data('phase-id');
+                swalAsk({ title: 'Phase löschen?', text: 'Alle Aktivitäten dieser Phase werden gelöscht.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Löschen', cancelButtonText: 'Abbrechen' })
+                    .then(result => { if (!result.isConfirmed) return; $.ajax({ url: routes.taskDeleteBase + id, method: 'DELETE', headers: { 'X-CSRF-TOKEN': csrf() } }).done(res => { notify('success', res.message); loadBoard(); }).fail(xhr => notify('error', apiError(xhr, 'Löschen fehlgeschlagen.'))); });
             });
 
-        // 8) Status dropdown change (your original)
-        $(document)
-            .off('change.activityStatus', '.status-dropdown')
-            .on('change.activityStatus', '.status-dropdown', function () {
-                let status = $(this).val();
-                let id = $(this).data('id');
-
-                $.ajax({
-                    url: `/phase/activity/status/${id}`,
-                    type: 'POST',
-                    data: { _token: csrf(), status: status },
-                    success: function () {
-                        Swal.fire('Status aktualisiert', '', 'success');
-                    }
-                });
+            $(document).on('click', '.js-clone-task', function (e) {
+                e.stopPropagation();
+                $.post(routes.taskCloneBase + $(this).data('phase-id') + '/clone', { _token: csrf() }).done(res => { notify('success', res.message); loadBoard(); }).fail(xhr => notify('error', apiError(xhr, 'Kopieren fehlgeschlagen.')));
             });
 
-        // 9) Delete phase + delete activity (your original)
-        $(document)
-            .off('click.deletePhase', '.btn-delete-phase')
-            .on('click.deletePhase', '.btn-delete-phase', function () {
-                let id = $(this).data('id');
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'Cancel',
-                }).then((result) => {
-                    if (!result.isConfirmed) return;
-
-                    $.ajax({
-                        url: '/task_phase_destroy/' + id,
-                        type: 'GET',
-                        success: function (response) {
-                            Swal.fire({
-                                title: 'Deleted!',
-                                text: response[1],
-                                icon: 'success',
-                                timer: 1500,
-                                showConfirmButton: false
-                            }).then(() => location.reload());
-                        },
-                        error: function () {
-                            Swal.fire('Error!', 'Something went wrong.', 'error');
-                        }
-                    });
-                });
+            $(document).on('click', '.js-delete-activity', function (e) {
+                e.stopPropagation();
+                const id = $(this).data('activity-id');
+                swalAsk({ title: 'Aktivität löschen?', text: 'Unteraktivitäten werden ebenfalls gelöscht.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Löschen', cancelButtonText: 'Abbrechen' })
+                    .then(result => { if (!result.isConfirmed) return; $.ajax({ url: routes.activityDeleteBase + id, method: 'DELETE', headers: { 'X-CSRF-TOKEN': csrf() } }).done(res => { notify('success', res.message); loadBoard(); }).fail(xhr => notify('error', apiError(xhr, 'Löschen fehlgeschlagen.'))); });
             });
 
-        $(document)
-            .off('click.deleteActivity', '.btn-delete-activity')
-            .on('click.deleteActivity', '.btn-delete-activity', function () {
-                let id = $(this).data('id');
-
-                Swal.fire({
-                    title: 'Delete this activity?',
-                    text: "This action cannot be undone.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Delete',
-                    cancelButtonText: 'Cancel',
-                }).then((result) => {
-                    if (!result.isConfirmed) return;
-
-                    $.ajax({
-                        url: '/activities_destroy/' + id,
-                        type: 'GET',
-                        success: function (response) {
-                            Swal.fire({
-                                title: 'Deleted!',
-                                text: response[1],
-                                icon: 'success',
-                                timer: 1500,
-                                showConfirmButton: false
-                            }).then(() => location.reload());
-                        },
-                        error: function () {
-                            Swal.fire('Error!', 'Could not delete the activity.', 'error');
-                        }
-                    });
-                });
+            $(document).on('click', '.js-clone-activity', function (e) {
+                e.stopPropagation();
+                $.post(routes.activityCloneBase + $(this).data('activity-id') + '/clone', { _token: csrf() }).done(res => { notify('success', res.message); loadBoard(); }).fail(xhr => notify('error', apiError(xhr, 'Kopieren fehlgeschlagen.')));
             });
 
-        // 10) Sidebar minimize (your original)
-        (function initSidebarMinimize() {
-            let sidebarVisible = true;
-
-            $('.minimize-button')
-                .off('click.sidebarToggle')
-                .on('click.sidebarToggle', function () {
-                    const $sidebar = $('.side-bar');
-                    const $activity = $('#activities');
-
-                    if (sidebarVisible) {
-                        $sidebar.hide();
-                        $activity.removeClass('col-md-8').addClass('col-12');
-                        $(this).find('i').removeClass('icon-minus').addClass('icon-maximize');
-                    } else {
-                        $sidebar.show();
-                        $activity.removeClass('col-12').addClass('col-md-8');
-                        $(this).find('i').removeClass('icon-maximize').addClass('icon-minus');
-                    }
-
-                    sidebarVisible = !sidebarVisible;
-                });
-        })();
-
-        // 11) Tooltips (your original)
-        document.addEventListener('DOMContentLoaded', function () {
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'));
-            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-                new bootstrap.Tooltip(tooltipTriggerEl);
+            $(function () {
+                setupSelect2();
+                loadBoard();
+                iconRefresh();
             });
-        });
-
-        // 12) Version select (#version_id) with safe autoload (prevents reload-conflicts)
-        (function initVersionSelect() {
-            const $versionSelect = $('#version_id');
-            if (!$versionSelect.length) return;
-
-            const productId      = $('#filter_product_id').val();
-            const sectionId      = $('#section_id').val();
-            const defaultVersion = $('#currentVersion').val();
-
-            const storageKey = `selectedVersion:${productId}:${sectionId}`;
-
-            safeSelect2($versionSelect, {
-                placeholder: "Bitte wählen",
-                width: '100%',
-                templateResult: function (data) {
-                    return !data.id ? data.text : $('<strong>' + data.text + '</strong>');
-                }
-            });
-
-            $versionSelect
-                .off('change.phaseVersion')
-                .on('change.phaseVersion', function () {
-                    const v = $(this).val();
-
-                    if (!v) {
-                        localStorage.removeItem(storageKey);
-                        $('#folderStructure').html('<div class="text-muted p-2">Bitte wählen Sie eine Version.</div>');
-                        return;
-                    }
-
-                    localStorage.setItem(storageKey, v);
-
-                    // keep in URL for refresh
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('version', v);
-                    url.searchParams.delete('stage_id');
-                    history.replaceState({}, '', url);
-
-                    window.loadStagesAndPhases(v, productId, sectionId);
-                });
-
-            // initial selection: URL -> localStorage -> default
-            const urlVersion    = (new URL(window.location.href)).searchParams.get('version');
-            const storedVersion = localStorage.getItem(storageKey);
-            const initial       = urlVersion || storedVersion || defaultVersion;
-
-            if (initial && $versionSelect.find(`option[value="${initial}"]`).length) {
-                // set without firing change (prevents “loads phases on every reload”)
-                $versionSelect.val(initial).trigger('change.select2');
-
-                // only autoload if folderStructure is empty (AJAX mode)
-                if (folderStructureLooksEmpty()) {
-                    window.loadStagesAndPhases(initial, productId, sectionId);
-                }
-            }
-
-            // initial sortables on first paint
-            initSortables(document);
-        })();
-
-        // 13) COPY DRAWER (your original, but avoids double-select2 init)
-        (function initCopyDrawer() {
-            let selectedCopyVersion = null;
-            let copyContext = { sourceType: 'phase', phaseId: null, activityId: null };
-            let prefillTarget = null;
-
-            function updateTargetSummary() {
-                const p  = $('#targetProduct option:selected').text() || '–';
-                const s  = $('#targetSection option:selected').text() || '–';
-                const v  = $('#targetVersion option:selected').text() || '–';
-                const st = $('#targetStage option:selected').text() || '–';
-                const ph = $('#targetPhase').find('option:selected').text() || '–';
-
-                $('#targetSummary').html(
-                    `<strong>Ziel:</strong> ${p} · ${s} · Version: ${v} · Stage: ${st} · Phase: ${ph}`
-                );
-            }
-
-            function closeCopyDrawer() {
-                $('#copyDrawer').removeClass('open');
-            }
-
-            function openCopyDrawer(sourceType, phaseId, activityId = null) {
-                copyContext = { sourceType, phaseId, activityId };
-
-                $('#copyForm')[0].reset();
-                $('#targetProduct, #targetSection, #targetVersion, #targetStage, #targetPhase')
-                    .val(null).trigger('change');
-
-                $('#activitiesList').html('');
-                $('#selectAllActivities').prop('checked', false);
-
-                $('#copyDrawer').addClass('open');
-
-                $.get(`/copy/load/${phaseId}`, function (res) {
-                    const phase = res.phase;
-
-                    prefillTarget = {
-                        productId: phase.product_id,
-                        sectionId: phase.section_id,
-                        version:   phase.version,
-                        stageId:   phase.stage_id,
-                        phaseId:   phase.id
-                    };
-
-                    $('#sourcePhaseDetails').html(
-                        `${phase.phase_name} · ${phase.stage || 'ohne Stage'} · Version ${phase.version || '-'}`
-                    );
-
-                    let html = '';
-                    res.activities.forEach(a => {
-                        const isPreSelected =
-                            copyContext.sourceType === 'activity' &&
-                            parseInt(copyContext.activityId, 10) === parseInt(a.id, 10);
-
-                        html += `
-                            <div class="custom-control custom-checkbox mb-0">
-                                <input type="checkbox"
-                                    class="custom-control-input activity-checkbox"
-                                    id="activityCopy${a.id}"
-                                    value="${a.id}"
-                                    ${isPreSelected ? 'checked' : ''}>
-                                <label class="custom-control-label small" for="activityCopy${a.id}">
-                                    ${a.title || 'Ohne Titel'}
-                                </label>
-                            </div>
-                        `;
-                    });
-
-                    $('#activitiesList').html(html || '<div class="p-1 text-muted small">Keine Aktivitäten vorhanden.</div>');
-
-                    let productOptions = '<option value="">Produkt wählen</option>';
-                    res.products.forEach(p => productOptions += `<option value="${p.id}">${p.article_group}</option>`);
-                    $('#targetProduct').html(productOptions);
-
-                    let sectionOptions = '<option value="">Bereich wählen</option>';
-                    res.sections.forEach(s => sectionOptions += `<option value="${s.id}">${s.phase_section}</option>`);
-                    $('#targetSection').html(sectionOptions);
-
-                    if (prefillTarget.productId) $('#targetProduct').val(prefillTarget.productId).trigger('change');
-                    if (prefillTarget.sectionId) $('#targetSection').val(prefillTarget.sectionId).trigger('change');
-
-                    updateTargetSummary();
-                });
-            }
-
-            // Drawer close events (your original)
-            $('#copyDrawerClose, #copyDrawerCancel')
-                .off('click.copyDrawerClose')
-                .on('click.copyDrawerClose', closeCopyDrawer);
-
-            $('.phase-copy-overlay')
-                .off('click.copyDrawerOverlay')
-                .on('click.copyDrawerOverlay', closeCopyDrawer);
-
-            // Select2 init for drawer (your original intent)
-            safeSelect2($('#targetVersion'), {
-                placeholder: "Bitte wählen",
-                width: '100%',
-                dropdownParent: $('#copyDrawerPanel'),
-                templateResult: function (data) {
-                    if (!data.id) return data.text;
-                    return $('<strong>' + data.text + '</strong>');
-                }
-            });
-
-            safeSelect2($('#targetStage'), {
-                placeholder: "Bitte wählen",
-                width: '100%',
-                dropdownParent: $('#copyDrawerPanel'),
-                templateResult: function (data) {
-                    if (!data.id) return data.text;
-                    return $('<strong>' + data.text + '</strong>');
-                }
-            });
-
-            // PHASE select2 (your original advanced config)
-            if (!isSelect2($('#targetPhase'))) {
-                $('#targetPhase').select2({
-                    tags: true,
-                    placeholder: 'Phase wählen oder neu eingeben',
-                    width: '100%',
-                    dropdownParent: $('#copyDrawerPanel'),
-                    ajax: {
-                        url: '/search-phases',
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                q: params.term,
-                                product_id: $('#targetProduct').val(),
-                                section_id: $('#targetSection').val()
-                            };
-                        },
-                        processResults: function (data) {
-                            return { results: data };
-                        }
-                    },
-                    createTag: function (params) {
-                        return { id: params.term, text: params.term, newPhase: true };
-                    },
-                    templateResult: function (data) {
-                        return data.newPhase
-                            ? `<span>➕ Neue Phase: <strong>${data.text}</strong></span>`
-                            : data.text;
-                    },
-                    escapeMarkup: function (markup) { return markup; }
-                });
-            }
-
-            // PRODUCT → VERSION (your original)
-            $('#targetProduct')
-                .off('change.copyProduct')
-                .on('change.copyProduct', function () {
-                    const productId = $(this).val();
-
-                    $('#targetVersion').html('<option>Versionen werden geladen...</option>').trigger('change');
-                    $('#targetStage').html('<option>Bitte Version wählen</option>').trigger('change');
-                    $('#targetPhase').html('<option>Bitte Phase wählen</option>').trigger('change');
-
-                    if (!productId) {
-                        updateTargetSummary();
-                        return;
-                    }
-
-                    $.get('/get-stage-versions', { product_id: productId }, function (versions) {
-                        let options = '<option value="">Version wählen</option>';
-                        versions.forEach(version => options += `<option value="${version}">${version}</option>`);
-                        $('#targetVersion').html(options).trigger('change');
-
-                        if (prefillTarget &&
-                            prefillTarget.productId == productId &&
-                            prefillTarget.version) {
-                            $('#targetVersion').val(prefillTarget.version).trigger('change');
-                        }
-
-                        updateTargetSummary();
-                    });
-                });
-
-            // VERSION → STAGES (your original)
-            $('#targetVersion')
-                .off('change.copyVersion')
-                .on('change.copyVersion', function () {
-                    selectedCopyVersion = $(this).val();
-                    const productId = $('#targetProduct').val();
-
-                    $('#targetStage').html('<option>Lade Stages...</option>');
-                    $('#targetPhase').html('<option>Bitte Phase wählen</option>');
-
-                    if (!selectedCopyVersion || !productId) {
-                        updateTargetSummary();
-                        return;
-                    }
-
-                    $.get('/get/stage/version', { version: selectedCopyVersion, product_id: productId }, function (stages) {
-                        let options = '<option value="">-- Bitte wählen --</option>';
-                        let defaultStageId = null;
-
-                        if (!Array.isArray(stages)) {
-                            console.warn('Ungültige Stage-Daten:', stages);
-                            $('#targetStage').html('<option value="">Keine Stages gefunden</option>');
-                            updateTargetSummary();
-                            return;
-                        }
-
-                        stages.forEach(stage => {
-                            if (stage.default === 'yes') defaultStageId = stage.id;
-                            options += `<option value="${stage.id}">${stage.stage}${stage.default === 'yes' ? ' (Standard)' : ''}</option>`;
-                        });
-
-                        $('#targetStage').html(options).trigger('change');
-
-                        if (prefillTarget &&
-                            prefillTarget.productId == productId &&
-                            prefillTarget.version == selectedCopyVersion &&
-                            prefillTarget.stageId) {
-                            $('#targetStage').val(prefillTarget.stageId).trigger('change');
-                        } else if (defaultStageId) {
-                            $('#targetStage').val(defaultStageId).trigger('change');
-                        }
-
-                        updateTargetSummary();
-                    });
-                });
-
-            // STAGE → LOAD phases + activities (your original)
-            $('#targetStage')
-                .off('change.copyStage')
-                .on('change.copyStage', function () {
-                    const stageId = $(this).val();
-                    const version = $('#targetVersion').val();
-                    const productId = $('#targetProduct').val();
-
-                    $('#targetPhase').html('<option>Phasen werden geladen...</option>');
-                    $('#activitiesList').html('<div class="p-1 text-muted small">Aktivitäten werden geladen...</div>');
-
-                    if (!stageId || !version || !productId) return;
-
-                    $.get('/get-activities-by-stage', { stage: stageId, version: version, product_id: productId }, function (phases) {
-                        let phaseOptions = '<option value="">Phase wählen oder neu eingeben</option>';
-                        let activityHtml = '';
-
-                        if (!Array.isArray(phases)) {
-                            console.warn('Ungültige Phase/Activity-Daten:', phases);
-                            $('#targetPhase').html('<option value="">Keine Phasen gefunden</option>');
-                            $('#activitiesList').html('<div class="p-1 text-danger small">Keine Aktivitäten gefunden</div>');
-                            return;
-                        }
-
-                        phases.forEach(phase => {
-                            phaseOptions += `<option value="${phase.id}">${phase.phase_name}</option>`;
-
-                            if (Array.isArray(phase.activities)) {
-                                phase.activities.forEach(a => {
-                                    activityHtml += `
-                                        <div class="custom-control custom-checkbox mb-0">
-                                            <input type="checkbox"
-                                                   class="custom-control-input activity-checkbox"
-                                                   id="activityCopy${a.id}"
-                                                   value="${a.id}">
-                                            <label class="custom-control-label small" for="activityCopy${a.id}">
-                                                ${a.title || 'Ohne Titel'}
-                                            </label>
-                                        </div>
-                                    `;
-                                });
-                            }
-                        });
-
-                        $('#targetPhase').html(phaseOptions).trigger('change');
-                        $('#activitiesList').html(activityHtml || '<div class="text-muted">Keine Aktivitäten vorhanden</div>');
-
-                        if (prefillTarget && prefillTarget.phaseId) {
-                            const exists = $('#targetPhase option[value="' + prefillTarget.phaseId + '"]').length > 0;
-                            if (exists) $('#targetPhase').val(prefillTarget.phaseId).trigger('change');
-                        }
-
-                        updateTargetSummary();
-                    });
-                });
-
-            // NEW PHASE CREATE (your original)
-            $('#targetPhase')
-                .off('select2:select.copyNewPhase')
-                .on('select2:select.copyNewPhase', function (e) {
-                    const data = e.params.data;
-                    if (!data.newPhase) return;
-
-                    const phaseName = data.text;
-                    const productId = $('#targetProduct').val();
-                    const sectionId = $('#targetSection').val();
-
-                    if (!productId || !sectionId) {
-                        Swal.fire('Hinweis', 'Bitte wählen Sie zuerst Produkt und Bereich aus.', 'warning');
-                        $('#targetPhase').val(null).trigger('change');
-                        return;
-                    }
-
-                    $.ajax({
-                        url: '/create-phase',
-                        type: 'POST',
-                        data: {
-                            product_id: productId,
-                            section_id: sectionId,
-                            phase_name: phaseName,
-                            _token: csrf()
-                        },
-                        success: function (res) {
-                            const newOption = new Option(res.phase_name, res.id, true, true);
-                            $('#targetPhase').append(newOption).trigger('change');
-                            Swal.fire('Erfolgreich', 'Neue Phase wurde erstellt.', 'success');
-                        },
-                        error: function () {
-                            Swal.fire('Fehler', 'Phase konnte nicht erstellt werden.', 'error');
-                            $('#targetPhase').val(null).trigger('change');
-                        }
-                    });
-                });
-
-            // SELECT ALL (your original)
-            $('#selectAllActivities')
-                .off('change.copyAll')
-                .on('change.copyAll', function () {
-                    $('.activity-checkbox').prop('checked', this.checked);
-                });
-
-            // Buttons open drawer (your original)
-            $(document)
-                .off('click.copyPhaseBtn', '.btn-copy-phase')
-                .on('click.copyPhaseBtn', '.btn-copy-phase', function () {
-                    const phaseId = $(this).data('phase-id');
-                    if (!phaseId) return;
-                    openCopyDrawer('phase', phaseId);
-                });
-
-            $(document)
-                .off('click.copyActivityBtn', '.btn-copy-activity')
-                .on('click.copyActivityBtn', '.btn-copy-activity', function () {
-                    const phaseId = $(this).data('phase-id');
-                    const activityId = $(this).data('id');
-                    if (!phaseId || !activityId) return;
-                    openCopyDrawer('activity', phaseId, activityId);
-                });
-
-            // Submit copy (your original)
-            $('#copyForm')
-                .off('submit.copySubmit')
-                .on('submit.copySubmit', function (e) {
-                    e.preventDefault();
-
-                    const phaseId = $('#targetPhase').val();
-                    if (!phaseId || isNaN(phaseId)) {
-                        return Swal.fire('Fehler', 'Bitte wählen Sie eine gültige Phase aus.', 'error');
-                    }
-
-                    const data = {
-                        target_product_id: $('#targetProduct').val(),
-                        target_section_id: $('#targetSection').val(),
-                        target_version: $('#targetVersion').val(),
-                        target_stage_id: $('#targetStage').val(),
-                        target_phase_id: parseInt(phaseId, 10),
-                        activities: $('.activity-checkbox:checked').map(function () {
-                            return $(this).val();
-                        }).get()
-                    };
-
-                    if (!data.target_product_id || !data.target_section_id || !data.target_version || !data.target_stage_id) {
-                        return Swal.fire('Hinweis', 'Bitte wählen Sie Produkt, Bereich, Version und Stage.', 'warning');
-                    }
-
-                    if (!data.activities.length) {
-                        return Swal.fire('Hinweis', 'Bitte wählen Sie mindestens eine Aktivität aus.', 'warning');
-                    }
-
-                    $.ajax({
-                        url: '/copy/do',
-                        method: 'POST',
-                        data: JSON.stringify(data),
-                        contentType: 'application/json',
-                        headers: { 'X-CSRF-TOKEN': csrf() },
-                        success: function (res) {
-                            closeCopyDrawer();
-                            Swal.fire('Erfolgreich', res.message || 'Aktivitäten kopiert.', 'success');
-                        },
-                        error: function (xhr) {
-                            let msg = 'Kopieren fehlgeschlagen.';
-                            if (xhr.responseJSON?.errors) {
-                                msg = Object.values(xhr.responseJSON.errors).flat().join('<br>');
-                            }
-                            Swal.fire('Fehler', msg, 'error');
-                        }
-                    });
-                });
-
-            $('#targetProduct, #targetSection, #targetVersion, #targetStage, #targetPhase')
-                .off('change.copySummary')
-                .on('change.copySummary', updateTargetSummary);
-        })();
-
-        // 14) Modal Version + Stage (your original)
-        (function initCreatePhaseModalVersionStage() {
-            safeSelect2($('#modal_version'), {
-                placeholder: "Bitte wählen",
-                width: '100%',
-                dropdownParent: $('#primary'),
-                templateResult: function (data) {
-                    if (!data.id) return data.text;
-                    return $('<strong>' + data.text + '</strong>');
-                }
-            });
-
-            safeSelect2($('#modal_stage_id'), {
-                placeholder: "Bitte wählen",
-                width: '100%',
-                dropdownParent: $('#primary'),
-                templateResult: function (data) {
-                    if (!data.id) return data.text;
-                    return $('<strong>' + data.text + '</strong>');
-                }
-            });
-
-            const productId = $('#product_id').val();
-
-            $('#primary')
-                .off('shown.bs.modal.modalVersionRestore')
-                .on('shown.bs.modal.modalVersionRestore', function () {
-                    const savedVersion = localStorage.getItem('modal_version');
-                    const savedStageId = localStorage.getItem('modal_stage_id');
-
-                    if (savedVersion) {
-                        $('#modal_version').val(savedVersion).trigger('change');
-
-                        setTimeout(() => {
-                            if (savedStageId) $('#modal_stage_id').val(savedStageId).trigger('change');
-                        }, 500);
-                    }
-                });
-
-            $('#modal_version')
-                .off('change.modalStages')
-                .on('change.modalStages', function () {
-                    const selectedVersion = $(this).val();
-                    localStorage.setItem('modal_version', selectedVersion);
-                    $('#modal_stage_id').html('<option value="">Lade Phasen...</option>');
-
-                    if (!selectedVersion) return;
-
-                    $.get('/get-stages-by-version', { version: selectedVersion, product_id: productId }, function (data) {
-                        let options = '<option value="">-- Bitte wählen --</option>';
-                        let defaultStageId = null;
-
-                        data.forEach(stage => {
-                            if (stage.default === 'yes') defaultStageId = stage.id;
-                            options += `<option value="${stage.id}">${stage.stage}${stage.default === 'yes' ? ' (Standard)' : ''}</option>`;
-                        });
-
-                        $('#modal_stage_id').html(options);
-
-                        const savedStageId = localStorage.getItem('modal_stage_id');
-                        if (savedStageId && $(`#modal_stage_id option[value="${savedStageId}"]`).length) {
-                            $('#modal_stage_id').val(savedStageId).trigger('change');
-                        } else if (defaultStageId) {
-                            $('#modal_stage_id').val(defaultStageId).trigger('change');
-                        }
-                    });
-                });
-        })();
-
-        // 15) Edit phase modal (your original) + global function
-        window.editPhase = function (button) {
-            const btn = $(button);
-
-            const phaseId   = btn.data('phase-id');
-            const phaseName = btn.data('phase-name');
-            const version   = btn.data('version');
-            const stageId   = btn.data('stage-id');
-
-            $('#edit_phase_id').val(phaseId);
-            $('#edit_phase_name').val(phaseName);
-
-            $('#modal_edit_version').val(version).trigger('change');
-
-            setTimeout(() => {
-                $('#modal_edit_stage_id').val(stageId).trigger('change');
-            }, 500);
-
-            $('#editPhaseModal').modal('show');
-        };
-
-        (function initEditPhaseModal() {
-            const productId = $('#product_id').val();
-
-            safeSelect2($('#modal_edit_version'), {
-                placeholder: "Bitte wählen",
-                width: '100%',
-                dropdownParent: $('#editPhaseModal'),
-                templateResult: function (data) {
-                    if (!data.id) return data.text;
-                    return $('<strong>' + data.text + '</strong>');
-                }
-            });
-
-            safeSelect2($('#modal_edit_stage_id'), {
-                placeholder: "Bitte wählen",
-                width: '100%',
-                dropdownParent: $('#editPhaseModal'),
-                templateResult: function (data) {
-                    if (!data.id) return data.text;
-                    return $('<strong>' + data.text + '</strong>');
-                }
-            });
-
-            $('#modal_edit_version')
-                .off('change.editPhaseStages')
-                .on('change.editPhaseStages', function () {
-                    const selectedVersion = $(this).val();
-
-                    $('#modal_edit_stage_id').html('<option value="">Lade Phasen...</option>');
-                    if (!selectedVersion || !productId) return;
-
-                    $.get('/get-stages-by-version', { version: selectedVersion, product_id: productId }, function (data) {
-                        let options = '<option value="">-- Bitte wählen --</option>';
-                        data.forEach(stage => {
-                            options += `<option value="${stage.id}">${stage.stage}${stage.default === 'yes' ? ' (Standard)' : ''}</option>`;
-                        });
-                        $('#modal_edit_stage_id').html(options);
-                    });
-                });
-
-            $('#editPhaseForm')
-                .off('submit.editPhaseSave')
-                .on('submit.editPhaseSave', function (e) {
-                    e.preventDefault();
-
-                    const phaseId   = $('#edit_phase_id').val();
-                    const phaseName = $('#edit_phase_name').val();
-                    const version   = $('#modal_edit_version').val();
-                    const stageId   = $('#modal_edit_stage_id').val();
-
-                    if (!phaseName || !version || !stageId) {
-                        return Swal.fire('Fehler', 'Bitte füllen Sie alle Felder aus.', 'warning');
-                    }
-
-                    const url = $('#editPhaseForm').data('action-template').replace(':id', phaseId);
-
-                   $.ajax({
-                        url: url,
-                        method: 'POST',
-                        data: {
-                            _token: csrf(),
-                            phase_name: phaseName,
-                            version: version,
-                            stage_id: stageId
-                        },
-                        success: function () {
-                            $('#editPhaseModal').modal('hide');
-                            location.reload();
-                        },
-                        error: function (err) {
-                            console.error('Fehler:', err.responseJSON);
-                            Swal.fire('Fehler', 'Beim Speichern ist ein Fehler aufgetreten.', 'error');
-                        }
-                    });
-
-                });
-        })();
-
-    }); // end ready
-})();
-</script>
- 
-  <script>
-(() => {
-  if (window.__MASTER_SET_DRAWER_BOOTSTRAPPED__) return;
-  window.__MASTER_SET_DRAWER_BOOTSTRAPPED__ = true;
-
-  const $drawer   = $('#masterSetDrawer');
-  const $overlay  = $('#masterSetDrawerOverlay');
-  const $closeBtn = $('#masterSetDrawerClose');
-  const $body     = $('#master-set-list-container');
-
-  const csrf = () => $('meta[name="csrf-token"]').attr('content');
-
-  const state = {
-    type: null,       // "phase" | "activity"
-    targetId: null,
-    productId: null,
-    q: '',
-    activeTab: 'search', // 'search' | 'linked'
-    cacheDetails: new Map(), // setId -> {components,labor,totals}
-  };
-
-  function openDrawer() {
-    $drawer.addClass('open');
-    document.documentElement.style.overflow = 'hidden';
-  }
-  function closeDrawer() {
-    $drawer.removeClass('open');
-    document.documentElement.style.overflow = '';
-  }
-
-  function money(n) {
-    const v = Number(n || 0);
-    return v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
-
-  function renderShell() {
-    $body.html(`
-      <div style="padding:12px 14px;">
-        <div class="d-flex align-items-center justify-content-between" style="gap:10px;">
-          <div>
-            <div class="small text-muted">Type: <strong>${state.type}</strong> · Target: <strong>#${state.targetId}</strong> · Product: <strong>#${state.productId}</strong></div>
-          </div>
-        </div>
-
-        <div class="mt-2 d-flex" style="gap:8px;">
-          <button class="btn btn-sm ${state.activeTab==='search'?'btn-primary':'btn-outline-primary'} js-ms-tab" data-tab="search">Search Sets</button>
-          <button class="btn btn-sm ${state.activeTab==='linked'?'btn-primary':'btn-outline-primary'} js-ms-tab" data-tab="linked">Linked Sets</button>
-        </div>
-
-        <div class="mt-2 ${state.activeTab==='search' ? '' : 'd-none'}" id="msSearchBar">
-          <div class="input-group input-group-sm">
-            <input type="text" class="form-control" id="msQ" placeholder="Search by name/description..." value="${escapeHtml(state.q)}">
-            <div class="input-group-append">
-              <button class="btn btn-primary" id="msDoSearch">Search</button>
-            </div>
-          </div>
-          <div class="small text-muted mt-1">Search uses <code>/api/master-sets/search?product_id=…&q=…</code></div>
-        </div>
-
-        <div class="mt-2" id="msList">
-          <div class="text-muted small p-2">Loading…</div>
-        </div>
-      </div>
-    `);
-  }
-
-  function escapeHtml(s){
-    return String(s ?? '')
-      .replaceAll('&','&amp;').replaceAll('<','&lt;')
-      .replaceAll('>','&gt;').replaceAll('"','&quot;')
-      .replaceAll("'","&#039;");
-  }
-
-  async function fetchSets() {
-    const url = state.activeTab === 'search'
-      ? `/api/master-sets/search?product_id=${encodeURIComponent(state.productId)}&q=${encodeURIComponent(state.q)}`
-      : `/api/master-sets/search?product_id=${encodeURIComponent(state.productId)}&q=`; // fallback if you don't have linked endpoint
-
-    // If you implement a dedicated linked endpoint later:
-    // const url = `/api/master-sets/linked/list?type=${state.type}&target_id=${state.targetId}`;
-
-    return $.get(url);
-  }
-
-  function isLinked(set) {
-    if (state.type === 'phase') return String(set.task_phase_id || '') === String(state.targetId);
-    return String(set.phase_activity_id || '') === String(state.targetId);
-  }
-
-  function renderSetRow(set) {
-    const linked = isLinked(set);
-    const total = (Number(set.components_total || 0) + Number(set.labor_total || 0));
-    const badge = linked
-      ? `<span class="badge badge-success">Linked</span>`
-      : `<span class="badge badge-secondary">Not linked</span>`;
-
-    return `
-      <div class="border rounded-lg mb-1" style="border-radius:12px; overflow:hidden;">
-        <div class="d-flex align-items-center justify-content-between" style="padding:10px 12px; background:#f8fafc;">
-          <div style="min-width:0;">
-            <div class="font-weight-bold" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-              #${set.id} · ${escapeHtml(set.name || 'Untitled Set')}
-            </div>
-            <div class="small text-muted">
-              Total: <strong>${money(total)} €</strong>
-              · Components: ${money(set.components_total)} €
-              · Labor: ${money(set.labor_total)} €
-              · ${badge}
-            </div>
-          </div>
-
-          <div class="d-flex" style="gap:6px; flex-shrink:0;">
-            <button class="btn btn-sm btn-outline-primary js-ms-toggle-details" data-set-id="${set.id}">
-              Details
-            </button>
-            ${linked
-              ? `<button class="btn btn-sm btn-outline-danger js-ms-unlink" data-set-id="${set.id}">Unlink</button>`
-              : `<button class="btn btn-sm btn-primary js-ms-link" data-set-id="${set.id}">Link</button>`
-            }
-          </div>
-        </div>
-
-        <div class="d-none" id="msDetails_${set.id}" style="padding:10px 12px; background:#fff;">
-          <div class="text-muted small">Loading details…</div>
-        </div>
-      </div>
-    `;
-  }
-
-function renderDetails(setId, details) {
-  const comps = (details.components || []).map(c => `
-    <div class="d-flex justify-content-between border-bottom py-1">
-      <div>
-        <div class="small font-weight-bold">
-          ${escapeHtml(c.product_name || 'Product')}
-          ${c.article_no ? `<span class="text-muted">(${escapeHtml(c.article_no)})</span>` : ''}
-        </div>
-        <div class="small text-muted">${escapeHtml(c.description || '')}</div>
-      </div>
-      <div class="small text-right">
-        <div>Qty: ${c.qty}</div>
-        <div>${money(c.unit_price)} €</div>
-        <div><strong>${money(c.line_total)} €</strong></div>
-      </div>
-    </div>
-  `).join('') || `<div class="small text-muted">No components.</div>`;
-
-  const labor = (details.labor || []).map(l => `
-    <div class="d-flex justify-content-between border-bottom py-1">
-      <div class="small">
-        ${escapeHtml(l.department_name || '–')} · ${escapeHtml(l.position_name || '–')}
-        ${l.employee_name ? ` · ${escapeHtml(l.employee_name)}` : ''}
-      </div>
-      <div class="small text-right">
-        <div>${l.hours} h</div>
-        <div>${money(l.hourly_rate)} €/h</div>
-        <div><strong>${money(l.line_total)} €</strong></div>
-      </div>
-    </div>
-  `).join('') || `<div class="small text-muted">No labor.</div>`;
-
-  const t = details.totals || {};
-  const totalsBox = `
-    <div class="p-2 mb-2" style="background:#f8fafc; border-radius:10px;">
-      <div class="d-flex justify-content-between small">
-        <div>Components</div><div><strong>${money(t.components_total)} €</strong></div>
-      </div>
-      <div class="d-flex justify-content-between small">
-        <div>Labor</div><div><strong>${money(t.labor_total)} €</strong></div>
-      </div>
-      <div class="d-flex justify-content-between">
-        <div><strong>Total</strong></div><div><strong>${money(t.total)} €</strong></div>
-      </div>
-    </div>
-  `;
-
-  $(`#msDetails_${setId}`).html(`
-    ${totalsBox}
-    <div class="row">
-      <div class="col-12 col-md-7">
-        <div class="font-weight-bold mb-1">Components</div>
-        ${comps}
-      </div>
-      <div class="col-12 col-md-5 mt-2 mt-md-0">
-        <div class="font-weight-bold mb-1">Labor</div>
-        ${labor}
-      </div>
-    </div>
-  `);
-}
-
-  async function loadAndRenderList() {
-    $('#msList').html(`<div class="text-muted small p-2">Loading…</div>`);
-
-    let sets = await fetchSets();
-
-    // If user is on "Linked" tab but you don't have linked endpoint:
-    if (state.activeTab === 'linked') {
-      sets = (sets || []).filter(isLinked);
-    }
-
-    if (!sets || !sets.length) {
-      $('#msList').html(`<div class="text-muted small p-2">No sets found.</div>`);
-      return;
-    }
-
-    $('#msList').html(sets.map(renderSetRow).join(''));
-  }
-
-    async function fetchDetails(setId) {
-    return $.get(`/api/master-sets/${setId}`);
-    }
-
-
-  async function linkSet(setId) {
-    return $.ajax({
-      url: `{{ route('task.link_master_set') }}`,
-      method: 'POST',
-      headers: { 'X-CSRF-TOKEN': csrf() },
-      data: { master_set_id: setId, type: state.type, target_id: state.targetId }
-    });
-  }
-
-  async function unlinkSet(setId) {
-    return $.ajax({
-      url: `{{ route('task.unlink_master_set') }}`,
-      method: 'POST',
-      headers: { 'X-CSRF-TOKEN': csrf() },
-      data: { master_set_id: setId }
-    });
-  }
-
-  // ✅ Global open function
-  window.openMasterSetModal = function ({ type, targetId, productId }) {
-    state.type = type;
-    state.targetId = String(targetId);
-    state.productId = String(productId);
-    state.q = '';
-    state.activeTab = 'search';
-
-    openDrawer();
-    renderShell();
-    loadAndRenderList();
-  };
-
-  // ✅ Delegated open handler (works after AJAX)
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.js-open-master-set');
-    if (!btn) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    window.openMasterSetModal({
-      type: btn.dataset.type,
-      targetId: btn.dataset.targetId,
-      productId: btn.dataset.productId
-    });
-  });
-
-  // Close handlers
-  $overlay.on('click', closeDrawer);
-  $closeBtn.on('click', closeDrawer);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && $drawer.hasClass('open')) closeDrawer();
-  });
-
-  // Delegated inside drawer
-  $drawer.on('click', '.js-ms-tab', function () {
-    state.activeTab = this.dataset.tab;
-    renderShell();
-    loadAndRenderList();
-  });
-
-  $drawer.on('click', '#msDoSearch', function () {
-    state.q = $('#msQ').val() || '';
-    loadAndRenderList();
-  });
-
-  $drawer.on('keypress', '#msQ', function (e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      state.q = $('#msQ').val() || '';
-      loadAndRenderList();
-    }
-  });
-
-  $drawer.on('click', '.js-ms-link', async function () {
-    const setId = this.dataset.setId;
-    try {
-      await linkSet(setId);
-      await loadAndRenderList();
-    } catch (xhr) {
-      const msg = xhr?.responseJSON?.message || 'Link failed';
-      Swal.fire('Error', msg, 'error');
-    }
-  });
-
-  $drawer.on('click', '.js-ms-unlink', async function () {
-    const setId = this.dataset.setId;
-    try {
-      await unlinkSet(setId);
-      await loadAndRenderList();
-    } catch (xhr) {
-      const msg = xhr?.responseJSON?.message || 'Unlink failed';
-      Swal.fire('Error', msg, 'error');
-    }
-  });
-
-  $drawer.on('click', '.js-ms-toggle-details', async function () {
-    const setId = this.dataset.setId;
-    const $panel = $(`#msDetails_${setId}`);
-
-    $panel.toggleClass('d-none');
-    if ($panel.hasClass('d-none')) return;
-
-    // load once
-    if (state.cacheDetails.has(setId)) {
-      renderDetails(setId, state.cacheDetails.get(setId));
-      return;
-    }
-
-    try {
-      const details = await fetchDetails(setId);
-      state.cacheDetails.set(setId, details);
-      renderDetails(setId, details);
-    } catch (e) {
-      $panel.html(`<div class="text-danger small">Failed to load details.</div>`);
-    }
-  });
-
-})();
-</script>
-
-
-
+        })(jQuery);
+    </script>
 @endsection

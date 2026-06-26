@@ -371,12 +371,7 @@
   <g class="st13">
     <g id="Ebene_1">
       <g class="st55">
-        <g class="st17">
-          <g class="st2">
-            <g class="st18">
-              <rect class="st9" x="14.33" y="48.01" width="230.88" height="141.6"/>
-            </g>
-          </g>
+        <g class="st17"> 
           <rect class="st8" x="15.54" y="49.5" width="220.39" height="130.82" rx="12" ry="12"/>
         </g>
         <g class="st19">
@@ -387,19 +382,7 @@
               </g>
             </g>
           </g>
-        </g>
-        <g class="st21">
-          <g class="st29">
-            <g class="st24">
-              <g class="st14">
-                <g class="st16">
-                  <rect class="st9" x="14.33" y="48.01" width="230.88" height="141.6"/>
-                </g>
-              </g>
-              <rect class="st12" x="15.54" y="49.5" width="220.39" height="130.82" rx="12" ry="12"/>
-            </g>
-          </g>
-        </g>
+        </g> 
         <text class="st6" fill="${theme.primary}" transform="translate(26.02 79.42)" id="kombiBonus"><tspan class="st33" x="0" y="0">KOMBI-BONUS</tspan></text>
         <rect class="st8" x="47.22" y="85.22" width="157.04" height="42.65"/>
         <text class="st5" transform="translate(93.62 96.78)"><tspan class="st71" x="0" y="0">I</tspan><tspan x="3.05" y="0">M </tspan><tspan class="st77" x="14.85" y="0">W</tspan><tspan class="st46" x="23.93" y="0">E</tspan><tspan class="st61" x="29.91" y="0">R</tspan><tspan x="36.64" y="0">T </tspan><tspan class="st37" x="45.04" y="0">V</tspan><tspan class="st76" x="50.93" y="0">O</tspan><tspan x="57.61" y="0">N </tspan></text>

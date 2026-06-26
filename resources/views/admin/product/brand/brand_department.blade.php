@@ -30,8 +30,8 @@
     --transition:all .2s ease-in-out;
   }
 
-  .oc-wrap{font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--text-main);max-width:1550px;margin:20px auto;padding:20px;}
-  .oc-header{margin-bottom:18px;margin-top:103px;}
+  .oc-wrap{font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--text-main)}
+  .oc-header{margin-bottom:18px;}
   .oc-titlebar{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
   .oc-title{font-size:26px;font-weight:800;letter-spacing:-.025em;color:#111827}
   .oc-sub{font-size:14px;color:var(--text-muted);margin-top:4px}
@@ -120,11 +120,11 @@
 
 @section('content')
 @php
-  $departmentItems = collect($department->items());
-  $totalContacts = $department->total();
-  $mailCount = $departmentItems->filter(fn($d) => !empty($d->email))->count();
-  $phoneCount = $departmentItems->filter(fn($d) => !empty($d->phone))->count();
-  $officeCount = $departmentItems->filter(fn($d) => !empty($d->office))->count();
+$departmentItems = collect($department->items());
+$totalContacts = $department->total();
+$mailCount = $departmentItems->filter(fn($d) => !empty($d->email))->count();
+$phoneCount = $departmentItems->filter(fn($d) => !empty($d->phone))->count();
+$officeCount = $departmentItems->filter(fn($d) => !empty($d->office))->count();
 @endphp
 
 <div class="oc-wrap">
@@ -524,3 +524,32 @@
 </script>
 @endpush
 @endonce 
+
+@push('scripts')
+  <script>
+    window.GlobalBreadcrumbs = [
+      {
+        label: 'Dashboard',
+        url: "{{ url('/') }}"
+      },
+      {
+        label: 'Hersteller',
+        url: "{{ url('/brand') }}"
+      },
+      {
+        label: 'Ansprechpartner',
+        url: "{{ url()->current()  }}",
+         clickable: false
+      },
+      {
+        label: '{{ $brand->name }}',
+        url: "{{ url()->current() }}",
+        clickable: false
+      }
+    ];
+
+    if (window.setGlobalBreadcrumbs) {
+      window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+    }
+  </script>
+@endpush

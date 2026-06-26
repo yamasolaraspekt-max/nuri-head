@@ -13,21 +13,42 @@ return new class extends Migration
     {
         Schema::create('inventory_request_outs', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id');
-            $table->integer('responsible_id');
-            $table->integer('requester_id');
-            $table->string('reason')->nullable();
-            $table->integer('quantity');
+
+            $table->foreignId('product_id')
+                ->constrained('products')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+
+            $table->foreignId('responsible_id')
+                ->nullable()
+                ->constrained('employees')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+
+            $table->foreignId('requester_id')
+                ->nullable()
+                ->constrained('employees')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+
+            $table->text('reason')->nullable();
+            $table->unsignedInteger('quantity')->default(1);
+
+            $table->string('status')->default('Unpublished');
+
             $table->string('add_by')->nullable();
-            $table->date('add_date')->nullable();
-            $table->string('delete_by')->nullable();
-            $table->date('delete_date')->nullable();
+            $table->dateTime('add_date')->nullable();
+
             $table->string('edit_by')->nullable();
-            $table->date('edit_date')->nullable();
-            $table->string('status')->nullable();
-            // Foreign keys
+            $table->dateTime('edit_date')->nullable();
+
+            $table->string('delete_by')->nullable();
+            $table->dateTime('delete_date')->nullable();
 
             $table->timestamps();
+
+            $table->index(['product_id', 'status']);
+            $table->index(['requester_id', 'responsible_id']);
         });
     }
 

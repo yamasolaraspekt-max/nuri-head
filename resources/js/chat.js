@@ -18,15 +18,17 @@ if (window.Echo?.connector?.pusher?.connection) {
     );
 }
 
-window.Echo.connector.pusher.connection.bind("disconnected", () => {
-    console.log("Echo disconnected from Reverb!");
-});
+if (window.Echo?.connector?.pusher?.connection) {
+    window.Echo.connector.pusher.connection.bind("disconnected", () => {
+        console.log("Echo disconnected from Reverb!");
+    });
 
-window.Echo.connector.pusher.connection.bind("error", (err) => {
-    console.error("Echo connection error:", err);
-});
+    window.Echo.connector.pusher.connection.bind("error", (err) => {
+        console.error("Echo connection error:", err);
+    });
+}
 
-console.log("✅ Echo (Reverb) initialized from Chatroom:", window.Echo);
+console.log("✅ Echo (Reverb) initialized from Chatroom:", window.Echo || null);
 
 /* -----------------------------------------------------------------------------
    Echo + Reverb + Vite diagnostics (drop-in)
@@ -305,6 +307,812 @@ function showToast(text) {
     }, 2000);
 }
 
+
+
+/* -----------------------------------------------------------------------------
+   @Employee Mention Picker + Persistent Mention Toasts
+   Backend contract:
+   - Send mentions as mentions[] or JSON mentions: [users.id]
+   - GET  /chat/mentions/unread returns { mentions: [...] }
+   - POST /chat/mentions/{id}/read marks one mention read
+   - Echo private channel: chat.user.{userId}, event: .chat-mention-created
+----------------------------------------------------------------------------- */
+function getCurrentChatUserId() {
+    return (
+        window.userId ||
+        document.querySelector('meta[name="chat-user-id"]')?.content ||
+        document.querySelector('meta[name="user-id"]')?.content ||
+        null
+    );
+}
+
+function getCsrfToken() {
+    return (
+        csrf ||
+        window.csrfToken ||
+        document.querySelector('meta[name="csrf-token"]')?.content ||
+        ''
+    );
+}
+
+function injectChatMentionStyles() {
+    if (document.getElementById('chatMentionDynamicStyles')) return;
+
+    const style = document.createElement('style');
+    style.id = 'chatMentionDynamicStyles';
+    style.textContent = `
+        .chat-mention-picker {
+            position: fixed;
+            z-index: 1200000;
+            width: min(340px, calc(100vw - 24px));
+            max-height: 280px;
+            overflow-y: auto;
+            padding: 8px;
+            border-radius: 18px;
+            background: #ffffff;
+            border: 1px solid rgba(148, 163, 184, .35);
+            box-shadow: 0 22px 60px rgba(15, 23, 42, .18);
+        }
+        .chat-mention-picker.hidden {
+            display: none !important;
+        }
+        .chat-mention-option {
+            width: 100%;
+            min-height: 46px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border: 0;
+            border-radius: 14px;
+            background: transparent;
+            color: #1f2937;
+            cursor: pointer;
+            text-align: left;
+        }
+        .chat-mention-option:hover,
+        .chat-mention-option.is-active {
+            background: rgba(116, 178, 212, .12);
+        }
+        .chat-mention-option img {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            object-fit: cover;
+            border: 1px solid rgba(148, 163, 184, .35);
+            flex-shrink: 0;
+        }
+        .chat-mention-name {
+            display: block;
+            font-size: 13px;
+            font-weight: 900;
+            color: #1f2937;
+            line-height: 1.2;
+        }
+        .chat-mention-meta {
+            display: block;
+            margin-top: 2px;
+            font-size: 11px;
+            font-weight: 750;
+            color: #64748b;
+        }
+        .chat-mention-empty {
+            padding: 10px 12px;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 800;
+        }
+        .sa-mention-toast-wrap {
+            position: fixed;
+            top: 88px;
+            right: 24px;
+            z-index: 1200000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+        .sa-mention-toast {
+            width: min(390px, calc(100vw - 24px));
+            pointer-events: auto;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 14px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(255,255,255,.98), rgba(248,250,252,.96));
+            border: 1px solid rgba(116, 178, 212, .35);
+            box-shadow: 0 22px 55px rgba(15, 23, 42, .18);
+            cursor: pointer;
+            animation: saMentionToastIn .25s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .sa-mention-toast::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 5px;
+            background: linear-gradient(180deg, #74b2d4, #93c21c);
+        }
+        .sa-mention-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 999px;
+            object-fit: cover;
+            border: 2px solid rgba(147, 194, 28, .35);
+            flex-shrink: 0;
+        }
+        .sa-mention-body {
+            min-width: 0;
+            flex: 1;
+        }
+        .sa-mention-kicker {
+            font-size: 11px;
+            font-weight: 950;
+            color: #93c21c;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            margin-bottom: 3px;
+        }
+        .sa-mention-title {
+            margin: 0;
+            color: #1f2937;
+            font-size: 14px;
+            font-weight: 950;
+        }
+        .sa-mention-msg {
+            margin: 5px 0 0;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+        .sa-mention-action {
+            margin-top: 9px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 900;
+            color: #569ad8;
+        }
+        .sa-mention-close {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            background: transparent;
+            color: #94a3b8;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .sa-mention-close:hover {
+            background: #f1f5f9;
+            color: #ef4444;
+        }
+        @keyframes saMentionToastIn {
+            from { opacity: 0; transform: translateY(-12px) scale(.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        html.dark .chat-mention-picker,
+        html.dark .sa-mention-toast {
+            background: linear-gradient(135deg, rgba(30,41,59,.98), rgba(15,23,42,.96));
+            border-color: rgba(116, 178, 212, .28);
+        }
+        html.dark .chat-mention-name,
+        html.dark .sa-mention-title { color: #f8fafc; }
+        html.dark .chat-mention-meta,
+        html.dark .chat-mention-empty,
+        html.dark .sa-mention-msg { color: #cbd5e1; }
+        html.dark .chat-mention-option:hover,
+        html.dark .chat-mention-option.is-active { background: rgba(116, 178, 212, .18); }
+        @media (max-width: 767px) {
+            .chat-mention-picker,
+            .sa-mention-toast-wrap {
+                left: 12px;
+                right: 12px;
+                width: auto;
+            }
+            .sa-mention-toast-wrap { top: 76px; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function getMentionWrap() {
+    let wrap = document.getElementById('saMentionToastWrap');
+    if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.id = 'saMentionToastWrap';
+        wrap.className = 'sa-mention-toast-wrap';
+        document.body.appendChild(wrap);
+    }
+    return wrap;
+}
+
+function normalizeMentionPayload(payload) {
+    return payload?.mention || payload || null;
+}
+
+function getMentionOpenUrl(mention) {
+    if (mention?.open_url) {
+        return mention.open_url;
+    }
+
+    const params = new URLSearchParams();
+
+    if (mention?.group_id) {
+        params.set("group_id", mention.group_id);
+    } else {
+        const userId =
+            mention?.user_id ||
+            mention?.mentioned_by_user_id ||
+            mention?.from_user_id ||
+            null;
+
+        if (userId) {
+            params.set("user_id", userId);
+        }
+    }
+
+    if (mention?.chat_id) {
+        params.set("message_id", mention.chat_id);
+    }
+
+    return `/admin/chat?${params.toString()}`;
+}
+
+window.ChatMentionNotifications = window.ChatMentionNotifications || {
+    renderedIds: new Set(),
+    booted: false,
+    echoBooted: false,
+
+    show(payload) {
+        const mention = normalizeMentionPayload(payload);
+        if (!mention || !mention.id) return;
+
+        injectChatMentionStyles();
+
+        const key = String(mention.id);
+        if (this.renderedIds.has(key)) return;
+        if (document.querySelector(`.sa-mention-toast[data-mention-id="${CSS.escape(key)}"]`)) return;
+
+        this.renderedIds.add(key);
+
+        const toast = document.createElement('div');
+        toast.className = 'sa-mention-toast';
+        toast.dataset.mentionId = key;
+
+        const sender = mention.sender_name || mention.from_name || 'Mitarbeiter';
+        const groupName = mention.group_name || mention.chat_name || 'Chat';
+        const msg = mention.message || 'Du wurdest in einer Nachricht markiert.';
+        const avatar = mention.sender_avatar || mention.avatar || '/images/gender/users.png';
+
+        toast.innerHTML = `
+            <img class="sa-mention-avatar" src="${escapeHtml(avatar)}" alt="">
+            <div class="sa-mention-body">
+                <div class="sa-mention-kicker">@Erwähnung</div>
+                <p class="sa-mention-title">${escapeHtml(sender)} hat dich markiert</p>
+                <p class="sa-mention-msg">
+                    <strong>${escapeHtml(groupName)}</strong><br>
+                    ${escapeHtml(msg)}
+                </p>
+                <div class="sa-mention-action">
+                    Öffnen und als gelesen markieren <span>→</span>
+                </div>
+            </div>
+            <button type="button" class="sa-mention-close" title="Schließen">×</button>
+        `;
+
+        toast.querySelector('.sa-mention-close')?.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            toast.remove();
+            this.renderedIds.delete(key);
+        });
+
+        toast.addEventListener('click', async () => {
+            await this.markRead(mention.id);
+            toast.remove();
+            this.renderedIds.delete(key);
+
+            window.location.href = getMentionOpenUrl(mention);
+        });
+
+        getMentionWrap().prepend(toast);
+    },
+
+    async markRead(id) {
+        if (!id) return;
+        try {
+            await fetch(`/chat/mentions/${id}/read`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': getCsrfToken(),
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                credentials: 'same-origin',
+            });
+        } catch (error) {
+            console.error('Mention read failed:', error);
+        }
+    },
+
+    async loadUnread() {
+        try {
+            const response = await fetch('/chat/mentions/unread', {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                credentials: 'same-origin',
+            });
+            if (!response.ok) return;
+
+            const data = await response.json();
+            (data.mentions || []).forEach((mention) => this.show(mention));
+        } catch (error) {
+            console.warn('Unread chat mentions could not be loaded:', error);
+        }
+    },
+
+    bootEcho() {
+        if (this.echoBooted) return;
+
+        const currentUserId = getCurrentChatUserId();
+        if (!currentUserId) return;
+
+        if (!window.Echo || typeof window.Echo.private !== 'function') {
+            setTimeout(() => this.bootEcho(), 700);
+            return;
+        }
+
+        this.echoBooted = true;
+        window.Echo.private(`chat.user.${currentUserId}`)
+            .listen('.chat-mention-created', (event) => {
+                this.show(event.mention || event);
+            });
+    },
+
+    boot() {
+        if (this.booted) return;
+        this.booted = true;
+        injectChatMentionStyles();
+        this.loadUnread();
+        this.bootEcho();
+    },
+};
+
+function bootChatMentionNotifications() {
+    window.ChatMentionNotifications?.boot?.();
+}
+
+function ensureMentionBox() {
+    injectChatMentionStyles();
+
+    if (mentionBox) return mentionBox;
+
+    mentionBox = document.createElement('div');
+    mentionBox.id = 'chatMentionBox';
+    mentionBox.className = 'chat-mention-picker hidden';
+    document.body.appendChild(mentionBox);
+
+    return mentionBox;
+}
+
+function hideMentionBox() {
+    if (!mentionBox) return;
+    mentionBox.classList.add('hidden');
+    mentionActiveIndex = -1;
+}
+
+async function loadMentionEmployees() {
+    if (mentionEmployees.length) return mentionEmployees;
+
+    try {
+        const response = await fetch('/chat/employee', {
+            headers: { Accept: 'application/json' },
+            credentials: 'same-origin',
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const rows = await response.json();
+
+        // Support both response formats:
+        // 1) [ { id, name, lastname, avatar } ]
+        // 2) { employees: [ ... ] }
+        mentionEmployees = Array.isArray(rows)
+            ? rows
+            : (Array.isArray(rows?.employees) ? rows.employees : []);
+    } catch (error) {
+        console.error('Could not load mention employees:', error);
+        mentionEmployees = [];
+    }
+
+    return mentionEmployees;
+}
+
+function getMentionSearchTerm(input) {
+    if (!input) return null;
+
+    const caret = input.selectionStart || 0;
+    const beforeCaret = String(input.value || '').slice(0, caret);
+
+    // Important: when the user types only "@", return an empty string.
+    // Empty string means: show ALL employees.
+    // This also works when @ is typed after text, e.g. "Bitte @" or "Bitte@".
+    const match = beforeCaret.match(/@([^@\s]{0,40})$/u);
+
+    return match ? match[1].toLowerCase() : null;
+}
+
+function positionMentionBox(input) {
+    const box = ensureMentionBox();
+    const rect = input.getBoundingClientRect();
+    const boxHeight = Math.min(280, box.offsetHeight || 260);
+
+    let top = rect.top - boxHeight - 10;
+    if (top < 10) top = rect.bottom + 8;
+
+    box.style.left = `${Math.max(12, rect.left)}px`;
+    box.style.top = `${top}px`;
+
+    if (window.innerWidth < 768) {
+        box.style.left = '12px';
+        box.style.right = '12px';
+        box.style.width = 'auto';
+    } else {
+        box.style.right = 'auto';
+        box.style.width = `${Math.min(340, Math.max(280, rect.width))}px`;
+    }
+}
+
+function updateMentionActiveOption() {
+    const box = ensureMentionBox();
+    const options = Array.from(box.querySelectorAll('.chat-mention-option'));
+
+    options.forEach((option, index) => {
+        option.classList.toggle('is-active', index === mentionActiveIndex);
+    });
+}
+
+async function showMentionSuggestions(input) {
+    const term = getMentionSearchTerm(input);
+    const box = ensureMentionBox();
+
+    if (term === null) {
+        hideMentionBox();
+        return;
+    }
+
+    const employees = await loadMentionEmployees();
+    const currentUserId = Number(getCurrentChatUserId() || 0);
+
+    const filtered = employees
+        .filter((user) => Number(user.id) !== currentUserId)
+        .filter((user) => {
+            // If term is empty because the user typed only @, show all employees.
+            if (term === '') return true;
+
+            const fullName = `${user.name || ''} ${user.lastname || ''}`.toLowerCase();
+            const email = String(user.email || '').toLowerCase();
+            const employeeId = String(user.employee_id || user.emp_id || '').toLowerCase();
+
+            return fullName.includes(term) || email.includes(term) || employeeId.includes(term);
+        })
+        .slice(0, 20);
+
+    if (!filtered.length) {
+        box.innerHTML = '<div class="chat-mention-empty">Kein Mitarbeiter gefunden</div>';
+        positionMentionBox(input);
+        box.classList.remove('hidden');
+        return;
+    }
+
+    box.innerHTML = filtered.map((user) => {
+        const fullName = `${user.name || ''} ${user.lastname || ''}`.trim() || `User ${user.id}`;
+        const avatar = user.avatar || user.image || '/images/gender/users.png';
+
+        return `
+            <button type="button"
+                    class="chat-mention-option"
+                    data-user-id="${escapeHtml(user.id)}"
+                    data-user-name="${escapeHtml(fullName)}">
+                <img src="${escapeHtml(avatar)}" alt="">
+                <span>
+                    <span class="chat-mention-name">${escapeHtml(fullName)}</span>
+                    <span class="chat-mention-meta">@ markieren</span>
+                </span>
+            </button>
+        `;
+    }).join('');
+
+    mentionActiveIndex = 0;
+    updateMentionActiveOption();
+    positionMentionBox(input);
+    box.classList.remove('hidden');
+
+    box.querySelectorAll('.chat-mention-option').forEach((button) => {
+        button.addEventListener('click', () => {
+            insertMention(input, button.dataset.userId, button.dataset.userName);
+        });
+    });
+}
+
+function insertMention(input, userId, userName) {
+    if (!input || !userId || !userName) return;
+
+    const caret = input.selectionStart || 0;
+    const before = String(input.value || '').slice(0, caret);
+    const after = String(input.value || '').slice(caret);
+    const replacedBefore = before.replace(/@([^@\s]{0,40})$/u, `@${userName} `);
+
+    input.value = replacedBefore + after;
+    selectedMentionUserIds.add(Number(userId));
+
+    const nextCaret = replacedBefore.length;
+    input.focus();
+    input.setSelectionRange(nextCaret, nextCaret);
+
+    hideMentionBox();
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function initMentionPicker() {
+    if (mentionPickerBooted || !DOM.messageInput) return;
+
+    mentionPickerBooted = true;
+    ensureMentionBox();
+
+    const refreshMentionPicker = () => {
+        showMentionSuggestions(DOM.messageInput);
+    };
+
+    DOM.messageInput.addEventListener('input', refreshMentionPicker);
+    DOM.messageInput.addEventListener('keyup', refreshMentionPicker);
+    DOM.messageInput.addEventListener('click', refreshMentionPicker);
+    DOM.messageInput.addEventListener('focus', refreshMentionPicker);
+
+    DOM.messageInput.addEventListener('keydown', (event) => {
+        // On many German keyboards @ is created with AltGr+Q.
+        // The input event should catch it, but this makes it immediate and reliable.
+        if (event.key === '@') {
+            setTimeout(refreshMentionPicker, 0);
+            return;
+        }
+
+        const box = ensureMentionBox();
+        const isOpen = !box.classList.contains('hidden');
+        if (!isOpen) return;
+
+        const options = Array.from(box.querySelectorAll('.chat-mention-option'));
+        if (!options.length) {
+            if (event.key === 'Escape') hideMentionBox();
+            return;
+        }
+
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            mentionActiveIndex = (mentionActiveIndex + 1) % options.length;
+            updateMentionActiveOption();
+        } else if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            mentionActiveIndex = (mentionActiveIndex - 1 + options.length) % options.length;
+            updateMentionActiveOption();
+        } else if (event.key === 'Enter' && mentionActiveIndex >= 0) {
+            event.preventDefault();
+            const option = options[mentionActiveIndex];
+            insertMention(DOM.messageInput, option.dataset.userId, option.dataset.userName);
+        } else if (event.key === 'Escape') {
+            event.preventDefault();
+            hideMentionBox();
+        }
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!mentionBox || mentionBox.classList.contains('hidden')) return;
+        if (mentionBox.contains(event.target) || DOM.messageInput.contains(event.target)) return;
+        hideMentionBox();
+    });
+}
+
+function getSelectedMentionIdsForSending() {
+    return Array.from(selectedMentionUserIds)
+        .map((id) => Number(id))
+        .filter((id) => Number.isInteger(id) && id > 0);
+}
+
+function appendSelectedMentionsToFormData(formData) {
+    getSelectedMentionIdsForSending().forEach((id) => {
+        formData.append('mentions[]', id);
+    });
+}
+
+function resetMentionComposerState() {
+    selectedMentionUserIds.clear();
+    hideMentionBox();
+}
+
+/* -----------------------------------------------------------------------------
+   Chat Media / PDF Lightbox
+----------------------------------------------------------------------------- */
+window.ChatMediaLightbox = {
+    items: [],
+    index: 0,
+
+    getEls() {
+        return {
+            modal: document.getElementById("chatMediaModal"),
+            body: document.getElementById("chatMediaBody"),
+            title: document.getElementById("chatMediaTitle"),
+            counter: document.getElementById("chatMediaCounter"),
+            download: document.getElementById("chatMediaDownload"),
+            prev: document.getElementById("chatMediaPrev"),
+            next: document.getElementById("chatMediaNext"),
+        };
+    },
+
+    collectItems() {
+        const nodes = Array.from(
+            document.querySelectorAll("[data-chat-preview-url]")
+        );
+
+        this.items = nodes
+            .map((node) => ({
+                url: node.dataset.chatPreviewUrl || "",
+                type: node.dataset.chatPreviewType || "file",
+                name: node.dataset.chatPreviewName || "Datei",
+                node,
+            }))
+            .filter((item) => item.url);
+
+        return this.items;
+    },
+
+    openFromNode(node) {
+        this.collectItems();
+
+        const index = this.items.findIndex((item) => item.node === node);
+        this.index = index >= 0 ? index : 0;
+
+        this.render();
+        this.show();
+    },
+
+    open(url, type = "file", name = "Datei") {
+        this.collectItems();
+
+        let index = this.items.findIndex((item) => item.url === url);
+
+        if (index < 0) {
+            this.items.push({ url, type, name, node: null });
+            index = this.items.length - 1;
+        }
+
+        this.index = index;
+        this.render();
+        this.show();
+    },
+
+    show() {
+        const { modal } = this.getEls();
+        if (!modal) return;
+
+        modal.classList.remove("hidden");
+        document.body.classList.add("overflow-hidden");
+
+        if (window.feather) window.feather.replace();
+    },
+
+    close() {
+        const { modal, body } = this.getEls();
+        if (!modal) return;
+
+        modal.classList.add("hidden");
+        document.body.classList.remove("overflow-hidden");
+
+        if (body) body.innerHTML = "";
+    },
+
+    prev() {
+        if (!this.items.length) return;
+        this.index = (this.index - 1 + this.items.length) % this.items.length;
+        this.render();
+    },
+
+    next() {
+        if (!this.items.length) return;
+        this.index = (this.index + 1) % this.items.length;
+        this.render();
+    },
+
+    render() {
+        const { body, title, counter, download, prev, next } = this.getEls();
+        if (!body) return;
+
+        const item = this.items[this.index];
+        if (!item) return;
+
+        body.innerHTML = "";
+
+        const type = (item.type || "").toLowerCase();
+        const isPdf = type === "pdf" || item.url.toLowerCase().includes(".pdf");
+        const isImage = type === "image";
+
+        if (isImage) {
+            const img = document.createElement("img");
+            img.src = item.url;
+            img.alt = item.name || "Bild";
+            body.appendChild(img);
+        } else if (isPdf) {
+            const iframe = document.createElement("iframe");
+            iframe.src = item.url;
+            iframe.title = item.name || "PDF";
+            body.appendChild(iframe);
+        } else {
+            body.innerHTML = `
+                <div class="text-center bg-white rounded-2xl border border-slate-200 p-6 shadow-sm max-w-md">
+                    <div class="mx-auto mb-3 w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
+                        <i data-feather="file" class="w-6 h-6 text-slate-500"></i>
+                    </div>
+                    <div class="font-semibold text-slate-800 mb-1">${escapeHtml(item.name || "Datei")}</div>
+                    <div class="text-sm text-slate-500 mb-4">Diese Datei kann nicht direkt in der Vorschau angezeigt werden.</div>
+                    <a href="${item.url}" target="_blank" rel="noopener"
+                       class="inline-flex items-center justify-center px-4 py-2 rounded-full text-white bg-[#93c21c] hover:bg-emerald-600 text-sm">
+                        Datei öffnen
+                    </a>
+                </div>
+            `;
+        }
+
+        if (title) title.textContent = item.name || "Vorschau";
+
+        if (counter) {
+            counter.textContent = this.items.length > 1
+                ? `${this.index + 1} von ${this.items.length}`
+                : "";
+        }
+
+        if (download) {
+            download.href = item.url;
+        }
+
+        if (prev) prev.disabled = this.items.length <= 1;
+        if (next) next.disabled = this.items.length <= 1;
+
+        if (window.feather) window.feather.replace();
+    },
+
+    init() {
+        const { modal, prev, next } = this.getEls();
+        if (!modal || modal.dataset.initialized === "1") return;
+
+        modal.dataset.initialized = "1";
+
+        modal.querySelectorAll("[data-chat-media-close]").forEach((btn) => {
+            btn.addEventListener("click", () => this.close());
+        });
+
+        if (prev) prev.addEventListener("click", () => this.prev());
+        if (next) next.addEventListener("click", () => this.next());
+
+        document.addEventListener("keydown", (e) => {
+            if (modal.classList.contains("hidden")) return;
+
+            if (e.key === "Escape") this.close();
+            if (e.key === "ArrowLeft") this.prev();
+            if (e.key === "ArrowRight") this.next();
+        });
+    },
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    window.ChatMediaLightbox.init();
+});
 // --- Share modal state -------------------------------------------------------
 let shareMessageId = null;
 let shareMessageText = "";
@@ -451,54 +1259,7 @@ window.pinState = {
     isPinned: false,
 };
 
-function isBuilderQuery(text) {
-    const t = text.trim().toLowerCase();
-
-    const patterns = [
-        "who is the developer",
-        "who built this",
-        "who created this",
-        "who is the creator",
-        "who made this",
-        "who made zuhalify",
-        "developer info",
-        "about the developer",
-    ];
-
-    return patterns.some((p) => t === p || t.includes(p));
-}
-
-function showBuilderCard(questionText) {
-    const profile = window.builderProfile || {};
-    const name = profile.name || "Developer";
-    const product = profile.product || "";
-    const avatar = profile.avatar || window.defaultPic || "";
-    const link = profile.link || "";
-    const bio = profile.bio || "";
-
-    // 1) Echo the user's question as a normal message from "me"
-    const myMsg = {
-        id: "local-" + Date.now(),
-        message: questionText,
-        type: "text",
-        from_user: {
-            id: window.userId,
-            name: window.userName,
-            image: window.userImage,
-        },
-        created_at: new Date().toISOString(),
-    };
-    addMessage(myMsg, true, false);
-
-    // 2) Add the fancy developer card as a special system message
-    const answerMsg = {
-        id: "builder-" + Date.now(),
-        type: "builder-info",
-        builder: { name, product, avatar, link, bio },
-        created_at: new Date().toISOString(),
-    };
-    addMessage(answerMsg, false, true);
-}
+ 
 
 // lookup maps
 window.usersById = {};
@@ -507,6 +1268,16 @@ let replyToId = null;
 let replyPreviewText = "";
 let editingMessageId = null;
 const seenMessageIds = new Set();
+
+
+// ─────────────────────────────────────────────────────────────
+// @Employee mentions state
+// ─────────────────────────────────────────────────────────────
+const selectedMentionUserIds = new Set();
+let mentionEmployees = [];
+let mentionBox = null;
+let mentionActiveIndex = -1;
+let mentionPickerBooted = false;
 let mediaRecorder = null;
 let recordedChunks = [];
 let isRecording = false;
@@ -564,6 +1335,8 @@ function toggleJumpToLatest(show) {
 }
 
 function escapeHtml(s = "") {
+    s = String(s ?? "");
+
     return s
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
@@ -704,7 +1477,7 @@ async function togglePin() {
 
         updatePinButton();
         // Refresh list so pin order & badges are updated
-        loadUsers();
+        await loadUsers();
     } catch (err) {
         console.error("togglePin error:", err);
         Swal?.fire?.("Fehler", "Chat konnte nicht angepinnt werden.", "error");
@@ -838,11 +1611,7 @@ if (attachBtn && fileInput) {
     console.warn("attachBtn/fileInput missing – upload bindings skipped");
 }
 
-fileInput.addEventListener("change", () => {
-    if (!fileInput.files || fileInput.files.length === 0) return;
-    sendFiles(Array.from(fileInput.files));
-    fileInput.value = ""; // reset selection
-});
+ 
 
 async function sendFiles(files) {
     if (composerReadOnly) {
@@ -859,6 +1628,7 @@ async function sendFiles(files) {
     if (selectedUserId) fd.append("to_user_id", selectedUserId);
     if (selectedGroupId) fd.append("group_id", selectedGroupId);
     fd.append("type", "file"); // let backend branch on type
+    appendSelectedMentionsToFormData(fd);
 
     try {
         const res = await fetch("/chat/send", {
@@ -1114,30 +1884,32 @@ function stopRecording() {
 }
 
 // ✅ click handler that actually branches to fallback
-voiceBtn.addEventListener("click", () => {
-    if (!hasMicSupport() || !hasMediaRecorder()) {
-        voiceFileInput.click();
-        return;
-    }
-    if (isRecording) stopRecording();
-    else startRecording();
-});
-
-// Optional: long-press hold-to-record (mobile-like)
 let pressTimer = null;
-voiceBtn.addEventListener("mousedown", (e) => {
-    if (e.button !== 0) return;
-    pressTimer = setTimeout(() => {
-        if (!isRecording) startRecording();
-    }, 150);
-});
-voiceBtn.addEventListener("mouseup", () => {
-    clearTimeout(pressTimer);
-    if (isRecording) stopRecording();
-});
-voiceBtn.addEventListener("mouseleave", () => {
-    clearTimeout(pressTimer);
-});
+if (voiceBtn) {
+    voiceBtn.addEventListener("click", () => {
+        if (!hasMicSupport() || !hasMediaRecorder()) {
+            voiceFileInput.click();
+            return;
+        }
+        if (isRecording) stopRecording();
+        else startRecording();
+    });
+
+    // Optional: long-press hold-to-record (mobile-like)
+    voiceBtn.addEventListener("mousedown", (e) => {
+        if (e.button !== 0) return;
+        pressTimer = setTimeout(() => {
+            if (!isRecording) startRecording();
+        }, 150);
+    });
+    voiceBtn.addEventListener("mouseup", () => {
+        clearTimeout(pressTimer);
+        if (isRecording) stopRecording();
+    });
+    voiceBtn.addEventListener("mouseleave", () => {
+        clearTimeout(pressTimer);
+    });
+}
 
 async function sendVoice(blob, ext = "webm") {
     const fd = new FormData();
@@ -1145,6 +1917,7 @@ async function sendVoice(blob, ext = "webm") {
     if (selectedUserId) fd.append("to_user_id", selectedUserId);
     if (selectedGroupId) fd.append("group_id", selectedGroupId);
     fd.append("type", "audio");
+    appendSelectedMentionsToFormData(fd);
 
     const res = await fetch("/chat/send", {
         method: "POST",
@@ -1274,6 +2047,56 @@ function subscribeSolarNewsChannel() {
     });
 }
 
+
+function scrollAndHighlightMessage(messageId, attempts = 0) {
+    if (!messageId || !DOM.chatBox) return;
+
+    const selector = `div[data-msg-id="${String(messageId).replace(/"/g, '\\"')}"]`;
+    const node = DOM.chatBox.querySelector(selector);
+
+    if (!node) {
+        if (attempts < 20) {
+            setTimeout(() => scrollAndHighlightMessage(messageId, attempts + 1), 250);
+        }
+        return;
+    }
+
+    node.scrollIntoView({ behavior: "smooth", block: "center" });
+    node.classList.add("message-new");
+
+    setTimeout(() => {
+        node.classList.remove("message-new");
+    }, 3500);
+}
+
+function openChatFromUrlOnce() {
+    if (window.__chatUrlOpenDone) return;
+
+    const params = new URLSearchParams(window.location.search || "");
+    const userIdFromUrl = Number(params.get("user_id") || 0);
+    const groupIdFromUrl = Number(params.get("group_id") || 0);
+    const messageIdFromUrl = Number(params.get("message_id") || 0);
+
+    if (!userIdFromUrl && !groupIdFromUrl) return;
+
+    window.__chatUrlOpenDone = true;
+
+    if (groupIdFromUrl) {
+        const group = window.groupsById?.[groupIdFromUrl] || window.groupsById?.[String(groupIdFromUrl)];
+        openGroupChat(groupIdFromUrl, group?.name || group?.context_label || `Gruppe #${groupIdFromUrl}`);
+    } else if (userIdFromUrl) {
+        const user = window.usersById?.[userIdFromUrl] || window.usersById?.[String(userIdFromUrl)];
+        const fullName = `${user?.name || ""} ${user?.lastname || ""}`.trim() || `User #${userIdFromUrl}`;
+        openChat(userIdFromUrl, fullName);
+        subscribeToChat(userIdFromUrl);
+    }
+
+    if (messageIdFromUrl) {
+        window.__pendingMentionMessageId = messageIdFromUrl;
+        setTimeout(() => scrollAndHighlightMessage(messageIdFromUrl), 900);
+    }
+}
+
 // Initialize the chat UI once the DOM is fully loaded
 // ─── Initialize UI & wire filters ───────────────────────────────────
 function initChatUI() {
@@ -1291,6 +2114,12 @@ function initChatUI() {
     ];
     ids.forEach((id) => (DOM[id] = document.getElementById(id)));
 
+    bootChatMentionNotifications();
+
+    if (!DOM.userList || !DOM.chatBox || !DOM.messageInput) {
+        return;
+    }
+
     if (DOM.pinChatBtn) {
         DOM.pinChatBtn.addEventListener("click", togglePin);
     }
@@ -1300,10 +2129,10 @@ function initChatUI() {
 
     if (!micOK) {
         // keep it enabled; our click handler already opens the file picker fallback
-        voiceBtn.title =
+        if (voiceBtn) voiceBtn.title =
             "Keine sichere Umgebung – es wird Datei-Aufnahme genutzt";
     } else if (!recOK) {
-        voiceBtn.title =
+        if (voiceBtn) voiceBtn.title =
             "Direktaufnahme nicht unterstützt – Datei-Aufnahme wird genutzt";
     }
 
@@ -1327,39 +2156,50 @@ function initChatUI() {
             sendTyping();
         });
 
-        DOM.messageInput.addEventListener("paste", (e) => {
-            // Get clipboard data
-            const clipboardItems = e.clipboardData || window.clipboardData;
-            if (!clipboardItems) return;
+       DOM.messageInput.addEventListener("paste", (e) => {
+           // Get clipboard data
+           const clipboardItems = e.clipboardData || window.clipboardData;
+           if (!clipboardItems) return;
 
-            const items = clipboardItems.items;
-            const filesToUpload = [];
+           const items = clipboardItems.items;
+           const filesToUpload = [];
 
-            // Look for files (images, documents) in the clipboard
-            for (let i = 0; i < items.length; i++) {
-                if (items[i].kind === "file") {
-                    const file = items[i].getAsFile();
-                    if (file) filesToUpload.push(file);
-                }
-            }
+           // Look for files (images, documents) in the clipboard
+           for (let i = 0; i < items.length; i++) {
+               if (items[i].kind === "file") {
+                   let file = items[i].getAsFile();
+                   if (file) {
+                       // NEW: Rename pasted images to prevent "image.png" conflicts on the backend
+                       if (file.type.startsWith("image/")) {
+                           const ext = file.type.split("/")[1] || "png";
+                           file = new File(
+                               [file],
+                               `pasted-image-${Date.now()}.${ext}`,
+                               { type: file.type },
+                           );
+                       }
+                       filesToUpload.push(file);
+                   }
+               }
+           }
 
-            // If files were found, upload them!
-            if (filesToUpload.length > 0) {
-                e.preventDefault(); // Prevent the default behavior (pasting text/paths)
+           // If files were found, upload them!
+           if (filesToUpload.length > 0) {
+               e.preventDefault(); // Prevent the default behavior (pasting weird text/paths)
 
-                if (!selectedUserId && !selectedGroupId) {
-                    Swal?.fire?.(
-                        "No Chat Selected",
-                        "Please select a chat first.",
-                        "info",
-                    );
-                    return;
-                }
+               if (!selectedUserId && !selectedGroupId) {
+                   Swal?.fire?.(
+                       "Kein Chat ausgewählt",
+                       "Bitte wähle zuerst einen Chat aus.",
+                       "info",
+                   );
+                   return;
+               }
 
-                // Send the files using your existing upload function
-                sendFiles(filesToUpload);
-            }
-        });
+               // Send the files using your existing upload function
+               sendFiles(filesToUpload);
+           }
+       });
 
         // Enter to send, Shift+Enter for newline
         DOM.messageInput.addEventListener("keydown", (e) => {
@@ -1369,6 +2209,8 @@ function initChatUI() {
             }
         });
     }
+
+    initMentionPicker();
 
     // Debounce helper
     function debounce(fn, delay = 200) {
@@ -1425,7 +2267,9 @@ function initChatUI() {
         });
     }
 
-    Notification.requestPermission();
+    if (window.Notification && Notification.permission === "default") {
+        Notification.requestPermission().catch?.(() => {});
+    }
     if (DOM.sendButton) DOM.sendButton.addEventListener("click", sendMessage);
     if (DOM.messageInput)
         DOM.messageInput.addEventListener("input", sendTyping);
@@ -1434,6 +2278,7 @@ function initChatUI() {
     // Fix: Wait for users to load before applying unread counts
     loadUsers().then(() => {
         loadUnreadCounts();
+        openChatFromUrlOnce();
     });
 
     window.Echo.private(`chat.user.${userId}`)
@@ -1459,10 +2304,15 @@ function initChatUI() {
                 }
             });
         })
+        .listen(".chat-mention-created", (e) => {
+            window.ChatMentionNotifications?.show?.(e.mention || e);
+        })
         .listen(".group-membership-updated", (e) => {
             console.log("🔄 group-membership-updated", e);
-            // simplest: reload employees + groups list
-            loadUsers();
+            loadUsers().then(() => loadUnreadCounts());
+            if (e?.group?.membership_status === "pending") {
+                showToast("Neue Gruppeneinladung erhalten.");
+            }
         });
 
     // Default: always land at the last message
@@ -1512,7 +2362,7 @@ function setComposerReadOnly(isReadOnly) {
         input.disabled = composerReadOnly;
         input.placeholder = composerReadOnly
             ? "Sie haben in dieser Gruppe nur Lesezugriff."
-            : "Write a message…";
+            : "Nachricht schreiben…";
     }
     if (send) send.disabled = composerReadOnly;
     if (attach) attach.disabled = composerReadOnly;
@@ -1599,10 +2449,10 @@ async function acceptGroupInvite(groupId, li) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         await loadUsers();
-        Swal?.fire?.("Joined", "You joined the group.", "success");
+        Swal?.fire?.("Beigetreten", "Du bist der Gruppe beigetreten.", "success");
     } catch (err) {
         console.error("acceptGroupInvite error:", err);
-        Swal?.fire?.("Error", "Invitation could not be accepted.", "error");
+        Swal?.fire?.("Fehler", "Die Einladung konnte nicht angenommen werden.", "error");
     }
 }
 
@@ -1619,10 +2469,10 @@ async function rejectGroupInvite(groupId, li) {
 
         li?.remove();
         await loadUsers(); // <--- add this so left sidebar is consistent
-        Swal?.fire?.("Declined", "Invitation was declined.", "success");
+        Swal?.fire?.("Abgelehnt", "Die Einladung wurde abgelehnt.", "success");
     } catch (err) {
         console.error("rejectGroupInvite error:", err);
-        Swal?.fire?.("Error", "Invitation could not be declined.", "error");
+        Swal?.fire?.("Fehler", "Die Einladung konnte nicht abgelehnt werden.", "error");
     }
 }
 
@@ -1666,7 +2516,7 @@ function updateUserPreview(message) {
  * Loads the list of users/employees from the backend and populates the sidebar.
  */
 function loadUsers() {
-    fetch("/chat/employees")
+    return fetch("/chat/employees")
         .then((res) => res.json())
         .then((data) => {
             const employees = Array.isArray(data.employees)
@@ -2056,7 +2906,10 @@ function showUnread(groupId, increment = true, setTo = null) {
 }
 
 // Initialize the chat UI once the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", initChatUI);
+document.addEventListener("DOMContentLoaded", () => {
+    bootChatMentionNotifications();
+    initChatUI();
+});
 /**
  * Sets up the Laravel Echo presence channel to track online/offline status of users.
  */
@@ -2199,7 +3052,7 @@ function handleIncoming(e) {
     if (seenMessageIds.has(e.id)) return;
     seenMessageIds.add(e.id);
 
-    const isMine = from.id === userId;
+    const isMine = Number(from.id) === Number(userId);
     const name = (from.name || "") + (from.lastname ? " " + from.lastname : "");
     const fromId = from.id;
     const toId = e.to_user_id;
@@ -2250,6 +3103,8 @@ function handleIncoming(e) {
             !isMine,
         );
 
+        updateUserListPreview(e, { incrementUnread: false });
+
         if (!isMine && selectedUserId) {
             // DM read receipts
             markAsRead(selectedUserId);
@@ -2260,27 +3115,13 @@ function handleIncoming(e) {
         }
     } else {
         // Not the currently open conversation
-        if (e.group_id) {
-            // group: bump unread + preview via list updater
-            showUnread(e.group_id, true);
-            updateUserListPreview(e);
-        } else {
-            // private: unread badge + preview
-            showBadge(fromId);
-            updatePreview(
-                fromId,
-                e.message ||
-                    (e.type === "voice" || e.type === "audio"
-                        ? "🎤 Sprachnachricht"
-                        : "Neue Nachricht"),
-                true,
-            );
-            updateUserListPreview(e);
-        }
+        updateUserListPreview(e, { incrementUnread: true });
     }
 }
 
-function updateUserListPreview(payload) {
+function updateUserListPreview(payload, options = {}) {
+    const incrementUnread = options.incrementUnread !== false;
+
     const fromObj =
         payload.from_user ||
         payload.user ||
@@ -2288,7 +3129,7 @@ function updateUserListPreview(payload) {
         (payload.message && payload.message.user) ||
         null;
 
-    const fromId = fromObj?.id || null;
+    const fromId = fromObj?.id || payload.from_user_id || null;
 
     const groupId =
         payload.group_id ||
@@ -2302,21 +3143,28 @@ function updateUserListPreview(payload) {
           ? `li.user-entry[data-id="${fromId}"]`
           : null;
 
-    if (!selector) return;
+    if (!selector || !DOM.userList) return;
 
     const entry = DOM.userList.querySelector(selector);
-    if (!entry) return;
+    if (!entry) {
+        // New membership/group may not yet be in the sidebar.
+        loadUsers();
+        return;
+    }
 
     const previewEl = entry.querySelector(".preview");
     let text =
         payload.message ||
         (payload.type === "voice" || payload.type === "audio"
             ? "🎤 Sprachnachricht"
-            : "Neue Nachricht") ||
+            : payload.type === "image"
+              ? "🖼️ Bild"
+              : payload.type === "file"
+                ? "📎 Datei"
+                : "Neue Nachricht") ||
         "Neue Nachricht";
 
     if (groupId) {
-        // build "User: text"
         const from = payload.from_user || {};
         const rawName =
             (from.employee?.name || from.name || "") +
@@ -2327,41 +3175,25 @@ function updateUserListPreview(payload) {
         text = `${senderName}: ${text}`;
     }
 
-    if (previewEl) previewEl.textContent = text.slice(0, 40);
+    if (previewEl) previewEl.textContent = text.slice(0, 55);
 
     if (groupId) {
-        showUnread(groupId, true);
+        const senderId = Number(fromId || payload.from_user_id || payload.from_user?.id || 0);
+        const isOwnMessage = senderId === Number(userId);
+
+        if (incrementUnread && !isOwnMessage) {
+            showUnread(groupId, true);
+        }
+
         moveGroupToTop(groupId);
     } else if (fromId) {
-        const badge = setBadge(
-            entry,
-            Number(entry.querySelector(".badge")?.textContent || 0) + 1,
-        );
+        if (incrementUnread && Number(fromId) !== Number(userId)) {
+            const current = Number(entry.querySelector(".badge")?.textContent || 0) || 0;
+            setBadge(entry, current + 1);
+        }
         moveUserToTop(fromId);
     }
 }
-
-// ── hook into your handleIncoming to move/top + update badges
-const _origHandleIncoming =
-    typeof handleIncoming === "function" ? handleIncoming : null;
-window.handleIncoming = function (e) {
-    if (_origHandleIncoming) _origHandleIncoming(e);
-
-    const fromId = e?.from_user?.id;
-    const isCurrentPrivate =
-        !!selectedUserId &&
-        ((fromId === selectedUserId && e.to_user_id === userId) ||
-            (fromId === userId && e.to_user_id === selectedUserId));
-
-    const isCurrentGroup =
-        !!selectedGroupId &&
-        e.group_id &&
-        Number(selectedGroupId) === Number(e.group_id);
-
-    if (!isCurrentPrivate && !isCurrentGroup) {
-        updateUserListPreview(e);
-    }
-};
 
 document.addEventListener(
     "click",
@@ -3490,6 +4322,12 @@ function loadMessages() {
             scrollToBottom();
             filterMessages();
 
+            if (window.__pendingMentionMessageId) {
+                const pendingId = window.__pendingMentionMessageId;
+                window.__pendingMentionMessageId = null;
+                setTimeout(() => scrollAndHighlightMessage(pendingId), 350);
+            }
+
             // 🔵 After messages are loaded, mark as read
             if (selectedGroupId) {
                 // group chat
@@ -3518,104 +4356,18 @@ function scrollToBottom(opts = {}) {
 }
 
 /**
- * Adds a message to the chat box display.
+ * Adds a message to the chat box display.a
  * @param {object} msg - The message object (e.g., { message: "...", created_at: "..." }).
  * @param {boolean} isMine - True if the message was sent by the current user, false otherwise.
  */
 
 function addMessage(msg, isMine, isNew = false) {
-    if (msg.type === "builder-info") {
-        const profile = msg.builder || window.builderProfile || {};
-        const name = profile.name || "Developer";
-        const product = profile.product || "";
-        const avatar = profile.avatar || window.defaultPic || "";
-        const link = profile.link || "";
-        const bio = profile.bio || "";
-
-        const wrapper = document.createElement("div");
-        wrapper.className = "w-full sm:max-w-lg mx-auto my-4";
-
-        const card = document.createElement("div");
-        card.className = [
-            "relative overflow-hidden rounded-2xl border border-slate-200",
-            "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900",
-            "text-slate-50 shadow-lg",
-        ].join(" ");
-
-        card.innerHTML = `
-            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-sky-400 to-fuchsia-500"></div>
-            <div class="px-4 sm:px-6 pt-4 pb-5 sm:pb-6 flex flex-col sm:flex-row sm:items-start gap-4">
-                <div class="flex-shrink-0">
-                    <div class="relative">
-                        <img src="${avatar}" alt="${name}"
-                             class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover ring-2 ring-emerald-400/80 shadow-md">
-                        <span class="absolute -bottom-1 -right-1 inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-xs font-semibold shadow">
-                            ⚡
-                        </span>
-                    </div>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <h3 class="text-lg sm:text-xl font-semibold tracking-tight">
-                            ${name}
-                        </h3>
-                        ${
-                            product
-                                ? `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] bg-emerald-500/15 text-emerald-200 border border-emerald-400/30">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                        Creator of ${product}
-                                   </span>`
-                                : ""
-                        }
-                    </div>
-                    <p class="mt-1 text-xs text-slate-400 uppercase tracking-[0.18em]">
-                        Developer • Writer • Youth Activist
-                    </p>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-200 whitespace-pre-line">
-                        ${bio}
-                    </p>
-                    <div class="mt-4 flex flex-wrap gap-2">
-                        ${
-                            link
-                                ? `<a href="${link}" target="_blank" rel="noopener noreferrer"
-                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-900 text-xs font-medium hover:bg-white transition">
-                                        <i data-feather="linkedin" class="w-4 h-4"></i>
-                                        LinkedIn
-                                   </a>`
-                                : ""
-                        }
-                        ${
-                            product
-                                ? `<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-600/80 text-[11px] text-slate-200">
-                                        <i data-feather="code" class="w-3 h-3"></i>
-                                        Built for ${product}
-                                   </span>`
-                                : ""
-                        }
-                    </div>
-                </div>
-            </div>
-        `;
-
-        wrapper.appendChild(card);
-
-        if (!DOM.chatBox) {
-            console.warn("chatBox is not ready. Skipping builder-info.");
-            return;
-        }
-
-        DOM.chatBox.appendChild(wrapper);
-        scrollToBottom({ behavior: "smooth" });
-        if (window.feather) window.feather.replace();
-        return;
-    }
-
     const from = msg.from_user || {};
     const isGroup = !!msg.group_id;
 
     const root = document.createElement("div");
     root.className = `group relative mb-3 w-full sm:max-w-lg ${
-        isMine ? "ml-auto text-right" : "mr-auto text-left"
+        isMine ? "mr-auto text-left" : "ml-auto text-left"
     }`;
     root.dataset.msgId = msg.id;
 
@@ -3634,9 +4386,9 @@ function addMessage(msg, isMine, isNew = false) {
     }
 
     const row = document.createElement("div");
-    row.className =
+        row.className =
         "mt-0.5 flex items-start gap-2 " +
-        (isMine ? "flex-row-reverse text-right" : "flex-row text-left");
+        (isMine ? "flex-row text-left" : "flex-row-reverse text-left");
 
     const avatarWrap = document.createElement("div");
     avatarWrap.className = "flex-shrink-0";
@@ -3661,7 +4413,7 @@ function addMessage(msg, isMine, isNew = false) {
 
     const bubble = document.createElement("div");
     bubble.className =
-        "message-bubble rounded-2xl text-sm shadow-sm px-3 py-2 " +
+        "message-bubble rounded-2xl text-sm shadow-sm px-3 py-2 text-left direction-ltr " +
         (isMine ? "bg-mine" : "bg-theirs");
 
     if (isNew && !isMine) {
@@ -3766,37 +4518,162 @@ function addMessage(msg, isMine, isNew = false) {
         content.appendChild(audio);
     }
 
-    // ATTACHMENTS
+    // ATTACHMENTS / WhatsApp-style grouped album
     if (Array.isArray(msg.attachments) && msg.attachments.length) {
-        const list = document.createElement("div");
-        list.className = "mt-1 space-y-1";
+        const normalizeAttachment = (att) => {
+            const mime = (att.mime || att.mime_type || "").toLowerCase();
+            const name = att.name || att.filename || "Datei";
+            const url = att.url || att.file_url || "";
+            const lowerUrl = String(url).toLowerCase();
+            const lowerName = String(name).toLowerCase();
 
-        msg.attachments.forEach((att) => {
-            const isImg = att.is_image || att.mime?.startsWith?.("image/");
-            if (isImg) {
+            const isImg =
+                att.is_image ||
+                mime.startsWith("image/") ||
+                /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(lowerUrl) ||
+                /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(lowerName);
+
+            const isPdf =
+                mime === "application/pdf" ||
+                mime.includes("pdf") ||
+                lowerUrl.includes(".pdf") ||
+                lowerName.endsWith(".pdf");
+
+            return { ...att, mime, name, url, isImg, isPdf };
+        };
+
+        const attachments = msg.attachments
+            .map(normalizeAttachment)
+            .filter((att) => att.url);
+
+        const imageAttachments = attachments.filter((att) => att.isImg);
+        const fileAttachments = attachments.filter((att) => !att.isImg);
+
+        const album = document.createElement("div");
+        album.className = "chat-attachment-album mt-2";
+
+        if (attachments.length > 1) {
+            const summary = document.createElement("div");
+            summary.className = "chat-attachment-summary";
+            const imageCount = imageAttachments.length;
+            const fileCount = fileAttachments.length;
+            const parts = [];
+
+            if (imageCount) parts.push(`${imageCount} Bild${imageCount === 1 ? "" : "er"}`);
+            if (fileCount) parts.push(`${fileCount} Datei${fileCount === 1 ? "" : "en"}`);
+
+            summary.innerHTML = `
+                <span class="inline-flex items-center gap-1">
+                    <i data-feather="paperclip" class="w-3 h-3"></i>
+                    ${escapeHtml(parts.join(" · ") || `${attachments.length} Anhänge`)}
+                </span>
+            `;
+            album.appendChild(summary);
+        }
+
+        if (imageAttachments.length) {
+            const grid = document.createElement("div");
+            const visibleImages = imageAttachments.slice(0, 4);
+            const hiddenCount = imageAttachments.length - visibleImages.length;
+
+            grid.className = [
+                "chat-image-grid",
+                imageAttachments.length === 1 ? "chat-image-grid-one" : "",
+                imageAttachments.length === 2 ? "chat-image-grid-two" : "",
+                imageAttachments.length >= 3 ? "chat-image-grid-many" : "",
+            ].filter(Boolean).join(" ");
+
+            visibleImages.forEach((att, idx) => {
+                const tile = document.createElement("button");
+                tile.type = "button";
+                tile.className = "chat-image-tile";
+
+                tile.dataset.chatPreviewUrl = att.url;
+                tile.dataset.chatPreviewType = "image";
+                tile.dataset.chatPreviewName = att.name;
+
                 const img = document.createElement("img");
                 img.src = att.url;
-                img.alt = att.name || "Bild";
-                img.className = "mt-1 max-w-xs rounded cursor-pointer";
-                img.addEventListener("click", () =>
-                    window.open(att.url, "blank", "noopener"),
-                );
-                list.appendChild(img);
-            } else {
-                const a = document.createElement("a");
-                a.href = att.url;
-                a.target = "blank";
-                a.rel = "noopener";
-                a.className =
-                    "inline-flex items-center gap-1 underline break-all";
-                a.innerHTML = `<i data-feather="file"></i> ${escapeHtml(
-                    att.name || "Datei",
-                )}`;
-                list.appendChild(a);
-            }
-        });
+                img.alt = att.name;
+                img.loading = "lazy";
+                img.className = "chat-attachment-image";
 
-        content.appendChild(list);
+                tile.appendChild(img);
+
+                if (idx === 3 && hiddenCount > 0) {
+                    const more = document.createElement("span");
+                    more.className = "chat-image-more";
+                    more.textContent = `+${hiddenCount}`;
+                    tile.appendChild(more);
+                }
+
+                tile.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    window.ChatMediaLightbox.openFromNode(tile);
+                });
+
+                grid.appendChild(tile);
+            });
+
+            // Hidden preview nodes are added so the existing lightbox can still
+            // navigate through every image, not only the first four visible ones.
+            imageAttachments.slice(4).forEach((att) => {
+                const hidden = document.createElement("span");
+                hidden.className = "hidden";
+                hidden.dataset.chatPreviewUrl = att.url;
+                hidden.dataset.chatPreviewType = "image";
+                hidden.dataset.chatPreviewName = att.name;
+                album.appendChild(hidden);
+            });
+
+            album.appendChild(grid);
+        }
+
+        if (fileAttachments.length) {
+            const fileList = document.createElement("div");
+            fileList.className = "chat-file-stack";
+
+            fileAttachments.forEach((att) => {
+                const isPdf = att.isPdf;
+                const el = document.createElement(isPdf ? "button" : "a");
+
+                if (isPdf) {
+                    el.type = "button";
+                } else {
+                    el.href = att.url;
+                    el.target = "_blank";
+                    el.rel = "noopener";
+                }
+
+                el.className = "chat-attachment-file";
+                el.dataset.chatPreviewUrl = att.url;
+                el.dataset.chatPreviewType = isPdf ? "pdf" : "file";
+                el.dataset.chatPreviewName = att.name;
+
+                el.innerHTML = `
+                    <span class="w-9 h-9 rounded-xl ${isPdf ? "bg-red-50 text-red-600" : "bg-slate-100 text-slate-600"} flex items-center justify-center shrink-0">
+                        <i data-feather="${isPdf ? "file-text" : "file"}" class="w-4 h-4"></i>
+                    </span>
+                    <span class="min-w-0">
+                        <span class="block font-semibold truncate">${escapeHtml(att.name)}</span>
+                        <span class="block text-[11px] text-slate-500">${isPdf ? "PDF Vorschau öffnen" : "Datei öffnen"}</span>
+                    </span>
+                `;
+
+                if (isPdf) {
+                    el.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        window.ChatMediaLightbox.openFromNode(el);
+                    });
+                }
+
+                fileList.appendChild(el);
+            });
+
+            album.appendChild(fileList);
+        }
+
+        content.appendChild(album);
     }
 
     const time = document.createElement("div");
@@ -3995,18 +4872,7 @@ function sendMessage() {
     const trimmed = raw.trim();
     if (!trimmed) return;
 
-    // If user asks about the developer, answer locally with a fancy card
-    if (isBuilderQuery(trimmed)) {
-        showBuilderCard(raw);
-        DOM.messageInput.value = "";
-        // reset height if you use auto-grow
-        DOM.messageInput.style.height = "";
-        replyToId = null;
-        editingMessageId = null;
-        document.getElementById("replyBox")?.classList.add("hidden");
-        scrollToBottom();
-        return;
-    }
+     
 
     // Must have a target
     if (!selectedUserId && !selectedGroupId) return;
@@ -4018,6 +4884,7 @@ function sendMessage() {
         to_user_id: selectedUserId || null,
         group_id: selectedGroupId || null,
         edit_id: editingMessageId || null,
+        mentions: editingMessageId ? [] : getSelectedMentionIdsForSending(),
     };
 
     // UI lock
@@ -4114,6 +4981,7 @@ function sendMessage() {
             // reset input + UI
             DOM.messageInput.value = "";
             if (typeof autogrow === "function") autogrow(DOM.messageInput);
+            resetMentionComposerState();
             editingMessageId = null;
             cancelReply();
 
@@ -4239,15 +5107,13 @@ function handleGroupMessageRead(e) {
 }
 
 function subscribeToGroup(groupId) {
+    groupId = Number(groupId);
     if (window.subscribedGroups.includes(groupId)) return;
     window.subscribedGroups.push(groupId);
 
     window.Echo.private(`chat.group.${groupId}`)
         .stopListening(".message-sent")
         .listen(".message-sent", (data) => {
-            if (seenMessageIds.has(data.id)) return;
-            seenMessageIds.add(data.id);
-
             console.log("📩 New group message:", data);
             handleIncoming(data);
         })
@@ -4314,30 +5180,95 @@ function markGroupRead(groupId) {
  * Loads and updates the unread message counts for all users in the sidebar.
  */
 function loadUnreadCounts() {
-    fetch("/chat/unread-counts")
+    if (!DOM.userList) return Promise.resolve();
+
+    return fetch("/chat/unread-counts", {
+        headers: { Accept: "application/json" },
+        credentials: "same-origin",
+    })
         .then((res) => res.json())
         .then((counts) => {
-            Object.entries(counts).forEach(([id, count]) => {
-                const badge = DOM.userList.querySelector(
-                    `li[data-id="${id}"] .badge`,
-                );
-                if (badge) {
-                    badge.textContent = count;
-                    badge.classList.toggle("hidden", count == 0); // Hide badge if count is zero
-                }
-                // Also update the preview in case it was highlighted as unread
-                const previewEl = DOM.userList.querySelector(
-                    `.preview[data-id="${id}"]`,
-                );
-                if (previewEl) {
-                    previewEl.classList.toggle("font-bold", count > 0);
-                }
+            const privateCounts = counts.private || counts.users || counts.direct || {};
+            const groupCounts = counts.groups || counts.group || {};
+
+            // Reset all badges first, so old counts do not stay visible.
+            DOM.userList
+                .querySelectorAll("li.user-entry, li.group-entry")
+                .forEach((li) => setBadge(li, 0));
+
+            Object.entries(privateCounts).forEach(([id, count]) => {
+                const li = DOM.userList.querySelector(`li.user-entry[data-id="${id}"]`);
+                if (!li) return;
+
+                const n = Number(count || 0);
+                setBadge(li, n);
+
+                const previewEl = li.querySelector(`.preview[data-id="${id}"]`);
+                if (previewEl) previewEl.classList.toggle("font-bold", n > 0);
+            });
+
+            Object.entries(groupCounts).forEach(([id, count]) => {
+                const li = DOM.userList.querySelector(`li.group-entry[data-group-id="${id}"]`);
+                if (!li) return;
+
+                const n = Number(count || 0);
+                setBadge(li, n);
+
+                const previewEl = li.querySelector(".preview");
+                if (previewEl) previewEl.classList.toggle("font-bold", n > 0);
             });
         })
         .catch((error) => console.error("Error loading unread counts:", error));
 }
 
+
 feather.replace(); // after any new icons are injected
+
+function ensureGroupMemberToolbar() {
+    if (!userList || document.getElementById("groupMemberToolbar")) return;
+
+    const toolbar = document.createElement("div");
+    toolbar.id = "groupMemberToolbar";
+    toolbar.className = "flex flex-wrap items-center gap-2 mb-3 rounded-xl border border-slate-200 bg-slate-50 p-2";
+    toolbar.innerHTML = `
+        <button type="button" id="selectAllGroupMembers" class="text-xs px-3 py-1.5 rounded-full bg-[#93c21c] text-white hover:bg-emerald-600">
+            Alle Mitglieder auswählen
+        </button>
+        <button type="button" id="clearAllGroupMembers" class="text-xs px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-100">
+            Auswahl löschen
+        </button>
+    `;
+
+    userList.parentNode.insertBefore(toolbar, userList);
+
+    document.getElementById("selectAllGroupMembers")?.addEventListener("click", () => {
+        userList.querySelectorAll(".member-checkbox").forEach((checkbox) => {
+            checkbox.checked = true;
+            checkbox.dispatchEvent(new Event("change"));
+        });
+    });
+
+    document.getElementById("clearAllGroupMembers")?.addEventListener("click", () => {
+        userList.querySelectorAll(".member-checkbox").forEach((checkbox) => {
+            checkbox.checked = false;
+            checkbox.dispatchEvent(new Event("change"));
+        });
+    });
+}
+
+function normalizeGroupResponse(group) {
+    if (!group) return null;
+    const label = group.name || group.context_label || `Gruppe #${group.id}`;
+    return {
+        ...group,
+        isGroup: true,
+        name: label,
+        membership_status: group.membership_status || group.pivot?.status || "accepted",
+        isPending: (group.membership_status || group.pivot?.status) === "pending",
+        is_pinned: !!group.is_pinned,
+    };
+}
+
 const createBtn = document.getElementById("createGroupBtn");
 const cancelBtn = document.getElementById("cancelGroupBtn");
 const submitBtn = document.getElementById("submitGroupBtn");
@@ -4349,21 +5280,23 @@ const leaveGroupBtn = document.getElementById("leaveGroupBtn");
 const deleteGroupBtn = document.getElementById("deleteGroupBtn");
 
 // 🚀 Open modal
-createBtn.addEventListener("click", () => {
-    modal.classList.remove("hidden");
+createBtn?.addEventListener("click", () => {
+    submitBtn?.removeAttribute("data-id");
+    if (modal) modal.classList.remove("hidden");
+    if (groupNameInput) groupNameInput.value = "";
     populateUserCheckboxList(); // no groupId for new group
 });
 
 // ❌ Close modal
-cancelBtn.addEventListener("click", () => {
-    modal.classList.add("hidden");
-    groupNameInput.value = "";
-    submitBtn.removeAttribute("data-id");
-    userList.innerHTML = "";
+cancelBtn?.addEventListener("click", () => {
+    if (modal) modal.classList.add("hidden");
+    if (groupNameInput) groupNameInput.value = "";
+    submitBtn?.removeAttribute("data-id");
+    if (userList) userList.innerHTML = "";
 });
 
 // ✅ Save group
-submitBtn.addEventListener("click", async () => {
+submitBtn?.addEventListener("click", async () => {
     const groupName = groupNameInput.value.trim();
     const groupId = submitBtn.dataset.id;
     const isEdit = !!groupId;
@@ -4384,7 +5317,13 @@ submitBtn.addEventListener("click", async () => {
         const userId = checkbox.value;
         const roleSelect = document.getElementById(`role-${userId}`);
         const role = roleSelect?.value || "member";
-        return { id: userId, role };
+        return {
+            id: Number(userId),
+            role,
+            status: isEdit ? undefined : "pending",
+            history_visibility: isEdit ? "all" : "from_join",
+            can_write: true,
+        };
     });
 
     const customerId =
@@ -4439,11 +5378,19 @@ submitBtn.addEventListener("click", async () => {
             );
         }
 
-        await response.json();
+        const saved = await response.json();
+        const savedGroup = normalizeGroupResponse(saved.group);
+
+        if (savedGroup) {
+            window.groupsById = window.groupsById || {};
+            window.groupsById[savedGroup.id] = savedGroup;
+            window.groupsById[String(savedGroup.id)] = savedGroup;
+        }
 
         Swal.fire({
             icon: "success",
             title: isEdit ? "Gruppe aktualisiert!" : "Gruppe erstellt!",
+            text: isEdit ? "Die Änderungen wurden gespeichert." : "Die Mitglieder erhalten eine Einladung und müssen sie annehmen.",
             timer: 1500,
             showConfirmButton: false,
         });
@@ -4460,7 +5407,10 @@ submitBtn.addEventListener("click", async () => {
             customerLabelEl.textContent = "";
         }
 
-        loadUsers();
+        await loadUsers();
+        if (savedGroup && !savedGroup.isPending) {
+            openGroupChat(savedGroup.id, savedGroup.name);
+        }
     } catch (err) {
         console.error("Fehler beim Speichern:", err.message);
         Swal.fire({
@@ -4473,6 +5423,7 @@ submitBtn.addEventListener("click", async () => {
 
 // 🧩 Load users with checkboxes and role selectors
 function populateUserCheckboxList(groupId = null) {
+    ensureGroupMemberToolbar();
     fetch("/chat/employee")
         .then((res) => res.json())
         .then((users) => {
@@ -4489,11 +5440,11 @@ function populateUserCheckboxList(groupId = null) {
 
                 div.innerHTML = `
                     <div class="flex items-center gap-2">
-                        <input type="checkbox" value="${user.id}" id="user-${user.id}" class="form-checkbox member-checkbox" />
+                        <input type="checkbox" value="${user.id}" id="user-${user.id}" class="form-checkbox member-checkbox" data-status="pending" />
                         <label for="user-${user.id}" class="text-sm">${name} ${lastname}</label>
                     </div>
                     <select name="roles[${user.id}]" id="role-${user.id}" class="text-xs px-1 py-0.5 border rounded role-select hidden">
-                        <option value="member">👤 Member</option>
+                        <option value="member">👤 Mitglied</option>
                         <option value="moderator">🛡 Moderator</option>
                         <option value="admin">⭐ Admin</option>
                     </select>
@@ -4522,7 +5473,10 @@ function populateUserCheckboxList(groupId = null) {
                             );
                             const role = u.pivot?.role ?? u.role ?? "member";
 
-                            if (cb) cb.checked = true;
+                            if (cb) {
+                                cb.checked = true;
+                                cb.dataset.status = u.pivot?.status || u.status || "accepted";
+                            }
                             if (roleSelect) {
                                 roleSelect.classList.remove("hidden");
                                 roleSelect.value = role;

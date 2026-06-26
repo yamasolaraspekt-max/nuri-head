@@ -528,27 +528,9 @@
 @endsection
 
 @section('content')
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
+<div class="app-content"> 
 
-    <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-md-7 col-12 mb-2">
-                <div class="row breadcrumbs-top">
-                    <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">Artikelverwaltung</h2>
-                        <div class="breadcrumb-wrapper col-12">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ url('/') }}">Dashboard</a></li>
-                                <li class="breadcrumb-item"><a href="{{ url('/product') }}">Produktliste</a></li>
-                                <li class="breadcrumb-item active">Neues Produkt anlegen</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="content-wrapper"> 
 
         <div class="content-body">
             <div class="container mt-2">
@@ -576,15 +558,15 @@
 
                             <div class="wizard-steps-row">
                                 @php
-                                    $stepes = [
-                                        ['icon' => 'edit-3',       'label' => 'Produktinfo'],
-                                        ['icon' => 'settings',     'label' => 'Produkteigenschaft'],
-                                        ['icon' => 'truck',        'label' => 'Lieferant'],
-                                        ['icon' => 'home',         'label' => 'Lager'],
-                                        ['icon' => 'image',        'label' => 'Bilder'],
-                                        ['icon' => 'file-text',    'label' => 'Mediadaten (Dokument-Center)'],
-                                        ['icon' => 'check-circle', 'label' => 'Abschluss'],
-                                    ];
+$stepes = [
+  ['icon' => 'edit-3', 'label' => 'Produktinfo'],
+  ['icon' => 'settings', 'label' => 'Produkteigenschaft'],
+  ['icon' => 'truck', 'label' => 'Lieferant'],
+  ['icon' => 'home', 'label' => 'Lager'],
+  ['icon' => 'image', 'label' => 'Bilder'],
+  ['icon' => 'file-text', 'label' => 'Mediadaten (Dokument-Center)'],
+  ['icon' => 'check-circle', 'label' => 'Abschluss'],
+];
                                 @endphp
 
                                 @foreach($stepes as $index => $step)
@@ -2617,3 +2599,373 @@ function bindEvents() {
 
 
 @endsection
+
+@push('scripts')
+    <script>
+      window.GlobalBreadcrumbs = [
+        {
+          label: 'Dashboard',
+          url: "{{ url('/') }}"
+        },
+        {
+          label: 'Produktliste',
+          url: "{{ url('product')}}", 
+        },
+        {
+          label: 'Nue Anlegen',
+          url: "{{ url()->current()}}",
+          clickable:false
+        }
+      ];
+
+      if (window.setGlobalBreadcrumbs) {
+        window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+      }
+    </script>
+ <script>
+(function () {
+    'use strict';
+
+    const modal = document.getElementById('new_brand');
+    const form = document.getElementById('brandForm');
+    const saveBtn = document.getElementById('saveBrandBtn');
+    const tableBody = document.querySelector('#add_department tbody');
+    const addBtn = document.getElementById('add_brand');
+    const imageInput = document.getElementById('brand_image');
+    const imagePreview = document.getElementById('brandLogoPreview');
+
+    const fallbackLogo = @json(asset('logo/logo.png'));
+    const brandImageBase = @json(asset('images/brand'));
+    const storeUrl = @json(route('product.store.brand'));
+
+    let rowIndex = 1;
+    let isSubmitting = false;
+
+    function refreshIcons() {
+        if (window.feather) {
+            window.feather.replace();
+        }
+    }
+
+    function cleanupBootstrapModalState() {
+        document.querySelectorAll('.modal-backdrop').forEach(function (backdrop) {
+            backdrop.remove();
+        });
+
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('padding-right');
+        document.body.style.removeProperty('overflow');
+
+        if (window.$ && $.fn.modal) {
+            try {
+                $('#new_brand').removeClass('modal fade show').removeAttr('style');
+                $('#new_brand').data('bs.modal', null);
+                $('#new_brand').data('modal', null);
+            } catch (e) {}
+        }
+    }
+
+    function openBrandModal() {
+        if (!modal) return;
+
+        cleanupBootstrapModalState();
+
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        setTimeout(function () {
+            document.getElementById('brand_name')?.focus();
+        }, 80);
+
+        refreshIcons();
+    }
+
+    function closeBrandModal(reset = false) {
+        if (!modal) return;
+
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+
+        document.body.style.removeProperty('overflow');
+        cleanupBootstrapModalState();
+
+        if (reset) {
+            resetForm();
+        }
+    }
+
+    function clearErrors() {
+        ['name', 'initial', 'purpose', 'image'].forEach(function (field) {
+            const el = document.getElementById(field + '-error');
+            if (el) el.textContent = '';
+        });
+    }
+
+    function createDepartmentRow(index) {
+        return `
+            <tr>
+                <td>
+                    <input type="text" class="brand-input" placeholder="Abteilung" name="brand[${index}][brand_department]">
+                </td>
+                <td>
+                    <input type="text" class="brand-input" placeholder="Ansprechpartner" name="brand[${index}][name]">
+                </td>
+                <td>
+                    <input type="text" class="brand-input" placeholder="Position" name="brand[${index}][position]">
+                </td>
+                <td>
+                    <input type="email" class="brand-input" placeholder="E-Mail" name="brand[${index}][email]">
+                </td>
+                <td>
+                    <input type="text" class="brand-input" placeholder="Mobilnummer" name="brand[${index}][phone]">
+                </td>
+                <td>
+                    <input type="text" class="brand-input" placeholder="Festnetznummer" name="brand[${index}][home]">
+                </td>
+                <td>
+                    <input type="text" class="brand-input" placeholder="Büro-Telefonnummer" name="brand[${index}][office]">
+                </td>
+                <td class="text-right">
+                    <button type="button" class="brand-btn-danger brand-remove-row">
+                        <i class="feather icon-trash-2"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }
+
+    function resetForm() {
+        if (form) form.reset();
+
+        clearErrors();
+
+        if (imagePreview) {
+            imagePreview.src = fallbackLogo;
+        }
+
+        if (tableBody) {
+            tableBody.innerHTML = createDepartmentRow(0);
+            rowIndex = 1;
+        }
+
+        refreshIcons();
+    }
+
+    function brandImageUrl(image) {
+        if (!image) return fallbackLogo;
+
+        const value = String(image);
+
+        if (
+            value.startsWith('http://') ||
+            value.startsWith('https://') ||
+            value.startsWith('/')
+        ) {
+            return value;
+        }
+
+        return brandImageBase + '/' + value;
+    }
+
+    function addAndSelectBrand(brand) {
+        if (!brand || !brand.id || !brand.name) return;
+
+        const select = document.getElementById('brand');
+        if (!select) return;
+
+        const imageUrl = brandImageUrl(brand.image);
+        let option = select.querySelector('option[value="' + brand.id + '"]');
+
+        if (!option) {
+            option = new Option(brand.name, brand.id, true, true);
+            option.setAttribute('data-image', imageUrl);
+            select.appendChild(option);
+        } else {
+            option.textContent = brand.name;
+            option.setAttribute('data-image', imageUrl);
+            option.selected = true;
+        }
+
+        if (window.$ && $.fn.select2) {
+            $('#brand').val(String(brand.id)).trigger('change.select2').trigger('change');
+        } else {
+            select.value = String(brand.id);
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    }
+
+    function notifySuccess(message) {
+        if (window.toastr) {
+            toastr.success(message);
+        }
+    }
+
+    function notifyError(message) {
+        if (window.toastr) {
+            toastr.error(message);
+        } else {
+            alert(message);
+        }
+    }
+
+    function setLoading(isLoading) {
+        if (!saveBtn) return;
+
+        saveBtn.disabled = isLoading;
+        saveBtn.innerHTML = isLoading
+            ? '<i class="feather icon-loader"></i> Speichern...'
+            : '<i class="feather icon-save"></i> Speichern';
+
+        refreshIcons();
+    }
+
+    function setFieldError(field, message) {
+        const errorEl = document.getElementById(field + '-error');
+
+        if (errorEl) {
+            errorEl.textContent = message;
+        }
+
+        notifyError(message);
+    }
+
+    document.addEventListener('click', function (event) {
+        const customOpenBtn = event.target.closest('.js-open-brand-modal');
+
+        if (customOpenBtn) {
+            event.preventDefault();
+            event.stopPropagation();
+            openBrandModal();
+            return;
+        }
+
+        const oldBootstrapTrigger = event.target.closest('[data-target="#new_brand"], [data-bs-target="#new_brand"]');
+
+        if (oldBootstrapTrigger) {
+            event.preventDefault();
+            event.stopPropagation();
+            openBrandModal();
+            return;
+        }
+
+        if (event.target.closest('.js-brand-modal-close')) {
+            event.preventDefault();
+            closeBrandModal(false);
+            return;
+        }
+
+        if (event.target === modal) {
+            closeBrandModal(false);
+            return;
+        }
+
+        if (event.target.closest('.brand-remove-row')) {
+            event.preventDefault();
+
+            const row = event.target.closest('tr');
+
+            if (!row || !tableBody) return;
+
+            if (tableBody.querySelectorAll('tr').length <= 1) {
+                row.querySelectorAll('input').forEach(function (input) {
+                    input.value = '';
+                });
+                return;
+            }
+
+            row.remove();
+        }
+    }, true);
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && modal?.classList.contains('is-open')) {
+            closeBrandModal(false);
+        }
+    });
+
+    addBtn?.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        if (!tableBody) return;
+
+        tableBody.insertAdjacentHTML('beforeend', createDepartmentRow(rowIndex));
+        rowIndex++;
+
+        refreshIcons();
+    });
+
+    imageInput?.addEventListener('change', function () {
+        const file = imageInput.files?.[0];
+
+        if (!file) {
+            imagePreview.src = fallbackLogo;
+            return;
+        }
+
+        imagePreview.src = URL.createObjectURL(file);
+    });
+
+    form?.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        if (isSubmitting) return;
+
+        clearErrors();
+        setLoading(true);
+        isSubmitting = true;
+
+        const formData = new FormData(form);
+
+        $.ajax({
+            url: storeUrl,
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                'Accept': 'application/json'
+            },
+            success: function (response) {
+                const brand = response.brand || response.data || response;
+
+                addAndSelectBrand(brand);
+
+                if (typeof window.updatePreviewFromForm === 'function') {
+                    window.updatePreviewFromForm();
+                }
+
+                closeBrandModal(true);
+
+                notifySuccess(response.save_msg || response.message || 'Hersteller wurde erfolgreich gespeichert.');
+            },
+            error: function (xhr) {
+                if (xhr.status === 422) {
+                    const errors = xhr.responseJSON?.errors || {};
+
+                    Object.keys(errors).forEach(function (field) {
+                        const message = errors[field]?.[0] || 'Ungültige Eingabe.';
+                        setFieldError(field, message);
+                    });
+
+                    return;
+                }
+
+                notifyError(xhr.responseJSON?.message || 'Hersteller konnte nicht gespeichert werden.');
+            },
+            complete: function () {
+                setLoading(false);
+                isSubmitting = false;
+            }
+        });
+    });
+
+    window.openBrandModal = openBrandModal;
+    window.closeBrandModal = closeBrandModal;
+
+    cleanupBootstrapModalState();
+    refreshIcons();
+})();
+</script>
+@endpush

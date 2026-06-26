@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('department_head')->nullable(); 
             $table->unsignedBigInteger('head_representative')->nullable(); 
             $table->integer('order')->nullable(); 
-            $table->longText('description')->default(0);
+           $table->longText('description')->nullable();
             $table->string('status')->default('Published');
             $table->timestamps();
              $table->softDeletes();

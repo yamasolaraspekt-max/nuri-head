@@ -25,7 +25,7 @@
     --mc-tr:all .18s ease;
   }
 
-  .mc-page{ padding:18px 12px 30px; background:var(--mc-shell-bg); min-height:calc(100vh - 80px); }
+  .mc-page{ padding:18px 12px 30px; min-height:calc(100vh - 80px); }
   .mc-container{ max-width: 100%; margin:0 auto; }
   .mc-shell{ border-radius:var(--mc-radius-xl); padding:16px 18px 18px; }
 
@@ -232,23 +232,9 @@
 @endsection
 
 @section('content')
-<div class="app-content content">
-  <div class="content-overlay"></div>
-  <div class="header-navbar-shadow"></div>
+<div class="app-content"> 
 
-  <div class="content-wrapper">
-    <div class="content-header row">
-      <div class="col-12">
-        <h2 class="content-header-title float-left mb-0">Assets &amp; Übergaben</h2>
-        <div class="breadcrumb-wrapper col-12">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ url('/employee_dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item">Lager</li>
-            <li class="breadcrumb-item active">Vermögensbestand</li>
-          </ol>
-        </div>
-      </div>
-    </div>
+  <div class="content-wrapper"> 
 
     <div class="content-body">
       <div class="mc-page" id="asset-center">
@@ -324,7 +310,7 @@
                     <select class="mc-select" id="ac-filter-employee" aria-label="Mitarbeiter" style="min-width: 220px;">
                         <option value="0">Mitarbeiter: Alle</option>
                         @foreach(($employees ?? []) as $e)
-                        <option value="{{ $e->id }}">{{ trim(($e->name ?? '').' '.($e->lastname ?? '')) }}</option>
+                        <option value="{{ $e->id }}">{{ trim(($e->name ?? '') . ' ' . ($e->lastname ?? '')) }}</option>
                         @endforeach
                     </select>
                     </div>
@@ -507,7 +493,7 @@
           <select class="mc-sel" name="handover_id" id="ac-asset-handover">
             <option value="">—</option>
             @foreach(($employees ?? []) as $e)
-              <option value="{{ $e->id }}">{{ trim(($e->name ?? '').' '.($e->lastname ?? '')) }}</option>
+              <option value="{{ $e->id }}">{{ trim(($e->name ?? '') . ' ' . ($e->lastname ?? '')) }}</option>
             @endforeach
           </select>
         </div>
@@ -550,7 +536,7 @@
           <select class="mc-sel" name="handover_id" id="ac-handover-employee" required>
             <option value="">—</option>
             @foreach(($employees ?? []) as $e)
-              <option value="{{ $e->id }}">{{ trim(($e->name ?? '').' '.($e->lastname ?? '')) }}</option>
+              <option value="{{ $e->id }}">{{ trim(($e->name ?? '') . ' ' . ($e->lastname ?? '')) }}</option>
             @endforeach
           </select>
         </div>
@@ -1437,3 +1423,25 @@
 </script>
 
 @endsection
+
+@push('scripts')
+  <script>
+    window.GlobalBreadcrumbs = [
+      {
+        label: 'Dashboard',
+        url: "{{ url('/') }}"
+      },
+      {
+        label: 'Vermögensbestand/Übergaben',
+        url: "{{ url()->current()}}",
+        clickable: false
+
+      }
+
+    ];
+
+    if (window.setGlobalBreadcrumbs) {
+      window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+    }
+  </script>
+@endpush

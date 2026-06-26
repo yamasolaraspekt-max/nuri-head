@@ -14,7 +14,7 @@
             padding: 20mm;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* 🔥 push footer to bottom */
+            justify-content: space-between;  
             background: white;
             border: 2px solid white !important;
         }

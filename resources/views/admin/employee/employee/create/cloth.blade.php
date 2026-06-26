@@ -14,7 +14,7 @@
                                                                             <span aria-hidden="true">×</span>
                                                                         </button>
                                                                     </div>
-                                                                    <form novalidate action="{{ action('App\Http\Controllers\EmployeeClothController@store')}}" method="post"  class="custom-file-upload" enctype="multipart/form-data" >
+                                                                    <form novalidate action="{{ route('cloth.create')}}" method="post"  class="custom-file-upload" enctype="multipart/form-data" >
                                                                         @csrf
                                                                         <input type="hidden" name="active_tab" id="active_tab" value="cloth"> 
                                                                           <input type="hidden" name="emp_id" value="{{ request()->id }}" >  
@@ -147,7 +147,7 @@
                                                                                                 <span aria-hidden="true">×</span>
                                                                                             </button>
                                                                                         </div>
-                                                                                            <form class="form-horizontal" novalidate method="post" action="{{ action('App\Http\Controllers\EmployeeClothController@update') }}" class="custom-file-upload" enctype="multipart/form-data">
+                                                                                            <form class="form-horizontal" novalidate method="post" action="{{ route('cloth.update')}}" class="custom-file-upload" enctype="multipart/form-data">
                                                                                             @csrf
                                                                                             <div class="modal-body"> 
                                                                                                 <input type="hidden" name="active_tab" id="active_tab" value="cloth"> 

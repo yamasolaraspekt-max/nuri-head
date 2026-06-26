@@ -3,9 +3,7 @@
 @section('title') Zeitmanagement – Zeitpläne aller Mitarbeiter @endsection
 
 @section('content')
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
+<div class="app-content"> 
 
     <div class="content-wrapper">
         {{-- Page header --}}
@@ -72,47 +70,47 @@
                 <div class="row" id="tmSlotsContainer">
                     @forelse($employees as $employee)
                         @php
-                            /** @var \App\Models\Employee $employee */
+    /** @var \App\Models\Employee $employee */
 
-                            // Controller should ideally pass $plans keyed by employee_id
-                            // e.g. $plans[employee_id] = TimeManagementPlan for selected month
-                            $plan = isset($plans) ? ($plans[$employee->id] ?? null) : ($employee->currentTimePlan ?? null);
+    // Controller should ideally pass $plans keyed by employee_id
+    // e.g. $plans[employee_id] = TimeManagementPlan for selected month
+    $plan = isset($plans) ? ($plans[$employee->id] ?? null) : ($employee->currentTimePlan ?? null);
 
-                            $status = $plan->status ?? 'draft';
+    $status = $plan->status ?? 'draft';
 
-                            switch ($status) {
-                                case 'pending':
-                                    $statusLabel = 'Zur Prüfung';
-                                    $statusClass = 'badge-light-warning';
-                                    break;
-                                case 'approved':
-                                    $statusLabel = 'Genehmigt';
-                                    $statusClass = 'badge-light-success';
-                                    break;
-                                case 'rejected':
-                                    $statusLabel = 'Abgelehnt';
-                                    $statusClass = 'badge-light-danger';
-                                    break;
-                                default:
-                                    $statusLabel = 'Entwurf';
-                                    $statusClass = 'badge-light-secondary';
-                            }
+    switch ($status) {
+        case 'pending':
+            $statusLabel = 'Zur Prüfung';
+            $statusClass = 'badge-light-warning';
+            break;
+        case 'approved':
+            $statusLabel = 'Genehmigt';
+            $statusClass = 'badge-light-success';
+            break;
+        case 'rejected':
+            $statusLabel = 'Abgelehnt';
+            $statusClass = 'badge-light-danger';
+            break;
+        default:
+            $statusLabel = 'Entwurf';
+            $statusClass = 'badge-light-secondary';
+    }
 
-                            $workingType   = $plan->working_type   ?? $employee->working_type;
-                            $hourlyRate    = (float)($plan->hourly_rate ?? $employee->salary_per_hour ?? 0);
-                            $targetHours   = (float)($plan->target_hours ?? $employee->working_hour ?? 0);
-                            $scheduledHours= (float)($plan->scheduled_hours ?? 0);
-                            $diffHours     = $scheduledHours - $targetHours;
-                            $estimatedPay  = $scheduledHours * $hourlyRate;
-                            $planMonth     = $plan->month ?? null;
-                            $planYear      = $plan->year ?? null;
+    $workingType = $plan->working_type ?? $employee->working_type;
+    $hourlyRate = (float) ($plan->hourly_rate ?? $employee->salary_per_hour ?? 0);
+    $targetHours = (float) ($plan->target_hours ?? $employee->working_hour ?? 0);
+    $scheduledHours = (float) ($plan->scheduled_hours ?? 0);
+    $diffHours = $scheduledHours - $targetHours;
+    $estimatedPay = $scheduledHours * $hourlyRate;
+    $planMonth = $plan->month ?? null;
+    $planYear = $plan->year ?? null;
                         @endphp
 
                         <div class="col-xl-4 col-lg-6 col-md-6 col-12 tm-slot-card-wrapper p-1">
                             <div class="tm-slot-card card h-100"
                                  data-plan-id="{{ $plan->id ?? '' }}"
                                  data-status="{{ $status }}"
-                                 data-employee-name="{{ Str::lower($employee->name.' '.$employee->lastname) }}">
+                                 data-employee-name="{{ Str::lower($employee->name . ' ' . $employee->lastname) }}">
                                 <div class="card-body">
                                     {{-- Header: avatar + name + status --}}
                                     <div class="d-flex justify-content-between align-items-start mb-75">
@@ -120,7 +118,7 @@
                                             <div class="tm-avatar mr-75"
                                                  style="background-color: {{ $employee->color ?? '#e5e7eb' }};">
                                                 <span>
-                                                    {{ strtoupper(mb_substr($employee->name, 0, 1).mb_substr($employee->lastname, 0, 1)) }}
+                                                    {{ strtoupper(mb_substr($employee->name, 0, 1) . mb_substr($employee->lastname, 0, 1)) }}
                                                 </span>
                                             </div>
                                             <div>
@@ -150,7 +148,7 @@
                                         <div class="tm-kpi-item">
                                             <div class="tm-kpi-label">Vertragliche Std./Monat</div>
                                             <div class="tm-kpi-value">
-                                                {{ number_format((float)($employee->working_hour ?? 0), 2, ',', '.') }} h
+                                                {{ number_format((float) ($employee->working_hour ?? 0), 2, ',', '.') }} h
                                             </div>
                                         </div>
                                         <div class="tm-kpi-item">
@@ -490,3 +488,28 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endsection
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs = [
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            },
+            {
+                label: 'Mitarbeiterliste',
+                url: "{{ url('emp?status_tab=active')}}",
+            },
+            {
+                label: 'Zeitpläne',
+                url: "{{url()->current()}}",
+                clickable: false
+            }
+
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+@endpush

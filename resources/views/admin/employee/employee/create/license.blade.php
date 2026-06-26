@@ -35,7 +35,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form class="form-horizontal" novalidate method="post" action="{{action('App\Http\Controllers\EmployeeLicenseController@store')}}" class="custom-file-upload" enctype="multipart/form-data">
+                        <form class="form-horizontal" novalidate method="post" action="{{route('license.create')}}" class="custom-file-upload" enctype="multipart/form-data">
                             @csrf
                             <div class="modal-body">  
                                 <div class="row"> 
@@ -183,192 +183,192 @@
                 </thead>
                 <tbody>
                     @foreach ($license as $lice)
-                    <tr> 
-                        <td>{{ $data->name }} {{ $data->lastname }}</td>
-                        <td>
-                            @foreach ($employee_license as $license )
-                            <div class="badge badge-success mr-1 mb-1">
-                                <i class="fa fa-times-circle"></i >{{ $license->type }}
-                            </div>
-                            @endforeach 
-                        </td>
-                        
-                        <td>{{ $lice->license_no }}</td>
-                        
-                        <td>{{ $lice->expiry_date }}
-                            <br>
-                            @if($lice->expiry_date== \Carbon\Carbon::parse(now())->isoFormat('DD.MM.YYY'))
-                            <div class="badge badge-danger mr-1 mb-1">
-                                <i class="fa fa-times-circle"></i >Die Lizenz ist abgelaufen
-                            </div>
-                            @endif
-                        </td>
-                   
-                        
-
-                        <td>
-                            {{ $lice->status }}<br>
-                            @if($lice->status!=Null)
-                            <div class="badge badge-danger mr-1 mb-1">
-                                <i class="fa fa-times-circle"></i > {{ $lice->duration }}
-                            </div>
-                            <div class="badge badge-danger mr-1 mb-1">
-                                {{ $lice->suspend_date }}
-                            </div>
-                            @else
-                            <div class="badge badge-success mr-1 mb-1">
-                                <i class="fa fa-check"></i >Aktiv
-                            </div>
-                            @endif
-                        </td>
-                    
-                        <td>
-                            <!-- Delete Modal -->
-                            <button type="button" class="btn btn-icon btn-icon rounded-circle btn-danger mr-1 mb-1" data-toggle="modal" data-target="#delete-licese{{$lice->id}}">
-                            <i class="feather icon-trash"></i>
-                            </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade text-left" id="delete-licese{{$lice->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-scrollable" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">                                       
-                                            <h5>Datensatz löschen</h5>
-                                            <p>Möchten Sie diesen Datensatz wirklich löschen?</p>
-                                            <p>Die Datensatznummer lautet: {{$lice->id}} </p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a type="button"   class="btn btn-primary" data-dismiss="modal">abbrechen</a>
-                                            <a type="button" href="{{url('/license_destroy').'/'.$lice->id}}" class="btn btn-danger">Löschen</a>
-                                        </div>
-                                    </div>
+                        <tr> 
+                            <td>{{ $data->name }} {{ $data->lastname }}</td>
+                            <td>
+                                @foreach ($employee_license as $license )
+                                <div class="badge badge-success mr-1 mb-1">
+                                    <i class="fa fa-times-circle"></i >{{ $license->type }}
                                 </div>
-                            </div> 
+                                @endforeach 
+                            </td>
 
-                                    <!-- licenseEdit Start -->
-                            <button type="button" class="btn btn-icon rounded-circle btn-outline-primary mr-1 mb-1" data-toggle="modal" data-target="#licenseEdit{{$lice->id}}"><i class="feather icon-edit"></i></button>
-                                <div class="modal fade text-left" id="licenseEdit{{$lice->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel17" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title" id="myModalLabel17">Large Modal</h4>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">×</span>
-                                                </button>
-                                            </div>
-                                            <form class="form-horizontal" novalidate method="post" action="{{action('App\Http\Controllers\EmployeeLicenseController@update')}}" class="custom-file-upload" enctype="multipart/form-data">
-                                                @csrf 
-                                                <div class="modal-body"> 
-                                                    <div class="row"> 
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="Title">  Mitarbeitername  </label>
-                                                                <input disabled type="text" class="form-control required" value="{{$data->name}} {{$data->lastname}}">
-                                                                <input  type="hidden" class="form-control required" name="emp_id" value="{{$data->id}}">
-                                                                <input  type="hidden" class="form-control required" name="id" value="{{$lice->id}}"> 
-                                                            </div> 
-                                                        </div>
+                            <td>{{ $lice->license_no }}</td>
 
-                                                        <div class="col-md-6" id="sick">
-                                                            <div class="form-group">
-                                                                <label for="Title">
-                                                                    Amtliches Kennzeichen
-                                                                    </label>
-                                                                <input  type="string" class="form-control required"name="license_no" value="{{ $lice->license_no }}">
-                                                            </div>
-                                                        </div>
+                            <td>{{ $lice->expiry_date }}
+                                <br>
+                                @if($lice->expiry_date== \Carbon\Carbon::parse(now())->isoFormat('DD.MM.YYY'))
+                                <div class="badge badge-danger mr-1 mb-1">
+                                    <i class="fa fa-times-circle"></i >Die Lizenz ist abgelaufen
+                                </div>
+                                @endif
+                            </td>
 
-                                                        <div class="col-md-6" id="sick">
-                                                            <div class="form-group">
-                                                                <label for="Title">
-                                                                    Amtliches Kennzeichen
-                                                                    </label>
-                                                                <input  type="string" class="form-control required"name="license_no" value="{{ $lice->license_no }}">
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="col-md-6" id="personal_remain">
-                                                            <div class="form-group">
-                                                                <label for="Title">
-                                                                    Verfallsdatum
-                                                                    </label>
-                                                                <input  type="date"  class="form-control required" name="expiry_date" value="{{ $lice->expiry_date }}" id="expiry_date">
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="Title">
-                                                                    Lizenzfoto
-                                                                </label>
-                                                                <input type="file" name="image" class="form-control">
-                                                                @if ($errors->has('image'))<p style="color:red;">{!!$errors->first('image')!!}</p>@endif
-                                                            </div>
-                                                        </div>
-                                                    </div> 
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-danger waves-effect waves-light" data-dismiss="modal">abbrechen</button>
-                                                    <button type="submit" class="btn btn-primary waves-effect waves-light" >speichern</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>  
-                                    <!-- End licenseEdit -->
+                            <td>
+                                {{ $lice->status }}<br>
+                                @if($lice->status!=Null)
+                                <div class="badge badge-danger mr-1 mb-1">
+                                    <i class="fa fa-times-circle"></i > {{ $lice->duration }}
+                                </div>
+                                <div class="badge badge-danger mr-1 mb-1">
+                                    {{ $lice->suspend_date }}
+                                </div>
+                                @else
+                                <div class="badge badge-success mr-1 mb-1">
+                                    <i class="fa fa-check"></i >Aktiv
+                                </div>
+                                @endif
+                            </td>
 
-                                <button type="button" class="btn btn-icon btn-icon rounded-circle btn-danger mr-1 mb-1" data-toggle="modal" data-target="#suspend{{$lice->id}}">
-                                    <i class="feather icon-alert-octagon "></i>
-                                </button> 
-                                    
-                                <div class="modal fade text-left" id="suspend{{$lice->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                            <td>
+                                <!-- Delete Modal -->
+                                <button type="button" class="btn btn-icon btn-icon rounded-circle btn-danger mr-1 mb-1" data-toggle="modal" data-target="#delete-licese{{$lice->id}}">
+                                <i class="feather icon-trash"></i>
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade text-left" id="delete-licese{{$lice->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-scrollable" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                Suspendierter Status
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span> 
+                                                    <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                            <form class="form-horizontal" novalidate method="post" action="{{action('App\Http\Controllers\EmployeeLicenseController@suspend')}}" class="custom-file-upload" enctype="multipart/form-data">
-                                                @csrf
-                                                <div class="modal-body">                                       
-                                                    <div class="col-md-12" id="sick">
-                                                        <div class="form-group">
-                                                            <label for="Title">
-                                                                Suspendiertes Datum
-                                                                </label>
-                                                                <input type="hidden" name="id" value="{{ $lice->id }}">
-                                                            <input  type="date" class="form-control required"name="suspend_date">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-12" id="sick">
-                                                        <div class="form-group">
-                                                            <label for="Title">
-                                                                Ausgesetzte Dauer
-                                                                </label>
-                                                    
-                                                            <input  type="string" class="form-control required"name="duration">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button"  class="btn btn-danger" data-dismiss="modal">abbrechen</button>
-                                                    <button type="submit"  class="btn btn-primary">spiechern</button>
-                                                </div>
-                                            </form>
+                                            <div class="modal-body">                                       
+                                                <h5>Datensatz löschen</h5>
+                                                <p>Möchten Sie diesen Datensatz wirklich löschen?</p>
+                                                <p>Die Datensatznummer lautet: {{$lice->id}} </p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a type="button"   class="btn btn-primary" data-dismiss="modal">abbrechen</a>
+                                                <a type="button" href="{{url('/license_destroy').'/'.$lice->id}}" class="btn btn-danger">Löschen</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div> 
-                        </td>
-                    </tr>
-                @endforeach
+
+                                        <!-- licenseEdit Start -->
+                                <button type="button" class="btn btn-icon rounded-circle btn-outline-primary mr-1 mb-1" data-toggle="modal" data-target="#licenseEdit{{$lice->id}}"><i class="feather icon-edit"></i></button>
+                                    <div class="modal fade text-left" id="licenseEdit{{$lice->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel17" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="myModalLabel17">Large Modal</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>
+                                                <form class="form-horizontal" novalidate method="post" action="{{route('license.update')}}" class="custom-file-upload" enctype="multipart/form-data">
+                                                    @csrf 
+                                                    <div class="modal-body"> 
+                                                        <div class="row"> 
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="Title">  Mitarbeitername  </label>
+                                                                    <input disabled type="text" class="form-control required" value="{{$data->name}} {{$data->lastname}}">
+                                                                    <input  type="hidden" class="form-control required" name="emp_id" value="{{$data->id}}">
+                                                                    <input  type="hidden" class="form-control required" name="id" value="{{$lice->id}}"> 
+                                                                </div> 
+                                                            </div>
+
+                                                            <div class="col-md-6" id="sick">
+                                                                <div class="form-group">
+                                                                    <label for="Title">
+                                                                        Amtliches Kennzeichen
+                                                                        </label>
+                                                                    <input  type="string" class="form-control required"name="license_no" value="{{ $lice->license_no }}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6" id="sick">
+                                                                <div class="form-group">
+                                                                    <label for="Title">
+                                                                        Amtliches Kennzeichen
+                                                                        </label>
+                                                                    <input  type="string" class="form-control required"name="license_no" value="{{ $lice->license_no }}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6" id="personal_remain">
+                                                                <div class="form-group">
+                                                                    <label for="Title">
+                                                                        Verfallsdatum
+                                                                        </label>
+                                                                    <input  type="date"  class="form-control required" name="expiry_date" value="{{ $lice->expiry_date }}" id="expiry_date">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="Title">
+                                                                        Lizenzfoto
+                                                                    </label>
+                                                                    <input type="file" name="image" class="form-control">
+                                                                    @if ($errors->has('image'))<p style="color:red;">{!!$errors->first('image')!!}</p>@endif
+                                                                </div>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger waves-effect waves-light" data-dismiss="modal">abbrechen</button>
+                                                        <button type="submit" class="btn btn-primary waves-effect waves-light" >speichern</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>  
+                                        <!-- End licenseEdit -->
+
+                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-danger mr-1 mb-1" data-toggle="modal" data-target="#suspend{{$lice->id}}">
+                                        <i class="feather icon-alert-octagon "></i>
+                                    </button> 
+
+                                    <div class="modal fade text-left" id="suspend{{$lice->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    Suspendierter Status
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span> 
+                                                    </button>
+                                                </div>
+                                                <form class="form-horizontal" novalidate method="post" action="{{route('license.suspend')}}" class="custom-file-upload" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="modal-body">                                       
+                                                        <div class="col-md-12" id="sick">
+                                                            <div class="form-group">
+                                                                <label for="Title">
+                                                                    Suspendiertes Datum
+                                                                    </label>
+                                                                    <input type="hidden" name="id" value="{{ $lice->id }}">
+                                                                <input  type="date" class="form-control required"name="suspend_date">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12" id="sick">
+                                                            <div class="form-group">
+                                                                <label for="Title">
+                                                                    Ausgesetzte Dauer
+                                                                    </label>
+
+                                                                <input  type="string" class="form-control required"name="duration">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button"  class="btn btn-danger" data-dismiss="modal">abbrechen</button>
+                                                        <button type="submit"  class="btn btn-primary">spiechern</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div> 
+                            </td>
+                        </tr>
+                    @endforeach
             </tbody>
         </table>
     </div>    

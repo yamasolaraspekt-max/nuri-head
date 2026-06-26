@@ -1,1089 +1,2662 @@
- @extends('admin.layouts.app')
-
-@section('title','Tickets')
-
-@section('style')
-<meta name="csrf-token" content="{{ csrf_token() }}">
+@extends('admin.layouts.app')
+@section('title', 'Tickets')
 
 @php
-  $cBlue      = '#74b2d4';
-  $cGreen     = '#93c21c';
-  $cGreenSoft = '#cfe09b';
-  $cBlueSoft  = '#c0d8ea';
-  $cDanger    = '#e2583e';
+  $counts = $counts ?? [
+    'mine' => 0,
+    'created' => 0,
+    'progress' => 0,
+    'completed' => 0,
+    'junk' => 0,
+    'all' => 0,
+  ];
+
+  $viewMode = $viewMode ?? request('view', 'list');
 @endphp
 
-<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+@once
+  @push('style')
+    <style>
+      :root {
+        --app-bg: #f3f4f6;
+        --card-bg: #ffffff;
+        --text-main: #1f2937;
+        --text-muted: #6b7280;
+        --border: #e5e7eb;
+        --primary: #93c21c;
+        --primary-hover: #7baa18;
+        --primary-light: #f4fae7;
+        --blue: #74b2d4;
+        --blue-light: #eff6ff;
+        --success: #10b981;
+        --success-light: #ecfdf5;
+        --warning: #f59e0b;
+        --warning-light: #fffbeb;
+        --danger: #ef4444;
+        --danger-hover: #dc2626;
+        --danger-light: #fef2f2;
+        --gray: #6b7280;
+        --gray-light: #f3f4f6;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / .05);
+        --shadow: 0 10px 25px -10px rgb(0 0 0 / .25), 0 4px 8px -4px rgb(0 0 0 / .12);
+        --radius: 14px;
+        --transition: all .2s ease-in-out;
+      }
 
-<style>
-  :root{
-    --t-blue: {{ $cBlue }};
-    --t-green: {{ $cGreen }};
-    --t-greenSoft: {{ $cGreenSoft }};
-    --t-blueSoft: {{ $cBlueSoft }};
-    --t-danger: {{ $cDanger }};
-    --t-ink: #0b1220;
-    --t-muted: #6b7280;
-    --t-border: #e5e7eb;
-    --t-bg: #f9fafb;
-    --t-surface: #ffffff;
-  }
+      .oc-wrap {
+        font-family: Inter, system-ui, -apple-system, sans-serif;
+        color: var(--text-main);
+      }
 
-  .content-wrapper { padding:0 !important; }
-  .content-body { padding:0 !important; }
-  .content-body .tk-layout{ padding: 0px 55px 0px 20px !important; }
+      .oc-header {
+        margin-bottom: 18px;
+      }
 
-  .tk-layout{ display:flex; flex-direction:column; gap:.7rem; }
-  .tk-header{ display:flex; flex-wrap:wrap; gap:.6rem; justify-content:space-between; align-items:center; }
-  .tk-title{ font-size:16px; font-weight:950; letter-spacing:.02em; color:var(--t-ink); margin:0; }
-  .tk-sub{ font-size:12px; color:var(--t-muted); margin:0; }
+      .oc-titlebar {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
 
-  .tk-view-toggle{
-    display:inline-flex; border-radius:999px; border:1px solid var(--t-border);
-    overflow:hidden; background:#fff;
-  }
-  .tk-view-toggle button{
-    font-size:12px; padding:.28rem .85rem; border:none; background:transparent; cursor:pointer;
-    font-weight:950;
-  }
-  .tk-view-toggle button.is-active{ background:#020617; color:#fff; }
+      .oc-title {
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: -.025em;
+        color: #111827
+      }
 
-  .tk-surface{
-    background:var(--t-surface);
-    border:1px solid var(--t-border);
-    border-radius:14px;
-    padding:.85rem;
-  }
+      .oc-sub {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-top: 4px
+      }
 
-  /* ✅ ANALYTICS */
-  .tk-analytics{
-    display:grid;
-    grid-template-columns:repeat(5,minmax(0,1fr)); /* ✅ incl. Beendet */
-    gap:.65rem;
-    margin:.25rem 0 .75rem;
-  }
-  @media (max-width: 1200px){ .tk-analytics{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
-  @media (max-width: 640px){ .tk-analytics{ grid-template-columns:1fr; } }
+      .oc-breadcrumb {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
 
-  .tk-metric{
-    background:rgba(255,255,255,.85);
-    border:1px solid var(--t-border);
-    border-radius:16px;
-    padding:.75rem .85rem;
-    box-shadow:0 10px 25px rgba(15,23,42,0.06);
-    display:flex;
-    gap:.75rem;
-    align-items:center;
-    min-width:0;
-  }
-  .tk-metric .ico{
-    width:38px; height:38px;
-    border-radius:14px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:16px; font-weight:950;
-    border:1px solid rgba(0,0,0,.06);
-    flex:0 0 auto;
-  }
-  .tk-metric .txt{ min-width:0; }
-  .tk-metric .k{
-    font-size:11px;
-    font-weight:950;
-    letter-spacing:.08em;
-    color:#64748b;
-    text-transform:uppercase;
-  }
-  .tk-metric .v{
-    font-size:18px;
-    font-weight:950;
-    color:var(--t-ink);
-    margin-top:.1rem;
-    line-height:1.1;
-  }
-  .tk-metric .s{
-    font-size:11px;
-    font-weight:900;
-    color:#6b7280;
-    margin-top:.15rem;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-  .ico.blue{ background:rgba(116,178,212,.16); color:#0b3c55; }
-  .ico.green{ background:rgba(147,194,28,.16); color:#36510c; }
-  .ico.gray{ background:rgba(148,163,184,.18); color:#0f172a; }
-  .ico.red{ background:rgba(226,88,62,.12); color:#5b1b10; }
+      .oc-breadcrumb a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 700;
+      }
 
-  .tk-tabs{ display:flex; flex-wrap:wrap; gap:.35rem; }
-  .tk-chip{
-    border-radius:999px; padding:.22rem .72rem;
-    font-size:11px; font-weight:950;
-    border:1px solid var(--t-border); background:#fff; cursor:pointer;
-    display:inline-flex; align-items:center; gap:.35rem;
-  }
-  .tk-chip.is-active{ background:#020617; border-color:#020617; color:#fff; }
-  .tk-chip small{ opacity:.75; font-weight:900; }
+      .oc-breadcrumb a:hover {
+        color: var(--text-main);
+      }
 
-  .tk-filters{
-    display:flex; flex-wrap:wrap; gap:.45rem; align-items:center;
-    padding:.55rem .75rem; border-radius:9999px;
-    background:#f9fafb; border:1px solid var(--t-greenSoft);
-    box-shadow:0 10px 25px rgba(15,23,42,0.08);
-    font-size:12px;
-  }
-  .tk-filters input[type="text"], .tk-filters select{
-    min-width: 150px;
-    border-radius:9999px;
-    border:1px solid var(--t-greenSoft);
-    padding:.33rem .85rem;
-    font-size:12px; color:#374151; background:#fff; outline:none;
-  }
-  .tk-filters input[type="text"]:focus, .tk-filters select:focus{
-    border-color: var(--t-green);
-    box-shadow:0 0 0 2px rgba(147,194,28,.18);
-  }
+      .oc-breadcrumb span.current {
+        color: #111827;
+        font-weight: 800;
+      }
 
-  .tk-btn{
-    border-radius:9999px;
-    border:1px solid var(--t-border);
-    background:#fff;
-    padding:.32rem .85rem;
-    font-size:12px;
-    font-weight:950;
-    cursor:pointer;
-    display:inline-flex; align-items:center; gap:.35rem;
-    white-space:nowrap;
-    transition:transform .12s ease, box-shadow .12s ease;
-  }
-  .tk-btn:hover{ transform:translateY(-1px); box-shadow:0 12px 30px rgba(15,23,42,.10); }
-  .tk-btn-green{
-    background:linear-gradient(135deg, var(--t-green), var(--t-greenSoft));
-    color:#0b1220; border:none;
-    box-shadow:0 12px 30px rgba(147,194,28,.28);
-  }
-  .tk-btn-primary{
-    background:linear-gradient(135deg, var(--t-blue), var(--t-blueSoft));
-    color:#0b1220; border:none;
-    box-shadow:0 12px 30px rgba(116,178,212,.22);
-  }
+      .oc-status-select {
+        border: 1px solid var(--border);
+        background: #fff;
+        color: #111827;
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-size: 12px;
+        font-weight: 900;
+        outline: none;
+        cursor: pointer;
+        max-width: 150px;
+      }
 
-  .status-pill{
-    padding:.12rem .55rem;
-    border-radius:999px;
-    font-weight:950;
-    font-size:.7rem;
-    letter-spacing:.05em;
-    border:1px solid var(--t-border);
-    display:inline-flex; align-items:center; gap:.25rem;
-    white-space:nowrap;
-  }
-  .s-open{ background: rgba(147,194,28,.16); border-color: rgba(147,194,28,.55); color:#36510c;}
-  .s-proc{ background: rgba(116,178,212,.20); border-color: rgba(116,178,212,.55); color:#0b3c55;}
-  .s-end { background: rgba(192,216,234,.45); border-color: rgba(116,178,212,.45); color:#12324a;}
-  .s-junk{ background: rgba(226,88,62,.14); border-color: rgba(226,88,62,.45); color:#5b1b10;}
+      .oc-status-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-light);
+      }
 
-  .avatar{
-    width:26px;height:26px;border-radius:999px; object-fit:cover;
-    border:2px solid #fff; overflow:hidden;
-    box-shadow:0 6px 18px rgba(11,18,32,.12);
-    background:#e5e7eb;
-  }
-  .avatar.sm{ width:20px; height:20px; }
-  .tk-avatars{ display:flex; align-items:center; }
-  .tk-avatars .avatar{ margin-left:-7px; }
-  .tk-avatars .avatar:first-child{ margin-left:0; }
+      .kanban-body {
+        min-height: 220px;
+      }
 
-  .audit-row{
-    display:flex; flex-wrap:wrap; gap:.55rem;
-    margin-top:.4rem;
-    padding-top:.4rem;
-    border-top:1px dashed var(--t-border);
-    font-size:11px;
-    color:#64748b;
-    font-weight:850;
-  }
-  .audit-item{ display:flex; gap:.4rem; align-items:center; min-width:0; }
-  .audit-item .k{ font-weight:950; letter-spacing:.06em; color:#6b7280; }
-  .audit-item .v{ color:#0f172a; font-weight:950; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:220px; }
-  .audit-item .d{ color:#6b7280; font-weight:900; }
+      .kanban-body.drag-over {
+        background: var(--primary-light);
+        outline: 2px dashed var(--primary);
+        outline-offset: -6px;
+        border-radius: 14px;
+      }
 
-  .shell{
-    border:1px solid var(--t-border);
-    border-radius:18px;
-    background:rgba(255,255,255,.75);
-    overflow:hidden;
-  }
-  .shell-head{
-    padding:.75rem .9rem;
-    background:rgba(255,255,255,.80);
-    border-bottom:1px solid var(--t-border);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:.75rem;
-  }
+      .kanban-ticket {
+        cursor: grab;
+      }
 
-  /* ✅ kanban (now 4 columns incl. end) */
-  .tk-board{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.75rem; }
-  @media (max-width: 1200px){ .tk-board{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
-  @media (max-width: 700px){ .tk-board{ grid-template-columns:1fr; } }
+      .kanban-ticket:active {
+        cursor: grabbing;
+      }
 
-  .tk-col{
-    background:#f1f1f1;
-    border-right:2px dashed #c5c5c5;
-    padding:.55rem;
-    display:flex; flex-direction:column;
-    max-height: calc(100vh - 320px);
-    border-radius:14px; overflow:hidden;
-  }
-  .tk-col-header{
-    display:flex; justify-content:space-between; align-items:center;
-    margin-bottom:.45rem;
-    font-size:13px; text-transform:uppercase; letter-spacing:.08em;
-    color:#1f2937; background: rgba(207,224,155,.65);
-    padding:10px 12px; font-weight:950;
-    border-radius:12px;
-  }
-  .tk-col-body{ flex:1; overflow-y:auto; padding-right:.25rem; display:flex; flex-direction:column; gap:.55rem; }
+      .kanban-ticket.dragging {
+        opacity: .55;
+        transform: scale(.98);
+      }
 
-  .tk-card{
-    border-radius:14px;
-    border:1px solid #e5e7eb;
-    background:#fff;
-    padding:.7rem .8rem;
-    font-size:12px;
-    border-left:4px solid var(--t-blue);
-    transition:box-shadow .15s ease, transform .15s ease;
-  }
-  .tk-card:hover{ box-shadow:0 18px 45px rgba(15,23,42,.10); transform:translateY(-1px); }
+      .oc-btn {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-weight: 900;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+      }
 
-  .tk-card-head{ display:flex; justify-content:space-between; gap:.6rem; align-items:flex-start; }
-  .tk-card-title{ font-weight:950; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .tk-card-meta{ margin-top:.25rem; color:#6b7280; font-weight:900; font-size:11px; }
-  .tk-card-sub{ margin-top:.15rem; color:#6b7280; font-weight:850; font-size:11px; }
-  .tk-card-foot{ margin-top:.55rem; display:flex; justify-content:space-between; align-items:center; gap:.5rem; flex-wrap:wrap; }
+      .oc-btn:hover {
+        background: var(--primary-hover);
+        color: #fff;
+        text-decoration: none;
+      }
 
-  /* ✅ CARD VIEW GRID: force 3 columns on large screens */
-  .tk-cards-grid{
-    display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:1rem;
-  }
-  @media (max-width: 1100px){ .tk-cards-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
-  @media (max-width: 700px){ .tk-cards-grid{ grid-template-columns:1fr; } }
+      .oc-btn-soft {
+        background: #fff;
+        color: var(--text-main);
+        border: 1px solid var(--border);
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+      }
 
-  /* modals */
-  .modal-backdrop{ position:fixed; inset:0; background:rgba(15,23,42,.45); z-index:3000; display:none; }
-  .modal{ position:fixed; inset:0; z-index:3001; display:none; align-items:center; justify-content:center; padding:16px; }
-  .modal-card{
-    width:100%; max-width:900px;
-    border-radius:18px;
-    background:#fff;
-    box-shadow:0 20px 50px rgba(15,23,42,.25);
-    border:1px solid var(--t-border);
-    overflow:hidden;
-  }
-  .modal-head{
-    padding:.75rem .9rem;
-    border-bottom:1px solid var(--t-border);
-    display:flex; align-items:center; justify-content:space-between; gap:.75rem;
-  }
-  .modal-body{ padding:.9rem; max-height:75vh; overflow:auto; display:flex; flex-direction:column; gap:.75rem; }
-  .field{ display:flex; flex-direction:column; gap:.35rem; }
-  .label{ font-size:11px; font-weight:950; letter-spacing:.08em; color:#6b7280; text-transform:uppercase; }
-  .input{
-    border:1px solid var(--t-border);
-    border-radius:14px;
-    padding:.55rem .7rem;
-    font-size:12px;
-    font-weight:900;
-    outline:none;
-    background:#fff;
-  }
-  .row{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; }
-  @media (max-width: 720px){ .row{ grid-template-columns:1fr; } }
+      .oc-btn-soft:hover {
+        background: #f9fafb;
+        color: var(--text-main);
+        text-decoration: none;
+      }
 
-  .meta-box{
-    border:1px solid var(--t-border);
-    border-radius:16px;
-    padding:.75rem;
-    background:#fff;
-  }
-  .meta-grid{
-    display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:.7rem;
-  }
-  @media (max-width: 900px){ .meta-grid{ grid-template-columns:1fr; } }
-  .meta-item{ display:flex; gap:.6rem; align-items:center; }
-  .meta-item .txt{ min-width:0; }
-  .meta-item .name{ font-size:12px; font-weight:950; color:var(--t-ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .meta-item .sub{ font-size:11px; font-weight:900; color:#6b7280; }
-  .ql-container{ border-bottom-left-radius:14px; border-bottom-right-radius:14px; }
-  .ql-toolbar{ border-top-left-radius:14px; border-top-right-radius:14px; }
-</style>
-@endsection
+      .oc-btn-ic {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+        flex: 0 0 auto;
+      }
+
+      .oc-btn-ic:hover {
+        background: #f9fafb;
+        color: var(--text-main);
+        border-color: #d1d5db;
+        text-decoration: none;
+      }
+
+      .oc-btn-ic.primary {
+        color: var(--primary);
+        border-color: var(--primary-light);
+        background: var(--primary-light)
+      }
+
+      .oc-btn-ic.primary:hover {
+        border-color: var(--primary)
+      }
+
+      .oc-btn-ic.warning {
+        color: #d97706;
+        border-color: #fde7b0;
+        background: #fffbeb
+      }
+
+      .oc-btn-ic.warning:hover {
+        border-color: #f59e0b
+      }
+
+      .oc-btn-ic.success {
+        color: var(--success);
+        border-color: #c7f2df;
+        background: var(--success-light)
+      }
+
+      .oc-btn-ic.success:hover {
+        border-color: var(--success)
+      }
+
+      .oc-btn-ic.danger {
+        color: var(--danger);
+        border-color: rgba(239, 68, 68, .18);
+        background: var(--danger-light)
+      }
+
+      .oc-btn-ic.danger:hover {
+        border-color: rgba(239, 68, 68, .35)
+      }
+
+      .oc-analytics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+
+      @media(max-width:1200px) {
+        .oc-analytics {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media(max-width:700px) {
+        .oc-analytics {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .oc-stat {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 92px;
+      }
+
+      .oc-stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+      }
+
+      .oc-stat-icon.total {
+        background: var(--blue-light);
+        color: var(--blue)
+      }
+
+      .oc-stat-icon.published {
+        background: var(--success-light);
+        color: var(--success)
+      }
+
+      .oc-stat-icon.unpublished {
+        background: var(--warning-light);
+        color: #d97706
+      }
+
+      .oc-stat-icon.type {
+        background: var(--gray-light);
+        color: var(--gray)
+      }
+
+      .oc-stat-meta {
+        min-width: 0
+      }
+
+      .oc-stat-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: .06em;
+      }
+
+      .oc-stat-value {
+        font-size: 24px;
+        font-weight: 900;
+        color: #111827;
+        line-height: 1.1;
+        margin-top: 4px;
+      }
+
+      .oc-stat-sub {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 4px;
+      }
+
+      .oc-toolbar {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 14px 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .oc-toolbar-left,
+      .oc-toolbar-right {
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .oc-toolbar-left {
+        flex: 1;
+      }
+
+      .oc-filter-block {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 170px;
+      }
+
+      .oc-filter-block.search {
+        flex: 1;
+        min-width: 320px;
+      }
+
+      .oc-filter-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: .06em;
+      }
+
+      .oc-input,
+      .oc-select {
+        background: #f9fafb;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 14px;
+        outline: none;
+        transition: var(--transition);
+        min-width: 180px;
+        width: 100%;
+      }
+
+      .oc-input.search {
+        padding-left: 36px;
+        min-width: 240px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' /%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: 10px center;
+        background-size: 16px;
+      }
+
+      .oc-input:focus,
+      .oc-select:focus {
+        background: #fff;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-light);
+      }
+
+      .oc-tabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+
+      .oc-tab {
+        border: 1px solid var(--border);
+        background: #fff;
+        color: #374151;
+        border-radius: 999px;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .oc-tab:hover {
+        border-color: #d1d5db;
+        background: #f9fafb
+      }
+
+      .oc-tab.active {
+        background: var(--primary-light);
+        color: #54730f;
+        border-color: #d9edaa;
+      }
+
+      .oc-tab-all {
+        background: #111827;
+        color: #fff;
+        border-color: #111827;
+      }
+
+      .oc-tab-all:hover,
+      .oc-tab-all.active {
+        background: #020617;
+        color: #fff;
+        border-color: #020617;
+      }
+
+      .oc-tab-badge {
+        margin-left: 7px;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 7px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, .22);
+        color: inherit;
+        font-size: 11px;
+        font-weight: 950;
+      }
+
+      .oc-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+      }
+
+      .oc-list-head {
+        display: grid;
+        grid-template-columns: 90px minmax(250px, 1.3fr) 140px minmax(180px, .9fr) minmax(210px, 1fr) minmax(230px, 1.2fr) 150px;
+        gap: 14px;
+        align-items: center;
+        padding: 16px 16px 10px 16px;
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+      }
+
+      @media(max-width:1450px) {
+        .oc-list-head {
+          display: none;
+        }
+      }
+
+      .oc-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 0 16px 0;
+      }
+
+      .oc-item {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        transition: var(--transition);
+        overflow: hidden;
+        margin: 0 16px;
+      }
+
+      .oc-item:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow);
+      }
+
+      .oc-item-row {
+        padding: 16px;
+        display: grid;
+        gap: 16px;
+        align-items: start;
+        grid-template-columns: 90px minmax(250px, 1.3fr) 140px minmax(180px, .9fr) minmax(210px, 1fr) minmax(230px, 1.2fr) 150px;
+      }
+
+      @media(max-width:1450px) {
+        .oc-item-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .oc-cell {
+        min-width: 0
+      }
+
+      .oc-cell-title {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        margin-bottom: 4px;
+        display: none;
+      }
+
+      @media(max-width:1450px) {
+        .oc-cell-title {
+          display: block;
+        }
+      }
+
+      .oc-id-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 74px;
+        height: 48px;
+        padding: 0 5px;
+        border-radius: 10px;
+        background: var(--blue-light);
+        color: var(--blue);
+        font-size: 10px;
+        font-weight: 900;
+      }
+
+      .oc-main {
+        display: flex;
+        flex-direction: column;
+        min-width: 0
+      }
+
+      .oc-ttl {
+        font-weight: 800;
+        font-size: 15px;
+        margin-bottom: 4px;
+        color: #111827
+      }
+
+      .oc-subt {
+        font-size: 13px;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis
+      }
+
+      .oc-subt-wrap {
+        font-size: 13px;
+        color: var(--text-muted);
+        line-height: 1.45
+      }
+
+      .oc-status-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+
+      .oc-status-pill.open {
+        background: #eff6ff;
+        color: #1d4ed8;
+      }
+
+      .oc-status-pill.process {
+        background: #fffbeb;
+        color: #b45309;
+      }
+
+      .oc-status-pill.end {
+        background: #ecfdf5;
+        color: #047857;
+      }
+
+      .oc-status-pill.junk {
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+
+      .oc-priority {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 900;
+        white-space: nowrap;
+        background: #f3f4f6;
+        color: #374151;
+      }
+
+      .oc-priority.high {
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+
+      .oc-priority.medium {
+        background: #fffbeb;
+        color: #b45309;
+      }
+
+      .oc-priority.low {
+        background: #ecfdf5;
+        color: #047857;
+      }
+
+      .oc-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .oc-empty {
+        text-align: center;
+        padding: 60px;
+        color: var(--text-muted);
+        background: #fff;
+        border: 1px dashed var(--border);
+        border-radius: 16px;
+        margin: 16px;
+      }
+
+      .oc-pagination {
+        margin-top: 18px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 16px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .oc-pagination .pagination {
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .oc-pagination .page-item .page-link {
+        border-radius: 10px !important;
+        border: 1px solid var(--border);
+        color: var(--text-main);
+        padding: 8px 12px;
+        line-height: 1.1;
+        box-shadow: none !important;
+      }
+
+      .oc-pagination .page-item.active .page-link {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+
+      .oc-pagination .page-item.disabled .page-link {
+        color: #9ca3af;
+        background: #f9fafb;
+      }
+
+      .oc-loading {
+        padding: 40px 20px;
+        text-align: center;
+        color: var(--text-muted);
+        font-weight: 700;
+      }
+
+      .oc-view-panels {
+        position: relative;
+      }
+
+      .oc-view-panel {
+        display: none;
+      }
+
+      .oc-view-panel.active {
+        display: block;
+      }
+
+      .oc-card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        padding: 16px;
+      }
+
+      @media(max-width:1350px) {
+        .oc-card-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media(max-width:760px) {
+        .oc-card-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .ticket-card {
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: var(--shadow-sm);
+        padding: 16px;
+        transition: var(--transition);
+      }
+
+      .ticket-card:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow);
+      }
+
+      .ticket-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .ticket-card-title {
+        font-size: 15px;
+        font-weight: 800;
+        color: #111827;
+      }
+
+      .ticket-card-meta {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 4px;
+        line-height: 1.45;
+      }
+
+      .ticket-card-section {
+        margin-top: 14px;
+      }
+
+      .ticket-card-label {
+        font-size: 11px;
+        font-weight: 900;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+
+      .ticket-card-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+
+      .kanban-wrap {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        padding: 16px;
+        align-items: start;
+      }
+
+      @media(max-width:1400px) {
+        .kanban-wrap {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media(max-width:760px) {
+        .kanban-wrap {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .kanban-col {
+        background: #f9fafb;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        min-height: 280px;
+        overflow: hidden;
+      }
+
+      .kanban-col-head {
+        padding: 14px 14px 10px 14px;
+        border-bottom: 1px solid var(--border);
+        background: #fff;
+      }
+
+      .kanban-col-title {
+        font-size: 14px;
+        font-weight: 900;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .kanban-count {
+        min-width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 900;
+        background: var(--gray-light);
+        color: #374151;
+      }
+
+      .kanban-body {
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .kanban-ticket {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .kanban-ticket:hover {
+        border-color: var(--primary);
+      }
+
+      .kanban-ticket-no {
+        font-size: 12px;
+        font-weight: 900;
+        color: var(--blue);
+        margin-bottom: 6px;
+      }
+
+      .kanban-ticket-title {
+        font-size: 14px;
+        font-weight: 800;
+        color: #111827;
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+
+      .kanban-ticket-sub {
+        font-size: 12px;
+        color: var(--text-muted);
+        line-height: 1.45;
+      }
+
+      .oc-user-stack {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .oc-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        object-fit: cover;
+        background: #fff;
+        border: 2px solid #fff;
+        box-shadow: 0 0 0 1px var(--border);
+        flex: 0 0 auto;
+      }
+
+      .oc-avatar.sm {
+        width: 28px;
+        height: 28px;
+      }
+
+      .oc-avatar.lg {
+        width: 42px;
+        height: 42px;
+      }
+
+      .oc-avatar-group {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .oc-avatar-meta {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .oc-avatar-name {
+        font-size: 12px;
+        font-weight: 800;
+        color: #111827;
+        line-height: 1.2;
+      }
+
+      .oc-avatar-role {
+        font-size: 11px;
+        color: var(--text-muted);
+        line-height: 1.3;
+      }
+
+      .oc-mini-users {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .oc-history {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .oc-history-item {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+
+      .oc-history-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        margin-top: 5px;
+        flex: 0 0 auto;
+      }
+
+      .oc-history-dot.created {
+        background: #3b82f6;
+      }
+
+      .oc-history-dot.progress {
+        background: #f59e0b;
+      }
+
+      .oc-history-dot.edited {
+        background: #6b7280;
+      }
+
+      .oc-history-dot.ended {
+        background: #10b981;
+      }
+
+      .oc-history-body {
+        min-width: 0
+      }
+
+      .oc-history-label {
+        font-size: 12px;
+        font-weight: 800;
+        color: #111827;
+        line-height: 1.2;
+      }
+
+      .oc-history-sub {
+        font-size: 12px;
+        color: var(--text-muted);
+        line-height: 1.45;
+      }
+
+      .oc-kanban-users {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .oc-toast-wrap {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        pointer-events: none;
+      }
+
+      .oc-toast {
+        pointer-events: auto;
+        min-width: 280px;
+        max-width: 360px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        padding: 12px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        animation: ocToastIn .3s cubic-bezier(.175, .885, .32, 1.275) forwards;
+      }
+
+      @keyframes ocToastIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0
+        }
+
+        to {
+          transform: translateX(0);
+          opacity: 1
+        }
+      }
+
+      .oc-toast-ic {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+      }
+
+      .oc-toast-ic.ok {
+        background: var(--success-light);
+        color: var(--success)
+      }
+
+      .oc-toast-ic.bad {
+        background: var(--danger-light);
+        color: var(--danger)
+      }
+
+      .oc-toast-ttl {
+        font-weight: 900;
+        font-size: 13px;
+        margin: 0;
+        color: #111827
+      }
+
+      .oc-toast-msg {
+        font-size: 12px;
+        color: #374151;
+        margin: 4px 0 0 0;
+        line-height: 1.4
+      }
+
+      .oc-toast-x {
+        margin-left: auto;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: var(--text-muted);
+      }
+    </style>
+
+    <style>
+      .oc-latest-history-btn {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: #fff;
+        border-radius: 12px;
+        padding: 10px 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+        transition: var(--transition);
+      }
+
+      .oc-latest-history-btn:hover {
+        border-color: var(--primary);
+        background: var(--primary-light);
+      }
+
+      .oc-latest-history-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        flex: 0 0 auto;
+      }
+
+      .oc-latest-history-dot.created {
+        background: #3b82f6;
+      }
+
+      .oc-latest-history-dot.progress {
+        background: #f59e0b;
+      }
+
+      .oc-latest-history-dot.edited {
+        background: #6b7280;
+      }
+
+      .oc-latest-history-dot.ended,
+      .oc-latest-history-dot.end {
+        background: #10b981;
+      }
+
+      .oc-latest-history-dot.junk {
+        background: #ef4444;
+      }
+
+      .oc-latest-history-content {
+        min-width: 0;
+        flex: 1;
+      }
+
+      .oc-latest-history-label {
+        font-size: 12px;
+        font-weight: 900;
+        color: #111827;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .oc-latest-history-meta {
+        margin-top: 3px;
+        font-size: 11px;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .oc-latest-history-icon {
+        color: var(--text-muted);
+        flex: 0 0 auto;
+      }
+
+      /* Modal */
+      .oc-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, .52);
+        z-index: 9998;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 22px;
+      }
+
+      .oc-modal-backdrop.active {
+        display: flex;
+      }
+
+      .oc-modal {
+        width: min(720px, 100%);
+        max-height: 85vh;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 30px 90px rgba(15, 23, 42, .35);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .oc-modal-head {
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        background: #f9fafb;
+      }
+
+      .oc-modal-title {
+        font-size: 18px;
+        font-weight: 950;
+        color: #111827;
+        margin: 0;
+      }
+
+      .oc-modal-sub {
+        margin-top: 4px;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .oc-modal-close {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: #6b7280;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        line-height: 1;
+      }
+
+      .oc-modal-close:hover {
+        color: #111827;
+        border-color: #d1d5db;
+      }
+
+      .oc-modal-body {
+        padding: 18px 20px;
+        overflow: auto;
+      }
+
+      .oc-history-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .oc-history-full-item {
+        position: relative;
+        display: grid;
+        grid-template-columns: 28px 1fr;
+        gap: 12px;
+      }
+
+      .oc-history-full-item:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        left: 13px;
+        top: 28px;
+        bottom: -14px;
+        width: 2px;
+        background: #e5e7eb;
+      }
+
+      .oc-history-full-dot {
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f3f4f6;
+        position: relative;
+        z-index: 1;
+      }
+
+      .oc-history-full-dot::after {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #6b7280;
+      }
+
+      .oc-history-full-dot.created::after {
+        background: #3b82f6;
+      }
+
+      .oc-history-full-dot.progress::after {
+        background: #f59e0b;
+      }
+
+      .oc-history-full-dot.edited::after {
+        background: #6b7280;
+      }
+
+      .oc-history-full-dot.ended::after,
+      .oc-history-full-dot.end::after {
+        background: #10b981;
+      }
+
+      .oc-history-full-dot.junk::after {
+        background: #ef4444;
+      }
+
+      .oc-history-full-card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px 14px;
+        background: #fff;
+      }
+
+      .oc-history-full-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .oc-history-full-label {
+        font-size: 14px;
+        font-weight: 950;
+        color: #111827;
+      }
+
+      .oc-history-full-date {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--text-muted);
+        white-space: nowrap;
+      }
+
+      .oc-history-full-user {
+        margin-top: 8px;
+        font-size: 13px;
+        color: #374151;
+      }
+
+      .oc-history-full-note {
+        margin-top: 8px;
+        font-size: 13px;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+    </style>
+  @endpush
+@endonce
 
 @section('content')
-<div class="app-content content">
-  <div class="content-overlay"></div>
-  <div class="header-navbar-shadow"></div>
+  <div class="oc-wrap" id="ticketBoardApp" data-fetch-url="{{ route('tickets.fetch') }}"
+    data-kanban-url="{{ route('tickets.kanban') }}"
+    data-default-view="{{ $viewMode === 'kanban' ? 'kanban' : $viewMode }}"
+    data-profile-base="{{ url('problem/profile') }}" data-status-url-base="{{ url('/tickets') }}">
 
-  <div class="content-wrapper">
-    <div class="content-header row">
-      <div class="col-12">
-        <h2 class="content-header-title float-left mb-0">TICKETS</h2>
-        <div class="breadcrumb-wrapper col-12">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ url('/employee_dashboard') }}">Dashboard</a></li>
-          </ol>
-        </div>
-      </div>
-    </div>
+    <div class="oc-header">
+      <div class="oc-titlebar">
+        <div>
+          <div class="oc-title">TICKETS</div>
+          <div class="oc-sub">Verwalten Sie erstellte, zugewiesene, laufende, abgeschlossene und Junk-Tickets zentral.
+          </div>
 
-    <div class="content-body">
-      <div class="tk-layout">
-
-        <div class="tk-header">
-          <div class="tk-view-toggle">
-            <button type="button" id="btnViewList"   data-view="list">Liste</button>
-            <button type="button" id="btnViewCards"  data-view="cards">Karten</button>
-            <button type="button" id="btnViewKanban" data-view="kanban">Board</button>
+          <div class="oc-breadcrumb">
+            <a href="{{ url('/employee_dashboard') }}">Home</a>
+            <span>›</span>
+            <span class="current">Tickets</span>
           </div>
         </div>
 
-        {{-- ✅ Analytics --}}
-        <div class="tk-analytics" id="analyticsRow">
-          <div class="tk-metric"><div class="ico green">✓</div><div class="txt"><div class="k">Offen</div><div class="v" id="mOpen">0</div><div class="s">Tickets</div></div></div>
-          <div class="tk-metric"><div class="ico blue">↻</div><div class="txt"><div class="k">In Bearbeitung</div><div class="v" id="mProc">0</div><div class="s">Tickets</div></div></div>
-          <div class="tk-metric"><div class="ico gray">⎘</div><div class="txt"><div class="k">Beendet</div><div class="v" id="mEnd">0</div><div class="s">Tickets</div></div></div>
-          <div class="tk-metric"><div class="ico red">!</div><div class="txt"><div class="k">Junk</div><div class="v" id="mJunk">0</div><div class="s">Tickets</div></div></div>
-          <div class="tk-metric"><div class="ico gray">Σ</div><div class="txt"><div class="k">Gesamt</div><div class="v" id="mTotal">0</div><div class="s">Alle Status</div></div></div>
+        <div class="oc-inline-actions">
+          <a href="{{ route('problem.create') }}" class="oc-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            Neues Ticket
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="oc-analytics">
+      <div class="oc-stat">
+        <div class="oc-stat-icon total">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18" />
+          </svg>
+        </div>
+        <div class="oc-stat-meta">
+          <div class="oc-stat-label">Meine Tickets</div>
+          <div class="oc-stat-value" id="stat-mine">{{ $counts['mine'] ?? 0 }}</div>
+          <div class="oc-stat-sub">Mir zugewiesen</div>
+        </div>
+      </div>
+
+      <div class="oc-stat">
+        <div class="oc-stat-icon published">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+        <div class="oc-stat-meta">
+          <div class="oc-stat-label">Erstellt</div>
+          <div class="oc-stat-value" id="stat-created">{{ $counts['created'] ?? 0 }}</div>
+          <div class="oc-stat-sub">Von mir erstellt</div>
+        </div>
+      </div>
+
+      <div class="oc-stat">
+        <div class="oc-stat-icon unpublished">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v6m0 4v10m10-10h-6M8 12H2" />
+          </svg>
+        </div>
+        <div class="oc-stat-meta">
+          <div class="oc-stat-label">In Bearbeitung</div>
+          <div class="oc-stat-value" id="stat-process">{{ $counts['progress'] ?? 0 }}</div>
+          <div class="oc-stat-sub">Laufende Tickets</div>
+        </div>
+      </div>
+
+      <div class="oc-stat">
+        <div class="oc-stat-icon type">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+        <div class="oc-stat-meta">
+          <div class="oc-stat-label">Beendet</div>
+          <div class="oc-stat-value" id="stat-end">{{ $counts['completed'] ?? 0 }}</div>
+          <div class="oc-stat-sub">Abgeschlossene Tickets</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="oc-tabs" id="filterTabs">
+      <button type="button" class="oc-tab active" data-filter="active">Aktiv</button>
+      <button type="button" class="oc-tab" data-filter="mine">Meine aktiven Tickets</button>
+      <button type="button" class="oc-tab" data-filter="created">Von mir erstellt</button>
+      <button type="button" class="oc-tab" data-filter="progress">In Bearbeitung</button>
+      <button type="button" class="oc-tab" data-filter="archive">Archiv</button>
+      <button type="button" class="oc-tab" data-filter="junk">Junk</button>
+      <button type="button" class="oc-tab oc-tab-all" data-filter="all">
+        Alle Tickets
+        <span class="oc-tab-badge" id="tab-all-count">{{ $counts['all'] ?? 0 }}</span>
+      </button>
+    </div>
+
+    <form class="oc-toolbar" id="ticketToolbar" onsubmit="return false;">
+      <div class="oc-toolbar-left">
+        <div class="oc-filter-block search">
+          <label class="oc-filter-label">Suche</label>
+          <input type="text" class="oc-input search" id="searchInput"
+            placeholder="Suche nach Ticketnummer, Kunde, Produkt, Adresse, Fehlercode">
         </div>
 
-        <div class="tk-surface">
-          <div class="tk-header" style="gap:.6rem; align-items:flex-start;">
-            <div class="tk-tabs" style="flex:1;">
-              <button class="tk-chip" data-filter="mine"     id="chipMine">MEINE <small>({{ $counts['mine'] ?? 0 }})</small></button>
-              <button class="tk-chip" data-filter="open"     id="chipOpen">OFFEN <small>({{ $counts['open'] ?? 0 }})</small></button>
-              <button class="tk-chip" data-filter="progress" id="chipProg">IN BEARBEITUNG <small>({{ $counts['progress'] ?? 0 }})</small></button>
-              <button class="tk-chip" data-filter="completed" id="chipEnd">BEENDET <small>({{ $counts['completed'] ?? 0 }})</small></button>
-              <button class="tk-chip" data-filter="junk"     id="chipJunk">JUNK <small>({{ $counts['junk'] ?? 0 }})</small></button>
-              <button class="tk-chip" data-filter="all"      id="chipAll">ALLE <small>({{ $counts['all'] ?? 0 }})</small></button>
-            </div>
+        <div class="oc-filter-block">
+          <label class="oc-filter-label">Priorität</label>
+          <select class="oc-select" id="priorityFilter">
+            <option value="">Alle</option>
+            <option value="high">Hoch</option>
+            <option value="medium">Mittel</option>
+            <option value="low">Niedrig</option>
+          </select>
+        </div>
 
-            <div class="tk-filters">
-              <input id="qSearch" type="text" placeholder="Suche: Ticket#, Kunde, Produkt, Fehlercode..." />
-              <select id="sortField">
-                <option value="created_at">Erstellt</option>
-                <option value="updated_at">Aktualisiert</option>
-                <option value="ticket_no">Ticket#</option>
-                <option value="status">Status</option>
-                <option value="priority">Priorität</option>
-                <option value="customer">Kunde</option>
-                <option value="product">Produkt</option>
-                <option value="start_date">Start</option>
-              </select>
-              <select id="sortOrder">
-                <option value="desc">↓</option>
-                <option value="asc">↑</option>
-              </select>
-              <select id="perPage">
-                <option value="12">12</option>
-                <option value="24">24</option>
-                <option value="36">36</option>
-              </select>
-              <button id="btnClear" type="button" class="tk-btn tk-btn-green">Zurücksetzen</button>
-              <a href="{{url('problem_create')}}" type="button" class="tk-btn tk-btn-green">Erstellen</a>
-            </div>
+        <div class="oc-filter-block">
+          <label class="oc-filter-label">Ansicht</label>
+          <div class="oc-tabs" style="margin-bottom:0;" id="viewTabs">
+            <button type="button" class="oc-tab {{ $viewMode === 'list' ? 'active' : '' }}"
+              data-view="list">Liste</button>
+            <button type="button" class="oc-tab {{ $viewMode === 'cards' ? 'active' : '' }}"
+              data-view="cards">Karten</button>
+            <button type="button" class="oc-tab {{ $viewMode === 'kanban' ? 'active' : '' }}"
+              data-view="kanban">Kanban</button>
           </div>
+        </div>
+      </div>
 
-          <div style="margin-top:.85rem;">
-            <div id="viewListCards">
-              <div id="ticketsHost" style="min-height:220px;"></div>
-              <div id="paginationHost" style="margin-top:.5rem;"></div>
-            </div>
+      <div class="oc-toolbar-right">
+        <button class="oc-btn-soft" type="button" id="reloadBtn">Aktualisieren</button>
+        <button class="oc-btn-soft" type="button" id="resetBtn">Zurücksetzen</button>
+      </div>
+    </form>
 
-            <div id="viewKanban" style="display:none;">
-              @php
-                // ✅ Board INCL. completed
-                $cols = [
-                  ['key'=>'offen','label'=>'OFFEN','pill'=>'s-open'],
-                  ['key'=>'process','label'=>'IN BEARBEITUNG','pill'=>'s-proc'],
-                  ['key'=>'end','label'=>'BEENDET','pill'=>'s-end'],
-                  ['key'=>'junk','label'=>'JUNK','pill'=>'s-junk'],
-                ];
-              @endphp
-
-              <div class="tk-board">
-                @foreach($cols as $col)
-                  <div class="tk-col">
-                    <div class="tk-col-header">
-                      <span>{{ $col['label'] }}</span>
-                      <div style="display:flex;align-items:center;gap:.5rem;">
-                        <span class="status-pill {{ $col['pill'] }}">{{ $col['label'] }}</span>
-                        <span style="font-weight:950;color:#4b5563;" id="count-{{ $col['key'] }}">0</span>
-                        <button class="tk-btn" type="button" style="padding:.2rem .55rem;" onclick="Tickets.reloadKanban()">↻</button>
-                      </div>
-                    </div>
-                    <div class="tk-col-body" data-kanban-col="{{ $col['key'] }}" id="col-{{ $col['key'] }}"></div>
-                  </div>
-                @endforeach
-              </div>
-            </div>
+    <div class="oc-card">
+      <div class="oc-view-panels">
+        <div class="oc-view-panel {{ $viewMode !== 'kanban' ? 'active' : '' }}" id="standardPanel">
+          <div id="ticketsContent">
+            <div class="oc-loading">Daten werden geladen ...</div>
           </div>
-
         </div>
 
+        <div class="oc-view-panel {{ $viewMode === 'kanban' ? 'active' : '' }}" id="kanbanPanel">
+          <div id="kanbanContent">
+            <div class="oc-loading">Kanban wird geladen ...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="ticketsPagination"></div>
+  </div>
+
+  <div class="oc-toast-wrap" id="toast-wrap"></div>
+
+  <div class="oc-modal-backdrop" id="historyModal" aria-hidden="true">
+    <div class="oc-modal" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
+      <div class="oc-modal-head">
+        <div>
+          <h3 class="oc-modal-title" id="historyModalTitle">Status-Historie</h3>
+          <div class="oc-modal-sub" id="historyModalSub">Alle Änderungen dieses Tickets</div>
+        </div>
+
+        <button type="button" class="oc-modal-close" data-history-modal-close aria-label="Schließen">
+          ×
+        </button>
+      </div>
+
+      <div class="oc-modal-body" id="historyModalBody">
+        <div class="oc-subt">Keine Historie</div>
       </div>
     </div>
   </div>
-</div>
 
-{{-- Fehler Modal --}}
-<div class="modal-backdrop" id="errBackdrop"></div>
-<div class="modal" id="errModal">
-  <div class="modal-card">
-    <div class="modal-head">
-      <div>
-        <div style="font-size:13px;font-weight:950;color:var(--t-ink);">Fehlerdetails</div>
-        <div style="font-size:12px;font-weight:900;color:#6b7280;" id="errModalSubtitle">Ticket</div>
-      </div>
-      <button class="tk-btn" type="button" id="btnCloseErr">Schließen</button>
-    </div>
-    <div class="modal-body" id="errModalBody"></div>
-  </div>
-</div>
-
-{{-- Ticket beenden Modal --}}
-<div class="modal-backdrop" id="endBackdrop"></div>
-<div class="modal" id="endModal">
-  <div class="modal-card">
-    <div class="modal-head">
-      <div style="min-width:0;">
-        <div style="font-size:13px;font-weight:950;color:var(--t-ink);">Ticket abschließen</div>
-        <div style="font-size:12px;font-weight:900;color:#6b7280;" id="endModalSubtitle">Ticket</div>
-      </div>
-      <button class="tk-btn" type="button" id="btnCloseEnd">Schließen</button>
-    </div>
-
-    <div class="modal-body">
-      <div class="meta-box">
-        <div class="meta-grid" id="endMetaGrid"></div>
-      </div>
-
-      <div class="row">
-        <div class="field">
-          <div class="label">Enddatum</div>
-          <input class="input" type="date" id="endDate" />
-        </div>
-        <div class="field">
-          <div class="label">Status</div>
-          <input class="input" type="text" value="END" readonly />
-        </div>
-      </div>
-
-      <div class="field">
-        <div class="label">Lösung / Durchführung</div>
-        <div id="endSolutionEditor"></div>
-        <input type="hidden" id="endSolutionHtml">
-      </div>
-
-      <div style="display:flex; justify-content:flex-end; gap:.5rem; flex-wrap:wrap;">
-        <button class="tk-btn" type="button" id="btnCancelEnd">Abbrechen</button>
-        <button class="tk-btn tk-btn-green" type="button" id="btnSaveEnd">Ticket abschließen</button>
-      </div>
-
-      <div id="endModalHint" style="display:none; font-size:12px; font-weight:950; color:#b42318; background:rgba(226,88,62,.10); border:1px solid rgba(226,88,62,.35); padding:.6rem .75rem; border-radius:14px;">
-        Bitte Enddatum setzen und eine Lösung eintragen.
-      </div>
-    </div>
-  </div>
-</div>
 @endsection
 
-@section('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+@push('scripts')
+  <script>
+    (function () {
+      "use strict";
 
-<script>
-const Tickets = (() => {
-  const csrf = document.querySelector('meta[name="csrf-token"]').content;
+      const app = document.getElementById('ticketBoardApp');
+      if (!app) return;
 
-  const state = {
-    view: @json($viewMode ?? 'list'),
-    filter: 'open',
-    search: '',
-    sort_field: 'created_at',
-    sort_order: 'desc',
-    per_page: 12,
-    page: 1,
-    kanban: { sortables: [] },
-    endFlow: { ticket:null, ticketId:null, ticketNo:null, prevStatus:null, selectEl:null }
-  };
+      const fetchUrl = app.dataset.fetchUrl;
+      const kanbanUrl = app.dataset.kanbanUrl;
+      const defaultView = app.dataset.defaultView || 'list';
+      const profileBase = app.dataset.profileBase || '';
+      const statusUrlBase = app.dataset.statusUrlBase || '';
 
-  let endQuill = null;
+      const state = {
+        filter: 'active',
+        view: defaultView,
+        search: '',
+        priority: '',
+        page: 1
+      };
 
-  const els = {
-    host: () => document.getElementById('ticketsHost'),
-    pag: () => document.getElementById('paginationHost'),
-    viewListCards: () => document.getElementById('viewListCards'),
-    viewKanban: () => document.getElementById('viewKanban'),
+      const els = {
+        filterTabs: document.getElementById('filterTabs'),
+        viewTabs: document.getElementById('viewTabs'),
+        searchInput: document.getElementById('searchInput'),
+        priorityFilter: document.getElementById('priorityFilter'),
+        ticketsContent: document.getElementById('ticketsContent'),
+        kanbanContent: document.getElementById('kanbanContent'),
+        ticketsPagination: document.getElementById('ticketsPagination'),
+        standardPanel: document.getElementById('standardPanel'),
+        kanbanPanel: document.getElementById('kanbanPanel'),
+        reloadBtn: document.getElementById('reloadBtn'),
+        resetBtn: document.getElementById('resetBtn'),
+      };
 
-    q: () => document.getElementById('qSearch'),
-    btnClear: () => document.getElementById('btnClear'),
-    sortField: () => document.getElementById('sortField'),
-    sortOrder: () => document.getElementById('sortOrder'),
-    perPage: () => document.getElementById('perPage'),
-
-    // analytics
-    mOpen: () => document.getElementById('mOpen'),
-    mProc: () => document.getElementById('mProc'),
-    mEnd:  () => document.getElementById('mEnd'),
-    mJunk: () => document.getElementById('mJunk'),
-    mTotal: () => document.getElementById('mTotal'),
-
-    // error modal
-    errBackdrop: () => document.getElementById('errBackdrop'),
-    errModal: () => document.getElementById('errModal'),
-
-    // end modal
-    endBackdrop: () => document.getElementById('endBackdrop'),
-    endModal: () => document.getElementById('endModal'),
-    endSubtitle: () => document.getElementById('endModalSubtitle'),
-    endMetaGrid: () => document.getElementById('endMetaGrid'),
-    endDate: () => document.getElementById('endDate'),
-    endSolutionHtml: () => document.getElementById('endSolutionHtml'),
-    endHint: () => document.getElementById('endModalHint'),
-    btnSaveEnd: () => document.getElementById('btnSaveEnd'),
-    btnCancelEnd: () => document.getElementById('btnCancelEnd'),
-    btnCloseEnd: () => document.getElementById('btnCloseEnd'),
-  };
-
-  function setActiveChip(){
-    document.querySelectorAll('.tk-chip').forEach(c => c.classList.remove('is-active'));
-    const chip = document.querySelector(`.tk-chip[data-filter="${state.filter}"]`);
-    if (chip) chip.classList.add('is-active');
-  }
-
-  function setActiveViewButtons(){
-    const map = {list:'btnViewList',cards:'btnViewCards',kanban:'btnViewKanban'};
-    Object.values(map).forEach(id => document.getElementById(id)?.classList.remove('is-active'));
-    document.getElementById(map[state.view])?.classList.add('is-active');
-  }
-
-  function showView(){
-    setActiveViewButtons();
-    if (state.view === 'kanban') {
-      els.viewListCards().style.display = 'none';
-      els.viewKanban().style.display = 'block';
-      reloadKanban();
-    } else {
-      els.viewKanban().style.display = 'none';
-      els.viewListCards().style.display = 'block';
-      loadTickets(1);
-    }
-  }
-
-  function qs(params){
-    const u = new URLSearchParams(params);
-    return u.toString();
-  }
-
-  function setAnalytics(open, proc, end, junk){
-    const total = (open||0) + (proc||0) + (end||0) + (junk||0);
-    els.mOpen().textContent = open ?? 0;
-    els.mProc().textContent = proc ?? 0;
-    els.mEnd().textContent  = end ?? 0;
-    els.mJunk().textContent = junk ?? 0;
-    els.mTotal().textContent = total;
-  }
-
-  async function loadTickets(page=1){
-    state.page = page;
-    setActiveChip();
-    els.host().innerHTML = `<div style="padding:1.6rem 0;text-align:center;font-size:12px;font-weight:950;color:#6b7280;">Lade…</div>`;
-    els.pag().innerHTML = '';
-
-    const url = `{{ route('tickets.fetch') }}?` + qs({
-      mode: state.view,
-      filter: state.filter,   // ✅ now includes "completed"
-      search: state.search,
-      sort_field: state.sort_field,
-      sort_order: state.sort_order,
-      per_page: state.per_page,
-      page: state.page,
-    });
-
-    const res = await fetch(url, { headers: { 'X-Requested-With':'XMLHttpRequest' }});
-    const data = await res.json();
-
-    els.host().innerHTML = data.html || '';
-    els.pag().innerHTML = data.pagination || '';
-
-    if (data.analytics){
-      setAnalytics(data.analytics.open, data.analytics.process, data.analytics.end, data.analytics.junk);
-    } else {
-      setAnalytics(
-        {{ (int)($counts['open'] ?? 0) }},
-        {{ (int)($counts['progress'] ?? 0) }},
-        {{ (int)($counts['completed'] ?? 0) }},
-        {{ (int)($counts['junk'] ?? 0) }}
-      );
-    }
-
-    els.pag().querySelectorAll('a').forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        e.preventDefault();
-        const p = new URL(a.href).searchParams.get('page') || 1;
-        loadTickets(parseInt(p,10));
-      });
-    });
-
-    bindTicketActions();
-  }
-
-  function statusPillClass(st){
-    const s = (st||'offen').toLowerCase();
-    if (s === 'process') return 's-proc';
-    if (s === 'end') return 's-end';
-    if (s === 'junk') return 's-junk';
-    return 's-open';
-  }
-
-  async function updateStatus(id, payload){
-    const res = await fetch(`{{ url('/tickets') }}/${id}/status`, {
-      method: 'POST',
-      headers: {
-        'Content-Type':'application/json',
-        'X-CSRF-TOKEN': csrf,
-        'X-Requested-With':'XMLHttpRequest',
-      },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await res.json().catch(()=>({}));
-    if (!res.ok || !data.success) throw new Error(data.message || 'Update fehlgeschlagen');
-    return data;
-  }
-
-  // ---------------- END MODAL ----------------
-  function ensureEndQuill(){
-    if (endQuill) return;
-    endQuill = new Quill('#endSolutionEditor', {
-      theme: 'snow',
-      placeholder: 'Lösung / Schritte / Ergebnis…',
-      modules: {
-        toolbar: [
-          [{ header: [1,2,false] }],
-          ['bold','italic','underline','strike'],
-          [{ list: 'ordered' }, { list: 'bullet' }],
-          ['link','blockquote','code-block'],
-          [{ color: [] }, { background: [] }],
-          [{ align: [] }],
-          ['clean']
-        ]
+      function csrfToken() {
+        return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
       }
-    });
 
-    endQuill.on('text-change', () => {
-      els.endSolutionHtml().value = endQuill.root.innerHTML || '';
-    });
-  }
+      const ERROR_TYPE_LABELS = {
+        complaint: 'Reklamation',
+        emergency_service: 'Notdienst',
+        repair: 'Reparatur',
+        maintenance: 'Wartung',
+        malfunction: 'Störung',
+        installation: 'Installation',
+        configuration_error: 'Konfiguration',
+        system_outage: 'Systemausfall',
+        security_issue: 'Sicherheitsproblem',
+        user_error: 'Bedienungsfehler',
+        network_problem: 'Netzwerkfehler',
+        software_bug: 'Softwarefehler',
+        hardware_defect: 'Hardwarefehler',
+        spare_part_request: 'Ersatzteilanfrage',
+        timeout: 'Zeitüberschreitung',
+        communication_failure: 'Kommunikationsproblem',
+        power_outage: 'Energieausfall',
+        update_failure: 'Updatefehler',
+        access_issue: 'Zugriffsproblem',
+        other: 'Sonstiges'
+      };
 
-  function todayYmd(){
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth()+1).padStart(2,'0');
-    const dd = String(d.getDate()).padStart(2,'0');
-    return `${yyyy}-${mm}-${dd}`;
-  }
 
-  function fmtDateTime(str){
-    try{
-      const d = new Date(str);
-      if (!isNaN(d.getTime())) {
-        const yy = d.getFullYear();
-        const mm = String(d.getMonth()+1).padStart(2,'0');
-        const dd = String(d.getDate()).padStart(2,'0');
-        const hh = String(d.getHours()).padStart(2,'0');
-        const mi = String(d.getMinutes()).padStart(2,'0');
-        return `${yy}-${mm}-${dd} ${hh}:${mi}`;
+      const ticketHistoryStore = new Map();
+
+      function rememberTicketHistory(ticket) {
+        if (!ticket || !ticket.id) return;
+
+        ticketHistoryStore.set(String(ticket.id), {
+          id: ticket.id,
+          ticket_no: ticket.ticket_no || ticket.id,
+          customer: ticket.customer || 'Kein Kunde',
+          history: Array.isArray(ticket.history) ? ticket.history : []
+        });
       }
-    }catch(e){}
-    return String(str || '');
-  }
 
-  function escapeHtml(str){
-    return String(str ?? '').replace(/[&<>"']/g, s => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[s]));
-  }
+      function openHistoryModal(ticketId) {
+        const modal = document.getElementById('historyModal');
+        const title = document.getElementById('historyModalTitle');
+        const sub = document.getElementById('historyModalSub');
+        const body = document.getElementById('historyModalBody');
 
-  function metaItem(label, user, dateStr){
-    const u = user || {};
-    const img = u.avatar_url || '';
-    const name = u.name || '—';
-    const when = dateStr ? fmtDateTime(dateStr) : '—';
-    return `
-      <div class="meta-item">
-        ${img ? `<img class="avatar sm" src="${img}" alt="" onerror="this.style.display='none'">` : `<div class="avatar sm"></div>`}
-        <div class="txt">
-          <div class="sub">${escapeHtml(label)}</div>
-          <div class="name">${escapeHtml(name)}</div>
-          <div class="sub">${escapeHtml(when)}</div>
-        </div>
-      </div>
-    `;
-  }
+        if (!modal || !body) return;
 
-  function openEndModal(ticketObj, ticketId, ticketNo, prevStatus, selectEl){
-    state.endFlow.ticket = ticketObj || null;
-    state.endFlow.ticketId = ticketId;
-    state.endFlow.ticketNo = ticketNo;
-    state.endFlow.prevStatus = prevStatus || 'offen';
-    state.endFlow.selectEl = selectEl || null;
+        const ticket = ticketHistoryStore.get(String(ticketId));
 
-    ensureEndQuill();
+        if (!ticket) {
+          body.innerHTML = `<div class="oc-subt">Historie konnte nicht gefunden werden.</div>`;
+        } else {
+          if (title) {
+            title.textContent = `Status-Historie #${ticket.ticket_no}`;
+          }
 
-    document.getElementById('endModalSubtitle').textContent = `Ticket #${ticketNo}`;
-    els.endHint().style.display = 'none';
-    els.endDate().value = todayYmd();
+          if (sub) {
+            sub.textContent = ticket.customer || 'Alle Änderungen dieses Tickets';
+          }
 
-    endQuill.setContents([]);
-    els.endSolutionHtml().value = '';
+          body.innerHTML = renderHistoryModalBody(ticket.history);
+        }
 
-    const t = state.endFlow.ticket || {};
-    els.endMetaGrid().innerHTML = [
-      metaItem('Erstellt', t.created_by_user, t.created_at || null),
-      metaItem('Bearbeitet',  t.updated_by_user, t.edit_date || t.updated_at || null),
-      metaItem('Abschluss',   t.current_user || t.ended_by_user, els.endDate().value)
-    ].join('');
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+      }
 
-    els.endBackdrop().style.display='block';
-    els.endModal().style.display='flex';
-  }
+      function closeHistoryModal() {
+        const modal = document.getElementById('historyModal');
 
-  function closeEndModal(rollback=false){
-    els.endBackdrop().style.display='none';
-    els.endModal().style.display='none';
-    els.endHint().style.display='none';
+        if (!modal) return;
 
-    if (rollback && state.endFlow.selectEl){
-      state.endFlow.selectEl.value = state.endFlow.prevStatus;
-      state.endFlow.selectEl.setAttribute('data-prev-status', state.endFlow.prevStatus);
-    }
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+      }
 
-    state.endFlow = { ticket:null, ticketId:null, ticketNo:null, prevStatus:null, selectEl:null };
-  }
+      function bindHistoryModal() {
+        document.querySelectorAll('[data-history-open]').forEach(btn => {
+          if (btn.dataset.bound === '1') return;
+          btn.dataset.bound = '1';
 
-  async function saveEnd(){
-    const id = state.endFlow.ticketId;
-    const end_date = (els.endDate().value || '').trim();
-    const solution_html = (els.endSolutionHtml().value || '').trim();
-    const hasText = solution_html.replace(/<(.|\n)*?>/g,'').trim().length > 0;
+          btn.addEventListener('click', function () {
+            openHistoryModal(this.dataset.ticketId);
+          });
+        });
+      }
 
-    if (!end_date || !hasText){
-      els.endHint().style.display='block';
-      return;
-    }
+      function escapeHtml(value) {
+        return String(value ?? '')
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#039;');
+      }
 
-    els.endHint().style.display='none';
-    els.btnSaveEnd().disabled = true;
+      function normalizeKey(value) {
+        return String(value ?? '')
+          .trim()
+          .toLowerCase()
+          .replaceAll('-', '_')
+          .replace(/\s+/g, '_');
+      }
 
-    try{
-      await updateStatus(id, { status: 'end', end_date, solution: solution_html });
-      closeEndModal(false);
+      function humanizeGermanFallback(value) {
+        const raw = String(value ?? '').trim();
 
-      if (state.view === 'kanban') reloadKanban();
-      else loadTickets(state.page || 1);
-    }catch(err){
-      alert(err.message || 'Speichern fehlgeschlagen');
-      closeEndModal(true);
-    }finally{
-      els.btnSaveEnd().disabled = false;
-    }
-  }
+        if (!raw) return 'Kein Fehlertyp';
 
-  // ---------------- ERROR MODAL ----------------
-  function openErrorModal(ticketNo, errors){
-    document.getElementById('errModalSubtitle').textContent = `Ticket #${ticketNo}`;
-    const body = document.getElementById('errModalBody');
+        return raw
+          .replaceAll('_', ' ')
+          .replaceAll('-', ' ')
+          .split(' ')
+          .filter(Boolean)
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      }
 
-    if (!errors || !errors.length){
-      body.innerHTML = `<div class="meta-box"><div style="font-size:12px;font-weight:950;color:#374151;">Keine Fehler verknüpft.</div></div>`;
-    } else {
-      body.innerHTML = errors.map(er => `
-        <div class="meta-box">
-          <div class="label">Fehlercode</div>
-          <div style="font-size:16px;font-weight:950;color:var(--t-ink);">${escapeHtml(er.error_code || '-')}</div>
-          <div style="font-size:11px;font-weight:900;color:#6b7280;margin-top:.2rem;">${escapeHtml(er.problem_types || '')}</div>
-          ${er.reason ? `<div style="margin-top:.55rem;" class="label">Ursache</div><div style="font-size:12px;font-weight:850;color:#374151;white-space:pre-line;">${escapeHtml(er.reason)}</div>` : ``}
-          ${er.solution ? `<div style="margin-top:.55rem;" class="label">Lösung</div><div style="font-size:12px;font-weight:850;color:#374151;white-space:pre-line;">${escapeHtml(er.solution)}</div>` : ``}
-        </div>
-      `).join('');
-    }
+      function errorTypeLabel(type, serverLabel = null) {
+        const server = String(serverLabel ?? '').trim();
 
-    els.errBackdrop().style.display='block';
-    els.errModal().style.display='flex';
-  }
+        if (server && server !== type) {
+          return server;
+        }
 
-  function closeErrorModal(){
-    els.errBackdrop().style.display='none';
-    els.errModal().style.display='none';
-  }
+        const key = normalizeKey(type);
 
-  // ---------------- BIND ACTIONS ----------------
-  function bindTicketActions(){
-    document.querySelectorAll('[data-ticket-status]').forEach(sel=>{
-      sel.addEventListener('change', async (e)=>{
-        const id = sel.getAttribute('data-ticket-id');
-        const nextStatus = e.target.value;
-        const prevStatus = sel.getAttribute('data-prev-status') || sel.value;
+        if (ERROR_TYPE_LABELS[key]) {
+          return ERROR_TYPE_LABELS[key];
+        }
 
-        const rawTicket = sel.getAttribute('data-ticket-json') || null;
-        const ticketObj = rawTicket ? JSON.parse(rawTicket) : null;
+        return humanizeGermanFallback(type);
+      }
 
-        if (String(nextStatus).toLowerCase() === 'end'){
-          const ticketNo = sel.getAttribute('data-ticket-no') || (ticketObj?.ticket_no ?? '');
-          openEndModal(ticketObj, id, ticketNo, prevStatus, sel);
+      function ticketErrorTypeLabel(ticket) {
+        return errorTypeLabel(ticket?.error_type, ticket?.error_type_label);
+      }
+
+      function toast(kind, title, msg) {
+        const wrap = document.getElementById('toast-wrap');
+        if (!wrap) return;
+
+        const icons = {
+          ok: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M20 6L9 17l-5-5"/></svg>`,
+          bad: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`
+        };
+
+        const el = document.createElement('div');
+        el.className = 'oc-toast';
+        el.innerHTML = `
+                  <div class="oc-toast-ic ${escapeHtml(kind)}">${icons[kind] || icons.ok}</div>
+                  <div style="flex:1;">
+                      <p class="oc-toast-ttl">${escapeHtml(title)}</p>
+                      <p class="oc-toast-msg">${escapeHtml(msg)}</p>
+                  </div>
+                  <button class="oc-toast-x" type="button">×</button>
+              `;
+
+        el.querySelector('.oc-toast-x')?.addEventListener('click', () => el.remove());
+        wrap.appendChild(el);
+
+        setTimeout(() => {
+          try {
+            el.remove();
+          } catch (e) { }
+        }, 4000);
+      }
+
+      function setActiveButton(container, value, attr) {
+        if (!container) return;
+
+        container.querySelectorAll(`[${attr}]`).forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute(attr) === value);
+        });
+      }
+
+      function formatDate(dateStr, withTime = true) {
+        if (!dateStr) return '—';
+
+        const d = new Date(dateStr);
+        if (Number.isNaN(d.getTime())) return escapeHtml(dateStr);
+
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+
+        if (!withTime) return `${dd}.${mm}.${yyyy}`;
+
+        const hh = String(d.getHours()).padStart(2, '0');
+        const ii = String(d.getMinutes()).padStart(2, '0');
+
+        return `${dd}.${mm}.${yyyy} ${hh}:${ii}`;
+      }
+
+      function statusClass(status) {
+        switch (normalizeKey(status)) {
+          case 'process':
+          case 'in_bearbeitung':
+            return 'process';
+
+          case 'end':
+          case 'done':
+          case 'beendet':
+            return 'end';
+
+          case 'junk':
+            return 'junk';
+
+          case 'offen':
+          case 'open':
+          default:
+            return 'open';
+        }
+      }
+
+      function statusLabel(status) {
+        switch (normalizeKey(status)) {
+          case 'process':
+          case 'in_bearbeitung':
+            return 'In Bearbeitung';
+
+          case 'end':
+          case 'done':
+          case 'beendet':
+            return 'Beendet';
+
+          case 'junk':
+            return 'Junk';
+
+          case 'offen':
+          case 'open':
+          default:
+            return 'Offen';
+        }
+      }
+
+      function priorityClass(priority) {
+        switch (normalizeKey(priority)) {
+          case 'high':
+          case 'dringend':
+          case 'sehr_dringend':
+          case 'very_high':
+            return 'high';
+
+          case 'medium':
+          case 'mittel':
+            return 'medium';
+
+          case 'low':
+          case 'normal':
+            return 'low';
+
+          default:
+            return '';
+        }
+      }
+
+      function priorityLabel(priority) {
+        if (!priority) return '—';
+
+        switch (normalizeKey(priority)) {
+          case 'high':
+            return 'Hoch';
+
+          case 'medium':
+            return 'Mittel';
+
+          case 'low':
+            return 'Niedrig';
+
+          case 'dringend':
+            return 'Dringend';
+
+          case 'sehr_dringend':
+          case 'very_high':
+            return 'Sehr dringend';
+
+          case 'normal':
+            return 'Normal';
+
+          default:
+            return humanizeGermanFallback(priority);
+        }
+      }
+
+      function avatar(url, name, size = 'sm') {
+        const fallback = "{{ asset('images/gender/male.png') }}";
+        const imgUrl = url || fallback;
+
+        return `
+                  <img src="${escapeHtml(imgUrl)}"
+                       alt="${escapeHtml(name || '')}"
+                       title="${escapeHtml(name || '')}"
+                       class="oc-avatar ${escapeHtml(size)}">
+              `;
+      }
+
+      function renderAssignedUsers(users) {
+        if (!Array.isArray(users) || !users.length) {
+          return `<div class="oc-subt">Niemand zugewiesen</div>`;
+        }
+
+        const avatars = users.map(u => avatar(u.avatar_url, u.name)).join('');
+        const names = users.map(u => escapeHtml(u.name || '')).join(', ');
+
+        return `
+                  <div class="oc-avatar-group">${avatars}</div>
+                  <div class="oc-subt-wrap" style="margin-top:8px; display:none;">${names}</div>
+              `;
+      }
+
+      function renderCreator(user, date) {
+        if (!user) {
+          return `<div class="oc-subt">Kein Ersteller</div>`;
+        }
+
+        return `
+                  <div class="oc-user-stack">
+                      ${avatar(user.avatar_url, user.name, 'lg')}
+                      <div class="oc-avatar-meta">
+                          <div class="oc-avatar-name">${escapeHtml(user.name || '')}</div>
+                          <div class="oc-avatar-role">${formatDate(date)}</div>
+                      </div>
+                  </div>
+              `;
+      }
+
+      function sortHistoryLatestFirst(history) {
+        if (!Array.isArray(history)) return [];
+
+        return [...history].sort((a, b) => {
+          const dateA = new Date(a?.date || a?.created_at || 0).getTime();
+          const dateB = new Date(b?.date || b?.created_at || 0).getTime();
+
+          return dateB - dateA;
+        });
+      }
+
+      function renderLatestHistory(ticket) {
+        const history = sortHistoryLatestFirst(ticket?.history || []);
+
+        if (!history.length) {
+          return `<div class="oc-subt">Keine Historie</div>`;
+        }
+
+        const latest = history[0];
+        const ticketNo = ticket?.ticket_no || ticket?.id || '';
+
+        return `
+                <button type="button"
+                        class="oc-latest-history-btn"
+                        data-history-open
+                        data-ticket-id="${escapeHtml(ticket.id)}"
+                        title="Alle Statusänderungen anzeigen">
+                    <span class="oc-latest-history-dot ${escapeHtml(latest.type || '')}"></span>
+
+                    <span class="oc-latest-history-content">
+                        <span class="oc-latest-history-label">
+                            ${escapeHtml(latest.label || 'Status geändert')}
+                        </span>
+
+                        <span class="oc-latest-history-meta">
+                            ${escapeHtml(latest?.user?.name || 'Unbekannt')} · ${formatDate(latest.date)}
+                        </span>
+                    </span>
+
+                    <span class="oc-latest-history-icon">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </span>
+                </button>
+            `;
+      }
+
+      function renderHistoryModalBody(history) {
+        const items = sortHistoryLatestFirst(history || []);
+
+        if (!items.length) {
+          return `<div class="oc-subt">Keine Historie vorhanden.</div>`;
+        }
+
+        return `
+                <div class="oc-history-timeline">
+                    ${items.map(item => `
+                        <div class="oc-history-full-item">
+                            <div class="oc-history-full-dot ${escapeHtml(item.type || '')}"></div>
+
+                            <div class="oc-history-full-card">
+                                <div class="oc-history-full-top">
+                                    <div class="oc-history-full-label">
+                                        ${escapeHtml(item.label || 'Status geändert')}
+                                    </div>
+
+                                    <div class="oc-history-full-date">
+                                        ${formatDate(item.date)}
+                                    </div>
+                                </div>
+
+                                <div class="oc-history-full-user">
+                                    Von: <strong>${escapeHtml(item?.user?.name || 'Unbekannt')}</strong>
+                                </div>
+
+                                ${item.note || item.description || item.comment ? `
+                                    <div class="oc-history-full-note">
+                                        ${escapeHtml(item.note || item.description || item.comment)}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+      }
+
+      function profileUrl(ticket) {
+        if (ticket.profile_url) return ticket.profile_url;
+        return `${profileBase}/${ticket.id}`;
+      }
+
+      function editUrl(ticket) {
+        if (ticket.edit_url) return ticket.edit_url;
+        return `/problem_edit/${ticket.id}`;
+      }
+
+      function deleteUrl(ticket) {
+        if (ticket.delete_url) return ticket.delete_url;
+        return `/problem_destroy/${ticket.id}`;
+      }
+
+      function statusSelect(ticket) {
+        const current = normalizeKey(ticket.status || 'offen') === 'open'
+          ? 'offen'
+          : normalizeKey(ticket.status || 'offen');
+
+        return `
+              <select class="oc-status-select"
+                      data-ticket-status-select
+                      data-ticket-id="${escapeHtml(ticket.id)}"
+                      title="Status ändern">
+                  <option value="offen" ${current === 'offen' ? 'selected' : ''}>Offen</option>
+                  <option value="process" ${current === 'process' ? 'selected' : ''}>In Bearbeitung</option>
+                  <option value="end" ${current === 'end' ? 'selected' : ''}>Beendet</option>
+                  <option value="junk" ${current === 'junk' ? 'selected' : ''}>Junk</option>
+              </select>
+          `;
+      }
+      function actionButtons(ticket) {
+        return `
+              ${statusSelect(ticket)}
+
+              <a href="${escapeHtml(profileUrl(ticket))}"
+                class="oc-btn-ic primary"
+                title="Anzeigen">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                  </svg>
+              </a>
+
+              <a href="${escapeHtml(editUrl(ticket))}"
+                class="oc-btn-ic warning"
+                title="Bearbeiten">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+              </a>
+
+              <a href="${escapeHtml(deleteUrl(ticket))}"
+                class="oc-btn-ic danger"
+                title="Löschen"
+                onclick="return confirm('Möchten Sie dieses Ticket wirklich löschen?')">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"/>
+                  </svg>
+              </a>
+          `;
+      }
+
+
+      function renderListFromJson(items) {
+        if (!Array.isArray(items) || !items.length) {
+          return `<div class="oc-empty">Keine Tickets gefunden.</div>`;
+        }
+
+        return `
+                    <div class="oc-list-head">
+                        <div>Ticket</div>
+                        <div>Kunde / Problem</div>
+                        <div>Status</div>
+                        <div>Erstellt von</div>
+                        <div>Zuständig</div>
+                        <div>Letzte Historie</div>
+                        <div style="text-align:right;">Aktionen</div>
+                    </div>
+
+                    <div class="oc-list">
+                        ${items.map(ticket => {
+          rememberTicketHistory(ticket);
+
+          return `
+                                <div class="oc-item">
+                                    <div class="oc-item-row">
+                                        <div class="oc-cell">
+                                            <div class="oc-cell-title">Ticket</div>
+                                            <span class="oc-id-badge">#${escapeHtml(ticket.ticket_no || ticket.id)}</span>
+                                        </div>
+
+                                        <div class="oc-cell">
+                                            <div class="oc-cell-title">Kunde / Problem</div>
+                                            <div class="oc-main">
+                                                <div class="oc-ttl">${escapeHtml(ticket.customer || 'Kein Kunde')}</div>
+                                                <div class="oc-subt-wrap">
+                                                    ${escapeHtml(ticket.product || '—')}<br>
+                                                    ${escapeHtml(ticketErrorTypeLabel(ticket))}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="oc-cell">
+                                            <div class="oc-cell-title">Status</div>
+                                            <div class="oc-main">
+                                                <span class="oc-status-pill ${statusClass(ticket.status)}">${statusLabel(ticket.status)}</span>
+                                                <div style="margin-top:8px;">
+                                                    <span class="oc-priority ${priorityClass(ticket.priority)}">${escapeHtml(priorityLabel(ticket.priority))}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="oc-cell">
+                                            <div class="oc-cell-title">Erstellt von</div>
+                                            ${renderCreator(ticket.creator_user || ticket.created_by_user, ticket.start_date || ticket.created_at)}
+                                        </div>
+
+                                        <div class="oc-cell">
+                                            <div class="oc-cell-title">Zuständig</div>
+                                            ${renderAssignedUsers(ticket.employees)}
+                                        </div>
+
+                                        <div class="oc-cell">
+                                            <div class="oc-cell-title">Letzte Historie</div>
+                                            ${renderLatestHistory(ticket)}
+                                        </div>
+
+                                        <div class="oc-cell">
+                                            <div class="oc-cell-title">Aktionen</div>
+                                            <div class="oc-actions">
+                                                ${actionButtons(ticket)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+        }).join('')}
+                    </div>
+                `;
+      }
+      function renderCardsFromJson(items) {
+        if (!Array.isArray(items) || !items.length) {
+          return `<div class="oc-empty">Keine Tickets gefunden.</div>`;
+        }
+
+        return `
+                  <div class="oc-card-grid">
+                      ${items.map(ticket => `
+                          <div class="ticket-card">
+                              <div class="ticket-card-top">
+                                  <div>
+                                      <div class="ticket-card-title">#${escapeHtml(ticket.ticket_no || ticket.id)}</div>
+                                      <div class="ticket-card-meta">${escapeHtml(ticket.customer || 'Kein Kunde')}</div>
+                                  </div>
+
+                                  <span class="oc-status-pill ${statusClass(ticket.status)}">${statusLabel(ticket.status)}</span>
+                              </div>
+
+                              <div class="ticket-card-section">
+                                  <div class="ticket-card-label">Produkt</div>
+                                  <div class="ticket-card-meta">${escapeHtml(ticket.product || '—')}</div>
+                              </div>
+
+                              <div class="ticket-card-section">
+                                  <div class="ticket-card-label">Fehlertyp</div>
+                                  <div class="ticket-card-meta">${escapeHtml(ticketErrorTypeLabel(ticket))}</div>
+                              </div>
+
+                              <div class="ticket-card-section">
+                                  <div class="ticket-card-label">Priorität</div>
+                                  <span class="oc-priority ${priorityClass(ticket.priority)}">${escapeHtml(priorityLabel(ticket.priority))}</span>
+                              </div>
+
+                              <div class="ticket-card-section">
+                                  <div class="ticket-card-label">Erstellt von</div>
+                                  ${renderCreator(ticket.creator_user || ticket.created_by_user, ticket.start_date || ticket.created_at)}
+                              </div>
+
+                              <div class="ticket-card-section">
+                                  <div class="ticket-card-label">Zuständig</div>
+                                  ${renderAssignedUsers(ticket.employees)}
+                              </div>
+
+                              <div class="ticket-card-section">
+                                  <div class="ticket-card-label">Historie</div>
+                                   ${renderLatestHistory(ticket)}
+                              </div>
+
+                              <div class="ticket-card-actions">
+                                  ${actionButtons(ticket)}
+                              </div>
+                          </div>
+                      `).join('')}
+                  </div>
+              `;
+      }
+
+      function renderKanban(data) {
+        const groups = {
+          offen: [],
+          process: [],
+          end: [],
+          junk: []
+        };
+
+        (data || []).forEach(ticket => {
+          let key = normalizeKey(ticket.status || 'offen');
+
+          if (key === 'open') key = 'offen';
+          if (key === 'in_bearbeitung') key = 'process';
+          if (key === 'done' || key === 'beendet') key = 'end';
+
+          if (groups[key]) {
+            groups[key].push(ticket);
+          } else {
+            groups.offen.push(ticket);
+          }
+        });
+
+        const cols = [
+          ['offen', 'Offen'],
+          ['process', 'In Bearbeitung'],
+          ['end', 'Beendet'],
+          ['junk', 'Junk'],
+        ];
+
+        let html = `<div class="kanban-wrap">`;
+
+        cols.forEach(([key, label]) => {
+          html += `
+                <div class="kanban-col" data-kanban-col="${escapeHtml(key)}">
+                    <div class="kanban-col-head">
+                        <div class="kanban-col-title">
+                            <span>${label}</span>
+                            <span class="kanban-count">${groups[key].length}</span>
+                        </div>
+                    </div>
+
+                    <div class="kanban-body"
+                         data-kanban-dropzone
+                         data-status="${escapeHtml(key)}">
+            `;
+
+          if (!groups[key].length) {
+            html += `<div class="oc-empty" style="margin:0;" data-empty-kanban>Keine Tickets</div>`;
+          } else {
+            groups[key].forEach(ticket => {
+              const creator = ticket.creator_user || ticket.created_by_user;
+
+              html += `
+                        <div class="kanban-ticket"
+                             draggable="true"
+                             data-ticket-card
+                             data-ticket-id="${escapeHtml(ticket.id)}"
+                             data-current-status="${escapeHtml(ticket.status || 'offen')}">
+
+                            <div class="kanban-ticket-no">#${escapeHtml(ticket.ticket_no || ticket.id)}</div>
+                            <div class="kanban-ticket-title">${escapeHtml(ticket.customer || 'Kein Kunde')}</div>
+                            <div class="kanban-ticket-sub">${escapeHtml(ticket.product || '—')}</div>
+                            <div class="kanban-ticket-sub">${escapeHtml(ticketErrorTypeLabel(ticket))}</div>
+
+                            ${creator ? `
+                                <div class="oc-user-stack" style="margin-top:10px;">
+                                    ${avatar(creator.avatar_url, creator.name, 'sm')}
+                                    <div class="oc-avatar-meta">
+                                        <div class="oc-avatar-name">${escapeHtml(creator.name || '')}</div>
+                                        <div class="oc-avatar-role">${formatDate(ticket.start_date || ticket.created_at)}</div>
+                                    </div>
+                                </div>
+                            ` : ''}
+
+                            ${(ticket.employees && ticket.employees.length) ? `
+                                <div class="oc-kanban-users">
+                                    ${ticket.employees.map(u => avatar(u.avatar_url, u.name, 'sm')).join('')}
+                                </div>
+                            ` : ''}
+
+                            <div class="ticket-card-actions" style="margin-top:10px;">
+                                <span class="oc-status-pill ${statusClass(ticket.status)}">${statusLabel(ticket.status)}</span>
+                                ${actionButtons(ticket)}
+                            </div>
+                        </div>
+                    `;
+            });
+          }
+
+          html += `
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `</div>`;
+
+        els.kanbanContent.innerHTML = html;
+
+        bindStatusSelects();
+        bindHistoryModal();
+        bindKanbanDragDrop();
+      }
+
+      function updateAnalytics(analytics) {
+        if (!analytics) return;
+
+        const created = document.getElementById('stat-created');
+        const process = document.getElementById('stat-process');
+        const end = document.getElementById('stat-end');
+        const mine = document.getElementById('stat-mine');
+
+        const allBadge = document.getElementById('tab-all-count');
+
+        if (created && analytics.created !== undefined) created.textContent = analytics.created;
+        if (process && analytics.process !== undefined) process.textContent = analytics.process;
+        if (end && analytics.end !== undefined) end.textContent = analytics.end;
+        if (mine && analytics.mine !== undefined) mine.textContent = analytics.mine;
+        if (allBadge && analytics.all !== undefined) allBadge.textContent = analytics.all;
+      }
+
+      async function loadStandard(page = 1) {
+        state.page = page;
+
+        els.standardPanel?.classList.add('active');
+        els.kanbanPanel?.classList.remove('active');
+
+        if (els.ticketsContent) {
+          els.ticketsContent.innerHTML = `<div class="oc-loading">Daten werden geladen ...</div>`;
+        }
+
+        if (els.ticketsPagination) {
+          els.ticketsPagination.innerHTML = '';
+        }
+
+        const params = new URLSearchParams({
+          filter: state.filter,
+          mode: state.view,
+          search: state.search,
+          priority: state.priority,
+          page: state.page
+        });
+
+        try {
+          const res = await fetch(`${fetchUrl}?${params.toString()}`, {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Accept': 'application/json'
+            }
+          });
+
+          if (!res.ok) throw new Error('Fehler beim Laden');
+
+          const data = await res.json();
+
+          if (data.items && Array.isArray(data.items)) {
+            els.ticketsContent.innerHTML = state.view === 'cards'
+              ? renderCardsFromJson(data.items)
+              : renderListFromJson(data.items);
+          } else {
+            els.ticketsContent.innerHTML = data.html || `<div class="oc-empty">Keine Tickets gefunden.</div>`;
+          }
+
+          els.ticketsPagination.innerHTML = data.pagination
+            ? `<div class="oc-pagination">${data.pagination}</div>`
+            : '';
+
+          updateAnalytics(data.analytics);
+          bindPagination();
+          bindStatusSelects();
+          bindHistoryModal();
+        } catch (e) {
+          if (els.ticketsContent) {
+            els.ticketsContent.innerHTML = `<div class="oc-empty">Die Ticketliste konnte nicht geladen werden.</div>`;
+          }
+
+          toast('bad', 'Fehler', 'Die Ticketliste konnte nicht geladen werden.');
+        }
+      }
+
+      async function loadKanban() {
+        els.standardPanel?.classList.remove('active');
+        els.kanbanPanel?.classList.add('active');
+
+        if (els.kanbanContent) {
+          els.kanbanContent.innerHTML = `<div class="oc-loading">Kanban wird geladen ...</div>`;
+        }
+
+        if (els.ticketsPagination) {
+          els.ticketsPagination.innerHTML = '';
+        }
+
+        const params = new URLSearchParams({
+          filter: state.filter,
+          search: state.search
+        });
+
+        try {
+          const res = await fetch(`${kanbanUrl}?${params.toString()}`, {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Accept': 'application/json'
+            }
+          });
+
+          if (!res.ok) throw new Error('Fehler beim Laden');
+
+          const data = await res.json();
+          renderKanban(data);
+        } catch (e) {
+          if (els.kanbanContent) {
+            els.kanbanContent.innerHTML = `<div class="oc-empty">Das Kanban konnte nicht geladen werden.</div>`;
+          }
+
+          toast('bad', 'Fehler', 'Das Kanban konnte nicht geladen werden.');
+        }
+      }
+
+      async function updateTicketStatus(ticketId, status) {
+        if (!ticketId || !status) return false;
+
+        try {
+          const res = await fetch(`${statusUrlBase}/${ticketId}/status`, {
+            method: 'POST',
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': csrfToken()
+            },
+            body: JSON.stringify({ status })
+          });
+
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok || data.success === false) {
+            throw new Error(data.message || 'Status konnte nicht geändert werden.');
+          }
+
+          toast('ok', 'Aktualisiert', data.message || 'Status aktualisiert.');
+          return true;
+        } catch (e) {
+          toast('bad', 'Fehler', e.message || 'Status konnte nicht geändert werden.');
+          return false;
+        }
+      }
+
+      function bindKanbanDragDrop() {
+        let draggedTicketId = null;
+        let draggedEl = null;
+
+        document.querySelectorAll('[data-ticket-card]').forEach(card => {
+          card.addEventListener('dragstart', function (e) {
+            draggedTicketId = this.dataset.ticketId;
+            draggedEl = this;
+
+            this.classList.add('dragging');
+
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', draggedTicketId);
+          });
+
+          card.addEventListener('dragend', function () {
+            this.classList.remove('dragging');
+
+            document.querySelectorAll('[data-kanban-dropzone]').forEach(zone => {
+              zone.classList.remove('drag-over');
+            });
+
+            draggedTicketId = null;
+            draggedEl = null;
+          });
+        });
+
+        document.querySelectorAll('[data-kanban-dropzone]').forEach(zone => {
+          zone.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+            e.dataTransfer.dropEffect = 'move';
+          });
+
+          zone.addEventListener('dragleave', function () {
+            this.classList.remove('drag-over');
+          });
+
+          zone.addEventListener('drop', async function (e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+
+            const ticketId = draggedTicketId || e.dataTransfer.getData('text/plain');
+            const newStatus = this.dataset.status;
+
+            if (!ticketId || !newStatus) return;
+
+            const currentStatus = normalizeKey(draggedEl?.dataset?.currentStatus || '');
+
+            if (currentStatus === newStatus || (currentStatus === 'open' && newStatus === 'offen')) {
+              return;
+            }
+
+            if (draggedEl) {
+              this.querySelector('[data-empty-kanban]')?.remove();
+              this.appendChild(draggedEl);
+            }
+
+            const ok = await updateTicketStatus(ticketId, newStatus);
+
+            if (!ok) {
+              loadKanban();
+              return;
+            }
+
+            loadKanban();
+          });
+        });
+      }
+
+      function bindStatusSelects() {
+        document.querySelectorAll('[data-ticket-status-select]').forEach(select => {
+          if (select.dataset.bound === '1') return;
+          select.dataset.bound = '1';
+
+          select.addEventListener('change', async function () {
+            const ticketId = this.dataset.ticketId;
+            const newStatus = this.value;
+            const oldValue = this.dataset.oldValue || this.getAttribute('data-old-value') || '';
+
+            this.disabled = true;
+
+            const ok = await updateTicketStatus(ticketId, newStatus);
+
+            this.disabled = false;
+
+            if (!ok && oldValue) {
+              this.value = oldValue;
+              return;
+            }
+
+            reloadCurrent();
+          });
+
+          select.dataset.oldValue = select.value;
+        });
+      }
+
+      document.addEventListener('click', function (e) {
+        if (e.target.closest('[data-history-modal-close]')) {
+          closeHistoryModal();
           return;
         }
 
-        sel.disabled = true;
-        try{
-          await updateStatus(id, { status: nextStatus });
-          sel.setAttribute('data-prev-status', nextStatus);
+        const modal = document.getElementById('historyModal');
 
-          const pill = document.querySelector(`[data-pill-id="${id}"]`);
-          if (pill){
-            pill.className = `status-pill ${statusPillClass(nextStatus)}`;
-            pill.textContent = nextStatus.toUpperCase();
-          }
-
-          if (state.view === 'kanban') reloadKanban();
-          else loadTickets(state.page || 1);
-        }catch(err){
-          alert(err.message);
-          sel.value = prevStatus;
-        }finally{
-          sel.disabled = false;
+        if (modal && e.target === modal) {
+          closeHistoryModal();
         }
       });
 
-      if (!sel.getAttribute('data-prev-status')) sel.setAttribute('data-prev-status', sel.value);
-    });
-
-    document.querySelectorAll('[data-open-errors]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const ticketNo = btn.getAttribute('data-ticket-no');
-        const raw = btn.getAttribute('data-errors-json') || '[]';
-        const errors = JSON.parse(raw);
-        openErrorModal(ticketNo, errors);
-      });
-    });
-  }
-
-  // ---------------- KANBAN ----------------
-  function destroySortables(){
-    state.kanban.sortables.forEach(s => { try{ s.destroy(); }catch(e){} });
-    state.kanban.sortables = [];
-  }
-
-  function kanCard(t){
-    const st = (t.status || 'offen').toLowerCase();
-    const pill = statusPillClass(st);
-    const errCount = (t.errors || []).length;
-
-    const emps = (t.employees || []).slice(0,3).map(e => {
-      const src = e.avatar_url || '';
-      return `<img class="avatar" src="${src}" alt="" onerror="this.style.display='none'">`;
-    }).join('');
-
-    const more = (t.employees || []).length > 3
-      ? `<div class="avatar" style="display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:950;color:#374151;background:#fff;">+${(t.employees||[]).length-3}</div>`
-      : '';
-
-    const created = t.created_by_user || null;
-    const edited  = t.updated_by_user || null;
-
-    // ✅ show "END" tickets too
-    return `
-      <div class="tk-card kan-card" data-ticket-id="${t.id}">
-        <div class="tk-card-head">
-          <a href="${t.profile_url}" class="tk-card-title" style="color:var(--t-ink); text-decoration:none;">#${t.ticket_no}</a>
-          <span class="status-pill ${pill}" data-pill-id="${t.id}">${(t.status||'offen').toUpperCase()}</span>
-        </div>
-
-        <div class="tk-card-meta">${escapeHtml(t.customer || '')}</div>
-        <div class="tk-card-sub">${escapeHtml(t.product || '')}</div>
-
-        <div class="audit-row">
-          <div class="audit-item">
-            ${created?.avatar_url ? `<img class="avatar sm" src="${created.avatar_url}" alt="" onerror="this.style.display='none'">` : `<div class="avatar sm"></div>`}
-            <span class="k">ERSTELLT</span>
-            <span class="v">${escapeHtml(created?.name || '—')}</span>
-            <span class="d">${escapeHtml(t.created_at ? fmtDateTime(t.created_at) : '—')}</span>
-          </div>
-          <div class="audit-item">
-            ${edited?.avatar_url ? `<img class="avatar sm" src="${edited.avatar_url}" alt="" onerror="this.style.display='none'">` : `<div class="avatar sm"></div>`}
-            <span class="k">BEARBEITET</span>
-            <span class="v">${escapeHtml(edited?.name || '—')}</span>
-            <span class="d">${escapeHtml(t.edit_date || t.updated_at ? fmtDateTime(t.edit_date || t.updated_at) : '—')}</span>
-          </div>
-        </div>
-
-        <div class="tk-card-foot">
-          <div class="tk-avatars" title="Mitarbeiter">${emps}${more}</div>
-
-          <button class="tk-btn" type="button" style="padding:.22rem .6rem;"
-            data-open-errors="1"
-            data-ticket-no="${t.ticket_no}"
-            data-errors-json='${escapeHtml(JSON.stringify(t.errors || []))}'>
-            Fehler (${errCount})
-          </button>
-
-          <select class="input" style="padding:.38rem .6rem; border-radius:999px; font-size:11px;"
-            data-ticket-status="1"
-            data-ticket-id="${t.id}"
-            data-ticket-no="${t.ticket_no}"
-            data-ticket-json='${escapeHtml(JSON.stringify(t))}'
-            data-prev-status="${st}">
-            <option value="offen" ${st==='offen'?'selected':''}>OFFEN</option>
-            <option value="process" ${st==='process'?'selected':''}>IN BEARBEITUNG</option>
-            <option value="end" ${st==='end'?'selected':''}>BEENDET</option>
-            <option value="junk" ${st==='junk'?'selected':''}>JUNK</option>
-          </select>
-        </div>
-      </div>
-    `;
-  }
-
-  async function reloadKanban(){
-    destroySortables();
-
-    const url = `{{ route('tickets.kanban') }}?` + qs({
-      filter: state.filter,  // ✅ supports completed/all/mine too
-      search: state.search,
-    });
-
-    const res = await fetch(url, { headers: { 'X-Requested-With':'XMLHttpRequest' }});
-    const data = await res.json();
-
-    const cols = { offen:[], process:[], end:[], junk:[] };
-    (Array.isArray(data) ? data : []).forEach(t=>{
-      const st = (t.status || 'offen').toLowerCase();
-      if (cols[st]) cols[st].push(t);
-    });
-
-    setAnalytics(cols.offen.length, cols.process.length, cols.end.length, cols.junk.length);
-
-    ['offen','process','end','junk'].forEach(k=>{
-      document.getElementById(`col-${k}`).innerHTML = (cols[k]||[]).map(kanCard).join('');
-      document.getElementById(`count-${k}`).textContent = (cols[k]||[]).length;
-    });
-
-    bindTicketActions();
-
-    ['offen','process','end','junk'].forEach(k=>{
-      const el = document.getElementById(`col-${k}`);
-      const s = new Sortable(el, {
-        group: 'tickets',
-        animation: 150,
-        ghostClass: 'opacity-50',
-        onEnd: async (evt)=>{
-          const id = evt.item.getAttribute('data-ticket-id');
-          const newStatus = evt.to.getAttribute('data-kanban-col');
-          const prevStatus = evt.from.getAttribute('data-kanban-col');
-
-          if (String(newStatus).toLowerCase() === 'end' && String(prevStatus).toLowerCase() !== 'end'){
-            // ✅ only open end modal when moving INTO end (optional)
-            const raw = evt.item.querySelector('[data-ticket-json]')?.getAttribute('data-ticket-json') || null;
-            const t = raw ? JSON.parse(raw) : null;
-            openEndModal(t, id, t?.ticket_no || id, prevStatus, null);
-            reloadKanban();
-            return;
-          }
-
-          try{
-            await updateStatus(id, { status: newStatus });
-            reloadKanban();
-          }catch(err){
-            alert(err.message);
-            reloadKanban();
-          }
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          closeHistoryModal();
         }
       });
-      state.kanban.sortables.push(s);
-    });
-  }
+      function reloadCurrent() {
+        if (state.view === 'kanban') {
+          loadKanban();
+        } else {
+          loadStandard(1);
+        }
+      }
 
-  function init(){
-    state.filter = 'open';
-    setActiveChip();
+      function bindPagination() {
+        if (!els.ticketsPagination) return;
 
-    setAnalytics(
-      {{ (int)($counts['open'] ?? 0) }},
-      {{ (int)($counts['progress'] ?? 0) }},
-      {{ (int)($counts['completed'] ?? 0) }},
-      {{ (int)($counts['junk'] ?? 0) }}
-    );
+        els.ticketsPagination.querySelectorAll('a').forEach(a => {
+          a.addEventListener('click', function (e) {
+            e.preventDefault();
 
-    document.querySelectorAll('[data-view]').forEach(b=>{
-      b.addEventListener('click', ()=>{
-        state.view = b.getAttribute('data-view');
-        showView();
+            const url = new URL(this.href);
+            const page = url.searchParams.get('page') || 1;
+
+            loadStandard(page);
+          });
+        });
+      }
+
+      els.filterTabs?.addEventListener('click', function (e) {
+        const btn = e.target.closest('[data-filter]');
+        if (!btn) return;
+
+        state.filter = btn.dataset.filter;
+        setActiveButton(els.filterTabs, state.filter, 'data-filter');
+        reloadCurrent();
       });
-    });
 
-    document.querySelectorAll('.tk-chip[data-filter]').forEach(ch=>{
-      ch.addEventListener('click', ()=>{
-        state.filter = ch.getAttribute('data-filter');
-        setActiveChip();
-        if (state.view === 'kanban') reloadKanban();
-        else loadTickets(1);
+      els.viewTabs?.addEventListener('click', function (e) {
+        const btn = e.target.closest('[data-view]');
+        if (!btn) return;
+
+        state.view = btn.dataset.view;
+        setActiveButton(els.viewTabs, state.view, 'data-view');
+        reloadCurrent();
       });
-    });
 
-    let t=null;
-    els.q().addEventListener('input', ()=>{
-      clearTimeout(t);
-      t = setTimeout(()=>{
-        state.search = els.q().value.trim();
-        if (state.view === 'kanban') reloadKanban();
-        else loadTickets(1);
-      }, 250);
-    });
+      let searchTimer = null;
 
-    els.btnClear().addEventListener('click', ()=>{
-      els.q().value = '';
-      state.search = '';
-      if (state.view === 'kanban') reloadKanban();
-      else loadTickets(1);
-    });
+      els.searchInput?.addEventListener('input', function () {
+        state.search = this.value.trim();
 
-    els.sortField().addEventListener('change', ()=>{ state.sort_field = els.sortField().value; state.page=1; if(state.view==='kanban') reloadKanban(); else loadTickets(1); });
-    els.sortOrder().addEventListener('change', ()=>{ state.sort_order = els.sortOrder().value; state.page=1; if(state.view==='kanban') reloadKanban(); else loadTickets(1); });
-    els.perPage().addEventListener('change', ()=>{ state.per_page = parseInt(els.perPage().value,10); state.page=1; if(state.view==='kanban') reloadKanban(); else loadTickets(1); });
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => reloadCurrent(), 350);
+      });
 
-    document.getElementById('btnCloseErr').addEventListener('click', closeErrorModal);
-    els.errBackdrop().addEventListener('click', closeErrorModal);
+      els.priorityFilter?.addEventListener('change', function () {
+        state.priority = this.value;
 
-    els.btnSaveEnd().addEventListener('click', saveEnd);
-    els.btnCancelEnd().addEventListener('click', ()=> closeEndModal(true));
-    els.btnCloseEnd().addEventListener('click', ()=> closeEndModal(true));
-    els.endBackdrop().addEventListener('click', ()=> closeEndModal(true));
+        if (state.view === 'kanban') {
+          toast('bad', 'Hinweis', 'Prioritätsfilter ist nur in Liste und Karten aktiv.');
+          return;
+        }
 
-    document.addEventListener('keydown', (e)=>{
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); els.q().focus(); }
-      if (e.key === 'Escape') { closeErrorModal(); closeEndModal(true); }
-    });
+        reloadCurrent();
+      });
 
-    showView();
-  }
+      els.reloadBtn?.addEventListener('click', reloadCurrent);
 
-  return { init, loadTickets, reloadKanban };
-})();
+      els.resetBtn?.addEventListener('click', function () {
+        state.filter = 'active';
+        state.view = 'list';
+        state.search = '';
+        state.priority = '';
+        state.page = 1;
 
-document.addEventListener('DOMContentLoaded', Tickets.init);
-</script>
-@endsection
+        if (els.searchInput) els.searchInput.value = '';
+        if (els.priorityFilter) els.priorityFilter.value = '';
+
+        setActiveButton(els.filterTabs, 'active', 'data-filter');
+        setActiveButton(els.viewTabs, 'list', 'data-view');
+
+        reloadCurrent();
+      });
+
+      setActiveButton(els.filterTabs, state.filter, 'data-filter');
+      setActiveButton(els.viewTabs, state.view, 'data-view');
+
+      reloadCurrent();
+
+      @if(session('update_msg'))
+        toast('ok', 'Aktualisiert', @json(session('update_msg')));
+      @endif
+
+      @if(session('save_msg'))
+        toast('ok', 'Gespeichert', @json(session('save_msg')));
+      @endif
+
+      @if(session('delete_msg'))
+        toast('bad', 'Gelöscht', @json(session('delete_msg')));
+      @endif
+      })();
+  </script>
+@endpush
+
+@push('scripts')
+  <script>
+    window.GlobalBreadcrumbs = [
+      {
+        label: 'Dashboard',
+        url: "{{ url('/') }}"
+      },
+      {
+        label: 'Ticketliste',
+        url: "{{ url()->current() }}",
+        clickable: false
+      }
+    ];
+
+    if (window.setGlobalBreadcrumbs) {
+      window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+    }
+  </script>
+@endpush

@@ -10,7 +10,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4">
-                                <form action="{{action('App\Http\Controllers\AssetInstallmentController@show')}}">
+                                <form action="{{route('assets.installment.show')}}">
                                     <fieldset>
                                         <div class="input-group">
                                             <input type="text" name="search" class="form-control"

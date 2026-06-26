@@ -119,7 +119,7 @@
 
                 {{-- ===================== CREATE / UPLOAD ===================== --}}
                 <form novalidate
-                      action="{{ action('App\Http\Controllers\ProductDocumentsController@store') }}"
+                      action="{{ route('product.create.document', ['id'=>request()->id]) }}"
                       method="post"
                       enctype="multipart/form-data"
                       class="custom-file-upload">

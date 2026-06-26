@@ -23,7 +23,7 @@
 
 
                                 <div class="col-9">
-                                    <form action="{{action('App\Http\Controllers\TemperatureController@index')}}">
+                                    <form action="{{ route('temp.view') }}">
                                         <fieldset>
                                             <div class="input-group">
                                                 <input type="text" name="search" class="form-control"
@@ -56,7 +56,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <form class="form-horizontal" novalidate method="post"
-                                                            action="{{action('App\Http\Controllers\TemperatureController@store')}}"
+                                                            action="{{ route('temp.store')}}"
                                                             class="custom-file-upload" enctype="multipart/form-data">
                                                             @csrf
                                                             <fieldset>
@@ -193,7 +193,7 @@
                                             </div>
                                             <div class="modal-body">
                                                 <form class="form-horizontal" novalidate method="post"
-                                                    action="{{action('App\Http\Controllers\TemperatureController@update')}}">
+                                                    action="{{route('temp.update')}}">
                                                     @csrf
 
                                                     <fieldset>

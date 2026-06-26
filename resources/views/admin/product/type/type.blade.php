@@ -54,14 +54,9 @@
                                                             </div>
                                                         @endif
                                                             <!-- Table with outer spacing -->
-                                                            <form novalidate action="{{ action('App\Http\Controllers\ProductTypeController@store')}}" method="post">
+                                                            <form novalidate action="{{ action('App\Http\Controllers\Product\ProductTypeController@store')}}" method="post">
                                                              @csrf
-                                                            <div class="table-responsive">
-                                                            @if(DB::table('user_rolls')
-                                                                        ->where('user_rolls.user_id', '=', auth()->user()->id)
-                                                                        ->where('user_rolls.item_id', '=', 'Product')
-                                                                        ->where('user_rolls.is_add', '=', 'on')
-                                                                        ->first())
+                                                            <div class="table-responsive"> 
                                                                 <table class="table" id="add_department">
                                                                 
                                                                     <thead>
@@ -161,8 +156,7 @@
                                                                                 
                                                                           </div>
                                                                     </form>
-                                                                </table>
-                                                                @endif
+                                                                </table> 
                                                                 <table class="table" id="brand_table">
                                                                     <thead>
                                                                       

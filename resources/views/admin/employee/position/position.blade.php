@@ -12,7 +12,7 @@
     --danger:#ef4444;
   }
 
-  .pos-wrap .xcard{ background:var(--card); border:1px solid rgba(15,23,42,.08); border-radius:16px; box-shadow:0 8px 24px rgba(15,23,42,.06); }
+  .pos-wrap .xcard{ }
   .pos-wrap .xtab{ display:flex; gap:8px; padding:8px; flex-wrap:wrap; }
   .pos-wrap .xtab button{ border-radius:12px; padding:10px 14px; border:1px solid rgba(15,23,42,.08); background:#fff; color:var(--ink); font-weight:1000; }
   .pos-wrap .xtab button.active{ background:linear-gradient(180deg, var(--g), #7fb715); color:white; border-color:rgba(0,0,0,.05); }
@@ -228,13 +228,8 @@
 @endsection
 
 @section('content')
-<div class="app-content content pos-wrap">
-  <div class="content-wrapper">
-    <div class="content-header row">
-      <div class="content-header-left col-12 mb-1">
-        <h2 class="content-header-title mb-0">POSITIONEN</h2>
-      </div>
-    </div>
+<div class="app-content pos-wrap">
+  <div class="content-wrapper"> 
 
     <div class="content-body">
       <div class="xcard p-2">
@@ -242,6 +237,8 @@
           <button type="button" class="active" data-tab="tab-positions">Positionen</button>
           <button type="button" data-tab="tab-qual">Qualifikationen</button>
           <button type="button" data-tab="tab-costing">Kalkulation</button>
+          <button type="button" data-tab="tab-hierarchy">Job-Hierarchie</button>
+
         </div>
 
         <div class="p-2">
@@ -257,7 +254,7 @@
               <select id="pos-qual" class="xfield">
                 <option value="">Qualifikation: Alle</option>
                 @foreach($quals as $q)
-                  <option value="{{ $q->id }}">{{ $q->name }} ({{ number_format($q->default_price,2,',','.') }}€)</option>
+                  <option value="{{ $q->id }}">{{ $q->name }} ({{ number_format($q->default_price, 2, ',', '.') }}€)</option>
                 @endforeach
               </select>
               <button id="btn-new" class="xbtn xbtn-primary" type="button">+ Erstellen</button>
@@ -338,6 +335,63 @@
             </div>
           </div>
           {{-- /TAB 3 --}}
+
+          {{-- TAB 4: Job-Hierarchie --}}
+            <div id="tab-hierarchy" style="display:none;">
+              <div class="d-flex align-items-center justify-content-between mb-2" style="gap:10px; flex-wrap:wrap;">
+                <div>
+                  <div style="font-weight:1100; color:var(--ink);">
+                    Job-Hierarchie / Vertretungsmatrix
+                  </div>
+                  <div class="hint">
+                    Definiert, welche Qualifikation welche Arbeit übernehmen darf.
+                  </div>
+                </div>
+
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                  <button id="btn-hierarchy-auto" class="xbtn xbtn-soft" type="button">
+                    Auto nach Sortierung
+                  </button>
+                  <button id="btn-hierarchy-save" class="xbtn xbtn-primary" type="button">
+                    Hierarchie speichern
+                  </button>
+                </div>
+              </div>
+
+              <div class="xcard p-1 mb-2">
+                <div style="font-weight:1100; margin-bottom:8px;">
+                  Test-Kalkulation
+                </div>
+
+                <div class="xgrid" style="grid-template-columns:1fr 1fr .5fr .5fr;">
+                  <select id="hierarchy-required" class="xfield">
+                    <option value="">Arbeit benötigt...</option>
+                    @foreach($quals as $q)
+                      <option value="{{ $q->id }}">{{ $q->name }}</option>
+                    @endforeach
+                  </select>
+
+                  <select id="hierarchy-performer" class="xfield">
+                    <option value="">Mitarbeiter ist...</option>
+                    @foreach($quals as $q)
+                      <option value="{{ $q->id }}">{{ $q->name }}</option>
+                    @endforeach
+                  </select>
+
+                  <input id="hierarchy-hours" class="xfield" value="1" placeholder="Stunden">
+
+                  <button id="btn-hierarchy-check" class="xbtn xbtn-soft" type="button">
+                    Prüfen
+                  </button>
+                </div>
+
+                <div id="hierarchy-check-result" class="mt-1" style="font-weight:900; color:var(--muted);"></div>
+              </div>
+
+              <div id="hierarchy-board-wrap" class="xcard p-1" style="min-height:260px;">
+                Bitte laden...
+              </div>
+            </div>
         </div>
       </div>
     </div>
@@ -573,12 +627,14 @@
     qsa('.xtab button').forEach(b=>b.classList.remove('active'));
     qsa('.xtab button').find(b=>b.getAttribute('data-tab')===tab)?.classList.add('active');
 
-    qs('#tab-positions').style.display = tab==='tab-positions' ? 'block' : 'none';
-    qs('#tab-qual').style.display      = tab==='tab-qual'      ? 'block' : 'none';
-    qs('#tab-costing').style.display   = tab==='tab-costing'   ? 'block' : 'none';
+    qs('#tab-positions').style.display = tab === 'tab-positions' ? 'block' : 'none';
+    qs('#tab-qual').style.display      = tab === 'tab-qual' ? 'block' : 'none';
+    qs('#tab-costing').style.display   = tab === 'tab-costing' ? 'block' : 'none';
+    qs('#tab-hierarchy').style.display = tab === 'tab-hierarchy' ? 'block' : 'none';
 
-    if(tab==='tab-qual') loadBoard();
-    if(tab==='tab-costing') loadCostingSets();
+    if(tab === 'tab-qual') loadBoard();
+    if(tab === 'tab-costing') loadCostingSets();
+    if(tab === 'tab-hierarchy') loadHierarchyBoard();
   }
   qsa('.xtab button').forEach(btn=>{
     btn.addEventListener('click', ()=> showTab(btn.getAttribute('data-tab')));
@@ -1427,6 +1483,169 @@
     });
   }
 
+
+  // -----------------------------
+// TAB 4: Job-Hierarchie / user-friendly cards
+// -----------------------------
+async function loadHierarchyBoard(){
+  const out = await api(`{{ route('position.hierarchy.board') }}`, 'GET');
+  if(!out.ok) return;
+
+  qs('#hierarchy-board-wrap').innerHTML = out.html;
+  bindHierarchyUi();
+}
+
+function bindHierarchyUi(){
+  const wrap = qs('#hierarchy-board-wrap');
+  if(!wrap) return;
+
+  qsa('[data-qh-toggle]', wrap).forEach(head => {
+    head.addEventListener('click', () => {
+      const card = head.closest('[data-qh-card]');
+      card?.classList.toggle('is-open');
+    });
+  });
+
+  qs('#qh-open-all', wrap)?.addEventListener('click', () => {
+    qsa('[data-qh-card]', wrap).forEach(card => card.classList.add('is-open'));
+  });
+
+  qs('#qh-close-all', wrap)?.addEventListener('click', () => {
+    qsa('[data-qh-card]', wrap).forEach(card => card.classList.remove('is-open'));
+  });
+
+  qs('#qh-search', wrap)?.addEventListener('input', e => {
+    const term = (e.target.value || '').toLowerCase().trim();
+
+    qsa('[data-qh-card]', wrap).forEach(card => {
+      const txt = card.getAttribute('data-search-text') || '';
+      const show = !term || txt.includes(term);
+
+      card.classList.toggle('qh-hidden', !show);
+
+      if(term && show){
+        card.classList.add('is-open');
+      }
+    });
+  });
+
+  qsa('[data-hierarchy-cell]', wrap).forEach(cell => {
+    const checkbox = cell.querySelector('[data-field="allowed"]');
+
+    checkbox?.addEventListener('change', () => {
+      refreshHierarchyCellState(cell);
+    });
+
+    refreshHierarchyCellState(cell);
+  });
+}
+
+function refreshHierarchyCellState(cell){
+  const performerId = parseInt(cell.getAttribute('data-performer-id'), 10);
+  const requiredId = parseInt(cell.getAttribute('data-required-id'), 10);
+  const allowedEl = cell.querySelector('[data-field="allowed"]');
+
+  const isSelf = performerId === requiredId;
+  const allowed = isSelf || !!allowedEl?.checked;
+
+  cell.classList.remove('is-self', 'is-allowed', 'is-denied');
+
+  if(isSelf){
+    cell.classList.add('is-self');
+  } else if(allowed){
+    cell.classList.add('is-allowed');
+  } else {
+    cell.classList.add('is-denied');
+  }
+
+  const small = cell.querySelector('.qh-work-small');
+  if(small && !isSelf){
+    small.textContent = allowed ? 'Diese Arbeit ist erlaubt' : 'Diese Arbeit ist nicht erlaubt';
+  }
+}
+
+function collectHierarchyRules(){
+  return qsa('#hierarchy-board-wrap [data-hierarchy-cell]').map(cell => {
+    const performerId = parseInt(cell.getAttribute('data-performer-id'), 10);
+    const requiredId = parseInt(cell.getAttribute('data-required-id'), 10);
+
+    const allowedEl = cell.querySelector('[data-field="allowed"]');
+    const efficiencyEl = cell.querySelector('[data-field="efficiency_factor"]');
+    const costEl = cell.querySelector('[data-field="cost_factor"]');
+
+    const isSelf = performerId === requiredId;
+
+    return {
+      performer_qualification_id: performerId,
+      required_qualification_id: requiredId,
+      allowed: isSelf ? 1 : (allowedEl?.checked ? 1 : 0),
+      efficiency_factor: isSelf ? 1 : toNum(efficiencyEl?.value || 1),
+      cost_factor: isSelf ? 1 : toNum(costEl?.value || 1),
+    };
+  });
+}
+
+qs('#btn-hierarchy-save')?.addEventListener('click', async () => {
+  const rules = collectHierarchyRules();
+
+  await api(`{{ route('position.hierarchy.save') }}`, 'POST', {
+    rules
+  });
+
+  alert('Hierarchie gespeichert.');
+  loadHierarchyBoard();
+});
+
+qs('#btn-hierarchy-auto')?.addEventListener('click', async () => {
+  if(!confirm('Automatisch nach Sortierung generieren? Bestehende Matrix-Regeln werden überschrieben/angepasst.')) {
+    return;
+  }
+
+  await api(`{{ route('position.hierarchy.auto') }}`, 'POST', {});
+  loadHierarchyBoard();
+});
+
+qs('#btn-hierarchy-check')?.addEventListener('click', async () => {
+  const requiredId = qs('#hierarchy-required')?.value || '';
+  const performerId = qs('#hierarchy-performer')?.value || '';
+  const hours = toNum(qs('#hierarchy-hours')?.value || 1);
+
+  if(!requiredId || !performerId){
+    alert('Bitte benötigte Arbeit und Mitarbeiter-Qualifikation auswählen.');
+    return;
+  }
+
+  const out = await api(`{{ route('position.hierarchy.check') }}`, 'POST', {
+    required_qualification_id: parseInt(requiredId, 10),
+    performer_qualification_id: parseInt(performerId, 10),
+    hours
+  });
+
+  if(!out.ok) return;
+
+  const box = qs('#hierarchy-check-result');
+
+  if(!out.allowed){
+    box.innerHTML = `
+      <div style="padding:12px 14px; border-radius:14px; background:rgba(239,68,68,.12); color:#7f1d1d;">
+        <strong>Nicht erlaubt</strong><br>
+        ${esc(out.performer.name)} darf die Arbeit von ${esc(out.required.name)} nicht ausführen.
+      </div>
+    `;
+    return;
+  }
+
+  box.innerHTML = `
+    <div style="padding:12px 14px; border-radius:14px; background:rgba(147,194,28,.14); color:#365314;">
+      <strong>Erlaubt</strong><br>
+      ${esc(out.performer.name)} kann ${esc(out.required.name)}-Arbeit ausführen.
+      <br>
+      Zeit: <strong>${fmtDE(out.effective_hours)}</strong> h
+      · Kosten/h: <strong>${fmtDE(out.hourly_cost)}</strong> €
+      · Gesamt: <strong>${fmtDE(out.total_cost)}</strong> €
+    </div>
+  `;
+});
   // -----------------------------
   // Popup open/close (rm-info)
   // -----------------------------
@@ -1460,3 +1679,24 @@
 })();
 </script>
 @endsection
+
+
+@push('scripts')
+  <script>
+      window.GlobalBreadcrumbs = [
+          {
+              label: 'Dashboard',
+              url: "{{ url('/') }}"
+          }, 
+          {
+              label: 'Postionverwaltung',
+              url: "{{ url()->current() }}",
+              clickable: false
+          }
+      ];
+
+      if (window.setGlobalBreadcrumbs) {
+          window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+      }
+  </script>
+@endpush

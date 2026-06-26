@@ -8,21 +8,8 @@ BEARBEITEN
 
 @endsection
 @section('content')
-    <div class="app-content content">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-        <div class="content-wrapper">
-            <div class="content-header row">
-                <div class="col-12">
-                    <h2 class="content-header-title float-left mb-0">Aufgabenliste</h2>
-                    <div class="breadcrumb-wrapper col-12">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ url('/employee_dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ url('/personal_task_view') }}">Bearbeiten</a></li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
+    <div class="app-content"> 
+        <div class="content-wrapper"> 
             <div class="content-body">  
                 <div class="col-md-12">
                     <div class="card">
@@ -1013,3 +1000,29 @@ $(document).ready(function () {
 
  
 @endsection
+
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs =[
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            },
+            {
+                label: 'Aufgabeliste',
+                url: "{{ url('admin/todo/personal')}}", 
+            },
+            {
+                label: 'Bearbeiten',
+                url: "{{ url()->current()}}",
+                clickable: false
+            }
+
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+@endpush

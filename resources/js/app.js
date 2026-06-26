@@ -7,6 +7,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./bootstrap";
 import "./notification";
 import "./chat";
+import './chat-mensions';
 
 import Echo from "laravel-echo";
 import Pusher from "pusher-js"; // Make sure this is here

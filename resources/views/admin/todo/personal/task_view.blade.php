@@ -2,3262 +2,3909 @@
 
 @section('title', 'Persönliche Aufgaben')
 
+@php
+use Illuminate\Support\Facades\Route;
+
+$taskEmployees = collect($employees ?? $employeeOptions ?? []);
+$taskTeams = collect($teams ?? []);
+$taskProducts = collect($articleGroups ?? $products ?? []);
+$taskLeadStages = collect($leadStages ?? []);
+$taskLeadStagePayload = $taskLeadStages->map(function ($stage) {
+    $subStages = collect(data_get($stage, 'activeSubStages') ?? data_get($stage, 'active_sub_stages') ?? data_get($stage, 'subStages') ?? data_get($stage, 'sub_stages') ?? []);
+
+    return [
+        'id' => data_get($stage, 'id'),
+        'key' => data_get($stage, 'key'),
+        'name' => data_get($stage, 'name'),
+        'color' => data_get($stage, 'color') ?: '#74b2d4',
+        'icon' => data_get($stage, 'icon'),
+        'sub_stages' => $subStages->map(function ($subStage) {
+            return [
+                'id' => data_get($subStage, 'id'),
+                'lead_stage_id' => data_get($subStage, 'lead_stage_id'),
+                'key' => data_get($subStage, 'key'),
+                'name' => data_get($subStage, 'name'),
+                'color' => data_get($subStage, 'color') ?: '#93c21c',
+                'icon' => data_get($subStage, 'icon'),
+            ];
+        })->values(),
+    ];
+})->values();
+
+$storeRoute = Route::has('personal-tasks.personal.task.store')
+    ? route('personal-tasks.personal.task.store')
+    : (Route::has('personal.task.store')
+        ? route('personal.task.store')
+        : (Route::has('personal-tasks.store') ? route('personal-tasks.store') : null));
+
+$updateRoute = route('personal-tasks.personal.task.update');
+@endphp
+
 @section('style')
-<link rel="stylesheet" type="text/css" href="{{ asset('css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
 
-<style>
-    .pt-layout {
-        display:flex;
-        flex-direction:column;
-        gap:0.2rem;
-    }
-    .pt-header {
-        display:flex;
-        flex-wrap:wrap;
-        gap:.75rem;
-        justify-content:space-between;
-        align-items:center;
-    }
-    .pt-tabs {
-        display:flex;
-        flex-wrap:wrap;
-        gap:.25rem;
-    }
-    .pt-tab {
-        font-size:12px;
-        padding:.3rem .75rem;
-        border-radius:999px;
-        border:1px solid #e5e7eb;
-        background:#f9fafb;
-        cursor:pointer;
-    }
-    .pt-tab.is-active {
-        background:#020617;
-        color:#fff;
-        border-color:#020617;
-    }
-    .pt-view-toggle {
-        display:inline-flex;
-        border-radius:999px;
-        border:1px solid #e5e7eb;
-        overflow:hidden;
-    }
-    .pt-view-toggle button {
-        font-size:12px;
-        padding:.25rem .75rem;
-        border:none;
-        background:transparent;
-        cursor:pointer;
-    }
-    .pt-view-toggle button.is-active {
-        background:#020617;
-        color:#fff;
-    }
-    .pt-filters {
-        display:flex;
-        flex-wrap:wrap;
-        gap:.5rem;
-        font-size:12px;
-    }
-    .pt-filters select,
-    .pt-filters input {
-        font-size:12px;
-        padding:.25rem .4rem;
-        border-radius:.5rem;
-        border:1px solid #e5e7eb;
-    }
-
-    /* Board */
-    .pt-board {
-        display:grid;
-        grid-template-columns:repeat(3,minmax(0,1fr));
-        gap:.75rem;
-    }
-    @media (max-width:900px){
-        .pt-board{grid-template-columns:1fr;}
-    }
-    .pt-column {
-        background: #f1f1f1;
-        border-right: 2px dashed #c5c5c5;
-        padding: .5rem;
-        display: flex;
-        flex-direction: column;
-        max-height: calc(100vh - 220px);
-    }
-    .pt-column-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: .25rem;
-        font-size: 15px;
-        text-transform: uppercase;
-        letter-spacing: .08em;
-        color: #636363;
-        background: #cfe09b;
-        padding: 12px;
-        font-weight: 500;
-    }
-    .pt-column-body {
-        flex:1;
-        overflow-y:auto;
-        padding-right:.25rem;
-        display:flex;
-        flex-direction:column;
-        gap:.5rem;
-    }
-
-    /* Card */
-    .pt-card {
-        position:relative;
-        border-radius:0;
-        border:1px solid #e5e7eb;
-        background:#fff;
-        padding:.55rem .7rem .6rem;
-        font-size:12px;
-        cursor:grab; 
-        border-left:4px solid var(--pt-card-color,#0f172a);
-        transition:box-shadow .15s ease, transform .15s ease, background .15s ease;
-    }
-    .pt-card:hover {
-        box-shadow:0 18px 45px rgba(15,23,42,.1);
-        transform:translateY(-1px);
-    }
-    .pt-card.is-pending {
-        background:#f9fafb;
-        border-left-color:#ff7561;
-    }
-    .pt-card-header {
-        display:flex;
-        justify-content:space-between;
-        gap:.75rem;
-        margin-bottom:.25rem;
-    }
-    .pt-card-title-wrap {
-        flex:1;
-        min-width:0;
-    }
-    .pt-card-title {
-        font-weight:600;
-        font-size:13px;
-        margin-bottom:.15rem;
-        white-space:nowrap;
-        overflow:hidden;
-        text-overflow:ellipsis;
-    }
-    .pt-card-meta {
-        display:flex;
-        flex-wrap:wrap;
-        gap:.25rem .45rem;
-        color:#6b7280;
-    }
-    .pt-card-side {
-        display:flex;
-        flex-direction:column;
-        align-items:flex-end;
-        gap:.25rem;
-    }
-    .pt-card-color-picker {
-        width:20px;
-        height:20px;
-        padding:0;
-        border-radius:999px;
-        border:none;
-        background:transparent;
-    }
-    .pt-card-row {
-        display:flex;
-        align-items:center;
-        gap:.4rem;
-        margin-top:.2rem;
-    }
-    .pt-card-label {
-        font-size:11px;
-        color:#9ca3af;
-        display:flex;
-        align-items:center;
-        gap:.25rem;
-        min-width:70px;
-    }
-    .pt-card-value {
-        font-size:12px;
-        color:#374151;
-        min-width:0;
-    }
-    .pt-card-desc {
-        font-size:11px;
-        color:#6b7280;
-        margin-top:.25rem;
-    }
-    .pt-card-people {
-        display:flex;
-        align-items:center;
-    }
-    .pt-card-footer {
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin-top:.4rem;
-    }
-    .pt-card-footer-meta {
-        display:flex;
-        flex-wrap:wrap;
-        gap:.25rem;
-    }
-
-    .pt-pill {
-        border-radius:999px;
-        padding:.1rem .45rem;
-        border:1px solid #e5e7eb;
-        font-size:10px;
-        background:#f9fafb;
-        display:inline-flex;
-        align-items:center;
-        gap:.2rem;
-    }
-    .pt-pill-warn {
-        border-color:#f97316;
-        color:#c2410c;
-        background:#ffedd5;
-    }
-    .pt-pill-light {
-        background:#f3f4f6;
-        border-color:#e5e7eb;
-        color:#4b5563;
-    }
-
-    .pt-badge-accept {
-        border-radius:999px;
-        padding:.08rem .5rem;
-        font-size:10px; 
-        background:#8fc73e;
-        color:#166534;
-        display:inline-flex;
-        align-items:center;
-        gap:.2rem;
-    }
-    .pt-badge-pending {
-        border-radius:999px;
-        padding:.08rem .5rem;
-        font-size:10px;
-        border:1px solid #f97373;
-        background:#fee2e2;
-        color:#b91c1c;
-        display:inline-flex;
-        align-items:center;
-        gap:.2rem;
-    }
-
-    .pt-avatars {
-        display:flex;
-        align-items:center;
-    }
-    .pt-avatar {
-        width:22px;
-        height:22px;
-        border-radius:999px;
-        border:2px solid #fff;
-        overflow:hidden;
-        margin-left:-6px;
-        background:#e5e7eb;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:11px;
-        color:#374151;
-    }
-    .pt-avatar:first-child {margin-left:0;}
-
-    .pt-card-actions {
-        display:flex;
-        gap:.25rem;
-    }
-    .pt-icon-btn {
-        border:none;
-        background:#f9fafb;
-        border-radius:999px;
-        padding:.2rem .4rem;
-        font-size:11px;
-        cursor:pointer;
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-    }
-    .pt-icon-btn:hover {
-        background:#8fc73e;
-    }
-    .pt-icon-xs {
-        width:13px;
-        height:13px;
-    }
-
-    /* List */
-    .pt-table {
-        width:100%;
-        border-collapse:collapse;
-        font-size:12px;
-    }
-    .pt-table thead {
-        background:#f9fafb;
-    }
-    .pt-table th,
-    .pt-table td {
-        padding:.4rem .5rem;
-        border-bottom:1px solid #e5e7eb;
-        vertical-align:top;
-    }
-    .pt-table th {
-        text-align:left;
-        font-size:11px;
-        text-transform:uppercase;
-        letter-spacing:.08em;
-        color:#6b7280;
-    }
-    .pt-row-pending {
-        background:#fef2f2;
-    }
-    .pt-icon-col {
-        display:flex;
-        flex-direction:column;
-        gap:.25rem;
-        align-items:center;
-        justify-content:flex-start;
-        padding-top:.35rem;
-    }
-    .pt-icon-col span {
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        width:22px;
-        height:22px;
-        border-radius:999px;
-        border:1px solid #e5e7eb;
-        background:#fff;
-    }
-    .pt-badge-age {
-        padding:.1rem .4rem;
-        border-radius:999px;
-        font-size:10px;
-        border:1px solid #f97316;
-        color:#c2410c;
-        background:#ffedd5;
-    }
-
-    .pt-dropdown {
-        position:relative;
-        display:inline-block;
-    }
-    .pt-dropdown-menu {
-        position:absolute;
-        right:0;
-        top:120%;
-        background:#fff;
-        border-radius:.6rem;
-        border:1px solid #e5e7eb;
-        min-width:180px;
-        padding:.25rem 0;
-        box-shadow:0 12px 30px rgba(15,23,42,0.08);
-        display:none;
-        z-index:30;
-    }
-    .pt-dropdown-menu button {
-        width:100%;
-        padding:.25rem .75rem;
-        font-size:12px;
-        border:none;
-        background:transparent;
-        text-align:left;
-        cursor:pointer;
-        display:flex;
-        gap:.35rem;
-        align-items:center;
-    }
-    .pt-dropdown-menu button:hover {
-        background:#8fc73e;
-    }
-
-    /* Modal */
-    .pt-modal-backdrop {
-        position:fixed;
-        inset:0;
-        background:rgba(15,23,42,.45);
-        display:none;
-        align-items:center;
-        justify-content:center;
-        z-index:40;
-    }
-    .pt-modal {
-        background:#fff;
-        border-radius:1rem;
-        padding:1rem;
-        width:100%;
-        max-width:380px;
-        box-shadow:0 20px 50px rgba(15,23,42,0.25);
-        display:flex;
-        flex-direction:column;
-        gap:.5rem;
-    }
-    .pt-modal textarea {
-        width:100%;
-        min-height:90px;
-        font-size:12px;
-        padding:.5rem;
-        border-radius:.75rem;
-        border:1px solid #e5e7eb;
-    }
-    .pt-modal-footer {
-        display:flex;
-        justify-content:flex-end;
-        gap:.5rem;
-        margin-top:.5rem;
-    }
-    .btn-primary {
-        background:#020617;
-        color:#fff;
-        border-radius:.75rem;
-        border:none;
-        padding:.25rem .8rem;
-        font-size:12px;
-        cursor:pointer;
-    }
-    .btn-secondary {
-        background:#f3f4f6;
-        color:#374151;
-        border-radius:.75rem;
-        border:none;
-        padding:.25rem .7rem;
-        font-size:12px;
-        cursor:pointer;
-    }
-    .swal2-container {
-        z-index: 3000 !important;
-    }
-
-    @keyframes ptHighlightPulse {
-        0% {
-            box-shadow: 0 0 0 0 rgba(147,194,28,0.6);
-            border-color: #93c21c;
-            background-color: #fefce8;
+    <style>
+        :root {
+            --pt-bg: #f3f4f6;
+            --pt-card: #ffffff;
+            --pt-text: #1f2937;
+            --pt-muted: #6b7280;
+            --pt-border: #e5e7eb;
+            --pt-primary: #93c21c;
+            --pt-primary-hover: #7baa18;
+            --pt-primary-light: #f4fae7;
+            --pt-blue: #74b2d4;
+            --pt-blue-light: #eff6ff;
+            --pt-success: #10b981;
+            --pt-success-light: #ecfdf5;
+            --pt-warning: #f59e0b;
+            --pt-warning-light: #fffbeb;
+            --pt-danger: #ef4444;
+            --pt-danger-light: #fef2f2;
+            --pt-gray-light: #f9fafb;
+            --pt-dark: #111827;
+            --pt-shadow: 0 10px 25px -10px rgb(0 0 0 / .25), 0 4px 8px -4px rgb(0 0 0 / .12);
+            --pt-radius: 16px;
         }
-        50% {
-            box-shadow: 0 0 0 8px rgba(147,194,28,0);
-            background-color: #ffffff;
+
+        .pt-app {
+            color: var(--pt-text);
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
-        100% {
-            box-shadow: 0 0 0 0 rgba(147,194,28,0);
-            border-color: #e5e7eb;
+
+        .pt-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
         }
-    }
- 
-    /* highlight newly created / updated task */
-    .pt-highlight {
-        position: relative;
-        animation: ptHighlightPulse 1.2s ease-out 0s 3;
-        box-shadow:
-            0 0 0 2px #93c21c,
-            0 0 0 10px rgba(147, 194, 28, 0.35);
-    }
 
-    @keyframes ptHighlightPulse {
-        0% {
-            transform: scale(1);
-            box-shadow:
-                0 0 0 0 rgba(147, 194, 28, 0.45),
-                0 0 0 0 rgba(147, 194, 28, 0.0);
+        .pt-title {
+            font-size: 26px;
+            font-weight: 900;
+            color: #111827;
+            margin: 0;
+            letter-spacing: -.025em;
         }
-        50% {
-            transform: scale(1.02);
-            box-shadow:
-                0 0 0 4px rgba(147, 194, 28, 0.45),
-                0 0 0 14px rgba(147, 194, 28, 0.15);
+
+        .pt-subtitle {
+            font-size: 13px;
+            color: var(--pt-muted);
+            margin-top: 4px;
         }
-        100% {
-            transform: scale(1);
-            box-shadow:
-                0 0 0 0 rgba(147, 194, 28, 0.0),
-                0 0 0 0 rgba(147, 194, 28, 0.0);
+
+        .pt-header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
         }
-    }
 
-    /* make SweetAlert always above sidebar / slide-in */
-    .swal2-container {
-        z-index: 3000 !important;
-    }
-
-
-</style>
- 
- 
-<style>
-    .pt-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: center;
-    padding: 0.6rem 0.9rem;
-    border-radius: 9999px;
-    background: #f9fafb;
-    border: 1px solid #cfe09b;
-    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
-}
-
-/* Text + selects */
-.pt-filters input[type="text"],
-.pt-filters select {
-    min-width: 130px;
-    border-radius: 9999px;
-    border: 1px solid #cfe09b;
-    padding: 0.35rem 0.9rem;
-    font-size: 0.85rem;
-    color: #374151;           /* dark gray text */
-    background-color: #ffffff;
-    outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-}
-
-/* Slightly smaller for the sort direction select */
-.pt-filters select[name="dir"] {
-    min-width: 70px;
-    text-align: center;
-}
-
-.pt-filters input[type="text"]::placeholder {
-    color: #9ca3af;
-}
-
-a:hover {
-        color: black;
-}
-/* Hover + focus states */
-.pt-filters input[type="text"]:hover,
-.pt-filters select:hover {
-    background-color: #fefefb;
-    border-color: #93c21c;
-}
-
-.pt-filters input[type="text"]:focus,
-.pt-filters select:focus {
-    border-color: #93c21c;
-    box-shadow: 0 0 0 2px rgba(147, 194, 28, 0.18);
-}
-
-/* Filter button */
-.pt-filters .btn-secondary {
-    border-radius: 9999px;
-    border: none;
-    padding: 0.4rem 1.2rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, #93c21c, #cfe09b);
-    color: #1f2933;
-    box-shadow: 0 12px 30px rgba(147, 194, 28, 0.35);
-    cursor: pointer;
-    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
-    white-space: nowrap;
-}
-
-.pt-filters .btn-secondary:hover {
-    filter: brightness(0.96);
-    transform: translateY(-1px);
-    box-shadow: 0 16px 35px rgba(147, 194, 28, 0.45);
-}
-
-.pt-filters .btn-secondary:active {
-    transform: translateY(0);
-    box-shadow: 0 8px 18px rgba(147, 194, 28, 0.25);
-}
-
-/* Priority / color row tweaks */
-.nt-priority-cell {
-    text-align: right;
-}
-
-.nt-priority-wrapper {
-    display: inline-flex;
-    align-items: center;
-    gap: .35rem;
-}
-
-.nt-priority-label {
-    font-size: .75rem;
-    color: #4b5563;
-    white-space: nowrap;
-}
-
-/* Responsive: stack on small screens */
-@media (max-width: 768px) {
-    .pt-filters {
-        border-radius: 18px;
-    }
-    .pt-filters input[type="text"],
-    .pt-filters select,
-    .pt-filters .btn-secondary {
-        flex: 1 1 100%;
-    }
-}
-
-</style>
-
-<style>
-    /* ---- Slide-in shell ---- */
-    .new_task {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 1200px;
-        max-width: 100%;
-        height: 100vh;
-        z-index: 1300;
-        display: none;
-        font-size: 13px;
-        color: #020617;
-    }
-
-    .new_task_card {
-        position: relative;
-        height: 100%;
-        background: #f9fafb;
-        box-shadow: 0 25px 60px rgba(15,23,42,.32);
-        border-radius: 1.25rem 0 0 1.25rem;
-        border: 1px solid rgba(148, 163, 184, 0.4);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Header */
-    .nt-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: .9rem 1.2rem;
-        background: linear-gradient(135deg, #93c21c, #cfe09b);
-        color: #0b1120;
-    }
-
-    .nt-header-left {
-        display: flex;
-        flex-direction: column;
-        gap: .1rem;
-    }
-
-    .nt-header-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        letter-spacing: .03em;
-        text-transform: uppercase;
-    }
-
-    .nt-header-sub {
-        font-size: .75rem;
-        opacity: .9;
-    }
-
-    .nt-header-actions {
-        display: flex;
-        align-items: center;
-        gap: .4rem;
-    }
-
-    .nt-close-btn {
-        border: none;
-        border-radius: 999px;
-        padding: .2rem .55rem;
-        background: rgba(15,23,42,.12);
-        color: #0b1120;
-        font-size: .8rem;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: .25rem;
-        transition: background .15s ease, transform .15s ease;
-    }
-
-    .nt-close-btn:hover {
-        background: rgba(15,23,42,.22);
-        transform: translateY(-1px);
-    }
-
-    /* Body layout */
-    .nt-body {
-        flex: 1;
-        overflow-y: auto;
-        padding: 1rem 1.1rem 0.75rem;
-        background: radial-gradient(circle at top left, #eef5d8 0, #f9fafb 50%, #f3f4f6 100%);
-    }
-
-    .nt-grid {
-        display: grid;
-        grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
-        gap: .9rem;
-    }
-
-    @media (max-width: 900px) {
-        .nt-grid {
-            grid-template-columns: minmax(0, 1fr);
+        .pt-btn {
+            border: none;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: .18s ease;
+            text-decoration: none;
+            line-height: 1;
         }
-    }
 
-    .nt-section {
-        background: #ffffff;
-        border-radius: 1rem;
-        padding: .75rem .85rem;
-        box-shadow: 0 14px 35px rgba(15,23,42,.08);
-        border: 1px solid rgba(209,213,219,.7);
-        margin-bottom: .7rem;
-    }
-
-    .nt-section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: .5rem;
-    }
-
-    .nt-section-title {
-        font-size: .8rem;
-        font-weight: 600;
-        letter-spacing: .08em;
-        text-transform: uppercase;
-        color: #6b7280;
-    }
-
-    .nt-section-badge {
-        font-size: .7rem;
-        padding: .1rem .5rem;
-        border-radius: 999px;
-        background: #ecfccb;
-        color: #3f6212;
-        border: 1px solid #a3e635;
-    }
-
-    .nt-field-label {
-        font-size: .8rem;
-        font-weight: 500;
-        margin-bottom: .15rem;
-        color: #374151;
-    }
-
-    .nt-input,
-    .nt-textarea,
-    .nt-select {
-        width: 100%;
-        border-radius: .7rem;
-        border: 1px solid #d1d5db;
-        font-size: .8rem;
-        padding: .4rem .6rem;
-        background: #f9fafb;
-        outline: none;
-        transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
-    }
-
-    .nt-textarea {
-        resize: vertical;
-        min-height: 60px;
-    }
-
-    .nt-input:focus,
-    .nt-textarea:focus,
-    .nt-select:focus {
-        background: #ffffff;
-        border-color: #93c21c;
-        box-shadow: 0 0 0 1px rgba(147,194,28,.4);
-    }
-
-    .nt-row {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: .5rem;
-        margin-bottom: .4rem;
-    }
-
-    .nt-row-4 {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: .5rem;
-        margin-bottom: .4rem;
-    }
-
-    @media (max-width: 768px) {
-        .nt-row, .nt-row-4 {
-            grid-template-columns: minmax(0, 1fr);
+        .pt-btn svg,
+        .pt-btn i[data-lucide] {
+            width: 16px;
+            height: 16px;
         }
-    }
 
-    /* Switch line */
-    .nt-switch-row {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: .75rem;
-        flex-wrap: wrap;
-        margin-top: .25rem;
-    }
-
-    .nt-switch-label {
-        font-size: .75rem;
-        color: #4b5563;
-        display: flex;
-        align-items: center;
-        gap: .25rem;
-    }
-
-    /* Side settings */
-    .nt-chip-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: .4rem;
-    }
-
-    .nt-chip {
-        border-radius: 999px;
-        padding: .18rem .55rem;
-        font-size: .74rem;
-        border: 1px solid #d1d5db;
-        background: #f9fafb;
-        display: inline-flex;
-        align-items: center;
-        gap: .25rem;
-        color: #4b5563;
-    }
-
-    .nt-chip strong {
-        font-weight: 600;
-    }
-
-    /* Settings table keep, but restyle rows */
-    #accordionWrapa1 .table {
-        width: 100%;
-        margin-bottom: 0;
-        border-collapse: collapse;
-        font-size: .8rem;
-    }
-
-    #accordionWrapa1 .table tr {
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    #accordionWrapa1 .table td {
-        padding: .35rem .3rem;
-        vertical-align: middle;
-    }
-
-    #accordionWrapa1 .table tr:first-child td {
-        border-top: none;
-    }
-
-    #accordionWrapa1 .table tr:nth-child(odd) {
-        background: #f9fafb;
-    }
-
-    /* Color + toggles row */
-    .nt-top-right-row {
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-end;
-        gap: .6rem;
-        flex-wrap: wrap;
-        margin-top: .35rem;
-    }
-
-    .nt-inline-toggle {
-        font-size: .7rem;
-        display: flex;
-        flex-direction: column;
-        gap: .1rem;
-        align-items: flex-start;
-    }
-
-    .nt-inline-toggle p {
-        margin-bottom: 0;
-        font-size: .75rem;
-        color: #4b5563;
-    }
-
-    /* Task keys section */
-    #key_task th,
-    #key_task td {
-        font-size: .75rem;
-        vertical-align: top;
-    }
-
-    #key_task thead th {
-        text-transform: uppercase;
-        letter-spacing: .06em;
-        color: #6b7280;
-        background: #f9fafb;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    #key_task .task-duration {
-        font-size: .75rem;
-    }
-
-    #key_total_time {
-        font-size: .7rem;
-        color: #4b5563;
-    }
-
-    /* Footer buttons */
-    .nt-footer {
-        padding: .6rem .9rem .8rem;
-        border-top: 1px solid rgba(209,213,219,.8);
-        background: #f9fafb;
-        display: flex;
-        justify-content: flex-end;
-        gap: .5rem;
-    }
-
-    .nt-btn {
-        border-radius: 999px;
-        padding: .32rem .9rem;
-        font-size: .8rem;
-        display: inline-flex;
-        align-items: center;
-        gap: .28rem;
-        border: none;
-        cursor: pointer;
-        transition: box-shadow .12s ease, transform .12s ease, background-color .12s ease;
-    }
-
-    .nt-btn-primary {
-        background: linear-gradient(135deg, #020617, #1f2937);
-        color: #f9fafb;
-        box-shadow: 0 12px 30px rgba(15,23,42,.35);
-    }
-
-    .nt-btn-primary:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 16px 40px rgba(15,23,42,.45);
-    }
-
-    .nt-btn-ghost {
-        background: transparent;
-        color: #6b7280;
-        border: 1px solid #d1d5db;
-    }
-
-    .nt-btn-ghost:hover {
-        background: #e5e7eb;
-    }
-
-    .nt-btn-danger {
-        background: #fee2e2;
-        color: #b91c1c;
-        border: 1px solid #fecaca;
-    }
-
-    .nt-btn-danger:hover {
-        background: #fecaca;
-    }
-
-    .nt-btn i {
-        font-size: .9rem;
-    }
-</style>
-
-<style>
-    .sa-feed {
-        display: flex;
-        align-items: stretch;
-        gap: 0;
-        border-radius: 9999px;
-        overflow: hidden;
-        background: linear-gradient(90deg, #b91c1c 0, #0b1020 40%);
-        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
-        color: #e5e7eb;
-        font-size: 0.85rem;
-        max-width: 100%;
-        margin: .75rem 0 1rem;
-    }
-
-    .sa-feed-left {
-        display: flex;
-        align-items: center;
-        gap: .4rem;
-        background: #cfe09b;
-        padding: .6rem .9rem;
-    }
-    .sa-feed-icon {
-        width: 26px;
-        height: 26px;
-        border-radius: 999px;
-        background: rgba(248, 250, 252, .15);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #6bb20c;
-    }
-    .sa-feed-icon svg {
-        width: 14px;
-        height: 14px;
-    }
-    .sa-feed-label {
-        font-weight: 700;
-        letter-spacing: .12em;
-        text-transform: uppercase;
-        white-space: nowrap;
-        font-size: .78rem;
-        color: #6bb20c;
-    }
-
-    .sa-feed-main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: .5rem .9rem;
-        background: radial-gradient(circle at top left, #052d4c 0, #020617 55%, #020617 100%);
-        min-width: 0;
-    }
-
-    .sa-feed-line {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: .5rem;
-        margin-bottom: .1rem;
-    }
-
-    .sa-feed-pill {
-        border-radius: 999px;
-        padding: .1rem .7rem;
-        border: 1px solid rgba(148, 163, 184, .7);
-        font-size: .75rem;
-        background: rgba(15, 23, 42, 0.6);
-        color: #e5e7eb;
-        white-space: nowrap;
-    }
-
-    .sa-feed-title {
-        font-weight: 500;
-        font-size: .9rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .sa-feed-time {
-        display: inline-flex;
-        align-items: center;
-        gap: .3rem;
-        margin-left: auto;
-        font-size: .8rem;
-        color: #9ca3af;
-        white-space: nowrap;
-    }
-
-    .sa-feed-time::before {
-        content: "⏱";
-        font-size: .8rem;
-    }
-
-    .sa-feed-sub {
-        font-size: .78rem;
-        color: #9ca3af;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .sa-feed-controls {
-        display: flex;
-        align-items: center;
-        gap: .25rem;
-        padding: .35rem .5rem;
-        background: #020617;
-    }
-
-    .sa-feed-btn {
-        width: 30px;
-        height: 30px;
-        border-radius: .4rem;
-        border: 1px solid rgba(148, 163, 184, .7);
-        background: transparent;
-        color: #e5e7eb;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: .8rem;
-        cursor: pointer;
-        transition: background .12s ease, transform .12s ease, box-shadow .12s ease;
-    }
-
-    .sa-feed-btn:hover {
-        background: rgba(15, 23, 42, .9);
-        transform: translateY(-1px);
-        box-shadow: 0 8px 18px rgba(15, 23, 42, .5);
-    }
-
-    .sa-feed-btn:active {
-        transform: translateY(0);
-        box-shadow: none;
-    }
-
-    .pt-card.pt-card-deleted {
-        background: #e5e7eb;
-        border-left-color: #4b5563;
-        border-style: dashed;
-        opacity: 0.8;
-    }
-
-    .pt-card.pt-card-deleted .pt-card-title {
-        text-decoration: line-through;
-        color: #4b5563;
-    }
-
-    .pt-card.pt-card-deleted .pt-card-desc {
-        color: #6b7280;
-    }
-
-    @media (max-width: 768px) {
-        .sa-feed {
-            border-radius: 1rem;
+        .pt-btn-primary {
+            background: var(--pt-primary);
+            color: #fff;
+            box-shadow: 0 12px 25px rgba(147, 194, 28, .28);
         }
-        .sa-feed-label {
-            display: none; /* keep only icon on small screens */
+
+        .pt-btn-primary:hover {
+            background: var(--pt-primary-hover);
+            color: #fff;
+            transform: translateY(-1px);
         }
-        .sa-feed-main {
-            padding: .45rem .6rem;
+
+        .pt-btn-soft {
+            background: #fff;
+            border: 1px solid var(--pt-border);
+            color: var(--pt-text);
         }
-        .sa-feed-title {
+
+        .pt-btn-soft:hover {
+            background: #f9fafb;
+            color: var(--pt-text);
+        }
+
+        .pt-btn-danger {
+            background: var(--pt-danger-light);
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
+
+        .pt-btn-danger:hover {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .pt-toolbar {
+            background: #fff;
+            border: 1px solid var(--pt-border);
+            border-radius: var(--pt-radius);
+            padding: 14px;
+            box-shadow: 0 1px 2px rgb(0 0 0 / .04);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .pt-toolbar-left,
+        .pt-toolbar-right {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pt-toolbar-left {
+            flex: 1;
+        }
+
+        .pt-filter {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 150px;
+        }
+
+        .pt-filter.search {
+            min-width: 280px;
+            flex: 1;
+        }
+
+        #ptLeadStageFilter,
+        #ptLeadSubStageFilter {
+            min-width: 190px;
+        }
+
+        .pt-label,
+        .nt-field-label {
+            font-size: 11px;
+            font-weight: 900;
+            color: var(--pt-muted);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 0;
+        }
+
+        .pt-input,
+        .pt-select {
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--pt-border);
+            background: #f9fafb;
+            padding: 0 12px;
+            font-size: 13px;
+            outline: none;
+            transition: .15s ease;
+        }
+
+        .pt-input:focus,
+        .pt-select:focus {
+            background: #fff;
+            border-color: var(--pt-primary);
+            box-shadow: 0 0 0 3px var(--pt-primary-light);
+        }
+
+        .pt-tabs {
+            display: inline-flex;
+            background: #f9fafb;
+            border: 1px solid var(--pt-border);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .pt-tab {
+            border: none;
+            background: transparent;
+            border-radius: 9px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 900;
+            color: var(--pt-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .pt-tab.is-active {
+            background: #111827;
+            color: #fff;
+        }
+
+        .pt-tab svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .pt-more {
+            position: relative;
+        }
+
+        .pt-more-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 250px;
+            background: #fff;
+            border: 1px solid var(--pt-border);
+            border-radius: 14px;
+            box-shadow: var(--pt-shadow);
+            padding: 8px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .pt-more.is-open .pt-more-menu {
+            display: block;
+        }
+
+        .pt-more-item {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--pt-text);
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            cursor: pointer;
+        }
+
+        .pt-more-item:hover {
+            background: var(--pt-primary-light);
+        }
+
+        .pt-more-item svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .pt-stats {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        @media(max-width:1280px) {
+            .pt-stats {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media(max-width:720px) {
+            .pt-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pt-stat {
+            background: #fff;
+            border: 1px solid var(--pt-border);
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 1px 2px rgb(0 0 0 / .04);
+        }
+
+        .pt-stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+        }
+
+        .pt-stat-icon.open {
+            background: var(--pt-blue-light);
+            color: var(--pt-blue);
+        }
+
+        .pt-stat-icon.progress {
+            background: var(--pt-warning-light);
+            color: var(--pt-warning);
+        }
+
+        .pt-stat-icon.done {
+            background: var(--pt-success-light);
+            color: var(--pt-success);
+        }
+
+        .pt-stat-icon.pause,
+        .pt-stat-icon.archive {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .pt-stat-icon.trash {
+            background: var(--pt-danger-light);
+            color: var(--pt-danger);
+        }
+
+        .pt-stat-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .pt-stat-label {
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--pt-muted);
+            letter-spacing: .06em;
+        }
+
+        .pt-stat-value {
+            font-size: 22px;
+            font-weight: 900;
+            color: #111827;
+            line-height: 1.1;
+            margin-top: 3px;
+        }
+
+        .pt-main-card {
+            background: #fff;
+            border: 1px solid var(--pt-border);
+            border-radius: 18px;
+            box-shadow: 0 1px 2px rgb(0 0 0 / .04);
+            overflow: visible;
+        }
+
+        .pt-main-head {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--pt-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .pt-section-title {
+            font-size: 14px;
+            font-weight: 900;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pt-section-title svg {
+            width: 17px;
+            height: 17px;
+            color: var(--pt-primary);
+        }
+
+        .pt-board {
+            padding: 14px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            min-height: 520px;
+        }
+
+        @media(max-width:980px) {
+            .pt-board {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pt-column {
+            background: #f9fafb;
+            border: 1px solid var(--pt-border);
+            border-radius: 16px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .pt-column-head {
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--pt-border);
+            background: #fff;
+        }
+
+        .pt-column-title {
+            font-size: 13px;
+            font-weight: 900;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pt-column-count {
+            background: var(--pt-primary-light);
+            color: #3f6212;
+            border-radius: 999px;
+            padding: 3px 9px;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .pt-column-body {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+            overflow-y: auto;
+            max-height: calc(100vh - 360px);
+        }
+
+        .pt-column-body.is-over {
+            outline: 2px dashed var(--pt-primary);
+            outline-offset: -8px;
+            background: #f8ffe9;
+        }
+
+        .pt-task-card {
+            background: #fff;
+            border: 1px solid var(--pt-border);
+            border-left: 5px solid var(--card-color, var(--pt-primary));
+            border-radius: 14px;
+            padding: 12px;
+            position: relative;
+            transition: .18s ease;
+            cursor: grab;
+        }
+
+        .pt-task-card:hover {
+            border-color: var(--pt-primary);
+            box-shadow: var(--pt-shadow);
+            transform: translateY(-1px);
+        }
+
+        .pt-task-card.is-paused {
+            opacity: .86;
+        }
+
+        .pt-task-card.is-paused .pt-card-inner {
+            filter: blur(1.2px) grayscale(.25);
+        }
+
+        .pt-pause-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, .74);
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 6px;
+            padding: 16px;
+        }
+
+        .pt-pause-layer svg {
+            width: 24px;
+            height: 24px;
+            color: var(--pt-warning);
+        }
+
+        .pt-pause-layer strong {
+            font-size: 13px;
+            color: #111827;
+        }
+
+        .pt-pause-layer span {
+            font-size: 11px;
+            color: var(--pt-muted);
+            max-width: 240px;
+        }
+
+        .pt-card-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .pt-card-title {
+            font-size: 14px;
+            font-weight: 900;
+            color: #111827;
+            margin: 0;
+            line-height: 1.35;
+        }
+
+        .pt-card-code {
+            font-size: 11px;
+            color: var(--pt-muted);
+            margin-top: 3px;
+        }
+
+        .pt-card-actions {
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .pt-icon-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            border: 1px solid var(--pt-border);
+            background: #fff;
+            color: var(--pt-muted);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: .15s ease;
+        }
+
+        .pt-icon-btn:hover {
+            background: var(--pt-primary-light);
+            color: #111827;
+            border-color: var(--pt-primary);
+        }
+
+        .pt-icon-btn svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .pt-card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 9px 0;
+        }
+
+        .pt-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #f9fafb;
+            border: 1px solid var(--pt-border);
+            color: #4b5563;
+        }
+
+        .pt-pill svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .pt-pill.priority-high,
+        .pt-pill.priority-very-high {
+            background: var(--pt-danger-light);
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
+
+        .pt-pill.priority-medium {
+            background: var(--pt-warning-light);
+            color: #92400e;
+            border-color: #fde68a;
+        }
+
+        .pt-pill.priority-low,
+        .pt-pill.priority-normal {
+            background: var(--pt-success-light);
+            color: #047857;
+            border-color: #bbf7d0;
+        }
+
+        .pt-stage-pill {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #0f172a;
             max-width: 100%;
         }
-        .sa-feed-time {
+
+        .pt-stage-pill small {
+            padding-left: 7px;
+            margin-left: 2px;
+            color: #475569;
+            font-weight: 900;
+        }
+
+        .nt-stage-preview {
+            border: 1px dashed #cbd5e1;
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            border-radius: 14px;
+            padding: 10px;
+            margin-top: 8px;
+        }
+
+        .nt-stage-preview .nt-chip {
+            font-weight: 900;
+        }
+
+        .pt-desc {
+            font-size: 12px;
+            color: var(--pt-muted);
+            line-height: 1.45;
+            margin-top: 8px;
+        }
+
+        .pt-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .pt-avatars {
+            display: flex;
+            align-items: center;
+        }
+
+        .pt-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            border: 2px solid #fff;
+            background: #e5e7eb;
+            margin-left: -7px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 900;
+            color: #374151;
+        }
+
+        .pt-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .pt-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pt-progress {
+            width: 100%;
+            height: 6px;
+            border-radius: 999px;
+            background: #f3f4f6;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .pt-progress-bar {
+            height: 100%;
+            background: var(--pt-primary);
+            border-radius: 999px;
+        }
+
+        .pt-list {
+            padding: 14px;
+            overflow-x: auto;
+        }
+
+        .pt-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            min-width: 1120px;
+        }
+
+        .pt-table th {
+            text-align: left;
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--pt-muted);
+            letter-spacing: .06em;
+            padding: 0 12px;
+        }
+
+        .pt-table td {
+            background: #fff;
+            border-top: 1px solid var(--pt-border);
+            border-bottom: 1px solid var(--pt-border);
+            padding: 12px;
+            vertical-align: middle;
+            font-size: 13px;
+        }
+
+        .pt-table td:first-child {
+            border-left: 1px solid var(--pt-border);
+            border-radius: 14px 0 0 14px;
+        }
+
+        .pt-table td:last-child {
+            border-right: 1px solid var(--pt-border);
+            border-radius: 0 14px 14px 0;
+        }
+
+        .pt-row-paused td {
+            background: #fafafa;
+            opacity: .78;
+        }
+
+        .pt-action-dropdown {
+            position: relative;
+            display: inline-flex;
+        }
+
+        .pt-action-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 220px;
+            background: #fff;
+            border: 1px solid var(--pt-border);
+            border-radius: 14px;
+            box-shadow: var(--pt-shadow);
+            padding: 8px;
+            display: none;
+            z-index: 2500;
+        }
+
+        .pt-action-dropdown.is-open .pt-action-menu {
+            display: block;
+        }
+
+        .pt-action-menu button {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 9px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--pt-text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .pt-action-menu button:hover {
+            background: var(--pt-primary-light);
+        }
+
+        .pt-action-menu button.danger {
+            color: var(--pt-danger);
+        }
+
+        .pt-empty {
+            padding: 30px 16px;
+            text-align: center;
+            color: var(--pt-muted);
+            font-size: 13px;
+            border: 1px dashed #d1d5db;
+            border-radius: 14px;
+            background: #fff;
+        }
+
+        .pt-loader {
+            padding: 50px;
+            text-align: center;
+            color: var(--pt-muted);
+            font-weight: 800;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        /* slide drawer */
+        .new_task {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 1220px;
+            max-width: 100%;
+            height: 100vh;
+            z-index: 1300;
+            display: none;
+            font-size: 13px;
+            color: #020617;
+        }
+
+        .new_task_card {
+            position: relative;
+            height: 100%;
+            background: #f9fafb;
+            box-shadow: 0 25px 60px rgba(15, 23, 42, .32);
+            border-radius: 1.25rem 0 0 1.25rem;
+            border: 1px solid rgba(148, 163, 184, .4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nt-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .9rem 1.2rem;
+            background: linear-gradient(135deg, #93c21c, #cfe09b);
+            color: #0b1120;
+        }
+
+        .nt-header-left {
+            display: flex;
+            flex-direction: column;
+            gap: .1rem;
+        }
+
+        .nt-header-title {
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: .03em;
+            text-transform: uppercase;
+        }
+
+        .nt-header-sub {
+            font-size: .76rem;
+            opacity: .9;
+        }
+
+        .nt-header-actions {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+        }
+
+        .nt-close-btn {
+            border: none;
+            border-radius: 999px;
+            padding: .35rem .7rem;
+            background: rgba(15, 23, 42, .12);
+            color: #0b1120;
+            font-size: .8rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+            transition: .15s ease;
+        }
+
+        .nt-close-btn:hover {
+            background: rgba(15, 23, 42, .22);
+            transform: translateY(-1px);
+        }
+
+        .nt-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.1rem .75rem;
+            background: radial-gradient(circle at top left, #eef5d8 0, #f9fafb 50%, #f3f4f6 100%);
+        }
+
+        .nt-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.05fr);
+            gap: .9rem;
+        }
+
+        @media(max-width:900px) {
+            .nt-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .new_task_card {
+                border-radius: 0;
+            }
+        }
+
+        .nt-section {
+            background: #fff;
+            border-radius: 1rem;
+            padding: .8rem .9rem;
+            box-shadow: 0 14px 35px rgba(15, 23, 42, .08);
+            border: 1px solid rgba(209, 213, 219, .7);
+            margin-bottom: .75rem;
+        }
+
+        .nt-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: .6rem;
+            gap: .75rem;
+        }
+
+        .nt-section-title {
+            font-size: .8rem;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+        }
+
+        .nt-section-badge {
+            font-size: .7rem;
+            padding: .15rem .55rem;
+            border-radius: 999px;
+            background: #ecfccb;
+            color: #3f6212;
+            border: 1px solid #a3e635;
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+        }
+
+        .nt-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: .55rem;
+            margin-bottom: .55rem;
+        }
+
+        .nt-row-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: .55rem;
+            margin-bottom: .55rem;
+        }
+
+        .nt-row-4 {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: .55rem;
+            margin-bottom: .55rem;
+        }
+
+        @media(max-width:768px) {
+
+            .nt-row,
+            .nt-row-3,
+            .nt-row-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .nt-input,
+        .nt-select,
+        .nt-textarea {
+            width: 100%;
+            border-radius: .7rem;
+            border: 1px solid #d1d5db;
+            font-size: .8rem;
+            padding: .45rem .65rem;
+            background: #f9fafb;
+            outline: none;
+            transition: .15s ease;
+            color: #111827;
+        }
+
+        .nt-select,
+        .nt-input {
+            min-height: 38px;
+        }
+
+        .nt-textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .nt-input:focus,
+        .nt-select:focus,
+        .nt-textarea:focus {
+            background: #fff;
+            border-color: #93c21c;
+            box-shadow: 0 0 0 1px rgba(147, 194, 28, .4);
+        }
+
+        .nt-switch-row {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            flex-wrap: wrap;
+            margin-top: .25rem;
+        }
+
+        .nt-switch-label {
+            font-size: .78rem;
+            color: #4b5563;
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+        }
+
+        .nt-top-right-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: .65rem;
+            flex-wrap: wrap;
+            margin-top: .15rem;
+        }
+
+        .nt-inline-toggle {
+            font-size: .72rem;
+            display: flex;
+            flex-direction: column;
+            gap: .1rem;
+            align-items: flex-start;
+        }
+
+        .nt-inline-toggle p {
+            margin-bottom: 0;
             font-size: .75rem;
+            color: #4b5563;
         }
-    }
 
-    @media (max-width: 480px) {
-        .sa-feed-time {
-            display: none; /* hide time on very small screens */
+        .nt-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem;
         }
-    }
-</style>
 
-@endsection
+        .nt-chip {
+            border-radius: 999px;
+            padding: .2rem .6rem;
+            font-size: .74rem;
+            border: 1px solid #d1d5db;
+            background: #f9fafb;
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+            color: #4b5563;
+        }
+
+        .nt-footer {
+            padding: .7rem 1rem;
+            border-top: 1px solid rgba(209, 213, 219, .8);
+            background: #f9fafb;
+            display: flex;
+            justify-content: flex-end;
+            gap: .55rem;
+            flex-wrap: wrap;
+        }
+
+        .nt-btn {
+            border-radius: 999px;
+            padding: .45rem 1rem;
+            font-size: .8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .nt-btn svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .nt-btn-primary {
+            background: linear-gradient(135deg, #020617, #1f2937);
+            color: #f9fafb;
+        }
+
+        .nt-btn-ghost {
+            background: transparent;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+        }
+
+        .nt-btn-danger {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        #key_task {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .78rem;
+        }
+
+        #key_task th {
+            font-size: .7rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: #6b7280;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            padding: .45rem;
+        }
+
+        #key_task td {
+            padding: .45rem;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+
+        #key_total_time {
+            font-size: .75rem;
+            color: #4b5563;
+        }
+
+        .select2-container {
+            font-size: 13px;
+        }
+
+        .select2-container--default .select2-selection--single,
+        .select2-container--default .select2-selection--multiple {
+            border: 1px solid #d1d5db;
+            border-radius: .7rem;
+            min-height: 38px;
+            background: #f9fafb;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 36px;
+            color: #111827;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background: #ecfccb;
+            border: 1px solid #a3e635;
+            border-radius: 999px;
+            color: #365314;
+            padding: 2px 8px;
+            font-size: 12px;
+        }
+
+        .nt-customer-option-title {
+            font-weight: 800;
+            color: #111827;
+            font-size: 13px;
+        }
+
+        .nt-customer-option-meta {
+            font-size: 11px;
+            color: #6b7280;
+            line-height: 1.35;
+            margin-top: 3px;
+        }
+
+        .pt-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 3000;
+        }
+
+        .pt-modal-backdrop.is-open {
+            display: flex;
+        }
+
+        .pt-modal {
+            width: 100%;
+            max-width: 460px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: var(--pt-shadow);
+            overflow: hidden;
+        }
+
+        .pt-modal-head {
+            padding: 16px;
+            border-bottom: 1px solid var(--pt-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pt-modal-title {
+            font-size: 15px;
+            font-weight: 900;
+            color: #111827;
+        }
+
+        .pt-modal-body {
+            padding: 16px;
+        }
+
+        .pt-modal-foot {
+            padding: 14px 16px;
+            border-top: 1px solid var(--pt-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .pt-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 4000;
+            background: #111827;
+            color: #fff;
+            border-radius: 14px;
+            padding: 12px 14px;
+            display: none;
+            align-items: center;
+            gap: 9px;
+            box-shadow: var(--pt-shadow);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .pt-toast.is-open {
+            display: flex;
+        }
+
+        .pt-toast.success {
+            background: #065f46;
+        }
+
+        .pt-toast.error {
+            background: #991b1b;
+        }
+
+
+        /* ===== v2: employee avatars, profile, comments, step employee mode, conflict box ===== */
+        .pt-tab-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 7px;
+            margin-left: 6px;
+            border-radius: 999px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .pt-tab.is-active .pt-tab-count {
+            background: #93c21c;
+            color: #fff;
+        }
+
+        .pt-card-actions .pt-icon-btn.profile {
+            background: #eff6ff;
+            color: #2563eb;
+            border-color: #bfdbfe;
+        }
+
+        .pt-card-actions .pt-icon-btn.comments {
+            background: #f4fae7;
+            color: #3f6212;
+            border-color: #d9f99d;
+            position: relative;
+        }
+
+        .pt-card-actions .pt-icon-btn.comments b {
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            min-width: 17px;
+            height: 17px;
+            border-radius: 999px;
+            background: #111827;
+            color: #fff;
+            font-size: 10px;
+            line-height: 17px;
+            text-align: center;
+        }
+
+        .pt-card-comments {
+            margin-top: 10px;
+            border-top: 1px dashed #d1d5db;
+            padding-top: 10px;
+            display: none;
+        }
+
+        .pt-task-card.is-comments-open .pt-card-comments {
+            display: block;
+        }
+
+        .pt-comment-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 9px;
+            margin-bottom: 8px;
+        }
+
+        .pt-comment-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 5px;
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 800;
+        }
+
+        .pt-comment-author {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #111827;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .pt-comment-author img {
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            object-fit: cover;
+            background: #e5e7eb;
+        }
+
+        .pt-comment-text {
+            font-size: 12px;
+            color: #374151;
+            line-height: 1.45;
+        }
+
+        .pt-comment-form {
+            display: flex;
+            gap: 7px;
+            margin-top: 8px;
+        }
+
+        .pt-comment-form textarea {
+            flex: 1;
+            min-height: 38px;
+            max-height: 120px;
+            border: 1px solid #d1d5db;
+            border-radius: 11px;
+            padding: 8px;
+            font-size: 12px;
+            resize: vertical;
+        }
+
+        .pt-comment-form button {
+            border: 0;
+            border-radius: 11px;
+            background: #93c21c;
+            color: #fff;
+            font-weight: 900;
+            padding: 0 10px;
+        }
+
+        .pt-step-mode {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #dbeafe;
+            background: #f8fafc;
+            border-radius: 14px;
+        }
+
+        .pt-step-mode label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin: 0;
+            font-size: 12px;
+            font-weight: 900;
+            color: #374151;
+        }
+
+        .pt-step-mode small {
+            width: 100%;
+            color: #64748b;
+            font-size: 11px;
+        }
+
+        .pt-global-employee-box.is-hidden {
+            display: none !important;
+        }
+
+        .pt-conflict-box {
+            display: none;
+            margin-top: 10px;
+            border: 1px solid #fed7aa;
+            background: #fff7ed;
+            border-radius: 14px;
+            padding: 10px;
+            color: #9a3412;
+            font-size: 12px;
+        }
+
+        .pt-conflict-box.is-open {
+            display: block;
+        }
+
+        .pt-conflict-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-weight: 950;
+            color: #9a3412;
+            margin-bottom: 7px;
+        }
+
+        .pt-conflict-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .pt-conflict-item {
+            background: #fff;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            padding: 7px;
+        }
+
+        .pt-conflict-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 9px;
+        }
+
+        .pt-conflict-actions button {
+            border: 1px solid #fed7aa;
+            background: #fff;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-weight: 900;
+            color: #9a3412;
+        }
+
+        .pt-conflict-actions button.is-primary {
+            background: #f97316;
+            color: #fff;
+            border-color: #f97316;
+        }
+
+        .nt-customer-product-row {
+            padding: 8px 0;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 6px;
+        }
+
+        .nt-customer-product-row:first-child {
+            border-top: 0;
+            margin-top: 0;
+        }
+
+        .nt-customer-product-title {
+            font-weight: 900;
+            color: #111827;
+            font-size: 13px;
+        }
+
+        .nt-customer-product-meta {
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.35;
+            margin-top: 2px;
+        }
+
+
+
+        /* =========================================================
+                       Priority/date sorting + due-date animation + reject reasons
+                       ========================================================= */
+        .pt-task-card.is-due-overdue {
+            border-color: #fecaca;
+            box-shadow: 0 0 0 1px rgba(239, 68, 68, .16), 0 16px 36px rgba(239, 68, 68, .12);
+        }
+
+        .pt-task-card.is-due-today {
+            border-color: #fde68a;
+            box-shadow: 0 0 0 1px rgba(245, 158, 11, .18), 0 16px 36px rgba(245, 158, 11, .10);
+        }
+
+        .pt-due-animated {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .pt-due-animated::after {
+            content: "";
+            position: absolute;
+            inset: -40% -20%;
+            background: linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, .75) 50%, transparent 65%);
+            transform: translateX(-120%);
+            animation: ptDueShine 2.8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .pt-due-overdue {
+            background: #fef2f2 !important;
+            border-color: #fecaca !important;
+            color: #991b1b !important;
+            animation: ptDuePulseRed 1.8s ease-in-out infinite;
+        }
+
+        .pt-due-today {
+            background: #fffbeb !important;
+            border-color: #fde68a !important;
+            color: #92400e !important;
+            animation: ptDuePulseAmber 2.1s ease-in-out infinite;
+        }
+
+        .pt-reject-note {
+            margin-top: 10px;
+            border: 1px solid #fee2e2;
+            background: #fff7f7;
+            color: #7f1d1d;
+            border-radius: 12px;
+            padding: 9px 10px;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .pt-reject-note strong {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 900;
+            margin-bottom: 3px;
+        }
+
+        .pt-reject-note small {
+            color: #991b1b;
+            font-weight: 700;
+        }
+
+        .pt-row-rejected td {
+            background: #fff7f7 !important;
+        }
+
+        @keyframes ptDueShine {
+
+            0%,
+            55% {
+                transform: translateX(-120%);
+            }
+
+            100% {
+                transform: translateX(120%);
+            }
+        }
+
+        @keyframes ptDuePulseRed {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, .22);
+            }
+
+            50% {
+                box-shadow: 0 0 0 5px rgba(239, 68, 68, .06);
+            }
+        }
+
+        @keyframes ptDuePulseAmber {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, .22);
+            }
+
+            50% {
+                box-shadow: 0 0 0 5px rgba(245, 158, 11, .06);
+            }
+        }
+
+
+
+        /* =========================================================
+                       Vivid Laravel Validation Debug UI
+                       Shows exact field errors, red borders, and top summary.
+                       ========================================================= */
+        .nt-validation-summary {
+            display: none;
+            border: 1px solid #fecaca;
+            background: linear-gradient(135deg, #fff1f2, #fef2f2);
+            color: #7f1d1d;
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 12px 30px rgba(239, 68, 68, .13);
+        }
+
+        .nt-validation-summary.is-open {
+            display: block;
+        }
+
+        .nt-validation-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 950;
+            margin-bottom: 8px;
+        }
+
+        .nt-validation-list {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 12px;
+            line-height: 1.55;
+            font-weight: 700;
+        }
+
+        .nt-validation-list button {
+            border: 0;
+            background: transparent;
+            padding: 0;
+            color: #b91c1c;
+            font-weight: 950;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .nt-field-error {
+            margin-top: 6px;
+            font-size: 11px;
+            font-weight: 900;
+            color: #dc2626;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            padding: 6px 8px;
+            line-height: 1.35;
+        }
+
+        .nt-invalid,
+        .nt-input.nt-invalid,
+        .nt-select.nt-invalid,
+        .nt-textarea.nt-invalid {
+            border-color: #ef4444 !important;
+            background: #fff1f2 !important;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, .14) !important;
+        }
+
+        .select2-container.nt-invalid .select2-selection {
+            border-color: #ef4444 !important;
+            background: #fff1f2 !important;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, .14) !important;
+        }
+
+        .nt-error-flash {
+            animation: ntErrorFlash 1.2s ease-in-out 2;
+        }
+
+
+
+        /* =========================================================
+                       List-only state management for paused/cancelled/archived/deleted
+                       ========================================================= */
+        .pt-list-only-note {
+            display: none;
+            margin: 0 14px 14px;
+            border: 1px solid #dbeafe;
+            background: linear-gradient(135deg, #eff6ff, #f8fafc);
+            color: #1e3a8a;
+            border-radius: 14px;
+            padding: 10px 12px;
+            font-size: 12px;
+            font-weight: 800;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pt-list-only-note.is-open {
+            display: flex;
+        }
+
+        .pt-board-disabled {
+            padding: 26px;
+            text-align: center;
+            color: #64748b;
+            font-weight: 900;
+        }
+
+        .pt-action-menu button.restore-open {
+            color: #2563eb;
+        }
+
+        .pt-action-menu button.restore-progress {
+            color: #d97706;
+        }
+
+        @keyframes ntErrorFlash {
+
+            0%,
+            100% {
+                outline: 0 solid rgba(239, 68, 68, 0);
+            }
+
+            50% {
+                outline: 4px solid rgba(239, 68, 68, .22);
+                outline-offset: 2px;
+            }
+        }
+    </style>
+
+    <style>
+        /* =========================================================
+                           Personal Task Board Scroll Fix
+                           ========================================================= */
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        .pt-app {
+            min-height: 0;
+        }
+
+        .pt-main-card {
+            height: calc(100vh - 285px);
+            min-height: 560px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden !important;
+        }
+
+        .pt-main-head {
+            flex: 0 0 auto;
+        }
+
+        #ptBoardView,
+        #ptListView {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .pt-board {
+            height: 100%;
+            min-height: 0 !important;
+            overflow: hidden;
+        }
+
+        .pt-column {
+            min-height: 0 !important;
+            height: 100%;
+            overflow: hidden !important;
+        }
+
+        .pt-column-body {
+            flex: 1 1 auto;
+            min-height: 0;
+            max-height: none !important;
+            overflow-y: auto !important;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+            padding-bottom: 70px;
+        }
+
+        .pt-column-body::-webkit-scrollbar,
+        .pt-list::-webkit-scrollbar,
+        .nt-body::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .pt-column-body::-webkit-scrollbar-track,
+        .pt-list::-webkit-scrollbar-track,
+        .nt-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .pt-column-body::-webkit-scrollbar-thumb,
+        .pt-list::-webkit-scrollbar-thumb,
+        .nt-body::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 999px;
+        }
+
+        .pt-column-body::-webkit-scrollbar-thumb:hover,
+        .pt-list::-webkit-scrollbar-thumb:hover,
+        .nt-body::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .pt-list {
+            height: 100%;
+            overflow: auto !important;
+            min-height: 0;
+        }
+
+        .pt-table {
+            margin-bottom: 70px;
+        }
+
+        .new_task_card {
+            min-height: 0;
+        }
+
+        .nt-body {
+            min-height: 0;
+            overflow-y: auto !important;
+            overscroll-behavior: contain;
+        }
+
+        @media (max-width: 980px) {
+            .pt-main-card {
+                height: calc(100vh - 245px);
+                min-height: 520px;
+            }
+
+            .pt-board {
+                overflow-y: auto;
+                padding-bottom: 70px;
+            }
+
+            .pt-column {
+                min-height: 420px !important;
+                max-height: 70vh;
+            }
+        }
+    </style>
+    <style>
+        /* =========================================================
+               New Task Drawer: collapsible sections + fixed action footer
+               ========================================================= */
+
+        #newTaskDrawer {
+            overflow: hidden;
+        }
+
+        #newTaskDrawer .new_task_card {
+            height: 100vh;
+            max-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden !important;
+        }
+
+        #newTaskDrawer #task_form {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #newTaskDrawer .nt-body {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto !important;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+            padding-bottom: 1.15rem;
+            scroll-padding-bottom: 110px;
+        }
+
+        #newTaskDrawer .nt-footer {
+            position: sticky;
+            bottom: 0;
+            z-index: 40;
+            flex: 0 0 auto;
+            background: rgba(249, 250, 251, .96);
+            backdrop-filter: blur(14px);
+            border-top: 1px solid rgba(203, 213, 225, .95);
+            box-shadow: 0 -18px 34px rgba(15, 23, 42, .12);
+            padding: .8rem 1rem calc(.8rem + env(safe-area-inset-bottom));
+        }
+
+        #newTaskDrawer .nt-footer .nt-btn {
+            min-height: 38px;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, .08);
+        }
+
+        #newTaskDrawer .nt-footer .nt-btn-primary {
+            box-shadow: 0 12px 25px rgba(2, 6, 23, .18);
+        }
+
+        .nt-section.is-collapsible {
+            overflow: hidden;
+            transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+        }
+
+        .nt-section.is-collapsible .nt-section-header {
+            cursor: pointer;
+            user-select: none;
+            margin: -.2rem -.25rem .6rem;
+            padding: .25rem;
+            border-radius: .85rem;
+            transition: background .18s ease;
+        }
+
+        .nt-section.is-collapsible .nt-section-header:hover {
+            background: #f8fafc;
+        }
+
+        .nt-section-actions {
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: .35rem;
+            flex-wrap: wrap;
+            margin-left: auto;
+        }
+
+        .nt-section-toggle {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #dbe3ef;
+            background: #fff;
+            color: #334155;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: .18s ease;
+            flex: 0 0 auto;
+        }
+
+        .nt-section-toggle:hover {
+            border-color: #93c21c;
+            background: #f4fae7;
+            color: #365314;
+            transform: translateY(-1px);
+        }
+
+        .nt-section-toggle svg {
+            width: 15px;
+            height: 15px;
+            transition: transform .18s ease;
+        }
+
+        .nt-section.is-collapsed {
+            padding-bottom: .8rem;
+        }
+
+        .nt-section.is-collapsed .nt-section-header {
+            margin-bottom: 0;
+        }
+
+        .nt-section.is-collapsed> :not(.nt-section-header) {
+            display: none !important;
+        }
+
+        .nt-section.is-collapsed .nt-section-toggle svg {
+            transform: rotate(-90deg);
+        }
+
+        .nt-section.is-collapsed {
+            box-shadow: 0 8px 22px rgba(15, 23, 42, .05);
+        }
+
+        .nt-section.has-validation-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, .10), 0 16px 35px rgba(239, 68, 68, .08) !important;
+        }
+
+        .nt-section.has-validation-error .nt-section-header {
+            background: #fff1f2;
+        }
+
+        @media (max-width: 768px) {
+            #newTaskDrawer .nt-footer {
+                justify-content: stretch;
+            }
+
+            #newTaskDrawer .nt-footer .nt-btn {
+                flex: 1 1 auto;
+                justify-content: center;
+            }
+        }
+    </style>
+
+<style>
+    
+            .pt-app {
+                position: relative;
+                isolation: isolate;
+            }
+
+            .pt-task-card,
+            .pt-card-inner,
+            .pt-card-top,
+            .pt-card-actions,
+            .pt-action-dropdown {
+                overflow: visible !important;
+            }
+
+            .pt-task-card {
+                position: relative;
+                z-index: 1;
+                isolation: isolate;
+            }
+
+            .pt-task-card:hover {
+                z-index: 50;
+            }
+
+            .pt-task-card:has(.pt-action-dropdown.is-open),
+            .pt-task-card:has(.pt-action-menu:hover) {
+                z-index: 99999 !important;
+                transform: none !important;
+            }
+
+            .pt-main-card:has(.pt-action-dropdown.is-open),
+            #ptBoardView:has(.pt-action-dropdown.is-open),
+            .pt-board:has(.pt-action-dropdown.is-open),
+            .pt-column:has(.pt-action-dropdown.is-open),
+            .pt-column-body:has(.pt-action-dropdown.is-open) {
+                overflow: visible !important;
+            }
+
+            .pt-action-dropdown {
+                position: relative;
+                z-index: 999999;
+            }
+
+            .pt-action-menu {
+                position: absolute !important;
+                top: calc(100% + 8px) !important;
+                right: 0 !important;
+                left: auto !important;
+
+                display: none;
+                width: 230px;
+                max-height: min(420px, 70vh);
+                overflow-y: auto;
+
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
+                border-radius: 16px;
+                padding: 8px;
+
+                z-index: 999999 !important;
+                box-shadow:
+                    0 24px 70px rgba(15, 23, 42, .24),
+                    0 8px 22px rgba(15, 23, 42, .12);
+
+                transform: translateZ(0);
+            }
+
+            .pt-action-dropdown.is-open .pt-action-menu {
+                display: block !important;
+                pointer-events: auto;
+            }
+
+            .pt-action-menu button {
+                position: relative;
+                z-index: 1;
+                white-space: nowrap;
+            }
+
+            .pt-action-menu::-webkit-scrollbar {
+                width: 7px;
+            }
+
+            .pt-action-menu::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 999px;
+            }
+
+            /* Fix top "Mehr" dropdown too */
+            .pt-toolbar,
+            .pt-toolbar-right,
+            .pt-more {
+                overflow: visible !important;
+                position: relative;
+                z-index: 9999;
+            }
+
+            .pt-more-menu {
+                z-index: 999999 !important;
+                max-height: min(430px, 70vh);
+                overflow-y: auto;
+            }
+
+            .pt-more.is-open .pt-more-menu {
+                display: block !important;
+            }
+
+            /* List view action menu fix */
+            .pt-list:has(.pt-action-dropdown.is-open),
+            .pt-table:has(.pt-action-dropdown.is-open),
+            .pt-table tr:has(.pt-action-dropdown.is-open),
+            .pt-table td:has(.pt-action-dropdown.is-open) {
+                overflow: visible !important;
+                position: relative;
+                z-index: 99999 !important;
+            }
+
+            .pt-table tr:has(.pt-action-dropdown.is-open) {
+                transform: none !important;
+            }
+
+            /* Mobile safe behavior */
+            @media (max-width: 768px) {
+                .pt-action-menu {
+                    right: 0 !important;
+                    width: 220px;
+                    max-width: calc(100vw - 32px);
+                }
+            }
+        </style>
+    @endsection
 
 @section('content')
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
-    <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="col-12">
-                <h2 class="content-header-title float-left mb-0">ALLGEMEINE AUFGABEN</h2>
-                <div class="breadcrumb-wrapper col-12">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{ url('/employee_dashboard') }}">Dashboard</a>
-                        </li>
-                    </ol>
+    <div class="pt-app" id="personalTaskApp" data-auth-employee-id="{{ auth()->user()->name ?? '' }}">
+        <div class="pt-header">
+            <div>
+                <h1 class="pt-title">Persönliche Aufgaben</h1>
+                <div class="pt-subtitle">Klare AJAX-Aufgabenverwaltung mit Kanban, Liste und vollständigem Aufgaben-Drawer.
+                </div>
+            </div>
+
+            <div class="pt-header-actions">
+                <button type="button" class="pt-btn pt-btn-soft" id="ptRefreshBtn"><i
+                        data-lucide="refresh-cw"></i>Aktualisieren</button>
+                <button type="button" class="pt-btn pt-btn-primary create_new_task" id="ptNewTaskBtn"><i
+                        data-lucide="plus"></i>Aufgabe erstellen</button>
+            </div>
+        </div>
+
+        <div class="pt-toolbar">
+            <div class="pt-toolbar-left">
+                <div class="pt-filter search">
+                    <label class="pt-label">Suche</label>
+                    <input type="text" class="pt-input" id="ptSearchInput" placeholder="Aufgabe, Kunde, Objekt, Produkt...">
+                </div>
+                <div class="pt-filter">
+                    <label class="pt-label">Priorität</label>
+                    <select class="pt-select" id="ptPriorityFilter">
+                        <option value="">Alle</option>
+                        <option value="normal">Keiner</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">Hoch</option>
+                        <option value="very high">Sehr wichtig</option>
+                    </select>
+                </div>
+                <div class="pt-filter">
+                    <label class="pt-label">Fälligkeit</label>
+                    <select class="pt-select" id="ptDueFilter">
+                        <option value="all">Alle</option>
+                        <option value="overdue">Überfällig</option>
+                        <option value="today">Heute</option>
+                        <option value="this_week">Diese Woche</option>
+                        <option value="next_14_days">Nächste 14 Tage</option>
+                        <option value="this_month">Dieser Monat</option>
+                        <option value="no_due">Ohne Datum</option>
+                    </select>
+                </div>
+                <div class="pt-filter">
+                    <label class="pt-label">Mitarbeiter</label>
+                    <select class="pt-select" id="ptEmployeeFilter">
+                        <option value="">Alle</option>
+                        @foreach($taskEmployees as $employee)
+                            <option value="{{ data_get($employee, 'id') }}">
+                                {{ trim((data_get($employee, 'name') ?? '') . ' ' . (data_get($employee, 'lastname') ?? '')) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="pt-filter">
+                    <label class="pt-label">Lead Stage</label>
+                    <select class="pt-select" id="ptLeadStageFilter">
+                        <option value="">Alle Stages</option>
+                        @foreach($taskLeadStagePayload as $stage)
+                            <option value="{{ data_get($stage, 'id') }}" data-color="{{ data_get($stage, 'color') }}">
+                                {{ data_get($stage, 'name') }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="pt-filter">
+                    <label class="pt-label">Sub Stage</label>
+                    <select class="pt-select" id="ptLeadSubStageFilter" disabled>
+                        <option value="">Alle Sub Stages</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="pt-toolbar-right">
+                <div class="pt-tabs" id="ptScopeTabs">
+                    <button type="button" class="pt-tab is-active" data-scope="my"><i data-lucide="user-check"></i>Meine
+                        Jobs <span class="pt-tab-count" data-tab-count="my">0</span></button>
+                    <button type="button" class="pt-tab" data-scope="created"><i data-lucide="send"></i>Erstellt von mir
+                        <span class="pt-tab-count" data-tab-count="created">0</span></button>
+                </div>
+                <div class="pt-tabs" id="ptViewTabs">
+                    <button type="button" class="pt-tab is-active" data-view="board"><i
+                            data-lucide="kanban"></i>Kanban</button>
+                    <button type="button" class="pt-tab" data-view="list"><i data-lucide="list-todo"></i>Liste</button>
+                </div>
+                <div class="pt-more" id="ptMoreDropdown">
+                    <button type="button" class="pt-btn pt-btn-soft" id="ptMoreBtn"><i
+                            data-lucide="more-horizontal"></i>Mehr</button>
+                    <div class="pt-more-menu">
+                        <button type="button" class="pt-more-item" data-state="active"><i
+                                data-lucide="layout-dashboard"></i>Aktive Aufgaben <span class="pt-tab-count"
+                                data-tab-count="active">0</span></button>
+                        <button type="button" class="pt-more-item" data-state="pause"><i
+                                data-lucide="pause-circle"></i>Pausierte Aufgaben <span class="pt-tab-count"
+                                data-tab-count="pause">0</span></button>
+                        <button type="button" class="pt-more-item" data-state="cancel"><i
+                                data-lucide="x-circle"></i>Abgebrochen von mir <span class="pt-tab-count"
+                                data-tab-count="cancel">0</span></button>
+                        <button type="button" class="pt-more-item" data-state="archived"><i
+                                data-lucide="archive"></i>Archiviert <span class="pt-tab-count"
+                                data-tab-count="archived">0</span></button>
+                        <button type="button" class="pt-more-item" data-state="deleted"><i
+                                data-lucide="trash-2"></i>Gelöscht <span class="pt-tab-count"
+                                data-tab-count="deleted">0</span></button>
+                        <button type="button" class="pt-more-item" data-state="rejected"><i data-lucide="ban"></i>Abgelehnt
+                            <span class="pt-tab-count" data-tab-count="rejected">0</span></button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        
-        <div class="content-body">
-            <div class="pt-layout">
-                @include('admin.todo.personal.simple_stats_cards', ['stats' => $stats ?? null])
-
-                @include('admin.todo.personal.news_feed')
-
-
-                {{-- Header --}}
-                <div class="pt-header">
-                    <div class="pt-tabs">
-                        @php
-                            $tab  = $tab  ?? request('tab', 'my');
-                            $view = $view ?? request('view', 'board');
-
-                            $filters = $filters ?? [
-                                'search'   => request('search'),
-                                'status'   => request('status'),
-                                'priority' => request('priority'),
-                                'public'   => request('public'),
-                                'isReport' => request('is_report'),
-                                'sort'     => request('sort', 'created_at'),
-                                'dir'      => request('dir', 'desc'),
-                            ];
-
-                            $tabs = [
-                                'my'        => 'Meine Jobs',
-                                'created'   => 'Erstellt von mir',
-                                'completed' => 'Erledigt',
-                                'paused'    => 'Pausiert',
-                                'rejected'  => 'Abgelehnt',
-                                'archived'  => 'Archiv',
-                                'deleted'   => 'Gelöscht',   // NEW
-                            ];
-                        @endphp
-
-                        @foreach($tabs as $key => $label)
-                            <a href="{{ route('personal-tasks.index', array_merge(request()->query(), ['tab' => $key])) }}"
-                            class="pt-tab {{ $tab === $key ? 'is-active' : '' }}">
-                                {{ $label }}
-                            </a>
-                        @endforeach
-                    </div>
-
-                    <div style="display:flex; gap:.5rem; align-items:center;">
-                        <form method="GET" action="{{ route('personal-tasks.index') }}" class="pt-filters">
-                            <input type="hidden" name="tab" value="{{ $tab }}">
-                            <input type="hidden" name="view" value="{{ $view }}">
-
-                            <input type="text" name="search" placeholder="Suche..."
-                                value="{{ $filters['search'] ?? '' }}">
-
-                            <select name="priority">
-                                <option value="">Priorität</option>
-                                <option value="low"    @selected(($filters['priority'] ?? '')==='low')>Niedrig</option>
-                                <option value="normal" @selected(($filters['priority'] ?? '')==='normal')>Normal</option>
-                                <option value="high"   @selected(($filters['priority'] ?? '')==='high')>Hoch</option>
-                                <option value="urgent" @selected(($filters['priority'] ?? '')==='urgent')>Dringend</option>
-                            </select>
-
-                            <select name="public">
-                                <option value="">Sichtbarkeit</option>
-                                <option value="1" @selected(($filters['public'] ?? '') === '1')>Öffentlich</option>
-                                <option value="0" @selected(($filters['public'] ?? '') === '0')>Privat</option>
-                            </select>
-
-                            <select name="is_report">
-                                <option value="">Report?</option>
-                                <option value="1" @selected(($filters['isReport'] ?? '') === '1')>Ja</option>
-                                <option value="0" @selected(($filters['isReport'] ?? '') === '0')>Nein</option>
-                            </select>
-
-                            <select name="sort">
-                                <option value="created_at" @selected(($filters['sort'] ?? '')==='created_at')>Erstellt</option>
-                                <option value="due_date"   @selected(($filters['sort'] ?? '')==='due_date')>Fällig</option>
-                                <option value="priority"   @selected(($filters['sort'] ?? '')==='priority')>Priorität</option>
-                                <option value="task_title" @selected(($filters['sort'] ?? '')==='task_title')>Titel</option>
-                            </select>
-
-                            <select name="dir">
-                                <option value="desc" @selected(($filters['dir'] ?? '')==='desc')>↓</option>
-                                <option value="asc"  @selected(($filters['dir'] ?? '')==='asc')>↑</option>
-                            </select>
-
-                            <button type="submit" class="btn-secondary">Filtern</button>
-                        </form>
-
-                        <div class="pt-view-toggle">
-                            <a href="{{ route('personal-tasks.index', array_merge(request()->query(), ['view' => 'board'])) }}">
-                                <button type="button" class="{{ $view === 'board' ? 'is-active' : '' }}">Board</button>
-                            </a>
-                            <a href="{{ route('personal-tasks.index', array_merge(request()->query(), ['view' => 'list'])) }}">
-                                <button type="button" class="{{ $view === 'list' ? 'is-active' : '' }}">Liste</button>
-                            </a>
-                        </div>
-
-                        <button type="button"
-                                class="btn-primary create_new_task"
-                                style="
-                                    display:inline-flex;
-                                    align-items:center;
-                                    gap:.35rem;
-                                    border-radius:9999px;
-                                    border:none;
-                                    padding:.45rem 1rem;
-                                    font-size:.85rem;
-                                    font-weight:600;
-                                    background:linear-gradient(135deg,#93c21c,#cfe09b);
-                                    color:#020617;
-                                    box-shadow:0 10px 25px rgba(147,194,28,.35);
-                                    cursor:pointer;
-                                    white-space:nowrap;
-                                ">
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 5v14M5 12h14"/>
-                            </svg>
-                            Neue Aufgabe
-                        </button>
-                    </div>
+        <div class="pt-stats" id="ptStats">
+            <div class="pt-stat">
+                <div class="pt-stat-icon open"><i data-lucide="circle"></i></div>
+                <div>
+                    <div class="pt-stat-label">Offen</div>
+                    <div class="pt-stat-value" data-stat="open">{{ $stats['open'] ?? 0 }}</div>
                 </div>
+            </div>
+            <div class="pt-stat">
+                <div class="pt-stat-icon progress"><i data-lucide="loader"></i></div>
+                <div>
+                    <div class="pt-stat-label">In Bearbeitung</div>
+                    <div class="pt-stat-value" data-stat="in_progress">{{ $stats['in_progress'] ?? 0 }}</div>
+                </div>
+            </div>
+            <div class="pt-stat">
+                <div class="pt-stat-icon done"><i data-lucide="check-circle-2"></i></div>
+                <div>
+                    <div class="pt-stat-label">Erledigt</div>
+                    <div class="pt-stat-value" data-stat="completed">{{ $stats['completed'] ?? 0 }}</div>
+                </div>
+            </div>
+            <div class="pt-stat">
+                <div class="pt-stat-icon pause"><i data-lucide="pause-circle"></i></div>
+                <div>
+                    <div class="pt-stat-label">Pausiert</div>
+                    <div class="pt-stat-value" data-stat="pause">{{ $stats['paused'] ?? $stats['pause'] ?? 0 }}</div>
+                </div>
+            </div>
+            <div class="pt-stat">
+                <div class="pt-stat-icon archive"><i data-lucide="archive"></i></div>
+                <div>
+                    <div class="pt-stat-label">Archiviert</div>
+                    <div class="pt-stat-value" data-stat="archived">{{ $stats['archived'] ?? 0 }}</div>
+                </div>
+            </div>
+            <div class="pt-stat">
+                <div class="pt-stat-icon trash"><i data-lucide="trash-2"></i></div>
+                <div>
+                    <div class="pt-stat-label">Gelöscht</div>
+                    <div class="pt-stat-value" data-stat="deleted">{{ $stats['deleted'] ?? 0 }}</div>
+                </div>
+            </div>
+        </div>
 
-                {{-- Board view --}}
-                @if($view === 'board')
-                       @php
-                            if ($tab === 'rejected') {
-                                $columnMeta = [
-                                    'rejected' => ['label' => 'Abgelehnt', 'color' => '#ef4444'],
-                                ];
-                            } elseif ($tab === 'archived') {
-                                $columnMeta = [
-                                    'archived' => ['label' => 'Archiv', 'color' => '#9ca3af'],
-                                ];
-                            } elseif ($tab === 'deleted') {
-                                $columnMeta = [
-                                    'deleted' => ['label' => 'Gelöscht', 'color' => '#4b5563'], // NEW
-                                ];
-                            } else {
-                                $columnMeta = [
-                                    'open'        => ['label' => 'Offen',     'color' => '#93c21c'],
-                                    'in_progress' => ['label' => 'In Arbeit', 'color' => '#93c21c'],
-                                    'completed'   => ['label' => 'Erledigt',  'color' => '#74b2d4'],
-                                ];
-                            }
-                        @endphp
+        <div class="pt-main-card">
+            <div class="pt-main-head">
+                <div class="pt-section-title"><i data-lucide="kanban"></i><span id="ptMainTitle">Kanban Ansicht</span></div>
+                <div class="pt-subtitle" id="ptResultText">Lade Aufgaben...</div>
+            </div>
 
-                    <div class="pt-board" id="pt-board"
-                        data-status-url="{{ route('personal-tasks.status', ['task' => '__ID__']) }}">
-                        @foreach($columnMeta as $key => $meta)
-                            @php
-                                /** @var \Illuminate\Support\Collection $items */
-                                $items = $columns[$key] ?? collect();
-                            @endphp
+            <div class="pt-list-only-note" id="ptListOnlyNote">
+                <i data-lucide="list-checks"></i>
+                <span>Dieser Bereich ist eine Verwaltungs-Liste. Pausierte, abgebrochene, archivierte und gelöschte Aufgaben
+                    werden nicht im Kanban angezeigt.</span>
+            </div>
 
-                            <div class="pt-column" data-column="{{ $key }}">
-                                <div class="pt-column-header">
-                                    <span>{{ $meta['label'] }}</span>
-                                    <span style="width:8px;height:8px;border-radius:999px;background:{{ $meta['color'] }};"></span>
-                                </div>
-                                <div class="pt-column-body">
-                                    @foreach($items as $task)
-                                        @include('admin.todo.personal._task_card', [
-                                            'task'       => $task,
-                                            'employeeId' => $employeeId,
-                                        ])
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
+            <div id="ptBoardView">
+                <div class="pt-board" id="ptBoard">
+                    <div class="pt-loader">Lade Kanban...</div>
+                </div>
+            </div>
 
-                {{-- List view --}}
-                @if($view === 'list')
-                    <div style="overflow-x:auto;">
-                        <table class="pt-table">
-                            <thead>
+            <div id="ptListView" class="d-none">
+                <div class="pt-list">
+                    <table class="pt-table">
+                        <thead>
                             <tr>
-                                <th style="width:60px;">Info</th>
                                 <th>Aufgabe</th>
-                                <th>Ersteller / Status</th>
-                                <th>Controller</th>
-                                <th>Mitarbeiter</th>
+                                <th>Status</th>
+                                <th>Priorität</th>
+                                <th>Fällig</th>
                                 <th>Kunde / Objekt</th>
-                                <th>Fällig / Zeiten</th>
+                                <th>CRM Status</th>
+                                <th>Mitarbeiter</th>
+                                <th>Controller</th>
+                                <th>Fortschritt</th>
                                 <th>Aktion</th>
                             </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($tasks as $task)
-                                @php
-                                    $ageHours   = \Carbon\Carbon::now()->diffInHours($task->created_at);
-                                    $isOlder48  = $ageHours >= 48;
-
-                                    $myPivot    = $employeeId
-                                        ? $task->employees->firstWhere('id', $employeeId)
-                                        : null;
-
-                                    $myStatus   = $myPivot && $myPivot->pivot ? $myPivot->pivot->status : null;
-                                    $rowPending = $myPivot && $myStatus !== 'accepted';
-
-                                    $rejectedEmployees = $task->employees->filter(function ($e) {
-                                        return $e->pivot && $e->pivot->status === 'rejected';
-                                    });
-                                @endphp
-
-                                <tr data-task-id="{{ $task->id }}" class="{{ $rowPending ? 'pt-row-pending' : '' }}">
-                                    {{-- icon column --}}
-                                    <td>
-                                        <div class="pt-icon-col">
-                                            <span title="{{ $task->public ? 'Öffentlich' : 'Privat' }}">
-                                                <i data-feather="{{ $task->public ? 'unlock' : 'lock' }}" class="pt-icon-xs"></i>
-                                            </span>
-                                            <span title="Priorität: {{ $task->priority ?? 'Normal' }}">
-                                                <i data-feather="flag" class="pt-icon-xs"></i>
-                                            </span>
-                                            @if($isOlder48)
-                                                <span title="> 48 Std. offen">
-                                                    <i data-feather="clock" class="pt-icon-xs"></i>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </td>
-
-                                    {{-- job title + desc --}}
-                                    <td>
-                                         <a href="{{ route('personal-tasks.profile', ['task'=>$task->id])}}">
-                                            <div style="display:flex;align-items:flex-start;gap:.4rem;">
-                                                <input type="color"
-                                                    class="js-task-color"
-                                                    value="{{ $task->color ?? '#0f172a' }}"
-                                                    data-task-id="{{ $task->id }}"
-                                                    style="width:18px;height:18px;border:none;padding:0;margin-top:2px;">
-                                                <div>
-                                                    <div style="font-weight:600;font-size:13px;">
-                                                    
-                                                        {{ $task->task_title ?? 'Ohne Titel' }}
-                                                    
-                                                    </div>
-                                                    <div style="font-size:11px;color:#6b7280;">
-                                                        {{ \Illuminate\Support\Str::limit($task->description, 90) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                          </a>
-                                    </td>
-
-                                    {{-- creator + accepted badge + rejection reasons --}}
-                                    <td>
-                                        <div style="display:flex;flex-direction:column;gap:.2rem;">
-                                            @if($task->assignedBy)
-                                                <span class="pt-pill pt-pill-light">
-                                                    <i data-feather="edit-3" class="pt-icon-xs"></i>
-                                                    {{ $task->assignedBy->name }} {{ $task->assignedBy->lastname }}
-                                                </span>
-                                            @endif
-
-                                            @if($myStatus === 'accepted')
-                                                <span class="pt-badge-accept">
-                                                    <i data-feather="check-circle" class="pt-icon-xs"></i>
-                                                    Job akzeptiert
-                                                </span>
-                                            @elseif($myStatus === 'rejected')
-                                                <span class="pt-badge-pending">
-                                                    <i data-feather="x-circle" class="pt-icon-xs"></i>
-                                                    Job von dir abgelehnt
-                                                </span>
-                                            @elseif($myPivot)
-                                                <span class="pt-badge-pending">
-                                                    <i data-feather="alert-triangle" class="pt-icon-xs"></i>
-                                                    Noch nicht akzeptiert
-                                                </span>
-                                            @endif
-
-                                            <span class="pt-pill pt-pill-light">
-                                                <i data-feather="clock" class="pt-icon-xs"></i>
-                                                {{ $task->created_at->format('d.m.Y H:i') }}
-                                            </span>
-                                        </div>
-
-                                        @if($tab === 'rejected' && $rejectedEmployees->count())
-                                            <div style="margin-top:.35rem;font-size:11px;color:#b91c1c;">
-                                                @foreach($rejectedEmployees as $re)
-                                                    <div>
-                                                        <strong>{{ $re->name }} {{ $re->lastname }}:</strong>
-                                                        {{ $re->pivot->reason ?? $re->pivot->change_reason ?? 'kein Grund angegeben' }}
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                    </td>
-
-                                    {{-- controllers --}}
-                                    <td>
-                                        @if(method_exists($task, 'controllers') && $task->controllers && $task->controllers->count())
-                                            <div class="pt-avatars">
-                                                @foreach($task->controllers as $ctrl)
-                                                    <div class="pt-avatar" title="{{ $ctrl->name }} {{ $ctrl->lastname }}">
-                                                        @if($ctrl->image)
-                                                            <img src="{{ asset('images/employee/'.$ctrl->image) }}" alt=""
-                                                                style="width:100%;height:100%;object-fit:cover;">
-                                                        @else
-                                                            {{ mb_substr($ctrl->name,0,1) }}{{ mb_substr($ctrl->lastname,0,1) }}
-                                                        @endif
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <span style="font-size:11px;color:#9ca3af;">—</span>
-                                        @endif
-                                    </td>
-
-                                    {{-- employees --}}
-                                    <td>
-                                        @if($task->employees->count())
-                                            <div class="pt-avatars">
-                                                @foreach($task->employees as $emp)
-                                                    <div class="pt-avatar" title="{{ $emp->name }} {{ $emp->lastname }}">
-                                                        @if($emp->image)
-                                                            <img src="{{ asset('images/employee/'.$emp->image) }}" alt=""
-                                                                style="width:100%;height:100%;object-fit:cover;">
-                                                        @else
-                                                            {{ mb_substr($emp->name,0,1) }}{{ mb_substr($emp->lastname,0,1) }}
-                                                        @endif
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <span style="font-size:11px;color:#9ca3af;">—</span>
-                                        @endif
-                                    </td>
-
-                                    {{-- customer --}}
-                                    <td>
-                                        @if($task->customer)
-                                            <div style="font-size:12px;">
-                                                {{ $task->customer->customer_no }} /
-                                                {{ $task->customer->lastname }} {{ $task->customer->name }}
-                                            </div>
-                                            <div style="font-size:11px;color:#6b7280;">
-                                                {{ $task->customer->city }}
-                                            </div>
-                                        @else
-                                            <span style="font-size:11px;color:#9ca3af;">kein Kunde</span>
-                                        @endif
-                                    </td>
-
-                                    {{-- due + info --}}
-                                    <td>
-                                        <div style="font-size:12px;">
-                                            @if($task->due_date)
-                                                {{ $task->due_date->format('d.m.Y') }}
-                                                @if($task->due_time)
-                                                    {{ $task->due_time }}
-                                                @endif
-                                            @else
-                                                —
-                                            @endif
-                                        </div>
-                                        <div style="margin-top:.25rem;display:flex;flex-direction:column;gap:.15rem;">
-                                            <span class="pt-pill">Status: {{ $task->task_status ?? 'offen' }}</span>
-                                            <span class="pt-pill">Prio: {{ $task->priority ?? 'Normal' }}</span>
-                                            @if(!empty($task->is_report))
-                                                <span class="pt-pill">
-                                                    <i data-feather="clipboard" class="pt-icon-xs"></i>
-                                                    Report
-                                                </span>
-                                            @endif
-                                            @if($isOlder48)
-                                                <span class="pt-badge-age">> 48 Std. offen</span>
-                                            @endif
-                                        </div>
-                                    </td>
-
-                                    {{-- actions --}}
-                                   <td>
-                                        <div class="pt-dropdown">
-                                            <button type="button" class="pt-icon-btn js-dropdown-toggle">
-                                                <i data-feather="more-horizontal" class="pt-icon-xs"></i>
-                                            </button>
-                                            <div class="pt-dropdown-menu" style="display:none;">
-                                                <button type="button"
-                                                        class="js-open-profile"
-                                                        data-profile-url="{{ route('personal-tasks.profile', $task->id) }}">
-                                                    <i data-feather="external-link" class="pt-icon-xs"></i> Profil
-                                                </button>
-
-                                                <button type="button"
-                                                        class="js-edit-task-btn"
-                                                        data-edit-url="{{ route('personal.task.edit', $task->id) }}">
-                                                    <i data-feather="edit" class="pt-icon-xs"></i> Bearbeiten
-                                                </button>
-
-                                                @if($task->trashed())
-                                                    <button type="button" class="js-restore-task">
-                                                        <i data-feather="rotate-ccw" class="pt-icon-xs"></i>
-                                                        Wiederherstellen
-                                                    </button>
-                                                @else
-                                                    <button type="button" class="js-delete-task">
-                                                        <i data-feather="trash-2" class="pt-icon-xs"></i>
-                                                        Löschen
-                                                    </button>
-                                                @endif
-                                                <button type="button" class="js-status-btn" data-status="on_progress">
-                                                    <i data-feather="play" class="pt-icon-xs"></i> Starten / Fortsetzen
-                                                </button>
-                                                <button type="button" class="js-status-btn" data-status="pause">
-                                                    <i data-feather="pause" class="pt-icon-xs"></i> Pausieren
-                                                </button>
-                                                <button type="button" class="js-status-btn" data-status="completed">
-                                                    <i data-feather="check" class="pt-icon-xs"></i> Abschließen
-                                                </button>
-                                                <button type="button" class="js-status-btn" data-status="cancel">
-                                                    <i data-feather="x" class="pt-icon-xs"></i> Abbrechen
-                                                </button>
-                                                <button type="button" class="js-archive-btn">
-                                                    <i data-feather="archive" class="pt-icon-xs"></i>
-                                                    {{ $task->archived_at ? 'Aus Archiv holen' : 'Archivieren' }}
-                                                </button>
-                                                <button type="button" class="js-accept-btn">
-                                                    <i data-feather="thumbs-up" class="pt-icon-xs"></i> Job akzeptieren
-                                                </button>
-                                                <button type="button" class="js-open-reject-modal">
-                                                    <i data-feather="x-circle" class="pt-icon-xs"></i> Job ablehnen
-                                                </button> 
-                                                
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div style="margin-top:.5rem;">
-                        {{ $tasks->links() }}
-                    </div>
-                @endif
-            </div>
-
-
-            {{-- Reject modal --}}
-            <div class="pt-modal-backdrop" id="pt-reject-backdrop">
-                <div class="pt-modal">
-                    <div style="font-weight:600;font-size:14px;">Job ablehnen</div>
-                    <div style="font-size:12px;color:#6b7280;">
-                        Bitte gib den Grund für die Ablehnung an. Dieser Grund wird im Reiter
-                        <strong>Abgelehnt</strong> sichtbar sein.
-                    </div>
-                    <textarea id="pt-reject-reason" placeholder="Begründung..."></textarea>
-                    <div class="pt-modal-footer">
-                        <button class="btn-secondary" type="button" id="pt-reject-cancel">Abbrechen</button>
-                        <button class="btn-primary"  type="button" id="pt-reject-save">Ablehnen</button>
-                    </div>
+                        </thead>
+                        <tbody id="ptListBody">
+                            <tr>
+                                <td colspan="10">Lade Liste...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
         </div>
     </div>
-</div>
 
-
-<div class="new_task">
-    <div class="card new_task_card">
-        {{-- Header --}}
-        <div class="nt-header">
-            <div class="nt-header-left">
-                <div class="nt-header-title">
-                    ALLGEMEINE AUFGABE
+    <div class="new_task" id="newTaskDrawer">
+        <div class="new_task_card">
+            <div class="nt-header">
+                <div class="nt-header-left">
+                    <div class="nt-header-title" id="drawerModeTitle">Aufgabe erstellen</div>
+                    <div class="nt-header-sub">Mitarbeiter, Controller, Kunde, Objekt, Produkt, Priorität, Farbe und
+                        Aufgaben-Schlüssel.</div>
                 </div>
-                <div class="nt-header-sub">
-                    Neue persönliche Aufgabe mit Kunde, Verantwortlichen und Schritten anlegen.
-                </div>
+                <div class="nt-header-actions"><button type="button" class="nt-close-btn close_task_window"><i
+                            data-lucide="x"></i>Schließen</button></div>
             </div>
-            <div class="nt-header-actions">
-                <button type="button" class="nt-close-btn close_task_window">
-                    <i class="feather icon-x"></i>
-                    Schließen
-                </button>
-            </div>
-        </div>
 
-        {{-- Body --}}
-        <div class="card-body p-0 nt-body">
-            <form id="task_form">
+            <form id="task_form" method="POST" action="{{ $storeRoute ?: $updateRoute }}"
+                data-store-route="{{ $storeRoute }}" data-update-route="{{ $updateRoute }}">
                 @csrf
+                <input type="hidden" name="id" id="task_edit_id">
+                <input type="hidden" name="same_id" value="same">
+                <input type="hidden" name="color" id="color" value="#93c21c">
+                <input type="hidden" name="lead_product_list_id" id="lead_product_list_id">
 
-                <div class="nt-grid">
-                    {{-- LEFT --}}
-                    <div>
-                        {{-- Grunddaten --}}
-                        <div class="nt-section">
-                            <div class="nt-section-header">
-                                <div class="nt-section-title">Grunddaten</div>
-                                <span class="nt-section-badge">
-                                    <i class="feather icon-clipboard"></i> Aufgabe
-                                </span>
-                            </div>
-
-                            <div class="nt-row">
-                                <div>
-                                    <label class="nt-field-label" for="task_title">Aufgabentitel</label>
-                                    <input type="text" id="task_title" name="task_title" class="nt-input">
+                <div class="nt-body">
+                    <div id="taskValidationSummary" class="nt-validation-summary" aria-live="polite">
+                        <div class="nt-validation-title"><i data-lucide="alert-triangle"></i> Bitte prüfen Sie diese Felder
+                        </div>
+                        <ol id="taskValidationList" class="nt-validation-list"></ol>
+                    </div>
+                    <div class="nt-grid">
+                        <div>
+                            <div class="nt-section">
+                                <div class="nt-section-header">
+                                    <div class="nt-section-title"><i data-lucide="clipboard-list"></i>Grunddaten</div><span
+                                        class="nt-section-badge">Pflicht</span>
                                 </div>
-                                <div>
-                                    <label class="nt-field-label">Farbe & Sichtbarkeit</label>
-                                    <div class="nt-top-right-row">
-                                        {{-- Hidden color --}}
-                                        <input type="hidden" name="color" id="color" value="#8fc73e">
-
-                                        {{-- Color dropdown (IDs kept) --}}
-                                        <div class="btn-group dropup dropdown-icon-wrapper" id="color_drop_down">
-                                            <button type="button"
-                                                    class="btn btn-sm btn-light dropdown-toggle dropdown-toggle-split"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                <i class="fa fa-square" id="colorIcon" style="color:#8fc73e;"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                @php
-                                                    $colors = [
-                                                        '#8fc73e' => 'Grün',
-                                                        '#ff0000' => 'Rot',
-                                                        '#0000ff' => 'Blau',
-                                                        '#ffff00' => 'Gelb',
-                                                        '#ff00ff' => 'Magenta',
-                                                        '#00ffff' => 'Cyan',
-                                                        '#000000' => 'Schwarz',
-                                                        '#ffffff' => 'Weiß',
-                                                        '#808080' => 'Grau',
-                                                        '#ffa500' => 'Orange',
-                                                        '#800080' => 'Lila',
-                                                        '#8b4513' => 'Braun',
-                                                        '#4682b4' => 'Stahlblau',
-                                                        '#5f9ea0' => 'Kadettenblau',
-                                                        '#d2691e' => 'Schokoladenbraun',
-                                                        '#2e8b57' => 'Seegrün',
-                                                        '#dc143c' => 'Karmesinrot',
-                                                        '#7fffd4' => 'Aquamarin',
-                                                        '#9932cc' => 'Dunkles Lila',
-                                                        '#ff6347' => 'Tomate',
-                                                    ];
-                                                @endphp
-                                                @foreach($colors as $hex => $label)
-                                                    <span class="dropdown-item" data-value="{{ $hex }}">
-                                                        <i class="fa fa-square"
-                                                           style="color:{{ $hex }};@if($hex==='#ffffff')border:1px solid #ccc;@endif"></i>
-                                                        {{ $label }}
-                                                    </span>
-                                                @endforeach
-                                            </div>
-                                        </div>
-
-                                        {{-- Öffentlich --}}
-                                        <div class="nt-inline-toggle">
-                                            <p class="mb-0">Öffentlich</p>
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox"
-                                                       class="custom-control-input"
-                                                       id="customSwitch10"
-                                                       name="public"
-                                                       checked>
-                                                <label class="custom-control-label" for="customSwitch10"></label>
-                                            </div>
-                                        </div>
-
-                                        {{-- Kunde --}}
-                                        <div class="nt-inline-toggle">
-                                            <p class="mb-0">Kunde</p>
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox"
-                                                       class="custom-control-input"
-                                                       id="customerSwitch"
-                                                       name="is_customer"
-                                                       value="0">
-                                                <label class="custom-control-label" for="customerSwitch"></label>
-                                            </div>
-                                        </div>
+                                <div class="nt-row">
+                                    <div>
+                                        <label class="nt-field-label" for="task_title">Aufgabentitel</label>
+                                        <input type="text" id="task_title" name="task_title" class="nt-input">
+                                    </div>
+                                    <div>
+                                        <label class="nt-field-label" for="task_status">Status</label>
+                                        <select id="task_status" name="task_status" class="nt-select">
+                                            <option value="open">Offen</option>
+                                            <option value="on_progress">In Bearbeitung</option>
+                                            <option value="completed">Erledigt</option>
+                                            <option value="pause">Pausiert</option>
+                                            <option value="cancel">Abgebrochen</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div>
-                                <label class="nt-field-label" for="description">Beschreibung</label>
-                                <textarea name="description"
-                                          id="description"
-                                          class="nt-textarea"
-                                          rows="2"></textarea>
-                            </div>
-                        </div>
-
-                          {{-- Zeitplanung --}}
-                        <div class="nt-section">
-                            <div class="nt-section-header">
-                                <div class="nt-section-title">
-                                    <i class="feather icon-calendar"></i> Zeitplanung
-                                </div>
-                            </div>
-
-                            <div class="nt-row-4">
-                                <div>
-                                    <label class="nt-field-label" for="due_date">Fälligkeitsdatum</label>
-                                    <input type="date" id="due_date" class="nt-input" name="due_date">
-                                    <input type="hidden" name="same_id" value="same">
-                                    <input type="hidden"
-                                           id="start_date"
-                                           name="start_date"
-                                           class="nt-input"
-                                           value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
-                                </div>
-                                <div>
-                                    <label class="nt-field-label" for="due_time">Fälligkeitsuhrzeit</label>
-                                    <input type="time" id="due_time" class="nt-input" name="due_time">
-                                </div>
-                                <div>
-                                    <label class="nt-field-label" for="total_day">Gesamt Tage</label>
-                                    <input type="number" id="total_day" class="nt-input" name="total_day">
-                                </div>
-                                <div>
-                                    <label class="nt-field-label" for="total_time">Gesamtstunden</label>
-                                    <input type="number" id="total_time" class="nt-input" name="total_time">
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Kunde & Objekt --}}
-                        <div class="nt-section">
-                            <div class="nt-section-header">
-                                <div class="nt-section-title">Kunde & Objekt</div>
-                                <span class="nt-section-badge">
-                                    <i class="feather icon-user-check"></i> Optional
-                                </span>
-                            </div>
-
-                            <div id="customerSelectContainer" style="display:none;">
-                                <label class="nt-field-label" for="customerLeadProductSelect">
-                                    Wähle Kunde & Objekt
-                                </label>
-                                <select class="nt-select"
-                                        id="customerLeadProductSelect"
-                                        name="customer_id"
-                                        style="width: 100%;">
-                                    <option value="">Auswählen...</option>
-                                </select>
-                                <input type="hidden" name="alternative_id" id="select_alternative_id">
-                                <input type="hidden" name="product_id"     id="select_product_id">
-                            </div>
-                        </div>
-
-                        {{-- Team --}}
-                        <div class="nt-section">
-                            <div class="nt-section-header">
-                                <div class="nt-section-title">Team</div>
-                                <span class="nt-section-badge">
-                                    <i class="feather icon-users"></i> Zuweisung
-                                </span>
-                            </div>
-
-                            <div class="nt-row">
-                                <div id="task_employee_section">
-                                    <label class="nt-field-label" for="employee">Zugewiesen an</label>
-                                    <select name="employee[]" id="employee" class="employee nt-select" multiple style="width:100%">
-                                        @foreach ($employees as $emp)
-                                            <option value="{{ $emp->id }}"
-                                                    data-image="{{ asset('images/employee/'.$emp->image) }}"
-                                                    data-checked="false">
-                                                {{ $emp->name }} {{ $emp->lastname }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="nt-field-label" for="controller">Kontroller</label>
-                                    <select name="controller[]" id="controller" class="employee nt-select" multiple style="width:100%">
-                                        @foreach ($employees as $emp)
-                                            <option value="{{ $emp->id }}"
-                                                    data-image="{{ asset('images/employee/'.$emp->image) }}"
-                                                    data-checked="false">
-                                                {{ $emp->name }} {{ $emp->lastname }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    {{-- RIGHT --}}
-                    <div>
-                        {{-- Einstellungen --}}
-                        <div class="nt-section">
-                            <div class="nt-section-header">
-                                <div class="nt-section-title">
-                                    <i class="feather icon-settings"></i> Einstellungen
-                                </div>
-                            </div>
-
-                            <div id="accordionWrapa1" role="tablist" aria-multiselectable="true">
-                                <div class="accordion" id="nt-settings-accordion">
-                                    <div class="card mb-0" style="border:none;background:transparent;">
-                                        <div class="card-content">
-                                            <div class="card-body p-0">
-                                                <div class="accordion-default collapse-bordered">
-                                                    <div class="card collapse-header" style="border:none;">
-                                                        <div id="heading1"
-                                                             class="card-header collapse-header p-0"
-                                                             data-toggle="collapse"
-                                                             role="button"
-                                                             data-target="#accordion1"
-                                                             aria-expanded="true"
-                                                             aria-controls="accordion1"
-                                                             style="background:transparent;border:none;">
-                                                            <span class="lead collapse-title">
-                                                                <span class="nt-chip">
-                                                                    <i class="feather icon-settings"></i>
-                                                                    Wiederholung, Erinnerung & Prio
-                                                                </span>
-                                                            </span>
-                                                        </div>
-
-                                                        <div id="accordion1"
-                                                             role="tabpanel"
-                                                             data-parent="#accordionWrapa1"
-                                                             aria-labelledby="heading1"
-                                                             class="collapse show">
-                                                            <div class="card-content">
-                                                                <div class="card-body p-0 mt-1">
-                                                                    <table class="table mb-0">
-                                                                        {{-- Wiederholung --}}
-                                                                        <tr>
-                                                                            <td>
-                                                                                <i class="feather icon-refresh-cw"></i>
-                                                                                Wiederholung
-                                                                            </td>
-                                                                            <td class="text-right">
-                                                                                <div class="custom-control custom-switch mr-2 mb-0">
-                                                                                    <input type="checkbox"
-                                                                                           class="custom-control-input"
-                                                                                           id="repeated"
-                                                                                           name="repeated">
-                                                                                    <label class="custom-control-label" for="repeated"></label>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-
-                                                                        <tr class="repeated_area">
-                                                                            <td colspan="2">
-                                                                                <select name="repeat" class="form-control form-control-sm" id="wiederholung">
-                                                                                    <option value="">Häufigkeit auswählen</option>
-                                                                                    <option value="minute">Minütlich</option>
-                                                                                    <option value="hourly">Stündlich</option>
-                                                                                    <option value="daily">Täglich</option>
-                                                                                    <option value="weekly">Wöchentlich</option>
-                                                                                    <option value="monthly">Monatlich</option>
-                                                                                    <option value="quarterly">Vierteljährlich</option>
-                                                                                    <option value="yearly">Jährlich</option>
-                                                                                </select>
-                                                                            </td>
-                                                                        </tr>
-
-                                                                        {{-- Erinnerung --}}
-                                                                        <tr>
-                                                                            <td>
-                                                                                <i class="fa fa-clock-o"></i>
-                                                                                Erinnerung
-                                                                            </td>
-                                                                            <td class="text-right">
-                                                                                <div class="custom-control custom-switch mr-2 mb-0">
-                                                                                    <input type="checkbox"
-                                                                                           class="custom-control-input"
-                                                                                           id="reminder_check"
-                                                                                           name="reminder_check">
-                                                                                    <label class="custom-control-label" for="reminder_check"></label>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-
-                                                                        <tr class="reminder_area">
-                                                                            <td colspan="2">
-                                                                                <label class="nt-field-label mb-0">Datum</label>
-                                                                                <input type="date" name="reminder_date" class="form-control form-control-sm">
-                                                                                <label class="nt-field-label mt-1 mb-0">Zeit</label>
-                                                                                <input type="time" name="reminder_time" class="form-control form-control-sm">
-                                                                            </td>
-                                                                        </tr>
-
-                                                                        {{-- Priorität (nicer layout) --}}
-                                                                        <tr>
-                                                                            <td>
-                                                                                <i class="feather icon-flag"></i>
-                                                                                Priorität
-                                                                            </td>
-                                                                            <td class="nt-priority-cell">
-                                                                                <input type="hidden" name="priority" value="normal">
-                                                                                <div class="nt-priority-wrapper" id="priority_select">
-                                                                                    <span class="nt-priority-label">Standard</span>
-                                                                                    <div class="btn-group dropup dropdown-icon-wrapper">
-                                                                                        <button type="button"
-                                                                                                class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-                                                                                                data-toggle="dropdown"
-                                                                                                aria-haspopup="true"
-                                                                                                aria-expanded="false">
-                                                                                            <i class="fa fa-battery-empty"></i>
-                                                                                        </button>
-                                                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                                                            <span class="dropdown-item" data-value="normal">
-                                                                                                <i class="fa fa-battery-empty"></i> Keiner
-                                                                                            </span>
-                                                                                            <span class="dropdown-item" data-value="medium">
-                                                                                                <i class="fa fa-battery-half"></i> Medium
-                                                                                            </span>
-                                                                                            <span class="dropdown-item" data-value="high">
-                                                                                                <i class="fa fa-battery-full"></i> Hoch
-                                                                                            </span>
-                                                                                            <span class="dropdown-item" data-value="very high">
-                                                                                                <i class="fa fa-fire warning"></i> Sehr wichtig
-                                                                                            </span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div> {{-- /accordion1 --}}
-                                                    </div>
+                                <div class="nt-row">
+                                    <div>
+                                        <label class="nt-field-label">Farbe & Priorität</label>
+                                        <div class="nt-top-right-row">
+                                            <div class="dropdown" id="color_drop_down">
+                                                <button type="button" class="nt-btn nt-btn-ghost dropdown-toggle"
+                                                    data-toggle="dropdown"><i id="colorIcon" data-lucide="square"
+                                                        style="color:#93c21c"></i>Farbe</button>
+                                                <div class="dropdown-menu">
+                                                    @foreach(['#93c21c' => 'Grün', '#74b2d4' => 'Blau', '#f59e0b' => 'Orange', '#ef4444' => 'Rot', '#111827' => 'Dunkel', '#8b4513' => 'Braun', '#800080' => 'Lila', '#808080' => 'Grau'] as $hex => $label)
+                                                        <button type="button" class="dropdown-item"
+                                                            data-value="{{ $hex }}"><span
+                                                                style="display:inline-block;width:12px;height:12px;border-radius:3px;background:{{ $hex }};margin-right:6px;"></span>{{ $label }}</button>
+                                                    @endforeach
                                                 </div>
                                             </div>
+                                            <div id="priority_select" style="min-width:180px;">
+                                                <label class="nt-field-label" for="priority"
+                                                    style="margin-bottom:4px;display:block;">Priorität</label>
+                                                <select name="priority" id="priority" class="nt-select"
+                                                    data-allowed="normal,medium,high,very high">
+                                                    <option value="normal">Keiner</option>
+                                                    <option value="medium" selected>Mittel</option>
+                                                    <option value="high">Hoch</option>
+                                                    <option value="very high">Sehr wichtig</option>
+                                                </select>
+                                                <small id="priorityDebugHint"
+                                                    style="display:block;margin-top:4px;color:#64748b;font-size:11px;font-weight:800;">Gesendet:
+                                                    medium</small>
+                                            </div>
+                                            <div class="nt-inline-toggle">
+                                                <p>Öffentlich</p><label><input type="checkbox" id="public_switch"
+                                                        name="public" value="1" checked> Ja</label>
+                                            </div>
+                                            <div class="nt-inline-toggle">
+                                                <p>Kunde</p><label><input type="checkbox" id="customerSwitch"
+                                                        name="is_customer" value="1"> Ja</label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div> {{-- /accordion --}}
-                            </div>
-                        </div>
-
-
-                        {{-- Aufgabenschritte --}}
-                        <div class="nt-section">
-                            <div class="nt-section-header"
-                                 data-toggle="collapse"
-                                 data-target="#collapseTaskKeys"
-                                 aria-expanded="false"
-                                 aria-controls="collapseTaskKeys"
-                                 style="cursor:pointer;">
-                                <div class="nt-section-title">
-                                    <i class="feather icon-list"></i> Aufgabenschritte
+                                    <div>
+                                        <label class="nt-field-label">Bericht / Typ</label>
+                                        <div class="nt-row" style="margin-bottom:0;">
+                                            <label class="nt-switch-label"><input type="checkbox" id="is_report"
+                                                    name="is_report" value="1"> Berichtspflichtig</label>
+                                            <select name="type" id="type" class="nt-select">
+                                                <option value="task">Aufgabe</option>
+                                                <option value="appointment">Termin</option>
+                                                <option value="report">Bericht</option>
+                                                <option value="follow_up">Nachfassen</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <span class="nt-section-badge">
-                                    <i class="feather icon-chevron-down"></i> Details
-                                </span>
+                                <div>
+                                    <label class="nt-field-label" for="description">Beschreibung</label>
+                                    <textarea name="description" id="description" class="nt-textarea" rows="3"></textarea>
+                                </div>
                             </div>
 
-                            <div id="collapseTaskKeys" class="collapse">
-                                <div class="table-responsive">
-                                    <table class="table" id="key_task">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Aufgabenschritte</th>
-                                            <th style="width: 90px;">
-                                                Dauer
-                                                <br>
-                                                <small><code id="key_total_time">0 Stunden</code></small>
-                                            </th>
-                                            <th style="width: 135px;">Zugewiesen</th>
-                                            <th>Beschreibung</th>
-                                            <th style="width: 80px;">Aktion</th>
-                                        </tr>
-                                        </thead>
+                            <div class="nt-section">
+                                <div class="nt-section-header">
+                                    <div class="nt-section-title"><i data-lucide="calendar-clock"></i>Zeitplanung</div>
+                                </div>
+                                <div class="nt-row-4">
+                                    <div><label class="nt-field-label">Startdatum</label><input type="date" id="start_date"
+                                            name="start_date" class="nt-input" value="{{ now()->format('Y-m-d') }}"></div>
+                                    <div><label class="nt-field-label">Fälligkeitsdatum</label><input type="date"
+                                            id="due_date" name="due_date" class="nt-input"></div>
+                                    <div><label class="nt-field-label">Fälligkeitsuhrzeit</label><input type="time"
+                                            id="due_time" name="due_time" class="nt-input"></div>
+                                    <div><label class="nt-field-label">Fortschritt %</label><input type="number" min="0"
+                                            max="100" id="progress" name="progress" class="nt-input" value="0"></div>
+                                </div>
+                                <div class="nt-row">
+                                    <div><label class="nt-field-label">Gesamttage</label><input type="number" step="0.01"
+                                            id="total_day" name="total_day" class="nt-input" readonly></div>
+                                    <div><label class="nt-field-label">Gesamtstunden</label><input type="number" step="0.25"
+                                            id="total_time" name="total_time" class="nt-input" readonly></div>
+                                </div>
+                                <div class="pt-conflict-box" id="appointmentConflictBox">
+                                    <div class="pt-conflict-head"><span><i data-lucide="alert-triangle"></i>
+                                            Terminüberschneidung gefunden</span><button type="button"
+                                            id="ptConflictClose">×</button></div>
+                                    <div class="pt-conflict-list" id="appointmentConflictList"></div>
+                                    <div class="pt-conflict-actions">
+                                        <button type="button" id="ptConflictChange">Datum ändern</button>
+                                        <button type="button" class="is-primary" id="ptConflictAnyway">Trotzdem
+                                            auswählen</button>
+                                    </div>
+                                </div>
+                            </div>
 
-                                        <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>
-                                                <input type="text"
-                                                       name="key[0][task]"
-                                                       class="form-control form-control-sm">
-                                            </td>
-                                            <td>
-                                                <input type="number"
-                                                       name="key[0][duration]"
-                                                       class="form-control form-control-sm task-duration">
-                                            </td>
-                                            <td>
-                                                <select name="key[0][employee_id][]"
-                                                        class="form-control form-control-sm employee-select"
-                                                        multiple
-                                                        style="width:100%">
-                                                    @foreach ($employees as $employee)
-                                                        <option value="{{ $employee->id }}"
-                                                                data-image="{{ asset('images/employee/'.$employee->image) }}">
-                                                            {{ $employee->name }} {{ $employee->lastname }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <textarea name="key[0][key_description]"
-                                                          class="form-control form-control-sm"></textarea>
-                                            </td>
-                                            <td>
-                                                <button type="button"
-                                                        class="btn btn-sm btn-primary add-task-steps">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                                <button type="button"
-                                                        class="btn btn-sm btn-danger remove-task-steps">
-                                                    <i class="fa fa-minus"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
+                            <div class="nt-section" id="customerSelectContainer" style="display:none;">
+                                <div class="nt-section-header">
+                                    <div class="nt-section-title"><i data-lucide="building-2"></i>Kunde / Objekt / Produkt
+                                    </div><span class="nt-section-badge">CRM</span>
+                                </div>
+                                <div class="nt-row">
+                                    <div><label class="nt-field-label">Kunde suchen</label><select name="customer_id"
+                                            id="customer_id" class="nt-select"></select></div>
+                                    <div><label class="nt-field-label">Objekt</label><select name="alternative_id"
+                                            id="alternative_id" class="nt-select">
+                                            <option value="">Zuerst Kunde wählen</option>
+                                        </select></div>
+                                </div>
+                                <div class="nt-row">
+                                    <div><label class="nt-field-label">Produkt</label><select name="product_id"
+                                            id="product_id" class="nt-select">
+                                            <option value="">Produkt wählen</option>@foreach($taskProducts as $product)
+                                                <option value="{{ data_get($product, 'id') }}">
+                                                    {{ data_get($product, 'article_group') ?? data_get($product, 'name') ?? ('#' . data_get($product, 'id')) }}
+                                            </option>@endforeach
+                                        </select></div>
+                                    <div><label class="nt-field-label">Kundeninfo</label>
+                                        <div class="nt-chip-row" id="customerInfoChips"><span class="nt-chip">Kein Kunde
+                                                gewählt</span></div>
+                                    </div>
+                                </div>
+                                <div class="nt-row">
+                                    <div>
+                                        <label class="nt-field-label">Lead Stage</label>
+                                        <select name="lead_stage_id" id="lead_stage_id" class="nt-select">
+                                            <option value="">Stage automatisch übernehmen</option>
+                                            @foreach($taskLeadStagePayload as $stage)
+                                                <option value="{{ data_get($stage, 'id') }}"
+                                                    data-color="{{ data_get($stage, 'color') }}">
+                                                    {{ data_get($stage, 'name') }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="nt-field-label">Sub Stage</label>
+                                        <select name="lead_stage_sub_stage_id" id="lead_stage_sub_stage_id"
+                                            class="nt-select">
+                                            <option value="">Zuerst Stage wählen</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="nt-stage-preview">
+                                    <div class="nt-chip-row" id="leadStageInfoChips">
+                                        <span class="nt-chip">Stage wird automatisch vom Kundenprodukt übernommen</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="nt-section">
+                                <div class="nt-section-header">
+                                    <div class="nt-section-title"><i data-lucide="list-checks"></i>Aufgaben-Schlüssel</div>
+                                    <button type="button" class="nt-btn nt-btn-primary add-task-steps"><i
+                                            data-lucide="plus"></i>Schritt</button>
+                                </div>
+                                <input type="hidden" name="step_employee_mode" id="step_employee_mode" value="all">
+                                <div class="pt-step-mode" id="stepEmployeeModeBox">
+                                    <label><input type="radio" name="step_employee_mode_radio" value="all" checked> Gleiche
+                                        Mitarbeiter für alle Schritte</label>
+                                    <label><input type="radio" name="step_employee_mode_radio" value="per_step"> Jeder
+                                        Schritt hat eigene Mitarbeiter</label>
+                                    <small>Bei eigenen Schritt-Mitarbeitern wird die große Mitarbeiter-Auswahl oben
+                                        ausgeblendet und pro Schritt gespeichert.</small>
+                                </div>
+                                <div style="overflow-x:auto;">
+                                    <table id="key_task">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Aufgabenschritt</th>
+                                                <th>Dauer<br><small id="key_total_time">0.00 Stunden</small></th>
+                                                <th>Zugewiesen</th>
+                                                <th>Status</th>
+                                                <th>Beschreibung</th>
+                                                <th>Aktion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                      
+
+                        <div>
+                            <div class="nt-section">
+                                <div class="nt-section-header">
+                                    <div class="nt-section-title"><i data-lucide="users"></i>Zuweisung</div><span
+                                        class="nt-section-badge">Team</span>
+                                </div>
+                                <div class="nt-form-group pt-global-employee-box" id="globalEmployeeBox"
+                                    style="margin-bottom:12px;"><label class="nt-field-label">Mitarbeiter</label><select
+                                        name="employee[]" id="employee" class="nt-select"
+                                        multiple>@foreach($taskEmployees as $employee)<option
+                                            value="{{ data_get($employee, 'id') }}">
+                                            {{ trim((data_get($employee, 'name') ?? '') . ' ' . (data_get($employee, 'lastname') ?? '')) }}
+                                        </option>@endforeach</select></div>
+                                <div class="nt-form-group" style="margin-bottom:12px;"><label
+                                        class="nt-field-label">Controller / Kontrolle</label><select name="controller[]"
+                                        id="controller" class="nt-select" multiple>@foreach($taskEmployees as $employee)
+                                            <option value="{{ data_get($employee, 'id') }}">
+                                                {{ trim((data_get($employee, 'name') ?? '') . ' ' . (data_get($employee, 'lastname') ?? '')) }}
+                                        </option>@endforeach
+                                    </select></div>
+                                <div class="nt-form-group"><label class="nt-field-label">Team</label><select name="team_id"
+                                        id="team_id" class="nt-select">
+                                        <option value="">Kein Team</option>@foreach($taskTeams as $team)<option
+                                            value="{{ data_get($team, 'id') }}">
+                                            {{ data_get($team, 'name') ?? data_get($team, 'team_name') ?? ('Team #' . data_get($team, 'id')) }}
+                                        </option>@endforeach
+                                    </select></div>
+                            </div>
+
+                            <div class="nt-section">
+                                <div class="nt-section-header">
+                                    <div class="nt-section-title"><i data-lucide="repeat"></i>Wiederholung / Erinnerung
+                                    </div>
+                                </div>
+                                <div class="nt-switch-row">
+                                    <label class="nt-switch-label"><input type="checkbox" id="repeated" name="repeat"
+                                            value="daily"> Wiederholen</label>
+                                    <label class="nt-switch-label"><input type="checkbox" id="reminder_check" value="1">
+                                        Erinnerung</label>
+                                </div>
+                                <div class="repeated_area" style="display:none;margin-top:12px;"><label
+                                        class="nt-field-label">Wiederholung</label><select name="repeat_type"
+                                        id="repeat_type" class="nt-select">
+                                        <option value="daily">Täglich</option>
+                                        <option value="weekly">Wöchentlich</option>
+                                        <option value="monthly">Monatlich</option>
+                                        <option value="yearly">Jährlich</option>
+                                    </select></div>
+                                <div class="reminder_area" style="display:none;margin-top:12px;">
+                                    <div class="nt-row">
+                                        <div><label class="nt-field-label">Erinnerungsdatum</label><input type="date"
+                                                name="reminder_date" id="reminder_date" class="nt-input"></div>
+                                        <div><label class="nt-field-label">Erinnerungszeit</label><input type="time"
+                                                name="reminder_time" id="reminder_time" class="nt-input"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="nt-section">
+                                <div class="nt-section-header">
+                                    <div class="nt-section-title"><i data-lucide="info"></i>Hinweise</div>
+                                </div>
+                                <div class="nt-chip-row">
+                                    <span class="nt-chip"><strong>Meine Jobs:</strong> Aufgaben, die mir zugewiesen
+                                        sind</span>
+                                    <span class="nt-chip"><strong>Erstellt von mir:</strong> Aufgaben, die ich verteilt
+                                        habe</span>
+                                    <span class="nt-chip"><strong>Pause:</strong> bleibt im Board mit Blur und Grund</span>
+                                    <span class="nt-chip"><strong>CRM Stage:</strong> wird vom Kundenprodukt übernommen und
+                                        kann manuell angepasst werden</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {{-- Footer --}}
-                <div class="nt-footer modal-footer">
-                    <button type="button"
-                            class="nt-btn nt-btn-danger close_task_window">
-                        <i class="feather icon-x"></i>
-                        Abbrechen
-                    </button>
-
-                    <button type="button"
-                            class="nt-btn nt-btn-primary save-task-close">
-                        <i class="feather icon-save"></i>
-                        Speichern & schließen
-                    </button>
-
-                    <button type="button"
-                            class="nt-btn nt-btn-primary save-task-continue">
-                        <i class="feather icon-save"></i>
-                        Speichern & weiter
-                    </button>
+                <div class="nt-footer">
+                    <button type="button" class="nt-btn nt-btn-ghost close_task_window"><i
+                            data-lucide="x"></i>Abbrechen</button>
+                    <button type="button" class="nt-btn nt-btn-primary save-task-continue"><i
+                            data-lucide="save"></i>Speichern & weiter</button>
+                    <button type="button" class="nt-btn nt-btn-primary save-task-close"><i data-lucide="check"></i>Speichern
+                        & schließen</button>
                 </div>
             </form>
         </div>
     </div>
-</div>
 
+    <div class="pt-modal-backdrop" id="ptReasonModal">
+        <div class="pt-modal">
+            <div class="pt-modal-head">
+                <div class="pt-modal-title" id="ptReasonTitle">Grund angeben</div><button type="button" class="pt-icon-btn"
+                    data-close-reason><i data-lucide="x"></i></button>
+            </div>
+            <div class="pt-modal-body">
+                <input type="hidden" id="ptReasonTaskId"><input type="hidden" id="ptReasonAction">
+                <label class="pt-label">Grund</label><textarea class="nt-textarea" id="ptReasonText"
+                    placeholder="Bitte Grund eingeben..."></textarea>
+            </div>
+            <div class="pt-modal-foot"><button type="button" class="pt-btn pt-btn-soft"
+                    data-close-reason>Abbrechen</button><button type="button" class="pt-btn pt-btn-primary"
+                    id="ptReasonSubmit"><i data-lucide="check"></i>Speichern</button></div>
+        </div>
+    </div>
 
+    <div class="pt-toast" id="ptToast"><i data-lucide="check-circle-2"></i><span id="ptToastText">Gespeichert</span></div>
 @endsection
- 
+
 @section('script')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-<script>
-    const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    <script>
+        (function () {
+            'use strict';
 
-    let rejectTaskId   = null;
-    let rejectBackdrop = null;
-    let rejectReason   = null;
-    let rejectCancel   = null;
-    let rejectSave     = null;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+            const hasStoreRoute = @json((bool) $storeRoute);
+            const routes = {
+                ajaxTasks: @json(route('personal-tasks.ajax.tasks')),
+                ajaxStats: @json(route('personal-tasks.ajax.stats')),
+                customersSearch: @json(route('personal-tasks.customers.search')),
+                leadStageContext: @json(Route::has('personal-tasks.lead-stage-context') ? route('personal-tasks.lead-stage-context') : '#'),
+                store: @json($storeRoute),
+                update: @json($updateRoute),
+                edit: @json(route('personal-tasks.personal.task.edit', ['id' => '__TASK__'])),
+                status: @json(route('personal-tasks.status', ['task' => '__TASK__'])),
+                archive: @json(route('personal-tasks.archive', ['task' => '__TASK__'])),
+                destroy: @json(route('personal-tasks.destroy', ['task' => '__TASK__'])),
+                restore: @json(route('personal-tasks.restore', ['task' => '__TASK__'])),
+                pause: @json(route('personal-tasks.pause', ['task' => '__TASK__'])),
+                resume: @json(route('personal-tasks.resume', ['task' => '__TASK__'])),
+                cancel: @json(route('personal-tasks.cancel', ['task' => '__TASK__'])),
+                reject: @json(route('personal-tasks.reject', ['task' => '__TASK__'])),
+                accept: @json(route('personal-tasks.accept', ['task' => '__TASK__'])),
+                color: @json(route('personal-tasks.color', ['task' => '__TASK__'])),
+                profile: @json(Route::has('personal-tasks.profile') ? route('personal-tasks.profile', ['task' => '__TASK__']) : '#'),
+                commentsStore: @json(Route::has('personal-tasks.comments.store') ? route('personal-tasks.comments.store', ['task' => '__TASK__']) : '#'),
+                appointmentConflicts: @json(Route::has('personal-tasks.appointment-conflicts') ? route('personal-tasks.appointment-conflicts') : '#'),
+            };
 
-    document.addEventListener('DOMContentLoaded', () => {
-        if (window.feather) {
-            feather.replace();
-        }
+            const leadStageOptions = @json($taskLeadStagePayload);
+            const state = { view: 'board', scope: 'my', state: 'active', search: '', priority: '', due: 'all', employee: '', leadStage: '', leadSubStage: '', tasks: [], stats: {}, draggingTaskId: null };
+            const columns = [{ key: 'open', label: 'Offen', icon: 'circle' }, { key: 'in_progress', label: 'In Bearbeitung', icon: 'loader' }, { key: 'completed', label: 'Erledigt', icon: 'check-circle-2' }];
+            const els = {
+                board: document.getElementById('ptBoard'), boardView: document.getElementById('ptBoardView'), listView: document.getElementById('ptListView'), listBody: document.getElementById('ptListBody'), mainTitle: document.getElementById('ptMainTitle'), resultText: document.getElementById('ptResultText'), search: document.getElementById('ptSearchInput'), priority: document.getElementById('ptPriorityFilter'), due: document.getElementById('ptDueFilter'), employee: document.getElementById('ptEmployeeFilter'), leadStage: document.getElementById('ptLeadStageFilter'), leadSubStage: document.getElementById('ptLeadSubStageFilter'), refresh: document.getElementById('ptRefreshBtn'), more: document.getElementById('ptMoreDropdown'), moreBtn: document.getElementById('ptMoreBtn'), toast: document.getElementById('ptToast'), toastText: document.getElementById('ptToastText'), reasonModal: document.getElementById('ptReasonModal'), reasonTaskId: document.getElementById('ptReasonTaskId'), reasonAction: document.getElementById('ptReasonAction'), reasonText: document.getElementById('ptReasonText'), reasonTitle: document.getElementById('ptReasonTitle'), listOnlyNote: document.getElementById('ptListOnlyNote')
+            };
 
-        cacheRejectModalElements();
-        initDropdowns();
-        initDragDrop();
-        initStatusButtons();
-        initListActions();
-        initColorChangeListener();
-        highlightNewTask();
-    });
+            function route(name, taskId) { return (routes[name] || '').replace('__TASK__', taskId); }
+            function esc(value) { return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
+            function icon(name) { return `<i data-lucide="${name}"></i>`; }
+            function refreshIcons() { if (window.lucide) { window.lucide.createIcons(); } }
+            function stripHtml(html) { const div = document.createElement('div'); div.innerHTML = html || ''; return div.textContent || div.innerText || ''; }
+            function toast(message, type = 'success') { els.toast.classList.remove('success', 'error'); els.toast.classList.add('is-open', type); els.toastText.textContent = message; setTimeout(() => els.toast.classList.remove('is-open'), 2500); refreshIcons(); }
+            function debounce(fn, delay = 350) { let timer; return function (...args) { clearTimeout(timer); timer = setTimeout(() => fn.apply(this, args), delay); }; }
+            function formData(data) { const fd = new FormData(); Object.entries(data).forEach(([key, value]) => fd.append(key, value)); return fd; }
+            async function requestJson(url, options = {}) {
+                const response = await fetch(url, { headers: { 'X-CSRF-TOKEN': csrfToken, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json', ...(options.headers || {}) }, ...options });
+                const contentType = response.headers.get('content-type') || '';
+                const data = contentType.includes('application/json') ? await response.json().catch(() => ({})) : { success: response.ok, html: await response.text().catch(() => '') };
+                if (!response.ok || data.success === false) {
+                    const error = new Error(data.message || 'Serverfehler');
+                    error.status = response.status;
+                    error.errors = data.errors || {};
+                    error.response = data;
+                    throw error;
+                }
+                return data;
+            }
 
-    function cacheRejectModalElements() {
-        rejectBackdrop = document.getElementById('pt-reject-backdrop');
-        rejectReason   = document.getElementById('pt-reject-reason');
-        rejectCancel   = document.getElementById('pt-reject-cancel');
-        rejectSave     = document.getElementById('pt-reject-save');
+            function queryString() {
+                const params = new URLSearchParams({
+                    view: state.view,
+                    scope: state.scope,
+                    state: state.state,
+                    search: state.search,
+                    priority: state.priority,
+                    due: state.due,
+                    due_filter: state.due,
+                    employee: state.employee,
+                    employee_id: state.employee,
+                });
 
-        if (rejectCancel && rejectBackdrop) {
-            rejectCancel.addEventListener('click', () => {
-                rejectBackdrop.style.display = 'none';
-                rejectTaskId = null;
-            });
-        }
+                if (state.leadStage) {
+                    params.set('lead_stage_id', state.leadStage);
+                }
 
-        if (rejectSave && rejectBackdrop) {
-            rejectSave.addEventListener('click', () => {
-                if (!rejectTaskId) return;
-                const reason = (rejectReason && rejectReason.value ? rejectReason.value : '').trim();
-                if (!reason) {
-                    alert('Bitte einen Grund angeben.');
+                if (state.leadSubStage) {
+                    params.set('lead_stage_sub_stage_id', state.leadSubStage);
+                }
+
+                return params.toString();
+            }
+            function setLoading() { if (state.view === 'board') { els.board.innerHTML = '<div class="pt-loader">Lade Aufgaben...</div>'; } else { els.listBody.innerHTML = '<tr><td colspan="10">Lade Aufgaben...</td></tr>'; } }
+            async function loadTasks() { setLoading(); try { const data = await requestJson(`${routes.ajaxTasks}?${queryString()}`); state.tasks = sortTasks(data.tasks || []); state.stats = data.stats || {}; renderStats(); render(); } catch (error) { els.board.innerHTML = `<div class="pt-empty">${esc(error.message)}</div>`; els.listBody.innerHTML = `<tr><td colspan="10">${esc(error.message)}</td></tr>`; toast(error.message, 'error'); } }
+            function priorityRank(priority) { const value = String(priority || 'medium').toLowerCase().replace(/\s+/g, '_').replace(/-/g, '_'); return { 'very_high': 1, 'high': 2, 'medium': 3, 'normal': 4, 'low': 5 }[value] || 4; }
+            function normalizePriorityForBlade(value) {
+                const raw = String(value || '').trim().toLowerCase().replace(/[_.-]+/g, ' ').replace(/\s+/g, ' ');
+                const map = {
+                    'keiner': 'normal', 'none': 'normal', 'normal': 'normal', 'no priority': 'normal',
+                    'mittel': 'medium', 'medium': 'medium', 'med': 'medium',
+                    'hoch': 'high', 'high': 'high',
+                    'sehr hoch': 'very high', 'sehr wichtig': 'very high', 'very high': 'very high', 'urgent': 'very high', 'dringend': 'very high', 'very_high': 'very high',
+                    'low': 'normal', 'niedrig': 'normal'
+                };
+                return map[raw] || 'medium';
+            }
+            function priorityLabel(value) {
+                const v = normalizePriorityForBlade(value);
+                return { normal: 'Keiner', medium: 'Mittel', high: 'Hoch', 'very high': 'Sehr wichtig' }[v] || 'Mittel';
+            }
+            function setPriorityValue(value) {
+                const normalized = normalizePriorityForBlade(value);
+                const input = document.getElementById('priority');
+                if (input) input.value = normalized;
+                const label = document.querySelector('#priority_select .nt-priority-label');
+                if (label) label.textContent = priorityLabel(normalized);
+                return normalized;
+            }
+            function dueRank(task) { if (!task.due_date) return 9999999999999; const time = task.due_time || '23:59:59'; const stamp = Date.parse(`${task.due_date}T${time}`); return Number.isNaN(stamp) ? 9999999999999 : stamp; }
+            function sortTasks(tasks) { return [...tasks].sort((a, b) => { const p = priorityRank(a.priority) - priorityRank(b.priority); if (p !== 0) return p; const d = dueRank(a) - dueRank(b); if (d !== 0) return d; return Number(b.id || 0) - Number(a.id || 0); }); }
+            function statValue(key) {
+                const aliases = { pause: 'paused', paused: 'pause' };
+                if (state.stats && Object.prototype.hasOwnProperty.call(state.stats, key)) return state.stats[key] ?? 0;
+                const alias = aliases[key];
+                if (alias && state.stats && Object.prototype.hasOwnProperty.call(state.stats, alias)) return state.stats[alias] ?? 0;
+                return 0;
+            }
+
+            function renderStats() {
+                document.querySelectorAll('[data-stat]').forEach(el => {
+                    const key = el.getAttribute('data-stat');
+                    el.textContent = statValue(key);
+                });
+                document.querySelectorAll('[data-tab-count]').forEach(el => {
+                    const key = el.getAttribute('data-tab-count');
+                    el.textContent = statValue(key);
+                });
+            }
+            function isListOnlyState() { return !['active', 'my', 'created'].includes(String(state.state || 'active')); }
+            function stateLabel() {
+                return { active: 'Aktive Aufgaben', pause: 'Pausierte Aufgaben', cancel: 'Abgebrochene Aufgaben', archived: 'Archivierte Aufgaben', deleted: 'Gelöschte Aufgaben', rejected: 'Abgelehnte Aufgaben' }[state.state] || 'Aufgaben';
+            }
+            function forceListForManagedState() {
+                if (!isListOnlyState()) return;
+                state.view = 'list';
+                document.querySelectorAll('#ptViewTabs .pt-tab').forEach(b => b.classList.toggle('is-active', b.dataset.view === 'list'));
+            }
+            function render() {
+                forceListForManagedState();
+                els.resultText.textContent = `${state.tasks.length} Aufgaben gefunden`;
+                if (els.listOnlyNote) els.listOnlyNote.classList.toggle('is-open', isListOnlyState());
+                if (state.view === 'board') {
+                    els.mainTitle.textContent = 'Kanban Ansicht';
+                    els.boardView.classList.remove('d-none');
+                    els.listView.classList.add('d-none');
+                    renderBoard();
+                } else {
+                    els.mainTitle.textContent = isListOnlyState() ? `${stateLabel()} · Listenverwaltung` : 'Listen Ansicht';
+                    els.boardView.classList.add('d-none');
+                    els.listView.classList.remove('d-none');
+                    renderList();
+                }
+                refreshIcons();
+            }
+            function boardColumn(task) { if (task.task_status === 'completed') return 'completed'; if (['on_progress', 'on_going', 'working', 'in_progress'].includes(task.task_status)) return 'in_progress'; return 'open'; }
+            function isActiveKanbanTask(task) {
+                if (task.deleted_at || task.archived_at) return false;
+                return !['pause', 'cancel', 'junk', 'rejected'].includes(String(task.task_status || '').toLowerCase());
+            }
+            function renderBoard() {
+                const activeTasks = state.tasks.filter(isActiveKanbanTask);
+                const grouped = { open: [], in_progress: [], completed: [] };
+                activeTasks.forEach(task => grouped[boardColumn(task)].push(task));
+                els.board.innerHTML = columns.map(column => { const tasks = grouped[column.key] || []; return `<section class="pt-column" data-column="${column.key}"><div class="pt-column-head"><div class="pt-column-title">${icon(column.icon)}${esc(column.label)}</div><div class="pt-column-count">${tasks.length}</div></div><div class="pt-column-body" data-drop-column="${column.key}">${tasks.length ? tasks.map(renderCard).join('') : '<div class="pt-empty">Keine aktiven Aufgaben</div>'}</div></section>`; }).join('');
+            }
+            function profileUrl(taskId) { return route('profile', taskId); }
+
+            function cleanStageColor(color, fallback = '#74b2d4') {
+                const value = String(color || '').trim();
+                return /^#[0-9a-f]{3,8}$/i.test(value) ? value : fallback;
+            }
+
+            function getStageById(stageId) {
+                return (leadStageOptions || []).find(stage => String(stage.id) === String(stageId)) || null;
+            }
+
+            function getSubStageById(stage, subStageId) {
+                if (!stage || !Array.isArray(stage.sub_stages)) return null;
+                return stage.sub_stages.find(subStage => String(subStage.id) === String(subStageId)) || null;
+            }
+
+            function destroySelect2IfNeeded(selector) {
+                if (!window.jQuery || !$.fn.select2) return;
+                const $el = $(selector);
+                if ($el.hasClass('select2-hidden-accessible')) $el.select2('destroy');
+            }
+
+            function initDrawerSelect2(selector, options = {}) {
+                if (!window.jQuery || !$.fn.select2) return;
+                $(selector).select2({ width: '100%', dropdownParent: $('#newTaskDrawer'), ...options });
+            }
+
+            function setSubStageOptions(stageId, selectedSubStageId = '') {
+                const select = document.getElementById('lead_stage_sub_stage_id');
+                if (!select) return;
+
+                const stage = getStageById(stageId);
+                const subStages = stage && Array.isArray(stage.sub_stages) ? stage.sub_stages : [];
+
+                destroySelect2IfNeeded('#lead_stage_sub_stage_id');
+                select.innerHTML = '<option value="">Sub Stage automatisch übernehmen</option>';
+
+                subStages.forEach(subStage => {
+                    const option = new Option(subStage.name || ('Sub Stage #' + subStage.id), subStage.id);
+                    option.dataset.color = subStage.color || '#93c21c';
+                    option.dataset.key = subStage.key || '';
+                    select.appendChild(option);
+                });
+
+                if (selectedSubStageId && subStages.some(item => String(item.id) === String(selectedSubStageId))) {
+                    select.value = String(selectedSubStageId);
+                }
+
+                initDrawerSelect2('#lead_stage_sub_stage_id', { placeholder: 'Sub Stage wählen', allowClear: true });
+            }
+
+            function filterSubStagesForStage(stageId) {
+                const stage = getStageById(stageId);
+                if (!stage) return [];
+                return Array.isArray(stage.sub_stages) ? stage.sub_stages : [];
+            }
+
+            function rebuildFilterSubStageSelect(subStages = [], selectedSubStageId = '', stageId = '') {
+                const select = document.getElementById('ptLeadSubStageFilter');
+                if (!select) return;
+
+                if (window.jQuery && $.fn.select2) {
+                    const $select = $('#ptLeadSubStageFilter');
+                    if ($select.hasClass('select2-hidden-accessible')) {
+                        $select.select2('destroy');
+                    }
+                }
+
+                select.innerHTML = '<option value="">Alle Sub Stages</option>';
+
+                (subStages || []).forEach(subStage => {
+                    const option = new Option(subStage.name || ('Sub Stage #' + subStage.id), subStage.id);
+                    option.dataset.color = subStage.color || '#93c21c';
+                    option.dataset.key = subStage.key || '';
+                    select.appendChild(option);
+                });
+
+                select.disabled = !stageId || !(subStages || []).length;
+
+                if (selectedSubStageId && (subStages || []).some(item => String(item.id) === String(selectedSubStageId))) {
+                    select.value = String(selectedSubStageId);
+                } else {
+                    select.value = '';
+                }
+
+                if (window.jQuery && $.fn.select2) {
+                    $('#ptLeadSubStageFilter')
+                        .prop('disabled', select.disabled)
+                        .select2({
+                            width: '100%',
+                            placeholder: select.disabled ? 'Keine Sub Stages' : 'Alle Sub Stages',
+                            allowClear: true,
+                        })
+                        .trigger('change.select2');
+                }
+            }
+
+            function setFilterSubStageOptions(stageId, selectedSubStageId = '') {
+                const subStages = filterSubStagesForStage(stageId);
+                rebuildFilterSubStageSelect(subStages, selectedSubStageId, stageId);
+                return subStages;
+            }
+
+            async function loadFilterSubStagesForStage(stageId, selectedSubStageId = '') {
+                const localSubStages = setFilterSubStageOptions(stageId, selectedSubStageId);
+
+                if (!stageId || localSubStages.length) {
+                    return localSubStages;
+                }
+
+                if (!routes.leadStageContext || routes.leadStageContext === '#') {
+                    return [];
+                }
+
+                try {
+                    const data = await requestJson(`${routes.leadStageContext}?lead_stage_id=${encodeURIComponent(stageId)}`);
+                    const remoteSubStages = Array.isArray(data.sub_stage_options) ? data.sub_stage_options : [];
+
+                    if (remoteSubStages.length) {
+                        const stage = getStageById(stageId);
+                        if (stage) {
+                            stage.sub_stages = remoteSubStages;
+                        }
+                        rebuildFilterSubStageSelect(remoteSubStages, selectedSubStageId, stageId);
+                    }
+
+                    return remoteSubStages;
+                } catch (error) {
+                    console.warn('Filter sub stages could not be loaded:', error);
+                    return [];
+                }
+            }
+
+            let filterStageTimer = null;
+
+            function handleFilterStageChanged() {
+                window.clearTimeout(filterStageTimer);
+                filterStageTimer = window.setTimeout(async () => {
+                    state.leadStage = document.getElementById('ptLeadStageFilter')?.value || '';
+                    state.leadSubStage = '';
+                    await loadFilterSubStagesForStage(state.leadStage, '');
+                    loadTasks();
+                }, 40);
+            }
+
+            function handleFilterSubStageChanged() {
+                state.leadSubStage = document.getElementById('ptLeadSubStageFilter')?.value || '';
+                loadTasks();
+            }
+
+            function currentLeadStageContextFromSelects() {
+                const stageId = document.getElementById('lead_stage_id')?.value || '';
+                const subStageId = document.getElementById('lead_stage_sub_stage_id')?.value || '';
+                const stage = getStageById(stageId);
+                const subStage = getSubStageById(stage, subStageId);
+
+                return {
+                    lead_stage_id: stage?.id || stageId || '',
+                    lead_stage_name: stage?.name || '',
+                    lead_stage_color: stage?.color || '#74b2d4',
+                    lead_stage_sub_stage_id: subStage?.id || subStageId || '',
+                    lead_stage_sub_stage_name: subStage?.name || '',
+                    lead_stage_sub_stage_color: subStage?.color || '#93c21c',
+                };
+            }
+
+            function updateLeadStageChips(context = null) {
+                const chips = document.getElementById('leadStageInfoChips');
+                if (!chips) return;
+
+                const data = context || currentLeadStageContextFromSelects();
+                const stageName = data.lead_stage_name || 'Keine Stage';
+                const subStageName = data.lead_stage_sub_stage_name || 'Keine Sub Stage';
+                const stageColor = cleanStageColor(data.lead_stage_color, '#74b2d4');
+                const subStageColor = cleanStageColor(data.lead_stage_sub_stage_color, '#93c21c');
+
+                chips.innerHTML = `
+                            <span class="nt-chip" style="border-color:${esc(stageColor)}">${icon('git-branch')}${esc(stageName)}</span>
+                            <span class="nt-chip" style="border-color:${esc(subStageColor)}">${icon('workflow')}${esc(subStageName)}</span>
+                        `;
+                refreshIcons();
+            }
+
+            function renderLeadStageBadge(task) {
+                const stageName = task.lead_stage_name || task.lead_stage_context?.lead_stage_name || '';
+                const subStageName = task.lead_stage_sub_stage_name || task.lead_stage_context?.lead_stage_sub_stage_name || '';
+                if (!stageName && !subStageName) return '';
+
+                const stageColor = cleanStageColor(task.lead_stage_color || task.lead_stage_context?.lead_stage_color, '#74b2d4');
+                const subStageColor = cleanStageColor(task.lead_stage_sub_stage_color || task.lead_stage_context?.lead_stage_sub_stage_color, '#93c21c');
+
+                return `<span class="pt-pill pt-stage-pill" style="border-color:${esc(stageColor)}">
+                            ${icon('git-branch')}${esc(stageName || 'Stage')}
+                            ${subStageName ? `<small style="border-left:3px solid ${esc(subStageColor)}">${esc(subStageName)}</small>` : ''}
+                        </span>`;
+            }
+
+            function applyLeadStageContext(context = {}) {
+                const leadProductInput = document.getElementById('lead_product_list_id');
+                const stageSelect = document.getElementById('lead_stage_id');
+                const subStageSelect = document.getElementById('lead_stage_sub_stage_id');
+
+                if (leadProductInput && context.lead_product_list_id) leadProductInput.value = context.lead_product_list_id;
+
+                if (stageSelect) {
+                    const stageId = context.lead_stage_id || '';
+                    stageSelect.value = stageId ? String(stageId) : '';
+                    setSubStageOptions(stageSelect.value, context.lead_stage_sub_stage_id || '');
+                    if (window.jQuery && $.fn.select2) $('#lead_stage_id').trigger('change.select2');
+                }
+
+                if (subStageSelect && context.lead_stage_sub_stage_id) {
+                    subStageSelect.value = String(context.lead_stage_sub_stage_id);
+                    if (window.jQuery && $.fn.select2) $('#lead_stage_sub_stage_id').trigger('change.select2');
+                }
+
+                updateLeadStageChips(context);
+            }
+
+            async function loadLeadStageContext(preferred = {}) {
+                const stageSelect = document.getElementById('lead_stage_id');
+                const subStageSelect = document.getElementById('lead_stage_sub_stage_id');
+                const stageId = preferred.lead_stage_id ?? stageSelect?.value ?? '';
+                const subStageId = preferred.lead_stage_sub_stage_id ?? subStageSelect?.value ?? '';
+
+                if (stageId) {
+                    setSubStageOptions(stageId, subStageId);
+                    updateLeadStageChips();
+                }
+
+                if (!routes.leadStageContext || routes.leadStageContext === '#') return;
+
+                const params = new URLSearchParams();
+                const leadProductListId = preferred.lead_product_list_id ?? document.getElementById('lead_product_list_id')?.value ?? '';
+                const customerId = preferred.customer_id ?? document.getElementById('customer_id')?.value ?? '';
+                const alternativeId = preferred.alternative_id ?? document.getElementById('alternative_id')?.value ?? '';
+                const productId = preferred.product_id ?? document.getElementById('product_id')?.value ?? '';
+
+                if (leadProductListId) params.set('lead_product_list_id', leadProductListId);
+                if (customerId) params.set('customer_id', customerId);
+                if (alternativeId) params.set('alternative_id', alternativeId);
+                if (productId) params.set('product_id', productId);
+                if (stageId) params.set('lead_stage_id', stageId);
+                if (subStageId) params.set('lead_stage_sub_stage_id', subStageId);
+                if (!params.toString()) return;
+
+                try {
+                    const data = await requestJson(`${routes.leadStageContext}?${params.toString()}`);
+                    applyLeadStageContext(data.context || {});
+                } catch (error) {
+                    console.warn('Lead stage context could not be loaded:', error);
+                }
+            }
+            function dueState(task) {
+                if (!task.due_date) return 'none';
+                const time = task.due_time || '23:59:59';
+                const due = new Date(`${task.due_date}T${time}`);
+                if (Number.isNaN(due.getTime())) return 'none';
+                const now = new Date();
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const dueDay = new Date(due.getFullYear(), due.getMonth(), due.getDate());
+                if (due < now && task.task_status !== 'completed') return 'overdue';
+                if (dueDay.getTime() === today.getTime()) return 'today';
+                return 'future';
+            }
+            function dueCardClass(task) { const state = dueState(task); return state === 'overdue' ? 'is-due-overdue' : (state === 'today' ? 'is-due-today' : ''); }
+            function taskEmployeeImage(employee) {
+                const raw = employee.image_url || employee.image || '';
+                if (!raw) return '';
+                if (/^https?:\/\//i.test(raw) || raw.startsWith('/')) return raw;
+                const clean = raw.replace(/^\/+/, '');
+                if (clean.includes('images/employee/')) return '/' + clean;
+                return '/images/employee/' + clean;
+            }
+            function renderCard(task) {
+                const paused = task.task_status === 'pause';
+                const color = task.color || '#93c21c';
+                const progress = Math.max(0, Math.min(100, Number(task.progress || 0)));
+                const commentsCount = Number(task.comments_count || (task.comments ? task.comments.length : 0));
+                return `<article class="pt-task-card ${paused ? 'is-paused' : ''} ${dueCardClass(task)}" style="--card-color:${esc(color)}" data-task-id="${task.id}" draggable="${paused ? 'false' : 'true'}">
+                                    ${paused ? renderPauseLayer(task) : ''}
+                                    <div class="pt-card-inner">
+                                        <div class="pt-card-top">
+                                            <div>
+                                                <h3 class="pt-card-title">${esc(task.task_title || 'Ohne Titel')}</h3>
+                                                <div class="pt-card-code">${esc(task.task_id || ('#' + task.id))}</div>
+                                            </div>
+                                            <div class="pt-card-actions">
+                                                <a class="pt-icon-btn profile" href="${esc(profileUrl(task.id))}" title="Profil öffnen">${icon('external-link')}</a>
+                                                <button type="button" class="pt-icon-btn comments" data-action="toggle-comments" data-id="${task.id}" title="Kommentare">${icon('message-circle')}<b>${commentsCount}</b></button>
+                                                <button type="button" class="pt-icon-btn" data-action="edit" data-id="${task.id}" title="Bearbeiten">${icon('pencil')}</button>
+                                                ${renderActionDropdown(task)}
+                                            </div>
+                                        </div>
+                                        <div class="pt-card-meta">
+                                            ${renderPriority(task.priority)}${renderDue(task)}${renderLeadStageBadge(task)}
+                                            ${task.customer_name ? `<span class="pt-pill">${icon('building-2')}${esc(task.customer_name)}</span>` : ''}
+                                            ${task.object_name ? `<span class="pt-pill">${icon('map-pin')}${esc(task.object_name)}</span>` : ''}
+                                            ${task.product_name ? `<span class="pt-pill">${icon('package')}${esc(task.product_name)}</span>` : ''}
+                                        </div>
+                                        ${task.description ? `<div class="pt-desc">${esc(stripHtml(task.description)).slice(0, 150)}</div>` : ''}
+                                        ${renderRejectedReasons(task)}
+                                        <div class="pt-progress"><div class="pt-progress-bar" style="width:${progress}%"></div></div>
+                                        <div class="pt-card-footer">${renderAvatars(task.employees || [])}<span class="pt-pill">${icon('list-checks')}${task.keys_count || (task.keys ? task.keys.length : 0)} Schritte</span></div>
+                                        <div class="pt-card-comments" data-comments-for="${task.id}">${renderComments(task)}</div>
+                                    </div>
+                                </article>`;
+            }
+            function renderComments(task) {
+                const comments = task.comments || [];
+                const list = comments.length ? comments.map(comment => {
+                    const author = comment.author || comment.employee || {};
+                    const name = `${author.name || ''} ${author.lastname || ''}`.trim() || 'Unbekannt';
+                    const img = taskEmployeeImage(author);
+                    return `<div class="pt-comment-box"><div class="pt-comment-head"><span class="pt-comment-author">${img ? `<img src="${esc(img)}" alt="${esc(name)}">` : ''}${esc(name)}</span><span>${esc(comment.created_at || '')}</span></div><div class="pt-comment-text">${comment.comment || ''}</div></div>`;
+                }).join('') : '<div class="pt-empty" style="padding:12px">Noch keine Kommentare</div>';
+                return `${list}<form class="pt-comment-form" data-comment-form="${task.id}"><textarea name="comment" placeholder="Kommentar schreiben..."></textarea><button type="submit">${icon('send')}</button></form>`;
+            }
+            function renderPauseLayer(task) { return `<div class="pt-pause-layer">${icon('pause-circle')}<strong>Pausiert</strong><span>${esc(task.pause_reason || task.reason || task.change_reason || 'Kein Grund angegeben')}</span><button type="button" class="pt-btn pt-btn-soft" data-action="resume" data-id="${task.id}">${icon('play')}Fortsetzen</button></div>`; }
+            function renderPriority(priority) { const clean = normalizePriorityForBlade(priority); const value = clean.replace(' ', '-'); const labels = { 'very-high': 'Sehr wichtig', high: 'Hoch', medium: 'Mittel', normal: 'Keiner' }; const icons = { 'very-high': 'siren', high: 'flame', medium: 'signal-medium', normal: 'minus-circle' }; return `<span class="pt-pill priority-${esc(value)}">${icon(icons[value] || 'signal-medium')}${esc(labels[value] || 'Mittel')}</span>`; }
+            function renderDue(task) { if (!task.due_date) return `<span class="pt-pill">${icon('calendar-x')}Ohne Datum</span>`; let text = task.due_date; if (task.due_time) text += ` ${String(task.due_time).slice(0, 5)} Uhr`; const state = dueState(task); const cls = state === 'overdue' ? 'pt-due-overdue pt-due-animated' : (state === 'today' ? 'pt-due-today pt-due-animated' : ''); const label = state === 'overdue' ? 'Überfällig' : (state === 'today' ? 'Heute fällig' : 'Fällig'); return `<span class="pt-pill ${cls}">${icon(state === 'overdue' ? 'alarm-clock' : (state === 'today' ? 'calendar-clock' : 'calendar'))}${esc(label)}: ${esc(text)}</span>`; }
+            function renderRejectedReasons(task) { const items = task.rejected_employees || []; if (!items.length) return ''; return `<div class="pt-reject-note"><strong>${icon('ban')}Abgelehnte Mitarbeiter</strong>${items.map(item => `<div><small>${esc(item.employee_name || 'Mitarbeiter')}</small>: ${esc(item.reason || 'Kein Grund angegeben')}</div>`).join('')}</div>`; }
+            function renderAvatars(employees) {
+                if (!employees.length) return '<div class="pt-avatars"><span class="pt-avatar">?</span></div>';
+                return `<div class="pt-avatars">${employees.slice(0, 4).map(employee => {
+                    const name = `${employee.name || ''} ${employee.lastname || ''}`.trim();
+                    const initials = name ? name.split(' ').map(part => part[0]).join('').slice(0, 2).toUpperCase() : '?';
+                    const image = taskEmployeeImage(employee);
+                    if (image) { return `<span class="pt-avatar" title="${esc(name)}"><img src="${esc(image)}" alt="${esc(name)}" onerror="this.closest('.pt-avatar').textContent='${esc(initials)}';this.remove();"></span>`; }
+                    return `<span class="pt-avatar" title="${esc(name)}">${esc(initials)}</span>`;
+                }).join('')}</div>`;
+            }
+            function renderActionDropdown(task) {
+                const isArchived = !!task.archived_at;
+                const isDeleted = !!task.deleted_at;
+                const status = String(task.task_status || 'open').toLowerCase();
+                const isPaused = status === 'pause';
+                const isCancelled = status === 'cancel';
+                const isManaged = isArchived || isDeleted || isPaused || isCancelled || status === 'rejected';
+
+                let managedActions = '';
+                if (isManaged) {
+                    managedActions = `
+                                    <button type="button" class="restore-open" data-action="restore-status" data-status="open" data-id="${task.id}">${icon('rotate-ccw')}Wiederherstellen: Offen</button>
+                                    <button type="button" class="restore-progress" data-action="restore-status" data-status="on_progress" data-id="${task.id}">${icon('play')}Wiederherstellen: In Bearbeitung</button>
+                                `;
+                }
+
+                return `<div class="pt-action-dropdown"><button type="button" class="pt-icon-btn" data-action="toggle-menu">${icon('more-vertical')}</button><div class="pt-action-menu">
+                                <button type="button" data-action="edit" data-id="${task.id}">${icon('pencil')}Bearbeiten</button>
+                                ${isManaged ? managedActions : `<button type="button" data-action="status" data-status="completed" data-id="${task.id}">${icon('check-circle-2')}Erledigt + Archivieren</button>`}
+                                ${(!isManaged && !isPaused) ? `<button type="button" data-action="reason" data-reason-action="pause" data-id="${task.id}">${icon('pause-circle')}Pausieren</button>` : ''}
+                                ${(!isManaged) ? `<button type="button" data-action="reason" data-reason-action="reject" data-id="${task.id}">${icon('ban')}Job ablehnen</button>` : ''}
+                                ${(!isManaged) ? `<button type="button" data-action="reason" data-reason-action="cancel" data-id="${task.id}">${icon('x-circle')}Abbrechen</button>` : ''}
+                                ${(!isManaged) ? `<button type="button" data-action="archive" data-id="${task.id}">${icon('archive')}Archivieren</button>` : ''}
+                                ${isDeleted ? `<button type="button" data-action="restore-status" data-status="open" data-id="${task.id}">${icon('rotate-ccw')}Aus Papierkorb wiederherstellen</button>` : `<button type="button" class="danger" data-action="delete" data-id="${task.id}">${icon('trash-2')}Löschen</button>`}
+                            </div></div>`;
+            }
+            function renderStatusPill(task) { const map = { open: ['Offen', 'circle'], on_progress: ['In Bearbeitung', 'loader'], in_progress: ['In Bearbeitung', 'loader'], completed: ['Erledigt', 'check-circle-2'], pause: ['Pausiert', 'pause-circle'], cancel: ['Abgebrochen', 'x-circle'], rejected: ['Abgelehnt', 'ban'] }; const item = map[task.task_status] || [task.task_status || 'Offen', 'circle']; return `<span class="pt-pill">${icon(item[1])}${esc(item[0])}</span>`; }
+            function renderList() {
+                if (!state.tasks.length) {
+                    els.listBody.innerHTML = '<tr><td colspan="10"><div class="pt-empty">Keine Aufgaben gefunden</div></td></tr>';
                     return;
                 }
 
-                const urlTpl = "{{ route('personal-tasks.reject', ['task' => '__ID__']) }}";
-                const url    = urlTpl.replace('__ID__', rejectTaskId);
+                els.listBody.innerHTML = state.tasks.map(task => `
+                            <tr class="${task.task_status === 'pause' ? 'pt-row-paused' : ''} ${(task.rejected_employees || []).length ? 'pt-row-rejected' : ''}">
+                                <td>
+                                    <strong>${esc(task.task_title || 'Ohne Titel')}</strong>
+                                    <div class="pt-subtitle">${esc(task.task_id || ('#' + task.id))}</div>
+                                    ${renderRejectedReasons(task)}
+                                </td>
+                                <td>${renderStatusPill(task)}</td>
+                                <td>${renderPriority(task.priority)}</td>
+                                <td>${renderDue(task)}</td>
+                                <td>
+                                    ${esc(task.customer_name || '-')}
+                                    ${task.object_name ? `<div class="pt-subtitle">${esc(task.object_name)}</div>` : ''}
+                                    ${task.product_name ? `<div class="pt-subtitle">${esc(task.product_name)}</div>` : ''}
+                                </td>
+                                <td>${renderLeadStageBadge(task) || '-'}</td>
+                                <td>${renderAvatars(task.employees || [])}</td>
+                                <td>${renderAvatars(task.controllers || [])}</td>
+                                <td>
+                                    <div class="pt-progress"><div class="pt-progress-bar" style="width:${Number(task.progress || 0)}%"></div></div>
+                                    <div class="pt-subtitle">${Number(task.progress || 0)}%</div>
+                                </td>
+                                <td>${renderActionDropdown(task)}</td>
+                            </tr>
+                        `).join('');
+            }
 
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrf,
-                        'Accept'      : 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ reason })
-                })
-                    .then(() => {
-                        rejectBackdrop.style.display = 'none';
-                        rejectTaskId = null;
-                        location.reload();
-                    })
-                    .catch(err => console.error('Reject error', err));
-            });
-        }
-    }
+            async function updateStatus(taskId, status) { const data = await requestJson(route('status', taskId), { method: 'POST', body: formData({ status }) }); toast(status === 'completed' ? 'Aufgabe erledigt und automatisch archiviert' : (data.message || 'Status aktualisiert')); await loadTasks(); }
+            async function archiveTask(taskId) { await requestJson(route('archive', taskId), { method: 'POST' }); toast('Aufgabe archiviert und aus dem Kanban entfernt'); await loadTasks(); }
+            async function deleteTask(taskId) { if (!confirm('Aufgabe wirklich löschen?')) return; await requestJson(route('destroy', taskId), { method: 'DELETE' }); toast('Aufgabe gelöscht'); await loadTasks(); }
+            async function restoreTask(taskId, status = 'open') { await requestJson(route('restore', taskId), { method: 'POST', body: formData({ status }) }); toast(status === 'on_progress' ? 'Aufgabe wurde in Bearbeitung wiederhergestellt' : 'Aufgabe wurde offen wiederhergestellt'); state.state = 'active'; state.view = 'board'; syncTopNavigation(); await loadTasks(); }
+            async function resumeTask(taskId, status = 'open') { await requestJson(route('resume', taskId), { method: 'POST', body: formData({ status }) }); toast('Aufgabe fortgesetzt'); state.state = 'active'; state.view = 'board'; syncTopNavigation(); await loadTasks(); }
+            function openReasonModal(taskId, action) { els.reasonTaskId.value = taskId; els.reasonAction.value = action; els.reasonText.value = ''; els.reasonTitle.textContent = { pause: 'Aufgabe pausieren', cancel: 'Aufgabe abbrechen', reject: 'Aufgabe ablehnen' }[action] || 'Grund angeben'; els.reasonModal.classList.add('is-open'); refreshIcons(); }
+            function closeReasonModal() { els.reasonModal.classList.remove('is-open'); }
+            async function submitReason() { const taskId = els.reasonTaskId.value; const action = els.reasonAction.value; const reason = els.reasonText.value.trim(); if (!reason) { toast('Bitte Grund eingeben', 'error'); return; } const data = await requestJson(route(action, taskId), { method: 'POST', body: formData({ reason }) }); closeReasonModal(); toast(data.message || (action === 'reject' ? 'Job abgelehnt' : 'Grund gespeichert')); await loadTasks(); }
 
-    function highlightNewTask() {
-        const url         = new URL(window.location.href);
-        const highlightId = url.searchParams.get('highlight');
-        if (!highlightId) return;
+            function openTaskDrawer() {
+                const drawer = document.getElementById('newTaskDrawer');
+                const body = drawer?.querySelector('.nt-body');
+                initCollapsibleTaskSections();
 
-        const card = document.querySelector('.pt-card[data-task-id="' + highlightId + '"]');
-        const row  = document.querySelector('tr[data-task-id="' + highlightId + '"]');
-        const el   = card || row;
-
-        if (el) {
-            el.classList.add('pt-highlight');
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        url.searchParams.delete('highlight');
-        window.history.replaceState({}, '', url.toString());
-    }
-
-    function getTaskIdFromElement(el) {
-        if (!el) return null;
-        const tr   = el.closest('tr');
-        const card = el.closest('.pt-card');
-        return tr ? tr.dataset.taskId : (card ? card.dataset.taskId : null);
-    }
-
-    // -----------------------------
-    // Dropdown (list actions menu)
-    // -----------------------------
-    function initDropdowns() {
-        document.addEventListener('click', function (e) {
-            const clickedDropdown = e.target.closest('.pt-dropdown');
-            const toggle          = e.target.closest('.js-dropdown-toggle');
-
-            // Close all other dropdowns
-            document.querySelectorAll('.pt-dropdown-menu').forEach(menu => {
-                const wrapper = menu.closest('.pt-dropdown');
-                if (!wrapper || wrapper !== clickedDropdown) {
-                    menu.style.display = 'none';
-                }
-            });
-
-            // Toggle current dropdown
-            if (toggle && clickedDropdown) {
-                e.preventDefault();
-                const menu  = clickedDropdown.querySelector('.pt-dropdown-menu');
-                const open  = menu && menu.style.display === 'block';
-                if (menu) {
-                    menu.style.display = open ? 'none' : 'block';
+                if (window.jQuery) {
+                    $('.new_task').show().animate({ right: '0' }, 350, function () {
+                        if (body) body.scrollTop = 0;
+                        refreshIcons();
+                    });
+                } else {
+                    drawer.style.display = 'block';
+                    drawer.style.right = '0';
+                    if (body) body.scrollTop = 0;
+                    refreshIcons();
                 }
             }
-        });
-    }
+            function closeTaskDrawer() { if (window.jQuery) { $('.new_task').animate({ right: '-100%' }, 350, function () { $(this).hide(); }); } else { document.getElementById('newTaskDrawer').style.right = '-100%'; document.getElementById('newTaskDrawer').style.display = 'none'; } }
+            function resetTaskDrawerForm() {
+                clearTaskValidationErrors();
+                clearDrawerValidationSectionMarks();
+                document.querySelectorAll('#newTaskDrawer .nt-section.is-collapsed').forEach(section => {
+                    section.classList.remove('is-collapsed');
+                    section.querySelector(':scope > .nt-section-header .nt-section-toggle')?.setAttribute('aria-expanded', 'true');
+                });
+                const form = document.getElementById('task_form');
+                if (form) form.reset();
 
-    // -----------------------------
-    // Drag & Drop (Board)
-    // -----------------------------
-    function initDragDrop() {
-        document.querySelectorAll('.pt-card').forEach(card => {
-            card.addEventListener('dragstart', e => {
-                e.dataTransfer.setData('text/plain', card.dataset.taskId || '');
-            });
-        });
+                document.getElementById('drawerModeTitle').textContent = 'Aufgabe erstellen';
+                document.getElementById('task_edit_id').value = '';
+                document.getElementById('lead_product_list_id').value = '';
+                document.getElementById('color').value = '#93c21c';
+                setPriorityValue('medium');
+                document.getElementById('colorIcon')?.style.setProperty('color', '#93c21c');
+                document.getElementById('customerSelectContainer').style.display = 'none';
 
-        document.querySelectorAll('.pt-column-body').forEach(colBody => {
-            colBody.addEventListener('dragover', e => {
-                e.preventDefault();
-            });
+                setSubStageOptions('', '');
+                updateLeadStageChips({
+                    lead_stage_name: 'Keine Stage',
+                    lead_stage_sub_stage_name: 'Keine Sub Stage',
+                    lead_stage_color: '#74b2d4',
+                    lead_stage_sub_stage_color: '#93c21c',
+                });
 
-            colBody.addEventListener('drop', e => {
-                e.preventDefault();
-                const taskId = e.dataTransfer.getData('text/plain');
-                if (!taskId) return;
-
-                const card = document.querySelector('.pt-card[data-task-id="' + taskId + '"]');
-                if (!card) return;
-
-                const columnContainer = colBody.closest('.pt-column');
-                if (!columnContainer) return;
-
-                const columnKey = columnContainer.dataset.column;
-                colBody.prepend(card);
-
-                let status = 'open';
-                if (columnKey === 'in_progress') status = 'on_progress';
-                if (columnKey === 'completed')   status = 'completed';
-
-                updateStatus(taskId, status);
-            });
-        });
-    }
-
-    // -----------------------------
-    // Status update (shared)
-    // -----------------------------
-    function updateStatus(taskId, status) {
-        const urlTpl = "{{ route('personal-tasks.status', ['task' => '__ID__']) }}";
-        const url    = urlTpl.replace('__ID__', taskId);
-
-        console.log('updateStatus →', { taskId, status, url });
-
-        return fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrf,
-                'Accept'      : 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ status })
-        })
-            .then(async response => {
-                let data = null;
-                try {
-                    data = await response.json();
-                } catch (e) {}
-
-                if (!response.ok) {
-                    console.error('Status update HTTP error', response.status, data);
-                    if (window.Swal) {
-                        Swal.fire({
-                            icon : 'error',
-                            title: 'Status-Update fehlgeschlagen',
-                            text : 'HTTP ' + response.status + ' – Details in der Konsole.',
-                        });
-                    } else {
-                        alert('Status-Update fehlgeschlagen (HTTP ' + response.status + ').');
-                    }
-                    throw new Error('HTTP ' + response.status);
+                if (window.jQuery) {
+                    $('#employee,#controller,#customer_id,#alternative_id,#product_id,#team_id,#lead_stage_id,#lead_stage_sub_stage_id').val(null).trigger('change');
                 }
 
-                console.log('Status updated response:', data);
-                return data;
-            })
-            .catch(err => {
-                console.error('Status update error', err);
+                resetKeyRows();
+            }
+            function resetKeyRows() { const tbody = document.querySelector('#key_task tbody'); tbody.innerHTML = ''; addKeyRow(); updateTotalDuration(); }
+            function addKeyRow(prefill = {}) {
+                const tbody = document.querySelector('#key_task tbody');
+                const index = tbody.querySelectorAll('tr').length;
+                const options = Array.from(document.querySelectorAll('#employee option')).map(opt => `<option value="${esc(opt.value)}">${esc(opt.textContent)}</option>`).join('');
+                tbody.insertAdjacentHTML('beforeend', `<tr>
+                                    <td>${index + 1}<input type="hidden" name="key[${index}][id]" value="${esc(prefill.id || '')}"></td>
+                                    <td><input type="text" name="key[${index}][task]" class="nt-input" value="${esc(prefill.task || '')}" placeholder="Schritt"></td>
+                                    <td><input type="number" step="0.25" name="key[${index}][duration]" class="nt-input task-duration" value="${esc(prefill.duration || '')}" placeholder="0.5"></td>
+                                    <td class="pt-key-employee-cell"><select name="key[${index}][employee_id][]" class="nt-select employee-select key-employee-select" multiple>${options}</select></td>
+                                    <td><select name="key[${index}][status]" class="nt-select"><option value="accepted">Offen</option><option value="on_progress">In Bearbeitung</option><option value="completed">Erledigt</option></select></td>
+                                    <td><textarea name="key[${index}][key_description]" class="nt-textarea" rows="2">${esc(prefill.key_description || '')}</textarea></td>
+                                    <td><button type="button" class="nt-btn nt-btn-danger remove-task-steps">${icon('minus')}</button></td>
+                                </tr>`);
+                if (window.jQuery && $.fn.select2) {
+                    const $row = $('#key_task tbody tr').last();
+                    $row.find('.key-employee-select').select2({ width: '100%', dropdownParent: $('#newTaskDrawer') });
+                    if (prefill.employee_id) {
+                        let ids = [];
+                        try { ids = Array.isArray(prefill.employee_id) ? prefill.employee_id : JSON.parse(prefill.employee_id || '[]'); } catch (e) { ids = []; }
+                        $row.find('.key-employee-select').val(ids.map(String)).trigger('change');
+                    }
+                    $row.find('select[name$="[status]"]').val(prefill.status || 'accepted');
+                }
+                applyStepEmployeeMode();
+                refreshIcons();
+            }
+            function updateTotalDuration() {
+                let total = 0;
+                document.querySelectorAll('.task-duration').forEach(input => {
+                    const value = String(input.value || '').replace(',', '.');
+                    total += parseFloat(value) || 0;
+                });
+                const totalDays = total > 0 ? (total / 8) : 0;
+                const totalTimeEl = document.getElementById('total_time');
+                const totalDayEl = document.getElementById('total_day');
+                const keyTotalEl = document.getElementById('key_total_time');
+                if (keyTotalEl) keyTotalEl.textContent = total.toFixed(2) + ' Stunden / ' + totalDays.toFixed(2) + ' Tage';
+                if (totalTimeEl) totalTimeEl.value = total.toFixed(2);
+                if (totalDayEl) totalDayEl.value = totalDays.toFixed(2);
+            }
+
+            function normalizeTaskFromState(taskId) { return state.tasks.find(t => String(t.id) === String(taskId)); }
+            async function editTask(taskId) {
+                const task = normalizeTaskFromState(taskId);
+                if (!task) {
+                    toast('Aufgabe in aktueller Liste nicht gefunden', 'error');
+                    return;
+                }
+
+                resetTaskDrawerForm();
+                document.getElementById('drawerModeTitle').textContent = 'Aufgabe bearbeiten';
+                document.getElementById('task_edit_id').value = task.id || '';
+                document.getElementById('task_title').value = task.task_title || '';
+                document.getElementById('description').value = stripHtml(task.description || '');
+                document.getElementById('task_status').value = task.task_status || 'open';
+                document.getElementById('due_date').value = task.due_date || '';
+                document.getElementById('due_time').value = task.due_time || '';
+                document.getElementById('start_date').value = task.start_date || '{{ now()->format('Y-m-d') }}';
+                document.getElementById('progress').value = task.progress || 0;
+                document.getElementById('total_day').value = task.total_day || '';
+                document.getElementById('total_time').value = task.total_time || '';
+                document.getElementById('lead_product_list_id').value = task.lead_product_list_id || '';
+                document.getElementById('color').value = task.color || '#93c21c';
+                document.getElementById('colorIcon')?.style.setProperty('color', task.color || '#93c21c');
+                setPriorityValue(task.priority || 'medium');
+                document.getElementById('public_switch').checked = !!Number(task.public ?? 0);
+                document.getElementById('customerSwitch').checked = !!Number((task.is_customer ?? task.customer_id) ? 1 : 0);
+                document.getElementById('customerSelectContainer').style.display = document.getElementById('customerSwitch').checked ? 'block' : 'none';
+
+                if (window.jQuery) {
+                    $('#employee').val((task.employees || []).map(e => String(e.id))).trigger('change');
+                    $('#controller').val((task.controllers || []).map(e => String(e.id))).trigger('change');
+
+                    if (task.customer_id) {
+                        const customerText = task.customer_name || ('Kunde #' + task.customer_id);
+                        if (!$('#customer_id option[value="' + task.customer_id + '"]').length) {
+                            $('#customer_id').append(new Option(customerText, task.customer_id, true, true));
+                        }
+                        $('#customer_id').val(String(task.customer_id)).trigger('change.select2');
+                    }
+
+                    if (task.alternative_id) {
+                        const altText = task.object_name || ('Objekt #' + task.alternative_id);
+                        if (!$('#alternative_id option[value="' + task.alternative_id + '"]').length) {
+                            $('#alternative_id').append(new Option(altText, task.alternative_id, true, true));
+                        }
+                        $('#alternative_id').val(String(task.alternative_id)).trigger('change.select2');
+                    }
+
+                    if (task.product_id) $('#product_id').val(String(task.product_id)).trigger('change.select2');
+                }
+
+                applyLeadStageContext(task.lead_stage_context || task);
+
+                document.getElementById('customerInfoChips').innerHTML = `
+                            ${task.customer_name ? `<span class="nt-chip">${esc(task.customer_name)}</span>` : '<span class="nt-chip">Kein Kunde gewählt</span>'}
+                            ${task.object_name ? `<span class="nt-chip">${esc(task.object_name)}</span>` : ''}
+                            ${task.product_name ? `<span class="nt-chip">${esc(task.product_name)}</span>` : ''}
+                        `;
+
+                document.querySelector('#key_task tbody').innerHTML = '';
+                (task.keys || task.task_keys || []).forEach(key => addKeyRow(key));
+                if (!document.querySelector('#key_task tbody tr')) addKeyRow();
+                updateTotalDuration();
+                openTaskDrawer();
+            }
+            function validationFieldLabel(field) {
+                const labels = {
+                    task_title: 'Aufgabentitel', description: 'Beschreibung', task_status: 'Status', due_date: 'Fälligkeitsdatum', due_time: 'Fälligkeitsuhrzeit', start_date: 'Startdatum', progress: 'Fortschritt', total_day: 'Gesamttage', total_time: 'Gesamtstunden', priority: 'Priorität', employee: 'Mitarbeiter', controller: 'Controller', customer_id: 'Kunde', alternative_id: 'Objekt', product_id: 'Produkt', lead_stage_id: 'Lead Stage', lead_stage_sub_stage_id: 'Sub Stage', color: 'Farbe', type: 'Typ'
+                };
+                const keyMatch = String(field).match(/^key\.(\d+)\.(.+)$/);
+                if (keyMatch) {
+                    const row = Number(keyMatch[1]) + 1;
+                    const part = keyMatch[2];
+                    if (part === 'task') return 'Schritt ' + row + ' – Titel';
+                    if (part === 'duration') return 'Schritt ' + row + ' – Dauer';
+                    if (part === 'key_description') return 'Schritt ' + row + ' – Beschreibung';
+                    if (part.startsWith('employee_id')) return 'Schritt ' + row + ' – Mitarbeiter';
+                    if (part === 'status') return 'Schritt ' + row + ' – Status';
+                    return 'Schritt ' + row;
+                }
+                return labels[field] || field;
+            }
+
+            function validationSelector(field) {
+                const map = { task_title: '#task_title', description: '#description', task_status: '#task_status', due_date: '#due_date', due_time: '#due_time', start_date: '#start_date', progress: '#progress', total_day: '#total_day', total_time: '#total_time', priority: '#priority', employee: '#employee', controller: '#controller', customer_id: '#customer_id', alternative_id: '#alternative_id', product_id: '#product_id', lead_stage_id: '#lead_stage_id', lead_stage_sub_stage_id: '#lead_stage_sub_stage_id', color: '#color', type: '#type' };
+                if (map[field]) return map[field];
+                const keyMatch = String(field).match(/^key\.(\d+)\.(.+)$/);
+                if (keyMatch) {
+                    const i = keyMatch[1];
+                    const part = keyMatch[2];
+                    if (part === 'task') return `[name="key[${i}][task]"]`;
+                    if (part === 'duration') return `[name="key[${i}][duration]"]`;
+                    if (part === 'key_description') return `[name="key[${i}][key_description]"]`;
+                    if (part === 'status') return `[name="key[${i}][status]"]`;
+                    if (part.startsWith('employee_id')) return `[name="key[${i}][employee_id][]"]`;
+                }
                 return null;
-            });
-    }
-
-    // -----------------------------
-    // Status buttons (Board + List)
-    // -----------------------------
-    function initStatusButtons() {
-        document.addEventListener('click', function (e) {
-            const btn = e.target.closest('.js-status-btn');
-            if (!btn) return;
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            const taskId = getTaskIdFromElement(btn);
-            const status = btn.dataset.status;
-
-            if (!taskId || !status) {
-                console.warn('No taskId/status for status button.');
-                return;
             }
 
-            updateStatus(taskId, status).then(data => {
-                // Close all menus after action
-                document.querySelectorAll('.pt-dropdown-menu').forEach(m => m.style.display = 'none');
+            function clearTaskValidationErrors() {
+                document.querySelectorAll('.nt-field-error').forEach(el => el.remove());
+                document.querySelectorAll('.nt-invalid').forEach(el => el.classList.remove('nt-invalid', 'nt-error-flash'));
+                clearDrawerValidationSectionMarks();
+                const summary = document.getElementById('taskValidationSummary');
+                const list = document.getElementById('taskValidationList');
+                if (summary) summary.classList.remove('is-open');
+                if (list) list.innerHTML = '';
+            }
 
-                if (data && data.success) {
-                    location.reload();
-                } else {
-                    if (window.Swal) {
-                        Swal.fire({
-                            icon : 'error',
-                            title: 'Status konnte nicht aktualisiert werden',
-                            text : 'Bitte Konsole/Netzwerk prüfen.',
+            function markTaskFieldInvalid(field, message) {
+                const selector = validationSelector(field);
+                if (!selector) return null;
+                const input = document.querySelector(selector);
+                if (!input) return null;
+                expandDrawerSectionForElement(input);
+                input.classList.add('nt-invalid', 'nt-error-flash');
+                if (window.jQuery && input.tagName === 'SELECT' && $(input).hasClass('select2-hidden-accessible')) {
+                    $(input).next('.select2-container').addClass('nt-invalid', 'nt-error-flash');
+                }
+                const error = document.createElement('div');
+                error.className = 'nt-field-error';
+                error.textContent = message;
+                const target = input.closest('td') || input.closest('div') || input.parentElement;
+                if (target) target.appendChild(error);
+                return input;
+            }
+
+            function showTaskValidationErrors(errors) {
+                clearTaskValidationErrors();
+                const summary = document.getElementById('taskValidationSummary');
+                const list = document.getElementById('taskValidationList');
+                const normalized = [];
+                Object.keys(errors || {}).forEach(field => {
+                    const msgs = Array.isArray(errors[field]) ? errors[field] : [errors[field]];
+                    msgs.forEach(msg => normalized.push({ field, message: String(msg || 'Ungültiger Wert') }));
+                });
+                if (!normalized.length) {
+                    normalized.push({ field: 'task_title', message: 'Validierungsfehler. Bitte prüfen Sie das Formular.' });
+                }
+                let firstInput = null;
+                normalized.forEach(item => {
+                    const input = markTaskFieldInvalid(item.field, item.message);
+                    if (!firstInput && input) firstInput = input;
+                    if (list) {
+                        const li = document.createElement('li');
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.textContent = validationFieldLabel(item.field);
+                        btn.addEventListener('click', () => {
+                            const target = document.querySelector(validationSelector(item.field));
+                            if (target) { expandDrawerSectionForElement(target); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => target.focus?.(), 250); }
                         });
+                        li.appendChild(btn);
+                        li.appendChild(document.createTextNode(': ' + item.message));
+                        list.appendChild(li);
+                    }
+                });
+                if (summary) summary.classList.add('is-open');
+                if (firstInput) {
+                    firstInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => firstInput.focus?.(), 300);
+                }
+                toast(normalized[0].message, 'error');
+                console.warn('Laravel validation errors:', errors);
+                refreshIcons();
+            }
+
+            function showClientValidationErrors(messages) {
+                const errors = {};
+                messages.forEach(item => { errors[item.field] = [item.message]; });
+                showTaskValidationErrors(errors);
+            }
+            function validateTaskForm() {
+                const errors = [];
+                const title = document.getElementById('task_title')?.value.trim() || '';
+                if (!title) errors.push({ field: 'task_title', message: 'Bitte geben Sie einen Aufgabentitel ein.' });
+
+                const currentPriority = normalizePriorityForBlade(document.getElementById('priority')?.value || 'medium');
+                setPriorityValue(currentPriority);
+
+                const dueDate = document.getElementById('due_date')?.value || '';
+                if (dueDate && Number.isNaN(Date.parse(dueDate))) errors.push({ field: 'due_date', message: 'Das Fälligkeitsdatum ist ungültig.' });
+
+                const mode = document.getElementById('step_employee_mode')?.value || 'all';
+                const employeeSelect = document.getElementById('employee');
+                const hasGlobal = employeeSelect ? Array.from(employeeSelect.selectedOptions || []).length > 0 : false;
+                const hasStep = Array.from(document.querySelectorAll('.key-employee-select')).some(sel => Array.from(sel.selectedOptions || []).length > 0);
+                if (mode === 'all' && !hasGlobal) errors.push({ field: 'employee', message: 'Bitte wählen Sie Mitarbeiter für die Aufgabe aus.' });
+                if (mode === 'per_step' && !hasStep) errors.push({ field: 'key.0.employee_id', message: 'Bitte wählen Sie mindestens einen Mitarbeiter direkt im Schritt aus.' });
+
+                document.querySelectorAll('.task-duration').forEach(input => {
+                    const raw = String(input.value || '').replace(',', '.');
+                    if (raw !== '' && (Number.isNaN(Number(raw)) || Number(raw) < 0)) {
+                        const name = input.getAttribute('name') || '';
+                        const match = name.match(/key\[(\d+)\]/);
+                        const idx = match ? match[1] : '0';
+                        errors.push({ field: `key.${idx}.duration`, message: 'Die Dauer muss eine positive Zahl sein, z.B. 0.5 oder 1.25.' });
+                    }
+                });
+                return errors;
+            }
+            function formSubmitUrl() { const isEdit = !!document.getElementById('task_edit_id').value; if (isEdit) return routes.update; if (routes.store) return routes.store; return routes.update; }
+            async function submitTaskForm(closeAfterSave) {
+                setPriorityValue(document.getElementById('priority')?.value || 'medium');
+                console.log('Task priority submitted from Blade:', document.getElementById('priority')?.value);
+                clearTaskValidationErrors();
+                const errors = validateTaskForm();
+                if (errors.length) { showClientValidationErrors(errors); return; }
+                if (!document.getElementById('task_edit_id').value && !hasStoreRoute) {
+                    showTaskValidationErrors({ task_title: ['Store-Route fehlt: bitte Route personal.task.store oder personal-tasks.store hinzufügen.'] });
+                    return;
+                }
+                updateTotalDuration();
+                const selectedPriority = setPriorityValue(document.getElementById('priority')?.value || 'medium');
+                console.info('Task priority submitted from Blade:', selectedPriority);
+                const form = document.getElementById('task_form');
+                try {
+                    const data = await requestJson(formSubmitUrl(), { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+                    clearTaskValidationErrors();
+                    toast(data.message || 'Aufgabe gespeichert', 'success');
+                    if (closeAfterSave) closeTaskDrawer(); else resetTaskDrawerForm();
+                    await loadTasks();
+                } catch (error) {
+                    if (error.status === 422 || error.errors) {
+                        showTaskValidationErrors(error.errors || {});
+                        return;
+                    }
+                    toast(error.message || 'Speichern fehlgeschlagen', 'error');
+                    console.error('Task save failed:', error);
+                }
+            }
+
+            function initSelect2() {
+                if (!window.jQuery || !$.fn.select2) return;
+
+                $('#ptEmployeeFilter').select2({ width: '100%', placeholder: 'Mitarbeiter', allowClear: true });
+                $('#ptLeadStageFilter').select2({ width: '100%', placeholder: 'Alle Stages', allowClear: true });
+                $('#ptLeadSubStageFilter').select2({ width: '100%', placeholder: 'Alle Sub Stages', allowClear: true });
+
+                loadFilterSubStagesForStage($('#ptLeadStageFilter').val() || '', $('#ptLeadSubStageFilter').val() || '');
+
+                $('#ptLeadStageFilter')
+                    .off('change.ptFilterStage select2:select.ptFilterStage select2:clear.ptFilterStage')
+                    .on('change.ptFilterStage select2:select.ptFilterStage select2:clear.ptFilterStage', handleFilterStageChanged);
+
+                $('#ptLeadSubStageFilter')
+                    .off('change.ptFilterSubStage select2:select.ptFilterSubStage select2:clear.ptFilterSubStage')
+                    .on('change.ptFilterSubStage select2:select.ptFilterSubStage select2:clear.ptFilterSubStage', handleFilterSubStageChanged);
+
+                $('#employee,#controller,#team_id,#product_id,#alternative_id,#lead_stage_id,#lead_stage_sub_stage_id')
+                    .select2({ width: '100%', dropdownParent: $('#newTaskDrawer'), allowClear: true });
+
+                setSubStageOptions($('#lead_stage_id').val() || '', $('#lead_stage_sub_stage_id').val() || '');
+
+                $('#lead_stage_id').off('change.ptStage').on('change.ptStage', function () {
+                    const stageId = this.value || '';
+                    setSubStageOptions(stageId, '');
+                    updateLeadStageChips();
+                });
+
+                $('#lead_stage_sub_stage_id').off('change.ptStage').on('change.ptStage', function () {
+                    updateLeadStageChips();
+                });
+
+                $('#product_id,#alternative_id').off('change.ptLeadContext').on('change.ptLeadContext', debounce(() => {
+                    loadLeadStageContext();
+                }, 200));
+
+                $('#customer_id').select2({
+                    width: '100%',
+                    dropdownParent: $('#newTaskDrawer'),
+                    placeholder: 'Kunde / Objekt / Produkt suchen',
+                    allowClear: true,
+                    ajax: {
+                        url: routes.customersSearch,
+                        dataType: 'json',
+                        delay: 300,
+                        data: params => ({ q: params.term || '', page: params.page || 1 }),
+                        processResults: data => data,
+                    },
+                    escapeMarkup: m => m,
+                    templateResult: item => item.html || item.text,
+                    templateSelection: item => item.text || item.name || '',
+                }).on('select2:select', function (e) {
+                    const item = e.params.data || {};
+                    const customerId = item.customer_id || item.id;
+                    const alternativeId = item.alternative_id || '';
+                    const productId = item.product_id || '';
+                    const leadProductListId = item.lead_product_list_id || item.leadProductListId || '';
+
+                    if (leadProductListId) document.getElementById('lead_product_list_id').value = leadProductListId;
+                    if (customerId) $('#customer_id').val(String(customerId)).trigger('change.select2');
+
+                    if (alternativeId) {
+                        const altText = item.object_name || item.object_address || ('Objekt #' + alternativeId);
+                        if (!$('#alternative_id option[value="' + alternativeId + '"]').length) {
+                            $('#alternative_id').append(new Option(altText, alternativeId, true, true));
+                        }
+                        $('#alternative_id').val(String(alternativeId)).trigger('change.select2');
+                    }
+
+                    if (productId) {
+                        if (!$('#product_id option[value="' + productId + '"]').length) {
+                            $('#product_id').append(new Option(item.product_name || ('Produkt #' + productId), productId, true, true));
+                        }
+                        $('#product_id').val(String(productId)).trigger('change.select2');
+                    }
+
+                    document.getElementById('customerInfoChips').innerHTML = `
+                                <span class="nt-chip">${esc(item.customer_name || item.text || '')}</span>
+                                ${item.object_name ? `<span class="nt-chip">${esc(item.object_name)}</span>` : ''}
+                                ${item.product_name ? `<span class="nt-chip">${esc(item.product_name)}</span>` : ''}
+                            `;
+
+                    if (item.lead_stage_context) {
+                        applyLeadStageContext(item.lead_stage_context);
                     } else {
-                        alert('Status konnte nicht aktualisiert werden.');
-                    }
-                }
-            });
-        });
-    }
-
-    // -----------------------------
-    // Other list/board actions
-    // -----------------------------
-        function initListActions() {
-            // Archive
-            document.addEventListener('click', function (e) {
-                const btn = e.target.closest('.js-archive-btn');
-                if (!btn) return;
-
-                e.preventDefault();
-                const taskId = getTaskIdFromElement(btn);
-                if (!taskId) return;
-
-                const urlTpl = "{{ route('personal-tasks.archive', ['task' => '__ID__']) }}";
-                const url    = urlTpl.replace('__ID__', taskId);
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrf,
-                        'Accept'      : 'application/json',
-                    },
-                })
-                    .then(() => location.reload())
-                    .catch(err => console.error('Archive error', err));
-            });
-
-            document.addEventListener('click', function (e) {
-                const btn = e.target.closest('.js-delete-task');
-                if (!btn) return;
-
-                e.preventDefault();
-                const taskId = getTaskIdFromElement(btn);
-                if (!taskId) return;
-
-                const doDelete = () => {
-                    const urlTpl = "{{ route('personal-tasks.destroy', ['task' => '__ID__']) }}";
-                    const url    = urlTpl.replace('__ID__', taskId);
-
-                    fetch(url, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': csrf,
-                            'Accept'      : 'application/json',
-                        },
-                    })
-                    .then(res => res.ok ? location.reload() : console.error('Delete HTTP error', res.status))
-                    .catch(err => console.error('Delete error', err));
-                };
-
-                if (window.Swal) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Aufgabe löschen?',
-                        text: 'Die Aufgabe wird in den Bereich „Gelöscht“ verschoben.',
-                        showCancelButton: true,
-                        confirmButtonText: 'Ja, löschen',
-                        cancelButtonText: 'Abbrechen',
-                    }).then(result => {
-                        if (result.isConfirmed) doDelete();
-                    });
-                } else {
-                    if (confirm('Aufgabe wirklich löschen?')) doDelete();
-                }
-            });
-
-            // NEW: Restore
-            document.addEventListener('click', function (e) {
-                const btn = e.target.closest('.js-restore-task');
-                if (!btn) return;
-
-                e.preventDefault();
-                const taskId = getTaskIdFromElement(btn);
-                if (!taskId) return;
-
-                const urlTpl = "{{ route('personal-tasks.restore', ['task' => '__ID__']) }}";
-                const url    = urlTpl.replace('__ID__', taskId);
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrf,
-                        'Accept'      : 'application/json',
-                    },
-                })
-                .then(res => res.ok ? location.reload() : console.error('Restore HTTP error', res.status))
-                .catch(err => console.error('Restore error', err));
-            });
-
-            // Accept job
-            document.addEventListener('click', function (e) {
-                const btn = e.target.closest('.js-accept-btn');
-                if (!btn) return;
-
-                e.preventDefault();
-                const taskId = getTaskIdFromElement(btn);
-                if (!taskId) return;
-
-                const urlTpl = "{{ route('personal-tasks.accept', ['task' => '__ID__']) }}";
-                const url    = urlTpl.replace('__ID__', taskId);
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrf,
-                        'Accept'      : 'application/json',
-                    },
-                })
-                    .then(() => location.reload())
-                    .catch(err => console.error('Accept error', err));
-            });
-
-            // Open reject modal
-            document.addEventListener('click', function (e) {
-                const btn = e.target.closest('.js-open-reject-modal');
-                if (!btn) return;
-
-                e.preventDefault();
-                const taskId = getTaskIdFromElement(btn);
-                if (!taskId) return;
-
-                if (rejectBackdrop && rejectReason) {
-                    rejectTaskId       = taskId;
-                    rejectReason.value = '';
-                    rejectBackdrop.style.display = 'flex';
-                }
-            });
-
-            // Edit task
-            document.addEventListener('click', function (e) {
-                const btn = e.target.closest('.js-edit-task-btn');
-                if (!btn) return;
-
-                e.preventDefault();
-                const url = btn.dataset.editUrl;
-                if (url) {
-                    window.location.href = url;
-                }
-            });
-
-            // Profil öffnen (List-Ansicht)
-            document.addEventListener('click', function (e) {
-                const btn = e.target.closest('.js-open-profile');
-                if (!btn) return;
-
-                e.preventDefault();
-                const url = btn.dataset.profileUrl;
-                if (url) {
-                    window.location.href = url;
-                }
-            });
-        }
-
-
-    // -----------------------------
-    // Color change (card + list)
-    // -----------------------------
-    function initColorChangeListener() {
-        document.addEventListener('change', function (e) {
-            const input = e.target.closest('.js-task-color');
-            if (!input) return;
-
-            const taskId = input.dataset.taskId;
-            if (!taskId) return;
-
-            const urlTpl = "{{ route('personal-tasks.color', ['task' => '__ID__']) }}";
-            const url    = urlTpl.replace('__ID__', taskId);
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': csrf,
-                    'Accept'      : 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ color: input.value })
-            })
-                .then(() => {
-                    if (window.feather) feather.replace();
-                })
-                .catch(err => console.error('Color update error', err));
-        });
-    }
-</script>
-
-<script>
-    window.employeeOptions       = @json($employeeOptions ?? []);
-    window.TaskActivityFeed      = @json($activityFeed ?? []);
-    window.employeeImageBasePath = "{{ asset('images/employee') }}";
-    window.employeeDefaultAvatar = "{{ asset('images/gender/male.png') }}";
-    window.currentEmployeeId     = {{ (int)($employeeId ?? 0) }};
-</script>
-
-<script>
-    $(function () {
-        const employeeOptions  = window.employeeOptions || [];
-
-        const startDateInput   = document.getElementById("start_date");
-        const dueDateInput     = document.getElementById("due_date");
-        const dueTimeInput     = document.getElementById("due_time");
-        const totalDayInput    = document.getElementById("total_day");
-        const totalTimeInput   = document.getElementById("total_time");
-
-        let keyTaskIndex       = $('#key_task tbody tr').length || 0;
-
-        function formatEmployeeOption(employee) {
-            if (!employee.id) return employee.text || '';
-            const $opt  = $(employee.element);
-            const image = $opt.data('image');
-            const name  = employee.text || '';
-            if (!image) return name;
-
-            return $(`
-                <div style="display:flex;align-items:center;">
-                    <img src="${image}"
-                         style="width:20px;height:20px;border-radius:50%;margin-right:8px;object-fit:cover;">
-                    <span>${name}</span>
-                </div>
-            `);
-        }
-
-        function formatEmployeeSelection(employee) {
-            return employee.text || '';
-        }
-
-        function initEmployeeSelect2(scope) {
-            const $scope = scope ? $(scope) : $(document);
-
-            $scope
-                .find('#employee, #controller, select[name^="key"][name$="[employee_id][]"]')
-                .not('.select2-initialized')
-                .each(function () {
-                    $(this)
-                        .addClass('select2-initialized')
-                        .select2({
-                            width            : '100%',
-                            templateResult   : formatEmployeeOption,
-                            templateSelection: formatEmployeeSelection,
-                            escapeMarkup     : function (m) { return m; },
-                            dropdownParent   : $('.new_task_card')
+                        loadLeadStageContext({
+                            lead_product_list_id: leadProductListId,
+                            customer_id: customerId,
+                            alternative_id: alternativeId,
+                            product_id: productId,
                         });
+                    }
+                }).on('select2:clear', function () {
+                    document.getElementById('lead_product_list_id').value = '';
+                    document.getElementById('customerInfoChips').innerHTML = '<span class="nt-chip">Kein Kunde gewählt</span>';
+                    applyLeadStageContext({});
                 });
-        }
 
-        function syncTopEmployeeFromSteps() {
-            const $top = $('#employee');
-            if (!$top.length) return;
+                $('.key-employee-select').select2({ width: '100%', dropdownParent: $('#newTaskDrawer') });
+            }
 
-            const currentTop = $top.val() || [];
-            const idSet      = new Set(currentTop);
 
-            $('select[name^="key"][name$="[employee_id][]"]').each(function () {
-                const vals = $(this).val() || [];
-                vals.forEach(v => idSet.add(v));
-            });
-
-            const newVals = Array.from(idSet);
-            $top.val(newVals).trigger('change.select2');
-        }
-
-        initEmployeeSelect2();
-        syncTopEmployeeFromSteps();
-
-        $(document).on('change', 'select[name^="key"][name$="[employee_id][]"]', function () {
-            syncTopEmployeeFromSteps();
-        });
-
-        const $customerSelect    = $('#customerLeadProductSelect');
-        const $customerSwitch    = $('#customerSwitch');
-        const $customerContainer = $('#customerSelectContainer');
-
-        if ($customerSelect.length) {
-            $customerSelect.select2({
-                width         : '100%',
-                placeholder   : 'Kunde suchen...',
-                dropdownParent: $customerContainer,
-                ajax: {
-                    url: '{{ route("lead.product.list.ajax") }}',
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                        q: params.term || '',
-                        page: params.page || 1,
-                        per_page: 25
-                        };
-                    },
-                    processResults: function (data, params) {
-                        params.page = params.page || 1;
-
-                        return {
-                        results: (data.results || []).map(function (item) {
-                            return {
-                            id: item.id,
-                            text: item.text,
-                            html: item.html,
-                            alternative_id: item.alternative_id,
-                            product_id: item.product_id
-                            };
-                        }),
-                        pagination: {
-                            more: !!(data.pagination && data.pagination.more)
-                        }
-                        };
-                    },
-                    cache: true
-                    },
-
-                templateResult: function (data) {
-                    if (data.loading) return data.text;
-                    return $(data.html);
-                },
-                templateSelection: function (data) {
-                    if (data.alternative_id) {
-                        $('#select_alternative_id').val(data.alternative_id);
-                    }
-                    if (data.product_id) {
-                        $('#select_product_id').val(data.product_id);
-                    }
-                    return data.text;
-                },
-                escapeMarkup: function (markup) {
-                    return markup;
-                }
-            });
-
-            $customerSwitch.on('change', function () {
-                if ($(this).is(':checked')) {
-                    $customerContainer.slideDown(150, function () {
-                        $customerSelect.trigger('change.select2');
-                    });
-                    $(this).val(1);
+            function applyStepEmployeeMode() {
+                const mode = document.querySelector('input[name="step_employee_mode_radio"]:checked')?.value || 'all';
+                document.getElementById('step_employee_mode').value = mode;
+                document.getElementById('globalEmployeeBox')?.classList.toggle('is-hidden', mode === 'per_step');
+                document.querySelectorAll('.pt-key-employee-cell').forEach(cell => cell.style.display = mode === 'per_step' ? '' : 'none');
+                if (mode === 'per_step' && window.jQuery) { $('#employee').val(null).trigger('change'); }
+            }
+            async function checkAppointmentConflicts() {
+                if (!routes.appointmentConflicts || routes.appointmentConflicts === '#') return;
+                const date = document.getElementById('due_date').value;
+                const time = document.getElementById('due_time').value;
+                if (!date) return;
+                let employeeIds = [];
+                if (document.getElementById('step_employee_mode').value === 'per_step') {
+                    document.querySelectorAll('.key-employee-select').forEach(sel => Array.from(sel.selectedOptions).forEach(o => employeeIds.push(o.value)));
                 } else {
-                    $customerContainer.slideUp(150);
-                    $customerSelect.val(null).trigger('change');
-                    $('#select_alternative_id').val('');
-                    $('#select_product_id').val('');
-                    $(this).val(0);
+                    employeeIds = Array.from(document.getElementById('employee').selectedOptions).map(o => o.value);
                 }
-            });
-
-            if ($customerSwitch.is(':checked')) {
-                $customerContainer.show();
-            } else {
-                $customerContainer.hide();
+                employeeIds = [...new Set(employeeIds.filter(Boolean))];
+                if (!employeeIds.length) return;
+                const params = new URLSearchParams();
+                params.set('date', date); params.set('time', time || ''); employeeIds.forEach(id => params.append('employee_ids[]', id));
+                try {
+                    const data = await requestJson(`${routes.appointmentConflicts}?${params.toString()}`);
+                    const box = document.getElementById('appointmentConflictBox');
+                    const list = document.getElementById('appointmentConflictList');
+                    if (data.conflicts && data.conflicts.length) {
+                        list.innerHTML = data.conflicts.map(c => `<div class="pt-conflict-item"><strong>${esc(c.employee_name || 'Mitarbeiter')}</strong><br>${esc(c.title || 'Termin')} · ${esc(c.start || '')} - ${esc(c.end || '')}</div>`).join('');
+                        box.classList.add('is-open');
+                    } else { box.classList.remove('is-open'); list.innerHTML = ''; }
+                    refreshIcons();
+                } catch (e) { console.warn(e); }
             }
-        }
-
-        function calculateTotalDaysAndHours() {
-            if (!startDateInput || !dueDateInput) return;
-
-            const startDate = new Date(startDateInput.value);
-            const dueDate   = new Date(dueDateInput.value);
-
-            if (!startDateInput.value || !dueDateInput.value ||
-                isNaN(startDate) || isNaN(dueDate)) {
-                if (totalDayInput)  totalDayInput.value  = "";
-                if (totalTimeInput) totalTimeInput.value = "";
-                return;
-            }
-
-            const workHoursPerDay = 24;
-            let totalDays         = 0;
-            let totalWorkingHours = 0;
-            let tempDate          = new Date(startDate);
-
-            while (tempDate <= dueDate) {
-                const day = tempDate.getDay();
-                if (day !== 0 && day !== 6) {
-                    totalDays++;
-                    totalWorkingHours += workHoursPerDay;
-                }
-                tempDate.setDate(tempDate.getDate() + 1);
+            async function submitTaskComment(taskId, textarea) {
+                const comment = textarea.value.trim();
+                if (!comment) { toast('Bitte Kommentar schreiben', 'error'); return; }
+                await requestJson(route('commentsStore', taskId), { method: 'POST', body: formData({ comment }) });
+                toast('Kommentar gespeichert');
+                await loadTasks();
+                setTimeout(() => document.querySelector(`[data-task-id="${taskId}"]`)?.classList.add('is-comments-open'), 100);
             }
 
-            if (dueTimeInput && dueTimeInput.value) {
-                const [hStr, mStr] = dueTimeInput.value.split(':');
-                const dueHour      = parseInt(hStr || '0', 10);
-                const dueMinute    = parseInt(mStr || '0', 10);
-
-                const remainingHours = dueHour + (dueMinute > 0 ? 1 : 0);
-
-                let lastDay = new Date(dueDate);
-                let dow     = lastDay.getDay();
-
-                while (dow === 0 || dow === 6) {
-                    lastDay.setDate(lastDay.getDate() + 1);
-                    dow = lastDay.getDay();
-                }
-
-                totalWorkingHours -= workHoursPerDay;
-                totalWorkingHours += remainingHours;
+            function syncTopNavigation() {
+                document.querySelectorAll('#ptScopeTabs .pt-tab').forEach(b => b.classList.toggle('is-active', b.dataset.scope === state.scope));
+                document.querySelectorAll('#ptViewTabs .pt-tab').forEach(b => b.classList.toggle('is-active', b.dataset.view === state.view));
             }
 
-            if (totalDayInput)  totalDayInput.value  = totalDays;
-            if (totalTimeInput) totalTimeInput.value = totalWorkingHours;
 
-            updateTotalDuration();
-        }
+            function initCollapsibleTaskSections() {
+                const drawer = document.getElementById('newTaskDrawer');
+                if (!drawer) return;
 
-        function updateTotalDuration() {
-            let total = 0;
-            $('.task-duration').each(function () {
-                const val = parseInt($(this).val(), 10) || 0;
-                total += val;
-            });
+                drawer.querySelectorAll('.nt-section').forEach((section, index) => {
+                    const header = section.querySelector(':scope > .nt-section-header');
+                    if (!header || header.dataset.collapsibleReady === '1') return;
 
-            const allowed = parseInt($('#total_time').val(), 10) || 0;
-            const diff    = allowed - total;
+                    section.classList.add('is-collapsible');
+                    header.dataset.collapsibleReady = '1';
 
-            $('#key_total_time').text(
-                diff >= 0 ? `${diff} Std` : `Überschreitung um ${Math.abs(diff)} Std!`
-            );
+                    let actions = header.querySelector(':scope > .nt-section-actions');
+                    if (!actions) {
+                        actions = document.createElement('div');
+                        actions.className = 'nt-section-actions';
 
-            if (allowed && total > allowed) {
-                Swal.fire({
-                    icon : "error",
-                    title: "⚠ Zeitüberschreitung!",
-                    text : `Die gesamte Dauer der Aufgaben beträgt ${total} Stunden, überschreitet jedoch die geplanten ${allowed} Stunden.`,
-                });
-            }
-        }
-
-        if (startDateInput && dueDateInput && dueTimeInput) {
-            startDateInput.addEventListener("change", calculateTotalDaysAndHours);
-            dueDateInput.addEventListener("change", calculateTotalDaysAndHours);
-            dueTimeInput.addEventListener("change", calculateTotalDaysAndHours);
-        }
-
-        $('#key_task').on('input', '.task-duration', updateTotalDuration);
-
-        $(document).on('click', '.add-task-steps', function () {
-            keyTaskIndex++;
-            const rowCount = $('#key_task tbody tr').length;
-
-            const employeeOptionsHtml = employeeOptions.map(emp => {
-                return `<option value="${emp.id}" data-image="${emp.image}">
-                            ${emp.name} ${emp.lastname}
-                        </option>`;
-            }).join('');
-
-            const newRowHtml = `
-                <tr>
-                    <td>${rowCount + 1}</td>
-                    <td>
-                        <input type="text"
-                               name="key[${keyTaskIndex}][task]"
-                               class="form-control form-control-sm">
-                    </td>
-                    <td>
-                        <input type="number"
-                               name="key[${keyTaskIndex}][duration]"
-                               class="form-control form-control-sm task-duration">
-                    </td>
-                    <td>
-                        <select name="key[${keyTaskIndex}][employee_id][]"
-                                multiple
-                                style="width:100%">
-                            ${employeeOptionsHtml}
-                        </select>
-                    </td>
-                    <td>
-                        <textarea name="key[${keyTaskIndex}][key_description]"
-                                  class="form-control form-control-sm"></textarea>
-                    </td>
-                    <td>
-                        <button type="button"
-                                class="btn btn-sm btn-primary add-task-steps">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <button type="button"
-                                class="btn btn-sm btn-danger remove-task-steps">
-                            <i class="fa fa-minus"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
-
-            const $newRow = $(newRowHtml);
-            $('#key_task tbody').append($newRow);
-
-            initEmployeeSelect2($newRow);
-            syncTopEmployeeFromSteps();
-            updateTotalDuration();
-        });
-
-        $(document).on('click', '.remove-task-steps', function () {
-            const $tbody = $('#key_task tbody');
-
-            if ($tbody.find('tr').length <= 1) {
-                Swal.fire({
-                    icon : "warning",
-                    title: "Achtung",
-                    text : "Es muss mindestens ein Aufgabenschritt vorhanden sein.",
-                });
-                return;
-            }
-
-            $(this).closest('tr').remove();
-
-            $tbody.find('tr').each(function (index) {
-                $(this).find('td:first').text(index + 1);
-
-                $(this).find('input, textarea, select').each(function () {
-                    let name = $(this).attr('name');
-                    if (!name) return;
-                    name = name.replace(/\[\d+]/, `[${index}]`);
-                    $(this).attr('name', name);
-                });
-            });
-
-            syncTopEmployeeFromSteps();
-            updateTotalDuration();
-        });
-
-        calculateTotalDaysAndHours();
-        updateTotalDuration();
-        syncTopEmployeeFromSteps();
-
-        const collapse           = document.getElementById('collapseTaskKeys');
-        const topEmployeeSection = document.getElementById('task_employee_section');
-
-        if (collapse && topEmployeeSection) {
-            $('#collapseTaskKeys').on('show.bs.collapse', function () {
-                topEmployeeSection.style.display = 'none';
-            });
-
-            $('#collapseTaskKeys').on('hide.bs.collapse', function () {
-                topEmployeeSection.style.display = 'block';
-            });
-        }
-
-        $('#color_drop_down').on('click', '.dropdown-item', function () {
-            const selectedColor = $(this).data('value');
-            $('#color').val(selectedColor);
-            $('#colorIcon').css('color', selectedColor);
-        });
-
-        $('#priority_select').on('click', '.dropdown-item', function () {
-            const selectedPriority = $(this).data('value');
-            const selectedIcon     = $(this).html();
-
-            $('input[name="priority"]').val(selectedPriority);
-            $('#priority_select button').html(selectedIcon);
-
-            let label = 'Standard';
-            if (selectedPriority === 'medium')    label = 'Medium';
-            if (selectedPriority === 'high')      label = 'Hoch';
-            if (selectedPriority === 'very high') label = 'Sehr wichtig';
-
-            $('#priority_select .nt-priority-label').text(label);
-        });
-
-        const repeatedButton = document.getElementById('repeated');
-        const repeatedArea   = document.querySelector('.repeated_area');
-        const reminderButton = document.getElementById('reminder_check');
-        const reminderArea   = document.querySelector('.reminder_area');
-
-        if (repeatedButton && repeatedArea) {
-            repeatedButton.addEventListener('change', function () {
-                repeatedArea.style.display = this.checked ? 'table-row' : 'none';
-            });
-            repeatedArea.style.display = 'none';
-        }
-
-        if (reminderButton && reminderArea) {
-            reminderButton.addEventListener('change', function () {
-                reminderArea.style.display = this.checked ? 'table-row' : 'none';
-            });
-            reminderArea.style.display = 'none';
-        }
-
-        $('.create_new_task').on('click', function () {
-            $('.new_task')
-                .show()
-                .animate({ right: '0' }, 400, function () {
-                    $('#employee, #controller, #customerLeadProductSelect')
-                        .trigger('change.select2');
-                });
-        });
-
-        $('.new_task').on('click', '.close_task_window', function () {
-            $('.new_task').animate({ right: '-100%' }, 400, function () {
-                $(this).hide();
-            });
-        });
-
-        function validateForm() {
-            const errors      = [];
-            const taskTitle   = $('#task_title').val().trim();
-            const dueDate     = $('#due_date').val().trim();
-            const keyTaskRows = $('#key_task tbody tr');
-
-            if (!taskTitle) {
-                errors.push('Bitte geben Sie einen Aufgabentitel ein.');
-            }
-
-            if (!dueDate) {
-                errors.push('Bitte wählen Sie ein Fälligkeitsdatum.');
-            }
-
-            keyTaskRows.each(function () {
-                const taskInput = $(this).find('input[name^="key"]').val();
-                if (taskInput && taskInput.trim() !== '') {
-                    return false;
-                }
-            });
-
-            return errors;
-        }
-
-        function submitTaskForm(closeAfterSave) {
-            const errors = validateForm();
-
-            if (errors.length > 0) {
-                Swal.fire({
-                    icon : 'warning',
-                    title: 'Formular ungültig',
-                    html : errors.join('<br>'),
-                });
-                return;
-            }
-
-            const formData = $('#task_form').serialize();
-
-            $.ajax({
-                type   : 'POST',
-                url    : "{{ route('personal.task.store') }}",
-                data   : formData,
-                success: function (response) {
-                    Swal.fire({
-                        icon : 'success',
-                        title: 'Erfolgreich gespeichert!',
-                        text : 'Die Aufgabe wurde erfolgreich gespeichert.',
-                    }).then(() => {
-                        if (closeAfterSave) {
-                            if (response && response.task_id) {
-                                const url = new URL(window.location.href);
-                                url.searchParams.set('highlight', response.task_id);
-                                window.location.href = url.toString();
-                            } else {
-                                location.reload();
+                        Array.from(header.children).forEach(child => {
+                            if (!child.classList.contains('nt-section-title')) {
+                                actions.appendChild(child);
                             }
-                        } else {
-                            $('#task_form')[0].reset();
-                        }
-                    });
-                },
-                error: function (xhr) {
-                    let errorMsg = 'Ein Fehler ist aufgetreten.';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMsg = xhr.responseJSON.message;
+                        });
+
+                        header.appendChild(actions);
                     }
-                    Swal.fire({
-                        icon : 'error',
-                        title: 'Fehler',
-                        text : errorMsg,
+
+                    const toggle = document.createElement('button');
+                    toggle.type = 'button';
+                    toggle.className = 'nt-section-toggle';
+                    toggle.setAttribute('aria-expanded', section.classList.contains('is-collapsed') ? 'false' : 'true');
+                    toggle.setAttribute('title', 'Abschnitt ein-/ausklappen');
+                    toggle.innerHTML = icon('chevron-down');
+                    actions.insertBefore(toggle, actions.firstChild);
+
+                    const toggleSection = () => {
+                        const collapsed = section.classList.toggle('is-collapsed');
+                        toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+                        refreshIcons();
+                    };
+
+                    toggle.addEventListener('click', event => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        toggleSection();
+                    });
+
+                    header.addEventListener('click', event => {
+                        if (event.target.closest('button,a,input,select,textarea,label,.select2-container,.dropdown-menu')) return;
+                        toggleSection();
+                    });
+                });
+
+                refreshIcons();
+            }
+
+            function expandDrawerSectionForElement(element) {
+                const field = typeof element === 'string' ? document.querySelector(element) : element;
+                if (!field) return;
+
+                const section = field.closest('.nt-section');
+                if (!section) return;
+
+                section.classList.remove('is-collapsed');
+                section.classList.add('has-validation-error');
+
+                const toggle = section.querySelector(':scope > .nt-section-header .nt-section-toggle');
+                if (toggle) toggle.setAttribute('aria-expanded', 'true');
+
+                refreshIcons();
+            }
+
+            function clearDrawerValidationSectionMarks() {
+                document.querySelectorAll('#newTaskDrawer .nt-section.has-validation-error')
+                    .forEach(section => section.classList.remove('has-validation-error'));
+            }
+
+            function bindEvents() {
+                els.search.addEventListener('input', debounce(() => { state.search = els.search.value.trim(); loadTasks(); }));
+                els.priority.addEventListener('change', () => { state.priority = els.priority.value; loadTasks(); });
+                els.due.addEventListener('change', () => { state.due = els.due.value; loadTasks(); });
+                els.employee.addEventListener('change', () => { state.employee = els.employee.value; loadTasks(); });
+                els.leadStage.addEventListener('change', handleFilterStageChanged);
+                els.leadSubStage.addEventListener('change', handleFilterSubStageChanged);
+                els.refresh.addEventListener('click', loadTasks);
+                document.querySelectorAll('#ptScopeTabs .pt-tab').forEach(btn => btn.addEventListener('click', () => { document.querySelectorAll('#ptScopeTabs .pt-tab').forEach(b => b.classList.remove('is-active')); btn.classList.add('is-active'); state.scope = btn.dataset.scope; loadTasks(); }));
+                document.querySelectorAll('#ptViewTabs .pt-tab').forEach(btn => btn.addEventListener('click', () => { if (btn.dataset.view === 'board' && isListOnlyState()) { toast('Dieser Bereich wird nur als Liste angezeigt.', 'error'); state.view = 'list'; syncTopNavigation(); render(); return; } document.querySelectorAll('#ptViewTabs .pt-tab').forEach(b => b.classList.remove('is-active')); btn.classList.add('is-active'); state.view = btn.dataset.view; render(); }));
+                els.moreBtn.addEventListener('click', () => els.more.classList.toggle('is-open'));
+                document.querySelectorAll('.pt-more-item').forEach(btn => btn.addEventListener('click', () => { state.state = btn.dataset.state; if (isListOnlyState()) state.view = 'list'; syncTopNavigation(); els.more.classList.remove('is-open'); loadTasks(); }));
+                document.querySelector('.create_new_task').addEventListener('click', () => { resetTaskDrawerForm(); openTaskDrawer(); });
+                document.querySelectorAll('.close_task_window').forEach(btn => btn.addEventListener('click', closeTaskDrawer));
+                document.querySelector('.save-task-close').addEventListener('click', () => submitTaskForm(true));
+                document.querySelector('.save-task-continue').addEventListener('click', () => submitTaskForm(false));
+                document.getElementById('customerSwitch').addEventListener('change', function () { document.getElementById('customerSelectContainer').style.display = this.checked ? 'block' : 'none'; });
+                document.getElementById('repeated').addEventListener('change', function () { document.querySelector('.repeated_area').style.display = this.checked ? 'block' : 'none'; });
+                document.getElementById('reminder_check').addEventListener('change', function () { document.querySelector('.reminder_area').style.display = this.checked ? 'block' : 'none'; });
+                document.querySelector('.add-task-steps').addEventListener('click', () => addKeyRow());
+                const prioritySelect = document.getElementById('priority');
+                if (prioritySelect) {
+                    prioritySelect.addEventListener('change', function () {
+                        setPriorityValue(this.value);
+                        console.log('Task priority selected in Blade:', this.value);
                     });
                 }
-            });
-        }
 
-        $('.save-task-close').on('click', function () {
-            submitTaskForm(true);
-        });
-
-        $('.save-task-continue').on('click', function () {
-            submitTaskForm(false);
-        });
-    });
-</script>
-
-<script>
-    (function () {
-        const bar     = document.getElementById('sa-news-feed');
-        if (!bar) return;
-
-        const feedUrl = bar.dataset.feedUrl;
-        const badgeEl = bar.querySelector('[data-feed-badge]');
-        const titleEl = bar.querySelector('[data-feed-title]');
-        const timeEl  = bar.querySelector('[data-feed-time]');
-        const msgEl   = bar.querySelector('[data-feed-message]');
-        const btnPrev = bar.querySelector('[data-feed-action="prev"]');
-        const btnNext = bar.querySelector('[data-feed-action="next"]');
-        const btnTog  = bar.querySelector('[data-feed-action="toggle"]');
-        const togIcon = bar.querySelector('[data-feed-icon="toggle"]');
-
-        let items   = [];
-        let index   = 0;
-        let playing = true;
-        let timer   = null;
-        const delay = 8000; // ms per item
-
-        function timeAgo(isoString) {
-            if (!isoString) return '';
-            const t  = new Date(isoString);
-            const now = new Date();
-            const diffMs = now - t;
-            const diffMin = Math.round(diffMs / 60000);
-            const diffHr  = Math.round(diffMs / 3600000);
-            const diffDay = Math.round(diffMs / 86400000);
-
-            if (diffMin < 1)  return 'gerade eben';
-            if (diffMin === 1) return 'vor 1 Minute';
-            if (diffMin < 60)  return `vor ${diffMin} Minuten`;
-            if (diffHr === 1)  return 'vor 1 Stunde';
-            if (diffHr < 24)   return `vor ${diffHr} Stunden`;
-            if (diffDay === 1) return 'vor 1 Tag';
-            return `vor ${diffDay} Tagen`;
-        }
-
-        function render() {
-            if (!items.length) {
-                badgeEl.textContent = '—';
-                titleEl.textContent = 'Keine Benachrichtigungen';
-                timeEl.textContent  = '';
-                msgEl.textContent   = '';
-                return;
-            }
-
-            const item = items[index];
-            badgeEl.textContent = item.badge || 'Info';
-            titleEl.textContent = item.title || '';
-            timeEl.textContent  = timeAgo(item.performed_at);
-            msgEl.textContent   = item.message || '';
-
-            if (item.url) {
-                titleEl.style.cursor = 'pointer';
-                titleEl.onclick = () => {
-                    window.location.href = item.url;
-                };
-            } else {
-                titleEl.style.cursor = 'default';
-                titleEl.onclick = null;
-            }
-        }
-
-        function next() {
-            if (!items.length) return;
-            index = (index + 1) % items.length;
-            render();
-        }
-
-        function prev() {
-            if (!items.length) return;
-            index = (index - 1 + items.length) % items.length;
-            render();
-        }
-
-        function clearTimer() {
-            if (timer) {
-                clearTimeout(timer);
-                timer = null;
-            }
-        }
-
-        function schedule() {
-            clearTimer();
-            if (!playing || !items.length) return;
-            timer = setTimeout(function tick() {
-                next();
-                schedule();
-            }, delay);
-        }
-
-        function setPlaying(state) {
-            playing = state;
-            if (playing) {
-                togIcon.textContent = '\u275A\u275A'; // ||
-                btnTog.title        = 'Pause';
-                schedule();
-            } else {
-                togIcon.textContent = '\u25B6'; // ►
-                btnTog.title        = 'Abspielen';
-                clearTimer();
-            }
-        }
-
-        function attachEvents() {
-            if (btnPrev) {
-                btnPrev.addEventListener('click', function () {
-                    prev();
-                    if (playing) schedule();
+                document.querySelectorAll('input[name="step_employee_mode_radio"]').forEach(r => r.addEventListener('change', applyStepEmployeeMode));
+                document.getElementById('due_date').addEventListener('change', checkAppointmentConflicts);
+                document.getElementById('due_time').addEventListener('change', checkAppointmentConflicts);
+                document.getElementById('employee').addEventListener('change', checkAppointmentConflicts);
+                document.getElementById('ptConflictClose')?.addEventListener('click', () => document.getElementById('appointmentConflictBox').classList.remove('is-open'));
+                document.getElementById('ptConflictChange')?.addEventListener('click', () => document.getElementById('due_date').focus());
+                document.getElementById('ptConflictAnyway')?.addEventListener('click', () => document.getElementById('appointmentConflictBox').classList.remove('is-open'));
+                document.addEventListener('input', event => { if (event.target.classList.contains('task-duration')) updateTotalDuration(); });
+                document.addEventListener('click', async event => {
+                    const colorItem = event.target.closest('#color_drop_down .dropdown-item'); if (colorItem) { event.preventDefault(); const color = colorItem.dataset.value; document.getElementById('color').value = color; document.getElementById('colorIcon')?.style.setProperty('color', color); refreshIcons(); return; }
+                    const priorityItem = event.target.closest('#priority_select .dropdown-item'); if (priorityItem) { event.preventDefault(); setPriorityValue(priorityItem.dataset.value || priorityItem.textContent.trim()); refreshIcons(); return; }
+                    const removeKey = event.target.closest('.remove-task-steps'); if (removeKey) { const rows = document.querySelectorAll('#key_task tbody tr'); if (rows.length <= 1) { toast('Es muss mindestens ein Schritt bleiben', 'error'); return; } removeKey.closest('tr').remove(); renumberKeys(); updateTotalDuration(); return; }
+                    const closeReason = event.target.closest('[data-close-reason]'); if (closeReason) { closeReasonModal(); return; }
+                    const actionBtn = event.target.closest('[data-action]'); if (!actionBtn) { document.querySelectorAll('.pt-action-dropdown.is-open').forEach(el => el.classList.remove('is-open')); if (!event.target.closest('#ptMoreDropdown')) els.more.classList.remove('is-open'); return; }
+                    const action = actionBtn.dataset.action; const taskId = actionBtn.dataset.id;
+                    if (action === 'toggle-menu') { const dropdown = actionBtn.closest('.pt-action-dropdown'); document.querySelectorAll('.pt-action-dropdown.is-open').forEach(el => { if (el !== dropdown) el.classList.remove('is-open'); }); dropdown.classList.toggle('is-open'); return; }
+                    if (action === 'toggle-comments') { const card = actionBtn.closest('.pt-task-card'); card?.classList.toggle('is-comments-open'); refreshIcons(); return; }
+                    if (!taskId) return;
+                    try { if (action === 'edit') await editTask(taskId); if (action === 'status') await updateStatus(taskId, actionBtn.dataset.status); if (action === 'archive') await archiveTask(taskId); if (action === 'delete') await deleteTask(taskId); if (action === 'restore') await restoreTask(taskId, 'open'); if (action === 'restore-status') await restoreTask(taskId, actionBtn.dataset.status || 'open'); if (action === 'resume') await resumeTask(taskId, actionBtn.dataset.status || 'open'); if (action === 'reason') openReasonModal(taskId, actionBtn.dataset.reasonAction); } catch (error) { toast(error.message, 'error'); }
                 });
+                document.addEventListener('submit', async event => { const form = event.target.closest('[data-comment-form]'); if (!form) return; event.preventDefault(); try { await submitTaskComment(form.dataset.commentForm, form.querySelector('textarea')); } catch (error) { toast(error.message, 'error'); } });
+                document.getElementById('ptReasonSubmit').addEventListener('click', () => submitReason().catch(error => toast(error.message, 'error')));
+                document.addEventListener('dragstart', event => { const card = event.target.closest('.pt-task-card'); if (!card) return; state.draggingTaskId = card.dataset.taskId; event.dataTransfer.effectAllowed = 'move'; });
+                document.addEventListener('dragover', event => { const zone = event.target.closest('[data-drop-column]'); if (zone) { event.preventDefault(); zone.classList.add('is-over'); } });
+                document.addEventListener('dragleave', event => { const zone = event.target.closest('[data-drop-column]'); if (zone) zone.classList.remove('is-over'); });
+                document.addEventListener('drop', async event => { const zone = event.target.closest('[data-drop-column]'); if (!zone || !state.draggingTaskId) return; event.preventDefault(); zone.classList.remove('is-over'); const statusMap = { open: 'open', in_progress: 'on_progress', completed: 'completed' }; try { await updateStatus(state.draggingTaskId, statusMap[zone.dataset.dropColumn] || 'open'); } catch (error) { toast(error.message, 'error'); } finally { state.draggingTaskId = null; } });
             }
-            if (btnNext) {
-                btnNext.addEventListener('click', function () {
-                    next();
-                    if (playing) schedule();
-                });
-            }
-            if (btnTog) {
-                btnTog.addEventListener('click', function () {
-                    setPlaying(!playing);
-                });
-            }
-        }
+            function renumberKeys() { document.querySelectorAll('#key_task tbody tr').forEach((row, index) => { row.children[0].textContent = index + 1; row.querySelectorAll('input,textarea,select').forEach(input => { if (!input.name) return; input.name = input.name.replace(/key\[\d+\]/, `key[${index}]`); }); }); }
 
-        function loadFeed() {
-            fetch(feedUrl, { headers: { 'Accept': 'application/json' } })
-                .then(function (res) { return res.json(); })
-                .then(function (data) {
-                    if (!data || !data.success) {
-                        throw new Error('Feed not successful');
-                    }
-                    items = data.items || [];
-                    index = 0;
-                    render();
-                    setPlaying(true);
-                })
-                .catch(function (err) {
-                    console.error('News feed error:', err);
-                    badgeEl.textContent = '—';
-                    titleEl.textContent = 'Feed konnte nicht geladen werden';
-                    timeEl.textContent  = '';
-                    msgEl.textContent   = '';
-                    setPlaying(false);
-                });
-        }
-
-        attachEvents();
-        loadFeed();
-    })();
-</script>
-
-<script>
-(function () {
-  let clickTimer = null;
-
-  function clearSelected() {
-    document.querySelectorAll('.pt-card.is-selected').forEach(el => el.classList.remove('is-selected'));
-    document.querySelectorAll('tr.is-selected').forEach(el => el.classList.remove('is-selected'));
-  }
-
-  function openProfileFrom(el) {
-    // Board card: take <a href="...profile..."> if exists
-    const card = el.closest('.pt-card');
-    if (card) {
-      const a = card.querySelector('a[href*="personal-tasks/profile"], a.js-open-profile-link');
-      if (a && a.getAttribute('href')) return window.location.href = a.getAttribute('href');
-    }
-
-    // List row: your dropdown button has data-profile-url on .js-open-profile
-    const row = el.closest('tr[data-task-id]');
-    if (row) {
-      const btn = row.querySelector('.js-open-profile');
-      const url = btn?.dataset?.profileUrl;
-      if (url) return window.location.href = url;
-    }
-  }
-
-  // 1 click = select (but NOT when clicking action buttons/inputs/links)
-  document.addEventListener('click', function (e) {
-    const card = e.target.closest('.pt-card');
-    const row  = e.target.closest('tr[data-task-id]');
-
-    if (!card && !row) return;
-
-    if (
-      e.target.closest('button') ||
-      e.target.closest('a') ||
-      e.target.closest('input') ||
-      e.target.closest('select') ||
-      e.target.closest('textarea') ||
-      e.target.closest('.pt-dropdown')
-    ) {
-      return;
-    }
-
-    // delay selection a bit to allow dblclick to cancel
-    clearTimeout(clickTimer);
-    clickTimer = setTimeout(() => {
-      clearSelected();
-      if (card) card.classList.add('is-selected');
-      if (row)  row.classList.add('is-selected');
-    }, 160);
-  });
-
-  // double click = open profile
-  document.addEventListener('dblclick', function (e) {
-    const card = e.target.closest('.pt-card');
-    const row  = e.target.closest('tr[data-task-id]');
-
-    if (!card && !row) return;
-
-    if (
-      e.target.closest('button') ||
-      e.target.closest('input') ||
-      e.target.closest('select') ||
-      e.target.closest('textarea') ||
-      e.target.closest('.pt-dropdown')
-    ) {
-      return;
-    }
-
-    clearTimeout(clickTimer);
-    openProfileFrom(e.target);
-  });
-})();
-</script>
-
+            document.addEventListener('DOMContentLoaded', () => { resetKeyRows(); initSelect2(); initCollapsibleTaskSections(); bindEvents(); refreshIcons(); loadTasks(); });
+        })();
+    </script>
 @endsection

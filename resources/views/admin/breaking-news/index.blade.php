@@ -6,12 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         /* --- Page layout --- */
-        .breaking-news-page {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 90px 24px 32px;
-            min-height: 100vh;
-            background: #f3f4f6;
+        .breaking-news-page {  
             box-sizing: border-box;
         }
         .bn-header {
@@ -442,9 +437,9 @@
                 <tbody id="news-table-body">
                     @forelse($breakingNews as $news)
                         @php
-                            $audioUrl = $news->audio_path
-                                ? asset('storage/'.$news->audio_path)
-                                : ($news->audio_url ?? null);
+    $audioUrl = $news->audio_path
+        ? asset('storage/' . $news->audio_path)
+        : ($news->audio_url ?? null);
                         @endphp
                         <tr data-id="{{ $news->id }}"
                             data-json='@json($news->toArray() + ["audio_url" => $audioUrl])'>
@@ -477,13 +472,13 @@
                             </td>
                             <td>
                                 @php
-                                    $typeClass = match($news->type) {
-                                        'info'    => 'bn-type-info',
-                                        'warning' => 'bn-type-warning',
-                                        'danger'  => 'bn-type-danger',
-                                        'success' => 'bn-type-success',
-                                        default   => 'bn-type-info',
-                                    };
+    $typeClass = match ($news->type) {
+        'info' => 'bn-type-info',
+        'warning' => 'bn-type-warning',
+        'danger' => 'bn-type-danger',
+        'success' => 'bn-type-success',
+        default => 'bn-type-info',
+    };
                                 @endphp
                                 <span class="bn-badge-type {{ $typeClass }}">
                                     {{ ucfirst($news->type) }}
@@ -1343,3 +1338,24 @@
         });
     </script>
 @endsection
+
+
+@push('scripts')
+    <script>
+        window.GlobalBreadcrumbs = [
+            {
+                label: 'Dashboard',
+                url: "{{ url('/') }}"
+            },
+            {
+                label: 'Breaking News',
+                url: "{{ url()->current() }}",
+                clickable: false
+            }, 
+        ];
+
+        if (window.setGlobalBreadcrumbs) {
+            window.setGlobalBreadcrumbs(window.GlobalBreadcrumbs);
+        }
+    </script>
+@endpush

@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-12 mb-1 float-right">
-        <form action="{{ action('App\Http\Controllers\DealInvoiceController@index') }}" method="GET">
+        <form action="{{ route('deal.invoice')}}" method="GET">
             <fieldset>
                 <div class="input-group mb-1">
                     <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Suche..." aria-describedby="button-addon2">
