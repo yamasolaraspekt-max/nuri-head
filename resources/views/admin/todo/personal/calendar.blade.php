@@ -11272,7 +11272,7 @@
 
     // Function to show the map with route and open Google Maps button
     function showMapWithRoute(origin, destination, locationTitle) {
-      let googleMapsAPIKey = "AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo"; // Replace with your Google API Key
+      let googleMapsAPIKey = "{{ config('services.google.maps_key') }}"; // Replace with your Google API Key
       let mapContainer = document.createElement("div");
       mapContainer.id = "map";
       mapContainer.style = "width: 100%; height: 400px; margin-top: 10px;";
@@ -11691,7 +11691,7 @@
         if (!window.google || !window.google.maps) {
           const script = document.createElement("script");
           script.src =
-            "https://maps.googleapis.com/maps/api/js?key=AIzaSyByZgrvtQbWdEfRWf9hXRk4ZWiEP2mLFMk&libraries=places";
+            "https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=places";
           script.async = true;
           script.defer = true;
           script.onload = function () {

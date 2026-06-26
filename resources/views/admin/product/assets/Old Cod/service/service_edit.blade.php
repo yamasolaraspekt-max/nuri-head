@@ -389,7 +389,7 @@
 const CONFIGURATION = {
   "ctaTitle": "Checkout",
   "mapOptions": {"center":{"lat":37.4221,"lng":-122.0841},"fullscreenControl":true,"mapTypeControl":true,"streetViewControl":true,"zoom":100,"zoomControl":true,"maxZoom":22,"mapId":""},
-  "mapsApiKey": "AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo",
+  "mapsApiKey": "{{ config('services.google.maps_key') }}",
   "capabilities": {"addressAutocompleteControl":true,"mapDisplayControl":true,"ctaControl":false}
 };
 

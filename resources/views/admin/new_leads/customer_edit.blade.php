@@ -29,7 +29,7 @@
     $productsCount = is_countable($products ?? []) ? count($products) : collect($products ?? [])->count();
     $departmentsCount = is_countable($departments ?? []) ? count($departments) : collect($departments ?? [])->count();
 
-    $googleMapsKey = config('services.google.maps_key', 'AIzaSyByZgrvtQbWdEfRWf9hXRk4ZWiEP2mLFMk');
+    $googleMapsKey = config('services.google.maps_key', '{{ config('services.google.maps_key') }}');
 @endphp
 
 @once

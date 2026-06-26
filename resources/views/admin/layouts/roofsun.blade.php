@@ -195,6 +195,6 @@
         });
     }
   </script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo&libraries=drawing,geometry,places&callback=initMap" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=drawing,geometry,places&callback=initMap" async defer></script>
 </body>
 </html>

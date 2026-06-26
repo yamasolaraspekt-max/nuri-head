@@ -896,7 +896,7 @@ input:focus::placeholder {
 
       <!-- Google Maps API (make sure API key has Places and Maps JS enabled) -->
     <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByZgrvtQbWdEfRWf9hXRk4ZWiEP2mLFMk&libraries=places&callback=initMap"
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=places&callback=initMap"
         async defer></script>
 
     <script>

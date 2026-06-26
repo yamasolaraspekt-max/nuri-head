@@ -3284,7 +3284,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@5.3.0/main.global.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js"></script>
   <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByZgrvtQbWdEfRWf9hXRk4ZWiEP2mLFMk&libraries=places"></script>
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=places"></script>
   <script src="{{ asset('app-assets/js/scripts/tooltip/tooltip.js') }}"></script>
   <!-- Replace Feather with Lucide -->
   <script src="https://unpkg.com/lucide@latest"></script>

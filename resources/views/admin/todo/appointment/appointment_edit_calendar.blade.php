@@ -1076,7 +1076,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function loadGoogleMapsAPI() {
         if (!window.google || !window.google.maps) {
             const script = document.createElement("script");
-            script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo&libraries=places";
+            script.src = "https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=places";
             script.async = true;
             script.defer = true;
             script.onload = function() {

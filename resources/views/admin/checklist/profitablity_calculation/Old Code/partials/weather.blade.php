@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (postcodeInput && latInput && lonInput && !latInput.value && !lonInput.value && postcodeInput.value) {
         const postcode = postcodeInput.value;
-        fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${postcode}&region=de&key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo`)
+        fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${postcode}&region=de&key={{ config('services.google.maps_key') }}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status === "OK") {

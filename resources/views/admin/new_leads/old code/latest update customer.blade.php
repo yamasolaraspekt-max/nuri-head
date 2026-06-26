@@ -1926,7 +1926,7 @@ document.getElementById('electric_car').addEventListener('change', function() {
 
 <!-- Map and screenshots  -->
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo&libraries=places,marker,drawing&callback=initMap&solution_channel=GMP_QB_addressselection_v2_cAB"
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=places,marker,drawing&callback=initMap&solution_channel=GMP_QB_addressselection_v2_cAB"
     async defer></script>
  
    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -2223,7 +2223,7 @@ document.getElementById('electric_car').addEventListener('change', function() {
         let pitch = pov.pitch; // Up-down tilt angle
 
         // ✅ Use the camera position in the Street View Image API
-        let streetViewImageUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x300&pano=${panoId}&heading=${heading}&pitch=${pitch}&key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo`;
+        let streetViewImageUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x300&pano=${panoId}&heading=${heading}&pitch=${pitch}&key={{ config('services.google.maps_key') }}`;
 
         // Fetch the image as a Blob and store it as a file
         fetch(streetViewImageUrl)

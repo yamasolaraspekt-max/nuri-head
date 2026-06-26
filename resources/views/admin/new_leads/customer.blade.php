@@ -12,7 +12,7 @@
     $departmentsCount = is_countable($departments ?? []) ? count($departments) : collect($departments ?? [])->count();
     $branchesCount = is_countable($branch ?? []) ? count($branch) : collect($branch ?? [])->count();
 
-$googleMapsKey = config('services.google.maps_key', 'AIzaSyByZgrvtQbWdEfRWf9hXRk4ZWiEP2mLFMk');
+$googleMapsKey = config('services.google.maps_key', '{{ config('services.google.maps_key') }}');
 @endphp
 
 @section('style')

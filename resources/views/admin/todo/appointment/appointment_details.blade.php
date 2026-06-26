@@ -1219,7 +1219,7 @@ $(document).ready(function () {
     // Dynamically load Google Maps script
     function loadGoogleMapsAPI() {
         const script = document.createElement('script');
-        script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo&libraries=places&callback=initializeAutocomplete";
+        script.src = "https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=places&callback=initializeAutocomplete";
         script.async = true;
         script.defer = true;
         document.head.appendChild(script);

@@ -374,5 +374,5 @@
 </script>
 
 {{-- Load Google Maps JS properly. Move key to env and echo from server --}}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo &libraries=places,marker&v=weekly&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }} &libraries=places,marker&v=weekly&callback=initMap" async defer></script>
 @endsection

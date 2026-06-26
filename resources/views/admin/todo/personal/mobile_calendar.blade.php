@@ -741,7 +741,7 @@ Mein Kalendar
 <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo&libraries=places,marker,drawing&callback=initMap&solution_channel=GMP_QB_addressselection_v2_cAB"
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=places,marker,drawing&callback=initMap&solution_channel=GMP_QB_addressselection_v2_cAB"
     async defer></script>
 
 <script>
@@ -1165,7 +1165,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const currentLng = position.coords.longitude;
 
                     const mapUrl = `https://www.google.com/maps/dir/?api=1&origin=${currentLat},${currentLng}&destination=${lat},${lng}&travelmode=driving`;
-                    const embedUrl = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo&origin=${currentLat},${currentLng}&destination=${lat},${lng}&mode=driving`;
+                    const embedUrl = `https://www.google.com/maps/embed/v1/directions?key={{ config('services.google.maps_key') }}&origin=${currentLat},${currentLng}&destination=${lat},${lng}&mode=driving`;
 
                     Swal.fire({
                         title: `${name}`,

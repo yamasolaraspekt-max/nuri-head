@@ -1477,7 +1477,7 @@
  
 <!-- SweetAlert and Google Maps API -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo&libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=places"></script>
 
 <!-- Map container that will be shown in the SweetAlert modal -->
 <div id="map" style="height: 400px; width: 100%; display: none;"></div>

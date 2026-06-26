@@ -306,7 +306,7 @@
                             </div>
 
                             <script
-                                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByZgrvtQbWdEfRWf9hXRk4ZWiEP2mLFMk&libraries=places,marker&solution_channel=GMP_QB_addressselection_v2_cAB"
+                                src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=places,marker&solution_channel=GMP_QB_addressselection_v2_cAB"
                                 defer
                             ></script>
                         </div>
@@ -335,7 +335,7 @@ const CONFIGURATION = {
         maxZoom: 22,
         mapId: ""
     },
-    mapsApiKey: "AIzaSyByZgrvtQbWdEfRWf9hXRk4ZWiEP2mLFMk",
+    mapsApiKey: "{{ config('services.google.maps_key') }}",
     capabilities: {
         addressAutocompleteControl: true,
         mapDisplayControl: true,

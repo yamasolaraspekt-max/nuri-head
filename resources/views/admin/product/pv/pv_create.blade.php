@@ -1525,7 +1525,7 @@
 
 @section('script')
 <script src="{{ asset('js/select2.min.js') }}"></script>
-<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgavU38-YXH1ar9VEneTHJIBQYcjC8PgI&callback=console.debug&libraries=maps,marker&v=beta"></script>
+<script async src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&callback=console.debug&libraries=maps,marker&v=beta"></script>
 <script>
     $(document).ready(function() {
         $('#modules').select2(); 

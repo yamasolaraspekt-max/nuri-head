@@ -3533,7 +3533,7 @@ SERIALS (CUSTOM) – already custom
     if (document.querySelector('script[data-mayar-google-maps="1"], script[src*="maps.googleapis.com/maps/api/js"]')) return;
     window.__mayarGoogleMapsLoading = true;
     var script = document.createElement('script');
-    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyByZgrvtQbWdEfRWf9hXRk4ZWiEP2mLFMk&libraries=places&loading=async';
+    script.src = 'https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=places&loading=async';
     script.async = true;
     script.defer = true;
     script.setAttribute('data-mayar-google-maps', '1');

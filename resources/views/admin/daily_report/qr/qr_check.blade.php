@@ -244,7 +244,7 @@
 
 <!-- ✅ Load Google Maps JS API with your API key -->
 <script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsEupm9-Dxg6B2Pts7pWnVsjXyt76Mwzo&callback=Function.prototype">
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&callback=Function.prototype">
 </script>
 
 <script>
