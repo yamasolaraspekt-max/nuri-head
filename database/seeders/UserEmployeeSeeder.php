@@ -71,10 +71,10 @@ class UserEmployeeSeeder extends Seeder
                 return [
                     'user_id'    => $userId,
                     'item_id'    => $item,
-                    'is_read'    => 'on',
-                    'is_update'  => 'on',
-                    'is_delete'  => 'on',
-                    'is_add'     => 'on',
+                    'is_read'    => 1,
+                    'is_update'  => 1,
+                    'is_delete'  => 1,
+                    'is_add'     => 1,
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];
