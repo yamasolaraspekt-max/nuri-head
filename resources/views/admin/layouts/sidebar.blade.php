@@ -437,7 +437,7 @@
                 ],
 
                 [
-                    'label' => 'Tage',
+                    'label' => 'Tagesberichte',
                     'icon' => 'file-clock',
                     'url' => $safeRoute('employee.daily.plan'),
                     'count_key' => 'daily_reports',
@@ -517,7 +517,7 @@
                             'active_routes' => ['/my-inquiry', '/my_inquiry'],
                         ],
                         [
-                            'label' => 'Anfrageliste',
+                            'label' => 'Kundenanfragen',
                             'icon' => 'users',
                             'url' => $safeRoute('inquiry.customer'),
                             'count_key' => 'customer_inquiries_unpublished',
@@ -532,7 +532,7 @@
                             'active_routes' => ['/inquiry_published_list', '/published-inquiries'],
                         ],
                         [
-                            'label' => 'Webseiten',
+                            'label' => 'Website-Leads',
                             'icon' => 'globe',
                             'url' => $safeRoute('fusion.forms.index'),
                             'count_key' => 'website_leads',
@@ -627,7 +627,7 @@
                             'active_routes' => ['/all-contacts'],
                         ],
                         [
-                            'label' => 'Hersteller',
+                            'label' => 'Alle Marken / Partner',
                             'icon' => 'factory',
                             'url' => $safeRoute('brand.index', 'brand'),
                             'count_key' => 'brands',
@@ -641,7 +641,7 @@
                             'active_routes' => ['/distributors'],
                         ],
                         [
-                            'label' => 'Dienstleister',
+                            'label' => 'Externe Firmen',
                             'icon' => 'users',
                             'url' => $safeRoute('external.info'),
                             'count_key' => 'external_companies',
@@ -699,7 +699,7 @@
                             'active_routes' => ['/admin/offers', '/offers/list'],
                         ],
                         [
-                            'label' => 'Neue Vorlage',
+                            'label' => 'Neues Angebot',
                             'icon' => 'file-text',
                             'url' => url('offers/wizard'),
                             'count_key' => 'offer_templates',
@@ -744,7 +744,7 @@
                             'active_routes' => ['/admin/invoices'],
                         ],
                         [
-                            'label' => 'Rechnung Canvas',
+                            'label' => 'Rechnungen (Canvas-Hinweis)',
                             'icon' => 'file-text',
                             'url' => $safeRoute('invoices.index', 'admin/invoices') . '?open_canvas=1',
                             'count_key' => 'invoices',
@@ -893,7 +893,7 @@
                             'active_routes' => ['/problem_create'],
                         ],
                         [
-                            'label' => 'Offen',
+                            'label' => 'Ticket-Übersicht',
                             'icon' => 'list',
                             'url' => url('problem_view'),
                             'count_key' => 'tickets_open',
@@ -1009,7 +1009,7 @@
                             'count_key' => 'public_holidays',
                         ],
                         [
-                            'label' => 'Betriebsfrei',
+                            'label' => 'Feiertagskalender',
                             'icon' => 'calendar',
                             'url' => $safeRoute('holiday.info'),
                             'count_key' => 'holidays',
@@ -1099,7 +1099,7 @@
                             'count_key' => 'product_favorites',
                         ],
                         [
-                            'label' => 'Stempel',
+                            'label' => 'Stamm-Listen',
                             'icon' => 'award',
                             'url' => $safeRoute('stamp.lists.index'),
                             'count_key' => 'stamp_favorites',
@@ -1161,7 +1161,7 @@
                             'count_key' => 'article_groups',
                         ],
                         [
-                            'label' => 'Formeln',
+                            'label' => 'Checklisten-Formulare',
                             'icon' => 'layout',
                             'url' => $safeRoute('product.formula.index'),
                             'count_key' => 'product_formulas',
@@ -1246,7 +1246,7 @@
                             'count_key' => 'fundings',
                         ],
                         [
-                            'label' => 'Spesenarten',
+                            'label' => 'Filial-Betriebskosten',
                             'icon' => 'receipt',
                             'url' => $safeRoute('branch.expense'),
                             'count_key' => 'branch_expenses',
@@ -1280,7 +1280,7 @@
                             'count_key' => 'admin_users',
                         ],
                         [
-                            'label' => 'Limit-User',
+                            'label' => 'Eingeschränkte Benutzer',
                             'icon' => 'user-lock',
                             'url' => url('/limit_user'),
                             'count_key' => 'limited_users',
@@ -1311,7 +1311,7 @@
                             'count_key' => 'task_phases',
                         ],
                         [
-                            'label' => 'Phasen',
+                            'label' => 'Projekt-Struktur',
                             'icon' => 'flag',
                             'url' => $safeRoute('stages.index'),
                             'count_key' => 'stages',
@@ -1363,7 +1363,7 @@
             'count_key' => 'system_warnings',
         ],
         $canDeleteGarbage ? [
-            'label' => 'Papierkorb',
+            'label' => 'Datenbankbereinigung',
             'icon' => 'trash-2',
             'style' => 'color: var(--color-danger)',
             'url' => $safeRoute('admin.garbage.index'),
