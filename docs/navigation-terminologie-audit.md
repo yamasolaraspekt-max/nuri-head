@@ -10,7 +10,7 @@
 - 🟡 **ungenau:** 55  (richtig, aber unpräzise)
 - 🔴 **irreführend:** 16  (Titel suggeriert etwas anderes als der Inhalt)
 
-> **Umsetzungsstand (2026-06-27):** 15 der 16 irreführenden Titel wurden direkt in der Sidebar umbenannt. Ausnahme: „Neuer Kontakt" (Partner) — verlinkt auf `inquiry.create` und würde „Neue Anfrage" doppeln; das ist vermutlich ein **falscher Link** statt eines Wording-Problems → bewusst offen gelassen.
+> **Umsetzungsstand (2026-06-27):** 15 der 16 irreführenden Titel **und alle 55 „ungenau"-Titel** wurden direkt in der Sidebar umbenannt. Ausnahme: „Neuer Kontakt" (Partner) — verlinkt auf `inquiry.create` und würde „Neue Anfrage" doppeln; das ist vermutlich ein **falscher Link** statt eines Wording-Problems → siehe offene Produktfrage unten.
 
 ---
 

@@ -400,7 +400,7 @@
                     'active_routes' => ['/'],
                 ],
                 [
-                    'label' => 'Pipeline',
+                    'label' => 'Lead-Kanban',
                     'icon' => 'kanban',
                     'tone' => 'text-brand-blue',
                     'url' => url('lead/kanban'),
@@ -413,7 +413,7 @@
             'title' => 'Berichte',
             'items' => array_values(array_filter([
                 $canSeeAllReports ? [
-                    'label' => 'Alle Berichte',
+                    'label' => 'Berichts-Übersicht',
                     'icon' => 'file-text',
                     'tone' => 'text-brand-blue',
                     'url' => url('admin/overdue-center/recent'),
@@ -425,7 +425,7 @@
                 ] : null,
 
                 [
-                    'label' => 'Meine Berichte',
+                    'label' => 'Überfällige Berichte',
                     'icon' => 'clipboard-check',
                     'tone' => 'text-brand-green',
                     'url' => url('admin/reports'),
@@ -456,7 +456,7 @@
                     'submenu' => 'sub-kommunikation',
                     'children' => [
                         [
-                            'label' => 'Postfach',
+                            'label' => 'Posteingang (Legacy)',
                             'icon' => 'inbox',
                             'url' => url('/email_view'),
                             'active_routes' => ['/email_view'],
@@ -468,7 +468,7 @@
                             'active_routes' => ['/lead-email', '/lead/emails'],
                         ],
                         [
-                            'label' => 'Mail-Einstellungen',
+                            'label' => 'E-Mail-Konten (System)',
                             'icon' => 'settings',
                             'url' => url('/email_configuration'),
                             'active_routes' => ['/email_configuration'],
@@ -480,13 +480,13 @@
                             'active_routes' => ['/lead-email-accounts'],
                         ],
                         [
-                            'label' => 'Mail-Regeln',
+                            'label' => 'Domain-Filter',
                             'icon' => 'filter',
                             'url' => $safeRoute('lead.email.domain.filters.index'),
                             'active_routes' => ['/lead-email-domain-filters', '/lead/email/domain/filters'],
                         ],
                         [
-                            'label' => 'Chat',
+                            'label' => 'Bitrix24-Chat',
                             'icon' => 'message-square',
                             'url' => $safeRoute('chats.view', 'admin/chat', [$employeeId]),
                             'count_key' => 'chat_unread',
@@ -510,7 +510,7 @@
                             'active_routes' => ['/inquiry_create', '/inquiries/create'],
                         ],
                         [
-                            'label' => 'Meine Liste',
+                            'label' => 'Meine Anfragen',
                             'icon' => 'user-check',
                             'url' => $safeRoute('my.inquiry.view'),
                             'count_key' => 'my_inquiries_unpublished',
@@ -525,7 +525,7 @@
                         ],
 
                         [
-                            'label' => 'Verifiziert',
+                            'label' => 'Veröffentlichte Anfragen',
                             'icon' => 'check-circle',
                             'url' => $safeRoute('inquiry.published.list'),
                             'count_key' => 'inquiries_published',
@@ -556,7 +556,7 @@
                     ],
                 ],
                 [
-                    'label' => 'Kunden',
+                    'label' => 'Leads / Kunden',
                     'icon' => 'users',
                     'tone' => 'text-brand-green',
                     'id' => 'customer-menu',
@@ -565,26 +565,26 @@
                     'count_key' => 'customers',
                     'children' => [
                         [
-                            'label' => 'Neu',
+                            'label' => 'Neuer Lead',
                             'icon' => 'user-plus',
                             'url' => url('new_lead_create'),
                             'active_routes' => ['/new_lead_create'],
                         ],
                         [
-                            'label' => 'Liste',
+                            'label' => 'Leadliste',
                             'icon' => 'list',
                             'url' => url('new_lead_view'),
                             'count_key' => 'customers',
                             'active_routes' => ['/new_lead_view', '/customer/profile', '/lead/profile'],
                         ],
                         [
-                            'label' => 'Historie',
+                            'label' => 'Kundenakte',
                             'icon' => 'clock',
                             'url' => $leadHistorySidebarUrl,
                             'active_routes' => ['/customers/*/history', '/customers/history'],
                         ],
                         [
-                            'label' => 'Warteliste',
+                            'label' => 'Warteschleife',
                             'icon' => 'clock',
                             'url' => url('wating_leads'),
                             'count_key' => 'customers_waiting',
@@ -620,7 +620,7 @@
                             'url' => $safeRoute('inquiry.create', 'inquiry_create'),
                         ],
                         [
-                            'label' => 'Kontakte',
+                            'label' => 'Alle Kontakte',
                             'icon' => 'list',
                             'url' => $safeRoute('all.contacts', 'all-contacts'),
                             'count_key' => 'contacts',
@@ -647,7 +647,7 @@
                             'count_key' => 'external_companies',
                         ],
                         [
-                            'label' => 'Subunternehmer',
+                            'label' => 'Nachunternehmer',
                             'icon' => 'wrench',
                             'url' => $safeRoute('brand.sub.contractor'),
                             'count_key' => 'sub_contractors',
@@ -686,7 +686,7 @@
                     'count_key' => 'offers',
                     'children' => [
                         [
-                            'label' => 'Angebotskonfigurator',
+                            'label' => 'Angebots-Assistent',
                             'icon' => 'cpu',
                             'url' => url('offers/wizard-smart'),
                             'active_routes' => ['/offers/wizard-smart'],
@@ -730,7 +730,7 @@
                             'active_routes' => ['/deal', '/deals', '/auftrag'],
                         ],
                         [
-                            'label' => 'Feinaufmaß',
+                            'label' => 'Feinaufmaß-Kanban',
                             'icon' => 'ruler',
                             'url' => $safeRoute('deal.measurements.kanban', 'deal-measurements-kanban'),
                             'count_key' => 'deal_measurements',
@@ -791,7 +791,7 @@
                     ],
                 ],
                 [
-                    'label' => 'Aufgaben',
+                    'label' => 'Meine Aufgaben',
                     'icon' => 'check-square',
                     'tone' => 'text-brand-green',
                     'url' => url('personal/task/' . $employeeId),
@@ -800,7 +800,7 @@
                 ],
 
                 [
-                    'label' => 'Team-Aufgaben',
+                    'label' => 'Allgemeine Aufgaben',
                     'icon' => 'users-round',
                     'tone' => 'text-brand-blue',
                     'url' => $safeRoute('general-tasks.index', 'general-tasks'),
@@ -821,7 +821,7 @@
                             'count_key' => 'note_categories',
                         ],
                         [
-                            'label' => 'To-dos',
+                            'label' => 'Persönliche Notizen',
                             'icon' => 'list-checks',
                             'url' => $safeRoute('notes.details'),
                             'count_key' => 'personal_notes',
@@ -836,13 +836,13 @@
                     'count_key' => 'appointments',
                     'children' => [
                         [
-                            'label' => 'Kalender',
+                            'label' => 'Mein Kalender',
                             'icon' => 'calendar',
                             'url' => url('tasks/calendar/personal'),
                             'active_routes' => ['/tasks/calendar/personal'],
                         ],
                         [
-                            'label' => 'Übersicht',
+                            'label' => 'Terminübersicht',
                             'icon' => 'calendar-check',
                             'url' => url('customer/appointments'),
                             'count_key' => 'appointments',
@@ -858,13 +858,13 @@
                     'count_key' => 'maintenance_contracts',
                     'children' => [
                         [
-                            'label' => 'Verträge',
+                            'label' => 'Wartungsverträge',
                             'icon' => 'folder-open',
                             'url' => url('admin/maintenance/contracts'),
                             'count_key' => 'maintenance_contracts',
                         ],
                         [
-                            'label' => 'Checklisten',
+                            'label' => 'Wartungs-Checklisten',
                             'icon' => 'plus-circle',
                             'url' => $safeRoute('admin.maintenance_checklists.index') . '#new-checklist',
                             'count_key' => 'maintenance_checklists',
@@ -900,7 +900,7 @@
                             'active_routes' => ['/problem_view', '/problem/profile'],
                         ],
                         [
-                            'label' => 'Fehler',
+                            'label' => 'Fehlerkatalog',
                             'icon' => 'alert-circle',
                             'url' => url('error'),
                             'count_key' => 'errors',
@@ -924,7 +924,7 @@
                     'count_key' => 'employees',
                     'children' => array_values(array_filter([
                         [
-                            'label' => 'Neu',
+                            'label' => 'Mitarbeiter anlegen',
                             'icon' => 'user-plus',
                             'url' => $safeRoute('emp.create', 'emp_create'),
                         ],
@@ -936,7 +936,7 @@
                             'active_routes' => ['/emp_info', '/employee_profile', '/employees'],
                         ],
                         [
-                            'label' => 'Arbeitszeiten',
+                            'label' => 'Zeitpläne',
                             'icon' => 'clock',
                             'url' => $safeRoute('time_management.slots'),
                             'count_key' => 'time_slots',
@@ -971,7 +971,7 @@
                         ],
 
                         $canSalary ? [
-                            'label' => 'Lohnkosten',
+                            'label' => 'Lohn & Vollkosten',
                             'icon' => 'calculator',
                             'url' => $safeRoute('salary.index'),
                             'count_key' => 'salaries',
@@ -997,13 +997,13 @@
                             'count_key' => 'languages',
                         ],
                         [
-                            'label' => 'Länder',
+                            'label' => 'Länder & Nationalitäten',
                             'icon' => 'globe',
                             'url' => $safeRoute('country.info'),
                             'count_key' => 'countries',
                         ],
                         [
-                            'label' => 'Feiertage',
+                            'label' => 'Gesetzliche Feiertage',
                             'icon' => 'calendar-days',
                             'url' => $safeRoute('public-holidays.index'),
                             'count_key' => 'public_holidays',
@@ -1015,13 +1015,13 @@
                             'count_key' => 'holidays',
                         ],
                         [
-                            'label' => 'Urlaub',
+                            'label' => 'Urlaubsanspruch',
                             'icon' => 'calendar-check',
                             'url' => $safeRoute('leave.day.info'),
                             'count_key' => 'leave_days',
                         ],
                         [
-                            'label' => 'Steuerdaten',
+                            'label' => 'Steuerklassen',
                             'icon' => 'percent',
                             'url' => $safeRoute('tax.info'),
                             'count_key' => 'taxes',
@@ -1043,7 +1043,7 @@
                             'count_key' => 'departments',
                         ],
                         [
-                            'label' => 'Positionen',
+                            'label' => 'Stellen & Qualifikationen',
                             'icon' => 'briefcase',
                             'url' => $safeRoute('position.index'),
                             'count_key' => 'positions',
@@ -1055,7 +1055,7 @@
                         ],
 
                     [
-                        'label' => 'Zuweisungen',
+                        'label' => 'Stellenbesetzung',
                         'icon' => 'network',
                         'url' => $safeRoute('employee.organization.index', 'employee-organization'),
                         'count_key' => 'department_positions',
@@ -1081,7 +1081,7 @@
                     'count_key' => 'products',
                     'children' => [
                         [
-                            'label' => 'Neu',
+                            'label' => 'Neuer Artikel',
                             'icon' => 'plus',
                             'url' => $safeRoute('product.create', 'product_create'),
                         ],
@@ -1105,12 +1105,12 @@
                             'count_key' => 'stamp_favorites',
                         ],
                         [
-                            'label' => 'Vergleich',
+                            'label' => 'Preisvergleich',
                             'icon' => 'layers',
                             'url' => $safeRoute('admin.products.difference'),
                         ],
                         [
-                            'label' => 'Heizkörper',
+                            'label' => 'Heizkörper-Konfigurator',
                             'icon' => 'thermometer',
                             'url' => $safeRoute('radiator.config.view'),
                         ],
@@ -1121,7 +1121,7 @@
                             'count_key' => 'master_sets',
                         ],
                         [
-                            'label' => 'Schnittstellen',
+                            'label' => 'Lieferanten-Schnittstellen',
                             'icon' => 'plug-zap',
                             'url' => $safeRoute('admin.supplier-connectors.index'),
                             'active_routes' => [
@@ -1149,13 +1149,13 @@
                             'count_key' => 'measures',
                         ],
                         [
-                            'label' => 'Rabatte',
+                            'label' => 'Rabattgruppen',
                             'icon' => 'percent',
                             'url' => $safeRoute('discount_group.info'),
                             'count_key' => 'discount_groups',
                         ],
                         [
-                            'label' => 'Gruppen',
+                            'label' => 'Artikel-Gruppen',
                             'icon' => 'layers',
                             'url' => $safeRoute('article_group.index'),
                             'count_key' => 'article_groups',
@@ -1167,7 +1167,7 @@
                             'count_key' => 'product_formulas',
                         ],
                         [
-                            'label' => 'Vorschläge',
+                            'label' => 'Anfragevorschläge',
                             'icon' => 'users',
                             'url' => $safeRoute('product.position.view'),
                             'count_key' => 'product_positions',
@@ -1194,7 +1194,7 @@
                             'count_key' => 'delivery_notes',
                         ],
                         [
-                            'label' => 'Assets',
+                            'label' => 'Betriebsmittel',
                             'icon' => 'qr-code',
                             'url' => $safeRoute('handover.details.asset'),
                             'count_key' => 'assets',
@@ -1205,19 +1205,19 @@
                             'url' => $safeRoute('handover.details'),
                         ],
                         [
-                            'label' => 'Anforderungen',
+                            'label' => 'Lagerausgaben',
                             'icon' => 'send',
                             'url' => $safeRoute('request.out.details'),
                             'count_key' => 'inventory_requests',
                         ],
                         [
-                            'label' => 'Einkauf',
+                            'label' => 'Kaufanfragen',
                             'icon' => 'shopping-basket',
                             'url' => $safeRoute('purchase.request'),
                             'count_key' => 'purchase_requests',
                         ],
                         [
-                            'label' => 'Fahrzeuge',
+                            'label' => 'Maschinen & Fahrzeuge',
                             'icon' => 'car',
                             'url' => $safeRoute('machine.inventory'),
                             'count_key' => 'machines',
@@ -1240,7 +1240,7 @@
                     'count_key' => 'finances',
                     'children' => [
                         [
-                            'label' => 'Förderung',
+                            'label' => 'BEG-Förderungen',
                             'icon' => 'file-text',
                             'url' => $safeRoute('beg-fundings.index'),
                             'count_key' => 'fundings',
@@ -1252,7 +1252,7 @@
                             'count_key' => 'branch_expenses',
                         ],
                         [
-                            'label' => 'Raten',
+                            'label' => 'Ratenzahlungen (Assets)',
                             'icon' => 'credit-card',
                             'url' => $safeRoute('assets.installment.show'),
                             'count_key' => 'installments',
@@ -1274,7 +1274,7 @@
                     'count_key' => 'users',
                     'children' => [
                         [
-                            'label' => 'Admins',
+                            'label' => 'Admin-Benutzer',
                             'icon' => 'shield-user',
                             'url' => url('/admin_user'),
                             'count_key' => 'admin_users',
@@ -1286,13 +1286,13 @@
                             'count_key' => 'limited_users',
                         ],
                         [
-                            'label' => 'Rollen',
+                            'label' => 'Berechtigungen',
                             'icon' => 'settings',
                             'url' => $safeRoute('user-rolls.index'),
                             'count_key' => 'user_roles',
                         ],
                         [
-                            'label' => 'Profile',
+                            'label' => 'Mein Profil',
                             'icon' => 'circle-user',
                             'url' => url('/user'),
                             'count_key' => 'users',
@@ -1305,7 +1305,7 @@
                     'submenu' => 'sub-systemeinstellungen',
                     'children' => [
                         [
-                            'label' => 'Schritte',
+                            'label' => 'Arbeitsschritte',
                             'icon' => 'clock',
                             'url' => $safeRoute('task_phase.index'),
                             'count_key' => 'task_phases',
@@ -1317,7 +1317,7 @@
                             'count_key' => 'stages',
                         ],
                         [
-                            'label' => 'Standorte',
+                            'label' => 'Filialen',
                             'icon' => 'map-pin',
                             'url' => $safeRoute('branch.info'),
                             'count_key' => 'branches',
@@ -1349,14 +1349,14 @@
             'count_key' => 'feedback',
         ],
         [
-            'label' => 'Hilfe',
+            'label' => 'Wissensdatenbank',
             'icon' => 'circle-help',
             'tone' => 'text-brand-blue',
             'url' => $safeRoute('knowledge.base'),
             'count_key' => 'knowledge_base',
         ],
         [
-            'label' => 'Hinweise',
+            'label' => 'Systemwarnung',
             'icon' => 'triangle-alert',
             'style' => 'color: var(--color-warning)',
             'url' => $safeRoute('admin.system-warning.index'),
