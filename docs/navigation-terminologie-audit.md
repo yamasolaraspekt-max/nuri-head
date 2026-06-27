@@ -87,8 +87,8 @@
 
 ## 🟡 Ungenau (55) — zum Abhaken
 
-- [ ] **CRM › Postfach** → **Posteingang (Legacy)**  ·  _IMAP-Posteingang aus Legacy-Leads-Tabelle mit Compose_
-- [ ] **CRM › Mail-Einstellungen** → **E-Mail-Konten (System)**  ·  _Liste der IMAP/SMTP-Serverkonfigurationen mit Test- und Aktivierungsfunktion_
+- [ ] **CRM › Postfach** → **Posteingang**  ·  _IMAP-Posteingang aus Legacy-Leads-Tabelle mit Compose_
+- [ ] **CRM › Mail-Einstellungen** → **E-Mail-Konten**  ·  _Liste der IMAP/SMTP-Serverkonfigurationen mit Test- und Aktivierungsfunktion_
 - [ ] **CRM › Mail-Regeln** → **Domain-Filter**  ·  _Whitelist erlaubter Absender-Domains für Lead-E-Mail-Sync_
 - [ ] **CRM › Chat** → **Bitrix24-Chat**  ·  _Bitrix24-Chat-Übersicht mit Kanal- und Nachrichtenliste_
 - [ ] **CRM › Meine Liste** → **Meine Anfragen**  ·  _Anfragen-Liste des eingeloggten Nutzers_
@@ -128,7 +128,7 @@
 - [ ] **Artikel & Lager › Einkauf** → **Kaufanfragen**  ·  _Liste interner Kaufanfragen an den Einkauf_
 - [ ] **Artikel & Lager › Fahrzeuge** → **Maschinen & Fahrzeuge**  ·  _Maschinenbestand-Liste für Maschinen und Fahrzeuge_
 - [ ] **Finanzen › Förderung** → **BEG-Förderungen**  ·  _Liste BEG-Fördereinträge: Heizungstyp, Förderprozentsatz, Maximalbetrag_
-- [ ] **Finanzen › Raten** → **Ratenzahlungen (Assets)**  ·  _Ratenzahlungsliste für Fahrzeuge/Maschinen und Vermögenswerte_
+- [ ] **Finanzen › Raten** → **Ratenzahlungen**  ·  _Ratenzahlungsliste für Fahrzeuge/Maschinen und Vermögenswerte_
 - [ ] **Admin › Admins** → **Admin-Benutzer**  ·  _Benutzerliste gefiltert auf is_admin=1, CRUD_
 - [ ] **Admin › Rollen** → **Berechtigungen**  ·  _Berechtigungsmatrix pro Benutzer, Lesen/Schreiben/Löschen je Modul_
 - [ ] **Admin › Profile** → **Mein Profil**  ·  _Eigenes Benutzerprofil: Kontodaten, Rolle, Berechtigungsübersicht_

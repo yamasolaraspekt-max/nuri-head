@@ -456,7 +456,7 @@
                     'submenu' => 'sub-kommunikation',
                     'children' => [
                         [
-                            'label' => 'Posteingang (Legacy)',
+                            'label' => 'Posteingang',
                             'icon' => 'inbox',
                             'url' => url('/email_view'),
                             'active_routes' => ['/email_view'],
@@ -468,7 +468,7 @@
                             'active_routes' => ['/lead-email', '/lead/emails'],
                         ],
                         [
-                            'label' => 'E-Mail-Konten (System)',
+                            'label' => 'E-Mail-Konten',
                             'icon' => 'settings',
                             'url' => url('/email_configuration'),
                             'active_routes' => ['/email_configuration'],
@@ -1247,7 +1247,7 @@
                             'count_key' => 'branch_expenses',
                         ],
                         [
-                            'label' => 'Ratenzahlungen (Assets)',
+                            'label' => 'Ratenzahlungen',
                             'icon' => 'credit-card',
                             'url' => $safeRoute('assets.installment.show'),
                             'count_key' => 'installments',
