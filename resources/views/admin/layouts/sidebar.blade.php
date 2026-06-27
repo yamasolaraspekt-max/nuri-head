@@ -615,11 +615,6 @@
                     'count_key' => 'contacts',
                     'children' => [
                         [
-                            'label' => 'Neuer Kontakt',
-                            'icon' => 'plus',
-                            'url' => $safeRoute('inquiry.create', 'inquiry_create'),
-                        ],
-                        [
                             'label' => 'Alle Kontakte',
                             'icon' => 'list',
                             'url' => $safeRoute('all.contacts', 'all-contacts'),

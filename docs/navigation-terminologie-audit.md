@@ -10,7 +10,7 @@
 - 🟡 **ungenau:** 55  (richtig, aber unpräzise)
 - 🔴 **irreführend:** 16  (Titel suggeriert etwas anderes als der Inhalt)
 
-> **Umsetzungsstand (2026-06-27):** 15 der 16 irreführenden Titel **und alle 55 „ungenau"-Titel** wurden direkt in der Sidebar umbenannt. Ausnahme: „Neuer Kontakt" (Partner) — verlinkt auf `inquiry.create` und würde „Neue Anfrage" doppeln; das ist vermutlich ein **falscher Link** statt eines Wording-Problems → siehe offene Produktfrage unten.
+> **Umsetzungsstand (2026-06-27):** 15 der 16 irreführenden Titel **und alle 55 „ungenau"-Titel** wurden direkt in der Sidebar umbenannt. Ausnahme: „Neuer Kontakt" (Partner) — verlinkt auf `inquiry.create` und würde „Neue Anfrage" doppeln. Da es gar kein „Partner anlegen"-Formular gibt (also ein falscher Link, kein Wording-Problem), wurde der Menüpunkt **entfernt** — Partner werden direkt auf den Listen per Modal angelegt, „Alle Kontakte" liefert die Übersicht.
 
 ---
 
@@ -42,7 +42,7 @@
 - [ ] **CRM › Webseiten** → **Website-Leads**
   - _Inhalt:_ Website-Leads aus WordPress Fusion-Formularen
   - _Warum:_ Die Seite zeigt Eingangs-Leads aus dem WordPress-Frontend (Fusion-Forms) und betitelt sich 'WEBSITE LEADS'; 'Webseiten' suggeriert eine Verwaltung von Webseiten statt einer Lead-Eingangsübersicht.
-- [ ] **CRM › Neuer Kontakt** → **Neue Anfrage**
+- [x] **CRM › Neuer Kontakt** → **ENTFERNT** _(kein korrektes „Neu"-Ziel vorhanden — Menüpunkt gelöscht statt umbenannt)_
   - _Inhalt:_ Formular zur Erstellung einer neuen Anfrage
   - _Warum:_ Die Seite (View 'admin.inquiry.contact', Titel 'ANFRAGE AUFNAHME') ist ein vollständiges Anfrage-Erfassungsformular (Inquiry), nicht ein allgemeines Kontaktformular; unter 'Partner' wirkt der Begriff 'Neuer Kontakt' fehl am Platz und verschleiert, dass eine CRM-Anfrage angelegt wird.
 - [ ] **CRM › Hersteller** → **Alle Marken / Partner**
