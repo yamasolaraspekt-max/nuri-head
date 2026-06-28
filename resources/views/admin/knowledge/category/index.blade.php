@@ -152,11 +152,7 @@ Knowledge Base
                         @foreach($data as $item)
                         <div class="col-md-4 col-sm-6 col-12 search-content">
                             <div class="card"> 
-                            @if(DB::table('user_rolls')
-                                ->where('user_rolls.user_id', '=', auth()->user()->name)
-                                ->where('user_rolls.item_id', '=', 'Programmer')
-                                ->where('user_rolls.is_read', '=', 'on')
-                                ->first())
+                            @if(auth()->user()->hasPermission('Programmer', 'read'))
                                 <div>
                                     <div class="btn-group dropdown dropdown-icon-wrapper mr-1 mb-1"> 
                                         <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
