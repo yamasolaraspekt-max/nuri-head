@@ -315,10 +315,12 @@ class InquiryController extends Controller
 
     private function getInquiryPermissions(): array
     {
-        $userId = auth()->user()->name;
+        $user = auth()->user();
+        $isAdmin = (bool) $user->is_admin;
 
+        // FIX P0-09: user_rolls.user_id = users.id (FK), NICHT users.name; Super-Admin-Bypass.
         $roll = DB::table('user_rolls')
-            ->where('user_id', $userId)
+            ->where('user_id', $user->id)
             ->where('item_id', 'Customer')
             ->first();
 
@@ -327,8 +329,8 @@ class InquiryController extends Controller
         };
 
         return [
-            'canUpdate' => $roll && $isAllowed($roll->is_update ?? null),
-            'canDelete' => $roll && $isAllowed($roll->is_delete ?? null),
+            'canUpdate' => $isAdmin || ($roll && $isAllowed($roll->is_update ?? null)),
+            'canDelete' => $isAdmin || ($roll && $isAllowed($roll->is_delete ?? null)),
             'canVerify' => true,
         ];
     }
@@ -1334,6 +1336,8 @@ class InquiryController extends Controller
 
     public function update(Request $request)
     {
+        abort_unless($this->getInquiryPermissions()['canUpdate'], 403, 'Keine Berechtigung, Anfragen zu bearbeiten.'); // FIX P0-09
+
         $this->validateInquiryRequest($request);
 
         $inquiry = Inquiry::findOrFail($request->id);
@@ -1514,6 +1518,8 @@ class InquiryController extends Controller
 
     public function destroy($id)
     {
+        abort_unless($this->getInquiryPermissions()['canDelete'], 403, 'Keine Berechtigung, Anfragen zu loeschen.'); // FIX P0-09
+
         $inquiry = Inquiry::findOrFail($id);
         $inquiry->delete();
 
@@ -1527,6 +1533,8 @@ class InquiryController extends Controller
 
     public function restore($id)
     {
+        abort_unless($this->getInquiryPermissions()['canUpdate'], 403, 'Keine Berechtigung, Anfragen wiederherzustellen.'); // FIX P0-09
+
         $inquiry = Inquiry::withTrashed()->findOrFail($id);
         $inquiry->restore();
 
@@ -1631,6 +1639,8 @@ class InquiryController extends Controller
             'junk_note' => ['nullable', 'string'],
         ]);
 
+        abort_unless($this->getInquiryPermissions()['canDelete'], 403, 'Keine Berechtigung, Anfragen als Junk zu markieren.'); // FIX P0-09
+
         $inquiry = Inquiry::findOrFail($id);
         $inquiry->status = 'Junk';
         $inquiry->junk_reason = $request->input('junk_reason');
@@ -1645,6 +1655,8 @@ class InquiryController extends Controller
 
     public function unjunk(Request $request, $id)
     {
+        abort_unless($this->getInquiryPermissions()['canUpdate'], 403, 'Keine Berechtigung, Anfragen aus Junk zu holen.'); // FIX P0-09
+
         $inquiry = Inquiry::findOrFail($id);
         $inquiry->status = 'Unpublished';
         $inquiry->junk_reason = null;
