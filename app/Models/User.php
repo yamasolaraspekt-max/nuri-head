@@ -73,6 +73,16 @@ class User extends Authenticatable
             ->exists();
     }
 
+    /**
+     * Mitarbeiter-ID dieses Kontos.
+     * In diesem Projekt speichert users.name die employees.id.
+     * Gibt null zurück, wenn name nicht numerisch ist (Null-/Leerwert-Schutz).
+     */
+    public function employeeId(): ?int
+    {
+        return is_numeric($this->name) ? (int) $this->name : null;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Employee
