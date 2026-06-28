@@ -13,8 +13,15 @@ class TimeManagementController extends Controller
 {
     public function index(Employee $employee, Request $request)
     {
-        // TODO: adapt permission check (employee vs admin/supervisor)
-        // if (!Auth::user()->can('viewTimeManagement', $employee)) abort(403);
+        // FIX P0-11: nur eigener Plan, dessen Vorgesetzter (employees.supervisor) oder Admin.
+        $me = (int) (auth()->user()->name ?? 0);
+        abort_unless(
+            auth()->user()->is_admin
+                || ($me > 0 && $me === (int) $employee->id)
+                || ($me > 0 && $me === (int) ($employee->supervisor ?? 0)),
+            403,
+            'Kein Zugriff auf diesen Zeitplan.'
+        );
 
         return view('admin.employee.time_management.time', [
             'employee' => $employee,
@@ -178,8 +185,13 @@ class TimeManagementController extends Controller
 
         $plan = TimeManagementPlan::with('employee')->findOrFail($data['plan_id']);
 
-        // TODO: check that current user belongs to this employee or is admin
-        // if (!Auth::user()->can('submitTimeManagement', $plan->employee)) abort(403);
+        // FIX P0-11: nur der eigene Zeitplan (oder Admin) darf eingereicht werden.
+        $me = (int) (auth()->user()->name ?? 0);
+        abort_unless(
+            auth()->user()->is_admin || ($me > 0 && $me === (int) $plan->employee_id),
+            403,
+            'Nur der eigene Zeitplan darf eingereicht werden.'
+        );
 
         if ($plan->status === 'approved') {
             return response()->json([
@@ -205,9 +217,13 @@ class TimeManagementController extends Controller
             'comment' => 'nullable|string|max:2000',
         ]);
 
-        // Example permission: admin or this employee's supervisor
-        // $employeeSupervisorId = $plan->employee->supervisor;
-        // if (!Auth::user()->hasRole('admin') && Auth::user()->employee_id != $employeeSupervisorId) abort(403);
+        // FIX P0-11: genehmigen/ablehnen nur Admin oder Vorgesetzter; kein Selbst-Genehmigen.
+        $plan->loadMissing('employee');
+        $me = (int) (auth()->user()->name ?? 0);
+        $isAdmin = (bool) auth()->user()->is_admin;
+        $isSupervisor = $me > 0 && $me === (int) ($plan->employee->supervisor ?? 0);
+        abort_unless($isAdmin || $isSupervisor, 403, 'Nur Admin oder Vorgesetzter darf genehmigen/ablehnen.');
+        abort_if(!$isAdmin && $me === (int) $plan->employee_id, 403, 'Der eigene Zeitplan darf nicht selbst genehmigt werden.');
 
         $plan->status      = $data['status'];
         $plan->comment     = $data['comment'] ?? null;
@@ -223,11 +239,14 @@ class TimeManagementController extends Controller
 
     public function slotsIndex(Request $request)
     {
-        // Example permission: only admin / HR / supervisor
-        // Adjust or remove as you like:
-        // if (!Auth::user()->hasRole('admin')) {
-        //     abort(403);
-        // }
+        // FIX P0-11: Gesamtuebersicht nur fuer Admin oder Vorgesetzte (mind. ein zugeordneter Mitarbeiter).
+        $me = (int) (auth()->user()->name ?? 0);
+        abort_unless(
+            auth()->user()->is_admin
+                || ($me > 0 && Employee::where('supervisor', $me)->exists()),
+            403,
+            'Kein Zugriff auf die Zeitplan-Gesamtuebersicht.'
+        );
 
         // Expected format: YYYY-MM (from <input type="month">)
         $monthInput = $request->input('month');
