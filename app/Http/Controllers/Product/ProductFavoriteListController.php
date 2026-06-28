@@ -231,7 +231,7 @@ class ProductFavoriteListController extends Controller
     public function attachProduct(ProductFavoriteList $list, Request $request)
     {
         $this->authorizeView($list);
-        $employeeId = Auth::user()->employee_id ?? null;
+        $employeeId = Auth::user()?->employeeId();
 
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
@@ -272,16 +272,16 @@ class ProductFavoriteListController extends Controller
     // Helpers
     protected function authorizeOwner(ProductFavoriteList $list)
     {
-        $employeeId = Auth::user()->employee_id ?? null;
-        if ($list->employee_id !== $employeeId) {
+        $employeeId = Auth::user()?->employeeId();
+        if ((int) $list->employee_id !== (int) $employeeId) {
             abort(403);
         }
     }
 
     protected function authorizeView(ProductFavoriteList $list)
     {
-        $employeeId = Auth::user()->employee_id ?? null;
-        if ($list->employee_id !== $employeeId && !$list->is_shared) {
+        $employeeId = Auth::user()?->employeeId();
+        if ((int) $list->employee_id !== (int) $employeeId && !$list->is_shared) {
             abort(403);
         }
     }
