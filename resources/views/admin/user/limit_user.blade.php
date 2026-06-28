@@ -3,25 +3,10 @@
 @section('title', 'Limited Users')
 
 @php
-    $authUserKey = auth()->user()->name ?? auth()->id();
-
-    $canAdd = auth()->user()->is_admin == 1 || \Illuminate\Support\Facades\DB::table('user_rolls')
-        ->where('user_rolls.user_id', '=', $authUserKey)
-        ->where('user_rolls.item_id', '=', 'Users')
-        ->where('user_rolls.is_add', '=', 'on')
-        ->first();
-
-    $canUpdate = auth()->user()->is_admin == 1 || \Illuminate\Support\Facades\DB::table('user_rolls')
-        ->where('user_rolls.user_id', '=', $authUserKey)
-        ->where('user_rolls.item_id', '=', 'Users')
-        ->where('user_rolls.is_update', '=', 'on')
-        ->first();
-
-    $canDelete = auth()->user()->is_admin == 1 || \Illuminate\Support\Facades\DB::table('user_rolls')
-        ->where('user_rolls.user_id', '=', $authUserKey)
-        ->where('user_rolls.item_id', '=', 'Users')
-        ->where('user_rolls.is_delete', '=', 'on')
-        ->first();
+    // user_rolls.user_id = users.id, Flags = tinyint(1); hasPermission() kapselt das + Super-Admin-Bypass.
+    $canAdd    = auth()->user()->hasPermission('Users', 'add');
+    $canUpdate = auth()->user()->hasPermission('Users', 'update');
+    $canDelete = auth()->user()->hasPermission('Users', 'delete');
 
     $isMainAdmin = auth()->user()->is_admin == 1;
 @endphp
