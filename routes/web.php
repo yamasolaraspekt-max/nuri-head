@@ -2284,7 +2284,7 @@ Route::group(['middleware' => ['web','auth']], function () {
 
 // Product CRUD
  
-Route::group(['middleware' => 'web', 'is_Admin'], function () {
+Route::group(['middleware' => ['web', 'is_Admin']], function () { // FIX P0-08: is_Admin jetzt wirksam (war Array-Index, wurde ignoriert)
     Route::get('/product', [ProductController::class, 'index'])->name('product.info');
     Route::get('/product_details/{id}', [ProductController::class, 'show'])->name('product.show');
     Route::get('/product_destroy/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
@@ -2482,7 +2482,7 @@ Route::group(['middleware' => 'web'], function () {
 });
 
 //Measure CRUD
-Route::group(['middleware' => 'web', 'is_Admin'], function () {
+Route::group(['middleware' => ['web', 'is_Admin']], function () { // FIX P0-08: is_Admin jetzt wirksam (war Array-Index, wurde ignoriert)
     Route::get('/measure', [MeasureController::class, 'index'])->name('measure.info');
     Route::get('/measure_destroy/{id}', [MeasureController::class, 'destroy'])->name('measure.destroy');
     Route::post('/measure_save', [MeasureController::class, 'store'])->name('measure.store');
@@ -2843,7 +2843,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/country_update', [CountryController::class, 'update'])->name('country.update');
 });
 //Tax CRUD
-Route::group(['middleware' => 'web', 'is_Admin'], function () {
+Route::group(['middleware' => ['web', 'is_Admin']], function () { // FIX P0-08: is_Admin jetzt wirksam (war Array-Index, wurde ignoriert)
     Route::get('/tax', [TaxController::class, 'index'])->name('tax.info');
     Route::get('/tax_destroy/{id}', [TaxController::class, 'destroy'])->name('tax.destroy');
     Route::post('/tax_save', [TaxController::class, 'store'])->name('tax.store');
@@ -2851,7 +2851,7 @@ Route::group(['middleware' => 'web', 'is_Admin'], function () {
 });
 
 //Discount Group CRUD
-Route::group(['middleware' => 'web', 'is_Admin'], function () {
+Route::group(['middleware' => ['web', 'is_Admin']], function () { // FIX P0-08: is_Admin jetzt wirksam (war Array-Index, wurde ignoriert)
     Route::get('/discount_group', [DiscountGroupController::class, 'index'])->name('discount_group.info');
     Route::get('/discount_group_destroy/{id}', [DiscountGroupController::class, 'destroy'])->name('discount_group.destroy');
     Route::post('/discount_group_save', [DiscountGroupController::class, 'store'])->name('discount_group.store');
@@ -2870,7 +2870,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 });
 
 //Formual chechelist
-Route::group(['middleware' => 'web', 'is_Admin'], function () {
+Route::group(['middleware' => ['web', 'is_Admin']], function () { // FIX P0-08: is_Admin jetzt wirksam (war Array-Index, wurde ignoriert)
     Route::get('/product-formula', [ProductFormulaController::class, 'index'])->name('product.formula.index');  
     Route::get('/admin/formula/create/{id}', [ProductFormulaController::class, 'create'])->name('admin.formula.create');
     Route::post('/product-formula/store', [ProductFormulaController::class, 'store'])->name('product.formula.store');

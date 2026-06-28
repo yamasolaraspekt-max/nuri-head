@@ -16,10 +16,16 @@ class is_Admin
      */
     public function handle($request, Closure $next)
     {
-         if (Auth::user() &&  Auth::user()->roll == 1) {
-                return $next($request);
-         }
-    
-        return redirect('/');
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        // FIX P0-08: gefixtes Muster - generischer Admin-Gate = Super-Admin (is_admin).
+        // Vorher: Vergleich auf die nicht-existente Spalte users.roll -> immer false -> sperrte ALLE aus.
+        if (auth()->user()->is_admin) {
+            return $next($request);
+        }
+
+        abort(403, 'Nur fuer Administratoren.');
     }
 }
