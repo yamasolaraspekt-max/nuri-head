@@ -160,6 +160,8 @@ class GeneralTaskController extends Controller
 
     public function update(Request $request, GeneralTask $generalTask)
     {
+        $this->authorize('update', $generalTask); // FIX P0-10: nur Eigentuemer/Assignee/Admin
+
         $request->validate([
             'change_reason' => ['nullable', 'string', 'max:2000'],
         ]);
@@ -261,6 +263,7 @@ class GeneralTaskController extends Controller
         ]);
 
         $task = GeneralTask::with($this->taskRelations())->findOrFail($data['task_id']);
+        $this->authorize('update', $task); // FIX P0-10: kein Status-Move fremder Aufgaben
         $employeeId = (int) auth()->user()->name;
 
         DB::transaction(function () use ($task, $data, $request, $employeeId) {
@@ -329,6 +332,8 @@ class GeneralTaskController extends Controller
 
     public function archive(Request $request, GeneralTask $generalTask)
     {
+        $this->authorize('update', $generalTask); // FIX P0-10
+
         $data = $request->validate([
             'change_reason' => ['nullable', 'string', 'max:2000'],
         ]);
@@ -357,6 +362,8 @@ class GeneralTaskController extends Controller
 
     public function destroy(Request $request, GeneralTask $generalTask)
     {
+        $this->authorize('delete', $generalTask); // FIX P0-10
+
         $data = $request->validate([
             'change_reason' => ['nullable', 'string', 'max:2000'],
             'reason' => ['nullable', 'string', 'max:2000'],
@@ -412,11 +419,24 @@ class GeneralTaskController extends Controller
             ], 422);
         }
 
-        $employeeId = (int) auth()->user()->name;
+        $employeeId = auth()->user()->employeeId();
+        $isAdmin = (bool) auth()->user()->is_admin;
         $status = $data['status'] ?? null;
         $updated = 0;
 
-        DB::transaction(function () use ($data, $status, &$updated) {
+        // FIX P0-10: Reorder/Status-Move nur fuer eigene/zugewiesene Aufgaben (Admin: alle).
+        $scopeOwn = function ($query) use ($employeeId, $isAdmin) {
+            if ($isAdmin) {
+                return $query;
+            }
+
+            return $query->where(function ($w) use ($employeeId) {
+                $w->where('created_by', $employeeId)
+                    ->orWhereHas('assignees', fn($a) => $a->where('employees.id', $employeeId));
+            });
+        };
+
+        DB::transaction(function () use ($data, $status, &$updated, $scopeOwn) {
             if (!empty($data['orders'])) {
                 foreach ($data['orders'] as $row) {
                     $updates = [
@@ -427,8 +447,7 @@ class GeneralTaskController extends Controller
                         $updates['status'] = $row['status'];
                     }
 
-                    GeneralTask::whereKey((int) $row['id'])->update($updates);
-                    $updated++;
+                    $updated += $scopeOwn(GeneralTask::whereKey((int) $row['id']))->update($updates);
                 }
 
                 return;
@@ -449,8 +468,7 @@ class GeneralTaskController extends Controller
                     $updates['status'] = $status;
                 }
 
-                GeneralTask::whereKey($taskId)->update($updates);
-                $updated++;
+                $updated += $scopeOwn(GeneralTask::whereKey($taskId))->update($updates);
             }
         });
 
@@ -541,6 +559,7 @@ class GeneralTaskController extends Controller
         ]);
 
         $task = GeneralTask::withTrashed()->findOrFail($id);
+        $this->authorize('restore', $task); // FIX P0-10
 
         if (method_exists($task, 'restore')) {
             $task->restore();

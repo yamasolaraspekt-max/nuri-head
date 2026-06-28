@@ -21,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
         PersonalTask::class => PersonalTaskPolicy::class,
         ChatGroup::class => ChatGroupPolicy::class,
         \App\Models\AiChat::class => \App\Policies\AiChatPolicy::class,
+        \App\Models\GeneralTask::class => \App\Policies\GeneralTaskPolicy::class, // FIX P0-10
 
 
 
