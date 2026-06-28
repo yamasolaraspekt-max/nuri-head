@@ -26,14 +26,12 @@ class FeedbackController extends Controller
 
     private function isProgrammer(): bool
     {
-        return DB::table('user_rolls')
-            ->where('user_id', auth()->user()->name)
+        // user_rolls.user_id = users.id (FK), Flags = tinyint(1). Super-Admins gelten als berechtigt.
+        return (bool) auth()->user()->is_admin || DB::table('user_rolls')
+            ->where('user_id', auth()->id())
             ->where('item_id', 'Programmer')
             ->where(function ($query) {
-                $query->where('is_read', 'on')
-                    ->orWhere('is_read', 1)
-                    ->orWhere('is_update', 'on')
-                    ->orWhere('is_update', 1);
+                $query->where('is_read', 1)->orWhere('is_update', 1);
             })
             ->exists();
     }
