@@ -19,20 +19,19 @@ class InvoiceMiddleware
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-    
-        $user = DB::table('user_rolls')
-            ->join('users', 'users.name', '=', 'user_rolls.user_id')
-            ->where('user_rolls.user_id', '=', auth()->user()->name)
-            ->where('user_rolls.is_read', '=', 'on')
+
+        // FIX P0-07: gefixtes Muster - user_rolls.user_id = users.id (FK), Flag tinyint(1)=1 (NICHT 'on'),
+        // is_admin-Bypass. Der vorherige Join auf users.name + Flag 'on' ohne Bypass haette ALLE ausgesperrt.
+        $allowed = (bool) auth()->user()->is_admin || DB::table('user_rolls')
+            ->where('user_rolls.user_id', '=', auth()->id())
+            ->where('user_rolls.is_read', '=', 1)
             ->where('user_rolls.item_id', '=', 'Invoice')
-            ->select('user_rolls.user_id')
-            ->value('user_rolls.user_id');
-    
-        // Check if the user is authorized (user exists in the user_rolls table with correct permissions)
-        if (auth()->user()->name == $user) {
+            ->exists();
+
+        if ($allowed) {
             return $next($request);
         }
-    
-        return redirect('/notAdmin');
+
+        abort(403, 'Keine Berechtigung fuer Rechnungen.');
     }
 }

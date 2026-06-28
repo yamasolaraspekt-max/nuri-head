@@ -4467,7 +4467,7 @@ Route::middleware(['auth'])->group(function () {
 });
 // Invoice CRUD
 
-Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'InvoiceMiddleware'])->group(function () { // FIX P0-07: Invoice-Rolle erzwingen
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
     Route::get('/invoices/list', [InvoiceController::class, 'list'])->name('invoices.list');
     Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
@@ -4492,7 +4492,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/invoice-files/{file}/view', [InvoiceController::class, 'viewFile'])->name('invoices.files.view');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'InvoiceMiddleware'])->group(function () { // FIX P0-07: Canvas = Rechnungsbearbeitung
     Route::prefix('invoices/canvas')->name('invoices.canvas.')->group(function () {
         Route::get('/offer-detail/{offerDetail}', [InvoiceCanvasController::class, 'createFromOfferDetail'])
             ->name('offer-detail.create');
