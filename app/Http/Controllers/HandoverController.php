@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Models\Handover;
 use Illuminate\Http\Request;
-use App\Models\Assets;
+use App\Models\Asset;
 use DB;
 use Route;
 use Session;
@@ -94,22 +94,22 @@ class HandoverController extends Controller
 
         if($pervious=="handover.details"){
             session()->forget('handoverID');
-            $data['asset']=Assets::where('quantity', '>', 0)->get();
+            $data['asset']=Asset::where('quantity', '>', 0)->get();
             $data['employee']=Employee::all();
             $data['data']=DB::table('handovers')
                                 ->join('assets', 'assets.id', '=', 'handovers.item_id')
                                 ->select('handovers.*', 'assets.item')
-                                ->where('handover_id', '=', Session('handoverID'))
+                                ->where('handovers.handover_id', '=', Session('handoverID'))
                                 ->get();
             return view('admin.product.handover.handover_create', $data);
         }
         else{
-            $data['asset']=Assets::where('quantity', '>', 0)->get();
+            $data['asset']=Asset::where('quantity', '>', 0)->get();
             $data['employee']=Employee::all();
             $data['data']=DB::table('handovers')
                                 ->join('assets', 'assets.id', '=', 'handovers.item_id')
                                 ->select('handovers.*', 'assets.item')
-                                ->where('handover_id', '=', Session('handoverID'))
+                                ->where('handovers.handover_id', '=', Session('handoverID'))
                                 ->get();
             return view('admin.product.handover.handover_create', $data);
         }
@@ -148,7 +148,7 @@ class HandoverController extends Controller
                 Handover::create($request->all());
           
 
-            Assets::where('id', '=', $request->item_id)->update(['quantity' => $new_quantity]);
+            Asset::where('id', '=', $request->item_id)->update(['quantity' => $new_quantity]);
     
             return redirect()->to('/handover')->with('save_msg', 'Artikel zur Übergabeliste hinzugefügt')->with($handoverID);
         }
@@ -156,7 +156,7 @@ class HandoverController extends Controller
  
     }
     public function next($id){
-        $data['asset']=Assets::where('quantity', '>', 0)->get();
+        $data['asset']=Asset::where('quantity', '>', 0)->get();
         $data['employee']=Employee::all();
         $data['data']=DB::table('handovers')
                             ->join('assets', 'assets.id', '=', 'handovers.item_id')
@@ -231,9 +231,9 @@ class HandoverController extends Controller
     public function destroy($id)
     {
         $data=Handover::find($id);
-        $old_quantity=Assets::where('id', '=', $data->item_id)->select('quantity')->value('quantity');
+        $old_quantity=Asset::where('id', '=', $data->item_id)->select('quantity')->value('quantity');
         $new_quantity= $data->quantity + $old_quantity;
-        Assets::where('id', '=', $data->item_id)->update(['quantity' => $new_quantity]);
+        Asset::where('id', '=', $data->item_id)->update(['quantity' => $new_quantity]);
         $data->delete();
         $handoverID = Session::put('handoverID', $data->handover_id);
         return redirect()->back()->with('delete_msg', 'Der Datensatz wurde erfolgreich gelöscht')->with($handoverID);
@@ -278,7 +278,7 @@ class HandoverController extends Controller
             $data->status="New";
             $data->save();
     
-            Assets::where('id', '=', $request->item_id)->update(['quantity' => $new_quantity]);
+            Asset::where('id', '=', $request->item_id)->update(['quantity' => $new_quantity]);
             $handoverID = Session::put('handoverID', $request->handover_id);
     
             return redirect()->to('/handover')->with('save_msg', 'Artikel zur Übergabeliste hinzugefügt')->with($handoverID);
@@ -290,7 +290,7 @@ class HandoverController extends Controller
             $data->status="New";
             $data->save();
     
-            Assets::where('id', '=', $request->item_id)->update(['quantity' => $new_quantity]);
+            Asset::where('id', '=', $request->item_id)->update(['quantity' => $new_quantity]);
             $handoverID = Session::put('handoverID', $request->handover_id);
             return redirect()->to('/handover')->with('save_msg', 'Artikel zur Übergabeliste hinzugefügt')->with($handoverID);
          
