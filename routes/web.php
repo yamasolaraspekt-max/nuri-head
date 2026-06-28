@@ -2240,7 +2240,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 });
 //  User Roll CRUD
  Route::middleware(['auth'])->prefix('user-rolls')->name('user-rolls.')->group(function () {
-    Route::get('/', [UserRollController::class, 'index'])->name('index');
+    Route::get('/', [UserRollController::class, 'index'])->middleware('permission:Users,read')->name('index'); // FIX P0-13: index analog zu ajax/store absichern
     Route::get('/ajax', [UserRollController::class, 'ajaxIndex'])->middleware('permission:Users,read')->name('ajax');
     Route::post('/', [UserRollController::class, 'store'])->middleware('permission:Users,add')->name('store');
     Route::put('/{userRoll}', [UserRollController::class, 'update'])->middleware('permission:Users,update')->name('update');
