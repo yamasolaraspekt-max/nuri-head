@@ -1,43 +1,44 @@
 # Inventar: Externe Konten & Zugänge
 
-**Stand:** 2026-06-28 · Reine Leseaufgabe — **keine Secret-Werte** in dieser Liste, nur Dienst, Ort im Code und der `.env`-Variablenname. Zweck: klären, **auf wessen Namen** die Konten laufen und ob du selbst Zugang hast.
+**Stand:** 2026-06-28 · Reine Doku — **keine Secret-Werte**, nur Dienst, Ort im Code, Eigentümer-Hinweis (aus Code/Config gelesen) und konkreter nächster Schritt. Zweck: klären, **wem der Zugang gehört** und ob **du selbst Zugriff** hast.
 
-## 1. API-/Datendienste mit Schlüssel/Login (Zugang zu klären)
-| Dienst | Zweck | Host | Ort im Code | Schlüssel (.env) | Zugang? |
+## Wichtigste Eigentümer-Hinweise (nur was im Code/Config steht)
+- **Ramin Sadid** (Ex-Programmierer): erster Git-Commit (`Ramin Sadid`), `origin`-Repo = `raminsadid2021`. Ihm gehört das Original-Repo (und das Tomorrow.io-Konto).
+- **Solar Aspekt** (Firma): Mail-Absender „SOLAR ASPEKT", `leads@solar-aspekt.de`, Bitrix-Konto `solaraspekt`, Mapbox-Konto `solar-aspekt`.
+- **„Nuri"** = dein Nachname (Yama **Nuri**): Domains `nuri-head.de`, `nuri-software.de` (`hallo@nuri-software.de`).
+- **Mail läuft über Goneo** (`smtp.goneo.de`, Konto `noreply@nuri-head.de`) — **nicht** kasserver (das war nur ein ungenutzter Config-Standardwert).
+
+---
+
+## 🔴 Existenzbedrohend, wenn du KEINEN Zugang hast
+| Dienst | Wo referenziert | Eigentümer-Hinweis | Schlimmster Fall ohne Zugang | Dein Zugang? | Status / nächster Schritt |
 |---|---|---|---|---|---|
-| **Tomorrow.io** | Wetter (Dashboard) | api.tomorrow.io | `EmployeeDashboardController::fetchWeatherData` | `DASHBOARD_KEY` | ⚠️ **Ex-Programmierer**, kostenlos → später tauschen |
-| **OpenWeatherMap** | Wetter (Admin) | api.openweathermap.org | `AdminController::getWeatherData` | `WEATHER_API_KEY` | ❓ wessen Konto? |
-| **RapidAPI** (Weatherbit) | Wetter | weatherbit-v1-mashape.p.rapidapi.com | `ToolsController` | `RAPIDAPI_KEY` | ❓ |
-| **myUplink / NIBE** | Wärmepumpen-Daten (OAuth) | api.myuplink.com, login.myuplink.com | `Api/ApiLinkController` | `MYUPLINK_CLIENT_ID`, `MYUPLINK_CLIENT_SECRET` | ❓ NIBE-Entwicklerkonto |
-| **Google Maps** | Karten | maps.googleapis.com | viele Blade-Views | `GOOGLE_MAPS_KEY` | ❓ Google-Cloud-Konto |
-| **Mapbox** | Karten/Adresssuche | api.mapbox.com | `customer/customer_page/prof.blade.php` | `MAPBOX_TOKEN` | ❓ Mapbox-Konto |
-| **Bitrix24** | Chat-Integration | solaraspekt.bitrix24.de | `Bitrix-/MessageController` | (Webhook/Token in `.env`) | Firmen-Konto „solaraspekt" |
-| **IDS / GC Online** | Artikel-Shop-Schnittstelle | gconlineplus.de | `config/services.php → ids` | `IDS_USERNAME`, `IDS_PASSWORD`, `IDS_KNDNR` | ❓ Händler-/Kundenkonto |
-| **NewsAPI** | News-Widget | newsapi.org | `config/services.php → newsapi` | `NEWSAPI_KEY` | ❓ |
-| **AWS** (S3 + SES) | Dateispeicher / Mailversand | s3.eu-central-1.amazonaws.com | `config/services.php → ses`, filesystems | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | ❓ AWS-Konto |
-| **Mailgun / Postmark** | Mailversand (Alternativen) | api.mailgun.net | `config/services.php` | `MAILGUN_*`, `POSTMARK_TOKEN` | ❓ evtl. ungenutzt |
+| **Domain `nuri-head.de`** (DNS/Registrar) | `ApiLinkController` redirectUri, `.env MAIL_FROM` | „Nuri" = dein Name; `noreply@nuri-head.de` | **Website + Mail komplett tot** | ❓ | **DENIC-WebWhois prüfen** (webwhois.denic.de) — läuft sie auf Solar Aspekt oder Privatperson? Registrar + Inhaber feststellen. |
+| **Webhosting / Server** (nuri-head.de) | nicht im Code; Indiz: Mail über **Goneo** | vermutlich Goneo | **Kein Deploy, kein Zugriff auf Live-App** | ❓ | Klären, wo nuri-head.de gehostet ist (zuerst Goneo prüfen) und **Hosting-/Server-Login besorgen**. |
+| **Mail (Goneo)** `smtp.goneo.de` | `config/mail.php`, `.env MAIL_HOST/USERNAME` | Konto `noreply@nuri-head.de` | **Keine System-Mails** (Benachrichtigungen, Passwort-Resets) | ❓ | **Zugangsdaten zum Goneo-Konto** (noreply@nuri-head.de) suchen/klären. |
+| **GitHub `origin`** | `git remote origin` | **Ramin Sadid** (`raminsadid2021`) | gehört Ramin — aber privates Backup existiert | ❌ (nur Lesen) | **Erledigt** — privates Backup `nurihead` existiert. Nur klären, ob ein **gemeinsames Repo mit Ramin** gewünscht ist. |
 
-## 2. Freie Dienste (kein Konto/Schlüssel nötig)
-Open-Meteo (`api.open-meteo.com`), DWD (`www.dwd.de`), JRC PVGIS (`re.jrc.ec.europa.eu`, EU-Solardaten), Overpass/OpenStreetMap (`overpass-api.de`), Geo-IP (`ipapi.co`, `ipinfo.io`, `api.iplocation.net`), Avatare (`ui-avatars.com`). → kein Handlungsbedarf.
+## 🟠 Wichtig (Geschäfts-Integrationen brechen)
+| Dienst | Wo referenziert | Eigentümer-Hinweis | Schlimmster Fall | Dein Zugang? | Status / nächster Schritt |
+|---|---|---|---|---|---|
+| **IDS / GC Online** (Artikel-Shop) | `services.ids`, `.env IDS_*` | **Kundennr. 017896**, User 160160017896 | Artikel-/Shop-Sync bricht | ❓ | GC-Online-**Händlerkonto (Kundennr. 017896)** zuordnen — auf wessen Namen? Login besorgen. |
+| **Bitrix24** (Chat) | `MessageController`, Bitrix | Konto **`solaraspekt`** | Chat-Integration tot | ❓ | **Bitrix24-Admin-Zugang** für `solaraspekt.bitrix24.de` klären. |
+| **myUplink / NIBE** (Wärmepumpen) | `ApiLinkController`, `.env MYUPLINK_*` | OAuth-App, Redirect `nuri-head.de` | Wärmepumpen-Daten weg | ❓ | **NIBE/myUplink-Entwicklerkonto** identifizieren, Zugang besorgen. |
+| **Google Maps** | viele Views, `.env GOOGLE_MAPS_KEY` | Google-Cloud-Projekt | Karten aus (App läuft sonst) | ❓ | **Google-Cloud-Konto** mit dem Maps-Key identifizieren; Key per Referrer einschränken (offener Audit-Punkt). |
+| **Mapbox** | `prof.blade`, `.env MAPBOX_TOKEN` | Konto **`solar-aspekt`** | eine Adress-Karte aus | ❓ | **Mapbox-Konto `solar-aspekt`** — Login klären; Token per URL einschränken. |
+| **AWS** (S3/SES) | `services.ses`, filesystems | Bucket **leer**, Mail über Goneo | wohl **ungenutzt** → kaum Schaden | ❓ | Prüfen, ob AWS überhaupt genutzt wird — sonst aus Config entfernen/ignorieren. |
 
-## 3. Mail / IMAP
-- **Ausgehende Mail (SMTP):** `config/mail.php`, `.env MAIL_*`.
-- **Mail-Hosting:** Standard-IMAP-Host im Code = `w00dfa8e.kasserver.com` → Hoster **ALL-INKL (KAS)**. Zugang zum Mail-/Webhosting? ❓
-- **IMAP-Abruf der Lead-Mails:** pro Konto in der **Datenbank** gespeichert (`LeadEmailAccounts`), Host/Benutzer/Passwort vom Nutzer eingegeben. ⚠️ Passwörter liegen aktuell **im Klartext** in der DB (Audit #16).
+## 🟢 Harmlos / geklärt
+| Dienst | Wo | Eigentümer | Status / nächster Schritt |
+|---|---|---|---|
+| **Tomorrow.io** (Wetter) | `EmployeeDashboardController` | **Ex-Programmierer** (kostenlos) | ✅ **Geklärt/unkritisch** — später eigenes kostenloses Konto anlegen (TODO steht in `.env`). |
+| **OpenWeatherMap, RapidAPI, NewsAPI** | `services.*` | ❓ (unkritisch) | ✅ **Unkritisch** — bei Bedarf eigenes kostenloses Konto. |
+| Open-Meteo, DWD, PVGIS, Overpass, Geo-IP, ui-avatars | div. | **kein Konto** (frei) | ✅ Kein Handlungsbedarf. |
 
-## 4. Domain / Hosting
-- **Produktiv-Domain:** `nuri-head.de` (in `ApiLinkController` als OAuth-Redirect). DNS-/Hosting-Zugang? ❓
-- Firmen-Sites: `solar-aspekt.de`, `solaraspekt.bitrix24.de`.
-- **Produktionsserver** (wo `nuri-head.de` läuft): aus dem Code **nicht** ermittelbar → ❓ klären (Hoster, evtl. Ex-Programmierer).
-- Lokal: `ticket.test` (Herd, dein Rechner).
+---
 
-## 5. Git / Code-Hosting
-- **origin** = `github.com/raminsadid2021/nuri-head` (öffentlich) — vermutlich **Ex-Programmierer/Owner**, du hast **keinen Schreibzugang** (403 bestätigt).
-- **fork** = `github.com/yamasolaraspekt-max/nuri-head` (öffentlich) — **dein** Konto.
-- **Privates Repo** für den App-Code: **noch einzurichten** (für das Backup von `app/`+`routes/`).
-
-## Kurz: was du klären solltest (Priorität)
-1. **GitHub origin** (raminsadid2021) + **Produktions-Hosting/Server** für nuri-head.de — wer hat Zugang?
-2. **myUplink/NIBE**, **Google Cloud (Maps)**, **Mapbox**, **AWS**, **IDS-Händlerkonto** — auf wessen Namen?
-3. **Mail-Hosting (ALL-INKL/kasserver)** — Zugangsdaten?
-4. **Tomorrow.io** — unkritisch (kostenlos), später eigenes Konto.
+## 👉 Priorität zum Nachhaken
+1. **Domain `nuri-head.de`** (WebWhois) — wichtigster Punkt: ohne sie sind Website + Mail weg.
+2. **Goneo-Konto** (Hosting + Mail).
+3. **GitHub origin (Ramin)** — Backup erledigt; nur gemeinsames Repo klären.
+4. **IDS 017896, Bitrix `solaraspekt`, Google/Mapbox, NIBE** — Inhaber + Login klären.
