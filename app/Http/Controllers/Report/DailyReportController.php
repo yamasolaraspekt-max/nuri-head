@@ -1648,12 +1648,16 @@ class DailyReportController extends Controller
 
     private function isAdmin()
     {
-        $employeeId = (int) auth()->user()->name;
+        $user = auth()->user();
 
-        return session('force_admin_view') === true || DB::table('user_rolls')
-            ->where('user_id', $employeeId)
-            ->where('item_id', 'Administrator')
-            ->exists();
+        // user_rolls.user_id ist FK auf users.id (NICHT employees.id/name).
+        // Super-Admins (is_admin) sind generell Admin.
+        return session('force_admin_view') === true
+            || (bool) $user->is_admin
+            || DB::table('user_rolls')
+                ->where('user_id', $user->id)
+                ->where('item_id', 'Administrator')
+                ->exists();
     }
 
 
@@ -1665,8 +1669,8 @@ class DailyReportController extends Controller
         $user = DB::table('users')->where('email', $email)->first();
 
         if ($user && Hash::check($password, $user->password)) {
-            $hasAdminRole = DB::table('user_rolls')
-                ->where('user_id', $user->name) // ✅ user.id = user_rolls.user_id
+            $hasAdminRole = (bool) $user->is_admin || DB::table('user_rolls')
+                ->where('user_id', $user->id) // user_rolls.user_id = users.id (FK)
                 ->where('item_id', 'Administrator')
                 ->exists();
 
