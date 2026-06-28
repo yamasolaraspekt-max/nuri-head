@@ -17,6 +17,14 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        // FIX P0-06: Benutzerverwaltung erfordert das 'Users'-Recht je Aktion.
+        // CheckUserPermission nutzt die in Paket 1 reparierte hasPermission() (users.id + is_admin-Bypass),
+        // laeuft also auf dem gefixten Muster -> Aktivieren sperrt Admins NICHT aus.
+        $this->middleware('permission:Users,read')->only(['admin_user', 'limit_user', 'adminUsersPage', 'adminUsersFetch']);
+        $this->middleware('permission:Users,add')->only(['store', 'limit_store', 'adminUsersStore']);
+        $this->middleware('permission:Users,update')->only(['make_limit', 'active', 'deactive', 'limit_edit', 'adminUsersUpdate', 'adminUsersToggleActive', 'adminUsersPassword']);
+        $this->middleware('permission:Users,delete')->only(['destroy', 'limit_destroy', 'adminUsersDestroy']);
     }
 
     /* =========================================================================
@@ -133,7 +141,7 @@ class UserController extends Controller
         $user->name      = $employeeId; // employee_id stored in users.name
         $user->email     = $request->email;
         $user->password  = bcrypt($request->password);
-        $user->is_admin  = (int) ($request->input('is_admin', 1));
+        $user->is_admin  = auth()->user()->is_admin ? (int) ($request->input('is_admin', 1)) : 0; // FIX P0-06: Nicht-Admins koennen keinen Admin anlegen
         $user->is_active = $request->has('is_active') ? 1 : 1; // keep legacy default active
         $user->save();
 
@@ -208,6 +216,9 @@ class UserController extends Controller
 
     public function admin_destroy($id)
     {
+        // FIX P0-06: Admin-Konten loeschen darf NUR ein bestehender Admin.
+        abort_unless((bool) auth()->user()->is_admin, 403, 'Nur Administratoren duerfen Admin-Konten loeschen.');
+
         $user = User::findOrFail($id);
 
         if ($this->isSelf($user)) {
@@ -487,6 +498,9 @@ class UserController extends Controller
 
     public function make_admin($id)
     {
+        // FIX P0-06: Admin-Rechte vergeben darf NUR ein bestehender Admin (Privilege-Escalation-Schutz).
+        abort_unless((bool) auth()->user()->is_admin, 403, 'Nur Administratoren duerfen Admin-Rechte vergeben.');
+
         $user = User::findOrFail($id);
 
         if ($this->isSelf($user)) {
@@ -666,7 +680,7 @@ public function adminUsersPage()
             'name'      => (string) $data['employee_id'], // employee_id stored in users.name
             'email'     => $data['email'],
             'password'  => Hash::make($data['password']),
-            'is_admin'  => (int) $data['is_admin'],
+            'is_admin'  => auth()->user()->is_admin ? (int) $data['is_admin'] : 0, // FIX P0-06: Nicht-Admins koennen keinen Admin anlegen
             'is_active' => $request->boolean('is_active') ? 1 : 0,
         ]);
 
@@ -688,7 +702,7 @@ public function adminUsersPage()
 
         $user->name      = (string) $data['employee_id'];
         $user->email     = $data['email'];
-        $user->is_admin  = (int) $data['is_admin'];
+        $user->is_admin  = auth()->user()->is_admin ? (int) $data['is_admin'] : (int) $user->is_admin; // FIX P0-06: Nicht-Admins koennen das Admin-Flag nicht aendern
         $user->is_active = (int) $data['is_active'];
         $user->save();
 
@@ -735,6 +749,9 @@ public function adminUsersPage()
 
     public function adminUsersToggleAdmin(User $user)
     {
+        // FIX P0-06: Admin-Rechte umschalten darf NUR ein bestehender Admin.
+        abort_unless((bool) auth()->user()->is_admin, 403, 'Nur Administratoren duerfen Admin-Rechte aendern.');
+
         if ($this->isSelf($user)) {
             return response()->json([
                 'message' => 'You cannot change your own role here.',
