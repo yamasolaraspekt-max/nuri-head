@@ -594,13 +594,7 @@ $defaultImage = asset('images/icons/placeholder.svg');
         </div>
       </div>
 
-      @if(
-  DB::table('user_rolls')
-    ->where('user_rolls.user_id', auth()->user()->name)
-    ->where('user_rolls.item_id', 'Employee')
-    ->where('user_rolls.is_add', 'on')
-    ->first()
-)
+      @if(auth()->user()->hasPermission('Employee', 'add'))
         <button type="button" class="oc-btn" onclick="openModal('createBranchModal')">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 5v14M5 12h14"></path>
@@ -800,7 +794,7 @@ $defaultImage = asset('images/icons/placeholder.svg');
                   </svg>
                 </a>
 
-                @if(DB::table('user_rolls')->where('user_rolls.user_id', auth()->user()->name)->where('user_rolls.item_id', 'Employee')->where('user_rolls.is_update', 'on')->first())
+                @if(auth()->user()->hasPermission('Employee', 'update'))
                   <button
                     type="button"
                     class="oc-btn-ic primary js-open-edit"
@@ -855,7 +849,7 @@ $defaultImage = asset('images/icons/placeholder.svg');
                   </a>
                 @endif
 
-                @if(DB::table('user_rolls')->where('user_rolls.user_id', auth()->user()->name)->where('user_rolls.item_id', 'Employee')->where('user_rolls.is_delete', 'on')->first())
+                @if(auth()->user()->hasPermission('Employee', 'delete'))
                   <a href="{{ route('branch.destroy', $branch->id) }}"
                      class="oc-btn-ic danger"
                      title="Löschen"
