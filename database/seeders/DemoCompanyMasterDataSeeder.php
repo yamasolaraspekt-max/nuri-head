@@ -112,9 +112,21 @@ class DemoCompanyMasterDataSeeder extends Seeder
             DB::table('contract_types')->updateOrInsert(['contract_type' => $ct[0]], ['contract_duration' => $ct[1], 'created_at' => $now, 'updated_at' => $now]);
         }
 
-        // ── Produkte (article_groups) ──────────────────────────────────
-        foreach ([['Photovoltaik-Anlage', 'PV'], ['Wärmepumpe', 'WP'], ['Stromspeicher', 'SP'], ['Wallbox', 'WB'], ['Elektroinstallation', 'EL']] as $ag) {
+        // ── Produkte / Gewerke (article_groups) ────────────────────────
+        // Alte Platzhalter-Gruppen entfernen, vollständige Produktpalette setzen.
+        DB::table('article_groups')->whereIn('article_group', ['Photovoltaik-Anlage', 'Stromspeicher', 'Elektroinstallation'])->delete();
+        $products = [
+            ['Photovoltaik', 'PV'], ['Wärmepumpe', 'WP'], ['Batteriespeicher', 'BS'], ['Wallbox', 'WB'],
+            ['Fenster', 'FE'], ['Türen', 'TR'], ['Badsanierung', 'BAD'], ['Küche', 'KU'],
+            ['Fliesen', 'FL'], ['Dach', 'DA'], ['Insektenschutz', 'IS'], ['Fliegengitter', 'FG'], ['Tapete', 'TA'],
+        ];
+        foreach ($products as $ag) {
             DB::table('article_groups')->updateOrInsert(['article_group' => $ag[0]], ['initial' => $ag[1], 'min_value' => 0, 'max_value' => 0, 'created_at' => $now, 'updated_at' => $now]);
+        }
+
+        // ── Dienstleistungen (inquiry_types) ───────────────────────────
+        foreach (['Komplettlösung', 'Verkauf', 'Montage', 'Planung', 'Reparatur', 'Reklamation', 'Wartung', 'Sonstiges'] as $svc) {
+            DB::table('inquiry_types')->updateOrInsert(['type' => $svc], ['created_at' => $now, 'updated_at' => $now]);
         }
 
         // ── Rechte-Items: Sidebar-Sektionen + Spezial-Items ────────────
