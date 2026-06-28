@@ -435,7 +435,8 @@ Route::get('/fix-notes', function () {
 })->middleware('auth');
 
 Route::get('/notAdmin', [AdminController::class, 'notAdmin'])->name('notweb');
-Route::get('/system-warning/current', [SystemWarningController::class, 'current'])->name('system-warning.current');
+// FIX P0-05: Systemhinweis nicht anonym (wird nicht vor dem Login gebraucht).
+Route::get('/system-warning/current', [SystemWarningController::class, 'current'])->name('system-warning.current')->middleware('auth');
 Route::get('/browser-info', [AdminController::class, 'showDetails'])->name('browser.info');
 Route::middleware(['auth'])->get('/api/sidebar-counts', [SidebarCountController::class, 'index'])->name('api.sidebar.counts');
 Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(function () {
