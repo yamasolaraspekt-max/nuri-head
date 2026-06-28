@@ -3258,8 +3258,10 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/lead_send_email_view', [EmailConfigurationController::class, 'send'])->name('lead.email.send');
 });
 
-//Creating Angebot | Offer 
-Route::prefix('offers')->name('offers.')->group(function () {
+//Creating Angebot | Offer
+// FIX P0-04: interner Angebots-Wizard inkl. Kalkulation/Netto-Preise hinter auth.
+// Kein oeffentlicher (tokenisierter) Kunden-Angebotslink vorhanden -> ganze Gruppe auth.
+Route::middleware('auth')->prefix('offers')->name('offers.')->group(function () {
     Route::get('/wizard', [OfferWizardController::class, 'index'])
         ->name('wizard');
     Route::get('/wizard-smart', [OfferWizardController::class, 'smart'])
