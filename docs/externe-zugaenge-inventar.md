@@ -5,7 +5,7 @@
 ## Wichtigste Eigentümer-Hinweise (nur was im Code/Config steht)
 - **Ramin Sadid** (Ex-Programmierer): erster Git-Commit (`Ramin Sadid`), `origin`-Repo = `raminsadid2021`. Ihm gehört das Original-Repo (und das Tomorrow.io-Konto).
 - **Solar Aspekt** (Firma): Mail-Absender „SOLAR ASPEKT", `leads@solar-aspekt.de`, Bitrix-Konto `solaraspekt`, Mapbox-Konto `solar-aspekt`.
-- **„Nuri"** = dein Nachname (Yama **Nuri**): Domains `nuri-head.de`, `nuri-software.de` (`hallo@nuri-software.de`).
+- **„Nuri"** = dein Nachname (Yama **Nuri**): Domain **`nuri-head.de` gehört dir** (von dir bestätigt ✅); außerdem `nuri-software.de` (`hallo@nuri-software.de`).
 - **Mail läuft über Goneo** (`smtp.goneo.de`, Konto `noreply@nuri-head.de`) — **nicht** kasserver (das war nur ein ungenutzter Config-Standardwert).
 
 ---
@@ -13,7 +13,7 @@
 ## 🔴 Existenzbedrohend, wenn du KEINEN Zugang hast
 | Dienst | Wo referenziert | Eigentümer-Hinweis | Schlimmster Fall ohne Zugang | Dein Zugang? | Status / nächster Schritt |
 |---|---|---|---|---|---|
-| **Domain `nuri-head.de`** (DNS/Registrar) | `ApiLinkController` redirectUri, `.env MAIL_FROM` | „Nuri" = dein Name; `noreply@nuri-head.de` | **Website + Mail komplett tot** | ❓ | **DENIC-WebWhois prüfen** (webwhois.denic.de) — läuft sie auf Solar Aspekt oder Privatperson? Registrar + Inhaber feststellen. |
+| **Domain `nuri-head.de`** (DNS/Registrar) | `ApiLinkController` redirectUri, `.env MAIL_FROM` | **gehört dir** (bestätigt) | (abgesichert) | ✅ **ja** | ✅ **Geklärt — Domain gehört dir.** Existenzrisiko hier entschärft. |
 | **Webhosting / Server** (nuri-head.de) | nicht im Code; Indiz: Mail über **Goneo** | vermutlich Goneo | **Kein Deploy, kein Zugriff auf Live-App** | ❓ | Klären, wo nuri-head.de gehostet ist (zuerst Goneo prüfen) und **Hosting-/Server-Login besorgen**. |
 | **Mail (Goneo)** `smtp.goneo.de` | `config/mail.php`, `.env MAIL_HOST/USERNAME` | Konto `noreply@nuri-head.de` | **Keine System-Mails** (Benachrichtigungen, Passwort-Resets) | ❓ | **Zugangsdaten zum Goneo-Konto** (noreply@nuri-head.de) suchen/klären. |
 | **GitHub `origin`** | `git remote origin` | **Ramin Sadid** (`raminsadid2021`) | gehört Ramin — aber privates Backup existiert | ❌ (nur Lesen) | **Erledigt** — privates Backup `nurihead` existiert. Nur klären, ob ein **gemeinsames Repo mit Ramin** gewünscht ist. |
@@ -38,7 +38,7 @@
 ---
 
 ## 👉 Priorität zum Nachhaken
-1. **Domain `nuri-head.de`** (WebWhois) — wichtigster Punkt: ohne sie sind Website + Mail weg.
-2. **Goneo-Konto** (Hosting + Mail).
+1. ~~Domain `nuri-head.de`~~ — ✅ **geklärt, gehört dir.**
+2. **Goneo-Konto** (Hosting + Mail `noreply@nuri-head.de`) — Login bestätigen (Domain gehört dir → Hosting vermutlich auch in deiner Kontrolle).
 3. **GitHub origin (Ramin)** — Backup erledigt; nur gemeinsames Repo klären.
 4. **IDS 017896, Bitrix `solaraspekt`, Google/Mapbox, NIBE** — Inhaber + Login klären.
