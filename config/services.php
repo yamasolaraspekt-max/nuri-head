@@ -44,6 +44,18 @@ return [
         'client_secret' => env('MYUPLINK_CLIENT_SECRET'),
     ],
 
+    'openweather' => [
+        'key' => env('WEATHER_API_KEY'),
+    ],
+
+    'tomorrowio' => [
+        'key' => env('DASHBOARD_KEY'),
+    ],
+
+    'rapidapi' => [
+        'key' => env('RAPIDAPI_KEY'),
+    ],
+
     'ollama' => [
         'host' => env('OLLAMA_HOST','http://127.0.0.1:11434'),
         'model' => env('OLLAMA_MODEL','llama3:instruct'),
