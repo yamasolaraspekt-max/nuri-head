@@ -653,7 +653,10 @@ Route::prefix('admin')
     });
 
 
-Route::group(['middleware' =>   'web'], function(){ 
+// FIX P0-01: interne Fusion-Admin-Endpunkte hinter auth (anonymes Leck der Website-Leads).
+// Der eingehende Webhook /receive-fusion-form (oben, ausserhalb dieser Gruppe) bleibt public,
+// ist aber per Shared-Secret X-Fusion-Form-Token geschuetzt.
+Route::group(['middleware' => ['web', 'auth']], function(){
     Route::get('/admin/fusion-forms', [FusionFormSubmissionController::class, 'index'])->name('fusion.forms.index');
     Route::get('/admin/fusion-forms/{id}', [FusionFormSubmissionController::class, 'show'])->name('fusion.forms.show');
     Route::get('/admin/fusion-forms/import', [FusionFormSubmissionController::class, 'importFromGoneo'])->name('fusion.forms.import');
