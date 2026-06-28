@@ -8,11 +8,11 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 /**
- * DEMO-Firma „Solar Aspekt Nord GmbH" — Stammdaten / Gerüst (Schritt 1).
+ * DEMO-Firma „Solar Aspekt Nord GmbH" — Stammdaten / Gerüst (Schritt 1+2).
  *
- * Idempotent (updateOrInsert auf natürliche Schlüssel). Nur frei erfundene Daten.
- * Reihenfolge: Niederlassung → Abteilungen → Teams → Qualifikationen/Positionen →
- * Vertragstypen → Produkte → Rechte-Items → Sprachen/Länder → Urlaubsanspruch → Arbeitsorte.
+ * Idempotent: bestehende Demo-Belegschaft & -Struktur (@solar-aspekt-nord.test bzw. dieser
+ * Niederlassung) werden zuerst restlos entfernt, dann frisch gesetzt. Nur frei erfundene Daten.
+ * Reihenfolge: Niederlassung → Reset → Abteilungen (16) → Teams → Positionen → Stammdaten → 50 MA.
  */
 class DemoCompanyMasterDataSeeder extends Seeder
 {
@@ -30,49 +30,69 @@ class DemoCompanyMasterDataSeeder extends Seeder
         );
         $branchId = DB::table('branches')->where('slug', 'solar-aspekt-nord')->value('id');
 
-        // ── Abteilungen ────────────────────────────────────────────────
-        $departments = ['Vertrieb', 'Planung & Technik', 'Montage & Bau', 'Lager & Einkauf', 'Buchhaltung & Verwaltung', 'Kundendienst'];
+        // ── Idempotenter Reset: alte Demo-Belegschaft & -Struktur dieser Niederlassung entfernen ──
+        $demoEmpIds  = DB::table('employees')->where('email', 'like', '%@solar-aspekt-nord.test')->pluck('id')->all();
+        $demoUserIds = DB::table('users')->where('email', 'like', '%@solar-aspekt-nord.test')->pluck('id')->all();
+        if ($demoUserIds) {
+            DB::table('user_rolls')->whereIn('user_id', $demoUserIds)->delete();
+            DB::table('users')->whereIn('id', $demoUserIds)->delete();
+        }
+        if ($demoEmpIds) {
+            DB::table('employee_departments')->whereIn('employee_id', $demoEmpIds)->delete();
+            DB::table('department_positions')->whereIn('employee_id', $demoEmpIds)->delete();
+            DB::table('employees')->whereIn('id', $demoEmpIds)->delete();
+        }
+        $oldDepIds = DB::table('departments')->where('branch_id', $branchId)->pluck('id')->all();
+        if ($oldDepIds) {
+            DB::table('teams')->whereIn('department_id', $oldDepIds)->delete();
+            DB::table('employee_departments')->whereIn('department_id', $oldDepIds)->delete();
+            DB::table('department_positions')->whereIn('department_id', $oldDepIds)->delete();
+            DB::table('departments')->whereIn('id', $oldDepIds)->delete();
+        }
+
+        // ── Abteilungen (16, gewerkeorientiert) ────────────────────────
+        $departments = [
+            'Heizung', 'Elektro', 'SHK', 'Bauelemente', 'Schreiner', 'Dachdecker', 'Maler',
+            'Fliesenleger', 'Baudekoration', 'Controlling', 'Marketing', 'Finanzen',
+            'Buchhaltung', 'Verwaltung', 'Management', 'Geschäftsführung',
+        ];
         $depIds = [];
         foreach ($departments as $i => $name) {
             DB::table('departments')->updateOrInsert(
                 ['department_name' => $name, 'branch_id' => $branchId],
-                ['order' => $i + 1, 'description' => $name . ' der Solar Aspekt Nord GmbH', 'status' => 'active', 'created_at' => $now, 'updated_at' => $now]
+                ['order' => $i + 1, 'description' => 'Abteilung ' . $name . ' der Solar Aspekt Nord GmbH', 'status' => 'active', 'created_at' => $now, 'updated_at' => $now]
             );
             $depIds[$name] = DB::table('departments')->where('department_name', $name)->where('branch_id', $branchId)->value('id');
         }
 
-        // ── Teams (je Abteilung) ───────────────────────────────────────
-        $teams = [
-            ['Vertriebsteam Nord', 'Vertrieb'], ['Planungsteam', 'Planung & Technik'],
-            ['Montageteam A', 'Montage & Bau'], ['Montageteam B', 'Montage & Bau'],
-            ['Lager- & Einkaufsteam', 'Lager & Einkauf'], ['Verwaltungsteam', 'Buchhaltung & Verwaltung'],
-            ['Kundendienstteam', 'Kundendienst'],
-        ];
-        foreach ($teams as $t) {
+        // ── Teams (eines je Abteilung) ─────────────────────────────────
+        foreach ($depIds as $depName => $depId) {
             DB::table('teams')->updateOrInsert(
-                ['slug' => Str::slug($t[0])],
-                ['name' => $t[0], 'department_id' => $depIds[$t[1]], 'description' => $t[0], 'status' => 'active', 'created_at' => $now, 'updated_at' => $now]
+                ['slug' => Str::slug('Team ' . $depName)],
+                ['name' => 'Team ' . $depName, 'department_id' => $depId, 'description' => 'Team ' . $depName, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now]
             );
         }
 
-        // ── Qualifikationen (Gewerke) + Positionen (Funktionen) ────────
-        // [Qualifikation, Funktion/Position, Stundensatz €]
+        // ── Qualifikationen / Funktionen (Rollen) + Positionen ─────────
+        // [Qualifikation/Rolle, Funktionsbezeichnung, Stundensatz €]
         $roles = [
             ['Geschäftsführung', 'Geschäftsführer/in', 0],
-            ['Elektromeister', 'Meister/in Elektrotechnik', 75],
-            ['Elektrofachkraft', 'Elektriker/in', 55],
-            ['Anlagenmechaniker SHK', 'SHK-Monteur/in', 55],
-            ['PV-Monteur', 'PV-Monteur/in', 48],
-            ['Dachmonteur', 'Dachmonteur/in', 50],
-            ['Disponent', 'Disponent/in', 45],
-            ['Vertriebsberater', 'Vertriebsberater/in', 50],
-            ['Projektplaner', 'Projektplaner/in', 52],
-            ['Lagerist', 'Lagerist/in', 38],
-            ['Buchhalter', 'Buchhalter/in', 45],
-            ['Bürokraft', 'Sachbearbeiter/in', 38],
+            ['Management', 'Manager/in', 65],
+            ['Meister', 'Meister/in', 70],
+            ['Geselle', 'Geselle/in', 45],
+            ['Helfer', 'Helfer/in', 30],
+            ['Techniker', 'Techniker/in', 50],
+            ['Planer', 'Planer/in', 52],
+            ['Designer', 'Designer/in', 48],
+            ['Controlling', 'Controller/in', 58],
+            ['Außendienst', 'Außendienstmitarbeiter/in', 50],
+            ['Innendienst', 'Innendienstmitarbeiter/in', 40],
+            ['Buchhaltung', 'Buchhalter/in', 45],
+            ['Marketing', 'Marketing-Manager/in', 48],
+            ['Verwaltung', 'Sachbearbeiter/in', 38],
+            ['Ausbildung', 'Azubi', 14],
         ];
         $qualId = [];
-        $posId = [];
         foreach ($roles as $i => $r) {
             DB::table('position_qualifications')->updateOrInsert(
                 ['name' => $r[0]],
@@ -85,7 +105,6 @@ class DemoCompanyMasterDataSeeder extends Seeder
                 ['qualification_id' => $qualId[$r[0]], 'qualification' => $r[0], 'price' => $r[2],
                  'description' => $r[1], 'status' => 'active', 'created_at' => $now, 'updated_at' => $now]
             );
-            $posId[$r[1]] = DB::table('positions')->where('position', $r[1])->value('id');
         }
 
         // ── Vertragstypen ──────────────────────────────────────────────
@@ -98,7 +117,7 @@ class DemoCompanyMasterDataSeeder extends Seeder
             DB::table('article_groups')->updateOrInsert(['article_group' => $ag[0]], ['initial' => $ag[1], 'min_value' => 0, 'max_value' => 0, 'created_at' => $now, 'updated_at' => $now]);
         }
 
-        // ── Rechte-Items: Sidebar-Sektionen + Spezial-Items aus Paket 1 ─────
+        // ── Rechte-Items: Sidebar-Sektionen + Spezial-Items ────────────
         foreach (['Customer', 'Email', 'Employee', 'Finance', 'Inquiry', 'Organization', 'Partner', 'Problem', 'Product', 'Users', 'Programmer', 'Administrator', 'Super', 'Invoice'] as $item) {
             DB::table('user_roll_items')->updateOrInsert(['item' => $item], ['created_at' => $now, 'updated_at' => $now]);
         }
@@ -113,75 +132,101 @@ class DemoCompanyMasterDataSeeder extends Seeder
 
         // ── Urlaubsanspruch / Arbeitsorte ──────────────────────────────
         DB::table('leave_days')->updateOrInsert(['year' => (int) $now->year], ['leave_day' => 30, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now]);
-        // Hinweis: daily_report_work_places.branch_id ist FK auf branch_addresses (NICHT branches) und nullable -> null.
         foreach ([['Büro Hamburg', 'branch'], ['Zentrallager', 'warehouse'], ['Baustelle / Kunde', 'customer']] as $wp) {
             DB::table('daily_report_work_places')->updateOrInsert(['place_name' => $wp[0]], ['type' => $wp[1], 'branch_id' => null, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now]);
         }
 
-        // ── Demo-Profile (3 Login-Konten für die Paket-1-Rechte-Verifikation) ──
-        $this->seedDemoProfiles($branchId, $depIds, $qualId, $now);
+        // ── Belegschaft (50 Personen) ──────────────────────────────────
+        $count = $this->seedDemoProfiles($branchId, $depIds, $qualId, $now);
 
-        $this->command->info('Stammdaten gesetzt: 1 Niederlassung, ' . count($departments) . ' Abteilungen, ' . count($teams) . ' Teams, ' . count($roles) . ' Qualifikationen/Positionen + 14 Mitarbeiter (Belegschaft mit Rollen & Fotos).');
+        $this->command->info('Stammdaten gesetzt: 1 Niederlassung, ' . count($departments) . ' Abteilungen, ' . count($depIds) . ' Teams, ' . count($roles) . ' Rollen/Positionen + ' . $count . ' Mitarbeiter (Belegschaft mit Rollen, Vorgesetzten & Fotos).');
     }
 
     /**
-     * Lebendige Demo-Belegschaft (14 Personen): employees + users + user_rolls + Profilfoto.
+     * Demo-Belegschaft (50 Personen): employees + users + user_rolls + Vorgesetzte + Profilfoto.
      * Verdrahtung exakt nach Code: users.name = (string) employees.id; user_rolls.user_id = users.id;
      * item_id = Item-Name (String); Flags tinyint (1/0). Passwort aller Konten: "demo1234".
-     * Avatar: employees.image (Dateiname) in public/images/employee/ (Topbar/Liste/Profil via asset()).
-     * Rollen-Stufen (macht „Rolle" sichtbar):
-     *   0 ADMIN   -> is_admin=1, keine user_rolls (Bypass)            [Hoffmann = A]
-     *   1 VOLL    -> alle Items, alle 4 Flags=1                       [Neumann  = B]
-     *   2 LEITUNG -> volle CRUD auf Bereichs-Items + is_read Querschnitt
-     *   3 SACHB.  -> nur is_read auf Bereichs-Items (Kundendienst +is_update)
-     *   4 OHNE    -> keine user_rolls                                 [Wagner u.a. = C]
-     * Fotos werden idempotent von randomuser.me geladen (nur falls Datei fehlt; danach offline).
+     * 3 feste Login-Profile für die Rechte-Verifikation (Stufen 0/1/4):
+     *   A Hoffmann  = Geschäftsführer, is_admin=1 (Bypass)
+     *   B Neumann   = Leitung Buchhaltung, alle Items/Flags=1 (Voll, Nicht-Admin)
+     *   C Wagner    = Elektrogeselle, keine user_rolls (gesperrt)
+     * Vorgesetzte: jede Abteilung hat einen Kopf (Meister/Leitung); dessen supervisor = Geschäftsführer.
      */
-    private function seedDemoProfiles(int $branchId, array $depIds, array $qualId, $now): void
+    private function seedDemoProfiles(int $branchId, array $depIds, array $qualId, $now): int
     {
-        // Alte 3 Platzhalter-Profile restlos entfernen (keine Leichen).
-        foreach (['admin.demo@san.test', 'berechtigt.demo@san.test', 'ohne.demo@san.test'] as $oldEmail) {
-            $oldUser = DB::table('users')->where('email', $oldEmail)->first();
-            if ($oldUser) {
-                DB::table('user_rolls')->where('user_id', $oldUser->id)->delete();
-            }
-            DB::table('users')->where('email', $oldEmail)->delete();
-            $oldEmp = DB::table('employees')->where('email', $oldEmail)->first();
-            if ($oldEmp) {
-                DB::table('employee_departments')->where('employee_id', $oldEmp->id)->delete();
-            }
-            DB::table('employees')->where('email', $oldEmail)->delete();
-        }
-
         $contractTypeId = DB::table('contract_types')->where('contract_type', 'Vollzeit unbefristet')->value('id');
 
         $allItems = ['Customer', 'Email', 'Employee', 'Finance', 'Inquiry', 'Organization', 'Partner', 'Problem', 'Product', 'Users', 'Programmer', 'Administrator', 'Super', 'Invoice'];
         $areaItems = [
-            'Vertrieb'                 => ['Customer', 'Inquiry', 'Partner'],
-            'Planung & Technik'        => ['Product', 'Problem'],
-            'Lager & Einkauf'          => ['Product', 'Organization'],
-            'Buchhaltung & Verwaltung' => ['Finance', 'Invoice', 'Employee'],
-            'Kundendienst'             => ['Problem', 'Customer'],
-            'Montage & Bau'            => [],
+            'Management'       => ['Customer', 'Inquiry', 'Partner', 'Employee'],
+            'Controlling'      => ['Finance', 'Employee'],
+            'Marketing'        => ['Customer', 'Partner'],
+            'Finanzen'         => ['Finance', 'Invoice'],
+            'Buchhaltung'      => ['Finance', 'Invoice', 'Employee'],
+            'Verwaltung'       => ['Employee', 'Organization'],
+            'Heizung'          => ['Product', 'Problem'],
+            'Elektro'          => ['Product', 'Problem'],
+            'SHK'              => ['Product', 'Problem'],
+            'Bauelemente'      => ['Product', 'Problem'],
+            'Schreiner'        => ['Product', 'Problem'],
+            'Dachdecker'       => ['Product', 'Problem'],
+            'Maler'            => ['Product', 'Problem'],
+            'Fliesenleger'     => ['Product', 'Problem'],
+            'Baudekoration'    => ['Product', 'Problem'],
+            'Geschäftsführung' => [],
         ];
-        $crossReadItems = ['Customer', 'Product']; // Querschnitt-Leserechte für Leitung
+        $crossReadItems = ['Customer', 'Product'];
+        $tradeDeps = ['Heizung', 'Elektro', 'SHK', 'Bauelemente', 'Schreiner', 'Dachdecker', 'Maler', 'Fliesenleger', 'Baudekoration'];
 
-        $team = [
-            ['v' => 'Markus',  'n' => 'Hoffmann', 'fn' => 'Geschäftsführer',                'dep' => 'Buchhaltung & Verwaltung', 'qual' => 'Geschäftsführung',       'stufe' => 0, 'g' => 'men',   'pn' => 32],
-            ['v' => 'Claudia', 'n' => 'Neumann',  'fn' => 'Büroleitung / Buchhalterin',     'dep' => 'Buchhaltung & Verwaltung', 'qual' => 'Buchhalter',            'stufe' => 1, 'g' => 'women', 'pn' => 44],
-            ['v' => 'Sandra',  'n' => 'König',    'fn' => 'Vertriebsleiterin',              'dep' => 'Vertrieb',                 'qual' => 'Vertriebsberater',      'stufe' => 2, 'g' => 'women', 'pn' => 68],
-            ['v' => 'Daniel',  'n' => 'Krüger',   'fn' => 'Vertriebsberater',               'dep' => 'Vertrieb',                 'qual' => 'Vertriebsberater',      'stufe' => 3, 'g' => 'men',   'pn' => 45],
-            ['v' => 'Aylin',   'n' => 'Yıldız',   'fn' => 'Vertriebsberaterin',             'dep' => 'Vertrieb',                 'qual' => 'Vertriebsberater',      'stufe' => 3, 'g' => 'women', 'pn' => 65],
-            ['v' => 'Thomas',  'n' => 'Bauer',    'fn' => 'Technische Leitung (E-Meister)', 'dep' => 'Planung & Technik',        'qual' => 'Elektromeister',        'stufe' => 2, 'g' => 'men',   'pn' => 52],
-            ['v' => 'Lena',    'n' => 'Schmitt',  'fn' => 'Projektplanerin',                'dep' => 'Planung & Technik',        'qual' => 'Projektplaner',         'stufe' => 3, 'g' => 'women', 'pn' => 30],
-            ['v' => 'Petra',   'n' => 'Wolf',     'fn' => 'Lagerleiterin / Disponentin',    'dep' => 'Lager & Einkauf',          'qual' => 'Disponent',             'stufe' => 2, 'g' => 'women', 'pn' => 12],
-            ['v' => 'Tobias',  'n' => 'Richter',  'fn' => 'Lagerist',                       'dep' => 'Lager & Einkauf',          'qual' => 'Lagerist',              'stufe' => 3, 'g' => 'men',   'pn' => 76],
-            ['v' => 'Julia',   'n' => 'Fischer',  'fn' => 'Sachbearbeiterin Verwaltung',    'dep' => 'Buchhaltung & Verwaltung', 'qual' => 'Bürokraft',             'stufe' => 3, 'g' => 'women', 'pn' => 22],
-            ['v' => 'Andreas', 'n' => 'Schäfer',  'fn' => 'Kundendienst-Techniker',         'dep' => 'Kundendienst',             'qual' => 'Elektrofachkraft',      'stufe' => 3, 'g' => 'men',   'pn' => 41],
-            ['v' => 'Kevin',   'n' => 'Wagner',   'fn' => 'PV-Monteur',                     'dep' => 'Montage & Bau',            'qual' => 'PV-Monteur',            'stufe' => 4, 'g' => 'men',   'pn' => 15],
-            ['v' => 'Mehmet',  'n' => 'Demir',    'fn' => 'SHK-Monteur',                    'dep' => 'Montage & Bau',            'qual' => 'Anlagenmechaniker SHK', 'stufe' => 4, 'g' => 'men',   'pn' => 83],
-            ['v' => 'Stefan',  'n' => 'Lange',    'fn' => 'Dachmonteur',                    'dep' => 'Montage & Bau',            'qual' => 'Dachmonteur',           'stufe' => 4, 'g' => 'men',   'pn' => 67],
+        $funktion = [
+            'Geschäftsführung' => 'Geschäftsführer/in', 'Management' => 'Manager/in', 'Meister' => 'Meister/in',
+            'Geselle' => 'Geselle/in', 'Helfer' => 'Helfer/in', 'Techniker' => 'Techniker/in', 'Planer' => 'Planer/in',
+            'Designer' => 'Designer/in', 'Controlling' => 'Controller/in', 'Außendienst' => 'Außendienstmitarbeiter/in',
+            'Innendienst' => 'Innendienstmitarbeiter/in', 'Buchhaltung' => 'Buchhalter/in', 'Marketing' => 'Marketing-Manager/in',
+            'Verwaltung' => 'Sachbearbeiter/in', 'Ausbildung' => 'Azubi',
         ];
+
+        // Namens-Pools (frei erfunden; ohne Hoffmann/Neumann/Wagner -> keine E-Mail-Kollision mit A/B/C).
+        $men = ['Lukas', 'Jonas', 'Leon', 'Finn', 'Paul', 'Felix', 'Max', 'Tim', 'Jan', 'Niklas', 'Tom', 'David', 'Erik', 'Marco', 'Sven', 'Jens', 'Dirk', 'Ralf', 'Uwe', 'Olaf', 'Malte', 'Carsten', 'Hauke', 'Bjarne'];
+        $women = ['Mia', 'Emma', 'Hannah', 'Lea', 'Lina', 'Sophie', 'Marie', 'Laura', 'Sarah', 'Nina', 'Katrin', 'Britta', 'Silke', 'Anke', 'Maren', 'Frauke', 'Insa', 'Wiebke', 'Imke', 'Birte'];
+        $last = ['Schmidt', 'Meyer', 'Schulz', 'Becker', 'Koch', 'Bauer', 'Richter', 'Klein', 'Wolf', 'Schröder', 'Braun', 'Werner', 'Krause', 'Lehmann', 'Köhler', 'Hermann', 'Walter', 'König', 'Mayer', 'Huber', 'Kaiser', 'Fuchs', 'Peters', 'Möller', 'Weiß', 'Jung', 'Hahn', 'Vogel', 'Friedrich', 'Keller', 'Günther', 'Frank', 'Berger', 'Winkler', 'Roth', 'Beck', 'Lorenz', 'Baumann', 'Franke', 'Albrecht', 'Ludwig', 'Winter', 'Kraus', 'Schumacher', 'Krämer', 'Vogt', 'Stein', 'Brandt', 'Sauer', 'Arnold'];
+        $mi = 0; $wi = 0; $li = 0; $pnMen = 40; $pnWomen = 50;
+
+        // Generierungsplan je Abteilung: [Rolle, Stufe, head]. Feste Profile A/B/C separat eingehängt.
+        $gen = [
+            'Management'    => [['Management', 2, true], ['Planer', 3, false], ['Außendienst', 3, false], ['Innendienst', 4, false]],
+            'Controlling'   => [['Controlling', 2, true], ['Controlling', 3, false]],
+            'Marketing'     => [['Marketing', 2, true], ['Designer', 3, false], ['Designer', 4, false], ['Innendienst', 4, false]],
+            'Finanzen'      => [['Buchhaltung', 2, true], ['Controlling', 3, false]],
+            'Buchhaltung'   => [['Buchhaltung', 3, false], ['Verwaltung', 3, false]],
+            'Verwaltung'    => [['Verwaltung', 2, true], ['Innendienst', 3, false], ['Innendienst', 4, false], ['Ausbildung', 4, false]],
+            'Heizung'       => [['Meister', 2, true], ['Geselle', 4, false], ['Geselle', 4, false], ['Helfer', 4, false]],
+            'Elektro'       => [['Meister', 2, true], ['Geselle', 4, false], ['Ausbildung', 4, false]],
+            'SHK'           => [['Meister', 2, true], ['Geselle', 4, false], ['Geselle', 4, false], ['Techniker', 4, false]],
+            'Bauelemente'   => [['Meister', 2, true], ['Geselle', 4, false], ['Geselle', 4, false]],
+            'Schreiner'     => [['Meister', 2, true], ['Geselle', 4, false], ['Ausbildung', 4, false]],
+            'Dachdecker'    => [['Meister', 2, true], ['Geselle', 4, false], ['Geselle', 4, false]],
+            'Maler'         => [['Meister', 2, true], ['Geselle', 4, false], ['Helfer', 4, false]],
+            'Fliesenleger'  => [['Meister', 2, true], ['Geselle', 4, false], ['Geselle', 4, false]],
+            'Baudekoration' => [['Meister', 2, true], ['Geselle', 4, false], ['Designer', 4, false]],
+        ];
+
+        // Roster zusammenstellen (genau 50): 3 feste + generierte.
+        $roster = [
+            ['v' => 'Markus', 'n' => 'Hoffmann', 'dep' => 'Geschäftsführung', 'qual' => 'Geschäftsführung', 'stufe' => 0, 'g' => 'men', 'pn' => 32, 'head' => true],
+            ['v' => 'Claudia', 'n' => 'Neumann', 'dep' => 'Buchhaltung', 'qual' => 'Buchhaltung', 'stufe' => 1, 'g' => 'women', 'pn' => 44, 'head' => true],
+            ['v' => 'Kevin', 'n' => 'Wagner', 'dep' => 'Elektro', 'qual' => 'Geselle', 'stufe' => 4, 'g' => 'men', 'pn' => 15, 'head' => false],
+        ];
+        foreach ($gen as $dep => $members) {
+            foreach ($members as $m) {
+                [$qual, $stufe, $head] = $m;
+                $g = in_array($qual, ['Marketing', 'Buchhaltung', 'Verwaltung'], true) ? 'women' : (($li % 3 === 0) ? 'women' : 'men');
+                if ($g === 'men') { $v = $men[$mi % count($men)]; $mi++; $pn = $pnMen++; }
+                else { $v = $women[$wi % count($women)]; $wi++; $pn = $pnWomen++; }
+                $n = $last[$li % count($last)]; $li++;
+                $roster[] = ['v' => $v, 'n' => $n, 'dep' => $dep, 'qual' => $qual, 'stufe' => $stufe, 'g' => $g, 'pn' => $pn, 'head' => (bool) $head];
+            }
+        }
 
         $slugify = function (string $s): string {
             $s = str_replace(['ä', 'ö', 'ü', 'Ä', 'Ö', 'Ü', 'ß'], ['ae', 'oe', 'ue', 'ae', 'oe', 'ue', 'ss'], $s);
@@ -194,14 +239,16 @@ class DemoCompanyMasterDataSeeder extends Seeder
             @mkdir($imgDir, 0775, true);
         }
 
-        $adminEmpId = null;
+        $created = [];
+        $headByDep = [];
+        $ceoEmpId = null;
 
-        foreach ($team as $t) {
+        foreach ($roster as $t) {
             $slug  = $slugify($t['v']) . '.' . $slugify($t['n']);
             $email = $slug . '@solar-aspekt-nord.test';
             $file  = $slug . '.jpg';
 
-            // Profilfoto idempotent laden (nur wenn Datei fehlt). Bei Fehler: Bild leer lassen + Vermerk.
+            // Profilfoto idempotent laden (nur wenn Datei fehlt). Bei Fehler: Bild leer + Vermerk.
             $image = '';
             $dest  = $imgDir . '/' . $file;
             if (is_file($dest) && filesize($dest) > 0) {
@@ -220,6 +267,7 @@ class DemoCompanyMasterDataSeeder extends Seeder
             DB::table('employees')->updateOrInsert(
                 ['email' => $email],
                 ['title' => ($t['g'] === 'women' ? 'Frau' : 'Herr'), 'name' => $t['v'], 'lastname' => $t['n'],
+                 'bio' => ($funktion[$t['qual']] ?? $t['qual']) . ' · ' . $t['dep'],
                  'branch' => $branchId, 'contract_type_id' => $contractTypeId, 'qualification_id' => ($qualId[$t['qual']] ?? null),
                  'image' => $image, 'working_hour' => 40, 'working_type' => 'Vollzeit', 'status' => 'Active',
                  'remaining_day' => 30, 'leave' => 30, 'daily_start_time' => '08:00:00', 'daily_end_time' => '17:00:00',
@@ -227,7 +275,10 @@ class DemoCompanyMasterDataSeeder extends Seeder
             );
             $empId = DB::table('employees')->where('email', $email)->value('id');
             if ($t['stufe'] === 0) {
-                $adminEmpId = $empId;
+                $ceoEmpId = $empId;
+            }
+            if ($t['head']) {
+                $headByDep[$t['dep']] = $empId;
             }
 
             DB::table('users')->updateOrInsert(
@@ -252,7 +303,7 @@ class DemoCompanyMasterDataSeeder extends Seeder
                     $rolls[$it] = $rolls[$it] ?? ['is_read' => 1, 'is_add' => 0, 'is_update' => 0, 'is_delete' => 0];
                 }
             } elseif ($t['stufe'] === 3) {
-                $upd = ($t['dep'] === 'Kundendienst') ? 1 : 0;
+                $upd = in_array($t['dep'], $tradeDeps, true) ? 1 : 0;
                 foreach (($areaItems[$t['dep']] ?? []) as $it) {
                     $rolls[$it] = ['is_read' => 1, 'is_add' => 0, 'is_update' => $upd, 'is_delete' => 0];
                 }
@@ -270,29 +321,41 @@ class DemoCompanyMasterDataSeeder extends Seeder
                     ['employee_id' => $empId, 'department_id' => $depId],
                     ['created_at' => $now, 'updated_at' => $now]
                 );
-                // Position (Funktion) passend zur Qualifikation/Gewerk verknüpfen.
                 $positionId = DB::table('positions')->where('qualification', $t['qual'])->value('id');
                 if ($positionId) {
-                    $isMontage = ($t['dep'] === 'Montage & Bau');
+                    $isTrade = in_array($t['dep'], $tradeDeps, true);
                     DB::table('department_positions')->updateOrInsert(
                         ['employee_id' => $empId, 'department_id' => $depId, 'position_id' => $positionId],
-                        ['percent' => 100, 'montage_percent' => ($isMontage ? 100 : 0), 'office_percent' => ($isMontage ? 0 : 100),
+                        ['percent' => 100, 'montage_percent' => ($isTrade ? 100 : 0), 'office_percent' => ($isTrade ? 0 : 100),
                          'working_hours' => 40, 'main' => 'Yes', 'created_at' => $now, 'updated_at' => $now]
                     );
                 }
             }
+
+            $created[] = ['empId' => $empId, 'dep' => $t['dep'], 'head' => $t['head'], 'isCeo' => ($t['stufe'] === 0)];
         }
 
-        // branches.chairman auf die echte Geschäftsführer-employee-id (Hoffmann) setzen.
-        if ($adminEmpId) {
-            DB::table('branches')->where('slug', 'solar-aspekt-nord')->update(['chairman' => $adminEmpId]);
+        // ── Vorgesetzte setzen (Geschäftsführer → Abteilungsköpfe → Mitarbeiter) ──
+        foreach ($created as $c) {
+            if ($c['isCeo']) {
+                $sup = null;
+            } elseif ($c['head']) {
+                $sup = $ceoEmpId;
+            } else {
+                $sup = $headByDep[$c['dep']] ?? $ceoEmpId;
+            }
+            DB::table('employees')->where('id', $c['empId'])->update(['supervisor' => $sup]);
         }
 
-        // is_active=1 als "Konto aktiv"-Baseline für ALLE Demo-Konten explizit erzwingen
-        // (idempotent, greift auch im Update-Fall).
-        // HINWEIS: is_active ist im Projekt ZUGLEICH ein Online-Flag — LogUserLogin setzt es bei Login
-        // auf 1, LogUserLogout bei Logout auf 0 (EventServiceProvider). Der Web-Login erzwingt is_active
-        // NICHT (kein credentials()-Override); is_active=0 sperrt also KEINEN Login.
+        // branches.chairman auf den Geschäftsführer (Hoffmann) setzen.
+        if ($ceoEmpId) {
+            DB::table('branches')->where('slug', 'solar-aspekt-nord')->update(['chairman' => $ceoEmpId]);
+        }
+
+        // is_active=1 als "Konto aktiv"-Baseline für ALLE Demo-Konten (is_active ist zugleich Online-Flag;
+        // Login erzwingt is_active NICHT -> 0 sperrt keinen Login).
         DB::table('users')->where('email', 'like', '%@solar-aspekt-nord.test')->update(['is_active' => 1]);
+
+        return count($created);
     }
 }
