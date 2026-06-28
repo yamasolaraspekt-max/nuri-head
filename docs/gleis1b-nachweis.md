@@ -14,5 +14,9 @@
 
 **Verifikation:** `php -l` (web.php + Controller) OK · `php artisan route:list` parst (2041 Routen) · `/login` = 200 (legitime Nutzung intakt).
 
-## Offen: #115 (öffentliche Selbstregistrierung) — Produktentscheidung
-Befund: kein Kundenportal, kein separater Guard; `RegisterController` legt einen normalen `User` an (wie Admin/Mitarbeiter). → Selbstregistrierung ist hier ein Loch, kein Feature. **Empfehlung: komplett deaktivieren** (`Auth::routes(['register' => false])`). Wird mit dem Nutzer abgestimmt, bevor geändert wird.
+## #115 (öffentliche Selbstregistrierung) — DEAKTIVIERT ✅
+Befund: kein Kundenportal, kein separater Guard; `RegisterController` legt einen normalen `User` an (wie Admin/Mitarbeiter) → ein Loch, kein Feature. Umgesetzt (nach Freigabe):
+- `Auth::routes(['register' => false])` (beide Aufrufe in `routes/web.php`) → Registrierungs-Route existiert nicht mehr.
+- Toten `/register`-Link aus `resources/views/layouts/app.blade.php` entfernt.
+
+**Nachweis:** anonymer `GET /register` **200 → 404**, `POST /register` **→ 404**. `php artisan route:list` enthält keine register-Route mehr. `/login` = 200 und legitime Mitarbeiter-Anmeldung unberührt (Login-POST → 302 → /home).

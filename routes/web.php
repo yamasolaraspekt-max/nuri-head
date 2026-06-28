@@ -599,7 +599,7 @@ Route::post('/receive-fusion-form', [FusionFormSubmissionController::class, 'sto
 Route::get('lead/email/api/{id}', [WebsiteController::class, 'getEmailDetails'])->middleware('auth');
 
 Route::get('employee/qr/get/daily/report/{daily_report_id}/{daily_times_id}', [WebsiteController::class, 'getTime'])->name('employee.qr.get.daily.report');
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::get('/', [EmployeeDashboardController::class, 'index'])->name('home');
 Route::get('/home', [EmployeeDashboardController::class, 'index'])->name('dashbaord'); 
@@ -3966,7 +3966,7 @@ Route::get('/route-cache', function () {
     Artisan::call('optimize:clear');
     return 'Routes cache cleared and optimized!';
 })->middleware('auth');
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::get('/timeline', [AdminController::class, 'timeline'])->name('timeline');
  
