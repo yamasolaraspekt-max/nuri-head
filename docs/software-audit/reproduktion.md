@@ -46,6 +46,29 @@
 2. **Jeder** verbleibende Tier-A-Fund (18 Stück, ⚠️) muss **vor** einem Fix einzeln dynamisch/Konstruktor-geprüft werden — Quote legt nahe, dass ~1/3 davon ebenfalls FPs sind.
 3. Tier B (CSRF/XSS/Rollen) und Tier C (Crash-Bugs) sind davon **weniger betroffen** (Crash-Bugs lassen sich i.d.R. eindeutig am Code zeigen), sollten aber stichprobenartig reproduziert werden.
 
+---
+
+## Gleis 2 — Nachverifikation der restlichen 10 Tier-A-Funde
+Gleiche Methode (anonymer lesender Probe / Konstruktor- & Routen-Check, nichts Destruktives).
+
+| Fund | Prüfung | Ergebnis |
+|---|---|---|
+| **#116** `/api/secure/master-sets` | anonym GET | **401** „API username and password are required" → 🟢 **FALSE POSITIVE** (Controller-Auth vorhanden) |
+| **#115** `/register` | anonym GET | **200** (Registrierungsformular öffentlich) → 🔴 **real** — anonyme Selbstregistrierung; Fix = Registrierung deaktivieren (Produktentscheidung) |
+| **#104** email-account toggle/test | Routen-/Konstruktor-Check | außerhalb der `auth`-Gruppe + `LeadEmailAccountsController` ohne `auth` → 🔴 **real offen** (POST, nicht getriggert) |
+| **#108** brand/distributor/external destroy via GET | Konstruktor-Check | Brand-/Distributor-/ExternalPersonalController **haben** `auth` → kein anonymer → 🟠 **reklassifiziert Tier B** (CSRF, Opfer nötig) |
+| **#123** `/dispatch-chat-jobs`, `/chat-jobs` | Routen-/Konstruktor-Check | standalone, `MessageController` ohne `auth` → 🔴 **real offen** (dispatcht Jobs; nicht getriggert) |
+| **#124** `/run-backfill-phase-sections` | Routen-Check | standalone Closure ohne Middleware → 🔴 **real offen** (Artisan; nicht getriggert) |
+| **#103 / #106 / #118 / #119** | route:list-Check | Routen-**Duplikate/Kollisionen** (kein Auth-Loch) → ⚪ **reklassifiziert Qualität** (#106 und #118 sind derselbe Fund) |
+
+**Bilanz Gleis 2:** von 10 → **1 FALSE POSITIVE** (#116), **1 → Tier B** (#108), **4 → Qualität** (#103/106/118/119), **4 real-offen** (#104, #115, #123, #124).
+
+## Endgültige anonyme Angriffsfläche (Stand 2026-06-28)
+- ✅ **geschlossen (Gleis 1):** #20, #23, #26, #29, #30, #31 — nachgewiesen 302→/login (siehe `gleis1-nachweis.md`).
+- 🟧 **noch offen, neu bestätigt (Gleis 2):** #104, #115, #123, #124.
+- 🛑 **offen, bewusst nicht getriggert (destruktiv):** #33 `/route-cache`, #34 `/fix-notes`.
+- 🟢 **FALSE POSITIVES gesamt:** #24, #28, #32, #116, #117, #122 (6).
+
 ## Wichtiger systemischer Vorbehalt
 Die Audit-Agenten haben **Controller-Konstruktoren nicht auf `$this->middleware('auth')` geprüft**. Genau das hat 2 der „kritischen" Routing-Funde gekippt (#28, #32). **Schlussfolgerung:** Jeder verbleibende „fehlende Auth-Middleware"-Fund (Regel `routing`) muss vor einem Fix gegen den Controller-Konstruktor gegengeprüft werden. Bestätigt **ohne** Konstruktor-Auth sind: AllContactController, PurchaseRequestController, GoodsReceiptController, BegFundingsController, WebsiteController, LeaveController.
 
