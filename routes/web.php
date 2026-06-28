@@ -4843,7 +4843,7 @@ Route::get('request/token', function(){
       
     });
 
-    Route::get('customer/appointments/{appointment}/reports',  [CustomerMainAppointmentController::class, 'reports']); 
+    Route::get('customer/appointments/{appointment}/reports',  [CustomerMainAppointmentController::class, 'reports'])->middleware('auth');
 
 
  
