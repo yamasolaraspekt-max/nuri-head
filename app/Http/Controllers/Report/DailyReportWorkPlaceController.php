@@ -11,6 +11,11 @@ use DB;
 
 class DailyReportWorkPlaceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $places = DailyReportWorkPlace::latest()->get();
