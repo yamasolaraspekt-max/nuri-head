@@ -18,16 +18,16 @@ class isAdmin
             return redirect()->route('login');
         }
 
-        $user = DB::table('user_rolls')
-        ->join('users', 'users.name', '=', 'user_rolls.user_id')
-        ->where('user_rolls.user_id', '=', auth()->user()->name)
-        ->where('user_rolls.is_read', '=', 'on')
-        ->where('user_rolls.item_id', '=', 'Invoice' )
-        ->select('user_rolls.user_id')
-        ->value('user_rolls.user_id');
-        
-        if (auth()->user()->name == $user) {
-         return $next($request);
+        // user_rolls.user_id = users.id (FK); Flags sind tinyint(1) (1/0, nicht 'on').
+        // Super-Admins (is_admin) dürfen generell durch.
+        $allowed = (bool) auth()->user()->is_admin || DB::table('user_rolls')
+            ->where('user_rolls.user_id', '=', auth()->id())
+            ->where('user_rolls.is_read', '=', 1)
+            ->where('user_rolls.item_id', '=', 'Invoice')
+            ->exists();
+
+        if ($allowed) {
+            return $next($request);
         }
         return redirect('/notAdmin');
        
