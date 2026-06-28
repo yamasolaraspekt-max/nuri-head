@@ -287,5 +287,12 @@ class DemoCompanyMasterDataSeeder extends Seeder
         if ($adminEmpId) {
             DB::table('branches')->where('slug', 'solar-aspekt-nord')->update(['chairman' => $adminEmpId]);
         }
+
+        // is_active=1 als "Konto aktiv"-Baseline für ALLE Demo-Konten explizit erzwingen
+        // (idempotent, greift auch im Update-Fall).
+        // HINWEIS: is_active ist im Projekt ZUGLEICH ein Online-Flag — LogUserLogin setzt es bei Login
+        // auf 1, LogUserLogout bei Logout auf 0 (EventServiceProvider). Der Web-Login erzwingt is_active
+        // NICHT (kein credentials()-Override); is_active=0 sperrt also KEINEN Login.
+        DB::table('users')->where('email', 'like', '%@solar-aspekt-nord.test')->update(['is_active' => 1]);
     }
 }
