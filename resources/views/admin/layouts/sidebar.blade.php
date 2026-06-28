@@ -1235,9 +1235,9 @@
                     'count_key' => 'finances',
                     'children' => [
                         [
-                            'label' => 'BEG-Förderungen',
+                            'label' => 'Förderungen',
                             'icon' => 'file-text',
-                            'url' => $safeRoute('beg-fundings.index'),
+                            'url' => $safeRoute('foerderungen.index'),
                             'count_key' => 'fundings',
                         ],
                         [

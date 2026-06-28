@@ -75,6 +75,7 @@ use App\Http\Controllers\Customer\LeadActivityLogsController;
 use App\Http\Controllers\Customer\PVRoofController;
 use App\Http\Controllers\Customer\PVRoofPlanController;
 use App\Http\Controllers\Customer\BegFundingsController;
+use App\Http\Controllers\Admin\FoerderungController;
 use App\Http\Controllers\Customer\CustomerReviewController;
 use App\Http\Controllers\Customer\CustomerContextFeedController;
 
@@ -857,7 +858,14 @@ Route::group(['middleware'   =>  'web'], function(){
     // Budget FUnd slidebar 
     Route::get('/funding/sidebar/{lead}/{alternative}/{product}', [NewLeadsController::class, 'showSidebar']);
     // Budget Funding
-    Route::resource('beg-fundings', BegFundingsController::class);
+    // Förderprogramm-Verwaltung (übernommen aus playground; ersetzt das kaputte BEG-Förderungen-Standalone-Modul).
+    // Der Lead-Förderrechner weiter unten (saveFunding / update-beg-funding / funding/sidebar) bleibt unberührt.
+    Route::get('/foerderungen', [FoerderungController::class, 'index'])->name('foerderungen.index');
+    Route::post('/foerderungen', [FoerderungController::class, 'store'])->name('foerderungen.store');
+    Route::put('/foerderungen/{foerderung}', [FoerderungController::class, 'update'])->name('foerderungen.update');
+    Route::delete('/foerderungen/{foerderung}', [FoerderungController::class, 'destroy'])->name('foerderungen.destroy');
+    Route::post('/foerderungen/{foerderung}/restore', [FoerderungController::class, 'restore'])->name('foerderungen.restore');
+    // DEAKTIVIERT (kaputtes Standalone-Modul, BegFunding-Fatal-Error, Tier-C): Route::resource('beg-fundings', BegFundingsController::class);
     Route::post('/funding/save/{customer_id}/{alternative_id}/{product_id}', [NewLeadsController::class, 'saveFunding']);
     Route::get('/activity/carousel', [NewLeadsController::class, 'nextStep'])->name('activity.carousel');
     Route::get('/activity/nextStep', [NewLeadsController::class, 'nextSteps'])->name('activity.nextStep');
