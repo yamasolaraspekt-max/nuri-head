@@ -115,7 +115,7 @@
                                                                                            Password
                                                                                         </label>
                                                                                     
-                                                                                        <input type="text" class="form-control" value="{{ old('password') }}" name="password"  required>
+                                                                                        <input type="password" class="form-control" name="password" required autocomplete="new-password">
                                                                                         @if ($errors->has('password'))<p style="color:red;">{!!$errors->first('password')!!}</p>@endif
                                                                                     </div>
                                                                                 </div>
@@ -199,7 +199,7 @@
                                                     <th scope="row">{{ $item->id }}</th>
                                                     <td>{{ $item->name }}</td>
                                                     <td>{{ $item->username }}</td>
-                                                    <td><input type="password" id="passwordField" disabled value="{{ $item->password }}" style="border: 0;border-style: none; background: transparent;" ondblclick="togglePasswordVisibility(this)"></td>
+                                                    <td><span class="text-muted">••••••••</span></td>
                                                     <td>{{ $item->host }}</td>
                                                     <td>{{ $item->port }}</td>
                                                     <td>{{ $item->encryption }}</td>
@@ -333,7 +333,7 @@
                                                                                    Password
                                                                                 </label>
                                                                             
-                                                                                <input type="text" class="form-control"  name="password"  value="{{ $item->password }}" required>
+                                                                                <input type="password" class="form-control" name="password" placeholder="•••••••• (leer lassen = unverändert)" autocomplete="new-password">
                                                                                 @if ($errors->has('password'))<p style="color:red;">{!!$errors->first('password')!!}</p>@endif
                                                                             </div>
                                                                         </div>

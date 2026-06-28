@@ -82,11 +82,15 @@ class EmailConfigurationController extends Controller
             'host' => 'required',
             'port' => 'required',
             'username' => 'required',
-            'password' => 'required',
+            'password' => 'nullable', // leer lassen = Passwort unveraendert
         ]);
-    
-        $id = $request->input('id');
-        EmailConfiguration::where('id', $id)->update($request->except(['_token', '_method']));
+
+        $config = EmailConfiguration::findOrFail($request->input('id'));
+        $data = $request->except(['_token', '_method', 'id']);
+        if (blank($data['password'] ?? null)) {
+            unset($data['password']); // leeres Passwort -> bestehendes behalten
+        }
+        $config->update($data); // Eloquent-update -> encrypted-Cast verschluesselt das Passwort
     
         return redirect()->to('/email_configuration')->with('save_msg', 'Der Datensatz wurde erfolgreich gespeichert.');
     }
