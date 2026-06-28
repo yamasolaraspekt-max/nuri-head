@@ -29,7 +29,7 @@ class PersonalNoteController extends Controller
     public function index(Request $request)
         {
             $status   = $request->get('status', 'open');   // 'open' | 'done' | 'all'
-            $userName = Auth::user()->name;               // you used name in filter/search
+            $userName = Auth::user()->employeeId();               // you used name in filter/search
 
             $query = DB::table('personal_notes')
                 ->join('note_categories', 'note_categories.id', '=', 'personal_notes.category_id')
@@ -62,7 +62,7 @@ class PersonalNoteController extends Controller
         $notes = DB::table('personal_notes')
             ->join('note_categories', 'note_categories.id', '=', 'personal_notes.category_id')
             ->select('personal_notes.*', 'note_categories.category_name')
-            ->where('personal_notes.user_id', auth()->user()->name) // Use the user's ID
+            ->where('personal_notes.user_id', auth()->user()->employeeId()) // Use the user's ID
             ->whereNull('personal_notes.deleted_at') 
             ->orderBy('personal_notes.order_by', 'asc') // Order by "order_by" first
             ->orderBy('personal_notes.created_at', 'desc') // Then by "created_at"
@@ -80,7 +80,7 @@ class PersonalNoteController extends Controller
         $notes = DB::table('personal_notes')
             ->join('note_categories', 'note_categories.id', '=', 'personal_notes.category_id')
             ->select('personal_notes.*', 'note_categories.category_name')
-            ->where('personal_notes.user_id', auth()->user()->name)
+            ->where('personal_notes.user_id', auth()->user()->employeeId())
             ->whereNotNull('personal_notes.deleted_at') // Only fetch trashed notes
             ->orderBy('personal_notes.order_by', 'asc')
             ->orderBy('personal_notes.created_at', 'desc')
@@ -225,7 +225,7 @@ class PersonalNoteController extends Controller
         $category_id = $validatedData['category_id'] ?? NoteCategory::firstOrCreate(
             ['category_name' => 'Standard'],
             [
-                'user' => auth()->user()->name,
+                'user' => auth()->user()->employeeId(),
                 'color' => '#8fc73e',
                 'type' => 'Normal',
             ]
@@ -234,7 +234,7 @@ class PersonalNoteController extends Controller
         // If add_calendar is enabled, create a task
         if ($request->add_calendar) {
             $appointment = now();
-            $by = auth()->user()->name;
+            $by = auth()->user()->employeeId();
             $this->make_task(
                 $request->title,
                 $by,
@@ -251,7 +251,7 @@ class PersonalNoteController extends Controller
             'title' => $validatedData['title'],
             'note' => $validatedData['note'],
             'category_id' => $category_id,
-            'user_id' => auth()->user()->name,
+            'user_id' => auth()->user()->employeeId(),
             'is_done' => $request->is_done ?? false,
             'deadline' => $request->deadline,
             'end_time' => $request->end_time,
@@ -273,7 +273,7 @@ class PersonalNoteController extends Controller
 
         private function checkAvailability($start_date, $end_date){
 
-            $user= auth()->user()->name;
+            $user= auth()->user()->employeeId();
             $check = DB::table('personal_tasks')
                         ->join('employees_personal_tasks as emp_task', 'emp_task.task_id', '=', 'personal_tasks.id')
                         ->leftJoin('employees', 'employees.id', '=', 'emp_task.employee_id')
@@ -335,7 +335,7 @@ class PersonalNoteController extends Controller
 
             $emp = DB::table('employees')
                 ->select('name', 'lastname')
-                ->where('id', auth()->user()->name)
+                ->where('id', auth()->user()->employeeId())
                 ->first();
 
             if ($emp) {
@@ -536,7 +536,7 @@ class PersonalNoteController extends Controller
             // If add_calendar is enabled, create a task
                 if ($request->add_calendar) {
                     $appointment = now();
-                    $by = auth()->user()->name;
+                    $by = auth()->user()->employeeId();
                     $this->make_task(
                         $note->title,
                         $by,
@@ -590,7 +590,7 @@ class PersonalNoteController extends Controller
         public function getCategory()
         {
             $data = DB::table('note_categories')
-                ->where('user', auth()->user()->name)
+                ->where('user', auth()->user()->employeeId())
                 ->whereNull('deleted_at') // optional, if you want only active categories
                 ->get();
 
@@ -636,14 +636,14 @@ class PersonalNoteController extends Controller
             $data['data'] = DB::table('personal_notes')
                 ->join('note_categories', 'note_categories.id', '=', 'personal_notes.category_id')
                 ->select('personal_notes.*', 'note_categories.category_name')
-                ->where('personal_notes.user_id', auth()->user()->name) // Use the user's ID
+                ->where('personal_notes.user_id', auth()->user()->employeeId()) // Use the user's ID
                 ->whereNull('personal_notes.deleted_at')
                 ->orderBy('personal_notes.order_by', 'asc') // Order by "order_by" first
                 ->orderBy('personal_notes.created_at', 'desc') // Then by "created_at"
                 ->get();
 
             $data['category'] = DB::table('note_categories')
-                                    ->where('user', auth()->user()->name)
+                                    ->where('user', auth()->user()->employeeId())
                                     ->whereNull('deleted_at')
                                     ->get(); 
             return view('admin.notes.notes.note', $data);
@@ -653,7 +653,7 @@ class PersonalNoteController extends Controller
         {
             $searchQuery = $request->input('search');
             $status      = $request->input('status', 'open'); // open | done | all
-            $userName    = auth()->user()->name;
+            $userName    = auth()->user()->employeeId();
 
             // optional: interpret words as done/open
             $isDoneFilter = null;
@@ -711,7 +711,7 @@ class PersonalNoteController extends Controller
             // Fetch notes based on the search query, excluding deleted ones
             $notes = DB::table('personal_notes')
                 ->join('note_categories', 'note_categories.id', '=', 'personal_notes.category_id')
-                ->where('personal_notes.user_id', auth()->user()->name) // Use user ID instead of name for security
+                ->where('personal_notes.user_id', auth()->user()->employeeId()) // Use user ID instead of name for security
                 ->whereNull('personal_notes.deleted_at') // Exclude deleted notes
                 ->where('note_categories.id', '=', $searchQuery)
                 ->select('personal_notes.*', 'note_categories.category_name')
@@ -730,7 +730,7 @@ class PersonalNoteController extends Controller
                 ->whereNotNull('repeat')
                 ->whereIn('repeat', ['minute', 'hourly', 'daily', 'weekly', 'monthly', 'quarterly', 'yearly'])
                 ->whereNull('deleted_at') 
-                ->where('user_id', auth()->user()->name) 
+                ->where('user_id', auth()->user()->employeeId()) 
                 ->get();
 
             $newNotes = [];
@@ -791,7 +791,7 @@ class PersonalNoteController extends Controller
 
             DB::table('personal_notes')
                 ->whereIn('id', $noteIds)
-                ->where('user_id', auth()->user()->name)
+                ->where('user_id', auth()->user()->employeeId())
                 ->update(['repeat' => null]);
 
             return response()->json(['message' => 'Repeats stopped for selected notes.']);
@@ -905,7 +905,7 @@ class PersonalNoteController extends Controller
 
 
     private function getEmployeeId() {
-        return auth()->user()->name; 
+        return auth()->user()->employeeId(); 
     }
 
     /**
@@ -1004,7 +1004,7 @@ class PersonalNoteController extends Controller
         ]);
 
         $note = PersonalNote::where('id', $id)
-            ->where('user_id', auth()->user()->name)
+            ->where('user_id', auth()->user()->employeeId())
             ->whereNull('deleted_at')
             ->first();
 
@@ -1020,7 +1020,7 @@ class PersonalNoteController extends Controller
             $categoryId = NoteCategory::firstOrCreate(
                 [
                     'category_name' => 'Standard',
-                    'user' => auth()->user()->name,
+                    'user' => auth()->user()->employeeId(),
                 ],
                 [
                     'color' => '#8fc73e',

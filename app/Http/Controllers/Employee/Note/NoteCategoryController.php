@@ -21,7 +21,7 @@ class NoteCategoryController extends Controller
 
             // Base query excluding deleted records
             $query = DB::table('note_categories')
-                        ->where('user', auth()->user()->name)
+                        ->where('user', auth()->user()->employeeId())
                         ->whereNull('deleted_at');
 
             // Apply search filter if provided
@@ -57,7 +57,7 @@ class NoteCategoryController extends Controller
             'category_name' => $request->category_name,
             'type'  =>  $request->type,
             'color' =>  $request->color,
-            'user'  =>  auth()->user()->name
+            'user'  =>  auth()->user()->employeeId()
         ]);
         return redirect()->back()->with('save_msg', 'Hinweiskategorie erfolgreich erstellt');
 
@@ -75,7 +75,7 @@ class NoteCategoryController extends Controller
             'category_name' => $request->category_name,
             'type' => $request->type,
             'color' => $request->color,
-            'user' => auth()->user()->name,
+            'user' => auth()->user()->employeeId(),
         ]);
 
         return response()->json([
@@ -89,7 +89,7 @@ class NoteCategoryController extends Controller
     {
 
         $data = DB::table('note_categories')
-                    ->where('user', auth()->user()->name)
+                    ->where('user', auth()->user()->employeeId())
                     ->get();
 
     return response()->json($data, 200); 
@@ -107,7 +107,7 @@ class NoteCategoryController extends Controller
             'category_name' =>  'required|string', 
             'type'  =>  'required|string',
             'color'  =>  'nullable|string',
-            'user'  =>  auth()->user()->name
+            'user'  =>  auth()->user()->employeeId()
 
         ]);
 
@@ -115,7 +115,7 @@ class NoteCategoryController extends Controller
             'category_name' => $request->category_name,
             'type'  =>  $request->type,
             'color' =>  $request->color,
-            'user'  =>  auth()->user()->name
+            'user'  =>  auth()->user()->employeeId()
         ]);
         
         return redirect()->back()->with('save_msg', 'Hinweiskategorie erfolgreich aktualisiert');
