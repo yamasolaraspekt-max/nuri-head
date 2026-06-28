@@ -21,19 +21,12 @@ class GarbageController extends Controller
 
         abort_if(!$user, 403);
 
-        /**
-         * In your app, auth()->user()->name stores the employee ID.
-         * So we check user_rolls.user_id against auth()->user()->name.
-         */
-        $hasPermission = DB::table('user_rolls')
-            ->where('user_id', $user->name)
+        // user_rolls.user_id = users.id (FK auf users), Flags = tinyint(1).
+        // Super-Admins (is_admin) dürfen generell.
+        $hasPermission = (bool) $user->is_admin || DB::table('user_rolls')
+            ->where('user_id', $user->id)
             ->where('item_id', 'Administrator')
-            ->where(function ($query) {
-                $query->where('is_delete', 1)
-                    ->orWhere('is_delete', '1')
-                    ->orWhere('is_delete', 'on')
-                    ->orWhere('is_delete', true);
-            })
+            ->where('is_delete', 1)
             ->exists();
 
         abort_unless($hasPermission, 403, 'You do not have permission to delete garbage records.');
