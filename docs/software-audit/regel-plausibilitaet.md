@@ -17,7 +17,7 @@ Funde: 25  ·  🔴 2 kritisch · 🟠 7 hoch · 🟡 15 mittel · ⚪ 1 niedrig
 ### 🟠 Hardcodierter Tomorrow.io API-Key im Quellcode  
 **Modul:** Dashboard & Berichte · **Severity:** hoch · ✅ bestätigt  
 **Ort:** `app/Http/Controllers/EmployeeDashboardController.php:735`  
-**Problem:** $apiKey = '810lNaHm47aq72XReqTSkAtQRi1P9jQh' ist direkt im Controller hartcodiert (Kommentar: 'Replace with your actual API key' – das wurde nie gemacht). Der Key ist im Git-Repository sichtbar und kann zu unberechtigter API-Nutzung führen.  
+**Problem:** $apiKey = '***REDACTED***' ist direkt im Controller hartcodiert (Kommentar: 'Replace with your actual API key' – das wurde nie gemacht). Der Key ist im Git-Repository sichtbar und kann zu unberechtigter API-Nutzung führen.  
 **Fix:** API-Key in .env als TOMORROW_IO_API_KEY auslagern und per config('services.tomorrow_io.key') einbinden. Key sofort in Tomorrow.io rotieren.
 
 ### 🟠 Hardcodierter API-Token und hardcodierte branch_id=1 in Produktionscode  
