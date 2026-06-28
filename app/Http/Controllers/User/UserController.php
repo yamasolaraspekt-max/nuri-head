@@ -87,7 +87,13 @@ class UserController extends Controller
             ->select('user_rolls.*', 'users.name')
             ->get();
 
-        return view('admin.user.user_view')->with('data', $data);
+        // users.name speichert die employees.id -> Employee fuer Name/Bild im Profil laden.
+        $employee = \App\Models\Employee::find(auth()->user()->name);
+
+        return view('admin.user.user_view')
+            ->with('data', $data)
+            ->with('employee', $employee)
+            ->with('user', auth()->user());
     }
 
     public function destroy($id)

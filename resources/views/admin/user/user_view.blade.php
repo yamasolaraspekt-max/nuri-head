@@ -38,12 +38,12 @@
     $statusLabel = ((int) $user->is_active === 1) ? 'Active' : 'Deactivated';
 
     $permissions = collect($data ?? [])->filter(function ($pre) use ($user) {
-        return (string) $pre->user_id === (string) ($user->name ?? $user->id)
-            || (string) $pre->user_id === (string) $user->id;
+        // user_rolls.user_id = users.id
+        return (string) $pre->user_id === (string) $user->id;
     });
 
     $hasPermission = function ($value) {
-        return $value === 'on';
+        return (int) $value === 1; // Flags sind tinyint(1) (1/0), nicht mehr 'on'
     };
 @endphp
 
