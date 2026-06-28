@@ -273,7 +273,6 @@
                                         data-id="{{ $account->id }}"
                                         data-label="{{ $account->label }}"
                                         data-email="{{ $account->email }}"
-                                        data-password="{{ $account->password }}"
                                         data-host="{{ $account->host }}"
                                         data-port="{{ $account->port }}"
                                         data-encryption="{{ $account->encryption }}"
@@ -358,7 +357,7 @@
 
                     <div class="oc-form-group">
                         <label class="oc-label">Passwort</label>
-                        <input type="text" name="password" id="edit_password" class="oc-input-form" required>
+                        <input type="password" name="password" id="edit_password" class="oc-input-form" placeholder="•••• (leer lassen = unverändert)" autocomplete="new-password">
                     </div>
 
                     <div class="oc-form-group">
@@ -536,7 +535,7 @@ $(document).ready(function(){
         document.getElementById('editAccountForm').action = `/admin/lead-email-accounts/${id}`;
         document.getElementById('edit_label').value = btn.dataset.label || '';
         document.getElementById('edit_email').value = btn.dataset.email || '';
-        document.getElementById('edit_password').value = btn.dataset.password || '';
+        document.getElementById('edit_password').value = ''; // Passwort nie vorbefuellen (nur bei Eingabe neu setzen)
         document.getElementById('edit_host').value = btn.dataset.host || '';
         document.getElementById('edit_port').value = btn.dataset.port || '';
         document.getElementById('edit_encryption').value = btn.dataset.encryption || 'ssl';

@@ -16,4 +16,9 @@ class LeadEmailAccounts extends Model
         'status',
         'test',
     ];
+
+    // IMAP-Passwort verschluesselt in der DB ablegen (Cast greift bei Eloquent create/save/update).
+    protected $casts = [
+        'password' => 'encrypted',
+    ];
 }

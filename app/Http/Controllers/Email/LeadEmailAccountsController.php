@@ -91,7 +91,8 @@ class LeadEmailAccountsController extends Controller
             'status' => 'required|string|in:Published,Unpublished',
         ]);
 
-        LeadEmailAccounts::create($request->all());
+        // Explizite Whitelist statt $request->all() (kein Mass-Assignment-Risiko); Cast verschluesselt das Passwort.
+        LeadEmailAccounts::create($request->only(['label', 'email', 'password', 'host', 'port', 'encryption', 'status', 'test']));
 
         return redirect()->route('lead-email-accounts.index')->with('save_msg', 'E-Mail-Konto wurde erfolgreich erstellt.');
     }
@@ -109,22 +110,25 @@ class LeadEmailAccountsController extends Controller
         $request->validate([
             'label' => 'required|string|max:255',
             'email' => 'required|email|unique:lead_email_accounts,email,' . $account->id,
-            'password' => 'required|string',
+            'password' => 'nullable|string', // leer lassen = Passwort unveraendert
             'host' => 'required|string',
             'port' => 'required|integer',
             'encryption' => 'required|string',
             'status' => 'required|string|in:Published,Unpublished',
         ]);
 
-        $account->update([
+        $data = [
             'label' => $request->label,
             'email' => $request->email,
-            'password' => $request->password,
             'host' => $request->host,
             'port' => $request->port,
             'encryption' => $request->encryption,
             'status' => $request->status,
-        ]);
+        ];
+        if (filled($request->password)) {
+            $data['password'] = $request->password; // nur bei Eingabe -> Eloquent verschluesselt via Cast
+        }
+        $account->update($data);
 
         return redirect()
             ->route('lead-email-accounts.index')
