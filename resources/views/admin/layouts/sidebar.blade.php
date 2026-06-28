@@ -261,7 +261,7 @@
     | In this app:
     | users.id   = Laravel auth user id
     | users.name = employees.id
-    | user_rolls.user_id = employees.id
+    | user_rolls.user_id = users.id (FK auf users)
     |--------------------------------------------------------------------------
     */
     $authUser = auth()->user();
@@ -297,8 +297,13 @@
             ->orWhere($column, true);
     };
 
-    $hasPermission = function (?string $itemId, string $permission = 'is_read') use ($userId, $truthyPermission) {
+    $hasPermission = function (?string $itemId, string $permission = 'is_read') use ($userId, $authUser, $truthyPermission) {
         if (!$itemId) {
+            return true;
+        }
+
+        // Super-Admin (is_admin) sieht alle Menüpunkte.
+        if ($authUser && $authUser->is_admin) {
             return true;
         }
 
@@ -320,12 +325,14 @@
     | Special Permissions
     |--------------------------------------------------------------------------
     */
-    $canSalary = false;
-    $canDeleteGarbage = false;
+    // Spezial-Rechte: user_rolls.user_id = users.id; Super-Admins haben alles.
+    $isSuperAdmin = (bool) ($authUser?->is_admin);
+    $canSalary = $isSuperAdmin;
+    $canDeleteGarbage = $isSuperAdmin;
 
-    if ($employeeId) {
+    if (!$isSuperAdmin && $userId) {
         $canSalary = DB::table('user_rolls')
-            ->where('user_id', $employeeId)
+            ->where('user_id', $userId)
             ->where('item_id', 'Super')
             ->where(function ($query) use ($truthyPermission) {
                 $truthyPermission($query, 'is_add');
@@ -333,7 +340,7 @@
             ->exists();
 
         $canDeleteGarbage = DB::table('user_rolls')
-            ->where('user_id', $employeeId)
+            ->where('user_id', $userId)
             ->where('item_id', 'Administrator')
             ->where(function ($query) use ($truthyPermission) {
                 $truthyPermission($query, 'is_delete');
@@ -341,9 +348,9 @@
             ->exists();
     }
 
-    $canSeeAllReports = false;
+    $canSeeAllReports = $isSuperAdmin;
 
-    if ($userId) {
+    if (!$isSuperAdmin && $userId) {
         $canSeeAllReports = DB::table('user_rolls')
             ->where('user_id', $userId)
             ->where('item_id', 'Administrator')
