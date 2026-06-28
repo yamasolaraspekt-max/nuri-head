@@ -728,7 +728,13 @@ class OverdueCenterController extends Controller
         $products = collect();
         $departments = collect();
 
-        if ($this->hasTable('employees')) {
+        // FIX P0-12: employeeId real setzen; "Alles sehen" nur fuer Admin oder Mitarbeiter-Leserecht
+        // (vorher hart canViewAll=true + employeeId=0 -> jeder Auth-User sah volle MA-/Kundenliste).
+        $employeeId = $this->currentEmployeeId();
+        $canViewAll = (bool) auth()->user()->is_admin
+            || (bool) auth()->user()->hasPermission('Employee', 'read');
+
+        if ($canViewAll && $this->hasTable('employees')) {
             $employees = DB::table('employees')
                 ->select('id', 'name', 'lastname')
                 ->orderBy('name')
@@ -736,7 +742,7 @@ class OverdueCenterController extends Controller
                 ->get();
         }
 
-        if ($this->hasTable('new_leads')) {
+        if ($canViewAll && $this->hasTable('new_leads')) {
             $customers = DB::table('new_leads')
                 ->when($this->hasColumn('new_leads', 'deleted_at'), fn($q) => $q->whereNull('deleted_at'))
                 ->select([
@@ -751,7 +757,7 @@ class OverdueCenterController extends Controller
                 ->get();
         }
 
-        if ($this->hasTable('article_groups')) {
+        if ($canViewAll && $this->hasTable('article_groups')) {
             $products = DB::table('article_groups')
                 ->when($this->hasColumn('article_groups', 'deleted_at'), fn($q) => $q->whereNull('deleted_at'))
                 ->select('id', 'article_group', 'initial')
@@ -759,7 +765,7 @@ class OverdueCenterController extends Controller
                 ->get();
         }
 
-        if ($this->hasTable('departments')) {
+        if ($canViewAll && $this->hasTable('departments')) {
             $departments = DB::table('departments')
                 ->when($this->hasColumn('departments', 'deleted_at'), fn($q) => $q->whereNull('deleted_at'))
                 ->select('id', 'department_name')
@@ -772,8 +778,8 @@ class OverdueCenterController extends Controller
             'customers' => $customers,
             'products' => $products,
             'departments' => $departments,
-            'employeeId' => 0,
-            'canViewAll' => true,
+            'employeeId' => $employeeId,
+            'canViewAll' => $canViewAll,
         ]);
     }
 
