@@ -1,0 +1,529 @@
+<?php
+
+namespace App\Http\Controllers\Customer\Offer;
+
+use App\Http\Controllers\Controller;
+use App\Models\ArticleGroup;
+use App\Models\LeadAlternativeAdd;
+use App\Models\LeadProductList;
+use App\Models\NewLeads;
+use App\Models\Offer;
+use App\Models\OfferDetail;
+use App\Models\OfferFolder;
+use App\Models\OfferTemplate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Employee;
+class OfferTemplatePickerController extends Controller
+{
+    public function index(Request $request)
+    {
+        $templates = OfferTemplate::query()
+            ->with([
+                'creator',
+                'department',
+                'articleGroup',
+                'brand',
+                'distributor',
+                'favoritedByEmployees',
+                'stampedByEmployee',
+                'lastUsedByEmployee',
+            ])
+            ->when($request->filled('q'), function ($q) use ($request) {
+                $search = trim((string) $request->q);
+
+                $q->where(function ($qq) use ($search) {
+                    $qq->where('name', 'like', "%{$search}%")
+                        ->orWhere('company_name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('cover_text_html', 'like', "%{$search}%")
+                        ->orWhere('sections', 'like', "%{$search}%")
+                        ->orWhereHas('articleGroup', function ($query) use ($search) {
+                            $query->where('article_group', 'like', "%{$search}%")
+                                ->orWhere('initial', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('brand', fn($query) => $query->where('name', 'like', "%{$search}%"))
+                        ->orWhereHas('distributor', fn($query) => $query->where('name', 'like', "%{$search}%"));
+                });
+            })
+            ->when($request->filled('article_group_id'), function ($q) use ($request) {
+                $q->where('article_group_id', $request->article_group_id);
+            })
+            ->when($request->filled('employee_id'), function ($q) use ($request) {
+                $employeeId = $request->integer('employee_id');
+
+                $q->where(function ($qq) use ($employeeId) {
+                    $qq->where('created_by', $employeeId)
+                        ->orWhere('favorite_by_employee_id', $employeeId)
+                        ->orWhere('stamped_by_employee_id', $employeeId)
+                        ->orWhere('last_used_by_employee_id', $employeeId)
+                        ->orWhereHas('favoritedByEmployees', function ($fav) use ($employeeId) {
+                            $fav->where('employees.id', $employeeId);
+                        });
+                });
+            })
+            ->orderByDesc('is_favorite')
+            ->orderByDesc('stamp')
+            ->orderByDesc('usage_count')
+            ->orderByDesc('id')
+            ->paginate(12)
+            ->withQueryString();
+
+        $activeEmployees = Employee::query()
+            ->where(function ($q) {
+                $q->where('status', 'Active')
+                    ->orWhere('status', 'active')
+                    ->orWhere('status_msg', 'Active')
+                    ->orWhere('status_msg', 'active');
+            })
+            ->select(['id', 'name', 'lastname', 'image', 'status', 'status_msg'])
+            ->orderBy('name')
+            ->limit(30)
+            ->get();
+
+        $selectedArticleGroup = null;
+
+        if ($request->filled('article_group_id')) {
+            $selectedArticleGroup = ArticleGroup::find($request->article_group_id);
+        }
+
+        return view('admin.offer.offer-templates.customer-picker', [
+            'templates' => $templates,
+            'activeEmployees' => $activeEmployees,
+            'selectedArticleGroup' => $selectedArticleGroup,
+        ]);
+    }
+    public function searchCustomers(Request $request)
+    {
+        $search = trim((string) $request->get('q'));
+
+        $customers = NewLeads::query()
+            ->select([
+                'id',
+                'customer_no',
+                'firma',
+                'name',
+                'lastname',
+                'email',
+                'phone',
+                'telephone',
+                'street',
+                'postcode',
+                'city',
+            ])
+            ->when($search !== '', function ($q) use ($search) {
+                $q->where(function ($qq) use ($search) {
+                    $qq->where('customer_no', 'like', "%{$search}%")
+                        ->orWhere('firma', 'like', "%{$search}%")
+                        ->orWhere('name', 'like', "%{$search}%")
+                        ->orWhere('lastname', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhere('telephone', 'like', "%{$search}%")
+                        ->orWhere('street', 'like', "%{$search}%")
+                        ->orWhere('postcode', 'like', "%{$search}%")
+                        ->orWhere('city', 'like', "%{$search}%");
+                });
+            })
+            ->orderByDesc('id')
+            ->limit(30)
+            ->get()
+            ->map(function ($customer) {
+                $name = $customer->firma
+                    ?: trim(($customer->name ?? '') . ' ' . ($customer->lastname ?? ''));
+
+                $name = $name ?: 'Kunde #' . $customer->id;
+
+                $address = trim(collect([
+                    $customer->street,
+                    $customer->postcode,
+                    $customer->city,
+                ])->filter()->implode(', '));
+
+                return [
+                    'id' => $customer->id,
+                    'text' => trim(($customer->customer_no ? "#{$customer->customer_no} · " : '') . $name),
+                    'address' => $address,
+                ];
+            });
+
+        return response()->json([
+            'results' => $customers,
+        ]);
+    }
+
+    public function searchObjects(Request $request)
+    {
+        $customerId = $request->integer('customer_id');
+
+        if (!$customerId) {
+            return response()->json([
+                'results' => [],
+            ]);
+        }
+
+        $objects = LeadAlternativeAdd::query()
+            ->where('lead_id', $customerId)
+            ->orderByDesc('main')
+            ->orderByDesc('id')
+            ->limit(50)
+            ->get()
+            ->map(function ($object) {
+                $address = trim(collect([
+                    $object->street,
+                    $object->postcode,
+                    $object->city,
+                ])->filter()->implode(', '));
+
+                return [
+                    'id' => $object->id,
+                    'text' => ($object->main ? 'Hauptobjekt · ' : '') . ($address ?: 'Objekt #' . $object->id),
+                    'main' => (bool) $object->main,
+                ];
+            });
+
+        return response()->json([
+            'results' => $objects,
+        ]);
+    }
+
+    public function searchProducts(Request $request)
+    {
+        $customerId = $request->integer('customer_id');
+        $alternativeId = $request->integer('alternative_id');
+        $search = trim((string) $request->get('q'));
+
+        if (!$customerId) {
+            return response()->json([
+                'results' => [],
+            ]);
+        }
+
+        $productIds = LeadProductList::query()
+            ->where('customer_id', $customerId)
+            ->when($alternativeId, function ($q) use ($alternativeId) {
+                $q->where('alternative_id', $alternativeId);
+            })
+            ->pluck('product_id')
+            ->filter()
+            ->unique()
+            ->values();
+
+        $products = ArticleGroup::query()
+            ->whereIn('id', $productIds)
+            ->when($search !== '', function ($q) use ($search) {
+                $q->where(function ($qq) use ($search) {
+                    $qq->where('name', 'like', "%{$search}%")
+                        ->orWhere('title', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('name')
+            ->limit(50)
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'text' => $product->name ?? $product->title ?? 'Produkt #' . $product->id,
+                ];
+            });
+
+        return response()->json([
+            'results' => $products,
+        ]);
+    }
+
+    public function check(Request $request, OfferTemplate $template)
+    {
+        $validated = $request->validate([
+            'customer_id' => ['required', 'integer', 'exists:new_leads,id'],
+            'alternative_id' => ['nullable', 'integer'],
+            'product_id' => ['nullable', 'integer'],
+        ]);
+
+        $customerId = (int) $validated['customer_id'];
+        $alternativeId = $validated['alternative_id'] ?? null;
+        $productId = $validated['product_id'] ?? $template->article_group_id;
+
+        $offers = Offer::query()
+            ->with([
+                'productGroup',
+                'department',
+                'detail',
+                'folders.detail',
+                'folders.product',
+            ])
+            ->where('customer_id', $customerId)
+            ->when($alternativeId, function ($q) use ($alternativeId) {
+                $q->where('alternative_id', $alternativeId);
+            })
+            ->when($productId, function ($q) use ($productId) {
+                $q->where('product_id', $productId);
+            })
+            ->orderByDesc('id')
+            ->get();
+
+        $folders = OfferFolder::query()
+            ->with([
+                'offer',
+                'detail',
+                'product',
+            ])
+            ->where('customer_id', $customerId)
+            ->when($alternativeId, function ($q) use ($alternativeId) {
+                $q->where('alternative_id', $alternativeId);
+            })
+            ->when($productId, function ($q) use ($productId) {
+                $q->where('product_id', $productId);
+            })
+            ->orderByDesc('id')
+            ->get();
+
+        return response()->json([
+            'has_offer' => $offers->isNotEmpty(),
+            'has_folder' => $folders->isNotEmpty(),
+            'has_detail' => $offers->contains(fn($offer) => (bool) $offer->detail)
+                || $folders->contains(fn($folder) => (bool) $folder->detail),
+
+            'template' => [
+                'id' => $template->id,
+                'name' => $template->name,
+                'article_group_id' => $template->article_group_id,
+            ],
+
+            'offers' => $offers->map(function ($offer) {
+                return [
+                    'id' => $offer->id,
+                    'offer_no' => $offer->offer_no,
+                    'status' => $offer->status,
+                    'product' => $offer->productGroup?->name ?? $offer->productGroup?->title ?? '-',
+                    'department' => $offer->department?->department_name ?? $offer->department?->name ?? '-',
+                    'has_detail' => (bool) $offer->detail,
+                    'folders_count' => $offer->folders->count(),
+                ];
+            })->values(),
+
+            'folders' => $folders->map(function ($folder) {
+                return [
+                    'id' => $folder->id,
+                    'name' => $folder->name,
+                    'offer_no' => $folder->offer?->offer_no,
+                    'status' => $folder->workflow_status_label ?? $folder->status ?? '-',
+                    'document_status' => $folder->document_status,
+                    'product' => $folder->product?->name ?? $folder->product?->title ?? '-',
+                    'has_detail' => (bool) $folder->detail,
+                ];
+            })->values(),
+        ]);
+    }
+
+    public function useTemplate(Request $request, OfferTemplate $template)
+    {
+        $validated = $request->validate([
+            'customer_id' => ['required', 'integer', 'exists:new_leads,id'],
+            'alternative_id' => ['nullable', 'integer'],
+            'product_id' => ['required', 'integer', 'exists:article_groups,id'],
+            'folder_name' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $employeeId = auth()->user()->name ?? auth()->id();
+
+        $result = DB::transaction(function () use ($validated, $template, $employeeId) {
+            $customerId = (int) $validated['customer_id'];
+            $alternativeId = $validated['alternative_id'] ?? null;
+            $productId = (int) $validated['product_id'];
+
+            $offer = Offer::create([
+                'customer_id' => $customerId,
+                'product_id' => $productId,
+                'alternative_id' => $alternativeId,
+                'department_id' => $template->department_id,
+                'service_id' => null,
+                'created_by' => $employeeId,
+                'created_for' => $employeeId,
+                'status' => 'draft',
+                'status_msg' => 'Created from template: ' . $template->name,
+            ]);
+
+            $folder = OfferFolder::create([
+                'offer_id' => $offer->id,
+                'customer_id' => $customerId,
+                'alternative_id' => $alternativeId,
+                'product_id' => $productId,
+                'created_by' => $employeeId,
+                'name' => $validated['folder_name'] ?: $template->name . ' - ' . now()->format('d.m.Y H:i'),
+                'color' => $template->brand_color ?: '#2563eb',
+                'status' => 'draft',
+                'document_status' => OfferFolder::DOCUMENT_STATUS_OFFER,
+                'offer_status' => OfferFolder::OFFER_STATUS_DRAFT,
+                'deal_status' => OfferFolder::DEAL_STATUS_OPEN,
+                'history' => [
+                    [
+                        'type' => 'created_from_template',
+                        'template_id' => $template->id,
+                        'template_name' => $template->name,
+                        'employee_id' => $employeeId,
+                        'at' => now()->toDateTimeString(),
+                    ],
+                ],
+            ]);
+
+            $detail = OfferDetail::create([
+                'offer_id' => $offer->id,
+                'offer_folder_id' => $folder->id,
+                'offer_no' => $offer->offer_no,
+
+                'document_status' => OfferDetail::DOCUMENT_STATUS_OFFER,
+
+                'brand_color' => $template->brand_color,
+                'brand_mode' => $template->brand_mode,
+                'brand_logo_url' => $template->brand_logo_url,
+                'company_name' => $template->company_name,
+                'cover_text_html' => $template->cover_text_html,
+                'cover_text' => strip_tags((string) $template->cover_text_html),
+
+                'sections' => $template->sections ?? [],
+                'placed_images' => $template->placed_images ?? [],
+                'biography_data' => $template->biography_data ?? [],
+
+                'total_net' => 0,
+                'tax_rate' => 19,
+                'total_gross' => 0,
+            ]);
+
+            $template->increment('usage_count');
+
+            $template->forceFill([
+                'last_used_by_employee_id' => $employeeId,
+                'last_used_at' => now(),
+            ])->save();
+
+            return [
+                'offer' => $offer,
+                'folder' => $folder,
+                'detail' => $detail,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Template wurde erfolgreich verwendet.',
+            'offer_id' => $result['offer']->id,
+            'offer_folder_id' => $result['folder']->id,
+            'offer_detail_id' => $result['detail']->id,
+            'redirect_url' => url('/wizard') . '?' . http_build_query([
+                'offer_id' => $result['offer']->id,
+                'offer_folder_id' => $result['folder']->id,
+                'customer_id' => $result['offer']->customer_id,
+                'alternative_id' => $result['offer']->alternative_id,
+                'product_id' => $result['offer']->product_id,
+            ]),
+        ]);
+    }
+
+    public function searchArticleGroups(Request $request)
+    {
+        $search = trim((string) $request->get('q'));
+
+        $groups = ArticleGroup::query()
+            ->when($search !== '', function ($q) use ($search) {
+                $q->where(function ($qq) use ($search) {
+                    $qq->where('article_group', 'like', "%{$search}%")
+                        ->orWhere('initial', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('article_group')
+            ->limit(30)
+            ->get()
+            ->map(fn($group) => [
+                'id' => $group->id,
+                'text' => $group->article_group ?: ('Artikelgruppe #' . $group->id),
+            ]);
+
+        return response()->json(['results' => $groups]);
+    }
+
+    public function searchSuggestions(Request $request)
+    {
+        $search = trim((string) $request->get('q'));
+        $articleGroupId = $request->integer('article_group_id');
+
+        if (mb_strlen($search) < 2) {
+            return response()->json(['results' => []]);
+        }
+
+        $templates = OfferTemplate::query()
+            ->with(['articleGroup', 'brand', 'distributor'])
+            ->when($articleGroupId, fn($q) => $q->where('article_group_id', $articleGroupId))
+            ->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('company_name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('cover_text_html', 'like', "%{$search}%")
+                    ->orWhere('sections', 'like', "%{$search}%");
+            })
+            ->limit(8)
+            ->get()
+            ->map(function ($template) {
+                return [
+                    'id' => $template->id,
+                    'text' => $template->name,
+                    'meta' => trim(collect([
+                        $template->articleGroup?->article_group,
+                        $template->brand?->name,
+                        $template->distributor?->name,
+                        $template->company_name,
+                    ])->filter()->implode(' · ')),
+                ];
+            });
+
+        return response()->json(['results' => $templates]);
+    }
+
+    public function searchEmployees(Request $request)
+    {
+        $search = trim((string) $request->get('q'));
+
+        $employees = Employee::query()
+            ->where(function ($q) {
+                $q->where('status', 'Active')
+                    ->orWhere('status', 'active')
+                    ->orWhere('status_msg', 'Active')
+                    ->orWhere('status_msg', 'active');
+            })
+            ->when($search !== '', function ($q) use ($search) {
+                $q->where(function ($qq) use ($search) {
+                    $qq->where('name', 'like', "%{$search}%")
+                        ->orWhere('lastname', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->select(['id', 'name', 'lastname', 'email', 'image', 'status', 'status_msg'])
+            ->orderBy('name')
+            ->limit(30)
+            ->get()
+            ->map(function ($employee) {
+                $name = trim(($employee->name ?? '') . ' ' . ($employee->lastname ?? ''));
+                $name = $name ?: 'Mitarbeiter #' . $employee->id;
+
+                $initials = collect(explode(' ', trim($name)))
+                    ->filter()
+                    ->take(2)
+                    ->map(fn($part) => mb_substr($part, 0, 1))
+                    ->implode('');
+
+                return [
+                    'id' => $employee->id,
+                    'text' => $name,
+                    'meta' => $employee->email ?: 'Active',
+                    'initials' => strtoupper($initials ?: '?'),
+                    'image_url' => $employee->image
+                        ? asset('images/employee/' . ltrim($employee->image, '/'))
+                        : null,
+                ];
+            });
+
+        return response()->json([
+            'results' => $employees,
+        ]);
+    }
+}
