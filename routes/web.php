@@ -431,7 +431,7 @@ Route::get('/fix-notes', function () {
     }
 
     return "Fixed $count notes! You can now delete this route.";
-});
+})->middleware('auth');
 
 Route::get('/notAdmin', [AdminController::class, 'notAdmin'])->name('notweb');
 Route::get('/system-warning/current', [SystemWarningController::class, 'current'])->name('system-warning.current');
@@ -3965,7 +3965,7 @@ Route::get('/route-cache', function () {
     Artisan::call('config:cache');
     Artisan::call('optimize:clear');
     return 'Routes cache cleared and optimized!';
-});
+})->middleware('auth');
 Auth::routes();
 
 Route::get('/timeline', [AdminController::class, 'timeline'])->name('timeline');
@@ -4511,8 +4511,8 @@ Route::middleware(['auth'])->group(function () {
 Route::group(['middleware'=> 'auth'], function(){
     Route::get('chats/{user}',[MessageController::class, 'index'])->name('chats.view');
 });
-Route::get('/dispatch-chat-jobs/{startId}/{endId}/{chunkSize?}', [MessageController::class, 'dispatchChatProcessingJobs']);
-Route::get('/chat-jobs/{startId}/{endId}/{chunkSize?}', [MessageController::class, 'dispatchChatJobs']);
+Route::get('/dispatch-chat-jobs/{startId}/{endId}/{chunkSize?}', [MessageController::class, 'dispatchChatProcessingJobs'])->middleware('auth');
+Route::get('/chat-jobs/{startId}/{endId}/{chunkSize?}', [MessageController::class, 'dispatchChatJobs'])->middleware('auth');
 
 
 
@@ -4523,7 +4523,7 @@ Route::get('/run-backfill-phase-sections', function () {
     } catch (\Exception $e) {
         return response()->json(['error' => $e->getMessage()], 500);
     }
-});
+})->middleware('auth');
 
 Route::get('weather_station', [WeatherStationController::class, 'index']);
 Route::post('weather_station_upload', [WeatherStationController::class, 'upload'])->name('weather_stations.upload');

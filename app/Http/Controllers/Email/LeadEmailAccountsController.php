@@ -14,6 +14,10 @@ use Illuminate\Http\JsonResponse;
 
 class LeadEmailAccountsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function unreadRealtimeData(): JsonResponse
     {
