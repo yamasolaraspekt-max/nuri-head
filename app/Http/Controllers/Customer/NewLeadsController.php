@@ -371,7 +371,8 @@ class NewLeadsController extends Controller
             ->leftJoin('employee_departments', 'employee_departments.employee_id', '=', 'employees.id')
             ->leftJoin('departments', 'departments.id', '=', 'employee_departments.department_id')
             ->leftJoin('positions', 'departments.id', '=', 'positions.department_id')
-            ->leftJoin('product_positions', 'product_positions.position_id', '=', 'positions.id')
+            // FIX P1: kaputter Join entfernt - product_positions hat keine Spalte position_id (sondern position_ids JSON);
+            // wurde weder selektiert noch gefiltert -> Query crashte nur (Unknown column).
             ->join('article_groups', 'article_groups.id', '=', 'new_lead_responsibilities.product_id')
             ->select('employees.id', 'employees.name', 'employees.lastname', 'employees.image', 'positions.position')
             ->where('new_lead_responsibilities.product_id', '=', $product_id)
