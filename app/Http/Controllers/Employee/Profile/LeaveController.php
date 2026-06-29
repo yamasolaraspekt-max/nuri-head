@@ -236,11 +236,26 @@ class LeaveController extends Controller
                 return $this->errorResponse($request, 'Urlaubsantrag wurde nicht gefunden.', 404);
             }
 
-            $leave->approved = 'Yes';
-            $leave->status = 'accept';
-            $leave->request_answer = 'accept';
-            $leave->changed_by = $this->currentActorId();
-            $leave->save();
+            // FIX P2-31: War der Antrag vor diesem Aufruf schon genehmigt? Dann die
+            // Resttage NICHT erneut abziehen (Schutz vor Doppel-Dekrement bei erneutem approve()).
+            $alreadyApproved = strtolower(trim((string) $leave->approved)) === 'yes'
+                || strtolower(trim((string) $leave->status)) === 'accept';
+
+            DB::transaction(function () use ($leave, $alreadyApproved) {
+                $leave->approved = 'Yes';
+                $leave->status = 'accept';
+                $leave->request_answer = 'accept';
+                $leave->changed_by = $this->currentActorId();
+                $leave->save();
+
+                // FIX P2-31: Beim erstmaligen Genehmigen die verbleibenden Urlaubstage
+                // des Mitarbeiters um die Urlaubsdauer reduzieren (bisher fehlte das,
+                // nur der Dashboard-Pfad save() tat es).
+                $duration = (int) $leave->duration;
+                if (!$alreadyApproved && $leave->emp_id && $duration > 0) {
+                    Employee::where('id', $leave->emp_id)->decrement('remaining_day', $duration);
+                }
+            });
 
             return $this->successResponse($request, [
                 'message' => 'Urlaub erfolgreich genehmigt!',
