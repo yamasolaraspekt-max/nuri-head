@@ -38,7 +38,16 @@ class BrandDepartmentController extends Controller
             ->paginate(20)
             ->appends($request->query());
 
-        return view('admin.product.brand.brand_department', compact('brand', 'department'));
+        // Produkte des Herstellers für die Profilansicht
+        $products = \DB::table('products as p')
+            ->leftJoin('article_groups as ag', 'ag.id', '=', 'p.article_group')
+            ->where('p.brand_id', $brand->id)
+            ->select('p.product', 'p.article_no', 'ag.article_group as gruppe', 'p.model', 'p.retail_price')
+            ->orderBy('ag.article_group')
+            ->orderBy('p.product')
+            ->get();
+
+        return view('admin.product.brand.brand_department', compact('brand', 'department', 'products'));
     }
 
     public function store(Request $request)

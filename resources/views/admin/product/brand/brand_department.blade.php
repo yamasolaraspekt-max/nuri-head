@@ -285,6 +285,59 @@ $officeCount = $departmentItems->filter(fn($d) => !empty($d->office))->count();
     </div>
   </div>
 
+  {{-- Profil: Stammdaten des Herstellers --}}
+  <div class="oc-card">
+    <div class="oc-card-head">
+      <h3 class="oc-card-title">Stammdaten</h3>
+    </div>
+    <div class="oc-card-body">
+      <div class="oc-table-wrap">
+        <table class="oc-table">
+          <tbody>
+            <tr><th style="width:220px">Name</th><td>{{ $brand->name }}</td></tr>
+            <tr><th>Kürzel</th><td>{{ $brand->initial ?: '—' }}</td></tr>
+            <tr><th>Typ</th><td>{{ $brand->type ?: '—' }}</td></tr>
+            <tr><th>Bereich / Zweck</th><td>{{ $brand->purpose ?: '—' }}</td></tr>
+            <tr><th>Adresse</th><td>{{ $brand->address ?: '—' }}</td></tr>
+            <tr><th>Status</th><td>{{ $brand->status ?: '—' }}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {{-- Profil: Produkte / Artikel des Herstellers --}}
+  <div class="oc-card">
+    <div class="oc-card-head">
+      <h3 class="oc-card-title">Produkte / Artikel</h3>
+      <span class="oc-badge">{{ count($products ?? []) }} Artikel</span>
+    </div>
+    <div class="oc-card-body">
+      @if(count($products ?? []))
+        <div class="oc-table-wrap">
+          <table class="oc-table">
+            <thead>
+              <tr><th>Artikel-Nr.</th><th>Produkt</th><th>Gruppe</th><th>Modell</th><th>VK-Preis</th></tr>
+            </thead>
+            <tbody>
+              @foreach($products as $p)
+                <tr>
+                  <td>{{ $p->article_no ?: '—' }}</td>
+                  <td>{{ $p->product }}</td>
+                  <td>{{ $p->gruppe ?: '—' }}</td>
+                  <td>{{ $p->model ?: '—' }}</td>
+                  <td>{{ $p->retail_price ? number_format((float) $p->retail_price, 2, ',', '.') . ' €' : '—' }}</td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      @else
+        <div class="oc-empty">Keine Artikel hinterlegt.</div>
+      @endif
+    </div>
+  </div>
+
   <div class="oc-card">
     <div class="oc-card-head">
       <h3 class="oc-card-title">Vorhandene Kontakte</h3>

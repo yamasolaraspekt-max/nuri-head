@@ -967,6 +967,65 @@
         </div>
       </div>
 
+      {{-- Profil: Stammdaten & Konditionen des Lieferanten --}}
+      <div class="oc-card">
+        <div class="oc-card-head">
+          <h3 class="oc-card-title">Stammdaten & Konditionen</h3>
+        </div>
+        <div class="oc-card-body">
+          <div class="oc-table-wrap">
+            <table class="oc-table">
+              <tbody>
+                <tr><th style="width:220px">Name</th><td>{{ $distributor->name }}</td></tr>
+                <tr><th>Kurzname</th><td>{{ $distributor->short_name ?: '—' }}</td></tr>
+                <tr><th>Typ</th><td>{{ $distributor->type ?: '—' }}</td></tr>
+                <tr><th>Adresse</th><td>{{ trim(($distributor->street ?? '') . ', ' . ($distributor->postal_code ?? '') . ' ' . ($distributor->city ?? ''), ', ') ?: '—' }}</td></tr>
+                <tr><th>Telefon / Mobil</th><td>{{ $distributor->phone ?: '—' }} {{ $distributor->mobile ? ' · ' . $distributor->mobile : '' }}</td></tr>
+                <tr><th>E-Mail</th><td>{{ $distributor->email ?: '—' }}</td></tr>
+                <tr><th>Kundennummer</th><td>{{ $distributor->account_number ?: '—' }}</td></tr>
+                <tr><th>Zahlungsziel</th><td>{{ $distributor->payment_terms ?: '—' }}</td></tr>
+                <tr><th>Skonto</th><td>{{ $distributor->cash_discount !== null ? number_format((float) $distributor->cash_discount, 2, ',', '.') . ' %' : '—' }}</td></tr>
+                <tr><th>Status</th><td>{{ $distributor->status ?: '—' }}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {{-- Profil: Sortiment (gelieferte Artikel + Preise) --}}
+      <div class="oc-card">
+        <div class="oc-card-head">
+          <h3 class="oc-card-title">Sortiment / gelieferte Artikel</h3>
+          <span class="oc-badge">{{ count($products ?? []) }} Artikel</span>
+        </div>
+        <div class="oc-card-body">
+          @if(count($products ?? []))
+            <div class="oc-table-wrap">
+              <table class="oc-table">
+                <thead>
+                  <tr><th>Artikel-Nr.</th><th>Produkt</th><th>Gruppe</th><th>EK-Preis</th><th>VK-Preis</th><th>Rabatt</th><th>Verfügbarkeit</th></tr>
+                </thead>
+                <tbody>
+                  @foreach($products as $p)
+                    <tr>
+                      <td>{{ $p->article_no ?: '—' }}</td>
+                      <td>{{ $p->product }}</td>
+                      <td>{{ $p->gruppe ?: '—' }}</td>
+                      <td>{{ $p->purchase_price ? number_format((float) $p->purchase_price, 2, ',', '.') . ' €' : '—' }}</td>
+                      <td>{{ $p->price ? number_format((float) $p->price, 2, ',', '.') . ' €' : '—' }}</td>
+                      <td>{{ $p->discount_percent ? number_format((float) $p->discount_percent, 0) . ' %' : '—' }}</td>
+                      <td>{{ $p->availability ?: '—' }}</td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          @else
+            <div class="oc-empty">Kein Sortiment hinterlegt.</div>
+          @endif
+        </div>
+      </div>
+
       <div class="oc-card">
         <div class="oc-card-head">
           <h3 class="oc-card-title">Vorhandene Kontakte</h3>

@@ -37,9 +37,21 @@ class DistributorDepartmentController extends Controller
             ->orderBy('id', 'desc')
             ->paginate((int) $request->get('perPage', 25));
 
+        // Sortiment (gelieferte Artikel + Preise) für die Profilansicht
+        $products = \DB::table('distributor_prices as dp')
+            ->join('products as p', 'p.id', '=', 'dp.product_id')
+            ->leftJoin('article_groups as ag', 'ag.id', '=', 'p.article_group')
+            ->where('dp.distributor_id', $distributor->id)
+            ->select('p.product', 'p.article_no', 'ag.article_group as gruppe',
+                     'dp.purchase_price', 'dp.price', 'dp.discount_percent', 'dp.availability')
+            ->orderBy('ag.article_group')
+            ->orderBy('p.product')
+            ->get();
+
         return view('admin.product.distributor.distributor_department', [
             'distributor' => $distributor,
             'departments' => $departments,
+            'products' => $products,
         ]);
     }
 
