@@ -61,7 +61,7 @@
                                                             </div>
                                                         @endif
                                                             <!-- Table with outer spacing -->
-                                                            <form novalidate action="{{ action('App\Http\Controllers\InquiryTypeController@store')}}" method="post" >
+                                                            <form novalidate action="{{ action('App\Http\Controllers\Inquiry\InquiryTypeController@store')}}" method="post" >
                                                              @csrf
                                                             <div class="table-responsive">
                                                             @if(DB::table('user_rolls')
@@ -124,7 +124,7 @@
                                                                                                         <span aria-hidden="true">&times;</span>
                                                                                                     </button>
                                                                                                 </div>
-                                                                                                <form method="post" action="{{ action('App\Http\Controllers\InquiryTypeController@update')}}">
+                                                                                                <form method="post" action="{{ action('App\Http\Controllers\Inquiry\InquiryTypeController@update')}}">
                                                                                                     @csrf
                                                                                                 <div class="modal-body" style="text-align: left;">
                                                                                                     <input type="hidden" name="id" value="{{ $type->id}}">
