@@ -614,7 +614,7 @@
                     ],
                 ],
                 [
-                    'label' => 'Partner',
+                    'label' => 'Kontakte',
                     'icon' => 'users',
                     'id' => 'partner-menu',
                     'permission' => 'Partner',
@@ -629,7 +629,7 @@
                             'active_routes' => ['/all-contacts'],
                         ],
                         [
-                            'label' => 'Alle Marken / Partner',
+                            'label' => 'Hersteller / Marken',
                             'icon' => 'factory',
                             'url' => $safeRoute('brand.index', 'brand'),
                             'count_key' => 'brands',

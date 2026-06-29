@@ -6105,8 +6105,11 @@
 
             if (!submenu) return;
 
-            if (submenu.classList.contains('open')) {
+            // 'open-by-route' (aktive Seite) zwingt das Menue via !important auf -> beim Zuklappen mit entfernen,
+            // sonst bleibt das Untermenue haengen und laesst sich nicht manuell schliessen.
+            if (submenu.classList.contains('open') || submenu.classList.contains('open-by-route')) {
                 submenu.classList.remove('open');
+                submenu.classList.remove('open-by-route');
 
                 if (icon) {
                     icon.style.transform = 'rotate(0deg)';
