@@ -1301,59 +1301,40 @@
                         ],
                     ],
                 ],
-                [
-                    'label' => 'Konfiguration',
-                    'icon' => 'settings-2',
-                    'submenu' => 'sub-systemeinstellungen',
-                    'children' => [
-                        [
-                            'label' => 'Arbeitsschritte',
-                            'icon' => 'clock',
-                            'url' => $safeRoute('task_phase.index'),
-                            'count_key' => 'task_phases',
-                        ],
-                        [
-                            'label' => 'Projekt-Struktur',
-                            'icon' => 'flag',
-                            'url' => $safeRoute('stages.index'),
-                            'count_key' => 'stages',
-                        ],
-                        [
-                            'label' => 'Filialen',
-                            'icon' => 'map-pin',
-                            'url' => $safeRoute('branch.info'),
-                            'count_key' => 'branches',
-                        ],
-                    ],
-                ],
-                [
-                    'label' => 'Tools',
-                    'icon' => 'wrench',
-                    'submenu' => 'sub-tools',
-                    'children' => [
-                        ['label' => 'Werkzeuge-Übersicht', 'icon' => 'wrench', 'url' => $safeRoute('tools.view')],
-                        ['label' => 'PV-Planer (PVGIS)', 'icon' => 'sun', 'url' => $safeRoute('admin.pvgis.index')],
-                    ],
-                ],
-                [
-                    'label' => 'System',
-                    'icon' => 'activity',
-                    'submenu' => 'sub-system',
-                    'children' => [
-                        ['label' => 'Systemwarnung', 'icon' => 'triangle-alert', 'url' => $safeRoute('admin.system-warning.index')],
-                        ['label' => 'Feedback', 'icon' => 'info', 'url' => $safeRoute('system.feedback.index')],
-                        ['label' => 'KI-Wissen', 'icon' => 'book-open', 'url' => $safeRoute('admin.chat.learnings.index')],
-                        ['label' => 'Datenbankbereinigung', 'icon' => 'trash-2', 'url' => $safeRoute('admin.garbage.index')],
-                    ],
-                ],
-                [
-                    'label' => 'Einstellungen',
-                    'icon' => 'sliders-horizontal',
-                    'submenu' => 'sub-einstellungen',
-                    'children' => [
-                        ['label' => 'Kalkulationssätze', 'icon' => 'calculator', 'url' => $safeRoute('admin.costing_sets.index')],
-                    ],
-                ],
+            ],
+        ],
+
+        [
+            'title' => 'Konfiguration',
+            'items' => [
+                ['label' => 'Arbeitsschritte', 'icon' => 'clock', 'url' => $safeRoute('task_phase.index'), 'count_key' => 'task_phases'],
+                ['label' => 'Projekt-Struktur', 'icon' => 'flag', 'url' => $safeRoute('stages.index'), 'count_key' => 'stages'],
+                ['label' => 'Filialen', 'icon' => 'map-pin', 'url' => $safeRoute('branch.info'), 'count_key' => 'branches'],
+            ],
+        ],
+
+        [
+            'title' => 'Tools',
+            'items' => [
+                ['label' => 'Werkzeuge-Übersicht', 'icon' => 'wrench', 'url' => $safeRoute('tools.view')],
+                ['label' => 'PV-Planer (PVGIS)', 'icon' => 'sun', 'url' => $safeRoute('admin.pvgis.index')],
+            ],
+        ],
+
+        [
+            'title' => 'System',
+            'items' => [
+                ['label' => 'Systemwarnung', 'icon' => 'triangle-alert', 'url' => $safeRoute('admin.system-warning.index')],
+                ['label' => 'Feedback', 'icon' => 'info', 'url' => $safeRoute('system.feedback.index')],
+                ['label' => 'KI-Wissen', 'icon' => 'book-open', 'url' => $safeRoute('admin.chat.learnings.index')],
+                ['label' => 'Datenbankbereinigung', 'icon' => 'trash-2', 'url' => $safeRoute('admin.garbage.index')],
+            ],
+        ],
+
+        [
+            'title' => 'Einstellungen',
+            'items' => [
+                ['label' => 'Kalkulationssätze', 'icon' => 'calculator', 'url' => $safeRoute('admin.costing_sets.index')],
             ],
         ],
     ];
