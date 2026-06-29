@@ -60,7 +60,7 @@
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                            <form class="form-horizontal" novalidate method="post" action="{{route('external.update')}}" class="custom-file-upload" enctype="multipart/form-data">
+                                                            <form class="form-horizontal" novalidate method="post" action="{{route('external.store')}}" class="custom-file-upload" enctype="multipart/form-data">
                                                                 @csrf
                                                                 <fieldset>
                                                                     <div class="row">
