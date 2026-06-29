@@ -1673,6 +1673,27 @@ class InquiryController extends Controller
         ]);
     }
 
+    // FIX P1-19: fehlende Methode fuer Kanban-Drag&Drop (Route inquiry.status).
+    // Setzt ausschliesslich inquiries.status auf einen validierten, erlaubten Wert.
+    public function updateStatus(Request $request, $id)
+    {
+        abort_unless($this->getInquiryPermissions()['canUpdate'], 403, 'Keine Berechtigung, den Status zu aendern.'); // FIX P0-09
+
+        $validated = $request->validate([
+            'status' => 'required|string|in:Unpublished,progress,verified,junk,Published,Junk,Draft',
+        ]);
+
+        $inquiry = Inquiry::findOrFail($id);
+        $inquiry->status = $validated['status'];
+        $inquiry->save();
+
+        return response()->json([
+            'success' => true,
+            'status'  => $inquiry->status,
+            'message' => 'Status aktualisiert.',
+        ]);
+    }
+
     public function departmentEmployees(Request $request)
     {
         $raw = $request->input('products', []);
