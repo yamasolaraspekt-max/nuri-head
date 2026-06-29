@@ -25,7 +25,7 @@
                          
                                     <div class="row">
                                         <div class="col-8">
-                                            <form action="{{action('App\Http\Controllers\AssetsController@index')}}">
+                                            <form action="{{action('App\Http\Controllers\HandoverController@multiple')}}">
                                                 <fieldset>
                                                     <div class="input-group">
                                                         <input type="text" name="search" class="form-control" placeholder="Search Form" aria-describedby="button-addon2">
