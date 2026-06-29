@@ -251,6 +251,15 @@ class DemoCompanyMasterDataSeeder extends Seeder
             @mkdir($imgDir, 0775, true);
         }
 
+        // Stundensätze je Rolle (Gehalt) + Vertragstypen.
+        $rate = [
+            'Geschäftsführung' => 95, 'Management' => 65, 'Meister' => 70, 'Geselle' => 45, 'Helfer' => 30,
+            'Techniker' => 50, 'Planer' => 52, 'Designer' => 48, 'Controlling' => 58, 'Außendienst' => 50,
+            'Innendienst' => 40, 'Buchhaltung' => 45, 'Marketing' => 48, 'Verwaltung' => 38, 'Ausbildung' => 14,
+        ];
+        $ctAzubi = DB::table('contract_types')->where('contract_type', 'Ausbildung')->value('id');
+        $ctTeil  = DB::table('contract_types')->where('contract_type', 'Teilzeit')->value('id');
+
         $created = [];
         $headByDep = [];
         $ceoEmpId = null;
@@ -276,13 +285,30 @@ class DemoCompanyMasterDataSeeder extends Seeder
                 }
             }
 
+            // Arbeitsvertrag / Gehalt / Urlaub / Krankheit
+            $isAzubi  = ($t['qual'] === 'Ausbildung');
+            $salary   = round(($rate[$t['qual']] ?? 40) * (1 + rand(-5, 9) / 100), 2);
+            $ctId     = $isAzubi ? ($ctAzubi ?: $contractTypeId) : $contractTypeId;
+            $workHour = 40; $workType = 'Vollzeit';
+            if (! $isAzubi && in_array($t['qual'], ['Verwaltung', 'Innendienst'], true) && rand(0, 2) === 0) {
+                $ctId = $ctTeil ?: $ctId; $workHour = 25; $workType = 'Teilzeit';
+            }
+            $contractDate = $now->copy()->subDays(rand(120, 3650))->toDateString();
+            $age = $isAzubi ? rand(17, 21) : rand(24, 60);
+            $dob = $now->copy()->subYears($age)->subDays(rand(0, 360))->toDateString();
+            $krank = rand(0, 14);
+
             DB::table('employees')->updateOrInsert(
                 ['email' => $email],
                 ['title' => ($t['g'] === 'women' ? 'Frau' : 'Herr'), 'name' => $t['v'], 'lastname' => $t['n'],
                  'bio' => ($funktion[$t['qual']] ?? $t['qual']) . ' · ' . $t['dep'],
-                 'branch' => $branchId, 'contract_type_id' => $contractTypeId, 'qualification_id' => ($qualId[$t['qual']] ?? null),
-                 'image' => $image, 'working_hour' => 40, 'working_type' => 'Vollzeit', 'status' => 'Active',
-                 'remaining_day' => 30, 'leave' => 30, 'daily_start_time' => '08:00:00', 'daily_end_time' => '17:00:00',
+                 'branch' => $branchId, 'contract_type_id' => $ctId, 'contract_date' => $contractDate,
+                 'qualification_id' => ($qualId[$t['qual']] ?? null), 'salary_per_hour' => $salary,
+                 'dob' => $dob, 'phone' => '0' . rand(151, 179) . ' ' . rand(1000000, 9999999),
+                 'image' => $image, 'working_hour' => $workHour, 'working_type' => $workType, 'status' => 'Active',
+                 'leave' => 30, 'remaining_day' => 30 - rand(0, 18),
+                 'sick_leave' => 42, 'sick_leave_remaining' => 42 - $krank,
+                 'daily_start_time' => '08:00:00', 'daily_end_time' => '17:00:00',
                  'color' => '#16a34a', 'created_at' => $now, 'updated_at' => $now]
             );
             $empId = DB::table('employees')->where('email', $email)->value('id');
