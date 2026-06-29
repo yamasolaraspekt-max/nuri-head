@@ -1361,7 +1361,11 @@ class InquiryController extends Controller
         $inquiry->note = $request->description;
         $inquiry->periority = $request->periority;
         $inquiry->source = $request->source;
-        $inquiry->status = 'Unpublished';
+        // FIX P2-29: Status beim Bearbeiten erhalten. Nur initialisieren, wenn er
+        // noch leer oder ein Draft ist; sonst (Published/Junk/Unpublished) beibehalten.
+        if (empty($inquiry->status) || $inquiry->status === 'Draft') {
+            $inquiry->status = 'Unpublished';
+        }
         $inquiry->save();
 
         InquiryProductList::where('inquiry_id', $inquiry->id)->delete();
