@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Inventory;
 use App\Http\Controllers\Controller;
 
 use App\Models\AssetInstallment;
-use App\Models\Assets;
+use App\Models\Asset;
 use App\Models\Employee;
 use App\Models\Machine;
 use DB;
@@ -25,6 +25,9 @@ class AssetInstallmentController extends Controller
     {
         if ($type == 'machine') {
             $data['asset'] = Machine::find($asset);
+            if (! $data['asset']) {
+                return redirect()->to('asset_installment_show')->with('delete_msg', 'Der zugehörige Datensatz wurde nicht gefunden.');
+            }
             $data['employees'] = Employee::where('status', '=', 'Active')->get();
 
             $duplicate = AssetInstallment::where('asset_id', '=', $asset)->where('type', '=', $type)->where('branch_id', '=', $branch)->first();
@@ -36,7 +39,10 @@ class AssetInstallmentController extends Controller
 
             }
         } elseif ($type == 'asset') {
-            $data['asset'] = Assets::find($asset);
+            $data['asset'] = Asset::find($asset);
+            if (! $data['asset']) {
+                return redirect()->to('asset_installment_show')->with('delete_msg', 'Der zugehörige Datensatz wurde nicht gefunden.');
+            }
                  $data['employees'] = Employee::where('status', '=', 'Active')->get();
 
             $duplicate = AssetInstallment::where('asset_id', '=', $asset)->where('type', '=', $type)->where('branch_id', '=', $branch)->first();
@@ -60,11 +66,15 @@ class AssetInstallmentController extends Controller
         if ($type == 'machine') {
             $data['asset'] = Machine::find($asset);
         } elseif ($type == 'asset') {
-            $data['asset'] = Assets::find($asset);
+            $data['asset'] = Asset::find($asset);
 
         }
         $data['employees'] = Employee::where('status', '=', 'Active')->get();
         $data['data'] = AssetInstallment::find($id);
+
+        if (empty($data['asset']) || ! $data['data']) {
+            return redirect()->to('asset_installment_show')->with('delete_msg', 'Der zugehörige Datensatz wurde nicht gefunden.');
+        }
 
         return view('admin.product.assets.installment.installment_edit', $data);
     }
