@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DemoCompanyMasterDataSeeder::class,
             DemoPartnersArticlesSeeder::class,
+            DemoPartnerTypesSeeder::class,
             DemoOperationalDataSeeder::class,
             DemoMatrixSeeder::class,
             DemoLeadActivitySeeder::class,
