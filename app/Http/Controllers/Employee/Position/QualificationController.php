@@ -101,10 +101,10 @@ public function emp_qualification(Request $request)
      */
     public function destroy($id)
     {
-        $education = FurtherEducation::find($id);
+        $qualification = Qualification::find($id);
 
-        if ($education) {
-            $education->delete();
+        if ($qualification) {
+            $qualification->delete();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Der Eintrag wurde erfolgreich gelöscht'
