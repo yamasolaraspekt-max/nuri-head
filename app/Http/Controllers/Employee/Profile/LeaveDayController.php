@@ -68,7 +68,9 @@ class LeaveDayController extends Controller
        $data=LeaveDay::find($id);
        $data->year=$request->year;
        $data->leave_day=$request->leave_day;
-       $data->status="Not published";
+       // FIX P2-32: Status beim Bearbeiten NICHT hart auf "Not published" zuruecksetzen.
+       // Sonst verliert ein aktives (Published) Urlaubsjahr beim Bearbeiten still seinen
+       // Status. Aktivieren/Deaktivieren erfolgt bewusst ueber active()/deactive().
        $data->save();
         return back()->with('save_msg', 'Die Frietags wurde erfolgreich hinzugefügt');
 
