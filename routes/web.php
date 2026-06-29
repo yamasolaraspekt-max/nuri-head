@@ -1549,7 +1549,7 @@ Route::group(['middleware' => 'web'], function () {
 Route::group(['middleware' => 'web'], function () {
     Route::get('/emp', [EmployeeController::class, 'index'])->name('emp.info');
     Route::get('/emp_create', [EmployeeController::class, 'create'])->name('emp.create');
-    Route::get('/emp_destroy/{id}', [EmployeeController::class, 'destroy'])->name('emp.destroy');
+    Route::delete('/emp_destroy/{id}', [EmployeeController::class, 'destroy'])->name('emp.destroy');
     Route::post('/emp_save', [EmployeeController::class, 'store'])->name('emp.store');
     Route::post('/emp_update', [EmployeeController::class, 'update'])->name('emp.update');
     Route::post('/emp_add', [EmployeeController::class, 'add'])->name('emp.add');
@@ -1620,7 +1620,7 @@ Route::post('/book-appointment', [EmployeeController::class, 'bookAppointment'])
 // Contract Type CRUD
 Route::group(['middleware' => 'web'], function () {
     Route::get('/contract_type', [ContractTypeController::class, 'index'])->name('contract.type.info');
-    Route::get('/contract_type_destroy/{id}', [ContractTypeController::class, 'destroy'])->name('contract.type.destroy');
+    Route::delete('/contract_type_destroy/{id}', [ContractTypeController::class, 'destroy'])->name('contract.type.destroy');
     Route::post('/contract_type_save', [ContractTypeController::class, 'store'])->name('contract.type.store');
     Route::post('/contract_type_update', [ContractTypeController::class, 'update'])->name('contract.type.update');
 });
@@ -1697,7 +1697,7 @@ Route::group(['middleware' => ['auth']], function () {
 // Holiday  CRUD
 Route::group(['middleware' => 'web'], function () {
     Route::get('/holiday_view', [HolidayController::class, 'index'])->name('holiday.info');
-    Route::get('/holiday_destroy/{id}', [HolidayController::class, 'destroy'])->name('holiday.destroy');
+    Route::delete('/holiday_destroy/{id}', [HolidayController::class, 'destroy'])->name('holiday.destroy');
     Route::post('/holiday_create', [HolidayController::class, 'store'])->name('holiday.create');
     Route::post('/holiday_update', [HolidayController::class, 'update'])->name('holiday.update');
     Route::get('/holiday_active/{id}', [HolidayController::class, 'active'])->name('holiday.active');
@@ -1708,7 +1708,7 @@ Route::group(['middleware' => 'web'], function () {
 // Holiday  CRUD
 Route::group(['middleware' => 'web'], function () {
     Route::get('/leave_day_view', [LeaveDayController::class, 'index'])->name('leave.day.info');
-    Route::get('/leave_day_destroy/{id}', [LeaveDayController::class, 'destroy'])->name('leave.day.destroy');
+    Route::delete('/leave_day_destroy/{id}', [LeaveDayController::class, 'destroy'])->name('leave.day.destroy');
     Route::post('/leave_day_create', [LeaveDayController::class, 'store'])->name('leave.day.create');
     Route::post('/leave_day_update', [LeaveDayController::class, 'update'])->name('leave.day.update');
     Route::get('/leave_day_active/{id}', [LeaveDayController::class, 'active'])->name('leave.day.active');
@@ -2288,7 +2288,7 @@ Route::group(['middleware' => ['web','auth']], function () {
 Route::group(['middleware' => ['web', 'is_Admin']], function () { // FIX P0-08: is_Admin jetzt wirksam (war Array-Index, wurde ignoriert)
     Route::get('/product', [ProductController::class, 'index'])->name('product.info');
     Route::get('/product_details/{id}', [ProductController::class, 'show'])->name('product.show');
-    Route::get('/product_destroy/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
+    Route::delete('/product_destroy/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
     Route::post('/product_save', [ProductController::class, 'store'])->name('product.store'); 
     Route::get('/product/export/no-images', [ProductController::class, 'exportNoImageProductsCsv'])->name('products.export.no-images');
     Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
@@ -2485,7 +2485,7 @@ Route::group(['middleware' => 'web'], function () {
 //Measure CRUD
 Route::group(['middleware' => ['web', 'is_Admin']], function () { // FIX P0-08: is_Admin jetzt wirksam (war Array-Index, wurde ignoriert)
     Route::get('/measure', [MeasureController::class, 'index'])->name('measure.info');
-    Route::get('/measure_destroy/{id}', [MeasureController::class, 'destroy'])->name('measure.destroy');
+    Route::delete('/measure_destroy/{id}', [MeasureController::class, 'destroy'])->name('measure.destroy');
     Route::post('/measure_save', [MeasureController::class, 'store'])->name('measure.store');
     Route::post('/measure_update', [MeasureController::class, 'update'])->name('measure.update');
 
@@ -2839,14 +2839,14 @@ Route::group(['middleware' => 'web'], function () {
 // Country Type CRUD
 Route::group(['middleware' => 'web'], function () {
     Route::get('/country', [CountryController::class, 'index'])->name('country.info');
-    Route::get('/country_destroy/{id}', [CountryController::class, 'destroy'])->name('country.destroy');
+    Route::delete('/country_destroy/{id}', [CountryController::class, 'destroy'])->name('country.destroy');
     Route::post('/country_save', [CountryController::class, 'store'])->name('country.store');
     Route::post('/country_update', [CountryController::class, 'update'])->name('country.update');
 });
 //Tax CRUD
 Route::group(['middleware' => ['web', 'is_Admin']], function () { // FIX P0-08: is_Admin jetzt wirksam (war Array-Index, wurde ignoriert)
     Route::get('/tax', [TaxController::class, 'index'])->name('tax.info');
-    Route::get('/tax_destroy/{id}', [TaxController::class, 'destroy'])->name('tax.destroy');
+    Route::delete('/tax_destroy/{id}', [TaxController::class, 'destroy'])->name('tax.destroy');
     Route::post('/tax_save', [TaxController::class, 'store'])->name('tax.store');
     Route::post('/tax_update', [TaxController::class, 'update'])->name('tax.update');
 });
@@ -2854,7 +2854,7 @@ Route::group(['middleware' => ['web', 'is_Admin']], function () { // FIX P0-08: 
 //Discount Group CRUD
 Route::group(['middleware' => ['web', 'is_Admin']], function () { // FIX P0-08: is_Admin jetzt wirksam (war Array-Index, wurde ignoriert)
     Route::get('/discount_group', [DiscountGroupController::class, 'index'])->name('discount_group.info');
-    Route::get('/discount_group_destroy/{id}', [DiscountGroupController::class, 'destroy'])->name('discount_group.destroy');
+    Route::delete('/discount_group_destroy/{id}', [DiscountGroupController::class, 'destroy'])->name('discount_group.destroy');
     Route::post('/discount_group_save', [DiscountGroupController::class, 'store'])->name('discount_group.store');
     Route::post('/discount_group_update', [DiscountGroupController::class, 'update'])->name('discount_group.update');
 });

@@ -147,12 +147,17 @@
                                         </a>
                                     @endif
 
-                                    <a href="{{ route('product.destroy', $item->id) }}" style="padding: 11px"
-                                       class="btn btn-outline-danger"
-                                       onclick="return confirm('Dieses Produkt wirklich löschen?')"
-                                       title="Löschen">
-                                        <i class="feather icon-trash"></i>
-                                    </a>
+                                    <form action="{{ route('product.destroy', $item->id) }}" method="POST"
+                                          style="display:inline-flex;margin:0;"
+                                          onsubmit="return confirm('Dieses Produkt wirklich löschen?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" style="padding: 11px"
+                                                class="btn btn-outline-danger"
+                                                title="Löschen">
+                                            <i class="feather icon-trash"></i>
+                                        </button>
+                                    </form>
                                 </div>
 
                                 {{-- Listen-Menü (custom JS, kein Bootstrap JS) --}}

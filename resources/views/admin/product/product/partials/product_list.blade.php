@@ -1179,10 +1179,15 @@
                                                     </a>
                                                 @endif
 
-                                                <a href="{{ route('product.destroy', $item->id) }}" class="product-modern-btn delete"
-                                                    onclick="return confirm('Dieses Produkt wirklich löschen?')" title="Löschen">
-                                                    <i class="feather icon-trash"></i>
-                                                </a>
+                                                <form action="{{ route('product.destroy', $item->id) }}" method="POST"
+                                                    style="display:inline-flex;margin:0;"
+                                                    onsubmit="return confirm('Dieses Produkt wirklich löschen?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="product-modern-btn delete" title="Löschen">
+                                                        <i class="feather icon-trash"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

@@ -726,10 +726,14 @@
                                                             Abbrechen
                                                         </button>
 
-                                                        <a href="{{ route('discount_group.destroy', ['id' => $item->id]) }}" class="dg-btn-danger">
-                                                            <i class="feather icon-trash-2"></i>
-                                                            Ja, löschen
-                                                        </a>
+                                                        <form action="{{ route('discount_group.destroy', ['id' => $item->id]) }}" method="POST" style="display:inline-flex;margin:0;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="dg-btn-danger">
+                                                                <i class="feather icon-trash-2"></i>
+                                                                Ja, löschen
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
