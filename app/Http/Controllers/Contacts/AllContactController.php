@@ -11,6 +11,7 @@ use App\Models\MainAppointment;
 use App\Models\NewLeads;
 use App\Models\PersonalTask;
 use App\Models\Problem;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -991,16 +992,36 @@ class AllContactController extends Controller
 
     public function brand(Request $request)
     {
-        Brand::withTrashed()->where('id', $request->id)->restore();
+        $this->restoreIfSoftDeletable(Brand::class, $request->id);
 
         return response()->json(['success' => true]);
     }
 
     public function distributor(Request $request)
     {
-        Distributor::withTrashed()->where('id', $request->id)->restore();
+        $this->restoreIfSoftDeletable(Distributor::class, $request->id);
 
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Restore a soft-deleted record only if the model actually supports
+     * soft deletes. Models without the SoftDeletes trait (e.g. Brand,
+     * Distributor) have no "deleted_at" column, so calling withTrashed()
+     * on them throws a BadMethodCallException (HTTP 500). In that case the
+     * record can never be soft-deleted, so there is nothing to restore.
+     */
+    protected function restoreIfSoftDeletable(string $modelClass, $id): void
+    {
+        if (!$id) {
+            return;
+        }
+
+        if (!in_array(SoftDeletes::class, class_uses_recursive($modelClass), true)) {
+            return;
+        }
+
+        $modelClass::withTrashed()->where('id', $id)->restore();
     }
 
     public function show(string $id)
