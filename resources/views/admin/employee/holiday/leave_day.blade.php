@@ -23,7 +23,7 @@
                                 
                         
                                 <div class="col-9">
-                                        <form action="{{action('App\Http\Controllers\LeaveDayController@index')}}">
+                                        <form action="{{ route('leave.day.info') }}">
                                             <fieldset>
                                                 <div class="input-group">
                                                     <input type="text" name="search" class="form-control" placeholder="Search Form" aria-describedby="button-addon2">
@@ -51,7 +51,7 @@
                                                                 </button>
                                                             </div>
                                                                 <div class="modal-body">
-                                                                    <form class="form-horizontal" novalidate method="post" action="{{action('App\Http\Controllers\LeaveDayController@store')}}" class="custom-file-upload" enctype="multipart/form-data">
+                                                                    <form class="form-horizontal" novalidate method="post" action="{{ route('leave.day.create') }}" class="custom-file-upload" enctype="multipart/form-data">
                                                                         @csrf
                                                                         <fieldset> 
                                                                             <div class="row">
@@ -155,7 +155,7 @@
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                            <form class="form-horizontal" novalidate method="post" action="{{action('App\Http\Controllers\LeaveDayController@update')}}">
+                                                            <form class="form-horizontal" novalidate method="post" action="{{ route('leave.day.update') }}">
                                                                 @csrf
 
                                                                 <fieldset> 
