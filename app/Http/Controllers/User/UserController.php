@@ -142,7 +142,7 @@ class UserController extends Controller
         $user->email     = $request->email;
         $user->password  = bcrypt($request->password);
         $user->is_admin  = auth()->user()->is_admin ? (int) ($request->input('is_admin', 1)) : 0; // FIX P0-06: Nicht-Admins koennen keinen Admin anlegen
-        $user->is_active = $request->has('is_active') ? 1 : 1; // keep legacy default active
+        $user->is_active = $request->boolean('is_active') ? 1 : 0; // FIX P4-41: korrekte Auswertung statt No-Op
         $user->save();
 
         return redirect()->back()->with('save_msg', 'The record saved successfully!');
@@ -307,7 +307,7 @@ class UserController extends Controller
         $user->email     = $request->email;
         $user->password  = bcrypt($request->password);
         $user->is_admin  = 2;
-        $user->is_active = $request->has('is_active') ? 1 : 1;
+        $user->is_active = $request->boolean('is_active') ? 1 : 0; // FIX P4-41: korrekte Auswertung statt No-Op
         $user->save();
 
         return redirect()->to('/limit_user')->with('save_msg', 'The record saved successfully!');
