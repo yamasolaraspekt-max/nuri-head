@@ -39,6 +39,28 @@ class OfferController extends Controller
         return view('admin.offer.index');
     }
 
+    /**
+     * Open an offer by redirecting to its primary folder detail page.
+     *
+     * Offers are viewed and edited through their folders. OfferWizardController@createOffer
+     * already redirects to admin.offers.folders.show after creating an offer, and the smart
+     * wizard uses "/offers/{id}" as a fallback navigation target. Without this action the
+     * registered GET /offers/{offer} route resolves to a missing controller method and crashes
+     * with a 500 (BadMethodCallException). This mirrors the existing create flow instead.
+     */
+    public function show(Offer $offer)
+    {
+        $folder = $offer->folders()->orderBy('id')->first();
+
+        if ($folder) {
+            return redirect()->route('admin.offers.folders.show', $folder->id);
+        }
+
+        return redirect()
+            ->route('admin.offers.index')
+            ->with('error', 'Zu diesem Angebot wurde kein Ordner gefunden.');
+    }
+
     protected function prepareJsonResponse(): void
     {
         if (app()->bound('debugbar')) {
