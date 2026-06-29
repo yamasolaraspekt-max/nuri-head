@@ -1302,7 +1302,7 @@
                     ],
                 ],
                 [
-                    'label' => 'System',
+                    'label' => 'Konfiguration',
                     'icon' => 'settings-2',
                     'submenu' => 'sub-systemeinstellungen',
                     'children' => [
@@ -1336,6 +1336,18 @@
     |--------------------------------------------------------------------------
     */
     $systemMenus = array_values(array_filter([
+        [
+            'label' => 'Tools',
+            'icon' => 'wrench',
+            'tone' => 'text-brand-blue',
+            'url' => $safeRoute('tools.view'),
+        ],
+        [
+            'label' => 'Einstellungen',
+            'icon' => 'sliders-horizontal',
+            'tone' => 'text-brand-green',
+            'url' => $safeRoute('admin.costing_sets.index'),
+        ],
         [
             'label' => 'KI-Wissen',
             'icon' => 'book-open',
@@ -2094,7 +2106,7 @@
                 aria-expanded="false">
                 <span class="sa-section-title-wrap">
                     {!! $sectionSvgIcon('System') !!}
-                    <span class="sa-section-title">System</span>
+                    <span class="sa-section-title">Tools & Wissen</span>
                 </span>
 
                 <span class="sa-section-right">
@@ -2103,7 +2115,7 @@
                 </span>
 
                 <span class="sa-section-tooltip">
-                    <strong>System</strong>
+                    <strong>Tools & Wissen</strong>
 
                     @foreach($systemTooltipItems as $tooltipItem)
                         <span>{{ $tooltipItem }}</span>
