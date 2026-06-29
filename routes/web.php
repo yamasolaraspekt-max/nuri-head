@@ -784,6 +784,7 @@ Route::group(['middleware'   =>  'web'], function(){
     Route::prefix('lead/objects')->name('lead.objects.')->group(function () {
         Route::post('/{object}/junk', [NewLeadsController::class, 'junkObject'])->name('junk');
         Route::post('/{object}/restore-junk', [NewLeadsController::class, 'restoreJunkObject'])->name('restore-junk');
+        Route::post('/{object}/restore-deleted', [NewLeadsController::class, 'restoreDeletedObject'])->name('restore-deleted');
         Route::delete('/{object}', [NewLeadsController::class, 'deleteObject'])->name('delete');
     });
     Route::get('/customers/{customer}/history', [LeadHistoryController::class, 'show'])->name('customers.history.show');

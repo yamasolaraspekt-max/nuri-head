@@ -14047,4 +14047,46 @@ class NewLeadsController extends Controller
         }
     }
 
+    public function restoreDeletedObject(Request $request, $object): JsonResponse
+    {
+        try {
+            // Soft-deleted records are excluded from normal queries / route-model-binding,
+            // therefore resolve the object explicitly including trashed ones.
+            $model = LeadAlternativeAdd::withTrashed()->findOrFail($object);
+
+            DB::transaction(function () use ($model) {
+                if ($model->trashed()) {
+                    $model->restore();
+                }
+
+                $this->logActivity(
+                    'restore_deleted',
+                    LeadAlternativeAdd::class,
+                    $model->id,
+                    $model->lead_id,
+                    $model->id,
+                    null,
+                    ['info' => 'Gelöschtes Objekt wiederhergestellt']
+                );
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Objekt wurde wiederhergestellt.',
+                'object_id' => $model->id,
+                'customer_id' => $model->lead_id,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Object restore deleted failed', [
+                'object_id' => $object,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Objekt konnte nicht wiederhergestellt werden.',
+            ], 500);
+        }
+    }
+
 }
