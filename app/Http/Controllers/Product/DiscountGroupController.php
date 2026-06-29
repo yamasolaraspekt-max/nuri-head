@@ -56,7 +56,7 @@ class DiscountGroupController extends Controller
         DiscountGroup::create($validated);
 
         return redirect()
-            ->route('discount.group.info')
+            ->route('discount_group.info')
             ->with('save_msg', 'Der Datensatz wurde erfolgreich gespeichert.');
     }
 
@@ -91,7 +91,7 @@ class DiscountGroupController extends Controller
         ]);
 
         return redirect()
-            ->route('discount.group.info')
+            ->route('discount_group.info')
             ->with('save_msg', 'Der Datensatz wurde erfolgreich aktualisiert.');
     }
 
