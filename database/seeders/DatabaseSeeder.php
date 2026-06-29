@@ -35,5 +35,14 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DashboardWidgetSeeder::class,
         ]);
+
+        // Demo-Firma „Solar Aspekt Nord GmbH" — Reihenfolge wichtig:
+        // Stammdaten/Belegschaft -> Partner/Artikel -> operative Daten -> Zuständigkeitsmatrix.
+        $this->call([
+            DemoCompanyMasterDataSeeder::class,
+            DemoPartnersArticlesSeeder::class,
+            DemoOperationalDataSeeder::class,
+            DemoMatrixSeeder::class,
+        ]);
     }
 }
