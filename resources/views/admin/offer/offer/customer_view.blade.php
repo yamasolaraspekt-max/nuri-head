@@ -833,7 +833,7 @@ function openCommentPanel(customerId, alternativeId, productId) {
       <p class="mt-2">Kommentare werden geladen...</p>
     </div>`;
 
-  fetch(`/comments/${customerId}/${alternativeId}/${productId}`)
+  fetch(`/offer-comments/${customerId}/${alternativeId}/${productId}`)
     .then(res => res.text())
     .then(html => {
       commentsList.innerHTML = html;
@@ -845,7 +845,7 @@ function openCommentPanel(customerId, alternativeId, productId) {
 
     const formData = new FormData(form);
 
-    fetch('/comments/store', {
+    fetch('/offer-comments/store', {
       method: 'POST',
       headers: {
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
@@ -879,7 +879,7 @@ function bindReplyForms(customerId, alternativeId, productId) {
       data.append('comment', comment);
       data.append('parent_id', parentId);
 
-      fetch('/comments/store', {
+      fetch('/offer-comments/store', {
         method: 'POST',
         headers: {
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
@@ -907,7 +907,7 @@ function bindReplyForms(customerId, alternativeId, productId) {
 }
 
 function loadComments(customerId, alternativeId, productId) {
-  fetch(`/comments/${customerId}/${alternativeId}/${productId}`)
+  fetch(`/offer-comments/${customerId}/${alternativeId}/${productId}`)
     .then(res => res.text())
     .then(html => {
       const commentsList = document.getElementById('commentsList');
@@ -923,7 +923,7 @@ function loadComments(customerId, alternativeId, productId) {
         e.preventDefault();
         const formData = new FormData(form);
 
-        fetch('/comments/store', {
+        fetch('/offer-comments/store', {
           method: 'POST',
           headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
@@ -977,7 +977,7 @@ document.getElementById('commentFilter')?.addEventListener('change', function ()
 function editComment(id, oldComment) {
   const newComment = prompt("Kommentar bearbeiten:", oldComment);
   if (newComment && newComment !== oldComment) {
-    fetch(`/comments/${id}/update`, {
+    fetch(`/offer-comments/${id}/update`, {
       method: 'POST',
       headers: {
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -992,7 +992,7 @@ function editComment(id, oldComment) {
 
 function deleteComment(id) {
   if (confirm("Willst du diesen Kommentar löschen?")) {
-    fetch(`/comments/${id}/delete`, {
+    fetch(`/offer-comments/${id}/delete`, {
       method: 'DELETE',
       headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
     }).then(() => document.getElementById(`comment-text-${id}`).closest('.media').remove());

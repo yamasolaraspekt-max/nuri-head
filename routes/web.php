@@ -4047,6 +4047,13 @@ Route::group(['middleware'  =>  'auth'], function(){
     Route::delete('/comments/{comment_id}/delete', [InquiryCommentController::class, 'deleteComment'])->name('comments.delete');
     Route::put('/comments/{comment_id}/edit', [InquiryCommentController::class, 'editComment'])->name('comments.edit');
     Route::post('/comments/{comment_id}/reply', [InquiryCommentController::class, 'replyComment'])->name('comments.reply');
+
+    // Offer (Angebot) comments - OfferCommentController (own prefix to avoid clashes with /comments/* above)
+    Route::get('/offer-comments/{customer}/{alternative}/{product}', [OfferCommentController::class, 'index'])->name('offer.comments.index');
+    Route::post('/offer-comments/store', [OfferCommentController::class, 'store'])->name('offer.comments.store');
+    Route::post('/offer-comments/{id}/update', [OfferCommentController::class, 'update'])->name('offer.comments.update');
+    Route::delete('/offer-comments/{id}/delete', [OfferCommentController::class, 'destroy'])->name('offer.comments.destroy');
+
     Route::post('/inquiry/{id}/verify', [InquiryController::class, 'verify'])->name('inquiry.verify1');
 
     Route::post('/admin/inquiries/ai-save', [InquiryController::class, 'storeFromAI']);
