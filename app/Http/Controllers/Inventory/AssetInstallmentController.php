@@ -173,8 +173,11 @@ class AssetInstallmentController extends Controller
             'paid_by' => 'required',
             'payment_method' => 'required',
         ]);
-        $id = $request->id;
-        $data = AssetInstallment::find($id)->update($request->all());
+        $record = AssetInstallment::find($request->id);
+        if (! $record) {
+            return redirect()->to('asset_installment_show')->with('delete_msg', 'Der zu aktualisierende Datensatz wurde nicht gefunden.');
+        }
+        $data = $record->update($request->all());
 
         if ($data) {
             return redirect()->to('asset_installment_show')->with('save_msg', 'Der Datensatz wurd erfulgreich gespeichert!');
