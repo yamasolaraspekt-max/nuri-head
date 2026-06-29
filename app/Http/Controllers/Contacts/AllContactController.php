@@ -220,18 +220,18 @@ class AllContactController extends Controller
                 'new_leads.phone',
             ],
             function ($q, $term, $digits) {
-                $q->orWhereExists(function ($sub) use ($term, $digits) {
+                // lead_alternative_adds only stores address data (no email/phone
+                // columns), so match the term against the address-like columns
+                // that actually exist to avoid "Unknown column" SQL errors.
+                $q->orWhereExists(function ($sub) use ($term) {
                     $sub->select(DB::raw(1))
                         ->from('lead_alternative_adds')
                         ->whereColumn('lead_alternative_adds.lead_id', 'new_leads.id')
-                        ->where(function ($sq) use ($term, $digits) {
-                            $sq->where('lead_alternative_adds.email', 'like', '%' . $term . '%');
-
-                            if ($digits !== '') {
-                                $sq->orWhereRaw($this->normalizedPhoneSql('lead_alternative_adds.phone') . ' LIKE ?', ['%' . $digits . '%'])
-                                   ->orWhereRaw($this->normalizedPhoneSql('lead_alternative_adds.telephone') . ' LIKE ?', ['%' . $digits . '%'])
-                                   ->orWhereRaw($this->normalizedPhoneSql('lead_alternative_adds.mobile') . ' LIKE ?', ['%' . $digits . '%']);
-                            }
+                        ->where(function ($sq) use ($term) {
+                            $sq->where('lead_alternative_adds.full_address', 'like', '%' . $term . '%')
+                               ->orWhere('lead_alternative_adds.street', 'like', '%' . $term . '%')
+                               ->orWhere('lead_alternative_adds.city', 'like', '%' . $term . '%')
+                               ->orWhere('lead_alternative_adds.object_name', 'like', '%' . $term . '%');
                         });
                 });
             }
