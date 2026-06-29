@@ -28,8 +28,7 @@ class BrandDepartmentController extends Controller
                   ->orWhere('email', 'like', "%{$search}%")
                   ->orWhere('phone', 'like', "%{$search}%")
                   ->orWhere('home', 'like', "%{$search}%")
-                  ->orWhere('office', 'like', "%{$search}%")
-                  ->orWhere('address', 'like', "%{$search}%");
+                  ->orWhere('office', 'like', "%{$search}%");
             });
         }
 
