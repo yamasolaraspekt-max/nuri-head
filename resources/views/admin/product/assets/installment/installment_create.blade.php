@@ -123,7 +123,7 @@
                             <div class="card-content">
                                 <div class="card-body">
                                     <form class="form-horizontal" novalidate method="post"
-                                        action="{{action('App\Http\Controllers\AssetInstallmentController@store')}}"
+                                        action="{{ route('assets.installment.store') }}"
                                         class="custom-file-upload" enctype="multipart/form-data">
                                         @csrf
                                         <fieldset>
