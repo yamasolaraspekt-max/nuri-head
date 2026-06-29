@@ -413,25 +413,32 @@ class EmployeeDashboardController extends Controller
         ]);
     
         // ✅ Tab loader
-        if ($tab === 'tasks') {
-            return $this->getTasks($employeeId, $search, $applyDateFilter, $date);
-        } elseif ($tab === 'appointments') {
-            return $this->getAppointments($employeeId, $search, $applyDateFilter, $date);
-        } elseif ($tab === 'projects') {
-            return $this->getProjects($employeeId, $search, $applyDateFilter, $date);
-        } elseif ($tab === 'offers') {
-            return $this->getOffers($employeeId, $search, $applyDateFilter, $date);
-        } elseif ($tab === 'notes') {
-            return view('admin.dashboard.employee.partials.notes');
-        } elseif ($tab === 'calendar') {
-            return view('admin.dashboard.employee.partials.calendar');
-        }
-        elseif ($tab === 'admin') {
-            return $this->getAdminContent($search, $applyDateFilter, $date);
-        }
-        
-        else {
-            return $this->getAllContent($employeeId, $search, $applyDateFilter, $date);
+        // Sicherheitsnetz: einige Tab-Partials existieren nicht mehr (nach Old/ verschoben).
+        // Statt eines 500ers liefern wir einen leeren, geschützten Platzhalter aus.
+        try {
+            if ($tab === 'tasks') {
+                return $this->getTasks($employeeId, $search, $applyDateFilter, $date);
+            } elseif ($tab === 'appointments') {
+                return $this->getAppointments($employeeId, $search, $applyDateFilter, $date);
+            } elseif ($tab === 'notes') {
+                return view('admin.dashboard.employee.partials.notes');
+            } elseif ($tab === 'calendar') {
+                return view('admin.dashboard.employee.partials.calendar');
+            } elseif ($tab === 'admin') {
+                return $this->getAdminContent($search, $applyDateFilter, $date);
+            } else {
+                return $this->getAllContent($employeeId, $search, $applyDateFilter, $date);
+            }
+        } catch (\Throwable $e) {
+            \Log::warning('loadTabContent: Tab-Inhalt nicht verfuegbar', [
+                'tab'   => $tab,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response(
+                '<div class="p-4 text-sm text-gray-500">Dieser Tab-Inhalt ist derzeit nicht verfügbar.</div>',
+                200
+            );
         }
     }
     
@@ -680,8 +687,8 @@ class EmployeeDashboardController extends Controller
      public function getTabCounts()
      {
          return response()->json([
-             'tasks' => Task::count(),
-             'appointments' => Appointment::count(), 
+             'tasks' => PersonalTask::count(),
+             'appointments' => MainAppointment::count(),
          ]);
      }
 
