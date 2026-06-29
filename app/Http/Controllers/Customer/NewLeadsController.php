@@ -368,11 +368,11 @@ class NewLeadsController extends Controller
         $selectedEmployees = DB::table('new_lead_responsibilities')
             ->join('new_leads', 'new_leads.id', '=', 'new_lead_responsibilities.new_lead_id')
             ->join('employees', 'employees.id', '=', 'new_lead_responsibilities.employee_id')
-            ->leftJoin('employee_departments', 'employee_departments.employee_id', '=', 'employees.id')
-            ->leftJoin('departments', 'departments.id', '=', 'employee_departments.department_id')
-            ->leftJoin('positions', 'departments.id', '=', 'positions.department_id')
-            // FIX P1: kaputter Join entfernt - product_positions hat keine Spalte position_id (sondern position_ids JSON);
-            // wurde weder selektiert noch gefiltert -> Query crashte nur (Unknown column).
+            // FIX P1: Positions-Joins korrigiert - 'positions' hat keine Spalte department_id und
+            // 'product_positions' keine position_id; Mitarbeiter->Funktion laeuft ueber department_positions.
+            // (Vorher: leftJoin auf positions.department_id + product_positions.position_id -> Unknown column.)
+            ->leftJoin('department_positions', 'department_positions.employee_id', '=', 'employees.id')
+            ->leftJoin('positions', 'positions.id', '=', 'department_positions.position_id')
             ->join('article_groups', 'article_groups.id', '=', 'new_lead_responsibilities.product_id')
             ->select('employees.id', 'employees.name', 'employees.lastname', 'employees.image', 'positions.position')
             ->where('new_lead_responsibilities.product_id', '=', $product_id)
@@ -380,7 +380,9 @@ class NewLeadsController extends Controller
 
         // Fetch all employees
         $allEmployees = DB::table('employees')
-            ->select('id', 'name', 'lastname', 'position', 'image')
+            // FIX P1: 'position' ist keine employees-Spalte (Funktion via department_positions) -> leerer Platzhalter,
+            // damit die View ($employee->position) nicht bricht.
+            ->select('id', 'name', 'lastname', 'image', DB::raw("'' as position"))
             ->get();
 
         // Filter out selected employees from all employees

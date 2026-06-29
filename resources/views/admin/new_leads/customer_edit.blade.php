@@ -24,12 +24,12 @@
     $initialLat = old('latitude', optional($safeAlternative)->lat);
     $initialLng = old('longitude', optional($safeAlternative)->lon);
 
-    $productRowsCount = is_countable($product_list ?? []) ? count($product_list) : collect($product_list ?? [])->count();
-    $servicesCount = is_countable($services ?? []) ? count($services) : collect($services ?? [])->count();
-    $productsCount = is_countable($products ?? []) ? count($products) : collect($products ?? [])->count();
-    $departmentsCount = is_countable($departments ?? []) ? count($departments) : collect($departments ?? [])->count();
+    $productRowsCount = is_countable($product_list ?? []) ? count($product_list ?? []) : collect($product_list ?? [])->count();
+    $servicesCount = is_countable($services ?? []) ? count($services ?? []) : collect($services ?? [])->count();
+    $productsCount = is_countable($products ?? []) ? count($products ?? []) : collect($products ?? [])->count();
+    $departmentsCount = is_countable($departments ?? []) ? count($departments ?? []) : collect($departments ?? [])->count();
 
-    $googleMapsKey = config('services.google.maps_key', '{{ config('services.google.maps_key') }}');
+    $googleMapsKey = config('services.google.maps_key', '');
 @endphp
 
 @once
