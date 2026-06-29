@@ -1371,9 +1371,9 @@ public function next_employee($id){
 
   public function cv($id){
         $data['data']=DB::table('employees')
-                ->join('branches', 'branches.id', '=', 'employees.branch')
-                ->join('contract_types', 'contract_types.id', '=', 'employees.contract_type_id') 
-                ->join('countries', 'countries.id', '=', 'employees.country_id')
+                ->leftJoin('branches', 'branches.id', '=', 'employees.branch')
+                ->leftJoin('contract_types', 'contract_types.id', '=', 'employees.contract_type_id')
+                ->leftJoin('countries', 'countries.id', '=', 'employees.country_id')
                 ->leftJoin('taxes', 'taxes.id', '=', 'employees.tax_class' )
                 ->where('employees.id', '=', $id)
                 ->select('employees.*', 'branches.branch', 'contract_types.contract_type',  'countries.country', 'taxes.tax', 'taxes.class', 'taxes.remark')
