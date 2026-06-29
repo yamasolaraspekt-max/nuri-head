@@ -1326,6 +1326,34 @@
                         ],
                     ],
                 ],
+                [
+                    'label' => 'Tools',
+                    'icon' => 'wrench',
+                    'submenu' => 'sub-tools',
+                    'children' => [
+                        ['label' => 'Werkzeuge-Übersicht', 'icon' => 'wrench', 'url' => $safeRoute('tools.view')],
+                        ['label' => 'PV-Planer (PVGIS)', 'icon' => 'sun', 'url' => $safeRoute('admin.pvgis.index')],
+                    ],
+                ],
+                [
+                    'label' => 'System',
+                    'icon' => 'activity',
+                    'submenu' => 'sub-system',
+                    'children' => [
+                        ['label' => 'Systemwarnung', 'icon' => 'triangle-alert', 'url' => $safeRoute('admin.system-warning.index')],
+                        ['label' => 'Feedback', 'icon' => 'info', 'url' => $safeRoute('system.feedback.index')],
+                        ['label' => 'KI-Wissen', 'icon' => 'book-open', 'url' => $safeRoute('admin.chat.learnings.index')],
+                        ['label' => 'Datenbankbereinigung', 'icon' => 'trash-2', 'url' => $safeRoute('admin.garbage.index')],
+                    ],
+                ],
+                [
+                    'label' => 'Einstellungen',
+                    'icon' => 'sliders-horizontal',
+                    'submenu' => 'sub-einstellungen',
+                    'children' => [
+                        ['label' => 'Kalkulationssätze', 'icon' => 'calculator', 'url' => $safeRoute('admin.costing_sets.index')],
+                    ],
+                ],
             ],
         ],
     ];
@@ -1337,52 +1365,12 @@
     */
     $systemMenus = array_values(array_filter([
         [
-            'label' => 'Tools',
-            'icon' => 'wrench',
-            'tone' => 'text-brand-blue',
-            'url' => $safeRoute('tools.view'),
-        ],
-        [
-            'label' => 'Einstellungen',
-            'icon' => 'sliders-horizontal',
-            'tone' => 'text-brand-green',
-            'url' => $safeRoute('admin.costing_sets.index'),
-        ],
-        [
-            'label' => 'KI-Wissen',
-            'icon' => 'book-open',
-            'tone' => 'text-brand-blue',
-            'url' => $safeRoute('admin.chat.learnings.index'),
-            'count_key' => 'learning_topics',
-        ],
-        [
-            'label' => 'Feedback',
-            'icon' => 'info',
-            'tone' => 'text-brand-green',
-            'url' => $safeRoute('system.feedback.index'),
-            'count_key' => 'feedback',
-        ],
-        [
             'label' => 'Wissensdatenbank',
             'icon' => 'circle-help',
             'tone' => 'text-brand-blue',
             'url' => $safeRoute('knowledge.base'),
             'count_key' => 'knowledge_base',
         ],
-        [
-            'label' => 'Systemwarnung',
-            'icon' => 'triangle-alert',
-            'style' => 'color: var(--color-warning)',
-            'url' => $safeRoute('admin.system-warning.index'),
-            'count_key' => 'system_warnings',
-        ],
-        $canDeleteGarbage ? [
-            'label' => 'Datenbankbereinigung',
-            'icon' => 'trash-2',
-            'style' => 'color: var(--color-danger)',
-            'url' => $safeRoute('admin.garbage.index'),
-            'count_key' => 'garbage',
-        ] : null,
     ]));
 
     /*
@@ -2106,7 +2094,7 @@
                 aria-expanded="false">
                 <span class="sa-section-title-wrap">
                     {!! $sectionSvgIcon('System') !!}
-                    <span class="sa-section-title">Tools & Wissen</span>
+                    <span class="sa-section-title">Wissen</span>
                 </span>
 
                 <span class="sa-section-right">
@@ -2115,7 +2103,7 @@
                 </span>
 
                 <span class="sa-section-tooltip">
-                    <strong>Tools & Wissen</strong>
+                    <strong>Wissen</strong>
 
                     @foreach($systemTooltipItems as $tooltipItem)
                         <span>{{ $tooltipItem }}</span>
