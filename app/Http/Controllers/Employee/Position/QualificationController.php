@@ -103,18 +103,29 @@ public function emp_qualification(Request $request)
     {
         $qualification = Qualification::find($id);
 
-        if ($qualification) {
-            $qualification->delete();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Der Eintrag wurde erfolgreich gelöscht'
-            ]);
-        } else {
+        if (! $qualification) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Eintrag nicht gefunden'
             ]);
         }
+
+        // FIX P1-23b: IDOR/Ownership beim Loeschen. Bisher wurde nur per $id geloescht,
+        // ohne Eigentuemer-Pruefung. Nur Admin oder der Eigentuemer der Qualifikation
+        // (emp_id == eigene employees.id) darf loeschen. employees.id wird in users.name
+        // gehalten (vgl. User::employeeId()).
+        $me = (int) (auth()->user()->name ?? 0);
+        abort_unless(
+            auth()->user()->is_admin || ($me > 0 && $me === (int) $qualification->emp_id),
+            403,
+            'Kein Zugriff auf diese Qualifikation.'
+        );
+
+        $qualification->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Der Eintrag wurde erfolgreich gelöscht'
+        ]);
     }
 
 }
