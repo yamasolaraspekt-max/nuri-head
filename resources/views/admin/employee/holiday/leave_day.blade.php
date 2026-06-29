@@ -131,7 +131,11 @@
                                                                 <p>Die Datensatznummer lautet: {{$item->id}} </p>
                                                             </div>
                                                             <div class="modal-footer">
-                                                              <a type="button" href="{{url('/leave_day_destroy').'/'.$item->id}}" class="btn btn-primary">Yes</a>
+                                                              <form action="{{ route('leave.day.destroy', $item->id) }}" method="POST" style="display:inline-flex;margin:0;">
+                                                                  @csrf
+                                                                  @method('DELETE')
+                                                                  <button type="submit" class="btn btn-primary">Yes</button>
+                                                              </form>
                                                             </div>
                                                         </div>
                                                     </div>

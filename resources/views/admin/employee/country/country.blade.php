@@ -890,10 +890,14 @@
                     Abbrechen
                 </button>
 
-                <a href="#" class="oc-btn-danger" id="deleteCountryConfirm">
-                    <i class="feather icon-trash-2"></i>
-                    Ja, löschen
-                </a>
+                <form method="POST" action="#" id="deleteCountryForm" style="display:inline-flex;margin:0;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="oc-btn-danger">
+                        <i class="feather icon-trash-2"></i>
+                        Ja, löschen
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -1025,7 +1029,7 @@
         document.querySelectorAll('.js-delete-country').forEach(function (button) {
             button.addEventListener('click', function () {
                 document.getElementById('deleteCountryName').textContent = button.dataset.country || '';
-                document.getElementById('deleteCountryConfirm').href = button.dataset.url || '#';
+                document.getElementById('deleteCountryForm').action = button.dataset.url || '#';
 
                 openModal('deleteCountryModal');
             });

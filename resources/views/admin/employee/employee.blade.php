@@ -1426,10 +1426,14 @@
 
                                                         <div class="modal-footer">
                                                             <button type="button" class="oc-btn-soft" data-dismiss="modal">Nein</button>
-                                                            <a href="{{ url('/emp_destroy/' . $item->id) }}" class="oc-btn-danger">
-                                                                <i class="feather icon-trash"></i>
-                                                                Ja, löschen
-                                                            </a>
+                                                            <form action="{{ route('emp.destroy', $item->id) }}" method="POST" style="display:inline-flex;margin:0;">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="oc-btn-danger">
+                                                                    <i class="feather icon-trash"></i>
+                                                                    Ja, löschen
+                                                                </button>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
