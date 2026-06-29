@@ -1251,7 +1251,7 @@
                                         <div class="tc-field tc-col-12">
                                             <label for="editor">Beschreibung</label>
                                             <div id="editor" class="form-control">
-                                                {!! old('editor_text', $problem->problem) !!}</div>
+                                                {!! clean(old('editor_text', $problem->problem)) !!}</div>
                                             <textarea name="editor_text" hidden id="editor_text" cols="30"
                                                 rows="10">{{ old('editor_text', $problem->problem) }}</textarea>
                                             @error('editor_text')<p class="text-danger">{{ $message }}</p>@enderror

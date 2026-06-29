@@ -2087,7 +2087,7 @@
                                         </div>
 
                                         <div class="ticket-inner-pane active" id="overview-problem">
-                                            <div class="ticket-problem-box ticket-rich-content">{!! $problemText ?: '<span
+                                            <div class="ticket-problem-box ticket-rich-content">{!! clean($problemText) ?: '<span
                                                         class="text-muted">Kein Problemtext vorhanden.</span>' !!}</div>
                                         </div>
 
@@ -2171,7 +2171,7 @@
                                         </div>
 
                                         <div class="ticket-inner-pane" id="overview-solution">
-                                            <div class="ticket-problem-box ticket-rich-content">{!! $solutionText ?: '<span
+                                            <div class="ticket-problem-box ticket-rich-content">{!! clean($solutionText) ?: '<span
                                                         class="text-muted">Noch keine Lösung hinterlegt.</span>' !!}</div>
                                         </div>
                                     </div>
@@ -2325,7 +2325,7 @@
                                                                                                     class="fa fa-trash"></i></button>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="ticket-report-content">{!! $report->report !!}</div>
+                                                                                    <div class="ticket-report-content">{!! clean($report->report) !!}</div>
                                                                                 </div>
                                             @empty
                                                 <div class="ticket-empty" id="ticketReportEmpty">Noch keine Berichte vorhanden.

@@ -1632,7 +1632,7 @@ $reportAuthors = $reports->pluck('employee')->filter()->unique('id');
                                                 </div>
 
                                                 <div class="ap-report-content">
-                                                    {!! $r->report !!}
+                                                    {!! clean($r->report) !!}
                                                 </div>
 
                                                 @if($r->next_step || $r->due_date)
