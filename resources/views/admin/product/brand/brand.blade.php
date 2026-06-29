@@ -42,6 +42,17 @@ $unpublishedCount = (int) $items->filter(fn($item) => ($item->status ?? '') !== 
 $typedCount = (int) $items->filter(fn($item) => !empty($item->type))->count();
 
 $typeOptions = ['brand', 'architect', 'sub_contractor', 'contractor', 'bank', 'insurance', 'other'];
+
+// Anzeige-Labels (technischer Wert bleibt 'brand' etc., angezeigt wird Deutsch)
+$typeLabels = [
+  'brand' => 'Hersteller',
+  'sub_contractor' => 'Nachunternehmer',
+  'architect' => 'Architekt',
+  'bank' => 'Bank',
+  'insurance' => 'Versicherung',
+  'contractor' => 'Geschäftspartner',
+  'other' => 'Weitere Partner',
+];
 @endphp
 
 @once
@@ -743,7 +754,7 @@ $typeOptions = ['brand', 'architect', 'sub_contractor', 'contractor', 'bank', 'i
             <div class="oc-cell">
               <div class="oc-cell-title">Typ</div>
               <div class="oc-main">
-                <div class="oc-ttl" style="font-size:14px;">{{ $item->type ?: 'brand' }}</div>
+                <div class="oc-ttl" style="font-size:14px;">{{ $typeLabels[$item->type ?: 'brand'] ?? ($item->type ?: 'Hersteller') }}</div>
               </div>
             </div>
 
@@ -887,7 +898,7 @@ $typeOptions = ['brand', 'architect', 'sub_contractor', 'contractor', 'bank', 'i
             <label class="oc-label">Typ</label>
             <select name="type" class="oc-select" id="edit_brand_type">
               @foreach($typeOptions as $type)
-                <option value="{{ $type }}">{{ $type }}</option>
+                <option value="{{ $type }}">{{ $typeLabels[$type] ?? $type }}</option>
               @endforeach
             </select>
           </div>
@@ -952,7 +963,7 @@ $typeOptions = ['brand', 'architect', 'sub_contractor', 'contractor', 'bank', 'i
             <label class="oc-label">Typ</label>
             <select name="type" class="oc-select">
               @foreach($typeOptions as $type)
-                <option value="{{ $type }}">{{ $type }}</option>
+                <option value="{{ $type }}">{{ $typeLabels[$type] ?? $type }}</option>
               @endforeach
             </select>
           </div>

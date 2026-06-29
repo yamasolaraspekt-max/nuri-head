@@ -296,7 +296,7 @@ $officeCount = $departmentItems->filter(fn($d) => !empty($d->office))->count();
           <tbody>
             <tr><th style="width:220px">Name</th><td>{{ $brand->name }}</td></tr>
             <tr><th>Kürzel</th><td>{{ $brand->initial ?: '—' }}</td></tr>
-            <tr><th>Typ</th><td>{{ $brand->type ?: '—' }}</td></tr>
+            <tr><th>Typ</th><td>{{ ['brand'=>'Hersteller','sub_contractor'=>'Nachunternehmer','architect'=>'Architekt','bank'=>'Bank','insurance'=>'Versicherung','contractor'=>'Geschäftspartner','other'=>'Weitere Partner'][$brand->type ?? ''] ?? ($brand->type ?: '—') }}</td></tr>
             <tr><th>Bereich / Zweck</th><td>{{ $brand->purpose ?: '—' }}</td></tr>
             <tr><th>Adresse</th><td>{{ $brand->address ?: '—' }}</td></tr>
             <tr><th>Status</th><td>{{ $brand->status ?: '—' }}</td></tr>
