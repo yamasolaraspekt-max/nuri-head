@@ -3221,68 +3221,31 @@ class NewLeadsController extends Controller
         }
     }
 
-    public function qualified_sort()
+    // Status-Schnellfilter (STATUS-Spalten-Dropdown der Leadliste).
+    // Delegieren an index(), damit der vollstaendige View-Kontext der
+    // customer_view-Blade bereitsteht (frueher fehlten ~19 Variablen -> 500).
+    public function qualified_sort(Request $request)
     {
-        $query = DB::table('new_leads')
-            ->leftJoin('lead_alternative_adds', 'lead_alternative_adds.lead_id', '=', 'new_leads.id')
-            ->join('employees as contact_person', 'contact_person.id', '=', 'new_leads.contact_person')
-            ->select('new_leads.*', 'contact_person.name as c_name', 'contact_person.lastname as c_lastname', 'contact_person.image as c_image', 'lead_alternative_adds.street', 'lead_alternative_adds.postcode', 'lead_alternative_adds.lat', 'lead_alternative_adds.lon', 'lead_alternative_adds.main', 'lead_alternative_adds.address_no')
-            ->where('new_leads.status', '=', 'QUALIFIZIERT')
-            ->where('new_leads.status', '!=', "Junk")
-
-            ->orderBy('new_leads.id', 'desc');
-
-        $data['data'] = $query->paginate(20);
-        $this->setCommonData($data);
-
-        return view('admin.new_leads.customer_view', $data);
+        $request->merge(['status_filter' => 'qualified']);
+        return $this->index($request);
     }
 
-    public function not_qualified_sort()
+    public function not_qualified_sort(Request $request)
     {
-        $query = DB::table('new_leads')
-            ->leftJoin('lead_alternative_adds', 'lead_alternative_adds.lead_id', '=', 'new_leads.id')
-            ->join('employees as contact_person', 'contact_person.id', '=', 'new_leads.contact_person')
-            ->select('new_leads.*', 'contact_person.name as c_name', 'contact_person.lastname as c_lastname', 'contact_person.image as c_image', 'lead_alternative_adds.street', 'lead_alternative_adds.postcode', 'lead_alternative_adds.lat', 'lead_alternative_adds.lon', 'lead_alternative_adds.main', 'lead_alternative_adds.address_no')
-            ->where('new_leads.status', '=', "um zu qualifizieren, bitte telefonisch  Kontakt aufnehmen")
-            ->orWhere('new_leads.status', '=', "um zu qualifizieren, bitte per E-Mail  Kontakt aufnehmen")
-            ->where('new_leads.status', '!=', "Junk")
-            ->orderBy('new_leads.id', 'desc');
-
-        $data['data'] = $query->paginate(20);
-        $this->setCommonData($data);
-
-        return view('admin.new_leads.customer_view', $data);
+        $request->merge(['status_filter' => 'info_required']);
+        return $this->index($request);
     }
 
-    public function incomplete_sort()
+    public function incomplete_sort(Request $request)
     {
-        $query = DB::table('new_leads')
-            ->leftJoin('lead_alternative_adds', 'lead_alternative_adds.lead_id', '=', 'new_leads.id')
-            ->join('employees as contact_person', 'contact_person.id', '=', 'new_leads.contact_person')
-            ->select('new_leads.*', 'contact_person.name as c_name', 'contact_person.lastname as c_lastname', 'contact_person.image as c_image', 'lead_alternative_adds.street', 'lead_alternative_adds.postcode', 'lead_alternative_adds.lat', 'lead_alternative_adds.lon', 'lead_alternative_adds.main', 'lead_alternative_adds.address_no')
-            ->where('new_leads.status', '=', "um zu qualifizieren, bitte per Brief  Kontakt aufnehmen")
-            ->where('new_leads.status', '!=', "Junk")
-
-            ->orderBy('new_leads.id', 'desc');
-
-        $data['data'] = $query->paginate(20);
-        $this->setCommonData($data);
-
-        return view('admin.new_leads.customer_view', $data);
+        $request->merge(['status_filter' => 'not_qualified']);
+        return $this->index($request);
     }
-    public function junk_sort()
-    {
-        $query = DB::table('new_leads')
-            ->leftJoin('lead_alternative_adds', 'lead_alternative_adds.lead_id', '=', 'new_leads.id')
-            ->join('employees as contact_person', 'contact_person.id', '=', 'new_leads.contact_person')
-            ->select('new_leads.*', 'contact_person.name as c_name', 'contact_person.lastname as c_lastname', 'contact_person.image as c_image', 'lead_alternative_adds.street', 'lead_alternative_adds.postcode', 'lead_alternative_adds.lat', 'lead_alternative_adds.lon', 'lead_alternative_adds.main', 'lead_alternative_adds.address_no')
-            ->where('new_leads.status', '=', "Junk")
-            ->orderBy('new_leads.id', 'desc');
-        $data['data'] = $query->paginate(20);
-        $this->setCommonData($data);
 
-        return view('admin.new_leads.customer_view', $data);
+    public function junk_sort(Request $request)
+    {
+        $request->merge(['status_filter' => 'junk']);
+        return $this->index($request);
     }
 
     private function setCommonData(&$data)
@@ -3490,6 +3453,10 @@ class NewLeadsController extends Controller
         }
 
         // 5. Main Lead Query
+        // Status-Schnellfilter (STATUS-Spalten-Dropdown der Leadliste).
+        // Wird von den qualified_sort()/junk_sort()/... Methoden gesetzt.
+        $statusFilter = $request->input('status_filter');
+
         $leadQuery = DB::table('new_leads')
             ->leftJoin('employees as contact_person', 'contact_person.id', '=', 'new_leads.contact_person')
             ->select(
@@ -3498,8 +3465,25 @@ class NewLeadsController extends Controller
                 'contact_person.lastname as c_lastname',
                 'contact_person.image as c_image'
             )
-            ->whereNotIn('new_leads.status', ['Junk', 'plan'])
             ->whereNull('new_leads.deleted_at');
+
+        // Behaelt die exakte WHERE-Semantik der frueheren *_sort-Methoden bei.
+        if ($statusFilter === 'junk') {
+            $leadQuery->where('new_leads.status', 'Junk');
+        } else {
+            $leadQuery->whereNotIn('new_leads.status', ['Junk', 'plan']);
+
+            if ($statusFilter === 'qualified') {
+                $leadQuery->where('new_leads.status', 'QUALIFIZIERT');
+            } elseif ($statusFilter === 'info_required') {
+                $leadQuery->whereIn('new_leads.status', [
+                    'um zu qualifizieren, bitte telefonisch  Kontakt aufnehmen',
+                    'um zu qualifizieren, bitte per E-Mail  Kontakt aufnehmen',
+                ]);
+            } elseif ($statusFilter === 'not_qualified') {
+                $leadQuery->where('new_leads.status', 'um zu qualifizieren, bitte per Brief  Kontakt aufnehmen');
+            }
+        }
 
         // 6. Search Filter
         if (!empty($search)) {
