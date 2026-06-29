@@ -313,15 +313,40 @@ class InventoryRequestOutController extends Controller
             ], 404);
         }
 
-        $item->delete_by = auth()->user()->name ?? 'System';
-        $item->delete_date = Carbon::now();
-        $item->save();
+        try {
+            return DB::transaction(function () use ($item) {
+                // FIX P2-30: store() zieht den Bestand bei Anlage ab, destroy() buchte
+                // ihn bisher NICHT zurück -> Inventarschwund. Beim Löschen (Storno) den
+                // quantity des Postens wieder auf inventories.quantity addieren.
+                // Hard-Delete + find() oben => der Posten ist danach nicht mehr
+                // auffindbar => kein zweites destroy() => keine Doppel-Rückbuchung.
+                $inventory = Inventory::where('product_id', $item->product_id)
+                    ->lockForUpdate()
+                    ->first();
 
-        $item->delete();
+                if ($inventory) {
+                    $inventory->quantity = (int) $inventory->quantity + (int) $item->quantity;
+                    $inventory->save();
+                }
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Datensatz erfolgreich gelöscht.',
-        ]);
+                $item->delete_by = auth()->user()->name ?? 'System';
+                $item->delete_date = Carbon::now();
+                $item->save();
+
+                $item->delete();
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Datensatz erfolgreich gelöscht.',
+                ]);
+            });
+        } catch (Throwable $e) {
+            report($e);
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Fehler beim Löschen.',
+            ], 500);
+        }
     }
 }
