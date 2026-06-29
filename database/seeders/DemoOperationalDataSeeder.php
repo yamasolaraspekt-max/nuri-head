@@ -63,6 +63,9 @@ class DemoOperationalDataSeeder extends Seeder
         $strassen = ['Lindenweg', 'Bahnhofstraße', 'Dorfstraße', 'Gartenstraße', 'Hauptstraße', 'Birkenallee', 'Mühlenweg', 'Am Deich', 'Sonnenstraße', 'Feldweg'];
         $quellen = ['Website', 'Empfehlung', 'Messe', 'Telefon', 'Google Ads', 'Flyer'];
         $statusKunde = ['Lead', 'Lead', 'Active', 'Active', 'Active']; // Mischung Interessent/Kunde
+        // Kanban-Stufen: lead_product_lists.status treibt die Kanban-Spalte (gültige offene Stage-Keys,
+        // keine excluded archive/junk/ticket). Verteilung mit Schwerpunkt auf frühen Stufen.
+        $kanbanStages = ['lead', 'lead', 'lead', 'offer', 'offer', 'follow_up', 'accepted', 'deal', 'project'];
 
         $pick = fn(array $a) => $a[array_rand($a)];
 
@@ -104,13 +107,15 @@ class DemoOperationalDataSeeder extends Seeder
                     'main' => 1, 'status' => 'active', 'created_at' => $now, 'updated_at' => $now,
                 ]);
 
-                // Lead-Leistungsposition: Kunde <-> Produkt/Gewerk + Innendienst/Außendienst
+                // Lead-Leistungsposition: Kunde <-> Produkt/Gewerk + Innendienst/Außendienst + Kanban-Stufe
+                $sk = $pick($kanbanStages);
                 DB::table('lead_product_lists')->insert([
                     'customer_id'    => $custId, 'alternative_id' => $objId, 'product_id' => $products[$product],
                     'department_id'  => $depIds[$dep] ?? null, 'service' => $pick($services),
                     'employee_id'    => $pick($empIds),   // Innendienst
                     'field_employee' => $pick($empIds),   // Außendienst
-                    'status'         => 'active', 'created_at' => $now, 'updated_at' => $now,
+                    'stage'          => $sk, 'status' => $sk, // treibt die Kanban-Spalte
+                    'created_at'     => $now, 'updated_at' => $now,
                 ]);
 
                 $customers[] = ['id' => $custId, 'obj' => $objId, 'product' => $product,

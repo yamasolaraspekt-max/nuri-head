@@ -864,6 +864,7 @@ class LeadOverviewController extends Controller
             ->join('lead_alternative_adds as alt', 'alt.id', '=', 'lead_product_lists.alternative_id')
             ->join('article_groups', 'article_groups.id', '=', 'lead_product_lists.product_id')
             ->leftJoin('employees', 'employees.id', '=', 'lead_product_lists.employee_id')
+            ->leftJoin('employees as field_emp', 'field_emp.id', '=', 'lead_product_lists.field_employee') // FIX: Außendienst-Join (fehlte -> getLead crashte bei field_employee_id)
             ->leftJoin('departments', 'departments.id', '=', 'lead_product_lists.department_id')
             ->leftJoin('phase_sections', 'phase_sections.id', '=', 'lead_product_lists.service_id')
             ->leftJoinSub($latestHistory, 'history', function ($join) {
@@ -904,6 +905,10 @@ class LeadOverviewController extends Controller
                 'employees.name as employee_name',
                 'employees.lastname as employee_lastname',
                 'employees.image as employee_image',
+                'field_emp.id as field_employee_id',
+                'field_emp.name as field_employee_name',
+                'field_emp.lastname as field_employee_lastname',
+                'field_emp.image as field_employee_image',
                 'departments.department_name',
                 'phase_sections.phase_section as phase_section_title',
                 'phase_sections.status as phase_status',
