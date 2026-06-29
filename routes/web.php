@@ -2830,7 +2830,7 @@ Route::group(['middleware' => 'web'], function () {
 // Language Type CRUD
 Route::group(['middleware' => 'web'], function () {
     Route::get('/language', [LanguagesController::class, 'index'])->name('language.info');
-    Route::get('/language_destroy/{id}', [LanguagesController::class, 'destroy'])->name('language.destroy');
+    Route::delete('/language_destroy/{id}', [LanguagesController::class, 'destroy'])->name('language.destroy');
     Route::post('/language_save', [LanguagesController::class, 'store'])->name('language.store');
     Route::post('/language_update', [LanguagesController::class, 'update'])->name('language.update');
     Route::post('/ajax_save', [LanguagesController::class, 'save'])->name('save.language');
