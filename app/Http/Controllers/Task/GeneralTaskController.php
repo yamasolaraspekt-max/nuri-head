@@ -21,7 +21,7 @@ class GeneralTaskController extends Controller
 
     public function index(Request $request)
     {
-        $authEmployeeId = (int) auth()->user()->name;
+        $authEmployeeId = auth()->user()->employeeId();
 
         $employee = Employee::with('departments')->find($authEmployeeId);
 
@@ -127,7 +127,7 @@ class GeneralTaskController extends Controller
         $validated = $this->validated($request);
         $data = $this->taskData($validated);
         $data = $this->normalizeRecurringData($request, $data);
-        $data['created_by'] = (int) auth()->user()->name;
+        $data['created_by'] = auth()->user()->employeeId();
         $data['task_mode'] = $request->input('task_mode') === 'bulk' ? 'bulk' : 'single';
         $data['progress_percent'] = 0;
         $data['soll_minutes'] = 0;
@@ -204,7 +204,7 @@ class GeneralTaskController extends Controller
 
     public function claim(Request $request, GeneralTask $generalTask)
     {
-        $employeeId = (int) auth()->user()->name;
+        $employeeId = auth()->user()->employeeId() ?? 0;
 
         $data = $request->validate([
             'planned_hours_today' => ['nullable', 'numeric', 'min:0'],
@@ -264,7 +264,7 @@ class GeneralTaskController extends Controller
 
         $task = GeneralTask::with($this->taskRelations())->findOrFail($data['task_id']);
         $this->authorize('update', $task); // FIX P0-10: kein Status-Move fremder Aufgaben
-        $employeeId = (int) auth()->user()->name;
+        $employeeId = auth()->user()->employeeId() ?? 0;
 
         DB::transaction(function () use ($task, $data, $request, $employeeId) {
             $updates = [
@@ -370,7 +370,7 @@ class GeneralTaskController extends Controller
         ]);
 
         $reason = $data['change_reason'] ?? $data['reason'] ?? null;
-        $employeeId = (int) auth()->user()->name;
+        $employeeId = auth()->user()->employeeId() ?? 0;
 
         DB::transaction(function () use ($generalTask, $reason, $employeeId) {
             $generalTask->reports()->create([
@@ -533,7 +533,7 @@ class GeneralTaskController extends Controller
         ]);
 
         $generalTask->reports()->create([
-            'employee_id' => (int) auth()->user()->name,
+            'employee_id' => auth()->user()->employeeId() ?? 0,
             'type' => $data['type'],
             'body' => $data['body'],
             'hours' => $data['hours'] ?? null,
@@ -800,7 +800,7 @@ class GeneralTaskController extends Controller
                 $id => [
                     'type' => 'finish_to_start',
                     'lag_days' => 0,
-                    'created_by' => (int) auth()->user()->name,
+                    'created_by' => auth()->user()->employeeId(),
                 ],
             ];
         })->all());
@@ -816,7 +816,7 @@ class GeneralTaskController extends Controller
                 'is_done' => false,
                 'checked_by' => null,
                 'checked_at' => null,
-                'created_by' => (int) auth()->user()->name,
+                'created_by' => auth()->user()->employeeId(),
             ]);
 
             $newStep->assignees()->sync($step->assignees->pluck('id')->all());
@@ -825,7 +825,7 @@ class GeneralTaskController extends Controller
         $this->recalculateTaskStepProgress($nextTask);
 
         $nextTask->reports()->create([
-            'employee_id' => (int) auth()->user()->name,
+            'employee_id' => auth()->user()->employeeId() ?? 0,
             'type' => 'comment',
             'body' => 'Automatisch aus wiederkehrender Aufgabe erstellt.',
         ]);
@@ -910,7 +910,7 @@ class GeneralTaskController extends Controller
             $parentColumn => $dependsOnTaskId,
             'type' => 'finish_to_start',
             'lag_days' => 0,
-            'created_by' => (int) auth()->user()->name,
+            'created_by' => auth()->user()->employeeId(),
             'created_at' => $now,
             'updated_at' => $now,
         ];
@@ -995,7 +995,7 @@ class GeneralTaskController extends Controller
         }
 
         $task->reports()->create([
-            'employee_id' => (int) auth()->user()->name,
+            'employee_id' => auth()->user()->employeeId() ?? 0,
             'type' => 'comment',
             'body' => "Änderungsgrund ({$action}): {$reason}",
         ]);
