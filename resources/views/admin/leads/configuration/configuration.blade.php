@@ -23,7 +23,7 @@
                                 
                         
                                 <div class="col-9">
-                                        <form action="{{action('App\Http\Controllers\EmailConfigurationController@index')}}">
+                                        <form action="{{action('App\Http\Controllers\Email\EmailConfigurationController@index')}}">
                                             <fieldset>
                                                 <div class="input-group">
                                                     <input type="text" name="search" class="form-control" placeholder="Search Form" aria-describedby="button-addon2">
@@ -64,7 +64,7 @@
                                                                 </button>
                                                             </div>
                                                                 <div class="modal-body">
-                                                                    <form class="form-horizontal" novalidate method="post" action="{{action('App\Http\Controllers\EmailConfigurationController@store')}}" class="custom-file-upload" enctype="multipart/form-data">
+                                                                    <form class="form-horizontal" novalidate method="post" action="{{action('App\Http\Controllers\Email\EmailConfigurationController@store')}}" class="custom-file-upload" enctype="multipart/form-data">
                                                                         @csrf
                                                                         <fieldset> 
                                                                             <div class="row">
@@ -280,7 +280,7 @@
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                            <form class="form-horizontal" novalidate method="post" action="{{action('App\Http\Controllers\EmailConfigurationController@update')}}">
+                                                            <form class="form-horizontal" novalidate method="post" action="{{action('App\Http\Controllers\Email\EmailConfigurationController@update')}}">
                                                                 @csrf
 
                                                                 <fieldset> 
