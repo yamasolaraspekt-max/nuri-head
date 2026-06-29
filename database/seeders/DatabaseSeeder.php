@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
             DemoLeadActivitySeeder::class,
             DemoPartnerProfileSeeder::class,
             DemoCrmPipelineSeeder::class,
+            DemoMasterSetSeeder::class,
         ]);
     }
 }
