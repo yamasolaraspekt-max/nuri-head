@@ -117,6 +117,16 @@ OFFENE ECHTE NUTZER-CRASHES: keine mehr in der Spur. Bitrix/NIBE/IMAP ignoriert.
 
 ---
 
+### 14. Parallel-Runde (4 Spuren gleichzeitig, konfliktfrei) — ✅ 10 Crash-Fixes
+Konfliktvermeidung: jede Spur nur eigene Dateien, routes/web.php nur vom CRM-Agenten. Alle 10 Commits sauber, kein Verlust (git-verifiziert).
+- Anfragen/Leads (2): Lead-Details-Edit Blade-Syntaxfehler (994a4ae); Leadliste Status-Filter $productInfo (646bbf0).
+- Vertrieb (1): OfferController@show ergänzt (2745614).
+- Partner (3): global-restore SoftDeletes-Guard (6d0f8e6); all-contacts Suche falsche Spalten (210a5c6); brand departments address-Spalte (0012272).
+- Finanzen (4): AssetInstallment Asset-Modell+Null-Guards (17726dd), Edit-Action (0f01003), Create-Action (1d17ac6), update Null-Deref (3f8297d).
+ECHTE OFFENE CRASHES (zurückgestellt = Geschäftslogik): Aufträge Löschen/Junk/Unjunk/Restore (DealController-Methoden fehlen); Anfragen reverify/publish/storeFromAI. Tote/unverlinkte Routen (new_lead_product, lead_new_sort, lead/references) = kein Nutzer-Crash.
+
+---
+
 ## OFFEN — braucht Nutzer-Vorgaben (nicht von mir geraten)
 - **3 rollenbasierte Dashboards** (MA/Teamleitung/GF) + GF-Cockpit-KPIs → welche Zahlen, wer sieht was.
 - **Krankmeldungs-Docs-Schutz** (Umbau wie oben) → Freigabe wegen echter Daten.
