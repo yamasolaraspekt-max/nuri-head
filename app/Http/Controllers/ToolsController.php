@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ProcessWeatherData;
 use App\Models\Customer;
+use App\Models\NewLeads;
 use App\Models\Temperature;
 use App\Models\WeatherStation;
 use DB;
@@ -75,11 +76,11 @@ class ToolsController extends Controller
      */
     public function weather($id)
     {
-        $customer = Customer::findOrFail($id);
+        $customer = NewLeads::findOrFail($id);
         $temperature = Temperature::where('postcode', '=', $customer->postcode)->first();
 
-        $lat = $customer->lat;
-        $lon = $customer->lon;
+        $lat = $customer->latitude;
+        $lon = $customer->longitude;
         $city = $customer->city;
 
         $code = DB::table('weather_stations')
@@ -147,9 +148,9 @@ class ToolsController extends Controller
 
 
    private function weatherman($id){
-        $customer = Customer::findOrFail($id);
-        $lat = $customer->lat;
-        $lon = $customer->lon;
+        $customer = NewLeads::findOrFail($id);
+        $lat = $customer->latitude;
+        $lon = $customer->longitude;
 
         $client = new \GuzzleHttp\Client();
         try {
