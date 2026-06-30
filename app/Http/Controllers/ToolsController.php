@@ -147,7 +147,7 @@ class ToolsController extends Controller
     }
 
 
-   private function weatherman($id){
+   public function weatherman($id){
         $customer = NewLeads::findOrFail($id);
         $lat = $customer->latitude;
         $lon = $customer->longitude;
