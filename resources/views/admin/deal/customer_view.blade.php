@@ -2465,17 +2465,11 @@
                                         $folderId = $folderId ?: ($detail->offer_folder_id ?? null);
                                     }
 
-                                    $canUpdateCustomer = DB::table('user_rolls')
-                                        ->where('user_rolls.user_id', '=', auth()->user()->name)
-                                        ->where('user_rolls.item_id', '=', 'Customer')
-                                        ->where('user_rolls.is_update', '=', 'on')
-                                        ->exists();
-
-                                    $canDeleteCustomer = DB::table('user_rolls')
-                                        ->where('user_rolls.user_id', '=', auth()->user()->name)
-                                        ->where('user_rolls.item_id', '=', 'Customer')
-                                        ->where('user_rolls.is_delete', '=', 'on')
-                                        ->exists();
+                                    // Rechte ueber das reparierte Muster (User::hasPermission -> user_rolls
+                                    // ueber users.id, Flag=1, is_admin-Bypass) statt des alten name/'on'-Musters.
+                                    $authUser = auth()->user();
+                                    $canUpdateCustomer = $authUser ? $authUser->hasPermission('Customer', 'update') : false;
+                                    $canDeleteCustomer = $authUser ? $authUser->hasPermission('Customer', 'delete') : false;
                                 @endphp
 
                                 <div id="deal-{{ $item->id }}" class="deal-item deal-row-card" style="--row-status-color: {{ $statusColor }};">
