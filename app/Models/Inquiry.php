@@ -314,6 +314,11 @@ class Inquiry extends Model
 
     public function markUnjunk(): self
     {
+        // Bewusste Entscheidung (Paket 2 / Punkt 1 / Variante c): Beim Aus-Junk-Holen wird
+        // der Status auf 'Unpublished' gesetzt - das ist KEIN vergessener Reset, sondern gewollt.
+        // Den exakten Vor-Junk-Status (z.B. 'Published') wiederherzustellen wuerde eine
+        // zusaetzliche Spalte erfordern (Schema-Eingriff) und ist bewusst NICHT umgesetzt.
+        // Der Nutzer publiziert bei Bedarf manuell neu.
         $this->status = 'Unpublished';
         $this->junk_reason = null;
         $this->junk_note = null;

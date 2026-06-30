@@ -1662,6 +1662,10 @@ class InquiryController extends Controller
         abort_unless($this->getInquiryPermissions()['canUpdate'], 403, 'Keine Berechtigung, Anfragen aus Junk zu holen.'); // FIX P0-09
 
         $inquiry = Inquiry::findOrFail($id);
+        // Bewusste Entscheidung (Paket 2 / Punkt 1 / Variante c): Un-Junk setzt auf 'Unpublished'
+        // - kein vergessener Reset, sondern gewollt. Exakte Wiederherstellung des Vor-Junk-Status
+        // waere ein Schema-Eingriff und ist bewusst NICHT gemacht; der Nutzer publiziert bei Bedarf
+        // manuell neu.
         $inquiry->status = 'Unpublished';
         $inquiry->junk_reason = null;
         $inquiry->junk_note = null;
