@@ -3774,13 +3774,22 @@ class DealController extends Controller
 
         $deal = Deal::findOrFail($id);
 
-        // Schwaeche 6: Lead-Stufe auf den Vor-Deal-Stand zuruecksetzen (zusammen mit dem Loeschen).
-        DB::transaction(function () use ($deal) {
-            $this->restoreLeadStageForDeal($deal);
+        // Schwaeche 5 + 6: Rechnungen rueckabwickeln + Lead-Stufe zuruecksetzen (atomar mit dem Loeschen).
+        $invoiceInfo = DB::transaction(function () use ($deal) {
+            $info = $this->cancelDealInvoices($deal);   // Schwaeche 5
+            $this->restoreLeadStageForDeal($deal);      // Schwaeche 6
             $deal->delete();
+            return $info;
         });
 
-        return redirect()->back()->with('success', 'Auftrag wurde geloescht.');
+        $redirect = redirect()->back()->with('success', 'Auftrag wurde geloescht.');
+        if (($invoiceInfo['paid_count'] ?? 0) > 0) {
+            $redirect->with('warning', 'Auftrag storniert, enthaelt ' . $invoiceInfo['paid_count']
+                . ' bezahlte Rechnung(en) ueber ' . number_format($invoiceInfo['paid_sum'], 2, ',', '.')
+                . ' EUR - bitte buchhalterisch pruefen (Rueckzahlung/Gutschrift).');
+        }
+
+        return $redirect;
     }
 
     /** Geloeschten Auftrag wiederherstellen. */
@@ -3829,6 +3838,51 @@ class DealController extends Controller
             ->where('product_id', $deal->product_id)
             ->where('alternative_id', $deal->alternative_id)
             ->update(['status' => 'deal', 'stage' => 'deal', 'updated_at' => now()]);
+    }
+
+    /**
+     * Schwaeche 5: Beim Auftrags-Storno die deal-verknuepften Rechnungen rueckabwickeln (idempotent).
+     * - Offene Rechnungen (paid_amount = 0) -> status = 'storniert'.
+     * - Bezahlte Rechnungen (paid_amount > 0) -> status = 'storniert_bezahlt_pruefen' (NICHT loeschen,
+     *   menschliche Pruefung noetig: Rueckzahlung/Gutschrift).
+     * Behandelt sowohl 'invoices' (wo die Umsaetze liegen) als auch 'deal_invoices' (heute leer, aber
+     * dieselbe Luecke kuenftig). Gibt Anzahl/Summe der bezahlten Rechnungen fuer eine Warnung zurueck.
+     */
+    private function cancelDealInvoices(Deal $deal): array
+    {
+        $paidCount = 0;
+        $paidSum = 0.0;
+
+        foreach (['invoices' => 'total_amount', 'deal_invoices' => 'invoice_amount'] as $table => $amountCol) {
+            if (! Schema::hasTable($table) || ! Schema::hasColumn($table, 'deal_id')) {
+                continue;
+            }
+
+            $query = DB::table($table)
+                ->where('deal_id', $deal->id)
+                ->whereNotIn('status', ['storniert', 'storniert_bezahlt_pruefen']); // idempotent: schon markierte ueberspringen
+
+            if (Schema::hasColumn($table, 'deleted_at')) {
+                $query->whereNull('deleted_at');
+            }
+
+            foreach ($query->get() as $inv) {
+                $paid = (float) ($inv->paid_amount ?? 0);
+                $newStatus = $paid > 0 ? 'storniert_bezahlt_pruefen' : 'storniert';
+
+                DB::table($table)->where('id', $inv->id)->update([
+                    'status'     => $newStatus,
+                    'updated_at' => now(),
+                ]);
+
+                if ($paid > 0) {
+                    $paidCount++;
+                    $paidSum += (float) ($inv->{$amountCol} ?? 0);
+                }
+            }
+        }
+
+        return ['paid_count' => $paidCount, 'paid_sum' => $paidSum];
     }
 
     /** Mitarbeiterliste fuer den Reviewer-/Geprueft-durch-Auswaehler (JSON: id, name, lastname). */
