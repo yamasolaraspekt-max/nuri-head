@@ -73,7 +73,7 @@ $lat = $customer->lat;  $lon = $customer->lon;  // 'lat'/'lon' existieren auf ne
 ## Priorisierte To-do-Liste (Vorschläge — NICHT ausgeführt)
 
 1. **(✅ ERLEDIGT — Commits `168b464` + `0aa2c3c`)** `ToolsController` Wetter/PVGIS → `NewLeads` + Feld-Mapping `lat→latitude`, `lon→longitude` (in **beiden** Methoden `@weather` + `@weatherman`). **Korrektur zum Befund:** der geroutete Pfad `@weatherman` warf **kein 404, sondern 500** (`BadMethodCallException` — die Methode war `private`, eine Route kann sie nicht aufrufen); die Customer-Falle war dahinter verdeckt. `@weatherman` separat auf `public` gesetzt; Verifikation: `GET /get_weather/105` → 200, `NewLeads::findOrFail(105)` liefert echte `latitude/longitude`. Siehe **Nachtrag** unten.
-2. **(mittel)** `PurchaseRequestController:40` Kunden-Dropdown → `NewLeads` (leeres Dropdown ist offensichtlich).
+2. **(✅ ERLEDIGT — Commit `9475c0a`)** Bestellantrag-Seite **vollständig**: `PurchaseRequestController@index` Kunden-Dropdown (`Customer::select`→`NewLeads::select`) **plus** die 3 `leftJoin('customers')` (Ticket-Kundenname in `index()`, Posten-Kundenname in zwei weiteren Methoden) → `new_leads` (alle nur `id/name/lastname` — in `new_leads` vorhanden, kein Mapping). Verifiziert: Dropdown **52 Kunden** (vorher 0), Ticket-Liste **15/15** mit echten Namen. **Offen:** Junk/gelöscht-Filter (s. Nachtrag 2).
 3. **(mittel)** `Email/LeadsController:137`, `LeadOverviewController:2409`, `CustomerHeatingCircuit:87`, `ChecklistRoom:138`, `AdminController:76` → je Stelle prüfen + auf `new_leads` mit Feld-Mapping.
 4. **(Breitenrisiko)** `belongsTo(Customer::class)`-Beziehungen durchgehen: welche `->customer`-Zugriffe sind live? (eigene Mini-Untersuchung wert).
 5. **(harmlos/aufräumen)** `NewLeadsController:5520`-Backfill, tote Importe (PVTools/CustomerPhaseList), `Old/*` → im Zuge der `customers`-Bereinigung (Glossar Abschnitt 4) entfernen.
@@ -88,6 +88,16 @@ Beim Falle-Fix (`0aa2c3c`) wurde `ToolsController::weatherman` von `private` auf
 - **`ToolsController@weather`** bleibt **unrouted/verwaist** (eigenständige öffentliche Methode ohne Route).
 
 → **Backlog-Entscheidung (keine Aktion):** das „Wetter-pro-Kunde"-Feature entweder **verdrahten** (Button/JS auf `get_weather/{id}`), falls gewollt — oder die verwaisten Wetter-Routen **entfernen**, falls nicht. Nur vermerkt.
+
+---
+
+## Nachtrag 2: Kunden-Dropdown-Filter (Backlog — KEINE Aktion jetzt)
+
+Beim Fix von Stelle 2.3 (`9475c0a`) wurde das Bestellantrag-Dropdown **1:1** auf `NewLeads::select(...)->orderBy('name')->get()` umgestellt — **ohne Filter**, genau wie der bisherige `Customer`-Code (bewusste Entscheidung, um das Verhalten nicht zu ändern). 
+
+**Befund:** `customers` war leer, daher fiel nie auf, dass **kein Aktiv-/Nicht-Junk-Filter** existiert. `new_leads` enthält dagegen reale Daten — in der **Demo** sind alle 52 aktiv (kein Unterschied), aber in **Produktion** könnten **Junk- oder gelöschte Leads** im Kunden-Dropdown auftauchen.
+
+→ **Sinnvolle spätere Verbesserung (separat, kein Fallen-Teil):** Filter ergänzen, z. B. `->whereNull('deleted_at')->where('status','!=','Junk')`, damit nur reale Kunden im Dropdown stehen. Bewusst **nicht jetzt** umgesetzt — nur vermerkt.
 
 ---
 
