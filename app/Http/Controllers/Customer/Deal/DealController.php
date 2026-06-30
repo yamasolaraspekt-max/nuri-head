@@ -3840,4 +3840,27 @@ class DealController extends Controller
         return response()->json(['success' => true]);
     }
 
+    /**
+     * Auftrags-Profil: Dokument loeschen. Dispatcher auf die vorhandenen
+     * Bild- (profileDeleteImageDocument) bzw. Anhang-Methoden (profileDeleteAttachmentDocument).
+     */
+    public function profileDeleteDocument(Request $request, Deal $deal, $source = null, $id = null)
+    {
+        $this->authorizeDealDelete();
+
+        if ($source === 'image') {
+            $image = Image::findOrFail($id);
+            return $this->profileDeleteImageDocument($deal, $image);
+        }
+
+        if ($source === 'attachment') {
+            return $this->profileDeleteAttachmentDocument($deal, $id);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Unbekannter Dokumenttyp.',
+        ], 422);
+    }
+
 }
