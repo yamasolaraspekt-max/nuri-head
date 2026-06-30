@@ -3731,4 +3731,50 @@ class DealController extends Controller
         return redirect()->back()->with('success', 'Auftrag wurde angelegt (Nr. ' . $deal->order_number . ').');
     }
 
+    /** Auftrag als Junk markieren (reversibel ueber unjunk). */
+    public function junk($id)
+    {
+        $this->authorizeDealDelete();
+
+        $deal = Deal::findOrFail($id);
+        $deal->status = 'Junk';
+        $deal->save();
+
+        return redirect()->back()->with('success', 'Auftrag wurde als Junk markiert.');
+    }
+
+    /** Auftrag aus Junk zurueckholen. */
+    public function unjunk($id)
+    {
+        $this->authorizeDealDelete();
+
+        $deal = Deal::findOrFail($id);
+        $deal->status = 'deal';
+        $deal->save();
+
+        return redirect()->back()->with('success', 'Auftrag wurde aus Junk wiederhergestellt.');
+    }
+
+    /** Auftrag loeschen (SoftDelete -> ueber restore wiederherstellbar). */
+    public function destroy($id)
+    {
+        $this->authorizeDealDelete();
+
+        $deal = Deal::findOrFail($id);
+        $deal->delete();
+
+        return redirect()->back()->with('success', 'Auftrag wurde geloescht.');
+    }
+
+    /** Geloeschten Auftrag wiederherstellen. */
+    public function restore($id)
+    {
+        $this->authorizeDealDelete();
+
+        $deal = Deal::withTrashed()->findOrFail($id);
+        $deal->restore();
+
+        return redirect()->back()->with('success', 'Auftrag wurde wiederhergestellt.');
+    }
+
 }
