@@ -72,11 +72,22 @@ $lat = $customer->lat;  $lon = $customer->lon;  // 'lat'/'lon' existieren auf ne
 
 ## Priorisierte To-do-Liste (Vorschläge — NICHT ausgeführt)
 
-1. **(kritisch)** `ToolsController` Wetter/PVGIS → `NewLeads` + Feld-Mapping `lat→latitude`, `lon→longitude`. **Zuerst** (sichtbarer 404). Vorher: prüfen, ob die Route erreichbar ist.
+1. **(✅ ERLEDIGT — Commits `168b464` + `0aa2c3c`)** `ToolsController` Wetter/PVGIS → `NewLeads` + Feld-Mapping `lat→latitude`, `lon→longitude` (in **beiden** Methoden `@weather` + `@weatherman`). **Korrektur zum Befund:** der geroutete Pfad `@weatherman` warf **kein 404, sondern 500** (`BadMethodCallException` — die Methode war `private`, eine Route kann sie nicht aufrufen); die Customer-Falle war dahinter verdeckt. `@weatherman` separat auf `public` gesetzt; Verifikation: `GET /get_weather/105` → 200, `NewLeads::findOrFail(105)` liefert echte `latitude/longitude`. Siehe **Nachtrag** unten.
 2. **(mittel)** `PurchaseRequestController:40` Kunden-Dropdown → `NewLeads` (leeres Dropdown ist offensichtlich).
 3. **(mittel)** `Email/LeadsController:137`, `LeadOverviewController:2409`, `CustomerHeatingCircuit:87`, `ChecklistRoom:138`, `AdminController:76` → je Stelle prüfen + auf `new_leads` mit Feld-Mapping.
 4. **(Breitenrisiko)** `belongsTo(Customer::class)`-Beziehungen durchgehen: welche `->customer`-Zugriffe sind live? (eigene Mini-Untersuchung wert).
 5. **(harmlos/aufräumen)** `NewLeadsController:5520`-Backfill, tote Importe (PVTools/CustomerPhaseList), `Old/*` → im Zuge der `customers`-Bereinigung (Glossar Abschnitt 4) entfernen.
+
+---
+
+## Nachtrag: verwaiste Wetter-Route (Backlog — KEINE Aktion jetzt)
+
+Beim Falle-Fix (`0aa2c3c`) wurde `ToolsController::weatherman` von `private` auf `public` gesetzt, damit die **registrierte** Route überhaupt aufrufbar ist (vorher 500 `BadMethodCallException`). Dabei festgestellt:
+- **`GET /get_weather/{id}` (`name: weather.man`) hat keinen UI-Aufrufer** — in Views/JS nicht auffindbar. Die Route ist jetzt lauffähig, aber **verwaist** (nur per direkter URL erreichbar). Der frühere Hinweis auf `weather_station/station.blade.php:18` war falsch — das ist `weather_stations.upload` (anderes Feature).
+- Ebenso **ohne erkennbaren View-Trigger:** `tools.weather` (→ `PVToolsController@getPVData`), `weather.data` (→ `fetchWeatherData`). Die ToolsController-Wetter-Familie wirkt insgesamt **registriert, aber nicht verdrahtet**.
+- **`ToolsController@weather`** bleibt **unrouted/verwaist** (eigenständige öffentliche Methode ohne Route).
+
+→ **Backlog-Entscheidung (keine Aktion):** das „Wetter-pro-Kunde"-Feature entweder **verdrahten** (Button/JS auf `get_weather/{id}`), falls gewollt — oder die verwaisten Wetter-Routen **entfernen**, falls nicht. Nur vermerkt.
 
 ---
 
