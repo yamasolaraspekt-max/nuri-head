@@ -521,6 +521,13 @@ class LeaveController extends Controller
             $oldStart = $leave->start_date;
             $oldEnd = $leave->end_date;
 
+            // MODELL A: War der Antrag vorher GENEHMIGT (= abgebucht), den ALTEN Abzug zurueckbuchen.
+            // Der editierte Antrag geht auf Pending und wird erst bei erneuter Genehmigung neu abgebucht
+            // -> bei Kuerzung wird netto nur die Differenz abgebucht. Idempotent (danach Pending -> kein zweites Mal).
+            $wasApprovedBeforeUpdate = $this->leaveIsApproved($leave);
+            $oldEmpId = (int) $leave->emp_id;
+            $oldDuration = (int) $leave->duration;
+
             $payload = [
                 'emp_id' => $employeeId,
                 'year' => Carbon::parse($data['start_date'])->year,
@@ -542,6 +549,10 @@ class LeaveController extends Controller
             ];
 
             $leave->update($payload);
+
+            if ($wasApprovedBeforeUpdate && $oldEmpId && $oldDuration > 0) {
+                Employee::where('id', $oldEmpId)->increment('remaining_day', $oldDuration);
+            }
 
             return $this->successResponse($request, [
                 'message' => 'Urlaub erfolgreich aktualisiert!',
@@ -568,7 +579,14 @@ class LeaveController extends Controller
                 return $this->errorResponse($request, 'Urlaubsantrag wurde nicht gefunden.', 404);
             }
 
-            $leave->delete();
+            // MODELL A: War der Urlaub genehmigt (= abgebucht), die Tage VOR dem Loeschen zurueckbuchen.
+            // Hard-Delete (kein SoftDeletes) => zweites destroy() findet nichts => keine Doppel-Rueckbuchung.
+            DB::transaction(function () use ($leave) {
+                if ($this->leaveIsApproved($leave)) {
+                    $this->creditRemainingDay($leave);
+                }
+                $leave->delete();
+            });
 
             return $this->successResponse($request, [
                 'message' => 'Der Urlaub wurde erfolgreich gelöscht!',
@@ -734,6 +752,10 @@ class LeaveController extends Controller
                 ]);
             }
 
+            // MODELL A: Ablehnung eines vorher GENEHMIGTEN Antrags bucht die Tage zurueck (idempotent:
+            // danach status='Anfrage' -> nicht mehr genehmigt -> kein zweites Mal).
+            $wasApproved = $this->leaveIsApproved($leave);
+
             $leave->update([
                 'start_date' => $data['start_date'] ?? $leave->start_date,
                 'end_date' => $data['end_date'] ?? $leave->end_date,
@@ -743,6 +765,10 @@ class LeaveController extends Controller
                 'status' => 'Anfrage',
                 'request_answer' => 'reject',
             ]);
+
+            if ($wasApproved) {
+                $this->creditRemainingDay($leave);
+            }
 
             return response()->json([
                 'success' => true,
