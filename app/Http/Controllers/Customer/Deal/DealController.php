@@ -3777,4 +3777,67 @@ class DealController extends Controller
         return redirect()->back()->with('success', 'Auftrag wurde wiederhergestellt.');
     }
 
+    /** Mitarbeiterliste fuer den Reviewer-/Geprueft-durch-Auswaehler (JSON: id, name, lastname). */
+    public function getEmployees()
+    {
+        $cols = ['id', 'name'];
+        if (Schema::hasColumn('employees', 'lastname')) {
+            $cols[] = 'lastname';
+        }
+
+        $employees = Employee::query()
+            ->when(Schema::hasColumn('employees', 'status'), fn ($q) => $q->where('status', 'Active'))
+            ->orderBy('name')
+            ->get($cols);
+
+        return response()->json($employees);
+    }
+
+    /** Pruefer / Geprueft-durch eines Auftrags setzen. */
+    public function updateReviewers(Request $request)
+    {
+        $this->authorizeDealUpdate();
+
+        $data = $request->validate([
+            'deal_id'     => ['required', 'integer'],
+            'checked_by'  => ['nullable', 'integer'],
+            'reviewed_by' => ['nullable', 'integer'],
+        ]);
+
+        $deal = Deal::findOrFail($data['deal_id']);
+        $deal->checked_by  = $data['checked_by'] ?: null;
+        $deal->reviewer_id = $data['reviewed_by'] ?: null;
+        $deal->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    /** Inline-Feld eines Auftrags aktualisieren (Whitelist: sign_date, confirmed_at, status, price). */
+    public function updateDate(Request $request)
+    {
+        $this->authorizeDealUpdate();
+
+        $data = $request->validate([
+            'deal_id' => ['required', 'integer'],
+            'field'   => ['required', 'string'],
+            'value'   => ['nullable'],
+        ]);
+
+        $allowed = ['sign_date', 'confirmed_at', 'status', 'price'];
+        if (! in_array($data['field'], $allowed, true)) {
+            return response()->json(['success' => false, 'message' => 'Feld nicht erlaubt.'], 422);
+        }
+
+        $value = $data['value'];
+        if ($data['field'] === 'price') {
+            $value = ($value === null || $value === '') ? null : (float) $value;
+        }
+
+        $deal = Deal::findOrFail($data['deal_id']);
+        $deal->{$data['field']} = $value;
+        $deal->save();
+
+        return response()->json(['success' => true]);
+    }
+
 }
