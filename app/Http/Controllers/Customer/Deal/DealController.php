@@ -3719,9 +3719,15 @@ class DealController extends Controller
                 'status'          => 'deal',
             ]);
 
-            // Kanban konsistent halten: Lead-Stufe des Produkts auf 'deal' setzen.
+            // Kanban konsistent halten: Lead-Stufe (status UND stage gemeinsam) auf 'deal' setzen und
+            // den Vor-Deal-Stand in old_stage merken (fuer die Rueckbuchung beim Storno, Schwaeche 6).
+            $priorStage = $lpl->stage ?: $lpl->status;
             DB::table('lead_product_lists')->where('id', $lpl->id)->update([
+                'old_stage'  => ($priorStage && strtolower((string) $priorStage) !== 'deal')
+                    ? $priorStage
+                    : ($lpl->old_stage ?: 'accepted'),
                 'status'     => 'deal',
+                'stage'      => 'deal',
                 'updated_at' => now(),
             ]);
 
@@ -3740,6 +3746,9 @@ class DealController extends Controller
         $deal->status = 'Junk';
         $deal->save();
 
+        // Schwaeche 6: Lead-Stufe (status + stage) auf den Vor-Deal-Stand zuruecksetzen.
+        $this->restoreLeadStageForDeal($deal);
+
         return redirect()->back()->with('success', 'Auftrag wurde als Junk markiert.');
     }
 
@@ -3752,6 +3761,9 @@ class DealController extends Controller
         $deal->status = 'deal';
         $deal->save();
 
+        // Schwaeche 6 (symmetrisch): Lead-Stufe wieder auf 'deal' setzen.
+        $this->markLeadStageDealForDeal($deal);
+
         return redirect()->back()->with('success', 'Auftrag wurde aus Junk wiederhergestellt.');
     }
 
@@ -3761,7 +3773,12 @@ class DealController extends Controller
         $this->authorizeDealDelete();
 
         $deal = Deal::findOrFail($id);
-        $deal->delete();
+
+        // Schwaeche 6: Lead-Stufe auf den Vor-Deal-Stand zuruecksetzen (zusammen mit dem Loeschen).
+        DB::transaction(function () use ($deal) {
+            $this->restoreLeadStageForDeal($deal);
+            $deal->delete();
+        });
 
         return redirect()->back()->with('success', 'Auftrag wurde geloescht.');
     }
@@ -3775,6 +3792,43 @@ class DealController extends Controller
         $deal->restore();
 
         return redirect()->back()->with('success', 'Auftrag wurde wiederhergestellt.');
+    }
+
+    /**
+     * Schwaeche 6: Lead-Stufe (status + stage konsistent) eines Auftrags auf den Vor-Deal-Stand
+     * zuruecksetzen. Idempotent: wirkt nur, solange der Lead noch in 'deal' steht. Fallback 'accepted'.
+     */
+    private function restoreLeadStageForDeal(Deal $deal): void
+    {
+        $lpls = DB::table('lead_product_lists')
+            ->where('customer_id', $deal->customer_id)
+            ->where('product_id', $deal->product_id)
+            ->where('alternative_id', $deal->alternative_id)
+            ->get();
+
+        foreach ($lpls as $lpl) {
+            $inDeal = strtolower((string) $lpl->status) === 'deal'
+                || strtolower((string) $lpl->stage) === 'deal';
+            if (! $inDeal) {
+                continue; // schon zurueckgesetzt -> nicht erneut (idempotent)
+            }
+            $target = $lpl->old_stage ?: 'accepted';
+            DB::table('lead_product_lists')->where('id', $lpl->id)->update([
+                'status'     => $target,
+                'stage'      => $target,
+                'updated_at' => now(),
+            ]);
+        }
+    }
+
+    /** Schwaeche 6 (symmetrisch): Lead-Stufe (status + stage) eines Auftrags wieder auf 'deal' setzen. */
+    private function markLeadStageDealForDeal(Deal $deal): void
+    {
+        DB::table('lead_product_lists')
+            ->where('customer_id', $deal->customer_id)
+            ->where('product_id', $deal->product_id)
+            ->where('alternative_id', $deal->alternative_id)
+            ->update(['status' => 'deal', 'stage' => 'deal', 'updated_at' => now()]);
     }
 
     /** Mitarbeiterliste fuer den Reviewer-/Geprueft-durch-Auswaehler (JSON: id, name, lastname). */
