@@ -822,9 +822,12 @@ public function next_employee($id){
                 $employee->working_type = $request->input('working_type');
                 $employee->salary_per_hour = $request->input('salary_per_hour');
                 $employee->leave = $request->input('leave');
-                $employee->remaining_day = $request->input('leave');
+                // FIX (Paket 2 / Punkt 3 / Bug 1): remaining_day und sick_leave_remaining sind AUFGELAUFENE
+                // Salden und gehoeren NICHT in die allgemeine Profilbearbeitung. Sie werden ausschliesslich
+                // ueber Urlaubs-/Krankheitsantraege (approve/destroy) veraendert. Frueher wurden sie hier bei
+                // JEDER Profilaenderung auf den vollen Jahresanspruch zurueckgesetzt -> aufgelaufener Resturlaub
+                // ging verloren. Bewusste Korrektur eines Saldos ist ein separater Vorgang, nicht das Profil-Update.
                 $employee->sick_leave = $request->input('sick_leave');
-                $employee->sick_leave_remaining = $request->input('sick_leave');
                 $employee->supervisor = $request->input('supervisor');
 
                 /*
