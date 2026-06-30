@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Brand;
 use App\Models\Customer;
+use App\Models\NewLeads;
 use App\Models\Distributor;
 use App\Models\Employee;
 use App\Models\Measure;
@@ -37,18 +38,18 @@ class PurchaseRequestController extends Controller
             ->orderBy('name')
             ->get();
 
-        $customers = Customer::select('id', 'name', 'lastname')
+        $customers = NewLeads::select('id', 'name', 'lastname')
             ->orderBy('name')
             ->get();
 
         $problems = Problem::query()
-            ->leftJoin('customers', 'customers.id', '=', 'problems.customer_id')
+            ->leftJoin('new_leads', 'new_leads.id', '=', 'problems.customer_id')
             ->leftJoin('products', 'products.id', '=', 'problems.product_id')
             ->select([
                 'problems.id',
                 'problems.ticket_no',
-                'customers.name as customer_name',
-                'customers.lastname as customer_lastname',
+                'new_leads.name as customer_name',
+                'new_leads.lastname as customer_lastname',
                 'products.product as product_name',
             ])
             ->orderByDesc('problems.id')
@@ -111,7 +112,7 @@ class PurchaseRequestController extends Controller
             ->leftJoin('distributors', 'distributors.id', '=', 'purchase_requests.distributor_id')
             ->leftJoin('employees as requestf', 'requestf.id', '=', 'purchase_requests.request_from')
             ->leftJoin('employees as requestt', 'requestt.id', '=', 'purchase_requests.request_to')
-            ->leftJoin('customers', 'customers.id', '=', 'purchase_requests.customer_id')
+            ->leftJoin('new_leads', 'new_leads.id', '=', 'purchase_requests.customer_id')
             ->leftJoin('employees as used_employee', 'used_employee.id', '=', 'purchase_requests.employee_id')
             ->select([
                 'purchase_requests.*',
@@ -124,8 +125,8 @@ class PurchaseRequestController extends Controller
                 'requestt.name as requestt_name',
                 'requestt.lastname as requestt_lastname',
 
-                'customers.name as customer_name',
-                'customers.lastname as customer_lastname',
+                'new_leads.name as customer_name',
+                'new_leads.lastname as customer_lastname',
 
                 'used_employee.name as used_employee_name',
                 'used_employee.lastname as used_employee_lastname',
@@ -299,7 +300,7 @@ class PurchaseRequestController extends Controller
             ->leftJoin('distributors', 'distributors.id', '=', 'purchase_requests.distributor_id')
             ->leftJoin('employees as requestf', 'requestf.id', '=', 'purchase_requests.request_from')
             ->leftJoin('employees as requestt', 'requestt.id', '=', 'purchase_requests.request_to')
-            ->leftJoin('customers', 'customers.id', '=', 'purchase_requests.customer_id')
+            ->leftJoin('new_leads', 'new_leads.id', '=', 'purchase_requests.customer_id')
             ->leftJoin('employees as used_employee', 'used_employee.id', '=', 'purchase_requests.employee_id')
             ->select([
                 'purchase_requests.*',
@@ -312,8 +313,8 @@ class PurchaseRequestController extends Controller
                 'requestt.name as requestt_name',
                 'requestt.lastname as requestt_lastname',
 
-                'customers.name as customer_name',
-                'customers.lastname as customer_lastname',
+                'new_leads.name as customer_name',
+                'new_leads.lastname as customer_lastname',
 
                 'used_employee.name as used_employee_name',
                 'used_employee.lastname as used_employee_lastname',
