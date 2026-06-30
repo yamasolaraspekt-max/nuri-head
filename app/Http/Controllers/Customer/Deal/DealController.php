@@ -3619,4 +3619,116 @@ class DealController extends Controller
         ];
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | P1-16: Auftrags-Anlage (Angebot -> Auftrag) + Lebenszyklus
+    |--------------------------------------------------------------------------
+    | Wiederhergestellte, real genutzte Endpunkte. Rechte nach dem reparierten
+    | Muster (User::hasPermission -> user_rolls ueber users.id, Flag=1,
+    | is_admin-Bypass). Felder werden server-seitig aus dem lead_product_list
+    | abgeleitet, nicht aus spoofbaren Hidden-Feldern uebernommen.
+    */
+
+    /** Mitarbeiter-ID des eingeloggten Kontos (users.name speichert hier die employees.id). */
+    private function dealCurrentEmployeeId(): ?int
+    {
+        $user = auth()->user();
+        if (! $user) {
+            return null;
+        }
+        if (is_numeric($user->name ?? null)) {
+            return (int) $user->name;
+        }
+        if (! empty($user->employee_id) && is_numeric($user->employee_id)) {
+            return (int) $user->employee_id;
+        }
+        return $user->employee?->id ? (int) $user->employee->id : null;
+    }
+
+    private function authorizeDealUpdate(): void
+    {
+        $user = auth()->user();
+        if (! $user || ! $user->hasPermission('Customer', 'update')) {
+            abort(403, 'Keine Berechtigung, Auftraege zu bearbeiten.');
+        }
+    }
+
+    private function authorizeDealDelete(): void
+    {
+        $user = auth()->user();
+        if (! $user || ! $user->hasPermission('Customer', 'delete')) {
+            abort(403, 'Keine Berechtigung, Auftraege zu loeschen.');
+        }
+    }
+
+    /**
+     * Auftrag aus dem gewaehlten Produkt (lead_product_lists) anlegen.
+     * Modal "Neues Projekt erstellen" -> route('deal.store').
+     */
+    public function dealStore(Request $request)
+    {
+        $this->authorizeDealUpdate();
+
+        $validated = $request->validate([
+            'customer_id'          => ['required', 'integer'],
+            'lead_product_list_id' => ['required', 'integer'],
+        ]);
+
+        // Massgebliche Quelle: das Produkt des Leads (nicht die spoofbaren Hidden-Felder).
+        $lpl = DB::table('lead_product_lists')->where('id', $validated['lead_product_list_id'])->first();
+        if (! $lpl) {
+            return redirect()->back()->with('error', 'Das gewaehlte Produkt wurde nicht gefunden.');
+        }
+
+        if ((int) $lpl->customer_id !== (int) $validated['customer_id']) {
+            return redirect()->back()->with('error', 'Produkt und Kunde passen nicht zusammen.');
+        }
+
+        // employee_id ist Pflicht -> Fallback auf den eingeloggten Nutzer.
+        $employeeId = $lpl->employee_id ?: $this->dealCurrentEmployeeId();
+        if (! $employeeId) {
+            return redirect()->back()->with('error', 'Dem Produkt ist kein Mitarbeiter zugeordnet und das eigene Konto hat keinen Mitarbeiter.');
+        }
+
+        // Angebot verknuepfen: bevorzugt der angenommene Ordner, sonst ein passendes Angebot.
+        $offerFolderId = $lpl->accepted_offer_folder_id ?: null;
+        $offerId = $offerFolderId
+            ? DB::table('offer_folders')->where('id', $offerFolderId)->value('offer_id')
+            : null;
+        if (! $offerId) {
+            $offerId = DB::table('offers')
+                ->where('customer_id', $lpl->customer_id)
+                ->where('product_id', $lpl->product_id)
+                ->where('alternative_id', $lpl->alternative_id)
+                ->whereNull('deleted_at')
+                ->orderByDesc('id')
+                ->value('id');
+        }
+
+        $deal = DB::transaction(function () use ($lpl, $employeeId, $offerId, $offerFolderId) {
+            $deal = Deal::create([
+                'customer_id'     => $lpl->customer_id,
+                'product_id'      => $lpl->product_id,
+                'alternative_id'  => $lpl->alternative_id,
+                'service_id'      => $lpl->service_id,
+                'department_id'   => $lpl->department_id,
+                'service'         => $lpl->service,
+                'employee_id'     => $employeeId,
+                'offer_id'        => $offerId,
+                'offer_folder_id' => $offerFolderId,
+                'status'          => 'deal',
+            ]);
+
+            // Kanban konsistent halten: Lead-Stufe des Produkts auf 'deal' setzen.
+            DB::table('lead_product_lists')->where('id', $lpl->id)->update([
+                'status'     => 'deal',
+                'updated_at' => now(),
+            ]);
+
+            return $deal;
+        });
+
+        return redirect()->back()->with('success', 'Auftrag wurde angelegt (Nr. ' . $deal->order_number . ').');
+    }
+
 }
