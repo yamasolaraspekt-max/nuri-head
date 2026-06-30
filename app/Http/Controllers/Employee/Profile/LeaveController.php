@@ -194,6 +194,41 @@ class LeaveController extends Controller
         return Leave::find($id);
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Urlaubssaldo-Buchung (Paket 2 / Punkt 3 / Bug 2, Modell A)
+    |--------------------------------------------------------------------------
+    | Invariante: Tage sind genau dann vom Mitarbeiter-Saldo abgebucht, wenn der
+    | Antrag genehmigt ist. Abgebucht wird ausschliesslich bei der Genehmigung
+    | (approve / change-accept), zurueckgebucht bei Storno/Ablehnung/Edit eines
+    | vorher genehmigten Antrags. Alles idempotent ueber den Genehmigt-Status.
+    */
+
+    /** Gilt der Antrag als genehmigt (= Tage wurden vom Saldo abgebucht)? */
+    private function leaveIsApproved($leave): bool
+    {
+        return strtolower(trim((string) ($leave->approved ?? ''))) === 'yes'
+            || strtolower(trim((string) ($leave->status ?? ''))) === 'accept';
+    }
+
+    /** Urlaubsdauer vom Mitarbeiter-Saldo abbuchen (nur bei erstmaliger Genehmigung). */
+    private function debitRemainingDay($leave): void
+    {
+        $duration = (int) $leave->duration;
+        if ($leave->emp_id && $duration > 0) {
+            Employee::where('id', $leave->emp_id)->decrement('remaining_day', $duration);
+        }
+    }
+
+    /** Urlaubsdauer auf den Mitarbeiter-Saldo zurueckbuchen (nur fuer vorher abgebuchte Antraege). */
+    private function creditRemainingDay($leave): void
+    {
+        $duration = (int) $leave->duration;
+        if ($leave->emp_id && $duration > 0) {
+            Employee::where('id', $leave->emp_id)->increment('remaining_day', $duration);
+        }
+    }
+
     private function hasOverlappingLeave(int $employeeId, string $startDate, string $endDate, ?int $ignoreLeaveId = null): bool
     {
         $query = Leave::where('emp_id', $employeeId)
@@ -677,12 +712,19 @@ class LeaveController extends Controller
             $oldEnd = $leave->end_date;
 
             if ($data['type'] === 'accept') {
+                // MODELL A: finale Genehmigung -> idempotent abbuchen, exakt wie approve().
+                $wasApproved = $this->leaveIsApproved($leave);
+
                 $leave->update([
                     'request_answer' => 'accept',
                     'approved' => 'Yes',
                     'status' => 'accept',
                     'changed_by' => $this->currentActorId(),
                 ]);
+
+                if (!$wasApproved) {
+                    $this->debitRemainingDay($leave);
+                }
 
                 return response()->json([
                     'success' => true,
@@ -1155,11 +1197,9 @@ class LeaveController extends Controller
 
             $leave = Leave::create($leavePayload);
 
-            if (Schema::hasColumn('employees', 'remaining_day')) {
-                DB::table('employees')
-                    ->where('id', $employee->id)
-                    ->update(['remaining_day' => $newRemaining]);
-            }
+            // MODELL A (Bug 2): Der Self-Service-Antrag bucht NICHT mehr sofort ab. Der Saldo bleibt
+            // unberuehrt; abgebucht wird ausschliesslich bei der Genehmigung (approve / change-accept).
+            // Damit verschwindet auch der fruehere Doppel-Abzug (save() + spaeteres approve()).
 
             DB::commit();
 
