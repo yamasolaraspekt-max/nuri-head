@@ -27,6 +27,32 @@ Solange es keine eine Wahrheit gibt, kann der angezeigte Stand je nachdem kippen
 ### Wer entscheidet
 Du (technisch-konzeptionell). Kein Steuerberater nötig.
 
+### ✅ ENTSCHIEDEN (ratifiziert von Yama, gemeinsam erarbeitet): Variante A + saubere Dreiteilung
+**Ein Vorgang hat DREI getrennte Dimensionen** (statt der heutigen ~11 vermischten Felder). Das ist die Auflösung von Schwäche 1:
+
+**Dimension 1 — PHASE (wo im Prozess):** eine einzige lineare Achse, EINE verbindliche Quelle. Ein Vorgang ist zu jeder Zeit an genau EINER Phase. Die finale, verbindliche Phasen-Liste (6 Phasen) — Begriffe bewusst nach dem gewählt, was das Team im Alltag sagt (Gewöhnung vor Theorie):
+1. **Lead** (Vorgang frisch reingekommen; Team-Begriff, ersetzt „Anfrage")
+2. **Angebot** (Beratung + Angebotserstellung zusammen; benannt nach dem Ergebnis der Phase. Zustand „Angebot draußen" beim Warten auf die Kundenentscheidung. NICHT „Verkauf" genannt, weil hier noch nicht verkauft, sondern beraten/angeboten wird — der Verkauf ist erst die Zusage = Übergang zu Auftrag.)
+3. **Auftrag** (entsteht bei Zusage; die Zusage/Absage ist der ÜBERGANG, keine eigene Phase — Absage → Zustand „verloren")
+4. **Montage** (die Ausführung/Leistungserbringung; Team-Begriff. Hinweis: fachlich wäre „Ausführung" breiter über alle Gewerke, aber „Montage" ist der eingespielte Begriff des Teams — Gewöhnung vor Theorie, bewusst so gewählt.)
+5. **Abnahme** (EIGENE Phase — rechtlich/finanziell scharf: Gewährleistungsbeginn, Schlussrechnung fällig, oft nicht glatt: Mängel/Nachbesserung/zweiter Termin. Der Zustand „fertig, aber noch nicht abgenommen" muss sichtbar bleiben.)
+6. **Abschluss** (darunter als AUFGABEN, nicht als eigene Phasen: Schlussrechnung, Nachkalkulation/Auswertung des Einzelprojekts, Dokumentation, Archivierung)
+
+**Dimension 2 — ZUSTAND (wie es an der Phase läuft):** aktiv · pausiert · zurückgestellt · Wiedervorlage (mit Datum) · gewonnen · verloren (mit Grund) · archiviert. Quer zur Phase. „Archiviert" ist ein ZUSTAND, keine Phase — der Kunde/Vorgang wird archiviert, wenn abgeschlossen (Kunde archiviert, wenn ALLE seine Vorgänge abgeschlossen sind).
+
+**Dimension 3 — HISTORIE (was passiert ist):** Notizen, Berichte je Phase, Kommunikation, Wiedervorlage-Termine, Dokumente. Keine Status, sondern Dokumentation.
+
+**Wichtige Abgrenzungen (bewusst entschieden):**
+- Qualifizierung ist KEINE eigene Phase (mit Beratung verschmolzen — passiert im Alltag zusammen).
+- Entscheidung/Zusage ist KEINE Phase (Übergang Beratung→Auftrag bzw. → verloren).
+- Archiv ist KEINE Phase (Zustand nach Abschluss).
+- Nachkalkulation/Auswertung des EINZELprojekts = Aufgabe in der Abschluss-Phase. Die Auswertung ÜBER ALLE Projekte (Muster, Profitabilität je Gewerk/Abteilung) = Controlling/Cockpit, NICHT die Phasen-Achse.
+- Leitprinzip: lieber wenige, klar unterscheidbare Phasen als viele verwaschene. Eine Phase verdient nur, wer ein echter Wartepunkt mit eigener Arbeit/Konsequenz ist.
+
+**Umsetzung (Variante A):** EINE führende Quelle je Dimension, eine zentrale Schreibstelle. Das ist ein größerer Umbau (berührt die ~12 Schreibpfade) → bewusst geplant, einzeln, in Etappe 4 des Fahrplans (NACH den übrigen Weichen). Kurzfristige Brücke bleibt (B: konsistent zusammenführen, wie beim Storno-Fix), bis der volle Umbau dran ist.
+
+**Noch NICHT gebaut.** Dies ist die Weichen-Entscheidung — das Zielbild der Statusführung. Der Bau ist Fahrplan-Etappe 4.1.
+
 ---
 
 ## Frage 2 — Soll „Angebot angenommen" Pflicht sein, bevor ein Auftrag entsteht?
@@ -109,6 +135,14 @@ Das hängt davon ab, wie ihr real arbeitet — ich stelle die Frage scharf: **Is
 ### Wer entscheidet
 Du (Geschäftsregel — hängt daran, wie ihr Aufträge und Projekte real strukturiert). Verbindet sich eng mit dem objekt-zentrierten Zielbild.
 
+### ✅ ENTSCHIEDEN (ratifiziert von Yama, 2026-06-30): Variante A
+**Das Objekt ist die Klammer, nicht das Projekt.** „Projekt" wird *kein* eigenständiger Vorgang über den Aufträgen.
+- **Die Klammer über den Gewerken ist das Objekt** (Kunde → Objekt → mehrere Gewerke-Aufträge). Diese Klammer existiert bereits als saubere FK-Kette und wird genutzt.
+- Die `projects`-Tabelle wird damit zur **Bauphasen-/Ausführungs-Sicht eines Auftrags** (Projektleiter, Montagestart, Fortschritt) — *nicht* zu einer eigenen Ebene über den Aufträgen.
+- **Merksatz (verbindlich):** *Das Objekt klammert, der Auftrag führt aus, „Projekt" ist nur die Bauphase des Auftrags — keine eigene Ebene darüber.*
+- **Wirkung:** Löst die Doppeldeutigkeit von „Projekt" auf (vorher: Gewerk-am-Objekt *vs.* `projects`-Tabelle). Künftig meint „Projekt" eindeutig die Bauphase eines Auftrags.
+- **Noch NICHT gebaut.** Dies ist die Weichen-Entscheidung. Die technische Umsetzung (z.B. `projects` sauber an `deals` koppeln) kommt erst in der Bau-Phase, nach den übrigen Weichen — und berührt sich mit Weiche 1 (Status) und Weiche 3 (Rechnung), die zuerst stehen müssen.
+
 ---
 
 ## Zusammenfassung — wer entscheidet was
@@ -138,3 +172,93 @@ Die heutige Storno-Reparatur (Frage 4) war bewusst eine *abgegrenzte* Lücke, di
 ---
 
 *Grundlage: `docs/workflow-analyse.md`. Dieses Dokument stellt die Entscheidungen — es trifft sie nicht. Die verbindlichen Antworten kommen von dir (und beim Rechnungssystem vom Steuerberater).*
+
+---
+
+# WEICHE 6 — Aufgaben-/Ausführungs-Architektur (Planner / Kanban / Phasen)
+
+**Status: ANALYSIERT (zwei Fachmeinungen), NOCH NICHT entschieden.** Grundlage: `struktur-systeme-verhaeltnis-befund.md`, `kanban-ebenen-montage-planner-nuriva-befund.md`, `architektur-bewertung-zweitmeinung.md`. Diese Weiche gehört zur Planner-Detailinventur (Fahrplan Etappe 5.1) und hängt an Weiche 1.
+
+## Befundlage (belegt)
+Das CRM hat drei/vier Systeme, die dieselben `phase_activities` instanziieren:
+- **Lead-Kanban** (`lead_stages` × `lead_stage_sub_stages` auf `lead_product_lists`) = Pipeline-Position (die 6 Phasen + Unterphasen). Zweistufig, sauber, dynamisch pflegbar.
+- **`kanban_lead_tasks`** = Büro-Aufgaben je Gewerk (Planung/Kuratierung), Instanz von Template A.
+- **`planner_items`** = Feld-/Montage-Ausführung, **einzige Nuriva-Anbindung**, Aggregator (phase_activity + Termine + Tickets + personal_task + master_set), stage-gefiltert.
+- **`customer_phase_lists`** = ältere Fortschrittsliste, **fast dormant** (4 Dateien app/, 0 Views, 1 Schreibstelle).
+
+## Die zwei Fachmeinungen — Konsens
+1. **Planner wird die Ausführungs-Wahrheit** — zwingend, weil Nuriva NUR `planner_items` liest (jede Alternative müsste Nuriva umbauen). Planner ist einziges stage-gefiltertes, aggregierendes, rückschreibendes System.
+2. **`customer_phase_lists` wird abgelöst** — dormant, billig, risikoarm.
+3. **„Eine Wahrheit" heißt pro Lebenszyklus-Ebene, nicht eine Tabelle:** Feld-Ausführung = `planner_items`; Büro-Planung = `kanban_lead_tasks` (bleibt eigene, legitime Ebene); `customer_phase_lists` = weg.
+
+## Der eigentliche Fehler (Zweitmeinung-Korrektur, wichtig)
+**Der Status-Rückfluss ist eine Audit-Sackgasse:** Wenn der Monteur eine Aufgabe abschließt (Foto, erledigt), landet der Status in `customer_histories` (Protokoll) — **NICHT zurück auf der Büro-Kanban-Karte oder der Phasen-Instanz, wo geplant wurde.** → Das Büro sieht die Feld-Erledigung nicht dort, wo es geplant hat. Das ist die gefährlichste Alltags-Falle (schärfer als zunächst angenommen — es ist die RÜCK-Richtung, nicht die Hin-Richtung).
+
+## Der manuelle Büro→Planner-Schritt ist ein FEATURE, kein Bug
+Nicht jede Büro-Aufgabe („Kunde anrufen", „Unterlagen prüfen") gehört aufs Monteur-Tablet. Das Büro kuratiert bewusst, was der Monteur sieht. → NICHT automatisch alles weiterleiten (würde Nuriva mit Rauschen fluten); stattdessen den Kuratier-Schritt (`storeProjectWorkItem`) 1-Klick-reibungsarm machen.
+
+## Empfohlene Bereinigungs-Reihenfolge (zu entscheiden, NICHT umgesetzt)
+1. **ZUERST: Weiche 1 (Statusquelle) entscheiden** — ohne Status-Vertrag ist jede Reconciliation Raten. Blockiert alles Weitere.
+2. **Rück-Richtung schließen:** Feld-Status (Planner) → Büro-Kanban-Karte + Phasen-Instanz (nicht nur Audit). Höchster Alltags-ROI, geringes Risiko.
+3. **`customer_phase_lists` ablösen** (dormant).
+4. **Hin-Richtung entschlacken:** Kuratier-Schritt zum 1-Klick-„an Monteur geben" (Kuratierung behalten, Reibung raus).
+5. **ZULETZT: Felder (B) an `phase_activities` (A) koppeln** — Erweiterung, kein Bruch, niedrige Dringlichkeit.
+
+## Nebenbefund
+**Stage-Tabellen-Wildwuchs:** mindestens 5 Stage-Tabellen (`stages`, `customer_stages`, `phase_stages`, `offer_kanban_stages`, `lead_stages`) — dasselbe „Danebenbau statt Ablösen"-Muster. Aufräum-Kandidat, später.
+
+## Zu entscheidende Design-Fragen (für Yama, frischer Kopf)
+1. Bestätigung: Planner = Feld-Ausführungs-Wahrheit, `kanban_lead_tasks` = Büro-Wahrheit, `customer_phase_lists` weg?
+2. Rück-Richtung: Soll Feld-Status automatisch auf Büro-Karte + Phasen-Instanz zurücklaufen? (Empfehlung: ja, höchste Prio nach Weiche 1.)
+3. Auto-Plan bei Montage-Eintritt, oder manuell wie heute?
+4. Felder an Schritte koppeln — ja, aber wann (niedrige Dringlichkeit)?
+
+---
+
+## WEICHE 6 — Nachtrag: Progressbar-Fix hart geprüft (Ergebnis der Detailkette)
+
+**Stand: ANALYSE ABGESCHLOSSEN, Bau offen (hängt an Weiche 1 + frischer Bau-Session).**
+
+### Der belegte Alltagsfehler
+Der Fortschrittsbalken im Kundenprofil (`customerKanbanProgressBar`) rechnet aus `kanban_lead_tasks` (Büro-Karten, status='done'). Der Monteur-Abschluss (`source_type='phase_activity'`) schreibt aber NICHT in `kanban_lead_tasks` — nur in `planner_items` + `customer_reports` + `customer_histories`. → **Der Balken bewegt sich nicht, wenn der Monteur draußen fertig wird.** Hart belegt.
+
+### Warum der naheliegende Fix NICHT sicher ist (hart geprüft, wörtliche Code-Belege)
+Vorschlag war: beim Abschluss die zugehörige kanban-Karte auf 'done' setzen. Prüfung ergab: **keine eindeutige Zuordnung** planner_item(phase_activity) ↔ kanban_lead_tasks-Karte:
+- Kein direkter FK (weder `planner_item_id` auf kanban noch umgekehrt).
+- Kein Unique-Constraint auf `(lead_product_list_id, phase_activity_id)`.
+- `storeFromTemplate` dedupliziert nicht (`create()` ohne Check) → **mehrere Karten je Aufgabe möglich**.
+- Kein bestehender Query, der die Karte auflöst.
+→ Der Fix würde raten, welche Karte „die richtige" ist. **Nicht sicher baubar.**
+
+### Die zwei möglichen Wege (Bau-Entscheidung, hängt an Weiche 1)
+1. **Eindeutigkeit schaffen:** direkter Link (z.B. `planner_items.meta.kanban_lead_task_id`) ODER Unique-Index + `firstOrCreate` in `storeFromTemplate`. Dann wird der einfache Fix sicher.
+2. **Progressbar-Quelle ändern:** Balken aus erledigten `planner_items`/`phase_activities` rechnen statt aus `kanban_lead_tasks`. Dann bewegt ihn jeder Abschluss automatisch. (Hängt an Weiche 1: welche Tabelle ist die Fortschritts-Wahrheit.)
+
+### Positiver Prozess-Hinweis
+Die Detailkette hat einen unsicheren Fix VERHINDERT, bevor er gebaut wurde. Die harte Prüfung (wörtliche Code-Belege, Gelesen/Nicht-gelesen-Liste, Selbstkritik) hat gezeigt: der erste Vorschlag stand auf ungeprüfter Annahme. Lehre: Bau-Vorschläge zu Aufgaben-/Ausführungs-Code IMMER auf Zuordnungs-Eindeutigkeit hart prüfen, bevor gebaut wird.
+
+---
+
+## WEICHE 6 — Nachtrag 2: Zuordnung final geklärt, Weg 2 bestätigt
+
+**Ergebnis der vollständigen Prüfkette (dreifach belegt, DB leer):**
+Es gibt KEINE nutzbare Zuordnung planner_item(phase_activity) ↔ kanban_lead_tasks-Karte:
+- Kein FK, kein meta-Link (planner-Sync setzt gar kein meta; kanban.meta enthält nur Freitext-Strings ohne ID), kein Verknüpfungs-Query (2 unabhängige Greps leer), keine Daten zum empirischen Gegenbeweis (lokale DB = 0 Zeilen).
+- Die einzige echte planner↔kanban-Kopplung ist der `kanban_task`-Identitäts-Link (source_id = kanban.id) — greift NICHT für Montage-Abschlüsse (die kommen als `phase_activity`).
+
+**→ ENTSCHEIDUNG FÜR DEN BAU (wenn Progressbar-Fix drankommt): WEG 2.**
+Den Profil-Progressbar aus erledigten `planner_items` (status='done') rechnen statt aus `kanban_lead_tasks`. Braucht kein Cross-Table-Matching; jeder Monteur-Abschluss bewegt den Balken automatisch, weil planner_items bereits die Feld-Abschluss-Wahrheit ist (status/done_at/done_by_employee_id).
+Der einfache Fix (kanban-Karte auf done) wäre NUR nach einem Umbau möglich (echten Link schaffen: planner_items.meta.kanban_lead_task_id beim Sync ODER Unique+firstOrCreate in storeFromTemplate) — das ist ein Umbau, kein reiner Fix. Verworfen.
+
+**Die eine offene DESIGN-Frage (Yama entscheidet, hängt an Weiche 1):**
+Soll der Profil-Progressbar die FELD-Ausführung (planner_items) oder die BÜRO-Planung (kanban_lead_tasks) als Fortschritts-Wahrheit zeigen? Empfehlung: Feld-Ausführung (planner_items), weil das der reale Baufortschritt ist, den der Monteur meldet. Aber bewusst zu entscheiden.
+
+**Status:** Analyse KOMPLETT abgeschlossen. Nächster Schritt ist BAU (Weg 2) — gehört in eine frische Bau-Session, nach Bestätigung der Design-Frage. Kein weiterer Analyse-Bedarf.
+
+### Vollständige Befund-Kette zu Weiche 6 (Reihenfolge)
+1. `struktur-systeme-verhaeltnis-befund.md` — drei Struktur-Systeme, task_phases = Heimat des Prinzips
+2. `kanban-ebenen-montage-planner-nuriva-befund.md` — zwei Kanban-Ebenen + Montage→Planner→Nuriva bestätigt
+3. `architektur-bewertung-zweitmeinung.md` — Berater-Bewertung geprüft, Rückfluss = Audit-Sackgasse
+4. `monteur-rueckfluss-vier-ziele-befund.md` — 4 Ziele: Historie ✅, Tagesbericht halb, Progressbar gebrochen, erledigt halb
+5. `planner-kanban-zuordnung-hart-geprueft.md` — keine eindeutige Zuordnung (Schema)
+6. `planner-kanban-meta-daten-geprueft.md` — dreifach bestätigt: kein Link → Weg 2
