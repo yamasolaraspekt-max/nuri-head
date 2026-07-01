@@ -3076,7 +3076,6 @@
             const customerId = $(this).data('customer');
             const productId = $(this).data('product');
             const serviceId = $(this).data('service');
-            const url = `/customer/phase/get/${customerId}/${alternativeId}/${productId}`;
             const check = $(this).data('initial');
 
             // Update hidden input fields with the fetched data
@@ -3089,96 +3088,6 @@
             $('#check-tab').attr('data-product', check);
 
 
-            $('#project .progress_card').html('<div>Loading...</div>');
-
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function (response) {
-                    if (response.length === 0) {
-                        Swal.fire({
-                            title: 'No Phase Steps Found',
-                            text: 'You have not created the phase steps for this product.',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Create Phase Steps',
-                            cancelButtonText: 'Cancel'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                const form = $('<form>', {
-                                    action: '/customer/phase/manage',
-                                    method: 'POST'
-                                });
-
-                                form.append($('<input>', {
-                                    type: 'hidden',
-                                    name: '_token',
-                                    value: $('meta[name="csrf-token"]').attr('content')
-                                }));
-
-                                form.append($('<input>', {
-                                    type: 'hidden',
-                                    name: 'alternative_id',
-                                    value: alternativeId
-                                }));
-
-                                form.append($('<input>', {
-                                    type: 'hidden',
-                                    name: 'customer',
-                                    value: customerId
-                                }));
-
-                                form.append($('<input>', {
-                                    type: 'hidden',
-                                    name: 'product',
-                                    value: productId
-                                }));
-                                form.append($('<input>', {
-                                    type: 'hidden',
-                                    name: 'service',
-                                    value: serviceId
-                                }));
-
-                                $('body').append(form);
-                                form.submit();
-                            }
-                        });
-
-                        $('#project .progress_card').html('<div>No data available</div>');
-                    } else {
-                        let progressHTML = '<div class="step-progress">';
-                        let dynamicStyles = '<style>';
-
-                        response.forEach((phase, index) => {
-                            const stepIndex = index + 1;
-                            const color = phase.color || '#ccc';
-
-                            progressHTML += `
-                                <div class="step" style="background-color: ${color};">
-                                    <span>${phase.phase_name}</span>
-                                    ${phase.jump_steps === 'complete' ? '<i class="feather icon-check-square"></i>' : ''}
-                                </div>`;
-
-                            dynamicStyles += `
-                                .step:nth-child(${stepIndex}):after {
-                                    border-left-color: ${color};
-                                }`;
-                        });
-
-                        progressHTML += '</div>';
-                        dynamicStyles += '</style>';
-
-                        $('#project .progress_card').html(progressHTML);
-                        $('head').append(dynamicStyles);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching phases:', error);
-                    $('#project .progress_card').html('<div>Error loading phases. Please try again.</div>');
-                }
-            });
-
-            $('#project').show();
         });
 
         $('#project').hide();
