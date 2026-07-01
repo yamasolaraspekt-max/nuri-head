@@ -4,7 +4,7 @@
 
 **Wichtig — zwei getrennte Ordnungen:**
 - **Dieses Konzept ordnet nach THEMA** (wie ist das System aufgebaut) — es ist das *Buch*, zum Nachschlagen.
-- **Der Fahrplan (`fahrplan-ticket-crm.md`, noch nicht erstellt) ordnet nach DRINGLICHKEIT** (in welcher Reihenfolge fassen wir es an) — das ist die *Route*.
+- **Der Fahrplan (`fahrplan-ticket-crm.md`) ordnet nach DRINGLICHKEIT** (in welcher Reihenfolge fassen wir es an) — das ist die *Route*.
 - Wir arbeiten die Kapitel **NICHT** in Nummern-Reihenfolge ab, sondern in Fahrplan-Reihenfolge. Die Kapitelnummer ist nur zum Wiederfinden.
 
 **Stand:** Juli 2026. Quellen: 8-Zonen-Inventur (`crm-inventur-00-index.md` + 01–08) und die Kern-Landkarten.
@@ -141,7 +141,7 @@ Externe Monteur-App; hier nur Backend-API (`/api/mobile`, `/api/planner`, Sanctu
 ---
 
 ## Anhang A — Fahrplan (Abarbeitungs-Reihenfolge)
-Die Reihenfolge, in der wir die Kapitel anfassen, gehört in `fahrplan-ticket-crm.md` (nach Dringlichkeit/Abhängigkeit, NICHT nach Kapitelnummer) — **dieses Fahrplan-Dokument ist noch nicht erstellt**. Grundprinzip je Bereich: verstehen → entscheiden → bauen.
+Die Reihenfolge, in der wir die Kapitel anfassen, steht in `fahrplan-ticket-crm.md` (nach Dringlichkeit/Abhängigkeit, NICHT nach Kapitelnummer). Grundprinzip je Bereich: verstehen → entscheiden → bauen.
 
 ## Anhang B — Offene Detail-Inventur-Lücken (vorrangig)
 Bereiche, die nur grob kartiert sind und eine eigene Detail-Inventur brauchen, bevor man sie anfasst:
