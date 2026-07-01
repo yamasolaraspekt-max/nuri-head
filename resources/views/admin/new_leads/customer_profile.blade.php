@@ -131,41 +131,7 @@ or this Blade will have no team data to render.
             <!-- Report Slider for each customer product  -->
 
 
-            <div id="commentSidebar" class="report-sidebar shadow" style="display:none;">
-                <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
-                    <h5 class="mb-0">Kommentare</h5>
-                    <div>
-                        <button class="btn btn-sm btn-success mr-2 open-comment-form"><i class="fa fa-plus"></i></button>
-                        <button class="btn btn-sm btn-danger close-comment-sidebar">×</button>
-                    </div>
-                </div>
-                <div id="commentContent" class="p-3 overflow-auto" style="height: calc(100% - 50px);"></div>
-
-                <!-- 🔻 Modal Form -->
-                <div id="commentFormModal" class="report-form-modal" style="display:none;">
-                    <div class="modal-content bg-white p-3 shadow" style="width: 90%; max-width: 500px; position:relative;">
-                        <button type="button" class="btn btn-sm btn-danger close-comment-form"
-                            style="position:absolute; top:8px; right:8px; line-height:1;">×</button>
-
-                        <form id="newCommentForm" class="mt-3">
-                            <input type="hidden" name="report_id" id="report_id">
-                            <input type="hidden" name="parent_id" id="parent_id">
-                            <div id="commentMeta"></div>
-                            <div id="quotedComment" class="alert alert-light py-2 px-3" style="display:none;"></div>
-
-                            <textarea name="comment" class="form-control" rows="3" placeholder="Kommentieren..."
-                                required></textarea>
-
-                            <div class="d-flex justify-content-end mt-2">
-                                <button type="button" class="btn btn-light mr-2 close-comment-form">Abbrechen</button>
-                                <button type="submit" class="btn btn-primary">Senden</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-
-            </div>
+            @include('admin.new_leads.partials.modals.comment_sidebar')
 
             @php
                 $allEmployees = DB::table('employees')->select('id', 'name', 'lastname', 'image')->where('status', 'Active')->get();
@@ -190,34 +156,7 @@ or this Blade will have no team data to render.
 
 
             {{-- ================= SUGGEST EMPLOYEES DRAWER ================= --}}
-            <div id="suggestEmployeesDrawer" class="nx-drawer">
-                <div class="nx-drawer-backdrop" data-drawer-close></div>
-
-                <div class="nx-drawer-panel">
-                    <div class="nx-drawer-header">
-                        <div class="nx-drawer-title">Mitarbeiter vorschlagen</div>
-                        <button type="button" class="nx-drawer-close" data-drawer-close aria-label="Schließen">
-                            &times;
-                        </button>
-                    </div>
-
-                    <form id="suggestEmployeesForm">
-                        @csrf
-                        <input type="hidden" name="customer_id">
-                        <input type="hidden" name="alternative_id">
-                        <input type="hidden" name="product_id">
-                        <input type="hidden" name="phase_id">
-
-                        <div class="nx-drawer-body">
-                            <div id="employeeRows"></div>
-                        </div>
-
-                        <div class="nx-drawer-footer">
-                            <button type="submit" class="btn btn-success">Speichern</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            @include('admin.new_leads.partials.modals.suggest_employees_drawer')
 
             {{-- ================= EDIT SUGGESTED EMPLOYEE DRAWER ================= --}}
             <div id="editSuggestedEmployeeDrawer" class="nx-drawer">
