@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 use App\Models\PersonalTask;
 use App\Models\PersonalTaskKey;
@@ -99,9 +100,83 @@ class KanbanLeadTaskController extends Controller
             ],
             'templates' => $templates,
             'tasks' => $savedTasks,
+            'field_progress' => $this->montageFieldProgress($leadProduct),
             'employees' => $employees,
             'auth_employee_id' => (int) auth()->user()->name,
         ]);
+    }
+
+    /**
+     * Montage-Fortschritt nach ANZAHL (bewusst NICHT zeitgewichtet — Weiche 6:
+     * duration-Daten sind unbrauchbar). Quelle: planner_items (Feld-Ausfuehrung,
+     * Nuriva-angebunden) des Montage-Plans dieses Gewerks — NICHT kanban_lead_tasks.
+     * Nur source_type='phase_activity' (die Arbeits-Schritte); cancel-Klasse raus.
+     * Additiv: die tasks-Liste (kanban) bleibt unveraendert.
+     */
+    private function montageFieldProgress(LeadProductList $leadProduct): array
+    {
+        $empty = ['gesamt' => 0, 'erledigt' => 0, 'offen' => 0, 'percent' => 0];
+
+        if (!Schema::hasTable('planner_plans') || !Schema::hasTable('planner_items')) {
+            return $empty;
+        }
+
+        $montagePlanIds = DB::table('planner_plans')
+            ->where('project_id', $leadProduct->id)   // planner_plans.project_id -> lead_product_lists.id
+            ->where('stage', 'montage')
+            ->pluck('id');
+
+        if ($montagePlanIds->isEmpty()) {
+            return $empty;                             // Gewerk ohne Montage-Plan -> 0 %, kein Crash
+        }
+
+        $query = DB::table('planner_items')
+            ->whereIn('plan_id', $montagePlanIds)
+            ->where('source_type', 'phase_activity');
+
+        if (Schema::hasColumn('planner_items', 'deleted_at')) {
+            $query->whereNull('deleted_at');
+        }
+
+        $gesamt = 0;
+        $erledigt = 0;
+
+        foreach ($query->pluck('status') as $rawStatus) {
+            $normalized = $this->normalizePlannerItemStatus((string) $rawStatus);
+
+            if ($normalized === 'cancelled') {
+                continue;                              // wie pmoNormalizePlannerStatus: cancel-Klasse nicht in gesamt
+            }
+
+            $gesamt++;
+
+            if ($normalized === 'done') {
+                $erledigt++;
+            }
+        }
+
+        $offen = max(0, $gesamt - $erledigt);
+        $percent = $gesamt > 0 ? (int) round(($erledigt / $gesamt) * 100) : 0;
+
+        return compact('gesamt', 'erledigt', 'offen', 'percent');
+    }
+
+    /**
+     * Spiegelt die done-/cancel-Aliasse aus PlannerPlanController::pmoNormalizePlannerStatus,
+     * damit ein roh geschriebener Status (z.B. 'storniert') die Zaehlung nicht verfaelscht.
+     */
+    private function normalizePlannerItemStatus(string $status): string
+    {
+        $status = str_replace(['-', ' '], '_', mb_strtolower(trim($status)));
+
+        return match ($status) {
+            'completed', 'complete', 'finished', 'finish', 'closed', 'close', 'ended', 'end',
+            'done', 'erledigt', 'beendet', 'geschlossen' => 'done',
+
+            'cancel', 'canceled', 'cancelled', 'storniert', 'junk' => 'cancelled',
+
+            default => 'open',
+        };
     }
 
 

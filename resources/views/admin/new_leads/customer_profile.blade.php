@@ -1082,7 +1082,7 @@ or this Blade will have no team data to render.
 
                         <div class="kb-enterprise-card">
                             <div class="kb-enterprise-card-title">
-                                <span><i class="feather icon-bar-chart-2"></i> Fortschritt</span>
+                                <span><i class="feather icon-bar-chart-2"></i> Montage-Fortschritt</span>
                                 <span id="customerKanbanTaskCount" class="kb-task-profile-pill">0 Aufgaben</span>
                             </div>
 
@@ -1091,6 +1091,7 @@ or this Blade will have no team data to render.
                                     <div>
                                         <div class="kb-enterprise-stat-label">Erledigt</div>
                                         <div id="customerKanbanProgressText" class="kb-enterprise-stat-value">0 von 0</div>
+                                        <div id="customerKanbanProgressOpen" class="kb-task-profile-info" style="font-size:.78rem;opacity:.85;">0 offen</div>
                                     </div>
                                     <div id="customerKanbanProgressPercent" class="kb-enterprise-percent">0%</div>
                                 </div>
@@ -17523,6 +17524,7 @@ or this Blade will have no team data to render.
         const progressTextEl = document.getElementById('customerKanbanProgressText');
         const progressPercentEl = document.getElementById('customerKanbanProgressPercent');
         const progressBarEl = document.getElementById('customerKanbanProgressBar');
+        const progressOpenEl = document.getElementById('customerKanbanProgressOpen');
 
         const openListEl = document.getElementById('customerKanbanOpenTaskList');
         const doneListEl = document.getElementById('customerKanbanDoneTaskList');
@@ -17545,6 +17547,7 @@ or this Blade will have no team data to render.
         const performerSelect = document.getElementById('customerKanbanTaskPerformer');
 
         let activeLeadProductId = null;
+        let activeFieldProgress = null;
         let activeEmployees = [];
         let summaryRefreshTimer = null;
 
@@ -17892,11 +17895,13 @@ or this Blade will have no team data to render.
             if (sollValueEl) sollValueEl.textContent = formatMinutes(currentTime.soll);
             if (istDiffValueEl) istDiffValueEl.textContent = `${formatMinutes(currentTime.ist)} / ${formatMinutes(currentTime.diff)}`;
 
-            if (progressTextEl) progressTextEl.textContent = `${progress.doneCount} von ${progress.total}`;
-            if (progressPercentEl) progressPercentEl.textContent = `${progress.percent}%`;
-            if (progressBarEl) progressBarEl.style.width = `${progress.percent}%`;
+            const fp = activeFieldProgress || { gesamt: 0, erledigt: 0, offen: 0, percent: 0 };
+            if (progressTextEl) progressTextEl.textContent = `${fp.erledigt} von ${fp.gesamt}`;
+            if (progressPercentEl) progressPercentEl.textContent = `${fp.percent}%`;
+            if (progressBarEl) progressBarEl.style.width = `${fp.percent}%`;
+            if (progressOpenEl) progressOpenEl.textContent = `${fp.offen} offen`;
 
-            if (taskCountEl) taskCountEl.textContent = `${progress.total} Aufgaben`;
+            if (taskCountEl) taskCountEl.textContent = `${fp.gesamt} Aufgaben`;
             if (openCountEl) openCountEl.textContent = String(open.length);
             if (doneCountEl) doneCountEl.textContent = String(done.length);
         }
@@ -18283,6 +18288,8 @@ or this Blade will have no team data to render.
             showLoading();
 
             const data = await fetchJson(`/admin/kanban/tasks/context/${encodeURIComponent(leadProductId)}`);
+
+            activeFieldProgress = data.field_progress || null;
 
             renderContext(data.context || {});
             renderEmployees(data.employees || [], data.auth_employee_id || null);
