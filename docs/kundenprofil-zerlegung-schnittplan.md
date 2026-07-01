@@ -116,3 +116,88 @@ Zweck: ein **Schnittplan**, damit die Datei später **Scheibe für Scheibe** sic
 ---
 
 *Reine Analyse — kein Code verschoben, keine Partials angelegt. Belege: Sektions-Grenzen (`@section`/`@endsection`), `<style>`/`<script>`-Zeilenbereiche, `{{ route() }}`/`{{ $item }}`/`@php`-Zählungen je Sektion, Content-Anker (Modal-/Aside-IDs, Karten-Überschriften), `NewLeadsController` (Methoden `view`/`index`/`my_lead`/`new_lead`). Querverweis: `kundenprofil-architektur-bestandsaufnahme.md`, `glossar.md`.*
+
+---
+
+# Scheibe 2: Content-Modals — Schnitt-Analyse
+
+> **Stand:** nach Scheibe 1 (CSS ausgelagert, Commit `cbd92d8`). Die externe-Skripte-Scheibe wurde **verworfen** (Skripte sind bereits extern + mit Inline-JS verschachtelt → nicht verhaltensneutral schneidbar). Nächster Kandidat: der **`@section('content')`-Bereich, Z.25–1373** (1.348 Z.). **Reine Analyse — nichts geschnitten, keine Partials angelegt.**
+>
+> **Zeilenangaben** beziehen sich auf `customer_profile.blade.php` im **aktuellen** Zustand (19.554 Z., nach Scheibe 1).
+
+## Grundlegendes zur Schnitt-Mechanik (gilt für ALLE Blöcke)
+
+1. **Struktur:** Der Content-Bereich ist eine **flache Folge von Geschwister-`<div>`s** (Modals, Drawer, Overlays, Asides) — jeweils sauber balanciert (`<div id=…>…</div>`). Kein Block greift in offene Tags eines anderen. **Markup-seitig sind alle Top-Level-Blöcke sauber kapselbar.**
+2. **Blade-Variablen-Vererbung:** `@include('…')` **erbt automatisch den kompletten Eltern-Scope**. Ein Block, der `$customer`/`$employees`/… nutzt, funktioniert nach dem Auslagern an **derselben Stelle** unverändert — die Variablen sind weiter im Scope. → **Verhaltensneutral.** Best Practice zusätzlich: Variablen **explizit** übergeben (`@include('…', ['customer' => $customer])`).
+3. **JS-Anker:** Der große JS-Bereich (Z.1411–19.552, 63 Inline-Blöcke) spricht die Blöcke **ausschließlich über Element-IDs / `class` / `data-`-Attribute** an (`getElementById`, `querySelector`). Ein **wortgleicher** Umzug ins Partial (IDs unverändert, `@include` rendert inline an gleicher DOM-Position) lässt das JS die Elemente **exakt wie bisher** finden. → JS bleibt unangetastet, **IDs dürfen sich nicht ändern**.
+4. **Die eigentliche Falle ist NICHT das Markup, sondern zwei lose `@php`-Datenblöcke** (Z.170–189, siehe unten) — die müssen **an Ort und Stelle bleiben**, weil ein nachfolgender `@include` sie konsumiert.
+
+## Block-Landkarte (Z.25–1373)
+
+| # | Block | Zeilen | Was / wofür | Blade-Daten | in sich geschl.? | JS-Anker (Beispiele) |
+|---|---|---|---|---|---|---|
+| A | Wrapper + **Profil-Include** | 27–36 | `app-content > content-body > @include(layouts.profile)` | (erbt alle) | **schon Partial** | — |
+| B | **newProductModal** | 40–66 | BS-Modal „Neues Produkt hinzufügen"; enthält `@include(layouts.new_product_form)` | `route(lead_product_lists.bulk.store)` | ✅ | `#product_customer_id`, `#saveProductRows` |
+| C | **reportSidebar** (+ reportFormContainer) | 69–130 | „Kundenprozessbericht"-Slider + Bericht-Formular (Quill) | `$stageLabels` (inline `@php`, self-contained), `now()` | ✅ | `#reportSidebar`, `#reportForm`, `#quill-editor` |
+| D | **commentSidebar** (+ commentFormModal) | 134–168 | „Kommentare"-Slider + Kommentar-Formular | — | ✅ | `#commentSidebar`, `#newCommentForm`, `#report_id` |
+| — | *glue: `@php $allEmployees`* | 170–173 | DB-Query, speist Block F **und** Include I | *definiert* `$allEmployees` | **kein Block — nicht schneiden** | — |
+| — | *glue: `@php $docTypes`* | 175–189 | Array, speist Include I (customerEditDrawer) | *definiert* `$docTypes` | **kein Block — nicht schneiden** | — |
+| E | **suggestEmployeesDrawer** | 193–220 | nx-Drawer „Mitarbeiter vorschlagen" | — (`@csrf`) | ✅ | `#suggestEmployeesDrawer`, `#employeeRows` |
+| F | **editSuggestedEmployeeDrawer** | 223–286 | nx-Drawer „Mitarbeiter bearbeiten" | `@foreach($allEmployees)` (aus glue 170) | ✅ (aber Daten-gekoppelt) | `#editSuggestedEmployeeForm`, `#deleteSuggestedEmployee` |
+| G | **halfDoneModal** | 288–324 | BS-Modal „Teilweise erledigt" | — | ✅ | `#halfDoneModal`, `#halfDoneForm` |
+| H | **doneHistoryModal** | 326–342 | BS-Modal „Verlaufsdetails" | — | ✅ | `#doneHistoryModal`, `#doneHistoryContent` |
+| I | **customerEditDrawer-Include** | 344–345 | `@include(partials.customerEditDrawer)` (konsumiert glue 170/175) | (erbt `$allEmployees`,`$docTypes`) | **schon Partial** | — |
+| J | **customerContactPeopleModal** | 351–464 | Custom-Modal „Kontaktpersonen" (Tabelle + Formular) | `{{ $customer->id }}` (1×) | ✅ | `#customerContactPeopleModal`, `#contactPeopleTableBody`, `#contactPersonForm` |
+| K | **addProductOverlay** | 466–691 | cp-Overlay „Neues Produkt" (Tabs Details/Galerie), groß | `@foreach($employees)` | ✅ (groß, 226 Z.) | `#addProductOverlay`, `#btnAddSave`, `#installed_by` |
+| L | **editProductOverlay** | 693–912 | cp-Overlay „Produkt ansehen/bearbeiten" (Tabs), groß | `@foreach($employees)` | ✅ (groß, 220 Z.) | `#editProductOverlay`, `#btnEditSave`, `#btnToggleEditLock` |
+| M | **serialsOverlay** | 917–949 | cp-Overlay „Seriennummern verwalten" (im Quelltext als *„already custom"* markiert) | — (**0 Blade**) | ✅ **isoliert** | `#serialsOverlay`, `#serialsModalBody`, `#btnSerialsModalSave` |
+| N | **addCustomerProductModal** | 953–994 | cmodal „Produkt hinzufügen" (Zeilen-Tabelle) | `route(lead.products.save)` | ✅ | `#addCustomerProductModal`, `#modalNewRows`, `#modalAddRow` |
+| O | **editCustomerProduct** | 997–1069 | cmodal „Produkt bearbeiten" | `@foreach($new_products)`, `@foreach($departments)`, `route(lead.products.update)` | ✅ | `#editCustomerProduct`, `#edit_product`, `#edit_department` |
+| P | **objDrawerRoot** | 1071–1151 | Aside „Produkte zu Objekten zuordnen" + Objekt-Anlage + Google-Maps | — (**0 Blade**, aber Maps-JS) | ✅ (JS-schwer) | `#objDrawerPanel`, `#co_map`, `#drawerObjectsCols` |
+| Q | **maHoverPreview / maLightbox** | 1153–1175 | Bild-Hover-Vorschau + Lightbox | — (CSS-Var `--ma-blue-soft`, Inline-`onclick`) | ⚠️ **Doppel-ID** (s. Backlog) | `#maLightboxImg`, `window.maCloseLightbox()` |
+| R | **customerKanbanTaskDrawer** | 1178–1372 | Aside „Aufgabenmanagement" (Kanban-Tasks/Vorlagen), sehr groß | — (`@csrf`) | ✅ (sehr groß, 195 Z.) | `#customerKanbanTaskDrawer`, `.kb-enterprise-card`, `#customerKanbanManualTaskForm` |
+
+**Daten-Abhängigkeiten kompakt:** `$customer`→J · `$employees`→K,L · `$allEmployees`→F (def. in glue 170) · `$docTypes`→Include I (def. in glue 175) · `$new_products`,`$departments`→O · `$stageLabels`→C (block-intern) · Routen→B,N,O.
+
+## Schnitt-Eignung — Rangliste (am saubersten → am riskantesten)
+
+**Tier 1 — 0 Blade-Variablen, klein, isoliert (ideale erste Schnitte):**
+1. **M — serialsOverlay** (917–949, 33 Z.) — 0 Blade, im Quelltext selbst als eigenständig markiert, kleiner Blast-Radius. ★
+2. **H — doneHistoryModal** (326–342, 17 Z.) — 0 Blade, winzig.
+3. **G — halfDoneModal** (288–324, 37 Z.) — 0 Blade.
+4. **E — suggestEmployeesDrawer** (193–220) — 0 Blade (`@csrf`).
+5. **D — commentSidebar** (134–168) — 0 Blade.
+
+**Tier 2 — genau 1 einfache Blade-Abhängigkeit (Route oder 1 Variable):**
+6. **N — addCustomerProductModal** (nur Route) · 7. **C — reportSidebar** (`$stageLabels` block-intern) · 8. **B — newProductModal** (Route + verschachtelter Include) · 9. **J — customerContactPeopleModal** (`$customer`).
+
+**Tier 3 — Daten-gekoppelt oder groß:**
+10. **F — editSuggestedEmployeeDrawer** (braucht `$allEmployees` aus loser glue-`@php`) · 11. **O — editCustomerProduct** (2 Var + Route) · 12. **K — addProductOverlay** (226 Z., `$employees`) · 13. **L — editProductOverlay** (220 Z., `$employees`).
+
+**Tier 4 — groß/JS-schwer (später, einzeln, mit Extra-Vorsicht):**
+14. **P — objDrawerRoot** (Google-Maps-Init an IDs gebunden) · 15. **R — customerKanbanTaskDrawer** (195 Z., viele Kanban-Anker).
+
+**Nicht schneiden:** A + I (schon Partials) · glue-`@php` 170–189 (Daten-Prep, muss vor Include I stehen bleiben) · **Q** (Doppel-ID zuerst bereinigen → Backlog).
+
+## Empfehlung: Scheibe 2a = **Block M (serialsOverlay, Z.917–949)**
+
+**Warum genau dieser Block zuerst:**
+- **0 Blade-Variablen** → das Partial ist ein reiner statischer `@include` ohne Argumente; trivial verhaltensneutral (kein Datenfluss zu prüfen).
+- **Vollständig in sich geschlossen:** ein Top-Level-`<div id="serialsOverlay" class="cp-overlay">…</div>`, balanciert, klarer Anfang/Ende.
+- **Klar abgegrenzte Semantik** („Seriennummern verwalten") — im Quelltext bereits als eigenständiger, „custom" Baustein gekennzeichnet.
+- **Klein (33 Z.)** → Byte-Gleichheit des verschobenen Markups leicht verifizierbar, minimaler Blast-Radius — perfekt, um das Partial-Muster **einmal sauber zu etablieren**.
+- **JS-Anker** (`#serialsModalProductName`, `#serialsModalBody`, `#serialsModalCount`, `#btnSerialsModalSave`, `#snCloseBtn`, `#snCancelBtn`) bleiben **wortgleich**; das JS im großen Block findet sie unverändert per ID.
+
+**Schnitt-Plan 2a (nach separatem OK, NICHT jetzt):** neues Partial `resources/views/admin/new_leads/partials/modals/serials_overlay.blade.php` (Markup Z.917–949 **wortgleich**), im Blade durch **eine** `@include('admin.new_leads.partials.modals.serials_overlay')`-Zeile ersetzen. **Verifikation:** Profil `/new_lead_profile/105` → 200; Seriennummern-Overlay öffnet/funktioniert (JS findet IDs); Byte-Vergleich des verschobenen Markups; vorher/nachher-Zeilen. → Danach 2b/2c = **H** und **G** (weitere 0-Blade-Modals) als natürliche Folgeschnitte.
+
+> **Hinweis Namenskonvention:** Es existiert bereits `resources/views/admin/new_leads/partials/` mit ~18 Partials (u. a. `customerEditDrawer`, `contact_info`, `report`, `single_comment`) und ein `partials/edit/`-Unterordner. Ein neuer `partials/modals/`-Unterordner fügt sich sauber ein. Muster ist im Repo also etabliert.
+
+## Backlog (getrennt festgehalten — NICHT Teil einer Schnitt-Scheibe, jetzt nicht anfassen)
+
+1. **Skript-Dubletten:** `Sortable.min.js` wird 2× geladen (Z.1382 `sortablejs@1.15.0` **und** Z.1408 cdnjs `Sortable/1.15.0`); `chart.js` wird 2× geladen (Z.1389 **und** Z.1409). → Doppelte Netzwerk-Requests, harmlos, aber unsauber. Entfernen ist eine **Verhaltensänderung** (Tag weg) → eigener Bugfix mit eigenem Pflicht-Stopp.
+2. **Kaputte Referenzen (vorbestehend, älter als Scheibe 1) → 404:** Z.21 `object-context-menu-final.css` **und** Z.19553 `object-context-menu-final.js` verweisen auf Dateien mit Suffix `-final`, die **nicht existieren** (live geprüft: HTTP 404). Auf der Platte liegen `public/css/object-context-menu.css` / `public/js/object-context-menu.js` (**ohne `-final`**). → Das Objekt-Kontextmenü lädt aktuell **gar nicht**. Fix = Referenz korrigieren **oder** Datei umbenennen; eigener Pflicht-Stopp.
+3. **Doppelte DOM-ID `maHoverPreviewOverlay`** (Block Q): identisch bei **Z.1153 und Z.1173** (inkl. Kind-`<img id="maHoverPreviewImg">`). Ungültiges HTML (ID-Duplikat); der zweite Block ist toter/verschatteter Code. → Vor dem Auslagern von Block Q **zuerst deduplizieren**; eigener Pflicht-Stopp.
+
+---
+
+*Reine Analyse für Scheibe 2 — kein Code verschoben, keine Partials angelegt. Belege: vollständige Lektüre `@section('content')` Z.25–1373; Block-Grenzen per `<div id=…>`/Schließ-Tags; Daten per `@php`/`@foreach`/`{{ $… }}`-Scan; JS-Anker per ID-Referenzen; Live-404-Check `object-context-menu-final.*`; Doppel-ID-Grep. Querverweis: `kundenprofil-architektur-bestandsaufnahme.md`, `glossar.md`.*
