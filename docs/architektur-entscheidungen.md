@@ -262,3 +262,123 @@ Soll der Profil-Progressbar die FELD-Ausführung (planner_items) oder die BÜRO-
 4. `monteur-rueckfluss-vier-ziele-befund.md` — 4 Ziele: Historie ✅, Tagesbericht halb, Progressbar gebrochen, erledigt halb
 5. `planner-kanban-zuordnung-hart-geprueft.md` — keine eindeutige Zuordnung (Schema)
 6. `planner-kanban-meta-daten-geprueft.md` — dreifach bestätigt: kein Link → Weg 2
+
+---
+
+## WEICHE 6 — Design-Frage ENTSCHIEDEN (Yama, ratifiziert)
+
+**Der Profil-Progressbar zeigt die FELD-AUSFÜHRUNG (erledigte planner_items), nicht die Büro-Planung.**
+Begründung (Yamas eigene Worte): der Fortschritt des Projekts soll vom Monteur-Abschluss beeinflusst werden — "das ist doch Sinn und Zweck". Der Balken soll den realen Baufortschritt zeigen (was draußen erledigt wurde), nicht was das Büro geplant hat.
+→ Damit ist Weg 2 vollständig baureif: Progressbar aus planner_items (status='done') je Gewerk/Plan rechnen. Bau gehört in eine (frische) Bau-Session mit vollem Pflicht-Stopp.
+
+---
+
+## WEICHE 6 — Progressbar: Bau-Entscheidung (Weg A, ehrlicher Anzahl-Balken)
+
+**Befund `progressbar-zeitgewichtung-geprueft.md` ergab:** Zeitgewichtung heute NICHT ehrlich baubar (phase_activities.duration ist time-Feld '00:00:0X', Sync-Cast (int)→0→Default 60 → alle Schritte wögen 60 = verkleidete Anzahl-Zählung). Soll-Ist NICHT baubar (planned_end_at beim Sync = null → kein Soll). Beide brauchen zuerst Daten-/Planungs-Disziplin.
+
+**ENTSCHEIDUNG: Heute Weg A — ehrlicher ANZAHL-Balken.**
+- Balken = erledigte / gesamte Aufgaben als Prozent (nach Anzahl, NICHT zeitgewichtet — ehrlich, keine Scheingenauigkeit).
+- Zähler: "X von Y" + "Z offen".
+- Quelle: planner_items, nur Montage-Plan, nur source_type='phase_activity', cancelled ausgeschlossen.
+- Status-Kübel: erledigt=done, offen=nicht-done-nicht-cancelled (inkl. scheduled/in_progress/paused), gesamt=alle außer cancelled.
+- Bewegt sich beim Monteur-Abschluss (Kernziel erfüllt). Fundament, auf das später Zeitgewichtung aufsetzt (nur Rechnung tauschen).
+
+**AUFGESCHOBEN (nächste Schritte, brauchen Daten-Fix zuerst):**
+1. Zeitgewichtung — braucht: phase_activities.duration als echte Integer-Minuten + Sync-Konvertierung time→Minuten reparieren.
+2. Soll-Ist-Verzug (Kalender-Verzug am ehesten machbar) — braucht: planned_end_at konsequent gefüllt (auto aus Start+Dauer ableiten?).
+3. Aufwand-Verzug/Puffer — braucht zusätzlich Ist-Timer-Nutzung (started_at/stopped_at durch Nuriva — NICHT VERIFIZIERT).
+
+**6 Design-Entscheidungen offen (für später):** welche Ebene trägt Zeit; was bei fehlender Dauer; Dauer-Format fixen; planned_end_at auto ableiten?; Ist-Timer verpflichtend?; Status-Kübel bestätigt (paused=offen, cancelled raus).
+
+---
+
+## WEICHE 6 — Progressbar Weg A: GEBAUT & VERIFIZIERT (Commit f52ab10)
+
+**Status: 🟢 FERTIG, Seed-verifiziert. Erster Produktiv-Bau nach der Analysekette.**
+
+Geändert (additiv, 2 Dateien):
+- KanbanLeadTaskController::context() liefert zusätzlich field_progress (tasks-Liste unverändert daneben). Neue montageFieldProgress(): planner_plans stage='montage' → planner_items source_type='phase_activity', nach Anzahl gezählt. Guards gegen kein-Plan (→0%) und fehlende Tabellen.
+- Neue normalizePlannerItemStatus() spiegelt done-/cancel-Aliasse → schließt das Restrisiko roh geschriebener Status.
+- customer_profile.blade.php: Balken/Prozent/"X von Y"/"Y Aufgaben" + neues "Z offen" aus field_progress; Titel "Montage-Fortschritt"; Listen-Header bleiben kanban (konsistent mit ihren Listen). Option α.
+
+Verifikation (Seed, echter Endpoint context/53, DB war leer):
+- 2 done/3 offen/1 storniert → 40%, storniert korrekt aus gesamt (5 statt 6) ✅
+- 1 Item → done → Balken bewegt sich 40%→60% ✅
+- Gewerk ohne Montage-Plan → 0%, HTTP 200, kein Crash ✅
+- tasks-Liste weiter vorhanden (additiv) ✅
+- php -l grün, Blade kompiliert, Seed restlos entfernt.
+
+Der Alias-Test (storniert korrekt ausgeschlossen) hat konkret einen falsch rechnenden Balken verhindert — die einfache Query status<>'cancelled' hätte storniert als offen mitgezählt.
+
+Unberührt (bestätigt): summaries(), api.php, Nuriva, Sync, planner_items-Schreibpfade.
+
+Akzeptierter Mismatch (bewusst): Balken zeigt Feld-Fortschritt, Aufgabenliste im Drawer bleibt Büro (kanban).
+NICHT an Produktivdaten belegt (DB leer) — nur Seed. Zeitgewichtung + Soll-Ist bleiben aufgeschoben (brauchen Daten-Disziplin).
+
+---
+
+## KUNDENPROFIL-STRUKTUR — Bestandsaufnahme (Ist/Soll-Abgleich)
+
+**Status: kartiert (Blade-belegt), JS-Laufzeit NICHT verifiziert. Kein Neu-Design — Grundlage für spätere Design-Entscheidung.** Volltext: `kundenprofil-struktur-bestandsaufnahme.md`.
+Quelle der Nav: layouts/profile.blade.php (12.352 Z.), via @include aus customer_profile.blade.php:32.
+
+**Stärken (schon Soll-konform):**
+- Hierarchie Kunde→Objekt→Gewerk verschachtelt sichtbar (Objekt-Galerie mit Karte/Street-View → Gewerke je Objekt). ✅
+- "Projekt" korrekt keine eigene Nav-Ebene (passt zu Weiche 5). ✅
+- Objekt-Zentrierung stark verankert (alternative 279×). ✅
+- Bereichs-Nav ist DATEN-GETRIEBEN (Array label/count_key/count) → Neu-Sortierung wäre markup-arm. ✅ (wichtig)
+
+**Hauptwiderspruch:**
+- Die 6 Phasen (Weiche 1) erscheinen im Profil-Blade NICHT (lead_stage = 0 Vorkommen) — Phasen-Nav lebt nur im externen Kanban.
+- Bereichs-Nav ist FLACH: mischt Phasen-Labels (Angebote/Auftrag/Montage) mit Funktionen (Aufgaben/Termin/Produkt/Tickets) ohne die 6er-Ordnung. Lead/Abnahme/Abschluss fehlen als Nav-Punkt; "Rechnungen" steht als Phase-Peer, ist aber Aufgabe der Abschluss-Phase.
+- Phase→Aufgabe→Arbeitsschritt verteilt über 4 Stellen (Nav Aufgaben + Nav Arbeitsprozess + phaseSidebar + customerKanbanTaskDrawer) — spiegelt die Aufgaben-System-Zersplitterung.
+
+**NICHT VERIFIZIERT (vor Umbau zu klären):**
+- Das JS hinter phaseSidebar (data-service-id) — zeigt es zur Laufzeit doch Phasen (welches System)? Nur Blade belegt, nicht Laufzeit.
+
+**Konsequenz:** Profil ist NICHT grundlegend falsch — Hierarchie-Basis stimmt. EIN Struktur-Problem: Phasen-Achse fehlt + flache gemischte Nav. Umbau wäre markup-arm (daten-getrieben), aber die Design-Entscheidung (wie Phase-Achse vs Funktion-Inhalt trennen) steht aus und hängt an Weiche 1 + 6.
+
+---
+
+## WEICHE 6 — Restfrage entschieden: Montageplan-Erzeugung
+
+**Der Montageplan wird NICHT automatisch erstellt, sondern bewusst GEPLANT.** (Yama entschieden)
+
+Kein Auto-Trigger bei Eintritt in die Montage-Phase. Stattdessen ein menschlicher Planungsschritt: Vorlage oder Set wählen, Materialliste mit Feinaufmaß abgleichen, Personal einteilen. Passt zum Kuratier-Prinzip (Büro plant bewusst, statt Automatismus).
+
+Kontext (Yamas Prozessbeschreibung): Nach Auftragsbestätigung stehen Produkte/Dienstleistungen fest → Materialliste wird aus der Auftragsbestätigung erstellt → mit Feinaufmaß verglichen → bestellt. Jedes Projekt hat teils vorgefertigte Aufgaben (über Einstellungen neu konfigurierbar). Gewerke wie PV haben eigenen Montageplan, beziehbar aus verschiedenen Vorlagen oder aus Sets.
+
+---
+
+## WEICHE 1 + WEICHE 6 — final entschieden (fachlich begründet, korrigierbar)
+
+Diese Entscheidungen sind auf Basis von Yamas Prozessbeschreibungen und der Befundlage getroffen. Wo eine nicht zur Praxis passt, wird sie korrigiert.
+
+### WEICHE 1 — Phasen-Wahrheit: lead_stages
+**Der verbindliche Phasen-Status eines Gewerks lebt in `lead_stages` / `lead_stage_sub_stages`.**
+Begründung: Das ist das jüngste (2026), sauberste, zweistufige System (6 Hauptphasen × Unterphasen), an die 6 entschiedenen Phasen anschlussfähig, und Yama hat es selbst als sein Phasen-System bestätigt (Kanban mit Gewerken als Karten). Die alten verstreuten Statusfelder und customer_phase_lists werden NICHT mehr als Phasen-Wahrheit genutzt (customer_phase_lists wird ohnehin abgelöst).
+→ Alle anderen Systeme (Profil-Anzeige, Rückfluss, Progressbar) richten sich nach lead_stages als der einen Antwort auf "in welcher Phase steht das Gewerk".
+
+### WEICHE 6 — Rückfluss: ja, MIT Prüfschritt des Projektleiters
+**Der Feld-Status des Monteurs (erledigt/Foto) läuft zurück ins Büro — aber als MELDUNG, die der Projektleiter PRÜFT, nicht als automatisch endgültige Wahrheit.**
+Fluss: Monteur hakt ab → läuft ins Büro als "vom Monteur als erledigt gemeldet" → Projektleiter prüft → er bestätigt (oder schickt zurück). Der Monteur-Abschluss ist eine Meldung, die der Projektleiter abnimmt — kein automatisches Durchreichen.
+Begründung: Sonst sieht das Büro an der geplanten Stelle nie, was draußen erledigt wurde. Höchster Alltagsnutzen. Der Prüfschritt ist bewusst gewollt (Kontroll-/Abnahme-Funktion des Projektleiters) — passt zum Kuratier-Prinzip.
+→ Bau-Konsequenz: die Büro-Karte braucht einen Zwischenstatus wie "vom Monteur gemeldet" (≠ "vom PL bestätigt"). Nicht nur done/offen, sondern eine Melde→Prüf→Bestätigt-Kette.
+ABER (technische Voraussetzung, hart geprüft): Es gibt heute KEINE eindeutige Verbindung planner_item(phase_activity) ↔ kanban_lead_tasks-Karte. Der Bau braucht ZUERST einen echten Link (z.B. planner_items.meta.kanban_lead_task_id beim Planen setzen, ODER Unique+firstOrCreate). → Entscheidung "ja" steht; Bau ist ein eigener späterer Schritt nach Schaffung des Links.
+
+### WEICHE 6 — Felder an Arbeitsschritte koppeln: später
+**Die Qualifizierungs-/Formular-Felder (product_formulas) werden an die Arbeitsschritte (phase_activities) gekoppelt — aber mit niedriger Priorität, nach den wichtigeren Schritten.**
+Begründung: Sinnvolle Erweiterung, aber kein Alltags-Schmerz. Reihenfolge: erst Rückfluss + customer_phase_lists ablösen, dann diese Kopplung.
+
+### Montageplan-Erzeugung: geplant, nicht automatisch (bereits entschieden, s.o.)
+
+---
+
+## DAMIT SIND WEICHE 1 UND WEICHE 6 GESCHLOSSEN.
+Offene Bau-Schritte (kein Entscheidungsbedarf mehr, nur noch Umsetzung, je mit Pflicht-Stopp):
+1. Rückfluss-Link schaffen + Feld-Status → Büro-Karte (nach Link).
+2. customer_phase_lists ablösen (dormant).
+3. Progressbar später auf lead_stages/planner ausrichten (Basis steht, gebaut).
+4. Felder an Arbeitsschritte koppeln (niedrige Prio).
+Alle Bau-Schritte hängen jetzt auf ENTSCHIEDENEM Boden — keine Weichen mehr offen im Kernprozess-Ausführungsteil.
