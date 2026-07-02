@@ -1,102 +1,93 @@
-# Abarbeitungs-Reihenfolge — ticket CRM, Schritt für Schritt
+# Fahrplan — ticket CRM (nach Abschluss customer_phase_lists-Cleanup)
 
-**Was das ist:** Die konkrete Reihenfolge, in der wir die Kapitel des Gesamtkonzepts anfassen — mit Begründung je Schritt. Verdichtet Konzept (das Buch, `gesamtkonzept-ticket-crm.md`) + Fahrplan (die grobe Route) zu einer durcharbeitbaren Liste.
+**Stand: 2026-07-02.** Der `customer_phase_lists`-Strang ist komplett abgeschlossen (Commits `f51bb08` → `f6a8b4c` → `6981b7c` → `32a3146`: .files-500-Fix, Feature-Code-Cleanup, Tabellen-Drop umkehrbar, 3 tote Old-Controller entfernt). Der Entscheidungsteil des Kernprozesses steht (6 Phasen; **Weiche 1** + **Weiche 5** + **Weiche 6** entschieden und in `architektur-entscheidungen.md` dokumentiert). Heute fertig gebaut: Progressbar (Weg A, `f52ab10`), objDrawerRoot-Zerlegungs-Scheibe, .files-500-Fix, customer_phase_lists-Ablösung.
 
-**Ordnungslogik (3 Kriterien, in dieser Priorität):**
-1. **Blockiert es anderes?** Entscheidungen, von denen viel abhängt → zuerst (sonst baut man auf Sand).
-2. **Schmerz oder Sicherheit?** Echte Bugs + risikoarme Aufräumarbeit → dürfen jederzeit dazwischen.
-3. **Braucht es erst Verstehen?** Grob kartierte Bereiche → erst Detail-Inventur, dann anfassen.
+> **Ältere Fassung dieses Dokuments** (Etappen-Struktur, Stand vor den Weichen-Entscheidungen) am Ende unter „Detail-Referenz" erhalten — die granulare Vertiefungs-Liste (Planner/Master-Set/Katalog/HR mit Code-Größen) und die Schutz-Prinzipien gelten weiter.
 
-**Zwei Spuren laufen parallel** (stören sich nicht — die eine ist *bauen*, die andere *entscheiden*):
-- **Bau-Spur:** konkrete, sichere Handarbeit (Zerlegung, Bugfixes).
-- **Denk-Spur:** Weichen entscheiden, Bereiche vertiefen.
+**Leitgedanke:** Genug aufgeräumt. Der nächste Schritt sollte wieder **Wert schaffen**, nicht nur Schulden tilgen. Das Aufräumen war richtig (Kernkrankheit „mehrere Wahrheiten"), aber der größte Alltagsnutzen liegt jetzt woanders.
 
 ---
 
-## Die Reihenfolge — als Etappen
+## Ebene 1 — Wertschaffende Bau-Schulden aus den Weichen (höchster Alltagsnutzen)
 
-### ETAPPE 1 — Fundament fertig machen (Denk-Spur) · HÖCHSTE PRIORITÄT
-*Diese Dinge blockieren den ganzen Kernprozess-Umbau. Solange sie offen sind, ist Teil III–V nicht bau-reif.*
+### 1.1 Rückfluss mit Projektleiter-Prüfschritt — **WICHTIGSTER nächster Bau**
+Entschieden (Weiche 6): Monteur meldet erledigt → läuft ins Büro als **„gemeldet"** → Projektleiter prüft → **„bestätigt"**. Heute sieht das Büro NICHT, was der Monteur draußen erledigt hat (Rückfluss endet in `customer_histories`/Audit).
+- **VORAUSSETZUNG (zuerst):** der technische Link `planner_item(phase_activity)` ↔ Büro-Karte (`kanban_lead_tasks`) **fehlt heute** (hart geprüft, s. `planner-kanban-zuordnung-hart-geprueft.md`). Muss ZUERST geschaffen werden — `planner_items.meta.kanban_lead_task_id` beim Planen setzen ODER Unique-Constraint + `firstOrCreate`. Berührte Dateien (Startpunkt, noch NICHT angefasst): `KanbanLeadTask`-Model, `Planner\PlannerPlanController`, `Customer\Kanban\KanbanLeadTaskController`.
+- **Dann:** Melde→Prüf→Bestätigt-Kette bauen (Büro-Karte braucht Zwischenstatus „gemeldet" ≠ „bestätigt").
+- GRÖSSER + heikler als alles heute (Nuriva-nah, tief in der Aufgaben-Logik) → verdient **frischen, konzentrierten Start**, kein müdes Anreißen. **Strenger Pflicht-Stopp + Seed-Verifikation.**
 
-**1.1 — Weiche 1: Verbindliche Statusquelle** (Kap. 2/4)
-Die wichtigste offene Entscheidung. Die Auflösung (Phase/Zustand/Historie) steht im Sollkonzept — sie muss ratifiziert werden. Löst Schwäche 1 (die ~11 Status-Felder) auf, die sich als „mehrere Wahrheiten"-Muster durchs ganze System zieht. *Gemeinsam durchsprechen, ich lege die Optionen vor, du entscheidest.*
-
-**1.2 — Weiche 2: Angebot-Annahme Pflicht vor Auftrag?** (Kap. 2)
-Reine Geschäftsregel — hängt an eurem Vertriebsalltag. Schnell zu entscheiden.
-
-**1.3 — Steuerberater-Paket bündeln & Termin** (Kap. 2/7/14)
-Weiche 3 (Rechnungssystem) + Weiche 4 (Storno-Folge) + die 10 Controlling-Fragen. *Ein* gebündeltes Gespräch. Läuft extern, blockiert intern nichts, außer der Rechnungs-Konsolidierung.
-
-→ **Nach Etappe 1 steht das Fundament.** Erst dann ist der Kernprozess-Umbau (Etappe 4) erlaubt.
+### 1.2 Felder an Arbeitsschritte koppeln
+Niedrige Priorität — Erweiterung (`phase_activities`-Kopplung), kein akuter Schmerz.
 
 ---
 
-### ETAPPE 2 — Bau-Spur: Kundenprofil zerlegen (läuft parallel zu Etappe 1)
-*Sicher, unabhängig von den Weichen, im Fluss. Kann jederzeit voranlaufen, während Etappe 1 gedacht wird.*
+## Ebene 2 — Kundenprofil strukturell richtig machen (großer Wert, eigenes Projekt)
 
-**2.1 — Scheibe 2a: serialsOverlay** → Partial. ✓ **ERLEDIGT** (Commit `a97be10`, byte-genau, alle 8 Element-IDs im gerenderten DOM verifiziert).
-**2.2 — Scheibe 2b/2c:** doneHistoryModal, halfDoneModal (weitere 0-Blade-Modals, Muster wiederholen).
-**2.3 — weitere Content-Blöcke** nach Rangliste im Schnittplan (sicher → riskant).
-**2.4 — JS-Bootstrap-Konstanten, dann JS-Module** (der riskante Teil, zuletzt, jede Scheibe einzeln).
-**2.5 — zweite Datei `customer_view.blade`** (eigener Schnittplan danach).
+### 2.1 ZUERST: JS-Laufzeit verifizieren
+Zeigt die `phaseSidebar` **zur Laufzeit** doch Phasen (und welches System)? Der Struktur-Befund (`kundenprofil-struktur-bestandsaufnahme.md`) gilt fürs **Blade**, nicht die AJAX-Laufzeit. Muss geklärt sein, **BEVOR** umgebaut wird — sonst Umbau für etwas, das schon existiert. *Grep = Verdacht, Live-Ausführung = Wahrheit.*
 
----
-
-### ETAPPE 3 — Aufräumen & echte Bugs (Bau-Spur, jederzeit dazwischen)
-*Unabhängig, risikoarm oder klar umrissen. Gut als Füller zwischen größeren Schritten.*
-
-**3.1 — echter Bug: 404-Referenzen `object-context-menu-final.*`** (Kontextmenü lädt gar nicht). Klein, echter Alltagsdefekt.
-**3.2 — Skript-Dubletten** (Sortable, chart.js je 2× geladen). Kosmetisch, trivial.
-**3.3 — Doppel-DOM-ID `maHoverPreviewOverlay`** (vor Zerlegung von Block Q).
-**3.4 — Sicherheitspunkt: öffentliche IDS-Callback-Routen ohne Auth** (Kap. 9) — *prüfen, ob real exponiert; wenn ja, priorisieren.*
-**3.5 — restliche Customer-Fallen-Stellen** im Zuge der `customers`-Bereinigung (Glossar Kap. 1).
+### 2.2 Profil-Redesign
+Die 3 überlappenden Navigationen (Top / Bereich / Feed) konsolidieren, die **6 Phasen als Achse** einbauen, „Rechnungen" als Abschluss-Aufgabe einordnen. Markup-arm (daten-getriebene Nav), aber echtes Gestaltungsprojekt → eigener frischer Anlauf.
 
 ---
 
-### ETAPPE 4 — Kernprozess-Umbau (NUR nach Etappe 1!)
-*Gesperrt, bis die Weichen stehen. Dann in dieser Reihenfolge:*
+## Ebene 3 — Steuerberater-Gespräch (extern blockiert, parallel terminieren)
 
-**4.1 — Statusführung vereinheitlichen** (nach Weiche 1) — Phase/Zustand/Historie sauber trennen.
-**4.2 — Erfassungs-Workflow: Mehrfachheit nutzbar machen** (Kunde→Objekt→Gewerke; UI existiert schon, nur Nutzerführung). Nach Weiche 5 (steht) + Statusarbeit.
-**4.3 — Rechnungssystem konsolidieren** (nach Weiche 3, Steuerberater).
+- **Weiche 3** (Rechnungssystem: `deal_invoices` vs `invoices` — welche Umsatzquelle ist buchhalterisch führend).
+- **Weiche 4 Folgeregel** (bezahlte stornierte Rechnungen — Rückzahlung / Gutschrift / Umbuchung?). *(Storno technisch bereits umgesetzt: offen→`storniert`, bezahlt→`storniert_bezahlt_pruefen`+Warnung; die buchhalterische Folgeregel fehlt.)*
+- Die **10 Controlling-Fragen** — dokumentiert in `controlling-bestandsaufnahme.md`.
 
----
-
-### ETAPPE 5 — Grob kartierte Bereiche vertiefen (Denk-Spur, vor Bau)
-*Diese Kapitel sind nur grob kartiert. Erst Detail-Inventur, dann bau-reif. Reihenfolge nach Wichtigkeit/Blockier-Wirkung:*
-
-**5.1 — Planner / Projektmanagement** (Kap. 11) — größter Brocken (~11k Z.), **3 parallele Phasen-Systeme + projects/planner_plans**. Wichtigster Vertiefungs-Kandidat, weil es dasselbe „mehrere Wahrheiten"-Muster ist wie beim Status — und weil Projekt/Bauphase (Weiche 5) schon entschieden ist, gibt es hier Anschluss.
-**5.2 — Master-Set / Angebots-Konfiguration** (Kap. 6) — ~6.700 + 25k Z.; hängt eng am Angebots-Workflow.
-**5.3 — Produktkatalog** (Kap. 8) + **5.4 — Lager/Beschaffung/Großhandel** (Kap. 9) — die Warenwelt; Katalog vor Beschaffung (Beschaffung baut auf Katalog auf).
-**5.5 — HR-Monolith** (Kap. 10) — viel Code, DB leer; niedrigere Dringlichkeit.
+→ Blockiert bis zum Gespräch. **Terminieren, dann entscheiden.**
 
 ---
 
-### ETAPPE 6 — Fehlende Funktionen & Altlasten (später)
-**6.1 — Serverseitiges Angebots-/Auftrags-PDF** (Kap. 7) — echte Lücke; Priorität hängt davon ab, wie sehr es im Alltag fehlt (deine Einschätzung).
-**6.2 — Legacy-Aufräumung** (Kap. 16) — ~58.500 Z. toter Ballast entfernen. Großer Aufräum-Strang, niedrige Dringlichkeit, aber hoher Ordnungs-Gewinn. Erst wenn sicher ist, dass wirklich 0 Live-Routen dranhängen.
-**6.3 — Cross-Gewerk-Intelligenz & Cockpit** (Kap. 14, Zielbild) — die „intelligente Schicht", ganz zuletzt, baut auf allem darunter auf.
+## Ebene 4 — Verbleibende „mehrere Wahrheiten" (große Ablösungen, später, einzeln)
+
+- Die **~11 Status-Felder / 12 Schreibpfade** (Weiche 1 entschieden, aber Umbau steht aus — Statusführung Phase/Zustand/Historie sauber trennen).
+- **Stage-Tabellen-Wildwuchs** (`stages` / `customer_stages` / `phase_stages` / `offer_kanban_stages` / `lead_stages`).
+- **Zwei Rechnungssysteme** (hängt an Ebene 3 / Steuerberater).
 
 ---
 
-## Was JETZT dran ist (die nächsten 3 konkreten Schritte)
+## Ebene 5 — Aufräum-Fäden (klein, wenn Zeit; kein Wert, nur Hygiene)
 
-1. **Bau-Spur:** Scheibe **2b/2c** (doneHistoryModal, halfDoneModal) schneiden — Muster wie 2a wiederholen. *(2a/serialsOverlay ist bereits erledigt, `a97be10`.)*
-2. **Denk-Spur:** Weiche 1 (Statusquelle) gemeinsam durchsprechen — die wichtigste offene Entscheidung.
-3. **Denk-Spur:** Weiche 2 (Angebot-Pflicht) — schnell, direkt danach.
-
-Danach: Etappe 2 weiter (Profil) + Etappe 5.1 (Planner-Detail-Inventur) als nächster großer Verstehens-Schritt.
+- **Verwaiste 404-Links + tote Blades** aufspüren. Bereits aufgedeckt: `customer_product_create`-Blade (unerreichbar, bewusst behalten) + 4 Live-Views verlinken sie ins 404; dazu die dangling `action()`-Verweise in `todo_checklist.blade.php` (jetzt 0 Renderer) + 2 Backup-Kopien. Symptom „Wegbauen ohne Aufräumen" → eigener gründlicher Strang.
+- **Kundenprofil weiter zerlegen** — ab jetzt Tier-2/3 mit Blade-Logik (riskanter — nur mit Variablen-/Routen-Prüfung, jede Scheibe einzeln). Bisher erledigt: serialsOverlay, doneHistoryModal, halfDoneModal, commentSidebar, suggestEmployeesDrawer, objDrawerRoot (alle 0-Blade Tier-1 erschöpft).
 
 ---
 
-## Prinzipien, die die Reihenfolge schützen
-- **Nie Etappe 4 vor Etappe 1.** Kein Kernprozess-Bau, bevor die Weichen stehen.
-- **Nie einen grob kartierten Bereich (Etappe 5) bauen, bevor seine Detail-Inventur da ist.**
-- **Bau-Spur und Denk-Spur laufen parallel** — man muss nicht auf das eine warten, um das andere zu tun.
-- **Jeder Bau-Schritt:** kleiner Auftrag → Pflicht-Stopp/Befund → gemeinsame Freigabe → Bau → Verifikation.
-- **Neue Funde** → Backlog-Eintrag, nicht sofort verfolgen.
-- **Reihenfolge schlägt Neugier:** der interessanteste Fund ist nicht automatisch der nächste Schritt.
+## Empfohlene Reihenfolge
+
+1. ✅ **Abgeschlossen:** customer_phase_lists komplett (inkl. Old-Controller-Restposten).
+2. **Nächster wertschaffender Bau (frisch):** **1.1 Rückfluss-Link + Projektleiter-Prüfschritt.**
+3. **Parallel/extern:** Ebene 3 — Steuerberater-Gespräch terminieren.
+4. **Eigenes Projekt (frisch):** 2.1 JS-Laufzeit klären → 2.2 Profil-Redesign.
+5. **Große Ablösungen (geplant, einzeln):** Ebene 4.
+6. **Hygiene (Lückenfüller):** Ebene 5.
 
 ---
 
-*Konkrete Route. Ergänzt Konzept (`gesamtkonzept-ticket-crm.md`) + 8-Zonen-Inventur (`crm-inventur-00-index.md`). Fortschreiben: erledigte Etappen abhaken.*
+## Kernprinzip (schützt jeden Schritt)
+
+**Vor jedem Bau harte Lebend-/Zuordnungs-Prüfung** — heute mehrfach bewährt: hat den Progressbar-Fix, die Zeitgewichtungs-Frage, die customer_phase_lists-Einstufung und die .files-Funktion vor Fehlern bewahrt. **Grep-Befunde sind Verdacht, Live-Ausführung ist Wahrheit.** Jeder Bau-Schritt: kleiner Auftrag → Pflicht-Stopp/Befund → Freigabe → Bau → Verifikation. Neue Funde → Backlog, nicht sofort verfolgen. Reihenfolge schlägt Neugier.
+
+---
+---
+
+## Detail-Referenz — Vertiefungs-Kandidaten & Prinzipien (frühere Fassung, weiter gültig)
+
+*Die granulare Liste der grob kartierten Bereiche (vor Bau erst Detail-Inventur) — geordnet nach Blockier-Wirkung. Fließt in Ebene 4/„große Ablösungen" ein:*
+
+- **Planner / Projektmanagement** (~11k Z.) — **3 parallele Phasen-Systeme + `projects`/`planner_plans`**. Wichtigster Vertiefungs-Kandidat (dasselbe „mehrere Wahrheiten"-Muster wie beim Status; Projekt/Bauphase per Weiche 5 entschieden → Anschluss vorhanden). Vorarbeit teils erledigt: `kanban-ebenen-montage-planner-nuriva-befund.md`, `planner-kanban-zuordnung-hart-geprueft.md`, `planner-kanban-meta-daten-geprueft.md`.
+- **Master-Set / Angebots-Konfiguration** (~6.700 + 25k Z.) — hängt eng am Angebots-Workflow.
+- **Produktkatalog** + **Lager/Beschaffung/Großhandel** — Warenwelt; Katalog vor Beschaffung.
+- **HR-Monolith** — viel Code, DB leer; niedrige Dringlichkeit.
+- **Serverseitiges Angebots-/Auftrags-PDF** — echte Lücke; Priorität nach Alltags-Schmerz.
+- **Legacy-Aufräumung** (`Old/`, ~58.500 Z. toter Ballast) — hoher Ordnungs-Gewinn, niedrige Dringlichkeit; nur wenn sicher 0 Live-Routen dranhängen (Muster wie beim customer_phase_lists-Cleanup: pro Datei Lebend-Check).
+- **Cross-Gewerk-Intelligenz & Cockpit** (Zielbild) — die „intelligente Schicht", ganz zuletzt.
+
+**Schutz-Prinzipien:** Nie Kernprozess-Bau (Ebene 4) bevor die Weichen stehen (jetzt: Weiche 1/5/6 ✓, offen 2/3/4). Nie einen grob kartierten Bereich bauen, bevor seine Detail-Inventur da ist. Bau-Spur und Denk-Spur laufen parallel.
+
+---
+
+*Ergänzt: `gesamtkonzept-ticket-crm.md` (Konzept), `crm-inventur-00-index.md` (8-Zonen-Inventur), `architektur-entscheidungen.md` (Weichen/ADRs), `workflow-sollkonzept.md` (Soll-Landkarte). Fortschreiben: erledigte Ebenen/Bauten abhaken.*
