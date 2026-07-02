@@ -5747,34 +5747,6 @@ class NewLeadsController extends Controller
         }
     }
 
-    public function get_phase($customer, $alternative, $product)
-    {
-
-        $data = DB::table('customer_phase_lists')
-            ->join('task_phases', 'task_phases.id', '=', 'customer_phase_lists.phase_id')
-            ->where('customer_phase_lists.customer', $customer)
-            ->where('customer_phase_lists.product', $product)
-            ->where('customer_phase_lists.alternative', $alternative)
-            ->select(
-                'customer_phase_lists.id',
-                'customer_phase_lists.customer',
-                'customer_phase_lists.phase_id',
-                'customer_phase_lists.product',
-                'customer_phase_lists.alternative',
-                'customer_phase_lists.service',
-                'customer_phase_lists.status',
-                'customer_phase_lists.color',
-                'customer_phase_lists.active_by',
-                'customer_phase_lists.jump_steps',
-                'customer_phase_lists.jump_steps_by',
-                'task_phases.phase_name'
-            )
-            ->get();
-
-
-        return response()->json($data, 200);
-    }
-
     public function getTaskNotifications(): JsonResponse
     {
         $user = auth()->user();

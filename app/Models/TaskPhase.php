@@ -48,10 +48,6 @@ class TaskPhase extends Model
     {
         return $this->belongsTo(ArticleGroup::class, 'product_id');
     }
-     public function customerPhaseList()
-    {
-        return $this->hasOne(CustomerPhaseList::class, 'phase_id');
-    }
 
     
 

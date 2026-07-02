@@ -160,7 +160,6 @@ use App\Http\Controllers\TaskToDoController;
  use App\Http\Controllers\AdminController;
  
 
-use App\Http\Controllers\CustomerPhaseListController;
 use App\Http\Controllers\PVToolsController;
 use App\Http\Controllers\BitrixController;
 use App\Http\Controllers\PlaningController;
@@ -850,7 +849,6 @@ Route::group(['middleware'   =>  'web'], function(){
     Route::get('/restore_leads/{id}', [NewLeadsController::class, 'restore'])->name('restore.leads');
     Route::get('/new_object/{id}', [NewLeadsController::class, 'new_object'])->name('new.object.leads');
     Route::post('/new_object_store', [NewLeadsController::class, 'object_store'])->name('store.object.leads');
-    Route::get('/customer/phase/get/{customer}/{alternative}/{product}', [NewLeadsController::class, 'get_phase'])->name('lead.phase.get.status');
     Route::post('/lead_reason_update/{lead}', [NewLeadsController::class, 'updateReason'])->name('leads.reason.update');
     Route::get('/calendar-settings', [PersonalSettingsController::class, 'get'])->name('calendar.settings.get');
     Route::post('/calendar-settings/save', [PersonalSettingsController::class, 'save'])->name('calendar.settings.save');
@@ -1454,16 +1452,6 @@ Route::prefix('admin/products/images')->name('admin.products.images.')->group(fu
     Route::get('/csv-import', [ProductImageCsvImportController::class, 'index'])->name('csv-import.index');
     Route::post('/csv-import', [ProductImageCsvImportController::class, 'store'])->name('csv-import.store');
 });
-Route::group(['middlware'=>'auth'], function(){
-    Route::get('/customer_phase_manage', [CustomerPhaseListController::class, 'show'])->name('customer.phase.managment.show');
-    Route::post('/customer/phase/manage', [CustomerPhaseListController::class, 'create'])->name('customer.phase.managment.create');
-    Route::get('/customer_phase_management/edit', [CustomerPhaseListController::class, 'create'])->name('customer.phase.manage.edit');
-    Route::get('/customer_phase_get/{customer}/{product}/{service}/{alternative}', [CustomerPhaseListController::class, 'getPhase'])->name('customer.phase.managment.get');
-    Route::get('/customer_phase_get_new/{customer}/{product}/{service}/{alternative}', [CustomerPhaseListController::class, 'getPhaseNew'])->name('customer.phase.managment.get.new');
-    Route::post('/customer_phase_management_store', [CustomerPhaseListController::class, 'store'])->name('customer.phase.management.store');
-    Route::post('/customer_phase_management/color', [CustomerPhaseListController::class, 'color'])->name('customer.phase.management.color');
-    Route::delete('/customer_phase_management_delete/{id}', [CustomerPhaseListController::class, 'deletePhase'])->name('customer.phase.management.delete');
-});  
 Route::group(['middleware'=>'auth'], function () {
     Route::get('product_positions', [ProductPositionController::class, 'index'])->name('product.position.view');
     Route::get('/product-position/article-groups', [ProductPositionController::class, 'getArticleGroups']);
