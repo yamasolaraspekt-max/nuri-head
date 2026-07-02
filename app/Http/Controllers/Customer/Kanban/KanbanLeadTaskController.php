@@ -466,6 +466,31 @@ class KanbanLeadTaskController extends Controller
 
             $estimatedMinutes = $data['estimated_minutes'] ?? $this->activityMinutes($activity);
 
+            // Idempotenz (Rueckfluss Stufe 1a): pro (Gewerk, Aktivitaet) hoechstens EINE lebende Karte,
+            // damit der Sync-Karten-Lookup (Stufe 1b) eindeutig ist. Soft-Delete-bewusst statt DB-Unique-Index
+            // (kanban_lead_tasks nutzt SoftDeletes): bestehende - auch soft-geloeschte - Template-Karte
+            // wiederverwenden bzw. restaurieren statt ein Duplikat anzulegen. Nur wenn eine Aktivitaet gesetzt
+            // ist (Phasen-/Manuell-Karten mit phase_activity_id = null bleiben bewusst mehrfach moeglich).
+            if ($activity) {
+                $existing = KanbanLeadTask::withTrashed()
+                    ->where('lead_product_list_id', $leadProduct->id)
+                    ->where('phase_activity_id', $activity->id)
+                    ->first();
+
+                if ($existing) {
+                    if ($existing->trashed()) {
+                        $existing->restore();
+                    }
+
+                    return $existing->fresh([
+                        'performer:id,name,lastname,image',
+                        'employees:id,name,lastname,image',
+                        'taskPhase:id,phase_name',
+                        'phaseActivity:id,title',
+                    ]);
+                }
+            }
+
             $task = KanbanLeadTask::query()->create([
                 'lead_product_list_id' => $leadProduct->id,
                 'customer_id' => $leadProduct->customer_id,
