@@ -97,6 +97,11 @@ class KanbanLeadTask extends Model
         return $this->belongsTo(Employee::class, 'performer_employee_id');
     }
 
+    public function reviewer()
+    {
+        return $this->belongsTo(Employee::class, 'reviewer_employee_id');
+    }
+
     public function scheduledBy()
     {
         return $this->belongsTo(Employee::class, 'scheduled_by_employee_id');

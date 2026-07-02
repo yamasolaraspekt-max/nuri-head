@@ -17492,6 +17492,7 @@ or this Blade will have no team data to render.
                 open: 'Offen',
                 scheduled: 'Geplant',
                 in_progress: 'In Bearbeitung',
+                reported: 'Zu prüfen',
                 done: 'Erledigt',
                 cancelled: 'Abgebrochen'
             }[normalizeStatus(status)] || (status || 'Offen');
@@ -17845,6 +17846,7 @@ or this Blade will have no team data to render.
 
                     <div class="kb-task-profile-meta">
                         <span class="kb-task-profile-pill">Zuständig: ${escapeHtml(performer)}</span>
+                        ${normalizeStatus(task.status) === 'reported' && task.reviewer ? `<span class="kb-task-profile-pill">Zu prüfen bei: ${escapeHtml(task.reviewer.display_name || '')}</span>` : ''}
                         ${task.planned_start_at ? `<span class="kb-task-profile-pill">Start: ${escapeHtml(task.planned_start_at)}</span>` : ''}
                         ${task.planned_end_at ? `<span class="kb-task-profile-pill">Ende: ${escapeHtml(task.planned_end_at)}</span>` : ''}
                         <span class="kb-task-profile-pill">${escapeHtml(time.label)}</span>

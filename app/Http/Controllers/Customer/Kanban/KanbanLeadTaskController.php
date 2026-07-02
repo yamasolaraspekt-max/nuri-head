@@ -47,6 +47,7 @@ class KanbanLeadTaskController extends Controller
         $savedTasks = KanbanLeadTask::query()
             ->with([
                 'performer:id,name,lastname,image',
+                'reviewer:id,name,lastname,image',
                 'employees:id,name,lastname,image',
                 'taskPhase:id,phase_name',
                 'phaseActivity:id,title',
@@ -219,6 +220,7 @@ class KanbanLeadTaskController extends Controller
         $savedByLeadProduct = KanbanLeadTask::query()
             ->with([
                 'performer:id,name,lastname,image',
+                'reviewer:id,name,lastname,image',
                 'employees:id,name,lastname,image',
                 'taskPhase:id,phase_name',
                 'phaseActivity:id,title',
@@ -551,7 +553,7 @@ class KanbanLeadTaskController extends Controller
     public function updateStatus(Request $request, KanbanLeadTask $task): JsonResponse
     {
         $data = $request->validate([
-            'status' => ['required', Rule::in(['open', 'scheduled', 'in_progress', 'done', 'cancelled'])],
+            'status' => ['required', Rule::in(['open', 'scheduled', 'in_progress', 'reported', 'done', 'cancelled'])],
             'planned_start_at' => ['nullable', 'date'],
             'planned_end_at' => ['nullable', 'date'],
             'performer_employee_id' => ['nullable', 'integer', 'exists:employees,id'],
@@ -732,6 +734,15 @@ class KanbanLeadTaskController extends Controller
                 'role' => $employee->pivot->role ?? null,
                 'status' => $employee->pivot->status ?? null,
             ])->values(),
+            // B3: Pruefer (bei Status 'reported' gesetzt), damit der Drawer "Zu pruefen bei X" zeigen kann.
+            'reviewer_employee_id' => $task->reviewer_employee_id ? (int) $task->reviewer_employee_id : null,
+            'reviewer' => $task->reviewer ? [
+                'id' => (int) $task->reviewer->id,
+                'name' => $task->reviewer->name,
+                'lastname' => $task->reviewer->lastname,
+                'image' => $task->reviewer->image,
+                'display_name' => trim(($task->reviewer->lastname ?? '') . ' ' . ($task->reviewer->name ?? '')),
+            ] : null,
         ];
     }
 
