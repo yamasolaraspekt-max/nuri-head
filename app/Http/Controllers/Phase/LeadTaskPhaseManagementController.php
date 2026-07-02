@@ -64,6 +64,15 @@ class LeadTaskPhaseManagementController extends Controller
             ->limit(500)
             ->get();
 
+        // B1: rang-tragende Qualifikationen (position_qualifications) fuer das
+        // "Mindest-Qualifikation"-Dropdown im Aktivitaets-Modal, nach Rang sortiert.
+        $requiredQualifications = DB::table('position_qualifications')
+            ->select('id', 'name', 'sort_order')
+            ->whereNull('deleted_at')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
+
         return view('admin.task.phase.phase_management', [
             'section' => $section,
             'productModel' => $productModel,
@@ -71,6 +80,7 @@ class LeadTaskPhaseManagementController extends Controller
             'departments' => $departments,
             'positions' => $positions,
             'articles' => $articles,
+            'requiredQualifications' => $requiredQualifications,
         ]);
     }
 
@@ -396,8 +406,14 @@ class LeadTaskPhaseManagementController extends Controller
 
     public function ajaxStoreActivity(Request $request): JsonResponse
     {
+        // B1: leere Auswahl ("keine Anforderung") als null behandeln, damit nullable+exists greift.
+        if ($request->input('required_qualification_id') === '') {
+            $request->merge(['required_qualification_id' => null]);
+        }
+
         $data = $request->validate([
             'phase_id' => ['required', 'integer', 'exists:task_phases,id'],
+            'required_qualification_id' => ['nullable', 'integer', 'exists:position_qualifications,id'],
             'parent_id' => ['nullable', 'integer', 'exists:phase_activities,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -437,6 +453,11 @@ class LeadTaskPhaseManagementController extends Controller
             $activity->lead_sub_stage_id = $this->phaseLeadSubStageId($phase);
         }
 
+        // B1: Mindest-Qualifikation (Neuanlage: ?? null unkritisch, kein Bestandswert).
+        if (Schema::hasColumn('phase_activities', 'required_qualification_id')) {
+            $activity->required_qualification_id = $data['required_qualification_id'] ?? null;
+        }
+
         $activity->save();
         $this->syncActivityRelations($activity, $data);
 
@@ -449,8 +470,14 @@ class LeadTaskPhaseManagementController extends Controller
 
     public function ajaxUpdateActivity(Request $request, PhaseActivities $activity): JsonResponse
     {
+        // B1: leere Auswahl ("keine Anforderung") als null behandeln.
+        if ($request->input('required_qualification_id') === '') {
+            $request->merge(['required_qualification_id' => null]);
+        }
+
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'required_qualification_id' => ['nullable', 'integer', 'exists:position_qualifications,id'],
             'description' => ['nullable', 'string'],
             'duration' => ['nullable', 'numeric', 'min:0'],
             'duration_type' => ['nullable', 'string', 'max:50'],
@@ -470,6 +497,13 @@ class LeadTaskPhaseManagementController extends Controller
         $activity->duration_type = $data['duration_type'] ?? $activity->duration_type ?? 'minutes';
         $activity->photo = !empty($data['photo_required']) ? 'needed' : 'not_needed';
         $activity->status = $data['status'] ?? $activity->status ?? 'Published';
+
+        // B1: Mindest-Qualifikation NUR setzen, wenn das Feld im Request kam (has()),
+        // sonst wuerde ein Pfad ohne das Feld den Bestandswert stillschweigend nullen.
+        if (Schema::hasColumn('phase_activities', 'required_qualification_id') && $request->has('required_qualification_id')) {
+            $activity->required_qualification_id = $data['required_qualification_id'] ?? null;
+        }
+
         $activity->save();
 
         $this->syncActivityRelations($activity, $data);
@@ -819,6 +853,7 @@ class LeadTaskPhaseManagementController extends Controller
             'status' => $activity->status ?: 'Published',
             'photo_required' => $activity->photo === 'needed',
             'sort_order' => (int) ($activity->sort_order ?? 0),
+            'required_qualification_id' => $activity->required_qualification_id ? (int) $activity->required_qualification_id : null,
             'qualification_ids' => $this->pivotIds('activity_positions', 'activity_id', 'position_id', (int) $activity->id),
             'department_ids' => $this->pivotIds('activity_departments', 'activity_id', 'department_id', (int) $activity->id),
             'article_ids' => $this->pivotIds('activity_articles', 'activity_id', 'article_id', (int) $activity->id),

@@ -985,6 +985,16 @@
                                         </select>
                                     </div>
                                     <div class="ltm-form-group">
+                                        <label class="ltm-label">Mindest-Qualifikation (Rang)</label>
+                                        <select class="ltm-select" name="required_qualification_id"
+                                            id="activity_required_qualification_id">
+                                            <option value="">— keine Anforderung —</option>
+                                            @foreach($requiredQualifications as $rq)
+                                                <option value="{{ $rq->id }}">{{ $rq->sort_order }} · {{ $rq->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="ltm-form-group">
                                         <label class="ltm-label">Abteilung</label>
                                         <select class="ltm-select js-ltm-select2" name="department_ids[]"
                                             id="activity_department_ids" multiple>
@@ -1769,6 +1779,7 @@
                     $('#activity_status').val(activity.status || 'Published');
                     $('#activity_photo_required').prop('checked', !!activity.photo_required);
                     $('#activity_qualification_ids').val(activity.qualification_ids || []).trigger('change');
+                    $('#activity_required_qualification_id').val(activity.required_qualification_id || '');
                     $('#activity_department_ids').val(activity.department_ids || []).trigger('change');
                     $('#activity_article_ids').val(activity.article_ids || []).trigger('change');
                 } else if (defaults) {
