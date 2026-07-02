@@ -411,9 +411,9 @@ class PlannerApiAuthController extends Controller
         if (Schema::hasTable('lead_alternative_adds')) {
             $q->leftJoin('lead_alternative_adds as laa', 'laa.id', '=', DB::raw('COALESCE(klt.alternative_id, lpl.alternative_id)'));
             $select = array_merge($select, [
-                'laa.name as object_name',
+                'laa.object_name as object_name',
                 'laa.street as object_street',
-                'laa.street_number as object_street_number',
+                'laa.address_no as object_street_number',
                 'laa.postcode as object_postcode',
                 'laa.city as object_city',
             ]);
@@ -626,7 +626,6 @@ class PlannerApiAuthController extends Controller
                 'e.lastname',
                 'e.title',
                 'e.image',
-                'e.photo',
                 'e.email',
                 'e.phone',
             ])
@@ -643,7 +642,7 @@ class PlannerApiAuthController extends Controller
                     'name' => $row->name ?? null,
                     'lastname' => $row->lastname ?? null,
                     'full_name' => $this->employeeFullName($row),
-                    'photo_url' => $this->assetUrl($row->image ?? $row->photo ?? null, 'images/employee'),
+                    'photo_url' => $this->assetUrl($row->image ?? null, 'images/employee'),
                     'email' => $row->email ?? null,
                     'phone' => $row->phone ?? null,
                 ];
