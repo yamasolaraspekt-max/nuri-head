@@ -191,10 +191,14 @@ class MobilePlannerApiController extends Controller
         }
 
         if (isset($data['report']) || isset($data['signature'])) {
-            $meta = $item->meta ? json_decode($item->meta, true) : [];
+            // meta ist im Model als 'array' gecastet -> $item->meta ist bereits ein Array.
+            // Legacy-String (falls Cast je fehlte) wird dekodiert; null/leer -> [].
+            $meta = is_array($item->meta)
+                ? $item->meta
+                : (is_string($item->meta) && $item->meta !== '' ? (json_decode($item->meta, true) ?: []) : []);
             if(isset($data['report'])) $meta['mobile_report'] = $data['report'];
-            if(isset($data['signature'])) $meta['signature'] = $data['signature']; 
-            $item->meta = json_encode($meta);
+            if(isset($data['signature'])) $meta['signature'] = $data['signature'];
+            $item->meta = $meta; // Array-Cast encodiert beim Speichern (kein Doppel-Encode)
         }
         
         $item->save();
