@@ -212,6 +212,50 @@ class EmployeeDashboardController extends Controller
             ->count();
       
 
+        // PL-Prüfliste: Montage-Karten, die bei MIR zur Prüfung liegen (status='reported',
+        // reviewer_employee_id=ich); Admin sieht zusätzlich die prüferlosen (orWhereNull).
+        $isAdmin = (bool) (auth()->user()->is_admin ?? false);
+        $reviews = \App\Models\KanbanLeadTask::query()
+            ->with(['customer', 'product', 'phaseActivity', 'reviewer'])
+            ->where('status', 'reported')
+            ->whereNull('deleted_at')
+            ->where(function ($q) use ($employeeId, $isAdmin) {
+                $q->where('reviewer_employee_id', (int) $employeeId);
+                if ($isAdmin) {
+                    $q->orWhereNull('reviewer_employee_id');
+                }
+            })
+            ->orderByDesc('updated_at')
+            ->get();
+
+        // Melder = jüngstes erledigtes planner_item, das auf die Karte zeigt (1b-Rückweg).
+        // Ein Query, kein N+1; bei mehreren Items je Karte gewinnt das jüngste done_at.
+        $reviewMelder = [];
+        $reviewCardIds = $reviews->pluck('id')->all();
+        if (!empty($reviewCardIds)) {
+            $melderByCard = [];
+            $melderRows = DB::table('planner_items')
+                ->whereIn('kanban_lead_task_id', $reviewCardIds)
+                ->whereNotNull('done_at')
+                ->whereNotNull('done_by_employee_id')
+                ->orderByDesc('done_at')
+                ->get(['kanban_lead_task_id', 'done_by_employee_id']);
+            foreach ($melderRows as $row) {
+                $cid = (int) $row->kanban_lead_task_id;
+                if (!isset($melderByCard[$cid])) {
+                    $melderByCard[$cid] = (int) $row->done_by_employee_id; // erster Treffer = jüngstes done
+                }
+            }
+            $melderNames = DB::table('employees')
+                ->whereIn('id', array_values($melderByCard) ?: [0])
+                ->get(['id', 'name', 'lastname'])
+                ->keyBy('id');
+            foreach ($melderByCard as $cid => $eid) {
+                $e = $melderNames->get($eid);
+                $reviewMelder[$cid] = $e ? trim(($e->lastname ?? '') . ' ' . ($e->name ?? '')) : null;
+            }
+        }
+
         return view('admin.dashboard.employee.mobile', compact(
             'tasks',
             'appointments',
@@ -226,8 +270,10 @@ class EmployeeDashboardController extends Controller
             'planScheduledHours',
             'planLoggedHours',
             'activeDepartments',
-            'myCustomerCount', 
+            'myCustomerCount',
             'myProjectCount',
+            'reviews',
+            'reviewMelder',
         ));
     }
 
