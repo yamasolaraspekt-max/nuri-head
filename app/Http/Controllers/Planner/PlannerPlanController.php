@@ -490,6 +490,16 @@ class PlannerPlanController extends Controller
         $historyByActivity = $this->pmoCustomerActivityHistoryMap($project);
         $activitiesByPhase = $activityRows->groupBy(fn($row) => (int) ($row->phase_id ?? 0));
 
+        // Rueckfluss 1b: Karten dieses Gewerks einmalig laden (kein N+1) -> [phase_activity_id => card_id], nur lebende.
+        $cardMap = [];
+        if (Schema::hasTable('kanban_lead_tasks')) {
+            $cardMap = DB::table('kanban_lead_tasks')
+                ->where('lead_product_list_id', (int) $project->id)
+                ->whereNotNull('phase_activity_id')
+                ->when($this->safeColumn('kanban_lead_tasks', 'deleted_at'), fn($q) => $q->whereNull('deleted_at'))
+                ->pluck('id', 'phase_activity_id')->all();
+        }
+
         foreach ($phaseRows as $phase) {
             $phaseId = (int) $phase->id;
             $phaseActivities = $activitiesByPhase->get($phaseId, collect());
@@ -552,6 +562,7 @@ class PlannerPlanController extends Controller
                     'sort_order' => (int) ($activity->sort_order ?? $phase->order ?? 9999),
                     'done_at' => $isDone ? $this->pmoSourceDoneAt($history) : null,
                     'done_by_employee_id' => $isDone ? $this->pmoSourceDoneByEmployeeId($history) : null,
+                    'kanban_lead_task_id' => $cardMap[$activityId] ?? null,
                 ], $employeeIds);
             }
         }
@@ -807,6 +818,12 @@ class PlannerPlanController extends Controller
 
         if ($this->safeColumn('planner_items', 'done_by_employee_id') && !empty($payload['done_by_employee_id'])) {
             $item->done_by_employee_id = (int) $payload['done_by_employee_id'];
+        }
+
+        // Rueckfluss 1b: Link zur Buero-Karte frisch halten. array_key_exists (nicht !empty) -> setzt auch null,
+        // wenn keine lebende Karte (mehr) existiert. Fuer task_phase-Items ohne den Key wird nichts angefasst.
+        if ($this->safeColumn('planner_items', 'kanban_lead_task_id') && array_key_exists('kanban_lead_task_id', $payload)) {
+            $item->kanban_lead_task_id = $payload['kanban_lead_task_id'] ? (int) $payload['kanban_lead_task_id'] : null;
         }
 
         $item->save();

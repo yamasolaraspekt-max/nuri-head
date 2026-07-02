@@ -531,6 +531,16 @@ class KanbanLeadTaskController extends Controller
             ]);
         });
 
+        // Rueckfluss 1b (Rueckrichtung): Karte entstand evtl. NACH dem Sync ->
+        // passenden phase_activity-planner_item sofort auf diese Karte verlinken (best-effort, deckt neue + wiederverwendete Karte ab).
+        if (!empty($task->phase_activity_id) && Schema::hasColumn('planner_items', 'kanban_lead_task_id')) {
+            DB::table('planner_items')
+                ->where('source_type', 'phase_activity')
+                ->where('source_id', (int) $task->phase_activity_id)
+                ->whereIn('plan_id', DB::table('planner_plans')->where('project_id', (int) $task->lead_product_list_id)->pluck('id'))
+                ->update(['kanban_lead_task_id' => (int) $task->id]);
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Aufgabe wurde übernommen.',
