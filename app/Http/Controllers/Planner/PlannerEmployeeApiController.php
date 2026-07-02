@@ -1830,6 +1830,16 @@ class PlannerEmployeeApiController extends Controller
                 note: $noteText !== '' ? $noteText : ($reportText !== '' ? 'Mit Bericht abgeschlossen.' : 'Ohne Bericht abgeschlossen.'),
                 now: $now
             );
+
+            /*
+            |--------------------------------------------------------------------------
+            | 6. B3: Qualifikations-Rueckfluss auf die verlinkte Buero-Karte (1b-Link).
+            |--------------------------------------------------------------------------
+            | Additiv + feature-gesichert: greift NUR fuer phase_activity-Items mit
+            | gesetztem kanban_lead_task_id UND einer Mindest-Qualifikation (B1) an der
+            | Taetigkeit. Sonst passiert nichts (Verhalten exakt wie bisher).
+            */
+            $this->applyMontageQualificationRueckfluss($plannerItem, $employeeId, $now);
         });
 
         $fresh = DB::table('planner_items')
@@ -1854,6 +1864,157 @@ class PlannerEmployeeApiController extends Controller
                 'done_by_employee' => $this->employeeMini($employeeId),
             ],
         ]);
+    }
+
+    /**
+     * B3: Qualifikations-Rueckfluss auf die verlinkte Buero-Karte.
+     * Qualifiziert (person.sort_order <= required.sort_order) ODER keine Anforderung -> Karte 'done'.
+     * Nicht qualifiziert -> 'reported' + ermittelter Pruefer (done_at bleibt null; PL bestaetigt spaeter).
+     * Haertung: bereits done/cancelled ODER soft-geloeschte Karten werden NICHT angefasst.
+     */
+    private function applyMontageQualificationRueckfluss(object $plannerItem, int $employeeId, Carbon $now): void
+    {
+        $cardId = (int) ($plannerItem->kanban_lead_task_id ?? 0);
+        $sourceType = strtolower(trim((string) ($plannerItem->source_type ?? '')));
+
+        // Feature-Guard: nur verlinkte Montage-Items (phase_activity).
+        if ($cardId <= 0 || $sourceType !== 'phase_activity' || !Schema::hasTable('kanban_lead_tasks')) {
+            return;
+        }
+
+        // Karte lesen mit SoftDelete-Guard.
+        $card = DB::table('kanban_lead_tasks')
+            ->where('id', $cardId)
+            ->when($this->safeColumn('kanban_lead_tasks', 'deleted_at'), fn($q) => $q->whereNull('deleted_at'))
+            ->first();
+
+        if (!$card) {
+            return; // geloescht oder nicht vorhanden
+        }
+
+        // Zustands-Guard: vom Buero schon abgeschlossen/storniert -> Monteur-Report kippt nichts.
+        $cardStatus = strtolower(trim((string) ($card->status ?? '')));
+        if (in_array($cardStatus, ['done', 'cancelled', 'canceled'], true)) {
+            return;
+        }
+
+        // B1-Anforderung der Taetigkeit (source_id = phase_activity_id).
+        $requiredQualId = DB::table('phase_activities')
+            ->where('id', (int) ($plannerItem->source_id ?? 0))
+            ->value('required_qualification_id');
+
+        if (empty($requiredQualId)) {
+            $this->markKanbanCardDone($cardId, $employeeId, $now); // keine Anforderung -> done (wie heute)
+            return;
+        }
+
+        $requiredSort = DB::table('position_qualifications')->where('id', (int) $requiredQualId)->value('sort_order');
+        $performerSort = $this->employeeQualSort($employeeId);
+
+        // Qualifiziert = performer.sort_order <= required.sort_order (niedriger sort_order = hoeher).
+        // Null-Stufe (qualification_id leer) = NICHT qualifiziert (konservativ).
+        if ($performerSort !== null && $requiredSort !== null && (int) $performerSort <= (int) $requiredSort) {
+            $this->markKanbanCardDone($cardId, $employeeId, $now);
+            return;
+        }
+
+        // NICHT qualifiziert -> reported + Pruefer ermitteln (done_at bleibt null).
+        $reviewerId = $requiredSort !== null
+            ? $this->resolveReviewer($employeeId, (int) $requiredSort)
+            : $this->directSupervisor($employeeId);
+
+        $updates = ['updated_at' => $now];
+        if ($this->safeColumn('kanban_lead_tasks', 'status')) {
+            $updates['status'] = 'reported';
+        }
+        if ($this->safeColumn('kanban_lead_tasks', 'reviewer_employee_id')) {
+            $updates['reviewer_employee_id'] = $reviewerId;
+        }
+
+        DB::table('kanban_lead_tasks')
+            ->where('id', $cardId)
+            ->when($this->safeColumn('kanban_lead_tasks', 'deleted_at'), fn($q) => $q->whereNull('deleted_at'))
+            ->update($updates);
+    }
+
+    /** Karte auf 'done' setzen (spiegelt den bestehenden kanban_task-Zweig in markPlannerSourceDone). */
+    private function markKanbanCardDone(int $cardId, int $employeeId, Carbon $now): void
+    {
+        $updates = ['updated_at' => $now];
+        if ($this->safeColumn('kanban_lead_tasks', 'status')) {
+            $updates['status'] = 'done';
+        }
+        if ($this->safeColumn('kanban_lead_tasks', 'done_at')) {
+            $updates['done_at'] = $now;
+        }
+        if ($this->safeColumn('kanban_lead_tasks', 'done_by_employee_id')) {
+            $updates['done_by_employee_id'] = $employeeId;
+        }
+
+        DB::table('kanban_lead_tasks')
+            ->where('id', $cardId)
+            ->when($this->safeColumn('kanban_lead_tasks', 'deleted_at'), fn($q) => $q->whereNull('deleted_at'))
+            ->update($updates);
+    }
+
+    /** Qualifikations-Stufe (position_qualifications.sort_order) einer Person; null = keine Stufe. */
+    private function employeeQualSort(int $employeeId): ?int
+    {
+        if ($employeeId <= 0 || !Schema::hasTable('employees') || !Schema::hasTable('position_qualifications')) {
+            return null;
+        }
+
+        $qualId = DB::table('employees')->where('id', $employeeId)->value('qualification_id');
+        if (empty($qualId)) {
+            return null; // keine Stufe -> NICHT qualifiziert (konservativ)
+        }
+
+        $sort = DB::table('position_qualifications')->where('id', (int) $qualId)->value('sort_order');
+
+        return $sort === null ? null : (int) $sort;
+    }
+
+    /** Direkter Vorgesetzter (employees.supervisor) oder null. */
+    private function directSupervisor(int $employeeId): ?int
+    {
+        if ($employeeId <= 0 || !Schema::hasTable('employees')) {
+            return null;
+        }
+
+        $sup = (int) (DB::table('employees')->where('id', $employeeId)->value('supervisor') ?? 0);
+
+        return $sup > 0 ? $sup : null;
+    }
+
+    /**
+     * Pruefer ermitteln: supervisor-Kette aufsteigen, ERSTER der die Anforderung erfuellt.
+     * Fallback: direkter Supervisor (auch unqualifiziert). Kein Supervisor -> null.
+     * Zyklen-/Tiefen-Schutz (visited + max 15).
+     */
+    private function resolveReviewer(int $employeeId, int $requiredSort): ?int
+    {
+        $direct = $this->directSupervisor($employeeId);
+        if ($direct === null) {
+            return null; // kein Supervisor -> reported ohne Pruefer
+        }
+
+        $current = $direct;
+        $visited = [$employeeId];
+        $depth = 0;
+
+        while ($current !== null && $current > 0 && !in_array($current, $visited, true) && $depth < 15) {
+            $visited[] = $current;
+
+            $sort = $this->employeeQualSort($current);
+            if ($sort !== null && $sort <= $requiredSort) {
+                return $current; // ERSTER der die Anforderung erfuellt
+            }
+
+            $current = $this->directSupervisor($current);
+            $depth++;
+        }
+
+        return $direct; // Fallback: direkter Supervisor (auch unqualifiziert)
     }
 
     private function storePlannerItemReportMirror(
