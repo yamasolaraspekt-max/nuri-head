@@ -6254,6 +6254,9 @@
         {{-- PL-Prüfliste (Montage-Karten status='reported' beim eingeloggten Prüfer) --}}
         @include('admin.dashboard.employee.partials.reviews')
 
+        {{-- F3: "Meine Follow-ups" — 2. Sektion in "Mein Bereich", neben "Zu prüfen" --}}
+        @include('admin.dashboard.employee.partials.my-followups')
+
         <article class="widget col-span-8 row-span-4" data-widget-id="personalChart" data-widget-key="personalChart"
           data-widget-title="Meine Arbeitsstunden" data-widget-tags="analytics today">
           <div class="widget-header">

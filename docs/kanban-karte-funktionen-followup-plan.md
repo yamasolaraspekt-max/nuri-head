@@ -174,7 +174,7 @@ Exakt nach dem „Zu prüfen"-Muster (fa41c61, `partials/reviews.blade.php`):
 1. **Träger:** ✅ **`personal_tasks` (Termin-Muster verallgemeinern)** — **reversiert** die ursprüngliche lead_reminders-Wahl nach dem /home-Korrektur-Fund (Teil 2b). F1 = additive Spalten `follow_up_art` + `source_type` + `source_id` auf personal_tasks (+ `type='follow_up'`-Konvention); Loop (a,b,c) besteht bereits.
 2. **Abschluss-Dialog:** ✅ **optional anbietbar** (nicht erzwungen). „Vollständig erledigt" schließt ohne Follow-up; kein Zwang.
 3. **Erinnerung Stufe 1:** ✅ **nur Dashboard** (kein Mail/Push). ⚠️ Umsetzung mit personal_tasks: Follow-ups setzen **`next_reminder_at` NICHT** → der bestehende Scheduler (sendet Mail/Push) überspringt sie; Anzeige rein über `due_date` im Widget.
-4. **Widget:** ✅ **ein „Mein Bereich" mit zwei Sektionen** („Zu prüfen (N)" | „Meine Follow-ups (N)"), datenmäßig getrennt (Follow-up-Sektion filtert `type='follow_up'`).
+4. **Widget:** ✅ **ein „Mein Bereich" mit zwei Sektionen** („Zu prüfen (N)" | „Meine Follow-ups (N)"), datenmäßig getrennt (Follow-up-Sektion filtert `type='follow_up'`). **Interpretation (F3, keine Revision):** „Mein Bereich" = der Container `#view-personal`; die „2 Sektionen" sind die zwei **nebeneinanderstehenden Widgets** (reviews + my-followups) — kein Umbau des committeten reviews-Widgets.
 
 → **Nächster Schritt: F1 (Träger-Erweiterung auf personal_tasks) als eigener Pflicht-Stopp.**
 

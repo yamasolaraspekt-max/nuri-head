@@ -256,6 +256,32 @@ class EmployeeDashboardController extends Controller
             }
         }
 
+        // F3: "Meine Follow-ups" — offene Follow-up-personal_tasks, die bei MIR liegen
+        // (Pivot employees_personal_tasks = ich, type='follow_up'), sortiert nach Faelligkeit
+        // (ueberfaellig/frueheste zuerst, ohne Datum zuletzt). Eigenes Widget neben "Zu pruefen".
+        $followupDone = ['completed', 'pause', 'cancel', 'junk', 'rejected'];
+        $myFollowups = DB::table('personal_tasks as pt')
+            ->join('employees_personal_tasks as ept', 'ept.task_id', '=', 'pt.id')
+            ->leftJoin('new_leads as nl', 'nl.id', '=', 'pt.customer_id')
+            ->leftJoin('article_groups as ag', 'ag.id', '=', 'pt.product_id')
+            ->where('ept.employee_id', (int) $employeeId)
+            ->where('pt.type', 'follow_up')
+            ->whereNull('pt.deleted_at')
+            ->whereNotIn(DB::raw('LOWER(COALESCE(pt.task_status,""))'), $followupDone)
+            ->orderByRaw('pt.due_date IS NULL, pt.due_date ASC')
+            ->select(
+                'pt.id',
+                'pt.task_title',
+                'pt.follow_up_art',
+                'pt.due_date',
+                'pt.customer_id',
+                'nl.name as customer_name',
+                'nl.lastname as customer_lastname',
+                'nl.firma as customer_company',
+                'ag.article_group as product_name'
+            )
+            ->get();
+
         return view('admin.dashboard.employee.mobile', compact(
             'tasks',
             'appointments',
@@ -274,6 +300,7 @@ class EmployeeDashboardController extends Controller
             'myProjectCount',
             'reviews',
             'reviewMelder',
+            'myFollowups',
         ));
     }
 
@@ -834,6 +861,13 @@ class EmployeeDashboardController extends Controller
             ->whereNotIn(DB::raw('LOWER(COALESCE(ept.status,""))'), $doneLower)
             ->whereNotIn(DB::raw('LOWER(COALESCE(pt.task_status,""))'), $doneLower)
             ->whereDate('pt.due_date', $selectedDate)
+            // F3: Follow-ups (type='follow_up') laufen in der eigenen "Meine Follow-ups"-Sektion,
+            // NICHT doppelt in Focus-Today. NULL-sicher: pt.type='follow_up' allein wuerde in SQL
+            // auch type=NULL-Zeilen ausschliessen (NULL != 'x' ist nicht TRUE) -> bestehende
+            // normale Aufgaben (type=NULL) MUESSEN erhalten bleiben.
+            ->where(function ($q) {
+                $q->whereNull('pt.type')->orWhere('pt.type', '!=', 'follow_up');
+            })
             ->select(
                 'pt.id',
                 'pt.task_title as title',

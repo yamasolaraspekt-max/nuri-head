@@ -610,7 +610,14 @@ Route::get('/my/due-today', [EmployeeDashboardController::class, 'getDueToday'])
     ->name('my.due.today'); 
 Route::post('/my/mark-done', [EmployeeDashboardController::class, 'markAsDone'])
     ->middleware('auth')
-    ->name('my.mark.done'); 
+    ->name('my.mark.done');
+// F3: "Meine Follow-ups"-Aktionen (streng gescoped auf type='follow_up' + Pivot=ich, s. FollowUpController)
+Route::post('/followups/{task}/complete', [\App\Http\Controllers\FollowUpController::class, 'complete'])
+    ->middleware('auth')
+    ->name('followups.complete');
+Route::post('/followups/{task}/snooze', [\App\Http\Controllers\FollowUpController::class, 'snooze'])
+    ->middleware('auth')
+    ->name('followups.snooze');
 Route::get('/employee/dashboard/hr-widget', [EmployeeDashboardController::class, 'hrWidget'])
     ->name('employee.dashboard.hr_widget')
     ->middleware('auth');
