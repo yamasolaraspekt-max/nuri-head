@@ -61,7 +61,8 @@ class InvoiceCanvasController extends Controller
                 'deal_id' => null,
                 'offer_detail_id' => $offerDetail->id,
 
-                'invoice_no' => $this->makeInvoiceNo(),
+                // S1-01: Draft ohne Nummer. Die Rechnungsnummer entsteht erst bei
+                // Ausstellung über den InvoiceNumberService (Model-saving-Hook).
                 'type' => $data['type'],
                 'status' => 'draft',
 
@@ -707,24 +708,6 @@ class InvoiceCanvasController extends Controller
             'total_amount' => $totalAmount,
             'updated_by' => $this->employeeId(),
         ])->save();
-    }
-
-    private function makeInvoiceNo(): string
-    {
-        $prefix = 'RE-' . now()->format('y');
-
-        $lastNo = Invoice::query()
-            ->where('invoice_no', 'like', $prefix . '%')
-            ->orderByDesc('id')
-            ->value('invoice_no');
-
-        $next = 1;
-
-        if ($lastNo && preg_match('/(\d+)$/', $lastNo, $m)) {
-            $next = ((int) $m[1]) + 1;
-        }
-
-        return $prefix . str_pad((string) $next, 4, '0', STR_PAD_LEFT);
     }
 
     private function projectTitle(OfferDetail $offerDetail): string

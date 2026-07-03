@@ -170,7 +170,7 @@
             this.text('[data-doc-title]', doc.type || 'Rechnung');
             this.text('[data-doc-number]', doc.invoice_no ? '#' + doc.invoice_no : '');
             this.text('[data-preview-type]', (doc.type || 'Rechnung').toUpperCase());
-            this.text('[data-preview-invoice-no]', doc.invoice_no || 'Entwurf');
+            this.text('[data-preview-invoice-no]', doc.invoice_no || 'Nummer wird beim Senden vergeben');
             this.text('[data-preview-project-title]', this.projectTitle());
             this.text('[data-preview-issue-date]', this.formatDate(doc.issue_date));
             this.text('[data-preview-contact-person]', this.footerValue('contact_person') || company.contact_person || '');

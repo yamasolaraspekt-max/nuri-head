@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\InvoiceDeletionBlockedException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes; 
@@ -11,6 +12,22 @@ class NewLeads extends Model
 {
     use HasFactory, SoftDeletes;
     use AuditableLead;
+
+    protected static function booted(): void
+    {
+        static::deleting(function (self $lead): void {
+            if (!$lead->isForceDeleting()) {
+                return;
+            }
+
+            if (Invoice::where('customer_id', $lead->id)->exists()) {
+                throw new InvoiceDeletionBlockedException(
+                    'Dieser Kunde hat Rechnungen und darf nicht endgueltig geloescht werden.',
+                    'CUSTOMER_HAS_INVOICES'
+                );
+            }
+        });
+    }
 
    protected $fillable = [
         'customer_no',

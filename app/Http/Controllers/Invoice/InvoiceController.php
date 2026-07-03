@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceFile;
 use App\Models\InvoiceItem;
 use App\Models\NewLeads;
+use App\Services\Invoice\InvoiceDeletionGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -37,14 +38,29 @@ class InvoiceController extends Controller
         ]);
 
         $newStatus = $validated['status'];
-        $before = $this->invoiceHistorySnapshot($invoice->fresh(['items']));
 
-        $invoice->status = $newStatus;
-        $invoice->updated_by = $this->employeeId();
+        // S1-01: sent/paid/overdue -> draft ist gesperrt (Rücknahme nur via Storno, S1-04).
+        if ($newStatus === 'draft' && $invoice->isIssuedStatus((string) $invoice->status)) {
+            return response()->json([
+                'ok' => false,
+                'code' => 'STATUS_TRANSITION_INVALID',
+                'message' => 'Eine ausgestellte Rechnung kann nicht nach Entwurf zurückgesetzt werden. Bitte stornieren.',
+            ], 422);
+        }
 
-        $this->applyStatusAccounting($invoice, $newStatus);
-        $invoice->save();
-        $this->recordInvoiceHistory($invoice, 'status_changed', $before, $this->invoiceHistorySnapshot($invoice), 'Status geändert');
+        // S1-01: Statuswechsel + Nummernvergabe (über den Model-saving-Hook) laufen
+        // atomar in EINER Transaktion. Scheitert der Save, wird auch die reservierte
+        // Nummer zurückgerollt -> keine Nummernlücke (lückenlos, nicht nur -arm).
+        DB::transaction(function () use ($invoice, $newStatus) {
+            $before = $this->invoiceHistorySnapshot($invoice->fresh(['items']));
+
+            $invoice->status = $newStatus;
+            $invoice->updated_by = $this->employeeId();
+
+            $this->applyStatusAccounting($invoice, $newStatus);
+            $invoice->save();
+            $this->recordInvoiceHistory($invoice, 'status_changed', $before, $this->invoiceHistorySnapshot($invoice), 'Status geändert');
+        });
 
         $invoice->refresh();
 
@@ -205,13 +221,9 @@ class InvoiceController extends Controller
             $invoice->created_by = $this->employeeId();
             $invoice->updated_by = $this->employeeId();
 
-            // auto number if empty
-            if (empty($invoice->invoice_no)) {
-                $invoice->invoice_no = method_exists(Invoice::class, 'makeInvoiceNo')
-                    ? Invoice::makeInvoiceNo()
-                    : ('INV-' . now()->format('Ymd-His') . '-' . Str::upper(Str::random(4)));
-            }
-
+            // S1-01: KEINE Nummernvergabe beim Draft. Die Nummer entsteht ausschließlich
+            // über den InvoiceNumberService (Model-saving-Hook), sobald die Rechnung einen
+            // ausgestellten Status (sent/paid/overdue) erhält. Drafts bleiben invoice_no = NULL.
             $invoice->save();
 
             $this->syncItems($invoice, $validated['items'] ?? []);
@@ -271,6 +283,15 @@ class InvoiceController extends Controller
     public function destroy(Invoice $invoice)
     {
         return DB::transaction(function () use ($invoice) {
+            $result = app(InvoiceDeletionGuard::class)->canDeleteInvoice($invoice);
+            if (!$result->allowed) {
+                return response()->json([
+                    'ok' => false,
+                    'code' => $result->code,
+                    'message' => $result->message,
+                ], 422);
+            }
+
             $invoice->loadMissing('files:id,invoice_id,stored_path');
 
             foreach ($invoice->files as $f) {
@@ -518,6 +539,15 @@ class InvoiceController extends Controller
 
     public function deleteFile(InvoiceFile $file)
     {
+        $result = app(InvoiceDeletionGuard::class)->canDeleteFile($file);
+        if (!$result->allowed) {
+            return response()->json([
+                'ok' => false,
+                'code' => $result->code,
+                'message' => $result->message,
+            ], 422);
+        }
+
         $invoice = $file->invoice;
         if ($invoice) {
             $this->recordInvoiceHistory($invoice, 'file_deleted', [

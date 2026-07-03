@@ -2679,7 +2679,7 @@
                 if (els.docTitle) els.docTitle.textContent = type;
                 if (els.docNumber) els.docNumber.textContent = doc.invoice_no ? `#${doc.invoice_no}` : '';
                 if (els.previewType) els.previewType.textContent = type.toUpperCase();
-                if (els.previewInvoiceNo) els.previewInvoiceNo.textContent = doc.invoice_no || 'Entwurf';
+                if (els.previewInvoiceNo) els.previewInvoiceNo.textContent = doc.invoice_no || 'Nummer wird beim Senden vergeben';
                 if (els.previewProjectTitle) els.previewProjectTitle.textContent = object.name || object.full_address || auftrag.offer_no || 'Projekt';
                 if (els.previewIssueDate) els.previewIssueDate.textContent = formatDate(getField('issue_date'));
                 if (els.previewContactPerson) els.previewContactPerson.textContent = companyData().contact_person || companyData().contactPerson || '';
@@ -3336,7 +3336,7 @@
             function continuationHeaderHtml(pageNo) {
                 const doc = documentData();
                 const type = escapeHtml((getField('type') || doc.type || 'Rechnung').toUpperCase());
-                const invoiceNo = escapeHtml(doc.invoice_no || 'Entwurf');
+                const invoiceNo = escapeHtml(doc.invoice_no || 'Nummer wird beim Senden vergeben');
                 const project = escapeHtml(objectData().name || objectData().full_address || auftragData().offer_no || 'Projekt');
 
                 return `

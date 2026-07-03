@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Exceptions\InvoiceStatusTransitionException;
+use App\Exceptions\InvoiceDeletionBlockedException;
+use App\Services\Invoice\InvoiceDeletionGuard;
+use App\Services\Invoice\InvoiceNumberService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -10,6 +14,47 @@ class Invoice extends Model
     use SoftDeletes;
 
     public const STATUS = ['draft', 'sent', 'paid', 'overdue', 'cancelled'];
+
+    /** S1-01 (D1-A): Status, die als „ausgestellt/final" gelten und eine Nummer erhalten. */
+    public const ISSUED_STATUSES = ['sent', 'paid', 'overdue'];
+
+    protected static function booted(): void
+    {
+        // S1-01: EINZIGE Vergabestelle. Beim Speichern einer ausgestellten Rechnung
+        // ohne Nummer wird sie über den InvoiceNumberService reserviert (idempotent).
+        static::saving(function (self $invoice): void {
+            if (empty($invoice->invoice_no) && $invoice->isIssuedStatus($invoice->status)) {
+                app(InvoiceNumberService::class)->reserve($invoice);
+            }
+        });
+
+        // S1-01: sent/paid/overdue -> draft ist gesperrt (Rücknahme nur via Storno, S1-04).
+        static::updating(function (self $invoice): void {
+            if ($invoice->isDirty('status')
+                && (string) $invoice->status === 'draft'
+                && $invoice->isIssuedStatus((string) $invoice->getOriginal('status'))
+            ) {
+                throw new InvoiceStatusTransitionException(
+                    'Eine ausgestellte Rechnung kann nicht nach Entwurf zurückgesetzt werden. Bitte stornieren.'
+                );
+            }
+        });
+
+        // S1-02: Defense-in-depth gegen direkte $invoice->delete()-Aufrufe.
+        static::deleting(function (self $invoice): void {
+            $result = app(InvoiceDeletionGuard::class)->canDeleteInvoice($invoice);
+
+            if (!$result->allowed) {
+                throw new InvoiceDeletionBlockedException($result->message, $result->code);
+            }
+        });
+    }
+
+    /** True, wenn der (angegebene oder eigene) Status als ausgestellt/final gilt. */
+    public function isIssuedStatus(?string $status = null): bool
+    {
+        return in_array($status ?? (string) $this->status, self::ISSUED_STATUSES, true);
+    }
 
     protected $fillable = [
         'account_id',
@@ -145,21 +190,4 @@ class Invoice extends Model
         return $this;
     }
 
-    public static function makeInvoiceNo(): string
-    {
-        $prefix = 'RE-' . now()->format('y');
-
-        $lastNo = static::query()
-            ->where('invoice_no', 'like', $prefix . '%')
-            ->orderByDesc('id')
-            ->value('invoice_no');
-
-        $next = 1;
-
-        if ($lastNo && preg_match('/(\d+)$/', $lastNo, $m)) {
-            $next = ((int) $m[1]) + 1;
-        }
-
-        return $prefix . str_pad((string) $next, 4, '0', STR_PAD_LEFT);
-    }
 }

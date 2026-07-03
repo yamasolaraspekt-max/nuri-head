@@ -114,15 +114,21 @@ class DemoCrmPipelineSeeder extends Seeder
                 continue;
             }
             $paid = $pick([true, false]);
-            DB::table('invoices')->insert([
+            // S1-01/D2-A: keine eigene Nummernlogik im Seeder mehr. Ausgestellte Demo-Rechnungen
+            // erhalten ihre Nummer ausschließlich über den führenden InvoiceNumberService
+            // (Model-saving-Hook). Produktiver Lebenszyklus (paid/sent) statt Legacy-Status 'open'.
+            $demoInvoice = new \App\Models\Invoice();
+            $demoInvoice->forceFill([
                 'customer_id' => $l->customer_id, 'object_id' => $l->alternative_id, 'deal_id' => $dealId,
-                'invoice_no' => 'RE-' . date('Y') . '-' . str_pad((string) $i, 5, '0', STR_PAD_LEFT), 'type' => 'final',
-                'status' => $paid ? 'paid' : 'open', 'issue_date' => $now->copy()->subDays(rand(1, 60))->toDateString(),
+                'type' => 'final',
+                'status' => $paid ? 'paid' : 'sent',
+                'issue_date' => $now->copy()->subDays(rand(1, 60))->toDateString(),
                 'due_date' => $now->copy()->addDays(14)->toDateString(), 'currency' => 'EUR',
                 'subtotal' => $net, 'tax_rate' => 19, 'tax_amount' => round($gross - $net, 2), 'total_amount' => $gross,
                 'paid_amount' => $paid ? $gross : 0, 'paid_at' => $paid ? $now->copy()->subDays(rand(1, 30)) : null,
                 'created_by' => $emp, 'created_at' => $now, 'updated_at' => $now,
             ]);
+            $demoInvoice->save();
             $nIn++;
         }
 
