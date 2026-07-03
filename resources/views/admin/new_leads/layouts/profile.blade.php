@@ -5115,7 +5115,49 @@ $leadHistoryUrl = \Illuminate\Support\Facades\Route::has('customers.history.show
                                     {{ $customer->email }}
                                 </span>
                             @endif
+
+                            {{-- Jitsi Videocall: Start-Button (F1) — nur bei aktiviertem Feature --}}
+                            @if(config('jitsi.enabled'))
+                                <span>
+                                    <form action="{{ route('video-calls.store', $customer->id) }}" method="POST"
+                                          target="_blank" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" title="Video-Call mit dem Kunden starten"
+                                            style="display:inline-flex;align-items:center;gap:4px;border:0;background:#93c21c;color:#fff;border-radius:4px;padding:2px 8px;font-size:12px;cursor:pointer;">
+                                            <i class="feather icon-video"></i> Video-Call
+                                        </button>
+                                    </form>
+                                </span>
+                            @endif
                         </div>
+
+                        {{-- Jitsi Videocall: schlichte read-only Liste der bisherigen Kunden-Calls (Leitplanke 2) --}}
+                        @if(config('jitsi.enabled') && \Illuminate\Support\Facades\Schema::hasTable('video_calls'))
+                            @php
+                                $customerVideoCalls = \App\Models\VideoCall::with('creator.employee')
+                                    ->where('customer_id', $customer->id)
+                                    ->whereNotNull('customer_id')
+                                    ->latest()->limit(10)->get();
+                            @endphp
+                            @if($customerVideoCalls->isNotEmpty())
+                                <div class="cn-videocalls" style="margin-top:8px;font-size:12px;">
+                                    <div style="color:#6b7280;text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px;">Video-Calls</div>
+                                    @foreach($customerVideoCalls as $vc)
+                                        @php
+                                            $emp = optional($vc->creator)->employee;
+                                            $creatorName = $emp ? trim(($emp->name ?? '').' '.($emp->lastname ?? '')) : (optional($vc->creator)->name ?? '');
+                                            $statusLabel = ['created' => 'gestartet', 'active' => 'aktiv', 'ended' => 'beendet'][$vc->status] ?? $vc->status;
+                                        @endphp
+                                        <div style="display:flex;gap:10px;padding:2px 0;border-top:1px solid #f0f0f0;">
+                                            <span>{{ optional($vc->created_at)->format('d.m.Y H:i') }}</span>
+                                            <span>{{ $creatorName !== '' ? $creatorName : '—' }}</span>
+                                            <span>{{ $statusLabel }}</span>
+                                            <span>{{ $vc->durationHuman() ?: '—' }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        @endif
                     </div>
                 </div>
 

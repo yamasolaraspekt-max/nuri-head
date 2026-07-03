@@ -6983,6 +6983,11 @@
                     </div>
 
                     <div style="display:flex;align-items:center;gap:4px;">
+                        @if(config('jitsi.enabled'))
+                        <button type="button" class="icon-btn chat-video-btn" style="width:28px;height:28px;" title="Video-Call starten">
+                            <i data-lucide="video" class="icon-sm"></i>
+                        </button>
+                        @endif
                         <button type="button" class="icon-btn chat-minimize-btn" style="width:28px;height:28px;" title="Minimieren">
                             <i data-lucide="minus" class="icon-sm"></i>
                         </button>
@@ -11141,6 +11146,43 @@
 
 @stack('scripts')
 @yield('script')
+
+@if(config('jitsi.enabled'))
+{{-- Jitsi Videocall: interner Call aus dem Messenger-Header (Kollege <-> Kollege) --}}
+<script>
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest ? e.target.closest('.chat-video-btn') : null;
+        if (!btn) return;
+        var popup = btn.closest('.chat-popup');
+        if (!popup) return;
+        var type = popup.getAttribute('data-chat-type');
+        var id = popup.getAttribute('data-chat-id');
+        if (!id) return;
+
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = @json(url('/video-calls/intern'));
+        form.target = '_blank';
+
+        var meta = document.querySelector('meta[name="csrf-token"]');
+        var token = document.createElement('input');
+        token.type = 'hidden';
+        token.name = '_token';
+        token.value = meta ? meta.getAttribute('content') : @json(csrf_token());
+        form.appendChild(token);
+
+        var field = document.createElement('input');
+        field.type = 'hidden';
+        field.name = (type === 'group') ? 'group_id' : 'to_user_id';
+        field.value = id;
+        form.appendChild(field);
+
+        document.body.appendChild(form);
+        form.submit();
+        form.remove();
+    });
+</script>
+@endif
 </body>
 
 </html>

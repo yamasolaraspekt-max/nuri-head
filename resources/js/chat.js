@@ -4447,6 +4447,17 @@ function addMessage(msg, isMine, isNew = false) {
         bubble.classList.add("news-solar");
     }
 
+    // VIDEO-CALL: type='video_call' — Text + "Beitreten"-Button; Marker ##VIDEOCALL:url## wird entfernt.
+    const isVideoCall = t === "video_call";
+    let videoCallUrl = null;
+    if (isVideoCall) {
+        const vcMatch = rawMsg.match(/##VIDEOCALL:(.+?)##/);
+        if (vcMatch) {
+            videoCallUrl = vcMatch[1];
+        }
+        displayText = rawMsg.replace(/\s*##VIDEOCALL:.+?##/, "").trim();
+    }
+
     // TEXT
     let msgText = null;
     if (rawMsg && !msg.deleted_at) {
@@ -4501,6 +4512,22 @@ function addMessage(msg, isMine, isNew = false) {
         } else {
             content.appendChild(msgText);
         }
+    }
+
+    // VIDEO-CALL: Beitreten-Button (fuehrt zur Mitarbeiter-Ansicht des Calls)
+    if (isVideoCall && videoCallUrl) {
+        const joinWrap = document.createElement("div");
+        joinWrap.className = "mt-2";
+        const joinBtn = document.createElement("a");
+        joinBtn.href = videoCallUrl;
+        joinBtn.target = "_blank";
+        joinBtn.rel = "noopener";
+        joinBtn.className =
+            "inline-flex items-center gap-1 px-3 py-1 rounded text-white text-sm no-underline";
+        joinBtn.style.background = "#93c21c";
+        joinBtn.innerHTML = `<i data-feather="video" class="w-4 h-4"></i> Beitreten`;
+        joinWrap.appendChild(joinBtn);
+        content.appendChild(joinWrap);
     }
 
     // VOICE / AUDIO
