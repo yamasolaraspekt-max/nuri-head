@@ -30,22 +30,53 @@ class CustomerReportController extends Controller
 
 public function store(Request $request)
 {
-    $request->validate([
+    $data = $request->validate([
         'product_id' => 'required',
         'customer_id' => 'required',
         'alternative_id' => 'required',
         'stage' => 'required',
-        'report' => 'required'
+        'report' => 'required',
+
+        // F4: optionaler Follow-up-Abschluss-Dialog (gleicher Ansatz wie Notiz).
+        'follow_up_outcome' => ['nullable', \Illuminate\Validation\Rule::in(['keine', 'nachfass', 'weitere_aufgaben'])],
+        'follow_up_next_step' => ['nullable', 'required_if:follow_up_outcome,nachfass,weitere_aufgaben', 'string', 'max:5000'],
+        'follow_up_due_date' => ['nullable', 'required_if:follow_up_outcome,nachfass,weitere_aufgaben', 'date'],
+        'follow_up_responsible' => ['nullable', 'integer', 'exists:employees,id'],
     ]);
 
-    CustomerReport::create([
-        'product_id' => $request->product_id,
-        'customer_id' => $request->customer_id,
-        'alternative_id' => $request->alternative_id,
-        'stage' => $request->stage,
-        'report' => $request->report,
-        'report_by' => auth()->user()->name,
-    ]);
+    $employeeId = (int) auth()->user()->name;
+
+    \Illuminate\Support\Facades\DB::transaction(function () use ($request, $data, $employeeId) {
+        $report = CustomerReport::create([
+            'product_id' => $request->product_id,
+            'customer_id' => $request->customer_id,
+            'alternative_id' => $request->alternative_id,
+            'stage' => $request->stage,
+            'report' => $request->report,
+            'report_by' => auth()->user()->name,
+        ]);
+
+        // Follow-up nur bei Nachfass/weitere-Aufgaben; source_type='customer_report'.
+        if (in_array($data['follow_up_outcome'] ?? 'keine', ['nachfass', 'weitere_aufgaben'], true)) {
+            app(\App\Services\FollowUp\FollowUpCreator::class)->sync(
+                'customer_report',
+                (int) $report->id,
+                [
+                    'customer_id'    => $report->customer_id,
+                    'alternative_id' => $report->alternative_id,
+                    'product_id'     => $report->product_id,
+                    'description'    => 'Aus Kundenbericht',
+                ],
+                [
+                    'follow_up_art' => \App\Services\FollowUp\FollowUpCreator::artFromOutcome($data['follow_up_outcome'] ?? null),
+                    'next_step'     => $data['follow_up_next_step'] ?? '',
+                    'due_date'      => $data['follow_up_due_date'] ?? null,
+                    'responsible'   => $data['follow_up_responsible'] ?? null,
+                ],
+                $employeeId
+            );
+        }
+    });
 
     return response()->json(['success' => true]);
 }
