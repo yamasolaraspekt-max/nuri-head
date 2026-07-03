@@ -5426,6 +5426,29 @@ Route::middleware(['auth'])
         });
 
 
+// ===== Jitsi Videocall-Integration (additiv; Feature-Flag JITSI_ENABLED steuert 404) =====
+Route::middleware('auth')->group(function () {
+    // Kunden-Call (F4: new-leads, Binding auf NewLeads)
+    Route::post('/new-leads/{newLead}/video-calls', [\App\Http\Controllers\VideoCallController::class, 'store'])
+        ->name('video-calls.store');
+    // Interner Call (Kollege <-> Kollege) — VOR der {videoCall}-Route, defensiv
+    Route::post('/video-calls/intern', [\App\Http\Controllers\VideoCallController::class, 'intern'])
+        ->name('video-calls.intern');
+    // Mitarbeiter-Ansicht (Moderator)
+    Route::get('/video-calls/{videoCall}', [\App\Http\Controllers\VideoCallController::class, 'show'])
+        ->name('video-calls.show');
+    // Beenden
+    Route::post('/video-calls/{videoCall}/ende', [\App\Http\Controllers\VideoCallController::class, 'ende'])
+        ->name('video-calls.ende');
+    // Gast-Einladungen (Phase 3b)
+    Route::post('/video-calls/{videoCall}/einladungen', [\App\Http\Controllers\VideoCallController::class, 'einladungen'])
+        ->name('video-calls.einladungen');
+});
+// Gast-Ansicht ohne Login (Signatur im Controller geprueft -> saubere deutsche Fehlerseite)
+Route::get('/video-call/gast/{videoCall}', [\App\Http\Controllers\VideoCallController::class, 'guest'])
+    ->name('video-call.guest');
+
+
     
 
 
