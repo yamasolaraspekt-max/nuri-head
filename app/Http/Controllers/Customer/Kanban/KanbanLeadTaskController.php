@@ -565,10 +565,17 @@ class KanbanLeadTaskController extends Controller
             'appointment_type' => ['nullable', 'string', 'max:100'],
             'appointment_contact_mode' => ['nullable', 'string', 'max:100'],
             'appointment_priority' => ['nullable', 'string', 'max:50'],
+
+            // F4: optionaler Follow-up-Abschluss-Dialog (nur beim Buero-Direkt-Abschluss done).
+            'follow_up_outcome' => ['nullable', Rule::in(['keine', 'nachfass', 'weitere_aufgaben'])],
+            'follow_up_next_step' => ['nullable', 'required_if:follow_up_outcome,nachfass,weitere_aufgaben', 'string', 'max:5000'],
+            'follow_up_due_date' => ['nullable', 'required_if:follow_up_outcome,nachfass,weitere_aufgaben', 'date'],
+            'follow_up_responsible' => ['nullable', 'integer', 'exists:employees,id'],
         ]);
 
         DB::transaction(function () use ($task, $data) {
             $employeeId = $this->authEmployeeId();
+            $oldStatus = $task->getOriginal('status'); // vor der Zuweisung (fuer den Follow-up-Guard)
 
             $task->status = $data['status'];
 
@@ -605,6 +612,32 @@ class KanbanLeadTaskController extends Controller
             }
 
             $this->createExternalTaskLinks($task, $data, $employeeId);
+
+            // F4: Follow-up NUR beim Buero-Direkt-Abschluss (done aus NICHT-reported-Zustand),
+            // NICHT bei der PL-Bestaetigung (reported->done) -> kein Doppel-Andock. Und nur, wenn
+            // der optionale Dialog einen Ausgang traegt.
+            if ($data['status'] === 'done'
+                && $oldStatus !== 'reported'
+                && in_array($data['follow_up_outcome'] ?? 'keine', ['nachfass', 'weitere_aufgaben'], true)) {
+                app(\App\Services\FollowUp\FollowUpCreator::class)->sync(
+                    'kanban_lead_task',
+                    (int) $task->id,
+                    [
+                        'customer_id'          => $task->customer_id,
+                        'alternative_id'       => $task->alternative_id,
+                        'product_id'           => $task->product_id,
+                        'lead_product_list_id' => $task->lead_product_list_id,
+                        'description'          => 'Aus Aufgabe: ' . \Illuminate\Support\Str::limit(strip_tags((string) ($task->title ?? '')), 200),
+                    ],
+                    [
+                        'follow_up_art' => \App\Services\FollowUp\FollowUpCreator::artFromOutcome($data['follow_up_outcome'] ?? null),
+                        'next_step'     => $data['follow_up_next_step'] ?? '',
+                        'due_date'      => $data['follow_up_due_date'] ?? null,
+                        'responsible'   => $data['follow_up_responsible'] ?? null,
+                    ],
+                    (int) $employeeId
+                );
+            }
         });
 
         return response()->json([
