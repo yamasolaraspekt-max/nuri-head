@@ -382,3 +382,11 @@ Offene Bau-Schritte (kein Entscheidungsbedarf mehr, nur noch Umsetzung, je mit P
 3. Progressbar später auf lead_stages/planner ausrichten (Basis steht, gebaut).
 4. Felder an Arbeitsschritte koppeln (niedrige Prio).
 Alle Bau-Schritte hängen jetzt auf ENTSCHIEDENEM Boden — keine Weichen mehr offen im Kernprozess-Ausführungsteil.
+
+---
+
+## VIDEO-CALL via Jitsi (Feature-Flag)
+
+Kunden- und interne Calls über `video_calls` + `JitsiService`; Systemnachricht `type='video_call'` im bestehenden Chat (MessageSent/Reverb); signierte, zeitlich begrenzte **Gast-Links** nur für Kunden-Calls (intern kein Externen-Zugang); Domain/Secrets per `.env`; JWT pures PHP HS256, nur bei `JITSI_JWT_ENABLED`. Berührt Weiche 1/5/6 nicht. Ausgeliefert deaktiviert (`JITSI_ENABLED=false`).
+
+Verifiziert am 2026-07-04 (migrate, route:list, 11 Feature-Tests grün).
