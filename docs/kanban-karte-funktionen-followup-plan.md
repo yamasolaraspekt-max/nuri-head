@@ -97,7 +97,9 @@ Schema: CRM-Refs (customer/alternative/product/lead_product_list/lead_stage), `a
 | Altdaten-Last | 0 | 0 |
 | fehlende Spalten | 5 additive (§5) | outcome/art/source-ref fehlen ebenso; Board-Semantik im Weg |
 
-**EMPFEHLUNG: `lead_reminders` erweitern.** Begründung: bereits karten-verdrahtet, lead-nativ, `due()` = fertige Dashboard-Query, und die **dashboard-only Erinnerung (Stufe 1)** passt zu seinem passiven `notified_at`-Modell — personal_tasks' aktiver Sender ist mehr als Stufe 1 braucht und sein Board-Charakter zieht die Follow-up-Semantik in die falsche Richtung. Deckt sich mit `follow-up-bestandsaufnahme.md`. *(Kippt Richtung personal_tasks/generisches `reminders` nur, falls Follow-ups an Nicht-Lead-Vorgänge hängen sollen — dann polymorpher Träger nötig.)*
+> **⚠️ ÜBERHOLT durch Teil 2b (2026-07-03).** Die folgende Empfehlung galt bis zum /home-Korrektur-Fund; sie ruhte auf der FALSCHEN Prämisse „personal_tasks nicht auf /home". **Gültige Empfehlung: personal_tasks (Teil 2b).** Der Absatz bleibt als ehrlicher Trail stehen.
+
+**~~EMPFEHLUNG: `lead_reminders` erweitern.~~** Begründung (überholt): bereits karten-verdrahtet, lead-nativ, `due()` = fertige Dashboard-Query, und die **dashboard-only Erinnerung (Stufe 1)** passt zu seinem passiven `notified_at`-Modell — personal_tasks' aktiver Sender ist mehr als Stufe 1 braucht und sein Board-Charakter zieht die Follow-up-Semantik in die falsche Richtung. *(Der Board-Charakter-Einwand war der Fehler: das Focus-Today-Widget zeigt personal_tasks sehr wohl auf /home.)*
 
 ---
 ## TEIL 2b — NACHTRAG (2026-07-03): Korrektur + dritter Träger-Kandidat → Empfehlung gekippt
@@ -118,6 +120,8 @@ Schema: CRM-Refs (customer/alternative/product/lead_product_list/lead_stage), `a
 | „EINE Wahrheit" | cards→lead_reminders = **2. Wahrheit** | Termine nutzen es → **eine Wahrheit** |
 
 **Empfehlung revidiert → `personal_tasks` (Termin-Muster verallgemeinern).** Meine ursprüngliche lead_reminders-Empfehlung ruhte auf der falschen Prämisse „nicht auf /home". Korrigiert kippt das Kernprinzip („EINE Wahrheit, nicht das 6. System danebenbauen") zu personal_tasks: (a,b,c) laufen schon, Termine nutzen es. **Preis:** 3-Tabellen-Struktur + JSON-Zuweisung (Komplexität). **Yama-Entscheidung 2026-07-03: `personal_tasks`** (Entscheidung 1 unten reversiert).
+
+**`lead_reminders` — ausdrücklich VERWORFEN als Follow-up-Träger** (nicht erweitern). Langfrist-Los, damit die 5-Systeme-Landschaft eine Endaussage hat: `lead_reminders` bleibt vorerst **Legacy** in seiner **einen** heutigen Nutzung — der leichte Stage-Wechsel-Reminder als Karten-Badge (`createReminderFromStageChange` → `cardSummaries`), live **0 Zeilen**. Es wird **nicht** erweitert und **nicht** parallel bespielt. **Ziel-Endzustand:** die Stage-Wechsel-Reminder-Erzeugung **mündet später** (eigener Konsolidierungs-Schritt, NACH F1-F5) in den `personal_tasks`-Follow-up-Träger (ein Stage-Wechsel-mit-Nachverfolgung wird ein Follow-up-`personal_task` mit `source_type='lead_product_list'`), dann wird `lead_reminders` retiriert. Bis dahin: **eine** Follow-up-Wahrheit (`personal_tasks`) + ein eingefrorenes Legacy-Badge (`lead_reminders`), **keine** zwei aktiven Follow-up-Systeme.
 
 ---
 ## TEIL 3 — DESIGN (nicht bauen)
