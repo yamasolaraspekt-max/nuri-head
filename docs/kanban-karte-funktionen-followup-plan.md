@@ -146,11 +146,13 @@ Exakt nach dem „Zu prüfen"-Muster (fa41c61, `partials/reviews.blade.php`):
 **Sequenz:** F1 → F2 → F3 → F5(F2-Fälle) → F4. Jede Stufe eigener Pflicht-Stopp.
 
 ---
-## GESAMMELTE YAMA-ENTSCHEIDUNGEN
-1. **Träger:** `lead_reminders` erweitern **(Empfehlung)** oder `personal_tasks`?
-2. **Abschluss-Dialog:** Pflicht bei **jedem** Erledigen (erzwungen) oder optional anbietbar?
-3. **Erinnerung Stufe 1 = nur Dashboard** (kein Mail/Push) — bestätigt?
-4. **Widget:** eigenes „Meine Follow-ups" **neben** „Zu prüfen", oder **ein** „Mein Bereich" mit zwei Sektionen **(Empfehlung §9-iii)**?
+## YAMA-ENTSCHEIDUNGEN (getroffen 2026-07-03 — Design verbindlich)
+1. **Träger:** ✅ **`lead_reminders` erweitern** (nicht personal_tasks). → F1 = +5 additive Spalten (§5).
+2. **Abschluss-Dialog:** ✅ **optional anbietbar** (nicht erzwungen). „Vollständig erledigt" schließt ohne Follow-up; kein Zwang.
+3. **Erinnerung Stufe 1:** ✅ **nur Dashboard** (kein Mail/Push). Aktive Erinnerung = Stufe 2 später.
+4. **Widget:** ✅ **ein „Mein Bereich" mit zwei Sektionen** („Zu prüfen (N)" | „Meine Follow-ups (N)"), datenmäßig getrennt.
+
+→ **Nächster Schritt: F1 (Träger-Erweiterung) als eigener Pflicht-Stopp.**
 
 ---
 ## Gelesen / NICHT gelesen (ehrlich)
