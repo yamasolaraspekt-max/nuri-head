@@ -179,6 +179,15 @@ Exakt nach dem „Zu prüfen"-Muster (fa41c61, `partials/reviews.blade.php`):
 → **Nächster Schritt: F1 (Träger-Erweiterung auf personal_tasks) als eigener Pflicht-Stopp.**
 
 ---
+## F4 — Umsetzungsnotiz (2026-07-03, gebaut)
+- **Geteilter Service** `App\Services\FollowUp\FollowUpCreator` = EINE Erzeugungs-Stelle (Notiz/kanban_lead_task/Kundenbericht/Termin), **UPSERT by (source_type, source_id)** → ein Quell-Objekt hat höchstens EIN Follow-up (Termin-Update dupliziert nicht).
+- **`source_type` = belegte 6er-Liste** (`FollowUpCreator::SOURCE_TYPES`): `customer_note`, `kanban_lead_task`, `customer_report`, `lead_product_list`, `appointment_report` + **F4-Termin: `main_appointment`** (6. Wert, bewusst ergänzt — die ursprünglich „fixe 5er-Liste" ist damit eine belegte 6er-Liste, kein stilles Wildern).
+- **kanban_lead_task:** Dialog an `updateStatus` mit Guard `getOriginal('status') !== 'reported'` → nur Büro-Direkt-Abschluss, nicht PL-Bestätigung.
+- **Termin-Konvergenz (Ansatz A):** beide Legacy-Pfade (`syncAppointmentPersonalTask` + Inline-Block in `update()`) erzeugen jetzt `type='follow_up'` via Service, `source_type='main_appointment'`, `follow_up_art=NULL` (kein Outcome-Dialog); `next_step→task_title`, `reminder_date→due_date`, `report_responsible→Verantwortliche` 1:1. Legacy-Kosmetik (PersonalTaskKey/Attendee-Pivot/color/priority/start_date) entfällt (Follow-up ≠ Termin-Kachel).
+- **Bestand (2d):** **0** main_appointments mit `task_id`, 0 verknüpfte personal_tasks → **kein Backfill nötig**; neue Termin-Follow-ups sind `type='follow_up'`. (Bei künftigem Bestand: umkehrbar type+source nachsetzen.)
+- **Widget:** `follow_up_art=NULL` (Termin) rendert **kein** Art-Badge (Badge nur bei nachfass/wiederaufnahme).
+
+---
 ## Gelesen / NICHT gelesen (ehrlich)
 **Geprüft (wörtlich, via 3 Explore-Agenten Datei:Zeile + live):** Karten-Menü `kanban.blade.php:2141-2217` + `kanban.js` (Handler 12235/17030/4527); `LeadReminderController` store/due/context/cardSummaries/done (:15-225 wörtlich); `PersonalTaskController@store` (:684-840) + `ProcessPersonalTaskScheduler` (Reminder-Engine); `completeItemWithReport` next_step/due_date-Ziele (:2065/2115/2161) + Leser (`OverdueCenterController:2758`, `DashboardCalendarWidgetController:219`); Dashboard-Einbindung (`mobile.blade.php:6255` @include reviews; `/home`→EmployeeDashboardController web.php:604); Schemas + Live-Counts (lead_reminders/personal_tasks=0, general_tasks=45).
 **NUR gegrept / NICHT VERIFIZIERT:** ob eine der beiden Aufgaben-Funktionen (personal_tasks vs. kanban_lead_tasks) auf der Karte die **dominante** ist (Nutzungshäufigkeit nicht messbar, 0 Live-Zeilen personal_tasks); genaues Frontend-Verhalten des Abschluss-Buttons je Flow (nur Endpunkte, nicht jeder Klickpfad durchgespielt); ob `customer_notes`/`customer_reports` irgendwo doch einen Leser mit Fälligkeit haben (Agent fand keinen — Grep, nicht erschöpfend); der genaue „Erinnerung X Tage vorher"-Speicherweg (Meta vs. eingerechnetes Datum) = Design-offen; `general_tasks` (45 Zeilen) bewusst **außen vor** gelassen (nicht karten-gebunden).

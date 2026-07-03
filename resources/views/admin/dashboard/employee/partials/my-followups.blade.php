@@ -27,7 +27,7 @@
                     $kunde = trim(($fu->customer_name ?? '') . ' ' . ($fu->customer_lastname ?? ''));
                     $kunde = $kunde !== '' ? $kunde : ($fu->customer_company ?? ('Kunde #' . $fu->customer_id));
                     $gewerk = $fu->product_name ?? '–';
-                    $artLabel = ($fu->follow_up_art === 'wiederaufnahme') ? 'Wiederaufnahme' : 'Nachfass';
+                    $artLabel = $fu->follow_up_art === 'wiederaufnahme' ? 'Wiederaufnahme' : ($fu->follow_up_art === 'nachfass' ? 'Nachfass' : null);
                     $overdue = $fu->due_date && $fu->due_date < $today;
                 @endphp
                 <div class="pl-review-item" data-followup-id="{{ $fu->id }}"
@@ -39,7 +39,7 @@
                         <span class="fu-due" @if($overdue) style="color:#dc2626;font-weight:600;" @endif>
                             <strong>Fällig:</strong> {{ $fu->due_date ? \Illuminate\Support\Carbon::parse($fu->due_date)->format('d.m.Y') : '—' }}@if($overdue) (überfällig)@endif
                         </span>
-                        <span class="pill">{{ $artLabel }}</span>
+                        @if($artLabel)<span class="pill">{{ $artLabel }}</span>@endif
                     </div>
                     <div class="pl-review-actions" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
                         <button type="button" class="fu-complete pill danger" data-id="{{ $fu->id }}"

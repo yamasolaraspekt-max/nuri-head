@@ -1250,77 +1250,30 @@ public function status(Request $request)
             ]);
         }
 
-        // 🧠 Update or create personal task
+        // 🧠 Follow-up (Termin-Konvergenz F4/Ansatz A): EIN Follow-up ueber den geteilten Service,
+        // statt der Legacy-Doppel-Erzeugung. UPSERT by (source_type='main_appointment',
+        // source_id=appointment.id) -> Update erzeugt KEIN zweites Follow-up, sondern aktualisiert.
+        // type='follow_up', art=NULL; next_step->task_title, reminder_date->due_date,
+        // report_responsible->Verantwortliche (1:1).
         if ($request->reminder_date && $request->next_step && $request->report_responsible) {
-            if ($appointment->task_id) {
-                // UPDATE existing task
-                $task = \App\Models\PersonalTask::find($appointment->task_id);
-                if ($task) {
-                    $task->update([
-                        'task_title'     => $finalName,
-                        'description'    => $request->description,
-                        'priority'       => $validated['priority'],
-                        'color'          => $request->color ?? '#8fc73e',
-                        'public'         => $request->public === 'on' ? '1' : '0',
-                        'start_date'     => $startDate->toDateString(),
-                        'due_date'       => $request->reminder_date,
-                        'reminder_date'  => $request->reminder_date,
-                        'controller_id'  => is_array($request->report_responsible)
-                                            ? json_encode($request->report_responsible)
-                                            : $request->report_responsible,
-                    ]);
+            $followUpTask = app(\App\Services\FollowUp\FollowUpCreator::class)->sync(
+                'main_appointment',
+                (int) $appointment->id,
+                [
+                    'customer_id' => $appointment->customer_id ?: $request->input('customer_id'),
+                    'description' => 'Aus Termin: ' . $finalName,
+                ],
+                [
+                    'follow_up_art' => null,
+                    'next_step'     => $request->next_step,
+                    'due_date'      => $request->reminder_date,
+                    'responsible'   => (array) $request->report_responsible,
+                ],
+                (int) auth()->user()->name
+            );
 
-                    \App\Models\PersonalTaskKey::updateOrCreate(
-                        ['personal_task_id' => $task->id],
-                        [
-                            'task'        => $request->next_step,
-                            'status'      => 'open',
-                            'employee_id' => json_encode($validated['employee']),
-                        ]
-                    );
-
-                    \App\Models\EmployeesPersonalTask::where('task_id', $task->id)->delete();
-                    foreach ($validated['employee'] as $empId) {
-                        \App\Models\EmployeesPersonalTask::create([
-                            'employee_id' => $empId,
-                            'task_id'     => $task->id,
-                            'status'      => 'send',
-                        ]);
-                    }
-                }
-            } else {
-                // CREATE new task
-                $task = \App\Models\PersonalTask::create([
-                    'task_title'     => $finalName,
-                    'description'    => $request->description,
-                    'priority'       => $validated['priority'],
-                    'color'          => $request->color ?? '#8fc73e',
-                    'assigned_by'    => auth()->user()->name,
-                    'public'         => $request->public === 'on' ? '1' : '0',
-                    'start_date'     => $startDate->toDateString(),
-                    'due_date'       => $request->reminder_date,
-                    'reminder_date'  => $request->reminder_date,
-                    'type'           => 'personal_task',
-                    'is_notified'    => false,
-                    'controller_id'  => json_encode($request->report_responsible),
-                ]);
-
-                \App\Models\PersonalTaskKey::create([
-                    'personal_task_id' => $task->id,
-                    'task'             => $request->next_step,
-                    'status'           => 'open',
-                    'employee_id'      => json_encode($validated['employee']),
-                ]);
-
-                foreach ($validated['employee'] as $empId) {
-                    \App\Models\EmployeesPersonalTask::create([
-                        'employee_id' => $empId,
-                        'task_id'     => $task->id,
-                        'status'      => 'send',
-                    ]);
-                }
-
-                $appointment->update(['task_id' => $task->id]);
+            if ((int) $appointment->task_id !== (int) $followUpTask->id) {
+                $appointment->forceFill(['task_id' => $followUpTask->id])->save();
             }
         }
 
@@ -2616,73 +2569,39 @@ public function getMap($id)
             return null;
         }
 
-        $controllerIds = collect((array) $request->input('report_responsible', []))
+        // report_responsible = Verantwortliche des Follow-ups (sehen es auf /home).
+        $responsibles = collect((array) $request->input('report_responsible', []))
             ->filter(fn($value) => filled($value))
             ->map(fn($value) => (int) $value)
             ->unique()
             ->values()
             ->all();
 
-        $employeeIds = collect($employeeIds)
-            ->filter(fn($value) => filled($value))
-            ->map(fn($value) => (int) $value)
-            ->unique()
-            ->values()
-            ->all();
-
-        $task = $appointment->task_id
-            ? PersonalTask::query()->find($appointment->task_id)
-            : null;
-
-        if (!$task) {
-            $task = new PersonalTask();
-            $task->assigned_by = auth()->user()->name;
-            $task->task_status = 'open';
-            $task->type = 'personal_task';
-            $task->is_notified = false;
-        }
-
-        $task->fill([
-            'task_title' => $finalName,
-            'description' => $request->input('description'),
-            'priority' => $request->input('priority', 'normal'),
-            'color' => $request->input('color') ?: '#8fc73e',
-            'public' => $request->boolean('public'),
-            'start_date' => $request->input('start_date') ?: optional($appointment->start_date)->toDateString(),
-            'due_date' => $request->input('reminder_date'),
-            'reminder_date' => $request->input('reminder_date'),
-            'reminder_time' => $request->input('reminder_time'),
-            'controller_id' => $controllerIds,
-            'is_customer' => filled($appointment->customer_id ?: $request->input('customer_id')),
-            'customer_id' => $appointment->customer_id ?: $request->input('customer_id'),
-            'lead_product_list_id' => $stageContext['lead_product_list_id'] ?? null,
-            'lead_stage_id' => $stageContext['lead_stage_id'] ?? null,
-            'lead_stage_sub_stage_id' => $stageContext['lead_stage_sub_stage_id'] ?? null,
-        ]);
-
-        $task->save();
-
-        PersonalTaskKey::updateOrCreate(
-            ['personal_task_id' => $task->id],
+        // F4 (Termin-Konvergenz, Ansatz A): EIN Follow-up ueber den geteilten Service statt der
+        // Legacy-Erzeugung (type='personal_task' + PersonalTaskKey + Attendee-Pivot). UPSERT by
+        // (source_type='main_appointment', source_id=appointment.id) -> Termin-Update erzeugt KEIN
+        // zweites Follow-up, sondern aktualisiert. type='follow_up', follow_up_art=NULL (kein
+        // Outcome-Dialog beim Termin-Sync). Mapping 1:1: next_step->task_title, reminder_date->
+        // due_date, report_responsible->Verantwortliche (Pivot). Legacy-Kosmetik (color/priority/
+        // start_date/reminder_time/sub-stage/PersonalTaskKey) entfaellt - Follow-up != Termin-Kachel.
+        $task = app(\App\Services\FollowUp\FollowUpCreator::class)->sync(
+            'main_appointment',
+            (int) $appointment->id,
             [
-                'task' => $request->input('next_step'),
-                'status' => 'open',
-                'employee_id' => $employeeIds,
-            ]
+                'customer_id'          => $appointment->customer_id ?: $request->input('customer_id'),
+                'lead_product_list_id' => $stageContext['lead_product_list_id'] ?? null,
+                'description'          => 'Aus Termin: ' . $finalName,
+            ],
+            [
+                'follow_up_art' => null,
+                'next_step'     => $request->input('next_step'),
+                'due_date'      => $request->input('reminder_date'),
+                'responsible'   => $responsibles,
+            ],
+            (int) auth()->user()->name
         );
 
-        EmployeesPersonalTask::query()
-            ->where('task_id', $task->id)
-            ->delete();
-
-        foreach ($employeeIds as $employeeId) {
-            EmployeesPersonalTask::create([
-                'employee_id' => $employeeId,
-                'task_id' => $task->id,
-                'status' => 'send',
-            ]);
-        }
-
+        // Bestehende appointment.task_id-Verankerung beibehalten.
         if ((int) $appointment->task_id !== (int) $task->id) {
             $appointment->forceFill(['task_id' => $task->id])->save();
         }
