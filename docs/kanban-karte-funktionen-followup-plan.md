@@ -100,6 +100,26 @@ Schema: CRM-Refs (customer/alternative/product/lead_product_list/lead_stage), `a
 **EMPFEHLUNG: `lead_reminders` erweitern.** Begründung: bereits karten-verdrahtet, lead-nativ, `due()` = fertige Dashboard-Query, und die **dashboard-only Erinnerung (Stufe 1)** passt zu seinem passiven `notified_at`-Modell — personal_tasks' aktiver Sender ist mehr als Stufe 1 braucht und sein Board-Charakter zieht die Follow-up-Semantik in die falsche Richtung. Deckt sich mit `follow-up-bestandsaufnahme.md`. *(Kippt Richtung personal_tasks/generisches `reminders` nur, falls Follow-ups an Nicht-Lead-Vorgänge hängen sollen — dann polymorpher Träger nötig.)*
 
 ---
+## TEIL 2b — NACHTRAG (2026-07-03): Korrektur + dritter Träger-Kandidat → Empfehlung gekippt
+
+**⚠️ Korrektur eines Fehlers oben:** §6 sagte „personal_tasks: Auf /home: NEIN". **Falsch.** personal_tasks **erscheinen auf /home** — im **„Focus Today"-Widget** (`EmployeeDashboardController::index :68-83` + `getDueToday() :830`), das über den `employees_personal_tasks`-Pivot (`ept.employee_id = ich`) filtert. Die Scheduler-Erinnerung sendet **in-app** (DB-Notification + WebSocket, `ProcessPersonalTaskScheduler :207-228` / `PersonalTaskReminderNotification` via `'database'`), nicht nur Mail.
+
+**Dritter Träger-Fund (Termin-Pfad):** `MainAppointmentController :1254-1324` erzeugt bei `reminder_date`+`next_step`+`report_responsible` (dort **required**) einen **`PersonalTask`** (`type='personal_task'`, `due_date`+`reminder_date`, `controller_id`=Verantwortliche-JSON) + `PersonalTaskKey.task = next_step` + `EmployeesPersonalTask`-Pivot (status='send'). → Der Follow-up-Loop **(a) nächster Schritt + (b) Erinnerung + (c) /home-Sichtbarkeit** ist auf **personal_tasks bereits gebaut** und wird von Terminen genutzt.
+
+**Korrigierter 3-Wege-Vergleich:**
+| Yamas Punkt | lead_reminders | **personal_tasks** (Termin-Muster) |
+|---|---|---|
+| (a) nächster Schritt | fehlt | ✅ (`personal_task_keys.task`) |
+| (b) Erinnerung+Fällig | ✅ passiv | ✅ due + Scheduler (in-app + Mail) |
+| (c) /home-Sichtbar | **fehlt** | ✅ **Focus-Today-Widget** |
+| (d) 3 Ausgänge | fehlt | fehlt |
+| Karten-Verdrahtung | ✅ Badges | fehlt |
+| Struktur | 1 flache Tabelle | 3 Tabellen + controller_id-JSON |
+| „EINE Wahrheit" | cards→lead_reminders = **2. Wahrheit** | Termine nutzen es → **eine Wahrheit** |
+
+**Empfehlung revidiert → `personal_tasks` (Termin-Muster verallgemeinern).** Meine ursprüngliche lead_reminders-Empfehlung ruhte auf der falschen Prämisse „nicht auf /home". Korrigiert kippt das Kernprinzip („EINE Wahrheit, nicht das 6. System danebenbauen") zu personal_tasks: (a,b,c) laufen schon, Termine nutzen es. **Preis:** 3-Tabellen-Struktur + JSON-Zuweisung (Komplexität). **Yama-Entscheidung 2026-07-03: `personal_tasks`** (Entscheidung 1 unten reversiert).
+
+---
 ## TEIL 3 — DESIGN (nicht bauen)
 
 ### 7. Der Abschluss-Dialog (Kern)
@@ -137,7 +157,7 @@ Exakt nach dem „Zu prüfen"-Muster (fa41c61, `partials/reviews.blade.php`):
 ### 10. Gestufter Bau-Plan
 | Stufe | Inhalt | Umfang | Risiko | Verifikation |
 |---|---|---|---|---|
-| **F1** | Träger erweitern: `lead_reminders` + Spalten `next_step`, `outcome`, `art`, `source_type`, `source_id`, `snoozed_until` (+ Status `snoozed`) | 1 additive Migration | niedrig (nur neue nullable Spalten; store() unverändert lauffähig) | Migration up/down; bestehende cardSummaries/context/due unverändert grün |
+| **F1** | Träger erweitern: **`personal_tasks`** + Spalten `follow_up_art` (nachfass/wiederaufnahme), `source_type` (5 Werte), `source_id` (+ Index); `type='follow_up'`-Konvention. `next_step`/Zuweisung/due/(a,b,c) bestehen bereits (personal_task_keys/employees_personal_tasks/Focus-Today). | 1 additive Migration (3 nullable Spalten) | niedrig (nullable; store/getDueToday/Scheduler/Termin-Pfad unberührt) | Migration up/down; bestehende personal_tasks-Pfade grün; Follow-up-Zeile erscheint beim Verantwortlichen, Scheduler überspringt sie (kein next_reminder_at) |
 | **F2** | Abschluss-Dialog an **einem** Flow pilotieren (Vorschlag: Karten-Aufgabe „Erledigen" — hat schon B3-Ausgang) | 1 Dialog + 1 Schreibpfad (lead_reminders-Insert) | mittel (neuer Flow; Legacy-Abschluss unberührt) | Ausgang 2/3 → lead_reminders-Insert korrekt; Ausgang 1 → kein Insert; Feld-Mapping stimmt |
 | **F3** | Dashboard-Widget „Meine Follow-ups" (§8) | 1 Partial + `$myFollowups` in index() | niedrig (additiv, Muster fa41c61) | offene Follow-ups des Verantwortlichen erscheinen, überfällig rot, Aktionen erledigt/verschieben/Kunde |
 | **F4** | Dialog auf die übrigen Flows ausrollen (Notiz, Kundenbericht, Termin, später Monteur-Report §9-ii) | je Flow 1 Andockung | mittel (Breite) | je Flow: Follow-up entsteht, versickert nicht mehr |
@@ -147,12 +167,12 @@ Exakt nach dem „Zu prüfen"-Muster (fa41c61, `partials/reviews.blade.php`):
 
 ---
 ## YAMA-ENTSCHEIDUNGEN (getroffen 2026-07-03 — Design verbindlich)
-1. **Träger:** ✅ **`lead_reminders` erweitern** (nicht personal_tasks). → F1 = +5 additive Spalten (§5).
+1. **Träger:** ✅ **`personal_tasks` (Termin-Muster verallgemeinern)** — **reversiert** die ursprüngliche lead_reminders-Wahl nach dem /home-Korrektur-Fund (Teil 2b). F1 = additive Spalten `follow_up_art` + `source_type` + `source_id` auf personal_tasks (+ `type='follow_up'`-Konvention); Loop (a,b,c) besteht bereits.
 2. **Abschluss-Dialog:** ✅ **optional anbietbar** (nicht erzwungen). „Vollständig erledigt" schließt ohne Follow-up; kein Zwang.
-3. **Erinnerung Stufe 1:** ✅ **nur Dashboard** (kein Mail/Push). Aktive Erinnerung = Stufe 2 später.
-4. **Widget:** ✅ **ein „Mein Bereich" mit zwei Sektionen** („Zu prüfen (N)" | „Meine Follow-ups (N)"), datenmäßig getrennt.
+3. **Erinnerung Stufe 1:** ✅ **nur Dashboard** (kein Mail/Push). ⚠️ Umsetzung mit personal_tasks: Follow-ups setzen **`next_reminder_at` NICHT** → der bestehende Scheduler (sendet Mail/Push) überspringt sie; Anzeige rein über `due_date` im Widget.
+4. **Widget:** ✅ **ein „Mein Bereich" mit zwei Sektionen** („Zu prüfen (N)" | „Meine Follow-ups (N)"), datenmäßig getrennt (Follow-up-Sektion filtert `type='follow_up'`).
 
-→ **Nächster Schritt: F1 (Träger-Erweiterung) als eigener Pflicht-Stopp.**
+→ **Nächster Schritt: F1 (Träger-Erweiterung auf personal_tasks) als eigener Pflicht-Stopp.**
 
 ---
 ## Gelesen / NICHT gelesen (ehrlich)
