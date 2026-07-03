@@ -391,37 +391,25 @@ class CustomerNoteController extends Controller
      */
     protected function createFollowUpFromNote(CustomerNote $note, array $data, ?int $employeeId): void
     {
-        $art = (($data['follow_up_outcome'] ?? null) === 'weitere_aufgaben') ? 'wiederaufnahme' : 'nachfass';
-
-        $responsible = (int) ($data['follow_up_responsible'] ?? 0);
-        if ($responsible <= 0) {
-            $responsible = (int) $employeeId; // Default = Ersteller
-        }
-
-        $task = \App\Models\PersonalTask::create([
-            'task_title'           => Str::limit(trim(strip_tags((string) $data['follow_up_next_step'])), 120, '') ?: 'Follow-up',
-            'description'          => 'Aus Notiz: ' . Str::limit(strip_tags((string) $note->description), 200),
-            'task_status'          => 'open',
-            'type'                 => 'follow_up',
-            'follow_up_art'        => $art,
-            'source_type'          => 'customer_note',
-            'source_id'            => $note->id,
-            'due_date'             => $data['follow_up_due_date'],
-            'reminder_date'        => $data['follow_up_due_date'],
-            'next_reminder_at'     => null,
-            'assigned_by'          => (string) $employeeId,
-            'customer_id'          => $note->customer_id,
-            'alternative_id'       => $note->alternative_id,
-            'product_id'           => $note->product_id,
-            'lead_product_list_id' => $note->lead_product_list_id,
-            'controller_id'        => [$responsible],
-        ]);
-
-        \App\Models\EmployeesPersonalTask::create([
-            'employee_id' => $responsible,
-            'task_id'     => $task->id,
-            'status'      => 'send',
-        ]);
+        // F4: EINE Erzeugungs-Stelle (geteilter Service) statt Inline-Copy je Controller.
+        app(\App\Services\FollowUp\FollowUpCreator::class)->sync(
+            'customer_note',
+            (int) $note->id,
+            [
+                'customer_id'          => $note->customer_id,
+                'alternative_id'       => $note->alternative_id,
+                'product_id'           => $note->product_id,
+                'lead_product_list_id' => $note->lead_product_list_id,
+                'description'          => 'Aus Notiz: ' . Str::limit(strip_tags((string) $note->description), 200),
+            ],
+            [
+                'follow_up_art' => \App\Services\FollowUp\FollowUpCreator::artFromOutcome($data['follow_up_outcome'] ?? null),
+                'next_step'     => $data['follow_up_next_step'] ?? '',
+                'due_date'      => $data['follow_up_due_date'] ?? null,
+                'responsible'   => $data['follow_up_responsible'] ?? null,
+            ],
+            (int) $employeeId
+        );
     }
 
     protected function createReplyNoteFromStore(array $data, ?int $employeeId, string $employeeName): CustomerNote
