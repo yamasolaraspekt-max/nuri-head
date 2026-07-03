@@ -4321,6 +4321,30 @@ $kanbanFilterSettings = $kanbanFilterSettings ?? collect();
               <input type="hidden" id="noteText">
             </div>
 
+            {{-- F2: optionale Nachverfolgung (Follow-up). Standard = keine -> Notiz-Flow unveraendert. --}}
+            <div class="kb-note-followup" style="margin-top:6px;">
+              <button type="button" id="noteFollowupToggle" class="btn btn-sm btn-outline-secondary" style="font-size:12px;padding:2px 8px;"
+                      onclick="var s=document.getElementById('noteFollowupSection'); if(s){ s.style.display = (s.style.display==='none'?'block':'none'); }">
+                <i class="feather icon-bell"></i> Nachverfolgung
+              </button>
+              <div id="noteFollowupSection" style="display:none;margin-top:8px;padding:10px;border:1px solid #e5e7eb;border-radius:8px;">
+                <div style="display:flex;gap:14px;margin-bottom:8px;font-size:12px;">
+                  <label style="cursor:pointer;"><input type="radio" name="noteFollowupOutcome" value="nachfass"> Nachfass nötig</label>
+                  <label style="cursor:pointer;"><input type="radio" name="noteFollowupOutcome" value="weitere_aufgaben"> Weitere Aufgaben</label>
+                </div>
+                <textarea id="noteFollowupNextStep" class="form-control" rows="2" placeholder="Nächster Schritt (Pflicht)…" style="font-size:13px;margin-bottom:8px;"></textarea>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <select id="noteFollowupResponsible" class="form-control" style="flex:1;min-width:150px;font-size:13px;">
+                    <option value="">Verantwortlich: ich</option>
+                    @foreach (($employees ?? []) as $e)
+                      <option value="{{ $e->id }}">{{ $e->lastname }} {{ $e->name }}</option>
+                    @endforeach
+                  </select>
+                  <input type="date" id="noteFollowupDueDate" class="form-control" style="flex:0 0 155px;font-size:13px;" title="Fälligkeit">
+                </div>
+              </div>
+            </div>
+
             <button class="btn btn-primary kb-chatgpt-send" type="submit" title="Notiz senden">
               <i class="feather icon-send"></i>
             </button>

@@ -281,6 +281,13 @@ class CustomerNoteController extends Controller
             'lead_stage_sub_stage_id' => ['nullable', 'integer'],
             'lead_stage_sub_stage_name' => ['nullable', 'string', 'max:255'],
             'lead_stage_sub_stage_color' => ['nullable', 'string', 'max:50'],
+
+            // Follow-up (F2): optionaler Abschluss-Dialog. Der Client schickt NUR outcome;
+            // follow_up_art wird server-seitig abgeleitet, source_type ist hart 'customer_note'.
+            'follow_up_outcome' => ['nullable', Rule::in(['keine', 'nachfass', 'weitere_aufgaben'])],
+            'follow_up_next_step' => ['nullable', 'required_if:follow_up_outcome,nachfass,weitere_aufgaben', 'string', 'max:5000'],
+            'follow_up_due_date' => ['nullable', 'required_if:follow_up_outcome,nachfass,weitere_aufgaben', 'date'],
+            'follow_up_responsible' => ['nullable', 'integer', 'exists:employees,id'],
         ]);
 
         $employeeId = $this->currentEmployeeId();
@@ -327,6 +334,12 @@ class CustomerNoteController extends Controller
 
             $note->save();
 
+            // F2: optionalen Follow-up INNERHALB derselben Transaktion erzeugen
+            // -> Notiz + Follow-up entstehen atomar oder gar nicht.
+            if (in_array($data['follow_up_outcome'] ?? 'keine', ['nachfass', 'weitere_aufgaben'], true)) {
+                $this->createFollowUpFromNote($note, $data, $employeeId);
+            }
+
             return $note->load(['creator', 'replies.creator']);
         });
 
@@ -361,6 +374,53 @@ class CustomerNoteController extends Controller
                 'note' => $note,
             ])->render(),
             'note' => $note,
+        ]);
+    }
+
+    /**
+     * F2 Follow-up: erzeugt aus einer Notiz einen Follow-up-personal_task (Termin-Muster
+     * verallgemeinert). WIRD NUR INNERHALB der store()-Transaktion aufgerufen (atomar).
+     *
+     * - naechster Schritt = task_title (auf /home garantiert sichtbar: Focus-Today rendert
+     *   den Titel immer, description nur wenn vorhanden) -> die Handlung ist die Ueberschrift.
+     * - source_type hart 'customer_note'; follow_up_art server-seitig aus outcome abgeleitet.
+     * - next_reminder_at = NULL -> ProcessPersonalTaskScheduler ueberspringt es -> dashboard-only
+     *   (kein Mail/Push, Stufe-1-Konvention).
+     * - controller_id = [$responsible] als PHP-Array; PersonalTask castet 'controller_id' => 'array'
+     *   -> genau einmal JSON-encodiert (kein manuelles json_encode).
+     */
+    protected function createFollowUpFromNote(CustomerNote $note, array $data, ?int $employeeId): void
+    {
+        $art = (($data['follow_up_outcome'] ?? null) === 'weitere_aufgaben') ? 'wiederaufnahme' : 'nachfass';
+
+        $responsible = (int) ($data['follow_up_responsible'] ?? 0);
+        if ($responsible <= 0) {
+            $responsible = (int) $employeeId; // Default = Ersteller
+        }
+
+        $task = \App\Models\PersonalTask::create([
+            'task_title'           => Str::limit(trim(strip_tags((string) $data['follow_up_next_step'])), 120, '') ?: 'Follow-up',
+            'description'          => 'Aus Notiz: ' . Str::limit(strip_tags((string) $note->description), 200),
+            'task_status'          => 'open',
+            'type'                 => 'follow_up',
+            'follow_up_art'        => $art,
+            'source_type'          => 'customer_note',
+            'source_id'            => $note->id,
+            'due_date'             => $data['follow_up_due_date'],
+            'reminder_date'        => $data['follow_up_due_date'],
+            'next_reminder_at'     => null,
+            'assigned_by'          => (string) $employeeId,
+            'customer_id'          => $note->customer_id,
+            'alternative_id'       => $note->alternative_id,
+            'product_id'           => $note->product_id,
+            'lead_product_list_id' => $note->lead_product_list_id,
+            'controller_id'        => [$responsible],
+        ]);
+
+        \App\Models\EmployeesPersonalTask::create([
+            'employee_id' => $responsible,
+            'task_id'     => $task->id,
+            'status'      => 'send',
         ]);
     }
 

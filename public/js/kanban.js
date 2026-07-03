@@ -17110,6 +17110,15 @@
           lead_stage_sub_stage_name: context.lead_stage_sub_stage_name || qs("#notesLeadStageSubStageName")?.value || "",
           lead_stage_sub_stage_color: context.lead_stage_sub_stage_color || qs("#notesLeadStageSubStageColor")?.value || "#93c21c",
           type: (context.lead_stage_sub_stage_id || qs("#notesLeadStageSubStageId")?.value) ? "sub_stage_note" : "stage_note",
+          // F2 Follow-up (optional): nur wenn Sektion offen UND ein Ausgang gewaehlt -> sonst "keine"
+          follow_up_outcome: (function () {
+            const sec = qs("#noteFollowupSection");
+            if (!sec || sec.style.display === "none") return "keine";
+            return qs('input[name="noteFollowupOutcome"]:checked')?.value || "keine";
+          })(),
+          follow_up_next_step: qs("#noteFollowupNextStep")?.value || "",
+          follow_up_due_date: qs("#noteFollowupDueDate")?.value || "",
+          follow_up_responsible: qs("#noteFollowupResponsible")?.value ? Number(qs("#noteFollowupResponsible")?.value) : null,
         };
 
         const endpoint = app().endpoints?.notesStore || window.LeadUI?.APP?.endpoints?.notesStore || "/customer-notes";
@@ -17136,6 +17145,13 @@
           const editor = qs("#noteEditor .ql-editor");
           if (editor) editor.innerHTML = "";
           if (qs("#noteText")) qs("#noteText").value = "";
+          // F2: Follow-up-Sektion zuruecksetzen (naechste Notiz startet ohne Nachverfolgung)
+          const fuSec = qs("#noteFollowupSection");
+          if (fuSec) fuSec.style.display = "none";
+          document.querySelectorAll('input[name="noteFollowupOutcome"]').forEach(function (r) { r.checked = false; });
+          if (qs("#noteFollowupNextStep")) qs("#noteFollowupNextStep").value = "";
+          if (qs("#noteFollowupDueDate")) qs("#noteFollowupDueDate").value = "";
+          if (qs("#noteFollowupResponsible")) qs("#noteFollowupResponsible").value = "";
           updateAllMatchingBadges(context, +1);
           if (window.feather?.replace) window.feather.replace();
         } catch (error) {

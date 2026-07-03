@@ -51,6 +51,9 @@ class PersonalTask extends Model
         'lead_product_list_id',
         'lead_stage_id',
         'lead_stage_sub_stage_id',
+        'follow_up_art',
+        'source_type',
+        'source_id',
     ];
 
     protected $casts = [
