@@ -35,6 +35,28 @@ class LeadStageController extends Controller
         ]);
     }
 
+    /**
+     * HTML-Verwaltungsseite fuer Lead-Phasen.
+     * Nutzt dieselbe Nutzlast wie index(); alle Mutationen laufen ueber die
+     * bestehende JSON-API (store/update/destroy/reorder).
+     */
+    public function manage()
+    {
+        $stages = LeadStage::query()
+            ->with([
+                'subStages' => function ($query) {
+                    $query->orderBy('sort_order')->orderBy('id');
+                },
+            ])
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get()
+            ->map(fn(LeadStage $stage) => $this->stagePayload($stage))
+            ->values();
+
+        return view('admin.lead_stages.manage', ['stages' => $stages]);
+    }
+
     public function store(Request $request): JsonResponse
     {
         /*

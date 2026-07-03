@@ -594,8 +594,8 @@
         [
             'title' => 'Phasen',
             'items' => [
-                // Lead-Phasen bewusst NICHT hier: lead-stages.index ist eine JSON-API (Kanban-Spalten-Editor),
-                // keine Seite. Lead-Phasen werden inline auf dem Lead-Kanban verwaltet.
+                // Lead-Phasen-Verwaltung (HTML-Seite lead-stages.manage; NICHT die JSON-API lead-stages.index)
+                ['label' => 'Lead-Phasen', 'icon' => 'flag', 'url' => $safeRoute('lead-stages.manage', 'admin/lead-stages/manage'), 'active_routes' => ['/admin/lead-stages/manage']],
                 ['label' => 'Arbeitsschritte', 'icon' => 'clock', 'url' => $safeRoute('task_phase.index'), 'count_key' => 'task_phases'],
                 ['label' => 'Projekt-Struktur', 'icon' => 'flag', 'url' => $safeRoute('stages.index'), 'count_key' => 'stages'],
             ],

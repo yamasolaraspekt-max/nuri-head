@@ -1060,6 +1060,10 @@ Route::group(['middleware'   =>  'web'], function(){
             Route::get('/', [LeadStageController::class, 'index'])
                 ->name('index');
 
+            // HTML-Verwaltungsseite — MUSS vor /{stage} stehen (sonst matcht 'manage' als {stage}).
+            Route::get('/manage', [LeadStageController::class, 'manage'])
+                ->name('manage');
+
             Route::post('/', [LeadStageController::class, 'store'])
                 ->name('store');
 
