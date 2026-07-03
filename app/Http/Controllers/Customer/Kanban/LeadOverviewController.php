@@ -2108,6 +2108,19 @@ class LeadOverviewController extends Controller
                     $payload['lead_product_status'] = $newStage;
                 }
 
+                // Stufe A (additiv): FK-Stage-Bindung zusaetzlich schreiben; Legacy `status`
+                // bleibt exakt wie bisher die Bruecke. Unbekannter Key -> null + Log, kein Crash.
+                if (Schema::hasColumn('lead_product_lists', 'lead_stage_id')) {
+                    $targetStageId = LeadStage::query()->where('key', $newStage)->value('id');
+                    if ($targetStageId === null) {
+                        Log::warning('changeStage: kein lead_stages.id fuer Stage-Key', [
+                            'key' => $newStage,
+                            'lead_product_list_id' => $locked->id,
+                        ]);
+                    }
+                    $payload['lead_stage_id'] = $targetStageId;
+                }
+
                 DB::table('lead_product_lists')
                     ->where('id', $locked->id)
                     ->update($payload);
