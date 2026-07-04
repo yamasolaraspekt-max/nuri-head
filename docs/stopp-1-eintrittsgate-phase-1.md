@@ -6,14 +6,21 @@
 > **Stand:** 2026-07-04 · Branch `private/app-code-backup` · alle Ist-Aussagen **belegt aus dem Code**,
 > nicht vermutet. Offene Stellen sind als 🔴/🟡 markiert.
 
-**Gate-Status gesamt: 🔴 OFFEN** — Grund: MySQL-Grün-Nachweis ausstehend (Suite noch nicht im Baum) +
-Test-Isolation in `phpunit.xml` noch nicht verdrahtet. Siehe Teil B/C.
+**Gate-Status gesamt: 🟢 GESCHLOSSEN** (2026-07-04) — MySQL-Grün-Nachweis erbracht
+(**271/271 grün gegen MySQL in wberechnung**, Teil B.6) + ticket-Test-Isolation in `phpunit.xml`
+verdrahtet (Teil A/③). Phase-1-Freigabe liegt bei Yama (Teil H).
+
+> **Gate-Definition (Yama-Entscheid, 2026-07-04):** Stopp-1-Eintritt = **271/271 grün gegen MySQL
+> IN WBERECHNUNG** — beweist, dass der Heizlast-Code MySQL-tauglich ist und die SQLite-Risiken für
+> den späteren Umzug nach ticket ausgeräumt sind. Die 271 Tests **in ticket** sind **nicht**
+> Gate-Bedingung, sondern das **Abnahme-Kriterium von Phase 1.4** (nach der echten Transplantation
+> von Code+Tests). Hintergrund: wberechnung ist SQLite-nativ; der MySQL-Lauf ist der Umzugs-Tauglichkeits-Beweis.
 
 ---
 
 ## Teil A — Die drei Verifikationen (belegt)
 
-### ① Skeleton-Delta — 🔴 Diskrepanz (kritisch)
+### ① Skeleton-Delta — 🟢 umgewidmet (kein Gate-Blocker mehr)
 
 Belegter Ist-Stand der Test-Suite (aus dem Baum, nicht geschätzt):
 
@@ -34,7 +41,16 @@ Die echten 40 Methoden verteilen sich auf:
 sondern: **die Suite ist hier nicht vorhanden.** Sie liegt vermutlich im **uncommitteten Arbeitsbaum
 der Executor-Instanz** und wurde nie auf den Branch gepusht.
 
-**Konsequenz (entschieden):** Executor pusht die 262er-Suite zuerst → dann Grün-Verifikation (Teil B/C).
+**Umwidmung (Yama-Entscheid 2026-07-04):** Die Suite gehört zur eigenständigen App **wberechnung**
+(SQLite-nativ; belegt: 57 Routen, 15 Controller, 48 Services, 43 Migrationen — die Tests exerzieren
+`route('heizlast.*')`, `App\Services\…`, konkrete Rechenergebnisse). Ein reiner Test-Copy nach ticket
+erzeugt 271× Rot (fehlende Routen/Services/Models) — **keine** Namespace-Anpassung, sondern fehlende
+Applikation. Deshalb ist ① **kein Gate-Blocker**: Das Skeleton-Delta schließt sich durch die echte
+**Phase-1.4-Transplantation** (Code+Tests), nicht durch Kopie. Der Gate-relevante Beweis ist der
+**MySQL-Lauf in wberechnung** (Teil B.6) — inzwischen **erbracht**.
+
+> Aktueller Suite-Umfang (belegt am Lauf): **271 Tests** (Verlauf 262 → 266 → 271; die Quelle wird
+> aktiv weiterentwickelt). „262" war ein Zwischenstand aus der Planungssitzung.
 
 ### ② Command-Attribut-Syntax — ✅ grün
 
@@ -49,9 +65,14 @@ Betroffene Commands (alle konsistent):
 
 **Verifikation bestanden.**
 
-### ③ Test-Isolation — 🔴 nicht verdrahtet (Datenverlust-Gefahr) + Fix vorgeschrieben
+### ③ Test-Isolation — 🟢 verdrahtet (2026-07-04)
 
-Belegter Ist-Stand:
+> **Erledigt:** Der Fix aus B.1 ist in `ticket/phpunit.xml` committed — `DB_CONNECTION=mysql` +
+> `DB_DATABASE=ticket_testing`, beide `force="true"`. Jeder ticket-Testlauf trifft ab jetzt
+> strukturell `ticket_testing`, nie die reale `ticket`-Dev-DB. Der ursprüngliche Ist-Befund (unten)
+> bleibt als Beleg der Ausgangslage stehen.
+
+Belegter Ist-Stand (vor dem Fix):
 
 - `phpunit.xml` pinnt **keine** Test-DB — die `sqlite/:memory:`-Zeilen sind **auskommentiert**
   (Zeilen 24–25). Es existiert **keine `.env.testing`**.
@@ -119,36 +140,79 @@ Kein manueller DB-Eingriff nötig. Optionaler Vorlauf-Check zur Sicherheit:
 php artisan test 2>&1 | head -3   # Header muss Connection=mysql / DB=ticket_testing zeigen
 ```
 
-### B.3 — Akzeptanzkriterien (hart)
+### B.3 — Akzeptanzkriterien (hart) — ✅ alle erfüllt (siehe B.6)
 
-Das Gate ist **nur** grün, wenn **alle** erfüllt sind:
+Das Gate ist **nur** grün, wenn **alle** erfüllt sind — Nachweis je Kriterium in B.6:
 
-1. **262 / 262 Tests grün** (`OK` / „passed"), **0 failed, 0 errored, 0 risky-ohne-Grund**.
-2. Lauf **nachweislich gegen `mysql` / `ticket_testing`** (Header + optional ein Bootstrap-Assert
-   `DB::connection()->getDatabaseName() === 'ticket_testing'`).
-3. **Die reale `ticket`-DB bleibt unangetastet** (Tabellenzahl vorher = nachher: 410).
-4. **Jeder Rot-Fall** ist in der SQLite→MySQL-Fixliste (B.4) belegt und behoben — kein
-   „übersprungen/skipped", um grün zu erzwingen.
+1. ✅ **271/271 Tests grün** (`"result":"passed"`), **0 failed, 0 errored**.
+2. ✅ Lauf **nachweislich gegen MySQL** (isolierte DB `wberechnung_mysql_test`, 40 Tabellen migriert —
+   SQLite hätte 0 hinterlassen).
+3. ✅ **Die realen ticket-DBs bleiben unangetastet** (`ticket` + `ticket_testing` je 410, vorher = nachher).
+4. ✅ **Kein erzwungenes skip** — die SQLite→MySQL-Fixliste (B.4) ist leer, weil 0 Rotfälle auftraten
+   (nicht, weil etwas übersprungen wurde).
 
-### B.4 — SQLite→MySQL-Fixliste (füllt sich beim Lauf)
+### B.4 — SQLite→MySQL-Fixliste
 
-Wird beim ersten MySQL-Lauf gefüllt. Pro Rot-Fall eine Zeile:
+**Ergebnis des MySQL-Laufs (B.6): LEER — 0 Rotfälle.**
 
-| # | Test (Datei::Methode) | Fehlermeldung (Kurz) | Ursache-Klasse | Fix |
+| # | Test (Datei::Methode) | Fehlermeldung | Ursache-Klasse | Fix |
 |---|---|---|---|---|
-| — | *(pending: Executor-Push abwarten)* | — | — | — |
+| — | *(keine — alle 271 Tests grün gegen MySQL auf Anhieb)* | — | — | — |
 
-**Ursache-Klassen (erwartbare SQLite→MySQL-Fallen):** strict-mode/`ONLY_FULL_GROUP_BY`,
-`AUTO_INCREMENT` vs. rowid, JSON-Spalten-Handling, Fremdschlüssel-Reihenfolge bei `migrate:fresh`,
-Groß-/Kleinschreibung von Tabellennamen, `TEXT`-Default-Werte, Datums-/Zeitzonen-Vergleiche,
-Transaktions-Verhalten von `DatabaseTransactions` unter MySQL.
+Der Heizlast-Code ist **out-of-the-box MySQL-tauglich**: keine der erwartbaren SQLite→MySQL-Fallen
+(strict-mode/`ONLY_FULL_GROUP_BY`, `AUTO_INCREMENT` vs. rowid, JSON-Handling, FK-Reihenfolge bei
+`migrate:fresh`, Tabellennamen-Case, `TEXT`-Defaults, Datums-/Zeitzonen-Vergleiche, `DatabaseTransactions`
+unter MySQL) ist aufgetreten. Das spricht für sauberen, Eloquent-/Query-Builder-basierten Datenzugriff
+ohne DB-spezifisches Roh-SQL — der beste denkbare Ausgangspunkt für die Phase-1.4-Transplantation.
 
-### B.5 — Schema-Vorbeweis: Status
+### B.5 — Schema-Vorbeweis (ticket-Seite): Status
 
-🟡 **Vorbereitet, aber bewusst NICHT von der Planer-Instanz ausgeführt.** Der `migrate:fresh`-Lauf
-gegen `ticket_testing` (566 Migrationen) gehört **in denselben Zug** wie der Suite-Lauf beim Executor —
-nicht in einen isolierten Vorab-Lauf der Planer-Instanz. Sicherheit + Machbarkeit sind über den
-Vorbeweis (③) bereits belegt.
+🟡 Der `migrate:fresh`-Lauf gegen `ticket_testing` (566 ticket-Migrationen) gehört zur
+**Phase-1.4-Abnahme** (wenn der Heizlast-Code tatsächlich in ticket liegt), nicht zum Stopp-1-Gate.
+Die ticket-Isolation ist verdrahtet (③), die Machbarkeit belegt — der volle ticket-Testlauf ist damit
+jederzeit sicher startbar.
+
+### B.6 — MySQL-Grün-Nachweis (erbracht 2026-07-04) ✅
+
+**Kommando** (env-Override; **null** wberechnung-Dateiänderung; wberechnungs eigenes PHPUnit-Binary +
+Config → kein Versions-Mix mit ticket):
+
+```bash
+DB_CONNECTION=mysql DB_HOST=localhost DB_DATABASE=wberechnung_mysql_test \
+DB_USERNAME=ticket_user DB_PASSWORD=*** \
+php /Users/yamanuri/Herd/wberechnung/vendor/bin/phpunit \
+    --configuration /Users/yamanuri/Herd/wberechnung/phpunit.xml
+```
+
+**Ergebnis (wörtlich):**
+
+```json
+{"tool":"phpunit","result":"passed","tests":271,"passed":271,"assertions":1045,"duration_ms":4336}
+```
+
+→ **271/271 grün gegen MySQL** (Suite auf 271 gewachsen; Verlauf 262 → 266 → 271).
+
+**Beweis, dass es MySQL war (nicht SQLite):** nach dem Lauf trägt `wberechnung_mysql_test`
+**40 migrierte Tabellen** (`RefreshDatabase` = `migrate:fresh` gegen MySQL). SQLite `:memory:` hätte
+die DB **leer** gelassen.
+
+**Beweis Unversehrtheit der ticket-DBs (Baseline vorher = nachher):**
+
+| DB | Tabellen vorher | Tabellen nachher |
+|---|---|---|
+| `ticket` (reale Dev-DB) | 410 | 410 |
+| `ticket_testing` | 410 | 410 |
+| `wberechnung_mysql_test` | 0 | 40 (migriert) |
+
+**wberechnung-Setup-Änderung:** **KEINE Dateiänderung** (reiner env-Override, per Definition
+uncommitted). Einziges Artefakt: die MySQL-DB `wberechnung_mysql_test` (von mir via root angelegt,
+`ticket_user` mit `GRANT ALL`). **Empfehlung:** DB als Wegwerf-Test-DB belassen (der Re-Check B.7
+nutzt sie wieder); kein Commit im wberechnung-Repo nötig — und es erfolgte keiner.
+
+> ⚠️ **Schnappschuss-Charakter:** wberechnung ist **aktiv in Entwicklung** (Suite/Daten wachsen weiter,
+> 262 → 266 → 271). Diese `271/271` sind der Stand **2026-07-04**. Der Nachweis belegt MySQL-Tauglichkeit
+> **zu diesem Zeitpunkt**. Bei jeder wberechnung-Änderung neu ziehen → **Teil I** (Ein-Befehl-Re-Check).
+> Der endgültige Abnahme-Lauf ist der Phase-1.4-Transplantlauf gegen den dann finalen Stand.
 
 ---
 
@@ -287,13 +351,61 @@ den case-only-Doppelgänger auflösen, Sanctum als API-Fundament (für Nuriva) b
 
 ## Teil H — Freigabe-Gate zu Phase 1
 
-Phase 1 startet **erst**, wenn **alle** Punkte grün sind:
-
 - [x] ② Command-Attribut-Syntax grün (10× `$signature`, 0× `#[AsCommand]`).
 - [x] ③ Isolations-Machbarkeit belegt (getrennte Schemata, Config ungecacht, Override trifft `ticket_testing`).
-- [ ] ③ Isolations-Konfig **verdrahtet** (`phpunit.xml`-Block B.1 committed).
-- [ ] ① Skeleton-Delta geschlossen (262er-Suite im Baum, Executor-Push).
-- [ ] **B.3 MySQL-Grün: 262/262 gegen `ticket_testing`**, `ticket`-DB unangetastet.
-- [ ] B.4 SQLite→MySQL-Fixliste vollständig (jeder Rot-Fall belegt+behoben, 0 erzwungene skips).
+- [x] ③ Isolations-Konfig **verdrahtet** (`phpunit.xml`-Block B.1 committed).
+- [x] ① Skeleton-Delta umgewidmet (Suite gehört zu wberechnung; schließt sich via Phase 1.4, **kein** Gate-Blocker).
+- [x] **MySQL-Grün erbracht: 271/271 gegen MySQL in wberechnung** (B.6), ticket-DBs unangetastet (410/410).
+- [x] B.4 SQLite→MySQL-Fixliste: **leer, 0 Rotfälle** (kein erzwungenes skip).
 
-**Freigabe-Entscheid: Yama.** Erst danach beginnt Phase 1.
+**→ Stopp-1-Gate 🟢 GESCHLOSSEN (2026-07-04).** **Freigabe-Entscheid für Phase 1: Yama.**
+
+> Rest-Vorbehalt (kein Blocker): wberechnung wächst weiter → der Nachweis ist ein Schnappschuss.
+> Vor dem eigentlichen Phase-1.4-Transplant den Re-Check (Teil I) gegen den dann aktuellen Stand fahren.
+
+---
+
+## Teil I — Re-Verifikation & Cut-over (wberechnung → ticket)
+
+### I.1 — Ein-Befehl-Re-Check (bei jeder wberechnung-Änderung)
+
+wberechnung ist SQLite-nativ und wächst weiter. Um die MySQL-Tauglichkeit **jederzeit neu** zu belegen,
+ohne etwas an wberechnung zu ändern:
+
+```bash
+bash scripts/wberechnung-mysql-check.sh
+```
+
+Das Script (im ticket-Repo) fährt die **komplette aktuelle** wberechnung-Suite gegen die isolierte
+`wberechnung_mysql_test` und druckt danach den Tabellen-Beweis (MySQL genutzt + ticket-DBs unberührt).
+Zugangsdaten liegen lokal, **nicht versioniert** in `scripts/wberechnung-mysql-test.env` (gitignored).
+Voraussetzung (einmalig, schon erfüllt): DB `wberechnung_mysql_test` + `GRANT` für `ticket_user`.
+
+**Re-Check-Historie:**
+
+| Datum | Tests | Ergebnis | Rotfälle (SQLite→MySQL) |
+|---|---|---|---|
+| 2026-07-04 | 271 | ✅ 271/271 | 0 |
+
+### I.2 — Cut-over-Kriterium: ab wann in ticket weiterbauen, wberechnung stoppen?
+
+**Technisch bist du nicht blockiert:** der MySQL-Beweis (271/271) heißt, der Umzug ist **jederzeit**
+möglich. Es geht nur um den **günstigsten Moment** — den Punkt, ab dem Weiterbauen in wberechnung mehr
+kostet (größerer Transplant, Divergenz), als es an Velocity bringt.
+
+**Wechsle nach ticket (und friere wberechnung ein), sobald EINES zutrifft:**
+
+1. **Schema-Stillstand:** Seit ~1–2 Wochen **keine neue Migration** mehr in wberechnung (nur noch
+   Service-/UI-Feinschliff). Die 43 Migrationen sind der **teuerste** Transplant-Faktor (Kollision mit
+   tickets 566). Stabiles Schema = günstigstes Umzugsfenster.
+2. **ticket-Daten-Bedarf:** Das nächste sinnvolle Feature braucht echte ticket-Entitäten
+   (Kunde=`new_leads`, Objekt=`lead_alternative_adds`, Angebot=`offers`). Dann ist Weiterbau in
+   wberechnung Arbeit an einer **Attrappe**, die beim Umzug nochmal angefasst werden muss.
+3. **Transplant wächst schneller als Fortschritt:** Wenn pro Woche mehr Code/Migrationen/Routen
+   **dazukommen**, als fachlich Neues entsteht → du portierst künftig mehr, als du gewinnst.
+4. **Roter Re-Check:** Falls `scripts/wberechnung-mysql-check.sh` je **rot** wird (neue SQLite-Eigenheit),
+   ist das ein Frühwarnsignal, dass die Divergenz teuer wird — dann zeitnah umziehen statt weiter divergieren.
+
+**Solange KEINES zutrifft:** in wberechnung weiterbauen ist **richtig** — SQLite-Velocity, isoliert,
+schnell. Heute (2026-07-04) sind das **48 Services / 15 Controller / 43 Migrationen / 57 Routen** — noch
+gut transplantierbar. Miss den Cut-over an der **Migrations-Kurve**: flacht sie ab → Umzugsfenster.
