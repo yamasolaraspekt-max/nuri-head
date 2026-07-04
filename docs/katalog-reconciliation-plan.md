@@ -233,3 +233,7 @@ Migrationen `2026_07_04_150001–150004`, verifiziert gegen **ticket_testing** (
 
 ### 7.6 Vollständigkeit (Punkt 4) — 0 Lücken
 SizingInverter **30/30** (12 Bestand + 18 neu) · SizingModule **11/11** · SizingBattery **4/4** · WpKennlinie **komplett** (leistungskurve-JSON + 14 + 3 Labels) · Heizkörper **3/3** → HK-M1 `product_radiator_specs`. **Stufe (iii) kann an keinem Pflichtfeld scheitern.**
+
+### 7.7 Selbst-Gegenprüfung der 2 Fundament-Felder (belegt, nicht nur Explore-Agent)
+- **leistungskurve** — `wberechnung/…/Heizlast/WpKennlinieService.php:76-89`: `$k = $wp->leistungskurve; if (!is_array($k) || !isset($k['35'],$k['45'],$k['55'])) return null;` … je Ebene `$r[0]`=Außentemp, `$r[1]`=Leistung, `$r[2]`=cop. ⇒ **JSON-Schema `{"35":[[t_C,p_kW,cop],…],"45":…,"55":…}` exakt** (3 Ebenen W35/W45/W55, Zeilen `[t,p,cop]`).
+- **p_lade_max_kw** — `wberechnung/…/Energie/InverterSizingService.php:416`: `if ($wr->p_bat_lade_max_w !== null && $bat->p_lade_max_kw !== null && $bat->p_lade_max_kw * 1000 > $wr->p_bat_lade_max_w)` ⇒ **kW × 1000 gegen W** → `batteries.max_charge_power_kw` [kW] / `inverters.battery_max_charge_power_w` [W].
