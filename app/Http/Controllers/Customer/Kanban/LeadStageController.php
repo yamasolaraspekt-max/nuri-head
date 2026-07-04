@@ -421,6 +421,14 @@ class LeadStageController extends Controller
                         $update['stage'] = $toStage->key;
                     }
 
+                    // Stufe-A-Kanon (changeStage, 9e0d64a): FK-Wahrheit lead_stage_id MUSS mit status
+                    // mitwandern. Ohne das zeigt sie nach dem (Soft-)Delete auf die geloeschte Phase
+                    // (FK ist nullOnDelete, feuert bei SoftDelete aber nie). Es gibt keinen zentralen
+                    // Model-Hook, der das abfaengt (Stufe B geparkt) -> hier explizit setzen.
+                    if (Schema::hasColumn('lead_product_lists', 'lead_stage_id')) {
+                        $update['lead_stage_id'] = $toStage->id;
+                    }
+
                     if (Schema::hasColumn('lead_product_lists', 'lead_stage_sub_stage_id')) {
                         $update['lead_stage_sub_stage_id'] = $targetSubStageId;
                     }
