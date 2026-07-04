@@ -125,7 +125,7 @@
 | Arbeitsbereich(2) | **bleibt** → 1 (Dashboard, Lead-Kanban) |
 | Berichte(3) | **gesplittet** (A7): Tagesberichte→1 · Kontroll-/Overdue-Berichte→6 (Recht Administrator) |
 | CRM›Kommunikation(6) | **umgezogen** → 4 Kommunikation (Chat-Legacy-Link umhängen) |
-| CRM›Anfragen(7) | **umgezogen** → 2; Junk/Papierkorb → **Tabs** (A5) |
+| CRM›Anfragen(7) | **✓ Tab-Leiste seit `ca649b5`** (NAV III/F2 · Design A · 2a): 6 Tabs (Meine/Alle/Kunden/Veröffentlichte/Junk/Papierkorb) über die lebenden Routen; die zuvor **unverlinkte `inquiry.view` (Alle)** jetzt erreichbar. **Offene Weiche W-Website:** Fusion-Website-Formulare (`fusion.import`) als eigener Anfragen-Eingang = **Yama-Entscheid**, kein UI-Platzhalter vorher. **Geparkt (2b):** Sidebar-Anfragen-Reduktion (Mehrpunkt→1) + „Neue Anfrage" → +Aktion — **wartet auf Kollisionsbereinigung** von `sidebar.blade.php` (Parallel-Strang uncommittet). |
 | CRM›Leads/Kunden(6) | **umgezogen** → 2; Warteschleife/Junk/Papierkorb → **Tabs**; „CRM"-Etikett **entfällt** (A1) |
 | CRM›Kontakte(8) | **✓ Tab seit `764c4fd`** (NAV III/F1, Design A): Sidebar 8→1, 8 Typ-Tabs (Alle/Marken/Lieferanten/Externe/Nachunternehmer/Architekten/Banken/Versicherungen) über die lebenden Alt-Routen; 0 Redirect (nichts entfernt) |
 | Vertrieb›Angebote(4) | → 5; `wizard`+`wizard-smart` **konsolidiert** → **eine +Aktion** (wizard-smart, s. §4); Vorlagen/Sets → Tabs |
