@@ -3,7 +3,30 @@
 > **Reine Ableitung (kein Code, keine Nav/Routen/Blades geändert, kein Commit ohne OK).** Konsolidiert aus: System-A-Nav-Inventur (`navigation-ist-befund-inventur.md`, 15 Sektionen/37/93 + Agent-Item-Liste), Playground-Katalog (`uebernahme/inventar-playground.md`, 122 Punkte), Vergleich (`navigation-vergleich-bewertung-ticket-vs-playground.md`), Weichen (`architektur-entscheidungen.md`: Weiche 1 Phasen=lead_stages · Weiche 5 Projekt=Bauphase, keine eigene Ebene · Weiche 6 Planner=Feld-Wahrheit) + Live-Stichproben (route:list 2026-07-03). Übernimmt das gesetzte **Ziel-Gerüst B** und behebt die **8 Struktur-Fehler A**; Abweichungen sind als solche markiert. **Status:** produktiv · Prototyp · geplant · eingefroren. **Herkunft:** A-Punkt / playground / neu.
 
 ---
-## 1. DIE FINALE LISTE (Sidebar = nur Themenräume, max. 4–5 Unterpunkte)
+## ⚠️ REVISION v2 — 23 Ein-Wort-Bereiche, strikt 2 Ebenen (2026-07-04)
+
+> **Diese Revision überschreibt das 11-Themenraum-Konzept in §1 unten.** §1 bleibt als **Trail** erhalten (nicht gelöscht), ist aber **ÜBERHOLT**.
+
+**Grund (Yama, live 2026-07-04):** Das ticket-Template rendert **drei** Aufklapp-Ebenen (Sektion → Haupt-Item → Kind) — Sektion und Haupt-Item sind **zwei konkurrierende Aufklapp-Begrifflichkeiten** (z. B. „Kontakte ▸ Kontakte"), dazu „X & Y"-Sammel-Labels. Yamas Vorgabe: **keine zwei Begrifflichkeiten**, stattdessen **mehr Haupt-Navis mit je kurzer Unterliste**.
+
+**Entscheidung (Yama, Auswahl-Dialog 2026-07-04):** **23 Ein-Wort-Bereiche** (Alternative „~18 kompakter" verworfen) · Pipeline-Bereich = **„Leads"** · Vorplanung = **„Planung"**.
+
+**Prinzip — strikt 2 Ebenen:** Bereich = aufklappbare **Haupt-Navi** (ein Wort) · darunter **flache Unter-Links** (kein `children`/`submenu`). Ganze Bereiche gaten über **Sektions-`permission`**; Finance bleibt **Item-Gate**.
+
+**Die 23 Bereiche (Zahl = Unter-Links):**
+`Arbeitsbereich[7] · Anfragen[7] · Leads[6] · Kontakte[8] · Kommunikation[3] · Angebote[3] · Aufträge[5] · Montage[4] · Artikel[9] · Artikel-Daten[5] · Lager[7] · Planung[3] · Tickets[3] · Wartung[2] · Mitarbeiter[8] · HR-Daten[7] · Organisation[4] · Phasen[3] · Stammdaten[2] · Filialen[3] · E-Mail-Einrichtung[3] · System[4] · Benutzer[4]`
+
+**Belege (verifiziert vor Commit, Original `b34e4b2^` → Final):**
+- **Nav-Invariante:** 109 Routen-Ziele Original → 109 Final. Einziger Orphan = `offers/wizard` (**nur-URL**, ersetzt durch Angebots-Assistent `wizard-smart`). Neuzugang = `lead-stages.manage` (neue Lead-Phasen-Seite). 0 unerklärte Orphans, 0 Duplikate. (110 Nav-Punkte / 109 Routen; Differenz = „Kundenakte" via Variable.)
+- **Rechte-Erhalt:** je `permission`-Key identische gegatete Blätter. Email 1→2 Bereiche (dieselben 6 Blätter: Kommunikation + E-Mail-Einrichtung), Finance 1→3 Item-Gates (dieselben 3: Förderungen/Betriebskosten/Ratenzahlungen), 8 weitere Keys je 1 Section-Gate unverändert. Keine Verengung/Weitung.
+
+**Umgesetzt in Commits:** `b34e4b2` (Sidebar 2 Ebenen/23 Bereiche) · `903fe1e` (Lead-Phasen-Verwaltungsseite, neue CRUD-Seite auf bestehende JSON-API) · `9286dce` (Fix: Phasen-Löschung schreibt `lead_stage_id` konsistent mit `status`, Stufe-A-Kanon).
+
+**Beibehalten aus §1:** Weichen (1/5/6), Buchhaltung-nur-URL (Entsch. 3), Kundendienst eigener Bereich (Entsch. 5), Junk/Papierkorb als letzte Punkte, Finance-Gate. **Abweichung:** Themenraum-Bündelung (11) → Ein-Wort-Auflösung (23); „Benachrichtigungen" = Topbar (kein Sidebar-Punkt). **Offen (Phase III):** Tab-Konsolidierung (Kontakte-Typ, Junk/Papierkorb).
+
+---
+
+## 1. DIE FINALE LISTE (Sidebar = nur Themenräume, max. 4–5 Unterpunkte)  ·  ⚠️ ÜBERHOLT durch Revision v2 oben (Trail erhalten)
 
 ### 1 · Arbeitsbereich  ·  *Alt: Start · Cockpit*
 | Unterpunkt | Route/Ziel | Recht | Status | Herkunft |
