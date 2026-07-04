@@ -155,7 +155,7 @@ Andock: `RadiatorRecommendationService::fuerRaum(...)` liest `leistungstabelle()
 | (i) Migrationen | ✅ **grün** | `5f2bcd9` | up→down→up grün gg. `ticket_testing`; reale `ticket`-DB unberührt (0/0); Batch `[3]` isoliert |
 | (ii-a) Models | ✅ **grün** | `80598a9` | php -l + create/read/relation gg. `ticket_testing`, Teardown 0 |
 | (ii-b) EN442-Seeder | ✅ **grün** | `09eea5e` | 30/30 idempotent, 3 Stichproben wörtlich=Quelle, Marker-Rückbau→0→30 |
-| (ii-c) Ventiltechnik | offen (Recherche) | — | Quellen-Report vor Commit |
+| (ii-c) Ventiltechnik | ✅ **grün** | `22e335d` | Quellen-Report (11 SKUs belegt) + M9 imported_from; 5 Kat/11 Acc idempotent, Marker-Rückbau→0→11; compat=0 (Yama-Lücke) |
 | (iii) IDS-Mapper | offen | — | — |
 | (iv) Kompatibilität | offen | — | — |
 | (v) UI | offen | — | — |
