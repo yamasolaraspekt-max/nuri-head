@@ -284,6 +284,12 @@ class KanbanLeadTaskController extends Controller
             ->reject(fn($task) => in_array(strtolower((string) ($task['status'] ?? '')), ['done', 'cancelled'], true))
             ->values();
 
+        // Stufe C: 'reported' (Pruefliste, B3-Kette) als eigener Zaehler — Teilmenge der offenen;
+        // open_count bleibt bewusst unveraendert. 0 zusaetzliche Queries (Filter auf geladener Collection).
+        $reportedTasks = $taskCollection
+            ->filter(fn($task) => strtolower((string) ($task['status'] ?? '')) === 'reported')
+            ->values();
+
         $previous = $doneTasks
             ->sortByDesc(fn($task) => $task['done_at'] ?? $task['planned_end_at'] ?? $task['planned_start_at'] ?? '')
             ->first();
@@ -348,6 +354,7 @@ class KanbanLeadTaskController extends Controller
 
             'open_count' => $openTasks->count(),
             'done_count' => $doneTasks->count(),
+            'reported_count' => $reportedTasks->count(),
             'overdue_count' => $overdueTasks->count(),
             'is_overdue' => $overdueTasks->isNotEmpty(),
             'overdue_title' => $firstOverdue['title'] ?? null,

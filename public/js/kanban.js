@@ -13276,6 +13276,7 @@
             previous_title: previous?.title || '-',
             open_count: openTasks.length,
             done_count: doneTasks.length,
+            reported_count: openTasks.filter(t => String(t.status || '').toLowerCase() === 'reported').length,
             estimated_minutes: next?.estimated_minutes || null,
             photo_required: !!next?.photo_required,
             status: current?.status || (template ? 'open' : ''),
@@ -13317,6 +13318,15 @@
               <div class="kb-next-step-preview-line"><i class="feather icon-list"></i><span><strong>${esc(summary.title || 'Noch keine Aufgabe')}</strong></span></div>
               ${summary.planned_end_at ? `<div class="kb-next-step-preview-line"><i class="feather icon-clock"></i><span>Fällig: <strong>${esc(formatDateTimeDE(summary.planned_end_at))}</strong></span></div>` : ''}
               <div class="kb-next-step-preview-line"><i class="feather icon-activity"></i><span>Offen: <strong>${esc(summary.open_count)}</strong> · Erledigt: <strong>${esc(summary.done_count)}</strong>${summary.overdue ? ` · <strong class="text-danger">Überfällig: ${esc(summary.overdue_count)}</strong>` : ''}</span></div>
+              ${(() => {
+                // Stufe C: Aufgaben-Fortschritt (EHRLICH: Buero-Aufgaben, kein Montage-/Baustellen-Stand) + reported-Pill.
+                const total = Number(summary.open_count || 0) + Number(summary.done_count || 0);
+                const rep = Number(summary.reported_count || 0);
+                const parts = [];
+                if (total > 0) parts.push(`<span class="kb-mini-pill" title="Erledigte Buero-Aufgaben (kein Montage-/Baustellen-Stand)">Aufgaben ${esc(summary.done_count)}/${esc(total)}</span>`);
+                if (rep > 0) parts.push(`<span class="kb-mini-pill" style="background:#fff3cd;color:#8a5a00;" title="In Pruefung – siehe Pruefliste">Pruefung: ${esc(rep)}</span>`);
+                return parts.length ? `<div class="kb-next-step-preview-line kb-card-stufe-c-pills">${parts.join(' ')}</div>` : '';
+              })()}
             </div>`;
         }
 
@@ -13596,6 +13606,7 @@
           description: summary.description || current?.description || tmplCurrent?.description || null,
           open_count: Number(summary.open_count ?? openTasks.length ?? 0),
           done_count: Number(summary.done_count ?? doneTasks.length ?? 0),
+          reported_count: Number(summary.reported_count ?? openTasks.filter(t => String(t.status || '').toLowerCase() === 'reported').length ?? 0),
           overdue_count: Number(summary.overdue_count ?? overdueTasks.length ?? 0),
           is_overdue: Boolean(summary.is_overdue || overdueTasks.length),
           overdue_title: summary.overdue_title || overdueTasks[0]?.title || null,
