@@ -144,16 +144,21 @@ Wechselrichter/Batterien), (3) die **doppelte Artikel-/Lager-Domäne**. Diese dr
 
 ---
 
-## Offene Yama-Entscheidungen (vor dem Bau)
+## Yama-Entscheidungen (2026-07-04 — getroffen)
 
-1. **Modul-/Bereichsname:** „Energie & Auslegung" (Vorschlag) — oder anders?
-2. **PV-Katalog-Reuse:** tickets bestehende `inverters`/`batteries`/PV-Kataloge **nutzen** (Spalten-Mapping,
-   ein Katalog) — oder wberechnungs Kataloge **parallel** übernehmen (umbenannt)? *(Empfehlung: reconcilen —
-   ein Katalog, sonst zwei Wahrheiten für dieselben Geräte.)*
-3. **Artikel-/Lager-Reuse:** Heizlast/Materialliste an tickets `products`/Lager anbinden — oder wberechnungs
-   `artikels`/`lieferants`/`lagerbestands` mitziehen? *(Empfehlung: tickets Artikel-Welt nutzen.)*
-4. **Tabellen-Präfix** für die sauberen Domain-Tabellen (z. B. keiner, oder `hl_`/`energie_`) — Klarheit vs. Aufwand.
-5. **Plan-Import + Grundriss-Editor:** in Welle 1 mitnehmen oder als spätere Welle (schwerste Views + Queue)?
+1. **Modul-/Bereichsname:** ✅ **„Energie & Auslegung"** (= Bereich-8-Name). *(Weiche 3)*
+2. **PV-Katalog:** ✅ **KEIN Doppel-Katalog.** Tickets `inverters`/`batteries` (+ `products`/`article_groups`)
+   sind die **einzige** Katalog-Wahrheit — **inklusive der technischen Daten, die die Rechenkerne brauchen**.
+   wberechnungs `inverters`/`batteries` werden **nicht transplantiert**, sondern in tickets Katalog **überführt**. *(Weiche 1)*
+3. **Artikel/Lager:** ✅ Heizlast/Materialliste an **tickets** `products`/`article_groups`/Lieferanten anbinden;
+   wberechnungs `artikels`/`lieferants` **nicht** mitziehen, sondern **mappen/überführen**. *(Weiche 2)*
+4. **Tabellen-Präfix:** ✅ **kein Präfix** für die belegt kollisionsfreien Domain-Tabellen (`heizlast_*`,
+   `energiekonzepte`, …) — die Kollisions-Karte (Achse ④) trägt das. *(Weiche 4)*
+5. **Plan-Import + Grundriss-Editor:** ✅ **spätere Welle** (schwerste Views + Queue/Storage). *(Weiche 5)*
+
+> **Folge (Pflicht-Vorbedingung):** Die **Katalog-Reconciliation** (tickets Katalog additiv erweitern +
+> wb-Daten überführen + **Adapter-Schicht**, über die die Rechenkerne aus tickets Katalog lesen) ist jetzt
+> **Vorbedingung** der Rechenkern-Transplantation. Detailplan: **`docs/katalog-reconciliation-plan.md`**.
 
 ---
 
