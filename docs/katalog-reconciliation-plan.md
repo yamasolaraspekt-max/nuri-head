@@ -192,3 +192,44 @@ der ticket-Name** (Katalog-Wahrheit ist ticket); wb-Namen werden **gemappt, nich
 → ticket `max_mpp_voltage`). Nur die ➕-Felder (kein ticket-Äquivalent) kommen mit einem neuen, ticket-konformen Namen dazu.
 
 > **Status: Reconciliation-Plan vollständig entscheidungsreif.** Stufenplan (i)–(iv) bestätigt. Gebaut wird am Cut-over.
+
+---
+
+## 7. Stufe (i) GEBAUT (2026-07-04) — Rename-Tabelle + Schema-Nachtrag
+
+Migrationen `2026_07_04_150001–150004`, verifiziert gegen **ticket_testing** (migrate → DESCRIBE → rollback → exakter Vorzustand inkl. float→integer → erneut migrate). Scope: `inverters`-ADDs · `batteries`-ADDs · `product_pv_module_specs` · `product_heat_pump_specs`. **`product_radiator_specs` NICHT gebaut** — gehört dem Heizkörper-Strang (`heizkoerper-bauplan.md` M1, Migration `2026_07_04_140001`); der `HeizkoerperService`-3-Key dockt dort an.
+
+### 7.1 SizingInverter — Rename (wb → ticket, „ticket-Name gewinnt")
+| wb-Feld | ticket-Spalte (Bestand) | Einheit |
+|---|---|---|
+| u_dc_max_v | `max_input_voltage` | V |
+| u_mppt_min_v | `min_mpp_voltage` | V |
+| u_mppt_max_v | `max_mpp_voltage` | V |
+| anzahl_mppt | `num_mpp_trackers` | — |
+| i_dc_max_mppt_a | `max_input_current_per_mpp` | A *(F1: int→float)* |
+| i_sc_max_mppt_a | `max_short_circuit_current_per_mpp` | A *(F1)* |
+| i_dc_max_string_a | `max_input_current` | A *(F1)* |
+| p_ac_nenn_w | `ac_nominal_power` | W |
+| p_ac_max_va | `max_ac_power` | **VA** |
+| p_dc_max_w | `max_dc_power` | W |
+| phasen | `num_phases` | — *(F2: int\|string → Adapter-Cast in Stufe iii)* |
+| wirkungsgrad_euro_pct | `efficiency_*` (Kurve) | % |
+
+### 7.2 SizingInverter — 18 additive (neue ticket-konforme Namen ← wb)
+`dc_operating_max_voltage`←u_dc_betrieb_max_v · `dc_startup_voltage`←u_dc_start_v · `max_dc_ac_ratio`←max_dc_ac_ratio · `max_array_power_wp`←max_array_wp · `is_hybrid`←ist_hybrid · `eps_capable`←eps_faehig · `integrated_grid_protection`←na_schutz_integriert · `vde4105_compliant`←vde4105_konform · `active_power_limit`←wirkleistungsbegrenzung · `controllable_14a`←steuerbar_14a · `control_interface`←schnittstelle · `operating_temp_min_c`←temp_betrieb_min_c · `operating_temp_max_c`←temp_betrieb_max_c · `temp_derating_from_c`←temp_derating_ab_c · `battery_min_voltage`←u_bat_min_v · `battery_max_voltage`←u_bat_max_v · `battery_max_charge_power_w`←p_bat_lade_max_w · `battery_max_current_a`←i_bat_max_a.
+
+### 7.3 SizingBattery — 4 additive
+`min_voltage`←u_min_v [V] · `max_voltage`←u_max_v [V] · `max_charge_power_kw`←p_lade_max_kw [**kW**] · `max_current_a`←i_max_a [A].
+
+### 7.4 SizingModule / WpKennlinie — Interface-Feldnamen 1:1 als Spalten
+`product_pv_module_specs` (11): voc_v · vmpp_v · isc_a · impp_a · pmpp_wp · tk_{voc,isc,pmpp,vmpp}_pct_k · u_sys_max_v · sicherung_max_a.
+`product_heat_pump_specs`: `leistungskurve` **JSON** (W35/W45/W55) + 14 Numerik (heizleistung_*/cop_*/scop_*/max_vorlauf_c/aussen_heizen_min_c/modulation_*) + 3 Labels (geraetetyp/serie/kaeltemittel); hersteller/modell aus `products`.
+
+### 7.5 Einheiten-Regel (F3) & Korrekturen
+- **F3:** jede Leistungs-/Spannungs-/Strom-Spalte trägt die Einheit im DB-Kommentar (einmal sauber).
+- **Einheiten-Falle (belegt):** Batterie-Ladeleistung **kW** (`max_charge_power_kw`) vs. WR-Kopplung **W** (`battery_max_charge_power_w`) — Kern rechnet ×1000 (InverterSizingService:416). 1:1 vom Contract übernommen.
+- **Korrektur zu §1e:** der Kern liest `q_norm_w` (nicht `q_norm_w_pro_m`); HK-M1 hält `q_norm_w_pro_m` (→ q_norm_w = ×Baulänge×Anzahl) — Mapping im HK-Adapter (dort dokumentiert).
+- **§14a/Anomalie:** die Inverter-Spalten in `ticket.radiators` bleiben ein separates Datenqualitäts-Ticket (nicht dieser Cut-over).
+
+### 7.6 Vollständigkeit (Punkt 4) — 0 Lücken
+SizingInverter **30/30** (12 Bestand + 18 neu) · SizingModule **11/11** · SizingBattery **4/4** · WpKennlinie **komplett** (leistungskurve-JSON + 14 + 3 Labels) · Heizkörper **3/3** → HK-M1 `product_radiator_specs`. **Stufe (iii) kann an keinem Pflichtfeld scheitern.**
