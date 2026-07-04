@@ -25,6 +25,7 @@ class HarnessSeeder extends Seeder
             HarnessContextSeeder::class,
             QualifikationTestSeeder::class,
             MontageTestSeeder::class,
+            KanbanTestSeeder::class,
         ]);
 
         $this->command?->info(self::TAG . ' Harness vollstaendig geseedet.');

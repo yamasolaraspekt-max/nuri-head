@@ -90,6 +90,17 @@ class HarnessTeardownSeeder extends Seeder
         // 7b) phase_sections (nach task_phases + phase_activities, die es referenzieren)
         DB::table('phase_sections')->where('phase_section', 'LIKE', $like)->delete();
 
+        // 7c) personal_tasks (Follow-up-Traeger; marked task_title ODER Test-Kunde) — VOR lead_product_lists,
+        //     damit keine source_id-Waisen bleiben. Stufe-E-Erweiterung (KanbanTestSeeder 3a).
+        DB::table('personal_tasks')
+            ->where(function ($q) use ($like, $customerIds) {
+                $q->where('task_title', 'LIKE', $like);
+                if ($customerIds) {
+                    $q->orWhereIn('customer_id', $customerIds);
+                }
+            })
+            ->delete();
+
         // 8) lead_product_lists (ueber die Test-Kunden) — NUR wenn Kunden-IDs vorhanden
         if ($customerIds) {
             DB::table('lead_product_lists')->whereIn('customer_id', $customerIds)->delete();
