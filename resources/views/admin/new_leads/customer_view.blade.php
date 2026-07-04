@@ -4057,6 +4057,9 @@
     $selectedProducts = (array) request()->input('products', []);
 @endphp
 @section('content')
+    @if ($showLeadTabs ?? false)
+        @include('admin.new_leads._tabs')
+    @endif
 
     <!-- BEGIN: Content-->
     <div class="app-content"> 

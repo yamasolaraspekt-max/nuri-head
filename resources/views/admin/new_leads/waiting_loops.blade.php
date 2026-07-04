@@ -1071,6 +1071,7 @@ $defaultFemale = asset('images/gender/female.png');
 @endsection
 
 @section('content')
+    @include('admin.new_leads._tabs')
     <div class="oc-wrap">
         <div class="oc-header">
             <div class="oc-titlebar">

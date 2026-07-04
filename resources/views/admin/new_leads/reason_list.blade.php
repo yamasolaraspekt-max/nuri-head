@@ -712,6 +712,7 @@ $editEndpointBase = url('/lead_reason_update');
 @endsection
 
 @section('content')
+    @include('admin.new_leads._tabs')
     <div class="lx-page" id="lxLeadReasonApp" data-update-base="{{ $editEndpointBase }}">
         <div class="lx-topbar">
             <div class="lx-title-wrap">

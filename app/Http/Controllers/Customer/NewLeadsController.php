@@ -3681,6 +3681,7 @@ class NewLeadsController extends Controller
             ->values();
 
         return view('admin.new_leads.customer_view', [
+            'showLeadTabs' => true, // NAV III/F3: Tab-Leiste nur auf Tab-Routen (index = Aktiv)
             'data' => $leads,
             'myCounts' => $myCounts,
 
@@ -4790,6 +4791,7 @@ class NewLeadsController extends Controller
         // $services = DB::table('phase_sections')->select('id','product_id','phase_section')->whereNull('deleted_at')->get();
 
         return view('admin.new_leads.customer_view', [
+            'showLeadTabs' => true, // NAV III/F3: Tab-Leiste nur auf Tab-Routen (my_lead = Meine)
             'data' => $leads,
             'article' => $article,
             'productcount' => $productcount,
