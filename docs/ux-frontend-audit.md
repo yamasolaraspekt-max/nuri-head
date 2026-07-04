@@ -24,6 +24,7 @@
 - **91,8 % Inline-Code** im Schnitt. `customer_profile` 19.727 Z. = **15.595 Z. Inline-JS + 2.715 Z. Inline-CSS (92,8 %)**; `new_leads/customer_profile` 17.550 Z. Inline-JS. → **Jede Änderung an einer View berührt 19k-Zeilen-Dateien** = extremes Wartungsrisiko.
 - **Kundenprofil ~2,2 MB** Seitengewicht (Inventur-bekannt) + 15,6k Z. Inline-JS render-relevant.
 - **N+1 bekannt:** `context()` per Karte (Ebenen-Befund) — für Board-Badges ungeeignet, `summaries`-Batch existiert (siehe Verzahnung Stufe C).
+- **N+1 GEMESSEN im `summaries`-Batch (2026-07-04, Stufe-C-Verifikation):** 1 HTTP-Call, aber intern **≈4 Queries/Karte** — **8 Queries bei 1 Karte → 221 bei 53** (`KanbanLeadTaskController::summaries`/`summaryPayload`, Task-/Template-Laden je Karte). Wächst **linear mit dem Betrieb** → bei 200+ Karten spürbare Board-Ladezeit. **VOR dem echten Wachstum fixen** (Batch-Laden von Tasks/Templates über `lead_product_list_id IN (…)` statt je Karte), nicht erst bei Beschwerden. Stufe C selbst fügte **0 Queries** hinzu (Filter auf geladener Collection). → Quick-Win-Kandidat, s. Welle 1.
 - Profil-Struktur: von ~31.700 Z. beider Profil-Blades sind nur **~2.800 Z. echte Bereiche**, ~29.000 Z. CSS/JS (Beleg: kundenprofil-struktur §0).
 
 ### 1.4 Responsive / Mobile
@@ -130,6 +131,7 @@ Konsolidierung auf **6-7 arbeits-zentrierte Gruppen** (Aufwand **M** je Gruppe, 
 - **Konsistenz-Partial** (EIN `x-save-button`, Farb-Token-Datei, ein Modal-Muster) — #3.
 - **Tote UI entfernen** (22 Elemente) + **Nav-Duplikat** + **Chat-Link umhängen** + **B1-Pflege in Nav** — #4/#8/#9.
 - **Dashboard-Widgets** „Überfällige Angebote" + „nächste 3 Termine" + „Umsatz-at-risk" nach dem **Mein-Bereich-Muster (fa41c61/20a493d)** — #2.
+- **`summaries`-Batch entzerren** (Perf): Tasks/Templates **einmal** über `lead_product_list_id IN (…)` laden statt ≈4 Queries/Karte (gemessen 221 bei 53 Karten, §1.3). Isolierter Schritt, kein Verhaltensrisiko; **vor** dem Karten-Wachstum (200+) fixen. Klein-Schuld gleich mit: reported-Pill-Farbe in `kanban.js` steckt als **Inline-Style** (`#fff3cd`) statt CSS-Klasse (Stufe C) → in die Konsistenz-Token-Datei ziehen.
 
 **Welle 2 — Eine Fläche richtig (M): DAS BOARD.** Begründung: **Kanban Stufe B/C fasst das Board ohnehin an** → das Layout-Urteil (Karten-Signale, Informationsdichte, Badges) **MUSS in Stufe C einfließen**, sonst wird zweimal gebaut. Danach die **Nav-Konsolidierung** (Zielbild §iv).
 
