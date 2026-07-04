@@ -178,3 +178,9 @@ Gebaut: Stufe A (`169d1ee`/`9e0d64a`), B1 (`a1c7e18`, Board FK-first + symmetris
 **(2) Zwei Netze übereinander — bestätigt.** Im B2-Verifikations-Fall (ii, Guard) wurde testweise `lead_stage_id=99` (nicht existent) gesetzt → die **DB-FK-Constraint** (`lead_product_lists.lead_stage_id → lead_stages`, nullOnDelete) wies den Save mit Exception ab. Gutes Zeichen: der **Model-Hook** (Ableitung) und die **DB-Constraint** (Integrität) liegen als zwei unabhängige Netze übereinander. Der Test wurde danach auf einen gültigen FK (5/deal) korrigiert.
 
 **Deckung der ~19 status-Schreiber:** Eloquent-Schreiber → B2-Hook (creating/updating). Einziger raw-INSERT (`NewLeadsController:6116`) → direkt gefixt. raw-UPDATEs → B1-Query-Fold + `Log::warning('kanban fk-fallback')` macht sie sichtbar. `changeStage` (Kanon) unberührt.
+
+## Stufe C/D — Karten-Signale (2026-07-04)
+
+**Stufe C** (`3cd0519`): `reported_count` (In-Prüfung-Pill) + Aufgaben-Fortschritt-Pill (ehrlich: Büro-Aufgaben, kein Montage-Stand). **Stufe D** (`e3f7518`): Wiedervorlage-Zustand als Pill (macht den B1-Fold sichtbar — die 5 Altfall-Karten stehen in *Angebot* + zeigen *Wiedervorlage*). Quelle: personal_task-Follow-up (mit Datum) **gewinnt** vor `status='follow_up'`-Rest.
+
+**(Vorgemerkt) verloren / pausiert — NICHT gebaut (Stufe-D-Entscheidung).** Begründung: **verloren/junk/archiv-Karten verlassen das Board** (Tabs) → ein Pill, der konstruktionsbedingt nie feuert, wäre toter Code, keine Vorsorge. Und `work_status='playing'` ist ein **Timer**-Zustand, **nicht** die Weiche-1-Zustands-Dimension — daraus „pausiert" abzuleiten wäre eine erfundene Gleichsetzung. **Diese Pills kommen als eigener Mini-Schritt, WENN die Zustands-Dimension einen echten Träger bekommt** (z. B. Archiv-Tab zeigt Karten MIT Zustands-Pill, oder ein echtes `paused`-Feld entsteht).
