@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 @section('title') Zeitarbeitfirma @stop
 @section('content')
+    @include('admin.contacts._tabs')
 
     <!-- BEGIN: Content-->
     <div class="app-content content">

@@ -1087,6 +1087,7 @@
 @endonce
 
 @section('content')
+    @include('admin.contacts._tabs')
 @php
     $items = collect($data->items());
 

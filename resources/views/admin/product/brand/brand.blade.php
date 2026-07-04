@@ -596,6 +596,7 @@ $typeLabels = [
 @endonce
 
 @section('content')
+    @include('admin.contacts._tabs')
 <div class="oc-wrap">
   <div class="oc-header">
     <div class="oc-titlebar">

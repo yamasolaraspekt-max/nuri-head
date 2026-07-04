@@ -803,6 +803,7 @@ $exportQuery = request()->only(['search', 'type', 'sort', 'direction']);
 @endsection
 
 @section('content')
+    @include('admin.contacts._tabs')
 <div class="ac-wrap">
     <div class="ac-header">
         <div class="ac-titlebar">

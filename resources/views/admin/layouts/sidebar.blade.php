@@ -448,14 +448,9 @@
             'title' => 'Kontakte',
             'permission' => 'Partner',
             'items' => [
-                ['label' => 'Alle Kontakte', 'icon' => 'list', 'url' => $safeRoute('all.contacts', 'all-contacts'), 'count_key' => 'contacts', 'active_routes' => ['/all-contacts']],
-                ['label' => 'Hersteller / Marken', 'icon' => 'factory', 'url' => $safeRoute('brand.index', 'brand'), 'count_key' => 'brands', 'active_routes' => ['/brand', '/brands']],
-                ['label' => 'Lieferanten', 'icon' => 'truck', 'url' => $safeRoute('distributors.index', 'distributors'), 'count_key' => 'distributors', 'active_routes' => ['/distributors']],
-                ['label' => 'Externe Firmen', 'icon' => 'users', 'url' => $safeRoute('external.info'), 'count_key' => 'external_companies'],
-                ['label' => 'Nachunternehmer', 'icon' => 'wrench', 'url' => $safeRoute('brand.sub.contractor'), 'count_key' => 'sub_contractors'],
-                ['label' => 'Architekten', 'icon' => 'pen-tool', 'url' => $safeRoute('brand.architect'), 'count_key' => 'architects'],
-                ['label' => 'Banken', 'icon' => 'landmark', 'url' => $safeRoute('brand.bank'), 'count_key' => 'banks'],
-                ['label' => 'Versicherungen', 'icon' => 'shield', 'url' => $safeRoute('brand.insurance'), 'count_key' => 'insurances'],
+                // NAV Phase III (Fläche 1, Design A): 8 Kontakt-Typen -> Tab-Leiste (admin/contacts/_tabs).
+                // Sidebar 8 -> 1; Alt-Routen bleiben live (= die Tabs), aktiv bei jedem Tab via active_routes.
+                ['label' => 'Alle Kontakte', 'icon' => 'list', 'url' => $safeRoute('all.contacts', 'all-contacts'), 'count_key' => 'contacts', 'active_routes' => ['/all-contacts', '/brand', '/brands', '/distributors', '/external_personal']],
             ],
         ],
         [
