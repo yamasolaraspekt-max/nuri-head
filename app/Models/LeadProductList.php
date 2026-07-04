@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 use App\Traits\AuditableLead;
 use App\Models\LeadStage;
@@ -99,6 +100,79 @@ class LeadProductList extends Model
 
         'deleted_at' => 'datetime',
     ];
+
+    /** Stufe B: key->id-Map der Lead-Stages, statisch je Request gecacht (Hook + raw-Insert-Fix). */
+    protected static ?array $stageIdByKeyCache = null;
+
+    /**
+     * Stufe B: zentrales Netz fuer die FK-Wahrheit lead_stage_id. Deckt ALLE Eloquent-Schreiber.
+     * Raw DB::table-Writer umgehen den Hook -> die (eine) Batch-INSERT direkt gefixt; raw-UPDATEs
+     * faengt der B1-Query-Fold + Log. changeStage setzt beide -> FK dirty -> Hook greift nicht ein.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (self $lead) {
+            if (empty($lead->lead_stage_id)) {
+                $id = static::deriveLeadStageId($lead->status);
+                if ($id !== null) {
+                    $lead->lead_stage_id = $id;
+                } else {
+                    Log::warning('lead_stage_id derive-miss (creating)', ['status' => $lead->status]);
+                }
+            }
+        });
+
+        static::updating(function (self $lead) {
+            // Stale-FK-Schutz: status geaendert, FK NICHT selbst gesetzt -> FK aus NEUEM status neu ableiten
+            // (gefoldet, ueberschreibt stale). changeStage setzt beide -> lead_stage_id dirty -> Hook greift nicht ein.
+            if ($lead->isDirty('status') && !$lead->isDirty('lead_stage_id')) {
+                $id = static::deriveLeadStageId($lead->status);
+                if ($id !== null) {
+                    $lead->lead_stage_id = $id;
+                } else {
+                    // Unbekannter Key: FK unveraendert lassen, kein Crash.
+                    Log::warning('lead_stage_id derive-miss (updating)', ['status' => $lead->status]);
+                }
+            }
+        });
+    }
+
+    /**
+     * Ableitung lead_stage_id aus status, GEFOLDET nach Backfill-Kanon (follow_up->offer, accepted->deal).
+     * Unbekannter Key -> null. key->id-Map statisch je Request gecacht.
+     */
+    public static function deriveLeadStageId(?string $status): ?int
+    {
+        $key = strtolower(trim((string) $status));
+        if ($key === '' || $key === 'open') {
+            $key = 'lead';
+        }
+
+        $syn = [
+            'new' => 'lead', 'neu' => 'lead', 'neue' => 'lead',
+            'angebot' => 'offer', 'verkauf' => 'offer',
+            'nachfassen' => 'follow_up', 'followup' => 'follow_up',
+            'annehmen' => 'accepted', 'annemen' => 'accepted', 'angenommen' => 'accepted',
+            'auftrag' => 'deal',
+            'montage' => 'project', 'projekt' => 'project',
+            'abschluss' => 'completed', 'complete' => 'completed',
+            'archiv' => 'archive', 'reject' => 'junk', 'rejeck' => 'junk',
+        ];
+        $key = $syn[$key] ?? $key;
+
+        // FOLD auf die Eltern-Phase (Kanon aus 169d1ee / B1-Query-Fold).
+        $fold = ['follow_up' => 'offer', 'accepted' => 'deal'];
+        $key = $fold[$key] ?? $key;
+
+        if (static::$stageIdByKeyCache === null) {
+            static::$stageIdByKeyCache = LeadStage::query()
+                ->pluck('id', 'key')
+                ->mapWithKeys(fn($id, $k) => [strtolower(trim((string) $k)) => (int) $id])
+                ->toArray();
+        }
+
+        return static::$stageIdByKeyCache[$key] ?? null;
+    }
 
     public function customer()
     {

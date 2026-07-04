@@ -6100,6 +6100,8 @@ class NewLeadsController extends Controller
                 'interest' => $it,
                 'realization_time' => $rt,
                 'status' => 'Lead',
+                // Stufe B: FK-Wahrheit direkt mitsetzen (raw INSERT umgeht den Model-Hook). 'Lead' -> lead-Stage.
+                'lead_stage_id' => \App\Models\LeadProductList::deriveLeadStageId('Lead'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
