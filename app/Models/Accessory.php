@@ -23,6 +23,7 @@ class Accessory extends Model
         'voreinstellbar',
         'product_id',
         'quelle',
+        'imported_from',
         'aktiv',
     ];
 
