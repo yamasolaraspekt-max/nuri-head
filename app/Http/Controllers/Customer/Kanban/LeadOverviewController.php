@@ -263,12 +263,15 @@ class LeadOverviewController extends Controller
             ])
             ->toArray();
 
+        // Stufe B: Board zeigt nur die 6 Phasen-Spalten. follow_up/accepted sind in offer/deal gefoldet;
+        // archive/junk/ticket -> kein Spalten-Eintrag (Zugang via bestehende Tabs). lead_stages-Zeilen bleiben.
+        $kanbanPhaseKeys = ['lead', 'offer', 'deal', 'project', 'abnahme', 'completed'];
         $kanbanStageNames = collect($stageNames)
-            ->reject(fn($label, $key) => in_array(strtolower((string) $key), ['junk', 'ticket'], true))
+            ->reject(fn($label, $key) => !in_array(strtolower((string) $key), $kanbanPhaseKeys, true))
             ->toArray();
 
         $kanbanStageMeta = collect($stageMeta)
-            ->reject(fn($meta, $key) => in_array(strtolower((string) $key), ['junk', 'ticket'], true))
+            ->reject(fn($meta, $key) => !in_array(strtolower((string) $key), $kanbanPhaseKeys, true))
             ->toArray();
 
         $page = (int) $request->get('page', 1) ?: 1;
@@ -1062,8 +1065,23 @@ class LeadOverviewController extends Controller
 
             $this->hydrateLeadTeamsForKanbanFast($rows);
 
-            $leads = $rows->map(function ($lead) use ($stagesMap) {
-                $lead->stage = $stagesMap[strtolower($lead->stage ?? 'lead')] ?? ($lead->stage ?? 'lead');
+            $keyById = $this->leadStageKeyById();
+            $foldToParent = ['follow_up' => 'offer', 'accepted' => 'deal'];
+
+            $leads = $rows->map(function ($lead) use ($keyById, $foldToParent) {
+                // Stufe B: Spalten-Key FK-first (deckt Backfill-Fold); Fallback gefoldeter Status + Log bei NULL-FK.
+                if (!empty($lead->lead_stage_id) && isset($keyById[(int) $lead->lead_stage_id])) {
+                    $rawStage = $keyById[(int) $lead->lead_stage_id];
+                } else {
+                    if (empty($lead->lead_stage_id)) {
+                        Log::warning('kanban fk-fallback', [
+                            'lpl_id' => $lead->lead_product_id ?? null,
+                            'status' => $lead->stage ?? null,
+                        ]);
+                    }
+                    $rawStage = $this->normalizeStage((string) ($lead->stage ?? 'lead'));
+                }
+                $lead->stage = $foldToParent[$rawStage] ?? $rawStage;
 
                 $lead->employee = $lead->employee_id ? (object) [
                     'employee_id' => $lead->employee_id,
@@ -2780,6 +2798,23 @@ class LeadOverviewController extends Controller
         return $map[$s] ?? $fallback;
     }
 
+    /**
+     * Stufe B: [key => id] der Lead-Stages (lowercased). Genutzt vom FK-Fold in
+     * applyCommonFilters (Query) und vom FK-first-Transform in search (Rendering).
+     */
+    private function leadStageIdByKey(): array
+    {
+        return LeadStage::query()
+            ->pluck('id', 'key')
+            ->mapWithKeys(fn($id, $key) => [strtolower(trim((string) $key)) => (int) $id])
+            ->toArray();
+    }
+
+    private function leadStageKeyById(): array
+    {
+        return array_flip($this->leadStageIdByKey());
+    }
+
     private function stageExists(string $stage): bool
     {
         return LeadStage::query()
@@ -3192,6 +3227,8 @@ class LeadOverviewController extends Controller
 
             'lpl.id as lead_product_id',
             DB::raw("CASE WHEN lpl.status IS NULL OR lpl.status = '' OR LOWER(lpl.status) = 'open' THEN 'lead' ELSE LOWER(lpl.status) END as stage"),
+            // Stufe B: FK-Wahrheit mitselektieren (Board rendert FK-first, Fallback auf status-String)
+            Schema::hasColumn('lead_product_lists', 'lead_stage_id') ? 'lpl.lead_stage_id' : DB::raw('NULL as lead_stage_id'),
 
             $hasLeadStageMode ? 'lpl.stage_mode' : DB::raw("'company' as stage_mode"),
             $hasLeadProductStageId ? 'lpl.product_stage_id' : DB::raw('NULL as product_stage_id'),
@@ -3321,7 +3358,30 @@ class LeadOverviewController extends Controller
                     'reject' => 'junk',
                 ];
                 $canonical = $aliases[$stage] ?? $stage;
-                $q->where(DB::raw($norm), '=', $canonical);
+
+                if ($forKanban && Schema::hasColumn('lead_product_lists', 'lead_stage_id')) {
+                    // Stufe B: FK-first mit SYMMETRISCHEM Fold (follow_up->offer, accepted->deal).
+                    // Spalte holt Karten (a) deren FK auf die Spalte ODER die gefoldete Kind-Stage zeigt,
+                    // (b) NULL-FK mit gefoldetem Status. Zweige disjunkt (FK gesetzt vs. NULL) -> keine Doppelzaehlung.
+                    // Bruecke bis B2-Hook: solange raw-Writer FK=follow_up/accepted erzeugen koennen, faengt der FK-Fold sie.
+                    $childrenOf = ['offer' => ['follow_up'], 'deal' => ['accepted']];
+                    $statusSet = array_values(array_unique(array_merge([$canonical], $childrenOf[$canonical] ?? [])));
+                    $keyToId = $this->leadStageIdByKey();
+                    $stageIdSet = collect($statusSet)->map(fn($k) => $keyToId[$k] ?? null)->filter()->values()->all();
+
+                    if (!empty($stageIdSet)) {
+                        $q->where(function ($qq) use ($LPL, $stageIdSet, $norm, $statusSet) {
+                            $qq->whereIn("{$LPL}.lead_stage_id", $stageIdSet)
+                                ->orWhere(function ($q2) use ($LPL, $norm, $statusSet) {
+                                    $q2->whereNull("{$LPL}.lead_stage_id")->whereIn(DB::raw($norm), $statusSet);
+                                });
+                        });
+                    } else {
+                        $q->whereIn(DB::raw($norm), $statusSet);
+                    }
+                } else {
+                    $q->where(DB::raw($norm), '=', $canonical);
+                }
             }
         }
 
