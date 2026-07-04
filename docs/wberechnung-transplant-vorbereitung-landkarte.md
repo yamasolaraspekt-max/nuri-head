@@ -58,6 +58,12 @@ Belegt aus `routes/web.php` (57 Routen), 14 Controllern, 48 Services, 43 Migrati
 > transplantieren am saubersten (Service-Logik, wenig DB-Kopplung). **Plan-Import + Grundriss-Editor**
 > sind Kandidaten für eine **spätere** Welle (schwere Views + Queue/Storage).
 
+> **WR-Auslegung — Doppel-Kern (Yama-Entscheid 2026-07-04):** wberechnung hat zwei WR-Rechenkerne. Der
+> **aktive** (`App\Services\Energie\InverterSizingService`, DB-frei, via `Sizing*`-Interfaces verdrahtet) wird
+> transplantiert. Der **Legacy-Kern** (`App\Services\InverterSuggestionService`, fragt selbst Eloquent, vom
+> Controller **nicht** aufgerufen) wird **bewusst nicht transplantiert — abgelöst durch `Energie\InverterSizingService`**
+> (kein stiller Verlust). Details: `docs/katalog-reconciliation-plan.md` §3/§6.
+
 ---
 
 ## Achse ② — Navi-Platzierung in ticket

@@ -95,7 +95,7 @@ marginal (`scop`↔`scop_35`, `refrigerant`↔`kaeltemittel`, `phase_count`↔`p
 ### 1e — Heizkörper (wb `heizkoerper` → `ticket.radiators` unbrauchbar)
 Konsumiert vom **DB-freien** `HeizkoerperService`: **nur 3 Felder** — `q_norm_w_pro_m`, `exponent_n`, `norm_bedingung`.
 **Status: ➕ (klein)** — neue Spec-Struktur `product_radiator_specs` (3 Felder + Label-Felder für Auswahl).
-*Vorher klären: was ist `ticket.radiators` (Inverter-Spalten) wirklich, kann/soll es umbenannt/bereinigt werden?*
+*`ticket.radiators` bleibt unberührt (referenziert, s. §6.1) — die neue Tabelle entsteht sauber daneben.*
 
 ### 1f — Artikel (wb `artikel` → `ticket.products`) — Daten-Mapping, kein Spec
 `ticket.products` (article_no, sku, ean, brand_id, discount_group, heatpump_type, scop, …) deckt den Stammsatz ab;
@@ -167,13 +167,28 @@ die Referenz für „der Kern rechnet noch richtig".
 
 ---
 
-## 6. Offene Klärungen vor dem Bau (Pflicht-Stopp)
+## 6. Entscheidungen (Yama 2026-07-04 — alle 4 getroffen)
 
-1. **`ticket.radiators`** (Inverter-Spalten, 0 Zeilen): Was ist das, kann es bereinigt/umbenannt werden, bevor
-   `product_radiator_specs` entsteht? (sonst zwei „radiator"-Begriffe).
-2. **PV-Modul- & WP-Spec als eigene Tabellen** (`product_*_specs`, via `product_id`) — bestätigt als Muster
-   (analog `inverters`/`batteries`), oder generische EAV/`artikel_merkmale`-Struktur bevorzugt?
-3. **WR-Doppel-Kern:** wberechnung hat einen aktiven (`Energie\InverterSizingService`) **und** einen Legacy-Kern
-   (`InverterSuggestionService`, ruft selbst Eloquent). Nur den **aktiven** transplantieren; Legacy fällt weg — bestätigen.
-4. **Feld-Rename-Liste WR (§1a ✓-Zeilen):** exakte 1:1-Umbenennung wird in Stufe (i) als belegte Tabelle final gemacht
-   (hier als Mapping-Vorschlag, noch nicht als Migration).
+**(1) `ticket.radiators` — NICHT droppen, stehen lassen, neue Tabelle daneben.**
+Referenz-Check (belegt, read-only) ergab: **referenziert, nicht tot** — `app/Models/Radiator.php`,
+`ProductController.php:1392` (`DB::table('radiators')->where('product_id',…)`, Produkt-Detail-„Radiator"-Tab =
+`radiator.config.view`), Views `admin/configurations/radiator/*` + `admin/product/.../radiator.blade.php`.
+Damit greift der Fallback: **stehen lassen, gemeldet.** Der echte Heizkörper-Katalog entsteht **neu & sauber**
+als `product_radiator_specs` **daneben**. Die Anomalie (Inverter-Spalten in „radiators", 0 Zeilen) ist ein
+**separates ticket-Datenqualitäts-Thema**, NICHT Teil dieses Transplants (eigenes Ticket später).
+
+**(2) Eigene typisierte Spec-Tabellen, KEIN EAV.** `product_pv_module_specs`, `product_heat_pump_specs`,
+`product_radiator_specs` — je via `product_id`-FK, analog `inverters`/`batteries`. Begründung: die Rechenkern-
+Interfaces (`Sizing*`, `WpKennlinie`) verlangen **typisierte** Felder; EAV wäre typenlos, query-teuer und würde den
+Adapter-Contract aufweichen. Die 3-Ebenen-WP-**`leistungskurve` als JSON-Spalte** innerhalb `product_heat_pump_specs`
+(strukturiert, kein EAV-Zoo).
+
+**(3) Nur den aktiven WR-Kern transplantieren.** `Energie\InverterSizingService` (DB-frei) zieht um; der Legacy-Kern
+`InverterSuggestionService` (fragt selbst Eloquent) **fällt weg** — in der Funktions-Landkarte als *„bewusst nicht
+transplantiert, abgelöst durch `Energie\InverterSizingService`"* dokumentiert (kein stiller Verlust).
+
+**(4) Rename-Liste in Stufe (i) als belegter Migrations-Anhang.** Regel: **wo ein ticket-Feldname existiert, gewinnt
+der ticket-Name** (Katalog-Wahrheit ist ticket); wb-Namen werden **gemappt, nicht übernommen** (z. B. wb `u_mppt_max_v`
+→ ticket `max_mpp_voltage`). Nur die ➕-Felder (kein ticket-Äquivalent) kommen mit einem neuen, ticket-konformen Namen dazu.
+
+> **Status: Reconciliation-Plan vollständig entscheidungsreif.** Stufenplan (i)–(iv) bestätigt. Gebaut wird am Cut-over.
