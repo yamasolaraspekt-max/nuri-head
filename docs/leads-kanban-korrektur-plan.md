@@ -166,3 +166,15 @@ Im heutigen Board stecken **Zustände/Übergänge als Pseudo-Phasen-Spalten**:
 
 ---
 *Reine Analyse — nichts am Code/Schema geändert. Querverweise: `kanban-ebenen-phase-aufgabe-arbeitsschritt-bestandsaufnahme.md` (c48f8ba), `architektur-entscheidungen.md` (Weiche 1/6), `follow-up-bestandsaufnahme.md`, `glossar.md`. Belege: siehe Inline-Datei:Zeile + DB-Live 2026-07-02.*
+
+---
+
+## Stufe B — Umsetzungs-Notizen (2026-07-04, nach Bau)
+
+Gebaut: Stufe A (`169d1ee`/`9e0d64a`), B1 (`a1c7e18`, Board FK-first + symmetrischer Fold + Fallback + 6-Phasen-Spalten + Abnahme aktiv), B2 (`9bda1e4`, Model-Hook + Batch-INSERT-Fix). Zwei Notizen aus dem Bau:
+
+**(1) TECH-DEBT — doppelte Fold/Synonym-Logik.** `LeadProductList::deriveLeadStageId()` (B2-Hook) dupliziert die Synonym-/Fold-Abbildung (follow_up→offer, accepted→deal, open→lead …) aus dem Controller (`normalizeStage`/`stageMap` + der B1-Query-Fold in `applyCommonFilters`). **Bei künftigen Stage-Umbenennungen oder Fold-Änderungen BEIDE Stellen anfassen.** Konsolidierung in einen geteilten Service (z. B. `LeadStageResolver`) ist als späterer kleiner Schritt vorgemerkt — bewusst nicht jetzt (mehr Scope; Stufe B sollte klein bleiben).
+
+**(2) Zwei Netze übereinander — bestätigt.** Im B2-Verifikations-Fall (ii, Guard) wurde testweise `lead_stage_id=99` (nicht existent) gesetzt → die **DB-FK-Constraint** (`lead_product_lists.lead_stage_id → lead_stages`, nullOnDelete) wies den Save mit Exception ab. Gutes Zeichen: der **Model-Hook** (Ableitung) und die **DB-Constraint** (Integrität) liegen als zwei unabhängige Netze übereinander. Der Test wurde danach auf einen gültigen FK (5/deal) korrigiert.
+
+**Deckung der ~19 status-Schreiber:** Eloquent-Schreiber → B2-Hook (creating/updating). Einziger raw-INSERT (`NewLeadsController:6116`) → direkt gefixt. raw-UPDATEs → B1-Query-Fold + `Log::warning('kanban fk-fallback')` macht sie sichtbar. `changeStage` (Kanon) unberührt.
