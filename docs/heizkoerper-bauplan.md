@@ -42,9 +42,9 @@ W8 **Alpine** ins Ticket, Muster aus wberechnung; CLAUDE.md-Eintrag „Alpine nu
 **M1 `product_radiator_specs`** (E4, EN-442-Katalog)
 `id · product_id (FK products, nullable) · hersteller (string) · typ (string, z.B. '22') · bauart (enum: kompakt/glieder/roehren/konvektor/geblaesekonvektor/bad) · bauhoehe_mm (uint) · bautiefe_mm (uint) · q_norm_w_pro_m (decimal 8,2) · norm_bedingung (string, default '75/65/20') · exponent_n (decimal 4,2, default 1.30) · quelle (string, nullable) · aktiv (bool, default 1) · timestamps`
 
-**M2 `radiator_installations`-Erweiterung** (W1, ADD COLUMN)
-`radiator_spec_id (FK product_radiator_specs, nullable) · anzahl (uint, default 1) · baulaenge_mm (uint, nullable) · bautiefe_mm (uint, nullable) · anschluss_position (enum: seitlich/unten/mittel/wechselseitig, nullable) · anschluss_fuehrung (enum: zweirohr/einrohr, nullable) · ventil_einsatz_bestand (string, nullable) · kopf_norm_bestand (enum: M30x1_5/RA/RAV/RAVL/sonstige, nullable) · heating_circuit_id (FK heating_circuits, nullable) · q_norm_w_pro_m_override (decimal 8,2, nullable) · exponent_n_override (decimal 4,2, nullable) · typ_konfidenz (enum: sicher/geschaetzt, nullable)`
-*(vorhanden, nicht neu: room/room_size/width/height/depth/niche_*/supply_valve(_presettable)/return_valve(_present)/renew_thermostat_head/limbs/radiator_type/design/image)*
+**M2 `radiator_installations`-Erweiterung** (W1, ADD COLUMN) — *gebaut (`5f2bcd9`)*
+`radiator_spec_id (FK product_radiator_specs, nullable) · anzahl (uint, default 1) · anschluss_position (enum: seitlich/unten/mittel/wechselseitig, nullable) · anschluss_fuehrung (enum: zweirohr/einrohr, nullable) · ventil_einsatz_bestand (string, nullable) · kopf_norm_bestand (enum: M30x1_5/RA/RAV/RAVL/sonstige, nullable) · heating_circuit_id (FK heating_circuits, nullable) · q_norm_w_pro_m_override (decimal 8,2, nullable) · exponent_n_override (decimal 4,2, nullable) · typ_konfidenz (enum: sicher/geschaetzt, nullable)`
+*(Maße H/L/T = vorhandene Spalten `height`/`width`(=Baulänge)/`depth` — **keine `baulaenge_mm`/`bautiefe_mm`-Duplikate**. Weiter vorhanden: room/room_size/niche_*/supply_valve(_presettable)/return_valve(_present)/renew_thermostat_head/limbs/radiator_type/design/image)*
 
 **M3 `accessory_categories`**: `id · code (string, unique) · name (string) · sort_order (uint, default 0) · timestamps`
 
@@ -101,6 +101,13 @@ Jede Regel = eigener Unit-Test.
 > Andockpunkt-Basis: `RadiatorPerformanceService` (Port von `HeizkoerperService`) und die Ampel/Deckung (B7).
 > Alle drei setzen **auf** `qReal()/minVorlauf()/leistungstabelle()` auf, ohne diese zu ändern.
 
+> **NOTIZ Cut-over Stufe (iii) — Heizkörper-Adapter (Yama, verbindlich):** Die Katalog-Tabelle
+> `product_radiator_specs` (M1, committet `5f2bcd9`) liefert `q_norm_w_pro_m` [W/m] + `exponent_n` (default 1,30)
+> + `norm_bedingung` (default 75/65/20). Der Kern-Key **`q_norm_w` ist ABGELEITET**:
+> `q_norm_w = q_norm_w_pro_m × Baulänge × Anzahl`, **Baulänge = `radiator_installations.width`**, Anzahl =
+> `radiator_installations.anzahl`. **Der Adapter RECHNET das — nicht durchreichen.** `imported_from`-Marker vorhanden
+> (Herkunft `wberechnung_seeder`, rückbaubar). Damit dockt der DB-freie Kern (`qReal([{q_norm_w, exponent_n, norm_bedingung}], …)`) an.
+
 ### B5 — Anschlussart-Korrekturfaktoren
 Effektive Leistung `Q_eff = Q_real · f_anschluss`. `f_anschluss` aus `radiator_connection_factors`
 (Schlüssel `anschluss_position × anschluss_fuehrung × bauart`). Referenzfall **seitlich oben/unten (zweirohr) = 1,000**;
@@ -139,7 +146,7 @@ Andock: `RadiatorRecommendationService::fuerRaum(...)` liest `leistungstabelle()
 ## 8. Status (wird während Bau fortgeschrieben)
 | Stufe | Status | Commit | Test |
 |---|---|---|---|
-| (i) Migrationen | offen | — | — |
+| (i) Migrationen | ✅ **grün** | `5f2bcd9` | up→down→up grün gg. `ticket_testing`; reale `ticket`-DB unberührt (0/0); Batch `[3]` isoliert |
 | (ii) Stammdaten | offen | — | — |
 | (iii) IDS-Mapper | offen | — | — |
 | (iv) Kompatibilität | offen | — | — |
