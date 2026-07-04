@@ -850,7 +850,8 @@ Route::group(['middleware'   =>  'web'], function(){
     Route::get('/lead_junks', [NewLeadsController::class, 'junks'])->name('lead.junks');
     Route::get('/new_leads', [NewLeadsController::class, 'new_lead'])->name('new.leads');
     Route::get('/my_leads', [NewLeadsController::class, 'my_lead'])->name('my.leads');
-    Route::get('/wating_leads', [NewLeadsController::class, 'waiting_leads'])->name('waiting.loop.leads');
+    Route::get('/waiting_leads', [NewLeadsController::class, 'waiting_leads'])->name('waiting.loop.leads');
+    Route::redirect('/wating_leads', '/waiting_leads'); // Commit 2: Alt-Tippfehler-Pfad -> Weiterleitung (kein Bruch)
     Route::get('/deleted_leads', [NewLeadsController::class, 'deleted_lead'])->name('deleted.leads');
     Route::get('/restore_leads/{id}', [NewLeadsController::class, 'restore'])->name('restore.leads');
     Route::get('/new_object/{id}', [NewLeadsController::class, 'new_object'])->name('new.object.leads');

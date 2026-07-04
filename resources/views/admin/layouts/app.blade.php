@@ -2582,9 +2582,9 @@
         ? route('profile.edit')
         : url('/user');
 
-    $chatUrl = Route::has('chats.view')
-        ? route('chats.view', $employeeId)
-        : '#';
+    $chatUrl = Route::has('chat.index')
+        ? route('chat.index')
+        : url('admin/chat');
 
     $logoutUrl = Route::has('logout')
         ? route('logout')

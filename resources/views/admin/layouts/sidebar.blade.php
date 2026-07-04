@@ -438,7 +438,8 @@
                 ['label' => 'Neuer Lead', 'icon' => 'user-plus', 'url' => url('new_lead_create'), 'active_routes' => ['/new_lead_create']],
                 ['label' => 'Leadliste', 'icon' => 'list', 'url' => url('new_lead_view'), 'count_key' => 'customers', 'active_routes' => ['/new_lead_view', '/customer/profile', '/lead/profile']],
                 ['label' => 'Kundenakte', 'icon' => 'clock', 'url' => $leadHistorySidebarUrl, 'active_routes' => ['/customers/*/history', '/customers/history']],
-                ['label' => 'Warteschleife', 'icon' => 'clock', 'url' => url('wating_leads'), 'count_key' => 'customers_waiting', 'active_routes' => ['/wating_leads', '/waiting_leads']],
+                // Commit 2: Tippfehler-Pfad entschaerft -> Route-Name (waiting.loop.leads); Pfad in web.php auf /waiting_leads korrigiert (Alt-Pfad redirected)
+                ['label' => 'Warteschleife', 'icon' => 'clock', 'url' => $safeRoute('waiting.loop.leads', 'waiting_leads'), 'count_key' => 'customers_waiting', 'active_routes' => ['/wating_leads', '/waiting_leads']],
                 ['label' => 'Junk', 'icon' => 'alert-triangle', 'url' => url('lead_junks'), 'count_key' => 'customers_junk', 'active_routes' => ['/lead_junks']],
                 ['label' => 'Gelöscht', 'icon' => 'trash-2', 'url' => url('deleted_leads'), 'count_key' => 'customers_deleted', 'active_routes' => ['/deleted_leads']],
             ],
@@ -463,7 +464,8 @@
             'items' => [
                 ['label' => 'Posteingang', 'icon' => 'inbox', 'url' => url('/email_view'), 'active_routes' => ['/email_view']],
                 ['label' => 'Lead E-Mails', 'icon' => 'mail-open', 'url' => $safeRoute('lead.email.inbox'), 'active_routes' => ['/lead-email', '/lead/emails']],
-                ['label' => 'Bitrix24-Chat', 'icon' => 'message-square', 'url' => $safeRoute('chats.view', 'admin/chat', [$employeeId]), 'count_key' => 'chat_unread', 'active_routes' => ['/admin/chat', '/chats']],
+                // Commit 2: von Legacy chats.view (MessageController) auf modernen chat.index (Chat\ChatController) umgehaengt
+                ['label' => 'Bitrix24-Chat', 'icon' => 'message-square', 'url' => $safeRoute('chat.index', 'admin/chat'), 'count_key' => 'chat_unread', 'active_routes' => ['/admin/chat', '/chats']],
             ],
         ],
         [
@@ -479,7 +481,8 @@
             'items' => [
                 ['label' => 'Übersicht', 'icon' => 'briefcase', 'url' => $safeRoute('deal.all.list'), 'count_key' => 'deals', 'active_routes' => ['/deal', '/deals', '/auftrag']],
                 ['label' => 'Feinaufmaß-Kanban', 'icon' => 'ruler', 'url' => $safeRoute('deal.measurements.kanban', 'deal-measurements-kanban'), 'count_key' => 'deal_measurements', 'active_routes' => ['/deal-measurements-kanban', '/deal-measurements']],
-                ['label' => 'Rechnungen', 'icon' => 'receipt-text', 'url' => $safeRoute('invoices.index', 'admin/invoices'), 'count_key' => 'invoices', 'active_routes' => ['/admin/invoices', '/invoices/canvas']],
+                // Commit 2: Route-Name korrigiert (invoices.index existiert nicht -> admin.invoices.index); Invoice-Flaechen unberuehrt (Weiche 3)
+                ['label' => 'Rechnungen', 'icon' => 'receipt-text', 'url' => $safeRoute('admin.invoices.index', 'admin/invoices'), 'count_key' => 'invoices', 'active_routes' => ['/admin/invoices', '/invoices/canvas']],
                 ['label' => 'Junk', 'icon' => 'slash', 'url' => $safeRoute('deal.junk.list'), 'count_key' => 'deals_junk'],
                 ['label' => 'Gelöscht', 'icon' => 'trash', 'url' => $safeRoute('deal.delete.list'), 'count_key' => 'deals_deleted'],
             ],
@@ -631,8 +634,8 @@
                 ['label' => 'Systemwarnung', 'icon' => 'triangle-alert', 'url' => $safeRoute('admin.system-warning.index')],
                 ['label' => 'Feedback', 'icon' => 'info', 'url' => $safeRoute('system.feedback.index')],
                 ['label' => 'KI-Wissen', 'icon' => 'book-open', 'url' => $safeRoute('admin.chat.learnings.index')],
-                // Datenbankbereinigung-Gate = Commit 2 (heute P0)
-                ['label' => 'Datenbankbereinigung', 'icon' => 'trash-2', 'url' => $safeRoute('admin.garbage.index')],
+                // Commit 2 (P0): Nav-Gate gesetzt — GarbageController prueft item_id='Administrator'; Nav gleichzieht (is_admin bypass bleibt)
+                ['label' => 'Datenbankbereinigung', 'icon' => 'trash-2', 'permission' => 'Administrator', 'url' => $safeRoute('admin.garbage.index')],
             ],
         ],
         [
