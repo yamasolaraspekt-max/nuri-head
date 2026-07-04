@@ -14,7 +14,7 @@
 **Prinzip — strikt 2 Ebenen:** Bereich = aufklappbare **Haupt-Navi** (ein Wort) · darunter **flache Unter-Links** (kein `children`/`submenu`). Ganze Bereiche gaten über **Sektions-`permission`**; Finance bleibt **Item-Gate**.
 
 **Die 23 Bereiche (Zahl = Unter-Links):**
-`Arbeitsbereich[7] · Anfragen[7] · Leads[6] · Kontakte[8] · Kommunikation[3] · Angebote[3] · Aufträge[5] · Montage[4] · Artikel[9] · Artikel-Daten[5] · Lager[7] · Planung[3] · Tickets[3] · Wartung[2] · Mitarbeiter[8] · HR-Daten[7] · Organisation[4] · Phasen[3] · Stammdaten[2] · Filialen[3] · E-Mail-Einrichtung[3] · System[4] · Benutzer[4]`
+`Arbeitsbereich[7] · Anfragen[7] · Leads[6] · Kontakte[1] · Kommunikation[3] · Angebote[3] · Aufträge[5] · Montage[4] · Artikel[9] · Artikel-Daten[5] · Lager[7] · Planung[3] · Tickets[3] · Wartung[2] · Mitarbeiter[8] · HR-Daten[7] · Organisation[4] · Phasen[3] · Stammdaten[2] · Filialen[3] · E-Mail-Einrichtung[3] · System[4] · Benutzer[4]`
 
 **Belege (verifiziert vor Commit, Original `b34e4b2^` → Final):**
 - **Nav-Invariante:** 109 Routen-Ziele Original → 109 Final. Einziger Orphan = `offers/wizard` (**nur-URL**, ersetzt durch Angebots-Assistent `wizard-smart`). Neuzugang = `lead-stages.manage` (neue Lead-Phasen-Seite). 0 unerklärte Orphans, 0 Duplikate. (110 Nav-Punkte / 109 Routen; Differenz = „Kundenakte" via Variable.)
@@ -127,7 +127,7 @@
 | CRM›Kommunikation(6) | **umgezogen** → 4 Kommunikation (Chat-Legacy-Link umhängen) |
 | CRM›Anfragen(7) | **umgezogen** → 2; Junk/Papierkorb → **Tabs** (A5) |
 | CRM›Leads/Kunden(6) | **umgezogen** → 2; Warteschleife/Junk/Papierkorb → **Tabs**; „CRM"-Etikett **entfällt** (A1) |
-| CRM›Kontakte(8) | **verschmolzen** → 3 als **Typ-Tabs** (A3); Lieferanten als Tab |
+| CRM›Kontakte(8) | **✓ Tab seit `764c4fd`** (NAV III/F1, Design A): Sidebar 8→1, 8 Typ-Tabs (Alle/Marken/Lieferanten/Externe/Nachunternehmer/Architekten/Banken/Versicherungen) über die lebenden Alt-Routen; 0 Redirect (nichts entfernt) |
 | Vertrieb›Angebote(4) | → 5; `wizard`+`wizard-smart` **konsolidiert** → **eine +Aktion** (wizard-smart, s. §4); Vorlagen/Sets → Tabs |
 | Vertrieb›Aufträge(6) | → 5; **Rechnungen** bleibt Punkt, **Canvas-Hinweis → +Aktion** (A6, IA-10); Junk/Papierkorb → Tabs |
 | Projekte›Projektplanung | → 6 Einsatzplan |
