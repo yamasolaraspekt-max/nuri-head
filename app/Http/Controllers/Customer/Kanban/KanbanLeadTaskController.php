@@ -240,6 +240,22 @@ class KanbanLeadTaskController extends Controller
             ->get()
             ->groupBy('lead_product_list_id');
 
+        // Stufe D: offene Wiedervorlagen (F-Strang-Traeger personal_tasks) EINMAL gebatcht laden
+        // (source_id IN ...), KEIN per-Karte-Query. UPSERT-Garantie (source_type, source_id) => max. 1 je Karte.
+        // 'offen' = task_status nicht abgeschlossen. due_date = Faelligkeit fuer die Pill.
+        $followUpsBySource = collect();
+        if (Schema::hasTable('personal_tasks')) {
+            $followUpsBySource = DB::table('personal_tasks')
+                ->where('type', 'follow_up')
+                ->where('source_type', 'lead_product_list')
+                ->whereIn('source_id', $ids->all())
+                ->when(Schema::hasColumn('personal_tasks', 'deleted_at'), fn($q) => $q->whereNull('deleted_at'))
+                ->whereNotIn('task_status', ['completed', 'done', 'cancelled'])
+                ->orderBy('due_date')
+                ->get(['source_id', 'due_date', 'task_status', 'task_title'])
+                ->keyBy('source_id');
+        }
+
         $summaries = [];
 
         foreach ($ids as $id) {
@@ -263,7 +279,7 @@ class KanbanLeadTaskController extends Controller
                 ->map(fn($task) => $this->taskCard($task))
                 ->values();
 
-            $summaries[$id] = $this->summaryPayload($leadProduct, $tasks, $templates, $stageId, $subStageId);
+            $summaries[$id] = $this->summaryPayload($leadProduct, $tasks, $templates, $stageId, $subStageId, $followUpsBySource->get($id));
         }
 
         return response()->json([
@@ -272,7 +288,7 @@ class KanbanLeadTaskController extends Controller
         ]);
     }
 
-    private function summaryPayload(LeadProductList $leadProduct, $tasks, array $templates, ?int $stageId, ?int $subStageId): array
+    private function summaryPayload(LeadProductList $leadProduct, $tasks, array $templates, ?int $stageId, ?int $subStageId, $followUp = null): array
     {
         $taskCollection = collect($tasks);
 
@@ -334,6 +350,16 @@ class KanbanLeadTaskController extends Controller
 
         $firstOverdue = $overdueTasks->first();
 
+        // Stufe D: Wiedervorlage-Zustand. Doppel-Signal-Prioritaet: personal_task-Follow-up GEWINNT
+        // (hat Faelligkeit = mehr Info) vor dem status='follow_up'-Altfall-Rest (5 Bestandskarten).
+        $rawStatus = strtolower(trim((string) $leadProduct->status));
+        $wiedervorlage = null;
+        if ($followUp) {
+            $wiedervorlage = ['active' => true, 'source' => 'task', 'due_date' => $followUp->due_date ?? null];
+        } elseif ($rawStatus === 'follow_up') {
+            $wiedervorlage = ['active' => true, 'source' => 'status', 'due_date' => null];
+        }
+
         return [
             'lead_product_list_id' => (int) $leadProduct->id,
             'customer_id' => (int) $leadProduct->customer_id,
@@ -356,6 +382,8 @@ class KanbanLeadTaskController extends Controller
             'done_count' => $doneTasks->count(),
             'reported_count' => $reportedTasks->count(),
             'overdue_count' => $overdueTasks->count(),
+            'raw_status' => $leadProduct->status,
+            'wiedervorlage' => $wiedervorlage,
             'is_overdue' => $overdueTasks->isNotEmpty(),
             'overdue_title' => $firstOverdue['title'] ?? null,
             'overdue_at' => $firstOverdue['planned_end_at'] ?? null,

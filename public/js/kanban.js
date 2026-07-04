@@ -13277,6 +13277,7 @@
             open_count: openTasks.length,
             done_count: doneTasks.length,
             reported_count: openTasks.filter(t => String(t.status || '').toLowerCase() === 'reported').length,
+            wiedervorlage: null,
             estimated_minutes: next?.estimated_minutes || null,
             photo_required: !!next?.photo_required,
             status: current?.status || (template ? 'open' : ''),
@@ -13323,6 +13324,12 @@
                 const total = Number(summary.open_count || 0) + Number(summary.done_count || 0);
                 const rep = Number(summary.reported_count || 0);
                 const parts = [];
+                // Stufe D: Wiedervorlage-Zustand (personal_task-Follow-up mit Faelligkeit ODER status='follow_up'-Altfall).
+                const wv = summary.wiedervorlage;
+                if (wv && wv.active) {
+                  const dd = wv.due_date ? String(wv.due_date).slice(0, 10).split('-').reverse().join('.') : '';
+                  parts.push(`<span class="kb-mini-pill" style="background:#e7eefc;color:#274690;" title="Wiedervorlage${wv.source === 'task' ? ' (Follow-up-Aufgabe)' : ''}">Wiedervorlage${dd ? ' ' + esc(dd) : ''}</span>`);
+                }
                 if (total > 0) parts.push(`<span class="kb-mini-pill" title="Erledigte Buero-Aufgaben (kein Montage-/Baustellen-Stand)">Aufgaben ${esc(summary.done_count)}/${esc(total)}</span>`);
                 if (rep > 0) parts.push(`<span class="kb-mini-pill" style="background:#fff3cd;color:#8a5a00;" title="In Pruefung – siehe Pruefliste">Pruefung: ${esc(rep)}</span>`);
                 return parts.length ? `<div class="kb-next-step-preview-line kb-card-stufe-c-pills">${parts.join(' ')}</div>` : '';
@@ -13607,6 +13614,8 @@
           open_count: Number(summary.open_count ?? openTasks.length ?? 0),
           done_count: Number(summary.done_count ?? doneTasks.length ?? 0),
           reported_count: Number(summary.reported_count ?? openTasks.filter(t => String(t.status || '').toLowerCase() === 'reported').length ?? 0),
+          wiedervorlage: summary.wiedervorlage ?? null,
+          raw_status: summary.raw_status ?? null,
           overdue_count: Number(summary.overdue_count ?? overdueTasks.length ?? 0),
           is_overdue: Boolean(summary.is_overdue || overdueTasks.length),
           overdue_title: summary.overdue_title || overdueTasks[0]?.title || null,
