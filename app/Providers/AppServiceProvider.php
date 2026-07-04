@@ -19,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
                     model: config('services.ollama.model', env('OLLAMA_MODEL', 'llama3:instruct')),
                 );
             });
+
+            // (iii-b) Lieferantenkanal-Mapper-Registry (channel-basiert) — Singleton, damit der
+            // "kein Mapper"-Debug-Log einmalig pro Lauf bleibt und OMD/DATANORM ohne Eingriff andocken.
+            $this->app->singleton(\App\Services\Suppliers\Mappers\MapperRegistry::class);
         }
 
     /**

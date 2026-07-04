@@ -447,6 +447,25 @@ class SupplierConnectorService
                     'was_existing_product' => $savedProduct['was_existing_product'],
                     'url' => url('product_details/' . $savedProduct['product_id']),
                 ];
+
+                // (iii-b) Live-Hook, post-commit: neutralen Lieferanten-Artikel-Map (supplier_article_map) fuellen.
+                // Eigenes try/catch (Throwable): ein Mapper-Fehler beruehrt weder Import-Status ($success/$failed)
+                // noch die bereits committete Transaktion — der Import laeuft IMMER weiter.
+                try {
+                    $articleMapper = app(\App\Services\Suppliers\Mappers\MapperRegistry::class)
+                        ->resolve($connection->connector_type);
+
+                    if ($articleMapper && ! empty($savedProduct['product_id'])) {
+                        $mappedProduct = Product::with('brand')->find($savedProduct['product_id']);
+                        $articleMapper->map($row, $distributor, $mappedProduct);
+                    }
+                } catch (\Throwable $mapperException) {
+                    Log::warning('supplier_article_map hook failed', [
+                        'connection_id' => $connection->id,
+                        'product_id' => $savedProduct['product_id'] ?? null,
+                        'error' => $mapperException->getMessage(),
+                    ]);
+                }
             } catch (\Throwable $exception) {
                 $failed++;
 
