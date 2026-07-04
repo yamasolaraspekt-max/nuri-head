@@ -1810,6 +1810,7 @@
 
 
 @section('content')
+    @include('admin.inquiry._tabs')
     <div class="oc-wrap">
         <div class="oc-header">
             <div class="oc-titlebar">
