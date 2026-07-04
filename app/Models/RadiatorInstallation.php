@@ -38,6 +38,17 @@ class RadiatorInstallation extends Model
         'socket_distance',
         'limbs',
         'image',
+        // Heizkörper-Modul (Stufe i/ii):
+        'radiator_spec_id',
+        'anzahl',
+        'anschluss_position',
+        'anschluss_fuehrung',
+        'ventil_einsatz_bestand',
+        'kopf_norm_bestand',
+        'heating_circuit_id',
+        'q_norm_w_pro_m_override',
+        'exponent_n_override',
+        'typ_konfidenz',
     ];
 
     protected $casts = [
@@ -48,6 +59,9 @@ class RadiatorInstallation extends Model
         'has_socket' => 'boolean',
         'room_size' => 'decimal:2',
         'socket_distance' => 'decimal:2',
+        'anzahl' => 'integer',
+        'q_norm_w_pro_m_override' => 'decimal:2',
+        'exponent_n_override' => 'decimal:2',
     ];
 
     protected $appends = ['image_url'];
@@ -60,6 +74,16 @@ class RadiatorInstallation extends Model
     public function alternative()
     {
         return $this->belongsTo(LeadAlternativeAdd::class, 'alternative_id', 'id');
+    }
+
+    public function spec()
+    {
+        return $this->belongsTo(RadiatorSpec::class, 'radiator_spec_id', 'id');
+    }
+
+    public function heatingCircuit()
+    {
+        return $this->belongsTo(HeatingCircuit::class, 'heating_circuit_id', 'id');
     }
 
     public function getImageUrlAttribute(): ?string
