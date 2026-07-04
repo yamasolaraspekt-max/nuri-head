@@ -108,6 +108,12 @@ Jede Regel = eigener Unit-Test.
 > `radiator_installations.anzahl`. **Der Adapter RECHNET das — nicht durchreichen.** `imported_from`-Marker vorhanden
 > (Herkunft `wberechnung_seeder`, rückbaubar). Damit dockt der DB-freie Kern (`qReal([{q_norm_w, exponent_n, norm_bedingung}], …)`) an.
 
+> **NOTIZ bauart-Übersetzung (Stufe ii-b → iii):** Beim EN442-Import wurde wberechnungs `bauart='platte'`
+> auf tickets Enum `'kompakt'` gemappt. Wenn der Cut-over-Adapter oder späterer wb-Code nach `bauart` filtert/mappt,
+> gilt diese Übersetzung (wb → ticket): `platte`→**`kompakt`** · `glieder`→`glieder` · `roehren`→`roehren`
+> (inkl. Badheizkörper, quelltreu) · `konvektor`→`konvektor`. ticket-Enum `geblaesekonvektor`/`bad` reserviert (unbenutzt);
+> Detail-Typ steht immer im Feld `typ` („Kompakt Typ 22").
+
 ### B5 — Anschlussart-Korrekturfaktoren
 Effektive Leistung `Q_eff = Q_real · f_anschluss`. `f_anschluss` aus `radiator_connection_factors`
 (Schlüssel `anschluss_position × anschluss_fuehrung × bauart`). Referenzfall **seitlich oben/unten (zweirohr) = 1,000**;
@@ -147,7 +153,9 @@ Andock: `RadiatorRecommendationService::fuerRaum(...)` liest `leistungstabelle()
 | Stufe | Status | Commit | Test |
 |---|---|---|---|
 | (i) Migrationen | ✅ **grün** | `5f2bcd9` | up→down→up grün gg. `ticket_testing`; reale `ticket`-DB unberührt (0/0); Batch `[3]` isoliert |
-| (ii) Stammdaten | offen | — | — |
+| (ii-a) Models | ✅ **grün** | `80598a9` | php -l + create/read/relation gg. `ticket_testing`, Teardown 0 |
+| (ii-b) EN442-Seeder | ✅ **grün** | `09eea5e` | 30/30 idempotent, 3 Stichproben wörtlich=Quelle, Marker-Rückbau→0→30 |
+| (ii-c) Ventiltechnik | offen (Recherche) | — | Quellen-Report vor Commit |
 | (iii) IDS-Mapper | offen | — | — |
 | (iv) Kompatibilität | offen | — | — |
 | (v) UI | offen | — | — |
