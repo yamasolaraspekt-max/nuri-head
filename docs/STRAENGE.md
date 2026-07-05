@@ -31,6 +31,7 @@ damit „gebaut vs. nicht gebaut / wo committet" nie wieder verwechselt wird —
 
 ### ⛔ ARBEITSBAUM-TRENNUNG + COMMIT-HYGIENE (ab 2026-07-05, verbindlich — Lehre aus dem Absorptions-Vorfall)
 - **Ein Arbeitsbaum pro Instanz/Strang:** `git worktree add ../ticket-strang-<X> -b strang/<X>`. **Kein gemeinsamer Index mehr** — Absorption fremder ungestagter Änderungen wird technisch unmöglich (nicht nur verboten).
+- **Worktree lauffähig machen (diese Dinge sind gitignored, fehlen daher im frischen Worktree):** `vendor` als **echtes** Verzeichnis (`cp -r ../ticket/vendor . && composer dump-autoload` — **NICHT** als Symlink, sonst zeigt PSR-4 `App\` auf den Haupt-Baum und neue Strang-Klassen werden nicht gefunden) · `.env` (`cp ../ticket/.env .`) · `public/build` (`ln -sfn ../ticket/public/build public/build` — gitignored, **nie committbar**; ohne ihn scheitern View-Tests an `ViteManifestNotFoundException`). Danach `php artisan test` grün. *(Lehre aus B2b-C.)*
 - **`git add -A` und `git commit -a` sind VERBOTEN.** Immer **explizite Pfade** stagen.
 - **Ein Commit enthält ausschließlich Dateien des eigenen Strangs.**
 - **Vor jedem Commit:** `git status` muss **leer sein bis auf die eigenen, im Stopp-2 berichteten Dateien** — sonst **STOPP + melden** (nicht mitcommitten).

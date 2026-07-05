@@ -92,6 +92,7 @@
 | M4-b Sidebar-Menüpunkt HK-Konfigurator | `41822c2`/`baa66f9` *(noch nicht in `backup-private`)* | HK-Modul im Menü sichtbar (sonst nur per URL) |
 
 ## F) Nachläufe NACH Tag X (kein Teil des Deploys)
+- **KlimaPlzService auf `klima_plz`-Tabelle umstellen (B2b-C, C1.2):** rechnet aktuell gegen `database/data/klima_plz.csv` (byte-genau aus wb). Umstellung auf die `klima_plz`-DB-Tabelle **bricht Diff=0** → **eigener Auftrag mit Paritäts-Nachweis** (CSV-Ergebnis == Tabellen-Ergebnis je PLZ). Bis dahin ist die CSV die rechnende, die Tabelle die dokumentierte künftige Wahrheit; **Identität CSV==Tabelle ist per Test belegt** (`AnforderungsprofilKlimaAdapterTest::test_identitaet_csv_gegen_tabelle_c1_1`).
 - **14-Tage-Deny-Beobachtung** (5 Zähler `*_denied_count`/`*_orphan_write_count`) startet **nach** dem Produktions-Release (lokal mit 1 Nutzer sinnlos). Kriterium 0 → je Flag ein **Härtungs-Commit** (`*_HARD_DENY=true`) — selbst wieder Manifest-Posten.
 - **SEC-DM-2** (`@index`-Write-on-read), Image-Präzisions-Weiche, W-Website, W-new-leads-Sicht.
 - **`deal_invoices` DROP — AUSSTEHEND (Accounting/Tag-X-Posten):** die Rechnungs-Alt-Schiene ist code-seitig stillgelegt (Controller/Model/Routen/Views entfernt, Rückbau-Commit; `invoices` = führend). **Tabelle `deal_invoices` + Migration `2025_06_23_053704` bleiben bewusst stehen** — der DROP ist ein **separater, explizit zu beauftragender** Posten (0 Zeilen, kein Datenverlust), erst nach Yama-Freigabe. **NICHT** Beifang.

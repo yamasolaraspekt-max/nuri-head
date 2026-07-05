@@ -37,6 +37,8 @@ final class SchluesselRegistry
         'intermittierend' => ['einheit' => null,    'cast' => 'bool',   'wert_num_pflicht' => false],
         // --- Betrieb ---
         'sperrzeit_h' => ['einheit' => 'h',     'cast' => 'float',  'wert_num_pflicht' => false],
+        // --- Warmwasser / Nutzer (B2b-C) ---
+        'personen_im_haushalt' => ['einheit' => null, 'cast' => 'int', 'wert_num_pflicht' => false],
         // --- Rechenparameter / Ergebnis-Meta (B2a-3) ---
         'waermebruecken' => ['einheit' => null,    'cast' => 'string', 'wert_num_pflicht' => false],   // Rechenparameter, zurückgeschrieben
         'ergebnis_hinweis' => ['einheit' => null,    'cast' => 'string', 'wert_num_pflicht' => false],   // Datenlage-Vermerk (W-B2a-4)
