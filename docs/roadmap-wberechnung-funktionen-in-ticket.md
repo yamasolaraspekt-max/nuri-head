@@ -87,3 +87,19 @@ Fundament (DB/Logik/Tests), das man in der Navi nicht sieht, aber ohne das die U
 > **Kurzfassung für die Entscheidung:** „Alle wberechnung-Funktionen in ticket" = Strang A bis **M5** (Heizkörper live)
 > **plus** Strang B bis **B4** (Rest live) nach dem Cut-over. Der erste sichtbare Gewinn ist **M4**; davor liegen
 > (ii-c)→(iv), die reine Fundament-/Logik-Arbeit sind.
+
+## 9. Cut-over-Entscheide 2026-07-05 (Pflicht-Stopp 1, Modul-Inventur)
+
+Belege: `docs/cutover-wb-module.md`. **wberechnung ist eine leere Werkstatt** (nur 6 `energiekonzepte` + Kataloge; alle Projekt-/Auslegungstabellen 0) → Cut-over-Aufwand = **Rechenkern-Port + Views**, kaum Datenmigration.
+
+**Überschneidungen (Version, die gewinnt):**
+- **PVGIS (Modul J):** wb-`PvgisController`/`GeocodingService` gewinnt; ticket-`PVToolsController` wird **abgelöst** — bestehende Route/Nav übernimmt den neuen Kern, **keine Parallelroute**. Slot B2/B3.
+- **Wirtschaftlichkeit (H):** ticket um `SanierungsWirtschaftlichkeitService` **erweitern** (kein Neuschreiben); Model-Frage (`EconomicCalculation` vs. Sanierungsvarianten) offen bis B3. ⚠️ **Sperre:** `EconomicCalculationController` uncommittet (Navi-Strang) — Arbeit daran erst nach dessen Commit.
+- **Heizkörper (B):** bestätigt (M3 ✓ Port, M4 UI läuft).
+
+**Strang-B-Verfeinerung:**
+- **B2a — Rechenkern-Reihenfolge:** ZUERST **A (Heizlast-Kern)** + **P (Klimadaten)** (Input für alles Weitere), DANN **F+G (WP-Auslegung)** und **I (PV/WR-Auslegung)** parallel.
+- **B3/B4:** H/O/L (Wirtschaft/Förderung/Sanierung) · **Q (Energiekonzept-Bundler)** → B4 (neue Struktur, ≠ ticket-`EconomicCalculation`).
+- **M (Fußbodenheizung EN 1264):** aufgenommen als **letzter B3-Unterpunkt** (S-Aufwand) — erste Streichposition, falls B3 drückt.
+- **K (Grundriss/Plan-Import, A-3d):** **B5/W6 bestätigt, KEIN Verzicht** (abgenommene Arbeit). **wb bleibt für Modul K benutzbar bis B5** — alles andere friert ein (Einfrier-Vermerk differenziert).
+- **N (Beschaffung):** **A4 entschieden** — ticket-Supplier-Stack gilt, **wb-Procurement wird NICHT portiert**; B1 dockt an ticket an.
