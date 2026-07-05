@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Support\DealMeasurementHistoryLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -1581,6 +1582,10 @@ class DealMeasurementController extends Controller
 
     public function updateItem(Request $request, DealMeasurementItem $item)
     {
+        if ($item->measurement) {
+            Gate::authorize('write', $item->measurement); // S-1a Ownership
+        }
+
         $validator = Validator::make($request->all(), [
             'qty_measurement' => ['nullable', 'numeric', 'min:0'],
             'qty_final' => ['nullable', 'numeric', 'min:0'],

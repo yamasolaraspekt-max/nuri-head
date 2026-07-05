@@ -8,12 +8,15 @@ use App\Models\DealMeasurementDetail;
 use App\Support\DealMeasurementHistoryLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class DealMeasurementMaterialController extends Controller
 {
     public function saveMaterials(Request $request, DealMeasurement $measurement)
     {
+        Gate::authorize('write', $measurement); // S-1a Ownership
+
         $validated = $request->validate([
             'materials' => ['required', 'array'],
             'history_action' => ['nullable', 'string', 'max:500'],
@@ -75,6 +78,8 @@ class DealMeasurementMaterialController extends Controller
 
     public function saveDetails(Request $request, DealMeasurement $measurement)
     {
+        Gate::authorize('write', $measurement); // S-1a Ownership
+
         $validator = Validator::make($request->all(), [
             'type' => ['required', 'in:PV,WP,OTHER'],
             'data' => ['required', 'array'],

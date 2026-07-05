@@ -22,9 +22,7 @@ class AuthServiceProvider extends ServiceProvider
         ChatGroup::class => ChatGroupPolicy::class,
         \App\Models\AiChat::class => \App\Policies\AiChatPolicy::class,
         \App\Models\GeneralTask::class => \App\Policies\GeneralTaskPolicy::class, // FIX P0-10
-
-
-
+        \App\Models\DealMeasurement::class => \App\Policies\DealMeasurementPolicy::class, // S-1a Ownership
     ];
 
     /**

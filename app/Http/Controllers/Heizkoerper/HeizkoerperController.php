@@ -14,6 +14,7 @@ use App\Services\Heizkoerper\RadiatorSituation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * Rechen-/Kompatibilitäts-Endpunkte des Heizkörper-Moduls (M4-a v-a).
@@ -141,6 +142,7 @@ class HeizkoerperController extends Controller
         ]);
 
         $measurement = DealMeasurement::findOrFail($data['deal_measurement_id']);
+        Gate::authorize('write', $measurement); // S-1a Ownership
         if ($measurement->status === 'completed') {
             return response()->json(['message' => 'Dieses Aufmaß ist abgeschlossen und gesperrt. Bitte zuerst entsperren.'], 423);
         }

@@ -31,7 +31,8 @@ class HeizkoerperUebernahmeTest extends TestCase
 
     private function user(): User
     {
-        return User::factory()->create(['password' => 'password']);
+        // S-1a: name='1' = Employee-ID = deal.employee_id der measurement()-Fixture -> Deal-Zuständiger, write erlaubt.
+        return User::factory()->create(['password' => 'password', 'name' => '1']);
     }
 
     private function measurement(string $status = 'draft'): DealMeasurement

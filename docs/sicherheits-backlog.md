@@ -28,3 +28,14 @@ Nutzer den zugehörigen Deal bearbeiten (Zuweisung/Rolle/Filiale)?
 
 **Priorität: HOCH** (Yama terminiert). Verwandt: die WP-/Heizlast-Auslegungstabellen
 (`heizlast_projekte` u. a.) sind bei ihrer Produktiv-Anbindung auf dieselbe Ownership-Frage zu prüfen.
+
+### Status
+- **S-1a ✅ gebaut** (2026-07-05): `DealMeasurementPolicy` (Deal-Zuständigkeit b+: `created_by` ∨ `responsible_employee_id` ∨ `deals.employee_id` ∨ Super-Admin; **Portal-Hart-Deny** ohne Employee-Kontext), registriert in `AuthServiceProvider`. **Enforcement (`Gate::authorize('write', $measurement)`) an allen Item-/Material-Schreibern:** `HeizkoerperController@uebernehmen`, `DealMeasurementMaterialController@saveMaterials`/`@saveDetails`, `DealMeasurementController@updateItem`, `DealMaterialListController@updateMaterialStatus`/`@moveMaterialAllocation`/`@updateOrderDetails`/`@applyFeinaufmassToOfferDetail`. **Auto-Gen (`@index`) bewusst NICHT gegated** (Write-on-read, Backlog). **Waisen:** weiches Deny (erlaubt+geloggt+gezählt via `Cache` `deal_measurement_orphan_write_count`) bis `config('features.deal_measurement_orphan_hard_deny')` (Default OFF). **Backfill:** `php artisan deal-measurements:backfill-owner` (created_by ← `deals.employee_id`), **gebaut+getestet, Prod-Lauf = M5/Deploy**.
+  - **UMSCHALT-KRITERIUM (Yama gibt Zeitraum frei):** definierter Zeitraum mit `orphan_write_count == 0` → Mikro-Commit `DEAL_MEASUREMENT_ORPHAN_HARD_DENY=true`.
+- **S-1b offen** (eigener Befund+Stopp): `assignWork`, `complete`/`unlock`/`destroy`, `storeNote`, Images — Frage: reicht `write` oder eigene Abilities (`assign`/`complete`/`delete`)?
+
+## S-2 · Write-on-read: `DealMeasurementController@index` (GET erzeugt DB-Zeilen) — mittel
+`@index` (@256, via `createMeasurementItemFromRow@544`) **erzeugt `deal_measurement_items` beim Anzeigen** (GET mit DB-Write). Deshalb in S-1a **nicht** gegated (sonst bräche das Ansehen fremder Aufmaße). Eigener Konstruktions-Befund: expliziter Init-Schritt **oder** Idempotenz-Absicherung. **Nicht Teil von S-1.**
+
+## S-3 / M5 · Preis-Spalten `deal_measurement_items` nullable — mit M5
+`unit_price`/`purchase_price`/`total_price` sind `decimal default(0)` **non-nullable** → HK-Regel-Kandidaten (kein Preis) landen als **0,00** in der preisführenden Material-Liste = **falsche Zahl, nicht Platzhalter**. **Fix = additive `nullable`-Migration, Bestandteil von M5** (zusammen mit den HK-Produktiv-Migrationen + Flag-Freischaltung). Bis dahin lebt „kein Preis" in `raw_snapshot.preis_bekannt=false`+`note`.

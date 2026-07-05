@@ -12,6 +12,7 @@ use App\Models\Employee;
 use App\Models\Inventory;
 use App\Models\MasterSetComponent;
 use App\Models\OfferDetail;
+use Illuminate\Support\Facades\Gate;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -176,6 +177,15 @@ class DealMaterialListController extends Controller
             ->latest('updated_at')
             ->latest('id')
             ->first();
+    }
+
+    /** S-1a Ownership: schreibende Material-Aktionen gegen das zugehörige Aufmaß absichern. */
+    protected function authorizeMeasurementWrite(OfferDetail $offerDetail): void
+    {
+        $measurement = $this->latestMeasurement($offerDetail);
+        if ($measurement) {
+            Gate::authorize('write', $measurement);
+        }
     }
 
     protected function buildFeinaufmassMaterials(?DealMeasurement $measurement): Collection
@@ -1451,6 +1461,8 @@ class DealMaterialListController extends Controller
 
     public function updateMaterialStatus(Request $request, OfferDetail $offerDetail): JsonResponse
     {
+        $this->authorizeMeasurementWrite($offerDetail); // S-1a Ownership
+
         $validated = $request->validate([
             'item_key' => ['required', 'string'],
             'source' => ['nullable', 'string', 'in:offer,feinaufmass,compare'],
@@ -1568,6 +1580,8 @@ class DealMaterialListController extends Controller
 
     public function moveMaterialAllocation(Request $request, OfferDetail $offerDetail): JsonResponse
     {
+        $this->authorizeMeasurementWrite($offerDetail); // S-1a Ownership
+
         $validated = $request->validate([
             'item_key' => ['required', 'string'],
             'action' => ['required', 'string', 'in:found_in_lager,move_to_order,reset_allocation'],
@@ -1716,6 +1730,8 @@ class DealMaterialListController extends Controller
 
     public function updateOrderDetails(Request $request, OfferDetail $offerDetail): JsonResponse
     {
+        $this->authorizeMeasurementWrite($offerDetail); // S-1a Ownership
+
         $validated = $request->validate([
             'item_key' => ['required', 'string'],
 
@@ -2103,6 +2119,9 @@ class DealMaterialListController extends Controller
     public function applyFeinaufmassToOfferDetail(Request $request, OfferDetail $offerDetail): JsonResponse
     {
         $measurement = $this->latestMeasurement($offerDetail);
+        if ($measurement) {
+            Gate::authorize('write', $measurement); // S-1a Ownership
+        }
 
         if (!$measurement) {
             return response()->json([
