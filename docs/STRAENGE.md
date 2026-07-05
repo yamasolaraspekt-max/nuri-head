@@ -29,12 +29,22 @@ damit „gebaut vs. nicht gebaut / wo committet" nie wieder verwechselt wird —
 - **Migrations-Timestamps koordinieren sich über diese Datei** (nächster freier Slot ablesen, hier eintragen).
 - **Einmal committete Migrationen werden NIE umbenannt** (Timestamp bleibt, auch wenn ein anderer Strang später einen früheren wählt).
 
+### ⛔ ARBEITSBAUM-TRENNUNG + COMMIT-HYGIENE (ab 2026-07-05, verbindlich — Lehre aus dem Absorptions-Vorfall)
+- **Ein Arbeitsbaum pro Instanz/Strang:** `git worktree add ../ticket-strang-<X> -b strang/<X>`. **Kein gemeinsamer Index mehr** — Absorption fremder ungestagter Änderungen wird technisch unmöglich (nicht nur verboten).
+- **`git add -A` und `git commit -a` sind VERBOTEN.** Immer **explizite Pfade** stagen.
+- **Ein Commit enthält ausschließlich Dateien des eigenen Strangs.**
+- **Vor jedem Commit:** `git status` muss **leer sein bis auf die eigenen, im Stopp-2 berichteten Dateien** — sonst **STOPP + melden** (nicht mitcommitten).
+- **Geteilte Datei `RELEASE-MANIFEST.md`** = einziger erwartbarer Berührungspunkt der Stränge: Manifest-Zeilen **nur im eigenen Commit** ergänzen, **nie fremde Zeilen anfassen**; Merge-Konflikte dort sind normal und werden **additiv** aufgelöst.
+
+> **Provenienz-Vermerk (einmalig, KEIN History-Rewrite):** Beim `deal_invoices`-Rückbau (Accounting) hat der geteilte Arbeitsbaum meine ungestagten Änderungen in Fremd-Commits gezogen: **`f51dd50` (fox-ess)** enthält die Rückbau-**Datei-Löschungen**, **`d8d3870` (b2a-3)** die Rückbau-**Manifest-Zeile** — beide **fachlich zugehörig zu `b0735e3`** (Accounting-Rückbau-Commit). **Kein rebase/amend** auf dem gepushten Stand; hier nur dokumentiert.
+
 | Strang | Ort (Repo · Branch) | SCHREIB-Scope (exakt) | Status | letzter Commit |
 |---|---|---|---|---|
 | **A — Heizkörper M4-b** | ticket · `private/app-code-backup` | **NUR** `resources/views/admin/layouts/sidebar.blade.php` + `docs/heizkoerper-bauplan.md` | aktiv | `89e175f` |
 | **B — Spec-Standard B2–4** | ticket · `private/app-code-backup` | `app/Services/Spec/*` · `app/Console/Commands/Spec*` · `database/migrations/2026_07_05_15000[7+]*` · `tests/{Feature,Unit}/Spec*` | aktiv (B1+B2 committet, B3–4 offen) | `9501376` |
 | **C — B2a-Bau (1/2/3)** | ticket · `private/app-code-backup` | `app/Services/Heizlast/*` · `app/Services/Anforderungsprofil/*` · `app/Models/Anforderungsprofil*` · `database/migrations/2026_07_05_170001–170007` · `database/seeders/{ReferenzKatalog,Klima}*` · `tests/{Feature,Unit}/{Heizlast,Anforderungsprofil}*` · `docs/befund-b2a-*` | **aktiv** | B2a-3 Heizlast-Adapter |
 | **D — NAV 2b/3b** | ticket · `private/app-code-backup` | `sidebar.blade.php` + NAV-01-Doku — **GEPARKT bis A `sidebar.blade.php` committet hat** (Konflikt mit A) | ⏸ geparkt | `df1dc8c` |
+| **E — Accounting/FiBu** | ticket · Worktree **`strang/accounting`** (Bau); Doku auf shared | **Invoice-/FiBu-Zone:** `docs/accounting/*` · `docs/umsatzdefinition.md` · (Bau später) `app/**/{Invoice,Accounting}*`, `app/Models/{Invoice,Accounting}*`, FiBu-Migrationen. **DealController nur Invoice-Teile.** Read-only Befund läuft. | **aktiv** (Schritt 0/1 + Phase 0) | `b0735e3` |
 
 > Belegte Migrations-Timestamps (nie umbenennen): HK `2026_07_04_140001–140009`; Katalog/Spec
 > `2026_07_04_150001–150004` (main), `2026_07_05_150005–150009` (testing → M5), S-3/SEC-DM `160000`.
