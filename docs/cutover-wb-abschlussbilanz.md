@@ -31,6 +31,7 @@ Dokumentenstände zählen nicht als Beweis. Grundlagen: Datei-Manifest (301, unt
 **Nicht-wb, aber Cut-over-relevant (ticket-eigener Katalog, live auf main):**
 | Fox-ESS/LONGi-Geräte | — (ticket-Eigenrecherche) | `products` 26 · `inverters` 13 · `batteries` 2 · `product_pv_module_specs` 10 | **`46b1986`** — live gezählt auf main; 2 brands |
 | WR/Bat/PV/WP-**Spec-Schema** (additiv) | wb-Spec-Struktur | 4 Spec-Migrationen `150001–150004` | **`217473f`** — auf main migriert |
+| **wb-Katalog-Import** (19 WP `en14511_nenn` + AIKO 2 + LONGi LR7 3) — *B→A, Stufe 2* | wb `waermepumpen`/`artikel` (`b4a9eda`) | `products` + `product_heat_pump_specs` + `product_pv_module_specs` (**testing**) | `WberechnungImportSeeder` — **8 Tests grün** (Zeilen-Soll 19/5, Buderus-A-7-COP 2,36, NIBE-Varianten, Dedup-Skip, Idempotenz, Rückbau); Marker `imported_from='wberechnung'`; **main = W3** offen |
 
 > **Diskrepanz-Befund (Doku ↔ Realität):** `product_heat_pump_specs` existiert auf main, ist aber **0 Zeilen**
 > (WP-Import = Teil B). `product_radiator_specs`/`radiator_connection_factors` **fehlen auf main** (nur testing) →
@@ -56,11 +57,10 @@ WpKennlinie, Bivalenz, Pvgis, Sanierungs, Fussboden, Energiekonzept, PvProjekt, 
 | **Fußbodenheizung** EN 1264 (M) | **B3-Unterpunkt** | erste Streichposition | `FussbodenheizungService` |
 | **Energiekonzept-Bundler** (Q) | **B4** | neue Struktur ≠ ticket-`EconomicCalculation` | `EnergiekonzeptController`, `Models/Energiekonzept` (+ 6 Faker-Datensätze, archiviert `1085c43`) |
 | **Referenz-Kataloge** (W-C4) | **mit B2a** | Herkunfts-/Stichproben-Auflage | `materials` (23), `konstruktionen` (5), `baualtersklassen` (25), `batterie_wr_kompatibilitaet` (26) |
-| **WP-Katalog-Import** (19 WP + AIKO/LONGi) | **B1/Stufe 2** | **WP-Fix-Abnahme** (`b4a9eda`) → dann `WberechnungImportSeeder` bauen | `waermepumpen.csv` (datenblatt-verifiziert) |
 | **Grundriss/Plan-Import** A-3d (K) | **B5/W6** | eigene Welle; Queue/Storage | `GrundrissController`, `PlanUploadController`, 4 Jobs, `MassstabVorschlagService` |
 | **HK produktiv** (M5) | **M5** | Prod-Migration-Fenster (~3000 Kunden) | HK-Schema von testing → main |
 
-**Diese 13 Zeilen SIND die ehrliche Antwort auf „wofür muss ich noch in wb schauen".**
+**Diese 12 Zeilen SIND die ehrliche Antwort auf „wofür muss ich noch in wb schauen".** *(WP-Katalog-Import ist mit Stufe 2 nach Teil A gewandert — testing; main = W3.)*
 
 ---
 
@@ -111,13 +111,16 @@ A = übernommen · B = entschieden-offen · C = verzichtet · **Infra** = Framew
 
 ## Teil E — AMPEL-FAZIT
 
-🟡 **11 von 215 fachlich wertvollen Positionen übernommen** (das komplette Heizkörper-Modul, live-testgrün,
-`6bf75b0`/`947bed6`/`09eea5e`/`89e175f`) · **204 entschieden-offen mit klaren Roadmap-Slots** (B1→B5/M5) ·
+🟡 **12 von 215 fachlich wertvollen Positionen übernommen** (Heizkörper-Modul `6bf75b0`/`947bed6`/`09eea5e`/`89e175f`
+**+ wb-Katalog-Import** 19 WP `en14511_nenn` + AIKO/LONGi LR7, testing) · **203 entschieden-offen** (B1→B5/M5) ·
 **Teil D leer** (301/301 klassifiziert) → **es ist nichts unbemerkt liegengeblieben, aber wb ist noch NICHT
-abschaltbar.** Für das Heizkörper-Modul gilt ticket; für alles andere (Heizlast, WP-/PV-Auslegung, PVGIS,
-Wirtschaftlichkeit, Klima, Energiekonzept, Grundriss) bleibt **wb die Wahrheit**, bis der jeweilige B-Slot
-portiert ist.
+abschaltbar.** Für Heizkörper + Geräte-Katalog gilt ticket; für alles andere (Heizlast, WP-/PV-Auslegung, PVGIS,
+Wirtschaftlichkeit, Klima, Energiekonzept, Grundriss) bleibt **wb die Wahrheit**, bis der jeweilige B-Slot portiert ist.
 
-**Fortschreibungs-Regel:** Bei jedem B-Slot-Abschluss wandert die Zeile **B → A** (Beweis-Zeile ergänzen).
+**Einfrier-Vermerk (W-C2):** Mit Stufe 2 ist der **Geräte-Katalog wb komplett eingefroren** — WP war es schon,
+jetzt auch die WR/Bat/Modul-Zeilen (Fox-ESS/LONGi bereits in ticket, AIKO/LONGi-LR7 importiert). Geräte-Änderungen
+laufen ab jetzt in ticket; die wb-Geräte-Daten sind nur noch Herkunftsnachweis. (K/Grundriss bleibt bis B5 wb-benutzbar.)
+
+**Fortschreibungs-Regel:** Bei jedem B-Slot-Abschluss wandert die Zeile **B → A** (Beweis-Zeile ergänzen, selber Commit).
 **Ist Teil B leer, ist wb abschaltbar** — frühestens nach **M5** (HK produktiv) **und B5** (Grundriss).
-Nächster Schritt Richtung A: **WP-Katalog-Import** (Gate: WP-Fix-Abnahme `b4a9eda`) → dann B2a-Kern-Ports.
+Nächster Schritt Richtung A: **B2a-Kern-Ports** (Heizlast + Klima), sobald freigegeben. WP-Import-**main-Lauf = W3**.
