@@ -673,6 +673,8 @@ class DealMeasurementController extends Controller
 
     public function assignWork(Request $request, DealMeasurement $measurement)
     {
+        Gate::authorize('assign', $measurement); // S-1b-2: Disposition (nicht der zugewiesene Techniker)
+
         /*
          * IMPORTANT:
          * status = completed means the technical Aufmaß form was completed.
@@ -2100,6 +2102,8 @@ class DealMeasurementController extends Controller
 
     public function complete(Request $request, DealMeasurement $measurement)
     {
+        Gate::authorize('write', $measurement); // S-1b-2: Abschliessen = write (Asymmetrie zu unlock gewollt)
+
         try {
             return DB::transaction(function () use ($measurement) {
                 if ($measurement->status === 'completed') {
@@ -2246,16 +2250,19 @@ class DealMeasurementController extends Controller
 
     public function unlock(Request $request, DealMeasurement $measurement)
     {
+        Gate::authorize('unlock', $measurement); // S-1b-2: Entsperren = engster Kreis (Deal-Zuständiger ∨ Admin)
+
+        if ($measurement->status !== 'completed') {
+            // S-1b-2: kein stiller 200-No-op mehr -> 409 (nichts zu entsperren)
+            return response()->json([
+                'success' => false,
+                'message' => 'Aufmaß ist nicht gesperrt — nichts zu entsperren.',
+                'status' => $measurement->status ?: 'open',
+            ], 409);
+        }
+
         try {
             return DB::transaction(function () use ($measurement) {
-                if ($measurement->status !== 'completed') {
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Aufmaß ist bereits entsperrt.',
-                        'status' => $measurement->status ?: 'open',
-                    ]);
-                }
-
                 $oldStatus = $measurement->status;
 
                 $unlockUpdate = [
@@ -2376,6 +2383,8 @@ class DealMeasurementController extends Controller
 
     public function destroy(DealMeasurement $measurement)
     {
+        Gate::authorize('delete', $measurement); // S-1b-2: Löschen = Ersteller ∨ Deal-Zuständiger ∨ Admin (soft-delete)
+
         if ($measurement->status === 'completed') {
             return response()->json([
                 'success' => false,

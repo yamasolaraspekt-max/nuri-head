@@ -176,6 +176,8 @@ class DealMeasurementImageController extends Controller
      */
     public function destroy(Image $image)
     {
+        Gate::authorize('delete-measurement-image', $image); // S-1b-2: Kunden-Anker (b+-Kette)
+
         $filename = ltrim((string) $image->image, '/');
         $path = 'uploads/customers/' . $filename;
 

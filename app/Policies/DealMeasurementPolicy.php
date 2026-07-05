@@ -64,4 +64,84 @@ class DealMeasurementPolicy
 
         Cache::put(self::ORPHAN_COUNTER, (int) Cache::get(self::ORPHAN_COUNTER, 0) + 1);
     }
+
+    // ----- S-1b-2: enge Abilities (Übergangs-Soft-Deny je Ability) -------------------------------
+
+    /** Disposition (Techniker zuweisen): Deal-Zuständiger ∨ Ersteller ∨ Admin — NICHT der zugewiesene Techniker. */
+    public function assign(User $user, DealMeasurement $measurement): bool
+    {
+        return $this->ability($user, $measurement, $this->creatorOrDealOwnerIds($measurement), 'assign_denied', 'features.deal_measurement_assign_hard_deny');
+    }
+
+    /** Entsperren (hebt den 423-Schutz auf): engster Kreis — Deal-Zuständiger ∨ Admin. */
+    public function unlock(User $user, DealMeasurement $measurement): bool
+    {
+        return $this->ability($user, $measurement, $this->dealOwnerIds($measurement), 'unlock_denied', 'features.deal_measurement_unlock_hard_deny');
+    }
+
+    /** Löschen (soft): Ersteller ∨ Deal-Zuständiger ∨ Admin. */
+    public function delete(User $user, DealMeasurement $measurement): bool
+    {
+        return $this->ability($user, $measurement, $this->creatorOrDealOwnerIds($measurement), 'delete_denied', 'features.deal_measurement_delete_hard_deny');
+    }
+
+    /**
+     * Strikt erlaubt → true. Nicht strikt, aber im breiteren write-Kreis → Übergangs-Soft-Deny
+     * (loggen+zählen, erlauben; im harten Modus verweigern). Sonst (unbeteiligt/Portal) → hart deny.
+     *
+     * @param  array<int, mixed>  $strictOwners
+     */
+    private function ability(User $user, DealMeasurement $measurement, array $strictOwners, string $deniedKey, string $hardFlag): bool
+    {
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+        $emp = $user->employeeId();
+        if ($emp === null) {
+            return false;
+        }
+        $e = (string) $emp;
+
+        if (in_array($e, array_map('strval', $strictOwners), true)) {
+            return true;
+        }
+
+        if (in_array($e, array_map('strval', $this->writeOwnerIds($measurement)), true)) {
+            $this->logAbilitySoftDeny($deniedKey, $measurement, $emp);
+
+            return ! (bool) config($hardFlag, false);
+        }
+
+        return false;
+    }
+
+    /** @return array<int, mixed> voller write-Kreis (b+): Ersteller, zugewiesener Techniker, Deal-Zuständiger. */
+    private function writeOwnerIds(DealMeasurement $m): array
+    {
+        return array_values(array_filter([$m->created_by, $m->responsible_employee_id, $m->deal?->employee_id], fn ($v) => $v !== null && $v !== ''));
+    }
+
+    /** @return array<int, mixed> Ersteller ∨ Deal-Zuständiger (ohne den zugewiesenen Techniker). */
+    private function creatorOrDealOwnerIds(DealMeasurement $m): array
+    {
+        return array_values(array_filter([$m->created_by, $m->deal?->employee_id], fn ($v) => $v !== null && $v !== ''));
+    }
+
+    /** @return array<int, mixed> nur Deal-Zuständiger. */
+    private function dealOwnerIds(DealMeasurement $m): array
+    {
+        return array_values(array_filter([$m->deal?->employee_id], fn ($v) => $v !== null && $v !== ''));
+    }
+
+    private function logAbilitySoftDeny(string $key, DealMeasurement $m, int $emp): void
+    {
+        Log::warning('deal_measurement_ability_soft_deny', [
+            'ability' => $key,
+            'measurement_id' => $m->id,
+            'employee_id' => $emp,
+            'pfad' => optional(request()->route())->getName() ?? request()->path(),
+        ]);
+
+        Cache::put($key.'_count', (int) Cache::get($key.'_count', 0) + 1);
+    }
 }
