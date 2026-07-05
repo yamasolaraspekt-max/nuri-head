@@ -9,6 +9,20 @@
 > **Baseline (letzter Produktions-Stand):** von Yama zu bestätigen. **Reihenfolge:** Migrations-Timestamp.
 > Am Tag X wird diese Liste zum Deploy-Runbook ausgearbeitet (Befehle, Erwartungs-Outputs, Rollbacks) und
 > **einmal** mit Ramin auf dem Server ausgeführt.
+>
+> **Regel-Ersetzung (2026-07-05 — ersetzt „nur `ticket_testing` bis Cut-over", stirbt nicht stillschweigend):**
+> Die **lokale `ticket`-DB (Dev)** trägt ab **2026-07-05** die Cut-over-/Framework-Migrationen **150xxx + 170xxx**
+> (rein additive `CREATE`/`ALTER`, `down()`/Teardown rollback-bewiesen). **Hetzner-Produktion bleibt unberührt bis Release**
+> (diese Liste ist das Deploy-Runbook). Grund: ein halb-migrierter Zustand (150xxx auf Dev, 170xxx nur testing) ist schlechter
+> als ein konsistentes Dev-Schema — Integrations-Tests (Fox-ESS-Seeder + Anforderungsprofile) brauchen EIN Schema.
+>
+> **Migrations-Record lokale `ticket`-DB (Trail):**
+> - **Batch 14** — `150001–150004` (Katalog-i, Spec-Schema WR/Bat/PV/WP) · `217473f` · **2026-07-04** · Katalog-Cut-over-Instanz.
+> - **Batch 15** — `150005–150006` (kurve_semantik + `imported_from`) · **2026-07-05** · Katalog-Cut-over-Instanz.
+> - **Batch 16** — `170001–170006` (B2a Referenz-Kataloge + Anforderungsprofil) · **2026-07-05** · diese Instanz (Tabellen leer: Schema; Seeder separat).
+> - **Spec `150007–150009`** bleiben bewusst **Pending** (Strang B, M5.1 nach Abnahme — NICHT selektiv mitmigriert).
+> - **Governance-Klärung** (Fox-ESS-Frage „wer/wann 150xxx auf main?"): beantwortet = Batch 14/15. Eine *explizite* Yama-Freigabe
+>   für den Dev-Lauf ist im Trail nicht gesondert vermerkt → durch diese Regel-Ersetzung **rückwirkend legitimiert** (Dev, additiv, Prod unberührt).
 
 ## A) Migrationen (Timestamp-Reihenfolge)
 | Migration | Strang | lokal | Rollback |
@@ -36,10 +50,10 @@
 | `2026_07_05_170002` create konstruktionen | **B2a/C** | Ran (lokal) | `down()` (drop) |
 | `2026_07_05_170003` create baualtersklassen | **B2a/C** | Ran (lokal) | `down()` (drop) |
 | `2026_07_05_170004` create klima_plz | **B2a/C** | Ran (lokal) | `down()` (drop) |
-| `2026_07_05_170005` create anforderungsprofile | **B2a/C** | testing ✓ · ticket **Pending** | `down()` (drop) |
-| `2026_07_05_170006` create anforderungsprofil_werte | **B2a/C** | testing ✓ · ticket **Pending** | `down()` (drop) |
+| `2026_07_05_170005` create anforderungsprofile | **B2a/C** | testing ✓ · ticket **Ran [16]** | `down()` (drop) |
+| `2026_07_05_170006` create anforderungsprofil_werte | **B2a/C** | testing ✓ · ticket **Ran [16]** | `down()` (drop) |
 
-**22 committet** (HK 9 · Katalog 6 · S-3 1 · B2a-Referenz 4 · B2a-Anforderungsprofil 2) · **3 Spec Pending** (M5.1 nach Abnahme). Abhängigkeit: 170xxx (B2a) unabhängig von 150xxx/160xxx; `konstruktionen`→`materials` und `anforderungsprofil_werte`→`anforderungsprofile` (FK). **Hinweis:** alle 170xxx sind auf `ticket` (real) **Pending** — bisher nur `ticket_testing` (Tests); „Ran (lokal)" oben = Test-DB.
+**22 committet** (HK 9 · Katalog 6 · S-3 1 · B2a-Referenz 4 · B2a-Anforderungsprofil 2) · **3 Spec Pending** (M5.1 nach Abnahme). Abhängigkeit: 170xxx (B2a) unabhängig von 150xxx/160xxx; `konstruktionen`→`materials` und `anforderungsprofil_werte`→`anforderungsprofile` (FK). **Hinweis:** alle 170xxx sind auf `ticket` (real) **Ran (Batch 16, 2026-07-05)** — siehe Migrations-Record im Kopf; „Ran (lokal)" bei 170001–04 = Dev-DB `ticket`.
 
 ## B) Seeder-Läufe
 | Seeder | Wirkung | lokal | Rollback |
