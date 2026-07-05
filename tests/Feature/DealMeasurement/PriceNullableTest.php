@@ -70,8 +70,10 @@ class PriceNullableTest extends TestCase
         $ref->setAccessible(true);
         $row = $ref->invoke($controller, $item);
 
-        // Kein Crash (NULL-sicher). Mapper koerziert null->0 -> Display-Weiche (siehe Bericht/Backlog).
-        $this->assertSame(0.0, (float) $row['price']);
+        // M5: Mapper ERHÄLT jetzt NULL (ehrliches „kein Preis") statt zu 0 zu koerzieren.
+        // Kein Crash. Die Material-Liste-View zeigt ohnehin keinen Preis -> keine „—"-Frontend-Änderung nötig;
+        // Offer-Write-back (convertMaterialRowToOfferItem) koerziert null->0 korrekt.
+        $this->assertNull($row['price']);
         $this->assertSame('Heizkörper', $row['name']);
     }
 

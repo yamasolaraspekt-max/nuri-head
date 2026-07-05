@@ -6940,6 +6940,18 @@ $measurementRecords = $measurements->map(function ($m) use ($decodeArray, $build
 
                 const data = await response.json();
 
+                if (response.status === 409) {
+                    // M5: Aufmaß war nicht gesperrt (Doppelklick/Stale-Tab) -> Status still re-syncen, kein Error-Alert.
+                    const idx409 = records.findIndex(record => String(record.id) === String(id));
+                    if (idx409 > -1) {
+                        records[idx409].status = data.status || "open";
+                    }
+                    renderList();
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                    return;
+                }
+
                 if (!response.ok || !data.success) {
                     throw new Error(data.message || "Aufmaß konnte nicht entsperrt werden.");
                 }

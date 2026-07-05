@@ -655,8 +655,9 @@ class DealMaterialListController extends Controller
             'unit' => $unit,
             'measure' => $item->measure ?? $raw['measure'] ?? $unit,
 
-            'price' => (float) ($item->unit_price ?? $raw['price'] ?? 0),
-            'ek' => (float) ($item->purchase_price ?? $raw['ek'] ?? 0),
+            // S-3/M5: NULL erhalten (echtes „kein Preis") statt zu 0 zu koerzieren -> Frontend zeigt „—".
+            'price' => $item->unit_price !== null ? (float) $item->unit_price : (isset($raw['price']) ? (float) $raw['price'] : null),
+            'ek' => $item->purchase_price !== null ? (float) $item->purchase_price : (isset($raw['ek']) ? (float) $raw['ek'] : null),
 
             'availability' => (bool) ($raw['availability'] ?? false),
 
