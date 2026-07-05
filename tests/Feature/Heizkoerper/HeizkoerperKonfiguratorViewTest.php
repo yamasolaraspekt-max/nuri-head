@@ -46,4 +46,17 @@ class HeizkoerperKonfiguratorViewTest extends TestCase
 
         $this->actingAs($this->user())->get(route('heizkoerper.konfigurator'))->assertNotFound();
     }
+
+    /** v-c-1: Stückliste-Sektion vorhanden + Datenlage-ehrliches Label (kein erfundener Preis). */
+    public function test_stueckliste_sektion_und_datenlage_label(): void
+    {
+        $r = $this->actingAs($this->user())->get(route('heizkoerper.konfigurator'));
+
+        $r->assertOk();
+        $r->assertSee('Stückliste', false);
+        $r->assertSee('stuecklistePositionen', false);                    // Positions-Builder (Anzeige)
+        $r->assertSee('Regel-Kandidat — kein Preis/SKU', false);          // ehrliches Label regel-kandidaten
+        $r->assertSee('Preise/SKU folgen aus dem Lieferanten-Import', false);
+        $r->assertSee("p.preis === null ? '—' : p.preis", false);         // '—' statt 0,00-€-Optik
+    }
 }

@@ -44,6 +44,11 @@
                         <small class="text-muted">Bei Auswahl werden Spec, Baulänge, Anschluss serverseitig aus der Aufnahme gezogen.</small>
                     </div>
 
+                    <div class="form-group">
+                        <label>Raum (optional, für die Stückliste)</label>
+                        <input type="text" class="form-control" x-model="form.raum" placeholder="z. B. Wohnzimmer">
+                    </div>
+
                     <div class="row">
                         <div class="form-group col-6">
                             <label>Katalog-Spec-ID</label>
@@ -191,6 +196,52 @@
             </div>
         </div>
     </div>
+
+    {{-- Stückliste je Raum (ANZEIGE, kein B14-Write) --}}
+    <div class="row" x-show="hatStueckliste()" x-cloak>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Stückliste<span x-show="form.raum" x-cloak> — Raum <span x-text="form.raum"></span></span></h4>
+                </div>
+                <div class="card-body">
+                    <template x-if="kompat">
+                        <div class="alert" :class="kompat.datenqualitaet === 'serien-praezise' ? 'alert-success' : 'alert-warning'">
+                            <template x-if="kompat.datenqualitaet === 'regel-kandidaten'">
+                                <span><strong>Regel-Kandidat — kein Preis/SKU</strong> (folgen aus Lieferanten-Import).</span>
+                            </template>
+                            <template x-if="kompat.datenqualitaet === 'serien-praezise'">
+                                <span><strong>Serien-präzise</strong> — mit Hersteller-Artikelnummer.</span>
+                            </template>
+                        </div>
+                    </template>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Kategorie</th><th>Artikel</th><th>Herst-Nr.</th>
+                                <th class="text-right">Menge</th><th class="text-right">Preis</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="(p, i) in stuecklistePositionen()" :key="i">
+                                <tr>
+                                    <td x-text="p.kategorie"></td>
+                                    <td x-text="p.artikel"></td>
+                                    <td x-text="p.herstNr ?? '—'"></td>
+                                    <td class="text-right" x-text="p.menge"></td>
+                                    <td class="text-right" x-text="p.preis === null ? '—' : p.preis"></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                    <template x-if="kompat && kompat.voreinstellstufe !== null">
+                        <p class="mb-0 text-muted"><small>Voreinstellstufe: <strong x-text="kompat.voreinstellstufe"></strong> (Hydraulik, kein Artikel).</small></p>
+                    </template>
+                    <p class="mb-0 text-muted"><small>Preise/SKU folgen aus dem Lieferanten-Import; bis dahin „—". Reine Anzeige — keine Übernahme in die Material-Liste (das ist v-c-2).</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 @endsection
 
@@ -206,7 +257,7 @@
             csrf: document.querySelector('meta[name="csrf-token"]')?.content || '',
             form: {
                 installation_id: '', radiator_spec_id: '', baulaenge_mm: 1000, anzahl: 1,
-                vorlauf: 55, raumtemp: 20, spreizung: 10, heizlast_w: '',
+                vorlauf: 55, raumtemp: 20, spreizung: 10, heizlast_w: '', raum: '',
                 ist_ventil_heizkoerper: false, anschluss_fuehrung: 'zweirohr', kopf_norm_bestand: '',
             },
             result: null,
@@ -273,6 +324,32 @@
             ampelClass(a) { return { gruen: 'badge-success', gelb: 'badge-warning', rot: 'badge-danger', na: 'badge-secondary' }[a] || 'badge-secondary'; },
             ampelText(a) { return { gruen: 'Deckt (grün)', gelb: 'Knapp (gelb)', rot: 'Unterdeckung (rot)', na: '—' }[a] || a; },
             fieldError(name) { return this.fieldErrors[name] ? this.fieldErrors[name][0] : ''; },
+
+            // Stückliste je Raum (ANZEIGE, kein B14-Write): HK-Position + Zubehör aus den Endpunkt-Antworten.
+            // Preis/SKU nur, wenn tatsächlich vorhanden — sonst null → Anzeige '—' (keine erfundene 0,00-€-Optik).
+            stuecklistePositionen() {
+                const rows = [];
+                if (this.result) {
+                    rows.push({
+                        kategorie: 'Heizkörper',
+                        artikel: 'Heizkörper (Qₙₒᵣₘ ' + this.result.q_norm_w + ' W)',
+                        herstNr: null, menge: (this.form.anzahl || 1), preis: null,
+                    });
+                }
+                if (this.kompat) {
+                    for (const p of (this.kompat.positionen || [])) {
+                        rows.push({
+                            kategorie: p.kategorie,
+                            artikel: ((p.hersteller ? p.hersteller + ' ' : '') + (p.name || '')).trim(),
+                            herstNr: p.herst_artikelnr || null,
+                            menge: 1,
+                            preis: null, // Preise erst mit Lieferanten-Import (supplier_article_map)
+                        });
+                    }
+                }
+                return rows;
+            },
+            hatStueckliste() { return !!(this.result || this.kompat); },
         };
     }
 </script>
