@@ -72,6 +72,11 @@ Damit M5 sicher ist:
    idealerweise im Randzeit-Fenster.
 4. **Verifikation danach:** Tabellen vorhanden, Bestandszahlen unverändert, App bootet, bestehende Tests grün.
 
+**Deploy-Paket-Inhalt (ein Fenster, ein Backup, ein Rollback-Plan):**
+- Heizkörper-Migrationen (i)+(ii)+Zubehör (M5-Kern).
+- **Katalog-Cut-over Stufe 2** (auf `ticket_testing` bewiesen, `481b9cb`): `2026_07_05_150005` (kurve_semantik @ `product_heat_pump_specs`), `2026_07_05_150006` (imported_from @ `products`) + **`WberechnungImportSeeder`-Produktivlauf** (19 WP + AIKO 2 + LONGi LR7 3, `imported_from='wberechnung'`). Rückbau: `WberechnungImportTeardownSeeder` (zeilengenau via Marker).
+- Reihenfolge: Backup → Migrationen → Seeder → Verifikation (Bestandszahlen unverändert **+** 19 WP / 5 Module mit Marker importiert, App bootet). Alles additiv/nullable — `products`/Bestandsgeräte unberührt.
+
 ## 7. Offene Gates/Entscheidungen (blockieren „alle Funktionen sichtbar")
 1. **Ventiltechnik-Report-Freigabe** (M1) — wartet.
 2. **Supplier-Stack** (M2/A4): ticket-IDS vs. wberechnung-OMD/DATANORM-ETIM — eine Zielarchitektur.

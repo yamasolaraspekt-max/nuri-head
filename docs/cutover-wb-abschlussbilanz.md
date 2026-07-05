@@ -31,7 +31,7 @@ Dokumentenstände zählen nicht als Beweis. Grundlagen: Datei-Manifest (301, unt
 **Nicht-wb, aber Cut-over-relevant (ticket-eigener Katalog, live auf main):**
 | Fox-ESS/LONGi-Geräte | — (ticket-Eigenrecherche) | `products` 26 · `inverters` 13 · `batteries` 2 · `product_pv_module_specs` 10 | **`46b1986`** — live gezählt auf main; 2 brands |
 | WR/Bat/PV/WP-**Spec-Schema** (additiv) | wb-Spec-Struktur | 4 Spec-Migrationen `150001–150004` | **`217473f`** — auf main migriert |
-| **wb-Katalog-Import** (19 WP `en14511_nenn` + AIKO 2 + LONGi LR7 3) — *B→A, Stufe 2* | wb `waermepumpen`/`artikel` (`b4a9eda`) | `products` + `product_heat_pump_specs` + `product_pv_module_specs` (**testing**) | `WberechnungImportSeeder` — **8 Tests grün** (Zeilen-Soll 19/5, Buderus-A-7-COP 2,36, NIBE-Varianten, Dedup-Skip, Idempotenz, Rückbau); Marker `imported_from='wberechnung'`; **main = W3** offen |
+| **wb-Katalog-Import** (19 WP `en14511_nenn` + AIKO 2 + LONGi LR7 3) — *B→A, Stufe 2* | wb `waermepumpen`/`artikel` (`b4a9eda`) | `products` + `product_heat_pump_specs` + `product_pv_module_specs` (**testing**) | `WberechnungImportSeeder` — **8 Tests grün** (Zeilen-Soll 19/5, Buderus-A-7-COP 2,36, NIBE-Varianten, Dedup-Skip, Idempotenz, Rückbau); Marker `imported_from='wberechnung'`; **main = M5-Deploy-Paket** |
 
 > **Diskrepanz-Befund (Doku ↔ Realität):** `product_heat_pump_specs` existiert auf main, ist aber **0 Zeilen**
 > (WP-Import = Teil B). `product_radiator_specs`/`radiator_connection_factors` **fehlen auf main** (nur testing) →
@@ -60,7 +60,7 @@ WpKennlinie, Bivalenz, Pvgis, Sanierungs, Fussboden, Energiekonzept, PvProjekt, 
 | **Grundriss/Plan-Import** A-3d (K) | **B5/W6** | eigene Welle; Queue/Storage | `GrundrissController`, `PlanUploadController`, 4 Jobs, `MassstabVorschlagService` |
 | **HK produktiv** (M5) | **M5** | Prod-Migration-Fenster (~3000 Kunden) | HK-Schema von testing → main |
 
-**Diese 12 Zeilen SIND die ehrliche Antwort auf „wofür muss ich noch in wb schauen".** *(WP-Katalog-Import ist mit Stufe 2 nach Teil A gewandert — testing; main = W3.)*
+**Diese 12 Zeilen SIND die ehrliche Antwort auf „wofür muss ich noch in wb schauen".** *(WP-Katalog-Import ist mit Stufe 2 nach Teil A gewandert — testing; main = M5-Deploy-Paket.)*
 
 ---
 
@@ -123,4 +123,4 @@ laufen ab jetzt in ticket; die wb-Geräte-Daten sind nur noch Herkunftsnachweis.
 
 **Fortschreibungs-Regel:** Bei jedem B-Slot-Abschluss wandert die Zeile **B → A** (Beweis-Zeile ergänzen, selber Commit).
 **Ist Teil B leer, ist wb abschaltbar** — frühestens nach **M5** (HK produktiv) **und B5** (Grundriss).
-Nächster Schritt Richtung A: **B2a-Kern-Ports** (Heizlast + Klima), sobald freigegeben. WP-Import-**main-Lauf = W3**.
+Nächster Schritt Richtung A: **B2a-Kern-Ports** (Heizlast + Klima), sobald freigegeben. WP-Import-**main-Lauf = M5-Deploy-Paket** (mit HK-Migration; ein Fenster, ein Backup, ein Rollback-Plan — Roadmap §6).
