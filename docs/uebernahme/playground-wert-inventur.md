@@ -311,4 +311,39 @@ Ein **nicht-DATEV-zertifiziertes Accounting-Prototyp** in ein **Live-CRM mit ~30
 
 ---
 
-**→ STOPP (Anhang E).** Buchhaltung/DATEV: Weiche 3 aufgehoben (notiert), Reife = Prototyp (nicht DATEV-bewiesen), Risiko-Hinweis gesetzt, Bau = Accounting-Instanz nach Cut-over. **Als Nächstes (auf deinen Wunsch): Lohn/Gehalt-Befund + PV-3D-Datenmodell-Befund** (gleiche Tiefe, read-only). Yama: soll ich diese zwei jetzt anschließen, oder priorisierst du?
+**→ STOPP (Anhang E).** Buchhaltung/DATEV: Weiche 3 aufgehoben, Reife = Prototyp, Risiko-Hinweis, Bau = Accounting-Instanz nach Cut-over.
+
+---
+
+# Anhang F — PV-3D-Planer: Datenmodell + Rechenkern (2026-07-05, read-only) · **ZEITKRITISCH für Cut-over**
+**Scope (Yama):** NUR portierbares **Laravel-Datenmodell + Rechenkern**. Die **3D-UI (Three.js/React) bleibt raus** = Stack-Neubau. Zeitkritisch, weil der Cut-over die Energie-Architektur **jetzt** formt — additive Schema-Entscheidungen sind jetzt billig.
+
+## F.1 Montage-/Dach-Katalog — **ECHT gefüllt (geronnene Fachlogik), A-Wert**
+| Tabelle | Zeilen | Inhalt |
+|---|---|---|
+| `roof_tiles` | **94** | Ziegel-/Eindeckungstypen |
+| `roof_coverings` | 15 | Dacheindeckungen |
+| `solar_mounts` | 7 | Montagesysteme |
+| **`tile_solar_mount`** | **220** | **Ziegel↔Montage-Kompatibilität** |
+| **`mounting_components`** | **66** | Montage-Komponenten |
+| **`mounting_roof_compat`** | **111** | **Komponente↔Dach-Kompatibilität** |
+`roof_templates=0`/`energie_roof_models=1`/`auslegungen=0` = leer (Testdaten). → **Die Kompatibilitäts-Matrizen (220+111) sind der Wert** — welche Halterung auf welchen Ziegel/welches Dach passt = schwer neu zu erzeugende Montage-Fachlogik. **Empfehlung: additive Schema-Übernahme JETZT durch die Cut-over-Instanz** (Marker `imported_from='playground'`), solange die Energie-Architektur frisch ist.
+
+## F.2 PV-Rechenkern — reif, ~1210 Z., **an die wberechnung-Naht andockbar**
+`InverterSizingService`(553) · `StringBuilderService`(161) · `KabelService`(153) · `PerformanceService`(140) · `SchutzkomponentenService`(108) · `PvBelegungExtractor`(95, extrahiert Belegung aus 3D-`dach_json`).
+- **`InverterSizingService`** (gelesen): normgerechte Strangauslegung (Spannungsfenster n_min/n_max, Strang-Sicherung 1,25², DC/AC-Ratio) mit **Ampel grün/gelb/rot + Normbezug** und **Elektrofachkraft-Haftungshinweis** — Qualität wie mein HK-EN-442-Kern.
+- **⭐ Kern-Verzahnung:** nutzt **`App\Services\Energie\Contracts\Sizing{Inverter,Module,Battery}`** — **dieselbe Marker-Interface-Naht, die der wberechnung-Cut-over als Adapter-Naht gebaut hat.** → playgrounds PV-Sizing **plugt konzeptuell in die vorhandene Cut-over-Naht**, statt neu erfunden zu werden.
+
+## F.3 Verzahnung mit wberechnung-Cut-over (was „konzeptionell anpassen" heißt)
+- Der Cut-over bringt **Specs** (`product_pv_module_specs`/`inverters`/`batteries`) + die **WP-Seite**. Playground bringt die **PV-Sizing-/Montage-Seite** (Strang/WR/Kabel/Schutz + Dach-/Montage-Katalog) — **komplementär, nicht doppelt.**
+- **Empfehlung an die Cut-over-Instanz (Yama entscheidet):** (a) Montage-/Dach-Katalog jetzt additiv ins Schema; (b) playgrounds PV-Rechenkern über die **bestehende `Sizing*`-Naht** andocken (Adapter, nicht Neubau); (c) Doppelungen bei WR-Auslegung zwischen playground und wberechnung **konzeptuell zusammenführen** (eine Sizing-Wahrheit). `dach_json` = 3D-Layout-**Datenvertrag** (portabel, auch wenn die 3D-UI neu gebaut wird).
+
+## F.4 Urteil (Inventur)
+- **Montage-/Dach-Datenmodell = A, ZEITKRITISCH** (echte Kompatibilitäts-Fachlogik, jetzt billig additiv).
+- **PV-Rechenkern = A** (reif, normgerecht, **an die Cut-over-Naht andockbar** — konzeptionell anpassen, nicht neu bauen).
+- **3D-UI (Three.js) = C/Neubau** (stack-fremd, separater späterer UI-Strang; `dach_json`-Kontrakt bleibt).
+- **Bau/Andock = Cut-over-/Energie-Instanz, nach Cut-over** — ich liefere nur diesen Befund an sie.
+
+---
+
+**→ STOPP (Anhang F).** PV-3D: Montage-Katalog echt (220+111 Kompat-Zeilen) → **additiv jetzt** an die Cut-over-Instanz; PV-Rechenkern reif + **an die vorhandene `Sizing*`-Naht andockbar** (konzeptionell anpassen); 3D-UI = Neubau (raus). **Als Nächstes: (B) Lohn/Gehalt-Befund** (gleiche Tiefe, read-only) — schließe ich jetzt an.
