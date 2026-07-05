@@ -1,5 +1,13 @@
 # Stränge & Zuständigkeiten (wberechnung → ticket)
 
+## ⛔ DAUERDIREKTIVE: LOKAL-FIRST-ENTWICKLUNG (ab 2026-07-05, bis Yama „Tag X" ausruft)
+**Gilt für ALLE Stränge und Sessions.**
+- **Umgebung:** Yamas Rechner ist die **einzige** Arbeitsumgebung (lokale DB mit Seeder-Beispieldaten, lokale `.env`/Flags). **„main" / „produktiv fahren" = Yamas lokaler Hauptstand.** Migrationen/Seeder/Flags laufen **lokal, ohne Randzeit/Wartungsfenster/Deploy-Vorsicht** (lokales `mysqldump` vor destruktiven Läufen bleibt guter Ton, ist aber billig).
+- **Produktions-Server = ABSOLUT TABU** für jede Instanz aus jedem Anlass bis Tag X: kein SSH, kein Remote-DB-Zugriff, kein Deploy, keine Produktions-`.env`.
+- **Entfällt:** Deploy-Termine, Randzeit-/Wartungsfenster, Produktions-Backup-Zeremonie; **Echt-Nutzer-Beobachtungsfenster** (z. B. 14-Tage-Deny-Zähler) → wandern als Manifest-Posten in die Zeit **nach Tag X** (weiche Denies bleiben lokal aktiv). Nur wegen Deploy-Risiko getrennte Stufen dürfen zusammengelegt werden; **fachliche** Stufen (Befund→Bau) bleiben.
+- **Unverändert (Qualität ≠ Produktionsschutz):** Pflicht-Stopps, Befund-vor-Bau, Weichen, additive Commits, Tests-grün-vor-Commit, Paritäts-Prinzip, ehrliche Datenlage, Rate-nicht-Regel, Strang-Scopes/Sperr-Dateien, Ein-Schreiber-pro-Datei, Migrationen nie umbenennen. Lokale Fehler sind billig, **nicht egal**.
+- **RELEASE-MANIFEST-PFLICHT:** `docs/deploy/RELEASE-MANIFEST.md` ist die fortlaufende Tag-X-Liste. **Jeder** Commit mit prod-pflichtigem Teil (Migration · Seeder-Lauf · `.env`/Flag · Frontend-Fix mit Nutzerwirkung · Härtungs-Schalter · Config) trägt **im selben Commit** seine Manifest-Zeile nach (Posten · Commit · Reihenfolge/Abhängigkeit · Rollback · Nachläufe). **Posten ohne Zeile = Governance-Verstoß (gleichrangig Tabu-Bruch).**
+
 Verbindliche Strang-Trennung, damit **kein Rechenkern doppelt gebaut** wird und Sperr-Dateien respektiert
 werden. **Begriffsregel: Stufen IMMER mit Strang-Präfix benennen** — `Katalog-ii`, `Heizkörper-iii`, `M3`, `B1`
 — **nie nacktes „Stufe (ii)"**. Stand: 2026-07-05.
