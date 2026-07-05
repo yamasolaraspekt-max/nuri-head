@@ -204,6 +204,10 @@ class HeizkoerperController extends Controller
                     'qty_offer' => $row['menge'],
                     'qty_measurement' => $row['menge'],
                     'qty_final' => $row['menge'],
+                    // S-3: kein Preis bekannt -> ehrlich NULL (nicht 0,00). Spalten seit 2026_07_05_160000 nullable.
+                    'unit_price' => null,
+                    'purchase_price' => null,
+                    'total_price' => null,
                     'note' => $serienPraezise ? 'Heizkörper – serien-präzise' : 'Heizkörper – Regel-Kandidat (kein Preis/SKU)',
                     'raw_snapshot' => [
                         'herkunft' => 'heizkoerper',

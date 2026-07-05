@@ -18,7 +18,7 @@ damit „gebaut vs. nicht gebaut / wo committet" nie wieder verwechselt wird —
 - **Ort:** `ticket` · `private/app-code-backup` · Katalog-(i) `217473f`; Fox-ESS/LONGi `46b1986`; Cut-over-Analyse `8287add`; Energiekonzept-Archiv `1085c43`; **Abschluss-Bilanz** `cutover-wb-abschlussbilanz.md`.
 - `katalog-reconciliation-plan.md` Stufen **(i)–(iv)**: Schema additiv → Import → Adapter → Rechenkern.
 - **Katalog-(i)** = `217473f` (4 Spec-Migrationen `150001–150004`, auf main migriert 2026-07-04).
-- **Katalog-(ii) = Import-Seeder** — **noch NICHT gebaut**; Gate: **WP-Fix erledigt** (`b4a9eda`, wb) → Abnahme läuft, danach bauen. Scope: Netto-Neuwert (19 WP + AIKO + LONGi LR7), `imported_from='wberechnung'`, skip-Dedup, nur `ticket_testing`.
+- **Katalog-(ii) = Import-Seeder `WberechnungImportSeeder`** — **✅ GEBAUT + ABGENOMMEN** (`481b9cb`, 19/19, 8 Tests grün, nur `ticket_testing`). Scope: Netto-Neuwert (19 WP + AIKO + LONGi LR7), `imported_from='wberechnung'`, skip-Dedup. **M5-Posten B = regulärer Deploy-Lauf** im M5-Fenster (Smoke-Zählungen 19/5/24 = Kern-Smoke). *[Korrektur 2026-07-05: früher „nicht gebaut" — jetzt belegt gebaut.]*
 - Cut-over-Analyse (Stufe 0+1) + **Abschluss-Bilanz** (Gewissheits-Audit: **301/301 klassifiziert, Teil D leer**, 🟡 11 A / 204 B): `docs/cutover-wb-module.md`, `cutover-wb-inventur.md`, `cutover-wb-abschlussbilanz.md`.
 - **Fortschreibungs-Regel (verbindlich):** Bei jedem B-Slot-Abschluss wandert die Bilanz-Zeile **B→A** — im selben Commit wie der Slot.
 
