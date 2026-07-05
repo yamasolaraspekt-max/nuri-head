@@ -181,4 +181,64 @@ Belegt über 57 Live-COUNTs: playground trägt **dünne Sample-/Seed-Daten** —
 - **Lastmanagement/Dachbasis + Kundendienst/Betriebsmittel-Reife** sind die **wichtigsten offenen Prüfpunkte** (Verzahnung Energie-Cut-over bzw. leer+unklar).
 - **Weiche-3-/W5-/Katalog-/Energie-Ausschlüsse** habe ich streng angewandt; falls eine Weiche später kippt, ändert sich das Urteil (v. a. Buchhaltung).
 
-**→ STOPP.** Yama entscheidet die A-Liste (Empfehlung: **Formular-Engine als Prio-1-A**; Lastmanagement als Energie-Verzahnungs-Weiche; Kundendienst/Betriebsmittel erst nach Reife-Befund). Gebaut wird erst nach Abschluss des wberechnung-Cut-overs.
+**→ STOPP (TEIL 1–4).** A-Liste unten in Anhang A vertieft.
+
+---
+
+# Anhang A — Formular-Engine: Code-Reife-Befund (2026-07-05, read-only)
+
+> Auflage aus der Selbstkritik erfüllt: Engine **wirklich gelesen** (nicht aus Counts), Reife belegt, `fusion.forms`-Abgrenzung, Aufwand ehrlich. Quellen: Code `backend-laravel/app/{Models,Services,Http/Controllers}` + playgrounds **eigener Audit** `docs/projekt/formular-modul-bestandsaufnahme.md` (2026-06-02, am echten Code geprüft).
+
+## A.1 Architektur (wörtlich gelesen)
+- **Models (6):** `DynamicForm`(40 Z.) → `FormSection`(113 live) → `FormField`(62 Z.) → `FormFieldOption`(489 live) · `FormAnswer` · **`FormRoutingRule`**(45 Z.). `FormField`-Baukasten: `options_json`,`validation_rules_json`,`calculation_json`,`visible_if_json`,`recognition_json`,`min/max_value`,`decimals`,`internal_only`/`external_visible`,`depends_on_field_key`.
+- **Services:** `FormRoutingService`(91 Z., Smartrouting) · `Services/Form/FormulaEvaluationService`(902 Z., Berechnung) · `ErkennungController`+`EntityHistoryService` (OCR-Kette + Audit).
+- **Controller dual:** `Api/*` (FormBuilder/FormCalculation/FormAnswer/DynamicForm/ProjectForm — für React) **+** `Modules/*` (Blade-Admin-Listen). **API-first.**
+- **Live-Bestand:** 21 Formulare · 113 Sektionen · **358 Felder** (select=150, number=49, text=30, textarea=27, **length=21/area=5/power=3/plz** = technische Aufnahme, calculation=14) · 489 Optionen · **14 Routing-Rules**.
+
+## A.2 Smartrouting (belegt, `FormRoutingService:12-58`)
+`resolveForProject(Project)` → je Projekt-**Interest** (`product_id`+`service_id`+`interest_type`+`group_id`) matchende `FormRoutingRule` (null=Wildcard) + `object_type`, sortiert nach `priority`×100 + Spezifitäts-Score (Dimensionen inkl. **`phase_id`/`progress_id`**). Basis-Formulare immer dazu. **Elegant, generisch, phasen-fähig.**
+
+## A.3 Berechnungs-Engine (belegt, `FormulaEvaluationService:7-45`) — passt zu tickets „ehrlicher Datenlage"
+Sicherer **Shunting-Yard→RPN, KEIN `eval()`**; Whitelist +,-,*,/, `SUM/MENGE/FLAECHE/VOLUMEN`, Feld-Slugs+Literale. **Operanden-Gate:** `is_assumption`/ungeprüfter Erkennungswert → `enthaelt-ungepruefte-werte` (berechnet, **nicht verbindlich**); fehlender Pflicht-Operand → `unvollstaendig`, **keine erfundene Zahl**. → **konzeptuell identisch mit meinem S-3-Prinzip (NULL statt 0).**
+
+## A.4 Reife — ehrlich (playground-Audit `bestandsaufnahme.md` + Code)
+| Ebene | Reife | Beleg |
+|---|---|---|
+| Read-API | ✅ | `DynamicFormController` index/show, Tests, RBAC `permission:formulare.view` |
+| Schreibpfad (Antworten) | 🟡 | Option-Validierung select/multiselect **fehlt**; min/max/decimals fließen nicht ein; **Status ohne Zustandsmaschine** (DB `begonnen` ≠ Ctrl `eingereicht`) — `:52/62` |
+| Berechnungs-Engine | 🟡 **6/10** | Design stark, Score-Lücken `:15` |
+| Bedingte Sichtbarkeit `visible_if` | 🔴 **nicht implementiert** | „nur Spalte, KEINE Auswertungslogik" `:81` |
+| Fundament-Migrationen | 🔴 | Basistabellen **nur Raw-SQL** `crm_erp_mysql_schema.sql:388-463`, **nicht migrationsbasiert** `:51/56` |
+| **Frontend (Renderer+Builder)** | 🔴 **fehlt** | „nur Backend-API, React/TS-Oberfläche fehlt vollständig" `:95`; kein Blade-Renderer |
+| Feldtyp-Katalog | 🟡 generisch | 40 generische statt 40 Fachtypen; ~19 fehlen `:96` |
+| OCR-Erkennungskette | ✅ reif | `ErkennungController` Statuskette+Tests `:64` *(aber `UNSICHERE_STUFEN` rein deskriptiv `:66`)* |
+| RBAC/Audit | ✅ | `permission:*`-Gating + `EntityHistoryService` `:68-69` |
+
+**Gesamturteil:** **starkes Konzept + solide Backend-Logik, aber NICHT produktionsreif** (Raw-SQL-Fundament, Schreibpfad-Lücken, `visible_if` fehlt, **Frontend komplett fehlend**). Kein Fragment — „fortgeschrittener Prototyp mit belegten Lücken".
+
+## A.5 `fusion.forms`-Abgrenzung (definitiv)
+ticket-`fusion.forms` = `FusionFormSubmissionController` (Namespace **`Wordpress`**) — passiver **Import/Sync von Website-Einsendungen** (Goneo/WordPress → Leads), Tabellen `fusion_forms`/`fusion_fields`. **Kein Builder/Calc/Routing.** playground-Engine = **interne dynamische Aufnahme-Formulare**. → **Verschiedene Zwecke, keine funktionale Überlappung, keine Tabellen-Kollision** (`fusion_*` ≠ `dynamic_forms`/`form_*`). **Erweitern statt danebenstellen? NEIN** — additives neues Modul; **in der Nav klar trennen** (fusion=„Website-Eingang", dynamische Formulare=„Aufnahme/Konfigurator") + `imported_from='playground'`-Marker.
+
+## A.6 Transplantations-Aufwand (ehrlich — Blade-Neubau-Anteil HOCH)
+| Teil | Aufwand | Anmerkung |
+|---|---|---|
+| Models + Read-API + Schreibpfad + Calc/Routing/OCR | portierbar (mittel) | reine Laravel-Logik, **mit Gap-Fixes** (Option-Validierung, Status-Maschine, `visible_if`-Logik NEU) |
+| Basistabellen-Migrationen | klein, aber **NEU schreiben** | Raw-SQL nicht portierbar → echte Migrationen (Cut-over-Muster, Marker) |
+| **Re-Anchoring Weiche 5** | **mittel-hoch** | `FormRoutingService` hängt an `Project`+`interests` → auf ticket **Kunde→Objekt→Gewerk** umhängen (`lead_product_list`/`deal`+`object`; Routing-Dim = `article_group`/`phase_section`/`lead_stage`). Kern-Anpassung. |
+| **Frontend (Renderer+Builder)** | **HOCH — ~100 % Blade-Neubau** | playground hat **kein** übernehmbares Frontend → Feld-Renderer (20 Typen), Baukasten-UI, Antwort-Formulare, `visible_if`-JS **komplett neu in ticket-Blade/Vuexy** (Alpine nur mit Yama-Freigabe). |
+
+**Fazit:** Backend-**Wert hoch** (geronnene Fachlogik + prinzipientreue Calc-Engine), **Aufwand nicht klein** (UI-Neubau + Re-Anchoring). **Mehrstufig (Cut-over-Muster):** (i) Schema+Marker, (ii) Models+Read-API, (iii) Calc+Routing re-anchored, (iv) Schreibpfad+Gaps, (v) Blade-Renderer, (vi) Baukasten-UI, (vii) OCR optional.
+
+---
+
+# Anhang B — B-Konzepte als ticket-Verbesserungs-Merker (kein Code-Port)
+- **Angebotsampel = Pflichtdaten-Gate vor Phasenwechsel** → FK-Kanban-**`changeStage`-Guard** (blockiert Phasenwechsel bei fehlenden Pflichtdaten). Kandidat für spätere **Kanban-Ausbaustufe** (koppelt an Weiche 1). Merker.
+- **RBAC-Ablösung `is_admin`/`user_rolls`** → **eigener späterer Strang (groß!)**, mit Security-Instanz abstimmen.
+- **Append-only-Audit** (`EntityHistoryService`/`history_entries`) + **Feinaufmaß-Nachweisketten** = Muster-Referenzen für ticket-Härtung.
+
+# Anhang C — Energie-Verzahnungs-Weiche (an die Cut-over-Instanz)
+Der Cut-over liefert WP/PV/Auslegung, **nicht** `lastprofile`/`lastmanagement` (Wallbox/Verbrauch) und **nicht** die Dachbelegungs-Datenbasis (`roof_tiles=94`/`mounting_components`/`solar_mounts`). **Frage (Yama entscheidet):** additive Schema-Erweiterung **JETZT** in die frische Energie-Architektur, damit später nichts umgebaut wird? **Nur Datenmodell + Laravel-Logik** — React/Three.js-3D-UI bleibt raus. Ich treffe keine Entscheidung; ich lege die Verzahnung offen.
+
+---
+
+**→ STOPP.** Reife-Befund abgeschlossen: **Formular-Engine = hoher Backend-Wert (Smartrouting + sichere Calc-Engine + OCR-Kette) bei ehrlich hohem Aufwand (Re-Anchoring W5 + ~100 % Blade-UI-Neubau + Gap-Fixes)**. Yama entscheidet die Bau-Tiefe. **Gebaut wird erst nach Abschluss des wberechnung-Cut-overs** (harte Regel, andere Instanz).
