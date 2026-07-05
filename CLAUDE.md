@@ -16,6 +16,13 @@
 
 *(Verankert auch in `docs/STRAENGE.md`. Bezug: `invoices`-Schienen-Entscheidung + `docs/accounting/`.)*
 
+## Eine Wahrheit je Sachverhalt
+
+Für jeden zentralen Sachverhalt gibt es **genau eine führende Datenquelle** — keine zweite, auch nicht übergangsweise. Parallel-Strukturen werden **additiv zusammengeführt**, nie doppelt produktiv gehalten. Neue Quellen dürfen eine bestehende nicht duplizieren; bei Bedarf wird die alte belegt stillgelegt (Trail erhalten, Drop als eigener Posten).
+
+- **Umsatz → `invoices`** (einzige Wahrheit): **`docs/accounting/umsatzdefinition.md`** (Dauerregel). `deal_invoices` stillgelegt, Drop ausstehend.
+- **Status/Phasen → `lead_stages`** · **Katalog → ticket-Artikel-DB** (EIN Katalog). *(weitere Beispiele additiv ergänzen)*
+
 ## Heizkörper-Modul (Bereich „Energie & Auslegung")
 
 - **Alpine.js ist erlaubt AUSSCHLIESSLICH in den neuen `heizkoerper.*`-Views** — unter
