@@ -73,7 +73,7 @@
 **Was:** Doppelte Buchführung, Journal (unveränderbar/Festschreibung), Konten/Kontenrahmen, Bank/Kasse, Belege, Rechnungsein-/ausgang, Offene Posten, Mahnwesen, Nummernkreise, Perioden/Monatsabschluss, Bilanz/BWA/SuSa/UStVA, Anlagen(AfA), Kostenstellen/Dimensionen, DATEV-EXTF-Export, GoBD-Protokoll, Prüfzentrum, Steuerberater-Portal.
 **Daten:** `accounting_clients=1` · `accounts=17` · `accounting_journal_entries=6` · `accounting_outgoing_invoices=3` · `open_items=0` · `accounting_datev_exports=0`. → **Prototyp, DATEV-Testpaket lt. Vorgänger-Doc „nicht bestanden".**
 **ticket hat das?** **Nein — und BEWUSST NICHT** (Weiche 3 + A1: **Kanzlei führt FiBu; keine Buchhaltung in ticket**).
-**Urteil:** **C / EINGEFROREN** — Weiche-3-Verstoß + parallele Accounting-Instanz besitzt das Thema. **Ich bewerte es nicht weiter; Verweis an die Accounting-Instanz.** (Größter Einzelblock von playground fällt damit raus.)
+**Urteil:** **⚠️ NEU 2026-07-05 — Weiche 3 von Yama AUFGEHOBEN** („Steuerberater ignorieren, Einfrieren weg, ausführen"). Damit nicht mehr C-eingefroren → **Wert-Kandidat**, ABER: großer Prototyp (45 Models, DATEV legally sensitiv, DATEV-Testpaket lt. playground **nicht bestanden**). **Bau = Accounting-Instanz, nach Cut-over** (nicht diese Inventur-Instanz). **Tiefer Reife-/Risiko-Befund s. Anhang E.**
 
 ## 8. Kundendienst
 **Was:** Tickets (Nachrichten/Notizen), Serviceaufträge, Reklamationen.
@@ -285,4 +285,30 @@ Der Cut-over liefert WP/PV/Auslegung, **nicht** `lastprofile`/`lastmanagement` (
 
 ---
 
-**→ STOPP.** Formular-Bau-Scope eingefroren (A.7); Kundendienst = klarer A-Kandidat #2 (reifes Api-Backend, echte Nav-9-Lücke, moderater Aufwand); Betriebsmittel = kleines A-niedrig/B (Tiefe geringer als Vorgänger-Inventar behauptete). **Alle Bauten erst nach Abschluss des wberechnung-Cut-overs** (harte Regel, andere Instanz). Yama entscheidet die A-Reihenfolge (Empfehlung: Formular → Kundendienst → Betriebsmittel).
+**→ STOPP.** Formular-Bau-Scope eingefroren (A.7); Kundendienst = klarer A-Kandidat #2; Betriebsmittel = klein. **Alle Bauten erst nach Cut-over.**
+
+---
+
+# Anhang E — Buchhaltung / DATEV: Reife-/Risiko-Befund (2026-07-05, read-only)
+**Anlass:** Yama hebt **Weiche 3 auf** („Steuerberater ignorieren, Einfrieren weg, ausführen"). Notiert als Entscheidung. **Dieser Befund = read-only, mein Scope; der BAU gehört der Accounting-Instanz + nach Cut-over.**
+
+## E.1 Umfang (Struktur-Scan)
+**18 Migrationen · 45 Models · voller Service-Layer.** Domänen (belegt an Services/Tabellen): Mandant (`accounting_clients`) · **Kontenrahmen** (`accounts`/`account_mappings`) · **doppelte Buchführung** (`accounting_journal_entries`+`accounting_journal_lines`) · Belege (`accounting_documents`) · Ein-/Ausgangsrechnungen · **Bank + `BankMatchingService`** · Offene Posten · **Mahnwesen** (`dunning`) · Fristen · **GoBD Maker-Checker-Gates** (`AccountingGateDecisionService`/`GateReleaseService`) · **DATEV-EXTF-Export + `DatevExtfKonformitaetService`** · **Bilanz/BWA/SuSa/UStVA/AfA** (`BalanceSheet`/`Bwa`/`Afa`-Service) · Adjustment-Suggestions.
+
+## E.2 Reife — ehrlich = **Prototyp**
+- **Datenfüllung dünn:** `accounting_clients=1` · `accounts=17`/`mappings=17` · `journal_entries=6`/`lines=12` · `outgoing_invoices=3` — **aber `documents=0`, `incoming_invoices=0`, `open_items=0`, `datev_exports=0`, `dunning=0`.** → Kontenrahmen + Test-Buchungen, **kein echter Beleg-/Export-/OP-Fluss gelebt.**
+- **DATEV-Konformität NICHT bewiesen:** `DatevExtfKonformitaetService` ist ein **Prüfer, der „Blockgründe" liefert** (Header/Encoding/CSV/Feldformate) — d. h. Konformität ist ein zu prüfender Zustand, nicht garantiert. Playgrounds eigenes Vorgänger-Inventar: **„DATEV-Testpaket nicht bestanden, offene GoBD-Punkte".**
+- **NICHT-VERIFIZIERT:** die 45 Models einzeln, die tatsächliche EXTF-Export-Korrektheit, die GoBD-Festschreibungs-Vollständigkeit — dafür bräuchte es einen **dedizierten Accounting-Fach-Befund** (Accounting-Instanz), nicht meinen Struktur-Scan.
+
+## E.3 ticket-Kontext + Weichen-Umkehr
+ticket hat **keine** Buchhaltung — nur das **Invoice-Modul** (`/invoices`, S1-Strang: Nummernkreis/Storno/Teilzahlung). **A1 war entschieden: „Kanzlei führt FiBu, keine Buchhaltung in ticket".** Yama kehrt das jetzt um → **A1 + Weiche 3 im `architektur-entscheidungen.md` nachziehen** (nicht meine Datei — **an Yama/Accounting-Instanz**), sonst divergiert die dokumentierte Architektur.
+
+## E.4 ⚠️ Risiko-Hinweis (Sorgfaltspflicht — trotz „ignorieren")
+Ein **nicht-DATEV-zertifiziertes Accounting-Prototyp** in ein **Live-CRM mit ~3000 echten Kunden** zu heben und daraus **steuerrelevante DATEV-Exporte/UStVA/Bilanz** zu erzeugen, ohne Steuerberater-Validierung, ist ein **reales rechtliches/steuerliches Risiko** (GoBD-Unveränderbarkeit, Festschreibung, EXTF-Konformität sind prüfungsrelevant). Ich sage das als Befund — **entscheiden tust du**; ich baue nichts blind.
+
+## E.5 Urteil (Inventur)
+**Hoher konzeptioneller + Code-Wert** (vollständige FiBu-Architektur mit GoBD-Gates + DATEV-EXTF + Auswertungen — das gibt es in ticket nicht), **aber NICHT produktionsreif + legally sensitiv.** → **Kein Transplant, sondern dediziertes Accounting-Projekt** (eigene Instanz, nach Cut-over), mit **eigenem Fach-Reife-Befund + DATEV-Zertifizierungs-Pfad** als Pflicht-Vorstufe. **Wert = A (groß), Aufwand + Risiko = sehr hoch.**
+
+---
+
+**→ STOPP (Anhang E).** Buchhaltung/DATEV: Weiche 3 aufgehoben (notiert), Reife = Prototyp (nicht DATEV-bewiesen), Risiko-Hinweis gesetzt, Bau = Accounting-Instanz nach Cut-over. **Als Nächstes (auf deinen Wunsch): Lohn/Gehalt-Befund + PV-3D-Datenmodell-Befund** (gleiche Tiefe, read-only). Yama: soll ich diese zwei jetzt anschließen, oder priorisierst du?
