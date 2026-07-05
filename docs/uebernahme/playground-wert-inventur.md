@@ -375,4 +375,43 @@ ticket hat **HR-Org** (`employees`/`departments`/`branches`/`position_qualificat
 | **Lohn/Gehalt** (G) | A | **Framework, ungenutzt** | HR-Instanz nach Cut-over; **Berater/Lohnbüro PFLICHT**, Risiko-Klasse wie Buchhaltung |
 | **Formular-Engine/Smartrouting** (A/A.7) | B (Synthese) | Backend solide, Frontend fehlt | ticket ⊕ playground **verschmelzen**, nach Cut-over |
 
-**→ STOPP (Inventur vollständig).** Alle vier von dir priorisierten Brocken befundet (E/F/G + A.7-Synthese) + TEIL 1–4 + Kundendienst/Betriebsmittel (D). **Kein Bau — reine Inventur.** Nächste Züge liegen bei dir: (1) den **PV-3D-Befund (F) an die Cut-over-Instanz** geben (zeitkritisch), (2) Accounting-/HR-Instanzen mit E/G beauftragen (nach Cut-over, mit Berater-Pfad), (3) `architektur-entscheidungen.md` A1/Weiche 3 nachziehen lassen. Ich bleibe für weitere Befunde/Vertiefungen bereit.
+**→ STOPP (Inventur-Überblick).** F-Detail-Vertrag für die Cut-over-Instanz s. unten.
+
+---
+
+# Anhang F-Detail — Cut-over-Vertrag: Montage-Schema + Sizing-Naht (2026-07-05, read-only)
+> Direkt verwertbarer Vertrag für die Cut-over-/Energie-Instanz. **Kein Bau** — Belege + Empfehlung; Yama/Cut-over entscheiden.
+
+## F-D.1 Montage-/Dach-Katalog — exakte Tabellen, Spalten, FK-Geflecht (Migrationen wörtlich gelesen)
+| Tabelle | Zeilen | Schlüssel-Spalten | FK |
+|---|---|---|---|
+| `solar_mounts` | 7 | `product_name`, **`slug` (unique, Upsert)**, `mount_type`(enum), `material`, `max_load_n`(dec), `pv_system_compat`, `source_url`, `verified`, `notes` | `manufacturer_id`→`manufacturers` |
+| `mounting_components` | 66 | `product_name`, `slug`(unique), `component_type`(enum), `product_line`, `material`, `article_no`, `module_frame_min/max_mm`(dec) | `manufacturer_id`→`manufacturers` |
+| **`tile_solar_mount`** | **220** | **`fit`(enum exakt/universal/auf_anfrage)**, `color`, `article_no`, `verified`, `notes` | `roof_tile_id`→`roof_tiles`, `solar_mount_id`→`solar_mounts` (M:N) |
+| **`mounting_roof_compat`** | **111** | **`roof_family`(enum)**, `fit`(enum geeignet/bedingt/auf_anfrage), `verified`, `notes` | `mounting_component_id`→`mounting_components`, `tile_type_id`→**`tile_types`**(nullable), `covering_category_id`→**`covering_categories`**(nullable) |
+| `roof_tiles` | 94 | Ziegeltypen | (Basis der Taxonomie) |
+| `roof_coverings` | 15 | Eindeckungen | — |
+
+**FK-Geflecht:** `manufacturers` ← {`solar_mounts`, `mounting_components`} · Dach-Taxonomie = {`roof_tiles`, `tile_types`, `covering_categories`} · **`tile_solar_mount`** = M:N(roof_tiles × solar_mounts) · **`mounting_roof_compat`** = mounting_components × (roof_family | tile_types | covering_categories). Durchgängig `verified`/`source_url`/`notes` = Nachweis-Disziplin.
+
+**Additiver Schema-Vorschlag (Cut-over-Takt):** 6 Kern-Tabellen + Taxonomie (`tile_types`/`covering_categories`) additiv; **`manufacturers`-Weiche:** prüfen, ob ticket `brands`/`manufacturers` hat → FK **umbiegen (Reuse)** statt Doppel-Stammdaten. **Marker-Pflicht** `imported_from='playground'` je Tabelle (Teardown marker-basiert, RELEASE-MANIFEST-Konvention). Dringlichkeit: **HOCH** (220+111 Kompat-Zeilen = geronnene Fachlogik, jetzt billig).
+
+## F-D.2 Sizing-Naht-Vertrag — wörtlich + Feld-Diff (die Kernfrage)
+- **`Contracts\Sizing{Inverter,Module,Battery}` = leere Marker-Interfaces** (`interface SizingInverter {}`) → Vertrag = **konkrete Datenblatt-Felder**, nicht Interface-Methoden.
+- **`InverterSizingService` liest** (WR): `u_dc_max_v`, `u_dc_betrieb_max_v`, `u_dc_start_v`, `u_mppt_min/max_v`, `i_dc_max_string_a`, `i_dc_max_mppt_a`, `i_sc_max_mppt_a`, `p_ac_nenn_w`, `p_ac_max_va`, `p_dc_max_w`, `max_dc_ac_ratio`, `max_array_wp`, `temp_betrieb_min/max_c`, `temp_derating_ab_c`, `ist_hybrid`, `eps_faehig`, `na_schutz_integriert`, `vde`, `wirkleistungsbegrenzung`, `steuerbar_14a`, `schnittstelle`, `wirkungsgrad_euro_pct`, `phasen` + Batterie (`u_bat_min/max_v`, `p_bat_lade_max_w`, `i_bat_max_a`). Modul: `Voc/Vmpp/Isc/Impp/Pmpp`, `TK_Voc/Isc/Pmpp/Vmpp`, `u_sys_max`, `sicherung_max`.
+
+**Feld-Diff gegen ticket (Cut-over hat vorweggenommen — Kommentare zitieren die wb-Namen!):**
+- **Modul (`product_pv_module_specs`/150003): VOLLTREFFER** — `voc_v/vmpp_v/isc_a/impp_a/pmpp_wp/tk_*_pct_k/u_sys_max_v/sicherung_max_a` = exakt der Bedarf.
+- **WR (`inverters` Basis + 150001): abgedeckt** — `min_mpp_voltage`/`max_mpp_voltage` (MPPT-Fenster) ✅ · `max_input_voltage`(u_dc_max) ✅ · `dc_operating_max_voltage`/`dc_startup_voltage` ✅ · `max_dc_ac_ratio` ✅ · `max_array_power_wp` ✅ · `is_hybrid`/`eps_capable`/`integrated_grid_protection`/`vde4105_compliant`/`active_power_limit`/`controllable_14a`/`control_interface` ✅ · Temp-Trio ✅ · Batterie-Fenster ✅ · Ströme (`max_input_current`/`_per_mpp`, `max_short_circuit_current_per_mpp`) ✅.
+- **Kleine Rest-Diffs (NICHT schema-dringlich, beim Port abgleichen):** `wirkungsgrad_euro_pct` (nur Ertrags-Anzeige) · `p_ac_max_va` (Scheinleistung VA vs `ac_nominal_power` W) · `i_dc_max_string_a` (String- vs MPPT-Strom-Nuance). **Keine berührt eine Strangauslegungs-Sicherheitsregel.**
+
+**➜ Antwort auf „braucht die Naht neue Felder JETZT?": NEIN.** Der Cut-over hat die Spec-Felder bereits gebaut. Die additive Dringlichkeit liegt **allein beim Montage-Katalog (F-D.1)**, nicht bei den Spec-Tabellen. Rest-Diffs = Port-Zeit-Feinschliff.
+
+## F-D.3 Empfehlung ersetzen/ergänzen/parallel + UI-Freiheit
+- **ticket hat KEINEN Inverter-Sizing-Dienst** (nur Spec-Felder) → **ERGÄNZEN** (neue Fähigkeit), nicht ersetzen (nichts da), nicht parallel (kein Konkurrent). Anbindung = **dünner Feldnamen-Adapter** (wb-Name → engl. Spalte), Wiederverwendung der Cut-over-Spec-Tabellen.
+- **Ampel + Normbezug = 100% UI-frei portierbar:** je Prüfregel liefert der Service **Ampel(grün/gelb/rot) + Wert + Grenzwert + Normbezug** als Protokoll-DATEN (Docblock belegt), keine View. Die 3D-UI (`PvBelegungExtractor`←`dach_json`) ist getrennt und bleibt raus.
+- **„Wo besser als der wb-Kern?"** — es existiert **kein** ticket-Inverter-Sizing-Kern zum Vergleich; der Mehrwert ist die **normgerechte Prüfregel-Matrix + Ampel/Normbezug + Elektrofachkraft-Haftungshinweis**, die ticket bisher fehlt.
+
+---
+
+**→ STOPP (Inventur endgültig komplett).** F-Detail = Cut-over-Vertrag geliefert: (1) Montage-Schema additiv **jetzt** (6 Tabellen + Taxonomie, `manufacturers`-Reuse-Weiche, Marker-Pflicht); (2) Sizing-Naht braucht **keine** neuen Spec-Felder (Cut-over hat sie vorweggenommen; Modul=Volltreffer, WR=abgedeckt); (3) InverterSizingService = **ergänzen**, Ampel/Normbezug **100% UI-frei portierbar**. **Empfänger: Cut-over-/Energie-Instanz** (Bau dort, nach Cut-over). Meine Inventur-Arbeit ist damit vollständig — ich bin ab hier die Accounting-Instanz.
