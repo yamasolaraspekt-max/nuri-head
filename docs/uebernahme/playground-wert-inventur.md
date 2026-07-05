@@ -241,4 +241,40 @@ Der Cut-over liefert WP/PV/Auslegung, **nicht** `lastprofile`/`lastmanagement` (
 
 ---
 
-**→ STOPP.** Reife-Befund abgeschlossen: **Formular-Engine = hoher Backend-Wert (Smartrouting + sichere Calc-Engine + OCR-Kette) bei ehrlich hohem Aufwand (Re-Anchoring W5 + ~100 % Blade-UI-Neubau + Gap-Fixes)**. Yama entscheidet die Bau-Tiefe. **Gebaut wird erst nach Abschluss des wberechnung-Cut-overs** (harte Regel, andere Instanz).
+## A.7 Bau-Scope Formular-Engine — ENTSCHIEDEN 2026-07-05 (mittlere Variante), Bau NACH Cut-over
+**Renderer + Smartrouting + Calc-Engine; Builder nur minimal** (Begründung Yama: Betriebswert = Ausfüllen/Routen/Rechnen täglich; voller Drag-Drop-Builder = teuerste UI für seltenste Tätigkeit → spätere eigene Stufe bei belegtem Bedarf).
+- **(i)** Echte Migrationen statt Raw-SQL (`form_*` additiv, `imported_from`-Marker) + Seed der 21 Formulare/358 Felder/489 Optionen als Marker-Import (**Fachlogik-Konserve**).
+- **(ii)** **Re-Anchoring Weiche 5 (Kern-Umbau):** `resolveForProject` → Kunde→Objekt→Gewerk (`lead_product_list` + Objekt-Typ aus `lead_alternative_adds`), Phasen-Bindung → `lead_stages`. **Logik bleibt, Anker werden ticket** — kein `Project`/`interests`.
+- **(iii)** Blade-**Renderer** in ticket-Design **inkl. minimaler `visible_if`-Logik** (Bedingungs-Syntax `Feld=Wert` — **Pflicht**, ohne bedingte Sichtbarkeit sind 358-Feld-Formulare unbenutzbar) **+ Option-Validierung im Schreibpfad** (die 🟡-Lücke schließen).
+- **(iv)** Calc-Engine **1:1** portieren (Shunting-Yard, kein `eval`, Operanden-Gate — **prinzipientreu, KEINE Logik-Änderung**).
+- **(v)** `FormAnswer` an Gewerk/Objekt verankern + **minimale** Status-Werte (keine große Zustandsmaschine — 🟡-Lücke dokumentiert, nicht überbaut).
+- **NICHT im Scope:** voller Builder · React-Reste · OCR-Kette (später) · RBAC (eigener Strang).
+
+**→ STOPP (Formular-Engine).** Scope eingefroren; Bau nach Cut-over-Abschluss.
+
+---
+
+# Anhang D — Kundendienst + Betriebsmittel: Reife-Befund (2026-07-05, read-only, freigegeben parallel)
+
+> Gleiche Tiefe wie Anhang A: Code **wirklich gelesen**, Reife ehrlich, ticket-Lücke (**Nav-Bereich 9**) gegen Aufwand. Daten beider Domänen = **0** (nur Code/Konzept wandert).
+
+## D.1 Kundendienst (Tickets · Reklamationen · Serviceaufträge)
+**Architektur (gelesen):** Models `Ticket`/`TicketNachricht`/`TicketNotiz`/`Reklamation`/`Serviceauftrag`/`Service`. **Echte Migrationen** (`create_tickets_schema` = 3 Tabellen tickets+nachrichten+notizen; `create_reklamationen_schema` = 1). Controller: **`Api/TicketController` (258 Z.)** — voll: `index/show/store/update/destroy` **+ `updateStatus` (Status-Workflow) + `addNachricht`/`addNotiz` (Threaded) + `EntityHistoryService`-Audit**; **`Api/ReklamationController` (217 Z.)** — Status + **Fristen/Überfälligkeit (SLA-artig: `frist < now` & nicht abgeschlossen → überfällig)** + Priorität/Kategorie + Status-Whitelist `Rule::in(Reklamation::STATUS)`. Blade = dünne Listen (`Modules/*Controller` 76/61 Z.).
+**Reife:** **Api-Backend mittel-reif/funktional** (CRUD + Status + Threading + SLA + Audit — sauber, getestet-Muster). **Frontend fehlt** (Blade nur Listen; Bearbeitungs-UI war React). Daten leer.
+**ticket hat das?** **Nein** — Nav-Bereich 9 (Tickets/Reklamationen/Wartung) ist **echte Lücke**.
+**Urteil:** **A-Kandidat #2** — realer Nav-Lücken-Bezug + reifes Api-Backend. **Aufwand deutlich unter Formular-Engine** (Standard-CRUD, KEIN Smartrouting/Calc): Re-Anchoring an ticket-`new_leads`/`deals` + Standard-Blade-CRUD-UI. Gutes Nutzwert/Aufwand-Verhältnis.
+
+## D.2 Betriebsmittel / Fuhrpark
+**Architektur (gelesen):** Models `Betriebsmittel`/`BetriebsmittelArt`. **Echte Migration** `create_betriebsmittel_schema` = **2 Tabellen** (`betriebsmittel_arten` + `betriebsmittel`: Inventarnr/Status/Zustand/Hersteller/Standort/`verantwortlicher_user_id`/Anschaffungswert/Kostenstelle/`naechste_wartung_at`/`naechste_pruefung_at`/`meta_json`). Controller `Api/BetriebsmittelController` (281 Z., voll-CRUD + Audit).
+**Reife:** **funktionales Asset-Register**, aber **flacher als das Vorgänger-Inventar behauptete** — die dort genannten Sub-Tabellen (Kosten/Nutzungen/Reservierungen/Wartungsereignisse/Prüfpläne) **existieren in dieser Migration NICHT** (nur `naechste_wartung/pruefung_at`-Felder). **NICHT-VERIFIZIERT**, ob Sub-Tabellen in anderer Migration; im gelesenen Schema = 2 Tabellen.
+**ticket hat das?** **Nein.**
+**Urteil:** **B / A-niedrig** — sauberes kleines Modul, echte Lücke, aber **geringere Tiefe + geringerer Betriebswert** als Kundendienst. Quick-Win-A möglich (kleine Blade-CRUD), sonst B (später). **Korrektur zum Vorgänger-Inventar: keine 6-Tabellen-Fuhrpark-Suite belegt.**
+
+## D.3 Priorisierung (Nachtrag zu TEIL 3)
+1. **Formular-Engine** (A, entschieden, s. A.7).
+2. **Kundendienst** (A-Kandidat #2) — Nav-Bereich-9-Lücke, reifes Backend, moderater Aufwand. **Empfehlung: nächster A nach Formular.**
+3. **Betriebsmittel** (A-niedrig/B) — Quick-Win oder Backlog, Yama entscheidet; Tiefe klein.
+
+---
+
+**→ STOPP.** Formular-Bau-Scope eingefroren (A.7); Kundendienst = klarer A-Kandidat #2 (reifes Api-Backend, echte Nav-9-Lücke, moderater Aufwand); Betriebsmittel = kleines A-niedrig/B (Tiefe geringer als Vorgänger-Inventar behauptete). **Alle Bauten erst nach Abschluss des wberechnung-Cut-overs** (harte Regel, andere Instanz). Yama entscheidet die A-Reihenfolge (Empfehlung: Formular → Kundendienst → Betriebsmittel).
