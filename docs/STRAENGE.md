@@ -27,11 +27,12 @@ damit „gebaut vs. nicht gebaut / wo committet" nie wieder verwechselt wird —
 |---|---|---|---|---|
 | **A — Heizkörper M4-b** | ticket · `private/app-code-backup` | **NUR** `resources/views/admin/layouts/sidebar.blade.php` + `docs/heizkoerper-bauplan.md` | aktiv | `89e175f` |
 | **B — Spec-Standard B2–4** | ticket · `private/app-code-backup` | `app/Services/Spec/*` · `app/Console/Commands/Spec*` · `database/migrations/2026_07_05_15000[7+]*` · `tests/{Feature,Unit}/Spec*` | aktiv (B1+B2 committet, B3–4 offen) | `9501376` |
-| **C — B2a-Befund** | ticket · `private/app-code-backup` | **NUR `docs/`** (Code strikt read-only) | read-only | — |
+| **C — B2a-Bau (1/2/3)** | ticket · `private/app-code-backup` | `app/Services/Heizlast/*` · `database/migrations/2026_07_05_170001–170004` · `database/seeders/{ReferenzKatalog,Klima}*` · `tests/{Feature,Unit}/Heizlast*` · `docs/befund-b2a-*` | **aktiv** | `73c7b00` (Befund) |
 | **D — NAV 2b/3b** | ticket · `private/app-code-backup` | `sidebar.blade.php` + NAV-01-Doku — **GEPARKT bis A `sidebar.blade.php` committet hat** (Konflikt mit A) | ⏸ geparkt | `df1dc8c` |
 
 > Belegte Migrations-Timestamps (nie umbenennen): HK `2026_07_04_140001–140009`; Katalog/Spec
-> `2026_07_04_150001–150004` (main), `2026_07_05_150005–150009` (testing → M5). **Nächster freier Spec-Slot: `150010`.**
+> `2026_07_04_150001–150004` (main), `2026_07_05_150005–150009` (testing → M5), S-3/SEC-DM `160000`.
+> **Reserviert (Bau läuft):** Spec-M-C `2026_07_05_150010` (**Strang B**) · **B2a-Referenz+Klima `2026_07_05_170001–170004`** (**Strang C** — materials/konstruktionen/baualtersklassen/klima_plz). Kein Überlappungsbereich.
 
 ## Strang HEIZKÖRPER — parallele Instanz (NICHT anfassen)
 - **Ort:** `ticket` = `/Users/yamanuri/Documents/ticket` · Branch `private/app-code-backup` · zuletzt `89e175f`.
