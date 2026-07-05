@@ -36,6 +36,37 @@ class SpecSchema
         };
     }
 
+    /**
+     * Ziel-Mapping für den Write (Baustufe 2): Spec-Tabelle je Typ + Herleitung der products- und
+     * Spec-Extra-Spalten aus den kanonischen Blöcken (Pfad "block.feld"). Fachdaten, deren Name eine
+     * Spalte der Spec-Tabelle ist, werden 1:1 geschrieben; hier nur die Nicht-1:1-Fälle.
+     */
+    public static function ziel(string $typ): array
+    {
+        return match ($typ) {
+            'waermepumpe' => [
+                'spec_tabelle' => 'product_heat_pump_specs',
+                'category' => 'Wärmepumpe',
+                'products' => [
+                    'heatpump_type' => 'fachdaten.bauart', 'refrigerant' => 'fachdaten.kaeltemittel',
+                    'phase_count' => 'fachdaten.phasen', 'scop' => 'fachdaten.scop_35', 'noise_level_db' => 'fachdaten.schall_volllast_db',
+                ],
+                'spec_extra' => ['geraetetyp' => 'fachdaten.bauart', 'serie' => 'identitaet.serie', 'kaeltemittel' => 'fachdaten.kaeltemittel'],
+            ],
+            'pv_modul' => [
+                'spec_tabelle' => 'product_pv_module_specs', 'category' => 'PV-Modul', 'products' => [], 'spec_extra' => [],
+            ],
+            'wechselrichter' => [
+                'spec_tabelle' => 'inverters', 'category' => 'Wechselrichter',
+                'products' => ['phase_count' => 'fachdaten.num_phases'], 'spec_extra' => [],
+            ],
+            'batterie' => [
+                'spec_tabelle' => 'batteries', 'category' => 'Batterie', 'products' => [], 'spec_extra' => [],
+            ],
+            default => throw new \InvalidArgumentException("Unbekannter Gerätetyp: {$typ}"),
+        };
+    }
+
     // ---- Constraint-Helfer ----
     private static function num($min, $max, bool $req = false): array
     {

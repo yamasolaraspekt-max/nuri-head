@@ -75,6 +75,7 @@ Damit M5 sicher ist:
 **Deploy-Paket-Inhalt (ein Fenster, ein Backup, ein Rollback-Plan):**
 - Heizkörper-Migrationen (i)+(ii)+Zubehör (M5-Kern).
 - **Katalog-Cut-over Stufe 2** (auf `ticket_testing` bewiesen, `481b9cb`): `2026_07_05_150005` (kurve_semantik @ `product_heat_pump_specs`), `2026_07_05_150006` (imported_from @ `products`) + **`WberechnungImportSeeder`-Produktivlauf** (19 WP + AIKO 2 + LONGi LR7 3, `imported_from='wberechnung'`). Rückbau: `WberechnungImportTeardownSeeder` (zeilengenau via Marker).
+- **Spec-Standard-Infrastruktur** (auf `ticket_testing` bewiesen, Baustufe 2): `2026_07_05_150007` (verifikations_status/_datum/datenblatt_referenz @ `products`), `2026_07_05_150008` (import_batch_id @ products + 4 Spec-Ziele), `2026_07_05_150009` (`spec_import_batches`). Reine Struktur, keine Daten — `spec:import --commit` schreibt produktiv erst nach eigener Freigabe.
 - Reihenfolge: Backup → Migrationen → Seeder → Verifikation (Bestandszahlen unverändert **+** 19 WP / 5 Module mit Marker importiert, App bootet). Alles additiv/nullable — `products`/Bestandsgeräte unberührt.
 
 ## 7. Offene Gates/Entscheidungen (blockieren „alle Funktionen sichtbar")

@@ -195,10 +195,13 @@ Alle Migrationen additiv/nullable, **nur `ticket_testing`**; main-Ausführung al
 
 1. **`SpecSchema`-Regelquelle (V1–V7) + `spec:import --dry-run`.** Tests: je Regel Verletzung → Ablehnung mit
    Fehlerliste · Dry-Run-Report korrekt (angelegt/geskippt/abgelehnt) · **kein Write**.
-2. **Migrationen M-A + M-B (testing) + `--commit`-Pfad.** Tests: Write mit Herkunftskette (`imported_from` +
-   `import_batch_id` + `verifikations_status`) · Idempotenz · skip-Dedup · `--update`-Felddiff ·
-   **Downgrade-Schutz** (`--allow-downgrade` → Status `importiert_ungeprueft` + Log) · Batch-Rückbau (ein Lauf
-   raus, andere unberührt).
+2. **Migrationen M-A + M-B (testing) + `--commit`-Pfad.** ✅ **umgesetzt** (`30fe611`-Nachfolger): 3 Migrationen
+   (`150007` M-A · `150008` M-B · `150009` `spec_import_batches`), `spec:import --commit` (atomar, Herkunftskette),
+   `spec:rollback {batch_id}` (**eigener Command**, gewählt für saubere Trennung Import↔Rollback). **Rollback-Weiche
+   entschieden:** Update-Batches werden **abgelehnt** (überschriebene Vorwerte nicht wiederherstellbar) — erkannt
+   über `spec_import_batches` (nur Lauf-Modus/Zählung, **keine** Zeilen-Vorwerte = keine Schatten-Historie).
+   Tests: Herkunftskette · Idempotenz · skip-Dedup · `--update`-Felddiff · **Downgrade-Schutz** (`--allow-downgrade`
+   → `importiert_ungeprueft` + Log) · Batch-Rückbau isoliert · Update-Batch-Ablehnung. 9 Tests grün.
 3. **`SpecEligibilityService` + M-C + `spec:recheck`.** Tests: Mindestprofile je Typ (Code-belegte Felder) ·
    Status-Neuberechnung bei Spec-Write · `recheck` nach Regeländerung (persistierte Stati werden sonst stale) ·
    Fehlliste **on-the-fly** korrekt.
