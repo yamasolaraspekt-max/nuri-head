@@ -32,8 +32,12 @@
 | `2026_07_05_150007` ALTER products (verifikation) | **Spec/B** | **Pending** | bedingt Strang-B-Abnahme (M5.1) |
 | `2026_07_05_150008` ALTER spec_targets (import_batch_id) | **Spec/B** | **Pending** | ⬏ |
 | `2026_07_05_150009` create spec_import_batches | **Spec/B** | **Pending** | ⬏ |
+| `2026_07_05_170001` create materials | **B2a/C** | Ran (lokal) | `down()` (drop) |
+| `2026_07_05_170002` create konstruktionen | **B2a/C** | Ran (lokal) | `down()` (drop) |
+| `2026_07_05_170003` create baualtersklassen | **B2a/C** | Ran (lokal) | `down()` (drop) |
+| `2026_07_05_170004` create klima_plz | **B2a/C** | Ran (lokal) | `down()` (drop) |
 
-**16 committet + lokal Ran** (HK 9 · Katalog 6 · S-3 1) · **3 Spec Pending** (M5.1 nach Abnahme). Abhängigkeit: alle ALTER-Basistabellen existieren; HK-interne FK-Ordnung durch Timestamps gedeckt.
+**20 committet + lokal Ran** (HK 9 · Katalog 6 · S-3 1 · B2a-Referenz 4) · **3 Spec Pending** (M5.1 nach Abnahme). Abhängigkeit: 170xxx (B2a) unabhängig von 150xxx/160xxx; `konstruktionen` referenziert `materials` (Seeder-Ordnung, nicht FK).
 
 ## B) Seeder-Läufe
 | Seeder | Wirkung | lokal | Rollback |
@@ -41,6 +45,7 @@
 | `WberechnungImportSeeder` | `products.imported_from='wberechnung'=24` (19 WP + 5 PV), skip-Dedup | gelaufen | `DELETE … WHERE imported_from='wberechnung'` |
 | `RadiatorSpecSeeder` (HK-Katalog) | `product_radiator_specs=30` | **gelaufen lokal 2026-07-05** | `TRUNCATE`/Marker-Delete |
 | `AccessorySeeder` (HK-Zubehör) | `accessories=11` + `accessory_categories=5` | **gelaufen lokal 2026-07-05** | Marker-Delete |
+| `ReferenzKatalogSeeder` (B2a-1) | `materials=23` + `konstruktionen=5` + `baualtersklassen=25` + `klima_plz=8168`, `imported_from='wberechnung'`, `verifikations_status` je Zeile | **gelaufen lokal 2026-07-05** | `ReferenzKatalogTeardownSeeder` (Marker-Delete) |
 
 > Code der HK-Seeder gehört dem Katalog-/HK-Strang (Tabu); die **Läufe** hier = lokale Umgebungs-Arbeit (Tag-X-Posten: müssen produktiv wiederholt werden).
 

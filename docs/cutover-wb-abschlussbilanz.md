@@ -32,6 +32,7 @@ Dokumentenstände zählen nicht als Beweis. Grundlagen: Datei-Manifest (301, unt
 | Fox-ESS/LONGi-Geräte | — (ticket-Eigenrecherche) | `products` 26 · `inverters` 13 · `batteries` 2 · `product_pv_module_specs` 10 | **`46b1986`** — live gezählt auf main; 2 brands |
 | WR/Bat/PV/WP-**Spec-Schema** (additiv) | wb-Spec-Struktur | 4 Spec-Migrationen `150001–150004` | **`217473f`** — auf main migriert |
 | **wb-Katalog-Import** (19 WP `en14511_nenn` + AIKO 2 + LONGi LR7 3) — *B→A, Stufe 2* | wb `waermepumpen`/`artikel` (`b4a9eda`) | `products` + `product_heat_pump_specs` + `product_pv_module_specs` (**testing**) | `WberechnungImportSeeder` — **8 Tests grün** (Zeilen-Soll 19/5, Buderus-A-7-COP 2,36, NIBE-Varianten, Dedup-Skip, Idempotenz, Rückbau); Marker `imported_from='wberechnung'`; **main = M5-Deploy-Paket** |
+| **B2a-1 Referenz-Kataloge** Heizlast + Klima — *B→A* | wb `b4a9eda` | `materials` (23) · `konstruktionen` (5) · `baualtersklassen` (25) · `klima_plz` (8168), **lokal** | `ReferenzKatalogSeeder` — **6 Tests grün**; `verifikations_status` je Zeile (din_belegt/tabula_richtwert, W-B2a-4); material_id-Remap wb→ticket; Migr. `170001–170004` |
 
 > **Diskrepanz-Befund (Doku ↔ Realität):** `product_heat_pump_specs` existiert auf main, ist aber **0 Zeilen**
 > (WP-Import = Teil B). `product_radiator_specs`/`radiator_connection_factors` **fehlen auf main** (nur testing) →
@@ -56,7 +57,8 @@ WpKennlinie, Bivalenz, Pvgis, Sanierungs, Fussboden, Energiekonzept, PvProjekt, 
 | **Förderung** BAFA/KfW (O) | **B3/B4** | integriert in H | `FoerderungService` |
 | **Fußbodenheizung** EN 1264 (M) | **B3-Unterpunkt** | erste Streichposition | `FussbodenheizungService` |
 | **Energiekonzept-Bundler** (Q) | **B4** | neue Struktur ≠ ticket-`EconomicCalculation` | `EnergiekonzeptController`, `Models/Energiekonzept` (+ 6 Faker-Datensätze, archiviert `1085c43`) |
-| **Referenz-Kataloge** (W-C4) | **mit B2a** | Herkunfts-/Stichproben-Auflage | `materials` (23), `konstruktionen` (5), `baualtersklassen` (25), `batterie_wr_kompatibilitaet` (26) |
+| **batterie_wr_kompatibilitaet** (26) — *Rest von W-C4* | **PV/WR-Sizing-Slot** (nicht Heizlast) | n:m `artikel↔artikel` → `products↔products` | `batterie_wr_kompatibilitaet` |
+*(Die 3 Heizlast-Referenz-Kataloge `materials`/`konstruktionen`/`baualtersklassen` + `klima_plz` sind mit **B2a-1 nach Teil A gewandert** — siehe dort.)*
 | **Grundriss/Plan-Import** A-3d (K) | **B5/W6** | eigene Welle; Queue/Storage | `GrundrissController`, `PlanUploadController`, 4 Jobs, `MassstabVorschlagService` |
 | **HK produktiv** (M5) | **M5** | Prod-Migration-Fenster (~3000 Kunden) | HK-Schema von testing → main |
 
@@ -111,8 +113,8 @@ A = übernommen · B = entschieden-offen · C = verzichtet · **Infra** = Framew
 
 ## Teil E — AMPEL-FAZIT
 
-🟡 **12 von 215 fachlich wertvollen Positionen übernommen** (Heizkörper-Modul `6bf75b0`/`947bed6`/`09eea5e`/`89e175f`
-**+ wb-Katalog-Import** 19 WP `en14511_nenn` + AIKO/LONGi LR7, testing) · **203 entschieden-offen** (B1→B5/M5) ·
+🟡 **13 von 215 fachlich wertvollen Positionen übernommen** (Heizkörper-Modul `6bf75b0`/`947bed6`/`09eea5e`/`89e175f`
+**+ wb-Katalog-Import** 19 WP + AIKO/LONGi **+ B2a-1 Referenz-Kataloge** `materials`/`konstruktionen`/`baualtersklassen`/`klima_plz`, lokal) · **202 entschieden-offen** (B1→B5/M5) ·
 **Teil D leer** (301/301 klassifiziert) → **es ist nichts unbemerkt liegengeblieben, aber wb ist noch NICHT
 abschaltbar.** Für Heizkörper + Geräte-Katalog gilt ticket; für alles andere (Heizlast, WP-/PV-Auslegung, PVGIS,
 Wirtschaftlichkeit, Klima, Energiekonzept, Grundriss) bleibt **wb die Wahrheit**, bis der jeweilige B-Slot portiert ist.
