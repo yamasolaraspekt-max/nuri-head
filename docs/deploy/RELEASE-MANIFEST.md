@@ -36,8 +36,10 @@
 | `2026_07_05_170002` create konstruktionen | **B2a/C** | Ran (lokal) | `down()` (drop) |
 | `2026_07_05_170003` create baualtersklassen | **B2a/C** | Ran (lokal) | `down()` (drop) |
 | `2026_07_05_170004` create klima_plz | **B2a/C** | Ran (lokal) | `down()` (drop) |
+| `2026_07_05_170005` create anforderungsprofile | **B2a/C** | testing ✓ · ticket **Pending** | `down()` (drop) |
+| `2026_07_05_170006` create anforderungsprofil_werte | **B2a/C** | testing ✓ · ticket **Pending** | `down()` (drop) |
 
-**20 committet + lokal Ran** (HK 9 · Katalog 6 · S-3 1 · B2a-Referenz 4) · **3 Spec Pending** (M5.1 nach Abnahme). Abhängigkeit: 170xxx (B2a) unabhängig von 150xxx/160xxx; `konstruktionen` referenziert `materials` (Seeder-Ordnung, nicht FK).
+**22 committet** (HK 9 · Katalog 6 · S-3 1 · B2a-Referenz 4 · B2a-Anforderungsprofil 2) · **3 Spec Pending** (M5.1 nach Abnahme). Abhängigkeit: 170xxx (B2a) unabhängig von 150xxx/160xxx; `konstruktionen`→`materials` und `anforderungsprofil_werte`→`anforderungsprofile` (FK). **Hinweis:** alle 170xxx sind auf `ticket` (real) **Pending** — bisher nur `ticket_testing` (Tests); „Ran (lokal)" oben = Test-DB.
 
 ## B) Seeder-Läufe
 | Seeder | Wirkung | lokal | Rollback |
