@@ -49,6 +49,7 @@ damit „gebaut vs. nicht gebaut / wo committet" nie wieder verwechselt wird —
 > Belegte Migrations-Timestamps (nie umbenennen): HK `2026_07_04_140001–140009`; Katalog/Spec
 > `2026_07_04_150001–150004` (main), `2026_07_05_150005–150009` (testing → M5), S-3/SEC-DM `160000`.
 > **Reserviert (Bau läuft):** Spec-M-C `2026_07_05_150010` (**Strang B**) · **B2a-Referenz+Klima `2026_07_05_170001–170004`** (**Strang C** — materials/konstruktionen/baualtersklassen/klima_plz). Kein Überlappungsbereich.
+> **Belegt (Accounting/E):** FiBu Stufe (i) `2026_07_05_180001–180003` (180er-Block, kollisionsfrei geprüft) — chart_of_accounts/clients/accounts/tax_codes/account_mappings/fiscal_years/documents/journal_entries/journal_lines.
 
 ## Strang HEIZKÖRPER — parallele Instanz (NICHT anfassen)
 - **Ort:** `ticket` = `/Users/yamanuri/Documents/ticket` · Branch `private/app-code-backup` · zuletzt `89e175f`.

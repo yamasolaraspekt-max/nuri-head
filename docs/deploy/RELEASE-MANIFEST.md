@@ -59,6 +59,11 @@
 | `2026_07_05_170005` create anforderungsprofile | **B2a/C** | testing ✓ · ticket **Ran [16]** | `down()` (drop) |
 | `2026_07_05_170006` create anforderungsprofil_werte | **B2a/C** | testing ✓ · ticket **Ran [16]** | `down()` (drop) |
 | `2026_07_05_170007` ALTER anforderungsprofile (gebaeude_geometrie, B2a-3) | **B2a/C** | testing ✓ · ticket **Ran [17]** | `down()` (drop column) |
+| `2026_07_05_180001` create accounting foundation (chart_of_accounts/clients/accounts/tax_codes/account_mappings/fiscal_years) | **Accounting/E** | testing ✓ · **Prod = Tag-X (Stufe i)** | `down()` (drop 6, FK-Reihenfolge) |
+| `2026_07_05_180002` create accounting_documents (FK source_invoice_id→invoices) | **Accounting/E** | testing ✓ · **Prod = Tag-X** | `down()` (drop) |
+| `2026_07_05_180003` create accounting_journal (entries+lines) | **Accounting/E** | testing ✓ · **Prod = Tag-X** | `down()` (drop 2) |
+
+> **Accounting Stufe (i) (Strang E):** `180001–180003` sind **testing-verifiziert** (Migrate 9/9, Rollback 0/9, Suite 186) und **rein additiv** (nur CREATE, `imported_from`-Marker, kein Bestandseingriff). **Prod-Lauf = eigener Tag-X-Posten** (nicht in der obigen „23 committet"-Prod-Zählung enthalten; ausführen Yama/Ramin).
 
 **23 committet** (HK 9 · Katalog 6 · S-3 1 · B2a-Referenz 4 · B2a-Anforderungsprofil 3) · **3 Spec Pending** (M5.1 nach Abnahme). Abhängigkeit: 170xxx (B2a) unabhängig von 150xxx/160xxx; `konstruktionen`→`materials` und `anforderungsprofil_werte`→`anforderungsprofile` (FK). **Hinweis:** alle 170xxx sind auf `ticket` (real) **Ran (Batch 16, 2026-07-05)** — siehe Migrations-Record im Kopf; „Ran (lokal)" bei 170001–04 = Dev-DB `ticket`.
 
