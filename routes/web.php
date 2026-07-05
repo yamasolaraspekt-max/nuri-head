@@ -119,7 +119,6 @@ use App\Http\Controllers\Customer\Offer\OfferPageLibraryController;
 
 
 use App\Http\Controllers\Customer\Deal\DealController;
-use App\Http\Controllers\Customer\Deal\DealInvoiceController;
 use App\Http\Controllers\Customer\Deal\DealMeasurementController;
 use App\Http\Controllers\Customer\Deal\DealMeasurementMaterialController;
 use App\Http\Controllers\Customer\Deal\DealMeasurementImageController;
@@ -4350,12 +4349,8 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/deal/invoices', [DealInvoiceController::class, 'index'])
-        ->name('deal.invoice');
-
-    Route::post('/deal/invoices/store', [DealInvoiceController::class, 'store'])
-        ->name('deal.invoice.store');
-
+    // deal_invoices-Schiene stillgelegt 2026-07-05 (invoices = führende Schiene). Routen entfernt;
+    // Tabelle bleibt (Drop = separater Tag-X-Posten). Rückbau-Commit: s. docs/accounting/schritt-1-*.
 
     /*
     |--------------------------------------------------------------------------

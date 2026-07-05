@@ -731,7 +731,7 @@ class LeadOverviewController extends Controller
 
             $dealIds = DB::table('deals')->where(['customer_id' => $cid, 'alternative_id' => $aid, 'product_id' => $pid])->pluck('id');
             if ($dealIds->isNotEmpty()) {
-                DB::table('deal_invoices')->whereIn('deal_id', $dealIds)->delete();
+                // deal_invoices-Schiene stillgelegt 2026-07-05 (invoices = führend) — Alt-Schienen-Löschung entfernt.
                 DB::table('deals')->whereIn('id', $dealIds)->delete();
             }
 

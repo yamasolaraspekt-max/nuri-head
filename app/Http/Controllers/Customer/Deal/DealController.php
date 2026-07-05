@@ -185,15 +185,9 @@ class DealController extends Controller
             $parts['documents_attachments'] = $zero;
         }
 
-        if (Schema::hasTable('deal_invoices')) {
-            $parts['invoices'] = "COALESCE((
-                SELECT MAX(COALESCE(di.updated_at, di.created_at, {$zero}))
-                FROM deal_invoices di
-                WHERE di.deal_id = deals.id
-            ), {$zero})";
-        } else {
-            $parts['invoices'] = $zero;
-        }
+        // deal_invoices stillgelegt (invoices = führende Schiene, 2026-07-05) — kein Aktivitäts-Signal aus der Alt-Schiene.
+        // (invoices-basiertes Aktivitätssignal ist ein separater, bewusster Ausbau — nicht Teil des Rückbaus.)
+        $parts['invoices'] = $zero;
 
         if (Schema::hasTable('planner_plans') && Schema::hasColumn('planner_plans', 'meta')) {
             $parts['planning'] = "COALESCE((
@@ -1132,23 +1126,8 @@ class DealController extends Controller
                 });
         }
 
-        if (Schema::hasTable('deal_invoices')) {
-            DB::table('deal_invoices')
-                ->where('deal_id', $deal->id)
-                ->orderByDesc('updated_at')
-                ->limit($limit)
-                ->get()
-                ->each(function ($invoice) use ($push) {
-                    $push(
-                        $invoice->updated_at ?? $invoice->created_at,
-                        'rechnung',
-                        'Rechnung aktualisiert',
-                        trim(($invoice->invoice_number ?? 'Rechnung') . ' · ' . ($invoice->status ?? '')),
-                        $invoice->updated_by ?? $invoice->created_by ?? null,
-                        ['invoice_id' => $invoice->id]
-                    );
-                });
-        }
+        // deal_invoices stillgelegt (invoices = führende Schiene) — Rechnungs-Timeline aus der Alt-Schiene entfernt.
+        // (Timeline aus invoices ist ein separater Ausbau, nicht Teil des Rückbaus.)
 
         if (Schema::hasTable('images')) {
             Image::query()
@@ -2823,10 +2802,8 @@ class DealController extends Controller
         $materialSections = $this->profileHydrateMaterialImagesAndLocations($materialSections);
         $materialStats = $this->profileMaterialStats($materialSections);
 
-        $invoices = DB::table('deal_invoices')
-            ->where('deal_id', $deal->id)
-            ->orderByDesc('created_at')
-            ->get();
+        // deal_invoices stillgelegt (invoices = führende Schiene) — leere Sammlung, verhaltensneutral (Tabelle war leer).
+        $invoices = collect();
 
         $images = $this->profileImagesQuery($deal)
             ->latest()
@@ -3776,7 +3753,7 @@ class DealController extends Controller
 
         // Schwaeche 5 + 6: Rechnungen rueckabwickeln + Lead-Stufe zuruecksetzen (atomar mit dem Loeschen).
         $invoiceInfo = DB::transaction(function () use ($deal) {
-            $info = $this->cancelDealInvoices($deal);   // Schwaeche 5
+            $info = $this->cancelInvoicesForDeal($deal);   // Schwaeche 5
             $this->restoreLeadStageForDeal($deal);      // Schwaeche 6
             $deal->delete();
             return $info;
@@ -3845,15 +3822,16 @@ class DealController extends Controller
      * - Offene Rechnungen (paid_amount = 0) -> status = 'storniert'.
      * - Bezahlte Rechnungen (paid_amount > 0) -> status = 'storniert_bezahlt_pruefen' (NICHT loeschen,
      *   menschliche Pruefung noetig: Rueckzahlung/Gutschrift).
-     * Behandelt sowohl 'invoices' (wo die Umsaetze liegen) als auch 'deal_invoices' (heute leer, aber
-     * dieselbe Luecke kuenftig). Gibt Anzahl/Summe der bezahlten Rechnungen fuer eine Warnung zurueck.
+     * Behandelt die führende Rechnungs-Schiene 'invoices' (wo die Umsaetze liegen).
+     * (Alt-Schiene stillgelegt 2026-07-05 — aus dieser Storno-Logik entfernt; invoices ist die einzige Wahrheit.)
+     * Gibt Anzahl/Summe der bezahlten Rechnungen fuer eine Warnung zurueck.
      */
-    private function cancelDealInvoices(Deal $deal): array
+    private function cancelInvoicesForDeal(Deal $deal): array
     {
         $paidCount = 0;
         $paidSum = 0.0;
 
-        foreach (['invoices' => 'total_amount', 'deal_invoices' => 'invoice_amount'] as $table => $amountCol) {
+        foreach (['invoices' => 'total_amount'] as $table => $amountCol) {
             if (! Schema::hasTable($table) || ! Schema::hasColumn($table, 'deal_id')) {
                 continue;
             }
