@@ -2478,6 +2478,7 @@ Route::middleware([\App\Http\Middleware\EnsureHeizkoerperEnabled::class, 'auth']
     Route::get('/heizkoerper/konfigurator', [\App\Http\Controllers\Heizkoerper\HeizkoerperController::class, 'konfigurator'])->name('heizkoerper.konfigurator');
     Route::post('/heizkoerper/berechnen', [\App\Http\Controllers\Heizkoerper\HeizkoerperController::class, 'berechnen'])->name('heizkoerper.berechnen');
     Route::post('/heizkoerper/kompatibilitaet', [\App\Http\Controllers\Heizkoerper\HeizkoerperController::class, 'kompatibilitaet'])->name('heizkoerper.kompatibilitaet');
+    Route::post('/heizkoerper/stueckliste/uebernehmen', [\App\Http\Controllers\Heizkoerper\HeizkoerperController::class, 'uebernehmen'])->name('heizkoerper.stueckliste.uebernehmen');
 });
 
 // IDS CRUD
