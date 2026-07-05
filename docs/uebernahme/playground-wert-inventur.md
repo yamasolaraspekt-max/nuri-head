@@ -346,4 +346,33 @@ Ein **nicht-DATEV-zertifiziertes Accounting-Prototyp** in ein **Live-CRM mit ~30
 
 ---
 
-**→ STOPP (Anhang F).** PV-3D: Montage-Katalog echt (220+111 Kompat-Zeilen) → **additiv jetzt** an die Cut-over-Instanz; PV-Rechenkern reif + **an die vorhandene `Sizing*`-Naht andockbar** (konzeptionell anpassen); 3D-UI = Neubau (raus). **Als Nächstes: (B) Lohn/Gehalt-Befund** (gleiche Tiefe, read-only) — schließe ich jetzt an.
+**→ STOPP (Anhang F).** PV-3D: Montage-Katalog echt → additiv jetzt; Rechenkern an `Sizing*`-Naht andockbar; 3D-UI = Neubau.
+
+---
+
+# Anhang G — Lohn / Gehalt: Reife-/Risiko-Befund (2026-07-05, read-only)
+**Scope:** read-only, mein Job; Bau = HR-/Accounting-Instanz nach Cut-over.
+
+## G.1 Umfang + Wesen
+**Lohn-VORBEREITUNG, kein Netto-Lohnlauf.** Migrationen: `extend_payroll_for_preparation`, `lohn_ueberstunden_lohnarten`, **`lohn_korrektur_pruefung_freigabe`** (Korrektur→Prüfung→Freigabe-Workflow), **`lohn_uebergabe_dokumente`** (Übergabe ans Lohnbüro), `hr_shifts`, `hr_clock_events`. Services: `Hr/PayrollCheckService`, `Hr/PayrollStatusService`, `Hr/ProjektLohnkostenService` (Lohnkosten je Vorgang), `ArticleMountingTimeService` (Montagezeit→Lohn). → **Sammelt Zeiten/Lohnarten/Überstunden, führt Freigabe-Workflow, erzeugt Übergabe-Dokumente** fürs externe Lohnbüro/DATEV-Lohn. **Rechnet KEINE Löhne/SV/Lohnsteuer selbst.**
+
+## G.2 Reife = **Framework, ungenutzt**
+`employee_profiles=14` · `employment_contracts=1` · `hr_time_entries=5` — dünner Seed. **`hr_payroll_runs=0` · `entries=0` · `wage_lines=0` · `approvals=0` · `exports=0` · `wage_types=0`** → die **Payroll-Maschinerie wurde nie gelaufen**. Framework steht, Betrieb = 0.
+
+## G.3 ticket-Kontext + Risiko-Klasse
+ticket hat **HR-Org** (`employees`/`departments`/`branches`/`position_qualifications`), **keine Lohn-Vorbereitung**. → echte Lücke. **Aber gleiche Risiko-Klasse wie Buchhaltung** (Anhang E): Lohn → **Lohnsteuer/SV/Lohnbüro/DATEV-Lohn** = rechtlich/steuerlich sensibel; ein ungenutztes Vorbereitungs-Framework in ein Live-System zu heben, das steuer-/sv-relevante Übergaben erzeugt, verlangt **Fach-Reife-Befund + Lohnbüro-/Berater-Einbindung** als Pflicht-Vorstufe. *(Nebenbefund: „Projekt-Lohnkosten" berührt Weiche 5 → auf Gewerk/Objekt umankern.)*
+
+## G.4 Urteil (Inventur) — bestätigt Yamas Erwartung
+**Wert = A (Konzept: Lohn-Vorbereitung + Freigabe-Workflow + Übergabe), Reife = Prototyp (ungenutzt), Risiko + Aufwand hoch.** → **Dediziertes HR-/Payroll-Projekt** (eigene Instanz, nach Cut-over) mit **eigenem Fach-Reife-Befund + Berater-/Lohnbüro-Pfad**. **Gleiches Urteil wie Buchhaltung** (E.5), wie von dir vorhergesagt.
+
+---
+
+# Zusammenfassung der 4 „großen Brocken" (Yama-Priorität)
+| Brocken | Wert | Reife | Zuständigkeit / Timing |
+|---|---|---|---|
+| **PV-3D-Datenmodell + Rechenkern** (F) | **A** | Katalog echt (220+111), Rechenkern reif, an `Sizing*`-Naht andockbar | **ZEITKRITISCH → Cut-over-Instanz JETZT** (additives Schema); 3D-UI = Neubau (raus) |
+| **Buchhaltung/DATEV** (E) | A (groß) | **Prototyp, DATEV nicht bewiesen** | Accounting-Instanz nach Cut-over; **DATEV-Zert.+Steuerberater PFLICHT**, Risiko hoch |
+| **Lohn/Gehalt** (G) | A | **Framework, ungenutzt** | HR-Instanz nach Cut-over; **Berater/Lohnbüro PFLICHT**, Risiko-Klasse wie Buchhaltung |
+| **Formular-Engine/Smartrouting** (A/A.7) | B (Synthese) | Backend solide, Frontend fehlt | ticket ⊕ playground **verschmelzen**, nach Cut-over |
+
+**→ STOPP (Inventur vollständig).** Alle vier von dir priorisierten Brocken befundet (E/F/G + A.7-Synthese) + TEIL 1–4 + Kundendienst/Betriebsmittel (D). **Kein Bau — reine Inventur.** Nächste Züge liegen bei dir: (1) den **PV-3D-Befund (F) an die Cut-over-Instanz** geben (zeitkritisch), (2) Accounting-/HR-Instanzen mit E/G beauftragen (nach Cut-over, mit Berater-Pfad), (3) `architektur-entscheidungen.md` A1/Weiche 3 nachziehen lassen. Ich bleibe für weitere Befunde/Vertiefungen bereit.
