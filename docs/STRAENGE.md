@@ -8,6 +8,23 @@ werden. **Begriffsregel: Stufen IMMER mit Strang-Präfix benennen** — `Katalog
 damit „gebaut vs. nicht gebaut / wo committet" nie wieder verwechselt wird — Lehre aus zwei Fehlannahmen:
 `WberechnungImportSeeder` (als „gebaut" angenommen, fehlte) und **G-3b** (Feature auf keinem Branch dieses Repos, belegt durch `964a378`).
 
+## 🚦 Parallelbetrieb-Karte (aktive Schreiber — Stand 2026-07-05)
+
+**Regeln:**
+- **Ein Schreiber pro Datei.** `sidebar.blade.php` gehört **aktuell Strang A** (M4-b Nav-Eintrag).
+- **Migrations-Timestamps koordinieren sich über diese Datei** (nächster freier Slot ablesen, hier eintragen).
+- **Einmal committete Migrationen werden NIE umbenannt** (Timestamp bleibt, auch wenn ein anderer Strang später einen früheren wählt).
+
+| Strang | Ort (Repo · Branch) | SCHREIB-Scope (exakt) | Status | letzter Commit |
+|---|---|---|---|---|
+| **A — Heizkörper M4-b** | ticket · `private/app-code-backup` | **NUR** `resources/views/admin/layouts/sidebar.blade.php` + `docs/heizkoerper-bauplan.md` | aktiv | `89e175f` |
+| **B — Spec-Standard B2–4** | ticket · `private/app-code-backup` | `app/Services/Spec/*` · `app/Console/Commands/Spec*` · `database/migrations/2026_07_05_15000[7+]*` · `tests/{Feature,Unit}/Spec*` | aktiv (B1+B2 committet, B3–4 offen) | `9501376` |
+| **C — B2a-Befund** | ticket · `private/app-code-backup` | **NUR `docs/`** (Code strikt read-only) | read-only | — |
+| **D — NAV 2b/3b** | ticket · `private/app-code-backup` | `sidebar.blade.php` + NAV-01-Doku — **GEPARKT bis A `sidebar.blade.php` committet hat** (Konflikt mit A) | ⏸ geparkt | `df1dc8c` |
+
+> Belegte Migrations-Timestamps (nie umbenennen): HK `2026_07_04_140001–140009`; Katalog/Spec
+> `2026_07_04_150001–150004` (main), `2026_07_05_150005–150009` (testing → M5). **Nächster freier Spec-Slot: `150010`.**
+
 ## Strang HEIZKÖRPER — parallele Instanz (NICHT anfassen)
 - **Ort:** `ticket` = `/Users/yamanuri/Documents/ticket` · Branch `private/app-code-backup` · zuletzt `89e175f`.
 - Roadmap **M0–M5** (Strang A): Fundament → Ventiltechnik → IDS-Mapper → **Rechenkern-Port (M3)** → **UI/Nav (M4)** → Prod-Migration (M5).
