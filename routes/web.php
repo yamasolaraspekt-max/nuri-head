@@ -2475,6 +2475,7 @@ Route::middleware('auth')->group(function () {
 // Heizkörper-Modul (M4-a v-a): Rechen-/Kompatibilitäts-Endpunkte hinter Feature-Flag.
 // Flag-Middleware VOR 'auth' -> bei OFF 404 (kein Query auf HK-Tabellen). KEIN Sidebar-Eintrag (M4-b geparkt).
 Route::middleware([\App\Http\Middleware\EnsureHeizkoerperEnabled::class, 'auth'])->group(function () {
+    Route::get('/heizkoerper/konfigurator', [\App\Http\Controllers\Heizkoerper\HeizkoerperController::class, 'konfigurator'])->name('heizkoerper.konfigurator');
     Route::post('/heizkoerper/berechnen', [\App\Http\Controllers\Heizkoerper\HeizkoerperController::class, 'berechnen'])->name('heizkoerper.berechnen');
     Route::post('/heizkoerper/kompatibilitaet', [\App\Http\Controllers\Heizkoerper\HeizkoerperController::class, 'kompatibilitaet'])->name('heizkoerper.kompatibilitaet');
 });

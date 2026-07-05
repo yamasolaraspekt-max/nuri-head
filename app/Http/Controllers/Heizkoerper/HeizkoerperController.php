@@ -26,6 +26,17 @@ class HeizkoerperController extends Controller
         private CompatibilityService $compatibility = new CompatibilityService,
     ) {}
 
+    /** GET heizkoerper.konfigurator → Alpine-Fläche (Live-EN-442 + Ampel + Kompatibilität). */
+    public function konfigurator()
+    {
+        // Optionale Auswahl bestehender Aufnahmen; Direkteingabe funktioniert auch ohne Daten.
+        $installations = RadiatorInstallation::query()
+            ->latest('id')->limit(50)
+            ->get(['id', 'room', 'radiator_spec_id', 'width', 'anzahl']);
+
+        return view('admin.heizkoerper.konfigurator', compact('installations'));
+    }
+
     /** POST heizkoerper.berechnen → EN-442-Tabelle (75→35), Ampel, Mindest-Vorlauf. */
     public function berechnen(Request $request): JsonResponse
     {
