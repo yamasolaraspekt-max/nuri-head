@@ -96,8 +96,8 @@
 ## 11. Formulare (dynamische Abfrage-Engine) — **A-Kandidat #1**
 **Was:** Dynamische Formulare (Sektionen/Felder/Optionen), Formular-Antworten, Formular-Berechnung, **„Smartrouting" (FormRoutingService): Produktauswahl lädt automatisch Pflichtfelder/Dokumente/Aufgaben.**
 **Daten:** `dynamic_forms=21` · `form_fields=358` (**echte Formular-Definitionen!**) · `form_answers=0`.
-**ticket hat das?** **Nein** — ticket hat keine generische Formular-Engine (NICHT-VERIFIZIERT, aber kein bekanntes Äquivalent).
-**Urteil:** **A (transplantieren)** — echte Lücke, substanzieller Realbestand (358 Felder = geronnene Fachlogik), koppelt an Angebotsampel/Pflichtdaten-Gate (B aus §2). **Stärkster Transplantations-Kandidat.**
+**ticket hat das? ⚠️ KORREKTUR 2026-07-05 (Yama-Hinweis, erst übersehen):** **JA** — ticket hat ein eigenes **„Checklisten-Formulare"-System**: `ProductFormula`/`product_formulas` (**generischer Builder je Produkt**: `product_id`→`article_groups`, `section_name`, **`fields` = JSON-Builder**, Publish-Status, **Version**, Antworten via `LeadProductChecklistValue` je Lead) + Builder-UI `admin/formula/{create,edit}` (Sidebar „Checklisten-Formulare", `product.formula.index`) + **hardcodierte Per-Produkt-Checklisten** (`heatpump_checklists`/`p_v_checklists`/`w_p_checklists` mit fixen Aufnahme-Feldern) + **Wartungs-Checklisten** + `knowledge/question`. **Schon W5-verankert** (article_group + Lead, kein „Project").
+**Urteil:** **B — Synthese/erweitern, NICHT danebenstellen** (Yama-Direktive: „aus beiden das beste Formular"). ticket liefert die **W5-native Grundlage** (per-Produkt, Lead-Antworten, Builder-UI, Versionierung, Blade); playground liefert die **Engine-Stärken, die ticket fehlen** (eval-freie Calc-Engine + Operanden-Gate, `visible_if`, Feldtyp-Semantik, erweitertes Smartrouting nach Service/Phase/Objekt). → Verschmelzen, s. A.7. *(Selbstkritik: mein erstes „A/ticket lacks it" war ein Such-Fehler — nur `fusion.forms` geprüft, das ticket-Checklisten-System übersehen; vom Nutzer korrigiert.)*
 
 ## 12. Controlling / Strategie
 **Was:** Controlling-KPI, Ziele (OKR), Abteilungs-GuV.
@@ -241,16 +241,24 @@ Der Cut-over liefert WP/PV/Auslegung, **nicht** `lastprofile`/`lastmanagement` (
 
 ---
 
-## A.7 Bau-Scope Formular-Engine — ENTSCHIEDEN 2026-07-05 (mittlere Variante), Bau NACH Cut-over
-**Renderer + Smartrouting + Calc-Engine; Builder nur minimal** (Begründung Yama: Betriebswert = Ausfüllen/Routen/Rechnen täglich; voller Drag-Drop-Builder = teuerste UI für seltenste Tätigkeit → spätere eigene Stufe bei belegtem Bedarf).
-- **(i)** Echte Migrationen statt Raw-SQL (`form_*` additiv, `imported_from`-Marker) + Seed der 21 Formulare/358 Felder/489 Optionen als Marker-Import (**Fachlogik-Konserve**).
-- **(ii)** **Re-Anchoring Weiche 5 (Kern-Umbau):** `resolveForProject` → Kunde→Objekt→Gewerk (`lead_product_list` + Objekt-Typ aus `lead_alternative_adds`), Phasen-Bindung → `lead_stages`. **Logik bleibt, Anker werden ticket** — kein `Project`/`interests`.
-- **(iii)** Blade-**Renderer** in ticket-Design **inkl. minimaler `visible_if`-Logik** (Bedingungs-Syntax `Feld=Wert` — **Pflicht**, ohne bedingte Sichtbarkeit sind 358-Feld-Formulare unbenutzbar) **+ Option-Validierung im Schreibpfad** (die 🟡-Lücke schließen).
-- **(iv)** Calc-Engine **1:1** portieren (Shunting-Yard, kein `eval`, Operanden-Gate — **prinzipientreu, KEINE Logik-Änderung**).
-- **(v)** `FormAnswer` an Gewerk/Objekt verankern + **minimale** Status-Werte (keine große Zustandsmaschine — 🟡-Lücke dokumentiert, nicht überbaut).
-- **NICHT im Scope:** voller Builder · React-Reste · OCR-Kette (später) · RBAC (eigener Strang).
+## A.7 Bau-Scope — **SYNTHESE ticket ⊕ playground** (entschieden 2026-07-05), Bau NACH Cut-over
+**Direktive Yama:** aus **beiden** Systemen das **beste** Formular bauen — ticket-Bestand (`product_formulas` + Per-Produkt-Checklisten) **als Grundlage erweitern**, playground-Engine-Stärken **einpflanzen**. Kein Parallel-Modul, keine Doppelung. Mittlere Tiefe: Renderer + Smartrouting + Calc; voller Builder minimal (ticket hat schon einen JSON-Builder).
 
-**→ STOPP (Formular-Engine).** Scope eingefroren; Bau nach Cut-over-Abschluss.
+**Grundlage (bleibt, ticket-nativ):** `product_formulas` (per `article_group`, `fields`-JSON, Version, Publish) + `LeadProductChecklistValue` (Lead-/Gewerk-Antworten) + Builder-UI `admin/formula/*` + Blade-Design. **Schon W5-verankert** — das erspart das große Re-Anchoring.
+
+**Aus playground einpflanzen (die Lücken, die ticket fehlen):**
+- **(a) Calc-Engine 1:1** (`FormulaEvaluationService`): Shunting-Yard, **kein `eval`**, **Operanden-Gate** (`ungeprüft`/`unvollständig` → keine erfundene Zahl) — **prinzipientreu übernehmen**; ticket-`fields`-Felder um `calculation`/Einheit erweitern.
+- **(b) `visible_if`-Logik** (bedingte Sichtbarkeit `Feld=Wert`) — **Pflicht** (große Aufnahme-Formulare sonst unbenutzbar); ticket-`fields`-JSON um Bedingungen erweitern.
+- **(c) Feldtyp-Semantik + Option-/Wert-Validierung** (length/area/power/plz, select gegen Optionen, min/max/decimals) — die technischen Aufnahme-Feldtypen aus playgrounds 358 Feldern in ticket-`fields` heben.
+- **(d) Erweitertes Smartrouting** (playgrounds `FormRoutingRule`-**Logik**): heute lädt ticket per `product_id`; ergänzen um **Service/Gewerk + Objekt-Typ + Phase** (`lead_product_list.service` / `lead_alternative_adds.object_type` / `lead_stages`). **Nur die Routing-Logik, an ticket-Anker** — kein `Project`/`interests`.
+- **(e) Fachlogik-Konserve:** playgrounds 21 Formulare/358 Felder/489 Optionen als **Vorlagen-Import** (Marker `imported_from='playground'`) in tickets `product_formulas`-Struktur überführen — die geronnene Fach-Aufnahme nicht verlieren.
+
+**Weiche (Yama/Bau-Session):** JSON-`fields` (ticket) **beibehalten & erweitern** vs. auf normalisierte `form_fields`-Tabellen (playground) migrieren? **Empfehlung: JSON behalten** (ticket-nativ, weniger Umbau), Calc/visible_if/Feldtypen **im JSON-Schema** ergänzen — nur falls Abfragen über Felder nötig werden, normalisieren.
+**NICHT im Scope:** voller Drag-Drop-Builder · React-Reste · OCR-Kette (später) · RBAC (eigener Strang) · playgrounds Raw-SQL-Tabellen 1:1 (ticket-Struktur gewinnt).
+
+**Pflicht vor Bau:** eigener **ticket-Checklisten-System-Befund** (ProductFormulaController + `fields`-JSON-Schema + `LeadProductChecklistValue` + die hardcodierten `*_checklists` wörtlich lesen) — damit die Synthese am echten ticket-Stand ansetzt, nicht an Annahmen. *(Dieser Befund fehlt noch — ich habe playground gelesen, tickets Formular-System nur angerissen.)*
+
+**→ STOPP (Synthese-Scope).** Eingefroren; Bau nach Cut-over. Vor Bau: ticket-Formular-System-Befund.
 
 ---
 
