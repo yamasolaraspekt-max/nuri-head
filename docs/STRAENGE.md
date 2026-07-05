@@ -50,23 +50,28 @@ damit „gebaut vs. nicht gebaut / wo committet" nie wieder verwechselt wird —
 - Merke: `plan_uploads`/A-3d gehört **nicht** hierher (das ist der wberechnung-Grundriss-Strang, Modul K).
 
 ## Strang NAV (Navigation) — parallele Instanz (NICHT anfassen)
-- **Ort:** `ticket` · `private/app-code-backup` · zuletzt ~`fa29f89` (Flächen 2/3 Tab-Leisten: `ca649b5`/`5680a71`).
-- ⚠️ `sidebar.blade.php` + `EconomicCalculationController.php` teils **uncommittet** → Sperr-Dateien (unten).
+- **Ort:** `ticket` · `private/app-code-backup` · zuletzt `df1dc8c` (Energie-Konsolidierung: Sidebar + EconomicCalculation, **entsperrt NAV 2b/3b, M4-b, IA-2, B3**); davor `fa29f89`/`ca649b5`/`5680a71`.
+- ✅ `sidebar.blade.php` + `EconomicCalculationController.php` **committet** (`df1dc8c`) — uncommittet-**Sperre aufgelöst**. `sidebar.blade.php`-Schreibrecht jetzt über die Parallelbetrieb-Karte (aktuell Strang A / M4-b).
 
 ## Strang OMD (Supplier-Connector) — DIESE Instanz
 - **Ort:** `ticket` · `private/app-code-backup` · OMD Phase 1 `35a2904`. Mapper-Kette (`1503854`/`f13f277`) gehört zum Heizkörper-/Import-Strang.
 - Phasen-gated; beim Katalog-Import nicht berühren (Tabu-Zone unten).
 
 ## Strang S1 (Rechnungsschiene-Härtung, Kanzlei-Übergabe) — eigene Instanz (NICHT anfassen)
+> ⚠️ **„S1" = ausschließlich die Rechnungsschiene** (Invoice). **NICHT** verwechseln mit **SEC-DM** (Deal-Measurement-Security, unten) — die Commits `67a78a0`/`ab31863`/`15c0d55`/`63a7369` gehören zu **SEC-DM**, nicht zu S1.
 - **Ort:** `ticket` (führend) · Branch/Commits **noch nicht belegt** (Planungsstand 2026-07-02) — *bei Umsetzung Ort-Zeile nachtragen (git-Beleg wie bei den anderen Strängen).*
 - Basis: **Invoice-Modul** (`app/Models/Invoice*`, `Http/Controllers/Invoice/*`, Routes `/invoices` + `/invoices/canvas`). Planungsdok `docs/uebernahme/sprint-1-tickets-rechnungsschiene.md`.
 - **S1-01…S1-11**: Nummernkreis → Löschsperre → Editiersperre-ab-sent → Storno/Gutschrift → Teilzahlung (`invoice_payments`) → payment_status → … → Legacy-Cleanup (S1-10) → Regressionssuite (S1-11). **A1 = Option 1** (Kanzlei führt FiBu; **keine** Buchhaltung im ticket).
 - **Abgrenzung:** S1 = bestehende **Rechnungs-Schiene** (`/invoices`) härten. Strang **G** = CRM-Konversion + **Beleg-PDF/GAEB/XRechnung** (`/app`, `crm.*`). „Belege"-Überschneidung mit Yama klären (evtl. G ⊃ S1 oder getrennt).
 - **Tabu für Cut-over/Katalog/Heizkörper:** Invoice-/Accounting-Dateien, `finanz_safety`, Rechnungs-Migrationen.
 
-## Geteilte Sperr-Dateien (Navi-Strang, uncommittet — NICHT überschreiben)
-- `resources/views/admin/layouts/sidebar.blade.php`
-- `app/Http/Controllers/EconomicCalculationController.php`
+## Strang SEC-DM (Deal-Measurement-Security) — eigene Instanz (NICHT anfassen)
+- **Ort:** `ticket` · `private/app-code-backup` · zuletzt `63a7369` (Preis-nullable); `67a78a0`(a)·`ab31863`(b-1)·`15c0d55`(b-2).
+- **Scope:** `DealMeasurementPolicy`, Item-/Material-Schreibpfade, `DealMeasurement*Controller`, `DealMaterialListController`, `deal_measurement_*`. Doku: `docs/sicherheits-backlog.md`.
+- **Umbenannt 2026-07-05** von „S-1/S-2" → **SEC-DM** (behebt Namens-Kollision mit dem **S1-Rechnungsschiene**-Strang). Offen: Umschalt auf hartes Deny (M5-Flags), Image-Präzisions-Weiche, `@index`-Write-on-read (SEC-DM-2).
+
+## Sperr-Dateien — AUFGELÖST (Stand 2026-07-05, `df1dc8c`)
+- ✅ `resources/views/admin/layouts/sidebar.blade.php` + `app/Http/Controllers/EconomicCalculationController.php` sind **committet** (`df1dc8c`) — keine uncommittet-Sperre mehr. `sidebar.blade.php` wird jetzt über die **Parallelbetrieb-Karte** koordiniert (ein Schreiber pro Datei; aktuell Strang A / M4-b).
 
 ## Tabu-Zonen (nie anfassen)
 - `/api/planner` + Sanctum-Setup

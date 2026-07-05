@@ -3,6 +3,9 @@
 > Eigene, additiv gepflegte Liste. Einträge sind **Bestandsbefunde**, die bewusst **nicht** im
 > auslösenden Feature-Ticket gefixt werden (Scope-Disziplin), sondern als eigener Strang.
 > Priorität terminiert Yama.
+>
+> **Umbenannt 2026-07-05:** die früheren „S-1/S-2/S-3"-Punkte heißen jetzt **SEC-DM** (Deal-Measurement-Security)
+> — behebt die Namens-Kollision mit dem **S1-Rechnungsschiene**-Strang (STRAENGE.md). „S1" bleibt exklusiv der Rechnungsschiene.
 
 ## SEC-DM · `deal_measurement_items`-Schreibfläche ohne Ownership — **HOCH**
 
@@ -42,16 +45,16 @@ Nutzer den zugehörigen Deal bearbeiten (Zuweisung/Rolle/Filiale)?
 
 ### 🚀 M5-Deploy auf main — ausgeführt 2026-07-05 (Sonntag-Randzeit)
 - **DB-Backup:** `~/ticket-backups/ticket-pre-M5-2026-07-05.sql` (412/412 Tabellen).
-- **Migrationen [Batch 15]:** HK `140001–140009` + Katalog `150005/150006` + S-3 `160000` — Spec `150007–150009` **ausgeschlossen** (Strang B, nicht abgenommen → M5.1). Rollback: `migrate:rollback --batch=15`.
+- **Migrationen [Batch 15]:** HK `140001–140009` + Katalog `150005/150006` + SEC-DM-3 `160000` — Spec `150007–150009` **ausgeschlossen** (Strang B, nicht abgenommen → M5.1). Rollback: `migrate:rollback --batch=15`.
 - **Seeder:** `WberechnungImportSeeder` → `products.imported_from='wberechnung'=24` (19 WP + 5 PV). **Backfill:** 0 (0 Measurements auf main).
 - **Flag:** `HEIZKOERPER_MODULE_ENABLED=true` (config verifiziert ON).
-- **Smoke:** 663-Durchstich=662,8 · 7 HK-Tabellen · Policy registriert · S-3 nullable=YES · PlannerApiContractTest 14/14.
+- **Smoke:** 663-Durchstich=662,8 · 7 HK-Tabellen · Policy registriert · SEC-DM-3 nullable=YES · PlannerApiContractTest 14/14.
 - **⏳ 14-Tage-Beobachtungsfenster: 2026-07-05 → 2026-07-19.** Kriterium: alle 5 Zähler (`deal_measurement_orphan_write_count`, `offer_orphan_write_count`, `assign_denied_count`, `unlock_denied_count`, `delete_denied_count`) **durchgängig 0** → dann je Flag ein Hart-Deny-Mikro-Commit (`DEAL_MEASUREMENT_*_HARD_DENY=true`). **Zähler > 0 → STOPP + Befund (wer/warum), keine Härtung.**
 - **Nicht-Posten / Folge:** HK-Katalog leer (`RadiatorSpecSeeder` = Katalog-Strang, nicht in diesem Fenster) → Konfigurator erreichbar, aber ohne Katalog-Specs bis dahin · **M4-b Sidebar-Menüpunkt** (HK sonst nur per URL) · Spec-Migrationen **M5.1** · `image_delete_denied_count` (hart, nur Observability).
 
 ## SEC-DM-2 · Write-on-read: `DealMeasurementController@index` (GET erzeugt DB-Zeilen) — mittel
 `@index` (@256, via `createMeasurementItemFromRow@544`) **erzeugt `deal_measurement_items` beim Anzeigen** (GET mit DB-Write). Deshalb in SEC-DM-a **nicht** gegated (sonst bräche das Ansehen fremder Aufmaße). Eigener Konstruktions-Befund: expliziter Init-Schritt **oder** Idempotenz-Absicherung. **Nicht Teil von SEC-DM.**
 
-## S-3 · Preis-Spalten `deal_measurement_items` nullable — ✅ testing (main = M5)
+## SEC-DM-3 · Preis-Spalten `deal_measurement_items` nullable — ✅ testing (main = M5)
 **Gebaut** (2026-07-05, testing): Migration `2026_07_05_160000` macht `unit_price`/`purchase_price`/`total_price` nullable (up/down, down nur waisenfrei sicher). `HeizkoerperController@uebernehmen` schreibt HK-Preise ehrlich **NULL** statt 0,00. **Konsequenz-Check belegt:** einziger `deal_measurement_items`-Preis-Leser `DealMaterialListController::mapDealMeasurementItemToMaterialRow:658-659` ist **NULL-sicher** (`?? 0`), bricht nichts; `DealController@780` summiert andere Struktur (null-sicher). **main-Lauf = M5.**
 - **⚑ Display-Weiche (offen):** der Mapper **koerziert `null → 0`** (`(float)($item->unit_price ?? … ?? 0)`) → die Material-Liste zeigt weiterhin **0,00** statt „—". Ehrliche **Speicherung** ist erreicht (NULL in DB), die **Anzeige** braucht einen separaten Mini-Fix (Mapper null-erhaltend + Frontend „—"). Bewusst NICHT still gefixt (betrifft alle Material-Zeilen, nicht nur HK). Kandidat für M5-Frontend-Mikroposten (neben unlock-409).

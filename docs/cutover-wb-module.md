@@ -64,7 +64,7 @@ Master-Roadmap: `docs/roadmap-wberechnung-funktionen-in-ticket.md`.
 
 **Überschneidungen (Version, die gewinnt):**
 1. **PVGIS** → ✅ wb-Kern übernimmt; ticket-`PVToolsController` **abgelöst** (Route/Nav-kompatibel, keine Parallelroute). Slot B2/B3.
-2. **Wirtschaftlichkeit** → ✅ ticket um `SanierungsWirtschaftlichkeitService` **erweitern**; Model-Frage offen bis B3. ⚠️ Sperre: `EconomicCalculationController` uncommittet — erst nach dessen Commit.
+2. **Wirtschaftlichkeit** → ✅ ticket um `SanierungsWirtschaftlichkeitService` **erweitern**; Model-Frage offen bis B3. ✅ Sperre **aufgelöst** (`EconomicCalculationController` committet `df1dc8c`) — B3-Arbeit nicht mehr blockiert.
 3. **Heizkörper** → ✅ ticket behalten + M4-UI (Kern-Port bleibt).
 
 **Roadmap-Aufnahmen (alle bestätigt):**

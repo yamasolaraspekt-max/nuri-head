@@ -52,7 +52,7 @@ WpKennlinie, Bivalenz, Pvgis, Sanierungs, Fussboden, Energiekonzept, PvProjekt, 
 | **WP-Auslegung** Kennlinie/Bivalenz/JAZ (F+G) | **B2a** | nach B1 (Katalog) | `WpKennlinieService` (jetzt datenblatt-sauber, `b4a9eda`), `BivalenzService`, `JazService` |
 | **PV-/WR-Sizing** (I) | **B2a** | nach B1 | `PvProjektService`, `InverterSizingService`, `StringBuilderService`, `Contracts/*` |
 | **PVGIS-Ertrag** (J) | **B2/B3** | löst ticket-`PVToolsController`-Stub ab | `PvgisController`, `GeocodingService` |
-| **Wirtschaftlichkeit** (H/L) | **B3/B4** | ⚠️ `EconomicCalculationController` uncommittet (Navi-Strang) | `SanierungsWirtschaftlichkeitService`, `SanierungController` |
+| **Wirtschaftlichkeit** (H/L) | **B3/B4** | ✅ EconomicCalc-Sperre **aufgelöst** (`df1dc8c`); Rechenkern-Port noch offen | `SanierungsWirtschaftlichkeitService`, `SanierungController` |
 | **Förderung** BAFA/KfW (O) | **B3/B4** | integriert in H | `FoerderungService` |
 | **Fußbodenheizung** EN 1264 (M) | **B3-Unterpunkt** | erste Streichposition | `FussbodenheizungService` |
 | **Energiekonzept-Bundler** (Q) | **B4** | neue Struktur ≠ ticket-`EconomicCalculation` | `EnergiekonzeptController`, `Models/Energiekonzept` (+ 6 Faker-Datensätze, archiviert `1085c43`) |
