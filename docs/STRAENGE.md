@@ -8,6 +8,12 @@
 - **Unverändert (Qualität ≠ Produktionsschutz):** Pflicht-Stopps, Befund-vor-Bau, Weichen, additive Commits, Tests-grün-vor-Commit, Paritäts-Prinzip, ehrliche Datenlage, Rate-nicht-Regel, Strang-Scopes/Sperr-Dateien, Ein-Schreiber-pro-Datei, Migrationen nie umbenennen. Lokale Fehler sind billig, **nicht egal**.
 - **RELEASE-MANIFEST-PFLICHT:** `docs/deploy/RELEASE-MANIFEST.md` ist die fortlaufende Tag-X-Liste. **Jeder** Commit mit prod-pflichtigem Teil (Migration · Seeder-Lauf · `.env`/Flag · Frontend-Fix mit Nutzerwirkung · Härtungs-Schalter · Config) trägt **im selben Commit** seine Manifest-Zeile nach (Posten · Commit · Reihenfolge/Abhängigkeit · Rollback · Nachläufe). **Posten ohne Zeile = Governance-Verstoß (gleichrangig Tabu-Bruch).**
 
+## ⛔ DAUERDIREKTIVE: DATEN- UND KETTEN-SCHUTZ (ab 2026-07-05, strang-übergreifend)
+**Gilt für ALLE playground→ticket-Schritte (Migration · Seeder · Import · Cut-over · FiBu). Volltext auch in `CLAUDE.md`.**
+1. **Ticket-Daten unantastbar:** kein Transplantat ändert/löscht Bestands-Zeilen. Nur additiv: neue Tabellen · neue Spalten (nullable/Default) · neue Zeilen. **Jeder UPDATE/DELETE auf Bestand = eigener, explizit beauftragter Posten, nie Beifang.**
+2. **Belegkette gesetzt — FiBu dockt an, baut nicht um:** Angebot(Sets→Artikel)→Auftrag→Rechnung(`invoices`, führend)·Bestelllisten. FiBu hängt **nur an die festgeschriebene Rechnung** (Buchungssatz); Angebot/Set/Artikel/Auftrag/Bestellliste werden **nicht verändert/dupliziert/ersetzt**.
+3. **Konflikt:** playground-Code passt sich dem ticket-Schema an (Adapter bevorzugt, sonst additive Spalte) — nie umgekehrt. Prüfen: Teilrechnungen · Positions-Erlöskonten-Split · Leistungszeitraum-Herkunft.
+
 Verbindliche Strang-Trennung, damit **kein Rechenkern doppelt gebaut** wird und Sperr-Dateien respektiert
 werden. **Begriffsregel: Stufen IMMER mit Strang-Präfix benennen** — `Katalog-ii`, `Heizkörper-iii`, `M3`, `B1`
 — **nie nacktes „Stufe (ii)"**. Stand: 2026-07-05.
