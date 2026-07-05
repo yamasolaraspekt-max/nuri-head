@@ -69,8 +69,10 @@ Punkt aus derselben Betriebsart. — *`JazService` liest KEIN WP-Modell direkt (
 
 `products.auslegungsstatus` (enum, nullable): `auslegungsfaehig` | `teilweise` | `nur_handelsdaten`.
 **Automatische Neuberechnung bei jedem Spec-Write** (Import-Commit, künftig manuelle Pflege) via Prüfer (§3).
-Additive Migration — **Weiche, erst nach Freigabe**. *(Bei `teilweise` zusätzlich die Fehlliste ausweisen —
-Speicherung als `auslegungs_fehlfelder` JSON, oder on-the-fly im Prüfer; Detail für den Pflicht-Stopp.)*
+Additive Migration **M-C** (freigegeben A3, nur testing → M5). **Fehlliste on-the-fly** im Prüfer berechnet
+(**nicht** persistiert — entschieden A3). Zusätzlich **`spec:recheck`** (Baustufe 3): rechnet alle
+`auslegungsstatus` gegen die **aktuelle** Regelquelle neu — Pflicht, weil Regeländerungen persistierte Stati
+stale machen.
 
 ---
 

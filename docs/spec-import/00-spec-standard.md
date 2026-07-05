@@ -138,7 +138,7 @@ php artisan spec:import <datei.json|.csv> [--typ=waermepumpe] [--commit] [--upda
 1. **Laden** JSON (kanonisch) oder CSV (Zubringer, Header = Feldnamen → intern auf JSON gemappt).
 2. **Validieren** je Zeile gegen `SpecSchema::rules($typ)` (Abschnitt 3).
 3. **DRY-RUN-Report** (Default, ohne `--commit`): Tabelle *angelegt / geskippt (Dedup) / abgelehnt (mit Fehlerliste)* + Summen. **Kein Write.**
-4. **Write** nur mit `--commit`: `products` + Spec-Detailzeile in einer Transaktion. **skip-if-exists** (Dedup `brand_id`+`model`) ist Default — `--update` nur explizit, dann mit **Feld-Diff-Report** (was sich ändert). Nie stummes Update.
+4. **Write** nur mit `--commit`: `products` + Spec-Detailzeile in einer Transaktion. **skip-if-exists** (Dedup `brand_id`+`model`) ist Default. **`--update`** nur explizit, **immer** mit **Feld-Diff-Report**. **Downgrade-Schutz:** ist die Bestandszeile `verifikations_status='datenblatt_verifiziert'`, überschreibt `--update` sie **nicht** still — nur mit zusätzlichem **`--allow-downgrade`**, das den Status auf `importiert_ungeprueft` setzt **und** den Downgrade loggt. Nie stummes Update, nie stiller Qualitätsverlust.
 5. **Marker je Lauf:** `import_batch_id` (UUID) auf jeder geschriebenen Zeile ⇒ zeilengenauer Rückbau `spec:import:rollback <batch-id>`. (Ergänzt `imported_from` um die Lauf-Granularität.)
 
 **Service-Schnitt:** `SpecImportService` (Parsing/Validierung/Dry-Run/Write, wiederverwendbar), `spec:import` = dünner Command-Wrapper. Idempotent (2× = 1×) durch Dedup.
@@ -176,12 +176,31 @@ OMD-Namespace nicht an** (`app/Services/Suppliers/Omd/*` = Tabu). Verbindung zu 
 
 | Weiche | Tabelle | Feld | Zweck | Teil |
 |---|---|---|---|---|
-| **M-A** | `product_*_specs` + `inverters`/`batteries` | `verifikations_status` (enum), `verifikations_datum` (date), `datenblatt_referenz` (string) | Herkunft/Prüfstand am Gerät (statt nur im Import-Log) | 1 |
+| **M-A** | **`products`** (zentral, entschieden A1) | `verifikations_status` (enum), `verifikations_datum` (date), `datenblatt_referenz` (string) | Herkunft/Prüfstand am Gerät (statt nur im Import-Log) | 1 |
 | **M-B** | geschriebene Spec-Zeilen | `import_batch_id` (uuid, nullable) | Lauf-genauer Rückbau | 1 |
 | **M-C** | `products` | `auslegungsstatus` (enum: `auslegungsfaehig`\|`teilweise`\|`nur_handelsdaten`) | Eignungs-Ergebnis am Gerät, bei jedem Spec-Write neu berechnet | 3 |
 
 *(M-A/M-B/M-C laufen in dieser Stufe nur gegen `ticket_testing`; produktiv im M5-Deploy-Paket.)*
 
-> Offene Detailfrage für den Pflicht-Stopp: `verifikations_status` **an jeder Spec-Tabelle** (M-A, 4×) vs.
-> **einmal an `products`** (zentral, weniger redundant). Empfehlung: an `products` (ein Ort, gilt für das
-> Gerät als Ganzes) — außer der Status soll je Detail-Sicht getrennt sein.
+> **Entschieden (A1):** `verifikations_status`/`_datum`/`datenblatt_referenz` **an `products`** (ein Ort, gilt
+> fürs Gerät). Annahme **„1 Produkt = 1 Spec-Satz"** — bei künftiger 1:n-Spec wandert der Status mit
+> (dann M-A überdenken).
+
+---
+
+## 8. Bau-Reihenfolge (freigegeben — je Stufe eigener Pflicht-Stopp + Commit)
+
+Alle Migrationen additiv/nullable, **nur `ticket_testing`**; main-Ausführung als Posten ins **M5-Deploy-Paket**
+(Roadmap §6, Muster `44c77b4`).
+
+1. **`SpecSchema`-Regelquelle (V1–V7) + `spec:import --dry-run`.** Tests: je Regel Verletzung → Ablehnung mit
+   Fehlerliste · Dry-Run-Report korrekt (angelegt/geskippt/abgelehnt) · **kein Write**.
+2. **Migrationen M-A + M-B (testing) + `--commit`-Pfad.** Tests: Write mit Herkunftskette (`imported_from` +
+   `import_batch_id` + `verifikations_status`) · Idempotenz · skip-Dedup · `--update`-Felddiff ·
+   **Downgrade-Schutz** (`--allow-downgrade` → Status `importiert_ungeprueft` + Log) · Batch-Rückbau (ein Lauf
+   raus, andere unberührt).
+3. **`SpecEligibilityService` + M-C + `spec:recheck`.** Tests: Mindestprofile je Typ (Code-belegte Felder) ·
+   Status-Neuberechnung bei Spec-Write · `recheck` nach Regeländerung (persistierte Stati werden sonst stale) ·
+   Fehlliste **on-the-fly** korrekt.
+4. **`spec:export` + Roundtrip-Test** (export → import → identischer Stand) + **Kurzdoku für den Yama-Workflow**
+   (Datenblatt → Template → JSON → `spec:import --dry-run` → `--commit`).
