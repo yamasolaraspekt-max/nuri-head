@@ -500,7 +500,6 @@
                 ['label' => 'Favoriten', 'icon' => 'star', 'url' => $safeRoute('product.favorites.index'), 'count_key' => 'product_favorites'],
                 ['label' => 'Stamm-Listen', 'icon' => 'award', 'url' => $safeRoute('stamp.lists.index'), 'count_key' => 'stamp_favorites'],
                 ['label' => 'Preisvergleich', 'icon' => 'layers', 'url' => $safeRoute('admin.products.difference')],
-                ['label' => 'Heizkörper-Konfigurator', 'icon' => 'thermometer', 'url' => $safeRoute('radiator.config.view')],
                 ['label' => 'Master-Sets', 'icon' => 'shopping-cart', 'url' => $safeRoute('admin.master_sets.index'), 'count_key' => 'master_sets'],
                 ['label' => 'Lieferanten-Schnittstellen', 'icon' => 'plug-zap', 'url' => $safeRoute('admin.supplier-connectors.index'), 'active_routes' => ['/admin/supplier-connectors']],
                 ['label' => 'GC Online / IDS', 'icon' => 'arrow-up-circle', 'url' => $safeRoute('ids.search.form')],
@@ -529,12 +528,13 @@
             ],
         ],
         [
-            'title' => 'Planung',
+            'title' => 'Energie',
             'items' => [
-                ['label' => 'PV-Planer (PVGIS)', 'icon' => 'sun', 'url' => $safeRoute('admin.pvgis.index')],
+                ['label' => 'PVGIS', 'icon' => 'sun', 'url' => $safeRoute('admin.pvgis.index'), 'active_routes' => ['/admin/pvgis']],
+                ['label' => 'Heizkörper-Check', 'icon' => 'thermometer', 'url' => $safeRoute('radiator.config.view'), 'active_routes' => ['/radiator_config_view']],
+                ['label' => 'Wirtschaftlichkeit', 'icon' => 'calculator', 'url' => $safeRoute('economic_calculations.index', 'admin/economic-calculations'), 'active_routes' => ['/admin/economic-calculations', '/profitability']],
                 // Finance-Gate 1:1 erhalten (Item-Level)
                 ['label' => 'Förderungen', 'icon' => 'file-text', 'permission' => 'Finance', 'url' => $safeRoute('foerderungen.index'), 'count_key' => 'fundings'],
-                ['label' => 'Werkzeuge-Übersicht', 'icon' => 'wrench', 'url' => $safeRoute('tools.view')],
             ],
         ],
         [

@@ -8,6 +8,7 @@ use App\Models\SolarSystem;
 use App\Models\HeatPump;
 use App\Models\NewLead;
 use App\Models\ArticleGroup;
+use Illuminate\Support\Facades\Auth;
 
 class EconomicCalculationController extends Controller
 {
