@@ -1483,6 +1483,8 @@ class DealMeasurementController extends Controller
 
     public function storeNote(Request $request, DealMeasurement $measurement)
     {
+        Gate::authorize('write', $measurement); // S-1b-1 Ownership
+
         $validator = Validator::make($request->all(), [
             'note' => ['required', 'string', 'max:5000'],
         ], [

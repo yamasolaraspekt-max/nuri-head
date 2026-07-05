@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\DealMeasurement;
 use App\Models\Image;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -70,6 +71,8 @@ class DealMeasurementImageController extends Controller
      */
     public function upload(Request $request, DealMeasurement $measurement)
     {
+        Gate::authorize('write', $measurement); // S-1b-1 Ownership
+
         $request->validate([
             'image' => ['required', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
             'image_name' => ['nullable', 'string', 'max:255'],

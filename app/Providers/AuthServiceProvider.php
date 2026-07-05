@@ -36,5 +36,19 @@ class AuthServiceProvider extends ServiceProvider
             // allow only users with role = Admin, or any logic
             return $user->role === 'Admin';
         });
+
+        // S-1b-1 (W-0): Deal-Anker für Offer-Ebene-Writes ohne Aufmaß. deals hat kein created_by ->
+        // Owner = deals.employee_id (FK, non-null) + Super-Admin; Portal-Hart-Deny ohne Employee-Kontext.
+        Gate::define('write-deal-measurement-offer', function (\App\Models\User $user, \App\Models\Deal $deal) {
+            if ($user->isSuperAdmin()) {
+                return true;
+            }
+            $emp = $user->employeeId();
+            if ($emp === null) {
+                return false;
+            }
+
+            return (string) $emp === (string) $deal->employee_id;
+        });
     }
 }

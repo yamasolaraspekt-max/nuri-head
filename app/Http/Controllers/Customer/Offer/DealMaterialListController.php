@@ -11,8 +11,11 @@ use App\Models\Distributor;
 use App\Models\Employee;
 use App\Models\Inventory;
 use App\Models\MasterSetComponent;
+use App\Models\Deal;
 use App\Models\OfferDetail;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -179,13 +182,32 @@ class DealMaterialListController extends Controller
             ->first();
     }
 
-    /** S-1a Ownership: schreibende Material-Aktionen gegen das zugehörige Aufmaß absichern. */
+    /**
+     * S-1a/S-1b-1 Ownership: schreibende Material-Aktionen absichern.
+     * Aufmaß vorhanden → Measurement-Policy. Kein Aufmaß → Deal-Anker (W-0) via deals.offer_id,
+     * damit die Offer-Ebene (offer_details) IMMER gegated ist. Kein Deal auffindbar → deny + Log/Zähler.
+     */
     protected function authorizeMeasurementWrite(OfferDetail $offerDetail): void
     {
         $measurement = $this->latestMeasurement($offerDetail);
         if ($measurement) {
             Gate::authorize('write', $measurement);
+
+            return;
         }
+
+        $deal = Deal::where('offer_id', $offerDetail->offer_id)->first();
+        if (! $deal) {
+            Log::warning('offer_orphan_write', [
+                'offer_detail_id' => $offerDetail->id,
+                'offer_id' => $offerDetail->offer_id,
+                'pfad' => optional(request()->route())->getName() ?? request()->path(),
+            ]);
+            Cache::put('offer_orphan_write_count', (int) Cache::get('offer_orphan_write_count', 0) + 1);
+            abort(403);
+        }
+
+        Gate::authorize('write-deal-measurement-offer', $deal);
     }
 
     protected function buildFeinaufmassMaterials(?DealMeasurement $measurement): Collection
