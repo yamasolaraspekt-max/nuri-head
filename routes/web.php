@@ -2472,7 +2472,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/radiator_config_delete/{id}', [RadiatorInstallationController::class, 'destroy'])->name('radiator.config.delete');
 });
 
-// IDS CRUD 
+// Heizkörper-Modul (M4-a v-a): Rechen-/Kompatibilitäts-Endpunkte hinter Feature-Flag.
+// Flag-Middleware VOR 'auth' -> bei OFF 404 (kein Query auf HK-Tabellen). KEIN Sidebar-Eintrag (M4-b geparkt).
+Route::middleware([\App\Http\Middleware\EnsureHeizkoerperEnabled::class, 'auth'])->group(function () {
+    Route::post('/heizkoerper/berechnen', [\App\Http\Controllers\Heizkoerper\HeizkoerperController::class, 'berechnen'])->name('heizkoerper.berechnen');
+    Route::post('/heizkoerper/kompatibilitaet', [\App\Http\Controllers\Heizkoerper\HeizkoerperController::class, 'kompatibilitaet'])->name('heizkoerper.kompatibilitaet');
+});
+
+// IDS CRUD
 // Product TIles CRUD
 Route::group(['middleware' => 'web'], function () {
     Route::get('/tiles_view', [TilesController::class, 'index'])->name('tiles.view');

@@ -72,7 +72,7 @@ W8 **Alpine** ins Ticket, Muster aus wberechnung; CLAUDE.md-Eintrag „Alpine nu
 | **(iv) Kompatibilitäts-Service** | `App\Services\Heizkoerper\CompatibilityService` (Regeln D3, §5); Port `RadiatorPerformanceService` + `HydraulicService` (DB-frei, aus wberechnung) | Unit je Regel (§5): Ventil-HK/Kompakt-HK/Einrohr-Sperre/voreinstellbar/Voreinstellstufe/Altnorm |
 | **(v) UI** | Alpine einführen (**CLAUDE.md-Eintrag zuerst**); Routen `heizkoerper.*` (Bereich 8 „Energie & Auslegung", ticket-Web-Guard); Views: Aufnahme-Formular (auf `radiator_installations`), SVG-Schema (Front+Seitenprofil), Stücklisten-Ansicht je Raum; CSV-Export über B14 erweitern | Feature: Aufnahme-CRUD; Rechen-Endpunkt liefert EN-442-Tabelle+Ampel; Export erzeugt Positionen |
 
-**Routen (Vorschlag, Bereich 8):** `heizkoerper.aufnahme.{index,store,update,destroy}` · `heizkoerper.berechnen` (POST, Rechen-Endpunkt) · `heizkoerper.schema` (SVG) · `heizkoerper.stueckliste.{show,export}`. Auto-Typerkennung aus `bautiefe_mm` mit Unsicherheits-Auswahl (`typ_konfidenz`).
+**Routen (Vorschlag, Bereich 8):** ~~`heizkoerper.aufnahme.{index,store,update,destroy}`~~ **entfällt zugunsten Reuse** (M4-a W-Reuse-Entscheid: die Aufnahme läuft weiter über die bestehende `radiator.config.*`-CRUD, `RadiatorInstallationController`; **nicht** doppelt gebaut, **nicht** angefasst) · `heizkoerper.berechnen` (POST) **✅ v-a** · `heizkoerper.kompatibilitaet` (POST) **✅ v-a** · `heizkoerper.schema` (SVG, v-d offen) · `heizkoerper.stueckliste.{show,export}` (v-c). Alle hinter Feature-Flag (`config('features.heizkoerper')`, `EnsureHeizkoerperEnabled`, Default OFF). Auto-Typerkennung aus `bautiefe_mm` mit Unsicherheits-Auswahl (`typ_konfidenz`).
 
 ---
 
@@ -158,7 +158,7 @@ Andock: `RadiatorRecommendationService::fuerRaum(...)` liest `leistungstabelle()
 | (ii-c) Ventiltechnik | ✅ **grün** | `22e335d` | Quellen-Report (11 SKUs belegt) + M9 imported_from; 5 Kat/11 Acc idempotent, Marker-Rückbau→0→11; compat=0 (Yama-Lücke) |
 | (iii) IDS-Mapper | offen | — | — |
 | (iv) Kompatibilität | ✅ **grün** | `6bf75b0` (iv-a) · `947bed6` (iv-b) | iv-a: byte-genauer Port `RadiatorPerformanceService`+`HydraulicService` (wb@d81faa8) + `RadiatorCatalogAdapter`, 7 Paritäts-Tests. iv-b: `CompatibilityService` (D3 §5.1-5.6, Datenlage-Stufen serien-präzise/regel-kandidaten), 10 Unit-Tests inkl. Naht (Voreinstellstufe==HydraulicService). Gesamtsuite 92/0. |
-| (v) UI | offen | — | — |
+| (v) UI | 🟡 **v-a grün** (Endpunkte); v-b/c/d offen | `heizkoerper.berechnen`/`kompatibilitaet` hinter Feature-Flag | v-a: Rechen-/Kompatibilitäts-Endpunkte (EN-442-Durchstich 663 über HTTP, Datenlage-Stufen, Flag-off→404 ohne HK-Query, 422), 4 Feature-Tests. Aufnahme = Reuse `radiator.config.*`. **M4-b (Sidebar/Nav) geparkt** bis Parallelstrang-Commit. **M5 fährt die HK-Migrationen produktiv UND schaltet das M4-Flag (`HEIZKOERPER_MODULE_ENABLED`) frei** — bis dahin Modul prod-OFF. |
 
 ## 9. Offene Fragen an Yama (nummeriert)
 1. **Katalog-Datenquelle B1:** Die EN-442-Kennwerte (`q_norm_w_pro_m`, `exponent_n`) für `product_radiator_specs` — aus wberechnungs `HeizkoerperSeeder` (Kermi-kalibriert) **übernehmen** (im Feinkonzept begründete Code-/Datenübernahme, W3-konform) oder in Stufe ii neu recherchieren? *(Empfehlung: übernehmen — bereits kalibriert.)*

@@ -4,10 +4,12 @@
 
 ## Heizkörper-Modul (Bereich „Energie & Auslegung")
 
-- **Alpine.js ist erlaubt AUSSCHLIESSLICH im Heizkörper-Modul** — Views unter
+- **Alpine.js ist erlaubt AUSSCHLIESSLICH in den neuen `heizkoerper.*`-Views** — unter
   `resources/views/admin/heizkoerper/**`. **Nirgends sonst** im CRM. Der übrige Bestand
   nutzt jQuery + Bootstrap/Vuexy; Alpine ist ausschließlich für die Heizkörper-Konfigurator-/
-  Ergebnis-Flächen (M4) zugelassen.
+  Ergebnis-Flächen (M4) zugelassen. **Die bestehende Aufnahme-CRUD `radiator.config.*`
+  (`RadiatorInstallationController`) bleibt unangetastet** (jQuery, kein Alpine-Umbau) — M4-a
+  nutzt sie per Reuse für die Heizkörper-Aufnahme.
 
 - **DO NOT DOCK `radiators`:** Das Alt-Model `app/Models/Radiator.php` (Tabelle `radiators`,
   Route `product.inveter.store`) ist eine **Wechselrichter-Altlast** — **NICHT** für Heizkörper
