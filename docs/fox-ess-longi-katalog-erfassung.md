@@ -73,3 +73,20 @@ werden aus offiziellen Datenblättern konsolidiert (Agent).
 - **Fix im Bau:** `products` hat kein `description`, nur `short_description` (longtext) → `product()`-Helper mappt. Fehlversuch-Reste (2 leere Marken/Gruppen) via Teardown sauber entfernt — produktive DB blieb konsistent.
 - **Bewusste Lücken (null, nicht erfunden):** Batterie-Ladeleistung kW/W, Ah-Kapazität, `num_cells`, EPS-Umschaltzeit, `efficiency_*` (nur max. Wirkungsgrad → description). H3 PRO: Nennleistung als VA übernommen (Datenblatt deklariert VA, nicht W) — in description vermerkt.
 - **Artefakte:** `database/seeders/FoxEssLongiCatalogSeeder.php` + `…TeardownSeeder.php` (Pint grün). DB-Daten sind kein Git-Artefakt; Reproduktion via `php artisan db:seed --class=FoxEssLongiCatalogSeeder`.
+
+## 7. Fix 2 — Marker-Konvention nachgezogen (2026-07-05)
+
+**Historischer Bruch erklärt:** Seeder **vor** der `imported_from`-Migration (150006, 2026-07-05) trugen den
+Herkunfts-Marker als `version='fox-longi-seed'` auf `inverters`/`batteries`. Die Haus-Konvention ist
+`products.imported_from` (wie WberechnungImport/ReferenzKatalog). Fox-ESS am **2026-07-05 nachgezogen**:
+
+- **Marker-Nachtrag (idempotent):** `product()` setzt jetzt `imported_from='fox-longi-seed'`; Re-Seed markierte
+  die 26 bestehenden products. `inverters`/`batteries` behalten `version='fox-longi-seed'` (Spalte ohne
+  `imported_from`, Fallback); `product_pv_module_specs` trägt keinen Marker → im Teardown über `product_id`.
+- **Teardown umgestellt (KRITISCH):** löscht ausschließlich per `imported_from='fox-longi-seed'`, **NIE über
+  `brand_id`**. Marke/Gruppe bleiben, solange fremde products dranhängen (Meldung im Output). Grund: der alte
+  brand_id-Rückbau hätte die 3 wberechnung-LONGi (`LR7-72HGD-*`) + die geteilte LONGi-Marke gerissen — der
+  Beweis von 2026-07-04 war durch die spätere wberechnung-Datenlage entwertet.
+- **Rückbau-Beweis NEU (ticket, 2026-07-05):** Nachtrag→`fox26/wb3` · Teardown→**`fox0/wb3`** (fremde unberührt,
+  LONGi-Marke bleibt, Fox-Marke weg, inv/bat kaskadiert) · Re-Seed→`fox26/wb3` identisch. Stichproben
+  H3-10.0-Smart + EK12 wörtlich ok. Regressions-Test `tests/Feature/Catalog/FoxEssLongiTeardownTest.php` (2 grün).

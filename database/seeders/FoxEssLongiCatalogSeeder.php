@@ -10,8 +10,11 @@ use Illuminate\Support\Facades\DB;
  *
  * Muster: 1 products-Zeile + 1 Detailzeile (inverters/batteries) bzw. product_pv_module_specs;
  * EPS-Box = reines Zubehör-Produkt ohne Detailzeile. Idempotent (upsert auf Marke+Modell bzw.
- * product_id). Herkunfts-Marker: Marken 'Fox ESS'/'LONGi' existierten vorher nicht + version-Feld
- * ('fox-longi-seed') auf inverters/batteries -> eindeutig rückbaubar via FoxEssLongiCatalogTeardownSeeder.
+ * product_id). Herkunfts-Marker (Haus-Konvention seit 150006): products.imported_from='fox-longi-seed'
+ * — der maßgebliche Marker, über den der Teardown ausschließlich löscht. Zusätzlich version='fox-longi-seed'
+ * auf inverters/batteries (Detail-Tabellen ohne imported_from-Spalte; Fallback/Auffindbarkeit). pv_specs
+ * trägt keinen Marker -> im Teardown über product_id der markierten products entfernt. NIE über brand_id/
+ * Gruppen zurückbauen (Marken/Gruppen sind mehrbesitzt — z. B. LONGi trägt auch wberechnung-Module).
  *
  * NUR datenblatt-wörtliche Werte. Bewusste Lücken (bleiben null): battery_max_charge_power (nur Ströme
  * im DB), Ah-Kapazität + num_cells (Batterien), efficiency_* (DB gibt nur max. Wirkungsgrad -> description),
@@ -20,7 +23,7 @@ use Illuminate\Support\Facades\DB;
  */
 class FoxEssLongiCatalogSeeder extends Seeder
 {
-    private const MARKER = 'fox-longi-seed';
+    public const MARKER = 'fox-longi-seed';
 
     public function run(): void
     {
@@ -206,6 +209,7 @@ class FoxEssLongiCatalogSeeder extends Seeder
             $data['short_description'] = $data['description'];
             unset($data['description']);
         }
+        $data['imported_from'] = self::MARKER; // Haus-Konvention (seit 150006); Teardown identifiziert hierüber
         $id = DB::table('products')->where('brand_id', $data['brand_id'])->where('model', $data['model'])->value('id');
         $data['updated_at'] = $now;
         if ($id) {
