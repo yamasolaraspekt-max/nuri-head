@@ -39,7 +39,10 @@
 | Seeder | Wirkung | lokal | Rollback |
 |---|---|---|---|
 | `WberechnungImportSeeder` | `products.imported_from='wberechnung'=24` (19 WP + 5 PV), skip-Dedup | gelaufen | `DELETE … WHERE imported_from='wberechnung'` |
-| *(offen)* `RadiatorSpecSeeder` (HK-Katalog, Kermi-Specs) | füllt `product_radiator_specs` | **noch nicht** (Katalog-Strang) | Marker-Delete |
+| `RadiatorSpecSeeder` (HK-Katalog) | `product_radiator_specs=30` | **gelaufen lokal 2026-07-05** | `TRUNCATE`/Marker-Delete |
+| `AccessorySeeder` (HK-Zubehör) | `accessories=11` + `accessory_categories=5` | **gelaufen lokal 2026-07-05** | Marker-Delete |
+
+> Code der HK-Seeder gehört dem Katalog-/HK-Strang (Tabu); die **Läufe** hier = lokale Umgebungs-Arbeit (Tag-X-Posten: müssen produktiv wiederholt werden).
 
 ## C) Console-Commands (Daten)
 | Command | Zweck | Pflicht | Rollback |
