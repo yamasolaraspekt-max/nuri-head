@@ -25,6 +25,7 @@
 > - **Batch 14** — `150001–150004` (Katalog-i, Spec-Schema WR/Bat/PV/WP) · `217473f` · **2026-07-04** · Katalog-Cut-over-Instanz.
 > - **Batch 15** — `150005–150006` (kurve_semantik + `imported_from`) · **2026-07-05** · Katalog-Cut-over-Instanz.
 > - **Batch 16** — `170001–170006` (B2a Referenz-Kataloge + Anforderungsprofil) · **2026-07-05** · diese Instanz (Tabellen leer: Schema; Seeder separat).
+> - **Batch 17** — `170007` (Geometrie-Spalte `gebaeude_geometrie`, B2a-3 Heizlast-Adapter) · **2026-07-05** · diese Instanz.
 > - **Spec `150007–150009`** bleiben bewusst **Pending** (Strang B, M5.1 nach Abnahme — NICHT selektiv mitmigriert).
 > - **Governance-Klärung** (Fox-ESS-Frage „wer/wann 150xxx auf main?"): beantwortet = Batch 14/15. Eine *explizite* Yama-Freigabe
 >   für den Dev-Lauf ist im Trail nicht gesondert vermerkt → durch diese Regel-Ersetzung **rückwirkend legitimiert** (Dev, additiv, Prod unberührt).
@@ -57,8 +58,9 @@
 | `2026_07_05_170004` create klima_plz | **B2a/C** | Ran (lokal) | `down()` (drop) |
 | `2026_07_05_170005` create anforderungsprofile | **B2a/C** | testing ✓ · ticket **Ran [16]** | `down()` (drop) |
 | `2026_07_05_170006` create anforderungsprofil_werte | **B2a/C** | testing ✓ · ticket **Ran [16]** | `down()` (drop) |
+| `2026_07_05_170007` ALTER anforderungsprofile (gebaeude_geometrie, B2a-3) | **B2a/C** | testing ✓ · ticket **Ran [17]** | `down()` (drop column) |
 
-**22 committet** (HK 9 · Katalog 6 · S-3 1 · B2a-Referenz 4 · B2a-Anforderungsprofil 2) · **3 Spec Pending** (M5.1 nach Abnahme). Abhängigkeit: 170xxx (B2a) unabhängig von 150xxx/160xxx; `konstruktionen`→`materials` und `anforderungsprofil_werte`→`anforderungsprofile` (FK). **Hinweis:** alle 170xxx sind auf `ticket` (real) **Ran (Batch 16, 2026-07-05)** — siehe Migrations-Record im Kopf; „Ran (lokal)" bei 170001–04 = Dev-DB `ticket`.
+**23 committet** (HK 9 · Katalog 6 · S-3 1 · B2a-Referenz 4 · B2a-Anforderungsprofil 3) · **3 Spec Pending** (M5.1 nach Abnahme). Abhängigkeit: 170xxx (B2a) unabhängig von 150xxx/160xxx; `konstruktionen`→`materials` und `anforderungsprofil_werte`→`anforderungsprofile` (FK). **Hinweis:** alle 170xxx sind auf `ticket` (real) **Ran (Batch 16, 2026-07-05)** — siehe Migrations-Record im Kopf; „Ran (lokal)" bei 170001–04 = Dev-DB `ticket`.
 
 ## B) Seeder-Läufe
 | Seeder | Wirkung | lokal | Rollback |
@@ -92,3 +94,4 @@
 ## F) Nachläufe NACH Tag X (kein Teil des Deploys)
 - **14-Tage-Deny-Beobachtung** (5 Zähler `*_denied_count`/`*_orphan_write_count`) startet **nach** dem Produktions-Release (lokal mit 1 Nutzer sinnlos). Kriterium 0 → je Flag ein **Härtungs-Commit** (`*_HARD_DENY=true`) — selbst wieder Manifest-Posten.
 - **SEC-DM-2** (`@index`-Write-on-read), Image-Präzisions-Weiche, W-Website, W-new-leads-Sicht.
+- **`deal_invoices` DROP — AUSSTEHEND (Accounting/Tag-X-Posten):** die Rechnungs-Alt-Schiene ist code-seitig stillgelegt (Controller/Model/Routen/Views entfernt, Rückbau-Commit; `invoices` = führend). **Tabelle `deal_invoices` + Migration `2025_06_23_053704` bleiben bewusst stehen** — der DROP ist ein **separater, explizit zu beauftragender** Posten (0 Zeilen, kein Datenverlust), erst nach Yama-Freigabe. **NICHT** Beifang.

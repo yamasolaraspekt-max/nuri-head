@@ -71,6 +71,7 @@ class AnforderungsprofilService
                 'status' => Anforderungsprofil::STATUS_ENTWURF,
                 'bezeichnung' => $basis->bezeichnung,
                 'created_by' => $erfasserId ?? $basis->created_by,
+                'gebaeude_geometrie' => $basis->gebaeude_geometrie, // B2a-3: Geometrie ist Teil der Version (Reproduzierbarkeit)
             ]);
             $neu->save();
 

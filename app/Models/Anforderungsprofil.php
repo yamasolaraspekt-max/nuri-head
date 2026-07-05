@@ -25,15 +25,18 @@ class Anforderungsprofil extends Model
 
     protected $fillable = [
         'verankerbar_type', 'verankerbar_id', 'version', 'status',
-        'abgeloest_durch_id', 'bezeichnung', 'created_by',
+        'abgeloest_durch_id', 'bezeichnung', 'created_by', 'gebaeude_geometrie',
     ];
 
     protected $casts = [
         'version' => 'integer',
+        'gebaeude_geometrie' => 'array', // B2a-3: Rechen-Input des HeizlastRechners (raeume[]+bauteile[])
     ];
 
     public const STATUS_ENTWURF = 'entwurf';
+
     public const STATUS_AKTIV = 'aktiv';
+
     public const STATUS_ABGELOEST = 'abgeloest';
 
     /**

@@ -34,6 +34,7 @@ Dokumentenstände zählen nicht als Beweis. Grundlagen: Datei-Manifest (301, unt
 | **wb-Katalog-Import** (19 WP `en14511_nenn` + AIKO 2 + LONGi LR7 3) — *B→A, Stufe 2* | wb `waermepumpen`/`artikel` (`b4a9eda`) | `products` + `product_heat_pump_specs` + `product_pv_module_specs` (**testing**) | `WberechnungImportSeeder` — **8 Tests grün** (Zeilen-Soll 19/5, Buderus-A-7-COP 2,36, NIBE-Varianten, Dedup-Skip, Idempotenz, Rückbau); Marker `imported_from='wberechnung'`; **main = M5-Deploy-Paket** |
 | **B2a-1 Referenz-Kataloge** Heizlast + Klima — *B→A* | wb `b4a9eda` | `materials` (23) · `konstruktionen` (5) · `baualtersklassen` (25) · `klima_plz` (8168), **lokal** | `ReferenzKatalogSeeder` — **6 Tests grün**; `verifikations_status` je Zeile (din_belegt/tabula_richtwert, W-B2a-4); material_id-Remap wb→ticket; Migr. `170001–170004` |
 | **B2a-2 Anforderungsprofil-Framework** (Bedarfs-Rahmen) — *neu-A (kein wb-Port)* | — (Zielbild Phase 1, bewusst KEIN Nachbau von wb-`heizlast_projekte`) | `anforderungsprofile` + `anforderungsprofil_werte` (`170005/06`, testing) | versioniert append-only · polymorph verankert (Whitelist Objekt `LeadAlternativeAdd`/Gewerk `LeadProductList`) · Datenlage je Wert + Schlüssel-Registry-Vertrag · **9 Tests grün** |
+| **B2a-3 Heizlast-Kern** (Rechner+RaumHülle+Normwerte) + Adapter — *B→A* | wb `b4a9eda` **byte-genau (Diff=0)** | `app/Services/Heizlast/*` + `AnforderungsprofilHeizlastAdapter` + `170007` (Geometrie-Spalte), lokal | **8 Tests + Byte-Beweis** (H_T=17,26 · Φ_HL 892/948 W · auslegung 0,95 kW · spez 37,9); deckt **5/28 Anker** (HeizlastRechnerTest); UWert/Auslegung/WW = separate Adapter |
 
 > **Diskrepanz-Befund (Doku ↔ Realität):** `product_heat_pump_specs` existiert auf main, ist aber **0 Zeilen**
 > (WP-Import = Teil B). `product_radiator_specs`/`radiator_connection_factors` **fehlen auf main** (nur testing) →
@@ -49,7 +50,7 @@ WpKennlinie, Bivalenz, Pvgis, Sanierungs, Fussboden, Energiekonzept, PvProjekt, 
 
 | Was (wb-Modul) | Roadmap-Slot | Gate/Blocker | wb bleibt Referenz für |
 |---|---|---|---|
-| **Heizlast-Kern** DIN EN 12831 (A) | **B2a** (zuerst) | Referenz-Kataloge nötig (u.) | `HeizlastRechner`, `HeizlastNormwerte`, `RaumHuelleService`, `UWertService` |
+| **Heizlast-Kern** DIN EN 12831 — *Rechner B→A (B2a-3)* | **✓ Rechner portiert** | UWert/Auslegung/WW = eigene Adapter (offen) | `HeizlastRechner`+`RaumHuelleService`+`HeizlastNormwerte` **portiert Diff=0**; `UWertService`/`AuslegungService`/`WarmwasserService` warten (23/28 Anker) |
 | **Klimadaten** (P) | **B2b** (parallel A) | — | `KlimaPlzService`, `KlimaBinService`, `OpenMeteoKlimaService`, `HoehenkorrekturService` |
 | **WP-Auslegung** Kennlinie/Bivalenz/JAZ (F+G) | **B2a** | nach B1 (Katalog) | `WpKennlinieService` (jetzt datenblatt-sauber, `b4a9eda`), `BivalenzService`, `JazService` |
 | **PV-/WR-Sizing** (I) | **B2a** | nach B1 | `PvProjektService`, `InverterSizingService`, `StringBuilderService`, `Contracts/*` |
@@ -114,8 +115,10 @@ A = übernommen · B = entschieden-offen · C = verzichtet · **Infra** = Framew
 
 ## Teil E — AMPEL-FAZIT
 
-🟡 **13 von 215 fachlich wertvollen Positionen übernommen** (Heizkörper-Modul `6bf75b0`/`947bed6`/`09eea5e`/`89e175f`
-**+ wb-Katalog-Import** 19 WP + AIKO/LONGi **+ B2a-1 Referenz-Kataloge** `materials`/`konstruktionen`/`baualtersklassen`/`klima_plz`, lokal) · **202 entschieden-offen** (B1→B5/M5) ·
+🟡 **14 von 215 fachlich wertvollen Positionen übernommen** (Heizkörper-Modul `6bf75b0`/`947bed6`/`09eea5e`/`89e175f`
+**+ wb-Katalog-Import** 19 WP + AIKO/LONGi **+ B2a-1 Referenz-Kataloge** `materials`/`konstruktionen`/`baualtersklassen`/`klima_plz` **+ B2a-3 Heizlast-Kern** (Rechner byte-genau), lokal) · **201 entschieden-offen** (B1→B5/M5) ·
+
+**Basis-Klärung (202→215):** „202" war die Zahl der *offenen* B-Posten, nicht die Basis — die Gesamt-Basis ist **215** (A+B-Klasse des Gewissheits-Audits: 301/301 klassifiziert − 86 C/Infra). Die **14 übernommenen A-Posten** (215 − 201) sind je in Teil A per Commit-Hash + Manifest-Zeile identifiziert (Heizkörper-Modul `6bf75b0`/`947bed6`/`09eea5e`/`89e175f` · wb-Katalog-Import `481b9cb` · Spec-Schema `217473f` · B2a-1 Referenz-Kataloge `9b48521` · B2a-3 Heizlast-Kern); B2a-2 zählt als *neu-A* (Framework, kein wb-Port) nicht in die Übernahme-Quote.
 **Teil D leer** (301/301 klassifiziert) → **es ist nichts unbemerkt liegengeblieben, aber wb ist noch NICHT
 abschaltbar.** Für Heizkörper + Geräte-Katalog gilt ticket; für alles andere (Heizlast, WP-/PV-Auslegung, PVGIS,
 Wirtschaftlichkeit, Klima, Energiekonzept, Grundriss) bleibt **wb die Wahrheit**, bis der jeweilige B-Slot portiert ist.

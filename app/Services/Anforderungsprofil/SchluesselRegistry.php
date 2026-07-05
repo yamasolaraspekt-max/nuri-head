@@ -19,22 +19,27 @@ final class SchluesselRegistry
     /** @var array<string, array{einheit: ?string, cast: string, wert_num_pflicht: bool}> */
     private const SCHLUESSEL = [
         // --- Ergebnis-Bedarf (i. d. R. berechnet) ---
-        'phi_hl_kw'         => ['einheit' => 'kW',    'cast' => 'float',  'wert_num_pflicht' => true],
-        'phi_ww_kw'         => ['einheit' => 'kW',    'cast' => 'float',  'wert_num_pflicht' => true],
-        'vorlauf_c'         => ['einheit' => '°C',    'cast' => 'float',  'wert_num_pflicht' => true],
-        'ruecklauf_c'       => ['einheit' => '°C',    'cast' => 'float',  'wert_num_pflicht' => false],
-        'spreizung_k'       => ['einheit' => 'K',     'cast' => 'float',  'wert_num_pflicht' => false],
+        'phi_hl_kw' => ['einheit' => 'kW',    'cast' => 'float',  'wert_num_pflicht' => true],
+        'phi_ww_kw' => ['einheit' => 'kW',    'cast' => 'float',  'wert_num_pflicht' => true],
+        'standardheizlast_kw' => ['einheit' => 'kW',   'cast' => 'float', 'wert_num_pflicht' => true],   // B2a-3 (Heizlast-Adapter)
+        'spezifische_heizlast_w_m2' => ['einheit' => 'W/m²', 'cast' => 'float', 'wert_num_pflicht' => true],   // B2a-3
+        'vorlauf_c' => ['einheit' => '°C',    'cast' => 'float',  'wert_num_pflicht' => true],
+        'ruecklauf_c' => ['einheit' => '°C',    'cast' => 'float',  'wert_num_pflicht' => false],
+        'spreizung_k' => ['einheit' => 'K',     'cast' => 'float',  'wert_num_pflicht' => false],
         // --- Rahmenbedingungen / Standort ---
-        'standort_plz'      => ['einheit' => null,    'cast' => 'string', 'wert_num_pflicht' => false],
+        'standort_plz' => ['einheit' => null,    'cast' => 'string', 'wert_num_pflicht' => false],
         'norm_aussentemp_c' => ['einheit' => '°C',    'cast' => 'float',  'wert_num_pflicht' => true],
-        'gelaendehoehe_m'   => ['einheit' => 'm',     'cast' => 'float',  'wert_num_pflicht' => false],
+        'gelaendehoehe_m' => ['einheit' => 'm',     'cast' => 'float',  'wert_num_pflicht' => false],
         // --- Gebäude-Kontext ---
-        'baujahr'           => ['einheit' => null,    'cast' => 'int',    'wert_num_pflicht' => false],
-        'sanierungsstufe'   => ['einheit' => null,    'cast' => 'string', 'wert_num_pflicht' => false],
+        'baujahr' => ['einheit' => null,    'cast' => 'int',    'wert_num_pflicht' => false],
+        'sanierungsstufe' => ['einheit' => null,    'cast' => 'string', 'wert_num_pflicht' => false],
         'komfortzuschlag_k' => ['einheit' => 'K',     'cast' => 'float',  'wert_num_pflicht' => false],
-        'intermittierend'   => ['einheit' => null,    'cast' => 'bool',   'wert_num_pflicht' => false],
+        'intermittierend' => ['einheit' => null,    'cast' => 'bool',   'wert_num_pflicht' => false],
         // --- Betrieb ---
-        'sperrzeit_h'       => ['einheit' => 'h',     'cast' => 'float',  'wert_num_pflicht' => false],
+        'sperrzeit_h' => ['einheit' => 'h',     'cast' => 'float',  'wert_num_pflicht' => false],
+        // --- Rechenparameter / Ergebnis-Meta (B2a-3) ---
+        'waermebruecken' => ['einheit' => null,    'cast' => 'string', 'wert_num_pflicht' => false],   // Rechenparameter, zurückgeschrieben
+        'ergebnis_hinweis' => ['einheit' => null,    'cast' => 'string', 'wert_num_pflicht' => false],   // Datenlage-Vermerk (W-B2a-4)
     ];
 
     /** Erlaubte Datenlage-Stufen (die Kern-Ehrlichkeit je Wert). */
