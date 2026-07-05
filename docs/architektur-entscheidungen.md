@@ -4,6 +4,13 @@
 
 **Wie dieses Dokument zu nutzen ist:** Geh die fünf Fragen in Ruhe durch. Zu jeder gibt es den Hintergrund (warum es die Frage überhaupt gibt), die Optionen, eine Empfehlung und den Hinweis, ob du das allein entscheiden kannst oder ob der Steuerberater mitreden muss. Notiere zu jeder eine Antwort — die wird dann zur Vorgabe für die spätere Umsetzung.
 
+> ## ⚠️ REVISION 2026-07-05 — Weiche 3 + A1 ÜBERHOLT (Yama-Entscheidung, verbindlich)
+> **In-house-Buchhaltung: ticket bucht selbst** (doppelte Buchführung, Belege, Bank, DATEV-Export) — **KEINE Kanzlei-Pflicht.** Damit sind **überholt:**
+> - die durchgehende Einordnung „der Steuerberater hat die buchhalterische Hoheit / muss mitreden" (unten bei **Frage 3** und **Frage 4** sowie im Abschluss),
+> - **A1 „Kanzlei führt FiBu; keine Buchhaltung in ticket"** (frühere DATEV-Zielbild-Option 1) — **umgekehrt**.
+>
+> **Neu:** Eine **Accounting-Instanz** besitzt die FiBu-/Invoice-Zone und baut eine vollwertige **In-house-Buchhaltung** (Quelle: playground-FiBu-Modul, A-Transplantat nach Cut-over-Muster). Der Steuerberater bleibt **optionaler Prüf-/Freigabe-Partner**; **Sorgfaltspflicht bleibt Engineering-Gate** (DATEV-EXTF-Testpaket + GoBD-Grundsätze müssen **grün** sein vor dem ersten echten Export — s. Accounting-Projekt-Doc `docs/accounting/`). **Trail:** Der Originaltext unten bleibt erhalten; wo er die Steuerberater-**Hoheit** für Frage 3/4 postuliert, gilt er als **ÜBERHOLT** (nur noch optionale fachliche Zweitmeinung).
+
 **Wichtig:** Erst wenn diese fünf Weichen gestellt sind, sollten die größeren Umbauten (v.a. die einheitliche Status-Führung) gebaut werden. Sonst baut man etwas, das eine dieser Entscheidungen später wieder umwirft.
 
 ---
@@ -93,7 +100,7 @@ Das ist die **kritischste** der fünf Fragen für deine Finanzauswertungen. Sola
 Das ist **die eine Frage, die du NICHT allein entscheiden solltest** — sie gehört mit dem Steuerberater geklärt, weil sie direkt mit der Buchhaltung und der Umsatzdefinition zusammenhängt. Sie überschneidet sich mit den Steuerberater-Fragen (dort Frage 8: „welche Umsatzquelle gilt buchhalterisch als führend?"). Technisch tendiere ich zu *einer* führenden Quelle mit sauberem Auftrags- und Abteilungsbezug (Richtung B oder ein um Auftragsbezug ergänztes A), aber die buchhalterische Hoheit hat der Steuerberater.
 
 ### Wer entscheidet
-Du **gemeinsam mit dem Steuerberater**. Kritisch.
+~~Du **gemeinsam mit dem Steuerberater**. Kritisch.~~ **(ÜBERHOLT 2026-07-05 — s. Revision oben:** entscheidet die **Accounting-Instanz + Yama**, in-house; die führende Rechnungs-Schiene wird im Accounting-Projekt-Befund (`docs/accounting/`) belegt vorgelegt, Yama entscheidet.**)**
 
 ---
 
