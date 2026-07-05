@@ -157,7 +157,7 @@ Andock: `RadiatorRecommendationService::fuerRaum(...)` liest `leistungstabelle()
 | (ii-b) EN442-Seeder | ✅ **grün** | `09eea5e` | 30/30 idempotent, 3 Stichproben wörtlich=Quelle, Marker-Rückbau→0→30 |
 | (ii-c) Ventiltechnik | ✅ **grün** | `22e335d` | Quellen-Report (11 SKUs belegt) + M9 imported_from; 5 Kat/11 Acc idempotent, Marker-Rückbau→0→11; compat=0 (Yama-Lücke) |
 | (iii) IDS-Mapper | offen | — | — |
-| (iv) Kompatibilität | offen | — | — |
+| (iv) Kompatibilität | ✅ **grün** | `6bf75b0` (iv-a) · `947bed6` (iv-b) | iv-a: byte-genauer Port `RadiatorPerformanceService`+`HydraulicService` (wb@d81faa8) + `RadiatorCatalogAdapter`, 7 Paritäts-Tests. iv-b: `CompatibilityService` (D3 §5.1-5.6, Datenlage-Stufen serien-präzise/regel-kandidaten), 10 Unit-Tests inkl. Naht (Voreinstellstufe==HydraulicService). Gesamtsuite 92/0. |
 | (v) UI | offen | — | — |
 
 ## 9. Offene Fragen an Yama (nummeriert)
