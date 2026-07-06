@@ -70,7 +70,7 @@
 | `AccessorySeeder` (HK-Zubehör) | `accessories=11` + `accessory_categories=5` | **gelaufen lokal 2026-07-05** | Marker-Delete |
 | `ReferenzKatalogSeeder` (B2a-1) | `materials=23` + `konstruktionen=5` + `baualtersklassen=25` + `klima_plz=8168`, `imported_from='wberechnung'`, `verifikations_status` je Zeile | **gelaufen lokal 2026-07-05** | `ReferenzKatalogTeardownSeeder` (Marker-Delete) |
 | `FoxEssLongiCatalogSeeder` (Fix 2) | Fox-ESS 16 + LONGi 10 products `imported_from='fox-longi-seed'` + 13 inverters + 2 batteries (`version`-Fallback) + neue Marken/Gruppen | **gelaufen lokal; Marker-Nachtrag 2026-07-05** | `FoxEssLongiCatalogTeardownSeeder` (**marker-basiert**, schont mehrbesitzte Marken) |
-| **KLIMA-PLZ-DB-SOURCE** (B2a-i Datenquellen-Umstellung) | Service `KlimaPlzService` interne Quelle CSV→DB (`klima_plz` Live-Tabelle); CSV bleibt Referenz/Seed. Diff=0 (API unverändert). Test: 187✓ (kein Regress). | **Commit 2026-07-06** | öffentliche API unverändert; kein Rollback nötig (nur Lookup-Quelle) |
+| **KLIMA-PLZ-DB-SOURCE** (B2a-i Datenquellen-Umstellung) | Service `KlimaPlzService` interne Quelle CSV→DB (`klima_plz` Live-Tabelle); CSV bleibt Referenz/Seed. Diff=0 (API unverändert). Test: 187✓ (kein Regress). | **Commit `2fc1c08` (2026-07-06)** | öffentliche API unverändert; kein Rollback nötig (nur Lookup-Quelle) |
 
 > Code der HK-Seeder gehört dem Katalog-/HK-Strang (Tabu); die **Läufe** hier = lokale Umgebungs-Arbeit (Tag-X-Posten: müssen produktiv wiederholt werden).
 
