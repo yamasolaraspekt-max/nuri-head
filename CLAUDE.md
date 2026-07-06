@@ -27,12 +27,14 @@ Für jeden zentralen Sachverhalt gibt es **genau eine führende Datenquelle** �
 
 ## Heizkörper-Modul (Bereich „Energie & Auslegung")
 
-- **Alpine.js ist erlaubt AUSSCHLIESSLICH in den neuen `heizkoerper.*`-Views** — unter
-  `resources/views/admin/heizkoerper/**`. **Nirgends sonst** im CRM. Der übrige Bestand
-  nutzt jQuery + Bootstrap/Vuexy; Alpine ist ausschließlich für die Heizkörper-Konfigurator-/
-  Ergebnis-Flächen (M4) zugelassen. **Die bestehende Aufnahme-CRUD `radiator.config.*`
-  (`RadiatorInstallationController`) bleibt unangetastet** (jQuery, kein Alpine-Umbau) — M4-a
-  nutzt sie per Reuse für die Heizkörper-Aufnahme.
+- **Alpine.js ist erlaubt AUSSCHLIESSLICH in zwei Scopes** (Yama-Entscheidung 2026-07-06): **(1)** die
+  `heizkoerper.*`-Views unter `resources/views/admin/heizkoerper/**`; **(2)** das **Formular-Rendering**
+  des Strangs `formulare` (dynamische Sichtbarkeit `visible_if`, Feld-Renderer/Preview der
+  `ProductFormula`-Checklisten-Formulare). **Nirgends sonst** im CRM. Begründung Scope 2: reaktive
+  Sichtbarkeit ist genau Alpines Fall; ein jQuery-Nachbau wäre mehr Code bei geringerer Wartbarkeit.
+  **Grenze:** kein Alpine-Wildwuchs außerhalb dieser zwei Scopes. Der übrige Bestand nutzt jQuery +
+  Bootstrap/Vuexy. **Die bestehende Aufnahme-CRUD `radiator.config.*` (`RadiatorInstallationController`)
+  bleibt unangetastet** (jQuery, kein Alpine-Umbau) — M4-a nutzt sie per Reuse für die Heizkörper-Aufnahme.
 
 - **DO NOT DOCK `radiators`:** Das Alt-Model `app/Models/Radiator.php` (Tabelle `radiators`,
   Route `product.inveter.store`) ist eine **Wechselrichter-Altlast** — **NICHT** für Heizkörper
