@@ -4,6 +4,7 @@ namespace App\Services\Anforderungsprofil;
 
 use App\Models\Anforderungsprofil;
 use App\Models\AnforderungsprofilWert;
+use App\Services\Klima\KlimaPlzService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -31,7 +32,7 @@ class AnforderungsprofilService
                 'created_by' => $erfasserId,
             ]);
             $profil->save();
-            $this->werteSchreiben($profil, $werte);
+            $this->werteSchreiben($profil, $this->werteErgaenzen($werte));
 
             return $profil->load('werte');
         });
@@ -86,7 +87,7 @@ class AnforderungsprofilService
             foreach ($geaenderteWerte as $g) {
                 $werte[$g['schluessel']] = array_merge($werte[$g['schluessel']] ?? [], $g);
             }
-            $this->werteSchreiben($neu, array_values($werte));
+            $this->werteSchreiben($neu, $this->werteErgaenzen(array_values($werte)));
 
             $basis->status = Anforderungsprofil::STATUS_ABGELOEST;
             $basis->abgeloest_durch_id = $neu->getKey();
@@ -115,5 +116,41 @@ class AnforderungsprofilService
             $wert->anforderungsprofil_id = $profil->getKey();
             $wert->save();
         }
+    }
+
+    /** Ergänzt fehlende Werte aus Hilfsdiensten, z. B. Klima lookup per PLZ. */
+    private function werteErgaenzen(array $werte): array
+    {
+        $hatNormAussentemp = false;
+        $standortPlz = null;
+
+        foreach ($werte as $wert) {
+            if (($wert['schluessel'] ?? '') === 'norm_aussentemp_c') {
+                $hatNormAussentemp = true;
+            }
+            if (($wert['schluessel'] ?? '') === 'standort_plz') {
+                $standortPlz = trim((string) ($wert['wert'] ?? ''));
+            }
+        }
+
+        if ($hatNormAussentemp || $standortPlz === null || $standortPlz === '') {
+            return $werte;
+        }
+
+        $klimaWert = (new KlimaPlzService)->getNormAussentempForPlz($standortPlz);
+        if ($klimaWert === null) {
+            return $werte;
+        }
+
+        $werte[] = [
+            'schluessel' => 'norm_aussentemp_c',
+            'wert' => (string) $klimaWert,
+            'wert_num' => $klimaWert,
+            'datenlage' => 'berechnet',
+            'quelle' => sprintf('klima_plz %s', $standortPlz),
+            'erfassungsweg' => 'import',
+        ];
+
+        return $werte;
     }
 }

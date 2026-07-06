@@ -9,7 +9,13 @@ return new class extends Migration
 {
     private function indexExists(string $table, string $indexName): bool
     {
-        $row = DB::selectOne("
+        $driver = DB::getPdo()->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        if ($driver === 'sqlite') {
+            return false;
+        }
+
+        $row = DB::selectOne(
+            "
             SELECT 1
             FROM information_schema.statistics
             WHERE table_schema = DATABASE()
@@ -23,7 +29,13 @@ return new class extends Migration
 
     private function foreignKeyExists(string $table, string $fkName): bool
     {
-        $row = DB::selectOne("
+        $driver = DB::getPdo()->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        if ($driver === 'sqlite') {
+            return false;
+        }
+
+        $row = DB::selectOne(
+            "
             SELECT 1
             FROM information_schema.table_constraints
             WHERE constraint_schema = DATABASE()
@@ -46,8 +58,8 @@ return new class extends Migration
             DB::table('personal_tasks')->where('start_date',    '0000-00-00')->update(['start_date'    => null]);
             DB::table('personal_tasks')->where('due_date',      '0000-00-00')->update(['due_date'      => null]);
 
-            DB::table('personal_tasks')->where('created_at', '0000-00-00 00:00:00')->update(['created_at' => DB::raw('NOW()')]);
-            DB::table('personal_tasks')->where('updated_at', '0000-00-00 00:00:00')->update(['updated_at' => DB::raw('NOW()')]);
+            DB::table('personal_tasks')->where('created_at', '0000-00-00 00:00:00')->update(['created_at' => DB::raw('CURRENT_TIMESTAMP')]);
+            DB::table('personal_tasks')->where('updated_at', '0000-00-00 00:00:00')->update(['updated_at' => DB::raw('CURRENT_TIMESTAMP')]);
             DB::table('personal_tasks')->where('deleted_at', '0000-00-00 00:00:00')->update(['deleted_at' => null]);
         }
 
@@ -58,8 +70,8 @@ return new class extends Migration
             DB::table('problems')->where('end_date',          '0000-00-00')->update(['end_date'          => null]);
             DB::table('problems')->where('edit_date',         '0000-00-00')->update(['edit_date'         => null]);
 
-            DB::table('problems')->where('created_at', '0000-00-00 00:00:00')->update(['created_at' => DB::raw('NOW()')]);
-            DB::table('problems')->where('updated_at', '0000-00-00 00:00:00')->update(['updated_at' => DB::raw('NOW()')]);
+            DB::table('problems')->where('created_at', '0000-00-00 00:00:00')->update(['created_at' => DB::raw('CURRENT_TIMESTAMP')]);
+            DB::table('problems')->where('updated_at', '0000-00-00 00:00:00')->update(['updated_at' => DB::raw('CURRENT_TIMESTAMP')]);
             DB::table('problems')->where('deleted_at', '0000-00-00 00:00:00')->update(['deleted_at' => null]);
         }
 
