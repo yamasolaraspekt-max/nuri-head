@@ -9,6 +9,7 @@ use App\Models\HeizlastRaum;
 use App\Models\SanierungsVariante;
 use App\Repositories\CatalogDeviceRepository;
 use App\Services\Energie\KostenService;
+use App\Services\Energie\PvgisErtragService;
 use App\Services\Heizlast\FoerderungService;
 use App\Services\Heizlast\HeizlastEingabe;
 use App\Services\Heizlast\HeizlastKonstanten;
@@ -44,9 +45,11 @@ class EnergiekonzeptController extends Controller
         private FoerderungService $foerderung = new FoerderungService,
         private ?SanierungsWirtschaftlichkeitService $sanierung = null,
         private ?KlimaPlzService $klimaPlz = null,
+        private ?PvgisErtragService $pvgis = null,
     ) {
         $this->sanierung = $sanierung ?? app(SanierungsWirtschaftlichkeitService::class);
         $this->klimaPlz = $klimaPlz ?? app(KlimaPlzService::class);
+        $this->pvgis = $pvgis ?? app(PvgisErtragService::class);
     }
 
     /** GET energie.energiekonzept → leeres Formular (Kunde + WP-Abschnitt + Sanierungs-Abschnitt). */
@@ -174,6 +177,17 @@ class EnergiekonzeptController extends Controller
             'annahmen.energiepreis_ct_kwh' => ['nullable', 'numeric', 'min:0'],
             'annahmen.isfp' => ['nullable'],
             'annahmen.anzahl_we' => ['nullable', 'integer', 'min:1'],
+
+            'pv_aktiv' => ['nullable', 'boolean'],
+            'pv.kwp' => ['nullable', 'required_if:pv_aktiv,1', 'numeric', 'min:0', 'max:1000'],
+            'pv.angle' => ['nullable', 'numeric', 'min:0', 'max:90'],
+            'pv.aspect' => ['nullable', 'numeric', 'min:-180', 'max:180'],
+            'pv.investition' => ['nullable', 'numeric', 'min:0'],
+            'pv.strompreis' => ['nullable', 'numeric', 'min:0'],
+            'pv.einspeiseverguetung' => ['nullable', 'numeric', 'min:0'],
+            'pv.eigenverbrauch_pct' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'pv.lat' => ['nullable', 'numeric', 'min:-90', 'max:90'],
+            'pv.lon' => ['nullable', 'numeric', 'min:-180', 'max:180'],
         ]);
     }
 
@@ -191,8 +205,11 @@ class EnergiekonzeptController extends Controller
         $wpAktiv = (bool) ($data['wp_aktiv'] ?? false);
         $sanAktiv = (bool) ($data['sanierung_aktiv'] ?? false);
 
+        $pvAktiv = (bool) ($data['pv_aktiv'] ?? false);
+
         $wp = $wpAktiv ? $this->baueWp($data['wp'] ?? []) : null;
         $sanierung = $sanAktiv ? $this->baueSanierung($data) : null;
+        $pv = $pvAktiv ? $this->bauePv($data['pv'] ?? [], $data['projekt'] ?? [], $kunde) : null;
 
         // Gesamt-Summen: WP-Netto-Investition + Sanierungs-(Brutto-)Investition; Förderungen addiert.
         $wpInvest = (float) ($wp['investition_netto'] ?? 0);
@@ -200,9 +217,14 @@ class EnergiekonzeptController extends Controller
         $wpFoerd = (float) ($wp['foerderung']['zuschuss'] ?? 0);
         $sanFoerd = (float) ($sanierung['wirtschaftlichkeit']['foerderung_eur'] ?? 0);
 
-        $investitionGesamt = $wpInvest + $sanInvest;
+        // PV: additiv in die Gesamt-Summe — Investition erhöht, PV-Ertrag zählt als
+        // jährliche Ersparnis. Für PV gibt es hier keine Förderung (PV-Förderung = 0).
+        $pvInvest = (float) ($pv['investition_eur'] ?? 0);
+        $pvErtrag = (float) ($pv['ertrag_gesamt_eur_a'] ?? 0);
+
+        $investitionGesamt = $wpInvest + $sanInvest + $pvInvest;
         $foerderungGesamt = $wpFoerd + $sanFoerd;
-        $einsparungGesamt = (float) ($sanierung['wirtschaftlichkeit']['einsparung_eur_a'] ?? 0);
+        $einsparungGesamt = (float) ($sanierung['wirtschaftlichkeit']['einsparung_eur_a'] ?? 0) + $pvErtrag;
 
         return [
             'kunde' => [
@@ -214,6 +236,7 @@ class EnergiekonzeptController extends Controller
             'datum' => now()->format('d.m.Y'),
             'wp' => $wp,
             'sanierung' => $sanierung,
+            'pv' => $pv,
             'gesamt' => [
                 'investition_eur' => round($investitionGesamt),
                 'foerderung_eur' => round($foerderungGesamt),
@@ -406,6 +429,61 @@ class EnergiekonzeptController extends Controller
             'foerderung' => [
                 'quote_pct' => $ergebnis['foerderung']['quote_pct'],
             ],
+        ];
+    }
+
+    /**
+     * PV-Teil (optional). Holt den PVGIS-Jahresertrag über den kanonischen
+     * PvgisErtragService (EINE Wahrheit; kein zweites PVGIS-Tool) mit graceful
+     * Fallback und rechnet die einfache PV-Wirtschaftlichkeit (Eigenverbrauch-
+     * Ersparnis + Einspeise-Vergütung). Koordinaten: direkte lat/lon-Eingabe
+     * (Vorrang) oder Auflösung der Standort-PLZ über `klima_plz`; ohne beides
+     * greift der Fallback-Spezifischertrag (keine neue Geocoding-API).
+     *
+     * @param  array<string, mixed>  $in  PV-Eingaben
+     * @param  array<string, mixed>  $projekt  Projekt-Eingaben (für standort_plz)
+     * @param  array<string, mixed>  $kunde  Kunde-Eingaben (PLZ-Fallback)
+     * @return array<string, mixed>|null
+     */
+    private function bauePv(array $in, array $projekt, array $kunde): ?array
+    {
+        $kwp = (float) ($in['kwp'] ?? 0);
+        if ($kwp <= 0) {
+            return null;
+        }
+
+        $angle = isset($in['angle']) && $in['angle'] !== '' ? (float) $in['angle'] : 30.0;
+        $aspect = isset($in['aspect']) && $in['aspect'] !== '' ? (float) $in['aspect'] : 0.0;
+        $investition = (float) ($in['investition'] ?? 0);
+        $strompreis = isset($in['strompreis']) && $in['strompreis'] !== '' ? (float) $in['strompreis'] : 0.30;
+        $einspeise = isset($in['einspeiseverguetung']) && $in['einspeiseverguetung'] !== '' ? (float) $in['einspeiseverguetung'] : 0.08;
+        $eigenverbrauchPct = isset($in['eigenverbrauch_pct']) && $in['eigenverbrauch_pct'] !== '' ? (float) $in['eigenverbrauch_pct'] : 30.0;
+
+        $lat = isset($in['lat']) && $in['lat'] !== '' ? (float) $in['lat'] : null;
+        $lon = isset($in['lon']) && $in['lon'] !== '' ? (float) $in['lon'] : null;
+        $plz = (string) ($projekt['standort_plz'] ?? $kunde['plz'] ?? '');
+
+        $ertrag = $this->pvgis->jahresertragFuerStandort($plz !== '' ? $plz : null, $lat, $lon, $kwp, $angle, $aspect);
+        $jahresertragKwh = (float) $ertrag['jahresertrag_kwh'];
+
+        $eigenverbrauchKwh = $jahresertragKwh * $eigenverbrauchPct / 100;
+        $einspeisungKwh = $jahresertragKwh - $eigenverbrauchKwh;
+        $ersparnisEigenverbrauch = $eigenverbrauchKwh * $strompreis;
+        $verguetung = $einspeisungKwh * $einspeise;
+        $ertragGesamt = $ersparnisEigenverbrauch + $verguetung;
+
+        return [
+            'kwp' => $kwp,
+            'spezifischer_ertrag' => round((float) $ertrag['spezifischer_ertrag'], 1),
+            'jahresertrag_kwh' => round($jahresertragKwh),
+            'quelle' => $ertrag['quelle'],
+            'investition_eur' => round($investition),
+            'eigenverbrauch_pct' => $eigenverbrauchPct,
+            'strompreis' => $strompreis,
+            'einspeiseverguetung' => $einspeise,
+            'ersparnis_eigenverbrauch_eur_a' => round($ersparnisEigenverbrauch),
+            'verguetung_einspeisung_eur_a' => round($verguetung),
+            'ertrag_gesamt_eur_a' => round($ertragGesamt),
         ];
     }
 

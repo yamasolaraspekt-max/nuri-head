@@ -24,6 +24,8 @@
     $annahmen = old('annahmen', []);
     $projekt = old('projekt', []);
     $raum = old('raum', []);
+    $pv = old('pv', []);
+    $pvAktiv = old('pv_aktiv', false);
 
     $wd = $wpDefaults;
     $g = fn ($src, $key, $def = null) => data_get($src, $key, $def);
@@ -361,6 +363,77 @@
             </div>
         </div>
 
+        {{-- ── PV-Abschnitt (optional) ── --}}
+        <div class="card">
+            <div class="card-header">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input toggle-section" id="pv_aktiv"
+                        name="pv_aktiv" value="1" data-target="#pv-section" @checked($pvAktiv)>
+                    <label class="custom-control-label" for="pv_aktiv"><h4 class="card-title mb-0 d-inline">Photovoltaik einbeziehen</h4></label>
+                </div>
+            </div>
+            <div class="card-body section-body" id="pv-section" @style(['display:none' => !$pvAktiv])>
+                <div class="row">
+                    <div class="form-group col-md-3 col-6">
+                        <label>Anlagengröße kWp</label>
+                        <input type="number" step="0.1" min="0" class="form-control" name="pv[kwp]"
+                            value="{{ $g($pv, 'kwp', 10) }}" placeholder="10">
+                    </div>
+                    <div class="form-group col-md-3 col-6">
+                        <label>Investition €</label>
+                        <input type="number" step="1" min="0" class="form-control" name="pv[investition]"
+                            value="{{ $g($pv, 'investition', 18000) }}">
+                    </div>
+                    <div class="form-group col-md-3 col-6">
+                        <label>Neigung ° <small class="text-muted">(Dach)</small></label>
+                        <input type="number" step="1" min="0" max="90" class="form-control" name="pv[angle]"
+                            value="{{ $g($pv, 'angle', 30) }}">
+                    </div>
+                    <div class="form-group col-md-3 col-6">
+                        <label>Ausrichtung <small class="text-muted">(0=Süd, −90=Ost, 90=West)</small></label>
+                        <input type="number" step="1" min="-180" max="180" class="form-control" name="pv[aspect]"
+                            value="{{ $g($pv, 'aspect', 0) }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-3 col-6">
+                        <label>Strompreis €/kWh</label>
+                        <input type="number" step="0.01" min="0" class="form-control" name="pv[strompreis]"
+                            value="{{ $g($pv, 'strompreis', 0.30) }}">
+                    </div>
+                    <div class="form-group col-md-3 col-6">
+                        <label>Einspeisevergütung €/kWh</label>
+                        <input type="number" step="0.001" min="0" class="form-control" name="pv[einspeiseverguetung]"
+                            value="{{ $g($pv, 'einspeiseverguetung', 0.08) }}">
+                    </div>
+                    <div class="form-group col-md-3 col-6">
+                        <label>Eigenverbrauch %</label>
+                        <input type="number" step="1" min="0" max="100" class="form-control" name="pv[eigenverbrauch_pct]"
+                            value="{{ $g($pv, 'eigenverbrauch_pct', 30) }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-3 col-6">
+                        <label>Breite (lat) <small class="text-muted">(opt.)</small></label>
+                        <input type="number" step="0.00001" min="-90" max="90" class="form-control" name="pv[lat]"
+                            value="{{ $g($pv, 'lat') }}" placeholder="48.14">
+                    </div>
+                    <div class="form-group col-md-3 col-6">
+                        <label>Länge (lon) <small class="text-muted">(opt.)</small></label>
+                        <input type="number" step="0.00001" min="-180" max="180" class="form-control" name="pv[lon]"
+                            value="{{ $g($pv, 'lon') }}" placeholder="11.58">
+                    </div>
+                    <div class="col-12">
+                        <small class="text-muted">
+                            Ertrag über PVGIS. Ohne lat/lon werden die Koordinaten aus der Standort-PLZ
+                            (Abschnitt Sanierung) bzw. Kunden-PLZ aufgelöst; sind keine verfügbar oder
+                            PVGIS nicht erreichbar, greift ein Schätz-Spezifischertrag (~950 kWh/kWp).
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="d-flex flex-wrap mb-2" style="gap:.5rem;">
             <button type="submit" class="btn btn-primary">Energiekonzept berechnen</button>
             <button type="submit" class="btn btn-outline-secondary" formaction="{{ route('energie.energiekonzept.dokument') }}" formtarget="_blank">
@@ -375,6 +448,7 @@
             $ges = $konzept['gesamt'];
             $wpErg = $konzept['wp'];
             $sanErg = $konzept['sanierung'];
+            $pvErg = $konzept['pv'] ?? null;
         @endphp
 
         <div class="card border-primary">
@@ -457,6 +531,23 @@
                         @endif
                     </div>
                 </div>
+
+                @if ($pvErg)
+                    {{-- PV-Block --}}
+                    <div class="row mt-1">
+                        <div class="col-12">
+                            <h5>Photovoltaik</h5>
+                            <dl class="row mb-0">
+                                <dt class="col-6 col-md-3">Anlagengröße</dt><dd class="col-6 col-md-3 text-right">{{ $fmt($pvErg['kwp'], 1) }} kWp</dd>
+                                <dt class="col-6 col-md-3">Jahresertrag</dt><dd class="col-6 col-md-3 text-right">{{ $fmt($pvErg['jahresertrag_kwh']) }} kWh/a <small class="text-muted">({{ $pvErg['quelle'] === 'pvgis' ? 'PVGIS' : 'Schätzung' }})</small></dd>
+                                <dt class="col-6 col-md-3">Eigenverbrauch-Ersparnis</dt><dd class="col-6 col-md-3 text-right text-success">{{ $fmt($pvErg['ersparnis_eigenverbrauch_eur_a']) }} €/a</dd>
+                                <dt class="col-6 col-md-3">Einspeise-Vergütung</dt><dd class="col-6 col-md-3 text-right text-success">{{ $fmt($pvErg['verguetung_einspeisung_eur_a']) }} €/a</dd>
+                                <dt class="col-6 col-md-3">PV-Ertrag gesamt</dt><dd class="col-6 col-md-3 text-right"><strong>{{ $fmt($pvErg['ertrag_gesamt_eur_a']) }} €/a</strong></dd>
+                                <dt class="col-6 col-md-3">Investition</dt><dd class="col-6 col-md-3 text-right">{{ $fmt($pvErg['investition_eur']) }} €</dd>
+                            </dl>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     @endif

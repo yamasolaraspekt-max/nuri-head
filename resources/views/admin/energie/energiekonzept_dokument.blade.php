@@ -16,6 +16,7 @@
     $kunde    = $konzept['kunde'] ?? [];
     $wp       = $konzept['wp'] ?? null;
     $san      = $konzept['sanierung'] ?? null;
+    $pv       = $konzept['pv'] ?? null;
     $gesamt   = $konzept['gesamt'] ?? [];
     $datum    = $konzept['datum'] ?? now()->format('d.m.Y');
 
@@ -136,7 +137,7 @@
         </div>
     </div>
 
-    @if ($wp === null && $san === null)
+    @if ($wp === null && $san === null && $pv === null)
         <div class="empty">
             Für dieses Energiekonzept liegen noch keine ausgefüllten Teil-Berechnungen vor.
             Sobald die Wärmepumpen-Auslegung oder die Gebäudesanierung erfasst ist, erscheinen die Details hier.
@@ -202,6 +203,37 @@
                         </tr>
                         <tr><td><strong>Netto nach Förderung</strong></td><td class="r"><strong>{{ $eur($sW['netto_investition_eur'] ?? null) }}</strong></td></tr>
                         <tr><td>Gewinn über 30 Jahre</td><td class="r" style="color:var(--pos)">{{ $eur($sW['gewinn_30j_eur'] ?? null) }}</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Abschnitt Photovoltaik --}}
+    @if ($pv !== null)
+        <div class="section">
+            <div class="sec-title">
+                <h2>Photovoltaik</h2>
+                <span class="badge">{{ $num($pv['kwp'] ?? null, 1) }} kWp</span>
+            </div>
+            <div class="grid2">
+                <div>
+                    <table>
+                        <tr><td>Anlagengröße</td><td class="r">{{ $num($pv['kwp'] ?? null, 1) }} kWp</td></tr>
+                        <tr>
+                            <td>Jahresertrag</td>
+                            <td class="r">{{ $kwh($pv['jahresertrag_kwh'] ?? null) }} / Jahr <span style="color:var(--muted)">({{ ($pv['quelle'] ?? null) === 'pvgis' ? 'PVGIS' : 'Schätzung' }})</span></td>
+                        </tr>
+                        <tr><td>Eigenverbrauch <span style="color:var(--muted)">({{ $num($pv['eigenverbrauch_pct'] ?? null, 0) }} %)</span></td><td class="r">{{ $kwh(($pv['jahresertrag_kwh'] ?? 0) * ($pv['eigenverbrauch_pct'] ?? 0) / 100) }} / Jahr</td></tr>
+                        <tr><td>Netzeinspeisung</td><td class="r">{{ $kwh(($pv['jahresertrag_kwh'] ?? 0) - ($pv['jahresertrag_kwh'] ?? 0) * ($pv['eigenverbrauch_pct'] ?? 0) / 100) }} / Jahr</td></tr>
+                    </table>
+                </div>
+                <div>
+                    <table>
+                        <tr><td>Investition</td><td class="r">{{ $eur($pv['investition_eur'] ?? null) }}</td></tr>
+                        <tr><td>Eigenverbrauch-Ersparnis</td><td class="r" style="color:var(--pos)">{{ $eur($pv['ersparnis_eigenverbrauch_eur_a'] ?? null) }} / Jahr</td></tr>
+                        <tr><td>Einspeise-Vergütung</td><td class="r" style="color:var(--pos)">{{ $eur($pv['verguetung_einspeisung_eur_a'] ?? null) }} / Jahr</td></tr>
+                        <tr><td><strong>PV-Ertrag gesamt</strong></td><td class="r" style="color:var(--pos)"><strong>{{ $eur($pv['ertrag_gesamt_eur_a'] ?? null) }} / Jahr</strong></td></tr>
                     </table>
                 </div>
             </div>
