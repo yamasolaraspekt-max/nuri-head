@@ -28,9 +28,14 @@ HeizlastProjektService** (Nähte: RadiatorSpec/RadiatorPerformanceService/Hydrau
 `/admin/energie/sanierung` (Ist/Nachher-Heizlast + Amortisation/Einsparung/**BAFA** + PDF). Sanierung nutzt die
 volle Heizlast-Projekt-Domäne transient (Cascade-Cleanup). 81 Tests grün.
 
-**OFFEN (optional/Welle):** PVGIS-Ertragsplaner (ticket hat PVGIS-Prototyp; wb-`PvProjektService` portiert, UI-Aufwertung
-offen). **AuslegungService**-Orchestrierung (Energiekonzept PV+WP+Sanierung als 1 Dokument). **Welle:**
-GeometrieAbleitungService + raum_geometrien (Grundriss-Editor). *(Parallel-Instanz „Angebots-WP-Konfigurator" im git-Stash `stash@{0}`.)*
+**ENERGIEKONZEPT LIVE (2026-07-07):** `/admin/energie/energiekonzept` — fasst WP-Auslegung + Sanierung zu EINEM
+kundenfertigen Beratungsangebot-PDF (Gesamt-Investition + Gesamt-Förderung KfW+BAFA + Eigenanteil). Nav-Eintrag gesetzt.
+Deckt die AuslegungService-Orchestrierung fachlich ab (ohne den DB-/Geocoding-gebundenen wb-Orchestrator zu portieren).
+
+**OFFEN (optional/Welle):** PVGIS-Ertragsplaner (ticket hat PVGIS-Prototyp; `PvProjektService` portiert, UI-Aufwertung offen —
+PV-Block ins Energiekonzept). Kleine Checks/Listen (Materialliste, Fußboden-/Heizkörper-Check). **Welle:**
+GeometrieAbleitungService + raum_geometrien (Grundriss-Editor). Externe APIs (OpenMeteo/Geocoding) = optional, klima_plz führt.
+*(Parallel-Instanz „Angebots-WP-Konfigurator" im git-Stash `stash@{0}`.)*
 
 ## A. Rechenkerne — Heizlast / Wärmepumpe / PV
 
