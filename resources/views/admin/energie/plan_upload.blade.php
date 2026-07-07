@@ -111,7 +111,7 @@
                                     </td>
                                     <td class="text-muted">{{ $u->created_at?->format('d.m.Y H:i') }}</td>
                                     <td class="text-end text-nowrap">
-                                        <a href="{{ route('energie.grundriss.editor', $u->heizlast_projekt_id ?: null) }}"
+                                        <a href="{{ route('energie.grundriss.editor', $u->heizlast_projekt_id ?: null) }}?upload={{ $u->id }}"
                                            class="btn btn-sm btn-outline-primary">Im Editor öffnen</a>
                                         <button type="button" class="btn btn-sm btn-outline-danger plan-loeschen"
                                                 data-id="{{ $u->id }}">Löschen</button>

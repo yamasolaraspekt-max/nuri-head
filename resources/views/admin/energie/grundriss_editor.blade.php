@@ -68,6 +68,47 @@
                 </div>
             </div>
 
+            @if ($import)
+            <div class="card border-info" id="import-card">
+                <div class="card-header py-1"><h5 class="card-title mb-0">Plan-Underlay</h5></div>
+                <div class="card-body">
+                    <p class="text-muted small mb-1">
+                        Import: <strong>{{ $import['original_name'] ?? 'Plan' }}</strong>
+                        <span class="badge bg-secondary">{{ strtoupper($import['typ'] ?? '?') }}</span>
+                    </p>
+                    <div class="d-grid gap-1">
+                        <div class="form-check form-switch mb-1">
+                            <input class="form-check-input" type="checkbox" id="chk-underlay" checked>
+                            <label class="form-check-label small" for="chk-underlay">Underlay anzeigen</label>
+                        </div>
+
+                        {{-- DXF / bereits kalibriert: direktes Nachzeichnen 1:1 --}}
+                        <button type="button" id="btn-import-polygon" class="btn btn-sm btn-outline-info d-none">
+                            <i class="feather icon-copy"></i> Import als Polygon übernehmen
+                        </button>
+
+                        {{-- PDF-Vektor / Raster ohne Maßstab: Zwei-Punkt-Kalibrierung --}}
+                        <div id="calib-block" class="d-none border rounded p-1 mt-1">
+                            <div class="small fw-bold mb-1">Maßstab setzen (2 Punkte)</div>
+                            <button type="button" id="btn-calib-start" class="btn btn-xs btn-outline-primary w-100 mb-1">
+                                1. Zwei Punkte im Plan klicken
+                            </button>
+                            <div class="mb-1">
+                                <label class="form-label small mb-0">2. Reale Länge dieser Strecke (mm)</label>
+                                <input type="text" id="calib-mm" class="form-control form-control-sm" placeholder="z. B. 5000" inputmode="decimal">
+                            </div>
+                            <button type="button" id="btn-calib-apply" class="btn btn-xs btn-primary w-100">
+                                3. Maßstab anwenden
+                            </button>
+                            <div class="small text-muted mt-1" id="calib-status">Maßstab noch nicht gesetzt.</div>
+                        </div>
+
+                        <div class="small mt-1" id="import-scale-info"></div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <div class="card">
                 <div class="card-header py-1"><h5 class="card-title mb-0">Decke &amp; Boden</h5></div>
                 <div class="card-body">
@@ -125,6 +166,8 @@
                     <div style="overflow:auto; max-height:640px; background:#fafafa;">
                         <svg id="grundriss-svg" width="900" height="600" style="display:block; cursor:crosshair; touch-action:none;">
                             <g id="layer-grid"></g>
+                            <g id="layer-underlay"></g>
+                            <g id="layer-calib"></g>
                             <g id="layer-fill"></g>
                             <g id="layer-openings"></g>
                             <g id="layer-walls"></g>
@@ -252,6 +295,26 @@
     var svg = document.getElementById('grundriss-svg');
     var SVGNS = 'http://www.w3.org/2000/svg';
 
+    // ---- Import-Underlay (optional) ---------------------------------------------
+    // Rohdaten aus PlanUpload.kandidat_geometrie (DXF: mm-Einheiten; PDF-Vektor/Raster:
+    // PDF-Punkte bzw. Bild-Pixel). Wird NICHT editiert, nur als graue Referenz gezeichnet.
+    var IMPORT = @json($import);
+
+    // View-Transform: Underlay-Einheiten → px. Ohne Import Identität (scale=PPM, offset 0),
+    // dann sind Underlay-Einheiten == mm und der Editor verhält sich exakt wie bisher.
+    var view = { scale: PPM, oxMm: 0, oyMm: 0 };
+
+    // 'factor' = mm pro Underlay-Einheit (Maßstab). Ohne Import bzw. DXF/mm == 1;
+    // PDF/Raster: null bis zur Zwei-Punkt-Kalibrierung. Der Editor rechnet intern in mm.
+    var factor = 1;
+    var scaleSet = true;              // ist ein maßhaltiger Faktor bekannt?
+    var hasImport = !!IMPORT;
+    var showUnderlay = true;
+    var mode = 'draw';                // 'draw' | 'calib'
+    var calibPts = [];                // [{u:{x,y}}] Underlay-Einheiten, max 2
+    var snapTargets = [];             // Import-Linienenden in mm (zum Snappen)
+    var importRingMm = null;          // geschlossener Ring in mm (falls ableitbar)
+
     // ---- Zustand -----------------------------------------------------------------
     var state = {
         polygon: [],      // [{x,y}] in mm
@@ -266,7 +329,13 @@
     var raumId = @json($raumId);
 
     // ---- Helfer ------------------------------------------------------------------
-    function mmToPx(v) { return v * PPM; }
+    // Der Editor rechnet in mm; 'factor' überbrückt zu Underlay-Einheiten, 'view' zu px.
+    function mmToUnit(mm) { return mm / factor; }
+    function unitToMm(u) { return u * factor; }
+    function mmToPxX(mm) { return (mmToUnit(mm) - view.oxMm) * view.scale; }
+    function mmToPxY(mm) { return (mmToUnit(mm) - view.oyMm) * view.scale; }
+    function unitToPxX(u) { return (u - view.oxMm) * view.scale; }
+    function unitToPxY(u) { return (u - view.oyMm) * view.scale; }
     function deNum(v) {
         if (v === null || v === undefined) return null;
         v = String(v).trim().replace(',', '.');
@@ -286,13 +355,38 @@
     }
     function snap(v) { return Math.round(v / SNAP_MM) * SNAP_MM; }
 
-    function eventToMm(evt) {
+    function eventToPx(evt) {
         var rect = svg.getBoundingClientRect();
         var sx = CANVAS_W / rect.width;
         var sy = CANVAS_H / rect.height;
-        var pxX = (evt.clientX - rect.left) * sx;
-        var pxY = (evt.clientY - rect.top) * sy;
-        return { x: snap(pxX / PPM), y: snap(pxY / PPM) };
+        return { x: (evt.clientX - rect.left) * sx, y: (evt.clientY - rect.top) * sy };
+    }
+
+    // Klick → Underlay-Einheiten (roh, ungesnappt) — Basis für Kalibrierung.
+    function eventToUnit(evt) {
+        var p = eventToPx(evt);
+        return { x: p.x / view.scale + view.oxMm, y: p.y / view.scale + view.oyMm };
+    }
+
+    function eventToMm(evt) {
+        var u = eventToUnit(evt);
+        var mmX = unitToMm(u.x), mmY = unitToMm(u.y);
+        // 1) Snap auf Import-Linienenden (Toleranz in mm), sonst 2) Raster-Snap.
+        var t = nearestSnapTarget(mmX, mmY);
+        if (t) { return { x: t.x, y: t.y }; }
+        return { x: snap(mmX), y: snap(mmY) };
+    }
+
+    function nearestSnapTarget(mmX, mmY) {
+        if (!snapTargets.length) { return null; }
+        var tolMm = (20 / view.scale) * factor;   // ~20 px, in mm
+        if (tolMm < 150) { tolMm = 150; }
+        var best = null, bd = tolMm;
+        for (var i = 0; i < snapTargets.length; i++) {
+            var d = Math.hypot(snapTargets[i].x - mmX, snapTargets[i].y - mmY);
+            if (d <= bd) { bd = d; best = snapTargets[i]; }
+        }
+        return best;
     }
 
     function segLenMm(seg) {
@@ -346,19 +440,34 @@
             while (g.firstChild) g.removeChild(g.firstChild);
         });
 
-        // Raster
+        // Raster (in mm, via View-Transform → px; ohne Import identisch zu 500-mm-Raster).
         var grid = document.getElementById('layer-grid');
-        var stepPx = mmToPx(GRID_MM);
-        for (var x = 0; x <= CANVAS_W; x += stepPx) {
-            grid.appendChild(el('line', { x1: x, y1: 0, x2: x, y2: CANVAS_H, stroke: '#e6e6e6', 'stroke-width': 1 }));
-        }
-        for (var y = 0; y <= CANVAS_H; y += stepPx) {
-            grid.appendChild(el('line', { x1: 0, y1: y, x2: CANVAS_W, y2: y, stroke: '#e6e6e6', 'stroke-width': 1 }));
+        if (factor) {
+            var mmLeft = unitToMm(view.oxMm);
+            var mmTop = unitToMm(view.oyMm);
+            var mmRight = unitToMm(view.oxMm + CANVAS_W / view.scale);
+            var mmBottom = unitToMm(view.oyMm + CANVAS_H / view.scale);
+            for (var gx = Math.floor(mmLeft / GRID_MM) * GRID_MM; gx <= mmRight; gx += GRID_MM) {
+                var gpx = mmToPxX(gx);
+                grid.appendChild(el('line', { x1: gpx, y1: 0, x2: gpx, y2: CANVAS_H, stroke: '#e6e6e6', 'stroke-width': 1 }));
+            }
+            for (var gy = Math.floor(mmTop / GRID_MM) * GRID_MM; gy <= mmBottom; gy += GRID_MM) {
+                var gpy = mmToPxY(gy);
+                grid.appendChild(el('line', { x1: 0, y1: gpy, x2: CANVAS_W, y2: gpy, stroke: '#e6e6e6', 'stroke-width': 1 }));
+            }
+        } else {
+            // Maßstab noch nicht gesetzt (PDF/Raster): neutrales px-Raster als Orientierung.
+            for (var nx = 0; nx <= CANVAS_W; nx += 25) {
+                grid.appendChild(el('line', { x1: nx, y1: 0, x2: nx, y2: CANVAS_H, stroke: '#eee', 'stroke-width': 1 }));
+            }
+            for (var ny = 0; ny <= CANVAS_H; ny += 25) {
+                grid.appendChild(el('line', { x1: 0, y1: ny, x2: CANVAS_W, y2: ny, stroke: '#eee', 'stroke-width': 1 }));
+            }
         }
 
         // Füllung
         if (state.polygon.length >= 3) {
-            var pts = state.polygon.map(function (p) { return mmToPx(p.x) + ',' + mmToPx(p.y); }).join(' ');
+            var pts = state.polygon.map(function (p) { return mmToPxX(p.x) + ',' + mmToPxY(p.y); }).join(' ');
             document.getElementById('layer-fill').appendChild(el('polygon', {
                 points: pts, fill: state.closed ? 'rgba(115,103,240,0.10)' : 'rgba(115,103,240,0.05)',
                 stroke: 'none'
@@ -372,8 +481,8 @@
             var dimLayer = document.getElementById('layer-dims');
 
             state.segments.forEach(function (seg, i) {
-                var x1 = mmToPx(seg.von.x), y1 = mmToPx(seg.von.y);
-                var x2 = mmToPx(seg.bis.x), y2 = mmToPx(seg.bis.y);
+                var x1 = mmToPxX(seg.von.x), y1 = mmToPxY(seg.von.y);
+                var x2 = mmToPxX(seg.bis.x), y2 = mmToPxY(seg.bis.y);
 
                 // Öffnungen als Marker entlang der Wand
                 var len = segLenMm(seg);
@@ -388,7 +497,7 @@
                     var bx = seg.von.x + ux * (start + w);
                     var by = seg.von.y + uy * (start + w);
                     openLayer.appendChild(el('line', {
-                        x1: mmToPx(ax), y1: mmToPx(ay), x2: mmToPx(bx), y2: mmToPx(by),
+                        x1: mmToPxX(ax), y1: mmToPxY(ay), x2: mmToPxX(bx), y2: mmToPxY(by),
                         stroke: (o.typ === 'tuer' ? '#ff9f43' : '#00cfe8'), 'stroke-width': 6, 'stroke-linecap': 'butt'
                     }));
                 });
@@ -418,7 +527,7 @@
             for (var k = 0; k + 1 < state.polygon.length; k++) {
                 var a = state.polygon[k], b = state.polygon[k + 1];
                 wallLayer2.appendChild(el('line', {
-                    x1: mmToPx(a.x), y1: mmToPx(a.y), x2: mmToPx(b.x), y2: mmToPx(b.y),
+                    x1: mmToPxX(a.x), y1: mmToPxY(a.y), x2: mmToPxX(b.x), y2: mmToPxY(b.y),
                     stroke: '#7367f0', 'stroke-width': 2, 'stroke-dasharray': '4 3'
                 }));
             }
@@ -427,7 +536,7 @@
         // Ecken
         var nodeLayer = document.getElementById('layer-nodes');
         state.polygon.forEach(function (p, i) {
-            var c = el('circle', { cx: mmToPx(p.x), cy: mmToPx(p.y), r: 4, fill: '#7367f0', stroke: '#fff', 'stroke-width': 1.5 });
+            var c = el('circle', { cx: mmToPxX(p.x), cy: mmToPxY(p.y), r: 4, fill: '#7367f0', stroke: '#fff', 'stroke-width': 1.5 });
             nodeLayer.appendChild(c);
         });
 
@@ -438,7 +547,129 @@
         $('#lbl-flaeche').text(fmt(shoelaceM2(state.polygon)));
         $('#lbl-ecken').text(state.polygon.length);
         $('#lbl-waende').text(state.closed ? state.segments.length : 0);
-        $('#scale-label').text('1 px = ' + Math.round(1 / PPM) + ' mm');
+        var mmPerPx = factor ? (factor / view.scale) : null;
+        $('#scale-label').text(mmPerPx ? ('1 px ≈ ' + Math.round(mmPerPx) + ' mm') : 'Maßstab offen');
+    }
+
+    // ---- Import-Underlay: Zeichnen + Einpassen ----------------------------------
+    function clearLayer(id) {
+        var g = document.getElementById(id);
+        while (g && g.firstChild) { g.removeChild(g.firstChild); }
+    }
+
+    // Passt die View auf eine bbox in Underlay-Einheiten ein (zentriert, mit Rand).
+    function fitToBboxUnits(bbox) {
+        if (!bbox || !bbox.min || !bbox.max) { return; }
+        var w = bbox.max.x - bbox.min.x, h = bbox.max.y - bbox.min.y;
+        if (!(w > 0) || !(h > 0)) { return; }
+        var pad = 40;
+        var s = Math.min((CANVAS_W - 2 * pad) / w, (CANVAS_H - 2 * pad) / h);
+        var mX = (CANVAS_W - w * s) / 2, mY = (CANVAS_H - h * s) / 2;
+        view.scale = s;
+        view.oxMm = bbox.min.x - mX / s;
+        view.oyMm = bbox.min.y - mY / s;
+    }
+
+    // Liefert die Import-Liniensegmente als Paare in Underlay-Einheiten.
+    // Polylinien werden in ihre aufeinanderfolgenden Einzelkanten zerlegt (für Ring/Snap).
+    function importSegmente() {
+        if (!IMPORT || !IMPORT.entities) { return []; }
+        var out = [];
+        IMPORT.entities.forEach(function (e) {
+            if (!e || e.typ !== 'line' || !e.punkte || e.punkte.length < 2) { return; }
+            for (var i = 0; i + 1 < e.punkte.length; i++) {
+                var p = e.punkte[i], q = e.punkte[i + 1];
+                out.push({ a: { x: +p[0], y: +p[1] }, b: { x: +q[0], y: +q[1] } });
+            }
+        });
+        return out;
+    }
+
+    function renderUnderlay() {
+        clearLayer('layer-underlay');
+        if (!hasImport || !showUnderlay) { return; }
+        var g = document.getElementById('layer-underlay');
+
+        if (IMPORT.raster_bild_url) {
+            // Rasterbild: als <image> über die (Pixel-)bbox legen. Natürliche Größe → fit onload.
+            var img = el('image', { x: 0, y: 0, opacity: 0.6, preserveAspectRatio: 'none' });
+            img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', IMPORT.raster_bild_url);
+            img.setAttribute('href', IMPORT.raster_bild_url);
+            g.appendChild(img);
+            positionRaster(img);
+            return;
+        }
+
+        // Vektor: dünne graue Linien.
+        importSegmente().forEach(function (s) {
+            g.appendChild(el('line', {
+                x1: unitToPxX(s.a.x), y1: unitToPxY(s.a.y),
+                x2: unitToPxX(s.b.x), y2: unitToPxY(s.b.y),
+                stroke: '#b0b0b0', 'stroke-width': 1
+            }));
+        });
+    }
+
+    function positionRaster(img) {
+        var bb = rasterBbox();
+        if (!bb) { return; }
+        img.setAttribute('x', unitToPxX(bb.min.x));
+        img.setAttribute('y', unitToPxY(bb.min.y));
+        img.setAttribute('width', (bb.max.x - bb.min.x) * view.scale);
+        img.setAttribute('height', (bb.max.y - bb.min.y) * view.scale);
+    }
+
+    // bbox eines Rasterbildes: aus IMPORT.bbox oder aus der natürlichen Bildgröße (Pixel).
+    var rasterNat = null;
+    function rasterBbox() {
+        if (IMPORT && IMPORT.bbox && IMPORT.bbox.min && IMPORT.bbox.max) { return IMPORT.bbox; }
+        if (rasterNat) { return { min: { x: 0, y: 0 }, max: { x: rasterNat.w, y: rasterNat.h } }; }
+        return null;
+    }
+
+    // Sammelt Import-Linienenden als Snap-Ziele in mm (nur bei bekanntem Maßstab).
+    function rebuildSnapTargets() {
+        snapTargets = [];
+        if (!hasImport || !factor || IMPORT.raster_bild_url) { return; }
+        var seen = {};
+        importSegmente().forEach(function (s) {
+            [s.a, s.b].forEach(function (u) {
+                var mm = { x: unitToMm(u.x), y: unitToMm(u.y) };
+                var key = Math.round(mm.x) + '|' + Math.round(mm.y);
+                if (!seen[key]) { seen[key] = 1; snapTargets.push(mm); }
+            });
+        });
+    }
+
+    // Versucht aus den Import-Kanten einen geschlossenen Ring zu ketteln (Toleranz in Einheiten).
+    function extractRingUnits() {
+        var segs = importSegmente();
+        if (segs.length < 3) { return null; }
+        var bb = IMPORT.bbox;
+        var diag = bb ? Math.hypot(bb.max.x - bb.min.x, bb.max.y - bb.min.y) : 1000;
+        var tol = Math.max(diag * 0.004, 1e-6);
+        function near(p, q) { return Math.hypot(p.x - q.x, p.y - q.y) <= tol; }
+
+        var used = new Array(segs.length).fill(false);
+        used[0] = true;
+        var start = segs[0].a;
+        var cur = segs[0].b;
+        var ring = [start, cur];
+        var guard = segs.length + 2;
+        while (guard-- > 0) {
+            if (near(cur, start)) { ring.pop(); return ring; } // geschlossen
+            var found = -1, next = null;
+            for (var i = 0; i < segs.length; i++) {
+                if (used[i]) { continue; }
+                if (near(segs[i].a, cur)) { found = i; next = segs[i].b; break; }
+                if (near(segs[i].b, cur)) { found = i; next = segs[i].a; break; }
+            }
+            if (found < 0) { return null; }
+            used[found] = true;
+            cur = next;
+            ring.push(cur);
+        }
+        return null;
     }
 
     // ---- Wand-Panel --------------------------------------------------------------
@@ -537,6 +768,10 @@
             hinweis('Bitte zuerst ein Polygon mit mindestens 3 Ecken zeichnen und schließen.');
             return false;
         }
+        if (hasImport && !scaleSet) {
+            hinweis('Import ohne Maßstab: bitte erst die Zwei-Punkt-Kalibrierung durchführen (Scale-Gate).');
+            return false;
+        }
         hinweis(null);
         return true;
     }
@@ -555,7 +790,12 @@
     // ---- Events ------------------------------------------------------------------
     $(svg).on('click', function (evt) {
         if (evt.target.classList && evt.target.classList.contains('wall-hit')) return; // Wandklick separat
+        if (mode === 'calib') { handleCalibClick(evt); return; }
         if (state.closed) return;
+        if (hasImport && !scaleSet) {
+            hinweis('Import ohne Maßstab: erst die Zwei-Punkt-Kalibrierung durchführen, dann nachzeichnen.');
+            return;
+        }
         var p = eventToMm(evt);
         state.polygon.push(p);
         render();
@@ -695,7 +935,157 @@
         render();
     }
 
+    // ---- Import: Kalibrierung / Übernahme / Init ---------------------------------
+    function handleCalibClick(evt) {
+        var u = eventToUnit(evt);
+        if (calibPts.length >= 2) { calibPts = []; }
+        calibPts.push(u);
+        drawCalib();
+        if (calibPts.length === 2) {
+            var d = Math.hypot(calibPts[1].x - calibPts[0].x, calibPts[1].y - calibPts[0].y);
+            $('#calib-status').text('Strecke gemessen (' + fmt(d, 1) + ' Einh.). Reale Länge in mm eingeben und anwenden.');
+        } else {
+            $('#calib-status').text('Zweiten Punkt klicken …');
+        }
+    }
+
+    function drawCalib() {
+        clearLayer('layer-calib');
+        var g = document.getElementById('layer-calib');
+        calibPts.forEach(function (u) {
+            g.appendChild(el('circle', { cx: unitToPxX(u.x), cy: unitToPxY(u.y), r: 5, fill: '#ea5455', stroke: '#fff', 'stroke-width': 1.5 }));
+        });
+        if (calibPts.length === 2) {
+            g.appendChild(el('line', {
+                x1: unitToPxX(calibPts[0].x), y1: unitToPxY(calibPts[0].y),
+                x2: unitToPxX(calibPts[1].x), y2: unitToPxY(calibPts[1].y),
+                stroke: '#ea5455', 'stroke-width': 2, 'stroke-dasharray': '5 3'
+            }));
+        }
+    }
+
+    function applyCalibration() {
+        if (calibPts.length < 2) { hinweis('Bitte zwei Punkte im Plan klicken.'); return; }
+        var realMm = deNum($('#calib-mm').val());
+        if (!realMm || realMm <= 0) { hinweis('Bitte die reale Länge der Strecke in mm eingeben.'); return; }
+        var d = Math.hypot(calibPts[1].x - calibPts[0].x, calibPts[1].y - calibPts[0].y);
+        if (!(d > 0)) { hinweis('Die zwei Punkte liegen zu dicht beieinander.'); return; }
+
+        var f = realMm / d; // mm pro Underlay-Einheit
+        // Plausibilitäts-Gate: Gesamtgebäude 1..100 m.
+        var bb = IMPORT.bbox || rasterBbox();
+        if (bb) {
+            var wmm = (bb.max.x - bb.min.x) * f, hmm = (bb.max.y - bb.min.y) * f;
+            var maxDim = Math.max(wmm, hmm);
+            if (maxDim < 1000 || maxDim > 100000) {
+                hinweis('Maßstab unplausibel: Gebäude wäre ' + fmt(maxDim / 1000, 1) + ' m (erlaubt 1–100 m). Bitte Strecke/Länge prüfen.');
+                return;
+            }
+        }
+
+        factor = f;
+        scaleSet = true;
+        mode = 'draw';
+        svg.style.cursor = 'crosshair';
+        calibPts = [];
+        clearLayer('layer-calib');
+        rebuildSnapTargets();
+        $('#calib-status').text('Maßstab gesetzt: 1 Einheit = ' + fmt(f, 3) + ' mm.');
+        $('#btn-calib-start').removeClass('btn-outline-primary').addClass('btn-outline-secondary').text('Maßstab neu setzen');
+        if (importHasRing()) { $('#btn-import-polygon').removeClass('d-none'); }
+        updateImportInfo();
+        renderUnderlay();
+        render();
+        hinweis(null);
+    }
+
+    function importHasRing() {
+        if (!hasImport || IMPORT.raster_bild_url) { return false; }
+        var r = extractRingUnits();
+        return !!(r && r.length >= 3);
+    }
+
+    function adoptImportPolygon() {
+        if (!scaleSet) { hinweis('Erst Maßstab setzen.'); return; }
+        var ring = extractRingUnits();
+        if (!ring || ring.length < 3) {
+            hinweis('Kein geschlossener Ring aus dem Import erkennbar — bitte manuell nachzeichnen.');
+            return;
+        }
+        state.polygon = ring.map(function (u) { return { x: Math.round(unitToMm(u.x)), y: Math.round(unitToMm(u.y)) }; });
+        state.segments = [];
+        state.closed = true;
+        state.selected = null;
+        rebuildSegments();
+        $('#wall-panel').addClass('d-none');
+        $('#wall-empty').removeClass('d-none');
+        $('#ergebnis-box').addClass('d-none');
+        hinweis('Import als Polygon übernommen — Wände abgeleitet. Eigenschaften je Wand prüfen.');
+        render();
+    }
+
+    function updateImportInfo() {
+        if (!hasImport) { return; }
+        var html = scaleSet
+            ? '<span class="text-success">Maßstab aktiv: 1 Einheit = ' + fmt(factor, 3) + ' mm.</span>'
+            : '<span class="text-warning">Ohne Maßstab: Vorschau/Speichern gesperrt — bitte kalibrieren.</span>';
+        $('#import-scale-info').html(html);
+    }
+
+    function initImport() {
+        if (!hasImport) { render(); return; }
+
+        // Maßstab: numerischer massstab (mm/Einheit) → direkt maßhaltig; sonst Kalibrierung nötig.
+        var m = IMPORT.massstab;
+        if (typeof m === 'number' && isFinite(m) && m > 0) {
+            factor = m; scaleSet = true;
+        } else {
+            factor = null; scaleSet = false;
+        }
+
+        if (IMPORT.bbox) { fitToBboxUnits(IMPORT.bbox); }
+
+        if (scaleSet) {
+            // DXF/mm (bzw. bekannter Maßstab): direkt maßhaltig, nur Direktübernahme anbieten.
+            if (importHasRing()) { $('#btn-import-polygon').removeClass('d-none'); }
+        } else {
+            // PDF-Vektor/Raster ohne Maßstab: Zwei-Punkt-Kalibrierung.
+            $('#calib-block').removeClass('d-none');
+        }
+        rebuildSnapTargets();
+        updateImportInfo();
+
+        if (IMPORT.raster_bild_url) {
+            var probe = new Image();
+            probe.onload = function () {
+                rasterNat = { w: probe.naturalWidth, h: probe.naturalHeight };
+                if (!IMPORT.bbox) { fitToBboxUnits(rasterBbox()); }
+                renderUnderlay();
+                render();
+            };
+            probe.onerror = function () { renderUnderlay(); render(); };
+            probe.src = IMPORT.raster_bild_url;
+        }
+
+        renderUnderlay();
+        render();
+    }
+
+    // ---- Import-Events -----------------------------------------------------------
+    $('#chk-underlay').on('change', function () { showUnderlay = this.checked; renderUnderlay(); });
+    $('#btn-import-polygon').on('click', adoptImportPolygon);
+    $('#btn-calib-apply').on('click', applyCalibration);
+    $('#btn-calib-start').on('click', function () {
+        mode = 'calib';
+        calibPts = [];
+        clearLayer('layer-calib');
+        svg.style.cursor = 'cell';
+        $('#calib-status').text('Ersten Punkt einer bekannten Strecke im Plan klicken …');
+        hinweis('Maßstab-Modus: zwei Punkte einer bekannten Strecke im Plan anklicken.');
+    });
+
     loadInitial();
+    initImport();
 
 })(jQuery);
 </script>

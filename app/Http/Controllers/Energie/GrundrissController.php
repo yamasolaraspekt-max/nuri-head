@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\HeizlastProjekt;
 use App\Models\HeizlastRaum;
 use App\Models\Konstruktion;
+use App\Models\PlanUpload;
 use App\Models\RaumGeometrie;
 use App\Services\Heizlast\GeometrieAbleitungService;
 use App\Services\Heizlast\HeizlastProjektService;
@@ -56,8 +57,13 @@ class GrundrissController extends Controller
 
     /**
      * GET energie.grundriss.editor → Editor, optional mit vorhandener Geometrie geladen.
+     *
+     * Optionaler Query-Param ?upload=<PlanUpload-id> legt einen hochgeladenen Plan als
+     * nicht-editierbares Underlay (Nachzeichnen) unter die Zeichenfläche. Der PlanUpload
+     * ist über auth()->id() streng gescoped (keine PlanUpload-Policy, A-3d). Ohne ?upload
+     * bleibt das Verhalten unverändert ($import === null).
      */
-    public function editor(?int $projekt = null)
+    public function editor(Request $request, ?int $projekt = null)
     {
         $geometrie = null;
         $projektName = null;
@@ -96,7 +102,46 @@ class GrundrissController extends Controller
             'projektId' => $projektId,
             'projektName' => $projektName,
             'raumId' => $raumId,
+            'import' => $this->importUnterlage($request),
         ]);
+    }
+
+    /**
+     * Baut aus ?upload=<id> das Underlay-Array für den Editor (oder null).
+     *
+     * Rein lesend, additiv: der PlanUpload wird nie verändert. Das Rohkandidaten-JSON
+     * (kandidat_geometrie) wird 1:1 an die View durchgereicht — Interpretation/Maßstab
+     * passieren clientseitig im Editor (DXF 1:1 mm, PDF/Raster per Zwei-Punkt-Kalibrierung).
+     *
+     * @return array<string, mixed>|null
+     */
+    private function importUnterlage(Request $request): ?array
+    {
+        $uploadId = $request->integer('upload') ?: null;
+        if ($uploadId === null) {
+            return null;
+        }
+
+        $upload = PlanUpload::query()
+            ->where('user_id', auth()->id()) // Besitzer-Scope (keine Policy, A-3d)
+            ->find($uploadId);
+
+        if ($upload === null) {
+            return null;
+        }
+
+        $kg = is_array($upload->kandidat_geometrie) ? $upload->kandidat_geometrie : [];
+        $hatBild = $upload->typ === 'bild' || filled(data_get($upload->meta, 'bild_pfad'));
+
+        return [
+            'entities' => $kg['entities'] ?? [],
+            'bbox' => $kg['bbox'] ?? null,
+            'massstab' => $kg['massstab_mm_pro_einheit'] ?? $upload->massstab_mm_pro_einheit ?? null,
+            'typ' => $upload->typ,
+            'raster_bild_url' => $hatBild ? route('energie.plan-upload.bild', $upload) : null,
+            'upload_id' => $upload->getKey(),
+            'original_name' => $upload->original_name,
+        ];
     }
 
     /**
