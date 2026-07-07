@@ -5453,6 +5453,16 @@ Route::middleware('auth')->group(function () {
 Route::get('/video-call/gast/{videoCall}', [\App\Http\Controllers\VideoCallController::class, 'guest'])
     ->name('video-call.guest');
 
+// ── Strang Energie: Wechselrichter-String-Auslegung (erste sichtbare Energie-Fläche) ──
+// Server-gerendert (Blade + Bootstrap/Vuexy, KEIN Alpine). Per direkter URL erreichbar;
+// Nav-Eintrag folgt separat (sidebar gehört einem anderen Strang).
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/energie/wr-auslegung', [\App\Http\Controllers\Energie\EnergieAuslegungController::class, 'index'])
+        ->name('energie.wr-auslegung');
+    Route::post('/admin/energie/wr-auslegung/berechnen', [\App\Http\Controllers\Energie\EnergieAuslegungController::class, 'berechnen'])
+        ->name('energie.wr-auslegung.berechnen');
+});
+
 
     
 
