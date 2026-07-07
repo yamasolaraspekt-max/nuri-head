@@ -5500,6 +5500,18 @@ Route::middleware(['auth'])->group(function () {
         ->name('energie.grundriss.vorschau');
     Route::post('/admin/energie/grundriss/speichern', [\App\Http\Controllers\Energie\GrundrissController::class, 'speichern'])
         ->name('energie.grundriss.speichern');
+
+    // Zusatz-Werkzeuge: Materialliste (Referenz), Fußboden-Check, Heizlast-Rechner
+    Route::get('/admin/energie/materialliste', [\App\Http\Controllers\Energie\MateriallisteController::class, 'index'])
+        ->name('energie.materialliste');
+    Route::get('/admin/energie/fussboden-check', [\App\Http\Controllers\Energie\FussbodenCheckController::class, 'index'])
+        ->name('energie.fussboden-check');
+    Route::post('/admin/energie/fussboden-check/berechnen', [\App\Http\Controllers\Energie\FussbodenCheckController::class, 'berechnen'])
+        ->name('energie.fussboden-check.berechnen');
+    Route::get('/admin/energie/heizlast', [\App\Http\Controllers\Energie\HeizlastController::class, 'index'])
+        ->name('energie.heizlast');
+    Route::post('/admin/energie/heizlast/berechnen', [\App\Http\Controllers\Energie\HeizlastController::class, 'berechnen'])
+        ->name('energie.heizlast.berechnen');
 });
 
 
