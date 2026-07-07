@@ -36,7 +36,12 @@ Deckt die AuslegungService-Orchestrierung fachlich ab (ohne den DB-/Geocoding-ge
 Graceful-Fallback ~950 kWh/kWp) — **keine Dopplung** (PVToolsController unangetastet). Energiekonzept deckt jetzt
 **PV + Wärmepumpe + Sanierung** in einem Beratungsangebot-PDF (Gesamt-Investition/Förderung/Eigenanteil/Ersparnis).
 
-**OFFEN (bewusst):** **Welle** GeometrieAbleitungService + raum_geometrien (Grundriss-Editor). Kleine Checks/Listen
+**GRUNDRISS-KERN GEBAUT (2026-07-08, Commit `9ad45a9`):** raum_geometrien + RaumGeometrie + GeometrieAbleitungService
+(Polygon→Flächen→Bauteile→Heizlast, verifiziert 5×4m→20m²/7 Bauteile→2,55 kW). **OFFEN Grundriss Teil 2 (Governance-Gate):**
+Zeichen-Editor (wb = Alpine+SVG — per CLAUDE.md außerhalb Heizkörper/Formulare VERBOTEN → Yama-Entscheidung: Alpine-Scope
+erweitern ODER jQuery/SVG-Neubau) + Plan-Import (ImportServiceClient/Async — externe Dienste).
+
+**OFFEN (bewusst):** Kleine Checks/Listen
 (Materialliste, Fußboden-/Heizkörper-Check) — teils REUSE ticket. Externe APIs (OpenMeteo/Geocoding) = optional, klima_plz führt.
 PVToolsController→PvgisErtragService-Delegation = späterer Konsolidierungs-Posten (eine Wahrheit).
 *(Parallel-Instanz „Angebots-WP-Konfigurator" im git-Stash `stash@{0}`.)*
