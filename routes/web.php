@@ -5461,6 +5461,12 @@ Route::middleware(['auth'])->group(function () {
         ->name('energie.wr-auslegung');
     Route::post('/admin/energie/wr-auslegung/berechnen', [\App\Http\Controllers\Energie\EnergieAuslegungController::class, 'berechnen'])
         ->name('energie.wr-auslegung.berechnen');
+
+    // Wärmepumpen-Auslegung + Wirtschaftlichkeit/KfW-Förderung (gleiche Machart wie die WR-Seite).
+    Route::get('/admin/energie/wp-auslegung', [\App\Http\Controllers\Energie\EnergieAuslegungController::class, 'wpIndex'])
+        ->name('energie.wp-auslegung');
+    Route::post('/admin/energie/wp-auslegung/berechnen', [\App\Http\Controllers\Energie\EnergieAuslegungController::class, 'wpBerechnen'])
+        ->name('energie.wp-auslegung.berechnen');
 });
 
 
