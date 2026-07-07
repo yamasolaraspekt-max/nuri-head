@@ -32,9 +32,13 @@ volle Heizlast-Projekt-Domäne transient (Cascade-Cleanup). 81 Tests grün.
 kundenfertigen Beratungsangebot-PDF (Gesamt-Investition + Gesamt-Förderung KfW+BAFA + Eigenanteil). Nav-Eintrag gesetzt.
 Deckt die AuslegungService-Orchestrierung fachlich ab (ohne den DB-/Geocoding-gebundenen wb-Orchestrator zu portieren).
 
-**OFFEN (optional/Welle):** PVGIS-Ertragsplaner (ticket hat PVGIS-Prototyp; `PvProjektService` portiert, UI-Aufwertung offen —
-PV-Block ins Energiekonzept). Kleine Checks/Listen (Materialliste, Fußboden-/Heizkörper-Check). **Welle:**
-GeometrieAbleitungService + raum_geometrien (Grundriss-Editor). Externe APIs (OpenMeteo/Geocoding) = optional, klima_plz führt.
+**PV im Energiekonzept LIVE (2026-07-07):** `PvgisErtragService` (kanonisch, v5_3 PVcalc, klima_plz-lat/lon-Geocoding,
+Graceful-Fallback ~950 kWh/kWp) — **keine Dopplung** (PVToolsController unangetastet). Energiekonzept deckt jetzt
+**PV + Wärmepumpe + Sanierung** in einem Beratungsangebot-PDF (Gesamt-Investition/Förderung/Eigenanteil/Ersparnis).
+
+**OFFEN (bewusst):** **Welle** GeometrieAbleitungService + raum_geometrien (Grundriss-Editor). Kleine Checks/Listen
+(Materialliste, Fußboden-/Heizkörper-Check) — teils REUSE ticket. Externe APIs (OpenMeteo/Geocoding) = optional, klima_plz führt.
+PVToolsController→PvgisErtragService-Delegation = späterer Konsolidierungs-Posten (eine Wahrheit).
 *(Parallel-Instanz „Angebots-WP-Konfigurator" im git-Stash `stash@{0}`.)*
 
 ## A. Rechenkerne — Heizlast / Wärmepumpe / PV
