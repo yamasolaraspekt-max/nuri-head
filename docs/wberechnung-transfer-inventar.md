@@ -50,8 +50,14 @@ PlanKlassifizieren-Job, PlanUploadController, Upload-View, Nav). **End-to-End ve
 UND PHP-Client (aktiv=true). Graceful-off wenn IMPORT_SERVICE_URL leer. **Aktivierung:** `IMPORT_SERVICE_URL=http://127.0.0.1:8001`
 in `.env` (`.env` ist schreibgeschützt → Nutzer trägt die Zeile ein) + Dienst via `uvicorn main:app --port 8001`.
 
-**LETZTER POLIER-POSTEN:** Editor-Underlay — den extrahierten Plan (DXF-Entities in mm) im Grundriss-Editor als Startgeometrie
-laden/nachzeichnen; PDF/Raster zusätzlich Zwei-Punkt-Kalibrierung (jQuery, kein Alpine). Alt-Anmerkung Kleine Checks/Listen
+**EDITOR-UNDERLAY GEBAUT (2026-07-08, `d7fce99`):** Plan-Import-Kette komplett — hochgeladenen Plan als maßhaltigen
+Underlay im Grundriss-Editor (`?upload=id`), DXF-Direktübernahme (Ring→Polygon), PDF/Raster Zwei-Punkt-Kalibrierung
+mit Plausibilitäts-Gate, Scale-Gate. jQuery/SVG, kein Alpine, bestehende Editor-Logik byte-identisch (Identitäts-Transform).
+Aktivierung ohne .env: Config-Default `services.import.url` → 127.0.0.1:8001 bei APP_ENV=local (`5c9b041`); aktiv=true.
+
+**✅ wberechnung-TRANSFER VOLLSTÄNDIG.** Kette: Plan hochladen → im Editor nachzeichnen → Heizlast → Auslegung/Sanierung/
+Energiekonzept mit Wirtschaftlichkeit + KfW/BAFA + PDF. Offen nur noch bewusste Kleinigkeiten (Legacy-Konsolidierung
+PVToolsController→PvgisErtragService; Dienst-Dauerbetrieb per launchd). Alt-Anmerkung Kleine Checks/Listen
 (Materialliste, Fußboden-/Heizkörper-Check) — teils REUSE ticket. Externe APIs (OpenMeteo/Geocoding) = optional, klima_plz führt.
 PVToolsController→PvgisErtragService-Delegation = späterer Konsolidierungs-Posten (eine Wahrheit).
 *(Parallel-Instanz „Angebots-WP-Konfigurator" im git-Stash `stash@{0}`.)*
