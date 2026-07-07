@@ -44,8 +44,14 @@ Polygon→Bauteile→Heizlast). **Editor `d9715e7`** — jQuery/SVG-Neubau (Yama
 **ZUSATZSEITEN GEBAUT (2026-07-08, `c129f6b`):** Materialliste (Referenz), Fußboden-Check (FussbodenheizungService),
 Heizlast-Rechner (HeizlastProjektService, Ist-Heizlast + WP-Match) — 3 Controller + Views + Nav.
 
-**NUR NOCH EXTERN OFFEN:** **Plan-Import** (dwg/dxf/pdf via `ImportServiceClient` + Async-Klassifizierung `PlanKlassifizieren`)
-— echte externe Dienste, nicht in ticket (braucht Bereitstellung des Import-/OCR-Dienstes). Alt-Anmerkung Kleine Checks/Listen
+**PLAN-IMPORT IMPORTIERT (2026-07-08, `435256e`):** Python-Microservice `import-service/` (FastAPI + ezdxf/PyMuPDF/Tesseract,
+venv installiert, 11 py-Tests grün, läuft :8001, /health ok) + PHP-Anbindung (PlanUpload-Model/Migration, ImportServiceClient,
+PlanKlassifizieren-Job, PlanUploadController, Upload-View, Nav). **End-to-End verifiziert:** DXF→mm/bbox/Wandlinien über Dienst
+UND PHP-Client (aktiv=true). Graceful-off wenn IMPORT_SERVICE_URL leer. **Aktivierung:** `IMPORT_SERVICE_URL=http://127.0.0.1:8001`
+in `.env` (`.env` ist schreibgeschützt → Nutzer trägt die Zeile ein) + Dienst via `uvicorn main:app --port 8001`.
+
+**LETZTER POLIER-POSTEN:** Editor-Underlay — den extrahierten Plan (DXF-Entities in mm) im Grundriss-Editor als Startgeometrie
+laden/nachzeichnen; PDF/Raster zusätzlich Zwei-Punkt-Kalibrierung (jQuery, kein Alpine). Alt-Anmerkung Kleine Checks/Listen
 (Materialliste, Fußboden-/Heizkörper-Check) — teils REUSE ticket. Externe APIs (OpenMeteo/Geocoding) = optional, klima_plz führt.
 PVToolsController→PvgisErtragService-Delegation = späterer Konsolidierungs-Posten (eine Wahrheit).
 *(Parallel-Instanz „Angebots-WP-Konfigurator" im git-Stash `stash@{0}`.)*
