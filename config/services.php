@@ -57,9 +57,9 @@ return [
     ],
 
     'ollama' => [
-        'host' => env('OLLAMA_HOST','http://127.0.0.1:11434'),
-        'model' => env('OLLAMA_MODEL','llama3:instruct'),
-        'embed_model' => env('OLLAMA_EMBED_MODEL', 'mxbai-embed-large'), 
+        'host' => env('OLLAMA_HOST', 'http://127.0.0.1:11434'),
+        'model' => env('OLLAMA_MODEL', 'llama3:instruct'),
+        'embed_model' => env('OLLAMA_EMBED_MODEL', 'mxbai-embed-large'),
     ],
 
     'overpass' => [
@@ -70,18 +70,20 @@ return [
     ],
 
     'newsapi' => [
-        'key'  => env('NEWSAPI_KEY'),
+        'key' => env('NEWSAPI_KEY'),
         'slug' => env('NEWSAPI_GROUP_SLUG', 'solar-news'),
     ],
 
     'ids' => [
         'shop_url' => env('IDS_SHOP_URL', 'https://gconlineplus.de/ids.aspx'),
-        'kndnr'    => env('IDS_KNDNR'),
+        'kndnr' => env('IDS_KNDNR'),
         'username' => env('IDS_USERNAME'),
         'password' => env('IDS_PASSWORD'),
     ],
 
-
-
+    // Python-Microservice für den Plan-Import (ezdxf/PyMuPDF). Leer ⇒ Import-Features graceful aus.
+    'import' => [
+        'url' => env('IMPORT_SERVICE_URL'),
+    ],
 
 ];

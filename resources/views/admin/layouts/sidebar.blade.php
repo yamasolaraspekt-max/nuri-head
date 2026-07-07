@@ -536,6 +536,7 @@
                 ['label' => 'Sanierungs-Wirtschaftlichkeit', 'icon' => 'trending-down', 'url' => $safeRoute('energie.sanierung'), 'active_routes' => ['/admin/energie/sanierung']],
                 ['label' => 'Energiekonzept', 'icon' => 'file-check', 'url' => $safeRoute('energie.energiekonzept'), 'active_routes' => ['/admin/energie/energiekonzept']],
                 ['label' => 'Grundriss-Editor', 'icon' => 'pen-tool', 'url' => $safeRoute('energie.grundriss'), 'active_routes' => ['/admin/energie/grundriss']],
+                ['label' => 'Plan-Import', 'icon' => 'file-up', 'url' => $safeRoute('energie.plan-upload'), 'active_routes' => ['/admin/energie/plan-upload']],
                 ['label' => 'Heizlast-Rechner', 'icon' => 'thermometer-sun', 'url' => $safeRoute('energie.heizlast'), 'active_routes' => ['/admin/energie/heizlast']],
                 ['label' => 'Fußboden-Check', 'icon' => 'grid', 'url' => $safeRoute('energie.fussboden-check'), 'active_routes' => ['/admin/energie/fussboden-check']],
                 ['label' => 'Materialliste', 'icon' => 'layers', 'url' => $safeRoute('energie.materialliste'), 'active_routes' => ['/admin/energie/materialliste']],

@@ -5512,6 +5512,16 @@ Route::middleware(['auth'])->group(function () {
         ->name('energie.heizlast');
     Route::post('/admin/energie/heizlast/berechnen', [\App\Http\Controllers\Energie\HeizlastController::class, 'berechnen'])
         ->name('energie.heizlast.berechnen');
+
+    // Plan-Import (DXF/PDF/Bild) — Upload + Klassifikation; Import-Microservice via IMPORT_SERVICE_URL (graceful optional)
+    Route::get('/admin/energie/plan-upload', [\App\Http\Controllers\Energie\PlanUploadController::class, 'index'])
+        ->name('energie.plan-upload');
+    Route::post('/admin/energie/plan-upload', [\App\Http\Controllers\Energie\PlanUploadController::class, 'store'])
+        ->name('energie.plan-upload.store');
+    Route::delete('/admin/energie/plan-upload/{planUpload}', [\App\Http\Controllers\Energie\PlanUploadController::class, 'destroy'])
+        ->name('energie.plan-upload.destroy');
+    Route::get('/admin/energie/plan-upload/{planUpload}/bild', [\App\Http\Controllers\Energie\PlanUploadController::class, 'bild'])
+        ->name('energie.plan-upload.bild');
 });
 
 
