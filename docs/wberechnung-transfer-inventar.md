@@ -8,6 +8,20 @@
 > (ggf. Contract-Swap Waermepumpe→WpKennlinie) · **[ADAPTER]** DB-/Http-gebunden, braucht Naht · **[UI]** eigener
 > Blade-Bau · **[WELLE]** eigener großer Posten · **[SKIP]** kein Nutzen.
 
+## ✅ FORTSCHRITT (Stand 2026-07-07, alles in main)
+**Rechenkerne live:** InverterSizing, WpKennlinie(+Kurven), HeizlastRechner, Anforderungsprofil, Heizkörper-EN-442,
+Hydraulik · **13 DB-freie Kerne portiert** (Jaz, Warmwasser, Verbrauch, Hoehenkorrektur, KlimaBin, HeizlastService,
+HeizlastKonstanten, HeizlastEingabe, Bivalenz, Fussbodenheizung, **KostenService, FoerderungService/KfW, PvProjektService**) ·
+**Bivalenz-Klima-Naht** (KlimaBinService) · **WaermepumpenMatchService** (Adapter auf CatalogDeviceRepository).
+**Sichtbar/live:** WR-Auslegung (`/admin/energie/wr-auslegung`) + WP-Auslegung inkl. Wirtschaftlichkeit+KfW
+(`/admin/energie/wp-auslegung`). **Daten:** Katalog + Referenz + klima_plz(8168) + Heizkörper(30) + WP-Kurven(19).
+Tests: 73 Unit grün. KfW-Smoke 8.750€, Bivalenzpunkt −1,5°C/JAZ 3,53, WP-Match 5 Treffer.
+
+**OFFEN (Adapter-Block, DB-/Artikel-gebunden — nächster Posten):** SanierungsWirtschaftlichkeitService (Amortisation,
+U-Wert-Naht auf `konstruktionen`), UWertService, GeometrieAbleitungService, HeizlastProjektService, AuslegungHandoffService,
+AuslegungService-Orchestrierung. **UI-Block:** Heizlast-Eingabe, PVGIS-Planer, Sanierung, Energiekonzept-PDF. **Welle:** Grundriss/Plan.
+**Nav-Eintrag Bereich 8** (sidebar = Strang A). *(Parallel-Instanz-Arbeit „Angebots-WP-Konfigurator" liegt im git-Stash.)*
+
 ## A. Rechenkerne — Heizlast / Wärmepumpe / PV
 
 | Service (Z.) | DBrefs | Verdikt | Anmerkung |
