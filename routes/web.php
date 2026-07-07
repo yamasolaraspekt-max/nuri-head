@@ -5490,6 +5490,16 @@ Route::middleware(['auth'])->group(function () {
         ->name('energie.energiekonzept.berechnen');
     Route::post('/admin/energie/energiekonzept/dokument', [\App\Http\Controllers\Energie\EnergiekonzeptController::class, 'dokument'])
         ->name('energie.energiekonzept.dokument');
+
+    // Grundriss-Editor (jQuery/SVG): Raum zeichnen → Bauteile ableiten → Heizlast
+    Route::get('/admin/energie/grundriss', [\App\Http\Controllers\Energie\GrundrissController::class, 'index'])
+        ->name('energie.grundriss');
+    Route::get('/admin/energie/grundriss/editor/{projekt?}', [\App\Http\Controllers\Energie\GrundrissController::class, 'editor'])
+        ->name('energie.grundriss.editor');
+    Route::post('/admin/energie/grundriss/vorschau', [\App\Http\Controllers\Energie\GrundrissController::class, 'vorschau'])
+        ->name('energie.grundriss.vorschau');
+    Route::post('/admin/energie/grundriss/speichern', [\App\Http\Controllers\Energie\GrundrissController::class, 'speichern'])
+        ->name('energie.grundriss.speichern');
 });
 
 

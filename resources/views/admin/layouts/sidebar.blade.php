@@ -535,6 +535,7 @@
                 ['label' => 'Wärmepumpen-Auslegung', 'icon' => 'flame', 'url' => $safeRoute('energie.wp-auslegung'), 'active_routes' => ['/admin/energie/wp-auslegung']],
                 ['label' => 'Sanierungs-Wirtschaftlichkeit', 'icon' => 'trending-down', 'url' => $safeRoute('energie.sanierung'), 'active_routes' => ['/admin/energie/sanierung']],
                 ['label' => 'Energiekonzept', 'icon' => 'file-check', 'url' => $safeRoute('energie.energiekonzept'), 'active_routes' => ['/admin/energie/energiekonzept']],
+                ['label' => 'Grundriss-Editor', 'icon' => 'pen-tool', 'url' => $safeRoute('energie.grundriss'), 'active_routes' => ['/admin/energie/grundriss']],
                 ['label' => 'Heizkörper-Check', 'icon' => 'thermometer', 'url' => $safeRoute('radiator.config.view'), 'active_routes' => ['/radiator_config_view']],
                 ['label' => 'Wirtschaftlichkeit', 'icon' => 'calculator', 'url' => $safeRoute('economic_calculations.index', 'admin/economic-calculations'), 'active_routes' => ['/admin/economic-calculations', '/profitability']],
                 // Finance-Gate 1:1 erhalten (Item-Level)

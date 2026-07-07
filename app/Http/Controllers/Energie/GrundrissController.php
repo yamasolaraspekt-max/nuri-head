@@ -1,0 +1,352 @@
+<?php
+
+namespace App\Http\Controllers\Energie;
+
+use App\Http\Controllers\Controller;
+use App\Models\HeizlastProjekt;
+use App\Models\HeizlastRaum;
+use App\Models\Konstruktion;
+use App\Models\RaumGeometrie;
+use App\Services\Heizlast\GeometrieAbleitungService;
+use App\Services\Heizlast\HeizlastProjektService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Throwable;
+
+/**
+ * Interaktiver Grundriss-Editor (Zeichnen → Heizlast), Strang Energie.
+ *
+ * Frontend: jQuery + inline SVG, KEIN Alpine (CLAUDE.md verbietet Alpine außerhalb der
+ * heizkoerper.*-Views und des Formular-Renderings). Der Editor zeichnet ein Raum-Polygon,
+ * leitet je Polygon-Kante ein Wandsegment ab (Geometrie-JSON-Contract der RaumGeometrie)
+ * und lässt es serverseitig rechnen.
+ *
+ * - vorschau(): baut ein TRANSIENTES Projekt (Cascade-Delete danach) → reiner Rechner, DB bleibt sauber.
+ * - speichern(): persistiert Projekt + 1 Raum + RaumGeometrie (updateOrCreate) und leitet Bauteile ab.
+ *
+ * Beide Wege bauen die Eingabe nur; die Rechen-Engine (GeometrieAbleitungService,
+ * HeizlastProjektService) bleibt unangetastet.
+ */
+class GrundrissController extends Controller
+{
+    /** Grenzflächen eines Wand-/Decke-/Boden-Bauteils. */
+    private const GRENZFLAECHEN = ['aussen', 'erdreich', 'unbeheizt'];
+
+    /** Öffnungs-Typen. */
+    private const OEFFNUNG_TYPEN = ['fenster', 'tuer'];
+
+    public function __construct(
+        private GeometrieAbleitungService $ableitung,
+        private HeizlastProjektService $heizlast,
+    ) {}
+
+    /** GET energie.grundriss → Liste bestehender Grundriss-Projekte + Button „Neuer Grundriss". */
+    public function index()
+    {
+        $projekte = HeizlastProjekt::query()
+            ->whereHas('raeume.geometrie')
+            ->with(['raeume' => fn ($q) => $q->with('geometrie')])
+            ->orderByDesc('id')
+            ->get();
+
+        return view('admin.energie.grundriss', [
+            'projekte' => $projekte,
+        ]);
+    }
+
+    /**
+     * GET energie.grundriss.editor → Editor, optional mit vorhandener Geometrie geladen.
+     */
+    public function editor(?int $projekt = null)
+    {
+        $geometrie = null;
+        $projektName = null;
+        $projektId = null;
+        $raumId = null;
+
+        if ($projekt !== null) {
+            $p = HeizlastProjekt::with(['raeume' => fn ($q) => $q->with('geometrie')])->find($projekt);
+            if ($p !== null) {
+                $projektId = $p->getKey();
+                $projektName = $p->name;
+                $raum = $p->raeume->first();
+                if ($raum !== null) {
+                    $raumId = $raum->getKey();
+                    $g = $raum->geometrie;
+                    if ($g !== null) {
+                        $geometrie = [
+                            'name' => $raum->name,
+                            'nutzung' => $raum->nutzung ?? 'wohnen',
+                            'geschoss' => $g->geschoss ?? 0,
+                            'hoehe_mm' => $g->hoehe_mm ?? 2500,
+                            'polygon' => $g->polygon ?? [],
+                            'wand_segmente' => $g->wand_segmente ?? [],
+                            'decke' => $g->decke,
+                            'boden' => $g->boden,
+                        ];
+                    }
+                }
+            }
+        }
+
+        return view('admin.energie.grundriss_editor', [
+            'konstruktionen' => Konstruktion::orderBy('name')->pluck('name', 'id'),
+            'grenzflaechen' => self::GRENZFLAECHEN,
+            'geometrie' => $geometrie,
+            'projektId' => $projektId,
+            'projektName' => $projektName,
+            'raumId' => $raumId,
+        ]);
+    }
+
+    /**
+     * POST energie.grundriss.vorschau → TRANSIENTE Berechnung.
+     *
+     * Baut Projekt/Raum/Geometrie in einer Transaktion, leitet Bauteile ab, rechnet die
+     * Heizlast und verwirft das Projekt (Cascade) wieder. Antwort: JSON mit Kennzahlen.
+     */
+    public function vorschau(Request $request)
+    {
+        $data = $this->validieren($request);
+
+        if (count($data['polygon']) < 3) {
+            return response()->json(['message' => 'Mindestens 3 Ecken für eine Vorschau nötig.'], 422);
+        }
+
+        try {
+            $ergebnis = DB::transaction(function () use ($data) {
+                $projekt = $this->baueProjekt($data, null);
+                $this->ableitung->schreibeInProjekt($projekt);
+
+                $bauteilAnzahl = (int) $projekt->raeume()->first()?->bauteile()->count();
+                $grundflaeche = round($this->ableitung->polygonFlaecheM2($data['polygon']), 2);
+
+                $rechnung = $this->heizlast->fuerProjekt($projekt->fresh());
+                $raum0 = $rechnung['raeume'][0] ?? [];
+
+                // TRANSIENT: reiner Rechner — Projekt (Cascade: Raum/Geometrie/Bauteile) verwerfen.
+                $projekt->delete();
+
+                return [
+                    'grundflaeche_m2' => $grundflaeche,
+                    'bauteil_anzahl' => $bauteilAnzahl,
+                    'auslegungsheizlast_kw' => $rechnung['gebaeude']['auslegungsheizlast_kw'] ?? null,
+                    'h_t_w_k' => $raum0['h_t_w_k'] ?? null,
+                    'h_v_w_k' => $raum0['h_v_w_k'] ?? null,
+                ];
+            });
+        } catch (Throwable $e) {
+            return response()->json(['message' => 'Berechnung fehlgeschlagen: '.$e->getMessage()], 422);
+        }
+
+        return response()->json($ergebnis);
+    }
+
+    /**
+     * POST energie.grundriss.speichern → persistiert Projekt + 1 Raum + RaumGeometrie.
+     *
+     * updateOrCreate anhand optionaler projekt_id/raum_id; leitet danach die Bauteile ab.
+     * Antwort: JSON { projekt_id, raum_id, message }.
+     */
+    public function speichern(Request $request)
+    {
+        $data = $this->validieren($request);
+
+        if (count($data['polygon']) < 3) {
+            return response()->json(['message' => 'Mindestens 3 Ecken zum Speichern nötig.'], 422);
+        }
+
+        $projektId = $request->integer('projekt_id') ?: null;
+        $raumId = $request->integer('raum_id') ?: null;
+
+        try {
+            $result = DB::transaction(function () use ($data, $projektId, $raumId) {
+                $projekt = $this->baueProjekt($data, $projektId, $raumId, persist: true);
+                $this->ableitung->schreibeInProjekt($projekt);
+                $raum = $projekt->raeume()->first();
+
+                return [
+                    'projekt_id' => $projekt->getKey(),
+                    'raum_id' => $raum?->getKey(),
+                    'message' => 'Grundriss „'.$projekt->name.'" gespeichert.',
+                ];
+            });
+        } catch (Throwable $e) {
+            return response()->json(['message' => 'Speichern fehlgeschlagen: '.$e->getMessage()], 422);
+        }
+
+        return response()->json($result);
+    }
+
+    /**
+     * Baut (transient oder persistent) ein Projekt mit genau einem Raum + dessen RaumGeometrie
+     * nach dem Geometrie-JSON-Contract. Bei $persist wird per updateOrCreate wiederverwendet.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    private function baueProjekt(array $data, ?int $projektId, ?int $raumId = null, bool $persist = false): HeizlastProjekt
+    {
+        $name = $data['name'] !== '' ? $data['name'] : 'Grundriss';
+
+        $projekt = $persist && $projektId !== null
+            ? HeizlastProjekt::find($projektId)
+            : null;
+
+        if ($projekt === null) {
+            $projekt = HeizlastProjekt::create(['name' => $name]);
+        } else {
+            $projekt->update(['name' => $name]);
+        }
+
+        $raum = $persist && $raumId !== null
+            ? $projekt->raeume()->whereKey($raumId)->first()
+            : ($persist ? $projekt->raeume()->first() : null);
+
+        // grundflaeche_m2/hoehe_m sind NOT NULL — mit den Geometrie-Werten vorbelegen;
+        // schreibeInProjekt() aktualisiert sie danach identisch aus der Geometrie.
+        $raumAttrs = [
+            'heizlast_projekt_id' => $projekt->getKey(),
+            'name' => $name,
+            'nutzung' => $data['nutzung'] !== '' ? $data['nutzung'] : 'wohnen',
+            'grundflaeche_m2' => round($this->ableitung->polygonFlaecheM2($data['polygon']), 2),
+            'hoehe_m' => round($data['hoehe_mm'] / 1000.0, 2),
+        ];
+
+        if ($raum === null) {
+            $raum = HeizlastRaum::create($raumAttrs);
+        } else {
+            $raum->update($raumAttrs);
+        }
+
+        $geometrieAttrs = [
+            'geschoss' => $data['geschoss'],
+            'hoehe_mm' => $data['hoehe_mm'],
+            'polygon' => $data['polygon'],
+            'wand_segmente' => $data['wand_segmente'],
+            'decke' => $data['decke'],
+            'boden' => $data['boden'],
+        ];
+
+        RaumGeometrie::updateOrCreate(
+            ['heizlast_raum_id' => $raum->getKey()],
+            $geometrieAttrs
+        );
+
+        return $projekt->fresh();
+    }
+
+    /**
+     * Validiert und normalisiert das Geometrie-JSON (Contract der RaumGeometrie, mm).
+     *
+     * @return array<string, mixed>
+     */
+    private function validieren(Request $request): array
+    {
+        $grenz = implode(',', self::GRENZFLAECHEN);
+        $typen = implode(',', self::OEFFNUNG_TYPEN);
+
+        $validated = $request->validate([
+            'name' => ['nullable', 'string', 'max:190'],
+            'nutzung' => ['nullable', 'string', 'max:60'],
+            'geschoss' => ['nullable', 'integer', 'min:-5', 'max:200'],
+            'hoehe_mm' => ['required', 'integer', 'min:1000', 'max:20000'],
+
+            'polygon' => ['required', 'array', 'min:3'],
+            'polygon.*.x' => ['required', 'numeric'],
+            'polygon.*.y' => ['required', 'numeric'],
+
+            'wand_segmente' => ['required', 'array', 'min:1'],
+            'wand_segmente.*.von.x' => ['required', 'numeric'],
+            'wand_segmente.*.von.y' => ['required', 'numeric'],
+            'wand_segmente.*.bis.x' => ['required', 'numeric'],
+            'wand_segmente.*.bis.y' => ['required', 'numeric'],
+            'wand_segmente.*.grenzflaeche' => ['required', "in:$grenz"],
+            'wand_segmente.*.bauteil_typ' => ['nullable', 'string', 'max:30'],
+            'wand_segmente.*.azimut_grad' => ['nullable', 'numeric', 'min:0', 'max:360'],
+            'wand_segmente.*.u_wert' => ['nullable', 'numeric', 'min:0.01', 'max:10'],
+            'wand_segmente.*.konstruktion_id' => ['nullable', 'integer', 'exists:konstruktionen,id'],
+            'wand_segmente.*.oeffnungen' => ['nullable', 'array'],
+            'wand_segmente.*.oeffnungen.*.typ' => ['required_with:wand_segmente.*.oeffnungen', "in:$typen"],
+            'wand_segmente.*.oeffnungen.*.breite_mm' => ['required_with:wand_segmente.*.oeffnungen', 'numeric', 'min:1'],
+            'wand_segmente.*.oeffnungen.*.hoehe_mm' => ['required_with:wand_segmente.*.oeffnungen', 'numeric', 'min:1'],
+            'wand_segmente.*.oeffnungen.*.u_wert' => ['nullable', 'numeric', 'min:0.01', 'max:10'],
+
+            'decke' => ['nullable', 'array'],
+            'decke.grenzflaeche' => ['nullable', "in:$grenz"],
+            'decke.u_wert' => ['nullable', 'numeric', 'min:0.01', 'max:10'],
+            'boden' => ['nullable', 'array'],
+            'boden.grenzflaeche' => ['nullable', "in:$grenz"],
+            'boden.u_wert' => ['nullable', 'numeric', 'min:0.01', 'max:10'],
+        ]);
+
+        return [
+            'name' => trim((string) ($validated['name'] ?? '')),
+            'nutzung' => trim((string) ($validated['nutzung'] ?? '')),
+            'geschoss' => (int) ($validated['geschoss'] ?? 0),
+            'hoehe_mm' => (int) $validated['hoehe_mm'],
+            'polygon' => $this->normPolygon($validated['polygon']),
+            'wand_segmente' => $this->normSegmente($validated['wand_segmente']),
+            'decke' => $this->normFlaeche($validated['decke'] ?? null, 'decke'),
+            'boden' => $this->normFlaeche($validated['boden'] ?? null, 'boden'),
+        ];
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $polygon
+     * @return array<int, array{x: float, y: float}>
+     */
+    private function normPolygon(array $polygon): array
+    {
+        return array_values(array_map(fn ($p) => [
+            'x' => (float) $p['x'],
+            'y' => (float) $p['y'],
+        ], $polygon));
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $segmente
+     * @return array<int, array<string, mixed>>
+     */
+    private function normSegmente(array $segmente): array
+    {
+        return array_values(array_map(function ($seg) {
+            $oeffnungen = [];
+            foreach ($seg['oeffnungen'] ?? [] as $o) {
+                $oeffnungen[] = [
+                    'typ' => $o['typ'] ?? 'fenster',
+                    'breite_mm' => (float) ($o['breite_mm'] ?? 0),
+                    'hoehe_mm' => (float) ($o['hoehe_mm'] ?? 0),
+                    'u_wert' => isset($o['u_wert']) && $o['u_wert'] !== '' && $o['u_wert'] !== null ? (float) $o['u_wert'] : null,
+                ];
+            }
+
+            return [
+                'von' => ['x' => (float) $seg['von']['x'], 'y' => (float) $seg['von']['y']],
+                'bis' => ['x' => (float) $seg['bis']['x'], 'y' => (float) $seg['bis']['y']],
+                'grenzflaeche' => $seg['grenzflaeche'],
+                'bauteil_typ' => $seg['bauteil_typ'] ?? 'wand',
+                'azimut_grad' => isset($seg['azimut_grad']) && $seg['azimut_grad'] !== '' && $seg['azimut_grad'] !== null ? (float) $seg['azimut_grad'] : null,
+                'u_wert' => isset($seg['u_wert']) && $seg['u_wert'] !== '' && $seg['u_wert'] !== null ? (float) $seg['u_wert'] : null,
+                'konstruktion_id' => isset($seg['konstruktion_id']) && $seg['konstruktion_id'] !== '' && $seg['konstruktion_id'] !== null ? (int) $seg['konstruktion_id'] : null,
+                'oeffnungen' => $oeffnungen,
+            ];
+        }, $segmente));
+    }
+
+    /**
+     * @param  array<string, mixed>|null  $def
+     * @return array<string, mixed>|null
+     */
+    private function normFlaeche(?array $def, string $typ): ?array
+    {
+        if (empty($def) || empty($def['grenzflaeche'])) {
+            return null;
+        }
+
+        return [
+            'bauteil_typ' => $typ,
+            'grenzflaeche' => $def['grenzflaeche'],
+            'u_wert' => isset($def['u_wert']) && $def['u_wert'] !== '' && $def['u_wert'] !== null ? (float) $def['u_wert'] : null,
+        ];
+    }
+}
