@@ -23,9 +23,14 @@ HeizlastProjektService** (Nähte: RadiatorSpec/RadiatorPerformanceService/Hydrau
 **SanierungsWirtschaftlichkeitService** (Amortisation/Einsparung/**BAFA**) portiert + End-to-End verifiziert
 (Test-Projekt→Heizlast 1,32 kW→Sanierungs-Vergleich fehlerfrei). 81 Tests grün. Commit `ced8784`.
 
-**OFFEN:** **UI-Block** — Sanierungs-Eingabe+Dokument (PDF), Heizlast-Eingabe-Maske, PVGIS-Planer, WR-Dokument.
-**AuslegungService**-Orchestrierung. **Welle:** GeometrieAbleitungService + raum_geometrien (Grundriss). **Nav-Eintrag
-Bereich 8** (sidebar = Strang A). *(Parallel-Instanz „Angebots-WP-Konfigurator" im git-Stash.)*
+**UI LIVE (2026-07-07):** 3 Energie-Werkzeuge in Sidebar-Sektion „Energie" verlinkt + je kundenfertiges PDF:
+`/admin/energie/wr-auslegung` (WR-String + PDF), `/admin/energie/wp-auslegung` (WP + Wirtschaftlichkeit + KfW + PDF),
+`/admin/energie/sanierung` (Ist/Nachher-Heizlast + Amortisation/Einsparung/**BAFA** + PDF). Sanierung nutzt die
+volle Heizlast-Projekt-Domäne transient (Cascade-Cleanup). 81 Tests grün.
+
+**OFFEN (optional/Welle):** PVGIS-Ertragsplaner (ticket hat PVGIS-Prototyp; wb-`PvProjektService` portiert, UI-Aufwertung
+offen). **AuslegungService**-Orchestrierung (Energiekonzept PV+WP+Sanierung als 1 Dokument). **Welle:**
+GeometrieAbleitungService + raum_geometrien (Grundriss-Editor). *(Parallel-Instanz „Angebots-WP-Konfigurator" im git-Stash `stash@{0}`.)*
 
 ## A. Rechenkerne — Heizlast / Wärmepumpe / PV
 
