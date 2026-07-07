@@ -25,7 +25,7 @@ use App\Services\Energie\Contracts\WpKennlinie;
 class BivalenzService
 {
     public function __construct(
-        private OpenMeteoKlimaService $klima,
+        private KlimaBinService $klima,
         private WpKennlinieService $kennlinie,
     ) {}
 
@@ -44,7 +44,7 @@ class BivalenzService
         ?float $lat = null,
         ?float $lon = null,
     ): array {
-        $profil = $this->klima->profil($plz, $lat, $lon);
+        $profil = $this->klima->profil($plz);
         $thetaE = $profil['theta_e'];
         $thetaHg = $profil['heizgrenze_c'];
         $bins = $profil['bins'];

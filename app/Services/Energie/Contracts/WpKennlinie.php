@@ -10,6 +10,7 @@ namespace App\Services\Energie\Contracts;
  * Property-Namen = Spaltennamen von product_heat_pump_specs (1:1), hersteller/modell
  * aus products via Join.
  *
+ * @property int|null $id
  * @property array|null $leistungskurve 3-Ebenen-Kennlinie, JSON-Schema exakt:
  *                                      {"35":[[t_C,p_kW,cop],…],"45":[…],"55":[…]} — Ebenen W35/W45/W55, je Zeile [Außentemp, Leistung_kW, COP]
  * @property string|null $kurve_semantik Semantik der Leistungsdaten ('en14511_nenn' | 'volllast_max' | null)

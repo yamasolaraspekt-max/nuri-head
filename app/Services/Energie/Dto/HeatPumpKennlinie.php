@@ -14,6 +14,8 @@ use App\Services\Energie\Contracts\WpKennlinie;
  */
 final class HeatPumpKennlinie implements WpKennlinie
 {
+    public ?int $id;
+
     public ?array $leistungskurve;
 
     public ?string $kurve_semantik;
@@ -61,6 +63,7 @@ final class HeatPumpKennlinie implements WpKennlinie
         $r = (array) $row;
         $o = new self;
 
+        $o->id = self::nInt($r['id'] ?? null);
         $o->leistungskurve = self::decodeKurve($r['leistungskurve'] ?? null);
         $o->kurve_semantik = self::nStr($r['kurve_semantik'] ?? null);
 
@@ -117,6 +120,11 @@ final class HeatPumpKennlinie implements WpKennlinie
     private static function nFloat(mixed $v): ?float
     {
         return $v === null ? null : (float) $v;
+    }
+
+    private static function nInt(mixed $v): ?int
+    {
+        return $v === null ? null : (int) $v;
     }
 
     private static function nStr(mixed $v): ?string
