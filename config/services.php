@@ -81,9 +81,11 @@ return [
         'password' => env('IDS_PASSWORD'),
     ],
 
-    // Python-Microservice für den Plan-Import (ezdxf/PyMuPDF). Leer ⇒ Import-Features graceful aus.
+    // Python-Microservice für den Plan-Import (ezdxf/PyMuPDF/OCR). IMPORT_SERVICE_URL setzen, um
+    // ihn produktiv anzubinden. Ohne .env-Eintrag greift lokal (APP_ENV=local) automatisch der
+    // Standard-Dienst auf 127.0.0.1:8001 (import-service/, uvicorn); sonst leer ⇒ Import graceful aus.
     'import' => [
-        'url' => env('IMPORT_SERVICE_URL'),
+        'url' => env('IMPORT_SERVICE_URL') ?: (env('APP_ENV') === 'local' ? 'http://127.0.0.1:8001' : null),
     ],
 
 ];
