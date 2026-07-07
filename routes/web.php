@@ -5470,6 +5470,18 @@ Route::middleware(['auth'])->group(function () {
     // Kundenfertiges, druck-/PDF-taugliches Auslegungs-Dokument (eigenständiges HTML, öffnet in neuem Tab).
     Route::post('/admin/energie/wp-auslegung/dokument', [\App\Http\Controllers\Energie\EnergieAuslegungController::class, 'wpDokument'])
         ->name('energie.wp-auslegung.dokument');
+
+    // WR-Auslegungs-Dokument (PDF, spiegelt WP-Dokument)
+    Route::post('/admin/energie/wr-auslegung/dokument', [\App\Http\Controllers\Energie\EnergieAuslegungController::class, 'wrDokument'])
+        ->name('energie.wr-auslegung.dokument');
+
+    // Sanierungs-Wirtschaftlichkeit (Heizlast-Projekt-Domäne): Rechner + kundenfertiges Dokument
+    Route::get('/admin/energie/sanierung', [\App\Http\Controllers\Energie\SanierungController::class, 'index'])
+        ->name('energie.sanierung');
+    Route::post('/admin/energie/sanierung/berechnen', [\App\Http\Controllers\Energie\SanierungController::class, 'berechnen'])
+        ->name('energie.sanierung.berechnen');
+    Route::post('/admin/energie/sanierung/dokument', [\App\Http\Controllers\Energie\SanierungController::class, 'dokument'])
+        ->name('energie.sanierung.dokument');
 });
 
 

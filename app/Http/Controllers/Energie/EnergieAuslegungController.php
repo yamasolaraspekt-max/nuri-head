@@ -111,6 +111,71 @@ class EnergieAuslegungController extends Controller
         ]);
     }
 
+    /**
+     * POST energie.wr-auslegung.dokument → kundenfertiges, druck-/PDF-taugliches WR-Dokument.
+     * Validiert wie berechnen(), rechnet über denselben InverterSizingService-Kern und gibt das
+     * eigenständige Dokument-Layout zurück (spiegelbildlich zu wpDokument()).
+     * Bei fehlender/ungültiger Auswahl zurück zur Rechenseite mit Fehlermeldung.
+     */
+    public function wrDokument(Request $request)
+    {
+        $data = $request->validate([
+            'module_index' => ['required', 'integer', 'min:0'],
+            'inverter_index' => ['required', 'integer', 'min:0'],
+            'module_gesamt' => ['required', 'integer', 'min:1'],
+            'parallel_strings' => ['nullable', 'integer', 'min:1'],
+        ]);
+
+        $modules = $this->repo->modules()->values();
+        $inverters = $this->repo->inverters()->values();
+
+        $modul = $modules->get((int) $data['module_index']);
+        $wr = $inverters->get((int) $data['inverter_index']);
+
+        if ($modul === null || $wr === null) {
+            return redirect()
+                ->route('energie.wr-auslegung')
+                ->with('error', 'Gewähltes PV-Modul oder Wechselrichter nicht gefunden. Bitte erneut auswählen und das Dokument erneut erzeugen.');
+        }
+
+        $ergebnis = $this->wrErgebnis($data, $modul, $wr);
+
+        return view('admin.energie.wr_auslegung_dokument', ['ergebnis' => $ergebnis]);
+    }
+
+    /**
+     * Kern der WR-Auslegungsrechnung als eigene Methode (spiegelbildlich zu wpErgebnis()) —
+     * baut die $ergebnis-Struktur, die auch berechnen() aufbaut, über denselben
+     * InverterSizingService::bewerteWechselrichter() + formatRegeln(). Keine eigene Physik/Regel-Logik.
+     * Setzt voraus, dass Modul und Wechselrichter existieren (Null-Check liegt beim Aufrufer).
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function wrErgebnis(array $data, mixed $modul, mixed $wr): array
+    {
+        $moduleGesamt = (int) $data['module_gesamt'];
+        $parallelStrings = (int) ($data['parallel_strings'] ?? 1);
+
+        $moduleOptions = $this->moduleOptions();
+        $inverterOptions = $this->inverterOptions();
+
+        $opt = ['parallel_strings' => $parallelStrings];
+        $bewertung = $this->service->bewerteWechselrichter($modul, $wr, $moduleGesamt, $opt);
+
+        return [
+            'ampel' => $bewertung['ampel'],
+            'gueltig' => $bewertung['gueltig'],
+            'ratio' => $bewertung['ratio'],
+            'p_dc_w' => $moduleGesamt * $modul->pmpp_wp,
+            'module_gesamt' => $moduleGesamt,
+            'parallel_strings' => $parallelStrings,
+            'modul_label' => $moduleOptions[(int) $data['module_index']]['label'] ?? ('Modul #'.((int) $data['module_index'] + 1)),
+            'wr_label' => $inverterOptions[(int) $data['inverter_index']]['label'] ?? ('WR #'.((int) $data['inverter_index'] + 1)),
+            'regeln' => $this->service->formatRegeln($bewertung['regeln']),
+        ];
+    }
+
     // ── Wärmepumpen-Auslegung (Heizlast → JAZ/Verbrauch → Wirtschaftlichkeit + KfW/BEG) ──
     // Reiner Durchstich über die portierten Heizlast-/Energie-Kerne (nur SELECT im Repository):
     // JazService, WarmwasserService, VerbrauchsService, KostenService, FoerderungService.

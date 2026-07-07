@@ -97,6 +97,17 @@
         <div class="col-lg-7 col-12">
             @if (!empty($ergebnis))
                 @php $a = $ampelMap[$ergebnis['ampel']] ?? $ampelFallback; @endphp
+
+                {{-- Kundenfertiges Dokument / PDF: postet die aktuelle Auswahl an die Dokument-Route,
+                     öffnet das eigenständige Druck-/PDF-Layout in einem neuen Tab. --}}
+                <form method="POST" action="{{ route('energie.wr-auslegung.dokument') }}" target="_blank" class="mb-1">
+                    @csrf
+                    @foreach (['module_index', 'inverter_index', 'module_gesamt', 'parallel_strings'] as $feld)
+                        <input type="hidden" name="{{ $feld }}" value="{{ $eingabe[$feld] ?? '' }}">
+                    @endforeach
+                    <button type="submit" class="btn btn-outline-primary btn-block">📄 Als Dokument / PDF öffnen</button>
+                </form>
+
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
                         <h4 class="card-title mb-0">Auslegungs-Ergebnis</h4>
