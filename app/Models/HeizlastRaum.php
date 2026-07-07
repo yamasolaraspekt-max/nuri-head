@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Raum eines Heizlast-Projekts. Transplantat aus wberechnung. Die geometrie()-Relation
- * (RaumGeometrie) aus wberechnung entfällt hier bewusst – der Grundriss ist eine spätere
- * Welle und die Tabelle raum_geometrien wird in diesem Schritt nicht gebaut.
+ * (RaumGeometrie / raum_geometrien) speist die Flächenableitung (GeometrieAbleitungService).
  */
 class HeizlastRaum extends Model
 {
@@ -51,5 +51,13 @@ class HeizlastRaum extends Model
     public function bauteile(): HasMany
     {
         return $this->hasMany(HeizlastBauteil::class)->orderBy('reihenfolge')->orderBy('id');
+    }
+
+    /**
+     * @return HasOne<RaumGeometrie, $this>
+     */
+    public function geometrie(): HasOne
+    {
+        return $this->hasOne(RaumGeometrie::class);
     }
 }
