@@ -5482,6 +5482,14 @@ Route::middleware(['auth'])->group(function () {
         ->name('energie.sanierung.berechnen');
     Route::post('/admin/energie/sanierung/dokument', [\App\Http\Controllers\Energie\SanierungController::class, 'dokument'])
         ->name('energie.sanierung.dokument');
+
+    // Energiekonzept: WP-Auslegung + Sanierung als ein kundenfertiges Beratungsangebot (PDF)
+    Route::get('/admin/energie/energiekonzept', [\App\Http\Controllers\Energie\EnergiekonzeptController::class, 'index'])
+        ->name('energie.energiekonzept');
+    Route::post('/admin/energie/energiekonzept/berechnen', [\App\Http\Controllers\Energie\EnergiekonzeptController::class, 'berechnen'])
+        ->name('energie.energiekonzept.berechnen');
+    Route::post('/admin/energie/energiekonzept/dokument', [\App\Http\Controllers\Energie\EnergiekonzeptController::class, 'dokument'])
+        ->name('energie.energiekonzept.dokument');
 });
 
 
