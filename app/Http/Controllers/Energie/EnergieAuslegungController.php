@@ -201,6 +201,112 @@ class EnergieAuslegungController extends Controller
             ]);
         }
 
+        // Berechnung ausgelagert (eine Wahrheit für Rechenseite und Dokument-Export).
+        $ergebnis = $this->wpErgebnis($data, $eingabe);
+
+        return view('admin.energie.wp_auslegung', [
+            'wpOptions' => $wpOptions,
+            'eingabe' => $eingabe,
+            'ergebnis' => $ergebnis,
+            'fehler' => null,
+        ]);
+    }
+
+    /**
+     * POST energie.wp-auslegung.dokument → kundenfertiges, druck-/PDF-taugliches Dokument.
+     * Validiert wie wpBerechnen und nutzt dieselbe Rechenquelle wpErgebnis() (keine Doppelrechnung).
+     * Bei fehlender/ungültiger Eingabe zurück zur Rechenseite mit Fehlermeldung.
+     */
+    public function wpDokument(Request $request)
+    {
+        $data = $request->validate([
+            'wp_index' => ['required', 'integer', 'min:0'],
+            'heizlast_kw' => ['required', 'numeric', 'min:0.1', 'max:100'],
+            'heizsystem' => ['required', 'in:fussbodenheizung,heizkoerper,beides'],
+            'wp_typ' => ['required', 'in:luft_wasser,sole_sonde,sole_kollektor,wasser_wasser'],
+            'personen_im_haushalt' => ['required', 'integer', 'min:1', 'max:20'],
+            'ww_mit_wp' => ['nullable', 'boolean'],
+            'badewanne_vorhanden' => ['nullable', 'boolean'],
+            'investition' => ['required', 'numeric', 'min:0'],
+            'heizungsart' => ['nullable', 'in:oel,gas,fluessiggas,kohle,nacht,holz,fernwaerme,keine'],
+            'heizung_alter' => ['nullable', 'integer', 'min:0', 'max:120'],
+            'anzahl_we' => ['nullable', 'integer', 'min:1'],
+            'selbst_bewohnte_we' => ['nullable', 'integer', 'min:0'],
+            'effizienzbonus' => ['nullable', 'boolean'],
+            'einkommensbonus' => ['nullable', 'boolean'],
+            'strompreis' => ['nullable', 'numeric', 'min:0'],
+            'verbrauch_menge' => ['nullable', 'numeric', 'min:0'],
+            'verbrauch_einheit' => ['nullable', 'in:kWh,m3,Liter,kg,Ster'],
+            'aktuelles_heizmedium' => ['nullable', 'in:erdgas,heizoel,fluessiggas,pellets,scheitholz,strom,fernwaerme'],
+            'verbrauch_zeitraum_jahre' => ['nullable', 'integer', 'min:1', 'max:10'],
+            'enthaelt_warmwasser' => ['nullable', 'boolean'],
+        ]);
+
+        $strompreis = isset($data['strompreis']) ? (float) $data['strompreis'] : 0.30;
+
+        // Eingabe normalisieren (gleiche Machart wie wpBerechnen).
+        $eingabe = array_merge($this->wpDefaults(), [
+            'wp_index' => (int) $data['wp_index'],
+            'heizlast_kw' => (float) $data['heizlast_kw'],
+            'heizsystem' => $data['heizsystem'],
+            'wp_typ' => $data['wp_typ'],
+            'personen_im_haushalt' => (int) $data['personen_im_haushalt'],
+            'ww_mit_wp' => $request->boolean('ww_mit_wp'),
+            'badewanne_vorhanden' => $request->boolean('badewanne_vorhanden'),
+            'investition' => (float) $data['investition'],
+            'heizungsart' => $data['heizungsart'] ?? 'keine',
+            'heizung_alter' => (int) ($data['heizung_alter'] ?? 0),
+            'anzahl_we' => (int) ($data['anzahl_we'] ?? 1),
+            'selbst_bewohnte_we' => (int) ($data['selbst_bewohnte_we'] ?? 1),
+            'effizienzbonus' => $request->boolean('effizienzbonus'),
+            'einkommensbonus' => $request->boolean('einkommensbonus'),
+            'strompreis' => $strompreis,
+            'verbrauch_menge' => isset($data['verbrauch_menge']) ? (float) $data['verbrauch_menge'] : null,
+            'verbrauch_einheit' => $data['verbrauch_einheit'] ?? 'kWh',
+            'aktuelles_heizmedium' => $data['aktuelles_heizmedium'] ?? 'erdgas',
+            'verbrauch_zeitraum_jahre' => (int) ($data['verbrauch_zeitraum_jahre'] ?? 1),
+            'enthaelt_warmwasser' => $request->boolean('enthaelt_warmwasser'),
+        ]);
+
+        $hp = $this->repo->heatPumps()->values()->get((int) $data['wp_index']);
+
+        if ($hp === null) {
+            return redirect()
+                ->route('energie.wp-auslegung')
+                ->with('error', 'Gewählte Wärmepumpe nicht gefunden. Bitte erneut auswählen und das Dokument erneut erzeugen.');
+        }
+
+        $ergebnis = $this->wpErgebnis($data, $eingabe);
+
+        return view('admin.energie.wp_auslegung_dokument', ['ergebnis' => $ergebnis]);
+    }
+
+    /**
+     * Kern der WP-Auslegungsrechnung — EINE Wahrheit für Rechenseite (wpBerechnen) und
+     * Dokument-Export (wpDokument). Erwartet die validierten $data plus die normalisierte
+     * $eingabe (aus wpDefaults() + Formular). Setzt voraus, dass die gewählte Wärmepumpe
+     * existiert (Null-Check liegt beim Aufrufer). Keine eigene Physik/Förderlogik hier —
+     * reiner Durchstich über die portierten Heizlast-/Energie-Kerne.
+     *
+     * @param  array<string, mixed>  $data
+     * @param  array<string, mixed>  $eingabe
+     * @return array<string, mixed>
+     */
+    private function wpErgebnis(array $data, array $eingabe): array
+    {
+        $hp = $this->repo->heatPumps()->values()->get((int) $eingabe['wp_index']);
+
+        $wwMitWp = (bool) $eingabe['ww_mit_wp'];
+        $badewanne = (bool) $eingabe['badewanne_vorhanden'];
+        $effizienzbonus = (bool) $eingabe['effizienzbonus'];
+        $einkommensbonus = (bool) $eingabe['einkommensbonus'];
+        $enthaeltWw = (bool) $eingabe['enthaelt_warmwasser'];
+        $strompreis = (float) $eingabe['strompreis'];
+        $heizungsart = $eingabe['heizungsart'];
+        $heizungAlter = (int) $eingabe['heizung_alter'];
+        $anzahlWe = (int) $eingabe['anzahl_we'];
+        $selbstWe = (int) $eingabe['selbst_bewohnte_we'];
+
         // HeizlastEingabe-DTO aus den Formulardaten (direkte Heizlast-Übergabe = Methode „direkt").
         $e = HeizlastEingabe::fromArray([
             'methode' => 'direkt',
@@ -254,8 +360,8 @@ class EnergieAuslegungController extends Controller
             'rabatt' => 0,
         ]);
 
-        $ergebnis = [
-            'wp_label' => $wpOptions[$eingabe['wp_index']]['label'] ?? ('WP #'.($eingabe['wp_index'] + 1)),
+        return [
+            'wp_label' => $this->wpOptions()[$eingabe['wp_index']]['label'] ?? ('WP #'.($eingabe['wp_index'] + 1)),
             'wp' => [
                 'hersteller' => $hp->hersteller,
                 'modell' => $hp->modell,
@@ -287,13 +393,6 @@ class EnergieAuslegungController extends Controller
             'investition_netto' => $investitionNetto,
             'foerderung' => $foerderung,
         ];
-
-        return view('admin.energie.wp_auslegung', [
-            'wpOptions' => $wpOptions,
-            'eingabe' => $eingabe,
-            'ergebnis' => $ergebnis,
-            'fehler' => null,
-        ]);
     }
 
     /**

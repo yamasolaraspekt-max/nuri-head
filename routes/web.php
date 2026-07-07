@@ -5467,6 +5467,9 @@ Route::middleware(['auth'])->group(function () {
         ->name('energie.wp-auslegung');
     Route::post('/admin/energie/wp-auslegung/berechnen', [\App\Http\Controllers\Energie\EnergieAuslegungController::class, 'wpBerechnen'])
         ->name('energie.wp-auslegung.berechnen');
+    // Kundenfertiges, druck-/PDF-taugliches Auslegungs-Dokument (eigenständiges HTML, öffnet in neuem Tab).
+    Route::post('/admin/energie/wp-auslegung/dokument', [\App\Http\Controllers\Energie\EnergieAuslegungController::class, 'wpDokument'])
+        ->name('energie.wp-auslegung.dokument');
 });
 
 

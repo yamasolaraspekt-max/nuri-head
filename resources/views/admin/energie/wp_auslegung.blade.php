@@ -217,6 +217,24 @@
         {{-- Ergebnis --}}
         <div class="col-lg-7 col-12">
             @if (!empty($ergebnis))
+                {{-- Kundenfertiges Dokument / PDF: postet die aktuelle Eingabe an die Dokument-Route,
+                     öffnet das eigenständige Druck-/PDF-Layout in einem neuen Tab. --}}
+                <form method="POST" action="{{ route('energie.wp-auslegung.dokument') }}" target="_blank" class="mb-1">
+                    @csrf
+                    @foreach ([
+                        'wp_index', 'heizlast_kw', 'heizsystem', 'wp_typ', 'personen_im_haushalt',
+                        'investition', 'heizungsart', 'heizung_alter', 'anzahl_we', 'selbst_bewohnte_we',
+                        'strompreis', 'verbrauch_menge', 'verbrauch_einheit', 'aktuelles_heizmedium',
+                        'verbrauch_zeitraum_jahre',
+                    ] as $feld)
+                        <input type="hidden" name="{{ $feld }}" value="{{ $eingabe[$feld] }}">
+                    @endforeach
+                    @foreach (['ww_mit_wp', 'badewanne_vorhanden', 'effizienzbonus', 'einkommensbonus', 'enthaelt_warmwasser'] as $feld)
+                        <input type="hidden" name="{{ $feld }}" value="{{ $eingabe[$feld] ? 1 : 0 }}">
+                    @endforeach
+                    <button type="submit" class="btn btn-outline-primary btn-block">📄 Als Dokument / PDF öffnen</button>
+                </form>
+
                 {{-- Wirtschaftlichkeit / Förderung (hervorgehoben) --}}
                 @php $f = $ergebnis['foerderung']; @endphp
                 <div class="card border-success">
