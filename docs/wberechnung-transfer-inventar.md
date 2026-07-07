@@ -17,10 +17,15 @@ HeizlastKonstanten, HeizlastEingabe, Bivalenz, Fussbodenheizung, **KostenService
 (`/admin/energie/wp-auslegung`). **Daten:** Katalog + Referenz + klima_plz(8168) + Heizkörper(30) + WP-Kurven(19).
 Tests: 73 Unit grün. KfW-Smoke 8.750€, Bivalenzpunkt −1,5°C/JAZ 3,53, WP-Match 5 Treffer.
 
-**OFFEN (Adapter-Block, DB-/Artikel-gebunden — nächster Posten):** SanierungsWirtschaftlichkeitService (Amortisation,
-U-Wert-Naht auf `konstruktionen`), UWertService, GeometrieAbleitungService, HeizlastProjektService, AuslegungHandoffService,
-AuslegungService-Orchestrierung. **UI-Block:** Heizlast-Eingabe, PVGIS-Planer, Sanierung, Energiekonzept-PDF. **Welle:** Grundriss/Plan.
-**Nav-Eintrag Bereich 8** (sidebar = Strang A). *(Parallel-Instanz-Arbeit „Angebots-WP-Konfigurator" liegt im git-Stash.)*
+**Heizlast-Projekt-Domäne GEBAUT (volltreu, 2026-07-07):** 4 Migrationen (heizlast_projekte→raeume→bauteile,
+sanierungs_varianten) + Models + Konstruktion/Material/Baualtersklasse + Enum KonstruktionTyp. **UWertService,
+HeizlastProjektService** (Nähte: RadiatorSpec/RadiatorPerformanceService/HydraulicService/KlimaPlz-findByPlz),
+**SanierungsWirtschaftlichkeitService** (Amortisation/Einsparung/**BAFA**) portiert + End-to-End verifiziert
+(Test-Projekt→Heizlast 1,32 kW→Sanierungs-Vergleich fehlerfrei). 81 Tests grün. Commit `ced8784`.
+
+**OFFEN:** **UI-Block** — Sanierungs-Eingabe+Dokument (PDF), Heizlast-Eingabe-Maske, PVGIS-Planer, WR-Dokument.
+**AuslegungService**-Orchestrierung. **Welle:** GeometrieAbleitungService + raum_geometrien (Grundriss). **Nav-Eintrag
+Bereich 8** (sidebar = Strang A). *(Parallel-Instanz „Angebots-WP-Konfigurator" im git-Stash.)*
 
 ## A. Rechenkerne — Heizlast / Wärmepumpe / PV
 
