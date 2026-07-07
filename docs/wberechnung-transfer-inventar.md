@@ -41,8 +41,11 @@ Polygon→Bauteile→Heizlast). **Editor `d9715e7`** — jQuery/SVG-Neubau (Yama
 `/admin/energie/grundriss` — Raum zeichnen (Raster/Snap), Wand-/Öffnungs-/Decke-/Boden-Eigenschaften, „Vorschau"=Live-Heizlast
 (transient), „Speichern" persistiert. Nav-Eintrag. Verifiziert 5×4m→20m²/7 Bauteile/2,87 kW.
 
-**OFFEN (nur noch extern/klein):** **Plan-Import** (dwg/dxf/pdf via `ImportServiceClient` + Async-Klassifizierung `PlanKlassifizieren`)
-— echte externe Dienste, nicht in ticket. Kleine Checks/Listen
+**ZUSATZSEITEN GEBAUT (2026-07-08, `c129f6b`):** Materialliste (Referenz), Fußboden-Check (FussbodenheizungService),
+Heizlast-Rechner (HeizlastProjektService, Ist-Heizlast + WP-Match) — 3 Controller + Views + Nav.
+
+**NUR NOCH EXTERN OFFEN:** **Plan-Import** (dwg/dxf/pdf via `ImportServiceClient` + Async-Klassifizierung `PlanKlassifizieren`)
+— echte externe Dienste, nicht in ticket (braucht Bereitstellung des Import-/OCR-Dienstes). Alt-Anmerkung Kleine Checks/Listen
 (Materialliste, Fußboden-/Heizkörper-Check) — teils REUSE ticket. Externe APIs (OpenMeteo/Geocoding) = optional, klima_plz führt.
 PVToolsController→PvgisErtragService-Delegation = späterer Konsolidierungs-Posten (eine Wahrheit).
 *(Parallel-Instanz „Angebots-WP-Konfigurator" im git-Stash `stash@{0}`.)*
