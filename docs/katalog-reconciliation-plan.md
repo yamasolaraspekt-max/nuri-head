@@ -237,3 +237,20 @@ SizingInverter **30/30** (12 Bestand + 18 neu) · SizingModule **11/11** · Sizi
 ### 7.7 Selbst-Gegenprüfung der 2 Fundament-Felder (belegt, nicht nur Explore-Agent)
 - **leistungskurve** — `wberechnung/…/Heizlast/WpKennlinieService.php:76-89`: `$k = $wp->leistungskurve; if (!is_array($k) || !isset($k['35'],$k['45'],$k['55'])) return null;` … je Ebene `$r[0]`=Außentemp, `$r[1]`=Leistung, `$r[2]`=cop. ⇒ **JSON-Schema `{"35":[[t_C,p_kW,cop],…],"45":…,"55":…}` exakt** (3 Ebenen W35/W45/W55, Zeilen `[t,p,cop]`).
 - **p_lade_max_kw** — `wberechnung/…/Energie/InverterSizingService.php:416`: `if ($wr->p_bat_lade_max_w !== null && $bat->p_lade_max_kw !== null && $bat->p_lade_max_kw * 1000 > $wr->p_bat_lade_max_w)` ⇒ **kW × 1000 gegen W** → `batteries.max_charge_power_kw` [kW] / `inverters.battery_max_charge_power_w` [W].
+
+---
+
+## 8. Stufe (ii)+(iii) GEBAUT (2026-07-07)
+
+### 8.1 Stufe (ii) — wb-Katalogdaten in main geladen
+Seeder gegen lokale main-DB (LOCAL-FIRST; Sicherungs-Dump vorher):
+- `ReferenzKatalogSeeder` → materials +23 · konstruktionen +5 · baualtersklassen +25 · **klima_plz +8168** (Marker `imported_from='wberechnung'`, idempotent, Teardown vorhanden).
+- `WberechnungImportSeeder` → 19 Wärmepumpen (`product_heat_pump_specs`) + 5 PV-Module (Dedup-Skip auf brand+model). products mit Marker = 24.
+- Verifiziert: `KlimaPlzService` liefert Werte (10115→−8,5 · 80331→−14); WP-Parität Datenfile↔DB (NIBE S2125-8: heizl_a7_w35=3,15 / cop=5,16 / scop=5).
+
+### 8.2 Stufe (iii) — Adapter GEBAUT (Worktree `strang/energie-adapter`, Commit `fda237e`)
+- `app/Services/Energie/Contracts/{SizingInverter,SizingModule,SizingBattery}` **verbatim** aus wberechnung (byte-gleiche Andockung Stufe iv) + `WpKennlinie` (neu, product_heat_pump_specs-Fläche, leistungskurve-JSON {35,45,55}).
+- `app/Services/Energie/Dto/{InverterSpec,ModuleSpec,BatterySpec,HeatPumpKennlinie}` — Mapping ticket-Spalte→wb-Property exakt nach §7.1–7.4; `wirkungsgrad_euro_pct` fest null (keine ticket-Spalte, keine Ableitung).
+- `app/Repositories/CatalogDeviceRepository` — dünnes SELECT, liefert DTO-Collections (heatPumps LEFT JOIN products+brands für hersteller/modell).
+- **27 DB-freie Unit-Tests / 138 Assertions grün** + End-to-End gegen echte main-Daten verifiziert (13 WR/15 PV/2 Bat/19 WP, instanceof-Konformität, Feld-Parität). Nur additive neue Klassen.
+- **Offen: Stufe (iv)** Rechenkern-Port (Engines lesen künftig über `CatalogDeviceRepository` statt Eloquent).
