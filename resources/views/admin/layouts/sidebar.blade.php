@@ -531,6 +531,9 @@
             'title' => 'Energie',
             'items' => [
                 ['label' => 'PVGIS', 'icon' => 'sun', 'url' => $safeRoute('admin.pvgis.index'), 'active_routes' => ['/admin/pvgis']],
+                ['label' => 'Wechselrichter-Auslegung', 'icon' => 'zap', 'url' => $safeRoute('energie.wr-auslegung'), 'active_routes' => ['/admin/energie/wr-auslegung']],
+                ['label' => 'Wärmepumpen-Auslegung', 'icon' => 'flame', 'url' => $safeRoute('energie.wp-auslegung'), 'active_routes' => ['/admin/energie/wp-auslegung']],
+                ['label' => 'Sanierungs-Wirtschaftlichkeit', 'icon' => 'trending-down', 'url' => $safeRoute('energie.sanierung'), 'active_routes' => ['/admin/energie/sanierung']],
                 ['label' => 'Heizkörper-Check', 'icon' => 'thermometer', 'url' => $safeRoute('radiator.config.view'), 'active_routes' => ['/radiator_config_view']],
                 ['label' => 'Wirtschaftlichkeit', 'icon' => 'calculator', 'url' => $safeRoute('economic_calculations.index', 'admin/economic-calculations'), 'active_routes' => ['/admin/economic-calculations', '/profitability']],
                 // Finance-Gate 1:1 erhalten (Item-Level)
