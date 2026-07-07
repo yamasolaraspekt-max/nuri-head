@@ -306,6 +306,20 @@ class RadiatorInstallationController extends Controller
             'socket_distance' => ['nullable', 'numeric', 'min:0'],
             'limbs' => ['nullable', 'string', 'max:255'],
 
+            // EN-442-Auslegung (additiv; Spalten seit Migration 140005, alle nullable/Default).
+            // Katalog-Link + Rechen-Input, damit RadiatorPerformanceService q_norm/exponent/norm_bedingung
+            // aus product_radiator_specs ziehen kann. Reine Reuse der Bestandsaufnahme, keine Bestandsänderung.
+            'radiator_spec_id' => ['nullable', 'exists:product_radiator_specs,id'],
+            'anzahl' => ['nullable', 'integer', 'min:1'],
+            'anschluss_position' => ['nullable', 'in:seitlich,unten,mittel,wechselseitig'],
+            'anschluss_fuehrung' => ['nullable', 'in:zweirohr,einrohr'],
+            'ventil_einsatz_bestand' => ['nullable', 'string', 'max:255'],
+            'kopf_norm_bestand' => ['nullable', 'in:M30x1_5,RA,RAV,RAVL,sonstige'],
+            'heating_circuit_id' => ['nullable', 'exists:heating_circuits,id'],
+            'q_norm_w_pro_m_override' => ['nullable', 'numeric', 'min:0'],
+            'exponent_n_override' => ['nullable', 'numeric', 'min:0'],
+            'typ_konfidenz' => ['nullable', 'in:sicher,geschaetzt'],
+
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
         ]);
     }
