@@ -34,7 +34,8 @@
 > VisibleIfService (Server-autoritativ): istSichtbar (=/!=/<>/<=/>=/in/not_in), sichtbareFelder mit Kaskade (kein verwaistes Kind), fehlendePflichtfelder (unsichtbares Pflichtfeld blockt NICHT), alpineAusdruck (x-show fuer Scope-2-Rendering). 8 Tests gruen. UI-Verdrahtung = FS-07.
 - **Ziel:** `VisibleIfService` (Server-Auswertung `Feld op Wert`) + Alpine-Rendering (CLAUDE.md-Scope 2). **Abh.:** FS-02. **Anker:** Sichtbarkeits-Tests; unsichtbares Pflichtfeld blockt nicht. **Auflagen:** Alpine nur im Formular-Rendering-Scope. **Nicht im Scope:** jQuery-Variante (Alpine entschieden).
 
-### FS-05 — SmartroutingService
+### FS-05 — SmartroutingService  ·  GEBAUT (2026-07-08)
+> Tabelle product_formula_routing_rules (additiv, Tag-X): Anker article_group_id/lead_product_list_id/object_type (NULL=Wildcard) + priority + is_active + imported_from. SmartroutingService.route(context): Spezifitaet vor Prioritaet, exakter Anker-Match, definierter Fallback (leere Liste+Hinweis), inaktive Regeln ignoriert. 5 Tests gruen. Phase-2-Anker (deals/phase/branch) nicht im Scope.
 - **Ziel:** Tabelle `product_formula_routing_rules` (Tag-X) + Port re-anchored (Artikelgruppe/Lead-Produkt-Zeile/Objekt-Typ = Phase 1). **Abh.:** FS-02. **Anker:** Routing-Tests (Mehrdeutigkeit→priority/Spezifität; kein Treffer→definierter Fallback/leere Liste+Hinweis). **Nicht im Scope:** Phase-2-Anker (deals/phase/branch).
 
 ### FS-06 — playground-Vorlagen-Mapper/Seeder **Dry-Run**
