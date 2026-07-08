@@ -264,6 +264,7 @@ class LeaveController extends Controller
      */
     public function approve(Request $request, $id)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         try {
             $leave = $this->findLeave($id);
 
@@ -457,6 +458,7 @@ class LeaveController extends Controller
      */
     public function update(Request $request)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         try {
             Log::info('LeaveController@update incoming request', [
                 'payload' => $request->all(),
@@ -572,6 +574,7 @@ class LeaveController extends Controller
 
     public function destroy(Request $request, $id)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         try {
             $leave = $this->findLeave($id);
 
@@ -609,6 +612,7 @@ class LeaveController extends Controller
      */
     public function accept(Request $request)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         try {
             Log::info('LeaveController@accept incoming request', $request->all());
 
@@ -694,6 +698,7 @@ class LeaveController extends Controller
      */
     public function change(Request $request)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         try {
             Log::info('LeaveController@change incoming request', $request->all());
 

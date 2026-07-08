@@ -186,6 +186,7 @@ class EmployeeController extends Controller
     }
     public function updatePasscode(Request $request, $id)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         // Validate the input (e.g., must be 4 digits)
         $request->validate([
             'passcode' => 'required|digits:4',
@@ -639,6 +640,7 @@ public function next_employee($id){
 
     public function update(Request $request, Employee $employee)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         $this->validate($request, [
             'name' => 'required',
             'lastname'  =>  'required',
@@ -677,6 +679,7 @@ public function next_employee($id){
      */
     public function destroy($id)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         $data=Employee::find($id);
         $data->delete();
         $this->delete_photo($data->image);
@@ -686,6 +689,7 @@ public function next_employee($id){
 
     public function profile_update(Request $request)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         try {
             /*
             |--------------------------------------------------------------------------

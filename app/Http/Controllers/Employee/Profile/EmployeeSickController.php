@@ -207,6 +207,7 @@ class EmployeeSickController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         $validator = Validator::make($request->all(), [
             'emp_id' => ['required', 'exists:employees,id'],
             'start_date' => ['required', 'date'],
@@ -298,6 +299,7 @@ class EmployeeSickController extends Controller
 
     public function update(Request $request, $id)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         $sick = EmployeeSick::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
@@ -369,6 +371,7 @@ class EmployeeSickController extends Controller
 
     public function destroy($id)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         $sick = EmployeeSick::findOrFail($id);
 
         foreach ($this->normalizeDocuments($sick->document) as $path) {
@@ -390,6 +393,7 @@ class EmployeeSickController extends Controller
 
     public function destroyDocument($id, $index)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Nur Administratoren duerfen Personaldaten aendern (MASTER-01 P0-3; HR-Rolle folgt).');
         $sick = EmployeeSick::findOrFail($id);
         $documents = $this->normalizeDocuments($sick->document);
 
