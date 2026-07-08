@@ -680,14 +680,14 @@ Route::group(['middleware' => ['web', 'auth']], function(){
 });
 
 // Dashboards 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/employee_dashboard', [EmployeeDashboardController::class, 'index'])->name('employee.dashboard');
     Route::get('/employee_dashboard/mobile', [EmployeeDashboardController::class, 'mobile'])->name('employee.dashboard.mobile');
     Route::get('/get-weather-data', [EmployeeDashboardController::class, 'getWeatherData']);
     Route::post('dashboard/save/order', [DashboardIconController::class, 'saveOrder'])->name('dashboard.saveOrder');  
 });
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/branch', [BranchController::class, 'index'])->name('branch.info');
     Route::get('/branch_create', [BranchController::class, 'create'])->name('branch.create');
     Route::get('/branch_destroy/{id}', [BranchController::class, 'destroy'])->name('branch.destroy');
@@ -703,7 +703,7 @@ Route::group(['middleware' => 'web'], function () {
 });
 
 //Branch Frenchise 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/branch_address_view', [BranchAddressController::class, 'index'])->name('branch.address.view');  
     Route::post('/store-address-branch', [BranchAddressController::class, 'store'])->name('branch.address.store');
 
@@ -775,7 +775,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 //NEW LEADS CRUD
-Route::group(['middleware'   =>  'web'], function(){
+Route::group(['middleware' => ['web', 'auth']], function(){
     Route::get('/new_lead_create', [NewLeadsController::class, 'create'])->name('new.lead.create');
     Route::get('/admin/roofs/partial/{index}', [NewLeadsController::class, 'getRoofPartial']);
     Route::get('/admin/roofs/partial-edit/{index}', [NewLeadsController::class, 'getRoofPartialEdit']);
@@ -1298,7 +1298,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 });
 
 // Customer Report 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/customer-reports/list', [CustomerReportController::class, 'list']);
     Route::post('/customer-reports/store', [CustomerReportController::class, 'store']);
     Route::delete('/customer-reports/delete/{id}', [CustomerReportController::class, 'destroy']);
@@ -1317,7 +1317,7 @@ Route::group(['middleware' => 'web'], function () {
 
 });
      // Berechnungsübersicht
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::prefix('admin/economic-calculations')->middleware(['auth'])->group(function () {
         Route::get('/', [EconomicCalculationController::class, 'index'])->name('economic_calculations.index');
         Route::post('/store', [EconomicCalculationController::class, 'store'])->name('economic_calculations.store');
@@ -1331,7 +1331,7 @@ Route::group(['middleware' => 'web'], function () {
  
 
 // Customer Notes
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/customer-notes/{customer}/{alternative}/{product}', [CustomerNoteController::class, 'getNotesHtml']);
 
     Route::get(
@@ -1377,7 +1377,7 @@ Route::middleware(['auth'])
 
 
 // Contact People
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/customer-contact/fetch/{customer}/{alternative}', [CustomerContactPersonController::class, 'fetch']);
     Route::post('/customer-contact/update', [CustomerContactPersonController::class, 'updateAll'])->name('customer.contact.update');
     Route::delete('/customer-contact/delete/{id}', [CustomerContactPersonController::class, 'delete']);
@@ -1392,7 +1392,7 @@ Route::prefix('customers/{customer}')->group(function () {
 });
 Route::put('customer-contact-people/{person}', [CustomerContactPersonController::class, 'update'])->name('customer-contact-people.update');
 Route::delete('customer-contact-people/{person}', [CustomerContactPersonController::class, 'deletes']) ->name('customer-contact-people.destroy');
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::resource('lead-email-accounts', LeadEmailAccountsController::class);
         Route::get('/lead-email-accounts/realtime-data', [LeadEmailAccountsController::class, 'unreadRealtimeData']) ->name('lead-email-accounts.realtime-data');
@@ -1418,7 +1418,7 @@ Route::group(['middleware' => 'web'], function () {
 });
 
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
 
     Route::post('/images', [ImageController::class, 'store'])->name('images.store');
 
@@ -1511,7 +1511,7 @@ Route::group(['middleware' => 'auth'], function () {
 // });
 //Customer Measurement
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
 
     Route::post('/customer_measure', [CustomerMeasureController::class, 'store'])->name('customer.measure');
 
@@ -1520,7 +1520,7 @@ Route::group(['middleware' => 'web'], function () {
 
 // Customer Details
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     //Building Type
     Route::get('/building_type_view', [BuildingTypeController::class, 'index'])->name('building.type.view');
     Route::post('/building_type_store', [BuildingTypeController::class, 'store'])->name('building.type.store');
@@ -1544,7 +1544,7 @@ Route::group(['middleware' => 'web'], function () {
  
 //Employee Managment
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/emp', [EmployeeController::class, 'index'])->name('emp.info');
     Route::get('/emp_create', [EmployeeController::class, 'create'])->name('emp.create');
     Route::delete('/emp_destroy/{id}', [EmployeeController::class, 'destroy'])->name('emp.destroy');
@@ -1586,7 +1586,7 @@ Route::group(['middleware' => 'web'], function () {
 });
 // Contract Type CRUD
  
-Route::group(['middleware' => 'web'], function(){  
+Route::group(['middleware' => ['web', 'auth']], function(){  
     Route::get('capacity/list', [EmployeeCapacityStateController::class, 'index'])->name('employee.capacity.list'); 
     Route::get('capacity/index', [EmployeeCapacityStateController::class, 'view'])->name('employee.capacity.view'); 
     Route::get('/admin/employee/capacity/summary', [EmployeeCapacityStateController::class, 'summary'])->name('employee.capacity.summary');
@@ -1616,7 +1616,7 @@ Route::post('/employee-availability/{employee}', [EmployeeController::class, 'ge
 Route::post('/book-appointment', [EmployeeController::class, 'bookAppointment']);
 
 // Contract Type CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/contract_type', [ContractTypeController::class, 'index'])->name('contract.type.info');
     Route::delete('/contract_type_destroy/{id}', [ContractTypeController::class, 'destroy'])->name('contract.type.destroy');
     Route::post('/contract_type_save', [ContractTypeController::class, 'store'])->name('contract.type.store');
@@ -1625,7 +1625,7 @@ Route::group(['middleware' => 'web'], function () {
 
 //Employee Capicity State
 
-    Route::group(['middleware' => 'web'], function(){ 
+    Route::group(['middleware' => ['web', 'auth']], function(){ 
         Route::prefix('admin/employee/employee')->group(function() {
             Route::get('{employee}/postcodes', [EmployeePostcodeListController::class, 'index'])->name('employee-postcodes.index');
             Route::post('postcodes', [EmployeePostcodeListController::class, 'store'])->name('employee-postcodes.store');
@@ -1642,7 +1642,7 @@ Route::group(['middleware' => 'web'], function () {
         ->name('dashboard.notifications.read');
         
     //Notification List of Employees
-    Route::group(['middleware' => 'web'], function () {
+    Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/employee_notifications/{user}', [NotificationListController::class, 'index'])->name('employee.notification.index'); 
         Route::get('/get/employee/notification/', [NotificationListController::class, 'view'])->name('employee.notification.view'); 
         Route::get('/get/employee/response/', [NotificationListController::class, 'response'])->name('employee.notification.response'); 
@@ -1693,7 +1693,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 // Holiday  CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/holiday_view', [HolidayController::class, 'index'])->name('holiday.info');
     Route::delete('/holiday_destroy/{id}', [HolidayController::class, 'destroy'])->name('holiday.destroy');
     Route::post('/holiday_create', [HolidayController::class, 'store'])->name('holiday.create');
@@ -1704,7 +1704,7 @@ Route::group(['middleware' => 'web'], function () {
 });
 
 // Holiday  CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/leave_day_view', [LeaveDayController::class, 'index'])->name('leave.day.info');
     Route::delete('/leave_day_destroy/{id}', [LeaveDayController::class, 'destroy'])->name('leave.day.destroy');
     Route::post('/leave_day_create', [LeaveDayController::class, 'store'])->name('leave.day.create');
@@ -1715,7 +1715,7 @@ Route::group(['middleware' => 'web'], function () {
 });
 
 // License  CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/license_view', [EmployeeLicenseController::class, 'index'])->name('license.info');
     Route::get('/license_destroy/{id}', [EmployeeLicenseController::class, 'destroy'])->name('license.destroy');
     Route::post('/license_create', [EmployeeLicenseController::class, 'store'])->name('license.create');
@@ -1726,7 +1726,7 @@ Route::group(['middleware' => 'web'], function () {
  
 
 // Cloths  CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/cloth_view', [EmployeeClothController::class, 'index'])->name('cloth.info');
     Route::delete('/cloth_destroy/{id}', [EmployeeClothController::class, 'destroy'])->name('cloth.destroy');
     Route::post('/cloth_create', [EmployeeClothController::class, 'store'])->name('cloth.create');
@@ -1735,7 +1735,7 @@ Route::group(['middleware' => 'web'], function () {
 });
 
 //Employee Documents 
-Route::group(['middleware' =>   'web'], function(){
+Route::group(['middleware' => ['web', 'auth']], function(){
     Route::delete('/employee_image_destroy/{id}', [EmployeeDocumentController::class, 'destroy'])->name('employee.image.destroy'); 
     Route::post('/employee_upload', [EmployeeDocumentController::class, 'upload'])->name('employee.upload');
     Route::post('/employee_image_name', [EmployeeDocumentController::class, 'update'])->name('employee.image.rename'); 
@@ -1750,7 +1750,7 @@ Route::group(['middleware' =>   'web'], function(){
 
 
 //Public Holidays
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::prefix('public-holidays')->name('public-holidays.')->group(function () {
         Route::get('/', [PublicHolidayController::class, 'index'])->name('index');
         Route::get('/fetch', [PublicHolidayController::class, 'fetch'])->name('fetch');
@@ -1767,7 +1767,7 @@ Route::group(['middleware' => 'web'], function () {
 
 
 //Address Employee CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
 
     Route::post('/emp_address_save', [EmployeeAddressController::class, 'store'])->name('emp.address.save');
     Route::post('/emp_address_update', [EmployeeAddressController::class, 'update'])->name('emp.address.update');
@@ -1839,7 +1839,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::delete('/employee-sick/{id}/document/{index}', [EmployeeSickController::class, 'destroyDocument'])->name('employee.sick.document.destroy');
 });
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/employee_details', [EmployeeController::class, 'view'])->name('employee.info');
 });
 
@@ -1853,13 +1853,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/daily-attachments/{attachment}', [DailyReportAttachmentController::class, 'destroy'])->name('daily.attach.destroy');
 });
 // Daily Report 
-Route::group(['middleware'=>'web'], function(){
+Route::group(['middleware' => ['web', 'auth']], function(){
     Route::get('/daily_report', [DailyReportController::class, 'index'])->name('daily.report');
     Route::get('/employee_daily_report/{employee_id}/{start_date}/{end_date}', [DailyReportController::class, 'report'])
     ->name('employee.daily.report');
 });
 
-Route::group(['middleware'=>'web'], function(){
+Route::group(['middleware' => ['web', 'auth']], function(){
    Route::prefix('admin/daily_report/work_place')->name('work.place.')->group(function () {
         Route::get('/', [DailyReportWorkPlaceController::class, 'index'])->name('index');
         Route::post('/', [DailyReportWorkPlaceController::class, 'store'])->name('store');
@@ -2482,7 +2482,7 @@ Route::middleware([\App\Http\Middleware\EnsureHeizkoerperEnabled::class, 'auth']
 
 // IDS CRUD
 // Product TIles CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/tiles_view', [TilesController::class, 'index'])->name('tiles.view');
     Route::post('/tiles_save', [TilesController::class, 'store'])->name('tiles.save');
     Route::get('/tiles_destroy/{id}', [TilesController::class, 'destroy'])->name('tiles.delete');
@@ -2535,7 +2535,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/brand/departments/{id}/update', [BrandDepartmentController::class, 'update'])->name('brand.department.update');
     Route::get('/brand/departments/{id}/delete', [BrandDepartmentController::class, 'destroy'])->name('brand.department.delete');
 });
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/external_personal', [ExternalPersonalController::class, 'index'])->name('external.info');
     Route::get('/external_destroy/{id}', [ExternalPersonalController::class, 'destroy'])->name('external.destroy');
     Route::post('/external_save', [ExternalPersonalController::class, 'store'])->name('external.store');
@@ -2744,7 +2744,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::delete('/purchase_request_delete/{id}', [PurchaseRequestController::class, 'destroy'])->name('purchase.request.delete');
 });
 // Department  CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/department_view', [DepartmentController::class, 'index'])->name('department.info');
     Route::delete('/department_destroy/{id}', [DepartmentController::class, 'destroy'])->name('department.destroy');
     Route::post('/department_create', [DepartmentController::class, 'store'])->name('department.create');
@@ -2822,20 +2822,20 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Qualification  CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('/emp_qualification', [QualificationController::class, 'emp_qualification'])->name('emp.qualification');
     Route::post('/emp_qualification_update', [QualificationController::class, 'update'])->name('emp.qualification.update');
     Route::delete('/qualification_delete/{id}', [QualificationController::class, 'destroy'])->name('emp.qualification.delete');
 
 });
 // Further Education  CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('/f_education', [FurtherEducationController::class, 'store'])->name('f.education.store');
     Route::post('/f_education_update', [FurtherEducationController::class, 'update'])->name('f.education.update');
     Route::delete('f_education_delete/{id}', [FurtherEducationController::class, 'destroy'])->name('f_education.delete');
 });
 // Language Type CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/language', [LanguagesController::class, 'index'])->name('language.info');
     Route::delete('/language_destroy/{id}', [LanguagesController::class, 'destroy'])->name('language.destroy');
     Route::post('/language_save', [LanguagesController::class, 'store'])->name('language.store');
@@ -2844,7 +2844,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/language_view', [LanguagesController::class, 'view'])->name('load.languages');
 });
 // Country Type CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/country', [CountryController::class, 'index'])->name('country.info');
     Route::delete('/country_destroy/{id}', [CountryController::class, 'destroy'])->name('country.destroy');
     Route::post('/country_save', [CountryController::class, 'store'])->name('country.store');
@@ -3233,7 +3233,7 @@ Route::prefix('copy')->group(function () {
 
 
 //Task Phase Activieis CRUD
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('get/phase/all/activity/{id}', [PhaseActivitiesController::class, 'allActivity'])->name('get.all.activities');
     Route::get('get/phase/activity/{id}', [PhaseActivitiesController::class, 'index'])->name('activities');
     Route::post('/phase/activity/status/{id}', [PhaseActivitiesController::class, 'status'])->name('activities.status');
@@ -3246,14 +3246,14 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('phase/activity/order', [PhaseActivitiesController::class, 'orderTask'])->name('phase.task.activity.order');
 });
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/sub_task/{task_id}/{phase_id}/{product}', [TaskSubTaskController::class, 'index'])->name('sub.tasks.view'); 
     Route::post('/sub_task_save', [TaskSubTaskController::class, 'store'])->name('sub.tasks.store'); 
     Route::post('/sub_task_update', [TaskSubTaskController::class, 'update'])->name('sub.tasks.update'); 
     Route::get('/sub_task_delete/{id}', [TaskSubTaskController::class, 'destroy'])->name('sub.tasks.delete'); 
 });
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/email_view', [LeadsController::class, 'index'])->name('email.view');
     Route::get('/email_refresh', [LeadsController::class, 'fetchAndDisplayEmails'])->name('email.refresh');
     Route::get('/email_configuration', [EmailConfigurationController::class, 'index'])->name('email.configuration');
@@ -3869,7 +3869,7 @@ Route::group(['middleware'  =>  'auth'], function(){
 
 // Appointment CRUD 
 
-    Route::group(['middleware' => 'web'], function () {
+    Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/appointments', [MainAppointmentController::class, 'index'])->name('main.appointment');
         Route::get('/appointments/search', [MainAppointmentController::class, 'index'])->name('main.appointment.search');
         Route::get('/calendar/datasets', [MainAppointmentController::class, 'datasets']);
@@ -4131,7 +4131,7 @@ Route::prefix('inquiries')->middleware(['auth'])->group(function () {
 
 // Inquiry Type CRUD
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/inquiry_type', [InquiryTypeController::class, 'index'])->name('inquiry.type.info');
     Route::get('/getType', [InquiryTypeController::class, 'getType'])->name('inquiry.type.get'); 
     Route::get('/inquiry_type_destroy/{id}', [InquiryTypeController::class, 'destroy'])->name('inquiry.type.destroy');
@@ -4557,7 +4557,7 @@ Route::post('weather_station_upload', [WeatherStationController::class, 'upload'
  
 
 
-Route::group(['middleware'=>'web'], function(){
+Route::group(['middleware' => ['web', 'auth']], function(){
     Route::get('knowlege', [KnowledgeCategoryController::class, 'index'])->name('knowledge.base'); 
     Route::get('question/{id}', [KnowledgeCategoryController::class, 'question'])->name('knowledge.question'); 
     Route::resource('knowledge', KnowledgeCategoryController::class);
