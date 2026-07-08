@@ -2892,6 +2892,7 @@ Route::group(['middleware' => ['web', 'is_Admin']], function () { // FIX P0-08: 
     Route::get('/product-formula/{id}/test', [ProductFormulaController::class, 'test'])->name('product.formula.test');
     Route::post('/product-formula/test-submit', [ProductFormulaController::class, 'testSubmit'])->name('product.formula.test.submit');
     Route::get('/product-formula/checklist/{product_id}', [ProductFormulaController::class, 'loadChecklist']);
+    Route::post('/product-formula/evaluate', [ProductFormulaController::class, 'evaluate'])->name('product.formula.evaluate'); // FS-07: eval-freie Server-Auswertung
     Route::post('/lead-product-checklist/init', [LeadProductChecklistValueController::class, 'initChecklistRender']);
     Route::post('/lead-product-checklist/save', [LeadProductChecklistValueController::class, 'saveChecklist'])->name('lead-product-checklist.save');
 }); 

@@ -5,6 +5,9 @@ use App\Http\Controllers\Controller;
 
 use App\Models\ProductFormula;
 use App\Models\ArticleGroup;
+use App\Services\Form\FormSchemaValidator;
+use App\Services\Form\VisibleIfService;
+use App\Services\Form\FormulaEvaluationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -252,8 +255,62 @@ class ProductFormulaController extends Controller
         return response()->json($formulas);
     }
 
+    /**
+     * FS-07 — Eval-freie Server-Auswertung (ersetzt `new Function` im Client): berechnet für ein
+     * v2-`fields`-Array + Antwortstand die sichtbaren Felder (VisibleIfService), die Calculation-Werte
+     * (FormulaEvaluationService, Whitelist-Parser statt eval) und die offenen Pflichtfelder.
+     *
+     * Erwartet JSON: { fields: [ {key,label,type,...} ], answers: { slug: value } }.
+     * Gibt 422 bei Schema-Verstoß (Server-Validierung, JSON-Wildwuchs-Mitigation).
+     */
+    public function evaluate(Request $request, FormSchemaValidator $validator, VisibleIfService $visible, FormulaEvaluationService $engine)
+    {
+        $fields = $request->input('fields', []);
+        $answers = $request->input('answers', []);
+        if (! is_array($fields) || ! is_array($answers)) {
+            return response()->json(['message' => 'fields und answers müssen Arrays sein.'], 422);
+        }
 
-   
+        $fehler = $validator->validate($fields);
+        if ($fehler !== []) {
+            return response()->json(['message' => 'Schema-Verstoß', 'errors' => $fehler], 422);
+        }
 
+        // Operanden aus den Antworten (je Slug value + optional Einheit aus dem Feld).
+        $unitBySlug = [];
+        foreach ($fields as $f) {
+            if (isset($f['key'])) {
+                $unitBySlug[$f['key']] = $f['unit'] ?? null;
+            }
+        }
+        $operands = [];
+        foreach ($answers as $slug => $value) {
+            $operands[$slug] = ['value' => is_numeric($value) ? $value + 0 : $value,
+                'unit' => $unitBySlug[$slug] ?? null];
+        }
 
+        $sichtbareKeys = array_column($visible->sichtbareFelder($fields, $answers), 'key');
+
+        $calculations = [];
+        foreach ($fields as $f) {
+            if (($f['type'] ?? null) !== 'calculation' || ! in_array($f['key'] ?? null, $sichtbareKeys, true)) {
+                continue;
+            }
+            $formel = $f['calculation']['formel'] ?? '';
+            $ergebnis = $engine->evaluate((string) $formel, $operands, [
+                'slug' => $f['key'] ?? null, 'unit' => $f['unit'] ?? null,
+                'decimals' => $f['decimals'] ?? null, 'rundung' => $f['calculation']['rundung'] ?? null,
+                'min_value' => $f['min'] ?? null, 'max_value' => $f['max'] ?? null,
+            ]);
+            $calculations[$f['key']] = [
+                'value' => $ergebnis['value'], 'status' => $ergebnis['status'], 'verbindlich' => $ergebnis['verbindlich'],
+            ];
+        }
+
+        return response()->json([
+            'visible' => $sichtbareKeys,
+            'calculations' => $calculations,
+            'missing_required' => $visible->fehlendePflichtfelder($fields, $answers),
+        ]);
+    }
 }
