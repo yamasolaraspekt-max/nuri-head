@@ -23,7 +23,9 @@ class UserController extends Controller
         // laeuft also auf dem gefixten Muster -> Aktivieren sperrt Admins NICHT aus.
         $this->middleware('permission:Users,read')->only(['admin_user', 'limit_user', 'adminUsersPage', 'adminUsersFetch']);
         $this->middleware('permission:Users,add')->only(['store', 'limit_store', 'adminUsersStore']);
-        $this->middleware('permission:Users,update')->only(['make_limit', 'active', 'deactive', 'limit_edit', 'adminUsersUpdate', 'adminUsersToggleActive', 'adminUsersPassword']);
+        // FIX P0-2 (MASTER-01): updatePassword (Legacy-Route users/{user}/password) war ungegatet
+        // -> Account-Takeover jedes Kontos. Jetzt gleiches Gate wie der Zwilling adminUsersPassword.
+        $this->middleware('permission:Users,update')->only(['make_limit', 'active', 'deactive', 'limit_edit', 'adminUsersUpdate', 'adminUsersToggleActive', 'adminUsersPassword', 'updatePassword']);
         $this->middleware('permission:Users,delete')->only(['destroy', 'limit_destroy', 'adminUsersDestroy']);
     }
 
