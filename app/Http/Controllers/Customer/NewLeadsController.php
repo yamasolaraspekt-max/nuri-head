@@ -1797,6 +1797,7 @@ class NewLeadsController extends Controller
 
     public function destroy($id)
     {
+        abort_unless((bool) (auth()->user()?->hasPermission('Customer', 'delete')), 403, 'Keine Berechtigung, Kunden/Objekte/Angebote zu loeschen (MASTER-01 P0-4).');
 
         $data = NewLeads::find($id);
         $data->delete();
@@ -3290,6 +3291,7 @@ class NewLeadsController extends Controller
 
     public function destroyWithReason(Request $request, $id)
     {
+        abort_unless((bool) (auth()->user()?->hasPermission('Customer', 'delete')), 403, 'Keine Berechtigung, Kunden/Objekte/Angebote zu loeschen (MASTER-01 P0-4).');
         $request->validate([
             'reason' => ['required', 'string', 'min:3', 'max:2000'],
         ], [
@@ -13940,6 +13942,7 @@ class NewLeadsController extends Controller
 
     public function deleteObject(Request $request, LeadAlternativeAdd $object): JsonResponse
     {
+        abort_unless((bool) (auth()->user()?->hasPermission('Customer', 'delete')), 403, 'Keine Berechtigung, Kunden/Objekte/Angebote zu loeschen (MASTER-01 P0-4).');
         $validated = $request->validate([
             'reason' => ['nullable', 'string', 'max:2000'],
         ]);

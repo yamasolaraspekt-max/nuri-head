@@ -1313,6 +1313,7 @@ class OfferController extends Controller
 
     public function destroy(Request $request, int $id): JsonResponse
     {
+        abort_unless((bool) (auth()->user()?->hasPermission('Customer', 'delete')), 403, 'Keine Berechtigung, Kunden/Objekte/Angebote zu loeschen (MASTER-01 P0-4).');
         $this->prepareJsonResponse();
 
         $validator = Validator::make($request->all(), [
