@@ -1,5 +1,13 @@
 # P0-6 — DATEN-Posten: Kaskaden-Analyse (Pflicht-Stopp vor Eingriff)
 
+> ## ✅ AUSGEFÜHRT LOKAL (2026-07-08) — Yama-Freigabe + Klarstellung „Live=lokal"
+> `SeedOrphanCleanupService::purge(dryRun:false)` auf lokaler `ticket`-DB (NICHT Hetzner). Zähl-Beleg:
+> - verwaiste Objekte aktiv **19 → 0** (soft-deleted: 9,16,24,25,26,27,28,29,31,32,34,38,41,42,44,47,48,49,50)
+> - Rechnungen aktiv **11 → 10** · Umsatz aktiv **205.194,48 → 204.194,48 €** (Δ −1.000, Test-Rechnung `id=21`)
+> - **übersprungen (referenziert): 0** (alle 19 waren 0-referenziert; Laufzeit-Re-Check bestätigt)
+> - Reversibel via `restore()`. Hetzner-Produktion unberührt (eigener Deploy-Tag).
+
+
 > **Status: ANALYSE FERTIG, KEIN EINGRIFF.** Rein lesend. Yama hat P0-6 als eigenen Daten-Posten freigegeben mit den Auflagen: Kaskaden-Check zuerst · kein Blind-Delete · Backup-Bestätigung · reversibel · gegen `ticket_testing` proben vor Live.
 > **⚠️ Diese Analyse lief auf der LOKALEN Dev-DB (Restore).** Für einen echten Eingriff auf der Live-DB muss dieselbe Analyse dort erneut laufen — die hiesigen Waisen sind erkennbar ein Seed-Batch (s. u.) und nicht zwingend repräsentativ für Live.
 
