@@ -30,7 +30,8 @@
 - **Auflagen (2.3):** **kein produktiver Buchungssatz vor grünem GoBD-Beweis-Testsatz.**
 - **Abnahme-Anker:** 4 GoBD-Beweis-Tests grün (Unveränderlichkeit/Nummernkreis/Maker-Checker/Audit-Trail).
 
-### (v) Auswertungen (SuSa/BWA/UStVA)
+### (v) Auswertungen (SuSa/BWA/UStVA)  ·  ✅ GEBAUT (2026-07-08)
+> AuswertungsService (read-only, nur festgeschriebene Buchungen): SuSa (Soll/Haben/Saldo je Konto), UStVA (KZ81/86 Netto, USt, KZ66 Vorsteuer, KZ83 Zahllast über mapping_keys), BWA (Erlöse/Wareneinsatz/Rohertrag/Ergebnis). **4 Tests grün gegen Referenz-GJ** (Zahllast 102, Ergebnis 600, Debitor-Saldo 1297; Zeitraumabgrenzung).
 - **Abnahme-Anker:** gegen Referenz-Geschäftsjahr mit bekannten Soll-Werten (Zahlen-Wahrheit).
 
 ### (vi) DATEV-EXTF-Export
