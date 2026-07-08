@@ -4,6 +4,10 @@
 
 > **⛔ OBERSTES DOKUMENT: [`docs/BETRIEBSORDNUNG.md`](docs/BETRIEBSORDNUNG.md)** — autonomer Mehrstrang-Betrieb (Rollen BAUER/PRÜFER/KOORDINATOR, Gates G1–G9, Vollmacht + Restgrenze, FiBu-Sondergates). Bindet JEDE Instanz; bei Konflikt mit einem Auftragstext gilt die Betriebsordnung. Ändert nur Yama.
 
+> **⛔ BAU-ORDNUNG (verbindlich): Vor jedem Produktiv-Commit: Selbstprüfung gegen [`docs/architektur/bauordnung.md`](docs/architektur/bauordnung.md) §5 (die 10 Fragen).** Die Bauordnung (Schichten-/Daten-/Sicherheits-/Bau-Prozess-Regeln, abgeleitet aus dem Code-Audit) ist verbindlich und steht **unter** BETRIEBSORDNUNG.md/CLAUDE.md — bei Konflikt gelten diese. Jeder Agent liest sie bei jedem Start.
+
+> **📍 „LIVE"/„PRODUKTION" = LOKALE DEV-DB (Yama-Klarstellung 2026-07-08).** Im laufenden Programm meint „live" die **lokale** DB (`ticket`/`ticket_testing`) auf Yamas Rechner — dort ist freies Arbeiten erlaubt (Migrationen, Seeder, Daten-Bereinigung inkl. UPDATE/DELETE als beauftragter Posten). **Hetzner-Produktion (3000 Kunden) wird NICHT angefasst** — erst am separaten Deploy-Tag, den Yama auslöst. Die „Produktion off-limits"-Regel gilt weiterhin **NUR für Hetzner**. *(Die DAUERDIREKTIVE unten schützt die ticket-Datenintegrität auch lokal: destruktive Schritte bleiben eigene, beauftragte, belegte Posten — kein Beifang.)*
+
 ## ⛔ DAUERDIREKTIVE: DATEN- UND KETTEN-SCHUTZ (ab 2026-07-05, strang-übergreifend & dauerhaft)
 
 **Bindet JEDE Instanz und JEDEN playground→ticket-Schritt (Migration · Seeder · Import · Cut-over · FiBu).**
