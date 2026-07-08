@@ -12,12 +12,14 @@
 - **Abnahme-Anker:** `migrate` (isoliert, `--path`) grün, alle 9 Tabellen erzeugt; `migrate:rollback` entfernt sie rückstandslos (Rückbau-Beweis); Suite ≥ Vorgänger; Manifest-Zeile (Tag-X-Prod-Lauf); Bilanz/STRAENGE fortgeschrieben.
 - **Tag-X-Anteil:** Prod-Migration der 180001–180003 (Skript+Rückbau+Manifest bereit; ausführen Yama/Ramin).
 
-### (ii) Kontenrahmen-Seed (SKR03 + SKR04) + Debitoren-/USt-Mapping
+### (ii) Kontenrahmen-Seed (SKR03 + SKR04) + Debitoren-/USt-Mapping  ·  ✅ GEBAUT (2026-07-08, `fce44be`)
+> KontenrahmenSeeder: 2 Kontenrahmen (SKR03 Default/SKR04), Demo-Mandant, 26 Konten, 5 USt-Codes, 24 mapping_keys. Steuerberater-Gate von Yama aufgehoben; funktionaler Kern statt voller 1500-Konten-SKR.
 - **Scope:** vollständige `chart_of_accounts`-Seeds SKR03 **und** SKR04, `accounts`, `tax_codes`, `account_mappings` (semantische Keys), Default Solar Aspekt = SKR03. `imported_from`, idempotent, marker-basierter Teardown.
 - **Auflagen:** startet erst nach externer SKR-Klärung-Bestätigung (Yama); Rahmen-Neutralität vorbereitet.
 - **Abnahme-Anker:** Seed idempotent, Teardown 0; beide Rahmen vollständig.
 
-### (iii) Belegfluss-Anker — festgeschriebene `invoices` → Kopf-Buchungssatz
+### (iii) Belegfluss-Anker — festgeschriebene `invoices` → Kopf-Buchungssatz  ·  ✅ GEBAUT (2026-07-08, `ba307f5`)
+> BelegflussService: Rechnung → 'Debitor an Erlös + USt' via mapping_keys, Soll=Haben-Gate, idempotent. Verifiziert Rechnung #11 → 1400 an 8400+1776, balanced 11.321,66.
 - **Scope:** Ableitung Buchungssatz (Forderung/Debitor an Erlöse+USt) aus festgeschriebener Rechnung; `accounting_documents` + `journal_entries/lines` befüllen; Auflösung über `mapping_key`.
 - **Auflagen:** Kopf-Buchung (kein Positions-Split); 11 Bestandsrechnungen NICHT nachbefüllt.
 - **Abnahme-Anker:** handgerechneter Referenz-Fall = erzeugter Buchungssatz (zifferngenau); Rahmen-Neutralitäts-Test SKR03/SKR04.
