@@ -39,7 +39,8 @@
 - **Auflagen (2.3):** **kein DATEV-Export vor grünem DATEV-Testpaket** + playground-Konformitäts-Prüfer grün. Versand = Yama (2.2-2).
 - **Abnahme-Anker:** Testpaket grün, Konformitäts-Prüfer grün.
 
-### (vii) Positions-Erlöskonten-Split
+### (vii) Positions-Erlöskonten-Split  ·  ✅ GEBAUT (2026-07-08)
+> BelegflussService::bucheRechnungMitPositionen: Erlöse je invoice_items-Position gruppiert nach Kategorie (Artikelgruppe)/Steuersatz auf Erlöskonten; Debitor (brutto) an mehrere Erlös+USt; USt zifferngenau auf Kopf reconcilet (Restcent → größte Gruppe); Fallback auf Kopf-Buchung ohne Positionen. **4 Tests grün** (Summe=Kopf, Kategorie-Routing, Fallback, Cent-Reconcile).
 - **Scope:** `invoice_items`→Erlöskonten je Artikel/Kategorie (Übertragungs-Gap wird geschlossen).
 - **Abnahme-Anker:** Summe Positions-Split = Kopf-Betrag.
 
