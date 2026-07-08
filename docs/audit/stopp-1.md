@@ -1,5 +1,16 @@
 # ⛔ STOPP 1 — Audit-Ergebnis (Yama entscheidet)
 
+> ## ✅ UMSETZUNGS-STAND (2026-07-08, Yama-Freigabe „P0-Sicherheit sofort")
+> Phase 4 für die P0-Security vorgezogen, je Fix einzeln Stopp→Fix→Verifikation→Commit, **additiv** (nur Middleware/Gates, kein Dateneingriff):
+> - **P0-1** anonyme Schreibrouten → `auth` auf 40 Route-Gruppen · Commit `a6063cf` · 3 Tests
+> - **P0-2** Account-Takeover `updatePassword` → `permission:Users,update` · Commit `e554817` · 2 Tests
+> - **P0-3** HR/Lohn/Medizin-IDOR → `is_admin`-Gate auf 13 Methoden · Commit `f5803ed` · 2 Tests
+> - **P0-4** Belegkette-Löschung → `hasPermission('Customer','delete')` auf 4 Methoden · Commit `13ef2bc` · 2 Tests
+> - **P0-5** Massenlöschungen → `is_admin`-Gate auf 3 `bulkDelete` · Commit `…` · 2 Tests
+> - **Gesamt: 31 Security-Tests grün (77 Assertions).**
+> **OFFEN:** P0-6 (DATEN, ändert Bestandsdaten — wartet auf expliziten Yama-Auftrag). **HR-Rolle** (P0-3): aktuell Admin-only; dedizierte Personal-Rolle = Yama-Entscheidung (permission-System laut CODE-AUDIT-01 dormant, nur 5/1211 Schreibrouten gegatet → eigener Aktivierungs-Posten).
+
+
 > Synthese aus `01-fehler`, `02-architektur`, `03-swot`. Live-System (~3000 Kunden). Rein lesend erhoben. **Drei Lieferungen:** (A) P0-Liste mit Mini-Fix-Aufträgen · (B) Architektur-Urteil je Bereich · (C) Reihenfolge-Empfehlung. Der entkoppelte CODE-AUDIT-01 (läuft) ergänzt später `code-audit.md` + `bauordnung.md`.
 
 ## (A) P0-Liste — sofort (Sicherheit / Datenverlust)
