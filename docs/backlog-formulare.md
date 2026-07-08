@@ -22,10 +22,12 @@
 - **Abnahme-Anker:** Operanden-Gate-Tests grün (§10); nicht-whitelistetes Zeichen → `unvollstaendig`, nie Ausführung; `SUM` aggregiert Wiederholzeilen.
 - **Nicht im Scope:** UI, Migration, Bestandseingriff, Anbindung an `product_formulas`.
 
-### FS-01 — Ist-Bestand & Schema-Doku
+### FS-01 — Ist-Bestand & Schema-Doku  ·  GEBAUT (2026-07-08)
+> Abgedeckt durch docs/formular-synthese-ticket-playground-arbeitspaket.md (v1-Bestand + v2-Zielschema §5).
 - **Ziel:** `fields`-v1-Bestand + Arbeitspaket fixieren. **Dateien:** `docs/formular-*`. **Abh.:** —. **Anker:** Schema v1 dokumentiert. **Nicht im Scope:** Code.
 
-### FS-02 — ProductFormula JSON-Schema v2
+### FS-02 — ProductFormula JSON-Schema v2  ·  GEBAUT (2026-07-08)
+> Additive Migration (schema_version int Default 1 + imported_from nullable, lokal+Test migriert, Rueckbau in down()); FormSchemaValidator (Server, reine Funktion) gegen v2-Schema; ProductFormula fillable+cast erweitert. 11 Tests gruen. Prod-Migration = Tag-X.
 - **Ziel:** v2-Feldschema (§5) + Konzept `product_formulas.schema_version`/`imported_from` + Server-Validator. **Dateien:** `app/Models/ProductFormula.php`, Migration (**Tag-X**), Validator. **Abh.:** FS-01. **Anker:** Schema-Validierung grün; v1→v2 verträglich. **Auflagen:** additiv (2 nullable Spalten), kein Bestandseingriff. **Nicht im Scope:** Renderer.
 
 ### FS-04 — visible_if Engine (Alpine)

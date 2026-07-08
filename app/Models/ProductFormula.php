@@ -14,6 +14,8 @@ class ProductFormula extends Model
         'product_id',
         'section_name',
         'fields', // JSON field
+        'schema_version', // FS-02: 1 = v1-Bestand, 2 = validiertes v2-Schema
+        'imported_from',  // FS-02: Herkunfts-Marker (playground-Vorlagen, Rückbau-Beweis)
         'status',
         'created_by',
         'deleted_by',
@@ -24,6 +26,7 @@ class ProductFormula extends Model
 
     protected $casts = [
         'fields' => 'array',
+        'schema_version' => 'integer',
     ];
     /**
      * Relationship: belongs to an article group
