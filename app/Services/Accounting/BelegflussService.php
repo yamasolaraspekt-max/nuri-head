@@ -20,8 +20,10 @@ class BelegflussService
     /**
      * Bucht eine Rechnung. Gibt ['journal_entry_id', 'document_id', 'soll', 'haben', 'lines', 'skipped'] zurück.
      */
-    public function bucheRechnung(int $invoiceId): array
+    public function bucheRechnung(int $invoiceId, int|string $erfasserId = 'system'): array
     {
+        $erfasser = (string) $erfasserId;
+
         $invoice = DB::table('invoices')->where('id', $invoiceId)->first();
         if ($invoice === null) {
             throw new RuntimeException("Rechnung #{$invoiceId} nicht gefunden.");
@@ -53,7 +55,7 @@ class BelegflussService
         $erloes = $this->konto($client->id, $chartId, $erloesKey);
         $ust = $ustKey ? $this->konto($client->id, $chartId, $ustKey) : null;
 
-        return DB::transaction(function () use ($invoice, $client, $net, $tax, $gross, $rate, $debitor, $erloes, $ust) {
+        return DB::transaction(function () use ($invoice, $client, $net, $tax, $gross, $rate, $debitor, $erloes, $ust, $erfasser) {
             $now = now();
 
             // Beleg (accounting_documents) — Anker an source_invoice_id.
@@ -80,6 +82,7 @@ class BelegflussService
                 'document_date' => $invoice->issue_date,
                 'booking_text' => 'Ausgangsrechnung #'.$invoice->id,
                 'origin' => 'ausgangsrechnung', 'origin_id' => $invoice->id,
+                'status' => 'entwurf', 'created_by' => $erfasser,
                 'created_at' => $now, 'updated_at' => $now,
             ]);
 

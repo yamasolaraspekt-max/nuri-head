@@ -24,7 +24,8 @@
 - **Auflagen:** Kopf-Buchung (kein Positions-Split); 11 Bestandsrechnungen NICHT nachbefüllt.
 - **Abnahme-Anker:** handgerechneter Referenz-Fall = erzeugter Buchungssatz (zifferngenau); Rahmen-Neutralitäts-Test SKR03/SKR04.
 
-### (iv) Buchungs-Engine + GoBD-Gates
+### (iv) Buchungs-Engine + GoBD-Gates  ·  ✅ GEBAUT (2026-07-08)
+> BuchungsEngine: Festschreibung (unveränderlich), lückenloser Nummernkreis JJJJ-NNNNNN je Mandant/Jahr, Maker-Checker (Erfasser≠Festschreiber), Storno statt Edit (Gegenbuchung, Original unberührt). **4 GoBD-Beweis-Tests grün** (22 Assertions). Belegfluss (iii) erzeugt jetzt Entwurf (status=entwurf, created_by); Festschreibung ist der zweite Schritt.
 - **Scope:** append-only, Storno statt Edit, lückenloser Nummernkreis, Maker-Checker, Festschreibung.
 - **Auflagen (2.3):** **kein produktiver Buchungssatz vor grünem GoBD-Beweis-Testsatz.**
 - **Abnahme-Anker:** 4 GoBD-Beweis-Tests grün (Unveränderlichkeit/Nummernkreis/Maker-Checker/Audit-Trail).
