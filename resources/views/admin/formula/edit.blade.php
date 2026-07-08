@@ -715,6 +715,7 @@
 
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="{{ asset('js/form-safe-eval.js') }}"></script>{{-- FS-07: sicherer Evaluator statt new Function --}}
 
     <script>
     const fieldsBySection = {};
@@ -822,16 +823,8 @@
     }
 
     function evaluateFormula(formula, values) {
-        try {
-            const mathFns = { add, sub, mul, div, round, min, max, toNum };
-            const keys = Object.keys(values);
-            const vals = keys.map(k => values[k] ?? 0);
-            const fn = new Function(...Object.keys(mathFns), ...keys, `return ${formula}`);
-            return fn(...Object.values(mathFns), ...vals);
-        } catch (e) {
-            console.warn('Formula error:', formula, e);
-            return 'Error';
-        }
+        // FS-07: eval-frei über den sicheren Evaluator (kein new Function).
+        return window.FormSafeEval.evalArithmetic(formula, values);
     }
 
     function collectFormData() {
@@ -1044,14 +1037,8 @@
             const container = tabPane.querySelector('.sortable-container');
 
             fields.forEach((field, i) => {
-                try {
-                    if (field.advancedCondition) {
-                        const fn = new Function(...Object.keys(formData), `return ${field.advancedCondition}`);
-                        if (!fn(...Object.values(formData))) return;
-                    }
-                } catch (e) {
-                    return;
-                }
+                // FS-07: eval-freie Sichtbarkeitsprüfung (kein new Function).
+                if (field.advancedCondition && !window.FormSafeEval.evalCondition(field.advancedCondition, formData)) return;
 
                 const wrapper = document.createElement('div');
                 wrapper.className = 'draggable-field';

@@ -580,6 +580,7 @@ $formulaCount = collect($decodedFields)->filter(fn($field) => ($field['type'] ??
 
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/form-safe-eval.js') }}"></script>{{-- FS-07: sicherer Evaluator statt new Function --}}
 
     <script>
     function toNum(val) {
@@ -616,19 +617,8 @@ $formulaCount = collect($decodedFields)->filter(fn($field) => ($field['type'] ??
     }
 
     function evaluateFormula(formula, values) {
-        try {
-            const fns = { add, sub, mul, div, round, min, max, toNum };
-            const fnKeys = Object.keys(fns);
-            const fnVals = Object.values(fns);
-            const valKeys = Object.keys(values);
-            const valVals = valKeys.map(k => values[k] ?? 0);
-
-            const fn = new Function(...fnKeys, ...valKeys, `return ${formula}`);
-            return fn(...fnVals, ...valVals);
-        } catch (e) {
-            console.warn('Formula error:', formula, e);
-            return 'Fehler';
-        }
+        // FS-07: eval-frei über den sicheren Evaluator (kein new Function).
+        return window.FormSafeEval.evalArithmetic(formula, values);
     }
 
     function collectFormValues() {

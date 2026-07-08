@@ -738,6 +738,7 @@
 @section('script')
 <script src="{{ asset('js/dropzone.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="{{ asset('js/form-safe-eval.js') }}"></script>{{-- FS-07: sicherer Evaluator statt new Function --}}
 
 <script>
 const fieldsBySection = {};
@@ -827,16 +828,8 @@ function max(...args) {
 }
 
 function evaluateFormula(formula, values) {
-    try {
-        const fns = { add, sub, mul, div, round, min, max, toNum };
-        const keys = Object.keys(values);
-        const vals = keys.map(k => values[k] ?? 0);
-        const fn = new Function(...Object.keys(fns), ...keys, `return ${formula}`);
-        return fn(...Object.values(fns), ...vals);
-    } catch (e) {
-        console.warn('Formula error:', formula, e);
-        return 'Error';
-    }
+    // FS-07: eval-frei über den sicheren Evaluator (kein new Function).
+    return window.FormSafeEval.evalArithmetic(formula, values);
 }
 
 function collectFormData() {
@@ -1050,14 +1043,8 @@ function renderPreview() {
 
         fields.forEach((field, i) => {
             if (field.advancedCondition) {
-                try {
-                    const keys = Object.keys(formData);
-                    const vals = Object.values(formData);
-                    const fn = new Function(...keys, `return ${field.advancedCondition}`);
-                    if (!fn(...vals)) return;
-                } catch (e) {
-                    return;
-                }
+                // FS-07: eval-freie Sichtbarkeitsprüfung (kein new Function).
+                if (!window.FormSafeEval.evalCondition(field.advancedCondition, formData)) return;
             }
 
             const wrapper = document.createElement('div');

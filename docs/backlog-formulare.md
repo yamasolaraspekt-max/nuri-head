@@ -41,7 +41,8 @@
 ### FS-06 — playground-Vorlagen-Mapper/Seeder **Dry-Run**
 - **Ziel:** Stored-Procedure-SQL + Laravel-Seeder (Heizlast/Aufmaß/WP-Konfig) → ticket-Eloquent, `imported_from='playground:<slug>'`, **Dry-Run (kein Insert)** + Bericht. **Abh.:** FS-02. **Anker:** Bericht listet 21 Vorlagen/358 Felder korrekt; `risk_level='fachlich-vorlaeufig'` gesetzt (Heizlast ≠ DIN EN 12831). **Auflagen (§13-4):** **echter Seed erst nach Yama-Sichtung** des Berichts + Rückbau-Beweis. **Nicht im Scope:** produktiver Seed, Antwortdaten.
 
-### FS-07 — Builder/UI minimal erweitern
+### FS-07 — Builder/UI minimal erweitern  ·  GEBAUT (2026-07-08)
+> new Function VOLLSTAENDIG entfernt (8 Vorkommen): 2 Leichen-Views geloescht (index1, test.blade copy) + 5 ersetzt in create/edit/test durch public/js/form-safe-eval.js (sicherer Recursive-Descent-Evaluator, Whitelist, kein eval; 18 node-Assertions inkl. Injection-Abwehr). Server-Endpoint product.formula.evaluate (FS-02/03/04) als Auswertungs-Autoritaet (4 Feature-Tests). view:cache gruen. OFFEN (eigener Slice): EIN Save-Pfad-Konsolidierung (store/save/updateFormula) + v2-Keys-Migration im Builder + kaputte Route product.formula.updates.
 - **Ziel:** EIN Editor / EIN Save-Pfad, v2-Keys, ticket-Design; `new Function` raus (Server-Engine); Leichen entfernen (`index1.blade.php`, `test.blade copy.php`), kaputte Route `product.formula.updates` bereinigen. **Abh.:** FS-02/03/04. **Anker:** Builder speichert v2, kein `new Function` mehr, Bestands-Views brechen nicht. **Nicht im Scope:** `sidebar.blade.php` (NAV-Strang, tabu).
 
 ### FS-08 — Antwortspeicherung & Auswertung
