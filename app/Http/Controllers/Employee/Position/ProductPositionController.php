@@ -221,6 +221,7 @@ class ProductPositionController extends Controller
 
     public function bulkDelete(Request $request)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Massenloeschung nur fuer Administratoren (MASTER-01 P0-5).');
         $ids = $request->input('ids', []);
 
         if (!is_array($ids) || empty($ids)) {

@@ -2230,6 +2230,7 @@ class InquiryController extends Controller
 
     public function bulkDelete(Request $request)
     {
+        abort_unless((bool) (auth()->user()->is_admin ?? false), 403, 'Massenloeschung nur fuer Administratoren (MASTER-01 P0-5).');
         $ids = array_filter((array) $request->input('ids', []));
 
         if (!count($ids)) {
