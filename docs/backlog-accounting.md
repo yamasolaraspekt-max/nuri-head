@@ -44,5 +44,6 @@
 - **Scope:** `invoice_items`→Erlöskonten je Artikel/Kategorie (Übertragungs-Gap wird geschlossen).
 - **Abnahme-Anker:** Summe Positions-Split = Kopf-Betrag.
 
-### (viii) Kreditoren-/Bestelllisten-Seite (Wareneingang)
+### (viii) Kreditoren-/Bestelllisten-Seite (Wareneingang)  ·  🟡 KERN GEBAUT (2026-07-08) — Rest deferred
+> EingangsBelegflussService: „Wareneingang + Vorsteuer an Kreditor" (Personenkonto `accounts.id` oder Sammelkonto `verbindlichkeit_kreditor`), mapping_key-basiert, idempotent (Mandant+Kreditor+external_number), Entwurf zur Festschreibung via Engine (iv), Vorsteuer erscheint in UStVA (v). **3 Tests grün.** OFFEN (Yama-Scope): reale Eingangsrechnungs-Quelltabelle (existiert nicht — neue Tabelle vs. `purchase_requests`), Bestelllisten-/`DealMaterialList`-Feinkartierung, Kreditoren-UI/Import.
 - **Scope:** Eingangsrechnungen/Kreditoren; Feinkartierung `DealMaterialList*`. Eigener Block, später.
