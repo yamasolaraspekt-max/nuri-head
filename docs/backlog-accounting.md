@@ -5,7 +5,8 @@
 
 ## Posten
 
-### (i) FiBu-Schema-Fundament — additiv, SKR-neutral, KEIN Seed  ·  **AKTIV (Bau fertig, Prüfung ausstehend)**
+### (i) FiBu-Schema-Fundament — additiv, SKR-neutral, KEIN Seed  ·  **✅ FREIGEGEBEN + IN MAIN (2026-07-08)**
+> Prüfer-Protokoll (frische Instanz): geprüfter Hash `28b074b` → cherry-pick nach main `f371ee6`. G1 Suite: 121 Unit grün; die 3 Suite-Fehler (Invoice/Pusher `cURL localhost:6001`) sind **vorbestehend auf main** (Broadcasting-Env, keine Regression). G3 Additiv: nur `Schema::create` (9 Tabellen), 0 destruktive Muster. G8 FiBu: SKR-neutral, kein Seed, `mapping_key` (keine harten Kontonummern), Anker `source_invoice_id`→`invoices` read-only. **Votum: FREIGABE.** Lokal migriert (9 Tabellen erzeugt). Tag-X-Prod-Migration bleibt offener Manifest-Posten. **Nächster Posten: (ii) Kontenrahmen-Seed — Gate Steuerberater (SKR03/04).**
 - **Scope:** FiBu-eigene Tabellen (`chart_of_accounts`, `accounting_clients`, `accounts`, `tax_codes`, `account_mappings`, `accounting_fiscal_years`, `accounting_documents`, `accounting_journal_entries`, `accounting_journal_lines`), Timestamps `2026_07_05_180001–180003`, `imported_from`-Marker auf seedbaren Referenztabellen. Nur lokal/Test.
 - **Auflagen:** additiv (nur CREATE); `down()` rollback-bewiesen; Weiche 5 (kein `project_id`); `mapping_key`-Architektur (keine harten Kontonummern); Ketten-Anker `source_invoice_id`→`invoices` read-only; kein Kontenrahmen-Seed (eigener Posten).
 - **Abnahme-Anker:** `migrate` (isoliert, `--path`) grün, alle 9 Tabellen erzeugt; `migrate:rollback` entfernt sie rückstandslos (Rückbau-Beweis); Suite ≥ Vorgänger; Manifest-Zeile (Tag-X-Prod-Lauf); Bilanz/STRAENGE fortgeschrieben.
