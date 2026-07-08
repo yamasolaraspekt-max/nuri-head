@@ -30,7 +30,8 @@
 > Additive Migration (schema_version int Default 1 + imported_from nullable, lokal+Test migriert, Rueckbau in down()); FormSchemaValidator (Server, reine Funktion) gegen v2-Schema; ProductFormula fillable+cast erweitert. 11 Tests gruen. Prod-Migration = Tag-X.
 - **Ziel:** v2-Feldschema (§5) + Konzept `product_formulas.schema_version`/`imported_from` + Server-Validator. **Dateien:** `app/Models/ProductFormula.php`, Migration (**Tag-X**), Validator. **Abh.:** FS-01. **Anker:** Schema-Validierung grün; v1→v2 verträglich. **Auflagen:** additiv (2 nullable Spalten), kein Bestandseingriff. **Nicht im Scope:** Renderer.
 
-### FS-04 — visible_if Engine (Alpine)
+### FS-04 — visible_if Engine (Alpine)  ·  GEBAUT (2026-07-08)
+> VisibleIfService (Server-autoritativ): istSichtbar (=/!=/<>/<=/>=/in/not_in), sichtbareFelder mit Kaskade (kein verwaistes Kind), fehlendePflichtfelder (unsichtbares Pflichtfeld blockt NICHT), alpineAusdruck (x-show fuer Scope-2-Rendering). 8 Tests gruen. UI-Verdrahtung = FS-07.
 - **Ziel:** `VisibleIfService` (Server-Auswertung `Feld op Wert`) + Alpine-Rendering (CLAUDE.md-Scope 2). **Abh.:** FS-02. **Anker:** Sichtbarkeits-Tests; unsichtbares Pflichtfeld blockt nicht. **Auflagen:** Alpine nur im Formular-Rendering-Scope. **Nicht im Scope:** jQuery-Variante (Alpine entschieden).
 
 ### FS-05 — SmartroutingService
