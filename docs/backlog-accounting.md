@@ -34,7 +34,8 @@
 > AuswertungsService (read-only, nur festgeschriebene Buchungen): SuSa (Soll/Haben/Saldo je Konto), UStVA (KZ81/86 Netto, USt, KZ66 Vorsteuer, KZ83 Zahllast über mapping_keys), BWA (Erlöse/Wareneinsatz/Rohertrag/Ergebnis). **4 Tests grün gegen Referenz-GJ** (Zahllast 102, Ergebnis 600, Debitor-Saldo 1297; Zeitraumabgrenzung).
 - **Abnahme-Anker:** gegen Referenz-Geschäftsjahr mit bekannten Soll-Werten (Zahlen-Wahrheit).
 
-### (vi) DATEV-EXTF-Export
+### (vi) DATEV-EXTF-Export  ·  ✅ GEBAUT (2026-07-08)
+> DatevExtfExportService: EXTF-Buchungsstapel v13 (CP1252, Semikolon, Dezimal-Komma, Beträge o. Vorzeichen + S/H), Stern-Zerlegung je Buchung (Ausgangs-/Eingangsrechnung), Berater/Mandant aus accounting_clients + integrierter Konformitäts-Prüfer. **5 Tests grün.** Versand bleibt Yama (2.2-2); datev_export_status wird NICHT automatisch gesetzt.
 - **Auflagen (2.3):** **kein DATEV-Export vor grünem DATEV-Testpaket** + playground-Konformitäts-Prüfer grün. Versand = Yama (2.2-2).
 - **Abnahme-Anker:** Testpaket grün, Konformitäts-Prüfer grün.
 
