@@ -95,6 +95,7 @@ class PersonalNoteController extends Controller
     public function recover($id)
         {
             $note = PersonalNote::withTrashed()->find($id);
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Notiz nicht gefunden.'], 404);
@@ -110,6 +111,7 @@ class PersonalNoteController extends Controller
         public function permanentDelete($id)
         {
                 $note = PersonalNote::withTrashed()->find($id);
+                $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
                 if (!$note) {
                     return response()->json(['message' => 'Notiz nicht gefunden.'], 404);
@@ -355,6 +357,7 @@ class PersonalNoteController extends Controller
             \Log::info('Updating note with ID: ' . $id);
 
             $note = PersonalNote::find($id);
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Note not found'], 404);
@@ -376,6 +379,7 @@ class PersonalNoteController extends Controller
             \Log::info('Updating note with ID: ' . $id);
 
             $note = PersonalNote::find($id);
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Note not found'], 404);
@@ -393,6 +397,7 @@ class PersonalNoteController extends Controller
             \Log::info('Updating note with ID: ' . $id);
 
             $note = PersonalNote::find($id);
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Note not found'], 404);
@@ -410,6 +415,7 @@ class PersonalNoteController extends Controller
             \Log::info('Updating note with ID: ' . $id);
 
             $note = PersonalNote::find($id);
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Note not found'], 404);
@@ -427,6 +433,7 @@ class PersonalNoteController extends Controller
             \Log::info('Updating note with ID: ' . $id);
 
             $note = PersonalNote::find($id);
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Note not found'], 404);
@@ -444,6 +451,7 @@ class PersonalNoteController extends Controller
             \Log::info('Updating note with ID: ' . $id);
 
             $note = PersonalNote::find($id);
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Note not found'], 404);
@@ -461,6 +469,7 @@ class PersonalNoteController extends Controller
             \Log::info('Updating note with ID: ' . $id);
 
             $note = PersonalNote::find($id);
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Note not found'], 404);
@@ -486,6 +495,7 @@ class PersonalNoteController extends Controller
             ]);
 
             $note = PersonalNote::find($id);
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Notiz nicht gefunden.'], 404);
@@ -503,6 +513,7 @@ class PersonalNoteController extends Controller
         {
             \Log::info('Updating note with ID: ' . $id); 
             $note = PersonalNote::find($id);
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Notiz nicht gefunden.'], 404);
@@ -565,6 +576,7 @@ class PersonalNoteController extends Controller
         public function show($id)
         {
             $note = PersonalNote::find($id);
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Notiz nicht gefunden.'], 404);
@@ -577,6 +589,7 @@ class PersonalNoteController extends Controller
         public function destroy($id)
         {
             $note = PersonalNote::find($id); // Use find() instead of findOrFail()
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                 return response()->json(['message' => 'Note not found'], 404);
@@ -601,6 +614,7 @@ class PersonalNoteController extends Controller
         public function updateCategory($id,$category_id){
         
             $note = PersonalNote::find($id); // Use find() instead of findOrFail()
+            $this->authorizeNoteOwner($note); // P1-IDOR Buendel-1: Owner-Gate
 
             if (!$note) {
                     return response()->json(['message' => 'Note not found'], 404);
@@ -903,6 +917,14 @@ class PersonalNoteController extends Controller
         return back()->with('save_msg', 'Notiz gelöscht.');
     }
 
+
+    /** MASTER-01 P1-IDOR Buendel-1: nur der Eigentuemer (user_id=Employee-ID) darf seine Notiz aendern/loeschen. */
+    private function authorizeNoteOwner(?PersonalNote $note): void
+    {
+        if ($note !== null && (string) $note->user_id !== (string) $this->getEmployeeId()) {
+            abort(403, 'Keine Berechtigung fuer diese Notiz.');
+        }
+    }
 
     private function getEmployeeId() {
         return auth()->user()->employeeId(); 
