@@ -8,6 +8,8 @@
 
 > **📍 „LIVE"/„PRODUKTION" = LOKALE DEV-DB (Yama-Klarstellung 2026-07-08).** Im laufenden Programm meint „live" die **lokale** DB (`ticket`/`ticket_testing`) auf Yamas Rechner — dort ist freies Arbeiten erlaubt (Migrationen, Seeder, Daten-Bereinigung inkl. UPDATE/DELETE als beauftragter Posten). **Hetzner-Produktion (3000 Kunden) wird NICHT angefasst** — erst am separaten Deploy-Tag, den Yama auslöst. Die „Produktion off-limits"-Regel gilt weiterhin **NUR für Hetzner**. *(Die DAUERDIREKTIVE unten schützt die ticket-Datenintegrität auch lokal: destruktive Schritte bleiben eigene, beauftragte, belegte Posten — kein Beifang.)*
 
+> **⛔ AUTOMATISIERUNGS-PRINZIP (dauerhaft, ab 2026-07-09).** „Sinnvoll automatisiert" ≠ „maximal automatisiert". Jede Automatisierung, die eine **Fach-/Rechtsentscheidung** dem Menschen abnimmt, folgt dem **Operanden-Gate**: **kein erfundener Wert — bei Unsicherheit/fehlenden Operanden wird gefragt oder markiert (Vorschlag + Bestätigung), nie stillschweigend weitergerechnet** (wie in der Formular-Calc-Engine + Anforderungsprofilen). Drei Klassen bei jedem Automatisierungs-Vorschlag benennen: **(a)** soll automatisiert sein (sicher ableitbar, spart Arbeit) · **(b)** darf NICHT voll automatisiert sein (Fach-/Rechtsentscheidung → nur Vorschlag+Bestätigung) · **(c)** ist automatisiert, aber falsch/riskant → korrigieren. Bindet Planner/Generator/Evaluator + jeden Optimierungs-Posten.
+
 ## ⛔ DAUERDIREKTIVE: DATEN- UND KETTEN-SCHUTZ (ab 2026-07-05, strang-übergreifend & dauerhaft)
 
 **Bindet JEDE Instanz und JEDEN playground→ticket-Schritt (Migration · Seeder · Import · Cut-over · FiBu).**
