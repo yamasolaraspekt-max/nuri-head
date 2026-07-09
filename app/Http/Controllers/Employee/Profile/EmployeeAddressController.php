@@ -9,6 +9,16 @@ use Illuminate\Http\Request;
 
 class EmployeeAddressController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR: HR-Rollen-Gate (permission:Employee), enforced mit heutigen user_rolls-Grants
+        $this->middleware('permission:Employee,add')->only(['store']);
+        $this->middleware('permission:Employee,update')->only(['update', 'active', 'deactive']);
+        $this->middleware('permission:Employee,delete')->only(['destroy']);
+    }
+
     /**
      * Display a listing of the resource.
      */
