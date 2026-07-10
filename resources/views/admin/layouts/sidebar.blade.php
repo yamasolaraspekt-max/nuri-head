@@ -410,6 +410,7 @@
             'title' => 'Arbeitsbereich',
             'items' => [
                 ['label' => 'Dashboard', 'icon' => 'layout-dashboard', 'tone' => 'text-brand-blue', 'url' => url('/'), 'active_routes' => ['/']],
+                ['label' => 'Was jetzt?', 'icon' => 'inbox', 'tone' => 'text-brand-blue', 'url' => $safeRoute('admin.arbeitsliste', 'arbeitsliste'), 'active_routes' => ['/arbeitsliste']],
                 ['label' => 'Lead-Kanban', 'icon' => 'kanban', 'tone' => 'text-brand-blue', 'url' => url('lead/kanban'), 'active_routes' => ['/lead/kanban']],
                 ['label' => 'Meine Aufgaben', 'icon' => 'check-square', 'tone' => 'text-brand-green', 'url' => url('personal/task/' . $employeeId), 'count_key' => 'tasks', 'active_routes' => ['/personal/task', '/admin/todo/personal']],
                 ['label' => 'Tagesberichte', 'icon' => 'file-clock', 'url' => $safeRoute('employee.daily.plan'), 'count_key' => 'daily_reports'],

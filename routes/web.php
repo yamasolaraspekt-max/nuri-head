@@ -15,7 +15,8 @@ use App\Events\TestNotificationEvent;
 use App\Http\Controllers\Admin\SystemWarningController;
 use App\Http\Controllers\Admin\GarbageController;
 use App\Http\Controllers\Admin\AttendanceAnalyticsController;
-// User Management 
+use App\Http\Controllers\ArbeitslisteController;
+// User Management
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRollController;
 use App\Http\Controllers\User\UserPreferenceController; //Offer Designer Column Display
@@ -436,6 +437,8 @@ Route::get('/notAdmin', [AdminController::class, 'notAdmin'])->name('notweb');
 Route::get('/system-warning/current', [SystemWarningController::class, 'current'])->name('system-warning.current')->middleware('auth');
 Route::get('/browser-info', [AdminController::class, 'showDetails'])->name('browser.info');
 Route::middleware(['auth'])->get('/api/sidebar-counts', [SidebarCountController::class, 'index'])->name('api.sidebar.counts');
+// Arbeitsliste — Inbox „Was braucht mich jetzt?" (auth-gated wie der uebrige Admin-Bereich).
+Route::middleware(['auth'])->get('/arbeitsliste', [ArbeitslisteController::class, 'index'])->name('admin.arbeitsliste');
 Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/widgets/load', [DashboardWidgetController::class, 'load'])->name('widgets.load');
     Route::post('/widgets/save', [DashboardWidgetController::class, 'save'])->name('widgets.save');
