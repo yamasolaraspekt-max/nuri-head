@@ -52,4 +52,12 @@ class HrPermissionGateTest extends TestCase
         $admin = $this->user(true);
         $this->assertNotSame(403, $this->actingAs($admin)->get('/skill_delete/999999')->getStatusCode());
     }
+
+    /** Personal-Rest: Department/Position-Controller ebenfalls hinter permission:Employee. */
+    public function test_department_position_ohne_grant_geblockt(): void
+    {
+        $u = $this->user();
+        $this->actingAs($u)->delete('/department_destroy/1')->assertForbidden();
+        $this->actingAs($u)->delete('/product-position/delete/1')->assertForbidden();
+    }
 }

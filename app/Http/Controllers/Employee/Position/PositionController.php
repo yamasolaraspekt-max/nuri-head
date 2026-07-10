@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class PositionController extends Controller
 {
-    public function __construct() { $this->middleware('auth'); }
+    public function __construct() {
+        // MASTER-01 P1-IDOR: Personal-Rollen-Gate (permission:Employee)
+        $this->middleware('permission:Employee,delete')->only(['destroyAjax', 'qualificationDestroy']);
+        $this->middleware('permission:Employee,update')->only(['updateAjax']); $this->middleware('auth'); }
 
     public function index(Request $request)
     {

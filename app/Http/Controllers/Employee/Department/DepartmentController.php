@@ -23,6 +23,9 @@ class DepartmentController extends Controller
      * Display a listing of the resource.
      */
     public function __construct(){
+        // MASTER-01 P1-IDOR: Personal-Rollen-Gate (permission:Employee)
+        $this->middleware('permission:Employee,delete')->only(['destroy', 'delete_leader', 'delete_representative', 'unassignPosition', 'employeeChange']);
+        $this->middleware('permission:Employee,update')->only(['update', 'updateOrder', 'updateEmployeeAllocations', 'description_update', 'storeHead', 'storeRepresentative']);
         $this->middleware('auth');
     }
 

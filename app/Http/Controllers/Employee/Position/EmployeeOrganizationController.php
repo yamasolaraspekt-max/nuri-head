@@ -17,6 +17,9 @@ class EmployeeOrganizationController extends Controller
 {
     public function __construct()
     {
+        // MASTER-01 P1-IDOR: Personal-Rollen-Gate (permission:Employee)
+        $this->middleware('permission:Employee,delete')->only(['remove']);
+        $this->middleware('permission:Employee,update')->only(['update']);
         $this->middleware('auth');
     }
 
