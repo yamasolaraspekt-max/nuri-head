@@ -8,6 +8,7 @@ use App\Services\Invoice\InvoiceDeletionGuard;
 use App\Services\Invoice\InvoiceNumberService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 class Invoice extends Model
 {
@@ -18,6 +19,12 @@ class Invoice extends Model
     /** S1-01 (D1-A): Status, die als „ausgestellt/final" gelten und eine Nummer erhalten. */
     public const ISSUED_STATUSES = ['sent', 'paid', 'overdue'];
 
+    /**
+     * Zahlungsziel-Default (Kalendertage) fuer die due_date-Ableitung; hier zentral anpassbar.
+     * Explizit gesetztes due_date bleibt unangetastet.
+     */
+    public const ZAHLUNGSZIEL_TAGE = 14;
+
     protected static function booted(): void
     {
         // S1-01: EINZIGE Vergabestelle. Beim Speichern einer ausgestellten Rechnung
@@ -25,6 +32,25 @@ class Invoice extends Model
         static::saving(function (self $invoice): void {
             if (empty($invoice->invoice_no) && $invoice->isIssuedStatus($invoice->status)) {
                 app(InvoiceNumberService::class)->reserve($invoice);
+            }
+        });
+
+        // A3: EINZIGE Ableitungsregel fuer das Zahlungsziel. Ist due_date leer und ein
+        // issue_date vorhanden, wird due_date = issue_date + ZAHLUNGSZIEL_TAGE (Kalendertage,
+        // KEINE Werktags-/Feiertagslogik). Ein explizit gesetztes due_date wird NIEMALS
+        // ueberschrieben (Operanden-Gate) — idempotent auf create UND update.
+        // A3-DELTA: Gutschrift/Stornorechnung tragen kein Kunden-Zahlungsziel (Geld fliesst
+        // zum Kunden / Rechnung aufgehoben) -> keine due_date-Ableitung.
+        // BEWUSSTE GoBD-Entscheidung: greift NUR bei leerem due_date. Wird das issue_date
+        // nachtraeglich geaendert, wird die Faelligkeit NICHT neu abgeleitet — eine einmal
+        // gesetzte Faelligkeit bleibt stabil (kein rueckwirkendes Verschieben von Zahlungszielen).
+        static::saving(function (self $invoice): void {
+            if (empty($invoice->due_date)
+                && !empty($invoice->issue_date)
+                && !in_array(mb_strtolower(trim((string) $invoice->type)), ['gutschrift', 'stornorechnung'], true)
+            ) {
+                $invoice->due_date = Carbon::parse($invoice->issue_date)
+                    ->addDays(self::ZAHLUNGSZIEL_TAGE);
             }
         });
 

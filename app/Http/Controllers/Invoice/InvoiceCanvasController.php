@@ -67,7 +67,9 @@ class InvoiceCanvasController extends Controller
                 'status' => 'draft',
 
                 'issue_date' => $data['issue_date'] ?? now()->toDateString(),
-                'due_date' => $data['due_date'] ?? now()->addDays(8)->toDateString(),
+                // A3: Kein zweiter due_date-Pfad. Bei leerem due_date leitet der Invoice-
+                // Model-saving-Hook zentral ab (issue_date + Invoice::ZAHLUNGSZIEL_TAGE).
+                'due_date' => $data['due_date'] ?? null,
                 'service_from' => $data['service_from'] ?? null,
                 'service_to' => $data['service_to'] ?? null,
 
@@ -226,7 +228,10 @@ class InvoiceCanvasController extends Controller
                 'invoice_no' => null,
                 'offer_no' => $offerDetail->offer_no ?: $offer?->offer_no,
                 'issue_date' => now()->toDateString(),
-                'due_date' => now()->addDays(8)->toDateString(),
+                // A3: Vorschau des Zahlungsziels aus der zentralen Regel (issue_date +
+                // Invoice::ZAHLUNGSZIEL_TAGE). Verbindlich abgeleitet wird erst beim Speichern
+                // im Invoice-Model-saving-Hook; ein leeres due_date bleibt hier ohne Zwang.
+                'due_date' => now()->addDays(Invoice::ZAHLUNGSZIEL_TAGE)->toDateString(),
                 'service_from' => null,
                 'service_to' => null,
                 'tax_rate' => (float) ($offerDetail->tax_rate ?? 19),
