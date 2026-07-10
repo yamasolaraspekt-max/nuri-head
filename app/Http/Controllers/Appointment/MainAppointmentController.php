@@ -41,6 +41,9 @@ class MainAppointmentController extends Controller
      * Display a listing of the resource.
      */
 public function __construct(){
+        // MASTER-01 P1-IDOR Customer-Rest: Belegkette-Gate (permission:Customer)
+        $this->middleware('permission:Customer,delete')->only(['destroy', 'calendar_destroy', 'forceDeleteAppointment']);
+        $this->middleware('permission:Customer,update')->only(['update', 'status']);
     $this->middleware('auth');
 }
 

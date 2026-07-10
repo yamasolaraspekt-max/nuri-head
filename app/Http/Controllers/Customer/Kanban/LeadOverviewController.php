@@ -65,6 +65,9 @@ class LeadOverviewController extends Controller
 
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Customer-Rest: Belegkette-Gate (permission:Customer)
+        $this->middleware('permission:Customer,delete')->only(['purge', 'appointmentsDestroy']);
+        $this->middleware('permission:Customer,update')->only(['changeStage', 'ticketize', 'updateProgress']);
         $this->middleware('auth');
     }
 

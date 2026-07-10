@@ -81,6 +81,9 @@ class NewLeadsController extends Controller
 
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Customer-Rest: Belegkette-Gate (permission:Customer)
+        $this->middleware('permission:Customer,delete')->only(['delete_alternative', 'delete_responsible', 'deleteResponsible', 'delete_product', 'deleteProduct', 'productDelete', 'mergeDuplicate']);
+        $this->middleware('permission:Customer,update')->only(['updatedata', 'updateLeadEmployee', 'updateProduct', 'updateProductPrice', 'junkObject', 'restoreJunkObject', 'syncProductInvoicePrice', 'updateFieldPV']);
         $this->middleware('auth');
     }
 

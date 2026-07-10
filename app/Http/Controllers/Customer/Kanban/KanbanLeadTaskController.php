@@ -23,6 +23,8 @@ class KanbanLeadTaskController extends Controller
 {
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Customer-Rest: Belegkette-Gate (permission:Customer)
+        $this->middleware('permission:Customer,delete')->only(['destroy']);
         $this->middleware('auth');
     }
 

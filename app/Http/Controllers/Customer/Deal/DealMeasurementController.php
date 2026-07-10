@@ -24,6 +24,14 @@ use App\Models\PersonalTask;
 use App\Models\EmployeesPersonalTask;
 class DealMeasurementController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Customer-Rest: Belegkette-Gate (permission:Customer)
+        $this->middleware('permission:Customer,update')->only(['updateKanbanStatus', 'saveDetail']);
+    }
+
     public function index(Request $request)
     {
         /*

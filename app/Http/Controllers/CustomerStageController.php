@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Log;
 
 class CustomerStageController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Customer-Rest: Belegkette-Gate (permission:Customer)
+        $this->middleware('permission:Customer,delete')->only(['updateCustomerStage']);
+        $this->middleware('permission:Customer,update')->only(['updateSingleCustomerStage', 'initializeCustomerStage']);
+    }
+
     /**
      * Display a listing of the resource.
      */

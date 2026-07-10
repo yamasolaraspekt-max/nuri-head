@@ -49,4 +49,12 @@ class CustomerPermissionGateTest extends TestCase
         $admin = $this->user(true);
         $this->assertNotSame(403, $this->actingAs($admin)->delete('/lead/roof/delete/999999')->getStatusCode());
     }
+
+    /** Customer-Rest: Gott-Klassen (NewLeads/LeadOverview) + Appointments ebenfalls hinter permission:Customer. */
+    public function test_customer_rest_ohne_grant_geblockt(): void
+    {
+        $u = $this->user();
+        $this->actingAs($u)->get('/delete_lead_alternative/1')->assertForbidden();      // NewLeads@delete_alternative
+        $this->actingAs($u)->delete('/lead-product/purge/1')->assertForbidden();         // LeadOverview@purge
+    }
 }
