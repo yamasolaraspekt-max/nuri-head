@@ -62,6 +62,11 @@ use App\Models\Stage;
 use App\Models\LeadStageSubStage;
 class LeadOverviewController extends Controller
 {
+    /**
+     * Betriebs-SLA: Angebot binnen N Werktagen nach Phasenwechsel; hier zentral anpassbar.
+     * (Kein Setting-Model/-Tabelle im Projekt vorhanden -> benannte Klassen-Konstante.)
+     */
+    private const ANGEBOT_TASK_SLA_WERKTAGE = 3;
 
     public function __construct()
     {
@@ -2162,6 +2167,42 @@ class LeadOverviewController extends Controller
                     ]
                 );
             });
+
+            // A1 (rein additiv, NACH dem committeten Move): Beim Wechsel in die Angebots-Phase
+            // GENAU EINE Angebots-Aufgabe ueber den bestehenden FollowUpCreator (UPSERT je
+            // source_type/source_id). Eigenes try/catch => ein Task-Fehler darf NIEMALS den
+            // bereits committeten Move in eine 500-Response verwandeln; Fehler wird SICHTBAR
+            // geloggt (lead_id + Grund), nicht stumm verschluckt.
+            if ($newStage === 'offer' && $oldStage !== 'offer') {
+                try {
+                    app(\App\Services\FollowUp\FollowUpCreator::class)->sync(
+                        'lead_product_list',
+                        (int) $lead->id,
+                        [
+                            'customer_id'          => $lead->customer_id,
+                            'alternative_id'       => $lead->alternative_id,
+                            'product_id'           => $lead->product_id,
+                            'lead_product_list_id' => (int) $lead->id,
+                            'description'          => 'Automatisch beim Wechsel in die Angebots-Phase.',
+                        ],
+                        [
+                            'follow_up_art' => null,
+                            'next_step'     => 'Angebot erstellen',
+                            'due_date'      => now()->addWeekdays(self::ANGEBOT_TASK_SLA_WERKTAGE),
+                            'responsible'   => $teamIds, // leer -> FollowUpCreator faellt auf Ersteller ($assignedBy) zurueck
+                        ],
+                        $assignedBy
+                    );
+                } catch (\Throwable $e) {
+                    Log::error('A1: Angebots-Follow-up konnte nicht erzeugt werden', [
+                        'lead_product_list_id' => (int) $lead->id,
+                        'customer_id'          => $lead->customer_id,
+                        'new_stage'            => $newStage,
+                        'old_stage'            => $oldStage,
+                        'reason'               => $e->getMessage(),
+                    ]);
+                }
+            }
 
             return response()->json([
                 'success' => true,
