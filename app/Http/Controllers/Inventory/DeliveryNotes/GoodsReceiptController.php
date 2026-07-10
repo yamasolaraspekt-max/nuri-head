@@ -20,6 +20,15 @@ use Illuminate\Validation\Rule;
 
 class GoodsReceiptController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,update')->only(['update', 'issue', 'quickStatus']);
+        $this->middleware('permission:Product,delete')->only(['destroy']);
+    }
+
     public function relationOptions(Request $request): JsonResponse
     {
         $q = trim((string) $request->get('q', ''));

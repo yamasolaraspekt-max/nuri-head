@@ -13,6 +13,15 @@ use Illuminate\Support\Facades\Schema;
 
 class AssetController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,update')->only(['assetsUpdate', 'handoversUpdate']);
+        $this->middleware('permission:Product,delete')->only(['assetsDestroy', 'handoversDestroy']);
+    }
+
     private const MAX_PER_PAGE = 100;
     private const MIN_PER_PAGE = 6;
     private const DEFAULT_PER_PAGE = 12;

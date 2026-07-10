@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\View;
 
 class ProductFavoriteListController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,update')->only(['update']);
+        $this->middleware('permission:Product,delete')->only(['destroy', 'detachProduct', 'destroyItem']);
+    }
+
     public function index()
     {
         return view('admin.product.product.favorite_lists');

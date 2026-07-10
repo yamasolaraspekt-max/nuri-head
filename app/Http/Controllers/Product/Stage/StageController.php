@@ -15,6 +15,15 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class StageController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,update')->only(['edit', 'update', 'reorder', 'duplicateSection']);
+        $this->middleware('permission:Product,delete')->only(['destroy']);
+    }
+
     public function index()
     {
         $products = ArticleGroup::orderBy('article_group')->get();

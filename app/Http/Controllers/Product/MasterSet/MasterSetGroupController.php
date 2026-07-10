@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\DB;
 
 class MasterSetGroupController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,update')->only(['update', 'groupSetsUpdate']);
+        $this->middleware('permission:Product,delete')->only(['destroy', 'groupSetsDestroy']);
+    }
+
      
     // GET /admin/master-sets/groups/list?article_group_id=..&q=..
         public function list(Request $request)

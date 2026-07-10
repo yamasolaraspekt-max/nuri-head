@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\DB;
 
 class StampArticleListController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,update')->only(['update']);
+        $this->middleware('permission:Product,delete')->only(['destroy', 'detachStampArticle', 'detachStampArticleByProduct']);
+    }
+
     /**
      * Main UI
      * GET /admin/stamp-articles/lists  (stamp.lists.index)

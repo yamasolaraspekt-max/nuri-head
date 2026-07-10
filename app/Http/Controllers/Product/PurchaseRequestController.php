@@ -20,6 +20,14 @@ use Throwable;
 
 class PurchaseRequestController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,delete')->only(['destroy']);
+    }
+
     public function index()
     {
         $brands = Brand::select('id', 'name', 'image', 'status')

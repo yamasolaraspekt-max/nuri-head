@@ -18,6 +18,9 @@ class MachineInstallmentController extends Controller
 {
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,update')->only(['update', 'updatePayment']);
+        $this->middleware('permission:Product,delete')->only(['destroy', 'destroyPayment']);
         $this->middleware('auth');
     }
 

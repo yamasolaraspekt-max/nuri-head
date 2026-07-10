@@ -13,6 +13,9 @@ class HeatingTypeController extends Controller
      */
    
      public function __construct(){
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,update')->only(['update']);
+        $this->middleware('permission:Product,delete')->only(['destroy']);
         $this->middleware('auth');
     }
      public function index()

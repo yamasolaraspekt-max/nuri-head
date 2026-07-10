@@ -18,6 +18,14 @@ use App\Models\Measure;
 
 class IdsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,update')->only(['promoteToProduct']);
+    }
+
     // SERVER CALLBACK → must remain PUBLIC
     public function callback(Request $request)
     {

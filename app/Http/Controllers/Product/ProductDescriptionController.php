@@ -15,6 +15,9 @@ class ProductDescriptionController extends Controller
      */
 
     public function __construct(){
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,update')->only(['update', 'updateAjax', 'updateDescription']);
+        $this->middleware('permission:Product,delete')->only(['destroy', 'deleteDescription', 'destroyDescription']);
         $this->middleware('auth');
     }
     public function index($id)

@@ -15,6 +15,15 @@ use Illuminate\Support\Facades\Validator;
 use Throwable; 
 class DeliveryNoteController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Product: Katalog/Lager-Rollen-Gate (permission:Product)
+        $this->middleware('permission:Product,update')->only(['update', 'updateProgress', 'toggleStatus']);
+        $this->middleware('permission:Product,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $branches = Branch::select('id', 'branch')->orderBy('branch')->get();
