@@ -9,6 +9,7 @@ use App\Services\Invoice\InvoiceNumberService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Invoice extends Model
 {
@@ -24,6 +25,15 @@ class Invoice extends Model
      * Explizit gesetztes due_date bleibt unangetastet.
      */
     public const ZAHLUNGSZIEL_TAGE = 14;
+
+    /**
+     * A5: Typen OHNE Kunden-Zahlungsziel — EINE Wahrheit fuer die Ausnahme-Menge.
+     * Gutschrift/Stornorechnung: Geld fliesst zum Kunden / Rechnung aufgehoben — es gibt
+     * kein Kunden-Zahlungsziel, sie werden daher NIE als „bezahlt" klassifiziert (kein
+     * due_date-Ableiten in A3, kein isFullyPaid()/scopePaid() in A5). Vergleich case-insensitiv
+     * (Typ-Strings im Bestand sind kapitalisiert, z.B. 'Gutschrift'), Liste hier in lowercase.
+     */
+    public const TYPEN_OHNE_ZAHLUNG = ['gutschrift', 'stornorechnung'];
 
     protected static function booted(): void
     {
@@ -47,7 +57,7 @@ class Invoice extends Model
         static::saving(function (self $invoice): void {
             if (empty($invoice->due_date)
                 && !empty($invoice->issue_date)
-                && !in_array(mb_strtolower(trim((string) $invoice->type)), ['gutschrift', 'stornorechnung'], true)
+                && !in_array(mb_strtolower(trim((string) $invoice->type)), self::TYPEN_OHNE_ZAHLUNG, true)
             ) {
                 $invoice->due_date = Carbon::parse($invoice->issue_date)
                     ->addDays(self::ZAHLUNGSZIEL_TAGE);
@@ -193,9 +203,48 @@ class Invoice extends Model
         return $accountId === null ? $q : $q->where('account_id', $accountId);
     }
 
+    /**
+     * A5 — EINZIGE (betrags-basierte) „voll bezahlt"-Wahrheit: KEIN gespeichertes Bool-Feld,
+     * sondern abgeleitet aus paid_amount/total_amount. Regel: NICHT ausgenommener Typ UND
+     * paid_amount >= total_amount, decimal-EXAKT via bccomp (kein Float-Drift). Konsistent zum
+     * bestehenden open_amount-Accessor: fuer nicht-ausgenommene Typen gilt open_amount == 0 ⇔ voll bezahlt.
+     * Kanten: total_amount = 0 -> bezahlt (paid >= 0); Ueberzahlung paid > total -> bezahlt (>=);
+     * Gutschrift/Stornorechnung -> nie bezahlt (Typ-Gate, TYPEN_OHNE_ZAHLUNG).
+     */
+    public function isFullyPaid(): bool
+    {
+        if (in_array(mb_strtolower(trim((string) $this->type)), self::TYPEN_OHNE_ZAHLUNG, true)) {
+            return false;
+        }
+
+        return bccomp((string) $this->paid_amount, (string) $this->total_amount, 2) >= 0;
+    }
+
+    /** A5 — dieselbe Regel serverseitig/SQL-filterbar (nicht ausgenommen UND paid >= total). */
+    public function scopePaid($q)
+    {
+        return $q
+            ->whereColumn('paid_amount', '>=', 'total_amount')
+            ->whereNotIn(DB::raw('LOWER(type)'), self::TYPEN_OHNE_ZAHLUNG);
+    }
+
+    /** A5 — Gegenstueck: nicht ausgenommen UND paid < total. */
+    public function scopeUnpaid($q)
+    {
+        return $q
+            ->whereColumn('paid_amount', '<', 'total_amount')
+            ->whereNotIn(DB::raw('LOWER(type)'), self::TYPEN_OHNE_ZAHLUNG);
+    }
+
+    /**
+     * A5 — delegiert auf die EINE „bezahlt"-Wahrheit (betrags-basiert). Die fruehere
+     * status-basierte Variante (return $this->status === 'paid') ist damit abgeloest; sie hatte
+     * 0 Aufrufer, die Umstellung ist regressionsfrei. Der status='paid'-Filter in den Dashboards
+     * (A5b) bleibt bewusst unberuehrt.
+     */
     public function isPaid(): bool
     {
-        return $this->status === 'paid';
+        return $this->isFullyPaid();
     }
 
     public function recalcTotals(): self
