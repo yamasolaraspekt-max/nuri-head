@@ -16,6 +16,14 @@ use Illuminate\Support\Facades\Schema;
 class OfferDetailsController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Customer: Belegkette-Rollen-Gate (permission:Customer)
+        $this->middleware('permission:Customer,update')->only(['update', 'updateAssets', 'updateEmployees', 'updateProduct']);
+    }
+
+
 
 
 

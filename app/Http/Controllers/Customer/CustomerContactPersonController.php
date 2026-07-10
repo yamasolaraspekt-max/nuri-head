@@ -14,6 +14,9 @@ class CustomerContactPersonController extends Controller
 {
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Customer: Belegkette-Rollen-Gate (permission:Customer)
+        $this->middleware('permission:Customer,update')->only(['update', 'updateAll', 'save']);
+        $this->middleware('permission:Customer,delete')->only(['delete', 'deletes', 'destroy']);
         $this->middleware('auth');
     }
 

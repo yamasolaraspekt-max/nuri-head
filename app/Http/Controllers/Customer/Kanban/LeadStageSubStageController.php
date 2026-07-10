@@ -15,6 +15,15 @@ use Throwable;
 
 class LeadStageSubStageController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Customer: Belegkette-Rollen-Gate (permission:Customer)
+        $this->middleware('permission:Customer,update')->only(['makeDefault', 'reorder', 'toggle', 'update']);
+        $this->middleware('permission:Customer,delete')->only(['destroy']);
+    }
+
     public function index(Request $request, LeadStage $stage)
     {
         $stage->load([

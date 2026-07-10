@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\DB;
 
 class CustomerObjectProductModalController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Customer: Belegkette-Rollen-Gate (permission:Customer)
+        $this->middleware('permission:Customer,delete')->only(['deleteObject', 'deleteProduct']);
+    }
+
     public function tree(Request $request, $customer)
     {
         $lead = NewLeads::query()

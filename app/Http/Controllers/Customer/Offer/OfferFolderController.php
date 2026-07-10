@@ -32,6 +32,8 @@ class OfferFolderController extends Controller
 {
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Customer: Belegkette-Rollen-Gate (permission:Customer)
+        $this->middleware('permission:Customer,delete')->only(['deleteAttachment']);
         $this->middleware('auth');
     }
 

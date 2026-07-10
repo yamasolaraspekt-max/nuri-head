@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\DB;
 
 class CustomerReviewController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Customer: Belegkette-Rollen-Gate (permission:Customer)
+        $this->middleware('permission:Customer,update')->only(['update']);
+        $this->middleware('permission:Customer,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $data = $request->validate([

@@ -13,6 +13,14 @@ use App\Models\PhaseSection;
 
 class MassManagerController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Customer: Belegkette-Rollen-Gate (permission:Customer)
+        $this->middleware('permission:Customer,delete')->only(['delete']);
+    }
+
     // 1. Load Data
    public function load(Request $request)
     {

@@ -22,6 +22,9 @@ class OfferPageLibraryController extends Controller
 {
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Customer: Belegkette-Rollen-Gate (permission:Customer)
+        $this->middleware('permission:Customer,update')->only(['reorder']);
+        $this->middleware('permission:Customer,delete')->only(['destroyPage']);
         $this->middleware('auth');
     }
 

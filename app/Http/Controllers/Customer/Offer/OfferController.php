@@ -31,6 +31,9 @@ class OfferController extends Controller
 {
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Customer: Belegkette-Rollen-Gate (permission:Customer)
+        $this->middleware('permission:Customer,update')->only(['update', 'updateFolder']);
+        $this->middleware('permission:Customer,delete')->only(['destroy', 'destroyFolder']);
         $this->middleware('auth');
     }
 

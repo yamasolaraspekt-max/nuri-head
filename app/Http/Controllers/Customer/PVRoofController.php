@@ -13,6 +13,9 @@ class PVRoofController extends Controller
      * Get all roofs for a given customer and alternative.
      */
     public function __construct(){
+        // MASTER-01 P1-IDOR Customer: Belegkette-Rollen-Gate (permission:Customer)
+        $this->middleware('permission:Customer,update')->only(['edit', 'update']);
+        $this->middleware('permission:Customer,delete')->only(['destroy']);
         $this->middleware('auth');
     }
     public function index($customer_id, $alternative_id)
