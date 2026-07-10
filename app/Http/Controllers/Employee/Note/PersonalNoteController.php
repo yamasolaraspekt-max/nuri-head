@@ -921,6 +921,7 @@ class PersonalNoteController extends Controller
     /** MASTER-01 P1-IDOR Buendel-1: nur der Eigentuemer (user_id=Employee-ID) darf seine Notiz aendern/loeschen. */
     private function authorizeNoteOwner(?PersonalNote $note): void
     {
+        if ((bool) (auth()->user()->is_admin ?? false)) { return; }
         if ($note !== null && (string) $note->user_id !== (string) $this->getEmployeeId()) {
             abort(403, 'Keine Berechtigung fuer diese Notiz.');
         }

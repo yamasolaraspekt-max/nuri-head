@@ -1189,9 +1189,20 @@ public function taskDuration(Request $request)
     ], 200);
 }
  
-public function destroy($id)
+    /** MASTER-01 P1-IDOR: nur Ersteller (assigned_by) ODER Zugewiesene (employees-Pivot) duerfen die Aufgabe aendern/loeschen. */
+    private function authorizePersonalTaskOwner(?\App\Models\PersonalTask $task): void
+    {
+        if ($task === null || (bool) (auth()->user()->is_admin ?? false)) { return; }
+        $empId = auth()->user()->employeeId();
+        $isOwner = (string) $task->assigned_by === (string) $empId
+            || $task->employees()->where('employees.id', $empId)->exists();
+        abort_unless($isOwner, 403, 'Keine Berechtigung fuer diese Aufgabe.');
+    }
+
+    public function destroy($id)
 {
     $data = PersonalTask::findOrFail($id);
+    $this->authorizePersonalTaskOwner($data); // P1-IDOR Owner-Gate
     $data->delete();
     return redirect()->to('personal/task/'.auth()->user()->name)->with('save_msg', 'Die Aufgabe wurde in den Papierkorb verschoben.');
 }
@@ -1199,6 +1210,7 @@ public function destroy($id)
 public function restore($id)
 {
     $data = PersonalTask::withTrashed()->find($id);
+    $this->authorizePersonalTaskOwner($data); // P1-IDOR Owner-Gate
     $data->task_status = 'start';
     $data->save();
     if ($data) {
@@ -1212,6 +1224,7 @@ public function restore($id)
 public function calendar_destroy($id)
 {
 $data = PersonalTask::findOrFail($id); 
+$this->authorizePersonalTaskOwner($data); // P1-IDOR Owner-Gate
 $data->delete();
 // Update status instead of deleting
 $data->update([
@@ -1337,6 +1350,7 @@ public function update(Request $request)
          * 3) Load task
          */
         $task = PersonalTask::findOrFail($request->id);
+        $this->authorizePersonalTaskOwner($task); // P1-IDOR Owner-Gate
 
         /**
          * 4) Resolve employees
@@ -5444,6 +5458,7 @@ public function dueDateUpdate(Request $request)
 
     // Fetch the existing task
     $task = PersonalTask::find($request->id);
+    $this->authorizePersonalTaskOwner($task); // P1-IDOR Owner-Gate
     if (!$task) {
         return response()->json(['error' => 'Task not found'], 404);
     }
@@ -5910,6 +5925,7 @@ public function personalTasksUpdate(Request $req, PersonalTask $task)
 
 public function personalTasksDestroy(PersonalTask $task)
 {
+    $this->authorizePersonalTaskOwner($task); // P1-IDOR Owner-Gate
     $task->delete();
     return response()->json(['success' => true]);
 }
