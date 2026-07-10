@@ -345,6 +345,30 @@
         flex-shrink: 0;
     }
 
+    /* Globaler Fehler-Zustand = eigenstaendiges Panel (nicht der In-Sektion-Streifen). */
+    .al-error-panel {
+        border: 1px solid var(--al-danger);
+        border-radius: var(--al-radius);
+    }
+
+    .al-error-title {
+        font-weight: 700;
+        margin: 0 0 2px 0;
+    }
+
+    .al-error-text {
+        margin: 0;
+        opacity: .9;
+    }
+
+    /* Sektions-Leere = leise Inline-Zeile (untergeordnet), NIE der grosse globale Empty-Block. */
+    .al-section-empty {
+        margin: 0;
+        padding: var(--al-space-3) var(--al-space-4);
+        font-size: var(--al-fs-sm);
+        color: var(--al-text-muted);
+    }
+
     /* ---- Responsive (Handy vor Ort): Betrag/Pill nie abgeschnitten ---- */
     @media (max-width: 640px) {
         .al-page {

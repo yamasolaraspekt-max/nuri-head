@@ -10,13 +10,6 @@
 @endsection
 
 @section('content')
-    @php
-        $errored = !$overdueInvoices['ok'] || !$followUpTasks['ok'] || !$dealsNoInvoice['ok'];
-        $allEmpty = empty($overdueInvoices['items'])
-            && empty($followUpTasks['items'])
-            && empty($dealsNoInvoice['items']);
-    @endphp
-
     <div class="al-page">
         <header class="al-page-head">
             <h1 class="al-page-title">Was braucht mich jetzt?</h1>
@@ -25,141 +18,59 @@
             </p>
         </header>
 
-        @if ($allEmpty && !$errored)
-            {{-- Globaler Leer-Zustand: alle drei Kategorien leer und fehlerfrei. --}}
-            <section class="al-section" aria-label="Arbeitsliste leer">
-                <x-arbeitsliste.empty-state
-                    title="Nichts offen — alles erledigt"
-                    text="Kein überfälliger Beleg, keine offene Angebots-Aufgabe, kein unberechneter Auftrag. Neue Posten erscheinen hier automatisch — sobald ein Lead in die Angebots-Phase wandert, ein Zahlungsziel überschritten wird oder ein Auftrag noch abzurechnen ist. Nichts weiter zu tun." />
-            </section>
-        @endif
+        {{-- EINE Zustandsmaschine: der Controller entscheidet $viewState zentral, die View rendert
+             immer genau EINEN Zustand. So kollidieren globaler und Sektions-Zustand nicht mehr. --}}
+        @switch($viewState)
+            @case('loading')
+                {{-- Nur fuer kuenftige Async-Nutzung reserviert; SSR erreicht diesen Zweig nicht. --}}
+                <div class="al-empty" role="status" aria-live="polite" aria-busy="true">
+                    <p class="al-empty-title">Arbeitsliste wird geladen …</p>
+                </div>
+                @break
 
-        {{-- Sektionen nur zeigen, wenn NICHT der globale Leer-Zustand greift.
-             errored -> Sektionen bleiben (mit Alerts), aber ohne Sektions-Empty-States (s.u.). --}}
-        @unless ($allEmpty && !$errored)
-        {{-- ============ 1) Überfällige Rechnungen ============ --}}
-        <section class="al-section" aria-labelledby="al-sec-overdue">
-            <div class="al-section-head">
-                <i data-lucide="alert-triangle" class="al-section-icon" aria-hidden="true"></i>
-                <h2 class="al-section-title" id="al-sec-overdue">Überfällige Rechnungen</h2>
-                <span class="al-badge {{ count($overdueInvoices['items']) === 0 ? 'is-zero' : '' }}">
-                    {{ count($overdueInvoices['items']) }}
-                </span>
-            </div>
-
-            @if (!$overdueInvoices['ok'])
-                <div class="al-error" role="alert">
+            @case('error')
+                {{-- Fehler: assertiv (role="alert"), rot, sagt was passiert ist. KEINE Sektionen/Empty-States. --}}
+                <div class="al-error al-error-panel" role="alert">
                     <i data-lucide="alert-octagon" class="al-error-icon" aria-hidden="true"></i>
-                    <span>{{ $overdueInvoices['error'] ?? 'Fehler beim Laden.' }}</span>
+                    <div>
+                        <p class="al-error-title">Die Arbeitsliste konnte gerade nicht vollständig geladen werden.</p>
+                        <p class="al-error-text">Bitte lade die Seite neu. Bleibt es bestehen, wende dich an den Support.</p>
+                    </div>
                 </div>
-            @elseif (empty($overdueInvoices['items']) && !$errored)
+                @break
+
+            @case('empty')
+                {{-- Leer = ERFOLG: hoeflich (role="status"), positiv, handlungsleitend. Genau EIN Block. --}}
                 <x-arbeitsliste.empty-state
-                    title="Keine überfälligen Rechnungen"
-                    text="Alle fälligen Rechnungen sind bezahlt oder noch nicht fällig." />
-            @else
-                <div class="al-list" role="list">
-                    @foreach ($overdueInvoices['items'] as $row)
-                        <x-arbeitsliste.row
-                            role="listitem"
-                            :title="$row['title']"
-                            :meta="$row['meta']"
-                            :amount="$row['amount']">
-                            <x-slot:pill>
-                                <x-arbeitsliste.pill variant="danger" icon="clock">überfällig</x-arbeitsliste.pill>
-                            </x-slot:pill>
-                            <x-slot:action>
-                                <x-arbeitsliste.button variant="primary" :href="$row['href']" icon="receipt-text">
-                                    Rechnung öffnen
-                                </x-arbeitsliste.button>
-                            </x-slot:action>
-                        </x-arbeitsliste.row>
-                    @endforeach
-                </div>
-            @endif
-        </section>
+                    role="status"
+                    aria-live="polite"
+                    title="Nichts offen — du bist auf dem Stand."
+                    text="Kein überfälliger Beleg, keine offene Angebots-Aufgabe, kein unberechneter Auftrag. Neue Posten erscheinen hier automatisch, sobald etwas anliegt." />
+                @break
 
-        {{-- ============ 2) Offene Angebots-Aufgaben (A1) ============ --}}
-        <section class="al-section" aria-labelledby="al-sec-followup">
-            <div class="al-section-head">
-                <i data-lucide="file-plus" class="al-section-icon" aria-hidden="true"></i>
-                <h2 class="al-section-title" id="al-sec-followup">Offene Angebots-Aufgaben</h2>
-                <span class="al-badge {{ count($followUpTasks['items']) === 0 ? 'is-zero' : '' }}">
-                    {{ count($followUpTasks['items']) }}
-                </span>
-            </div>
+            @default
+                {{-- data: die drei Sektionen; eine einzeln leere Sektion zeigt nur eine leise Inline-Zeile. --}}
+                @include('admin.arbeitsliste._section', [
+                    'id' => 'overdue', 'icon' => 'alert-triangle', 'heading' => 'Überfällige Rechnungen',
+                    'category' => $overdueInvoices, 'emptyText' => 'Keine überfälligen Rechnungen.',
+                    'pillVariant' => 'danger', 'pillIcon' => 'clock', 'pillLabel' => 'überfällig',
+                    'actionIcon' => 'receipt-text', 'actionLabel' => 'Rechnung öffnen',
+                ])
 
-            @if (!$followUpTasks['ok'])
-                <div class="al-error" role="alert">
-                    <i data-lucide="alert-octagon" class="al-error-icon" aria-hidden="true"></i>
-                    <span>{{ $followUpTasks['error'] ?? 'Fehler beim Laden.' }}</span>
-                </div>
-            @elseif (empty($followUpTasks['items']) && !$errored)
-                <x-arbeitsliste.empty-state
-                    title="Keine offenen Angebots-Aufgaben"
-                    text="Für alle Vorgänge ist das Angebot angestoßen." />
-            @else
-                <div class="al-list" role="list">
-                    @foreach ($followUpTasks['items'] as $row)
-                        <x-arbeitsliste.row
-                            role="listitem"
-                            :title="$row['title']"
-                            :meta="$row['meta']"
-                            :amount="$row['amount']">
-                            <x-slot:pill>
-                                <x-arbeitsliste.pill variant="warning" icon="file-text">Angebot fehlt</x-arbeitsliste.pill>
-                            </x-slot:pill>
-                            <x-slot:action>
-                                <x-arbeitsliste.button variant="primary" :href="$row['href']" icon="arrow-right">
-                                    Angebot erstellen
-                                </x-arbeitsliste.button>
-                            </x-slot:action>
-                        </x-arbeitsliste.row>
-                    @endforeach
-                </div>
-            @endif
-        </section>
+                @include('admin.arbeitsliste._section', [
+                    'id' => 'followup', 'icon' => 'file-plus', 'heading' => 'Offene Angebots-Aufgaben',
+                    'category' => $followUpTasks, 'emptyText' => 'Keine offenen Angebots-Aufgaben.',
+                    'pillVariant' => 'warning', 'pillIcon' => 'file-text', 'pillLabel' => 'Angebot fehlt',
+                    'actionIcon' => 'arrow-right', 'actionLabel' => 'Angebot erstellen',
+                ])
 
-        {{-- ============ 3) Aufträge ohne Rechnung ============ --}}
-        <section class="al-section" aria-labelledby="al-sec-deals">
-            <div class="al-section-head">
-                <i data-lucide="briefcase" class="al-section-icon" aria-hidden="true"></i>
-                <h2 class="al-section-title" id="al-sec-deals">Aufträge ohne Rechnung</h2>
-                <span class="al-badge {{ count($dealsNoInvoice['items']) === 0 ? 'is-zero' : '' }}">
-                    {{ count($dealsNoInvoice['items']) }}
-                </span>
-            </div>
-
-            @if (!$dealsNoInvoice['ok'])
-                <div class="al-error" role="alert">
-                    <i data-lucide="alert-octagon" class="al-error-icon" aria-hidden="true"></i>
-                    <span>{{ $dealsNoInvoice['error'] ?? 'Fehler beim Laden.' }}</span>
-                </div>
-            @elseif (empty($dealsNoInvoice['items']) && !$errored)
-                <x-arbeitsliste.empty-state
-                    title="Keine Aufträge ohne Rechnung"
-                    text="Zu jedem laufenden Auftrag existiert bereits eine Rechnung." />
-            @else
-                <div class="al-list" role="list">
-                    @foreach ($dealsNoInvoice['items'] as $row)
-                        <x-arbeitsliste.row
-                            role="listitem"
-                            :title="$row['title']"
-                            :meta="$row['meta']"
-                            :amount="$row['amount']">
-                            <x-slot:pill>
-                                <x-arbeitsliste.pill variant="info" icon="receipt-text">Rechnung fehlt</x-arbeitsliste.pill>
-                            </x-slot:pill>
-                            <x-slot:action>
-                                <x-arbeitsliste.button variant="primary" :href="$row['href']" icon="plus">
-                                    Rechnung erstellen
-                                </x-arbeitsliste.button>
-                            </x-slot:action>
-                        </x-arbeitsliste.row>
-                    @endforeach
-                </div>
-            @endif
-        </section>
-        @endunless
+                @include('admin.arbeitsliste._section', [
+                    'id' => 'deals', 'icon' => 'briefcase', 'heading' => 'Aufträge ohne Rechnung',
+                    'category' => $dealsNoInvoice, 'emptyText' => 'Keine Aufträge ohne Rechnung.',
+                    'pillVariant' => 'info', 'pillIcon' => 'receipt-text', 'pillLabel' => 'Rechnung fehlt',
+                    'actionIcon' => 'plus', 'actionLabel' => 'Rechnung erstellen',
+                ])
+        @endswitch
     </div>
 @endsection
 

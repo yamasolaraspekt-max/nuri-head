@@ -33,7 +33,21 @@ class ArbeitslisteController extends Controller
         $followUpTasks   = $this->category(fn () => $this->followUpTasks());
         $dealsNoInvoice  = $this->category(fn () => $this->dealsWithoutInvoice());
 
+        $categories = [$overdueInvoices, $followUpTasks, $dealsNoInvoice];
+
+        // EINE Zustandsquelle: eine Listen-View hat genau vier kanonische Zustaende und rendert
+        // immer nur EINEN. Zentral hier entschieden, nicht verteilt in der View — so kollidieren
+        // globaler und Sektions-Zustand nicht mehr.
+        //   error -> mind. eine Kategorie-Query gescheitert (nur der Fehler-Block).
+        //   empty -> alle ok und alle leer (nur der globale, positive Empty-State).
+        //   data  -> mind. eine Kategorie hat Items (Sektionen; einzeln leere -> leise Inline-Zeile).
+        // 'loading' existiert im Enum fuer kuenftige Async-Nutzung; SSR liefert stets data/empty/error.
+        $errored  = collect($categories)->contains(fn ($c) => $c['ok'] === false);
+        $anyItems = collect($categories)->contains(fn ($c) => ! empty($c['items']));
+        $viewState = $errored ? 'error' : ($anyItems ? 'data' : 'empty');
+
         return view('admin.arbeitsliste.index', [
+            'viewState'       => $viewState,
             'overdueInvoices' => $overdueInvoices,
             'followUpTasks'   => $followUpTasks,
             'dealsNoInvoice'  => $dealsNoInvoice,

@@ -10,12 +10,13 @@ use Tests\TestCase;
 /**
  * Arbeitsliste — Inbox „Was braucht mich jetzt?" (server-gerendert).
  *
- * Fährt den echten Stack: HTTP-GET /arbeitsliste als eingeloggter Admin -> Route -> Controller ->
- * View. Prueft die drei Sektions-Ueberschriften, mit Fixtures die Pills MIT Text, den rechtsbuendigen
- * Betrag als Zahl, und den Leer-Zustand ohne Fixtures.
+ * Prueft die EINE Zustandsmaschine ($viewState: loading|data|empty|error): die View rendert
+ * immer genau EINEN Zustand. Daten -> Sektionen; einzeln leere Sektion -> leise Inline-Zeile;
+ * komplett leer -> GENAU ein globaler, positiver Empty-State (role="status"); Fehler -> nur ein
+ * role="alert"-Panel, keine Empty-States.
  *
- * Schema-Muster wie bestehende Accounting/Security-Tests: synthetische FK-IDs, daher
- * FOREIGN_KEY_CHECKS kurz aus; DatabaseTransactions raeumt auf. is_admin-Bypass fuer Auth.
+ * Schema-Muster wie bestehende Tests: synthetische FK-IDs, FOREIGN_KEY_CHECKS kurz aus;
+ * DatabaseTransactions raeumt auf. is_admin-Bypass fuer Auth.
  */
 class ArbeitslisteTest extends TestCase
 {
@@ -42,7 +43,6 @@ class ArbeitslisteTest extends TestCase
         ]);
     }
 
-    /** Kunde in new_leads (fuer Kundenname im Meta). */
     private function makeCustomer(string $name = 'Testkunde'): int
     {
         return DB::table('new_leads')->insertGetId([
@@ -53,7 +53,6 @@ class ArbeitslisteTest extends TestCase
         ]);
     }
 
-    /** Ueberfaellige, unbezahlte Rechnung (due_date in der Vergangenheit). */
     private function makeOverdueInvoice(int $customerId): int
     {
         return DB::table('invoices')->insertGetId([
@@ -69,7 +68,6 @@ class ArbeitslisteTest extends TestCase
         ]);
     }
 
-    /** Offene Angebots-Aufgabe (A1 Follow-up auf personal_tasks). */
     private function makeFollowUpTask(int $customerId): int
     {
         return DB::table('personal_tasks')->insertGetId([
@@ -84,7 +82,6 @@ class ArbeitslisteTest extends TestCase
         ]);
     }
 
-    /** Auftrag ohne Rechnung (deals status='deal'). */
     private function makeDealWithoutInvoice(int $customerId): int
     {
         return DB::table('deals')->insertGetId([
@@ -100,10 +97,26 @@ class ArbeitslisteTest extends TestCase
         ]);
     }
 
+    /** Sind ausser den Test-Fixtures schon passende Bestandszeilen da? (Leer-Fall isolierbar?) */
+    private function hasAnyRealItems(): bool
+    {
+        $overdue = DB::table('invoices')->whereNotNull('due_date')
+            ->whereDate('due_date', '<', now()->toDateString())
+            ->whereColumn('paid_amount', '<', 'total_amount')
+            ->whereNotIn(DB::raw('LOWER(type)'), ['gutschrift', 'stornorechnung'])->exists();
+        $followUp = DB::table('personal_tasks')->where('type', 'follow_up')
+            ->where('source_type', 'lead_product_list')
+            ->whereNotIn('task_status', ['completed', 'done', 'cancelled'])
+            ->whereNull('deleted_at')->exists();
+        $deal = DB::table('deals')->where('status', 'deal')
+            ->whereNotExists(fn ($q) => $q->from('invoices')->whereColumn('invoices.deal_id', 'deals.id')->whereNull('invoices.deleted_at'))
+            ->exists();
+
+        return $overdue || $followUp || $deal;
+    }
+
     public function test_daten_zustand_rendert_mit_drei_sektions_ueberschriften(): void
     {
-        // Sektionen erscheinen im DATEN-Zustand (nach der Glättung sind sie im global-leeren
-        // Zustand bewusst unterdrueckt) -> je eine Fixture, damit alle drei Sektionen rendern.
         $customerId = $this->makeCustomer('Max Mustermann');
         $this->makeOverdueInvoice($customerId);
         $this->makeFollowUpTask($customerId);
@@ -127,47 +140,77 @@ class ArbeitslisteTest extends TestCase
         $res = $this->actingAs($this->admin())->get('/arbeitsliste');
 
         $res->assertStatus(200);
-
         // Pills tragen Farbe UND Text.
         $res->assertSee('überfällig', false);
         $res->assertSee('Angebot fehlt', false);
         $res->assertSee('Rechnung fehlt', false);
-
-        // Betrag als deutsche Zahl, in der rechtsbuendigen Betrags-Zelle (tabular-nums).
+        // Betrag als deutsche Zahl, rechtsbuendige Betrags-Zelle (tabular-nums).
         $res->assertSee('al-row-amount', false);
         $res->assertSee('1.234,56 €', false);
     }
 
-    public function test_leer_zustand_ohne_fixtures(): void
+    /** DATEN mit EINZELN leerer Sektion: nur die leise Inline-Zeile, NICHT der grosse globale Block. */
+    public function test_einzeln_leere_sektion_zeigt_leise_inline_zeile(): void
     {
-        // Sicherstellen, dass keine passenden Bestandszeilen die Leer-Aussage kippen.
-        $hasOverdue = DB::table('invoices')
-            ->whereNotNull('due_date')
-            ->whereDate('due_date', '<', now()->toDateString())
-            ->whereColumn('paid_amount', '<', 'total_amount')
-            ->whereNotIn(DB::raw('LOWER(type)'), ['gutschrift', 'stornorechnung'])
-            ->exists();
+        $customerId = $this->makeCustomer('Max Mustermann');
+        $this->makeOverdueInvoice($customerId); // nur Kategorie 1 hat Items -> data-Zustand
+
+        if ($this->hasAnyRealItems() && false) {
+            // (Guard nur zur Doku; makeOverdueInvoice sichert den data-Zustand ohnehin.)
+        }
 
         $res = $this->actingAs($this->admin())->get('/arbeitsliste');
+        $html = $res->getContent();
 
         $res->assertStatus(200);
+        // Gefuellte Sektion -> Liste; leere Sektionen -> leise Inline-Zeile (Element, nicht CSS-Regel).
+        $this->assertStringContainsString('class="al-list"', $html);
+        $this->assertStringContainsString('class="al-section-empty"', $html);
+        // NICHT der grosse globale Empty-Block und KEIN Alert im data-Zustand.
+        $this->assertStringNotContainsString('class="al-empty"', $html);
+        $this->assertStringNotContainsString('role="alert"', $html);
+    }
 
-        $hasFollowUp = DB::table('personal_tasks')->where('type', 'follow_up')
-            ->where('source_type', 'lead_product_list')
-            ->whereNotIn('task_status', ['completed', 'done', 'cancelled'])
-            ->whereNull('deleted_at')->exists();
-        $hasDeal = DB::table('deals')->where('status', 'deal')
-            ->whereNotExists(fn ($q) => $q->from('invoices')->whereColumn('invoices.deal_id', 'deals.id')->whereNull('invoices.deleted_at'))
-            ->exists();
-
-        if (!$hasOverdue && !$hasFollowUp && !$hasDeal) {
-            // Glättung: genau EIN Empty-Block (der globale), Sektionen unterdrueckt.
-            $res->assertSee('Nichts offen', false);                       // handlungsleitender globaler Empty-State
-            $res->assertSee('Neue Posten erscheinen hier automatisch', false); // sagt, was passiert (nicht „keine Daten")
-            $res->assertDontSee('Überfällige Rechnungen', false);         // Sektions-Ueberschrift unterdrueckt
-            $res->assertDontSee('Aufträge ohne Rechnung', false);
-        } else {
+    /** LEER = ERFOLG: genau EIN globaler Block, role="status", positiver Text, Sektionen unterdrueckt. */
+    public function test_leer_zustand_genau_ein_positiver_status_block(): void
+    {
+        if ($this->hasAnyRealItems()) {
             $this->markTestSkipped('Bestands-Daten enthalten passende Zeilen; Leer-Fall nicht isolierbar.');
         }
+
+        $res = $this->actingAs($this->admin())->get('/arbeitsliste');
+        $html = $res->getContent();
+
+        $res->assertStatus(200);
+        // Genau EIN globaler Empty-Block.
+        $this->assertSame(1, substr_count($html, 'class="al-empty"'));
+        // Positiv + handlungsleitend (nicht „keine Daten"), hoeflich (role="status"), KEIN alert.
+        $res->assertSee('Nichts offen — du bist auf dem Stand.', false);
+        $res->assertSee('Neue Posten erscheinen hier automatisch', false);
+        $this->assertStringContainsString('role="status"', $html);
+        $this->assertStringNotContainsString('role="alert"', $html);
+        // Sektionen unterdrueckt.
+        $res->assertDontSee('Überfällige Rechnungen', false);
+        $res->assertDontSee('Aufträge ohne Rechnung', false);
+    }
+
+    /** FEHLER: nur ein role="alert"-Panel, keine Empty-States, keine Sektionen. Direkt am View-State. */
+    public function test_fehler_zustand_nur_alert_keine_leerbloecke(): void
+    {
+        $this->actingAs($this->admin());
+
+        $html = view('admin.arbeitsliste.index', [
+            'viewState'       => 'error',
+            'overdueInvoices' => ['ok' => false, 'items' => [], 'error' => 'x'],
+            'followUpTasks'   => ['ok' => true, 'items' => []],
+            'dealsNoInvoice'  => ['ok' => true, 'items' => []],
+        ])->render();
+
+        $this->assertStringContainsString('role="alert"', $html);
+        $this->assertStringContainsString('class="al-error al-error-panel"', $html);
+        // KEIN Empty-Block, KEINE Sektions-Ueberschrift im Fehler-Zustand (Element, nicht CSS-Regel).
+        $this->assertStringNotContainsString('class="al-empty"', $html);
+        $this->assertStringNotContainsString('class="al-section-empty"', $html);
+        $this->assertStringNotContainsString('Überfällige Rechnungen', $html);
     }
 }
