@@ -3720,13 +3720,25 @@ class DealController extends Controller
         $this->authorizeDealDelete();
 
         $deal = Deal::findOrFail($id);
-        $deal->status = 'Junk';
-        $deal->save();
 
-        // Schwaeche 6: Lead-Stufe (status + stage) auf den Vor-Deal-Stand zuruecksetzen.
-        $this->restoreLeadStageForDeal($deal);
+        // Schwaeche 5 + 6 (gespiegelt zu destroy): Rechnungen rueckabwickeln + Lead-Stufe zuruecksetzen
+        // (atomar mit der Junk-Markierung). KEIN delete() — Junk ist reversibel ueber unjunk.
+        $invoiceInfo = DB::transaction(function () use ($deal) {
+            $deal->status = 'Junk';
+            $deal->save();
+            $info = $this->cancelInvoicesForDeal($deal);   // Schwaeche 5
+            $this->restoreLeadStageForDeal($deal);      // Schwaeche 6
+            return $info;
+        });
 
-        return redirect()->back()->with('success', 'Auftrag wurde als Junk markiert.');
+        $redirect = redirect()->back()->with('success', 'Auftrag wurde als Junk markiert.');
+        if (($invoiceInfo['paid_count'] ?? 0) > 0) {
+            $redirect->with('warning', 'Als Junk markiert, enthaelt ' . $invoiceInfo['paid_count']
+                . ' bezahlte Rechnung(en) ueber ' . number_format($invoiceInfo['paid_sum'], 2, ',', '.')
+                . ' EUR - bitte buchhalterisch pruefen.');
+        }
+
+        return $redirect;
     }
 
     /** Auftrag aus Junk zurueckholen. */
