@@ -25,6 +25,9 @@ class FoerderungController extends Controller
 
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Finance: Rollen-Gate (permission:Finance)
+        $this->middleware('permission:Finance,update')->only(['update', 'restore']);
+        $this->middleware('permission:Finance,delete')->only(['destroy']);
         $this->middleware('auth');
     }
 

@@ -9,6 +9,15 @@ use DB;
 
 class InquiryTypeController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Inquiry: Rollen-Gate (permission:Inquiry)
+        $this->middleware('permission:Inquiry,update')->only(['save', 'edit', 'update']);
+        $this->middleware('permission:Inquiry,delete')->only(['destroy']);
+    }
+
     /**
      * Display a listing of the resource.
      */

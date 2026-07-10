@@ -13,6 +13,15 @@ use Illuminate\Validation\Rule;
 
 class MaintenanceChecklistController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Problem: Rollen-Gate (permission:Problem)
+        $this->middleware('permission:Problem,update')->only(['update', 'restore', 'editJson', 'bulk']);
+        $this->middleware('permission:Problem,delete')->only(['destroy']);
+    }
+
     /**
      * Liste mit Tabs: aktiv / archiviert / Papierkorb.
      */

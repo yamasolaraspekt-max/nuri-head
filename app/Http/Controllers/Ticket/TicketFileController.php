@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\File;
 
 class TicketFileController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Problem: Rollen-Gate (permission:Problem)
+        $this->middleware('permission:Problem,update')->only(['update', 'edit']);
+        $this->middleware('permission:Problem,delete')->only(['destroy']);
+    }
+
     /**
      * Display a listing of the resource.
      */

@@ -13,6 +13,9 @@ class InquiryReportController extends Controller
 {
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Inquiry: Rollen-Gate (permission:Inquiry)
+        $this->middleware('permission:Inquiry,update')->only(['update']);
+        $this->middleware('permission:Inquiry,delete')->only(['destroy']);
         $this->middleware('auth');
     }
 

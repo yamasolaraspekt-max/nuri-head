@@ -14,6 +14,9 @@ class ErrorController extends Controller
      * Display a listing of the resource.
      */
     public function __construct(){
+        // MASTER-01 P1-IDOR Problem: Rollen-Gate (permission:Problem)
+        $this->middleware('permission:Problem,update')->only(['error_save', 'update', 'updateStatus']);
+        $this->middleware('permission:Problem,delete')->only(['destroy']);
         $this->middleware('auth');
     }
 

@@ -27,6 +27,15 @@ use Illuminate\Support\Facades\Schema;
 class CustomerMaintenanceContractController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Problem: Rollen-Gate (permission:Problem)
+        $this->middleware('permission:Problem,update')->only(['bulkStatus', 'kanbanUpdate', 'edit', 'update', 'kanbanFeed']);
+        $this->middleware('permission:Problem,delete')->only(['bulkDelete']);
+    }
+
+
     public function index(Request $request)
     {
         $search = trim((string) $request->input('search', ''));

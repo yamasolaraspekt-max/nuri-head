@@ -38,6 +38,9 @@ class ProblemController extends Controller
 {
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Problem: Rollen-Gate (permission:Problem)
+        $this->middleware('permission:Problem,update')->only(['edit', 'update', 'closeSave', 'kanban', 'updateStage', 'updateType', 'assignTicket', 'updateStatus']);
+        $this->middleware('permission:Problem,delete')->only(['destroy']);
         $this->middleware('auth');
     }
 

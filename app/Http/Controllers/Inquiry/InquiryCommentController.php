@@ -6,6 +6,15 @@ use Illuminate\Http\Request;
 
 class InquiryCommentController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Inquiry: Rollen-Gate (permission:Inquiry)
+        $this->middleware('permission:Inquiry,update')->only(['editComment']);
+        $this->middleware('permission:Inquiry,delete')->only(['deleteComment']);
+    }
+
     // Fetch Comments for a specific inquiry
     public function fetchComments($inquiry_id)
     {

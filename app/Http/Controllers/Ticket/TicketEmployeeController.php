@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\DB;
 
 class TicketEmployeeController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Problem: Rollen-Gate (permission:Problem)
+        $this->middleware('permission:Problem,update')->only(['sync']);
+    }
+
     public function index(int $problem): JsonResponse
     {
         $ticket = Problem::whereNull('deleted_at')->findOrFail($problem);

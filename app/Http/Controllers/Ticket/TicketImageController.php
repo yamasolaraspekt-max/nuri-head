@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Storage;
 
 class TicketImageController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Problem: Rollen-Gate (permission:Problem)
+        $this->middleware('permission:Problem,delete')->only(['destroy']);
+    }
+
     public function upload(Request $request)
     {
         $request->validate([

@@ -12,6 +12,9 @@ class BranchExpenseInsuranceController extends Controller
 {
     public function __construct()
     {
+        // MASTER-01 P1-IDOR Finance: Rollen-Gate (permission:Finance)
+        $this->middleware('permission:Finance,update')->only(['update']);
+        $this->middleware('permission:Finance,delete')->only(['destroy']);
         $this->middleware('auth');
     }
 

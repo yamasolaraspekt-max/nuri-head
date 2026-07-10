@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\Auth;
 
 class ProblemCommentController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        // MASTER-01 P1-IDOR Problem: Rollen-Gate (permission:Problem)
+        $this->middleware('permission:Problem,update')->only(['update']);
+        $this->middleware('permission:Problem,delete')->only(['destroy']);
+    }
+
     public function fetch($ticket_id)
     {
         $comments = ProblemComment::with('employee')
