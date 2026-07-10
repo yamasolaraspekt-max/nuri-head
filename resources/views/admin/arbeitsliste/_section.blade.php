@@ -9,12 +9,21 @@
     <div class="al-section-head">
         <i data-lucide="{{ $icon }}" class="al-section-icon" aria-hidden="true"></i>
         <h2 class="al-section-title" id="al-sec-{{ $id }}">{{ $heading }}</h2>
-        <span class="al-badge {{ count($category['items']) === 0 ? 'is-zero' : '' }}">
-            {{ count($category['items']) }}
-        </span>
+        @if ($category['ok'])
+            <span class="al-badge {{ count($category['items']) === 0 ? 'is-zero' : '' }}">
+                {{ count($category['items']) }}
+            </span>
+        @endif
     </div>
 
-    @if (empty($category['items']))
+    @if (! $category['ok'])
+        {{-- Sektions-Fehler: role="alert" NUR in dieser Sektion (kein seitenweiter Alarm bei
+             Teilausfall). Der In-Sektion-Streifen .al-error (ohne .al-error-panel = ohne Rahmen). --}}
+        <div class="al-error" role="alert">
+            <i data-lucide="alert-octagon" class="al-error-icon" aria-hidden="true"></i>
+            <span>{{ $category['error'] ?? 'Diese Liste konnte gerade nicht geladen werden.' }}</span>
+        </div>
+    @elseif (empty($category['items']))
         <p class="al-section-empty" role="status">{{ $emptyText }}</p>
     @else
         <div class="al-list" role="list">

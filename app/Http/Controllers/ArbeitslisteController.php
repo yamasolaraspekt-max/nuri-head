@@ -35,16 +35,18 @@ class ArbeitslisteController extends Controller
 
         $categories = [$overdueInvoices, $followUpTasks, $dealsNoInvoice];
 
-        // EINE Zustandsquelle: eine Listen-View hat genau vier kanonische Zustaende und rendert
-        // immer nur EINEN. Zentral hier entschieden, nicht verteilt in der View — so kollidieren
-        // globaler und Sektions-Zustand nicht mehr.
-        //   error -> mind. eine Kategorie-Query gescheitert (nur der Fehler-Block).
-        //   empty -> alle ok und alle leer (nur der globale, positive Empty-State).
-        //   data  -> mind. eine Kategorie hat Items (Sektionen; einzeln leere -> leise Inline-Zeile).
+        // Jede Sektion traegt ihren EIGENEN Zustand (data|empty|error, siehe _section.blade.php).
+        // Der globale $viewState wird daraus ABGELEITET und rollt nur den GESAMT-Fall auf — ein
+        // Teilausfall kippt NICHT die ganze Seite (graceful degradation):
+        //   error -> ALLE Kategorien gescheitert (Gesamtausfall -> ein globaler role="alert").
+        //   empty -> alle ok UND alle leer (ein globaler, positiver role="status").
+        //   data  -> sonst: jede Sektion rendert ihren eigenen Zustand (befuellt/leer/Fehler),
+        //            ein einzelner Kategorie-Fehler bleibt auf seine Sektion begrenzt.
         // 'loading' existiert im Enum fuer kuenftige Async-Nutzung; SSR liefert stets data/empty/error.
-        $errored  = collect($categories)->contains(fn ($c) => $c['ok'] === false);
-        $anyItems = collect($categories)->contains(fn ($c) => ! empty($c['items']));
-        $viewState = $errored ? 'error' : ($anyItems ? 'data' : 'empty');
+        $allErrored = collect($categories)->every(fn ($c) => $c['ok'] === false);
+        $anyErrored = collect($categories)->contains(fn ($c) => $c['ok'] === false);
+        $anyItems   = collect($categories)->contains(fn ($c) => ! empty($c['items']));
+        $viewState = $allErrored ? 'error' : ((! $anyErrored && ! $anyItems) ? 'empty' : 'data');
 
         return view('admin.arbeitsliste.index', [
             'viewState'       => $viewState,

@@ -194,23 +194,58 @@ class ArbeitslisteTest extends TestCase
         $res->assertDontSee('Aufträge ohne Rechnung', false);
     }
 
-    /** FEHLER: nur ein role="alert"-Panel, keine Empty-States, keine Sektionen. Direkt am View-State. */
-    public function test_fehler_zustand_nur_alert_keine_leerbloecke(): void
+    /** GESAMTAUSFALL (alle Kategorien errored): ein globaler role="alert"-Panel, keine Sektionen. */
+    public function test_gesamtausfall_globaler_alert_keine_sektionen(): void
     {
         $this->actingAs($this->admin());
 
         $html = view('admin.arbeitsliste.index', [
             'viewState'       => 'error',
             'overdueInvoices' => ['ok' => false, 'items' => [], 'error' => 'x'],
-            'followUpTasks'   => ['ok' => true, 'items' => []],
-            'dealsNoInvoice'  => ['ok' => true, 'items' => []],
+            'followUpTasks'   => ['ok' => false, 'items' => [], 'error' => 'x'],
+            'dealsNoInvoice'  => ['ok' => false, 'items' => [], 'error' => 'x'],
         ])->render();
 
-        $this->assertStringContainsString('role="alert"', $html);
         $this->assertStringContainsString('class="al-error al-error-panel"', $html);
-        // KEIN Empty-Block, KEINE Sektions-Ueberschrift im Fehler-Zustand (Element, nicht CSS-Regel).
+        $this->assertStringContainsString('role="alert"', $html);
+        // Genau EIN globaler Alert-Panel, KEIN Empty-Block, KEINE Sektions-Ueberschrift.
+        $this->assertSame(1, substr_count($html, 'class="al-error al-error-panel"'));
         $this->assertStringNotContainsString('class="al-empty"', $html);
         $this->assertStringNotContainsString('class="al-section-empty"', $html);
         $this->assertStringNotContainsString('Überfällige Rechnungen', $html);
+    }
+
+    /**
+     * TEILAUSFALL (graceful degradation): GENAU EINE Kategorie errored -> nur DIESE Sektion zeigt
+     * ihren begrenzten role="alert"; die anderen zwei rendern ihre Daten/Leere WEITER, kein globaler
+     * Alert, kein globaler Erfolg. Der Sektions-Alert ist der In-Sektion-Streifen (.al-error OHNE
+     * .al-error-panel).
+     */
+    public function test_teilausfall_nur_diese_sektion_faellt_rest_rendert(): void
+    {
+        $this->actingAs($this->admin());
+
+        $html = view('admin.arbeitsliste.index', [
+            'viewState'       => 'data',
+            'overdueInvoices' => ['ok' => false, 'items' => [], 'error' => 'Boom-Kategorie-1'],
+            'followUpTasks'   => ['ok' => true, 'items' => [
+                ['title' => 'Angebot X', 'meta' => 'Kunde Y', 'amount' => null, 'href' => '#'],
+            ]],
+            'dealsNoInvoice'  => ['ok' => true, 'items' => []],
+        ])->render();
+
+        // Alle drei Sektionen rendern weiter (Ueberschriften da).
+        $this->assertStringContainsString('Überfällige Rechnungen', $html);
+        $this->assertStringContainsString('Offene Angebots-Aufgaben', $html);
+        $this->assertStringContainsString('Aufträge ohne Rechnung', $html);
+        // GENAU EIN Sektions-Alert (In-Sektion-Streifen), KEIN globaler Alert-Panel.
+        $this->assertStringContainsString('Boom-Kategorie-1', $html);
+        $this->assertSame(1, substr_count($html, 'role="alert"'));
+        $this->assertStringNotContainsString('class="al-error al-error-panel"', $html);
+        // Die anderen zwei rendern weiter: befuellte -> Liste, leere -> leise Inline-Zeile.
+        $this->assertStringContainsString('class="al-list"', $html);
+        $this->assertStringContainsString('class="al-section-empty"', $html);
+        // KEIN globaler Erfolg (leer=Erfolg) bei Teilausfall.
+        $this->assertStringNotContainsString('class="al-empty"', $html);
     }
 }
