@@ -369,6 +369,38 @@
         color: var(--al-text-muted);
     }
 
+    /* „mehr"-Zeile: dezent, am Fuss der Liste. Als Link (Accent) oder statischer Hinweis (muted).
+       Nur Tokens, kein Hex — EINE Wahrheit fuers Design bleibt hier. */
+    .al-section-more {
+        display: flex;
+        align-items: center;
+        gap: var(--al-space-1);
+        margin: 0;
+        padding: var(--al-space-2) var(--al-space-4);
+        border-top: 1px solid var(--al-border);
+        background: var(--al-bg-muted);
+        font-size: var(--al-fs-xs);
+        font-weight: 600;
+        color: var(--al-accent);
+        text-decoration: none;
+    }
+
+    a.al-section-more:hover {
+        background: color-mix(in srgb, var(--al-accent) 6%, var(--al-bg-muted));
+        text-decoration: underline;
+    }
+
+    .al-section-more--static {
+        color: var(--al-text-muted);
+        font-weight: 400;
+    }
+
+    .al-section-more-icon {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+    }
+
     /* ---- Responsive (Handy vor Ort): Betrag/Pill nie abgeschnitten ---- */
     @media (max-width: 640px) {
         .al-page {

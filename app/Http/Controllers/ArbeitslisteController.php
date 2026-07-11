@@ -6,6 +6,7 @@ use App\Models\Deal;
 use App\Models\Invoice;
 use App\Models\PersonalTask;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
@@ -24,8 +25,12 @@ use Illuminate\View\View;
  */
 class ArbeitslisteController extends Controller
 {
-    /** Limit je Kategorie — die Inbox bleibt scanbar, kein Endlos-Scroll. */
-    private const LIMIT = 50;
+    /**
+     * Sichtbares Limit je Kategorie — die Inbox bleibt scanbar, kein Endlos-Scroll.
+     * Geladen wird LIMIT+1 (siehe paginate()): die (LIMIT+1)-te Zeile beweist „es gibt mehr",
+     * OHNE ein teures count(*) ueber tausende Zeilen. Gezeigt werden nur LIMIT Zeilen.
+     */
+    private const LIMIT = 25;
 
     public function index(): View
     {
@@ -57,18 +62,48 @@ class ArbeitslisteController extends Controller
     }
 
     /**
-     * Fuehrt eine Kategorie-Query aus und kapselt sie: bei Erfolg ['ok'=>true,'items'=>[...]],
-     * bei Fehler ['ok'=>false,'error'=>Meldung] — nie eine Exception nach aussen (kein 500).
+     * Fuehrt eine Kategorie-Query aus und kapselt sie: bei Erfolg wird das paginate()-Payload
+     * (items + has_more + more_href) um ['ok'=>true] ergaenzt, bei Fehler ['ok'=>false,...] —
+     * nie eine Exception nach aussen (kein 500). Der Fehler-Zweig liefert dieselben Schluessel
+     * (items/has_more/more_href), damit die View einheitlich darauf zugreift.
      */
     private function category(callable $fn): array
     {
         try {
-            return ['ok' => true, 'items' => $fn()];
+            return ['ok' => true] + $fn();
         } catch (\Throwable $e) {
             report($e);
 
-            return ['ok' => false, 'items' => [], 'error' => 'Diese Liste konnte gerade nicht geladen werden.'];
+            return [
+                'ok'        => false,
+                'items'     => [],
+                'has_more'  => false,
+                'more_href' => '#',
+                'error'     => 'Diese Liste konnte gerade nicht geladen werden.',
+            ];
         }
+    }
+
+    /**
+     * Kappung MIT „mehr"-Signal ohne count(*): geladen wird LIMIT+1; existiert die (LIMIT+1)-te
+     * Zeile, gibt es mehr als das Sicht-Limit -> has_more=true (+ Link zur Vollansicht). Gezeigt
+     * werden nur LIMIT gemappte Zeilen. Ein einzelnes SELECT je Sektion, kein Zaehl-Overhead.
+     */
+    private function paginate(Collection $rows, callable $map, string $moreHref): array
+    {
+        $hasMore = $rows->count() > self::LIMIT;
+
+        return [
+            'items'     => $rows->take(self::LIMIT)->map($map)->values()->all(),
+            'has_more'  => $hasMore,
+            'more_href' => $hasMore ? $moreHref : '#',
+        ];
+    }
+
+    /** Leeres Payload (Schema-Guard greift): dieselbe Form wie paginate(), damit die View gleich bleibt. */
+    private function emptyPayload(): array
+    {
+        return ['items' => [], 'has_more' => false, 'more_href' => '#'];
     }
 
     /**
@@ -78,24 +113,32 @@ class ArbeitslisteController extends Controller
     private function overdueInvoices(): array
     {
         if (!Schema::hasTable('invoices') || !Schema::hasColumn('invoices', 'due_date')) {
-            return [];
+            return $this->emptyPayload();
         }
 
-        return Invoice::query()
+        // select() nur auf die WIRKLICH gebrauchten Spalten: customer_id (FK fuer with('customer')),
+        // paid_amount/total_amount/type (unpaid()-Scope + open_amount-Accessor), invoice_no/id/due_date
+        // (Anzeige). Kleinere Zeilen = weniger Transfer; die Query-Zahl bleibt konstant (kein N+1).
+        $rows = Invoice::query()
+            ->select(['id', 'invoice_no', 'customer_id', 'due_date', 'total_amount', 'paid_amount', 'type'])
             ->unpaid()
             ->whereNotNull('due_date')
             ->whereDate('due_date', '<', Carbon::today())
             ->with('customer')
             ->orderBy('due_date')
-            ->limit(self::LIMIT)
-            ->get()
-            ->map(fn (Invoice $inv) => [
+            ->limit(self::LIMIT + 1)
+            ->get();
+
+        return $this->paginate(
+            $rows,
+            fn (Invoice $inv) => [
                 'title'  => $inv->invoice_no ?: ('Rechnung #' . $inv->id),
                 'meta'   => $this->customerName($inv->customer) . ' · fällig ' . $this->date($inv->due_date),
                 'amount' => $this->money($inv->open_amount),
                 'href'   => $this->safeRoute('admin.invoices.show', ['invoice' => $inv->id]),
-            ])
-            ->all();
+            ],
+            $this->safeRoute('admin.invoices.index'),
+        );
     }
 
     /**
@@ -105,26 +148,36 @@ class ArbeitslisteController extends Controller
     private function followUpTasks(): array
     {
         if (!Schema::hasTable('personal_tasks') || !Schema::hasColumn('personal_tasks', 'source_type')) {
-            return [];
+            return $this->emptyPayload();
         }
 
-        return PersonalTask::query()
+        // select() nur auf: id (orderBy + Fallback-Titel), task_title (Titel), customer_id (FK fuer
+        // with('customer') + href). Die where-Spalten (type/source_type/task_status) muessen NICHT im
+        // select stehen. EXPLAIN: ORDER BY id DESC LIMIT n wird per PRIMARY-reverse-Scan + Filter +
+        // LIMIT-Early-Termination bedient (kein filesort, bounded); der (type,source_type,source_id)-
+        // Index greift hier bewusst NICHT, weil er fuer ORDER BY id DESC einen filesort erzwaenge.
+        $rows = PersonalTask::query()
+            ->select(['id', 'task_title', 'customer_id'])
             ->where('type', 'follow_up')
             ->where('source_type', 'lead_product_list')
             ->whereNotIn('task_status', ['completed', 'done', 'cancelled'])
             ->with('customer')
             ->orderByDesc('id')
-            ->limit(self::LIMIT)
-            ->get()
-            ->map(fn (PersonalTask $task) => [
+            ->limit(self::LIMIT + 1)
+            ->get();
+
+        return $this->paginate(
+            $rows,
+            fn (PersonalTask $task) => [
                 'title'  => $task->task_title ?: 'Angebots-Aufgabe',
                 'meta'   => $this->customerName($task->customer),
                 'amount' => null,
                 'href'   => $task->customer_id
                     ? $this->safeRoute('new.lead.profile', ['id' => $task->customer_id])
                     : '#',
-            ])
-            ->all();
+            ],
+            '#', // keine dedizierte Follow-up-Vollansicht -> „mehr" wird als Hinweis (ohne Link) gezeigt
+        );
     }
 
     /**
@@ -139,7 +192,12 @@ class ArbeitslisteController extends Controller
 
         $invoicesHaveSoftDelete = Schema::hasColumn('invoices', 'deleted_at');
 
-        return Deal::query()
+        // select() nur auf: id (orderBy + whereNotExists-Korrelation + Fallback-Titel), order_number
+        // (Titel), customer_id (FK fuer with('customer')), price (Meta), status (where-Klarheit).
+        // Neuer Index deals_status_index bedient status='deal' + ORDER BY id DESC (Sekundaerindex
+        // fuehrt die PK mit -> reverse ohne filesort); die Subquery nutzt invoices_deal_id_index.
+        $rows = Deal::query()
+            ->select(['id', 'order_number', 'customer_id', 'price', 'status'])
             ->where('status', 'deal')
             ->whereNotExists(function ($q) use ($invoicesHaveSoftDelete) {
                 $q->selectRaw('1')
@@ -151,16 +209,20 @@ class ArbeitslisteController extends Controller
             })
             ->with('customer')
             ->orderByDesc('id')
-            ->limit(self::LIMIT)
-            ->get()
-            ->map(fn (Deal $deal) => [
+            ->limit(self::LIMIT + 1)
+            ->get();
+
+        return $this->paginate(
+            $rows,
+            fn (Deal $deal) => [
                 'title'  => $deal->order_number ?: ('Auftrag #' . $deal->id),
                 'meta'   => $this->customerName($deal->customer)
                     . ($deal->price ? ' · ' . $this->money($deal->price) : ''),
                 'amount' => null,
                 'href'   => $this->safeRoute('admin.invoices.index', ['deal_id' => $deal->id]),
-            ])
-            ->all();
+            ],
+            '#', // keine dedizierte Auftrags-Vollansicht -> „mehr" als Hinweis (ohne Link)
+        );
     }
 
     /** Kundenname aus NewLeads (display_name-Accessor); leer -> Platzhalter. */

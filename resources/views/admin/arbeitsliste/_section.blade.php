@@ -44,5 +44,19 @@
                 </x-arbeitsliste.row>
             @endforeach
         </div>
+
+        {{-- „mehr"-Hinweis: es gibt mehr als das Sicht-Limit (per LIMIT+1 erkannt, kein count(*)).
+             Fuehrt eine Vollansicht-Route existiert (more_href != '#') -> Link; sonst nur Hinweis. --}}
+        @if (($category['has_more'] ?? false))
+            @php($moreHref = $category['more_href'] ?? '#')
+            @if ($moreHref !== '#')
+                <a class="al-section-more" href="{{ $moreHref }}">
+                    <span>Weitere anzeigen</span>
+                    <i data-lucide="arrow-right" class="al-section-more-icon" aria-hidden="true"></i>
+                </a>
+            @else
+                <p class="al-section-more al-section-more--static" role="note">Weitere vorhanden — die {{ count($category['items']) }} dringendsten zuerst.</p>
+            @endif
+        @endif
     @endif
 </section>
