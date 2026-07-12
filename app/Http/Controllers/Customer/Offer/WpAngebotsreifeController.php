@@ -26,4 +26,13 @@ class WpAngebotsreifeController extends Controller
     {
         return response()->json($service->fuerId($leadProductList));
     }
+
+    /**
+     * Paket 1b-a — nur das Panel-Partial (für Lazy-AJAX-Einbettung ins Objektprofil).
+     * Read-only, kein Wrapper/Layout.
+     */
+    public function panelPartial(int $leadProductList, OfferReadinessService $service)
+    {
+        return view('admin.offer.partials.angebotsreife_panel', ['reife' => $service->fuerId($leadProductList)]);
+    }
 }

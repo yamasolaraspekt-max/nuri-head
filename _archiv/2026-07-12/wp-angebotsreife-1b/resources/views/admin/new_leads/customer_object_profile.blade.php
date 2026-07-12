@@ -534,29 +534,6 @@
                                                                             style="">
                                                                             <div class="card-content">
                                                                                 <div class="card-body">
-                                                                                    {{-- Paket 1b-a: WP-Angebotsreife (read-only, lazy nachgeladen; bricht nicht bei Fehler) --}}
-                                                                                    @if((int) ($product->product_id ?? 0) === 2)
-                                                                                        <div class="wp-angebotsreife-lazy" data-reife-url="{{ route('offers.angebotsreife.panel', $product->id) }}" style="margin-bottom:14px;">
-                                                                                            <div style="font-size:12px;color:#6b7280;">Angebotsreife wird geladen …</div>
-                                                                                        </div>
-                                                                                        @once
-                                                                                            <script>
-                                                                                            (function () {
-                                                                                                function loadWpAngebotsreife() {
-                                                                                                    document.querySelectorAll('.wp-angebotsreife-lazy[data-reife-url]:not([data-loaded])').forEach(function (el) {
-                                                                                                        el.setAttribute('data-loaded', '1');
-                                                                                                        fetch(el.getAttribute('data-reife-url'), { headers: { 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
-                                                                                                            .then(function (r) { if (!r.ok) { throw new Error(r.status); } return r.text(); })
-                                                                                                            .then(function (html) { el.innerHTML = html; })
-                                                                                                            .catch(function () { el.innerHTML = '<div style="font-size:12px;color:#9ca3af;">Angebotsreife konnte nicht geladen werden.</div>'; });
-                                                                                                    });
-                                                                                                }
-                                                                                                if (document.readyState !== 'loading') { loadWpAngebotsreife(); }
-                                                                                                else { document.addEventListener('DOMContentLoaded', loadWpAngebotsreife); }
-                                                                                            })();
-                                                                                            </script>
-                                                                                        @endonce
-                                                                                    @endif
                                                                                     <p>
                                                                                     <ul
                                                                                         class="nav nav-pills flex-column mt-md-0 mt-1">

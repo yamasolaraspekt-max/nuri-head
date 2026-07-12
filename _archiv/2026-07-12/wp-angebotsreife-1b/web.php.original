@@ -3287,10 +3287,6 @@ Route::middleware('auth')->prefix('offers')->name('offers.')->group(function () 
     Route::get('/angebotsreife/{leadProductList}/json', [WpAngebotsreifeController::class, 'json'])
         ->whereNumber('leadProductList')
         ->name('angebotsreife.json');
-    // Paket 1b-a — nur das Panel-Partial (Lazy-AJAX-Einbettung, read-only).
-    Route::get('/angebotsreife/{leadProductList}/panel', [WpAngebotsreifeController::class, 'panelPartial'])
-        ->whereNumber('leadProductList')
-        ->name('angebotsreife.panel');
     Route::get('/wizard/customers', [OfferWizardController::class, 'searchCustomers'])
         ->name('wizard.customers');
     Route::get('/wizard/customers/{lead}', [OfferWizardController::class, 'customerShow'])
