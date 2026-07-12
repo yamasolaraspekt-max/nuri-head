@@ -3,6 +3,7 @@
 > **Zweck:** Kontinuierliche, sichere Optimierung des ticket CRM/ERP durch drei getrennte Rollen — **PLANNER** (Strategie) · **GENERATOR** (Umsetzung) · **EVALUATOR** (Kontrolle+Veto). Dies ist das **Team + Regelwerk + der Zyklus** — **noch kein CRM-Umbau**.
 > **Verhältnis zur Governance:** setzt `docs/BETRIEBSORDNUNG.md`, `CLAUDE.md`, `docs/architektur/bauordnung.md` und die entschiedenen Weichen **durch**, hebt sie nie auf. Bei Konflikt gilt die Betriebsordnung/CLAUDE.md. Die drei Rollen sind die feinkörnige Optimierungs-Ausprägung der Betriebsordnungs-Rollen BAUER≈Generator / PRÜFER≈Evaluator, mit dem PLANNER als vorgelagerter Strategie-Station.
 > **Rollen-Docs:** [`01-planner.md`](01-planner.md) · [`02-generator.md`](02-generator.md) · [`03-evaluator.md`](03-evaluator.md).
+> **Claude-Code-Start:** [`04-claude-code-startanweisung.md`](04-claude-code-startanweisung.md) ist der verbindliche Einstiegspunkt, damit dieser Zyklus bei jeder Arbeit im Repo sofort geladen und angewendet wird.
 
 ---
 
