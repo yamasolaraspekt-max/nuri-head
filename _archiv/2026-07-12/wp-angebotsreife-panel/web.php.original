@@ -100,7 +100,6 @@ use App\Http\Controllers\Customer\Kanban\LeadStageBulkMoveController;
 
 
 use App\Http\Controllers\Customer\Offer\OfferWizardController;
-use App\Http\Controllers\Customer\Offer\WpAngebotsreifeController;
 use App\Http\Controllers\Customer\Offer\OfferController;
 use App\Http\Controllers\Customer\Offer\OfferFolderController;
 use App\Http\Controllers\Customer\Offer\OfferDocumentController;
@@ -3279,14 +3278,6 @@ Route::middleware('auth')->prefix('offers')->name('offers.')->group(function () 
         ->name('wizard');
     Route::get('/wizard-smart', [OfferWizardController::class, 'smart'])
         ->name('wizard.smart');
-
-    // Paket 1 — READ-ONLY Angebotsreife-Anzeige je Gewerkzeile (kein Angebotslogik-Eingriff).
-    Route::get('/angebotsreife/{leadProductList}', [WpAngebotsreifeController::class, 'show'])
-        ->whereNumber('leadProductList')
-        ->name('angebotsreife');
-    Route::get('/angebotsreife/{leadProductList}/json', [WpAngebotsreifeController::class, 'json'])
-        ->whereNumber('leadProductList')
-        ->name('angebotsreife.json');
     Route::get('/wizard/customers', [OfferWizardController::class, 'searchCustomers'])
         ->name('wizard.customers');
     Route::get('/wizard/customers/{lead}', [OfferWizardController::class, 'customerShow'])
