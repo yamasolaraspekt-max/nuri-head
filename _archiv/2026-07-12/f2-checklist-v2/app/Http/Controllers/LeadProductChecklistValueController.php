@@ -51,15 +51,15 @@ class LeadProductChecklistValueController extends Controller
                 'product_id' => $request->product_id,
                 'section_name' => $formula->section_name,
             ], [
-                'filled_values' => [],
-                'formula_snapshot' => $this->asArray($formula->fields),
+                'filled_values' => json_encode([]),
+                'formula_snapshot' => $formula->fields,
                 'formula_version' => $formula->version,
             ]);
 
-            // Render-Block je Formular (v1/v2-robust — die Blade normalisiert die Felder).
+            // Render test block per formula
             $html .= view('admin.new_leads.checklists.checklist', [
                 'formula' => $formula,
-                'filled_values' => $this->asArray($value->filled_values),
+                'filled_values' => json_decode($value->filled_values, true) ?? [] // ✅ FIXED HERE
             ])->render();
 
             
@@ -81,20 +81,20 @@ class LeadProductChecklistValueController extends Controller
         ]);
     
         $checklists = LeadProductChecklistValue::where('lead_product_list_id', $request->lead_product_list_id)->get();
-        $values = (array) $request->input('values', []);
-
+    
         foreach ($checklists as $checklist) {
+            $fields = json_decode($checklist->formula_snapshot, true);
             $sectionData = [];
-
-            foreach ($this->asArray($checklist->formula_snapshot) as $field) {
-                $id = $this->fieldIdentity((array) $field);
-                if ($id !== '' && array_key_exists($id, $values)) {
-                    $sectionData[$id] = $values[$id]; // multiselect-Array bleibt Array
+    
+            foreach ($fields as $field) {
+                $name = $field['name'];
+                if (isset($request->values[$name])) {
+                    $sectionData[$name] = $request->values[$name];
                 }
             }
-
+    
             $checklist->update([
-                'filled_values' => $sectionData,
+                'filled_values' => json_encode($sectionData),
             ]);
         }
     
@@ -114,73 +114,34 @@ class LeadProductChecklistValueController extends Controller
         ]);
     
         $formulas = ProductFormula::where('product_id', $request->product_id)->get();
-        $incoming = (array) $request->input('filled_values', []);
-
+    
         foreach ($formulas as $formula) {
+            $fields = json_decode($formula->fields, true);
+            $fieldNames = array_column($fields, 'name');
+    
             $filteredValues = [];
-            foreach ($this->asArray($formula->fields) as $field) {
-                $id = $this->fieldIdentity((array) $field);
-                if ($id !== '' && array_key_exists($id, $incoming)) {
-                    $filteredValues[$id] = $incoming[$id]; // multiselect-Array bleibt Array
+            foreach ($fieldNames as $name) {
+                if (isset($request->filled_values[$name])) {
+                    $filteredValues[$name] = $request->filled_values[$name];
                 }
             }
-
-            $row = LeadProductChecklistValue::firstOrNew([
+    
+            LeadProductChecklistValue::updateOrCreate([
                 'lead_product_list_id' => $request->lead_product_list_id,
                 'product_formula_id' => $formula->id,
                 'customer_id' => $request->customer_id,
                 'alternative_id' => $request->alternative_id,
                 'product_id' => $request->product_id,
                 'section_name' => $formula->section_name,
+            ], [
+                'filled_values' => json_encode($filteredValues),
             ]);
-
-            // NOT-NULL-Felder nur bei Neuanlage setzen (Save vor Init darf nicht 1364-fehlschlagen);
-            // bei bestehender Zeile bleibt der Init-Snapshot erhalten.
-            if (! $row->exists) {
-                $row->formula_snapshot = $this->asArray($formula->fields);
-                $row->formula_version = $formula->version;
-            }
-
-            $row->filled_values = $filteredValues;
-            $row->save();
         }
     
         return response()->json(['success' => true]);
     }
     
 
-
-    /**
-     * F2 — robuster Zugriff: Array bleibt Array, JSON-String wird dekodiert, null/kaputt → leeres Array.
-     * Behebt den json_decode(array)-TypeError bei array-gecasteten Attributen (fields/formula_snapshot/filled_values).
-     *
-     * @return array<mixed>
-     */
-    private function asArray($raw): array
-    {
-        if (is_array($raw)) {
-            return $raw;
-        }
-        if (is_string($raw) && $raw !== '') {
-            $decoded = json_decode($raw, true);
-
-            return is_array($decoded) ? $decoded : [];
-        }
-
-        return [];
-    }
-
-    /**
-     * F2 — Feld-Identität: v2 nutzt 'key', v1 'name' (WP-Pilot trägt beide identisch).
-     *
-     * @param  array<string,mixed>  $field
-     */
-    private function fieldIdentity(array $field): string
-    {
-        $id = $field['key'] ?? $field['name'] ?? '';
-
-        return is_string($id) ? $id : '';
-    }
 
     /**
      * Display the specified resource.
