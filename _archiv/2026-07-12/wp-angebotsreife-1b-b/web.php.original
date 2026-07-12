@@ -3291,9 +3291,6 @@ Route::middleware('auth')->prefix('offers')->name('offers.')->group(function () 
     Route::get('/angebotsreife/{leadProductList}/panel', [WpAngebotsreifeController::class, 'panelPartial'])
         ->whereNumber('leadProductList')
         ->name('angebotsreife.panel');
-    // Paket 1b-b — READ-ONLY Batch-Status für Kanban-Badges (?ids=1,2,3; nur numerisch, cap 100).
-    Route::get('/angebotsreife-batch', [WpAngebotsreifeController::class, 'index'])
-        ->name('angebotsreife.index');
     Route::get('/wizard/customers', [OfferWizardController::class, 'searchCustomers'])
         ->name('wizard.customers');
     Route::get('/wizard/customers/{lead}', [OfferWizardController::class, 'customerShow'])

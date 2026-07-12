@@ -228,17 +228,6 @@
       <h3>Kanban</h3>
       <p>Drag & Drop zwischen Spalten</p>
     </div>
-
-    {{-- Paket 1b-b: Angebotsreife-Filter (read-only, clientseitig; Badges lazy via Batch) --}}
-    <div class="kb-reife-filter" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-left:auto;">
-      <span style="font-size:12px;font-weight:800;color:#6b7280;">Angebotsreife:</span>
-      @foreach (['all' => 'alle', 'angebotsfaehig' => 'angebotsfähig', 'in_pruefung' => 'in Prüfung', 'unvollstaendig' => 'unvollständig', 'blockiert' => 'blockiert'] as $fkey => $flabel)
-        <button type="button" class="kb-reife-fbtn" data-reife-filter="{{ $fkey }}"
-          style="font-size:11px;font-weight:800;padding:4px 10px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;color:#374151;cursor:pointer;">
-          {{ $flabel }}
-        </button>
-      @endforeach
-    </div>
   </div>
 
   <div class="kb-board" id="kanban-board">
@@ -274,14 +263,6 @@
                 {{ $stages[$lead->stage] ?? ucfirst($lead->stage) }}
               </div>
 
-              {{-- Paket 1b-b: WP-Angebotsreife-Badge (nur WP; lazy per Batch gefüllt) --}}
-              @if((int) ($lead->product_id ?? 0) === 2)
-                <span class="kb-reife-badge" data-reife-id="{{ $lead->lead_product_id }}"
-                  style="display:inline-block;margin-top:5px;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;background:#f3f4f6;color:#9ca3af;">
-                  Reife …
-                </span>
-              @endif
-
               <div class="kb-name">
                 {{ $lead->customer_name ?? '-' }} {{ $lead->customer_lastname ?? '' }}
               </div>
@@ -301,75 +282,3 @@
     @endforeach
   </div>
 </div>
-
-@once
-<script>
-(function () {
-  // Paket 1b-b: WP-Angebotsreife-Badges + clientseitiger Filter (read-only, graceful).
-  var META = {
-    angebotsfaehig: ['angebotsfähig', '#166534', '#dcfce7'],
-    in_pruefung:    ['in Prüfung',    '#92400e', '#fef3c7'],
-    unvollstaendig: ['unvollständig', '#3730a3', '#e0e7ff'],
-    blockiert:      ['blockiert',     '#991b1b', '#fee2e2'],
-  };
-
-  function setBadge(el, d) {
-    var m = META[d.status] || ['—', '#374151', '#f3f4f6'];
-    el.textContent = m[0] + ' · ' + (parseInt(d.percent, 10) || 0) + '%';
-    el.style.color = m[1];
-    el.style.background = m[2];
-    var card = el.closest('.kb-card');
-    if (card) { card.setAttribute('data-reife-status', d.status); }
-  }
-
-  function loadBadges() {
-    var badges = [].slice.call(document.querySelectorAll('.kb-reife-badge[data-reife-id]:not([data-loaded])'));
-    var ids = [];
-    badges.forEach(function (b) {
-      b.setAttribute('data-loaded', '1');
-      var id = b.getAttribute('data-reife-id');
-      if (/^\d+$/.test(id)) { ids.push(id); }
-    });
-    if (!ids.length) { return; }
-    // Server cappt bei 100; Client sendet in 100er-Chunks.
-    for (var i = 0; i < ids.length; i += 100) {
-      (function (chunk) {
-        fetch('{{ route('offers.angebotsreife.index') }}?ids=' + chunk.join(','), { headers: { 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
-          .then(function (r) { if (!r.ok) { throw new Error(r.status); } return r.json(); })
-          .then(function (list) {
-            (list || []).forEach(function (d) {
-              var el = document.querySelector('.kb-reife-badge[data-reife-id="' + d.id + '"]');
-              if (el) { setBadge(el, d); }
-            });
-          })
-          .catch(function () { /* Ladefehler: Badges bleiben neutral, Board intakt */ });
-      })(ids.slice(i, i + 100));
-    }
-  }
-
-  function applyFilter(f) {
-    document.querySelectorAll('.kb-card').forEach(function (card) {
-      var isWp = card.getAttribute('data-product-id') === '2';
-      var st = card.getAttribute('data-reife-status');
-      var show = (f === 'all') ? true : (isWp && st === f);
-      card.style.display = show ? '' : 'none';
-    });
-    document.querySelectorAll('.kb-reife-fbtn').forEach(function (b) {
-      var active = b.getAttribute('data-reife-filter') === f;
-      b.style.background = active ? '#111827' : '#fff';
-      b.style.color = active ? '#fff' : '#374151';
-    });
-  }
-
-  function init() {
-    loadBadges();
-    document.querySelectorAll('.kb-reife-fbtn').forEach(function (b) {
-      b.addEventListener('click', function () { applyFilter(b.getAttribute('data-reife-filter')); });
-    });
-  }
-
-  if (document.readyState !== 'loading') { init(); }
-  else { document.addEventListener('DOMContentLoaded', init); }
-})();
-</script>
-@endonce

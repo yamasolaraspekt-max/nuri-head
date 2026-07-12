@@ -35,4 +35,34 @@ class WpAngebotsreifeController extends Controller
     {
         return view('admin.offer.partials.angebotsreife_panel', ['reife' => $service->fuerId($leadProductList)]);
     }
+
+    /**
+     * Paket 1b-b — READ-ONLY Batch-Status für Kanban-Badges.
+     * `ids` = kommagetrennte/Array-Liste, NUR numerisch, hart auf 100 gecappt, ungültig/leer → [].
+     * JSON gibt ausschließlich {id, status, percent, angebotsfaehig} zurück — KEINE PII.
+     */
+    public function index(Request $request, OfferReadinessService $service)
+    {
+        $raw = $request->query('ids', '');
+        $ids = collect(is_array($raw) ? $raw : explode(',', (string) $raw))
+            ->map(fn ($v) => trim((string) $v))
+            ->filter(fn ($v) => $v !== '' && ctype_digit($v)) // nur rein numerisch
+            ->map(fn ($v) => (int) $v)
+            ->filter(fn ($v) => $v > 0)
+            ->unique()
+            ->take(100); // harte Obergrenze
+
+        $out = $ids->map(function (int $id) use ($service) {
+            $r = $service->fuerId($id);
+
+            return [
+                'id' => (int) $r['lead_product_list_id'],
+                'status' => $r['status'],
+                'percent' => (int) $r['percent'],
+                'angebotsfaehig' => (bool) $r['angebotsfaehig'],
+            ];
+        })->values();
+
+        return response()->json($out);
+    }
 }
