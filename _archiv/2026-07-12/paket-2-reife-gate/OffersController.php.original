@@ -90,21 +90,6 @@ class OffersController extends Controller
                 'plan_id' => ['required', 'exists:planings,id'],
             ]);
 
-            // Paket 2a — Angebotsreife-Gate (read-only, nur WP, nur bei offenen Blockern; kein Override).
-            $reifeGate = app(\App\Services\Offer\OfferReadinessGate::class)->pruefe(
-                (int) $validated['customer_id'],
-                isset($validated['alternative_id']) ? (int) $validated['alternative_id'] : null,
-                (int) $validated['product_id']
-            );
-            if ($reifeGate) {
-                return response()->json([
-                    'success' => false,
-                    'code' => 'OFFER_NOT_READY',
-                    'message' => $reifeGate['hinweis'],
-                    'blocker' => $reifeGate['blocker'],
-                ], 422);
-            }
-
             $offer = Offer::create([
                 'customer_id' => $validated['customer_id'],
                 'product_id' => $validated['product_id'],
