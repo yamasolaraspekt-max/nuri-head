@@ -2285,15 +2285,6 @@ class OfferController extends Controller
             }
 
             $sections = $this->offerNormalizeSections($request->input('sections', []));
-
-            // P1-a Preis-Integrität: für sections-Knoten mit stabiler Katalog-Referenz
-            // (component_id) den Katalog-EK/VK serverseitig erzwingen (Browser-Payload
-            // verliert); ankerlose Positionen als preis_quelle='manuell' markieren.
-            // Rein additiv, abschaltbar via config('offer.enforce_catalog_pricing').
-            if (config('offer.enforce_catalog_pricing', true)) {
-                $sections = app(\App\Services\Offer\CatalogPriceGuard::class)->apply($sections);
-            }
-
             $taxRate = $this->offerNormalizeDecimal($request->input('tax_rate', 19), 19.0);
             $calculation = $this->calculateOfferSections($sections, $taxRate);
 
