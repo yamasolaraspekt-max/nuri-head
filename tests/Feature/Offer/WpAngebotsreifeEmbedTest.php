@@ -75,8 +75,9 @@ class WpAngebotsreifeEmbedTest extends TestCase
         // wir sichern die Einbettung + WP-Gating + read-only Route auf Quellebene ab.
         $src = file_get_contents(resource_path('views/admin/new_leads/customer_object_profile.blade.php'));
 
-        $this->assertStringContainsString('wp-angebotsreife-lazy', $src, 'Platzhalter fehlt.');
-        $this->assertStringContainsString("offers.angebotsreife.panel', \$product->id", $src, 'Lazy-Route/Ziel fehlt.');
+        // UX-2: die Reife-Einbettung liegt jetzt im read-only Tab-Block (Tab „Reife"), gleiche Route/WP-Gate/@once.
+        $this->assertStringContainsString('ux2-tabblock', $src, 'Tab-Block fehlt.');
+        $this->assertStringContainsString("offers.angebotsreife.panel', \$product->id", $src, 'Reife-Route/Ziel fehlt.');
         $this->assertStringContainsString("product_id ?? 0) === 2", $src, 'WP-Gating (product_id==2) fehlt.');
         $this->assertStringContainsString('@once', $src, 'Loader-Script muss einmalig (@once) sein.');
     }

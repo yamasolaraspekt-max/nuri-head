@@ -534,74 +534,25 @@
                                                                             style="">
                                                                             <div class="card-content">
                                                                                 <div class="card-body">
-                                                                                    {{-- UX-2: WP Angebots-/Auslegungs-Tabs (read-only, lazy je Tab; Fehler isoliert; bricht nicht) --}}
+                                                                                    {{-- Paket 1b-a: WP-Angebotsreife (read-only, lazy nachgeladen; bricht nicht bei Fehler) --}}
                                                                                     @if((int) ($product->product_id ?? 0) === 2)
-                                                                                        <div class="ux2-tabblock" style="border:1px solid #e5e7eb;border-radius:10px;margin-bottom:14px;overflow:hidden;">
-                                                                                            <div class="ux2-tabbar" style="display:flex;gap:2px;align-items:stretch;background:#f9fafb;border-bottom:1px solid #e5e7eb;padding:6px 8px;flex-wrap:wrap;">
-                                                                                                <button type="button" class="ux2-tab" data-tab-target="reife" aria-selected="true"
-                                                                                                    style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:4px 10px;cursor:pointer;text-align:left;">
-                                                                                                    <span style="font-weight:800;font-size:12px;color:#111827;">Reife</span>
-                                                                                                    <span style="display:block;font-size:10px;color:#6b7280;">Technik</span>
-                                                                                                </button>
-                                                                                                <button type="button" class="ux2-tab" data-tab-target="auslegung" aria-selected="false"
-                                                                                                    style="background:transparent;border:1px solid transparent;border-radius:8px;padding:4px 10px;cursor:pointer;text-align:left;">
-                                                                                                    <span style="font-weight:800;font-size:12px;color:#111827;">Auslegung</span>
-                                                                                                    <span style="display:block;font-size:10px;color:#6b7280;">Technik</span>
-                                                                                                </button>
-                                                                                                <span aria-hidden="true" style="width:1px;background:#e5e7eb;margin:2px 4px;"></span>
-                                                                                                <button type="button" class="ux2-tab" data-tab-target="preis" aria-selected="false"
-                                                                                                    style="background:transparent;border:1px solid transparent;border-radius:8px;padding:4px 10px;cursor:pointer;text-align:left;">
-                                                                                                    <span style="font-weight:800;font-size:12px;color:#111827;">Preis</span>
-                                                                                                    <span style="display:block;font-size:10px;color:#92400e;">Kaufmännisch / OMD-IDS</span>
-                                                                                                </button>
-                                                                                            </div>
-                                                                                            <div class="ux2-panes" style="padding:12px;">
-                                                                                                <div class="ux2-pane" data-tab-key="reife" data-tab-auto="1" data-tab-url="{{ route('offers.angebotsreife.panel', $product->id) }}">
-                                                                                                    <div style="font-size:12px;color:#6b7280;">Reife wird geladen …</div>
-                                                                                                </div>
-                                                                                                <div class="ux2-pane" data-tab-key="auslegung" data-tab-url="{{ route('offers.auslegung.vorschau', $product->id) }}" style="display:none;">
-                                                                                                    <div style="font-size:12px;color:#6b7280;">Klicken zum Laden …</div>
-                                                                                                </div>
-                                                                                                <div class="ux2-pane" data-tab-key="preis" data-tab-url="{{ route('offers.wp-katalog-matching', $product->id) }}" style="display:none;">
-                                                                                                    <div style="font-size:12px;color:#6b7280;">Klicken zum Laden …</div>
-                                                                                                </div>
-                                                                                            </div>
+                                                                                        <div class="wp-angebotsreife-lazy" data-reife-url="{{ route('offers.angebotsreife.panel', $product->id) }}" style="margin-bottom:14px;">
+                                                                                            <div style="font-size:12px;color:#6b7280;">Angebotsreife wird geladen …</div>
                                                                                         </div>
                                                                                         @once
                                                                                             <script>
                                                                                             (function () {
-                                                                                                function loadPane(pane) {
-                                                                                                    if (!pane || pane.getAttribute('data-tab-loaded')) { return; }
-                                                                                                    pane.setAttribute('data-tab-loaded', '1');
-                                                                                                    fetch(pane.getAttribute('data-tab-url'), { headers: { 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
-                                                                                                        .then(function (r) { if (!r.ok) { throw new Error(r.status); } return r.text(); })
-                                                                                                        .then(function (html) { pane.innerHTML = html; })
-                                                                                                        .catch(function () { pane.innerHTML = '<div style="font-size:12px;color:#9ca3af;">Konnte nicht geladen werden.</div>'; });
-                                                                                                }
-                                                                                                function initUx2() {
-                                                                                                    document.querySelectorAll('.ux2-tabblock:not([data-ux2-init])').forEach(function (block) {
-                                                                                                        block.setAttribute('data-ux2-init', '1');
-                                                                                                        block.querySelectorAll('.ux2-pane[data-tab-auto]').forEach(loadPane);
-                                                                                                        block.querySelectorAll('.ux2-tab').forEach(function (btn) {
-                                                                                                            btn.addEventListener('click', function () {
-                                                                                                                var key = btn.getAttribute('data-tab-target');
-                                                                                                                block.querySelectorAll('.ux2-tab').forEach(function (b) {
-                                                                                                                    var on = b === btn;
-                                                                                                                    b.setAttribute('aria-selected', on ? 'true' : 'false');
-                                                                                                                    b.style.background = on ? '#fff' : 'transparent';
-                                                                                                                    b.style.border = on ? '1px solid #e5e7eb' : '1px solid transparent';
-                                                                                                                });
-                                                                                                                block.querySelectorAll('.ux2-pane').forEach(function (p) {
-                                                                                                                    var show = p.getAttribute('data-tab-key') === key;
-                                                                                                                    p.style.display = show ? '' : 'none';
-                                                                                                                    if (show) { loadPane(p); }
-                                                                                                                });
-                                                                                                            });
-                                                                                                        });
+                                                                                                function loadWpAngebotsreife() {
+                                                                                                    document.querySelectorAll('.wp-angebotsreife-lazy[data-reife-url]:not([data-loaded])').forEach(function (el) {
+                                                                                                        el.setAttribute('data-loaded', '1');
+                                                                                                        fetch(el.getAttribute('data-reife-url'), { headers: { 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
+                                                                                                            .then(function (r) { if (!r.ok) { throw new Error(r.status); } return r.text(); })
+                                                                                                            .then(function (html) { el.innerHTML = html; })
+                                                                                                            .catch(function () { el.innerHTML = '<div style="font-size:12px;color:#9ca3af;">Angebotsreife konnte nicht geladen werden.</div>'; });
                                                                                                     });
                                                                                                 }
-                                                                                                if (document.readyState !== 'loading') { initUx2(); }
-                                                                                                else { document.addEventListener('DOMContentLoaded', initUx2); }
+                                                                                                if (document.readyState !== 'loading') { loadWpAngebotsreife(); }
+                                                                                                else { document.addEventListener('DOMContentLoaded', loadWpAngebotsreife); }
                                                                                             })();
                                                                                             </script>
                                                                                         @endonce
