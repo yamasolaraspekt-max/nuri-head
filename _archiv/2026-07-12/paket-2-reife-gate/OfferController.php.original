@@ -358,11 +358,6 @@ class OfferController extends Controller
                     continue;
                 }
 
-                // Paket 2a — Angebotsreife-Gate: WP mit offenen Blockern NICHT auto-anlegen (Zeile überspringen).
-                if (app(\App\Services\Offer\OfferReadinessGate::class)->pruefe($customerId, $alternativeId, $productId)) {
-                    continue;
-                }
-
                 DB::beginTransaction();
 
                 $createdBy = $employeeId ?: (is_numeric($row->employee_id ?? null) ? (int) $row->employee_id : null);
@@ -1028,15 +1023,6 @@ class OfferController extends Controller
         $alternativeId = (int) $request->input('alternative_id');
         $productId = (int) $request->input('product_id');
         $departmentId = $request->filled('department_id') ? (int) $request->input('department_id') : null;
-
-        // Paket 2a — Angebotsreife-Gate (read-only, nur WP, nur bei offenen Blockern; kein Override).
-        $reifeGate = app(\App\Services\Offer\OfferReadinessGate::class)->pruefe($customerId, $alternativeId, $productId);
-        if ($reifeGate) {
-            return $this->errorResponse($reifeGate['hinweis'], 422, [
-                'code' => 'OFFER_NOT_READY',
-                'blocker' => $reifeGate['blocker'],
-            ]);
-        }
 
         DB::beginTransaction();
 
@@ -2233,16 +2219,6 @@ class OfferController extends Controller
 
                 $offer = $existingOffer->fresh();
             } else {
-                // Paket 2a — Angebotsreife-Gate: WP mit offenen Blockern kein NEUES Angebot anlegen.
-                if ($reifeGate = app(\App\Services\Offer\OfferReadinessGate::class)->pruefe($customerId, $alternativeId, $productId)) {
-                    DB::rollBack();
-
-                    return $this->errorResponse($reifeGate['hinweis'], 422, [
-                        'code' => 'OFFER_NOT_READY',
-                        'blocker' => $reifeGate['blocker'],
-                    ]);
-                }
-
                 $offer = Offer::create([
                     'offer_no' => $this->safeGenerateOfferNo($customerId, $departmentId, $expectedPrefix),
                     'customer_id' => $customerId,

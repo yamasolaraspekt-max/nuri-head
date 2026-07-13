@@ -377,21 +377,6 @@ class OfferWizardController extends Controller
             ], 422);
         }
 
-        // Paket 2a — Angebotsreife-Gate (read-only, nur WP, nur bei offenen Blockern; kein Override).
-        $reifeGate = app(\App\Services\Offer\OfferReadinessGate::class)->pruefe(
-            (int) $data['customer_id'],
-            (int) $data['alternative_id'],
-            (int) $firstProductId
-        );
-        if ($reifeGate) {
-            return response()->json([
-                'success' => false,
-                'code' => 'OFFER_NOT_READY',
-                'message' => $reifeGate['hinweis'],
-                'blocker' => $reifeGate['blocker'],
-            ], 422);
-        }
-
         $employeeId = null;
 
         if (auth()->check()) {
