@@ -297,4 +297,34 @@ class OfferReadinessGateTest extends TestCase
         $res->assertStatus(422)->assertJsonPath('code', 'OFFER_NOT_READY');
         $this->assertDatabaseCount('offers', 0);
     }
+
+    /**
+     * Nachtrag 2a — Gate-Platzierung (nur else/Neu-Create) blockiert KEINE Updates:
+     * saveDocument() auf einen reifen WP-Vorgang mit BESTEHENDEM Angebot aktualisiert dieses weiter,
+     * legt KEIN zweites Angebot an und wird vom Gate nicht abgewiesen.
+     */
+    public function test_savedocument_aktualisiert_bestehendes_wp_angebot_ohne_gate_block(): void
+    {
+        $k = $this->wpKombi(960, reif: true);
+
+        // Bestehendes Angebot für exakt die Kombination (customer/alternative/product) anlegen.
+        DB::table('offers')->insert([
+            'id' => 9600,
+            'customer_id' => $k['customer'], 'alternative_id' => $k['alternative'], 'product_id' => 2,
+            'offer_no' => 'SA-AN26999', 'service' => 'Alt', 'status' => 'todo',
+            'created_at' => now(), 'updated_at' => now(),
+        ]);
+
+        $res = $this->actingAs($this->admin())->postJson(route('offers.save-document'), [
+            'customer_id' => $k['customer'], 'alternative_id' => $k['alternative'], 'product_id' => 2,
+            'service' => 'Aktualisiert-Nachtrag', 'status' => 'todo', 'sections' => [],
+            'branding' => ['mode' => 'light', 'color' => '#ffffff', 'logo' => '', 'company' => 'Testfirma'],
+            'cover_text' => 'Deckblatt', 'canvas_images' => [], 'biography' => [],
+        ]);
+
+        $res->assertSuccessful();
+        // Kein neues Angebot (weiterhin genau eines), und das bestehende wurde aktualisiert.
+        $this->assertDatabaseCount('offers', 1);
+        $this->assertDatabaseHas('offers', ['id' => 9600, 'service' => 'Aktualisiert-Nachtrag']);
+    }
 }
