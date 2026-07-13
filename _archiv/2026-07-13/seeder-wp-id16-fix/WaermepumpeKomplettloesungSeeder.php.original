@@ -14,12 +14,8 @@ class WaermepumpeKomplettloesungSeeder extends Seeder
         DB::transaction(function () {
             $now = Carbon::now();
 
-            // id=16-Fix (Option B): WP-Artikelgruppe per Name auflösen statt hartkodierter id
-            // (id=16 = „Tapete" in dieser DB). Kein stiller Fallback — fehlt WP, wird abgebrochen.
-            $productId = DB::table('article_groups')->where('article_group', 'Wärmepumpe')->value('id');
-            if ($productId === null) {
-                throw new RuntimeException("article_groups mit article_group='Wärmepumpe' nicht gefunden — WP-Komplettlösung kann nicht angelegt werden.");
-            }
+            // Fixed from your UI wrapper
+            $productId = 16;
             $sectionId = 1;
             $version   = '1';
 
