@@ -41,6 +41,8 @@ EVALUATOR ──►  dreifach: (A) Richtigkeit  (B) Bauordnung 10 Fragen  (C) Gr
 4. **Eskalation an Yama bei Dissens.** Planner↔Evaluator-Konflikt, Weichen-/Direktiven-Zweifel, Restgrenze berührt → Strang stoppt, Yama entscheidet, Antwort wird Entscheidung.
 5. **Pflicht-Stopp = Haupt-Taktgeber.** Geschwindigkeit entsteht durch den geschlossenen Kreislauf, nicht durch das Aufweichen von Gates.
 6. **Beweis statt Bericht** (Evaluator misst selbst) · **kein `git add -A`** · **kein Beifang** (Bestandsdaten-Mutation nur als eigener Yama-Posten) · **TABU** (Nuriva/Video/Invoice-Zone/Legacy) unberührt · **Testanzahl sinkt nie**.
+7. **Evaluator strikt read-only — keine Schreib-/git-Werkzeuge.** Der Evaluator (und jeder Prüf-Subagent) führt KEINE git-Schreibbefehle aus (`add`, `commit`, `push`, `reset`, `rebase`, `checkout`, `stash`, `tag`, `restore`) und ändert KEINE Dateien. Er nutzt nur lesende Werkzeuge und liefert ausschließlich **Befund / Votum (FREIGABE/NACHBESSERN/ABLEHNEN) / Auflagen** — nie einen Commit oder Push. Erlaubt sind nur read-only-Prüfungen (Diff/Log/Show/Grep/Tests).
+8. **Kein Push ohne ausdrückliche Yama-Freigabe.** Lokale Commits sind nach Freigabe erlaubt; **Push ist IMMER ein eigener, separater, ausdrücklich freigegebener Schritt.** Kein automatischer Push nach Commit, kein `--force`/force-push ohne explizite Yama-Freigabe.
 
 **Fundament — alle drei Rollen laden es immer (read-only):** `docs/architektur/bauordnung.md` · `docs/architektur-entscheidungen.md` · `docs/glossar.md` · `docs/audit/code-audit.md` · `docs/BETRIEBSORDNUNG.md` · `CLAUDE.md`. Sobald vorhanden zusätzlich: `docs/zielbild-domaenen.md` + die Wächter-Skills.
 

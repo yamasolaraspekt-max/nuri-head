@@ -120,6 +120,8 @@ Bei Aufgaben zur Wärmepumpen-Auslegung, zu Wizards oder zu „Layout ist katast
 
 **Evaluator darf nicht bauen.** Bei Mängeln gibt er eine konkrete Mängelliste zurück.
 
+- **Evaluator arbeitet strikt read-only:** keine git-Schreibbefehle (`add`/`commit`/`push`/`reset`/`rebase`/`checkout`/`stash`/`tag`/`restore`), keine Datei-Änderungen, keine Schreibtools. Nur Befund/Votum/Auflagen — nie Commit/Push.
+
 ---
 
 ## 4. Reserve-Skills und wann sie geladen werden
@@ -207,6 +209,8 @@ Danach wird nicht geraten, sondern geprüft.
 - Keine zweite Wahrheit für Status, Umsatz, Katalog, Heizlast oder Auslegung.
 - Kein Commit ohne Evaluator-Freigabe und Yama-Bestätigung.
 - Kein `git add -A`.
+- Kein Push ohne ausdrückliche Yama-Freigabe. Push ist immer ein eigener separater Schritt; kein automatischer Push, kein force-push ohne explizite Freigabe.
+- Evaluator/Prüf-Subagenten führen KEINE git-Schreibbefehle aus (`add`/`commit`/`push`/`reset`/`rebase`/`checkout`/`stash`/`tag`/`restore`) und ändern KEINE Dateien.
 - Keine Bestandsdatenänderung als Beifang.
 - Keine Layout-Kosmetik, wenn die fachliche Struktur darunter falsch ist.
 - Kein „ungefähr“ bei Konzepten: jede Behauptung braucht Beleg oder wird als nicht verifiziert markiert.
