@@ -3302,10 +3302,6 @@ Route::middleware('auth')->prefix('offers')->name('offers.')->group(function () 
     Route::get('/wp-katalog-matching/{leadProductList}', [\App\Http\Controllers\Customer\Offer\WpKatalogMatchingController::class, 'panelPartial'])
         ->whereNumber('leadProductList')
         ->name('wp-katalog-matching');
-    // Paket 4a — READ-ONLY WP-Angebotsworkflow-Cockpit (Führung/Status, kein Write, kein Preisanker).
-    Route::get('/workflow/{leadProductList}', [\App\Http\Controllers\Customer\Offer\WpAngebotsWorkflowController::class, 'show'])
-        ->whereNumber('leadProductList')
-        ->name('workflow');
     Route::get('/wizard/customers', [OfferWizardController::class, 'searchCustomers'])
         ->name('wizard.customers');
     Route::get('/wizard/customers/{lead}', [OfferWizardController::class, 'customerShow'])
