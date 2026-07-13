@@ -230,4 +230,67 @@ class UseTemplateGateTest extends TestCase
         $res->assertSuccessful();
         $this->assertDatabaseHas('offer_folders', ['name' => 'Mein Ordner']);
     }
+
+    // ---------- H2: alternative_id validieren / Kunden-Zugehörigkeit ----------
+
+    public function test_h2_null_wird_nicht_als_invalid_abgewiesen(): void
+    {
+        // null bleibt wie bisher: H2-Guard feuert NICHT für null; WP+null → weiterhin OFFER_OBJECT_REQUIRED
+        // (nicht OFFER_OBJECT_INVALID). Beweist, dass die Zugehörigkeitsprüfung null nicht fälschlich sperrt.
+        $k = $this->wpKombi(820, reif: true);
+        $tpl = $this->makeTemplate(82);
+
+        $res = $this->actingAs($this->admin())->postJson(route('offer-templates.use', $tpl), [
+            'customer_id' => $k['customer'], 'product_id' => 2, 'folder_name' => 'Ordner', // KEIN alternative_id
+        ]);
+
+        $res->assertStatus(422)->assertJsonPath('code', 'OFFER_OBJECT_REQUIRED');
+        $this->assertDatabaseCount('offers', 0);
+    }
+
+    public function test_h2_gueltiges_eigenes_objekt_wird_genutzt(): void
+    {
+        $k = $this->wpKombi(830, reif: true);
+        $tpl = $this->makeTemplate(83);
+
+        $res = $this->actingAs($this->admin())->postJson(route('offer-templates.use', $tpl), [
+            'customer_id' => $k['customer'], 'alternative_id' => $k['alternative'], 'product_id' => 2, 'folder_name' => 'Ordner',
+        ]);
+
+        $res->assertSuccessful();
+        $this->assertDatabaseCount('offers', 1);
+        $this->assertDatabaseCount('offer_folders', 1);
+    }
+
+    public function test_h2_nicht_existente_alternative_id_wird_abgewiesen(): void
+    {
+        $k = $this->wpKombi(840, reif: true);
+        $tpl = $this->makeTemplate(84);
+
+        $res = $this->actingAs($this->admin())->postJson(route('offer-templates.use', $tpl), [
+            'customer_id' => $k['customer'], 'alternative_id' => 999999, 'product_id' => 2, 'folder_name' => 'Ordner',
+        ]);
+
+        $res->assertStatus(422);
+        $this->assertDatabaseCount('offers', 0);
+        $this->assertDatabaseCount('offer_folders', 0);
+        $this->assertDatabaseCount('offer_details', 0);
+    }
+
+    public function test_h2_fremde_alternative_id_wird_abgewiesen(): void
+    {
+        $a = $this->wpKombi(850, reif: true);         // Kunde A + eigenes Objekt
+        $b = $this->wpKombi(860, reif: true);         // Kunde B + eigenes Objekt
+        $tpl = $this->makeTemplate(85);
+
+        // Kunde A verwendet das Objekt von Kunde B → muss abgewiesen werden.
+        $res = $this->actingAs($this->admin())->postJson(route('offer-templates.use', $tpl), [
+            'customer_id' => $a['customer'], 'alternative_id' => $b['alternative'], 'product_id' => 2, 'folder_name' => 'Ordner',
+        ]);
+
+        $res->assertStatus(422)->assertJsonPath('code', 'OFFER_OBJECT_INVALID');
+        $this->assertDatabaseCount('offers', 0);
+        $this->assertDatabaseCount('offer_folders', 0);
+        $this->assertDatabaseCount('offer_details', 0);
+    }
 }

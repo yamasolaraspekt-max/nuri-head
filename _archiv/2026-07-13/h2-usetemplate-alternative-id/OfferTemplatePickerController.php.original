@@ -236,7 +236,7 @@ class OfferTemplatePickerController extends Controller
     {
         $validated = $request->validate([
             'customer_id' => ['required', 'integer', 'exists:new_leads,id'],
-            'alternative_id' => ['nullable', 'integer', 'exists:lead_alternative_adds,id'],
+            'alternative_id' => ['nullable', 'integer'],
             'product_id' => ['nullable', 'integer'],
         ]);
 
@@ -320,7 +320,7 @@ class OfferTemplatePickerController extends Controller
     {
         $validated = $request->validate([
             'customer_id' => ['required', 'integer', 'exists:new_leads,id'],
-            'alternative_id' => ['nullable', 'integer', 'exists:lead_alternative_adds,id'],
+            'alternative_id' => ['nullable', 'integer'],
             'product_id' => ['required', 'integer', 'exists:article_groups,id'],
             'folder_name' => ['nullable', 'string', 'max:255'],
         ]);
@@ -330,16 +330,6 @@ class OfferTemplatePickerController extends Controller
         $customerId = (int) $validated['customer_id'];
         $alternativeId = isset($validated['alternative_id']) ? (int) $validated['alternative_id'] : null;
         $productId = (int) $validated['product_id'];
-
-        // H2 — Objekt (falls angegeben) muss zum Kunden gehören (kein fremdes/verwaistes Objekt).
-        if ($alternativeId !== null
-            && ! LeadAlternativeAdd::where('id', $alternativeId)->where('lead_id', $customerId)->exists()) {
-            return response()->json([
-                'success' => false,
-                'code' => 'OFFER_OBJECT_INVALID',
-                'message' => 'Das gewählte Objekt gehört nicht zu diesem Kunden oder existiert nicht.',
-            ], 422);
-        }
 
         // Paket 2b (Option B) — WP-Vorlage ist objektgebunden: ohne Objekt keine eindeutige Reifeprüfung.
         if ($productId === \App\Services\Offer\OfferReadinessGate::GEWERK_WP && $alternativeId === null) {
