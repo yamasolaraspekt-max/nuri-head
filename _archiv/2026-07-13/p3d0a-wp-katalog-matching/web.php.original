@@ -3298,10 +3298,6 @@ Route::middleware('auth')->prefix('offers')->name('offers.')->group(function () 
     Route::get('/auslegung-vorschau/{leadProductList}', [\App\Http\Controllers\Customer\Offer\AuslegungVorschlagController::class, 'panelPartial'])
         ->whereNumber('leadProductList')
         ->name('auslegung.vorschau');
-    // P3-d0a — READ-ONLY WP-Katalog-Matching-Diagnose (kein Preisanker, kein component_id, kein Write).
-    Route::get('/wp-katalog-matching/{leadProductList}', [\App\Http\Controllers\Customer\Offer\WpKatalogMatchingController::class, 'panelPartial'])
-        ->whereNumber('leadProductList')
-        ->name('wp-katalog-matching');
     Route::get('/wizard/customers', [OfferWizardController::class, 'searchCustomers'])
         ->name('wizard.customers');
     Route::get('/wizard/customers/{lead}', [OfferWizardController::class, 'customerShow'])
