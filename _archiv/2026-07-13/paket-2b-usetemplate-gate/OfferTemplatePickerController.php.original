@@ -327,30 +327,6 @@ class OfferTemplatePickerController extends Controller
 
         $employeeId = auth()->user()->name ?? auth()->id();
 
-        $customerId = (int) $validated['customer_id'];
-        $alternativeId = isset($validated['alternative_id']) ? (int) $validated['alternative_id'] : null;
-        $productId = (int) $validated['product_id'];
-
-        // Paket 2b (Option B) — WP-Vorlage ist objektgebunden: ohne Objekt keine eindeutige Reifeprüfung.
-        if ($productId === \App\Services\Offer\OfferReadinessGate::GEWERK_WP && $alternativeId === null) {
-            return response()->json([
-                'success' => false,
-                'code' => 'OFFER_OBJECT_REQUIRED',
-                'message' => 'Bitte zuerst ein Objekt auswählen, bevor eine WP-Vorlage als Angebot verwendet wird.',
-            ], 422);
-        }
-
-        // Paket 2b — Angebotsreife-Gate (zentraler Guard, read-only, nur WP, nur bei offenen Blockern; kein Override).
-        $reifeGate = app(\App\Services\Offer\OfferReadinessGate::class)->pruefe($customerId, $alternativeId, $productId);
-        if ($reifeGate) {
-            return response()->json([
-                'success' => false,
-                'code' => 'OFFER_NOT_READY',
-                'message' => $reifeGate['hinweis'],
-                'blocker' => $reifeGate['blocker'],
-            ], 422);
-        }
-
         $result = DB::transaction(function () use ($validated, $template, $employeeId) {
             $customerId = (int) $validated['customer_id'];
             $alternativeId = $validated['alternative_id'] ?? null;
