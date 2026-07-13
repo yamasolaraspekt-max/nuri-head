@@ -293,4 +293,37 @@ class UseTemplateGateTest extends TestCase
         $this->assertDatabaseCount('offer_folders', 0);
         $this->assertDatabaseCount('offer_details', 0);
     }
+
+    // ---------- H3: Non-WP + null → sauberes 422 statt 500 (offers.alternative_id NOT NULL) ----------
+
+    public function test_h3_nonwp_ohne_objekt_wird_abgewiesen(): void
+    {
+        // Non-WP (Produkt 3) OHNE alternative_id → früher 500 (offers.alternative_id NOT NULL), jetzt 422.
+        $k = $this->wpKombi(870, reif: false, productId: 3);
+        $tpl = $this->makeTemplate(87, articleGroupId: 3);
+
+        $res = $this->actingAs($this->admin())->postJson(route('offer-templates.use', $tpl), [
+            'customer_id' => $k['customer'], 'product_id' => 3, 'folder_name' => 'Ordner', // KEIN alternative_id
+        ]);
+
+        $res->assertStatus(422)->assertJsonPath('code', 'OFFER_OBJECT_REQUIRED');
+        $this->assertLessThan(500, $res->status(), 'Kein 500 mehr (Guard greift vor Offer::create).');
+        $this->assertDatabaseCount('offers', 0);
+        $this->assertDatabaseCount('offer_folders', 0);
+        $this->assertDatabaseCount('offer_details', 0);
+    }
+
+    public function test_h3_nonwp_mit_gueltigem_objekt_wird_angelegt(): void
+    {
+        // Non-WP MIT gültigem eigenem Objekt → Anlage wie bisher (unverändert).
+        $k = $this->wpKombi(880, reif: false, productId: 3);
+        $tpl = $this->makeTemplate(88, articleGroupId: 3);
+
+        $res = $this->actingAs($this->admin())->postJson(route('offer-templates.use', $tpl), [
+            'customer_id' => $k['customer'], 'alternative_id' => $k['alternative'], 'product_id' => 3, 'folder_name' => 'Ordner',
+        ]);
+
+        $res->assertSuccessful();
+        $this->assertDatabaseCount('offers', 1);
+    }
 }

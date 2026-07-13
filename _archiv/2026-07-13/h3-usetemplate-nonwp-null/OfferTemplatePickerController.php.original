@@ -350,15 +350,6 @@ class OfferTemplatePickerController extends Controller
             ], 422);
         }
 
-        // H3 — offers.alternative_id ist NOT NULL: jedes Angebot braucht ein Objekt (auch Non-WP) → sauberes 422 statt 500.
-        if ($alternativeId === null) {
-            return response()->json([
-                'success' => false,
-                'code' => 'OFFER_OBJECT_REQUIRED',
-                'message' => 'Bitte zuerst ein Objekt auswählen, bevor eine Vorlage als Angebot verwendet wird.',
-            ], 422);
-        }
-
         // Paket 2b — Angebotsreife-Gate (zentraler Guard, read-only, nur WP, nur bei offenen Blockern; kein Override).
         $reifeGate = app(\App\Services\Offer\OfferReadinessGate::class)->pruefe($customerId, $alternativeId, $productId);
         if ($reifeGate) {
