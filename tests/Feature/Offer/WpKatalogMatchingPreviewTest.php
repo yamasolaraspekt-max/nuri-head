@@ -171,6 +171,51 @@ class WpKatalogMatchingPreviewTest extends TestCase
         $this->assertFalse($r['anwendbar']);
     }
 
+    // ---------- P3-d0a-fix: alle WP-Sets ----------
+
+    private function zweitesWpSet(int $setId, int $productId, string $name, ?string $status = null): void
+    {
+        DB::table('master_sets')->insert(['id' => $setId, 'article_group_id' => 2, 'name' => $name, 'status' => $status, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('master_set_components')->insert(['master_set_id' => $setId, 'product_id' => $productId, 'article_no' => 'ART-'.$setId, 'unit_price' => 9999, 'purchase_price' => 7777, 'created_at' => now(), 'updated_at' => now()]);
+    }
+
+    public function test_alle_wp_sets_werden_gelesen_und_schnittmenge_ueber_alle(): void
+    {
+        // Zweites WP-Set mit Spec-Produkt 101 (hat Specs aus setUp) → Schnittmenge muss 1 werden.
+        $this->zweitesWpSet(3, 101, 'WP-Set (kuratiert Test)', 'kuratiert');
+
+        $r = $this->service()->fuerId($this->wpLead(200));
+
+        // beide Sets gelesen (Set 2 = Demo-Produkt 9, Set 3 = 101)
+        $setIds = collect($r['set_produkte'])->pluck('set_id')->unique()->sort()->values()->all();
+        $this->assertSame([2, 3], $setIds);
+
+        // Schnittmenge über alle Sets: 101 ist in Specs UND jetzt in Set 3
+        $this->assertSame(1, $r['schnittmenge']);
+        $eintrag101 = collect($r['set_produkte'])->firstWhere('set_id', 3);
+        $this->assertSame('eindeutig_gemappt', $eintrag101['status']);
+    }
+
+    public function test_ist_zustand_bleibt_null_bei_nur_set2(): void
+    {
+        // Kein zweites Set → nur Set 2 (Demo, ohne Specs) → Schnittmenge bleibt 0.
+        $r = $this->service()->fuerId($this->wpLead(210));
+        $this->assertSame(0, $r['schnittmenge']);
+    }
+
+    public function test_set_herkunft_marker_basiert(): void
+    {
+        $this->zweitesWpSet(4, 102, 'WP-Set (kuratiert)', 'kuratiert');
+        $this->zweitesWpSet(5, 103, 'Irgendein Set', 'demo');
+
+        $r = $this->service()->fuerId($this->wpLead(220));
+        $herkunft = collect($r['set_produkte'])->groupBy('set_id')->map(fn ($g) => $g->first()['set_herkunft']);
+
+        $this->assertSame('unbekannt', $herkunft[2]); // Set 2 „Wärmepumpe-Set Standard" ohne Marker
+        $this->assertSame('kuratiert', $herkunft[4]);
+        $this->assertSame('demo', $herkunft[5]);
+    }
+
     // ---------- Route (read-only Panel) ----------
 
     public function test_panel_route_rendert_read_only(): void

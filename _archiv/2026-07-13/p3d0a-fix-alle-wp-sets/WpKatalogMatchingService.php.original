@@ -107,9 +107,6 @@ class WpKatalogMatchingService
             }
 
             $setProdukte[] = [
-                'set_id' => $s->set_id !== null ? (int) $s->set_id : null,
-                'set_name' => $s->set_name ?: '—',
-                'set_herkunft' => $this->setHerkunft($s->set_status ?? null, $s->set_name ?? null),
                 'name' => $s->produkt ?: ($s->modell ?: '—'),
                 'hersteller' => $s->hersteller ?: '—',
                 'article_no' => $s->article_no ?: '—',
@@ -165,18 +162,18 @@ class WpKatalogMatchingService
             ->all();
     }
 
-    /**
-     * Liest die Komponenten ALLER WP-Sets (article_group_id=2), nicht nur des ersten.
-     * @return array<int,object>
-     */
+    /** @return array<int,object> */
     private function setProdukteLesen(): array
     {
+        $setId = DB::table('master_sets')->where('article_group_id', self::GEWERK_WP)->orderBy('id')->value('id');
+        if ($setId === null) {
+            return [];
+        }
+
         return DB::table('master_set_components as c')
-            ->join('master_sets as s', 's.id', '=', 'c.master_set_id')
             ->leftJoin('products as p', 'p.id', '=', 'c.product_id')
             ->leftJoin('brands as b', 'b.id', '=', 'p.brand_id')
-            ->where('s.article_group_id', self::GEWERK_WP)
-            ->whereNull('s.deleted_at')
+            ->where('c.master_set_id', $setId)
             ->select([
                 'c.product_id',
                 'c.article_no',
@@ -186,11 +183,7 @@ class WpKatalogMatchingService
                 'p.model as modell',
                 'b.name as hersteller',
                 'p.article_group',
-                's.id as set_id',
-                's.name as set_name',
-                's.status as set_status',
             ])
-            ->orderBy('s.id')
             ->orderBy('c.id')
             ->get()
             ->all();
@@ -209,24 +202,6 @@ class WpKatalogMatchingService
      * können dann nicht divergieren, wohl aber die Gewerk-Zuordnung (Katalog-Datenfehler).
      * @return array<int,string>
      */
-    /**
-     * Herkunft eines WP-Sets — rein marker-basiert (keine Annahme):
-     * 'kuratiert'/'demo' nur bei explizitem Marker in status/name, sonst 'unbekannt'.
-     */
-    private function setHerkunft($status, $name): string
-    {
-        $s = mb_strtolower(trim((string) $status));
-        $n = mb_strtolower(trim((string) $name));
-        if ($s === 'kuratiert' || str_contains($n, 'kuratiert')) {
-            return 'kuratiert';
-        }
-        if ($s === 'demo' || str_contains($n, 'demo')) {
-            return 'demo';
-        }
-
-        return 'unbekannt';
-    }
-
     private function artikelgruppenKonflikt($articleGroup): array
     {
         if ($articleGroup !== null && (int) $articleGroup !== self::GEWERK_WP) {

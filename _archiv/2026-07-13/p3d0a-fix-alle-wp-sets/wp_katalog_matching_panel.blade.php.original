@@ -77,43 +77,26 @@
                 @endforelse
             </div>
 
-            {{-- RECHTS: Preis-Set-Produkte, gruppiert je WP-Set --}}
-            @php
-                $herkunftFarbe = [
-                    'kuratiert' => ['#166534', '#dcfce7'],
-                    'demo'      => ['#92400e', '#fef3c7'],
-                    'unbekannt' => ['#374151', '#f3f4f6'],
-                ];
-                $setGruppen = collect($m['set_produkte'] ?? [])->groupBy('set_id');
-            @endphp
+            {{-- RECHTS: Preis-Set-Produkte --}}
             <div style="flex:1;min-width:280px;">
-                <div style="font-weight:800;color:#111827;margin-bottom:8px;">Preis-Set-Produkte <span style="color:#6b7280;font-weight:600;">(je WP-Set)</span></div>
-                @forelse ($setGruppen as $setId => $gruppe)
-                    @php $g0 = $gruppe->first(); $hf = $herkunftFarbe[$g0['set_herkunft'] ?? 'unbekannt'] ?? $herkunftFarbe['unbekannt']; @endphp
-                    <div style="border:1px solid #e5e7eb;border-radius:8px;padding:8px 10px;margin-bottom:10px;background:#fcfcfd;">
-                        <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
-                            <span style="font-weight:800;color:#111827;">Set: {{ $g0['set_name'] ?? '—' }}</span>
-                            <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;color:{{ $hf[0] }};background:{{ $hf[1] }};">{{ $g0['set_herkunft'] ?? 'unbekannt' }}</span>
+                <div style="font-weight:800;color:#111827;margin-bottom:8px;">Preis-Set-Produkte <span style="color:#6b7280;font-weight:600;">(bepreist, ohne Kennlinie)</span></div>
+                @forelse (($m['set_produkte'] ?? []) as $s)
+                    <div style="border:1px solid #eef2f7;border-radius:8px;padding:8px 10px;margin-bottom:6px;">
+                        <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                            <span style="font-weight:700;color:#111827;">{{ $s['hersteller'] }} · {{ $s['name'] }}</span>
+                            <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;{{ $badge($s['status']) }}">{{ $s['status'] }}</span>
                         </div>
-                        @foreach ($gruppe as $s)
-                            <div style="border:1px solid #eef2f7;border-radius:8px;padding:8px 10px;margin-bottom:6px;background:#fff;">
-                                <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-                                    <span style="font-weight:700;color:#111827;">{{ $s['hersteller'] }} · {{ $s['name'] }}</span>
-                                    <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;{{ $badge($s['status']) }}">{{ $s['status'] }}</span>
-                                </div>
-                                <div style="color:#4b5563;font-size:12px;margin-top:3px;">
-                                    Art-Nr: {{ $s['article_no'] }}
-                                    @if (! is_null($s['vk_diagnostisch'])) · VK (diagn.): {{ $eur($s['vk_diagnostisch']) }} @endif
-                                    @if (! is_null($s['ek_diagnostisch'])) · EK (diagn.): {{ $eur($s['ek_diagnostisch']) }} @endif
-                                </div>
-                                <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;">
-                                    <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;color:{{ $s['hat_specs'] ? '#166534' : '#9a3412' }};background:{{ $s['hat_specs'] ? '#dcfce7' : '#ffedd5' }};">{{ $s['hat_specs'] ? 'Kennlinie vorhanden' : 'keine Kennlinie' }}</span>
-                                </div>
-                                @if (! empty($s['konflikt_felder']))
-                                    <div style="margin-top:4px;color:#991b1b;font-size:12px;">⚠ Konflikt: {{ implode(', ', $s['konflikt_felder']) }}</div>
-                                @endif
-                            </div>
-                        @endforeach
+                        <div style="color:#4b5563;font-size:12px;margin-top:3px;">
+                            Art-Nr: {{ $s['article_no'] }}
+                            @if (! is_null($s['vk_diagnostisch'])) · VK (diagn.): {{ $eur($s['vk_diagnostisch']) }} @endif
+                            @if (! is_null($s['ek_diagnostisch'])) · EK (diagn.): {{ $eur($s['ek_diagnostisch']) }} @endif
+                        </div>
+                        <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;">
+                            <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;color:{{ $s['hat_specs'] ? '#166534' : '#9a3412' }};background:{{ $s['hat_specs'] ? '#dcfce7' : '#ffedd5' }};">{{ $s['hat_specs'] ? 'Kennlinie vorhanden' : 'keine Kennlinie' }}</span>
+                        </div>
+                        @if (! empty($s['konflikt_felder']))
+                            <div style="margin-top:4px;color:#991b1b;font-size:12px;">⚠ Konflikt: {{ implode(', ', $s['konflikt_felder']) }}</div>
+                        @endif
                     </div>
                 @empty
                     <div style="color:#6b7280;font-size:12px;">Kein WP-Preis-Set gefunden.</div>
