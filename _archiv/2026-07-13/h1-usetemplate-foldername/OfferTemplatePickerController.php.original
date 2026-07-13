@@ -374,7 +374,7 @@ class OfferTemplatePickerController extends Controller
                 'alternative_id' => $alternativeId,
                 'product_id' => $productId,
                 'created_by' => $employeeId,
-                'name' => ($validated['folder_name'] ?? null) ?: $template->name . ' - ' . now()->format('d.m.Y H:i'),
+                'name' => $validated['folder_name'] ?: $template->name . ' - ' . now()->format('d.m.Y H:i'),
                 'color' => $template->brand_color ?: '#2563eb',
                 'status' => 'draft',
                 'document_status' => OfferFolder::DOCUMENT_STATUS_OFFER,

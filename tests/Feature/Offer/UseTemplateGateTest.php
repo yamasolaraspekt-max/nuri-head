@@ -197,4 +197,37 @@ class UseTemplateGateTest extends TestCase
             $this->assertStringNotContainsString($pii, $body, "PII '$pii' darf nicht in der Fehlerantwort stehen.");
         }
     }
+
+    // ---------- H1: optionales folder_name ohne "Undefined array key" ----------
+
+    public function test_ohne_folder_name_kein_500_und_fallback_name(): void
+    {
+        $k = $this->wpKombi(800, reif: true);
+        $tpl = $this->makeTemplate(80); // Template-Name = "WP-Vorlage"
+
+        // KEIN folder_name im Request → früher "Undefined array key".
+        $res = $this->actingAs($this->admin())->postJson(route('offer-templates.use', $tpl), [
+            'customer_id' => $k['customer'], 'alternative_id' => $k['alternative'], 'product_id' => 2,
+        ]);
+
+        $this->assertLessThan(500, $res->status(), 'Kein 500 (Undefined array key behoben).');
+        $res->assertSuccessful();
+        $this->assertDatabaseCount('offer_folders', 1);
+        $name = DB::table('offer_folders')->value('name');
+        $this->assertStringStartsWith('WP-Vorlage', (string) $name, 'Fallback = Template-Name bei fehlendem folder_name.');
+    }
+
+    public function test_mit_folder_name_wird_exakt_uebernommen(): void
+    {
+        $k = $this->wpKombi(810, reif: true);
+        $tpl = $this->makeTemplate(81);
+
+        $res = $this->actingAs($this->admin())->postJson(route('offer-templates.use', $tpl), [
+            'customer_id' => $k['customer'], 'alternative_id' => $k['alternative'], 'product_id' => 2,
+            'folder_name' => 'Mein Ordner',
+        ]);
+
+        $res->assertSuccessful();
+        $this->assertDatabaseHas('offer_folders', ['name' => 'Mein Ordner']);
+    }
 }
