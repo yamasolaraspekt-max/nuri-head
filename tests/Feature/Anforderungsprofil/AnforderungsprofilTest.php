@@ -7,6 +7,7 @@ use App\Models\AnforderungsprofilWert;
 use App\Models\Employee;
 use App\Models\LeadAlternativeAdd;
 use App\Services\Anforderungsprofil\AnforderungsprofilService;
+use App\Services\Anforderungsprofil\StaleProfilVersionException;
 use Database\Factories\AnforderungsprofilFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use RuntimeException;
@@ -125,6 +126,60 @@ class AnforderungsprofilTest extends TestCase
         $this->assertSame(Anforderungsprofil::STATUS_ABGELOEST, $v1->status);
         $this->assertSame($v2->id, $v1->abgeloest_durch_id);
         $this->assertSame('9.6000', $v1->werte()->where('schluessel', 'phi_hl_kw')->first()->wert_num); // v1-Wert unangetastet
+    }
+
+    /**
+     * Stufe 3b P0 (Auflage B) — optimistische Nebenläufigkeits-Kontrolle. Deterministische Gegenprobe des
+     * Lost-Update-Szenarios: eine VERALTETE Basis (version 1), obwohl bereits eine höhere Version existiert.
+     * Zielverhalten (Yama/Planner): der Save auf der stale Basis wird als Konflikt ABGELEHNT — es entsteht
+     * KEINE automatische Folgeversion aus alten Daten, der erste erfolgreiche Save bleibt vollständig erhalten.
+     */
+    public function test_neue_version_auf_stale_basis_wird_als_konflikt_abgelehnt(): void
+    {
+        $anker = AnforderungsprofilFactory::objektAnker();
+        $svc = $this->service();
+
+        $v1 = $svc->anlegen($anker, 'Bestand', $this->beispielWerte());
+        $v2 = $svc->neueVersion($v1); // v1 (Kopf) -> v2 (v1 wird abgelöst, v2 ist neuer Kopf)
+        $this->assertSame(2, $v2->version);
+
+        // Zweiter Aufruf mit der inzwischen STALE Basis $v1 → muss abgelehnt werden (kein stilles v3).
+        try {
+            $svc->neueVersion($v1);
+            $this->fail('Erwartete StaleProfilVersionException bei veralteter Basis.');
+        } catch (StaleProfilVersionException $e) {
+            $this->assertSame(1, $e->basisVersion);
+            $this->assertSame(2, $e->aktuelleVersion);
+        }
+
+        // Kette unverändert: nur [1,2], kein Duplikat, v2 bleibt vollständig erhalten.
+        $versionen = Anforderungsprofil::query()
+            ->where('verankerbar_type', $anker->getMorphClass())
+            ->where('verankerbar_id', $anker->getKey())
+            ->orderBy('version')->pluck('version')->all();
+        $this->assertSame([1, 2], $versionen, 'Stale-Save darf keine Folgeversion erzeugt haben.');
+        $this->assertSame(Anforderungsprofil::STATUS_ABGELOEST, $v1->refresh()->status);
+    }
+
+    /**
+     * Positiver Pfad: nacheinander auf dem jeweils AKTUELLEN Kopf versionieren ist zulässig und
+     * ergibt eine lineare Kette 1→2→3 (jede Basis ist zum Aufrufzeitpunkt der Kopf).
+     */
+    public function test_neue_version_auf_aktuellem_kopf_bildet_lineare_kette(): void
+    {
+        $anker = AnforderungsprofilFactory::objektAnker();
+        $svc = $this->service();
+
+        $v1 = $svc->anlegen($anker, 'Bestand', $this->beispielWerte());
+        $v2 = $svc->neueVersion($v1);
+        $v3 = $svc->neueVersion($v2->refresh()); // Kopf frisch übergeben
+
+        $this->assertSame(3, $v3->version);
+        $versionen = Anforderungsprofil::query()
+            ->where('verankerbar_type', $anker->getMorphClass())
+            ->where('verankerbar_id', $anker->getKey())
+            ->orderBy('version')->pluck('version')->all();
+        $this->assertSame([1, 2, 3], $versionen);
     }
 
     public function test_ein_aktiv_invariante_je_verankerung(): void

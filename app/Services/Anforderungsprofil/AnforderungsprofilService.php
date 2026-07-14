@@ -65,19 +65,41 @@ class AnforderungsprofilService
     public function neueVersion(Anforderungsprofil $basis, array $geaenderteWerte = [], ?int $erfasserId = null): Anforderungsprofil
     {
         return DB::transaction(function () use ($basis, $geaenderteWerte, $erfasserId) {
+            // Stufe 3b P0 (Auflage B) — optimistische Nebenläufigkeits-Kontrolle der LINEAREN Versionskette:
+            // die Zeilen dieser Verankerung innerhalb der Transaktion exklusiv sperren und den maßgeblichen
+            // Ketten-Kopf frisch lesen. Zwei gleichzeitige neueVersion()-Aufrufe serialisieren am Lock;
+            // der zweite sieht dann eine höhere Version als seine Basis → seine Basis ist STALE.
+            // Zielverhalten (Yama/Planner): stale wird als Konflikt ABGELEHNT, NICHT als Folgeversion aus
+            // alten Daten angehängt (kein automatisches Rebase/Branching). So bleibt der erste erfolgreiche
+            // Save vollständig erhalten und es entsteht keine zweite Wahrheit.
+            $gesperrt = Anforderungsprofil::query()
+                ->where('verankerbar_type', $basis->verankerbar_type)
+                ->where('verankerbar_id', $basis->verankerbar_id)
+                ->lockForUpdate()
+                ->get();
+            $maxVersion = (int) $gesperrt->max('version');
+
+            if ((int) $basis->version < $maxVersion) {
+                // Eine neuere Version existiert bereits (Kopf verschoben) → übergebene Basis ist veraltet.
+                throw new StaleProfilVersionException((int) $basis->version, $maxVersion);
+            }
+
+            // Basis ist der aktuelle Kopf; frisch gesperrte Zeile ist die Kopierquelle.
+            $quelle = $gesperrt->firstWhere('id', $basis->getKey()) ?? $basis;
+
             $neu = new Anforderungsprofil([
-                'verankerbar_type' => $basis->verankerbar_type,
-                'verankerbar_id' => $basis->verankerbar_id,
-                'version' => $basis->version + 1,
+                'verankerbar_type' => $quelle->verankerbar_type,
+                'verankerbar_id' => $quelle->verankerbar_id,
+                'version' => $maxVersion + 1,
                 'status' => Anforderungsprofil::STATUS_ENTWURF,
-                'bezeichnung' => $basis->bezeichnung,
-                'created_by' => $erfasserId ?? $basis->created_by,
-                'gebaeude_geometrie' => $basis->gebaeude_geometrie, // B2a-3: Geometrie ist Teil der Version (Reproduzierbarkeit)
+                'bezeichnung' => $quelle->bezeichnung,
+                'created_by' => $erfasserId ?? $quelle->created_by,
+                'gebaeude_geometrie' => $quelle->gebaeude_geometrie, // B2a-3: Geometrie ist Teil der Version (Reproduzierbarkeit)
             ]);
             $neu->save();
 
             $werte = [];
-            foreach ($basis->werte()->get() as $w) {
+            foreach ($quelle->werte()->get() as $w) {
                 $werte[$w->schluessel] = [
                     'schluessel' => $w->schluessel, 'wert' => $w->wert, 'wert_num' => $w->wert_num,
                     'einheit' => $w->einheit, 'datenlage' => $w->datenlage,
@@ -89,9 +111,9 @@ class AnforderungsprofilService
             }
             $this->werteSchreiben($neu, $this->werteErgaenzen(array_values($werte)));
 
-            $basis->status = Anforderungsprofil::STATUS_ABGELOEST;
-            $basis->abgeloest_durch_id = $neu->getKey();
-            $basis->save();
+            $quelle->status = Anforderungsprofil::STATUS_ABGELOEST;
+            $quelle->abgeloest_durch_id = $neu->getKey();
+            $quelle->save();
 
             return $neu->load('werte');
         });
