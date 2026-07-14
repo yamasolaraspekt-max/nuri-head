@@ -6,7 +6,6 @@ use App\Models\Anforderungsprofil;
 use App\Models\LeadAlternativeAdd;
 use App\Models\LeadProductList;
 use App\Models\ProductFormula;
-use App\Services\Heizlast\HeizlastBelastbarkeit;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -126,8 +125,6 @@ class OfferReadinessService
             'naechster_schritt' => $naechster,
             'blocker_offen' => array_map(fn ($k) => $k['label'], $offeneHart),
             'hinweis' => $hinweis,
-            // AP-1 / Paket 5b: Belastbarkeit der technischen Auslegung (read-only, keine 2. Wahrheit).
-            'heizlast_belastbarkeit' => $this->heizlastBelastbarkeit($lpl),
             'kriterien' => array_map(fn ($k) => [
                 'key' => $k['key'],
                 'label' => $k['label'],
@@ -270,28 +267,10 @@ class OfferReadinessService
         return $required->intersect($filled)->count() / $required->count();
     }
 
-    /**
-     * AP-1 / Paket 5b: NICHT mehr binär durch bloße Existenz. Die technische Auslegung zählt
-     * nur voll, wenn die hinterlegte Heizlast BELASTBAR ist (raumweise DIN ohne geschätzte Eingaben);
-     * eingeschränkt/vorläufig zählen abgestuft (0.6/0.3), fehlend/unplausibel 0.0.
-     */
     private function gradTechnischeAuslegung(LeadProductList $lpl): float
     {
-        return (float) $this->heizlastBelastbarkeit($lpl)['reifegrad'];
-    }
-
-    /**
-     * Read-only Belastbarkeits-Einstufung der aktiven Heizlast (keine Persistenz, keine 2. Wahrheit).
-     * Liest den ersten vorhandenen Auslegungs-Schlüssel samt datenlage/quelle/erfassungsweg aus dem
-     * aktiven Anforderungsprofil und wertet zusätzlich einen gesetzten `ergebnis_hinweis` als
-     * „Eingaben unsicher" (geschätzte/ungeprüfte Eingaben) → deckelt auf eingeschränkt.
-     *
-     * @return array{stufe:string,label:string,reifegrad:float,verbindlich:bool,hinweis:?string}
-     */
-    private function heizlastBelastbarkeit(LeadProductList $lpl): array
-    {
         try {
-            $profil = Anforderungsprofil::query()
+            $exists = Anforderungsprofil::query()
                 ->aktiv()
                 ->where(function ($w) use ($lpl) {
                     $w->where(function ($a) use ($lpl) {
@@ -302,37 +281,12 @@ class OfferReadinessService
                             ->where('verankerbar_id', $lpl->id);
                     });
                 })
-                ->with('werte')
-                ->orderByDesc('version')
-                ->first();
+                ->whereHas('werte', fn ($x) => $x->whereIn('schluessel', self::AUSLEGUNG_KEYS))
+                ->exists();
 
-            if (! $profil) {
-                return HeizlastBelastbarkeit::fehlend();
-            }
-
-            $werte = $profil->werte->keyBy('schluessel');
-            $heizlast = null;
-            foreach (self::AUSLEGUNG_KEYS as $key) {
-                if ($werte->has($key)) {
-                    $heizlast = $werte[$key];
-                    break;
-                }
-            }
-            if (! $heizlast) {
-                return HeizlastBelastbarkeit::fehlend();
-            }
-
-            $eingabenUnsicher = $werte->has('ergebnis_hinweis');
-
-            return HeizlastBelastbarkeit::beurteile(
-                $heizlast->datenlage,
-                $heizlast->quelle,
-                $heizlast->erfassungsweg,
-                $heizlast->wert_num !== null ? (float) $heizlast->wert_num : null,
-                $eingabenUnsicher,
-            );
+            return $exists ? 1.0 : 0.0;
         } catch (Throwable $e) {
-            return HeizlastBelastbarkeit::fehlend(); // konservativ: ohne belegte Auslegung = unzureichend
+            return 0.0; // konservativ: ohne belegte Auslegung = offen
         }
     }
 

@@ -5,7 +5,6 @@ namespace App\Services\Offer;
 use App\Models\Anforderungsprofil;
 use App\Models\LeadAlternativeAdd;
 use App\Models\LeadProductList;
-use App\Services\Heizlast\HeizlastBelastbarkeit;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -56,18 +55,6 @@ class AuslegungVorschlagService
         $vorlauf = $werte['vorlauf_c'] ?? null;
         $auslegungVorhanden = $heizlast !== null;
 
-        // AP-1 / Paket 5b: Belastbarkeit der Heizlast → Vorschau bleibt lauffähig, wird aber markiert.
-        $belastbarkeit = ($heizlast && $heizlast['wert_num'] !== null)
-            ? HeizlastBelastbarkeit::beurteile(
-                $heizlast['datenlage'] ?? null,
-                $heizlast['quelle'] ?? null,
-                $heizlast['erfassungsweg'] ?? null,
-                $heizlast['wert_num'],
-                isset($werte['ergebnis_hinweis']),
-            )
-            : HeizlastBelastbarkeit::fehlend();
-        $verbindlich = $belastbarkeit['verbindlich'];
-
         $positionen = [
             $this->positionGeraet($heizlast),
             $this->positionPuffer(),
@@ -83,11 +70,8 @@ class AuslegungVorschlagService
             'anwendbar' => true,
             'gewerk_id' => self::GEWERK_WP,
             'auslegung_vorhanden' => $auslegungVorhanden,
-            // AP-1 / Paket 5b: read-only Vorschau, aber Verbindlichkeit ehrlich ausweisen.
-            'verbindlich' => $verbindlich,
-            'belastbarkeit' => $belastbarkeit,
-            'kurzergebnis' => $this->kurzergebnis($auslegungVorhanden, $heizlast, $vorlauf, $belastbarkeit),
-            'gesamt_ampel' => $auslegungVorhanden ? ($verbindlich ? ($vorlauf ? 'gruen' : 'gelb') : 'gelb') : 'grau',
+            'kurzergebnis' => $this->kurzergebnis($auslegungVorhanden, $heizlast, $vorlauf),
+            'gesamt_ampel' => $auslegungVorhanden ? ($vorlauf ? 'gruen' : 'gelb') : 'grau',
             'offene_aufgaben' => $offeneAufgaben,
             'katalog_hinweis' => $this->katalogHinweis(),
             'foerderung_hinweis' => $this->foerderungHinweis(),
@@ -132,8 +116,6 @@ class AuslegungVorschlagService
                     'wert_num' => $w->wert_num !== null ? (float) $w->wert_num : null,
                     'einheit' => $w->einheit,
                     'datenlage' => $w->datenlage,
-                    'quelle' => $w->quelle,
-                    'erfassungsweg' => $w->erfassungsweg,
                 ];
             }
 
@@ -275,8 +257,7 @@ class AuslegungVorschlagService
         ];
     }
 
-    /** @param array{stufe:string,label:string,reifegrad:float,verbindlich:bool,hinweis:?string}|null $belastbarkeit */
-    private function kurzergebnis(bool $vorhanden, ?array $heizlast, ?array $vorlauf, ?array $belastbarkeit = null): string
+    private function kurzergebnis(bool $vorhanden, ?array $heizlast, ?array $vorlauf): string
     {
         if (! $vorhanden) {
             return 'Noch keine Auslegung — Heizlast im Anforderungsprofil fehlt. Zuerst Auslegung rechnen.';
@@ -287,11 +268,7 @@ class AuslegungVorschlagService
             $teile[] = 'Vorlauf '.$this->fmt($vorlauf).' °C';
         }
 
-        $marke = ($belastbarkeit && ! $belastbarkeit['verbindlich'])
-            ? ' UNVERBINDLICH – Datenlage '.$belastbarkeit['label'].' (kein verbindliches Ranking).'
-            : '';
-
-        return 'WP-Auslegung: '.implode(', ', $teile).'. Positionen als Vorschlag, nicht bepreist.'.$marke;
+        return 'WP-Auslegung: '.implode(', ', $teile).'. Positionen als Vorschlag, nicht bepreist.';
     }
 
     private function fmt(?array $wert): string
@@ -307,8 +284,6 @@ class AuslegungVorschlagService
             'anwendbar' => false,
             'gewerk_id' => 0,
             'auslegung_vorhanden' => false,
-            'verbindlich' => false,
-            'belastbarkeit' => HeizlastBelastbarkeit::fehlend(),
             'kurzergebnis' => $grund,
             'gesamt_ampel' => 'grau',
             'offene_aufgaben' => 0,

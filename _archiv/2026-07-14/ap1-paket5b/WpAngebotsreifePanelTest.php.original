@@ -61,7 +61,7 @@ class WpAngebotsreifePanelTest extends TestCase
             ]);
             $this->relax(function () use ($aid) {
                 DB::table('anforderungsprofile')->insert(['id' => 1, 'verankerbar_type' => LeadAlternativeAdd::class, 'verankerbar_id' => $aid, 'version' => 1, 'status' => 'aktiv', 'created_at' => now(), 'updated_at' => now()]);
-                DB::table('anforderungsprofil_werte')->insert(['id' => 1, 'anforderungsprofil_id' => 1, 'schluessel' => 'phi_hl_kw', 'wert_num' => 8.5, 'datenlage' => 'berechnet', 'quelle' => 'HeizlastRechner', 'erfassungsweg' => 'berechnet', 'created_at' => now(), 'updated_at' => now()]);
+                DB::table('anforderungsprofil_werte')->insert(['id' => 1, 'anforderungsprofil_id' => 1, 'schluessel' => 'phi_hl_kw', 'wert_num' => 8.5, 'created_at' => now(), 'updated_at' => now()]);
             });
         }
     }

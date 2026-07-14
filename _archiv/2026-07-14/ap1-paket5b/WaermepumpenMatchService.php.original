@@ -18,18 +18,16 @@ class WaermepumpenMatchService
     public function __construct(private CatalogDeviceRepository $repo = new CatalogDeviceRepository) {}
 
     /**
-     * @param  bool  $belastbar  AP-1/Paket 5b: false ⇒ das Ranking wird als UNVERBINDLICH markiert
-     *                           (Heizlast nicht belastbar). Default true = unverändertes Verhalten.
-     * @return array{geraete: array<int, array<string, mixed>>, design_punkt: ?string, hinweis: ?string, verbindlich: bool}
+     * @return array{geraete: array<int, array<string, mixed>>, design_punkt: ?string, hinweis: ?string}
      */
-    public function kandidaten(float $benoetigtKw, string $wpTyp, string $heizsystem, float $vorlaufC, int $limit = 6, bool $belastbar = true): array
+    public function kandidaten(float $benoetigtKw, string $wpTyp, string $heizsystem, float $vorlaufC, int $limit = 6): array
     {
         // Die Geräte-DB enthält aktuell ausschließlich Luft/Wasser-Monoblocks (R290).
         if ($wpTyp !== 'luft_wasser') {
-            return ['geraete' => [], 'design_punkt' => null, 'hinweis' => 'Die Geräte-Datenbank enthält aktuell nur Luft/Wasser-Wärmepumpen.', 'verbindlich' => false];
+            return ['geraete' => [], 'design_punkt' => null, 'hinweis' => 'Die Geräte-Datenbank enthält aktuell nur Luft/Wasser-Wärmepumpen.'];
         }
         if ($benoetigtKw <= 0) {
-            return ['geraete' => [], 'design_punkt' => null, 'hinweis' => null, 'verbindlich' => false];
+            return ['geraete' => [], 'design_punkt' => null, 'hinweis' => null];
         }
 
         $useW55 = in_array($heizsystem, ['heizkoerper', 'beides'], true);
@@ -73,8 +71,7 @@ class WaermepumpenMatchService
         return [
             'geraete' => $geraete->all(),
             'design_punkt' => $useW55 ? 'A-7 / W55' : 'A-7 / W35',
-            'hinweis' => $belastbar ? null : 'Heizlast nicht belastbar — Geräte-Ranking nur als unverbindliche Vorschau.',
-            'verbindlich' => $belastbar,
+            'hinweis' => null,
         ];
     }
 
