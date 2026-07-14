@@ -818,10 +818,6 @@ Route::group(['middleware' => ['web', 'auth']], function(){
     Route::get('/new-leads/{id}/history-feed', [NewLeadsController::class, 'loadHistoryFeed'])->name('new_leads.history_feed');
     Route::get('/lead_pv_edit/{customer}/{alternative}', [NewLeadsController::class, 'pv_edit'])->name('lead.pv.edit');
     Route::get('/new_lead_profile_object/{id}/{alternative}', [NewLeadsController::class, 'object_profile'])->name('new.lead.profile.object');
-    // AP-3a — READ-ONLY Konfigurationsprojekt-Sicht je Objekt (Aggregation aktivierte Gewerke; kein Write, keine neue Tabelle).
-    Route::get('/objekt/{alternative}/konfiguration', [\App\Http\Controllers\Customer\Offer\KonfigurationsprojektController::class, 'show'])
-        ->whereNumber('alternative')
-        ->name('objekt.konfiguration');
     Route::post('/update-field-pv', [NewLeadsController::class, 'updateFieldPV'])->name('update-field.pv');
     Route::get('/new_lead_delete/{id}', [NewLeadsController::class, 'destroy'])->name('new.lead.delete');
     Route::get('/get_customer_details/{id}', [NewLeadsController::class, 'getCustomer'])->name('new.lead.get.customer');
