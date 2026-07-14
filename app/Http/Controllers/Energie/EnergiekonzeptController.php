@@ -8,7 +8,7 @@ use App\Models\HeizlastProjekt;
 use App\Models\HeizlastRaum;
 use App\Models\SanierungsVariante;
 use App\Repositories\CatalogDeviceRepository;
-use App\Services\Energie\KostenService;
+use App\Services\Auslegung\WpCostingService;
 use App\Services\Energie\PvgisErtragService;
 use App\Services\Heizlast\FoerderungService;
 use App\Services\Heizlast\HeizlastEingabe;
@@ -41,7 +41,7 @@ class EnergiekonzeptController extends Controller
         private CatalogDeviceRepository $repo = new CatalogDeviceRepository,
         private JazService $jaz = new JazService,
         private WarmwasserService $ww = new WarmwasserService,
-        private KostenService $kosten = new KostenService,
+        private WpCostingService $costing = new WpCostingService,
         private FoerderungService $foerderung = new FoerderungService,
         private ?SanierungsWirtschaftlichkeitService $sanierung = null,
         private ?KlimaPlzService $klimaPlz = null,
@@ -291,11 +291,10 @@ class EnergiekonzeptController extends Controller
         $qWwKwh = $this->ww->qWwKwh($e);
         $qHeizKwh = $heizlastKw * HeizlastKonstanten::B_VH_DEFAULT;
         $stromKwh = $this->jaz->stromverbrauch($e, $qHeizKwh, $qWwKwh);
-        $stromkostenJahr = $stromKwh * $strompreis;
 
-        // Investitionssumme (KostenService – eine Wahrheit für die förderfähigen Kosten).
-        $kosten = $this->kosten->berechne([], null, null, (float) ($in['investition'] ?? 0));
-        $investitionNetto = $kosten['summe_netto'];
+        // WP-Kosten (P1b-1: WpCostingService, verhaltensgleich extrahiert): Investition (summe_netto) + Stromkosten.
+        $kostenErg = $this->costing->berechne((float) ($in['investition'] ?? 0), $stromKwh, $strompreis);
+        $investitionNetto = $kostenErg->investitionNetto;
 
         // KfW/BEG-Förderung (FoerderungService::berechne) — Aufruf wie in wpErgebnis.
         $foerderung = $this->foerderung->berechne([
@@ -315,7 +314,7 @@ class EnergiekonzeptController extends Controller
             'modell' => $hp->modell,
             'jaz' => round($jaz, 2),
             'strom_kwh' => round($stromKwh),
-            'stromkosten_jahr' => round($stromkostenJahr),
+            'stromkosten_jahr' => round($kostenErg->stromkostenJahr),
             'investition_netto' => $investitionNetto,
             'foerderung' => [
                 'zuschuss' => $foerderung['zuschuss'],

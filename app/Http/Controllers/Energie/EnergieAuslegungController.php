@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Energie;
 use App\Http\Controllers\Controller;
 use App\Repositories\CatalogDeviceRepository;
 use App\Services\Energie\InverterSizingService;
-use App\Services\Energie\KostenService;
+use App\Services\Auslegung\WpCostingService;
 use App\Services\Heizlast\FoerderungService;
 use App\Services\Heizlast\HeizlastEingabe;
 use App\Services\Heizlast\HeizlastKonstanten;
@@ -28,7 +28,7 @@ class EnergieAuslegungController extends Controller
         private InverterSizingService $service = new InverterSizingService,
         private JazService $jaz = new JazService,
         private WarmwasserService $ww = new WarmwasserService,
-        private KostenService $kosten = new KostenService,
+        private WpCostingService $costing = new WpCostingService,
         private FoerderungService $foerderung = new FoerderungService,
     ) {}
 
@@ -403,14 +403,13 @@ class EnergieAuslegungController extends Controller
         $bvh = HeizlastKonstanten::B_VH_DEFAULT;
         $qHeizKwh = (float) $data['heizlast_kw'] * $bvh;
         $stromKwh = $this->jaz->stromverbrauch($e, $qHeizKwh, $qWwKwh);
-        $stromkostenJahr = $stromKwh * $strompreis;
 
         // Optionale Verbrauchsmethode zur Plausibilisierung (null, wenn kein Verbrauch angegeben).
         $verbrauchPlausi = (new VerbrauchsService($this->ww))->berechne($e);
 
-        // Investitionssumme (KostenService – eine Wahrheit für die förderfähigen Kosten).
-        $kosten = $this->kosten->berechne([], null, null, (float) $data['investition']);
-        $investitionNetto = $kosten['summe_netto'];
+        // WP-Kosten (P1b-1: WpCostingService, verhaltensgleich extrahiert): Investition (summe_netto) + Stromkosten.
+        $kostenErg = $this->costing->berechne((float) $data['investition'], $stromKwh, $strompreis);
+        $investitionNetto = $kostenErg->investitionNetto;
 
         // KfW/BEG-Förderung (FoerderungService::berechne).
         $foerderung = $this->foerderung->berechne([
@@ -451,7 +450,7 @@ class EnergieAuslegungController extends Controller
             'q_ww_kwh' => round($qWwKwh),
             'strom_kwh' => round($stromKwh),
             'strompreis' => $strompreis,
-            'stromkosten_jahr' => round($stromkostenJahr),
+            'stromkosten_jahr' => round($kostenErg->stromkostenJahr),
             'ww' => $wwErgebnis,
             'ww_mit_wp' => $wwMitWp,
             'verbrauch_plausi' => $verbrauchPlausi,
