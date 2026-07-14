@@ -31,17 +31,6 @@ class GrundrissGateHttpTest extends TestCase
         return User::factory()->create(['password' => 'password', 'name' => 'gatetest', 'is_admin' => true]);
     }
 
-    /** Objekt (LeadAlternativeAdd) für den objektgebundenen Schreibpfad (G0c-2). */
-    private function objekt(int $seed = 700): int
-    {
-        $customer = $seed + 1;
-        $alt = $seed + 2;
-        DB::table('new_leads')->insert(['id' => $customer, 'customer_type' => 'privat', 'name' => 'K', 'lastname' => 'T', 'email' => 'gate@example.com', 'phone' => '0', 'created_at' => now(), 'updated_at' => now()]);
-        DB::table('lead_alternative_adds')->insert(['id' => $alt, 'lead_id' => $customer, 'street' => 'Weg 1', 'postcode' => '12345', 'city' => 'S', 'created_at' => now(), 'updated_at' => now()]);
-
-        return $alt;
-    }
-
     /** @return array<string,mixed> */
     private function payload(array $polygon): array
     {
@@ -76,24 +65,17 @@ class GrundrissGateHttpTest extends TestCase
         $this->assertNull($res->json('grundflaeche_m2'));
     }
 
-    /**
-     * G0c-2-Vertrag: speichern verlangt ein Objekt (alternative_id) VOR dem Gate. Mit Objekt wird das
-     * Topologie-Gate erreicht und lehnt den Bow-Tie ab — nichts wird persistiert (weder raum_geometrien
-     * noch eine Anforderungsprofil-Version). Beweist: das Gate bleibt auch am objektgebundenen Schreibpfad Pflicht.
-     */
     public function test_speichern_lehnt_ab_und_persistiert_nichts(): void
     {
         $vorher = DB::table('raum_geometrien')->count();
-        $payload = array_merge($this->payload($this->bowtie()), ['alternative_id' => $this->objekt()]);
 
         $res = $this->actingAs($this->admin())
-            ->postJson(route('energie.grundriss.speichern'), $payload);
+            ->postJson(route('energie.grundriss.speichern'), $this->payload($this->bowtie()));
 
         $res->assertStatus(422);
         $this->assertContains('selbstschnitt', collect($res->json('blocker'))->pluck('rule_key')->all());
         $this->assertSame($vorher, DB::table('raum_geometrien')->count(), 'Ungültige Geometrie wurde persistiert.');
         $this->assertSame(0, DB::table('heizlast_projekte')->count());
-        $this->assertSame(0, DB::table('anforderungsprofile')->count(), 'Ungültige Geometrie erzeugte eine Profil-Version.');
     }
 
     /** Autorisierungs-Angriff: der Ingestion-Endpunkt bleibt hinter Auth (kein anonymer Schreibversuch). */

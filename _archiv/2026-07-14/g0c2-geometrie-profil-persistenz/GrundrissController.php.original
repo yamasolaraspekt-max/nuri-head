@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Energie;
 
 use App\Http\Controllers\Controller;
-use App\Models\Anforderungsprofil;
 use App\Models\HeizlastProjekt;
 use App\Models\HeizlastRaum;
 use App\Models\Konstruktion;
-use App\Models\LeadAlternativeAdd;
 use App\Models\PlanUpload;
 use App\Models\RaumGeometrie;
-use App\Services\Anforderungsprofil\AnforderungsprofilService;
 use App\Services\Geometrie\GeometrieUngueltigException;
 use App\Services\Geometrie\TopologieGate;
 use App\Services\Heizlast\GeometrieAbleitungService;
@@ -45,7 +42,6 @@ class GrundrissController extends Controller
         private GeometrieAbleitungService $ableitung,
         private HeizlastProjektService $heizlast,
         private TopologieGate $gate,
-        private AnforderungsprofilService $profilService,
     ) {}
 
     /**
@@ -135,10 +131,6 @@ class GrundrissController extends Controller
             }
         }
 
-        // G0c-2: Objekt-Kontext (lead_alternative_add). Primärweg = Absprung aus AP-3a/Objektprofil.
-        // Ohne Objekt darf gezeichnet werden; die Persistenz verlangt aber ein Objekt (speichern → 422/Picker).
-        $alternativeId = $request->integer('alternative') ?: null;
-
         return view('admin.energie.grundriss_editor', [
             'konstruktionen' => Konstruktion::orderBy('name')->pluck('name', 'id'),
             'grenzflaechen' => self::GRENZFLAECHEN,
@@ -146,7 +138,6 @@ class GrundrissController extends Controller
             'projektId' => $projektId,
             'projektName' => $projektName,
             'raumId' => $raumId,
-            'alternativeId' => $alternativeId, // G0c-2: an die Speichern-Aktion durchreichen
             'import' => $this->importUnterlage($request),
         ]);
     }
@@ -249,31 +240,20 @@ class GrundrissController extends Controller
             return response()->json(['message' => 'Mindestens 3 Ecken zum Speichern nötig.'], 422);
         }
 
-        // G0c-2: objektgebundene Persistenz — objektlose Speicherung ist VERBOTEN (definierter 422).
-        // Die gezeichnete Geometrie im Client bleibt erhalten; der Nutzer wählt ein Objekt (Picker) und speichert erneut.
-        $alternativeId = $request->integer('alternative_id') ?: null;
-        if ($alternativeId === null) {
-            return response()->json([
-                'message' => 'Bitte ein Objekt wählen — eine objektlose Grundriss-Speicherung ist nicht möglich.',
-                'code' => 'objekt_fehlt',
-            ], 422);
-        }
-        $objekt = LeadAlternativeAdd::find($alternativeId);
-        if ($objekt === null) {
-            return response()->json(['message' => 'Objekt nicht gefunden.', 'code' => 'objekt_nicht_gefunden'], 422);
-        }
+        $projektId = $request->integer('projekt_id') ?: null;
+        $raumId = $request->integer('raum_id') ?: null;
 
         try {
-            $this->gatePruefung($data); // G0b: Topologie-Gate bleibt Pflicht vor jeder Persistenz
-            $result = DB::transaction(function () use ($data, $objekt) {
-                $geometrie = $this->baueGebaeudeGeometrie($data);              // Transform via ausGeometrie (Mirror nur aufgerufen)
-                $profil = $this->schreibeGeometrieVersion($objekt, $geometrie); // neue, versionierte, objekt-verankerte Wahrheit
+            $this->gatePruefung($data); // G0b: Topologie-Gate vor jeder Persistenz
+            $result = DB::transaction(function () use ($data, $projektId, $raumId) {
+                $projekt = $this->baueProjekt($data, $projektId, $raumId, persist: true);
+                $this->ableitung->schreibeInProjekt($projekt);
+                $raum = $projekt->raeume()->first();
 
                 return [
-                    'anforderungsprofil_id' => $profil->getKey(),
-                    'version' => $profil->version,
-                    'objekt_id' => $objekt->getKey(),
-                    'message' => 'Grundriss als Version '.$profil->version.' am Objekt gespeichert.',
+                    'projekt_id' => $projekt->getKey(),
+                    'raum_id' => $raum?->getKey(),
+                    'message' => 'Grundriss „'.$projekt->name.'" gespeichert.',
                 ];
             });
         } catch (GeometrieUngueltigException $e) {
@@ -283,52 +263,6 @@ class GrundrissController extends Controller
         }
 
         return response()->json($result);
-    }
-
-    /**
-     * G0c-2: Format-Transform der gezeichneten Geometrie in die `gebaeude_geometrie`-Struktur
-     * (raeume[]+bauteile[]). Ruft den Mirror `ausGeometrie` NUR auf (verändert ihn nicht) und
-     * persistiert nichts — das Ergebnis wird als Profil-Version geschrieben (schreibeGeometrieVersion).
-     *
-     * @param  array<string, mixed>  $data
-     * @return array<string, mixed>
-     */
-    private function baueGebaeudeGeometrie(array $data): array
-    {
-        $geo = new RaumGeometrie;
-        $geo->polygon = $data['polygon'];
-        $geo->wand_segmente = $data['wand_segmente'];
-        $geo->hoehe_mm = $data['hoehe_mm'];
-        $geo->geschoss = $data['geschoss'];
-        $geo->decke = $data['decke'];
-        $geo->boden = $data['boden'];
-        $raum = new HeizlastRaum;
-        $raum->name = $data['name'] !== '' ? $data['name'] : 'Grundriss';
-        $raum->nutzung = $data['nutzung'] !== '' ? $data['nutzung'] : 'wohnen';
-        $geo->setRelation('heizlastRaum', $raum);
-
-        return ['raeume' => [$this->ableitung->ausGeometrie($geo)]];
-    }
-
-    /**
-     * G0c-2: schreibt die Geometrie als NEUE, aktive Version des Anforderungsprofils am Objekt
-     * (append-only version/status). Kein destruktives Überschreiben, keine `raum_geometrien`-Persistenz.
-     */
-    private function schreibeGeometrieVersion(LeadAlternativeAdd $objekt, array $geometrie): Anforderungsprofil
-    {
-        $aktiv = Anforderungsprofil::query()->aktiv()
-            ->where('verankerbar_type', LeadAlternativeAdd::class)
-            ->where('verankerbar_id', $objekt->getKey())
-            ->first();
-
-        $neu = $aktiv !== null
-            ? $this->profilService->neueVersion($aktiv, [], auth()->id())
-            : $this->profilService->anlegen($objekt, 'Grundriss-Geometrie', [], auth()->id());
-
-        $neu->gebaeude_geometrie = $geometrie;
-        $neu->save();
-
-        return $this->profilService->aktivieren($neu)->fresh();
     }
 
     /**

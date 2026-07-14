@@ -66,7 +66,7 @@ Die Orchestrator-Logik ist mit **gestubten Kern-Services** deterministisch getes
 
 ## 11. Offene Punkte / nächster Schritt / Ballbesitz
 - **Punktueller Stopp (Yama):** Preis-/Verfügbarkeitsquelle für Invest/Verfügbarkeit (E-WP4).
-- **Nächste Schritte:** **Stufe 3b** (Profil-Verankerung/Persistenz-Snapshot + Controller-Umstellung + E2E-Integrationsreferenz) als eigener Slice mit Pflicht-Stopp bei Schemabedarf; parallel **G0c-1** (Geometrie-Migrationsplan, read-only, bleibt beauftragt).
+- **Nächste Schritte:** **Stufe 3b** (Controller-Umstellung der Auslegungskette + E8-Preisanbindung + `offer_details`-Übergabe + E2E-Integrationsreferenz; ggf. persistierter **Auslegungs-Snapshot** mit Pflicht-Stopp bei Schemabedarf) als eigener Slice. **Begriffsabgrenzung (Yama 2026-07-14):** Der Stufe-3b-„Persistenz-Snapshot" meint den **WP-Auslegungs-Snapshot** — NICHT die **Geometrie-Profil-Persistenz**, die als **G0c-2** (objektgebundene, versionierte `gebaeude_geometrie`) bereits eigenständig umgesetzt ist (`docs/g0c2-release-manifest.md`). Stufe 3b darf nicht erneut „Profil-Persistenz" der Geometrie heißen. Parallel **G0c-1/2** (Geometrie) abgeschlossen/read-only-Plan.
 - **Ballbesitz:** Evaluator (Prüfung) → danach **Yama** (Commit-Freigabe Stufe 3a + Preis-Entscheidung).
 
 ---
