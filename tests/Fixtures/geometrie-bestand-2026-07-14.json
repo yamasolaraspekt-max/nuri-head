@@ -1,0 +1,12 @@
+{
+  "herkunft": "synthetisch",
+  "grund": "Lokale Dev-DB (ticket) enthaelt 0 raum_geometrien-Zeilen (Read-only-Scan 2026-07-14). Kein echter Geometrie-Bestand lokal verfuegbar; echter Bestand liegt nur auf Hetzner (off-limits). Aussagekraft eingeschraenkt (E3-Fallback). Echter Bestands-Scan ist Deploy-Tag-Checklistenpunkt.",
+  "einheit": "mm",
+  "geometrien": [
+    { "id": "rechteck_8x10", "polygon": [ {"x":0,"y":0}, {"x":8000,"y":0}, {"x":8000,"y":10000}, {"x":0,"y":10000} ] },
+    { "id": "walm_footprint_9x12", "polygon": [ {"x":0,"y":0}, {"x":9000,"y":0}, {"x":9000,"y":12000}, {"x":0,"y":12000} ] },
+    { "id": "l_form", "polygon": [ {"x":0,"y":0}, {"x":10000,"y":0}, {"x":10000,"y":6000}, {"x":6000,"y":6000}, {"x":6000,"y":10000}, {"x":0,"y":10000} ] },
+    { "id": "t_form", "polygon": [ {"x":4000,"y":0}, {"x":8000,"y":0}, {"x":8000,"y":6000}, {"x":12000,"y":6000}, {"x":12000,"y":10000}, {"x":0,"y":10000}, {"x":0,"y":6000}, {"x":4000,"y":6000} ] },
+    { "id": "u_form", "polygon": [ {"x":0,"y":0}, {"x":4000,"y":0}, {"x":4000,"y":6000}, {"x":8000,"y":6000}, {"x":8000,"y":0}, {"x":12000,"y":0}, {"x":12000,"y":10000}, {"x":0,"y":10000} ] }
+  ]
+}

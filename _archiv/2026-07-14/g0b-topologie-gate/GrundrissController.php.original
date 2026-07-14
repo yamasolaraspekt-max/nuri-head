@@ -8,8 +8,6 @@ use App\Models\HeizlastRaum;
 use App\Models\Konstruktion;
 use App\Models\PlanUpload;
 use App\Models\RaumGeometrie;
-use App\Services\Geometrie\GeometrieUngueltigException;
-use App\Services\Geometrie\TopologieGate;
 use App\Services\Heizlast\GeometrieAbleitungService;
 use App\Services\Heizlast\HeizlastProjektService;
 use Illuminate\Http\Request;
@@ -41,41 +39,7 @@ class GrundrissController extends Controller
     public function __construct(
         private GeometrieAbleitungService $ableitung,
         private HeizlastProjektService $heizlast,
-        private TopologieGate $gate,
     ) {}
-
-    /**
-     * G0b/AP-4b — Ingestion-Gate: validiert eingehende Geometrie VOR jeder Berechnung/Persistenz.
-     * Regeln 1–6 auf dem Polygon, Regel 7 (Öffnungsplausibilität) auf den in-memory abgeleiteten
-     * Bauteilen (Mirror `ausGeometrie`, read-only, nichts persistiert). Bei ungültiger Geometrie
-     * wird eine GeometrieUngueltigException geworfen — nichts erreicht Mirror-Rechnung oder DB.
-     *
-     * @param  array<string, mixed>  $data
-     */
-    private function gatePruefung(array $data): void
-    {
-        $poly = $this->gate->pruefePolygon($data['polygon']);
-        if (! $poly->valid) {
-            throw new GeometrieUngueltigException($poly);
-        }
-
-        $geo = new RaumGeometrie;
-        $geo->polygon = $data['polygon'];
-        $geo->wand_segmente = $data['wand_segmente'];
-        $geo->hoehe_mm = $data['hoehe_mm'];
-        $geo->decke = $data['decke'];
-        $geo->boden = $data['boden'];
-        $raum = new HeizlastRaum;
-        $raum->name = $data['name'] !== '' ? $data['name'] : 'Grundriss';
-        $raum->nutzung = $data['nutzung'] !== '' ? $data['nutzung'] : 'wohnen';
-        $geo->setRelation('heizlastRaum', $raum);
-
-        $bauteile = $this->ableitung->ausGeometrie($geo)['bauteile'];
-        $oeffnung = $this->gate->pruefeOeffnungen($bauteile);
-        if (! $oeffnung->valid) {
-            throw new GeometrieUngueltigException($oeffnung);
-        }
-    }
 
     /** GET energie.grundriss → Liste bestehender Grundriss-Projekte + Button „Neuer Grundriss". */
     public function index()
@@ -195,7 +159,6 @@ class GrundrissController extends Controller
         }
 
         try {
-            $this->gatePruefung($data); // G0b: Topologie-Gate vor jeder Berechnung
             $ergebnis = DB::transaction(function () use ($data) {
                 $projekt = $this->baueProjekt($data, null);
                 $this->ableitung->schreibeInProjekt($projekt);
@@ -217,8 +180,6 @@ class GrundrissController extends Controller
                     'h_v_w_k' => $raum0['h_v_w_k'] ?? null,
                 ];
             });
-        } catch (GeometrieUngueltigException $e) {
-            return response()->json(['message' => 'Ungültige Geometrie abgelehnt.', 'blocker' => $e->ergebnis->blocker], 422);
         } catch (Throwable $e) {
             return response()->json(['message' => 'Berechnung fehlgeschlagen: '.$e->getMessage()], 422);
         }
@@ -244,7 +205,6 @@ class GrundrissController extends Controller
         $raumId = $request->integer('raum_id') ?: null;
 
         try {
-            $this->gatePruefung($data); // G0b: Topologie-Gate vor jeder Persistenz
             $result = DB::transaction(function () use ($data, $projektId, $raumId) {
                 $projekt = $this->baueProjekt($data, $projektId, $raumId, persist: true);
                 $this->ableitung->schreibeInProjekt($projekt);
@@ -256,8 +216,6 @@ class GrundrissController extends Controller
                     'message' => 'Grundriss „'.$projekt->name.'" gespeichert.',
                 ];
             });
-        } catch (GeometrieUngueltigException $e) {
-            return response()->json(['message' => 'Ungültige Geometrie abgelehnt.', 'blocker' => $e->ergebnis->blocker], 422);
         } catch (Throwable $e) {
             return response()->json(['message' => 'Speichern fehlgeschlagen: '.$e->getMessage()], 422);
         }

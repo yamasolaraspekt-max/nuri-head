@@ -2,14 +2,12 @@
 
 namespace Tests\Unit\Heizlast;
 
-use App\Services\Geometrie\TopologieGate;
 use App\Services\Heizlast\RaumHuelleService;
 use Tests\TestCase;
 
 /**
- * G0a-Referenztest des Öffnungsabzugs (P3) + G0b-Schließung des Öffnung>Wand-Falls.
- * Der Mirror (RaumHuelleService) bleibt unverändert (klemmt weiterhin auf 0); der neue
- * Schutz kommt aus dem vorgelagerten Topologie-Gate (Regel 7), nicht aus dem Kern.
+ * G0a / AP-4a — Referenztest des VORHANDENEN Öffnungsabzugs (test/spec-only).
+ * Belegt P3 der Startblock-Matrix + dokumentiert die Öffnung>Wand-Lücke (G0b).
  */
 class RaumHuelleServiceTest extends TestCase
 {
@@ -46,23 +44,20 @@ class RaumHuelleServiceTest extends TestCase
     }
 
     /**
-     * G0b — Öffnung > Wand: der Mirror klemmt weiterhin still auf 0 (unverändert),
-     * ABER das vorgelagerte Gate (Regel 7) lehnt den Fall jetzt als Blocker ab.
+     * LÜCKE (G0b/AP-4b) — Öffnung > Wand wird heute STILL auf 0 geklemmt, ohne Blocker-Markierung.
+     * Wird nur dokumentiert, NICHT durch Produktivcode grün gemacht.
      */
-    public function test_oeffnung_groesser_wand_wird_vom_gate_abgelehnt(): void
+    public function test_oeffnung_groesser_wand_wird_still_geklemmt_luecke(): void
     {
         $bauteile = [
             ['typ' => 'wand', 'grenzflaeche' => 'aussen', 'flaeche_m2' => 30],
             ['typ' => 'fenster', 'grenzflaeche' => 'aussen', 'flaeche_m2' => 40],
         ];
+        $eff = $this->service()->effektiveBauteile($bauteile);
+        $wand = collect($eff)->firstWhere('typ', 'wand');
 
-        // Mirror unverändert: max(0, (30-40)/30) = 0 → Wand-Netto 0 (stiller Clamp bleibt).
-        $wand = collect($this->service()->effektiveBauteile($bauteile))->firstWhere('typ', 'wand');
+        // Heutiges Ist: max(0, (30-40)/30) = 0 → Wand-Netto 0, KEINE Blocker-Markierung im Ergebnis.
         $this->assertSame(0.0, (float) $wand['flaeche_eff']);
-
-        // G0b-Schutz: das Gate lehnt Öffnung > Wand ab.
-        $ergebnis = (new TopologieGate)->pruefeOeffnungen($bauteile);
-        $this->assertFalse($ergebnis->valid);
-        $this->assertContains('oeffnung_groesser_wand', $ergebnis->ruleKeys());
+        $this->markTestIncomplete('Öffnung > Wand wird still auf 0 geklemmt ohne Blocker-Markierung — Absicherung fehlt (G0b/AP-4b).');
     }
 }
