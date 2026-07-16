@@ -457,7 +457,6 @@
                 ['label' => 'Übersicht', 'icon' => 'list', 'url' => url('admin/offers'), 'count_key' => 'offers', 'active_routes' => ['/admin/offers', '/offers/list']],
                 ['label' => 'Vorlagen', 'icon' => 'file-text', 'url' => $safeRoute('offer-templates.index', 'offer-templates'), 'count_key' => 'offer_templates', 'active_routes' => ['/offer-templates']],
                 ['label' => 'Sets · geplant', 'icon' => 'layers', 'url' => url('#')],
-                ['label' => 'Auftragsbestätigungen · geplant', 'icon' => 'file-check-2', 'url' => url('#')],
                 ['label' => 'Konfigurator · geplant', 'icon' => 'sliders-horizontal', 'url' => url('#')],
             ],
         ],
@@ -475,8 +474,9 @@
             'permission' => 'Customer', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Übersicht', 'icon' => 'briefcase', 'url' => $safeRoute('deal.all.list'), 'count_key' => 'deals', 'active_routes' => ['/deal', '/deals', '/auftrag']],
-                ['label' => 'Feinaufmaß', 'icon' => 'ruler', 'url' => $safeRoute('deal.measurements.kanban', 'deal-measurements-kanban'), 'count_key' => 'deal_measurements', 'active_routes' => ['/deal-measurements-kanban', '/deal-measurements']],
-                ['label' => 'Materialbedarf & Bestellungen · geplant', 'icon' => 'package-search', 'url' => url('#')],
+                ['label' => 'Auftragseingang · geplant', 'icon' => 'inbox', 'url' => url('#')],
+                ['label' => 'Auftragsbestätigungen · geplant', 'icon' => 'file-check', 'url' => url('#')],
+                ['label' => 'Auftragsstatus · geplant', 'icon' => 'git-commit', 'url' => url('#')],
                 ['label' => 'Abnahme & Abrechnung · geplant', 'icon' => 'clipboard-signature', 'url' => url('#')],
                 ['label' => 'Interne Arbeiten · geplant', 'icon' => 'wrench', 'url' => url('#')],
                 ['label' => 'Spam', 'icon' => 'slash', 'url' => $safeRoute('deal.junk.list'), 'count_key' => 'deals_junk'],
@@ -484,10 +484,20 @@
             ],
         ],
         [
+            // Umbau 2026-07-16 (Yama): Auftrag = kaufmännische Erteilung — die operative Vorstufe
+            // (Feinaufmaß, Material) läuft PARALLEL dazu und heißt Arbeitsvorbereitung (AV).
+            // Sie übergibt an Baustelle (vor Ort) und Plantafel (Einsatzplanung).
+            'title' => 'Arbeitsvorbereitung',
+            'permission' => 'Customer',
+            'items' => [
+                ['label' => 'Feinaufmaß', 'icon' => 'ruler', 'url' => $safeRoute('deal.measurements.kanban', 'deal-measurements-kanban'), 'count_key' => 'deal_measurements', 'active_routes' => ['/deal-measurements-kanban', '/deal-measurements']],
+                ['label' => 'Materialbedarf & Bestellungen · geplant', 'icon' => 'package-search', 'url' => url('#')],
+            ],
+        ],
+        [
             'title' => 'Baustelle',
             'permission' => 'Customer',
             'items' => array_values(array_filter([
-                ['label' => 'Montagevorbereitung · geplant', 'icon' => 'list-todo', 'url' => url('#')],
                 ['label' => 'Aufgaben', 'icon' => 'users-round', 'tone' => 'text-brand-blue', 'url' => $safeRoute('general-tasks.index', 'general-tasks'), 'count_key' => 'general_tasks_open', 'active_routes' => ['/general-tasks']],
                 $canSeeAllReports ? ['label' => 'Berichte', 'icon' => 'file-text', 'tone' => 'text-brand-blue', 'url' => url('admin/overdue-center/recent'), 'count_key' => 'reports_all_remaining', 'active_routes' => ['/admin/overdue-center/recent', '/overdue-center/recent']] : null,
                 ['label' => 'Überfällig', 'icon' => 'clipboard-check', 'tone' => 'text-brand-green', 'url' => url('admin/reports'), 'count_key' => 'reports_my_remaining', 'active_routes' => ['/admin/reports', '/reports']],
@@ -517,11 +527,14 @@
             ],
         ],
         [
+            // Begriffs-Entscheid 2026-07-16 (Yama): «Disposition» ersetzt durch «Einsatzplanung» —
+            // wer arbeitet wann auf welcher Baustelle (Montage/Service/Wartung). Konzept: konzept-einsatzplanung,
+            // Kern wird mit nuriva geteilt (dort: Baustellen + Personal direkt).
             'title' => 'Montage',
-            'etage' => 'Disposition',
+            'etage' => 'Einsatzplanung',
             'permission' => 'Employee', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => array_values(array_filter([
-                ['label' => 'Einsatzplan', 'icon' => 'calendar-range', 'tone' => 'text-brand-purple', 'url' => $safeRoute('planner.index', '/planner'), 'count_key' => 'planner_projects', 'active_routes' => ['/planner/projects']],
+                ['label' => 'Plantafel', 'icon' => 'calendar-range', 'tone' => 'text-brand-purple', 'url' => $safeRoute('planner.index', '/planner'), 'count_key' => 'planner_projects', 'active_routes' => ['/planner/projects']],
                 ['label' => 'Mein Tag · geplant', 'icon' => 'smartphone', 'url' => url('#')],
             ])),
         ],
