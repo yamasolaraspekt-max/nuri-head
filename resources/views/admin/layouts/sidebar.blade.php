@@ -828,7 +828,7 @@
             'items' => [
                 ['label' => 'Gesamtfirma', 'icon' => 'gauge', 'url' => \$safeRoute('dashboard.company.cockpit'), 'active_routes' => ['/dashboard/company/cockpit']],
                 ['label' => 'Je Abteilung', 'icon' => 'building', 'url' => \$safeRoute('dashboard.department.cockpit'), 'active_routes' => ['/dashboard/department/cockpit']],
-                ['label' => 'Geschäftsführung · geplant', 'icon' => 'crown', 'url' => url('#')],
+                ['label' => 'Geschäftsführung', 'icon' => 'crown', 'url' => \$safeRoute('dashboard.company.profit-centers'), 'active_routes' => ['/dashboard/company/profit-centers']],
             ],
         ],
         [

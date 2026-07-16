@@ -486,6 +486,9 @@ Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(func
     // Welle B2 (2026-07-16): Je-Abteilung-Cockpit = reine Praesentationsseite ueber
     // department.departments + department.overview (eine Wahrheit). Route::view, Controller unberuehrt.
     Route::view('/department/cockpit', 'admin.controlling.je-abteilung')->name('department.cockpit');
+    // Welle B2 (2026-07-16): Geschaeftsfuehrung = Profit-Center-Vergleich, reine Praesentation
+    // ueber department.overview je Abteilung (eine Wahrheit, kein Controller-Touch).
+    Route::view('/company/profit-centers', 'admin.controlling.geschaeftsfuehrung')->name('company.profit-centers');
 });
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
