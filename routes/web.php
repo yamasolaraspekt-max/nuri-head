@@ -455,6 +455,10 @@ Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(func
 Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/company/overview', [DashboardCompanyController::class, 'overview'])
         ->name('company.overview');
+
+    // Welle B2 (2026-07-16): Gesamtfirma-Cockpit = reine Praesentationsseite ueber company.overview
+    // (eine Wahrheit, keine duplizierte Logik). Route::view => Live-Controller unberuehrt.
+    Route::view('/company/cockpit', 'admin.controlling.gesamtfirma')->name('company.cockpit');
 });
 Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/employee-status', [DashboardEmployeeStatusController::class, 'index'])

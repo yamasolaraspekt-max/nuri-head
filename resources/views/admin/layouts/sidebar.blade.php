@@ -826,7 +826,7 @@
             'etage' => 'Controlling',
             'permission' => 'Finance',
             'items' => [
-                ['label' => 'Gesamtfirma · geplant', 'icon' => 'gauge', 'url' => url('#')],
+                ['label' => 'Gesamtfirma', 'icon' => 'gauge', 'url' => \$safeRoute('dashboard.company.cockpit'), 'active_routes' => ['/dashboard/company/cockpit']],
                 ['label' => 'Je Abteilung · geplant', 'icon' => 'building', 'url' => url('#')],
                 ['label' => 'Geschäftsführung · geplant', 'icon' => 'crown', 'url' => url('#')],
             ],
