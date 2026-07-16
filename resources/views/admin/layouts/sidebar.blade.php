@@ -488,6 +488,10 @@
                 ['label' => 'Objektakte (Gebäude) · geplant', 'icon' => 'building-2', 'url' => url('#')],
                 ['label' => 'Projekt-Akte · geplant', 'icon' => 'folder-kanban', 'url' => url('#')],
                 ['label' => 'Serienbriefe · geplant', 'icon' => 'mails', 'url' => url('#')],
+                ['label' => 'Mietobjekte · geplant', 'icon' => 'home', 'url' => url('#')],
+                ['label' => 'Dokumenten-Center (DMS) · geplant', 'icon' => 'folder-open', 'url' => url('#')],
+                ['label' => 'Vertragsmanagement · geplant', 'icon' => 'file-signature', 'url' => url('#')],
+                ['label' => 'Versicherungen · geplant', 'icon' => 'shield', 'url' => url('#')],
             ],
         ],
         [
@@ -500,6 +504,8 @@
                 ['label' => 'Abnahme & Abrechnung · geplant', 'icon' => 'clipboard-signature', 'url' => url('#')],
                 ['label' => 'Innenaufträge · geplant', 'icon' => 'wrench', 'url' => url('#')],
                 ['label' => 'Montagevorbereitung · geplant', 'icon' => 'list-todo', 'url' => url('#')],
+                ['label' => 'Baudokumentation · geplant', 'icon' => 'camera', 'url' => url('#')],
+                ['label' => 'Qualitätsprüfung · geplant', 'icon' => 'badge-check', 'url' => url('#')],
                 ['label' => 'Spam', 'icon' => 'slash', 'url' => $safeRoute('deal.junk.list'), 'count_key' => 'deals_junk'],
                 ['label' => 'Papierkorb', 'icon' => 'trash', 'url' => $safeRoute('deal.delete.list'), 'count_key' => 'deals_deleted'],
             ],
@@ -545,6 +551,26 @@
                 ['label' => '3D-Dachplaner · geplant', 'icon' => 'box', 'url' => url('#')],
                 ['label' => 'Dachplaner Pro · geplant (nurihead)', 'icon' => 'pencil-ruler', 'url' => url('#')],
                 ['label' => 'Dachbelegung PV · geplant', 'icon' => 'layout-grid', 'url' => url('#')],
+            ],
+        ],
+        [
+            // AUSBAU 2026-07-16 R3: Portale (playground: Kundenportal, Lieferantenportal, FreigabeApp, MobileStamp).
+            'title' => 'Portale',
+            'items' => [
+                ['label' => 'Kundenportal · geplant', 'icon' => 'globe', 'url' => url('#')],
+                ['label' => 'Lieferantenportal · geplant', 'icon' => 'truck', 'url' => url('#')],
+                ['label' => 'Freigabe-App · geplant', 'icon' => 'check-check', 'url' => url('#')],
+                ['label' => 'Mobile Stempel-App · geplant', 'icon' => 'smartphone', 'url' => url('#')],
+            ],
+        ],
+        [
+            // AUSBAU 2026-07-16 R3: KI-Zentrale (playground: KIAgentenZentrale, KIInsights, Automatisierungszentrale, Erkennung).
+            'title' => 'KI & Automatisierung',
+            'items' => [
+                ['label' => 'KI-Agenten-Zentrale · geplant', 'icon' => 'bot', 'url' => url('#')],
+                ['label' => 'KI-Insights · geplant', 'icon' => 'sparkles', 'url' => url('#')],
+                ['label' => 'Automatisierungszentrale · geplant', 'icon' => 'workflow', 'url' => url('#')],
+                ['label' => 'Beleg-Erkennung · geplant', 'icon' => 'scan-text', 'url' => url('#')],
             ],
         ],
         [
@@ -642,6 +668,11 @@
                 ['label' => 'Bilanz & SuSa · geplant', 'icon' => 'scale', 'url' => url('#')],
                 ['label' => 'GoBD & Prüfzentrum · geplant', 'icon' => 'shield-check', 'url' => url('#')],
                 ['label' => 'Steuerberater-Übergabe · geplant', 'icon' => 'briefcase', 'url' => url('#')],
+                ['label' => 'E-Rechnungen (XRechnung/ZUGFeRD) · geplant', 'icon' => 'file-digit', 'url' => url('#')],
+                ['label' => 'Gutschriften · geplant', 'icon' => 'file-minus', 'url' => url('#')],
+                ['label' => 'Anlagenbuchhaltung · geplant', 'icon' => 'building', 'url' => url('#')],
+                ['label' => 'Wiederkehrende Buchungen · geplant', 'icon' => 'repeat', 'url' => url('#')],
+                ['label' => 'Bankanbindung & Zahlungsdienstleister · geplant', 'icon' => 'plug', 'url' => url('#')],
             ],
         ],
         [
@@ -664,6 +695,11 @@
                 ['label' => 'Abteilungs-GuV · geplant', 'icon' => 'table-2', 'url' => url('#')],
                 ['label' => 'Kapazität & Produktivität · geplant', 'icon' => 'trending-up', 'url' => url('#')],
                 ['label' => 'Ziele · geplant', 'icon' => 'target', 'url' => url('#')],
+                ['label' => 'Geschäftsführungs-Cockpit · geplant', 'icon' => 'crown', 'url' => url('#')],
+                ['label' => 'Strategische Übersicht · geplant', 'icon' => 'compass', 'url' => url('#')],
+                ['label' => 'Abteilungsvergleich · geplant', 'icon' => 'git-compare', 'url' => url('#')],
+                ['label' => 'Liquidität & Finanzplanung · geplant', 'icon' => 'wallet-cards', 'url' => url('#')],
+                ['label' => 'Investitionsplanung · geplant', 'icon' => 'trending-up', 'url' => url('#')],
             ],
         ],
         [
@@ -682,6 +718,11 @@
                 ['label' => 'Überstunden · geplant', 'icon' => 'clock-4', 'url' => url('#')],
                 ['label' => 'Lohnvorbereitung · geplant', 'icon' => 'receipt-euro', 'url' => url('#')],
                 ['label' => 'Arbeitsverträge · geplant', 'icon' => 'file-signature', 'url' => url('#')],
+                ['label' => 'Bewerbungen · geplant', 'icon' => 'user-plus', 'url' => url('#')],
+                ['label' => 'Personalakte · geplant', 'icon' => 'folder-heart', 'url' => url('#')],
+                ['label' => 'Dienstplanung · geplant', 'icon' => 'calendar-cog', 'url' => url('#')],
+                ['label' => 'Einarbeitung & Austritt · geplant', 'icon' => 'door-open', 'url' => url('#')],
+                ['label' => 'Schulungen & Zertifikate · geplant', 'icon' => 'award', 'url' => url('#')],
             ])),
         ],
         [
@@ -749,6 +790,7 @@
             'title' => 'System',
             'items' => [
                 ['label' => 'Systemwarnung', 'icon' => 'triangle-alert', 'url' => $safeRoute('admin.system-warning.index')],
+                ['label' => 'Audit-Log · geplant', 'icon' => 'history', 'url' => url('#')],
                 ['label' => 'Notiz-Kategorien', 'icon' => 'folder', 'url' => $safeRoute('note.category.view'), 'count_key' => 'note_categories'],
                 // Commit 2 (P0): Nav-Gate gesetzt — GarbageController prueft item_id='Administrator'; Nav gleichzieht (is_admin bypass bleibt)
                 ['label' => 'Datenbankbereinigung', 'icon' => 'trash-2', 'permission' => 'Administrator', 'url' => $safeRoute('admin.garbage.index')],
