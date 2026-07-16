@@ -598,7 +598,7 @@
         <div class="oc-breadcrumb">
           <a href="{{ url('/employee_dashboard') }}">Home</a>
           <span>›</span>
-          <a href="{{ route('deal.all.list') }}">Aufträge</a>
+          <a href="{{ route('deal.all.list') }}">Arbeitsvorbereitung</a>
           <span>›</span>
           <a href="{{ route('deal.measurements.index') }}">Feinaufmaß</a>
           <span>›</span>

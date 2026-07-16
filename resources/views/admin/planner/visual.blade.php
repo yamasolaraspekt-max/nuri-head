@@ -1139,7 +1139,7 @@
                     <div class="pc-title">{{ $pageTitle }}</div>
                     <div class="pc-sub">{{ $pageSubtitle }}</div>
                     <div class="pc-breadcrumb">
-                        <a href="{{ $profileConfig['backUrl'] }}">Projektplanung</a>
+                        <a href="{{ $profileConfig['backUrl'] }}">Plantafel</a>
                         <span>/</span>
                         <span class="current" id="pcBreadcrumbTitle">Projekt #{{ $projectId }}</span>
                     </div>

@@ -1241,12 +1241,12 @@
     <div class="fm-wrap" data-auth-employee-id="{{ $authEmployeeId }}">
         <div class="fm-titlebar">
             <div>
-                <h1 class="fm-title">Feinaufmaß Aufgaben</h1>
+                <h1 class="fm-title">Feinaufmaß</h1>
                 <div class="fm-sub">Alle Feinaufmaße mit Team, Termin, Aufgabe, Notizen und Kanban-Status.</div>
                 <div class="fm-breadcrumb">
                     <a href="{{ url('/employee_dashboard') }}">Dashboard</a><span>›</span>
-                    <a href="{{ url('deal_details') }}">Aufträge</a><span>›</span>
-                    <span class="current">Feinaufmaß Kanban</span>
+                    <a href="{{ url('deal_details') }}">Arbeitsvorbereitung</a><span>›</span>
+                    <span class="current">Feinaufmaß</span>
                 </div>
             </div>
             <div class="fm-actions">

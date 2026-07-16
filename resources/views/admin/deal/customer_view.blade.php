@@ -4452,7 +4452,7 @@
                     .fail(function (xhr) {
                         Swal.fire(
                             'Fehler',
-                            xhr.responseJSON?.message || 'Projektplanung konnte nicht geladen werden.',
+                            xhr.responseJSON?.message || 'Plantafel konnte nicht geladen werden.',
                             'error'
                         );
                     });
@@ -4728,7 +4728,7 @@
                         }, 900);
                     },
                     error: function (xhr) {
-                        let message = xhr.responseJSON?.message || 'Projektplanung konnte nicht gespeichert werden.';
+                        let message = xhr.responseJSON?.message || 'Plantafel konnte nicht gespeichert werden.';
 
                         if (xhr.responseJSON?.errors) {
                             message = Object.values(xhr.responseJSON.errors).flat().join('\n');

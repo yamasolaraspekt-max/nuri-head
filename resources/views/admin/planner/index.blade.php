@@ -3412,15 +3412,15 @@
     <div id="pmo">
         <div class="pmo-header">
             <div>
-                <h1 class="pmo-title">Montage Planung</h1>
+                <h1 class="pmo-title">Montageplan</h1>
                 <div class="pmo-subtitle">Automatische Einsatzplanung aus Montage-Phase, Sub-Stages, Aufgaben, Terminen,
                     Tickets und Personal Tasks.</div>
                 <div class="pmo-breadcrumb">
                     <a href="{{ url('/employee_dashboard') }}">Dashboard</a>
                     <span>›</span>
-                    <a href="{{ route('planner.projects') }}">Projektübersicht</a>
+                    <a href="{{ route('planner.projects') }}">Plantafel</a>
                     <span>›</span>
-                    <span>Projektplanung</span>
+                    <span>Montageplan</span>
                 </div>
             </div>
         </div>

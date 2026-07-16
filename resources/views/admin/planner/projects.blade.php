@@ -1,9 +1,9 @@
 @extends('admin.layouts.app')
-@section('title', 'Projektplanung')
+@section('title', 'Plantafel')
 
 @php
-    $pageTitle = 'PROJEKTPLANUNG';
-    $pageSubtitle = 'Montage-Projekte nach Kunde, Objekt, Produkt, Team, Terminen, Aufgaben, Tickets und Fortschritt verwalten.';
+    $pageTitle = 'PLANTAFEL';
+    $pageSubtitle = 'Einsatzplanung: Montage-Projekte nach Kunde, Objekt, Produkt, Team, Terminen, Aufgaben, Tickets und Fortschritt.';
     $plannerCockpitUrl = \Illuminate\Support\Facades\Route::has('planner.cockpit')
         ? route('planner.cockpit')
         : url('/planner/cockpit');
@@ -1671,9 +1671,9 @@
                     <div class="oc-breadcrumb">
                         <a href="{{ url('/employee_dashboard') }}">Home</a>
                         <span>›</span>
-                        <span>Projekte</span>
+                        <span>Einsatzplanung</span>
                         <span>›</span>
-                        <span class="current">Projektplanung</span>
+                        <span class="current">Plantafel</span>
                     </div>
                 </div>
                 <div class="oc-inline-actions">
@@ -1688,7 +1688,7 @@
                             <rect x="3" y="3" width="7" height="18" rx="2" />
                             <rect x="14" y="3" width="7" height="18" rx="2" />
                         </svg>
-                        Plan-Tafel
+                        Kanban
                     </button>
                     <button type="button" class="oc-btn-soft" id="ppRefresh">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
