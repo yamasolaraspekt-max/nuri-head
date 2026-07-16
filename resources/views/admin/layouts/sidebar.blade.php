@@ -880,6 +880,15 @@
         return $filtered;
     };
 
+    // Themen-Etagen 2026-07-16: jede Sektion erbt ihre Etage von der zuletzt gesetzten — VOR dem
+    // Rechte-Filter, damit die Etage bleibt, wenn die erste Sektion einer Etage weggefiltert wird.
+    $currentEtage = null;
+    foreach ($sidebarSections as $__i => $__sec) {
+        if (!empty($__sec['etage'])) { $currentEtage = $__sec['etage']; }
+        $sidebarSections[$__i]['_etage'] = $currentEtage;
+    }
+    unset($__i, $__sec);
+
     $sidebarSections = array_values(array_filter(array_map(function ($section) use ($filterSidebarItems, $hasPermission) {
         // Section-Gate: ganzer Bereich unsichtbar, wenn Recht fehlt (2-Ebenen-Nav; Bereich = Haupt-Navi).
         if (!empty($section['permission']) && !$hasPermission($section['permission'], 'is_read')) {
@@ -1544,14 +1553,27 @@
                     : '<span class="sa-section-count">' . count($section['items']) . '</span>';
             @endphp
 
-            @if(!empty($section['etage']))
+            @php $__etage = $section['_etage'] ?? null; @endphp
+            @if($__etage && $__etage !== ($__prevEtage ?? null))
+                @php $__prevEtage = $__etage; $__etageSlug = Str::slug($__etage); @endphp
                 @once
-                    <style>.sa-etage-label{margin:16px 10px 4px;font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#9ca3af;}</style>
+                    <style>
+                        /* Etagen: groesser als die Sektions-Titel, eigene Farbe (Navy-Akzent) — Yamas Vorgabe. */
+                        .sa-etage-toggle{display:flex;width:calc(100% - 12px);align-items:center;justify-content:space-between;margin:14px 6px 3px;padding:8px 10px;background:transparent;border:0;cursor:pointer;font-size:15px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sa-accent, #1C3F94);border-radius:8px;}
+                        .sa-etage-toggle:hover{background:var(--sa-accent-light, #e8edf7);}
+                        html.dark .sa-etage-toggle{color:#8fa8dd;}
+                        .sa-etage-chevron{width:12px;height:12px;transition:transform .15s;}
+                        .sa-etage-toggle.is-open .sa-etage-chevron{transform:rotate(180deg);}
+                    </style>
                 @endonce
-                <div class="sa-etage-label">{{ $section['etage'] }}</div>
+                <button type="button" class="sa-etage-toggle" data-etage-toggle="{{ $__etageSlug }}" aria-expanded="false">
+                    <span>{{ $__etage }}</span>
+                    <i data-lucide="chevron-down" class="icon-sm sa-etage-chevron"></i>
+                </button>
             @endif
             <div id="{{ $sectionId }}" class="sa-sidebar-section {{ $isDefaultOpen ? 'is-open' : 'is-collapsed' }}"
-                data-sidebar-section data-section-default-open="{{ $isDefaultOpen ? '1' : '0' }}">
+                data-sidebar-section data-section-default-open="{{ $isDefaultOpen ? '1' : '0' }}"
+                data-etage-group="{{ Str::slug($section['_etage'] ?? '') }}">
                 <button type="button" class="sa-section-toggle" onclick="toggleSidebarSection('{{ $sectionId }}')"
                     aria-expanded="{{ $isDefaultOpen ? 'true' : 'false' }}">
                     <span class="sa-section-title-wrap">
@@ -1623,3 +1645,43 @@
         </div>
     @endif
 </nav>
+
+{{-- Themen-Etagen: Auf-/Zuklappen mit Merken (localStorage). Standard: Heute + Etage der aktiven Seite. --}}
+<script>
+(function () {
+    'use strict';
+    var KEY = 'sa_etagen_open';
+    function read() { try { var a = JSON.parse(localStorage.getItem(KEY) || 'null'); return Array.isArray(a) ? a : null; } catch (e) { return null; } }
+    function write(a) { try { localStorage.setItem(KEY, JSON.stringify(a)); } catch (e) {} }
+    function apply() {
+        var open = read() || [];
+        document.querySelectorAll('[data-etage-toggle]').forEach(function (btn) {
+            var g = btn.getAttribute('data-etage-toggle');
+            var isOpen = open.indexOf(g) !== -1;
+            btn.classList.toggle('is-open', isOpen);
+            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            document.querySelectorAll('[data-etage-group="' + g + '"]').forEach(function (sec) {
+                sec.style.display = isOpen ? '' : 'none';
+            });
+        });
+    }
+    function init() {
+        if (read() === null) {
+            var def = ['heute'];
+            var act = document.querySelector('.sidebar-nav .nav-item.active');
+            if (act) { var sec = act.closest('[data-etage-group]'); if (sec) { var g = sec.getAttribute('data-etage-group'); if (g && def.indexOf(g) === -1) def.push(g); } }
+            write(def);
+        }
+        document.addEventListener('click', function (ev) {
+            var btn = ev.target && ev.target.closest ? ev.target.closest('[data-etage-toggle]') : null;
+            if (!btn) return;
+            var g = btn.getAttribute('data-etage-toggle');
+            var open = read() || []; var i = open.indexOf(g);
+            if (i === -1) open.push(g); else open.splice(i, 1);
+            write(open); apply();
+        });
+        apply();
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
