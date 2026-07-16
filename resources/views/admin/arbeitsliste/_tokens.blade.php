@@ -22,21 +22,21 @@
         --al-accent-hover: var(--sa-accent-hover, #7baa18);
 
         /* Semantische Statusfarben — je Status: Vollton, heller Grund, dunkle Tinte (AA) */
-        --al-danger: #dc2626;
-        --al-danger-bg: #fdecec;
-        --al-danger-ink: #991b1b;
+        --al-danger: #ef4444;
+        --al-danger-bg: #fef2f2;
+        --al-danger-ink: #b91c1c;
 
-        --al-warning: #d97706;
+        --al-warning: #f59e0b;
         --al-warning-bg: #fdf3e6;
-        --al-warning-ink: #92400e;
+        --al-warning-ink: #d97706;
 
-        --al-success: #16a34a;
+        --al-success: #10b981;
         --al-success-bg: #e9f7ee;
         --al-success-ink: #15803d;
 
-        --al-info: #2563eb;
-        --al-info-bg: #e8f0fe;
-        --al-info-ink: #1d4ed8;
+        --al-info: #6b7280;
+        --al-info-bg: #f3f4f6;
+        --al-info-ink: #374151;
 
         /* Abstaende (4 / 8 / 12 / 16 / 24 / 32) */
         --al-space-1: 4px;

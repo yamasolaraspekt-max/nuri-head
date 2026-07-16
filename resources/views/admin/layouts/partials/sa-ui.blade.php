@@ -11,9 +11,9 @@
         --sa-accent-ink: #ffffff;
 
         /* Semantische Statusfarben (getrennt von der Marke) */
-        --sa-danger: #dc2626;  --sa-danger-bg: #fdecec;
-        --sa-warning: #d97706; --sa-warning-bg: #fdf3e6;
-        --sa-success: #16a34a; --sa-success-bg: #e9f7ee;
-        --sa-info: #2563eb;    --sa-info-bg: #e8f0fe;
+        --sa-danger: #ef4444;  --sa-danger-bg: #fef2f2;
+        --sa-warning: #f59e0b; --sa-warning-bg: #fff7ed;
+        --sa-success: #10b981; --sa-success-bg: #ecfdf5;
+        --sa-info: #6b7280;    --sa-info-bg: #f3f4f6;
     }
 </style>
