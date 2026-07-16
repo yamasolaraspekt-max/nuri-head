@@ -1,0 +1,167 @@
+{
+    "schema_version": "1.1.0",
+    "model_id": "0000000b-0000-4000-8000-000000000011",
+    "revision_id": "0000000c-0000-4000-8000-000000000012",
+    "parent_revision_id": null,
+    "object_id": 1,
+    "status": "draft",
+    "source": "manual_2d",
+    "north_angle_deg": 0,
+    "north_source": "manual",
+    "height_datum": "okff_eg_zero",
+    "warnings": [],
+    "data_quality": "entered",
+    "source_ref": null,
+    "buildings": [
+        {
+            "id": "0000000d-0000-4000-8000-000000000013",
+            "name": "Gebäude",
+            "external_ref": null,
+            "storeys": [
+                {
+                    "id": "0000000a-0000-4000-8000-000000000010",
+                    "name": "EG",
+                    "order": 0,
+                    "finished_floor_level_mm": 0,
+                    "raw_floor_level_mm": null,
+                    "default_clear_height_mm": 2400,
+                    "slab_thickness_mm": 300,
+                    "storey_height_mm": null,
+                    "nodes": [
+                        {
+                            "id": "00000001-0000-4000-8000-000000000001",
+                            "x_mm": 0,
+                            "y_mm": 0
+                        },
+                        {
+                            "id": "00000002-0000-4000-8000-000000000002",
+                            "x_mm": 500,
+                            "y_mm": 9000
+                        },
+                        {
+                            "id": "00000003-0000-4000-8000-000000000003",
+                            "x_mm": 9500,
+                            "y_mm": 9500
+                        },
+                        {
+                            "id": "00000004-0000-4000-8000-000000000004",
+                            "x_mm": 10000,
+                            "y_mm": 300
+                        }
+                    ],
+                    "walls": [
+                        {
+                            "id": "00000005-0000-4000-8000-000000000005",
+                            "reference_path": {
+                                "node_ids": [
+                                    "00000001-0000-4000-8000-000000000001",
+                                    "00000002-0000-4000-8000-000000000002"
+                                ]
+                            },
+                            "reference_line_type": "axis",
+                            "thickness_change_anchor": "reference_line",
+                            "thickness_mm": 240,
+                            "bottom_offset_mm": 0,
+                            "height_mode": "uniform",
+                            "height_mm": 2500,
+                            "wall_type": "external",
+                            "exterior_side": "left"
+                        },
+                        {
+                            "id": "00000006-0000-4000-8000-000000000006",
+                            "reference_path": {
+                                "node_ids": [
+                                    "00000002-0000-4000-8000-000000000002",
+                                    "00000003-0000-4000-8000-000000000003"
+                                ]
+                            },
+                            "reference_line_type": "axis",
+                            "thickness_change_anchor": "reference_line",
+                            "thickness_mm": 240,
+                            "bottom_offset_mm": 0,
+                            "height_mode": "uniform",
+                            "height_mm": 2500,
+                            "wall_type": "external",
+                            "exterior_side": "left"
+                        },
+                        {
+                            "id": "00000007-0000-4000-8000-000000000007",
+                            "reference_path": {
+                                "node_ids": [
+                                    "00000003-0000-4000-8000-000000000003",
+                                    "00000004-0000-4000-8000-000000000004"
+                                ]
+                            },
+                            "reference_line_type": "axis",
+                            "thickness_change_anchor": "reference_line",
+                            "thickness_mm": 240,
+                            "bottom_offset_mm": 0,
+                            "height_mode": "uniform",
+                            "height_mm": 2500,
+                            "wall_type": "external",
+                            "exterior_side": "left"
+                        },
+                        {
+                            "id": "00000008-0000-4000-8000-000000000008",
+                            "reference_path": {
+                                "node_ids": [
+                                    "00000004-0000-4000-8000-000000000004",
+                                    "00000001-0000-4000-8000-000000000001"
+                                ]
+                            },
+                            "reference_line_type": "axis",
+                            "thickness_change_anchor": "reference_line",
+                            "thickness_mm": 240,
+                            "bottom_offset_mm": 0,
+                            "height_mode": "uniform",
+                            "height_mm": 2500,
+                            "wall_type": "external",
+                            "exterior_side": "left"
+                        }
+                    ],
+                    "openings": [],
+                    "rooms": [
+                        {
+                            "id": "00000009-0000-4000-8000-000000000009",
+                            "name": "Altbau-Raum",
+                            "usage": "wohnen",
+                            "geometry_source": "derived_topology",
+                            "status": "derived",
+                            "boundary_edges": [
+                                {
+                                    "wall_id": "00000005-0000-4000-8000-000000000005",
+                                    "host_segment_index": 0,
+                                    "wall_side": "right",
+                                    "traversal": "forward"
+                                },
+                                {
+                                    "wall_id": "00000006-0000-4000-8000-000000000006",
+                                    "host_segment_index": 0,
+                                    "wall_side": "right",
+                                    "traversal": "forward"
+                                },
+                                {
+                                    "wall_id": "00000007-0000-4000-8000-000000000007",
+                                    "host_segment_index": 0,
+                                    "wall_side": "right",
+                                    "traversal": "forward"
+                                },
+                                {
+                                    "wall_id": "00000008-0000-4000-8000-000000000008",
+                                    "host_segment_index": 0,
+                                    "wall_side": "right",
+                                    "traversal": "forward"
+                                }
+                            ],
+                            "manual_reason": null,
+                            "derived_from_revision": null,
+                            "topology_signature": "sig-schraeg",
+                            "polygon_cache_mm": null
+                        }
+                    ],
+                    "slabs": []
+                }
+            ]
+        }
+    ]
+}

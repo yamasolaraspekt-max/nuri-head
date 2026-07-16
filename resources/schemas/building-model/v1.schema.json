@@ -1,0 +1,163 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ticket.local/schemas/building-model/v1.schema.json",
+  "title": "Kanonischer Gebäudemodell-Vertrag v1 (G1a / Alias 3D-1A)",
+  "description": "Versionierter, fachlich eindeutiger Vertrag für das kanonische Gebäudemodell nach Masterprompt V3.3 (B2/B9/B10/B12/B19) und den ratifizierten CAD-Auflagen A1–A6/E1–E3. Längen sind Millimeter-Integer, Winkel Dezimalgrad (0=Nord, im Uhrzeigersinn). Höhendatum: OKFF Erdgeschoss = 0 mm. Das Schema prüft ausschließlich Syntax und elementare Wertebereiche; geometrische Toleranz-/Topologie-Entscheidungen trifft der semantische Validator über den zentralen Toleranzvertrag (config/geometrie.php via GeometrieToleranz/TopologieGate). Fachliche Schreibwahrheit bleibt gebaeude_geometrie (3D-0B Variante C); dieser Vertrag ist nachgelagert.",
+  "type": "object",
+  "required": ["schema_version", "model_id", "revision_id", "object_id", "status", "source", "north_source", "height_datum", "buildings"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "pattern": "^1\\.[0-9]+\\.[0-9]+$" },
+    "model_id": { "$ref": "#/$defs/uuid" },
+    "revision_id": { "$ref": "#/$defs/uuid" },
+    "parent_revision_id": { "oneOf": [ { "$ref": "#/$defs/uuid" }, { "type": "null" } ] },
+    "object_id": { "type": "integer", "minimum": 1 },
+    "status": { "type": "string", "enum": ["draft", "validated", "confirmed"] },
+    "source": { "type": "string", "enum": ["manual_2d", "migrated_existing_geometry", "import_dxf", "import_pdf", "import_image", "scan_proposal", "playground_migration", "external_provider", "unknown"] },
+    "north_angle_deg": { "oneOf": [ { "type": "number", "minimum": 0, "exclusiveMaximum": 360 }, { "type": "null" } ] },
+    "north_source": { "type": "string", "enum": ["manual", "site_plan", "georeference", "external_provider", "import", "unknown"] },
+    "height_datum": { "type": "string", "const": "okff_eg_zero" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "data_quality": { "type": "string", "enum": ["measured", "entered", "imported", "scanned_proposal", "derived", "unknown"] },
+    "source_ref": { "type": ["string", "null"] },
+    "buildings": { "type": "array", "items": { "$ref": "#/$defs/building" } }
+  },
+  "$defs": {
+    "uuid": { "type": "string", "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$" },
+    "building": {
+      "type": "object",
+      "required": ["id", "name", "storeys"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/uuid" },
+        "name": { "type": "string" },
+        "external_ref": { "type": ["string", "null"] },
+        "storeys": { "type": "array", "items": { "$ref": "#/$defs/storey" } }
+      }
+    },
+    "storey": {
+      "type": "object",
+      "required": ["id", "name", "order", "finished_floor_level_mm", "nodes", "walls", "openings", "rooms", "slabs"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/uuid" },
+        "building_id": { "$ref": "#/$defs/uuid" },
+        "name": { "type": "string" },
+        "order": { "type": "integer" },
+        "finished_floor_level_mm": { "type": "integer" },
+        "raw_floor_level_mm": { "type": ["integer", "null"] },
+        "default_clear_height_mm": { "oneOf": [ { "type": "integer", "minimum": 1 }, { "type": "null" } ] },
+        "slab_thickness_mm": { "oneOf": [ { "type": "integer", "minimum": 1 }, { "type": "null" } ] },
+        "storey_height_mm": { "oneOf": [ { "type": "integer", "minimum": 1 }, { "type": "null" } ] },
+        "nodes": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+        "walls": { "type": "array", "items": { "$ref": "#/$defs/wall" } },
+        "openings": { "type": "array", "items": { "$ref": "#/$defs/opening" } },
+        "rooms": { "type": "array", "items": { "$ref": "#/$defs/room" } },
+        "slabs": { "type": "array", "items": { "$ref": "#/$defs/slab" } }
+      }
+    },
+    "node": {
+      "type": "object",
+      "required": ["id", "x_mm", "y_mm"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/uuid" },
+        "x_mm": { "type": "integer" },
+        "y_mm": { "type": "integer" }
+      }
+    },
+    "wall": {
+      "type": "object",
+      "required": ["id", "reference_path", "reference_line_type", "thickness_mm", "bottom_offset_mm", "height_mode", "height_mm", "wall_type", "exterior_side"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/uuid" },
+        "reference_path": {
+          "type": "object",
+          "required": ["node_ids"],
+          "additionalProperties": false,
+          "properties": {
+            "node_ids": { "type": "array", "items": { "$ref": "#/$defs/uuid" }, "minItems": 2 }
+          }
+        },
+        "reference_line_type": { "type": "string", "enum": ["axis", "inner", "outer"] },
+        "thickness_change_anchor": { "type": "string", "enum": ["reference_line", "inner_face", "outer_face"], "default": "reference_line" },
+        "thickness_mm": { "type": "integer", "minimum": 1 },
+        "bottom_offset_mm": { "type": "integer" },
+        "height_mode": { "type": "string", "enum": ["uniform", "profile"] },
+        "height_mm": { "type": "integer", "minimum": 1 },
+        "wall_type": { "type": "string", "enum": ["external", "internal", "unknown"] },
+        "exterior_side": { "type": "string", "enum": ["left", "right", "unknown", "not_applicable"] }
+      }
+    },
+    "opening": {
+      "type": "object",
+      "required": ["id", "wall_id", "host_segment_index", "opening_type", "station_mm", "rough_width_mm", "rough_height_mm", "sill_height_mm"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/uuid" },
+        "wall_id": { "$ref": "#/$defs/uuid" },
+        "host_segment_index": { "type": "integer", "minimum": 0 },
+        "opening_type": { "type": "string", "enum": ["window", "door", "passage", "unknown"] },
+        "station_mm": { "type": "integer", "minimum": 0 },
+        "rough_width_mm": { "type": "integer", "minimum": 1 },
+        "rough_height_mm": { "type": "integer", "minimum": 1 },
+        "sill_height_mm": { "type": "integer", "minimum": 0 },
+        "lintel_height_mm": { "oneOf": [ { "type": "integer" }, { "type": "null" } ] },
+        "finished_width_mm": { "oneOf": [ { "type": "integer", "minimum": 1 }, { "type": "null" } ] },
+        "finished_height_mm": { "oneOf": [ { "type": "integer", "minimum": 1 }, { "type": "null" } ] }
+      }
+    },
+    "room": {
+      "type": "object",
+      "required": ["id", "name", "geometry_source", "status", "boundary_edges"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/uuid" },
+        "name": { "type": "string" },
+        "usage": { "type": ["string", "null"] },
+        "geometry_source": { "type": "string", "enum": ["derived_topology", "manual"] },
+        "status": { "type": "string", "enum": ["derived", "confirmed", "invalid"] },
+        "boundary_edges": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["wall_id", "host_segment_index", "wall_side", "traversal"],
+            "additionalProperties": false,
+            "properties": {
+              "wall_id": { "$ref": "#/$defs/uuid" },
+              "host_segment_index": { "type": "integer", "minimum": 0 },
+              "wall_side": { "type": "string", "enum": ["left", "right"] },
+              "traversal": { "type": "string", "enum": ["forward", "backward"] }
+            }
+          }
+        },
+        "manual_reason": { "type": ["string", "null"] },
+        "derived_from_revision": { "oneOf": [ { "$ref": "#/$defs/uuid" }, { "type": "null" } ] },
+        "topology_signature": { "type": ["string", "null"] },
+        "polygon_cache_mm": {
+          "type": ["object", "null"],
+          "required": ["is_cache", "points"],
+          "additionalProperties": false,
+          "properties": {
+            "is_cache": { "type": "boolean", "const": true },
+            "points": { "type": "array", "items": { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2 } }
+          }
+        }
+      }
+    },
+    "slab": {
+      "type": "object",
+      "required": ["id", "kind", "elevation_mm", "boundary_node_ids"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/uuid" },
+        "kind": { "type": "string", "enum": ["ceiling", "floor_slab"] },
+        "elevation_mm": { "type": "integer" },
+        "boundary_node_ids": { "type": "array", "items": { "$ref": "#/$defs/uuid" }, "minItems": 3 },
+        "is_cache": { "type": "boolean" }
+      }
+    }
+  }
+}
