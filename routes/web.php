@@ -4935,6 +4935,13 @@ Route::get('request/token', function(){
 
  
 
+// Bearbeitungs-Sperre (2026-07-16, Yama: je Dokument) — EINE Mechanik für alle Dokument-Editoren.
+Route::middleware(['auth'])->prefix('admin/sperre')->name('system.sperre.')->group(function () {
+    Route::post('/ping', [\App\Http\Controllers\System\BearbeitungsSperreController::class, 'ping'])->name('ping');
+    Route::get('/status', [\App\Http\Controllers\System\BearbeitungsSperreController::class, 'status'])->name('status');
+    Route::post('/leave', [\App\Http\Controllers\System\BearbeitungsSperreController::class, 'leave'])->name('leave');
+});
+
 // Hausplaner W1 (2026-07-16): 3D-Dachplaner-Insel (playground-Bundle, Prototyp — AP-4-Gates folgen in W2).
 Route::middleware(['auth'])->get('/admin/hausplaner/dachplaner', function () {
     return view('admin.hausplaner.dachplaner');

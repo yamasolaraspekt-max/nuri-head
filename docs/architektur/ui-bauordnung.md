@@ -43,3 +43,15 @@ CRM-Ansichten sehen mit 3 Demozeilen immer gut aus und brechen bei 3.000 Kunden.
 ## §4 · Abnahme-Gate UI (ergänzt die 10 Fragen der Bauordnung)
 
 Vor jedem Produktiv-Commit mit UI-Anteil zusätzlich: **(a)** Styleguide geprüft/ergänzt? **(b)** Tokens statt Hex? **(c)** Extremfälle gerendert? **(d)** 3 Viewports gesehen? **(e)** Styleguide-Diff sauber? — Eine Nein-Antwort ohne Begründung = kein Commit.
+
+## §5 · Bearbeitungs-Sperre (Yama-Entscheid 2026-07-16: je Dokument, nicht je Kunde)
+
+Jede Fläche, die ein Dokument BEARBEITET (Rechnung, Auftrag/AB, Grundriss, Hausplan, Materialliste …),
+bindet die eine Sperr-Mechanik ein: `@include('admin.layouts.partials.bearbeitungs-sperre', ['bereich' => '…', 'sperrId' => $id])`.
+Dahinter: `App\Services\Sperre\BearbeitungsSperreService` — herausgelöst aus dem bewährten Angebots-Muster
+(Presence + weiche Exklusiv-Sperre, Heartbeat 30 s, Verfall nach 2 Min, Cache-basiert, kein Deadlock).
+Der Erste hält die Sperre; Kollegen sehen ein Banner „wird gerade von X bearbeitet" und das Event
+`sperre:locked` (Seiten deaktivieren damit ihr Speichern). Die Angebots-Mappe behält ihre bestehende
+Implementierung (`offer_lock:*`) — Vereinheitlichung auf den Service ist ein eigener, beauftragter Posten.
+Übersichts-/Lese-Flächen brauchen KEINE Sperre. Ergänzend gilt für Dokument-Speicherstände die
+Revisionsprüfung (Hausplaner-Foundation) als zweites Netz gegen stille Überschreibungen.

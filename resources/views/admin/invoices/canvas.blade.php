@@ -3,6 +3,10 @@
 @section('title', 'Rechnung Canvas')
 
 @section('content')
+    {{-- Pilot Bearbeitungs-Sperre (2026-07-16): Rechnung = Geld-Dokument; Banner + sperre:locked-Event. --}}
+    @if (!empty($invoice?->id))
+        @include('admin.layouts.partials.bearbeitungs-sperre', ['bereich' => 'rechnung', 'sperrId' => $invoice->id])
+    @endif
     @php
         $canvasPayload = $payload ?? [];
         $invoiceModel = $invoice ?? null;
