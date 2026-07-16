@@ -528,7 +528,7 @@
         [
             // Navi-Audit v3 (2026-07-16): Kontakte-Sektion (1 Eintrag) + Kommunikation zusammengeführt.
             // Rechte je Item (Partner bzw. Email), KEIN Sektions-Gate — sonst verliert eine Rolle die andere Hälfte.
-            'title' => 'Adressbuch & Kommunikation',
+            'title' => 'Adressbuch',
             'etage' => 'Kontakte',
             'items' => [
                 // NAV Phase III (Fläche 1, Design A): 8 Kontakt-Typen -> Tab-Leiste (admin/contacts/_tabs).
@@ -622,7 +622,7 @@
             ],
         ],
         [
-            'title' => 'Lager & Logistik',
+            'title' => 'Lager',
             'permission' => 'Product', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Lieferscheine', 'icon' => 'file-text', 'url' => $safeRoute('delivery-notes.index'), 'count_key' => 'delivery_notes'],
@@ -805,7 +805,7 @@
             'permission' => 'Finance',
             'items' => [
                 ['label' => 'Gesamtfirma · geplant', 'icon' => 'gauge', 'url' => url('#')],
-                ['label' => 'Abteilungen · geplant', 'icon' => 'building', 'url' => url('#')],
+                ['label' => 'Je Abteilung · geplant', 'icon' => 'building', 'url' => url('#')],
                 ['label' => 'Geschäftsführung · geplant', 'icon' => 'crown', 'url' => url('#')],
             ],
         ],
