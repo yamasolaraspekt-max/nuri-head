@@ -649,7 +649,7 @@
                 ['label' => 'Übergaben', 'icon' => 'repeat', 'url' => $safeRoute('handover.details')],
                 ['label' => 'Warenausgang', 'icon' => 'send', 'url' => $safeRoute('request.out.details'), 'count_key' => 'inventory_requests'],
                 ['label' => 'Kaufanfragen', 'icon' => 'shopping-basket', 'url' => $safeRoute('purchase.request'), 'count_key' => 'purchase_requests'],
-                ['label' => 'Materialentnahmen · geplant', 'icon' => 'package-minus', 'url' => url('#')],
+                ['label' => 'Materialentnahmen', 'icon' => 'package-minus', 'url' => \$safeRoute('inventory.materialentnahmen'), 'active_routes' => ['/admin/inventory/materialentnahmen']],
             ],
         ],
         [

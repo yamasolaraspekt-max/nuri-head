@@ -440,6 +440,10 @@ Route::get('/browser-info', [AdminController::class, 'showDetails'])->name('brow
 Route::middleware(['auth'])->get('/api/sidebar-counts', [SidebarCountController::class, 'index'])->name('api.sidebar.counts');
 // Arbeitsliste — Inbox „Was braucht mich jetzt?" (auth-gated wie der uebrige Admin-Bereich).
 Route::middleware(['auth'])->get('/arbeitsliste', [ArbeitslisteController::class, 'index'])->name('admin.arbeitsliste');
+
+// Welle B2 (2026-07-16): Materialentnahmen = projektuebergreifende Material-Uebersicht (LESEND)
+// ueber den Anforderungsfluss planner_item_material_requests. Kein separates Lagerbuch in ticket.
+Route::middleware(['auth'])->get('/admin/inventory/materialentnahmen', [\App\Http\Controllers\Inventory\MaterialentnahmenController::class, 'index'])->name('inventory.materialentnahmen');
 Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/widgets/load', [DashboardWidgetController::class, 'load'])->name('widgets.load');
     Route::post('/widgets/save', [DashboardWidgetController::class, 'save'])->name('widgets.save');
