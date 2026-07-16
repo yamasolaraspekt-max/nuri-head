@@ -1558,10 +1558,11 @@
                 @php $__prevEtage = $__etage; $__etageSlug = Str::slug($__etage); @endphp
                 @once
                     <style>
-                        /* Etagen: groesser als die Sektions-Titel, eigene Farbe (Navy-Akzent) — Yamas Vorgabe. */
-                        .sa-etage-toggle{display:flex;width:calc(100% - 12px);align-items:center;justify-content:space-between;margin:14px 6px 3px;padding:8px 10px;background:transparent;border:0;cursor:pointer;font-size:15px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--sa-accent, #1C3F94);border-radius:8px;}
-                        .sa-etage-toggle:hover{background:var(--sa-accent-light, #e8edf7);}
-                        html.dark .sa-etage-toggle{color:#8fa8dd;}
+                        /* Etagen: dezent & smart (Yamas Korrektur 2026-07-16) — klein, ruhiges Grau, kein harter Akzent. */
+                        .sa-etage-toggle{display:flex;width:calc(100% - 12px);align-items:center;justify-content:space-between;margin:12px 6px 2px;padding:5px 10px;background:transparent;border:0;cursor:pointer;font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#6b7280;border-radius:8px;}
+                        .sa-etage-toggle:hover{background:rgba(148,163,184,.12);color:#374151;}
+                        html.dark .sa-etage-toggle{color:#9ca3af;}
+                        html.dark .sa-etage-toggle:hover{color:#d1d5db;}
                         .sa-etage-chevron{width:12px;height:12px;transition:transform .15s;}
                         .sa-etage-toggle.is-open .sa-etage-chevron{transform:rotate(180deg);}
                     </style>

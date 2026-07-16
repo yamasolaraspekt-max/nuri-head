@@ -2,7 +2,7 @@
     Seitenkopf — EINE Wahrheit für alle Hauptseiten (CI-Vereinheitlichung 2026-07-15).
     Ersetzt die je Seite kopierten Köpfe (ac-/iv-/oc-Titelbars). Werte abgeleitet aus der
     führenden Fassung (Arbeitsliste/Planner): Titel 26px/800 GROSS, Untertitel gedämpft,
-    Breadcrumb „Dashboard › Seite", Aktionen rechts. Marke (Navy #1C3F94) nur als Akzent.
+    Breadcrumb „Dashboard › Seite", Aktionen rechts. Akzentfarbe kommt aus dem sa-ui-Token (Bestands-Grün).
     Nutzung:
         <x-page-head title="Filialen" sub="Beschreibung…" current="Filialen">
             <x-slot:actions> …Buttons der Seite… </x-slot:actions>
@@ -25,7 +25,7 @@
     .sa-ph-sub { margin: 4px 0 0; font-size: 13.5px; color: #6b7280; max-width: 780px; }
     .sa-ph-breadcrumb { margin-top: 8px; font-size: 12.5px; color: #6b7280; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .sa-ph-breadcrumb a { color: #6b7280; text-decoration: none; }
-    .sa-ph-breadcrumb a:hover { color: #1C3F94; }
+    .sa-ph-breadcrumb a:hover { color: var(--sa-accent, #93c21c); }
     .sa-ph-breadcrumb .current { color: #111827; font-weight: 700; }
     .sa-ph-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     @media (max-width: 767px) {

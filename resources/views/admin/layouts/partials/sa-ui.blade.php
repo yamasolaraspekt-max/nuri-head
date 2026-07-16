@@ -1,14 +1,13 @@
 {{--
-    SA-UI-Tokens — EINE Wahrheit für die Aktionsfarbe & Statusfarben (CI Welle 3, 2026-07-16).
-    Vorher definierten ~68 Seiten je eigene --primary-Werte (#93c21c, #8fc73e, #74b2d4 …).
-    Jetzt referenzieren alle var(--sa-accent*); geändert wird nur noch HIER.
-    Marke: Solar-Aspekt-Navy als Akzent (Arbeitsliste-Standard). Grün bleibt semantisch (Erfolg).
+    SA-UI-Tokens — EINE Wahrheit für die Aktionsfarbe & Statusfarben.
+    KORREKTUR 2026-07-16 (Yamas Entscheid): Aktionsfarbe = das gewachsene Solar-Aspekt-GRÜN
+    (bestehende Farbwelt), NICHT Navy. Der Token-Mechanismus bleibt: geändert wird nur HIER.
 --}}
 <style>
     :root {
-        --sa-accent: #1C3F94;
-        --sa-accent-hover: #16336f;
-        --sa-accent-light: #e8edf7;
+        --sa-accent: #93c21c;
+        --sa-accent-hover: #7baa18;
+        --sa-accent-light: #f4fae7;
         --sa-accent-ink: #ffffff;
 
         /* Semantische Statusfarben (getrennt von der Marke) */
