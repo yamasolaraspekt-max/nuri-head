@@ -483,6 +483,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/department/departments', [DashboardDepartmentController::class, 'departments'])->name('department.departments');
     Route::get('/department/overview', [DashboardDepartmentController::class, 'overview'])->name('department.overview');
+    // Welle B2 (2026-07-16): Je-Abteilung-Cockpit = reine Praesentationsseite ueber
+    // department.departments + department.overview (eine Wahrheit). Route::view, Controller unberuehrt.
+    Route::view('/department/cockpit', 'admin.controlling.je-abteilung')->name('department.cockpit');
 });
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
