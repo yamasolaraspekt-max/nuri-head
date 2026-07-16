@@ -803,6 +803,7 @@ Route::group(['middleware' => ['web', 'auth']], function(){
     // Welle A4 (2026-07-16): Gebäudeakte V1 lesend (Spec: docs/planner-spec-gebaeudeakte.md).
     Route::get('/objekte', [\App\Http\Controllers\Customer\ObjektakteController::class, 'index'])->name('objekte.index');
     Route::get('/objekte/{alternative}', [\App\Http\Controllers\Customer\ObjektakteController::class, 'show'])->whereNumber('alternative')->name('objekte.akte');
+    Route::post('/objekte/{alternative}/auslegung', [\App\Http\Controllers\Customer\ObjektakteController::class, 'auslegung'])->whereNumber('alternative')->name('objekte.auslegung');
 
     Route::get('/new_lead_profile/{id}', [NewLeadsController::class, 'view'])->name('new.lead.profile');
     Route::get('/customers/{customer}/price-history',[NewLeadsController::class, 'priceHistoryForCustomer'])->name('customers.price-history');

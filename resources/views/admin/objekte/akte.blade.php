@@ -90,6 +90,83 @@
                 @endforeach
             </table>
         </div>
+
+        <div class="gk-card" style="flex: 1 1 100%" id="auslegung">
+            <h3>WP-Auslegung rechnen <span style="font-weight:600; text-transform:none; letter-spacing:0; color:#9ca3af">informativ, nicht verbindlich — Objektwerte vorbelegt, du bestätigst die Fach-Operanden</span></h3>
+            <form method="POST" action="{{ route('objekte.auslegung', $objekt->id) }}" style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end;">
+                @csrf
+                @php $e = $eingaben ?? []; @endphp
+                <label style="font-size:11.5px; color:#6b7280; display:flex; flex-direction:column; gap:3px;">Heizlast phiHl (kW) *
+                    <input name="phi_hl_kw" value="{{ $e['phi_hl_kw'] ?? '' }}" placeholder="aus Heizlast-Rechner" style="border:1px solid #d1d5db; border-radius:8px; padding:7px 9px; font-size:12.5px; width:150px;">
+                </label>
+                <label style="font-size:11.5px; color:#6b7280; display:flex; flex-direction:column; gap:3px;">Jahres-Heizenergie (kWh) *
+                    <input name="q_heiz_kwh" value="{{ $e['q_heiz_kwh'] ?? $vorbelegung['q_heiz_kwh'] ?? '' }}" placeholder="{{ $vorbelegung['q_heiz_kwh'] ? '' : 'im Objekt nicht in kWh belegt' }}" style="border:1px solid #d1d5db; border-radius:8px; padding:7px 9px; font-size:12.5px; width:170px;">
+                </label>
+                <label style="font-size:11.5px; color:#6b7280; display:flex; flex-direction:column; gap:3px;">Vorlauf (°C) *
+                    <input name="vorlauf_c" value="{{ $e['vorlauf_c'] ?? $vorbelegung['vorlauf_c'] ?? '' }}" style="border:1px solid #d1d5db; border-radius:8px; padding:7px 9px; font-size:12.5px; width:100px;">
+                </label>
+                <label style="font-size:11.5px; color:#6b7280; display:flex; flex-direction:column; gap:3px;">WP-Typ *
+                    <select name="wp_typ" style="border:1px solid #d1d5db; border-radius:8px; padding:7px 9px; font-size:12.5px;">
+                        <option value="">– wählen –</option>
+                        <option value="luft_wasser" {{ ($e['wp_typ'] ?? '') === 'luft_wasser' ? 'selected' : '' }}>Luft/Wasser</option>
+                        <option value="sole_wasser" {{ ($e['wp_typ'] ?? '') === 'sole_wasser' ? 'selected' : '' }}>Sole/Wasser</option>
+                        <option value="wasser_wasser" {{ ($e['wp_typ'] ?? '') === 'wasser_wasser' ? 'selected' : '' }}>Wasser/Wasser</option>
+                    </select>
+                </label>
+                <label style="font-size:11.5px; color:#6b7280; display:flex; flex-direction:column; gap:3px;">Heizsystem * {{ $vorbelegung['heizsystem_hinweis'] ? '(Objekt: ' . $vorbelegung['heizsystem_hinweis'] . ')' : '' }}
+                    <select name="heizsystem" style="border:1px solid #d1d5db; border-radius:8px; padding:7px 9px; font-size:12.5px;">
+                        <option value="">– wählen –</option>
+                        <option value="heizkoerper" {{ ($e['heizsystem'] ?? '') === 'heizkoerper' ? 'selected' : '' }}>Heizkörper</option>
+                        <option value="fussboden" {{ ($e['heizsystem'] ?? '') === 'fussboden' ? 'selected' : '' }}>Fußbodenheizung</option>
+                        <option value="beides" {{ ($e['heizsystem'] ?? '') === 'beides' ? 'selected' : '' }}>Gemischt</option>
+                    </select>
+                </label>
+                <label style="font-size:11.5px; color:#6b7280; display:flex; flex-direction:column; gap:3px;">Warmwasser mit WP? *
+                    <select name="ww_mit_wp" style="border:1px solid #d1d5db; border-radius:8px; padding:7px 9px; font-size:12.5px;">
+                        <option value="">– entscheiden –</option>
+                        <option value="1" {{ ($e['ww_mit_wp'] ?? null) === true ? 'selected' : '' }}>ja</option>
+                        <option value="0" {{ ($e['ww_mit_wp'] ?? null) === false ? 'selected' : '' }}>nein</option>
+                    </select>
+                </label>
+                <label style="font-size:11.5px; color:#6b7280; display:flex; flex-direction:column; gap:3px;">WW-Energie (kWh/a, optional)
+                    <input name="q_ww_kwh" value="{{ $e['q_ww_kwh'] ?? '' }}" style="border:1px solid #d1d5db; border-radius:8px; padding:7px 9px; font-size:12.5px; width:150px;">
+                </label>
+                <button type="submit" style="border:none; border-radius:8px; padding:9px 18px; font-size:13px; font-weight:700; background:var(--sa-accent, #93c21c); color:#fff; cursor:pointer;">Auslegung rechnen</button>
+            </form>
+            <div style="font-size:11px; color:#9ca3af; margin-top:6px;">PLZ, Koordinaten und (wenn in kWh belegt) Jahres-Heizenergie kommen aus dem Objekt. * = Pflicht-Operand — fehlt einer, meldet die Kette das Gate statt zu raten.</div>
+
+            @isset ($auslegung)
+                <div style="margin-top:16px; border-top:1px solid #e5e7eb; padding-top:12px;">
+                    @if (!($auslegung['anwendbar'] ?? false))
+                        <div class="gk-fehlt" style="font-size:12.5px;"><span>Gate offen:</span> {{ implode(' · ', $auslegung['gates_offen'] ?? []) }} — {{ implode(' ', $auslegung['hinweise'] ?? []) }}</div>
+                    @else
+                        <div style="font-size:12px; color:#6b7280; margin-bottom:8px;">Ergebnis: <strong>{{ $auslegung['label'] }}</strong>{{ !empty($auslegung['gewichte_ausgesetzt']) ? ' · Kriterien ohne Quelle nicht gewichtet: ' . implode(', ', $auslegung['gewichte_ausgesetzt']) : '' }}</div>
+                        <table class="gk-reife">
+                            <tr>
+                                <td style="font-weight:700">Gerät</td><td style="font-weight:700">geeignet</td>
+                                <td style="font-weight:700">Bivalenzpunkt</td><td style="font-weight:700">Deckung</td>
+                                <td style="font-weight:700">JAZ</td><td style="font-weight:700">Score</td>
+                            </tr>
+                            @foreach ($auslegung['kandidaten'] as $k)
+                                <tr>
+                                    <td>{{ $k['hersteller'] }} {{ $k['modell'] }}{{ !empty($k['nibe']) ? ' · NIBE' : '' }}</td>
+                                    <td>
+                                        <span class="gk-pill {{ $k['geeignet'] ? 'ok' : 'fehlt' }}"><i></i> {{ $k['geeignet'] ? 'ja' : ($k['ausschluss_grund'] ?: 'nein') }}</span>
+                                    </td>
+                                    <td>{{ $k['bivalenz']['bivalenzpunkt_c'] !== null ? $k['bivalenz']['bivalenzpunkt_c'] . ' °C' : '—' }}</td>
+                                    <td>{{ $k['bivalenz']['deckung_ne_pct'] !== null ? $k['bivalenz']['deckung_ne_pct'] . ' %' : '—' }}</td>
+                                    <td>{{ $k['bivalenz']['jaz'] ?? '—' }}</td>
+                                    <td>{{ $k['score'] ?? '—' }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                        @if (!empty($auslegung['hinweise']))
+                            <div style="font-size:11px; color:#9ca3af; margin-top:6px;">{{ implode(' · ', $auslegung['hinweise']) }}</div>
+                        @endif
+                    @endif
+                </div>
+            @endisset
+        </div>
     </div>
 </div>
 @endsection

@@ -87,6 +87,44 @@ class ObjektakteController extends Controller
 
     public function show(int $alternativeId)
     {
+        return view('admin.objekte.akte', $this->akteDaten($alternativeId));
+    }
+
+    /**
+     * Auslegung rechnen (Ketten-Adapter V1.5) — Vorschlag + Bestätigung:
+     * Objekt liefert belegte Operanden, der Mensch bestätigt phiHl/WP-Typ/Heizsystem/WW.
+     * Read-Model (Stufe 3a): rechnet on-the-fly, schreibt NICHTS, Ergebnis immer informativ.
+     */
+    public function auslegung(Request $request, int $alternativeId)
+    {
+        $daten = $this->akteDaten($alternativeId);
+
+        $bestaetigt = $request->validate([
+            'phi_hl_kw' => ['nullable', 'numeric', 'min:0'],
+            'wp_typ' => ['nullable', 'string', 'in:luft_wasser,sole_wasser,wasser_wasser'],
+            'heizsystem' => ['nullable', 'string', 'in:heizkoerper,fussboden,beides'],
+            'ww_mit_wp' => ['nullable', 'in:0,1'],
+            'q_ww_kwh' => ['nullable', 'numeric', 'min:0'],
+            'q_heiz_kwh' => ['nullable', 'numeric', 'min:0'],
+            'vorlauf_c' => ['nullable', 'numeric', 'min:0'],
+        ]);
+        if (array_key_exists('ww_mit_wp', $bestaetigt) && $bestaetigt['ww_mit_wp'] !== null) {
+            $bestaetigt['ww_mit_wp'] = $bestaetigt['ww_mit_wp'] === '1';
+        }
+
+        $adapter = app(\App\Services\Auslegung\GebaeudeakteAuslegungsAdapter::class);
+        $eingabe = $adapter->eingabe($daten['objekt'], $bestaetigt);
+        $ergebnis = app(\App\Services\Auslegung\WpAuslegungsketteService::class)->rankeKandidaten($eingabe);
+
+        return view('admin.objekte.akte', $daten + [
+            'auslegung' => $ergebnis,
+            'eingaben' => $bestaetigt,
+        ]);
+    }
+
+    /** Gemeinsame Akte-Daten für show() und auslegung() — eine Wahrheit. */
+    private function akteDaten(int $alternativeId): array
+    {
         $objekt = LeadAlternativeAdd::query()->with('lead:id,firma,name,lastname,customer_no')->findOrFail($alternativeId);
 
         $profil = Anforderungsprofil::query()
@@ -115,13 +153,14 @@ class ObjektakteController extends Controller
             return ['werte' => $werte, 'fehlt' => $fehlt, 'quote' => $this->vollstaendigkeit($objekt, $felder)];
         });
 
-        return view('admin.objekte.akte', [
+        return [
             'objekt' => $objekt,
             'kunde' => $this->kundenName($objekt),
             'kapitel' => $kapitel,
             'profil' => $profil,
             'reife' => $this->auslegungsReife($objekt, $profil),
-        ]);
+            'vorbelegung' => app(\App\Services\Auslegung\GebaeudeakteAuslegungsAdapter::class)->vorbelegung($objekt),
+        ];
     }
 
     /** Anteil gefüllter Felder eines Kapitels in Prozent. */
