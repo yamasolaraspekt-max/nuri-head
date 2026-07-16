@@ -408,6 +408,7 @@
         // ============================================================================
         [
             'title' => 'Arbeitsbereich',
+            'etage' => 'Heute',
             'items' => [
                 ['label' => 'Dashboard', 'icon' => 'layout-dashboard', 'tone' => 'text-brand-blue', 'url' => url('/'), 'active_routes' => ['/']],
                 ['label' => 'Arbeitsliste', 'icon' => 'inbox', 'tone' => 'text-brand-blue', 'url' => $safeRoute('admin.arbeitsliste', 'arbeitsliste'), 'active_routes' => ['/arbeitsliste']],
@@ -420,15 +421,8 @@
             ],
         ],
         [
-            // AUSBAU 2026-07-16 (Roadmap-Navi): geplante Fläche — Pipeline über den ganzen Vorgangsfluss.
-            'title' => 'Vorgänge',
-            'permission' => 'Customer',
-            'items' => [
-                ['label' => 'Vorgangs-Pipeline · geplant', 'icon' => 'git-branch', 'url' => url('#')],
-            ],
-        ],
-        [
             'title' => 'Anfragen',
+            'etage' => 'Vertriebsaktivitäten',
             'permission' => 'Inquiry',
             'items' => [
                 ['label' => 'Neue Anfrage', 'icon' => 'plus-circle', 'url' => $safeRoute('inquiry.create', 'inquiry_create'), 'active_routes' => ['/inquiry_create', '/inquiries/create']],
@@ -455,19 +449,6 @@
             ],
         ],
         [
-            // Navi-Audit v3 (2026-07-16): Kontakte-Sektion (1 Eintrag) + Kommunikation zusammengeführt.
-            // Rechte je Item (Partner bzw. Email), KEIN Sektions-Gate — sonst verliert eine Rolle die andere Hälfte.
-            'title' => 'Kontakte & Kommunikation',
-            'items' => [
-                // NAV Phase III (Fläche 1, Design A): 8 Kontakt-Typen -> Tab-Leiste (admin/contacts/_tabs).
-                ['label' => 'Alle Kontakte', 'icon' => 'list', 'permission' => 'Partner', 'url' => $safeRoute('all.contacts', 'all-contacts'), 'count_key' => 'contacts', 'active_routes' => ['/all-contacts', '/brand', '/brands', '/distributors', '/external_personal']],
-                ['label' => 'Posteingang', 'icon' => 'inbox', 'permission' => 'Email', 'url' => url('/email_view'), 'active_routes' => ['/email_view']],
-                ['label' => 'Lead E-Mails', 'icon' => 'mail-open', 'permission' => 'Email', 'url' => $safeRoute('lead.email.inbox'), 'active_routes' => ['/lead-email', '/lead/emails']],
-                // ENTFERNT auf Anweisung Yama 2026-07-16: Bitrix24-Chat („brauchen wir nicht"). Route/Controller unberührt; zum Reaktivieren einkommentieren.
-                // ['label' => 'Bitrix24-Chat', 'icon' => 'message-square', 'url' => $safeRoute('chat.index', 'admin/chat'), 'count_key' => 'chat_unread', 'active_routes' => ['/admin/chat', '/chats']],
-            ],
-        ],
-        [
             'title' => 'Angebote',
             'permission' => 'Customer', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
@@ -481,17 +462,12 @@
             ],
         ],
         [
-            // AUSBAU 2026-07-16: Objektakte (Konzept playground «Kunde→Objekt→Projekt») — geplant.
-            'title' => 'Kunden & Objekte',
+            // AUSBAU 2026-07-16 (Roadmap-Navi): geplante Fläche — Pipeline über den ganzen Vorgangsfluss.
+            'title' => 'Vorgänge',
+            'etage' => 'Vorgänge & Aufträge',
             'permission' => 'Customer',
             'items' => [
-                ['label' => 'Objektakte (Gebäude) · geplant', 'icon' => 'building-2', 'url' => url('#')],
-                ['label' => 'Projekt-Akte · geplant', 'icon' => 'folder-kanban', 'url' => url('#')],
-                ['label' => 'Serienbriefe · geplant', 'icon' => 'mails', 'url' => url('#')],
-                ['label' => 'Mietobjekte · geplant', 'icon' => 'home', 'url' => url('#')],
-                ['label' => 'Dokumenten-Center (DMS) · geplant', 'icon' => 'folder-open', 'url' => url('#')],
-                ['label' => 'Vertragsmanagement · geplant', 'icon' => 'file-signature', 'url' => url('#')],
-                ['label' => 'Versicherungen · geplant', 'icon' => 'shield', 'url' => url('#')],
+                ['label' => 'Vorgangs-Pipeline · geplant', 'icon' => 'git-branch', 'url' => url('#')],
             ],
         ],
         [
@@ -509,19 +485,6 @@
                 ['label' => 'Spam', 'icon' => 'slash', 'url' => $safeRoute('deal.junk.list'), 'count_key' => 'deals_junk'],
                 ['label' => 'Papierkorb', 'icon' => 'trash', 'url' => $safeRoute('deal.delete.list'), 'count_key' => 'deals_deleted'],
             ],
-        ],
-        [
-            'title' => 'Montage',
-            'permission' => 'Employee', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
-            'items' => array_values(array_filter([
-                ['label' => 'Einsatzplan', 'icon' => 'calendar-range', 'tone' => 'text-brand-purple', 'url' => $safeRoute('planner.index', '/planner'), 'count_key' => 'planner_projects', 'active_routes' => ['/planner/projects']],
-                ['label' => 'Mein Tag (Monteur) · geplant', 'icon' => 'smartphone', 'url' => url('#')],
-                ['label' => 'Montage-Aufgaben', 'icon' => 'users-round', 'tone' => 'text-brand-blue', 'url' => $safeRoute('general-tasks.index', 'general-tasks'), 'count_key' => 'general_tasks_open', 'active_routes' => ['/general-tasks']],
-                $canSeeAllReports ? ['label' => 'Berichts-Übersicht', 'icon' => 'file-text', 'tone' => 'text-brand-blue', 'url' => url('admin/overdue-center/recent'), 'count_key' => 'reports_all_remaining', 'active_routes' => ['/admin/overdue-center/recent', '/overdue-center/recent']] : null,
-                ['label' => 'Überfällige Berichte', 'icon' => 'clipboard-check', 'tone' => 'text-brand-green', 'url' => url('admin/reports'), 'count_key' => 'reports_my_remaining', 'active_routes' => ['/admin/reports', '/reports']],
-                ['label' => 'Abnahmen & Mängel · geplant', 'icon' => 'stamp', 'url' => url('#')],
-                ['label' => 'Bautagesberichte · geplant', 'icon' => 'notebook-pen', 'url' => url('#')],
-            ])),
         ],
         [
             'title' => 'Tickets',
@@ -543,34 +506,54 @@
             ],
         ],
         [
+            'title' => 'Montage',
+            'etage' => 'Disposition',
+            'permission' => 'Employee', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
+            'items' => array_values(array_filter([
+                ['label' => 'Einsatzplan', 'icon' => 'calendar-range', 'tone' => 'text-brand-purple', 'url' => $safeRoute('planner.index', '/planner'), 'count_key' => 'planner_projects', 'active_routes' => ['/planner/projects']],
+                ['label' => 'Mein Tag (Monteur) · geplant', 'icon' => 'smartphone', 'url' => url('#')],
+                ['label' => 'Montage-Aufgaben', 'icon' => 'users-round', 'tone' => 'text-brand-blue', 'url' => $safeRoute('general-tasks.index', 'general-tasks'), 'count_key' => 'general_tasks_open', 'active_routes' => ['/general-tasks']],
+                $canSeeAllReports ? ['label' => 'Berichts-Übersicht', 'icon' => 'file-text', 'tone' => 'text-brand-blue', 'url' => url('admin/overdue-center/recent'), 'count_key' => 'reports_all_remaining', 'active_routes' => ['/admin/overdue-center/recent', '/overdue-center/recent']] : null,
+                ['label' => 'Überfällige Berichte', 'icon' => 'clipboard-check', 'tone' => 'text-brand-green', 'url' => url('admin/reports'), 'count_key' => 'reports_my_remaining', 'active_routes' => ['/admin/reports', '/reports']],
+                ['label' => 'Abnahmen & Mängel · geplant', 'icon' => 'stamp', 'url' => url('#')],
+                ['label' => 'Bautagesberichte · geplant', 'icon' => 'notebook-pen', 'url' => url('#')],
+            ])),
+        ],
+        [
+            // Navi-Audit v3 (2026-07-16): Kontakte-Sektion (1 Eintrag) + Kommunikation zusammengeführt.
+            // Rechte je Item (Partner bzw. Email), KEIN Sektions-Gate — sonst verliert eine Rolle die andere Hälfte.
+            'title' => 'Kontakte & Kommunikation',
+            'etage' => 'Kontaktverwaltung',
+            'items' => [
+                // NAV Phase III (Fläche 1, Design A): 8 Kontakt-Typen -> Tab-Leiste (admin/contacts/_tabs).
+                ['label' => 'Alle Kontakte', 'icon' => 'list', 'permission' => 'Partner', 'url' => $safeRoute('all.contacts', 'all-contacts'), 'count_key' => 'contacts', 'active_routes' => ['/all-contacts', '/brand', '/brands', '/distributors', '/external_personal']],
+                ['label' => 'Posteingang', 'icon' => 'inbox', 'permission' => 'Email', 'url' => url('/email_view'), 'active_routes' => ['/email_view']],
+                ['label' => 'Lead E-Mails', 'icon' => 'mail-open', 'permission' => 'Email', 'url' => $safeRoute('lead.email.inbox'), 'active_routes' => ['/lead-email', '/lead/emails']],
+                // ENTFERNT auf Anweisung Yama 2026-07-16: Bitrix24-Chat („brauchen wir nicht"). Route/Controller unberührt; zum Reaktivieren einkommentieren.
+                // ['label' => 'Bitrix24-Chat', 'icon' => 'message-square', 'url' => $safeRoute('chat.index', 'admin/chat'), 'count_key' => 'chat_unread', 'active_routes' => ['/admin/chat', '/chats']],
+            ],
+        ],
+        [
+            // AUSBAU 2026-07-16: Objektakte (Konzept playground «Kunde→Objekt→Projekt») — geplant.
+            'title' => 'Kunden & Objekte',
+            'permission' => 'Customer',
+            'items' => [
+                ['label' => 'Objektakte (Gebäude) · geplant', 'icon' => 'building-2', 'url' => url('#')],
+                ['label' => 'Projekt-Akte · geplant', 'icon' => 'folder-kanban', 'url' => url('#')],
+                ['label' => 'Serienbriefe · geplant', 'icon' => 'mails', 'url' => url('#')],
+                ['label' => 'Dokumenten-Center (DMS) · geplant', 'icon' => 'folder-open', 'url' => url('#')],
+            ],
+        ],
+        [
             // Navi-Audit v3: NEU — „Planung & 3D" aus Energie herausgelöst (Yamas Thema; wächst mit 3D-Planer/Solar-API).
             'title' => 'Planung & 3D',
+            'etage' => 'Planung & Energie',
             'items' => [
                 ['label' => 'Grundriss-Editor', 'icon' => 'pen-tool', 'url' => $safeRoute('energie.grundriss'), 'active_routes' => ['/admin/energie/grundriss']],
                 ['label' => 'Plan-Import', 'icon' => 'file-up', 'url' => $safeRoute('energie.plan-upload'), 'active_routes' => ['/admin/energie/plan-upload']],
                 ['label' => '3D-Dachplaner · geplant', 'icon' => 'box', 'url' => url('#')],
                 ['label' => 'Dachplaner Pro · geplant (nurihead)', 'icon' => 'pencil-ruler', 'url' => url('#')],
                 ['label' => 'Dachbelegung PV · geplant', 'icon' => 'layout-grid', 'url' => url('#')],
-            ],
-        ],
-        [
-            // AUSBAU 2026-07-16 R3: Portale (playground: Kundenportal, Lieferantenportal, FreigabeApp, MobileStamp).
-            'title' => 'Portale',
-            'items' => [
-                ['label' => 'Kundenportal · geplant', 'icon' => 'globe', 'url' => url('#')],
-                ['label' => 'Lieferantenportal · geplant', 'icon' => 'truck', 'url' => url('#')],
-                ['label' => 'Freigabe-App · geplant', 'icon' => 'check-check', 'url' => url('#')],
-                ['label' => 'Mobile Stempel-App · geplant', 'icon' => 'smartphone', 'url' => url('#')],
-            ],
-        ],
-        [
-            // AUSBAU 2026-07-16 R3: KI-Zentrale (playground: KIAgentenZentrale, KIInsights, Automatisierungszentrale, Erkennung).
-            'title' => 'KI & Automatisierung',
-            'items' => [
-                ['label' => 'KI-Agenten-Zentrale · geplant', 'icon' => 'bot', 'url' => url('#')],
-                ['label' => 'KI-Insights · geplant', 'icon' => 'sparkles', 'url' => url('#')],
-                ['label' => 'Automatisierungszentrale · geplant', 'icon' => 'workflow', 'url' => url('#')],
-                ['label' => 'Beleg-Erkennung · geplant', 'icon' => 'scan-text', 'url' => url('#')],
             ],
         ],
         [
@@ -593,6 +576,7 @@
         ],
         [
             'title' => 'Artikel',
+            'etage' => 'Artikelverwaltung',
             'permission' => 'Product',
             'items' => [
                 ['label' => 'Neuer Artikel', 'icon' => 'plus', 'url' => $safeRoute('product.create', 'product_create')],
@@ -632,6 +616,7 @@
         ],
         [
             'title' => 'Anlagevermögen & Inventur',
+            'etage' => 'Inventur & Anlagen',
             'permission' => 'Finance', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Inventur', 'icon' => 'warehouse', 'url' => $safeRoute('inventory.index'), 'count_key' => 'inventory'],
@@ -641,6 +626,7 @@
         ],
         [
             'title' => 'Finanzen & Buchhaltung',
+            'etage' => 'Finanzen',
             'permission' => 'Finance', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Rechnungen', 'icon' => 'receipt-text', 'permission' => 'Invoice', 'url' => $safeRoute('admin.invoices.index', 'admin/invoices'), 'count_key' => 'invoices', 'active_routes' => ['/admin/invoices', '/invoices/canvas']],
@@ -654,6 +640,7 @@
             // AUSBAU 2026-07-16: Buchhaltung — Kern im Haus (app/Services/Accounting, FIBU-Transplant 08.07.).
             // Verdrahtung abgestimmt mit dem accounting-Strang (web.php:5494 «Nav-Eintrag folgt separat»).
             'title' => 'Buchhaltung',
+            'etage' => 'Buchhaltung',
             'permission' => 'Finance',
             'items' => [
                 ['label' => 'Offene Posten & Mahnwesen · geplant', 'icon' => 'list-checks', 'url' => url('#')],
@@ -676,34 +663,21 @@
             ],
         ],
         [
-            'title' => 'Controlling',
-            'permission' => 'Finance', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
-            'items' => [
-                ['label' => 'Abteilungen', 'icon' => 'building', 'url' => $safeRoute('department.info'), 'count_key' => 'departments'],
-                ['label' => 'Filialen', 'icon' => 'map-pin', 'url' => $safeRoute('branch.info'), 'count_key' => 'branches'],
-            ],
-        ],
-        [
-            // AUSBAU 2026-07-16: ZAHLEN-Etage (Profit-Center-Bild) — geplante Cockpits.
-            'title' => 'Zahlen & Auswertungen',
-            'permission' => 'Finance',
-            'items' => [
-                ['label' => 'Firmen-Cockpit · geplant', 'icon' => 'gauge', 'url' => url('#')],
-                ['label' => 'Abteilungs-Cockpit · geplant', 'icon' => 'building', 'url' => url('#')],
-                ['label' => 'Auslastung · geplant', 'icon' => 'activity', 'url' => url('#')],
-                ['label' => 'BWA · geplant', 'icon' => 'bar-chart-3', 'url' => url('#')],
-                ['label' => 'Abteilungs-GuV · geplant', 'icon' => 'table-2', 'url' => url('#')],
-                ['label' => 'Kapazität & Produktivität · geplant', 'icon' => 'trending-up', 'url' => url('#')],
-                ['label' => 'Ziele · geplant', 'icon' => 'target', 'url' => url('#')],
-                ['label' => 'Geschäftsführungs-Cockpit · geplant', 'icon' => 'crown', 'url' => url('#')],
-                ['label' => 'Strategische Übersicht · geplant', 'icon' => 'compass', 'url' => url('#')],
-                ['label' => 'Abteilungsvergleich · geplant', 'icon' => 'git-compare', 'url' => url('#')],
-                ['label' => 'Liquidität & Finanzplanung · geplant', 'icon' => 'wallet-cards', 'url' => url('#')],
-                ['label' => 'Investitionsplanung · geplant', 'icon' => 'trending-up', 'url' => url('#')],
-            ],
+            // Themen-Etagen 2026-07-16: Yamas Thema «Lohn & Gehalt» — aus Mitarbeiter/Stammdaten herausgelöst.
+            'title' => 'Lohn & Gehalt',
+            'etage' => 'Lohn & Gehalt',
+            'permission' => 'Employee',
+            'items' => array_values(array_filter([
+                $canSalary ? ['label' => 'Lohn & Vollkosten', 'icon' => 'calculator', 'url' => $safeRoute('salary.index'), 'count_key' => 'salaries'] : null,
+                ['label' => 'Zeiterfassung · geplant', 'icon' => 'timer', 'url' => url('#')],
+                ['label' => 'Überstunden · geplant', 'icon' => 'clock-4', 'url' => url('#')],
+                ['label' => 'Lohnvorbereitung · geplant', 'icon' => 'receipt-euro', 'url' => url('#')],
+                ['label' => 'Lohnarten · geplant', 'icon' => 'coins', 'url' => url('#')],
+            ])),
         ],
         [
             'title' => 'Mitarbeiter',
+            'etage' => 'Personal',
             'permission' => 'Employee',
             'items' => array_values(array_filter([
                 ['label' => 'Mitarbeiter anlegen', 'icon' => 'user-plus', 'url' => $safeRoute('emp.create', 'emp_create')],
@@ -713,10 +687,6 @@
                 ['label' => 'Arbeitsorte', 'icon' => 'map-pin', 'url' => $safeRoute('work.place.index'), 'count_key' => 'work_places'],
                 ['label' => 'Anwesenheit', 'icon' => 'user-check', 'url' => $safeRoute('admin.attendance.analytics'), 'count_key' => 'attendance_today'],
                 ['label' => 'Krankheit & Urlaub', 'icon' => 'activity', 'url' => $safeRoute('employee.sickness-holiday-analyser'), 'active_routes' => ['/employee/sickness-holiday-analyser']],
-                $canSalary ? ['label' => 'Lohn & Vollkosten', 'icon' => 'calculator', 'url' => $safeRoute('salary.index'), 'count_key' => 'salaries'] : null,
-                ['label' => 'Zeiterfassung · geplant', 'icon' => 'timer', 'url' => url('#')],
-                ['label' => 'Überstunden · geplant', 'icon' => 'clock-4', 'url' => url('#')],
-                ['label' => 'Lohnvorbereitung · geplant', 'icon' => 'receipt-euro', 'url' => url('#')],
                 ['label' => 'Arbeitsverträge · geplant', 'icon' => 'file-signature', 'url' => url('#')],
                 ['label' => 'Bewerbungen · geplant', 'icon' => 'user-plus', 'url' => url('#')],
                 ['label' => 'Personalakte · geplant', 'icon' => 'folder-heart', 'url' => url('#')],
@@ -736,13 +706,24 @@
                 ['label' => 'Feiertagskalender', 'icon' => 'calendar', 'url' => $safeRoute('holiday.info'), 'count_key' => 'holidays'],
                 ['label' => 'Urlaubsanspruch', 'icon' => 'calendar-check', 'url' => $safeRoute('leave.day.info'), 'count_key' => 'leave_days'],
                 ['label' => 'Steuerklassen', 'icon' => 'percent', 'url' => $safeRoute('tax.info'), 'count_key' => 'taxes'],
-                ['label' => 'Lohnarten · geplant', 'icon' => 'coins', 'url' => url('#')],
                 ['label' => 'HR-Prozesse · geplant', 'icon' => 'workflow', 'url' => url('#')],
                 ['label' => 'Entwicklungsberichte · geplant', 'icon' => 'graduation-cap', 'url' => url('#')],
             ],
         ],
         [
+            // Themen-Etagen 2026-07-16: Yamas Thema «Firma» — Filialen, Mietobjekte, Verträge, Versicherungen.
+            'title' => 'Firma',
+            'etage' => 'Firma',
+            'items' => [
+                ['label' => 'Filialen', 'icon' => 'map-pin', 'url' => $safeRoute('branch.info'), 'count_key' => 'branches'],
+                ['label' => 'Mietobjekte · geplant', 'icon' => 'home', 'url' => url('#')],
+                ['label' => 'Vertragsmanagement · geplant', 'icon' => 'file-signature', 'url' => url('#')],
+                ['label' => 'Versicherungen · geplant', 'icon' => 'shield', 'url' => url('#')],
+            ],
+        ],
+        [
             'title' => 'Organisation',
+            'etage' => 'Organisation',
             'permission' => 'Organization',
             'items' => [
                 ['label' => 'Stellen & Qualifikationen', 'icon' => 'briefcase', 'url' => $safeRoute('position.index'), 'count_key' => 'positions'],
@@ -751,8 +732,36 @@
             ],
         ],
         [
+            'title' => 'Controlling',
+            'permission' => 'Finance', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
+            'items' => [
+                ['label' => 'Abteilungen', 'icon' => 'building', 'url' => $safeRoute('department.info'), 'count_key' => 'departments'],
+            ],
+        ],
+        [
+            // AUSBAU 2026-07-16: ZAHLEN-Etage (Profit-Center-Bild) — geplante Cockpits.
+            'title' => 'Zahlen & Auswertungen',
+            'etage' => 'Zahlen & Controlling',
+            'permission' => 'Finance',
+            'items' => [
+                ['label' => 'Firmen-Cockpit · geplant', 'icon' => 'gauge', 'url' => url('#')],
+                ['label' => 'Abteilungs-Cockpit · geplant', 'icon' => 'building', 'url' => url('#')],
+                ['label' => 'Auslastung · geplant', 'icon' => 'activity', 'url' => url('#')],
+                ['label' => 'BWA · geplant', 'icon' => 'bar-chart-3', 'url' => url('#')],
+                ['label' => 'Abteilungs-GuV · geplant', 'icon' => 'table-2', 'url' => url('#')],
+                ['label' => 'Kapazität & Produktivität · geplant', 'icon' => 'trending-up', 'url' => url('#')],
+                ['label' => 'Ziele · geplant', 'icon' => 'target', 'url' => url('#')],
+                ['label' => 'Geschäftsführungs-Cockpit · geplant', 'icon' => 'crown', 'url' => url('#')],
+                ['label' => 'Strategische Übersicht · geplant', 'icon' => 'compass', 'url' => url('#')],
+                ['label' => 'Abteilungsvergleich · geplant', 'icon' => 'git-compare', 'url' => url('#')],
+                ['label' => 'Liquidität & Finanzplanung · geplant', 'icon' => 'wallet-cards', 'url' => url('#')],
+                ['label' => 'Investitionsplanung · geplant', 'icon' => 'trending-up', 'url' => url('#')],
+            ],
+        ],
+        [
             // Navi-Audit v3: NEU — internes Thema (Wissen/Feedback aus System & Benutzer hierher; Team-Chat entfernt).
             'title' => 'Kommunikation & Wissen',
+            'etage' => 'Wissen & Portale',
             'items' => [
                 ['label' => 'Wissensdatenbank', 'icon' => 'circle-help', 'url' => $safeRoute('knowledge.base'), 'count_key' => 'knowledge_base'],
                 ['label' => 'KI-Wissen', 'icon' => 'book-open', 'url' => $safeRoute('admin.chat.learnings.index')],
@@ -763,8 +772,30 @@
             ],
         ],
         [
+            // AUSBAU 2026-07-16 R3: Portale (playground: Kundenportal, Lieferantenportal, FreigabeApp, MobileStamp).
+            'title' => 'Portale',
+            'items' => [
+                ['label' => 'Kundenportal · geplant', 'icon' => 'globe', 'url' => url('#')],
+                ['label' => 'Lieferantenportal · geplant', 'icon' => 'truck', 'url' => url('#')],
+                ['label' => 'Freigabe-App · geplant', 'icon' => 'check-check', 'url' => url('#')],
+                ['label' => 'Mobile Stempel-App · geplant', 'icon' => 'smartphone', 'url' => url('#')],
+            ],
+        ],
+        [
+            // AUSBAU 2026-07-16 R3: KI-Zentrale (playground: KIAgentenZentrale, KIInsights, Automatisierungszentrale, Erkennung).
+            'title' => 'KI & Automatisierung',
+            'etage' => 'KI & Automatisierung',
+            'items' => [
+                ['label' => 'KI-Agenten-Zentrale · geplant', 'icon' => 'bot', 'url' => url('#')],
+                ['label' => 'KI-Insights · geplant', 'icon' => 'sparkles', 'url' => url('#')],
+                ['label' => 'Automatisierungszentrale · geplant', 'icon' => 'workflow', 'url' => url('#')],
+                ['label' => 'Beleg-Erkennung · geplant', 'icon' => 'scan-text', 'url' => url('#')],
+            ],
+        ],
+        [
             // Navi-Audit v3: ex „Phasen" — Konfigurationsflächen, gehören zur Administration (Umzug via Sortierung).
             'title' => 'Prozess-Einstellungen',
+            'etage' => 'Einstellungen',
             'permission' => 'Administrator', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 // Lead-Phasen-Verwaltung (HTML-Seite lead-stages.manage; NICHT die JSON-API lead-stages.index)
@@ -1510,6 +1541,12 @@
                     : '<span class="sa-section-count">' . count($section['items']) . '</span>';
             @endphp
 
+            @if(!empty($section['etage']))
+                @once
+                    <style>.sa-etage-label{margin:16px 10px 4px;font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#9ca3af;}</style>
+                @endonce
+                <div class="sa-etage-label">{{ $section['etage'] }}</div>
+            @endif
             <div id="{{ $sectionId }}" class="sa-sidebar-section {{ $isDefaultOpen ? 'is-open' : 'is-collapsed' }}"
                 data-sidebar-section data-section-default-open="{{ $isDefaultOpen ? '1' : '0' }}">
                 <button type="button" class="sa-section-toggle" onclick="toggleSidebarSection('{{ $sectionId }}')"
