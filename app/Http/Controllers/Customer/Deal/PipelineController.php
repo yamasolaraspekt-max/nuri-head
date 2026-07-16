@@ -47,7 +47,7 @@ class PipelineController extends Controller
             ->with([
                 'customer:id,name,lastname,firma',
                 'alternative:id,object_name',
-                'product:id,name',
+                'product:id,article_group', // B2-1-Fix: ArticleGroup-Namensspalte ist article_group, nicht name
             ])
             ->orderByDesc('updated_at')
             ->get();
@@ -85,7 +85,7 @@ class PipelineController extends Controller
                     'order_number' => $deal->order_number,
                     'kunde' => $kunde?->firma ?: trim(($kunde->name ?? '') . ' ' . ($kunde->lastname ?? '')),
                     'objekt' => $deal->alternative?->object_name,
-                    'produkt' => $deal->product?->name,
+                    'produkt' => $deal->product?->article_group,
                     'price' => $deal->price !== null ? (float) $deal->price : null,
                     'aktualisiert' => $deal->updated_at,
                 ];
