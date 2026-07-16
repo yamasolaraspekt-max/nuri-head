@@ -659,15 +659,22 @@
             ],
         ],
         [
-            'title' => 'Abschluss & Steuern',
+            'title' => 'Abschluss',
+            'permission' => 'Finance',
+            'items' => [
+                ['label' => 'Monatsabschluss · geplant', 'icon' => 'lock', 'url' => url('#')],
+                ['label' => 'Bilanz & SuSa · geplant', 'icon' => 'scale', 'url' => url('#')],
+                ['label' => 'Kontenrahmen · geplant', 'icon' => 'list-tree', 'url' => url('#')],
+            ],
+        ],
+        [
+            'title' => 'Steuern',
             'permission' => 'Finance',
             'items' => [
                 ['label' => 'UStVA · geplant', 'icon' => 'percent', 'url' => url('#')],
-                ['label' => 'Bilanz & SuSa · geplant', 'icon' => 'scale', 'url' => url('#')],
-                ['label' => 'GoBD & Prüfzentrum · geplant', 'icon' => 'shield-check', 'url' => url('#')],
-                ['label' => 'Steuerberater-Übergabe · geplant', 'icon' => 'briefcase', 'url' => url('#')],
                 ['label' => 'DATEV-Export · geplant', 'icon' => 'file-spreadsheet', 'url' => url('#')],
-                ['label' => 'Kontenrahmen · geplant', 'icon' => 'list-tree', 'url' => url('#')],
+                ['label' => 'Kanzlei-Übergabe · geplant', 'icon' => 'briefcase', 'url' => url('#')],
+                ['label' => 'GoBD & Prüfzentrum · geplant', 'icon' => 'shield-check', 'url' => url('#')],
             ],
         ],
         [
