@@ -4517,6 +4517,10 @@ Route::middleware(['auth'])->group(function () {
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'InvoiceMiddleware'])->group(function () { // FIX P0-07: Invoice-Rolle erzwingen
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
     Route::get('/invoices/list', [InvoiceController::class, 'list'])->name('invoices.list');
+
+    // Welle A1 Paket 1 (2026-07-16): Offene Posten — Lese-Fläche auf invoices (vor /invoices/{invoice}!).
+    Route::get('/invoices/offene-posten', [\App\Http\Controllers\Invoice\OffenePostenController::class, 'index'])
+        ->name('invoices.offene-posten');
     Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
 
     // Select2 endpoints must come before /invoices/{invoice}

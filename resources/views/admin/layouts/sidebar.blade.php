@@ -663,7 +663,8 @@
             'title' => 'Buchhaltung',
             'permission' => 'Finance',
             'items' => [
-                ['label' => 'Offene Posten · geplant', 'icon' => 'list-checks', 'url' => url('#')],
+                // Welle A1 Paket 1 (2026-07-16): live — reine Lese-Fläche auf invoices (open_amount).
+                ['label' => 'Offene Posten', 'icon' => 'list-checks', 'url' => $safeRoute('admin.invoices.offene-posten'), 'active_routes' => ['/admin/invoices/offene-posten']],
                 ['label' => 'Mahnwesen · geplant', 'icon' => 'alarm-clock', 'url' => url('#')],
                 ['label' => 'Eingangsrechnungen · geplant', 'icon' => 'file-input', 'url' => url('#')],
                 ['label' => 'Journal · geplant', 'icon' => 'book-open-check', 'url' => url('#')],
