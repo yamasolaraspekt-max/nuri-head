@@ -4901,6 +4901,12 @@ Route::get('request/token', function(){
 
  
 
+// Styleguide — lebende Komponentenbibliothek (UI-Bauordnung 2026-07-16).
+// Nur eingeloggt; reine Ansicht ohne Daten. Navi-Gate: Administrator.
+Route::middleware(['auth'])->get('/admin/styleguide', function () {
+    return view('admin.styleguide.index');
+})->name('styleguide.index');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/breaking-news', [BreakingNewsController::class, 'index'])
         ->name('breaking-news.index');

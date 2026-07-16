@@ -923,6 +923,8 @@
                 ['label' => 'Notiz-Kategorien', 'icon' => 'folder', 'url' => $safeRoute('note.category.view'), 'count_key' => 'note_categories'],
                 // Commit 2 (P0): Nav-Gate gesetzt — GarbageController prueft item_id='Administrator'; Nav gleichzieht (is_admin bypass bleibt)
                 ['label' => 'Datenbankbereinigung', 'icon' => 'trash-2', 'permission' => 'Administrator', 'url' => $safeRoute('admin.garbage.index')],
+                // UI-Bauordnung 2026-07-16: lebende Komponentenbibliothek — Pflicht-Blick vor jedem neuen UI-Element.
+                ['label' => 'Styleguide', 'icon' => 'palette', 'permission' => 'Administrator', 'url' => $safeRoute('styleguide.index'), 'active_routes' => ['/admin/styleguide']],
             ],
         ],
         [
