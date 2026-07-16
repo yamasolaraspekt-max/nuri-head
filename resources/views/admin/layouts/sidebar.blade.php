@@ -640,10 +640,8 @@
             'permission' => 'Finance', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Rechnungen', 'icon' => 'receipt-text', 'permission' => 'Invoice', 'url' => $safeRoute('admin.invoices.index', 'admin/invoices'), 'count_key' => 'invoices', 'active_routes' => ['/admin/invoices', '/invoices/canvas']],
-                ['label' => 'Filial-Betriebskosten', 'icon' => 'receipt', 'permission' => 'Finance', 'url' => $safeRoute('branch.expense'), 'count_key' => 'branch_expenses'],
-                ['label' => 'Ratenzahlungen', 'icon' => 'credit-card', 'permission' => 'Finance', 'url' => $safeRoute('assets.installment.show'), 'count_key' => 'installments'],
+                ['label' => 'Gutschriften · geplant', 'icon' => 'file-minus', 'url' => url('#')],
                 // Navi-Audit v3: aus „Stammdaten" hierher (Kostenbasis gehört zu Finanzen).
-                ['label' => 'Kalkulationssätze', 'icon' => 'calculator', 'url' => $safeRoute('admin.costing_sets.index')],
             ],
         ],
         [
@@ -657,7 +655,6 @@
                 ['label' => 'Journal · geplant', 'icon' => 'book-open-check', 'url' => url('#')],
                 ['label' => 'Kassenbuch · geplant', 'icon' => 'wallet', 'url' => url('#')],
                 ['label' => 'Eingangs-/Ausgangsrechnungen · geplant', 'icon' => 'file-input', 'url' => url('#')],
-                ['label' => 'Gutschriften · geplant', 'icon' => 'file-minus', 'url' => url('#')],
                 ['label' => 'Daueraufträge · geplant', 'icon' => 'repeat', 'url' => url('#')],
             ],
         ],
@@ -670,7 +667,7 @@
                 ['label' => 'GoBD & Prüfzentrum · geplant', 'icon' => 'shield-check', 'url' => url('#')],
                 ['label' => 'Steuerberater-Übergabe · geplant', 'icon' => 'briefcase', 'url' => url('#')],
                 ['label' => 'DATEV-Export · geplant', 'icon' => 'file-spreadsheet', 'url' => url('#')],
-                ['label' => 'Kontenrahmen & Kostenstellen · geplant', 'icon' => 'list-tree', 'url' => url('#')],
+                ['label' => 'Kontenrahmen · geplant', 'icon' => 'list-tree', 'url' => url('#')],
             ],
         ],
         [
@@ -682,6 +679,28 @@
                 ['label' => 'E-Rechnungen (XRechnung/ZUGFeRD) · geplant', 'icon' => 'file-digit', 'url' => url('#')],
                 ['label' => 'Belegarchiv · geplant', 'icon' => 'archive', 'url' => url('#')],
                 ['label' => 'Abschreibungen (AfA) · geplant', 'icon' => 'building', 'url' => url('#')],
+            ],
+        ],
+        [
+            // 2026-07-16 (Yama): laufende Verpflichtungen der Firma — echte Begriffe statt Zahlungsarten.
+            'title' => 'Verpflichtungen',
+            'permission' => 'Finance',
+            'items' => [
+                ['label' => 'Kredite & Finanzierung', 'icon' => 'credit-card', 'url' => $safeRoute('assets.installment.show'), 'count_key' => 'installments'],
+                ['label' => 'Versicherungen · geplant', 'icon' => 'shield', 'url' => url('#')],
+                ['label' => 'Mieten & Pacht · geplant', 'icon' => 'home', 'url' => url('#')],
+                ['label' => 'Abgaben · geplant', 'icon' => 'landmark', 'url' => url('#')],
+                ['label' => 'Filial-Betriebskosten', 'icon' => 'receipt', 'permission' => 'Finance', 'url' => $safeRoute('branch.expense'), 'count_key' => 'branch_expenses'],
+            ],
+        ],
+        [
+            // 2026-07-16 (Yama): Kostenrechnung — Kostenstellen/Kostenträger sichtbar.
+            'title' => 'Kostenrechnung',
+            'permission' => 'Finance',
+            'items' => [
+                ['label' => 'Kostenstellen · geplant', 'icon' => 'list-tree', 'url' => url('#')],
+                ['label' => 'Kostenträger · geplant', 'icon' => 'tags', 'url' => url('#')],
+                ['label' => 'Kalkulationssätze', 'icon' => 'calculator', 'url' => $safeRoute('admin.costing_sets.index')],
             ],
         ],
         [
@@ -751,7 +770,6 @@
                 ['label' => 'Filialen', 'icon' => 'map-pin', 'url' => $safeRoute('branch.info'), 'count_key' => 'branches'],
                 ['label' => 'Mietobjekte · geplant', 'icon' => 'home', 'url' => url('#')],
                 ['label' => 'Vertragsmanagement · geplant', 'icon' => 'file-signature', 'url' => url('#')],
-                ['label' => 'Versicherungen · geplant', 'icon' => 'shield', 'url' => url('#')],
             ],
         ],
         [
@@ -788,6 +806,7 @@
             'title' => 'Auswertungen',
             'permission' => 'Finance',
             'items' => [
+                ['label' => 'Umsätze · geplant', 'icon' => 'trending-up', 'url' => url('#')],
                 ['label' => 'BWA · geplant', 'icon' => 'bar-chart-3', 'url' => url('#')],
                 ['label' => 'Abteilungs-GuV · geplant', 'icon' => 'table-2', 'url' => url('#')],
                 ['label' => 'Abteilungsvergleich · geplant', 'icon' => 'git-compare', 'url' => url('#')],
