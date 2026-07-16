@@ -156,7 +156,7 @@
     text-decoration: none;
     padding: 10px 15px;
     border-radius: 5px;
-    color: black;
+    color: #1f2937;
     font-weight: bold;
 }
 

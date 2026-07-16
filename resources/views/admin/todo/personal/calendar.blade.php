@@ -340,7 +340,7 @@
     /* Recurring leave */
     .fc-event.recurring-leave {
       background: repeating-linear-gradient(45deg, #6c757d, #6c757d 5px, #9ca3af 5px, #9ca3af 10px);
-      color: #000 !important;
+      color: #1f2937 !important;
       /* <--- Changed to Black */
       border: 1px solid #6c757d !important;
       border-radius: 6px;
@@ -3811,7 +3811,7 @@
                           <span class="dropdown-item" data-value="#00ffff"><i class="fa fa-square"
                               style="color:#00ffff;"></i> Cyan</span>
                           <span class="dropdown-item" data-value="#000000"><i class="fa fa-square"
-                              style="color:#000000;"></i> Schwarz</span>
+                              style="color:#1f2937;"></i> Schwarz</span>
                           <span class="dropdown-item" data-value="#808080"><i class="fa fa-square"
                               style="color:#808080;"></i> Grau</span>
                           <span class="dropdown-item" data-value="#ffa500"><i class="fa fa-square"

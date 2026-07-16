@@ -206,7 +206,7 @@
 }
 .badge-success { background-color: #28a745; color: white; }
 .badge-secondary { background-color: #6c757d; color: white; }
-.badge-warning { background-color: #ffc107; color: black; }
+.badge-warning { background-color: #ffc107; color: #1f2937; }
 </style>
 
 </head>

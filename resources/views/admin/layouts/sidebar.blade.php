@@ -486,11 +486,16 @@
         [
             'title' => 'Baustelle',
             'permission' => 'Customer',
-            'items' => [
+            'items' => array_values(array_filter([
                 ['label' => 'Montagevorbereitung · geplant', 'icon' => 'list-todo', 'url' => url('#')],
+                ['label' => 'Aufgaben', 'icon' => 'users-round', 'tone' => 'text-brand-blue', 'url' => $safeRoute('general-tasks.index', 'general-tasks'), 'count_key' => 'general_tasks_open', 'active_routes' => ['/general-tasks']],
+                $canSeeAllReports ? ['label' => 'Berichte', 'icon' => 'file-text', 'tone' => 'text-brand-blue', 'url' => url('admin/overdue-center/recent'), 'count_key' => 'reports_all_remaining', 'active_routes' => ['/admin/overdue-center/recent', '/overdue-center/recent']] : null,
+                ['label' => 'Überfällig', 'icon' => 'clipboard-check', 'tone' => 'text-brand-green', 'url' => url('admin/reports'), 'count_key' => 'reports_my_remaining', 'active_routes' => ['/admin/reports', '/reports']],
+                ['label' => 'Bautagebuch · geplant', 'icon' => 'notebook-pen', 'url' => url('#')],
                 ['label' => 'Baudokumentation · geplant', 'icon' => 'camera', 'url' => url('#')],
                 ['label' => 'Qualitätsprüfung · geplant', 'icon' => 'badge-check', 'url' => url('#')],
-            ],
+                ['label' => 'Mängel & Nacharbeiten · geplant', 'icon' => 'stamp', 'url' => url('#')],
+            ])),
         ],
         [
             'title' => 'Tickets',
@@ -518,11 +523,6 @@
             'items' => array_values(array_filter([
                 ['label' => 'Einsatzplan', 'icon' => 'calendar-range', 'tone' => 'text-brand-purple', 'url' => $safeRoute('planner.index', '/planner'), 'count_key' => 'planner_projects', 'active_routes' => ['/planner/projects']],
                 ['label' => 'Mein Tag · geplant', 'icon' => 'smartphone', 'url' => url('#')],
-                ['label' => 'Aufgaben', 'icon' => 'users-round', 'tone' => 'text-brand-blue', 'url' => $safeRoute('general-tasks.index', 'general-tasks'), 'count_key' => 'general_tasks_open', 'active_routes' => ['/general-tasks']],
-                $canSeeAllReports ? ['label' => 'Berichte', 'icon' => 'file-text', 'tone' => 'text-brand-blue', 'url' => url('admin/overdue-center/recent'), 'count_key' => 'reports_all_remaining', 'active_routes' => ['/admin/overdue-center/recent', '/overdue-center/recent']] : null,
-                ['label' => 'Überfällig', 'icon' => 'clipboard-check', 'tone' => 'text-brand-green', 'url' => url('admin/reports'), 'count_key' => 'reports_my_remaining', 'active_routes' => ['/admin/reports', '/reports']],
-                ['label' => 'Abnahmen & Mängel · geplant', 'icon' => 'stamp', 'url' => url('#')],
-                ['label' => 'Bautagebuch · geplant', 'icon' => 'notebook-pen', 'url' => url('#')],
             ])),
         ],
         [

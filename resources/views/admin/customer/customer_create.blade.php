@@ -810,7 +810,7 @@
 
         function createMapLabel(map, text, position) {
             const label = new google.maps.InfoWindow({
-                content: `<div style="color: black; font-size: 12px;">${text}</div>`,
+                content: `<div style="color: #1f2937; font-size: 12px;">${text}</div>`,
                 position: position,
                 pixelOffset: new google.maps.Size(0, -20)
             });

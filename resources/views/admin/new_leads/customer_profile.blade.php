@@ -934,7 +934,7 @@ or this Blade will have no team data to render.
 
             <button type="button" onclick="window.maCloseLightbox()" style="position:absolute; top:-40px; right:0; background:transparent; border:none; color:#fff; font-size:2rem; cursor:pointer; line-height:1;">&times;</button>
 
-            <div style="position:relative; width:100%; display:flex; justify-content:center; align-items:center; border-radius:16px; overflow:hidden; background:#000;">
+            <div style="position:relative; width:100%; display:flex; justify-content:center; align-items:center; border-radius:16px; overflow:hidden; background:#1f2937;">
                 <img id="maLightboxImg" src="" alt="Enlarged Screenshot" style="max-height:75vh; max-width:100%; object-fit:contain; display:block;">
 
                 <button id="maLightboxPrevBtn" onclick="window.maLightboxNavigate(-1)" style="position:absolute; left:16px; top:50%; transform:translateY(-50%); width:48px; height:48px; border-radius:999px; background:var(--ma-heading); color:#fff; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,0.2);">&lsaquo;</button>

@@ -14,7 +14,7 @@
             <style>
                 .white{
                     background: white !important;
-                    color: black !important;
+                    color: #1f2937 !important;
                 }
             </style>
             <div class="table-responsive">

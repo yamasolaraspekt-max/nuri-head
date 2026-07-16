@@ -11,11 +11,11 @@
                         <div class="col-7" style="">
                             <h1 style="text-align: center; margin:0;font-family: system-ui;">{{ $item->branch }}</h1>
                             <div class="invoice-details"style="text-align: -webkit-center; ">
-                                <p style="color:black;font-family: sans-serif; font-size:10px;line-height: 1; margin:0" > Vermögenswerte </p>
+                                <p style="color:#1f2937;font-family: sans-serif; font-size:10px;line-height: 1; margin:0" > Vermögenswerte </p>
                             </div>
                             <div class="invoice-details" style="top: 14px;margin-left: 14px;position: relative;" >
                                 {!! DNS1D::getBarcodeHTML("$item->qrcode", 'C128') !!}
-                                <p style="margin: 0px;color:black;font-family: sans-serif; font-size:10px;line-height: 1; margin-left: 13px; text-align: center;" > {{$item->qrcode }} </p>
+                                <p style="margin: 0px;color:#1f2937;font-family: sans-serif; font-size:10px;line-height: 1; margin-left: 13px; text-align: center;" > {{$item->qrcode }} </p>
 
                             </div>
                         </div>

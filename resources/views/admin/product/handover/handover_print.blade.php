@@ -108,23 +108,23 @@
                         <div id="invoice-items-details" class="pt-1 invoice-items-table">
                             <div class="row">
                                 <div class="table-responsive col-12">
-                                    <table class="table " style="border:1px; border-style:solid; border-color:black;">
+                                    <table class="table " style="border:1px; border-style:solid; border-color:#1f2937;">
                                         <thead>
                                             <tr>
-                                                <th style="border:1px; border-style:solid; border-color:black;">ARTIKEL</th>
-                                                <th style="border:1px; border-style:solid; border-color:black;">MENGE</th>
-                                                <th style="border:1px; border-style:solid; border-color:black;">VERWENDUNGSZWECK</th>
-                                                <th style="border:1px; border-style:solid; border-color:black;">INFO</th>
+                                                <th style="border:1px; border-style:solid; border-color:#1f2937;">ARTIKEL</th>
+                                                <th style="border:1px; border-style:solid; border-color:#1f2937;">MENGE</th>
+                                                <th style="border:1px; border-style:solid; border-color:#1f2937;">VERWENDUNGSZWECK</th>
+                                                <th style="border:1px; border-style:solid; border-color:#1f2937;">INFO</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 @foreach ($handovers as $handover )
                                                 @if($handover->handover_id == $data->handover_id)
-                                                <td style="border:1px; border-style:solid; border-color:black;">{{ $handover->item }}</td>
-                                                <td style="border:1px; border-style:solid; border-color:black;">{{ $handover->quantity }}</td>
-                                                <td style="border:1px; border-style:solid; border-color:black;">{!! $handover->purpose   !!}</td>
-                                                <td style="border:1px; border-style:solid; border-color:black;">{{ $handover->remark }}</td>
+                                                <td style="border:1px; border-style:solid; border-color:#1f2937;">{{ $handover->item }}</td>
+                                                <td style="border:1px; border-style:solid; border-color:#1f2937;">{{ $handover->quantity }}</td>
+                                                <td style="border:1px; border-style:solid; border-color:#1f2937;">{!! $handover->purpose   !!}</td>
+                                                <td style="border:1px; border-style:solid; border-color:#1f2937;">{{ $handover->remark }}</td>
                                             </tr>
                                             <tr>
                                                 <td>{{ $handover->description }}</td>

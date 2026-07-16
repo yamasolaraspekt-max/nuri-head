@@ -1630,7 +1630,7 @@
 
         .icon-toolbar .icon-action:hover i {
             transform: scale(1.3);
-            color: #000 !important;
+            color: #1f2937 !important;
         }
 
         .bg-highlight {

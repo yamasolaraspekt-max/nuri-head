@@ -10,7 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <style>
-    body { background-color:rgb(247, 247, 247); color: #000; }
+    body { background-color:rgb(247, 247, 247); color: #1f2937; }
     .kpi-card { border-radius: 10px; padding: 20px; text-align: center; font-weight: bold; margin-bottom: 15px; }
     .scroll-table-wrapper { overflow: hidden; height: 100%; position: relative; }
     .scroll-table { display: block; width: 100%; }

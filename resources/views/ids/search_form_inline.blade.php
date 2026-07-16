@@ -408,7 +408,7 @@
     #gcOverlayInner {
         width: 96%;
         height: 92%;
-        background: #000;
+        background: #1f2937;
         border-radius: 12px;
         box-shadow: 0 20px 50px rgba(0,0,0,0.4);
         overflow: hidden;

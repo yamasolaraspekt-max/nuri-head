@@ -602,7 +602,7 @@ tr.edited {
                                                     <i class="fa fa-square" style="color: #00ffff;"></i> Cyan
                                                 </span>
                                                 <span class="dropdown-item" data-value="#000000">
-                                                    <i class="fa fa-square" style="color: #000000;"></i> Schwarz
+                                                    <i class="fa fa-square" style="color: #1f2937;"></i> Schwarz
                                                 </span>
                                                 <span class="dropdown-item" data-value="#808080">
                                                     <i class="fa fa-square" style="color: #808080;"></i> Grau

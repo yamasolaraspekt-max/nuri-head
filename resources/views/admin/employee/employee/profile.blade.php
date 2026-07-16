@@ -139,7 +139,7 @@
         .fc-col-header-cell {
             text-transform: uppercase;
             font-weight: bold;
-            color: black;
+            color: #1f2937;
             border:0px !important;
         }
         .fc-col-header-cell-cushion {

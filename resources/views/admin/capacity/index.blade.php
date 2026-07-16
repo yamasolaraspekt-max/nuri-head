@@ -32,7 +32,7 @@
     width: 100%;
     text-align: center;
     font-weight: bold;
-    color: #000;
+    color: #1f2937;
 }
 .bg-light{
     background-color: #ffffff !important;
