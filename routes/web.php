@@ -4216,6 +4216,9 @@ Route::middleware(['auth'])->group(function () {
         ->whereNumber('deal')->name('deal.auftragseingang.ab.erzeugen');
     Route::get('auftragseingang/ab/{confirmation}', [\App\Http\Controllers\Customer\Deal\AuftragseingangController::class, 'ab'])
         ->whereNumber('confirmation')->name('deal.auftragseingang.ab');
+    // Arbeitsvorbereitung (2026-07-16): Materialbedarf-Übersicht — Pflege bleibt auf deal.material.list.
+    Route::get('materialbedarf', [\App\Http\Controllers\Customer\Deal\MaterialbedarfController::class, 'index'])
+        ->name('deal.materialbedarf');
 
     Route::get('deal_details', [DealController::class, 'index'])
         ->name('deal.details');

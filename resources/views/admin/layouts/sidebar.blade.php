@@ -493,7 +493,8 @@
             'permission' => 'Customer',
             'items' => [
                 ['label' => 'Feinaufmaß', 'icon' => 'ruler', 'url' => $safeRoute('deal.measurements.kanban', 'deal-measurements-kanban'), 'count_key' => 'deal_measurements', 'active_routes' => ['/deal-measurements-kanban', '/deal-measurements']],
-                ['label' => 'Materialbedarf & Bestellungen · geplant', 'icon' => 'package-search', 'url' => url('#')],
+                // Welle A2/A3 (2026-07-16): live — Übersicht; Pflege bleibt auf der Materialliste je Auftrag.
+                ['label' => 'Materialbedarf & Bestellungen', 'icon' => 'package-search', 'url' => $safeRoute('deal.materialbedarf'), 'active_routes' => ['/materialbedarf']],
             ],
         ],
         [
