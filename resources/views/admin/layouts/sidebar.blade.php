@@ -425,11 +425,11 @@
             'etage' => 'Vertrieb',
             'permission' => 'Inquiry',
             'items' => [
-                ['label' => 'Neue Anfrage', 'icon' => 'plus-circle', 'url' => $safeRoute('inquiry.create', 'inquiry_create'), 'active_routes' => ['/inquiry_create', '/inquiries/create']],
-                ['label' => 'Meine Anfragen', 'icon' => 'user-check', 'url' => $safeRoute('my.inquiry.view'), 'count_key' => 'my_inquiries_unpublished', 'active_routes' => ['/my-inquiry', '/my_inquiry']],
-                ['label' => 'Kundenanfragen', 'icon' => 'users', 'url' => $safeRoute('inquiry.customer'), 'count_key' => 'customer_inquiries_unpublished', 'active_routes' => ['/inquiry/customer', '/customer-inquiries']],
-                ['label' => 'Freigegebene Anfragen', 'icon' => 'check-circle', 'url' => $safeRoute('inquiry.published.list'), 'count_key' => 'inquiries_published', 'active_routes' => ['/inquiry_published_list', '/published-inquiries']],
-                ['label' => 'Website-Leads', 'icon' => 'globe', 'url' => $safeRoute('fusion.forms.index'), 'count_key' => 'website_leads', 'active_routes' => ['/fusion/forms']],
+                ['label' => 'Neu erfassen', 'icon' => 'plus-circle', 'url' => $safeRoute('inquiry.create', 'inquiry_create'), 'active_routes' => ['/inquiry_create', '/inquiries/create']],
+                ['label' => 'Meine', 'icon' => 'user-check', 'url' => $safeRoute('my.inquiry.view'), 'count_key' => 'my_inquiries_unpublished', 'active_routes' => ['/my-inquiry', '/my_inquiry']],
+                ['label' => 'Von Kunden', 'icon' => 'users', 'url' => $safeRoute('inquiry.customer'), 'count_key' => 'customer_inquiries_unpublished', 'active_routes' => ['/inquiry/customer', '/customer-inquiries']],
+                ['label' => 'Freigegeben', 'icon' => 'check-circle', 'url' => $safeRoute('inquiry.published.list'), 'count_key' => 'inquiries_published', 'active_routes' => ['/inquiry_published_list', '/published-inquiries']],
+                ['label' => 'Website-Formulare', 'icon' => 'globe', 'url' => $safeRoute('fusion.forms.index'), 'count_key' => 'website_leads', 'active_routes' => ['/fusion/forms']],
                 ['label' => 'Spam', 'icon' => 'alert-triangle', 'url' => url('inquiry_junklist'), 'count_key' => 'inquiries_junk', 'active_routes' => ['/inquiry_junklist']],
                 ['label' => 'Papierkorb', 'icon' => 'trash-2', 'url' => url('inquiry_deleted_list'), 'count_key' => 'inquiries_deleted', 'active_routes' => ['/inquiry_deleted_list']],
             ],
@@ -438,9 +438,9 @@
             'title' => 'Leads',
             'permission' => 'Customer',
             'items' => [
-                ['label' => 'Neuer Lead', 'icon' => 'user-plus', 'url' => url('new_lead_create'), 'active_routes' => ['/new_lead_create']],
-                ['label' => 'Leadliste', 'icon' => 'list', 'url' => url('new_lead_view'), 'count_key' => 'customers', 'active_routes' => ['/new_lead_view', '/customer/profile', '/lead/profile']],
-                ['label' => 'Lead-Kanban', 'icon' => 'kanban', 'tone' => 'text-brand-blue', 'url' => url('lead/kanban'), 'active_routes' => ['/lead/kanban']],
+                ['label' => 'Neu anlegen', 'icon' => 'user-plus', 'url' => url('new_lead_create'), 'active_routes' => ['/new_lead_create']],
+                ['label' => 'Übersicht', 'icon' => 'list', 'url' => url('new_lead_view'), 'count_key' => 'customers', 'active_routes' => ['/new_lead_view', '/customer/profile', '/lead/profile']],
+                ['label' => 'Kanban', 'icon' => 'kanban', 'tone' => 'text-brand-blue', 'url' => url('lead/kanban'), 'active_routes' => ['/lead/kanban']],
                 ['label' => 'Kundenhistorie', 'icon' => 'clock', 'url' => $leadHistorySidebarUrl, 'active_routes' => ['/customers/*/history', '/customers/history']],
                 // Commit 2: Tippfehler-Pfad entschaerft -> Route-Name (waiting.loop.leads); Pfad in web.php auf /waiting_leads korrigiert (Alt-Pfad redirected)
                 ['label' => 'Wiedervorlage', 'icon' => 'clock', 'url' => $safeRoute('waiting.loop.leads', 'waiting_leads'), 'count_key' => 'customers_waiting', 'active_routes' => ['/wating_leads', '/waiting_leads']],
@@ -452,11 +452,11 @@
             'title' => 'Angebote',
             'permission' => 'Customer', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
-                ['label' => 'Angebots-Assistent', 'icon' => 'cpu', 'url' => url('offers/wizard-smart'), 'active_routes' => ['/offers/wizard-smart']],
+                ['label' => 'Assistent', 'icon' => 'cpu', 'url' => url('offers/wizard-smart'), 'active_routes' => ['/offers/wizard-smart']],
                 ['label' => 'Nachfassen fällig · geplant', 'icon' => 'bell-ring', 'url' => url('#')],
-                ['label' => 'Angebotsliste', 'icon' => 'list', 'url' => url('admin/offers'), 'count_key' => 'offers', 'active_routes' => ['/admin/offers', '/offers/list']],
+                ['label' => 'Übersicht', 'icon' => 'list', 'url' => url('admin/offers'), 'count_key' => 'offers', 'active_routes' => ['/admin/offers', '/offers/list']],
                 ['label' => 'Vorlagen', 'icon' => 'file-text', 'url' => $safeRoute('offer-templates.index', 'offer-templates'), 'count_key' => 'offer_templates', 'active_routes' => ['/offer-templates']],
-                ['label' => 'Angebot-Sets · geplant', 'icon' => 'layers', 'url' => url('#')],
+                ['label' => 'Sets · geplant', 'icon' => 'layers', 'url' => url('#')],
                 ['label' => 'Auftragsbestätigungen · geplant', 'icon' => 'file-check-2', 'url' => url('#')],
                 ['label' => 'Konfigurator · geplant', 'icon' => 'sliders-horizontal', 'url' => url('#')],
             ],
@@ -474,8 +474,8 @@
             'title' => 'Aufträge',
             'permission' => 'Customer', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
-                ['label' => 'Auftragsliste', 'icon' => 'briefcase', 'url' => $safeRoute('deal.all.list'), 'count_key' => 'deals', 'active_routes' => ['/deal', '/deals', '/auftrag']],
-                ['label' => 'Feinaufmaß-Kanban', 'icon' => 'ruler', 'url' => $safeRoute('deal.measurements.kanban', 'deal-measurements-kanban'), 'count_key' => 'deal_measurements', 'active_routes' => ['/deal-measurements-kanban', '/deal-measurements']],
+                ['label' => 'Übersicht', 'icon' => 'briefcase', 'url' => $safeRoute('deal.all.list'), 'count_key' => 'deals', 'active_routes' => ['/deal', '/deals', '/auftrag']],
+                ['label' => 'Feinaufmaß', 'icon' => 'ruler', 'url' => $safeRoute('deal.measurements.kanban', 'deal-measurements-kanban'), 'count_key' => 'deal_measurements', 'active_routes' => ['/deal-measurements-kanban', '/deal-measurements']],
                 ['label' => 'Materialbedarf & Bestellungen · geplant', 'icon' => 'package-search', 'url' => url('#')],
                 ['label' => 'Abnahme & Abrechnung · geplant', 'icon' => 'clipboard-signature', 'url' => url('#')],
                 ['label' => 'Innenaufträge · geplant', 'icon' => 'wrench', 'url' => url('#')],
@@ -496,8 +496,8 @@
             'title' => 'Tickets',
             'permission' => 'Problem',
             'items' => [
-                ['label' => 'Neues Ticket', 'icon' => 'plus', 'url' => url('problem_create'), 'active_routes' => ['/problem_create']],
-                ['label' => 'Ticket-Übersicht', 'icon' => 'list', 'url' => url('problem_view'), 'count_key' => 'tickets_open', 'active_routes' => ['/problem_view', '/problem/profile']],
+                ['label' => 'Neu erfassen', 'icon' => 'plus', 'url' => url('problem_create'), 'active_routes' => ['/problem_create']],
+                ['label' => 'Übersicht', 'icon' => 'list', 'url' => url('problem_view'), 'count_key' => 'tickets_open', 'active_routes' => ['/problem_view', '/problem/profile']],
                 ['label' => 'Fehlerkatalog', 'icon' => 'alert-circle', 'url' => url('error'), 'count_key' => 'errors', 'active_routes' => ['/error']],
                 ['label' => 'Reklamationen · geplant', 'icon' => 'shield-alert', 'url' => url('#')],
             ],
@@ -507,8 +507,8 @@
             'permission' => 'Problem', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Fälligkeiten · geplant', 'icon' => 'calendar-clock', 'url' => url('#')],
-                ['label' => 'Wartungsverträge', 'icon' => 'folder-open', 'url' => url('admin/maintenance/contracts'), 'count_key' => 'maintenance_contracts'],
-                ['label' => 'Wartungs-Checklisten', 'icon' => 'plus-circle', 'url' => $safeRoute('admin.maintenance_checklists.index') . '#new-checklist', 'count_key' => 'maintenance_checklists'],
+                ['label' => 'Verträge', 'icon' => 'folder-open', 'url' => url('admin/maintenance/contracts'), 'count_key' => 'maintenance_contracts'],
+                ['label' => 'Checklisten (Wartung)', 'icon' => 'plus-circle', 'url' => $safeRoute('admin.maintenance_checklists.index') . '#new-checklist', 'count_key' => 'maintenance_checklists'],
             ],
         ],
         [
@@ -517,12 +517,12 @@
             'permission' => 'Employee', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => array_values(array_filter([
                 ['label' => 'Einsatzplan', 'icon' => 'calendar-range', 'tone' => 'text-brand-purple', 'url' => $safeRoute('planner.index', '/planner'), 'count_key' => 'planner_projects', 'active_routes' => ['/planner/projects']],
-                ['label' => 'Mein Tag (Monteur) · geplant', 'icon' => 'smartphone', 'url' => url('#')],
-                ['label' => 'Montage-Aufgaben', 'icon' => 'users-round', 'tone' => 'text-brand-blue', 'url' => $safeRoute('general-tasks.index', 'general-tasks'), 'count_key' => 'general_tasks_open', 'active_routes' => ['/general-tasks']],
-                $canSeeAllReports ? ['label' => 'Berichts-Übersicht', 'icon' => 'file-text', 'tone' => 'text-brand-blue', 'url' => url('admin/overdue-center/recent'), 'count_key' => 'reports_all_remaining', 'active_routes' => ['/admin/overdue-center/recent', '/overdue-center/recent']] : null,
-                ['label' => 'Überfällige Berichte', 'icon' => 'clipboard-check', 'tone' => 'text-brand-green', 'url' => url('admin/reports'), 'count_key' => 'reports_my_remaining', 'active_routes' => ['/admin/reports', '/reports']],
+                ['label' => 'Mein Tag · geplant', 'icon' => 'smartphone', 'url' => url('#')],
+                ['label' => 'Aufgaben', 'icon' => 'users-round', 'tone' => 'text-brand-blue', 'url' => $safeRoute('general-tasks.index', 'general-tasks'), 'count_key' => 'general_tasks_open', 'active_routes' => ['/general-tasks']],
+                $canSeeAllReports ? ['label' => 'Berichte', 'icon' => 'file-text', 'tone' => 'text-brand-blue', 'url' => url('admin/overdue-center/recent'), 'count_key' => 'reports_all_remaining', 'active_routes' => ['/admin/overdue-center/recent', '/overdue-center/recent']] : null,
+                ['label' => 'Überfällig', 'icon' => 'clipboard-check', 'tone' => 'text-brand-green', 'url' => url('admin/reports'), 'count_key' => 'reports_my_remaining', 'active_routes' => ['/admin/reports', '/reports']],
                 ['label' => 'Abnahmen & Mängel · geplant', 'icon' => 'stamp', 'url' => url('#')],
-                ['label' => 'Bautagesberichte · geplant', 'icon' => 'notebook-pen', 'url' => url('#')],
+                ['label' => 'Bautagebuch · geplant', 'icon' => 'notebook-pen', 'url' => url('#')],
             ])),
         ],
         [
@@ -532,7 +532,7 @@
             'etage' => 'Kontakte',
             'items' => [
                 // NAV Phase III (Fläche 1, Design A): 8 Kontakt-Typen -> Tab-Leiste (admin/contacts/_tabs).
-                ['label' => 'Alle Kontakte', 'icon' => 'list', 'permission' => 'Partner', 'url' => $safeRoute('all.contacts', 'all-contacts'), 'count_key' => 'contacts', 'active_routes' => ['/all-contacts', '/brand', '/brands', '/distributors', '/external_personal']],
+                ['label' => 'Übersicht', 'icon' => 'list', 'permission' => 'Partner', 'url' => $safeRoute('all.contacts', 'all-contacts'), 'count_key' => 'contacts', 'active_routes' => ['/all-contacts', '/brand', '/brands', '/distributors', '/external_personal']],
                 ['label' => 'Posteingang', 'icon' => 'inbox', 'permission' => 'Email', 'url' => url('/email_view'), 'active_routes' => ['/email_view']],
                 ['label' => 'Lead E-Mails', 'icon' => 'mail-open', 'permission' => 'Email', 'url' => $safeRoute('lead.email.inbox'), 'active_routes' => ['/lead-email', '/lead/emails']],
                 // ENTFERNT auf Anweisung Yama 2026-07-16: Bitrix24-Chat („brauchen wir nicht"). Route/Controller unberührt; zum Reaktivieren einkommentieren.
@@ -544,7 +544,7 @@
             'title' => 'Kunden & Objekte',
             'permission' => 'Customer',
             'items' => [
-                ['label' => 'Objektakte (Gebäude) · geplant', 'icon' => 'building-2', 'url' => url('#')],
+                ['label' => 'Gebäudeakte · geplant', 'icon' => 'building-2', 'url' => url('#')],
                 ['label' => 'Projekt-Akte · geplant', 'icon' => 'folder-kanban', 'url' => url('#')],
                 ['label' => 'Serienbriefe · geplant', 'icon' => 'mails', 'url' => url('#')],
                 ['label' => 'Dokumenten-Center (DMS) · geplant', 'icon' => 'folder-open', 'url' => url('#')],
@@ -557,9 +557,8 @@
             'items' => [
                 ['label' => 'Grundriss-Editor', 'icon' => 'pen-tool', 'url' => $safeRoute('energie.grundriss'), 'active_routes' => ['/admin/energie/grundriss']],
                 ['label' => 'Plan-Import', 'icon' => 'file-up', 'url' => $safeRoute('energie.plan-upload'), 'active_routes' => ['/admin/energie/plan-upload']],
-                ['label' => '3D-Dachplaner · geplant', 'icon' => 'box', 'url' => url('#')],
-                ['label' => 'Dachplaner Pro · geplant', 'icon' => 'pencil-ruler', 'url' => url('#')],
-                ['label' => 'Dachbelegung PV · geplant', 'icon' => 'layout-grid', 'url' => url('#')],
+                ['label' => 'Dachplaner · geplant', 'icon' => 'box', 'url' => url('#')],
+                ['label' => 'Dachbelegung (PV) · geplant', 'icon' => 'layout-grid', 'url' => url('#')],
             ],
         ],
         [
@@ -574,7 +573,7 @@
                 ['label' => 'Wärmepumpen-Auslegung', 'icon' => 'flame', 'url' => $safeRoute('energie.wp-auslegung'), 'active_routes' => ['/admin/energie/wp-auslegung']],
                 ['label' => 'Sanierungs-Wirtschaftlichkeit', 'icon' => 'trending-down', 'url' => $safeRoute('energie.sanierung'), 'active_routes' => ['/admin/energie/sanierung']],
                 ['label' => 'Energiekonzept', 'icon' => 'file-check', 'url' => $safeRoute('energie.energiekonzept'), 'active_routes' => ['/admin/energie/energiekonzept']],
-                ['label' => 'Heizlast-Rechner', 'icon' => 'thermometer-sun', 'url' => $safeRoute('energie.heizlast'), 'active_routes' => ['/admin/energie/heizlast']],
+                ['label' => 'Heizlast', 'icon' => 'thermometer-sun', 'url' => $safeRoute('energie.heizlast'), 'active_routes' => ['/admin/energie/heizlast']],
                 // GEPARKT 2026-07-15 — Neu-Ausarbeitung Wirtschaftlichkeit/Förderung. Vorübergehend aus der Navi; Routen/Controller bleiben unberührt. Zum Reaktivieren die zwei Zeilen wieder einkommentieren.
                 // ['label' => 'Wirtschaftlichkeit', 'icon' => 'calculator', 'url' => $safeRoute('economic_calculations.index', 'admin/economic-calculations'), 'active_routes' => ['/admin/economic-calculations', '/profitability']],
                 // ['label' => 'Förderungen', 'icon' => 'file-text', 'permission' => 'Finance', 'url' => $safeRoute('foerderungen.index'), 'count_key' => 'fundings'],
@@ -593,7 +592,7 @@
             'etage' => 'Materialwirtschaft',
             'permission' => 'Product',
             'items' => [
-                ['label' => 'Neuer Artikel', 'icon' => 'plus', 'url' => $safeRoute('product.create', 'product_create')],
+                ['label' => 'Neu anlegen', 'icon' => 'plus', 'url' => $safeRoute('product.create', 'product_create')],
                 ['label' => 'Katalog', 'icon' => 'file', 'url' => $safeRoute('product.info'), 'count_key' => 'products', 'active_routes' => ['/product', '/product_view', '/products']],
                 ['label' => 'Favoriten', 'icon' => 'star', 'url' => $safeRoute('product.favorites.index'), 'count_key' => 'product_favorites'],
                 ['label' => 'Stempellisten', 'icon' => 'award', 'url' => $safeRoute('stamp.lists.index'), 'count_key' => 'stamp_favorites'],
@@ -641,6 +640,7 @@
             'items' => [
                 ['label' => 'Rechnungen', 'icon' => 'receipt-text', 'permission' => 'Invoice', 'url' => $safeRoute('admin.invoices.index', 'admin/invoices'), 'count_key' => 'invoices', 'active_routes' => ['/admin/invoices', '/invoices/canvas']],
                 ['label' => 'Gutschriften · geplant', 'icon' => 'file-minus', 'url' => url('#')],
+                ['label' => 'E-Rechnungen (XRechnung/ZUGFeRD) · geplant', 'icon' => 'file-digit', 'url' => url('#')],
                 // Navi-Audit v3: aus „Stammdaten" hierher (Kostenbasis gehört zu Finanzen).
             ],
         ],
@@ -664,6 +664,7 @@
             'permission' => 'Finance',
             'items' => [
                 ['label' => 'Monatsabschluss · geplant', 'icon' => 'lock', 'url' => url('#')],
+                ['label' => 'Abschreibungen (AfA) · geplant', 'icon' => 'building', 'url' => url('#')],
                 ['label' => 'Bilanz & SuSa · geplant', 'icon' => 'scale', 'url' => url('#')],
                 ['label' => 'Kontenrahmen · geplant', 'icon' => 'list-tree', 'url' => url('#')],
             ],
@@ -675,18 +676,16 @@
                 ['label' => 'UStVA · geplant', 'icon' => 'percent', 'url' => url('#')],
                 ['label' => 'DATEV-Export · geplant', 'icon' => 'file-spreadsheet', 'url' => url('#')],
                 ['label' => 'Kanzlei-Übergabe · geplant', 'icon' => 'briefcase', 'url' => url('#')],
+                ['label' => 'Belegarchiv · geplant', 'icon' => 'archive', 'url' => url('#')],
                 ['label' => 'GoBD & Prüfzentrum · geplant', 'icon' => 'shield-check', 'url' => url('#')],
             ],
         ],
         [
-            'title' => 'Bank & Belege',
+            'title' => 'Bank',
             'permission' => 'Finance',
             'items' => [
-                ['label' => 'Bank & Zahlungsverkehr · geplant', 'icon' => 'landmark', 'url' => url('#')],
-                ['label' => 'Bankanbindung & Zahlungsdienstleister · geplant', 'icon' => 'plug', 'url' => url('#')],
-                ['label' => 'E-Rechnungen (XRechnung/ZUGFeRD) · geplant', 'icon' => 'file-digit', 'url' => url('#')],
-                ['label' => 'Belegarchiv · geplant', 'icon' => 'archive', 'url' => url('#')],
-                ['label' => 'Abschreibungen (AfA) · geplant', 'icon' => 'building', 'url' => url('#')],
+                ['label' => 'Zahlungsverkehr · geplant', 'icon' => 'landmark', 'url' => url('#')],
+                ['label' => 'Kontenanbindung & Dienstleister · geplant', 'icon' => 'plug', 'url' => url('#')],
             ],
         ],
         [
@@ -716,15 +715,15 @@
             'etage' => 'Personal',
             'permission' => 'Employee',
             'items' => array_values(array_filter([
-                ['label' => 'Mitarbeiter anlegen', 'icon' => 'user-plus', 'url' => $safeRoute('emp.create', 'emp_create')],
-                ['label' => 'Mitarbeiterliste', 'icon' => 'users', 'url' => $safeRoute('emp.info'), 'count_key' => 'employees', 'active_routes' => ['/emp_info', '/employee_profile', '/employees']],
+                ['label' => 'Neu anlegen', 'icon' => 'user-plus', 'url' => $safeRoute('emp.create', 'emp_create')],
+                ['label' => 'Übersicht', 'icon' => 'users', 'url' => $safeRoute('emp.info'), 'count_key' => 'employees', 'active_routes' => ['/emp_info', '/employee_profile', '/employees']],
                 ['label' => 'Teams', 'icon' => 'layers', 'url' => $safeRoute('teams.index'), 'count_key' => 'teams'],
                 ['label' => 'Arbeitsverträge · geplant', 'icon' => 'file-signature', 'url' => url('#')],
                 ['label' => 'Personalakte · geplant', 'icon' => 'folder-heart', 'url' => url('#')],
             ])),
         ],
         [
-            'title' => 'Zeit & Anwesenheit',
+            'title' => 'Zeitwirtschaft',
             'permission' => 'Employee',
             'items' => [
                 ['label' => 'Zeiterfassung · geplant', 'icon' => 'timer', 'url' => url('#')],
@@ -752,7 +751,7 @@
             'title' => 'Lohn & Gehalt',
             'permission' => 'Employee',
             'items' => array_values(array_filter([
-                $canSalary ? ['label' => 'Lohn & Vollkosten', 'icon' => 'calculator', 'url' => $safeRoute('salary.index'), 'count_key' => 'salaries'] : null,
+                $canSalary ? ['label' => 'Vollkosten', 'icon' => 'calculator', 'url' => $safeRoute('salary.index'), 'count_key' => 'salaries'] : null,
                 ['label' => 'Lohnvorbereitung · geplant', 'icon' => 'receipt-euro', 'url' => url('#')],
                 ['label' => 'Lohnarten · geplant', 'icon' => 'coins', 'url' => url('#')],
             ])),
@@ -765,7 +764,7 @@
                 ['label' => 'Sprachen', 'icon' => 'languages', 'url' => $safeRoute('language.info'), 'count_key' => 'languages'],
                 ['label' => 'Länder & Nationalitäten', 'icon' => 'globe', 'url' => $safeRoute('country.info'), 'count_key' => 'countries'],
                 ['label' => 'Gesetzliche Feiertage', 'icon' => 'calendar-days', 'url' => $safeRoute('public-holidays.index'), 'count_key' => 'public_holidays'],
-                ['label' => 'Feiertagskalender', 'icon' => 'calendar', 'url' => $safeRoute('holiday.info'), 'count_key' => 'holidays'],
+                ['label' => 'Betriebskalender', 'icon' => 'calendar', 'url' => $safeRoute('holiday.info'), 'count_key' => 'holidays'],
                 ['label' => 'Urlaubsanspruch', 'icon' => 'calendar-check', 'url' => $safeRoute('leave.day.info'), 'count_key' => 'leave_days'],
                 ['label' => 'Steuerklassen', 'icon' => 'percent', 'url' => $safeRoute('tax.info'), 'count_key' => 'taxes'],
             ],
@@ -805,9 +804,9 @@
             'etage' => 'Controlling',
             'permission' => 'Finance',
             'items' => [
-                ['label' => 'Firmen-Cockpit · geplant', 'icon' => 'gauge', 'url' => url('#')],
-                ['label' => 'Abteilungs-Cockpit · geplant', 'icon' => 'building', 'url' => url('#')],
-                ['label' => 'Geschäftsführungs-Cockpit · geplant', 'icon' => 'crown', 'url' => url('#')],
+                ['label' => 'Gesamtfirma · geplant', 'icon' => 'gauge', 'url' => url('#')],
+                ['label' => 'Abteilungen · geplant', 'icon' => 'building', 'url' => url('#')],
+                ['label' => 'Geschäftsführung · geplant', 'icon' => 'crown', 'url' => url('#')],
             ],
         ],
         [
@@ -816,7 +815,7 @@
             'items' => [
                 ['label' => 'Umsätze · geplant', 'icon' => 'trending-up', 'url' => url('#')],
                 ['label' => 'BWA · geplant', 'icon' => 'bar-chart-3', 'url' => url('#')],
-                ['label' => 'Abteilungs-GuV · geplant', 'icon' => 'table-2', 'url' => url('#')],
+                ['label' => 'Bereichs-GuV · geplant', 'icon' => 'table-2', 'url' => url('#')],
                 ['label' => 'Abteilungsvergleich · geplant', 'icon' => 'git-compare', 'url' => url('#')],
                 ['label' => 'Auslastung · geplant', 'icon' => 'activity', 'url' => url('#')],
                 ['label' => 'Kapazität & Produktivität · geplant', 'icon' => 'trending-up', 'url' => url('#')],
@@ -834,11 +833,11 @@
         ],
         [
             // Navi-Audit v3: NEU — internes Thema (Wissen/Feedback aus System & Benutzer hierher; Team-Chat entfernt).
-            'title' => 'Wissen & News',
+            'title' => 'Wissen',
             'etage' => 'Kommunikation',
             'items' => [
                 ['label' => 'Handbuch', 'icon' => 'circle-help', 'url' => $safeRoute('knowledge.base'), 'count_key' => 'knowledge_base'],
-                ['label' => 'KI-Wissen', 'icon' => 'book-open', 'url' => $safeRoute('admin.chat.learnings.index')],
+                ['label' => 'KI-Lernbasis', 'icon' => 'book-open', 'url' => $safeRoute('admin.chat.learnings.index')],
                 ['label' => 'News', 'icon' => 'megaphone', 'url' => url('/admin/breaking-news')],
                 ['label' => 'Akademie', 'icon' => 'graduation-cap', 'url' => $safeRoute('chat.tutorials.index')],
                 ['label' => 'Veranstaltungen · geplant', 'icon' => 'party-popper', 'url' => url('#')],
@@ -849,8 +848,8 @@
             // AUSBAU 2026-07-16 R3: Portale (playground: Kundenportal, Lieferantenportal, FreigabeApp, MobileStamp).
             'title' => 'Portale',
             'items' => [
-                ['label' => 'Kundenportal · geplant', 'icon' => 'globe', 'url' => url('#')],
-                ['label' => 'Lieferantenportal · geplant', 'icon' => 'truck', 'url' => url('#')],
+                ['label' => 'Kundenzugang · geplant', 'icon' => 'globe', 'url' => url('#')],
+                ['label' => 'Lieferantenzugang · geplant', 'icon' => 'truck', 'url' => url('#')],
                 ['label' => 'Freigabe-App · geplant', 'icon' => 'check-check', 'url' => url('#')],
                 ['label' => 'Mobile Stempel-App · geplant', 'icon' => 'smartphone', 'url' => url('#')],
             ],
@@ -860,15 +859,15 @@
             'title' => 'KI & Automatisierung',
             'etage' => 'Administration',
             'items' => [
-                ['label' => 'KI-Agenten-Zentrale · geplant', 'icon' => 'bot', 'url' => url('#')],
-                ['label' => 'KI-Insights · geplant', 'icon' => 'sparkles', 'url' => url('#')],
-                ['label' => 'Automatisierungszentrale · geplant', 'icon' => 'workflow', 'url' => url('#')],
+                ['label' => 'Agenten-Zentrale · geplant', 'icon' => 'bot', 'url' => url('#')],
+                ['label' => 'Insights · geplant', 'icon' => 'sparkles', 'url' => url('#')],
+                ['label' => 'Regeln & Abläufe · geplant', 'icon' => 'workflow', 'url' => url('#')],
                 ['label' => 'Beleg-Erkennung · geplant', 'icon' => 'scan-text', 'url' => url('#')],
             ],
         ],
         [
             // Navi-Audit v3: ex „Phasen" — Konfigurationsflächen, gehören zur Administration (Umzug via Sortierung).
-            'title' => 'Prozesse & Formulare',
+            'title' => 'Prozesse',
             'permission' => 'Administrator', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 // Lead-Phasen-Verwaltung (HTML-Seite lead-stages.manage; NICHT die JSON-API lead-stages.index)
@@ -882,18 +881,18 @@
             ],
         ],
         [
-            'title' => 'E-Mail-Konten',
+            'title' => 'E-Mail',
             'permission' => 'Email',
             'items' => [
-                ['label' => 'E-Mail-Konten', 'icon' => 'settings', 'url' => url('/email_configuration'), 'active_routes' => ['/email_configuration']],
-                ['label' => 'Lead-Konten', 'icon' => 'settings-2', 'url' => $safeRoute('lead-email-accounts.index'), 'active_routes' => ['/lead-email-accounts']],
+                ['label' => 'Konten', 'icon' => 'settings', 'url' => url('/email_configuration'), 'active_routes' => ['/email_configuration']],
+                ['label' => 'Lead-Postfächer', 'icon' => 'settings-2', 'url' => $safeRoute('lead-email-accounts.index'), 'active_routes' => ['/lead-email-accounts']],
                 ['label' => 'Domain-Filter', 'icon' => 'filter', 'url' => $safeRoute('lead.email.domain.filters.index'), 'active_routes' => ['/lead-email-domain-filters', '/lead/email/domain/filters']],
             ],
         ],
         [
             'title' => 'System',
             'items' => [
-                ['label' => 'Systemwarnung', 'icon' => 'triangle-alert', 'url' => $safeRoute('admin.system-warning.index')],
+                ['label' => 'Warnmeldungen', 'icon' => 'triangle-alert', 'url' => $safeRoute('admin.system-warning.index')],
                 ['label' => 'Audit-Log · geplant', 'icon' => 'history', 'url' => url('#')],
                 ['label' => 'Notiz-Kategorien', 'icon' => 'folder', 'url' => $safeRoute('note.category.view'), 'count_key' => 'note_categories'],
                 // Commit 2 (P0): Nav-Gate gesetzt — GarbageController prueft item_id='Administrator'; Nav gleichzieht (is_admin bypass bleibt)
@@ -904,8 +903,8 @@
             'title' => 'Benutzer',
             'permission' => 'Users',
             'items' => [
-                ['label' => 'Admin-Benutzer', 'icon' => 'shield-user', 'url' => url('/admin_user'), 'count_key' => 'admin_users'],
-                ['label' => 'Eingeschränkte Benutzer', 'icon' => 'user-lock', 'url' => url('/limit_user'), 'count_key' => 'limited_users'],
+                ['label' => 'Administratoren', 'icon' => 'shield-user', 'url' => url('/admin_user'), 'count_key' => 'admin_users'],
+                ['label' => 'Eingeschränkte Zugänge', 'icon' => 'user-lock', 'url' => url('/limit_user'), 'count_key' => 'limited_users'],
                 ['label' => 'Berechtigungen', 'icon' => 'settings', 'url' => $safeRoute('user-rolls.index'), 'count_key' => 'user_roles'],
                 // Navi-Audit v3: „Mein Profil" → Arbeitsbereich (persönlich, nicht Administration).
             ],
