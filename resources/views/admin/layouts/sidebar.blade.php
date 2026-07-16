@@ -457,7 +457,7 @@
                 ['label' => 'Vorlagen', 'icon' => 'file-text', 'url' => $safeRoute('offer-templates.index', 'offer-templates'), 'count_key' => 'offer_templates', 'active_routes' => ['/offer-templates']],
                 // Welle A2 (2026-07-16): live — Angebote ohne Bewegung, Regeln in config/vertrieb.php.
                 ['label' => 'Nachfassen fällig', 'icon' => 'bell-ring', 'url' => $safeRoute('admin.offers.nachfassen'), 'active_routes' => ['/admin/offers/nachfassen']],
-                ['label' => 'Sets · geplant', 'icon' => 'layers', 'url' => url('#')],
+                ['label' => 'Sets', 'icon' => 'layers', 'url' => $safeRoute('offer-templates.index'), 'active_routes' => ['/offer-templates']], // Welle B2: Inventur-Fund — Vorlagen-Picker existierte komplett (inkl. Reife-Gate), nur unverlinkt
                 ['label' => 'Konfigurator · geplant', 'icon' => 'sliders-horizontal', 'url' => url('#')],
             ],
         ],
