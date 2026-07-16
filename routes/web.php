@@ -800,6 +800,10 @@ Route::group(['middleware' => ['web', 'auth']], function(){
     Route::post('/new_lead_update', [NewLeadsController::class, 'update'])->name('new.lead.update');
     Route::post('/new_lead_save', [NewLeadsController::class, 'store'])->name('new.lead.store'); 
     Route::get('/new_lead_view', [NewLeadsController::class, 'index'])->name('new.lead.view');
+    // Welle A4 (2026-07-16): Gebäudeakte V1 lesend (Spec: docs/planner-spec-gebaeudeakte.md).
+    Route::get('/objekte', [\App\Http\Controllers\Customer\ObjektakteController::class, 'index'])->name('objekte.index');
+    Route::get('/objekte/{alternative}', [\App\Http\Controllers\Customer\ObjektakteController::class, 'show'])->whereNumber('alternative')->name('objekte.akte');
+
     Route::get('/new_lead_profile/{id}', [NewLeadsController::class, 'view'])->name('new.lead.profile');
     Route::get('/customers/{customer}/price-history',[NewLeadsController::class, 'priceHistoryForCustomer'])->name('customers.price-history');
     Route::get('lead/customer-profile-feed/{id}', [NewLeadsController::class, 'customerProfileFeed'])->name('lead.customer.profile-feed');

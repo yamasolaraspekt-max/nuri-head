@@ -561,7 +561,8 @@
             'title' => 'Kunden & Objekte',
             'permission' => 'Customer',
             'items' => [
-                ['label' => 'Gebäudeakte · geplant', 'icon' => 'building-2', 'url' => url('#')],
+                // Welle A4 (2026-07-16): live, V1 lesend — Sicht auf das kanonische Objekt (LeadAlternativeAdd).
+                ['label' => 'Gebäudeakte', 'icon' => 'building-2', 'url' => $safeRoute('objekte.index'), 'active_routes' => ['/objekte']],
                 ['label' => 'Projekt-Akte · geplant', 'icon' => 'folder-kanban', 'url' => url('#')],
                 ['label' => 'Dokumenten-Center (DMS) · geplant', 'icon' => 'folder-open', 'url' => url('#')],
                 ['label' => 'Serienbriefe · geplant', 'icon' => 'mails', 'url' => url('#')],

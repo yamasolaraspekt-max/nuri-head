@@ -1,3 +1,12 @@
+{{-- Gebäudeakte-Verweis (Welle A4, 2026-07-16): Lese-Akte zum Objekt — Pflege bleibt hier. --}}
+@if (!empty($alternative?->id))
+    <div style="margin: 6px 0 10px; text-align: right;">
+        <a href="{{ route('objekte.akte', $alternative->id) }}" target="_blank"
+           style="display:inline-flex; align-items:center; gap:6px; border:1px solid #d1d5db; border-radius:8px; padding:5px 12px; font-size:12px; font-weight:600; color:#374151; text-decoration:none; background:#fff;">
+            Gebäudeakte öffnen (Übersicht)
+        </a>
+    </div>
+@endif
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
