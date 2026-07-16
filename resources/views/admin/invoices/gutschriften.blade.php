@@ -14,14 +14,14 @@
     .gs-filter select { border: 1px solid #d1d5db; border-radius: 8px; padding: 7px 10px; font-size: 13px; color: #1f2937; background: #fff; }
     .gs-cards { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 18px; }
     .gs-card { flex: 1 1 180px; min-width: 180px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 14px; }
-    .gs-card .k { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #9ca3af; }
+    .gs-card .k { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; }
     .gs-card .v { font-size: 19px; font-weight: 800; margin-top: 4px; }
     .gs-card .n { font-size: 11.5px; color: #6b7280; margin-top: 2px; }
 
     .gs-hinweis { background: var(--sa-info-bg, #f3f4f6); border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 14px; font-size: 12.5px; color: #374151; margin: 0 0 18px; }
 
     .gs-table { width: 100%; border-collapse: collapse; font-size: 12.5px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; }
-    .gs-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #9ca3af; border-bottom: 1px solid #e5e7eb; padding: 9px 12px; background: #f9fafb; }
+    .gs-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; border-bottom: 1px solid #e5e7eb; padding: 9px 12px; background: #f9fafb; }
     .gs-table td { border-bottom: 1px solid #f3f4f6; padding: 9px 12px; vertical-align: middle; }
     .gs-table tbody tr:hover { background: #f9fafb; }
     .gs-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }

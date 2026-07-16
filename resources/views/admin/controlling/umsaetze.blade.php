@@ -14,7 +14,7 @@
     .um-filter select { border: 1px solid #d1d5db; border-radius: 8px; padding: 7px 10px; font-size: 13px; color: #1f2937; background: #fff; }
     .um-cards { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 22px; }
     .um-card { flex: 1 1 170px; min-width: 170px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 14px; }
-    .um-card .k { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #9ca3af; }
+    .um-card .k { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; }
     .um-card .v { font-size: 19px; font-weight: 800; margin-top: 4px; }
     .um-card .n { font-size: 11.5px; color: #6b7280; margin-top: 2px; }
     .um-card.total { border-color: var(--sa-accent, #93c21c); background: var(--sa-accent-light, #f4fae7); }
@@ -22,7 +22,7 @@
     .um-card.tone-info .v { color: #374151; }
 
     .um-table { width: 100%; border-collapse: collapse; font-size: 12.5px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; }
-    .um-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #9ca3af; border-bottom: 1px solid #e5e7eb; padding: 9px 12px; background: #f9fafb; }
+    .um-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; border-bottom: 1px solid #e5e7eb; padding: 9px 12px; background: #f9fafb; }
     .um-table th.num, .um-table td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
     .um-table td { border-bottom: 1px solid #f3f4f6; padding: 9px 12px; vertical-align: middle; }
     .um-table tbody tr:hover { background: #f9fafb; }
@@ -30,7 +30,7 @@
     .um-balken { display: inline-block; height: 8px; border-radius: 4px; background: var(--sa-accent, #93c21c); vertical-align: middle; min-width: 2px; }
     .um-delta-plus { color: #047857; font-weight: 700; }
     .um-delta-minus { color: #b91c1c; font-weight: 700; }
-    .um-leer { color: #9ca3af; }
+    .um-leer { color: #6b7280; }
     .um-hinweis { background: var(--sa-info-bg, #f3f4f6); border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 14px; font-size: 12.5px; color: #374151; margin: 14px 0 0; }
 </style>
 

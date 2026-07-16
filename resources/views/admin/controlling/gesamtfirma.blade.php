@@ -20,14 +20,14 @@
 
     .gf-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 14px; }
     .gf-tile { flex: 1 1 150px; min-width: 150px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 14px; }
-    .gf-tile .k { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #9ca3af; }
+    .gf-tile .k { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; }
     .gf-tile .v { font-size: 20px; font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums; }
     .gf-tile.money { border-color: var(--sa-accent, #93c21c); background: var(--sa-accent-light, #f4fae7); }
     .gf-tile.money.open .v { color: #d97706; }
     .gf-tile .v.success { color: #047857; }
     .gf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin: 0 0 18px; }
     .gf-mini { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 12px; }
-    .gf-mini .k { font-size: 11px; color: #9ca3af; font-weight: 600; }
+    .gf-mini .k { font-size: 11px; color: #6b7280; font-weight: 600; }
     .gf-mini .v { font-size: 17px; font-weight: 800; margin-top: 2px; font-variant-numeric: tabular-nums; }
 
     .gf-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -43,7 +43,7 @@
     .gf-chart-row .val { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
 
     .gf-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-    .gf-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #9ca3af; border-bottom: 1px solid #e5e7eb; padding: 7px 9px; }
+    .gf-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; border-bottom: 1px solid #e5e7eb; padding: 7px 9px; }
     .gf-table td { border-bottom: 1px solid #f3f4f6; padding: 7px 9px; }
     .gf-table td.num, .gf-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
 

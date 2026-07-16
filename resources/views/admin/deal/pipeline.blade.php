@@ -24,9 +24,9 @@
     .pl-card-meta { font-size: 11.5px; color: #6b7280; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .pl-card-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 7px; }
     .pl-card-preis { font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .pl-card-alter { font-size: 11px; color: #9ca3af; }
+    .pl-card-alter { font-size: 11px; color: #6b7280; }
     .pl-mehr { font-size: 11.5px; color: #6b7280; text-align: center; padding: 6px; }
-    .pl-empty { font-size: 12px; color: #9ca3af; padding: 14px 10px; text-align: center; }
+    .pl-empty { font-size: 12px; color: #6b7280; padding: 14px 10px; text-align: center; }
 
     /* semantische Töne — Farbe + Text (Pill trägt immer den Punkt UND das Label im Kopf) */
     .tone-info    i { background: #6b7280; }

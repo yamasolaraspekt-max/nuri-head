@@ -17,14 +17,14 @@
 
     .ab-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 14px; }
     .ab-tile { flex: 1 1 150px; min-width: 150px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 14px; }
-    .ab-tile .k { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #9ca3af; }
+    .ab-tile .k { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; }
     .ab-tile .v { font-size: 20px; font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums; }
     .ab-tile.money { border-color: var(--sa-accent, #93c21c); background: var(--sa-accent-light, #f4fae7); }
     .ab-tile.money.open .v { color: #d97706; }
     .ab-tile .v.success { color: #047857; }
     .ab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 10px; margin: 0 0 18px; }
     .ab-mini { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 12px; }
-    .ab-mini .k { font-size: 11px; color: #9ca3af; font-weight: 600; }
+    .ab-mini .k { font-size: 11px; color: #6b7280; font-weight: 600; }
     .ab-mini .v { font-size: 17px; font-weight: 800; margin-top: 2px; font-variant-numeric: tabular-nums; }
 
     .ab-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }

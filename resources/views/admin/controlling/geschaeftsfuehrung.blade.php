@@ -18,12 +18,12 @@
     .pc-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 4px 0 16px; }
     .pc-bar input[type=date] { border: 1px solid #d1d5db; border-radius: 8px; padding: 6px 9px; font-size: 12.5px; color: #1f2937; }
     .pc-bar button { border: 1px solid var(--sa-accent, #93c21c); background: #f4fae7; color: #4d7c0f; border-radius: 8px; padding: 7px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; }
-    .pc-note { font-size: 11.5px; color: #9ca3af; }
+    .pc-note { font-size: 11.5px; color: #6b7280; }
 
     .pc-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 16px; }
     .pc-tile { flex: 1 1 170px; min-width: 170px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 14px; }
     .pc-tile.total { border-color: var(--sa-accent, #93c21c); background: var(--sa-accent-light, #f4fae7); }
-    .pc-tile .k { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #9ca3af; }
+    .pc-tile .k { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; }
     .pc-tile .v { font-size: 20px; font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums; }
     .pc-tile.open .v { color: #d97706; }
 
@@ -37,12 +37,12 @@
     .pc-chart-row .val { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
 
     .pc-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-    .pc-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #9ca3af; border-bottom: 1px solid #e5e7eb; padding: 8px 10px; }
+    .pc-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; border-bottom: 1px solid #e5e7eb; padding: 8px 10px; }
     .pc-table th.num, .pc-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
     .pc-table td { border-bottom: 1px solid #f3f4f6; padding: 8px 10px; }
     .pc-table tbody tr:hover { background: #f9fafb; }
     .pc-table tfoot td { font-weight: 800; background: #f9fafb; border-top: 2px solid #e5e7eb; }
-    .pc-rank { color: #9ca3af; font-weight: 700; width: 26px; }
+    .pc-rank { color: #6b7280; font-weight: 700; width: 26px; }
 
     .pc-state { background: #fff; border: 1px dashed #d1d5db; border-radius: 10px; padding: 34px; text-align: center; color: #6b7280; font-size: 13.5px; }
     .pc-err { border-color: #ef4444; color: #b91c1c; }
