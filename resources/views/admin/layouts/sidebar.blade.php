@@ -477,8 +477,6 @@
             'items' => [
                 ['label' => 'Übersicht', 'icon' => 'briefcase', 'url' => $safeRoute('deal.all.list'), 'count_key' => 'deals', 'active_routes' => ['/deal', '/deals', '/auftrag']],
                 ['label' => 'Feinaufmaß-Kanban', 'icon' => 'ruler', 'url' => $safeRoute('deal.measurements.kanban', 'deal-measurements-kanban'), 'count_key' => 'deal_measurements', 'active_routes' => ['/deal-measurements-kanban', '/deal-measurements']],
-                // Commit 2: Route-Name korrigiert (invoices.index existiert nicht -> admin.invoices.index); Invoice-Flaechen unberuehrt (Weiche 3)
-                ['label' => 'Rechnungen', 'icon' => 'receipt-text', 'url' => $safeRoute('admin.invoices.index', 'admin/invoices'), 'count_key' => 'invoices', 'active_routes' => ['/admin/invoices', '/invoices/canvas']],
                 ['label' => 'Junk', 'icon' => 'slash', 'url' => $safeRoute('deal.junk.list'), 'count_key' => 'deals_junk'],
                 ['label' => 'Gelöscht', 'icon' => 'trash', 'url' => $safeRoute('deal.delete.list'), 'count_key' => 'deals_deleted'],
             ],
@@ -491,6 +489,50 @@
                 $canSeeAllReports ? ['label' => 'Berichts-Übersicht', 'icon' => 'file-text', 'tone' => 'text-brand-blue', 'url' => url('admin/overdue-center/recent'), 'count_key' => 'reports_all_remaining', 'active_routes' => ['/admin/overdue-center/recent', '/overdue-center/recent']] : null,
                 ['label' => 'Überfällige Berichte', 'icon' => 'clipboard-check', 'tone' => 'text-brand-green', 'url' => url('admin/reports'), 'count_key' => 'reports_my_remaining', 'active_routes' => ['/admin/reports', '/reports']],
             ])),
+        ],
+        [
+            'title' => 'Phasen',
+            'items' => [
+                // Lead-Phasen-Verwaltung (HTML-Seite lead-stages.manage; NICHT die JSON-API lead-stages.index)
+                ['label' => 'Lead-Phasen', 'icon' => 'flag', 'url' => $safeRoute('lead-stages.manage', 'admin/lead-stages/manage'), 'active_routes' => ['/admin/lead-stages/manage']],
+                ['label' => 'Arbeitsschritte', 'icon' => 'clock', 'url' => $safeRoute('task_phase.index'), 'count_key' => 'task_phases'],
+                ['label' => 'Projekt-Struktur', 'icon' => 'flag', 'url' => $safeRoute('stages.index'), 'count_key' => 'stages'],
+            ],
+        ],
+        [
+            'title' => 'Tickets',
+            'permission' => 'Problem',
+            'items' => [
+                ['label' => 'Neues Ticket', 'icon' => 'plus', 'url' => url('problem_create'), 'active_routes' => ['/problem_create']],
+                ['label' => 'Ticket-Übersicht', 'icon' => 'list', 'url' => url('problem_view'), 'count_key' => 'tickets_open', 'active_routes' => ['/problem_view', '/problem/profile']],
+                ['label' => 'Fehlerkatalog', 'icon' => 'alert-circle', 'url' => url('error'), 'count_key' => 'errors', 'active_routes' => ['/error']],
+            ],
+        ],
+        [
+            'title' => 'Wartung',
+            'items' => [
+                ['label' => 'Wartungsverträge', 'icon' => 'folder-open', 'url' => url('admin/maintenance/contracts'), 'count_key' => 'maintenance_contracts'],
+                ['label' => 'Wartungs-Checklisten', 'icon' => 'plus-circle', 'url' => $safeRoute('admin.maintenance_checklists.index') . '#new-checklist', 'count_key' => 'maintenance_checklists'],
+            ],
+        ],
+        [
+            'title' => 'Energie',
+            'items' => [
+                ['label' => 'PVGIS', 'icon' => 'sun', 'url' => $safeRoute('admin.pvgis.index'), 'active_routes' => ['/admin/pvgis']],
+                ['label' => 'Wechselrichter-Auslegung', 'icon' => 'zap', 'url' => $safeRoute('energie.wr-auslegung'), 'active_routes' => ['/admin/energie/wr-auslegung']],
+                ['label' => 'Wärmepumpen-Auslegung', 'icon' => 'flame', 'url' => $safeRoute('energie.wp-auslegung'), 'active_routes' => ['/admin/energie/wp-auslegung']],
+                ['label' => 'Sanierungs-Wirtschaftlichkeit', 'icon' => 'trending-down', 'url' => $safeRoute('energie.sanierung'), 'active_routes' => ['/admin/energie/sanierung']],
+                ['label' => 'Energiekonzept', 'icon' => 'file-check', 'url' => $safeRoute('energie.energiekonzept'), 'active_routes' => ['/admin/energie/energiekonzept']],
+                ['label' => 'Grundriss-Editor', 'icon' => 'pen-tool', 'url' => $safeRoute('energie.grundriss'), 'active_routes' => ['/admin/energie/grundriss']],
+                ['label' => 'Plan-Import', 'icon' => 'file-up', 'url' => $safeRoute('energie.plan-upload'), 'active_routes' => ['/admin/energie/plan-upload']],
+                ['label' => 'Heizlast-Rechner', 'icon' => 'thermometer-sun', 'url' => $safeRoute('energie.heizlast'), 'active_routes' => ['/admin/energie/heizlast']],
+                ['label' => 'Fußboden-Check', 'icon' => 'grid', 'url' => $safeRoute('energie.fussboden-check'), 'active_routes' => ['/admin/energie/fussboden-check']],
+                ['label' => 'Materialliste', 'icon' => 'layers', 'url' => $safeRoute('energie.materialliste'), 'active_routes' => ['/admin/energie/materialliste']],
+                ['label' => 'Heizkörper-Check', 'icon' => 'thermometer', 'url' => $safeRoute('radiator.config.view'), 'active_routes' => ['/radiator_config_view']],
+                // GEPARKT 2026-07-15 — Neu-Ausarbeitung Wirtschaftlichkeit/Förderung. Vorübergehend aus der Navi; Routen/Controller bleiben unberührt. Zum Reaktivieren die zwei Zeilen wieder einkommentieren.
+                // ['label' => 'Wirtschaftlichkeit', 'icon' => 'calculator', 'url' => $safeRoute('economic_calculations.index', 'admin/economic-calculations'), 'active_routes' => ['/admin/economic-calculations', '/profitability']],
+                // ['label' => 'Förderungen', 'icon' => 'file-text', 'permission' => 'Finance', 'url' => $safeRoute('foerderungen.index'), 'count_key' => 'fundings'],
+            ],
         ],
         [
             'title' => 'Artikel',
@@ -517,50 +559,35 @@
             ],
         ],
         [
-            'title' => 'Lager',
+            'title' => 'Lager & Logistik',
             'items' => [
-                ['label' => 'Inventar', 'icon' => 'warehouse', 'url' => $safeRoute('inventory.index'), 'count_key' => 'inventory'],
                 ['label' => 'Lieferscheine', 'icon' => 'file-text', 'url' => $safeRoute('delivery-notes.index'), 'count_key' => 'delivery_notes'],
-                ['label' => 'Betriebsmittel', 'icon' => 'qr-code', 'url' => $safeRoute('handover.details.asset'), 'count_key' => 'assets'],
                 ['label' => 'Übergaben', 'icon' => 'repeat', 'url' => $safeRoute('handover.details')],
                 ['label' => 'Lagerausgaben', 'icon' => 'send', 'url' => $safeRoute('request.out.details'), 'count_key' => 'inventory_requests'],
                 ['label' => 'Kaufanfragen', 'icon' => 'shopping-basket', 'url' => $safeRoute('purchase.request'), 'count_key' => 'purchase_requests'],
+            ],
+        ],
+        [
+            'title' => 'Anlagevermögen & Inventur',
+            'items' => [
+                ['label' => 'Inventar', 'icon' => 'warehouse', 'url' => $safeRoute('inventory.index'), 'count_key' => 'inventory'],
+                ['label' => 'Betriebsmittel', 'icon' => 'qr-code', 'url' => $safeRoute('handover.details.asset'), 'count_key' => 'assets'],
                 ['label' => 'Maschinen & Fahrzeuge', 'icon' => 'car', 'url' => $safeRoute('machine.inventory'), 'count_key' => 'machines'],
             ],
         ],
         [
-            'title' => 'Energie',
+            'title' => 'Finanzen & Buchhaltung',
             'items' => [
-                ['label' => 'PVGIS', 'icon' => 'sun', 'url' => $safeRoute('admin.pvgis.index'), 'active_routes' => ['/admin/pvgis']],
-                ['label' => 'Wechselrichter-Auslegung', 'icon' => 'zap', 'url' => $safeRoute('energie.wr-auslegung'), 'active_routes' => ['/admin/energie/wr-auslegung']],
-                ['label' => 'Wärmepumpen-Auslegung', 'icon' => 'flame', 'url' => $safeRoute('energie.wp-auslegung'), 'active_routes' => ['/admin/energie/wp-auslegung']],
-                ['label' => 'Sanierungs-Wirtschaftlichkeit', 'icon' => 'trending-down', 'url' => $safeRoute('energie.sanierung'), 'active_routes' => ['/admin/energie/sanierung']],
-                ['label' => 'Energiekonzept', 'icon' => 'file-check', 'url' => $safeRoute('energie.energiekonzept'), 'active_routes' => ['/admin/energie/energiekonzept']],
-                ['label' => 'Grundriss-Editor', 'icon' => 'pen-tool', 'url' => $safeRoute('energie.grundriss'), 'active_routes' => ['/admin/energie/grundriss']],
-                ['label' => 'Plan-Import', 'icon' => 'file-up', 'url' => $safeRoute('energie.plan-upload'), 'active_routes' => ['/admin/energie/plan-upload']],
-                ['label' => 'Heizlast-Rechner', 'icon' => 'thermometer-sun', 'url' => $safeRoute('energie.heizlast'), 'active_routes' => ['/admin/energie/heizlast']],
-                ['label' => 'Fußboden-Check', 'icon' => 'grid', 'url' => $safeRoute('energie.fussboden-check'), 'active_routes' => ['/admin/energie/fussboden-check']],
-                ['label' => 'Materialliste', 'icon' => 'layers', 'url' => $safeRoute('energie.materialliste'), 'active_routes' => ['/admin/energie/materialliste']],
-                ['label' => 'Heizkörper-Check', 'icon' => 'thermometer', 'url' => $safeRoute('radiator.config.view'), 'active_routes' => ['/radiator_config_view']],
-                ['label' => 'Wirtschaftlichkeit', 'icon' => 'calculator', 'url' => $safeRoute('economic_calculations.index', 'admin/economic-calculations'), 'active_routes' => ['/admin/economic-calculations', '/profitability']],
-                // Finance-Gate 1:1 erhalten (Item-Level)
-                ['label' => 'Förderungen', 'icon' => 'file-text', 'permission' => 'Finance', 'url' => $safeRoute('foerderungen.index'), 'count_key' => 'fundings'],
+                ['label' => 'Rechnungen', 'icon' => 'receipt-text', 'url' => $safeRoute('admin.invoices.index', 'admin/invoices'), 'count_key' => 'invoices', 'active_routes' => ['/admin/invoices', '/invoices/canvas']],
+                ['label' => 'Filial-Betriebskosten', 'icon' => 'receipt', 'permission' => 'Finance', 'url' => $safeRoute('branch.expense'), 'count_key' => 'branch_expenses'],
+                ['label' => 'Ratenzahlungen', 'icon' => 'credit-card', 'permission' => 'Finance', 'url' => $safeRoute('assets.installment.show'), 'count_key' => 'installments'],
             ],
         ],
         [
-            'title' => 'Tickets',
-            'permission' => 'Problem',
+            'title' => 'Controlling',
             'items' => [
-                ['label' => 'Neues Ticket', 'icon' => 'plus', 'url' => url('problem_create'), 'active_routes' => ['/problem_create']],
-                ['label' => 'Ticket-Übersicht', 'icon' => 'list', 'url' => url('problem_view'), 'count_key' => 'tickets_open', 'active_routes' => ['/problem_view', '/problem/profile']],
-                ['label' => 'Fehlerkatalog', 'icon' => 'alert-circle', 'url' => url('error'), 'count_key' => 'errors', 'active_routes' => ['/error']],
-            ],
-        ],
-        [
-            'title' => 'Wartung',
-            'items' => [
-                ['label' => 'Wartungsverträge', 'icon' => 'folder-open', 'url' => url('admin/maintenance/contracts'), 'count_key' => 'maintenance_contracts'],
-                ['label' => 'Wartungs-Checklisten', 'icon' => 'plus-circle', 'url' => $safeRoute('admin.maintenance_checklists.index') . '#new-checklist', 'count_key' => 'maintenance_checklists'],
+                ['label' => 'Abteilungen', 'icon' => 'building', 'url' => $safeRoute('department.info'), 'count_key' => 'departments'],
+                ['label' => 'Filialen', 'icon' => 'map-pin', 'url' => $safeRoute('branch.info'), 'count_key' => 'branches'],
             ],
         ],
         [
@@ -593,19 +620,9 @@
             'title' => 'Organisation',
             'permission' => 'Organization',
             'items' => [
-                ['label' => 'Abteilungen', 'icon' => 'building', 'url' => $safeRoute('department.info'), 'count_key' => 'departments'],
                 ['label' => 'Stellen & Qualifikationen', 'icon' => 'briefcase', 'url' => $safeRoute('position.index'), 'count_key' => 'positions'],
                 ['label' => 'Organigramm', 'icon' => 'git-branch', 'url' => $safeRoute('department.organize')],
                 ['label' => 'Stellenbesetzung', 'icon' => 'network', 'url' => $safeRoute('employee.organization.index', 'employee-organization'), 'count_key' => 'department_positions', 'active_routes' => ['/employee-organization']],
-            ],
-        ],
-        [
-            'title' => 'Phasen',
-            'items' => [
-                // Lead-Phasen-Verwaltung (HTML-Seite lead-stages.manage; NICHT die JSON-API lead-stages.index)
-                ['label' => 'Lead-Phasen', 'icon' => 'flag', 'url' => $safeRoute('lead-stages.manage', 'admin/lead-stages/manage'), 'active_routes' => ['/admin/lead-stages/manage']],
-                ['label' => 'Arbeitsschritte', 'icon' => 'clock', 'url' => $safeRoute('task_phase.index'), 'count_key' => 'task_phases'],
-                ['label' => 'Projekt-Struktur', 'icon' => 'flag', 'url' => $safeRoute('stages.index'), 'count_key' => 'stages'],
             ],
         ],
         [
@@ -613,15 +630,6 @@
             'items' => [
                 ['label' => 'Notiz-Kategorien', 'icon' => 'folder', 'url' => $safeRoute('note.category.view'), 'count_key' => 'note_categories'],
                 ['label' => 'Kalkulationssätze', 'icon' => 'calculator', 'url' => $safeRoute('admin.costing_sets.index')],
-            ],
-        ],
-        [
-            'title' => 'Filialen',
-            'items' => [
-                ['label' => 'Filialen', 'icon' => 'map-pin', 'url' => $safeRoute('branch.info'), 'count_key' => 'branches'],
-                // Finance-Gate 1:1 erhalten (Item-Level)
-                ['label' => 'Filial-Betriebskosten', 'icon' => 'receipt', 'permission' => 'Finance', 'url' => $safeRoute('branch.expense'), 'count_key' => 'branch_expenses'],
-                ['label' => 'Ratenzahlungen', 'icon' => 'credit-card', 'permission' => 'Finance', 'url' => $safeRoute('assets.installment.show'), 'count_key' => 'installments'],
             ],
         ],
         [
@@ -1349,6 +1357,7 @@
         }
     </style>
 
+    @include("admin.layouts.partials.zuletzt-besucht")
     @foreach($sidebarSections as $sectionIndex => $section)
         @if(!empty($section['items']))
             @php

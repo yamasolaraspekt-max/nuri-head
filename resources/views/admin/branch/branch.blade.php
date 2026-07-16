@@ -581,29 +581,21 @@ $defaultImage = asset('images/icons/placeholder.svg');
 
 @section('content')
 <div class="oc-wrap">
-  <div class="oc-header">
-    <div class="oc-titlebar">
-      <div>
-        <div class="oc-title">FILIALEN</div>
-        <div class="oc-sub">Verwalten Sie Filialen, Kontaktdaten, Farbwelt, Bankdaten und Ansprechpartner zentral.</div>
-
-        <div class="oc-breadcrumb">
-          <a href="{{ url('/employee_dashboard') }}">Home</a>
-          <span>›</span>
-          <span class="current">Filialen</span>
-        </div>
-      </div>
-
-      @if(auth()->user()->hasPermission('Employee', 'add'))
-        <button type="button" class="oc-btn" onclick="openModal('createBranchModal')">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 5v14M5 12h14"></path>
-          </svg>
-          Neue Filiale
-        </button>
-      @endif
-    </div>
-  </div>
+  {{-- CI-Vereinheitlichung 2026-07-15: Alt-Kopf (oc-titlebar) durch das gemeinsame Bauteil ersetzt. --}}
+  <x-page-head title="Filialen"
+      sub="Verwalten Sie Filialen, Kontaktdaten, Farbwelt, Bankdaten und Ansprechpartner zentral."
+      current="Filialen">
+      <x-slot:actions>
+          @if(auth()->user()->hasPermission('Employee', 'add'))
+              <button type="button" class="oc-btn" onclick="openModal('createBranchModal')">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 5v14M5 12h14"></path>
+                  </svg>
+                  Neue Filiale
+              </button>
+          @endif
+      </x-slot:actions>
+  </x-page-head>
 
   <div class="oc-analytics">
     <div class="oc-stat">

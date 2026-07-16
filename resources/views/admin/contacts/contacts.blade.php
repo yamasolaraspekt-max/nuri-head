@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'ALLE KONTAKTE')
+@section('title', 'Kontakte')
 
 @section('style')
   <link rel="stylesheet" type="text/css" href="{{ asset('css/select2.min.css') }}">
@@ -805,33 +805,21 @@ $exportQuery = request()->only(['search', 'type', 'sort', 'direction']);
 @section('content')
     @include('admin.contacts._tabs')
 <div class="ac-wrap">
-    <div class="ac-header">
-        <div class="ac-titlebar">
-            <div>
-                <div class="ac-title">Alle Kontakte</div>
-                <div class="ac-sub">
-                    Zentrale Übersicht für Kunden, Hersteller, Lieferanten, Anfragen und Mitarbeiter.
-                </div>
-
-                <div class="ac-breadcrumb">
-                    <a href="{{ url('/employee_dashboard') }}">Dashboard</a>
-                    <span>›</span>
-                    <span class="current">Kontaktlisten</span>
-                </div>
-            </div>
-
-            <div class="ac-actions-inline">
-                <a href="{{ route('all.contacts.export', $exportQuery) }}" class="ac-btn">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <path d="M7 10l5 5 5-5"/>
-                        <path d="M12 15V3"/>
-                    </svg>
-                    Als CSV exportieren
-                </a>
-            </div>
-        </div>
-    </div>
+    {{-- CI-Vereinheitlichung 2026-07-15: Alt-Kopf (ac-titlebar) durch das gemeinsame Bauteil ersetzt. --}}
+    <x-page-head title="Kontakte"
+        sub="Zentrale Übersicht für Kunden, Hersteller, Lieferanten, Anfragen und Mitarbeiter."
+        current="Kontakte" style="margin:0 0 14px;">
+        <x-slot:actions>
+            <a href="{{ route('all.contacts.export', $exportQuery) }}" class="ac-btn">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <path d="M7 10l5 5 5-5"/>
+                    <path d="M12 15V3"/>
+                </svg>
+                Als CSV exportieren
+            </a>
+        </x-slot:actions>
+    </x-page-head>
 
     <div class="ac-analytics">
         <div class="ac-stat">

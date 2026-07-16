@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Inventory')
+@section('title', 'Inventar')
 
 @php
 $productsJson = collect($products ?? [])->map(function ($p) {
@@ -750,33 +750,23 @@ $quantityUnits = collect($quantityUnits ?? [
     data-use-base-url="{{ url('/inventory/use-product-ajax') }}"
     data-find-by-product-url="{{ url('/inventory/find-by-product') }}"
 >
-    <div class="iv-header">
-        <div class="iv-titlebar">
-            <div>
-                <div class="iv-title">INVENTORY</div>
-                <div class="iv-sub">Verwalten Sie Lagerorte, Kategorien, Räume, Regale, Reihen, Spalten, Maßeinheiten, Produktbilder, Hersteller, Quantitäten, Verantwortliche, Verbrauch und exakte Standortdaten zentral.</div>
-
-                <div class="iv-breadcrumb">
-                    <a href="{{ url('/employee_dashboard') }}">Home</a>
-                    <span>›</span>
-                    <span class="current">Inventory</span>
-                </div>
-            </div>
-
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                <button type="button" class="iv-btn" onclick="openCreateModal()">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 5v14M5 12h14"></path>
-                    </svg>
-                    Neuer Inventareintrag
-                </button>
-            </div>
-        </div>
-    </div>
+    {{-- CI-Vereinheitlichung 2026-07-15: Alt-Kopf (iv-titlebar, engl. „INVENTORY") durch das gemeinsame Bauteil ersetzt. --}}
+    <x-page-head title="Inventar"
+        sub="Verwalten Sie Lagerorte, Kategorien, Räume, Regale, Reihen, Spalten, Maßeinheiten, Produktbilder, Hersteller, Quantitäten, Verantwortliche, Verbrauch und exakte Standortdaten zentral."
+        current="Inventar">
+        <x-slot:actions>
+            <button type="button" class="iv-btn" onclick="openCreateModal()">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"></path>
+                </svg>
+                Neuer Inventareintrag
+            </button>
+        </x-slot:actions>
+    </x-page-head>
 
     <div class="iv-tabs-card">
         <div class="iv-tabs">
-            <button type="button" class="iv-btn" id="tab-inventory-btn" onclick="switchInventoryTab('inventory')">Inventory</button>
+            <button type="button" class="iv-btn" id="tab-inventory-btn" onclick="switchInventoryTab('inventory')">Inventar</button>
             <button type="button" class="iv-btn-soft" id="tab-history-btn" onclick="switchInventoryTab('history')">Verbrauch / Historie</button>
         </div>
     </div>

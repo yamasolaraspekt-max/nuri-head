@@ -1355,30 +1355,19 @@
     data-default-view="{{ $viewMode === 'kanban' ? 'kanban' : $viewMode }}"
     data-profile-base="{{ url('problem/profile') }}" data-status-url-base="{{ url('/tickets') }}">
 
-    <div class="oc-header">
-      <div class="oc-titlebar">
-        <div>
-          <div class="oc-title">TICKETS</div>
-          <div class="oc-sub">Verwalten Sie erstellte, zugewiesene, laufende, abgeschlossene und Junk-Tickets zentral.
-          </div>
-
-          <div class="oc-breadcrumb">
-            <a href="{{ url('/employee_dashboard') }}">Home</a>
-            <span>›</span>
-            <span class="current">Tickets</span>
-          </div>
-        </div>
-
-        <div class="oc-inline-actions">
-          <a href="{{ route('problem.create') }}" class="oc-btn">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 5v14M5 12h14"></path>
-            </svg>
-            Neues Ticket
-          </a>
-        </div>
-      </div>
-    </div>
+    {{-- CI-Vereinheitlichung 2026-07-15: Alt-Kopf (oc-titlebar) durch das gemeinsame Bauteil ersetzt. --}}
+    <x-page-head title="Tickets"
+        sub="Verwalten Sie erstellte, zugewiesene, laufende, abgeschlossene und Junk-Tickets zentral."
+        current="Tickets">
+        <x-slot:actions>
+            <a href="{{ route('problem.create') }}" class="oc-btn">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"></path>
+                </svg>
+                Neues Ticket
+            </a>
+        </x-slot:actions>
+    </x-page-head>
 
     <div class="oc-analytics">
       <div class="oc-stat">
