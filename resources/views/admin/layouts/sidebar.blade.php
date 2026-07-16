@@ -478,7 +478,7 @@
                 ['label' => 'Feinaufmaß', 'icon' => 'ruler', 'url' => $safeRoute('deal.measurements.kanban', 'deal-measurements-kanban'), 'count_key' => 'deal_measurements', 'active_routes' => ['/deal-measurements-kanban', '/deal-measurements']],
                 ['label' => 'Materialbedarf & Bestellungen · geplant', 'icon' => 'package-search', 'url' => url('#')],
                 ['label' => 'Abnahme & Abrechnung · geplant', 'icon' => 'clipboard-signature', 'url' => url('#')],
-                ['label' => 'Innenaufträge · geplant', 'icon' => 'wrench', 'url' => url('#')],
+                ['label' => 'Interne Arbeiten · geplant', 'icon' => 'wrench', 'url' => url('#')],
                 ['label' => 'Spam', 'icon' => 'slash', 'url' => $safeRoute('deal.junk.list'), 'count_key' => 'deals_junk'],
                 ['label' => 'Papierkorb', 'icon' => 'trash', 'url' => $safeRoute('deal.delete.list'), 'count_key' => 'deals_deleted'],
             ],
@@ -572,7 +572,7 @@
                 ['label' => 'Wechselrichter-Auslegung', 'icon' => 'zap', 'url' => $safeRoute('energie.wr-auslegung'), 'active_routes' => ['/admin/energie/wr-auslegung']],
                 ['label' => 'Wärmepumpen-Auslegung', 'icon' => 'flame', 'url' => $safeRoute('energie.wp-auslegung'), 'active_routes' => ['/admin/energie/wp-auslegung']],
                 ['label' => 'Sanierungs-Wirtschaftlichkeit', 'icon' => 'trending-down', 'url' => $safeRoute('energie.sanierung'), 'active_routes' => ['/admin/energie/sanierung']],
-                ['label' => 'Energiekonzept', 'icon' => 'file-check', 'url' => $safeRoute('energie.energiekonzept'), 'active_routes' => ['/admin/energie/energiekonzept']],
+                ['label' => 'Konzept-Simulator', 'icon' => 'file-check', 'url' => $safeRoute('energie.energiekonzept'), 'active_routes' => ['/admin/energie/energiekonzept']],
                 ['label' => 'Heizlast', 'icon' => 'thermometer-sun', 'url' => $safeRoute('energie.heizlast'), 'active_routes' => ['/admin/energie/heizlast']],
                 // GEPARKT 2026-07-15 — Neu-Ausarbeitung Wirtschaftlichkeit/Förderung. Vorübergehend aus der Navi; Routen/Controller bleiben unberührt. Zum Reaktivieren die zwei Zeilen wieder einkommentieren.
                 // ['label' => 'Wirtschaftlichkeit', 'icon' => 'calculator', 'url' => $safeRoute('economic_calculations.index', 'admin/economic-calculations'), 'active_routes' => ['/admin/economic-calculations', '/profitability']],
@@ -660,7 +660,7 @@
             ],
         ],
         [
-            'title' => 'Abschluss',
+            'title' => 'Perioden',
             'permission' => 'Finance',
             'items' => [
                 ['label' => 'Monatsabschluss · geplant', 'icon' => 'lock', 'url' => url('#')],
@@ -726,9 +726,9 @@
             'title' => 'Zeitwirtschaft',
             'permission' => 'Employee',
             'items' => [
-                ['label' => 'Zeiterfassung · geplant', 'icon' => 'timer', 'url' => url('#')],
+                ['label' => 'Erfassung · geplant', 'icon' => 'timer', 'url' => url('#')],
                 ['label' => 'Überstunden · geplant', 'icon' => 'clock-4', 'url' => url('#')],
-                ['label' => 'Zeitpläne', 'icon' => 'clock', 'url' => $safeRoute('time_management.slots'), 'count_key' => 'time_slots'],
+                ['label' => 'Schichtpläne', 'icon' => 'clock', 'url' => $safeRoute('time_management.slots'), 'count_key' => 'time_slots'],
                 ['label' => 'Arbeitsorte', 'icon' => 'map-pin', 'url' => $safeRoute('work.place.index'), 'count_key' => 'work_places'],
                 ['label' => 'Anwesenheit', 'icon' => 'user-check', 'url' => $safeRoute('admin.attendance.analytics'), 'count_key' => 'attendance_today'],
                 ['label' => 'Abwesenheiten', 'icon' => 'activity', 'url' => $safeRoute('employee.sickness-holiday-analyser'), 'active_routes' => ['/employee/sickness-holiday-analyser']],
@@ -740,7 +740,7 @@
             'permission' => 'Employee',
             'items' => [
                 ['label' => 'HR-Prozesse · geplant', 'icon' => 'workflow', 'url' => url('#')],
-                ['label' => 'Entwicklungsberichte · geplant', 'icon' => 'graduation-cap', 'url' => url('#')],
+                ['label' => 'Beurteilungen · geplant', 'icon' => 'graduation-cap', 'url' => url('#')],
                 ['label' => 'Bewerbungen · geplant', 'icon' => 'user-plus', 'url' => url('#')],
                 ['label' => 'Einarbeitung & Austritt · geplant', 'icon' => 'door-open', 'url' => url('#')],
                 ['label' => 'Schulungen & Zertifikate · geplant', 'icon' => 'award', 'url' => url('#')],
@@ -786,7 +786,7 @@
                 ['label' => 'Abteilungen', 'icon' => 'building', 'url' => $safeRoute('department.info'), 'count_key' => 'departments'],
                 ['label' => 'Stellen & Qualifikationen', 'icon' => 'briefcase', 'url' => $safeRoute('position.index'), 'count_key' => 'positions'],
                 ['label' => 'Organigramm', 'icon' => 'git-branch', 'url' => $safeRoute('department.organize')],
-                ['label' => 'Stellenbesetzung', 'icon' => 'network', 'url' => $safeRoute('employee.organization.index', 'employee-organization'), 'count_key' => 'department_positions', 'active_routes' => ['/employee-organization']],
+                ['label' => 'Besetzung', 'icon' => 'network', 'url' => $safeRoute('employee.organization.index', 'employee-organization'), 'count_key' => 'department_positions', 'active_routes' => ['/employee-organization']],
             ],
         ],
         [
@@ -795,7 +795,7 @@
             'items' => [
                 ['label' => 'Inventur', 'icon' => 'warehouse', 'url' => $safeRoute('inventory.index'), 'count_key' => 'inventory'],
                 ['label' => 'Betriebsmittel', 'icon' => 'qr-code', 'url' => $safeRoute('handover.details.asset'), 'count_key' => 'assets'],
-                ['label' => 'Maschinen & Fahrzeuge', 'icon' => 'car', 'url' => $safeRoute('machine.inventory'), 'count_key' => 'machines'],
+                ['label' => 'Fuhrpark & Maschinen', 'icon' => 'car', 'url' => $safeRoute('machine.inventory'), 'count_key' => 'machines'],
             ],
         ],
         [
