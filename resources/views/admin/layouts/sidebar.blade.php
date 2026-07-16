@@ -659,7 +659,7 @@
             'items' => [
                 ['label' => 'Rechnungen', 'icon' => 'receipt-text', 'permission' => 'Invoice', 'url' => $safeRoute('admin.invoices.index', 'admin/invoices'), 'count_key' => 'invoices', 'active_routes' => ['/admin/invoices', '/invoices/canvas']],
                 ['label' => 'E-Rechnungen (XRechnung/ZUGFeRD) · geplant', 'icon' => 'file-digit', 'url' => url('#')],
-                ['label' => 'Gutschriften · geplant', 'icon' => 'file-minus', 'url' => url('#')],
+                ['label' => 'Gutschriften', 'icon' => 'file-minus', 'url' => $safeRoute('admin.invoices.gutschriften'), 'active_routes' => ['/admin/invoices/gutschriften']],
                 // Navi-Audit v3: aus „Stammdaten" hierher (Kostenbasis gehört zu Finanzen).
             ],
         ],
@@ -675,7 +675,7 @@
                 ['label' => 'Mahnwesen', 'icon' => 'alarm-clock', 'url' => $safeRoute('admin.invoices.mahnwesen'), 'active_routes' => ['/admin/invoices/mahnwesen']],
                 ['label' => 'Eingangsrechnungen · geplant', 'icon' => 'file-input', 'url' => url('#')],
                 ['label' => 'Journal · geplant', 'icon' => 'book-open-check', 'url' => url('#')],
-                ['label' => 'Ausgangsrechnungen · geplant', 'icon' => 'file-output', 'url' => url('#')],
+                ['label' => 'Ausgangsrechnungen', 'icon' => 'file-output', 'url' => $safeRoute('admin.invoices.ausgangsrechnungen'), 'active_routes' => ['/admin/invoices/ausgangsrechnungen']],
                 ['label' => 'Kassenbuch · geplant', 'icon' => 'wallet', 'url' => url('#')],
                 ['label' => 'Daueraufträge · geplant', 'icon' => 'repeat', 'url' => url('#')],
             ],
@@ -837,7 +837,7 @@
             'items' => [
                 // Welle A3 (2026-07-16): live verdrahtet — Fläche existierte bereits (Inventur-Fund employee.capacity.view).
                 ['label' => 'Auslastung', 'icon' => 'activity', 'url' => $safeRoute('employee.capacity.view'), 'active_routes' => ['/capacity/index', '/capacity/list']],
-                ['label' => 'Umsätze · geplant', 'icon' => 'trending-up', 'url' => url('#')],
+                ['label' => 'Umsätze', 'icon' => 'trending-up', 'url' => $safeRoute('admin.controlling.umsaetze'), 'active_routes' => ['/admin/controlling/umsaetze']],
                 ['label' => 'BWA · geplant', 'icon' => 'bar-chart-3', 'url' => url('#')],
                 ['label' => 'Kapazität & Produktivität · geplant', 'icon' => 'trending-up', 'url' => url('#')],
                 ['label' => 'Bereichs-GuV · geplant', 'icon' => 'table-2', 'url' => url('#')],

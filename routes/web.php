@@ -4551,6 +4551,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'InvoiceMiddleware']
         ->name('invoices.mahnwesen.execute');
     Route::get('/invoices/mahnwesen/brief/{item}', [\App\Http\Controllers\Invoice\MahnwesenController::class, 'brief'])
         ->name('invoices.mahnwesen.brief');
+
+    // Welle B1 (2026-07-16): drei Lese-Flächen auf der invoices-Wahrheit (vor /invoices/{invoice}!).
+    Route::get('/invoices/ausgangsrechnungen', [\App\Http\Controllers\Invoice\AusgangsrechnungenController::class, 'index'])
+        ->name('invoices.ausgangsrechnungen');
+    Route::get('/invoices/gutschriften', [\App\Http\Controllers\Invoice\GutschriftenController::class, 'index'])
+        ->name('invoices.gutschriften');
+    Route::get('/controlling/umsaetze', [\App\Http\Controllers\Controlling\UmsaetzeController::class, 'index'])
+        ->name('controlling.umsaetze');
     Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
 
     // Select2 endpoints must come before /invoices/{invoice}
