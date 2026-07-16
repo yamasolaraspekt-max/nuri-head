@@ -726,10 +726,12 @@
             'title' => 'Zeit & Anwesenheit',
             'permission' => 'Employee',
             'items' => [
+                ['label' => 'Zeiterfassung · geplant', 'icon' => 'timer', 'url' => url('#')],
+                ['label' => 'Überstunden · geplant', 'icon' => 'clock-4', 'url' => url('#')],
                 ['label' => 'Zeitpläne', 'icon' => 'clock', 'url' => $safeRoute('time_management.slots'), 'count_key' => 'time_slots'],
                 ['label' => 'Arbeitsorte', 'icon' => 'map-pin', 'url' => $safeRoute('work.place.index'), 'count_key' => 'work_places'],
                 ['label' => 'Anwesenheit', 'icon' => 'user-check', 'url' => $safeRoute('admin.attendance.analytics'), 'count_key' => 'attendance_today'],
-                ['label' => 'Krankheit & Urlaub', 'icon' => 'activity', 'url' => $safeRoute('employee.sickness-holiday-analyser'), 'active_routes' => ['/employee/sickness-holiday-analyser']],
+                ['label' => 'Abwesenheiten', 'icon' => 'activity', 'url' => $safeRoute('employee.sickness-holiday-analyser'), 'active_routes' => ['/employee/sickness-holiday-analyser']],
                 ['label' => 'Dienstplanung · geplant', 'icon' => 'calendar-cog', 'url' => url('#')],
             ],
         ],
@@ -750,8 +752,6 @@
             'permission' => 'Employee',
             'items' => array_values(array_filter([
                 $canSalary ? ['label' => 'Lohn & Vollkosten', 'icon' => 'calculator', 'url' => $safeRoute('salary.index'), 'count_key' => 'salaries'] : null,
-                ['label' => 'Zeiterfassung · geplant', 'icon' => 'timer', 'url' => url('#')],
-                ['label' => 'Überstunden · geplant', 'icon' => 'clock-4', 'url' => url('#')],
                 ['label' => 'Lohnvorbereitung · geplant', 'icon' => 'receipt-euro', 'url' => url('#')],
                 ['label' => 'Lohnarten · geplant', 'icon' => 'coins', 'url' => url('#')],
             ])),
