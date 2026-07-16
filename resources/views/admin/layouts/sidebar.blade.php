@@ -560,7 +560,10 @@
             // Navi-Audit v3: ex „Energie" — jetzt reines Rechner-Thema.
             'title' => 'Energie-Rechner',
             'items' => [
-                ['label' => 'PVGIS', 'icon' => 'sun', 'url' => $safeRoute('admin.pvgis.index'), 'active_routes' => ['/admin/pvgis']],
+                // ARCHITEKTUR-REGEL 2026-07-16 (Yama): APIs/Datenquellen (PVGIS, Wetter, Google, NAT/Heizgradtage)
+                // sind KEINE Navi-Punkte — sie werden als Operanden in Planer/Konfigurator/Rechner integriert
+                // (PLZ -> Klima automatisch; Services KlimaPlzService/KlimaBinService existieren dafür).
+                // ['label' => 'PVGIS', 'icon' => 'sun', 'url' => $safeRoute('admin.pvgis.index'), 'active_routes' => ['/admin/pvgis']],
                 ['label' => 'Wechselrichter-Auslegung', 'icon' => 'zap', 'url' => $safeRoute('energie.wr-auslegung'), 'active_routes' => ['/admin/energie/wr-auslegung']],
                 ['label' => 'Wärmepumpen-Auslegung', 'icon' => 'flame', 'url' => $safeRoute('energie.wp-auslegung'), 'active_routes' => ['/admin/energie/wp-auslegung']],
                 ['label' => 'Sanierungs-Wirtschaftlichkeit', 'icon' => 'trending-down', 'url' => $safeRoute('energie.sanierung'), 'active_routes' => ['/admin/energie/sanierung']],
