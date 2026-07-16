@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title') Stempel-Artikel Listen @endsection
+@section('title') Stammartikel-Listen @endsection
 
 @section('style')
 <style>

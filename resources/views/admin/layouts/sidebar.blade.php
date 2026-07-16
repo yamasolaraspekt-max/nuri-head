@@ -595,7 +595,7 @@
                 ['label' => 'Neu anlegen', 'icon' => 'plus', 'url' => $safeRoute('product.create', 'product_create')],
                 ['label' => 'Katalog', 'icon' => 'file', 'url' => $safeRoute('product.info'), 'count_key' => 'products', 'active_routes' => ['/product', '/product_view', '/products']],
                 ['label' => 'Favoriten', 'icon' => 'star', 'url' => $safeRoute('product.favorites.index'), 'count_key' => 'product_favorites'],
-                ['label' => 'Stempellisten', 'icon' => 'award', 'url' => $safeRoute('stamp.lists.index'), 'count_key' => 'stamp_favorites'],
+                ['label' => 'Stammartikel-Listen', 'icon' => 'award', 'url' => $safeRoute('stamp.lists.index'), 'count_key' => 'stamp_favorites'],
                 ['label' => 'Master-Sets', 'icon' => 'shopping-cart', 'url' => $safeRoute('admin.master_sets.index'), 'count_key' => 'master_sets'],
             ],
         ],
@@ -887,6 +887,17 @@
                 ['label' => 'Konten', 'icon' => 'settings', 'url' => url('/email_configuration'), 'active_routes' => ['/email_configuration']],
                 ['label' => 'Lead-Postfächer', 'icon' => 'settings-2', 'url' => $safeRoute('lead-email-accounts.index'), 'active_routes' => ['/lead-email-accounts']],
                 ['label' => 'Domain-Filter', 'icon' => 'filter', 'url' => $safeRoute('lead.email.domain.filters.index'), 'active_routes' => ['/lead-email-domain-filters', '/lead/email/domain/filters']],
+            ],
+        ],
+        [
+            // 2026-07-16 (Yama): Import/Export zentral — echte Flächen, waren unsichtbar. DATANORM = Handwerks-Standard.
+            'title' => 'Datenaustausch',
+            'items' => [
+                ['label' => 'Artikel', 'icon' => 'package', 'url' => $safeRoute('products.import.index')],
+                ['label' => 'Artikel-Bilder', 'icon' => 'image', 'url' => $safeRoute('admin.products.images.csv-import.index')],
+                ['label' => 'Leads', 'icon' => 'users', 'url' => $safeRoute('admin.leads.import')],
+                ['label' => 'DATANORM', 'icon' => 'database', 'url' => $safeRoute('datanorm.form')],
+                ['label' => 'Exporte · geplant', 'icon' => 'download', 'url' => url('#')],
             ],
         ],
         [
