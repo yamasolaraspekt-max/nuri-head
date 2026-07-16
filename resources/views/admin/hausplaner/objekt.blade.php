@@ -31,6 +31,8 @@
     </style>
 </head>
 <body>
+    {{-- T-c: BearbeitungsSperre je OBJEKT (weiche Sperre; harte Wahrheit bleibt base_revision->409). --}}
+    @include('admin.layouts.partials.bearbeitungs-sperre', ['bereich' => 'hausplaner', 'sperrId' => $objekt->id])
     <div class="hp-bar">
         <span class="hp-title">Hausplaner</span>
         <span class="hp-obj">{{ $objekt->object_name ?: ('Objekt #' . $objekt->id) }}{{ $objekt->full_address ? ' · ' . $objekt->full_address : '' }}</span>

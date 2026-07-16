@@ -41,6 +41,10 @@
         @if ($objekt->lead_id)
             <a class="gk-btn-soft" href="{{ route('new.lead.profile', $objekt->lead_id) }}">Kundenakte öffnen (pflegen)</a>
         @endif
+        {{-- Sichtbarkeit spiegelt die Route-Sperre exakt: hasPermission('hausplaner.view') == permission:hausplaner.view (Super-Admin/is_admin passiert beides). --}}
+        @if (auth()->check() && auth()->user()->hasPermission('hausplaner.view'))
+            <a class="gk-btn-soft" href="{{ route('hausplaner.objekt.seite', $objekt->id) }}">Hausplaner öffnen</a>
+        @endif
     </x-slot:actions>
 </x-page-head>
 
