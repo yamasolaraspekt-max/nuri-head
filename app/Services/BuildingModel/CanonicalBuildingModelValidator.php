@@ -278,6 +278,7 @@ final class CanonicalBuildingModelValidator
                     'height' => (isset($wall['height_mm']) && is_int($wall['height_mm'])) ? $wall['height_mm'] : null,
                     'bottom' => (isset($wall['bottom_offset_mm']) && is_int($wall['bottom_offset_mm'])) ? $wall['bottom_offset_mm'] : 0,
                     'type' => is_string($type) ? $type : null,
+                    'mode' => is_string($mode) ? $mode : null,
                 ];
             }
         }
@@ -298,8 +299,8 @@ final class CanonicalBuildingModelValidator
         $byHost = [];
         foreach (($storey['openings'] ?? []) as $oi => $op) {
             $opp = "$sp.openings.$oi";
-            foreach (['station_mm', 'rough_width_mm', 'rough_height_mm', 'sill_height_mm'] as $f) {
-                if (array_key_exists($f, $op) && ! is_int($op[$f])) {
+            foreach (['station_mm', 'rough_width_mm', 'rough_height_mm', 'sill_height_mm', 'lintel_height_mm', 'finished_width_mm', 'finished_height_mm'] as $f) {
+                if (array_key_exists($f, $op) && $op[$f] !== null && ! is_int($op[$f])) {
                     $r->add('unit.float_length', "$opp.$f", "Längenfeld $f muss Millimeter-Integer sein (kein Float).");
                 }
             }
@@ -340,13 +341,31 @@ final class CanonicalBuildingModelValidator
                 }
             }
 
-            // Vertikal: Öffnung innerhalb des Wandkörpers (bottom_offset .. bottom_offset+height).
+            // Vertikal (A-3): Öffnung innerhalb des Wandkörpers (bottom_offset .. bottom_offset+height).
+            // Bei height_mode=profile ist die lokale Wandhöhe an der Station nicht auflösbar → NICHT still als
+            // uniforme Höhe prüfen; stattdessen ausdrücklich als „nicht entscheidbar" markieren (Warncode),
+            // keine Öffnung durch einen erfundenen Default akzeptieren.
             $wh = $wall['height'];
             $bottom = $wall['bottom'];
-            if ($wh !== null && is_int($sill) && is_int($rh)) {
-                if ($sill < $bottom || ($sill + $rh) > ($bottom + $wh)) {
+            $mode = $wall['mode'] ?? null;
+            if (is_int($sill) && is_int($rh)) {
+                if ($mode === 'profile') {
+                    // Untere Grenze ist auch ohne Höhenprofil entscheidbar → hart prüfen.
+                    if ($sill < $bottom) {
+                        $r->add('opening.exceeds_wall_height', $opp, 'Öffnungsunterkante liegt unter der Wandunterkante.');
+                    }
+                    // Nur die OBERE Grenze braucht die lokale Wandhöhe an der Station → nicht entscheidbar.
+                    $r->add('opening.profile_height_unresolved', $opp, 'Obere vertikale Grenze bei height_mode=profile nicht entscheidbar (lokale Wandhöhe an der Station fehlt) — keine Annahme einer uniformen Höhe.', CanonicalModelValidationResult::SEVERITY_WARNING);
+                } elseif ($wh !== null && ($sill < $bottom || ($sill + $rh) > ($bottom + $wh))) {
                     $r->add('opening.exceeds_wall_height', $opp, 'Öffnung liegt vertikal außerhalb der Wand.');
                 }
+            }
+
+            // Sturzkonsistenz (A-3): lintel_height_mm == sill_height_mm + rough_height_mm (rough_top_mm).
+            // Abweichung = Messkonflikt, keine stille Priorisierung, keine automatische Korrektur.
+            $lintel = $op['lintel_height_mm'] ?? null;
+            if (is_int($lintel) && is_int($sill) && is_int($rh) && $lintel !== ($sill + $rh)) {
+                $r->add('opening.lintel_conflict', "$opp.lintel_height_mm", 'lintel_height_mm weicht von sill_height_mm + rough_height_mm (rough_top_mm) ab — Messkonflikt, keine stille Priorisierung.');
             }
 
             // Fertigmaß darf Rohbauausschnitt nicht überstimmen.
