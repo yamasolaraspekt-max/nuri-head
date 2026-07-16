@@ -4974,6 +4974,24 @@ Route::middleware(['auth'])->get('/admin/hausplaner/dachplaner', function () {
     return view('admin.hausplaner.dachplaner');
 })->name('hausplaner.dachplaner');
 
+// Hausplaner-Transplantation (T-b): 2D/3D-Planer am OBJEKT (alternative_id). WEB-Routen (Session+CSRF),
+// permission:hausplaner.view/manage; {objekt} = LeadAlternativeAdd (404 bei unbekanntem Objekt).
+// Landung 'in Abnahme' bis P1-Browser-Sichtproben gruen. Bestehende Dach-Insel oben unangetastet.
+Route::middleware(['auth'])->prefix('admin/hausplaner')->name('hausplaner.objekt.')->group(function () {
+    Route::get('/objekt/{objekt}', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'seite'])
+        ->whereNumber('objekt')->middleware('permission:hausplaner.view')->name('seite');
+    Route::put('/objekt/{objekt}/dokument', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'speichern'])
+        ->whereNumber('objekt')->middleware('permission:hausplaner.manage')->name('speichern');
+    Route::post('/objekt/{objekt}/snapshots', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'snapshotErstellen'])
+        ->whereNumber('objekt')->middleware('permission:hausplaner.manage')->name('snapshots.erstellen');
+    Route::get('/objekt/{objekt}/snapshots', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'snapshotListe'])
+        ->whereNumber('objekt')->middleware('permission:hausplaner.view')->name('snapshots.liste');
+    Route::post('/objekt/{objekt}/snapshots/{snapshotId}/wiederherstellen', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'wiederherstellen'])
+        ->whereNumber('objekt')->whereNumber('snapshotId')->middleware('permission:hausplaner.manage')->name('snapshots.wiederherstellen');
+    Route::get('/katalog', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'katalog'])
+        ->middleware('permission:hausplaner.view')->name('katalog');
+});
+
 // Styleguide — lebende Komponentenbibliothek (UI-Bauordnung 2026-07-16).
 // Nur eingeloggt; reine Ansicht ohne Daten. Navi-Gate: Administrator.
 Route::middleware(['auth'])->get('/admin/styleguide', function () {
