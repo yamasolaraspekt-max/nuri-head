@@ -475,8 +475,9 @@
             'permission' => 'Customer', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Übersicht', 'icon' => 'briefcase', 'url' => $safeRoute('deal.all.list'), 'count_key' => 'deals', 'active_routes' => ['/deal', '/deals', '/auftrag']],
-                ['label' => 'Auftragseingang · geplant', 'icon' => 'inbox', 'url' => url('#')],
-                ['label' => 'Auftragsbestätigungen · geplant', 'icon' => 'file-check', 'url' => url('#')],
+                // Welle A2 (2026-07-16): live — eine Fläche, zwei Blicke (Eingang + AB-Historie).
+                ['label' => 'Auftragseingang', 'icon' => 'inbox', 'url' => $safeRoute('deal.auftragseingang'), 'active_routes' => ['/auftragseingang']],
+                ['label' => 'Auftragsbestätigungen', 'icon' => 'file-check', 'url' => $safeRoute('deal.auftragseingang') . '#ab-historie'],
                 ['label' => 'Auftragsstatus · geplant', 'icon' => 'git-commit', 'url' => url('#')],
                 ['label' => 'Abnahme & Abrechnung · geplant', 'icon' => 'clipboard-signature', 'url' => url('#')],
                 ['label' => 'Interne Arbeiten · geplant', 'icon' => 'wrench', 'url' => url('#')],

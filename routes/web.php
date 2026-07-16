@@ -4209,6 +4209,14 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
+    // Welle A2 (2026-07-16): Auftragseingang + Auftragsbestätigung (Spec: docs/planner-spec-auftragseingang-ab.md).
+    Route::get('auftragseingang', [\App\Http\Controllers\Customer\Deal\AuftragseingangController::class, 'index'])
+        ->name('deal.auftragseingang');
+    Route::post('auftragseingang/{deal}/ab', [\App\Http\Controllers\Customer\Deal\AuftragseingangController::class, 'abErzeugen'])
+        ->whereNumber('deal')->name('deal.auftragseingang.ab.erzeugen');
+    Route::get('auftragseingang/ab/{confirmation}', [\App\Http\Controllers\Customer\Deal\AuftragseingangController::class, 'ab'])
+        ->whereNumber('confirmation')->name('deal.auftragseingang.ab');
+
     Route::get('deal_details', [DealController::class, 'index'])
         ->name('deal.details');
 
