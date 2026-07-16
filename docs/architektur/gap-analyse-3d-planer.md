@@ -72,6 +72,14 @@
 - **W4 · 2D-Grundriss neu** auf SceneDocument (Konva) — der SVG-Editor bleibt parallel, bis die Projektion `gebaeude_geometrie` gleichwertig speist (Heizlast darf nie brechen), dann Ablösung als eigener Posten.
 - **W5 · 3D-Haus** (Wände extrudieren, Öffnungen) · **W6 · technische Objekte** (Heizkörper, WP mit Wartungs-/Schallzonen aus Katalog) · **W7 · Ausbau** (Import, Mehrbenutzer).
 
+## F2 · Nachtrag (Yama-Hinweis): Vorarbeiten in ticket — eingearbeitet
+
+Die Prüfung hatte drei ticket-Vorarbeiten zu schwach gewichtet (R7-Korrektur):
+
+1. **`docs/ap4-geometrie-3d-gebaeudemodell-validierung.md` (14.07., read-only):** Die Dach-**Utils** sind belastbare Mathematik (Shoelace, Trigonometrie, Öffnungsabzug — 320 Tests in pg), die DachplanerPro-**UI/Engine ist ein @ts-nocheck-Prototyp**; server-seitig persistiert pg nur eine Bounding-Box-Näherung („kein Aufmaß"). **Vier Pflicht-Gates vor echten Ergebnissen:** (a) Polygon-Topologie-Validierung, (b) Referenztests nach ticket transplantieren, (c) versionierte Geometrie-Persistenz am Objekt, (d) belastbare Dachflächen-/Azimut-Quelle (`RoofAreaEstimator` hat einen Web-Mercator-Flächenfehler). → **Diese vier Gates sind ab jetzt Pflicht-Inhalt der Foundation (W2)**; W1 landet die Insel nur als gekennzeichnetes Prototyp-Werkzeug OHNE Persistenz-Anspruch.
+2. **Geometrie-Kern liegt schon in ticket** (`GeometrieAbleitungService`, `RaumHuelleService`, `RoofAreaEstimator`) — aus wberechnung transplantiert, aber **ohne die Referenztests** (Gate b).
+3. **`docs/uebernahme/uebernahme-empfehlung.md`** schloss den React-Dachplaner seinerzeit aus („kein Laravel/Blade") — das Standalone-Bundle (17.06., `vite.planer.config.ts` → feste Dateien `planer.js/css`) löst genau diesen Einwand; der Ausschluss ist damit überholt, nicht widerlegt. Zusätzlich: `public/models` in ticket trägt bereits 127 MB GLB (roof_config/solar) — die Insel-Assets bleiben getrennt unter `public/planer/`.
+
 ## G · Offene Entscheide an Yama
 
 **(a)** React-Scope-Freigabe fürs Hausplaner-Bundle (E5) — ja/nein?

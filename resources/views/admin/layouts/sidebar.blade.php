@@ -575,7 +575,8 @@
             'items' => [
                 ['label' => 'Grundriss-Editor', 'icon' => 'pen-tool', 'url' => $safeRoute('energie.grundriss'), 'active_routes' => ['/admin/energie/grundriss']],
                 ['label' => 'Plan-Import', 'icon' => 'file-up', 'url' => $safeRoute('energie.plan-upload'), 'active_routes' => ['/admin/energie/plan-upload']],
-                ['label' => 'Dachplaner · geplant', 'icon' => 'box', 'url' => url('#')],
+                // Hausplaner W1 (2026-07-16): live als Prototyp — playground-Insel gelandet (AP-4-Gates → Foundation W2).
+                ['label' => 'Dachplaner', 'icon' => 'box', 'url' => $safeRoute('hausplaner.dachplaner'), 'active_routes' => ['/admin/hausplaner/dachplaner']],
                 ['label' => 'Dachbelegung (PV) · geplant', 'icon' => 'layout-grid', 'url' => url('#')],
             ],
         ],

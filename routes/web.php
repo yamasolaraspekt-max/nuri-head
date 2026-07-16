@@ -4935,6 +4935,11 @@ Route::get('request/token', function(){
 
  
 
+// Hausplaner W1 (2026-07-16): 3D-Dachplaner-Insel (playground-Bundle, Prototyp — AP-4-Gates folgen in W2).
+Route::middleware(['auth'])->get('/admin/hausplaner/dachplaner', function () {
+    return view('admin.hausplaner.dachplaner');
+})->name('hausplaner.dachplaner');
+
 // Styleguide — lebende Komponentenbibliothek (UI-Bauordnung 2026-07-16).
 // Nur eingeloggt; reine Ansicht ohne Daten. Navi-Gate: Administrator.
 Route::middleware(['auth'])->get('/admin/styleguide', function () {
