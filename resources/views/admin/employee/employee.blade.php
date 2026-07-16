@@ -844,29 +844,17 @@
             $totalEmployeeCount = ($activeCount ?? 0) + ($inactiveCount ?? 0);
         @endphp
 
-        <div class="oc-header">
-            <div class="oc-titlebar">
-                <div>
-                    <div class="oc-title">Mitarbeiter Details</div>
-                    <div class="oc-sub">
-                        Mitarbeiter verwalten, Status prüfen, Gebiete einsehen und Passcodes administrieren.
-                    </div>
-
-                    <div class="oc-breadcrumb">
-                        <a href="{{ url('/employee_dashboard') }}">Dashboard</a>
-                        <span>›</span>
-                        <span class="current">Mitarbeiter</span>
-                    </div>
-                </div>
-
-                <div>
-                    <a class="oc-btn" href="{{ url('emp_create') }}">
-                        <i class="feather icon-user-plus"></i>
-                        Mitarbeiter erstellen
-                    </a>
-                </div>
-            </div>
-        </div>
+        {{-- CI-Vereinheitlichung 2026-07-15 (Welle 2): Alt-Kopf durch das gemeinsame Bauteil ersetzt. --}}
+        <x-page-head title="Mitarbeiter"
+            sub="Mitarbeiter verwalten, Status prüfen, Gebiete einsehen und Passcodes administrieren."
+            current="Mitarbeiter">
+            <x-slot:actions>
+                <a class="oc-btn" href="{{ url('emp_create') }}">
+                    <i class="feather icon-user-plus"></i>
+                    Mitarbeiter erstellen
+                </a>
+            </x-slot:actions>
+        </x-page-head>
 
         <div class="oc-analytics">
             <div class="oc-stat">

@@ -414,20 +414,11 @@
 
 @section('content')
 <div class="oc-wrap">
-  <div class="oc-header">
-    <div class="oc-titlebar">
-      <div>
-        <div class="oc-title">LAGERAUSGABE</div>
-        <div class="oc-sub">Produkte suchen, Lagerausgabe erstellen und Anfragen zentral verwalten.</div>
+  {{-- CI-Vereinheitlichung 2026-07-15 (Welle 2): Alt-Kopf durch das gemeinsame Bauteil ersetzt. --}}
+  <x-page-head title="Lagerausgabe"
+      sub="Produkte suchen, Lagerausgabe erstellen und Anfragen zentral verwalten."
+      current="Lagerausgabe" />
 
-        <div class="oc-breadcrumb">
-          <a href="{{ url('/employee_dashboard') }}">Home</a>
-          <span>›</span>
-          <span class="current">Lagerausgabe</span>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="oc-analytics">
     <div class="oc-stat">

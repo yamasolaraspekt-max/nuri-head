@@ -1455,20 +1455,19 @@
 
 @section('content')
   <div class="oc-wrap" id="offer-app">
-    <div class="oc-header">
-      <div class="oc-titlebar">
-        <div>
-          <div class="oc-title">Angebotsverwaltung</div>
-          <div class="oc-sub">Analytics, Filter, Sortierung und automatisches Ordner-Management.</div>
-        </div>
-        <button class="oc-btn" type="button" onclick="openModal()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-          Neues Angebot
-        </button>
-      </div>
-    </div>
+    {{-- CI-Vereinheitlichung 2026-07-15 (Welle 2): Alt-Kopf durch das gemeinsame Bauteil ersetzt. --}}
+    <x-page-head title="Angebote"
+        sub="Analytics, Filter, Sortierung und automatisches Ordner-Management."
+        current="Angebote">
+        <x-slot:actions>
+            <button class="oc-btn" type="button" onclick="openModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                Neues Angebot
+            </button>
+        </x-slot:actions>
+    </x-page-head>
 
     <div class="oc-analytics" id="analytics-cards">
       <div class="oc-stat">

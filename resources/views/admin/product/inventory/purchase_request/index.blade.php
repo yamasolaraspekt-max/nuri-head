@@ -74,20 +74,20 @@
 
 @section('content')
 <div class="oc-wrap">
-  <div class="oc-titlebar">
-    <div>
-      <div class="oc-title">KAUFANFRAGEN</div>
-      <div class="oc-sub">Kaufanfragen erstellen, suchen, filtern, sortieren.</div>
-    </div>
-
-    <button class="oc-btn" type="button" onclick="openModal('createModal')">+ Neue Kaufanfrage</button>
-  </div>
+  {{-- CI-Vereinheitlichung 2026-07-15 (Welle 2): Alt-Kopf durch das gemeinsame Bauteil ersetzt. --}}
+  <x-page-head title="Kaufanfragen"
+      sub="Kaufanfragen erstellen, suchen, filtern, sortieren."
+      current="Kaufanfragen">
+      <x-slot:actions>
+          <button class="oc-btn" type="button" onclick="openModal('createModal')">+ Neue Kaufanfrage</button>
+      </x-slot:actions>
+  </x-page-head>
 
   <div class="oc-analytics">
     <div class="oc-stat"><div class="oc-stat-icon">#</div><div><div class="oc-stat-label">Gesamt</div><div class="oc-stat-value" id="statTotal">0</div><div class="oc-stat-sub">Alle Kaufanfragen</div></div></div>
     <div class="oc-stat"><div class="oc-stat-icon">T</div><div><div class="oc-stat-label">Heute</div><div class="oc-stat-value" id="statToday">0</div><div class="oc-stat-sub">Neue Anfragen</div></div></div>
-    <div class="oc-stat"><div class="oc-stat-icon">✓</div><div><div class="oc-stat-label">Published</div><div class="oc-stat-value" id="statPublished">0</div><div class="oc-stat-sub">Veröffentlicht</div></div></div>
-    <div class="oc-stat"><div class="oc-stat-icon">!</div><div><div class="oc-stat-label">Unpublished</div><div class="oc-stat-value" id="statUnpublished">0</div><div class="oc-stat-sub">Offen</div></div></div>
+    <div class="oc-stat"><div class="oc-stat-icon">✓</div><div><div class="oc-stat-label">Veröffentlicht</div><div class="oc-stat-value" id="statPublished">0</div><div class="oc-stat-sub">Freigegeben</div></div></div>
+    <div class="oc-stat"><div class="oc-stat-icon">!</div><div><div class="oc-stat-label">Offen</div><div class="oc-stat-value" id="statUnpublished">0</div><div class="oc-stat-sub">Nicht veröffentlicht</div></div></div>
     <div class="oc-stat"><div class="oc-stat-icon">IMG</div><div><div class="oc-stat-label">Bilder</div><div class="oc-stat-value" id="statWithImage">0</div><div class="oc-stat-sub">Mit Datei</div></div></div>
   </div>
 
@@ -102,10 +102,10 @@
         <label class="oc-filter-label">Status</label>
         <select id="statusFilter" class="oc-select">
           <option value="">Alle</option>
-          <option value="Unpublished">Unpublished</option>
-          <option value="Published">Published</option>
-          <option value="Done">Done</option>
-          <option value="Canceled">Canceled</option>
+          <option value="Unpublished">Unveröffentlicht</option>
+          <option value="Published">Veröffentlicht</option>
+          <option value="Done">Erledigt</option>
+          <option value="Canceled">Storniert</option>
         </select>
       </div>
 

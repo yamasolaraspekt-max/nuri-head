@@ -721,27 +721,17 @@
 
 @section('content')
 <div class="dp-wrap">
-    <div class="dp-header">
-        <div class="dp-titlebar">
-            <div>
-                <div class="dp-title">ABTEILUNG</div>
-                <div class="dp-sub">Verwalten Sie Abteilungen, Hierarchien, Leiter, Stellvertretungen und Mitarbeiter zentral.</div>
-
-                <div class="dp-breadcrumb">
-                    <a href="{{ url('/') }}">Dashboard</a>
-                    <span>›</span>
-                    <span class="current">Abteilung Liste</span>
-                </div>
-            </div>
-
-            <div>
-                <button type="button" class="dp-btn" onclick="openDpModal('createDepartmentModal')">
-                    <i class="feather icon-plus"></i>
-                    Neue Abteilung
-                </button>
-            </div>
-        </div>
-    </div>
+    {{-- CI-Vereinheitlichung 2026-07-15 (Welle 2): Alt-Kopf durch das gemeinsame Bauteil ersetzt. --}}
+    <x-page-head title="Abteilungen"
+        sub="Verwalten Sie Abteilungen, Hierarchien, Leiter, Stellvertretungen und Mitarbeiter zentral."
+        current="Abteilungen">
+        <x-slot:actions>
+            <button type="button" class="dp-btn" onclick="openDpModal('createDepartmentModal')">
+                <i class="feather icon-plus"></i>
+                Neue Abteilung
+            </button>
+        </x-slot:actions>
+    </x-page-head>
 
     <div class="dp-analytics">
         <div class="dp-stat">
