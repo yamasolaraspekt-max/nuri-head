@@ -2154,6 +2154,8 @@ Route::prefix('admin/maintenance/contracts')
         Route::get('/technicians', [CustomerMaintenanceContractController::class, 'technicians'])->name('technicians');
 
         Route::get('/incoming', [CustomerMaintenanceContractController::class, 'incoming'])->name('incoming');
+        // Welle A3 (2026-07-16): Fällige Wartungen als Blade-Fläche (gleiche Logik wie incoming).
+        Route::get('/faelligkeiten', [CustomerMaintenanceContractController::class, 'faelligkeiten'])->name('faelligkeiten');
         Route::get('/calendar-feed', [CustomerMaintenanceContractController::class, 'calendarFeed'])->name('calendar_feed');
         Route::get('/kanban-feed', [CustomerMaintenanceContractController::class, 'kanbanFeed'])->name('kanban_feed');
 

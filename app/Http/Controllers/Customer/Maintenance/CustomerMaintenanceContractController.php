@@ -1573,6 +1573,38 @@ class CustomerMaintenanceContractController extends Controller
         ]);
     }
 
+    /**
+     * Fällige Wartungen — Welle A3 (2026-07-16). Blade-Fläche auf DERSELBEN Logik wie incoming()
+     * (eine Wahrheit): aktive Verträge mit next_service_date im Fenster, überfällige zuerst.
+     */
+    public function faelligkeiten(Request $request)
+    {
+        $days = max(1, min(365, (int) $request->get('days', 30)));
+
+        $contracts = CustomerMaintenanceContract::query()
+            ->with([
+                'lead:id,name,lastname,firma,customer_no,street,postcode,city',
+                'asset:id,title,manufacturer,model',
+                'responsibleEmployee:id,name',
+            ])
+            ->whereNotNull('next_service_date')
+            ->whereDate('next_service_date', '<=', now()->addDays($days)->toDateString())
+            ->whereIn('status', ['active', 'draft'])
+            ->orderBy('next_service_date')
+            ->limit(500)
+            ->get();
+
+        $today = now()->startOfDay();
+        $ueberfaellig = $contracts->filter(fn ($c) => $c->next_service_date && $today->gt($c->next_service_date));
+
+        return view('admin.maintenance.faelligkeiten', [
+            'contracts'    => $contracts,
+            'days'         => $days,
+            'ueberfaellig' => $ueberfaellig->count(),
+            'today'        => $today,
+        ]);
+    }
+
     public function calendarFeed(Request $request)
     {
         $start = $request->get('start');

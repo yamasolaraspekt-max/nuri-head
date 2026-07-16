@@ -524,7 +524,8 @@
             'items' => [
                 ['label' => 'Verträge', 'icon' => 'folder-open', 'url' => url('admin/maintenance/contracts'), 'count_key' => 'maintenance_contracts'],
                 ['label' => 'Checklisten (Wartung)', 'icon' => 'plus-circle', 'url' => $safeRoute('admin.maintenance_checklists.index') . '#new-checklist', 'count_key' => 'maintenance_checklists'],
-                ['label' => 'Fälligkeiten · geplant', 'icon' => 'calendar-clock', 'url' => url('#')],
+                // Welle A3 (2026-07-16): live — Blade-Fläche auf der incoming-Logik der Wartungsverträge.
+                ['label' => 'Fälligkeiten', 'icon' => 'calendar-clock', 'url' => $safeRoute('admin.maintenance.contracts.faelligkeiten'), 'active_routes' => ['/admin/maintenance/contracts/faelligkeiten']],
             ],
         ],
         [
@@ -830,7 +831,8 @@
             'title' => 'Auswertungen',
             'permission' => 'Finance',
             'items' => [
-                ['label' => 'Auslastung · geplant', 'icon' => 'activity', 'url' => url('#')],
+                // Welle A3 (2026-07-16): live verdrahtet — Fläche existierte bereits (Inventur-Fund employee.capacity.view).
+                ['label' => 'Auslastung', 'icon' => 'activity', 'url' => $safeRoute('employee.capacity.view'), 'active_routes' => ['/capacity/index', '/capacity/list']],
                 ['label' => 'Umsätze · geplant', 'icon' => 'trending-up', 'url' => url('#')],
                 ['label' => 'BWA · geplant', 'icon' => 'bar-chart-3', 'url' => url('#')],
                 ['label' => 'Kapazität & Produktivität · geplant', 'icon' => 'trending-up', 'url' => url('#')],
