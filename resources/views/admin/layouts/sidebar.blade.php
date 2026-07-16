@@ -665,7 +665,8 @@
             'items' => [
                 // Welle A1 Paket 1 (2026-07-16): live — reine Lese-Fläche auf invoices (open_amount).
                 ['label' => 'Offene Posten', 'icon' => 'list-checks', 'url' => $safeRoute('admin.invoices.offene-posten'), 'active_routes' => ['/admin/invoices/offene-posten']],
-                ['label' => 'Mahnwesen · geplant', 'icon' => 'alarm-clock', 'url' => url('#')],
+                // Welle A1 Paket 2 (2026-07-16): live — Vorschlag + Bestätigung, Standard-Regeln in config/mahnwesen.php.
+                ['label' => 'Mahnwesen', 'icon' => 'alarm-clock', 'url' => $safeRoute('admin.invoices.mahnwesen'), 'active_routes' => ['/admin/invoices/mahnwesen']],
                 ['label' => 'Eingangsrechnungen · geplant', 'icon' => 'file-input', 'url' => url('#')],
                 ['label' => 'Journal · geplant', 'icon' => 'book-open-check', 'url' => url('#')],
                 ['label' => 'Ausgangsrechnungen · geplant', 'icon' => 'file-output', 'url' => url('#')],

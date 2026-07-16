@@ -4521,6 +4521,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'InvoiceMiddleware']
     // Welle A1 Paket 1 (2026-07-16): Offene Posten — Lese-Fläche auf invoices (vor /invoices/{invoice}!).
     Route::get('/invoices/offene-posten', [\App\Http\Controllers\Invoice\OffenePostenController::class, 'index'])
         ->name('invoices.offene-posten');
+
+    // Welle A1 Paket 2 (2026-07-16): Mahnwesen — Vorschlag + Bestätigung, append-only (vor /invoices/{invoice}!).
+    Route::get('/invoices/mahnwesen', [\App\Http\Controllers\Invoice\MahnwesenController::class, 'index'])
+        ->name('invoices.mahnwesen');
+    Route::post('/invoices/mahnwesen', [\App\Http\Controllers\Invoice\MahnwesenController::class, 'execute'])
+        ->name('invoices.mahnwesen.execute');
+    Route::get('/invoices/mahnwesen/brief/{item}', [\App\Http\Controllers\Invoice\MahnwesenController::class, 'brief'])
+        ->name('invoices.mahnwesen.brief');
     Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
 
     // Select2 endpoints must come before /invoices/{invoice}
