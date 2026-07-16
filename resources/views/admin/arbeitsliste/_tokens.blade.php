@@ -17,9 +17,9 @@
         --al-text-muted: #5b616b;
 
         /* Marke (Accent = Navy, Weisstext AA-sicher) */
-        --al-accent: #1C3F94;
+        --al-accent: var(--sa-accent, #93c21c);
         --al-accent-ink: #ffffff;
-        --al-accent-hover: #16336f;
+        --al-accent-hover: var(--sa-accent-hover, #7baa18);
 
         /* Semantische Statusfarben — je Status: Vollton, heller Grund, dunkle Tinte (AA) */
         --al-danger: #dc2626;
@@ -58,7 +58,7 @@
         --al-fs-xl: 22px;
 
         /* Fokus-Ring */
-        --al-focus: #1C3F94;
+        --al-focus: var(--sa-accent, #93c21c);
 
         color: var(--al-text);
         background: var(--al-bg);
