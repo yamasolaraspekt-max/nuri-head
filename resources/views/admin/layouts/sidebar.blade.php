@@ -529,7 +529,7 @@
             // Navi-Audit v3 (2026-07-16): Kontakte-Sektion (1 Eintrag) + Kommunikation zusammengeführt.
             // Rechte je Item (Partner bzw. Email), KEIN Sektions-Gate — sonst verliert eine Rolle die andere Hälfte.
             'title' => 'Adressbuch & Kommunikation',
-            'etage' => 'Geschäftspartner',
+            'etage' => 'Kontakte',
             'items' => [
                 // NAV Phase III (Fläche 1, Design A): 8 Kontakt-Typen -> Tab-Leiste (admin/contacts/_tabs).
                 ['label' => 'Alle Kontakte', 'icon' => 'list', 'permission' => 'Partner', 'url' => $safeRoute('all.contacts', 'all-contacts'), 'count_key' => 'contacts', 'active_routes' => ['/all-contacts', '/brand', '/brands', '/distributors', '/external_personal']],
@@ -652,7 +652,8 @@
             'title' => 'Buchhaltung',
             'permission' => 'Finance',
             'items' => [
-                ['label' => 'Offene Posten & Mahnwesen · geplant', 'icon' => 'list-checks', 'url' => url('#')],
+                ['label' => 'Offene Posten · geplant', 'icon' => 'list-checks', 'url' => url('#')],
+                ['label' => 'Mahnwesen · geplant', 'icon' => 'alarm-clock', 'url' => url('#')],
                 ['label' => 'Journal · geplant', 'icon' => 'book-open-check', 'url' => url('#')],
                 ['label' => 'Kassenbuch · geplant', 'icon' => 'wallet', 'url' => url('#')],
                 ['label' => 'Eingangs-/Ausgangsrechnungen · geplant', 'icon' => 'file-input', 'url' => url('#')],
