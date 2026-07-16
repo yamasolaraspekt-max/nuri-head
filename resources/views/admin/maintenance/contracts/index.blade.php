@@ -1641,34 +1641,26 @@
 
 @section('content')
   <div class="mc-wrap">
-    <div class="mc-titlebar">
-      <div>
-        <h1 class="mc-title">WARTUNGSVERTRÄGE</h1>
-        <div class="mc-subtitle">Liste, Kalender, Kanban, nächste Wartungen und eingehende Vertrags-Erinnerungen an einem
-          Ort.</div>
-        <div class="mc-breadcrumb">
-          <a href="{{ url('/employee_dashboard') }}">Home</a>
-          <span>›</span>
-          <span>Wartungsverträge</span>
-        </div>
-      </div>
+    {{-- CI-Vereinheitlichung 2026-07-15 (Welle 2): Alt-Kopf durch das gemeinsame Bauteil ersetzt. --}}
+    <x-page-head title="Wartungsverträge"
+        sub="Liste, Kalender, Kanban, nächste Wartungen und eingehende Vertrags-Erinnerungen an einem Ort."
+        current="Wartungsverträge" style="margin:0 0 18px;">
+        <x-slot:actions>
+            <div class="mc-view-toggle" id="mc-view-toggle">
+                <button type="button" data-view="list" class="is-active"><i class="fa fa-list-ul"></i> Liste</button>
+                <button type="button" data-view="calendar"><i class="fa fa-calendar"></i> Kalender</button>
+                <button type="button" data-view="kanban"><i class="fa fa-columns"></i> Kanban</button>
+            </div>
 
-      <div class="mc-actions">
-        <div class="mc-view-toggle" id="mc-view-toggle">
-          <button type="button" data-view="list" class="is-active"><i class="fa fa-list-ul"></i> Liste</button>
-          <button type="button" data-view="calendar"><i class="fa fa-calendar"></i> Kalender</button>
-          <button type="button" data-view="kanban"><i class="fa fa-columns"></i> Kanban</button>
-        </div>
+            <button type="button" class="mc-btn-soft" id="mc-refresh-btn">
+                <i class="fa fa-rotate"></i> Aktualisieren
+            </button>
 
-        <button type="button" class="mc-btn-soft" id="mc-refresh-btn">
-          <i class="fa fa-rotate"></i> Aktualisieren
-        </button>
-
-        <a href="{{ $routeCreate }}" class="mc-btn">
-          <i class="fa fa-plus"></i> Vertrag anlegen
-        </a>
-      </div>
-    </div>
+            <a href="{{ $routeCreate }}" class="mc-btn">
+                <i class="fa fa-plus"></i> Vertrag anlegen
+            </a>
+        </x-slot:actions>
+    </x-page-head>
 
     @if(session('success'))
       <div class="alert alert-success">{{ session('success') }}</div>

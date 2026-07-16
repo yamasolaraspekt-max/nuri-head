@@ -2809,13 +2809,11 @@
             <div class="content-body">
                 <div class="products-shell">
 
-                    <div class="products-header">
-                        <div class="products-header-title">
-                            <h2>Artikel & Produkte</h2>
-                            <small>Verwalten Sie alle Artikel, Wärmepumpen, PV-Komponenten und Zubehör zentral.</small>
-                        </div>
-
-                        <div class="products-header-actions products-header-actions-clean">
+                    {{-- CI-Vereinheitlichung 2026-07-15 (Welle 2): Alt-Kopf durch das gemeinsame Bauteil ersetzt. --}}
+                    <x-page-head title="Artikel-Katalog"
+                        sub="Verwalten Sie alle Artikel, Wärmepumpen, PV-Komponenten und Zubehör zentral."
+                        current="Artikel-Katalog" style="margin:0 0 14px;">
+                        <x-slot:actions>
                             <span class="products-meta-pill">
                                 <i class="feather icon-layers"></i>
                                 <span><span id="total-products-label">0</span> Einträge</span>
@@ -2832,11 +2830,11 @@
 
                             <button type="button" id="product-cart-fab"
                                 class="btn btn-outline-success position-relative products-cart-btn">
-                                <i class="feather icon-shopping-cart mr-25"></i> Cart
+                                <i class="feather icon-shopping-cart mr-25"></i> Warenkorb
                                 <span class="product-cart-header-badge" id="product-cart-fab-count">0</span>
                             </button>
-                        </div>
-                    </div>
+                        </x-slot:actions>
+                    </x-page-head>
 
                     <div class="products-filters-shell">
                         <form id="product-filter-form" class="product-filter-notion">

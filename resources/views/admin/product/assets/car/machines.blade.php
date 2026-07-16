@@ -90,17 +90,15 @@
       <div class="content-overlay"></div><div class="header-navbar-shadow"></div>
       <div class="content-wrapper">
         <div class="oc-wrap">
-          <div class="oc-titlebar">
-            <div>
-              <div class="oc-title">MASCHINENBESTAND</div>
-              <div class="oc-sub">Zentrale Ajax-Verwaltung für Maschinen, Fahrzeuge, Service, TÜV, Abteilung, Ratenzahlung und Zahlungsanalyse.</div>
-              <div class="oc-breadcrumb"><a href="{{ url('/employee_dashboard') }}">Home</a><span>›</span><span class="current">Maschinenbestand</span></div>
-            </div>
-            <div class="d-flex flex-wrap" style="gap:8px">
-              <button type="button" class="oc-btn-soft" id="refreshMachinesBtn"><i data-lucide="refresh-cw"></i> Aktualisieren</button>
-              <button type="button" class="oc-btn" id="openMachineCreateBtn"><i data-lucide="plus"></i> Neue Maschine</button>
-            </div>
-          </div>
+          {{-- CI-Vereinheitlichung 2026-07-15 (Welle 2): Alt-Kopf durch das gemeinsame Bauteil ersetzt. --}}
+          <x-page-head title="Maschinen &amp; Fahrzeuge"
+              sub="Zentrale Verwaltung für Maschinen, Fahrzeuge, Service, TÜV, Abteilung, Ratenzahlung und Zahlungsanalyse."
+              current="Maschinen &amp; Fahrzeuge" style="margin:0 0 14px;">
+              <x-slot:actions>
+                  <button type="button" class="oc-btn-soft" id="refreshMachinesBtn"><i data-lucide="refresh-cw"></i> Aktualisieren</button>
+                  <button type="button" class="oc-btn" id="openMachineCreateBtn"><i data-lucide="plus"></i> Neue Maschine</button>
+              </x-slot:actions>
+          </x-page-head>
 
           <div class="oc-analytics" id="machineAnalytics">
             <div class="oc-stat"><div class="oc-stat-icon total"><i data-lucide="truck"></i></div><div><div class="oc-stat-label">Gesamt</div><div class="oc-stat-value" data-stat="total">0</div><div class="oc-stat-sub">Maschinen/Fahrzeuge</div></div></div>

@@ -1052,29 +1052,19 @@ $pageTitle = 'LIEFERSCHEINE';
 
 @section('content')
 <div class="oc-wrap">
-  <div class="oc-header">
-    <div class="oc-titlebar">
-      <div>
-        <div class="oc-title">{{ $pageTitle }}</div>
-        <div class="oc-sub">Verwalten Sie Lieferscheine, Verknüpfungen, Kunden, Deals, PDFs und Bilder zentral.</div>
-
-        <div class="oc-breadcrumb">
-          <a href="{{ url('/employee_dashboard') }}">Home</a>
-          <span>›</span>
-          <span class="current">{{ $pageTitle }}</span>
-        </div>
-      </div>
-
-      <div class="oc-inline-actions">
-        <button type="button" class="oc-btn" onclick="openModal('createDeliveryNoteModal')">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 5v14M5 12h14"></path>
-          </svg>
-          Neue hinzufügen
-        </button>
-      </div>
-    </div>
-  </div>
+  {{-- CI-Vereinheitlichung 2026-07-15 (Welle 2): Alt-Kopf durch das gemeinsame Bauteil ersetzt. --}}
+  <x-page-head :title="$pageTitle ?? 'Lieferscheine'"
+      sub="Verwalten Sie Lieferscheine, Verknüpfungen, Kunden, Deals, PDFs und Bilder zentral."
+      :current="$pageTitle ?? 'Lieferscheine'">
+      <x-slot:actions>
+          <button type="button" class="oc-btn" onclick="openModal('createDeliveryNoteModal')">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14M5 12h14"></path>
+              </svg>
+              Neue hinzufügen
+          </button>
+      </x-slot:actions>
+  </x-page-head>
 
   <div class="oc-analytics" id="analytics-wrap">
     <div class="oc-stat">
