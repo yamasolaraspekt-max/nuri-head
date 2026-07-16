@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\StreamedResponse; 
 use App\Services\WeatherClient;
 use App\Services\NormTempService;
-use App\Services\RoofAreaEstimator;
 use App\Services\ConversationMemory;
 use App\Services\EmbeddingClient;
 

@@ -5,15 +5,48 @@ namespace App\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
+/**
+ * STILLGELEGT (AP-4 Gate d, 2026-07-16) — dieser Schätzer liefert KEIN belastbares Maß:
+ * `polygonAreaMeters` rechnet Shoelace auf Web-Mercator-Metern ohne cos²(lat)-Korrektur
+ * (bei ~50°N ≈ Faktor 2 überschätzt) und misst den GRUNDRISS, nicht die geneigte Dachfläche
+ * (Befund: docs/ap4-geometrie-3d-gebaeudemodell-validierung.md, Web-Mercator-Abschnitt).
+ *
+ * Aufrufer-Beweis bei Stilllegung: 0 aktive Aufrufer im Repo (kein `new`, keine Injection,
+ * kein `app()`, kein `::`) — einzig ein toter `use`-Import in Ai/AiMessageController, der mit
+ * dieser Stilllegung entfernt wurde. Kanonische Geometrie-Wahrheit ist
+ * `anforderungsprofile.gebaeude_geometrie` (GrundrissController::schreibeGeometrieVersion);
+ * das kanonische Dach kommt mit dem Hausplaner-Dach-Andock.
+ *
+ * Die Klasse bleibt als Beleg erhalten (die Doku verweist mehrfach auf sie), wirft aber bei
+ * jedem Aufruf — eine stille Wiederverwendung als Zweitwahrheit ist damit ausgeschlossen.
+ * Wächter: tests/Unit/RoofAreaEstimatorStillgelegtTest.php.
+ *
+ * @deprecated Stillgelegt — nicht wieder verdrahten. Siehe docs/configuration/umsetzungsfahrplan.md (3.2).
+ */
 class RoofAreaEstimator
 {
     /**
-     * Estimate roof area in m² from:
-     * 1) Stored DB values (polygon_area or height*width)
-     * 2) OSM Overpass building polygon nearest to (lat,lon)
-     * 3) Fallback from heated area + stories + pitch
+     * Wirft immer — siehe Klassen-Doku (Stilllegung).
+     *
+     * Ursprünglicher Vertrag: Dachfläche m² aus 1) DB-Werten (polygon_area/height×width),
+     * 2) OSM-Overpass-Gebäudepolygon, 3) Fallback beheizte Fläche + Geschosse + Neigung.
+     *
+     * @deprecated Stillgelegt (Web-Mercator-Flächenfehler) — wirft immer.
      */
     public function estimate(?float $lat, ?float $lon, ?string $address, array $stored = []): array
+    {
+        throw new \LogicException(
+            'RoofAreaEstimator ist stillgelegt (Web-Mercator-Flächenfehler, misst Grundriss statt Dachfläche). '
+            .'Belastbare Geometrie: anforderungsprofile.gebaeude_geometrie — '
+            .'siehe docs/ap4-geometrie-3d-gebaeudemodell-validierung.md.'
+        );
+    }
+
+    /**
+     * Ursprüngliche Implementierung — bewusst unerreichbar erhalten (Beleg für den Befund,
+     * kein öffentlicher Einstieg mehr).
+     */
+    private function estimateStillgelegt(?float $lat, ?float $lon, ?string $address, array $stored = []): array
     {
         // 1) DB direct
         if (!empty($stored['polygon_area'])) {
