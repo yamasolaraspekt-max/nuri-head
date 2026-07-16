@@ -94,7 +94,7 @@
         const k = d.kpis || {};
         let html = '';
         html += '<div class="ab-row">'
-            + tile('Umsatz (bezahlt)', eur(k.invoice_total), 'money success')
+            + tile('Rechnungsvolumen', eur(k.invoice_total), 'money')
             + tile('Offene Forderungen', eur(k.invoice_open), 'money open')
             + tile('Rechnungen', num(k.invoices), 'money')
             + '</div>';
