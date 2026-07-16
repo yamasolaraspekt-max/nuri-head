@@ -14,3 +14,19 @@ deutschen Alt-project_status-Werte (Montage/offen/in Bearbeitung), damit die Stu
 real füllen statt alles in „Sonstige". DAUERDIREKTIVE: kein UPDATE als Beifang.
 
 ## Sets, Gesamtfirma-Cockpit, Je-Abteilung-Cockpit — umgesetzt, Abnahme ausstehend
+
+## B2-Batch (Materialentnahmen, Cockpit-Trilogie, Geschäftsführung) — ABGENOMMEN (2026-07-16)
+**Votum: FREI** (unabhängiger Evaluator, alle Werte selbst gemessen).
+- Materialentnahmen (9175360): Zähler == SQL, Filter, Operanden-Gate, Query-Zahl 2 (kein N+1), 302. 🟢
+- Gesamtfirma/Je-Abteilung/Geschäftsführung: reine Präsentation über die eine overview-Wahrheit,
+  Werte 1:1, Zeitraum/Wähler greifen, Zustände real erreichbar. 🟢
+- Reverb-Fix (c40a7aa): InvoiceDeletionGuardTest 9/9. 🟢
+- P0 B2-SIDEBAR-1 (\$safeRoute-Backslash über 5 Commits) gefixt (2cd80bf): voller Wächter 704/704,
+  0 failed, Arbeitsliste-Gruppe wieder grün, Admin-Seiten rendern die Sidebar fehlerfrei (HTTP 200). 🟢
+- B2-UI-2 (WCAG-Kontrast) in allen 7 Views auf #6b7280, 0× #9ca3af. 🟢
+
+**Lern-Merker (verankert):** nach Heredoc-/Skript-Edits an Blade/PHP IMMER Gegen-Grep auf `\$`
++ echten Rendered-Output prüfen — isolierte curl-302-/Controller-Abnahmen treffen den Sidebar-Render nie.
+
+**Offen (nicht blockierend):** B2-UI-1 (Inline-Hex→Token, Controlling-weiter Posten),
+B2-UI-3 (Pixel-Beleg 3 Viewports — via Screenshot-Zugriff nachholbar), Alt-Statuswert-Mapping Pipeline.
