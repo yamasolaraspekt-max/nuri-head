@@ -4269,6 +4269,11 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
+    // Welle B2 (2026-07-16): Pipeline-Board (LESEND) ueber deals.project_status. Plural-Pfad,
+    // damit es NICHT mit /deal/{deal}/... kollidiert; gleiche auth-Gruppe wie deal.profile.
+    Route::get('/deals/pipeline', [\App\Http\Controllers\Customer\Deal\PipelineController::class, 'pipeline'])
+        ->name('deal.pipeline');
+
     Route::get('/deal/{deal}/profile', [DealController::class, 'profile'])
         ->name('deal.profile');
 

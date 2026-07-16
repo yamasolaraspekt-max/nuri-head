@@ -467,7 +467,7 @@
             'etage' => 'Abwicklung',
             'permission' => 'Customer',
             'items' => [
-                ['label' => 'Pipeline · geplant', 'icon' => 'git-branch', 'url' => url('#')],
+                ['label' => 'Pipeline', 'icon' => 'git-branch', 'url' => \$safeRoute('deal.pipeline'), 'active_routes' => ['/deals/pipeline']],
             ],
         ],
         [
