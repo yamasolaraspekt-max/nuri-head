@@ -466,6 +466,7 @@
         ],
         [
             'title' => 'Angebote',
+            'permission' => 'Customer', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Angebots-Assistent', 'icon' => 'cpu', 'url' => url('offers/wizard-smart'), 'active_routes' => ['/offers/wizard-smart']],
                 ['label' => 'Übersicht', 'icon' => 'list', 'url' => url('admin/offers'), 'count_key' => 'offers', 'active_routes' => ['/admin/offers', '/offers/list']],
@@ -474,6 +475,7 @@
         ],
         [
             'title' => 'Aufträge',
+            'permission' => 'Customer', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Übersicht', 'icon' => 'briefcase', 'url' => $safeRoute('deal.all.list'), 'count_key' => 'deals', 'active_routes' => ['/deal', '/deals', '/auftrag']],
                 ['label' => 'Feinaufmaß-Kanban', 'icon' => 'ruler', 'url' => $safeRoute('deal.measurements.kanban', 'deal-measurements-kanban'), 'count_key' => 'deal_measurements', 'active_routes' => ['/deal-measurements-kanban', '/deal-measurements']],
@@ -483,6 +485,7 @@
         ],
         [
             'title' => 'Montage',
+            'permission' => 'Employee', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => array_values(array_filter([
                 ['label' => 'Einsatzplan', 'icon' => 'calendar-range', 'tone' => 'text-brand-purple', 'url' => $safeRoute('planner.index', '/planner'), 'count_key' => 'planner_projects', 'active_routes' => ['/planner/projects']],
                 ['label' => 'Allgemeine Aufgaben', 'icon' => 'users-round', 'tone' => 'text-brand-blue', 'url' => $safeRoute('general-tasks.index', 'general-tasks'), 'count_key' => 'general_tasks_open', 'active_routes' => ['/general-tasks']],
@@ -492,6 +495,7 @@
         ],
         [
             'title' => 'Phasen',
+            'permission' => 'Administrator', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 // Lead-Phasen-Verwaltung (HTML-Seite lead-stages.manage; NICHT die JSON-API lead-stages.index)
                 ['label' => 'Lead-Phasen', 'icon' => 'flag', 'url' => $safeRoute('lead-stages.manage', 'admin/lead-stages/manage'), 'active_routes' => ['/admin/lead-stages/manage']],
@@ -510,6 +514,7 @@
         ],
         [
             'title' => 'Wartung',
+            'permission' => 'Problem', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Wartungsverträge', 'icon' => 'folder-open', 'url' => url('admin/maintenance/contracts'), 'count_key' => 'maintenance_contracts'],
                 ['label' => 'Wartungs-Checklisten', 'icon' => 'plus-circle', 'url' => $safeRoute('admin.maintenance_checklists.index') . '#new-checklist', 'count_key' => 'maintenance_checklists'],
@@ -550,6 +555,7 @@
         ],
         [
             'title' => 'Artikel-Daten',
+            'permission' => 'Product', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Einheiten', 'icon' => 'sliders-horizontal', 'url' => $safeRoute('measure.info'), 'count_key' => 'measures'],
                 ['label' => 'Rabattgruppen', 'icon' => 'percent', 'url' => $safeRoute('discount_group.info'), 'count_key' => 'discount_groups'],
@@ -560,6 +566,7 @@
         ],
         [
             'title' => 'Lager & Logistik',
+            'permission' => 'Product', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Lieferscheine', 'icon' => 'file-text', 'url' => $safeRoute('delivery-notes.index'), 'count_key' => 'delivery_notes'],
                 ['label' => 'Übergaben', 'icon' => 'repeat', 'url' => $safeRoute('handover.details')],
@@ -569,6 +576,7 @@
         ],
         [
             'title' => 'Anlagevermögen & Inventur',
+            'permission' => 'Finance', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Inventar', 'icon' => 'warehouse', 'url' => $safeRoute('inventory.index'), 'count_key' => 'inventory'],
                 ['label' => 'Betriebsmittel', 'icon' => 'qr-code', 'url' => $safeRoute('handover.details.asset'), 'count_key' => 'assets'],
@@ -577,14 +585,16 @@
         ],
         [
             'title' => 'Finanzen & Buchhaltung',
+            'permission' => 'Finance', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
-                ['label' => 'Rechnungen', 'icon' => 'receipt-text', 'url' => $safeRoute('admin.invoices.index', 'admin/invoices'), 'count_key' => 'invoices', 'active_routes' => ['/admin/invoices', '/invoices/canvas']],
+                ['label' => 'Rechnungen', 'icon' => 'receipt-text', 'permission' => 'Invoice', 'url' => $safeRoute('admin.invoices.index', 'admin/invoices'), 'count_key' => 'invoices', 'active_routes' => ['/admin/invoices', '/invoices/canvas']],
                 ['label' => 'Filial-Betriebskosten', 'icon' => 'receipt', 'permission' => 'Finance', 'url' => $safeRoute('branch.expense'), 'count_key' => 'branch_expenses'],
                 ['label' => 'Ratenzahlungen', 'icon' => 'credit-card', 'permission' => 'Finance', 'url' => $safeRoute('assets.installment.show'), 'count_key' => 'installments'],
             ],
         ],
         [
             'title' => 'Controlling',
+            'permission' => 'Finance', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Abteilungen', 'icon' => 'building', 'url' => $safeRoute('department.info'), 'count_key' => 'departments'],
                 ['label' => 'Filialen', 'icon' => 'map-pin', 'url' => $safeRoute('branch.info'), 'count_key' => 'branches'],
@@ -606,6 +616,7 @@
         ],
         [
             'title' => 'HR-Daten',
+            'permission' => 'Employee', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Vertragstypen', 'icon' => 'file-signature', 'url' => $safeRoute('contract.type.info'), 'count_key' => 'contract_types'],
                 ['label' => 'Sprachen', 'icon' => 'languages', 'url' => $safeRoute('language.info'), 'count_key' => 'languages'],
@@ -627,6 +638,7 @@
         ],
         [
             'title' => 'Stammdaten',
+            'permission' => 'Administrator', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Notiz-Kategorien', 'icon' => 'folder', 'url' => $safeRoute('note.category.view'), 'count_key' => 'note_categories'],
                 ['label' => 'Kalkulationssätze', 'icon' => 'calculator', 'url' => $safeRoute('admin.costing_sets.index')],

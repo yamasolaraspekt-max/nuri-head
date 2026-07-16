@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title') Gegenstände übergeben
+@section('title') Übergaben
 @stop
 @section('content')
 
@@ -10,8 +10,12 @@
         <div class="content-wrapper">
             <div class="content-header row">
             </div>
-                          
+
             <div class="content-body">
+             {{-- CI-Vereinheitlichung 2026-07-16: Standard-Seitenkopf ergänzt (Alt-Seite, Vuexy-Generation). --}}
+             <x-page-head title="Übergaben"
+                 sub="Gegenstände an Mitarbeiter übergeben und Übergaben zentral nachverfolgen."
+                 current="Übergaben" style="margin:0 0 14px;" />
              <!-- Table Hover Animation start -->
              <div class="row" id="table-hover-animation">
                     <div class="col-12">
