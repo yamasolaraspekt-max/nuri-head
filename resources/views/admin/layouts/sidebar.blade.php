@@ -455,7 +455,8 @@
                 ['label' => 'Assistent', 'icon' => 'cpu', 'url' => url('offers/wizard-smart'), 'active_routes' => ['/offers/wizard-smart']],
                 ['label' => 'Übersicht', 'icon' => 'list', 'url' => url('admin/offers'), 'count_key' => 'offers', 'active_routes' => ['/admin/offers', '/offers/list']],
                 ['label' => 'Vorlagen', 'icon' => 'file-text', 'url' => $safeRoute('offer-templates.index', 'offer-templates'), 'count_key' => 'offer_templates', 'active_routes' => ['/offer-templates']],
-                ['label' => 'Nachfassen fällig · geplant', 'icon' => 'bell-ring', 'url' => url('#')],
+                // Welle A2 (2026-07-16): live — Angebote ohne Bewegung, Regeln in config/vertrieb.php.
+                ['label' => 'Nachfassen fällig', 'icon' => 'bell-ring', 'url' => $safeRoute('admin.offers.nachfassen'), 'active_routes' => ['/admin/offers/nachfassen']],
                 ['label' => 'Sets · geplant', 'icon' => 'layers', 'url' => url('#')],
                 ['label' => 'Konfigurator · geplant', 'icon' => 'sliders-horizontal', 'url' => url('#')],
             ],

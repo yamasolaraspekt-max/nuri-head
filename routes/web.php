@@ -3430,6 +3430,10 @@ Route::prefix('admin/offers')
     ->name('admin.offers.')
     ->middleware('auth')
     ->group(function () {
+
+    // Welle A2 (2026-07-16): Nachfassen fällig — Lese-Fläche, Regeln in config/vertrieb.php (vor Wildcards!).
+    Route::get('/nachfassen', [\App\Http\Controllers\Customer\Offer\NachfassenController::class, 'index'])
+        ->name('nachfassen');
     /*
     |--------------------------------------------------------------------------
     | Offer main routes
