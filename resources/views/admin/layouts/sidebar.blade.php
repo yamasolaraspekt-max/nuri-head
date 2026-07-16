@@ -777,6 +777,7 @@
                 ['label' => 'Filialen', 'icon' => 'map-pin', 'url' => $safeRoute('branch.info'), 'count_key' => 'branches'],
                 ['label' => 'Mietobjekte · geplant', 'icon' => 'home', 'url' => url('#')],
                 ['label' => 'Vertragsmanagement · geplant', 'icon' => 'file-signature', 'url' => url('#')],
+                ['label' => 'AGB & Rechtstexte · geplant', 'icon' => 'scale', 'url' => url('#')],
             ],
         ],
         [
@@ -876,6 +877,7 @@
                 ['label' => 'Projekt-Struktur', 'icon' => 'flag', 'url' => $safeRoute('stages.index'), 'count_key' => 'stages'],
                 ['label' => 'Checklisten', 'icon' => 'layout', 'url' => $safeRoute('product.formula.index'), 'count_key' => 'product_formulas'],
                 ['label' => 'Formularbaukasten · geplant', 'icon' => 'blocks', 'url' => url('#')],
+                ['label' => 'Textbausteine · geplant', 'icon' => 'text-select', 'url' => url('#')],
                 ['label' => 'Gewerke & Leistungen · geplant', 'icon' => 'hammer', 'url' => url('#')],
                 ['label' => 'Fristen · geplant', 'icon' => 'alarm-clock', 'url' => url('#')],
             ],
