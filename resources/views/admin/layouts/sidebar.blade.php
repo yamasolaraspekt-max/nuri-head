@@ -613,12 +613,12 @@
             ],
         ],
         [
-            'title' => 'Artikel-Daten',
+            'title' => 'Datenpflege',
             'permission' => 'Product', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
                 ['label' => 'Einheiten', 'icon' => 'sliders-horizontal', 'url' => $safeRoute('measure.info'), 'count_key' => 'measures'],
                 ['label' => 'Rabattgruppen', 'icon' => 'percent', 'url' => $safeRoute('discount_group.info'), 'count_key' => 'discount_groups'],
-                ['label' => 'Artikel-Gruppen', 'icon' => 'layers', 'url' => $safeRoute('article_group.index'), 'count_key' => 'article_groups'],
+                ['label' => 'Warengruppen', 'icon' => 'layers', 'url' => $safeRoute('article_group.index'), 'count_key' => 'article_groups'],
                 ['label' => 'Positionsvorschläge', 'icon' => 'users', 'url' => $safeRoute('product.position.view'), 'count_key' => 'product_positions'],
             ],
         ],
@@ -645,7 +645,7 @@
             ],
         ],
         [
-            'title' => 'Rechnungen & Zahlungen',
+            'title' => 'Fakturierung',
             'etage' => 'Finanzen',
             'permission' => 'Finance', // Rollen-Gate 2026-07-16 (Freischaltung steuert Navi)
             'items' => [
@@ -667,7 +667,7 @@
                 ['label' => 'Kassenbuch · geplant', 'icon' => 'wallet', 'url' => url('#')],
                 ['label' => 'Eingangs-/Ausgangsrechnungen · geplant', 'icon' => 'file-input', 'url' => url('#')],
                 ['label' => 'Gutschriften · geplant', 'icon' => 'file-minus', 'url' => url('#')],
-                ['label' => 'Wiederkehrende Buchungen · geplant', 'icon' => 'repeat', 'url' => url('#')],
+                ['label' => 'Daueraufträge · geplant', 'icon' => 'repeat', 'url' => url('#')],
             ],
         ],
         [
@@ -690,7 +690,7 @@
                 ['label' => 'Bankanbindung & Zahlungsdienstleister · geplant', 'icon' => 'plug', 'url' => url('#')],
                 ['label' => 'E-Rechnungen (XRechnung/ZUGFeRD) · geplant', 'icon' => 'file-digit', 'url' => url('#')],
                 ['label' => 'Belegarchiv · geplant', 'icon' => 'archive', 'url' => url('#')],
-                ['label' => 'Anlagenbuchhaltung · geplant', 'icon' => 'building', 'url' => url('#')],
+                ['label' => 'Abschreibungen (AfA) · geplant', 'icon' => 'building', 'url' => url('#')],
             ],
         ],
         [
