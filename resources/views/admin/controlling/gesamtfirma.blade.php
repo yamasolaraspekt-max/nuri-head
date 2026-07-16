@@ -130,7 +130,7 @@
             + (rows.length ? rows.map((r) => '<tr><td>' + esc(r.name) + '</td><td class="num">' + num(r.team_count)
                 + '</td><td class="num">' + num(r.leads) + '</td><td class="num">' + num(r.new_leads)
                 + '</td><td class="num">' + num(r.offers) + '</td><td class="num">' + num(r.deals) + '</td></tr>').join('')
-                : '<tr><td colspan="6" style="color:#9ca3af;padding:16px;text-align:center;">Keine Abteilungsdaten.</td></tr>')
+                : '<tr><td colspan="6" style="color:#6b7280;padding:16px;text-align:center;">Keine Abteilungsdaten.</td></tr>')
             + '</tbody></table></div></div>';
 
         content.innerHTML = html;

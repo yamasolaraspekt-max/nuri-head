@@ -467,7 +467,7 @@
             'etage' => 'Abwicklung',
             'permission' => 'Customer',
             'items' => [
-                ['label' => 'Pipeline', 'icon' => 'git-branch', 'url' => \$safeRoute('deal.pipeline'), 'active_routes' => ['/deals/pipeline']],
+                ['label' => 'Pipeline', 'icon' => 'git-branch', 'url' => $safeRoute('deal.pipeline'), 'active_routes' => ['/deals/pipeline']],
             ],
         ],
         [
@@ -649,7 +649,7 @@
                 ['label' => 'Übergaben', 'icon' => 'repeat', 'url' => $safeRoute('handover.details')],
                 ['label' => 'Warenausgang', 'icon' => 'send', 'url' => $safeRoute('request.out.details'), 'count_key' => 'inventory_requests'],
                 ['label' => 'Kaufanfragen', 'icon' => 'shopping-basket', 'url' => $safeRoute('purchase.request'), 'count_key' => 'purchase_requests'],
-                ['label' => 'Materialentnahmen', 'icon' => 'package-minus', 'url' => \$safeRoute('inventory.materialentnahmen'), 'active_routes' => ['/admin/inventory/materialentnahmen']],
+                ['label' => 'Materialentnahmen', 'icon' => 'package-minus', 'url' => $safeRoute('inventory.materialentnahmen'), 'active_routes' => ['/admin/inventory/materialentnahmen']],
             ],
         ],
         [
@@ -826,9 +826,9 @@
             'etage' => 'Controlling',
             'permission' => 'Finance',
             'items' => [
-                ['label' => 'Gesamtfirma', 'icon' => 'gauge', 'url' => \$safeRoute('dashboard.company.cockpit'), 'active_routes' => ['/dashboard/company/cockpit']],
-                ['label' => 'Je Abteilung', 'icon' => 'building', 'url' => \$safeRoute('dashboard.department.cockpit'), 'active_routes' => ['/dashboard/department/cockpit']],
-                ['label' => 'Geschäftsführung', 'icon' => 'crown', 'url' => \$safeRoute('dashboard.company.profit-centers'), 'active_routes' => ['/dashboard/company/profit-centers']],
+                ['label' => 'Gesamtfirma', 'icon' => 'gauge', 'url' => $safeRoute('dashboard.company.cockpit'), 'active_routes' => ['/dashboard/company/cockpit']],
+                ['label' => 'Je Abteilung', 'icon' => 'building', 'url' => $safeRoute('dashboard.department.cockpit'), 'active_routes' => ['/dashboard/department/cockpit']],
+                ['label' => 'Geschäftsführung', 'icon' => 'crown', 'url' => $safeRoute('dashboard.company.profit-centers'), 'active_routes' => ['/dashboard/company/profit-centers']],
             ],
         ],
         [
