@@ -31,9 +31,9 @@
             --pc-text: #111827;
             --pc-muted: #6b7280;
             --pc-border: #e5e7eb;
-            --pc-primary: #93c21c;
-            --pc-primary-dark: #7baa18;
-            --pc-primary-soft: #f4fae7;
+            --pc-primary: var(--sa-accent);
+            --pc-primary-dark: var(--sa-accent-hover);
+            --pc-primary-soft: var(--sa-accent-light);
             --pc-blue: #74b2d4;
             --pc-blue-soft: #eef7fb;
             --pc-success: #10b981;

@@ -51,8 +51,8 @@
 
             <style>
                 .pd-page {
-                    --pd-primary: #8fc73e;
-                    --pd-primary-dark: #79aa31;
+                    --pd-primary: var(--sa-accent);
+                    --pd-primary-dark: var(--sa-accent-hover);
                     --pd-blue: #74b2d4;
                     --pd-border: #e5e7eb;
                     --pd-text: #111827;

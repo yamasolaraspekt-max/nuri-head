@@ -15,9 +15,9 @@
               --pe-text: #1f2937;
               --pe-muted: #6b7280;
               --pe-border: #e5e7eb;
-              --pe-primary: #8fc73e;
-              --pe-primary-hover: #7baa18;
-              --pe-primary-light: #f4fae7;
+              --pe-primary: var(--sa-accent);
+              --pe-primary-hover: var(--sa-accent-hover);
+              --pe-primary-light: var(--sa-accent-light);
               --pe-blue: #74b2d4;
               --pe-blue-light: #eff6ff;
               --pe-danger: #ef4444;

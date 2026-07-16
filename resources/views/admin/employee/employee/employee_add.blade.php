@@ -13,7 +13,7 @@
             --ep-bg: #f3f4f6;
             --ep-card-bg: #ffffff;
             --ep-border: #e5e7eb;
-            --ep-primary: #8fc73e;
+            --ep-primary: var(--sa-accent);
             --ep-muted: #6b7280;
             --ep-heading: #111827;
             --ep-radius: 16px;

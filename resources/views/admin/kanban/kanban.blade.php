@@ -588,7 +588,7 @@
                ========================================================= */
 
             :root {
-              --pt-primary: #93c21c;
+              --pt-primary: var(--sa-accent);
               --pt-primary-dark: #7daa17;
               --pt-blue: #74b2d4;
               --pt-dark: #0f172a;
@@ -1827,7 +1827,7 @@
                    Inline inside this Blade as requested
                 ========================================================= */
                 .pt-lucide-drawer{
-                  --ptx-primary:#93c21c;
+                  --ptx-primary:var(--sa-accent);
                   --ptx-primary-dark:#7daa17;
                   --ptx-blue:#74b2d4;
                   --ptx-ink:#0f172a;

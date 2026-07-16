@@ -16,9 +16,9 @@
       --dr-text: #111827;
       --dr-muted: #6b7280;
       --dr-border: #e5e7eb;
-      --dr-primary: #93c21c;
-      --dr-primary-hover: #7baa18;
-      --dr-primary-soft: #f4fae7;
+      --dr-primary: var(--sa-accent);
+      --dr-primary-hover: var(--sa-accent-hover);
+      --dr-primary-soft: var(--sa-accent-light);
       --dr-blue: #74b2d4;
       --dr-blue-soft: #eff6ff;
       --dr-success: #10b981;

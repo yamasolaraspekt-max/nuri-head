@@ -22,9 +22,9 @@
         --text-main: #1f2937;
         --text-muted: #6b7280;
         --border: #e5e7eb;
-        --primary: #74b2d4;
+        --primary: var(--sa-accent);
         --primary-hover: #5a99bd;
-        --primary-light: #e3effb;
+        --primary-light: var(--sa-accent-light);
         --accent: #93c21c;
         --accent-hover: #7baa18;
         --accent-light: #cfe09b;

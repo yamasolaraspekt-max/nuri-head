@@ -44,9 +44,9 @@ $routes = [
             --text-main:#1f2937;
             --text-muted:#6b7280;
             --border:#e5e7eb;
-            --primary:#93c21c;
-            --primary-hover:#7baa18;
-            --primary-light:#f4fae7;
+            --primary:var(--sa-accent);
+            --primary-hover:var(--sa-accent-hover);
+            --primary-light:var(--sa-accent-light);
             --blue:#74b2d4;
             --blue-hover:#5d9fc5;
             --blue-light:#eff6ff;

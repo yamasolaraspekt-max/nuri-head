@@ -72,9 +72,9 @@
     --ff-text:#111827;
     --ff-muted:#6b7280;
     --ff-border:#e5e7eb;
-    --ff-primary:#93c21c;
-    --ff-primary-hover:#7baa18;
-    --ff-primary-soft:#f4fae7;
+    --ff-primary:var(--sa-accent);
+    --ff-primary-hover:var(--sa-accent-hover);
+    --ff-primary-soft:var(--sa-accent-light);
     --ff-danger:#ef4444;
     --ff-danger-soft:#fef2f2;
     --ff-info:#74b2d4;

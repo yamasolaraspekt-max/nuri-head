@@ -12,8 +12,8 @@
             --ep-bg: #f3f4f6;
             --ep-card-bg: #ffffff;
             --ep-border: #e5e7eb;
-            --ep-primary: #8fc73e;
-            --ep-primary-soft: rgba(143, 199, 62, 0.12);
+            --ep-primary: var(--sa-accent);
+            --ep-primary-soft: var(--sa-accent-light);
             --ep-muted: #6b7280;
             --ep-heading: #111827;
             --ep-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);

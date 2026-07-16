@@ -5,9 +5,9 @@
     --gt-text: #1f2937;
     --gt-muted: #6b7280;
     --gt-border: #e5e7eb;
-    --gt-primary: #93c21c;
-    --gt-primary-hover: #7baa18;
-    --gt-primary-light: #f4fae7;
+    --gt-primary: var(--sa-accent);
+    --gt-primary-hover: var(--sa-accent-hover);
+    --gt-primary-light: var(--sa-accent-light);
     --gt-blue: #74b2d4;
     --gt-blue-light: #eff6ff;
     --gt-success: #10b981;

@@ -10,8 +10,8 @@
     <style>
         .rr-wrap {
             --rr-primary: #73b2d4;
-            --rr-primary-dark: #5da0c2;
-            --rr-primary-light: #c0d8ea;
+            --rr-primary-dark: var(--sa-accent-hover);
+            --rr-primary-light: var(--sa-accent-light);
             --rr-secondary: #93c21c;
             --rr-secondary-light: #cfe09b;
             --rr-danger: #e50656;

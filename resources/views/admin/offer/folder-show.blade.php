@@ -206,9 +206,9 @@
                 --of-text: #111827;
                 --of-muted: #6b7280;
                 --of-line: #e5e7eb;
-                --of-primary: #93c21c;
-                --of-primary-hover: #7baa18;
-                --of-primary-soft: #f4fae7;
+                --of-primary: var(--sa-accent);
+                --of-primary-hover: var(--sa-accent-hover);
+                --of-primary-soft: var(--sa-accent-light);
                 --of-blue: #2563eb;
                 --of-success: #10b981;
                 --of-success-soft: #ecfdf5;

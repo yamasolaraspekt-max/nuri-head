@@ -33,8 +33,8 @@
 
             <style>
                 .pi-page {
-                    --pi-primary: #8fc73e;
-                    --pi-primary-dark: #79aa31;
+                    --pi-primary: var(--sa-accent);
+                    --pi-primary-dark: var(--sa-accent-hover);
                     --pi-blue: #74b2d4;
                     --pi-bg: #f8fafc;
                     --pi-border: #e5e7eb;

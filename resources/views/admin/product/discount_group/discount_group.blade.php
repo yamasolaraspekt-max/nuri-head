@@ -9,9 +9,9 @@
             --dg-text: #1f2937;
             --dg-muted: #6b7280;
             --dg-border: #e5e7eb;
-            --dg-primary: #8fc73e;
-            --dg-primary-hover: #7baa18;
-            --dg-primary-light: #f4fae7;
+            --dg-primary: var(--sa-accent);
+            --dg-primary-hover: var(--sa-accent-hover);
+            --dg-primary-light: var(--sa-accent-light);
             --dg-blue: #74b2d4;
             --dg-blue-light: #eff6ff;
             --dg-danger: #ef4444;

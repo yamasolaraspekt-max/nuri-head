@@ -52,9 +52,9 @@
         --lv-text: #1f2937;
         --lv-muted: #6b7280;
         --lv-border: #e5e7eb;
-        --lv-primary: #93c21c;
-        --lv-primary-dark: #7baa18;
-        --lv-primary-light: #f4fae7;
+        --lv-primary: var(--sa-accent);
+        --lv-primary-dark: var(--sa-accent-hover);
+        --lv-primary-light: var(--sa-accent-light);
         --lv-blue: #74b2d4;
         --lv-blue-light: #eff6ff;
         --lv-success: #10b981;

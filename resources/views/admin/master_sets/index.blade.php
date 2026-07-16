@@ -26,9 +26,9 @@
       --text-main: #2c3e50;
       --text-light: #94a3b8;
       /* slate-400 */
-      --primary: #74b2d4;
-      --primary-light: #e3effb;
-      --primary-dark: #5a9cb9;
+      --primary: var(--sa-accent);
+      --primary-light: var(--sa-accent-light);
+      --primary-dark: var(--sa-accent-hover);
       --accent: #93c21c;
       --accent-light: rgba(147, 194, 28, 0.1);
       --border-color: #c0d8ea;

@@ -6,7 +6,7 @@
   <style>
     :root{
       --app-bg:#f3f4f6;--card-bg:#fff;--text-main:#1f2937;--text-muted:#6b7280;--border:#e5e7eb;
-      --primary:#93c21c;--primary-hover:#7baa18;--primary-light:#f4fae7;--blue:#74b2d4;--blue-light:#eff6ff;
+      --primary:var(--sa-accent);--primary-hover:var(--sa-accent-hover);--primary-light:var(--sa-accent-light);--blue:var(--sa-accent);--blue-light:#eff6ff;
       --success:#10b981;--success-light:#ecfdf5;--warning:#f59e0b;--warning-light:#fffbeb;--danger:#ef4444;--danger-light:#fef2f2;
       --shadow-sm:0 1px 2px 0 rgb(0 0 0 / .05);--shadow:0 10px 25px -10px rgb(0 0 0 / .25),0 4px 8px -4px rgb(0 0 0 / .12);
       --radius:14px;--transition:all .2s ease-in-out;

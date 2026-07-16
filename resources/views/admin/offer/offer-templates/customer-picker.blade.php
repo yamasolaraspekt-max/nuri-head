@@ -146,9 +146,9 @@
                 --ot-text: #111827;
                 --ot-muted: #6b7280;
                 --ot-soft: #f9fafb;
-                --ot-primary: #93c21c;
+                --ot-primary: var(--sa-accent);
                 --ot-primary-2: #7baa18;
-                --ot-primary-soft: #f4fae7;
+                --ot-primary-soft: var(--sa-accent-light);
                 --ot-blue: #74b2d4;
                 --ot-blue-soft: #eff6ff;
                 --ot-yellow: #f59e0b;

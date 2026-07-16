@@ -97,7 +97,7 @@
 
     <style>
         .nl-invoice-panel{
-            --nl-primary:#74b2d4;
+            --nl-primary:var(--sa-accent);
             --nl-primary-dark:#5fa2c6;
             --nl-green:#93c21c;
             --nl-green-dark:#84b119;

@@ -5,8 +5,8 @@
 @section('style')
 <style>
 :root{
-    --dn-primary:#93c21c;
-    --dn-primary-dark:#7baa18;
+    --dn-primary:var(--sa-accent);
+    --dn-primary-dark:var(--sa-accent-hover);
     --dn-bg:#f3f4f6;
     --dn-card:#ffffff;
     --dn-text:#111827;

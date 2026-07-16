@@ -16,9 +16,9 @@
             --fb-text:#1f2937;
             --fb-muted:#6b7280;
             --fb-border:#e5e7eb;
-            --fb-primary:#93c21c;
-            --fb-primary-hover:#7baa18;
-            --fb-primary-light:#f4fae7;
+            --fb-primary:var(--sa-accent);
+            --fb-primary-hover:var(--sa-accent-hover);
+            --fb-primary-light:var(--sa-accent-light);
             --fb-blue:#74b2d4;
             --fb-blue-light:#eff6ff;
             --fb-success:#10b981;

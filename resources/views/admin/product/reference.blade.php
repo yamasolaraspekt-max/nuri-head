@@ -5,7 +5,7 @@
 @section('style')
 <style>
     :root {
-        --ref-primary: #93c21c;
+        --ref-primary: var(--sa-accent);
         --ref-bg: #f5f7fb;
         --ref-card: #ffffff;
         --ref-border: #e5e7eb;

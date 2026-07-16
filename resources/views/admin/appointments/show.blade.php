@@ -13,9 +13,9 @@
             --ap-text: #111827;
             --ap-muted: #6b7280;
             --ap-border: #e5e7eb;
-            --ap-primary: #93c21c;
-            --ap-primary-hover: #7baa18;
-            --ap-primary-soft: #f4fae7;
+            --ap-primary: var(--sa-accent);
+            --ap-primary-hover: var(--sa-accent-hover);
+            --ap-primary-soft: var(--sa-accent-light);
             --ap-blue: #74b2d4;
             --ap-blue-soft: #eff6ff;
             --ap-success: #10b981;

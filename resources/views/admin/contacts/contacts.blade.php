@@ -72,9 +72,9 @@ $exportQuery = request()->only(['search', 'type', 'sort', 'direction']);
       --ac-border:#e5e7eb;
       --ac-border-strong:#d1d5db;
 
-      --ac-primary:#93c21c;
-      --ac-primary-hover:#7baa18;
-      --ac-primary-soft:#f4fae7;
+      --ac-primary:var(--sa-accent);
+      --ac-primary-hover:var(--sa-accent-hover);
+      --ac-primary-soft:var(--sa-accent-light);
 
       --ac-blue:#74b2d4;
       --ac-blue-soft:#eff6ff;

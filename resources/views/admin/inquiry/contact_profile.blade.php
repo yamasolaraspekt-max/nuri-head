@@ -15,7 +15,7 @@
             --inq-text:#18212f;
             --inq-muted:#6b7280;
             --inq-primary:#73b2d4;
-            --inq-primary-soft:#eef7fb;
+            --inq-primary-soft:var(--sa-accent-light);
             --inq-success:#93c21c;
             --inq-success-soft:#f5fbe8;
             --inq-verified:#28c76f;

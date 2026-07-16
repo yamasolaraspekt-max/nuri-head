@@ -13,9 +13,9 @@
             --tc-text: #1f2937;
             --tc-muted: #6b7280;
             --tc-border: #e5e7eb;
-            --tc-primary: #93c21c;
-            --tc-primary-hover: #7baa18;
-            --tc-primary-light: #f4fae7;
+            --tc-primary: var(--sa-accent);
+            --tc-primary-hover: var(--sa-accent-hover);
+            --tc-primary-light: var(--sa-accent-light);
             --tc-blue: #74b2d4;
             --tc-blue-light: #eff6ff;
             --tc-success: #10b981;

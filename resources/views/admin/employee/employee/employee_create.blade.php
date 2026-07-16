@@ -114,9 +114,9 @@ Mitarbeiterprofil
             --emp-text: #172033;
             --emp-muted: #6b7280;
             --emp-border: #e5e7eb;
-            --emp-primary: #93c21c;
-            --emp-primary-dark: #7baa18;
-            --emp-primary-soft: #f4fae7;
+            --emp-primary: var(--sa-accent);
+            --emp-primary-dark: var(--sa-accent-hover);
+            --emp-primary-soft: var(--sa-accent-light);
             --emp-blue: #74b2d4;
             --emp-blue-soft: #eff7fb;
             --emp-danger: #ef4444;

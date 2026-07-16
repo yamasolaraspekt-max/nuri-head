@@ -53,9 +53,9 @@
             --deal-border-strong: #d1d5db;
             --deal-surface: #fff;
             --deal-soft: #f9fafb;
-            --deal-primary: #93c21c;
-            --deal-primary-hover: #7baa18;
-            --deal-primary-soft: #f4fae7;
+            --deal-primary: var(--sa-accent);
+            --deal-primary-hover: var(--sa-accent-hover);
+            --deal-primary-soft: var(--sa-accent-light);
             --deal-blue: #74b2d4;
             --deal-blue-soft: #eff6ff;
             --deal-success: #10b981;

@@ -39,7 +39,7 @@
     <style>
       :root{
         --oc-bg:#f3f4f6;--oc-card:#fff;--oc-text:#1f2937;--oc-muted:#6b7280;--oc-border:#e5e7eb;
-        --oc-primary:#93c21c;--oc-primary-hover:#7baa18;--oc-primary-light:#f4fae7;--oc-blue:#74b2d4;--oc-blue-light:#eff6ff;
+        --oc-primary:var(--sa-accent);--oc-primary-hover:var(--sa-accent-hover);--oc-primary-light:var(--sa-accent-light);--oc-blue:var(--sa-accent);--oc-blue-light:#eff6ff;
         --oc-success:#10b981;--oc-success-light:#ecfdf5;--oc-warning:#f59e0b;--oc-warning-light:#fffbeb;--oc-danger:#ef4444;--oc-danger-light:#fef2f2;
         --oc-shadow-sm:0 1px 2px 0 rgb(0 0 0 / .05);--oc-shadow:0 10px 25px -10px rgb(0 0 0 / .25),0 4px 8px -4px rgb(0 0 0 / .12);
         --oc-radius:14px;--oc-transition:all .2s ease-in-out;

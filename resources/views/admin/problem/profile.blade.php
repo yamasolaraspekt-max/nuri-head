@@ -361,7 +361,7 @@
             --tp-text: #111827;
             --tp-muted: #6b7280;
             --tp-soft: #f9fafb;
-            --tp-primary: #93c21c;
+            --tp-primary: var(--sa-accent);
             --tp-primary2: #7baa18;
             --tp-blue: #2563eb;
             --tp-green: #10b981;

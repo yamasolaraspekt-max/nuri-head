@@ -2538,6 +2538,7 @@
     @vite(['resources/js/bootstrap.js', 'resources/js/notification.js', 'resources/js/chat.js'])
 
 
+    @include("admin.layouts.partials.sa-ui")
 </head>
 
 @php

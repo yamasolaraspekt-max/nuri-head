@@ -11,8 +11,8 @@
             --dp-line: #e5e7eb;
             --dp-soft: #f8fafc;
             --dp-card: #ffffff;
-            --dp-primary: #93c21c;
-            --dp-primary-dark: #7baa18;
+            --dp-primary: var(--sa-accent);
+            --dp-primary-dark: var(--sa-accent-hover);
             --dp-success: #10b981;
             --dp-warning: #f59e0b;
             --dp-danger: #ef4444;

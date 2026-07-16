@@ -13,9 +13,9 @@
                 --rec-text: #1f2937;
                 --rec-muted: #6b7280;
                 --rec-border: #e5e7eb;
-                --rec-primary: #93c21c;
-                --rec-primary-dark: #7baa18;
-                --rec-primary-light: #f4fae7;
+                --rec-primary: var(--sa-accent);
+                --rec-primary-dark: var(--sa-accent-hover);
+                --rec-primary-light: var(--sa-accent-light);
                 --rec-blue: #74b2d4;
                 --rec-blue-light: #eff6ff;
                 --rec-success: #10b981;

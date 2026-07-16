@@ -43,8 +43,8 @@
                 --text-main:#1f2937;
                 --text-muted:#6b7280;
                 --border:#e5e7eb;
-                --primary:#8fc73e;
-                --primary-hover:#79aa31;
+                --primary:var(--sa-accent);
+                --primary-hover:var(--sa-accent-hover);
                 --primary-light:#f2fae8;
                 --blue:#74b2d4;
                 --blue-light:#eff6ff;

@@ -6,7 +6,7 @@
     <style>
       :root{
         --ur-bg:#f3f4f6;--ur-card:#fff;--ur-text:#111827;--ur-muted:#6b7280;--ur-border:#e5e7eb;
-        --ur-primary:#93c21c;--ur-primary-dark:#7baa18;--ur-primary-soft:#f4fae7;
+        --ur-primary:var(--sa-accent);--ur-primary-dark:var(--sa-accent-hover);--ur-primary-soft:var(--sa-accent-light);
         --ur-blue:#74b2d4;--ur-blue-soft:#eff6ff;--ur-green:#10b981;--ur-green-soft:#ecfdf5;
         --ur-red:#ef4444;--ur-red-soft:#fef2f2;--ur-yellow:#f59e0b;--ur-yellow-soft:#fffbeb;
         --ur-shadow:0 10px 25px -14px rgb(0 0 0 / .28),0 4px 10px -6px rgb(0 0 0 / .14);

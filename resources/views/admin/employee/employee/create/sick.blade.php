@@ -12,9 +12,9 @@
                 --sk-text: #1f2937;
                 --sk-muted: #6b7280;
                 --sk-border: #e5e7eb;
-                --sk-primary: #93c21c;
-                --sk-primary-dark: #7baa18;
-                --sk-primary-light: #f4fae7;
+                --sk-primary: var(--sa-accent);
+                --sk-primary-dark: var(--sa-accent-hover);
+                --sk-primary-light: var(--sa-accent-light);
                 --sk-blue: #74b2d4;
                 --sk-blue-light: #eff6ff;
                 --sk-success: #10b981;

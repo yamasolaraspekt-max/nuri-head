@@ -174,9 +174,9 @@
         --mc-text: #111827;
         --mc-muted: #6b7280;
         --mc-border: #e5e7eb;
-        --mc-primary: #93c21c;
-        --mc-primary-dark: #7baa18;
-        --mc-primary-soft: #f4fae7;
+        --mc-primary: var(--sa-accent);
+        --mc-primary-dark: var(--sa-accent-hover);
+        --mc-primary-soft: var(--sa-accent-light);
         --mc-blue: #74b2d4;
         --mc-blue-soft: #eff6ff;
         --mc-green: #10b981;

@@ -17,7 +17,7 @@
       --inv-text: #0f172a;
       --inv-muted: #64748b;
 
-      --inv-primary: #74b2d4;
+      --inv-primary: var(--sa-accent);
       --inv-primary-h: #5fa2c6;
 
       --inv-success: #16a34a;

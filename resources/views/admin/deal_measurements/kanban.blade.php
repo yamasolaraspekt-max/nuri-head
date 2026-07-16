@@ -148,8 +148,8 @@
                 --fm-text: #111827;
                 --fm-muted: #6b7280;
                 --fm-border: #e5e7eb;
-                --fm-primary: #93c21c;
-                --fm-primary-dark: #7baa18;
+                --fm-primary: var(--sa-accent);
+                --fm-primary-dark: var(--sa-accent-hover);
                 --fm-blue: #74b2d4;
                 --fm-success: #10b981;
                 --fm-warning: #f59e0b;

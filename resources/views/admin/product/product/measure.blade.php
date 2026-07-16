@@ -9,9 +9,9 @@
             --mu-text: #1f2937;
             --mu-muted: #6b7280;
             --mu-border: #e5e7eb;
-            --mu-primary: #8fc73e;
-            --mu-primary-hover: #7baa18;
-            --mu-primary-light: #f4fae7;
+            --mu-primary: var(--sa-accent);
+            --mu-primary-hover: var(--sa-accent-hover);
+            --mu-primary-light: var(--sa-accent-light);
             --mu-blue: #74b2d4;
             --mu-blue-light: #eff6ff;
             --mu-danger: #ef4444;

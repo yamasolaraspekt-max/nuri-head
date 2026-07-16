@@ -104,8 +104,8 @@ $editEndpointBase = url('/lead_reason_update');
 
     <style>
         :root {
-            --lx-primary: #93c21c;
-            --lx-primary-dark: #7baa18;
+            --lx-primary: var(--sa-accent);
+            --lx-primary-dark: var(--sa-accent-hover);
             --lx-blue: #2563eb;
             --lx-red: #dc2626;
             --lx-orange: #d97706;

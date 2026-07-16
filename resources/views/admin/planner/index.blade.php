@@ -25,9 +25,9 @@
                 --pmo-text: #0f172a;
                 --pmo-muted: #64748b;
                 --pmo-soft: #94a3b8;
-                --pmo-primary: #93c21c;
+                --pmo-primary: var(--sa-accent);
                 --pmo-primary-dark: #6f9915;
-                --pmo-primary-soft: #f4fae7;
+                --pmo-primary-soft: var(--sa-accent-light);
                 --pmo-blue: #74b2d4;
                 --pmo-blue-soft: #eff6ff;
                 --pmo-navy: #164191;
