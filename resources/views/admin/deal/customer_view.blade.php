@@ -2116,13 +2116,14 @@
 
             <div class="deal-stat">
                 <div class="deal-stat-icon value">
+                    {{-- CI 2026-07-15: Dollar-Icon durch Euro ersetzt (deutsches System, Beträge in EUR). --}}
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7H14.5a3.5 3.5 0 0 1 0 7H6" />
+                        <path d="M4 10h12M4 14h9M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2" />
                     </svg>
                 </div>
                 <div class="deal-stat-meta">
                     <div class="deal-stat-label">Auftragssumme</div>
-                    <div class="deal-stat-value">{{ number_format($totalValue, 0, ',', '.') }}</div>
+                    <div class="deal-stat-value">{{ number_format($totalValue, 0, ',', '.') }} €</div>
                     <div class="deal-stat-sub">Gesamtwert der Liste</div>
                 </div>
             </div>
