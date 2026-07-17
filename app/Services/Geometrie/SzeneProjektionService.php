@@ -3,10 +3,10 @@
 namespace App\Services\Geometrie;
 
 /**
- * SzeneProjektionService (P2-1a) — REINE, UNVERDRAHTETE Projektion Hausplaner-Szene → gebaeude_geometrie.
+ * SzeneProjektionService (P2-1b) — REINE, UNVERDRAHTETE Projektion Hausplaner-Szene → gebaeude_geometrie.
  *
  * Grundlage: docs/planner-spec-szene-projektion.md; eingefrorener Vertrag (nur als Referenz gelesen,
- * kein Code kopiert) playground src/hausplaner/projection/raumProjektion.ts + geometry/wallGeometry.ts.
+ * kein Code kopiert) playground src/hausplaner/geometry/roomDetection.ts + geometry/wallGeometry.ts.
  *
  * Übersetzt scene_json (levels[], nodes[]: WallNode/OpeningNode) je Geschoss in die BESTEHENDE
  * RaumGeometrie-Struktur (polygon, wand_segmente, oeffnungen) — das Format, das
@@ -14,9 +14,11 @@ namespace App\Services\Geometrie;
  * bestehenden TopologieGate geprüft; ungültige Geometrie wird abgelehnt (GeometrieUngueltigException),
  * nie still projiziert.
  *
- * P2-1a-Umfang (bewusst schmal): EIN geschlossener Wand-Umlauf je Geschoss, alle Wände 'aussen'.
- * Innen/aussen bei geteilten Kanten (Mehrraum) = P2-1b; Verdrahtung/Schreiben nach gebaeude_geometrie = P2-2.
- * Diese Klasse schreibt NICHTS und wird von KEINEM Produktivpfad aufgerufen.
+ * P2-1b: planare Raumerkennung (Wandachsen-Graph, T-Punkt-Teilung, Halbkanten-Umläufe, Innenflächen =
+ * positive Shoelace). MEHRRAUM. innen/aussen: eine Kante, deren BEIDE Halbkanten in Innenräumen liegen,
+ * ist 'innen' (kein Azimut); sonst 'aussen' (Azimut aus rechter Normale, Nord=+y). decke/boden ehrlich null.
+ * Verdrahtung/Schreiben nach gebaeude_geometrie = P2-2 (Yama-Go). Diese Klasse schreibt NICHTS und wird
+ * von KEINEM Produktivpfad aufgerufen.
  */
 class SzeneProjektionService
 {
@@ -44,8 +46,7 @@ class SzeneProjektionService
             if (count($levelWalls) < 3) {
                 continue;
             }
-            $raum = $this->projiziereGeschoss($levelWalls, $oeffnungen, $level);
-            if ($raum !== null) {
+            foreach ($this->projiziereGeschoss($levelWalls, $oeffnungen, $level) as $raum) {
                 $raeume[] = $raum;
             }
         }
@@ -57,129 +58,189 @@ class SzeneProjektionService
      * @param  array<int,array<string,mixed>>  $walls
      * @param  array<int,array<string,mixed>>  $oeffnungen
      * @param  array<string,mixed>  $level
-     * @return array<string,mixed>|null
+     * @return array<int,array<string,mixed>>
      */
-    private function projiziereGeschoss(array $walls, array $oeffnungen, array $level): ?array
+    private function projiziereGeschoss(array $walls, array $oeffnungen, array $level): array
     {
-        $corners = $this->kette($walls);
-        if ($corners === null) {
-            return null; // kein geschlossener Umlauf — ehrlich nichts, keine erfundene Geometrie
+        // 1) Kanten (an T-Punkten geteilt) sammeln.
+        $endpunkte = [];
+        foreach ($walls as $w) {
+            $endpunkte[] = $this->pt($w['start']);
+            $endpunkte[] = $this->pt($w['end']);
         }
 
-        $polygon = array_map(fn ($p) => ['x' => (int) $p['x'], 'y' => (int) $p['y']], $corners);
-
-        $pruef = $this->gate->pruefePolygon($polygon);
-        if (! $pruef->valid) {
-            throw new GeometrieUngueltigException($pruef);
+        $kanten = []; // [a,b,wallId,offVon,offBis]
+        foreach ($walls as $w) {
+            $s = $this->pt($w['start']);
+            $e = $this->pt($w['end']);
+            $laenge = hypot($e['x'] - $s['x'], $e['y'] - $s['y']);
+            if ($laenge == 0.0) {
+                continue;
+            }
+            // Split-Punkte als Liste {off,p} (KEINE Float-Array-Keys — PHP würde die zu int casten).
+            $paare = [['off' => 0.0, 'p' => $s], ['off' => $laenge, 'p' => $e]];
+            foreach ($endpunkte as $p) {
+                if ($this->liegtAufStrecke($p, $s, $e)) {
+                    $paare[] = ['off' => hypot($p['x'] - $s['x'], $p['y'] - $s['y']), 'p' => $p];
+                }
+            }
+            usort($paare, fn ($l, $r) => $l['off'] <=> $r['off']);
+            $punkte = [];
+            $gesehen = [];
+            foreach ($paare as $pr) {
+                $k = $this->key($pr['p']);
+                if (! isset($gesehen[$k])) {
+                    $gesehen[$k] = true;
+                    $punkte[] = $pr;
+                }
+            }
+            for ($i = 0; $i < count($punkte) - 1; $i++) {
+                $kanten[] = [
+                    'a' => $this->key($punkte[$i]['p']), 'b' => $this->key($punkte[$i + 1]['p']),
+                    'wallId' => $w['id'] ?? null, 'offVon' => $punkte[$i]['off'], 'offBis' => $punkte[$i + 1]['off'],
+                ];
+            }
         }
 
-        if ($this->flaecheDoppelt($polygon) < 0) {
-            $polygon = array_values(array_reverse($polygon)); // CCW erzwingen (Außennormale = rechte Normale)
+        // 2) Halbkanten (beide Richtungen) + Winkel; ausgehend je Knoten nach Winkel sortiert.
+        $H = []; // Halbkanten (Index-basiert, mutierbar)
+        $kanteHk = []; // kanteId => [hkIdx1, hkIdx2]
+        foreach ($kanten as $kid => $k) {
+            $pa = $this->parse($k['a']);
+            $pb = $this->parse($k['b']);
+            $i1 = count($H);
+            $H[] = ['von' => $k['a'], 'zu' => $k['b'], 'kanteId' => $kid,
+                'winkel' => atan2($pb['y'] - $pa['y'], $pb['x'] - $pa['x']), 'flaecheId' => -1,
+                'wallId' => $k['wallId'], 'offVon' => $k['offVon'], 'offBis' => $k['offBis']];
+            $i2 = count($H);
+            $H[] = ['von' => $k['b'], 'zu' => $k['a'], 'kanteId' => $kid,
+                'winkel' => atan2($pa['y'] - $pb['y'], $pa['x'] - $pb['x']), 'flaecheId' => -1,
+                'wallId' => $k['wallId'], 'offVon' => $k['offVon'], 'offBis' => $k['offBis']];
+            $kanteHk[$kid] = [$i1, $i2];
         }
 
-        $n = count($polygon);
-        $segmente = [];
-        for ($i = 0; $i < $n; $i++) {
-            $von = $polygon[$i];
-            $bis = $polygon[($i + 1) % $n];
-            $wall = $this->wandFuerKante($walls, $von, $bis);
-            $segmente[] = [
-                'von' => $von,
-                'bis' => $bis,
-                'grenzflaeche' => 'aussen',
-                'azimut_grad' => $this->azimutRechteNormale($von, $bis),
-                'bauteil_typ' => 'wand',
-                'oeffnungen' => $wall === null ? [] : $this->oeffnungenDerWand($wall, $oeffnungen),
+        $ausgehend = []; // node => list of hkIdx
+        foreach ($H as $i => $h) {
+            $ausgehend[$h['von']][] = $i;
+        }
+        foreach ($ausgehend as $node => $liste) {
+            usort($liste, fn ($l, $r) => $H[$l]['winkel'] <=> $H[$r]['winkel']);
+            $ausgehend[$node] = $liste;
+        }
+
+        // 3) Flächen-Umläufe einsammeln (jede Halbkante genau einmal ⇒ terminiert immer).
+        $faceInterior = [];   // flaecheId => bool (positive Shoelace = Innenraum)
+        $faceUmlauf = [];     // flaecheId => list of hkIdx
+        $zaehler = 0;
+        foreach (array_keys($H) as $startIdx) {
+            if ($H[$startIdx]['flaecheId'] !== -1) {
+                continue;
+            }
+            $umlauf = [];
+            $akt = $startIdx;
+            while ($H[$akt]['flaecheId'] === -1) {
+                $H[$akt]['flaecheId'] = $zaehler;
+                $umlauf[] = $akt;
+                $akt = $this->naechste($akt, $H, $ausgehend);
+            }
+            $polygon = array_map(fn ($i) => $this->parse($H[$i]['von']), $umlauf);
+            $flaeche = count($polygon) >= 3 ? $this->signierteFlaeche($polygon) : 0.0;
+            $faceInterior[$zaehler] = $flaeche > 0;
+            $faceUmlauf[$zaehler] = $umlauf;
+            $zaehler++;
+        }
+
+        // 4) Innenräume projizieren.
+        $raeume = [];
+        foreach ($faceUmlauf as $fid => $umlauf) {
+            if (! $faceInterior[$fid]) {
+                continue; // Außenumlauf/entartet
+            }
+            $polygon = array_map(fn ($i) => ['x' => (int) $this->parse($H[$i]['von'])['x'], 'y' => (int) $this->parse($H[$i]['von'])['y']], $umlauf);
+
+            $pruef = $this->gate->pruefePolygon($polygon);
+            if (! $pruef->valid) {
+                throw new GeometrieUngueltigException($pruef);
+            }
+
+            $segmente = [];
+            foreach ($umlauf as $hk) {
+                $von = ['x' => (int) $this->parse($H[$hk]['von'])['x'], 'y' => (int) $this->parse($H[$hk]['von'])['y']];
+                $bis = ['x' => (int) $this->parse($H[$hk]['zu'])['x'], 'y' => (int) $this->parse($H[$hk]['zu'])['y']];
+                $gegen = $this->gegenHalbkante($hk, $H, $kanteHk);
+                $istInnen = $gegen !== null && ($faceInterior[$H[$gegen]['flaecheId']] ?? false);
+                $segmente[] = [
+                    'von' => $von,
+                    'bis' => $bis,
+                    'grenzflaeche' => $istInnen ? 'innen' : 'aussen',
+                    'azimut_grad' => $istInnen ? null : $this->azimutRechteNormale($von, $bis),
+                    'bauteil_typ' => 'wand',
+                    'oeffnungen' => $this->oeffnungenDerKante($H[$hk], $oeffnungen),
+                ];
+            }
+
+            $raeume[] = [
+                'geschoss' => (int) ($level['sortOrder'] ?? 0),
+                'polygon' => $polygon,
+                'hoehe_mm' => $this->hoehe($level, $walls),
+                'wand_segmente' => $segmente,
+                'decke' => null, // ehrlich unbestimmt (Operanden-Gate)
+                'boden' => null,
             ];
         }
 
-        return [
-            'geschoss' => (int) ($level['sortOrder'] ?? 0),
-            'polygon' => $polygon,
-            'hoehe_mm' => $this->hoehe($level, $walls),
-            'wand_segmente' => $segmente,
-            'decke' => null, // ehrlich unbestimmt (Operanden-Gate) — kein erfundener bauteil_typ
-            'boden' => null,
-        ];
+        return $raeume;
     }
 
-    /**
-     * Ordnet die Wände zu EINER geschlossenen Eckenfolge; null, wenn die Kette nicht (sauber) schließt.
-     *
-     * @param  array<int,array<string,mixed>>  $walls
-     * @return array<int,array{x:int,y:int}>|null
-     */
-    private function kette(array $walls): ?array
+    /** Nächste Halbkante des Umlaufs: an h.zu die im Uhrzeigersinn nächste NACH der Gegenkante. */
+    private function naechste(int $i, array $H, array $ausgehend): int
     {
-        $rest = $walls;
-        $first = array_shift($rest);
-        $start = ['x' => (int) $first['start']['x'], 'y' => (int) $first['start']['y']];
-        $ende = ['x' => (int) $first['end']['x'], 'y' => (int) $first['end']['y']];
-        $corners = [$start, $ende];
-        $current = $ende;
-
-        while (count($rest) > 0) {
-            $found = null;
-            $next = null;
-            foreach ($rest as $idx => $w) {
-                $ws = ['x' => (int) $w['start']['x'], 'y' => (int) $w['start']['y']];
-                $we = ['x' => (int) $w['end']['x'], 'y' => (int) $w['end']['y']];
-                if ($this->samePoint($ws, $current)) {
-                    $next = $we;
-                    $found = $idx;
-                    break;
-                }
-                if ($this->samePoint($we, $current)) {
-                    $next = $ws;
-                    $found = $idx;
+        $liste = $ausgehend[$H[$i]['zu']];
+        $pos = -1;
+        foreach ($liste as $p => $j) {
+            if ($H[$j]['zu'] === $H[$i]['von'] && $H[$j]['kanteId'] === $H[$i]['kanteId']) {
+                $pos = $p;
+                break;
+            }
+        }
+        if ($pos === -1) {
+            foreach ($liste as $p => $j) {
+                if ($H[$j]['zu'] === $H[$i]['von']) {
+                    $pos = $p;
                     break;
                 }
             }
-            if ($found === null) {
-                return null; // Kette bricht ab
-            }
-            array_splice($rest, $found, 1);
-            if ($this->samePoint($next, $corners[0])) {
-                return count($rest) === 0 ? $corners : null; // frühzeitiger Schluss ⇒ mehrere Schleifen (P2-1a: nur eine)
-            }
-            $corners[] = $next;
-            $current = $next;
         }
+        $n = count($liste);
+        $naechstePos = ($pos - 1 + $n) % $n;
 
-        return null; // nie zu corners[0] zurückgekehrt
+        return $liste[$naechstePos];
     }
 
-    /**
-     * @param  array<int,array<string,mixed>>  $walls
-     * @param  array{x:int,y:int}  $von
-     * @param  array{x:int,y:int}  $bis
-     * @return array<string,mixed>|null
-     */
-    private function wandFuerKante(array $walls, array $von, array $bis): ?array
+    /** Die Gegen-Halbkante (andere Richtung derselben Kante). */
+    private function gegenHalbkante(int $i, array $H, array $kanteHk): ?int
     {
-        foreach ($walls as $w) {
-            $ws = ['x' => (int) $w['start']['x'], 'y' => (int) $w['start']['y']];
-            $we = ['x' => (int) $w['end']['x'], 'y' => (int) $w['end']['y']];
-            if (($this->samePoint($ws, $von) && $this->samePoint($we, $bis))
-                || ($this->samePoint($ws, $bis) && $this->samePoint($we, $von))) {
-                return $w;
-            }
-        }
+        [$a, $b] = $kanteHk[$H[$i]['kanteId']];
 
-        return null;
+        return $i === $a ? $b : $a;
     }
 
     /**
-     * @param  array<string,mixed>  $wall
+     * @param  array<string,mixed>  $hk  Halbkante (trägt wallId, offVon, offBis)
      * @param  array<int,array<string,mixed>>  $oeffnungen
      * @return array<int,array<string,mixed>>
      */
-    private function oeffnungenDerWand(array $wall, array $oeffnungen): array
+    private function oeffnungenDerKante(array $hk, array $oeffnungen): array
     {
         $typMap = ['window' => 'fenster', 'door' => 'tuer', 'opening' => 'oeffnung'];
         $out = [];
         foreach ($oeffnungen as $o) {
-            if (($o['hostWallId'] ?? null) !== ($wall['id'] ?? null)) {
+            if (($o['hostWallId'] ?? null) !== ($hk['wallId'] ?? null)) {
+                continue;
+            }
+            // Öffnung liegt im Offset-Fenster dieser (ggf. an T-Punkten geteilten) Kante.
+            $off = (float) ($o['offsetFromWallStart'] ?? 0);
+            if ($off < $hk['offVon'] || $off >= $hk['offBis']) {
                 continue;
             }
             $out[] = [
@@ -193,36 +254,41 @@ class SzeneProjektionService
         return $out;
     }
 
-    /**
-     * Azimut der rechten (bei CCW: äußeren) Normalen — Nord = +y = 0°, Ost = 90° (eingefrorene Konvention).
-     *
-     * @param  array{x:int,y:int}  $von
-     * @param  array{x:int,y:int}  $bis
-     */
+    /** Azimut der rechten (bei CCW-Innenraum: äußeren) Normalen — Nord = +y = 0°, Ost = 90°. */
     private function azimutRechteNormale(array $von, array $bis): int
     {
         $dx = $bis['x'] - $von['x'];
         $dy = $bis['y'] - $von['y'];
-        $nx = $dy;   // rechte Normale
-        $ny = -$dx;
-        $grad = (int) round(rad2deg(atan2($nx, $ny)));
+        $grad = (int) round(rad2deg(atan2($dy, -$dx)));
 
         return (($grad % 360) + 360) % 360;
     }
 
-    /**
-     * @param  array<int,array{x:int,y:int}>  $poly
-     */
-    private function flaecheDoppelt(array $poly): float
+    /** Liegt p exakt (mm-Integer, kollinear) auf der OFFENEN Strecke a–b? */
+    private function liegtAufStrecke(array $p, array $a, array $b): bool
     {
-        $n = count($poly);
-        $s = 0.0;
+        $kreuz = ($b['x'] - $a['x']) * ($p['y'] - $a['y']) - ($b['y'] - $a['y']) * ($p['x'] - $a['x']);
+        if ($kreuz != 0.0) {
+            return false;
+        }
+        $skalar = ($p['x'] - $a['x']) * ($b['x'] - $a['x']) + ($p['y'] - $a['y']) * ($b['y'] - $a['y']);
+        $laengeQ = ($b['x'] - $a['x']) ** 2 + ($b['y'] - $a['y']) ** 2;
+
+        return $skalar > 0 && $skalar < $laengeQ;
+    }
+
+    /** @param array<int,array{x:float|int,y:float|int}> $polygon */
+    private function signierteFlaeche(array $polygon): float
+    {
+        $summe = 0.0;
+        $n = count($polygon);
         for ($i = 0; $i < $n; $i++) {
-            $j = ($i + 1) % $n;
-            $s += $poly[$i]['x'] * $poly[$j]['y'] - $poly[$j]['x'] * $poly[$i]['y'];
+            $p = $polygon[$i];
+            $q = $polygon[($i + 1) % $n];
+            $summe += $p['x'] * $q['y'] - $q['x'] * $p['y'];
         }
 
-        return $s;
+        return $summe / 2.0;
     }
 
     /**
@@ -241,12 +307,23 @@ class SzeneProjektionService
         return null;
     }
 
-    /**
-     * @param  array{x:int,y:int}  $a
-     * @param  array{x:int,y:int}  $b
-     */
-    private function samePoint(array $a, array $b): bool
+    /** @param array<string,mixed> $p @return array{x:int,y:int} */
+    private function pt(array $p): array
     {
-        return (int) $a['x'] === (int) $b['x'] && (int) $a['y'] === (int) $b['y'];
+        return ['x' => (int) ($p['x'] ?? 0), 'y' => (int) ($p['y'] ?? 0)];
+    }
+
+    /** @param array{x:int,y:int} $p */
+    private function key(array $p): string
+    {
+        return $p['x'].','.$p['y'];
+    }
+
+    /** @return array{x:int,y:int} */
+    private function parse(string $k): array
+    {
+        [$x, $y] = explode(',', $k);
+
+        return ['x' => (int) $x, 'y' => (int) $y];
     }
 }

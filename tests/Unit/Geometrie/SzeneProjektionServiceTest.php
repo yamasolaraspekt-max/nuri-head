@@ -4,13 +4,12 @@ namespace Tests\Unit\Geometrie;
 
 use App\Models\HeizlastRaum;
 use App\Models\RaumGeometrie;
-use App\Services\Geometrie\GeometrieUngueltigException;
 use App\Services\Geometrie\SzeneProjektionService;
 use App\Services\Heizlast\GeometrieAbleitungService;
 use Tests\TestCase;
 
 /**
- * AP/P2-1a — Tests für die reine, unverdrahtete Projektion Szene → gebaeude_geometrie.
+ * P2-1a/b — Tests für die reine, unverdrahtete Projektion Szene → gebaeude_geometrie.
  * Grundlage: docs/planner-spec-szene-projektion.md. Kein DB-Schreiben; Tests\TestCase (bootet App
  * für Eloquent-Casts beim Round-Trip), ohne RefreshDatabase — kein DB-Zugriff.
  */
@@ -32,22 +31,30 @@ class SzeneProjektionServiceTest extends TestCase
     }
 
     /**
-     * Rechteck 5000 × 5000 mm, ein Geschoss. @param array<int,array<string,mixed>> $extra
+     * @param  array<int,array<string,mixed>>  $nodes
      * @return array<string,mixed>
      */
-    private function rechteckSzene(array $extra = []): array
+    private function szene(array $nodes): array
     {
         return [
             'schemaVersion' => 1, 'units' => 'mm',
             'levels' => [['id' => 'level-eg', 'name' => 'Erdgeschoss', 'sortOrder' => 0, 'defaultWallHeight' => 2500]],
-            'nodes' => array_merge([
-                $this->wall('w1', 0, 0, 5000, 0),
-                $this->wall('w2', 5000, 0, 5000, 5000),
-                $this->wall('w3', 5000, 5000, 0, 5000),
-                $this->wall('w4', 0, 5000, 0, 0),
-            ], $extra),
+            'nodes' => $nodes,
         ];
     }
+
+    /** @param array<int,array<string,mixed>> $extra @return array<string,mixed> */
+    private function rechteckSzene(array $extra = []): array
+    {
+        return $this->szene(array_merge([
+            $this->wall('w1', 0, 0, 5000, 0),
+            $this->wall('w2', 5000, 0, 5000, 5000),
+            $this->wall('w3', 5000, 5000, 0, 5000),
+            $this->wall('w4', 0, 5000, 0, 0),
+        ], $extra));
+    }
+
+    // ---- P2-1a: Ein-Raum ----
 
     public function test_ein_raum_rechteck_vier_aussenwaende_korrekte_azimute(): void
     {
@@ -70,7 +77,7 @@ class SzeneProjektionServiceTest extends TestCase
 
         $azimute = array_map(fn ($s) => $s['azimut_grad'], $raum['wand_segmente']);
         sort($azimute);
-        $this->assertSame([0, 90, 180, 270], $azimute); // N / O / S / W (Nord = +y)
+        $this->assertSame([0, 90, 180, 270], $azimute);
     }
 
     public function test_oeffnung_wird_der_wirtswand_zugeordnet(): void
@@ -109,22 +116,68 @@ class SzeneProjektionServiceTest extends TestCase
             $this->assertSame('wand', $b['typ']);
             $this->assertGreaterThan(0, $b['flaeche_m2']);
         }
-        $this->assertEqualsWithDelta(12.5, $abgeleitet['bauteile'][0]['flaeche_m2'], 0.001); // 5000 × 2500 mm
+        $this->assertEqualsWithDelta(12.5, $abgeleitet['bauteile'][0]['flaeche_m2'], 0.001);
     }
 
-    public function test_schmetterling_umlauf_wird_abgelehnt(): void
-    {
-        $szene = [
-            'levels' => [['id' => 'level-eg', 'sortOrder' => 0, 'defaultWallHeight' => 2500]],
-            'nodes' => [
-                $this->wall('w1', 0, 0, 5000, 5000),
-                $this->wall('w2', 5000, 5000, 5000, 0),
-                $this->wall('w3', 5000, 0, 0, 5000),
-                $this->wall('w4', 0, 5000, 0, 0),
-            ],
-        ];
+    // ---- P2-1b: Mehrraum, innen/aussen ----
 
-        $this->expectException(GeometrieUngueltigException::class);
-        $this->service()->projiziere($szene);
+    /**
+     * Zwei angrenzende Rechtecke mit geteilter Mittelwand → 2 Räume; die geteilte Wand ist in BEIDEN
+     * Räumen 'innen' (Azimut null), alle übrigen 'aussen'. Handgerechnet: 2 innen, 6 aussen.
+     */
+    public function test_zwei_raeume_geteilte_wand_ist_innen(): void
+    {
+        $raeume = $this->service()->projiziere($this->szene([
+            $this->wall('a_unten', 0, 0, 5000, 0),
+            $this->wall('b_unten', 5000, 0, 10000, 0),
+            $this->wall('rechts', 10000, 0, 10000, 5000),
+            $this->wall('b_oben', 10000, 5000, 5000, 5000),
+            $this->wall('a_oben', 5000, 5000, 0, 5000),
+            $this->wall('links', 0, 5000, 0, 0),
+            $this->wall('mitte', 5000, 0, 5000, 5000),
+        ]));
+
+        $this->assertCount(2, $raeume);
+        foreach ($raeume as $raum) {
+            $this->assertCount(4, $raum['wand_segmente']);
+        }
+
+        $alle = array_merge(...array_map(fn ($r) => $r['wand_segmente'], $raeume));
+        $innen = array_values(array_filter($alle, fn ($s) => $s['grenzflaeche'] === 'innen'));
+        $aussen = array_values(array_filter($alle, fn ($s) => $s['grenzflaeche'] === 'aussen'));
+
+        $this->assertCount(2, $innen);
+        $this->assertCount(6, $aussen);
+        foreach ($innen as $s) {
+            $this->assertNull($s['azimut_grad']);
+        }
+        foreach ($aussen as $s) {
+            $this->assertNotNull($s['azimut_grad']);
+        }
+    }
+
+    /** Selbstschneidender Wandzug (Schmetterling) ergibt KEINE Innenfläche → 0 Räume (nie falsche). */
+    public function test_schmetterling_ergibt_keine_raeume(): void
+    {
+        $raeume = $this->service()->projiziere($this->szene([
+            $this->wall('w1', 0, 0, 5000, 5000),
+            $this->wall('w2', 5000, 5000, 5000, 0),
+            $this->wall('w3', 5000, 0, 0, 5000),
+            $this->wall('w4', 0, 5000, 0, 0),
+        ]));
+
+        $this->assertSame([], $raeume);
+    }
+
+    /** Offener (nicht schließender) Wandzug → 0 Räume (ehrlich leer, keine erfundene Geometrie). */
+    public function test_offener_wandzug_ergibt_keine_raeume(): void
+    {
+        $raeume = $this->service()->projiziere($this->szene([
+            $this->wall('w1', 0, 0, 5000, 0),
+            $this->wall('w2', 5000, 0, 5000, 5000),
+            $this->wall('w3', 5000, 5000, 0, 5000),
+        ]));
+
+        $this->assertSame([], $raeume);
     }
 }
