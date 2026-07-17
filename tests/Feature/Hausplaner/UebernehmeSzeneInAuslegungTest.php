@@ -88,9 +88,20 @@ class UebernehmeSzeneInAuslegungTest extends TestCase
         $this->assertNotNull($profil);
         $geo = json_decode($profil->gebaeude_geometrie, true);
         $this->assertCount(2, $geo['raeume']);
-        $this->assertSame('hausplaner_szene', $geo['quelle']);
+        // S3: Herkunft/Hash unter reserviertem Key `_herkunft`.
+        $this->assertSame('hausplaner_szene', $geo['_herkunft']['quelle']);
+        $this->assertNotEmpty($geo['_herkunft']['source_hash']);
         // gebaeude_geometrie ist HeizlastRechner-Input: je Raum bauteile[] mit Wänden.
         $this->assertNotEmpty($geo['raeume'][0]['bauteile']);
+        // S2-Ehrlichkeit: Geometrie-Übernahme markiert U-Werte als unbelegt und erfindet KEINEN belegten
+        // u_wert (kein stiller Ersatzwert). Wand-Bauteile tragen u_strategie='C' ohne positiven u_wert.
+        $this->assertSame('unbelegt', $geo['_herkunft']['u_werte']);
+        $waende = array_filter($geo['raeume'][0]['bauteile'], fn ($b) => ($b['typ'] ?? null) === 'wand');
+        $this->assertNotEmpty($waende);
+        foreach ($waende as $b) {
+            $this->assertSame('C', $b['u_strategie'] ?? null);
+            $this->assertLessThanOrEqual(0.0, (float) ($b['u_wert'] ?? 0));
+        }
     }
 
     public function test_zweite_uebernahme_gleiche_szene_keine_neue_version(): void

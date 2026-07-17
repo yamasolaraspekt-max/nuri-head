@@ -70,3 +70,43 @@ Erster SCHREIBENDER Schritt der Linie → **Yama-Go Pflicht**, plus ein von Yama
 sichtbar wird. Keine Migration nötig (gebaeude_geometrie-Spalte + Versionierung existieren). Rollentrennung:
 diese Spec = Planner; Bau = Generator (grep-first: schreibeGeometrieVersion/AnforderungsprofilService real
 prüfen); Abnahme = Evaluator; Referenzfall-Freigabe = Yama.
+
+## 8 · Nachbesserung nach Evaluator-Spec-Review (2026-07-17)
+
+Der Evaluator hat die Spec (vor dem Bau) gegen den echten Code gemessen: S1/S4/S6 tragen. Zwei echte
+Löcher (S2 rot, S5 gelb) + S3-Präzisierung werden hier verbindlich geschlossen. **Diese Festlegungen
+haben Vorrang vor §4/§6 oben, wo sie abweichen.**
+
+**S2 — U-Werte / Operanden-Gate (der Blocker).** Die projizierte Geometrie liefert Flächen, aber keine
+belegten U-Werte: `GeometrieAbleitungService::opakeUQuelle` gibt ohne `u_wert`/`konstruktion_id` nur
+`u_strategie='C'` zurück, `HeizlastRechner` rechnet `u_wert ?? 0` → Transmission der Hülle = 0. **Dasselbe
+Loch hat die bestehende Grundriss-Linie** (gleicher `ausGeometrie`-Pfad) — es ist die Geometrie→Heizlast-
+Naht, nicht ein Fehler der Szene-Übernahme.
+- **Entscheidung:** Die Übernahme ist eine **Geometrie-Übernahme**. Bauteile tragen `u_strategie='C'` OHNE
+  erfundenen `u_wert` (kein stiller Ersatzwert). Die Herkunft markiert `_herkunft.u_werte='unbelegt'` +
+  Klartext-Hinweis, dass U-Werte/Konstruktionen ein **nachgelagerter Pflichtschritt** vor belastbarer
+  Heizlast sind.
+- **§6-Kriterium entschärft:** NICHT „End-to-End Heizlast sichtbar/belastbar", sondern „Pipeline läuft
+  ohne Formatbruch (Szene→Projektion→`gebaeude_geometrie`→Adapter/HeizlastRechner) UND fehlende U-Werte
+  sind sichtbar unbelegt (`u_strategie='C'` + `_herkunft.u_werte='unbelegt'`), kein stiller Belegt-Wert."
+- **Eigener Posten (NICHT in dieser Action, Heizlast-Heimat):** die `u_strategie='C'`-Auflösung bzw. ein
+  Operanden-Gate im HeizlastRechner/Adapter, das „C ohne u_wert" als Lücke ausweist statt still 0 zu
+  rechnen. Betrifft auch die Grundriss-Linie → gehört als eigener Vorgang in die Heizlast-Heimat.
+
+**S3 — Herkunft/Hash-Key festgenagelt.** Herkunft steht unter dem reservierten Key
+`gebaeude_geometrie._herkunft = { quelle:'hausplaner_szene', source_hash:<CanonicalHash der Szene>,
+u_werte:'unbelegt', hinweis:<klartext> }`. Idempotenz vergleicht `_herkunft.source_hash` (nicht die
+abgeleitete Geometrie, nicht ein Top-Level-Feld im `raeume`-Namensraum). Keine Migration (JSON-Spalte).
+
+**S5 — Kanten ergänzt.**
+- **Rechte-Gate:** die schreibende Übernahme braucht ein `permission`-Gate — gehört an den **P2-2b-Auslöser**
+  (analog Hausplaner), NICHT in die unverdrahtete Action P2-2a.
+- **Keine Szene** (Objekt ohne `HausplanerDocument`): eigener Status `keine_szene`, nichts geschrieben.
+- **Profil-Auswahl:** genau ein aktives Profil je Verankerung ist durch `aktivieren()`-Scope garantiert →
+  `aktiv()->first()` ist eindeutig; kein aktives → `anlegen()`.
+- **Staleness:** weicht `_herkunft.source_hash` vom aktuellen Szenen-Hash ab, zeigt die UI/P2-2b „Szene
+  geändert seit letzter Übernahme" (der Hash ist der Enabler; Anzeige = P2-2b).
+
+**Bau-Status:** P2-2a (Action + Referenzfall-Test) ist mit dieser Nachbesserung umgesetzt (additiv,
+UNVERDRAHTET, kein Produktiv-Caller). Abnahme durch unabhängigen Evaluator; danach P2-2b (Auslöser +
+Rechte-Gate + Staleness-Anzeige) nach Yama-Go + Referenzfall.

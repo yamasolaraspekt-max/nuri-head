@@ -27,6 +27,15 @@ use App\Services\Heizlast\GeometrieAbleitungService;
  * Idempotenz: gleicher Szenen-Quell-Hash wie die aktive Version ⇒ KEINE neue Version.
  * Ungültige Geometrie ⇒ GeometrieUngueltigException aus dem Gate (nichts geschrieben).
  * Der Nutzer-Auslöser (expliziter „Übernehmen"-Knopf) ist P2-2b und NICHT Teil dieser Action.
+ *
+ * Nachbesserung nach Evaluator-Spec-Review (2026-07-17):
+ * - S2 (Ehrlichkeit): GEOMETRIE-Übernahme. Projizierte Bauteile tragen u_strategie='C' OHNE belegten
+ *   u_wert (kein erfundener Wert); U-Werte/Konstruktionen sind ein nachgelagerter Pflichtschritt vor
+ *   belastbarer Heizlast. Herkunft markiert `u_werte='unbelegt'`. (Die u_strategie='C'-Auflösung im
+ *   HeizlastRechner/Adapter — betrifft auch die bestehende Grundriss-Linie — ist ein eigener Posten der
+ *   Heizlast-Heimat, NICHT dieser Action.)
+ * - S3: Herkunft/Hash unter reserviertem Key `_herkunft` (kollidiert nicht mit `raeume`).
+ * - S5: Auswahlregel Profil s. u.; Rechte-Gate + Staleness-Anzeige = P2-2b (Auslöser), nicht hier.
  */
 class UebernehmeSzeneInAuslegung
 {
@@ -68,20 +77,31 @@ class UebernehmeSzeneInAuslegung
         }
 
         $quellHash = CanonicalHash::of($szene);
+        // S2: Geometrie-Übernahme — U-Werte bleiben unbelegt (kein stiller Ersatzwert). S3: Herkunft/Hash
+        // unter reserviertem Key `_herkunft`, damit sie nicht mit dem `raeume`-Namensraum kollidieren.
         $gebaeudeGeometrie = [
             'raeume' => $raeume,
-            'quelle' => 'hausplaner_szene',
-            'quell_hash' => $quellHash,
+            '_herkunft' => [
+                'quelle' => 'hausplaner_szene',
+                'source_hash' => $quellHash,
+                'u_werte' => 'unbelegt',
+                'hinweis' => 'Geometrie-Übernahme aus Hausplaner-Szene; U-Werte/Konstruktionen sind ein '
+                    .'nachgelagerter Pflichtschritt vor belastbarer Heizlast (kein stiller Ersatzwert).',
+            ],
         ];
 
+        // S5 Auswahlregel: genau EIN aktives Profil je Verankerung ist durch AnforderungsprofilService::
+        // aktivieren() (Scope verankerbar_type+_id, andere → ABGELOEST) garantiert ⇒ first() ist eindeutig;
+        // kein aktives Profil ⇒ anlegen().
         $aktiv = Anforderungsprofil::query()->aktiv()
             ->where('verankerbar_type', $objekt->getMorphClass())
             ->where('verankerbar_id', $objekt->getKey())
             ->first();
 
         // Idempotenz: dieselbe Szene bereits übernommen ⇒ keine neue Version (kein Versionsmüll).
+        // Verglichen wird der Quell-Szenen-Hash unter `_herkunft.source_hash`, NICHT die abgeleitete Geometrie.
         if ($aktiv !== null && is_array($aktiv->gebaeude_geometrie)
-            && ($aktiv->gebaeude_geometrie['quell_hash'] ?? null) === $quellHash) {
+            && (($aktiv->gebaeude_geometrie['_herkunft']['source_hash'] ?? null) === $quellHash)) {
             return ['status' => 'unveraendert', 'raeume' => count($raeume), 'version' => (int) $aktiv->version];
         }
 
