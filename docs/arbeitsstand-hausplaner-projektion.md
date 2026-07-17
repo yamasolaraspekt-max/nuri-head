@@ -24,10 +24,10 @@
 ## Spur B — Naht Szene → belastbare Wahrheit (`gebaeude_geometrie`)
 | Schritt | Was | Wer | Status |
 |---|---|---|---|
-| B1 | P2-1a `SzeneProjektionService` Ein-Raum (rein, unverdrahtet) | Claude→Evaluator | ✅ gebaut (dbb630d), Evaluator prüft |
-| B2 | P2-1b innen/aussen bei geteilten Kanten (Mehrraum) | Claude→Evaluator | nach B1-grün |
+| B1 | P2-1a `SzeneProjektionService` Ein-Raum (rein, unverdrahtet) | Claude→Evaluator | ✅ grün abgenommen (dbb630d) |
+| B2 | P2-1b planare Raumerkennung, innen/aussen, Mehrraum | Claude→Evaluator | ✅ grün abgenommen (3498cde), inkl. T-Punkt-Bonus |
 | B3 | P2-1c mehrere Geschosse + Öffnungs-Feinheiten | Claude→Evaluator | nach B2 |
-| B4 | P2-2 Verdrahtung: Szene beim Speichern → `gebaeude_geometrie` (neue Profil-Version) | **Yama-Go** + Referenzfall → Claude→Evaluator→Yama | gesperrt (ändert Schreibkette) |
+| B4 | P2-2 Verdrahtung: Szene → `gebaeude_geometrie` (neue Profil-Version, bestehender Schreibpfad) | **Yama-Go** + Referenzfall → Claude→Evaluator→Yama | 📋 Spec fertig (ff92aba); Evaluator-Spec-Review vorbereitet; wartet Yama-Go + Referenzfall |
 
 ## Spur C — Gewerke auf der Naht (Zielbild §10, je eigenes Paket, NACH Spur B)
 Reihenfolge, jeweils Planner-Spec → Claude → Evaluator:
