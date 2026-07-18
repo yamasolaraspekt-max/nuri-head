@@ -10,6 +10,10 @@ import { resolve } from "node:path";
 export default defineConfig({
   plugins: [react()],
   base: "/hausplaner/",
+  // publicDir false: das Insel-Bundle braucht Vites public-Kopie NICHT. ticket/public ist Laravels
+  // public-Ordner (mit storage-Symlink); ohne dies versucht Vite public/ nach public/hausplaner zu
+  // kopieren und bricht am storage-Symlink ab (ENOENT). Fix fuer den Mac-Build.
+  publicDir: false,
   build: {
     outDir: resolve(__dirname, "public/hausplaner"),
     emptyOutDir: false,
