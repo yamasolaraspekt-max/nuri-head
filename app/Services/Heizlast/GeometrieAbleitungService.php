@@ -161,7 +161,11 @@ class GeometrieAbleitungService
             }
         }
 
-        return ['u_strategie' => $def['u_strategie'] ?? 'C'];
+        // U-a (Operanden-Gate): kein belegter U-Wert (weder direkter U noch Konstruktion) ⇒ Standard C,
+        // ABER zusätzlich als fehlend markiert — damit der Adapter die Lücke zählt und die Belastbarkeit
+        // ehrlich herabstuft statt still 0-Transmission zu rechnen. Kein erfundener U-Wert; die
+        // HeizlastRechner-Formel bleibt byte-genau (er liest weiter nur u_wert). Verdrahtung = U-b.
+        return ['u_strategie' => $def['u_strategie'] ?? 'C', 'u_wert_datenlage' => 'fehlt'];
     }
 
     /**
