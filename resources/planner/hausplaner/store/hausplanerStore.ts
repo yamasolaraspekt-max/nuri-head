@@ -1,0 +1,186 @@
+/**
+ * Hausplaner — zentraler Store (P0, zustand + Immer). EINE Wahrheit für die Szene;
+ * 2D- und (später) 3D-Renderer LESEN den Store, Änderungen laufen NUR über
+ * executeCommand (Immer produceWithPatches ⇒ Undo/Redo über inverse Patches).
+ *
+ * Entscheide aus dem Schema-Review:
+ * - setActiveLevel LEERT die Selektion (b — nie Geister-Selektion auf unsichtbaren Nodes).
+ * - CommandAbgelehnt lässt die Szene unverändert und legt die Meldung in letzteAblehnung.
+ * Speichern: PUT (web-Route, CSRF) mit base_revision; 409 ⇒ konflikt-Status, kein stiller Verlust.
+ */
+import { create } from 'zustand';
+import { enablePatches, produceWithPatches, applyPatches, type Patch } from 'immer';
+import type { SceneDocument } from '../domain/scene.types';
+import { CommandAbgelehnt, type HausplanerCommand } from '../domain/commands.types';
+import { applyCommand } from '../commands/applyCommand';
+import { Historie } from './history';
+
+enablePatches();
+
+export type HausplanerModus = '2d' | 'split' | '3d';
+export type SpeicherStatus = 'gespeichert' | 'ungespeichert' | 'speichert' | 'konflikt' | 'fehler';
+
+export interface HausplanerState {
+  scene: SceneDocument | null;
+  speichernUrl: string | null;
+  csrfToken: string | null;
+
+  modus: HausplanerModus;
+  activeLevelId: string | null;
+  selectedNodeIds: string[];
+
+  speicherStatus: SpeicherStatus;
+  konfliktRevision: number | null;
+  letzteAblehnung: string | null;
+
+  init: (scene: SceneDocument, speichernUrl: string, csrfToken: string) => void;
+  setModus: (modus: HausplanerModus) => void;
+  setActiveLevel: (levelId: string) => void;
+  selectNodes: (ids: string[]) => void;
+
+  executeCommand: (command: HausplanerCommand) => boolean;
+  undo: () => void;
+  redo: () => void;
+  kannUndo: () => boolean;
+  kannRedo: () => boolean;
+  istDirty: () => boolean;
+
+  save: () => Promise<void>;
+}
+
+const historie = new Historie();
+
+function wendePatchesAn(scene: SceneDocument, patches: Patch[]): SceneDocument {
+  return applyPatches(scene, patches) as SceneDocument;
+}
+
+export const useHausplanerStore = create<HausplanerState>((set, get) => ({
+  scene: null,
+  speichernUrl: null,
+  csrfToken: null,
+
+  modus: '2d',
+  activeLevelId: null,
+  selectedNodeIds: [],
+
+  speicherStatus: 'gespeichert',
+  konfliktRevision: null,
+  letzteAblehnung: null,
+
+  init: (scene, speichernUrl, csrfToken) => {
+    historie.markiereGespeichert();
+    set({
+      scene,
+      speichernUrl,
+      csrfToken,
+      activeLevelId: scene.levels[0]?.id ?? null,
+      selectedNodeIds: [],
+      speicherStatus: 'gespeichert',
+      konfliktRevision: null,
+      letzteAblehnung: null,
+    });
+  },
+
+  setModus: (modus) => set({ modus }),
+
+  // Entscheid (b): Geschosswechsel leert die Selektion — deterministisch, nie versteckte Treffer.
+  setActiveLevel: (levelId) => set({ activeLevelId: levelId, selectedNodeIds: [] }),
+
+  selectNodes: (ids) => set({ selectedNodeIds: ids }),
+
+  executeCommand: (command) => {
+    const { scene } = get();
+    if (!scene) {
+      return false;
+    }
+    try {
+      const [neueScene, patches, inversePatches] = produceWithPatches(scene, (draft) => {
+        applyCommand(draft, command, new Date().toISOString());
+      });
+      historie.push({ patches, inversePatches, beschreibung: command.type });
+      set({
+        scene: neueScene as SceneDocument,
+        speicherStatus: 'ungespeichert',
+        letzteAblehnung: null,
+      });
+
+      return true;
+    } catch (fehler) {
+      if (fehler instanceof CommandAbgelehnt) {
+        set({ letzteAblehnung: fehler.message }); // Szene unverändert — definierter Fehlerzustand
+        return false;
+      }
+      throw fehler;
+    }
+  },
+
+  undo: () => {
+    const { scene } = get();
+    const eintrag = historie.undo();
+    if (!scene || !eintrag) {
+      return;
+    }
+    set({
+      scene: wendePatchesAn(scene, eintrag.inversePatches),
+      speicherStatus: historie.istDirty() ? 'ungespeichert' : 'gespeichert',
+    });
+  },
+
+  redo: () => {
+    const { scene } = get();
+    const eintrag = historie.redo();
+    if (!scene || !eintrag) {
+      return;
+    }
+    set({
+      scene: wendePatchesAn(scene, eintrag.patches),
+      speicherStatus: historie.istDirty() ? 'ungespeichert' : 'gespeichert',
+    });
+  },
+
+  kannUndo: () => historie.kannUndo(),
+  kannRedo: () => historie.kannRedo(),
+  istDirty: () => historie.istDirty(),
+
+  save: async () => {
+    const { scene, speichernUrl, csrfToken } = get();
+    if (!scene || !speichernUrl) {
+      return;
+    }
+    set({ speicherStatus: 'speichert' });
+
+    try {
+      const antwort = await fetch(speichernUrl, {
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-CSRF-TOKEN': csrfToken ?? '',
+        },
+        body: JSON.stringify({
+          base_revision: scene.revision,
+          schema_version: scene.schemaVersion,
+          scene,
+        }),
+      });
+
+      if (antwort.status === 409) {
+        const daten = (await antwort.json()) as { aktuelle_revision?: number };
+        set({ speicherStatus: 'konflikt', konfliktRevision: daten.aktuelle_revision ?? null });
+        return;
+      }
+      if (!antwort.ok) {
+        set({ speicherStatus: 'fehler' });
+        return;
+      }
+
+      const daten = (await antwort.json()) as { revision: number };
+      historie.markiereGespeichert(); // Historie bleibt erhalten (Kante „Undo über Save-Grenze")
+      const aktualisiert = { ...get().scene!, revision: daten.revision };
+      set({ scene: aktualisiert, speicherStatus: historie.istDirty() ? 'ungespeichert' : 'gespeichert', konfliktRevision: null });
+    } catch {
+      set({ speicherStatus: 'fehler' });
+    }
+  },
+}));

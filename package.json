@@ -3,9 +3,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "build:hausplaner": "./scripts/node-runtime.sh ./node_modules/typescript/bin/tsc -p tsconfig.hausplaner.json --noEmit && ./scripts/node-runtime.sh ./node_modules/vite/bin/vite.js build --config vite.hausplaner.config.ts",
+    "test:hausplaner": "./scripts/node-runtime.sh --experimental-strip-types --import ./resources/planner/hausplaner/test-register.mjs --test \"resources/planner/hausplaner/__tests__/*.test.ts\"",
+    "tsc:hausplaner": "./scripts/node-runtime.sh ./node_modules/typescript/bin/tsc -p tsconfig.hausplaner.json --noEmit"
   },
   "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.163.0",
+    "@vitejs/plugin-react": "^4.4.1",
     "autoprefixer": "^10.4.22",
     "axios": "^1.1.2",
     "html5-qrcode": "^2.3.8",
@@ -14,6 +21,7 @@
     "postcss": "^8.5.6",
     "sass": "^1.56.1",
     "tailwindcss": "^4.1.17",
+    "typescript": "^5.8.0",
     "vite": "^6.2.4"
   },
   "dependencies": {
@@ -26,16 +34,23 @@
     "bootstrap": "^5.3.7",
     "chart.js": "^4.4.3",
     "fullcalendar": "^6.1.15",
+    "immer": "^10.1.0",
     "jquery": "3.7.1",
+    "konva": "^9.3.0",
     "mapbox-gl": "^3.0.1",
     "popper.js": "1.16.1",
     "puppeteer": "^24.39.1",
     "pusher-js": "^8.4.0",
     "quill": "^2.0.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-konva": "^19.0.0",
     "socket.io-client": "^4.8.1",
     "three": "^0.163.0",
     "vue": "^3.2.36",
-    "vue-loader": "^17.3.1"
+    "vue-loader": "^17.3.1",
+    "zod": "^3.25.0",
+    "zustand": "^5.0.0"
   },
   "name": "ticket",
   "description": "<p align=\"center\"><a href=\"https://laravel.com\" target=\"_blank\"><img src=\"https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg\" width=\"400\" alt=\"Laravel Logo\"></a></p>",

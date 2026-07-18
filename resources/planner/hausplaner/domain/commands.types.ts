@@ -1,0 +1,54 @@
+/**
+ * Hausplaner — Command-System (P0). Renderer/Werkzeuge schreiben NIE direkt in die
+ * Szene; jede Änderung ist ein Command. Der Store führt Commands über Immer
+ * `produceWithPatches` aus — die inversen Patches sind die Undo-Historie.
+ */
+import type { SceneNode, RoofNode } from './scene.types';
+
+export type HausplanerCommand =
+  | { type: 'ADD_NODE'; node: SceneNode }
+  | { type: 'REMOVE_NODE'; nodeId: string }
+  // Dach-Commands (D-a): operieren auf SceneDocument.roofs (getrennt von den Node-Commands).
+  // Undo/Redo/409 gelten automatisch, weil roofs Teil des Immer-Drafts sind.
+  | { type: 'ADD_ROOF'; roof: RoofNode }
+  | { type: 'UPDATE_ROOF'; roofId: string; changes: Record<string, unknown> }
+  | { type: 'REMOVE_ROOF'; roofId: string }
+  | {
+      type: 'MOVE_NODE';
+      nodeId: string;
+      /** Wand: neue Endpunkte; Objekt/Route: Verschiebung der Position (mm, ganzzahlig). */
+      position:
+        | { start: { x: number; y: number }; end: { x: number; y: number } }
+        | { x: number; y: number; z: number };
+    }
+  | {
+      type: 'UPDATE_NODE';
+      nodeId: string;
+      /** Teil-Änderungen; Geometrie-Felder durchlaufen dieselben Regeln wie MOVE_NODE. */
+      changes: Record<string, unknown>;
+    }
+  | { type: 'UPDATE_SETTINGS'; changes: Partial<{ gridSize: number; snapEnabled: boolean; angleSnap: number }> };
+
+export type AblehnungsGrund =
+  | 'wand_zu_kurz'
+  | 'oeffnung_passt_nicht'
+  | 'wirtswand_fehlt'
+  | 'node_unbekannt'
+  | 'level_unbekannt'
+  | 'nicht_ganzzahlig'
+  | 'dach_pro_level_vorhanden'
+  | 'dach_unbekannt';
+
+/**
+ * Definierter Fehlerzustand: Command verletzt eine Regel — Szene bleibt unverändert.
+ * (Bewusst OHNE TS-Parameter-Property: node --experimental-strip-types trägt das nicht.)
+ */
+export class CommandAbgelehnt extends Error {
+  readonly grund: AblehnungsGrund;
+
+  constructor(message: string, grund: AblehnungsGrund) {
+    super(message);
+    this.name = 'CommandAbgelehnt';
+    this.grund = grund;
+  }
+}
