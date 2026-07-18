@@ -346,6 +346,7 @@ class UserRollController extends Controller
             'Finance' => 'Finanzen',
             'Super' => 'Super',
             'Projects' => 'Projekte',
+            'Hausplaner' => 'Gebäudeplaner (Hausplaner)',
         ]);
     }
 
