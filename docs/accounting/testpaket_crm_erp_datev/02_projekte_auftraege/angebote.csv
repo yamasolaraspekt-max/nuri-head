@@ -1,0 +1,4 @@
+angebotsnummer;kunde;objekt;projekt;netto;ust_betrag;brutto;steuersatz;status;datum
+AN-2026-0001;K-10001;OBJ-0001;P-2026-0001;10000.00;1900.00;11900.00;19;angenommen;2026-01-10
+AN-2026-0002;K-10002;OBJ-0002;P-2026-0002;20000.00;3800.00;23800.00;19;angenommen;2026-01-15
+AN-2026-0003;K-10003;OBJ-0003;;3000.00;570.00;3570.00;19;offen;2026-02-01

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SIMULIERTE XRechnung (EN16931-naehe, vereinfacht, fiktiv) -->
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
+  <ID>AR-2026-0001</ID>
+  <IssueDate>2026-02-25</IssueDate>
+  <DueDate>2026-03-27</DueDate>
+  <InvoiceTypeCode>380</InvoiceTypeCode>
+  <DocumentCurrencyCode>EUR</DocumentCurrencyCode>
+  <BuyerReference>P-2026-0001</BuyerReference>
+  <AccountingSupplierParty>
+    <Party><PartyName><Name>Solaraspekt GmbH</Name></PartyName>
+      <PartyTaxScheme><CompanyID>DE999999999</CompanyID></PartyTaxScheme></Party>
+  </AccountingSupplierParty>
+  <AccountingCustomerParty>
+    <Party><PartyName><Name>Mustermann Solar GmbH</Name></PartyName>
+      <PartyIdentification><ID>10001</ID></PartyIdentification>
+      <PartyTaxScheme><CompanyID>DE123456789</CompanyID></PartyTaxScheme>
+      <PostalAddress><StreetName>Sonnenallee 1</StreetName><PostalZone>10115</PostalZone><CityName>Berlin</CityName></PostalAddress></Party>
+  </AccountingCustomerParty>
+  <TaxTotal><TaxAmount currencyID="EUR">1900.00</TaxAmount>
+    <TaxSubtotal><TaxableAmount currencyID="EUR">10000.00</TaxableAmount>
+      <TaxAmount currencyID="EUR">1900.00</TaxAmount>
+      <TaxCategory><Percent>19</Percent></TaxCategory></TaxSubtotal></TaxTotal>
+  <LegalMonetaryTotal>
+    <LineExtensionAmount currencyID="EUR">10000.00</LineExtensionAmount>
+    <TaxExclusiveAmount currencyID="EUR">10000.00</TaxExclusiveAmount>
+    <TaxInclusiveAmount currencyID="EUR">11900.00</TaxInclusiveAmount>
+    <PayableAmount currencyID="EUR">11900.00</PayableAmount></LegalMonetaryTotal>
+  <InvoiceLine><ID>1</ID><InvoicedQuantity unitCode="C62">25</InvoicedQuantity>
+    <LineExtensionAmount currencyID="EUR">7500.00</LineExtensionAmount>
+    <Item><Name>PV-Modul 400W</Name></Item><Price><PriceAmount currencyID="EUR">300.00</PriceAmount></Price></InvoiceLine>
+  <InvoiceLine><ID>2</ID><InvoicedQuantity unitCode="C62">1</InvoicedQuantity>
+    <LineExtensionAmount currencyID="EUR">2500.00</LineExtensionAmount>
+    <Item><Name>Wechselrichter 10kW</Name></Item><Price><PriceAmount currencyID="EUR">2500.00</PriceAmount></Price></InvoiceLine>
+</Invoice>

@@ -1,0 +1,4 @@
+zeitpunkt;exportnummer;ziel;anzahl;ergebnis;fehlercode;wiederholung
+2026-03-01T08:00:00;EXP-2026-0001;DATEV-EXTF;3;erfolgreich;;0
+2026-04-01T08:00:00;EXP-2026-0002;DATEV-EXTF;6;teilfehler;E-MISSING-KOSTENSTELLE;1
+2026-04-01T08:05:00;EXP-2026-0002;DATEV-EXTF;6;erfolgreich;;2

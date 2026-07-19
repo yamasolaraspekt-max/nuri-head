@@ -1,0 +1,21 @@
+{
+  "format": "ZUGFeRD-aehnlich (simuliert, fiktiv)",
+  "profile": "EN16931",
+  "invoice": {
+    "id": "AR-2026-0001",
+    "issueDate": "2026-02-25",
+    "serviceDate": "2026-02-20",
+    "dueDate": "2026-03-27",
+    "currency": "EUR",
+    "seller": { "name": "Solaraspekt GmbH", "vatId": "DE999999999" },
+    "buyer": { "name": "Mustermann Solar GmbH", "debtorNumber": "10001", "vatId": "DE123456789" },
+    "project": "P-2026-0001",
+    "lines": [
+      { "pos": 1, "name": "PV-Modul 400W", "qty": 25, "unitPrice": 300.00, "net": 7500.00, "taxRate": 19 },
+      { "pos": 2, "name": "Wechselrichter 10kW", "qty": 1, "unitPrice": 2500.00, "net": 2500.00, "taxRate": 19 }
+    ],
+    "totals": { "net": 10000.00, "tax": 1900.00, "gross": 11900.00 },
+    "linkedPdf": "rechnung_ausgang_AR-2026-0001.pdf",
+    "bookingRef": "BST-2026-0001"
+  }
+}

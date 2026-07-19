@@ -1,0 +1,7 @@
+steuerschluessel;bezeichnung;satz_prozent;ust_konto;vst_konto;datev_bu_schluessel;typ
+UST19;Umsatzsteuer 19%;19;1776;;3;steuer_ausgang
+UST7;Umsatzsteuer 7%;7;1771;;2;steuer_ausgang
+VST19;Vorsteuer 19%;19;;1576;9;vorsteuer
+FREI;steuerfrei;0;;;0;steuerfrei
+IGL;innergem. Lieferung steuerfrei;0;;;0;ig_lieferung
+RC13B;Reverse-Charge 13b;0;1776;1576;;reverse_charge

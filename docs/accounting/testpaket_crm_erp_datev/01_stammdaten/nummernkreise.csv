@@ -1,0 +1,14 @@
+bereich;key_name;praefix;jahr;aktuelle_nummer;naechste_nummer;min_laenge;reset_periode;mandant;eindeutig_pflicht
+Kunde;customer;K-;2026;10004;10005;5;jahr;M-001;ja
+Debitor;debtor;;2026;10004;10005;5;nie;M-001;ja
+Lieferant;supplier;L-;2026;70003;70004;5;nie;M-001;ja
+Kreditor;creditor;;2026;70003;70004;5;nie;M-001;ja
+Angebot;offer;AN-;2026;3;4;4;jahr;M-001;ja
+Auftrag;order;AB-;2026;2;3;4;jahr;M-001;ja
+Projekt;project;P-;2026;2;3;4;jahr;M-001;ja
+Ausgangsrechnung;outgoing_invoice;AR-;2026;10;11;4;jahr;M-001;ja
+Eingangsrechnung;incoming_invoice;ER-;2026;3;4;4;jahr;M-001;ja
+Gutschrift;credit_note;GU-;2026;1;2;4;jahr;M-001;ja
+Storno;reversal;ST-;2026;1;2;4;jahr;M-001;ja
+DATEV-Export;datev_export;EXP-;2026;1;2;4;jahr;M-001;ja
+Buchungsstapel;booking_batch;BST-;2026;1;2;4;jahr;M-001;ja

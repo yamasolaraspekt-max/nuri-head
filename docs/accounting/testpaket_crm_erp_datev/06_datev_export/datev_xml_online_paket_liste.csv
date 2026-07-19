@@ -1,0 +1,5 @@
+paket;typ;datei;belegbezug;groesse_kb;hash_sha256;status
+PKT-2026-02;buchungsstapel;datev_buchungsstapel_test.csv;EXP-2026-0001;4;aa11bb22cc33;vorbereitet
+PKT-2026-02;belegbild;rechnung_ausgang_AR-2026-0001.pdf;AR-2026-0001;128;a1b2c3d4;vorbereitet
+PKT-2026-02;stammdaten_debitoren;datev_debitoren_test.csv;-;2;cc33dd44;vorbereitet
+PKT-2026-02;stammdaten_kreditoren;datev_kreditoren_test.csv;-;2;dd44ee55;vorbereitet

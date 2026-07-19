@@ -1,0 +1,4 @@
+konto;name;kurzbezeichnung;ustid;strasse;plz;ort;land;zahlungsbedingung;iban
+70001;PV-Grosshandel Nord GmbH;PVNord;DE345678901;Hafenstr 3;20457;Hamburg;DE;SK3-14-30;DE02500105170137075030
+70002;Waermepumpen Direkt GmbH;WPDirekt;DE456789012;Industriestr 9;70565;Stuttgart;DE;NET14;DE02120300000000202051
+70003;Elektro Komponenten KG;ElektroKG;;Ringstr 22;50667;Koeln;DE;NET14;DE89370400440532013000

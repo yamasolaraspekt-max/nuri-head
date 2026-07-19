@@ -1,0 +1,5 @@
+konto;name;kurzbezeichnung;ustid;strasse;plz;ort;land;zahlungsbedingung;email
+10001;Mustermann Solar GmbH;Mustermann;DE123456789;Sonnenallee 1;10115;Berlin;DE;SK2-10-30;
+10002;Sonnenhaus Bautraeger AG;Sonnenhaus;DE234567890;Lindenweg 12;20095;Hamburg;DE;NET30;
+10003;Energie Schmidt e.K.;Schmidt;;Bergstrasse 7;80331;Muenchen;DE;NET7;
+10004;Green Power B.V.;GreenPower;NL812345678B01;Dam 5;1012;Amsterdam;NL;NET14;

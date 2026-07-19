@@ -1,0 +1,21 @@
+pruefpunkt;erwartetes_ergebnis;tatsaechliches_ergebnis_laut_audit;bewertung;kritisch
+Rechnungsnummer vorhanden;Pflicht erzwungen;Feld vorhanden;teilweise_bestanden;nein
+Rechnungsnummer eindeutig (kein Duplikat);DB-/Pruefsperre;BEHOBEN: unique-Index (client, invoice_number) aktiv;bestanden;nein
+Leistungsdatum vorhanden;Pflicht;BEHOBEN: Pflichtpruefung bei Freigabe (assertReleasable);bestanden;nein
+Netto+Steuer=Brutto;Summenpruefung;BEHOBEN: Rechenpruefung bei Freigabe;bestanden;nein
+Debitor vorhanden bei Export;Pflicht/Sperre;BEHOBEN: Freigabe blockiert ohne Debitor (assertReleasable);bestanden;nein
+Beleg mit Rechnung verknuepft;Pflicht;document_id NULLABLE;teilweise_bestanden;ja
+Buchung mit Beleg verknuepft;Pflicht;journal_entries.document_id NULLABLE;teilweise_bestanden;ja
+Rechnung aus Projekt hat Projektbezug;Pflicht;BEHOBEN: Projektbezug-Pflicht bei Auftrag/Angebot (assertReleasable);bestanden;nein
+Festschreibung Buchung unveraenderbar;technischer Guard;GUARD vorhanden (JournalEntry/Line, 146 AO);bestanden;nein
+Festschreibung Rechnung unveraenderbar;technischer Guard;BEHOBEN: Guard auf freigegebene Rechnung (steuerrel. Felder);bestanden;nein
+Aenderungsprotokoll (alt/neu/user/zeit/grund);aktiv geschrieben;BEHOBEN: LogsAccountingChanges-Trait schreibt entity_changes (Rechnung/Debitor/Kreditor);bestanden;nein
+Eingangsrechnung Dublettenschutz;Pruefung creditor+RG-Nr;BEHOBEN: capture() prueft creditor+external_number, weist Dublette ab;bestanden;nein
+Debitoren-/Kreditorennummer eindeutig;unique;unique-Index vorhanden;bestanden;nein
+Zahlungsabgleich Auto+Freigabe;Match+manuelle Freigabe;Service vorhanden, Automatik/Freigabe ungeprueft;teilweise_bestanden;nein
+Offene Posten korrekt berechnet;Start vs erwartet stimmt;Modell vorhanden, Prozess ungeprueft;teilweise_bestanden;nein
+DATEV-Export erzeugbar+protokolliert;EXTF+Protokoll;EXTF-Infra vorhanden, Vollfluss ungeprueft;teilweise_bestanden;nein
+DATEV-Export nur festgeschrieben;Pflicht;check-datev vorhanden, Erzwingung ungeprueft;teilweise_bestanden;nein
+Verfahrensdokumentation vorhanden;Dokument;Testversion vorhanden (13_verfahrensdokumentation), fortzuschreiben;teilweise_bestanden;nein
+E-Rechnung (ZUGFeRD/XRechnung);Erzeugung+Validierung;NICHT vorhanden;nicht_bestanden;nein
+Rollen/Rechte je Aktion;Gating;acc.role-Gating vorhanden, Feingranularitaet ungeprueft;teilweise_bestanden;nein

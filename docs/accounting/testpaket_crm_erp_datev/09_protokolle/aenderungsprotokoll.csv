@@ -1,0 +1,6 @@
+zeitpunkt;benutzer;rolle;objekt_typ;objekt_id;feld;alt_wert;neu_wert;grund;aktion;ergebnis
+2026-02-25T10:00:00;c.berger;buchhaltung;ausgangsrechnung;AR-2026-0001;status;freigegeben;festgeschrieben;Monatsabschluss;festschreibung;ok
+2026-02-26T11:00:00;c.berger;buchhaltung;ausgangsrechnung;AR-2026-0001;netto;10000.00;9000.00;Korrekturwunsch Kunde;aenderung_nach_festschreibung;ABGELEHNT_GoBD_146_AO
+2026-03-13T09:00:00;c.berger;buchhaltung;ausgangsrechnung;AR-2026-0009;status;festgeschrieben;storniert;Kundenstorno;storno;ok_via_ST-2026-0001
+2026-02-20T14:00:00;t.krueger;vertrieb;kunde;K-10001;zahlungsziel_tage;30;14;Bonitaetsanpassung;stammdaten_aenderung;ok_protokolliert
+2026-03-09T06:00:01;system;system;ausgangsrechnung;AR-2026-0001;zahlstatus;offen;bezahlt;Zahlungseingang BB-0001;zahlungszuordnung;ok

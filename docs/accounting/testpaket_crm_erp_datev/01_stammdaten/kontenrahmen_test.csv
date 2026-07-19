@@ -1,0 +1,11 @@
+konto;bezeichnung;kontoart;steuersatz;normalsaldo
+1200;Bank;bestand;;soll
+1400;Forderungen aus L+L (Debitoren-Sammelkonto);bestand;;soll
+1600;Verbindlichkeiten aus L+L (Kreditoren-Sammelkonto);bestand;;haben
+1576;Abziehbare Vorsteuer 19%;bestand;19;soll
+1776;Umsatzsteuer 19%;bestand;19;haben
+8400;Erloese 19% USt;erfolg_erloes;19;haben
+8300;Erloese 7% USt;erfolg_erloes;7;haben
+8125;Steuerfreie innergem. Lieferung;erfolg_erloes;0;haben
+3400;Wareneingang/Material 19% VSt;erfolg_aufwand;19;soll
+4920;Telefon/Buerokosten;erfolg_aufwand;19;soll

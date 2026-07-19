@@ -1,0 +1,5 @@
+dateiname;belegtyp;verknuepfte_rechnung;hashwert_sha256;erstellt_am;archivstatus
+rechnung_ausgang_AR-2026-0001.pdf;ausgangsrechnung;AR-2026-0001;a1b2c3d4e5f60718293a4b5c6d7e8f901122334455667788;2026-02-25T10:05:00;archiviert
+eingangsrechnung_ER-2026-0001.pdf;eingangsrechnung;ER-2026-0001;f0e1d2c3b4a5968778695a4b3c2d1e0fa1b2c3d4e5f60718;2026-02-10T08:30:00;archiviert
+xrechnung_AR-2026-0001.xml;e_rechnung_xml;AR-2026-0001;112233445566778899aabbccddeeff00112233445566778899;2026-02-25T10:06:00;archiviert
+zugferd_metadaten_AR-2026-0001.json;e_rechnung_meta;AR-2026-0001;99887766554433221100ffeeddccbbaa998877665544332211;2026-02-25T10:06:30;archiviert

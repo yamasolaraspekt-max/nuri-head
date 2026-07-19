@@ -1,0 +1,13 @@
+rechnungsnummer;belegart;kunde;debitor;projekt;auftrag;rechnungsdatum;leistungsdatum;faelligkeit;netto;ust_betrag;brutto;steuersatz;erloeskonto;zahlungsbedingung;status;belegdatei;bezug_rechnung
+AR-2026-0001;ausgangsrechnung;K-10001;10001;P-2026-0001;AB-2026-0001;2026-02-25;2026-02-20;2026-03-27;10000.00;1900.00;11900.00;19;8400;SK2-10-30;festgeschrieben;rechnung_ausgang_AR-2026-0001.pdf;
+AR-2026-0002;ausgangsrechnung;K-10002;10002;P-2026-0002;AB-2026-0002;2026-03-06;2026-03-05;2026-04-05;5000.00;950.00;5950.00;19;8400;NET30;festgeschrieben;rechnung_ausgang_AR-2026-0002.pdf;
+AR-2026-0003;ausgangsrechnung;K-10003;10003;;;2026-03-08;2026-03-08;2026-03-15;1000.00;190.00;1190.00;19;8400;NET7;festgeschrieben;rechnung_ausgang_AR-2026-0003.pdf;
+AR-2026-0004;ausgangsrechnung;K-10001;10001;;;2026-03-10;2026-03-10;2026-04-09;2000.00;380.00;2380.00;19;8400;SK2-10-30;festgeschrieben;rechnung_ausgang_AR-2026-0004.pdf;
+AR-2026-0005;ausgangsrechnung;K-10002;10002;;;2026-03-11;2026-03-11;2026-04-10;1000.00;190.00;1190.00;19;8400;NET30;festgeschrieben;;
+AR-2026-0006;ausgangsrechnung;K-10002;10002;;;2026-03-11;2026-03-11;2026-04-10;2000.00;380.00;2380.00;19;8400;NET30;festgeschrieben;;
+AR-2026-0007;abschlagsrechnung;K-10002;10002;P-2026-0002;AB-2026-0002;2026-02-01;2026-01-31;2026-02-15;5000.00;950.00;5950.00;19;8400;NET14;festgeschrieben;;
+AR-2026-0008;schlussrechnung;K-10002;10002;P-2026-0002;AB-2026-0002;2026-06-30;2026-06-28;2026-07-14;15000.00;2850.00;17850.00;19;8400;NET14;festgeschrieben;;AR-2026-0007
+AR-2026-0009;ausgangsrechnung;K-10001;10001;;;2026-03-12;2026-03-12;2026-03-26;3000.00;570.00;3570.00;19;8400;NET14;storniert;;
+ST-2026-0001;storno;K-10001;10001;;;2026-03-13;2026-03-12;2026-03-13;-3000.00;-570.00;-3570.00;19;8400;NET14;festgeschrieben;;AR-2026-0009
+GU-2026-0001;gutschrift;K-10001;10001;;;2026-03-20;2026-03-20;2026-03-20;-500.00;-95.00;-595.00;19;8400;SOFORT;festgeschrieben;;AR-2026-0001
+AR-2026-0010;ausgangsrechnung;K-10004;10004;;;2026-03-22;2026-03-22;2026-04-05;8000.00;0.00;8000.00;0;8125;NET14;festgeschrieben;;

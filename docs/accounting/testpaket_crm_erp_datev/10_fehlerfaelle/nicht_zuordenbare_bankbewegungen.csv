@@ -1,0 +1,4 @@
+buchungsdatum;betrag;verwendungszweck;grund
+2026-03-28;500.00;Zahlung;keine Rechnungsnummer im Verwendungszweck
+2026-03-29;11900.00;Rechnung AR-2026-9999;Rechnung existiert nicht
+2026-03-30;100.00;AR-2026-0001;Betrag passt nicht zum offenen Posten (bereits bezahlt)

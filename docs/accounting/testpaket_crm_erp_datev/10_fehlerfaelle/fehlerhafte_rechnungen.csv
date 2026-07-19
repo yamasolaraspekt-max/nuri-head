@@ -1,0 +1,8 @@
+rechnungsnummer;fehlerart;beschreibung;erwartete_systemreaktion;kritisch
+AR-2026-9001;fehlender_steuersatz;Steuersatz leer;Ablehnung Pflichtfeld;ja
+AR-2026-9002;summe_falsch;Netto 1000 + USt 190 = 1200 statt 1190;Ablehnung Summenpruefung;ja
+AR-2026-9003;fehlende_debitorennummer;Debitor leer;Ablehnung, Export gesperrt;ja
+AR-2026-9004;fehlendes_leistungsdatum;Leistungsdatum leer;Ablehnung Pflichtfeld;ja
+AR-2026-0001;doppelte_rechnungsnummer;AR-2026-0001 erneut vergeben;Ablehnung Dublette (lt. Audit aktuell NICHT erkannt);ja
+AR-2026-9006;rechnung_ohne_beleg;Keine Belegdatei verknuepft;Warnung/Sperre vor Export;nein
+AR-2026-9007;rechnung_ohne_projekt;Aus Projekt entstanden, Projektbezug fehlt;Warnung Pflichtbezug;nein

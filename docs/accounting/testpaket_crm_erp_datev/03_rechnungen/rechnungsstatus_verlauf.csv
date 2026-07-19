@@ -1,0 +1,7 @@
+rechnungsnummer;von_status;nach_status;benutzer;rolle;zeitpunkt
+AR-2026-0001;entwurf;geprueft;c.berger;buchhaltung;2026-02-25T09:00:00
+AR-2026-0001;geprueft;freigegeben;y.nuri;geschaeftsfuehrung;2026-02-25T09:30:00
+AR-2026-0001;freigegeben;festgeschrieben;c.berger;buchhaltung;2026-02-25T10:00:00
+AR-2026-0001;festgeschrieben;uebertragen;c.berger;buchhaltung;2026-03-01T08:00:00
+AR-2026-0001;uebertragen;bezahlt;system;system;2026-03-09T06:00:00
+AR-2026-0009;festgeschrieben;storniert;c.berger;buchhaltung;2026-03-13T09:00:00

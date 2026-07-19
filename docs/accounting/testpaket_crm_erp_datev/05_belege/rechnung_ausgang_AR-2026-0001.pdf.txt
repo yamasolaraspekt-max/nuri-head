@@ -1,0 +1,29 @@
+=== SIMULIERTE PDF-RECHNUNG (Testbeleg, fiktiv) ===
+Rechnungssteller: Solaraspekt GmbH (Testmandant M-001), Musterstr. 1, 12345 Musterstadt
+USt-IdNr. Aussteller: DE999999999
+
+RECHNUNG
+Rechnungsnummer: AR-2026-0001
+Rechnungsdatum:  2026-02-25
+Leistungsdatum:  2026-02-20
+Faelligkeit:     2026-03-27 (2% Skonto bei Zahlung bis 2026-03-07)
+
+Rechnungsempfaenger (Rechnungsadresse):
+Mustermann Solar GmbH
+Sonnenallee 1, 10115 Berlin
+Debitorennummer: 10001
+USt-IdNr.: DE123456789
+
+Leistungsadresse: Objekt OBJ-0001, Sonnenallee 1, 10115 Berlin
+Projekt: P-2026-0001 (Photovoltaik)
+
+Pos  Artikel                 Menge  Einzelpreis  Netto
+1    PV-Modul 400W           25     300.00       7500.00
+2    Wechselrichter 10kW     1      2500.00      2500.00
+
+Nettobetrag:        10000.00 EUR
+Umsatzsteuer 19%:    1900.00 EUR
+Bruttobetrag:       11900.00 EUR
+
+Zahlbar auf Konto Solaraspekt GmbH, IBAN DE00000000000000000000.
+Status: festgeschrieben | Belegverknuepfung: ja | Buchung: BST-2026-0001

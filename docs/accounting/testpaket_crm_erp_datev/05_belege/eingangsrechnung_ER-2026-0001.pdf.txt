@@ -1,0 +1,17 @@
+=== SIMULIERTE EINGANGSRECHNUNG (Testbeleg, fiktiv) ===
+Lieferant: PV-Grosshandel Nord GmbH, Hafenstr 3, 20457 Hamburg
+USt-IdNr.: DE345678901
+Externe Rechnungsnummer: RG-2026-5567
+Rechnungsdatum: 2026-02-08 | Leistungsdatum: 2026-02-05 | Eingang: 2026-02-10
+Faelligkeit: 2026-03-10 (3% Skonto bis 2026-02-22)
+
+Empfaenger: Solaraspekt GmbH (M-001) | Kreditor: 70001
+Projektzuordnung: P-2026-0001 | Aufwandskonto: 3400 | Kostenstelle: KST-100
+
+Pos  Beschreibung        Menge  Einzelpreis  Netto
+1    PV-Module Charge A  25     160.00       4000.00
+
+Netto:  4000.00 EUR
+VSt19:   760.00 EUR
+Brutto: 4760.00 EUR
+Freigabe: freigegeben (sachlich + rechnerisch geprueft)

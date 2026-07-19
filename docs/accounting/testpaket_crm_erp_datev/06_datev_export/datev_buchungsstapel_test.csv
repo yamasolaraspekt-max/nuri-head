@@ -1,0 +1,7 @@
+umsatz;soll_haben;konto;gegenkonto;bu_schluessel;belegdatum;belegfeld1;belegfeld2;buchungstext;kostenstelle;kostentraeger
+11900,00;S;10001;8400;3;2026-02-25;AR-2026-0001;P-2026-0001;Rechnung PV Mustermann;KST-100;KTR-PV-01
+5950,00;S;10002;8400;3;2026-03-06;AR-2026-0002;P-2026-0002;Abschlag Waermepumpe;KST-200;KTR-WP-02
+4760,00;S;3400;70001;9;2026-02-08;ER-2026-0001;RG-2026-5567;Wareneingang PV-Grosshandel;KST-100;KTR-PV-01
+3570,00;H;10001;8400;3;2026-03-13;ST-2026-0001;AR-2026-0009;Storno Rechnung;;
+595,00;H;10001;8400;3;2026-03-20;GU-2026-0001;AR-2026-0001;Gutschrift Mustermann;;
+8000,00;S;10004;8125;0;2026-03-22;AR-2026-0010;;Innergem. Lieferung steuerfrei;KST-100;

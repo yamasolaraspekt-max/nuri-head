@@ -1,0 +1,7 @@
+code;bezeichnung;netto_tage;skonto_prozent;skonto_tage
+SOFORT;sofort faellig;0;0;0
+NET7;7 Tage netto;7;0;0
+NET14;14 Tage netto;14;0;0
+NET30;30 Tage netto;30;0;0
+SK2-10-30;2% Skonto 10 Tage, 30 netto;30;2;10
+SK3-14-30;3% Skonto 14 Tage, 30 netto;30;3;14

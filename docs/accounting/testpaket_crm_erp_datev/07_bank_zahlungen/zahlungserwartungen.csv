@@ -1,0 +1,8 @@
+bankreferenz;erwartete_rechnung;erwarteter_betrag;zuordnungsart;erwartetes_ergebnis
+BB-0001;AR-2026-0001;11900.00;automatisch;vollzahlung
+BB-0002;AR-2026-0002;5950.00;automatisch;teilzahlung_3000.00
+BB-0003;AR-2026-0003;1190.00;automatisch;ueberzahlung_60.00
+BB-0004;AR-2026-0004;2380.00;automatisch;skonto_47.60
+BB-0005;AR-2026-0005+AR-2026-0006;3570.00;automatisch;sammelzahlung
+BB-0006;;0.00;manuell;nicht_zuordenbar
+BB-0007;ER-2026-0001;4760.00;automatisch;ausgang_vollzahlung

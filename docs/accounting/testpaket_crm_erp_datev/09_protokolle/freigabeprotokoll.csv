@@ -1,0 +1,5 @@
+zeitpunkt;benutzer;rolle;objekt_typ;objekt_id;pruefart;ergebnis
+2026-02-25T09:00:00;c.berger;buchhaltung;ausgangsrechnung;AR-2026-0001;rechnerische_pruefung;bestanden
+2026-02-25T09:30:00;y.nuri;geschaeftsfuehrung;ausgangsrechnung;AR-2026-0001;freigabe;freigegeben
+2026-02-10T09:00:00;c.berger;buchhaltung;eingangsrechnung;ER-2026-0001;sachliche_pruefung;bestanden
+2026-02-12T09:00:00;c.berger;buchhaltung;eingangsrechnung;ER-2026-0003;dublettenpruefung;abgelehnt_dublette

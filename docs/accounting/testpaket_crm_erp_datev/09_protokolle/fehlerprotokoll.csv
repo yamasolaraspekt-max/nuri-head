@@ -1,0 +1,5 @@
+zeitpunkt;quelle;objekt;fehlertyp;feld;meldung;schweregrad;status
+2026-03-08T10:00:00;rechnungspruefung;AR-2026-9002;summe_falsch;brutto;Netto+Steuer ungleich Brutto;kritisch;offen
+2026-03-08T10:01:00;rechnungspruefung;AR-2026-9003;fehlende_debitorennummer;debitor;Debitor fehlt, Export gesperrt;kritisch;offen
+2026-03-28T12:00:00;zahlungsabgleich;BB-0006;nicht_zuordenbar;verwendungszweck;Keine Rechnungsnummer erkennbar;hinweis;manuell_klaeren
+2026-02-12T09:00:00;eingangsrechnung;ER-2026-0003;dublette;externe_rechnungsnummer;Gleiche RG-Nr + Kreditor wie ER-2026-0001;hoch;blockiert

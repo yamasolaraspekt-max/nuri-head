@@ -1,0 +1,16 @@
+testfall_id;fall;bereich;eingabedatei;ausloeser;erwartete_systemreaktion;abnahmekriterium
+TF-01;Standardfall Vollzahlung;F;bankbewegungen.csv (BB-0001);Zahlungsabgleich;AR-2026-0001 wird automatisch zugeordnet, OP auf 0, Status bezahlt, Protokoll;OP-0001 offen=0.00 und Protokolleintrag vorhanden
+TF-02;Teilzahlung;F;bankbewegungen.csv (BB-0002);Zahlungsabgleich;Teilzahlung 3000.00, OP bleibt 2950.00, Status teilbezahlt;OP-0002 offen=2950.00
+TF-03;Ueberzahlung;F;bankbewegungen.csv (BB-0003);Zahlungsabgleich;Ueberzahlung 60.00 markiert, Klaerfall;OP-0003 offen=0.00, Ueberzahlung=60.00 ausgewiesen
+TF-04;Skonto;F;bankbewegungen.csv (BB-0004);Zahlungsabgleich;Skonto 47.60 als zulaessige Differenz erkannt;OP-0004 bezahlt, Skonto protokolliert
+TF-05;Sammelzahlung;F;bankbewegungen.csv (BB-0005);Zahlungsabgleich;Eine Zahlung deckt AR-0005 + AR-0006;beide OP bezahlt, beide Zuordnungen protokolliert
+TF-06;Nicht zuordenbar;F+H;bankbewegungen.csv (BB-0006);Zahlungsabgleich;Markierung nicht_zuordenbar, manuelle Klaerung;Fehlerprotokoll-Eintrag, kein falscher OP
+TF-07;Abschlag+Schluss;C;ausgangsrechnungen.csv (AR-0007/AR-0008);Schlussrechnung;Schluss verrechnet Abschlag, Restforderung korrekt;Schlussrechnung referenziert AR-2026-0007
+TF-08;Storno;C+G;ausgangsrechnungen.csv (AR-0009/ST-0001);Storno;Original AR-0009 unveraendert, Storno ST-0001 als Gegenbuchung;keine stille Aenderung an AR-2026-0009
+TF-09;Gutschrift;C+F;ausgangsrechnungen.csv (GU-0001);Gutschrift;OP korrekt angepasst, Gutschrift verknuepft mit AR-0001;Gutschrift protokolliert + verknuepft
+TF-10;Eingangsrechnung;D;eingangsrechnungen.csv (ER-0001);Freigabe+Zahlung;ER geprueft, freigegeben, Projektzuordnung, bezahlt;OP-0007 bezahlt, Freigabeprotokoll vorhanden
+TF-11;Fehlerhafte Rechnung;H;fehlerhafte_rechnungen.csv;Rechnungspruefung;Ablehnung mit konkreter Feldmeldung;jede fehlerhafte Rechnung wird abgelehnt+benannt
+TF-12;Dublette Kunde;A+H;dubletten_kunden.csv;Stammdatenanlage;Dublettenverdacht erkannt+gemeldet;Dublettenwarnung erscheint
+TF-13;Aenderung nach Festschreibung;G;aenderungsprotokoll.csv;Aenderungsversuch;Buchung blockiert; nur Korrektur/Storno/Gutschrift;Aenderung abgelehnt ODER protokolliert
+TF-14;DATEV-Export;E+G;datev_buchungsstapel_test.csv;Exportlauf;nur festgeschriebene Belege, Export protokolliert;datev_export_protokoll Eintrag mit Pruefsumme
+TF-15;Monatsabschluss;B+G;alle;Monatsabschluss-Testlauf;Belege/Zahlungen/OP/Fehler des Monats geprueft;Abschlussbericht erzeugbar

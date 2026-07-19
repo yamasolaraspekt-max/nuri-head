@@ -1,0 +1,4 @@
+lieferantennummer;kreditornummer;name;strasse;plz;ort;land;ustid;zahlungsbedingung;zahlungsziel_tage;standard_aufwandskonto;kostenstelle;iban;status
+L-70001;70001;PV-Grosshandel Nord GmbH;Hafenstr 3;20457;Hamburg;DE;DE345678901;SK3-14-30;30;3400;KST-200;DE02500105170137075030;aktiv
+L-70002;70002;Waermepumpen Direkt GmbH;Industriestr 9;70565;Stuttgart;DE;DE456789012;NET14;14;3400;KST-300;DE02120300000000202051;aktiv
+L-70003;70003;Elektro Komponenten KG;Ringstr 22;50667;Koeln;DE;;NET14;21;3400;KST-100;DE89370400440532013000;aktiv

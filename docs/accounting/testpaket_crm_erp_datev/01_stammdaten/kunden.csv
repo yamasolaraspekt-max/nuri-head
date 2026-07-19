@@ -1,0 +1,5 @@
+kundennummer;debitornummer;name;strasse;plz;ort;land;ustid;zahlungsbedingung;zahlungsziel_tage;standard_erloeskonto;kostenstelle;standort;status
+K-10001;10001;Mustermann Solar GmbH;Sonnenallee 1;10115;Berlin;DE;DE123456789;SK2-10-30;30;8400;KST-100;BER-01;aktiv
+K-10002;10002;Sonnenhaus Bautraeger AG;Lindenweg 12;20095;Hamburg;DE;DE234567890;NET30;30;8400;KST-200;HAM-02;aktiv
+K-10003;10003;Energie Schmidt e.K.;Bergstrasse 7;80331;Muenchen;DE;;NET7;7;8400;KST-300;MUC-03;aktiv
+K-10004;10004;Green Power B.V.;Dam 5;1012;Amsterdam;NL;NL812345678B01;NET14;14;8125;KST-100;BER-01;aktiv

@@ -1,0 +1,8 @@
+rechnungsnummer;position;artikel;menge;einheit;einzelpreis;netto;steuersatz;erloeskonto;projekt;kostenstelle
+AR-2026-0001;1;PV-Modul 400W;25;Stk;300.00;7500.00;19;8400;P-2026-0001;KST-100
+AR-2026-0001;2;Wechselrichter 10kW;1;Stk;2500.00;2500.00;19;8400;P-2026-0001;KST-100
+AR-2026-0002;1;Waermepumpe 12kW Abschlag;1;Pauschal;5000.00;5000.00;19;8400;P-2026-0002;KST-200
+AR-2026-0003;1;Wartung Jahrespauschale;1;Pauschal;1000.00;1000.00;19;8400;;KST-300
+AR-2026-0007;1;Abschlag Waermepumpe 25%;1;Pauschal;5000.00;5000.00;19;8400;P-2026-0002;KST-200
+AR-2026-0008;1;Schlussrechnung Projekt abzgl. Abschlag;1;Pauschal;15000.00;15000.00;19;8400;P-2026-0002;KST-200
+AR-2026-0010;1;PV-Anlage innergem. Lieferung;1;Pauschal;8000.00;8000.00;0;8125;;KST-100

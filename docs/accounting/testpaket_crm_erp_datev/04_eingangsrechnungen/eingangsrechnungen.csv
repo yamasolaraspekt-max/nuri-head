@@ -1,0 +1,4 @@
+er_nummer;lieferant;kreditor;externe_rechnungsnummer;eingangsdatum;rechnungsdatum;leistungsdatum;faelligkeit;netto;ust_betrag;brutto;steuersatz;aufwandskonto;projekt;kostenstelle;freigabestatus;zahlstatus;belegdatei
+ER-2026-0001;L-70001;70001;RG-2026-5567;2026-02-10;2026-02-08;2026-02-05;2026-03-10;4000.00;760.00;4760.00;19;3400;P-2026-0001;KST-100;freigegeben;offen;eingangsrechnung_ER-2026-0001.pdf
+ER-2026-0002;L-70002;70002;2026-0099;2026-03-01;2026-02-28;2026-02-25;2026-03-14;6000.00;1140.00;7140.00;19;3400;P-2026-0002;KST-200;in_pruefung;offen;
+ER-2026-0003;L-70001;70001;RG-2026-5567;2026-02-12;2026-02-08;2026-02-05;2026-03-10;4000.00;760.00;4760.00;19;3400;P-2026-0001;KST-100;abgelehnt_dublette;gesperrt;

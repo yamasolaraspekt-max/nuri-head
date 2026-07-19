@@ -1,0 +1,3 @@
+er_nummer;position;beschreibung;menge;einheit;einzelpreis;netto;steuersatz;aufwandskonto;projekt
+ER-2026-0001;1;PV-Module Charge A;25;Stk;160.00;4000.00;19;3400;P-2026-0001
+ER-2026-0002;1;Waermepumpe Liefergeraet;1;Stk;6000.00;6000.00;19;3400;P-2026-0002

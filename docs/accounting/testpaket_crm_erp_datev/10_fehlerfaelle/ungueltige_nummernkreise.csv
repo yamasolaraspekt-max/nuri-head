@@ -1,0 +1,5 @@
+nummer;bereich;fehler
+AR-2026-0001;Ausgangsrechnung;doppelt vergeben
+AR-26-1;Ausgangsrechnung;falsches Format (Jahr/Stellen)
+0;Debitor;ungueltige Debitorennummer
+70001;Debitor;Kreditornummer im Debitorenkreis verwendet
