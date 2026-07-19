@@ -286,7 +286,7 @@ export function HausplanerApp(): React.ReactElement {
     color: aktiv ? 'var(--sa-accent-hover, #4d7c0f)' : FARBEN.gedaempft,
   });
 
-  const breite = (typeof window !== 'undefined' ? window.innerWidth : 1200) - 56; // minus linke Werkzeugleiste
+  const breite = (typeof window !== 'undefined' ? window.innerWidth : 1200) - 56 - 268; // minus Werkzeugleiste + Panel
   const stageBreite = modus === 'split' ? Math.floor(breite / 2) : breite; // P1c: Split teilt die Fläche
   const hoehe = typeof window !== 'undefined' ? window.innerHeight - 96 : 700;
 
@@ -500,39 +500,43 @@ export function HausplanerApp(): React.ReactElement {
         </Stage>
         </div>
         <DreiDBereich sichtbar={modus !== '2d'} />
-      </div>
-
-      {/* D-c: Parameter-Panel — nur bei genau einem ausgewählten Dach. Änderungen = UPDATE_ROOF-Commands
-          (Undo/Redo/Speichern gelten automatisch). Inputs lösen keine Werkzeug-Tasten aus (Fokus-Guard). */}
-      {selectedRoof && (
-        <div style={{ position: 'fixed', right: 16, top: 112, width: 234, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, boxShadow: '0 6px 20px rgba(0,0,0,0.10)', padding: 14, zIndex: 10, fontSize: 12.5, color: FARBEN.text }}>
-          <div style={{ fontWeight: 700, marginBottom: 10 }}>Dach — Parameter</div>
-          <label style={panelLabel}>Dachform
-            <select value={selectedRoof.roofType} onChange={(e) => aktualisiereDach({ roofType: e.target.value as RoofNode['roofType'] })} style={panelInput}>
-              <option value="sattel">Satteldach</option>
-              <option value="walm">Walmdach</option>
-              <option value="pult">Pultdach</option>
-              <option value="flach">Flachdach</option>
-            </select>
-          </label>
-          <label style={panelLabel}>Neigung (°)
-            <input type="number" min={0} max={89} value={selectedRoof.neigungGrad} onChange={(e) => aktualisiereDach({ neigungGrad: Math.max(0, Math.min(89, Number(e.target.value))) })} style={panelInput} />
-          </label>
-          <label style={panelLabel}>First-Richtung (° Azimut, Nord=0)
-            <input type="number" value={selectedRoof.firstAzimutGrad} onChange={(e) => aktualisiereDach({ firstAzimutGrad: Number(e.target.value) })} style={panelInput} />
-          </label>
-          <label style={panelLabel}>Überstand (mm)
-            <input type="number" min={0} value={selectedRoof.ueberstandMm} onChange={(e) => aktualisiereDach({ ueberstandMm: Math.max(0, Math.round(Number(e.target.value))) })} style={panelInput} />
-          </label>
-          <button
-            type="button"
-            style={{ ...knopf(false), width: '100%', marginTop: 4 }}
-            onClick={() => { store.getState().executeCommand({ type: 'REMOVE_ROOF', roofId: selectedRoof.id }); store.getState().selectNodes([]); }}
-          >
-            Dach entfernen
-          </button>
+        {/* Rechtes Eigenschaften-Panel (immer sichtbar; Dach-Parameter oder Kontext) */}
+        <div style={{ width: 268, flex: '0 0 auto', background: '#fff', borderLeft: '1px solid #e5e7eb', padding: 14, overflowY: 'auto', fontSize: 12.5, color: FARBEN.text }}>
+          <div style={{ fontWeight: 800, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '.04em', color: FARBEN.gedaempft, marginBottom: 12 }}>Eigenschaften</div>
+          {selectedRoof ? (
+            <>
+              <div style={{ fontWeight: 700, marginBottom: 10 }}>Dach</div>
+              <label style={panelLabel}>Dachform
+                <select value={selectedRoof.roofType} onChange={(e) => aktualisiereDach({ roofType: e.target.value as RoofNode['roofType'] })} style={panelInput}>
+                  <option value="sattel">Satteldach</option>
+                  <option value="walm">Walmdach</option>
+                  <option value="pult">Pultdach</option>
+                  <option value="flach">Flachdach</option>
+                </select>
+              </label>
+              <label style={panelLabel}>Neigung (°)
+                <input type="number" min={0} max={89} value={selectedRoof.neigungGrad} onChange={(e) => aktualisiereDach({ neigungGrad: Math.max(0, Math.min(89, Number(e.target.value))) })} style={panelInput} />
+              </label>
+              <label style={panelLabel}>First-Richtung (° Azimut, Nord=0)
+                <input type="number" value={selectedRoof.firstAzimutGrad} onChange={(e) => aktualisiereDach({ firstAzimutGrad: Number(e.target.value) })} style={panelInput} />
+              </label>
+              <label style={panelLabel}>Überstand (mm)
+                <input type="number" min={0} value={selectedRoof.ueberstandMm} onChange={(e) => aktualisiereDach({ ueberstandMm: Math.max(0, Math.round(Number(e.target.value))) })} style={panelInput} />
+              </label>
+              <button type="button" style={{ ...knopf(false), width: '100%', marginTop: 4 }} onClick={() => { store.getState().executeCommand({ type: 'REMOVE_ROOF', roofId: selectedRoof.id }); store.getState().selectNodes([]); }}>Dach entfernen</button>
+            </>
+          ) : (
+            <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>
+              <div style={{ fontSize: 12 }}>Werkzeug: <strong style={{ color: FARBEN.text }}>{werkzeug}</strong></div>
+              <div style={{ fontSize: 12 }}>Geschoss: <strong style={{ color: FARBEN.text }}>{level.name}</strong></div>
+              <div style={{ fontSize: 12 }}>Räume: {raeume.length} · {(raeume.reduce((acc, r) => acc + r.flaecheMm2, 0) / 1_000_000).toFixed(2)} m²</div>
+              <div style={{ marginTop: 12, padding: 10, background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 11.5 }}>
+                Ein Dach auswählen zeigt hier seine Parameter. Ablauf: Wand ziehen (W) → Dach (D) über den Umriss → 3D.
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Statusleiste */}
       <div style={{ display: 'flex', gap: 16, alignItems: 'center', padding: '7px 14px', background: '#fff', borderTop: '1px solid #e5e7eb', fontSize: 12, color: FARBEN.gedaempft }}>
