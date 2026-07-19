@@ -327,7 +327,7 @@ export function HausplanerApp(): React.ReactElement {
         <button
           type="button"
           onClick={() => void store.getState().save()}
-          style={{ padding: '7px 16px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none', cursor: 'pointer', background: '#93c21c', color: '#fff' }}
+          style={{ padding: '7px 16px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none', cursor: 'pointer', background: 'var(--sa-accent, #93c21c)', color: 'var(--sa-accent-ink, #fff)' }}
         >
           Speichern (Strg+S)
         </button>

@@ -27,10 +27,10 @@ import { platziereWandQuader, bodenPunkteThree } from './platzierung';
 import { dachMeshWelt } from './dachMesh';
 import { DachGeometrieUngueltig } from '../../geometry/dachGeometrie';
 
-const FARBE_WAND = 0x9ca3af;      // neutrales Grau
-const FARBE_BODEN = 0xe5e7eb;     // hell
-const FARBE_DACH = 0xb08968;      // gedämpftes Terrakotta/Braun (neutral, keine Statusfarbe)
-const FARBE_AUSWAHL = 0x93c21c;   // Marken-Grün (einzige Akzentfarbe)
+const FARBE_WAND = 0xd9dee5;      // heller Putz — Form über Schatten + Kanten
+const FARBE_BODEN = 0xe4e7eb;     // heller Boden (CI)
+const FARBE_DACH = 0xc0895f;      // Terrakotta/Braun (neutral, keine Statusfarbe)
+const FARBE_AUSWAHL = 0xa3e635;   // Marken-/Akzent-Grün (einzige Akzentfarbe)
 const FARBE_GEKLEMMT = 0xe8b93c;  // Amber — Kante 2 sichtbar markiert
 
 export class HausplanerDreiDSzene implements RendererAdapter {
@@ -56,10 +56,15 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(container.clientWidth || 1, container.clientHeight || 1);
+    this.renderer.shadowMap.enabled = true;                   // Pro-CAD: echte Schlagschatten
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;  // filmisches Tone-Mapping (Kontrast/Farbe)
+    this.renderer.toneMappingExposure = 1.05;
     container.appendChild(this.renderer.domElement);
 
     this.szene = new THREE.Scene();
-    this.szene.background = new THREE.Color(0xf3f4f6);
+    this.szene.background = new THREE.Color(0xeef1f5);        // helles CI-Studio
+    this.szene.fog = new THREE.Fog(0xeef1f5, 70, 170);       // dezente Tiefenstaffelung
 
     this.kamera = new THREE.PerspectiveCamera(
       50,
@@ -72,12 +77,37 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     this.steuerung = new OrbitControls(this.kamera, this.renderer.domElement);
     this.steuerung.enableDamping = true;
 
-    // Ein Hemisphären- + ein Richtungslicht (Spec), neutraler Boden-Grid.
-    this.szene.add(new THREE.HemisphereLight(0xffffff, 0x9ca3af, 1.0));
-    const richtungslicht = new THREE.DirectionalLight(0xffffff, 1.4);
-    richtungslicht.position.set(8, 14, 6);
-    this.szene.add(richtungslicht);
-    this.szene.add(new THREE.GridHelper(40, 40, 0xd1d5db, 0xe5e7eb));
+    // Pro-CAD-Beleuchtung: kühles Himmels-/Bodenlicht + schattenwerfendes Hauptlicht + Fülllicht.
+    this.szene.add(new THREE.HemisphereLight(0xffffff, 0xc9ced5, 0.9));
+    const hauptlicht = new THREE.DirectionalLight(0xffffff, 2.0);
+    hauptlicht.position.set(16, 24, 12);
+    hauptlicht.castShadow = true;
+    hauptlicht.shadow.mapSize.set(2048, 2048);
+    hauptlicht.shadow.camera.near = 1;
+    hauptlicht.shadow.camera.far = 90;
+    hauptlicht.shadow.camera.left = -35;
+    hauptlicht.shadow.camera.right = 35;
+    hauptlicht.shadow.camera.top = 35;
+    hauptlicht.shadow.camera.bottom = -35;
+    hauptlicht.shadow.bias = -0.0004;
+    this.szene.add(hauptlicht);
+    const fuelllicht = new THREE.DirectionalLight(0xffffff, 0.8);
+    fuelllicht.position.set(-14, 10, -12);
+    this.szene.add(fuelllicht);
+
+    // Dunkler Boden (nimmt Schatten auf) + feines technisches Raster.
+    const bodenFlaeche = new THREE.Mesh(
+      new THREE.PlaneGeometry(240, 240),
+      new THREE.MeshStandardMaterial({ color: 0xe6e9ee, roughness: 1, metalness: 0 }),
+    );
+    bodenFlaeche.rotation.x = -Math.PI / 2;
+    bodenFlaeche.position.y = -0.002;
+    bodenFlaeche.receiveShadow = true;
+    this.szene.add(bodenFlaeche);
+    const raster = new THREE.GridHelper(80, 80, 0xcfd6de, 0xe2e6ea);
+    (raster.material as THREE.Material).transparent = true;
+    (raster.material as THREE.Material).opacity = 0.5;
+    this.szene.add(raster);
 
     this.inhalt = new THREE.Group();
     this.szene.add(this.inhalt);
@@ -162,10 +192,14 @@ export class HausplanerDreiDSzene implements RendererAdapter {
   private leereInhalt(): void {
     for (const kind of [...this.inhalt.children]) {
       this.inhalt.remove(kind);
-      if (kind instanceof THREE.Mesh) {
-        kind.geometry.dispose();
-        (Array.isArray(kind.material) ? kind.material : [kind.material]).forEach((m) => m.dispose());
-      }
+      kind.traverse((obj) => {
+        if ((obj as THREE.Mesh).geometry) {
+          const mesh = obj as THREE.Mesh;
+          mesh.geometry.dispose();
+          const mat = mesh.material;
+          (Array.isArray(mat) ? mat : [mat]).forEach((m) => m.dispose());
+        }
+      });
     }
   }
 
@@ -198,11 +232,18 @@ export class HausplanerDreiDSzene implements RendererAdapter {
           : p.geklemmt ? FARBE_GEKLEMMT : FARBE_WAND;
         const mesh = new THREE.Mesh(
           new THREE.BoxGeometry(p.masse.x, p.masse.y, p.masse.z),
-          new THREE.MeshStandardMaterial({ color: farbe }),
+          new THREE.MeshStandardMaterial({ color: farbe, roughness: 0.72, metalness: 0.02 }),
         );
         mesh.position.set(p.zentrum.x, p.zentrum.y, p.zentrum.z);
         mesh.rotation.y = p.rotationY;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
         mesh.userData.nodeId = wand.id;
+        const kanten = new THREE.LineSegments(
+          new THREE.EdgesGeometry(mesh.geometry),
+          new THREE.LineBasicMaterial({ color: 0x64748b, transparent: true, opacity: 0.32 }),
+        );
+        mesh.add(kanten);
         this.inhalt.add(mesh);
       }
     }
@@ -224,6 +265,7 @@ export class HausplanerDreiDSzene implements RendererAdapter {
       );
       mesh.rotation.x = -Math.PI / 2;              // Shape-y ⇒ −z (Herleitung: platzierung.ts)
       mesh.position.y = boden.y;
+      mesh.receiveShadow = true;
       mesh.userData.nodeId = raum.id;
       this.inhalt.add(mesh);
     }
@@ -257,9 +299,13 @@ export class HausplanerDreiDSzene implements RendererAdapter {
         geometrie,
         new THREE.MeshStandardMaterial({
           color: this.ausgewaehlt.has(dach.id) ? FARBE_AUSWAHL : FARBE_DACH,
+          roughness: 0.82,
+          metalness: 0.0,
           side: THREE.DoubleSide,
         }),
       );
+      dachMesh.castShadow = true;
+      dachMesh.receiveShadow = true;
       dachMesh.userData.nodeId = dach.id;
       this.inhalt.add(dachMesh);
     }

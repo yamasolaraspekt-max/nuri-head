@@ -41,10 +41,9 @@
         @if ($objekt->lead_id)
             <a class="gk-btn-soft" href="{{ route('new.lead.profile', $objekt->lead_id) }}">Kundenakte öffnen (pflegen)</a>
         @endif
-        {{-- Sichtbarkeit spiegelt die Route-Sperre exakt: hasPermission('Hausplaner') == permission:hausplaner.view (Super-Admin/is_admin passiert beides). --}}
-        @if (auth()->check() && auth()->user()->hasPermission('Hausplaner'))
-            <a class="gk-btn-soft" href="{{ route('hausplaner.objekt.seite', $objekt->id) }}">Hausplaner öffnen</a>
-        @endif
+        {{-- Hausplaner-Zugang bewusst NICHT an der Objekt-Akte (Yama 2026-07): Einstieg ueber
+             Tools-Navi "Planung & 3D -> Hausplaner" (Studio). Persistenter Objekt-Planer per Route
+             hausplaner.objekt.seite (rechte-gated); Tools-Einstieg dorthin (Gebaeude-Auswahl) folgt. --}}
     </x-slot:actions>
 </x-page-head>
 

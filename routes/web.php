@@ -4974,6 +4974,13 @@ Route::middleware(['auth'])->get('/admin/hausplaner/dachplaner', function () {
     return view('admin.hausplaner.dachplaner');
 })->name('hausplaner.dachplaner');
 
+// Hausplaner-Studio (2026-07-18): STANDALONE-Testflaeche des neuen Hausplaner-Bundles
+// (hausplaner/hausplaner.js, mit Dach). Leere Scratch-Szene, KEINE Persistenz. Navi-sichtbar,
+// nur auth. Der persistente Objekt-Planer bleibt rechte-gated (permission:Hausplaner).
+Route::middleware(['auth'])->get('/admin/hausplaner/studio', function () {
+    return view('admin.hausplaner.studio');
+})->name('hausplaner.studio');
+
 // Hausplaner-Transplantation (T-b): 2D/3D-Planer am OBJEKT (alternative_id). WEB-Routen (Session+CSRF),
 // permission:Hausplaner,read/manage; {objekt} = LeadAlternativeAdd (404 bei unbekanntem Objekt).
 // Landung 'in Abnahme' bis P1-Browser-Sichtproben gruen. Bestehende Dach-Insel oben unangetastet.
