@@ -98,7 +98,7 @@ class KontenrahmenSeeder extends Seeder
             ['name' => 'Demo-Mandant'],
             ['legal_name' => 'Solar Aspekt Nord GmbH', 'default_chart_of_account_id' => $charts['SKR03'],
                 'default_currency' => 'EUR', 'fiscal_year_start_month' => 1, 'is_active' => true,
-                'is_datev_enabled' => false, 'updated_at' => $now, 'created_at' => $now],
+                'is_datev_enabled' => false, 'imported_from' => self::MARKER, 'updated_at' => $now, 'created_at' => $now],
         );
         $clientId = DB::table('accounting_clients')->where('name', 'Demo-Mandant')->value('id');
 
