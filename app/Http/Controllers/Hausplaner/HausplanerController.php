@@ -36,6 +36,21 @@ class HausplanerController extends Controller
         ]);
     }
 
+    /** Tools-Einstieg: Gebaeude-Auswahl -> persistenter Objekt-Planer (hausplaner.objekt.seite). */
+    public function index(Request $request)
+    {
+        $q = trim((string) $request->get('q', ''));
+
+        $objekte = LeadAlternativeAdd::query()
+            ->with('lead:id,firma,name,lastname,customer_no')
+            ->gebaeudeSuche($q)
+            ->orderByDesc('id')
+            ->paginate(25)
+            ->appends($request->query());
+
+        return view('admin.hausplaner.index', ['objekte' => $objekte, 'q' => $q]);
+    }
+
     public function speichern(Request $request, LeadAlternativeAdd $objekt): JsonResponse
     {
         $daten = $request->validate([

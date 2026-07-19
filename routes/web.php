@@ -4981,6 +4981,10 @@ Route::middleware(['auth'])->get('/admin/hausplaner/studio', function () {
     return view('admin.hausplaner.studio');
 })->name('hausplaner.studio');
 
+// Tools-Einstieg: Gebaeude-Auswahl -> persistenter Objekt-Planer (rechte-gated).
+Route::middleware(['auth'])->get('/admin/hausplaner', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'index'])
+    ->middleware('permission:Hausplaner,read')->name('hausplaner.index');
+
 // Hausplaner-Transplantation (T-b): 2D/3D-Planer am OBJEKT (alternative_id). WEB-Routen (Session+CSRF),
 // permission:Hausplaner,read/manage; {objekt} = LeadAlternativeAdd (404 bei unbekanntem Objekt).
 // Landung 'in Abnahme' bis P1-Browser-Sichtproben gruen. Bestehende Dach-Insel oben unangetastet.

@@ -417,6 +417,32 @@ class LeadAlternativeAdd extends Model
         return $this->object_name ?: ('#' . $this->id);
     }
 
+    /**
+     * Kanonische Gebaeude-Suche (EINE Wahrheit fuer "Gebaeude finden"):
+     * Strasse / PLZ / Stadt / Objektname + Kunde (Name/Nachname/Firma ueber die lead-Relation).
+     * Reuse-Regel (ticket-code-reuse): HausplanerController::index und ObjektakteController::index
+     * teilen sich diesen Scope statt die Query zu kopieren. Leerer Begriff = kein Filter.
+     */
+    public function scopeGebaeudeSuche($query, ?string $begriff)
+    {
+        $begriff = trim((string) $begriff);
+        if ($begriff === '') {
+            return $query;
+        }
+
+        return $query->where(function ($w) use ($begriff) {
+            $w->where('street', 'like', "%{$begriff}%")
+                ->orWhere('city', 'like', "%{$begriff}%")
+                ->orWhere('postcode', 'like', "%{$begriff}%")
+                ->orWhere('object_name', 'like', "%{$begriff}%")
+                ->orWhereHas('lead', function ($l) use ($begriff) {
+                    $l->where('name', 'like', "%{$begriff}%")
+                        ->orWhere('lastname', 'like', "%{$begriff}%")
+                        ->orWhere('firma', 'like', "%{$begriff}%");
+                });
+        });
+    }
+
     public function rooms()
     {
         return $this->hasMany(\App\Models\LeadObjectRoom::class, 'alternative_id');

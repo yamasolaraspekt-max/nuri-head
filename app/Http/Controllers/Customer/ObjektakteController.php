@@ -52,19 +52,7 @@ class ObjektakteController extends Controller
 
         $objekte = LeadAlternativeAdd::query()
             ->with('lead:id,firma,name,lastname,customer_no')
-            ->when($q !== '', function ($query) use ($q) {
-                $query->where(function ($w) use ($q) {
-                    $w->where('street', 'like', "%{$q}%")
-                        ->orWhere('city', 'like', "%{$q}%")
-                        ->orWhere('postcode', 'like', "%{$q}%")
-                        ->orWhere('object_name', 'like', "%{$q}%")
-                        ->orWhereHas('lead', function ($l) use ($q) {
-                            $l->where('name', 'like', "%{$q}%")
-                                ->orWhere('lastname', 'like', "%{$q}%")
-                                ->orWhere('firma', 'like', "%{$q}%");
-                        });
-                });
-            })
+            ->gebaeudeSuche($q)
             ->orderByDesc('id')
             ->paginate(25)
             ->appends($request->query());
