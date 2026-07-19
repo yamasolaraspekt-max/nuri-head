@@ -93,6 +93,22 @@ class HausplanerSpeichernNutzlastTest extends TestCase
         $this->assertArrayHasKey('zukunft_v3_probe', $scene, 'Fix heilt nur roofs statt der Nutzlast-Weitergabe');
     }
 
+    /** P2: uebergrosse Szene wird abgelehnt (422), Dokument bleibt unveraendert. */
+    public function test_uebergrosse_szene_wird_abgelehnt(): void
+    {
+        $alt = $this->objekt(540);
+        $admin = User::factory()->create(['password' => 'password', 'is_admin' => 1]);
+        $scene = $this->v2SzeneMitDach();
+        $scene['muell'] = str_repeat('x', 2_100_000); // > MAX_SCENE_BYTES (2 MB)
+
+        $this->actingAs($admin)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
+            'base_revision' => 1, 'schema_version' => 2, 'scene' => $scene,
+        ])->assertStatus(422);
+
+        $doc = DB::table('hausplaner_documents')->where('alternative_id', $alt)->first();
+        $this->assertSame(1, (int) $doc->revision, 'Dokument darf bei zu grosser Szene nicht veraendert werden');
+    }
+
     /** Kante bleibt: unbekannte schemaVersion → 422 (Gate nicht zu weit geöffnet). */
     public function test_unbekannte_schema_version_bleibt_422(): void
     {

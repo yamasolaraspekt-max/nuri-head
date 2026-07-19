@@ -22,6 +22,10 @@ use Illuminate\Http\Request;
  */
 class HausplanerController extends Controller
 {
+    /** P2: Groessendeckel fuer die Szene (Bytes des JSON). Client-Zod bleibt Struktur-Wahrheit;
+     *  der Server gatet Invarianten + GROESSE, spiegelt aber NICHT das Schema (keine zweite Wahrheit). */
+    private const MAX_SCENE_BYTES = 2_000_000;
+
     public function seite(LeadAlternativeAdd $objekt)
     {
         $dokument = $this->dokumentFuer($objekt);
@@ -49,6 +53,12 @@ class HausplanerController extends Controller
         // (scene.roofs + kuenftige v3-Felder fielen still weg -> HTTP 200 + Datenverlust). Das Gate oben
         // prueft die Invarianten; PERSISTIERT wird die UNGESCHNITTENE Nutzlast aus input('scene').
         $szene = $request->input('scene');
+
+        // P2: unbegrenzte/eingeschleuste Nutzlast abfangen. Inhaltliche Gueltigkeit bleibt Sache der
+        // Client-Zod-Pruefung (fehlerhafter Inhalt ist per Revision/Snapshot heilbar).
+        if (strlen((string) json_encode($szene)) > self::MAX_SCENE_BYTES) {
+            return response()->json(['message' => 'Die Szene überschreitet die zulässige Größe.'], 422);
+        }
 
         $dokument = $this->dokumentFuer($objekt);
 
