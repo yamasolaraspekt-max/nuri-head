@@ -75,6 +75,21 @@ ist der Gegen-Beweis — Fix zurückdrehen, Test muss rot werden — fester Best
 - **Alt-Bundle `public/planer/planer.js`** (16.07., nur noch von `hausplaner.dachplaner` geladen):
   zweites React-Bundle neben dem aktuellen. Kandidat für Abriss mit Rückfallpfad, eigener Posten.
 
+**Fortschreibung 2026-07-19 (spät):**
+- **Abgeschlossen + committet:** Abriss Alt-Dachplaner (`a88845e`, Konserve `1cba744` davor),
+  P4 Warn-Tokens (`52f1254`), Navi-Aufräumung −76 Stubs (`d596ce3`), Zielbild EIN Planer
+  (`2634caa`), **W-A Übernehmen-Knopf (`7b18ed4`)** — alle unabhängig evaluiert.
+- **Nullpunkt-Messwelle gefahren** (echter Browser via Puppeteer, ticket.test):
+  Bericht + Referenzszenen in `~/Documents/planner-handover/referenzszenen/`.
+  Kernbefunde: SP-5-PAGEERROR stammt aus der CRM-Shell (chat-Bundle), nicht dem Planer;
+  **Studio lädt nie** (projectId 0 vs. Zod positive — ROT, Spec liegt vor); 8d70e4b formal
+  abgenommen; B1-10-Minuten-Test wartet auf Yama als Proband.
+- **Specs vorgelegt** (planner-handover/): Render-Welle 1 (RoomEnvironment + eine Sonne),
+  Studio-Fix (1 Blade-Zeile), UX-Welle 1 + Render-Welle 2 in Arbeit.
+- **Backlog FS-4–FS-9** nachgetragen (`docs/_playground-archiv/_auftraege/folge-scheiben-backlog.md`):
+  Giebeldreiecke, --sa-ink-Token, Orbit/Pick, Konflikt-Dialog zweiarmig, Lead-500 ohne
+  Reverb, Shell-Konsole.
+
 ---
 
 ## WP-Fachgrundsätze (dauerhaft)
