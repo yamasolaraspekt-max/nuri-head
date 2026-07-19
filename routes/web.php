@@ -4970,8 +4970,11 @@ Route::middleware(['auth'])->prefix('admin/sperre')->name('system.sperre.')->gro
 });
 
 // Hausplaner W1 (2026-07-16): 3D-Dachplaner-Insel (playground-Bundle, Prototyp — AP-4-Gates folgen in W2).
+// Abriss Alt-Bundle (2026-07-19): der 3D-Dachplaner-PROTOTYP (public/planer/planer.js) ist durch
+// den Hausplaner ersetzt (Dach als Werkzeug, public/hausplaner/hausplaner.js). Die alte URL bleibt
+// als Redirect erhalten (Bookmarks/Muskelgedaechtnis); Rueckfallpfad: _to_delete/planer-alt-abriss/.
 Route::middleware(['auth'])->get('/admin/hausplaner/dachplaner', function () {
-    return view('admin.hausplaner.dachplaner');
+    return redirect()->route('hausplaner.studio');
 })->name('hausplaner.dachplaner');
 
 // Hausplaner-Studio (2026-07-18): STANDALONE-Testflaeche des neuen Hausplaner-Bundles
