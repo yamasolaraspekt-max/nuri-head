@@ -23,7 +23,7 @@
         .hp-bar a:hover { border-color: var(--sa-accent, #93c21c); color: var(--sa-accent-hover, #7baa18); }
         .hp-title { font-size: 14px; font-weight: 800; }
         .hp-obj { font-size: 12.5px; color: var(--sa-info, #6b7280); }
-        .hp-abnahme { margin-left: auto; font-size: 12px; font-weight: 700; color: #b45309; background: var(--sa-warning-bg, #fff7ed); border: 1px solid #fed7aa; border-radius: 999px; padding: 4px 12px; }
+        .hp-abnahme { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--sa-warning-ink, #b45309); background: var(--sa-warning-bg, #fff7ed); border: 1px solid var(--sa-warning-border, #fed7aa); border-radius: 999px; padding: 4px 12px; }
         #hausplaner-root { min-height: calc(100vh - 46px); width: 100%; }
         .hp-skeleton { max-width: 720px; margin: 60px auto; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 28px; }
         .hp-skeleton h1 { font-size: 18px; margin: 0 0 6px; }

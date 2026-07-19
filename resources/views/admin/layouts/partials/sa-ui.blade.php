@@ -13,6 +13,7 @@
         /* Semantische Statusfarben (getrennt von der Marke) */
         --sa-danger: #ef4444;  --sa-danger-bg: #fef2f2;
         --sa-warning: #f59e0b; --sa-warning-bg: #fff7ed;
+        --sa-warning-ink: #b45309; --sa-warning-border: #fed7aa; /* Text/Rand auf warning-bg (Bestandston, P4 2026-07-19) */
         --sa-success: #10b981; --sa-success-bg: #ecfdf5;
         --sa-info: #6b7280;    --sa-info-bg: #f3f4f6;
     }
