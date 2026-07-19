@@ -36,20 +36,26 @@ class HausplanerController extends Controller
     {
         $daten = $request->validate([
             'base_revision' => ['required', 'integer', 'min:1'],
-            'schema_version' => ['required', 'integer', 'in:1'],
+            'schema_version' => ['required', 'integer', 'in:1,2'],
             'scene' => ['required', 'array'],
-            'scene.schemaVersion' => ['required', 'integer', 'in:1'],   // unbekannte Version ⇒ 422 (Kante)
+            'scene.schemaVersion' => ['required', 'integer', 'in:1,2'], // v1+v2 gueltig; alles andere ⇒ 422 (Kante)
             'scene.units' => ['required', 'in:mm'],
             'scene.levels' => ['required', 'array', 'min:1'],
             'scene.nodes' => ['present', 'array'],
+            'scene.roofs' => ['sometimes', 'array'],                    // D-a: Dach-Sammlung strukturell gueltig, wenn vorhanden
         ]);
+
+        // B2-Fix (Planner-Entscheidung): validate() BESCHNEIDET die Szene auf die benannten Schluessel
+        // (scene.roofs + kuenftige v3-Felder fielen still weg -> HTTP 200 + Datenverlust). Das Gate oben
+        // prueft die Invarianten; PERSISTIERT wird die UNGESCHNITTENE Nutzlast aus input('scene').
+        $szene = $request->input('scene');
 
         $dokument = $this->dokumentFuer($objekt);
 
         $ergebnis = app(SpeichereHausplanerDokument::class)->ausfuehren(
             $dokument,
             (int) $daten['base_revision'],
-            $daten['scene'],
+            $szene,
             optional($request->user())->id,
         );
 

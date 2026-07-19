@@ -36,6 +36,7 @@ class SpeichereHausplanerDokument
 
             $aktuell->update([
                 'scene_json' => $scene,
+                'schema_version' => (int) ($scene['schemaVersion'] ?? $aktuell->schema_version), // Spalte folgt der Szene (v1/v2)
                 'revision' => $neueRevision,
                 'checksum' => $checksum,
                 'updated_by' => $userId,
