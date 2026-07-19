@@ -68,3 +68,19 @@ Für jeden zentralen Sachverhalt gibt es **genau eine führende Datenquelle** �
   `App\Models\RadiatorSpec` / `App\Models\RadiatorInstallation` und
   `App\Services\Heizkoerper\*` (`RadiatorPerformanceService`, `HydraulicService`,
   `RadiatorCatalogAdapter`, `CompatibilityService`).
+
+
+## Existing-Code-First und Ticket-Wiederverwendung
+
+- Der bestehende Ticket-Bereich enthält umfangreichen produktiven Code und ist eine primäre Wiederverwendungsquelle.
+- Bei jeder neuen Planner-, CAD-, UI-, Workflow-, Dokument-, Aufgaben-, Freigabe- oder Projektfunktion zuerst den vorhandenen Ticket-Code untersuchen.
+- Nicht bei null beginnen, wenn eine geeignete Komponente, ein Service, ein Workflow, ein Datenmodell, ein Testmuster oder eine UI-Struktur bereits existiert.
+- Vor jeder Neuentwicklung eine Reuse-Prüfung durchführen (Skill `ticket-code-reuse`).
+- Wiederverwendung ist gegenüber Kopieren zu bevorzugen.
+- Gemeinsame Logik bei Bedarf kontrolliert in ein gemeinsames Modul extrahieren.
+- Keine zweite parallele Implementierung bestehender Ticket-Funktionen aufbauen.
+- Bestehende Ticket-Funktionen dürfen nicht unkontrolliert auf Planner-Bedürfnisse umgebaut werden.
+- Erweiterungen müssen rückwärtskompatibel bleiben und bestehende Ticket-Tests berücksichtigen.
+- Jede bewusste Nicht-Wiederverwendung vorhandenen Codes muss begründet werden (Klasse R5).
+- Keine neue UI-Komponente erstellen, bevor geprüft wurde, ob das Ticket-Designsystem (`resources/views/admin/styleguide/index.blade.php`, CSS-Tokens `--sa-*`) oder vorhandene Ticket-Komponenten genutzt werden können.
+- Keine neue Status-, Aufgaben-, Kommentar-, Datei-, Freigabe-, Historien- oder Benachrichtigungslogik erstellen, wenn diese bereits im Ticket-System vorhanden ist.

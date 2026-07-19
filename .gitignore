@@ -27,3 +27,9 @@ yarn-error.log
 
 # stale git-lock-Artefakte der Parallel-Instanzen
 _to_delete/
+
+# playground-Archiv — reine On-Disk-Sicherung, NICHT ins Repo (F&E-Altlast)
+/docs/_playground-archiv/
+
+# Hausplaner 3D-Katalog-Modelle (GLB, ~127MB) — Runtime-Assets, nicht in die Git-Historie
+/public/hausplaner/models/
