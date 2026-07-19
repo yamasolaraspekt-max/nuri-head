@@ -4996,6 +4996,9 @@ Route::middleware(['auth'])->prefix('admin/hausplaner')->name('hausplaner.objekt
         ->whereNumber('objekt')->middleware('permission:Hausplaner,read')->name('seite');
     Route::put('/objekt/{objekt}/dokument', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'speichern'])
         ->whereNumber('objekt')->middleware('permission:Hausplaner,update')->name('speichern');
+    // W-A: expliziter Übernehmen-Knopf Szene → Auslegung (Operanden-Gate: kein Automatismus).
+    Route::post('/objekt/{objekt}/uebernehmen', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'uebernehmen'])
+        ->whereNumber('objekt')->middleware('permission:Hausplaner,update')->name('uebernehmen');
     Route::post('/objekt/{objekt}/snapshots', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'snapshotErstellen'])
         ->whereNumber('objekt')->middleware('permission:Hausplaner,update')->name('snapshots.erstellen');
     Route::get('/objekt/{objekt}/snapshots', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'snapshotListe'])

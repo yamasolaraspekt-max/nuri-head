@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Hausplaner;
 
+use App\Domain\Hausplaner\Actions\ErmittleUebernahmeStatus;
 use App\Domain\Hausplaner\Actions\ErstelleLeeresSzenenDokument;
 use App\Domain\Hausplaner\Actions\SpeichereHausplanerDokument;
 use App\Domain\Hausplaner\Actions\StelleSnapshotWieder;
+use App\Domain\Hausplaner\Actions\UebernehmeSzeneInAuslegung;
 use App\Domain\Hausplaner\Models\HausplanerCatalogItem;
 use App\Domain\Hausplaner\Models\HausplanerDocument;
 use App\Domain\Hausplaner\Models\HausplanerSnapshot;
 use App\Http\Controllers\Controller;
 use App\Models\LeadAlternativeAdd;
+use App\Services\Geometrie\GeometrieUngueltigException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -33,7 +36,53 @@ class HausplanerController extends Controller
         return view('admin.hausplaner.objekt', [
             'objekt' => $objekt,
             'dokument' => $dokument,
+            'uebernahme' => app(ErmittleUebernahmeStatus::class)->ausfuehren($objekt, $dokument),
         ]);
+    }
+
+    /**
+     * W-A — expliziter Nutzer-Auslöser „In Auslegung übernehmen" (Operanden-Gate: Fachentscheidung,
+     * Vorschlag + Bestätigung, KEIN Automatismus). Dünne Hülle: EIN Action-Aufruf, Antwort-Mapping.
+     * Doppel-Submit ist per Bestand idempotent (gleicher Szenen-Hash ⇒ status 'unveraendert', keine
+     * Doppel-Version — UebernehmeSzeneInAuslegung). Liest die Szene nur; legt KEIN Dokument an.
+     */
+    public function uebernehmen(Request $request, LeadAlternativeAdd $objekt)
+    {
+        try {
+            $ergebnis = app(UebernehmeSzeneInAuslegung::class)
+                ->ausfuehren($objekt, optional($request->user())->id);
+        } catch (GeometrieUngueltigException $e) {
+            return redirect()->route('hausplaner.objekt.seite', $objekt)->with('hausplaner_uebernahme', [
+                'typ' => 'fehler',
+                'text' => 'Übernahme abgelehnt: die Szene enthält ungültige Geometrie ('.$e->getMessage().'). Es wurde nichts geschrieben.',
+            ]);
+        }
+
+        if ($ergebnis['status'] === 'keine_szene') {
+            // Kante (Spec §4): kein Dokument am Objekt ⇒ 422, nichts geschrieben (Button ist im UI deaktiviert).
+            return response()->json([
+                'status' => 'keine_szene',
+                'message' => 'Für dieses Objekt existiert noch keine Hausplaner-Szene — es wurde nichts übernommen.',
+            ], 422);
+        }
+
+        $flash = match ($ergebnis['status']) {
+            'kein_raum' => [
+                'typ' => 'warnung',
+                'text' => 'Die Szene enthält keine geschlossenen Räume — es wurde keine Version erzeugt.',
+            ],
+            'unveraendert' => [
+                'typ' => 'info',
+                'text' => 'Diese Szene ist bereits übernommen (Version '.$ergebnis['version'].') — keine neue Version erzeugt.',
+            ],
+            default => [
+                'typ' => 'erfolg',
+                'text' => $ergebnis['raeume'].' '.($ergebnis['raeume'] === 1 ? 'Raum' : 'Räume')
+                    .' übernommen, Version '.$ergebnis['version'].'.',
+            ],
+        };
+
+        return redirect()->route('hausplaner.objekt.seite', $objekt)->with('hausplaner_uebernahme', $flash);
     }
 
     /** Tools-Einstieg: Gebaeude-Auswahl -> persistenter Objekt-Planer (hausplaner.objekt.seite). */
