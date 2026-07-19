@@ -277,7 +277,16 @@ export function HausplanerApp(): React.ReactElement {
   const panelLabel: React.CSSProperties = { display: 'block', color: FARBEN.gedaempft, marginBottom: 8 };
   const panelInput: React.CSSProperties = { width: '100%', marginTop: 3, padding: '5px 8px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 12.5 };
 
-  const breite = typeof window !== 'undefined' ? window.innerWidth : 1200;
+  const railIcon = (w: string): string => (({ auswahl: '\u2196', wand: '\u25AC', fenster: '\u25A2', tuer: '\u25D7', dach: '\u25B3' } as Record<string, string>)[w] ?? '\u2022');
+  const railBtn = (aktiv: boolean): React.CSSProperties => ({
+    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+    height: 46, borderRadius: 9, cursor: 'pointer', fontWeight: 600,
+    border: `1px solid ${aktiv ? 'var(--sa-accent, #93c21c)' : 'transparent'}`,
+    background: aktiv ? 'var(--sa-accent-light, #f4fae7)' : 'transparent',
+    color: aktiv ? 'var(--sa-accent-hover, #4d7c0f)' : FARBEN.gedaempft,
+  });
+
+  const breite = (typeof window !== 'undefined' ? window.innerWidth : 1200) - 56; // minus linke Werkzeugleiste
   const stageBreite = modus === 'split' ? Math.floor(breite / 2) : breite; // P1c: Split teilt die Fläche
   const hoehe = typeof window !== 'undefined' ? window.innerHeight - 96 : 700;
 
@@ -298,12 +307,6 @@ export function HausplanerApp(): React.ReactElement {
       {/* Werkzeugleiste — neutral, Marke nur für Primäraktion */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: '#fff', borderBottom: '1px solid #e5e7eb' }}>
         <strong style={{ fontSize: 14, marginRight: 8 }}>Hausplaner</strong>
-        <button type="button" style={knopf(werkzeug === 'auswahl')} onClick={() => setWerkzeug('auswahl')}>Auswahl (V)</button>
-        <button type="button" style={knopf(werkzeug === 'wand')} onClick={() => { setWerkzeug('wand'); setWandStart(null); }}>Wand (W)</button>
-        <button type="button" style={knopf(werkzeug === 'fenster')} onClick={() => setWerkzeug('fenster')}>Fenster (F)</button>
-        <button type="button" style={knopf(werkzeug === 'tuer')} onClick={() => setWerkzeug('tuer')}>Tür (T)</button>
-        <button type="button" style={knopf(werkzeug === 'dach')} onClick={() => setWerkzeug('dach')}>Dach (D)</button>
-        <span style={{ width: 1, height: 22, background: '#e5e7eb', margin: '0 4px' }} />
         <button type="button" style={knopf(false)} onClick={() => store.getState().undo()} disabled={!store.getState().kannUndo()}>↶ Rückgängig</button>
         <button type="button" style={knopf(false)} onClick={() => store.getState().redo()} disabled={!store.getState().kannRedo()}>↷ Wiederholen</button>
         <span style={{ width: 1, height: 22, background: '#e5e7eb', margin: '0 4px' }} />
@@ -337,6 +340,17 @@ export function HausplanerApp(): React.ReactElement {
           Der 3D-Bereich bleibt über Moduswechsel gemountet (nur ausgeblendet) ⇒ Kamera
           bleibt erhalten; dispose() erst beim Verlassen der Seite (Kante 6). */}
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
+        {/* Linke Icon-Werkzeugleiste (CAD-Muster) */}
+        <div style={{ width: 56, flex: '0 0 auto', background: '#fff', borderRight: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', gap: 4, padding: '8px 6px' }}>
+          {([['auswahl', 'V', 'Auswahl'], ['wand', 'W', 'Wand'], ['fenster', 'F', 'Fenster'], ['tuer', 'T', 'Tür'], ['dach', 'D', 'Dach']] as ReadonlyArray<readonly [string, string, string]>).map(([w, k, label]) => (
+            <button key={w} type="button" title={`${label} (${k})`}
+              onClick={() => { setWerkzeug(w as typeof werkzeug); if (w === 'wand') { setWandStart(null); } }}
+              style={railBtn(werkzeug === w)}>
+              <span style={{ fontSize: 16, lineHeight: 1 }}>{railIcon(w)}</span>
+              <span style={{ fontSize: 9.5, marginTop: 3 }}>{label}</span>
+            </button>
+          ))}
+        </div>
         <div style={{ display: modus === '3d' ? 'none' : 'block', width: stageBreite, borderRight: modus === 'split' ? '1px solid #e5e7eb' : 'none' }}>
         <Stage
           ref={stageRef as never}
