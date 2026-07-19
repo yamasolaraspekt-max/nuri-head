@@ -1,6 +1,6 @@
 # Arbeitskompass — ticket
 
-**Stand:** 2026-07-15
+**Stand:** 2026-07-19
 **Zweck:** Diese Datei beantwortet jederzeit die Fragen: *Woran arbeiten wir gerade? Wann ist es fertig? Was kommt als Nächstes? Was ist geparkt?*
 
 > **Rang/Funktion:** Dieser Arbeitskompass ist ein **Navigations- und Statusdokument**. Er verweist auf die führenden Fahrpläne, ADRs und Startblöcke. Er **ersetzt oder überstimmt keine ranghöhere Governance** (BETRIEBSORDNUNG, `CLAUDE.md`, `STRAENGE.md`, ratifizierte ADRs) und **bestimmt nicht eigenständig den Scope eines Umsetzungsslices** — das tut der freigegebene **Startblock** des aktiven Slices. Bei Widersprüchen gilt die festgelegte Quellenhierarchie.
@@ -34,6 +34,46 @@
 - M-1 — paralleles erstmaliges Profilanlegen (Race/Unique-Index, additive Migration).
 - M-2 — HTTP-409-Vertrag für stale Profilversionen.
 - P1c — Orchestrator-Verdrahtung, Ranking, Auswahl und UI (inkl. Korrektur der Geräte-Unabhängigkeit A1).
+
+### Nebenstrang: Hausplaner + FiBu Stufe (ii) — Stand 2026-07-19
+
+**Committet (bis `d99cbb7`), jeweils unabhängig evaluiert:**
+- `c3fcf75` — Hausplaner Save-Fix (B2/T2): v2+Dach wird persistiert, kein stiller Verlust mehr.
+  Persistenz über `$request->input('scene')` (ungeschnitten) statt der von `validate()` beschnittenen
+  Nutzlast; Gate hält (422 an vier Kanten, schreibt dabei nichts), 409-Konflikt und Snapshot geprüft.
+- `77e25f7` — FiBu Stufe (ii): Kontenrahmen-Seed marker-vollständig (`accounting_clients` trägt jetzt
+  `imported_from`), Rückbau restlos; Eigenschafts-Test mit belegter Diskriminierung.
+- `e9048da` — Hausplaner UI: helle CRM-CI, Dach-Optik, Studio-Einstieg in der Tools-Navi.
+  **Achtung:** Dieser Commit hat den „Hausplaner öffnen"-Button aus der Gebäudeakte entfernt.
+- `da7db05` / `d99cbb7` — Existing-Code-First-Regel + Skills/Agenten; Accounting-/Planner-Doku.
+
+**Lehre aus vier Evaluator-Runden (gilt weiter):** Ein grüner Test ist kein Beleg, solange nicht
+gezeigt ist, dass er *fehlschlagen kann*. Dreimal in Folge waren mitgelieferte Tests ohne
+Diskriminierungskraft (Hash-Abbruch vor der ersten Assertion; zirkuläre Marker-Assertion). Seitdem
+ist der Gegen-Beweis — Fix zurückdrehen, Test muss rot werden — fester Bestandteil jeder Abnahme.
+
+**In Arbeit (uncommittet, Evaluator läuft):**
+- Scheibe 1 — P2 Größen-Cap (`MAX_SCENE_BYTES = 2_000_000`, Check vor der Action). **Abgenommen**,
+  wartet auf Commit-Freigabe.
+- Scheibe 2 — Gebäude-Auswahl (`hausplaner.index`) als Ersatz für den entfernten Akte-Button, plus
+  Reuse-Fix: kanonischer Scope `LeadAlternativeAdd::scopeGebaeudeSuche` statt der Kopie von
+  `Customer/ObjektakteController::index`. **Risiko:** der Reuse-Fix fasst produktiven Bestandscode
+  ohne vorherige Testabdeckung an — `/objekte` muss unbeschädigt bleiben.
+
+**Offen — Entscheidungen bei Yama:**
+- **Sichtbarkeit:** Darf jeder mit `Hausplaner,read` *jedes* Gebäude sehen? `lead_alternative_adds`
+  hat keinen Mandanten-/Filial-Anker; `/objekte` ist heute sogar nur `auth`. Empfehlung: konsistent
+  zu `/objekte` lassen; eine echte Mandantensicht ist ein eigenes Fundament-Projekt (Anker-Spalte +
+  Global Scope) und betrifft dann alle Objektlisten, nicht nur den Hausplaner.
+- **B6/C2 — Browser-Abnahme steht aus** (helle CI, Satteldach-Render, PAGEERROR-Stack). Die
+  Hypothese „PAGEERROR stammt aus dem Alt-Bundle `public/planer/planer.js`" ist auf Quellebene
+  **widerlegt**: beide Bundles haben Null-Guards am Mount, kein `addEventListener` hängt an einem
+  ungeprüften DOM-Lookup. Ursache weiter unbekannt, braucht echten Browserlauf.
+- **P3 Styleguide-Tokens:** `studio.blade.php` und `main.tsx` nutzen 15 Hex-Werte. Nur 5 haben ein
+  `--sa-*`-Token; für Neutral-/Ink-/Border-Farben existiert **gar keins**. Konsequenz nach
+  UI-Bauordnung: erst die fehlenden Tokens im Styleguide anlegen, dann umstellen — eigener Posten.
+- **Alt-Bundle `public/planer/planer.js`** (16.07., nur noch von `hausplaner.dachplaner` geladen):
+  zweites React-Bundle neben dem aktuellen. Kandidat für Abriss mit Rückfallpfad, eigener Posten.
 
 ---
 
