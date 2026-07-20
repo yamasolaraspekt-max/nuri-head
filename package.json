@@ -4,8 +4,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:hausplaner": "./scripts/node-runtime.sh ./node_modules/typescript/bin/tsc -p tsconfig.hausplaner.json --noEmit && ./scripts/node-runtime.sh ./node_modules/vite/bin/vite.js build --config vite.hausplaner.config.ts",
-    "test:hausplaner": "./scripts/node-runtime.sh --experimental-strip-types --import ./resources/planner/hausplaner/test-register.mjs --test \"resources/planner/hausplaner/__tests__/*.test.ts\"",
+    "build:hausplaner": "npm run schema:hausplaner:check && ./scripts/node-runtime.sh ./node_modules/typescript/bin/tsc -p tsconfig.hausplaner.json --noEmit && ./scripts/node-runtime.sh ./node_modules/vite/bin/vite.js build --config vite.hausplaner.config.ts",
+    "schema:hausplaner": "./scripts/node-runtime.sh --experimental-strip-types ./scripts/hausplaner-schema.mts",
+    "schema:hausplaner:check": "./scripts/node-runtime.sh --experimental-strip-types ./scripts/hausplaner-schema.mts --check",
+    "test:hausplaner": "npm run schema:hausplaner:check && ./scripts/node-runtime.sh --experimental-strip-types --import ./resources/planner/hausplaner/test-register.mjs --test \"resources/planner/hausplaner/__tests__/*.test.ts\"",
     "tsc:hausplaner": "./scripts/node-runtime.sh ./node_modules/typescript/bin/tsc -p tsconfig.hausplaner.json --noEmit"
   },
   "devDependencies": {

@@ -2,22 +2,12 @@
 
 namespace Tests\Feature\Hausplaner;
 
-use App\Models\LeadAlternativeAdd;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-/**
- * B2-Regression — Speichern darf die Szene NICHT beschneiden.
- *
- * Vorher (Bug): HausplanerController::speichern gab die per $request->validate() BESCHNITTENE Szene
- * an die Action → nicht validierte Schlüssel (scene.roofs, künftige v3-Felder) fielen still weg,
- * HTTP 200 + neue Revision, Dach verloren. Fix: Gate validiert Invarianten, PERSISTIERT wird die
- * ungeschnittene Nutzlast aus $request->input('scene').
- *
- * Läuft gegen die Test-DB (RefreshDatabase); die Arbeits-DB `ticket` wird NICHT geschrieben.
- */
+/** P2-Vertrag: Nur eine vollständig Zod-ladbare v2-Szene darf persistiert werden. */
 class HausplanerSpeichernNutzlastTest extends TestCase
 {
     use RefreshDatabase;
@@ -30,95 +20,208 @@ class HausplanerSpeichernNutzlastTest extends TestCase
         config(['broadcasting.default' => 'null']);
     }
 
-    private function objekt(int $seed = 500): int
+    private function objekt(int $seed = 500, int $revision = 1): int
     {
         $customer = $seed + 1;
         $alt = $seed + 2;
-        DB::table('new_leads')->insert(['id' => $customer, 'customer_type' => 'privat', 'name' => 'K', 'lastname' => 'T', 'email' => 'k@example.com', 'phone' => '0', 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('new_leads')->insert(['id' => $customer, 'customer_type' => 'privat', 'name' => 'K', 'lastname' => 'T', 'email' => "k{$seed}@example.com", 'phone' => '0', 'created_at' => now(), 'updated_at' => now()]);
         DB::table('lead_alternative_adds')->insert(['id' => $alt, 'lead_id' => $customer, 'street' => 'Weg 1', 'postcode' => '12345', 'city' => 'S', 'created_at' => now(), 'updated_at' => now()]);
+        $scene = $this->v2SzeneMitDach($alt);
+        $scene['revision'] = $revision;
         DB::table('hausplaner_documents')->insert([
-            'alternative_id' => $alt, 'schema_version' => 1, 'revision' => 1,
-            'scene_json' => json_encode(['schemaVersion' => 1, 'units' => 'mm', 'revision' => 1, 'levels' => [['id' => 'L', 'sortOrder' => 0, 'defaultWallHeight' => 2500]], 'nodes' => []]),
-            'checksum' => 't', 'created_by' => null, 'updated_by' => null, 'created_at' => now(), 'updated_at' => now(),
+            'alternative_id' => $alt,
+            'schema_version' => 2,
+            'revision' => $revision,
+            'scene_json' => json_encode($scene),
+            'checksum' => 'checksum-vorher',
+            'created_by' => null,
+            'updated_by' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return $alt;
     }
 
-    /** @return array<string,mixed> */
-    private function v2SzeneMitDach(): array
+    /** @return array<string, mixed> */
+    private function basisNode(string $id, string $type): array
     {
         return [
-            'schemaVersion' => 2,
-            'units' => 'mm',
-            'revision' => 1,
-            'levels' => [['id' => 'L', 'name' => 'EG', 'elevation' => 0, 'defaultWallHeight' => 2500, 'floorThickness' => 200, 'sortOrder' => 0]],
-            'nodes' => [],
-            'roofs' => [[
-                'id' => 'r1', 'type' => 'roof', 'levelId' => 'L', 'visible' => true, 'locked' => false, 'tags' => [],
-                'createdAt' => '2026-07-19T00:00:00.000Z', 'updatedAt' => '2026-07-19T00:00:00.000Z',
-                'polygon' => [['x' => 0, 'y' => 0], ['x' => 8000, 'y' => 0], ['x' => 8000, 'y' => 10000], ['x' => 0, 'y' => 10000]],
-                'roofType' => 'sattel', 'neigungGrad' => 35, 'firstAzimutGrad' => 90, 'ueberstandMm' => 500, 'traufhoeheMm' => 2500,
-            ]],
-            'zukunft_v3_probe' => ['unbekanntes' => 'feld'], // Gegen-Beweis: kein roofs-only-Whitelist-Pflaster
+            'id' => $id,
+            'type' => $type,
+            'levelId' => 'L',
+            'visible' => true,
+            'locked' => false,
+            'tags' => [],
+            'createdAt' => '2026-07-19T00:00:00.000Z',
+            'updatedAt' => '2026-07-19T00:00:00.000Z',
         ];
     }
 
-    /** B2-Kern: roofs überlebt das Speichern (wird NICHT beschnitten). */
-    public function test_speichern_persistiert_roofs_ungeschnitten(): void
+    /** @return array<string, mixed> */
+    private function v2SzeneMitDach(int $alt): array
+    {
+        return [
+            'id' => "doc-{$alt}",
+            'projectId' => $alt,
+            'schemaVersion' => 2,
+            'revision' => 1,
+            'units' => 'mm',
+            'settings' => ['gridSize' => 100, 'snapEnabled' => true, 'angleSnap' => 15],
+            'levels' => [['id' => 'L', 'name' => 'EG', 'elevation' => 0, 'defaultWallHeight' => 2500, 'floorThickness' => 200, 'sortOrder' => 0]],
+            'nodes' => [[
+                ...$this->basisNode('w1', 'wall'),
+                'start' => ['x' => 0, 'y' => 0],
+                'end' => ['x' => 8000, 'y' => 0],
+                'thickness' => 240,
+                'height' => 2500,
+            ]],
+            'materials' => [],
+            'roofs' => [[
+                ...$this->basisNode('r1', 'roof'),
+                'polygon' => [['x' => 0, 'y' => 0], ['x' => 8000, 'y' => 0], ['x' => 8000, 'y' => 10000], ['x' => 0, 'y' => 10000]],
+                'roofType' => 'sattel',
+                'neigungGrad' => 35,
+                'firstAzimutGrad' => 90,
+                'ueberstandMm' => 500,
+                'traufhoeheMm' => 2500,
+            ]],
+            'metadata' => ['createdAt' => '2026-07-19T00:00:00.000Z', 'updatedAt' => '2026-07-19T00:00:00.000Z'],
+        ];
+    }
+
+    private function user(): User
+    {
+        return User::factory()->create(['password' => 'password', 'is_admin' => 1]);
+    }
+
+    /** @return array<string, mixed> */
+    private function dokumentZeile(int $alt): array
+    {
+        return (array) DB::table('hausplaner_documents')->where('alternative_id', $alt)->first();
+    }
+
+    /** @param array<string, mixed> $scene */
+    private function speichere(int $alt, array $scene, int $baseRevision = 1, int $schemaVersion = 2)
+    {
+        return $this->actingAs($this->user())->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
+            'base_revision' => $baseRevision,
+            'schema_version' => $schemaVersion,
+            'scene' => $scene,
+        ]);
+    }
+
+    /** @param callable(array<string, mixed>): void $veraendere */
+    private function assert422OhneMutation(int $seed, callable $veraendere, int $schemaVersion = 2): void
+    {
+        $alt = $this->objekt($seed);
+        $vorher = $this->dokumentZeile($alt);
+        $scene = $this->v2SzeneMitDach($alt);
+        $veraendere($scene);
+
+        $this->speichere($alt, $scene, 1, $schemaVersion)->assertStatus(422);
+
+        $this->assertSame($vorher, $this->dokumentZeile($alt), '422 darf scene_json, Revision und Checksum nicht verändern.');
+    }
+
+    public function test_gueltige_v2_dachszene_wird_vollstaendig_persistiert(): void
     {
         $alt = $this->objekt();
-        $admin = User::factory()->create(['password' => 'password', 'is_admin' => 1]);
+        $scene = $this->v2SzeneMitDach($alt);
 
-        $res = $this->actingAs($admin)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
-            'base_revision' => 1,
-            'schema_version' => 2,
-            'scene' => $this->v2SzeneMitDach(),
-        ]);
+        $antwort = $this->speichere($alt, $scene)->assertOk();
+        $doc = $this->dokumentZeile($alt);
+        $gespeichert = json_decode($doc['scene_json'], true);
+        $erwartet = $scene;
+        $erwartet['revision'] = 2;
 
-        $res->assertOk(); // HTTP 200
-
-        $doc = DB::table('hausplaner_documents')->where('alternative_id', $alt)->first();
-        $scene = json_decode($doc->scene_json, true);
-
-        // Kern: roofs ist da und vollständig.
-        $this->assertArrayHasKey('roofs', $scene, 'roofs wurde beim Speichern beschnitten (B2-Regression)');
-        $this->assertCount(1, $scene['roofs'], 'roofs-Eintrag fehlt');
-        $this->assertSame('r1', $scene['roofs'][0]['id']);
-        $this->assertSame('sattel', $scene['roofs'][0]['roofType']);
-        // Spalte + Revision korrekt.
-        $this->assertSame(2, (int) $doc->schema_version);
-        $this->assertSame(2, (int) $doc->revision);
-        // Gegen-Beweis: auch ein nicht validiertes Zukunftsfeld überlebt (keine roofs-only-Whitelist).
-        $this->assertArrayHasKey('zukunft_v3_probe', $scene, 'Fix heilt nur roofs statt der Nutzlast-Weitergabe');
+        $this->assertEquals($erwartet, $gespeichert, 'Die validierte Szene muss vollständig und unbeschnitten persistiert werden.');
+        $this->assertSame(2, (int) $doc['schema_version']);
+        $this->assertSame(2, (int) $doc['revision']);
+        $this->assertSame($antwort->json('checksum'), $doc['checksum']);
     }
 
-    /** P2: uebergrosse Szene wird abgelehnt (422), Dokument bleibt unveraendert. */
-    public function test_uebergrosse_szene_wird_abgelehnt(): void
+    public function test_unbekanntes_zukunftsfeld_ohne_schemawechsel_wird_abgelehnt(): void
     {
-        $alt = $this->objekt(540);
-        $admin = User::factory()->create(['password' => 'password', 'is_admin' => 1]);
-        $scene = $this->v2SzeneMitDach();
-        $scene['muell'] = str_repeat('x', 2_100_000); // > MAX_SCENE_BYTES (2 MB)
-
-        $this->actingAs($admin)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
-            'base_revision' => 1, 'schema_version' => 2, 'scene' => $scene,
-        ])->assertStatus(422);
-
-        $doc = DB::table('hausplaner_documents')->where('alternative_id', $alt)->first();
-        $this->assertSame(1, (int) $doc->revision, 'Dokument darf bei zu grosser Szene nicht veraendert werden');
+        $this->assert422OhneMutation(510, fn (array &$scene) => $scene['zukunft_v3_probe'] = ['neu' => true]);
     }
 
-    /** Kante bleibt: unbekannte schemaVersion → 422 (Gate nicht zu weit geöffnet). */
-    public function test_unbekannte_schema_version_bleibt_422(): void
+    public function test_float_millimeter_wird_abgelehnt(): void
     {
-        $alt = $this->objekt(520);
-        $admin = User::factory()->create(['password' => 'password', 'is_admin' => 1]);
-        $scene = $this->v2SzeneMitDach();
-        $scene['schemaVersion'] = 3;
+        $this->assert422OhneMutation(520, fn (array &$scene) => $scene['nodes'][0]['end']['x'] = 8000.5);
+    }
 
-        $this->actingAs($admin)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
-            'base_revision' => 1, 'schema_version' => 3, 'scene' => $scene,
-        ])->assertStatus(422);
+    public function test_unbekannter_node_typ_wird_abgelehnt(): void
+    {
+        $this->assert422OhneMutation(530, fn (array &$scene) => $scene['nodes'][0]['type'] = 'mystery');
+    }
+
+    public function test_nullwand_wird_abgelehnt(): void
+    {
+        $this->assert422OhneMutation(540, fn (array &$scene) => $scene['nodes'][0]['end'] = $scene['nodes'][0]['start']);
+    }
+
+    public function test_verwaiste_oeffnung_wird_abgelehnt(): void
+    {
+        $this->assert422OhneMutation(550, function (array &$scene): void {
+            $scene['nodes'][] = [
+                ...$this->basisNode('f1', 'window'),
+                'hostWallId' => 'nicht-da',
+                'offsetFromWallStart' => 1000,
+                'width' => 1200,
+                'height' => 1400,
+                'sillHeight' => 900,
+            ];
+        });
+    }
+
+    public function test_ueberstehende_oeffnung_wird_abgelehnt(): void
+    {
+        $this->assert422OhneMutation(560, function (array &$scene): void {
+            $scene['nodes'][] = [
+                ...$this->basisNode('f1', 'window'),
+                'hostWallId' => 'w1',
+                'offsetFromWallStart' => 7500,
+                'width' => 1200,
+                'height' => 1400,
+                'sillHeight' => 900,
+            ];
+        });
+    }
+
+    public function test_fremde_project_id_wird_abgelehnt(): void
+    {
+        $this->assert422OhneMutation(570, fn (array &$scene) => $scene['projectId']++);
+    }
+
+    public function test_huellen_und_szenen_version_duerfen_nicht_abweichen(): void
+    {
+        $this->assert422OhneMutation(580, static function (array &$scene): void {}, 1);
+    }
+
+    public function test_huellen_und_szenen_revision_duerfen_nicht_abweichen(): void
+    {
+        $this->assert422OhneMutation(590, fn (array &$scene) => $scene['revision'] = 2);
+    }
+
+    public function test_dokument_id_darf_nicht_gewechselt_werden(): void
+    {
+        $this->assert422OhneMutation(600, fn (array &$scene) => $scene['id'] = 'anderes-dokument');
+    }
+
+    public function test_uebergrosse_szene_wird_ohne_mutation_abgelehnt(): void
+    {
+        $this->assert422OhneMutation(610, fn (array &$scene) => $scene['muell'] = str_repeat('x', 2_100_000));
+    }
+
+    public function test_revisionskonflikt_bleibt_409_und_schreibt_nichts(): void
+    {
+        $alt = $this->objekt(620, 2);
+        $vorher = $this->dokumentZeile($alt);
+        $scene = $this->v2SzeneMitDach($alt);
+
+        $this->speichere($alt, $scene, 1)->assertStatus(409)->assertJson(['aktuelle_revision' => 2]);
+
+        $this->assertSame($vorher, $this->dokumentZeile($alt), '409 darf scene_json, Revision und Checksum nicht verändern.');
     }
 }

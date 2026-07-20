@@ -11,6 +11,7 @@ use App\Domain\Hausplaner\Models\HausplanerCatalogItem;
 use App\Domain\Hausplaner\Models\HausplanerDocument;
 use App\Domain\Hausplaner\Models\HausplanerSnapshot;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Hausplaner\SpeichereHausplanerDokumentRequest;
 use App\Models\LeadAlternativeAdd;
 use App\Services\Geometrie\GeometrieUngueltigException;
 use Illuminate\Http\JsonResponse;
@@ -25,10 +26,6 @@ use Illuminate\Http\Request;
  */
 class HausplanerController extends Controller
 {
-    /** P2: Groessendeckel fuer die Szene (Bytes des JSON). Client-Zod bleibt Struktur-Wahrheit;
-     *  der Server gatet Invarianten + GROESSE, spiegelt aber NICHT das Schema (keine zweite Wahrheit). */
-    private const MAX_SCENE_BYTES = 2_000_000;
-
     public function seite(LeadAlternativeAdd $objekt)
     {
         $dokument = $this->dokumentFuer($objekt);
@@ -100,36 +97,14 @@ class HausplanerController extends Controller
         return view('admin.hausplaner.index', ['objekte' => $objekte, 'q' => $q]);
     }
 
-    public function speichern(Request $request, LeadAlternativeAdd $objekt): JsonResponse
+    public function speichern(SpeichereHausplanerDokumentRequest $request, LeadAlternativeAdd $objekt): JsonResponse
     {
-        $daten = $request->validate([
-            'base_revision' => ['required', 'integer', 'min:1'],
-            'schema_version' => ['required', 'integer', 'in:1,2'],
-            'scene' => ['required', 'array'],
-            'scene.schemaVersion' => ['required', 'integer', 'in:1,2'], // v1+v2 gueltig; alles andere ⇒ 422 (Kante)
-            'scene.units' => ['required', 'in:mm'],
-            'scene.levels' => ['required', 'array', 'min:1'],
-            'scene.nodes' => ['present', 'array'],
-            'scene.roofs' => ['sometimes', 'array'],                    // D-a: Dach-Sammlung strukturell gueltig, wenn vorhanden
-        ]);
-
-        // B2-Fix (Planner-Entscheidung): validate() BESCHNEIDET die Szene auf die benannten Schluessel
-        // (scene.roofs + kuenftige v3-Felder fielen still weg -> HTTP 200 + Datenverlust). Das Gate oben
-        // prueft die Invarianten; PERSISTIERT wird die UNGESCHNITTENE Nutzlast aus input('scene').
-        $szene = $request->input('scene');
-
-        // P2: unbegrenzte/eingeschleuste Nutzlast abfangen. Inhaltliche Gueltigkeit bleibt Sache der
-        // Client-Zod-Pruefung (fehlerhafter Inhalt ist per Revision/Snapshot heilbar).
-        if (strlen((string) json_encode($szene)) > self::MAX_SCENE_BYTES) {
-            return response()->json(['message' => 'Die Szene überschreitet die zulässige Größe.'], 422);
-        }
-
         $dokument = $this->dokumentFuer($objekt);
 
         $ergebnis = app(SpeichereHausplanerDokument::class)->ausfuehren(
             $dokument,
-            (int) $daten['base_revision'],
-            $szene,
+            (int) $request->validated('base_revision'),
+            $request->scene(),
             optional($request->user())->id,
         );
 

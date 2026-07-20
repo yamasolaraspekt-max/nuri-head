@@ -9,7 +9,7 @@
  * - Öffnung: width/height > 0; die Wandbindungs-Regeln (offset+width ≤ Wandlänge)
  *   sind KONTEXT-Regeln und leben in validateSceneIntegrity (braucht Nachbar-Nodes)
  */
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 // mm-Invariante: ganze Millimeter, keine Floats in der Persistenz.
 const mm = z.number().int();

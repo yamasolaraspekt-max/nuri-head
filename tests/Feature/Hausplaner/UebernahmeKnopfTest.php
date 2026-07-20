@@ -51,7 +51,7 @@ class UebernahmeKnopfTest extends TestCase
     private function dokument(int $alt, array $scene): void
     {
         DB::table('hausplaner_documents')->insert([
-            'alternative_id' => $alt, 'schema_version' => 1, 'revision' => (int) ($scene['revision'] ?? 1),
+            'alternative_id' => $alt, 'schema_version' => (int) ($scene['schemaVersion'] ?? 1), 'revision' => (int) ($scene['revision'] ?? 1),
             'scene_json' => json_encode($scene), 'checksum' => 't',
             'created_by' => null, 'updated_by' => null, 'created_at' => now(), 'updated_at' => now(),
         ]);
@@ -60,23 +60,35 @@ class UebernahmeKnopfTest extends TestCase
     /** @return array<string,mixed> */
     private function wall(string $id, int $sx, int $sy, int $ex, int $ey): array
     {
-        return ['id' => $id, 'type' => 'wall', 'levelId' => 'L', 'start' => ['x' => $sx, 'y' => $sy], 'end' => ['x' => $ex, 'y' => $ey], 'height' => 2500];
+        return [
+            'id' => $id, 'type' => 'wall', 'levelId' => 'L',
+            'visible' => true, 'locked' => false, 'tags' => [],
+            'createdAt' => '2026-07-19T00:00:00.000Z', 'updatedAt' => '2026-07-19T00:00:00.000Z',
+            'start' => ['x' => $sx, 'y' => $sy], 'end' => ['x' => $ex, 'y' => $ey],
+            'thickness' => 240, 'height' => 2500,
+        ];
     }
 
     /** Zwei angrenzende 5×5-Räume (Muster UebernehmeSzeneInAuslegungTest). @return array<string,mixed> */
-    private function zweiRaumSzene(): array
+    private function zweiRaumSzene(int $alt): array
     {
         return [
-            'schemaVersion' => 1,
+            'id' => "doc-{$alt}",
+            'projectId' => $alt,
+            'schemaVersion' => 2,
             'units' => 'mm',
             'revision' => 1,
-            'levels' => [['id' => 'L', 'sortOrder' => 0, 'defaultWallHeight' => 2500]],
+            'settings' => ['gridSize' => 100, 'snapEnabled' => true, 'angleSnap' => 15],
+            'levels' => [['id' => 'L', 'name' => 'EG', 'elevation' => 0, 'sortOrder' => 0, 'defaultWallHeight' => 2500, 'floorThickness' => 200]],
             'nodes' => [
                 $this->wall('a_u', 0, 0, 5000, 0), $this->wall('b_u', 5000, 0, 10000, 0),
                 $this->wall('re', 10000, 0, 10000, 5000), $this->wall('b_o', 10000, 5000, 5000, 5000),
                 $this->wall('a_o', 5000, 5000, 0, 5000), $this->wall('li', 0, 5000, 0, 0),
                 $this->wall('mid', 5000, 0, 5000, 5000),
             ],
+            'materials' => [],
+            'roofs' => [],
+            'metadata' => ['createdAt' => '2026-07-19T00:00:00.000Z', 'updatedAt' => '2026-07-19T00:00:00.000Z'],
         ];
     }
 
@@ -105,7 +117,7 @@ class UebernahmeKnopfTest extends TestCase
     public function test_ohne_schreibrecht_403_und_keine_seiteneffekte(): void
     {
         $alt = $this->objekt(700);
-        $this->dokument($alt, $this->zweiRaumSzene());
+        $this->dokument($alt, $this->zweiRaumSzene($alt));
         $vorher = $this->dokumentZeile($alt);
 
         $u = $this->user(); // kein Grant
@@ -128,7 +140,7 @@ class UebernahmeKnopfTest extends TestCase
     public function test_uebernahme_erzeugt_genau_eine_version_dokument_byte_unveraendert(): void
     {
         $alt = $this->objekt(710);
-        $this->dokument($alt, $this->zweiRaumSzene());
+        $this->dokument($alt, $this->zweiRaumSzene($alt));
         $vorher = $this->dokumentZeile($alt);
 
         $u = $this->user();
@@ -157,7 +169,7 @@ class UebernahmeKnopfTest extends TestCase
     public function test_doppel_submit_idempotent_keine_doppel_version(): void
     {
         $alt = $this->objekt(720);
-        $this->dokument($alt, $this->zweiRaumSzene());
+        $this->dokument($alt, $this->zweiRaumSzene($alt));
 
         $u = $this->user();
         $this->grant($u, ['is_update' => 1]);
@@ -221,7 +233,7 @@ class UebernahmeKnopfTest extends TestCase
     public function test_staleness_kippt_nie_aktuell_veraltet(): void
     {
         $alt = $this->objekt(750);
-        $this->dokument($alt, $this->zweiRaumSzene());
+        $this->dokument($alt, $this->zweiRaumSzene($alt));
 
         $u = $this->user();
         $this->grant($u, ['is_read' => 1, 'is_update' => 1]);
@@ -236,10 +248,10 @@ class UebernahmeKnopfTest extends TestCase
             ->assertOk()->assertSee('Übernommen — aktuell (Szene Rev. 1)');
 
         // 3) Szene über den ECHTEN Speicherpfad ändern (Wand verschoben) ⇒ VERALTET.
-        $geaendert = $this->zweiRaumSzene();
+        $geaendert = $this->zweiRaumSzene($alt);
         $geaendert['nodes'][6] = $this->wall('mid', 6000, 0, 6000, 5000);
         $this->actingAs($u)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
-            'base_revision' => 1, 'schema_version' => 1, 'scene' => $geaendert,
+            'base_revision' => 1, 'schema_version' => 2, 'scene' => $geaendert,
         ])->assertOk();
 
         $this->actingAs($u)->get("/admin/hausplaner/objekt/{$alt}")
@@ -249,7 +261,7 @@ class UebernahmeKnopfTest extends TestCase
     public function test_zweite_uebernahme_nach_aenderung_version_additiv_altversion_unveraendert(): void
     {
         $alt = $this->objekt(760);
-        $this->dokument($alt, $this->zweiRaumSzene());
+        $this->dokument($alt, $this->zweiRaumSzene($alt));
 
         $u = $this->user();
         $this->grant($u, ['is_update' => 1]);
@@ -259,10 +271,10 @@ class UebernahmeKnopfTest extends TestCase
         $v1Vorher = (array) DB::table('anforderungsprofile')->where('verankerbar_id', $alt)->where('version', 1)->first();
 
         // Szene ändern (echter Speicherpfad), dann erneut übernehmen.
-        $geaendert = $this->zweiRaumSzene();
+        $geaendert = $this->zweiRaumSzene($alt);
         $geaendert['nodes'][6] = $this->wall('mid', 6000, 0, 6000, 5000);
         $this->actingAs($u)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
-            'base_revision' => 1, 'schema_version' => 1, 'scene' => $geaendert,
+            'base_revision' => 1, 'schema_version' => 2, 'scene' => $geaendert,
         ])->assertOk();
 
         $res = $this->actingAs($u)->post("/admin/hausplaner/objekt/{$alt}/uebernehmen");

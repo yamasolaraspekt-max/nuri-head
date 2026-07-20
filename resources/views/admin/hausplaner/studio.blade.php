@@ -34,10 +34,11 @@
         <span class="hp-scratch">Testfläche — wird NICHT gespeichert</span>
     </div>
 
+    {{-- Scratch-Dummy (bewusst absurd hoch): Studio ist persistenzfrei (kein data-speichern-url => save() ist No-Op) - NIE als echten Objekt-Anker verwenden. --}}
     @php
         $studioScene = [
             'id' => (string) \Illuminate\Support\Str::uuid(),
-            'projectId' => 0,
+            'projectId' => 999999999,
             'schemaVersion' => 1,
             'revision' => 1,
             'units' => 'mm',
