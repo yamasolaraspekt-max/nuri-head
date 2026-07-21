@@ -214,6 +214,57 @@ export function applyCommand(draft: SceneDocument, command: HausplanerCommand, j
       break;
     }
 
+    case 'ADD_LEVEL': {
+      const level = command.level;
+      if (draft.levels.some((l) => l.id === level.id)) {
+        throw new CommandAbgelehnt(`Level ${level.id} existiert bereits.`, 'level_existiert');
+      }
+      pruefeGanzzahlig(
+        [level.elevation, level.defaultWallHeight, level.floorThickness, level.sortOrder],
+        'Geschoss',
+      );
+      draft.levels.push({ ...level });
+      draft.levels.sort((a, b) => a.sortOrder - b.sortOrder);
+      break;
+    }
+
+    case 'UPDATE_LEVEL': {
+      const level = draft.levels.find((l) => l.id === command.levelId);
+      if (!level) {
+        throw new CommandAbgelehnt(`Level ${command.levelId} existiert nicht.`, 'level_unbekannt');
+      }
+      // id ist unveränderlich — Nodes/Dächer referenzieren sie (eine Wahrheit).
+      const { id: _ignoriereId, ...aenderbar } = command.changes;
+      Object.assign(level as object, aenderbar);
+      pruefeGanzzahlig(
+        [level.elevation, level.defaultWallHeight, level.floorThickness, level.sortOrder],
+        'Geschoss',
+      );
+      draft.levels.sort((a, b) => a.sortOrder - b.sortOrder);
+      break;
+    }
+
+    case 'REMOVE_LEVEL': {
+      if (draft.levels.length <= 1) {
+        throw new CommandAbgelehnt('Das letzte Geschoss kann nicht gelöscht werden.', 'level_letztes');
+      }
+      const level = draft.levels.find((l) => l.id === command.levelId);
+      if (!level) {
+        throw new CommandAbgelehnt(`Level ${command.levelId} existiert nicht.`, 'level_unbekannt');
+      }
+      // Kein stilles Löschen von Fach-Daten: belegte Geschosse werden abgelehnt.
+      const hatNodes = draft.nodes.some((n) => n.levelId === command.levelId);
+      const hatDach = Array.isArray(draft.roofs) && draft.roofs.some((r) => r.levelId === command.levelId);
+      if (hatNodes || hatDach) {
+        throw new CommandAbgelehnt(
+          `Geschoss ${level.name} enthält noch Elemente — erst leeren, dann löschen.`,
+          'level_nicht_leer',
+        );
+      }
+      draft.levels = draft.levels.filter((l) => l.id !== command.levelId);
+      break;
+    }
+
     case 'UPDATE_SETTINGS': {
       Object.assign(draft.settings, command.changes);
       break;

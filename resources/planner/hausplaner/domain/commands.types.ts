@@ -3,11 +3,17 @@
  * Szene; jede Änderung ist ein Command. Der Store führt Commands über Immer
  * `produceWithPatches` aus — die inversen Patches sind die Undo-Historie.
  */
-import type { SceneNode, RoofNode } from './scene.types';
+import type { SceneNode, RoofNode, Level } from './scene.types';
 
 export type HausplanerCommand =
   | { type: 'ADD_NODE'; node: SceneNode }
   | { type: 'REMOVE_NODE'; nodeId: string }
+  // Geschoss-Commands (P2b-5): operieren auf SceneDocument.levels. Undo/Redo/409 gelten
+  // automatisch, weil levels Teil des Immer-Drafts sind. Löschen NIE stillschweigend Nodes/Dächer
+  // eines Levels — ein nicht-leeres Level wird abgelehnt (level_nicht_leer).
+  | { type: 'ADD_LEVEL'; level: Level }
+  | { type: 'UPDATE_LEVEL'; levelId: string; changes: Partial<Level> }
+  | { type: 'REMOVE_LEVEL'; levelId: string }
   // Dach-Commands (D-a): operieren auf SceneDocument.roofs (getrennt von den Node-Commands).
   // Undo/Redo/409 gelten automatisch, weil roofs Teil des Immer-Drafts sind.
   | { type: 'ADD_ROOF'; roof: RoofNode }
@@ -35,6 +41,9 @@ export type AblehnungsGrund =
   | 'wirtswand_fehlt'
   | 'node_unbekannt'
   | 'level_unbekannt'
+  | 'level_existiert'
+  | 'level_letztes'
+  | 'level_nicht_leer'
   | 'nicht_ganzzahlig'
   | 'dach_pro_level_vorhanden'
   | 'dach_unbekannt';

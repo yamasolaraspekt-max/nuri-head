@@ -335,6 +335,55 @@ export function HausplanerApp(): React.ReactElement {
             {scene.levels.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
           </select>
         </label>
+        {/* P2b-5: Geschoss anlegen / umbenennen / löschen. Löschen NIE still — belegte Geschosse
+            lehnt der Command ab (letzteAblehnung wird sichtbar); id bleibt Referenz-Wahrheit. */}
+        <input
+          key={level.id}
+          type="text"
+          defaultValue={level.name}
+          title="Geschoss umbenennen (Enter bestätigt)"
+          onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
+          onBlur={(e) => {
+            const name = e.target.value.trim();
+            if (name && name !== level.name) {
+              store.getState().executeCommand({ type: 'UPDATE_LEVEL', levelId: level.id, changes: { name } });
+            } else {
+              e.target.value = level.name; // leeren/unveränderten Namen zurücksetzen
+            }
+          }}
+          style={{ width: 104, fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: '1px solid #d1d5db' }}
+        />
+        <button
+          type="button"
+          style={knopf(false)}
+          title="Neues Geschoss über dem obersten anlegen"
+          onClick={() => {
+            const oben = scene.levels.reduce((a, b) => (b.sortOrder > a.sortOrder ? b : a));
+            const neu = {
+              id: uuid(),
+              name: `Geschoss ${scene.levels.length + 1}`,
+              elevation: oben.elevation + oben.defaultWallHeight + oben.floorThickness,
+              defaultWallHeight: oben.defaultWallHeight,
+              floorThickness: oben.floorThickness,
+              sortOrder: oben.sortOrder + 1,
+            };
+            if (store.getState().executeCommand({ type: 'ADD_LEVEL', level: neu })) {
+              store.getState().setActiveLevel(neu.id);
+            }
+          }}
+        >+ Geschoss</button>
+        <button
+          type="button"
+          style={{ ...knopf(false), opacity: scene.levels.length <= 1 ? 0.4 : 1, cursor: scene.levels.length <= 1 ? 'not-allowed' : 'pointer' }}
+          disabled={scene.levels.length <= 1}
+          title={scene.levels.length <= 1 ? 'Das letzte Geschoss kann nicht gelöscht werden' : 'Aktives Geschoss löschen (muss leer sein)'}
+          onClick={() => {
+            const rest = scene.levels.filter((l) => l.id !== level.id);
+            if (store.getState().executeCommand({ type: 'REMOVE_LEVEL', levelId: level.id }) && rest[0]) {
+              store.getState().setActiveLevel(rest[0].id);
+            }
+          }}
+        >− Geschoss</button>
         <label style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'flex', alignItems: 'center', gap: 4 }}>
           <input type="checkbox" checked={scene.settings.snapEnabled} onChange={(e) => store.getState().executeCommand({ type: 'UPDATE_SETTINGS', changes: { snapEnabled: e.target.checked } })} />
           Fang
