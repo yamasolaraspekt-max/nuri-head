@@ -13,7 +13,7 @@ import type Konva from 'konva';
 import { useHausplanerStore } from '../store/hausplanerStore';
 import type { OpeningNode, RoofNode, SceneNode, WallNode } from '../domain/scene.types';
 import { erkenneRaeume } from '../geometry/roomDetection';
-import { wandLaenge, punktAufWand, type Punkt } from '../geometry/wallGeometry';
+import { wandLaenge, punktAufWand, wandBaender, type Punkt } from '../geometry/wallGeometry';
 import { DreiDBereich } from './DreiDBereich';
 
 type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach';
@@ -75,6 +75,14 @@ export function HausplanerApp(): React.ReactElement {
     () => (level ? erkenneRaeume(waende, level.defaultWallHeight) : []),
     [waende, level],
   );
+  // P2b-2: Wandbaender (gefuellte Polygone mit Gehrung an 2-Wand-Ecken).
+  const bandVon = useMemo(() => {
+    const m = new Map<string, ReturnType<typeof wandBaender>[number]>();
+    for (const b of wandBaender(waende)) {
+      m.set(b.id, b);
+    }
+    return m;
+  }, [waende]);
 
   // D-c: genau EIN ausgewähltes Dach ⇒ Parameter-Panel; Änderungen laufen als UPDATE_ROOF-Command.
   const selectedRoof = scene?.roofs?.find((r) => selectedNodeIds.length === 1 && selectedNodeIds[0] === r.id) ?? null;
@@ -460,25 +468,39 @@ export function HausplanerApp(): React.ReactElement {
               );
             })}
 
-            {/* Wände + Bemaßung */}
+            {/* Wände + Bemaßung — gefüllte Bänder mit Gehrung (P2b-2), Fallback Linie. */}
             {waende.map((w) => {
               const ausgewaehlt = selectedNodeIds.includes(w.id);
               const mitte = punktAufWand(w.start, w.end, wandLaenge(w.start, w.end) / 2);
+              const band = bandVon.get(w.id);
+              const klick = (e: Konva.KonvaEventObject<MouseEvent>): void => {
+                if (werkzeug === 'auswahl') {
+                  e.cancelBubble = true;
+                  store.getState().selectNodes([w.id]);
+                }
+              };
 
               return (
                 <Group key={w.id}>
-                  <Line
-                    points={[w.start.x, w.start.y, w.end.x, w.end.y]}
-                    stroke={ausgewaehlt ? FARBEN.auswahl : FARBEN.wand}
-                    strokeWidth={w.thickness}
-                    lineCap="butt"
-                    onClick={(e) => {
-                      if (werkzeug === 'auswahl') {
-                        e.cancelBubble = true;
-                        store.getState().selectNodes([w.id]);
-                      }
-                    }}
-                  />
+                  {band ? (
+                    <Line
+                      points={band.ecken.flatMap((p) => [p.x, p.y])}
+                      closed
+                      fill={ausgewaehlt ? FARBEN.auswahl : FARBEN.wandFuellung}
+                      stroke={ausgewaehlt ? FARBEN.auswahl : FARBEN.wand}
+                      strokeWidth={1.5 / zoom}
+                      lineJoin="round"
+                      onClick={klick}
+                    />
+                  ) : (
+                    <Line
+                      points={[w.start.x, w.start.y, w.end.x, w.end.y]}
+                      stroke={ausgewaehlt ? FARBEN.auswahl : FARBEN.wand}
+                      strokeWidth={w.thickness}
+                      lineCap="butt"
+                      onClick={klick}
+                    />
+                  )}
                   <Text
                     x={mitte.x - 500} y={mitte.y + w.thickness / 2 + 320} width={1000} align="center"
                     scaleY={-1}
