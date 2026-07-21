@@ -84,6 +84,25 @@ export function HausplanerApp(): React.ReactElement {
     }
   }
 
+  // P2b-1: Mauerwerk-Katalog (materialId-Wert + Anzeige) + gängige Wandstärken (mm).
+  const MAUERWERK = [
+    { id: 'ziegel', label: 'Ziegel (Hochlochziegel)' },
+    { id: 'kalksandstein', label: 'Kalksandstein (KS)' },
+    { id: 'porenbeton', label: 'Porenbeton' },
+    { id: 'leichtbeton', label: 'Leichtbeton (Bims)' },
+    { id: 'stahlbeton', label: 'Stahlbeton' },
+    { id: 'holzstaender', label: 'Holzständerwand' },
+  ] as const;
+  const WANDSTAERKEN = [115, 150, 175, 240, 300, 365] as const;
+
+  // P2b-1: genau EINE ausgewählte Wand ⇒ Mauerwerk-/Stärke-Panel; Änderungen als UPDATE_NODE (additiv).
+  const selectedWall = waende.find((w) => selectedNodeIds.length === 1 && selectedNodeIds[0] === w.id) ?? null;
+  function aktualisiereWand(changes: Partial<WallNode>): void {
+    if (selectedWall) {
+      store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedWall.id, changes });
+    }
+  }
+
   /** Default-Traufkontur = Gebäude-Umriss (Bounding-Box der Wände; ohne Wände ein 8×10-m-Rechteck). */
   function gebaeudeUmriss(): Array<{ x: number; y: number }> {
     const pts = waende.flatMap((w) => [w.start, w.end]);
@@ -524,6 +543,28 @@ export function HausplanerApp(): React.ReactElement {
                 <input type="number" min={0} value={selectedRoof.ueberstandMm} onChange={(e) => aktualisiereDach({ ueberstandMm: Math.max(0, Math.round(Number(e.target.value))) })} style={panelInput} />
               </label>
               <button type="button" style={{ ...knopf(false), width: '100%', marginTop: 4 }} onClick={() => { store.getState().executeCommand({ type: 'REMOVE_ROOF', roofId: selectedRoof.id }); store.getState().selectNodes([]); }}>Dach entfernen</button>
+            </>
+          ) : selectedWall ? (
+            <>
+              <div style={{ fontWeight: 700, marginBottom: 10 }}>Wand</div>
+              <label style={panelLabel}>Mauerwerk
+                <select value={selectedWall.construction?.materialId ?? ''} onChange={(e) => aktualisiereWand({ construction: { ...(selectedWall.construction ?? {}), materialId: e.target.value } })} style={panelInput}>
+                  <option value="">— wählen —</option>
+                  {MAUERWERK.map((m) => (<option key={m.id} value={m.id}>{m.label}</option>))}
+                </select>
+              </label>
+              <label style={panelLabel}>Wandstärke (mm)
+                <select value={WANDSTAERKEN.includes(selectedWall.thickness as typeof WANDSTAERKEN[number]) ? selectedWall.thickness : ''} onChange={(e) => aktualisiereWand({ thickness: Number(e.target.value) })} style={panelInput}>
+                  {!WANDSTAERKEN.includes(selectedWall.thickness as typeof WANDSTAERKEN[number]) && (<option value="">{selectedWall.thickness} mm (aktuell)</option>)}
+                  {WANDSTAERKEN.map((d) => (<option key={d} value={d}>{d} mm</option>))}
+                </select>
+              </label>
+              <label style={panelLabel}>Höhe (mm)
+                <input type="number" min={100} value={selectedWall.height} onChange={(e) => aktualisiereWand({ height: Math.max(100, Math.round(Number(e.target.value))) })} style={panelInput} />
+              </label>
+              <div style={{ marginTop: 10, padding: 8, background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 11, color: FARBEN.gedaempft }}>
+                Länge: {(Math.hypot(selectedWall.end.x - selectedWall.start.x, selectedWall.end.y - selectedWall.start.y) / 1000).toFixed(2)} m
+              </div>
             </>
           ) : (
             <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>
