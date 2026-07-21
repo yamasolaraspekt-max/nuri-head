@@ -19,6 +19,7 @@
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import type { OpeningNode, SceneDocument, WallNode, ZoneNode } from '../../domain/scene.types';
 import type { RendererAdapter } from './adapter';
 import { weltZuThree } from './adapter';
@@ -26,6 +27,37 @@ import { segmentiereWand } from './segmentierung';
 import { platziereWandQuader, bodenPunkteThree } from './platzierung';
 import { dachMeshWelt } from './dachMesh';
 import { DachGeometrieUngueltig } from '../../geometry/dachGeometrie';
+
+/**
+ * Render-Welle 1: Sonnenrichtung als reine Funktion (unit-testbar ohne WebGL).
+ *
+ * Liefert die NORMIERTE Richtung Szene→Sonne im three-Raum (y-up; Welt-Nord = +y ⇒ three −z, ▲K2).
+ * `northAngleGrad`: Drehung des wahren Nordens gegenüber Welt-+y in Grad, im Uhrzeigersinn —
+ * heutige SceneDocuments TRAGEN DIESES FELD NICHT (Ist-Beleg scene.types.ts), der Parameter ist
+ * die Andock-Naht für eine spätere Welle. `geo.latitude` verfeinert nur die Sonnenhöhe
+ * (Äquinoktium-Mittag 90°−|Breite|, geklemmt auf 10–75°). Fallback ohne Werte: Süd, 35° Höhe
+ * (deutscher Jahresmittel-Kompromiss, Spec §3.2). Ungültige Eingaben (NaN/∞) fallen auf den
+ * Fallback zurück — nie NaN in der Lichtposition (Kante Spec §5).
+ */
+export function sonnenRichtung(
+  northAngleGrad?: number | null,
+  geo?: { latitude: number } | null,
+): THREE.Vector3 {
+  const nord = Number.isFinite(northAngleGrad as number) ? (northAngleGrad as number) : 0;
+  const hoeheGrad = geo && Number.isFinite(geo.latitude)
+    ? Math.min(75, Math.max(10, 90 - Math.abs(geo.latitude)))
+    : 35;
+
+  // Kompass-Azimut der Sonne: 180° = Süd; northAngle verschiebt den Kompass gegenüber Welt-+y.
+  const azimutRad = ((180 + nord) * Math.PI) / 180;
+  const hoeheRad = (hoeheGrad * Math.PI) / 180;
+
+  // Welt (x=Ost, y=Nord, z=Höhe) → three (x, y=Höhe, z=−Welt-y), Achsabbildung wie weltZuThree.
+  const weltX = Math.sin(azimutRad) * Math.cos(hoeheRad);
+  const weltY = Math.cos(azimutRad) * Math.cos(hoeheRad);
+  const weltZ = Math.sin(hoeheRad);
+  return new THREE.Vector3(weltX, weltZ, -weltY).normalize();
+}
 
 const FARBE_WAND = 0xd9dee5;      // heller Putz — Form über Schatten + Kanten
 const FARBE_BODEN = 0xe4e7eb;     // heller Boden (CI)
@@ -48,6 +80,8 @@ export class HausplanerDreiDSzene implements RendererAdapter {
   private ausgewaehlt = new Set<string>();
   private rafId = 0;
   private readonly aufKlickAuswahl?: (nodeId: string | null) => void;
+  /** Render-Welle 1: PMREM-Ziel der RoomEnvironment — im dispose() freigeben (kein GPU-Leak, Kante Spec §5). */
+  private readonly umgebung: THREE.WebGLRenderTarget;
 
   constructor(container: HTMLElement, aufKlickAuswahl?: (nodeId: string | null) => void) {
     this.container = container;
@@ -66,6 +100,16 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     this.szene.background = new THREE.Color(0xeef1f5);        // helles CI-Studio
     this.szene.fog = new THREE.Fog(0xeef1f5, 70, 170);       // dezente Tiefenstaffelung
 
+    // Render-Welle 1 (A3): prozedurale Umgebung via PMREM + RoomEnvironment — Reflexionen +
+    // indirektes Licht, ohne HDRI-Asset. background bleibt bewusst die helle CI-Farbe
+    // (Studio-Charakter, Sichtprobe-Entscheidung); die Intensität ist gedrosselt, damit die
+    // bestehende Licht-Balance (A4: ACES + Exposure 1.05) nicht absäuft.
+    const pmrem = new THREE.PMREMGenerator(this.renderer);
+    this.umgebung = pmrem.fromScene(new RoomEnvironment(), 0.04);
+    pmrem.dispose();
+    this.szene.environment = this.umgebung.texture;
+    this.szene.environmentIntensity = 0.55;
+
     this.kamera = new THREE.PerspectiveCamera(
       50,
       (container.clientWidth || 1) / (container.clientHeight || 1),
@@ -79,8 +123,12 @@ export class HausplanerDreiDSzene implements RendererAdapter {
 
     // Pro-CAD-Beleuchtung: kühles Himmels-/Bodenlicht + schattenwerfendes Hauptlicht + Fülllicht.
     this.szene.add(new THREE.HemisphereLight(0xffffff, 0xc9ced5, 0.9));
+    // Render-Welle 1 (A3): Sonne aus der Szene abgeleitet statt fix. Heutige Dokumente tragen
+    // weder northAngle noch geolocation (Ist-Beleg scene.types.ts) ⇒ Fallback Süd/35° greift;
+    // die Parameter-Naht steht für die spätere Welle. Distanz 31 ≈ bisheriger Betrag |(16,24,12)|,
+    // damit das bestehende Schatten-Frustum (±35, far 90) die Szene weiter umschließt (Spec §3.3).
     const hauptlicht = new THREE.DirectionalLight(0xffffff, 2.0);
-    hauptlicht.position.set(16, 24, 12);
+    hauptlicht.position.copy(sonnenRichtung().multiplyScalar(31));
     hauptlicht.castShadow = true;
     hauptlicht.shadow.mapSize.set(2048, 2048);
     hauptlicht.shadow.camera.near = 1;
@@ -168,6 +216,8 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     this.beobachter.disconnect();
     this.renderer.domElement.removeEventListener('pointerdown', this.klick);
     this.leereInhalt();
+    this.szene.environment = null;
+    this.umgebung.dispose(); // Render-Welle 1: PMREM-Ziel freigeben (Kante Spec §5, Re-Mount ohne GPU-Leak)
     this.steuerung.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();
