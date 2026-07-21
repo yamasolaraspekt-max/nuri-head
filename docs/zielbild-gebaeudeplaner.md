@@ -7,6 +7,13 @@ Dieses Dokument nagelt die Vision fest, damit sie über Jahre trägt. Es ist die
 Wer am Planer baut, liest zuerst hier. Es verhindert zweite Datenmodelle, doppelte Renderer und
 das Nachbauen von reifer Fremdtechnik.
 
+> **⛔ P/G/E = NUR Entwickler-Rollen (V3-Klarstellung 2026-07-20).** Planner/Generator/Evaluator
+> sind die drei Entwickler-Rollen des Zyklus, der diese Software BAUT — **keine** Produktfunktionen.
+> Das Produkt ist ein **manueller Profi-Planer**; es bekommt keine „Planen/Generieren/Bewerten"-
+> Navigation, keine KI-Grundriss-Generierung und keine automatische Design-Benotung. Generative
+> KI-Vorschläge sind außer Scope, bis separat als eigenes Feature geplant. Produktname bleibt
+> „Hausplaner". Vollfassung: `CLAUDE.md` (Block „ROLLEN vs. PRODUKT").
+
 ---
 
 ## 1 · Was wir bauen

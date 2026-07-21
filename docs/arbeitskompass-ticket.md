@@ -1,6 +1,6 @@
 # Arbeitskompass — ticket
 
-**Stand:** 2026-07-19
+**Stand:** 2026-07-21
 **Zweck:** Diese Datei beantwortet jederzeit die Fragen: *Woran arbeiten wir gerade? Wann ist es fertig? Was kommt als Nächstes? Was ist geparkt?*
 
 > **Rang/Funktion:** Dieser Arbeitskompass ist ein **Navigations- und Statusdokument**. Er verweist auf die führenden Fahrpläne, ADRs und Startblöcke. Er **ersetzt oder überstimmt keine ranghöhere Governance** (BETRIEBSORDNUNG, `CLAUDE.md`, `STRAENGE.md`, ratifizierte ADRs) und **bestimmt nicht eigenständig den Scope eines Umsetzungsslices** — das tut der freigegebene **Startblock** des aktiven Slices. Bei Widersprüchen gilt die festgelegte Quellenhierarchie.
@@ -13,11 +13,32 @@
 
 ---
 
-## Aktueller Arbeitsstand — Stand 2026-07-15
+## Aktueller Arbeitsstand — Stand 2026-07-21
 
 **Systemweite Bestandsaufnahme abgeschlossen.** Die systemweite Read-only-Analyse für Konfiguration, Auslegung und 3D-Gebäudeplaner ist **abgeschlossen, unabhängig evaluiert und unter [`docs/configuration/`](configuration/) dokumentiert** (ADR-0001 „Bedarf führt, Produkt folgt", Gesamtarchitektur, Anforderungs-/Lückenmatrix, Modul-/Abhängigkeitsmatrix, Umsetzungsfahrplan, Vollständigkeitsbericht, Evaluator-Akte). Sie bildet die Architektur- und Lückengrundlage für die folgenden Slices.
 
-### Aktiver Strang: WP Stufe 3b — kontrollierte Folgeintegration
+### Aktiver Strang: Hausplaner bis einschließlich UX-Welle 1
+
+**Fokusentscheidung Yama vom 2026-07-21:** Der Hausplaner wird ab jetzt als Hauptstrang
+bis einschließlich UX-Welle 1 geschlossen weitergeführt. WP Stufe 3b / P1b-2 wird für
+diesen Zeitraum bewusst geparkt. Diese Fokusentscheidung legt ausschließlich die
+Reihenfolge fest; sie ist **keine Umsetzungs-, Commit- oder Push-Freigabe** für eine
+Folgescheibe.
+
+**Nächster möglicher Slice:**
+- Hausplaner Scheibe 1 — Baseline und Repository-Hygiene für `7773c28`: versehentlichen
+  Gitlink getrennt behandeln, aktuelle JS-/PHP-/Vollsuite ausführen und Studio/Speichern/
+  409 im echten Browser belegen. **Wird hier NICHT freigegeben** — nur mit eigenem
+  Startblock + Yama-Freigabe.
+
+**Danach in festgelegter Reihenfolge, jeweils eigener Planner→Generator→Evaluator-Zyklus:**
+1. Arbeitskompass auf den abgenommenen Ist-Stand fortschreiben.
+2. Render-Welle 1 „Umgebungslicht + Sonne".
+3. FS-4 Giebeldreiecke als getrennte Geometrie-Mini-Scheibe.
+4. UX-Welle 1, intern weiter in Orbit/Pick, MOVE_NODE-UI, Präzision/Orientierung
+   und 409-Konfliktbehandlung zu schneiden.
+
+### Geparkter Strang: WP Stufe 3b — kontrollierte Folgeintegration
 
 **Abgeschlossen (committet/geprüft):**
 - WP Stufe 3a — Auslegungsketten-Orchestrator (`WpAuslegungsketteService`, service-only).
@@ -25,8 +46,10 @@
 - P1a — Charakterisierung der bestehenden WP-Ergebnis-/Kosten-/Förder-/Dokument-/Heizlastpfade (Golden Master).
 - P1b-1 — verhaltensgleiche Extraktion der Kostenlogik (`WpCostingService`).
 
-**Nächster möglicher Slice:**
-- P1b-2 — verhaltensgleiche Extraktion der Förderungslogik (`WpFundingAssessmentService`). **Wird hier NICHT freigegeben** — nur mit eigenem Startblock + Yama-Freigabe.
+**Nächster möglicher Slice nach bewusster Wiederaufnahme:**
+- P1b-2 — verhaltensgleiche Extraktion der Förderungslogik (`WpFundingAssessmentService`).
+  Bis zum Abschluss oder ausdrücklichen Abbruch der Hausplaner-UX-Welle geparkt; auch
+  danach nur mit eigenem Startblock + Yama-Freigabe.
 
 **Gesperrt (jeweils nur mit eigenem Startblock):**
 - P1b-3 — Dokument-/View-Model-Service.
@@ -35,7 +58,7 @@
 - M-2 — HTTP-409-Vertrag für stale Profilversionen.
 - P1c — Orchestrator-Verdrahtung, Ranking, Auswahl und UI (inkl. Korrektur der Geräte-Unabhängigkeit A1).
 
-### Nebenstrang: Hausplaner + FiBu Stufe (ii) — Stand 2026-07-19
+### Hausplaner-Bestandsstand + FiBu Stufe (ii) — Ausgangslage 2026-07-19
 
 **Committet (bis `d99cbb7`), jeweils unabhängig evaluiert:**
 - `c3fcf75` — Hausplaner Save-Fix (B2/T2): v2+Dach wird persistiert, kein stiller Verlust mehr.
@@ -120,13 +143,14 @@ Der Zustand „erst Wärmepumpe auswählen, danach Verbrauch/Objekt" ist fachlic
 
 ## Danach — nächste große Themen (Reihenfolge-Disziplin)
 
-Nach dem WP-Strang kommt nicht automatisch die nächste spontane Baustelle. Grobreihenfolge (je eigener Startblock, Yama entscheidet):
+Nach dem jeweils aktiven Strang kommt nicht automatisch die nächste spontane Baustelle. Grobreihenfolge (je eigener Startblock, Yama entscheidet):
 
-1. WP Stufe 3b weiterführen (P1b-2 ff.) **oder** bewusst parken.
-2. Rückfluss Montage/Planner → Büro aus [`docs/fahrplan-ticket-crm.md`](fahrplan-ticket-crm.md) wieder aufnehmen.
-3. Kundenprofil-/Objekt-Profil-Redesign erst mit eigener Bestandsaufnahme.
-4. Große Status-/Stage-Ablösungen nur einzeln und geplant.
-5. Hygiene/404/tote Views nur als Lückenfüller.
+1. Hausplaner bis einschließlich UX-Welle 1 nach der oben festgelegten Scheibenfolge führen.
+2. Danach bewusst entscheiden: WP Stufe 3b mit P1b-2 wieder aufnehmen oder weiter parken.
+3. Rückfluss Montage/Planner → Büro aus [`docs/fahrplan-ticket-crm.md`](fahrplan-ticket-crm.md) wieder aufnehmen.
+4. Kundenprofil-/Objekt-Profil-Redesign erst mit eigener Bestandsaufnahme.
+5. Große Status-/Stage-Ablösungen nur einzeln und geplant.
+6. Hygiene/404/tote Views nur als Lückenfüller.
 
 Umsetzungsreihenfolge der systemweiten Slices: siehe [`docs/configuration/umsetzungsfahrplan.md`](configuration/umsetzungsfahrplan.md).
 
@@ -162,9 +186,12 @@ Ist die Aufgabe nicht klar einordenbar, wird **nicht gebaut**, sondern der Arbei
 ## Kurzstatus für den Start eines neuen Chats
 
 ```text
-Aktiver Strang im ticket: WP Stufe 3b (kontrollierte Folgeintegration).
-Abgeschlossen: 3a, P0, P1a, P1b-1 (Kostenservice).
-Nächster möglicher Slice: P1b-2 (Förderungsservice) — nur mit eigenem Startblock + Yama-Freigabe.
+Aktiver Strang im ticket: Hausplaner bis einschließlich UX-Welle 1.
+Fokusentscheidung Yama 2026-07-21: WP Stufe 3b / P1b-2 ist bewusst geparkt.
+Nächster möglicher Slice: Hausplaner Scheibe 1 — Baseline und Repository-Hygiene
+für 7773c28; nur mit eigenem Startblock + Yama-Freigabe.
+Danach: Arbeitskompass-Abgleich → Render-Welle 1 → FS-4 Giebeldreiecke → UX-Welle 1.
+WP abgeschlossen: 3a, P0, P1a, P1b-1 (Kostenservice); P1b-2 wartet auf Wiederaufnahme.
 Systemweite Analyse liegt unter docs/configuration/ (ADR-0001 + Matrizen + Fahrplan).
 Bedarfsgeführt vor produktgeführt. Reuse statt Neubau. Kein automatischer Folgeslice.
 Siehe docs/arbeitskompass-ticket.md.

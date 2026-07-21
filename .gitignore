@@ -24,6 +24,7 @@ yarn-error.log
 # kein geteilter Repo-Inhalt (kehrte bei jedem Commit als Rauschen zurueck).
 .claude/settings.json
 .claude/settings.local.json
+.claude/worktrees/
 
 # stale git-lock-Artefakte der Parallel-Instanzen
 _to_delete/
