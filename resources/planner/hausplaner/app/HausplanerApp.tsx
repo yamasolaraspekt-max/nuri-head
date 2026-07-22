@@ -587,6 +587,11 @@ export function HausplanerApp(): React.ReactElement {
                     const lot = lotAufWand({ x: e.target.x(), y: e.target.y() }, wand);
                     const laenge = wandLaenge(wand.start, wand.end);
                     const off = Math.round(Math.max(0, Math.min(lot.offset - o.width / 2, laenge - o.width)));
+                    // Fix (Evaluator 4c1cfac): Konva-Position auf die Wandachse zuruecksetzen,
+                    // analog zum Wand-Handler. Sonst strandet die Oeffnung bei Quer-Drag neben
+                    // der Wand, weil react-konva unveraenderte Positions-Props nicht neu setzt.
+                    const neueMitte = punktAufWand(wand.start, wand.end, off + o.width / 2);
+                    e.target.position({ x: neueMitte.x, y: neueMitte.y });
                     store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: o.id, changes: { offsetFromWallStart: off } });
                   }}
                 >
