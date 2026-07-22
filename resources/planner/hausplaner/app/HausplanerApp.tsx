@@ -25,6 +25,19 @@ const FARBEN = {
   warnung: '#d97706', gefahr: '#b91c1c', erfolg: '#15803d',
 } as const;
 
+// L1 Layout-Aktivierung — Navigations-Stile (tokens-konform: neutral, Marke nur als Auswahl-Akzent).
+const navGrp: React.CSSProperties = { fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#9ca3af', padding: '12px 12px 4px' };
+const navItem = (aktiv: boolean): React.CSSProperties => ({ display: 'flex', alignItems: 'center', gap: 9, textAlign: 'left', width: 'calc(100% - 12px)', margin: '1px 6px', padding: '8px 8px', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 13, background: aktiv ? 'rgba(147,194,28,0.12)' : 'transparent', color: aktiv ? '#3f5a00' : '#1f2937', fontWeight: aktiv ? 700 : 500 });
+const navHub: React.CSSProperties = { fontSize: 12.5, fontWeight: 600, color: '#1f2937', padding: '8px 12px 2px' };
+const navSub: React.CSSProperties = { fontSize: 12.5, color: '#6b7280', padding: '6px 12px 6px 22px' };
+const FACHPLANER: ReadonlyArray<{ name: string; items: readonly string[] }> = [
+  { name: 'Haustechnik', items: ['Heizung', 'Heizlastberechnung', 'Lüftung', 'Klima', 'Wärmepumpe', 'Heizkörper', 'Fußbodenheizung', 'Wärme-Contracting'] },
+  { name: 'PV-Planer', items: ['PV-Module', 'Speicherauslegung', 'Wallbox', 'Carport', 'Zaun', 'Freiland', 'HEMS', 'Messstellenbetrieb', 'dynamischer Stromtarif', 'Mietstrom'] },
+  { name: 'Bauelemente', items: ['Fenster', 'Tür'] },
+  { name: 'Bad', items: [] },
+  { name: 'Küche', items: [] },
+];
+
 const uuid = (): string =>
   (globalThis.crypto?.randomUUID?.() ?? `id-${Math.random().toString(36).slice(2)}-${Date.now()}`);
 
@@ -357,7 +370,7 @@ export function HausplanerApp(): React.ReactElement {
     color: aktiv ? 'var(--sa-accent-hover, #4d7c0f)' : FARBEN.gedaempft,
   });
 
-  const breite = (typeof window !== 'undefined' ? window.innerWidth : 1200) - 56 - 268; // minus Werkzeugleiste + Panel
+  const breite = (typeof window !== 'undefined' ? window.innerWidth : 1200) - 220 - 268; // minus Werkzeugleiste + Panel
   const stageBreite = modus === 'split' ? Math.floor(breite / 2) : breite; // P1c: Split teilt die Fläche
   const hoehe = typeof window !== 'undefined' ? window.innerHeight - 96 : 700;
 
@@ -460,16 +473,26 @@ export function HausplanerApp(): React.ReactElement {
           Der 3D-Bereich bleibt über Moduswechsel gemountet (nur ausgeblendet) ⇒ Kamera
           bleibt erhalten; dispose() erst beim Verlassen der Seite (Kante 6). */}
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
-        {/* Linke Icon-Werkzeugleiste (CAD-Muster) */}
-        <div style={{ width: 56, flex: '0 0 auto', background: '#fff', borderRight: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', gap: 4, padding: '8px 6px' }}>
+        {/* L1: Planer-Navigation — Werkzeuge (aktiv) + Fachplaner-Struktur (Navi). */}
+        <div style={{ width: 220, flex: '0 0 auto', background: '#fff', borderRight: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
+          <div style={navGrp}>Werkzeuge</div>
           {([['auswahl', 'V', 'Auswahl'], ['wand', 'W', 'Wand'], ['fenster', 'F', 'Fenster'], ['tuer', 'T', 'Tür'], ['dach', 'D', 'Dach']] as ReadonlyArray<readonly [string, string, string]>).map(([w, k, label]) => (
             <button key={w} type="button" title={`${label} (${k})`}
               onClick={() => { setWerkzeug(w as typeof werkzeug); if (w === 'wand') { setWandStart(null); } }}
-              style={railBtn(werkzeug === w)}>
-              <span style={{ fontSize: 16, lineHeight: 1 }}>{railIcon(w)}</span>
-              <span style={{ fontSize: 9.5, marginTop: 3 }}>{label}</span>
+              style={navItem(werkzeug === w)}>
+              <span style={{ width: 18, textAlign: 'center' }}>{railIcon(w)}</span>
+              <span style={{ flex: 1 }}>{label}</span>
+              <span style={{ fontSize: 10.5, color: '#9ca3af' }}>{k}</span>
             </button>
           ))}
+          <div style={navGrp}>Fachplaner</div>
+          {FACHPLANER.map((g) => (
+            <React.Fragment key={g.name}>
+              <div style={navHub} title="Modul – geplant">{g.name}</div>
+              {g.items.map((it) => (<div key={it} style={navSub} title="geplant">{it}</div>))}
+            </React.Fragment>
+          ))}
+          <div style={{ padding: '10px 12px', fontSize: 11, color: '#9ca3af', borderTop: '1px solid #eef0f2', marginTop: 'auto' }}>Erweiterbar – Module folgen.</div>
         </div>
         <div style={{ display: modus === '3d' ? 'none' : 'block', width: stageBreite, borderRight: modus === 'split' ? '1px solid #e5e7eb' : 'none' }}>
         <Stage
