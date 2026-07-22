@@ -239,6 +239,37 @@
                 },
                 "additionalProperties": false
               },
+              "produkt": {
+                "type": "object",
+                "properties": {
+                  "profilId": {
+                    "type": "string"
+                  },
+                  "verglasungId": {
+                    "type": "string"
+                  },
+                  "oeffnungsArt": {
+                    "type": "string",
+                    "enum": [
+                      "fest",
+                      "dreh",
+                      "kipp",
+                      "dreh-kipp"
+                    ]
+                  },
+                  "rc": {
+                    "type": "string",
+                    "enum": [
+                      "ohne",
+                      "RC1N",
+                      "RC2N",
+                      "RC2",
+                      "RC3"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              },
               "clamped": {
                 "type": "boolean"
               },

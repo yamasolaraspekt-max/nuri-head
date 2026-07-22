@@ -78,6 +78,15 @@ export const openingNodeSchema = z
       })
       .strict()
       .optional(),
+    produkt: z
+      .object({
+        profilId: z.string().optional(),
+        verglasungId: z.string().optional(),
+        oeffnungsArt: z.enum(['fest', 'dreh', 'kipp', 'dreh-kipp']).optional(),
+        rc: z.enum(['ohne', 'RC1N', 'RC2N', 'RC2', 'RC3']).optional(),
+      })
+      .strict()
+      .optional(),
     clamped: z.boolean().optional(),
     anschlag: z.enum(['links', 'rechts']).optional(),
     oeffnung: z.enum(['innen', 'aussen']).optional(),

@@ -125,6 +125,15 @@ export interface OpeningNode extends BaseNode {
    *  und Aufschlagseite (innen = linke Wandnormale, außen = rechte). */
   anschlag?: 'links' | 'rechts';
   oeffnung?: 'innen' | 'aussen';
+
+  /** Fenster-/Tuer-Produktkonfiguration (additiv, Solar Aspekt): Profil/Glas/Oeffnungsart/RC.
+   *  Fachrechnung (Uw/RC/Preis) in geometry/fensterProdukt.ts; hier nur die Auswahl-IDs. */
+  produkt?: {
+    profilId?: string;
+    verglasungId?: string;
+    oeffnungsArt?: 'fest' | 'dreh' | 'kipp' | 'dreh-kipp';
+    rc?: 'ohne' | 'RC1N' | 'RC2N' | 'RC2' | 'RC3';
+  };
 }
 
 /** Frei platzierbare Objekte — P0 nur Typ-Definition, keine Werkzeuge. */
