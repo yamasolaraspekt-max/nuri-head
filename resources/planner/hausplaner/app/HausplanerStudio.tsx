@@ -21,6 +21,16 @@ export function HausplanerStudio(): React.ReactElement {
   const [konfig, setKonfig] = React.useState<KonfigArt | null>(null);
   const toastTimer = React.useRef<number | undefined>(undefined);
 
+  // Schmale Viewports (Handy/Baustelle): Navigation automatisch auf die Icon-Leiste einklappen,
+  // damit der Inhalt nicht in einen Reststreifen gedrängt wird (ux-Rubrik: tragfähig auf dem Handy).
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const prüfe = (): void => setNavZu(window.innerWidth < 900);
+    prüfe();
+    window.addEventListener('resize', prüfe);
+    return () => window.removeEventListener('resize', prüfe);
+  }, []);
+
   const zeigeToast = React.useCallback((t: string) => {
     setToast(t);
     if (toastTimer.current) window.clearTimeout(toastTimer.current);
