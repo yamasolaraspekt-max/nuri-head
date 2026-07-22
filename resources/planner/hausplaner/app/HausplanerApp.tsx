@@ -13,7 +13,7 @@ import type Konva from 'konva';
 import { useHausplanerStore } from '../store/hausplanerStore';
 import type { OpeningNode, RoofNode, SceneNode, WallNode } from '../domain/scene.types';
 import { erkenneRaeume } from '../geometry/roomDetection';
-import { punkteMassketten } from '../geometry/masskette';
+import { bemassung } from '../geometry/bemassung';
 import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt } from '../geometry/wallGeometry';
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
@@ -428,36 +428,40 @@ export function HausplanerApp(): React.ReactElement {
     rasterLinien.push(<Line key={`hy${y}`} points={[-weltBreite * 2, y, weltBreite * 2, y]} stroke={FARBEN.rasterGrob} strokeWidth={1 / zoom} listening={false} />);
   }
 
-  // P2b-3: 2D-Maßkette — getestete grundrissMassketten in die Ansicht rendern (nur lesen, kein Command).
-  const bandEcken = Array.from(bandVon.values()).flatMap((b) => b.ecken);
-  const massketten = punkteMassketten(bandEcken); // Außenmaß aus Wandband-Ecken (mit Mauerdicke)
+  // P2b-3: mehrstufige Bemaßung (nur lesen, kein Command) — INNEN die Öffnungskette (Wandstärken +
+  // Fenster/Tür-Öffnungen + lichte Maße), AUSSEN das Gesamt-Außenmaß. Referenzpunkte sauber je Achse.
+  const bem = bemassung(
+    waende.map((w) => ({ id: w.id, start: w.start, end: w.end, thickness: w.thickness })),
+    nodes.filter(istOeffnung).map((o) => ({ hostWallId: o.hostWallId, offsetFromWallStart: o.offsetFromWallStart, width: o.width })),
+  );
   const massElemente: React.ReactElement[] = [];
-  if (massketten.bbox) {
-    const bb = massketten.bbox;
-    const abstand = 900; // mm Abstand der Maßlinie vom Gebäude
-    const tick = 120; // mm halbe Strichlänge
-    const mfarbe = '#6b7280';
-    const yLinie = bb.minY - abstand;
-    const xLinie = bb.minX - abstand;
+  if (bem.bbox) {
+    const bb = bem.bbox;
+    const tick = 120;
     const sw = 1 / zoom;
-    massketten.xKette.forEach((seg, i) => {
-      massElemente.push(<Line key={`mx${i}`} points={[seg.von, yLinie, seg.bis, yLinie]} stroke={mfarbe} strokeWidth={sw} listening={false} />);
-      massElemente.push(<Line key={`mxa${i}`} points={[seg.von, yLinie - tick, seg.von, yLinie + tick]} stroke={mfarbe} strokeWidth={sw} listening={false} />);
-      massElemente.push(<Text key={`mxt${i}`} x={(seg.von + seg.bis) / 2 - 600} y={yLinie - 200} width={1200} align="center" scaleY={-1} text={`${seg.laenge}`} fontSize={170} fill={mfarbe} listening={false} />);
-    });
-    if (massketten.xKette.length) {
-      const last = massketten.xKette[massketten.xKette.length - 1];
-      massElemente.push(<Line key="mxend" points={[last.bis, yLinie - tick, last.bis, yLinie + tick]} stroke={mfarbe} strokeWidth={sw} listening={false} />);
-    }
-    massketten.yKette.forEach((seg, i) => {
-      massElemente.push(<Line key={`my${i}`} points={[xLinie, seg.von, xLinie, seg.bis]} stroke={mfarbe} strokeWidth={sw} listening={false} />);
-      massElemente.push(<Line key={`mya${i}`} points={[xLinie - tick, seg.von, xLinie + tick, seg.von]} stroke={mfarbe} strokeWidth={sw} listening={false} />);
-      massElemente.push(<Text key={`myt${i}`} x={xLinie - 1350} y={(seg.von + seg.bis) / 2 + 90} width={1200} align="right" scaleY={-1} text={`${seg.laenge}`} fontSize={170} fill={mfarbe} listening={false} />);
-    });
-    if (massketten.yKette.length) {
-      const last = massketten.yKette[massketten.yKette.length - 1];
-      massElemente.push(<Line key="myend" points={[xLinie - tick, last.bis, xLinie + tick, last.bis]} stroke={mfarbe} strokeWidth={sw} listening={false} />);
-    }
+    const mfarbe = '#6b7280';
+    const gfarbe = '#374151';
+    type Seg = { von: number; bis: number; laenge: number };
+    const ketteX = (segs: ReadonlyArray<Seg>, yl: number, kp: string, farbe: string, fs: number) => {
+      segs.forEach((seg, i) => {
+        massElemente.push(<Line key={`${kp}L${i}`} points={[seg.von, yl, seg.bis, yl]} stroke={farbe} strokeWidth={sw} listening={false} />);
+        massElemente.push(<Line key={`${kp}a${i}`} points={[seg.von, yl - tick, seg.von, yl + tick]} stroke={farbe} strokeWidth={sw} listening={false} />);
+        massElemente.push(<Text key={`${kp}t${i}`} x={(seg.von + seg.bis) / 2 - 700} y={yl - 200} width={1400} align="center" scaleY={-1} text={`${seg.laenge}`} fontSize={fs} fill={farbe} listening={false} />);
+      });
+      if (segs.length) { const last = segs[segs.length - 1]; massElemente.push(<Line key={`${kp}end`} points={[last.bis, yl - tick, last.bis, yl + tick]} stroke={farbe} strokeWidth={sw} listening={false} />); }
+    };
+    const ketteY = (segs: ReadonlyArray<Seg>, xl: number, kp: string, farbe: string, fs: number) => {
+      segs.forEach((seg, i) => {
+        massElemente.push(<Line key={`${kp}L${i}`} points={[xl, seg.von, xl, seg.bis]} stroke={farbe} strokeWidth={sw} listening={false} />);
+        massElemente.push(<Line key={`${kp}a${i}`} points={[xl - tick, seg.von, xl + tick, seg.von]} stroke={farbe} strokeWidth={sw} listening={false} />);
+        massElemente.push(<Text key={`${kp}t${i}`} x={xl - 1500} y={(seg.von + seg.bis) / 2 + 90} width={1400} align="right" scaleY={-1} text={`${seg.laenge}`} fontSize={fs} fill={farbe} listening={false} />);
+      });
+      if (segs.length) { const last = segs[segs.length - 1]; massElemente.push(<Line key={`${kp}end`} points={[xl - tick, last.bis, xl + tick, last.bis]} stroke={farbe} strokeWidth={sw} listening={false} />); }
+    };
+    ketteX(bem.x.oeffnung, bb.minY - 900, 'ox', mfarbe, 150);
+    ketteY(bem.y.oeffnung, bb.minX - 900, 'oy', mfarbe, 150);
+    if (bem.x.gesamt) ketteX([bem.x.gesamt], bb.minY - 1900, 'gx', gfarbe, 190);
+    if (bem.y.gesamt) ketteY([bem.y.gesamt], bb.minX - 1900, 'gy', gfarbe, 190);
   }
 
   return (
