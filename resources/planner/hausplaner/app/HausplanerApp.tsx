@@ -40,6 +40,33 @@ const FACHPLANER: ReadonlyArray<{ name: string; items: readonly string[] }> = [
   { name: 'Küche', items: [] },
 ];
 
+// SVG-Icons (frei/Feather-Stil, nachgezeichnet) — einheitlich 24er-Viewbox, stroke=currentColor.
+function svgWrap(children: React.ReactNode): React.ReactElement {
+  return (
+    <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">{children}</svg>
+  );
+}
+function werkzeugIcon(w: string): React.ReactElement {
+  switch (w) {
+    case 'auswahl': return svgWrap(<path d="M5 3l6 16 2-7 7-2z" />);
+    case 'wand': return svgWrap(<rect x="3" y="10" width="18" height="4" rx="1" />);
+    case 'fenster': return svgWrap(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M12 4v16M4 12h16" /></>);
+    case 'tuer': return svgWrap(<><path d="M7 21V4h9v17" /><path d="M7 21a9 9 0 0 1 9-9" /></>);
+    case 'dach': return svgWrap(<path d="M3 12L12 5l9 7" />);
+    default: return svgWrap(<circle cx="12" cy="12" r="3" />);
+  }
+}
+function fachIcon(name: string): React.ReactElement {
+  switch (name) {
+    case 'Haustechnik': return svgWrap(<path d="M8 3v18M12 3v18M16 3v18" />);
+    case 'PV-Planer': return svgWrap(<><rect x="3" y="4" width="18" height="12" rx="1" /><path d="M3 8h18M3 12h18M9 4v12M15 4v12" /></>);
+    case 'Bauelemente': return svgWrap(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M12 4v16M4 12h16" /></>);
+    case 'Bad': return svgWrap(<><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" /><path d="M6 12V6a2 2 0 0 1 4 0" /></>);
+    case 'Küche': return svgWrap(<><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 15h18M8 3v6" /></>);
+    default: return svgWrap(<circle cx="12" cy="12" r="8" />);
+  }
+}
+
 const uuid = (): string =>
   (globalThis.crypto?.randomUUID?.() ?? `id-${Math.random().toString(36).slice(2)}-${Date.now()}`);
 
@@ -537,11 +564,17 @@ export function HausplanerApp(): React.ReactElement {
         {/* L1: Planer-Navigation — Werkzeuge (aktiv) + Fachplaner-Struktur (Navi). */}
         <div style={{ width: 220, flex: '0 0 auto', background: '#fff', borderRight: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
           <div style={navGrp}>Werkzeuge</div>
-          {([['auswahl', 'V', 'Auswahl'], ['wand', 'W', 'Wand'], ['fenster', 'F', 'Fenster'], ['tuer', 'T', 'Tür'], ['dach', 'D', 'Dach']] as ReadonlyArray<readonly [string, string, string]>).map(([w, k, label]) => (
-            <button key={w} type="button" title={`${label} (${k})`}
+          {([
+            ['auswahl', 'V', 'Auswahl', 'Objekte anklicken zum Markieren, ziehen zum Bewegen'],
+            ['wand', 'W', 'Wand', 'Wände zeichnen — Punkt für Punkt klicken (Polygonzug)'],
+            ['fenster', 'F', 'Fenster', 'Fenster auf eine Wand setzen — Typ oben wählbar'],
+            ['tuer', 'T', 'Tür', 'Tür auf eine Wand setzen — Typ oben wählbar'],
+            ['dach', 'D', 'Dach', 'Dach über den Gebäudeumriss aufsetzen'],
+          ] as ReadonlyArray<readonly [string, string, string, string]>).map(([w, k, label, beschr]) => (
+            <button key={w} type="button" title={`${label} (${k}) — ${beschr}`}
               onClick={() => { setWerkzeug(w as typeof werkzeug); if (w === 'wand') { setWandStart(null); } }}
               style={navItem(werkzeug === w)}>
-              <span style={{ width: 18, textAlign: 'center' }}>{railIcon(w)}</span>
+              <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>{werkzeugIcon(w)}</span>
               <span style={{ flex: 1 }}>{label}</span>
               <span style={{ fontSize: 10.5, color: '#9ca3af' }}>{k}</span>
             </button>
@@ -549,8 +582,11 @@ export function HausplanerApp(): React.ReactElement {
           <div style={navGrp}>Fachplaner</div>
           {FACHPLANER.map((g) => (
             <React.Fragment key={g.name}>
-              <div style={navHub} title="Modul – geplant">{g.name}</div>
-              {g.items.map((it) => (<div key={it} style={navSub} title="geplant">{it}</div>))}
+              <div style={{ ...navHub, display: 'flex', alignItems: 'center', gap: 8 }} title={`${g.name} — Fachplaner (autark, geplant)`}>
+                <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', color: '#6b7280', flex: '0 0 auto' }}>{fachIcon(g.name)}</span>
+                <span>{g.name}</span>
+              </div>
+              {g.items.map((it) => (<div key={it} style={navSub} title={`${it} — autark konfigurierbar (geplant)`}>{it}</div>))}
             </React.Fragment>
           ))}
           <div style={{ padding: '10px 12px', fontSize: 11, color: '#9ca3af', borderTop: '1px solid #eef0f2', marginTop: 'auto' }}>Erweiterbar – Module folgen.</div>
