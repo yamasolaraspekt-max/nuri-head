@@ -13,7 +13,7 @@ import type Konva from 'konva';
 import { useHausplanerStore } from '../store/hausplanerStore';
 import type { OpeningNode, RoofNode, SceneNode, WallNode } from '../domain/scene.types';
 import { erkenneRaeume } from '../geometry/roomDetection';
-import { grundrissMassketten } from '../geometry/masskette';
+import { punkteMassketten } from '../geometry/masskette';
 import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt } from '../geometry/wallGeometry';
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
@@ -392,7 +392,8 @@ export function HausplanerApp(): React.ReactElement {
   }
 
   // P2b-3: 2D-Maßkette — getestete grundrissMassketten in die Ansicht rendern (nur lesen, kein Command).
-  const massketten = grundrissMassketten(waende.map((w) => ({ start: w.start, end: w.end })));
+  const bandEcken = Array.from(bandVon.values()).flatMap((b) => b.ecken);
+  const massketten = punkteMassketten(bandEcken); // Außenmaß aus Wandband-Ecken (mit Mauerdicke)
   const massElemente: React.ReactElement[] = [];
   if (massketten.bbox) {
     const bb = massketten.bbox;

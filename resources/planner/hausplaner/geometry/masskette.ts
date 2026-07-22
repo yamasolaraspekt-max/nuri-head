@@ -91,3 +91,28 @@ export function grundrissMassketten(
 
   return { xKette: masskette(xs, toleranz), yKette: masskette(ys, toleranz), bbox };
 }
+
+
+/**
+ * Maßkette aus BELIEBIGEN Bezugspunkten (z. B. Wandband-Ecken statt Achsen). Alle x ergeben die
+ * horizontale Kette, alle y die vertikale; bbox = Hüllquader der Punkte. Gefüttert mit den
+ * Außen-/Innenflächen-Ecken der Wandbänder liefert das die ROHBAU-AUSSENMASSKETTE
+ * (Außenkante → Mauerdicke → lichtes Maß → Mauerdicke → Außenkante), inkl. korrektem Außenmaß.
+ */
+export function punkteMassketten(
+  punkte: ReadonlyArray<MassPunkt>,
+  toleranz = 1,
+): GrundrissMassketten {
+  if (punkte.length === 0) {
+    return { xKette: [], yKette: [], bbox: null };
+  }
+  const xs = punkte.map((p) => p.x);
+  const ys = punkte.map((p) => p.y);
+  const bbox: Bbox = {
+    minX: Math.min(...xs),
+    maxX: Math.max(...xs),
+    minY: Math.min(...ys),
+    maxY: Math.max(...ys),
+  };
+  return { xKette: masskette(xs, toleranz), yKette: masskette(ys, toleranz), bbox };
+}
