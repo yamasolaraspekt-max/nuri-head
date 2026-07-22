@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HausplanerApp } from './app/HausplanerApp';
+import { HausplanerStudio } from './app/HausplanerStudio';
 import { useHausplanerStore } from './store/hausplanerStore';
 import { sceneDocumentSchema, validateSceneIntegrity, migriereSzene } from './domain/validation';
 import type { SceneDocument } from './domain/scene.types';
@@ -55,7 +55,7 @@ if (mount && szenenElement) {
       useHausplanerStore.getState().init(scene, speichernUrl, csrf);
       ReactDOM.createRoot(mount).render(
         <React.StrictMode>
-          <HausplanerApp />
+          <HausplanerStudio />
         </React.StrictMode>,
       );
     }

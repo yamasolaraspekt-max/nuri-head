@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Raumspartreppe</title>
+  <desc id="desc">Vogelperspektive – Raumspartreppe</desc>
+  
+<defs>
+  <filter id="shadow" x="-30%" y="-30%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".08"/>
+  </filter>
+</defs>
+
+  <rect width="160" height="160" rx="18" fill="#ffffff"/>
+  <rect x="10" y="10" width="140" height="140" rx="16" fill="#ffffff" stroke="#e6e8eb"/>
+  <g filter="url(#shadow)">
+    <rect x="62" y="24" width="36" height="92" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><path d="M62 28 H98 V36 H80 V32 H62 Z" fill="none" stroke="#9aa3ab" stroke-width="1"/><path d="M62 38 H80 V42 H98 V46 H62 Z" fill="none" stroke="#9aa3ab" stroke-width="1"/><path d="M62 48 H98 V56 H80 V52 H62 Z" fill="none" stroke="#9aa3ab" stroke-width="1"/><path d="M62 58 H80 V62 H98 V66 H62 Z" fill="none" stroke="#9aa3ab" stroke-width="1"/><path d="M62 68 H98 V76 H80 V72 H62 Z" fill="none" stroke="#9aa3ab" stroke-width="1"/><path d="M62 78 H80 V82 H98 V86 H62 Z" fill="none" stroke="#9aa3ab" stroke-width="1"/><path d="M62 88 H98 V96 H80 V92 H62 Z" fill="none" stroke="#9aa3ab" stroke-width="1"/><path d="M62 98 H80 V102 H98 V106 H62 Z" fill="none" stroke="#9aa3ab" stroke-width="1"/>
+    <line x1="80" y1="112" x2="80" y2="28" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="80,28 77.0,36.0 83.0,36.0" fill="#6d7680"/>
+  </g>
+</svg>

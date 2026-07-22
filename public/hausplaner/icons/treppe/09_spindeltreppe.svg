@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Spindeltreppe</title>
+  <desc id="desc">Vogelperspektive – Spindeltreppe</desc>
+  
+<defs>
+  <filter id="shadow" x="-30%" y="-30%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".08"/>
+  </filter>
+</defs>
+
+  <rect width="160" height="160" rx="18" fill="#ffffff"/>
+  <rect x="10" y="10" width="140" height="140" rx="16" fill="#ffffff" stroke="#e6e8eb"/>
+  <g filter="url(#shadow)">
+    
+    <circle cx="80" cy="80" r="38" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/>
+    <circle cx="80" cy="80" r="10" fill="#ffffff" stroke="#6d7680" stroke-width="1.2"/>
+    <path d="M80 42 A38 38 0 0 1 111 96" fill="none" stroke="#9aa3ab" stroke-width="1.2"/>
+    <path d="M80 50 A30 30 0 0 1 104 93" fill="none" stroke="#9aa3ab" stroke-width="1.2"/>
+    <path d="M80 58 A22 22 0 0 1 96 89" fill="none" stroke="#9aa3ab" stroke-width="1.2"/>
+    
+    <line x1="84" y1="110" x2="106" y2="84" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="106,84 98.5,88.2 103.1,92.0" fill="#6d7680"/>
+  </g>
+</svg>

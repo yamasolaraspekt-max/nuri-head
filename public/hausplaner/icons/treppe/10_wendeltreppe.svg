@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Wendeltreppe</title>
+  <desc id="desc">Vogelperspektive – Wendeltreppe</desc>
+  
+<defs>
+  <filter id="shadow" x="-30%" y="-30%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".08"/>
+  </filter>
+</defs>
+
+  <rect width="160" height="160" rx="18" fill="#ffffff"/>
+  <rect x="10" y="10" width="140" height="140" rx="16" fill="#ffffff" stroke="#e6e8eb"/>
+  <g filter="url(#shadow)">
+    
+    <path d="M52 46 C94 34, 126 56, 120 92 C114 124, 66 130, 48 104 C33 82, 38 55, 64 49" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/>
+    <path d="M64 56 C88 49, 106 62, 103 87 C99 105, 72 109, 61 95 C51 82, 53 60, 68 57" fill="#ffffff" stroke="#9aa3ab" stroke-width="1.2"/>
+    
+    <line x1="76" y1="98" x2="100" y2="66" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="100,66 92.8,70.6 97.6,74.2" fill="#6d7680"/>
+  </g>
+</svg>

@@ -24,6 +24,7 @@ import { berechneTreppe } from '../geometry/treppenBerechnung';
 import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../geometry/treppeObjekt';
 import { PROFIL_KATALOG, VERGLASUNG_KATALOG, berechneUw, rcMachbar, preisFenster, profilNach, verglasungNach, type OeffnungsArt, type RcKlasse } from '../geometry/fensterProdukt';
 import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, tuerBauartNach } from '../geometry/oeffnungsBauarten';
+import { TREPPEN_BAUARTEN, treppenBauartNach } from '../geometry/treppenBauarten';
 
 // Basis-URL der Icon-Assets — aus dem Bundle-Standort abgeleitet (traegt Subpfad/Domain).
 const ICON_BASE = new URL('.', import.meta.url).href;
@@ -123,7 +124,7 @@ function lotAufWand(p: Punkt, w: WallNode): { abstand: number; offset: number } 
   return { abstand: Math.hypot(p.x - fx, p.y - fy), offset: t * Math.sqrt(laengeQ) };
 }
 
-export function HausplanerApp(): React.ReactElement {
+export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {}): React.ReactElement {
   const scene = useHausplanerStore((s) => s.scene);
   const activeLevelId = useHausplanerStore((s) => s.activeLevelId);
   const selectedNodeIds = useHausplanerStore((s) => s.selectedNodeIds);
@@ -580,13 +581,15 @@ export function HausplanerApp(): React.ReactElement {
   }
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', color: FARBEN.text, height: '100vh', display: 'flex', flexDirection: 'column', background: '#f9fafb' }}>
+    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', color: FARBEN.text, height: imStudio ? '100%' : '100vh', display: 'flex', flexDirection: 'column', background: '#f9fafb' }}>
       {/* Werkzeugleiste — neutral, Marke nur für Primäraktion */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: '#fff', borderBottom: '1px solid #e5e7eb' }}>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 9, marginRight: 8 }}>
-          <span style={{ width: 26, height: 26, borderRadius: 7, background: FARBEN.auswahl, display: 'grid', placeItems: 'center', color: '#1e2b00' }}>{svgWrap(<><path d="M3 11l9-7 9 7" /><path d="M5 10v10h14V10" /></>)}</span>
-          <strong style={{ fontSize: 14 }}>Hausplaner <span style={{ fontWeight: 600, color: FARBEN.gedaempft, fontSize: 11.5 }}>· Solar Aspekt</span></strong>
-        </span>
+        {!imStudio && (
+          <span style={{ display: 'flex', alignItems: 'center', gap: 9, marginRight: 8 }}>
+            <span style={{ width: 26, height: 26, borderRadius: 7, background: FARBEN.auswahl, display: 'grid', placeItems: 'center', color: '#1e2b00' }}>{svgWrap(<><path d="M3 11l9-7 9 7" /><path d="M5 10v10h14V10" /></>)}</span>
+            <strong style={{ fontSize: 14 }}>Hausplaner <span style={{ fontWeight: 600, color: FARBEN.gedaempft, fontSize: 11.5 }}>· Solar Aspekt</span></strong>
+          </span>
+        )}
         <button type="button" style={knopf(false)} onClick={() => store.getState().undo()} disabled={!store.getState().kannUndo()}>↶ Rückgängig</button>
         <button type="button" style={knopf(false)} onClick={() => store.getState().redo()} disabled={!store.getState().kannRedo()}>↷ Wiederholen</button>
         <span style={{ width: 1, height: 22, background: '#e5e7eb', margin: '0 4px' }} />
@@ -1169,6 +1172,30 @@ export function HausplanerApp(): React.ReactElement {
           ) : selectedStair && selectedStairParams ? (
             <>
               <div style={{ fontWeight: 700, marginBottom: 10 }}>Treppe</div>
+              {(() => {
+                const aktuellTyp = selectedStairParams.typ;
+                return (
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', color: '#9aa0a8', marginBottom: 6 }}>Bauart</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, maxHeight: 200, overflowY: 'auto', paddingRight: 2 }}>
+                      {TREPPEN_BAUARTEN.map((t) => {
+                        const aktivT = aktuellTyp === t.id;
+                        return (
+                          <button key={t.id} type="button" title={t.label} onClick={() => aktualisiereTreppe({ typ: t.id })}
+                            style={{ display: 'grid', gap: 3, placeItems: 'center', padding: 5, borderRadius: 8, cursor: 'pointer',
+                              border: `1.5px solid ${aktivT ? FARBEN.auswahl : '#e5e7eb'}`, background: aktivT ? 'rgba(147,194,28,0.12)' : '#fff' }}>
+                            <img src={`${ICON_BASE}icons/treppe/${t.datei}`} alt={t.label} loading="lazy" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                            <span style={{ fontSize: 8.5, lineHeight: 1.15, color: aktivT ? FARBEN.text : '#6b7280', textAlign: 'center', height: 20, overflow: 'hidden' }}>{t.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {aktuellTyp && (
+                      <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 6 }}>Bauart: <strong style={{ color: FARBEN.text }}>{treppenBauartNach(aktuellTyp)?.label ?? aktuellTyp}</strong></div>
+                    )}
+                  </div>
+                );
+              })()}
               {(() => {
                 const erg = berechneTreppe({ geschosshoehe: selectedStairParams.geschosshoehe, laufbreite: selectedStairParams.laufbreite, gewuenschteSteigung: selectedStairParams.gewuenschteSteigung, bereich: selectedStairParams.bereich, verfuegbareLauflaenge: Math.hypot(selectedStairParams.endX - selectedStairParams.startX, selectedStairParams.endY - selectedStairParams.startY) || undefined });
                 return (

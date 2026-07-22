@@ -20,6 +20,8 @@ export interface TreppeParams {
   geschosshoehe: number;
   bereich: TreppenBereich;
   gewuenschteSteigung?: number;
+  /** Premium-Bauart-ID aus TREPPEN_BAUARTEN (Icon-Auswahl), additiv. */
+  typ?: string;
 }
 
 const P = 'treppe.';
@@ -40,6 +42,9 @@ export function treppeZuParametern(
   };
   if (t.gewuenschteSteigung !== undefined && t.gewuenschteSteigung > 0) {
     rec[`${P}gewuenschteSteigung`] = Math.round(t.gewuenschteSteigung);
+  }
+  if (t.typ) {
+    rec[`${P}typ`] = t.typ;
   }
   return rec;
 }
@@ -73,5 +78,7 @@ export function parametereZuTreppe(
   const gw = zahl(rec[`${P}gewuenschteSteigung`]);
   const out: TreppeParams = { startX, startY, endX, endY, laufbreite, geschosshoehe, bereich };
   if (gw !== null && gw > 0) out.gewuenschteSteigung = gw;
+  const typ = rec[`${P}typ`];
+  if (typeof typ === 'string' && typ) out.typ = typ;
   return out;
 }

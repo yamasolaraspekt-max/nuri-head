@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Außen-Fluchttreppe</title>
+  <desc id="desc">Vogelperspektive – Außen-Fluchttreppe</desc>
+  
+<defs>
+  <filter id="shadow" x="-30%" y="-30%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".08"/>
+  </filter>
+</defs>
+
+  <rect width="160" height="160" rx="18" fill="#ffffff"/>
+  <rect x="10" y="10" width="140" height="140" rx="16" fill="#ffffff" stroke="#e6e8eb"/>
+  <g filter="url(#shadow)">
+    <rect x="34" y="28" width="48" height="18" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><rect x="34" y="46" width="28" height="68" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><line x1="34" y1="57.3" x2="62" y2="57.3" stroke="#9aa3ab" stroke-width="1"/><line x1="34" y1="68.7" x2="62" y2="68.7" stroke="#9aa3ab" stroke-width="1"/><line x1="34" y1="80.0" x2="62" y2="80.0" stroke="#9aa3ab" stroke-width="1"/><line x1="34" y1="91.3" x2="62" y2="91.3" stroke="#9aa3ab" stroke-width="1"/><line x1="34" y1="102.7" x2="62" y2="102.7" stroke="#9aa3ab" stroke-width="1"/><rect x="82" y="28" width="44" height="18" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/>
+    <line x1="48" y1="108" x2="48" y2="56" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="48,56 45.0,64.0 51.0,64.0" fill="#6d7680"/>
+    <line x1="90" y1="37" x2="118" y2="37" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="118,37 110.0,34.0 110.0,40.0" fill="#6d7680"/>
+  </g>
+</svg>

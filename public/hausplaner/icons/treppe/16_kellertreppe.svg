@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Kellertreppe</title>
+  <desc id="desc">Vogelperspektive – Kellertreppe</desc>
+  
+<defs>
+  <filter id="shadow" x="-30%" y="-30%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".08"/>
+  </filter>
+</defs>
+
+  <rect width="160" height="160" rx="18" fill="#ffffff"/>
+  <rect x="10" y="10" width="140" height="140" rx="16" fill="#ffffff" stroke="#e6e8eb"/>
+  <g filter="url(#shadow)">
+    
+    <rect x="38" y="24" width="84" height="96" rx="3" fill="#f0f2f4" stroke="#6d7680" stroke-width="1.6"/>
+    <rect x="54" y="24" width="52" height="40" rx="2" fill="#ffffff"/>
+    <rect x="62" y="64" width="36" height="48" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><line x1="62" y1="73.6" x2="98" y2="73.6" stroke="#9aa3ab" stroke-width="1"/><line x1="62" y1="83.2" x2="98" y2="83.2" stroke="#9aa3ab" stroke-width="1"/><line x1="62" y1="92.8" x2="98" y2="92.8" stroke="#9aa3ab" stroke-width="1"/><line x1="62" y1="102.4" x2="98" y2="102.4" stroke="#9aa3ab" stroke-width="1"/>
+    <line x1="80" y1="68" x2="80" y2="108" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="80,108 83.0,100.0 77.0,100.0" fill="#6d7680"/>
+  </g>
+</svg>

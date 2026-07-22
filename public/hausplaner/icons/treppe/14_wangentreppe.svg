@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Wangentreppe</title>
+  <desc id="desc">Vogelperspektive – Wangentreppe</desc>
+  
+<defs>
+  <filter id="shadow" x="-30%" y="-30%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".08"/>
+  </filter>
+</defs>
+
+  <rect width="160" height="160" rx="18" fill="#ffffff"/>
+  <rect x="10" y="10" width="140" height="140" rx="16" fill="#ffffff" stroke="#e6e8eb"/>
+  <g filter="url(#shadow)">
+    <rect x="60" y="24" width="40" height="92" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><line x1="60" y1="35.5" x2="100" y2="35.5" stroke="#9aa3ab" stroke-width="1"/><line x1="60" y1="47.0" x2="100" y2="47.0" stroke="#9aa3ab" stroke-width="1"/><line x1="60" y1="58.5" x2="100" y2="58.5" stroke="#9aa3ab" stroke-width="1"/><line x1="60" y1="70.0" x2="100" y2="70.0" stroke="#9aa3ab" stroke-width="1"/><line x1="60" y1="81.5" x2="100" y2="81.5" stroke="#9aa3ab" stroke-width="1"/><line x1="60" y1="93.0" x2="100" y2="93.0" stroke="#9aa3ab" stroke-width="1"/><line x1="60" y1="104.5" x2="100" y2="104.5" stroke="#9aa3ab" stroke-width="1"/><rect x="56" y="24" width="4" height="92" fill="#6d7680"/><rect x="100" y="24" width="4" height="92" fill="#6d7680"/>
+    <line x1="80" y1="112" x2="80" y2="28" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="80,28 77.0,36.0 83.0,36.0" fill="#6d7680"/>
+  </g>
+</svg>

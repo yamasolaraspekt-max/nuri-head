@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">L-Treppe links</title>
+  <desc id="desc">Vogelperspektive – L-Treppe links</desc>
+  
+<defs>
+  <filter id="shadow" x="-30%" y="-30%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".08"/>
+  </filter>
+</defs>
+
+  <rect width="160" height="160" rx="18" fill="#ffffff"/>
+  <rect x="10" y="10" width="140" height="140" rx="16" fill="#ffffff" stroke="#e6e8eb"/>
+  <g filter="url(#shadow)">
+    <rect x="34" y="60" width="28" height="58" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><line x1="34" y1="71.6" x2="62" y2="71.6" stroke="#9aa3ab" stroke-width="1"/><line x1="34" y1="83.2" x2="62" y2="83.2" stroke="#9aa3ab" stroke-width="1"/><line x1="34" y1="94.8" x2="62" y2="94.8" stroke="#9aa3ab" stroke-width="1"/><line x1="34" y1="106.4" x2="62" y2="106.4" stroke="#9aa3ab" stroke-width="1"/><rect x="62" y="60" width="56" height="28" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><line x1="71.3" y1="60" x2="71.3" y2="88" stroke="#9aa3ab" stroke-width="1"/><line x1="80.7" y1="60" x2="80.7" y2="88" stroke="#9aa3ab" stroke-width="1"/><line x1="90.0" y1="60" x2="90.0" y2="88" stroke="#9aa3ab" stroke-width="1"/><line x1="99.3" y1="60" x2="99.3" y2="88" stroke="#9aa3ab" stroke-width="1"/><line x1="108.7" y1="60" x2="108.7" y2="88" stroke="#9aa3ab" stroke-width="1"/>
+    <line x1="48" y1="116" x2="48" y2="74" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="48,74 45.0,82.0 51.0,82.0" fill="#6d7680"/>
+    <line x1="66" y1="74" x2="110" y2="74" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="110,74 102.0,71.0 102.0,77.0" fill="#6d7680"/>
+  </g>
+</svg>

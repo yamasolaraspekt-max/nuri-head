@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">U-Treppe mit Podest</title>
+  <desc id="desc">Vogelperspektive – U-Treppe mit Podest</desc>
+  
+<defs>
+  <filter id="shadow" x="-30%" y="-30%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".08"/>
+  </filter>
+</defs>
+
+  <rect width="160" height="160" rx="18" fill="#ffffff"/>
+  <rect x="10" y="10" width="140" height="140" rx="16" fill="#ffffff" stroke="#e6e8eb"/>
+  <g filter="url(#shadow)">
+    <rect x="34" y="62" width="28" height="56" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><line x1="34" y1="76.0" x2="62" y2="76.0" stroke="#9aa3ab" stroke-width="1"/><line x1="34" y1="90.0" x2="62" y2="90.0" stroke="#9aa3ab" stroke-width="1"/><line x1="34" y1="104.0" x2="62" y2="104.0" stroke="#9aa3ab" stroke-width="1"/><rect x="98" y="62" width="28" height="56" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><line x1="98" y1="76.0" x2="126" y2="76.0" stroke="#9aa3ab" stroke-width="1"/><line x1="98" y1="90.0" x2="126" y2="90.0" stroke="#9aa3ab" stroke-width="1"/><line x1="98" y1="104.0" x2="126" y2="104.0" stroke="#9aa3ab" stroke-width="1"/><rect x="62" y="62" width="36" height="24" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/>
+    <line x1="48" y1="114" x2="48" y2="76" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="48,76 45.0,84.0 51.0,84.0" fill="#6d7680"/>
+    <line x1="112" y1="76" x2="112" y2="114" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="112,114 115.0,106.0 109.0,106.0" fill="#6d7680"/>
+  </g>
+</svg>

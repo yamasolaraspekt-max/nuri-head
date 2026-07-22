@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Dreiläufige U-Treppe mit Treppenauge</title>
+  <desc id="desc">Vogelperspektive – Dreiläufige U-Treppe mit Treppenauge</desc>
+  
+<defs>
+  <filter id="shadow" x="-30%" y="-30%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".08"/>
+  </filter>
+</defs>
+
+  <rect width="160" height="160" rx="18" fill="#ffffff"/>
+  <rect x="10" y="10" width="140" height="140" rx="16" fill="#ffffff" stroke="#e6e8eb"/>
+  <g filter="url(#shadow)">
+    <rect x="24" y="68" width="24" height="50" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><line x1="24" y1="80.5" x2="48" y2="80.5" stroke="#9aa3ab" stroke-width="1"/><line x1="24" y1="93.0" x2="48" y2="93.0" stroke="#9aa3ab" stroke-width="1"/><line x1="24" y1="105.5" x2="48" y2="105.5" stroke="#9aa3ab" stroke-width="1"/><rect x="48" y="68" width="48" height="20" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><line x1="57.6" y1="68" x2="57.6" y2="88" stroke="#9aa3ab" stroke-width="1"/><line x1="67.2" y1="68" x2="67.2" y2="88" stroke="#9aa3ab" stroke-width="1"/><line x1="76.8" y1="68" x2="76.8" y2="88" stroke="#9aa3ab" stroke-width="1"/><line x1="86.4" y1="68" x2="86.4" y2="88" stroke="#9aa3ab" stroke-width="1"/><rect x="96" y="48" width="24" height="70" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><line x1="96" y1="62.0" x2="120" y2="62.0" stroke="#9aa3ab" stroke-width="1"/><line x1="96" y1="76.0" x2="120" y2="76.0" stroke="#9aa3ab" stroke-width="1"/><line x1="96" y1="90.0" x2="120" y2="90.0" stroke="#9aa3ab" stroke-width="1"/><line x1="96" y1="104.0" x2="120" y2="104.0" stroke="#9aa3ab" stroke-width="1"/><rect x="48" y="28" width="48" height="20" rx="2" fill="#f7f8f9" stroke="#6d7680" stroke-width="1.6"/><line x1="57.6" y1="28" x2="57.6" y2="48" stroke="#9aa3ab" stroke-width="1"/><line x1="67.2" y1="28" x2="67.2" y2="48" stroke="#9aa3ab" stroke-width="1"/><line x1="76.8" y1="28" x2="76.8" y2="48" stroke="#9aa3ab" stroke-width="1"/><line x1="86.4" y1="28" x2="86.4" y2="48" stroke="#9aa3ab" stroke-width="1"/><rect x="48" y="48" width="48" height="20" rx="2" fill="#ffffff" stroke="#6d7680" stroke-width="1.6"/>
+    <line x1="36" y1="114" x2="36" y2="78" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="36,78 33.0,86.0 39.0,86.0" fill="#6d7680"/>
+    <line x1="55" y1="78" x2="89" y2="78" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="89,78 81.0,75.0 81.0,81.0" fill="#6d7680"/>
+    <line x1="108" y1="52" x2="108" y2="110" stroke="#6d7680" stroke-width="1.8"/>
+    <polygon points="108,110 111.0,102.0 105.0,102.0" fill="#6d7680"/>
+  </g>
+</svg>
