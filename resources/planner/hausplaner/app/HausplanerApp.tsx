@@ -62,6 +62,27 @@ function werkzeugIcon(w: string): React.ReactElement {
     default: return svgWrap(<circle cx="12" cy="12" r="3" />);
   }
 }
+// Bedien-Icons (Ansicht/Bearbeiten/Messen&Export) — je mit Tooltip + Funktionsbeschreibung.
+function opIcon(name: string): React.ReactElement {
+  switch (name) {
+    case 'zoom-in': return svgWrap(<><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.35-4.35M11 8v6M8 11h6" /></>);
+    case 'zoom-out': return svgWrap(<><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.35-4.35M8 11h6" /></>);
+    case 'zoom-reset': return svgWrap(<><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="2" /></>);
+    case 'einpassen': return svgWrap(<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />);
+    case 'grid': return svgWrap(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M4 10h16M4 16h16M10 4v16M16 4v16" /></>);
+    case 'fang': return svgWrap(<><path d="M12 3v6M12 15v6M3 12h6M15 12h6" /><circle cx="12" cy="12" r="2.5" /></>);
+    case 'dup': return svgWrap(<><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h8" /></>);
+    case 'del': return svgWrap(<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" />);
+    case 'mirror-h': return svgWrap(<path d="M12 3v18M8 7l-4 5 4 5M16 7l4 5-4 5" />);
+    case 'mirror-v': return svgWrap(<path d="M3 12h18M7 8l5-4 5 4M7 16l5 4 5-4" />);
+    case 'drehen': return svgWrap(<><path d="M21 12a9 9 0 1 1-3-6.7" /><path d="M21 3v5h-5" /></>);
+    case 'messen': return svgWrap(<><path d="M3 15l12-12 6 6-12 12z" /><path d="M8 8l2 2M11 5l2 2M5 11l2 2" /></>);
+    case 'bemassung': return svgWrap(<path d="M3 8h18M5 6v4M19 6v4M9 6v4M13 6v4M8 16h8" />);
+    case 'export': return svgWrap(<path d="M12 3v12M8 7l4-4 4 4M5 15v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-4" />);
+    case 'pdf': return svgWrap(<><path d="M7 3h7l4 4v14H7z" /><path d="M9 13h2a1.5 1.5 0 0 0 0-3H9v6M15 11h-2v5" /></>);
+    default: return svgWrap(<circle cx="12" cy="12" r="3" />);
+  }
+}
 function fachIcon(name: string): React.ReactElement {
   switch (name) {
     case 'Haustechnik': return svgWrap(<path d="M8 3v18M12 3v18M16 3v18" />);
@@ -115,6 +136,7 @@ export function HausplanerApp(): React.ReactElement {
   const [wandStart, setWandStart] = useState<Punkt | null>(null);
   const [cursor, setCursor] = useState<Punkt>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(0.12); // px pro mm
+  const [rasterAn, setRasterAn] = useState(true);
   const stageRef = useRef<Konva.Stage | null>(null);
 
   const level = scene?.levels.find((l) => l.id === activeLevelId) ?? scene?.levels[0] ?? null;
@@ -200,6 +222,23 @@ export function HausplanerApp(): React.ReactElement {
     }
     store.getState().selectNodes([]);
   }
+  function exportPng(): void {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const uri = stage.toDataURL({ pixelRatio: 2 });
+    const a = document.createElement('a');
+    a.href = uri;
+    a.download = 'grundriss.png';
+    a.click();
+  }
+  const OpBtn = ({ title, onClick, icon, disabled, aktiv, geplant }: { title: string; onClick?: () => void; icon: string; disabled?: boolean; aktiv?: boolean; geplant?: boolean }): React.ReactElement => (
+    <button type="button" title={geplant ? `${title} (geplant)` : title} onClick={geplant ? undefined : onClick} disabled={disabled || geplant}
+      style={{ display: 'grid', placeItems: 'center', width: 32, height: 30, borderRadius: 8, border: `1px solid ${aktiv ? FARBEN.auswahl : '#e5e7eb'}`, background: aktiv ? 'rgba(147,194,28,0.12)' : '#fff', color: (disabled || geplant) ? '#c7ccd2' : FARBEN.text, cursor: (disabled || geplant) ? 'not-allowed' : 'pointer' }}>
+      {opIcon(icon)}
+    </button>
+  );
+  const opSep = (): React.ReactElement => <span style={{ width: 1, height: 20, background: '#e5e7eb', margin: '0 4px' }} />;
+  const opLbl = (t: string): React.ReactElement => <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: '#9aa0a8', marginRight: 2 }}>{t}</span>;
   function dupliziere(): void {
     const jetzt = new Date().toISOString();
     const neu: string[] = [];
@@ -540,7 +579,10 @@ export function HausplanerApp(): React.ReactElement {
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', color: FARBEN.text, height: '100vh', display: 'flex', flexDirection: 'column', background: '#f9fafb' }}>
       {/* Werkzeugleiste — neutral, Marke nur für Primäraktion */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: '#fff', borderBottom: '1px solid #e5e7eb' }}>
-        <strong style={{ fontSize: 14, marginRight: 8 }}>Hausplaner</strong>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 9, marginRight: 8 }}>
+          <span style={{ width: 26, height: 26, borderRadius: 7, background: FARBEN.auswahl, display: 'grid', placeItems: 'center', color: '#1e2b00' }}>{svgWrap(<><path d="M3 11l9-7 9 7" /><path d="M5 10v10h14V10" /></>)}</span>
+          <strong style={{ fontSize: 14 }}>Hausplaner <span style={{ fontWeight: 600, color: FARBEN.gedaempft, fontSize: 11.5 }}>· Solar Aspekt</span></strong>
+        </span>
         <button type="button" style={knopf(false)} onClick={() => store.getState().undo()} disabled={!store.getState().kannUndo()}>↶ Rückgängig</button>
         <button type="button" style={knopf(false)} onClick={() => store.getState().redo()} disabled={!store.getState().kannRedo()}>↷ Wiederholen</button>
         <span style={{ width: 1, height: 22, background: '#e5e7eb', margin: '0 4px' }} />
@@ -619,10 +661,6 @@ export function HausplanerApp(): React.ReactElement {
             }
           }}
         >− Geschoss</button>
-        <label style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <input type="checkbox" checked={scene.settings.snapEnabled} onChange={(e) => store.getState().executeCommand({ type: 'UPDATE_SETTINGS', changes: { snapEnabled: e.target.checked } })} />
-          Fang
-        </label>
         <span style={{ width: 1, height: 22, background: '#e5e7eb', margin: '0 4px' }} />
         {/* P1c: Modus-Schalter — 3D ist der zweite Renderer DERSELBEN Daten (ein Store). */}
         <button type="button" title="2D-Grundriss" style={knopf(modus === '2d')} onClick={() => store.getState().setModus('2d')}>2D</button>
@@ -633,10 +671,35 @@ export function HausplanerApp(): React.ReactElement {
         <button
           type="button"
           onClick={() => void store.getState().save()}
-          style={{ padding: '7px 16px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none', cursor: 'pointer', background: 'var(--sa-accent, #93c21c)', color: 'var(--sa-accent-ink, #fff)' }}
+          style={{ padding: '7px 16px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none', cursor: 'pointer', background: 'var(--sa-accent, #93c21c)', color: 'var(--sa-accent-ink, #1e2b00)' }}
         >
           Speichern (Strg+S)
         </button>
+      </div>
+
+      {/* Bedien-Werkzeugleiste — Icons, jedes mit Tooltip + Funktionsbeschreibung */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: '#f6f7f8', borderBottom: '1px solid #e5e7eb', flex: '0 0 auto' }}>
+        {opLbl('Ansicht')}
+        <OpBtn title="Vergrößern (Zoom +) — näher an den Grundriss heranzoomen" icon="zoom-in" onClick={() => setZoom((z) => Math.min(1, z * 1.2))} />
+        <OpBtn title="Verkleinern (Zoom −) — weiter herauszoomen" icon="zoom-out" onClick={() => setZoom((z) => Math.max(0.02, z / 1.2))} />
+        <OpBtn title="Zoom zurücksetzen — Standardmaßstab wiederherstellen" icon="zoom-reset" onClick={() => setZoom(0.12)} />
+        <OpBtn title="Ansicht einpassen — gesamten Grundriss ins Bild rücken" icon="einpassen" geplant />
+        <OpBtn title="Raster ein-/ausblenden — Hintergrund-Hilfslinien" icon="grid" aktiv={rasterAn} onClick={() => setRasterAn((v) => !v)} />
+        <OpBtn title="Fang ein-/ausschalten — an Punkten und Raster einrasten" icon="fang" aktiv={scene.settings.snapEnabled} onClick={() => store.getState().executeCommand({ type: 'UPDATE_SETTINGS', changes: { snapEnabled: !scene.settings.snapEnabled } })} />
+        {opSep()}
+        {opLbl('Bearbeiten')}
+        <OpBtn title="Auswahl duplizieren — Kopie versetzt daneben einfügen" icon="dup" disabled={selectedNodeIds.length === 0} onClick={dupliziere} />
+        <OpBtn title="Auswahl löschen (Entf) — markiertes Objekt entfernen" icon="del" disabled={selectedNodeIds.length === 0} onClick={loescheAuswahl} />
+        <OpBtn title="Grundriss links/rechts spiegeln" icon="mirror-h" disabled={waende.length === 0} onClick={() => spiegeleGrundriss('vertikal')} />
+        <OpBtn title="Grundriss oben/unten spiegeln" icon="mirror-v" disabled={waende.length === 0} onClick={() => spiegeleGrundriss('horizontal')} />
+        <OpBtn title="Auswahl um 90° drehen" icon="drehen" geplant />
+        {opSep()}
+        {opLbl('Messen & Export')}
+        <OpBtn title="Messwerkzeug — Abstand zwischen zwei Punkten messen" icon="messen" geplant />
+        <OpBtn title="Bemaßung — Maßkette am Grundriss anlegen" icon="bemassung" geplant />
+        <OpBtn title="Als PNG-Bild exportieren — aktuelle 2D-Ansicht herunterladen" icon="export" onClick={exportPng} />
+        <OpBtn title="Als PDF-Planblatt exportieren" icon="pdf" geplant />
+        <span style={{ fontSize: 12, color: FARBEN.gedaempft, marginLeft: 8, fontVariantNumeric: 'tabular-nums' }}>Zoom {(zoom * 100).toFixed(0)} %</span>
       </div>
 
       {/* Canvas: 2D (Konva) + 3D (three) nebeneinander — beide lesen DENSELBEN Store.
@@ -659,7 +722,7 @@ export function HausplanerApp(): React.ReactElement {
               style={navItem(werkzeug === w)}>
               <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>{werkzeugIcon(w)}</span>
               <span style={{ flex: 1 }}>{label}</span>
-              <span style={{ fontSize: 10.5, color: '#9ca3af' }}>{k}</span>
+              <span style={{ fontSize: 10.5, color: '#9ca3af', border: '1px solid #e5e7eb', borderRadius: 4, padding: '1px 5px' }}>{k}</span>
             </button>
           ))}
           <div style={navGrp}>Fachplaner</div>
@@ -693,7 +756,7 @@ export function HausplanerApp(): React.ReactElement {
           y={hoehe - 80}
         >
           <Layer>
-            {rasterLinien}
+            {rasterAn && rasterLinien}
             {massElemente}
 
             {/* Räume: Füllung + Fläche (m², aus mm² gerundet auf 2 Stellen) */}
