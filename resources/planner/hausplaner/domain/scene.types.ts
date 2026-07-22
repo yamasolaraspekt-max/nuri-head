@@ -141,7 +141,8 @@ export interface ObjectNode extends BaseNode {
     | 'inverter'
     | 'wallbox'
     | 'furniture'
-    | 'sanitary';
+    | 'sanitary'
+    | 'stair'; // Treppe: laeuft durch ObjectNode-CRUD, Fachdaten in parameters (treppe.*)
 
   catalogItemId: string;
 

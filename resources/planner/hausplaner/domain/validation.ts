@@ -90,7 +90,7 @@ export const objectNodeSchema = z
     type: z.literal('object'),
     objectType: z.enum([
       'radiator', 'heat_pump_indoor', 'heat_pump_outdoor', 'buffer_tank', 'hot_water_tank',
-      'battery', 'inverter', 'wallbox', 'furniture', 'sanitary',
+      'battery', 'inverter', 'wallbox', 'furniture', 'sanitary', 'stair',
     ]),
     catalogItemId: z.string().min(1),
     transform: z

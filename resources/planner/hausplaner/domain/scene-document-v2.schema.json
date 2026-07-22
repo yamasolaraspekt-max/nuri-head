@@ -317,7 +317,8 @@
                   "inverter",
                   "wallbox",
                   "furniture",
-                  "sanitary"
+                  "sanitary",
+                  "stair"
                 ]
               },
               "catalogItemId": {
