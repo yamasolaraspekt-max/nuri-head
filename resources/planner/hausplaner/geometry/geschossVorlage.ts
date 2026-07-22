@@ -65,7 +65,9 @@ export function dupliziereGeschoss<N extends NodeBasis, R extends RoofBasis>(
   const neueNodes = nodes.map((n) => {
     const kopie = { ...n, id: idMap.get(n.id) as string, levelId: neuesLevelId } as N;
     if (n.hostWallId !== undefined) {
-      kopie.hostWallId = idMap.get(n.hostWallId) ?? n.hostWallId;
+      // Härtung (Evaluator): hängende Wirtswand (nicht mitkopiert) NICHT auf die alte id zeigen
+      // lassen — das bände die Öffnung an eine Wand des Quell-Geschosses. Referenz droppen (undefined).
+      kopie.hostWallId = idMap.get(n.hostWallId);
     }
     return kopie;
   });

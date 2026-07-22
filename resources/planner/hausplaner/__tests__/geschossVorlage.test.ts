@@ -71,3 +71,12 @@ test('ohne Dach bleibt roof null', () => {
   const { roof } = dupliziereGeschoss(eg, [], null, idFolge(), 'OG');
   assert.equal(roof, null);
 })
+
+test('hängende hostWallId (Wirtswand nicht mitkopiert) wird gedroppt statt alte id zu behalten', () => {
+  const nodes: TestNode[] = [
+    { id: 'f1', levelId: 'eg', type: 'window', hostWallId: 'fehlt' },
+  ];
+  const { nodes: neu } = dupliziereGeschoss(eg, nodes, null, idFolge(), 'OG');
+  const fenster = neu.find((n) => n.type === 'window')!;
+  assert.equal(fenster.hostWallId, undefined); // gedroppt, NICHT 'fehlt'
+});
