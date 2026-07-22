@@ -80,3 +80,24 @@ export function fange(
 
   return { punkt: runde(p), art: 'keiner' };
 }
+
+
+/** Eine Wandstrecke (für die Fangpunkt-Sammlung). */
+export interface WandStrecke {
+  start: FangPunkt;
+  end: FangPunkt;
+}
+
+/**
+ * Sammelt die Fang-Kandidaten aus den Wänden: Endpunkte + Mittelpunkt je Wand. Reine Ableitung —
+ * der Aufrufer reicht das Ergebnis an fange(); so bleibt fange() geometriefrei und testbar.
+ */
+export function wandFangpunkte(waende: ReadonlyArray<WandStrecke>): FangPunkt[] {
+  const pts: FangPunkt[] = [];
+  for (const w of waende) {
+    pts.push({ x: w.start.x, y: w.start.y });
+    pts.push({ x: w.end.x, y: w.end.y });
+    pts.push({ x: Math.round((w.start.x + w.end.x) / 2), y: Math.round((w.start.y + w.end.y) / 2) });
+  }
+  return pts;
+}

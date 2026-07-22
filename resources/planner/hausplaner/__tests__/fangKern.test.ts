@@ -3,7 +3,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { fange } from '../geometry/fangKern';
+import { fange, wandFangpunkte } from '../geometry/fangKern';
 
 test('Fang aus → Rohpunkt (gerundet), art keiner', () => {
   const r = fange({ x: 1234.6, y: 5678.4 }, [{ x: 1235, y: 5678 }], { toleranzMm: 50, aktiv: false });
@@ -60,4 +60,16 @@ test('kein Kandidat, kein Ortho, kein Raster → keiner', () => {
 test('Determinismus', () => {
   const args = [{ x: 1010, y: 20 }, [{ x: 1000, y: 0 }], { toleranzMm: 50, raster: 100, ortho: { x: 0, y: 0 } }] as const;
   assert.deepEqual(fange(...args), fange(...args));
+});
+
+test('wandFangpunkte: Endpunkte + Mittelpunkt je Wand', () => {
+  const pts = wandFangpunkte([{ start: { x: 0, y: 0 }, end: { x: 1000, y: 0 } }]);
+  assert.equal(pts.length, 3);
+  assert.deepEqual(pts[0], { x: 0, y: 0 });
+  assert.deepEqual(pts[1], { x: 1000, y: 0 });
+  assert.deepEqual(pts[2], { x: 500, y: 0 });
+});
+
+test('wandFangpunkte: leer -> leer', () => {
+  assert.deepEqual(wandFangpunkte([]), []);
 });
