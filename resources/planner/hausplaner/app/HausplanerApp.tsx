@@ -14,6 +14,7 @@ import { useHausplanerStore } from '../store/hausplanerStore';
 import type { OpeningNode, RoofNode, SceneNode, WallNode } from '../domain/scene.types';
 import { erkenneRaeume } from '../geometry/roomDetection';
 import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt } from '../geometry/wallGeometry';
+import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
 import { versetzteWand, spiegelteWand, bbox as punkteBbox, achsenMitte, type Achse } from '../geometry/editierGeometrie';
 
@@ -74,6 +75,8 @@ export function HausplanerApp(): React.ReactElement {
   const store = useHausplanerStore;
 
   const [werkzeug, setWerkzeug] = useState<Werkzeug>('auswahl');
+  const [fensterTypWahl, setFensterTypWahl] = useState<FensterTyp>('drehkipp');
+  const [tuerTypWahl, setTuerTypWahl] = useState<TuerTyp>('dreh1');
   const [wandStart, setWandStart] = useState<Punkt | null>(null);
   const [cursor, setCursor] = useState<Punkt>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(0.12); // px pro mm
@@ -263,7 +266,8 @@ export function HausplanerApp(): React.ReactElement {
       if (!beste) {
         return;
       }
-      const breite = werkzeug === 'fenster' ? 1200 : 900;
+      const vorlage = werkzeug === 'fenster' ? fensterTyp(fensterTypWahl) : tuerTyp(tuerTypWahl);
+      const breite = vorlage.breite;
       const laenge = wandLaenge(beste.wand.start, beste.wand.end);
       const offset = Math.round(Math.max(0, Math.min(beste.offset - breite / 2, laenge - breite)));
       const jetzt = new Date().toISOString();
@@ -273,7 +277,7 @@ export function HausplanerApp(): React.ReactElement {
           id: uuid(), type: werkzeug === 'fenster' ? 'window' : 'door', levelId: level.id,
           visible: true, locked: false, tags: [], createdAt: jetzt, updatedAt: jetzt,
           hostWallId: beste.wand.id, offsetFromWallStart: offset, width: breite,
-          height: werkzeug === 'fenster' ? 1400 : 2100, sillHeight: werkzeug === 'fenster' ? 900 : 0,
+          height: vorlage.hoehe, sillHeight: werkzeug === 'fenster' ? (vorlage.bruestung ?? 0) : 0,
         },
       });
       return;
@@ -394,6 +398,20 @@ export function HausplanerApp(): React.ReactElement {
         <button type="button" style={knopf(false)} onClick={() => store.getState().undo()} disabled={!store.getState().kannUndo()}>↶ Rückgängig</button>
         <button type="button" style={knopf(false)} onClick={() => store.getState().redo()} disabled={!store.getState().kannRedo()}>↷ Wiederholen</button>
         <span style={{ width: 1, height: 22, background: '#e5e7eb', margin: '0 4px' }} />
+        {(werkzeug === 'fenster' || werkzeug === 'tuer') && (
+          <label style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'flex', alignItems: 'center', gap: 5 }}>
+            {werkzeug === 'fenster' ? 'Fenstertyp' : 'Türtyp'}
+            <select
+              value={werkzeug === 'fenster' ? fensterTypWahl : tuerTypWahl}
+              onChange={(e) => (werkzeug === 'fenster' ? setFensterTypWahl(e.target.value as FensterTyp) : setTuerTypWahl(e.target.value as TuerTyp))}
+              style={{ fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: '1px solid #d1d5db' }}
+            >
+              {(werkzeug === 'fenster' ? FENSTER_TYPEN : TUER_TYPEN).map((v) => (
+                <option key={v.typ} value={v.typ}>{v.label} · {v.breite}×{v.hoehe} mm</option>
+              ))}
+            </select>
+          </label>
+        )}
         <label style={{ fontSize: 12, color: FARBEN.gedaempft }}>
           Geschoss{' '}
           <select value={level.id} onChange={(e) => store.getState().setActiveLevel(e.target.value)} style={{ fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: '1px solid #d1d5db' }}>
