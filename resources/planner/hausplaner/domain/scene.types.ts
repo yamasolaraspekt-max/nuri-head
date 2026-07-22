@@ -129,6 +129,8 @@ export interface OpeningNode extends BaseNode {
   /** Fenster-/Tuer-Produktkonfiguration (additiv, Solar Aspekt): Profil/Glas/Oeffnungsart/RC.
    *  Fachrechnung (Uw/RC/Preis) in geometry/fensterProdukt.ts; hier nur die Auswahl-IDs. */
   produkt?: {
+    /** Bauart-ID aus FENSTER_TYPEN/TUER_TYPEN (Icon-Auswahl), z. B. '05_dreh_kipp_links'. */
+    typ?: string;
     profilId?: string;
     verglasungId?: string;
     oeffnungsArt?: 'fest' | 'dreh' | 'kipp' | 'dreh-kipp';

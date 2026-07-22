@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Dreh-Kipp links</title>
+  <desc id="desc">Semi-fotorealistisches Konfigurator-Icon: Dreh-Kipp links</desc>
+
+  <defs>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5b6168"/>
+      <stop offset="35%" stop-color="#1f2429"/>
+      <stop offset="70%" stop-color="#3a4046"/>
+      <stop offset="100%" stop-color="#12161a"/>
+    </linearGradient>
+    <linearGradient id="frameHi" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6b737b"/>
+      <stop offset="100%" stop-color="#20252b"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset="45%" stop-color="#e9eef2" stop-opacity=".78"/>
+      <stop offset="100%" stop-color="#cfd8df" stop-opacity=".92"/>
+    </linearGradient>
+    <linearGradient id="glassOpen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity=".98"/>
+      <stop offset="100%" stop-color="#dce4e9" stop-opacity=".86"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity=".20"/>
+    </filter>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".14"/>
+    </filter>
+  </defs>
+
+  <rect width="160" height="160" rx="18" fill="#f8f7f4"/>
+  <g filter="url(#shadow)">
+
+    
+    <rect x="36" y="24" width="72" height="108" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="43" y="31" width="58" height="94" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M46 36 L88 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <polygon points="46,35 112,45 101,127 43,119" fill="url(#frameHi)" stroke="#0d1115" stroke-width="1.5"/>
+    <polygon points="54,43 103,50 95,118 51,112" fill="url(#glassOpen)" stroke="#7b858e"/>
+    <path d="M96 72v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M97 72v16" stroke="#353a40" stroke-width="1"/>
+
+  </g>
+</svg>

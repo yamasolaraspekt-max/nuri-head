@@ -80,6 +80,7 @@ export const openingNodeSchema = z
       .optional(),
     produkt: z
       .object({
+        typ: z.string().optional(),
         profilId: z.string().optional(),
         verglasungId: z.string().optional(),
         oeffnungsArt: z.enum(['fest', 'dreh', 'kipp', 'dreh-kipp']).optional(),

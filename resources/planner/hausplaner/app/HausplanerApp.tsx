@@ -23,6 +23,10 @@ import { treppe2DSymbol } from '../geometry/treppe2D';
 import { berechneTreppe } from '../geometry/treppenBerechnung';
 import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../geometry/treppeObjekt';
 import { PROFIL_KATALOG, VERGLASUNG_KATALOG, berechneUw, rcMachbar, preisFenster, profilNach, verglasungNach, type OeffnungsArt, type RcKlasse } from '../geometry/fensterProdukt';
+import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, tuerBauartNach } from '../geometry/oeffnungsBauarten';
+
+// Basis-URL der Icon-Assets — aus dem Bundle-Standort abgeleitet (traegt Subpfad/Domain).
+const ICON_BASE = new URL('.', import.meta.url).href;
 
 type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe';
 
@@ -1046,6 +1050,38 @@ export function HausplanerApp(): React.ReactElement {
           ) : selectedOpening ? (
             <>
               <div style={{ fontWeight: 700, marginBottom: 10 }}>{selectedOpening.type === 'door' ? 'Tür' : selectedOpening.type === 'window' ? 'Fenster' : 'Öffnung'}</div>
+              {(selectedOpening.type === 'window' || selectedOpening.type === 'door') && (() => {
+                const istFenster = selectedOpening.type === 'window';
+                const katalog = istFenster ? FENSTER_BAUARTEN : TUER_BAUARTEN;
+                const aktuellTyp = selectedOpening.produkt?.typ;
+                const waehleTyp = (t: (typeof katalog)[number]): void => {
+                  const prod = selectedOpening.produkt ?? {};
+                  const aend: NonNullable<OpeningNode['produkt']> = { ...prod, typ: t.id };
+                  if (t.oeffnungsArt) aend.oeffnungsArt = t.oeffnungsArt;
+                  aktualisiereOeffnung({ produkt: aend });
+                };
+                return (
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', color: '#9aa0a8', marginBottom: 6 }}>Bauart</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, maxHeight: 220, overflowY: 'auto', paddingRight: 2 }}>
+                      {katalog.map((t) => {
+                        const aktivT = aktuellTyp === t.id;
+                        return (
+                          <button key={t.id} type="button" title={t.label} onClick={() => waehleTyp(t)}
+                            style={{ display: 'grid', gap: 3, placeItems: 'center', padding: 5, borderRadius: 8, cursor: 'pointer',
+                              border: `1.5px solid ${aktivT ? FARBEN.auswahl : '#e5e7eb'}`, background: aktivT ? 'rgba(147,194,28,0.12)' : '#fff' }}>
+                            <img src={`${ICON_BASE}icons/${istFenster ? 'fenster' : 'tuer'}/${t.datei}`} alt={t.label} loading="lazy" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                            <span style={{ fontSize: 8.5, lineHeight: 1.15, color: aktivT ? FARBEN.text : '#6b7280', textAlign: 'center', height: 20, overflow: 'hidden' }}>{t.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {aktuellTyp && (
+                      <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 6 }}>Bauart: <strong style={{ color: FARBEN.text }}>{(istFenster ? fensterBauartNach(aktuellTyp) : tuerBauartNach(aktuellTyp))?.label ?? aktuellTyp}</strong></div>
+                    )}
+                  </div>
+                );
+              })()}
               {selectedOpening.type === 'door' && (
                 <>
                   <label style={panelLabel}>Anschlag (Angel)

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Falttür</title>
+  <desc id="desc">Semi-fotorealistisches Konfigurator-Icon: Falttür</desc>
+
+  <defs>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5b6168"/>
+      <stop offset="35%" stop-color="#1f2429"/>
+      <stop offset="70%" stop-color="#3a4046"/>
+      <stop offset="100%" stop-color="#12161a"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b98b58"/>
+      <stop offset="40%" stop-color="#9d6f41"/>
+      <stop offset="100%" stop-color="#7e5731"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7f7f4"/>
+      <stop offset="100%" stop-color="#d9ddd9"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity=".96"/>
+      <stop offset="45%" stop-color="#e9eef2" stop-opacity=".80"/>
+      <stop offset="100%" stop-color="#cfd8df" stop-opacity=".93"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity=".20"/>
+    </filter>
+  </defs>
+
+  <rect width="160" height="160" rx="18" fill="#f8f7f4"/>
+  <g filter="url(#shadow)">
+
+    
+    <rect x="24" y="24" width="112" height="112" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="28" y="28" width="104" height="104" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    <rect x="36" y="34" width="88" height="92" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    <g stroke="#0d1115" stroke-width="1.2">
+      <polygon points="43,40 65,36 65,120 43,116" fill="url(#panel)"/>
+      <polygon points="68,36 89,44 89,120 68,116" fill="url(#panel)"/>
+      <polygon points="92,44 117,38 117,118 92,120" fill="url(#panel)"/>
+    </g>
+
+  </g>
+</svg>

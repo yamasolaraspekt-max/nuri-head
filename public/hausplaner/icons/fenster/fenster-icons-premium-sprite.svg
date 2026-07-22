@@ -1,0 +1,287 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+
+  <defs>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5b6168"/>
+      <stop offset="35%" stop-color="#1f2429"/>
+      <stop offset="70%" stop-color="#3a4046"/>
+      <stop offset="100%" stop-color="#12161a"/>
+    </linearGradient>
+    <linearGradient id="frameHi" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6b737b"/>
+      <stop offset="100%" stop-color="#20252b"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset="45%" stop-color="#e9eef2" stop-opacity=".78"/>
+      <stop offset="100%" stop-color="#cfd8df" stop-opacity=".92"/>
+    </linearGradient>
+    <linearGradient id="glassOpen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity=".98"/>
+      <stop offset="100%" stop-color="#dce4e9" stop-opacity=".86"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity=".20"/>
+    </filter>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity=".14"/>
+    </filter>
+  </defs>
+
+  <defs>
+    <symbol id="01_festverglasung" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    <rect x="42" y="24" width="76" height="108" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="49" y="31" width="62" height="94" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M52 36 L98 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+  </g></symbol><symbol id="02_drehfenster_links" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="24" width="72" height="108" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="41" y="31" width="58" height="94" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M44 36 L86 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <polygon points="49,33 111,40 111,125 49,131" fill="url(#frameHi)" stroke="#0c1014" stroke-width="1.5"/>
+    <polygon points="56,40 103,45 103,117 56,123" fill="url(#glassOpen)" stroke="#7b858e"/>
+    <path d="M98 70v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M99 70v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="03_drehfenster_rechts" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="54" y="24" width="72" height="108" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="61" y="31" width="58" height="94" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M64 36 L106 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <polygon points="49,40 111,33 111,131 49,125" fill="url(#frameHi)" stroke="#0c1014" stroke-width="1.5"/>
+    <polygon points="57,45 104,40 104,123 57,117" fill="url(#glassOpen)" stroke="#7b858e"/>
+    <path d="M62 70v16m0-2h-8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M61 70v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="04_kippfenster" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="38" y="28" width="84" height="96" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="45" y="35" width="70" height="82" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M48 40 L102 40" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <polygon points="46,39 114,39 105,104 55,104" fill="url(#frameHi)" stroke="#0d1115" stroke-width="1.5"/>
+    <polygon points="53,46 107,46 99,97 61,97" fill="url(#glassOpen)" stroke="#7b858e"/>
+    <path d="M72 34h16" stroke="#d2d6da" stroke-width="3" stroke-linecap="round"/>
+
+  </g></symbol><symbol id="05_dreh_kipp_links" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="36" y="24" width="72" height="108" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="43" y="31" width="58" height="94" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M46 36 L88 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <polygon points="46,35 112,45 101,127 43,119" fill="url(#frameHi)" stroke="#0d1115" stroke-width="1.5"/>
+    <polygon points="54,43 103,50 95,118 51,112" fill="url(#glassOpen)" stroke="#7b858e"/>
+    <path d="M96 72v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M97 72v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="06_dreh_kipp_rechts" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="52" y="24" width="72" height="108" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="59" y="31" width="58" height="94" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M62 36 L104 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <polygon points="48,45 114,35 117,119 59,127" fill="url(#frameHi)" stroke="#0d1115" stroke-width="1.5"/>
+    <polygon points="57,50 106,43 109,112 65,118" fill="url(#glassOpen)" stroke="#7b858e"/>
+    <path d="M64 72v16m0-2h-8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M63 72v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="07_stulpfenster" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="25" y="30" width="110" height="96" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="32" y="37" width="96" height="82" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M35 42 L115 42" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="78" y="37" width="4" height="82" fill="#1c2126"/>
+    <path d="M75 70v16m0-2h-8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M74 70v16" stroke="#353a40" stroke-width="1"/>
+    <path d="M85 70v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M86 70v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="08_oberlicht" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="36" y="20" width="88" height="116" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="43" y="27" width="74" height="102" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M46 32 L104 32" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="43" y="27" width="74" height="28" fill="url(#glass)" stroke="#707983"/>
+    <rect x="43" y="61" width="74" height="68" fill="url(#glass)" stroke="#707983"/>
+
+  </g></symbol><symbol id="09_unterlicht_fest" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="36" y="20" width="88" height="116" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="43" y="27" width="74" height="102" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M46 32 L104 32" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <polygon points="43,28 117,28 108,61 52,61" fill="url(#frameHi)" stroke="#0d1115"/>
+    <polygon points="50,34 110,34 103,54 57,54" fill="url(#glassOpen)" stroke="#7b858e"/>
+    <rect x="43" y="67" width="74" height="62" fill="url(#glass)" stroke="#707983"/>
+
+  </g></symbol><symbol id="10_schiebefenster_2teilig" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="24" y="38" width="112" height="84" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="31" y="45" width="98" height="70" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M34 50 L116 50" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="31" y="45" width="50" height="70" fill="url(#glass)" stroke="#707983"/>
+    <rect x="79" y="45" width="50" height="70" fill="url(#glassOpen)" stroke="#707983"/>
+    <rect x="78" y="42" width="5" height="76" fill="#1a1f24"/>
+    <path d="M121 72v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M122 72v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="11_hebeschiebe_2teilig" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="18" y="34" width="124" height="92" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="25" y="41" width="110" height="78" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M28 46 L122 46" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="25" y="41" width="56" height="78" fill="url(#glass)" stroke="#707983"/>
+    <rect x="79" y="41" width="56" height="78" fill="url(#glassOpen)" stroke="#707983"/>
+    <rect x="78" y="38" width="5" height="84" fill="#1a1f24"/>
+    <path d="M126 74v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M127 74v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="12_hebeschiebe_3teilig" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="12" y="36" width="136" height="88" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="19" y="43" width="122" height="74" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M22 48 L128 48" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="19" y="43" width="38" height="74" fill="url(#glass)" stroke="#707983"/>
+    <rect x="61" y="43" width="38" height="74" fill="url(#glassOpen)" stroke="#707983"/>
+    <rect x="103" y="43" width="38" height="74" fill="url(#glass)" stroke="#707983"/>
+    <rect x="58" y="40" width="4" height="80" fill="#1a1f24"/>
+    <rect x="100" y="40" width="4" height="80" fill="#1a1f24"/>
+    <path d="M92 74v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M93 74v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="13_parallel_schiebe_kipp" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="38" y="26" width="84" height="108" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="45" y="33" width="70" height="94" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M48 38 L102 38" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <polygon points="47,37 119,44 111,128 43,121" fill="url(#frameHi)" stroke="#0d1115"/>
+    <polygon points="54,44 111,50 104,119 50,113" fill="url(#glassOpen)" stroke="#7b858e"/>
+    <path d="M106 76v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M107 76v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="14_falt_schiebe_3teilig" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    <rect x="22" y="34" width="116" height="94" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    <g stroke="#0d1115" stroke-width="1.2">
+      <polygon points="29,42 58,37 58,119 29,115" fill="url(#glassOpen)"/>
+      <polygon points="61,37 88,45 88,119 61,115" fill="url(#glassOpen)"/>
+      <polygon points="91,45 131,39 131,117 91,119" fill="url(#glassOpen)"/>
+    </g>
+    <path d="M58 37v82M88 45v74" stroke="#1b2025" stroke-width="4"/>
+
+  </g></symbol><symbol id="15_falt_schiebe_4teilig" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    <rect x="14" y="34" width="132" height="94" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    <g stroke="#0d1115" stroke-width="1.2">
+      <polygon points="21,42 49,37 49,119 21,115" fill="url(#glassOpen)"/>
+      <polygon points="52,37 79,45 79,119 52,115" fill="url(#glassOpen)"/>
+      <polygon points="82,45 109,37 109,115 82,119" fill="url(#glassOpen)"/>
+      <polygon points="112,37 139,42 139,115 112,119" fill="url(#glassOpen)"/>
+    </g>
+    <path d="M49 37v82M79 45v74M109 37v78" stroke="#1b2025" stroke-width="4"/>
+
+  </g></symbol><symbol id="16_schiebetuer_1fluegelig" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    <rect x="28" y="28" width="104" height="108" rx="2" fill="#e9e6df" stroke="#d7d0c6"/>
+    <rect x="24" y="34" width="58" height="96" fill="url(#frame)" stroke="#0d1115"/>
+    <rect x="31" y="41" width="44" height="82" fill="url(#glass)" stroke="#707983"/>
+    <path d="M80 33h45" stroke="#2a3035" stroke-width="4"/>
+    <path d="M72 74v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M73 74v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="17_schiebetuer_2fluegelig_mitte" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="18" y="34" width="124" height="94" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="25" y="41" width="110" height="80" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M28 46 L122 46" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="25" y="41" width="53" height="80" fill="url(#glass)" stroke="#707983"/>
+    <rect x="82" y="41" width="53" height="80" fill="url(#glass)" stroke="#707983"/>
+    <rect x="77" y="38" width="6" height="86" fill="#1a1f24"/>
+    <path d="M73 74v16m0-2h-8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M72 74v16" stroke="#353a40" stroke-width="1"/>
+    <path d="M87 74v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M88 74v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="18_eckfenster" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    <polygon points="28,46 78,28 78,126 28,112" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <polygon points="78,28 132,46 132,112 78,126" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <polygon points="36,51 72,39 72,116 36,106" fill="url(#glass)" stroke="#707983"/>
+    <polygon points="84,39 124,51 124,106 84,116" fill="url(#glass)" stroke="#707983"/>
+
+  </g></symbol><symbol id="19_trapezfenster" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    <path d="M34 126V58L124 28v98z" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <path d="M43 118V65L115 41v77z" fill="url(#glass)" stroke="#707983"/>
+
+  </g></symbol><symbol id="20_rundfenster" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    <circle cx="80" cy="80" r="50" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <circle cx="80" cy="80" r="40" fill="url(#glass)" stroke="#707983"/>
+    <path d="M80 40v80M40 80h80" stroke="#252a30" stroke-width="5"/>
+
+  </g></symbol><symbol id="21_dachfenster" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    <polygon points="48,132 62,26 120,26 106,132" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <polygon points="58,118 69,38 112,38 101,118" fill="url(#glass)" stroke="#707983"/>
+    <polygon points="60,86 111,69 103,121 53,132" fill="url(#frameHi)" stroke="#0d1115"/>
+    <polygon points="67,90 103,78 97,114 61,122" fill="url(#glassOpen)" stroke="#707983"/>
+
+  </g></symbol><symbol id="22_balkontuer_dreh_kipp" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="54" y="18" width="64" height="122" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="61" y="25" width="50" height="108" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M64 30 L98 30" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <polygon points="43,29 108,38 108,132 43,124" fill="url(#frameHi)" stroke="#0d1115"/>
+    <polygon points="50,36 100,44 100,124 50,117" fill="url(#glassOpen)" stroke="#707983"/>
+    <path d="M95 78v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M96 78v16" stroke="#353a40" stroke-width="1"/>
+
+  </g></symbol><symbol id="23_pfosten_riegel_element" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="22" y="34" width="116" height="94" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="29" y="41" width="102" height="80" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M32 46 L118 46" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <path d="M60 41v80M100 41v80M29 80h102" stroke="#20252a" stroke-width="5"/>
+
+  </g></symbol><symbol id="24_oberlichtband" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="18" y="30" width="124" height="100" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.5"/>
+    <rect x="25" y="37" width="110" height="86" rx="1" fill="url(#glass)" stroke="#707983" stroke-width="1"/>
+    <path d="M28 42 L122 42" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <path d="M59 37v86M100 37v86M25 66h110" stroke="#20252a" stroke-width="5"/>
+    <path d="M32 58l8-12 8 12M72 58l8-12 8 12M112 58l8-12 8 12" stroke="#9199a1" stroke-width="2"/>
+
+  </g></symbol>
+  </defs>
+</svg>

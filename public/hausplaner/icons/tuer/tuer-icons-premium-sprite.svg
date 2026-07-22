@@ -1,0 +1,484 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+
+  <defs>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5b6168"/>
+      <stop offset="35%" stop-color="#1f2429"/>
+      <stop offset="70%" stop-color="#3a4046"/>
+      <stop offset="100%" stop-color="#12161a"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b98b58"/>
+      <stop offset="40%" stop-color="#9d6f41"/>
+      <stop offset="100%" stop-color="#7e5731"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7f7f4"/>
+      <stop offset="100%" stop-color="#d9ddd9"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity=".96"/>
+      <stop offset="45%" stop-color="#e9eef2" stop-opacity=".80"/>
+      <stop offset="100%" stop-color="#cfd8df" stop-opacity=".93"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity=".20"/>
+    </filter>
+  </defs>
+
+  <defs>
+    <symbol id="01_innentuer_links" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="18" width="92" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="38" y="22" width="84" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="46" y="24" width="56" height="110" rx="2" fill="url(#wood)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="53" y="31" width="42" height="96" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M56 36 L82 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    
+        <path d="M90 71v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M91 71v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="02_innentuer_rechts" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="18" width="92" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="38" y="22" width="84" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="58" y="24" width="56" height="110" rx="2" fill="url(#wood)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="65" y="31" width="42" height="96" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M68 36 L94 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    
+    <path d="M70 71v16m0-2h-8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+    <path d="M69 71v16" stroke="#353a40" stroke-width="1"/>
+    
+
+  </g></symbol><symbol id="03_haustuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="32" y="14" width="96" height="132" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="36" y="18" width="88" height="124" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="47" y="20" width="66" height="120" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="54" y="27" width="52" height="106" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M57 32 L93 32" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    
+    <rect x="73" y="35" width="24" height="52" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M77 42 L87 42" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    <rect x="59" y="35" width="6" height="74" rx="3" fill="#cfd4d8"/>
+    
+        <path d="M100 82v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M101 82v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="04_wohnungseingangstuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="18" width="92" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="38" y="22" width="84" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="48" y="24" width="64" height="112" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="55" y="31" width="50" height="98" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M58 36 L92 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="60" y="38" width="40" height="20" rx="2" fill="#585f66" opacity=".35"/>
+    
+        <path d="M98 74v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M99 74v16" stroke="#353a40" stroke-width="1"/>
+        
+    <circle cx="90" cy="54" r="2.5" fill="#d7dbe0"/>
+
+  </g></symbol><symbol id="05_doppelfluegeltuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="18" y="18" width="124" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="22" y="22" width="116" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="30" y="24" width="100" height="112" rx="2" fill="url(#wood)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="37" y="31" width="86" height="98" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M40 36 L110 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="77" y="31" width="6" height="98" fill="#1f2429"/>
+    
+    <path d="M74 76v16m0-2h-8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+    <path d="M73 76v16" stroke="#353a40" stroke-width="1"/>
+    
+    
+        <path d="M86 76v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M87 76v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="06_tuer_mit_oberlicht" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="10" width="92" height="136" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="38" y="14" width="84" height="128" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    <rect x="46" y="20" width="68" height="24" rx="2" fill="url(#glass)" stroke="#808890"/>
+    
+    <rect x="46" y="48" width="68" height="88" rx="2" fill="url(#wood)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="53" y="55" width="54" height="74" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M56 60 L94 60" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    
+        <path d="M100 86v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M101 86v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="07_schiebetuer_vorwand" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="18" y="22" width="124" height="116" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="22" y="26" width="116" height="108" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    <path d="M38 34h84" stroke="#2a3035" stroke-width="5"/>
+    <rect x="34" y="38" width="62" height="94" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    
+    <rect x="43" y="50" width="44" height="68" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M47 57 L77 57" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    
+        <path d="M86 77v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M87 77v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="08_schiebetuer_in_wand" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="18" y="22" width="124" height="116" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="22" y="26" width="116" height="108" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    <path d="M38 34h84" stroke="#2a3035" stroke-width="5"/>
+    <rect x="72" y="42" width="54" height="88" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    
+    <rect x="80" y="52" width="38" height="60" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M84 59 L108 59" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    
+        <path d="M116 77v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M117 77v16" stroke="#353a40" stroke-width="1"/>
+        
+    <rect x="28" y="42" width="34" height="88" rx="2" fill="#f3f1eb" stroke="#e2ddd2" stroke-dasharray="4 3"/>
+
+  </g></symbol><symbol id="09_pendeltuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="18" width="92" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="38" y="22" width="84" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="52" y="24" width="56" height="110" rx="2" fill="url(#panel)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="59" y="31" width="42" height="96" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M62 36 L88 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <path d="M55 54c7-12 16-18 25-18M105 54c-7-12-16-18-25-18" stroke="#8a9198" stroke-width="2" fill="none"/>
+    <path d="M55 112c7 12 16 18 25 18M105 112c-7 12-16 18-25 18" stroke="#8a9198" stroke-width="2" fill="none"/>
+    
+        <path d="M98 71v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M99 71v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="10_falttuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="24" y="24" width="112" height="112" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="28" y="28" width="104" height="104" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    <rect x="36" y="34" width="88" height="92" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    <g stroke="#0d1115" stroke-width="1.2">
+      <polygon points="43,40 65,36 65,120 43,116" fill="url(#panel)"/>
+      <polygon points="68,36 89,44 89,120 68,116" fill="url(#panel)"/>
+      <polygon points="92,44 117,38 117,118 92,120" fill="url(#panel)"/>
+    </g>
+
+  </g></symbol><symbol id="11_pivottuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="32" y="18" width="96" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="36" y="22" width="88" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    <rect x="48" y="24" width="64" height="112" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    
+    <rect x="58" y="34" width="44" height="92" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M62 41 L92 41" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    <circle cx="60" cy="34" r="3" fill="#d7dbe0"/>
+    <circle cx="60" cy="126" r="3" fill="#d7dbe0"/>
+    
+        <path d="M96 72v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M97 72v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="12_ganzglas_schiebetuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="20" y="20" width="120" height="120" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="24" y="24" width="112" height="112" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    <path d="M38 34h84" stroke="#2a3035" stroke-width="5"/>
+    <rect x="44" y="40" width="56" height="92" rx="2" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M50 50L92 50" stroke="#ffffff" stroke-opacity=".65" stroke-width="1.5"/>
+    
+        <path d="M92 76v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M93 76v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="13_brandschutztuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="18" width="92" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="38" y="22" width="84" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="48" y="24" width="64" height="112" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="55" y="31" width="50" height="98" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M58 36 L92 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="58" y="36" width="44" height="10" rx="2" fill="#c05042"/>
+    <text x="80" y="44" font-size="7" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif">EI</text>
+    
+        <path d="M98 74v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M99 74v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="14_rauchschutztuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="18" width="92" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="38" y="22" width="84" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="48" y="24" width="64" height="112" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="55" y="31" width="50" height="98" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M58 36 L92 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="58" y="36" width="44" height="10" rx="2" fill="#6d7d8a"/>
+    <text x="80" y="44" font-size="7" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif">RS</text>
+    
+        <path d="M98 74v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M99 74v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="15_schallschutztuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="18" width="92" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="38" y="22" width="84" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="48" y="24" width="64" height="112" rx="2" fill="url(#wood)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="55" y="31" width="50" height="98" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M58 36 L92 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <path d="M116 52c8 4 8 16 0 20M124 48c12 8 12 24 0 32" stroke="#8a9198" stroke-width="2" fill="none"/>
+    
+        <path d="M98 74v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M99 74v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="16_fluchttuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="18" width="92" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="38" y="22" width="84" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="48" y="24" width="64" height="112" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="55" y="31" width="50" height="98" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M58 36 L92 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="58" y="38" width="44" height="12" rx="2" fill="#3f9152"/>
+    <path d="M70 44h20" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+    
+        <path d="M98 74v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M99 74v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="17_notausgang_tuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="18" width="92" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="38" y="22" width="84" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="48" y="24" width="64" height="112" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="55" y="31" width="50" height="98" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M58 36 L92 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    <rect x="62" y="76" width="36" height="6" rx="3" fill="#d7dbe0"/>
+    <rect x="62" y="78" width="36" height="2" rx="1" fill="#3e454c"/>
+
+  </g></symbol><symbol id="18_mehrzwecktuer_mit_verglasung" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="34" y="18" width="92" height="124" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="38" y="22" width="84" height="116" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="48" y="24" width="64" height="112" rx="2" fill="url(#wood)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="55" y="31" width="50" height="98" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M58 36 L92 36" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    
+    <rect x="62" y="38" width="18" height="52" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M66 45 L70 45" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    
+    <rect x="84" y="38" width="14" height="52" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M88 45 L88 45" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    
+        <path d="M98 88v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M99 88v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="19_garagentor_sektional" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="18" y="30" width="124" height="96" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="22" y="34" width="116" height="88" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    <rect x="28" y="38" width="104" height="82" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    <path d="M34 52h92M34 66h92M34 80h92M34 94h92" stroke="#707983" stroke-width="2"/>
+    
+    <rect x="42" y="46" width="18" height="10" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M46 53 L50 53" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    
+    <rect x="68" y="46" width="18" height="10" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M72 53 L76 53" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    
+    <rect x="94" y="46" width="18" height="10" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M98 53 L102 53" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+
+  </g></symbol><symbol id="20_haustuer_seitenteil_links" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="18" y="14" width="124" height="132" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="22" y="18" width="116" height="124" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    <rect x="30" y="20" width="24" height="120" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    
+    <rect x="36" y="28" width="12" height="104" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M40 35 L38 35" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    
+    <rect x="58" y="20" width="60" height="120" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="65" y="27" width="46" height="106" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M68 32 L98 32" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    
+    <rect x="82" y="34" width="18" height="58" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M86 41 L90 41" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    
+        <path d="M106 84v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M107 84v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="21_haustuer_seitenteil_rechts" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="18" y="14" width="124" height="132" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="22" y="18" width="116" height="124" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="42" y="20" width="60" height="120" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="49" y="27" width="46" height="106" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M52 32 L82 32" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    
+    <rect x="66" y="34" width="18" height="58" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M70 41 L74 41" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    
+        <path d="M90 84v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M91 84v16" stroke="#353a40" stroke-width="1"/>
+        
+    <rect x="106" y="20" width="24" height="120" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    
+    <rect x="112" y="28" width="12" height="104" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M116 35 L114 35" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+
+  </g></symbol><symbol id="22_haustuer_oberlicht_und_seitenteil" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="18" y="10" width="124" height="136" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="22" y="14" width="116" height="128" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    <rect x="42" y="20" width="76" height="20" rx="2" fill="url(#glass)" stroke="#808890"/>
+    <rect x="24" y="44" width="20" height="96" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    
+    <rect x="29" y="52" width="10" height="80" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M33 59 L29 59" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    
+    <rect x="48" y="44" width="60" height="96" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="55" y="51" width="46" height="82" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M58 56 L88 56" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    
+    <rect x="69" y="56" width="18" height="46" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M73 63 L77 63" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    
+        <path d="M96 84v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M97 84v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="23_terrassentuer" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="38" y="14" width="84" height="132" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="42" y="18" width="76" height="124" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    
+    <rect x="50" y="20" width="60" height="120" rx="2" fill="url(#frame)" stroke="#0d1115" stroke-width="1.3"/>
+    <rect x="57" y="27" width="46" height="106" rx="1.5" fill="url(#panel)" stroke="#808890" stroke-width="1"/>
+    <path d="M60 32 L90 32" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/>
+
+    
+    <rect x="58" y="28" width="44" height="104" rx="1.5" fill="url(#glass)" stroke="#87909a"/>
+    <path d="M62 35 L92 35" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.6"/>
+
+    <rect x="54" y="138" width="52" height="4" rx="2" fill="#9aa1a7"/>
+    
+        <path d="M98 84v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M99 84v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol><symbol id="24_tor_flugelig" viewBox="0 0 160 160"><rect width="160" height="160" rx="18" fill="#f8f7f4"/><g filter="url(#shadow)">
+
+    
+    <rect x="18" y="26" width="124" height="108" rx="3" fill="#ece8e0" stroke="#ddd7cb"/>
+    <rect x="22" y="30" width="116" height="100" rx="2" fill="#faf9f6" stroke="#e4dfd5"/>
+
+    <rect x="30" y="34" width="100" height="92" rx="2" fill="url(#frame)" stroke="#0d1115"/>
+    <rect x="78" y="40" width="4" height="80" fill="#1f2429"/>
+    <path d="M40 52h34M40 70h34M40 88h34M86 52h34M86 70h34M86 88h34" stroke="#707983" stroke-width="2"/>
+    
+    <path d="M74 74v16m0-2h-8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+    <path d="M73 74v16" stroke="#353a40" stroke-width="1"/>
+    
+    
+        <path d="M86 74v16m0-2h8" stroke="#cfd4d8" stroke-width="3" stroke-linecap="round"/>
+        <path d="M87 74v16" stroke="#353a40" stroke-width="1"/>
+        
+
+  </g></symbol>
+  </defs>
+</svg>
