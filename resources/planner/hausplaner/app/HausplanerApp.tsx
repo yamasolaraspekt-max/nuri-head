@@ -22,6 +22,7 @@ import { dupliziereGeschoss } from '../geometry/geschossVorlage';
 import { treppe2DSymbol } from '../geometry/treppe2D';
 import { berechneTreppe } from '../geometry/treppenBerechnung';
 import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../geometry/treppeObjekt';
+import { PROFIL_KATALOG, VERGLASUNG_KATALOG, berechneUw, rcMachbar, preisFenster, profilNach, verglasungNach, type OeffnungsArt, type RcKlasse } from '../geometry/fensterProdukt';
 
 type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe';
 
@@ -1011,6 +1012,56 @@ export function HausplanerApp(): React.ReactElement {
                 <input type="number" min={0} value={selectedOpening.offsetFromWallStart} onChange={(e) => aktualisiereOeffnung({ offsetFromWallStart: Math.max(0, Math.round(Number(e.target.value))) })} style={panelInput} />
               </label>
               <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 10 }}>Maße direkt hier ändern — oder die Öffnung im Plan entlang der Wand ziehen.</div>
+              {(selectedOpening.type === 'window' || selectedOpening.type === 'door') && (() => {
+                const prod = selectedOpening.produkt ?? {};
+                const prof = profilNach(prod.profilId ?? '') ?? PROFIL_KATALOG[0];
+                const verg = verglasungNach(prod.verglasungId ?? '') ?? VERGLASUNG_KATALOG[0];
+                const oa = (prod.oeffnungsArt ?? 'dreh-kipp') as OeffnungsArt;
+                const rc = (prod.rc ?? 'ohne') as RcKlasse;
+                const uw = berechneUw({ breiteMm: selectedOpening.width, hoeheMm: selectedOpening.height, uf: prof.uf, ug: verg.ug, ansichtsbreiteMm: prof.ansichtsbreiteMm });
+                const rcOk = rcMachbar(rc, verg);
+                const preis = preisFenster({ breiteMm: selectedOpening.width, hoeheMm: selectedOpening.height, profil: prof, verglasung: verg, oeffnungsArt: oa, rc });
+                const setP = (aend: Partial<NonNullable<OpeningNode['produkt']>>) => aktualisiereOeffnung({ produkt: { ...prod, ...aend } });
+                return (
+                  <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid #e5e7eb' }}>
+                    <div style={{ fontWeight: 700, marginBottom: 8 }}>Produkt (Fensterbau)</div>
+                    <label style={panelLabel}>Profilsystem
+                      <select value={prof.id} onChange={(e) => setP({ profilId: e.target.value })} style={panelInput}>
+                        {PROFIL_KATALOG.map((p) => (<option key={p.id} value={p.id}>{p.name}</option>))}
+                      </select>
+                    </label>
+                    <label style={panelLabel}>Verglasung
+                      <select value={verg.id} onChange={(e) => setP({ verglasungId: e.target.value })} style={panelInput}>
+                        {VERGLASUNG_KATALOG.map((v) => (<option key={v.id} value={v.id}>{v.name}</option>))}
+                      </select>
+                    </label>
+                    <label style={panelLabel}>Öffnungsart
+                      <select value={oa} onChange={(e) => setP({ oeffnungsArt: e.target.value as OeffnungsArt })} style={panelInput}>
+                        <option value="fest">fest</option>
+                        <option value="dreh">Dreh</option>
+                        <option value="kipp">Kipp</option>
+                        <option value="dreh-kipp">Dreh-Kipp</option>
+                      </select>
+                    </label>
+                    <label style={panelLabel}>Einbruchschutz (RC)
+                      <select value={rc} onChange={(e) => setP({ rc: e.target.value as RcKlasse })} style={panelInput}>
+                        <option value="ohne">ohne</option>
+                        <option value="RC1N">RC1N</option>
+                        <option value="RC2N">RC2N</option>
+                        <option value="RC2">RC2</option>
+                        <option value="RC3">RC3</option>
+                      </select>
+                    </label>
+                    <div style={{ marginTop: 8, padding: 10, background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 12, lineHeight: 1.7, color: FARBEN.text }}>
+                      <div>U-Wert (U<sub>w</sub>): <strong>{uw.uw.toFixed(2)}</strong> W/(m²·K)</div>
+                      <div>RC {rc === 'ohne' ? '' : rc}: <strong style={{ color: rc === 'ohne' ? FARBEN.gedaempft : rcOk ? FARBEN.erfolg : FARBEN.gefahr }}>{rc === 'ohne' ? 'kein Nachweis' : rcOk ? 'mit dieser Verglasung möglich' : 'Verglasung reicht nicht'}</strong></div>
+                      <div>Preis (netto): <strong>{preis.gesamt.toLocaleString('de-DE')} €</strong></div>
+                      <div style={{ fontSize: 10.5, color: FARBEN.gedaempft, marginTop: 4 }}>Rahmen {preis.rahmen} € · Glas {preis.glas} € · Beschlag {preis.beschlag} € · RC {preis.rcAufpreis} €</div>
+                      <div style={{ fontSize: 10.5, color: FARBEN.gedaempft, marginTop: 4 }}>Katalogwerte sind Platzhalter bis zu den echten Schüco-Daten.</div>
+                    </div>
+                  </div>
+                );
+              })()}
               <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
                 <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={dupliziere}>Duplizieren</button>
                 <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
