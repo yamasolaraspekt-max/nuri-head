@@ -1020,7 +1020,7 @@ export function HausplanerApp(): React.ReactElement {
             <>
               <div style={{ fontWeight: 700, marginBottom: 10 }}>Treppe</div>
               {(() => {
-                const erg = berechneTreppe({ geschosshoehe: selectedStairParams.geschosshoehe, laufbreite: selectedStairParams.laufbreite, gewuenschteSteigung: selectedStairParams.gewuenschteSteigung, bereich: selectedStairParams.bereich });
+                const erg = berechneTreppe({ geschosshoehe: selectedStairParams.geschosshoehe, laufbreite: selectedStairParams.laufbreite, gewuenschteSteigung: selectedStairParams.gewuenschteSteigung, bereich: selectedStairParams.bereich, verfuegbareLauflaenge: Math.hypot(selectedStairParams.endX - selectedStairParams.startX, selectedStairParams.endY - selectedStairParams.startY) || undefined });
                 return (
                   <div style={{ marginBottom: 10, padding: 10, background: erg.bestanden ? '#f0fdf4' : '#fef2f2', border: `1px solid ${erg.bestanden ? '#bbf7d0' : '#fecaca'}`, borderRadius: 8, fontSize: 11.5, lineHeight: 1.6, color: FARBEN.text }}>
                     <div><strong>{erg.anzahlSteigungen}</strong> Steigungen · <strong>{erg.anzahlAuftritte}</strong> Auftritte</div>
