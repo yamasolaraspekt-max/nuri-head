@@ -113,25 +113,25 @@ function gehrungsEcken(
   q: { x: number; y: number },
   h: number,
 ): [Punkt, Punkt] | null {
-  const sx = p.x + q.x;
-  const sy = p.y + q.y;
-  const t = einheit(sx, sy);
+  const t = einheit(p.x + q.x, p.y + q.y);
   if (!t) {
     return null; // Wände zeigen exakt entgegengesetzt (180°) — keine definierte Gehrung.
   }
-  const m = perpLinks(t); // Einheits-Richtung der Miter-Diagonale.
-  const pl = perpLinks(p);
-  const denom = m.x * pl.x + m.y * pl.y; // = sin(halber Öffnungswinkel).
-  if (Math.abs(denom) < EPS) {
-    return null;
+  // Die Gehrungsnaht liegt AUF der Winkelhalbierenden t (nicht senkrecht dazu): sie verbindet
+  // Innen- und Außeneck. So bleibt der Außenwinkel ein sauberer scharfer Eck (z. B. 90°),
+  // statt abgeschrägt zu werden. innen = V + t·len, außen = V − t·len.
+  const cosHalb = t.x * p.x + t.y * p.y; // cos(halber Öffnungswinkel), t·p == t·q
+  const sinHalb = Math.sqrt(Math.max(0, 1 - cosHalb * cosHalb));
+  if (sinHalb < EPS) {
+    return null; // kollinear/entartet.
   }
-  const len = h / denom;
-  if (Math.abs(len) > h * 8) {
+  const len = h / sinHalb;
+  if (len > h * 8) {
     return null; // Miter-Limit: bei sehr spitzem Winkel keine überlange Spitze.
   }
   return [
-    { x: V.x + m.x * len, y: V.y + m.y * len },
-    { x: V.x - m.x * len, y: V.y - m.y * len },
+    { x: V.x + t.x * len, y: V.y + t.y * len },
+    { x: V.x - t.x * len, y: V.y - t.y * len },
   ];
 }
 
