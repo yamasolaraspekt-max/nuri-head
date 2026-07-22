@@ -18,6 +18,7 @@ import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt }
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
 import { versetzteWand, spiegelteWand, bbox as punkteBbox, achsenMitte, type Achse } from '../geometry/editierGeometrie';
+import { dupliziereGeschoss } from '../geometry/geschossVorlage';
 
 type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach';
 
@@ -207,6 +208,24 @@ export function HausplanerApp(): React.ReactElement {
       const g = spiegelteWand(w.start, w.end, achse, pos);
       store.getState().executeCommand({ type: 'MOVE_NODE', nodeId: w.id, position: { start: g.start, end: g.end } });
     }
+  }
+  // Geschoss als Vorlage duplizieren (aktiviert die getestete Logik dupliziereGeschoss):
+  // neues Geschoss darueber, Waende/Oeffnungen/Dach kopiert, Oeffnungen an die neuen Waende umgehaengt.
+  function dupliziereGeschossJetzt(): void {
+    if (!level) return;
+    const roof = scene?.roofs?.find((r) => r.levelId === level.id) ?? null;
+    const dup = dupliziereGeschoss(
+      { id: level.id, name: level.name, elevation: level.elevation, defaultWallHeight: level.defaultWallHeight, floorThickness: level.floorThickness, sortOrder: level.sortOrder },
+      nodes,
+      roof,
+      uuid,
+      `${level.name} (Kopie)`,
+    );
+    const st = store.getState();
+    if (!st.executeCommand({ type: 'ADD_LEVEL', level: dup.level })) return;
+    for (const n of dup.nodes) { st.executeCommand({ type: 'ADD_NODE', node: n }); }
+    if (dup.roof) { st.executeCommand({ type: 'ADD_ROOF', roof: dup.roof }); }
+    st.setActiveLevel(dup.level.id);
   }
 
   /** Default-Traufkontur = Gebäude-Umriss (Bounding-Box der Wände; ohne Wände ein 8×10-m-Rechteck). */
@@ -531,6 +550,12 @@ export function HausplanerApp(): React.ReactElement {
         >+ Geschoss</button>
         <button
           type="button"
+          style={knopf(false)}
+          title="Aktuelles Geschoss als Vorlage duplizieren — Wände, Öffnungen und Dach werden ein Stockwerk höher kopiert"
+          onClick={dupliziereGeschossJetzt}
+        >⧉ Geschoss dupl.</button>
+        <button
+          type="button"
           style={{ ...knopf(false), opacity: scene.levels.length <= 1 ? 0.4 : 1, cursor: scene.levels.length <= 1 ? 'not-allowed' : 'pointer' }}
           disabled={scene.levels.length <= 1}
           title={scene.levels.length <= 1 ? 'Das letzte Geschoss kann nicht gelöscht werden' : 'Aktives Geschoss löschen (muss leer sein)'}
@@ -547,9 +572,9 @@ export function HausplanerApp(): React.ReactElement {
         </label>
         <span style={{ width: 1, height: 22, background: '#e5e7eb', margin: '0 4px' }} />
         {/* P1c: Modus-Schalter — 3D ist der zweite Renderer DERSELBEN Daten (ein Store). */}
-        <button type="button" style={knopf(modus === '2d')} onClick={() => store.getState().setModus('2d')}>2D</button>
-        <button type="button" style={knopf(modus === 'split')} onClick={() => store.getState().setModus('split')}>Split</button>
-        <button type="button" style={knopf(modus === '3d')} onClick={() => store.getState().setModus('3d')}>3D</button>
+        <button type="button" title="2D-Grundriss" style={knopf(modus === '2d')} onClick={() => store.getState().setModus('2d')}>2D</button>
+        <button type="button" title="2D und 3D nebeneinander" style={knopf(modus === 'split')} onClick={() => store.getState().setModus('split')}>Split</button>
+        <button type="button" title="3D-Ansicht" style={knopf(modus === '3d')} onClick={() => store.getState().setModus('3d')}>3D</button>
         <span style={{ flex: 1 }} />
         <span style={{ fontSize: 12, fontWeight: 600, padding: '4px 12px', borderRadius: 999, color: statusPill.farbe, background: statusPill.grund }}>{statusPill.text}</span>
         <button
