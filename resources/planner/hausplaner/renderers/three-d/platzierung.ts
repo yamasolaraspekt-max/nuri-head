@@ -34,6 +34,43 @@ export interface QuaderPlatzierung {
  * Quader-Mitte, Höhenmitte über der Level-Elevation, Rotation = Wandwinkel.
  * Reine Funktion — testbar ohne Browser/WebGL (Abnahme-Baustein für Kriterium 1/2).
  */
+export interface StufePlatzierung {
+  zentrum: ThreePunkt;
+  rotationY: number;
+  masse: { x: number; y: number; z: number };
+}
+
+/**
+ * Eine Treppen-Stufe (lokaler Quader aus treppe3DKoerper) in die three-Welt setzen — analog
+ * platziereWandQuader: lokale x-Achse = Laufrichtung (start->end), y = Hoehe, z = Laufbreite.
+ * Die EINE Achsen-Umrechnung bleibt weltZuThree; hier nur Verortung entlang der Lauflinie.
+ */
+export function platziereTreppenStufe(
+  start: { x: number; y: number },
+  end: { x: number; y: number },
+  stufe: { mitte: [number, number, number]; groesse: [number, number, number] },
+  levelElevationMm: number,
+): StufePlatzierung {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const len = Math.hypot(dx, dy);
+  const ux = len === 0 ? 1 : dx / len;
+  const uy = len === 0 ? 0 : dy / len;
+  const nx = -uy;
+  const ny = ux;
+  const [lx, ly, lz] = stufe.mitte;
+  const welt = {
+    x: start.x + ux * lx + nx * ly,
+    y: start.y + uy * lx + ny * ly,
+    z: levelElevationMm + lz,
+  };
+  return {
+    zentrum: weltZuThree(welt),
+    rotationY: Math.atan2(dy, dx),
+    masse: { x: stufe.groesse[0] / 1000, y: stufe.groesse[2] / 1000, z: stufe.groesse[1] / 1000 },
+  };
+}
+
 export function platziereWandQuader(
   wand: WallNode,
   quader: WandQuader,

@@ -11,7 +11,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Stage, Layer, Line, Rect, Group, Text, Circle } from 'react-konva';
 import type Konva from 'konva';
 import { useHausplanerStore } from '../store/hausplanerStore';
-import type { OpeningNode, RoofNode, SceneNode, WallNode } from '../domain/scene.types';
+import type { ObjectNode, OpeningNode, RoofNode, SceneNode, WallNode } from '../domain/scene.types';
 import { erkenneRaeume } from '../geometry/roomDetection';
 import { bemassung } from '../geometry/bemassung';
 import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt } from '../geometry/wallGeometry';
@@ -19,8 +19,11 @@ import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type Fens
 import { DreiDBereich } from './DreiDBereich';
 import { versetzteWand, spiegelteWand, bbox as punkteBbox, achsenMitte, type Achse } from '../geometry/editierGeometrie';
 import { dupliziereGeschoss } from '../geometry/geschossVorlage';
+import { treppe2DSymbol } from '../geometry/treppe2D';
+import { berechneTreppe } from '../geometry/treppenBerechnung';
+import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../geometry/treppeObjekt';
 
-type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach';
+type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe';
 
 const FARBEN = {
   text: '#1f2937', gedaempft: '#6b7280', linie: '#9ca3af', raster: '#eef0f2', rasterGrob: '#e2e4e7',
@@ -54,6 +57,7 @@ function werkzeugIcon(w: string): React.ReactElement {
     case 'fenster': return svgWrap(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M12 4v16M4 12h16" /></>);
     case 'tuer': return svgWrap(<><path d="M7 21V4h9v17" /><path d="M7 21a9 9 0 0 1 9-9" /></>);
     case 'dach': return svgWrap(<path d="M3 12L12 5l9 7" />);
+    case 'treppe': return svgWrap(<path d="M3 21h4v-4h4v-4h4v-4h4" />);
     default: return svgWrap(<circle cx="12" cy="12" r="3" />);
   }
 }
@@ -104,6 +108,7 @@ export function HausplanerApp(): React.ReactElement {
   const store = useHausplanerStore;
 
   const [werkzeug, setWerkzeug] = useState<Werkzeug>('auswahl');
+  const [treppeStart, setTreppeStart] = useState<{ x: number; y: number } | null>(null);
   const [fensterTypWahl, setFensterTypWahl] = useState<FensterTyp>('drehkipp');
   const [tuerTypWahl, setTuerTypWahl] = useState<TuerTyp>('dreh1');
   const [wandStart, setWandStart] = useState<Punkt | null>(null);
@@ -172,6 +177,20 @@ export function HausplanerApp(): React.ReactElement {
     if (selectedOpening) {
       store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedOpening.id, changes });
     }
+  }
+  // Treppe (objectType 'stair'): genau EIN ausgewaehltes Treppen-Objekt -> Panel; UPDATE_NODE (additiv).
+  const selectedStair = (nodes.find(
+    (n): n is ObjectNode => n.type === 'object' && n.objectType === 'stair'
+      && selectedNodeIds.length === 1 && selectedNodeIds[0] === n.id,
+  ) ?? null);
+  const selectedStairParams: TreppeParams | null = selectedStair ? parametereZuTreppe(selectedStair.parameters) : null;
+  function aktualisiereTreppe(aenderung: Partial<TreppeParams>): void {
+    if (!selectedStair || !selectedStairParams) return;
+    const neu = { ...selectedStairParams, ...aenderung };
+    store.getState().executeCommand({
+      type: 'UPDATE_NODE', nodeId: selectedStair.id,
+      changes: { parameters: treppeZuParametern(neu) },
+    });
   }
   // Editier-Operationen: Bewegen laeuft ueber das Ziehen (unten am Node); hier Loeschen/Duplizieren/Spiegeln.
   function loescheAuswahl(): void {
@@ -358,6 +377,36 @@ export function HausplanerApp(): React.ReactElement {
       return;
     }
 
+    if (werkzeug === 'treppe') {
+      if (!treppeStart) {
+        setTreppeStart(p);
+        return;
+      }
+      const ende = mitWinkelSnap(treppeStart, p);
+      if (ende.x === treppeStart.x && ende.y === treppeStart.y) { return; }
+      const jetzt = new Date().toISOString();
+      const params = treppeZuParametern({
+        startX: treppeStart.x, startY: treppeStart.y, endX: ende.x, endY: ende.y,
+        laufbreite: 1000, geschosshoehe: level.defaultWallHeight, bereich: 'wohnung',
+      });
+      store.getState().executeCommand({
+        type: 'ADD_NODE',
+        node: {
+          id: uuid(), type: 'object', objectType: 'stair', levelId: level.id,
+          visible: true, locked: false, tags: [], createdAt: jetzt, updatedAt: jetzt,
+          catalogItemId: 'treppe-standard',
+          transform: {
+            position: { x: treppeStart.x, y: treppeStart.y, z: 0 },
+            rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 1 },
+          },
+          parameters: params,
+        },
+      });
+      setTreppeStart(null);
+      setWerkzeug('auswahl');
+      return;
+    }
+
     // Auswahl: Klick auf leere Fläche hebt die Auswahl auf (Nodes stoppen die Propagation).
     store.getState().selectNodes([]);
   }
@@ -369,6 +418,7 @@ export function HausplanerApp(): React.ReactElement {
       }
       if (e.key === 'Escape') {
         setWandStart(null);
+        setTreppeStart(null);
         setWerkzeug('auswahl');
       } else if (e.key === 'Delete' || e.key === 'Backspace') {
         for (const id of store.getState().selectedNodeIds) {
@@ -394,6 +444,8 @@ export function HausplanerApp(): React.ReactElement {
         setWerkzeug('tuer');
       } else if (e.key === 'd') {
         setWerkzeug('dach');
+      } else if (e.key === 'r') {
+        setWerkzeug('treppe');
       }
     }
     window.addEventListener('keydown', taste);
@@ -599,9 +651,10 @@ export function HausplanerApp(): React.ReactElement {
             ['fenster', 'F', 'Fenster', 'Fenster auf eine Wand setzen — Typ oben wählbar'],
             ['tuer', 'T', 'Tür', 'Tür auf eine Wand setzen — Typ oben wählbar'],
             ['dach', 'D', 'Dach', 'Dach über den Gebäudeumriss aufsetzen'],
+            ['treppe', 'R', 'Treppe', 'Treppe setzen — zwei Klicks: Lauflinie Anfang→Ende (DIN 18065, automatische Stufung)'],
           ] as ReadonlyArray<readonly [string, string, string, string]>).map(([w, k, label, beschr]) => (
             <button key={w} type="button" title={`${label} (${k}) — ${beschr}`}
-              onClick={() => { setWerkzeug(w as typeof werkzeug); if (w === 'wand') { setWandStart(null); } }}
+              onClick={() => { setWerkzeug(w as typeof werkzeug); setWandStart(null); setTreppeStart(null); }}
               style={navItem(werkzeug === w)}>
               <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>{werkzeugIcon(w)}</span>
               <span style={{ flex: 1 }}>{label}</span>
@@ -810,6 +863,59 @@ export function HausplanerApp(): React.ReactElement {
               );
             })}
 
+            {/* Treppen (objectType 'stair') — Grundriss-Symbol: Umriss + Trittstufen + Aufwaerts-Pfeil. */}
+            {nodes.filter((n): n is ObjectNode => n.type === 'object' && n.objectType === 'stair').map((st) => {
+              const tp = parametereZuTreppe(st.parameters);
+              if (!tp) return null;
+              const sym = treppe2DSymbol({
+                start: { x: tp.startX, y: tp.startY }, end: { x: tp.endX, y: tp.endY },
+                laufbreite: tp.laufbreite, geschosshoehe: tp.geschosshoehe,
+                gewuenschteSteigung: tp.gewuenschteSteigung, bereich: tp.bereich,
+              });
+              const ausgewaehlt = selectedNodeIds.includes(st.id);
+              const farbe = ausgewaehlt ? FARBEN.auswahl : (sym.bestanden ? FARBEN.wand : FARBEN.gefahr);
+              const mx = (tp.startX + tp.endX) / 2;
+              const my = (tp.startY + tp.endY) / 2;
+              return (
+                <Group
+                  key={st.id}
+                  draggable={werkzeug === 'auswahl'}
+                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([st.id]); } }}
+                  onDragEnd={(e) => {
+                    const dx = Math.round(e.target.x()); const dy = Math.round(e.target.y());
+                    e.target.position({ x: 0, y: 0 });
+                    if (dx || dy) {
+                      const neu = { ...tp, startX: tp.startX + dx, startY: tp.startY + dy, endX: tp.endX + dx, endY: tp.endY + dy };
+                      store.getState().executeCommand({
+                        type: 'UPDATE_NODE', nodeId: st.id,
+                        changes: {
+                          parameters: treppeZuParametern(neu),
+                          transform: { ...st.transform, position: { x: neu.startX, y: neu.startY, z: st.transform.position.z } },
+                        },
+                      });
+                    }
+                  }}
+                  onClick={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([st.id]); } }}
+                >
+                  <Line points={sym.umriss.flatMap((q) => [q.x, q.y])} closed stroke={farbe} strokeWidth={40 / zoom} fill={ausgewaehlt ? 'rgba(147,194,28,0.10)' : 'rgba(55,65,81,0.05)'} />
+                  {sym.stufen.map((s, i) => (
+                    <Line key={i} points={[s[0].x, s[0].y, s[1].x, s[1].y]} stroke={farbe} strokeWidth={25 / zoom} listening={false} />
+                  ))}
+                  <Line points={[sym.pfeil.von.x, sym.pfeil.von.y, sym.pfeil.bis.x, sym.pfeil.bis.y]} stroke={farbe} strokeWidth={30 / zoom} listening={false} />
+                  <Circle x={sym.pfeil.bis.x} y={sym.pfeil.bis.y} radius={90} fill={farbe} listening={false} />
+                  <Text x={mx - 700} y={my + 200} width={1400} align="center" scaleY={-1} text={`Treppe · ${sym.anzahlSteigungen}×${Math.round(sym.steigungshoehe)} mm`} fontSize={170} fill={FARBEN.gedaempft} listening={false} />
+                </Group>
+              );
+            })}
+
+            {/* Vorschau beim Treppezeichnen */}
+            {werkzeug === 'treppe' && treppeStart && (
+              <Group listening={false}>
+                <Line points={[treppeStart.x, treppeStart.y, mitWinkelSnap(treppeStart, cursor).x, mitWinkelSnap(treppeStart, cursor).y]} stroke={FARBEN.auswahl} strokeWidth={50} dash={[200, 120]} />
+                <Circle x={treppeStart.x} y={treppeStart.y} radius={90} fill={FARBEN.auswahl} />
+              </Group>
+            )}
+
             {/* Vorschau beim Wandzeichnen */}
             {werkzeug === 'wand' && wandStart && (
               <Group listening={false}>
@@ -910,6 +1016,40 @@ export function HausplanerApp(): React.ReactElement {
                 <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
               </div>
             </>
+          ) : selectedStair && selectedStairParams ? (
+            <>
+              <div style={{ fontWeight: 700, marginBottom: 10 }}>Treppe</div>
+              {(() => {
+                const erg = berechneTreppe({ geschosshoehe: selectedStairParams.geschosshoehe, laufbreite: selectedStairParams.laufbreite, gewuenschteSteigung: selectedStairParams.gewuenschteSteigung, bereich: selectedStairParams.bereich });
+                return (
+                  <div style={{ marginBottom: 10, padding: 10, background: erg.bestanden ? '#f0fdf4' : '#fef2f2', border: `1px solid ${erg.bestanden ? '#bbf7d0' : '#fecaca'}`, borderRadius: 8, fontSize: 11.5, lineHeight: 1.6, color: FARBEN.text }}>
+                    <div><strong>{erg.anzahlSteigungen}</strong> Steigungen · <strong>{erg.anzahlAuftritte}</strong> Auftritte</div>
+                    <div>Steigung {erg.steigungshoehe} mm · Auftritt {erg.auftritt} mm</div>
+                    <div>Schrittmaß {erg.schrittmass} mm · {erg.bestanden ? 'DIN 18065 erfüllt' : 'DIN 18065 verletzt'}</div>
+                  </div>
+                );
+              })()}
+              <label style={panelLabel}>Nutzungsbereich
+                <select value={selectedStairParams.bereich} onChange={(e) => aktualisiereTreppe({ bereich: e.target.value as TreppeParams['bereich'] })} style={panelInput}>
+                  <option value="wohnung">Wohnung</option>
+                  <option value="gebaeude">Gebäude</option>
+                  <option value="aussen">außen</option>
+                </select>
+              </label>
+              <label style={panelLabel}>Laufbreite (mm)
+                <input type="number" min={500} value={selectedStairParams.laufbreite} onChange={(e) => aktualisiereTreppe({ laufbreite: Math.max(500, Math.round(Number(e.target.value))) })} style={panelInput} />
+              </label>
+              <label style={panelLabel}>Geschosshöhe (mm)
+                <input type="number" min={2000} value={selectedStairParams.geschosshoehe} onChange={(e) => aktualisiereTreppe({ geschosshoehe: Math.max(2000, Math.round(Number(e.target.value))) })} style={panelInput} />
+              </label>
+              <label style={panelLabel}>Ziel-Steigungshöhe (mm, optional)
+                <input type="number" min={0} value={selectedStairParams.gewuenschteSteigung ?? ''} onChange={(e) => { const v = Math.round(Number(e.target.value)); aktualisiereTreppe({ gewuenschteSteigung: v > 0 ? v : undefined }); }} style={panelInput} />
+              </label>
+              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Stufung wird automatisch nach DIN 18065 gerechnet. Bewegen: Treppe im Plan ziehen.</div>
+              <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
+              </div>
+            </>
           ) : (
             <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>
               <div style={{ fontWeight: 700, color: FARBEN.text, marginBottom: 6 }}>Grundriss spiegeln</div>
@@ -937,6 +1077,7 @@ export function HausplanerApp(): React.ReactElement {
         {werkzeug === 'wand' && <span style={{ color: FARBEN.text }}>{wandStart ? 'Klick = nächster Wandpunkt · Esc beendet den Zug' : 'Klick setzt den Wandanfang'}</span>}
         {(werkzeug === 'fenster' || werkzeug === 'tuer') && <span style={{ color: FARBEN.text }}>Klick nahe einer Wand platziert die Öffnung</span>}
         {werkzeug === 'dach' && <span style={{ color: FARBEN.text }}>Klick legt ein Dach über den Gebäude-Umriss (ein Dach je Geschoss) — dann in 3D umschalten</span>}
+        {werkzeug === 'treppe' && <span style={{ color: FARBEN.text }}>{treppeStart ? 'Klick = Ende der Lauflinie (Richtung = aufwärts) · Esc bricht ab' : 'Klick setzt den Anfang der Treppen-Lauflinie'}</span>}
         <span style={{ flex: 1 }} />
         {letzteAblehnung && <span style={{ color: FARBEN.warnung, fontWeight: 600 }}>✋ {letzteAblehnung}</span>}
       </div>

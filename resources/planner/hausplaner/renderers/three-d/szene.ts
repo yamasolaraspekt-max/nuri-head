@@ -20,11 +20,13 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import type { OpeningNode, SceneDocument, WallNode, ZoneNode } from '../../domain/scene.types';
+import type { ObjectNode, OpeningNode, SceneDocument, WallNode, ZoneNode } from '../../domain/scene.types';
 import type { RendererAdapter } from './adapter';
 import { weltZuThree } from './adapter';
 import { segmentiereWand } from './segmentierung';
-import { platziereWandQuader, bodenPunkteThree } from './platzierung';
+import { platziereWandQuader, bodenPunkteThree, platziereTreppenStufe } from './platzierung';
+import { treppe3DKoerper } from '../../geometry/treppe3D';
+import { parametereZuTreppe } from '../../geometry/treppeObjekt';
 import { dachMeshWelt } from './dachMesh';
 import { DachGeometrieUngueltig } from '../../geometry/dachGeometrie';
 
@@ -294,6 +296,34 @@ export class HausplanerDreiDSzene implements RendererAdapter {
           new THREE.LineBasicMaterial({ color: 0x64748b, transparent: true, opacity: 0.32 }),
         );
         mesh.add(kanten);
+        this.inhalt.add(mesh);
+      }
+    }
+
+    // Treppen (objectType 'stair'): je Stufe ein Quader (wie Waende), Placement ueber platziereTreppenStufe.
+    const treppen = knoten.filter((n): n is ObjectNode => n.type === 'object' && n.objectType === 'stair');
+    for (const treppe of treppen) {
+      const tp = parametereZuTreppe(treppe.parameters);
+      if (!tp) continue;
+      const koerper = treppe3DKoerper({
+        laufbreite: tp.laufbreite,
+        geschosshoehe: tp.geschosshoehe,
+        verfuegbareLauflaenge: Math.hypot(tp.endX - tp.startX, tp.endY - tp.startY) || undefined,
+        gewuenschteSteigung: tp.gewuenschteSteigung,
+        bereich: tp.bereich,
+      });
+      const farbe = this.ausgewaehlt.has(treppe.id) ? FARBE_AUSWAHL : FARBE_WAND;
+      for (const stufe of koerper.stufen) {
+        const pl = platziereTreppenStufe({ x: tp.startX, y: tp.startY }, { x: tp.endX, y: tp.endY }, stufe, level.elevation);
+        const mesh = new THREE.Mesh(
+          new THREE.BoxGeometry(pl.masse.x, pl.masse.y, pl.masse.z),
+          new THREE.MeshStandardMaterial({ color: farbe, roughness: 0.72, metalness: 0.02 }),
+        );
+        mesh.position.set(pl.zentrum.x, pl.zentrum.y, pl.zentrum.z);
+        mesh.rotation.y = pl.rotationY;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        mesh.userData.nodeId = treppe.id;
         this.inhalt.add(mesh);
       }
     }
