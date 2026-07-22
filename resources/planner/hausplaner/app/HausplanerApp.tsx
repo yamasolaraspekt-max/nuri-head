@@ -15,6 +15,7 @@ import type { OpeningNode, RoofNode, SceneNode, WallNode } from '../domain/scene
 import { erkenneRaeume } from '../geometry/roomDetection';
 import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt } from '../geometry/wallGeometry';
 import { DreiDBereich } from './DreiDBereich';
+import { versetzteWand, spiegelteWand, bbox as punkteBbox, achsenMitte, type Achse } from '../geometry/editierGeometrie';
 
 type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach';
 
@@ -115,6 +116,42 @@ export function HausplanerApp(): React.ReactElement {
   function aktualisiereOeffnung(changes: Partial<OpeningNode>): void {
     if (selectedOpening) {
       store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedOpening.id, changes });
+    }
+  }
+  // Editier-Operationen: Bewegen laeuft ueber das Ziehen (unten am Node); hier Loeschen/Duplizieren/Spiegeln.
+  function loescheAuswahl(): void {
+    for (const id of selectedNodeIds) {
+      store.getState().executeCommand({ type: 'REMOVE_NODE', nodeId: id });
+    }
+    store.getState().selectNodes([]);
+  }
+  function dupliziere(): void {
+    const jetzt = new Date().toISOString();
+    const neu: string[] = [];
+    for (const id of selectedNodeIds) {
+      const n = nodes.find((x) => x.id === id);
+      if (!n) continue;
+      const neueId = uuid();
+      if (n.type === 'wall') {
+        const g = versetzteWand(n.start, n.end, 500, 500);
+        if (store.getState().executeCommand({ type: 'ADD_NODE', node: { ...n, id: neueId, start: g.start, end: g.end, createdAt: jetzt, updatedAt: jetzt } })) neu.push(neueId);
+      } else if (istOeffnung(n)) {
+        const wand = waende.find((w) => w.id === n.hostWallId);
+        if (!wand) continue;
+        const laenge = wandLaenge(wand.start, wand.end);
+        const off = Math.round(Math.max(0, Math.min(n.offsetFromWallStart + n.width + 100, laenge - n.width)));
+        if (store.getState().executeCommand({ type: 'ADD_NODE', node: { ...n, id: neueId, offsetFromWallStart: off, createdAt: jetzt, updatedAt: jetzt } })) neu.push(neueId);
+      }
+    }
+    if (neu.length) store.getState().selectNodes(neu);
+  }
+  function spiegeleGrundriss(achse: Achse): void {
+    const b = punkteBbox(waende.flatMap((w) => [w.start, w.end]));
+    if (!b) return;
+    const pos = achsenMitte(b, achse);
+    for (const w of waende) {
+      const g = spiegelteWand(w.start, w.end, achse, pos);
+      store.getState().executeCommand({ type: 'MOVE_NODE', nodeId: w.id, position: { start: g.start, end: g.end } });
     }
   }
 
@@ -488,7 +525,20 @@ export function HausplanerApp(): React.ReactElement {
               };
 
               return (
-                <Group key={w.id}>
+                <Group
+                  key={w.id}
+                  draggable={werkzeug === 'auswahl'}
+                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([w.id]); } }}
+                  onDragEnd={(e) => {
+                    const dx = e.target.x();
+                    const dy = e.target.y();
+                    e.target.position({ x: 0, y: 0 });
+                    if (dx || dy) {
+                      const g = versetzteWand(w.start, w.end, dx, dy);
+                      store.getState().executeCommand({ type: 'MOVE_NODE', nodeId: w.id, position: { start: g.start, end: g.end } });
+                    }
+                  }}
+                >
                   {band ? (
                     <Line
                       points={band.ecken.flatMap((p) => [p.x, p.y])}
@@ -529,7 +579,17 @@ export function HausplanerApp(): React.ReactElement {
               const ausgewaehlt = selectedNodeIds.includes(o.id);
 
               return (
-                <Group key={o.id} x={mitte.x} y={mitte.y} rotation={winkel}>
+                <Group
+                  key={o.id} x={mitte.x} y={mitte.y} rotation={winkel}
+                  draggable={werkzeug === 'auswahl'}
+                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([o.id]); } }}
+                  onDragEnd={(e) => {
+                    const lot = lotAufWand({ x: e.target.x(), y: e.target.y() }, wand);
+                    const laenge = wandLaenge(wand.start, wand.end);
+                    const off = Math.round(Math.max(0, Math.min(lot.offset - o.width / 2, laenge - o.width)));
+                    store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: o.id, changes: { offsetFromWallStart: off } });
+                  }}
+                >
                   <Rect
                     x={-o.width / 2} y={-(wand.thickness / 2 + 40)} width={o.width} height={wand.thickness + 80}
                     fill="#ffffff" stroke={ausgewaehlt ? FARBEN.auswahl : o.type === 'door' ? FARBEN.gedaempft : FARBEN.linie}
@@ -652,6 +712,11 @@ export function HausplanerApp(): React.ReactElement {
               <div style={{ marginTop: 10, padding: 8, background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 11, color: FARBEN.gedaempft }}>
                 Länge: {(Math.hypot(selectedWall.end.x - selectedWall.start.x, selectedWall.end.y - selectedWall.start.y) / 1000).toFixed(2)} m
               </div>
+              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 10 }}>Zum Bewegen die Wand im Plan ziehen.</div>
+              <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={dupliziere}>Duplizieren</button>
+                <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
+              </div>
             </>
           ) : selectedOpening ? (
             <>
@@ -678,9 +743,20 @@ export function HausplanerApp(): React.ReactElement {
               <label style={panelLabel}>Höhe (mm)
                 <input type="number" min={100} value={selectedOpening.height} onChange={(e) => aktualisiereOeffnung({ height: Math.max(100, Math.round(Number(e.target.value))) })} style={panelInput} />
               </label>
+              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 10 }}>Zum Verschieben die Öffnung entlang der Wand ziehen.</div>
+              <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={dupliziere}>Duplizieren</button>
+                <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
+              </div>
             </>
           ) : (
             <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>
+              <div style={{ fontWeight: 700, color: FARBEN.text, marginBottom: 6 }}>Grundriss spiegeln</div>
+              <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
+                <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={() => spiegeleGrundriss('vertikal')} disabled={waende.length === 0}>↔ Links/Rechts</button>
+                <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={() => spiegeleGrundriss('horizontal')} disabled={waende.length === 0}>↕ Oben/Unten</button>
+              </div>
+              <div style={{ fontSize: 11.5, marginBottom: 10 }}>Objekt anklicken (Auswahl-Werkzeug) = markieren; dann ziehen zum Bewegen, oder Duplizieren/Löschen.</div>
               <div style={{ fontSize: 12 }}>Werkzeug: <strong style={{ color: FARBEN.text }}>{werkzeug}</strong></div>
               <div style={{ fontSize: 12 }}>Geschoss: <strong style={{ color: FARBEN.text }}>{level.name}</strong></div>
               <div style={{ fontSize: 12 }}>Räume: {raeume.length} · {(raeume.reduce((acc, r) => acc + r.flaecheMm2, 0) / 1_000_000).toFixed(2)} m²</div>
