@@ -128,6 +128,16 @@ export function HausplanerApp(): React.ReactElement {
       store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedWall.id, changes });
     }
   }
+  // Bearbeiten: Wand-Laenge exakt setzen -> Wandende entlang der Achse verschieben (MOVE_NODE).
+  function setzeWandLaenge(neu: number): void {
+    if (!selectedWall || !(neu > 0)) return;
+    const dx = selectedWall.end.x - selectedWall.start.x;
+    const dy = selectedWall.end.y - selectedWall.start.y;
+    const len = Math.hypot(dx, dy);
+    if (len === 0) return;
+    const end = { x: Math.round(selectedWall.start.x + (dx / len) * neu), y: Math.round(selectedWall.start.y + (dy / len) * neu) };
+    store.getState().executeCommand({ type: 'MOVE_NODE', nodeId: selectedWall.id, position: { start: selectedWall.start, end } });
+  }
   // P2b-4: genau EINE ausgewählte Öffnung ⇒ Öffnungs-Panel (Tür: Anschlag/Öffnung); UPDATE_NODE (additiv).
   const selectedOpening = (nodes.find((n) => istOeffnung(n) && selectedNodeIds.length === 1 && selectedNodeIds[0] === n.id) ?? null) as OpeningNode | null;
   function aktualisiereOeffnung(changes: Partial<OpeningNode>): void {
@@ -789,10 +799,10 @@ export function HausplanerApp(): React.ReactElement {
               <label style={panelLabel}>Höhe (mm)
                 <input type="number" min={100} value={selectedWall.height} onChange={(e) => aktualisiereWand({ height: Math.max(100, Math.round(Number(e.target.value))) })} style={panelInput} />
               </label>
-              <div style={{ marginTop: 10, padding: 8, background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 11, color: FARBEN.gedaempft }}>
-                Länge: {(Math.hypot(selectedWall.end.x - selectedWall.start.x, selectedWall.end.y - selectedWall.start.y) / 1000).toFixed(2)} m
-              </div>
-              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 10 }}>Zum Bewegen die Wand im Plan ziehen.</div>
+              <label style={panelLabel}>Länge (mm)
+                <input type="number" min={1} value={Math.round(Math.hypot(selectedWall.end.x - selectedWall.start.x, selectedWall.end.y - selectedWall.start.y))} onChange={(e) => setzeWandLaenge(Math.max(1, Math.round(Number(e.target.value))))} style={panelInput} />
+              </label>
+              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Länge ändern verschiebt das Wandende entlang der Achse. Bewegen: Wand im Plan ziehen.</div>
               <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
                 <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={dupliziere}>Duplizieren</button>
                 <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
@@ -823,7 +833,13 @@ export function HausplanerApp(): React.ReactElement {
               <label style={panelLabel}>Höhe (mm)
                 <input type="number" min={100} value={selectedOpening.height} onChange={(e) => aktualisiereOeffnung({ height: Math.max(100, Math.round(Number(e.target.value))) })} style={panelInput} />
               </label>
-              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 10 }}>Zum Verschieben die Öffnung entlang der Wand ziehen.</div>
+              <label style={panelLabel}>Brüstungshöhe (mm)
+                <input type="number" min={0} value={selectedOpening.sillHeight ?? 0} onChange={(e) => aktualisiereOeffnung({ sillHeight: Math.max(0, Math.round(Number(e.target.value))) })} style={panelInput} />
+              </label>
+              <label style={panelLabel}>Position ab Wandanfang (mm)
+                <input type="number" min={0} value={selectedOpening.offsetFromWallStart} onChange={(e) => aktualisiereOeffnung({ offsetFromWallStart: Math.max(0, Math.round(Number(e.target.value))) })} style={panelInput} />
+              </label>
+              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 10 }}>Maße direkt hier ändern — oder die Öffnung im Plan entlang der Wand ziehen.</div>
               <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
                 <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={dupliziere}>Duplizieren</button>
                 <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
