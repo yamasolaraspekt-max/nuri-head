@@ -241,6 +241,20 @@
               },
               "clamped": {
                 "type": "boolean"
+              },
+              "anschlag": {
+                "type": "string",
+                "enum": [
+                  "links",
+                  "rechts"
+                ]
+              },
+              "oeffnung": {
+                "type": "string",
+                "enum": [
+                  "innen",
+                  "aussen"
+                ]
               }
             },
             "required": [

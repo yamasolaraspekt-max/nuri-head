@@ -79,6 +79,8 @@ export const openingNodeSchema = z
       .strict()
       .optional(),
     clamped: z.boolean().optional(),
+    anschlag: z.enum(['links', 'rechts']).optional(),
+    oeffnung: z.enum(['innen', 'aussen']).optional(),
   })
   .strict();
 

@@ -120,6 +120,11 @@ export interface OpeningNode extends BaseNode {
 
   /** Schema-Review-Entscheid: beim Wand-Kürzen geklemmt statt still verschoben/gelöscht. */
   clamped?: boolean;
+
+  /** Nur Tür (P2b-4, additiv): Anschlagseite (Angel links/rechts der Wandlaufrichtung)
+   *  und Aufschlagseite (innen = linke Wandnormale, außen = rechte). */
+  anschlag?: 'links' | 'rechts';
+  oeffnung?: 'innen' | 'aussen';
 }
 
 /** Frei platzierbare Objekte — P0 nur Typ-Definition, keine Werkzeuge. */

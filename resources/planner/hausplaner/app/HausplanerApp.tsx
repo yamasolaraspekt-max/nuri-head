@@ -13,7 +13,7 @@ import type Konva from 'konva';
 import { useHausplanerStore } from '../store/hausplanerStore';
 import type { OpeningNode, RoofNode, SceneNode, WallNode } from '../domain/scene.types';
 import { erkenneRaeume } from '../geometry/roomDetection';
-import { wandLaenge, punktAufWand, wandBaender, type Punkt } from '../geometry/wallGeometry';
+import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt } from '../geometry/wallGeometry';
 import { DreiDBereich } from './DreiDBereich';
 
 type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach';
@@ -108,6 +108,13 @@ export function HausplanerApp(): React.ReactElement {
   function aktualisiereWand(changes: Partial<WallNode>): void {
     if (selectedWall) {
       store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedWall.id, changes });
+    }
+  }
+  // P2b-4: genau EINE ausgewählte Öffnung ⇒ Öffnungs-Panel (Tür: Anschlag/Öffnung); UPDATE_NODE (additiv).
+  const selectedOpening = (nodes.find((n) => istOeffnung(n) && selectedNodeIds.length === 1 && selectedNodeIds[0] === n.id) ?? null) as OpeningNode | null;
+  function aktualisiereOeffnung(changes: Partial<OpeningNode>): void {
+    if (selectedOpening) {
+      store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedOpening.id, changes });
     }
   }
 
@@ -535,6 +542,15 @@ export function HausplanerApp(): React.ReactElement {
                     }}
                   />
                   {o.type === 'window' && <Line points={[-o.width / 2, 0, o.width / 2, 0]} stroke={FARBEN.linie} strokeWidth={20} listening={false} />}
+                  {o.type === 'door' && (() => {
+                    const tb = tuerBlattGeometrie(o.width, o.anschlag ?? 'links', o.oeffnung ?? 'innen');
+                    return (
+                      <>
+                        <Line points={[tb.angelpunkt.x, tb.angelpunkt.y, tb.blattEnde.x, tb.blattEnde.y]} stroke={ausgewaehlt ? FARBEN.auswahl : FARBEN.gedaempft} strokeWidth={28} listening={false} />
+                        <Line points={tb.bogen.flatMap((p) => [p.x, p.y])} stroke={FARBEN.linie} strokeWidth={16} listening={false} />
+                      </>
+                    );
+                  })()}
                   {o.clamped && (
                     <Text x={-o.width / 2} y={wand.thickness / 2 + 380} width={o.width} align="center" scaleY={-1} text="⚠ geklemmt" fontSize={160} fill={FARBEN.warnung} listening={false} />
                   )}
@@ -636,6 +652,32 @@ export function HausplanerApp(): React.ReactElement {
               <div style={{ marginTop: 10, padding: 8, background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 11, color: FARBEN.gedaempft }}>
                 Länge: {(Math.hypot(selectedWall.end.x - selectedWall.start.x, selectedWall.end.y - selectedWall.start.y) / 1000).toFixed(2)} m
               </div>
+            </>
+          ) : selectedOpening ? (
+            <>
+              <div style={{ fontWeight: 700, marginBottom: 10 }}>{selectedOpening.type === 'door' ? 'Tür' : selectedOpening.type === 'window' ? 'Fenster' : 'Öffnung'}</div>
+              {selectedOpening.type === 'door' && (
+                <>
+                  <label style={panelLabel}>Anschlag (Angel)
+                    <select value={selectedOpening.anschlag ?? 'links'} onChange={(e) => aktualisiereOeffnung({ anschlag: e.target.value as 'links' | 'rechts' })} style={panelInput}>
+                      <option value="links">links</option>
+                      <option value="rechts">rechts</option>
+                    </select>
+                  </label>
+                  <label style={panelLabel}>Öffnungsrichtung
+                    <select value={selectedOpening.oeffnung ?? 'innen'} onChange={(e) => aktualisiereOeffnung({ oeffnung: e.target.value as 'innen' | 'aussen' })} style={panelInput}>
+                      <option value="innen">nach innen</option>
+                      <option value="aussen">nach außen</option>
+                    </select>
+                  </label>
+                </>
+              )}
+              <label style={panelLabel}>Breite (mm)
+                <input type="number" min={100} value={selectedOpening.width} onChange={(e) => aktualisiereOeffnung({ width: Math.max(100, Math.round(Number(e.target.value))) })} style={panelInput} />
+              </label>
+              <label style={panelLabel}>Höhe (mm)
+                <input type="number" min={100} value={selectedOpening.height} onChange={(e) => aktualisiereOeffnung({ height: Math.max(100, Math.round(Number(e.target.value))) })} style={panelInput} />
+              </label>
             </>
           ) : (
             <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>

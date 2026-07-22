@@ -250,3 +250,68 @@ export function wandBaender(waende: ReadonlyArray<WandEingabe>): WandBand[] {
 
   return baender;
 }
+
+// ---------------------------------------------------------------------------
+// Türblatt & Öffnungsbogen (P2b-4)
+//
+// Reine Geometrie im LOKALEN Öffnungs-Koordinatensystem (Ursprung = Öffnungsmitte
+// auf der Wandachse; +x entlang der Wand start→end; +y = linke Wandnormale). Der
+// Renderer legt die Gruppe bereits an Position/Drehung der Öffnung — hier wird nur
+// gerechnet, nichts gezeichnet und nichts geschrieben.
+//
+// `anschlag` wählt die Angel-Seite (Türangel an linkem oder rechtem Pfosten),
+// `oeffnung` die Seite, zu der das Blatt aufschlägt (innen = +y, außen = −y).
+// Das Blatt ist so lang wie die lichte Öffnung; der Bogen ist die 90°-Schwenkkurve.
+// ---------------------------------------------------------------------------
+
+export type TuerAnschlag = 'links' | 'rechts';
+export type TuerOeffnung = 'innen' | 'aussen';
+
+export interface TuerBlattGeometrie {
+  /** Angelpunkt (Drehpunkt des Blatts), lokal. */
+  angelpunkt: Punkt;
+  /** Blattspitze bei 90° geöffnet, lokal. */
+  blattEnde: Punkt;
+  /** Öffnungsbogen als Polylinie (geschlossene Position → offene Position). */
+  bogen: Punkt[];
+}
+
+/** Winkel auf (−π, π] normalisieren. */
+function normWinkel(a: number): number {
+  let x = a;
+  while (x <= -Math.PI) x += 2 * Math.PI;
+  while (x > Math.PI) x -= 2 * Math.PI;
+  return x;
+}
+
+/**
+ * Türblatt-Geometrie für eine Öffnung der lichten Breite `width` (mm).
+ * Defaults: anschlag='links', oeffnung='innen'. `segmente` = Bogen-Auflösung.
+ */
+export function tuerBlattGeometrie(
+  width: number,
+  anschlag: TuerAnschlag = 'links',
+  oeffnung: TuerOeffnung = 'innen',
+  segmente = 12,
+): TuerBlattGeometrie {
+  const h = width / 2;
+  const angelVorzeichen = anschlag === 'links' ? -1 : 1; // Angel am linken (−x) bzw. rechten (+x) Pfosten.
+  const schwenkVorzeichen = oeffnung === 'innen' ? 1 : -1; // Aufschlag zu +y (innen) bzw. −y (außen).
+
+  const angel = { x: angelVorzeichen * h, y: 0 };
+  const geschlossen = { x: -angelVorzeichen * h, y: 0 }; // gegenüberliegender Pfosten.
+  const blattEnde = { x: angel.x, y: schwenkVorzeichen * width };
+
+  const startWinkel = Math.atan2(geschlossen.y - angel.y, geschlossen.x - angel.x);
+  const endWinkel = Math.atan2(blattEnde.y - angel.y, blattEnde.x - angel.x);
+  const delta = normWinkel(endWinkel - startWinkel); // ±90°, kurzer Weg.
+
+  const bogen: Punkt[] = [];
+  const stufen = Math.max(2, Math.round(segmente));
+  for (let k = 0; k <= stufen; k++) {
+    const w = startWinkel + (delta * k) / stufen;
+    bogen.push(runde({ x: angel.x + width * Math.cos(w), y: angel.y + width * Math.sin(w) }));
+  }
+
+  return { angelpunkt: runde(angel), blattEnde: runde(blattEnde), bogen };
+}
