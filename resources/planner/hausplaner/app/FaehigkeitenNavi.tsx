@@ -10,26 +10,8 @@
  */
 import React from 'react';
 import { T } from './studioDaten';
+import { ZustandBadge } from './studioUi';
 import { FAEHIGKEIT_GRUPPEN, faehigkeitenNach, type Faehigkeit } from './tools/faehigkeiten';
-
-function ZustandBadge({ zustand }: { zustand: Faehigkeit['zustand'] }): React.ReactElement {
-  const aktiv = zustand === 'aktiv';
-  return (
-    <span
-      title={aktiv ? 'aktiv – bedienbar' : 'schläft – Panel folgt (Batch 1–3)'}
-      style={{
-        display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 10, flex: '0 0 auto',
-        color: aktiv ? T.brandInk : T.muted,
-        background: aktiv ? T.okSoft : T.hair2,
-        border: `1px solid ${aktiv ? T.brand : T.hair}`,
-        borderRadius: 6, padding: '0 6px',
-      }}
-    >
-      <span aria-hidden style={{ width: 6, height: 6, borderRadius: '50%', background: aktiv ? T.brand : T.faint }} />
-      {aktiv ? 'aktiv' : 'schläft'}
-    </span>
-  );
-}
 
 export function FaehigkeitenNavi(
   { onAktivieren, activeToolId }: { onAktivieren: (toolId: string) => void; activeToolId?: string },
