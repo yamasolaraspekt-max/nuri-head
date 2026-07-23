@@ -249,6 +249,18 @@ export interface RoofAufbau {
  * aufs oberste Geschoss. Die Flächen-Azimute werden NIE gepflegt, sondern aus `firstAzimutGrad`
  * abgeleitet (▲D4, Nord = +y) — belastbare Quelle für PV/Heizlast (Nachfolger RoofAreaEstimator).
  */
+/**
+ * Anbau-/Schenkel-Maße für zusammengesetzte L/T/U-Dächer (W-3b Stufe 2a Teil 2, additiv). Speist die
+ * reinen Verschneidungs-Engines: `length/width` = Hauptbau, `lengthB/widthB` = Anbau (u braucht nur
+ * `length/width`; l/t brauchen zusätzlich `lengthB/widthB`). Alle Maße in ganzen mm (mm-Invariante).
+ */
+export interface RoofAnbauMasse {
+  length: number;            // mm — Hauptbau-Länge
+  width: number;             // mm — Hauptbau-Breite
+  lengthB?: number;          // mm — Anbau-Länge (nur l/t)
+  widthB?: number;           // mm — Anbau-Breite (nur l/t)
+}
+
 export interface RoofNode extends BaseNode {
   type: 'roof';
 
@@ -265,6 +277,10 @@ export interface RoofNode extends BaseNode {
 
   /** Dachaufbauten (W-3a, OPTIONAL/additiv): Gauben/Dachfenster/Kamin/… auf der Dachfläche. */
   aufbauten?: RoofAufbau[];
+
+  /** Anbau-Maße für L/T/U-Verschneidungsformen (W-3b 2a-2, OPTIONAL/additiv). Fehlt bei den
+   *  rechteckigen Formen und bei Bestandsdaten ⇒ kein 422, kein Migrations-Zwang. */
+  anbau?: RoofAnbauMasse;
 }
 
 // ------------------------------------------- Projektions-Kontrakt (▲K2, P0-Fixture)

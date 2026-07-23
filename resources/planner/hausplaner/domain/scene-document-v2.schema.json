@@ -780,6 +780,28 @@
               ],
               "additionalProperties": false
             }
+          },
+          "anbau": {
+            "type": "object",
+            "properties": {
+              "length": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "width": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "lengthB": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "widthB": {
+                "$ref": "#/$defs/__schema0"
+              }
+            },
+            "required": [
+              "length",
+              "width"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [

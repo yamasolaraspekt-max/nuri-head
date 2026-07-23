@@ -191,6 +191,17 @@ export const aufbauSchema = z
   })
   .strict();
 
+// Anbau-Maße (W-3b 2a-2, additiv): L/T/U-Schenkel für die Verschneidungs-Engines. length/width Pflicht
+// (u genügt das), lengthB/widthB optional (l/t). Ganze mm (mm-Invariante).
+export const anbauMasseSchema = z
+  .object({
+    length: mmPos,
+    width: mmPos,
+    lengthB: mmPos.optional(),
+    widthB: mmPos.optional(),
+  })
+  .strict();
+
 // Dach (D-a, ▲D1): eigenes Schema, NICHT Teil der Node-Union (roofs[] ist eine eigene Sammlung).
 // neigungGrad in [0, 89]: 0 = flach; < 90, damit cos > 0 (sichererCos, Kante 2).
 export const roofNodeSchema = z
@@ -207,6 +218,8 @@ export const roofNodeSchema = z
     traufhoeheMm: mm,
     // W-3a: OPTIONAL ⇒ Bestands-Dächer ohne aufbauten bleiben gültig (additiv, kein 422).
     aufbauten: z.array(aufbauSchema).optional(),
+    // W-3b 2a-2: OPTIONAL ⇒ rechteckige Formen + Bestand ohne anbau bleiben gültig (kein 422).
+    anbau: anbauMasseSchema.optional(),
   })
   .strict();
 
