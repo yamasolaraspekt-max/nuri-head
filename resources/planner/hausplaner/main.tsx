@@ -10,6 +10,7 @@ import ReactDOM from 'react-dom/client';
 import { HausplanerStudio } from './app/HausplanerStudio';
 import { useHausplanerStore } from './store/hausplanerStore';
 import { sceneDocumentSchema, validateSceneIntegrity, migriereSzene } from './domain/validation';
+import { ladeFixture, fixtureNameAusSearch } from './fixtures/studioFixtures';
 import type { SceneDocument } from './domain/scene.types';
 
 const mount = document.getElementById('hausplaner-root');
@@ -28,12 +29,22 @@ function fehlerAnzeigen(titel: string, details: string[]): void {
 }
 
 if (mount && szenenElement) {
+  // Sicht-Abnahme (additiv, hinter Flag): `?fixture=<name>` lädt eine deterministische Szene STATT der
+  // eingebetteten — für den reproduzierbaren Evaluator-Snapshot (mit `?capture=1`). Ohne Flag unverändert.
+  const fixture = typeof window !== 'undefined'
+    ? ladeFixture(fixtureNameAusSearch(window.location.search))
+    : null;
+
   let roh: unknown;
-  try {
-    roh = JSON.parse(szenenElement.textContent ?? 'null');
-  } catch {
-    fehlerAnzeigen('Eingebettete Szene ist kein gültiges JSON.', []);
-    throw new Error('hausplaner: Szene unlesbar');
+  if (fixture) {
+    roh = fixture;
+  } else {
+    try {
+      roh = JSON.parse(szenenElement.textContent ?? 'null');
+    } catch {
+      fehlerAnzeigen('Eingebettete Szene ist kein gültiges JSON.', []);
+      throw new Error('hausplaner: Szene unlesbar');
+    }
   }
 
   // D-a: v1 → v2 Lade-Migration (roofs: []) VOR der Schema-Prüfung; v1-Inhalt bleibt unverändert.

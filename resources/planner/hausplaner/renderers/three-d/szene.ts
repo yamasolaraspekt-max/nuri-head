@@ -23,7 +23,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import type { ObjectNode, OpeningNode, SceneDocument, WallNode, RoofNode } from '../../domain/scene.types';
 import type { RendererAdapter } from './adapter';
 import { weltZuThree } from './adapter';
-import { captureAusFenster, SNAPSHOT_GLOBAL } from './capture';
+import { captureAusFenster, SNAPSHOT_GLOBAL, snapshotLeerMarker } from './capture';
 import { segmentiereWand } from './segmentierung';
 import { platziereWandQuader, bodenPunkteThree, platziereTreppenStufe } from './platzierung';
 import { treppe3DKoerper } from '../../geometry/treppe3D';
@@ -231,6 +231,13 @@ export class HausplanerDreiDSzene implements RendererAdapter {
    * nach dem Buffer-Swap geleert ⇒ nur mit `?capture=1` verlässlich nicht-leer.
    */
   snapshot(): string {
+    // Sizing-Fix: der Erst-Mount kann 2×2 sein (Container zur Mount-Zeit 0 — Fixture-/3D-Default-Fluss,
+    // Layout noch nicht gelegt). Ehrlicher Leer-Fall bei echtem 0-Container (kein stiller leerer PNG).
+    const marker = snapshotLeerMarker(this.container.clientWidth, this.container.clientHeight);
+    if (marker) return marker;
+    // Sonst: VOR dem Lesen auf die AKTUELLE Container-Größe dimensionieren + frischen Frame erzwingen,
+    // damit toDataURL nicht den veralteten 2×2-Puffer spiegelt.
+    this.groesseAnpassen();
     this.renderer.render(this.szene, this.kamera);
     return this.renderer.domElement.toDataURL('image/png');
   }
