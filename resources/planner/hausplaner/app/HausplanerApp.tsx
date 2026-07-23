@@ -1079,6 +1079,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                   <option value="walm">Walmdach</option>
                   <option value="pult">Pultdach</option>
                   <option value="flach">Flachdach</option>
+                  <option value="rect">Rechteck-Fläche</option>
+                  <option value="l-shape">L-Form</option>
+                  <option value="t-shape">T-Form</option>
+                  <option value="u-shape">U-Form</option>
                 </select>
               </label>
               <label style={panelLabel}>Neigung (°)
@@ -1090,6 +1094,28 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               <label style={panelLabel}>Überstand (mm)
                 <input type="number" min={0} value={selectedRoof.ueberstandMm} onChange={(e) => aktualisiereDach({ ueberstandMm: Math.max(0, Math.round(Number(e.target.value))) })} style={panelInput} />
               </label>
+              {/* Anbau-Maße: nur für die Verschneidungsformen. u-shape = Hauptbau (length/width);
+                  l/t-shape zusätzlich Anbau (lengthB/widthB). Verdrahtet an anbau (RoofAnbauMasse). */}
+              {(selectedRoof.roofType === 'u-shape' || selectedRoof.roofType === 'l-shape' || selectedRoof.roofType === 't-shape') && (
+                <>
+                  <label style={panelLabel}>Hauptbau Länge (mm)
+                    <input type="number" min={0} value={selectedRoof.anbau?.length ?? ''} onChange={(e) => { const a = selectedRoof.anbau ?? { length: 0, width: 0 }; aktualisiereDach({ anbau: { ...a, length: Math.max(0, Math.round(Number(e.target.value))) } }); }} style={panelInput} />
+                  </label>
+                  <label style={panelLabel}>Hauptbau Breite (mm)
+                    <input type="number" min={0} value={selectedRoof.anbau?.width ?? ''} onChange={(e) => { const a = selectedRoof.anbau ?? { length: 0, width: 0 }; aktualisiereDach({ anbau: { ...a, width: Math.max(0, Math.round(Number(e.target.value))) } }); }} style={panelInput} />
+                  </label>
+                  {(selectedRoof.roofType === 'l-shape' || selectedRoof.roofType === 't-shape') && (
+                    <>
+                      <label style={panelLabel}>Anbau Länge (mm)
+                        <input type="number" min={0} value={selectedRoof.anbau?.lengthB ?? ''} onChange={(e) => { const a = selectedRoof.anbau ?? { length: 0, width: 0 }; aktualisiereDach({ anbau: { ...a, lengthB: Math.max(0, Math.round(Number(e.target.value))) } }); }} style={panelInput} />
+                      </label>
+                      <label style={panelLabel}>Anbau Breite (mm)
+                        <input type="number" min={0} value={selectedRoof.anbau?.widthB ?? ''} onChange={(e) => { const a = selectedRoof.anbau ?? { length: 0, width: 0 }; aktualisiereDach({ anbau: { ...a, widthB: Math.max(0, Math.round(Number(e.target.value))) } }); }} style={panelInput} />
+                      </label>
+                    </>
+                  )}
+                </>
+              )}
               <button type="button" style={{ ...knopf(false), width: '100%', marginTop: 4 }} onClick={() => { store.getState().executeCommand({ type: 'REMOVE_ROOF', roofId: selectedRoof.id }); store.getState().selectNodes([]); }}>Dach entfernen</button>
             </>
           ) : selectedWall ? (
