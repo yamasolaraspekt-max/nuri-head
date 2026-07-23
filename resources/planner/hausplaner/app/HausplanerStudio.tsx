@@ -11,6 +11,7 @@ import { GuidedView } from './GuidedView';
 import { T, FACH, PROJ, type StudioModus } from './studioDaten';
 import { ConfigWizard, type KonfigArt } from './ConfigWizard';
 import { Ikon } from './studioUi';
+import { useHausplanerStore, type SpeicherStatus } from '../store/hausplanerStore';
 
 export function HausplanerStudio(): React.ReactElement {
   const [modus, setModus] = React.useState<StudioModus>('start');
@@ -19,6 +20,25 @@ export function HausplanerStudio(): React.ReactElement {
   const [offeneHubs, setOffeneHubs] = React.useState<Record<string, boolean>>({});
   const [toast, setToast] = React.useState<string | null>(null);
   const [konfig, setKonfig] = React.useState<KonfigArt | null>(null);
+  const scene = useHausplanerStore((s) => s.scene);
+  const speicherStatus = useHausplanerStore((s) => s.speicherStatus);
+  const modell = React.useMemo(() => {
+    const nodes = scene?.nodes ?? [];
+    return {
+      geschosse: scene?.levels.length ?? 0,
+      fenster: nodes.filter((n) => n.type === 'window').length,
+      tuer: nodes.filter((n) => n.type === 'door').length,
+      treppe: nodes.filter((n) => n.type === 'object' && n.objectType === 'stair').length,
+    };
+  }, [scene]);
+  const STATUS: Record<SpeicherStatus, { label: string; farbe: string }> = {
+    gespeichert: { label: 'Gespeichert', farbe: T.ok },
+    ungespeichert: { label: 'Ungespeicherte Änderungen', farbe: T.warn },
+    speichert: { label: 'Speichert …', farbe: T.info },
+    konflikt: { label: 'Konflikt', farbe: T.err },
+    fehler: { label: 'Speichern fehlgeschlagen', farbe: T.err },
+  };
+  const st = STATUS[speicherStatus];
   const toastTimer = React.useRef<number | undefined>(undefined);
 
   // Schmale Viewports (Handy/Baustelle): Navigation automatisch auf die Icon-Leiste einklappen,
@@ -69,7 +89,7 @@ export function HausplanerStudio(): React.ReactElement {
           Hausplaner
           <span style={{ fontWeight: 600, color: T.muted, fontSize: 13.5 }}>· Solar Aspekt</span>
         </div>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 7, color: T.muted, fontSize: 13 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: T.ok }} />Gespeichert · Rev. 42</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 7, color: T.muted, fontSize: 13 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: st.farbe }} />{st.label}{scene ? ` · Rev. ${scene.revision}` : ''}</span>
         <span style={{ flex: 1 }} />
         <div style={{ display: 'flex', background: T.surface, borderRadius: 12, padding: 4, boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>
           {modeBtn('start', 'Übersicht', '<path d="M4 5h16M4 12h16M4 19h10"/>')}
@@ -130,7 +150,7 @@ export function HausplanerStudio(): React.ReactElement {
         {/* Inhalt */}
         <div style={{ flex: 1, minHeight: 0, position: 'relative', overflow: imExperte ? 'hidden' : 'auto' }}>
           {modus === 'start' && <StartView onGuided={gehGeführt} onKonfigurator={öffneKonfigurator} />}
-          {modus === 'guided' && <GuidedView schritt={schritt} setSchritt={setSchritt} onExperte={() => setModus('expert')} onKonfigurator={(art) => setKonfig(art)} />}
+          {modus === 'guided' && <GuidedView schritt={schritt} setSchritt={setSchritt} onExperte={() => setModus('expert')} onKonfigurator={(art) => setKonfig(art)} modell={modell} />}
           {imExperte && (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 16px', background: T.surface, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}>
@@ -149,7 +169,7 @@ export function HausplanerStudio(): React.ReactElement {
         <div style={{ position: 'fixed', left: '50%', bottom: 34, transform: 'translateX(-50%)', background: '#1a262a', color: '#fff', padding: '12px 20px', borderRadius: 12, fontSize: 13.5, boxShadow: '0 10px 34px rgba(28,50,55,.10)', zIndex: 80, maxWidth: 560 }}>{toast}</div>
       )}
       {konfig && (
-        <ConfigWizard art={konfig} onClose={() => setKonfig(null)} onÜbernehmen={(label) => { setKonfig(null); zeigeToast(`${label} als Entwurf übernommen — als ConfiguratorPackage speicherbar.`); }} />
+        <ConfigWizard art={konfig} onClose={() => setKonfig(null)} onÜbernehmen={(nachricht) => { setKonfig(null); zeigeToast(nachricht); }} />
       )}
     </div>
   );

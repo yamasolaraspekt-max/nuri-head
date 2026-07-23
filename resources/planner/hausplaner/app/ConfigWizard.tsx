@@ -8,9 +8,11 @@
 import React from 'react';
 import { T } from './studioDaten';
 import { Ikon } from './studioUi';
-import { FENSTER_BAUARTEN, TUER_BAUARTEN, type OeffnungsBauart } from '../geometry/oeffnungsBauarten';
+import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, type OeffnungsBauart } from '../geometry/oeffnungsBauarten';
 import { TREPPEN_BAUARTEN, type TreppenBauart } from '../geometry/treppenBauarten';
 import { neuesPaket, type ConfiguratorType } from '../geometry/configuratorPackage';
+import { useHausplanerStore } from '../store/hausplanerStore';
+import type { SceneNode, WallNode, OpeningNode } from '../domain/scene.types';
 
 const ICON_BASE = new URL('.', import.meta.url).href;
 
@@ -20,7 +22,7 @@ interface Props {
   art: KonfigArt;
   standalone?: boolean;
   onClose: () => void;
-  onÜbernehmen: (bauartLabel: string) => void;
+  onÜbernehmen: (nachricht: string) => void;
 }
 
 interface Kachel { id: string; datei: string; label: string; }
@@ -142,9 +144,33 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
               if (!letzter) { setSchritt(schritt + 1); return; }
               const jetzt = new Date().toISOString();
               const id = (globalThis.crypto?.randomUUID?.() ?? `cfg-${jetzt}-${wahl.id}`);
+              // Wenn eine Wand ausgewählt ist und es eine Öffnung ist: direkt ins Modell (ADD_NODE).
+              const store = useHausplanerStore.getState();
+              const scene = store.scene;
+              if ((art === 'fenster' || art === 'tuer') && scene) {
+                const wand = scene.nodes.find(
+                  (n): n is WallNode => n.type === 'wall' && store.selectedNodeIds.includes(n.id),
+                );
+                if (wand) {
+                  const len = Math.hypot(wand.end.x - wand.start.x, wand.end.y - wand.start.y);
+                  const w = Math.min(breite, Math.max(100, Math.round(len - 100)));
+                  const offset = Math.max(0, Math.round(len / 2 - w / 2));
+                  const knoten: OpeningNode = {
+                    id, type: art === 'fenster' ? 'window' : 'door', levelId: wand.levelId,
+                    visible: true, locked: false, tags: [], createdAt: jetzt, updatedAt: jetzt,
+                    hostWallId: wand.id, offsetFromWallStart: offset, width: w, height: hoehe,
+                    sillHeight: art === 'fenster' ? 900 : 0,
+                    produkt: { typ: wahl.id, ...(art === 'fenster' ? { oeffnungsArt: fensterBauartNach(wahl.id)?.oeffnungsArt } : {}) },
+                  };
+                  const ok = store.executeCommand({ type: 'ADD_NODE', node: knoten as SceneNode });
+                  onÜbernehmen(ok ? `${wahl.label} auf die gewählte Wand gesetzt.` : `${wahl.label}: Platzierung abgelehnt (passt nicht in die Wand).`);
+                  return;
+                }
+              }
+              // Sonst: autark als ConfiguratorPackage (JSON-Download).
               const paket = neuesPaket({
                 id, type: TYP_MAP[art], jetzt, autor: 'Solar Aspekt',
-                parameters: { bauart: wahl.id, bauartLabel: wahl.label, breiteMm: breite, hoeheMm: hoehe, autark: standalone },
+                parameters: { bauart: wahl.id, bauartLabel: wahl.label, breiteMm: breite, hoeheMm: hoehe, autark: true },
                 geometry: { breite, hoehe },
               });
               try {
@@ -153,8 +179,8 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
                 const a = document.createElement('a');
                 a.href = url; a.download = `konfigurator-${art}-${wahl.id}.json`; a.click();
                 URL.revokeObjectURL(url);
-              } catch { /* Download optional — Übernahme meldet trotzdem */ }
-              onÜbernehmen(wahl.label);
+              } catch { /* Download optional */ }
+              onÜbernehmen(`${wahl.label} als ConfiguratorPackage gespeichert (Download). Für Platzierung: im Experten eine Wand wählen.`);
             }} style={{ border: 0, background: T.brand, color: '#fff', fontWeight: 700, fontSize: 14, padding: '11px 26px', borderRadius: 12, cursor: 'pointer' }}>{letzter ? 'Übernehmen' : 'Weiter'}</button>
           </span>
         </div>

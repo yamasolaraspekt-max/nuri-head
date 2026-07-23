@@ -9,6 +9,7 @@ interface Props {
   setSchritt: (i: number) => void;
   onExperte: () => void;
   onKonfigurator: (art: KonfigArt) => void;
+  modell: { geschosse: number; fenster: number; tuer: number; treppe: number };
 }
 
 const badgeFarbe: Record<SchrittStatus, { bg: string; fg: string }> = {
@@ -20,7 +21,7 @@ const checkFarbe: Record<SchrittStatus, { bg: string; fg: string; sym: string }>
   open: { bg: T.hair2, fg: T.faint, sym: '' }, prog: { bg: T.infoSoft, fg: T.infoInk, sym: '' },
 };
 
-export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator }: Props): React.ReactElement {
+export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, modell }: Props): React.ReactElement {
   const s = STEPS[schritt];
   const n = STEPS.length;
 
@@ -58,6 +59,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator }: P
             <div style={{ color: T.muted, fontSize: 14.5 }}>{s.hinweis}</div>
             <div>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 12.5, fontWeight: 600, borderRadius: 999, padding: '6px 13px', marginTop: 14, background: badgeFarbe[s.status].bg, color: badgeFarbe[s.status].fg }}>{STATUS_LABEL[s.status]}</span>
+              <span style={{ marginLeft: 8, fontSize: 12, color: T.muted, fontVariantNumeric: 'tabular-nums' }}>Im Modell: {modell.geschosse} Geschoss{modell.geschosse === 1 ? '' : 'e'} · {modell.fenster} Fenster · {modell.tuer} Tür{modell.tuer === 1 ? '' : 'en'} · {modell.treppe} Treppe{modell.treppe === 1 ? '' : 'n'}</span>
             </div>
             <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 2 }}>
               {s.checks.map((c) => {
