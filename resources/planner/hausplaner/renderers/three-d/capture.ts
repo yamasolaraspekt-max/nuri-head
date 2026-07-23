@@ -26,3 +26,13 @@ export function captureAusFenster(): boolean {
 
 /** Name des window-Globals, über das der Evaluator (Puppeteer/CDP) den 3D-Snapshot zieht. */
 export const SNAPSHOT_GLOBAL = '__hausplanerSnapshot3d';
+
+/**
+ * Ehrlicher Leer-Fall (Sizing-Fix): ist der 3D-Container zur Capture-Zeit real 0×0 (3D-Ansicht nicht
+ * gelegt), liefert der Snapshot KEINEN stillen leeren PNG (der sähe wie „ok" aus), sondern einen
+ * Klartext-Marker. Reine Funktion ⇒ testbar ohne WebGL. Bei echter Größe: null (Snapshot fährt fort).
+ */
+export function snapshotLeerMarker(breite: number, hoehe: number): string | null {
+  if (breite > 0 && hoehe > 0) return null;
+  return `data:text/plain;charset=utf-8,${encodeURIComponent(`3D-Ansicht nicht aktiv (Container ${breite}x${hoehe}px) — kein Snapshot`)}`;
+}
