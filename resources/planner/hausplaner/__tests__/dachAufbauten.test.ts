@@ -89,3 +89,24 @@ test('Walmdach: keine rechteckigen Aufbauflächen (Prüf-Marker-Pfad)', () => {
   const roof = { ...baseDoc().roofs[0], roofType: 'walm' } as RoofNode;
   assert.deepEqual(dachflaechen(roof), []);
 });
+
+test('SSOT-Verriegelung: dachflaechen()-Ecken liegen exakt auf der dachMeshWelt-Fläche (flach/pult/sattel)', () => {
+  // M1-Schutz: dachflaechen und dachMeshWelt speisen sich aus EINER Quelle (dachRoh). Divergieren sie je
+  // wieder (Doppel-Herleitung), findet mind. eine Fläche-Ecke keinen Mesh-Vertex → dieser Test schlägt an.
+  const gleich = (a: { x: number; y: number; z: number }, b: { x: number; y: number; z: number }) =>
+    Math.abs(a.x - b.x) < 1e-6 && Math.abs(a.y - b.y) < 1e-6 && Math.abs(a.z - b.z) < 1e-6;
+  for (const shape of ['flach', 'pult', 'sattel'] as const) {
+    const roof = { ...baseDoc().roofs[0], roofType: shape } as RoofNode;
+    const meshVerts = dachMeshWelt(roof).dreiecke.flat();
+    const faces = dachflaechen(roof);
+    assert.ok(faces.length >= 1, `${shape}: Fläche vorhanden`);
+    for (const f of faces) {
+      for (const ecke of [f.eaveLeft, f.eaveRight, f.ridgeRight, f.ridgeLeft]) {
+        assert.ok(
+          meshVerts.some((v) => gleich(v, ecke)),
+          `${shape}: Ecke (${ecke.x},${ecke.y},${ecke.z}) muss auf der Mesh-Fläche liegen`,
+        );
+      }
+    }
+  }
+});

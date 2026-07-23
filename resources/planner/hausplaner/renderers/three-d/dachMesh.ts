@@ -23,15 +23,30 @@ export interface DachMesh {
   firstHoeheMm: number;
 }
 
+/** Eine Rohfläche (Welt-mm-Ecken) aus der geteilten Herleitung; 4 = Quad, 3 = Walm-Dreieck. */
+interface RohFlaeche {
+  surfaceId: string;
+  rechteckig: boolean;
+  neigungRad: number;
+  /** 4 Ecken = [eaveLeft, eaveRight, ridgeRight, ridgeLeft]; 3 Ecken = Walm-Giebeldreieck. */
+  ecken: WeltPunkt3[];
+}
+
+interface DachRoh {
+  firstHoeheMm: number;
+  flaechen: RohFlaeche[];
+}
+
 /**
- * Roof → Welt-Dreiecke der Dachflächen. Nutzt DIESELBE Kontur-Prüfung wie dachFlaechen
- * (pruefeRechteckigeKontur) — nicht-rechteckige Kontur ⇒ DachGeometrieUngueltig, damit Render-Mesh und
- * belastbare Fläche NIE auseinanderlaufen (Kante 1; der szene.ts-catch überspringt das Dach dann).
- * firstHoeheMm = Höhe First/oberste Kante über ±0.
+ * W-3a-fix (M1/SSOT): DIE EINE Herleitung von Basis ((u,v)→Welt) + Flächen-Ecken je roofType.
+ * `dachMeshWelt` (Dreiecke) UND `dachflaechen` (Aufbau-Trägerflächen) lesen aus dieser Quelle — kein
+ * zweiter Rechenweg mehr, der still divergieren kann. Rechteckige Formen (flach/pult/sattel) → Quads
+ * (rechteckig=true); walm → 2 Trapez- + 2 Dreiecksflächen (rechteckig=false). KEIN mm-Runden der Ecken
+ * (abgeleitete Render-Geometrie). firstHoeheMm = oberste Kante über ±0.
  *
- * @throws DachGeometrieUngueltig
+ * @throws DachGeometrieUngueltig  bei nicht-rechteckiger Kontur (Kante 1).
  */
-export function dachMeshWelt(roof: RoofNode): DachMesh {
+function dachRoh(roof: RoofNode): DachRoh {
   const { laengeMm, spannMm, cx, cy } = pruefeRechteckigeKontur(roof.polygon, roof.firstAzimutGrad);
   const rad = (roof.firstAzimutGrad * Math.PI) / 180;
   const ux = Math.sin(rad);
@@ -44,56 +59,83 @@ export function dachMeshWelt(roof: RoofNode): DachMesh {
   const b = (spannMm + 2 * ue) / 2; // halbe Spannweite quer
   const zt = roof.traufhoeheMm;
   const tan = Math.tan((roof.neigungGrad * Math.PI) / 180);
+  const aRad = (roof.neigungGrad * Math.PI) / 180;
 
-  // lokal (u entlang First, v quer, z Höhe) → Welt. KEIN mm-Runden: das Mesh ist abgeleitete
-  // Render-Geometrie (wie platziereWandQuader Float-Meter liefert), nicht persistierte mm-Wahrheit.
-  const w = (u: number, v: number, z: number): WeltPunkt3 => ({
-    x: cx + u * ux + v * vx,
-    y: cy + u * uy + v * vy,
-    z,
-  });
+  const w = (u: number, v: number, z: number): WeltPunkt3 => ({ x: cx + u * ux + v * vx, y: cy + u * uy + v * vy, z });
 
-  const dreiecke: Dreieck[] = [];
-  const quad = (p1: WeltPunkt3, p2: WeltPunkt3, p3: WeltPunkt3, p4: WeltPunkt3) => {
-    dreiecke.push([p1, p2, p3], [p1, p3, p4]);
-  };
-
+  const flaechen: RohFlaeche[] = [];
   let firstHoehe = zt;
 
   switch (roof.roofType) {
-    case 'flach': {
-      quad(w(-a, -b, zt), w(a, -b, zt), w(a, b, zt), w(-a, b, zt));
+    case 'flach':
+      flaechen.push({
+        surfaceId: `${roof.id}#0`, rechteckig: true, neigungRad: 0,
+        ecken: [w(-a, -b, zt), w(a, -b, zt), w(a, b, zt), w(-a, b, zt)],
+      });
       break;
-    }
     case 'pult': {
       const hoch = zt + 2 * b * tan; // Anstieg über die volle Spannweite
       firstHoehe = hoch;
-      quad(w(-a, -b, zt), w(a, -b, zt), w(a, b, hoch), w(-a, b, hoch));
+      flaechen.push({
+        surfaceId: `${roof.id}#0`, rechteckig: true, neigungRad: aRad,
+        ecken: [w(-a, -b, zt), w(a, -b, zt), w(a, b, hoch), w(-a, b, hoch)],
+      });
       break;
     }
     case 'sattel': {
       const first = zt + b * tan;
       firstHoehe = first;
       // Südseite (v=-b) und Nordseite (v=+b), First bei v=0.
-      quad(w(-a, -b, zt), w(a, -b, zt), w(a, 0, first), w(-a, 0, first));
-      quad(w(a, b, zt), w(-a, b, zt), w(-a, 0, first), w(a, 0, first));
+      flaechen.push(
+        { surfaceId: `${roof.id}#0`, rechteckig: true, neigungRad: aRad,
+          ecken: [w(-a, -b, zt), w(a, -b, zt), w(a, 0, first), w(-a, 0, first)] },
+        { surfaceId: `${roof.id}#1`, rechteckig: true, neigungRad: aRad,
+          ecken: [w(a, b, zt), w(-a, b, zt), w(-a, 0, first), w(a, 0, first)] },
+      );
       break;
     }
     case 'walm': {
       const first = zt + b * tan;
       firstHoehe = first;
       const rr = Math.max(0, a - b); // halbe Firstlänge = (L−B)/2 (Überstand kürzt sich)
-      // 2 Haupt-(Trapez-)Flächen …
-      quad(w(-a, -b, zt), w(a, -b, zt), w(rr, 0, first), w(-rr, 0, first));
-      quad(w(a, b, zt), w(-a, b, zt), w(-rr, 0, first), w(rr, 0, first));
-      // … 2 Walm-(Dreiecks-)Flächen an den Giebelenden.
-      dreiecke.push([w(a, -b, zt), w(a, b, zt), w(rr, 0, first)]);
-      dreiecke.push([w(-a, b, zt), w(-a, -b, zt), w(-rr, 0, first)]);
+      flaechen.push(
+        // 2 Haupt-(Trapez-)Flächen …
+        { surfaceId: `${roof.id}#0`, rechteckig: false, neigungRad: aRad,
+          ecken: [w(-a, -b, zt), w(a, -b, zt), w(rr, 0, first), w(-rr, 0, first)] },
+        { surfaceId: `${roof.id}#1`, rechteckig: false, neigungRad: aRad,
+          ecken: [w(a, b, zt), w(-a, b, zt), w(-rr, 0, first), w(rr, 0, first)] },
+        // … 2 Walm-(Dreiecks-)Flächen an den Giebelenden.
+        { surfaceId: `${roof.id}#2`, rechteckig: false, neigungRad: aRad,
+          ecken: [w(a, -b, zt), w(a, b, zt), w(rr, 0, first)] },
+        { surfaceId: `${roof.id}#3`, rechteckig: false, neigungRad: aRad,
+          ecken: [w(-a, b, zt), w(-a, -b, zt), w(-rr, 0, first)] },
+      );
       break;
     }
   }
 
-  return { dreiecke, firstHoeheMm: Math.round(firstHoehe) };
+  return { firstHoeheMm: Math.round(firstHoehe), flaechen };
+}
+
+/**
+ * Roof → Welt-Dreiecke der Dachflächen. Trianguliert die Flächen aus `dachRoh()` (SSOT, kein eigener
+ * Rechenweg): Quad → 2 Dreiecke, Walm-Dreieck → 1. Nicht-rechteckige Kontur ⇒ DachGeometrieUngueltig
+ * (der szene.ts-catch überspringt das Dach dann). firstHoeheMm = Höhe First/oberste Kante über ±0.
+ *
+ * @throws DachGeometrieUngueltig
+ */
+export function dachMeshWelt(roof: RoofNode): DachMesh {
+  const roh = dachRoh(roof);
+  const dreiecke: Dreieck[] = [];
+  for (const f of roh.flaechen) {
+    const e = f.ecken;
+    if (e.length >= 4) {
+      dreiecke.push([e[0], e[1], e[2]], [e[0], e[2], e[3]]);
+    } else if (e.length === 3) {
+      dreiecke.push([e[0], e[1], e[2]]);
+    }
+  }
+  return { dreiecke, firstHoeheMm: roh.firstHoeheMm };
 }
 
 /**
@@ -112,58 +154,22 @@ export interface DachFlaeche {
 }
 
 /**
- * Roof → rechteckige Dachflächen (Sattel: 2, Pult/Flach: 1). Nutzt DIESELBE Kontur-Prüfung + dasselbe
- * (u,v)→Welt-Mapping wie dachMeshWelt (keine zweite Dach-Wahrheit; nur nach Flächen gruppiert statt
- * Dreieckssuppe). WALM liefert bewusst [] — seine Trapez-/Dreiecksflächen sind kein sicherer
- * Gauben-Untergrund (Stufe C); Aufbauten dort bleiben Prüf-Marker.
+ * Roof → rechteckige Dachflächen (Sattel: 2, Pult/Flach: 1). FILTERT die geteilte `dachRoh()`-Quelle
+ * auf die rechteckigen Quads — es sind DIESELBEN Ecken, die `dachMeshWelt` trianguliert (M1/SSOT: keine
+ * zweite Herleitung mehr). WALM liefert [] (Trapez/Dreieck = kein sicherer Gauben-Untergrund, Stufe C;
+ * Aufbauten dort bleiben Prüf-Marker).
  *
  * @throws DachGeometrieUngueltig bei nicht-rechteckiger Kontur (wie dachMeshWelt).
  */
 export function dachflaechen(roof: RoofNode): DachFlaeche[] {
-  const { laengeMm, spannMm, cx, cy } = pruefeRechteckigeKontur(roof.polygon, roof.firstAzimutGrad);
-  const rad = (roof.firstAzimutGrad * Math.PI) / 180;
-  const ux = Math.sin(rad);
-  const uy = Math.cos(rad);
-  const vx = Math.cos(rad);
-  const vy = -Math.sin(rad);
-  const ue = roof.ueberstandMm;
-  const a = (laengeMm + 2 * ue) / 2;
-  const b = (spannMm + 2 * ue) / 2;
-  const zt = roof.traufhoeheMm;
-  const tan = Math.tan((roof.neigungGrad * Math.PI) / 180);
-  const aRad = (roof.neigungGrad * Math.PI) / 180;
-  const w = (u: number, v: number, z: number): WeltPunkt3 => ({ x: cx + u * ux + v * vx, y: cy + u * uy + v * vy, z });
-
-  switch (roof.roofType) {
-    case 'flach':
-      return [{
-        surfaceId: `${roof.id}#0`, rechteckig: true, neigungRad: 0,
-        eaveLeft: w(-a, -b, zt), eaveRight: w(a, -b, zt), ridgeRight: w(a, b, zt), ridgeLeft: w(-a, b, zt),
-      }];
-    case 'pult': {
-      const hoch = zt + 2 * b * tan;
-      return [{
-        surfaceId: `${roof.id}#0`, rechteckig: true, neigungRad: aRad,
-        eaveLeft: w(-a, -b, zt), eaveRight: w(a, -b, zt), ridgeRight: w(a, b, hoch), ridgeLeft: w(-a, b, hoch),
-      }];
-    }
-    case 'sattel': {
-      const first = zt + b * tan;
-      return [
-        {
-          surfaceId: `${roof.id}#0`, rechteckig: true, neigungRad: aRad,
-          eaveLeft: w(-a, -b, zt), eaveRight: w(a, -b, zt), ridgeRight: w(a, 0, first), ridgeLeft: w(-a, 0, first),
-        },
-        {
-          surfaceId: `${roof.id}#1`, rechteckig: true, neigungRad: aRad,
-          eaveLeft: w(a, b, zt), eaveRight: w(-a, b, zt), ridgeRight: w(-a, 0, first), ridgeLeft: w(a, 0, first),
-        },
-      ];
-    }
-    case 'walm':
-    default:
-      return [];
-  }
+  return dachRoh(roof).flaechen
+    .filter((f) => f.rechteckig && f.ecken.length === 4)
+    .map((f) => ({
+      surfaceId: f.surfaceId,
+      rechteckig: true,
+      neigungRad: f.neigungRad,
+      eaveLeft: f.ecken[0], eaveRight: f.ecken[1], ridgeRight: f.ecken[2], ridgeLeft: f.ecken[3],
+    }));
 }
 
 /** 3D-Fläche eines Dreiecks in m² (halbe Kreuzprodukt-Norm; mm-Eingabe). */

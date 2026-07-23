@@ -4,8 +4,10 @@
  * Baut je rechteckiger Dachfläche einen `SurfaceFrame` im three-Meter-Raum (aus DENSELBEN Welt-Ecken
  * wie dachMeshWelt, via weltZuThree — weltZuThree ist linear, gilt daher auch für Richtungsvektoren;
  * keine zweite Dach-Wahrheit) und ruft die Engine für Körper (Gauben/Kamin) + masshaltiges Loch
- * (fussabdruckUV). KEINE eigene Gauben-/Loch-Mathe — SSOT bleibt geometry/*. Reines TS (kein THREE),
- * damit im Node-Test lauffähig.
+ * (fussabdruckUV). Gauben + Kamin kommen VOLLSTÄNDIG aus geometry/gaubeGeometrie (keine eigene
+ * Gauben-/Loch-Mathe). Die EINFACHEN Aufbauten (Dachfenster/Lüfter/Sat/Lichtkuppel) sind bewusst ein
+ * flacher lokaler Aufsatz (boxTris) + Rechteckloch (rechteckLoch) — schematisch, keine Engine-Route
+ * nötig. Reines TS (kein THREE), damit im Node-Test lauffähig.
  */
 import type { RoofAufbau } from '../../domain/scene.types';
 import { weltZuThree } from './adapter';
