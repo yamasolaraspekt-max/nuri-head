@@ -59,7 +59,9 @@ export function HausplanerStudio(): React.ReactElement {
   };
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', color: T.ink, minHeight: '100vh', display: 'flex', flexDirection: 'column', background: T.bg }}>
+    <div className="hp-studio" style={{ fontFamily: 'Inter, system-ui, sans-serif', color: T.ink, minHeight: '100vh', display: 'flex', flexDirection: 'column', background: T.bg }}>
+      {/* Sichtbarer Tastatur-Fokus über das ganze Studio (ux-Rubrik: Fokus sichtbar). */}
+      <style>{`.hp-studio :focus-visible{outline:2px solid ${T.accent};outline-offset:2px;border-radius:6px;}`}</style>
       {/* Kopfzeile */}
       <header style={{ height: 62, flex: '0 0 auto', display: 'flex', alignItems: 'center', gap: 16, padding: '0 26px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 11, fontWeight: 700, fontSize: 16 }}>
@@ -128,7 +130,7 @@ export function HausplanerStudio(): React.ReactElement {
         {/* Inhalt */}
         <div style={{ flex: 1, minHeight: 0, position: 'relative', overflow: imExperte ? 'hidden' : 'auto' }}>
           {modus === 'start' && <StartView onGuided={gehGeführt} onKonfigurator={öffneKonfigurator} />}
-          {modus === 'guided' && <GuidedView schritt={schritt} setSchritt={setSchritt} onExperte={() => setModus('expert')} onKonfigurator={() => öffneKonfigurator('Fenster', true)} />}
+          {modus === 'guided' && <GuidedView schritt={schritt} setSchritt={setSchritt} onExperte={() => setModus('expert')} onKonfigurator={(art) => setKonfig(art)} />}
           {imExperte && (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 16px', background: T.surface, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}>

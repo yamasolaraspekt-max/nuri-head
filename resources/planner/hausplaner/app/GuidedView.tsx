@@ -1,13 +1,14 @@
 /** Geführte Planung — WizardBase (v9). Stepper + Fokus-Schrittkarte + Aufgabe-Panel + Navigation. */
 import React from 'react';
 import { T, STEPS, STATUS_LABEL, type SchrittStatus } from './studioDaten';
+import type { KonfigArt } from './ConfigWizard';
 import { Ikon } from './studioUi';
 
 interface Props {
   schritt: number;
   setSchritt: (i: number) => void;
   onExperte: () => void;
-  onKonfigurator: () => void;
+  onKonfigurator: (art: KonfigArt) => void;
 }
 
 const badgeFarbe: Record<SchrittStatus, { bg: string; fg: string }> = {
@@ -69,6 +70,16 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator }: P
                 );
               })}
             </div>
+            {s.titel.includes('Türen') && (
+              <div style={{ display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap' }}>
+                {([['fenster', 'Fenster'], ['tuer', 'Tür'], ['treppe', 'Treppe']] as const).map(([a, l]) => (
+                  <button key={a} type="button" onClick={() => onKonfigurator(a)}
+                    style={{ border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600, fontSize: 13, padding: '9px 16px', borderRadius: 11, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <Ikon inhalt='<rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 4v16M4 12h16"/>' size={15} />{l} konfigurieren
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Fokus-Canvas (Muster-Grundriss) */}
@@ -111,7 +122,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator }: P
             <div style={{ background: T.accentSoft, borderRadius: 16, padding: 18 }}>
               <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: T.accentInk }}>Nächste empfohlene Aktion</div>
               <div style={{ fontSize: 15, fontWeight: 700, margin: '6px 0 14px', color: '#0a4f4d' }}>{s.empfehlung.titel}</div>
-              <button type="button" onClick={() => (s.empfehlung?.cfg ? onKonfigurator() : undefined)} style={{ width: '100%', border: 0, background: T.accent, color: '#fff', fontWeight: 700, fontSize: 14, padding: 11, borderRadius: 11, cursor: 'pointer' }}>{s.empfehlung.aktion}</button>
+              <button type="button" onClick={() => (s.empfehlung?.cfg ? onKonfigurator('fenster') : undefined)} style={{ width: '100%', border: 0, background: T.accent, color: '#fff', fontWeight: 700, fontSize: 14, padding: 11, borderRadius: 11, cursor: 'pointer' }}>{s.empfehlung.aktion}</button>
             </div>
           )}
           <button type="button" onClick={onExperte} style={{ width: '100%', border: '1px dashed #d3dbdb', background: 'transparent', color: T.muted, fontWeight: 600, fontSize: 13, padding: 12, borderRadius: 12, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
