@@ -20,6 +20,20 @@ test('alle 13 Rechen-Engines sind als art:engine / zustand:schlaeft registriert 
   }
 });
 
+test('Guard (AP-E): jede Engine-Fähigkeit importiert REAL + der deklarierte Export existiert (Export ≠ Modulname)', async () => {
+  // Verriegelt die „echte Engines"-Zusage per Beweis: dynamischer Import + Prüfung des deklarierten
+  // Export-Namens. Rot, sobald Modul ODER Export fehlt/verfälscht ist (Gegenbeweis).
+  const engines = FAEHIGKEITEN.filter((f) => f.art === 'engine');
+  for (const e of engines) {
+    assert.ok(e.engineModul && e.engineExport, `${e.id}: Modul UND Export müssen deklariert sein`);
+    const modul = (await import('../' + e.engineModul)) as Record<string, unknown>;
+    assert.equal(
+      typeof modul[e.engineExport as string], 'function',
+      `${e.id}: Export „${e.engineExport}" fehlt in ${e.engineModul} (Byte-Treue-Verriegelung)`,
+    );
+  }
+});
+
 test('die echten Werkzeuge sind aktiv und modus-schaltbar', () => {
   for (const id of ['auswahl', 'wand', 'fenster', 'tuer', 'dach', 'treppe']) {
     const f = FAEHIGKEITEN.find((x) => x.id === id);

@@ -89,16 +89,6 @@ function opIcon(name: string): React.ReactElement {
     default: return svgWrap(<circle cx="12" cy="12" r="3" />);
   }
 }
-function fachIcon(name: string): React.ReactElement {
-  switch (name) {
-    case 'Haustechnik': return svgWrap(<path d="M8 3v18M12 3v18M16 3v18" />);
-    case 'PV-Planer': return svgWrap(<><rect x="3" y="4" width="18" height="12" rx="1" /><path d="M3 8h18M3 12h18M9 4v12M15 4v12" /></>);
-    case 'Bauelemente': return svgWrap(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M12 4v16M4 12h16" /></>);
-    case 'Bad': return svgWrap(<><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" /><path d="M6 12V6a2 2 0 0 1 4 0" /></>);
-    case 'Küche': return svgWrap(<><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 15h18M8 3v6" /></>);
-    default: return svgWrap(<circle cx="12" cy="12" r="8" />);
-  }
-}
 
 const uuid = (): string =>
   (globalThis.crypto?.randomUUID?.() ?? `id-${Math.random().toString(36).slice(2)}-${Date.now()}`);

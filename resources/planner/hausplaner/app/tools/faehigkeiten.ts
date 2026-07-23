@@ -38,6 +38,8 @@ export interface Faehigkeit {
   ausgang?: string;
   /** Nur art:'engine': Doku-Referenz auf das echte Modul (nur aufgerufen, nie geändert). */
   engineModul?: string;
+  /** Nur art:'engine': der ECHTE Export-Name im Modul (≠ Modulname). Vom Guard-Test verriegelt. */
+  engineExport?: string;
   /** Nur art:'werkzeug'|'aktion': die TOOL_DEFINITIONS-id, die aktiviert wird (falls schon verdrahtet). */
   toolId?: string;
 }
@@ -71,19 +73,19 @@ const werkzeugFaehigkeiten: Faehigkeit[] = TOOL_DEFINITIONS.map((t) => ({
 
 // --- 2) Reine Rechen-Engines (echte Exports aus geometry/*, zustand 'schlaeft') ------------------
 const engineFaehigkeiten: Faehigkeit[] = [
-  { id: 'engine-fbh', label: 'Fußbodenheizung-Auslegung', gruppe: 'tga-heizung', art: 'engine', zustand: 'schlaeft', funktion: 'Heizfläche, Rohrlänge, Heizkreise', eingang: 'FbhEingabe', ausgang: 'FbhErgebnis', engineModul: 'geometry/fbhAuslegung' },
-  { id: 'engine-heizkoerper', label: 'Heizkörper-Leistung', gruppe: 'tga-heizung', art: 'engine', zustand: 'schlaeft', funktion: 'Über-/Unterdeckung nach EN 442', eingang: 'Normleistung + Betriebsbedingung', ausgang: 'DeckungErgebnis', engineModul: 'geometry/heizkoerperLeistung' },
-  { id: 'engine-heizkreis', label: 'Heizkreis-Verteiler', gruppe: 'tga-heizung', art: 'engine', zustand: 'schlaeft', funktion: 'Abgänge, Massenstrom je Kreis', eingang: 'HeizkreisEingabe[]', ausgang: 'VerteilerErgebnis', engineModul: 'geometry/heizkreisVerteiler' },
-  { id: 'engine-abwasser', label: 'Abwasser-Gefälle', gruppe: 'sanitaer', art: 'engine', zustand: 'schlaeft', funktion: 'Mindestgefälle DIN 1986-100', eingang: 'AbwasserEingabe', ausgang: 'AbwasserErgebnis', engineModul: 'geometry/abwassergefaelle' },
-  { id: 'engine-kueche', label: 'Küchen-Arbeitsdreieck', gruppe: 'kueche', art: 'engine', zustand: 'schlaeft', funktion: 'Ergonomie DIN 18022', eingang: 'Arbeitsdreieck', ausgang: 'DreieckErgebnis', engineModul: 'geometry/kuecheArbeitsdreieck' },
-  { id: 'engine-pv', label: 'PV-Schnellbelegung', gruppe: 'energie-pv', art: 'engine', zustand: 'schlaeft', funktion: 'Modulzahl, kWp, Flächennutzung', eingang: 'PvEingabe', ausgang: 'PvBelegung', engineModul: 'geometry/pvBelegung' },
-  { id: 'engine-uwert', label: 'U-Wert (Wandaufbau)', gruppe: 'bau', art: 'engine', zustand: 'schlaeft', funktion: 'U-Wert aus Schichten DIN EN ISO 6946', eingang: 'Schicht[]', ausgang: 'UErgebnis', engineModul: 'geometry/wandaufbau' },
-  { id: 'engine-fensterprodukt', label: 'Fenster Uw / RC / Preis', gruppe: 'fenster-tuer', art: 'engine', zustand: 'schlaeft', funktion: 'Uw (ISO 10077), RC (EN 1627), Preis', eingang: 'UwEingabe', ausgang: 'UwErgebnis', engineModul: 'geometry/fensterProdukt' },
-  { id: 'engine-sparren', label: 'Sparren-Vorbemessung', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'schlaeft', funktion: 'Biegenachweis Eurocode 5', eingang: 'SparrenEingabe', ausgang: 'SparrenErgebnis', engineModul: 'geometry/sparrenBerechnung' },
-  { id: 'engine-treppe', label: 'Treppen-Auslegung', gruppe: 'treppe', art: 'engine', zustand: 'schlaeft', funktion: 'Stufen/Steigung DIN 18065', eingang: 'TreppenEingabe', ausgang: 'TreppenErgebnis', engineModul: 'geometry/treppenBerechnung' },
-  { id: 'engine-holzmengen', label: 'Holz-Mengen (BOM)', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'schlaeft', funktion: 'Sparren/Konter/Latten summieren', eingang: 'HolzStück[]', ausgang: 'HolzMengen', engineModul: 'geometry/holzMengen' },
-  { id: 'engine-holzbauteile', label: 'Holz-Bauteile (BOM)', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'schlaeft', funktion: 'Pfetten/Grat-/Kehlsparren aggregieren', eingang: 'Holzliste', ausgang: 'HolzBauteile', engineModul: 'geometry/holzBauteile' },
-  { id: 'engine-schifter', label: 'Schifter-Liste', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'schlaeft', funktion: 'Schiftsparren klassifizieren + Stückliste', eingang: 'Fläche (u/v)', ausgang: 'SchifterSparren[]', engineModul: 'geometry/schifterListe' },
+  { id: 'engine-fbh', label: 'Fußbodenheizung-Auslegung', gruppe: 'tga-heizung', art: 'engine', zustand: 'schlaeft', funktion: 'Heizfläche, Rohrlänge, Heizkreise', eingang: 'FbhEingabe', ausgang: 'FbhErgebnis', engineModul: 'geometry/fbhAuslegung', engineExport: 'fbhAuslegung' },
+  { id: 'engine-heizkoerper', label: 'Heizkörper-Leistung', gruppe: 'tga-heizung', art: 'engine', zustand: 'schlaeft', funktion: 'Über-/Unterdeckung nach EN 442', eingang: 'Normleistung + Betriebsbedingung', ausgang: 'DeckungErgebnis', engineModul: 'geometry/heizkoerperLeistung', engineExport: 'bewerteDeckung' },
+  { id: 'engine-heizkreis', label: 'Heizkreis-Verteiler', gruppe: 'tga-heizung', art: 'engine', zustand: 'schlaeft', funktion: 'Abgänge, Massenstrom je Kreis', eingang: 'HeizkreisEingabe[]', ausgang: 'VerteilerErgebnis', engineModul: 'geometry/heizkreisVerteiler', engineExport: 'auslegeVerteiler' },
+  { id: 'engine-abwasser', label: 'Abwasser-Gefälle', gruppe: 'sanitaer', art: 'engine', zustand: 'schlaeft', funktion: 'Mindestgefälle DIN 1986-100', eingang: 'AbwasserEingabe', ausgang: 'AbwasserErgebnis', engineModul: 'geometry/abwassergefaelle', engineExport: 'pruefeAbwasser' },
+  { id: 'engine-kueche', label: 'Küchen-Arbeitsdreieck', gruppe: 'kueche', art: 'engine', zustand: 'schlaeft', funktion: 'Ergonomie DIN 18022', eingang: 'Arbeitsdreieck', ausgang: 'DreieckErgebnis', engineModul: 'geometry/kuecheArbeitsdreieck', engineExport: 'bewerteArbeitsdreieck' },
+  { id: 'engine-pv', label: 'PV-Schnellbelegung', gruppe: 'energie-pv', art: 'engine', zustand: 'schlaeft', funktion: 'Modulzahl, kWp, Flächennutzung', eingang: 'PvEingabe', ausgang: 'PvBelegung', engineModul: 'geometry/pvBelegung', engineExport: 'pvSchnellBelegung' },
+  { id: 'engine-uwert', label: 'U-Wert (Wandaufbau)', gruppe: 'bau', art: 'engine', zustand: 'schlaeft', funktion: 'U-Wert aus Schichten DIN EN ISO 6946', eingang: 'Schicht[]', ausgang: 'UErgebnis', engineModul: 'geometry/wandaufbau', engineExport: 'berechneUWert' },
+  { id: 'engine-fensterprodukt', label: 'Fenster Uw / RC / Preis', gruppe: 'fenster-tuer', art: 'engine', zustand: 'schlaeft', funktion: 'Uw (ISO 10077), RC (EN 1627), Preis', eingang: 'UwEingabe', ausgang: 'UwErgebnis', engineModul: 'geometry/fensterProdukt', engineExport: 'berechneUw' },
+  { id: 'engine-sparren', label: 'Sparren-Vorbemessung', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'schlaeft', funktion: 'Biegenachweis Eurocode 5', eingang: 'SparrenEingabe', ausgang: 'SparrenErgebnis', engineModul: 'geometry/sparrenBerechnung', engineExport: 'berechneSparren' },
+  { id: 'engine-treppe', label: 'Treppen-Auslegung', gruppe: 'treppe', art: 'engine', zustand: 'schlaeft', funktion: 'Stufen/Steigung DIN 18065', eingang: 'TreppenEingabe', ausgang: 'TreppenErgebnis', engineModul: 'geometry/treppenBerechnung', engineExport: 'berechneTreppe' },
+  { id: 'engine-holzmengen', label: 'Holz-Mengen (BOM)', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'schlaeft', funktion: 'Sparren/Konter/Latten summieren', eingang: 'HolzStück[]', ausgang: 'HolzMengen', engineModul: 'geometry/holzMengen', engineExport: 'holzMengenAusListe' },
+  { id: 'engine-holzbauteile', label: 'Holz-Bauteile (BOM)', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'schlaeft', funktion: 'Pfetten/Grat-/Kehlsparren aggregieren', eingang: 'Holzliste', ausgang: 'HolzBauteile', engineModul: 'geometry/holzBauteile', engineExport: 'holzBauteileAusListe' },
+  { id: 'engine-schifter', label: 'Schifter-Liste', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'schlaeft', funktion: 'Schiftsparren klassifizieren + Stückliste', eingang: 'Fläche (u/v)', ausgang: 'SchifterSparren[]', engineModul: 'geometry/schifterListe', engineExport: 'klassifiziereSchifter' },
 ];
 
 // --- 3) CAD-Teilmenge aus dem InDesign-Katalog (remappt, DTP raus) -------------------------------
