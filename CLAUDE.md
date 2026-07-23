@@ -90,3 +90,18 @@ Für jeden zentralen Sachverhalt gibt es **genau eine führende Datenquelle** �
 - Jede bewusste Nicht-Wiederverwendung vorhandenen Codes muss begründet werden (Klasse R5).
 - Keine neue UI-Komponente erstellen, bevor geprüft wurde, ob das Ticket-Designsystem (`resources/views/admin/styleguide/index.blade.php`, CSS-Tokens `--sa-*`) oder vorhandene Ticket-Komponenten genutzt werden können.
 - Keine neue Status-, Aufgaben-, Kommentar-, Datei-, Freigabe-, Historien- oder Benachrichtigungslogik erstellen, wenn diese bereits im Ticket-System vorhanden ist.
+
+> **🧠 SKILL-PFLICHT FÜR ALLE ROLLEN (dauerhaft, ab 2026-07-23).** Generator und Evaluator sind — wie der
+> Planner — **verpflichtet**, zu jeder Aufgabe die **passenden Skills zu laden und anzuwenden** (Verzeichnis
+> `.claude/skills/`). 3D-Hausplaner-Arbeit → `bauplaner-3d` (Code-Landkarte + 4 Regeln: messen-vor-behaupten,
+> Docs-zuerst, kuratieren, Konzept-Vorab-Freigabe) **immer**; Fachthema → passende **Meister-Linse**
+> (Dach→`dachdeckermeister`/`zimmermannmeister`, Heizung/Sanitär→`heizung-sanitaer-meister`,
+> Energie→`energieberater`, Statik→`statiker`, Elektro→`elektromeister`, PV→`pv-planer`, TGA→`tga-planer`,
+> Bad→`bad-planer`, Küche→`kuechenplaner`, Mauerwerk→`maurer`, Fliesen→`fliesenleger`, Türen/Möbel→`schreiner`,
+> Oberflächen→`maler`, Entwurf→`architekt`, Darstellung→`technischer-zeichner`); Code →
+> `software-architekt`/`frontend-entwickler`/`backend-entwickler`; plus `governance-zyklus` und `ux-design`.
+> **Kernregel: belegen statt behaupten** — keine Fach-/Geometrie-Aussage ohne Beleg am Code/an der Norm.
+> Der erweiterte Prozess (7 Stufen + 2 Freigabe-Tore) + Ausführungs-Ablauf: `.claude/skills/bauplaner-3d/
+> references/prozess-erweitert.md`. **Freigabe-Tor 2 (Merge nach main / Deploy ins LIVE-CRM) bleibt eine
+> bewusste Yama-Entscheidung** — Autonomie gilt für den ganzen Bau-/Prüf-Zyklus bis dorthin, nicht für den
+> irreversiblen Produktiv-Schritt.
