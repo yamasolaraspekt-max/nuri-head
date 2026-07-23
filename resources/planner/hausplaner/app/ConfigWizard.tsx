@@ -12,7 +12,8 @@ import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, type OeffnungsBauar
 import { TREPPEN_BAUARTEN, type TreppenBauart } from '../geometry/treppenBauarten';
 import { neuesPaket, type ConfiguratorType } from '../geometry/configuratorPackage';
 import { useHausplanerStore } from '../store/hausplanerStore';
-import type { SceneNode, WallNode, OpeningNode } from '../domain/scene.types';
+import type { SceneNode, WallNode, OpeningNode, ObjectNode } from '../domain/scene.types';
+import { treppeZuParametern } from '../geometry/treppeObjekt';
 
 const ICON_BASE = new URL('.', import.meta.url).href;
 
@@ -144,9 +145,30 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
               if (!letzter) { setSchritt(schritt + 1); return; }
               const jetzt = new Date().toISOString();
               const id = (globalThis.crypto?.randomUUID?.() ?? `cfg-${jetzt}-${wahl.id}`);
-              // Wenn eine Wand ausgewählt ist und es eine Öffnung ist: direkt ins Modell (ADD_NODE).
               const store = useHausplanerStore.getState();
               const scene = store.scene;
+              // Treppe ist freistehend: bei geladener Szene direkt als ObjectNode ins Modell (Standard-Lauflinie, verschiebbar).
+              if (art === 'treppe' && scene) {
+                const levelId = store.activeLevelId ?? scene.levels[0]?.id ?? null;
+                const level = scene.levels.find((l) => l.id === levelId) ?? scene.levels[0];
+                if (level) {
+                  const params = treppeZuParametern({
+                    startX: 1000, startY: 1000, endX: 1000, endY: 4000,
+                    laufbreite: breite, geschosshoehe: Math.max(2000, hoehe),
+                    bereich: 'wohnung', typ: wahl.id,
+                  });
+                  const treppe: ObjectNode = {
+                    id, type: 'object', objectType: 'stair', catalogItemId: 'stair-default', levelId: level.id,
+                    visible: true, locked: false, tags: [], createdAt: jetzt, updatedAt: jetzt,
+                    transform: { position: { x: 0, y: 0, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 1 } },
+                    parameters: params,
+                  };
+                  const ok = store.executeCommand({ type: 'ADD_NODE', node: treppe as SceneNode });
+                  onÜbernehmen(ok ? `Treppe „${wahl.label}" ins Modell gesetzt — im Plan verschiebbar.` : `Treppe: Platzierung abgelehnt.`);
+                  return;
+                }
+              }
+              // Wenn eine Wand ausgewählt ist und es eine Öffnung ist: direkt ins Modell (ADD_NODE).
               if ((art === 'fenster' || art === 'tuer') && scene) {
                 const wand = scene.nodes.find(
                   (n): n is WallNode => n.type === 'wall' && store.selectedNodeIds.includes(n.id),

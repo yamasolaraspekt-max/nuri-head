@@ -45,3 +45,25 @@ test('ConfigWizard-Schreiblogik: Fenster mit Bauart landet als OpeningNode auf d
   assert.equal(f.produkt?.oeffnungsArt, 'dreh-kipp');
   assert.equal(store.getState().speicherStatus, 'ungespeichert');
 });
+
+import { treppeZuParametern, parametereZuTreppe } from '../geometry/treppeObjekt';
+import type { ObjectNode } from '../domain/scene.types';
+
+test('ConfigWizard-Schreiblogik: Treppe landet als ObjectNode(stair) mit typ im Modell', () => {
+  const store = useHausplanerStore;
+  store.getState().init(szeneMitWand(), '', '');
+  const params = treppeZuParametern({ startX: 1000, startY: 1000, endX: 1000, endY: 4000, laufbreite: 1000, geschosshoehe: 2700, bereich: 'wohnung', typ: '09_spindeltreppe' });
+  const treppe: ObjectNode = {
+    id: 'neu-treppe', type: 'object', objectType: 'stair', catalogItemId: 'stair-default', levelId: 'eg',
+    visible: true, locked: false, tags: [], createdAt: JETZT, updatedAt: JETZT,
+    transform: { position: { x: 0, y: 0, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 1 } },
+    parameters: params,
+  };
+  const ok = store.getState().executeCommand({ type: 'ADD_NODE', node: treppe as SceneNode });
+  assert.equal(ok, true, 'ADD_NODE(stair) akzeptiert');
+  const stairs = store.getState().scene!.nodes.filter((n) => n.type === 'object' && (n as ObjectNode).objectType === 'stair');
+  assert.equal(stairs.length, 1);
+  const tp = parametereZuTreppe((stairs[0] as ObjectNode).parameters);
+  assert.equal(tp?.typ, '09_spindeltreppe');
+  assert.equal(tp?.laufbreite, 1000);
+});
