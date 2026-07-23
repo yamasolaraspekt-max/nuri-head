@@ -11,7 +11,7 @@
  * - Ablehnung = CommandAbgelehnt-Throw VOR jeder Mutation relevanter Werte; der Store
  *   verwirft den Draft, die Szene bleibt unverändert.
  */
-import type { SceneDocument, SceneNode, WallNode, OpeningNode, RoofNode } from '../domain/scene.types';
+import type { SceneDocument, SceneNode, WallNode, OpeningNode, RoofNode, RoofAufbau } from '../domain/scene.types';
 import { CommandAbgelehnt, type HausplanerCommand } from '../domain/commands.types';
 import { wandLaenge } from '../geometry/wallGeometry';
 
@@ -69,6 +69,23 @@ function pruefeDachProLevel(draft: SceneDocument, roof: RoofNode): void {
       'dach_pro_level_vorhanden',
     );
   }
+}
+
+/** Dach aus dem Draft holen oder ablehnen (W-3a, für Aufbau-Commands). */
+function dachOderFehler(draft: SceneDocument, roofId: string): RoofNode {
+  if (!Array.isArray(draft.roofs)) {
+    draft.roofs = [];
+  }
+  const roof = draft.roofs.find((r) => r.id === roofId);
+  if (!roof) {
+    throw new CommandAbgelehnt(`Dach ${roofId} existiert nicht.`, 'dach_unbekannt');
+  }
+  return roof;
+}
+
+/** mm-Invariante der Aufbau-Maße (W-3a): Breite/Höhe/Tiefe in ganzen mm. */
+function pruefeAufbauGanzzahlig(aufbau: RoofAufbau): void {
+  pruefeGanzzahlig([aufbau.breiteMm, aufbau.hoeheMm, aufbau.tiefeMm], 'Dachaufbau');
 }
 
 function pruefeNeueOeffnung(draft: SceneDocument, oeffnung: OpeningNode): void {
@@ -227,6 +244,40 @@ export function applyCommand(draft: SceneDocument, command: HausplanerCommand, j
       if (draft.roofs.length === vorher) {
         throw new CommandAbgelehnt(`Dach ${command.roofId} existiert nicht.`, 'dach_unbekannt');
       }
+      break;
+    }
+
+    case 'ADD_ROOF_AUFBAU': {
+      const roof = dachOderFehler(draft, command.roofId);
+      pruefeAufbauGanzzahlig(command.aufbau);
+      if (!Array.isArray(roof.aufbauten)) {
+        roof.aufbauten = [];
+      }
+      roof.aufbauten.push({ ...command.aufbau });
+      roof.updatedAt = jetztIso;
+      break;
+    }
+
+    case 'REMOVE_ROOF_AUFBAU': {
+      const roof = dachOderFehler(draft, command.roofId);
+      const vorher = roof.aufbauten?.length ?? 0;
+      roof.aufbauten = (roof.aufbauten ?? []).filter((a) => a.id !== command.aufbauId);
+      if (roof.aufbauten.length === vorher) {
+        throw new CommandAbgelehnt(`Aufbau ${command.aufbauId} existiert nicht.`, 'aufbau_unbekannt');
+      }
+      roof.updatedAt = jetztIso;
+      break;
+    }
+
+    case 'UPDATE_ROOF_AUFBAU': {
+      const roof = dachOderFehler(draft, command.roofId);
+      const aufbau = (roof.aufbauten ?? []).find((a) => a.id === command.aufbauId);
+      if (!aufbau) {
+        throw new CommandAbgelehnt(`Aufbau ${command.aufbauId} existiert nicht.`, 'aufbau_unbekannt');
+      }
+      Object.assign(aufbau as object, command.changes);
+      pruefeAufbauGanzzahlig(aufbau);
+      roof.updatedAt = jetztIso;
       break;
     }
 

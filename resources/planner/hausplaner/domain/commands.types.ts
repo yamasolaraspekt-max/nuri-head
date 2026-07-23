@@ -3,7 +3,7 @@
  * Szene; jede Änderung ist ein Command. Der Store führt Commands über Immer
  * `produceWithPatches` aus — die inversen Patches sind die Undo-Historie.
  */
-import type { SceneNode, RoofNode, Level } from './scene.types';
+import type { SceneNode, RoofNode, RoofAufbau, Level } from './scene.types';
 
 export type HausplanerCommand =
   | { type: 'ADD_NODE'; node: SceneNode }
@@ -19,6 +19,11 @@ export type HausplanerCommand =
   | { type: 'ADD_ROOF'; roof: RoofNode }
   | { type: 'UPDATE_ROOF'; roofId: string; changes: Record<string, unknown> }
   | { type: 'REMOVE_ROOF'; roofId: string }
+  // Dachaufbau-Commands (W-3a): operieren auf RoofNode.aufbauten (Teil des Immer-Drafts ⇒ Undo/Redo/409
+  // automatisch). Additiv — Dächer ohne aufbauten bleiben unberührt.
+  | { type: 'ADD_ROOF_AUFBAU'; roofId: string; aufbau: RoofAufbau }
+  | { type: 'REMOVE_ROOF_AUFBAU'; roofId: string; aufbauId: string }
+  | { type: 'UPDATE_ROOF_AUFBAU'; roofId: string; aufbauId: string; changes: Record<string, unknown> }
   | {
       type: 'MOVE_NODE';
       nodeId: string;
@@ -48,7 +53,8 @@ export type AblehnungsGrund =
   | 'level_nicht_leer'
   | 'nicht_ganzzahlig'
   | 'dach_pro_level_vorhanden'
-  | 'dach_unbekannt';
+  | 'dach_unbekannt'
+  | 'aufbau_unbekannt';
 
 /**
  * Definierter Fehlerzustand: Command verletzt eine Regel — Szene bleibt unverändert.

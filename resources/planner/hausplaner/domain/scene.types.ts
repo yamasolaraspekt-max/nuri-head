@@ -208,6 +208,40 @@ export interface RouteNode extends BaseNode {
 export type SceneNode = WallNode | OpeningNode | ObjectNode | ZoneNode | RouteNode;
 
 /**
+ * Dachaufbau-Typen (W-3a). STEHENDE Aufbauten auf der Dachfläche: Gauben (5 Typen), Dachfenster,
+ * Kamin, Lüfter/Sat, Lichtkuppel. Deckungsgleich mit den Typen der reinen Engine
+ * (geometry/gaubeGeometrie · geometry/aufbauPlatzierung) — hier nur die Modell-Auswahl.
+ */
+export type ObstacleType =
+  | 'chimney'
+  | 'window'
+  | 'vent'
+  | 'sat'
+  | 'lichtkuppel'
+  | 'schleppgaube'
+  | 'trapezgaube'
+  | 'flachgaube'
+  | 'giebelgaube'
+  | 'spitzgaube';
+
+/**
+ * Ein einzelner Dachaufbau (W-3a, additiv am RoofNode). Lage `x`,`y` sind RELATIV (0..1) auf der
+ * Dachfläche (x = parallel Traufe, y = Traufe→First). Maße in ganzen mm (mm-Invariante); die reine
+ * Geometrie/Anschluss-Rechnung bleibt in geometry/gaubeGeometrie — hier steht nur die Beschreibung.
+ */
+export interface RoofAufbau {
+  id: string;
+  typ: ObstacleType;
+  x: number;                  // 0..1, parallel Traufe
+  y: number;                  // 0..1, Traufe→First
+  breiteMm: number;           // ganze mm (Breite parallel Traufe)
+  hoeheMm: number;            // ganze mm (vertikale Aufbau-/Fronthöhe)
+  tiefeMm: number;            // ganze mm (Ausdehnung entlang der Dachschräge)
+  rotationGrad?: number;      // optional; Standard 0
+  neigungGrad?: number;       // optional; wird i. d. R. aus dem Hauptdach abgeleitet
+}
+
+/**
  * Dach (D-a, ▲D1). Teil DERSELBEN Szenen-Wahrheit, aber in `SceneDocument.roofs` statt in der
  * Node-Union (additiv, kein Eingriff in bestehende Node-Konsumenten). Je Level max. 1 Dach, Bezug
  * aufs oberste Geschoss. Die Flächen-Azimute werden NIE gepflegt, sondern aus `firstAzimutGrad`
@@ -225,6 +259,9 @@ export interface RoofNode extends BaseNode {
   firstAzimutGrad: number;    // First-RICHTUNG (Grad); Flächen-Azimute werden daraus abgeleitet
   ueberstandMm: number;       // Dachüberstand an Traufe/Giebel
   traufhoeheMm: number;       // Default: level.elevation + defaultWallHeight
+
+  /** Dachaufbauten (W-3a, OPTIONAL/additiv): Gauben/Dachfenster/Kamin/… auf der Dachfläche. */
+  aufbauten?: RoofAufbau[];
 }
 
 // ------------------------------------------- Projektions-Kontrakt (▲K2, P0-Fixture)

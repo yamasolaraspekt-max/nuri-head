@@ -20,7 +20,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import type { ObjectNode, OpeningNode, SceneDocument, WallNode } from '../../domain/scene.types';
+import type { ObjectNode, OpeningNode, SceneDocument, WallNode, RoofNode } from '../../domain/scene.types';
 import type { RendererAdapter } from './adapter';
 import { weltZuThree } from './adapter';
 import { segmentiereWand } from './segmentierung';
@@ -28,7 +28,8 @@ import { platziereWandQuader, bodenPunkteThree, platziereTreppenStufe } from './
 import { treppe3DKoerper } from '../../geometry/treppe3D';
 import { parametereZuTreppe } from '../../geometry/treppeObjekt';
 import { erkenneRaeume } from '../../geometry/roomDetection';
-import { dachMeshWelt } from './dachMesh';
+import { dachMeshWelt, dachflaechen, type DachFlaeche } from './dachMesh';
+import { flaecheZuFrame, aufbauKoerper, type AufbauFrame } from './dachAufbautenMesh';
 import { DachGeometrieUngueltig } from '../../geometry/dachGeometrie';
 
 /**
@@ -376,14 +377,23 @@ export class HausplanerDreiDSzene implements RendererAdapter {
       this.inhalt.add(mesh);
     }
 
-    // Dächer (D-c): aus dem reinen Mesh-Bauplan (dachMeshWelt) ein Mesh je Dach, Eckpunkte via
-    // weltZuThree. Ungültige (nicht-rechteckige) Kontur ⇒ dieses Dach wird übersprungen — nie ein
-    // stilles Falschdach und kein Render-Crash (Kante 1). Dach nur im obersten/aktiven Geschoss (▲D1).
+    // Dächer (D-c / W-3a): OHNE Aufbauten unverändert aus dem Mesh-Bauplan (dachMeshWelt). MIT Aufbauten
+    // auf rechteckigem Sattel/Pult/Flach je Dachfläche als Shape-mit-Loch + Aufbaukörper über die reine
+    // Engine (gaubeGeometrie). Walm o. Ä. (dachflaechen liefert []) rendert wie bisher; seine Aufbauten
+    // erscheinen als Prüf-Marker (ehrlich, kein stiller Wegfall). Ungültige Kontur ⇒ Dach übersprungen
+    // (Kante 1, kein Crash). Dach nur im aktiven Geschoss (▲D1).
     const daecher = (dokument.roofs ?? []).filter((r) => r.levelId === level.id && r.visible !== false);
     for (const dach of daecher) {
-      let bauplan;
+      const aufbauten = dach.aufbauten ?? [];
+      const farbeDach = this.ausgewaehlt.has(dach.id) ? FARBE_AUSWAHL : FARBE_DACH;
+
+      let flaechen: DachFlaeche[] = [];
+      let firstHoeheMm = 0;
       try {
-        bauplan = dachMeshWelt(dach);
+        firstHoeheMm = dachMeshWelt(dach).firstHoeheMm;
+        if (aufbauten.length > 0) {
+          flaechen = dachflaechen(dach);
+        }
       } catch (fehler) {
         if (fehler instanceof DachGeometrieUngueltig) {
           continue;
@@ -391,30 +401,145 @@ export class HausplanerDreiDSzene implements RendererAdapter {
         throw fehler;
       }
 
-      const positionen: number[] = [];
-      for (const dreieck of bauplan.dreiecke) {
-        for (const p of dreieck) {
-          const t = weltZuThree(p);
-          positionen.push(t.x, t.y, t.z);
+      if (aufbauten.length === 0 || flaechen.length === 0) {
+        // Bestandsrender: ganze Dachfläche aus dem Mesh-Bauplan (unverändert).
+        this.rendereDachMesh(dach, farbeDach);
+        // Aufbauten auf nicht-rechteckigem Dach (Walm): ehrlicher Prüf-Marker statt stillem Wegfall.
+        for (const _ of aufbauten) {
+          this.aufbauMarker(this.dachMittelpunktThree(dach, firstHoeheMm), dach.id);
+        }
+        continue;
+      }
+
+      // Rechteckige Flächen (Sattel/Pult/Flach): Aufbauten liegen (W-3a-MVP) auf der Primärfläche #0
+      // (das Modell trägt noch keine Flächen-Zuordnung). Loch + Körper masshaltig aus der Engine.
+      const yRidgeThree = firstHoeheMm / 1000;
+      for (let fi = 0; fi < flaechen.length; fi++) {
+        const af = flaecheZuFrame(flaechen[fi], yRidgeThree);
+        const eigene = fi === 0 ? aufbauten : [];
+        const koerper = eigene.map((a) => aufbauKoerper(af, a));
+        const loecher = koerper
+          .filter((k) => !k.pruefpflichtig && k.holePolyUV.length >= 3)
+          .map((k) => k.holePolyUV);
+        this.rendereDachflaeche(af, farbeDach, loecher, dach.id);
+        for (const k of koerper) {
+          if (k.pruefpflichtig || k.tris.length === 0) {
+            this.aufbauMarker(k.refWorld, dach.id);
+            continue;
+          }
+          this.rendereAufbauKoerper(k.tris, dach.id);
         }
       }
-      const geometrie = new THREE.BufferGeometry();
-      geometrie.setAttribute('position', new THREE.Float32BufferAttribute(positionen, 3));
-      geometrie.computeVertexNormals();
-      const dachMesh = new THREE.Mesh(
-        geometrie,
-        new THREE.MeshStandardMaterial({
-          color: this.ausgewaehlt.has(dach.id) ? FARBE_AUSWAHL : FARBE_DACH,
-          roughness: 0.82,
-          metalness: 0.0,
-          side: THREE.DoubleSide,
-        }),
-      );
-      dachMesh.castShadow = true;
-      dachMesh.receiveShadow = true;
-      dachMesh.userData.nodeId = dach.id;
-      this.inhalt.add(dachMesh);
     }
+  }
+
+  // ---------------------------------------------------------------- Dach-/Aufbau-Render (W-3a)
+
+  /** Bestehendes Dach-Rendering: ganze Fläche aus dem reinen Mesh-Bauplan (unverändert extrahiert). */
+  private rendereDachMesh(dach: RoofNode, farbe: number): void {
+    let bauplan;
+    try {
+      bauplan = dachMeshWelt(dach);
+    } catch (fehler) {
+      if (fehler instanceof DachGeometrieUngueltig) {
+        return;
+      }
+      throw fehler;
+    }
+    const positionen: number[] = [];
+    for (const dreieck of bauplan.dreiecke) {
+      for (const p of dreieck) {
+        const t = weltZuThree(p);
+        positionen.push(t.x, t.y, t.z);
+      }
+    }
+    const geometrie = new THREE.BufferGeometry();
+    geometrie.setAttribute('position', new THREE.Float32BufferAttribute(positionen, 3));
+    geometrie.computeVertexNormals();
+    const mesh = new THREE.Mesh(
+      geometrie,
+      new THREE.MeshStandardMaterial({ color: farbe, roughness: 0.82, metalness: 0.0, side: THREE.DoubleSide }),
+    );
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    mesh.userData.nodeId = dach.id;
+    this.inhalt.add(mesh);
+  }
+
+  /** W-3a: eine rechteckige Dachfläche als Shape-mit-Löchern (u,v-Meter), in den three-Raum abgebildet. */
+  private rendereDachflaeche(af: AufbauFrame, farbe: number, loecherUV: Array<Array<{ x: number; y: number }>>, nodeId: string): void {
+    const { width: W, height: H } = af.frame;
+    const form = new THREE.Shape();
+    form.moveTo(0, 0);
+    form.lineTo(W, 0);
+    form.lineTo(W, H);
+    form.lineTo(0, H);
+    form.closePath();
+    for (const loch of loecherUV) {
+      if (loch.length < 3) continue;
+      const pfad = new THREE.Path();
+      loch.forEach((p, i) => (i === 0 ? pfad.moveTo(p.x, p.y) : pfad.lineTo(p.x, p.y)));
+      pfad.closePath();
+      form.holes.push(pfad);
+    }
+    const geometrie = new THREE.ShapeGeometry(form);
+    // (u,v,0) → Welt: origin + u·vRight + v·vDown (vNormal als 3. Basisachse; makeBasis nutzt Spalten).
+    const m = new THREE.Matrix4().makeBasis(
+      new THREE.Vector3(af.frame.vRight.x, af.frame.vRight.y, af.frame.vRight.z),
+      new THREE.Vector3(af.frame.vDown.x, af.frame.vDown.y, af.frame.vDown.z),
+      new THREE.Vector3(af.frame.vNormal.x, af.frame.vNormal.y, af.frame.vNormal.z),
+    );
+    m.setPosition(af.frame.origin.x, af.frame.origin.y, af.frame.origin.z);
+    geometrie.applyMatrix4(m);
+    geometrie.computeVertexNormals();
+    const mesh = new THREE.Mesh(
+      geometrie,
+      new THREE.MeshStandardMaterial({ color: farbe, roughness: 0.82, metalness: 0.0, side: THREE.DoubleSide }),
+    );
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    mesh.userData.nodeId = nodeId;
+    this.inhalt.add(mesh);
+  }
+
+  /** W-3a: Aufbaukörper (Gauben-/Kamin-/Aufsatz-Dreiecke in three-Metern) als ein Mesh. */
+  private rendereAufbauKoerper(tris: Array<[{ x: number; y: number; z: number }, { x: number; y: number; z: number }, { x: number; y: number; z: number }]>, nodeId: string): void {
+    const positionen: number[] = [];
+    for (const t of tris) {
+      for (const p of t) {
+        positionen.push(p.x, p.y, p.z);
+      }
+    }
+    const geometrie = new THREE.BufferGeometry();
+    geometrie.setAttribute('position', new THREE.Float32BufferAttribute(positionen, 3));
+    geometrie.computeVertexNormals();
+    const mesh = new THREE.Mesh(
+      geometrie,
+      new THREE.MeshStandardMaterial({ color: FARBE_DACH, roughness: 0.8, metalness: 0.0, side: THREE.DoubleSide }),
+    );
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    mesh.userData.nodeId = nodeId;
+    this.inhalt.add(mesh);
+  }
+
+  /** W-3a: Prüf-Marker (Amber-Drahtwürfel) für einen nicht sicher platzierbaren Aufbau — kein Crash. */
+  private aufbauMarker(pos: { x: number; y: number; z: number }, nodeId: string): void {
+    const kanten = new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.BoxGeometry(0.6, 0.6, 0.6)),
+      new THREE.LineBasicMaterial({ color: FARBE_GEKLEMMT }),
+    );
+    kanten.position.set(pos.x, pos.y, pos.z);
+    kanten.userData.nodeId = nodeId;
+    this.inhalt.add(kanten);
+  }
+
+  /** Näherungs-Ankerpunkt (three) für Walm-Prüf-Marker: Polygon-Schwerpunkt auf Firsthöhe. */
+  private dachMittelpunktThree(dach: RoofNode, firstHoeheMm: number): { x: number; y: number; z: number } {
+    const n = dach.polygon.length || 1;
+    const cx = dach.polygon.reduce((s, p) => s + p.x, 0) / n;
+    const cy = dach.polygon.reduce((s, p) => s + p.y, 0) / n;
+    return weltZuThree({ x: cx, y: cy, z: firstHoeheMm });
   }
 
   // ---------------------------------------------------------------- Auswahl (nur selectNodes-Naht)

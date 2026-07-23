@@ -712,6 +712,70 @@
           },
           "traufhoeheMm": {
             "$ref": "#/$defs/__schema2"
+          },
+          "aufbauten": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "typ": {
+                  "type": "string",
+                  "enum": [
+                    "chimney",
+                    "window",
+                    "vent",
+                    "sat",
+                    "lichtkuppel",
+                    "schleppgaube",
+                    "trapezgaube",
+                    "flachgaube",
+                    "giebelgaube",
+                    "spitzgaube"
+                  ]
+                },
+                "x": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "y": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "breiteMm": {
+                  "$ref": "#/$defs/__schema0"
+                },
+                "hoeheMm": {
+                  "$ref": "#/$defs/__schema0"
+                },
+                "tiefeMm": {
+                  "$ref": "#/$defs/__schema0"
+                },
+                "rotationGrad": {
+                  "$ref": "#/$defs/__schema1"
+                },
+                "neigungGrad": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 89
+                }
+              },
+              "required": [
+                "id",
+                "typ",
+                "x",
+                "y",
+                "breiteMm",
+                "hoeheMm",
+                "tiefeMm"
+              ],
+              "additionalProperties": false
+            }
           }
         },
         "required": [

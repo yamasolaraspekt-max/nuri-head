@@ -173,6 +173,24 @@ export const materialSchema = z
   })
   .strict();
 
+// Dachaufbau (W-3a, additiv): stehender Aufbau auf der Dachfläche. x/y relativ (0..1); Maße ganze mm.
+export const aufbauSchema = z
+  .object({
+    id: z.string().min(1),
+    typ: z.enum([
+      'chimney', 'window', 'vent', 'sat', 'lichtkuppel',
+      'schleppgaube', 'trapezgaube', 'flachgaube', 'giebelgaube', 'spitzgaube',
+    ]),
+    x: z.number().min(0).max(1),
+    y: z.number().min(0).max(1),
+    breiteMm: mmPos,
+    hoeheMm: mmPos,
+    tiefeMm: mmPos,
+    rotationGrad: grad.optional(),
+    neigungGrad: z.number().min(0).max(89).optional(),
+  })
+  .strict();
+
 // Dach (D-a, ▲D1): eigenes Schema, NICHT Teil der Node-Union (roofs[] ist eine eigene Sammlung).
 // neigungGrad in [0, 89]: 0 = flach; < 90, damit cos > 0 (sichererCos, Kante 2).
 export const roofNodeSchema = z
@@ -185,6 +203,8 @@ export const roofNodeSchema = z
     firstAzimutGrad: z.number(),
     ueberstandMm: mmNonNeg,
     traufhoeheMm: mm,
+    // W-3a: OPTIONAL ⇒ Bestands-Dächer ohne aufbauten bleiben gültig (additiv, kein 422).
+    aufbauten: z.array(aufbauSchema).optional(),
   })
   .strict();
 

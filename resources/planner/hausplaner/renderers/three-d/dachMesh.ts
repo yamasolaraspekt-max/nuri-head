@@ -96,6 +96,76 @@ export function dachMeshWelt(roof: RoofNode): DachMesh {
   return { dreiecke, firstHoeheMm: Math.round(firstHoehe) };
 }
 
+/**
+ * W-3a: Eine Dachfläche als benannte Rechteck-Ecken (Welt mm, z-up) — Trägerfläche für Aufbauten.
+ * eaveLeft/eaveRight liegen an der Traufe, ridgeLeft/ridgeRight am First (bzw. Pult-Oberkante).
+ */
+export interface DachFlaeche {
+  surfaceId: string;
+  /** true = achsenparallele Rechteckfläche (Sattel/Pult/Flach) — Voraussetzung fürs echte Gauben-Loch. */
+  rechteckig: boolean;
+  neigungRad: number;
+  eaveLeft: WeltPunkt3;
+  eaveRight: WeltPunkt3;
+  ridgeRight: WeltPunkt3;
+  ridgeLeft: WeltPunkt3;
+}
+
+/**
+ * Roof → rechteckige Dachflächen (Sattel: 2, Pult/Flach: 1). Nutzt DIESELBE Kontur-Prüfung + dasselbe
+ * (u,v)→Welt-Mapping wie dachMeshWelt (keine zweite Dach-Wahrheit; nur nach Flächen gruppiert statt
+ * Dreieckssuppe). WALM liefert bewusst [] — seine Trapez-/Dreiecksflächen sind kein sicherer
+ * Gauben-Untergrund (Stufe C); Aufbauten dort bleiben Prüf-Marker.
+ *
+ * @throws DachGeometrieUngueltig bei nicht-rechteckiger Kontur (wie dachMeshWelt).
+ */
+export function dachflaechen(roof: RoofNode): DachFlaeche[] {
+  const { laengeMm, spannMm, cx, cy } = pruefeRechteckigeKontur(roof.polygon, roof.firstAzimutGrad);
+  const rad = (roof.firstAzimutGrad * Math.PI) / 180;
+  const ux = Math.sin(rad);
+  const uy = Math.cos(rad);
+  const vx = Math.cos(rad);
+  const vy = -Math.sin(rad);
+  const ue = roof.ueberstandMm;
+  const a = (laengeMm + 2 * ue) / 2;
+  const b = (spannMm + 2 * ue) / 2;
+  const zt = roof.traufhoeheMm;
+  const tan = Math.tan((roof.neigungGrad * Math.PI) / 180);
+  const aRad = (roof.neigungGrad * Math.PI) / 180;
+  const w = (u: number, v: number, z: number): WeltPunkt3 => ({ x: cx + u * ux + v * vx, y: cy + u * uy + v * vy, z });
+
+  switch (roof.roofType) {
+    case 'flach':
+      return [{
+        surfaceId: `${roof.id}#0`, rechteckig: true, neigungRad: 0,
+        eaveLeft: w(-a, -b, zt), eaveRight: w(a, -b, zt), ridgeRight: w(a, b, zt), ridgeLeft: w(-a, b, zt),
+      }];
+    case 'pult': {
+      const hoch = zt + 2 * b * tan;
+      return [{
+        surfaceId: `${roof.id}#0`, rechteckig: true, neigungRad: aRad,
+        eaveLeft: w(-a, -b, zt), eaveRight: w(a, -b, zt), ridgeRight: w(a, b, hoch), ridgeLeft: w(-a, b, hoch),
+      }];
+    }
+    case 'sattel': {
+      const first = zt + b * tan;
+      return [
+        {
+          surfaceId: `${roof.id}#0`, rechteckig: true, neigungRad: aRad,
+          eaveLeft: w(-a, -b, zt), eaveRight: w(a, -b, zt), ridgeRight: w(a, 0, first), ridgeLeft: w(-a, 0, first),
+        },
+        {
+          surfaceId: `${roof.id}#1`, rechteckig: true, neigungRad: aRad,
+          eaveLeft: w(a, b, zt), eaveRight: w(-a, b, zt), ridgeRight: w(-a, 0, first), ridgeLeft: w(a, 0, first),
+        },
+      ];
+    }
+    case 'walm':
+    default:
+      return [];
+  }
+}
+
 /** 3D-Fläche eines Dreiecks in m² (halbe Kreuzprodukt-Norm; mm-Eingabe). */
 export function dreieckFlaecheM2(t: Dreieck): number {
   const [a, b, c] = t;
