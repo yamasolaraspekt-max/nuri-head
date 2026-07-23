@@ -67,3 +67,19 @@ test('ConfigWizard-Schreiblogik: Treppe landet als ObjectNode(stair) mit typ im 
   assert.equal(tp?.typ, '09_spindeltreppe');
   assert.equal(tp?.laufbreite, 1000);
 });
+
+test('ConfigWizard-Schreiblogik: Heizkörper landet als ObjectNode(radiator) mit objekt.typ', () => {
+  const store = useHausplanerStore;
+  store.getState().init(szeneMitWand(), '', '');
+  const radiator: ObjectNode = {
+    id: 'neu-hk', type: 'object', objectType: 'radiator', catalogItemId: 'radiator-default', levelId: 'eg',
+    visible: true, locked: false, tags: [], createdAt: JETZT, updatedAt: JETZT,
+    transform: { position: { x: 2000, y: 500, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 1 } },
+    parameters: { 'objekt.typ': '01_kompakt', 'objekt.label': 'Kompaktheizkörper', 'objekt.laenge': 1000, 'objekt.hoehe': 600 },
+  };
+  const ok = store.getState().executeCommand({ type: 'ADD_NODE', node: radiator as SceneNode });
+  assert.equal(ok, true, 'ADD_NODE(radiator) akzeptiert');
+  const rads = store.getState().scene!.nodes.filter((n) => n.type === 'object' && (n as ObjectNode).objectType === 'radiator');
+  assert.equal(rads.length, 1);
+  assert.equal((rads[0] as ObjectNode).parameters['objekt.typ'], '01_kompakt');
+});

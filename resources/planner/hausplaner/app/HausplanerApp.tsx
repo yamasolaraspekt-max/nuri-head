@@ -211,6 +211,11 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     (n): n is ObjectNode => n.type === 'object' && n.objectType === 'stair'
       && selectedNodeIds.length === 1 && selectedNodeIds[0] === n.id,
   ) ?? null);
+  // Generisches Objekt (radiator/wallbox/… außer stair) — Auswahl fürs Panel.
+  const selectedObjekt = (nodes.find(
+    (n): n is ObjectNode => n.type === 'object' && n.objectType !== 'stair'
+      && selectedNodeIds.length === 1 && selectedNodeIds[0] === n.id,
+  ) ?? null);
   const selectedStairParams: TreppeParams | null = selectedStair ? parametereZuTreppe(selectedStair.parameters) : null;
   function aktualisiereTreppe(aenderung: Partial<TreppeParams>): void {
     if (!selectedStair || !selectedStairParams) return;
@@ -979,6 +984,31 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               );
             })}
 
+            {/* Generische Objekte (radiator/wallbox/… außer stair) — Grundriss-Kasten + Label. */}
+            {nodes.filter((n): n is ObjectNode => n.type === 'object' && n.objectType !== 'stair').map((ob) => {
+              const px = ob.transform.position.x;
+              const py = ob.transform.position.y;
+              const laenge = Number(ob.parameters['objekt.laenge']) || 800;
+              const tiefe = 150;
+              const label = String(ob.parameters['objekt.label'] ?? ob.objectType);
+              const ausgewaehlt = selectedNodeIds.includes(ob.id);
+              const farbe = ausgewaehlt ? FARBEN.auswahl : FARBEN.wand;
+              return (
+                <Group key={ob.id} x={px} y={py}
+                  draggable={werkzeug === 'auswahl'}
+                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([ob.id]); } }}
+                  onDragEnd={(e) => {
+                    const nx = Math.round(e.target.x()); const ny = Math.round(e.target.y());
+                    store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: ob.id, changes: { transform: { ...ob.transform, position: { x: nx, y: ny, z: ob.transform.position.z } } } });
+                  }}
+                  onClick={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([ob.id]); } }}
+                >
+                  <Rect x={0} y={0} width={laenge} height={tiefe} cornerRadius={30} stroke={farbe} strokeWidth={40 / zoom} fill={ausgewaehlt ? 'rgba(147,194,28,0.12)' : 'rgba(55,65,81,0.06)'} />
+                  <Text x={0} y={-90} width={laenge} align="center" scaleY={-1} text={label} fontSize={150} fill={FARBEN.gedaempft} listening={false} />
+                </Group>
+              );
+            })}
+
             {/* Vorschau beim Treppezeichnen */}
             {werkzeug === 'treppe' && treppeStart && (
               <Group listening={false}>
@@ -1223,6 +1253,20 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 <input type="number" min={0} value={selectedStairParams.gewuenschteSteigung ?? ''} onChange={(e) => { const v = Math.round(Number(e.target.value)); aktualisiereTreppe({ gewuenschteSteigung: v > 0 ? v : undefined }); }} style={panelInput} />
               </label>
               <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Stufung wird automatisch nach DIN 18065 gerechnet. Bewegen: Treppe im Plan ziehen.</div>
+              <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
+              </div>
+            </>
+          ) : selectedObjekt ? (
+            <>
+              <div style={{ fontWeight: 700, marginBottom: 10 }}>{String(selectedObjekt.parameters['objekt.label'] ?? 'Objekt')}</div>
+              <label style={panelLabel}>Länge (mm)
+                <input type="number" min={100} value={Number(selectedObjekt.parameters['objekt.laenge']) || 0} onChange={(e) => store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedObjekt.id, changes: { parameters: { ...selectedObjekt.parameters, 'objekt.laenge': Math.max(100, Math.round(Number(e.target.value))) } } })} style={panelInput} />
+              </label>
+              <label style={panelLabel}>Höhe (mm)
+                <input type="number" min={100} value={Number(selectedObjekt.parameters['objekt.hoehe']) || 0} onChange={(e) => store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedObjekt.id, changes: { parameters: { ...selectedObjekt.parameters, 'objekt.hoehe': Math.max(100, Math.round(Number(e.target.value))) } } })} style={panelInput} />
+              </label>
+              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Bewegen: im Plan ziehen.</div>
               <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
                 <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
               </div>

@@ -62,6 +62,7 @@ export function HausplanerStudio(): React.ReactElement {
     if (fenster || name === 'Fenster') { setKonfig('fenster'); return; }
     if (name === 'Tür') { setKonfig('tuer'); return; }
     if (name === 'Treppe') { setKonfig('treppe'); return; }
+    if (name === 'Heizkörper') { setKonfig('heizkoerper'); return; }
     zeigeToast(`${name} autark gestartet — kein Gebäude nötig. (Konfigurator folgt.)`);
   };
 

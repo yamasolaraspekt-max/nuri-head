@@ -10,6 +10,7 @@ import { T } from './studioDaten';
 import { Ikon } from './studioUi';
 import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, type OeffnungsBauart } from '../geometry/oeffnungsBauarten';
 import { TREPPEN_BAUARTEN, type TreppenBauart } from '../geometry/treppenBauarten';
+import { HEIZKOERPER_TYPEN, type HeizkoerperTyp } from '../geometry/heizkoerperTypen';
 import { neuesPaket, type ConfiguratorType } from '../geometry/configuratorPackage';
 import { useHausplanerStore } from '../store/hausplanerStore';
 import type { SceneNode, WallNode, OpeningNode, ObjectNode } from '../domain/scene.types';
@@ -17,7 +18,7 @@ import { treppeZuParametern } from '../geometry/treppeObjekt';
 
 const ICON_BASE = new URL('.', import.meta.url).href;
 
-export type KonfigArt = 'fenster' | 'tuer' | 'treppe';
+export type KonfigArt = 'fenster' | 'tuer' | 'treppe' | 'heizkoerper';
 
 interface Props {
   art: KonfigArt;
@@ -33,17 +34,18 @@ const SCHRITTE = ['Bauart', 'Maße', 'Material', 'Prüfung', 'Übernehmen'] as c
 function katalogFür(art: KonfigArt): { ordner: string; titel: string; kacheln: Kachel[] } {
   if (art === 'fenster') return { ordner: 'fenster', titel: 'Fenster konfigurieren', kacheln: FENSTER_BAUARTEN as readonly OeffnungsBauart[] as Kachel[] };
   if (art === 'tuer') return { ordner: 'tuer', titel: 'Tür konfigurieren', kacheln: TUER_BAUARTEN as readonly OeffnungsBauart[] as Kachel[] };
-  return { ordner: 'treppe', titel: 'Treppe konfigurieren', kacheln: TREPPEN_BAUARTEN as readonly TreppenBauart[] as Kachel[] };
+  if (art === 'treppe') return { ordner: 'treppe', titel: 'Treppe konfigurieren', kacheln: TREPPEN_BAUARTEN as readonly TreppenBauart[] as Kachel[] };
+  return { ordner: 'heizkoerper', titel: 'Heizkörper konfigurieren', kacheln: HEIZKOERPER_TYPEN as readonly HeizkoerperTyp[] as unknown as Kachel[] };
 }
 
-const TYP_MAP: Record<KonfigArt, ConfiguratorType> = { fenster: 'window', tuer: 'door', treppe: 'stair' };
+const TYP_MAP: Record<KonfigArt, ConfiguratorType> = { fenster: 'window', tuer: 'door', treppe: 'stair', heizkoerper: 'radiator' };
 
 export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }: Props): React.ReactElement {
   const { ordner, titel, kacheln } = katalogFür(art);
   const [schritt, setSchritt] = React.useState(0);
   const [wahl, setWahl] = React.useState<Kachel>(kacheln[0]);
-  const [breite, setBreite] = React.useState(art === 'treppe' ? 1000 : 1010);
-  const [hoehe, setHoehe] = React.useState(art === 'fenster' ? 1360 : 2010);
+  const [breite, setBreite] = React.useState(art === 'treppe' ? 1000 : art === 'heizkoerper' ? 1000 : 1010);
+  const [hoehe, setHoehe] = React.useState(art === 'fenster' ? 1360 : art === 'heizkoerper' ? 600 : 2010);
 
   const iconUrl = (k: Kachel): string => `${ICON_BASE}icons/${ordner}/${k.datei}`;
   const letzter = schritt === SCHRITTE.length - 1;
@@ -147,6 +149,22 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
               const id = (globalThis.crypto?.randomUUID?.() ?? `cfg-${jetzt}-${wahl.id}`);
               const store = useHausplanerStore.getState();
               const scene = store.scene;
+              // Heizkörper ist freistehend: als ObjectNode 'radiator' ins aktive Geschoss (verschiebbar).
+              if (art === 'heizkoerper' && scene) {
+                const levelId = store.activeLevelId ?? scene.levels[0]?.id ?? null;
+                const level = scene.levels.find((l) => l.id === levelId) ?? scene.levels[0];
+                if (level) {
+                  const radiator: ObjectNode = {
+                    id, type: 'object', objectType: 'radiator', catalogItemId: 'radiator-default', levelId: level.id,
+                    visible: true, locked: false, tags: [], createdAt: jetzt, updatedAt: jetzt,
+                    transform: { position: { x: 2000, y: 500, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 1 } },
+                    parameters: { 'objekt.typ': wahl.id, 'objekt.label': wahl.label, 'objekt.laenge': breite, 'objekt.hoehe': hoehe },
+                  };
+                  const ok = store.executeCommand({ type: 'ADD_NODE', node: radiator as SceneNode });
+                  onÜbernehmen(ok ? `Heizkörper „${wahl.label}" ins Modell gesetzt — im Plan verschiebbar.` : `Heizkörper: Platzierung abgelehnt.`);
+                  return;
+                }
+              }
               // Treppe ist freistehend: bei geladener Szene direkt als ObjectNode ins Modell (Standard-Lauflinie, verschiebbar).
               if (art === 'treppe' && scene) {
                 const levelId = store.activeLevelId ?? scene.levels[0]?.id ?? null;
