@@ -23,6 +23,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import type { ObjectNode, OpeningNode, SceneDocument, WallNode, RoofNode } from '../../domain/scene.types';
 import type { RendererAdapter } from './adapter';
 import { weltZuThree } from './adapter';
+import { captureAusFenster, SNAPSHOT_GLOBAL } from './capture';
 import { segmentiereWand } from './segmentierung';
 import { platziereWandQuader, bodenPunkteThree, platziereTreppenStufe } from './platzierung';
 import { treppe3DKoerper } from '../../geometry/treppe3D';
@@ -85,6 +86,8 @@ export class HausplanerDreiDSzene implements RendererAdapter {
   private ausgewaehlt = new Set<string>();
   private rafId = 0;
   private readonly aufKlickAuswahl?: (nodeId: string | null) => void;
+  /** Capture-Modus (?capture=1): preserveDrawingBuffer + window-Snapshot-Global aktiv. Sonst false. */
+  private readonly captureAktiv: boolean;
   /** Render-Welle 1: PMREM-Ziel der RoomEnvironment — im dispose() freigeben (kein GPU-Leak, Kante Spec §5). */
   private readonly umgebung: THREE.WebGLRenderTarget;
 
@@ -92,7 +95,9 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     this.container = container;
     this.aufKlickAuswahl = aufKlickAuswahl;
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    // preserveDrawingBuffer NUR mit Capture-Flag — im Normalbetrieb kostet es Leistung (keine Regression).
+    this.captureAktiv = captureAusFenster();
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: this.captureAktiv });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(container.clientWidth || 1, container.clientHeight || 1);
     this.renderer.shadowMap.enabled = true;                   // Pro-CAD: echte Schlagschatten
@@ -100,6 +105,11 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;  // filmisches Tone-Mapping (Kontrast/Farbe)
     this.renderer.toneMappingExposure = 1.05;
     container.appendChild(this.renderer.domElement);
+
+    // Nur im Capture-Modus: Snapshot-Fenster für den Evaluator (Puppeteer/CDP ruft window.__hausplanerSnapshot3d()).
+    if (this.captureAktiv && typeof window !== 'undefined') {
+      (window as unknown as Record<string, () => string>)[SNAPSHOT_GLOBAL] = () => this.snapshot();
+    }
 
     this.szene = new THREE.Scene();
     this.szene.background = new THREE.Color(0xeef1f5);        // helles CI-Studio
@@ -215,6 +225,16 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     this.baueInhalt();
   }
 
+  /**
+   * 3D-Standbild als PNG-DataURL (rendert synchron, liest dann den Framebuffer). Für die Evaluator-
+   * Sichtprüfung des WebGL-Frames (U-Dach, künftige 3D-Slices). Ohne Capture-Flag ist der Puffer
+   * nach dem Buffer-Swap geleert ⇒ nur mit `?capture=1` verlässlich nicht-leer.
+   */
+  snapshot(): string {
+    this.renderer.render(this.szene, this.kamera);
+    return this.renderer.domElement.toDataURL('image/png');
+  }
+
   /** Kante 6: WebGL-Ressourcen vollständig freigeben (Speicherleck beim Verlassen). */
   dispose(): void {
     cancelAnimationFrame(this.rafId);
@@ -226,6 +246,10 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     this.steuerung.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();
+    // Capture-Global nur räumen, wenn diese Szene es gesetzt hat (kein Fremd-Handle löschen).
+    if (this.captureAktiv && typeof window !== 'undefined') {
+      delete (window as unknown as Record<string, unknown>)[SNAPSHOT_GLOBAL];
+    }
     this.dokument = null;
   }
 
