@@ -64,6 +64,7 @@ export function sonnenRichtung(
 
 const FARBE_WAND = 0xd9dee5;      // heller Putz — Form über Schatten + Kanten
 const FARBE_BODEN = 0xe3d8c4;     // warmer, klar erkennbarer Bodenton (hebt sich von Wänden/Hintergrund ab)
+const FARBE_DECKE = 0xeef0f2;     // helle, kühle Decke — nur von unten/innen sichtbar (Rückseiten-Culling)
 const FARBE_DACH = 0xc0895f;      // Terrakotta/Braun (neutral, keine Statusfarbe)
 const FARBE_AUSWAHL = 0xa3e635;   // Marken-/Akzent-Grün (einzige Akzentfarbe)
 const FARBE_GEKLEMMT = 0xe8b93c;  // Amber — Kante 2 sichtbar markiert
@@ -350,6 +351,28 @@ export class HausplanerDreiDSzene implements RendererAdapter {
       mesh.position.y = boden.y;
       mesh.receiveShadow = true;
       mesh.userData.nodeId = raum.id;
+      this.inhalt.add(mesh);
+    }
+
+    // Decken (obere Raumabschlüsse): dieselbe Raumpolygon-Fläche wie der Boden, auf Wandhöhe
+    // (level.elevation + defaultWallHeight). RÜCKSEITEN-CULLING (side: BackSide) ⇒ nur von UNTEN/
+    // innen sichtbar; von oben durchsichtig, damit die Draufsicht nicht verdeckt wird. Kein
+    // userData.nodeId (dekorativ, nicht selektierbar — der Boden trägt die Raum-Selektion).
+    const deckenHoehe = level.elevation + level.defaultWallHeight;
+    for (const raum of raeume) {
+      if (raum.polygon.length < 3) {
+        continue;
+      }
+      const decke = bodenPunkteThree(raum.polygon, deckenHoehe);
+      const form = new THREE.Shape();
+      decke.punkte.forEach((p, i) => (i === 0 ? form.moveTo(p.x, -p.z) : form.lineTo(p.x, -p.z)));
+      const mesh = new THREE.Mesh(
+        new THREE.ShapeGeometry(form),
+        new THREE.MeshStandardMaterial({ color: FARBE_DECKE, side: THREE.BackSide }),
+      );
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.position.y = decke.y;
+      mesh.receiveShadow = true;
       this.inhalt.add(mesh);
     }
 
