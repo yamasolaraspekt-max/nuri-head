@@ -83,7 +83,10 @@ function dachRoh(roof: RoofNode): DachRoh {
   let firstHoehe = zt;
 
   switch (roof.roofType) {
+    // W-3b Stufe 2a: 'rect' = rechteckige Grundform ⇒ definiertes Verhalten wie 'flach' (flache Fläche),
+    // KEIN stiller Wegfall mehr durchs switch (Evaluator-Auflage aus Stufe 1).
     case 'flach':
+    case 'rect':
       flaechen.push({
         surfaceId: `${roof.id}#0`, rechteckig: true, neigungRad: 0,
         ecken: [w(-a, -b, zt), w(a, -b, zt), w(a, b, zt), w(-a, b, zt)],

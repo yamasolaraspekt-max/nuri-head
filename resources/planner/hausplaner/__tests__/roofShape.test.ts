@@ -75,3 +75,12 @@ test('istVerschneidungsForm trennt L/T/U von den Rechteck-Formen', () => {
   assert.equal(istVerschneidungsForm('sattel'), false);
   assert.equal(istVerschneidungsForm('rect'), false);
 });
+
+test('W-3b Stufe 2a: rect hat definiertes Verhalten (wie flach) — kein stiller Wegfall', () => {
+  const roof = docMit('rect').roofs[0] as RoofNode;
+  const mesh = dachMeshWelt(roof);
+  assert.ok(mesh.dreiecke.length > 0, 'rect liefert Dreiecke (nicht leer durchs switch)');
+  const faces = dachflaechen(roof);
+  assert.equal(faces.length, 1, 'rect liefert genau 1 rechteckige Fläche (wie flach)');
+  assert.equal(faces[0].neigungRad, 0, 'rect ist flach (Neigung 0)');
+});
