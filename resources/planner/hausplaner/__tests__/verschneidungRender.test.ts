@@ -47,10 +47,9 @@ test('U rendert echte Flächen aus dachUForm (nicht mehr leer)', () => {
   assert.deepEqual(dachflaechen(roof('u-shape', U_ANBAU)), []);
 });
 
-test('Fix: u-shape mit NUR length/width (kein lengthB/widthB) → U rendert nicht-leer (war maskiert)', () => {
+test('u-shape ohne Innenhof (nur length/width) → leer: die Kerbe wird NICHT erfunden (Operanden-Gate)', () => {
   const mesh = dachMeshWelt(roof('u-shape', { length: 12000, width: 8000 }));
-  assert.ok(mesh.dreiecke.length > 0, 'u-shape mit nur Hauptbau-Maßen muss rendern (Schenkel abgeleitet)');
-  assert.ok(mesh.firstHoeheMm > 6000, 'Firsthöhe über der Traufe');
+  assert.deepEqual(mesh.dreiecke, [], 'ohne lengthB/widthB fehlt die U-definierende Kerbe → kein Rateswert');
 });
 
 test('U ohne anbau → leer + kein Crash (Marker-Pfad)', () => {
