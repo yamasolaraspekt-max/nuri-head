@@ -1,14 +1,16 @@
 /**
  * ConfigWizard (v9) — geführter Konfigurator-Dialog für Fenster/Tür/Treppe.
  * Nutzt die echten Premium-Bauart-Icons (public/hausplaner/icons/*). Schritte: Bauart → Maße →
- * Material → Prüfung → Übernehmen, mit Live-Vorschau. Präsentativ: „Übernehmen" meldet den Entwurf
- * (das eigentliche Schreiben ins Modell/als ConfiguratorPackage ist die nächste Scheibe).
+ * Material → Prüfung → Übernehmen, mit Live-Vorschau. „Übernehmen" erzeugt ein echtes autarkes
+ * ConfiguratorPackage (geometry/configuratorPackage.ts) und lädt es als JSON herunter. Der Schreibpfad
+ * ins Gebäudemodell (Command) bleibt die nächste Scheibe.
  */
 import React from 'react';
 import { T } from './studioDaten';
 import { Ikon } from './studioUi';
 import { FENSTER_BAUARTEN, TUER_BAUARTEN, type OeffnungsBauart } from '../geometry/oeffnungsBauarten';
 import { TREPPEN_BAUARTEN, type TreppenBauart } from '../geometry/treppenBauarten';
+import { neuesPaket, type ConfiguratorType } from '../geometry/configuratorPackage';
 
 const ICON_BASE = new URL('.', import.meta.url).href;
 
@@ -30,6 +32,8 @@ function katalogFür(art: KonfigArt): { ordner: string; titel: string; kacheln: 
   if (art === 'tuer') return { ordner: 'tuer', titel: 'Tür konfigurieren', kacheln: TUER_BAUARTEN as readonly OeffnungsBauart[] as Kachel[] };
   return { ordner: 'treppe', titel: 'Treppe konfigurieren', kacheln: TREPPEN_BAUARTEN as readonly TreppenBauart[] as Kachel[] };
 }
+
+const TYP_MAP: Record<KonfigArt, ConfiguratorType> = { fenster: 'window', tuer: 'door', treppe: 'stair' };
 
 export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }: Props): React.ReactElement {
   const { ordner, titel, kacheln } = katalogFür(art);
@@ -134,7 +138,24 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
           <span style={{ fontSize: 12.5, color: T.muted }}>Status: <b style={{ color: T.accentInk }}>Entwurf</b> · {standalone ? 'als ConfiguratorPackage speicherbar' : 'Undo/Redo im Modell'}</span>
           <span style={{ marginLeft: 'auto', display: 'flex', gap: 10 }}>
             <button type="button" onClick={() => setSchritt(Math.max(0, schritt - 1))} style={{ border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600, fontSize: 14, padding: '11px 20px', borderRadius: 12, cursor: 'pointer' }}>Zurück</button>
-            <button type="button" onClick={() => { if (letzter) onÜbernehmen(wahl.label); else setSchritt(schritt + 1); }} style={{ border: 0, background: T.brand, color: '#fff', fontWeight: 700, fontSize: 14, padding: '11px 26px', borderRadius: 12, cursor: 'pointer' }}>{letzter ? 'Übernehmen' : 'Weiter'}</button>
+            <button type="button" onClick={() => {
+              if (!letzter) { setSchritt(schritt + 1); return; }
+              const jetzt = new Date().toISOString();
+              const id = (globalThis.crypto?.randomUUID?.() ?? `cfg-${jetzt}-${wahl.id}`);
+              const paket = neuesPaket({
+                id, type: TYP_MAP[art], jetzt, autor: 'Solar Aspekt',
+                parameters: { bauart: wahl.id, bauartLabel: wahl.label, breiteMm: breite, hoeheMm: hoehe, autark: standalone },
+                geometry: { breite, hoehe },
+              });
+              try {
+                const blob = new Blob([JSON.stringify(paket, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = `konfigurator-${art}-${wahl.id}.json`; a.click();
+                URL.revokeObjectURL(url);
+              } catch { /* Download optional — Übernahme meldet trotzdem */ }
+              onÜbernehmen(wahl.label);
+            }} style={{ border: 0, background: T.brand, color: '#fff', fontWeight: 700, fontSize: 14, padding: '11px 26px', borderRadius: 12, cursor: 'pointer' }}>{letzter ? 'Übernehmen' : 'Weiter'}</button>
           </span>
         </div>
       </div>
