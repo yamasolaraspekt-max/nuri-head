@@ -198,7 +198,9 @@ export const roofNodeSchema = z
     ...baseNode,
     type: z.literal('roof'),
     polygon: z.array(punkt2).min(3),
-    roofType: z.enum(['sattel', 'walm', 'pult', 'flach']),
+    // W-3b: additiv um rect/l/t/u-shape erweitert (die 4 Alt-Formen unverändert → Bestand bleibt gültig,
+    // kein 422). Spiegelt domain/roofShape.ts (ROOF_SHAPES) — eine Wahrheit.
+    roofType: z.enum(['sattel', 'walm', 'pult', 'flach', 'rect', 'l-shape', 't-shape', 'u-shape']),
     neigungGrad: z.number().min(0).max(89),
     firstAzimutGrad: z.number(),
     ueberstandMm: mmNonNeg,

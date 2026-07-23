@@ -144,5 +144,10 @@ export function dachFlaechen(roof: RoofNode): DachFlaeche[] {
         { flaeche_m2: walm, azimut_grad: normAz(az + 180), neigung_grad: n, first_laenge_mm: firstLenMm },
       ];
     }
+
+    default:
+      // W-3b: rect/l/t/u-shape — zusammengesetzte/rechteckige Neuformen. Flächenprojektion (inkl.
+      // Verschneidungsflächen) folgt in Stufe 2; hier bewusst keine Fläche statt eines Rateswerts.
+      return [];
   }
 }

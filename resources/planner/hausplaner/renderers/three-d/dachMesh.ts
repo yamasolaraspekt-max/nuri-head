@@ -8,7 +8,16 @@
  * (zwei unabhängige Rechnungen, gleiche Wahrheit). Überstand als Rechteck-Erweiterung modelliert (V1).
  */
 import type { RoofNode } from '../../domain/scene.types';
+import { istVerschneidungsForm, type RoofShape } from '../../domain/roofShape';
 import { pruefeRechteckigeKontur } from '../../geometry/dachGeometrie';
+import type { EngineRoofShape } from '../../geometry/dachformVorlagen';
+
+// W-3b (B1): Compile-Beweis, dass die Engine-Formen eine TEILMENGE der einen RoofShape-Wahrheit sind
+// (kein gespiegelter Zweit-Typ, der auseinanderläuft). Bricht tsc, sobald jemand EngineRoofShape um
+// einen Wert erweitert, den domain/roofShape.ts nicht kennt.
+type _EngineFormenSindTeilmenge = EngineRoofShape extends RoofShape ? true : never;
+const _engineSubsetBeweis: _EngineFormenSindTeilmenge = true;
+void _engineSubsetBeweis;
 
 export interface WeltPunkt3 {
   x: number;
@@ -47,6 +56,13 @@ interface DachRoh {
  * @throws DachGeometrieUngueltig  bei nicht-rechteckiger Kontur (Kante 1).
  */
 function dachRoh(roof: RoofNode): DachRoh {
+  // W-3b: L/T/U (Verschneidungsformen) validieren bereits (Schema), werden aber erst in Stufe 2 über die
+  // Verschneidungs-Engine gerendert. Der Kontur-Guard steht EINMAL hier in der geteilten Quelle ⇒ wirkt
+  // automatisch für dachMeshWelt (Triangulierung) UND dachflaechen (Filter): leeres Ergebnis statt
+  // pauschalem Kontur-Wurf (kein Crash). Rechteckige Formen (inkl. rect): Verhalten unverändert.
+  if (istVerschneidungsForm(roof.roofType)) {
+    return { firstHoeheMm: Math.round(roof.traufhoeheMm), flaechen: [] };
+  }
   const { laengeMm, spannMm, cx, cy } = pruefeRechteckigeKontur(roof.polygon, roof.firstAzimutGrad);
   const rad = (roof.firstAzimutGrad * Math.PI) / 180;
   const ux = Math.sin(rad);

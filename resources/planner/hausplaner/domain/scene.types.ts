@@ -11,6 +11,8 @@
  * noch Renderer (Union vollständig, damit schema_version 1 stabil bleibt).
  */
 
+import type { RoofShape } from './roofShape';
+
 export const SCHEMA_VERSION = 2 as const;
 
 // ---------------------------------------------------------------- Dokument
@@ -253,7 +255,8 @@ export interface RoofNode extends BaseNode {
   /** Traufkontur in mm (Default = Gebäude-Umriss des Levels). */
   polygon: Array<{ x: number; y: number }>;
 
-  roofType: 'sattel' | 'walm' | 'pult' | 'flach';
+  // W-3b: eine RoofShape-Wahrheit (additiv um rect/l/t/u-shape erweitert; die 4 Alt-Formen unverändert).
+  roofType: RoofShape;
 
   neigungGrad: number;        // 0 = flach; < 90 (cos > 0, sichererCos)
   firstAzimutGrad: number;    // First-RICHTUNG (Grad); Flächen-Azimute werden daraus abgeleitet
@@ -303,7 +306,9 @@ export interface RaumGeometrieProjektion {
 export interface DachFlaecheProjektion {
   geschoss: number;
   roof_id: string;
-  dachtyp: 'sattel' | 'walm' | 'pult' | 'flach';
+  // W-3b: additiv auf die eine RoofShape-Wahrheit geweitet. Zur Laufzeit projiziert Stufe 1 nur die 4
+  // rechteckigen Alt-Formen (dachFlaechen liefert für rect/l/t/u [] ⇒ kein Eintrag); Stufe 2 ergänzt L/T/U.
+  dachtyp: RoofShape;
   flaeche_m2: number;
   azimut_grad: number | null;   // null = horizontal (Flachdach); sonst abgeleitet aus der First-Richtung
   neigung_grad: number;

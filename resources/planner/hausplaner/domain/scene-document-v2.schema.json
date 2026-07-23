@@ -696,7 +696,11 @@
               "sattel",
               "walm",
               "pult",
-              "flach"
+              "flach",
+              "rect",
+              "l-shape",
+              "t-shape",
+              "u-shape"
             ]
           },
           "neigungGrad": {
