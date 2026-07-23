@@ -59,5 +59,7 @@ export interface RendererAdapter {
   focusNode(nodeId: string): void;
   fitToScene(): void;
   setActiveLevel(levelId: string): void;
+  /** 3D-Frame als PNG-DataURL (Evaluator-Sichtprüfung; nur mit ?capture=1 verlässlich nicht-leer). */
+  snapshot(): string;
   dispose(): void;
 }
