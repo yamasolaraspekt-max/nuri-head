@@ -84,6 +84,12 @@ export interface ToolDefinition {
   helpText: string;
   /** Grund, wenn generell nicht anwendbar (Fallback, falls keine spezifische Regel greift). */
   disabledReasonDefault?: string;
+
+  /** UI-3b (65-Tool-Paket, additiv): Anzeige-Metadaten fuer Tooltip/Dashboard. */
+  meaning?: string;
+  usageArea?: string;
+  group?: string;
+  tooltip?: { title: string; body: string; usage: string; shortcut?: string };
 }
 
 /** Kontext, gegen den die Aktivierung ausgewertet wird (aus UI-State + Modell-Store + Rechten). */
