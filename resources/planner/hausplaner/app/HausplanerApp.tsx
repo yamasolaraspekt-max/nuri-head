@@ -30,6 +30,7 @@ import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../ge
 import { PROFIL_KATALOG, VERGLASUNG_KATALOG, berechneUw, rcMachbar, preisFenster, profilNach, verglasungNach, type OeffnungsArt, type RcKlasse } from '../geometry/fensterProdukt';
 import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, tuerBauartNach } from '../geometry/oeffnungsBauarten';
 import { TREPPEN_BAUARTEN, treppenBauartNach } from '../geometry/treppenBauarten';
+import { FaehigkeitenNavi } from './FaehigkeitenNavi';
 
 // Basis-URL der Icon-Assets — aus dem Bundle-Standort abgeleitet (traegt Subpfad/Domain).
 const ICON_BASE = new URL('.', import.meta.url).href;
@@ -47,13 +48,8 @@ const navGrp: React.CSSProperties = { fontSize: 10, fontWeight: 700, letterSpaci
 const navItem = (aktiv: boolean): React.CSSProperties => ({ display: 'flex', alignItems: 'center', gap: 9, textAlign: 'left', width: 'calc(100% - 12px)', margin: '1px 6px', padding: '8px 8px', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 13, background: aktiv ? 'rgba(147,194,28,0.12)' : 'transparent', color: aktiv ? '#3f5a00' : '#1f2937', fontWeight: aktiv ? 700 : 500 });
 const navHub: React.CSSProperties = { fontSize: 12.5, fontWeight: 600, color: '#1f2937', padding: '8px 12px 2px' };
 const navSub: React.CSSProperties = { fontSize: 12.5, color: '#6b7280', padding: '6px 12px 6px 22px' };
-const FACHPLANER: ReadonlyArray<{ name: string; items: readonly string[] }> = [
-  { name: 'Haustechnik', items: ['Heizung', 'Heizlastberechnung', 'Lüftung', 'Klima', 'Wärmepumpe', 'Heizkörper', 'Fußbodenheizung', 'Wärme-Contracting'] },
-  { name: 'PV-Planer', items: ['PV-Module', 'Speicherauslegung', 'Wallbox', 'Carport', 'Zaun', 'Freiland', 'HEMS', 'Messstellenbetrieb', 'dynamischer Stromtarif', 'Mietstrom'] },
-  { name: 'Bauelemente', items: ['Fenster', 'Tür'] },
-  { name: 'Bad', items: [] },
-  { name: 'Küche', items: [] },
-];
+// Batch 0: die frühere FACHPLANER-Attrappe (inerte `geplant`-Labels) ist durch die datengetriebene
+// Fähigkeiten-Navi (app/tools/faehigkeiten.ts + FaehigkeitenNavi) ersetzt — eine Wahrheit, mit Zustand.
 
 // SVG-Icons (frei/Feather-Stil, nachgezeichnet) — einheitlich 24er-Viewbox, stroke=currentColor.
 function svgWrap(children: React.ReactNode): React.ReactElement {
@@ -776,16 +772,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               </button>
             );
           })}
-          <div style={navGrp}>Fachplaner</div>
-          {FACHPLANER.map((g) => (
-            <React.Fragment key={g.name}>
-              <div style={{ ...navHub, display: 'flex', alignItems: 'center', gap: 8 }} title={`${g.name} — Fachplaner (autark, geplant)`}>
-                <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', color: '#6b7280', flex: '0 0 auto' }}>{fachIcon(g.name)}</span>
-                <span>{g.name}</span>
-              </div>
-              {g.items.map((it) => (<div key={it} style={navSub} title={`${it} — autark konfigurierbar (geplant)`}>{it}</div>))}
-            </React.Fragment>
-          ))}
+          <FaehigkeitenNavi
+            activeToolId={werkzeug}
+            onAktivieren={(id) => { setWerkzeug(id as Werkzeug); setWandStart(null); setTreppeStart(null); }}
+          />
           <div style={{ padding: '10px 12px', fontSize: 11, color: '#9ca3af', borderTop: '1px solid #eef0f2', marginTop: 'auto' }}>Erweiterbar – Module folgen.</div>
         </div>
         <div style={{ display: modus === '3d' ? 'none' : 'block', width: stageBreite, borderRight: modus === 'split' ? '1px solid #e5e7eb' : 'none' }}>
