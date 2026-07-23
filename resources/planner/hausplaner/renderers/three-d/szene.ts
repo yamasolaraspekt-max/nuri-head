@@ -20,13 +20,14 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import type { ObjectNode, OpeningNode, SceneDocument, WallNode, ZoneNode } from '../../domain/scene.types';
+import type { ObjectNode, OpeningNode, SceneDocument, WallNode } from '../../domain/scene.types';
 import type { RendererAdapter } from './adapter';
 import { weltZuThree } from './adapter';
 import { segmentiereWand } from './segmentierung';
 import { platziereWandQuader, bodenPunkteThree, platziereTreppenStufe } from './platzierung';
 import { treppe3DKoerper } from '../../geometry/treppe3D';
 import { parametereZuTreppe } from '../../geometry/treppeObjekt';
+import { erkenneRaeume } from '../../geometry/roomDetection';
 import { dachMeshWelt } from './dachMesh';
 import { DachGeometrieUngueltig } from '../../geometry/dachGeometrie';
 
@@ -62,7 +63,7 @@ export function sonnenRichtung(
 }
 
 const FARBE_WAND = 0xd9dee5;      // heller Putz — Form über Schatten + Kanten
-const FARBE_BODEN = 0xe4e7eb;     // heller Boden (CI)
+const FARBE_BODEN = 0xe3d8c4;     // warmer, klar erkennbarer Bodenton (hebt sich von Wänden/Hintergrund ab)
 const FARBE_DACH = 0xc0895f;      // Terrakotta/Braun (neutral, keine Statusfarbe)
 const FARBE_AUSWAHL = 0xa3e635;   // Marken-/Akzent-Grün (einzige Akzentfarbe)
 const FARBE_GEKLEMMT = 0xe8b93c;  // Amber — Kante 2 sichtbar markiert
@@ -271,7 +272,9 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     const oeffnungen = knoten.filter(
       (n): n is OpeningNode => n.type === 'window' || n.type === 'door' || n.type === 'opening',
     );
-    const raeume = knoten.filter((n): n is ZoneNode => n.type === 'zone' && n.zoneType === 'room');
+    // Böden abgeleitet aus derselben Raumerkennung wie im 2D (Räume = Projektion der Wände,
+    // keine zweite Wahrheit). Level ohne geschlossenen Ring ⇒ keine Räume ⇒ keine Böden (Kante 4).
+    const raeume = erkenneRaeume(waende, level.defaultWallHeight).map((r, i) => ({ id: `raum-${level.id}-${i}`, polygon: r.polygon }));
 
     // Wände: ein Mesh je Quader (Kante 7); Klemm-Segmente in Warnfarbe (Kante 2).
     for (const wand of waende) {
