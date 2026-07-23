@@ -11,9 +11,10 @@
  * - Ablehnung = CommandAbgelehnt-Throw VOR jeder Mutation relevanter Werte; der Store
  *   verwirft den Draft, die Szene bleibt unverändert.
  */
-import type { SceneDocument, SceneNode, WallNode, OpeningNode, RoofNode, RoofAufbau } from '../domain/scene.types';
+import type { SceneDocument, SceneNode, WallNode, OpeningNode, RoofNode, RoofAufbau, CeilingNode, CeilingOeffnung } from '../domain/scene.types';
 import { CommandAbgelehnt, type HausplanerCommand } from '../domain/commands.types';
 import { wandLaenge } from '../geometry/wallGeometry';
+import { parametereZuTreppe } from '../geometry/treppeObjekt';
 
 function nodeOderFehler(draft: SceneDocument, nodeId: string): SceneNode {
   const node = draft.nodes.find((n) => n.id === nodeId);
@@ -98,6 +99,43 @@ function pruefeNeueOeffnung(draft: SceneDocument, oeffnung: OpeningNode): void {
   if (oeffnung.offsetFromWallStart + oeffnung.width > laenge) {
     throw new CommandAbgelehnt('Öffnung ragt über das Wandende.', 'oeffnung_passt_nicht');
   }
+}
+
+/** mm-Invariante der Deckengeometrie (Umriss + Öffnungen + Dicke). */
+function pruefeDeckeGanzzahlig(ceiling: CeilingNode): void {
+  const koords = ceiling.polygon.flatMap((p) => [p.x, p.y]);
+  const lochKoords = (ceiling.oeffnungen ?? []).flatMap((o) => o.polygon.flatMap((p) => [p.x, p.y]));
+  pruefeGanzzahlig([...koords, ...lochKoords, ceiling.dickeMm], 'Decke');
+}
+
+/** Je Level max. 1 Decke (wie Dach). */
+function pruefeDeckeProLevel(draft: SceneDocument, ceiling: CeilingNode): void {
+  if ((draft.ceilings ?? []).some((c) => c.id !== ceiling.id && c.levelId === ceiling.levelId)) {
+    throw new CommandAbgelehnt(`Level ${ceiling.levelId} hat bereits eine Decke (max. 1 je Level).`, 'decke_pro_level_vorhanden');
+  }
+}
+
+/** Treppendurchbrüche: je Treppe im Level ein Loch-Rechteck (Lauflinie ± halbe Laufbreite), mm-ganzzahlig. */
+function treppenDurchbrueche(draft: SceneDocument, levelId: string): CeilingOeffnung[] {
+  const loecher: CeilingOeffnung[] = [];
+  for (const n of draft.nodes) {
+    if (n.type !== 'object') continue;
+    if (n.objectType !== 'stair' || n.levelId !== levelId) continue;
+    const tp = parametereZuTreppe(n.parameters);
+    if (!tp) continue;
+    const dx = tp.endX - tp.startX, dy = tp.endY - tp.startY;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len, ny = dx / len;          // Normale zur Lauflinie
+    const h = tp.laufbreite / 2;
+    const p = (x: number, y: number): { x: number; y: number } => ({ x: Math.round(x), y: Math.round(y) });
+    loecher.push({ polygon: [
+      p(tp.startX + nx * h, tp.startY + ny * h),
+      p(tp.endX + nx * h, tp.endY + ny * h),
+      p(tp.endX - nx * h, tp.endY - ny * h),
+      p(tp.startX - nx * h, tp.startY - ny * h),
+    ] });
+  }
+  return loecher;
 }
 
 export function applyCommand(draft: SceneDocument, command: HausplanerCommand, jetztIso: string): void {
@@ -243,6 +281,50 @@ export function applyCommand(draft: SceneDocument, command: HausplanerCommand, j
       draft.roofs = draft.roofs.filter((r) => r.id !== command.roofId);
       if (draft.roofs.length === vorher) {
         throw new CommandAbgelehnt(`Dach ${command.roofId} existiert nicht.`, 'dach_unbekannt');
+      }
+      break;
+    }
+
+    case 'ADD_CEILING': {
+      const ceiling = command.ceiling;
+      if (!draft.levels.some((l) => l.id === ceiling.levelId)) {
+        throw new CommandAbgelehnt(`Level ${ceiling.levelId} existiert nicht.`, 'level_unbekannt');
+      }
+      if (!Array.isArray(draft.ceilings)) {
+        draft.ceilings = []; // Robustheit für Drafts ohne ceilings (Migration ist Lade-seitig).
+      }
+      pruefeDeckeProLevel(draft, ceiling);
+      // Treppen im Level ⇒ automatische Durchbrüche, wenn nicht schon welche gesetzt sind.
+      const auto = (ceiling.oeffnungen && ceiling.oeffnungen.length > 0) ? ceiling.oeffnungen : treppenDurchbrueche(draft, ceiling.levelId);
+      const gespeichert: CeilingNode = { ...ceiling, oeffnungen: auto.length > 0 ? auto : undefined, createdAt: jetztIso, updatedAt: jetztIso };
+      pruefeDeckeGanzzahlig(gespeichert);
+      draft.ceilings.push(gespeichert);
+      break;
+    }
+
+    case 'UPDATE_CEILING': {
+      if (!Array.isArray(draft.ceilings)) {
+        draft.ceilings = [];
+      }
+      const ceiling = draft.ceilings.find((c) => c.id === command.ceilingId);
+      if (!ceiling) {
+        throw new CommandAbgelehnt(`Decke ${command.ceilingId} existiert nicht.`, 'decke_unbekannt');
+      }
+      Object.assign(ceiling as object, command.changes);
+      ceiling.updatedAt = jetztIso;
+      pruefeDeckeProLevel(draft, ceiling); // falls levelId geändert wurde
+      pruefeDeckeGanzzahlig(ceiling);
+      break;
+    }
+
+    case 'REMOVE_CEILING': {
+      if (!Array.isArray(draft.ceilings)) {
+        draft.ceilings = [];
+      }
+      const vorher = draft.ceilings.length;
+      draft.ceilings = draft.ceilings.filter((c) => c.id !== command.ceilingId);
+      if (draft.ceilings.length === vorher) {
+        throw new CommandAbgelehnt(`Decke ${command.ceilingId} existiert nicht.`, 'decke_unbekannt');
       }
       break;
     }

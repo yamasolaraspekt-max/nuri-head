@@ -44,7 +44,7 @@ test('jedes Werkzeug hat Label, Icon, Art und Hilfetext', () => {
 
 test('werkzeugTools = genau die modus-schaltenden Werkzeuge der Leiste (UI-3)', () => {
   const ids = werkzeugTools().map((t) => t.id);
-  assert.deepEqual(ids, ['auswahl', 'wand', 'fenster', 'tuer', 'dach', 'treppe']);
+  assert.deepEqual(ids, ['auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe']);
   // Aktionen (Löschen/Duplizieren) gehören NICHT in die Werkzeugleiste
   assert.ok(!ids.includes('loeschen') && !ids.includes('duplizieren'));
 });

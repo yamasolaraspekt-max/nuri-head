@@ -360,7 +360,10 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     // innen sichtbar; von oben durchsichtig, damit die Draufsicht nicht verdeckt wird. Kein
     // userData.nodeId (dekorativ, nicht selektierbar — der Boden trägt die Raum-Selektion).
     const deckenHoehe = level.elevation + level.defaultWallHeight;
-    for (const raum of raeume) {
+    // Feature A: existiert eine MODELLIERTE Geschossdecke für dieses Level, ersetzt sie die dekorative
+    // Raum-Decke (eine Wahrheit je Level) — sonst bleibt der dekorative Raumabschluss.
+    const hatModellDecke = (dokument.ceilings ?? []).some((c) => c.levelId === level.id && c.visible !== false);
+    for (const raum of hatModellDecke ? [] : raeume) {
       if (raum.polygon.length < 3) {
         continue;
       }
@@ -374,6 +377,37 @@ export class HausplanerDreiDSzene implements RendererAdapter {
       mesh.rotation.x = -Math.PI / 2;
       mesh.position.y = decke.y;
       mesh.receiveShadow = true;
+      this.inhalt.add(mesh);
+    }
+
+    // Modellierte Geschossdecke (Feature A): Slab-mit-Löchern (Treppendurchbrüche) auf der Wand-Oberkante,
+    // selektierbar (userData.nodeId). Polygon minus oeffnungen; eine Geometrie-Quelle je Decke.
+    for (const decke of (dokument.ceilings ?? []).filter((c) => c.levelId === level.id && c.visible !== false)) {
+      if (decke.polygon.length < 3) {
+        continue;
+      }
+      const oberkante = level.elevation + level.defaultWallHeight;
+      const aussen = bodenPunkteThree(decke.polygon, oberkante);
+      const form = new THREE.Shape();
+      aussen.punkte.forEach((p, i) => (i === 0 ? form.moveTo(p.x, -p.z) : form.lineTo(p.x, -p.z)));
+      for (const oeff of decke.oeffnungen ?? []) {
+        if (oeff.polygon.length < 3) {
+          continue;
+        }
+        const loch = bodenPunkteThree(oeff.polygon, oberkante);
+        const pfad = new THREE.Path();
+        loch.punkte.forEach((p, i) => (i === 0 ? pfad.moveTo(p.x, -p.z) : pfad.lineTo(p.x, -p.z)));
+        pfad.closePath();
+        form.holes.push(pfad);
+      }
+      const mesh = new THREE.Mesh(
+        new THREE.ShapeGeometry(form),
+        new THREE.MeshStandardMaterial({ color: this.ausgewaehlt.has(decke.id) ? FARBE_AUSWAHL : FARBE_DECKE, side: THREE.DoubleSide }),
+      );
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.position.y = aussen.y;
+      mesh.receiveShadow = true;
+      mesh.userData.nodeId = decke.id;
       this.inhalt.add(mesh);
     }
 

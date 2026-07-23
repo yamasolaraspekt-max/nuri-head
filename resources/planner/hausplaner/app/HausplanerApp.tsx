@@ -35,7 +35,7 @@ import { FaehigkeitenNavi } from './FaehigkeitenNavi';
 // Basis-URL der Icon-Assets — aus dem Bundle-Standort abgeleitet (traegt Subpfad/Domain).
 const ICON_BASE = new URL('.', import.meta.url).href;
 
-type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe';
+type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe' | 'decke';
 
 const FARBEN = {
   text: '#1f2937', gedaempft: '#6b7280', linie: '#9ca3af', raster: '#eef0f2', rasterGrob: '#e2e4e7',
@@ -64,6 +64,7 @@ function werkzeugIcon(w: string): React.ReactElement {
     case 'fenster': return svgWrap(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M12 4v16M4 12h16" /></>);
     case 'tuer': return svgWrap(<><path d="M7 21V4h9v17" /><path d="M7 21a9 9 0 0 1 9-9" /></>);
     case 'dach': return svgWrap(<path d="M3 12L12 5l9 7" />);
+    case 'decke': return svgWrap(<><rect x="3" y="9" width="18" height="5" rx="1" /><path d="M13 9v5" /></>);
     case 'treppe': return svgWrap(<path d="M3 21h4v-4h4v-4h4v-4h4" />);
     default: return svgWrap(<circle cx="12" cy="12" r="3" />);
   }
@@ -441,6 +442,23 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           createdAt: jetzt, updatedAt: jetzt,
           polygon: gebaeudeUmriss(), roofType: 'sattel', neigungGrad: 35, firstAzimutGrad: 0,
           ueberstandMm: 500, traufhoeheMm: level.elevation + level.defaultWallHeight,
+        },
+      });
+      setWerkzeug('auswahl');
+
+      return;
+    }
+
+    if (werkzeug === 'decke') {
+      // Feature A: eine Decke je Geschoss über den Gebäude-Umriss; Treppen-Durchbrüche setzt der Command
+      // (aus Grundriss). Ein bereits vorhandene Decke lehnt der Command ab (Meldung in der Statusleiste).
+      const jetzt = new Date().toISOString();
+      store.getState().executeCommand({
+        type: 'ADD_CEILING',
+        ceiling: {
+          id: uuid(), type: 'ceiling', levelId: level.id, visible: true, locked: false, tags: [],
+          createdAt: jetzt, updatedAt: jetzt,
+          polygon: gebaeudeUmriss(), dickeMm: level.floorThickness,
         },
       });
       setWerkzeug('auswahl');

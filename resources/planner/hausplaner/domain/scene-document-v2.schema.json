@@ -801,6 +801,102 @@
         "additionalProperties": false
       }
     },
+    "ceilings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "levelId": {
+            "$ref": "#/$defs/__schema4"
+          },
+          "name": {
+            "$ref": "#/$defs/__schema5"
+          },
+          "visible": {
+            "$ref": "#/$defs/__schema6"
+          },
+          "locked": {
+            "$ref": "#/$defs/__schema7"
+          },
+          "tags": {
+            "$ref": "#/$defs/__schema8"
+          },
+          "createdAt": {
+            "$ref": "#/$defs/__schema9"
+          },
+          "updatedAt": {
+            "$ref": "#/$defs/__schema9"
+          },
+          "type": {
+            "type": "string",
+            "const": "ceiling"
+          },
+          "polygon": {
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/__schema10"
+            }
+          },
+          "dickeMm": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "oeffnungen": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "polygon": {
+                  "minItems": 3,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/__schema10"
+                  }
+                }
+              },
+              "required": [
+                "polygon"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "schichten": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "materialId": {
+                  "type": "string"
+                },
+                "dickeMm": {
+                  "$ref": "#/$defs/__schema0"
+                }
+              },
+              "required": [
+                "dickeMm"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "levelId",
+          "visible",
+          "locked",
+          "tags",
+          "createdAt",
+          "updatedAt",
+          "type",
+          "polygon",
+          "dickeMm"
+        ],
+        "additionalProperties": false
+      }
+    },
     "metadata": {
       "type": "object",
       "properties": {

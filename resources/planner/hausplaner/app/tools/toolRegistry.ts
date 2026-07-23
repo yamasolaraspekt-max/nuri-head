@@ -82,6 +82,18 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     helpText: 'Dach über den Gebäudeumriss aufsetzen — dann in 3D betrachten.',
   },
   {
+    id: 'decke',
+    label: 'Decke',
+    icon: 'decke',
+    art: 'werkzeug',
+    groupId: 'gebaeude',
+    supportedWorkspaces: [WORKSPACE_ARCHITEKTUR],
+    supportedViews: ['2d', 'split'],
+    shortcut: 'K',
+    bauteilKind: 'ceiling',
+    helpText: 'Geschossdecke aus dem Grundriss aufsetzen (Treppen werden ausgespart) — Etagen-Basis.',
+  },
+  {
     id: 'treppe',
     label: 'Treppe',
     icon: 'treppe',

@@ -43,6 +43,14 @@ export interface SceneDocument {
    */
   roofs: RoofNode[];
 
+  /**
+   * Decken (Geschossdecken, Feature A). Eigene Sammlung NEBEN nodes[]/roofs[] — additiv (Muster roofs),
+   * damit die Node-Union + Konsumenten unberührt bleiben. Je Level max. 1 Decke (Regel in applyCommand).
+   * v1/v2-Dokumente ohne `ceilings` werden per Lade-Migration auf `ceilings: []` gehoben. OPTIONAL/additiv:
+   * Bestandsdokumente ohne die Sammlung bleiben gültig (Konsumenten nutzen `?? []`). Kein 422.
+   */
+  ceilings?: CeilingNode[];
+
   metadata: {
     createdAt: string;        // ISO-8601
     updatedAt: string;
@@ -265,6 +273,29 @@ export interface RoofNode extends BaseNode {
 
   /** Dachaufbauten (W-3a, OPTIONAL/additiv): Gauben/Dachfenster/Kamin/… auf der Dachfläche. */
   aufbauten?: RoofAufbau[];
+}
+
+/** Durchbruch in einer Decke (z. B. Treppenauge) — Loch-Polygon in mm. Vorbild dachAusschnitt. */
+export interface CeilingOeffnung {
+  polygon: Array<{ x: number; y: number }>;
+}
+
+/**
+ * Geschossdecke (Feature A, additiv). Slab auf der Wand-Oberkante des Levels (level.elevation +
+ * defaultWallHeight), Dicke `dickeMm` (Default level.floorThickness). Durchbrüche (Treppe) als
+ * `oeffnungen`. `schichten` (Fußbodenaufbau) bleibt in Feature A leer — Feature B füllt/rechnet.
+ * Eigene Sammlung `SceneDocument.ceilings` (Muster roofs) ⇒ Node-Union unberührt.
+ */
+export interface CeilingNode extends BaseNode {
+  type: 'ceiling';
+  /** Umriss in mm (Default = Gebäude-Umriss/Raumerkennung des Levels). */
+  polygon: Array<{ x: number; y: number }>;
+  /** Deckendicke in mm (Default = level.floorThickness). */
+  dickeMm: number;
+  /** Durchbrüche (z. B. Treppenauge) — Loch-Polygone in mm. */
+  oeffnungen?: CeilingOeffnung[];
+  /** Fußbodenaufbau (Feature B) — in Feature A leer/optional; feldgleich mit wandaufbau.Schicht. */
+  schichten?: Array<{ materialId?: string; dickeMm: number }>;
 }
 
 // ------------------------------------------- Projektions-Kontrakt (▲K2, P0-Fixture)

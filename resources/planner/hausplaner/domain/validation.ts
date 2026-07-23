@@ -210,6 +210,19 @@ export const roofNodeSchema = z
   })
   .strict();
 
+// Decke (Feature A, additiv): eigenes Schema, NICHT Teil der Node-Union (ceilings[] eigene Sammlung).
+export const ceilingOeffnungSchema = z.object({ polygon: z.array(punkt2).min(3) }).strict();
+export const ceilingNodeSchema = z
+  .object({
+    ...baseNode,
+    type: z.literal('ceiling'),
+    polygon: z.array(punkt2).min(3),
+    dickeMm: mmPos,
+    oeffnungen: z.array(ceilingOeffnungSchema).optional(),
+    schichten: z.array(z.object({ materialId: z.string().optional(), dickeMm: mmPos }).strict()).optional(),
+  })
+  .strict();
+
 export const sceneDocumentSchema = z
   .object({
     id: z.string().min(1),
@@ -224,6 +237,7 @@ export const sceneDocumentSchema = z
     nodes: z.array(nodeSchema),
     materials: z.array(materialSchema),
     roofs: z.array(roofNodeSchema),
+    ceilings: z.array(ceilingNodeSchema).optional(), // additiv: Bestand ohne ceilings bleibt gültig (kein 422)
     metadata: z.object({ createdAt: isoDatum, updatedAt: isoDatum }).strict(),
   })
   .strict();
@@ -242,11 +256,17 @@ export function migriereSzene(roh: unknown): unknown {
     return roh;
   }
   const o = roh as Record<string, unknown>;
+  const mitSammlungen = (): Record<string, unknown> => ({
+    ...o,
+    schemaVersion: 2,
+    roofs: Array.isArray(o.roofs) ? o.roofs : [],
+    ceilings: Array.isArray(o.ceilings) ? o.ceilings : [], // Feature A: additiv, Bestand → [] (kein 422)
+  });
   if (o.schemaVersion === 1) {
-    return { ...o, schemaVersion: 2, roofs: Array.isArray(o.roofs) ? o.roofs : [] };
+    return mitSammlungen();
   }
-  if (o.schemaVersion === 2 && !Array.isArray(o.roofs)) {
-    return { ...o, roofs: [] };
+  if (o.schemaVersion === 2 && (!Array.isArray(o.roofs) || !Array.isArray(o.ceilings))) {
+    return mitSammlungen();
   }
 
   return roh;
