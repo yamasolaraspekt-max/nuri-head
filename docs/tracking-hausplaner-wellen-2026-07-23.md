@@ -25,6 +25,6 @@ Generator-Gates: tsc Exit 0 · 285/285 Tests · Bundle reproduzierbar · alle Mo
 
 ## Offener Rest (nächste Scheiben, brauchen Entscheidung/Bau)
 - [ ] Guided-Schritt-BADGE-Status aus dem Modell ableiten (Zahlen sind schon echt).
-- [ ] Treppen-Öffnung aus dem Wizard ins Modell (Lauflinie/Canvas-Interaktion).
+- [x] Treppen-Öffnung aus dem Wizard ins Modell — erledigt (4f997f6, ObjectNode stair, Standard-Lauflinie).
 - [ ] ConfiguratorPackage serverseitig persistieren (Endpoint) statt nur JSON-Download.
 - [ ] Schüco-/Glas-Echtdaten statt Katalog-Platzhalter (aus DATENBEDARF-SCHUECO-GLAS.md).
