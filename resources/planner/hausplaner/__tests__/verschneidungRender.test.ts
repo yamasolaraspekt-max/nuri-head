@@ -57,7 +57,9 @@ test('U mit degeneriertem anbau (Anbau breiter als Hauptbau) → leer, kein Cras
   assert.deepEqual(mesh.dreiecke, []);
 });
 
-test('l/t bleiben (noch) leer — nur Kehl-/Gratlinien portiert, Flächen Stufe C', () => {
-  assert.deepEqual(dachMeshWelt(roof('l-shape', U_ANBAU)).dreiecke, []);
-  assert.deepEqual(dachMeshWelt(roof('t-shape', U_ANBAU)).dreiecke, []);
+test('l/t rendern jetzt echte Flächen (Teil 3: buildCompoundPitchedFaces portiert)', () => {
+  assert.ok(dachMeshWelt(roof('l-shape', U_ANBAU)).dreiecke.length > 0, 'l-shape rendert');
+  assert.ok(dachMeshWelt(roof('t-shape', U_ANBAU)).dreiecke.length > 0, 't-shape rendert');
+  // degeneriert (Anbau ≥ Hauptbau) bleibt leer — kein NaN-Flächenbau.
+  assert.deepEqual(dachMeshWelt(roof('l-shape', { ...U_ANBAU, widthB: 9000 })).dreiecke, []);
 });

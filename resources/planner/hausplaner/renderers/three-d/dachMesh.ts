@@ -13,6 +13,8 @@ import { pruefeRechteckigeKontur } from '../../geometry/dachGeometrie';
 import type { EngineRoofShape } from '../../geometry/dachformVorlagen';
 // W-3b 2a-2: reine U-Form-Engine NUR aufgerufen (Byte-Treue). Liefert echte Flächen (poly in lokal u/v).
 import { uFormFlaechen, uBauGueltig, type UFormEingabe } from '../../geometry/dachUForm';
+// W-3b Teil 3: L/T-Verschneidungsflächen (byte-treuer Port) — gleiches (origin,uDir,vDir,poly)-Schema wie U.
+import { verschneidungsFlaechen as ltFormFlaechen, lTBauGueltig, type VerschneidungEingabe } from '../../geometry/dachVerschneidung';
 
 // W-3b (B1): Compile-Beweis, dass die Engine-Formen eine TEILMENGE der einen RoofShape-Wahrheit sind
 // (kein gespiegelter Zweit-Typ, der auseinanderläuft). Bricht tsc, sobald jemand EngineRoofShape um
@@ -122,18 +124,29 @@ function triangulierePolygon(poly: ReadonlyArray<{ x: number; y: number }>): Arr
 }
 
 /**
- * W-3b 2a-2: echte Dachflächen der Verschneidungsformen (in `dachRoh`, ersetzt den `→ []`-Guard).
- *  - u-shape: die 6 Flächen aus `uFormFlaechen` (Byte-Treue), Engine-Meter (x=Länge, z=Breite, y=oben)
- *    → Welt (mm, Nord=+y, um den Polygon-Schwerpunkt) transformiert und (konkav-sicher) trianguliert.
- *  - l/t-shape: `dachVerschneidung` liefert nur Kehl-/GRATLINIEN (die Flächen `buildCompoundPitchedFaces`
- *    sind NICHT portiert) ⇒ bewusst leer (Stufe C). Kein stiller Falschbau, kein Crash.
- *  - fehlendes/degeneriertes `anbau` ⇒ leer (Aufrufer setzt Prüf-Marker). Kein erfundener Wert.
+ * W-3b 2a-2 + Teil 3: echte Dachflächen der Verschneidungsformen (in `dachRoh`, ersetzt den `→ []`-Guard).
+ *  - u-shape: die 6 Flächen aus `uFormFlaechen` (Byte-Treue), Engine-Meter (x=Länge, z=Breite, y=oben).
+ *  - l/t-shape (Teil 3): die 4 Flächen aus `verschneidungsFlaechen` (byte-treu `buildCompoundPitchedFaces`)
+ *    — gleiches (origin,uDir,vDir,poly)-Schema, deshalb DIESELBE Transform/Triangulierung wie U.
+ *  - Alle → Welt (mm, Nord=+y, um den Polygon-Schwerpunkt) transformiert und (konkav-sicher) trianguliert.
+ *  - fehlendes/degeneriertes `anbau` ⇒ leer (Aufrufer setzt Prüf-Marker). Kein erfundener Wert, kein Crash.
  */
 function verschneidungsFlaechen(roof: RoofNode): DachRoh {
   const leer: DachRoh = { firstHoeheMm: Math.round(roof.traufhoeheMm), flaechen: [] };
-  if (roof.roofType !== 'u-shape') return leer; // l/t: nur Linien portiert (Stufe C)
   const e = anbauZuEingabe(roof);
-  if (!e || !uBauGueltig(e)) return leer;         // fehlend/degeneriert → Marker/leer
+  if (!e) return leer;                            // fehlendes anbau → Marker/leer
+
+  // Flächenquelle je Form; beide liefern dasselbe Flächen-Schema ⇒ eine Mapping-Schleife (eine Wahrheit).
+  type FlaechenQuelle = ReadonlyArray<{ origin: WeltPunkt3; uDir: WeltPunkt3; vDir: WeltPunkt3; poly: Array<{ x: number; y: number }> }>;
+  let quelle: FlaechenQuelle;
+  if (roof.roofType === 'u-shape') {
+    if (!uBauGueltig(e)) return leer;             // degeneriert → leer
+    quelle = uFormFlaechen(e);
+  } else {
+    const ve: VerschneidungEingabe = { ...e, form: roof.roofType === 't-shape' ? 't' : 'l' };
+    if (!lTBauGueltig(ve)) return leer;           // degeneriert → leer
+    quelle = ltFormFlaechen(ve);
+  }
 
   const c = polygonSchwerpunkt(roof.polygon);
   const azRad = (roof.firstAzimutGrad * Math.PI) / 180; // NICHT `rad` — kein zweiter Rechenweg der Rechteckbasis
@@ -145,7 +158,7 @@ function verschneidungsFlaechen(roof: RoofNode): DachRoh {
   const flaechen: RohFlaeche[] = [];
   let maxZ = roof.traufhoeheMm;
   let nr = 0;
-  for (const f of uFormFlaechen(e)) {
+  for (const f of quelle) {
     for (const [i, j, k] of triangulierePolygon(f.poly)) {
       const ecken = [f.poly[i], f.poly[j], f.poly[k]].map((uv): WeltPunkt3 => {
         // lokal (u,v) → Engine-Welt → Ziel-Welt (mm). Platzierung: Schwerpunkt-Näherung.

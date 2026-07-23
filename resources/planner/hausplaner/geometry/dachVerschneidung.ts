@@ -133,3 +133,73 @@ export function verschneidungslinien(e: VerschneidungEingabe): VerschneidungsLin
   out.push({ ...lineFuer(e, k, cx, 'rechts', rechtsArt), pruefpflichtig: pruef });
   return out;
 }
+
+// ----------------------------------------------------------------------------------------------------
+// W-3b Teil 3: L/T-Verschneidungs-FLÄCHEN (Port-Abschluss). Byte-treue Spiegelung der EINGEBAUTEN Flächen
+// aus DachplanerProPage.buildCompoundPitchedFaces (Z.1170 ff.) — dieselbe Quelle wie die Linien oben.
+// Analog zu dachUForm.uFormFlaechen (UFlaeche): reine Geometrie (kein three/mat), THREE-frei.
+// Vier Flächen: main_N (Rechteck), main_S (EINZEL-Notch via cx), ext_W, ext_E. L vs. T unterscheiden sich
+// NUR über cx (T zentriert, L bündig) — die Engine-Ableitung selbst ist identisch (1299–1323 gleich).
+
+export interface Punkt2D { x: number; y: number; }
+
+/** Eine geneigte Dachfläche im Engine-Raum (x=Länge, z=Breite, y=oben). origin+u·poly.x+v·poly.y = Welt. */
+export interface VerschneidungFlaeche {
+  id: string; name: string;
+  origin: Vec3; uDir: Vec3; vDir: Vec3; normal: Vec3;
+  uMax: number; vMax: number;
+  poly: Punkt2D[];
+}
+
+/**
+ * L/T-Bau nur gültig, wenn die Rohmaße es hergeben (kein max(0.1,·)-Durchrutschen). Anders als U (zwei
+ * Notches, innenGap) genügt der EINZEL-Notch: Anbau schmaler als Hauptdach (W_b < W), Neigung echt.
+ */
+export function lTBauGueltig(e: VerschneidungEingabe): boolean {
+  const L = endlich(e.length), W = endlich(e.width), W_b = endlich(e.widthB), L_b = endlich(e.lengthB);
+  const oh = endlich(e.overhang), ohG = endlich(e.overhangGable), pitch = endlich(e.pitchGrad);
+  if (![L, W, W_b, L_b, oh, ohG, pitch].every((n) => Number.isFinite(n))) return false;
+  if (!(L > 0 && W > 0 && W_b > 0 && L_b > 0)) return false;
+  const rad = pitch * Math.PI / 180;
+  if (!(rad > 0.5 * Math.PI / 180) || Math.cos(rad) < 1e-6) return false; // zu flach / Singularität
+  if (W_b >= W) return false;                                            // Anbau ≥ Hauptdach
+  return true;
+}
+
+/** main_S-Südfläche mit EINZEL-Notch (Engine 1230–1250: cx-abhängige Kappung an beiden Giebelseiten). */
+function mainSNotchPoly(cxLocal: number, uL: number, uR: number, uMaxMain: number, vMaxMain: number, vPeak: number): Punkt2D[] {
+  const poly: Punkt2D[] = [{ x: 0, y: vMaxMain }];
+  if (uL > 0) { poly.push({ x: 0, y: 0 }); poly.push({ x: uL, y: 0 }); }
+  else { const sV = vPeak / (cxLocal - uL); poly.push({ x: 0, y: Math.max(0, vPeak - sV * cxLocal) }); }
+  poly.push({ x: cxLocal, y: vPeak });                                    // Kehl-/Gratspitze
+  if (uR < uMaxMain) { poly.push({ x: uR, y: 0 }); poly.push({ x: uMaxMain, y: 0 }); }
+  else { const sV = vPeak / (cxLocal - uR); poly.push({ x: uMaxMain, y: Math.max(0, vPeak + sV * (uMaxMain - cxLocal)) }); }
+  poly.push({ x: uMaxMain, y: vMaxMain });
+  return poly;
+}
+
+/**
+ * Die vier Dachflächen einer geneigten L-/T-Verschneidung (byte-treu buildCompoundPitchedFaces). Bei
+ * degenerierten Maßen (lTBauGueltig=false) oder form 'u' → leer (kein erfundener/NaN-Flächenbau).
+ */
+export function verschneidungsFlaechen(e: VerschneidungEingabe): VerschneidungFlaeche[] {
+  if (e.form === 'u' || !lTBauGueltig(e)) return [];
+  const k = engineKonstanten(e);
+  const { L, W, W_b, oh, ohG, cosR: cos, sinR: sin, yEaveEdge, uMaxMain, vPeak } = k;
+  const L_b = Math.max(0.1, endlich(e.lengthB));
+  const vMaxMain = (W / 2 + oh) / cos;      // slopeLen
+  const slopeLenExt = vPeak;                // (W_b/2+oh)/cos == v_peak
+  const uValleyBot = W_b / 2 + oh;
+  const totalU = L_b + ohG + W_b / 2;
+  const cx = e.form === 't' ? 0 : L / 2 - W_b / 2;
+  const cxLocal = cx + L / 2 + ohG;
+  const uL = cxLocal - (W_b / 2 + oh);
+  const uR = cxLocal + (W_b / 2 + oh);
+  const rectN: Punkt2D[] = [{ x: 0, y: 0 }, { x: uMaxMain, y: 0 }, { x: uMaxMain, y: vMaxMain }, { x: 0, y: vMaxMain }];
+  return [
+    { id: 'main_N', name: 'Hauptdach Nord', origin: { x: L / 2 + ohG, y: yEaveEdge, z: -W / 2 - oh }, uDir: { x: -1, y: 0, z: 0 }, vDir: { x: 0, y: sin, z: cos }, normal: { x: 0, y: cos, z: -sin }, uMax: uMaxMain, vMax: vMaxMain, poly: rectN },
+    { id: 'main_S', name: 'Hauptdach Süd', origin: { x: -L / 2 - ohG, y: yEaveEdge, z: W / 2 + oh }, uDir: { x: 1, y: 0, z: 0 }, vDir: { x: 0, y: sin, z: -cos }, normal: { x: 0, y: cos, z: sin }, uMax: uMaxMain, vMax: vMaxMain, poly: mainSNotchPoly(cxLocal, uL, uR, uMaxMain, vMaxMain, vPeak) },
+    { id: 'ext_W', name: 'Anbau West', origin: { x: cx - W_b / 2 - oh, y: yEaveEdge, z: W / 2 - W_b / 2 }, uDir: { x: 0, y: 0, z: 1 }, vDir: { x: cos, y: sin, z: 0 }, normal: { x: -sin, y: cos, z: 0 }, uMax: totalU, vMax: slopeLenExt, poly: [{ x: 0, y: vPeak }, { x: uValleyBot, y: 0 }, { x: totalU, y: 0 }, { x: totalU, y: slopeLenExt }] },
+    { id: 'ext_E', name: 'Anbau Ost', origin: { x: cx + W_b / 2 + oh, y: yEaveEdge, z: (W / 2 - W_b / 2) + totalU }, uDir: { x: 0, y: 0, z: -1 }, vDir: { x: -cos, y: sin, z: 0 }, normal: { x: sin, y: cos, z: 0 }, uMax: totalU, vMax: slopeLenExt, poly: [{ x: 0, y: 0 }, { x: totalU - uValleyBot, y: 0 }, { x: totalU, y: vPeak }, { x: 0, y: slopeLenExt }] },
+  ];
+}
