@@ -173,6 +173,22 @@ export function applyCommand(draft: SceneDocument, command: HausplanerCommand, j
       break;
     }
 
+    case 'SET_NODES_SICHTBAR': {
+      for (const id of command.nodeIds) {
+        const node = nodeOderFehler(draft, id);
+        node.visible = command.sichtbar;
+        node.updatedAt = jetztIso;
+      }
+      break;
+    }
+    case 'SET_NODES_GESPERRT': {
+      for (const id of command.nodeIds) {
+        const node = nodeOderFehler(draft, id);
+        node.locked = command.gesperrt;
+        node.updatedAt = jetztIso;
+      }
+      break;
+    }
     case 'ADD_ROOF': {
       const roof = command.roof;
       if (!draft.levels.some((l) => l.id === roof.levelId)) {

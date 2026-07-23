@@ -33,6 +33,8 @@ export type HausplanerCommand =
       /** Teil-Änderungen; Geometrie-Felder durchlaufen dieselben Regeln wie MOVE_NODE. */
       changes: Record<string, unknown>;
     }
+  | { type: 'SET_NODES_SICHTBAR'; nodeIds: string[]; sichtbar: boolean }
+  | { type: 'SET_NODES_GESPERRT'; nodeIds: string[]; gesperrt: boolean }
   | { type: 'UPDATE_SETTINGS'; changes: Partial<{ gridSize: number; snapEnabled: boolean; angleSnap: number }> };
 
 export type AblehnungsGrund =
