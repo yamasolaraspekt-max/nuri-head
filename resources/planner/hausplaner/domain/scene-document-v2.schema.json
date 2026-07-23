@@ -242,6 +242,9 @@
               "produkt": {
                 "type": "object",
                 "properties": {
+                  "typ": {
+                    "type": "string"
+                  },
                   "profilId": {
                     "type": "string"
                   },
