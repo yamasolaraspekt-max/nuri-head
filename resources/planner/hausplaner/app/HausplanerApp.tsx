@@ -17,6 +17,11 @@ import { bemassung } from '../geometry/bemassung';
 import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt } from '../geometry/wallGeometry';
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
+import { usePlannerUiStore } from './state/uiState';
+import { werkzeugTools, toolFuerShortcut, toolNach } from './tools/toolRegistry';
+import { resolveToolState } from './tools/activation';
+import { baueAktivierungsKontext } from './tools/toolContext';
+import type { ObjectType, ViewType } from './tools/toolTypes';
 import { versetzteWand, spiegelteWand, bbox as punkteBbox, achsenMitte, type Achse } from '../geometry/editierGeometrie';
 import { dupliziereGeschoss } from '../geometry/geschossVorlage';
 import { treppe2DSymbol } from '../geometry/treppe2D';
@@ -134,7 +139,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const modus = useHausplanerStore((s) => s.modus);
   const store = useHausplanerStore;
 
-  const [werkzeug, setWerkzeug] = useState<Werkzeug>('auswahl');
+  // UI-2: aktives Werkzeug liegt jetzt im GETEILTEN UI-State (state/uiState.ts), nicht mehr lokal —
+  // dadurch für Studio-Shell/Kontextleiste/Activation-Engine lesbar. Variablennamen bleiben, damit
+  // die bestehenden Nutzungen unverändert bleiben (verhaltensgleich).
+  const werkzeug = usePlannerUiStore((s) => s.activeToolId) as Werkzeug;
+  const setWerkzeug = React.useCallback((w: Werkzeug) => usePlannerUiStore.getState().setActiveTool(w), []);
+  useEffect(() => { usePlannerUiStore.getState().reset(); }, []); // Mount: wie bisher mit 'auswahl' starten
   const [treppeStart, setTreppeStart] = useState<{ x: number; y: number } | null>(null);
   const [fensterTypWahl, setFensterTypWahl] = useState<FensterTyp>('drehkipp');
   const [tuerTypWahl, setTuerTypWahl] = useState<TuerTyp>('dreh1');
@@ -150,6 +160,31 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     [scene, level],
   );
   const waende = useMemo(() => nodes.filter(istWand), [nodes]);
+
+  // UI-3: Aktivierungs-Kontext für die Werkzeugleiste (§21). Sammelt die getrennten Wahrheiten:
+  // Arbeitsbereich (UI-State) · Ansicht (store.modus) · Auswahltypen (Modell). Rechte sind im
+  // Editor angenommen; die Werkzeugleisten-Werkzeuge (art='werkzeug') prüfen ohnehin keine Rechte.
+  const activeWorkspace = usePlannerUiStore((s) => s.activeWorkspace);
+  const werkzeugKontext = useMemo(
+    () =>
+      baueAktivierungsKontext({
+        workspace: activeWorkspace,
+        view: modus as ViewType,
+        selectionTypes: selectedNodeIds
+          .map((id) => nodes.find((n) => n.id === id)?.type)
+          .filter((t): t is NonNullable<typeof t> => Boolean(t)) as ObjectType[],
+        permissions: ['Hausplaner,update'],
+      }),
+    [activeWorkspace, modus, selectedNodeIds, nodes],
+  );
+  // Fällt das aktive Werkzeug im aktuellen Kontext aus (z. B. Zeichnen in 3D), zurück auf Auswahl —
+  // damit man nie in einem deaktivierten Werkzeug festhängt (§21/§28).
+  useEffect(() => {
+    const t = toolNach(werkzeug);
+    if (t && !resolveToolState(t, werkzeugKontext).enabled) {
+      usePlannerUiStore.getState().setActiveTool('auswahl');
+    }
+  }, [werkzeugKontext, werkzeug]);
   const raeume = useMemo(
     () => (level ? erkenneRaeume(waende, level.defaultWallHeight) : []),
     [waende, level],
@@ -484,18 +519,22 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
         e.preventDefault();
         void store.getState().save();
-      } else if (e.key === 'v') {
-        setWerkzeug('auswahl');
-      } else if (e.key === 'w') {
-        setWerkzeug('wand');
-      } else if (e.key === 'f') {
-        setWerkzeug('fenster');
-      } else if (e.key === 't') {
-        setWerkzeug('tuer');
-      } else if (e.key === 'd') {
-        setWerkzeug('dach');
-      } else if (e.key === 'r') {
-        setWerkzeug('treppe');
+      } else {
+        // UI-3: Werkzeug-Tastenkürzel aus der Registry (eine Quelle), Aktivierung respektiert.
+        const tool = toolFuerShortcut(e.key);
+        if (tool && tool.art === 'werkzeug') {
+          const ctx = baueAktivierungsKontext({
+            workspace: usePlannerUiStore.getState().activeWorkspace,
+            view: store.getState().modus as ViewType,
+            selectionTypes: [],
+            permissions: ['Hausplaner,update'],
+          });
+          if (resolveToolState(tool, ctx).enabled) {
+            setWandStart(null);
+            setTreppeStart(null);
+            setWerkzeug(tool.id as Werkzeug);
+          }
+        }
       }
     }
     window.addEventListener('keydown', taste);
@@ -721,22 +760,22 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         {/* L1: Planer-Navigation — Werkzeuge (aktiv) + Fachplaner-Struktur (Navi). */}
         <div style={{ width: 220, flex: '0 0 auto', background: '#fff', borderRight: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
           <div style={navGrp}>Werkzeuge</div>
-          {([
-            ['auswahl', 'V', 'Auswahl', 'Objekte anklicken zum Markieren, ziehen zum Bewegen'],
-            ['wand', 'W', 'Wand', 'Wände zeichnen — Punkt für Punkt klicken (Polygonzug)'],
-            ['fenster', 'F', 'Fenster', 'Fenster auf eine Wand setzen — Typ oben wählbar'],
-            ['tuer', 'T', 'Tür', 'Tür auf eine Wand setzen — Typ oben wählbar'],
-            ['dach', 'D', 'Dach', 'Dach über den Gebäudeumriss aufsetzen'],
-            ['treppe', 'R', 'Treppe', 'Treppe setzen — zwei Klicks: Lauflinie Anfang→Ende (DIN 18065, automatische Stufung)'],
-          ] as ReadonlyArray<readonly [string, string, string, string]>).map(([w, k, label, beschr]) => (
-            <button key={w} type="button" title={`${label} (${k}) — ${beschr}`}
-              onClick={() => { setWerkzeug(w as typeof werkzeug); setWandStart(null); setTreppeStart(null); }}
-              style={navItem(werkzeug === w)}>
-              <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>{werkzeugIcon(w)}</span>
-              <span style={{ flex: 1 }}>{label}</span>
-              <span style={{ fontSize: 10.5, color: '#9ca3af', border: '1px solid #e5e7eb', borderRadius: 4, padding: '1px 5px' }}>{k}</span>
-            </button>
-          ))}
+          {/* UI-3: Werkzeugleiste datengetrieben aus der Tool-Registry (§22) mit Aktivierung (§21). */}
+          {werkzeugTools().map((tool) => {
+            const zustand = resolveToolState(tool, werkzeugKontext);
+            const aktiv = werkzeug === tool.id;
+            return (
+              <button key={tool.id} type="button"
+                title={zustand.enabled ? `${tool.label} (${tool.shortcut ?? ''}) — ${tool.helpText}` : `${tool.label} — ${zustand.reason}`}
+                aria-disabled={!zustand.enabled}
+                onClick={() => { if (!zustand.enabled) return; setWerkzeug(tool.id as typeof werkzeug); setWandStart(null); setTreppeStart(null); }}
+                style={{ ...navItem(aktiv), ...(zustand.enabled ? {} : { opacity: 0.4, cursor: 'not-allowed' }) }}>
+                <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>{werkzeugIcon(tool.id)}</span>
+                <span style={{ flex: 1 }}>{tool.label}</span>
+                {tool.shortcut && <span style={{ fontSize: 10.5, color: '#9ca3af', border: '1px solid #e5e7eb', borderRadius: 4, padding: '1px 5px' }}>{tool.shortcut}</span>}
+              </button>
+            );
+          })}
           <div style={navGrp}>Fachplaner</div>
           {FACHPLANER.map((g) => (
             <React.Fragment key={g.name}>
