@@ -66,14 +66,19 @@ function polygonSchwerpunkt(poly: ReadonlyArray<{ x: number; y: number }>): { x:
  */
 function anbauZuEingabe(roof: RoofNode): UFormEingabe | null {
   const a = roof.anbau;
-  if (!a || !(a.length > 0) || !(a.width > 0) || !(a.lengthB && a.lengthB > 0) || !(a.widthB && a.widthB > 0)) {
+  // u-shape braucht NUR Hauptbau length/width (Soll-Contract). lengthB/widthB sind l/t-exklusiv und
+  // dürfen die U-Fläche NICHT blockieren — fehlen sie, werden die Flügel-Maße aus dem Hauptbau abgeleitet
+  // (Drittel), damit die U-Form nicht-degeneriert rendert. (anbauZuEingabe wird nur für u-shape gerufen.)
+  if (!a || !(a.length > 0) || !(a.width > 0)) {
     return null;
   }
+  const widthB = a.widthB && a.widthB > 0 ? a.widthB : Math.round(a.width / 3);
+  const lengthB = a.lengthB && a.lengthB > 0 ? a.lengthB : Math.round(a.length / 3);
   return {
     length: a.length / 1000,
     width: a.width / 1000,
-    lengthB: a.lengthB / 1000,
-    widthB: a.widthB / 1000,
+    lengthB: lengthB / 1000,
+    widthB: widthB / 1000,
     overhang: roof.ueberstandMm / 1000,
     overhangGable: roof.ueberstandMm / 1000,
     pitchGrad: roof.neigungGrad,
