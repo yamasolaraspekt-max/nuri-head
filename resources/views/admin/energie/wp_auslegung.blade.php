@@ -90,6 +90,14 @@
 
                         <div class="row">
                             <div class="form-group col-6">
+                                <label for="plz">PLZ <small class="text-muted">(für Klima / Bivalenz)</small></label>
+                                <input type="text" maxlength="5" class="form-control" id="plz"
+                                    name="plz" value="{{ $eingabe['plz'] }}" placeholder="z. B. 20095">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-6">
                                 <label for="personen_im_haushalt">Personen im Haushalt</label>
                                 <input type="number" min="1" class="form-control" id="personen_im_haushalt"
                                     name="personen_im_haushalt" value="{{ $eingabe['personen_im_haushalt'] }}" required>
@@ -222,7 +230,7 @@
                 <form method="POST" action="{{ route('energie.wp-auslegung.dokument') }}" target="_blank" class="mb-1">
                     @csrf
                     @foreach ([
-                        'wp_index', 'heizlast_kw', 'heizsystem', 'wp_typ', 'personen_im_haushalt',
+                        'wp_index', 'heizlast_kw', 'heizsystem', 'wp_typ', 'plz', 'personen_im_haushalt',
                         'investition', 'heizungsart', 'heizung_alter', 'anzahl_we', 'selbst_bewohnte_we',
                         'strompreis', 'verbrauch_menge', 'verbrauch_einheit', 'aktuelles_heizmedium',
                         'verbrauch_zeitraum_jahre',
@@ -319,6 +327,62 @@
                         </dl>
                     </div>
                 </div>
+
+                {{-- Bivalenz & Betrieb (Auslegungskette, informativ — Reuse des Orchestrators, keine Parallelrechnung) --}}
+                @php $ak = $ergebnis['auslegungskette'] ?? null; @endphp
+                @if ($ak)
+                    <div class="card border-info">
+                        <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+                            <h4 class="card-title mb-0 text-info">Bivalenz &amp; Betrieb</h4>
+                            <span class="badge badge-light-info">{{ $ak['label'] ?? 'informativ' }}</span>
+                        </div>
+                        <div class="card-body">
+                            @if (empty($ak['anwendbar']))
+                                <div class="text-warning mb-0">
+                                    Bivalenz-Auslegung noch nicht möglich — fehlende Operanden:
+                                    <strong>{{ implode(', ', $ak['gates_offen'] ?? []) }}</strong>.
+                                    @if (in_array('plz_fehlt', $ak['gates_offen'] ?? [], true)) Bitte PLZ oben eintragen. @endif
+                                </div>
+                            @elseif (empty($ak['kandidaten']))
+                                <div class="text-muted mb-0">Keine passenden Geräte gefunden.</div>
+                            @else
+                                <div class="table-responsive">
+                                    <table class="table table-sm mb-0">
+                                        <thead><tr>
+                                            <th>Gerät</th><th>Bivalenzpunkt</th><th>Deckung NE</th><th>JAZ</th>
+                                            <th>E-Stab-Anteil</th><th>Laufstunden</th><th>Eignung</th>
+                                        </tr></thead>
+                                        <tbody>
+                                        @foreach ($ak['kandidaten'] as $k)
+                                            @php $b = $k['bivalenz']; @endphp
+                                            <tr>
+                                                <td>{{ $k['hersteller'] }} {{ $k['modell'] }}</td>
+                                                <td>{{ $b['bivalenzpunkt_c'] !== null ? number_format($b['bivalenzpunkt_c'], 1, ',', '.').' °C' : '—' }}</td>
+                                                <td>{{ $b['deckung_ne_pct'] !== null ? number_format($b['deckung_ne_pct'], 1, ',', '.').' %' : '—' }}</td>
+                                                <td>{{ $b['jaz'] !== null ? number_format($b['jaz'], 2, ',', '.') : '—' }}</td>
+                                                <td>{{ $b['estab_waerme_anteil_pct'] !== null ? number_format($b['estab_waerme_anteil_pct'], 1, ',', '.').' %' : '—' }}</td>
+                                                <td>{{ $b['laufstunden_h'] !== null ? number_format($b['laufstunden_h'], 0, ',', '.').' h' : '—' }}</td>
+                                                <td>
+                                                    @if ($k['geeignet'])
+                                                        <span class="badge badge-light-success">geeignet</span>
+                                                    @else
+                                                        <span class="badge badge-light-danger">{{ $k['ausschluss_grund'] ?? 'ungeeignet' }}</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+                            @if (!empty($ak['hinweise']))
+                                <ul class="mb-0 mt-1 text-muted"><small>
+                                    @foreach ($ak['hinweise'] as $h)<li>{{ $h }}</li>@endforeach
+                                </small></ul>
+                            @endif
+                        </div>
+                    </div>
+                @endif
 
                 {{-- Verbrauch + Kosten --}}
                 <div class="card">

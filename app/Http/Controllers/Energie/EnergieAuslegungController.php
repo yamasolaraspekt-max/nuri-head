@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Energie;
 use App\Http\Controllers\Controller;
 use App\Repositories\CatalogDeviceRepository;
 use App\Services\Energie\InverterSizingService;
+use App\Services\Auslegung\WpAuslegungsEingabe;
+use App\Services\Auslegung\WpAuslegungsketteService;
 use App\Services\Auslegung\WpCostingService;
 use App\Services\Heizlast\FoerderungService;
 use App\Services\Heizlast\HeizlastEingabe;
@@ -201,6 +203,9 @@ class EnergieAuslegungController extends Controller
             'heizsystem' => ['required', 'in:fussbodenheizung,heizkoerper,beides'],
             'wp_typ' => ['required', 'in:luft_wasser,sole_sonde,sole_kollektor,wasser_wasser'],
             'personen_im_haushalt' => ['required', 'integer', 'min:1', 'max:20'],
+            // PLZ (Klima-Operand der Bivalenz-Auslegungskette; optional/additiv — fehlt sie, greift das
+            // Operanden-Gate der Kette statt eines erfundenen Werts).
+            'plz' => ['nullable', 'string', 'max:5'],
             'ww_mit_wp' => ['nullable', 'boolean'],
             'badewanne_vorhanden' => ['nullable', 'boolean'],
             'investition' => ['required', 'numeric', 'min:0'],
@@ -236,6 +241,7 @@ class EnergieAuslegungController extends Controller
             'heizlast_kw' => (float) $data['heizlast_kw'],
             'heizsystem' => $data['heizsystem'],
             'wp_typ' => $data['wp_typ'],
+            'plz' => $data['plz'] ?? null,
             'personen_im_haushalt' => (int) $data['personen_im_haushalt'],
             'ww_mit_wp' => $wwMitWp,
             'badewanne_vorhanden' => $badewanne,
@@ -290,6 +296,9 @@ class EnergieAuslegungController extends Controller
             'heizsystem' => ['required', 'in:fussbodenheizung,heizkoerper,beides'],
             'wp_typ' => ['required', 'in:luft_wasser,sole_sonde,sole_kollektor,wasser_wasser'],
             'personen_im_haushalt' => ['required', 'integer', 'min:1', 'max:20'],
+            // PLZ (Klima-Operand der Bivalenz-Auslegungskette; optional/additiv — fehlt sie, greift das
+            // Operanden-Gate der Kette statt eines erfundenen Werts).
+            'plz' => ['nullable', 'string', 'max:5'],
             'ww_mit_wp' => ['nullable', 'boolean'],
             'badewanne_vorhanden' => ['nullable', 'boolean'],
             'investition' => ['required', 'numeric', 'min:0'],
@@ -315,6 +324,7 @@ class EnergieAuslegungController extends Controller
             'heizlast_kw' => (float) $data['heizlast_kw'],
             'heizsystem' => $data['heizsystem'],
             'wp_typ' => $data['wp_typ'],
+            'plz' => $data['plz'] ?? null,
             'personen_im_haushalt' => (int) $data['personen_im_haushalt'],
             'ww_mit_wp' => $request->boolean('ww_mit_wp'),
             'badewanne_vorhanden' => $request->boolean('badewanne_vorhanden'),
@@ -378,6 +388,7 @@ class EnergieAuslegungController extends Controller
             'phi_hl_kw' => (float) $data['heizlast_kw'],
             'heizsystem' => $data['heizsystem'],
             'wp_typ' => $data['wp_typ'],
+            'plz' => $data['plz'] ?? null,
             'personen_im_haushalt' => (int) $data['personen_im_haushalt'],
             'ww_mit_wp' => $wwMitWp,
             'badewanne_vorhanden' => $badewanne,
@@ -403,6 +414,21 @@ class EnergieAuslegungController extends Controller
         $bvh = HeizlastKonstanten::B_VH_DEFAULT;
         $qHeizKwh = (float) $data['heizlast_kw'] * $bvh;
         $stromKwh = $this->jaz->stromverbrauch($e, $qHeizKwh, $qWwKwh);
+
+        // WP-Auslegungskette (Stufe 3b — REUSE des vorhandenen Orchestrators, KEINE Parallelrechnung):
+        // rankt die Kandidaten inkl. Bivalenz je Kandidat (Bivalenzpunkt/Deckung/JAZ/E-Stab-Anteil/
+        // Laufstunden). Fehlt plz o. a. Pflicht-Operand, greift dessen Operanden-Gate (informativ), statt
+        // einen Wert zu erfinden. Der Service wird nur AUFGERUFEN (byte-treu), per Container aufgelöst.
+        $auslegungskette = app(WpAuslegungsketteService::class)->rankeKandidaten(new WpAuslegungsEingabe(
+            phiHlKw: (float) $data['heizlast_kw'],
+            qHeizKwh: $qHeizKwh,
+            qWwKwh: $qWwKwh,
+            wwMitWp: $wwMitWp,
+            vorlaufC: (float) $vorlaufTemp,
+            plz: $data['plz'] ?? null,
+            wpTyp: $data['wp_typ'],
+            heizsystem: $data['heizsystem'],
+        ));
 
         // Optionale Verbrauchsmethode zur Plausibilisierung (null, wenn kein Verbrauch angegeben).
         $verbrauchPlausi = (new VerbrauchsService($this->ww))->berechne($e);
@@ -456,6 +482,8 @@ class EnergieAuslegungController extends Controller
             'verbrauch_plausi' => $verbrauchPlausi,
             'investition_netto' => $investitionNetto,
             'foerderung' => $foerderung,
+            // Stufe 3b: informatives Bivalenz-Ranking (Orchestrator-Reuse). Blade rendert „Bivalenz & Betrieb".
+            'auslegungskette' => $auslegungskette,
         ];
     }
 
@@ -486,6 +514,7 @@ class EnergieAuslegungController extends Controller
             'heizlast_kw' => 8.0,
             'heizsystem' => 'heizkoerper',
             'wp_typ' => 'luft_wasser',
+            'plz' => null,
             'personen_im_haushalt' => 4,
             'ww_mit_wp' => true,
             'badewanne_vorhanden' => false,
