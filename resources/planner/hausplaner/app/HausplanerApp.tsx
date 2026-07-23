@@ -30,7 +30,8 @@ import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../ge
 import { PROFIL_KATALOG, VERGLASUNG_KATALOG, berechneUw, rcMachbar, preisFenster, profilNach, verglasungNach, type OeffnungsArt, type RcKlasse } from '../geometry/fensterProdukt';
 import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, tuerBauartNach } from '../geometry/oeffnungsBauarten';
 import { TREPPEN_BAUARTEN, treppenBauartNach } from '../geometry/treppenBauarten';
-import { FaehigkeitenNavi } from './FaehigkeitenNavi';
+import { FAEHIGKEITEN } from './tools/faehigkeiten';
+import { T } from './studioDaten';
 
 // Basis-URL der Icon-Assets — aus dem Bundle-Standort abgeleitet (traegt Subpfad/Domain).
 const ICON_BASE = new URL('.', import.meta.url).href;
@@ -56,6 +57,10 @@ function svgWrap(children: React.ReactNode): React.ReactElement {
   return (
     <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">{children}</svg>
   );
+}
+/** Generisches Fachplaner-/Berechnungs-Icon (Messuhr, Feather-Stil, 24er-viewBox) für die Engine-Gruppe. */
+function fachplanerIcon(): React.ReactElement {
+  return svgWrap(<><circle cx="12" cy="12" r="9" /><path d="M12 12l4-2" /><path d="M12 3v2M3 12h2" /></>);
 }
 function werkzeugIcon(w: string): React.ReactElement {
   switch (w) {
@@ -762,10 +767,24 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               </button>
             );
           })}
-          <FaehigkeitenNavi
-            activeToolId={werkzeug}
-            onAktivieren={(id) => { setWerkzeug(id as Werkzeug); setWandStart(null); setTreppeStart(null); }}
-          />
+          {/* Fachplaner-/Berechnungs-Engines als Icon-Gruppe in DERSELBEN Werkzeugleiste (aus der EINEN
+              Registry, Batch 0). Noch ohne Bedien-Panel ⇒ gedimmt + „Panel folgt" (Farbe UND Text, A11y);
+              der Klick-Handler (Eingang→Ergebnis-Panel) kommt mit Batch 1. Ersetzt die frühere Text-Liste. */}
+          <div style={navGrp}>Fachplaner</div>
+          {FAEHIGKEITEN.filter((f) => f.art === 'engine').map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              disabled
+              aria-disabled="true"
+              title={`${f.label} — ${f.funktion}${f.eingang ? ` · ${f.eingang} → ${f.ausgang ?? ''}` : ''} · Panel folgt`}
+              style={{ ...navItem(false), opacity: 0.5, cursor: 'not-allowed', color: T.muted }}
+            >
+              <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>{fachplanerIcon()}</span>
+              <span style={{ flex: 1 }}>{f.label}</span>
+              <span style={{ fontSize: 9.5, color: T.faint }}>Panel folgt</span>
+            </button>
+          ))}
           <div style={{ padding: '10px 12px', fontSize: 11, color: '#9ca3af', borderTop: '1px solid #eef0f2', marginTop: 'auto' }}>Erweiterbar – Module folgen.</div>
         </div>
         <div style={{ display: modus === '3d' ? 'none' : 'block', width: stageBreite, borderRight: modus === 'split' ? '1px solid #e5e7eb' : 'none' }}>
