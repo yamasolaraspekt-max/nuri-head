@@ -10,7 +10,7 @@ export const T = {
   brand: '#7fae1c', brandInk: '#496700',
   ok: '#1a9e5f', okSoft: '#e6f5ec', okInk: '#137a49',
   info: '#2f6df0', infoSoft: '#e9f0fd', infoInk: '#2358c9',
-  warn: '#d98218', warnSoft: '#fdf2e3', warnInk: '#a5620f',
+  warn: '#d98218', warnSoft: '#fdf2e3', warnInk: '#9c5c0d',
   err: '#d24b3e',
 } as const;
 

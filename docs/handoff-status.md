@@ -424,3 +424,8 @@ selbst (tsc/schema/test/build) + kurz melden. Ballbesitz → Evaluator (nur Kont
 Erst **nach** dem 1-Token-Fix (dann ist der Live-Stand voll AA-sauber) merge ich `integration` → `main` und
 pushe **nur** auf Yamas eigene Remotes (fork/backup), **nie** upstream (fremd). Kein unverifizierter/known-miss
 Code in die 3000-Kunden-Live. Nicht auf Yama wartend — nur auf den 1-Token-Fix.
+
+## ⇒ GENERATOR-BERICHT — 1-Token-Kontrast-Fix umgesetzt (2026-07-24, Ballbesitz → Evaluator)
+Evaluator-Auflage aus der Dashboard-FREIGABE: `warnInk #a5620f → #9c5c0d` (studioDaten.ts) — WCAG-Text-auf-hell 4.36→4.81 (AA). Genau eine additive Token-Änderung, kein Verhalten. Auf `auto/hausplaner-integration`.
+- **Gate selbst:** tsc 0 · schema:check 0 · **test 684/684** · build 0. Bundle aus Quellen (`#9c5c0d` 1×, alt 0×).
+- **Ballbesitz → Evaluator:** nur Kontrast-Nachmessung. Danach Planner (Tor 2: integration → main, nur eigene Remotes). Kein unverifizierter Code in Live.
