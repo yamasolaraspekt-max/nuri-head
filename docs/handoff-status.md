@@ -313,3 +313,47 @@ Status nie nur Farbe, Tooltips vorhanden, Zustände ehrlich). Dann sieht Yama de
 Frei-zeichnen gestrichen. Neu: **Bogenwand (halbrund/rund)** — Modell kennt nur gerade Wände (`WallNode`
 start/end). Braucht Konzept (Regel 4): Bogen-Definition (Radius/Bulge/Mittelpunkt?), 2D-Konva-Arc + 3D-Mesh,
 additiv am WallNode. Planner bereitet Konzept → Yama-Fach-Freigabe → eigener Slice.
+
+---
+
+## ⇒ PROTOKOLL (Yama, 2026-07-24): Berichtskette + Ledger-Pflicht
+Generator & Evaluator: **immer** den Bericht an den Nächsten weitergeben und **ständig** hier nach offenen
+Aufträgen des Planners schauen. **Alles** wird hier hinterlegt (Bericht, Zahlen, Ballbesitz) — nichts nur im
+Commit, nichts mündlich. Der **Planner liest immer die Berichte**, bevor er den nächsten Auftrag stellt.
+
+## ⇒ PLANNER liest Bericht (2026-07-24)
+Gelesen: **Dashboard v1 Batch 1** = `4cde0be` (Icon-Tooltips + Undo/Redo-Icons + Geschoss-Stepper). L/T/U ist
+separat grün (`176aa48`). **Offen** aus der 8-Punkte-Liste: Auge/Schloss (5), Magnet (6), Speicher-Status (8),
+ehrliche 4 Zustände (4). Baum sauber (nur untracked push-Artefakte).
+
+## ⇒ PLANNER-FUND (Messung am Code) — BINDENDE GUARDRAIL für die Wizard-Welle
+Gemessen in `app/Services/`: die versionierte Übergabe-/Snapshot-/Invalidierungs-Schicht **existiert bereits** —
+`BuildingModel/CanonicalHash`, `BuildingModelVersionImmutableException` (unveränderlicher Snapshot),
+`DerivedBuildingModelVersionStore` (versionierte Ergebnisse), `ProjectionConflictException` (409),
+`SourceGeometryRef`, `CanonicalBuildingModelValidator`; dazu `Geometrie/SzeneProjektionService` + `TopologieGate`
+(Hausplaner→Modell-Projektion), `Auslegung/WpAuslegungsketteService`, `Heizkoerper/HydraulicService`
+(hydraul. Abgleich). **Regel 2: KEIN zweiter Snapshot-/Hash-/Versions-/Projektions-Mechanismus.** Der
+Wizard-Rahmen (`fach-wizard-rahmen-und-roadmap.md`, Planner-Cloud) wird an DIESE Dienste **verdrahtet**, nicht
+neu gebaut. Roadmap §8 wird entsprechend korrigiert (Wizard-Schicht 🔴 → 🟢 vorhanden/verdrahten).
+
+## ⇒ TOR 1 — Fach-Freigabe in Yamas Namen (2026-07-24)
+Yama hat den Planner ausdrücklich bevollmächtigt, ihn zu vertreten und nicht zu warten. Damit: Wizard-Rahmen
++ 5 Fach-Wizards (TGA/Bad/Küche/Elektro/Dach) + Dach-Sonderregel = **fachlich freigegeben**. **Gated hinter**
+(a) Abschluss der Dashboard-Welle und (b) der BuildingModel-Verdrahtungs-Guardrail oben. **Tor 2 (Merge in die
+Live-CRM) bleibt bei Yama.**
+
+## ⇒ GENERATOR — JETZT: Dashboard v1 Batch 2 (Ballbesitz: Generator)
+Additiv, nur **verdrahten** (Render/Commands existieren), Gates selbst, **kein Push**:
+1. **Auge (Sicht) + Schloss (Sperre)** je Auswahl/Objekt → `SET_NODES_SICHTBAR`/`SET_NODES_GESPERRT`
+   (`applyCommand.ts` Z.231/239; Felder `visible`/`locked`). Gesperrt: Klick fragt „entsperren?" vor Änderung.
+2. **Magnet-Umschalter**: `fang`-Icon (Z.81) → `settings.snapEnabled` (Snap-Logik Z.347-367). Tooltip
+   „Einrasten an Endpunkt/Raster/Winkel".
+3. **Speicher-Status-Zone**: vorhandene `SpeicherStatus` (gespeichert/ungespeichert/speichert/konflikt/fehler)
+   ehrlich in EINER Zone; **Bestätigen vor Verlassen/Übernahme** bei ungespeichert; 409 → echte Aktion.
+4. **Ehrliche 4 Zustände**: Verfügbar / Voraussetzung fehlt / Nur Ergebnis / In Entwicklung — nie nur Farbe.
+**Melden**: „umgesetzt + Zahlen" (tsc/schema/test/build) hier hinterlegen, dann Ballbesitz an Evaluator.
+
+## ⇒ EVALUATOR — danach: Batch 2 abnehmen
+Gates selbst nachmessen + Design-Rubrik am echten Rendern (Kontrast gemessen, Status nie nur Farbe,
+Bestätigung vor Datenverlust wirklich ausgelöst). Grün/rot **mit Beleg hier hinterlegen** (rot blockiert die
+nächste Welle). Ballbesitz zurück an Planner.
