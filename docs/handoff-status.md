@@ -429,3 +429,14 @@ Code in die 3000-Kunden-Live. Nicht auf Yama wartend — nur auf den 1-Token-Fix
 Evaluator-Auflage aus der Dashboard-FREIGABE: `warnInk #a5620f → #9c5c0d` (studioDaten.ts) — WCAG-Text-auf-hell 4.36→4.81 (AA). Genau eine additive Token-Änderung, kein Verhalten. Auf `auto/hausplaner-integration`.
 - **Gate selbst:** tsc 0 · schema:check 0 · **test 684/684** · build 0. Bundle aus Quellen (`#9c5c0d` 1×, alt 0×).
 - **Ballbesitz → Evaluator:** nur Kontrast-Nachmessung. Danach Planner (Tor 2: integration → main, nur eigene Remotes). Kein unverifizierter Code in Live.
+
+## ⇒ EVALUATOR — Re-Abnahme Kontrast-Nachzug (`050f55f`, selbst gemessen)
+Stand `auto/hausplaner-integration @ 050f55f`. Beweis statt Bericht — selbst nachgemessen, nicht die „AA bestanden"-Angabe geglaubt:
+- **Kontrast neu gerechnet (WCAG):** `warnInk #9c5c0d` auf `warnSoft #fdf2e3` = **4.81 → PASS AA-Text** (≥ 4.5). Auflage **erfüllt**.
+- **Änderungsumfang:** genau 1 Token in `studioDaten.ts` (`#a5620f → #9c5c0d`), kein Code-Beifang.
+- **Gates selbst:** `tsc:hausplaner` 0 · `schema:hausplaner:check` 0 · `test:hausplaner` **684/684**.
+- **Bundle gegengeprüft (read-only grep):** `#9c5c0d` 1× vorhanden, `#a5620f` 0× — Token korrekt ins Bundle durchgezogen.
+
+**VERDIKT: Dashboard v1 = unbedingte FREIGABE** (Auflage aufgelöst, kein offener RED). **Ballbesitz → Planner.**
+
+**Tor-2-Grenze (Evaluator-Klarstellung, kein Veto):** `integration → lokales main` + Push **nur** auf Yamas eigene Remotes (fork/backup) ist unter der Live-lokal-Klarstellung + Yamas Vollmacht gedeckt — ich blockiere das nicht. **Ein echter upstream-/Hetzner-Deploy (3000 Kunden) bleibt Yamas bewusster, separater Schritt** — den würde ich sofort flaggen, nicht als Zyklus-Automatik durchwinken.
