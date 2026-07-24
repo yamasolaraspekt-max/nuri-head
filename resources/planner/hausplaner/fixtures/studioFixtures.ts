@@ -8,8 +8,14 @@
  * Rein Daten (kein three/WebGL, keine Date.now → feste ISO-Zeit) ⇒ unit-testbar durch die volle
  * Pipeline (migriereSzene → Schema → Integrität). Additiv/hinter Flag: ohne `?fixture=` unverändert.
  */
-import type { SceneDocument, WallNode, CeilingNode, ObjectNode, Level } from '../domain/scene.types';
+import type { SceneDocument, WallNode, RoofNode, CeilingNode, ObjectNode, Level } from '../domain/scene.types';
 import { treppeZuParametern } from '../geometry/treppeObjekt';
+
+/** U-Grundriss (mm): Außenrechteck 12×10 m, Kerbe/Innenhof 5×4 m aus der oberen Kante. Ganze mm. */
+const U_UMRISS: Array<{ x: number; y: number }> = [
+  { x: 0, y: 0 }, { x: 12000, y: 0 }, { x: 12000, y: 10000 }, { x: 8500, y: 10000 },
+  { x: 8500, y: 6000 }, { x: 3500, y: 6000 }, { x: 3500, y: 10000 }, { x: 0, y: 10000 },
+];
 
 /** Feste Zeit — Fixtures müssen bit-stabil sein (kein Date.now, das bräche Determinismus). */
 const ISO = '2026-01-01T00:00:00.000Z';
@@ -86,7 +92,24 @@ function deckeTreppe(): SceneDocument {
 
 /** Registry aller benannten Fixtures. Decke-Branch: nur decke-treppe (u-dach lebt auf der Dach-Linie,
  *  die das anbau/u-shape-Roofmodell trägt — kein Fixture-Import aus einer fremden Modell-Welt). */
+/** U-Dach-Fixture: U-Grundriss + u-shape-Dach mit ALLEN vier Maßen. firstAzimut 270: Engine-Hoföffnung (+z)
+ *  fällt auf die Polygon-Kerbe (+y) — Konsistenz Polygon↔anbau↔Azimut (sonst 90°-Fehlplatzierung). */
+function uDach(): SceneDocument {
+  const dach: RoofNode = {
+    id: 'roof-u', type: 'roof', levelId: EG.id, visible: true, locked: false, tags: [], createdAt: ISO, updatedAt: ISO,
+    polygon: U_UMRISS, roofType: 'u-shape', neigungGrad: 35, firstAzimutGrad: 270, ueberstandMm: 500, traufhoeheMm: 2800,
+    anbau: { length: 12000, width: 10000, lengthB: 5000, widthB: 4000 },
+  };
+  return {
+    id: 'fixture-u-dach', projectId: 1, schemaVersion: 2, revision: 1, units: 'mm',
+    settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
+    levels: [EG], nodes: umrissZuWaenden(U_UMRISS, EG.id), materials: [], roofs: [dach],
+    metadata: { createdAt: ISO, updatedAt: ISO },
+  };
+}
+
 export const STUDIO_FIXTURES: Record<string, () => SceneDocument> = {
+  'u-dach': uDach,
   'decke-treppe': deckeTreppe,
 };
 
