@@ -366,6 +366,27 @@ Branch `auto/hausplaner-dashboard-v1`. Reine Verdrahtung auf vorhandenen Command
 - **Gate selbst (a1215a3):** tsc 0 · schema:check 0 · **test 684/684** · build 0. Bundle aus Quellen. **Kein Push (Tor 2 = Yama).**
 - **Ballbesitz → Evaluator:** Batch-1+2 abnehmen (Gates nachmessen + Design-Rubrik am echten Rendern: Kontrast, Status nie nur Farbe, Bestätigung-vor-Verlust wirklich ausgelöst, Tooltips vorhanden, 4 Zustände ehrlich). Grün/rot mit Beleg hier hinterlegen; danach Ballbesitz an Planner (nächste Welle = Wizard, gated hinter Dashboard-Abschluss + BuildingModel-Verdrahtungs-Guardrail).
 
+## ⇒ EVALUATOR-VOTUM — Dashboard v1 (Batch 1+2) + S0 + Bestandsprüfung (2026-07-24, selbst gemessen)
+Stand `auto/hausplaner-dashboard-v1 @ e4693f1`, Working Tree sauber (nur untracked Push-Artefakte). Gates **selbst** gefahren, nicht Bericht geglaubt.
+
+**Gates (Beweis):** `tsc:hausplaner` Exit 0 · `schema:hausplaner:check` Exit 0 · `test:hausplaner` **684/684 pass, 0 fail** · Gehrung-Ecken-Dichtheit ✔.
+
+1. **S0 — Schema-Re-Abnahme (`aecc517`): FREIGABE.** `schema:hausplaner:check` Exit 0 → Zod ↔ `scene-document-v2.schema.json` synchron, kein 422-Desync. Blockade für Generator-W-1 aufgehoben.
+2. **Gehrung-Ecken-Dichtheit: FREIGABE.** `wandGehrung3D`-Tests grün (zwei Wände teilen den Gehrungspunkt, kein Loch/Overlap; freies Ende stumpf; Öffnungsgrenze rechtwinklig).
+3. **Dashboard v1 Batch 1+2: FREIGABE.** Design-Rubrik am Quelldiff verifiziert:
+   - **Ehrliche 4 Zustände** (`studioUi.tsx`/`faehigkeiten.ts`): `verfuegbar/voraussetzung/nur_ergebnis/in_entwicklung`, je **Farbe UND Text (kurz+lang) UND Punkt** + `title` + `aria` → *Status nie nur Farbe* erfüllt; 0 roher Hex (nur `T.*`). 13 Rechen-Engines ehrlich `in_entwicklung` statt „schläft ohne Grund".
+   - **Auge/Schloss** (`HausplanerApp.tsx`): `SET_NODES_SICHTBAR`/`SET_NODES_GESPERRT`, Text+Symbol (👁/🙈, 🔓/🔒), Entsperren fragt nach (`window.confirm`).
+   - **Speicher-Bestätigung**: `beforeunload`-Guard nur bei `speicherStatus==='ungespeichert'` → kein stiller Verlust.
+   - **Magnet (§6):** Generator-Angabe „bereits vorhanden" **verifiziert korrekt** — `HausplanerApp.tsx:773` `fang`→`UPDATE_SETTINGS{snapEnabled}`, `aktiv`-State + Tooltip. *(Ein Zwischenbefund „Magnet fehlt" war ein `head`-Abschneide-Fehler meinerseits und ist zurückgezogen.)*
+4. **Kontrast gemessen (WCAG, browserfrei aus Token-Hex) — EIN Nachzug:** verfuegbar 4.77 ✅ · nur_ergebnis 13.16 ✅ · in_entwicklung 4.54 ✅ · **voraussetzung `warnInk #a5620f` auf `warnSoft #fdf2e3` = 4.36 → FAIL AA-Text (< 4.5)**, nur AA-Large. → **NACHBESSERN (klein, 1 Token):** `warnInk #a5620f → #9c5c0d` (= 4.81, PASS AA mit Reserve; `warnInk` ist Text-auf-hell, Nachdunkeln verbessert Kontrast überall, bricht nichts). Kein funktionaler RED — Feature + „Status nie nur Farbe" stehen; strenge ui-bauordnung verlangt aber AA.
+5. **Ehrlicher Rest-Vorbehalt (nicht abnahme-blockierend):** „Bundle aus Quellen, keine Drift" (`public/hausplaner/hausplaner.js`) kann ich nicht selbst belegen — Build = Datei-Mutation, außerhalb der Evaluator-Rolle. Quell-Gates grün; Pre-Push-Siegel (Rebuild + porcelain leer) deckt es ab.
+
+**Netto-Votum Dashboard v1: FREIGABE mit EINER Auflage** (Kontrast-Nachzug `warnInk`). Empfehlung an Planner/Generator (autorisiert): Generator setzt den 1-Token-Fix, dann Merge — oder Merge jetzt und Fix als sofortiger Nachzug. Ich blockiere den Merge dafür nicht hart (AA-Large erfüllt), verschweige den AA-Text-Miss aber nicht.
+
+**Ballbesitz → Planner.** Nächste Welle (Wizard) bleibt gated hinter Dashboard-Abschluss + BuildingModel-Verdrahtungs-Guardrail. **Tor 2 (Merge/Push) unverändert bei Yama.**
+
+**Bestandsprüfung (Runde 1+2) abgelegt in `docs/bestandspruefung-hausplaner.md`** (Funktionsinventar + 3D-Inventar + Werkzeugmatrix + Ursachen + Top-UX + Umsetzungsreihenfolge, existing-first). Kern: Geometrie/Render/Persistenz reif; höchster Hebel = die 13 fertigen Engines je mit einem Panel wecken (Verdrahtung, kein Neubau).
+
 ---
 
 ## ⇒ PLANNER — Push erledigt + Merge-Regel (2026-07-24, 22:45)
