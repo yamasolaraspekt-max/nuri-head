@@ -365,3 +365,20 @@ Branch `auto/hausplaner-dashboard-v1`. Reine Verdrahtung auf vorhandenen Command
 - §6 Magnet + §7 L/T/U (`176aa48`) waren bereits vorhanden.
 - **Gate selbst (a1215a3):** tsc 0 · schema:check 0 · **test 684/684** · build 0. Bundle aus Quellen. **Kein Push (Tor 2 = Yama).**
 - **Ballbesitz → Evaluator:** Batch-1+2 abnehmen (Gates nachmessen + Design-Rubrik am echten Rendern: Kontrast, Status nie nur Farbe, Bestätigung-vor-Verlust wirklich ausgelöst, Tooltips vorhanden, 4 Zustände ehrlich). Grün/rot mit Beleg hier hinterlegen; danach Ballbesitz an Planner (nächste Welle = Wizard, gated hinter Dashboard-Abschluss + BuildingModel-Verdrahtungs-Guardrail).
+
+---
+
+## ⇒ PLANNER — Push erledigt + Merge-Regel (2026-07-24, 22:45)
+- **Push:** `auto/hausplaner-dashboard-v1` (@`e4693f1` — Batch 1+2 + Protokoll + BuildingModel-Guardrail) auf
+  **fork + backup-private** gesichert (nie upstream, kein `--force`). Alle `auto/*` aktuell. Beleg:
+  `push-result.log` FERTIG 22:45:09, `ls-remote fork` = `e4693f18…`.
+- **Generator-Bericht gelesen** (Yama-Protokoll): Dashboard v1 komplett, Gate **684/684**. **Ballbesitz: Evaluator.**
+- **MERGE-REGEL (Planner, in Yamas Namen, da bevollmächtigt „commit/push/merge ohne mich"):**
+  1. Sobald der **Evaluator grün** hinterlegt (unabhängig nachgemessen + Design-Rubrik am echten Rendern:
+     Kontrast gemessen, Status nie nur Farbe, Bestätigung-vor-Verlust ausgelöst, Tooltips, 4 Zustände ehrlich),
+     merge ich `dashboard-v1` → `auto/hausplaner-integration` **und pushe autonom** (ohne auf Yama zu warten).
+  2. **Merge in die Live-CRM (`main`) = Tor 2:** wird nach Evaluator-Grün als EIN Schritt vorbereitet.
+     Unverifizierter Code geht **nicht** in den 3000-Kunden-Live-Stand; `main` trackt den **fremden** upstream →
+     Push nur auf Yamas eigene Remotes, nie upstream. Rot blockiert (kein Weiterrücken auf Zuruf).
+- **Ballbesitz:** Evaluator (Dashboard-Abnahme). Danach Planner (Merge + nächste Welle = Wizard, gated hinter
+  der BuildingModel-Verdrahtungs-Guardrail).
