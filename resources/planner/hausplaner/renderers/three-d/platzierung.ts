@@ -14,7 +14,57 @@
 
 import type { WallNode } from '../../domain/scene.types';
 import type { WandQuader } from './segmentierung';
+import type { WandBand, Punkt } from '../../geometry/wallGeometry';
 import { weltZuThree, type ThreePunkt } from './adapter';
+
+/**
+ * Gehrung (Auftrag 3D-Wandecken, Ansatz A): Grundriss-Viereck EINES Wandsegments in Welt-mm, das die
+ * bereits gehrten `wandBaender`-Ecken an den Wand-ENDEN WIEDERVERWENDET (eine Wahrheit — kein zweiter
+ * Miter im 3D) und an Öffnungs-/Innensegment-Grenzen rechtwinklig zur Wandachse bleibt (die Gehrung
+ * betrifft nur die Enden). Reihenfolge [leftVon, leftBis, rightBis, rightVon]. Rein/testbar (kein three).
+ * Offenes Wandende ohne Nachbar ⇒ `wandBaender` liefert dort die quadratische Ecke ⇒ automatisch rechtwinklig.
+ */
+export function wandSegmentGrundriss(
+  band: WandBand,
+  wand: WallNode,
+  quader: Pick<WandQuader, 'vonMm' | 'bisMm'>,
+): [Punkt, Punkt, Punkt, Punkt] {
+  const dx = wand.end.x - wand.start.x, dy = wand.end.y - wand.start.y;
+  const laenge = Math.hypot(dx, dy) || 1;
+  const dirx = dx / laenge, diry = dy / laenge;
+  const ulx = -diry, uly = dirx;                 // Links-Normale (perpLinks), konstant über die Wand
+  const h = wand.thickness / 2;
+  const [startLinks, endLinks, endRechts, startRechts] = band.ecken;
+  const amStart = quader.vonMm <= 0.5;           // Segment am Wand-Anfang → Band-Gehrung übernehmen
+  const amEnde = quader.bisMm >= laenge - 0.5;   // Segment am Wand-Ende → Band-Gehrung übernehmen
+  const kante = (offset: number, seite: 1 | -1): Punkt => ({
+    x: wand.start.x + dirx * offset + seite * ulx * h,
+    y: wand.start.y + diry * offset + seite * uly * h,
+  });
+  return [
+    amStart ? startLinks : kante(quader.vonMm, 1),
+    amEnde ? endLinks : kante(quader.bisMm, 1),
+    amEnde ? endRechts : kante(quader.bisMm, -1),
+    amStart ? startRechts : kante(quader.vonMm, -1),
+  ];
+}
+
+/**
+ * Die 8 three-Eckpunkte (Meter, y-up) des Wand-Segment-Prismas: 4 unten, 4 oben (Reihenfolge des
+ * Grundriss-Vierecks). `weltZuThree` bleibt die EINE Achsen-Umrechnung (kein zweiter Rechenweg).
+ */
+export function wandSegmentPrismaThree(
+  grundriss: readonly [Punkt, Punkt, Punkt, Punkt],
+  untenMm: number,
+  obenMm: number,
+  elevationMm: number,
+): ThreePunkt[] {
+  const zUnten = elevationMm + untenMm, zOben = elevationMm + obenMm;
+  return [
+    ...grundriss.map((p) => weltZuThree({ x: p.x, y: p.y, z: zUnten })),
+    ...grundriss.map((p) => weltZuThree({ x: p.x, y: p.y, z: zOben })),
+  ];
+}
 
 /** Fertige Platzierung eines Quaders in der three-Szene (Meter, y-up). */
 export interface QuaderPlatzierung {

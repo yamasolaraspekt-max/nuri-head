@@ -11,6 +11,10 @@ import type { RoofNode } from '../../domain/scene.types';
 import { istVerschneidungsForm, type RoofShape } from '../../domain/roofShape';
 import { pruefeRechteckigeKontur } from '../../geometry/dachGeometrie';
 import type { EngineRoofShape } from '../../geometry/dachformVorlagen';
+// W-3b 2a-2: reine U-Form-Engine NUR aufgerufen (Byte-Treue). Liefert echte Flächen (poly in lokal u/v).
+import { uFormFlaechen, uBauGueltig, type UFormEingabe } from '../../geometry/dachUForm';
+// W-3b Teil 3: L/T-Verschneidungsflächen (byte-treuer Port) — gleiches (origin,uDir,vDir,poly)-Schema wie U.
+import { verschneidungsFlaechen as ltFormFlaechen, lTBauGueltig, type VerschneidungEingabe } from '../../geometry/dachVerschneidung';
 
 // W-3b (B1): Compile-Beweis, dass die Engine-Formen eine TEILMENGE der einen RoofShape-Wahrheit sind
 // (kein gespiegelter Zweit-Typ, der auseinanderläuft). Bricht tsc, sobald jemand EngineRoofShape um
@@ -46,6 +50,155 @@ interface DachRoh {
   flaechen: RohFlaeche[];
 }
 
+/** Standard-Sparrenhöhe (cm) — Konstruktions-Konstante, nicht im Modell; wirkt nur cm-weise auf Höhen. */
+const SPARREN_HOEHE_CM = 20;
+
+/**
+ * Bounding-Box eines Polygons + deren Zentrum. Das Grundriss-Zentrum (Bbox-Mitte) ist der korrekte
+ * Platzierungs-Anker der Verschneidungsformen (u UND l/t) — NICHT der Schwerpunkt: der Schwerpunkt eines
+ * U/L/T-Polygons ist zur Masse hin verschoben (die Kerbe fehlt), was das Dach gegen den Wand-Footprint
+ * versetzt (Evaluator-Befund U-Optik, gilt gleich für L/T). Die Bbox-Mitte deckt sich mit der Rechteck-Basis.
+ */
+function polygonBbox(poly: ReadonlyArray<{ x: number; y: number }>): { xMin: number; xMax: number; yMin: number; yMax: number; cx: number; cy: number } {
+  let xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity;
+  for (const p of poly) {
+    if (p.x < xMin) xMin = p.x; if (p.x > xMax) xMax = p.x;
+    if (p.y < yMin) yMin = p.y; if (p.y > yMax) yMax = p.y;
+  }
+  return { xMin, xMax, yMin, yMax, cx: (xMin + xMax) / 2, cy: (yMin + yMax) / 2 };
+}
+
+/**
+ * W-3b 2a-2: EINE Abbildung `node.anbau` → `UFormEingabe` (Meter). U braucht ALLE vier Schenkelmaße
+ * (uFormFlaechen nutzt widthB/lengthB) — fehlen sie, gibt es KEINE Eingabe (→ leer/Marker, kein
+ * erfundener Wert). overhang/height/pitch stammen aus dem RoofNode; rafterHeight ist Standard-Konstante.
+ */
+function anbauZuEingabe(roof: RoofNode): UFormEingabe | null {
+  const a = roof.anbau;
+  if (!a || !(a.length > 0) || !(a.width > 0) || !(a.lengthB && a.lengthB > 0) || !(a.widthB && a.widthB > 0)) {
+    return null;
+  }
+  return {
+    length: a.length / 1000,
+    width: a.width / 1000,
+    lengthB: a.lengthB / 1000,
+    widthB: a.widthB / 1000,
+    overhang: roof.ueberstandMm / 1000,
+    overhangGable: roof.ueberstandMm / 1000,
+    pitchGrad: roof.neigungGrad,
+    height: roof.traufhoeheMm / 1000,
+    rafterHeight: SPARREN_HOEHE_CM,
+  };
+}
+
+/**
+ * Ohren-Schnitt-Triangulierung eines EINFACHEN Polygons (auch konkav — die U-Südfläche ist genotcht).
+ * Liefert Index-Dreiecke in die Eingabe. Rein/testbar; entartete Polygone brechen sicher ab (kein Hang).
+ */
+function triangulierePolygon(poly: ReadonlyArray<{ x: number; y: number }>): Array<[number, number, number]> {
+  const n = poly.length;
+  if (n < 3) return [];
+  const kreuz = (o: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }): number =>
+    (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+  let flaeche = 0;
+  for (let i = 0; i < n; i++) { const a = poly[i], b = poly[(i + 1) % n]; flaeche += a.x * b.y - b.x * a.y; }
+  const idx = [...Array(n).keys()];
+  if (flaeche < 0) idx.reverse(); // CCW erzwingen
+  const imDreieck = (p: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }, c: { x: number; y: number }): boolean => {
+    const d1 = kreuz(a, b, p), d2 = kreuz(b, c, p), d3 = kreuz(c, a, p);
+    return !(((d1 < 0) || (d2 < 0) || (d3 < 0)) && ((d1 > 0) || (d2 > 0) || (d3 > 0)));
+  };
+  const tris: Array<[number, number, number]> = [];
+  let wache = 0;
+  while (idx.length > 3 && wache++ < 2000) {
+    let ohr = false;
+    for (let i = 0; i < idx.length; i++) {
+      const ia = idx[(i + idx.length - 1) % idx.length], ib = idx[i], ic = idx[(i + 1) % idx.length];
+      const a = poly[ia], b = poly[ib], c = poly[ic];
+      if (kreuz(a, b, c) <= 0) continue; // reflex/kollinear — kein Ohr
+      let frei = true;
+      for (const j of idx) { if (j === ia || j === ib || j === ic) continue; if (imDreieck(poly[j], a, b, c)) { frei = false; break; } }
+      if (!frei) continue;
+      tris.push([ia, ib, ic]);
+      idx.splice(i, 1);
+      ohr = true;
+      break;
+    }
+    if (!ohr) break; // Sicherheitsnetz gegen entartete Polygone
+  }
+  if (idx.length === 3) tris.push([idx[0], idx[1], idx[2]]);
+  return tris;
+}
+
+/**
+ * W-3b 2a-2 + Teil 3: echte Dachflächen der Verschneidungsformen (in `dachRoh`, ersetzt den `→ []`-Guard).
+ *  - u-shape: die 6 Flächen aus `uFormFlaechen` (Byte-Treue), Engine-Meter (x=Länge, z=Breite, y=oben).
+ *  - l/t-shape (Teil 3): die 4 Flächen aus `verschneidungsFlaechen` (byte-treu `buildCompoundPitchedFaces`)
+ *    — gleiches (origin,uDir,vDir,poly)-Schema, deshalb DIESELBE Transform/Triangulierung wie U.
+ *  - Alle → Welt (mm, Nord=+y, um den Polygon-Schwerpunkt) transformiert und (konkav-sicher) trianguliert.
+ *  - fehlendes/degeneriertes `anbau` ⇒ leer (Aufrufer setzt Prüf-Marker). Kein erfundener Wert, kein Crash.
+ */
+function verschneidungsFlaechen(roof: RoofNode): DachRoh {
+  const leer: DachRoh = { firstHoeheMm: Math.round(roof.traufhoeheMm), flaechen: [] };
+  const e = anbauZuEingabe(roof);
+  if (!e) return leer;                            // fehlendes anbau → Marker/leer
+
+  // Flächenquelle je Form; beide liefern dasselbe Flächen-Schema ⇒ eine Mapping-Schleife (eine Wahrheit).
+  type FlaechenQuelle = ReadonlyArray<{ origin: WeltPunkt3; uDir: WeltPunkt3; vDir: WeltPunkt3; poly: Array<{ x: number; y: number }> }>;
+  let quelle: FlaechenQuelle;
+  if (roof.roofType === 'u-shape') {
+    if (!uBauGueltig(e)) return leer;             // degeneriert → leer
+    quelle = uFormFlaechen(e);
+  } else {
+    const ve: VerschneidungEingabe = { ...e, form: roof.roofType === 't-shape' ? 't' : 'l' };
+    if (!lTBauGueltig(ve)) return leer;           // degeneriert → leer
+    quelle = ltFormFlaechen(ve);
+  }
+
+  const azRad = (roof.firstAzimutGrad * Math.PI) / 180; // NICHT `rad` — kein zweiter Rechenweg der Rechteckbasis
+  const rx = Math.sin(azRad), ry = Math.cos(azRad);     // Firstrichtung (Nord=+y)
+  const qx = Math.cos(azRad), qy = -Math.sin(azRad);    // quer
+  const M = 1000;
+  const aRad = (roof.neigungGrad * Math.PI) / 180;
+
+  // (u,v)→Engine-Grundriss (ex,ez) — reine Ableitung, für die Footprint-Zentrierung (gemeinsam u+l/t).
+  const grund = (f: (typeof quelle)[number], uv: { x: number; y: number }): { ex: number; ez: number } => ({
+    ex: f.origin.x + uv.x * f.uDir.x + uv.y * f.vDir.x,
+    ez: f.origin.z + uv.x * f.uDir.z + uv.y * f.vDir.z,
+  });
+  // Engine-Footprint-Bbox über ALLE `quelle`-Flächen → dessen ZENTRUM auf das Grundriss-Zentrum (Bbox-
+  // Mitte) der Wände legen. Quellen-agnostisch ⇒ EIN Anker platziert u UND l/t (SSOT, behebt die
+  // Schwerpunkt-Fehlplatzierung: Traufe/Kehle sitzen auf der Kontur, kein Versatz gegen den Wand-Footprint).
+  let exMin = Infinity, exMax = -Infinity, ezMin = Infinity, ezMax = -Infinity;
+  for (const f of quelle) for (const uv of f.poly) {
+    const g = grund(f, uv);
+    if (g.ex < exMin) exMin = g.ex; if (g.ex > exMax) exMax = g.ex;
+    if (g.ez < ezMin) ezMin = g.ez; if (g.ez > ezMax) ezMax = g.ez;
+  }
+  const engCx = (exMin + exMax) / 2, engCz = (ezMin + ezMax) / 2;
+  const ziel = polygonBbox(roof.polygon);
+
+  const flaechen: RohFlaeche[] = [];
+  let maxZ = roof.traufhoeheMm;
+  let nr = 0;
+  for (const f of quelle) {
+    for (const [i, j, k] of triangulierePolygon(f.poly)) {
+      const ecken = [f.poly[i], f.poly[j], f.poly[k]].map((uv): WeltPunkt3 => {
+        // lokal (u,v) → Engine-Welt → Ziel-Welt (mm). Anker: Engine-Footprint-Zentrum → Grundriss-Bbox-Mitte.
+        const ex = f.origin.x + uv.x * f.uDir.x + uv.y * f.vDir.x;
+        const ey = f.origin.y + uv.x * f.uDir.y + uv.y * f.vDir.y;
+        const ez = f.origin.z + uv.x * f.uDir.z + uv.y * f.vDir.z;
+        const dex = ex - engCx, dez = ez - engCz;
+        const w: WeltPunkt3 = { x: ziel.cx + (dex * rx + dez * qx) * M, y: ziel.cy + (dex * ry + dez * qy) * M, z: ey * M };
+        if (w.z > maxZ) maxZ = w.z;
+        return w;
+      });
+      flaechen.push({ surfaceId: `${roof.id}#u${nr++}`, rechteckig: false, neigungRad: aRad, ecken });
+    }
+  }
+  return { firstHoeheMm: Math.round(maxZ), flaechen };
+}
+
 /**
  * W-3a-fix (M1/SSOT): DIE EINE Herleitung von Basis ((u,v)→Welt) + Flächen-Ecken je roofType.
  * `dachMeshWelt` (Dreiecke) UND `dachflaechen` (Aufbau-Trägerflächen) lesen aus dieser Quelle — kein
@@ -56,12 +209,11 @@ interface DachRoh {
  * @throws DachGeometrieUngueltig  bei nicht-rechteckiger Kontur (Kante 1).
  */
 function dachRoh(roof: RoofNode): DachRoh {
-  // W-3b: L/T/U (Verschneidungsformen) validieren bereits (Schema), werden aber erst in Stufe 2 über die
-  // Verschneidungs-Engine gerendert. Der Kontur-Guard steht EINMAL hier in der geteilten Quelle ⇒ wirkt
-  // automatisch für dachMeshWelt (Triangulierung) UND dachflaechen (Filter): leeres Ergebnis statt
-  // pauschalem Kontur-Wurf (kein Crash). Rechteckige Formen (inkl. rect): Verhalten unverändert.
+  // W-3b 2a-2: Verschneidungsformen (l/t/u) laufen NICHT durch die pauschale Rechteck-Prüfung, sondern
+  // über die reinen Engines (u = echte Flächen aus dachUForm; l/t noch leer, s. verschneidungsFlaechen).
+  // Bleibt EINMAL hier in der geteilten Quelle ⇒ wirkt für dachMeshWelt (Triangulierung) UND dachflaechen.
   if (istVerschneidungsForm(roof.roofType)) {
-    return { firstHoeheMm: Math.round(roof.traufhoeheMm), flaechen: [] };
+    return verschneidungsFlaechen(roof);
   }
   const { laengeMm, spannMm, cx, cy } = pruefeRechteckigeKontur(roof.polygon, roof.firstAzimutGrad);
   const rad = (roof.firstAzimutGrad * Math.PI) / 180;
@@ -83,7 +235,10 @@ function dachRoh(roof: RoofNode): DachRoh {
   let firstHoehe = zt;
 
   switch (roof.roofType) {
+    // W-3b Stufe 2a: 'rect' = rechteckige Grundform ⇒ definiertes Verhalten wie 'flach' (flache Fläche),
+    // KEIN stiller Wegfall mehr durchs switch (Evaluator-Auflage aus Stufe 1).
     case 'flach':
+    case 'rect':
       flaechen.push({
         surfaceId: `${roof.id}#0`, rechteckig: true, neigungRad: 0,
         ecken: [w(-a, -b, zt), w(a, -b, zt), w(a, b, zt), w(-a, b, zt)],

@@ -25,7 +25,8 @@ import type { RendererAdapter } from './adapter';
 import { weltZuThree } from './adapter';
 import { captureAusFenster, SNAPSHOT_GLOBAL, snapshotLeerMarker } from './capture';
 import { segmentiereWand } from './segmentierung';
-import { platziereWandQuader, bodenPunkteThree, platziereTreppenStufe } from './platzierung';
+import { platziereWandQuader, bodenPunkteThree, platziereTreppenStufe, wandSegmentGrundriss, wandSegmentPrismaThree } from './platzierung';
+import { wandBaender } from '../../geometry/wallGeometry';
 import { treppe3DKoerper } from '../../geometry/treppe3D';
 import { parametereZuTreppe } from '../../geometry/treppeObjekt';
 import { erkenneRaeume } from '../../geometry/roomDetection';
@@ -62,6 +63,24 @@ export function sonnenRichtung(
   const weltY = Math.cos(azimutRad) * Math.cos(hoeheRad);
   const weltZ = Math.sin(hoeheRad);
   return new THREE.Vector3(weltX, weltZ, -weltY).normalize();
+}
+
+/** Wand-Segment-Prisma (8 three-Ecken: 4 unten [0..3], 4 oben [4..7], Grundriss-Reihenfolge) →
+ *  BufferGeometry (Deck + Boden + 4 Seiten). Gehrung: die Grundriss-Ecken tragen die Band-Miter. */
+function prismaGeometrie(e: ReadonlyArray<{ x: number; y: number; z: number }>): THREE.BufferGeometry {
+  const pos = new Float32Array(e.flatMap((p) => [p.x, p.y, p.z]));
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setIndex([
+    4, 5, 6, 4, 6, 7,   // oben
+    0, 2, 1, 0, 3, 2,   // unten
+    0, 1, 5, 0, 5, 4,   // Seite links
+    1, 2, 6, 1, 6, 5,   // Seite bis
+    2, 3, 7, 2, 7, 6,   // Seite rechts
+    3, 0, 4, 3, 4, 7,   // Seite von
+  ]);
+  g.computeVertexNormals();
+  return g;
 }
 
 const FARBE_WAND = 0xd9dee5;      // heller Putz — Form über Schatten + Kanten
@@ -309,21 +328,36 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     // keine zweite Wahrheit). Level ohne geschlossenen Ring ⇒ keine Räume ⇒ keine Böden (Kante 4).
     const raeume = erkenneRaeume(waende, level.defaultWallHeight).map((r, i) => ({ id: `raum-${level.id}-${i}`, polygon: r.polygon }));
 
-    // Wände: ein Mesh je Quader (Kante 7); Klemm-Segmente in Warnfarbe (Kante 2).
+    // Gehrung (Auftrag 3D-Wandecken A): Bänder EINMAL aus ALLEN Level-Wänden (Nachbarschaft nötig) — die
+    // eine gehrte Ecken-Wahrheit aus `wandBaender`, im 3D wiederverwendet (kein zweiter Miter).
+    const baender = new Map(
+      wandBaender(waende.map((w) => ({ id: w.id, start: w.start, end: w.end, thickness: w.thickness }))).map((b) => [b.id, b] as const),
+    );
+
+    // Wände: ein Prisma je Quader (Kante 7); Enden gehrt (Band), Innensegmente/Öffnungen rechtwinklig;
+    // Klemm-Segmente in Warnfarbe (Kante 2).
     for (const wand of waende) {
+      const band = baender.get(wand.id);
       const eigene = oeffnungen.filter((o) => o.hostWallId === wand.id);
       const segmentiert = segmentiereWand(wand, eigene);
       for (const quader of segmentiert.quader) {
-        const p = platziereWandQuader(wand, quader, level.elevation);
+        const geklemmt = quader.geklemmt === true;
         const farbe = this.ausgewaehlt.has(wand.id)
           ? FARBE_AUSWAHL
-          : p.geklemmt ? FARBE_GEKLEMMT : FARBE_WAND;
-        const mesh = new THREE.Mesh(
-          new THREE.BoxGeometry(p.masse.x, p.masse.y, p.masse.z),
-          new THREE.MeshStandardMaterial({ color: farbe, roughness: 0.72, metalness: 0.02 }),
-        );
-        mesh.position.set(p.zentrum.x, p.zentrum.y, p.zentrum.z);
-        mesh.rotation.y = p.rotationY;
+          : geklemmt ? FARBE_GEKLEMMT : FARBE_WAND;
+        const material = new THREE.MeshStandardMaterial({ color: farbe, roughness: 0.72, metalness: 0.02, side: THREE.DoubleSide });
+        let mesh: THREE.Mesh;
+        if (band) {
+          // Gehrtes Prisma: Vertices liegen bereits in three-Welt (weltZuThree je Ecke), kein position/rotation.
+          const ecken = wandSegmentPrismaThree(wandSegmentGrundriss(band, wand, quader), quader.untenMm, quader.obenMm, level.elevation);
+          mesh = new THREE.Mesh(prismaGeometrie(ecken), material);
+        } else {
+          // Fallback (entartete Wand ohne Band): bisherige achsparallele Box.
+          const p = platziereWandQuader(wand, quader, level.elevation);
+          mesh = new THREE.Mesh(new THREE.BoxGeometry(p.masse.x, p.masse.y, p.masse.z), material);
+          mesh.position.set(p.zentrum.x, p.zentrum.y, p.zentrum.z);
+          mesh.rotation.y = p.rotationY;
+        }
         mesh.castShadow = true;
         mesh.receiveShadow = true;
         mesh.userData.nodeId = wand.id;
