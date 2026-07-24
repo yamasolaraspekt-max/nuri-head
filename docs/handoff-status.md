@@ -247,3 +247,18 @@ npm run build:hausplaner && git --no-optional-locks status --porcelain public/ha
 **Leere Ausgabe = das committete Bundle ist byte-identisch zu einem frischen Rebuild aus den Quellen = keine
 Drift.** Nicht abnahme-blockierend (Quell-Gate ist grün 680/680), aber es versiegelt das Tor-2-Ziel beweissicher.
 Nur lesen/melden; kein Commit nötig, wenn leer.
+
+## ✅ PUSH VERIFIZIERT (Planner führte ihn für Yama via Finder aus, 2026-07-24)
+Integrations-Ziel gesichert auf BEIDEN eigenen Remotes:
+- `fork/auto/hausplaner-integration = 31bf6a2` (= c5afcee Code/Skills + Planner-Docs)
+- `backup-private/auto/hausplaner-integration = 31bf6a2`
+Alle `auto/`-Branches auf fork + backup-private (ls-remote bestätigt). **Kein --force. Nichts ans Fremd-Repo.**
+Eine bewusste Auslassung: `auto/hausplaner-ui-3a` non-ff → NICHT zwangsgepusht (alt, nicht Teil der Integration).
+Protokoll: `push-result.log` (FERTIG 19:56).
+
+### KORREKTUR Remote-Sicherheitskarte (die alte "origin=fremd"-Notiz ist ÜBERHOLT)
+- `origin`, `fork` = https://github.com/yamasolaraspekt-max/nuri-head.git → **Yamas eigener Account** (sicher).
+- `backup-private` = https://github.com/yamasolaraspekt-max/nurihead.git → **Yamas Backup** (sicher).
+- `upstream` = https://github.com/raminsadid2021/nuri-head.git → **FREMD-REPO, nie dorthin pushen.**
+Merkregel neu: push nur auf fork/backup-private/origin (alle Yama); **nie `upstream`**. Von `main` kein blankes
+`git push` (main folgt upstream → Fremd-Repo).
