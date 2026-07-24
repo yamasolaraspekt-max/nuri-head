@@ -202,3 +202,31 @@ liegt). Schließe ihn ab — genau diese Schritte, kein UI, keine neuen Features
 4. **Übergabe an Evaluator:** eine Browser-Runde (Decke-Slab + Gehrung-Ecken) auf dem stabilen Integrationsstand.
 **KEIN Push, kein main-Merge (Tor 2 = Yama).** Danach folgen Bestandsprüfung → Verdrahtungs-Welle — NICHT vorher
 anfangen (kein Aufbau auf offenem/ungeprüftem Stand).
+
+## Journal — 2026-07-24 (Integration stabil, Skills drin, erster Verdrahtungs-Auftrag)
+- **Integrationsstand `c5afcee` — Whole-Stack grün 680/680** (Planner gegengemessen: tsc 0, schema 0, 680/680).
+- **#62/#3 ERLEDIGT:** `.claude/skills/` im Repo (bauplaner-3d + Kern-Linsen), CLAUDE.md Skill-Pflicht drin (grep=2).
+- **11 restliche Meister-Linsen (Heizung/Elektro/PV/TGA/Bad/Küche/Fliesen/Schreiner/Maler/Architekt/Zeichner):
+  BEWUSST NICHT jetzt.** Prioritätsregel „Vorhandenes nutzbar vor Neuem" — weitere Prüf-Skills sind Vorbereitung,
+  keine Nutzbarmachung. Nur auf konkreten Bedarf einer Welle ziehen.
+
+## ⇒ EVALUATOR — Ballbesitz: Browser-Abnahme auf `c5afcee` (stabiler Integrationsbaum)
+Eine Browser-Runde auf dem committeten Whole-Stack-Baum: Decke-Slab (`?fixture=decke-treppe&capture=1` → Slab auf
+Wand-Oberkante + Treppenauge) + Gehrung-Ecken (`wandGehrung3D.test.ts` ist der numerische Kern; Browser ergänzt).
+Whole-Stack-Gate ist Planner-gegengemessen grün (680/680). Danach Feld browserseitig abgenommen. Kein Push (Tor 2).
+
+## ⇒ GENERATOR — VERDRAHTUNG #1: L/T/U im Dach-select + Anbaufelder (erster Referenzablauf-Baustein)
+**Gemessen (Regel 1), Integrationsbaum:** `app/HausplanerApp.tsx` Z.1075–1079 bietet nur sattel/walm/pult/flach;
+neues Dach = `sattel` (Z.443). Der L/T/U-Render (`verschneidungsFlaechen`/`anbauZuEingabe`/`dachUForm`) ist grün
+und getestet — nur nicht UI-erreichbar. Anbaufelder fehlen im Panel.
+**Auftrag (reine Verdrahtung, kein neuer Render, kein Modell/Schema):**
+1. Dach-`select` um `l-shape`/`t-shape`/`u-shape` erweitern (Labels „L-Dach/T-Dach/U-Dach"), an vorhandenes
+   `aktualisiereDach({roofType})` verdrahtet.
+2. **Konditionale Anbaufelder** im Eigenschaftenpanel: bei l/t/u → Außenmaß Länge/Breite; bei u zusätzlich
+   Innenhof/Kerbe Länge/Breite (lengthB/widthB) — an `aktualisiereDach({anbau:{...}})`. (anbauZuEingabe verlangt
+   für u ALLE vier; s. dachMesh.ts.) Unzulässige/fehlende Maße sofort mit konkretem Grund markieren.
+3. Additiv, Token-Disziplin (`T`), `usePlannerUiStore`-SSOT. Gates selbst (tsc/schema/test), auf `auto/`-Branch
+   über `c5afcee`. **Kein Push.**
+**Abnahme (Evaluator):** L/T/U aus der UI wählbar → Anbaufelder erscheinen → SceneDocument-Wirkung → 3D rendert
+bündig (nutzt die schon abgenommene Platzierung) → speicherbar/reload-fest. Der erste vollständig geschlossene
+UI→Command→Modell→Renderer→Save-Beleg.
