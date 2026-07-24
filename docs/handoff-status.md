@@ -123,3 +123,13 @@ Nativer Ein-Schritt (Cowork/aarch64 kann nicht bauen/servieren):
 4. Konsole: `window.__hausplanerSnapshot3d()` → nicht-leere PNG; prüfen: **Slab** sitzt auf Wand-Oberkante
    (`elevation+defaultWallHeight`, Dicke=`floorThickness`), **Treppenauge**-Durchbruch ist als Loch sichtbar.
 5. Votum → Ledger. Danach ist das Hausplaner-Feld **komplett abgenommen**. Push/Merge = Yama (Tor 2).
+
+## ⇒ GENERATOR/EVALUATOR — Baum-Reihenfolge (Planner-Entscheidung, 2026-07-24, vertritt Yama)
+Alles Gebaute ist committet; kein offener Bau-Auftrag. Zwei Sicht-Schritte offen. Reihenfolge:
+1. **Gehrung `9be1d13` ZUERST — KEIN Umstellen.** Kern = `wandGehrung3D.test.ts` (numerischer Ecken-Dichtheits-
+   Test), read-only auf dem aktuellen `w3b-2`-Baum fahrbar. Browser-Ecken-Sicht optional, kann auf w3b-2 mitlaufen.
+   → Grund: L-Abnahme-1 (Unit-Test primär, Screenshot ergänzend). Gehrung braucht kein Serve.
+2. **DANN Baum auf `decke @ d59e26c`** (3-Zeilen-Selbstcheck: `rev-parse HEAD == d59e26c` + `?fixture=decke-
+   treppe`/capture-grep belegen) für die **Decke-Slab-Browser-Sicht** — die einzige, die zwingend Serve braucht
+   (Slab auf Wand-Oberkante + Treppenauge). Turnkey-Auftrag steht oben im Ledger.
+→ Fewest tree moves (ein Wechsel statt zwei). Danach ist das Hausplaner-Feld **komplett abgenommen**. Push/Merge = Yama (Tor 2).
