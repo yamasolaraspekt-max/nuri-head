@@ -133,3 +133,28 @@ Alles Gebaute ist committet; kein offener Bau-Auftrag. Zwei Sicht-Schritte offen
    treppe`/capture-grep belegen) für die **Decke-Slab-Browser-Sicht** — die einzige, die zwingend Serve braucht
    (Slab auf Wand-Oberkante + Treppenauge). Turnkey-Auftrag steht oben im Ledger.
 → Fewest tree moves (ein Wechsel statt zwei). Danach ist das Hausplaner-Feld **komplett abgenommen**. Push/Merge = Yama (Tor 2).
+
+## ⇒ GENERATOR — KONSOLIDIERUNGS-BRANCH freigegeben (Planner-Entscheidung, vertritt Yama, 2026-07-24)
+**JA, bau die Integrations-Branch.** Software-Integration (kein Bau-Fach) → Planner-Entscheidung, kein Tor 1.
+Nur `auto/` (Vorschlag `auto/hausplaner-integration`), **kein Push, kein main-Merge — Tor 2 bleibt Yamas**.
+
+### Reihenfolge
+1. ZUERST: Evaluator fährt den **Gehrung-Ecken-Dichtheitstest** (`wandGehrung3D.test.ts`) read-only auf dem
+   aktuellen `w3b-2 @ 9be1d13` — kein Tree-Move nötig (Unit-Test primär, L-Abnahme-1). Verdikt eintragen.
+2. DANN: Generator baut die Integrations-Branch aus den abgenommenen grünen Slices.
+
+### Merge-Plan (PFLICHT, schriftlich zur Evaluator-Abnahme) — die bekannten Divergenzen sauber auflösen
+- **`verschneidungsFlaechen`/`dachMesh`:** die **w3b-2-Fassung (`7556bc6`) ist kanonisch** — sie trägt den
+  Footprint-Anker für u UND l/t in der EINEN `quelle`-Schleife und **subsumiert** dach-ui `66ad448`. dach-ui
+  `66ad448` NICHT separat mergen (würde die zweite Anker-Wahrheit zurückholen).
+- **`CeilingNode`/`ceilings?`** (aus `decke @ d59e26c`): additiv übernehmen (Muster `roofs`/`ceilings?`), Node-
+  Union erweitern, Zod + `schema:hausplaner` **regenerieren** (sonst 422).
+- **capture/Fixture-Infra** (`capture.ts`, `studioFixtures.ts`, `?fixture=`/`?capture=`): NICHT verlieren —
+  aus dem Zweig übernehmen, der sie trägt; u-dach- UND decke-treppe-Fixture müssen beide im Integrationsbaum sein.
+- **Navi-CI `2011798`** einschließen.
+
+### Guardrail (kein grüner Verlust)
+Auf dem Integrationsbaum muss die **Vereinigung** aller Tests grün sein (nicht Teilmenge): u/l-t-Platzierung +
+L/T-Render + Gehrung + Decke (646) + Navi-CI. Voller Gate EINMAL grün (tsc 0 · schema 0 · test · build).
+Dann EIN Serve auf dem Integrationsbaum → Evaluator fährt Decke-Slab-Sicht (+ optional Gehrung-Ecken) in
+EINER Browser-Runde. Ergebnis = EIN Tor-2-Merge-Ziel für Yama.
