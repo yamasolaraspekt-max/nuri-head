@@ -11,7 +11,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Stage, Layer, Line, Rect, Group, Text, Circle } from 'react-konva';
 import type Konva from 'konva';
 import { useHausplanerStore } from '../store/hausplanerStore';
-import type { ObjectNode, OpeningNode, RoofNode, SceneNode, WallNode } from '../domain/scene.types';
+import type { ObjectNode, OpeningNode, RoofNode, RoofAnbauMasse, SceneNode, WallNode } from '../domain/scene.types';
+import { istVerschneidungsForm } from '../domain/roofShape';
 import { erkenneRaeume } from '../geometry/roomDetection';
 import { bemassung } from '../geometry/bemassung';
 import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt } from '../geometry/wallGeometry';
@@ -1077,6 +1078,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                   <option value="walm">Walmdach</option>
                   <option value="pult">Pultdach</option>
                   <option value="flach">Flachdach</option>
+                  <option value="l-shape">L-Dach</option>
+                  <option value="t-shape">T-Dach</option>
+                  <option value="u-shape">U-Dach</option>
                 </select>
               </label>
               <label style={panelLabel}>Neigung (°)
@@ -1088,6 +1092,46 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               <label style={panelLabel}>Überstand (mm)
                 <input type="number" min={0} value={selectedRoof.ueberstandMm} onChange={(e) => aktualisiereDach({ ueberstandMm: Math.max(0, Math.round(Number(e.target.value))) })} style={panelInput} />
               </label>
+              {/* Verdrahtung #1: L/T/U-Anbaumaße (verdrahten den schon abgenommenen Verschneidungs-Render an die UI).
+                  Operanden-Gate: fehlende/≤0 Maße rendern NICHT — mit konkretem Grund markiert, kein erfundener Wert. */}
+              {istVerschneidungsForm(selectedRoof.roofType) && (() => {
+                const a = selectedRoof.anbau;
+                const istU = selectedRoof.roofType === 'u-shape';
+                const setzeAnbau = (feld: keyof RoofAnbauMasse, wert: number): void => {
+                  const basis: RoofAnbauMasse = { length: a?.length ?? 0, width: a?.width ?? 0, lengthB: a?.lengthB, widthB: a?.widthB };
+                  basis[feld] = Math.max(0, Math.round(wert));
+                  aktualisiereDach({ anbau: basis });
+                };
+                const fehlt = !a || !(a.length > 0) || !(a.width > 0) || (istU && (!(a.lengthB && a.lengthB > 0) || !(a.widthB && a.widthB > 0)));
+                return (
+                  <>
+                    <div style={{ fontWeight: 700, margin: '12px 0 6px' }}>Anbau / Verschneidung</div>
+                    <label style={panelLabel}>Außenmaß Länge (mm)
+                      <input type="number" min={0} value={a?.length ?? ''} onChange={(e) => setzeAnbau('length', Number(e.target.value))} style={panelInput} />
+                    </label>
+                    <label style={panelLabel}>Außenmaß Breite (mm)
+                      <input type="number" min={0} value={a?.width ?? ''} onChange={(e) => setzeAnbau('width', Number(e.target.value))} style={panelInput} />
+                    </label>
+                    {istU && (
+                      <>
+                        <label style={panelLabel}>Innenhof/Kerbe Länge (mm)
+                          <input type="number" min={0} value={a?.lengthB ?? ''} onChange={(e) => setzeAnbau('lengthB', Number(e.target.value))} style={panelInput} />
+                        </label>
+                        <label style={panelLabel}>Innenhof/Kerbe Breite (mm)
+                          <input type="number" min={0} value={a?.widthB ?? ''} onChange={(e) => setzeAnbau('widthB', Number(e.target.value))} style={panelInput} />
+                        </label>
+                      </>
+                    )}
+                    {fehlt && (
+                      <div style={{ fontSize: 11, color: FARBEN.warnung, marginTop: 2 }}>
+                        ⚠ {istU
+                          ? 'U-Dach braucht alle vier Maße > 0 (Außen Länge/Breite + Innenhof/Kerbe Länge/Breite) — sonst rendert es nicht.'
+                          : 'L/T-Dach braucht Außenmaß Länge und Breite > 0 — sonst rendert es nicht.'}
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
               <button type="button" style={{ ...knopf(false), width: '100%', marginTop: 4 }} onClick={() => { store.getState().executeCommand({ type: 'REMOVE_ROOF', roofId: selectedRoof.id }); store.getState().selectNodes([]); }}>Dach entfernen</button>
             </>
           ) : selectedWall ? (
