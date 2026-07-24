@@ -53,12 +53,19 @@ interface DachRoh {
 /** Standard-Sparrenhöhe (cm) — Konstruktions-Konstante, nicht im Modell; wirkt nur cm-weise auf Höhen. */
 const SPARREN_HOEHE_CM = 20;
 
-/** Schwerpunkt eines Polygons (mm) — Platzierungs-Anker für die U-Form (pruefeRechteckigeKontur wirft hier). */
-function polygonSchwerpunkt(poly: ReadonlyArray<{ x: number; y: number }>): { x: number; y: number } {
-  let sx = 0, sy = 0;
-  for (const p of poly) { sx += p.x; sy += p.y; }
-  const n = poly.length || 1;
-  return { x: sx / n, y: sy / n };
+/**
+ * Bounding-Box eines Polygons + deren Zentrum. Das Grundriss-Zentrum (Bbox-Mitte) ist der korrekte
+ * Platzierungs-Anker der Verschneidungsformen (u UND l/t) — NICHT der Schwerpunkt: der Schwerpunkt eines
+ * U/L/T-Polygons ist zur Masse hin verschoben (die Kerbe fehlt), was das Dach gegen den Wand-Footprint
+ * versetzt (Evaluator-Befund U-Optik, gilt gleich für L/T). Die Bbox-Mitte deckt sich mit der Rechteck-Basis.
+ */
+function polygonBbox(poly: ReadonlyArray<{ x: number; y: number }>): { xMin: number; xMax: number; yMin: number; yMax: number; cx: number; cy: number } {
+  let xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity;
+  for (const p of poly) {
+    if (p.x < xMin) xMin = p.x; if (p.x > xMax) xMax = p.x;
+    if (p.y < yMin) yMin = p.y; if (p.y > yMax) yMax = p.y;
+  }
+  return { xMin, xMax, yMin, yMax, cx: (xMin + xMax) / 2, cy: (yMin + yMax) / 2 };
 }
 
 /**
@@ -148,12 +155,28 @@ function verschneidungsFlaechen(roof: RoofNode): DachRoh {
     quelle = ltFormFlaechen(ve);
   }
 
-  const c = polygonSchwerpunkt(roof.polygon);
   const azRad = (roof.firstAzimutGrad * Math.PI) / 180; // NICHT `rad` — kein zweiter Rechenweg der Rechteckbasis
   const rx = Math.sin(azRad), ry = Math.cos(azRad);     // Firstrichtung (Nord=+y)
   const qx = Math.cos(azRad), qy = -Math.sin(azRad);    // quer
   const M = 1000;
   const aRad = (roof.neigungGrad * Math.PI) / 180;
+
+  // (u,v)→Engine-Grundriss (ex,ez) — reine Ableitung, für die Footprint-Zentrierung (gemeinsam u+l/t).
+  const grund = (f: (typeof quelle)[number], uv: { x: number; y: number }): { ex: number; ez: number } => ({
+    ex: f.origin.x + uv.x * f.uDir.x + uv.y * f.vDir.x,
+    ez: f.origin.z + uv.x * f.uDir.z + uv.y * f.vDir.z,
+  });
+  // Engine-Footprint-Bbox über ALLE `quelle`-Flächen → dessen ZENTRUM auf das Grundriss-Zentrum (Bbox-
+  // Mitte) der Wände legen. Quellen-agnostisch ⇒ EIN Anker platziert u UND l/t (SSOT, behebt die
+  // Schwerpunkt-Fehlplatzierung: Traufe/Kehle sitzen auf der Kontur, kein Versatz gegen den Wand-Footprint).
+  let exMin = Infinity, exMax = -Infinity, ezMin = Infinity, ezMax = -Infinity;
+  for (const f of quelle) for (const uv of f.poly) {
+    const g = grund(f, uv);
+    if (g.ex < exMin) exMin = g.ex; if (g.ex > exMax) exMax = g.ex;
+    if (g.ez < ezMin) ezMin = g.ez; if (g.ez > ezMax) ezMax = g.ez;
+  }
+  const engCx = (exMin + exMax) / 2, engCz = (ezMin + ezMax) / 2;
+  const ziel = polygonBbox(roof.polygon);
 
   const flaechen: RohFlaeche[] = [];
   let maxZ = roof.traufhoeheMm;
@@ -161,11 +184,12 @@ function verschneidungsFlaechen(roof: RoofNode): DachRoh {
   for (const f of quelle) {
     for (const [i, j, k] of triangulierePolygon(f.poly)) {
       const ecken = [f.poly[i], f.poly[j], f.poly[k]].map((uv): WeltPunkt3 => {
-        // lokal (u,v) → Engine-Welt → Ziel-Welt (mm). Platzierung: Schwerpunkt-Näherung.
+        // lokal (u,v) → Engine-Welt → Ziel-Welt (mm). Anker: Engine-Footprint-Zentrum → Grundriss-Bbox-Mitte.
         const ex = f.origin.x + uv.x * f.uDir.x + uv.y * f.vDir.x;
         const ey = f.origin.y + uv.x * f.uDir.y + uv.y * f.vDir.y;
         const ez = f.origin.z + uv.x * f.uDir.z + uv.y * f.vDir.z;
-        const w: WeltPunkt3 = { x: c.x + (ex * rx + ez * qx) * M, y: c.y + (ex * ry + ez * qy) * M, z: ey * M };
+        const dex = ex - engCx, dez = ez - engCz;
+        const w: WeltPunkt3 = { x: ziel.cx + (dex * rx + dez * qx) * M, y: ziel.cy + (dex * ry + dez * qy) * M, z: ey * M };
         if (w.z > maxZ) maxZ = w.z;
         return w;
       });
