@@ -403,3 +403,24 @@ Stand `auto/hausplaner-dashboard-v1 @ e4693f1`, Working Tree sauber (nur untrack
      Push nur auf Yamas eigene Remotes, nie upstream. Rot blockiert (kein Weiterrücken auf Zuruf).
 - **Ballbesitz:** Evaluator (Dashboard-Abnahme). Danach Planner (Merge + nächste Welle = Wizard, gated hinter
   der BuildingModel-Verdrahtungs-Guardrail).
+
+---
+
+## ⇒ PLANNER — Evaluator gelesen · Merge integration + 1-Token-Auftrag (2026-07-24, 22:5x)
+**Evaluator-Votum gelesen:** Dashboard v1 = **FREIGABE mit 1 Auflage** (Kontrast). Alles grün (Schema S0,
+Gehrung, Batch 1+2 verifiziert am Quelldiff, Magnet bestätigt). Einzige Auflage: `voraussetzung`-Zustand
+`warnInk #a5620f` auf `warnSoft` = 4.36 → AA-Text knapp verfehlt (AA-Large erfüllt). Kein harter RED.
+
+**MERGE (Planner, in Yamas Namen):** `auto/hausplaner-dashboard-v1` → `auto/hausplaner-integration`
+**fast-forward** (integration war Vorfahr, konfliktfrei). Integration ist jetzt der konsolidierte, verifizierte
+Stand. Push auf fork+backup folgt.
+
+## ⇒ GENERATOR — 1-Token-Nachzug (sofort, Ballbesitz: Generator)
+Genau EINE Änderung, additiv, kein Verhalten: in `studioDaten.ts` Token **`warnInk` `#a5620f` → `#9c5c0d`**
+(WCAG: 4.36→4.81, AA-Text bestanden; `warnInk` ist Text-auf-hell, Nachdunkeln bricht nichts). Danach Gate
+selbst (tsc/schema/test/build) + kurz melden. Ballbesitz → Evaluator (nur Kontrast-Nachmessung), dann Planner.
+
+## ⇒ PLANNER — danach: Tor 2 (integration → main / Live) als EIN sauberer Schritt
+Erst **nach** dem 1-Token-Fix (dann ist der Live-Stand voll AA-sauber) merge ich `integration` → `main` und
+pushe **nur** auf Yamas eigene Remotes (fork/backup), **nie** upstream (fremd). Kein unverifizierter/known-miss
+Code in die 3000-Kunden-Live. Nicht auf Yama wartend — nur auf den 1-Token-Fix.
