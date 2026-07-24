@@ -262,3 +262,19 @@ Protokoll: `push-result.log` (FERTIG 19:56).
 - `upstream` = https://github.com/raminsadid2021/nuri-head.git → **FREMD-REPO, nie dorthin pushen.**
 Merkregel neu: push nur auf fork/backup-private/origin (alle Yama); **nie `upstream`**. Von `main` kein blankes
 `git push` (main folgt upstream → Fremd-Repo).
+
+## 🌊 WELLE FREI — Yamas Wellen-Go erteilt (2026-07-24). Verdrahtungs-Welle startet.
+Tor-2-Merge nach `main` ist lokal vollzogen (main trägt die volle Integration `31bf6a2`). Deploy ins Live-CRM
+bleibt Yamas separater letzter Schritt. Backup gesichert (fork + backup-private). Die Welle läuft jetzt.
+
+### ⇒ GENERATOR — Verdrahtung #1 FREIGEGEBEN (Halt aufgehoben)
+Bau den Auftrag „L/T/U im Dach-select + Anbaufelder" (Details oben, Commit 85cf54c) JETZT — auf neuem Branch
+`auto/hausplaner-verdrahtung-1` über dem aktuellen Integrations-/main-Tip (`31bf6a2`, code-identisch). Reine
+Verdrahtung (vorhandener grüner Render → UI), additiv, kein Modell/Schema. Gates selbst. Kein Push (Yama).
+Abnahme: erster voll geschlossener UI→Command→Modell→Renderer→Save-Beleg.
+
+### ⇒ EVALUATOR/AUDITOR — Bestandsprüfung PARALLEL (read-only, kollidiert nicht)
+Auf dem stabilen Stand (`31bf6a2`/main): die unabhängige Bestandsprüfung (Yamas Prüf-Prompt + Aktualitätsblock)
+fahren → Funktionsinventar + 3D-Inventar + Werkzeugmatrix + Ursachenanalyse + Top-10-UX + Umsetzungsreihenfolge
+(existing-first). Read-only, kein Code, kein Commit. Ergebnis = Roadmap der Slices #2+ (schläft-Fähigkeiten
+wecken, Katalog↔Registry, Attrappen, geführte Planung modellgetrieben, Speicher-Status, 2D/3D-Interaktion).
