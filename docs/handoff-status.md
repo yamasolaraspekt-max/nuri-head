@@ -166,3 +166,25 @@ Auf den Integrationsbaum zusätzlich:
 - **`.claude/skills/`** (Skills liegen bisher nur in Cowork): die kuratierten Skills ins Repo bringen, damit
   native Instanzen sie laden können. (Planner liefert die Skill-Dateien; landet im Integrationsbaum.)
 Beides ist additiv (Docs/Config, kein Code-Risiko). Danach sind #3 + #62 erledigt.
+
+## ⇒ MARSCHORDNUNG (sortiert, aktuell — Planner, vertritt Yama, 2026-07-24)
+Diese Liste bündelt die verstreuten ⇒-Einträge zu EINER sortierten Reihenfolge. Abarbeiten von oben.
+
+**VERTEILT — jetzt aktiv:**
+1. **Evaluator:** Gehrung-Ecken-Dichtheitstest `wandGehrung3D.test.ts` read-only auf `w3b-2 @ 9be1d13`
+   (kein Tree-Move). Verdikt eintragen. [Unit-Test primär, L-Abnahme-1]
+2. **Generator:** Konsolidierungs-Branch `auto/hausplaner-integration` bauen (schriftlicher Merge-Plan zur
+   Abnahme). Inhalt: `7556bc6` (w3b-2, KANONISCH für verschneidungsFlaechen — subsumiert dach-ui 66ad448)
+   + `decke @ d59e26c` (CeilingNode additiv, **Schema-Regen**) + Navi-CI `2011798` + capture/Fixture-Infra
+   (u-dach UND decke-treppe erhalten) + **CLAUDE.md Skill-Pflicht** + **.claude/skills** (#3/#62).
+   Guardrail: Vereinigung ALLER Tests grün (nicht Teilmenge), voller Gate 1× (tsc/schema/test/build).
+   Nur `auto/`, **kein Push, kein main-Merge**.
+3. **Evaluator:** EIN Serve auf dem Integrationsbaum → Decke-Slab-Sicht (+ optional Gehrung-Ecken) in EINER
+   Browser-Runde. → Hausplaner-Feld komplett abgenommen.
+4. **Yama (Tor 2):** Merge/Push auf das EINE Integrations-Ziel (`.command`).
+
+**BEWUSST NOCH NICHT VERTEILT (kein Generator-Auftrag offen — gated):**
+- Fach-Freigabe-gated (Regel 4, warten auf Yama-Ja): Tragwerk/Fundament, Fußboden (#56), Auto-Giebel (#57),
+  AP2, Batch-1-Panels. Planner bereitet die Konzepte vor; NICHT als Auftrag rausgegeben.
+- Nächste Welle (nach Abschluss): UI-Ehrlichkeit (#54 + 10 Audit-Befunde).
+- Separate Spur: Energie AP1 `7f844e8` — Evaluator-Abnahme, blockiert Hausplaner nicht.
