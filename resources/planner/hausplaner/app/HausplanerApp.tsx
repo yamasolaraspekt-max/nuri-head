@@ -13,6 +13,7 @@ import type Konva from 'konva';
 import { useHausplanerStore } from '../store/hausplanerStore';
 import type { ObjectNode, OpeningNode, RoofNode, RoofAnbauMasse, SceneNode, WallNode } from '../domain/scene.types';
 import { istVerschneidungsForm } from '../domain/roofShape';
+import { T } from './studioDaten';
 import { erkenneRaeume } from '../geometry/roomDetection';
 import { bemassung } from '../geometry/bemassung';
 import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt } from '../geometry/wallGeometry';
@@ -639,8 +640,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             <strong style={{ fontSize: 14 }}>Hausplaner <span style={{ fontWeight: 600, color: FARBEN.gedaempft, fontSize: 11.5 }}>· Solar Aspekt</span></strong>
           </span>
         )}
-        <button type="button" style={knopf(false)} onClick={() => store.getState().undo()} disabled={!store.getState().kannUndo()}>↶ Rückgängig</button>
-        <button type="button" style={knopf(false)} onClick={() => store.getState().redo()} disabled={!store.getState().kannRedo()}>↷ Wiederholen</button>
+        <button type="button" style={knopf(false)} title="Rückgängig (⌘Z)" aria-label="Rückgängig" onClick={() => store.getState().undo()} disabled={!store.getState().kannUndo()}>↶</button>
+        <button type="button" style={knopf(false)} title="Wiederholen (⌘⇧Z)" aria-label="Wiederholen" onClick={() => store.getState().redo()} disabled={!store.getState().kannRedo()}>↷</button>
         <span style={{ width: 1, height: 22, background: '#e5e7eb', margin: '0 4px' }} />
         {(werkzeug === 'fenster' || werkzeug === 'tuer') && (
           <label style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'flex', alignItems: 'center', gap: 5 }}>
@@ -656,12 +657,31 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             </select>
           </label>
         )}
-        <label style={{ fontSize: 12, color: FARBEN.gedaempft }}>
-          Geschoss{' '}
-          <select value={level.id} onChange={(e) => store.getState().setActiveLevel(e.target.value)} style={{ fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: '1px solid #d1d5db' }}>
-            {scene.levels.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
-          </select>
-        </label>
+        {/* Dashboard v1 §3: Geschoss-Stepper (◀ [Name ▾] ▶) statt Flach-select — ◀/▶ nach sortOrder/elevation,
+            native select = Sprung/Tipp-Suche (skaliert bis viele Etagen). setActiveLevel bleibt SSOT; Token-Border. */}
+        <span style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+          Geschoss
+          {(() => {
+            const sortiert = [...scene.levels].sort((a, b) => a.sortOrder - b.sortOrder || a.elevation - b.elevation);
+            const idx = sortiert.findIndex((l) => l.id === level.id);
+            const gehe = (d: number): void => { const z = sortiert[idx + d]; if (z) store.getState().setActiveLevel(z.id); };
+            const pfeil = (t: string, label: string, d: number, aus: boolean): React.ReactElement => (
+              <button type="button" disabled={aus} title={label} aria-label={label}
+                style={{ ...knopf(false), padding: '4px 7px', opacity: aus ? 0.4 : 1, cursor: aus ? 'not-allowed' : 'pointer' }}
+                onClick={() => gehe(d)}>{t}</button>
+            );
+            return (
+              <>
+                {pfeil('◀', 'Geschoss darunter', -1, idx <= 0)}
+                <select value={level.id} title="Geschoss wählen" onChange={(e) => store.getState().setActiveLevel(e.target.value)}
+                  style={{ fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: `1px solid ${T.hair}` }}>
+                  {sortiert.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
+                </select>
+                {pfeil('▶', 'Geschoss darüber', 1, idx >= sortiert.length - 1)}
+              </>
+            );
+          })()}
+        </span>
         {/* P2b-5: Geschoss anlegen / umbenennen / löschen. Löschen NIE still — belegte Geschosse
             lehnt der Command ab (letzteAblehnung wird sichtbar); id bleibt Referenz-Wahrheit. */}
         <input

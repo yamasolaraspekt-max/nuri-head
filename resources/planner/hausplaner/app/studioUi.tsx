@@ -2,13 +2,20 @@
 import React from 'react';
 import { T } from './studioDaten';
 
-/** Rendert ein 24er-viewBox-Icon aus rohem SVG-Innen-Markup (interne, statische Daten). */
-export function Ikon({ inhalt, size = 22, stroke = 1.6 }: { inhalt: string; size?: number; stroke?: number }): React.ReactElement {
+/**
+ * Rendert ein 24er-viewBox-Icon aus rohem SVG-Innen-Markup (interne, statische Daten). `titel` gibt dem
+ * Icon einen nativen SVG-`<title>`-Tooltip UND ein `aria-label` (A11y, §9 Tooltip-Pflicht). Da das Markup
+ * über dangerouslySetInnerHTML kommt, wird der `<title>` dem HTML vorangestellt (mit Escape der Sonderzeichen).
+ */
+export function Ikon({ inhalt, size = 22, stroke = 1.6, titel }: { inhalt: string; size?: number; stroke?: number; titel?: string }): React.ReactElement {
+  const esc = (s: string): string => s.replace(/[<>&]/g, (c) => (c === '<' ? '&lt;' : c === '>' ? '&gt;' : '&amp;'));
+  const html = (titel ? `<title>${esc(titel)}</title>` : '') + inhalt;
   return (
     <svg
       width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor"
       strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round"
-      dangerouslySetInnerHTML={{ __html: inhalt }}
+      role={titel ? 'img' : undefined} aria-label={titel}
+      dangerouslySetInnerHTML={{ __html: html }}
     />
   );
 }
