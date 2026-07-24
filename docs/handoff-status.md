@@ -278,3 +278,38 @@ Auf dem stabilen Stand (`31bf6a2`/main): die unabhängige Bestandsprüfung (Yama
 fahren → Funktionsinventar + 3D-Inventar + Werkzeugmatrix + Ursachenanalyse + Top-10-UX + Umsetzungsreihenfolge
 (existing-first). Read-only, kein Code, kein Commit. Ergebnis = Roadmap der Slices #2+ (schläft-Fähigkeiten
 wecken, Katalog↔Registry, Attrappen, geführte Planung modellgetrieben, Speicher-Status, 2D/3D-Interaktion).
+
+## ⇒ GENERATOR — DASHBOARD v1 (erster sichtbarer Verdrahtungs-Stand) — Yama will es schnell sehen
+Branch `auto/hausplaner-dashboard-v1` über dem Integrations-/main-Tip `31bf6a2`. Reine UI/Verdrahtung auf
+VORHANDENEN Commands/Engines (gemessen), additiv, kein tiefer Modell-Umbau. Optik-Maßstab: `design-spec-
+referenzablauf-dach.md` (§1, §5, §9). Subsumiert den früheren Standalone-L/T/U-Auftrag (= Punkt 7).
+Gates selbst (tsc/schema/test/build), kein Push (Tor 2 = Yama). „umgesetzt" + Zahlen melden.
+
+1. **Icon-Tooltip-Pflicht (§9):** `Ikon` (`studioUi.tsx`) um `titel?: string` erweitern → `<title>` im SVG +
+   Icon-Buttons mit `title=` **und** `aria-label=`. ALLE Werkzeug-Icons bekommen Tooltip (Name + Funktion).
+2. **Undo/Redo nur Icon** (`HausplanerApp.tsx` Z.642-643): Text entfernen → ↶/↷, Tooltip „Rückgängig (⌘Z)"/
+   „Wiederholen (⌘⇧Z)", disabled aus `kannUndo`/`kannRedo` (vorhanden).
+3. **Geschoss-Stepper** (ersetzt Flach-`<select>` aller Geschosse Z.660-662): `◀ [Name ▾] ▶` + „＋ Geschoss
+   generieren" (`dupliziereGeschoss` Z.306). ◀/▶ blättern nach `sortOrder`/`elevation`; „Name ▾" = Sprung-
+   Wähler (Suche ab ~8). `setActiveLevel` SSOT. Token-Fix Border `#d1d5db` → `T.hair`. Skaliert bis 100 Etagen.
+4. **Ehrliche Zustände (§1):** `ZustandBadge` von `'aktiv'|'schlaeft'` auf VIER erweitern (Verfügbar/
+   Voraussetzung fehlt/Nur Ergebnis/In Entwicklung), je Farbe+Text+Icon; „verfügbar" = `T.ok` (nicht Marke).
+   `FaehigkeitenNavi` nutzt sie. Kein „schläft" mehr ohne Grund.
+5. **Auge (Sicht) + Schloss (Sperre) verdrahten:** Icon-Buttons je Auswahl/Objekt → vorhandene Commands
+   `SET_NODES_SICHTBAR`/`SET_NODES_GESPERRT` (`applyCommand.ts` Z.231/239; Felder `visible`/`locked`).
+   **Gesperrt:** Klick auf gesperrtes Objekt fragt vor Änderung („entsperren?").
+6. **Magnet-Umschalter:** `fang`-Icon (Z.81) als Toggle → `settings.snapEnabled` (Snap-Logik Z.347-367 da).
+   Tooltip „Magnet: Einrasten an Endpunkt/Raster/Winkel".
+7. **L/T/U im Dach-`select` + Anbaufelder** (Z.1075): sattel/walm/pult/flach **+ L-/T-/U-Dach**; bei l/t/u
+   konditionale Anbaufelder (u = 4 Maße, Innenhof/Kerbe), an `aktualisiereDach({anbau})`; unzulässige Maße
+   sofort mit konkretem Grund. Render ist grün (nur verdrahten).
+8. **Speicher-Status-Zone (§5):** vorhandene `SpeicherStatus` (gespeichert/ungespeichert/speichert/konflikt/
+   fehler) ehrlich in EINER Zone; **Bestätigen vor Verlassen/Übernahme** bei `ungespeichert`. 409 → echte Aktionen.
+
+**Abnahme:** Logik-Evaluator = Gates selbst; Design-Evaluator = Rubrik am echten Rendern (Kontrast gemessen,
+Status nie nur Farbe, Tooltips vorhanden, Zustände ehrlich). Dann sieht Yama den neuen, ehrlichen Dashboard-Stand.
+
+## ⇒ PLANNER-TODO (nächster Slice, NICHT jetzt): Bogenwand-Konzept
+Frei-zeichnen gestrichen. Neu: **Bogenwand (halbrund/rund)** — Modell kennt nur gerade Wände (`WallNode`
+start/end). Braucht Konzept (Regel 4): Bogen-Definition (Radius/Bulge/Mittelpunkt?), 2D-Konva-Arc + 3D-Mesh,
+additiv am WallNode. Planner bereitet Konzept → Yama-Fach-Freigabe → eigener Slice.
