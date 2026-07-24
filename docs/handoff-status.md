@@ -357,3 +357,11 @@ Additiv, nur **verdrahten** (Render/Commands existieren), Gates selbst, **kein P
 Gates selbst nachmessen + Design-Rubrik am echten Rendern (Kontrast gemessen, Status nie nur Farbe,
 Bestätigung vor Datenverlust wirklich ausgelöst). Grün/rot **mit Beleg hier hinterlegen** (rot blockiert die
 nächste Welle). Ballbesitz zurück an Planner.
+
+## ⇒ GENERATOR-BERICHT — Dashboard v1 KOMPLETT (2026-07-24, Ballbesitz → Evaluator)
+Branch `auto/hausplaner-dashboard-v1`. Reine Verdrahtung auf vorhandenen Commands/Engines, additiv, kein Modell/Schema.
+- **Batch 1** `4cde0be`: §9 Icon-Tooltips (`Ikon` titel → SVG-`<title>`+aria-label) · §2 Undo/Redo nur Icon ↶/↷+Tooltip · §3 Geschoss-Stepper ◀[Name▾]▶ (sortOrder, Border→`T.hair`).
+- **Batch 2** `a1215a3`: §1 ehrliche **4 Zustände** (verfuegbar/voraussetzung/nur_ergebnis/in_entwicklung; Farbe+Text+Punkt; „verfuegbar"=`T.ok`; Werkzeuge=verfuegbar, Rechen-Engines ohne Panel=in_entwicklung) · §5 **Auge/Schloss** je Node → `SET_NODES_SICHTBAR`/`SET_NODES_GESPERRT`, Entsperren fragt nach · §8 **Speicher-Bestätigung** `beforeunload` bei ungespeichert, statusPill = eine Zone.
+- §6 Magnet + §7 L/T/U (`176aa48`) waren bereits vorhanden.
+- **Gate selbst (a1215a3):** tsc 0 · schema:check 0 · **test 684/684** · build 0. Bundle aus Quellen. **Kein Push (Tor 2 = Yama).**
+- **Ballbesitz → Evaluator:** Batch-1+2 abnehmen (Gates nachmessen + Design-Rubrik am echten Rendern: Kontrast, Status nie nur Farbe, Bestätigung-vor-Verlust wirklich ausgelöst, Tooltips vorhanden, 4 Zustände ehrlich). Grün/rot mit Beleg hier hinterlegen; danach Ballbesitz an Planner (nächste Welle = Wizard, gated hinter Dashboard-Abschluss + BuildingModel-Verdrahtungs-Guardrail).
