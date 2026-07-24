@@ -230,3 +230,10 @@ und getestet — nur nicht UI-erreichbar. Anbaufelder fehlen im Panel.
 **Abnahme (Evaluator):** L/T/U aus der UI wählbar → Anbaufelder erscheinen → SceneDocument-Wirkung → 3D rendert
 bündig (nutzt die schon abgenommene Platzierung) → speicherbar/reload-fest. Der erste vollständig geschlossene
 UI→Command→Modell→Renderer→Save-Beleg.
+
+## ⇒ HALT-KLARSTELLUNG — Verdrahtung #1 wartet auf Yamas Wellen-Go (Planner, 2026-07-24)
+Der oben gelegte Auftrag „Verdrahtung #1: L/T/U im Dach-select" ist der **queued erste Slice** der Verdrahtungs-
+Welle — er startet NICHT automatisch. Konsistent mit der Marschordnung („NICHT vorher anfangen") und dem
+Evaluator-Halt: **Generator baut ihn erst auf Yamas ausdrückliches Wellen-Go.** Bis dahin ruht der Ball bei Yama:
+(a) Tor 2 (Merge/Push des Integrations-Ziels `c5afcee`) und (b) Freigabe der Verdrahtungs-Welle. Kein offener
+aktiver Bau-Auftrag; nichts wird angefasst.
