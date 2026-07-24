@@ -60,6 +60,21 @@ function polygonSchwerpunkt(poly: ReadonlyArray<{ x: number; y: number }>): { x:
 }
 
 /**
+ * Bounding-Box eines Polygons + deren Zentrum. Das Grundriss-Zentrum (Bbox-Mitte) ist der korrekte
+ * Platzierungs-Anker der Verschneidungsformen — NICHT der Schwerpunkt: der Schwerpunkt eines U/L/T-
+ * Polygons ist zur Masse hin verschoben (die Kerbe fehlt), was das Dach gegen den Wand-Footprint
+ * versetzt (Evaluator-Befund U-Optik). Die Bbox-Mitte deckt sich dagegen mit der Rechteck-Basis.
+ */
+function polygonBbox(poly: ReadonlyArray<{ x: number; y: number }>): { xMin: number; xMax: number; yMin: number; yMax: number; cx: number; cy: number } {
+  let xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity;
+  for (const p of poly) {
+    if (p.x < xMin) xMin = p.x; if (p.x > xMax) xMax = p.x;
+    if (p.y < yMin) yMin = p.y; if (p.y > yMax) yMax = p.y;
+  }
+  return { xMin, xMax, yMin, yMax, cx: (xMin + xMax) / 2, cy: (yMin + yMax) / 2 };
+}
+
+/**
  * W-3b 2a-2: EINE Abbildung `node.anbau` → `UFormEingabe` (Meter). U braucht ALLE vier Schenkelmaße
  * (uFormFlaechen nutzt widthB/lengthB) — fehlen sie, gibt es KEINE Eingabe (→ leer/Marker, kein
  * erfundener Wert). overhang/height/pitch stammen aus dem RoofNode; rafterHeight ist Standard-Konstante.
@@ -138,24 +153,41 @@ function verschneidungsFlaechen(roof: RoofNode): DachRoh {
   const e = anbauZuEingabe(roof);
   if (!e || !uBauGueltig(e)) return leer;         // fehlend/degeneriert → Marker/leer
 
-  const c = polygonSchwerpunkt(roof.polygon);
   const azRad = (roof.firstAzimutGrad * Math.PI) / 180; // NICHT `rad` — kein zweiter Rechenweg der Rechteckbasis
   const rx = Math.sin(azRad), ry = Math.cos(azRad);     // Firstrichtung (Nord=+y)
   const qx = Math.cos(azRad), qy = -Math.sin(azRad);    // quer
   const M = 1000;
   const aRad = (roof.neigungGrad * Math.PI) / 180;
 
+  const faces = uFormFlaechen(e);
+  // (u,v)→Engine-Grundriss (ex,ez) — reine Ableitung, für die Footprint-Zentrierung.
+  const grund = (f: (typeof faces)[number], uv: { x: number; y: number }): { ex: number; ez: number } => ({
+    ex: f.origin.x + uv.x * f.uDir.x + uv.y * f.vDir.x,
+    ez: f.origin.z + uv.x * f.uDir.z + uv.y * f.vDir.z,
+  });
+  // Engine-Footprint-Bbox → dessen ZENTRUM auf das Grundriss-Zentrum (Bbox-Mitte) der Wände legen.
+  // Behebt die Schwerpunkt-Fehlplatzierung: das Dach sitzt bündig auf dem U-Umriss, Innenhof bleibt frei.
+  let exMin = Infinity, exMax = -Infinity, ezMin = Infinity, ezMax = -Infinity;
+  for (const f of faces) for (const uv of f.poly) {
+    const g = grund(f, uv);
+    if (g.ex < exMin) exMin = g.ex; if (g.ex > exMax) exMax = g.ex;
+    if (g.ez < ezMin) ezMin = g.ez; if (g.ez > ezMax) ezMax = g.ez;
+  }
+  const engCx = (exMin + exMax) / 2, engCz = (ezMin + ezMax) / 2;
+  const ziel = polygonBbox(roof.polygon);
+
   const flaechen: RohFlaeche[] = [];
   let maxZ = roof.traufhoeheMm;
   let nr = 0;
-  for (const f of uFormFlaechen(e)) {
+  for (const f of faces) {
     for (const [i, j, k] of triangulierePolygon(f.poly)) {
       const ecken = [f.poly[i], f.poly[j], f.poly[k]].map((uv): WeltPunkt3 => {
-        // lokal (u,v) → Engine-Welt → Ziel-Welt (mm). Platzierung: Schwerpunkt-Näherung.
+        // lokal (u,v) → Engine-Welt → Ziel-Welt (mm). Anker: Engine-Footprint-Zentrum → Grundriss-Bbox-Mitte.
         const ex = f.origin.x + uv.x * f.uDir.x + uv.y * f.vDir.x;
         const ey = f.origin.y + uv.x * f.uDir.y + uv.y * f.vDir.y;
         const ez = f.origin.z + uv.x * f.uDir.z + uv.y * f.vDir.z;
-        const w: WeltPunkt3 = { x: c.x + (ex * rx + ez * qx) * M, y: c.y + (ex * ry + ez * qy) * M, z: ey * M };
+        const dex = ex - engCx, dez = ez - engCz;
+        const w: WeltPunkt3 = { x: ziel.cx + (dex * rx + dez * qx) * M, y: ziel.cy + (dex * ry + dez * qy) * M, z: ey * M };
         if (w.z > maxZ) maxZ = w.z;
         return w;
       });

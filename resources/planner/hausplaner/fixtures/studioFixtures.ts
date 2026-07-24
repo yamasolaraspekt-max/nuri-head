@@ -69,7 +69,9 @@ function uDach(): SceneDocument {
     polygon: U_UMRISS,
     roofType: 'u-shape',
     neigungGrad: 35,
-    firstAzimutGrad: 0,
+    // U_UMRISS öffnet die Kerbe nach +y ⇒ First quer dazu; firstAzimut so, dass die Engine-Hoföffnung
+    // (+z) auf die Polygon-Kerbe (+y) fällt (Konsistenz Polygon↔anbau↔Azimut). Sonst 90°-Fehlplatzierung.
+    firstAzimutGrad: 270,
     ueberstandMm: 500,
     traufhoeheMm: 2800,
     // Vier Maße: Außenrechteck 12×10 m, Innenhof/Kerbe 5×4 m (deckungsgleich mit U_UMRISS).
