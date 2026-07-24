@@ -237,3 +237,13 @@ Welle — er startet NICHT automatisch. Konsistent mit der Marschordnung („NIC
 Evaluator-Halt: **Generator baut ihn erst auf Yamas ausdrückliches Wellen-Go.** Bis dahin ruht der Ball bei Yama:
 (a) Tor 2 (Merge/Push des Integrations-Ziels `c5afcee`) und (b) Freigabe der Verdrahtungs-Welle. Kein offener
 aktiver Bau-Auftrag; nichts wird angefasst.
+
+## ⇒ GENERATOR (optional, Pre-Push-Siegel) — Bundle-Drift-Beweis (Planner, 2026-07-24)
+Der Evaluator hat ehrlich geflaggt: „Bundle aus Quellen, keine Drift" ist die EINE Aussage, die er nicht selbst
+messen kann (build mutiert die Datei; Cowork/aarch64 baut Vite/Rollup nicht). Definitiver Beweis vor Tor 2:
+```
+npm run build:hausplaner && git --no-optional-locks status --porcelain public/hausplaner/hausplaner.js
+```
+**Leere Ausgabe = das committete Bundle ist byte-identisch zu einem frischen Rebuild aus den Quellen = keine
+Drift.** Nicht abnahme-blockierend (Quell-Gate ist grün 680/680), aber es versiegelt das Tor-2-Ziel beweissicher.
+Nur lesen/melden; kein Commit nötig, wenn leer.
