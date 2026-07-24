@@ -134,6 +134,13 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const werkzeug = usePlannerUiStore((s) => s.activeToolId) as Werkzeug;
   const setWerkzeug = React.useCallback((w: Werkzeug) => usePlannerUiStore.getState().setActiveTool(w), []);
   useEffect(() => { usePlannerUiStore.getState().reset(); }, []); // Mount: wie bisher mit 'auswahl' starten
+  // Dashboard v1 §8: bei ungespeicherten Änderungen VOR dem Verlassen bestätigen (kein stiller Verlust).
+  useEffect(() => {
+    if (speicherStatus !== 'ungespeichert') return undefined;
+    const warnen = (e: BeforeUnloadEvent): void => { e.preventDefault(); e.returnValue = ''; };
+    window.addEventListener('beforeunload', warnen);
+    return () => window.removeEventListener('beforeunload', warnen);
+  }, [speicherStatus]);
   const [treppeStart, setTreppeStart] = useState<{ x: number; y: number } | null>(null);
   const [fensterTypWahl, setFensterTypWahl] = useState<FensterTyp>('drehkipp');
   const [tuerTypWahl, setTuerTypWahl] = useState<TuerTyp>('dreh1');
@@ -240,6 +247,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     (n): n is ObjectNode => n.type === 'object' && n.objectType !== 'stair'
       && selectedNodeIds.length === 1 && selectedNodeIds[0] === n.id,
   ) ?? null);
+  // Dashboard v1 §5: genau EIN selektierter Node (Wand/Öffnung/Objekt/Treppe) → Auge/Schloss verdrahten.
+  const selectedNode = selectedNodeIds.length === 1 ? (nodes.find((n) => n.id === selectedNodeIds[0]) ?? null) : null;
   const selectedStairParams: TreppeParams | null = selectedStair ? parametereZuTreppe(selectedStair.parameters) : null;
   function aktualisiereTreppe(aenderung: Partial<TreppeParams>): void {
     if (!selectedStair || !selectedStairParams) return;
@@ -1089,6 +1098,20 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         {/* Rechtes Eigenschaften-Panel (immer sichtbar; Dach-Parameter oder Kontext) */}
         <div style={{ width: 268, flex: '0 0 auto', background: '#fff', borderLeft: '1px solid #e5e7eb', padding: 14, overflowY: 'auto', fontSize: 12.5, color: FARBEN.text }}>
           <div style={{ fontWeight: 800, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '.04em', color: FARBEN.gedaempft, marginBottom: 12 }}>Eigenschaften</div>
+          {/* Dashboard v1 §5: Sicht (Auge) + Sperre (Schloss) je selektiertem Node → vorhandene Commands
+              SET_NODES_SICHTBAR/SET_NODES_GESPERRT. Zustand als Text UND Symbol (A11y). Entsperren fragt nach. */}
+          {selectedNode && (
+            <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
+              <button type="button" style={knopf(false)} title={selectedNode.visible === false ? 'Einblenden' : 'Ausblenden'} aria-label="Sicht umschalten"
+                onClick={() => store.getState().executeCommand({ type: 'SET_NODES_SICHTBAR', nodeIds: [selectedNode.id], sichtbar: selectedNode.visible === false })}>
+                {selectedNode.visible === false ? '🙈 Ausgeblendet' : '👁 Sicht'}
+              </button>
+              <button type="button" style={knopf(selectedNode.locked === true)} title={selectedNode.locked ? 'Entsperren' : 'Sperren'} aria-label="Sperre umschalten"
+                onClick={() => { if (selectedNode.locked && !window.confirm('Objekt ist gesperrt — entsperren?')) return; store.getState().executeCommand({ type: 'SET_NODES_GESPERRT', nodeIds: [selectedNode.id], gesperrt: !selectedNode.locked }); }}>
+                {selectedNode.locked ? '🔒 Gesperrt' : '🔓 Sperren'}
+              </button>
+            </div>
+          )}
           {selectedRoof ? (
             <>
               <div style={{ fontWeight: 700, marginBottom: 10 }}>Dach</div>

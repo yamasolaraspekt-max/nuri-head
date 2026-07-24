@@ -30,7 +30,7 @@ export function FaehigkeitenNavi(
             {items.map((f) => {
               // Nur modus-schaltende Werkzeuge sind aus der Navi klickbar; Aktionen (Löschen/Duplizieren)
               // und Engines behalten ihre eigenen Handler (Op-Leiste bzw. Batch 1–3) — hier nur sichtbar.
-              const klickbar = f.art === 'werkzeug' && f.zustand === 'aktiv' && !!f.toolId;
+              const klickbar = f.art === 'werkzeug' && f.zustand === 'verfuegbar' && !!f.toolId;
               const aktiv = klickbar && f.toolId === activeToolId;
               return (
                 <button
