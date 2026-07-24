@@ -158,3 +158,11 @@ Auf dem Integrationsbaum muss die **Vereinigung** aller Tests grün sein (nicht 
 L/T-Render + Gehrung + Decke (646) + Navi-CI. Voller Gate EINMAL grün (tsc 0 · schema 0 · test · build).
 Dann EIN Serve auf dem Integrationsbaum → Evaluator fährt Decke-Slab-Sicht (+ optional Gehrung-Ecken) in
 EINER Browser-Runde. Ergebnis = EIN Tor-2-Merge-Ziel für Yama.
+
+## ⇒ KONSOLIDIERUNG — Zusatz: Skill-Governance mitnehmen (#3/#62, Planner 2026-07-24)
+Auf den Integrationsbaum zusätzlich:
+- **CLAUDE.md Skill-Pflicht-Block** (fehlt auf w3b-2, grep=0 — lebt nur auf dach-ui/8c2b5f4). Mitmergen, damit
+  Generator/Evaluator auf dem Integrationsbaum unter der Skill-Pflicht arbeiten.
+- **`.claude/skills/`** (Skills liegen bisher nur in Cowork): die kuratierten Skills ins Repo bringen, damit
+  native Instanzen sie laden können. (Planner liefert die Skill-Dateien; landet im Integrationsbaum.)
+Beides ist additiv (Docs/Config, kein Code-Risiko). Danach sind #3 + #62 erledigt.
