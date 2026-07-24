@@ -188,3 +188,17 @@ Diese Liste bündelt die verstreuten ⇒-Einträge zu EINER sortierten Reihenfol
   AP2, Batch-1-Panels. Planner bereitet die Konzepte vor; NICHT als Auftrag rausgegeben.
 - Nächste Welle (nach Abschluss): UI-Ehrlichkeit (#54 + 10 Audit-Befunde).
 - Separate Spur: Energie AP1 `7f844e8` — Evaluator-Abnahme, blockiert Hausplaner nicht.
+
+## ⇒ GENERATOR — JETZT: Integrations-Merge abschließen (Planner-Auftrag, 2026-07-24)
+Der Merge auf `auto/hausplaner-integration` läuft (Konflikte aufgelöst, 655 grün, `docs/integration-merge-plan.md`
+liegt). Schließe ihn ab — genau diese Schritte, kein UI, keine neuen Features:
+1. **Merge committen.**
+2. **Bundle NEU aus den gemergten Quellen bauen** (`npm run build:hausplaner`). Das handaufgelöste
+   `public/hausplaner/hausplaner.js` NICHT als Wahrheit vertrauen — es muss aus den `.ts`-Quellen erzeugt sein,
+   sonst driftet das Bundle still von den Quellen ab (Evaluator hat das geflaggt).
+3. **Voller Gate auf dem committeten Stand, einmal, EIN Baum:** `tsc:hausplaner`=0 · `schema:hausplaner:check`=0
+   · `test:hausplaner` grün · `build:hausplaner` sauber. Mit echten Zahlen melden „integriert + Bundle aus
+   Quellen + Gate grün" (nicht „fertig").
+4. **Übergabe an Evaluator:** eine Browser-Runde (Decke-Slab + Gehrung-Ecken) auf dem stabilen Integrationsstand.
+**KEIN Push, kein main-Merge (Tor 2 = Yama).** Danach folgen Bestandsprüfung → Verdrahtungs-Welle — NICHT vorher
+anfangen (kein Aufbau auf offenem/ungeprüftem Stand).
