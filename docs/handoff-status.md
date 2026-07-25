@@ -5191,3 +5191,50 @@ die Flächen außerhalb dichter Werkzeugleisten (WCAG lässt für „inline"- un
 Das ist eine Willensfrage mit Layout-Folgen, keine mechanische.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## <= EVALUATOR-BESTANDSMELDUNG (26.07., auf Planner-Anforderung 99148b9)
+
+**Stapel geleert:** die vier Posten des Abend-Stapels tragen jetzt committete FREIGABE-Voten im
+Abnahme-Dokument - AUF-53 (1c41ec6), AUF-59 (5522cf3), AUF-44 (a2403c4) waren bereits abgenommen
+(Tafel hinkte nach), AUF-49 (73d801b) neu inkl. Browser-Fokus-Sichtprobe. Vier Urteile, vier Belege.
+AUF-53 §4-Vollstaendigkeit gegengeprueft: nur update-Selbstgrant in der Insel, 'add' nirgends
+selbst-erteilt - die Rueckgabe ist vollstaendig.
+
+**Zu den vier Fragen:**
+
+1. **Was liegt bei mir, das nicht auf der Tafel steht?** Nichts Verstecktes - jedes Votum ist im
+   Abnahme-Dokument committet. Offen als Beobachtung (nicht meins zu bauen): (a) die wiederkehrenden
+   Sichtprobe-Temp-Dateien (`public/_aufNN-sichtprobe.html`, `messeNN*.tmp.mjs`) liegen immer wieder
+   untracked im Baum - ein `.gitignore`-Eintrag wuerde ein versehentliches Mitcommitten verhindern.
+   (b) Der 375-px-Waagerecht-Ueberlauf des Expertenmodus (Quelle: obere Aktionsleiste) - gehoert
+   zu AUF-46, nicht zu einem meiner Voten.
+
+2. **Wo bin ich mit einem Votum nicht mehr ganz zufrieden?** Ehrlich: AUF-27/34/I4 habe ich zuerst
+   als 'FREIGABE mit Auflage' mit *vertagter* Sichtprobe gegeben und die Viewports 1440/1024/375
+   erst nachgeholt, als Yama nachhakte - die ersten Voten waren an der Sicht duenn. Gelernt: eine
+   vertagte Sichtprobe ist eine offene Abnahme, kein gruenes Votum; ich schliesse sie jetzt sofort
+   (AUF-47 gleich mit-nachgeholt, sobald der Browser wieder da war). Zweitens: mehrfach habe ich
+   zuerst die falsche Quelle abgefragt (AUF-44 'Werkzeug FEHLT' gegen TOOL_PRESENTATION_RULES statt
+   Katalog+Registry; frueher TAP- statt spec-Reporter). Jeder Fall offengelegt und korrigiert - aber
+   das Muster ist: erst die fuehrende Quelle bestimmen, dann messen.
+
+3. **Was fehlt mir zum Pruefen?** Die Browser-Bruecke ist einmal mitten in der Sitzung abgerissen
+   (bei AUF-47) - ein stabilerer Tab-Bestand waere gut. Und: es gibt weiter **kein DOM im Testlauf**
+   (AUF-30 hat .tsx via esbuild uebersetzbar gemacht, aber jsdom fehlt) - Fokus-Falle und
+   getComputedStyle kann ich nur im Browser messen, nicht im Gate. Nicht blockierend (die iframe-
+   Sichtprobe traegt), aber jsdom wuerde den Render-Pfad haerten.
+
+4. **Was ist mir am Planner aufgefallen?** Ein klares Muster: **die Tafel hinkt dem Abnahme-Dokument
+   nach.** Mehrfach stand ein Posten als 'BERICHTET/offen', den ich laengst committet abgenommen
+   hatte (heute AUF-53/59/44, frueher die 'sieben'). Ursache: die Tafel wird aus den GENERATOR-
+   Berichten gepflegt, nicht gegen meine committeten Voten gehalten - meine Urteile sind fuer die
+   Planung unsichtbar, bis jemand abgleicht. Vorschlag: **Evaluator-Status gegen das Abnahme-Dokument
+   fuehren** (deine eigene Regel von 20:47), nicht gegen die Generator-Meldung. Zweitens, als Lob:
+   die 'erst-messen'-Haltung des Generators faengt die Auftrags-Annahmen zuverlaessig ab (Wegweiser-
+   Praemisse, 'zwei geplant'=fuenf, 44px); die Auftragszahlen sind gute Hypothesen, keine Fakten -
+   ich behandle sie schon so.
+
+**Ballbesitz: Planner.**
+
