@@ -481,6 +481,41 @@ Regel, keine Sperre gelockert), die Zahl ist die gemessene Differenz; B8 ist sic
 unterscheidet 'braucht nichts' von 'unfertig'. Mutationsfest. Die schlafende Teil-a-Anzeige ist ein
 Spec-Fehler des Planners (AUF-57), kein Mangel der Umsetzung.
 
+## AUF-51 - Zeichenflaeche laesst sich wirklich verschieben (74fdcb4, Bundle 31f33e6) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 74fdcb4 gemessen (/tmp-Auszug), dann Generator-Bericht.
+**Klasse: sichtbar** (Richtigkeitsfehler) - Sichtprobe Teil der Abnahme.
+
+- **Umfang (git show --name-status):** 3 Dateien - NEU dashboard/pan.ts + __tests__/pan.test.ts ;
+  M HausplanerApp.tsx. store/domain/geometry/renderers/public: null (Konva-Stage sitzt in HausplanerApp,
+  nicht in renderers/).
+- **Der Fehler (bestaetigt am Code):** Buehne draggable OHNE Drag-Handler, Position gesteuerter Wert
+  ohne Zustand (x=80); onMouseMove->setCursor rendert bei jeder Bewegung und setzte zurueck. weltPunkt
+  liest stage.x() (echte Lage) -> Anzeige und Koordinate widersprachen sich beim Zuruckspringen.
+- **Fix + drei Feinheiten (Grep + Test):** Pan-Zustand statt draggable-Entfernung (weltPunkt las die
+  verschobene Lage schon korrekt). (1) null-Start = 'nie verschoben' -> Standardlage folgt Fensterhoehe
+  (HausplanerApp Z.339 useState<Pan|null>(null)); (2) onDragMove schreibt WAEHREND des Ziehens (Z.1300),
+  sonst ruckelt es gegen onMouseMove; (3) Herkunftspruefung e.target===e.currentTarget an BEIDEN
+  Schreibstellen (Z.1300/1301), sonst ueberschreibt ein gezogenes Bauteil den Verschub.
+- **Gates im Auszug:** schema 0 . test **938/938 pass, 0 skip** (930->938) . tsc 0 . build ok.
+  8 pan-Subtests (null=nie verschoben, eigener Wert unabhaengig von Fensterhoehe, Drag-Handler jetzt da,
+  nur die BUEHNE schreibt, weltPunkt liest echte Lage, nur mit Auswahl-Werkzeug).
+- **Gegen-Beweis (zwei, /tmp-Kopie):**
+  A) panAus ignoriert den Pan-Wert ('pan ?? standardPan' -> 'standardPan') -> **'selbst verschoben =>
+     eigener Wert gilt' rot** (7/1; deckt Generator 'panAus ignoriert eigenen Wert = 1 rot').
+  B) Herkunftspruefung '===' -> '!==' an der Buehnen-Schreibstelle -> **2 rot** ('Drag-Handler' +
+     'nur die BUEHNE schreibt den Verschub') (6/2).
+- **Sichtprobe (iframe 1440, fixture decke-treppe, Bundle 31f33e6, interaktiver Drag):** Buehne an
+  leerem Raster um ~250/120 px gezogen -> der Inhalt wandert mit ('80.00 m2' von ~910 auf ~1140 px,
+  links tauchen zuvor abgeschnittene Bemassungen 8240/7760 auf). **Danach zwei Klicks auf leeres Raster
+  (loesen genau das Rendern aus, das frueher zuruecksetzte) -> der Verschub BLEIBT**, kein Zuruckspringen.
+  Der Richtigkeitsfehler ist behoben; Test belegt die Zustands-Logik, die Sichtprobe die Konva-Verdrahtung.
+
+**Urteil: FREIGABE.** Der Widerspruch (draggable ohne Zustand, Anzeige != Koordinate) ist mit einem
+Pan-Zustand geloest statt die Funktion zu entfernen; die drei Feinheiten (null-Start, onDragMove,
+Herkunftspruefung) sind begruendet und testverriegelt. Mutationsfest, und der bleibende Verschub ist
+am Schirm belegt - genau der Teil, den ein Test ohne DOM/Konva nicht zeigen kann.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -509,6 +544,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   Sichtprobe-Nachtrag  Bundle cb3d17e  1440: docOvfX 0, arb einzeilig, 3 Reiter, WZ sichtbar . 1024: docOvfX 0, arbH 27 einzeilig . 375: docOvfX 298 (Quelle: obere Aktionsleiste 'Speichern' right=1156, NICHT AUF-27/34/I4), arb bricht 82px arbOvfX 0, 3 Reiter da
   AUF-43    43a287f  Auszug: schema 0 / test 916/916 0-skip / tsc 0 / build ok ; Guardrails Undo/2D-3D nicht in Flaeche, kein Command/Schema, geschossStapel rein, setActiveLevel einzig, Name einmal ; 16 Subtests ; Gegen-Beweis Sortierung 3 rot + aktiv-Flip 5 rot ; Sichtprobe 1440 Knopf 'EG +-0 1 von 1' + Stapel-Flaeche ; 375 docOvf 298 bleibt (AUF-46, nicht AUF-43)
   AUF-45    b9861d7  Auszug: schema 0 / test 930/930 0-skip / tsc 0 / build ok ; naechsterSchritt liest nur resolveToolState (K3/K4), keine Sperre gelockert (73/53/28) ; 14 Subtests ; Gegen-Beweis Filter >0->>=0 = 1 rot, Gesten-Regex brechen = 2 rot (B8) ; Sichtprobe 1440: Markieren 'braucht keine Optionen' kein in-Entwicklung-Badge ; Wegweiser dormant (Geschoss immer da = Planner-Spec AUF-57)
+  AUF-51    74fdcb4  Auszug: schema 0 / test 938/938 0-skip / tsc 0 / build ok ; Pan-Zustand null-Start + onDragMove + Herkunftspruefung (HausplanerApp 339/1300/1301) ; 8 Subtests ; Gegen-Beweis panAus ignoriert Wert = 1 rot, Herkunft ===->!== = 2 rot ; Sichtprobe 1440: Drag ~250/120 -> Inhalt wandert, 2 Klicks danach -> Verschub BLEIBT (kein Snap-back)
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
