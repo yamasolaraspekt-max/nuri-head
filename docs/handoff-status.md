@@ -590,3 +590,26 @@ Widerspruch — der Test ist korrekt und grün**:
 `cf54ffc` (A1-Auftrag) und `2b9d468` (Push-Freigabe) noch **ungesichert**. Aus der Cloud geht kein Push
 (403 vom Proxy). → Bitte einmal **Doppelklick auf `push-integration-sicher.command`** (bzw. der native
 Generator führt es aus). Nur `fork` + `backup-private`, nie `upstream`, kein `--force`.
+
+## ⇒ GENERATOR (nativ) — COMMIT-FREIGABE (Planner, 2026-07-25 09:49)
+Deine A1-Arbeit liegt seit 09:41–09:43 **unversioniert** im Baum (`toolPresentation.ts` 12,1 kB,
+`__tests__/toolPresentation.test.ts` 5,9 kB, `faehigkeiten.ts` + `toolCatalog.ts` geändert) und hat sich
+seit 6 Minuten nicht bewegt. Vermutete Ursache: die alte Job-Regel „**Commit nur auf Yamas Wort**".
+**Diese Regel ist hiermit aufgehoben** — Yamas stehende Anweisung lautet „du commitest du pushst alles ohne
+mich". Also: **auf `auto/hausplaner-integration` committen** (eigener Commit, Bericht in diesen Ledger als
+`⇒ PLANNER`-Block mit den gemessenen Zahlen), Gates vorher selbst fahren (`tsc:hausplaner` ·
+`schema:hausplaner:check` · `test:hausplaner` · `build:hausplaner`), danach `push-integration-sicher.command`.
+Grenzen unverändert: kein `main`-Merge (Tor 2), nur `fork`/`backup-private`, nie `upstream`, kein `--force`.
+Der Planner fasst deine Dateien **nicht** an (Rollentrennung) — sie warten unangetastet auf dich.
+
+## ⇒ YAMA — Fach-/Design-Freigabe nötig: T1 Token-Konsolidierung (gemessen, blockiert A1 nicht)
+Neues Konzept: `docs/auftraege/planner-konzept-token-konsolidierung-hausplanerapp.md` (50 Zeilen).
+Messung an `HausplanerApp.tsx`: die Datei **importiert `T` schon** (Z. 16), hält aber eine **zweite
+Farbwahrheit** `FARBEN` (Z. 42–47) plus **31 verschiedene Hex-Werte in 79 Vorkommen auf 50 Zeilen** plus
+4× `var(--sa-…)`-Fallback. Der rote Kern: **zwei Grüns** — `FARBEN.auswahl #93c21c` ≠ `T.brand #7fae1c`;
+zusätzlich wird Grün hier als **Akzent** benutzt, während `T.accent` **Teal #12807d** ist.
+**Deine Entscheidung (nur die eine Frage):** Auswahl-/Aktiv-Grün auf **(a) `T.brand #7fae1c`**
+(Planner-Empfehlung, kleinste optische Verschiebung), **(b) `T.accent` Teal #12807d** (konsistent mit dem
+v9-Studio-Kopf, sichtbar andere Optik) oder **(c) `#93c21c` als neues Token in `T`** (dann drei Grüns)?
+Umsetzung erst **nach** A1-Abnahme (sonst Konflikt in derselben Dateiregion). Abnahmezahl danach:
+`grep -c "#[0-9a-fA-F]" HausplanerApp.tsx` = **0**.
