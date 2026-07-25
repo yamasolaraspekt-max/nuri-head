@@ -392,6 +392,50 @@ Messwerte per getBoundingClientRect im contentDocument.
 **Ergebnis:** alle sieben archivierten Posten (AUF-21 . 27 . 33 . 34 . 35a . 36 . 37) haben jetzt
 ein vollstaendiges Votum inkl. der geforderten Sichtproben. Kein deferred-Rest mehr offen.
 
+## AUF-43 - Geschoss-Bedienung verlaesst die Zeile (43a287f, Bundle 8fd6568) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 43a287f gemessen (/tmp-Auszug), dann Generator-Bericht.
+**Klasse: sichtbar** - Sichtprobe Teil der Abnahme.
+
+- **Umfang (git show --name-status):** 4 Dateien - NEU dashboard/GeschossFlaeche.tsx,
+  dashboard/geschossStapel.ts, __tests__/geschossFlaeche.test.ts ; M HausplanerApp.tsx.
+  store/domain/geometry/renderers/public: null Zeilen (selbst geprueft).
+- **Guardrails belegt (git-grep + Test):**
+  - Undo/Redo + 2D/Split/3D **nicht** in der Flaeche (nur in Kommentaren, die erklaeren warum) -
+    Test K6 verriegelt es.
+  - **kein neues Command, kein Schema-Eingriff** (Grep leer, schema:check 0).
+  - **setActiveLevel bleibt einzige Wahrheit:** Stapel-Knopf ruft onWechseln->setActiveLevel;
+    das einzige useState (name) ist der lokale Wert des Umbenennen-Felds, KEIN zweiter Auswahl-/
+    Modellzustand. Test 'kein zweiter aktuelles-Geschoss-Merker' gruen.
+  - **geschossStapel.ts rein** - nimmt Daten, gibt Daten, kein store/Datum/Zufall.
+  - **Name genau einmal** (Stapel = Knopf-Liste, kein Select; Umbenennen in EINEM Feld) - Test K3
+    'nicht Select und Eingabefeld denselben Wert' + 'App fuehrt keinen zweiten Geschoss-Waehler mehr'.
+- **Gates im Auszug:** schema 0 . test **916/916 pass, 0 skip** (900->916) . tsc 0 . build ok.
+  16 geschossFlaeche-Subtests gruen (Stapel oben->unten, aktiv markiert, unbekannte id->null kein Wurf,
+  leere Liste, sortOrder-dann-elevation, Nachbar, K4 Hoehenlage mit Vorzeichen/Tausender, K5 Umbenennen
+  ueber UPDATE_LEVEL undo-faehig, Loeschen letztes gesperrt).
+- **Gegen-Beweis (zwei, /tmp-Kopie):**
+  A) Sortierung umgekehrt (a,b->b,a) -> 'Stapel oben->unten' + 'keine Sortierumkehr' + Nachbar **3 rot**
+     (13 pass / 3 fail; Generator meldete 2 - meiner ist strenger).
+  B) aktiv-Erkennung '=== aktivId' -> '!==' -> aktiv/unbekannt/Nachbar/K4x2 **5 rot** (11/5).
+- **Sichtprobe (iframe 1440, fixture decke-treppe, Bundle 8fd6568):** die 13-Element-Zeile ist weg,
+  stattdessen EIN Knopf 'EG . +-0 mm . 1 von 1 v' (Kurzfassung Name/Hoehenlage/Position). Klick oeffnet
+  Flaeche 'STAPEL . 1 GESCHOSS': aktives Geschoss hervorgehoben (Hintergrund UND fett), '0 darueber .
+  0 darunter', **Name genau einmal** als beschriftetes Feld 'Name des aktiven Geschosses', Knoepfe
+  + Geschoss / Duplizieren / Loeschen (Loeschen gesperrt = letztes Geschoss). Undo/Redo + 2D/Split/3D
+  bleiben in der Kopfleiste, NICHT in der Flaeche.
+
+- **Cross-Check zu meinem 375-Befund (Nachtrag oben):** AUF-43 hat die Geschoss-Controls aus der
+  ueberlaufenden Kopfzeile gezogen - die fruehere Ueberhang-Quelle 'Speichern' bei right=1156 ist weg
+  (weiteste Kante jetzt 841). Die Seite hat bei 375 aber **weiter ~298 px docOverflowX** aus dem
+  uebrigen Desktop-Toolbar (Zoom/Ansicht/2D-3D). Der Expertenmodus hat eine faktische Desktop-Min-
+  Breite; das ist das bekannte Mobil-Thema (AUF-46-Umfeld), NICHT AUF-43s Scope. AUF-43 verbessert
+  die Struktur, loest die Mobil-Frage nicht (und soll es laut Auftrag nicht).
+
+**Urteil: FREIGABE.** Vier unabhaengige Aufgaben aus einer 13-Element-Zeile geloest, ohne zweite
+Wahrheit (setActiveLevel bleibt einzig), ohne neues Command/Schema; Stapel als reine Daten geprueft,
+Name-Doppel beseitigt, am Schirm belegt. Mutationsfest. Der 375-Rest gehoert AUF-46, nicht hierher.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -418,6 +462,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-33L2  9d0c12a  Auszug: schema 0 / test 888/888 0-skip / tsc 0 / build ok ; 3 Grenzen (keine Rechnung/statischer Aufruf/kein Modell-Schreiben) ; 14 Subtests ; Gegen-Beweis Fund-Fix + Operanden-Gate je 13/1 rot ; Sichtprobe 1440: Wohnung 7x erfuellt, Aussentreppe 2 Fehler+5 erfuellt (Fund-Fix am Schirm)
   AUF-39L5  b3a6210  Auszug: schema 0 / test 900/900 0-skip / tsc 0 / build ok ; Guardrail kein 2. Snapshot/Hash/Projektion (grep leer), ableitenSchritte rein ; 12 Subtests ; Gegen-Beweis A offen->ok = K5 rot (10/2), B fenster->tuer = K7 rot (11/1) ; Sichtprobe: frisch Schritt 2/11 'Offen', keine Waende, 0 Fenster/Tuer/Treppe, Expertenmodus bestaetigt 0 Bauteile ; Adjacent Demo-Canvas (68a7f7e, nicht AUF-39)
   Sichtprobe-Nachtrag  Bundle cb3d17e  1440: docOvfX 0, arb einzeilig, 3 Reiter, WZ sichtbar . 1024: docOvfX 0, arbH 27 einzeilig . 375: docOvfX 298 (Quelle: obere Aktionsleiste 'Speichern' right=1156, NICHT AUF-27/34/I4), arb bricht 82px arbOvfX 0, 3 Reiter da
+  AUF-43    43a287f  Auszug: schema 0 / test 916/916 0-skip / tsc 0 / build ok ; Guardrails Undo/2D-3D nicht in Flaeche, kein Command/Schema, geschossStapel rein, setActiveLevel einzig, Name einmal ; 16 Subtests ; Gegen-Beweis Sortierung 3 rot + aktiv-Flip 5 rot ; Sichtprobe 1440 Knopf 'EG +-0 1 von 1' + Stapel-Flaeche ; 375 docOvf 298 bleibt (AUF-46, nicht AUF-43)
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
