@@ -28,6 +28,7 @@
 | **AUF-27** Linke Spalte: 3 Reiter (Werkzeuge/Projekt/Fachplaner) | `894954a` | **FREIGABE MIT AUFLAGE** | Code+Tests gruen (810/810, Reihenfolge-Mutation 4 rot, kein 2. Tab-Mechanismus); **Bundle-Hole: kein Rebuild -> im App noch nicht sichtbar**, Sichtprobe deferred |
 | **AUF-34** Arbeitsbereiche: 15 Themen / 5 Bereiche | `8b2b9e6` | **FREIGABE MIT AUFLAGE** | Bilanz 15 Themen/110 Werkzeuge ohne Verlust, 7 durchgaengig (leere supportedWorkspaces); Mutation Thema-entfernt 4 rot; **3. Bundle-Hole -> Sichtprobe deferred** |
 | **AUF-37** Bundle-Rebuild (liefert AUF-27+34 aus) | `91d9592` | **FREIGABE** | committeter Bundle == frischer Build aus HEAD (byte-identisch); AUF-27+AUF-34 jetzt serviert. **Loest die Bundle-Holes von AUF-27 und AUF-34** |
+| **AUF-36** Funktionsvertrag: 110 Werkzeuge sagen warum gesperrt (**sichtbar**) | `d106445` | **FREIGABE** | 3 Grenzen (kein 2. Aktivierungs-Engine/Ausfuehrungsschicht/erfundener Kontext); 12 Vorbedingungen + 5 ehrlich-unerfuellbar; Mutation Grund-verfaelscht 1 rot; Sichtprobe: Grund-Text rendert; 853/853 |
 
 ---
 
@@ -163,6 +164,12 @@ Route `/admin/hausplaner/studio?fixture=decke-treppe` → **Expertenmodus**, ger
 - **AUF-34-Auflage AUFGELOEST (Sichtprobe, iframe):** ARBEITSBEREICH-Leiste = 5 Bereiche; bei **1371 px eine Zeile, kein Ueberlauf**; bei **375 px sauberer Umbruch auf 3 Zeilen, volle Woerter, kein Wortumbruch**; Kategorie-Menue pro Bereich gefiltert (kein 22-ueber-3-Zeilen mehr). Die 2 Kriterien (kein Ueberlauf 1371, keine Wortumbrueche) erfuellt. -> AUF-34 jetzt voll FREIGABE (sichtbar).
 - Damit sind alle drei Bundle-Holes (Batch2/AUF-27/AUF-34) geschlossen und die zwei sichtbaren Layout-Slices im Browser belegt (Screenshots an Yama).
 
+## AUF-36 (`d106445`) - FREIGABE, SICHTBAR (Funktionsvertrag: 110 Werkzeuge sagen warum gesperrt)
+- **3 Grenzen gewahrt:** nutzt `resolveToolState` (keine 2. Aktivierungs-Engine), `commandId` als Metadatum (keine 2. Ausfuehrungsschicht), 5 heute unerfuellbare Vorbedingungen mit ehrlichem Grund (kein erfundener Kontext). `werkzeugVertrag.ts` (+1397) + `vorbedingungen.ts` (+201).
+- **Test prueft den GRUND, nicht nur Boolean:** je Vorbedingung ein erfuellter + ein verletzter Fall. Mutation: einen Grund-Text verfaelscht -> 1 Test rot. 12 Vorbedingungen alle zugeordnet (keine Zeile 'sonstige'), Bijektion 9+101=110. Gates tsc 0 / schema 0 / test 853/853, K4 unberuehrt.
+- **Bundle:** eigener Rebuild-Commit (`368f2d7`, grep-Beleg) - der Generator folgt jetzt der Bundle-Regel aus meinem Fund.
+- **Sichtprobe (iframe 1440, auth):** Kategorie-Menue oeffnet, Lock-Grund-Text rendert (hatVoraussetzungText true, 37 Elemente mit Grund). Kleine Notiz: aria-disabled=0 (Deaktiviert-Zustand ueber anderen Mechanismus; Grund-Text ist da = Kriterium erfuellt).
+
 ## ⇒ NACHARBEIT — vier Planner-Auflagen (`1955311`, Evaluator, 25.07.)
 1. **AUF-9-Widerspruch aufgelöst:** Zeile unter „Nicht abgenommen/offen" **gestrichen**. AUF-9 = FREIGABE (Kommentar-gegen-Codewert ist auch für anchored Prüfer objektiv, beide Werte im Code).
 2. **`sichtbar`/`Vorarbeit` je Votum (ab sofort):**
@@ -191,6 +198,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-27    894954a  tsc 0 / schema 0 / test 810/810 ; Mutation werkzeuge->projekt = 4 rot ; BUNDLE NICHT rebuilt
   AUF-34    8b2b9e6  tsc 0 / schema 0 / test 830/830 ; Mutation Thema-entfernt = 4 rot ; BUNDLE NICHT rebuilt
   AUF-37    91d9592  build 0 ; committeter Bundle == frischer Build (byte-identisch) ; Sichtprobe 1371+375: AUF-27 3 Reiter, AUF-34 5 Bereiche kein Ueberlauf/Umbruch
+  AUF-36    d106445  tsc 0 / schema 0 / test 853/853 ; Mutation Grund-verfaelscht = 1 rot ; Bundle eigener Rebuild 368f2d7 ; Sichtprobe Grund-Text rendert
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
