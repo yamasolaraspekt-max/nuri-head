@@ -28,6 +28,7 @@ import { enginePanel } from './dashboard/enginePanels';
 import { faehigkeitNach } from './tools/faehigkeiten';
 import { GeschossFlaeche } from './dashboard/GeschossFlaeche';
 import { panAus, type Pan } from './dashboard/pan';
+import { opKnopfBild, type OpKnopfBild } from './dashboard/opKnopfZustand';
 import { speicherAnzeige, type AnzeigeArt } from './dashboard/speicherAnzeige';
 import { naechsterSchritt, wegweiserSatz } from './tools/naechsterSchritt';
 import { TOOL_DEFINITIONS } from './tools/toolRegistry';
@@ -592,9 +593,27 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     a.download = 'grundriss.png';
     a.click();
   }
+  /**
+   * AUF-59: Das Aussehen kommt aus `opKnopfBild` (rein, getestet) — nur die Token werden hier zu
+   * Farben. Vorher unterschieden sich `bedienbar` und `gesperrt` allein in der Icon-Farbe, und
+   * JEDER Knopf trug einen Rahmen; jetzt trägt ihn nur der eingeschaltete Schalter.
+   * **An der Sperre selbst ändert sich nichts** — `disabled` wird unverändert von außen gesetzt.
+   */
+  const OP_TOKEN: Record<string, string> = {
+    brandInk: T.brandInk, brandWash: T.brandWash, surface: T.surface, hair2: T.hair2,
+    ink: FARBEN.text, faint: T.faint,
+  };
+  const opStil = (b: OpKnopfBild): React.CSSProperties => ({
+    display: 'grid', placeItems: 'center', width: 32, height: 30, borderRadius: 8,
+    border: b.rahmenToken ? `1px solid ${OP_TOKEN[b.rahmenToken]}` : '1px solid transparent',
+    background: OP_TOKEN[b.grundToken],
+    color: OP_TOKEN[b.iconToken],
+    opacity: b.deckkraft,
+    cursor: b.cursor,
+  });
   const OpBtn = ({ title, onClick, icon, disabled, aktiv, geplant }: { title: string; onClick?: () => void; icon: string; disabled?: boolean; aktiv?: boolean; geplant?: boolean }): React.ReactElement => (
     <button type="button" title={geplant ? `${title} (geplant)` : title} onClick={geplant ? undefined : onClick} disabled={disabled || geplant}
-      style={{ display: 'grid', placeItems: 'center', width: 32, height: 30, borderRadius: 8, border: `1px solid ${aktiv ? T.brandInk : T.controlBorder}`, background: aktiv ? T.brandWash : T.surface, color: (disabled || geplant) ? T.faint : FARBEN.text, cursor: (disabled || geplant) ? 'not-allowed' : 'pointer' }}>
+      style={opStil(opKnopfBild(Boolean(aktiv), Boolean(disabled || geplant)))}>
       {opIcon(icon)}
     </button>
   );
@@ -1960,11 +1979,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             </>
           ) : (
             <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>
-              <div style={{ fontWeight: 700, color: FARBEN.text, marginBottom: 6 }}>Grundriss spiegeln</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
-                <button type="button" style={{ ...knopf(false), flex: '1 1 108px' }} onClick={() => spiegeleGrundriss('vertikal')} disabled={waende.length === 0}>↔ Links/Rechts</button>
-                <button type="button" style={{ ...knopf(false), flex: '1 1 108px' }} onClick={() => spiegeleGrundriss('horizontal')} disabled={waende.length === 0}>↕ Oben/Unten</button>
-              </div>
+              {/* AUF-59: Hier standen zwei ausgeschriebene Knöpfe „↔ Links/Rechts" und „↕ Oben/Unten"
+                  (117x43, ohne `title`) — dieselbe Handlung wie die beiden Spiegel-Icons in der
+                  Bedienzeile, mit derselben Sperrbedingung. Gemessen war es dieselbe Funktion,
+                  nicht eine zweite: `spiegeleGrundriss('vertikal'/'horizontal')`, `waende.length === 0`.
+                  Der Text weicht dem vorhandenen Icon — die Funktion bleibt, sie steht eine Zeile
+                  höher und nimmt dort keinen Panel-Platz weg. */}
               <div style={{ fontSize: 11.5, marginBottom: 10 }}>Objekt anklicken (Auswahl-Werkzeug) = markieren; dann ziehen zum Bewegen, oder Duplizieren/Löschen.</div>
               <div style={{ fontSize: 12 }}>Werkzeug: <strong style={{ color: FARBEN.text }}>{werkzeug}</strong></div>
               <div style={{ fontSize: 12 }}>Geschoss: <strong style={{ color: FARBEN.text }}>{level.name}</strong></div>

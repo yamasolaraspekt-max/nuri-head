@@ -44,15 +44,22 @@ test('B3: das Eigenschaften-Panel bricht lange Wörter um, statt sie abzuschneid
   assert.match(panel, /boxSizing: 'border-box'/, 'Padding darf die 268 px nicht sprengen');
 });
 
-test('B3: die Spiegel-Schaltflächen brechen um, statt „↕ Oben/Unten" zu kappen', () => {
-  // Eindeutig über den Beschriftungstext: `spiegeleGrundriss('vertikal')` steht ZWEIMAL in der
-  // Datei — einmal als Icon-Knopf in der Werkzeugleiste, einmal als beschrifteter Knopf im Panel.
-  // Gekappt wurde der im Panel; ein `findIndex` auf den Aufruf trifft den falschen.
-  const zeilen = app.split('\n');
-  const i = zeilen.findIndex((l) => l.includes('↔ Links/Rechts'));
-  assert.ok(i > 0, 'Spiegel-Zeile im Panel nicht gefunden');
-  assert.match(zeilen[i - 1], /flexWrap: 'wrap'/, 'die umgebende Zeile muss umbrechen dürfen');
-  assert.equal((app.match(/flex: '1 1 108px'/g) ?? []).length, 2, 'beide Schaltflächen mit Mindestbreite');
+test('B3: die Spiegel-Schaltflächen können nicht mehr kappen — es gibt sie nicht mehr', () => {
+  // AUF-26 hatte die beschrifteten Panel-Knöpfe „↔ Links/Rechts" / „↕ Oben/Unten" gegen Kappung
+  // gesichert. AUF-59 hat sie entfernt: sie waren eine DUBLETTE der beiden Spiegel-Icons in der
+  // Bedienzeile — gemessen derselbe Aufruf und dieselbe Sperrbedingung. Was es nicht gibt, kann
+  // auch nicht kappen; geprüft wird deshalb der Nachfolgezustand, statt die Zusage stillschweigend
+  // fallen zu lassen.
+  // Kommentare weg: der Kommentar, der die Entfernung ERKLÄRT, zitiert die Beschriftung — sonst
+  // schlägt der Test auf die eigene Begründung an. (Derselbe Fallstrick wie in AUF-27/36.)
+  const code = app.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  assert.ok(!code.includes('↔ Links/Rechts'), 'der Textknopf ist zurück — dann gilt die alte Zusage wieder');
+  assert.ok(!code.includes('↕ Oben/Unten'));
+  // Die Handlung ist erreichbar geblieben — als Icon mit Tooltip, der nichts kappen kann.
+  assert.equal((app.match(/spiegeleGrundriss\('vertikal'\)/g) ?? []).length, 1);
+  assert.equal((app.match(/spiegeleGrundriss\('horizontal'\)/g) ?? []).length, 1);
+  assert.match(app, /icon="mirror-h"/);
+  assert.match(app, /icon="mirror-v"/);
 });
 
 test('B4: das Fähigkeiten-Label bricht um — kein ellipsis, kein overflow:hidden', () => {
