@@ -1997,3 +1997,48 @@ N2 ist eine Quelltext-Prüfung, keine Wirkungsmessung. Braucht x64-nativ mit DOM
 
 Die Kollision selbst (→ AUF-22) · fehlende Elevation-Rolle in `studioDaten.ts` · `T.surface` in
 Doppelrolle (`T.onFilled`) · ~8 „nah dran"-Werte, deren Angleichung eine sichtbare Farbänderung wäre.
+
+## ⇒ GENERATOR-BERICHT — AUF-16 (Befund B1) UMGESETZT: `982384d`
+Tafel-Posten AUF-16 gezogen (`c3249d4`), ausgeführt, hier gemeldet. **„umgesetzt", nicht „grün".**
+Der Befund betraf **meinen eigenen** Batch-1-Code — das Muster hatte der Auftrag angeordnet, gebaut
+habe ich es.
+
+**Was war:** `KontextOptionenLeiste` stand als `const` im Rumpf von `HausplanerApp` ⇒ neue
+Typ-Identität bei **jedem** Render; `onMouseMove` rendert in Mausbewegungs-Frequenz, React riss den
+Teilbaum also fortlaufend ab. Der `<select>` darin ist fokussierbar — betroffen waren Fokus und
+Tastaturbedienung, **nicht** der Wert.
+
+**Was ist:** Definition auf **Modulebene** (Spalte 0), fünf **explizite Props** statt Closure
+(`werkzeug`, `fensterTypWahl`, `tuerTypWahl`, `setFensterTypWahl`, `setTuerTypWahl`). Optionswerte,
+`value`, `onChange` und Quelllisten **byte-identisch** — reiner Umzug (Kriterium 6). `OpBtn` und die
+anderen zustandslosen Rumpf-Komponenten blieben unangetastet, wie der Auftrag es verlangt.
+
+**Gate, HEAD vor == nach:** `tsc:hausplaner` **0** · `schema:hausplaner:check` **0** ·
+`test:hausplaner` **739/739 pass, 0 fail** (vorher **734**, +5) · `build:hausplaner` **0**.
+
+**Bundle laut Auftrag nicht angefasst:** Der Build ist fürs Gate gelaufen (Exit 0) und schreibt dabei
+`public/hausplaner/hausplaner.js`; ich habe die Datei danach per `checkout` zurückgesetzt. `git status`
+auf `public/` zeigt **0** geänderte Zeilen. *(Randnotiz zum Planner-Nachtrag: hier läuft der Build
+nativ — die aarch64-Einschränkung gilt für die Cloud-Seite, nicht für diese Sitzung.)*
+
+**Kriterium 5 — die ehrliche Grenze, ausdrücklich benannt statt behauptet:** Die Messung des
+Evaluators (Typ-Identität über zwei Renders, `false` vorher) ist hier **nicht reproduzierbar** —
+`HausplanerApp.tsx` zieht React/react-konva/three, die Testumgebung hat **kein DOM**. Statt die
+Wirkung zu behaupten, verriegelt der neue Test `kontextOptionenLeiste.test.ts` (5 Fälle) die
+**Ursache**: der erste Fall dokumentiert den Mechanismus (`rumpfRender() !== rumpfRender()`), die
+übrigen prüfen Modulebene, das Fehlen einer Rumpf-Deklaration, die Vollständigkeit der fünf Props
+(Kante 3) und die byte-treuen Options-Quellen.
+
+**Gegen-Beweis tatsächlich rot gesehen:** Komponente zurück in den Rumpf geschoben ⇒ **2 von 5 Tests
+rot** — „ist auf Modulebene deklariert (Spalte 0)" und „ist NICHT im Rumpf von HausplanerApp
+deklariert". Danach zurückgesetzt, `diff` gegen die Kopie **identisch**.
+
+**Kein Beifang:** `git status` zeigt 0 Zeilen in `app/tools/*`, `store/*`, `domain/*`, `geometry/*`,
+`renderers/*`, `public/*`. Commit umfasst genau zwei Pfade.
+
+**Nicht angefasst, weil nicht mein Posten:** AUF-15a (30 rohe Farbwerte) wird parallel von einer
+anderen Instanz gebaut — vier Dateien lagen dazu im Baum, ich bin ihnen ausgewichen. **AUF-19**
+(B3/B4: `role="tabpanel"`, `aria-controls`, Fokusnachführung) ist der nächste Posten und betrifft
+dieselbe Datei; er wird **einzeln** gezogen, nicht hier mitgebaut.
+
+**Ballbesitz → Evaluator.**
