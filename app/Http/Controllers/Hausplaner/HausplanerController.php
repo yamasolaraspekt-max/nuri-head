@@ -13,6 +13,7 @@ use App\Domain\Hausplaner\Models\HausplanerSnapshot;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Hausplaner\SpeichereHausplanerDokumentRequest;
 use App\Models\LeadAlternativeAdd;
+use App\Models\User;
 use App\Services\Geometrie\GeometrieUngueltigException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,7 +27,14 @@ use Illuminate\Http\Request;
  */
 class HausplanerController extends Controller
 {
-    public function seite(LeadAlternativeAdd $objekt)
+    /**
+     * AUF-60 — die Aktionen, die `User::hasPermission()` fuer das Item „Hausplaner" kennt.
+     * Genau diese vier, nicht mehr: `hasPermission()` bildet auf vier feste Spalten ab und schickt
+     * jede unbekannte Aktion in den `default`-Zweig, also auf `is_read`.
+     */
+    private const HAUSPLANER_AKTIONEN = ['read', 'add', 'update', 'delete'];
+
+    public function seite(Request $request, LeadAlternativeAdd $objekt)
     {
         $dokument = $this->dokumentFuer($objekt);
 
@@ -34,7 +42,35 @@ class HausplanerController extends Controller
             'objekt' => $objekt,
             'dokument' => $dokument,
             'uebernahme' => app(ErmittleUebernahmeStatus::class)->ausfuehren($objekt, $dokument),
+            'hpRechte' => $this->hausplanerRechte($request->user()),
         ]);
+    }
+
+    /**
+     * AUF-64 — die Rechte des angemeldeten Nutzers als Zeichenkette fuer `data-rechte`.
+     *
+     * **Warum hier und nicht im Blade:** `auth()->user()`, eine Sammlung und vier
+     * `hasPermission`-Aufrufe sind Anwendungslogik. Im Blade brauchte das einen `@php`-Block — und
+     * genau dessen schliessende Marke hat, gepaart mit der einzeiligen Form beim Uebernahme-Knopf,
+     * `objekt/203` zerbrochen (AUF-64). Hier ist die Berechnung ausserdem pruefbar; ein Block im
+     * Template ist es nicht.
+     *
+     * **Diese Methode entscheidet nichts.** Sie fragt `hasPermission` und gibt weiter, was von dort
+     * kommt — die Rechte-Wahrheit bleibt der Server (`CheckUserPermission` an jeder Route).
+     *
+     * **Ohne angemeldeten Nutzer ist das Ergebnis leer** — das Minimum, nie das Maximum. Ein
+     * fehlender Nutzer darf nicht „darf alles" bedeuten.
+     */
+    private function hausplanerRechte(?User $nutzer): string
+    {
+        if ($nutzer === null) {
+            return '';
+        }
+
+        return collect(self::HAUSPLANER_AKTIONEN)
+            ->filter(fn (string $aktion) => $nutzer->hasPermission('Hausplaner', $aktion))
+            ->map(fn (string $aktion) => 'Hausplaner,'.$aktion)
+            ->implode(' ');
     }
 
     /**

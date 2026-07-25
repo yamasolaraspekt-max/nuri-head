@@ -124,25 +124,32 @@ test('main.tsx liest die Rechte über dieselbe Naht wie die Speichern-URL', () =
   assert.equal(RECHTE_ATTRIBUT, 'rechte', 'data-rechte');
 });
 
-test('das Blade liefert die vier bekannten Rechte — aus hasPermission, ohne Ableitung', () => {
+test('das Blade gibt die Rechte nur AUS — gerechnet wird im Controller', () => {
+  // AUF-64: im Blade steht genau eine Zeile. Die Berechnung liegt in
+  // `HausplanerController::hausplanerRechte()` und ist dort geprüft (HausplanerRechteTest) —
+  // ein PHP-Block im Template wäre weder prüfbar noch, in DIESER Datei, ungefährlich.
   assert.match(blade, /data-rechte="\{\{ \$hpRechte \}\}"/);
-  assert.match(blade, /auth\(\)->user\(\)\?->hasPermission\('Hausplaner', \$aktion\)/);
-  assert.match(blade, /\['read', 'add', 'update', 'delete'\]/, 'die vier, die das System kennt');
-  // Ohne angemeldeten Nutzer bleibt die Liste leer — dieselbe Richtung wie K5. Der Fragezeichen-
-  // Pfeil liefert dann `null`, und `filter` wirft den Eintrag weg.
-  assert.match(blade, /user\(\)\?->/, 'ohne Nullsafe fiele die Seite ohne Anmeldung um');
+  assert.doesNotMatch(blade, /hasPermission/, 'die Rechte-Logik gehört nicht ins Template');
+  assert.doesNotMatch(blade, /collect\(\['read'/, 'auch nicht die Liste der Aktionen');
 });
 
-test('AUF-64: die Rechte-Zeile steht EINZEILIG — die Block-Form zerbricht diese Datei', () => {
-  // Die Ursache des Ausfalls: weiter oben steht die einzeilige Klammer-Form ohne schließendes
-  // Gegenstück. Blade paart Rohblöcke non-greedy und **vor** dem Entfernen der Kommentare — ein
-  // schließendes Gegenstück irgendwo später wird mit jener früheren Öffnung gepaart, und alles
-  // dazwischen landet als roher PHP-Code im Kompilat.
+test('der Controller kennt genau die vier Aktionen — und erfindet keine fünfte', () => {
+  const ctrl = ohneKommentare(readFileSync(join(wurzel, 'app/Http/Controllers/Hausplaner/HausplanerController.php'), 'utf8'));
+  assert.match(ctrl, /HAUSPLANER_AKTIONEN = \['read', 'add', 'update', 'delete'\]/);
+  assert.match(ctrl, /hausplanerRechte\(\$request->user\(\)\)/, 'die Seite reicht den echten Nutzer durch');
+  // Der leere Fall ist der wichtigste: kein Nutzer ⇒ leere Zeichenkette, nicht alle Rechte.
+  assert.match(ctrl, /if \(\$nutzer === null\) \{\s*return '';/);
+  assert.doesNotMatch(ctrl, /'Hausplaner,import'/, 'import ist keine Berechtigungsaktion');
+});
+
+test('AUF-64: im Blade steht KEIN PHP-Block — der hat diese Datei zerbrochen', () => {
+  // Weiter oben steht die einzeilige Klammer-Form ohne schließendes Gegenstück. Blade paart
+  // Rohblöcke non-greedy und **vor** dem Entfernen der Kommentare — ein schließendes Gegenstück
+  // irgendwo später wird mit jener früheren Öffnung gepaart, und alles dazwischen landet als
+  // roher PHP-Code im Kompilat. Bewusst zusammengesetzt: als Literal wäre die Marke hier
+  // harmlos, im Blade nicht. Der PHP-seitige Beleg liegt in BladeKompiliertTest.
   const roh = readFileSync(join(wurzel, 'resources/views/admin/hausplaner/objekt.blade.php'), 'utf8');
-  assert.match(roh, /@php\(\$hpRechte = collect/, 'die Rechte-Zeile muss die einzeilige Form sein');
-  // Bewusst zusammengesetzt: stünde die Marke hier als Literal, wäre sie in dieser Datei kein
-  // Problem — im Blade schon. Der PHP-seitige Beleg liegt in BladeKompiliertTest.
-  assert.equal(roh.split('@' + 'endphp').length - 1, 0, 'diese Datei mischt die beiden Formen');
+  assert.equal(roh.split('@' + 'endphp').length - 1, 0, 'ein Block hier zerbricht die Datei erneut');
 });
 
 test('K2/K3: der Weg berührt weder Modell-Store noch Routen noch das Rechtemodell', () => {

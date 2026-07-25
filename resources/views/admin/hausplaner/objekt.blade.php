@@ -95,18 +95,13 @@
         leer — das Minimum. Dieselbe Naht wie `data-speichern-url`, kein neuer Mechanismus.
     --}}
     {{--
-        AUF-64 — WARUM DAS HIER EINZEILIG STEHT UND NICHT ALS BLOCK:
-        Weiter oben (Uebernahme-Knopf) steht die einzeilige Klammer-Form der PHP-Direktive. Die hat
-        kein schliessendes Gegenstueck. Blade zieht seine Rohbloecke NON-GREEDY heraus, bevor es
-        Kommentare entfernt: das erste schliessende Gegenstueck irgendwo spaeter in dieser Datei
-        wird mit jener frueheren Oeffnung gepaart, und alles dazwischen (Formular, CSRF-Direktive,
-        Ausgabe-Klammern) landet als roher PHP-Code im Kompilat. Genau so hat AUF-60 objekt/203
-        zerbrochen — und der erste Erklaerversuch dieses Kommentars gleich noch einmal, weil die
-        Marke im Kommentartext mitzaehlt.
-        Solange diese Datei die einzeilige Form oben traegt, darf hier weder die Block-Form noch
-        ihr Schluesselwort stehen — auch nicht im Fliesstext. Festgehalten in BladeKompiliertTest.
+        AUF-64: `$hpRechte` kommt aus `HausplanerController::hausplanerRechte()`. Im Blade steht
+        bewusst nur die Ausgabe — keine Logik, kein PHP-Block. Diese Datei traegt weiter oben die
+        einzeilige Klammer-Form der PHP-Direktive (Uebernahme-Knopf); die hat kein schliessendes
+        Gegenstueck, und Blade paart seine Rohbloecke non-greedy und VOR dem Entfernen der
+        Kommentare. Ein Block hier wuerde die Datei erneut zerbrechen — so wie in AUF-60 geschehen.
+        Festgehalten in BladeKompiliertTest.
     --}}
-    @php($hpRechte = collect(['read', 'add', 'update', 'delete'])->filter(fn ($aktion) => auth()->user()?->hasPermission('Hausplaner', $aktion))->map(fn ($aktion) => 'Hausplaner,' . $aktion)->implode(' '))
     <div id="hausplaner-root"
          data-project-id="{{ $objekt->id }}"
          data-rechte="{{ $hpRechte }}"
