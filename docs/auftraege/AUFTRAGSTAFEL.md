@@ -74,7 +74,7 @@ Und `-m` steht **vor** dem `--`, sonst frisst der Pathspec den Text.
 | Nr | Auftrag | Rolle | Status | Datei / Beleg |
 |---|---|---|---|---|
 | **AUF-1** | **A1-Abnahme wiederholen** (Gegenstand `c0ffe31`), unter den zwei neuen Auflagen E1 (erst messen, dann lesen) und E2 (voller Prüfrahmen, nicht nur N1–N7) | Evaluator, **frische Instanz** | `OFFEN` | `evaluator-auftrag-wizard-welle-a1-werkzeug-praesentation.md` + Ledger-Block „ZWEI ERGÄNZUNGEN" (Z. 1103) |
-| **AUF-2** | **T1 + `decke` committen** — die sechs gestagten Dateien als **eigener** Commit mit Pfadangabe | Generator (nativ) | `OFFEN` | COMMIT-FREIGABE im Ledger (Z. 1006), Dateiliste dort |
+| **AUF-2** | **T1 + `decke` committen** — die sechs gestagten Dateien als **eigener** Commit mit Pfadangabe | Generator (nativ) | `IN ARBEIT — Generator (nativ)` | COMMIT-FREIGABE im Ledger (Z. 1006), Dateiliste dort |
 | **AUF-3** | **T1-Abnahme** (Token-Konsolidierung + `decke → bau`) | Evaluator | `GESPERRT` — braucht den Hash aus AUF-2 | `evaluator-auftrag-t1-token-konsolidierung-und-decke.md` **inkl. §10** |
 | **AUF-4** | **Wizard-Welle A2** — Leiste liest die Präsentationsschicht, inkl. P9-Memoisierung | Generator | `GESPERRT` — bis AUF-1 ein Votum im Ledger hat | `generator-auftrag-wizard-welle-a2-leiste-liest-praesentation.md` **inkl. §8** |
 | **AUF-5** | Die zwei vom Generator **zurückgegebenen** Punkte einordnen: `treppeSvg.ts:38`, `szene.ts:16` | Planner | `IN ARBEIT — Planner` | Ledger „SCHRITT 2 ERGEBNIS" (Z. 1171) |
