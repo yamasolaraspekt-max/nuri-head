@@ -35,7 +35,10 @@ const AUSWAEHLBAR = ['wall', 'window', 'door', 'opening', 'zone', 'object', 'rou
 export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
   {
     id: 'auswahl',
-    label: 'Auswahl',
+    // AUF-35a: sichtbar heisst das Werkzeug **Markieren** (Yamas Referenz vom 25.07.). Die id
+    // bleibt `auswahl`, das Kuerzel bleibt `V` — beides ist gespeicherte bzw. eingeuebte Wahrheit
+    // und haette ohne Not 101 Icon-Dateinamen und jede Tastaturgewohnheit angefasst.
+    label: 'Markieren',
     icon: 'auswahl',
     art: 'werkzeug',
     groupId: 'global',

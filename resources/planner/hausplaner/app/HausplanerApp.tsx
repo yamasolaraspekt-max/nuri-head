@@ -21,6 +21,8 @@ import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type Fens
 import { DreiDBereich } from './DreiDBereich';
 import { ZustandBadge } from './studioUi';
 import { PANEL_TABS, type PanelTabId } from './dashboard/panelTabs';
+import { aufloeseAuswahlmodus, wendeAuswahlAn, klickInsLeere } from './tools/auswahlModus';
+import { mehrfachUebersicht } from './tools/auswahlUebersicht';
 import { ReiterLeiste } from './dashboard/ReiterLeiste';
 import { SCHIENEN_REITER, SCHIENE_STANDARD, type SchienenReiterId } from './dashboard/schienenReiter';
 import { ARBEITSBEREICHE, arbeitsbereich } from './dashboard/arbeitsbereiche';
@@ -244,6 +246,13 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const scene = useHausplanerStore((s) => s.scene);
   const activeLevelId = useHausplanerStore((s) => s.activeLevelId);
   const selectedNodeIds = useHausplanerStore((s) => s.selectedNodeIds);
+  /**
+   * AUF-35a: Das Panel zeigt das **Primärobjekt**, nicht „das eine ausgewählte". Vorher stand an
+   * fünf Stellen `selectedNodeIds.length === 1` — damit war jede Mehrfachauswahl blind, obwohl der
+   * Store sie längst konnte. Jetzt führt `primaerId`, und bei Mehrfachauswahl zeigt das Panel eine
+   * eigene Übersicht statt Einzelfelder zu raten (Kante 4).
+   */
+  const primaerId = useHausplanerStore((s) => s.primaerId);
   const speicherStatus = useHausplanerStore((s) => s.speicherStatus);
   const konfliktRevision = useHausplanerStore((s) => s.konfliktRevision);
   const letzteAblehnung = useHausplanerStore((s) => s.letzteAblehnung);
@@ -307,6 +316,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     [scene, level],
   );
   const waende = useMemo(() => nodes.filter(istWand), [nodes]);
+  /** AUF-35a / Kante 4: Zählung der Auswahl je Typ — rein, getestet, nur Anzeige. */
+  const auswahlUebersicht = useMemo(() => mehrfachUebersicht(selectedNodeIds, nodes), [selectedNodeIds, nodes]);
 
   // UI-3: Aktivierungs-Kontext für die Werkzeugleiste (§21). Sammelt die getrennten Wahrheiten:
   // Arbeitsbereich (UI-State) · Ansicht (store.modus) · Auswahltypen (Modell). Rechte sind im
@@ -436,7 +447,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   }, [waende]);
 
   // D-c: genau EIN ausgewähltes Dach ⇒ Parameter-Panel; Änderungen laufen als UPDATE_ROOF-Command.
-  const selectedRoof = scene?.roofs?.find((r) => selectedNodeIds.length === 1 && selectedNodeIds[0] === r.id) ?? null;
+  const selectedRoof = scene?.roofs?.find((r) => primaerId === r.id) ?? null;
   function aktualisiereDach(changes: Partial<RoofNode>): void {
     if (selectedRoof) {
       store.getState().executeCommand({ type: 'UPDATE_ROOF', roofId: selectedRoof.id, changes });
@@ -455,7 +466,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const WANDSTAERKEN = [115, 150, 175, 240, 300, 365] as const;
 
   // P2b-1: genau EINE ausgewählte Wand ⇒ Mauerwerk-/Stärke-Panel; Änderungen als UPDATE_NODE (additiv).
-  const selectedWall = waende.find((w) => selectedNodeIds.length === 1 && selectedNodeIds[0] === w.id) ?? null;
+  const selectedWall = waende.find((w) => primaerId === w.id) ?? null;
   function aktualisiereWand(changes: Partial<WallNode>): void {
     if (selectedWall) {
       store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedWall.id, changes });
@@ -472,7 +483,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     store.getState().executeCommand({ type: 'MOVE_NODE', nodeId: selectedWall.id, position: { start: selectedWall.start, end } });
   }
   // P2b-4: genau EINE ausgewählte Öffnung ⇒ Öffnungs-Panel (Tür: Anschlag/Öffnung); UPDATE_NODE (additiv).
-  const selectedOpening = (nodes.find((n) => istOeffnung(n) && selectedNodeIds.length === 1 && selectedNodeIds[0] === n.id) ?? null) as OpeningNode | null;
+  const selectedOpening = (nodes.find((n) => istOeffnung(n) && primaerId === n.id) ?? null) as OpeningNode | null;
   function aktualisiereOeffnung(changes: Partial<OpeningNode>): void {
     if (selectedOpening) {
       store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedOpening.id, changes });
@@ -481,15 +492,15 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   // Treppe (objectType 'stair'): genau EIN ausgewaehltes Treppen-Objekt -> Panel; UPDATE_NODE (additiv).
   const selectedStair = (nodes.find(
     (n): n is ObjectNode => n.type === 'object' && n.objectType === 'stair'
-      && selectedNodeIds.length === 1 && selectedNodeIds[0] === n.id,
+      && primaerId === n.id,
   ) ?? null);
   // Generisches Objekt (radiator/wallbox/… außer stair) — Auswahl fürs Panel.
   const selectedObjekt = (nodes.find(
     (n): n is ObjectNode => n.type === 'object' && n.objectType !== 'stair'
-      && selectedNodeIds.length === 1 && selectedNodeIds[0] === n.id,
+      && primaerId === n.id,
   ) ?? null);
   // Dashboard v1 §5: genau EIN selektierter Node (Wand/Öffnung/Objekt/Treppe) → Auge/Schloss verdrahten.
-  const selectedNode = selectedNodeIds.length === 1 ? (nodes.find((n) => n.id === selectedNodeIds[0]) ?? null) : null;
+  const selectedNode = primaerId ? (nodes.find((n) => n.id === primaerId) ?? null) : null;
   const selectedStairParams: TreppeParams | null = selectedStair ? parametereZuTreppe(selectedStair.parameters) : null;
   function aktualisiereTreppe(aenderung: Partial<TreppeParams>): void {
     if (!selectedStair || !selectedStairParams) return;
@@ -649,6 +660,21 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     return { x: Math.round(start.x + laenge * Math.cos(winkel)), y: Math.round(start.y + laenge * Math.sin(winkel)) };
   }
 
+  /**
+   * AUF-35a — DIE eine Stelle, an der ein Klick zur Auswahl wird.
+   *
+   * Vorher rief jeder Knoten `selectNodes([id])` und ersetzte damit die Auswahl bedingungslos;
+   * die Modifikatortasten wurden beim Klick gar nicht gelesen. Jetzt entscheidet die reine
+   * Funktion `aufloeseAuswahlmodus` über den Modus und `wendeAuswahlAn` über den neuen Stand —
+   * hier wird nur noch übergeben. Keine zweite Auswahl-Logik in den Renderer-Zweigen.
+   */
+  const waehleAn = React.useCallback((id: string, ev: MouseEvent): void => {
+    const modus = aufloeseAuswahlmodus(ev);
+    const s = store.getState();
+    const neu = wendeAuswahlAn({ ids: s.selectedNodeIds, primaerId: s.primaerId }, id, modus);
+    s.selectNodes(neu.ids, neu.primaerId);
+  }, [store]);
+
   function klick(e: Konva.KonvaEventObject<MouseEvent>): void {
     if (!scene || !level) {
       return;
@@ -767,8 +793,14 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       return;
     }
 
-    // Auswahl: Klick auf leere Fläche hebt die Auswahl auf (Nodes stoppen die Propagation).
-    store.getState().selectNodes([]);
+    // Auswahl: Klick auf leere Fläche (Nodes stoppen die Propagation).
+    // Kante 5: MIT Modifikator bleibt die Auswahl stehen — sonst verliert man beim Danebentreffen
+    // die ganze Mehrfachauswahl.
+    const s = store.getState();
+    const neu = klickInsLeere({ ids: s.selectedNodeIds, primaerId: s.primaerId }, e.evt);
+    if (neu !== undefined && (neu.ids !== s.selectedNodeIds || neu.primaerId !== s.primaerId)) {
+      s.selectNodes(neu.ids, neu.primaerId);
+    }
   }
 
   useEffect(() => {
@@ -1204,7 +1236,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                         key={eintrag.id} type="button"
                         title={`${eintrag.label} – im Plan auswählen`}
                         aria-current={gewaehlt ? 'true' : undefined}
-                        onClick={() => store.getState().selectNodes([eintrag.id])}
+                        // AUF-35a: auch der Projektbrowser geht durch `waehleAn` — Shift/Strg
+                        // wirken hier wie im Plan. Zwei Auswahl-Wege mit verschiedenen Regeln
+                        // wären genau die zweite Wahrheit, die dieser Posten beseitigt.
+                        onClick={(e) => waehleAn(eintrag.id, e.nativeEvent)}
                         style={{
                           display: 'block', textAlign: 'left', width: 'calc(100% - 12px)', margin: '1px 6px',
                           padding: '4px 8px 4px 14px', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12,
@@ -1278,7 +1313,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               const klick = (e: Konva.KonvaEventObject<MouseEvent>): void => {
                 if (werkzeug === 'auswahl') {
                   e.cancelBubble = true;
-                  store.getState().selectNodes([w.id]);
+                  waehleAn(w.id, e.evt);
                 }
               };
 
@@ -1286,7 +1321,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 <Group
                   key={w.id}
                   draggable={werkzeug === 'auswahl'}
-                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([w.id]); } }}
+                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; waehleAn(w.id, e.evt); } }}
                   onDragEnd={(e) => {
                     const dx = e.target.x();
                     const dy = e.target.y();
@@ -1340,7 +1375,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 <Group
                   key={o.id} x={mitte.x} y={mitte.y} rotation={winkel}
                   draggable={werkzeug === 'auswahl'}
-                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([o.id]); } }}
+                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; waehleAn(o.id, e.evt); } }}
                   onDragEnd={(e) => {
                     const lot = lotAufWand({ x: e.target.x(), y: e.target.y() }, wand);
                     const laenge = wandLaenge(wand.start, wand.end);
@@ -1360,7 +1395,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                     onClick={(e) => {
                       if (werkzeug === 'auswahl') {
                         e.cancelBubble = true;
-                        store.getState().selectNodes([o.id]);
+                        waehleAn(o.id, e.evt);
                       }
                     }}
                   />
@@ -1406,7 +1441,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                     onClick={(e) => {
                       if (werkzeug === 'auswahl') {
                         e.cancelBubble = true;
-                        store.getState().selectNodes([r.id]);
+                        waehleAn(r.id, e.evt);
                       }
                     }}
                   />
@@ -1435,7 +1470,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 <Group
                   key={st.id}
                   draggable={werkzeug === 'auswahl'}
-                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([st.id]); } }}
+                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; waehleAn(st.id, e.evt); } }}
                   onDragEnd={(e) => {
                     const dx = Math.round(e.target.x()); const dy = Math.round(e.target.y());
                     e.target.position({ x: 0, y: 0 });
@@ -1450,7 +1485,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                       });
                     }
                   }}
-                  onClick={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([st.id]); } }}
+                  onClick={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; waehleAn(st.id, e.evt); } }}
                 >
                   <Line points={sym.umriss.flatMap((q) => [q.x, q.y])} closed stroke={farbe} strokeWidth={40 / zoom} fill={ausgewaehlt ? T.brandWash : T.canvasWallGhost} />
                   {sym.stufen.map((s, i) => (
@@ -1475,12 +1510,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               return (
                 <Group key={ob.id} x={px} y={py}
                   draggable={werkzeug === 'auswahl'}
-                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([ob.id]); } }}
+                  onDragStart={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; waehleAn(ob.id, e.evt); } }}
                   onDragEnd={(e) => {
                     const nx = Math.round(e.target.x()); const ny = Math.round(e.target.y());
                     store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: ob.id, changes: { transform: { ...ob.transform, position: { x: nx, y: ny, z: ob.transform.position.z } } } });
                   }}
-                  onClick={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([ob.id]); } }}
+                  onClick={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; waehleAn(ob.id, e.evt); } }}
                 >
                   <Rect x={0} y={0} width={laenge} height={tiefe} cornerRadius={30} stroke={farbe} strokeWidth={40 / zoom} fill={ausgewaehlt ? T.brandWash : T.canvasWallGhost} />
                   <Text x={0} y={-90} width={laenge} align="center" scaleY={-1} text={label} fontSize={150} fill={FARBEN.gedaempft} listening={false} />
@@ -1559,6 +1594,28 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             </div>
           ) : (
             <>
+          {/* AUF-35a / Kante 4: Bei MEHRFACHauswahl zeigt das Panel eine Übersicht mit Anzahl je Typ
+              statt Einzelfelder zu raten. Die Zählung kommt aus `mehrfachUebersicht` (rein,
+              getestet); das Markup bleibt dünn. Darunter laufen die Einzelfelder wie bisher weiter —
+              sie zeigen das PRIMÄROBJEKT, also das zuletzt gewählte. */}
+          {auswahlUebersicht.gesamt > 1 && (
+            <div style={{ marginBottom: 12, padding: '8px 10px', borderRadius: 8, background: T.surface2, border: `1px solid ${T.hair}` }}>
+              <div style={{ fontWeight: 700, marginBottom: 4 }}>{auswahlUebersicht.gesamt} Objekte gewählt</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
+                {auswahlUebersicht.typen.map((t) => (
+                  <span key={t.typ} style={{ fontSize: 11.5, padding: '2px 7px', borderRadius: 999, background: T.brandWash, color: T.brandInk }}>
+                    {t.bezeichnung}
+                  </span>
+                ))}
+              </div>
+              {auswahlUebersicht.gesperrt > 0 && (
+                <div style={{ fontSize: 11.5, color: FARBEN.gedaempft }}>🔒 {auswahlUebersicht.gesperrt} davon gesperrt — wählbar, aber nicht bearbeitbar.</div>
+              )}
+              <div style={{ fontSize: 11.5, color: FARBEN.gedaempft }}>
+                Unten stehen die Eigenschaften des zuletzt gewählten Objekts.
+              </div>
+            </div>
+          )}
           {/* Dashboard v1 §5: Sicht (Auge) + Sperre (Schloss) je selektiertem Node → vorhandene Commands
               SET_NODES_SICHTBAR/SET_NODES_GESPERRT. Zustand als Text UND Symbol (A11y). Entsperren fragt nach. */}
           {selectedNode && (

@@ -28,6 +28,14 @@ export interface HausplanerState {
   modus: HausplanerModus;
   activeLevelId: string | null;
   selectedNodeIds: string[];
+  /**
+   * AUF-35a: das **Primärobjekt** der Auswahl — dessen Eigenschaften zeigt das Panel, und nur an
+   * ihm hängen die Griffe. Additiv ergänzt; `selectedNodeIds` bleibt die Liste, hier steht nur,
+   * welches davon führt. Kein zweiter Auswahlzustand.
+   */
+  primaerId: string | null;
+  /** AUF-35a: das Objekt unter dem Zeiger (Hover-Vorschau). Reine Anzeige, nie im Dokument. */
+  ueberfahrenId: string | null;
 
   speicherStatus: SpeicherStatus;
   konfliktRevision: number | null;
@@ -36,7 +44,9 @@ export interface HausplanerState {
   init: (scene: SceneDocument, speichernUrl: string, csrfToken: string) => void;
   setModus: (modus: HausplanerModus) => void;
   setActiveLevel: (levelId: string) => void;
-  selectNodes: (ids: string[]) => void;
+  /** Setzt die Auswahl. Ohne `primaerId` rückt das **zuletzt** gewählte nach (Kante 3). */
+  selectNodes: (ids: string[], primaerId?: string | null) => void;
+  setUeberfahren: (id: string | null) => void;
 
   executeCommand: (command: HausplanerCommand) => boolean;
   undo: () => void;
@@ -62,6 +72,8 @@ export const useHausplanerStore = create<HausplanerState>((set, get) => ({
   modus: '2d',
   activeLevelId: null,
   selectedNodeIds: [],
+  primaerId: null,
+  ueberfahrenId: null,
 
   speicherStatus: 'gespeichert',
   konfliktRevision: null,
@@ -75,6 +87,8 @@ export const useHausplanerStore = create<HausplanerState>((set, get) => ({
       csrfToken,
       activeLevelId: scene.levels[0]?.id ?? null,
       selectedNodeIds: [],
+      primaerId: null,
+      ueberfahrenId: null,
       speicherStatus: 'gespeichert',
       konfliktRevision: null,
       letzteAblehnung: null,
@@ -84,9 +98,18 @@ export const useHausplanerStore = create<HausplanerState>((set, get) => ({
   setModus: (modus) => set({ modus }),
 
   // Entscheid (b): Geschosswechsel leert die Selektion — deterministisch, nie versteckte Treffer.
-  setActiveLevel: (levelId) => set({ activeLevelId: levelId, selectedNodeIds: [] }),
+  // Entscheid (b) gilt weiter, jetzt inklusive Primärobjekt: eine Auswahl, die das Geschoss
+  // verlässt, hinterlässt auch kein führendes Objekt (Kante 2).
+  setActiveLevel: (levelId) => set({ activeLevelId: levelId, selectedNodeIds: [], primaerId: null }),
 
-  selectNodes: (ids) => set({ selectedNodeIds: ids }),
+  selectNodes: (ids, primaerId) => set({
+    selectedNodeIds: ids,
+    // Ohne ausdrückliche Angabe führt das zuletzt gewählte Objekt — es bildet ab, woran zuletzt
+    // gearbeitet wurde. Leere Auswahl ⇒ kein Primärobjekt.
+    primaerId: primaerId !== undefined ? primaerId : (ids.length > 0 ? ids[ids.length - 1] : null),
+  }),
+
+  setUeberfahren: (id) => set({ ueberfahrenId: id }),
 
   executeCommand: (command) => {
     const { scene } = get();
