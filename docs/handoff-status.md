@@ -2827,3 +2827,46 @@ und daneben die persönlich angehefteten Werkzeuge.
 
 Damit wird aus einer Entscheidung über 110 Einzelwerkzeuge eine über **22 Gruppen** — und die
 Struktur ist die, die Yama ohnehin entworfen hat. **Zu bestätigen: ja/nein.** → **AUF-32**
+
+## ⇒ GENERATOR-BERICHT — I3 (AUF-21) UMGESETZT: `ccdc93b` — die sechs Werkzeug-Zustände
+Damit ist die Kette aus Yamas Prioritätsblock durch: **A2 abgenommen → I2 (`289ccc8`) → I3
+(`ccdc93b`)**. **„umgesetzt", nicht „grün".**
+
+**Der fehlende Zustand ist geschlossen.** Die Vorlagen-Messung führte „angeheftet" als **fehlend**
+(`grep -rnE 'angeheftet|pinned|Favorit'` → 0 Treffer im Code). Jetzt existieren alle sechs Zustände
+aus `dashboard-tools-v1.html` — ★ angeheftet · empfohlen · ▶ aktiv · ◌ gesperrt · ⋯ weitere ·
+⌂ system — **mit Zeichen UND Klartext**, nie nur Symbol, nie nur Farbe.
+
+**`canPin`/`priority` sind in der Zonen-Kuratierung angekommen:** `ToolPresentationRule` trägt
+additiv `prioritaet` und `anheftbar`; die 110 Katalog-Regeln beziehen die Werte aus dem Paket
+(**5 primary, 105 secondary**, `canPin` überall `true`). Registry-Regeln beziehen ihren Rang
+weiterhin aus der Fix-Zone.
+
+**Warum eine Regel und kein gespeichertes Feld:** Vier der sechs Zustände hängen vom Moment ab —
+welches Werkzeug gewählt ist, was der Wizard empfiehlt, ob die Voraussetzung erfüllt ist. Ein
+gespeicherter Zustand wäre sofort veraltet und die zweite Wahrheit neben `resolveToolState`.
+
+**Die Reihenfolge ist der eigentliche Inhalt** — `aktiv > gesperrt > system > angeheftet >
+empfohlen > weitere`. Zwei Stufen sind bewusst so und nicht anders:
+- **gesperrt vor angeheftet:** ein angehefteter, aber unbenutzbarer Knopf muss den **Grund** zeigen,
+  nicht den Stern. Genau das meint der Entwurf mit „angeheftet, aber Voraussetzung fehlt".
+- **system vor angeheftet:** sonst verspricht der Stern eine Entfernbarkeit, die es nicht gibt.
+  Pflichtwerkzeuge sind deshalb auch **nicht anheftbar** — ein Stern ohne Wirkung wäre gelogen.
+
+**Gate, HEAD vor == nach:** `tsc` **0** · `schema:check` **0** · `test` **782/782 pass, 0 fail**
+(vorher **771**, +11) · `build` **0**.
+**Gegen-Beweis rot gesehen:** `angeheftet` vor `gesperrt` gezogen ⇒ **2 Tests rot** („gesperrt
+schlägt angeheftet", „system schlägt angeheftet"); danach zurückgesetzt, `diff` identisch.
+
+**Nicht entschieden, ausdrücklich (Operanden-Gate):** **wo die persönlichen Anheftungen liegen.**
+Die Funktion nimmt sie als Parameter entgegen. Ob sie im UI-State, im Store oder am Benutzer in der
+Datenbank hängen, ist eine Architektur- **und Datenschutzfrage** — sie gehört Yama. Kein erfundener
+Speicherort, keine stille DB-Erweiterung.
+
+**Was jetzt noch fehlt, damit man es sieht:** Die Zustände sind Regel und Daten; **gerendert** wird
+noch nichts davon. Die Leiste zeigt weiterhin die 7 Registry-Werkzeuge, weil die 110 in `versteckt`
+liegen und keinen Handler haben. Der nächste sinnvolle Schritt ist die **Darstellung** — Leiste mit
+Zonen, Stern, Überlauf, Befehlspalette — und dafür braucht es Yamas Entscheidung zum Speicherort der
+Anheftungen. **Das ist kein Rückstand, sondern die Grenze dieses Postens.**
+
+**Ballbesitz → Evaluator.**
