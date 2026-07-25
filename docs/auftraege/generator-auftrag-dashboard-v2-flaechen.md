@@ -277,3 +277,36 @@ Bis dahin gilt die jeweils genannte, bewusst konservative Vorentscheidung.
 3. **Welche vier Panel-Tabs bleiben dauerhaft?** Vorentscheidung: `Allgemein · Beziehungen · Prüfungen ·
    Historie` nach §20. `Beziehungen` und `Historie` sind die unsichersten — sie stehen in v2 ohnehin
    nur als Fläche und lassen sich streichen, ohne dass etwas nachbricht.
+
+---
+
+## 11. NACHTRAG (Planner, 25.07., vor Beginn von Batch 2) — Umgebung und Bundle
+
+Batch 1 ist **freigegeben mit Auflage**; Batch 2 darf beginnen. Drei bindende Ergänzungen, die aus
+dem Evaluator-Votum folgen:
+
+**(a) `build:hausplaner` läuft in der Arbeitsumgebung NICHT.** Beleg des Evaluators:
+`Cannot find module @rollup/rollup-linux-arm64-gnu`, `uname -m` = `aarch64` — die in
+`docs/WIEDEREINSTIEG-HAUSPLANER.md` §5 dokumentierte x64-Grenze. Kriterium 7 lautet für Batch 2
+deshalb: **drei Gates Exit 0** (`tsc:hausplaner`, `schema:hausplaner:check`, `test:hausplaner`), und
+`build:hausplaner` wird als **„nicht ausführbar in dieser Umgebung, Grund: …"** berichtet.
+**Ihn als grün zu führen ist ein Rot.**
+
+**(b) `public/hausplaner/hausplaner.js` wird in Batch 2 NICHT angefasst.** Das Bundle ist versioniert,
+kann hier aber nicht neu erzeugt werden. Ein Commit, der Quellcode ändert und das Bundle stehen lässt,
+macht es stillschweigend veraltet. Also: Bundle unberührt lassen **und im Bericht ausdrücklich
+festhalten**, dass es ab Batch 2 hinter dem Quellstand liegt, bis jemand nativ auf x64 baut.
+`git diff` darf `public/` nicht enthalten.
+
+**(c) Kriterium 6 (rohe Farbwerte) ist neu geschnitten.** Der Evaluator hat belegt: `app/` enthält
+**30** rohe Werte außerhalb `studioDaten.ts` (ConfigWizard 2 · StartView 3 · DreiDBereich 4 ·
+GuidedView 15 · HausplanerStudio 6) — die Prämisse „T1 = 0 in ganz `app/*`" war falsch, der Fehler lag
+in diesem Auftrag. Für Batch 2 gilt deshalb: **0 rohe Farbwerte in den von dir geänderten Zeilen**,
+gemessen per `git diff`, nicht über den Gesamtbaum. Die 30 Altwerte sind **nicht** dein Posten
+(AUF-15, liegt bei Yama) — fasse sie nicht an.
+
+**(d) Der Befund B1 gilt als Muster-Warnung.** Eine im Rumpf von `HausplanerApp` definierte
+Komponente bekommt bei jedem Render eine neue Typ-Identität und wird samt Teilbaum neu gemountet;
+bei zustandslosen Buttons folgenlos, bei fokussierbaren Steuerelementen nicht. Baue die drei neuen
+Flächen so, dass **kein fokussierbares Steuerelement** in einer im Rumpf definierten Komponente
+sitzt. Wenn du dafür vom Muster der Datei abweichen musst, ist das gedeckt — sag es im Bericht.
