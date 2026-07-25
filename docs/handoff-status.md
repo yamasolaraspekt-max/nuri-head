@@ -3456,3 +3456,117 @@ IDs zurückgedreht.
    Antworttext; sie blockiert AUF-34.
 
 **Ballbesitz → Yama** für K3 und die Datei. K1 und K2 habe ich entschieden.
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-27 Linke Spalte mit Reitern
+
+**Rolle:** Generator (nativ, Mac) · **Branch:** `auto/hausplaner-integration` · **Commit:** `894954a`
+**Basis:** `ac0d9b3` (der Planner hat währenddessen AUF-35 abgelegt; mein Commit sitzt darauf)
+**Status:** **umgesetzt** — nicht abgenommen. Sichtprobe und Votum liegen beim Evaluator.
+
+### Was gebaut wurde
+
+Die 220-px-Schiene trägt drei Reiter — `Werkzeuge · Projekt · Fachplaner` —, von denen immer genau
+einer sichtbar ist. Die Scroll-Eigenschaft ist von der **Spalte** auf den **Inhaltsbereich**
+gewandert (`role="tabpanel"`, `flex: 1`, `minHeight: 0`, `overflowY: auto`); die Spalte selbst steht
+jetzt auf `overflow: hidden`. Der Fuß („Erweiterbar – Module folgen.") steht unter dem
+Inhaltsbereich und gehört keinem Reiter.
+
+**Kein zweiter Tab-Mechanismus — das war die eigentliche Entscheidung.** Der Auftrag verlangt Reiter
+und verbietet im selben Satz ein zweites Muster. Das vorhandene Muster lag als JSX **im Rumpf** von
+`HausplanerApp` (Panel, v2.2 + AUF-19-Nacharbeiten). Kopieren hätte geheißen: dieselbe A11y-
+Verdrahtung zweimal pflegen. Deshalb ist sie nach `app/dashboard/ReiterLeiste.tsx` extrahiert —
+**Modulebene** wegen Befund B1 — und wird von **beiden** benutzt. `role="tab"` kommt im ganzen
+Planer genau einmal vor; `<ReiterLeiste` zweimal.
+
+### Die zehn Kriterien, Rohausgabe
+
+| # | Kriterium | Ergebnis |
+|---|---|---|
+| 1 | `tsc:hausplaner` · `schema:hausplaner:check` (ohne Regen) · `test:hausplaner` · `build:hausplaner` | **Exit 0 / 0 / 0 / 0** — `hausplaner.js 1.338,50 kB`, built in 1.12s |
+| 2 | Testzahl vorher/nachher, Namen-Mengen verglichen | **798 → 810**, +12 neu, **0 verschwunden** (`comm -23` leer) |
+| 3 | genau drei Reiter, feste Reihenfolge, Standard `werkzeuge`, ids eindeutig | Test `K3` ×3 grün |
+| 4 | immer genau ein Abschnitt sichtbar | Test `K4`: die drei Bedingungen prüfen dieselbe Variable auf Gleichheit (nie zwei zugleich), und ihre Menge **deckt sich mit den Reiter-Daten** (nie keiner) |
+| 5 | Fachplaner-Einträge unverändert 22 | `alleFaehigkeiten().length === 22`; im Browser **22 Knöpfe** im Reiter, bei 1440 **und** 1024 px |
+| 6 | Muster wiederverwendet (`role="tablist"`, `aria-controls` auf existierende id, Pfeiltasten mit Fokusnachführung) | Test `K6` ×3 grün; im Browser `zielDa: true` für **alle sieben** Reiter beider Leisten |
+| 7 | Gegen-Beweis selbst geführt | Reihenfolge `projekt`↔`fachplaner` vertauscht ⇒ **`K3` rot** (`fail 1`, exit 1). Zurückgebaut ⇒ `diff` **leer**, wieder `pass 810 / fail 0` |
+| 8 | 0 rohe Farbwerte in geänderten Zeilen | `grep` über `^+`-Zeilen nach `#hex|rgba?\(|hsla?\(`: **0 Treffer** |
+| 9 | null Zeilen in `store/*`, `domain/*`, `geometry/*`, `renderers/*`, `public/*` | **0** — Commit umfasst 7 Dateien, alle unter `app/` bzw. `__tests__/` |
+| 10 | Browser-Sichtprobe bei 1440 **und** 1024 px | geführt, siehe unten |
+| 11 | (Nachtrag) „Fähigkeit" in keiner gerenderten Beschriftung | Test `K11` grün; im Browser `document.body.innerText.includes('Fähigkeit') === false` bei **beiden** Breiten |
+
+### Sichtprobe — genannte Breiten, und ein Umweg, den ich offenlegen muss
+
+`http://ticket.test/admin/hausplaner/objekt/203` steht hinter `auth` und leitet auf `/login`; ein
+Passwort habe ich nicht, und einen Nutzer anzulegen oder ein Kennwort zu setzen wäre ein Schreiben
+auf `ticket`-Bestandsdaten — also unterlassen. Gemessen habe ich stattdessen gegen das **gebaute
+Bundle** über eine temporäre statische Seite (`php -S`, Mount wie `studio.blade.php`, Szene
+`?fixture=u-dach`). Beide Hilfsdateien sind **wieder entfernt**, der Arbeitsbaum ist sauber. Das ist
+dasselbe Artefakt, das Yama im Browser sieht — aber **nicht** dieselbe Seite; wer die Objekt-Seite
+prüfen will, braucht eine angemeldete Sitzung.
+
+**1440 px:** Reiterzeile `Werkzeuge · Projekt · Fachplaner`, `Werkzeuge` gewählt, **kein** Reiter
+gekappt (`scrollWidth ≤ clientWidth`). Inhaltsbereich 492 px hoch. `Projekt` zeigt `Wände 8 · Dächer 1`,
+`Fachplaner` 22 Einträge.
+**1024 px:** dieselben drei Reiter, keiner gekappt, alle `aria-controls`-Ziele vorhanden.
+
+**Der Vorher-Nachher-Beleg (frisch gebautes Bundle von `ac0d9b3` gegen meines, gleiche Seite):**
+
+| | vorher (gestapelt) | nachher (Reiter) |
+|---|---|---|
+| 1440 px | Spalte 564 px, **Inhalt 2007 px**, „Projekt" **1691 px** unter der Oberkante ⇒ ~1127 px scrollen | Projekt **ohne Scrollen** erreichbar; je Reiter 492 / 492 / 1386 px Inhalt |
+| 1024 px | Spalte **144 px**, derselbe 2007-px-Stapel ⇒ ~1863 px scrollen | Projekt **ohne Scrollen** erreichbar; je Reiter 252 / 255 / 1386 px |
+
+Die „20 Scroll-Ticks" des Auftrags sind damit gegengemessen und stimmen (1127 px ≈ 21 Ticks à 53 px).
+
+### Kante 4 — die Entscheidung, mit einer Korrektur an der Prämisse
+
+Der Auftrag fragt, was bei **eingeklappter Schiene (66 px)** mit den Reitern passiert. **Gemessen:
+das trifft diese Schiene nicht.** Die 66 px gehören der **CRM-Schalen-Navigation** in
+`HausplanerStudio.tsx:77` (`navBreit = navZu ? 66 : 266`, umgeschaltet bei `innerWidth < 900`,
+Zeile 53). `HausplanerApp` liest `navZu` **nirgends** — die Planer-Schiene ist unverändert 220 px
+breit, egal ob die äußere Navigation eingeklappt ist. **Entscheidung: keine Sonderbehandlung.** Ein
+Einklapp-Zustand, den es nicht gibt, bekommt keinen Code.
+
+### Kante 1, 2, 3, 5, 6
+
+- **Kante 1 (Werkzeugwahl überlebt den Reiterwechsel):** im Browser geprüft — `Wand` gewählt, auf
+  `Projekt`, auf `Fachplaner`, zurück auf `Werkzeuge`: aktiv ist weiterhin **`Wand`**. Der
+  Werkzeug-Zustand liegt in `HausplanerApp`, nicht im Reiter.
+- **Kante 2 (Überleben eines Neuladens):** **bewusst nicht gespeichert.** Der Auftrag lässt
+  `localStorage` zu, verlangt es nicht. Der Reiter ist ein Arbeitskontext für den Moment, keine
+  Vorliebe wie die Anheftung (★). Ins Szenendokument gehört er unter keinen Umständen — Test
+  `Kante 2` hält fest, dass am Zustand kein `store`/`scene`/`executeCommand` hängt.
+- **Kante 3 (schmale Fenster):** `flexWrap: 'wrap'` + `overflowWrap: 'anywhere'`, kein
+  `textOverflow`, kein `nowrap` — umbrechen, nicht kappen. Test in `keineKappung.test.ts` erweitert,
+  im Browser bei beiden Breiten `gekappt: false`.
+- **Kante 5 (leerer Projektbrowser):** unverändert `PROJEKTBAUM_LEER` + `ZustandBadge` —
+  wiederverwendet, nicht neu gebaut.
+- **Kante 6 (Fokus):** die Reiter sind fokussierbar und liegen in einer Komponente auf
+  **Modulebene**; Test `B1` schließt eine Definition im App-Rumpf aus.
+
+### Zwei Befunde, die nicht zu diesem Posten gehören — aber gemessen sind
+
+1. **Bei 1024 px ist die ganze Planer-Zeile nur 144 px hoch** (1440 px: 564). Ursache ist die obere
+   Gruppenzeile: die 22 Kategorien brechen bei 1024 px auf ~15 Zeilen um und fressen ~500 px Höhe.
+   **Das ist Bestand, nicht mein Umbau** — vorher wie nachher exakt 144 px. Es ist genau der Posten,
+   den **AUF-34** angeht; der Wert dürfte dort als Ausgangsmessung nützlich sein.
+2. **`panelReiterVerknuepfung.test.ts` und `keineKappung.test.ts` mussten mitwandern**, weil sie den
+   Quelltext von `HausplanerApp.tsx` lesen und das Markup jetzt in `ReiterLeiste.tsx` steht.
+   **Testnamen und Anzahl unverändert**, nur der Messpunkt zeigt auf die neue Datei. Das ist der
+   Preis quelltextlesender Tests — ohne DOM in der Testumgebung sehe ich keine bessere Möglichkeit,
+   und ich behaupte auch nichts anderes.
+
+### Was NICHT angefasst wurde
+
+Keine Zusammenführung von Fachplaner-Einträgen und L4-Flächen (eigener Posten, AUF-33). Kein Inhalt
+gelöscht. Die obere Gruppenzeile aus I4 unberührt. `store/*`, `domain/*`, `geometry/*`,
+`renderers/*`, Zod, Schema, PHP, Migrationen, `public/*`: null Zeilen.
+
+**Das Bundle** (`public/hausplaner/hausplaner.js`) ist **neu gebaut, aber nicht committet** —
+Kriterium 9 verbietet `public/*` im Diff. Es liegt gebaut auf der Platte, damit die Sichtprobe
+möglich ist; im Arbeitsbaum steht es deshalb als einzige Änderung.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+**Ballbesitz → Evaluator** (getrennte Sitzung, nicht diese).
