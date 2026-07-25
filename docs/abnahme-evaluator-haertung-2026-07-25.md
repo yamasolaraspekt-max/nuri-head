@@ -266,6 +266,58 @@ offengelegt hatte (erste Mutation traf einen Kommentar). Erst die praezise Mutat
 eng gehalten (nur .tsx), und der erste Test durch den echten Render-Pfad hat belegte Zaehne.
 A1-Auflage 3 ist damit erfuellt, nicht nur behauptet.
 
+## AUF-33 L2 - engine-treppe Panel (Muster) (9d0c12a, Bundle 1c3aa31) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 9d0c12a gemessen (/tmp-Auszug, da FachFlaeche.tsx zeitweise
+native WIP trug), dann Generator-Bericht gelesen.
+**Klasse: sichtbar** - Sichtprobe Teil der Abnahme.
+
+- **Umfang (git show --name-status):** 8 Dateien - NEU EngineFlaeche.tsx, dashboard/enginePanels.ts,
+  __tests__/enginePanelTreppe.test.ts ; M FachFlaeche.tsx (FlaechenHuelle extrahiert), FaehigkeitenNavi.tsx,
+  HausplanerApp.tsx, tools/faehigkeiten.ts, faehigkeiten.test.ts.
+- **Drei Auftrags-Grenzen belegt (git-grep):**
+  1) **Keine Rechenlogik im Panel** - 'DIN' nur in beschreibendem Text (Z. 89/90), keine Formel/
+     Grenzwert/Math/Rundung. Test K3 verriegelt es.
+  2) **Ruft berechneTreppe statisch** (enginePanels.ts Z. 20 static import, Z. 129
+     'berechne: (werte) => berechneTreppe(...)'). Kein import(variable) - Test K6.
+  3) **Kein Modell-Schreibzugriff** (applyCommand/dispatch/store/SceneDocument-Grep leer).
+- **Reuse statt Wildwuchs:** FlaechenHuelle (Kopf/Zweck/Zurueck/Escape) aus FachFlaeche.tsx
+  extrahiert, von L4-Vorschau UND Engine-Flaeche geteilt - kein zweiter Rahmen, kein zweiter
+  Escape-Handler. Regel 'kuratieren, nicht wuchern' gewahrt.
+- **Gates im Auszug selbst gefahren:** schema:check 0 . test **888/888 pass, 0 skip**, EXIT 0 .
+  tsc 0 . build ok (1.17s). 14 enginePanelTreppe-Subtests gruen (K3/K4-Wertgleichheit x3/K5/K6/K7/
+  Operanden-Gate/Fund-Fix).
+- **Gegen-Beweis (zwei, /tmp-Kopie, Repo unberuehrt):**
+  1) Fund-Fix brechen ('const a = p.bestanden' -> 'false', erzwingt Schwere auch bei bestanden)
+     -> **'eine bestandene Pruefung zeigt ✓ erfuellt' rot** (13 pass / 1 fail).
+  2) Operanden-Gate entschaerfen (fehlendePflichtfelder-Filter -> immer leer)
+     -> **'ohne Geschosshoehe wird nicht gerechnet' rot** (13/1).
+- **Sichtprobe (iframe 1440, fixture decke-treppe, Bundle 1c3aa31 serviert, alle L2-Strings per grep):**
+  Fachplaner-Reiter -> 'Treppen-Auslegung . verfuegbar' klickbar (die EINE verfuegbare Engine der 13;
+  'Dach/Fenster/Tuer/Treppe' verfuegbar sind Fachmodule/Werkzeuge, kein art:engine). Panel: 6 Felder,
+  Geschosshoehe als Pflicht, **ehrlicher Leerzustand** ('Noch nicht gerechnet ... die Zahlen kommen
+  aus der Engine, nicht aus dieser Flaeche'), Berechnen aktiv.
+  - **Berechnen Wohnung:** '✓ Alle Pruefungen bestanden'; 8 Ergebnisse (16 Steigungen . 15 Auftritte .
+    175/280 mm . Lauflaenge 4200 . Schrittmass 630 . Bequemlichkeit 105 . Sicherheit 455); 7 Pruefzeilen
+    alle '✓ erfuellt'. Deckt sich mit dem Bericht.
+  - **Umschalten Aussentreppe:** '✕ Eine Pruefung ist nicht bestanden'; **die Zahlen bleiben stehen**;
+    2 '✕ Fehler' (Steigung 175>160, Auftritt 280<300 aussen) + 5 '✓ erfuellt'. **Fund-Fix am Schirm
+    bestaetigt:** 'Laufbreite 1000 >= 1000 (aussen)' zeigt '✓ erfuellt' - genau die Zeile, die in der
+    ersten Fassung falsch '✕ Fehler' trug. WCAG 1.4.1 (Zeichen UND Wort) erfuellt.
+
+- **Vier Rueckgaben des Generators (kein Mangel an L2, gehoeren an Planner/Yama):** (1) Kriterium 5
+  nicht erfuellbar - berechneTreppe liefert nur fehler/warnung, nie info (die Flaeche kann info
+  darstellen, behauptet aber nicht, es komme aus den Daten); (2) Treppe hat keine L4-Navigationsflaeche
+  - Produktfrage; (3) keine Persistenz ins SceneDocument (wie in 3c verlangt); (4) **L3 ist NICHT 13x
+  dasselbe** - bei 11/12 der uebrigen Engines laesst sich der Eingang nicht aus dem Modell fuellen
+  (HolzStueck[]/Holzliste/Schicht[]/HeizkreisEingabe[] setzen Zwischenergebnisse voraus). Die Naht,
+  die der Auftrag frueh sehen wollte.
+
+**Urteil: FREIGABE.** Das Muster steht sauber - reine Anzeige ueber der Engine, drei Grenzen gewahrt,
+Fund-Fix mit Test verriegelt UND am Schirm belegt, Operanden-Gate greift. L3 darf kopieren, mit der
+gemessenen Einschraenkung aus Rueckgabe 4 (nicht 13x identisch). Das Gate war gruen, als der Anzeige-
+fehler im Bild stand - die Sichtprobe blieb der Fangmechanismus, wie schon bei AUF-34/AUF-36.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -289,6 +341,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-35a   35fbfde  tsc 0 / schema 0 / test 874/874 ; Store +31 nur Auswahl-UI-State (kein SceneDocument) ; Mutation shift add->replace = 1 rot ; Bundle 4dce1cc ; Sichtprobe Klick-Treppe -> Panel 'Treppe'
   I1        7bbf9ff  diff-filter=A: 110 Icon-SVG + _sprite + 3 Referenz-Docs ; kein Code (Nicht-Asset-Liste leer) ; Stichprobe 370-393 B valide SVG ; Selbstkorrektur 106(--stat gekuerzt)->110
   AUF-30    56cc734  Auszug: schema 0 / test 788/788 0-skip / tsc 0 / build ok ; test-hooks nur .tsx via esbuild ; 6 renderPfad-Subtests ueber react-dom/server ; Gegen-Beweis A disabled-weg='Kante 4' rot, B zweck-Literal='Zweck im Markup' rot (je 5/1)
+  AUF-33L2  9d0c12a  Auszug: schema 0 / test 888/888 0-skip / tsc 0 / build ok ; 3 Grenzen (keine Rechnung/statischer Aufruf/kein Modell-Schreiben) ; 14 Subtests ; Gegen-Beweis Fund-Fix + Operanden-Gate je 13/1 rot ; Sichtprobe 1440: Wohnung 7x erfuellt, Aussentreppe 2 Fehler+5 erfuellt (Fund-Fix am Schirm)
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
