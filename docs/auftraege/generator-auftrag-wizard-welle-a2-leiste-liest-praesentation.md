@@ -134,3 +134,53 @@ In `docs/handoff-status.md` als Block `## ⇒ GENERATOR-BERICHT — Wizard-Welle
 Gate-Exit-Codes, Testzahl vorher/nachher, die 7 ids vorher/nachher in Reihenfolge, die rot
 gesehenen Testnamen der Gegenprobe, der Grep-Beleg zu `werkzeugTools`, die leeren Guardrail-Diffs
 und was offen bleibt. Ballbesitz danach an den Evaluator.
+
+---
+
+## 8. NACHTRAG (Planner, 25.07. 09:0x) — zwei Änderungen am Auftrag
+
+### 8.1 A2 ist gesperrt, bis die A1-Wiederholung durch ist (Yama)
+
+Yama hat in `~/Downloads/auftraege-0-bis-5.md`, Auftrag 1, angeordnet: die A1-Abnahme wird von
+einer **frischen Evaluator-Instanz** wiederholt, und **„A2 bleibt blockiert, bis das durch ist"**.
+Das gilt, obwohl der Planner A1 in `d530da3` bereits abgenommen hat — die Anordnung ist jünger und
+kommt von Tor 1. **Dieser Auftrag wird also erst gestartet, wenn das Wiederholungs-Votum im Ledger
+steht.** Bis dahin: nicht anfangen, auch nicht „schon mal vorbereiten".
+
+### 8.2 Der `zoneTools('fix')`-Aufruf darf nicht in den Render-Pfad (P9, vom Generator gemeldet)
+
+Der Generator hat in seiner P9-Angabe einen Punkt gemeldet, der **genau diesen Auftrag** trifft, und
+er ist am Code nachgemessen richtig:
+
+- `zoneToolsIn()` (`app/tools/toolPresentation.ts` ~Z.148) macht **pro Aufruf** `map` + `filter` +
+  `sort` + `map` + `filter` über alle **63** Regeln und legt dabei 63 Wrapper-Objekte an.
+- Heute unkritisch: **ein** Produktiv-Aufrufer (`faehigkeiten.ts:96`), und der läuft beim Modul-Laden.
+- Der Austausch aus §1 dieses Auftrags setzt den Aufruf aber an `HausplanerApp.tsx:798` — und dort
+  steht er **direkt im JSX**, also **pro Render**. Aus einem `filter` über 9 Registry-Einträge würde
+  eine Sortierung über 63 Regeln pro Render.
+
+**Entscheidung (Planner):** der Aufruf wird **am Aufrufort memoisiert**, nicht im Modul gecacht.
+
+```tsx
+const leistenWerkzeuge = useMemo(() => zoneTools('fix'), []);
+```
+
+Leere Abhängigkeitsliste ist korrekt, weil `TOOL_PRESENTATION_RULES` eine Modul-Konstante ist.
+`useMemo` wird in dieser Datei bereits **6×** verwendet — keine neue Abhängigkeit, kein neues Muster.
+
+**Ausdrücklich verboten: ein Cache im Modul** (`const cache = new Map<RailZone, …>` o. ä. in
+`toolPresentation.ts`). Grund ist kein Stilgeschmack, sondern die Beweiskraft: die Gegenproben aus
+A1 (N1) arbeiten mit **veränderten Regelsätzen** über `zoneToolsIn`. Ein Modul-Cache würde bei
+`zoneTools` stillschweigend alte Werte liefern und damit genau die Unterscheidungskraft zerstören,
+die in N1 gerade erst belegt wurde. Das Modul bleibt **rein**.
+
+### 8.3 Zusätzliche Abnahmekriterien (zu §5)
+
+- `grep -n "zoneTools(" app/HausplanerApp.tsx` ⇒ **genau eine** Fundstelle, und sie steht innerhalb
+  eines `useMemo`, nicht im JSX-Ausdruck.
+- `grep -niE "cache|memo" app/tools/toolPresentation.ts` ⇒ **kein** Modul-Cache; die Datei bleibt
+  ohne veränderlichen Modul-Zustand.
+- Die Gegenprobe aus §5 (eine `fix`-Regel auf `versteckt` ⇒ Leiste schrumpft auf 6, Test wird
+  tatsächlich rot) muss **nach** der Memoisierung weiterhin rot werden — sie läuft über
+  `zoneToolsIn`, nicht über den memoisierten Aufruf. Ausdrücklich noch einmal fahren und den roten
+  Testnamen nennen.

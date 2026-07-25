@@ -108,3 +108,38 @@ Testzahlen · die vier Roh-Farb-Zählungen (Datei und Insel) · die eigene Token
 die sieben selbst gerechneten Kontrastwerte · die vier Punkte aus §5 inkl. rot gesehenem Ankertest ·
 Beleg-Hygiene §6 · die Guardrail-Diffs und die vollständige Liste geänderter Dateien · Bundle-Urteil ·
 was offen bleibt und an wen der Ballbesitz geht.
+
+---
+
+## 10. NACHTRAG (Planner, 25.07. 09:0x) — Yamas bindende Ergänzungen E1/E2 gelten auch hier
+
+Yama hat im Ledger zwei Ergänzungen als **bindend** gesetzt (Block „EVALUATOR (frische Instanz) —
+ZWEI ERGÄNZUNGEN ZUR A1-ABNAHME"). Sie sind dort für die A1-Wiederholung formuliert, gelten der
+Sache nach aber für **jede** Abnahme, also auch für diese. Sie ergänzen §§1–9, ersetzen nichts.
+
+**E1 — erst messen, dann lesen.** Erhebe deine eigenen Zahlen, **bevor** du den Generator-Bericht
+zu T1 (Ledger, Block `⇒ GENERATOR-BERICHT — T1 Token-Konsolidierung + Fachzuordnung decke → bau`)
+liest. Das betrifft hier besonders die **sieben Kontrastwerte** und die **Token-Zählungen** — wer
+„5,51" vorher liest, rechnet auf 5,51 zu. Im Votum ist **ausdrücklich anzugeben, in welcher
+Reihenfolge du gelesen und gemessen hast**. Wer die Reihenfolge nicht mehr trennen kann, schreibt
+das hin, statt es zu glätten.
+
+**E2 — voller Prüfrahmen, nicht nur die Punkte dieses Auftrags.** Gehe `~/.claude/skills/
+governance-zyklus/references/pruefrahmen.md` **§2 vollständig** durch (dort **neun** nummerierte
+Punkte — Yamas Formulierung „zehn" zählt sinngemäß den **Wächter-Durchlauf §3** mit; fahre beides,
+dann bist du in jedem Fall vollständig). Jeder Punkt wird abgehakt **oder** als „n.z." **mit
+Begründung** markiert. Ausdrücklich benannt, weil bei A1 undokumentiert geblieben:
+
+- **P6 Bestandsdaten** — T1 fasst Farben und eine Gruppenzuordnung an. Erwartung: **0** PHP,
+  **0** Migrationen, **0** Zod-/Schema-Änderung, kein persistierter Wert. Selbst per
+  `git show --name-only <SHA>` widerlegen versuchen, nicht annehmen.
+- **P7 Nahtstellen** — sitzt die Änderung genau dort, wo §7 dieses Auftrags sie erlaubt (die sechs
+  Dateien), und **nicht** darüber hinaus? Ist ein Erweiterungspunkt vorzeitig gebaut worden
+  (z. B. Pin/Store-Feld, das erst nach A2 dran wäre)? Beides ist ein Befund.
+- **P9 Code-Gesundheit** — „korrekt und langsam ist nicht grün". Der Generator hat hierzu selbst
+  einen Punkt gemeldet (`zoneToolsIn` allokiert pro Aufruf über alle 63 Regeln); der betrifft
+  **A2**, nicht T1. Prüfe für T1 die eigene Dimension: erzeugt die Token-Umstellung neue
+  Berechnungen im Render-Pfad, oder sind es reine Konstanten-Zugriffe auf `T`?
+
+**P8 Funktionstest durch den echten Stack** darf hier begründet „n.z." sein (reine React-Insel,
+kein HTTP-Pfad) — aber **nur mit dieser Begründung im Votum**, nicht durch Weglassen.
