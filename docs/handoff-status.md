@@ -539,3 +539,28 @@ BuildingModel-Guardrail gilt (keine neue Hash-/Snapshot-/Version-/Projektions-Kl
    fällt auf 'werkzeuge', während wand→'bau' und dach→'dach-zimmerei'. Gehört Decke zu 'bau'?
 3. Widerspruch: `__tests__/toolKatalog.test.ts:13` behauptet `katalogTool(<DTP-id>) === undefined`,
    der Katalog enthält aber DTP-ids → Generator/Evaluator müssen abgleichen, welche ids der Test nennt.
+
+## ⇒ GENERATOR (nativ, Job 45c3c505) — PUSH-FREIGABE + Wecker-Entscheidung (Planner, 2026-07-25 09:41)
+**1) Push ist ausdrücklich freigegeben und erbeten.** Yamas stehende Anweisung lautet wörtlich „du commitest
+du pushst alles ohne mich" — der frühere Merksatz „kein Push" in der Job-Beschreibung ist damit **überholt**,
+solange die Grenzen eingehalten werden: **nur `fork` + `backup-private`** (beide `yamasolaraspekt-max`),
+**niemals `upstream`** (`raminsadid2021` = fremdes Konto), **kein `--force`**, kein `main`-Merge ohne Tor 2.
+→ Bitte im nächsten Takt `./push-integration-sicher.command` ausführen (schiebt `main` + alle `auto/`-Branches,
+schreibt `push-result.log`) und das Ergebnis hier als Zeile hinterlegen. Zu sichern ist mindestens `cf54ffc`
+(A1-Auftrag) auf `auto/hausplaner-integration`; fork steht dort noch auf `9bcc9c3`.
+
+**2) Warum das nicht der Planner selbst macht — gemessen, nicht vermutet (2026-07-25 07:39–07:41 UTC):**
+- `git push origin auto/hausplaner-integration` aus der Cloud-Session → **`fatal: … HTTP code 403 from proxy
+  after CONNECT`**. Die Geräte-VM hat kein Netz; der Cloud-Container hat Netz, aber nicht das Repo/die
+  Credentials. **Push kann nur nativ laufen.**
+- Commit aus der Cloud in den gemounteten Ordner geht (cf54ffc entstand so), hinterlässt aber
+  `warning: unable to unlink … .git/HEAD.lock / index.lock` → per `mv` nach `.git/_locks_beiseite/` geräumt.
+
+**3) Cloud-Wecker Generator/Evaluator bleiben bewusst AUS** (`trig_01BY6JAqqKXDVskxDwczDnYi`,
+`trig_01Gb5BHynnNGHHZdq9t1n61x`). Begründung aus derselben Messung: eine Cloud-Rolle kann **weder pushen
+(403) noch die Gates fahren** (kein node/PHP in der Geräte-VM) und produziert `.git/*.lock`-Müll. Die
+**nativen Sessions sind die echten Rollen**; der native 3-Min-Job läuft nachweislich (Takt 1 um 09:38, jetzt
+09:41). Ein zweiter, schwächerer Generator aus der Cloud wäre keine Redundanz, sondern eine Kollisionsquelle.
+→ Wenn Yamas native Session doch einmal zu ist, reißt die Kette — dann (und nur dann) ist der Cloud-Wecker
+als Notlauf zu reaktivieren. Der **Planner-Herzschlag** (send_later-Kette, 3 Min) läuft weiter: neuer Link
+`trig_01QUjFcMsVj1HRhicHJFQpvz`, Feuer 09:45.
