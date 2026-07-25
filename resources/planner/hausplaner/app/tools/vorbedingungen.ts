@@ -87,8 +87,22 @@ export const FACHSTAND_HEIZNETZ_VERBUNDEN = 'heatingNetwork.connected';
 
 /** Das Recht, das die App heute mitgibt — Bestand, nicht neu erfunden. */
 export const RECHT_BEARBEITEN = 'Hausplaner,update';
-/** Das Recht, das der Auftrag für den Import vorsieht — im CRM heute NICHT vergeben. */
-export const RECHT_IMPORTIEREN = 'Hausplaner,import';
+/**
+ * AUF-53 — das Import-Recht. **`Hausplaner,add`, nicht `Hausplaner,import`.**
+ *
+ * Der naheliegende Weg hätte nichts geschützt: `User::hasPermission()` bildet die Aktion auf genau
+ * **vier** feste Spalten ab (`is_read`/`is_add`/`is_update`/`is_delete`) und schickt jede unbekannte
+ * Aktion in den `default`-Zweig — also auf **`is_read`**. Eine Route mit
+ * Eine Route, die `Hausplaner` mit der Aktion `import` schützen wollte, sähe geschützt aus und
+ * wäre für **jeden Leseberechtigten** offen.
+ * Das ist schlimmer als kein Recht, weil es Sicherheit vortäuscht.
+ *
+ * `Hausplaner,add` ist dagegen ein **eigenes** Recht (Yamas Entscheidung „eigenes Recht"), getrennt
+ * von `update`, seit 2023 als Spalte vorhanden, in der Rechteverwaltung gepflegt — und **von keiner
+ * Route benutzt**. Es braucht keine Migration, keine Änderung an `hasPermission` und keine an der
+ * Rechteverwaltung.
+ */
+export const RECHT_IMPORTIEREN = 'Hausplaner,add';
 
 const faehigkeit = (wert: string, grund: string, luecke?: string): VorbedingungAbbildung => ({
   regel: { type: 'capability', operator: 'contains', value: wert, grund },
@@ -147,10 +161,9 @@ export const VORBEDINGUNGEN: Readonly<Record<string, VorbedingungAbbildung>> = {
       type: 'permission', operator: 'contains', value: RECHT_IMPORTIEREN,
       grund: 'Keine Berechtigung zum Importieren.',
     },
-    heuteErfuellbar: false,
-    lueckeGrund: 'Das CRM kennt nur `Hausplaner,read` und `Hausplaner,update`; ein Import-Recht ist '
-      + 'nicht vergeben. Ob Import an `update` hängt oder ein eigenes Recht bekommt, ist eine '
-      + 'Rechte-Entscheidung und geht als Rückgabe an Planner/Yama.',
+    // AUF-53: Seit der Zuordnung auf `Hausplaner,add` ist die Vorbedingung **erfüllbar** — sie
+    // hängt an einem Recht, das es wirklich gibt und das ein Nutzer wirklich haben kann.
+    heuteErfuellbar: true,
   },
   'component.thermalRelevant': faehigkeit(
     FACHSTAND_BAUTEIL_THERMISCH,

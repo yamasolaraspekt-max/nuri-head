@@ -176,11 +176,14 @@ test('am echten Werkzeug: dieselbe Sperre, derselbe Grund — nicht nur am Prüf
 });
 
 // --- K7: die fünf heute unerfüllbaren, mit ehrlichem Grund --------------------------------------
-test('K7: fünf Vorbedingungen sind heute unerfüllbar — benannt, nicht ausgelassen', () => {
+test('K7: die Fach-Vorbedingungen sind unerfüllbar — benannt, nicht ausgelassen', () => {
+  // AUF-53 hat `permission.import` aus dieser Liste geholt: seit der Zuordnung auf `Hausplaner,add`
+  // hängt sie an einem Recht, das es wirklich gibt. Übrig bleiben die vier Fach-Operanden aus der
+  // Auslegung — sie brauchen einen Rechenstand, den der Planer nicht führt.
   const luecken = offeneLuecken();
   assert.deepEqual(
     luecken.map((l) => l.vorbedingung).sort(),
-    ['component.thermalRelevant', 'heatEmitters.sized', 'heatingLoad.approved', 'heatingNetwork.connected', 'permission.import'],
+    ['component.thermalRelevant', 'heatEmitters.sized', 'heatingLoad.approved', 'heatingNetwork.connected'],
   );
 });
 
