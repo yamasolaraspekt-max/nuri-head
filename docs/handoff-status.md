@@ -1837,3 +1837,77 @@ Richtigstellung im Ledger. **Der Fehler war meiner:** ich habe in §5 des Genera
 mit 0 rohen Werten erfüllt" von `HausplanerApp.tsx` auf ganz `app/*` verallgemeinert und als K6
 weitergereicht. Der Generator hat gegen ein Kriterium berichtet, dessen Prämisse schon bei
 Auftragserteilung falsch war.
+
+---
+
+## ⇒ GENERATOR-BERICHT — Dashboard v2 Batch 2 UMGESETZT
+
+**Commit:** `5092b10` (Vorgänger `601f411`) · **Rolle:** Generator — meldet **umgesetzt**, nicht
+abgenommen. **Ballbesitz → Evaluator.** Arbeitsbaum porcelain `0` → `0`.
+
+### Gates
+
+| Gate | Exit |
+|---|---|
+| `tsc:hausplaner` | **0** |
+| `schema:hausplaner:check` | **0**, ohne Regen (Schema-mtime 24.07. 17:37, nicht im Commit) |
+| `test:hausplaner` | **0** — `# tests 734 / # pass 734 / # fail 0` |
+| `build:hausplaner` | **nicht ausführbar** — `@rollup/rollup-linux-arm64-gnu` fehlt, `uname -m` = aarch64 (Nachtrag §11 a). Weder grün noch rot. |
+
+**Testzahl 702 → 734 (+32),** Namen-Mengen verglichen: 33 neu, **ein** Name verschwunden —
+`nur „allgemein" ist heute verfügbar …` wurde **umbenannt und verschärft**, weil v2.4 seine Prämisse
+aufhebt (`pruefungen` ist jetzt `verfuegbar`). Kein Test von grün nach rot.
+
+### Commit — 9 Dateien
+
+`app/dashboard/projektBaum.ts` (neu, 131) · `befunde.ts` (neu, 47) · `palette.ts` (neu, 55) ·
+`panelTabs.ts` (9) · `app/HausplanerApp.tsx` (225) · dazu vier Testdateien.
+**K4:** null Zeilen in `app/tools/*`, `store/*`, `domain/*`, `geometry/*`, `renderers/*`;
+`toolPresentation.ts` unberührt. **§11 b:** `public/` **nicht** im Commit (`grep -c '^public/'` = 0).
+**K6 im neuen Schnitt:** 0 rohe Farbwerte in den geänderten Zeilen und in allen sechs neuen Dateien;
+die 30 Altwerte (AUF-15) nicht angefasst.
+
+### Gegen-Beweis (Kriterium 9)
+
+`enabled: zustand.enabled` → hart `true` in `palette.ts`: **fünf Tests rot** (`not ok 3,4,5,6,12`),
+`12/12` nach Rückbau, verifiziert per `md5sum -c`. Die Aktivierung ist nachweislich abgedeckt.
+
+### Kriterium 11 — und eine Abweichung, die der Generator selbst offenlegt
+
+`shortcutKollisionen()` = `[]`. **Das genügte nicht:** `toolFuerShortcut('k')` liefert `decke`, und der
+Kürzel-Zweig in `taste()` prüfte **keine Modifikatoren** — **vor diesem Commit hat `Strg+K` das
+Werkzeug „Decke" gesetzt.** Die Vorentscheidung „kollisionsfrei" aus §10.2 traf auf einen ungeprüften
+Fall. Behandelt: der `Strg/⌘+K`-Zweig steht **vor** dem Kürzel-Zweig und **nach** `Strg+S`. `Strg+S`
+speichert unverändert, `K` ohne Modifikator setzt weiterhin „Decke", `Strg/⌘+K` öffnet die Palette.
+**Bewusste Verhaltensänderung für genau eine Kombination → Willensfrage, AUF-17.**
+
+### Befund B1 beachtet — Muster bewusst verlassen
+
+Projektbrowser und Palette enthalten fokussierbare Steuerelemente (`<button>`, `<input>`) und sind
+deshalb **Inline-JSX über `useMemo`**, nicht als Rumpf-Komponenten gebaut — sonst ginge der Fokus bei
+jedem Tastendruck im Filterfeld verloren. Abweichung vom Datei-Muster, durch §11 d gedeckt und hiermit
+gesagt. Die Options-Leiste aus Batch 1 (B1 selbst) wurde **nicht** angefasst — das ist AUF-16.
+
+### Zurückgegeben, nicht mitgebaut
+
+1. **`Strg+K` war belegt** → AUF-17.
+2. **`RouteNode` (Leitungen) hat keine Gruppe** — §32 legt sechs fest, eine siebte wäre Umfang. Heute
+   erzeugt kein Werkzeug Routen. Im Modul vermerkt, nicht gebaut.
+3. **Befund-Historie** mit `grund`, Zeitstempel, Bauteilbezug braucht eine Store-Änderung → **Posten v3.**
+4. **`Beziehungen`/`Historie`** bleiben Fläche; Inhalte nicht spezifiziert.
+5. **Sichtprobe nicht durchgeführt** — kein DOM, kein lauffähiger Build. „Nicht sichtgeprüft", wie
+   Batch 1. Braucht x64-nativ mit Browser-Beleg.
+6. **Enter auf `loeschen`/`duplizieren`** ruft die vorhandenen Funktionen — Auslegung von „Enter
+   aktiviert", vom Auftrag nicht ausbuchstabiert. Rückbau wäre eine Zeile.
+
+### Bundle-Stand
+
+**`public/hausplaner/hausplaner.js` liegt ab diesem Commit hinter dem Quellstand** — es enthält weder
+Projektbrowser noch Prüfungscenter noch Palette. Wer die Seite heute öffnet, sieht **Batch 1**. Das
+bleibt so, bis jemand nativ auf x64 baut.
+
+### Umgebungs-Hinweis für die nächste Instanz
+
+Hintergrundprozesse überleben den Werkzeug-Aufruf nicht (auch mit `nohup` nicht) — sie werden auch
+nicht gebraucht: `test:hausplaner` läuft in ~3 s synchron durch, `tsc` in ~2 s. Zurückgebliebene
+`.git/*.lock` wurden per `mv` nach `.git/_locks_beiseite/generator-25-07/` geschoben, nicht gelöscht.
