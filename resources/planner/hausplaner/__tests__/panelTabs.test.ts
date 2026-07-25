@@ -23,10 +23,12 @@ test('jeder Reiter trägt einen gültigen StudioZustand', () => {
   }
 });
 
-test('nur „allgemein" ist heute verfügbar — die anderen drei sagen ihren Zustand aus', () => {
+test('„allgemein" und (seit Batch 2) „pruefungen" sind verfügbar — der Rest sagt seinen Zustand aus', () => {
   assert.equal(panelTab('allgemein')?.zustand, 'verfuegbar');
-  for (const id of ['beziehungen', 'pruefungen', 'historie']) {
-    assert.equal(panelTab(id)?.zustand, 'in_entwicklung', `${id} ist in v2 Batch 1 noch Fläche`);
+  // v2.4 hat den Prüfungen-Reiter gehoben: er zeigt echte Befunde (befunde.ts), keine Fläche mehr.
+  assert.equal(panelTab('pruefungen')?.zustand, 'verfuegbar');
+  for (const id of ['beziehungen', 'historie']) {
+    assert.equal(panelTab(id)?.zustand, 'in_entwicklung', `${id} ist in v2 noch Fläche`);
   }
 });
 

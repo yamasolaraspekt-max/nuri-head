@@ -21,6 +21,9 @@ import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type Fens
 import { DreiDBereich } from './DreiDBereich';
 import { ZustandBadge } from './studioUi';
 import { PANEL_TABS, type PanelTabId } from './dashboard/panelTabs';
+import { projektBaum, PROJEKTBAUM_LEER } from './dashboard/projektBaum';
+import { befundeAus, BEFUNDE_LEER, BEFUNDE_UMFANG } from './dashboard/befunde';
+import { palettenEintraege, PALETTE_LEER } from './dashboard/palette';
 import { usePlannerUiStore } from './state/uiState';
 import { werkzeugTools, toolFuerShortcut, toolNach } from './tools/toolRegistry';
 import { resolveToolState } from './tools/activation';
@@ -149,6 +152,13 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   /** Dashboard v2.2: aktiver Panel-Reiter. Bewusst LOKAL, kein Store-Feld — der Wert hat genau
    *  einen Leser; ob Panelzustand in den UI-State gehört, ist eine v4-Frage (F1). */
   const [aktiverTab, setAktiverTab] = useState<PanelTabId>('allgemein');
+  /** Dashboard v2.5: Zustand der Command-Palette. Ebenfalls LOKAL — der Wert hat genau einen
+   *  Leser, und v2 ändert den Store nicht. `paletteOffenRef` spiegelt `paletteOffen` für den
+   *  globalen Tastatur-Handler, dessen Closure sonst veraltet wäre (Kante 8). */
+  const [paletteOffen, setPaletteOffen] = useState(false);
+  const [paletteFilter, setPaletteFilter] = useState('');
+  const [paletteIndex, setPaletteIndex] = useState(0);
+  const paletteOffenRef = useRef(false);
   const [wandStart, setWandStart] = useState<Punkt | null>(null);
   const [cursor, setCursor] = useState<Punkt>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(0.12); // px pro mm
@@ -186,6 +196,29 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       usePlannerUiStore.getState().setActiveTool('auswahl');
     }
   }, [werkzeugKontext, werkzeug]);
+  /** Dashboard v2.3: Projektbaum des aktiven Geschosses — reine Funktion, nur LESEN. */
+  const baum = useMemo(() => projektBaum(nodes, scene?.roofs, level), [nodes, scene, level]);
+  /** Dashboard v2.4: Befunde aus dem heutigen Store-Zustand (heute 0 oder 1). */
+  const befunde = useMemo(() => befundeAus(letzteAblehnung), [letzteAblehnung]);
+  /** Dashboard v2.5: Paletten-Einträge im AKTUELLEN Werkzeug-Kontext — dieselbe Aktivierungs-
+   *  Wahrheit wie die Werkzeugleiste, keine zweite Logik. */
+  const paletteListe = useMemo(
+    () => palettenEintraege(werkzeugKontext, paletteFilter),
+    [werkzeugKontext, paletteFilter],
+  );
+  /** Markierte Zeile, gegen die Listenlänge geklemmt — die Liste kann sich unter der Palette
+   *  ändern (z. B. wenn die Auswahl wegfällt), ohne dass der Index nachgeführt wurde. */
+  const paletteMarkiert = paletteListe.length === 0 ? -1 : Math.min(paletteIndex, paletteListe.length - 1);
+  const oeffnePalette = React.useCallback(() => {
+    setPaletteFilter('');
+    setPaletteIndex(0);
+    paletteOffenRef.current = true;
+    setPaletteOffen(true);
+  }, []);
+  const schliessePalette = React.useCallback(() => {
+    paletteOffenRef.current = false;
+    setPaletteOffen(false);
+  }, []);
   const raeume = useMemo(
     () => (level ? erkenneRaeume(waende, level.defaultWallHeight) : []),
     [waende, level],
@@ -334,6 +367,25 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       </div>
     );
   };
+  /**
+   * Dashboard v2.5 — Enter in der Palette. Werkzeuge setzen den Modus (wie die Werkzeugleiste),
+   * Aktionen rufen die BEREITS VORHANDENEN Funktionen `loescheAuswahl`/`dupliziere`. Es entsteht
+   * kein zweiter Ausführungsweg; deaktivierte Einträge werden hier hart abgewiesen.
+   */
+  function aktivierePaletteEintrag(id: string, enabled: boolean): void {
+    if (!enabled) return;
+    schliessePalette();
+    const tool = toolNach(id);
+    if (!tool) return;
+    if (tool.art === 'werkzeug') {
+      setWandStart(null);
+      setTreppeStart(null);
+      setWerkzeug(tool.id as Werkzeug);
+      return;
+    }
+    if (tool.id === 'loeschen') loescheAuswahl();
+    else if (tool.id === 'duplizieren') dupliziere();
+  }
   const opSep = (): React.ReactElement => <span style={{ width: 1, height: 20, background: T.hair, margin: '0 4px' }} />;
   const opLbl = (t: string): React.ReactElement => <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.muted, marginRight: 2 }}>{t}</span>;
   function dupliziere(): void {
@@ -570,6 +622,16 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       if ((e.target as HTMLElement)?.tagName === 'INPUT') {
         return;
       }
+      // Kante 8: solange die Palette offen ist, dürfen die Werkzeug-Kürzel NICHT durchschlagen —
+      // sonst wechselt ein Tastendruck im Filterfeld das Werkzeug. Esc schließt (auch ohne Fokus
+      // im Feld, etwa nach einem Klick auf den Hintergrund).
+      if (paletteOffenRef.current) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          schliessePalette();
+        }
+        return;
+      }
       if (e.key === 'Escape') {
         setWandStart(null);
         setTreppeStart(null);
@@ -588,6 +650,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
         e.preventDefault();
         void store.getState().save();
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        // Dashboard v2.5 (§30 / UI-9): Command-Palette. Der Zweig steht VOR dem Kürzel-Zweig,
+        // sonst griffe „K" (Registry-Kürzel von „Decke") auch mit Strg/⌘ — der bisherige
+        // Kürzel-Zweig prüft die Modifikatoren nicht. OHNE Modifikator bleibt „K" = Decke.
+        e.preventDefault();
+        oeffnePalette();
       } else {
         // UI-3: Werkzeug-Tastenkürzel aus der Registry (eine Quelle), Aktivierung respektiert.
         const tool = toolFuerShortcut(e.key);
@@ -609,7 +677,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     window.addEventListener('keydown', taste);
 
     return () => window.removeEventListener('keydown', taste);
-  }, [store]);
+  }, [store, oeffnePalette, schliessePalette]);
 
   if (!scene || !level) {
     return <div style={{ padding: 24, color: FARBEN.text }}>Szene nicht geladen.</div>;
@@ -861,6 +929,58 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             activeToolId={werkzeug}
             onAktivieren={(id) => { setWerkzeug(id as Werkzeug); setWandStart(null); setTreppeStart(null); }}
           />
+          {/* Dashboard v2.3 (§32 / UI-8): Projektbrowser — DRITTER Abschnitt derselben 220-px-Schiene,
+              keine neue Spalte. Damit bleibt die Flächenrechnung (innerWidth − 220 − 268) unberührt.
+              Inhalt kommt als DATEN aus `projektBaum` (rein, getestet); das Markup bleibt dünn.
+              Bewusst KEINE eigene, im Rumpf definierte Komponente (Befund B1 aus dem Batch-1-Votum):
+              die Einträge sind fokussierbare Knöpfe und dürften sonst bei jedem Render neu montiert
+              werden. Klick nutzt das vorhandene `selectNodes([id])` — keine zweite Auswahl-Wahrheit. */}
+          <div style={navGrp}>Projekt</div>
+          {baum.length === 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, padding: '2px 12px 10px', fontSize: 11.5, color: T.muted }}>
+              <span>{PROJEKTBAUM_LEER}</span>
+              {/* Ehrlich: es fehlt eine VORAUSSETZUNG (Bauteile), nicht eine Funktion. */}
+              <ZustandBadge zustand="voraussetzung" />
+            </div>
+          ) : (
+            baum.map((gruppe) => (
+              <div key={gruppe.gruppe} style={{ marginBottom: 2 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px 2px', fontSize: 11, fontWeight: 700, letterSpacing: '.04em', color: T.muted }}>
+                  <span style={{ flex: 1 }}>{gruppe.gruppe}</span>
+                  <span style={{ fontVariantNumeric: 'tabular-nums' }}>{gruppe.anzahl}</span>
+                </div>
+                {gruppe.eingeklappt ? (
+                  /* Kante 6: zu viele Einträge — Kopf + Anzahl statt ungebremster Liste.
+                     Virtuelles Scrollen ist v6 und wird hier nicht vorweggenommen. */
+                  <div style={{ padding: '0 12px 6px 20px', fontSize: 11, color: T.muted }}>
+                    Zusammengeklappt – {gruppe.anzahl} Einträge. Auswahl über den Plan.
+                  </div>
+                ) : (
+                  gruppe.eintraege.map((eintrag) => {
+                    const gewaehlt = selectedNodeIds.includes(eintrag.id);
+                    return (
+                      <button
+                        key={eintrag.id} type="button"
+                        title={`${eintrag.label} – im Plan auswählen`}
+                        aria-current={gewaehlt ? 'true' : undefined}
+                        onClick={() => store.getState().selectNodes([eintrag.id])}
+                        style={{
+                          display: 'block', textAlign: 'left', width: 'calc(100% - 12px)', margin: '1px 6px',
+                          padding: '4px 8px 4px 14px', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12,
+                          /* Hervorhebung als Hintergrund UND Schriftschnitt — nicht nur farblich (WCAG 1.4.1). */
+                          background: gewaehlt ? T.brandWash : 'transparent',
+                          color: gewaehlt ? T.brandInk : T.ink,
+                          fontWeight: gewaehlt ? 700 : 500,
+                        }}
+                      >
+                        {eintrag.label}
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+            ))
+          )}
           <div style={{ padding: '10px 12px', fontSize: 11, color: T.muted, borderTop: `1px solid ${T.canvasGrid}`, marginTop: 'auto' }}>Erweiterbar – Module folgen.</div>
         </div>
         <div style={{ display: modus === '3d' ? 'none' : 'block', width: stageBreite, borderRight: modus === 'split' ? `1px solid ${T.hair}` : 'none' }}>
@@ -1173,7 +1293,31 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               );
             })}
           </div>
-          {aktiverTab !== 'allgemein' ? (
+          {aktiverTab === 'pruefungen' ? (
+            /* Dashboard v2.4 (§34 / UI-10): Prüfungscenter. Die Liste kommt aus `befundeAus`
+               (rein, getestet) und hat heute 0 oder 1 Eintrag — der Store hält genau EINE
+               Ablehnung. Was NICHT geführt wird, steht ehrlich unter der Liste, statt eine
+               Historie vorzutäuschen. */
+            <div style={{ color: FARBEN.gedaempft, lineHeight: 1.6 }}>
+              {befunde.length === 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, marginBottom: 12 }}>
+                  <span>{BEFUNDE_LEER}</span>
+                  <ZustandBadge zustand="verfuegbar" />
+                </div>
+              ) : (
+                <ul style={{ listStyle: 'none', margin: '0 0 12px', padding: 0 }}>
+                  {befunde.map((b) => (
+                    <li key={b.id} style={{ display: 'flex', gap: 6, alignItems: 'flex-start', padding: '6px 8px', marginBottom: 6, borderRadius: 8, background: T.errSoft, border: `1px solid ${T.errBorder}`, color: T.errInk }}>
+                      {/* Schwere als Symbol UND Text, nicht nur als Farbe (A11y). */}
+                      <span aria-hidden style={{ fontWeight: 700 }}>✋</span>
+                      <span><strong style={{ fontWeight: 700 }}>Abgelehnt</strong> – {b.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <div style={{ fontSize: 11, color: T.muted, borderTop: `1px solid ${T.hair}`, paddingTop: 8 }}>{BEFUNDE_UMFANG}</div>
+            </div>
+          ) : aktiverTab !== 'allgemein' ? (
             <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>
               <div style={{ marginBottom: 8 }}>{PANEL_TABS.find((t) => t.id === aktiverTab)?.hinweis}</div>
               <ZustandBadge zustand={PANEL_TABS.find((t) => t.id === aktiverTab)?.zustand ?? 'in_entwicklung'} />
@@ -1509,7 +1653,84 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         {werkzeug === 'treppe' && <span style={{ color: FARBEN.text }}>{treppeStart ? 'Klick = Ende der Lauflinie (Richtung = aufwärts) · Esc bricht ab' : 'Klick setzt den Anfang der Treppen-Lauflinie'}</span>}
         <span style={{ flex: 1 }} />
         {letzteAblehnung && <span style={{ color: FARBEN.warnung, fontWeight: 600 }}>✋ {letzteAblehnung}</span>}
+        <span style={{ color: T.muted }}>Strg/⌘+K · Befehle</span>
       </div>
+
+      {/* Dashboard v2.5 (§30 / UI-9): Command-Palette. Overlay `position: fixed` — außerhalb des
+          Flusses, damit die Studio-Shell nicht überläuft (Kante 10). Bewusst KEINE im Rumpf
+          definierte Komponente (Befund B1): das Filterfeld ist fokussierbar und würde sonst bei
+          jedem Render neu montiert — der Fokus ginge bei jedem Tastendruck verloren.
+          A11y in v2: role=dialog, aria-modal, aria-label, Autofokus, Esc. Ein vollständiger
+          Fokus-Käfig (Tab-Zyklus, Fokus-Rückgabe) ist v6 und wird hier NICHT gebaut. */}
+      {paletteOffen && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 60, background: T.canvasWallGhost, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: '12vh' }}
+          onMouseDown={(e) => { if (e.target === e.currentTarget) schliessePalette(); }}
+        >
+          <div
+            role="dialog" aria-modal="true" aria-label="Befehle suchen"
+            onMouseDown={(e) => e.stopPropagation()}
+            style={{ width: 460, maxWidth: '92vw', background: T.surface, border: `1px solid ${T.controlBorder}`, borderRadius: 12, boxShadow: `0 12px 34px ${T.canvasWallGhost}`, overflow: 'hidden' }}
+          >
+            <input
+              autoFocus type="text" value={paletteFilter}
+              aria-label="Befehl filtern"
+              placeholder="Befehl suchen … (↑↓ wählen, Enter ausführen, Esc schließt)"
+              onChange={(e) => { setPaletteFilter(e.target.value); setPaletteIndex(0); }}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') { e.preventDefault(); schliessePalette(); return; }
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                  e.preventDefault();
+                  if (paletteListe.length === 0) return;
+                  const d = e.key === 'ArrowDown' ? 1 : -1;
+                  setPaletteIndex((paletteMarkiert + d + paletteListe.length) % paletteListe.length);
+                  return;
+                }
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  const treffer = paletteListe[paletteMarkiert];
+                  if (treffer) aktivierePaletteEintrag(treffer.id, treffer.enabled);
+                }
+              }}
+              style={{ width: '100%', boxSizing: 'border-box', padding: '11px 14px', fontSize: 13.5, border: 'none', borderBottom: `1px solid ${T.hair}`, color: FARBEN.text, background: T.surface }}
+            />
+            <div style={{ maxHeight: '46vh', overflowY: 'auto', padding: 6 }}>
+              {paletteListe.length === 0 ? (
+                /* Kante 7: kein leerer Kasten — der Leerzustand spricht aus, was los ist. */
+                <div style={{ padding: '14px 10px', fontSize: 12.5, color: T.muted }}>{PALETTE_LEER}</div>
+              ) : (
+                paletteListe.map((eintrag, i) => {
+                  const markiert = i === paletteMarkiert;
+                  return (
+                    <button
+                      key={eintrag.id} type="button" tabIndex={-1}
+                      aria-disabled={!eintrag.enabled}
+                      title={eintrag.enabled ? eintrag.label : (eintrag.grund ?? eintrag.label)}
+                      onMouseEnter={() => setPaletteIndex(i)}
+                      onClick={() => aktivierePaletteEintrag(eintrag.id, eintrag.enabled)}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8, width: '100%', textAlign: 'left',
+                        padding: '7px 10px', border: 'none', borderRadius: 8, fontSize: 12.5,
+                        /* Markierung als Hintergrund UND Schriftschnitt, nicht nur farblich. */
+                        background: markiert ? T.brandWash : 'transparent',
+                        fontWeight: markiert ? 700 : 500,
+                        color: eintrag.enabled ? FARBEN.text : T.muted,
+                        cursor: eintrag.enabled ? 'pointer' : 'not-allowed',
+                      }}
+                    >
+                      <span style={{ flex: '0 0 auto', minWidth: 74 }}>{eintrag.label}</span>
+                      {/* Der Grund steht als sichtbarer TEXT, nicht nur als Ausgrauen (§28). */}
+                      {!eintrag.enabled && <span style={{ flex: 1, fontSize: 11, color: T.warnInk }}>{eintrag.grund}</span>}
+                      {eintrag.enabled && <span style={{ flex: 1 }} />}
+                      {eintrag.shortcut && <span style={{ flex: '0 0 auto', fontSize: 10.5, color: T.muted, border: `1px solid ${T.controlBorder}`, borderRadius: 4, padding: '1px 5px' }}>{eintrag.shortcut}</span>}
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

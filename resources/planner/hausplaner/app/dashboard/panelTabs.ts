@@ -11,8 +11,8 @@
  * seinen `zustand` (Badge im Panel, Text UND Symbol) und einen `hinweis`, der sagt, was dort
  * einmal stehen wird. Kein Blindtext, kein „keine Daten".
  *
- * `pruefungen` wird in **Batch 2** (v2.4 Prüfungscenter) auf `verfuegbar` gehoben — hier bewusst
- * noch `in_entwicklung`, weil die Fläche in Batch 1 noch nichts anzeigt.
+ * `pruefungen` ist seit **Batch 2** (v2.4 Prüfungscenter) `verfuegbar` — die Fläche zeigt jetzt
+ * echte Befunde aus `befunde.ts`. `beziehungen` und `historie` bleiben Fläche.
  */
 import type { StudioZustand } from '../studioUi';
 
@@ -43,8 +43,9 @@ export const PANEL_TABS: readonly PanelTab[] = [
   {
     id: 'pruefungen',
     label: 'Prüfungen',
-    zustand: 'in_entwicklung',
-    hinweis: 'Zeigt später offene Befunde zum Bauteil (Prüfungscenter, v2.4).',
+    // Batch 2 (v2.4): der Reiter zeigt jetzt echte Befunde aus `befunde.ts` — deshalb 'verfuegbar'.
+    zustand: 'verfuegbar',
+    hinweis: 'Offene Befunde zum Plan — heute die zuletzt abgelehnte Aktion (Prüfungscenter, v2.4).',
   },
   {
     id: 'historie',
