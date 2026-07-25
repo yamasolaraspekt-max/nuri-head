@@ -4395,3 +4395,61 @@ verriegelt es. **Das Gate war grün, als der Fehler im Bild stand.**
 | `alle 13 Rechen-Engines sind als art:engine / zustand:in_entwicklung registriert (…)` | `alle 13 Rechen-Engines sind registriert (echtes Modul + Ein-/Ausgang) — genau EINE ist verfügbar` | die geprüfte Tatsache hat sich geändert: die Treppe **ist** jetzt angeschlossen. Der Test prüft dieselben Zusagen plus die neue Verriegelung. |
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ PLANNER — Werkzeuge funktionstüchtig: die gemessene Lücke + zwei Entscheidungen von Yama
+
+**Frage (Yama, 25.07.):** *„können wir jetzt eigentlich alle Werkzeuge die stehen in Entwicklung
+funktionstüchtig machen … wir haben 15 Bereiche und jeder Bereich hat Werkzeuge."*
+
+### Die Lücke, gemessen statt geschätzt
+
+**Die 110 Verträge nennen 110 verschiedene `commandId`. `applyCommand` kennt 19 Typen.** Die
+Vertrags-IDs (`SelectCommand`, `AlignCommand`, `MirrorHorizontalCommand`) sind **Absichtserklärungen**
+mit eigener Namensgebung — keine Zeiger auf vorhandene Befehle. Daraus folgt aber **nicht**, dass 91
+Commands fehlen:
+
+| | Werkzeuge | Bedarf |
+|---|---|---|
+| rein Ansicht / Auswahl | **41** | **kein Modell-Command, kein Schema** |
+| modellverändernd (`model.revision.increment`) | **69** | echte Commands mit Undo |
+
+Die 69 nach Familie: `create` **40** · `modify` **20** · `workflow` **15** ·
+`assign-or-calculate` **9** · `import` **8** · `view` 7 · `measurement` 5 · `selection` 4 · `domain` 2.
+
+**Die drei Kostentreiber, die die Reihenfolge bestimmen:**
+1. **`create` (40)** braucht je einen Knoten- oder Objekttyp ⇒ Zod ändern, `npm run schema:hausplaner`
+   regenerieren, **Bestandsdaten betroffen**. Die DAUERDIREKTIVE gilt: persistierte Werte werden nicht
+   umbenannt — ergänzt werden dürfen sie, aber jede Ergänzung ist ein Schema-Vorgang.
+2. **`import` (8)** ist durch **AUF-41** blockiert — es gibt kein `Hausplaner,import`-Recht.
+3. **`assign-or-calculate` (9)** braucht die Rechen-Engines; zwölf von dreizehn haben noch keine
+   Fläche (AUF-33 L3).
+
+### Warum ich von „Bereich 1 bis 15 der Reihe nach" abgeraten habe
+
+Die 15 Bereiche sind Yamas Ordnung und bleiben es — aber sie liegen **quer zum Aufwand**.
+„Grundbedienung" ist fast nur Auswahl und Ansicht (billig), „Architektur" fast nur `create` (jedes
+Werkzeug ein Schema-Eingriff), „Heizung · TGA" kann heute gar nicht fertig werden. Wer der Reihe nach
+vorgeht, sitzt bei Bereich 3 fest und hat die billigen 41 nicht angefasst.
+
+### Yamas zwei Entscheidungen
+
+1. **Erst Layout fertig**, dann Werkzeuge. Betrifft AUF-39 · 43 · 45 · 44 · 47 — genau die fünf, die
+   er selbst beim Hinsehen gefunden hat. Alle klein.
+2. **Schnitt nach Aufwand, innerhalb seiner 15 Bereiche.** Erst die 41 ohne Modellwirkung, dann
+   `modify`, dann `create` mit Schema-Arbeit, `import`/`assign-or-calculate` zuletzt.
+
+Angelegt als **AUF-50**, `GESPERRT` hinter den Layout-Posten. **Jede Stufe wird ein eigener Posten** —
+AUF-50 ist der Fahrplan, nicht der Auftrag. Ein Posten über 110 Werkzeuge wäre kein Auftrag, sondern
+ein Vorsatz.
+
+### Nebenbei abgetragen
+
+**AUF-43** und **AUF-45** haben jetzt Auftragsdateien. Beide fassen `HausplanerApp.tsx` an und laufen
+**nacheinander**, nicht nebeneinander. AUF-45 trägt das Kriterium, das ihn ehrlich hält: **die Menge
+der gesperrten Werkzeuge bleibt identisch** — der Posten ändert nur, was die Oberfläche über die
+Sperren sagt, nicht die Sperren selbst. Und die Zahl 34 wird berechnet, nicht hartkodiert.
+
+**Tafel:** Arbeitsvorrat 16 · Abnahme 7 · bei Yama 10 · Archiv 19 = **52**, geprüft.
+
