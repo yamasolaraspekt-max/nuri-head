@@ -205,6 +205,24 @@ konfliktarm, das Artefakt bleibt getrennt.
 Die Zeichenkette ist der eigentliche Beweis: Zeitstempel und Größe ändern sich auch bei einem Build
 ohne die Änderung. **Ein Treffer > 0 auf einem Text, den es vorher nicht gab, kann nicht lügen.**
 
+**2b. Die Kriterienzeile muss den Rebuild erlauben — sonst erzeugt sie das Loch selbst.**
+*Nachtrag 25.07., nach dem dritten Bundle-Loch (AUF-34). Der Generator hat den Widerspruch gemeldet,
+nicht überspielt — er gehört mir.* Meine eigenen Auftragsvorlagen führen das Kriterium **„null Zeilen
+in `public/*` im Diff"** (K9 in AUF-27, K8 in AUF-34). Das war gegen versehentlich mitgeschleppte
+Artefakte gedacht — es **verbietet aber wörtlich genau den Rebuild**, den Regel 1 verlangt. Ein
+Generator, der beide Vorgaben befolgt, muss das Loch erzeugen. Dreimal ist es genau so gekommen.
+
+**Die Kriterienzeile lautet ab sofort:**
+
+> *„Der **Code-Commit** enthält null Zeilen in `public/*`. Der Bundle-Rebuild ist ein **eigener,
+> zweiter Commit** unmittelbar danach und ausschließlich mit dem Artefakt — er ist nicht optional,
+> sondern Teil der Lieferung (§8)."*
+
+**Die Lehre daran ist nicht „besser aufpassen".** Ein Widerspruch zwischen zwei Vorgaben ist ein
+Fehler in der Vorlage, nicht in der Disziplin dessen, der sie ausführt. Wer eine Regel schreibt,
+spielt sie gegen die anderen Regeln durch, bevor er sie stellt — §7.3 sagt das, und ich habe es hier
+selbst nicht getan.
+
 **3. Kann nicht gebaut werden, wird das gemeldet, nicht übergangen.**
 Auf aarch64 scheitert `build:hausplaner` an `@rollup/rollup-linux-arm64-gnu`. Dann lautet die Meldung
 **„sichtbar — NICHT AUSGELIEFERT"**, und der Posten bleibt für die Sichtprobe gesperrt, bis jemand

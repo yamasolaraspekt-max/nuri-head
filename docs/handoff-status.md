@@ -3898,3 +3898,75 @@ Auftragsvorlage, nicht in die Disziplin des Ausführenden. **An den Planner.**
 
 **Kein Push, kein Merge, kein Deploy.**
 **Ballbesitz → Evaluator.**
+
+
+---
+
+## ⇒ PLANNER — Zwei Willensentscheidungen von Yama + der dritte Bundle-Hole ist meine Vorlage (25.07.)
+
+### 1. Yama entscheidet: das Panel-Muster wird die **Treppe**
+
+**Frage:** AUF-11, Punkt 1 — welche der 13 Rechen-Engines wird das Muster, dem alle weiteren Panels
+folgen. Der Fahrplan hatte U-Wert vorgeschlagen; Yama hatte U-Wert am 25.07. bereits abgelehnt
+(*„ich will kein u wert"*), deshalb stand er nicht mehr zur Wahl. Gewählt: **`engine-treppe`**.
+
+**Wirkung:** **AUF-33 ist entsperrt** (13 Engines → 19 Fachplaner-Flächen). Die Treppe trägt am
+wenigsten Normlast, ist rein geometrisch und schnell sichtbar — als Muster schmal, aber genau deshalb
+schnell da. Was sich beim Übertragen auf die Heizungs-Engines nicht überträgt, wird beim zweiten Panel
+sichtbar und dann benannt, nicht vorher geraten.
+
+**Nebenbefund:** AUF-11 war auf der Tafel als große Fahrplan-Freigabe geführt. Gemessen waren zwei der
+drei Willensfragen längst durch Ereignisse beantwortet (Feldtiefe → AUF-25 abgenommen, L4 vorziehen →
+geschehen). Es lag nur noch **eine** Frage dort — und die war der Sperrgrund von AUF-33. Ein Posten,
+der als groß dasteht und klein ist, kostet dieselbe Aufmerksamkeit wie ein großer.
+
+### 2. Yama entscheidet: die Inline-Styles werden **abgelöst** — gegen meinen Rat
+
+**Gemessen vor der Frage:** 331 `style={{` in 35 Dateien / 6.660 Zeilen. Verteilung: HausplanerApp 132 ·
+GuidedView 41 · ConfigWizard 39 · HausplanerStudio 34 · FachFlaeche 27 · StartView 20 · Rest 38.
+`build:hausplaner` erzeugt keine CSS-Datei; beide Blades sind mit `@if (file_exists(…))` **bewacht** —
+der Link wird übersprungen, es gibt kein 404. *(Damit ist meine eigene Tafelzeile „der Blade-Link bleibt
+ungesetzt" richtiggestellt: er ist bewacht, nicht defekt.)*
+
+**Ich hatte abgeraten** — die Ablösung ist ein eigener Strang und bremst die Werkzeugleiste.
+**Yama hat anders entschieden. Tor 1 ist seins; ich setze es um, ich verhandle es nicht nach.**
+
+**Was ich als Planner daraus mache — die zwei Auflagen sind mechanisch, nicht meinungsbezogen:**
+- **Reihenfolge:** AUF-38 läuft **nach** AUF-36 und AUF-35a. Grund ist keine Priorisierung, sondern
+  Kollision: `HausplanerApp.tsx` trägt 132 der 331 Stellen und ist zugleich die Datei, die
+  Werkzeugleiste und Markieren anfassen. Zwei Instanzen darin gleichzeitig ist der teuerste Fehler
+  dieser Woche gewesen (§1.4, AUF-22).
+- **Schnitt nach Datei, nie zwei Scheiben gleichzeitig.** Jede Scheibe wert- und verhaltenstreu:
+  kein gerenderter Farbwert ändert sich, `studioDaten.ts` bleibt die Quelle. Das ist prüfbar
+  (byte-gleiche Werte), anders als „sieht gleich aus".
+
+Angelegt als **AUF-38**, Status `GESPERRT` — ich schreibe zuerst den Auftrag.
+
+### 3. Der dritte Bundle-Hole ist ein Fehler in **meiner** Vorlage, nicht in der Ausführung
+
+Der Generator meldet (`fa04542`), und er hat recht: **Abnahmekriterium 9 von AUF-27 und Kriterium 8 von
+AUF-34 verlangen wörtlich „null Zeilen in `public/*`"** — während die Bundle-Regel (§8) den
+Rebuild-Commit verlangt. Wer beides befolgt, **muss** das Loch erzeugen. Dreimal ist es genau so
+gekommen; ich habe zweimal die Disziplin des Ausführenden vermutet, wo eine Vorlage sich selbst
+widersprach. Er hat den Widerspruch beide Male gemeldet, statt eigenmächtig zu entscheiden — das ist
+die richtige Reaktion und sie hat den Fehler sichtbar gemacht.
+
+**Behoben in `06-laufzeiten-und-takt.md` §8 als neuer Punkt 2b:** die Kriterienzeile lautet ab sofort
+*„der **Code-Commit** enthält null Zeilen in `public/*`; der Bundle-Rebuild ist ein eigener, zweiter
+Commit unmittelbar danach"*. Das ist auch die Auflösung, die der Evaluator mit der AUF-34-Abnahme
+getroffen hat.
+
+**Meine Lehre, und sie trifft §7.3:** Ich habe die Bundle-Regel geschrieben, ohne sie gegen meine
+eigenen Auftragsvorlagen durchzuspielen — genau die Pflicht, die §7.3 mir auferlegt. Ein Widerspruch
+zwischen zwei Vorgaben ist ein Vorlagenfehler, nie ein Disziplinproblem.
+
+### 4. Stand der Kette nach diesem Takt (gemessen)
+
+`91d9592` liefert **AUF-27 und AUF-34** aus — belegt per `grep -c` auf sieben Zeichenketten aus beiden
+Slices, Commit-Umfang 1 Datei, 830/830 Tests vor dem Bau. Damit sind **beide** deferred Sichtproben
+führbar (iframe 1440/1024/375).
+
+**Tafel:** Arbeitsvorrat 9 · Abnahme 5 · bei Yama 9 · Archiv 17 = **40** (AUF-38 neu), geprüft.
+**⚡ AKTIV rückt von AUF-34 auf AUF-36** (Funktionsvertrag der 110 Werkzeuge).
+**Ballbesitz:** Evaluator (drei Sichtproben + AUF-21/I1 + AUF-30) · Generator (AUF-36) ·
+Planner (Aufträge für AUF-33 und AUF-38) · Yama (Push).
