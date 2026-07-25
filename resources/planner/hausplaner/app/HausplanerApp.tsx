@@ -19,6 +19,8 @@ import { bemassung } from '../geometry/bemassung';
 import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt } from '../geometry/wallGeometry';
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
+import { ZustandBadge } from './studioUi';
+import { PANEL_TABS, type PanelTabId } from './dashboard/panelTabs';
 import { usePlannerUiStore } from './state/uiState';
 import { werkzeugTools, toolFuerShortcut, toolNach } from './tools/toolRegistry';
 import { resolveToolState } from './tools/activation';
@@ -144,6 +146,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const [treppeStart, setTreppeStart] = useState<{ x: number; y: number } | null>(null);
   const [fensterTypWahl, setFensterTypWahl] = useState<FensterTyp>('drehkipp');
   const [tuerTypWahl, setTuerTypWahl] = useState<TuerTyp>('dreh1');
+  /** Dashboard v2.2: aktiver Panel-Reiter. Bewusst LOKAL, kein Store-Feld — der Wert hat genau
+   *  einen Leser; ob Panelzustand in den UI-State gehört, ist eine v4-Frage (F1). */
+  const [aktiverTab, setAktiverTab] = useState<PanelTabId>('allgemein');
   const [wandStart, setWandStart] = useState<Punkt | null>(null);
   const [cursor, setCursor] = useState<Punkt>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(0.12); // px pro mm
@@ -280,6 +285,55 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       {opIcon(icon)}
     </button>
   );
+  /**
+   * Dashboard v2.1 (§19 / UI-4) — Kontext-Options-Leiste unter der Bedienleiste.
+   *
+   * Die Zuordnung Werkzeug → Optionen ist EIN `switch` über `activeToolId`: Bedingung und
+   * Steuerelement liegen im selben `case` und können nicht auseinanderlaufen. Eine Parallelliste
+   * (Werkzeug hier, Option dort) wäre genau die zweite Wahrheit, die wir sonst überall abbauen.
+   *
+   * Erweiterungspunkt (NICHT hier bauen): in v5 wird dieser `switch` durch einen Deskriptor aus
+   * der Tool-Registry ersetzt, sobald die Zonen aus `toolPresentation.ts` die Leiste speisen.
+   */
+  const KontextOptionenLeiste = (): React.ReactElement => {
+    const aktivesTool = toolNach(werkzeug);
+    const optionen = ((): React.ReactElement => {
+      switch (werkzeug) {
+        case 'fenster':
+        case 'tuer': {
+          const istFenster = werkzeug === 'fenster';
+          return (
+            <label style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'flex', alignItems: 'center', gap: 5 }}>
+              {istFenster ? 'Fenstertyp' : 'Türtyp'}
+              <select
+                value={istFenster ? fensterTypWahl : tuerTypWahl}
+                onChange={(e) => (istFenster ? setFensterTypWahl(e.target.value as FensterTyp) : setTuerTypWahl(e.target.value as TuerTyp))}
+                style={{ fontSize: 12.5, padding: '4px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}` }}
+              >
+                {(istFenster ? FENSTER_TYPEN : TUER_TYPEN).map((v) => (
+                  <option key={v.typ} value={v.typ}>{v.label} · {v.breite}×{v.hoehe} mm</option>
+                ))}
+              </select>
+            </label>
+          );
+        }
+        default:
+          return (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 12, color: FARBEN.gedaempft }}>
+              Für dieses Werkzeug sind noch keine Optionen hinterlegt.
+              <ZustandBadge zustand="in_entwicklung" />
+            </span>
+          );
+      }
+    })();
+    return (
+      <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'center', gap: 10, padding: '5px 14px', fontSize: 12, background: T.surface2, borderBottom: `1px solid ${T.hair}` }}>
+        <span style={{ fontWeight: 700, color: FARBEN.text }}>{aktivesTool?.label ?? 'Werkzeug'}</span>
+        <span style={{ width: 1, height: 16, background: T.hair }} />
+        {optionen}
+      </div>
+    );
+  };
   const opSep = (): React.ReactElement => <span style={{ width: 1, height: 20, background: T.hair, margin: '0 4px' }} />;
   const opLbl = (t: string): React.ReactElement => <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.muted, marginRight: 2 }}>{t}</span>;
   function dupliziere(): void {
@@ -652,20 +706,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         <button type="button" style={knopf(false)} title="Rückgängig (⌘Z)" aria-label="Rückgängig" onClick={() => store.getState().undo()} disabled={!store.getState().kannUndo()}>↶</button>
         <button type="button" style={knopf(false)} title="Wiederholen (⌘⇧Z)" aria-label="Wiederholen" onClick={() => store.getState().redo()} disabled={!store.getState().kannRedo()}>↷</button>
         <span style={{ width: 1, height: 22, background: T.hair, margin: '0 4px' }} />
-        {(werkzeug === 'fenster' || werkzeug === 'tuer') && (
-          <label style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'flex', alignItems: 'center', gap: 5 }}>
-            {werkzeug === 'fenster' ? 'Fenstertyp' : 'Türtyp'}
-            <select
-              value={werkzeug === 'fenster' ? fensterTypWahl : tuerTypWahl}
-              onChange={(e) => (werkzeug === 'fenster' ? setFensterTypWahl(e.target.value as FensterTyp) : setTuerTypWahl(e.target.value as TuerTyp))}
-              style={{ fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}` }}
-            >
-              {(werkzeug === 'fenster' ? FENSTER_TYPEN : TUER_TYPEN).map((v) => (
-                <option key={v.typ} value={v.typ}>{v.label} · {v.breite}×{v.hoehe} mm</option>
-              ))}
-            </select>
-          </label>
-        )}
+        {/* Dashboard v2.1: Die Fenstertyp/Türtyp-Auswahl stand hier und ist byte-treu in die
+            Kontext-Options-Leiste unter der Werkzeugleiste gewandert (§19/UI-4). Gleiche States,
+            gleiche Optionslisten, gleiches onChange — der Platzierungspfad ist unberührt. */}
         {/* Dashboard v1 §3: Geschoss-Stepper (◀ [Name ▾] ▶) statt Flach-select — ◀/▶ nach sortOrder/elevation,
             native select = Sprung/Tipp-Suche (skaliert bis viele Etagen). setActiveLevel bleibt SSOT; Token-Border. */}
         <span style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
@@ -786,6 +829,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         <OpBtn title="Als PDF-Planblatt exportieren" icon="pdf" geplant />
         <span style={{ fontSize: 12, color: FARBEN.gedaempft, marginLeft: 8, fontVariantNumeric: 'tabular-nums' }}>Zoom {(zoom * 100).toFixed(0)} %</span>
       </div>
+
+      {/* Dashboard v2.1 (§19 / UI-4): Kontext-Options-Leiste — zeigt die Optionen des AKTIVEN
+          Werkzeugs. Volle Breite, direkt unter der Bedienleiste, vor dem Canvas. */}
+      <KontextOptionenLeiste />
 
       {/* Canvas: 2D (Konva) + 3D (three) nebeneinander — beide lesen DENSELBEN Store.
           Der 3D-Bereich bleibt über Moduswechsel gemountet (nur ausgeblendet) ⇒ Kamera
@@ -1097,7 +1144,42 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         <DreiDBereich sichtbar={modus !== '2d'} />
         {/* Rechtes Eigenschaften-Panel (immer sichtbar; Dach-Parameter oder Kontext) */}
         <div style={{ width: 268, flex: '0 0 auto', background: T.surface, borderLeft: `1px solid ${T.hair}`, padding: 14, overflowY: 'auto', fontSize: 12.5, color: FARBEN.text }}>
-          <div style={{ fontWeight: 800, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '.04em', color: FARBEN.gedaempft, marginBottom: 12 }}>Eigenschaften</div>
+          <div style={{ fontWeight: 800, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '.04em', color: FARBEN.gedaempft, marginBottom: 8 }}>Eigenschaften</div>
+          {/* Dashboard v2.2 (§20 / UI-5): Reiter aus PANEL_TABS (Daten, nicht Markup). Aktiver Reiter
+              ist an Schriftschnitt UND Unterstrich erkennbar, nicht nur farblich (WCAG 1.4.1).
+              Pfeiltasten links/rechts wechseln; `allgemein` zeigt den unveränderten Panelinhalt. */}
+          <div role="tablist" aria-label="Eigenschaften-Bereiche" style={{ display: 'flex', gap: 2, borderBottom: `1px solid ${T.hair}`, marginBottom: 12 }}>
+            {PANEL_TABS.map((tab, i) => {
+              const aktivT = tab.id === aktiverTab;
+              return (
+                <button
+                  key={tab.id} type="button" role="tab" aria-selected={aktivT} tabIndex={aktivT ? 0 : -1}
+                  title={tab.hinweis}
+                  onClick={() => setAktiverTab(tab.id)}
+                  onKeyDown={(e) => {
+                    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+                    e.preventDefault();
+                    const d = e.key === 'ArrowRight' ? 1 : -1;
+                    setAktiverTab(PANEL_TABS[(i + d + PANEL_TABS.length) % PANEL_TABS.length].id);
+                  }}
+                  style={{
+                    padding: '5px 8px', fontSize: 11.5, cursor: 'pointer', background: 'transparent',
+                    border: 'none', borderBottom: `2px solid ${aktivT ? T.brandInk : 'transparent'}`,
+                    fontWeight: aktivT ? 800 : 600, color: aktivT ? FARBEN.text : T.muted,
+                  }}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+          {aktiverTab !== 'allgemein' ? (
+            <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>
+              <div style={{ marginBottom: 8 }}>{PANEL_TABS.find((t) => t.id === aktiverTab)?.hinweis}</div>
+              <ZustandBadge zustand={PANEL_TABS.find((t) => t.id === aktiverTab)?.zustand ?? 'in_entwicklung'} />
+            </div>
+          ) : (
+            <>
           {/* Dashboard v1 §5: Sicht (Auge) + Sperre (Schloss) je selektiertem Node → vorhandene Commands
               SET_NODES_SICHTBAR/SET_NODES_GESPERRT. Zustand als Text UND Symbol (A11y). Entsperren fragt nach. */}
           {selectedNode && (
@@ -1410,6 +1492,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 Ein Dach auswählen zeigt hier seine Parameter. Ablauf: Wand ziehen (W) → Dach (D) über den Umriss → 3D.
               </div>
             </div>
+          )}
+            </>
           )}
         </div>
       </div>
