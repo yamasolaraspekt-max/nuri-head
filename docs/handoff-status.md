@@ -4141,3 +4141,99 @@ für Zierrat hält.
 **⚡ AKTIV rückt auf AUF-35a** („Markieren"); die Auftragsdatei liegt seit `239cefd`.
 **Ballbesitz:** Evaluator (6 Posten) · Generator (AUF-35a) · Planner (Aufträge AUF-38/39/40) · Yama (Push, 10 Fragen).
 
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-35a Markieren
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `35fbfde` (Code) · `4dce1cc` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+
+### Was gebaut wurde
+
+Vier **reine Funktionen** — das ist der wertvolle Teil aus Yamas Referenz, und er ist jetzt ohne
+Browser prüfbar:
+
+| Modul | was es entscheidet |
+|---|---|
+| `auswahlModus.ts` | `aufloeseAuswahlmodus` (Shift→add · Strg/Cmd→toggle · Alt→remove · sonst replace), `wendeAuswahlAn`, `klickInsLeere` |
+| `trefferSuche.ts` | Hit-Test: erst Zeichenreihenfolge, dann Distanz; Toleranz in Weltmaß |
+| `auswahlDarstellung.ts` | fünf Zustände → Strichstärke, Deckkraft, Griffe, Schloss, Kontur-**Token** |
+| `auswahlUebersicht.ts` | Anzahl je Typ, deutsch mit Plural (Kante 4) |
+
+**Übernommen wurde die Logik, nicht der Rahmen.** Yamas Referenz ist Vue 3 + Pinia, der Hausplaner
+ist React 19 + Zustand — Konflikt-Regel: der neue Code passt sich an. **Kein zweiter Store.**
+Additiv ergänzt sind ausschließlich `primaerId` und `ueberfahrenId` in `hausplanerStore.ts`.
+**Auswahl ändert das Modell nicht ⇒ kein Undo, kein Command** (deckt sich mit `undoable: false` im
+Funktionsvertrag aus AUF-36).
+
+### Die elf Kriterien, Rohausgabe
+
+| # | Kriterium | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` (ohne Regen) · `test` | **0 / 0 / 0** |
+| 2 | Testzahl, Namen-Mengen | **853 → 874**, +21, **0 verschwunden** (`comm -23` leer) |
+| 3 | je Modus ein Test, inkl. doppeltes Hinzufügen und Primärobjekt-Entfernen | fünf Tests grün |
+| 4 | Ableitung aus der Eingabe, ohne DOM | zwei Tests grün — inkl. `metaKey` (Cmd) und fester Rangfolge bei mehreren Tasten |
+| 5 | Hit-Test: oben gewinnt, bei Gleichstand näher, unsichtbar/nicht wählbar raus, Toleranz | vier Tests grün |
+| 6 | `aufloeseDarstellung` für alle fünf Zustände, kein roher Farbwert | zwei Tests grün; Quelle gegen `#hex|rgba(` geprüft |
+| 7 | die fünf `length === 1` aufgelöst | `grep -c "selectedNodeIds.length === 1"` = **1** — und dieser eine Treffer ist der **Kommentar in Zeile 251**, der den Umbau erklärt. In ausführbarem Code: **0** |
+| 8 | Kante 4: gemischte Mehrfachauswahl | drei Tests grün (`2 Wände · 1 Dach · 1 Fenster`, gesperrt gezählt, unbekannte id übergangen) |
+| 9 | Gegen-Beweis | Sortierung im Hit-Test umgedreht ⇒ **1 Test rot** („was oben liegt, gewinnt"); zurückgebaut ⇒ `diff` leer, 874/874 |
+| 10 | null Zeilen in `domain/*`, `geometry/*`, `public/*`, PHP | **0** im Code-Commit; Bundle als eigener zweiter Commit `4dce1cc` |
+| 11 | Sichtprobe, genannte Breite | **1440 px**, siehe unten |
+
+### Sichtprobe — 1440 px
+
+Projektbrowser, Klick auf „Wand 1", **Shift-Klick** auf „Wand 2":
+
+```
+gewählt im Baum:   ["Wand 1", "Wand 2"]
+Panel:             "2 Objekte gewählt"  ·  Chip "2 Wände"
+                   "Unten stehen die Eigenschaften des zuletzt gewählten Objekts."
+Kontextleiste:     "Markieren"
+```
+
+Darunter laufen die Einzelfelder der Wand weiter — sie zeigen das **Primärobjekt**. Das Panel rät
+nicht mehr, und es verschweigt auch nicht, welches der beiden es beschreibt.
+
+**Rebuild-Beleg** (`4dce1cc`, 1.393.843 Bytes, 25.07. 21:39, gebaut von `35fbfde`):
+`grep -c 'Objekte gewählt'` = 1 · `'Markieren'` = 1 · `'Unten stehen die Eigenschaften'` = 1.
+
+### Die Kanten
+
+- **Kante 1 (gesperrt):** bleibt **wählbar** — im Hit-Test ausdrücklich nicht gefiltert, Test
+  belegt es. Ein gewähltes gesperrtes Objekt wird auch **nicht** gedimmt: wer es anwählt, will
+  genau es ansehen. Die Mehrfach-Ansicht zählt „🔒 n davon gesperrt — wählbar, aber nicht
+  bearbeitbar."
+- **Kante 2 (Geschosswechsel):** `setActiveLevel` leert die Auswahl **weiterhin** — jetzt
+  einschließlich `primaerId`, sonst bliebe ein führendes Objekt aus einem unsichtbaren Geschoss
+  hängen.
+- **Kante 3 (Primärobjekt):** rückt auf das **zuletzt verbliebene** nach, leer ⇒ `null`. Drei Fälle
+  im Test.
+- **Kante 5 (leerer Klick mit Modifikator):** hebt die Auswahl **nicht** auf — vier Modifikatoren
+  einzeln geprüft.
+- **Kante 6 (Tastatur):** `Esc` hebt die Auswahl auf (Bestand, unverändert); kein neues
+  fokussierbares Steuerelement im App-Rumpf.
+
+### Eine Erweiterung über den Auftragstext hinaus, benannt
+
+**Auch der Projektbrowser geht jetzt durch `waehleAn`.** Er rief bisher direkt
+`selectNodes([id])` und hätte damit als einzige Fläche die Modifikatoren ignoriert — zwei
+Auswahl-Wege mit verschiedenen Regeln wären genau die zweite Wahrheit, die dieser Posten beseitigt.
+Ein Test schließt aus, dass irgendein Zweig die Auswahl noch selbst setzt.
+
+### Zwei Dinge, die ich NICHT gebaut habe
+
+1. **`shortLabel` als Feld.** Der Auftrag nennt Kurzform „Auswahl". Ein neues Feld an
+   `ToolDefinition` bricht die I2-Zusage („kein Feld geändert, keins ergänzt"), und **keine Fläche
+   braucht heute eine Kurzform** — „Markieren" passt in die 220-px-Schiene. Das Wort „Auswahl"
+   lebt weiter in der id, im Thema „Grundbedienung & Auswahl" und im Tooltip. Sobald eine Fläche
+   die Kurzform wirklich braucht, ist das ein eigener, winziger Posten.
+2. **`ueberfahrenId` ist gesetzt, aber noch nicht verdrahtet.** Das Feld steht im Store und die
+   Darstellungsregel kennt `ueberfahren` — die Hover-Vorschau im Renderer selbst ist **nicht**
+   Gegenstand dieses Auftrags (der Auftrag nennt sie unter „gebraucht", nicht unter Umfang). Ich
+   habe das Feld angelegt statt es später nachzuschieben, aber **nichts hinter Yamas Rücken
+   angeschlossen**. Wer es verdrahtet, findet es vor.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
