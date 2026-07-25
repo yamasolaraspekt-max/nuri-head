@@ -894,6 +894,35 @@ offen (Generator-Login abgewiesen). In MEINER authentifizierten MCP-Chrome-Sitzu
 fuehrbar und ist grün. Der W-Login-Posten bleibt fuer eine reproduzierbare/fremde Anmeldung sinnvoll,
 hat AUF-69 aber nicht blockiert.
 
+## AUF-68 - drei Gruppenwoerter raus, Name als aria-label (b5c231e, Bundle d59dd8d) - FREIGABE
+
+**Reihenfolge:** erst blind gegen b5c231e gemessen (/tmp + Browser + eigene Kontrast-Rechnung), dann Bericht.
+**Klasse: sichtbar** - Sichtprobe Teil der Abnahme. WCAG-Thema (sichtbarer Text weg, accessible name erhalten).
+
+- **Umfang (git show --name-status):** 2 Dateien - NEU __tests__/opGruppen.test.ts (10 Zusagen);
+  M HausplanerApp.tsx. store/domain/geometry/renderers/public: null.
+- **Sauber:** opLbl restlos weg (Aufrufe + Helfer, grep opLbl = 0), sichtbare Gruppenwoerter = 0.
+  Bedingung erfuellt: jede Gruppe traegt `role="group"` + nichtleeres `aria-label` -> accessible name
+  bleibt fuer Vorleseprogramme. Kein Knopf dazu/weg, keine Sperre geaendert, Reihenfolge Zeichen-fuer-Zeichen.
+- **Gates im Auszug:** schema 0 . test **1020/1020, 0 skip** (1010->1020) . tsc 0 . build ok.
+  10 opGruppen-Subtests (opLbl weg, Woerter weg, K6 role=group+nichtleeres aria-label, 11 Knoepfe,
+  6/4/1, keine Sperre geaendert, Reihenfolge, Trenner zwischen Gruppen, Zoom aussen, Themenzeile unberuehrt).
+- **Gegen-Beweis (/tmp-Kopie):** Gruppen-`aria-label={name}` -> `{''}` -> **K6 rot** (9/1). Deckt
+  Generator 'Mutation A 1 rot' (mein erster Versuch traf ein Knopf-aria-label statt des Gruppen-Labels,
+  offengelegt und korrigiert).
+- **Sichtprobe (iframe 1440, fixture decke-treppe):** 3 Gruppen mit aria-label 'Ansicht'(6)/'Bearbeiten'(4)/
+  'Messen & Export'(1), **keine sichtbaren Gruppenwoerter**, docOverflowX 0. **Abstand selbst gemessen:**
+  21 px zwischen Gruppen (236->257, 403->424) gegen 6 px innerhalb -> die Gliederung traegt der Abstand.
+- **Rueckgabe unabhaengig geprueft (Frontend-Linse, Kontrast selbst gerechnet):** Trennstrich
+  rgb(237,240,242) -> **1.09-1.14:1** je nach Grund (Generator 1.07); WCAG 1.4.11 verlangt 3:1 fuer
+  bedeutungstragende Grafik. Gleiche Aussage: der Strich traegt die Gliederung NICHT (weit unter 3:1),
+  der Abstand tut es. Ein staerkerer Trenner ist ein eigener Yama-Posten - nichts erfunden.
+
+**Urteil: FREIGABE.** Die drei Woerter sind weg, ohne den accessible name zu verlieren (role=group +
+aria-label, mit Zahn-Test), die Leiste ist unveraendert in Zahl/Sperre/Reihenfolge, kein Ueberlauf,
+und die Gliederung traegt messbar der Abstand. Die zu schwache Trennlinie ist sauber als Willensfrage
+zurueckgegeben, nicht stillschweigend hingenommen.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -933,6 +962,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-60    e0d1144  NACHBESSERN: Rechte-Logik solide (tsc 0/test 1008/1008/15 Subtests, K5 fehlt=Minimum, K4 liest-nicht-setzt) ABER objekt.blade.php @php...@endphp-Block (0->1 seit e0d1144) bricht Blade: HEAD-Compile -> php -l 'Parse error line 53', objekt/203 500 im committeten Stand ; Arbeitsbaum kompiliert sauber (AUF-64-Fix uncommittet: blade M + BladeKompiliertTest ??) ; Gate fing es nicht (kein Blade-Compile)
   AUF-64    1b2b26d  FREIGABE + schliesst AUF-60: committeter objekt-Blade inline (kein @php-Block), BladeCompiler+php -l 'No syntax errors' (war 'Parse error line 53' gegen HEAD) ; Rechte-Zeile erhalten (hpRechte/data-rechte, Nullsafe) ; BladeKompiliertTest 5 grün mit Selbst-Zahn-Probe (expectException ParseError) ; tsc 0 / test 1009/1009
   AUF-69    ea60d9e  FREIGABE: kein Tor-1 (keine Route/Migration) ; Rechte aus Blade in Controller::hausplanerRechte(?User) - kein Nutzer=='' Minimum (Reflection-Test verzahnt) ; Regel #9: Blade-Compile 'No syntax errors', PHP-Suite 44 grün (BladeKompiliert+HausplanerRechte), objekt/203 laedt + data-rechte aus Controller + Konsole ohne Fehler ; tsc 0 / test 1020/1020 ; W-Login-Konsolencheck in YS-Sitzung fuehrbar+grün
+  AUF-68    b5c231e  FREIGABE: opLbl weg (grep 0), sichtbare Gruppenwoerter 0, aber role=group+aria-label je Gruppe (K6, Zahn: aria-label leer=1 rot) ; 11 Knoepfe 6/4/1 keine Sperre/Reihenfolge geaendert ; schema 0/test 1020/1020/tsc 0/build ok ; Sichtprobe 1440: 3 Gruppen (Ansicht 6/Bearbeiten 4/Messen&Export 1), keine Woerter, docOvf 0, Abstand 21px zwischen vs 6px innerhalb ; eigene Kontrast-Rechnung Trennstrich 1.09-1.14:1 << 3:1 (Rueckgabe bestaetigt)
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
