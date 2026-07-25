@@ -18,7 +18,7 @@ import React, { useEffect, useRef } from 'react';
 import { T } from '../studioDaten';
 import { resolveToolState } from '../tools/activation';
 import type { AktivierungsKontext } from '../tools/toolTypes';
-import { WERKZEUG_GRUPPEN, iconPfad } from './werkzeugGruppen';
+import { WERKZEUG_GRUPPEN, iconPfad, type WerkzeugGruppe } from './werkzeugGruppen';
 import { werkzeugAnzeige, ANZEIGE_ZEICHEN, ANZEIGE_TEXT } from '../tools/werkzeugZustand';
 
 interface Props {
@@ -28,9 +28,15 @@ interface Props {
   aktivId: string;
   angeheftet: ReadonlySet<string>;
   onAnheften: (toolId: string) => void;
+  /**
+   * AUF-34: die anzuzeigenden Gruppen — seit den Arbeitsbereichen **nicht mehr alle**, sondern die
+   * des gewählten Bereichs. Als Prop und nicht aus dem Store gelesen: die Komponente bleibt dumm
+   * und ist ohne Store testbar. Ohne Angabe alle — dann verhält sie sich wie vor AUF-34.
+   */
+  gruppen?: readonly WerkzeugGruppe[];
 }
 
-export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angeheftet, onAnheften }: Props): React.ReactElement {
+export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angeheftet, onAnheften, gruppen = WERKZEUG_GRUPPEN }: Props): React.ReactElement {
   const huelle = useRef<HTMLSpanElement>(null);
 
   // Klick daneben und Esc schließen das Menü — sonst bleibt es beim Weiterarbeiten im Weg stehen.
@@ -47,12 +53,15 @@ export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angehe
 
   return (
     <span ref={huelle} style={{ display: 'inline-flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', position: 'relative' }}>
-      {WERKZEUG_GRUPPEN.map((gruppe) => {
+      {gruppen.map((gruppe) => {
         const auf = offen === gruppe.id;
         return (
           <span key={gruppe.id} style={{ position: 'relative' }}>
             <button
               type="button" aria-expanded={auf} aria-haspopup="menu"
+              // AUF-34: der Knopf trägt die KURZform, der Tooltip das volle Themen-Label. Elf volle
+              // Labels („Prüfung, Zusammenarbeit & Revision") nebeneinander sprengen jede Breite —
+              // und genau die mehrzeilige Leiste ist der Mangel, den dieser Posten behebt.
               title={`${gruppe.label} — ${gruppe.werkzeuge.length} Werkzeuge`}
               onClick={() => setOffen(auf ? null : gruppe.id)}
               style={{
@@ -62,7 +71,7 @@ export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angehe
                 color: auf ? T.brandInk : T.ink, fontWeight: auf ? 700 : 600,
               }}
             >
-              {gruppe.label}
+              {gruppe.kurz}
               <span style={{ fontSize: 10, color: T.muted }}>▾</span>
             </button>
 
@@ -74,7 +83,14 @@ export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angehe
                   background: T.surface, border: `1px solid ${T.hair}`, borderRadius: 10,
                   boxShadow: `0 10px 28px ${T.canvasWallGhost}`, padding: 6,
                   // Kante 1: 15 Einträge sprengen das Menü. Es scrollt und bricht um — es kappt nicht.
-                  maxHeight: '60vh', overflowY: 'auto', minWidth: 260, maxWidth: '90vw',
+                  maxHeight: '60vh', overflowY: 'auto', maxWidth: '90vw',
+                  // AUF-34 / Kriterium 12: 260 px waren zu wenig. In „Bearbeiten" brach die
+                  // Beschriftung Buchstabe für Buchstabe um — „K-o-p-i-e-r-e-n" untereinander —,
+                  // weil Kürzel-Kästchen, Zustandstext und Stern die Breite nahmen und der Text
+                  // ausweichen musste. Ein senkrecht stehendes Wort ist unlesbar; das ist derselbe
+                  // Fehler wie Kappung, nur andersherum. Deshalb: mehr Grundbreite UND der
+                  // Zustandstext in eine zweite Zeile (unten), statt in derselben Zeile zu drängeln.
+                  minWidth: 320,
                 }}
               >
                 {gruppe.werkzeuge.map((tool) => {
@@ -95,19 +111,27 @@ export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angehe
                           el.title = 'Icon-Datei fehlt';
                         }}
                       />
-                      <span style={{ flex: 1, minWidth: 0, fontSize: 12.5, overflowWrap: 'anywhere', color: zustand.enabled ? T.ink : T.muted }}>
-                        {tool.label}
+                      {/* AUF-34 / Kriterium 12: Beschriftung und Zustand stehen UNTEREINANDER, nicht
+                          nebeneinander. Vorher teilten sich Label, Kürzel, Zustandstext und Stern
+                          eine Zeile — dem Label blieben ~60 px, und `overflowWrap: 'anywhere'`
+                          brach es dann Buchstabe für Buchstabe um. `break-word` statt `anywhere`
+                          bricht nur, wenn ein ganzes Wort nicht passt; bei 320 px Menübreite
+                          passiert das nicht mehr. */}
+                      <span style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <span style={{ fontSize: 12.5, overflowWrap: 'break-word', color: zustand.enabled ? T.ink : T.muted }}>
+                          {tool.label}
+                        </span>
+                        {/* Zustand als Zeichen UND Text — nie nur Farbe. Bei gesperrt steht der Grund dabei. */}
+                        <span
+                          title={zustand.enabled ? ANZEIGE_TEXT[anzeige] : `${ANZEIGE_TEXT[anzeige]}: ${zustand.reason ?? ''}`}
+                          style={{ fontSize: 10.5, color: T.muted }}
+                        >
+                          {ANZEIGE_ZEICHEN[anzeige]} {anzeige === 'gesperrt' ? 'gesperrt' : 'in Entwicklung'}
+                        </span>
                       </span>
                       {tool.shortcut && (
-                        <span style={{ fontSize: 10.5, color: T.muted, border: `1px solid ${T.controlBorder}`, borderRadius: 4, padding: '1px 5px' }}>{tool.shortcut}</span>
+                        <span style={{ flex: '0 0 auto', fontSize: 10.5, color: T.muted, border: `1px solid ${T.controlBorder}`, borderRadius: 4, padding: '1px 5px', whiteSpace: 'nowrap' }}>{tool.shortcut}</span>
                       )}
-                      {/* Zustand als Zeichen UND Text — nie nur Farbe. Bei gesperrt steht der Grund dabei. */}
-                      <span
-                        title={zustand.enabled ? ANZEIGE_TEXT[anzeige] : `${ANZEIGE_TEXT[anzeige]}: ${zustand.reason ?? ''}`}
-                        style={{ fontSize: 10.5, color: T.muted, flex: '0 0 auto' }}
-                      >
-                        {ANZEIGE_ZEICHEN[anzeige]} {anzeige === 'gesperrt' ? 'gesperrt' : 'in Entwicklung'}
-                      </span>
                       <button
                         type="button"
                         onClick={() => onAnheften(tool.id)}

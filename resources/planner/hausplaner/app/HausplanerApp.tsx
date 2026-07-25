@@ -23,6 +23,9 @@ import { ZustandBadge } from './studioUi';
 import { PANEL_TABS, type PanelTabId } from './dashboard/panelTabs';
 import { ReiterLeiste } from './dashboard/ReiterLeiste';
 import { SCHIENEN_REITER, SCHIENE_STANDARD, type SchienenReiterId } from './dashboard/schienenReiter';
+import { ARBEITSBEREICHE, arbeitsbereich } from './dashboard/arbeitsbereiche';
+import { gruppenFuer } from './dashboard/werkzeugGruppen';
+import { ladeArbeitsbereich, speichereArbeitsbereich } from './state/arbeitsbereichSpeicher';
 import { projektBaum, PROJEKTBAUM_LEER } from './dashboard/projektBaum';
 import { befundeAus, BEFUNDE_LEER, BEFUNDE_UMFANG } from './dashboard/befunde';
 import { palettenEintraege, PALETTE_LEER } from './dashboard/palette';
@@ -71,6 +74,12 @@ const reiterId = (id: PanelTabId): string => `hp-eigenschaften-tab-${id}`;
  */
 const SCHIENE_ID = 'hp-schiene-panel';
 const schienenReiterId = (id: string): string => `hp-schiene-tab-${id}`;
+
+/** AUF-34 — dasselbe für den Arbeitsbereich-Wähler. Eigenes Präfix, keine id-Kollision. */
+const BEREICH_ID = 'hp-bereich-gruppenzeile';
+const bereichReiterId = (id: string): string => `hp-bereich-tab-${id}`;
+/** Die Bereiche als Reiter-Daten — einmal auf Modulebene, nicht bei jedem Render neu gebaut. */
+const bereichReiter = ARBEITSBEREICHE.map((b) => ({ id: b.id, label: b.label, hinweis: b.hinweis }));
 
 const FARBEN = {
   text: T.ink, gedaempft: T.muted, linie: T.faint, raster: T.canvasGrid, rasterGrob: T.canvasGridStrong,
@@ -170,13 +179,15 @@ function lotAufWand(p: Punkt, w: WallNode): { abstand: number; offset: number } 
  * der Tool-Registry ersetzt, sobald die Zonen aus `toolPresentation.ts` die Leiste speisen.
  */
 function KontextOptionenLeiste({
-  werkzeug, fensterTypWahl, tuerTypWahl, setFensterTypWahl, setTuerTypWahl,
+  werkzeug, fensterTypWahl, tuerTypWahl, setFensterTypWahl, setTuerTypWahl, fremderBereich,
 }: {
   werkzeug: Werkzeug;
   fensterTypWahl: FensterTyp;
   tuerTypWahl: TuerTyp;
   setFensterTypWahl: (t: FensterTyp) => void;
   setTuerTypWahl: (t: TuerTyp) => void;
+  /** AUF-34 / Kante 3: gesetzt, wenn das aktive Werkzeug im gewählten Arbeitsbereich nicht gilt. */
+  fremderBereich?: string;
 }): React.ReactElement {
   const aktivesTool = toolNach(werkzeug);
   const optionen = ((): React.ReactElement => {
@@ -212,7 +223,15 @@ function KontextOptionenLeiste({
     <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'center', gap: 10, padding: '5px 14px', fontSize: 12, background: T.surface2, borderBottom: `1px solid ${T.hair}` }}>
       <span style={{ fontWeight: 700, color: FARBEN.text }}>{aktivesTool?.label ?? 'Werkzeug'}</span>
       <span style={{ width: 1, height: 16, background: T.hair }} />
-      {optionen}
+      {/* AUF-34 / Kante 3: Ein Bereichswechsel darf das aktive Werkzeug NICHT stillschweigend
+          abwählen. Es bleibt gewählt — und sagt hier sichtbar, warum es gerade nicht greift.
+          Vorher stand die Begründung nur im `title` der Leiste, also faktisch nirgends. */}
+      {fremderBereich ? (
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 12, color: FARBEN.gedaempft, overflowWrap: 'anywhere' }}>
+          Gehört zum Arbeitsbereich <strong style={{ color: FARBEN.text }}>{fremderBereich}</strong> — hier nicht verfügbar. Bereich oben wechseln.
+          <ZustandBadge zustand="voraussetzung" />
+        </span>
+      ) : optionen}
     </div>
   );
 }
@@ -290,6 +309,22 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   // Editor angenommen; die Werkzeugleisten-Werkzeuge (art='werkzeug') prüfen ohnehin keine Rechte.
   const activeWorkspace = usePlannerUiStore((s) => s.activeWorkspace);
   /**
+   * AUF-34 — Arbeitsbereich wählen und merken. **Kein zweiter Zustand:** die Wahrheit bleibt
+   * `activeWorkspace` im UI-Store; `localStorage` ist nur ein Gedächtnis über den Neuladen hinweg
+   * (Kante 4) und **niemals** das Szenendokument. Der Ladeschritt läuft einmal beim Mounten, nach
+   * `reset()` — sonst überschriebe der Grundzustand die Wahl sofort wieder.
+   */
+  const waehleBereich = React.useCallback((id: string) => {
+    usePlannerUiStore.getState().setActiveWorkspace(id);
+    speichereArbeitsbereich(id);
+  }, []);
+  useEffect(() => {
+    const gemerkt = ladeArbeitsbereich();
+    if (gemerkt) usePlannerUiStore.getState().setActiveWorkspace(gemerkt);
+  }, []);
+  /** Die Gruppen des gewählten Bereichs — durchgängige plus gebundene, in Themen-Reihenfolge. */
+  const sichtbareGruppen = useMemo(() => gruppenFuer(activeWorkspace), [activeWorkspace]);
+  /**
    * Welle A2 / §8.2 (P9): Die Werkzeuge der Leiste kommen aus der Fix-Zone — **memoisiert am
    * Aufrufort**, nicht im Modul gecacht. Leere Abhängigkeitsliste ist korrekt, weil
    * `TOOL_PRESENTATION_RULES` eine Modul-Konstante ist.
@@ -321,14 +356,30 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       }),
     [activeWorkspace, modus, selectedNodeIds, nodes],
   );
+  /**
+   * AUF-34 / Kante 3 — gilt das aktive Werkzeug im gewählten Arbeitsbereich? Der Name des fremden
+   * Bereichs, sonst `undefined`. Gelesen wird `supportedWorkspaces`, also **dieselbe** Quelle, die
+   * `resolveToolState` als erste Regel prüft — keine zweite Beurteilung.
+   */
+  const fremderBereich = useMemo(() => {
+    const t = toolNach(werkzeug);
+    if (!t || t.supportedWorkspaces.length === 0) return undefined;
+    if (t.supportedWorkspaces.includes(activeWorkspace)) return undefined;
+    return arbeitsbereich(t.supportedWorkspaces[0])?.label ?? t.supportedWorkspaces[0];
+  }, [werkzeug, activeWorkspace]);
+
   // Fällt das aktive Werkzeug im aktuellen Kontext aus (z. B. Zeichnen in 3D), zurück auf Auswahl —
   // damit man nie in einem deaktivierten Werkzeug festhängt (§21/§28).
+  // AUF-34 / Kante 3: **außer** wenn nur der Arbeitsbereich nicht passt. Ein Bereichswechsel darf
+  // die Werkzeugwahl nicht stillschweigend wegräumen; das Werkzeug bleibt und die Kontextleiste
+  // sagt sichtbar, wohin es gehört. Wer zurückwechselt, findet es noch vor.
   useEffect(() => {
+    if (fremderBereich) return;
     const t = toolNach(werkzeug);
     if (t && !resolveToolState(t, werkzeugKontext).enabled) {
       usePlannerUiStore.getState().setActiveTool('auswahl');
     }
-  }, [werkzeugKontext, werkzeug]);
+  }, [werkzeugKontext, werkzeug, fremderBereich]);
   /** Dashboard v2.3: Projektbaum des aktiven Geschosses — reine Funktion, nur LESEN. */
   const baum = useMemo(() => projektBaum(nodes, scene?.roofs, level), [nodes, scene, level]);
   /** Dashboard v2.4: Befunde aus dem heutigen Store-Zustand (heute 0 oder 1). */
@@ -957,6 +1008,24 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         </button>
       </div>
 
+      {/* AUF-34: der Arbeitsbereich-Wähler. Er steht ÜBER der Gruppenzeile, weil er sie bestimmt.
+          Gerendert von derselben `ReiterLeiste` wie Panel und Schiene (AUF-27): die Bereiche wählen
+          aus, welcher Inhalt in der Gruppenzeile steht — genau ein Reiter-Verhalten. Ein dritter
+          Mechanismus mit eigener Tastaturbedienung wäre eine zweite Wahrheit. */}
+      <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'baseline', gap: 10, padding: '5px 14px 0', background: T.bg }}>
+        <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', color: FARBEN.gedaempft, flex: '0 0 auto' }}>Arbeitsbereich</span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <ReiterLeiste
+            reiter={bereichReiter}
+            aktiv={activeWorkspace}
+            setAktiv={waehleBereich}
+            ariaLabel="Arbeitsbereiche"
+            panelId={BEREICH_ID}
+            reiterId={bereichReiterId}
+          />
+        </div>
+      </div>
+
       {/* Bedien-Werkzeugleiste — Icons, jedes mit Tooltip + Funktionsbeschreibung */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: T.bg, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}>
         {opLbl('Ansicht')}
@@ -979,9 +1048,20 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         <OpBtn title="Bemaßung — Maßkette am Grundriss anlegen" icon="bemassung" geplant />
         <OpBtn title="Als PNG-Bild exportieren — aktuelle 2D-Ansicht herunterladen" icon="export" onClick={exportPng} />
         <OpBtn title="Als PDF-Planblatt exportieren" icon="pdf" geplant />
-        {opSep()}
-        {/* I4: die 22 Kategorie-Gruppen des Werkzeugpakets. Sie fuellen die vorhandene Leiste,
-            statt eine zweite zu bauen — Yamas Entwurf zeigt genau diese Struktur. */}
+        <span style={{ fontSize: 12, color: FARBEN.gedaempft, marginLeft: 'auto', fontVariantNumeric: 'tabular-nums' }}>Zoom {(zoom * 100).toFixed(0)} %</span>
+      </div>
+
+      {/* AUF-34: die Themen-Gruppen des GEWÄHLTEN Arbeitsbereichs — in einer EIGENEN Zeile.
+          Vorher standen alle 22 Kategorien hinter den Icon-Knöpfen in derselben Zeile; gemessen
+          waren das bei 1440 px drei Zeilen, und der waagerechte Überlauf schob das rechte Panel
+          aus dem Bild. Jetzt: 15 Themen, davon 7 durchgängig und 8 an einen Bereich gebunden,
+          in einer Zeile, die niemandem mehr den Platz nimmt.
+          Dieser Bereich ist das Ziel der `aria-controls` des Bereich-Wählers — deshalb trägt er
+          die Rolle und die id; ein Verweis ins Leere wäre schlimmer als kein Verweis. */}
+      <div
+        role="tabpanel" id={BEREICH_ID} aria-labelledby={bereichReiterId(activeWorkspace)}
+        style={{ display: 'flex', alignItems: 'center', gap: 2, padding: '3px 14px 6px', background: T.bg, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}
+      >
         <WerkzeugGruppenMenue
           offen={offeneGruppe}
           setOffen={setOffeneGruppe}
@@ -989,8 +1069,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           aktivId={werkzeug}
           angeheftet={angeheftet}
           onAnheften={heftUm}
+          gruppen={sichtbareGruppen}
         />
-        <span style={{ fontSize: 12, color: FARBEN.gedaempft, marginLeft: 8, fontVariantNumeric: 'tabular-nums' }}>Zoom {(zoom * 100).toFixed(0)} %</span>
       </div>
 
       {/* Dashboard v2.1 (§19 / UI-4): Kontext-Options-Leiste — zeigt die Optionen des AKTIVEN
@@ -1002,6 +1082,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         tuerTypWahl={tuerTypWahl}
         setFensterTypWahl={setFensterTypWahl}
         setTuerTypWahl={setTuerTypWahl}
+        fremderBereich={fremderBereich}
       />
 
       {/* Canvas: 2D (Konva) + 3D (three) nebeneinander — beide lesen DENSELBEN Store.

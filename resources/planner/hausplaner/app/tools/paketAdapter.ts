@@ -20,9 +20,11 @@
  * `verworfeneKuerzel()` nach — sichtbar, nicht stillschweigend. Die betroffenen Werkzeuge behalten
  * alles andere; nur ihr Kürzel ist frei, bis jemand es bewusst vergibt.
  */
-import type { ToolDefinition, ViewType } from './toolTypes';
+import type { ToolDefinition, ViewType, WorkspaceId } from './toolTypes';
 import { PAKET_WERKZEUGE, type PaketWerkzeug } from './werkzeugPaket';
 import { TOOL_DEFINITIONS } from './toolRegistry';
+import { themaVonWerkzeug } from './werkzeugThemen';
+import { bereichVonThema } from '../dashboard/arbeitsbereiche';
 
 /** Kürzel, die die bestehende Registry bereits belegt (klein geschrieben). */
 const REGISTRY_KUERZEL = new Set(
@@ -60,6 +62,27 @@ function ansichten(w: PaketWerkzeug): ViewType[] {
   return v;
 }
 
+/**
+ * AUF-34 — die Arbeitsbereiche eines Werkzeugs, **abgeleitet aus seinem Thema**.
+ *
+ * Bis hierher trugen alle 101 Paket-Werkzeuge `supportedWorkspaces: []` — der Adapter füllte das
+ * Feld nie, also galt jedes Werkzeug überall. Jetzt bekommt es seine Bindung, aber **nicht aus einer
+ * zweiten Tabelle**: Quelle ist ausschließlich die Themen-Bindung in `dashboard/arbeitsbereiche.ts`,
+ * dieselbe, aus der auch die Leiste gefiltert wird. Sonst gäbe die Leiste eine andere Antwort als
+ * `resolveToolState`, und der Nutzer sähe ein Werkzeug, das sich nicht benutzen lässt — oder
+ * umgekehrt.
+ *
+ * **Leere Liste heißt weiterhin „überall gültig"** — die bestehende Bedeutung wird nicht geändert
+ * (so liest sie `resolveToolState` seit UI-2), sie wird nur endlich benutzt. Ein durchgängiges Thema
+ * liefert deshalb `[]`, kein Aufzählen aller fünf Bereiche: fünf Einträge zu pflegen, wo „überall"
+ * gemeint ist, bricht beim sechsten Bereich.
+ */
+export function arbeitsbereicheVon(werkzeugId: string): WorkspaceId[] {
+  const t = themaVonWerkzeug(werkzeugId);
+  const bereich = t ? bereichVonThema(t.id) : undefined;
+  return bereich ? [bereich] : [];
+}
+
 /** Ein Paket-Werkzeug auf die Bestandsform abbilden. */
 export function paketZuTool(w: PaketWerkzeug): ToolDefinition {
   const kuerzel = kuerzelFrei(w.shortcut) ? w.shortcut : undefined;
@@ -69,7 +92,7 @@ export function paketZuTool(w: PaketWerkzeug): ToolDefinition {
     icon: w.icon,
     groupId: w.kategorie,
     art: 'werkzeug',
-    supportedWorkspaces: [],
+    supportedWorkspaces: arbeitsbereicheVon(w.id),
     supportedViews: ansichten(w),
     ...(kuerzel ? { shortcut: kuerzel } : {}),
     helpText: w.funktion,

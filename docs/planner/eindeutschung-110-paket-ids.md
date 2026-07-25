@@ -30,6 +30,13 @@ Die Eindeutschung betrifft **UI-ID · Icon-Dateiname · Label**. Sie betrifft **
 
 `pdf` bleibt Akronym `pdf` (keine Eindeutschung eines Kürzels).
 
+> **Nachtrag Generator, 25.07. (AUF-34):** Zwei Zellen der Spalte **dt. ID** waren defekt — der
+> führende Umlaut war verschluckt: Zeile 41 `ffnung` statt `oeffnung`, Zeile 98 `bergabepaket`
+> statt `uebergabepaket`. Beide sind jetzt nach der Konvention dieser Tabelle (`ö→oe`, `ü→ue`)
+> berichtigt. Maßstab war der Code: `app/tools/werkzeugPaket.ts` führt beide seit AUF-31 korrekt,
+> die Tabelle hinkte hinterher. Ohne die Korrektur hätte die Themen-Zuordnung (AUF-34) zwei
+> Werkzeuge auf ids abgebildet, die es nicht gibt.
+
 ## Die vollständige Tabelle (110)
 
 Legende: **📌** = `canPin` im Paket · ⛔ = schema-gebunden (Wert bleibt englisch, Adapter mappt) · *(9)* = deckt eine der 9 bestehenden Registry-IDs (Konvergenz) · **★** = von Yama entschieden (siehe oben).
@@ -76,7 +83,7 @@ Legende: **📌** = `canPin` im Paket · ⛔ = schema-gebunden (Wert bleibt engl
 | 38 | Architektur | `roof-window` | 📌 Dachfenster | `dachfenster` |  |
 | 39 | Architektur | `column` | 📌 Stütze | `stuetze` |  |
 | 40 | Architektur | `beam` | 📌 Unterzug / Träger | `unterzug`★ |  |
-| 41 | Architektur | `opening` | 📌 Öffnung | `ffnung` | ⛔ `type: opening` |
+| 41 | Architektur | `opening` | 📌 Öffnung | `oeffnung` | ⛔ `type: opening` |
 | 42 | Architektur | `floor` | 📌 Boden | `boden` |  |
 | 43 | Architektur | `slab` | 📌 Decke / Bodenplatte | `decke` *(9)* | ⛔ `type: ceiling` |
 | 44 | Architektur | `section` | 📌 Schnitt | `schnitt` |  |
@@ -133,7 +140,7 @@ Legende: **📌** = `canPin` im Paket · ⛔ = schema-gebunden (Wert bleibt engl
 | 95 | PV | `wallbox` | 📌 Wallbox | `wallbox` | ⛔ `objectType: wallbox` |
 | 96 | Workflow | `wizard` | 📌 Assistent | `assistent`★ |  |
 | 97 | Workflow | `workflow` | 📌 Prozessübersicht | `prozessuebersicht` |  |
-| 98 | Workflow | `handoff-package` | 📌 Übergabepaket | `bergabepaket` |  |
+| 98 | Workflow | `handoff-package` | 📌 Übergabepaket | `uebergabepaket` |  |
 | 99 | Workflow | `approve` | 📌 Freigeben | `freigeben` |  |
 | 100 | Zusammenarbeit | `comment` | 📌 Kommentar | `kommentar` |  |
 | 101 | Zusammenarbeit | `history` | 📌 Historie | `historie` |  |

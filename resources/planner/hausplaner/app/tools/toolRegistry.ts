@@ -9,8 +9,20 @@
 
 import type { ToolDefinition } from './toolTypes';
 
-/** Bekannte Arbeitsbereiche (heute real: 'architektur'). */
+/**
+ * Bekannte Arbeitsbereiche.
+ *
+ * Bis AUF-34 gab es hier **genau einen** Wert — die Ebene `activeWorkspace` existierte im Code
+ * (`state/uiState.ts:23`), wurde aber nie benutzt. Seit AUF-34 tragen die fünf Bereiche aus Yamas
+ * Entwurf die Werkzeugleiste; welches Thema zu welchem Bereich gehört, steht **an einer Stelle**:
+ * `dashboard/arbeitsbereiche.ts`. Hier stehen nur die ids, damit Registry, Adapter und Oberfläche
+ * dieselbe Zeichenkette benutzen und niemand `'heizung'` irgendwo neu tippt.
+ */
+export const WORKSPACE_IMPORT = 'import';
 export const WORKSPACE_ARCHITEKTUR = 'architektur';
+export const WORKSPACE_BAUPHYSIK = 'bauphysik';
+export const WORKSPACE_HEIZUNG = 'heizung';
+export const WORKSPACE_ELEKTRO_PV = 'elektro-pv';
 
 /** Alle transformierbaren Objekttypen (für globale Transform-/Lösch-Werkzeuge). */
 const AUSWAEHLBAR = ['wall', 'window', 'door', 'opening', 'zone', 'object', 'route', 'roof'] as const;

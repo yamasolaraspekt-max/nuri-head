@@ -53,7 +53,9 @@ test('B3: jeder Reiter trägt aria-controls UND eine eigene id', () => {
 });
 
 test('B3: der Inhaltsbereich ist ein tabpanel und trägt genau die id, auf die aria-controls zeigt', () => {
-  const panel = quelle.match(/<div role="tabpanel"[^>]*>/);
+  // Seit AUF-34 gibt es drei Tabpanels (Panel · Schiene · Gruppenzeile). Gesucht ist gezielt das
+  // des Eigenschaften-Panels — ein `match` auf das erste beliebige wäre ab hier Zufall.
+  const panel = quelle.match(/<div role="tabpanel" id=\{PANEL_ID\}[^>]*>/);
   assert.ok(panel, 'Inhaltsbereich ohne role="tabpanel"');
   assert.match(panel[0], /id=\{PANEL_ID\}/);
   // Verweis ins Leere ausgeschlossen: `panelId` und `id` sind DIESELBE Konstante,
@@ -64,7 +66,7 @@ test('B3: der Inhaltsbereich ist ein tabpanel und trägt genau die id, auf die a
 });
 
 test('B3: das Panel nennt den aktiven Reiter als Beschriftung (aria-labelledby)', () => {
-  const panel = quelle.match(/<div role="tabpanel"[^>]*>/);
+  const panel = quelle.match(/<div role="tabpanel" id=\{PANEL_ID\}[^>]*>/);
   assert.ok(panel);
   assert.match(panel[0], /aria-labelledby=\{reiterId\(aktiverTab\)\}/);
 });

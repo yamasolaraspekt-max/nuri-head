@@ -85,8 +85,9 @@ test('K6: es gibt im ganzen Planer genau EINE Stelle, die Reiter erzeugt', () =>
   assert.equal((leisteQuelle.match(/role="tab"/g) ?? []).length, 1);
   assert.equal((appQuelle.match(/role="tab"/g) ?? []).length, 0, 'kein zweiter Tab-Mechanismus in der App');
   assert.equal((appQuelle.match(/role="tablist"/g) ?? []).length, 0);
-  // Beide Benutzer — Panel und Schiene — kommen aus derselben Komponente.
-  assert.equal((appQuelle.match(/<ReiterLeiste/g) ?? []).length, 2);
+  // Alle Benutzer kommen aus derselben Komponente: Eigenschaften-Panel und Schiene (AUF-27),
+  // seit AUF-34 zusätzlich der Arbeitsbereich-Wähler.
+  assert.equal((appQuelle.match(/<ReiterLeiste/g) ?? []).length, 3);
 });
 
 test('K6: die Leiste trägt tablist, aria-controls und Pfeiltasten mit Fokusnachführung', () => {

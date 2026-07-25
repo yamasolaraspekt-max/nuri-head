@@ -1,17 +1,18 @@
 /**
  * I4 (AUF-21) — die 110 Werkzeuge als **Gruppen der oberen Werkzeugleiste**.
+ * AUF-34 / Nachtrag 2 — die Gruppen sind seit Yamas Entscheidung „15" die **15 Themen** des
+ * Funktionsvertrag-Pakets, nicht mehr die 22 Kategorien.
  *
- * Nach I2 lagen alle Fach-Werkzeuge als Daten im Katalog und **keines** war erreichbar. Dieses
- * Modul ordnet sie den 22 Paket-Kategorien zu — Yamas Freigabe auf die Frage, ob nach Kategorien
- * gruppiert werden darf, war „ja".
+ * **Warum gewechselt wurde, gemessen:** 22 gleichrangige Menüs liefen bei 1440 px über drei Zeilen,
+ * und zwei davon (`TGA`, `Sanitär`) trugen **je ein** Werkzeug. Die Themen fassen genau das
+ * zusammen und sind eine vollständige Zerlegung (Summe exakt 110, jedes Werkzeug in genau einem).
  *
- * **Warum ein Datenmodul und nicht Markup:** damit „22 Gruppen, Summe 110, jedes Werkzeug in genau
+ * **Die Kategorie ist nicht verschwunden** — sie steht weiter an jedem Werkzeug (`group`/`groupId`)
+ * als Trail. Sie gruppiert nur nichts mehr. Zwei Gruppierungen nebeneinander wären eine zweite
+ * Wahrheit; deshalb gibt es hier genau eine.
+ *
+ * **Warum ein Datenmodul und nicht Markup:** damit „15 Gruppen, Summe 110, jedes Werkzeug in genau
  * einer Gruppe" prüfbar ist. Ein Menü, das im JSX zusammengesetzt wird, kann man nur ansehen.
- *
- * **Die Quelle ist beides:** der Katalog (101 Paket-Werkzeuge) **und** die Registry (9 Bestands-
- * Werkzeuge, die seit AUF-31 die Kategorie des Pakets tragen). Ein Werkzeug taucht genau einmal auf;
- * die Registry hat Vorrang, falls eine id doppelt vorkäme — nach AUF-31 kann das nicht mehr passieren,
- * der Test hält es trotzdem fest.
  *
  * **Was hier NICHT entschieden wird:** ob ein Werkzeug bedienbar ist. Das sagt weiterhin
  * `resolveToolState` — eine Wahrheit, kein zweiter Mechanismus.
@@ -19,59 +20,48 @@
 import type { ToolDefinition } from '../tools/toolTypes';
 import { TOOL_KATALOG } from '../tools/toolCatalog';
 import { TOOL_DEFINITIONS } from '../tools/toolRegistry';
+import { WERKZEUG_THEMEN, kurzLabel } from '../tools/werkzeugThemen';
+import { themenFuer } from './arbeitsbereiche';
 
 export interface WerkzeugGruppe {
-  /** Schlüssel für Menü-State und Tests: ASCII, klein, ohne Umlaut. */
+  /** Schlüssel für Menü-State und Tests = die technische Themen-id (`07-architektur`). */
   id: string;
-  /** Anzeigename — die Kategorie aus dem Paket, unverändert deutsch. */
+  /** Anzeigename — das deutsche Themen-Label, unverändert aus dem Paket. */
   label: string;
+  /** Kurzform für die Leiste (erster Begriff); das volle Label bleibt im `title`. */
+  kurz: string;
   werkzeuge: readonly ToolDefinition[];
 }
 
-/** Kategorie → Menü-Schlüssel. Umlaute ausgeschrieben, wie bei den Werkzeug-IDs (AUF-31). */
-function schluessel(kategorie: string): string {
-  return kategorie
-    .toLowerCase()
-    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-}
+/**
+ * Alle Werkzeuge nach id. **Die Registry hat Vorrang** — bei Namensgleichheit gewinnt der Bestand
+ * (wie in `zoneTools`). Seit AUF-31 kann eine id nicht mehr doppelt vorkommen; der Vorrang bleibt
+ * als Regel stehen, damit ein künftiger Paket-Import den Bestand nicht still überschreibt.
+ */
+const NACH_ID = ((): Map<string, ToolDefinition> => {
+  const m = new Map<string, ToolDefinition>();
+  for (const t of [...TOOL_DEFINITIONS, ...TOOL_KATALOG]) if (!m.has(t.id)) m.set(t.id, t);
+  return m;
+})();
+
+export const WERKZEUG_GRUPPEN: readonly WerkzeugGruppe[] = WERKZEUG_THEMEN.map((t) => ({
+  id: t.id,
+  label: t.label,
+  kurz: kurzLabel(t),
+  // Ein Thema, das eine unbekannte id nennt, verliert sie hier still — `werkzeugeOhneGruppe()`
+  // macht genau das sichtbar, statt es im Menü zu verstecken.
+  werkzeuge: t.werkzeuge.map((id) => NACH_ID.get(id)).filter((x): x is ToolDefinition => Boolean(x)),
+}));
 
 /**
- * Anzeigereihenfolge der Gruppen. Fest, nicht alphabetisch und nicht nach Größe — sie folgt dem
- * Arbeitsablauf: erst auswählen und bearbeiten, dann zeichnen und konstruieren, dann das Gebäude,
- * dann die Gewerke, zuletzt Ansicht und System. Eine Leiste, deren Reihenfolge sich mit den Daten
- * ändert, zwingt den Nutzer jedes Mal zum Suchen.
+ * Die Gruppen **eines Arbeitsbereichs** — durchgängige und gebundene, in Themen-Reihenfolge.
+ * Das ist die Liste, die die Leiste rendert; `WERKZEUG_GRUPPEN` bleibt die Gesamtsicht für Tests
+ * und für die Bilanz „nichts verloren".
  */
-const REIHENFOLGE = [
-  'Auswahl', 'Bearbeiten', 'Zeichnen', 'CAD', 'Architektur', 'Fassade', 'Material',
-  'Bauphysik', 'Heizung', 'TGA', 'Sanitär', 'Bad', 'Küche', 'Elektro', 'PV',
-  'Messen', 'Prüfung', 'Import', 'Workflow', 'Zusammenarbeit', 'Ansicht', 'System',
-] as const;
-
-/** Die Kategorie eines Werkzeugs — Katalog führt sie in `groupId`, Registry in `group`. */
-function kategorieVon(t: ToolDefinition): string {
-  return t.group ?? t.groupId;
+export function gruppenFuer(bereichId: string): readonly WerkzeugGruppe[] {
+  const erlaubt = new Set(themenFuer(bereichId).map((t) => t.id));
+  return WERKZEUG_GRUPPEN.filter((g) => erlaubt.has(g.id));
 }
-
-export const WERKZEUG_GRUPPEN: readonly WerkzeugGruppe[] = ((): WerkzeugGruppe[] => {
-  const nachKategorie = new Map<string, ToolDefinition[]>();
-  const gesehen = new Set<string>();
-  // Registry zuerst: bei Namensgleichheit gewinnt der Bestand (wie in `zoneTools`).
-  for (const t of [...TOOL_DEFINITIONS, ...TOOL_KATALOG]) {
-    if (gesehen.has(t.id)) continue;
-    gesehen.add(t.id);
-    const k = kategorieVon(t);
-    nachKategorie.set(k, [...(nachKategorie.get(k) ?? []), t]);
-  }
-  const geordnet = [
-    ...REIHENFOLGE.filter((k) => nachKategorie.has(k)),
-    // Eine Kategorie, die das Paket später ergänzt, fällt nicht heraus — sie hängt sich hinten an,
-    // statt still zu verschwinden.
-    ...[...nachKategorie.keys()].filter((k) => !REIHENFOLGE.includes(k as typeof REIHENFOLGE[number])),
-  ];
-  return geordnet.map((k) => ({ id: schluessel(k), label: k, werkzeuge: nachKategorie.get(k) ?? [] }));
-})();
 
 /** Eine Gruppe nach Schlüssel. */
 export function gruppeNach(id: string): WerkzeugGruppe | undefined {
@@ -90,6 +80,12 @@ export function mehrfachGefuehrt(): string[] {
     for (const t of g.werkzeuge) zaehler.set(t.id, (zaehler.get(t.id) ?? 0) + 1);
   }
   return [...zaehler].filter(([, n]) => n > 1).map(([id]) => id);
+}
+
+/** Werkzeuge aus Registry oder Katalog, die in keinem Thema stehen — muss leer sein, sonst unerreichbar. */
+export function werkzeugeOhneGruppe(): string[] {
+  const drin = new Set(WERKZEUG_GRUPPEN.flatMap((g) => g.werkzeuge.map((t) => t.id)));
+  return [...NACH_ID.keys()].filter((id) => !drin.has(id));
 }
 
 /**
