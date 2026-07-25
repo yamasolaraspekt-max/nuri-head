@@ -1628,3 +1628,58 @@ nativen Instanz oder Yama — Remotes bleiben `fork` + `backup-private`, **nie**
 **Ballbesitz → Generator** für AUF-12 (Batch 1 zuerst, Bericht und Abnahme **vor** Batch 2).
 Unverändert offen: AUF-1 und AUF-3 beim Evaluator, AUF-9 `BERICHTET`. Bei Yama liegen AUF-5/6/7/8/10/11
 sowie die drei Willensfragen in Fahrplan §6 und die drei in Auftrag §10 — **keine davon blockiert v2.**
+
+## ⇒ GENERATOR-BERICHT — Dashboard v2 Batch 1 UMGESETZT: `f6bdfc2` (25.07. 13:4x)
+Tafel-Posten **AUF-12**, Batch 1 (v2.1 + v2.2). **„umgesetzt", nicht „grün".** Batch 2 beginnt erst
+nach der Abnahme — so ist der Auftrag geschnitten.
+
+**Vier Gates, selbst gefahren, HEAD vor == nach der Messung:**
+`tsc:hausplaner` **0** · `schema:hausplaner:check` **0** (grün **ohne** Regen — kein Zod berührt) ·
+`test:hausplaner` **702/702 pass, 0 fail** · `build:hausplaner` **0**.
+**Testzahl vorher 696 → nachher 702** (+6, alle neu; kein Test von grün nach rot).
+
+**Commit `f6bdfc2`, vier Pfade:** `app/dashboard/panelTabs.ts` (neu) ·
+`__tests__/panelTabs.test.ts` (neu) · `app/HausplanerApp.tsx` · `public/hausplaner/hausplaner.js`.
+
+**v2.1 — Kontext-Options-Leiste (§19/UI-4).** Neue Zeile unter der Bedienleiste, vor dem Canvas;
+lokale Komponente neben `OpBtn` (keine neue Datei — Zerlegung ist v4/R3). Ein **einziger `switch`**
+über `activeToolId`: Bedingung und Steuerelement liegen im selben `case`. Der v5-Erweiterungspunkt
+(Deskriptor aus der Registry) ist **nur als Kommentar** vermerkt, nicht vorgebaut.
+
+**v2.2 — Panel-Reiter (§20/UI-5).** Vier Reiter als **Daten** in `app/dashboard/panelTabs.ts`,
+kein React zur Laufzeit (`StudioZustand` als `import type`). Panel: `role="tablist"/"tab"`,
+`aria-selected`, Pfeiltasten links/rechts, `tabIndex` folgt dem aktiven Reiter. Der aktive Reiter ist
+an **Schriftschnitt UND Unterstrich** erkennbar, nicht nur farblich (WCAG 1.4.1). `allgemein` zeigt
+den bestehenden Panelinhalt **unverändert**, inklusive der Auge/Schloss-Zeile aus v1. Aktiver Reiter
+ist ein **lokaler** `useState` — bewusst kein Store-Feld (v4-Frage F1).
+
+**Abnahmekriterium 12 — jede neue leere Fläche mit Zustand (Fläche → Zustand → Text):**
+| Fläche | Zustand | Text |
+|---|---|---|
+| Options-Leiste, `default`-Zweig (alle Werkzeuge außer Fenster/Tür) | `in_entwicklung` | „Für dieses Werkzeug sind noch keine Optionen hinterlegt." |
+| Panel-Reiter **Beziehungen** | `in_entwicklung` | „Zeigt später, woran ein Bauteil hängt: Wand ↔ Öffnung, Geschoss, Dachfläche." |
+| Panel-Reiter **Prüfungen** | `in_entwicklung` | „Zeigt später offene Befunde zum Bauteil (Prüfungscenter, v2.4)." |
+| Panel-Reiter **Historie** | `in_entwicklung` | „Zeigt später, welche Befehle dieses Bauteil verändert haben." |
+
+**Belege zu den übrigen Kriterien:**
+- **K3:** `PANEL_TABS` = **4** Einträge in der Reihenfolge `allgemein · beziehungen · pruefungen ·
+  historie`; sechs Tests belegen Anzahl, Reihenfolge, gültigen `StudioZustand` je Reiter, keine
+  Dublette, `undefined` statt Wurf bei unbekannter id — und dass **kein** Reiter „keine Daten" sagt.
+- **K4:** `git status` zeigt **0** Änderungen in `app/tools/*`, `store/*`, `domain/*`, `geometry/*`,
+  `renderers/*`. `toolPresentation.ts` wurde weder gelesen noch geschrieben — v2 bleibt außerhalb
+  des AUF-1-Sperrbereichs.
+- **K5:** Fenstertyp/Türtyp in der Kopfzeile **0×**, in der Options-Leiste **1×**, mit unverändertem
+  Optionsformat (`Label · Breite×Höhe mm`); der Platzierungspfad (`fensterTyp(fensterTypWahl)`)
+  ist unberührt (**1×**, gleiche Zeile wie vorher).
+- **K6:** rohe Farbwerte (`#…`, `rgb(`) in `app/` außerhalb `studioDaten.ts`: **0**.
+
+**Eine Ermessensentscheidung, die ich offenlege:** Der Auftrag skizziert `PanelTab { id, label,
+zustand }`. Ich habe ein viertes Feld `hinweis` ergänzt — den Satz, der laut §3 in den leeren
+Reitern stehen soll. Grund: als Datenfeld ist er testbar („kein Blindtext, kein ‚keine Daten'"), als
+JSX-Text wäre er es nicht. Wenn der Evaluator das als Abweichung von der Signatur wertet: das Feld
+ist additiv und ohne Rückbau entfernbar.
+
+**Nichts zurückzugeben** — es ist beim Bauen nichts außerhalb des Umfangs aufgetaucht.
+
+**Ballbesitz → Evaluator.** Batch 2 (v2.3 Projektbrowser, v2.4 Prüfungscenter, v2.5 Befehlspalette)
+liegt bereit, wird aber **nicht** begonnen, bis Batch 1 ein Votum hat.
