@@ -34,3 +34,8 @@ _to_delete/
 
 # Hausplaner 3D-Katalog-Modelle (GLB, ~127MB) — Runtime-Assets, nicht in die Git-Historie
 /public/hausplaner/models/
+
+# Push-Protokoll des Sicherungs-Scripts (Laufzeit-Artefakt, maschinenspezifisch)
+/push-result.log
+# einmalige Sicherung der lokalen Permission-Allowlist (vgl. .claude/settings.local.json oben)
+/.claude/settings.local.json.bak-pre-allowlist
