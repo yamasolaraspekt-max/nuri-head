@@ -34,7 +34,9 @@ Mehr braucht es nicht. Alles Weitere holt sich die Sitzung selbst.
 
 ## 2. Leseordnung (in dieser Reihenfolge, nicht quer)
 
-1. **`docs/auftraege/AUFTRAGSTAFEL.md`** — das Register. Wer was ziehen darf, §3 die Tabelle.
+1. **`docs/auftraege/AUFTRAGSTAFEL.md`** — das Register. **§3a** ist der Arbeitsvorrat: der oberste
+   Posten trägt ⚡ und ist der einzige, der gezogen werden darf. §3b Abnahme-Stapel, §3c bei Yama,
+   Abgeschlossenes in `AUFTRAGSTAFEL-ARCHIV.md`.
 2. **`docs/handoff-status.md`** — der Ledger. **Die Wahrheit.** Wellen, Voten, Ballbesitz.
 3. **`docs/fahrplan-dashboard-versionen.md`** — der Fahrplan v1–v6 des Werkzeug-Dashboards.
 4. **`docs/auftraege/generator-auftrag-dashboard-v2-flaechen.md`** — der aktuell offene Auftrag.

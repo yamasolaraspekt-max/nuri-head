@@ -3573,3 +3573,45 @@ möglich ist; im Arbeitsbaum steht es deshalb als einzige Änderung.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
 **Ballbesitz → Evaluator** (getrennte Sitzung, nicht diese).
+
+
+---
+
+## TAFEL AUFGERÄUMT — 39 Posten auf vier Tabellen (Planner, 25.07., `9ca73af`)
+
+**Anlass:** Yama, 25.07.: *„mach das"* — auf den Vorschlag, die auf 39 Zeilen gewachsene Tafel zu
+sortieren. Vorbefund: in einer Tabelle mit 39 Zeilen war der eine ⚡AKTIV-Posten nicht mehr auffindbar;
+Yama hatte das zweimal als *„ich habe keinen Überblick mehr"* gemeldet.
+
+**Was geschehen ist — kein Inhalt umgeschrieben, nur sortiert:**
+
+| Tabelle | Posten | Für wen |
+|---|---|---|
+| §3a Arbeitsvorrat | 11 | Generator/Evaluator — hier wird gezogen, oberster trägt ⚡ |
+| §3b Abnahme-Stapel | 10 | Evaluator — berichtet, Prüfung steht aus |
+| §3c Bei Yama | 11 | Willensfragen, blockieren die Kette nicht |
+| Archiv (eigene Datei) | 7 | `ERLEDIGT`/`ENTFÄLLT` — AUF-1·4·12·20·24·26·32 |
+
+**Methode (nachprüfbar, weil der Fehler vom Vormittag genau hier saß):** die 39 Zeilen wurden per
+Python **wortgleich** verschoben — kein `awk`, kein `sed`, nachdem eine `awk`-Zeile mit deutschen
+Anführungszeichen die Tafel am Vormittag auf 0 Byte gekürzt hatte (`12c3288`, wiederhergestellt
+`239cefd`). Vor dem Schreiben lief die Zuteilung gegen drei Zusicherungen: jede Zeile genau einem
+Ziel zugeordnet (39 = 11+10+11+7), jede Zeile im Ziel **enthalten**, jede Zeile in der jeweils
+anderen Datei **nicht** enthalten. Wäre eine davon gefallen, wäre nichts geschrieben worden.
+Nachmessung: Tafel 244 Zeilen / 32 AUF-Posten, Archiv 43 Zeilen / 7 AUF-Posten.
+
+**Zusätzlich entfernt — ein Block, der falsch geworden war:** der „Kritischer Pfad"-Kasten
+(AUF-1 → AUF-24 → AUF-21 → AUF-4, *„solange AUF-1 kein Votum hat, bewegt sich diese Kette nicht"*).
+AUF-1 und AUF-4 sind abgenommen, AUF-24 entfällt seit Yamas Deutsch-Entscheidung. Der Kasten hätte
+die nächste Sitzung auf eine Kette gehetzt, die es nicht mehr gibt.
+
+**Die Tafel ist dabei länger geworden, nicht kürzer** (227 → 244 Zeilen): vier Überschriften und drei
+zusätzliche Tabellenköpfe kosten mehr, als die sieben ausgelagerten Zeilen einsparen. Das ist bewusst —
+das Ziel war Auffindbarkeit, nicht Dateigröße. Wer die Tafel öffnet, sieht den aktiven Posten jetzt in
+der ersten Tabellenzeile statt an Position 35 von 39.
+
+**Archiv ist nicht endgültig.** Zeigt eine Nachmessung, dass ein abgenommener Posten doch offen ist,
+wandert die Zeile zurück — mit Begründung hier im Ledger. Das steht so auch im Kopf des Archivs.
+
+**Ballbesitz unverändert:** AUF-34 beim nativen Generator (⚡), AUF-37 offen, zehn Posten beim
+Evaluator, Push bei Yama.
