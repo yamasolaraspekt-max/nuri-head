@@ -3970,3 +3970,124 @@ führbar (iframe 1440/1024/375).
 **⚡ AKTIV rückt von AUF-34 auf AUF-36** (Funktionsvertrag der 110 Werkzeuge).
 **Ballbesitz:** Evaluator (drei Sichtproben + AUF-21/I1 + AUF-30) · Generator (AUF-36) ·
 Planner (Aufträge für AUF-33 und AUF-38) · Yama (Push).
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-36 Funktionsvertrag der 110 Werkzeuge
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `5d98131` (Code) · `9a4623b` (Bundle) ·
+`d106445` (Nachbesserung) · `368f2d7` (Bundle) · **Status:** **umgesetzt**, nicht abgenommen.
+**Ballbesitz → Evaluator.**
+
+**Zum Auftrag:** Ich hatte AUF-36 mit `ebffad7` **ohne Auftragsdatei** gezogen und das offengelegt.
+Der Planner hat sie **nachgereicht**, während ich baute. Ich habe sie gegen das Gebaute geprüft und
+danach gearbeitet — eine Stelle hat mich das umbauen lassen (siehe „Was der Auftrag anders wollte").
+
+### Was gebaut wurde
+
+Die 110 Werkzeuge tragen ihren Funktionsvertrag als Daten: `commandId · familie · eingaben ·
+ergebnisse · vorbedingungen · seiteneffekte · umkehrbar · protokollpflichtig · dienstMethode`.
+Erzeugt aus `src/tool-registry.json` (Feld `code`), deutsche ids über die führende Namenstabelle.
+
+**Die drei Grenzen aus §3 sind eingehalten und testverriegelt:**
+
+- **(a) keine zweite Aktivierungs-Engine** — die 12 Vorbedingungen werden in
+  `ToolActivationRule` übersetzt und von `resolveToolState` ausgewertet. Test: genau **eine**
+  Funktion namens `resolveToolState`, **null** Dateien mit `resolveDisabledReasons`.
+- **(b) keine zweite Ausführungsschicht** — `runTool` kommt im Repo **nicht** vor, `dienstMethode`
+  wird **nirgends** aufgerufen. Beides gegrept, beides Test.
+- **(c) kein erfundener Kontext** — siehe die Tabelle unten.
+
+### Die Zuordnungstabelle (§4.2), vollständig — keine Zeile „sonstige"
+
+| Vorbedingung | abgebildet auf | heute erfüllbar? | Grund, den der Nutzer liest |
+|---|---|---|---|
+| `project.open` | `capability contains project.open` | ja | „Es ist kein Plan geöffnet." |
+| `viewport.ready` | `capability contains viewport.ready` | ja | „Die Zeichenfläche ist noch nicht bereit." |
+| `activeLevel.exists` | `capability contains activeLevel.exists` | ja | „Kein aktives Geschoss." |
+| `hostWall.exists` | `capability contains hostWall.exists` | ja | „Dafür braucht es zuerst eine Wand, in die das Bauteil gesetzt wird." |
+| `selection.count >= 1` | `selection-count greater-than 0` | ja | „Dafür muss zuerst etwas ausgewählt sein." |
+| `selection.hasRoofFace` | `selection-type contains roof` | ja | „Dafür muss eine Dachfläche ausgewählt sein." |
+| `permission.edit` | `permission contains Hausplaner,update` | ja | „Keine Berechtigung zum Bearbeiten." |
+| `permission.import` | `permission contains Hausplaner,import` | **nein** | „Keine Berechtigung zum Importieren." |
+| `component.thermalRelevant` | `capability contains component.thermalRelevant` | **nein** | „Nur für thermisch relevante Bauteile — diese Angabe kommt aus der Bauphysik-Auslegung." |
+| `heatingLoad.approved` | `capability contains heatingLoad.approved` | **nein** | „Dafür muss die Heizlast berechnet und freigegeben sein." |
+| `heatEmitters.sized` | `capability contains heatEmitters.sized` | **nein** | „Dafür müssen die Heizflächen ausgelegt sein." |
+| `heatingNetwork.connected` | `capability contains heatingNetwork.connected` | **nein** | „Dafür muss das Heiznetz verbunden sein." |
+
+**Kein neues Feld im `AktivierungsKontext`.** Die vier messbaren Tatsachen fließen über die
+**vorhandene** `capabilities`-Liste — der dafür gebaute Haken, der bisher leer lag. `HausplanerApp`
+füllt ihn aus dem, was sie ohnehin weiß: Szene geladen · aktives Geschoss · Wände im Geschoss ·
+Zeichenfläche gemountet.
+
+**Warum die fünf unerfüllbaren trotzdem eine Regel haben:** Sie sind nicht „hart false", sondern
+schlicht nicht in der Liste. Trägt eines Tages die Auslegung eine freigegebene Heizlast ein, geht
+**dieselbe** Regel von selbst auf grün — kein Sonderweg, kein späterer Umbau.
+
+### Was der Auftrag anders wollte — und wo ich abweiche
+
+**§4.1 verlangt die Vertragsfelder additiv an `ToolDefinition`.** Ich habe sie in ein **eigenes
+Modul neben** die Werkzeugdefinition gelegt (`werkzeugVertrag.ts`, verbunden über die id).
+**Grund:** die I2-Zusage im Kopf von `paketAdapter.ts` lautet wörtlich *„Kein Feld von
+`ToolDefinition` wird geändert, keins ergänzt"* — die Konflikt-Regel der Bauordnung. Beide Wege
+erfüllen §4.1s eigentliche Forderung (die Felder sind da, additiv, ohne Bedeutungsänderung); dieser
+hier bricht zusätzlich keine bestehende Zusage. Ein Test verriegelt, dass die sechs Vertragsfelder
+**nicht** in `toolTypes.ts` auftauchen. *(Der Auftrag erlaubt den abweichenden Schnitt bei
+Begründung — hier ist sie.)*
+
+### Die Kriterien, Rohausgabe
+
+| # | Kriterium | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` | **0 / 0 / 0** — **830 → 853**, **kein Test verschwunden** (`comm -23` leer) |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen** in beiden Code-Commits |
+| 3 | genau eine Aktivierungs-Engine | Test grün: 1× `resolveToolState`, 0× zweite Sperrgrund-Quelle |
+| 4 | `runTool` kommt nicht vor | Test grün, dazu: `dienstMethode` wird nirgends aufgerufen |
+| 5 | Bijektion 9+101=110 | 110 Verträge, je Werkzeug genau einer, kein Vertrag ohne Werkzeug |
+| 6 | alle zwölf zugeordnet | Tabelle oben; `unbekannteVorbedingungen()` leer |
+| 7 | die unerfüllbaren begründet | Test: kein Grund leer, keiner endet auf „folgt"/„in Kürze", keiner nennt Vokabular statt Satz |
+| 8 | Mutations-Gegenbeweis | `activeLevel.exists` aus dem Raum-Vertrag entfernt ⇒ **1 Test rot**; zurückgebaut ⇒ `diff` leer, 853/853 |
+| 9 | `public/*` im Code-Commit null Zeilen, Bundle als eigener zweiter Commit | erfüllt, **zweimal**: `5d98131`→`9a4623b`, `d106445`→`368f2d7` |
+| 10 | sichtbar ⇒ Sichtprobe + Rebuild-Beleg | siehe unten |
+
+**Rebuild-Beleg** (`368f2d7`, 1.391.384 Bytes, 25.07. 21:23, gebaut von `d106445`):
+`grep -c 'Kein aktives Geschoss'` = 1 · `'Keine Berechtigung zum Importieren'` = 1 ·
+`'Heizlast berechnet und freigegeben'` = 1 · `'WallCommand'` = 1 ·
+`'Voraussetzung fehlt — Grund im Tooltip'` = 1.
+
+### Die Sichtprobe hat einen Fehler gefunden, den das Gate nicht hatte
+
+Bei 1440 px, Bereich **Heizung**, Menü „Heizung": „Hydraulischer Abgleich" und „Wärmepumpe" waren
+korrekt ausgegraut — **aber die Zeile las sich „in Entwicklung"**, nicht „gesperrt".
+
+**Ursache, gemessen:** `werkzeugAnzeige` gab `gesperrt` nur zurück, wenn das Werkzeug **angeheftet
+oder Pflichtwerkzeug** war; ein Katalog-Werkzeug der Zone `weitere` fiel durch. Der Code
+widersprach damit **seiner eigenen dokumentierten Rangfolge** („`gesperrt` vor `angeheftet`").
+Folgenlos war das, solange Katalog-Werkzeuge **nie** gesperrt sein konnten — bis dieser Auftrag
+ihnen Vorbedingungen gab. Ausgerechnet dort, wo AUF-36 Ehrlichkeit herstellen soll, log die Anzeige.
+
+**Behoben in `d106445`:** `gesperrt` schlägt jeden anderen Anzeigezustand; `ANZEIGE_TEXT` von
+„angeheftet, aber Voraussetzung fehlt" auf „Voraussetzung fehlt — Grund im Tooltip" gezogen (der
+Zustand hängt nicht mehr an der Anheftung). **Zwei Tests verriegeln den Fall**, Gegenprobe geführt
+(Fix zurückgedreht ⇒ 1 Test rot). Nachgemessen im Browser:
+`„Voraussetzung fehlt — Grund im Tooltip: Dafür muss das Heiznetz verbunden sein."`
+
+**Die Lehre gehört in den Prozess, nicht nur in diesen Bericht:** Ein Gate aus 853 Tests hat den
+Fehler nicht gesehen, weil kein Test den Fall abdeckte, den es vorher nicht geben konnte. Die
+Sichtprobe hat ihn in der ersten Minute gefunden. **„Sichtprobe gehört in die Abnahme, nicht
+danach" ist keine Formalie** — hier hat sie einen echten Mangel gefangen.
+
+### Zurückgegeben statt heimlich mitgebaut (§6)
+
+1. **`permission.import` hat kein Recht im CRM.** Gemessen kennt `routes/web.php` nur
+   `Hausplaner,read` und `Hausplaner,update`. Die **acht** Import-Werkzeuge sind damit gesperrt mit
+   dem Grund „Keine Berechtigung zum Importieren." Ob Import an `update` hängt oder ein eigenes
+   Recht bekommt, ist eine **Rechte-Entscheidung** — **an Planner/Yama**.
+2. **Die vier Fach-Vorbedingungen** brauchen einen Auslegungsstand, den der Planer nicht führt
+   (L2/L3). Sie sind benannt, begründet und sichtbar gesperrt — **kein Beifang, kein Mitbauen**.
+3. **`viewport.ready` ist heute eine Vereinfachung:** die Fähigkeit wird gesetzt, sobald
+   `HausplanerApp` rendert. Einen echten Renderer-Bereitschaftszustand führt der Store nicht — das
+   wäre der eigene Posten, den §6 meint. Solange keine Ladeanimation existiert, ist die
+   Vereinfachung folgenlos; sie steht hier, damit sie niemand später für gemessen hält.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
