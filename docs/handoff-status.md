@@ -3615,3 +3615,111 @@ wandert die Zeile zurück — mit Begründung hier im Ledger. Das steht so auch 
 
 **Ballbesitz unverändert:** AUF-34 beim nativen Generator (⚡), AUF-37 offen, zehn Posten beim
 Evaluator, Push bei Yama.
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-34 Arbeitsbereiche
+
+**Rolle:** Generator (nativ, Mac) · **Branch:** `auto/hausplaner-integration` · **Commit:** `8b2b9e6`
+**Basis:** `1c81323` · **Status:** **umgesetzt** — nicht abgenommen. Ballbesitz → Evaluator.
+
+### Was gebaut wurde
+
+Die Leiste zeigt nur noch die Themen des **gewählten Arbeitsbereichs**. Darüber ein Wähler mit den
+fünf Bereichen aus Yamas Entwurf; darunter, in einer **eigenen Zeile**, die Themen-Gruppen.
+
+**Nachtrag 2 ist umgesetzt: gruppiert wird nach den 15 Themen, nicht nach den 22 Kategorien.** Die
+Themen sind als Datenmodul `app/tools/werkzeugThemen.ts` abgelegt, erzeugt aus
+`hausplaner_svg_tool_functions.zip` → `src/tool-themes.json` über die führende Namenstabelle. Die
+**22 Kategorien bleiben als Datenfeld** an jedem Werkzeug (`group`/`groupId`) — Trail, aber keine
+zweite Gruppierung.
+
+**Die Bindung Thema → Bereich steht an genau einer Stelle** (`dashboard/arbeitsbereiche.ts`). Aus ihr
+leitet `paketAdapter` `supportedWorkspaces` je Werkzeug ab. Der Grund ist kein Schönheitsgrund: gäbe
+die Leiste eine andere Antwort als `resolveToolState`, sähe der Nutzer Werkzeuge, die sich nicht
+benutzen lassen — oder umgekehrt. Ein Test hält beide Antworten aneinander.
+
+### Die zwölf Kriterien, Rohausgabe
+
+| # | Kriterium | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` (ohne Regen) · `test` · `build` | **Exit 0 / 0 / 0 / 0** — `hausplaner.js 1.343,91 kB` |
+| 2 | Testzahl vorher/nachher, Namen-Mengen verglichen | **810 → 830**, +22 neu, **2 ersetzt** (siehe unten) |
+| 3 | 8 durchgängige Gruppen in jedem Bereich | **7 durchgängige Themen** (Nachtrag 2 ersetzt die 8 Gruppen durch 7 Themen) — Test grün in allen fünf Bereichen |
+| 4′ | je Bereich die erwartete Themenmenge | fünf Tests, fest verdrahtet, grün |
+| 5′ | Summe = 15 Themen / 110 Werkzeuge, keine Dublette | grün; `themenOhneBereich()` leer, jedes Registry- **und** Katalog-Werkzeug in genau einem Thema |
+| 6 | angeheftetes Werkzeug überlebt den Bereichswechsel | grün — die linke Leiste kennt keinen Bereichsfilter, der Test schließt ihn aus |
+| 7 | Gegen-Beweis selbst geführt | `10-heizung-tga` als durchgängig markiert ⇒ **5 Tests rot** (`fail 5`, exit 1). Zurückgebaut ⇒ `diff` leer, wieder `pass 830 / fail 0` |
+| 8 | null Zeilen in `store/*`, `domain/*`, `geometry/*`, `renderers/*`, `public/*` | **0** |
+| 9 | 0 rohe Farbwerte in geänderten Zeilen | **0 Treffer** |
+| 10 | Sichtprobe 1440 / 1024 px, Gruppenzeile bei 1440 in **einer** Zeile | **1 Zeile bei 1440, 1371 UND 1024 px** (11 Gruppen im Bereich Architektur) |
+| 11 | kein waagerechter Überlauf bei 1371 px | `scrollWidth = clientWidth` bei **1440 (1440=1440) · 1371 (1371=1371) · 1024 (1024=1024)** |
+| 12 | kein Wort bricht im Menü um | Menü **334 px** breit, alle 15 Einträge in „Bearbeiten" **15 px hoch** = einzeilig; schmalstes Label „Kopieren" 156 px |
+
+### Die Entscheidung zu Kriterium 12
+
+**Zwei Änderungen, nicht eine.** Mindestbreite 260 → **320 px** *und* der Zustandstext
+(„in Entwicklung") wandert **unter** das Label statt daneben. Die Breite allein hätte nicht
+gereicht: Label, Kürzel-Kästchen, Zustandstext und Stern teilten sich eine Zeile, dem Label blieben
+~60 px, und `overflowWrap: 'anywhere'` brach es dann buchstabenweise um. Jetzt steht `break-word` —
+das bricht nur, wenn ein **ganzes Wort** nicht passt. Das Kürzel bleibt neben dem Label; es ist kurz
+und gehört sichtbar zur Zeile, zu der es gehört.
+
+### Die Entscheidung, die im Auftrag so nicht stand
+
+**Die Gruppenzeile hat eine eigene Zeile bekommen.** Erste Messung mit allem übrigen im selben
+Streifen: bei 1440 px **zwei Zeilen** — Kriterium 10 verfehlt, obwohl von 22 auf 11 Gruppen
+reduziert. Ursache gemessen: die Gruppen teilten sich die Zeile mit ~15 Icon-Knöpfen der Blöcke
+Ansicht/Bearbeiten/Messen. Nach der Trennung: **eine Zeile bei allen drei Breiten**. Das ist eine
+Layout-Änderung an einer Fläche, die der Auftrag nur mittelbar nennt — sie steht hier ausdrücklich,
+statt sie unter „Gruppenzeile" zu verbuchen.
+
+### Kanten 1–5
+
+- **Kante 1 (Bereich ohne viel Inhalt):** Der dünnste Bereich (`Bauphysik`, `Heizung`, `Elektro·PV`)
+  trägt **8 Gruppen und ≥ 50 Werkzeuge** — die 7 durchgängigen tragen ihn. Er wirkt nicht leer;
+  ein Test hält die Untergrenze fest.
+- **Kante 2 (Angeheftetes):** bleibt. Anheften ist persönlich und schlägt den Bereichsfilter; der
+  Filter greift ausschließlich in der oberen Gruppenzeile. Test schließt einen Bereichsfilter auf
+  der linken Leiste aus.
+- **Kante 3 (kein stilles Abwählen):** Der bestehende Rückfall-Effekt („Werkzeug fällt aus ⇒ zurück
+  auf Auswahl") hätte bei jedem Bereichswechsel zugeschlagen — **genau das verbietet die Kante.**
+  Er ist jetzt ausgenommen, wenn *nur* der Bereich nicht passt. Gemessen im Browser: `Wand` gewählt,
+  Wechsel auf `Heizung` ⇒ Kontextleiste zeigt **„Wand · Gehört zum Arbeitsbereich Architektur —
+  hier nicht verfügbar. Bereich oben wechseln." + Badge „Vorauss. fehlt"**. Vorher stand der Grund
+  nur im `title`, also faktisch nirgends.
+- **Kante 4 (überlebt Neuladen):** `localStorage`, Schlüssel `hausplaner.arbeitsbereich.v1`, **nie**
+  im Szenendokument. Unbekannter Wert wird verworfen statt übernommen. Beleg nebenbei: in der ersten
+  Messrunde schleppte sich der Bereich zwischen den Fensterbreiten mit — die Speicherung greift.
+- **Kante 5 (schmale Fenster):** kein Reiter des Wählers gekappt bei 1440/1371/1024; die
+  Beschriftungen brechen um.
+
+### Testnamen: zwei ersetzt, keine Deckung verloren
+
+| vorher | nachher | Grund |
+|---|---|---|
+| `22 Gruppen, Summe 110 — jedes Werkzeug genau einmal` | `15 Gruppen, Summe 110 — jedes Werkzeug genau einmal` | dieselbe Bilanz, neue Zahl (22 Kategorien ⇒ 15 Themen) |
+| `Kante 2 — Ein-Eintrag-Gruppen sind zulässig und bewusst: TGA und Sanitär` | `AUF-34: keine Ein-Eintrag-Gruppe mehr — genau das war der Mangel` | die geprüfte Tatsache ist weg: `TGA`/`Sanitär` sind in `10-heizung-tga` (6) und `11-bad-kueche` (7) aufgegangen |
+
+### Zwei Befunde nebenbei
+
+1. **Die führende Namenstabelle hatte zwei defekte Zellen** — verschluckter Anfangs-Umlaut:
+   `ffnung` statt `oeffnung` (Zeile 41), `bergabepaket` statt `uebergabepaket` (Zeile 98). Der Code
+   führt beide seit AUF-31 korrekt; die Tabelle hinkte hinterher. **Korrigiert und mit Nachtrag
+   vermerkt** — ohne die Korrektur hätte die Themen-Zuordnung zwei Werkzeuge auf ids abgebildet, die
+   es nicht gibt. (Der Befund war schon einmal gemeldet, aber nicht nachgezogen worden.)
+2. **Die Sichtprobe lief erneut nicht auf `/objekt/203`**, sondern gegen dasselbe gebaute Bundle über
+   eine temporäre statische Seite (`php -S`, `?fixture=u-dach`) — die Route steht hinter `auth`, und
+   ein Nutzer/Passwort anzulegen wäre ein Schreiben auf Bestandsdaten. Beide Hilfsdateien sind
+   entfernt, der Arbeitsbaum ist sauber.
+
+### Die drei Lücken — zurückgegeben, nicht gelöst
+
+1. **„Dach"** ist im Entwurf ein Bereich, im Paket aber weder Kategorie noch Thema; die
+   Dachwerkzeuge liegen in `07-architektur`. Ein Bereich „Dach" hieße, ein Thema aufzuteilen.
+2. **„Heizlast"** ist ein Rechenweg (L2/L3), kein Werkzeugbereich.
+3. **`Bad`/`Küche`** hängen als Thema `11-bad-kueche` vorläufig an **Architektur**. Ob sie einen
+   eigenen Bereich „Ausbau" bekommen, ist Yamas Willensfrage — sie blockiert nichts.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+**Ballbesitz → Evaluator** (getrennte Sitzung, nicht diese).
