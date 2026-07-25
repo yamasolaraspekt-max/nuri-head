@@ -75,8 +75,8 @@ test('Auflage 1: kein Katalog-Werkzeug ist unbemerkt in die Leiste gerutscht', (
 });
 
 // --- 5) Auflage 4 des A1-Votums: `herkunft` ist für alle 63 Regeln verriegelt ------------------
-test('Auflage 4: jede der 63 Regeln trägt eine herkunft, die der Wirklichkeit entspricht', () => {
-  assert.equal(TOOL_PRESENTATION_RULES.length, 63);
+test('Auflage 4: jede der 119 Regeln trägt eine herkunft, die der Wirklichkeit entspricht', () => {
+  assert.equal(TOOL_PRESENTATION_RULES.length, 119);
   for (const r of TOOL_PRESENTATION_RULES) {
     const inRegistry = toolNach(r.toolId) !== undefined;
     const imKatalog = katalogTool(r.toolId) !== undefined;

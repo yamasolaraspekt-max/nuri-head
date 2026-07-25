@@ -49,12 +49,16 @@ test('jede Fähigkeit hat eine gültige Gruppe', () => {
   for (const f of FAEHIGKEITEN) assert.ok(gruppen.has(f.gruppe), `${f.id}: gültige Gruppe (${f.gruppe})`);
 });
 
-test('CAD-Teilmenge remappt, literale DTP-Tools bleiben draußen (Produkt-Scope)', () => {
+test('AUF-28: die falschen Versprechen sind aus der Navi verschwunden', () => {
+  // Vorher zeigte die Navi 15 `cad-*`-Einträge (Links ausrichten, Hand, Zoom, Freie Transformation …)
+  // mit Zustand „in Entwicklung" — anklickbar, ohne dass ein Klick etwas tat. Sie stammten aus der
+  // Zone `weitere`, und die ist seit dem Katalog-Tausch (I2) leer.
   const ids = new Set(FAEHIGKEITEN.map((f) => f.id));
   for (const id of ['cad-rotate', 'cad-scale', 'cad-align-left', 'cad-measure', 'cad-zoom', 'cad-layers-panel']) {
-    assert.ok(ids.has(id), `CAD-Werkzeug ${id} übernommen`);
+    assert.ok(!ids.has(id), `${id} war ein falsches Versprechen und darf nicht mehr in der Navi stehen`);
   }
-  for (const id of ['type', 'pen', 'preflight', 'swatches-panel', 'pages-panel', 'cad-type', 'cad-pen', 'cad-preflight', 'cad-swatches-panel']) {
+  assert.equal([...ids].filter((id) => id.startsWith('cad-')).length, 0);
+  for (const id of ['type', 'pen', 'preflight', 'swatches-panel', 'pages-panel']) {
     assert.ok(!ids.has(id), `DTP-Tool ${id} darf NICHT in der Registry sein`);
   }
 });

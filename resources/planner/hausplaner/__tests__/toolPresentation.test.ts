@@ -23,10 +23,11 @@ import { TOOL_KATALOG } from '../app/tools/toolCatalog';
 import { faehigkeitenNach, doppelteIds } from '../app/tools/faehigkeiten';
 
 // --- 1) Vollständigkeit ---------------------------------------------------------------------
-test('jede Registry- und Katalog-id hat genau eine Regel (9 + 54 = 63, keine Dublette)', () => {
+test('jede Registry- und Katalog-id hat genau eine Regel (9 + 110 = 119, keine Dublette)', () => {
+  // I2: der Katalog ist seit dem Tausch das 110er-Fachpaket (vorher 54 InDesign-Einträge).
   assert.equal(TOOL_DEFINITIONS.length, 9);
-  assert.equal(TOOL_KATALOG.length, 54);
-  assert.equal(TOOL_PRESENTATION_RULES.length, 63);
+  assert.equal(TOOL_KATALOG.length, 110);
+  assert.equal(TOOL_PRESENTATION_RULES.length, 119);
 
   const ids = TOOL_PRESENTATION_RULES.map((r) => r.toolId);
   assert.equal(new Set(ids).size, ids.length, 'keine doppelte toolId');
@@ -37,11 +38,14 @@ test('jede Registry- und Katalog-id hat genau eine Regel (9 + 54 = 63, keine Dub
   assert.deepEqual(regelloseWerkzeuge(), [], 'kein Werkzeug ohne Zone');
 });
 
-test('Zonen-Aufteilung entspricht dem gemessenen Ist-Zustand (7 / 2 / 15 / 39)', () => {
+test('Zonen nach I2: 7 fix · 2 kontext · 0 weitere · 110 versteckt', () => {
   assert.equal(zoneTools('fix').length, 7);
   assert.equal(zoneTools('kontext').length, 2);
-  assert.equal(zoneTools('weitere').length, 15);
-  assert.equal(zoneTools('versteckt').length, 39);
+  // DER Punkt von AUF-28: `weitere` ist LEER. Vorher standen dort 15 Werkzeuge, die die Navi
+  // anzeigte, ohne dass ein Klick etwas tat — falsche Versprechen. Die neuen 110 versprechen
+  // nichts, solange I3 sie nicht einordnet.
+  assert.equal(zoneTools('weitere').length, 0, 'kein Werkzeug ohne Handler in der sichtbaren Zone');
+  assert.equal(zoneTools('versteckt').length, 110);
 });
 
 // --- 2) Keine verwaisten Regeln (+ Rot-Gegenprobe) -------------------------------------------
@@ -56,7 +60,7 @@ test('GEGENPROBE: eine erfundene id in einer lokalen Regel-Kopie wird als verwai
   ];
   assert.deepEqual(verwaisteRegelnIn(kopie), ['gibt-es-nicht']);
   // und sie taucht NICHT in der Zone auf (auslassen statt werfen)
-  assert.equal(zoneToolsIn(kopie, 'weitere').length, 15);
+  assert.equal(zoneToolsIn(kopie, 'weitere').length, 0);
 });
 
 // --- 3) Invariante Fix-Zone (+ Rot-Gegenprobe) -----------------------------------------------
@@ -86,40 +90,38 @@ test('GEGENPROBE: wand auf versteckt gesetzt ⇒ Fix-Invariante bricht', () => {
 });
 
 // --- 4) Kuratierungs-Beweis -------------------------------------------------------------------
-test('die DTP/Layout-Werkzeuge liegen namentlich in der versteckten Zone (39 Stück)', () => {
-  const versteckt = zoneTools('versteckt').map((t) => t.id);
+test('die DTP-Reste sind aus den Regeln verschwunden — nicht nur versteckt', () => {
+  const alle = TOOL_PRESENTATION_RULES.map((r) => r.toolId);
   for (const id of [
     'type', 'page', 'preflight', 'swatches-panel', 'pages-panel',
-    'rectangle-frame', 'pen', 'note', 'object-style',
+    'rectangle-frame', 'pen', 'note', 'object-style', 'eyedropper',
   ]) {
-    assert.ok(versteckt.includes(id), `${id} gehört in die versteckte Zone`);
+    assert.ok(!alle.includes(id), `${id} ist ein DTP-Rest und darf in keiner Zone mehr auftauchen`);
   }
-  assert.equal(versteckt.length, 39);
+  const versteckt = zoneTools('versteckt').map((t) => t.id);
+  assert.equal(versteckt.length, 110);
   // kein Datenverlust: der Katalog trägt sie weiterhin
   for (const id of versteckt) {
     assert.ok(TOOL_KATALOG.some((t) => t.id === id), `${id} bleibt als Katalog-Eintrag erhalten`);
   }
 });
 
-test('Registry-Vorrang: verschiedene ids werden nicht vereinheitlicht (auswahl ≠ selection)', () => {
+test('Registry-Vorrang: verschiedene ids werden nicht vereinheitlicht (auswahl ≠ select)', () => {
+  // Das deutsche Registry-Werkzeug und das gleichbedeutende Paket-Werkzeug bleiben getrennt —
+  // Yamas Entscheid „alles deutsch, keine Umbenennung" (14e6346) gilt für die Registry-ids.
   assert.equal(praesentation('auswahl')?.herkunft, 'registry');
-  assert.equal(praesentation('selection')?.herkunft, 'katalog');
+  assert.equal(praesentation('select')?.herkunft, 'katalog');
   assert.equal(praesentation('auswahl')?.zone, 'fix');
-  assert.equal(praesentation('selection')?.zone, 'versteckt');
+  assert.equal(praesentation('select')?.zone, 'versteckt');
 });
 
 // --- 5) Regressionsanker: die Navi verhält sich unverändert ------------------------------------
 test('Regressionsanker: faehigkeitenNach(werkzeuge) bleibt nach der Fachzuordnung in derselben Reihenfolge', () => {
   // `decke` wurde nach Yamas Fachentscheidung bewusst nach `bau` verschoben; der übrige Stand bleibt
   // hart hinterlegt aus Registry-Reihenfolge + bisheriger CAD_TEILMENGE.
-  const vorher = [
-    'auswahl', 'loeschen', 'duplizieren',
-    'cad-rotate', 'cad-scale', 'cad-free-transform',
-    'cad-align-left', 'cad-align-center', 'cad-align-right',
-    'cad-align-top', 'cad-align-middle', 'cad-align-bottom',
-    'cad-distribute-horizontal', 'cad-distribute-vertical',
-    'cad-hand', 'cad-zoom', 'cad-measure', 'cad-layers-panel',
-  ];
+  // I2/AUF-28: die 15 `cad-*`-Einträge sind WEG — sie kamen aus der Zone `weitere`, und die ist
+  // seit dem Katalog-Tausch leer. Übrig bleiben die echten Registry-Werkzeuge der Gruppe.
+  const vorher = ['auswahl', 'loeschen', 'duplizieren'];
   assert.deepEqual(faehigkeitenNach('werkzeuge').map((f) => f.id), vorher);
 });
 
