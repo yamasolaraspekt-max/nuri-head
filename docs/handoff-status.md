@@ -4856,3 +4856,62 @@ dort sprang es vorher zurück. **Der Verschub bleibt.** Dieselbe Zeigerposition 
    geschützt sind.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-47: Speichern lügt nicht mehr
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `79bf47c` (Code) · `fca2fc6` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+**Ohne Auftragsdatei** — die Tafelzeile war der Auftrag.
+
+### Was falsch war
+
+Zwei Aussagen, die vorher **eine** waren: *„nichts zu speichern"* beantwortet `speicherStatus` —
+*„hier kann gar nicht gespeichert werden"* steht in `speichernUrl` und **wurde nie gelesen**.
+Deshalb war der Knopf auf der Testfläche grün, primär und unbedingt aktiv, und die Plakette meldete
+„Gespeichert · Rev. 1" — direkt neben dem Hinweis „Testfläche — wird NICHT gespeichert" in
+derselben Kopfzeile.
+
+`speicherAnzeige(status, kannSpeichern)` ist rein und liefert Text, Gewichtung, Knopf-Sperre und
+den **Grund** im Tooltip. Farben bleiben in der Oberfläche — die Regel enthält keinen Farbwert und
+keinen Token-Zugriff.
+
+**Der `save()`-No-Op ist unangetastet.** Er war gewollt; falsch war nur, ihn wie einen Erfolg
+aussehen zu lassen. Ein Test verriegelt, dass die Stelle im Store unverändert ist.
+
+### Rohausgabe
+
+| # | Prüfung | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` · `build` | **0 / 0 / 0 / 0** — **938 → 948**, **0 verschwunden** |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen** |
+| 3 | Mutations-Gegenbeweis | Fähigkeitsprüfung ausgehebelt (`if (false)`) ⇒ **2 Tests rot**; zurückgebaut ⇒ `diff` leer, 948/948 |
+| 4 | `public/*` im Code-Commit null, Bundle eigener zweiter Commit | erfüllt: `79bf47c` → `fca2fc6` |
+| 5 | Rebuild-Beleg (`fca2fc6`, 1.409.735 Bytes, 25.07. 23:16) | `grep -c 'Testfläche — wird nicht gespeichert'` = 1 · `'kein Speicherziel'` = 1 |
+
+**Sichtprobe, 1440 px, Testfläche:**
+
+```
+Kopfzeile:   Hausplaner · Solar Aspekt · Testfläche — wird nicht gespeichert
+Knopf:       gesperrt
+Tooltip:     „Diese Fläche hat kein Speicherziel. Der Plan am Objekt wird gespeichert,
+              diese Testfläche nicht."
+„Gespeichert" im Text:  nein          Revisionsnummer sichtbar:  nein
+```
+
+### Der Fund, den erst die Sichtprobe gebracht hat: es gibt ZWEI Statusanzeigen
+
+Nach meiner ersten Fassung waren Knopf und Planer-Plakette ehrlich — **die Studio-Kopfzeile sagte
+weiter „Gespeichert · Rev. 1"**. Sie hat eine **eigene** Statustabelle in `HausplanerStudio.tsx`,
+und genau die hatte Yama in der Sichtprobe gesehen (daher das „· Rev. 1" in seiner Meldung).
+
+Beide lesen jetzt dieselbe Regel; die zweite Tabelle ist weg. Das **„· Rev. N"** hängt seither an
+der Fähigkeit: ohne Speicherziel gibt es keine gespeicherte Revision, also wird auch keine
+angezeigt. Ein Test hält beides fest.
+
+**Die Lehre ist dieselbe wie bei AUF-36 und AUF-33:** Das Gate war grün, während der Widerspruch im
+Bild stand. Gefunden hat ihn die Sichtprobe — und zwar erst die **zweite**, nach der ersten
+Korrektur.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
