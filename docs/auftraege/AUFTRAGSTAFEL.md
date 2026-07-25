@@ -61,6 +61,24 @@ Und `-m` steht **vor** dem `--`, sonst frisst der Pathspec den Text.
 
 ---
 
+
+## 1b. Zwei Nummernkreise — Legende (damit niemand mehr sucht)
+
+Es laufen **zwei** Bezeichnungen nebeneinander. Sie meinen dasselbe:
+
+| Welle / Slice | Tafelposten | Gegenstand |
+|---|---|---|
+| **Welle A1** | **AUF-1** | Werkzeug-Präsentationsschicht (`c0ffe31`) — abgenommen 25.07. |
+| **Welle A2** | **AUF-4** | Leiste liest die Präsentationsschicht (`acdb987`) — **Abnahme offen** |
+| **Welle A3** | noch kein Posten | Kontext-Zone + Anheften, im A2-Auftrag §3 abgetrennt |
+| **T1** | AUF-2 / AUF-3 | Token-Konsolidierung + `decke → bau` (`9ec3b25`) |
+| **T2a / T2b** | AUF-9 / AUF-10 | Farbwert-Kommentare · Palette in `geometry/` |
+| **Dashboard v2** | AUF-12 | Batch 1 (`f6bdfc2`) · Batch 2 (`5092b10`) |
+| **N1 / N2 / N3** | AUF-15a / AUF-16 / AUF-19 | Nacharbeit aus dem Batch-1-Votum |
+| **I1 / I2 / I3** | AUF-21 | Icons ablegen · Katalog tauschen · Anheften + Zonen |
+| **L1 … L7** | Layout-Fahrplan | **L1 = Welle A2 = AUF-4** · L4 = AUF-25 |
+
+**Merksatz: „Welle A2", „L1" und „AUF-4" sind derselbe Posten.**
 ## 2. Statuswerte (mehr braucht es nicht)
 
 | Status | heißt |
