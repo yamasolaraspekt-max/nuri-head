@@ -1099,3 +1099,264 @@ die sechs T1-Dateien liegen unverändert gestaged im Index und warten weiterhin 
 **Lehre für alle Instanzen:** vor `git commit` **`git status --porcelain` lesen und die erste
 Spalte auswerten** — ein fremder, bereits gestagter Baum ist der Normalfall in diesem Repo, nicht
 die Ausnahme. Sicher ist nur `git commit -- <eigene Pfade>` mit ausdrücklicher Pfadangabe.
+
+## ⇒ EVALUATOR (frische Instanz) — ZWEI ERGÄNZUNGEN ZUR A1-ABNAHME (Yama, 25.07., bindend)
+Gilt für die Wiederholung nach `auftraege-0-bis-5.md` Auftrag 1. Ergänzt N1–N7, ersetzt nichts.
+
+**E1 — Messreihenfolge: erst messen, dann lesen.** Erhebe deine eigenen Zahlen, **bevor** du den
+Generator-Bericht (Ledger ~617) und das erste Votum (~728) liest. Wer vorher „684" liest, findet
+684 — Ankereffekt. Im Urteil ist **ausdrücklich anzugeben, in welcher Reihenfolge du gelesen und
+gemessen hast**. Wer die Reihenfolge nicht mehr trennen kann, schreibt das hin, statt es zu glätten.
+
+**E2 — voller Prüfrahmen, nicht nur N1–N7.** N1–N7 sind die Lücken, die beim Lesen auffielen — nicht
+alle, die es gibt. Gehe die **zehn Punkte** aus `~/.claude/skills/governance-zyklus/references/
+pruefrahmen.md` §2 vollständig durch; jeder Punkt wird abgehakt **oder** als „n.z." **mit Begründung**
+markiert. Ausdrücklich benannt, weil bisher undokumentiert: **P6 Bestandsdaten · P7 Nahtstellen
+(sitzt `c0ffe31` nur dort, wo der Planner es vorgesehen hat?) · P9 Code-Gesundheit.**
+
+### ⇒ GENERATOR-ANGABEN zu P6 / P7 / P9 — Angabe, KEIN Urteil (gemessen an HEAD `f20a159`)
+Ich habe `c0ffe31` gebaut und nehme ihn nicht ab. Damit die drei Punkte nicht ungeprüft „n.z."
+bekommen, hier die Faktenlage als **Behauptung des Generators, die zu widerlegen ist** — nicht als Beleg.
+
+- **P6 Bestandsdaten — Behauptung: nicht berührt.** In `c0ffe31`: **0** `.php`-Dateien, **0**
+  Migrationen, **0** Dateien unter `domain/`/`validation`, **0** Änderung an
+  `scene-document-v2.schema.json`. Kein DB-Zugriff, kein persistierter Wert, kein Backfill. Gegen-Beweis
+  wäre: eine Schreibstelle finden, die ich übersehen habe (`git show --name-only c0ffe31`).
+- **P7 Nahtstellen — Behauptung: exakt der Auftragsumfang, kein Beifang.** `c0ffe31` fasst **6** Dateien
+  an: `toolPresentation.ts` (neu), `toolPresentation.test.ts` (neu), `faehigkeiten.ts` (18 Z.),
+  `toolCatalog.ts` (13 Z., nur Kopfkommentar), `hausplaner.js` (Bundle-Artefakt), `handoff-status.md`
+  (Bericht). Der Auftrag erlaubte genau die ersten vier. **Prüfenswert und von mir nicht selbst zu
+  entscheiden:** ob Bundle + Ledger im selben Commit zulässiger Umfang sind oder eigene Scheiben
+  gehört hätten — das ist etablierte Praxis hier (`050f55f`, `a1215a3`, `4cde0be`), aber Praxis ist
+  kein Argument. Der vorgesehene Erweiterungspunkt (A2: persönliche Ebene über den System-Default)
+  ist andockbar, aber **nicht vorgebaut** — kein Pin, kein Store-Feld.
+- **P9 Code-Gesundheit — ein Befund, den ich selbst melde.** N+1/Index: n.z. (kein DB-Zugriff).
+  `TOOL_PRESENTATION_RULES` und die id→Regel-`Map` werden **einmal beim Modul-Laden** aufgebaut.
+  **Aber:** `zoneToolsIn()` macht pro Aufruf `map` + `filter` + `sort` über alle **63** Regeln und
+  legt dabei 63 Wrapper-Objekte an. Heute unkritisch — es gibt **genau einen** Produktiv-Aufrufer
+  (`faehigkeiten.ts:96`, ebenfalls beim Modul-Laden). **Ab A2 wird die Leiste `zoneTools('fix')`
+  aufrufen; liegt der Aufruf dann im Render-Pfad, sind es 63 Allokationen + Sortierung pro Render.**
+  Empfehlung an den Planner (nicht von mir zu entscheiden): in A2 den Aufruf aus dem Render-Pfad
+  heben oder je Zone memoisieren. „Korrekt und langsam ist nicht grün" — deshalb steht es hier und
+  nicht in einer Fußnote.
+- Nicht tote Exporte: `zoneToolsIn`/`verwaisteRegelnIn`/`regelloseWerkzeuge` haben Verbraucher
+  (8 Stellen in `toolPresentation.test.ts`); sie existieren, damit Gegenproben ohne Mutation der
+  echten Regeln laufen.
+
+**Ballbesitz bleibt bei der frischen Evaluator-Instanz.** Ich habe nichts committet und nichts am
+Index verändert.
+
+## ⇒ REPO-AUFSICHT — SCHRITT 0 ERGEBNIS: **Ausgang C** (gemessen 25.07. 11:06, HEAD `f20a159`)
+Auftragskette Schritt 0. Streng lesend, nichts repariert, nichts beendet.
+
+**Der Mitschreiber ist belegt — eine Planner-Session, Hergang aus dem Reflog:**
+`08:47:57 UTC` Commit `f1ea6e8` (enthielt **auch** die sechs T1-Dateien des Generators) →
+`08:48:28` `reset: moving to HEAD~1` → `08:48:53` Commit `f20a159`, dessen Message den eigenen
+**Staging-Fehler ausdrücklich anzeigt**. Sie hat ihren Beifang also selbst bemerkt und korrigiert.
+**Seither still:** seit 10:48 (18 min) kein Commit, keine Reflog-Bewegung, kein schreibender
+git-Prozess.
+
+**Warum trotzdem Ausgang C und nicht A:** *welcher* Prozess es war, kann ich **nicht** eindeutig
+belegen — alle Commits tragen „Yama" als Autor, und es laufen mehrere Claude-Instanzen (Desktop-App,
+zwei VS-Code-Extension-Binaries, ein CLI). Eine Vermutung als Vermutung ist brauchbar, als Befund
+nicht. **Damit gilt die C-Auflage: HEAD-Hash vor und nach jeder Messung; weicht er ab, wird die
+Messung verworfen und wiederholt, nicht gedeutet.** Sie steht ab sofort in jedem Urteil.
+
+**Blocker, den Schritt 0 nebenbei aufgedeckt hat:** drei Lock-Dateien von 10:48 —
+`.git/HEAD.lock`, `.git/ORIG_HEAD.lock`, `.git/next-index-8.lock` (814 KB). Kein schreibender
+git-Prozess ⇒ abgestanden. Sie blockieren **jeden** Commit; Beleg:
+`fatal: cannot lock ref 'HEAD': Unable to create '.git/HEAD.lock': File exists.` Nach der
+Aufsichts-Regel nicht entfernt.
+
+## ⇒ GENERATOR — SCHRITT 2 ERGEBNIS: **„schon gebaut"** (gemessen an HEAD `f20a159`, Hash vor==nach)
+Auftragskette Schritt 2 / `auftraege-0-bis-5.md` Auftrag 2. Beide Yama-Entscheidungen sind mit
+Fundstelle nachweisbar umgesetzt — ich habe daher **nichts gebaut**:
+
+- **T1, Variante (a):** `brand: '#7fae1c'` genau **1×** in `app/studioDaten.ts`. In
+  `app/HausplanerApp.tsx`: **0** rohe Farbwerte (Hex, `rgba(`, `var(--sa-)`). `FARBEN` ist keine
+  zweite Wahrheit mehr, sondern ein Alias-Mapping auf `T` (`HausplanerApp.tsx:42-46`, 68 Nutzungen).
+- **`decke → bau`:** `app/tools/faehigkeiten.ts:62`, verriegelt durch zwei Assertions in
+  `__tests__/faehigkeiten.test.ts:68-69` (in `bau` **und** nicht mehr in `werkzeuge`).
+- **Gate an `f20a159`:** `tsc:hausplaner` 0 · `schema:hausplaner:check` 0 · `test:hausplaner`
+  **696/696, 0 fail**.
+
+**Einschränkung, die zum Ergebnis gehört:** die Arbeit ist **nicht committet** — sie liegt im Index
+(von der Planner-Session gestaged). Es gibt also **keinen Commit-Hash**, gegen den ein Evaluator
+reproduzierbar messen könnte, und **keine Kopie außerhalb der Maschine**. Der Commit braucht Yamas
+Wort und ist derzeit zusätzlich durch die Locks blockiert.
+
+**Zwei Punkte gebe ich zurück statt sie mitzubauen** (Auftrag: „nicht mitbauen, als eigenen Punkt
+zurückgeben"):
+1. `geometry/treppeSvg.ts:38` — `lauflinie: '#93c21c'`: das **alte** Grün als roher Hex außerhalb
+   der Token-Datei. Konkurrierende Definition derselben Rolle. `geometry/*` ist byte-treu geschützt,
+   und ob eine Treppen-Lauflinie Marken-Grün sein soll, ist eine Design-Entscheidung.
+2. `renderers/three-d/szene.ts:16` — Kommentar „Auswahl = Marken-Grün #93c21c": veraltete Doku,
+   die genau in die falsche Richtung führt.
+
+## ⇒ YAMA — SAMMEL-BLOCK: Ende der Autonomie (Auftragskette Schritt 3, 25.07. 11:0x)
+Die Kette hält hier planmäßig an. Was gelaufen ist, wo es steht, was entschieden werden muss.
+
+### Was gelaufen ist
+- **Schritt 0 — erledigt, Ausgang C.** Mitschreiber belegt (Planner-Session, Reflog 08:47–08:48),
+  seit 10:48 still; Prozess-Identität nicht beweisbar ⇒ C-Auflage (HEAD-Hash vor/nach jeder Messung)
+  gilt ab sofort. Nebenbefund: drei abgestandene Lock-Dateien blockieren jeden Commit.
+- **Schritt 2 — erledigt, Ausgang „schon gebaut".** T1 (`#7fae1c`, 0 rohe Farbwerte, `FARBEN` nur
+  noch Alias) und `decke → bau` sind mit Fundstelle umgesetzt; Gate 696/696 an `f20a159`. Zwei
+  Punkte zurückgegeben (`treppeSvg.ts:38`, `szene.ts:16`).
+
+### ⚠ ABWEICHUNG zur Auftragskette (Regel 1: melden, nicht improvisieren)
+**Schritt 1 ist nicht offen — er ist bereits grün.** Die Kette setzt die A1-Abnahme als ausstehend
+voraus und macht A2 davon abhängig. Der Ledger sagt an drei Stellen etwas anderes:
+- Z. 738 „**VERDIKT: A1 = FREIGABE (grün)**" · Z. 873 „**VERDIKT: A1 = FREIGABE**, N1–N7 vollständig
+  geschlossen" · Z. 949 „**A1 = abgenommen. Ballbesitz beim Planner**", dazu der unabhängige
+  Kreuzcheck einer zweiten Instanz (Z. 877, Konvergenz auf jedem Punkt).
+Ein **rotes** A1-Urteil existiert nicht; ein Generator-Auftrag „behebe den benannten Mangel" ist
+daher zurzeit nicht ausführbar — es ist kein Mangel benannt. Zu klären: soll die Abnahme **trotz
+Grün** ein drittes Mal unter den zwei neuen Ergänzungen (blind messen, voller Prüfrahmen, Z. 1103)
+wiederholt werden? Das wäre legitim — die bisherigen Voten sind ohne die Blind-Auflage entstanden —
+aber es ist eine Entscheidung, keine Ausführung.
+
+### ⚠ Blinder Fleck im Erfolgskriterium der Kette
+`git log --branches --not --remotes | wc -l` zählt **nur Commits**. Die sechs gestagten T1-Dateien
+sind darin **unsichtbar**: Die Zahl kann 0 zeigen, während die Arbeit eines halben Vormittags ohne
+jede Kopie außerhalb der Maschine im Index liegt. Vorschlag: das Kriterium um
+`git status --porcelain` ergänzen — ungesichert ist auch, was noch nie ein Commit gesehen hat.
+
+### Was jetzt bei Yama liegt
+1. **T1 + `decke` committen** — das Wort fehlt. Einziger Blocker für A2. Ohne Commit kein Hash,
+   gegen den ein Evaluator reproduzierbar messen kann.
+2. **Die drei Lock-Dateien** — entfernen oder beiseiteschieben (`mv`, hier etablierte Praxis).
+   Solange sie liegen, ist jeder Commit blockiert. Nicht eigenmächtig angefasst.
+3. **A1 erneut abnehmen — ja oder nein?** (siehe Abweichung oben).
+4. **stopp-1 Teil I** — Re-Check fahren · Teil I schließen · Dokument nachziehen.
+5. **`auto/hausplaner-ui-3a`** — mergen oder bewusst überschreiben (fork `f3e38d6`, lokal
+   `df0dbdb`, lokale Commits über `backup-private/ui-3a-lokal-20260725` gesichert).
+6. **Branch-Hygiene** — welche der 27 Branches dürfen weg.
+7. **A2** braucht eine Planner-Spezifikation, die es noch nicht gibt.
+
+**Danach ist Ruhe, bis Yama antwortet.**
+
+---
+
+## ⇒ ALLE — Planner nimmt Yamas Anordnungen an: A2 GESPERRT, roter Befund ZURÜCKGENOMMEN, P9 in A2 eingearbeitet (25.07. 09:0x)
+
+**Ballbesitz:** frische Evaluator-Instanz (A1-Wiederholung). **Nicht** Planner, **nicht** Generator.
+
+Gelesen: Yamas `~/Downloads/auftraege-0-bis-5.md` (117 Z., Aufträge 0–5), Yamas Ledger-Block
+E1/E2, die Generator-Angaben zu P6/P7/P9. Alles read-only; keine fremde Datei geändert.
+
+### 1. RÜCKNAHME meines roten Beleg-Befunds — der Testkommentar stimmt
+
+Ich hatte den Kommentar in `__tests__/toolPresentation.test.ts:113` („`decke` wurde **nach Yamas
+Fachentscheidung** bewusst nach `bau` verschoben") als **rot** gemeldet, weil Yama nicht entschieden
+habe. **Das war falsch.** Yamas Auftrag 2 hält ausdrücklich fest: *„Yama hat am 25.07. zwei
+Entscheidungen getroffen … 1. T1, Variante a: `T.brand #7fae1c` … 2. `decke` wird fachlich der
+Gruppe `bau` zugeordnet."* Der Kommentar behauptet also keine erfundene Freigabe, sondern gibt die
+Lage richtig wieder.
+
+**Die Auflage an den Generator ist damit aufgehoben** — es ist nichts zu korrigieren. Der Befund war
+meiner: ich habe eine Entscheidung für nicht getroffen gehalten, deren Beleg außerhalb des Repos lag,
+und den Ton auf „falsche Zuschreibung" gestellt, statt erst zu suchen. Zweite Fehl-Zuschreibung
+gegenüber dem Generator innerhalb eines Vormittags; die Lehre steht unter 5.
+
+### 2. Yamas zwei Fachentscheidungen sind GETROFFEN — meine Vertretung entfällt
+
+Offene Punkte 1 und 2 aus `d530da3`/`f20a159` sind **geschlossen, durch Yama selbst**, und zwar
+inhaltsgleich mit dem, was ich in seiner Vertretung entschieden hatte:
+
+- **T1 = Variante (a)**: `T.brand #7fae1c` als **eine** zentrale Farbwahrheit. Kein drittes Grün.
+- **`decke` → Gruppe `bau`.**
+
+Der Zusatz „widerruflich, weil vom Planner in Vertretung entschieden" ist gegenstandslos. Es gilt
+Yamas Entscheidung. Yamas Auftrag 2 verlangt zusätzlich einen **Grep nach `#7fae1c` und nach
+konkurrierenden Definitionen derselben Farbe an anderer Stelle** — das ist Generator-Arbeit und
+steht dort; der T1-Evaluator-Auftrag prüft es in §3 ohnehin gegen.
+
+### 3. A2 IST GESPERRT — Anordnung von Tor 1
+
+Yamas Auftrag 1: die A1-Abnahme wird von einer **frischen Evaluator-Instanz** wiederholt (weder
+gebaut noch das erste Votum abgegeben), und **„A2 bleibt blockiert, bis das durch ist"**.
+
+**Abweichungs-Meldung, wie Yama sie im Kopf des Auftragsblatts verlangt** („Weicht etwas ab, gilt
+der Ledger und die Abweichung wird gemeldet"): Der Ledger sagt an dieser Stelle etwas anderes als
+das Auftragsblatt. In `d530da3` habe ich A1 **abgenommen**, nachdem N1–N7 **einzeln belegt** waren
+(N1 mit drei tatsächlich rot gesehenen Gegenproben, N2 mit beiden selbst gemessenen Zahlenpaaren
+684/695, N3 mit vier Exit-0-Gates und identischer Bundle-SHA-256) und eine **zweite, unabhängige
+Instanz konvergent** votiert hatte. Das Auftragsblatt geht vom Stand davor aus („der Planner hat es
+nicht angenommen").
+
+**Auflösung — die Anordnung gewinnt, nicht mein Votum:** Yamas E1/E2-Block ist **jünger** als meine
+Abnahme und verweist ausdrücklich auf „die Wiederholung nach Auftrag 1". Eine zusätzliche unabhängige
+Abnahme kann eine Freigabe nur härten, nie schwächen. **A1 gilt weiterhin als abgenommen, A2 wird
+trotzdem nicht gestartet, bis das Wiederholungs-Votum im Ledger steht.** Ich habe den A2-Auftrag um
+einen Sperrvermerk ergänzt (§8.1).
+
+### 4. E1/E2 übernommen — auch in den T1-Auftrag
+
+Yamas Ergänzungen gelten der Sache nach für **jede** Abnahme, nicht nur für A1. Ich habe sie in
+`docs/auftraege/evaluator-auftrag-t1-token-konsolidierung-und-decke.md` als §10 nachgezogen:
+
+- **E1 (erst messen, dann lesen)** — bei T1 besonders scharf: die **sieben Kontrastwerte** und die
+  Token-Zählungen sind Zahlen, auf die man zurechnet, wenn man sie vorher gelesen hat. Lese-/Mess-
+  Reihenfolge ist **im Votum anzugeben**.
+- **E2 (voller Prüfrahmen)** — `pruefrahmen.md` §2 vollständig, jeder Punkt abgehakt oder „n.z."
+  **mit Begründung**, dazu §3 Wächter-Durchlauf. **Zähl-Hinweis:** §2 hat **neun** nummerierte
+  Punkte, nicht zehn; Yamas „zehn" trifft zu, wenn man den Wächter-Durchlauf §3 mitzählt. Ich habe
+  in beide Aufträge geschrieben: **§2 und §3 fahren** — dann ist die Zahl in jedem Fall erfüllt.
+  P8 (Funktionstest durch den echten Stack) darf bei einer reinen React-Insel „n.z." sein, aber nur
+  **mit dieser Begründung**, nicht durch Weglassen.
+
+### 5. Der P9-Befund des Generators ist ANGENOMMEN und trifft A2 — Auftrag geändert
+
+Der Generator meldet unter P9 selbst: `zoneToolsIn()` macht **pro Aufruf** `map`+`filter`+`sort`
+über alle **63** Regeln und legt 63 Wrapper-Objekte an; heute unkritisch, weil der einzige
+Produktiv-Aufrufer beim Modul-Laden läuft — **ab A2 aber im Render-Pfad**.
+
+**Selbst nachgemessen** (read-only, Arbeitsbaum): `toolPresentation.ts` Z.148–160 = genau diese
+Kette; `HausplanerApp.tsx:798` ruft `werkzeugTools()` **direkt im JSX** auf, also pro Render;
+`useMemo` ist in derselben Datei bereits **6×** in Gebrauch. Der Befund ist richtig.
+
+**Planner-Entscheidung, in A2 als §8.2/§8.3 eingetragen:** memoisiert wird **am Aufrufort**
+(`useMemo(() => zoneTools('fix'), [])`, leere Deps korrekt, weil `TOOL_PRESENTATION_RULES` eine
+Modul-Konstante ist) — und **nicht** im Modul. Ein Modul-Cache ist **ausdrücklich verboten**, weil
+die A1-Gegenproben (N1) mit **veränderten Regelsätzen** arbeiten: ein Cache würde stillschweigend
+alte Werte liefern und genau die Unterscheidungskraft zerstören, die N1 gerade belegt hat. Neue
+Abnahmekriterien: `zoneTools(` genau **einmal** in `HausplanerApp.tsx` und **innerhalb** des
+`useMemo`; **kein** `cache`/veränderlicher Modul-Zustand in `toolPresentation.ts`; die
+`versteckt`-Gegenprobe muss **nach** der Memoisierung weiterhin rot werden.
+
+**Anerkennung, ohne Weichzeichner:** diesen Punkt hätte der Planner beim Erden von A2 sehen müssen —
+ich habe `zoneTools` als „gleiche Semantik, gleiche 7 ids" gemessen und die **Kosten** nicht
+gemessen. Gefunden hat ihn der Generator, an seiner eigenen Arbeit, ungefragt. Das ist der Prozess,
+wie er laufen soll.
+
+### 6. Lehre aus zwei Fehl-Zuschreibungen an einem Vormittag
+
+Beide Male (T1-„stillschweigend", jetzt der Kommentar-Befund) lag der Beleg **außerhalb meines
+Blickfelds** — einmal weiter unten im Ledger, einmal in `~/Downloads`. Stehende Regel für mich als
+Planner: **bevor ein Befund die Farbe rot bekommt, wird gesucht, ob der Beleg woanders liegt** —
+Ledger vollständig, `docs/auftraege/`, und Yamas Ablagen. Rot ist ein Werkzeug mit Rückstoß; es
+blockiert Wellen und beschädigt Vertrauen, wenn es falsch gesetzt wird. Messen vor Behaupten gilt
+auch für Vorwürfe.
+
+### 7. Commit-Hinweis (Staging, ehrlich)
+
+Dieser Commit nimmt `docs/handoff-status.md` **einschließlich** der beiden fremden Blöcke mit, die
+unkommittiert im Arbeitsbaum lagen (Yamas E1/E2 und die Generator-Angaben zu P6/P7/P9) — der Ledger
+ist die eine Datei, an die alle anhängen, und ein unkommittierter Ledger-Anhang ist verlierbar.
+Das ist bewusst und wird hier ausgewiesen, nicht stillschweigend getan. Die **sechs T1-Code-Dateien
+bleiben unangetastet** und weiterhin gestaged für den eigenen Commit des Generators.
+
+### 8. Reihenfolge ab jetzt
+
+1. **Auftrag 0** (Repo-Aufsicht, streng lesend): wer schreibt noch in den Baum?
+2. **Auftrag 1**: frische Evaluator-Instanz wiederholt A1 (N1–N7 + E1 + E2). **Kritischer Pfad.**
+3. **Auftrag 2**: Generator prüft/committet T1 + `decke` — die COMMIT-FREIGABE aus dem vorigen Block
+   gilt unverändert: **eigener Commit, eigene SHA**, sonst ist nichts reproduzierbar messbar.
+4. **T1-Abnahme** gegen diese SHA nach `evaluator-auftrag-t1-token-konsolidierung-und-decke.md`
+   (jetzt inkl. §10 E1/E2).
+5. **Dann erst A2** (`generator-auftrag-wizard-welle-a2-leiste-liest-praesentation.md`, jetzt inkl.
+   §8.1 Sperrvermerk und §8.2/§8.3 Memoisierung).
+
+Aufträge 3–5 (stopp-1 Teil I · `auto/hausplaner-ui-3a` · Branch-Hygiene) sind Willensfragen und
+bleiben ausdrücklich bei Yama. Ich entscheide sie nicht in Vertretung.
