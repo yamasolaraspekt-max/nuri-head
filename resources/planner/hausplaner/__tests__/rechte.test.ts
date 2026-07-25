@@ -126,10 +126,23 @@ test('main.tsx liest die Rechte über dieselbe Naht wie die Speichern-URL', () =
 
 test('das Blade liefert die vier bekannten Rechte — aus hasPermission, ohne Ableitung', () => {
   assert.match(blade, /data-rechte="\{\{ \$hpRechte \}\}"/);
-  assert.match(blade, /\$hpNutzer->hasPermission\('Hausplaner', \$aktion\)/);
+  assert.match(blade, /auth\(\)->user\(\)\?->hasPermission\('Hausplaner', \$aktion\)/);
   assert.match(blade, /\['read', 'add', 'update', 'delete'\]/, 'die vier, die das System kennt');
-  // Ohne angemeldeten Nutzer bleibt die Liste leer — dieselbe Richtung wie K5.
-  assert.match(blade, /\$hpNutzer && \$hpNutzer->hasPermission/);
+  // Ohne angemeldeten Nutzer bleibt die Liste leer — dieselbe Richtung wie K5. Der Fragezeichen-
+  // Pfeil liefert dann `null`, und `filter` wirft den Eintrag weg.
+  assert.match(blade, /user\(\)\?->/, 'ohne Nullsafe fiele die Seite ohne Anmeldung um');
+});
+
+test('AUF-64: die Rechte-Zeile steht EINZEILIG — die Block-Form zerbricht diese Datei', () => {
+  // Die Ursache des Ausfalls: weiter oben steht die einzeilige Klammer-Form ohne schließendes
+  // Gegenstück. Blade paart Rohblöcke non-greedy und **vor** dem Entfernen der Kommentare — ein
+  // schließendes Gegenstück irgendwo später wird mit jener früheren Öffnung gepaart, und alles
+  // dazwischen landet als roher PHP-Code im Kompilat.
+  const roh = readFileSync(join(wurzel, 'resources/views/admin/hausplaner/objekt.blade.php'), 'utf8');
+  assert.match(roh, /@php\(\$hpRechte = collect/, 'die Rechte-Zeile muss die einzeilige Form sein');
+  // Bewusst zusammengesetzt: stünde die Marke hier als Literal, wäre sie in dieser Datei kein
+  // Problem — im Blade schon. Der PHP-seitige Beleg liegt in BladeKompiliertTest.
+  assert.equal(roh.split('@' + 'endphp').length - 1, 0, 'diese Datei mischt die beiden Formen');
 });
 
 test('K2/K3: der Weg berührt weder Modell-Store noch Routen noch das Rechtemodell', () => {

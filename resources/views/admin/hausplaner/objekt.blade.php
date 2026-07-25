@@ -94,13 +94,19 @@
         hier wird nichts abgeleitet und nichts ergaenzt. Ohne angemeldeten Nutzer bleibt die Liste
         leer — das Minimum. Dieselbe Naht wie `data-speichern-url`, kein neuer Mechanismus.
     --}}
-    @php
-        $hpNutzer = auth()->user();
-        $hpRechte = collect(['read', 'add', 'update', 'delete'])
-            ->filter(fn ($aktion) => $hpNutzer && $hpNutzer->hasPermission('Hausplaner', $aktion))
-            ->map(fn ($aktion) => 'Hausplaner,' . $aktion)
-            ->implode(' ');
-    @endphp
+    {{--
+        AUF-64 — WARUM DAS HIER EINZEILIG STEHT UND NICHT ALS BLOCK:
+        Weiter oben (Uebernahme-Knopf) steht die einzeilige Klammer-Form der PHP-Direktive. Die hat
+        kein schliessendes Gegenstueck. Blade zieht seine Rohbloecke NON-GREEDY heraus, bevor es
+        Kommentare entfernt: das erste schliessende Gegenstueck irgendwo spaeter in dieser Datei
+        wird mit jener frueheren Oeffnung gepaart, und alles dazwischen (Formular, CSRF-Direktive,
+        Ausgabe-Klammern) landet als roher PHP-Code im Kompilat. Genau so hat AUF-60 objekt/203
+        zerbrochen — und der erste Erklaerversuch dieses Kommentars gleich noch einmal, weil die
+        Marke im Kommentartext mitzaehlt.
+        Solange diese Datei die einzeilige Form oben traegt, darf hier weder die Block-Form noch
+        ihr Schluesselwort stehen — auch nicht im Fliesstext. Festgehalten in BladeKompiliertTest.
+    --}}
+    @php($hpRechte = collect(['read', 'add', 'update', 'delete'])->filter(fn ($aktion) => auth()->user()?->hasPermission('Hausplaner', $aktion))->map(fn ($aktion) => 'Hausplaner,' . $aktion)->implode(' '))
     <div id="hausplaner-root"
          data-project-id="{{ $objekt->id }}"
          data-rechte="{{ $hpRechte }}"
