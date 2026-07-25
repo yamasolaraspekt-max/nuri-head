@@ -24,6 +24,7 @@
 | **I3 / AUF-21** 6 Werkzeug-Zustände + canPin/priority | `ccdc93b` | **FREIGABE** | reine Funktion, ZustandKontext als Parameter (kein gespeicherter Zustand); Bijektion 119 hält; Mutation gesperrt→weitere = 2 rot |
 | **AUF-25** L4 — 19 Fachplaner-Flächen statt Toast | `17c8be2` | **FREIGABE** | tiefe Fläche (Kopf/Zweck/Feldvorschau/Leerzustand+Badge); Reuse T/Ikon/ZustandBadge; HausplanerApp unberührt; Blindtext-Verbot testverriegelt (Mutation 1 rot) |
 | **AUF-31** IDs eingedeutscht + 9 dedupliziert (**Vorarbeit**) | `2deb6a5` | **FREIGABE** | Bijektion 9+101=110 hält; 2 Umlaut-Tabellenfehler korrekt gesetzt (oeffnung/uebergabepaket) + gemeldet; Spec-Tabelle-Residuum an Planner |
+| **I4 / AUF-21** 110 Werkzeuge sichtbar, 22 Gruppen (**sichtbar**) | `4932b36` | **FREIGABE** | versteckt 0 (alle 110 sichtbar); 22 Gruppen Summe 110 genau-einmal; Sichtprobe 1512px; 1024/375 offen |
 
 ---
 
@@ -135,6 +136,12 @@ Route `/admin/hausplaner/studio?fixture=decke-treppe` → **Expertenmodus**, ger
 
 ---
 
+## I4 / AUF-21 (`4932b36`) — FREIGABE · SICHTBAR (schliesst die I3-Blindstelle)
+- Alle 110 Werkzeuge sichtbar: Zonen fix 7 / kontext 2 / weitere 101 / **versteckt 0** (nach I3 waren 101 versteckt). Erreichbar ueber **22 Kategorie-Gruppen** (werkzeugGruppen.ts) + Anheften (app/state/angeheftet.ts).
+- Test-Bilanz: WERKZEUG_GRUPPEN=22, Summe=110, genau-einmal, keins versteckt — gruen; Bijektion 9+101=110 haelt. Gates tsc 0 / schema 0 / test 798/798 / K4 unberuehrt.
+- Sichtprobe (auth. Browser, innerWidth 1512): 22-Gruppen-Leiste rendert vollstaendig, 7 Fix-Werkzeuge links (Screenshot an Yama). 1024/375 px nicht renderbar (resize aendert innerWidth nicht) — offen.
+- Vorbehalte: (a) zwei Blind-Mutationen an werkzeugGruppen landeten nicht (Gruppen aus dem Katalog abgeleitet) — Trennschaerfe ueber explizite Assertions + toolPresentation-GEGENPROBE. (b) Design-Folgeblock offen (cc2c43c: Faehigkeiten vs 22 Gruppen), kein I4-Blocker.
+
 ## ⇒ NACHARBEIT — vier Planner-Auflagen (`1955311`, Evaluator, 25.07.)
 1. **AUF-9-Widerspruch aufgelöst:** Zeile unter „Nicht abgenommen/offen" **gestrichen**. AUF-9 = FREIGABE (Kommentar-gegen-Codewert ist auch für anchored Prüfer objektiv, beide Werte im Code).
 2. **`sichtbar`/`Vorarbeit` je Votum (ab sofort):**
@@ -159,6 +166,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   I3        ccdc93b  tsc 0 · schema 0 · test 782/782
   AUF-25    17c8be2  tsc 0 · schema 0 · test 768/768
   AUF-31    2deb6a5  tsc 0 · schema 0 · test 788/788 ; Bijektion 9+101=110
+  I4        4932b36  tsc 0 · schema 0 · test 798/798 ; versteckt 0, 22 Gruppen Summe 110
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
