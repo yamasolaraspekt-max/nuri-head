@@ -4091,3 +4091,53 @@ danach" ist keine Formalie** — hier hat sie einen echten Mangel gefangen.
    Vereinfachung folgenlos; sie steht hier, damit sie niemand später für gemessen hält.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ PLANNER — AUF-36 gegengelesen: die Bundle-Regel trägt, und die Sichtprobe hat sich bezahlt gemacht
+
+**Gegenstand:** `5d98131` · `9a4623b` · `d106445` · `368f2d7`. **Keine Abnahme** — die macht der
+Evaluator. Was hier steht, ist Planner-Gegenlesung des Berichts und die Einordnung der drei Rückgaben.
+
+**1. Die korrigierte Kriterienzeile funktioniert.** Zweimal Code-Commit ohne `public/*`, zweimal
+Bundle als eigener zweiter Commit — `5d98131`→`9a4623b` und `d106445`→`368f2d7`. Nach drei
+Bundle-Löchern in Folge ist das der erste Takt ohne eines. Der Widerspruch saß, wie der Generator
+gesagt hat, in meiner Vorlage; seit §8 Punkt 2b ist er weg.
+
+**2. Der abweichende Schnitt ist besser als mein Auftrag.** §4.1 verlangte die Vertragsfelder
+additiv an `ToolDefinition`. Der Generator hat sie in ein eigenes Modul gelegt, **weil der Kopf von
+`paketAdapter.ts` seit I2 wörtlich zusagt: „Kein Feld von `ToolDefinition` wird geändert, keins
+ergänzt."** Mein Auftrag hätte eine bestehende Zusage gebrochen. Er hat die Abweichung begründet und
+testverriegelt — genau der Fall, für den §1 der Auftragsdatei den begründeten Abweicher zulässt.
+**Sein Weg gilt.**
+
+**3. Die Sichtprobe hat einen Mangel gefangen, den 853 Tests nicht sahen.** `werkzeugAnzeige` gab
+`gesperrt` nur für angeheftete oder Pflichtwerkzeuge zurück; ein Katalog-Werkzeug der Zone `weitere`
+las sich „in Entwicklung", obwohl es gesperrt war. Folgenlos, solange Katalog-Werkzeuge nie gesperrt
+sein **konnten** — bis AUF-36 ihnen Vorbedingungen gab. **Ausgerechnet der Posten, der Ehrlichkeit
+herstellen soll, hätte an der sichtbarsten Stelle gelogen.** Behoben in `d106445` mit zwei Tests und
+Gegenprobe.
+
+**Das ist der Beleg für die Regel „Sichtprobe gehört in die Abnahme, nicht danach".** Kein Test
+konnte den Fall abdecken, weil es ihn vorher nicht gab. Ein Gate prüft, was jemand vorhergesehen hat;
+eine Sichtprobe prüft, was da ist. Ich führe das ab sofort als Begründung, wenn jemand die Sichtprobe
+für Zierrat hält.
+
+**4. Die drei Rückgaben, eingeordnet:**
+
+- **Import-Recht** — gemessen: `routes/web.php` kennt nur `Hausplaner,read`/`,update`. Acht
+  Import-Werkzeuge sind gesperrt. Das ist eine **Rechte-Entscheidung**, kein Bau: **AUF-41, bei Yama.**
+  Meine Empfehlung steht in der Tafelzeile — eigenes Recht, weil Import fremde Daten ins Modell zieht.
+- **Die vier Fach-Vorbedingungen** brauchen einen Auslegungsstand aus L2/L3. Kein eigener Posten
+  nötig: **AUF-33 ist genau dieser Weg**, und die Vorbedingungen gehen von selbst auf grün, sobald die
+  Fähigkeiten gesetzt werden — der Generator hat sie bewusst über die vorhandene `capabilities`-Liste
+  geführt, ohne Sonderweg.
+- **`viewport.ready` ist eine Vereinfachung** und wurde als solche offengelegt, nicht als Messung
+  ausgegeben. Als **AUF-42** auf die Tafel — klein, gesperrt, ohne Dringlichkeit. Er existiert nur,
+  damit die Vereinfachung nicht später für gemessen gehalten wird. *(Lehre vom selben Tag: ein Punkt
+  ohne Tafelzeile existiert für die Kette nicht — so sind L5/L6 monatelang unsichtbar geblieben.)*
+
+**Tafel:** Arbeitsvorrat 11 · Abnahme 6 · bei Yama 10 · Archiv 17 = **44**, geprüft.
+**⚡ AKTIV rückt auf AUF-35a** („Markieren"); die Auftragsdatei liegt seit `239cefd`.
+**Ballbesitz:** Evaluator (6 Posten) · Generator (AUF-35a) · Planner (Aufträge AUF-38/39/40) · Yama (Push, 10 Fragen).
+
