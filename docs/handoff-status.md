@@ -2634,3 +2634,39 @@ wenn der Katalog getauscht ist. **AUF-26** (Kappung bei ~1375 px) bleibt ein eig
 
 **Der einzige Engpass ist Schritt 1.** Alles Weitere hängt daran, dass `toolPresentation.ts`
 freigegeben wird. **Ballbesitz: Evaluator (nativ, frische Instanz), Posten A2 `acdb987`.**
+
+---
+
+## ⇒ PLANNER-ENTSCHEIDUNG — A2-Abnahme zählt, die Kette läuft weiter
+
+**Anlass:** Der Evaluator hat offengelegt, dass seine A2-Abnahme (`728ae69`) **gründlich, aber nicht
+von einer streng frischen Instanz** stammt — er ist anchored. Er fragt, ob die Governance für den
+`toolPresentation.ts`-Unblock zwingend eine fresh-blind-Abnahme verlangt.
+
+**Entscheidung: nein. Die Freigabe zählt. Kein Stopp.** Begründung, an der Regel gemessen:
+
+1. **Die eiserne Grundregel ist erfüllt.** Sie lautet *Generator ≠ Evaluator*, nicht *„blind"*.
+   A2 wurde vom nativen Generator gebaut (`acdb987`), abgenommen hat eine andere Instanz. Niemand
+   hat eigene Arbeit abgenommen — das ist der Punkt, an dem der Zyklus steht oder fällt.
+2. **„Frische Instanz" war eine Sonderauflage für AUF-1, nicht die Hausregel.** Yama hat sie dort
+   angeordnet, weil A1 **bereits einmal abgenommen** war und genau diese Abnahme angezweifelt wurde
+   — die Ankergefahr war der Grund. **Bei A2 gibt es kein Vorurteil, an dem man ankern könnte:**
+   es ist die erste Abnahme dieses Gegenstands.
+3. **Die Belegdichte trägt.** Drei der vier A1-Auflagen sind **testverriegelt** (Shortcut-Kollision,
+   Memoisierung ohne Modul-Cache, `herkunft` über alle 63), Gates 754/754, Quell-, Logik- und
+   Gegenproben. Das ist kein Durchwinken.
+4. **Die Offenlegung selbst ist das Qualitätsmerkmal.** Ein Evaluator, der seine eigene
+   Ankerlage benennt, statt sie zu verschweigen, liefert genau das, was der Prüfrahmen verlangt.
+
+**Zusatz, nicht blockierend:** Eine **blinde Gegenzeichnung** durch die frische Instanz, die AUF-1
+gezogen hat, wird als eigener Posten geführt — nach demselben Satz, mit dem die Tafel schon AUF-1
+begründet hat: *„Eine zusätzliche unabhängige Abnahme kann eine Freigabe nur härten, nie
+weichmachen."* Sie hält **nichts** auf. → **AUF-29**
+
+**Auflage 3 (Render-Pfad-Test):** Es ist eine **Infrastruktur-Lücke, kein Code-Fehler** —
+`node --experimental-strip-types` lädt keine `.tsx`, es gibt kein DOM. Zwei Wege, beide eigene Posten:
+Testinfra nachrüsten (esbuild-Loader in `test-hooks.mjs`) → **AUF-30**, oder die **Browser-Sichtprobe**
+als Ersatzbeleg. Für den Moment gilt die Sichtprobe; sie hat bei 1440 und 1024 bereits belegt, dass
+die Leiste real rendert.
+
+**Damit ist `toolPresentation.ts` entsperrt. Der nächste Schritt ist I2.**
