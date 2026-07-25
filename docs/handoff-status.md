@@ -3170,3 +3170,47 @@ Kategorien. Die gespeicherten Szenen sind unberührt; wer eine alte Szene öffne
 **Ballbesitz → Evaluator.** Offen bleibt aus meiner Sicht der Schritt, der Yama wirklich etwas zeigt:
 die **Darstellung** der Leiste aus den Zonen (Stern, Überlauf, Befehlspalette) — sie hängt an der
 Entscheidung, **wo die persönlichen Anheftungen gespeichert werden** (I3-Bericht).
+
+---
+
+## ⇒ PLANNER — Die Fähigkeiten gehören nicht in die Werkzeugleiste
+
+**Vorher gelesen:** HEAD `1493052` · `git log -4` · Tafelzeile AUF-27 ·
+`app/tools/faehigkeiten.ts` (22 Einträge) · `app/dashboard/fachFlaechen.ts` (19 Einträge)
+
+**Anlass:** Yama, 25.07.: *„warum fähigkeiten stehen immer noch an den sidebar das ist doch kein
+layout"*. Der Einwand trifft AUF-27, den ich am Nachmittag gemessen hatte — er war bis zur
+A2-Abnahme gesperrt und ist jetzt frei.
+
+### Gemessen
+
+| Fläche | Inhalt |
+|---|---|
+| **Fähigkeiten-Navi** (`faehigkeiten.ts`) | **22 Einträge**: 9 Fachgruppen (`dach-zimmerei · tga-heizung · energie-pv · sanitaer · kueche · bau · fenster-tuer · treppe · werkzeuge`) **plus 13 Rechen-Engines** (`engine-fbh · -heizkoerper · -heizkreis · -abwasser · -kueche · -pv · -uwert · -fensterprodukt · -sparren · -treppe · -holzmengen · -holzbauteile · -schifter`) |
+| **L4-Fachplaner-Flächen** (`fachFlaechen.ts`) | **19 Einträge** in 3 Gruppen: Haustechnik 7 · PV-Planer 10 · Fachplaner 2 |
+
+**Teilweise Doppelung, keine vollständige** — das sage ich genau so, weil ich es nur so gemessen
+habe: mindestens drei offensichtliche Paare (`engine-fbh`↔`fach-fbh`, `engine-pv`↔`fach-pv-module`,
+`engine-kueche`↔`fach-kueche`). Eine 1:1-Deckung besteht **nicht**; die Engines sind Rechenwege,
+die L4-Flächen sind Themenflächen.
+
+### Drei Gründe, warum die Fläche falsch sitzt
+
+1. **Sidebar = Navigation, keine Daten** (`info-architektur`). Die Fähigkeiten sind ein
+   Fähigkeits-Katalog — weder Werkzeug noch Navigationsziel.
+2. **Die Spalte macht drei Jobs** (AUF-27): Werkzeug wählen · Fähigkeit ansteuern · Objekt im
+   Modell finden, alles in **einer** Scroll-Höhe. Der Projektbrowser war deshalb erst nach rund
+   20 Scroll-Ticks sichtbar.
+3. **Die 13 Engines sind die künftigen L2/L3-Panels.** Sie gehören dorthin, wo gearbeitet wird —
+   nicht neben Wand, Fenster und Tür.
+
+### Entscheidung
+
+**Die Fähigkeiten verlassen die Werkzeugleiste.** Die Leiste trägt künftig **nur Werkzeuge**:
+die angehefteten und die Gruppen-Menüs aus I4. Wohin die 13 Engines wandern — eigener Reiter,
+oder Andocken an die 19 L4-Flächen — ist **eine Entscheidung, die ich erst nach I4 treffe**, weil
+I4 die Leiste gerade umbaut und ich nicht gegen einen wandernden Stand plane.
+
+**Und die Reihenfolge ändert sich:** Design ist **der nächste Block nach I4**, nicht irgendwann
+später. AUF-27 ist sein erster Posten, AUF-26 (Kappung ~1375 px) der zweite. L5/L6 und die
+Engine-Panels kommen danach.
