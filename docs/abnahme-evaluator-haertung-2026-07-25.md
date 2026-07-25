@@ -26,6 +26,7 @@
 | **AUF-31** IDs eingedeutscht + 9 dedupliziert (**Vorarbeit**) | `2deb6a5` | **FREIGABE** | Bijektion 9+101=110 hält; 2 Umlaut-Tabellenfehler korrekt gesetzt (oeffnung/uebergabepaket) + gemeldet; Spec-Tabelle-Residuum an Planner |
 | **I4 / AUF-21** 110 Werkzeuge sichtbar, 22 Gruppen (**sichtbar**) | `4932b36` | **FREIGABE** | versteckt 0 (alle 110 sichtbar); 22 Gruppen Summe 110 genau-einmal; Sichtprobe 1512px; 1024/375 offen |
 | **AUF-27** Linke Spalte: 3 Reiter (Werkzeuge/Projekt/Fachplaner) | `894954a` | **FREIGABE MIT AUFLAGE** | Code+Tests gruen (810/810, Reihenfolge-Mutation 4 rot, kein 2. Tab-Mechanismus); **Bundle-Hole: kein Rebuild -> im App noch nicht sichtbar**, Sichtprobe deferred |
+| **AUF-34** Arbeitsbereiche: 15 Themen / 5 Bereiche | `8b2b9e6` | **FREIGABE MIT AUFLAGE** | Bilanz 15 Themen/110 Werkzeuge ohne Verlust, 7 durchgaengig (leere supportedWorkspaces); Mutation Thema-entfernt 4 rot; **3. Bundle-Hole -> Sichtprobe deferred** |
 
 ---
 
@@ -149,6 +150,12 @@ Route `/admin/hausplaner/studio?fixture=decke-treppe` → **Expertenmodus**, ger
 - **AUFLAGE - Bundle-Hole:** `894954a` enthaelt keinen Bundle-Rebuild, kein spaeterer Commit auch. Der servierte `public/hausplaner/hausplaner.js` hat AUF-27 also nicht -> die 3 Reiter sind im laufenden App **nicht sichtbar**. Braucht einen Bundle-Rebuild-Commit (wie Batch 2 -> `6dde059`), DANN Sichtprobe.
 - **Sichtprobe deferred** bis Rebuild; dann via iframe an 1440/1024/375 px (Werkzeug jetzt vorhanden).
 
+## AUF-34 (`8b2b9e6`) - FREIGABE MIT AUFLAGE (Arbeitsbereiche; sichtbar geplant, Bundle-Hole #3)
+- 15 Themen auf 5 Arbeitsbereiche (statt 22 Kategorien nebeneinander). 7 durchgaengige Themen in jedem Bereich, sauber als **leere supportedWorkspaces** (nicht 5 Eintraege). Bilanz 15 Themen / 110 Werkzeuge ohne Verlust/Dublette. K4 store/domain/geometry unberuehrt. Gates tsc 0 / schema 0 / test 830/830.
+- **Trennschaerfe:** ein durchgaengiges Thema (01-grundbedienung) aus DURCHGAENGIGE_THEMEN entfernt -> 4 Tests rot (K3 7-durchgaengig, K5' Bilanz 15/110, resolveToolState-Konsistenz, Kante 1).
+- **AUFLAGE - Bundle-Hole #3:** `8b2b9e6` ohne Rebuild -> die 5-Bereiche-Leiste ist im laufenden App nicht sichtbar. Braucht Rebuild-Commit (wie AUF-37 fuer AUF-27). Die zwei Sichtprobe-Kriterien (kein Ueberlauf bei 1371, keine Wortumbrueche im Menue) pruefe ich per iframe NACH dem Rebuild.
+- Muster: 3. Bundle-Hole (Batch 2 / AUF-27 / AUF-34) trotz neuer Bundle-Regel (0f06634) - an Planner.
+
 ## ⇒ NACHARBEIT — vier Planner-Auflagen (`1955311`, Evaluator, 25.07.)
 1. **AUF-9-Widerspruch aufgelöst:** Zeile unter „Nicht abgenommen/offen" **gestrichen**. AUF-9 = FREIGABE (Kommentar-gegen-Codewert ist auch für anchored Prüfer objektiv, beide Werte im Code).
 2. **`sichtbar`/`Vorarbeit` je Votum (ab sofort):**
@@ -175,6 +182,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-31    2deb6a5  tsc 0 · schema 0 · test 788/788 ; Bijektion 9+101=110
   I4        4932b36  tsc 0 · schema 0 · test 798/798 ; versteckt 0, 22 Gruppen Summe 110
   AUF-27    894954a  tsc 0 / schema 0 / test 810/810 ; Mutation werkzeuge->projekt = 4 rot ; BUNDLE NICHT rebuilt
+  AUF-34    8b2b9e6  tsc 0 / schema 0 / test 830/830 ; Mutation Thema-entfernt = 4 rot ; BUNDLE NICHT rebuilt
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
