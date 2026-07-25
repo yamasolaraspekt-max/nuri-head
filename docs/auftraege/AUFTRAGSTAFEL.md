@@ -136,7 +136,12 @@ jedes Bauwerks ist Fundament. Aber Yama muss es unterscheiden können, ohne zu f
 
 **Vier Tabellen statt einer — geordnet danach, wer als Nächstes handeln muss.** In einer Tabelle mit 39
 Zeilen war der eine Posten, der gezogen werden darf, nicht mehr zu finden. Kein Posten ist verschwunden:
-**9** Arbeitsvorrat · **5** Abnahme · **9** bei Yama · **17** im Archiv — Summe geprüft, 40 (AUF-38 neu).
+**11** Arbeitsvorrat · **5** Abnahme · **9** bei Yama · **17** im Archiv — Summe geprüft, 42.
+
+> **Befund 25.07., 21:05 (Bestandsaufnahme):** **L5 und L6 kamen auf dieser Tafel überhaupt nicht vor** —
+> null Treffer, gemessen. Sie standen im Layout-Fahrplan, aber niemand konnte sie ziehen; sie wären nie
+> gebaut worden, egal wie lange die Kette läuft. Als **AUF-39** und **AUF-40** nachgetragen. Lehre: ein
+> Fahrplanschritt ohne Tafelzeile existiert für die Kette nicht.
 
 > **Nachgeführt 25.07., 20:47:** Der Abnahme-Stapel stand auf 10, obwohl der Evaluator in
 > `docs/abnahme-evaluator-haertung-2026-07-25.md` längst **13 Voten** committet hatte. Acht Posten waren
@@ -162,6 +167,8 @@ Reihenfolge, kein Angebot. `GESPERRT`: Vorbedingung nicht erfüllt, Grund steht 
 | **AUF-28** | **15 falsche Versprechen aus der Navi nehmen** (Spur A) — die Zone `weitere` zeigt dem Nutzer „Links ausrichten · Hand · Zoom · Freie Transformation …" als `in Entwicklung`. Die Icon-Inventur belegt: DTP-Erbe, kommt nie. Ausführbarer Teil: die 15 Regeln in `toolPresentation.ts` von `weitere` auf `versteckt`; die Navi braucht dann einen ehrlichen Leerzustand. **Willensteil bleibt bei Yama:** womit `weitere` neu belegt wird (Kandidat: Fach-Werkzeuge aus dem 110er-Paket, AUF-21/I2) | Generator | `GESPERRT` — bis A2 abgenommen (`toolPresentation.ts`) | dito, B2 |
 | **AUF-33** | **Die 13 Rechen-Engines zu den Fachplaner-Flächen** — `engine-fbh · -heizkoerper · -heizkreis · -abwasser · -kueche · -pv · -uwert · -fensterprodukt · -sparren · -treppe · -holzmengen · -holzbauteile · -schifter` wandern zu den 19 L4-Flächen; danach fällt der Übergangs-Reiter „Fachplaner" ersatzlos weg. Gemessen: 3 klare Paare, 10 Engines ohne Entsprechung, 16 L4-Flächen ohne Engine — **keine Doppelung, zwei Sortierungen** | Planner → Generator | `OFFEN` — **entsperrt: Yama, 25.07. — das Panel-Muster wird die Treppe.** Erste Fläche `engine-treppe`, die übrigen 12 folgen dem Muster | Planner-Block „Der Begriff Fähigkeiten wird abgeschafft" |
 | **AUF-38** | **Inline-Styles ablösen** (Entscheidung Yama, 25.07., aus AUF-14) — 331 `style={{` in 35 Dateien wandern in eine echte Stilschicht; `build:hausplaner` erzeugt künftig `public/hausplaner/hausplaner.css`, die vorhandene `@if (file_exists(…))`-Bewachung in beiden Blades greift dann von selbst. **In Scheiben, nach Datei geschnitten** (HausplanerApp 132 · GuidedView 41 · ConfigWizard 39 · HausplanerStudio 34 · FachFlaeche 27 · StartView 20 · Rest 38) — nie zwei Scheiben gleichzeitig, weil dieselben Dateien der Werkzeugleiste gehören. **Wert- und verhaltenstreu:** kein gerenderter Farbwert ändert sich, `studioDaten.ts` bleibt die Quelle | Planner → Generator | `GESPERRT` — Planner schreibt zuerst den Auftrag (Schnitt, Reihenfolge, Wertgleichheits-Nachweis); Umsetzung erst nach AUF-36 und AUF-35a, sonst kollidiert sie mit der Werkzeugleiste | Ledger-Block „Zwei Willensentscheidungen" (25.07.) |
+| **AUF-39** | **L5 — Wizard-Schritte aus dem Modell ableiten** statt hartkodierter Status/Prüfungen. Steht seit `5af3e18` im Layout-Fahrplan und hatte bis 25.07. **keinen Posten** — gemessen: null Treffer auf `L5` in dieser Tafel. Guardrail aus dem Fahrplan: an vorhandene Services andocken, **kein zweiter Snapshot-/Hash-/Projektions-Mechanismus** | Planner → Generator | `GESPERRT` — hinter der Werkzeugleiste (AUF-36/35a) und hinter L2/L3 (AUF-33); Planner misst zuerst nach, wo die Schritte heute wirklich stehen | `docs/fahrplan-frontend-layout-hausplaner.md` Z. 90 |
+| **AUF-40** | **L6 — Start/Zuletzt an echte Projekte + Konfigurator-Paket serverseitig speichern.** Gemessen offen: `app/StartView.tsx:75` rendert die Demo-Liste `ZULETZT`, `app/ConfigWizard.tsx` lädt das `ConfiguratorPackage` als JSON **herunter**, statt es zu speichern. Hatte bis 25.07. ebenfalls **keinen Posten** (null Treffer auf `L6`). Braucht Backend-Anschluss, blockiert kein Layout | Planner → Generator | `GESPERRT` — hinter AUF-39; berührt als einziger Layout-Posten `app/Http/` und `routes/`, deshalb eigener Auftrag mit Yamas Fach-Freigabe vor dem Bau | `docs/fahrplan-frontend-layout-hausplaner.md` Z. 91 |
 
 ---
 
