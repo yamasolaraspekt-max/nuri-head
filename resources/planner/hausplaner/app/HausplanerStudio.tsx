@@ -12,6 +12,7 @@ import { T, FACH, PROJ, type StudioModus } from './studioDaten';
 import { ConfigWizard, type KonfigArt } from './ConfigWizard';
 import { FachFlaeche as FachFlaecheAnsicht } from './FachFlaeche';
 import { ableitenSchritte } from './dashboard/fahrschritte';
+import { speicherAnzeige, type AnzeigeArt } from './dashboard/speicherAnzeige';
 import { fachFlaecheNach, KONFIGURATOR_NAMEN, type FachFlaeche, type FlaechenHerkunft } from './dashboard/fachFlaechen';
 import { Ikon } from './studioUi';
 import { useHausplanerStore, type SpeicherStatus } from '../store/hausplanerStore';
@@ -42,14 +43,17 @@ export function HausplanerStudio(): React.ReactElement {
       treppe: nodes.filter((n) => n.type === 'object' && n.objectType === 'stair').length,
     };
   }, [scene]);
-  const STATUS: Record<SpeicherStatus, { label: string; farbe: string }> = {
-    gespeichert: { label: 'Gespeichert', farbe: T.ok },
-    ungespeichert: { label: 'Ungespeicherte Änderungen', farbe: T.warn },
-    speichert: { label: 'Speichert …', farbe: T.info },
-    konflikt: { label: 'Konflikt', farbe: T.err },
-    fehler: { label: 'Speichern fehlgeschlagen', farbe: T.err },
-  };
-  const st = STATUS[speicherStatus];
+  /**
+   * AUF-47: **die zweite Statusanzeige** — und die, die Yama in der Sichtprobe gesehen hat
+   * („Gespeichert · Rev. 1"). Sie stand direkt neben dem Hinweis „Testfläche — wird NICHT
+   * gespeichert" und widersprach ihm. Sie liest jetzt dieselbe Regel wie die Plakette im Planer
+   * (`dashboard/speicherAnzeige.ts`); die Farbe je Gewichtung bleibt hier.
+   */
+  const kannSpeichern = useHausplanerStore((s) => Boolean(s.speichernUrl));
+  const konfliktRevision = useHausplanerStore((s) => s.konfliktRevision);
+  const anzeige = speicherAnzeige(speicherStatus, kannSpeichern, konfliktRevision);
+  const ART_FARBE: Record<AnzeigeArt, string> = { ok: T.ok, warnung: T.warn, neutral: T.info, fehler: T.err };
+  const st = { label: anzeige.text, farbe: ART_FARBE[anzeige.art] };
   const toastTimer = React.useRef<number | undefined>(undefined);
 
   // Schmale Viewports (Handy/Baustelle): Navigation automatisch auf die Icon-Leiste einklappen,
@@ -104,7 +108,7 @@ export function HausplanerStudio(): React.ReactElement {
           Hausplaner
           <span style={{ fontWeight: 600, color: T.muted, fontSize: 13.5 }}>· Solar Aspekt</span>
         </div>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 7, color: T.muted, fontSize: 13 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: st.farbe }} />{st.label}{scene ? ` · Rev. ${scene.revision}` : ''}</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 7, color: T.muted, fontSize: 13 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: st.farbe }} />{st.label}{scene && kannSpeichern ? ` · Rev. ${scene.revision}` : ''}</span>
         <span style={{ flex: 1 }} />
         <div style={{ display: 'flex', background: T.surface, borderRadius: 12, padding: 4, boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>
           {modeBtn('start', 'Übersicht', '<path d="M4 5h16M4 12h16M4 19h10"/>')}

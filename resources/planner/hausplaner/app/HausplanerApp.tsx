@@ -28,6 +28,7 @@ import { enginePanel } from './dashboard/enginePanels';
 import { faehigkeitNach } from './tools/faehigkeiten';
 import { GeschossFlaeche } from './dashboard/GeschossFlaeche';
 import { panAus, type Pan } from './dashboard/pan';
+import { speicherAnzeige, type AnzeigeArt } from './dashboard/speicherAnzeige';
 import { naechsterSchritt, wegweiserSatz } from './tools/naechsterSchritt';
 import { TOOL_DEFINITIONS } from './tools/toolRegistry';
 import { TOOL_KATALOG } from './tools/toolCatalog';
@@ -271,6 +272,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    */
   const primaerId = useHausplanerStore((s) => s.primaerId);
   const speicherStatus = useHausplanerStore((s) => s.speicherStatus);
+  /**
+   * AUF-47: **kann** diese Fläche überhaupt speichern? Die Antwort stand immer im Store
+   * (`speichernUrl`), wurde aber nie gelesen — deshalb sagte die Plakette „Gespeichert" auf einer
+   * Testfläche, die noch nie etwas gespeichert hat.
+   */
+  const kannSpeichern = useHausplanerStore((s) => Boolean(s.speichernUrl));
   const konfliktRevision = useHausplanerStore((s) => s.konfliktRevision);
   const letzteAblehnung = useHausplanerStore((s) => s.letzteAblehnung);
   const modus = useHausplanerStore((s) => s.modus);
@@ -928,13 +935,17 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     return <div style={{ padding: 24, color: FARBEN.text }}>Szene nicht geladen.</div>;
   }
 
-  const statusPill = {
-    gespeichert: { text: 'Gespeichert', farbe: FARBEN.erfolg, grund: T.okSoft },
-    ungespeichert: { text: 'Ungespeicherte Änderungen', farbe: FARBEN.warnung, grund: T.warnSoft },
-    speichert: { text: 'Wird gespeichert …', farbe: FARBEN.gedaempft, grund: T.hair2 },
-    konflikt: { text: `Konflikt: Plan wurde von anderer Seite geändert (Revision ${konfliktRevision ?? '?'}) — Seite neu laden`, farbe: FARBEN.gefahr, grund: T.errSoft },
-    fehler: { text: 'Speichern fehlgeschlagen — erneut versuchen', farbe: FARBEN.gefahr, grund: T.errSoft },
-  }[speicherStatus];
+  // AUF-47: Text, Gewicht und Knopf-Sperre kommen aus `speicherAnzeige` (rein, getestet); hier
+  // stehen nur noch die Token je Gewicht. Vorher trug diese Tabelle die Aussage selbst — und kannte
+  // den Fall „kann gar nicht speichern" nicht.
+  const anzeige = speicherAnzeige(speicherStatus, kannSpeichern, konfliktRevision);
+  const ANZEIGE_TOKEN: Record<AnzeigeArt, { farbe: string; grund: string }> = {
+    ok: { farbe: FARBEN.erfolg, grund: T.okSoft },
+    warnung: { farbe: FARBEN.warnung, grund: T.warnSoft },
+    neutral: { farbe: FARBEN.gedaempft, grund: T.hair2 },
+    fehler: { farbe: FARBEN.gefahr, grund: T.errSoft },
+  };
+  const statusPill = { text: anzeige.text, ...ANZEIGE_TOKEN[anzeige.art] };
 
   const knopf = (aktiv: boolean): React.CSSProperties => ({
     padding: '6px 12px', fontSize: 12.5, fontWeight: 600, borderRadius: 8, cursor: 'pointer',
@@ -1067,7 +1078,14 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         <button
           type="button"
           onClick={() => void store.getState().save()}
-          style={{ padding: '7px 16px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none', cursor: 'pointer', background: T.brand, color: T.ink }}
+          disabled={anzeige.gesperrt}
+          title={anzeige.knopfTitel}
+          style={{
+            padding: '7px 16px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none',
+            cursor: anzeige.gesperrt ? 'not-allowed' : 'pointer',
+            background: anzeige.gesperrt ? T.hair2 : T.brand,
+            color: anzeige.gesperrt ? T.muted : T.ink,
+          }}
         >
           Speichern (Strg+S)
         </button>
