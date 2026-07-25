@@ -9,13 +9,23 @@
 > **Nicht verwechseln:** `docs/audit/stopp-1.md` ist ein **anderes** Dokument (paralleles Audit, P0-Liste
 > + Architektur-Urteil). Alle „stopp-1"-Verweise in `docs/audit/**` zeigen dorthin, nicht hierher.
 >
-> **🟡 OFFENER PUNKT AN YAMA (nicht selbst entschieden):** Die Re-Check-Pflicht aus Teil I („bei jeder
-> wberechnung-Änderung neu ziehen") wurde **seit dem 04.07. nicht gezogen** — die Historie in I.1 hat
-> weiterhin genau eine Zeile. Gleichzeitig liegen inzwischen **21 Services in `app/Services/Heizlast/`**
-> in ticket (u. a. `d8d3870` byte-genauer HeizlastRechner-Port, `17da20e` 13 Rechenkerne). Der
-> 271/271-Nachweis ist damit ein drei Wochen alter Schnappschuss einer Lage, die sich bewegt hat.
-> Zu entscheiden: Re-Check neu fahren · oder Teil I als erledigt schließen, weil der Transplant
-> ohnehin läuft · oder Dokument auf den tatsächlichen Transplant-Stand nachziehen.
+> **🟢 ENTSCHIEDEN (Yama, 25.07.2026): Teil I ist geschlossen.** Der offene Punkt lautete: Re-Check neu
+> fahren · Teil I schließen · oder das Dokument nachziehen. **Die Messung hat die Frage beantwortet.**
+>
+> **Cut-over-Kriterium I.2 Nr. 2 ist erfüllt** — gemessen am 25.07.: `app/Services/Heizlast/` in ticket
+> trägt **21 Services** und **17 Tests**, letzter Commit **18.07.** Der Transplant ist nicht mehr geplant,
+> **er ist gelaufen**. Damit ist die Frage „ab wann in ticket weiterbauen" nicht mehr offen, sondern
+> überholt: dort wird schon gebaut.
+>
+> **Der Re-Check bleibt bewusst ungezogen**, und das ist kein Versäumnis: er würde die MySQL-Tauglichkeit
+> von Code belegen, der bereits umgezogen ist. Zudem ist er von der Hausplaner-Sitzung aus nicht fahrbar
+> (`wberechnung` liegt nicht in den verbundenen Ordnern, die Zugangsdaten sind unversioniert lokal).
+> Das Script bleibt erhalten — falls jemand später in wberechnung weiterbaut, ist es der richtige Griff.
+>
+> **Was damit gilt:** Teil A–H bleibt Historie, **Teil I ist abgeschlossen**, nicht lebend. Die
+> Re-Check-Historie in I.1 behält ihre eine Zeile — sie dokumentiert den Gate-Nachweis vom 04.07.,
+> nicht eine versäumte Pflicht. **Nachgetragen als Planner-Arbeit auf Yamas Entscheid; Tafelposten AUF-6
+> ist damit geschlossen.**
 
 > **Rolle:** Planer/Überwacher (diese Instanz plant & prüft, die Executor-Instanz führt Code aus).
 > **Zweck:** Alle Phase-0-Ergebnisse in **einem** Dokument bündeln, damit Stopp 1 als **ein**
@@ -403,6 +413,10 @@ Voraussetzung (einmalig, schon erfüllt): DB `wberechnung_mysql_test` + `GRANT` 
 | Datum | Tests | Ergebnis | Rotfälle (SQLite→MySQL) |
 |---|---|---|---|
 | 2026-07-04 | 271 | ✅ 271/271 | 0 |
+
+**Kein weiterer Lauf — bewusst.** Am 25.07. entschieden (siehe Kopf): der Transplant nach ticket
+ist gelaufen (21 Services / 17 Tests, letzter Commit 18.07.), damit belegt ein neuer Lauf die Tauglichkeit
+von Code, der die Quelle bereits verlassen hat. **Teil I ist geschlossen.**
 
 ### I.2 — Cut-over-Kriterium: ab wann in ticket weiterbauen, wberechnung stoppen?
 
