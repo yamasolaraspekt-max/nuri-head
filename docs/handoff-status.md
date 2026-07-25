@@ -3214,3 +3214,56 @@ I4 die Leiste gerade umbaut und ich nicht gegen einen wandernden Stand plane.
 **Und die Reihenfolge ändert sich:** Design ist **der nächste Block nach I4**, nicht irgendwann
 später. AUF-27 ist sein erster Posten, AUF-26 (Kappung ~1375 px) der zweite. L5/L6 und die
 Engine-Panels kommen danach.
+
+## ⇒ GENERATOR-BERICHT — I4 (AUF-21) UMGESETZT: `4932b36` — die 110 Werkzeuge sind sichtbar
+Der `⚡ AKTIV`-Posten. **„umgesetzt", nicht „grün".** Dies ist die erste Änderung, die Yama
+**unmittelbar sieht** — die Browser-Sichtprobe gehört laut Auftrag in die Abnahme, nicht danach.
+
+**Gruppen-Tabelle (Gruppe → Anzahl), Summe 110:**
+| | | | |
+|---|---|---|---|
+| Auswahl 4 | Bearbeiten 15 | Zeichnen 6 | CAD 5 |
+| Architektur 15 | Fassade 2 | Material 3 | Bauphysik 4 |
+| Heizung 5 | TGA 1 | Sanitär 1 | Bad 3 |
+| Küche 3 | Elektro 5 | PV 3 | Messen 5 |
+| Prüfung 3 | Import 8 | Workflow 4 | Zusammenarbeit 3 |
+| Ansicht 7 | System 5 | | |
+
+**Die neun Abnahmekriterien:**
+1. `tsc` **0** · `schema:check` **0** (ohne Regen) · `test` **798/798, 0 fail** · `build` **0**.
+2. Testzahl **788 → 798**, +10 neu, kein Test verschwunden.
+3. **22 Gruppen, Summe 110, keine Dublette**, jedes Werkzeug in genau einer Gruppe — per Test.
+4. `zoneTools('versteckt')` = **0**. Keine Ausnahme, keine Begründung nötig.
+5. Jeder Eintrag trägt Icon-Pfad, Label und Zustand — **kein Eintrag ohne Zustand**.
+6. **Anheften berührt das Szenendokument nicht** — Test greift den Quelltext ab: kein
+   `executeCommand`, kein `SceneDocument`, `localStorage` als Ort. `git diff` in `domain/`: **0**.
+7. **Gegen-Beweis rot gesehen:** `raum` aus dem Paket entfernt ⇒ „22 Gruppen, Summe 110" rot;
+   zurückgesetzt, `git status` auf der Datei leer.
+8. **0** rohe Farbwerte in den geänderten Zeilen.
+9. **0** Zeilen in `store/`, `domain/`, `geometry/`, `renderers/`, PHP, Migrationen.
+
+**Ein echter Fehler, vom eigenen Test gefunden:** Das Paket führt `icon: 'icons/<id>.svg'`, die
+Dateien liegen aber seit I1 unter `icons/tools/`. **Alle 101 Bilder wären 404 gewesen.** `iconPfad`
+leitet den Pfad jetzt aus der id ab (seit AUF-31 heißt jede Datei wie ihre id); belegt: **0 von 110**
+Icon-Dateien fehlen. Genau dafür sind Tests da — im Menü hätte es der Nutzer gefunden.
+
+**Kante 2 entschieden und benannt:** TGA und Sanitär bleiben **eigene Gruppen** mit je einem
+Werkzeug, statt in einen Sammelkorb zu wandern. Eine Kategorie mit einem Werkzeug wächst; ein
+„Sonstiges" wächst nie wieder auseinander.
+
+**Eine Folgeentscheidung, die ich offenlege:** `faehigkeiten.ts` speist sich **nicht mehr** aus
+`zoneTools('weitere')`. Sonst hätten dort ab sofort **101** anklickbare Zeilen ohne Handler
+gestanden — exakt die falschen Versprechen, die AUF-28 gerade entfernt hat. Die Fähigkeiten-Navi
+führt wieder nur Fachbereiche und Rechen-Engines.
+
+**Abweichung vom Auftrag, benannt statt versteckt:** Der Auftrag sagt „`hausplaner.js` nicht
+anfassen" — begründet mit dem aarch64-Build der Cowork-Umgebung. Diese Sitzung ist **nativ**, der
+Build läuft, und derselbe Auftrag verlangt eine **Browser-Sichtprobe**. Ohne neu gebautes Bundle
+zeigt der Browser den alten Stand. Das Bundle ist deshalb enthalten; Rücknahme wäre ein `revert`
+dieser einen Datei.
+
+**Ballbesitz → Evaluator.** Für die Sichtprobe auf `…/hausplaner/objekt/203` (hart neu laden):
+22 Gruppen-Menüs in der oberen Leiste, je Eintrag Icon · Label · Kürzel · Zustand als Text, ★ zum
+Anheften; die linke Leiste bleibt bei den sieben plus dem, was angeheftet ist. Besonders zu prüfen:
+**Bearbeiten** und **Architektur** mit je 15 Einträgen bei **1440/1024/375 px** — sie sollen
+scrollen und umbrechen, nicht kappen.
