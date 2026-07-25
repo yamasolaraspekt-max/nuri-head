@@ -14,7 +14,12 @@ import { ZustandBadge } from './studioUi';
 import { FAEHIGKEIT_GRUPPEN, faehigkeitenNach, type Faehigkeit } from './tools/faehigkeiten';
 
 export function FaehigkeitenNavi(
-  { onAktivieren, activeToolId }: { onAktivieren: (toolId: string) => void; activeToolId?: string },
+  { onAktivieren, activeToolId, onEngine }: {
+    onAktivieren: (toolId: string) => void;
+    activeToolId?: string;
+    /** AUF-33: öffnet die Fläche einer verfügbaren Engine. Fehlt der Rückruf, bleibt sie stumm. */
+    onEngine?: (engineId: string) => void;
+  },
 ): React.ReactElement {
   return (
     <div>
@@ -32,7 +37,11 @@ export function FaehigkeitenNavi(
             {items.map((f) => {
               // Nur modus-schaltende Werkzeuge sind aus der Navi klickbar; Aktionen (Löschen/Duplizieren)
               // und Engines behalten ihre eigenen Handler (Op-Leiste bzw. Batch 1–3) — hier nur sichtbar.
-              const klickbar = f.art === 'werkzeug' && f.zustand === 'verfuegbar' && !!f.toolId;
+              // AUF-33/L2: Auch eine ENGINE ist klickbar, sobald sie `verfuegbar` ist — dann
+              // öffnet sie ihre Fläche. Vorher war jede Engine tot, obwohl die Rechenfunktion da
+              // war; es fehlte nur die Fläche davor.
+              const istEngine = f.art === 'engine' && f.zustand === 'verfuegbar' && Boolean(onEngine);
+              const klickbar = (f.art === 'werkzeug' && f.zustand === 'verfuegbar' && !!f.toolId) || istEngine;
               const aktiv = klickbar && f.toolId === activeToolId;
               return (
                 <button
@@ -40,7 +49,7 @@ export function FaehigkeitenNavi(
                   type="button"
                   title={`${f.label} — ${f.funktion}${f.eingang ? ` · ${f.eingang} → ${f.ausgang ?? ''}` : ''}`}
                   aria-disabled={!klickbar}
-                  onClick={klickbar ? () => onAktivieren(f.toolId as string) : undefined}
+                  onClick={klickbar ? () => (istEngine ? onEngine?.(f.id) : onAktivieren(f.toolId as string)) : undefined}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8, width: '100%', textAlign: 'left',
                     border: 'none', font: 'inherit', padding: '6px 12px',

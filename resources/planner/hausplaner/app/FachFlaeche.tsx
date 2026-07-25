@@ -20,7 +20,7 @@
  */
 import React from 'react';
 import { T } from './studioDaten';
-import { Ikon, ZustandBadge } from './studioUi';
+import { Ikon, ZustandBadge, type StudioZustand } from './studioUi';
 import {
   GRUND_DEAKTIVIERT,
   HINWEIS_ENGINE,
@@ -97,10 +97,28 @@ function AusgangZeile({ feld, grundId }: { feld: FeldVorschau; grundId: string }
   );
 }
 
-export function FachFlaeche({ flaeche, herkunft, onZurueck }: Props): React.ReactElement {
-  const basisId = React.useId();
-  const titelId = `${basisId}-titel`;
-  const grundId = `${basisId}-grund`;
+/**
+ * AUF-33 — die **Hülle** einer Fachfläche: Überlagerung, Kopf mit Zurück-Weg, Zweck, Escape,
+ * Klick daneben. Sie war bis dahin im Rumpf von `FachFlaeche` eingebaut; seit die Engine-Flächen
+ * (L2) dieselbe Hülle brauchen, steht sie hier **einmal** und wird zweimal benutzt.
+ *
+ * Der Auftrag sagt es wörtlich: *„`FachFlaeche.tsx` liefert bereits Kopf, Zweck, Zurück und
+ * Leerzustand — das wird wiederverwendet, nicht neu gebaut."* Ein zweiter Rahmen mit eigenem
+ * Escape-Handler und eigener Kopfzeile wäre genau die Doppelung, die dieser Posten vermeiden soll.
+ */
+export function FlaechenHuelle({
+  titel, gruppe, zustand, zweck, zurueck, onZurueck, children,
+}: {
+  titel: string;
+  gruppe: string;
+  zustand: StudioZustand;
+  zweck: string;
+  /** Beschriftung des Zurück-Knopfes — kommt von der Herkunft, nie pauschal (Kante 2). */
+  zurueck: string;
+  onZurueck: () => void;
+  children: React.ReactNode;
+}): React.ReactElement {
+  const titelId = React.useId();
 
   // Escape schließt — derselbe Rückweg wie die Schaltfläche, nicht die Startseite (Kante 2).
   React.useEffect(() => {
@@ -126,7 +144,6 @@ export function FachFlaeche({ flaeche, herkunft, onZurueck }: Props): React.Reac
           overflowX: 'hidden', overflowY: 'auto',
         }}
       >
-        {/* 1 · Kopf — Modul, Gruppe, Zurück-Weg. Bricht um, statt zu kappen (Kante 5). */}
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap', padding: '20px 24px 12px' }}>
           <button
             type="button" onClick={onZurueck}
@@ -136,26 +153,41 @@ export function FachFlaeche({ flaeche, herkunft, onZurueck }: Props): React.Reac
               display: 'flex', alignItems: 'center', gap: 7, flex: '0 0 auto',
             }}
           >
-            <Ikon inhalt='<path d="M15 6l-6 6 6 6"/>' size={15} />{zurueckLabel(herkunft)}
+            <Ikon inhalt='<path d="M15 6l-6 6 6 6"/>' size={15} />{zurueck}
           </button>
           <div style={{ flex: '1 1 240px', minWidth: 0 }}>
             <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.09em', textTransform: 'uppercase', color: T.accent }}>
-              Fachplaner · {flaeche.gruppe}
+              Fachplaner · {gruppe}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginTop: 4 }}>
               <h2 id={titelId} style={{ fontSize: 21, fontWeight: 800, letterSpacing: '-.01em', margin: 0, overflowWrap: 'anywhere' }}>
-                {flaeche.label}
+                {titel}
               </h2>
-              <ZustandBadge zustand={flaeche.zustand} />
+              <ZustandBadge zustand={zustand} />
             </div>
           </div>
         </div>
 
-        {/* 2 · Zweck — ein Satz, was hier entsteht. */}
         <p style={{ margin: 0, padding: '0 24px', fontSize: 14.5, color: T.muted, lineHeight: 1.5, overflowWrap: 'anywhere' }}>
-          {flaeche.zweck}
+          {zweck}
         </p>
 
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export function FachFlaeche({ flaeche, herkunft, onZurueck }: Props): React.ReactElement {
+  const basisId = React.useId();
+  const grundId = `${basisId}-grund`;
+
+  return (
+    <FlaechenHuelle
+      titel={flaeche.label} gruppe={flaeche.gruppe} zustand={flaeche.zustand}
+      zweck={flaeche.zweck} zurueck={zurueckLabel(herkunft)} onZurueck={onZurueck}
+    >
+      <>
         {/* 4 · Leerzustand: der Grund steht als Text, nicht nur als Tooltip (Kante 4). */}
         <div
           id={grundId}
@@ -188,7 +220,7 @@ export function FachFlaeche({ flaeche, herkunft, onZurueck }: Props): React.Reac
             </div>
           </section>
         </div>
-      </div>
-    </div>
+      </>
+    </FlaechenHuelle>
   );
 }

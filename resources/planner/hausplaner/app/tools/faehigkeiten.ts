@@ -81,7 +81,7 @@ const engineFaehigkeiten: Faehigkeit[] = [
   { id: 'engine-uwert', label: 'U-Wert (Wandaufbau)', gruppe: 'bau', art: 'engine', zustand: 'in_entwicklung', funktion: 'U-Wert aus Schichten DIN EN ISO 6946', eingang: 'Schicht[]', ausgang: 'UErgebnis', engineModul: 'geometry/wandaufbau', engineExport: 'berechneUWert' },
   { id: 'engine-fensterprodukt', label: 'Fenster Uw / RC / Preis', gruppe: 'fenster-tuer', art: 'engine', zustand: 'in_entwicklung', funktion: 'Uw (ISO 10077), RC (EN 1627), Preis', eingang: 'UwEingabe', ausgang: 'UwErgebnis', engineModul: 'geometry/fensterProdukt', engineExport: 'berechneUw' },
   { id: 'engine-sparren', label: 'Sparren-Vorbemessung', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'in_entwicklung', funktion: 'Biegenachweis Eurocode 5', eingang: 'SparrenEingabe', ausgang: 'SparrenErgebnis', engineModul: 'geometry/sparrenBerechnung', engineExport: 'berechneSparren' },
-  { id: 'engine-treppe', label: 'Treppen-Auslegung', gruppe: 'treppe', art: 'engine', zustand: 'in_entwicklung', funktion: 'Stufen/Steigung DIN 18065', eingang: 'TreppenEingabe', ausgang: 'TreppenErgebnis', engineModul: 'geometry/treppenBerechnung', engineExport: 'berechneTreppe' },
+  { id: 'engine-treppe', label: 'Treppen-Auslegung', gruppe: 'treppe', art: 'engine', zustand: 'verfuegbar', funktion: 'Stufen/Steigung DIN 18065', eingang: 'TreppenEingabe', ausgang: 'TreppenErgebnis', engineModul: 'geometry/treppenBerechnung', engineExport: 'berechneTreppe' },
   { id: 'engine-holzmengen', label: 'Holz-Mengen (BOM)', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'in_entwicklung', funktion: 'Sparren/Konter/Latten summieren', eingang: 'HolzStück[]', ausgang: 'HolzMengen', engineModul: 'geometry/holzMengen', engineExport: 'holzMengenAusListe' },
   { id: 'engine-holzbauteile', label: 'Holz-Bauteile (BOM)', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'in_entwicklung', funktion: 'Pfetten/Grat-/Kehlsparren aggregieren', eingang: 'Holzliste', ausgang: 'HolzBauteile', engineModul: 'geometry/holzBauteile', engineExport: 'holzBauteileAusListe' },
   { id: 'engine-schifter', label: 'Schifter-Liste', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'in_entwicklung', funktion: 'Schiftsparren klassifizieren + Stückliste', eingang: 'Fläche (u/v)', ausgang: 'SchifterSparren[]', engineModul: 'geometry/schifterListe', engineExport: 'klassifiziereSchifter' },
@@ -121,4 +121,9 @@ export function doppelteIds(): string[] {
     gesehen.add(f.id);
   }
   return [...doppelt];
+}
+
+/** AUF-33: eine Fähigkeit nach id — für die Engine-Fläche (Gruppe und Zustand am Kopf). */
+export function faehigkeitNach(id: string): Faehigkeit | undefined {
+  return FAEHIGKEITEN.find((f) => f.id === id);
 }

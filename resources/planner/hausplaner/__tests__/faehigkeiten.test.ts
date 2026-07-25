@@ -10,11 +10,18 @@ test('eine Wahrheit: keine doppelten Fähigkeit-ids', () => {
   assert.deepEqual(doppelteIds(), []);
 });
 
-test('alle 13 Rechen-Engines sind als art:engine / zustand:in_entwicklung registriert (mit echtem Modul + Ein-/Ausgang)', () => {
+test('alle 13 Rechen-Engines sind registriert (echtes Modul + Ein-/Ausgang) — genau EINE ist verfügbar', () => {
+  // AUF-33/L2: `engine-treppe` hat als erste eine Fläche und steht deshalb auf `verfuegbar`.
+  // Die übrigen zwölf bleiben `in_entwicklung`, bis L3 sie anschliesst — zwölf Kacheln, die
+  // „verfügbar" behaupten und es nicht sind, wären die falschen Versprechen aus AUF-28.
   const engines = FAEHIGKEITEN.filter((f) => f.art === 'engine');
   assert.equal(engines.length, 13);
+  const verfuegbar = engines.filter((e) => e.zustand === 'verfuegbar');
+  assert.deepEqual(verfuegbar.map((e) => e.id), ['engine-treppe'], 'genau eine Engine ist angeschlossen');
   for (const e of engines) {
-    assert.equal(e.zustand, 'in_entwicklung', `${e.id} sollte schlafen (Panel folgt Batch 1–3)`);
+    if (e.id !== 'engine-treppe') {
+      assert.equal(e.zustand, 'in_entwicklung', `${e.id} sollte schlafen (Fläche folgt in L3)`);
+    }
     assert.ok(e.engineModul?.startsWith('geometry/'), `${e.id} referenziert ein echtes geometry-Modul`);
     assert.ok(e.eingang && e.ausgang, `${e.id} trägt Ein-/Ausgang fürs spätere Panel`);
   }

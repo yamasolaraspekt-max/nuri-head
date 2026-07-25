@@ -23,6 +23,9 @@ import { ZustandBadge } from './studioUi';
 import { PANEL_TABS, type PanelTabId } from './dashboard/panelTabs';
 import { aufloeseAuswahlmodus, wendeAuswahlAn, klickInsLeere } from './tools/auswahlModus';
 import { mehrfachUebersicht } from './tools/auswahlUebersicht';
+import { EngineFlaeche } from './EngineFlaeche';
+import { enginePanel } from './dashboard/enginePanels';
+import { faehigkeitNach } from './tools/faehigkeiten';
 import { ReiterLeiste } from './dashboard/ReiterLeiste';
 import { SCHIENEN_REITER, SCHIENE_STANDARD, type SchienenReiterId } from './dashboard/schienenReiter';
 import { ARBEITSBEREICHE, arbeitsbereich } from './dashboard/arbeitsbereiche';
@@ -286,6 +289,11 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * kein Schema. Sollte er später überleben sollen, ist DIESE Zeile die einzige Stelle dafür.
    */
   const [schienenTab, setSchienenTab] = useState<SchienenReiterId>(SCHIENE_STANDARD);
+  /**
+   * AUF-33/L2: die geöffnete Engine-Fläche. Lokal — sie hat genau einen Leser und gehört weder
+   * ins Szenendokument noch in den UI-Store (dieselbe Begründung wie beim Schienen-Reiter).
+   */
+  const [offeneEngine, setOffeneEngine] = useState<string | null>(null);
   /** I4: persoenlich angeheftete Werkzeuge (★). Liegt in localStorage, NIE im Szenendokument —
    *  eine Vorliebe des Bedieners ist keine Eigenschaft des Gebaeudes. */
   const [angeheftet, setAngeheftet] = useState<Set<string>>(() => ladeAngeheftet());
@@ -1198,6 +1206,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             <FaehigkeitenNavi
               activeToolId={werkzeug}
               onAktivieren={(id) => { setWerkzeug(id as Werkzeug); setWandStart(null); setTreppeStart(null); }}
+              onEngine={(id) => setOffeneEngine(id)}
             />
           )}
 
@@ -2023,6 +2032,20 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             </div>
           </div>
         </div>
+      )}
+
+      {/* AUF-33/L2: die Fläche einer Rechen-Engine. Sie liegt hier und nicht im Studio, weil der
+          Auslöser hier liegt — der Fachplaner-Reiter der linken Schiene. Kopf, Zweck, Zurück und
+          Escape kommen aus derselben `FlaechenHuelle` wie die L4-Flächen (AUF-25), kein zweiter
+          Rahmen. Unbekannte Engine ⇒ nichts, kein Wurf. */}
+      {offeneEngine && enginePanel(offeneEngine) && (
+        <EngineFlaeche
+          panel={enginePanel(offeneEngine)!}
+          gruppe={faehigkeitNach(offeneEngine)?.gruppe ?? 'Fachplaner'}
+          zustand={faehigkeitNach(offeneEngine)?.zustand ?? 'in_entwicklung'}
+          zurueck="Zurück zum Planer"
+          onZurueck={() => setOffeneEngine(null)}
+        />
       )}
     </div>
   );
