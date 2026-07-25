@@ -26,6 +26,7 @@ import { mehrfachUebersicht } from './tools/auswahlUebersicht';
 import { EngineFlaeche } from './EngineFlaeche';
 import { enginePanel } from './dashboard/enginePanels';
 import { faehigkeitNach } from './tools/faehigkeiten';
+import { GeschossFlaeche } from './dashboard/GeschossFlaeche';
 import { ReiterLeiste } from './dashboard/ReiterLeiste';
 import { SCHIENEN_REITER, SCHIENE_STANDARD, type SchienenReiterId } from './dashboard/schienenReiter';
 import { ARBEITSBEREICHE, arbeitsbereich } from './dashboard/arbeitsbereiche';
@@ -294,6 +295,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * ins Szenendokument noch in den UI-Store (dieselbe Begründung wie beim Schienen-Reiter).
    */
   const [offeneEngine, setOffeneEngine] = useState<string | null>(null);
+  /** AUF-43: ob die Geschoss-Fläche offen ist. Reine Bedien-Anzeige, kein Modellzustand. */
+  const [geschossOffen, setGeschossOffen] = useState(false);
   /** I4: persoenlich angeheftete Werkzeuge (★). Liegt in localStorage, NIE im Szenendokument —
    *  eine Vorliebe des Bedieners ist keine Eigenschaft des Gebaeudes. */
   const [angeheftet, setAngeheftet] = useState<Set<string>>(() => ladeAngeheftet());
@@ -971,54 +974,19 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         {/* Dashboard v2.1: Die Fenstertyp/Türtyp-Auswahl stand hier und ist byte-treu in die
             Kontext-Options-Leiste unter der Werkzeugleiste gewandert (§19/UI-4). Gleiche States,
             gleiche Optionslisten, gleiches onChange — der Platzierungspfad ist unberührt. */}
-        {/* Dashboard v1 §3: Geschoss-Stepper (◀ [Name ▾] ▶) statt Flach-select — ◀/▶ nach sortOrder/elevation,
-            native select = Sprung/Tipp-Suche (skaliert bis viele Etagen). setActiveLevel bleibt SSOT; Token-Border. */}
-        <span style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-          Geschoss
-          {(() => {
-            const sortiert = [...scene.levels].sort((a, b) => a.sortOrder - b.sortOrder || a.elevation - b.elevation);
-            const idx = sortiert.findIndex((l) => l.id === level.id);
-            const gehe = (d: number): void => { const z = sortiert[idx + d]; if (z) store.getState().setActiveLevel(z.id); };
-            const pfeil = (t: string, label: string, d: number, aus: boolean): React.ReactElement => (
-              <button type="button" disabled={aus} title={label} aria-label={label}
-                style={{ ...knopf(false), padding: '4px 7px', opacity: aus ? 0.4 : 1, cursor: aus ? 'not-allowed' : 'pointer' }}
-                onClick={() => gehe(d)}>{t}</button>
-            );
-            return (
-              <>
-                {pfeil('◀', 'Geschoss darunter', -1, idx <= 0)}
-                <select value={level.id} title="Geschoss wählen" onChange={(e) => store.getState().setActiveLevel(e.target.value)}
-                  style={{ fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}` }}>
-                  {sortiert.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
-                </select>
-                {pfeil('▶', 'Geschoss darüber', 1, idx >= sortiert.length - 1)}
-              </>
-            );
-          })()}
-        </span>
-        {/* P2b-5: Geschoss anlegen / umbenennen / löschen. Löschen NIE still — belegte Geschosse
-            lehnt der Command ab (letzteAblehnung wird sichtbar); id bleibt Referenz-Wahrheit. */}
-        <input
-          key={level.id}
-          type="text"
-          defaultValue={level.name}
-          title="Geschoss umbenennen (Enter bestätigt)"
-          onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
-          onBlur={(e) => {
-            const name = e.target.value.trim();
-            if (name && name !== level.name) {
-              store.getState().executeCommand({ type: 'UPDATE_LEVEL', levelId: level.id, changes: { name } });
-            } else {
-              e.target.value = level.name; // leeren/unveränderten Namen zurücksetzen
-            }
-          }}
-          style={{ width: 104, fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}` }}
-        />
-        <button
-          type="button"
-          style={knopf(false)}
-          title="Neues Geschoss über dem obersten anlegen"
-          onClick={() => {
+        {/* AUF-43: Die Geschoss-Bedienung hat die Zeile verlassen. Vorher standen hier ein
+            111-px-Select, ein Textfeld mit DEMSELBEN Namen daneben und drei Verwaltungsknöpfe —
+            zusammen mit Rückgängig und dem Ansichtsmodus, mit denen das Geschoss nichts zu tun hat.
+            Jetzt: ein Knopf mit der Kurzfassung, dahinter die Fläche mit dem Stapel.
+            `setActiveLevel` bleibt die einzige Wahrheit; die Commands sind dieselben. */}
+        <GeschossFlaeche
+          levels={scene.levels}
+          aktivId={level.id}
+          offen={geschossOffen}
+          setOffen={setGeschossOffen}
+          onWechseln={(id) => store.getState().setActiveLevel(id)}
+          onUmbenennen={(name) => store.getState().executeCommand({ type: 'UPDATE_LEVEL', levelId: level.id, changes: { name } })}
+          onAnlegen={() => {
             const oben = scene.levels.reduce((a, b) => (b.sortOrder > a.sortOrder ? b : a));
             const neu = {
               id: uuid(),
@@ -1032,25 +1000,14 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               store.getState().setActiveLevel(neu.id);
             }
           }}
-        >+ Geschoss</button>
-        <button
-          type="button"
-          style={knopf(false)}
-          title="Aktuelles Geschoss als Vorlage duplizieren — Wände, Öffnungen und Dach werden ein Stockwerk höher kopiert"
-          onClick={dupliziereGeschossJetzt}
-        >⧉ Geschoss dupl.</button>
-        <button
-          type="button"
-          style={{ ...knopf(false), opacity: scene.levels.length <= 1 ? 0.4 : 1, cursor: scene.levels.length <= 1 ? 'not-allowed' : 'pointer' }}
-          disabled={scene.levels.length <= 1}
-          title={scene.levels.length <= 1 ? 'Das letzte Geschoss kann nicht gelöscht werden' : 'Aktives Geschoss löschen (muss leer sein)'}
-          onClick={() => {
+          onDuplizieren={dupliziereGeschossJetzt}
+          onLoeschen={() => {
             const rest = scene.levels.filter((l) => l.id !== level.id);
             if (store.getState().executeCommand({ type: 'REMOVE_LEVEL', levelId: level.id }) && rest[0]) {
               store.getState().setActiveLevel(rest[0].id);
             }
           }}
-        >− Geschoss</button>
+        />
         <span style={{ width: 1, height: 22, background: T.hair, margin: '0 4px' }} />
         {/* P1c: Modus-Schalter — 3D ist der zweite Renderer DERSELBEN Daten (ein Store). */}
         <button type="button" title="2D-Grundriss" style={knopf(modus === '2d')} onClick={() => store.getState().setModus('2d')}>2D</button>
