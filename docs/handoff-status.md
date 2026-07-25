@@ -1911,3 +1911,89 @@ bleibt so, bis jemand nativ auf x64 baut.
 Hintergrundprozesse überleben den Werkzeug-Aufruf nicht (auch mit `nohup` nicht) — sie werden auch
 nicht gebraucht: `test:hausplaner` läuft in ~3 s synchron durch, `tsc` in ~2 s. Zurückgebliebene
 `.git/*.lock` wurden per `mv` nach `.git/_locks_beiseite/generator-25-07/` geschoben, nicht gelöscht.
+
+---
+
+## ⇒ GENERATOR-BERICHT — Dashboard v2 Nacharbeit N1/N3 UMGESETZT (N2 fremd)
+
+**Rolle:** Generator (Cowork/remote) — meldet **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+Basis `03d83ea`, HEAD nachher `37616cf`, Arbeitsbaum `0` → `0`, kein Push.
+
+### ⚠️ Kollision — zwei Generator-Instanzen auf derselben Datei
+
+Während der Arbeit hat eine **parallele native Generator-Instanz** dieselbe Auftragsdatei
+abgearbeitet: `c3249d4` (Tafel: AUF-16 gezogen) und `982384d` (**N2**). Die Cowork-Instanz hat die
+Kollision mitten in der N2-Vorbereitung bemerkt — `HausplanerApp.tsx` war bereits umgebaut und ein
+fremder, noch **untracked** Test lag im Baum — und **N2 daraufhin nicht angefasst**. Jeder
+Schreibzugriff hätte fremde, uncommittete Arbeit zerstört.
+
+**N2 (`982384d`) ist nicht die Leistung der Cowork-Instanz; sie steht nicht dafür ein.** Die
+Kriterien 5 und 6 sind am fremden Commit zu prüfen.
+
+Für N3 wurde die Kollision aktiv verhindert statt gewürfelt: **AUF-19 vorher auf der Tafel gezogen**
+(`ca4153b`) — dieselbe Konvention, die die native Instanz für AUF-16 benutzt hat.
+
+**Planner-Einordnung:** Die Tafel-Ziehung aus §1 der AUFTRAGSTAFEL hat genau das getan, wofür sie
+gebaut wurde — *„Zwei Instanzen am selben Auftrag sind der teuerste Fehler dieser Woche gewesen."*
+Sie hat aber nur gegriffen, weil eine der beiden Instanzen sie **freiwillig** benutzt hat. Das ist
+Glück, keine Regel. **→ eigener Posten, AUF-22.**
+
+### Gates (an `37616cf`)
+
+`tsc:hausplaner` **0** · `schema:hausplaner:check` **0** (kein Regen) · `test:hausplaner` **0** —
+`# tests 746 / # pass 746 / # fail 0` · `build:hausplaner` **nicht ausführbar**
+(`@rollup/rollup-linux-arm64-gnu`, aarch64).
+
+**734 → 746 (+12)**, Namen-Mengen per `comm` verglichen: **null verschwundene Tests**. +5 aus dem
+fremden `kontextOptionenLeiste.test.ts` (N2), +7 aus `panelReiterVerknuepfung.test.ts` (N3).
+Beide N3-Mutationen rot (`focus()` entfernt → 2 Fälle, `role="tabpanel"` entfernt → 2 Fälle).
+
+### Commits
+
+`2d927fc` **N1** (AUF-15a) — 4 Dateien, +17/−16 · `8587ce7` **N3** (AUF-19) — 2 Dateien, +111/−1
+(`panelReiterVerknuepfung.test.ts` neu). `982384d` **N2** = fremde Instanz.
+
+### N1 — Wertgleichheit, 16 Ablösungen
+
+`studioDaten.ts` steht in **keinem** Commit ⇒ kein Token erfunden, kein Wert geändert.
+`#fff → T.surface (#ffffff)` ×10 · `#374151 → T.canvasWall` exakt ×1 ·
+`#4b5563 → T.canvasWallFill` exakt ×5. Kante 1 gewahrt (Laufzeit-Ternäre unverändert),
+Kante 2 gewahrt (`#4b5563` semantisch auf Wand-Füllung, nicht pauschal).
+
+**Grep vorher → nachher:** Hex-Zeilen **30 → 17**, alle Rohtreffer **52 → 36**.
+
+### Operanden-Gate — 24 distinkte Werte zurückgegeben, 36 Vorkommen
+
+Für **keinen** existiert ein wertgleiches Token. Drei Klassen:
+
+1. **Schatten/Scrim, 6 rgba-Werte (16 Vorkommen)** — `rgba(28,40,48,.05)`×9 u. a. Die Token-Tabelle
+   kennt **keine Elevation-/Overlay-Rolle**. Größte Einzellücke. → Posten „Elevation-Tokens".
+2. **Nah, aber nicht gleich** — `#e5e7eb` vs `T.hair #edf0f2` · `#6b7280` vs `T.muted #697079` ·
+   `#0a4f4d` vs `T.accentInk #0c5f5d` u. a. **T1 hätte hier gemappt und dabei Werte verschoben.**
+   Der Generator hat es nicht getan, weil der Auftrag Wertgleichheit fordert. **Willensfrage.**
+3. **Ohne Entsprechung** — 13 weitere Werte, plus Sonderfall `#ffffffcc` (Weiß **mit Alpha**;
+   `T.surface` ist deckend, eine Ablösung wäre eine sichtbare Änderung).
+
+**Offengelegt:** `T.surface` trägt jetzt **zwei Rollen** (Fläche und Text-auf-Farbe). Wertgleich ist
+es; sauber wäre eine eigene Rolle `T.onFilled`. Eine neue Rolle zu erfinden war untersagt → zurückgegeben.
+
+### N3
+
+**B3 erfüllt:** ein Inhaltsbereich für alle vier Reiter, deshalb zeigen alle `aria-controls` auf
+**dieselbe, immer vorhandene** `id` — ein Verweis ins Leere wäre schlechter. `PANEL_ID` + `reiterId()`
+auf Modulebene (Kante 5), Panel mit `role="tabpanel"` + `aria-labelledby`.
+**B4:** `reiterRefs.current[ziel]?.focus()` **nur** im Pfeiltasten-Zweig, `onClick` ruft es nicht
+(Kante 6 durch Konstruktion, per Test verriegelt). Der Fokus-**Effekt** ist **„nicht testbar ohne
+DOM"** — ausdrücklich so benannt, nicht behauptet.
+
+**Kriterium 5 (Zwei-Render-Messung) ist weiterhin NICHT erbracht.** Kein Test im Repo importiert eine
+`.tsx` — `node --experimental-strip-types` transformiert kein JSX, es gibt kein DOM. Der Nachweis für
+N2 ist eine Quelltext-Prüfung, keine Wirkungsmessung. Braucht x64-nativ mit DOM.
+
+**Kein Beifang:** 0 Zeilen in `app/tools/*`, `store/*`, `domain/*`, `geometry/*`, `renderers/*`,
+`public/*`, PHP, Migrationen. `toolPresentation.ts` (AUF-1) unberührt.
+
+### Zurückgegeben
+
+Die Kollision selbst (→ AUF-22) · fehlende Elevation-Rolle in `studioDaten.ts` · `T.surface` in
+Doppelrolle (`T.onFilled`) · ~8 „nah dran"-Werte, deren Angleichung eine sichtbare Farbänderung wäre.
