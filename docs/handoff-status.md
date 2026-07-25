@@ -4604,3 +4604,72 @@ Auftrag sagt ausdrücklich: *„`GuidedView` wird nicht umgebaut."* **Eigener Po
 nicht angefasst.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-43: die Geschoss-Bedienung verlässt die Zeile
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `43a287f` (Code) · `8fd6568` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+
+### Was gebaut wurde
+
+Ein Knopf mit der Kurzfassung — `EG · ±0 mm · 1 von 3` — öffnet eine Fläche mit dem **Stapel von
+oben nach unten**: Position, Name, Höhenlage je Geschoss, das aktive an Hintergrund **und**
+Schriftschnitt erkennbar, darunter `n darüber · n darunter`, dann das **eine** Namensfeld und die
+Verwaltung (anlegen · duplizieren · löschen).
+
+| Baustein | Inhalt |
+|---|---|
+| `dashboard/geschossStapel.ts` | rein: Stapel, Positionen, `hoehenLabel`, Kurzfassung, Nachbar |
+| `dashboard/GeschossFlaeche.tsx` | die Fläche; Modulebene (Befund B1) |
+| `HausplanerApp.tsx` | die alte Elementgruppe ist ersetzt |
+
+### Die neun Kriterien, Rohausgabe
+
+| # | Kriterium | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` | **0 / 0 / 0** — **900 → 916**, **0 verschwunden** |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen** |
+| 3 | Name genau einmal | in der Fläche: `<select` **0** · `<input` **1**; in der App sind „Geschoss wählen" und „Geschoss umbenennen (Enter bestätigt)" **weg** |
+| 4 | Höhenlage sichtbar | `hoehenLabel`: `±0 mm` · `+2 700 mm` · `−2 800 mm` (schmales geschütztes Leerzeichen); steht je Stapelzeile **und** in der Kurzfassung |
+| 5 | Umbenennen über `UPDATE_LEVEL`, undo-fähig | `applyCommand` liefert inverse Patches — am echten Command geprüft, nicht behauptet |
+| 6 | Trennung belegt | in der Fläche: `undo()` **0** · `redo()` **0** · `setModus` **0** · `save()` **0** |
+| 7 | Mutations-Gegenbeweis | Sortierung umgedreht ⇒ **2 Tests rot**; zurückgebaut ⇒ `diff` leer, 916/916 |
+| 8 | `public/*` im Code-Commit null Zeilen, Bundle eigener zweiter Commit | erfüllt: `43a287f` → `8fd6568` |
+| 9 | Sichtprobe 1440 / 1024 / 375 px | siehe unten |
+
+**Rebuild-Beleg** (`8fd6568`, 1.406.179 Bytes, 25.07. 22:36):
+`grep -c 'Name des aktiven Geschosses'` = 1 · `'darüber'` = 1 · `'Stapel'` = 1.
+
+### Sichtprobe
+
+| Breite | geschlossen | geöffnet |
+|---|---|---|
+| **1440 px** | Knopf `EG · ±0 mm · 1 von 1`; **7** Bedienelemente in der Zeile statt 13 | Stapel · 1 Geschoss · „0 darüber · 0 darunter" · 1 Namensfeld · 3 Verwaltungsknöpfe, „− Löschen" gesperrt |
+| **1024 px** | identisch, kein waagerechter Überlauf | identisch |
+| **375 px** | Knopf bricht auf **sechs Zeilen** um | Fläche reicht bis **432 px** — 57 px über den Fensterrand, „− Löschen" abgeschnitten |
+
+**Zu 375 px, und der Auftrag sagt ausdrücklich „melden, nicht flicken":** Die Seite läuft dort
+**auch mit geschlossener Fläche** waagerecht über — der Planer ist bei 375 px insgesamt nicht
+bedienbar (AUF-46). Meine Fläche macht es an einer Stelle sichtbarer: `minWidth: 290` schlägt in CSS
+das `maxWidth: 92vw`, deshalb ragt sie heraus statt zu schrumpfen. **Nicht angefasst.** Wer AUF-46
+angeht, findet hier eine konkrete Zeile.
+
+### Was NICHT passiert ist
+
+Kein neuer Zustand — `setActiveLevel` bleibt die einzige Wahrheit, ein Test schließt einen zweiten
+„aktuelles Geschoss"-Merker aus. Kein neues Command. Kein Schema-Eingriff: `elevation`, `sortOrder`
+und `name` werden **gezeigt**, nicht erfunden. Keine Sortierumkehr. **Der Hinweis aus AUF-45 ist
+nicht gebaut** — dieser Posten baut die Fläche, an der er später hängt.
+
+### Zwei Dinge, die die Messung korrigiert hat
+
+1. **Das Trennzeichen war unsichtbar falsch.** Mein erster Test verglich `+2 700 mm` mit
+   `+2 700 mm` — und schlug fehl: der Code schrieb **U+202F** (schmales geschütztes Leerzeichen),
+   der Test ein gewöhnliches. Im Diff sind beide nicht zu unterscheiden. Jetzt steht im Code
+   `' '` als Escape, im Test dieselbe Erwartung — und der Kommentar sagt, warum.
+2. **`enablePatches()` fehlte im Test.** Ohne das Immer-Plugin gibt es keine inversen Patches; der
+   Undo-Beleg wäre stillschweigend nie gelaufen. Übernommen aus `applyCommand.test.ts`.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
