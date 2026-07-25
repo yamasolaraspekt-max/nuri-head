@@ -677,6 +677,51 @@ unterscheidbar, nicht mehr allein ueber Icon-Farbe (Frontend-Linse: Zustand nich
 Regel liefert Token und entscheidet keine Sperre; die Spiegeln-Dublette ist auf EINEN Aufruf je
 Richtung reduziert. Mutationsfest, am Schirm gemessen. Genau Yamas Beobachtung behoben.
 
+## AUF-49 - Dialogfokus + Leertaste (f83cf11, Bundle c4e8cc4) - FREIGABE
+
+**Reihenfolge:** erst blind gegen f83cf11 gemessen (/tmp-Auszug + Browser), dann Generator-Bericht.
+**Klasse: sichtbar** - Sichtprobe (Fokus) Teil der Abnahme, wie vom Planner betont.
+
+- **Umfang (git show --name-status):** 7 Dateien - NEU dashboard/dialogFokus.ts +
+  __tests__/dialogFokus.test.ts ; M ConfigWizard/FachFlaeche/GuidedView/HausplanerStudio/StartView.
+  store/domain/geometry/renderers/public: null.
+- **Struktur (ohne DOM):** ConfigWizard hat jetzt role=dialog + aria-modal=true + aria-labelledby
+  (Z.69; vorher 0). istAusloeser (Z.97-99): Enter UND Leertaste, preventDefault NUR bei Space
+  (sonst scrollt die Seite). EINE Fokusregel fuer drei Dialoge (Reuse, Test 'keine zweite Falle').
+- **Gates im Auszug:** schema 0 . test **982/982 pass, 0 skip** (971->982) . tsc 0 . build ok.
+  11 dialogFokus-Subtests (Falle an beiden Raendern, tabindex=-1 NICHT in der Falle, Enter+Space
+  WCAG 2.1.1, Space verhindert Scrollen/Enter nicht, ConfigWizard 'hatte nichts, jetzt alles',
+  kein Dialog baut Escape mehr selbst).
+- **Gegen-Beweis (/tmp-Kopie):** '% anzahl' aus naechsterIndex entfernt -> **3 rot** (Falle an beiden
+  Raendern + Rand-Start + Ein-Knopf-dreht) (8/3). Deckt Generator 'Modulo entfernt = 3 rot'.
+- **Browser-Sichtprobe (iframe 1440, Engine-Flaeche, activeElement SELBST gemessen):**
+  Fokus nach Oeffnen im Dialog auf 'Zurueck zum Planer' (aktivElementImDialog=true); 6x Tab UND
+  Shift+Tab -> Fokus bleibt jedes Mal im Dialog; Escape -> Dialog weg; nach Schliessen Fokus
+  ausserhalb des Dialogs auf dem Oeffner. Alle vier Zusagen (rein/Falle/Escape/zurueck) belegt.
+- **44px ehrlich zurueckgegeben:** Touch-Ziel gemessen 55x26 (Hoehe < 44) - die Zielgroessen sind
+  NICHT angefasst (WCAG 2.5.5 eigener Posten). Die Planner-§2-44px-Erwartung ist zurueckgegeben,
+  nicht erfuellt - ehrliche Scope-Trennung (wie AUF-45/57), kein Mangel an AUF-49.
+
+**Urteil: FREIGABE.** Fokus haelt in allen drei Dialogen (rein, Falle beidseitig, Escape, Rueckgabe),
+selbstgebaute Knoepfe hoeren jetzt auf Enter UND Leertaste, eine Regel statt drei. Mutationsfest, Fokus
+selbst am activeElement gemessen. Die 44px sind ein sauber getrennter Folgeposten.
+
+## Bestaetigung der drei bereits abgenommenen Posten gegen die Planner-Nachfragen (26.07.)
+
+Der Planner-Stapel nennt vier; drei tragen bereits ein committetes FREIGABE-Votum (Tafel hinkte nach).
+Gegen die konkreten Nachfragen nachgeprueft:
+- **AUF-53 (Votum 1c41ec6):** K4 selbst gegen den Quelltext - 'Hausplaner,import' als **Aktion** = 0
+  (einziger Treffer ist ein KOMMENTAR in vorbedingungen.ts:91). Tor 1: keine Datei unter routes/ oder
+  database/migrations/ im Commit. **§4-Vollstaendigkeit (neue Frage):** die EINZIGEN rechte-annehmenden
+  Stellen der Insel sind HausplanerApp:408/938 - beide erteilen sich nur 'Hausplaner,update'; keine
+  weitere Stelle nimmt ein Recht an, 'add' wird nirgends selbst-erteilt. Die Rueckgabe ist vollstaendig.
+- **AUF-59 (Votum 5522cf3):** 'keine Sperre geaendert' testverriegelt (Regel liest gesperrt, entscheidet
+  nichts); Sichtprobe getComputedStyle: gesperrt-Menge unveraendert, Spiegeln-Funktion blieb (nur die
+  Text-Darstellung wich dem Icon).
+- **AUF-44 (Votum a2403c4):** Bilanz gegen die RICHTIGE Quelle (Katalog+Registry) = 110; die vier
+  Werkzeuge (drehen/distanz-messen/bemassen/pdf) je Katalog+Thema+Vertrag vorhanden - nur die tote
+  Icon-Kopie raus.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -710,6 +755,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-53    b4e5f03  Auszug: schema 0 / test 956/956 0-skip / tsc 0 / build ok ; kein Tor-1 (keine PHP/Migration/Route) ; is_read-Falle vermieden (K4 import nirgends Aktion), RECHT_IMPORTIEREN=Hausplaner,add ; Insel erteilt nur update (nicht add) -> 8 bleiben gesperrt ; 8 Subtests ; Gegen-Beweis Mapping->update = 3 rot (Generator 4, Delta erklaert) ; Sichtprobe: kein sichtbarer Effekt (Vorarbeit, Grund im Tooltip)
   AUF-44    47addd1  Auszug: schema 0 / test 962/962 0-skip / tsc 0 / build ok ; ALLE(Katalog+Registry)=110, drehen/distanz-messen/bemassen/pdf je Katalog+Thema+Vertrag=true (einpassen fehlt korrekt) ; 6 Subtests ; Gegen-Beweis Knopf wieder eingesetzt = 2 rot ; Sichtprobe 1440: genau 1 '(geplant)' (einpassen), 4 tote weg, 15->11 ; Selbstkorrektur FEHLT-Artefakt (falsche Registry)
   AUF-59    8f34fc5  Auszug: schema 0 / test 971/971 0-skip / tsc 0 / build ok ; opKnopfZustand rein (Token, keine Farbe), Regel liest gesperrt ; K2 Kappungs-Test ersetzt nicht entfallen ; 9 Subtests ; Gegen-Beweis gesperrt->1 Unterschied = 2 rot ; Sichtprobe 1440 getComputedStyle: 11 Knoepfe, 2 mit Rahmen (Raster/Fang), gesperrt Grund rgb(242,244,246)+Deckkraft 0.6 vs bedienbar weiss+1, Spiegeln-Textknoepfe weg
+  AUF-49    f83cf11  Auszug: schema 0 / test 982/982 0-skip / tsc 0 / build ok ; ConfigWizard role=dialog/aria-modal (war 0), istAusloeser Enter+Space, eine Regel 3 Dialoge ; 11 Subtests ; Gegen-Beweis % anzahl weg = 3 rot ; Browser activeElement: Fokus rein 'Zurueck zum Planer', 6x Tab+ShiftTab bleiben im Dialog, Escape schliesst, Fokus zurueck ausserhalb ; 44px zurueckgegeben (Ziel 55x26 <44, nicht angefasst)
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
