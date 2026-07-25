@@ -33,6 +33,10 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
 
   return (
     <div style={{ maxWidth: 1180, margin: '0 auto', padding: '14px 30px 30px', minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+      {/* AUF-46: Die zweite Spalte war mit `1fr 320px` fest. Bei 390 px passte `1fr + 320 + Lücke`
+          nicht mehr; das Aufgaben-`aside` legte sich über den Inhalt und fing die Zeigerereignisse
+          ab — eine sichtbare, aber tote Schaltfläche. `auto-fit` stapelt die Spalten stattdessen
+          untereinander, sobald der Platz fehlt. */}
       {/* Stepper */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, overflow: 'auto', padding: '12px 4px 20px' }}>
         {STEPS.map((st, i) => {
@@ -57,7 +61,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
       </div>
 
       {/* Board: Fokus + Seitenpanel */}
-      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 320px', gap: 20, minHeight: 0 }}>
+      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, minHeight: 0 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
           <div style={{ background: T.surface, borderRadius: 22, padding: '26px 28px', boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>
             <div style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: T.accent }}>Schritt {schritt + 1} von {n}</div>

@@ -79,6 +79,8 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
           </button>
         </div>
 
+        {/* AUF-46: auch hier stand eine feste zweite Spalte (`1fr 300px`) — dieselbe Ursache wie
+            in der geführten Planung. Bei 390 px stapeln die Spalten jetzt, statt sich zu überlagern. */}
         {/* Schritt-Punkte */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px 26px 18px', flexWrap: 'wrap' }}>
           {SCHRITTE.map((n, i) => (
@@ -93,7 +95,7 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
         </div>
 
         {/* Körper */}
-        <div style={{ padding: '6px 30px 8px', overflow: 'auto', display: 'grid', gridTemplateColumns: '1fr 300px', gap: 26 }}>
+        <div style={{ padding: '6px 30px 8px', overflow: 'auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 26 }}>
           <div>
             {schritt === 0 && (
               <>

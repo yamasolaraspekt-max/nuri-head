@@ -11,12 +11,15 @@ interface Props {
   onKonfigurator: (name: string, fenster?: boolean) => void;
 }
 
-const wrap: React.CSSProperties = { maxWidth: 1080, margin: '0 auto', padding: '20px 30px 70px' };
+const wrap: React.CSSProperties = { maxWidth: 1080, margin: '0 auto', padding: '20px 16px 70px' };
 const kicker: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: T.accent };
 const h1: React.CSSProperties = { fontSize: 34, fontWeight: 800, letterSpacing: '-.02em', margin: '10px 0 8px' };
 const lead: React.CSSProperties = { fontSize: 16, color: T.muted, maxWidth: 640, marginBottom: 14 };
 const themeHead: React.CSSProperties = { display: 'flex', alignItems: 'baseline', gap: 12, margin: '0 4px 16px' };
-const grid3: React.CSSProperties = { display: 'grid', gap: 16, gridTemplateColumns: 'repeat(3, 1fr)' };
+// AUF-46: `repeat(3, 1fr)` erzwang drei Spalten auch bei 390 px — der Inhalt konnte nicht unter
+// seine Mindestbreite, und die Karten ragten über den Rand. `auto-fit` legt so viele Spalten an,
+// wie wirklich passen: drei bei 1440, eine bei 390.
+const grid3: React.CSSProperties = { display: 'grid', gap: 16, gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))' };
 const cardBase: React.CSSProperties = { background: T.surface, borderRadius: 16, padding: 22, cursor: 'pointer', boxShadow: '0 1px 2px rgba(28,40,48,.05)', border: '1px solid transparent' };
 const icoBox: React.CSSProperties = { width: 52, height: 52, borderRadius: 13, background: T.accentSoft, color: T.accentInk, display: 'grid', placeItems: 'center', marginBottom: 16 };
 

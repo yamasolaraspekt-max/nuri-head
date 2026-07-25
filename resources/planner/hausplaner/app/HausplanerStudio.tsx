@@ -103,8 +103,12 @@ export function HausplanerStudio(): React.ReactElement {
       {/* Sichtbarer Tastatur-Fokus über das ganze Studio (ux-Rubrik: Fokus sichtbar). */}
       <style>{`.hp-studio :focus-visible{outline:2px solid ${T.accent};outline-offset:2px;border-radius:6px;}`}</style>
       {/* Kopfzeile */}
-      <header style={{ height: 62, flex: '0 0 auto', display: 'flex', alignItems: 'center', gap: 16, padding: '0 26px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 11, fontWeight: 700, fontSize: 16 }}>
+      {/* AUF-46: Die Kopfzeile war auf 62 px Höhe festgenagelt und durfte nicht umbrechen — bei
+          390 px schob sie Titel, Status, Moduswechsel und Namenskürzel über den rechten Rand und
+          riss die ganze Seite in den waagerechten Überlauf (gemessen: scrollWidth 656 bei 390).
+          Jetzt: umbrechen statt schieben, Mindesthöhe statt fester Höhe. */}
+      <header style={{ minHeight: 62, flex: '0 0 auto', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 12, padding: '8px 16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 11, fontWeight: 700, fontSize: 16, minWidth: 0 }}>
           <span style={{ width: 30, height: 30, borderRadius: 9, background: T.brand, display: 'grid', placeItems: 'center', color: T.surface }}><Ikon inhalt='<path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/>' size={16} /></span>
           Hausplaner
           <span style={{ fontWeight: 600, color: T.muted, fontSize: 13.5 }}>· Solar Aspekt</span>
