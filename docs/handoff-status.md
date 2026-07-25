@@ -4801,3 +4801,58 @@ geprüft**. §7.1 verlangt genau das („messen vor behaupten"); es gilt für Au
 **Stand:** Arbeitsvorrat 21 · Abnahme 1 (AUF-43) · bei Yama 1 · Archiv 37 = 60.
 AUF-51 ist gezogen, der Generator baut den Pan-Zustand.
 
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-51: die Zeichenfläche lässt sich wirklich verschieben
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `74fdcb4` (Code) · `31f33e6` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+**Ohne Auftragsdatei** — die Tafelzeile war der Auftrag; sie ließ ausdrücklich die Wahl.
+
+### Die Entscheidung, die der Auftrag offenließ
+
+Die Zeile bot zwei Wege: *„entweder Pan-Zustand einführen oder `draggable` an der Bühne entfernen,
+bis es einen gibt."* **Ich habe den Zustand eingeführt.** Der Grund steht in der Messung selbst:
+`weltPunkt` liest bereits `stage.x()`/`stage.y()`, also die **echte** Lage — der Rest der Anwendung
+war auf einen wirklichen Verschub vorbereitet, es fehlte allein die Stelle, die ihn behält.
+`draggable` zu entfernen hätte eine Fähigkeit weggenommen, die die Koordinatenrechnung längst
+beherrscht.
+
+### Was der Fehler wirklich war
+
+Nicht das Ruckeln. **Anzeige und Koordinate widersprachen sich:** die Bühne sprang bei jedem Rendern
+auf `x=80` zurück, während `weltPunkt` die verschobene Position las. Für die Dauer des
+Zurückspringens landete ein Klick **nicht dort, wo der Nutzer hinzeigte**. Deshalb ist es kein
+Layout-Posten.
+
+### Rohausgabe
+
+| # | Prüfung | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` · `build` | **0 / 0 / 0 / 0** — **930 → 938**, **0 verschwunden** |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen** |
+| 3 | Mutations-Gegenbeweis | `panAus` ignoriert den eigenen Wert ⇒ **1 Test rot**; zurückgebaut ⇒ `diff` leer, 938/938 |
+| 4 | `public/*` im Code-Commit null, Bundle eigener zweiter Commit | erfüllt: `74fdcb4` → `31f33e6` |
+| 5 | Rebuild-Beleg (`31f33e6`, 1.408.876 Bytes, 25.07. 23:04) | `grep -c 'onDragMove'` = 4 · `'currentTarget'` = 3 |
+
+**Sichtprobe, 1440 px:** Bühne um **256 / 120 px** gezogen, danach die Maus mehrfach bewegt — genau
+dort sprang es vorher zurück. **Der Verschub bleibt.** Dieselbe Zeigerposition meldet jetzt
+`x 1400 mm · y 3500 mm` statt vorher `x 2900 mm · y 2700 mm`; Anzeige und Koordinate stimmen wieder
+überein.
+
+### Drei Entscheidungen im Detail, die nicht offensichtlich sind
+
+1. **`null` als Startwert statt `{x: 80, y: hoehe − 80}`.** `null` heißt „nie verschoben" — dann
+   folgt die Standardlage **weiter der Fensterhöhe**. Ein sofort gesetzter Absolutwert fröre die
+   Lage beim ersten Rendern ein; nach einer Fenstergrößen-Änderung stünde die Zeichnung schief,
+   ohne dass jemand etwas getan hätte.
+2. **`onDragMove` **und** `onDragEnd`.** Nur am Ende zu schreiben genügt hier nicht: `onMouseMove`
+   rendert in Mausbewegungs-Frequenz und würde die Bühne mitten im Ziehen auf den alten Wert
+   zurücksetzen — der Verschub ruckelte gegen den Zeiger.
+3. **Beide Schreibstellen prüfen `e.target === e.currentTarget`.** Drags von Bauteilen steigen bis
+   zur Bühne auf; ohne die Herkunftsprüfung würde **jede gezogene Wand** den Verschub der ganzen
+   Fläche überschreiben. Ein Test hält fest, dass es genau zwei Schreibstellen gibt und beide
+   geschützt sind.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
