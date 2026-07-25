@@ -5616,3 +5616,92 @@ Das gehört neben die Regel aus AUF-45 („Zahlen in Kriterien sind Hypothesen m
   Auftrag liegt: `generator-auftrag-auf68-gruppenwoerter.md`.
 
 **Ballbesitz: Generator** — eine Aufgabe vor allen anderen: **AUF-64 committen.**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-64: `objekt/203` lädt wieder (mein Fehler aus AUF-60)
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commit:** `1b2b26d` · **Ballbesitz:** Evaluator.
+
+### 1. Die Ursache — reproduziert, nicht vermutet
+
+Die Diagnose des Planners stimmt und geht noch einen Schritt weiter:
+
+`objekt.blade.php` trägt beim Übernahme-Knopf (Zeile 62) die **einzeilige Klammer-Form** der
+PHP-Direktive. Die hat **kein schließendes Gegenstück**. Blade zieht seine Rohblöcke **non-greedy**
+heraus — und tut das, **bevor** es Kommentare entfernt.
+
+Mein Block aus AUF-60 (`e0d1144`) lieferte damit das **fehlende schließende Gegenstück**. Es wurde
+mit der *früheren* Öffnung gepaart, und alles dazwischen — Formular, CSRF-Direktive,
+Ausgabe-Klammern — landete als **roher PHP-Code** im Kompilat:
+
+```
+vorher   <?php($szeneLeer = empty(...))          ← ohne ; ohne ?>
+         <form class="hp-uebernahme" ...         ← PHP liest weiter → "unexpected token class"
+nachher  <?php ($szeneLeer = empty(...)); ?>     ← php -l: No syntax errors detected
+```
+
+Der Ausfall war also **nicht** „ein falsch geschriebener Block", sondern **die Mischung beider
+Formen in einer Datei**. Mein Commit hat sie ausgelöst.
+
+### 2. Was gebaut wurde
+
+Die Rechte-Zeile steht jetzt **einzeilig**; die Datei enthält **kein schließendes Gegenstück mehr**.
+
+**Und eine Lehre, die ins Werk gehört:** Mein erster Erklär-Kommentar hat den Fehler **sofort neu
+gestellt** — weil die Marke im Kommentartext mitzählt (Rohblock-Erkennung läuft vor dem Entfernen
+der Kommentare). Das steht jetzt im Kommentar selbst, damit es dem Nächsten nicht wieder passiert.
+
+**`routes/` und `app/Http/` unberührt.** Die vom Planner angebotene Controller-Variante ist der
+sauberere Weg, hätte aber **Tor 1** gebraucht und war für die Behebung nicht nötig. Sie bleibt als
+Vorschlag offen.
+
+### 3. Der Test gegen die Wiederkehr
+
+`tests/Feature/Hausplaner/BladeKompiliertTest.php` — kompiliert **alle drei** Hausplaner-Blades und
+lässt **PHP selbst** urteilen (`token_get_all(..., TOKEN_PARSE)`; kein Unterprozess, kein DB-Zugriff).
+Dazu eine Zusage gegen das Mischen der Formen und ein **Gegenbeispiel**, das beweist, dass der Test
+wirklich ausschlägt — ohne das sähe ein nie ausschlagender Test wie ein bestandener aus.
+
+### 4. Belege
+
+| Was | Ergebnis |
+|---|---|
+| Gates | tsc **0** · schema:check **0** · test **0** · build **0** |
+| Insel-Tests | 1008 → **1009** |
+| PHP `tests/Feature/Hausplaner` | 33 → **38**, alle grün |
+| Route als angemeldeter Admin gerendert | **HTTP 200**, 13 663 Bytes, **0** Fehlerspuren, `data-rechte` = alle vier Rechte |
+| Mutation (Block-Form zurück) | `BladeKompiliertTest` **2 rot** |
+
+### 5. Der unbequeme Teil: der Test war da, ich habe ihn nicht gefahren
+
+Beim Mutations-Gegenbeweis fiel **auch der vorhandene `UebernahmeKnopfTest`** um — mit
+`HTTP 500` und exakt diesem `ParseError`. **Die Abdeckung existierte.** Was fehlte, war ich: meine
+Gate-Kette sind die vier Hausplaner-Gates (TypeScript, Schema, Insel-Tests, Bundle) — **keines davon
+fasst eine Blade-Datei an**, und ich habe bei einer Blade-Änderung die PHP-Suite nicht gefahren.
+
+**Konsequenz für mich, ab sofort:** Berührt ein Posten eine `.blade.php`, gehört
+`php artisan test tests/Feature/Hausplaner` in die Gate-Kette dieses Postens. Das ist keine neue
+Regel für andere — es ist die Lücke, durch die dieser Ausfall in den Hauptzweig kam.
+
+### 6. Was ich NICHT belegen konnte
+
+**Die Konsolen-Prüfung im echten Browser auf `/admin/hausplaner/objekt/203` steht aus.** Die Route
+liegt hinter `auth`; der im Wissensstand hinterlegte lokale Zugang (`admin@ticket.test`) wird
+abgewiesen — *„These credentials do not match our records."* Einen Nutzer anzulegen wäre ein
+**Schreibvorgang auf der Arbeits-DB `ticket`** und damit ein eigener, von Yama zu beauftragender
+Posten — kein Test-Beifang. Deshalb habe ich es gelassen.
+
+**Was stattdessen belegt ist:** die Route serverseitig als angemeldeter Admin gerendert (HTTP 200,
+keine Fehlerspuren, `data-rechte` korrekt) und die vollständige PHP-Suite grün. Für die
+Konsolen-Prüfung braucht es einen funktionierenden lokalen Login — **Bitte an Yama.**
+
+### 7. Nebenbefund
+
+Beim Committen lag eine **verwaiste `.git/index.lock`** (00:59, 0 Bytes, kein laufender
+git-Prozess). Regelkonform nach `.git/_locks_beiseite/2026-07-26/index.lock-0059` **verschoben,
+nicht gelöscht**.
+
+### 8. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün.
