@@ -3841,3 +3841,60 @@ Bis dahin bleibt das Bundle gebaut, aber ungebunden: **im Browser auf Yamas Rech
 aktuell**, in einem frischen Checkout wäre er es nicht.
 
 **Ballbesitz → Planner** (Tafel-Marke) **bzw. Yama** (Bundle-Commit).
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-37 Bundle-Rebuild (zugleich die Auflage aus der AUF-34-Abnahme)
+
+**Rolle:** Generator (nativ, Mac) · **Commit:** `91d9592` · **Gebaut von:** `7fe6627`
+**Status:** **umgesetzt** — nicht abgenommen. Ballbesitz → Evaluator (die zwei deferred
+Sichtprobe-Kriterien).
+
+### Was der Anstoß war
+
+Der Evaluator hat AUF-34 mit **FREIGABE MIT AUFLAGE** bewertet (`7fe6627`): Bilanz und Mutation in
+Ordnung, aber *„`8b2b9e6` ohne Rebuild ⇒ die 5-Bereiche-Leiste ist im laufenden App nicht sichtbar.
+Braucht Rebuild-Commit (wie AUF-37 für AUF-27)."* Damit ist der Widerspruch entschieden, den ich in
+`97fc2bc` gemeldet hatte: die Kriterien *„null Zeilen in `public/*`"* galten dem **Code**-Commit —
+das Bundle kommt **daneben**, als eigener Commit. Genau so steht es auch in AUF-37.
+
+### Rohausgabe
+
+```
+public/hausplaner/hausplaner.js   1.343.905 Bytes   25.07.2026 20:52
+gzip 378,96 kB · vite „built in 1.18s"
+gebaut von HEAD 7fe6627 — enthält 894954a (AUF-27) und 8b2b9e6 (AUF-34)
+
+Tore vor dem Bau:  tsc 0 · schema:hausplaner:check 0 (ohne Regen) · test 0 (830/830) · build 0
+
+grep -c auf Zeichenketten beider Slices:
+  hp-schiene-panel             1    AUF-27, Reiter-Inhaltsbereich
+  Fachplaner                   1    AUF-27, dritter Reiter
+  hp-bereich-gruppenzeile      1    AUF-34, Ziel des Bereichswählers
+  Arbeitsbereiche              1    AUF-34, Wähler
+  Grundbedienung               1    AUF-34, Thema 01
+  Gehört zum Arbeitsbereich    1    AUF-34, Kante 3
+  11-bad-kueche                1    AUF-34, Thema 11
+
+Commit-Umfang: 1 Datei, 199 +/199 − — ausschließlich das Artefakt.
+```
+
+### Was der Evaluator jetzt prüfen kann
+
+Beide deferred Kriterien der AUF-34-Abnahme — **kein waagerechter Überlauf bei 1371 px** und **keine
+Wortumbrüche im Menü** — sind im ausgelieferten Bundle enthalten. Meine eigenen Messungen dazu
+stehen im AUF-34-Bericht (`scrollWidth = clientWidth` bei 1440/1371/1024; Menü 334 px, alle 15
+Einträge einzeilig); sie ersetzen die unabhängige Prüfung **nicht**.
+
+### Zum Muster „3. Bundle-Hole", das der Evaluator an den Planner adressiert
+
+Der Befund stimmt für die **Commits**, nicht für den Bau: auf dieser Maschine war nach AUF-27 und
+nach AUF-34 jeweils gebaut worden, das Artefakt lag aktuell auf der Platte (belegt in `97fc2bc`).
+Gefehlt hat der **Commit** — und zwar, weil die Abnahmekriterien beider Aufträge ihn wörtlich
+untersagten. **Solange „null Zeilen in `public/*`" im Kriterienblock steht und die Bundle-Regel den
+Rebuild-Commit verlangt, erzeugt jeder sichtbare Slice dieses Loch erneut.** Das ist keine
+Nachlässigkeit im Ablauf, sondern ein Widerspruch in den Vorlagen — er gehört in die
+Auftragsvorlage, nicht in die Disziplin des Ausführenden. **An den Planner.**
+
+**Kein Push, kein Merge, kein Deploy.**
+**Ballbesitz → Evaluator.**
