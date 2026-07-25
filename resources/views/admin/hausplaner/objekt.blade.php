@@ -88,8 +88,22 @@
         </div>
     @endif
 
+    {{--
+        AUF-60: die Rechte des angemeldeten Nutzers für das Item „Hausplaner" — die VIER, die das
+        System kennt, nicht mehr. Quelle ist ausschliesslich `User::hasPermission` (unveraendert);
+        hier wird nichts abgeleitet und nichts ergaenzt. Ohne angemeldeten Nutzer bleibt die Liste
+        leer — das Minimum. Dieselbe Naht wie `data-speichern-url`, kein neuer Mechanismus.
+    --}}
+    @php
+        $hpNutzer = auth()->user();
+        $hpRechte = collect(['read', 'add', 'update', 'delete'])
+            ->filter(fn ($aktion) => $hpNutzer && $hpNutzer->hasPermission('Hausplaner', $aktion))
+            ->map(fn ($aktion) => 'Hausplaner,' . $aktion)
+            ->implode(' ');
+    @endphp
     <div id="hausplaner-root"
          data-project-id="{{ $objekt->id }}"
+         data-rechte="{{ $hpRechte }}"
          data-speichern-url="{{ route('hausplaner.objekt.speichern', $objekt) }}"
          data-snapshots-url="{{ route('hausplaner.objekt.snapshots.liste', $objekt) }}"
          data-katalog-url="{{ route('hausplaner.objekt.katalog') }}">

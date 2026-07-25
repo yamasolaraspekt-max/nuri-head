@@ -9,6 +9,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HausplanerStudio } from './app/HausplanerStudio';
 import { useHausplanerStore } from './store/hausplanerStore';
+import { usePlannerUiStore } from './app/state/uiState';
+import { leseRechte, RECHTE_ATTRIBUT } from './app/state/rechte';
 import { sceneDocumentSchema, validateSceneIntegrity, migriereSzene } from './domain/validation';
 import { ladeFixture, fixtureNameAusSearch } from './fixtures/studioFixtures';
 import type { SceneDocument } from './domain/scene.types';
@@ -64,6 +66,9 @@ if (mount && szenenElement) {
       const csrf = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content ?? '';
 
       useHausplanerStore.getState().init(scene, speichernUrl, csrf);
+      // AUF-60: die Rechte des angemeldeten Nutzers über DIESELBE Naht wie `data-speichern-url`.
+      // Fehlt das Attribut, liefert `leseRechte` die leere Liste — das Minimum, nicht das Maximum.
+      usePlannerUiStore.getState().setRechte(leseRechte(mount.dataset[RECHTE_ATTRIBUT]));
       ReactDOM.createRoot(mount).render(
         <React.StrictMode>
           <HausplanerStudio />

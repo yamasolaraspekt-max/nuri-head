@@ -21,9 +21,18 @@ export interface PlannerUiState {
   activeToolId: string;
   /** Aktiver Arbeitsbereich (§9). Heute real nur 'architektur'. */
   activeWorkspace: WorkspaceId;
+  /**
+   * AUF-60 — die Rechte des angemeldeten Nutzers, **wie das Blade sie liefert**. Grundzustand ist
+   * die leere Liste: das Minimum. Wer nichts gesetzt hat, darf nichts — nie umgekehrt.
+   *
+   * Hier und nicht im Modell-Store: Rechte gehören zum Bedien-Zustand, nicht ins Gebäudemodell.
+   */
+  rechte: string[];
 
   setActiveTool: (id: string) => void;
   setActiveWorkspace: (id: WorkspaceId) => void;
+  /** Die gelesenen Rechte hinterlegen. Setzt nur ab, was `leseRechte` liefert — kein Ableiten. */
+  setRechte: (rechte: string[]) => void;
   /** Auf den Grundzustand zurücksetzen (Mount/Neuladen). */
   reset: () => void;
 }
@@ -35,7 +44,12 @@ const DEFAULTS = {
 
 export const usePlannerUiStore = create<PlannerUiState>((set) => ({
   ...DEFAULTS,
+  // Grundzustand = Minimum. Absichtlich NICHT in DEFAULTS: `reset()` ist ein Bedien-Reset
+  // (Werkzeug/Arbeitsbereich) und läuft beim Mount — es darf die vom Server gelesenen Rechte
+  // weder löschen noch wiederherstellen.
+  rechte: [],
   setActiveTool: (id) => set({ activeToolId: id }),
   setActiveWorkspace: (id) => set({ activeWorkspace: id }),
+  setRechte: (rechte) => set({ rechte }),
   reset: () => set({ ...DEFAULTS }),
 }));

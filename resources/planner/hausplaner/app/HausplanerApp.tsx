@@ -42,7 +42,7 @@ import { gruppenFuer } from './dashboard/werkzeugGruppen';
 import { ladeArbeitsbereich, speichereArbeitsbereich } from './state/arbeitsbereichSpeicher';
 import {
   FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_GESCHOSS_DA, FAEHIGKEIT_WAND_DA,
-  FAEHIGKEIT_ANSICHT_BEREIT, RECHT_BEARBEITEN,
+  FAEHIGKEIT_ANSICHT_BEREIT,
 } from './tools/vorbedingungen';
 import { projektBaum, PROJEKTBAUM_LEER } from './dashboard/projektBaum';
 import { befundeAus, BEFUNDE_LEER, BEFUNDE_UMFANG } from './dashboard/befunde';
@@ -289,6 +289,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   // die bestehenden Nutzungen unverändert bleiben (verhaltensgleich).
   const werkzeug = usePlannerUiStore((s) => s.activeToolId) as Werkzeug;
   const setWerkzeug = React.useCallback((w: Werkzeug) => usePlannerUiStore.getState().setActiveTool(w), []);
+  // AUF-60: die Rechte des angemeldeten Nutzers — gelesen aus dem UI-State, den `main.tsx` aus dem
+  // Blade befüllt hat. Vorher stand hier ein gesetzter Wert; damit sperrte die Oberfläche nach
+  // einer Angabe, die sie sich selbst gab. Grundzustand ist die leere Liste (Minimum).
+  const rechte = usePlannerUiStore((s) => s.rechte);
   useEffect(() => { usePlannerUiStore.getState().reset(); }, []); // Mount: wie bisher mit 'auswahl' starten
   // Dashboard v1 §8: bei ungespeicherten Änderungen VOR dem Verlassen bestätigen (kein stiller Verlust).
   useEffect(() => {
@@ -405,7 +409,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         selectionTypes: selectedNodeIds
           .map((id) => nodes.find((n) => n.id === id)?.type)
           .filter((t): t is NonNullable<typeof t> => Boolean(t)) as ObjectType[],
-        permissions: [RECHT_BEARBEITEN],
+        permissions: rechte,
         /**
          * AUF-36: die vier **messbaren** Vorbedingungen des Funktionsvertrags. Sie sind keine
          * Erfindung, sondern Tatsachen, die diese Komponente ohnehin kennt: Szene geladen, aktives
@@ -422,7 +426,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           FAEHIGKEIT_ANSICHT_BEREIT,
         ],
       }),
-    [activeWorkspace, modus, selectedNodeIds, nodes, scene, level, waende.length],
+    [activeWorkspace, modus, selectedNodeIds, nodes, scene, level, waende.length, rechte],
   );
   /**
    * AUF-45 — der Wegweiser. **Keine zweite Aktivierungs-Engine:** gezählt werden die Zustände, die
@@ -942,7 +946,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             workspace: usePlannerUiStore.getState().activeWorkspace,
             view: store.getState().modus as ViewType,
             selectionTypes: [],
-            permissions: ['Hausplaner,update'],
+            permissions: usePlannerUiStore.getState().rechte,
           });
           if (resolveToolState(tool, ctx).enabled) {
             setWandStart(null);
