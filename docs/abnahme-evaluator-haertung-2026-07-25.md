@@ -17,7 +17,7 @@
 | AUF-15a Token-Ablösung (30 Rohfarben) | `2d927fc` | **FREIGABE** | Wertgleichheit aller Ersetzungen + Operanden-Gate-Rückgabe belegt |
 | AUF-16 Kontext-Leiste auf Modulebene | `982384d` | **FREIGABE** | Test-Trennschärfe per Struktur-Mutation bestätigt |
 | AUF-19 Reiter-Muster N3 (B3/B4) | `8587ce7` | **FREIGABE** | `aria-controls`-Verknüpfung mutationsgeprüft (1 Test rot) |
-| AUF-26 Kappungs-Schutz (B3/B4) | `4c9bc04` | **FREIGABE** (Code; Sichtprobe offen) | Kappung→Umbruch mutationsgeprüft (1 Test rot) |
+| AUF-26 Kappungs-Schutz (B3/B4) | `4c9bc04` | **FREIGABE MIT AUFLAGE** — Code grün, aber **Sichtprobe-Defekt ~1375 px** (4. Reiter kappt, Planner-gemessen); 375 px offen | Kappung→Umbruch mutationsgeprüft (1 Test rot); Sicht siehe Nacharbeit |
 | **A2 / AUF-4** Leiste liest Präsentationsschicht | `acdb987` | **FREIGABE MIT AUFLAGE** | art/zone→eine Wahrheit; verhaltensneutral; 3/4 A1-Auflagen testverriegelt, **Auflage 3 (Render-Pfad-Test) offen** (keine .tsx-Infra) |
 | **AUF-9** T2a Kommentar-Fix `szene.ts` | `fbc5308` | **FREIGABE** | Kommentar auf tatsächlichen Wert `#a3e635` (statt falsch #93c21c); **kein Farbwert geändert**, T2b korrekt verwiesen |
 | **I2 / AUF-21** Katalog-Tausch 54→110 Fachpaket | `289ccc8` | **FREIGABE** | Bijektion hält (9+110=119, verwaiste/regellos leer); 54 InDesign belegt stillgelegt; Adapter passt sich ToolDefinition an; Kürzel-Kollisionen weggelassen |
@@ -67,7 +67,7 @@
   Fokusnachführung. 7 Tests inkl. Kante „Mausklick löst kein `focus()` aus". Gates test 746/746.
 - Trennschärfe: Mutation `aria-controls={PANEL_ID}→'kaputt-xyz'` → 1 Test rot (Verknüpfung greift).
 
-## AUF-26 (`4c9bc04`) — FREIGABE (Code-Ebene; Sichtprobe offen)
+## AUF-26 (`4c9bc04`) — FREIGABE MIT AUFLAGE (Code-Ebene grün; Sichtprobe-Defekt ~1375 px offen)
 - Kappungs-CSS (`overflow:hidden`+`textOverflow:ellipsis`+`whiteSpace:nowrap`) ersetzt durch Umbruch
   (`overflowWrap:anywhere`+`whiteSpace:normal`+`minWidth:0`) im Fähigkeiten-Label und im 268px-Panel
   (`overflowWrap:anywhere`+`boxSizing:border-box`); volles Label zusätzlich im `title`-Attribut.
@@ -112,7 +112,7 @@
 ## ⇒ SICHTPROBE DURCHGEFÜHRT (25.07., authentifizierte Browser-Session, kein Credential-Eintrag durch mich)
 Route `/admin/hausplaner/studio?fixture=decke-treppe` → **Expertenmodus**, gerendert im echten Bundle. Schließt den offenen Sicht-Rest von Batch 1/2, AUF-26 und A2. Visuell bestätigt (Screenshot an Yama):
 - **v2.1 Kontext-Leiste:** „**Auswahl** | Für dieses Werkzeug sind noch keine Optionen hinterlegt · in Entwicklung" — ehrlicher Platzhalter + Badge, wie im Code.
-- **v2.2 Panel-Reiter:** vier Reiter (Allgemein/Beziehungen/Prüfungen/Historie), aktiver **fett + grün unterstrichen** (nicht nur Farbe, WCAG 1.4.1). „Historie" **bricht in Zeile 2 um** — kein Ellipsis (AUF-26 visuell bestätigt).
+- **v2.2 Panel-Reiter:** vier Reiter (Allgemein/Beziehungen/Prüfungen/Historie), aktiver **fett + grün unterstrichen** (nicht nur Farbe, WCAG 1.4.1). „Historie" bricht in Zeile 2 um — kein Ellipsis. **Gemessen NUR bei innerWidth 1440** (dort „Prüfungen" bei −3 px, rasiermesserknapp). **Bei ~1375 px kappt der 4. Reiter (Planner-Befund) — von mir NICHT reproduzierbar (resize ändert innerWidth in dieser Umgebung nicht), also nicht widerlegt. AUF-26 bei ~1375 px + 375 px bleibt unbelegt.**
 - **A2 Werkzeugleiste aus Zonen:** 7 Werkzeuge V/W/F/T/D/K/R, **kollisionsfreie Kürzel** (Auflage 1 sichtbar).
 - **Ehrliche Zustände:** Dach ●verfügbar (grün) vs. Sparren/Holz ●in Entwicklung — Farbe **und** Text; Labels brechen um statt zu kappen.
 - **Fixture rendert:** Treppe 16×175 mm, 80 m², 2D-Ansicht sauber.
@@ -120,7 +120,43 @@ Route `/admin/hausplaner/studio?fixture=decke-treppe` → **Expertenmodus**, ger
 
 ## Nicht abgenommen / offen
 - **AUF-1** (A1-blind) — frische Instanz gezogen; ich anchored, korrekt ausgeschlossen.
-- **AUF-9** (T2a Kommentar-Fix) — ich anchored (Fund stammt von mir).
 - Yama-Willensfragen: AUF-15b (Palette/Grün-Rolle), stopp-1, Branch-Hygiene.
 
-*Belege sind reproduzierbar gegen die jeweilige feste SHA; Rohausgaben liegen im Chat-Protokoll dieser Instanz.*
+*Kern-Rohbelege ab hier in der Datei (Anhang). Weitere Rohausgaben reproduzierbar gegen die feste SHA; ab dem nächsten Votum liegen ALLE Rohausgaben committet daneben (Planner-Auflage 3).*
+
+
+---
+
+## ⇒ NACHARBEIT — vier Planner-Auflagen (`1955311`, Evaluator, 25.07.)
+1. **AUF-9-Widerspruch aufgelöst:** Zeile unter „Nicht abgenommen/offen" **gestrichen**. AUF-9 = FREIGABE (Kommentar-gegen-Codewert ist auch für anchored Prüfer objektiv, beide Werte im Code).
+2. **`sichtbar`/`Vorarbeit` je Votum (ab sofort):**
+   - **Vorarbeit** (technisch grün, für den Nutzer ändert sich NICHTS sichtbar): T1 · AUF-15a · AUF-16 · AUF-19 · A2 · AUF-9 · **I3** (nach I3 stehen alle 110 weiter auf `versteckt` — meine I3-Freigabe war die Blindstelle, die der Planner zu Recht benennt) · I2.
+   - **sichtbar** (Nutzer sieht neue Fläche): Dashboard B1 (Kontext-Leiste/Tabs) · B2 (Projektbrowser/Prüfungscenter/Palette) · AUF-25 (19 Fachplaner-Flächen) · AUF-26 (Umbruch — im belegten Band).
+   - Lehre: „technisch grün" ≠ „für Yama sichtbar" — steht ab jetzt in jedem Votum.
+3. **Rohbelege in der Datei** (Anhang unten) statt nur im Chat; ab dem nächsten Votum vollständig committet.
+4. **Sichtprobe mit Breite:** 1440 px selbst gemessen (DOM-getBoundingClientRect, alle 4 Reiter sichtbar, „Prüfungen" −3 px). **1375 px + 375 px konnte ich nicht rendern** (resize_window ändert `innerWidth` hier nicht). Der Planner-Defekt bei ~1375 px steht damit **unwiderlegt** → AUF-26 dort offen; 375 px offen.
+
+## Rohbelege (Anhang, selbst gemessen)
+```
+Gates je SHA (npm run …, EXIT / Testzähler):
+  T1        9ec3b25  tsc 0 · schema 0 · test 696/696 · build 0 (bundle==git-diff-leer)
+  Batch1    f6bdfc2  tsc 0 · schema 0 · test 702/702 · build 0 ; baseline 3229866=684
+  Batch2    5092b10  tsc 0 · schema 0 · test 734/734
+  AUF-15a   2d927fc  tsc 0 · test 734/734
+  AUF-16    982384d  tsc 0 · schema 0 · test 739/739
+  AUF-19    8587ce7  tsc 0 · schema 0 · test 746/746
+  AUF-26    4c9bc04  tsc 0 · schema 0 · test 759/759
+  A2        acdb987  tsc 0 · schema 0 · test 754/754
+  I2        289ccc8  tsc 0 · schema 0 · test 771/771
+  I3        ccdc93b  tsc 0 · schema 0 · test 782/782
+  AUF-25    17c8be2  tsc 0 · schema 0 · test 768/768
+Mutations-Gegenbeweise (Mutation → rote Tests):
+  T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
+  Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
+  AUF-16: FENSTER_TYPEN→TUER_TYPEN → 1 rot · AUF-19: aria-controls kaputt → 1 rot
+  AUF-26: Kappung zurück → 1 rot · A2: useMemo entfernt → 1 rot
+  I3: 'gesperrt'→'weitere' → 2 rot · AUF-25: Zweck→'folgt.' → 1 rot
+Bijektion (Katalog-Eingriffe): I2/I3 „9+110=119, keine Dublette", verwaisteRegeln()=[], regellose=[]
+Farb-„eine Wahrheit" (git grep, ohne Bundle): #7fae1c 1× (studioDaten) · #93c21c treppeSvg:38+szene:16 · 0xa3e635 szene:90 (real gerendert)
+Sichtprobe innerWidth 1440 (getBoundingClientRect): Reiter Allgemein/Beziehungen/Prüfungen/Historie sichtbar, clip=false; Prüfungen ovR −3 px
+```
