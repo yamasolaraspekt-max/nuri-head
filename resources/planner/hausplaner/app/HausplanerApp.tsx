@@ -25,7 +25,8 @@ import { projektBaum, PROJEKTBAUM_LEER } from './dashboard/projektBaum';
 import { befundeAus, BEFUNDE_LEER, BEFUNDE_UMFANG } from './dashboard/befunde';
 import { palettenEintraege, PALETTE_LEER } from './dashboard/palette';
 import { usePlannerUiStore } from './state/uiState';
-import { werkzeugTools, toolFuerShortcut, toolNach } from './tools/toolRegistry';
+import { toolFuerShortcut, toolNach } from './tools/toolRegistry';
+import { zoneTools } from './tools/toolPresentation';
 import { resolveToolState } from './tools/activation';
 import { baueAktivierungsKontext } from './tools/toolContext';
 import type { ObjectType, ViewType } from './tools/toolTypes';
@@ -260,6 +261,18 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   // Arbeitsbereich (UI-State) · Ansicht (store.modus) · Auswahltypen (Modell). Rechte sind im
   // Editor angenommen; die Werkzeugleisten-Werkzeuge (art='werkzeug') prüfen ohnehin keine Rechte.
   const activeWorkspace = usePlannerUiStore((s) => s.activeWorkspace);
+  /**
+   * Welle A2 / §8.2 (P9): Die Werkzeuge der Leiste kommen aus der Fix-Zone — **memoisiert am
+   * Aufrufort**, nicht im Modul gecacht. Leere Abhängigkeitsliste ist korrekt, weil
+   * `TOOL_PRESENTATION_RULES` eine Modul-Konstante ist.
+   *
+   * Warum kein Modul-Cache (ausdrücklich verboten): die A1-Gegenproben arbeiten über `zoneToolsIn`
+   * mit **veränderten** Regelsätzen. Ein Cache in `toolPresentation.ts` würde dort stillschweigend
+   * alte Werte liefern und genau die Unterscheidungskraft zerstören, die N1 gerade belegt hat.
+   * Ohne diese Memoisierung liefe pro Render eine Sortierung über 63 Regeln statt eines Filters
+   * über 9 Registry-Einträge — `onMouseMove` rendert in Mausbewegungs-Frequenz.
+   */
+  const leistenWerkzeuge = useMemo(() => zoneTools('fix'), []);
   const werkzeugKontext = useMemo(
     () =>
       baueAktivierungsKontext({
@@ -951,14 +964,20 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         {/* L1: Planer-Navigation — Werkzeuge (aktiv) + Fachplaner-Struktur (Navi). */}
         <div style={{ width: 220, flex: '0 0 auto', background: T.surface, borderRight: `1px solid ${T.hair}`, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
           <div style={navGrp}>Werkzeuge</div>
-          {/* UI-3: Werkzeugleiste datengetrieben aus der Tool-Registry (§22) mit Aktivierung (§21). */}
-          {werkzeugTools().map((tool) => {
+          {/* Welle A2 (§19/UI-4): Die Leiste bezieht ihre Zugehörigkeit AUSSCHLIESSLICH aus der
+              Präsentationsschicht — `zoneTools('fix')` statt `werkzeugTools()`. Vorher entschieden
+              zwei Mechanismen unabhängig über dieselbe Frage (`art` in der Registry UND `zone` in den
+              Regeln); sie stimmten nur zufällig überein. Jetzt ist es eine Wahrheit: wer ein Werkzeug
+              aus der Leiste nehmen will, ändert eine Regel in `toolPresentation.ts`.
+              Aktivierung bleibt `resolveToolState` — kein zweiter Filter. */}
+          {leistenWerkzeuge.map((tool) => {
             const zustand = resolveToolState(tool, werkzeugKontext);
             const aktiv = werkzeug === tool.id;
             return (
               <button key={tool.id} type="button"
                 title={zustand.enabled ? `${tool.label} (${tool.shortcut ?? ''}) — ${tool.helpText}` : `${tool.label} — ${zustand.reason}`}
                 aria-disabled={!zustand.enabled}
+                aria-pressed={aktiv}
                 onClick={() => { if (!zustand.enabled) return; setWerkzeug(tool.id as typeof werkzeug); setWandStart(null); setTreppeStart(null); }}
                 style={{ ...navItem(aktiv), ...(zustand.enabled ? {} : { opacity: 0.4, cursor: 'not-allowed' }) }}>
                 <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>{werkzeugIcon(tool.id)}</span>
