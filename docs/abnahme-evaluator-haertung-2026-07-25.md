@@ -89,8 +89,16 @@
 
 ---
 
+## ⇒ SICHTPROBE DURCHGEFÜHRT (25.07., authentifizierte Browser-Session, kein Credential-Eintrag durch mich)
+Route `/admin/hausplaner/studio?fixture=decke-treppe` → **Expertenmodus**, gerendert im echten Bundle. Schließt den offenen Sicht-Rest von Batch 1/2, AUF-26 und A2. Visuell bestätigt (Screenshot an Yama):
+- **v2.1 Kontext-Leiste:** „**Auswahl** | Für dieses Werkzeug sind noch keine Optionen hinterlegt · in Entwicklung" — ehrlicher Platzhalter + Badge, wie im Code.
+- **v2.2 Panel-Reiter:** vier Reiter (Allgemein/Beziehungen/Prüfungen/Historie), aktiver **fett + grün unterstrichen** (nicht nur Farbe, WCAG 1.4.1). „Historie" **bricht in Zeile 2 um** — kein Ellipsis (AUF-26 visuell bestätigt).
+- **A2 Werkzeugleiste aus Zonen:** 7 Werkzeuge V/W/F/T/D/K/R, **kollisionsfreie Kürzel** (Auflage 1 sichtbar).
+- **Ehrliche Zustände:** Dach ●verfügbar (grün) vs. Sparren/Holz ●in Entwicklung — Farbe **und** Text; Labels brechen um statt zu kappen.
+- **Fixture rendert:** Treppe 16×175 mm, 80 m², 2D-Ansicht sauber.
+→ **Sicht deckt sich mit dem Code auf jedem Punkt.** Einzig echtes Rendering-im-Testlauf (jsdom) bleibt Infra-Posten AUF-30.
+
 ## Nicht abgenommen / offen
-- **Sichtprobe** (Browser-Route hinter `auth`, kein DOM in Testumgebung) — braucht Yama oder eine Sitzung mit Browser.
 - **AUF-1** (A1-blind) — frische Instanz gezogen; ich anchored, korrekt ausgeschlossen.
 - **AUF-9** (T2a Kommentar-Fix) — ich anchored (Fund stammt von mir).
 - Yama-Willensfragen: AUF-15b (Palette/Grün-Rolle), stopp-1, Branch-Hygiene.
