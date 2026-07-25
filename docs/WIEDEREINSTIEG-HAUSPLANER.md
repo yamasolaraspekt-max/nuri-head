@@ -49,13 +49,13 @@ Die Skills tragen den Rahmen: `governance-zyklus` (Rollentrennung + `references/
 
 | Was | Zustand |
 |---|---|
-| Branch | `auto/hausplaner-integration`, HEAD `686d4ef` |
+| Branch | `auto/hausplaner-integration` — **Hash hier bewusst nicht genannt**, er veraltet. `git log --oneline -5` fragen. |
 | **AUF-12 Dashboard v2** | `OFFEN` — wartet auf einen **Generator**. Vorrang vor AUF-11. |
 | **AUF-1** A1-Abnahme | `OFFEN` — wartet auf eine **frische Evaluator-Instanz**. Sperrt AUF-4. |
 | **AUF-3** T1-Abnahme | `OFFEN` — wartet auf **Evaluator**. |
 | **AUF-9** T2a | `BERICHTET` (`fbc5308`) — wartet auf **Evaluator**. |
 | AUF-5/6/7/8/10/11 | `BEI YAMA` — Willensfragen, blockieren nichts. |
-| **Push** | `686d4ef` liegt **nur lokal**. Siehe §5. |
+| **Push** | Die Planner-Commits vom 25.07. liegen **nur lokal**. Siehe §5. |
 
 ---
 
