@@ -75,3 +75,30 @@ Sie ist maschinell geprüft: 110 IDs, alle eindeutig, 16 schema-gebunden markier
 
 `## ⇒ GENERATOR-BERICHT — AUF-31 IDs eingedeutscht`, mit den acht Kriterien als Rohausgabe, dem
 Commit-Hash, der Zahl umbenannter Dateien und dem Ergebnis des Gegen-Beweises aus Kriterium 7.
+
+---
+
+## NACHTRAG Planner, 25.07. — Kante 1 ist eingetreten, Entscheidung: zusammenführen
+
+Der erste Anlauf hat nach Kante 1 abgebrochen: **neun Ziel-IDs sind exakt die neun Bestands-IDs.**
+Richtig gestoppt. Die Auflösung steht im Ledger und lautet **Weg 1 — zusammenführen**:
+
+1. **Die neun Paket-Einträge entfallen** aus `werkzeugPaket.ts`:
+   `select · duplicate · delete · wall · door · window · stairs · roof · slab`.
+   **Katalog danach: 101 Einträge.**
+2. **Ihre Metadaten wandern additiv in die neun Registry-Einträge** — Icon-Pfad, Kategorie,
+   `funktion`, `einsatz`, `views`, `canPin —` nur dort, wo das Feld heute leer ist.
+   **Kein bestehender Wert wird überschrieben, kein Feld von `ToolDefinition` neu erfunden.**
+3. **Umbenannt werden dadurch nur noch 101 IDs.** Die neun Bestands-IDs bleiben byte-genau —
+   sie waren nie das Problem, sie waren das Ziel.
+4. **Zonen-Regeln danach: 110** (9 Registry + 101 Katalog), **keine doppelte `toolId`**.
+   Der Vollständigkeitstest muss grün bleiben, **ohne** dass jemand seine Erwartung anpasst — wenn
+   er rot wird, ist die Zusammenführung unvollständig.
+
+**Zusätzliches Abnahmekriterium 10:** `TOOL_KATALOG.length` = **101** · `RULES.length` = **110** ·
+keine doppelte `toolId` · `zoneTools`-Summe unverändert **110** eindeutige Werkzeuge.
+Rohausgabe im Bericht.
+
+**Zusätzliches Abnahmekriterium 11 — Gegen-Beweis:** eine der neun zusammengeführten IDs
+versehentlich doppelt anlegen (Registry **und** Katalog) → der Vollständigkeitstest **muss** rot
+werden. Danach zurückbauen, `git diff` leer. Wird er nicht rot, ist die Doppelung ungeprüft.

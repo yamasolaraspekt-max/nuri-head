@@ -2924,3 +2924,51 @@ im Auftrag korrekt beschrieben und wäre umsetzbar; sie ist **nicht** der Grund 
 
 **Tafel:** AUF-31 → `GESPERRT` mit Sperrgrund, damit nicht die nächste Instanz dieselbe Wand trifft.
 **Ballbesitz → Planner/Yama.**
+
+---
+
+## ⇒ PLANNER-ENTSCHEIDUNG — AUF-31: Weg 1, zusammenführen. Entsperrt.
+
+**Der Abbruch war richtig.** Der Generator hat Kante 1 wörtlich befolgt, gemessen statt geraten und
+die Sachfrage zurückgegeben, statt sie in seiner Vertretung zu entscheiden. Genau so ist der Auftrag
+gemeint gewesen.
+
+**Und sein Fund ist kein Tabellenfehler, sondern der Beweis, dass die Tabelle stimmt.** Neun
+Paket-Werkzeuge treffen exakt die neun Bestands-Werkzeuge — weil es **dieselben Werkzeuge sind**.
+Eine „Wand" aus dem Paket und die „Wand" der Registry sind nicht zwei Dinge, die zufällig gleich
+heißen. Dass beide Wege auf `wand` zeigen, ist Konvergenz, keine Kollision.
+
+### Entscheidung: **Weg 1 — zusammenführen.** 110 → **101** Katalog-Einträge.
+
+Die neun Paket-Einträge `select · duplicate · delete · wall · door · window · stairs · roof · slab`
+**entfallen aus `werkzeugPaket.ts`**. Die neun Registry-Einträge bleiben die eine Wahrheit und
+übernehmen **additiv** die Metadaten des Pakets, wo sie heute Lücken haben — Icon-Pfad, Kategorie,
+`funktion`, `einsatz`, `views`, `canPin`. **Kein Feld von `ToolDefinition` wird geändert**, nur
+gefüllt; die Richtung bleibt „der neue Code passt sich dem Bestand an".
+
+**Warum nicht Weg 2 (`wand-paket`):** Das verewigt genau die Doppelung, die A1 und A2 gerade
+abgebaut haben — zwei Einträge für ein Werkzeug, zwei Zonen, zwei Wahrheiten. Der Generator sagt es
+selbst, und er hat recht.
+**Warum nicht Weg 3 (neun englisch lassen):** widerspricht Yamas Anordnung und wäre die schlechteste
+Sorte Kompromiss — ein System, in dem acht von zehn Dingen deutsch heißen.
+
+### Was sich dadurch ändert — die Zahlen, damit niemand später stolpert
+
+| | vorher | nachher |
+|---|---|---|
+| Katalog-Einträge | 110 | **101** |
+| Zonen-Regeln gesamt | 119 (9 + 110) | **110** (9 + 101) |
+| eindeutige Werkzeuge | 110 | **110** — unverändert, denn die neun waren doppelt |
+| umzubenennende IDs in AUF-31 | 110 | **101** |
+| Icon-Dateien | 110 | **110** — die neun heißen ohnehin schon `wand.svg`, `fenster.svg`, … |
+
+**Die sechs schema-gebundenen unter den neun** (`wall · door · window · stairs · roof · slab`)
+tragen ihre Schutzwerte nach dem Zusammenführen **in den Registry-Einträgen**, wo sie heute schon
+sitzen. An der Trennung UI-ID ↔ gespeicherter Wert ändert sich **nichts** — sie war nicht der Grund
+des Abbruchs und bleibt wie im Auftrag beschrieben.
+
+**Für I3:** Die Prüfsumme lautet ab jetzt **22 Gruppen, Summe 110 Werkzeuge** (101 Paket + 9
+Registry), nicht „Summe 110 Paket-Einträge". Der Test muss die zusammengeführte Menge zählen.
+
+**AUF-31 ist entsperrt**, Umfang 101 statt 110. Alles Übrige am Auftrag bleibt gültig.
+**Ballbesitz → Generator.**
