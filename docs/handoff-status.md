@@ -4757,3 +4757,47 @@ und verriegelt; er schweigt, solange kein messbarer Schritt etwas löst — gena
    `kopieren`. Ein Test hält beides fest, damit die Abweichung nicht als Nachlässigkeit gilt.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ PLANNER — AUF-45 abgenommen, und drei meiner Annahmen waren falsch
+
+**Votum:** FREIGABE (`66128fe`), blind gegen `b9861d7` gemessen, dann erst die Berichte gelesen.
+930/930, zwei Mutations-Gegenbeweise, Sichtprobe im iframe bei 1440 gegen Bundle `ab7f2c1`.
+
+**Was sichtbar wurde:** Die Kontext-Leiste sagt bei „Markieren" jetzt *„Dieses Werkzeug braucht keine
+Optionen."* — **null `in Entwicklung`-Badges** im View. Der Platzhalter verwechselt „braucht nichts"
+nicht mehr mit „ist nicht fertig".
+
+### Drei falsche Annahmen in **einem** Auftrag — alle meine
+
+Der Generator hat sie gemessen, korrigiert und testverriegelt, statt sie auszuführen:
+
+1. **„Der häufigste Sperrgrund ist der erste Schritt."** Falsch. Im leeren Plan sperrt „etwas
+   auswählen" **23** Werkzeuge, „kein Geschoss" **22** — aber in einem leeren Plan gibt es nichts
+   auszuwählen. Er hat es auf den **gemessen meist-entsperrenden** Schritt umgestellt: ein Schritt,
+   der nichts löst, kann gar nicht gewinnen.
+2. **„Nenne die Zahl der wartenden Werkzeuge."** Falsch. 22 warten auf ein Geschoss, aber nur **20**
+   werden dadurch bedienbar. „Schaltet 22 frei" wäre eine falsche Zusage gewesen.
+3. **„Ein Werkzeug ohne `eingaben` braucht keine Optionen."** Diese Regel hätte **niemanden**
+   getroffen — **kein einziger** der 110 Verträge hat eine leere `eingaben`-Liste. Er hat die
+   Unterscheidung auf das gelegt, was die Daten hergeben: **Gesten-Eingaben** gegen **Optionen**,
+   trifft 3 Werkzeuge.
+
+**Dazu die vierte, die den Posten halb schlafen legt:** `activeLevel.exists` ist nie verletzt, weil
+eine Szene immer ein Geschoss trägt. Der Zustand, für den ich den Wegweiser geschrieben habe, ist
+nicht erreichbar.
+
+**Der Evaluator hat das sauber getrennt:** *„Teil a erscheint nie = Planner-Spezifikationsfehler,
+NICHT Generator-Mangel … zählt NICHT gegen dieses Votum."* Das ist die richtige Zurechnung — der
+Bauende haftet nicht für die Prämisse des Beauftragenden.
+
+**Meine Lehre, und sie ist unbequem:** Alle vier Annahmen wären durch **eine** Messung vor dem
+Schreiben gefallen — ein Blick in `werkzeugVertrag.ts` auf leere `eingaben`, ein Blick auf die
+tatsächliche Sperrverteilung. Ich habe die Kriterien sorgfältig formuliert und die **Grundlage nicht
+geprüft**. §7.1 verlangt genau das („messen vor behaupten"); es gilt für Aufträge so wie für Berichte.
+**Ab sofort trägt jeder Auftrag mit einer Zahl im Kriterium die Messung, aus der sie stammt, mit Datum.**
+
+**Stand:** Arbeitsvorrat 21 · Abnahme 1 (AUF-43) · bei Yama 1 · Archiv 37 = 60.
+AUF-51 ist gezogen, der Generator baut den Pan-Zustand.
+

@@ -142,7 +142,7 @@ jedes Bauwerks ist Fundament. Aber Yama muss es unterscheiden können, ohne zu f
 
 **Vier Tabellen statt einer — geordnet danach, wer als Nächstes handeln muss.** In einer Tabelle mit 39
 Zeilen war der eine Posten, der gezogen werden darf, nicht mehr zu finden. Kein Posten ist verschwunden:
-**21** Arbeitsvorrat · **2** Abnahme · **1** bei Yama · **36** im Archiv — Summe geprüft, 60.
+**21** Arbeitsvorrat · **1** Abnahme · **1** bei Yama · **37** im Archiv — Summe geprüft, 60.
 
 > **25.07., 23:15 — vier Fragen in Yamas Vertretung entschieden.** Er hat ausdrücklich delegiert
 > („nimm deine Empfehlungen an"). **Das ist die Ausnahme, nicht die Regel** (§5: keine Instanz entscheidet
@@ -235,7 +235,6 @@ Prüfung. Niemand nimmt eigene Arbeit ab (§1.4).
 
 | Nr | Auftrag | Rolle | Status | Datei / Beleg |
 |---|---|---|---|---|
-| **AUF-45** | **Der erste Schritt ist nirgends sichtbar** (Befunde B3 + B8) — gemessen: **78 von 110 Werkzeugen (71 %) sind beim Öffnen gesperrt**, mit aktivem Geschoss 44 (40 %), mit Auswahl 16 (15 %). Jede Sperre ist **korrekt** (AUF-36), aber nichts in der Oberfläche sagt, dass das Geschoss das Tor ist. Dazu B8: das Standardwerkzeug „Markieren" meldet sich beim Start als **„in Entwicklung"**, obwohl es nur schlicht keine Optionen braucht — der Platzhalter verwechselt „braucht nichts" mit „ist nicht fertig" | Planner → Generator | `BERICHTET — wartet auf Evaluator` — umgesetzt `b9861d7`, Bundle `ab7f2c1`, 930/930. **Teil b sichtbar wirksam** (das Standardwerkzeug sagt „braucht keine Optionen" statt „in Entwicklung"). **Teil a gebaut und erscheint nie** — der Auftrag stand auf einer falschen Annahme, siehe AUF-57 | `generator-auftrag-auf45-erster-schritt.md` |
 | **AUF-43** | **Geschoss-Bedienung neu ordnen** (Befund B1) — gemessen: **13 Bedienelemente in einer Zeile**, vier voneinander unabhängige Aufgaben (Rückgängig · Geschoss-Navigation · Geschoss-Verwaltung · Ansichtsmodus · Speichern), und der Geschossname steht **zweimal nebeneinander** (Select 111 px + Textfeld mit demselben Wert). Höhenlage wird geführt, aber nicht gezeigt; Namen automatisch „Geschoss 3"; kein Bild vom Stapel. **Größter Einzelhebel: ein angelegtes Geschoss entsperrt 34 der 110 Werkzeuge** — das Tor dahin ist ein 111-px-Dropdown zwischen Rückgängig und Speichern | Planner → Generator | `BERICHTET — wartet auf Evaluator` — umgesetzt `43a287f`, Bundle `8fd6568`. Neun Kriterien, Sichtprobe 1440/1024/375; den **375-px-Überlauf hat er gemeldet statt geflickt** (gehört zu AUF-46) | `generator-auftrag-auf43-geschoss-bedienung.md` |
 
 
@@ -255,7 +254,7 @@ Vertretung entscheidet (§5) — nicht, weil auf sie gewartet würde.
 ### 3d. Abgeschlossen — im Archiv
 
 Abgenommen, entschieden oder entfallen, wortgleich in **`docs/auftraege/AUFTRAGSTAFEL-ARCHIV.md`** —
-**36 Posten**: AUF-1 · AUF-2 · AUF-3 · AUF-4 · AUF-9 · AUF-11 · AUF-12 · AUF-14 · AUF-15a · AUF-16 ·
+**37 Posten**: AUF-1 · AUF-2 · AUF-3 · AUF-4 · AUF-9 · AUF-11 · AUF-12 · AUF-14 · AUF-15a · AUF-16 ·
 AUF-19 · AUF-20 · AUF-24 · AUF-25 · AUF-21 · AUF-26 · AUF-27 · AUF-28 · AUF-30 · AUF-31 · AUF-32 · AUF-33 · AUF-34 · AUF-35a · AUF-36 · AUF-37. Nicht gelöscht, nur nicht mehr im Weg.
 
 **Zu AUF-9/AUF-10:** Beide stammen aus den zwei Punkten, die der Generator mit AUF-5 zurückgegeben
