@@ -5988,3 +5988,80 @@ mein Auftrag), dann meine zwei Schulden. Danach steht AUF-50 — die 110 Werkzeu
 Wochenstück, kein Abendstück.
 
 **Ballbesitz über Nacht: Generator (AUF-68) und Evaluator (AUF-69).**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-68: die drei Gruppenwörter sind weg
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** Code `b5c231e` · Bundle `d59dd8d`
+**Ballbesitz:** Evaluator.
+
+*(Diesmal zuerst die Auftragsdatei gelesen, dann die Tafelzeile — die Lehre aus AUF-64/69.)*
+
+### 1. Was gebaut wurde
+
+Yamas Wunsch wörtlich: *„kannst du die Wörter Ansicht, Messen & Export sowie Bearbeiten weg machen."*
+
+Es waren genau **drei Aufrufe** von `opLbl` und die **Hilfsfunktion selbst**, die keinen weiteren
+Aufrufer hatte. Alles entfernt — nicht auskommentiert, nicht auf `''` gesetzt. `grep -c "opLbl"` = **0**.
+
+**Der Name lebt weiter, nur unsichtbar:** jede der drei Gruppen trägt jetzt `role="group"` mit
+`aria-label`. Das ist die Bedingung aus §2 des Auftrags, und sie ist kein Zierrat — Trennstriche
+sind für ein Vorleseprogramm nicht vorhanden; ohne das Label wären die Gruppen ersatzlos weg.
+
+### 2. Kein Beifang — das eigentliche Risiko dieses Postens
+
+| Kriterium | Beleg |
+|---|---|
+| K3 Wörter weg | `opLbl` **0 Treffer** |
+| K4 Knopfzahl | **11** — unverändert; Aufteilung **6 · 4 · 1** |
+| K5 Sperren | die fünf Bedingungen als **Menge** festgehalten (`einpassen:geplant`, `dup`/`del` an der Auswahl, `mirror-h`/`mirror-v` an den Wänden) — keine verschoben |
+| Reihenfolge | Icon-Folge Zeichen für Zeichen gleich |
+| K6 Name unsichtbar | `role="group"` **und** nichtleeres `aria-label`, alle drei, in dieser Reihenfolge |
+| K2 Modellschichten | `store/ domain/ geometry/ renderers/` — **null Zeilen** |
+| K7 `public/*` im Code-Commit | **0**; Bundle als zweiter Commit `d59dd8d` |
+
+**Gates:** tsc **0** · schema:check **0** · test **0** · build **0**. Tests **1010 → 1020**.
+Testnamen-Vergleich (`comm -23`): **keine** Zusage verschwunden.
+
+**Mutationen, beide angeschlagen:**
+- `aria-label` geleert ⇒ **1 rot** (K6)
+- Sperre an `dup` entfernt ⇒ **1 rot** (K5)
+
+### 3. Sichtprobe — 1440 und 1024 px, Fixture `u-dach`, Expertenmodus
+
+```
+Ansicht          6 Knöpfe (1 gesperrt)   x=14   b=222
+Bearbeiten       4 Knöpfe (2 gesperrt)   x=257  b=146
+Messen & Export  1 Knopf  (0 gesperrt)   x=424  b=32
+kein waagerechter Überlauf · sichtbare Gruppenwörter: keine
+```
+Bei beiden Breiten identisch. Bilder: `auf68-1440.png` · `auf68-1024.png`.
+
+### 4. Rückgabe nach §5 — gemessen, nicht beurteilt
+
+Der Auftrag fragt: *wirkt die Zeile ohne die Wörter gedrängt, weil die Trennstriche zu schwach
+sind?* Ich habe nicht geschaut, sondern gemessen:
+
+| Merkmal | Wert |
+|---|---|
+| Trennstrich | `rgb(237,240,242)`, 1 × 20 px |
+| **Kontrast zum Zeilengrund** | **1,07 : 1** |
+| Abstand **zwischen** Gruppen | **21 px** |
+| Abstand **innerhalb** einer Gruppe | **6 px** |
+
+**Der Trennstrich trägt die Gliederung nicht.** 1,07 : 1 ist praktisch unsichtbar; WCAG 1.4.11
+verlangt **3 : 1** für bedeutungstragende Grafik. Was die Gruppen tatsächlich trennt, ist der
+**3,5-fache Abstand** — 21 px gegen 6 px. Die Gliederung steht also, aber sie steht in der
+Nähe-Beziehung, nicht im Strich.
+
+**Damit ist die Annahme des Auftrags („die Trennstriche stehen schon da") in der Wirkung nur zur
+Hälfte richtig** — sie stehen, aber sie zeigen nichts. Ich habe deshalb **keinen Abstand erfunden
+und keinen Strich verstärkt**: ein stärkerer Trenner ist ein eigener winziger Posten und Yamas
+Entscheidung. Falls er kommt, wäre `hair2` statt `hair` der naheliegende Griff — das ist ein
+Vorschlag, keine Änderung.
+
+### 5. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. `WerkzeugGruppenMenue` (die
+Themenzeile darunter) unberührt — dort standen andere Wörter, sie waren nicht gemeint.
