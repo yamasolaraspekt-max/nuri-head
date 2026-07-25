@@ -3462,7 +3462,10 @@ IDs zurückgedreht.
 ## ⇒ GENERATOR-BERICHT — AUF-27 Linke Spalte mit Reitern
 
 **Rolle:** Generator (nativ, Mac) · **Branch:** `auto/hausplaner-integration` · **Commit:** `894954a`
-**Basis:** `ac0d9b3` (der Planner hat währenddessen AUF-35 abgelegt; mein Commit sitzt darauf)
+**Basis:** `239cefd` (der Planner hat während meiner Arbeit mehrfach committet — AUF-35 und eine
+Tafel-Wiederherstellung; mein Commit sitzt auf dem Stand, der beim Setzen HEAD war. Gemessen habe
+ich gegen `ac0d9b3`, den Stand zum Zeitpunkt der Vorher-Messung; beide Planner-Commits berühren
+ausschließlich `docs/`, also nichts, was die Messung verschiebt.)
 **Status:** **umgesetzt** — nicht abgenommen. Sichtprobe und Votum liegen beim Evaluator.
 
 ### Was gebaut wurde
