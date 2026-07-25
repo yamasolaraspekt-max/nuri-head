@@ -123,6 +123,72 @@ function lotAufWand(p: Punkt, w: WallNode): { abstand: number; offset: number } 
   return { abstand: Math.hypot(p.x - fx, p.y - fy), offset: t * Math.sqrt(laengeQ) };
 }
 
+/**
+ * Dashboard v2.1 (§19 / UI-4) — Kontext-Options-Leiste unter der Bedienleiste.
+ *
+ * Die Zuordnung Werkzeug → Optionen ist EIN `switch` über `activeToolId`: Bedingung und
+ * Steuerelement liegen im selben `case` und können nicht auseinanderlaufen. Eine Parallelliste
+ * (Werkzeug hier, Option dort) wäre genau die zweite Wahrheit, die wir sonst überall abbauen.
+ *
+ * **AUF-16 / Befund B1 — warum diese Komponente auf MODULEBENE steht und nicht im Rumpf von
+ * `HausplanerApp`:** eine im Rumpf definierte Komponente bekommt bei JEDEM Render eine neue
+ * Typ-Identität; React reißt ihren Teilbaum ab und baut ihn neu auf. `onMouseMove` rendert
+ * `HausplanerApp` in Mausbewegungs-Frequenz — der `<select>` hier ist fokussierbar, also gingen
+ * Fokus und Tastaturbedienung fortlaufend verloren. Bei zustandslosen Rumpf-Komponenten wie
+ * `OpBtn` ist dasselbe Muster folgenlos; hier nicht. Deshalb: Modulebene, Werte als **explizite
+ * Props** statt über Closure.
+ *
+ * Erweiterungspunkt (NICHT hier bauen): in v5 wird dieser `switch` durch einen Deskriptor aus
+ * der Tool-Registry ersetzt, sobald die Zonen aus `toolPresentation.ts` die Leiste speisen.
+ */
+function KontextOptionenLeiste({
+  werkzeug, fensterTypWahl, tuerTypWahl, setFensterTypWahl, setTuerTypWahl,
+}: {
+  werkzeug: Werkzeug;
+  fensterTypWahl: FensterTyp;
+  tuerTypWahl: TuerTyp;
+  setFensterTypWahl: (t: FensterTyp) => void;
+  setTuerTypWahl: (t: TuerTyp) => void;
+}): React.ReactElement {
+  const aktivesTool = toolNach(werkzeug);
+  const optionen = ((): React.ReactElement => {
+    switch (werkzeug) {
+      case 'fenster':
+      case 'tuer': {
+        const istFenster = werkzeug === 'fenster';
+        return (
+          <label style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'flex', alignItems: 'center', gap: 5 }}>
+            {istFenster ? 'Fenstertyp' : 'Türtyp'}
+            <select
+              value={istFenster ? fensterTypWahl : tuerTypWahl}
+              onChange={(e) => (istFenster ? setFensterTypWahl(e.target.value as FensterTyp) : setTuerTypWahl(e.target.value as TuerTyp))}
+              style={{ fontSize: 12.5, padding: '4px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}` }}
+            >
+              {(istFenster ? FENSTER_TYPEN : TUER_TYPEN).map((v) => (
+                <option key={v.typ} value={v.typ}>{v.label} · {v.breite}×{v.hoehe} mm</option>
+              ))}
+            </select>
+          </label>
+        );
+      }
+      default:
+        return (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 12, color: FARBEN.gedaempft }}>
+            Für dieses Werkzeug sind noch keine Optionen hinterlegt.
+            <ZustandBadge zustand="in_entwicklung" />
+          </span>
+        );
+    }
+  })();
+  return (
+    <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'center', gap: 10, padding: '5px 14px', fontSize: 12, background: T.surface2, borderBottom: `1px solid ${T.hair}` }}>
+      <span style={{ fontWeight: 700, color: FARBEN.text }}>{aktivesTool?.label ?? 'Werkzeug'}</span>
+      <span style={{ width: 1, height: 16, background: T.hair }} />
+      {optionen}
+    </div>
+  );
+}
+
 export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {}): React.ReactElement {
   const scene = useHausplanerStore((s) => s.scene);
   const activeLevelId = useHausplanerStore((s) => s.activeLevelId);
@@ -318,55 +384,6 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       {opIcon(icon)}
     </button>
   );
-  /**
-   * Dashboard v2.1 (§19 / UI-4) — Kontext-Options-Leiste unter der Bedienleiste.
-   *
-   * Die Zuordnung Werkzeug → Optionen ist EIN `switch` über `activeToolId`: Bedingung und
-   * Steuerelement liegen im selben `case` und können nicht auseinanderlaufen. Eine Parallelliste
-   * (Werkzeug hier, Option dort) wäre genau die zweite Wahrheit, die wir sonst überall abbauen.
-   *
-   * Erweiterungspunkt (NICHT hier bauen): in v5 wird dieser `switch` durch einen Deskriptor aus
-   * der Tool-Registry ersetzt, sobald die Zonen aus `toolPresentation.ts` die Leiste speisen.
-   */
-  const KontextOptionenLeiste = (): React.ReactElement => {
-    const aktivesTool = toolNach(werkzeug);
-    const optionen = ((): React.ReactElement => {
-      switch (werkzeug) {
-        case 'fenster':
-        case 'tuer': {
-          const istFenster = werkzeug === 'fenster';
-          return (
-            <label style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'flex', alignItems: 'center', gap: 5 }}>
-              {istFenster ? 'Fenstertyp' : 'Türtyp'}
-              <select
-                value={istFenster ? fensterTypWahl : tuerTypWahl}
-                onChange={(e) => (istFenster ? setFensterTypWahl(e.target.value as FensterTyp) : setTuerTypWahl(e.target.value as TuerTyp))}
-                style={{ fontSize: 12.5, padding: '4px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}` }}
-              >
-                {(istFenster ? FENSTER_TYPEN : TUER_TYPEN).map((v) => (
-                  <option key={v.typ} value={v.typ}>{v.label} · {v.breite}×{v.hoehe} mm</option>
-                ))}
-              </select>
-            </label>
-          );
-        }
-        default:
-          return (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 12, color: FARBEN.gedaempft }}>
-              Für dieses Werkzeug sind noch keine Optionen hinterlegt.
-              <ZustandBadge zustand="in_entwicklung" />
-            </span>
-          );
-      }
-    })();
-    return (
-      <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'center', gap: 10, padding: '5px 14px', fontSize: 12, background: T.surface2, borderBottom: `1px solid ${T.hair}` }}>
-        <span style={{ fontWeight: 700, color: FARBEN.text }}>{aktivesTool?.label ?? 'Werkzeug'}</span>
-        <span style={{ width: 1, height: 16, background: T.hair }} />
-        {optionen}
-      </div>
-    );
-  };
   /**
    * Dashboard v2.5 — Enter in der Palette. Werkzeuge setzen den Modus (wie die Werkzeugleiste),
    * Aktionen rufen die BEREITS VORHANDENEN Funktionen `loescheAuswahl`/`dupliziere`. Es entsteht
@@ -899,8 +916,15 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       </div>
 
       {/* Dashboard v2.1 (§19 / UI-4): Kontext-Options-Leiste — zeigt die Optionen des AKTIVEN
-          Werkzeugs. Volle Breite, direkt unter der Bedienleiste, vor dem Canvas. */}
-      <KontextOptionenLeiste />
+          Werkzeugs. Volle Breite, direkt unter der Bedienleiste, vor dem Canvas.
+          AUF-16/B1: Die Komponente steht auf MODULEBENE (s. o.); ihre Werte kommen als Props. */}
+      <KontextOptionenLeiste
+        werkzeug={werkzeug}
+        fensterTypWahl={fensterTypWahl}
+        tuerTypWahl={tuerTypWahl}
+        setFensterTypWahl={setFensterTypWahl}
+        setTuerTypWahl={setTuerTypWahl}
+      />
 
       {/* Canvas: 2D (Konva) + 3D (three) nebeneinander — beide lesen DENSELBEN Store.
           Der 3D-Bereich bleibt über Moduswechsel gemountet (nur ausgeblendet) ⇒ Kamera
