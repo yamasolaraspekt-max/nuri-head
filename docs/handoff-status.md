@@ -4307,3 +4307,91 @@ gelaufenen. Als **dauerhafte Render-Testinfra** wäre er die Antwort auf den äl
 
 **Tafel:** Arbeitsvorrat 16 · Abnahme 7 · bei Yama 10 · Archiv 18 = **51**, geprüft.
 
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-33 / L2: die Treppen-Auslegung hat eine Fläche
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `9d0c12a` (Code) · `1c3aa31` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+**L3 ist bewusst NICHT gebaut** — das Muster wird erst geprüft, dann zwölfmal kopiert.
+
+### Was gebaut wurde
+
+Eingabefelder → Knopf → Ergebnisblock + Prüfliste. Die Fläche **rechnet nicht**: sie ruft
+`berechneTreppe` und zeigt, was zurückkommt.
+
+| Baustein | Inhalt |
+|---|---|
+| `dashboard/enginePanels.ts` | Zuordnung `engine-treppe` → 6 Felder + 8 Ergebnisgrößen + **statischer** Aufruf |
+| `app/EngineFlaeche.tsx` | die Fläche; nutzt die Hülle, rendert Zahlen und Prüfliste |
+| `app/FachFlaeche.tsx` | **`FlaechenHuelle` extrahiert** — Kopf, Zweck, Zurück, Escape stehen jetzt einmal und werden zweimal benutzt |
+
+**Öffnungsweg, und hier musste ich vom Auftragstext abweichen:** Der Auftrag sagt „Panel in
+`FachFlaeche` einsetzen". **Gemessen gibt es für die Treppe keine L4-Fläche** — die 19 Flächen in
+`fachFlaechen.ts` decken die Fachplaner-Navigation (Haustechnik · PV · Bauelemente · Bad · Küche),
+und **Treppe ist dort kein Modul**. Ein zwanzigster Eintrag hätte zwei bestehende Tests gebrochen
+(„19 Flächen", „kein Modul ohne Fläche, keine Fläche ohne Modul") und einen unerreichbaren
+Waisen-Eintrag erzeugt. **Die „Treppen-Kachel" aus §4.5 ist der Eintrag in der Fachplaner-Schiene**
+(`faehigkeiten.ts`) — der ist jetzt `verfuegbar` und **klickbar**, und er öffnet die Fläche.
+Wiederverwendet wird trotzdem, was der Auftrag verlangt: dieselbe Hülle, nur extrahiert statt kopiert.
+
+### Die zehn Kriterien, Rohausgabe
+
+| # | Kriterium | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` | **0 / 0 / 0** — **874 → 888** |
+| 2 | `store/` `domain/` `renderers/` **und `geometry/`** unberührt | **0 Zeilen**; `treppenBerechnung.ts` nicht angefasst |
+| 3 | keine Rechnung in der Fläche | `grep -c` in **beiden** neuen Dateien: `Math.round` **0** · `GRENZEN` **0** · `DURCHGANG_MIN` **0**; Test prüft zusätzlich `Math.floor/ceil/max/min`, `steigungMax`, `auftrittMin`, `laufbreiteMin` und Formelmuster |
+| 4 | Wertgleichheit gegen die Engine, ≥3 Eingaben, eine mit `bestanden: false` | drei Fälle, `deepEqual` gegen den direkten Aufruf; **zwei** davon fallen durch |
+| 5 | alle drei Schweregrade, Unterschied nicht nur farblich | **eingeschränkt erfüllt — siehe Rückgabe 1** |
+| 6 | kein dynamischer Import | `grep -c "import("` **ohne Kommentare**: EngineFlaeche **0**, enginePanels **0** (der eine Roh-Treffer ist die Zusage im Kopfkommentar selbst) |
+| 7 | die anderen zwölf bleiben `in_entwicklung` | Test: genau **eine** Engine `verfuegbar`, und sie hat auch ein Panel; kein Panel ohne verfügbare Engine |
+| 8 | Mutations-Gegenbeweis | `geschosshoehe` auf `laufbreite` gelegt ⇒ **3 Tests rot**; zurückgebaut ⇒ `diff` leer, 888/888 |
+| 9 | `public/*` im Code-Commit null Zeilen, Bundle eigener zweiter Commit | erfüllt: `9d0c12a` → `1c3aa31` |
+| 10 | sichtbar ⇒ Rebuild-Beleg + Sichtprobe | siehe unten |
+
+**Rebuild-Beleg** (`1c3aa31`, 1.402.349 Bytes, 25.07. 22:00):
+`grep -c 'Treppen-Auslegung'` = 1 · `'DIN 18065'` = 1 · `'Ohne diese Angabe wird nicht gerechnet'` = 1 · `'erfüllt'` = 1.
+
+### Sichtprobe, 1440 px — und sie hat wieder etwas gefunden
+
+Fachplaner-Reiter → „Treppen-Auslegung **verfügbar**" (klickbar) → Fläche öffnet mit 6 Feldern,
+Knopf aktiv. „Berechnen" mit den Vorgaben: **16 Steigungen · 15 Auftritte · 175 mm · 280 mm ·
+4200 mm · Schrittmaß 630 mm · Bequemlichkeit 105 mm · Sicherheit 455 mm**, Urteil „✓ Alle Prüfungen
+bestanden", 7 Prüfzeilen. Umschalten auf **Außentreppe**: „✕ Eine Prüfung ist nicht bestanden",
+**die Zahlen bleiben stehen**, 2 Fehler + 5 erfüllte Prüfungen.
+
+**Der Fund:** In meiner ersten Fassung trug **jede** Prüfzeile ihren Schweregrad — auch die
+bestandenen. Im Bild stand „✕ Fehler · Laufbreite 1000 mm ≥ Mindestmaß 1000 mm (aussen)", obwohl
+genau diese Prüfung **bestanden** war. Der Schweregrad sagt, **wie schwer eine Verletzung wöge** —
+ob sie vorliegt, sagt `bestanden`. Beides zu vermischen macht aus einer erfüllten Anforderung einen
+Fehler, und zwar **im Muster, das L3 zwölfmal kopiert**. Behoben (bestanden ⇒ „✓ erfüllt"), Test
+verriegelt es. **Das Gate war grün, als der Fehler im Bild stand.**
+
+### Zurückgegeben statt heimlich gelöst (§6)
+
+1. **Kriterium 5 ist so nicht erfüllbar: `berechneTreppe` liefert nur `fehler` und `warnung`,
+   niemals `info`.** Gemessen über alle drei Testfälle. Der Typ `PruefSchwere` sieht `info` vor, die
+   Engine benutzt es nicht. Mein Test prüft deshalb: beide auftretenden Grade treten wirklich auf,
+   **und** die Fläche kann den dritten darstellen (Zeichen + Wort hinterlegt). Er behauptet nicht,
+   drei kämen aus den Daten. **Ob `info` je gebraucht wird, ist eine Frage an die Engine, nicht an
+   die Fläche.**
+2. **Die Treppe hat keine L4-Fläche in der Fachplaner-Navigation** (siehe oben). Ob sie eine
+   bekommen soll — also ein Navigationseintrag „Treppe" unter einem Hub — ist eine Produktfrage für
+   Yama, kein Beifang dieses Postens. Heute ist sie über die Schiene erreichbar.
+3. **Persistenz des Ergebnisses** bleibt außen vor, wie in §3c verlangt. Die Fläche rechnet und
+   zeigt; nichts wandert ins `SceneDocument`.
+4. **Für L3 früh sichtbar:** Bei elf der zwölf übrigen Engines lässt sich der `eingang` **nicht**
+   aus dem Modell füllen — `HolzStück[]`, `Holzliste`, `Schicht[]`, `HeizkreisEingabe[]`,
+   `Fläche (u/v)` setzen Zwischenergebnisse voraus, die der Planer heute nicht führt. Die Treppe war
+   die einfachste (eine Pflichtzahl). **L3 wird deshalb nicht dreizehnmal dasselbe sein** — das ist
+   die Naht, die der Auftrag früh sehen wollte.
+
+### Ein ersetzter Testname
+
+| vorher | nachher | Grund |
+|---|---|---|
+| `alle 13 Rechen-Engines sind als art:engine / zustand:in_entwicklung registriert (…)` | `alle 13 Rechen-Engines sind registriert (echtes Modul + Ein-/Ausgang) — genau EINE ist verfügbar` | die geprüfte Tatsache hat sich geändert: die Treppe **ist** jetzt angeschlossen. Der Test prüft dieselben Zusagen plus die neue Verriegelung. |
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
