@@ -1726,3 +1726,114 @@ Der Import existiert ausschließlich als Wizard-**Text** (`app/studioDaten.ts:96
 
 **Nichts abgenommen, kein Code angefasst.** Ballbesitz unverändert: **Evaluator** (AUF-12 Batch 1,
 AUF-1, AUF-3, AUF-9).
+
+---
+
+## ⇒ EVALUATOR-VOTUM — Dashboard v2 Batch 1 (`f6bdfc2`)
+
+**Geprüft:** 25.07.2026 · **Rolle:** Evaluator, andere Instanz als der Generator · **Auftrag:**
+`docs/auftraege/evaluator-auftrag-dashboard-v2-batch1.md`
+**E1 eingehalten:** alle Gates, Greps, Mutationen und Kontrastrechnungen liefen, *bevor* der
+Generator-Bericht geöffnet wurde. **Arbeitsbaum:** porcelain `0` → `0`, HEAD unverändert, keine
+`.lock`-Reste, kein Produktivcode angefasst.
+
+### Gates — selbst gefahren
+
+| Gate | Exit | Beleg |
+|---|---|---|
+| `tsc:hausplaner` | **0** | |
+| `schema:hausplaner:check` | **0** | Schema-Datei mtime 24.07. 17:37 < Commit 25.07. 13:41 ⇒ **nicht** regeneriert |
+| `test:hausplaner` | **0** | `# tests 702 / # pass 702 / # fail 0` |
+| `build:hausplaner` | **NICHT AUSFÜHRBAR** | `Cannot find module @rollup/rollup-linux-arm64-gnu`, `uname -m` = aarch64 — die in WIEDEREINSTIEG §5 dokumentierte x64-Grenze. **Nicht grün, nicht rot.** |
+
+### Kriterien
+
+- **K1 grün** (mit der Build-Einschränkung) · **K2 grün** — 696 → 702 selbst erzeugt, `git archive f6bdfc2^`
+  nach `/tmp`, **Testnamen-Mengen** verglichen: **null verschwundene Tests**, +6 aus `panelTabs.test.ts`.
+- **K3 grün, beide Mutationen rot.** Reihenfolge vertauscht → `not ok 1`; `zustand` verfälscht →
+  `not ok 2` + `not ok 3`. Die Tests decken Reihenfolge **und** Zustand nachweislich ab.
+- **K4 grün** — `git show --stat`: 4 Pfade, 0 Änderungen in `app/tools`, `store`, `domain`, `geometry`,
+  `renderers`; `toolPresentation.ts` unberührt ⇒ AUF-1-Sperrbereich gewahrt.
+- **K5 grün, mit benannter Abweichung** — Optionszeile byte-identisch, Quelllisten/States/`onChange`
+  identisch. Offengelegt: `<select>`-Padding `5px 8px` → `4px 8px`. Vom Auftrag gedeckt, aber keine
+  Byte-Treue. Nicht blockierend.
+- **K6 — die Behauptung ist ROT, die Änderung ist grün.** Der Bericht und die Commit-Botschaft sagen
+  „0 rohe Farbwerte in `app/` außerhalb `studioDaten.ts`". **Gemessen: 30**, in `ConfigWizard` (2),
+  `StartView` (3), `DreiDBereich` (4), `GuidedView` (15), `HausplanerStudio` (6). **`f6bdfc2` hat
+  keinen einzigen davon verursacht** (vorher 30, nachher 30; in beiden berührten Dateien 0).
+  Ursache: T1 (`9ec3b25`) war auf `HausplanerApp.tsx` geschnitten (50 → 0), nicht auf `app/*`
+  (80 → 30). Der Fehler sitzt in der **Spezifikation**, die Falschaussage im Bericht.
+
+### Die drei Planner-Auflagen — entschieden
+
+1. **Feld `hinweis`: additive Ergänzung im Sinne der Spec, keine Signaturabweichung.** §3 fordert den
+   Satz selbst; ihn als Datenfeld statt als JSX zu führen, macht ihn testbar. Kein Rückbau.
+2. **Ehrlicher Leerzustand: erfüllt.** Alle drei Reiter im Futur, konkret, mit `ZustandBadge`
+   (Farbe + Text + Punkt). Kein Blindtext, kein „keine Daten" — letzteres zusätzlich per Test verboten.
+3. **Platzhalter der Options-Leiste: genügt.** *„Für dieses Werkzeug sind noch keine Optionen
+   hinterlegt."* + Badge spricht die Abwesenheit aus, täuscht keine Fläche vor. Label fällt auf
+   `'Werkzeug'` zurück ⇒ Kante 2 erfüllt.
+
+### Kontraste — selbst nachgerechnet, gegen jeden realen Untergrund
+
+**Alle acht neuen Textflächen bestehen AA.** Engster Wert **4,54:1** (Badge `in_entwicklung`, 10 px) —
+bestanden, aber ohne Reserve; jede Aufhellung von `T.muted` oder Abdunkelung von `T.hair2` kippt ihn.
+Drei Nicht-Text-Kontraste unter 3:1 (Badge-Rand, Badge-Punkt, Reiter-Trennlinie) sind rein dekorativ,
+`aria-hidden`, aus v1 unverändert übernommen — festgehalten, nicht gewertet.
+Status-Grün nutzt `T.ok`, nicht `T.brand`. Aktiver Reiter zusätzlich über `fontWeight` + Unterstrich
+(WCAG 1.4.1).
+
+**Sichtprobe NICHT durchgeführt** — ohne DOM und ohne lauffähigen Build kein Weg zu
+`/admin/hausplaner/studio`. Zeilenhöhe, Fokusring und 1440/1024/375 bleiben **„nicht sichtgeprüft"**.
+
+### Was E2 zusätzlich fand
+
+- **B1 — Options-Leiste wird bei jeder Mausbewegung neu gemountet.** `KontextOptionenLeiste` ist als
+  `const` **im Rumpf** von `HausplanerApp` definiert (`:298`) und als `<KontextOptionenLeiste />`
+  gerendert (`:835`) ⇒ neue Typ-Identität je Render (empirisch: `false` vs. Gegenprobe `true`), und
+  `:873 onMouseMove` rendert fortlaufend. **Regression durch den Umzug**: vorher stand die Auswahl als
+  Inline-JSX und wurde an Ort und Stelle abgeglichen. Wert geht nicht verloren; betroffen sind Fokus,
+  Tastaturbedienung und DOM-Arbeit in Mausbewegungs-Frequenz. Das Muster hat **der Auftrag selbst**
+  angeordnet — bei `OpBtn` folgenlos, bei einem `<select>` nicht.
+- **B2 — Falschaussage im Bericht und in der Commit-Botschaft** (K6, s.o.).
+- **B3** — ARIA unvollständig: `role="tabpanel"`, `aria-controls`, `id`-Verknüpfung fehlen (nicht verlangt).
+- **B4** — roving `tabIndex` ohne Fokusnachführung: Pfeiltasten ändern `aktiverTab`, ziehen den DOM-Fokus
+  nicht mit.
+- **B5** — das mitcommittete Bundle `public/hausplaner/hausplaner.js` ist hier nicht verifizierbar
+  (Build läuft nicht); belegt ist nur, dass die neuen Zeichenketten darin vorkommen.
+
+**Reuse-Gate (`planner-verification`):** `ZustandBadge`/`StudioZustand` aus v1 wiederverwendet, kein
+zweites Designsystem, keine zweite Wahrheit, Store/Zod/Schema unberührt, Schreib-Heimat eingehalten,
+keine Bestandsdaten berührt, Rückweg = Commit zurückdrehbar. **Kein Verstoß.**
+
+### Urteil: **FREIGABE MIT AUFLAGE**
+
+Kein Befund erreicht Rot — B1 ist datenneutral und entspringt einem vom Auftrag angeordneten Muster,
+B2 betrifft die Aussage, nicht den Code.
+
+1. **K6-Zahl richtigstellen** (redaktionell, sofort) — der Ledger darf keine widerlegte Zahl behalten.
+2. **K6 neu schneiden** — künftig auf die *geänderten Zeilen* beziehen, oder die 30 Restwerte als
+   eigenen Posten beauftragen. **Planner-Sache, kein Befund gegen den Generator.** → AUF-15.
+3. **B1 entscheiden**, bevor v2 sichtbar freigegeben wird, zusammen mit der ausstehenden
+   Sichtprobe. → AUF-16.
+
+**Nicht abgenommen:** `build:hausplaner` und jede Aussage, die echtes Rendering verlangt.
+Beides braucht einen Lauf auf x64-nativ mit Browser-Beleg.
+
+**Batch 2 (v2.3/v2.4/v2.5) darf beginnen.** Ballbesitz → Planner.
+
+---
+
+## ⇒ PLANNER — Auflage 1 erledigt: Richtigstellung K6
+
+Die Aussage „**0** rohe Farbwerte in `app/` außerhalb `studioDaten.ts`" im Generator-Bericht zu
+`f6bdfc2` und in dessen Commit-Botschaft ist **widerlegt**. Richtig ist: **30**, verteilt auf
+`ConfigWizard.tsx` (2), `StartView.tsx` (3), `DreiDBereich.tsx` (4), `GuidedView.tsx` (15),
+`HausplanerStudio.tsx` (6). **`f6bdfc2` hat keinen davon verursacht** — die Token-Disziplin der
+geänderten Zeilen ist eingehalten (0 in beiden berührten Dateien).
+
+Die Commit-Botschaft bleibt stehen (Historie wird nicht umgeschrieben); diese Zeile ist die
+Richtigstellung im Ledger. **Der Fehler war meiner:** ich habe in §5 des Generator-Auftrags „T1 ist
+mit 0 rohen Werten erfüllt" von `HausplanerApp.tsx` auf ganz `app/*` verallgemeinert und als K6
+weitergereicht. Der Generator hat gegen ein Kriterium berichtet, dessen Prämisse schon bei
+Auftragserteilung falsch war.
