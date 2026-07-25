@@ -13,7 +13,7 @@
  * Regel: geometry/*-Engines werden NUR referenziert/aufgerufen, nie geändert (Byte-Treue).
  */
 import { TOOL_DEFINITIONS } from './toolRegistry';
-import { katalogTool } from './toolCatalog';
+import { zoneTools } from './toolPresentation';
 
 export type FaehigkeitGruppe =
   | 'dach-zimmerei' | 'tga-heizung' | 'energie-pv' | 'sanitaer' | 'kueche'
@@ -89,17 +89,11 @@ const engineFaehigkeiten: Faehigkeit[] = [
 ];
 
 // --- 3) CAD-Teilmenge aus dem InDesign-Katalog (remappt, DTP raus) -------------------------------
-// Bewusst NUR Transform/Ausrichten/Navigation — literale DTP-Tools (Text/Bézier/Rahmen/Farbfelder/
-// Preflight/Seiten) werden NICHT übernommen (Produkt-Scope). zustand 'schlaeft' (Handler folgt).
-const CAD_TEILMENGE: readonly string[] = [
-  'rotate', 'scale', 'free-transform',
-  'align-left', 'align-center', 'align-right', 'align-top', 'align-middle', 'align-bottom',
-  'distribute-horizontal', 'distribute-vertical',
-  'hand', 'zoom', 'measure', 'layers-panel',
-];
-const werkzeugKatalogFaehigkeiten: Faehigkeit[] = CAD_TEILMENGE
-  .map((id) => katalogTool(id))
-  .filter((t): t is NonNullable<typeof t> => Boolean(t))
+// A1: Die Kuratierung steht nicht mehr hier als lokale Liste, sondern in `toolPresentation.ts`
+// (Zone 'weitere') — EINE Kuratierungs-Wahrheit statt zweier Stellen. Bewusst NUR Transform/
+// Ausrichten/Navigation; literale DTP-Tools liegen dort in Zone 'versteckt' (Produkt-Scope).
+// zustand 'in_entwicklung' (Handler folgt A2/A3).
+const werkzeugKatalogFaehigkeiten: Faehigkeit[] = zoneTools('weitere')
   .map((t) => ({
     id: `cad-${t.id}`,
     label: t.label,

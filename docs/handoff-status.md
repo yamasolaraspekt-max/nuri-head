@@ -613,3 +613,60 @@ zusätzlich wird Grün hier als **Akzent** benutzt, während `T.accent` **Teal #
 v9-Studio-Kopf, sichtbar andere Optik) oder **(c) `#93c21c` als neues Token in `T`** (dann drei Grüns)?
 Umsetzung erst **nach** A1-Abnahme (sonst Konflikt in derselben Dateiregion). Abnahmezahl danach:
 `grep -c "#[0-9a-fA-F]" HausplanerApp.tsx` = **0**.
+
+## ⇒ GENERATOR-BERICHT (nativ) — Wizard-Welle A1 UMGESETZT (2026-07-25 09:5x, Ballbesitz → Evaluator)
+Auftrag `docs/auftraege/generator-auftrag-wizard-welle-a1-werkzeug-praesentation.md` vollständig umgesetzt auf
+`auto/hausplaner-integration` (Basis `3229866`). Additiv, kein UI-Umbau, kein Modell-/Schema-Eingriff.
+
+**Umgesetzt (4 Punkte, exakt der Auftrag):**
+- **A1.1** neu: `app/tools/toolPresentation.ts` — `RailZone`/`ToolHerkunft`/`ToolPresentationRule`,
+  `TOOL_PRESENTATION_RULES` (63 Regeln, jede id EINZELN aufgeführt), `praesentation()`, `zoneTools()`,
+  `verwaisteRegeln()`; zusätzlich `zoneToolsIn()`/`verwaisteRegelnIn()` (parametrisierte Kerne, damit
+  Gegenproben ohne Mutation der echten Daten laufen) und `regelloseWerkzeuge()` (Gegenrichtung der
+  Vollständigkeit). Auflösung `toolNach() ?? katalogTool()` = **Registry hat Vorrang**; Sortierung
+  `ordnung`, bei Gleichstand Regel-Index (nicht nach id); unbekannte id wird ausgelassen, nie geworfen.
+- **A1.2** `faehigkeiten.ts`: lokale `CAD_TEILMENGE` entfällt, die 15 ids kommen aus `zoneTools('weitere')`.
+  Import `katalogTool` → `zoneTools`. **Eine** Kuratierungs-Wahrheit statt zweier Stellen.
+- **A1.3** Kopfkommentar `toolCatalog.ts` in der **Planner-Präzisierung von 09:46** (nicht in meiner ersten,
+  pauschaleren Fassung): 65 → 54 durch 11 namentlich entfernte DTP-Tools (Belegstelle `toolKatalog.test.ts`),
+  weitere Layout-Werkzeuge bewusst enthalten, Sichtbarkeit über `toolPresentation.ts` Zone `versteckt`.
+  Nur Kommentar, keine Datenänderung. `__tests__/toolKatalog.test.ts` unangetastet.
+- **A1.4** neu: `__tests__/toolPresentation.test.ts` — 11 Fälle (alle 6 geforderten Punkte + Registry-Vorrang
+  `auswahl` ≠ `selection` + „kein Datenverlust: jede versteckte id bleibt Katalog-Eintrag").
+
+**Zahlen-Beweis (§5, selbst gemessen, Exit-Codes):**
+`tsc:hausplaner` **0** · `schema:hausplaner:check` **0** · `test:hausplaner` **0 → 695/695 pass, 0 fail**
+(vorher 684, also **+11**) · `build:hausplaner` **0**.
+`TOOL_PRESENTATION_RULES.length` = **63** · `zoneTools('fix')` = **7** · `('kontext')` = **2** ·
+`('weitere')` = **15** · `('versteckt')` = **39** · `verwaisteRegeln()` = **[]** · `regelloseWerkzeuge()` = **[]**.
+
+**Gegen-Beweise — beide TATSÄCHLICH ROT gesehen** (echte Regeldatei temporär verfälscht, danach per Kopie
+zurückgesetzt, `diff` = identisch):
+- (a) `wand` → `zone:'versteckt'`: **5 von 11 Tests rot** (Zonen-Aufteilung · Fix-Zone-Reihenfolge ·
+  „keine Registry-id versteckt").
+- (b) erfundene id `erfunden-xyz` in den Regeln: **3 von 11 Tests rot** (Vollständigkeit ·
+  `verwaisteRegeln()` leer · Gegenprobe-Test selbst).
+
+**Regressionsanker gemessen statt behauptet:** die im Test hart hinterlegte Vorher-Liste von
+`faehigkeitenNach('werkzeuge')` (19 ids) habe ich nicht abgeleitet, sondern aus
+`git show HEAD:…/faehigkeiten.ts` in einer temporären Kopie **ausgeführt** und verglichen — identisch.
+Temporärdatei entfernt (`git status` sauber).
+
+**Bundle aus Quellen:** `build` zweimal hintereinander → md5 beide Male `be0f864c0b722573acdda978c1e6cd70`
+(deterministisch, keine Drift). Bundle-Größe 1.287,29 kB → **1.292,69 kB** (neues Modul enthalten).
+
+**Offener Punkt, bewusst NICHT eigenmächtig behoben (Auftrag §4.6) — Frage an Yama:** in `faehigkeiten.ts`
+fehlt `decke` in `WERKZEUG_GRUPPE` und fällt auf `'werkzeuge'`, während `wand → 'bau'` und
+`dach → 'dach-zimmerei'` gehen. Vermutlich gehört `decke → 'bau'`. Das ist eine **Fachzuordnung**, kein
+Bau-Posten → unverändert gelassen. (Wirkt sich auf den Regressionsanker aus: `decke` steht heute in der
+Gruppe „Werkzeuge" — eine spätere Korrektur ändert diese Liste bewusst.)
+
+**Guardrails eingehalten:** kein Katalog-Eintrag gelöscht · kein Katalog-Werkzeug in die Leiste gehoben
+(Fachentscheidung Yama) · `HausplanerApp.tsx` nicht angefasst · `activation.ts`/`toolTypes.ts`/
+`toolRegistry.ts`/`toolContext.ts`/`domain`/`geometry`/`renderers`/PHP unberührt · `toolFuerShortcut` liest
+weiterhin nur die Registry (keine Katalog-Shortcuts) · kein neuer Deaktivierungs-Mechanismus ·
+kein Hash-/Snapshot-/Versions-/Projektions-Neubau · die rohen Hex-Werte in `HausplanerApp.tsx` **nicht**
+mitrepariert (eigener Posten T1).
+
+**Ballbesitz → EVALUATOR.** Bitte selbst nachmessen (Gates + die 6 Zahlen + beide Gegen-Beweise
+nachstellen) und Votum hier hinterlegen. **Kein `main`-Merge (Tor 2 = Yama).**

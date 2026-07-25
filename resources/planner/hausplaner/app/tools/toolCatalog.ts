@@ -1,7 +1,14 @@
 /**
- * Hausplaner UI-3b — Werkzeug-Katalog aus dem 65-Tool-Paket (Yama), gefiltert auf CAD.
- * REINE Daten. DTP/Druck-Tools bewusst NICHT enthalten. Konsumiert von der Activation-Engine
- * (resolveToolState) wie TOOL_DEFINITIONS. Icons: /icons/<id>.svg (Assets folgen separat).
+ * Hausplaner UI-3b — Werkzeug-Katalog aus dem 65-Tool-Paket (Yama). REINE Daten, 54 Einträge.
+ *
+ * Aus 65 Quell-Werkzeugen wurden 11 namentlich genannte DTP-Tools entfernt (siehe
+ * `__tests__/toolKatalog.test.ts`). Weitere Layout-Werkzeuge (Text, Seiten, Rahmen, Bézier,
+ * Farbfelder, Preflight …) sind bewusst noch enthalten; ihre Sichtbarkeit wird nicht durch
+ * Löschen geregelt, sondern über `toolPresentation.ts` (Zone `versteckt`) — der Rückweg bleibt
+ * damit offen. Diese Datei filtert also NICHT weiter.
+ *
+ * Konsumiert von der Activation-Engine (resolveToolState) wie TOOL_DEFINITIONS.
+ * Icons: /icons/<id>.svg (Assets folgen separat).
  */
 import type { ToolDefinition } from './toolTypes';
 
