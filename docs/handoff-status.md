@@ -3791,3 +3791,53 @@ Zeilen 41 und 98, mit Nachtrag). **Ich fasse sie nicht an**, sie gehört zu sein
 
 **Ballbesitz danach:** AUF-34 beim nativen Generator (⚡). AUF-37 offen und klein — er entriegelt die
 AUF-27-Sichtprobe. Beim Evaluator liegen drei Posten, nicht zehn. Push weiter bei Yama.
+
+---
+
+## ⇒ GENERATOR — Zwischenmeldung zu AUF-37 (Bundle) und ein Tafel-Widerspruch
+
+**Rolle:** Generator (nativ) · **HEAD:** `3aa266a` · **Kein Posten gezogen** — das ist der Punkt.
+
+### 1. Der Tafel-Widerspruch, den ich nicht selbst auflöse
+
+**AUF-34 trägt weiter `⚡ AKTIV`, ist aber `BERICHTET`** (`8b2b9e6`, Ballbesitz Evaluator). Die
+Marke steht damit auf einem Posten, an dem nichts mehr zu ziehen ist. Nach der Regel vom 25.07.
+(„genau ein Posten trägt AKTIV, und nur der wird gezogen") ist die Tafel gerade nicht ziehbar:
+der AKTIV-Posten ist fertig, und die offenen Posten tragen keine Marke. **Das Weiterrücken ist
+Planner-Sache** — deshalb melde ich es, statt es zu tun.
+
+### 2. AUF-37 ist enger, als die Zeile vermuten lässt — der Rebuild ist schon gelaufen
+
+Die Zeile sagt, `894954a` sei „nicht ausgeliefert, kein Rebuild danach". **Gemessen auf dieser
+Maschine trifft das nicht mehr zu.** Ich habe nach AUF-27 und noch einmal nach AUF-34 gebaut; das
+Bundle auf der Platte kennt beide Slices:
+
+```
+public/hausplaner/hausplaner.js   1.343.905 Bytes   Jul 25 20:43
+Quell-Stand: 8b2b9e6 (enthält 894954a)
+
+grep -c auf Zeichenketten der beiden Slices:
+  hp-schiene-panel            1     (AUF-27, Reiter-Inhaltsbereich)
+  Fachplaner                  1     (AUF-27, dritter Reiter)
+  hp-bereich-gruppenzeile     1     (AUF-34, Ziel des Bereichswählers)
+  Arbeitsbereiche             1     (AUF-34, Wähler)
+  Grundbedienung              1     (AUF-34, Thema 01)
+  Gehört zum Arbeitsbereich   1     (AUF-34, Kante 3)
+```
+
+**Was fehlt, ist nicht der Bau, sondern der Commit.** Und der fehlt aus einem benannten Grund:
+**Abnahmekriterium 9 von AUF-27 und Kriterium 8 von AUF-34 verlangen wörtlich „null Zeilen in
+`public/*`" im Diff.** Ich habe deshalb beide Male den gebauten Stand liegen lassen und es in beiden
+Berichten gesagt. AUF-37 verlangt jetzt das Gegenteil — als **eigenen** Commit. Beides ist
+gleichzeitig erfüllbar (Code-Commit ohne `public/*`, Bundle-Commit daneben), aber es ist eine
+Anweisung, die ich nicht selbst erteile.
+
+**Konkret brauche ich eine von zwei Entscheidungen:**
+1. Die Marke `⚡ AKTIV` rückt auf **AUF-37** — dann ziehe ich ihn im nächsten Takt und setze den
+   Bundle-Commit mit der obigen Rohausgabe. Oder
+2. Yamas Wort für den Bundle-Commit ohne Umweg über die Marke.
+
+Bis dahin bleibt das Bundle gebaut, aber ungebunden: **im Browser auf Yamas Rechner ist der Stand
+aktuell**, in einem frischen Checkout wäre er es nicht.
+
+**Ballbesitz → Planner** (Tafel-Marke) **bzw. Yama** (Bundle-Commit).
