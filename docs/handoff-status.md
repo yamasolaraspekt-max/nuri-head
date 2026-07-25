@@ -5434,3 +5434,99 @@ Die alte Zusage beschrieb genau die Zeile, die dieser Posten beseitigt hat; der 
 dass sie **nicht zurückkommt**.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-60: die Insel kennt die Rechte des Nutzers
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** Code `e0d1144` · Bundle `416aeb2`
+**Ballbesitz:** Evaluator.
+
+### 1. Was der Posten war
+
+Meine eigene Rückgabe aus AUF-53 §4: `permissions: [RECHT_BEARBEITEN]` stand als **Wert im
+Quelltext**. Die Insel kannte genau ein Recht, und es stammte nicht aus dem angemeldeten Nutzer —
+sie gab es sich selbst. Damit war die Zuordnung aus AUF-53 (`import ⇒ Hausplaner,add`) richtig und
+wirkungslos zugleich.
+
+**Keine Sicherheitslücke** — jede Route hängt weiter an `CheckUserPermission`. Eine **Anzeige-Lüge
+in beide Richtungen**: bedienbar aussehen, was der Server verweigert; gesperrt aussehen, was erlaubt
+wäre.
+
+### 2. Der Weg — dieselbe Naht, kein neuer Mechanismus
+
+| Stelle | Was sie tut |
+|---|---|
+| `objekt.blade.php` | `data-rechte` aus `hasPermission('Hausplaner', …)` für die **vier** bekannten Aktionen |
+| `main.tsx` | liest es beim Mount, wie `data-speichern-url` |
+| `app/state/uiState.ts` | hält es (App-Schicht, **nicht** im Dokumentmodell) |
+| `HausplanerApp.tsx` | `permissions: rechte` statt gesetztem Wert — an **beiden** Stellen |
+
+`app/state/rechte.ts` ist ein reiner Leser: Zeichenkette rein, Liste raus. **Getrennt wird am
+Leerraum, nicht am Komma** — ein Recht enthält selbst eines (`Hausplaner,update`); am Komma zu
+trennen zerlegte genau die Marken, die gelesen werden sollen. Die Datei kennt **keine einzige
+Rechte-Marke namentlich** (Test).
+
+### 3. Die Kriterien
+
+| K | Inhalt | Beleg |
+|---|---|---|
+| K1 | Gates | tsc **0** · schema:check **0** · test **0** · build **0** |
+| K2 | Modellschichten unberührt | `store/ domain/ geometry/ renderers/` — **0 Zeilen** |
+| K3 | keine Migration/`hasPermission`/neue Aktion | `database/migrations/` **0**, `User.php` **0**, `,import` als Aktion **0 Treffer** |
+| K4 | keine Rechteprüfung in der Insel | `hasPermission\|isSuperAdmin\|is_admin\|user_rolls` im Laufzeit-Code von `resources/planner/`: **0** |
+| K5 | **fehlendes Attribut ⇒ Minimum** | `undefined`/`null`/`''`/`'   '` ⇒ `[]` — vier Zusagen |
+| K6 | durchgereicht, nicht abgeleitet | kein Eintrag mehr, keiner weniger; kein „wer schreiben darf, darf auch lesen" |
+| K7 | Wirkung gemessen | s. Tabelle unten |
+| K8 | Mutation | Grundwert auf „darf alles" ⇒ **2 Tests rot** |
+| K9 | `public/*` im Code-Commit | **0 Zeilen**; Bundle als zweiter Commit `416aeb2` |
+| K10 | Sichtprobe, zwei Rechtelagen | s. unten |
+
+**Tests 993 → 1008** (+15). Namensvergleich `comm -23`: **keine** Zusage verschwunden.
+
+### 4. K7 — die Wirkung, gemessen (110 Werkzeuge)
+
+| Lage | ohne Recht | mit Recht | Differenz |
+|---|---|---|---|
+| Architektur, Wand gewählt · `Hausplaner,update` | **73 gesperrt** | **28 gesperrt** | **45 Werkzeuge** |
+| Import-Bereich · `Hausplaner,add` | 79 gesperrt | 71 gesperrt | 8 (= AUF-53) |
+| Import-Bereich · `Hausplaner,update` | 79 | 79 | **0** |
+
+Die letzte Zeile steht hier bewusst: **im Import-Bereich ohne Auswahl ändert das Bearbeiten-Recht
+nichts** — nicht weil es wirkungslos wäre, sondern weil dieselben Werkzeuge dort schon an anderen
+Vorbedingungen hängen. Wer nur die erste Zeile liest, schließt sonst, das Recht wirke überall
+gleich. Es wirkt dort, wo sonst nichts mehr sperrt.
+
+### 5. K10 — Sichtprobe, 1440 px, Fixture `u-dach`, „Wand 1" ausgewählt
+
+| `data-rechte` | Menü „Bearbeiten" | Grund im Tooltip |
+|---|---|---|
+| *(Attribut fehlt)* | **15 von 15 gesperrt** | „Keine Berechtigung zum Bearbeiten." |
+| `Hausplaner,read` | **15 von 15 gesperrt** | dieselbe |
+| `Hausplaner,read Hausplaner,update` | **0 gesperrt** | — |
+
+Die erste Zeile ist K5 im Bild: **fehlt das Attribut, verhält sich die Insel wie „nur lesen"** —
+nicht wie „darf alles". Belege: `auf60-ohne-attribut.png` · `auf60-nur-lesen.png` ·
+`auf60-mit-bearbeiten.png`.
+
+### 6. Zurückgegeben statt mitgezogen (§5 des Auftrags)
+
+**Das Eigenschaften-Feld fragt nicht.** Bei ausgewählter Wand stehen dort „Duplizieren" und
+„Löschen" — gemessen in **beiden** Rechtelagen **frei bedienbar**, während dieselben Handlungen im
+Werkzeug-Menü mit „Keine Berechtigung für ‚Löschen'" gesperrt sind.
+
+```
+nur-lesen        Duplizieren[frei] Löschen[frei]
+mit-bearbeiten   Duplizieren[frei] Löschen[frei]
+```
+
+Dieselbe Handlung, zwei Anzeigen, eine davon lügt weiter — dasselbe Muster wie die zweite
+Status-Anzeige aus AUF-47. Ich habe es **nicht** nebenbei geändert: es ist ein eigener Posten, und
+er braucht die Entscheidung, ob solche Aktions-Knöpfe grundsätzlich durch `resolveToolState` gehen.
+
+**Zweiter Punkt:** `routes/` und `app/Http/` wurden **nicht** berührt — der Controller musste nichts
+mitgeben, das Blade kommt allein an `hasPermission`. Tor 1 war nicht nötig.
+
+### 7. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün.
