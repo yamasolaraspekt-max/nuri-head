@@ -613,6 +613,35 @@ add statt import) und das Selbst-Erteilen in der Insel (nicht durchgereicht, ehr
 Additiv, kein Tor-1, hasPermission unberuehrt, mutationsfest. Die tatsaechliche Durchsetzung gehoert
 server-seitig und ist bewusst ausserhalb dieses Postens.
 
+## AUF-44 - vier tote Versprechen raus aus der Icon-Zeile (47addd1, Bundle 0bde0d9) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 47addd1 gemessen (/tmp-Auszug), dann Generator-Bericht.
+**Klasse: sichtbar** - Sichtprobe Teil der Abnahme.
+
+- **Umfang (git show --name-status):** 2 Dateien - NEU __tests__/geplantKnoepfe.test.ts ;
+  M HausplanerApp.tsx. store/domain/geometry/renderers/public: null.
+- **Kern:** die Tafel nannte 2 '(geplant)'-Knoepfe, gemessen waren es FUENF (einpassen, drehen,
+  distanz-messen, bemassen, pdf). VIER sind Dubletten - das Werkzeug existiert wirklich in seiner
+  Themen-Gruppe; nur die tote Icon-Kopie ist raus. Der fuenfte ('Ansicht einpassen') hat KEIN
+  Katalog-Werkzeug und bleibt - entfernen hiesse die Funktion tilgen -> Willensfrage zurueckgegeben.
+- **Werkzeuge bleiben / Bilanz 110 (gegen die RICHTIGE Quelle geprueft):** ALLE = TOOL_KATALOG +
+  TOOL_DEFINITIONS = **110**; drehen/distanz-messen/bemassen/pdf je imKatalog=true, Thema=true,
+  Vertrag=true. einpassen fehlt korrekt (der 5.). AUF-59-Forderung 'kein Werkzeug verschwindet' gewahrt.
+  *(Selbstkorrektur: mein erster Check gegen TOOL_PRESENTATION_RULES meldete 'FEHLT' - falsche Registry;
+  der Test prueft Katalog+Registry+Thema+Vertrag, dort sind alle vier da. Beweis gilt auch gegen mich.)*
+- **Gates im Auszug:** schema 0 . test **962/962 pass, 0 skip** (956->962) . tsc 0 . build ok.
+  6 geplantKnoepfe-Subtests (vier verschwunden, Werkzeug je geblieben mit Thema+Vertrag, einpassen
+  bleibt als einzige Nicht-Dublette, genau EIN geplant, verbliebener Knopf inert, Bilanz 110).
+- **Gegen-Beweis (/tmp-Kopie):** einen entfernten Knopf ('drehen') wieder eingesetzt -> **2 rot**
+  ('vier tote Versprechen verschwunden' + 'genau EIN geplant-Knopf uebrig') (4/2). Deckt Generator.
+- **Sichtprobe (iframe 1440, fixture decke-treppe, Bundle 0bde0d9):** genau **1** '(geplant)'-Knopf
+  ('Ansicht einpassen'); **keiner** der vier toten Versprechen (Auswahl 90 drehen / Abstand messen /
+  Masskette / PDF-Planblatt) mehr in der Leiste. MESSEN & EXPORT sichtbar schlanker. Icon-Zeile 15->11.
+
+**Urteil: FREIGABE.** Vier tote Icon-Versprechen entfernt, ohne ein Werkzeug zu verlieren (Bilanz 110,
+jedes in Thema + Vertrag), der einzige Nicht-Dublette-Knopf bleibt inert und als Willensfrage benannt.
+Mutationsfest, am Schirm belegt. Dieselbe Sorte Ehrlichkeit wie I2/B8: nichts vortaeuschen, was nicht wirkt.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -644,6 +673,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-51    74fdcb4  Auszug: schema 0 / test 938/938 0-skip / tsc 0 / build ok ; Pan-Zustand null-Start + onDragMove + Herkunftspruefung (HausplanerApp 339/1300/1301) ; 8 Subtests ; Gegen-Beweis panAus ignoriert Wert = 1 rot, Herkunft ===->!== = 2 rot ; Sichtprobe 1440: Drag ~250/120 -> Inhalt wandert, 2 Klicks danach -> Verschub BLEIBT (kein Snap-back)
   AUF-47    79bf47c  Auszug: schema 0 / test 948/948 0-skip / tsc 0 / build ok ; speicherAnzeige rein, kannSpeichern===false schlaegt alles, save() unberuehrt (Diff leer) ; 10 Subtests ; Gegen-Beweis Faehigkeit ausgehebelt = 2 rot ; Bundle fca2fc6 traegt 'wird nicht gespeichert' ; visuelle Sichtprobe AUFLAGE (Browser weg, nicht sichtgeprueft)
   AUF-53    b4e5f03  Auszug: schema 0 / test 956/956 0-skip / tsc 0 / build ok ; kein Tor-1 (keine PHP/Migration/Route) ; is_read-Falle vermieden (K4 import nirgends Aktion), RECHT_IMPORTIEREN=Hausplaner,add ; Insel erteilt nur update (nicht add) -> 8 bleiben gesperrt ; 8 Subtests ; Gegen-Beweis Mapping->update = 3 rot (Generator 4, Delta erklaert) ; Sichtprobe: kein sichtbarer Effekt (Vorarbeit, Grund im Tooltip)
+  AUF-44    47addd1  Auszug: schema 0 / test 962/962 0-skip / tsc 0 / build ok ; ALLE(Katalog+Registry)=110, drehen/distanz-messen/bemassen/pdf je Katalog+Thema+Vertrag=true (einpassen fehlt korrekt) ; 6 Subtests ; Gegen-Beweis Knopf wieder eingesetzt = 2 rot ; Sichtprobe 1440: genau 1 '(geplant)' (einpassen), 4 tote weg, 15->11 ; Selbstkorrektur FEHLT-Artefakt (falsche Registry)
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
