@@ -1,0 +1,552 @@
+{
+ "select": {
+  "de": "auswahl",
+  "label": "Auswahl",
+  "kategorie": "Auswahl"
+ },
+ "direct-select": {
+  "de": "direktauswahl",
+  "label": "Direktauswahl",
+  "kategorie": "Auswahl"
+ },
+ "box-select": {
+  "de": "rechteckauswahl",
+  "label": "Rechteckauswahl",
+  "kategorie": "Auswahl"
+ },
+ "lasso-select": {
+  "de": "lassoauswahl",
+  "label": "Lassoauswahl",
+  "kategorie": "Auswahl"
+ },
+ "move": {
+  "de": "verschieben",
+  "label": "Verschieben",
+  "kategorie": "Bearbeiten"
+ },
+ "rotate": {
+  "de": "drehen",
+  "label": "Drehen",
+  "kategorie": "Bearbeiten"
+ },
+ "scale": {
+  "de": "skalieren",
+  "label": "Skalieren",
+  "kategorie": "Bearbeiten"
+ },
+ "mirror-horizontal": {
+  "de": "horizontal-spiegeln",
+  "label": "Horizontal spiegeln",
+  "kategorie": "Bearbeiten"
+ },
+ "mirror-vertical": {
+  "de": "vertikal-spiegeln",
+  "label": "Vertikal spiegeln",
+  "kategorie": "Bearbeiten"
+ },
+ "copy": {
+  "de": "kopieren",
+  "label": "Kopieren",
+  "kategorie": "Bearbeiten"
+ },
+ "duplicate": {
+  "de": "duplizieren",
+  "label": "Duplizieren",
+  "kategorie": "Bearbeiten"
+ },
+ "delete": {
+  "de": "loeschen",
+  "label": "Löschen",
+  "kategorie": "Bearbeiten"
+ },
+ "lock": {
+  "de": "sperren",
+  "label": "Sperren",
+  "kategorie": "Bearbeiten"
+ },
+ "unlock": {
+  "de": "entsperren",
+  "label": "Entsperren",
+  "kategorie": "Bearbeiten"
+ },
+ "show": {
+  "de": "einblenden",
+  "label": "Einblenden",
+  "kategorie": "Bearbeiten"
+ },
+ "hide": {
+  "de": "ausblenden",
+  "label": "Ausblenden",
+  "kategorie": "Bearbeiten"
+ },
+ "group": {
+  "de": "gruppieren",
+  "label": "Gruppieren",
+  "kategorie": "Bearbeiten"
+ },
+ "align": {
+  "de": "ausrichten",
+  "label": "Ausrichten",
+  "kategorie": "Bearbeiten"
+ },
+ "distribute": {
+  "de": "verteilen",
+  "label": "Verteilen",
+  "kategorie": "Bearbeiten"
+ },
+ "line": {
+  "de": "linie",
+  "label": "Linie",
+  "kategorie": "Zeichnen"
+ },
+ "polyline": {
+  "de": "polylinie",
+  "label": "Polylinie",
+  "kategorie": "Zeichnen"
+ },
+ "rectangle": {
+  "de": "rechteck",
+  "label": "Rechteck",
+  "kategorie": "Zeichnen"
+ },
+ "polygon": {
+  "de": "polygon",
+  "label": "Polygon",
+  "kategorie": "Zeichnen"
+ },
+ "circle": {
+  "de": "kreis",
+  "label": "Kreis",
+  "kategorie": "Zeichnen"
+ },
+ "arc": {
+  "de": "bogen",
+  "label": "Bogen",
+  "kategorie": "Zeichnen"
+ },
+ "trim": {
+  "de": "trimmen",
+  "label": "Trimmen",
+  "kategorie": "CAD"
+ },
+ "extend": {
+  "de": "verlaengern",
+  "label": "Verlängern",
+  "kategorie": "CAD"
+ },
+ "offset": {
+  "de": "versatz",
+  "label": "Versatz",
+  "kategorie": "CAD"
+ },
+ "split": {
+  "de": "teilen",
+  "label": "Teilen",
+  "kategorie": "CAD"
+ },
+ "join": {
+  "de": "verbinden",
+  "label": "Verbinden",
+  "kategorie": "CAD"
+ },
+ "wall": {
+  "de": "wand",
+  "label": "Wand",
+  "kategorie": "Architektur"
+ },
+ "room": {
+  "de": "raum",
+  "label": "Raum",
+  "kategorie": "Architektur"
+ },
+ "door": {
+  "de": "tuer",
+  "label": "Tür",
+  "kategorie": "Architektur"
+ },
+ "window": {
+  "de": "fenster",
+  "label": "Fenster",
+  "kategorie": "Architektur"
+ },
+ "stairs": {
+  "de": "treppe",
+  "label": "Treppe",
+  "kategorie": "Architektur"
+ },
+ "roof": {
+  "de": "dach",
+  "label": "Dach",
+  "kategorie": "Architektur"
+ },
+ "dormer": {
+  "de": "gaube",
+  "label": "Gaube",
+  "kategorie": "Architektur"
+ },
+ "roof-window": {
+  "de": "dachfenster",
+  "label": "Dachfenster",
+  "kategorie": "Architektur"
+ },
+ "column": {
+  "de": "stuetze",
+  "label": "Stütze",
+  "kategorie": "Architektur"
+ },
+ "beam": {
+  "de": "unterzug-traeger",
+  "label": "Unterzug / Träger",
+  "kategorie": "Architektur"
+ },
+ "opening": {
+  "de": "offnung",
+  "label": "Öffnung",
+  "kategorie": "Architektur"
+ },
+ "floor": {
+  "de": "boden",
+  "label": "Boden",
+  "kategorie": "Architektur"
+ },
+ "slab": {
+  "de": "decke",
+  "label": "Decke / Bodenplatte",
+  "kategorie": "Architektur"
+ },
+ "section": {
+  "de": "schnitt",
+  "label": "Schnitt",
+  "kategorie": "Architektur"
+ },
+ "elevation": {
+  "de": "fassade-ansicht",
+  "label": "Fassade / Ansicht",
+  "kategorie": "Architektur"
+ },
+ "zoom-in": {
+  "de": "vergroessern",
+  "label": "Vergrößern",
+  "kategorie": "Ansicht"
+ },
+ "zoom-out": {
+  "de": "verkleinern",
+  "label": "Verkleinern",
+  "kategorie": "Ansicht"
+ },
+ "fit-view": {
+  "de": "alles-anzeigen",
+  "label": "Alles anzeigen",
+  "kategorie": "Ansicht"
+ },
+ "pan": {
+  "de": "verschieben-ansicht",
+  "label": "Pan / Hand",
+  "kategorie": "Ansicht"
+ },
+ "orbit": {
+  "de": "umkreisen",
+  "label": "Orbit",
+  "kategorie": "Ansicht"
+ },
+ "grid": {
+  "de": "raster",
+  "label": "Raster",
+  "kategorie": "Ansicht"
+ },
+ "snap": {
+  "de": "fangen",
+  "label": "Fang",
+  "kategorie": "Ansicht"
+ },
+ "measure-distance": {
+  "de": "distanz-messen",
+  "label": "Distanz messen",
+  "kategorie": "Messen"
+ },
+ "dimension": {
+  "de": "bemassen",
+  "label": "Bemaßen",
+  "kategorie": "Messen"
+ },
+ "measure-angle": {
+  "de": "winkel-messen",
+  "label": "Winkel messen",
+  "kategorie": "Messen"
+ },
+ "measure-area": {
+  "de": "flaeche-messen",
+  "label": "Fläche messen",
+  "kategorie": "Messen"
+ },
+ "measure-volume": {
+  "de": "volumen-messen",
+  "label": "Volumen messen",
+  "kategorie": "Messen"
+ },
+ "import-file": {
+  "de": "datei-importieren",
+  "label": "Datei importieren",
+  "kategorie": "Import"
+ },
+ "import-image": {
+  "de": "bild-importieren",
+  "label": "Bild importieren",
+  "kategorie": "Import"
+ },
+ "calibrate": {
+  "de": "kalibrieren",
+  "label": "Kalibrieren",
+  "kategorie": "Import"
+ },
+ "crop": {
+  "de": "beschneiden",
+  "label": "Beschneiden",
+  "kategorie": "Import"
+ },
+ "set-north": {
+  "de": "nordrichtung",
+  "label": "Nordrichtung setzen",
+  "kategorie": "Import"
+ },
+ "recognize": {
+  "de": "grundriss-erkennen",
+  "label": "Grundriss erkennen",
+  "kategorie": "Import"
+ },
+ "ai-assistant": {
+  "de": "ki-assistent",
+  "label": "KI-Assistent",
+  "kategorie": "Import"
+ },
+ "approve-detection": {
+  "de": "erkennung-bestaetigen",
+  "label": "Erkennung bestätigen",
+  "kategorie": "Import"
+ },
+ "material": {
+  "de": "material-zuweisen",
+  "label": "Material zuweisen",
+  "kategorie": "Material"
+ },
+ "texture": {
+  "de": "textur-pbr",
+  "label": "Textur / PBR",
+  "kategorie": "Material"
+ },
+ "paint": {
+  "de": "material-aufnehmen",
+  "label": "Material aufnehmen",
+  "kategorie": "Material"
+ },
+ "facade": {
+  "de": "fassadensystem",
+  "label": "Fassadensystem",
+  "kategorie": "Fassade"
+ },
+ "brick": {
+  "de": "klinker-verband",
+  "label": "Klinker / Verband",
+  "kategorie": "Fassade"
+ },
+ "insulation": {
+  "de": "daemmung",
+  "label": "Dämmung",
+  "kategorie": "Bauphysik"
+ },
+ "u-value": {
+  "de": "u-wert",
+  "label": "U-Wert",
+  "kategorie": "Bauphysik"
+ },
+ "thermal-envelope": {
+  "de": "thermische-huelle",
+  "label": "Thermische Hülle",
+  "kategorie": "Bauphysik"
+ },
+ "ventilation": {
+  "de": "lueftung",
+  "label": "Lüftung",
+  "kategorie": "Bauphysik"
+ },
+ "radiator": {
+  "de": "heizkoerper",
+  "label": "Heizkörper",
+  "kategorie": "Heizung"
+ },
+ "floor-heating": {
+  "de": "fussbodenheizung",
+  "label": "Fußbodenheizung",
+  "kategorie": "Heizung"
+ },
+ "pipe": {
+  "de": "rohrleitung",
+  "label": "Rohrleitung",
+  "kategorie": "TGA"
+ },
+ "pump": {
+  "de": "pumpe",
+  "label": "Pumpe",
+  "kategorie": "Heizung"
+ },
+ "heat-pump": {
+  "de": "waermepumpe",
+  "label": "Wärmepumpe",
+  "kategorie": "Heizung"
+ },
+ "hydraulic-balance": {
+  "de": "hydraulischer-abgleich",
+  "label": "Hydraulischer Abgleich",
+  "kategorie": "Heizung"
+ },
+ "sanitary": {
+  "de": "sanitaeranschluss",
+  "label": "Sanitäranschluss",
+  "kategorie": "Sanitär"
+ },
+ "bath": {
+  "de": "badewanne",
+  "label": "Badewanne",
+  "kategorie": "Bad"
+ },
+ "shower": {
+  "de": "dusche",
+  "label": "Dusche",
+  "kategorie": "Bad"
+ },
+ "toilet": {
+  "de": "wc",
+  "label": "WC",
+  "kategorie": "Bad"
+ },
+ "kitchen": {
+  "de": "kuechenplanung",
+  "label": "Küchenplanung",
+  "kategorie": "Küche"
+ },
+ "cabinet": {
+  "de": "schrank",
+  "label": "Schrank",
+  "kategorie": "Küche"
+ },
+ "appliance": {
+  "de": "geraet",
+  "label": "Gerät",
+  "kategorie": "Küche"
+ },
+ "electric": {
+  "de": "elektroplanung",
+  "label": "Elektroplanung",
+  "kategorie": "Elektro"
+ },
+ "socket": {
+  "de": "steckdose",
+  "label": "Steckdose",
+  "kategorie": "Elektro"
+ },
+ "switch": {
+  "de": "schalter",
+  "label": "Schalter",
+  "kategorie": "Elektro"
+ },
+ "light": {
+  "de": "leuchte",
+  "label": "Leuchte",
+  "kategorie": "Elektro"
+ },
+ "distribution-board": {
+  "de": "verteiler",
+  "label": "Verteiler",
+  "kategorie": "Elektro"
+ },
+ "pv-module": {
+  "de": "pv-modul",
+  "label": "PV-Modul",
+  "kategorie": "PV"
+ },
+ "battery": {
+  "de": "batteriespeicher",
+  "label": "Batteriespeicher",
+  "kategorie": "PV"
+ },
+ "wallbox": {
+  "de": "wallbox",
+  "label": "Wallbox",
+  "kategorie": "PV"
+ },
+ "wizard": {
+  "de": "wizard-assistent",
+  "label": "Wizard / Assistent",
+  "kategorie": "Workflow"
+ },
+ "workflow": {
+  "de": "prozessuebersicht",
+  "label": "Prozessübersicht",
+  "kategorie": "Workflow"
+ },
+ "handoff-package": {
+  "de": "ubergabepaket",
+  "label": "Übergabepaket",
+  "kategorie": "Workflow"
+ },
+ "approve": {
+  "de": "freigeben",
+  "label": "Freigeben",
+  "kategorie": "Workflow"
+ },
+ "comment": {
+  "de": "kommentar",
+  "label": "Kommentar",
+  "kategorie": "Zusammenarbeit"
+ },
+ "history": {
+  "de": "historie",
+  "label": "Historie",
+  "kategorie": "Zusammenarbeit"
+ },
+ "revision": {
+  "de": "revision",
+  "label": "Revision",
+  "kategorie": "Zusammenarbeit"
+ },
+ "check": {
+  "de": "pruefen",
+  "label": "Prüfen",
+  "kategorie": "Prüfung"
+ },
+ "warning": {
+  "de": "warnungen",
+  "label": "Warnungen",
+  "kategorie": "Prüfung"
+ },
+ "error": {
+  "de": "fehler",
+  "label": "Fehler",
+  "kategorie": "Prüfung"
+ },
+ "settings": {
+  "de": "einstellungen",
+  "label": "Einstellungen",
+  "kategorie": "System"
+ },
+ "search": {
+  "de": "suche",
+  "label": "Suche",
+  "kategorie": "System"
+ },
+ "command-palette": {
+  "de": "befehlspalette",
+  "label": "Command-Palette",
+  "kategorie": "System"
+ },
+ "export": {
+  "de": "exportieren",
+  "label": "Exportieren",
+  "kategorie": "System"
+ },
+ "pdf": {
+  "de": "pdf-ausgabe",
+  "label": "PDF / Planblatt",
+  "kategorie": "System"
+ }
+}
