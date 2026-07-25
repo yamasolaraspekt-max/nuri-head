@@ -1683,3 +1683,46 @@ ist additiv und ohne Rückbau entfernbar.
 
 **Ballbesitz → Evaluator.** Batch 2 (v2.3 Projektbrowser, v2.4 Prüfungscenter, v2.5 Befehlspalette)
 liegt bereit, wird aber **nicht** begonnen, bis Batch 1 ein Votum hat.
+
+---
+
+## Planner-Messung 25.07. — Design-Vorlagen gegen Code (Beleg, keine Abnahme)
+
+**Rolle:** Planner. **Gemessen gegen** `f60b923`. **Anlass:** Yama hat die sechs Entwurfsdateien
+benannt und gefragt, wie viel davon steht — und warum er im Browser nichts sieht.
+
+**Vorlagen-Bestand geklärt:** sechs genannte Dateien, aber nur **drei verschiedene Inhalte**
+(`md5sum`): `dashboard-wizard-v1/_1/_2` identisch, `dashboard-tools-v1/_1/_2` identisch,
+`dashboard-import-v3/_1` identisch; `dashboard-import-v2` ist der ältere Vorgänger. Wer künftig
+„die Vorlage" sagt, meint eine von drei.
+
+**Deckung: 24 Bausteine.**
+
+| | Anzahl | Bausteine |
+|---|---|---|
+| **gerendert** | 13 | Kopfleiste · Speicherzustand (5 Zustände statt 2) · linke Werkzeugleiste · Werkzeug „aktiv" · Werkzeug „gesperrt" mit Grund im `title` · Panel-Reiter (4, drei ehrlich `in_entwicklung`) · Kontext-Options-Leiste (echter Inhalt nur `fenster`/`tuer`) · Wizard-Schrittkette (11) · Schrittzähler Zurück/Weiter · Revisionsanzeige · 2D/Split/3D · Zoom · Raum-Overlays mit Flächenzahl |
+| **nur Daten, nicht gerendert** | 5 | **Rail-Zonen** (63 Regeln, 4 Zonen in `toolPresentation.ts`) · Gruppe `system` · Ansicht `schnitt` · `layers-panel` · Workspace-Wähler |
+| **fehlt** | 11 | Projektidentität Objekt+Kunde *in* der Insel · Befehlspalette ⌘K · Präsenz-Avatare · die Zustände angeheftet/empfohlen/Overflow · Konfig-Modal „Leiste anpassen" · Projektbrowser · Prüfungscenter · **Abhängigkeitskette** · Datencheck-Tor · Snapshot-Bedienung · **kompletter Import-Workflow** |
+
+**Gegen-Belege (leere Grep-Läufe, damit „fehlt" nicht Behauptung bleibt):**
+`grep -rn "zoneTools\|RAIL_" --include='*.tsx'` → 0 · `grep -rniE 'abhaengig|abhängig|dependenc'`
+in `app/` → 0 · `grep -rnE 'angeheftet|pinned|Favorit'` → 0 · `grep -rnE 'Befehlspalette|CommandPalette|cmdk'`
+in `app/` → 0 · `grep -rnE 'kalibr|nachzeichn|FileReader|input type="file"'` → 0.
+Der Import existiert ausschließlich als Wizard-**Text** (`app/studioDaten.ts:96,98,99`).
+
+**Drei Nebenbefunde:**
+
+1. **Tote Naht Snapshots.** `objekt.blade.php:94` setzt `data-snapshots-url`, `routes/web.php:5003-5008`
+   liefern drei Routen — `main.tsx:63` liest ausschließlich `dataset.speichernUrl`. Das Backend hängt
+   vorne ins Leere. → **AUF-13**.
+2. **Kein `hausplaner.css`.** `vite.hausplaner.config.ts` baut nach `public/hausplaner/`, erzeugt aber
+   keine CSS-Datei; der Blade-Link wird darum nie gesetzt, das Styling liegt vollständig inline im TSX.
+   Randbedingung für jede weitere Design-Version. → **AUF-14**.
+3. **Kein Dev-Server für die Insel.** `npm run dev` startet `vite.config.js` (Vue-Haupt), nicht
+   `vite.hausplaner.config.ts`; ein `dev:hausplaner` gibt es nicht. Der **einzige** Weg zur laufenden
+   Oberfläche: `npm run build:hausplaner` → `public/hausplaner/hausplaner.js` → Route
+   `/admin/hausplaner/studio` bzw. `/admin/hausplaner/objekt/{id}`, beide hinter `auth`.
+   In §5 des Wiedereinstiegs als Falle ergänzt.
+
+**Nichts abgenommen, kein Code angefasst.** Ballbesitz unverändert: **Evaluator** (AUF-12 Batch 1,
+AUF-1, AUF-3, AUF-9).

@@ -55,7 +55,7 @@ Die Skills tragen den Rahmen: `governance-zyklus` (Rollentrennung + `references/
 | **AUF-3** T1-Abnahme | `OFFEN` — wartet auf **Evaluator**. |
 | **AUF-9** T2a | `BERICHTET` (`fbc5308`) — wartet auf **Evaluator**. |
 | AUF-5/6/7/8/10/11 | `BEI YAMA` — Willensfragen, blockieren nichts. |
-| **Push** | Die Planner-Commits vom 25.07. liegen **nur lokal**. Siehe §5. |
+| **Push** | **Nicht erinnern — messen:** `git --no-optional-locks rev-list --count fork/auto/hausplaner-integration..HEAD`. Am 25.07. 13:42 lief ein Push, `fork` und `backup-private` standen danach auf `f60b923`. Push nur nativ, siehe §5. |
 
 ---
 
@@ -85,6 +85,11 @@ Die Skills tragen den Rahmen: `governance-zyklus` (Rollentrennung + `references/
   **Nie `-A`, nie `.`** — `-m` steht **vor** dem `--`. Vor jedem eigenen Commit muss
   `git status` die eigenen Dateien als **einzige** Änderung zeigen.
 - **Zod-Änderung ⇒ `npm run schema:hausplaner`.** Ohne Regen wird `schema:hausplaner:check` rot (422).
+- **Kein Dev-Server für die Insel.** `npm run dev` startet `vite.config.js` (Vue-Haupt), **nicht**
+  `vite.hausplaner.config.ts`; ein `dev:hausplaner` gibt es nicht. Der einzige Weg zur laufenden
+  Oberfläche: `npm run build:hausplaner` → `public/hausplaner/hausplaner.js` → Route
+  `/admin/hausplaner/studio` bzw. `/admin/hausplaner/objekt/{id}`, beide hinter `auth`.
+  Der Build erzeugt **keine** `hausplaner.css` — das Styling liegt inline im TSX (AUF-14).
 - **Gates:** `tsc:hausplaner` · `schema:hausplaner:check` · `test:hausplaner` · `build:hausplaner`
   (Build nur x64-nativ). **Es gibt kein DOM in der Testumgebung** (`node:test` mit
   `--experimental-strip-types`, kein jsdom) — Render-Tests sind unmöglich, beweisbar ist nur,
