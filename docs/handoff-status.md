@@ -5056,3 +5056,68 @@ Verschwundenen waren dauerhaft gesperrt. AUF-59 findet damit dieselbe Aufgabe vo
 Kästchen weniger. **Gleichzeitig gebaut wurde nichts** (AUF-22).
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-59: die Icon-Zeile macht ihre Zustände unterscheidbar
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `8f34fc5` (Code) · `ece8e43` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+**Ohne Auftragsdatei** — die Tafelzeile war die Forderung.
+
+### Die vier Forderungen, jede belegt
+
+| Forderung | Ergebnis |
+|---|---|
+| gesperrt unterscheidet sich in **mindestens zwei** Merkmalen von bedienbar | **drei**: Hintergrund · Icon-Farbe · Deckkraft |
+| der Rahmen trägt den **Schalter**-Zustand, nicht jeden Knopf | am Schirm: **11 Knöpfe, 2 mit Rahmen** — genau die eingeschalteten Schalter (Raster, Fang) |
+| die Textknöpfe weichen den vorhandenen Icons | „↔ Links/Rechts" und „↕ Oben/Unten" sind aus dem Panel raus; jeder `spiegeleGrundriss`-Aufruf steht jetzt **genau einmal** |
+| **kein Werkzeug verschwindet, keine Sperre ändert sich** | die Regel liest `gesperrt`, sie ermittelt es nicht; `disabled` wird unverändert von außen gesetzt — testverriegelt |
+
+**`opKnopfZustand.ts`** ist rein und liefert **Token**, keine Farben:
+
+```
+schalter-ein  Rahmen brandInk · Grund brandWash · Icon brandInk · Deckkraft 1
+bedienbar     kein Rahmen     · Grund surface   · Icon ink      · Deckkraft 1
+gesperrt      kein Rahmen     · Grund hair2     · Icon faint    · Deckkraft 0.6
+```
+
+Dazu eine Regel, die vorher fehlte: **gesperrt schlägt den Schalter-Zustand.** Ein eingeschalteter
+Schalter, der gerade nicht bedienbar ist, sah bisher aus wie ein bedienbarer.
+
+### Rohausgabe
+
+| # | Prüfung | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` · `build` | **0 / 0 / 0 / 0** — **962 → 971** |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen** |
+| 3 | Mutations-Gegenbeweis | gesperrt auf **einen** Unterschied zurückgedreht ⇒ **2 Tests rot**; zurückgebaut ⇒ `diff` leer, 971/971 |
+| 4 | `public/*` im Code-Commit null, Bundle eigener zweiter Commit | erfüllt: `8f34fc5` → `ece8e43` |
+| 5 | Rebuild-Beleg (`ece8e43`, 1.409.313 Bytes, 25.07. 23:51) | `grep -c 'Links/Rechts'` = **0** (die Dublette ist ausgeliefert verschwunden) |
+
+**Sichtprobe, 1440 px — die Forderung am Bildschirm gemessen:**
+
+```
+Knöpfe: 11        mit Rahmen: 2  (Raster, Fang — beide EIN)
+bedienbar   Grund rgb(255,255,255) · Icon rgb(35,42,49)   · Deckkraft 1
+gesperrt    Grund rgb(242,244,246) · Icon rgb(167,174,183) · Deckkraft 0.6
+Unterschiede: Grund · Farbe · Deckkraft          Textknopf im Panel: nein
+```
+
+### Ein ersetzter Testname
+
+| vorher | nachher | Grund |
+|---|---|---|
+| `B3: die Spiegel-Schaltflächen brechen um, statt „↕ Oben/Unten" zu kappen` | `B3: die Spiegel-Schaltflächen können nicht mehr kappen — es gibt sie nicht mehr` | Die Zusage aus AUF-26 galt genau den Knöpfen, die dieser Posten entfernt hat. Der Test prüft jetzt den Nachfolgezustand (Textknopf weg, Icon mit Tooltip da), statt stillschweigend zu entfallen. |
+
+### Zwei Fallstricke, beide beim ersten Anlauf zugeschlagen
+
+1. **Mein eigener Erklärtext hat den Test rot gemacht** — der Kommentar, der die Entfernung
+   begründet, **zitiert** die Beschriftung „↔ Links/Rechts". Der Test las die Datei roh. Jetzt misst
+   er kommentarfrei; das ist dasselbe Muster wie in AUF-27 und AUF-36 und gehört langsam in eine
+   gemeinsame Testhilfe.
+2. **AUF-44 hatte dieselbe Zeile bereits gekürzt** (15 → 11 Knöpfe). Die Messungen dieses Berichts
+   stehen deshalb auf 11, nicht auf den 15 der Tafelzeile — die Zahl ist nicht falsch, sie ist
+   älter.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
