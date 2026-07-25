@@ -50,8 +50,11 @@ Die Skills tragen den Rahmen: `governance-zyklus` (Rollentrennung + `references/
 | Was | Zustand |
 |---|---|
 | Branch | `auto/hausplaner-integration` — **Hash hier bewusst nicht genannt**, er veraltet. `git log --oneline -5` fragen. |
-| **AUF-12 Dashboard v2** | `OFFEN` — wartet auf einen **Generator**. Vorrang vor AUF-11. |
-| **AUF-1** A1-Abnahme | `OFFEN` — wartet auf eine **frische Evaluator-Instanz**. Sperrt AUF-4. |
+| **AUF-12 Dashboard v2** | Batch 1 `ERLEDIGT` (freigegeben mit Auflage), Batch 2 gebaut (`5092b10`) — Abnahme offen. |
+| **AUF-21 Werkzeug-Paket** | I1 umgesetzt (`7bbf9ff`); **I2/I3 gesperrt** hinter AUF-24. |
+| **AUF-24 ID-Umbenennung** | `GESPERRT` — berührt `toolPresentation.ts` (AUF-1-Sperrbereich). |
+| **AUF-15a / 16 / 19** | umgesetzt (`2d927fc` · `982384d` · `8587ce7`) — Abnahme offen. |
+| **AUF-1** A1-Abnahme | **Der Engpass.** Wartet auf eine **frische Evaluator-Instanz**. Sperrt AUF-24 → I2/I3 → AUF-4. |
 | **AUF-3** T1-Abnahme | `OFFEN` — wartet auf **Evaluator**. |
 | **AUF-9** T2a | `BERICHTET` (`fbc5308`) — wartet auf **Evaluator**. |
 | AUF-5/6/7/8/10/11 | `BEI YAMA` — Willensfragen, blockieren nichts. |

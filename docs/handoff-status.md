@@ -2142,3 +2142,28 @@ den Umfang gemessen (210 Treffer in ~30 Dateien), aber nicht gegen den Sperrbere
 Strangs.** Vier Nachfolgeposten warten darauf. Das gehört vor jede weitere Planung.
 
 **Ballbesitz → Evaluator (frische Instanz), AUF-1.**
+
+## ⇒ ALLE — Tafel und Wiedereinstieg auf den gemessenen Stand gebracht (Generator, Yama-Hinweis)
+Yama hat einen Ordnungsfehler benannt: Übersichtsdateien und Tafelzeilen waren veralteter als die
+Wirklichkeit. Gemessen und korrigiert — **nur Fakten, keine Planungsentscheidung.** Wo etwas eine
+Statusentscheidung wäre, habe ich es stehen lassen.
+
+**Drei belegte Abweichungen:**
+1. **AUF-21 stand auf `IN ARBEIT — Generator I1`**, obwohl I1 seit `7bbf9ff` committet und im Ledger
+   berichtet ist. → `I1 UMGESETZT 7bbf9ff — Abnahme offen (Evaluator); I2 + I3 GESPERRT hinter AUF-24`.
+2. **Der Tafel-Kopf fror einen HEAD-Hash ein** („gemessen gegen HEAD `7f1ecd6`"), obwohl der Planner
+   selbst in `2f39924` entschieden hatte, **keinen** Hash festzuschreiben, weil er veraltet. → Hash raus,
+   Messanweisung rein.
+3. **`WIEDEREINSTIEG-HAUSPLANER.md` §3 beschrieb den Stand von 11:35 UTC:** AUF-12 als „OFFEN, wartet
+   auf einen Generator" — tatsächlich ist Batch 1 abgenommen und Batch 2 gebaut (`5092b10`). Ergänzt um
+   AUF-21, AUF-24 und die drei umgesetzten Nacharbeits-Posten.
+
+**Zusätzlich eingetragen, weil es die Karte erst brauchbar macht — der kritische Pfad in Yamas Worten:**
+**AUF-1 → AUF-24 → AUF-21/I2+I3 → AUF-4 (A2).** Vier Posten in einer Kette; alles andere ist Randposten.
+Solange AUF-1 kein Votum hat, bewegt sich diese Kette nicht. Das steht jetzt im Kopf der Tafel, damit es
+niemand mehr aus 2.100 Ledger-Zeilen herleiten muss.
+
+**Was ich NICHT angefasst habe:** keinen Status, der eine Entscheidung wäre — AUF-1 bleibt
+`IN ARBEIT` (vom Planner stellvertretend gezogen, auch wenn faktisch keine Instanz daran arbeitet),
+AUF-24 bleibt `GESPERRT`, kein `BEI YAMA` angerührt. Der Planner dreht jede dieser Zeilen mit einem
+Handgriff zurück, falls er sie anders sieht.
