@@ -27,6 +27,7 @@
 | **I4 / AUF-21** 110 Werkzeuge sichtbar, 22 Gruppen (**sichtbar**) | `4932b36` | **FREIGABE** | versteckt 0 (alle 110 sichtbar); 22 Gruppen Summe 110 genau-einmal; Sichtprobe 1512px; 1024/375 offen |
 | **AUF-27** Linke Spalte: 3 Reiter (Werkzeuge/Projekt/Fachplaner) | `894954a` | **FREIGABE MIT AUFLAGE** | Code+Tests gruen (810/810, Reihenfolge-Mutation 4 rot, kein 2. Tab-Mechanismus); **Bundle-Hole: kein Rebuild -> im App noch nicht sichtbar**, Sichtprobe deferred |
 | **AUF-34** Arbeitsbereiche: 15 Themen / 5 Bereiche | `8b2b9e6` | **FREIGABE MIT AUFLAGE** | Bilanz 15 Themen/110 Werkzeuge ohne Verlust, 7 durchgaengig (leere supportedWorkspaces); Mutation Thema-entfernt 4 rot; **3. Bundle-Hole -> Sichtprobe deferred** |
+| **AUF-37** Bundle-Rebuild (liefert AUF-27+34 aus) | `91d9592` | **FREIGABE** | committeter Bundle == frischer Build aus HEAD (byte-identisch); AUF-27+AUF-34 jetzt serviert. **Loest die Bundle-Holes von AUF-27 und AUF-34** |
 
 ---
 
@@ -156,6 +157,12 @@ Route `/admin/hausplaner/studio?fixture=decke-treppe` → **Expertenmodus**, ger
 - **AUFLAGE - Bundle-Hole #3:** `8b2b9e6` ohne Rebuild -> die 5-Bereiche-Leiste ist im laufenden App nicht sichtbar. Braucht Rebuild-Commit (wie AUF-37 fuer AUF-27). Die zwei Sichtprobe-Kriterien (kein Ueberlauf bei 1371, keine Wortumbrueche im Menue) pruefe ich per iframe NACH dem Rebuild.
 - Muster: 3. Bundle-Hole (Batch 2 / AUF-27 / AUF-34) trotz neuer Bundle-Regel (0f06634) - an Planner.
 
+## AUF-37 (`91d9592`) - FREIGABE + Sichtprobe-Nachtrag AUF-27 / AUF-34
+- **Bundle-Rebuild ehrlich:** `91d9592` ist reiner Bundle (199+/199-); **committeter Bundle == frischer Build aus HEAD-Quellen (diff byte-identisch)** -> AUF-27 und AUF-34 sind jetzt wirklich ausgeliefert. Der Generator hat die Ursache des Musters benannt (Kriterium 'null Zeilen in public/*' erzeugte das Loch strukturell).
+- **AUF-27-Auflage AUFGELOEST (Sichtprobe, iframe):** linke Reiter Werkzeuge/Projekt/Fachplaner rendern bei **1371 UND 375 px**. -> AUF-27 jetzt voll FREIGABE (sichtbar).
+- **AUF-34-Auflage AUFGELOEST (Sichtprobe, iframe):** ARBEITSBEREICH-Leiste = 5 Bereiche; bei **1371 px eine Zeile, kein Ueberlauf**; bei **375 px sauberer Umbruch auf 3 Zeilen, volle Woerter, kein Wortumbruch**; Kategorie-Menue pro Bereich gefiltert (kein 22-ueber-3-Zeilen mehr). Die 2 Kriterien (kein Ueberlauf 1371, keine Wortumbrueche) erfuellt. -> AUF-34 jetzt voll FREIGABE (sichtbar).
+- Damit sind alle drei Bundle-Holes (Batch2/AUF-27/AUF-34) geschlossen und die zwei sichtbaren Layout-Slices im Browser belegt (Screenshots an Yama).
+
 ## ⇒ NACHARBEIT — vier Planner-Auflagen (`1955311`, Evaluator, 25.07.)
 1. **AUF-9-Widerspruch aufgelöst:** Zeile unter „Nicht abgenommen/offen" **gestrichen**. AUF-9 = FREIGABE (Kommentar-gegen-Codewert ist auch für anchored Prüfer objektiv, beide Werte im Code).
 2. **`sichtbar`/`Vorarbeit` je Votum (ab sofort):**
@@ -183,6 +190,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   I4        4932b36  tsc 0 · schema 0 · test 798/798 ; versteckt 0, 22 Gruppen Summe 110
   AUF-27    894954a  tsc 0 / schema 0 / test 810/810 ; Mutation werkzeuge->projekt = 4 rot ; BUNDLE NICHT rebuilt
   AUF-34    8b2b9e6  tsc 0 / schema 0 / test 830/830 ; Mutation Thema-entfernt = 4 rot ; BUNDLE NICHT rebuilt
+  AUF-37    91d9592  build 0 ; committeter Bundle == frischer Build (byte-identisch) ; Sichtprobe 1371+375: AUF-27 3 Reiter, AUF-34 5 Bereiche kein Ueberlauf/Umbruch
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
