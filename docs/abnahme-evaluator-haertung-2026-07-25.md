@@ -755,6 +755,42 @@ Pflichtbreiten nicht mehr ueber; die tote ueberlagernde Schaltflaeche ist weg (S
 Mutationsfest, Ueberlauf selbst gemessen. Nebenbei geschlossen: mein frueherer 375-px-Expertenmodus-
 Befund. Die zu kleine Leinwand ist eine sauber getrennte Layout-Rueckgabe.
 
+## AUF-57 - Wegweiser haengt am Ort und hat einen Anlass, der feuert (7cac7cb, Bundle e391e73) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 7cac7cb gemessen (/tmp-Auszug + Browser), dann Generator-Bericht.
+**Klasse: sichtbar** - Sichtprobe Teil der Abnahme. Folge zu AUF-45 (Wegweiser erschien nie).
+
+- **Umfang (git show --name-status):** 3 Dateien - M naechsterSchritt.test.ts, HausplanerApp.tsx,
+  tools/vorbedingungen.ts. store/domain/geometry/renderers/public: null.
+- **Der Fehler weg:** die Anzeige war auf den Grund 'Kein aktives Geschoss' hartkodiert (der Fall,
+  der nie eintritt). Jetzt haengt sie am ORT (WegweiserOrt = 'geschoss'|'schiene'): jede Handlung
+  dort, wo sie stattfindet; kein Ort -> Schweigen. **grep 'Kein aktives Geschoss' als Bedingung = 0.**
+  *(Selbstkorrektur: mein breiter grep 'grund ===' fand 1 Treffer - das ist die valide Ort-Zuordnung
+  k.grund === w.grund, nicht der Alt-String. Der hartkodierte String ist 0.)*
+- **Guardrails:** reuse resolveToolState (kein zweites resolveDisabledReasons, Kommentar Z.5/237/252);
+  Aktivierung **unveraendert 73/53/28** wie AUF-45 (testverriegelt); der Auswahl-Anlass aendert EIN
+  Feld desselben Kontexts, dieselbe Nachschlage-Operation, keine zweite Regel.
+- **Arbeitsbereich als Anlass WIDERLEGT (nichts erfunden):** jeder Wechsel weg von Architektur sperrt
+  MEHR (-26 Import, -26 Bauphysik, -22 Heizung, -19 Elektro/PV); der Mechanismus lehnt ihn ab, weil
+  nur 'entsperrt > 0' gewinnt. Testverriegelt.
+- **Gates im Auszug:** schema 0 . test **993/993 pass, 0 skip** (987->993) . tsc 0 . build ok.
+  20 naechsterSchritt-Subtests (14 aus AUF-45 + 6 neu: Ort je Handlung/Orte verschieden, Grund ohne
+  Handlung=kein Rat, Auswahl messbarer Anlass, Arbeitsbereich kein Anlass, Schweigen moeglich,
+  Aktivierung unveraendert).
+- **Gegen-Beweis (/tmp-Kopie):** Ortszuordnung 'geschoss' -> 'schiene' -> **1 rot** ('jede Handlung
+  genau einen Ort - Orte verschieden'). Deckt Generator.
+- **Browser-Sichtprobe (iframe 1440, fixture decke-treppe, Bundle e391e73):** der Wegweiser
+  '-> Waehle ein Bauteil aus - das schaltet N Werkzeuge frei.' steht **genau einmal, in der Schiene**
+  (kein Balken ueber dem Plan). Nach Klick auf die Treppe (selektiert, Panel zeigt Treppe/BAUART) ist
+  er **weg** (0). Beobachtung: N = **18**, nicht die vom Bericht genannten 25 - der Kontext ist hier
+  Bauphysik + gefuelltes Fixture. Das ist KEIN Defekt, sondern der Beleg, dass die Zahl **live je
+  Kontext gemessen** wird (waere sie hartkodiert, stuende immer 25).
+
+**Urteil: FREIGABE.** Der Wegweiser feuert jetzt an einem echten, gemessenen Anlass (Auswahl),
+haengt am Ort statt an einem toten Grund, schweigt wenn nichts entsperrt, und aendert keine Sperre
+(73/53/28). Der Arbeitsbereich ist als Anlass sauber widerlegt statt erzwungen. Mutationsfest; am
+Schirm einmal sichtbar und nach Auswahl weg. Schliesst die AUF-45-Rueckgabe.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -790,6 +826,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-59    8f34fc5  Auszug: schema 0 / test 971/971 0-skip / tsc 0 / build ok ; opKnopfZustand rein (Token, keine Farbe), Regel liest gesperrt ; K2 Kappungs-Test ersetzt nicht entfallen ; 9 Subtests ; Gegen-Beweis gesperrt->1 Unterschied = 2 rot ; Sichtprobe 1440 getComputedStyle: 11 Knoepfe, 2 mit Rahmen (Raster/Fang), gesperrt Grund rgb(242,244,246)+Deckkraft 0.6 vs bedienbar weiss+1, Spiegeln-Textknoepfe weg
   AUF-49    f83cf11  Auszug: schema 0 / test 982/982 0-skip / tsc 0 / build ok ; ConfigWizard role=dialog/aria-modal (war 0), istAusloeser Enter+Space, eine Regel 3 Dialoge ; 11 Subtests ; Gegen-Beweis % anzahl weg = 3 rot ; Browser activeElement: Fokus rein 'Zurueck zum Planer', 6x Tab+ShiftTab bleiben im Dialog, Escape schliesst, Fokus zurueck ausserhalb ; 44px zurueckgegeben (Ziel 55x26 <44, nicht angefasst)
   AUF-46    1ee27a4  Auszug: schema 0 / test 987/987 0-skip / tsc 0 / build ok ; auto-fit/minmax+flexWrap statt 3 fester Breiten ; 5 Subtests ; Gegen-Beweis feste Spalte wieder = 2 rot ; Sichtprobe docOverflowX: 390 Start 0/guided 0, 375 Start 0/guided 0, Expertenmodus 390 = 0 (Kopfzeile-flexWrap schliesst meinen 375-Befund) ; Rueckgabe Leinwand 0px@390 bestaetigt (Usability, kein Ueberlauf)
+  AUF-57    7cac7cb  Auszug: schema 0 / test 993/993 0-skip / tsc 0 / build ok ; hartkod. 'Kein aktives Geschoss'=0, WegweiserOrt geschoss|schiene, reuse resolveToolState, Aktivierung 73/53/28 ; Arbeitsbereich widerlegt (-26/-26/-22/-19) ; 20 Subtests ; Gegen-Beweis Ort vertauscht = 1 rot ; Sichtprobe: Wegweiser 1x in Schiene (N=18 live gemessen, nicht hartkod. 25), nach Auswahl weg
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
