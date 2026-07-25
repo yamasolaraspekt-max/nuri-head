@@ -14,6 +14,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useHausplanerStore } from '../store/hausplanerStore';
 import { HausplanerDreiDSzene } from '../renderers/three-d/szene';
+import { T } from './studioDaten';
 
 export function DreiDBereich({ sichtbar }: { sichtbar: boolean }): React.ReactElement {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -80,8 +81,8 @@ export function DreiDBereich({ sichtbar }: { sichtbar: boolean }): React.ReactEl
         onClick={() => szeneRef.current?.fitToScene()}
         style={{
           position: 'absolute', right: 12, bottom: 12, padding: '6px 12px', fontSize: 12,
-          fontWeight: 600, borderRadius: 8, border: '1px solid #d1d5db', background: '#fff',
-          color: '#374151', cursor: 'pointer',
+          fontWeight: 600, borderRadius: 8, border: '1px solid #d1d5db', background: T.surface,
+          color: T.canvasWall, cursor: 'pointer',
         }}
       >
         Ansicht einpassen

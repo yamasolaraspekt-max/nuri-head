@@ -86,7 +86,7 @@ export function HausplanerStudio(): React.ReactElement {
       {/* Kopfzeile */}
       <header style={{ height: 62, flex: '0 0 auto', display: 'flex', alignItems: 'center', gap: 16, padding: '0 26px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 11, fontWeight: 700, fontSize: 16 }}>
-          <span style={{ width: 30, height: 30, borderRadius: 9, background: T.brand, display: 'grid', placeItems: 'center', color: '#fff' }}><Ikon inhalt='<path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/>' size={16} /></span>
+          <span style={{ width: 30, height: 30, borderRadius: 9, background: T.brand, display: 'grid', placeItems: 'center', color: T.surface }}><Ikon inhalt='<path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/>' size={16} /></span>
           Hausplaner
           <span style={{ fontWeight: 600, color: T.muted, fontSize: 13.5 }}>· Solar Aspekt</span>
         </div>
@@ -111,7 +111,7 @@ export function HausplanerStudio(): React.ReactElement {
               </button>
             </div>
             <button type="button" onClick={() => zeigeToast('Neue Anfrage / Lead: Planer wählen → Lead zuordnen → Dokumente → Formulardaten. (folgt)')}
-              style={{ margin: '4px 12px 8px', display: 'flex', alignItems: 'center', gap: 10, background: T.accent, color: '#fff', border: 0, borderRadius: 12, padding: navZu ? 12 : '12px 14px', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', justifyContent: navZu ? 'center' : 'flex-start' }}>
+              style={{ margin: '4px 12px 8px', display: 'flex', alignItems: 'center', gap: 10, background: T.accent, color: T.surface, border: 0, borderRadius: 12, padding: navZu ? 12 : '12px 14px', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', justifyContent: navZu ? 'center' : 'flex-start' }}>
               <Ikon inhalt='<path d="M12 5v14M5 12h14"/>' size={16} />{!navZu && <span>Neue Anfrage / Lead</span>}
             </button>
             <div style={{ flex: 1, overflow: 'auto', padding: '4px 10px 12px' }}>
@@ -167,7 +167,7 @@ export function HausplanerStudio(): React.ReactElement {
       </div>
 
       {toast && (
-        <div style={{ position: 'fixed', left: '50%', bottom: 34, transform: 'translateX(-50%)', background: '#1a262a', color: '#fff', padding: '12px 20px', borderRadius: 12, fontSize: 13.5, boxShadow: '0 10px 34px rgba(28,50,55,.10)', zIndex: 80, maxWidth: 560 }}>{toast}</div>
+        <div style={{ position: 'fixed', left: '50%', bottom: 34, transform: 'translateX(-50%)', background: '#1a262a', color: T.surface, padding: '12px 20px', borderRadius: 12, fontSize: 13.5, boxShadow: '0 10px 34px rgba(28,50,55,.10)', zIndex: 80, maxWidth: 560 }}>{toast}</div>
       )}
       {konfig && (
         <ConfigWizard art={konfig} onClose={() => setKonfig(null)} onÜbernehmen={(nachricht) => { setKonfig(null); zeigeToast(nachricht); }} />

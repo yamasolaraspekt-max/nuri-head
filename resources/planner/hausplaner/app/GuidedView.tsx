@@ -32,7 +32,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
         {STEPS.map((st, i) => {
           const aktiv = i === schritt;
           const rn = st.status === 'ok' ? T.ok : (st.status === 'warn' && !aktiv ? T.warn : (aktiv ? T.accent : T.surface));
-          const rnInk = (st.status === 'ok' || aktiv || (st.status === 'warn' && !aktiv)) ? '#fff' : T.muted;
+          const rnInk = (st.status === 'ok' || aktiv || (st.status === 'warn' && !aktiv)) ? T.surface : T.muted;
           const sym = st.status === 'ok' ? '✓' : String(i + 1);
           return (
             <React.Fragment key={st.titel}>
@@ -89,13 +89,13 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
             <span style={{ position: 'absolute', top: 14, left: 16, fontSize: 12, color: T.muted, background: 'rgba(255,255,255,.7)', padding: '3px 10px', borderRadius: 8 }}>{schritt <= 2 ? 'Erdgeschoss · Grundriss · 1:50' : s.titel}</span>
             <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} viewBox="0 0 640 360" preserveAspectRatio="xMidYMid meet">
               <g>
-                <polygon points="150,70 490,70 490,80 160,80" fill="#4b5563" />
-                <polygon points="150,70 160,80 160,270 150,280" fill="#4b5563" />
-                <polygon points="490,70 490,280 480,270 480,80" fill="#4b5563" />
-                <polygon points="150,280 490,280 480,270 160,270" fill="#4b5563" />
-                <polygon points="330,80 340,80 340,270 330,270" fill="#4b5563" />
+                <polygon points="150,70 490,70 490,80 160,80" fill={T.canvasWallFill} />
+                <polygon points="150,70 160,80 160,270 150,280" fill={T.canvasWallFill} />
+                <polygon points="490,70 490,280 480,270 480,80" fill={T.canvasWallFill} />
+                <polygon points="150,280 490,280 480,270 160,270" fill={T.canvasWallFill} />
+                <polygon points="330,80 340,80 340,270 330,270" fill={T.canvasWallFill} />
               </g>
-              <g stroke="#9aa4af" strokeWidth={3}><rect x="220" y="70" width="64" height="10" fill="#fff" /><line x1="220" y1="75" x2="284" y2="75" /></g>
+              <g stroke="#9aa4af" strokeWidth={3}><rect x="220" y="70" width="64" height="10" fill={T.surface} /><line x1="220" y1="75" x2="284" y2="75" /></g>
               <text x="240" y="185" textAnchor="middle" fontFamily="Inter" fontSize="13" fill="#7c8590">Wohnen</text>
               <text x="410" y="185" textAnchor="middle" fontFamily="Inter" fontSize="12" fill="#aab2bb">Küche</text>
             </svg>
@@ -124,7 +124,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
             <div style={{ background: T.accentSoft, borderRadius: 16, padding: 18 }}>
               <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: T.accentInk }}>Nächste empfohlene Aktion</div>
               <div style={{ fontSize: 15, fontWeight: 700, margin: '6px 0 14px', color: '#0a4f4d' }}>{s.empfehlung.titel}</div>
-              <button type="button" onClick={() => (s.empfehlung?.cfg ? onKonfigurator('fenster') : undefined)} style={{ width: '100%', border: 0, background: T.accent, color: '#fff', fontWeight: 700, fontSize: 14, padding: 11, borderRadius: 11, cursor: 'pointer' }}>{s.empfehlung.aktion}</button>
+              <button type="button" onClick={() => (s.empfehlung?.cfg ? onKonfigurator('fenster') : undefined)} style={{ width: '100%', border: 0, background: T.accent, color: T.surface, fontWeight: 700, fontSize: 14, padding: 11, borderRadius: 11, cursor: 'pointer' }}>{s.empfehlung.aktion}</button>
             </div>
           )}
           <button type="button" onClick={onExperte} style={{ width: '100%', border: '1px dashed #d3dbdb', background: 'transparent', color: T.muted, fontWeight: 600, fontSize: 13, padding: 12, borderRadius: 12, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
@@ -138,7 +138,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
         <button type="button" onClick={() => setSchritt(Math.max(0, schritt - 1))} style={{ border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600, fontSize: 14, padding: '11px 20px', borderRadius: 12, cursor: 'pointer', boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>Zurück</button>
         <span style={{ flex: 1 }} />
         <span style={{ fontSize: 13, color: T.muted }}>Schritt {schritt + 1} von {n}</span>
-        <button type="button" onClick={() => setSchritt(Math.min(n - 1, schritt + 1))} style={{ border: 0, background: T.brand, color: '#fff', fontWeight: 600, fontSize: 14, padding: '11px 26px', borderRadius: 12, cursor: 'pointer' }}>Weiter</button>
+        <button type="button" onClick={() => setSchritt(Math.min(n - 1, schritt + 1))} style={{ border: 0, background: T.brand, color: T.surface, fontWeight: 600, fontSize: 14, padding: '11px 26px', borderRadius: 12, cursor: 'pointer' }}>Weiter</button>
       </div>
     </div>
   );
