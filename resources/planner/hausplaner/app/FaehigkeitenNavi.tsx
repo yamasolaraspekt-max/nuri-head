@@ -18,7 +18,9 @@ export function FaehigkeitenNavi(
 ): React.ReactElement {
   return (
     <div>
-      <div style={{ padding: '10px 12px 2px', fontSize: 11, fontWeight: 700, color: T.ink }}>Fähigkeiten</div>
+      {/* AUF-27: KEINE eigene Überschrift mehr — der Reiter „Fachplaner" beschriftet diese Fläche
+          bereits. Eine zweite Überschrift darunter wäre eine doppelte Aussage, und das Wort
+          „Fähigkeiten" ist Jargon: es beschreibt nicht, was der Nutzer sieht. */}
       {FAEHIGKEIT_GRUPPEN.map((g) => {
         const items = faehigkeitenNach(g.id);
         if (items.length === 0) return null;
@@ -58,7 +60,7 @@ export function FaehigkeitenNavi(
         );
       })}
       <div style={{ padding: '10px 12px', fontSize: 11, color: T.faint, borderTop: `1px solid ${T.hair}`, marginTop: 8 }}>
-        Jede Fähigkeit sichtbar · „schläft" = Bedien-Panel folgt (Batch 1–3).
+        Jeder Eintrag sichtbar · „schläft" = Bedien-Panel folgt (Batch 1–3).
       </div>
     </div>
   );

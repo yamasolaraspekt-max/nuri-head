@@ -18,13 +18,23 @@ import { dirname, join } from 'node:path';
 const hier = dirname(fileURLToPath(import.meta.url));
 const app = readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8');
 const navi = readFileSync(join(hier, '../app/FaehigkeitenNavi.tsx'), 'utf8');
+// AUF-27: die Reiterzeile steht seit dem Schienen-Umbau in der gemeinsamen `ReiterLeiste` — eine
+// Leiste, zwei Benutzer. Der Messpunkt wandert mit; die Zusage bleibt dieselbe.
+const leiste = readFileSync(join(hier, '../app/dashboard/ReiterLeiste.tsx'), 'utf8');
 
 test('B3: die Reiterzeile bricht um — sie kappt nicht', () => {
-  // zeilenweise statt über `}`-Grenzen: die Stile enthalten `${…}`-Templates, an denen eine
-  // `[^}]*`-Klammer abbricht — genau daran ist mein erster Testentwurf gescheitert.
-  const zeile = app.split('\n').find((l) => l.includes('role="tablist"'));
-  assert.ok(zeile, 'Reiterzeile nicht gefunden');
-  assert.match(zeile, /flexWrap: 'wrap'/, 'ohne Umbruch verschwindet der vierte Reiter aus dem Bild');
+  // Über den Element-Block statt zeilenweise: das Attribut steht auf einer anderen Zeile als der
+  // Stil. `[\s\S]*?>` endet am ersten `>` — die Stile enthalten `${…}`-Templates, an denen eine
+  // `[^}]*`-Klammer abbräche; genau daran ist mein erster Testentwurf gescheitert.
+  const block = leiste.match(/<div\s*\n\s*role="tablist"[\s\S]*?\n\s*>/);
+  assert.ok(block, 'Reiterzeile nicht gefunden');
+  assert.match(block[0], /flexWrap: 'wrap'/, 'ohne Umbruch verschwindet der vierte Reiter aus dem Bild');
+  // AUF-27 / Kante 3: drei Reiter in 220 px. Umbrechen, nicht kappen — auch INNERHALB eines Wortes,
+  // sonst heisst der dritte Reiter „Fachpla…".
+  const knopf = leiste.match(/<button\n[\s\S]*?role="tab"[\s\S]*?\n\s*>/);
+  assert.ok(knopf, 'Reiter-Knopf nicht gefunden');
+  assert.match(knopf[0], /overflowWrap: 'anywhere'/, 'sonst wird die Beschriftung gekappt');
+  assert.doesNotMatch(knopf[0], /textOverflow|whiteSpace: 'nowrap'/, 'Kappen ist ausgeschlossen');
 });
 
 test('B3: das Eigenschaften-Panel bricht lange Wörter um, statt sie abzuschneiden', () => {

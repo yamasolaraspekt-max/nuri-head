@@ -21,6 +21,8 @@ import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type Fens
 import { DreiDBereich } from './DreiDBereich';
 import { ZustandBadge } from './studioUi';
 import { PANEL_TABS, type PanelTabId } from './dashboard/panelTabs';
+import { ReiterLeiste } from './dashboard/ReiterLeiste';
+import { SCHIENEN_REITER, SCHIENE_STANDARD, type SchienenReiterId } from './dashboard/schienenReiter';
 import { projektBaum, PROJEKTBAUM_LEER } from './dashboard/projektBaum';
 import { befundeAus, BEFUNDE_LEER, BEFUNDE_UMFANG } from './dashboard/befunde';
 import { palettenEintraege, PALETTE_LEER } from './dashboard/palette';
@@ -62,6 +64,13 @@ type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe' | 'd
  */
 const PANEL_ID = 'hp-eigenschaften-panel';
 const reiterId = (id: PanelTabId): string => `hp-eigenschaften-tab-${id}`;
+
+/**
+ * AUF-27 — dasselbe für die linke Schiene. Eigenes Präfix, damit die drei Schienen-Reiter und die
+ * vier Panel-Reiter im selben Dokument keine id teilen (Kante 5, jetzt zweifach relevant).
+ */
+const SCHIENE_ID = 'hp-schiene-panel';
+const schienenReiterId = (id: string): string => `hp-schiene-tab-${id}`;
 
 const FARBEN = {
   text: T.ink, gedaempft: T.muted, linie: T.faint, raster: T.canvasGrid, rasterGrob: T.canvasGridStrong,
@@ -237,6 +246,14 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   /** Dashboard v2.2: aktiver Panel-Reiter. Bewusst LOKAL, kein Store-Feld — der Wert hat genau
    *  einen Leser; ob Panelzustand in den UI-State gehört, ist eine v4-Frage (F1). */
   const [aktiverTab, setAktiverTab] = useState<PanelTabId>('allgemein');
+  /**
+   * AUF-27: aktiver Reiter der linken Schiene. Ebenfalls LOKAL — und bewusst NICHT gespeichert:
+   * Kante 2 lässt `localStorage` zu, verlangt es aber nicht. Der Wert ist ein Arbeitskontext für
+   * den Moment, keine Vorliebe wie die Anheftung (★); nach dem Neuladen ist der häufigste Job der
+   * richtige Startpunkt. Ins Szenendokument gehört er unter keinen Umständen — kein Feld, kein Zod,
+   * kein Schema. Sollte er später überleben sollen, ist DIESE Zeile die einzige Stelle dafür.
+   */
+  const [schienenTab, setSchienenTab] = useState<SchienenReiterId>(SCHIENE_STANDARD);
   /** I4: persoenlich angeheftete Werkzeuge (★). Liegt in localStorage, NIE im Szenendokument —
    *  eine Vorliebe des Bedieners ist keine Eigenschaft des Gebaeudes. */
   const [angeheftet, setAngeheftet] = useState<Set<string>>(() => ladeAngeheftet());
@@ -246,9 +263,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     setAngeheftet(neu);
     speichereAngeheftet(neu);
   };
-  /** B4 (Nacharbeit N3): DOM-Referenzen der Reiter, damit die Pfeiltasten den Fokus mitziehen.
-   *  Nur Lese-/Fokus-Zugriff — kein Zustand, kein zweiter Auswahl-Weg neben `aktiverTab`. */
-  const reiterRefs = useRef<Partial<Record<PanelTabId, HTMLButtonElement | null>>>({});
+  /* B4 (Nacharbeit N3): Die DOM-Referenzen der Reiter liegen seit AUF-27 in `ReiterLeiste` —
+     dort, wo die Pfeiltasten sie brauchen. Eine Leiste, zwei Benutzer, eine Verdrahtung. */
   /** Dashboard v2.5: Zustand der Command-Palette. Ebenfalls LOKAL — der Wert hat genau einen
    *  Leser, und v2 ändert den Store nicht. `paletteOffenRef` spiegelt `paletteOffen` für den
    *  globalen Tastatur-Handler, dessen Closure sonst veraltet wäre (Kante 8). */
@@ -992,9 +1008,29 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           Der 3D-Bereich bleibt über Moduswechsel gemountet (nur ausgeblendet) ⇒ Kamera
           bleibt erhalten; dispose() erst beim Verlassen der Seite (Kante 6). */}
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
-        {/* L1: Planer-Navigation — Werkzeuge (aktiv) + Fachplaner-Struktur (Navi). */}
-        <div style={{ width: 220, flex: '0 0 auto', background: T.surface, borderRight: `1px solid ${T.hair}`, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
-          <div style={navGrp}>Werkzeuge</div>
+        {/* L1: Planer-Schiene — AUF-27: DREI REITER statt drei gestapelter Blöcke.
+            Vorher trugen Werkzeuge, Fachplaner und Projektbrowser eine gemeinsame Scroll-Höhe;
+            der Projektbrowser war erst nach rund 20 Scroll-Ticks sichtbar. Jetzt ist immer genau
+            ein Abschnitt sichtbar, und die Scroll-Höhe gehört dem Abschnitt, nicht der Spalte:
+            `overflow` sitzt am Inhaltsbereich, NICHT mehr an dieser Spalte.
+            Die Reiterleiste ist die gemeinsame `ReiterLeiste` (dasselbe Muster wie im
+            Eigenschaften-Panel, AUF-19) — kein zweiter Tab-Mechanismus. */}
+        <div style={{ width: 220, flex: '0 0 auto', background: T.surface, borderRight: `1px solid ${T.hair}`, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <ReiterLeiste
+            reiter={SCHIENEN_REITER}
+            aktiv={schienenTab}
+            setAktiv={(id) => setSchienenTab(id as SchienenReiterId)}
+            ariaLabel="Planer-Bereiche"
+            panelId={SCHIENE_ID}
+            reiterId={schienenReiterId}
+          />
+          {/* DER Inhaltsbereich der drei Reiter: eine Rolle, eine id, eigene Scroll-Höhe.
+              `aria-labelledby` nennt den gerade aktiven Reiter. */}
+          <div
+            role="tabpanel" id={SCHIENE_ID} aria-labelledby={schienenReiterId(schienenTab)}
+            style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}
+          >
+          {schienenTab === 'werkzeuge' && (<>
           {/* Welle A2 (§19/UI-4): Die Leiste bezieht ihre Zugehörigkeit AUSSCHLIESSLICH aus der
               Präsentationsschicht — `zoneTools('fix')` statt `werkzeugTools()`. Vorher entschieden
               zwei Mechanismen unabhängig über dieselbe Frage (`art` in der Registry UND `zone` in den
@@ -1017,17 +1053,30 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               </button>
             );
           })}
-          <FaehigkeitenNavi
-            activeToolId={werkzeug}
-            onAktivieren={(id) => { setWerkzeug(id as Werkzeug); setWandStart(null); setTreppeStart(null); }}
-          />
-          {/* Dashboard v2.3 (§32 / UI-8): Projektbrowser — DRITTER Abschnitt derselben 220-px-Schiene,
-              keine neue Spalte. Damit bleibt die Flächenrechnung (innerWidth − 220 − 268) unberührt.
+          </>)}
+
+          {/* AUF-27 / NACHTRAG: Der Reiter heisst „Fachplaner", nicht „Fähigkeiten" — derselbe
+              Begriff wie in Ebene 2 der Inventur. ÜBERGANGSLÖSUNG BIS L2/L3 (AUF-33): dass die
+              Fachgewerke hier in der Werkzeug-Schiene liegen, ist ein Zwischenstand, keine Absicht.
+              Wohin sie gehören, ist ungeklärt — es gibt eine gemessene Teil-Doppelung mit den 19
+              L4-Fachplaner-Flächen (mind. `engine-fbh`↔`fach-fbh`, `engine-pv`↔`fach-pv-module`,
+              `engine-kueche`↔`fach-kueche`), aber keine 1:1-Deckung. Die Zusammenführung ist ein
+              eigener, zu messender Posten. Bis dahin bleiben alle 22 Einträge erreichbar. */}
+          {schienenTab === 'fachplaner' && (
+            <FaehigkeitenNavi
+              activeToolId={werkzeug}
+              onAktivieren={(id) => { setWerkzeug(id as Werkzeug); setWandStart(null); setTreppeStart(null); }}
+            />
+          )}
+
+          {/* Dashboard v2.3 (§32 / UI-8): Projektbrowser — seit AUF-27 ein eigener REITER derselben
+              220-px-Schiene, keine neue Spalte. Damit bleibt die Flächenrechnung
+              (innerWidth − 220 − 268) unberührt, und er ist ohne Scrollen erreichbar.
               Inhalt kommt als DATEN aus `projektBaum` (rein, getestet); das Markup bleibt dünn.
               Bewusst KEINE eigene, im Rumpf definierte Komponente (Befund B1 aus dem Batch-1-Votum):
               die Einträge sind fokussierbare Knöpfe und dürften sonst bei jedem Render neu montiert
               werden. Klick nutzt das vorhandene `selectNodes([id])` — keine zweite Auswahl-Wahrheit. */}
-          <div style={navGrp}>Projekt</div>
+          {schienenTab === 'projekt' && (<>
           {baum.length === 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, padding: '2px 12px 10px', fontSize: 11.5, color: T.muted }}>
               <span>{PROJEKTBAUM_LEER}</span>
@@ -1073,7 +1122,11 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               </div>
             ))
           )}
-          <div style={{ padding: '10px 12px', fontSize: 11, color: T.muted, borderTop: `1px solid ${T.canvasGrid}`, marginTop: 'auto' }}>Erweiterbar – Module folgen.</div>
+          </>)}
+          </div>
+          {/* Fuss der Schiene: steht UNTER dem Inhaltsbereich, gehört also keinem Reiter und
+              scrollt nicht mit — er gilt für alle drei. */}
+          <div style={{ padding: '10px 12px', fontSize: 11, color: T.muted, borderTop: `1px solid ${T.canvasGrid}`, flex: '0 0 auto' }}>Erweiterbar – Module folgen.</div>
         </div>
         <div style={{ display: modus === '3d' ? 'none' : 'block', width: stageBreite, borderRight: modus === 'split' ? `1px solid ${T.hair}` : 'none' }}>
         <Stage
@@ -1359,41 +1412,18 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             werden. Ein Hinweis, der bei „…brauch" endet, ist kein Hinweis. */}
         <div style={{ width: 268, flex: '0 0 auto', background: T.surface, borderLeft: `1px solid ${T.hair}`, padding: 14, overflowY: 'auto', overflowWrap: 'anywhere', boxSizing: 'border-box', fontSize: 12.5, color: FARBEN.text }}>
           <div style={{ fontWeight: 800, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '.04em', color: FARBEN.gedaempft, marginBottom: 8 }}>Eigenschaften</div>
-          {/* Dashboard v2.2 (§20 / UI-5): Reiter aus PANEL_TABS (Daten, nicht Markup). Aktiver Reiter
-              ist an Schriftschnitt UND Unterstrich erkennbar, nicht nur farblich (WCAG 1.4.1).
-              Pfeiltasten links/rechts wechseln; `allgemein` zeigt den unveränderten Panelinhalt. */}
-          <div role="tablist" aria-label="Eigenschaften-Bereiche" style={{ display: 'flex', flexWrap: 'wrap', gap: 2, borderBottom: `1px solid ${T.hair}`, marginBottom: 12 }}>
-            {PANEL_TABS.map((tab, i) => {
-              const aktivT = tab.id === aktiverTab;
-              return (
-                <button
-                  key={tab.id} type="button" role="tab" aria-selected={aktivT} tabIndex={aktivT ? 0 : -1}
-                  id={reiterId(tab.id)} aria-controls={PANEL_ID}
-                  ref={(el) => { reiterRefs.current[tab.id] = el; }}
-                  title={tab.hinweis}
-                  onClick={() => setAktiverTab(tab.id)}
-                  onKeyDown={(e) => {
-                    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-                    e.preventDefault();
-                    const d = e.key === 'ArrowRight' ? 1 : -1;
-                    const ziel = PANEL_TABS[(i + d + PANEL_TABS.length) % PANEL_TABS.length].id;
-                    setAktiverTab(ziel);
-                    // B4 + Kante 6: der DOM-Fokus wandert MIT der Auswahl — aber ausschliesslich
-                    // hier im Tasten-Zweig. `onClick` ruft das nicht auf, also springt der
-                    // Fokusring nicht bei jedem Mausklick auf.
-                    reiterRefs.current[ziel]?.focus();
-                  }}
-                  style={{
-                    padding: '5px 8px', fontSize: 11.5, cursor: 'pointer', background: 'transparent',
-                    border: 'none', borderBottom: `2px solid ${aktivT ? T.brandInk : 'transparent'}`,
-                    fontWeight: aktivT ? 800 : 600, color: aktivT ? FARBEN.text : T.muted,
-                  }}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
+          {/* Dashboard v2.2 (§20 / UI-5): Reiter aus PANEL_TABS (Daten, nicht Markup). Seit AUF-27
+              rendert sie die gemeinsame `ReiterLeiste` — dieselbe Verdrahtung wie die Schiene,
+              inklusive der AUF-19-Nacharbeiten (aria-controls, Pfeiltasten, Fokusnachführung).
+              `allgemein` zeigt den unveränderten Panelinhalt. */}
+          <ReiterLeiste
+            reiter={PANEL_TABS}
+            aktiv={aktiverTab}
+            setAktiv={(id) => setAktiverTab(id as PanelTabId)}
+            ariaLabel="Eigenschaften-Bereiche"
+            panelId={PANEL_ID}
+            reiterId={(id) => reiterId(id as PanelTabId)}
+          />
           {/* B3 (Nacharbeit N3): DER Inhaltsbereich der Reiter. Bis hierher trug er keine Rolle —
               die Reiterleiste versprach ein Tabpanel, das im Baum nicht existierte. `aria-labelledby`
               zeigt auf den GERADE aktiven Reiter, `id` ist das Ziel aller vier `aria-controls`. */}
