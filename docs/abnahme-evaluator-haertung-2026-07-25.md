@@ -233,6 +233,39 @@ frueher head-Abschnitt / TAP-Reporter - im Votum offengelegt statt ueberspielt.
 Damit ist das Icon-Paket AUF-21 komplett belegt: I1 (Assets) + I2/I3/I4 (Katalog/Anheften/Zonen)
 alle FREIGABE.
 
+## AUF-30 - Render-Pfad-Testinfra / esbuild-Loader (56cc734) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 56cc734 gemessen (sauberer /tmp-Auszug, weil FachFlaeche.tsx
+im Repo-Baum gerade native AUF-33-WIP traegt), dann Commit-Nachricht gelesen.
+**Klasse: Vorarbeit** (Test-Infrastruktur; nichts am Schirm) - keine Sichtprobe noetig.
+**Erfuellt zugleich A1-Auflage 3** (Render-Pfad-Test), zweimal als 'nicht erfuellbar' zurueckgegeben.
+
+- **Umfang (git show --stat):** 2 Dateien - test-hooks.mjs (+48), __tests__/renderPfad.test.ts (+71).
+- **test-hooks.mjs eng wie behauptet:** load-Hook gibt fuer alles ausser .tsx an next() weiter
+  (.ts bleibt bei Nodes Type-Stripping), nur .tsx laeuft ueber esbuild transformSync loader:'tsx';
+  resolve-Hook ergaenzt .tsx bei endungslosen Importen. Keine neue Abhaengigkeit (esbuild via Vite da).
+- **Gates im Auszug selbst gefahren:** schema:check 0 (im Testskript) . test **788/788 pass, 0 fail,
+  0 skipped**, EXIT 0 . tsc:hausplaner EXIT 0 . build:hausplaner ok (1.21s).
+- **renderPfad.test.ts laeuft echt** (korrekte Registrierung ueber test-register.mjs, nicht die
+  Hook-Datei direkt): 6 Subtests ueber react-dom/server - Kopf/Gruppe/Zweck, Feldstruktur,
+  Kante 4 (kein Berechnen-Knopf, alle Felder deaktiviert), Zustand als TEXT, Kante 2 (Herkunft),
+  alle 19 Flaechen ohne Wurf.
+- **Gegen-Beweis (zwei, /tmp-Kopie, Repo unberuehrt):**
+  A) 'readOnly disabled' -> 'readOnly' entfernt disabled -> **'Kante 4' rot** (5 pass / 1 fail).
+  B) '{flaeche.zweck}' -> Literal -> **'Kopf/Gruppe/Zweck im Markup' rot** (5 pass / 1 fail).
+  Jede Mutation traf exakt ihre Aussage -> der Test geht wirklich durch den Render-Pfad.
+- **Repo-Baum:** meine Messung hinterliess 0 Marker in FachFlaeche.tsx; das vorhandene M ist die
+  native AUF-33-WIP (EngineFlaeche-Extraktion), nicht meine.
+
+**Korrektur an mir selbst (Beweis gilt auch gegen mich):** mein erster Gegen-Beweis
+(readOnly -> data_kaputt) blieb gruen - ein No-Op, weil das Feld BEIDE Attribute traegt und
+'Kante 4' auf `disabled` prueft. Dieselbe Falle, die der Generator in seiner Commit-Nachricht
+offengelegt hatte (erste Mutation traf einen Kommentar). Erst die praezise Mutation zaehlt.
+
+**Urteil: FREIGABE.** Der esbuild-Loader schliesst die .tsx-Luecke ohne neue Abhaengigkeit,
+eng gehalten (nur .tsx), und der erste Test durch den echten Render-Pfad hat belegte Zaehne.
+A1-Auflage 3 ist damit erfuellt, nicht nur behauptet.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -255,6 +288,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-36    d106445  tsc 0 / schema 0 / test 853/853 ; Mutation Grund-verfaelscht = 1 rot ; Bundle eigener Rebuild 368f2d7 ; Sichtprobe Grund-Text rendert
   AUF-35a   35fbfde  tsc 0 / schema 0 / test 874/874 ; Store +31 nur Auswahl-UI-State (kein SceneDocument) ; Mutation shift add->replace = 1 rot ; Bundle 4dce1cc ; Sichtprobe Klick-Treppe -> Panel 'Treppe'
   I1        7bbf9ff  diff-filter=A: 110 Icon-SVG + _sprite + 3 Referenz-Docs ; kein Code (Nicht-Asset-Liste leer) ; Stichprobe 370-393 B valide SVG ; Selbstkorrektur 106(--stat gekuerzt)->110
+  AUF-30    56cc734  Auszug: schema 0 / test 788/788 0-skip / tsc 0 / build ok ; test-hooks nur .tsx via esbuild ; 6 renderPfad-Subtests ueber react-dom/server ; Gegen-Beweis A disabled-weg='Kante 4' rot, B zweck-Literal='Zweck im Markup' rot (je 5/1)
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
