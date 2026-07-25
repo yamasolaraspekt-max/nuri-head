@@ -4237,3 +4237,73 @@ Ein Test schließt aus, dass irgendein Zweig die Auswahl noch selbst setzt.
    angeschlossen**. Wer es verdrahtet, findet es vor.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ PLANNER — Externe Frontend-Bewertung, nachgemessen (Yama, 25.07.)
+
+**Gegenstand:** Bewertung einer weiteren Instanz (Fach 7/10 · Frontend-Architektur 5/10 ·
+Bedienbarkeit 5/10 · Browserreife „noch nicht bewertet"), Prüfstand `33ad6d6` plus uncommittete Arbeit.
+
+**Vorgehen:** Ich habe **jede prüfbare Zahl selbst nachgemessen**, statt sie zu übernehmen — dieselbe
+Pflicht, die für Generator-Berichte gilt, gilt für Fremdbewertungen erst recht.
+
+### Was ich bestätigen kann (gemessen)
+
+| Befund | Behauptung | meine Messung |
+|---|---|---|
+| Nr. 3 | `HausplanerApp.tsx` 2.052 Zeilen | **2052** — exakt |
+| Nr. 4 | Speichern steigt still aus | `hausplanerStore.ts:168-172` `if (!scene \|\| !speichernUrl) return;` — **kein Status, keine Meldung**; Knopf `HausplanerApp.tsx:1061-1067` ohne `disabled` |
+| Nr. 5 | feste Spaltenbreiten trotz 900-px-Einklappen | `320px` · `300px` · `220px` je 1×, Panel fest 268 px — **bestätigt** |
+| Nr. 6 | Leertaste fehlt an eigenen Schaltflächen | **8×** `role="button"`, **10×** `key === 'Enter'`, **1×** Leertaste — bestätigt |
+| Nr. 1 | Wizard zeigt erfundene Zustände | deckungsgleich mit meinem Befund B6 vom selben Abend — er nennt zusätzlich „Steckdosen automatisch" |
+
+**Verschärfung, die keiner von uns beiden hatte und die aus meiner Sichtprobe kommt:** Auf der
+Testfläche steht die Statusplakette auf **„Gespeichert · Rev. 1"** — auf einer Fläche, die
+konstruktionsbedingt nicht speichern kann, und im Widerspruch zum Warnhinweis „Testfläche — wird
+NICHT gespeichert" in derselben Kopfzeile. Nicht nur der Knopf verspricht zu viel; die Anzeige
+behauptet den Vollzug. **AUF-47.**
+
+### Wo ich widerspreche
+
+**(a) Rollen.** Die Bewertung schreibt *„Planner arbeitet gerade an AUF-33"*. **Der Planner baut
+nichts.** AUF-33 baut der Generator (nativ); ich habe den Auftrag geschrieben. Die Trennung ist keine
+Formalie — sie ist der Grund, warum in diesem Projekt niemand die eigene Arbeit abnimmt.
+
+**(b) Befund Nr. 2 misst eine Baustelle.** *„Quellcode und Bundle sind nicht derselbe Stand"* stimmt —
+aber der Posten ist **nicht gemeldet**. Ein Arbeitsbaum während der Arbeit ist kein Mangel. Die
+Regel, die er als Priorität 2 vorschlägt (*separat committen, Bundle reproduzierbar bauen, Hash
+browserseitig prüfen*), steht seit heute Nachmittag als **§8 der Laufzeiten-Ordnung** — und der
+Generator hat sie **dreimal in Folge** eingehalten (AUF-36 → `9a4623b`/`368f2d7`, AUF-35a →
+`4dce1cc`). Der Vorschlag ist richtig und bereits gültig.
+
+**(c) „Browserabnahme offen" gilt für seine Sitzung, nicht für den Stand.** Er schreibt, Chrome sei
+bei ihm nicht verfügbar. **Die Sichtprobe ist am selben Abend gelaufen** — alle fünf Ebenen bei
+1440/1024/375 px, neun Befunde, jeder im Code belegt:
+`docs/planner/ux-befund-layout-alle-ebenen-2026-07-25.md` (`68a7f7e`).
+
+### Eingeordnet
+
+| seine Nr. | Posten |
+|---|---|
+| 1 · Wizard erfindet Zustände | **AUF-39** (Auftrag liegt) |
+| 2 · Commit/Bundle-Trennung | **§8** — gültig, dreimal eingehalten |
+| 3 · `HausplanerApp` zerlegen | **AUF-48** — neu, **bewusst gesperrt** (s. u.) |
+| 4 · Speichern-Affordance | **AUF-47** — neu |
+| 5 · feste Spaltenbreiten | **AUF-46** erweitert auf 390/768/1024/1440 |
+| 6 · Dialogfokus, Leertaste | **AUF-49** — neu |
+
+**Warum AUF-48 gesperrt bleibt, obwohl der Befund richtig ist:** Ein Schnitt durch die meistberührte
+Datei des Projekts, während vier Posten in ihr arbeiten (AUF-33, AUF-38, AUF-43, AUF-45), erzeugt
+genau die Kollision, die AUF-22 verhindern soll. Zwei Instanzen in einer Datei war der teuerste
+Fehler dieser Woche. Der Umbau kommt — nach den Layout-Posten, nicht neben ihnen.
+
+**Seine Frage „Playwright verwenden?" hat eine bessere Antwort als ja oder nein:** Genau das ist
+**AUF-30** (Render-Pfad-Testinfra) — der einzige Posten der Tafel, der noch **nie** geprüft wurde,
+und zugleich die offene A2-Auflage 3. Die Testumgebung hat kein DOM (`node:test`,
+`--experimental-strip-types`, kein jsdom); Render-Tests sind heute **unmöglich**, nicht bloß
+ungeschrieben. Ein Playwright-Lauf als einmalige Sichtprobe wäre eine zweite Wahrheit neben der schon
+gelaufenen. Als **dauerhafte Render-Testinfra** wäre er die Antwort auf den ältesten offenen Posten.
+
+**Tafel:** Arbeitsvorrat 16 · Abnahme 7 · bei Yama 10 · Archiv 18 = **51**, geprüft.
+
