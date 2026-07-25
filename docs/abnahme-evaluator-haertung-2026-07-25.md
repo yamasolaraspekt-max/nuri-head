@@ -642,6 +642,41 @@ server-seitig und ist bewusst ausserhalb dieses Postens.
 jedes in Thema + Vertrag), der einzige Nicht-Dublette-Knopf bleibt inert und als Willensfrage benannt.
 Mutationsfest, am Schirm belegt. Dieselbe Sorte Ehrlichkeit wie I2/B8: nichts vortaeuschen, was nicht wirkt.
 
+## AUF-59 - Icon-Zeile macht drei Zustaende unterscheidbar (8f34fc5, Bundle ece8e43) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 8f34fc5 gemessen (/tmp-Auszug), dann Generator-Bericht.
+**Klasse: sichtbar** - Sichtprobe Teil der Abnahme. Direkt aus Yamas Beobachtung.
+
+- **Umfang (git show --name-status):** 4 Dateien - NEU dashboard/opKnopfZustand.ts +
+  __tests__/opKnopfZustand.test.ts ; M HausplanerApp.tsx, __tests__/keineKappung.test.ts.
+  store/domain/geometry/renderers/public: null.
+- **Der Mangel (bestaetigt):** bedienbar vs gesperrt unterschieden sich AUSSCHLIESSLICH in der
+  Icon-Farbe + Cursor; Rahmen/Grund/Deckkraft identisch; jeder Knopf trug einen Rahmen.
+- **Fix (Grep + Test):** opKnopfZustand.ts rein, liefert **Token, keine Farben** (Grep: Farbwerte nur
+  in Kommentaren, die den Alt-Zustand beschreiben; Test 'keine Farbwerte in der Regel - liefert Token').
+  schalter-ein: Rahmen (einziger); bedienbar: kein Rahmen/weiss/Deckkraft 1; gesperrt: kein Rahmen/
+  gedaempft/Deckkraft 0.6 -> gesperrt in DREI Merkmalen verschieden. **Regel liest gesperrt, entscheidet
+  nichts** (Test 'keine Sperre aendert sich') - die eine Wahrheit fuer disabled bleibt aussen.
+- **K2 (kein Test still verschwunden):** der AUF-26-Kappungs-Test wurde ERSETZT, nicht entfernt - neu
+  verriegelt er, dass die Textknoepfe weg sind + spiegeleGrundriss je Richtung genau 1x + mirror-Icons da.
+- **Gates im Auszug:** schema 0 . test **971/971 pass, 0 skip** (962->971) . tsc 0 . build ok.
+  9 opKnopfZustand-Subtests (>=2 Merkmale je Paar, Rahmen nur am Schalter, gesperrt schlaegt aktiv,
+  Regel liest nicht entscheidet, Token statt Farbe, Spiegel-Dublette weg aber Funktion+title bleiben).
+- **Gegen-Beweis (/tmp-Kopie):** gesperrt auf EINEN Unterschied zurueckgedreht (Grund+Deckkraft = wie
+  bedienbar, nur Icon-Farbe bleibt) -> **2 rot** ('gesperrt >=2 Merkmale' + 'jeder der drei >=2') (7/2).
+  Deckt Generator. (Teil-Mutation nur Deckkraft = 1 rot - der Grund-Unterschied blieb; offengelegt.)
+- **Sichtprobe (iframe 1440, fixture decke-treppe, Bundle ece8e43, getComputedStyle):** 11 Knoepfe,
+  **genau 2 mit sichtbarem Rahmen** = 'Raster' + 'Fang' (die eingeschalteten Schalter), kein anderer.
+  bedienbar (6): weisser Grund, Deckkraft 1. gesperrt (3): Grund rgb(242,244,246), **Deckkraft 0.6**.
+  -> gesperrt vs bedienbar in **Grund UND Deckkraft**, nicht nur Farbe. **Spiegeln-Textknoepfe
+  ('Links/Rechts','Oben/Unten') weg** - im Screenshot fehlt das 'Grundriss spiegeln'-Paar, das in
+  jedem frueheren Screenshot dieser Sitzung stand.
+
+**Urteil: FREIGABE.** Die drei Zustaende sind ueber mehrere Merkmale (Rahmen/Grund/Deckkraft)
+unterscheidbar, nicht mehr allein ueber Icon-Farbe (Frontend-Linse: Zustand nicht nur Farbe); die
+Regel liefert Token und entscheidet keine Sperre; die Spiegeln-Dublette ist auf EINEN Aufruf je
+Richtung reduziert. Mutationsfest, am Schirm gemessen. Genau Yamas Beobachtung behoben.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -674,6 +709,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-47    79bf47c  Auszug: schema 0 / test 948/948 0-skip / tsc 0 / build ok ; speicherAnzeige rein, kannSpeichern===false schlaegt alles, save() unberuehrt (Diff leer) ; 10 Subtests ; Gegen-Beweis Faehigkeit ausgehebelt = 2 rot ; Bundle fca2fc6 traegt 'wird nicht gespeichert' ; visuelle Sichtprobe AUFLAGE (Browser weg, nicht sichtgeprueft)
   AUF-53    b4e5f03  Auszug: schema 0 / test 956/956 0-skip / tsc 0 / build ok ; kein Tor-1 (keine PHP/Migration/Route) ; is_read-Falle vermieden (K4 import nirgends Aktion), RECHT_IMPORTIEREN=Hausplaner,add ; Insel erteilt nur update (nicht add) -> 8 bleiben gesperrt ; 8 Subtests ; Gegen-Beweis Mapping->update = 3 rot (Generator 4, Delta erklaert) ; Sichtprobe: kein sichtbarer Effekt (Vorarbeit, Grund im Tooltip)
   AUF-44    47addd1  Auszug: schema 0 / test 962/962 0-skip / tsc 0 / build ok ; ALLE(Katalog+Registry)=110, drehen/distanz-messen/bemassen/pdf je Katalog+Thema+Vertrag=true (einpassen fehlt korrekt) ; 6 Subtests ; Gegen-Beweis Knopf wieder eingesetzt = 2 rot ; Sichtprobe 1440: genau 1 '(geplant)' (einpassen), 4 tote weg, 15->11 ; Selbstkorrektur FEHLT-Artefakt (falsche Registry)
+  AUF-59    8f34fc5  Auszug: schema 0 / test 971/971 0-skip / tsc 0 / build ok ; opKnopfZustand rein (Token, keine Farbe), Regel liest gesperrt ; K2 Kappungs-Test ersetzt nicht entfallen ; 9 Subtests ; Gegen-Beweis gesperrt->1 Unterschied = 2 rot ; Sichtprobe 1440 getComputedStyle: 11 Knoepfe, 2 mit Rahmen (Raster/Fang), gesperrt Grund rgb(242,244,246)+Deckkraft 0.6 vs bedienbar weiss+1, Spiegeln-Textknoepfe weg
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
