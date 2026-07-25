@@ -564,3 +564,29 @@ schreibt `push-result.log`) und das Ergebnis hier als Zeile hinterlegen. Zu sich
 → Wenn Yamas native Session doch einmal zu ist, reißt die Kette — dann (und nur dann) ist der Cloud-Wecker
 als Notlauf zu reaktivieren. Der **Planner-Herzschlag** (send_later-Kette, 3 Min) läuft weiter: neuer Link
 `trig_01QUjFcMsVj1HRhicHJFQpvz`, Feuer 09:45.
+
+## ⇒ GENERATOR — PRÄZISIERUNG zu A1.3 (Planner, 2026-07-25 09:46, gemessen) + Push-Bitte an Yama
+**Ich korrigiere meine eigene Meldung von 09:39.** Ich hatte einen „Widerspruch" zwischen
+`__tests__/toolKatalog.test.ts:13` und dem Katalog-Inhalt gemeldet. Nach Messung des Tests gibt es **keinen
+Widerspruch — der Test ist korrekt und grün**:
+- `toolKatalog.test.ts:7` definiert `DTP` als **genau 11 namentlich genannte ids**: `content-collector`,
+  `content-placer`, `gradient`, `gradient-feather`, `text-wrap`, `format-text`, `effects`, `opacity`,
+  `libraries-panel`, `links-panel`, `share`. Test 1 sagt dazu wörtlich „54 CAD-Tools (65 minus 11 DTP)".
+- Diese 11 sind tatsächlich nicht im Katalog. Die Filterung hat also **stattgefunden — aber nur teilweise**:
+  weitere Layout-/DTP-Werkzeuge (`type`, `page`, `rectangle-frame`, `ellipse-frame`, `polygon-frame`,
+  `preflight`, `swatches-panel`, `pages-panel`, `object-style`, `pen`, `pencil`, `scissors`,
+  `normal-screen`, `preview-screen`, …) sind weiterhin drin.
+- **Folge für A1.3:** Der Kopfkommentar in `toolCatalog.ts` ist nicht „falsch erfunden", sondern **zu
+  pauschal**. Er ist so zu präzisieren: *„Aus 65 Quell-Werkzeugen wurden 11 namentlich genannte DTP-Tools
+  entfernt (siehe `__tests__/toolKatalog.test.ts`). Weitere Layout-Werkzeuge sind bewusst noch enthalten;
+  ihre Sichtbarkeit wird nicht durch Löschen, sondern über `toolPresentation.ts` (Zone `versteckt`)
+  geregelt."* — **`__tests__/toolKatalog.test.ts` bleibt unangetastet** (kein Beifang, der Test ist die
+  Belegstelle für die 65→54-Historie).
+- Die Abnahme-Zahlen von A1 ändern sich dadurch **nicht**: 63 Regeln / 7 fix / 2 kontext / 15 weitere /
+  39 versteckt (54−15), `verwaisteRegeln()` = [].
+
+## ⇒ YAMA — eine Bitte (blockiert nichts)
+`push-result.log` steht noch auf **Fr. 24.07. 23:21**, fork/backup liegen damit auf `9bcc9c3`. Lokal sind
+`cf54ffc` (A1-Auftrag) und `2b9d468` (Push-Freigabe) noch **ungesichert**. Aus der Cloud geht kein Push
+(403 vom Proxy). → Bitte einmal **Doppelklick auf `push-integration-sicher.command`** (bzw. der native
+Generator führt es aus). Nur `fork` + `backup-private`, nie `upstream`, kein `--force`.
