@@ -3127,3 +3127,46 @@ Fensterbreite** vorliegt. 375 px ist ohnehin offen.
 
 **Nichts davon nimmt eine Freigabe zurück.** Drei der vier Punkte sind Beleg-Hygiene, einer ist ein
 Widerspruch, der zu streichen ist. **Ballbesitz → Evaluator** für die vier Nacharbeiten.
+
+## ⇒ GENERATOR-BERICHT — AUF-31 UMGESETZT: `2deb6a5` — 101 IDs deutsch, neun Dubletten zusammengeführt
+Nach der Planner-Entscheidung (Weg 1) und Yamas Anordnung „alles auf Deutsch". **„umgesetzt", nicht
+„grün".**
+
+**Zahlen, gemessen:** Katalog **101** · Regeln **110** (9 Registry + 101 Katalog) · fix 7 ·
+kontext 2 · weitere 0 · versteckt 101 · `verwaisteRegeln()` **0** · `regelloseWerkzeuge()` **0**.
+**Eindeutige Werkzeuge unverändert 110** — die neun waren doppelt, nicht zusätzlich.
+
+**Grenze 1 gewahrt (die neun Bestands-IDs byte-genau):** Der `git diff` auf `toolRegistry.ts` enthält
+**keine einzige `id:`-Zeile**. Angereichert wurden nur leere Felder (`meaning`, `usageArea`, `group`,
+`tooltip`) — additiv, kein Bestandsfeld geändert.
+
+**Icons:** 110 Dateien per **`git mv`** umbenannt, kein `rm`, keine Kopie; Sprite-Symbol-IDs
+mitgezogen. Belegt: **0** Ziel-Icons fehlen, **0** alte Dateinamen übrig, 111 Dateien wie vorher.
+
+**Die harte Grenze zwischen Anzeige und Speicherung ist gebaut:** `SCHEMA_SCHUTZWERT` in
+`paketAdapter.ts` bildet **16** deutsche UI-IDs auf ihren englischen Schema-Wert ab
+(`type`/`objectType`/`zoneType`/`routeType`), inklusive `slab→ceiling` und `stairs→stair`.
+**Kein Zod, kein Schema, keine Migration** — `schema:hausplaner:check` ist **ohne Regen** grün.
+Stichprobe: `wand→wall` · `decke→ceiling` · `treppe→stair` · `tuer→door` · `raum→room`.
+
+### ⚠ Zwei Fehler in der führenden Tabelle — korrigiert nach ihrer eigenen Konvention, hiermit gemeldet
+| # | Label | Tabelle sagt | gesetzt |
+|--:|---|---|---|
+| 41 | Öffnung | `ffnung` | **`oeffnung`** |
+| 98 | Übergabepaket | `bergabepaket` | **`uebergabepaket`** |
+
+Bei beiden ist der **führende Umlaut verschluckt** worden; die Konvention der Tabelle lautet
+ausdrücklich `ö→oe`, `ü→ue`. `ffnung.svg` wäre ein unbrauchbarer Dateiname gewesen. Ich habe die
+Tabelle **nicht** stillschweigend übergangen — sie ist führend, deshalb steht die Abweichung hier und
+in der Commit-Botschaft. **Bitte die Tabelle nachziehen.** Ein dritter Verdachtsfall (#40
+`beam→unterzug`) ist **korrekt**: die Konvention nimmt den ersten Begriff vor dem Schrägstrich.
+
+**Gate, HEAD vor == nach:** `tsc` **0** · `schema:check` **0** · `test` **788/788 pass, 0 fail** ·
+`build` **0**.
+
+**Was jetzt gilt:** Der Nutzer sieht ausschließlich Deutsch — Labels, IDs, Icon-Dateinamen,
+Kategorien. Die gespeicherten Szenen sind unberührt; wer eine alte Szene öffnet, bekommt kein 422.
+
+**Ballbesitz → Evaluator.** Offen bleibt aus meiner Sicht der Schritt, der Yama wirklich etwas zeigt:
+die **Darstellung** der Leiste aus den Zonen (Stern, Überlauf, Befehlspalette) — sie hängt an der
+Entscheidung, **wo die persönlichen Anheftungen gespeichert werden** (I3-Bericht).
