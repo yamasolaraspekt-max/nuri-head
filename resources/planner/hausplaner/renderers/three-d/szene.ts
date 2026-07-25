@@ -13,8 +13,10 @@
  * WebGL-Ressourcen vollständig frei (6). Klemm-Segmente (Kante 2) rendern sichtbar
  * in Warnfarbe — nie stillschweigend „passend gerechnet".
  *
- * Farben (UX-Rahmen): neutral — Wände Grau, Böden hell; Auswahl = Marken-Grün #93c21c;
- * Klemm-Markierung Amber. Keine Statusfarben-Zweckentfremdung.
+ * Farben (UX-Rahmen): neutral — Wände Grau, Böden hell; Auswahl = `FARBE_AUSWAHL` #a3e635
+ * (three-eigene Palette, NICHT das Marken-Token `T.brand` #7fae1c); Klemm-Markierung Amber.
+ * Keine Statusfarben-Zweckentfremdung. Ob diese Palette Markenfarbe werden soll, ist offen
+ * (Posten T2b, Yama) — hier wird kein Farbwert geändert, nur benannt, was tatsächlich gilt.
  */
 
 import * as THREE from 'three';
@@ -87,7 +89,7 @@ const FARBE_WAND = 0xd9dee5;      // heller Putz — Form über Schatten + Kante
 const FARBE_BODEN = 0xe3d8c4;     // warmer, klar erkennbarer Bodenton (hebt sich von Wänden/Hintergrund ab)
 const FARBE_DECKE = 0xeef0f2;     // helle, kühle Decke — nur von unten/innen sichtbar (Rückseiten-Culling)
 const FARBE_DACH = 0xc0895f;      // Terrakotta/Braun (neutral, keine Statusfarbe)
-const FARBE_AUSWAHL = 0xa3e635;   // Marken-/Akzent-Grün (einzige Akzentfarbe)
+const FARBE_AUSWAHL = 0xa3e635;   // #a3e635 Lime — einzige Akzentfarbe dieses Renderers; NICHT T.brand (#7fae1c)
 const FARBE_GEKLEMMT = 0xe8b93c;  // Amber — Kante 2 sichtbar markiert
 
 export class HausplanerDreiDSzene implements RendererAdapter {
