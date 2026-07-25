@@ -2448,3 +2448,58 @@ bleibt Pflicht** und ist Sache des messenden Strangs; dieser Test verhindert nur
 
 **Ballbesitz → Evaluator (Cowork-Strang, misst).** Bitte die drei Pflicht-Viewports am echten
 Rendern prüfen — insbesondere, ob die umgebrochene Reiterzeile bei 375 px noch bedienbar bleibt.
+
+---
+
+## ⇒ SITZUNGSENDE — Cowork-Strang wird geschlossen (Yama, 25.07.)
+
+**Entscheidung Yamas:** Der Cowork-Strang wird nicht weitergeführt. Diese Zeile schließt ihn
+ordentlich ab, damit kein Posten in der Luft hängt.
+
+### Was aus diesem Strang im Repo liegt — alles committet, nichts nur im Chat
+
+| Commit | Inhalt |
+|---|---|
+| `51a718e` | Vorlagen-Deckung gemessen: 24 Bausteine, 13 gerendert / 5 nur Daten / 11 fehlen |
+| `cf5d388` | Evaluator-Auftrag Dashboard v2 Batch 1 — **die Lücke, wegen der AUF-12 feststeckte** |
+| `5d47ff1` | Evaluator-Votum Batch 1 + Richtigstellung K6 (0 behauptet, 30 gemessen) |
+| `601f411` | Nachtrag zum v2-Auftrag: Build nicht ausführbar, Bundle unberührt, K6 neu geschnitten |
+| `db95dff` | Evaluator-Auftrag Batch 2 |
+| `7cc040c` | **Icon-Inventur**: 9 gerendert / 54 Katalog (47 DTP-Erbe) / 110 im Paket, 94 ohne Entsprechung |
+| `c1c60ea` | **Entscheidung ID-Sprache**: englisch, Labels deutsch, bei Konflikt gilt das Schema |
+| `d2c52b2` · `7bbf9ff` | Auftrag + Umsetzung I1 — **110 Werkzeug-Icons abgelegt** |
+| `6d4b279` | Evaluator-Votum A1 (Wiederholung) — **entsperrte AUF-4 = L1** |
+| `db88313` | Strang-Zuteilung + **erste Browser-Sichtprobe** des Projekts |
+| `0515511` | **UX/IA-Befund am echten Rendern** — AUF-26/27/28 |
+| `8dc8cb6` | Vorschlag Laufzeiten und Takt (bleibt Vorschlag, nicht freigegeben) |
+
+### Drei Befunde, die ohne die Browser-Sichtprobe unentdeckt geblieben wären
+
+1. **Der vierte Panel-Reiter „Historie" ist auf dem Schirm unsichtbar** — im Test grün, bei 1375 px
+   gekappt. Kriterium K3 gilt als erfüllt und ist es nicht. → **AUF-26**
+2. **Die Navi zeigt dem Nutzer 15 DTP-Werkzeuge als „in Entwicklung"**, die nie kommen. → **AUF-28**
+3. **Die linke Spalte macht drei Jobs** in einer Scroll-Höhe; der neu gebaute Projektbrowser ist
+   erst nach ~20 Scroll-Ticks sichtbar. → **AUF-27**
+
+**Diese drei Posten bleiben offen und gehören jetzt dem nativen Strang.** Sie hängen an der
+A2-Abnahme (`acdb987`).
+
+### Was ohne Cowork künftig fehlt — damit es niemand vergisst
+
+Die **Browser-Sichtprobe**. `fahrplan-frontend-layout-hausplaner.md` L7 und die UI-Bauordnung
+verlangen Messung an drei Viewports (1440/1024/375) mit Screenshot-Beleg, und beide Dashboard-Abnahmen
+führen „nicht sichtgeprüft" als offenen Punkt. Wer das künftig fährt — native Chrome-Anbindung oder
+Yama von Hand — ist zu klären. **Ein Test ersetzt es nicht: alle drei Befunde oben waren testgrün.**
+
+### Ballbesitz nach dem Schließen
+
+- **Evaluator (nativ, frisch):** A2 `acdb987`. Danach fallen AUF-24, 26, 27, 28 und I2/I3 frei.
+- **Evaluator (nativ):** die sechs Härtungsvoten aus dem Chat in den Ledger committen —
+  sie räumen sechs Tafelzeilen auf einmal ab.
+- **Generator (nativ):** L4 (AUF-25, in Arbeit), danach AUF-26.
+- **Yama:** die Engine für **L2** (Empfehlung U-Wert) — die einzige offene Willensfrage, die das
+  Layout blockiert. Alle übrigen blockieren nichts.
+
+**Geparkt, nicht verloren:** `docs/auftraege/l4-generator-beiseite-25-07/` — Entwurf mit 19 gemessenen
+Fachplaner-Flächen und fünf echten Engine-DTO-Zuordnungen. Materialspende für den nativen L4-Bau,
+außerhalb von `resources/`, damit nichts kollidiert.
