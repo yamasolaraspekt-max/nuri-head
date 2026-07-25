@@ -1,0 +1,1761 @@
+[
+  {
+    "id": "select",
+    "label": "Auswahl",
+    "category": "Auswahl",
+    "icon": "icons/select.svg",
+    "variant": "cursor",
+    "function": "Einzelne Objekte auswählen.",
+    "usage": "Alle Workspaces; Ausgangspunkt jeder Bearbeitung.",
+    "shortcut": "V",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "primary",
+    "canPin": true
+  },
+  {
+    "id": "direct-select",
+    "label": "Direktauswahl",
+    "category": "Auswahl",
+    "icon": "icons/direct-select.svg",
+    "variant": "cursor-direct",
+    "function": "Punkte, Kanten oder Teilflächen auswählen.",
+    "usage": "Geometrische Detailkorrektur.",
+    "shortcut": "A",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "box-select",
+    "label": "Rechteckauswahl",
+    "category": "Auswahl",
+    "icon": "icons/box-select.svg",
+    "variant": "box-select",
+    "function": "Mehrere Objekte mit Auswahlrahmen erfassen.",
+    "usage": "Grundriss, Fassaden, technische Netze.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "lasso-select",
+    "label": "Lassoauswahl",
+    "category": "Auswahl",
+    "icon": "icons/lasso-select.svg",
+    "variant": "lasso",
+    "function": "Unregelmäßige Objektgruppen auswählen.",
+    "usage": "Komplexe Grundrisse und TGA-Bereiche.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "move",
+    "label": "Verschieben",
+    "category": "Bearbeiten",
+    "icon": "icons/move.svg",
+    "variant": "move",
+    "function": "Objekte entlang X, Y oder Z verschieben.",
+    "usage": "Alle bearbeitbaren Fachobjekte.",
+    "shortcut": "G",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "primary",
+    "canPin": true
+  },
+  {
+    "id": "rotate",
+    "label": "Drehen",
+    "category": "Bearbeiten",
+    "icon": "icons/rotate.svg",
+    "variant": "rotate",
+    "function": "Objekte um einen Bezugspunkt drehen.",
+    "usage": "Möbel, Bauteile, Referenzen.",
+    "shortcut": "R",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "scale",
+    "label": "Skalieren",
+    "category": "Bearbeiten",
+    "icon": "icons/scale.svg",
+    "variant": "scale",
+    "function": "Freie Geometrie proportional oder achsweise skalieren.",
+    "usage": "Importe, Referenzen und freie Objekte.",
+    "shortcut": "S",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "mirror-horizontal",
+    "label": "Horizontal spiegeln",
+    "category": "Bearbeiten",
+    "icon": "icons/mirror-horizontal.svg",
+    "variant": "mirror-h",
+    "function": "Objekt an vertikaler Achse spiegeln.",
+    "usage": "Grundrisse, Türen, Fensterteilungen.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "mirror-vertical",
+    "label": "Vertikal spiegeln",
+    "category": "Bearbeiten",
+    "icon": "icons/mirror-vertical.svg",
+    "variant": "mirror-v",
+    "function": "Objekt an horizontaler Achse spiegeln.",
+    "usage": "Dachkonturen, Symmetrien.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "copy",
+    "label": "Kopieren",
+    "category": "Bearbeiten",
+    "icon": "icons/copy.svg",
+    "variant": "copy",
+    "function": "Auswahl in Zwischenablage kopieren.",
+    "usage": "Alle Workspaces.",
+    "shortcut": "Ctrl/Cmd+C",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "duplicate",
+    "label": "Duplizieren",
+    "category": "Bearbeiten",
+    "icon": "icons/duplicate.svg",
+    "variant": "copy",
+    "function": "Sofortige Kopie am aktuellen Ort erzeugen.",
+    "usage": "Fenster, Möbel, technische Objekte.",
+    "shortcut": "Ctrl/Cmd+D",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "primary",
+    "canPin": true
+  },
+  {
+    "id": "delete",
+    "label": "Löschen",
+    "category": "Bearbeiten",
+    "icon": "icons/delete.svg",
+    "variant": "delete",
+    "function": "Auswahl nach Abhängigkeitsprüfung entfernen.",
+    "usage": "Alle bearbeitbaren Objekte.",
+    "shortcut": "Delete",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "lock",
+    "label": "Sperren",
+    "category": "Bearbeiten",
+    "icon": "icons/lock.svg",
+    "variant": "lock",
+    "function": "Objekt vor Änderungen schützen.",
+    "usage": "Referenzen, freigegebene Bauteile.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "unlock",
+    "label": "Entsperren",
+    "category": "Bearbeiten",
+    "icon": "icons/unlock.svg",
+    "variant": "unlock",
+    "function": "Bearbeitung gesperrter Objekte zulassen.",
+    "usage": "Berechtigte Nutzer.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "show",
+    "label": "Einblenden",
+    "category": "Bearbeiten",
+    "icon": "icons/show.svg",
+    "variant": "eye",
+    "function": "Ausgeblendete Objekte sichtbar machen.",
+    "usage": "Layer- und Modellsteuerung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "hide",
+    "label": "Ausblenden",
+    "category": "Bearbeiten",
+    "icon": "icons/hide.svg",
+    "variant": "eye-off",
+    "function": "Objekte temporär ausblenden.",
+    "usage": "Koordination und Modellprüfung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "group",
+    "label": "Gruppieren",
+    "category": "Bearbeiten",
+    "icon": "icons/group.svg",
+    "variant": "group",
+    "function": "Mehrere Objekte als Gruppe behandeln.",
+    "usage": "Möbel, Symbole, technische Komponenten.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "align",
+    "label": "Ausrichten",
+    "category": "Bearbeiten",
+    "icon": "icons/align.svg",
+    "variant": "align",
+    "function": "Objekte an Kante, Achse oder Mitte ausrichten.",
+    "usage": "Innenraum, Fassaden, Elektro.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "distribute",
+    "label": "Verteilen",
+    "category": "Bearbeiten",
+    "icon": "icons/distribute.svg",
+    "variant": "distribute",
+    "function": "Objekte gleichmäßig verteilen.",
+    "usage": "Fenster, Leuchten, PV-Module.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "line",
+    "label": "Linie",
+    "category": "Zeichnen",
+    "icon": "icons/line.svg",
+    "variant": "line",
+    "function": "Gerade Linie zwischen zwei Punkten zeichnen.",
+    "usage": "Hilfsgeometrie und technische Zeichnung.",
+    "shortcut": "L",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "polyline",
+    "label": "Polylinie",
+    "category": "Zeichnen",
+    "icon": "icons/polyline.svg",
+    "variant": "polyline",
+    "function": "Zusammenhängende Liniensegmente zeichnen.",
+    "usage": "Konturen, Leitungswege und Grundstücke.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "rectangle",
+    "label": "Rechteck",
+    "category": "Zeichnen",
+    "icon": "icons/rectangle.svg",
+    "variant": "rectangle",
+    "function": "Rechteckige Kontur erzeugen.",
+    "usage": "Räume, Öffnungen und Flächen.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "polygon",
+    "label": "Polygon",
+    "category": "Zeichnen",
+    "icon": "icons/polygon.svg",
+    "variant": "polygon",
+    "function": "Freie geschlossene Kontur zeichnen.",
+    "usage": "Dächer, Grundstücke und Zonen.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "circle",
+    "label": "Kreis",
+    "category": "Zeichnen",
+    "icon": "icons/circle.svg",
+    "variant": "circle",
+    "function": "Kreis über Mittelpunkt und Radius erzeugen.",
+    "usage": "Runde Bauteile und Schächte.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "arc",
+    "label": "Bogen",
+    "category": "Zeichnen",
+    "icon": "icons/arc.svg",
+    "variant": "arc",
+    "function": "Kreisbogen oder tangentialen Bogen erzeugen.",
+    "usage": "Bogenwände und Leitungsführung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "trim",
+    "label": "Trimmen",
+    "category": "CAD",
+    "icon": "icons/trim.svg",
+    "variant": "trim",
+    "function": "Überstehende Linien an Begrenzungen abschneiden.",
+    "usage": "Grundriss- und Detailkorrektur.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "extend",
+    "label": "Verlängern",
+    "category": "CAD",
+    "icon": "icons/extend.svg",
+    "variant": "extend",
+    "function": "Linien bis zu einer Begrenzung verlängern.",
+    "usage": "Wände, Achsen, Leitungen.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "offset",
+    "label": "Versatz",
+    "category": "CAD",
+    "icon": "icons/offset.svg",
+    "variant": "offset",
+    "function": "Parallele Kopie mit festem Abstand erzeugen.",
+    "usage": "Wände, Installationszonen, Dachüberstand.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "split",
+    "label": "Teilen",
+    "category": "CAD",
+    "icon": "icons/split.svg",
+    "variant": "split",
+    "function": "Linie oder Fachobjekt an einem Punkt teilen.",
+    "usage": "Wände, Leitungen, Dachflächen.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "join",
+    "label": "Verbinden",
+    "category": "CAD",
+    "icon": "icons/join.svg",
+    "variant": "join",
+    "function": "Getrennte Segmente oder Objekte verbinden.",
+    "usage": "Konturen, Leitungsnetze.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "wall",
+    "label": "Wand",
+    "category": "Architektur",
+    "icon": "icons/wall.svg",
+    "variant": "wall",
+    "function": "Parametrische Wand mit Aufbau, Höhe und Dicke erzeugen.",
+    "usage": "Architektur, Bauphysik, Heizlast.",
+    "shortcut": "W",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "primary",
+    "canPin": true
+  },
+  {
+    "id": "room",
+    "label": "Raum",
+    "category": "Architektur",
+    "icon": "icons/room.svg",
+    "variant": "room",
+    "function": "Geschlossene Raumkontur erkennen oder erzeugen.",
+    "usage": "Grundriss, Heizlast, Innenraum.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "door",
+    "label": "Tür",
+    "category": "Architektur",
+    "icon": "icons/door.svg",
+    "variant": "door",
+    "function": "Türöffnung und Türelement platzieren.",
+    "usage": "Architektur, Bad, Küche.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "window",
+    "label": "Fenster",
+    "category": "Architektur",
+    "icon": "icons/window.svg",
+    "variant": "window",
+    "function": "Fenster mit Profil, Glas und Öffnungsart platzieren.",
+    "usage": "Architektur, Fassade, Heizlast.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "stairs",
+    "label": "Treppe",
+    "category": "Architektur",
+    "icon": "icons/stairs.svg",
+    "variant": "stairs",
+    "function": "Treppe zwischen Ebenen parametrisch erzeugen.",
+    "usage": "Erschließung und Schnittplanung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "roof",
+    "label": "Dach",
+    "category": "Architektur",
+    "icon": "icons/roof.svg",
+    "variant": "roof",
+    "function": "Dach aus Kontur oder Dachform erzeugen.",
+    "usage": "Dachplanung und Bauphysik.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "dormer",
+    "label": "Gaube",
+    "category": "Architektur",
+    "icon": "icons/dormer.svg",
+    "variant": "dormer",
+    "function": "Gaube mit Dachöffnung und Seitenwänden einsetzen.",
+    "usage": "Dachplanung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "roof-window",
+    "label": "Dachfenster",
+    "category": "Architektur",
+    "icon": "icons/roof-window.svg",
+    "variant": "roof-window",
+    "function": "Dachfenster in geneigter Dachfläche platzieren.",
+    "usage": "Dachplanung, Heizlast.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "column",
+    "label": "Stütze",
+    "category": "Architektur",
+    "icon": "icons/column.svg",
+    "variant": "column",
+    "function": "Tragende oder gestalterische Stütze setzen.",
+    "usage": "Architektur und Tragwerk.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "beam",
+    "label": "Unterzug / Träger",
+    "category": "Architektur",
+    "icon": "icons/beam.svg",
+    "variant": "beam",
+    "function": "Horizontalen Träger oder Unterzug erzeugen.",
+    "usage": "Tragwerk und Kollisionsprüfung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "opening",
+    "label": "Öffnung",
+    "category": "Architektur",
+    "icon": "icons/opening.svg",
+    "variant": "opening",
+    "function": "Durchbruch in Wand, Decke, Boden oder Dach erzeugen.",
+    "usage": "Architektur und TGA.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "floor",
+    "label": "Boden",
+    "category": "Architektur",
+    "icon": "icons/floor.svg",
+    "variant": "floor",
+    "function": "Bodenfläche und Bodenaufbau erzeugen.",
+    "usage": "Innenraum, Bauphysik.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "slab",
+    "label": "Decke / Bodenplatte",
+    "category": "Architektur",
+    "icon": "icons/slab.svg",
+    "variant": "slab",
+    "function": "Massive oder mehrschichtige Decke erzeugen.",
+    "usage": "Architektur, Statik, Heizlast.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "section",
+    "label": "Schnitt",
+    "category": "Architektur",
+    "icon": "icons/section.svg",
+    "variant": "section",
+    "function": "Schnittlinie und abgeleitete Schnittansicht erzeugen.",
+    "usage": "Treppen, Dächer, TGA.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "elevation",
+    "label": "Fassade / Ansicht",
+    "category": "Architektur",
+    "icon": "icons/elevation.svg",
+    "variant": "elevation",
+    "function": "Orthogonale Gebäudeansicht erzeugen.",
+    "usage": "Fassade, Fenster, Dokumentation.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "zoom-in",
+    "label": "Vergrößern",
+    "category": "Ansicht",
+    "icon": "icons/zoom-in.svg",
+    "variant": "zoom-in",
+    "function": "Ansicht schrittweise vergrößern.",
+    "usage": "Detailbearbeitung.",
+    "shortcut": "+",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "zoom-out",
+    "label": "Verkleinern",
+    "category": "Ansicht",
+    "icon": "icons/zoom-out.svg",
+    "variant": "zoom-out",
+    "function": "Ansicht schrittweise verkleinern.",
+    "usage": "Modellübersicht.",
+    "shortcut": "-",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "fit-view",
+    "label": "Alles anzeigen",
+    "category": "Ansicht",
+    "icon": "icons/fit-view.svg",
+    "variant": "fit",
+    "function": "Modell oder Referenz vollständig einpassen.",
+    "usage": "Alle Workspaces.",
+    "shortcut": "Shift+F",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "pan",
+    "label": "Pan / Hand",
+    "category": "Ansicht",
+    "icon": "icons/pan.svg",
+    "variant": "pan",
+    "function": "Canvas verschieben, ohne Geometrie zu ändern.",
+    "usage": "2D und 3D.",
+    "shortcut": "Space",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "orbit",
+    "label": "Orbit",
+    "category": "Ansicht",
+    "icon": "icons/orbit.svg",
+    "variant": "orbit",
+    "function": "3D-Kamera um Fokuspunkt drehen.",
+    "usage": "3D-Ansicht.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "grid",
+    "label": "Raster",
+    "category": "Ansicht",
+    "icon": "icons/grid.svg",
+    "variant": "grid",
+    "function": "Zeichenraster ein- oder ausblenden.",
+    "usage": "2D, Import, Grundriss.",
+    "shortcut": "G",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "snap",
+    "label": "Fang",
+    "category": "Ansicht",
+    "icon": "icons/snap.svg",
+    "variant": "snap",
+    "function": "Fang an Raster, Kanten, End- und Schnittpunkten.",
+    "usage": "Präzises Zeichnen.",
+    "shortcut": "S",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "measure-distance",
+    "label": "Distanz messen",
+    "category": "Messen",
+    "icon": "icons/measure-distance.svg",
+    "variant": "measure",
+    "function": "Temporäre Distanz zwischen zwei Punkten messen.",
+    "usage": "Alle Planungsbereiche.",
+    "shortcut": "M",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "dimension",
+    "label": "Bemaßen",
+    "category": "Messen",
+    "icon": "icons/dimension.svg",
+    "variant": "dimension",
+    "function": "Persistente technische Maßlinie erzeugen.",
+    "usage": "2D, Schnitt, Fassade.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "measure-angle",
+    "label": "Winkel messen",
+    "category": "Messen",
+    "icon": "icons/measure-angle.svg",
+    "variant": "angle",
+    "function": "Winkel zwischen Linien oder Flächen messen.",
+    "usage": "Dach, Treppe, Leitungen.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "measure-area",
+    "label": "Fläche messen",
+    "category": "Messen",
+    "icon": "icons/measure-area.svg",
+    "variant": "area",
+    "function": "Geschlossene Fläche ermitteln.",
+    "usage": "Räume, Fassaden, Dächer.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "measure-volume",
+    "label": "Volumen messen",
+    "category": "Messen",
+    "icon": "icons/measure-volume.svg",
+    "variant": "volume",
+    "function": "Körper- oder Raumvolumen ermitteln.",
+    "usage": "Heizlast, TGA.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "import-file",
+    "label": "Datei importieren",
+    "category": "Import",
+    "icon": "icons/import-file.svg",
+    "variant": "import",
+    "function": "PDF, Bild, DWG, DXF, IFC oder SVG laden.",
+    "usage": "Import & Nachzeichnen.",
+    "shortcut": "I",
+    "views": [
+      "2D"
+    ],
+    "priority": "primary",
+    "canPin": true
+  },
+  {
+    "id": "import-image",
+    "label": "Bild importieren",
+    "category": "Import",
+    "icon": "icons/import-image.svg",
+    "variant": "image",
+    "function": "Rasterbild oder Scan als Referenz laden.",
+    "usage": "Bestandsgrundrisse.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "calibrate",
+    "label": "Kalibrieren",
+    "category": "Import",
+    "icon": "icons/calibrate.svg",
+    "variant": "calibrate",
+    "function": "Bildmaßstab über bekannte Strecke bestimmen.",
+    "usage": "Grundrissimport.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "crop",
+    "label": "Beschneiden",
+    "category": "Import",
+    "icon": "icons/crop.svg",
+    "variant": "crop",
+    "function": "Referenz auf relevanten Bereich beschneiden.",
+    "usage": "PDF und Bild.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "set-north",
+    "label": "Nordrichtung setzen",
+    "category": "Import",
+    "icon": "icons/set-north.svg",
+    "variant": "north",
+    "function": "Nordrichtung und Gebäudebezug festlegen.",
+    "usage": "Import, PV, Verschattung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "recognize",
+    "label": "Grundriss erkennen",
+    "category": "Import",
+    "icon": "icons/recognize.svg",
+    "variant": "detect",
+    "function": "Wände, Räume, Fenster, Türen und Maße erkennen.",
+    "usage": "KI-/Regelerkennung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "ai-assistant",
+    "label": "KI-Assistent",
+    "category": "Import",
+    "icon": "icons/ai-assistant.svg",
+    "variant": "ai",
+    "function": "Vorschläge, Erkennung und Korrektur unterstützen.",
+    "usage": "Import, Planung, Prüfung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "approve-detection",
+    "label": "Erkennung bestätigen",
+    "category": "Import",
+    "icon": "icons/approve-detection.svg",
+    "variant": "check",
+    "function": "Erkanntes Objekt als Fachobjekt übernehmen.",
+    "usage": "Review-Modus.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "material",
+    "label": "Material zuweisen",
+    "category": "Material",
+    "icon": "icons/material.svg",
+    "variant": "material",
+    "function": "Technisches oder sichtbares Material zuordnen.",
+    "usage": "Fassade, Fenster, Türen, Dach.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "texture",
+    "label": "Textur / PBR",
+    "category": "Material",
+    "icon": "icons/texture.svg",
+    "variant": "texture",
+    "function": "PBR-Texturensatz und Mapping wählen.",
+    "usage": "3D-Darstellung und Rendering.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "paint",
+    "label": "Material aufnehmen",
+    "category": "Material",
+    "icon": "icons/paint.svg",
+    "variant": "paint",
+    "function": "Material von Objekt übernehmen und übertragen.",
+    "usage": "Innenraum und Fassade.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "facade",
+    "label": "Fassadensystem",
+    "category": "Fassade",
+    "icon": "icons/facade.svg",
+    "variant": "facade",
+    "function": "Putz, Klinker, Holz oder Plattensystem zuweisen.",
+    "usage": "Fassadenplanung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "brick",
+    "label": "Klinker / Verband",
+    "category": "Fassade",
+    "icon": "icons/brick.svg",
+    "variant": "brick",
+    "function": "Klinkerformat, Fuge und Verband konfigurieren.",
+    "usage": "Fassade.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "insulation",
+    "label": "Dämmung",
+    "category": "Bauphysik",
+    "icon": "icons/insulation.svg",
+    "variant": "insulation",
+    "function": "Dämmstoff und Dämmstärke festlegen.",
+    "usage": "Wand, Dach, Decke, Boden.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "u-value",
+    "label": "U-Wert",
+    "category": "Bauphysik",
+    "icon": "icons/u-value.svg",
+    "variant": "uvalue",
+    "function": "U-Wert berechnen, prüfen oder überschreiben.",
+    "usage": "Heizlast und Bauphysik.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "thermal-envelope",
+    "label": "Thermische Hülle",
+    "category": "Bauphysik",
+    "icon": "icons/thermal-envelope.svg",
+    "variant": "thermal",
+    "function": "Wärmeübertragende Gebäudehülle markieren.",
+    "usage": "Heizlast-Datencheck.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "ventilation",
+    "label": "Lüftung",
+    "category": "Bauphysik",
+    "icon": "icons/ventilation.svg",
+    "variant": "ventilation",
+    "function": "Lüftungszonen und Luftwechsel definieren.",
+    "usage": "Heizlast und TGA.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "radiator",
+    "label": "Heizkörper",
+    "category": "Heizung",
+    "icon": "icons/radiator.svg",
+    "variant": "radiator",
+    "function": "Heizkörper platzieren und auf Raumheizlast auslegen.",
+    "usage": "Heizung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "floor-heating",
+    "label": "Fußbodenheizung",
+    "category": "Heizung",
+    "icon": "icons/floor-heating.svg",
+    "variant": "floor-heating",
+    "function": "Heizfläche, Sperrflächen und Heizkreise planen.",
+    "usage": "Heizung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "pipe",
+    "label": "Rohrleitung",
+    "category": "TGA",
+    "icon": "icons/pipe.svg",
+    "variant": "pipe",
+    "function": "Rohr mit System, Dimension, Höhe und Gefälle zeichnen.",
+    "usage": "Sanitär, Heizung, Kälte.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "pump",
+    "label": "Pumpe",
+    "category": "Heizung",
+    "icon": "icons/pump.svg",
+    "variant": "pump",
+    "function": "Pumpe platzieren und Förderdaten zuweisen.",
+    "usage": "Hydraulik.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "heat-pump",
+    "label": "Wärmepumpe",
+    "category": "Heizung",
+    "icon": "icons/heat-pump.svg",
+    "variant": "heatpump",
+    "function": "Wärmepumpe platzieren und auslegen.",
+    "usage": "Wärmeerzeugung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "hydraulic-balance",
+    "label": "Hydraulischer Abgleich",
+    "category": "Heizung",
+    "icon": "icons/hydraulic-balance.svg",
+    "variant": "hydraulic",
+    "function": "Volumenströme, Druckverluste und Ventile abgleichen.",
+    "usage": "Heizsystem.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "sanitary",
+    "label": "Sanitäranschluss",
+    "category": "Sanitär",
+    "icon": "icons/sanitary.svg",
+    "variant": "sanitary",
+    "function": "Wasser- und Abwasseranschlüsse definieren.",
+    "usage": "Bad, Küche, TGA.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "bath",
+    "label": "Badewanne",
+    "category": "Bad",
+    "icon": "icons/bath.svg",
+    "variant": "bath",
+    "function": "Badewanne mit Bewegungs- und Anschlussflächen platzieren.",
+    "usage": "Badplanung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "shower",
+    "label": "Dusche",
+    "category": "Bad",
+    "icon": "icons/shower.svg",
+    "variant": "shower",
+    "function": "Dusche, Rinne und Gefällebereich planen.",
+    "usage": "Badplanung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "toilet",
+    "label": "WC",
+    "category": "Bad",
+    "icon": "icons/toilet.svg",
+    "variant": "toilet",
+    "function": "WC mit Vorwand, Abwasser und Bewegungsfläche platzieren.",
+    "usage": "Badplanung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "kitchen",
+    "label": "Küchenplanung",
+    "category": "Küche",
+    "icon": "icons/kitchen.svg",
+    "variant": "kitchen",
+    "function": "Küchenform und Arbeitszonen anlegen.",
+    "usage": "Küchenplanung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "cabinet",
+    "label": "Schrank",
+    "category": "Küche",
+    "icon": "icons/cabinet.svg",
+    "variant": "cabinet",
+    "function": "Küchenschrank oder Möbelmodul konfigurieren.",
+    "usage": "Küche und Innenraum.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "appliance",
+    "label": "Gerät",
+    "category": "Küche",
+    "icon": "icons/appliance.svg",
+    "variant": "appliance",
+    "function": "Elektro- oder Küchengerät einsetzen.",
+    "usage": "Küche, Elektro.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "electric",
+    "label": "Elektroplanung",
+    "category": "Elektro",
+    "icon": "icons/electric.svg",
+    "variant": "electric",
+    "function": "Elektro-Workspace und Systemfunktionen öffnen.",
+    "usage": "Elektroplanung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "socket",
+    "label": "Steckdose",
+    "category": "Elektro",
+    "icon": "icons/socket.svg",
+    "variant": "socket",
+    "function": "Steckdose mit Typ und Montagehöhe platzieren.",
+    "usage": "Elektro, Küche, Bad.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "switch",
+    "label": "Schalter",
+    "category": "Elektro",
+    "icon": "icons/switch.svg",
+    "variant": "switch",
+    "function": "Schalter, Taster oder Dimmer platzieren.",
+    "usage": "Elektro.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "light",
+    "label": "Leuchte",
+    "category": "Elektro",
+    "icon": "icons/light.svg",
+    "variant": "light",
+    "function": "Leuchte oder Lichtpunkt platzieren.",
+    "usage": "Elektro und Innenraum.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "distribution-board",
+    "label": "Verteiler",
+    "category": "Elektro",
+    "icon": "icons/distribution-board.svg",
+    "variant": "panel",
+    "function": "Elektroverteiler und Stromkreisbelegung konfigurieren.",
+    "usage": "Elektro.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "pv-module",
+    "label": "PV-Modul",
+    "category": "PV",
+    "icon": "icons/pv-module.svg",
+    "variant": "pv",
+    "function": "PV-Modul oder Modulreihe platzieren.",
+    "usage": "PV-Planung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "battery",
+    "label": "Batteriespeicher",
+    "category": "PV",
+    "icon": "icons/battery.svg",
+    "variant": "battery",
+    "function": "Speicher platzieren und Kapazität zuweisen.",
+    "usage": "PV und Energiesystem.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "wallbox",
+    "label": "Wallbox",
+    "category": "PV",
+    "icon": "icons/wallbox.svg",
+    "variant": "wallbox",
+    "function": "Wallbox mit Stellplatz und Stromkreis platzieren.",
+    "usage": "Elektro und Mobilität.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "wizard",
+    "label": "Wizard / Assistent",
+    "category": "Workflow",
+    "icon": "icons/wizard.svg",
+    "variant": "wizard",
+    "function": "Geführten Fachprozess starten oder fortsetzen.",
+    "usage": "Alle Fachbereiche.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "workflow",
+    "label": "Prozessübersicht",
+    "category": "Workflow",
+    "icon": "icons/workflow.svg",
+    "variant": "workflow",
+    "function": "Abhängige Planungsschritte und Status anzeigen.",
+    "usage": "Technische Planung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "handoff-package",
+    "label": "Übergabepaket",
+    "category": "Workflow",
+    "icon": "icons/handoff-package.svg",
+    "variant": "package",
+    "function": "Versioniertes Datenpaket an Fachmodul übergeben.",
+    "usage": "Heizlast, TGA, Dach, Elektro.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "approve",
+    "label": "Freigeben",
+    "category": "Workflow",
+    "icon": "icons/approve.svg",
+    "variant": "approve",
+    "function": "Berechnung, Planung oder Revision freigeben.",
+    "usage": "Prüfung und Dokumentation.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "comment",
+    "label": "Kommentar",
+    "category": "Zusammenarbeit",
+    "icon": "icons/comment.svg",
+    "variant": "comment",
+    "function": "Kommentar an Objekt oder Position setzen.",
+    "usage": "Teamarbeit.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "history",
+    "label": "Historie",
+    "category": "Zusammenarbeit",
+    "icon": "icons/history.svg",
+    "variant": "history",
+    "function": "Änderungsverlauf eines Objekts oder Projekts anzeigen.",
+    "usage": "Audit und Revision.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "revision",
+    "label": "Revision",
+    "category": "Zusammenarbeit",
+    "icon": "icons/revision.svg",
+    "variant": "revision",
+    "function": "Versionierten Planungsstand erzeugen oder vergleichen.",
+    "usage": "Projektsteuerung.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "check",
+    "label": "Prüfen",
+    "category": "Prüfung",
+    "icon": "icons/check.svg",
+    "variant": "check",
+    "function": "Regel- oder Vollständigkeitsprüfung starten.",
+    "usage": "Alle Fachbereiche.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "warning",
+    "label": "Warnungen",
+    "category": "Prüfung",
+    "icon": "icons/warning.svg",
+    "variant": "warning",
+    "function": "Warnungen und Abweichungen anzeigen.",
+    "usage": "Prüfungscenter.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "error",
+    "label": "Fehler",
+    "category": "Prüfung",
+    "icon": "icons/error.svg",
+    "variant": "error",
+    "function": "Blockierende Fehler anzeigen und bearbeiten.",
+    "usage": "Prüfungscenter.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "settings",
+    "label": "Einstellungen",
+    "category": "System",
+    "icon": "icons/settings.svg",
+    "variant": "settings",
+    "function": "Workspace, Toolbar und Benutzeroptionen konfigurieren.",
+    "usage": "System.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "search",
+    "label": "Suche",
+    "category": "System",
+    "icon": "icons/search.svg",
+    "variant": "search",
+    "function": "Werkzeuge, Objekte und Dokumente durchsuchen.",
+    "usage": "Global.",
+    "shortcut": "Ctrl/Cmd+K",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "command-palette",
+    "label": "Command-Palette",
+    "category": "System",
+    "icon": "icons/command-palette.svg",
+    "variant": "command",
+    "function": "Alle Befehle und Werkzeuge zentral aufrufen.",
+    "usage": "Expertenmodus.",
+    "shortcut": "Ctrl/Cmd+K",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "export",
+    "label": "Exportieren",
+    "category": "System",
+    "icon": "icons/export.svg",
+    "variant": "export",
+    "function": "Aktuelle Ansicht, Modell oder Daten exportieren.",
+    "usage": "Dokumentation.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  },
+  {
+    "id": "pdf",
+    "label": "PDF / Planblatt",
+    "category": "System",
+    "icon": "icons/pdf.svg",
+    "variant": "pdf",
+    "function": "Druckfähiges Planblatt oder PDF erzeugen.",
+    "usage": "Dokumentation.",
+    "shortcut": "",
+    "views": [
+      "2D",
+      "3D"
+    ],
+    "priority": "secondary",
+    "canPin": true
+  }
+]
