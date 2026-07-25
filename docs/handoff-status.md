@@ -2415,6 +2415,38 @@ Der Cowork-Generator hat vor dem Abbruch **gemessen** statt geraten. Übergabe a
 **Ballbesitz:** AUF-4 und AUF-25 liegen beim **nativen** Generator. Der Cowork-Strang wartet auf
 Sichtprobe-Aufträge.
 
+---
+
+## ⇒ COWORK — Sichtprobe AUF-26 (Panel-/Label-Kappung), objekt/203, 25.07.
+
+Gefahren über die Chrome-Anbindung gegen `http://ticket.test/admin/hausplaner/objekt/203`,
+**Expertenmodus**, echter Stack, gegen den **aktuell gebauten Bundle** (native AUF-26-Änderung
+uncommittet, `public/hausplaner/hausplaner.js` frisch gebaut). Objekt in Rev. 9. Das schließt den
+K3-Befund, den die erste Cowork-Sichtprobe selbst aufgemacht hat.
+
+**Viewport 1440 px (Erfassung 1375) — die vier Kappungen der Erst-Sichtprobe sind behoben, je belegt am Schirm:**
+
+| Ursprungs-Befund (Cowork-Erst-Sichtprobe) | Jetzt gemessen | Status |
+|---|---|---|
+| #1 / K3: „Historie"-Reiter bei 1375 px unsichtbar (nur 3 von 4) | Reiterzeile **bricht um** — „Allgemein · Beziehungen · Prüfungen" Zeile 1, **„Historie" Zeile 2 sichtbar** | behoben |
+| #1: „↕ Oben/Unten" gekappt | Button voll sichtbar samt ↕-Symbol | behoben |
+| #1: Hinweistext bricht im Wort ab („…brauch", „ein eigener Po") | beide Hinweistexte vollständig, sauberer Wortumbruch | behoben |
+| #3: Rail-Labels abgeschnitten („Sparren-…", „Holz-Me…") | „Sparren-Vorbemessung" · „Holz-Mengen (BOM)" · „Holz-Bauteile (BOM)" **brechen um**, voll lesbar | behoben |
+
+Der Mechanismus (`flexWrap: 'wrap'` + Wortumbruch) greift sichtbar; deckt sich mit dem Guard-Test
+`keineKappung.test.ts` des nativen Strangs, der die CSS-**Ursache** verriegelt.
+
+**Viewports 1024 px und 375 px:** Über die Chrome-Anbindung nicht messbar — `resize_window` reflowt
+den erfassten Viewport nicht (drei Fensterbreiten 1440/1089/560 liefern alle denselben 1375-px-Schirm
+mit identischem Layout). Das ist eine **Werkzeuggrenze des messenden Strangs, kein Fix-Fehler**.
+**Yama misst die beiden Pflicht-Viewports direkt** (DevTools-Geräteleiste) — daher hier **kein
+offener Punkt gegen AUF-26**. Fachlicher Zusatz, ausdrücklich Begründung und nicht Beweis:
+`flexWrap`/Wortumbruch wirken monoton — schmaler = mehr Umbruch, nie mehr Kappung.
+
+**Ballbesitz:** AUF-26 bleibt beim **nativen** Strang (uncommittet, `IN ARBEIT`). Der Cowork-Strang
+hat gemessen, keine `resources/planner`-Datei angefasst. Kopf-Marker „In Abnahme — Browser-Sichtproben
+ausstehend": für 1440 px durch diese Sichtprobe erfüllt, 1024/375 bei Yama.
+
 ## ⇒ GENERATOR-BERICHT — AUF-26 (B3/B4) UMGESETZT: `4c9bc04` · Spur B
 Tafel-Posten gezogen (`4f33b36`), umgesetzt, hier gemeldet. **„umgesetzt", nicht „grün".**
 
@@ -2503,3 +2535,46 @@ Yama von Hand — ist zu klären. **Ein Test ersetzt es nicht: alle drei Befunde
 **Geparkt, nicht verloren:** `docs/auftraege/l4-generator-beiseite-25-07/` — Entwurf mit 19 gemessenen
 Fachplaner-Flächen und fünf echten Engine-DTO-Zuordnungen. Materialspende für den nativen L4-Bau,
 außerhalb von `resources/`, damit nichts kollidiert.
+
+## ⇒ GENERATOR-BERICHT — L4 (AUF-25) UMGESETZT: `17c8be2`
+Der Posten stand seit dem Kollisions-Abbruch auf `IN ARBEIT — Generator (nativ)`, ohne dass jemand
+daran arbeitete. Nach der Strang-Zuteilung („nativ baut") war er meiner — ich habe zu lange auf ein
+Wort gewartet, das die Zuteilung schon gegeben hatte. **„umgesetzt", nicht „grün".**
+
+**Herkunft des Materials, ausdrücklich benannt:** `fachFlaechen.ts` (525 Z.) und `FachFlaeche.tsx`
+(194 Z.) hat der **Cowork-Strang** entworfen und nach der Doppelbelegung selbst beiseitegelegt —
+`LIESMICH.txt`: *„Materialspende für die native L4-Umsetzung"*. Ich habe sie übernommen, in den
+Produktivpfad geholt, verdrahtet und getestet; der Test fehlte dort. **Kein Byte doppelt gebaut** —
+und die fremde Vorarbeit ist als solche im Commit ausgewiesen, nicht stillschweigend vereinnahmt.
+
+**Vom nativen Strang ergänzt:**
+- Studio verdrahtet: Zustand `{flaeche, herkunft}`, Ansicht eingehängt.
+- **EINE Wahrheit für die vier echten Konfiguratoren:** das Studio liest `KONFIGURATOR_NAMEN`, statt
+  Fenster/Tür/Treppe/Heizkörper ein zweites Mal aufzuzählen. Vorher hätte eine Ergänzung im
+  Datenmodul still ins Leere gelaufen.
+- **Kante 2** bedient: Herkunft an den Aufrufstellen (`'navi'`, `'start'`) — der Zurück-Weg führt
+  dorthin, wo der Nutzer herkam.
+- `fachFlaechen.test.ts`, 9 Fälle — darunter die **Deckung in beide Richtungen**:
+  `fehlendeFlaechen()` und `verwaisteFlaechen()` müssen leer sein. Ein Modul ohne Fläche fällt sonst
+  zurück in den Toast; eine Fläche ohne Modul findet nie ein Klick.
+
+**Gemessen statt abgeschrieben: 19 Module, nicht 20.** Der Test rechnet es aus den Quelldaten gegen
+(`anklickbareModule()` minus `KONFIGURATOR_NAMEN`) — die Fahrplan-Zahl war eine Schätzung.
+
+**Gate, HEAD vor == nach:** `tsc` **0** · `schema:check` **0** · `test` **768/768 pass, 0 fail**
+(vorher **759**, +9) · `build` **0**.
+**Mutations-Gegenprobe (Kriterium 5) rot gesehen:** einen `zweck` auf `''` ⇒ „kein Blindtext" rot;
+danach zurückgesetzt, `diff` identisch.
+
+**Zurückgegeben statt mitgebaut:** Die Helferfunktion „Kommentare vor der Quelltextprüfung entfernen"
+steht jetzt zum **dritten** Mal in einer Testdatei (A2, L4 — und in AUF-26 habe ich denselben Fehler
+ohne sie gemacht). Sie gehört in einen gemeinsamen Test-Helfer. Eigener Posten, kein Beifang von L4.
+
+**Eigener Fehler, dritter gleicher Art an einem Tag:** Meine Quelltext-Prüfungen schlagen auf meine
+**eigenen Kommentare** an — sie messen Prosa statt Code. Zweimal über `[^}]*`-Grenzen, einmal über
+„Konfigurator folgt" im Erklärkommentar. Jedes Mal habe ich den Test korrigiert, nie den Kommentar
+entfernt. Der gemeinsame Helfer oben ist die eigentliche Abhilfe.
+
+**Ballbesitz → Evaluator (Cowork-Strang).** Für die Sichtprobe: 19 Flächen, erreichbar über
+Navigation und Startseite; zu prüfen ist besonders, ob die Feldstruktur bei **375 px** umbricht statt
+zu kappen — genau der Fehler, den AUF-26 gerade behoben hat.
