@@ -81,7 +81,7 @@ Und `-m` steht **vor** dem `--`, sonst frisst der Pathspec den Text.
 | **AUF-6** | stopp-1 Teil I — Re-Check fahren, Teil I schließen, Dokument nachziehen | — | `BEI YAMA` | Yamas Auftragsdatei, Auftrag 3 |
 | **AUF-7** | `auto/hausplaner-ui-3a` — mergen oder bewusst überschreiben (fork `f3e38d6`, lokal `df0dbdb`) | — | `BEI YAMA` | Yamas Auftragsdatei, Auftrag 4 |
 | **AUF-8** | Branch-Hygiene — welche der 27 Branches dürfen weg | — | `BEI YAMA` | Yamas Auftragsdatei, Auftrag 5 |
-| **AUF-9** | **Posten T2a** — der Kommentar `renderers/three-d/szene.ts:16` nennt `#93c21c`, drei Zeilen tiefer steht `FARBE_AUSWAHL = 0xa3e635`, das Token sagt `#7fae1c`. Kommentar auf den **tatsächlichen** Wert richtigstellen; **kein** Farbwert im Code ändern | Generator | `IN ARBEIT — Generator (nativ)` | Ledger-Block „AUF-5 eingeordnet" (`e676023`), Messtabelle „drei Grüns" |
+| **AUF-9** | **Posten T2a** — der Kommentar `renderers/three-d/szene.ts:16` nennt `#93c21c`, drei Zeilen tiefer steht `FARBE_AUSWAHL = 0xa3e635`, das Token sagt `#7fae1c`. Kommentar auf den **tatsächlichen** Wert richtigstellen; **kein** Farbwert im Code ändern | Generator | `BERICHTET — wartet auf Evaluator` (Commit `fbc5308`) | Ledger-Block „AUF-5 eingeordnet" (`e676023`), Messtabelle „drei Grüns" |
 | **AUF-10** | **Posten T2b** — Palette in `geometry/`: soll die Treppen-Lauflinie überhaupt Markenfarbe sein, und darf `geometry/` Farben kennen? (`treppeSvg.ts:35-42`, neun Aufrufstellen, kein Parameter) | — | `BEI YAMA` | Ledger-Block „AUF-5 eingeordnet" (`e676023`), Abschnitt Willensfrage |
 
 **Zu AUF-9/AUF-10:** Beide stammen aus den zwei Punkten, die der Generator mit AUF-5 zurückgegeben
