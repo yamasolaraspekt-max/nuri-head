@@ -173,3 +173,51 @@ nötig, wird die abgelöste im selben Commit **stillgelegt**, nicht danebengeleg
 ### 7.5 Antwortform
 
 Befund · Entscheidung · nächster Schritt. Details nur auf Nachfrage.
+
+---
+
+## 8. Die Bundle-Regel (Planner, 25.07., nach dem zweiten Bundle-Loch)
+
+**Anlass:** Der Evaluator hat ein Muster gemeldet, nicht einen Einzelfall. **Zweimal** wurde ein
+Posten mit „sichtbar" als umgesetzt gemeldet, ohne dass das gebaute Bundle die Änderung enthielt —
+Dashboard Batch 2 (behoben mit `6dde059`) und jetzt AUF-27 (`894954a`). Ein Votum „sichtbar", dessen
+Sichtbarkeit nicht ausgeliefert ist, ist keine Freigabe, sondern eine Fehlmeldung.
+
+### Warum nicht „Bundle im selben Commit"
+
+Der naheliegende Vorschlag wäre, das Bundle in denselben Commit zu legen. **Einmal durchgespielt,
+und er trägt nicht:** Das Bundle ist **1,3 MB minifiziert**. In jedem UI-Commit mitgeführt heißt das
+bei zwei parallel arbeitenden Instanzen einen **garantierten Konflikt in einer Datei, die niemand von
+Hand auflösen kann**. Und `bauplaner-3d` sagt ausdrücklich: *„Bundle-Artefakt — nie mergen, immer neu
+bauen."* Der Vorschlag würde also genau die Regel brechen, die das Bundle schützt.
+
+### Die Regel
+
+**1. Rebuild als eigener Commit, direkt nach dem Code-Commit, vor der Meldung.**
+Genau so, wie `6dde059` es beim ersten Mal gelöst hat. Zwei Commits, nicht einer: der Code bleibt
+konfliktarm, das Artefakt bleibt getrennt.
+
+**2. Der Bericht trägt den Beleg — drei Zeilen Rohausgabe:**
+- `ls -l public/hausplaner/hausplaner.js` (Größe und Zeitstempel)
+- **eine Zeichenkette aus dem neuen Slice**, per `grep -c` im Bundle nachgewiesen, mit Trefferzahl
+- die Aussage, gegen welchen Quell-Commit gebaut wurde
+
+Die Zeichenkette ist der eigentliche Beweis: Zeitstempel und Größe ändern sich auch bei einem Build
+ohne die Änderung. **Ein Treffer > 0 auf einem Text, den es vorher nicht gab, kann nicht lügen.**
+
+**3. Kann nicht gebaut werden, wird das gemeldet, nicht übergangen.**
+Auf aarch64 scheitert `build:hausplaner` an `@rollup/rollup-linux-arm64-gnu`. Dann lautet die Meldung
+**„sichtbar — NICHT AUSGELIEFERT"**, und der Posten bleibt für die Sichtprobe gesperrt, bis jemand
+nativ baut. Das ist ein zulässiges Ergebnis; es stillschweigend als erledigt zu führen ist es nicht.
+
+**4. Evaluator-Seite: kein Grün für „sichtbar" ohne diesen Beleg.**
+Fehlt er, lautet das Urteil **Freigabe mit Auflage** — Code grün, Auslieferung offen. Genau so hat
+der Evaluator es bei AUF-27 gehandhabt, bevor diese Regel existierte. **Sie schreibt fest, was er
+schon richtig gemacht hat.**
+
+**5. Gilt nur für Posten mit `sichtbar`.** Ein `Vorarbeit`-Posten braucht keinen Rebuild — er ändert
+für den Nutzer nichts, und ein Bundle-Commit ohne sichtbare Wirkung wäre nur Rauschen.
+
+**Nicht als Gate im Testlauf**, sondern als Berichtspflicht: Ein Gate müsste bauen können, und genau
+das kann die Umgebung nicht immer. Eine Pflicht, die in der Hälfte der Fälle nicht erfüllbar ist,
+wird umgangen — und das Umgehen wird zur Gewohnheit.
