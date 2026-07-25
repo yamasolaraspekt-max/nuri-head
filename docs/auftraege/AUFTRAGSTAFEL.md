@@ -69,7 +69,7 @@ Und `-m` steht **vor** dem `--`, sonst frisst der Pathspec den Text.
 
 ---
 
-## 3. Die Tafel (Stand 25.07., HEAD `78d384d`)
+## 3. Die Tafel (Stand 25.07., HEAD `6fed416`)
 
 | Nr | Auftrag | Rolle | Status | Datei / Beleg |
 |---|---|---|---|---|
@@ -77,10 +77,18 @@ Und `-m` steht **vor** dem `--`, sonst frisst der Pathspec den Text.
 | **AUF-2** | **T1 + `decke` committen** — die sechs gestagten Dateien als **eigener** Commit mit Pfadangabe | Generator (nativ) | `IN ARBEIT — Generator (nativ)` | COMMIT-FREIGABE im Ledger (Z. 1006), Dateiliste dort |
 | **AUF-3** | **T1-Abnahme** (Token-Konsolidierung + `decke → bau`) | Evaluator | `GESPERRT` — braucht den Hash aus AUF-2 | `evaluator-auftrag-t1-token-konsolidierung-und-decke.md` **inkl. §10** |
 | **AUF-4** | **Wizard-Welle A2** — Leiste liest die Präsentationsschicht, inkl. P9-Memoisierung | Generator | `GESPERRT` — bis AUF-1 ein Votum im Ledger hat | `generator-auftrag-wizard-welle-a2-leiste-liest-praesentation.md` **inkl. §8** |
-| **AUF-5** | Die zwei vom Generator **zurückgegebenen** Punkte einordnen: `treppeSvg.ts:38`, `szene.ts:16` | Planner | `IN ARBEIT — Planner` | Ledger „SCHRITT 2 ERGEBNIS" (Z. 1171) |
+| **AUF-5** | Die zwei vom Generator **zurückgegebenen** Punkte einordnen: `treppeSvg.ts:38`, `szene.ts:16` | Planner | `BERICHTET — wartet auf Yama` | Ledger „SCHRITT 2 ERGEBNIS" (Z. 1171); Einordnung im Ledger-Block „AUF-5 eingeordnet" (`e676023`) |
 | **AUF-6** | stopp-1 Teil I — Re-Check fahren, Teil I schließen, Dokument nachziehen | — | `BEI YAMA` | Yamas Auftragsdatei, Auftrag 3 |
 | **AUF-7** | `auto/hausplaner-ui-3a` — mergen oder bewusst überschreiben (fork `f3e38d6`, lokal `df0dbdb`) | — | `BEI YAMA` | Yamas Auftragsdatei, Auftrag 4 |
 | **AUF-8** | Branch-Hygiene — welche der 27 Branches dürfen weg | — | `BEI YAMA` | Yamas Auftragsdatei, Auftrag 5 |
+| **AUF-9** | **Posten T2a** — der Kommentar `renderers/three-d/szene.ts:16` nennt `#93c21c`, drei Zeilen tiefer steht `FARBE_AUSWAHL = 0xa3e635`, das Token sagt `#7fae1c`. Kommentar auf den **tatsächlichen** Wert richtigstellen; **kein** Farbwert im Code ändern | Generator | `OFFEN` | Ledger-Block „AUF-5 eingeordnet" (`e676023`), Messtabelle „drei Grüns" |
+| **AUF-10** | **Posten T2b** — Palette in `geometry/`: soll die Treppen-Lauflinie überhaupt Markenfarbe sein, und darf `geometry/` Farben kennen? (`treppeSvg.ts:35-42`, neun Aufrufstellen, kein Parameter) | — | `BEI YAMA` | Ledger-Block „AUF-5 eingeordnet" (`e676023`), Abschnitt Willensfrage |
+
+**Zu AUF-9/AUF-10:** Beide stammen aus den zwei Punkten, die der Generator mit AUF-5 zurückgegeben
+hat. Sie sind **kein** T1-Nachtrag — T1 gilt für die React-Insel (`app/*`), und die ist mit 0 rohen
+Farbwerten erfüllt. `geometry/` und `renderers/` liegen außerhalb dieses Scopes (Token-Scope-ADR),
+deshalb eigener Posten T2. Der ausführbare Teil (T2a) ist vom Willensteil (T2b) getrennt, damit der
+Generator arbeiten kann, ohne dass jemand in Yamas Vertretung eine Farbentscheidung trifft.
 
 ---
 
