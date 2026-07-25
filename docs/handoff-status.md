@@ -5530,3 +5530,89 @@ mitgeben, das Blade kommt allein an `hasPermission`. Tor 1 war nicht nötig.
 ### 7. Nicht getan
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün.
+
+---
+
+## PLANNER 26.07., 01:20 — Evaluator-Votum AUF-60 gelesen: der Fix liegt da und ist nicht committet
+
+**Anlass:** Yama: *„lies den Bericht von Evaluator, das ist kritisch."* Er hat recht, und der
+kritische Satz ist nicht der, den man erwartet.
+
+### 1. Was der Evaluator gemessen hat
+
+**Votum AUF-60 (`e0d1144`): NACHBESSERN** — festgehalten in `e4f2a25`,
+`docs/abnahme-evaluator-haertung-2026-07-25.md`.
+
+- **Die Rechte-Logik ist freigabereif.** Fehlendes oder leeres Attribut ⇒ **leere** Liste = Minimum
+  (`rechte.ts:31`), nicht Maximum. Genau das Kernkriterium. `tsc` 0 · **1008/1008** Tests, 0 Skip ·
+  15 Untertests zu den Rechten.
+- **Blockierend ist die Blade-Regression aus demselben Commit.** Unabhängig reproduziert: das
+  HEAD-Blade durch Laravels **echten** Compiler geschickt, `php -l` meldet
+  *„Parse error … unexpected token `class`, line 53"*. Der committete `objekt/203` liefert 500.
+- **Die vier grünen Gates fingen es nicht** — keines kompiliert ein Blade. Dieselbe Lücke wie bei
+  AUF-36 und AUF-47, hier mit einer toten Route statt einer Anzeige-Lüge.
+
+### 2. Der kritische Satz
+
+> *„Aktuell nur maskiert: `objekt/203` rendert live, WEIL die App aus dem Arbeitsbaum serviert und
+> dort der **uncommittete** AUF-64-Fix liegt."*
+
+**Selbst nachgeprüft, `git status` an HEAD `e4f2a25`:**
+
+```
+ M resources/planner/hausplaner/__tests__/rechte.test.ts
+ M resources/views/admin/hausplaner/objekt.blade.php
+?? tests/Feature/Hausplaner/BladeKompiliertTest.php
+```
+
+**Der Fix ist gebaut — und er ist nirgends.** Im Browser sieht alles heil aus; das ist die
+gefährlichste Form von heil, weil sie beruhigt. Wer heute den Arbeitsbaum aufräumt, den Stand
+klont, auf einen anderen Rechner geht oder Richtung Tor 2 schaut, hat eine tote Kundenroute.
+**Solange nichts committet ist, ist nichts erledigt** — und das gilt unabhängig davon, wie gut die
+Arbeit ist.
+
+**Ich kann das nicht selbst committen** und will es auch nicht: `resources/` und `tests/` sind
+Generator-Pfade, Cowork schreibt `docs/`. Der Posten geht zurück an den Generator, mit genau einer
+Aufgabe: **committen und den committeten `objekt/203` belegen.**
+
+### 3. Die Abweichung vom Auftrag — angenommen, mit Begründung
+
+Mein AUF-64-Auftrag hatte §2 mit *„Es wird der Controller — entschieden, nicht zur Wahl gestellt"*
+überschrieben. Gebaut wurde die **einzeilige** Form im Blade. **Ich nehme das an**, und zwar nicht
+aus Nachgiebigkeit:
+
+**Die gemessene Ursache im Arbeitsbaum ist genauer als meine.** Ich schrieb, beide Formen in
+derselben Datei „bringen den Compiler durcheinander". Der wirkliche Mechanismus, im Code-Kommentar
+und im Test festgehalten: Blade zieht seine Rohblöcke **non-greedy** heraus und tut das **bevor**
+es Kommentare entfernt — das schließende Gegenstück paart deshalb mit der **früheren** einzeiligen
+Öffnung, und es zählt sogar mit, wenn die Marke bloß im Kommentartext steht. Der erste
+Erklärversuch des Kommentars hat die Datei damit gleich ein zweites Mal zerbrochen. **Das ist eine
+Erkenntnis, die mein Auftrag nicht hatte.**
+
+Und: **`BladeKompiliertTest` leistet strukturell das, wofür ich den Controller wollte.** Mein Grund
+1 war „der Fehler kann so nicht wiederkommen" — das erledigt jetzt ein Test, der jedes
+Hausplaner-Blade durch den Compiler schickt, statt einer Umstellung, die nur diese eine Datei
+entschärft.
+
+**Was bleibt:** mein Grund 2 (Anwendungslogik gehört nicht in eine Vorlage) steht weiter. Er ist
+kein Notfall. **Er wird AUF-69, gesperrt bis AUF-64 committet und AUF-60 abgenommen ist** — zwei
+Änderungen an derselben zerbrechlichen Datei im selben Atemzug wären genau der Fehler, der uns
+hierher gebracht hat.
+
+### 4. Was ich mir selbst aufschreibe
+
+**Ein Auftrag darf einen Weg vorschreiben; ein Bericht darf ihn widerlegen.** Als ich „entschieden,
+nicht zur Wahl gestellt" schrieb, kannte ich den Pairing-Mechanismus nicht. Die Formulierung war
+richtig gegen Beliebigkeit und falsch gegen bessere Messung. **Künftig: der Weg steht fest, solange
+die Begründung steht — wer die Begründung misst und widerlegt, hat den Weg zu Recht verlassen.**
+Das gehört neben die Regel aus AUF-45 („Zahlen in Kriterien sind Hypothesen mit Datum").
+
+### 5. Tafel nachgezogen
+
+- **AUF-64** ⚡ AKTIV — Stand ergänzt: **gebaut, nicht committet**; Abweichung angenommen.
+- **AUF-60** — Votum NACHBESSERN eingetragen; wird grün, sobald AUF-64 committet ist.
+- **AUF-69** neu, `GESPERRT` — Rechteberechnung in den Controller, ohne Dringlichkeit.
+- **AUF-68** neu, `OFFEN` — die drei Gruppenwörter aus der Icon-Zeile (Wunsch Yama, 26.07.),
+  Auftrag liegt: `generator-auftrag-auf68-gruppenwoerter.md`.
+
+**Ballbesitz: Generator** — eine Aufgabe vor allen anderen: **AUF-64 committen.**
