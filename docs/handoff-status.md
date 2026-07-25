@@ -4673,3 +4673,87 @@ nicht gebaut** — dieser Posten baut die Fläche, an der er später hängt.
    Undo-Beleg wäre stillschweigend nie gelaufen. Übernommen aus `applyCommand.test.ts`.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-45: der erste Schritt
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `b9861d7` (Code) · `ab7f2c1` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+**Wichtig vorweg:** Teil (b) ist sichtbar wirksam. Teil (a) ist gebaut, getestet — und **erscheint
+im heutigen Programm nie.** Warum, steht unten; es ist der eigentliche Befund dieses Postens.
+
+### Die elf Kriterien, Rohausgabe
+
+| # | Kriterium | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` | **0 / 0 / 0** — **916 → 930**, **0 verschwunden** |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen** |
+| 3 | keine zweite Aktivierungsquelle | `naechsterSchritt.ts` enthält **kein** `resolveToolState`, `capabilities`, `supportedWorkspaces`, `VORBEDINGUNGEN`, `activationRules` — testverriegelt |
+| 4 | Aktivierung unverändert | gesperrte Mengen **73 / 53 / 28** für die drei Kontexte, hart im Test |
+| 5 | Zahl aus den Daten | die genannte Zahl ist die **gemessene Differenz**, nicht die Zahl der Wartenden |
+| 6 | verschwindet | mit erfülltem Schritt liefert die Funktion `null` statt eines wirkungslosen Rats |
+| 7 | zwei Platzhalter-Fälle | `brauchtOptionen('auswahl') === false`, `('wand') === true`; im Browser: **„Markieren · Dieses Werkzeug braucht keine Optionen."** ohne Badge |
+| 8 | kein Blindtext | jeder Satz > 20 Zeichen, keiner mit „folgt/in Kürze", jeder mit Zahl |
+| 9 | Mutations-Gegenbeweis | Kandidaten-Filter `> 0` → `>= 0` ⇒ **1 Test rot**; zurückgebaut ⇒ `diff` leer, 930/930 |
+| 10 | `public/*` im Code-Commit null, Bundle eigener zweiter Commit | erfüllt: `b9861d7` → `ab7f2c1` |
+| 11 | Sichtprobe mit leerem Plan | geführt, siehe unten |
+
+**Rebuild-Beleg** (`ab7f2c1`, 1.408.639 Bytes, 25.07. 22:54): `grep -c 'braucht keine Optionen'` = 1 ·
+`'das schaltet'` = 1 · `'Lege ein Geschoss an'` = 1.
+
+### Zwei Messungen, die den Entwurf korrigiert haben
+
+**1. Die bloße Häufigkeit zeigt auf den falschen Schritt.** Im leeren Plan sperrt *„Dafür muss
+zuerst etwas ausgewählt sein"* **23** Werkzeuge — mehr als *„Kein aktives Geschoss"* (**22**). Als
+erster Schritt wäre „wähle etwas aus" unbrauchbar: in einem leeren Plan gibt es nichts auszuwählen.
+**Deshalb gewinnt nicht der häufigste Grund, sondern der, der gemessen am meisten entsperrt** — der
+Aufrufer fragt dieselbe Engine ein zweites Mal („wie sähe es aus, wenn …"), das Modul zählt nur die
+Differenz. Ein Schritt, der nichts löst, kann gar nicht gewinnen.
+
+**2. Die Zahl im Satz ist die Differenz, nicht die Zahl der Wartenden.** 22 Werkzeuge warten auf ein
+Geschoss, aber nur **20** werden dadurch bedienbar — zwei bleiben aus einem anderen Grund gesperrt.
+„Schaltet 22 frei" wäre eine falsche Zusage.
+
+### Der eigentliche Befund: der Wegweiser hat heute keinen Anlass
+
+**Sichtprobe, 1440 px, leerer Plan:** B8 ist behoben und sichtbar — die Kontext-Leiste sagt
+**„Markieren · Dieses Werkzeug braucht keine Optionen."** statt „in Entwicklung". **Der Wegweiser
+erscheint nicht.** Das ist kein Fehler der Umsetzung, sondern das ehrliche Ergebnis der Messung:
+
+```
+Zustand, den die App WIRKLICH zeigt (Szene geladen, 1 Geschoss, keine Wand):
+  gesperrt                                  53 von 110
+  nach der ersten Wand                      53 von 110   → entsperrt: 0
+  häufigster Grund   „Dafür muss zuerst etwas ausgewählt sein."   23
+```
+
+- **`activeLevel.exists` ist nie verletzt.** Eine Szene trägt immer mindestens ein Geschoss — die
+  Anwendung legt es an. Derselbe Befund wie in AUF-39 („ein frisches Projekt *hat* bereits ein
+  Geschoss"). Der Zustand „78 gesperrt, kein Geschoss" aus dem Auftrag ist **nicht erreichbar**.
+- **`hostWall.exists` entsperrt gemessen 0 Werkzeuge.** Die beiden Werkzeuge, die eine Wirtswand
+  brauchen, sind zusätzlich an einen anderen Arbeitsbereich gebunden (AUF-34) und bleiben gesperrt.
+- **Der real dominante Grund ist „etwas auswählen"** — und der ist eine Auswahl-Regel, keine
+  Fähigkeit; er lässt sich nicht hypothetisch erfüllen und wäre als erster Schritt zirkulär.
+
+**Ich habe deshalb nichts erfunden, damit etwas erscheint.** Der Mechanismus ist gebaut, gemessen
+und verriegelt; er schweigt, solange kein messbarer Schritt etwas löst — genau wie es §2 verlangt
+(„verschwindet, sobald er erfüllt ist").
+
+### Zurückgegeben (§3-Grenze eingehalten, keine Sperre gelockert)
+
+1. **Die Zahlen des Auftrags gelten nicht mehr.** 78/44/16 stammen aus der Zeit vor AUF-34; heute
+   73/53/28. Ursache ist die **Arbeitsbereichs-Bindung**: 28 Werkzeuge sind im leeren Plan gesperrt,
+   weil sie einem anderen Bereich gehören — das ist inzwischen der größte Block, nicht das Geschoss.
+2. **Der Ort des Wegweisers ist damit offen.** Der Auftrag setzt ihn an die Geschoss-Fläche, „wenn
+   die fehlende Vorbedingung `activeLevel.exists` ist". Da dieser Fall nicht eintritt, hängt der
+   Hinweis an einer Bedingung, die nie wahr wird. **Wo ein Hinweis hingehört, der auf „zeichne eine
+   Wand" oder „wechsle den Arbeitsbereich" zeigt, ist eine Platzierungsfrage — sie gehört dem
+   Planner, nicht mir.** Der Mechanismus ist bereit; er braucht nur einen Anlass und einen Ort.
+3. **Die Regel „Werkzeug ohne `eingaben`" trifft niemanden.** Gemessen hat **kein einziger** der 110
+   Verträge eine leere `eingaben`-Liste. Ich habe die Unterscheidung auf das gelegt, was die Daten
+   hergeben — **Gesten-Eingaben** (`pointerPosition`, `selectionMode`) gegen **Optionen**
+   (`wallTypeId`, `height`, `thickness`). Sie trifft 3 Werkzeuge: `auswahl`, `entsperren`,
+   `kopieren`. Ein Test hält beides fest, damit die Abweichung nicht als Nachlässigkeit gilt.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
