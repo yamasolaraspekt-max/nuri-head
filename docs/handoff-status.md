@@ -1539,3 +1539,32 @@ blockiert hat allein `HEAD.lock`. Wer künftig auf Locks trifft, sollte die beid
 erfüllt; ich habe AUF-3 auf der Tafel entsprechend von `GESPERRT` auf `OFFEN` gesetzt — das ist die
 mechanische Folge der erfüllten Vorbedingung, kein Urteil über den Inhalt. AUF-2 steht auf
 `BERICHTET`; auf `ERLEDIGT` setzt es die abnehmende Rolle, nicht ich.
+
+## ⇒ GENERATOR-BERICHT — AUF-9 (T2a) UMGESETZT: `fbc5308` (25.07. 11:3x)
+Tafel-Posten AUF-9 gezogen (`e5ebc42`), ausgeführt, hier gemeldet. **„umgesetzt", nicht „grün".**
+
+**Commit `fbc5308` — nur `renderers/three-d/szene.ts`, nur Kommentar, kein Farbwert:**
+- **Z.16 (Dateikopf):** behauptete „Auswahl = Marken-Grün `#93c21c`". Neu: `FARBE_AUSWAHL` **#a3e635**,
+  ausdrücklich **nicht** `T.brand` #7fae1c, mit Verweis auf den offenen Posten **T2b** (Palettenfrage,
+  liegt bei Yama).
+- **Z.90 (Konstanten-Kommentar):** stand „Marken-/Akzent-Grün". Das ist derselbe falsche Anspruch —
+  die Farbe ist weder `T.brand` (#7fae1c) noch `T.accent` (#12807d). Neu: „#a3e635 Lime — einzige
+  Akzentfarbe dieses Renderers; NICHT T.brand".
+
+**Ermessensentscheidung, die ich offenlege:** Der Auftrag nannte **Z.16**. Z.90 ist der Kommentar
+**auf die Konstante selbst** und trug denselben falschen Anspruch; der Auftrag verlangt, dass „der
+Kommentar sagt, was `FARBE_AUSWAHL` tatsächlich ist". Ich habe ihn deshalb mitgerichtet, statt eine
+Datei zu hinterlassen, die sich in zwei Zeilen widerspricht. Wenn der Planner das als Überschreitung
+sieht: eine Zeile zurückdrehen, der Rest bleibt gültig.
+
+**Belege (HEAD vor == nach der Messung):** `0xa3e635` unverändert genau **1×** vorhanden · `#93c21c`
+in der Datei **0×** · `tsc:hausplaner` **0** · `schema:hausplaner:check` **0** · `test:hausplaner`
+**696/696 pass, 0 fail** · `build:hausplaner` **0**.
+**Bundle bewusst NICHT im Commit:** `sha256` vor == nach dem Build == `cadc4308…` — Kommentare werden
+beim Minifizieren entfernt, das Artefakt ändert sich nicht. Ein Bundle-Diff wäre hier reines Rauschen.
+
+**Was T2a NICHT anfasst:** kein Farbwert, kein `geometry/*` (`treppeSvg.ts:38` bleibt unberührt),
+keine Schichtfrage. Die drei Grüns existieren weiterhin — sie sind jetzt nur **korrekt benannt**
+statt falsch behauptet. Die Entscheidung, ob sie zusammengeführt werden, ist **T2b** und gehört Yama.
+
+**Ballbesitz → Evaluator.** AUF-9 steht auf `BERICHTET`; auf `ERLEDIGT` setzt es die abnehmende Rolle.
