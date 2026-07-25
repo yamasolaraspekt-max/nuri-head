@@ -142,7 +142,7 @@ jedes Bauwerks ist Fundament. Aber Yama muss es unterscheiden können, ohne zu f
 
 **Vier Tabellen statt einer — geordnet danach, wer als Nächstes handeln muss.** In einer Tabelle mit 39
 Zeilen war der eine Posten, der gezogen werden darf, nicht mehr zu finden. Kein Posten ist verschwunden:
-**16** Arbeitsvorrat · **1** Abnahme · **10** bei Yama · **26** im Archiv — Summe geprüft, 53.
+**16** Arbeitsvorrat · **0** Abnahme · **10** bei Yama · **27** im Archiv — Summe geprüft, 53.
 
 > **Nachmessung 25.07., 22:50 — der Abnahme-Stapel war leer, nicht voll.** Yama bat darum, den
 > Evaluator zur Abarbeitung anzuschreiben. Vor dem Schreiben gemessen: **sieben der sieben Posten
@@ -216,9 +216,11 @@ Sichtproben sind damit führbar (iframe 1440/1024/375, §8 in `docs/agents/06-la
 **AUF-21/I1** ist der einzige Teil des Icon-Pakets ohne Votum, **AUF-30** der einzige Posten ohne jede
 Prüfung. Niemand nimmt eigene Arbeit ab (§1.4).
 
-| Nr | Auftrag | Rolle | Status | Datei / Beleg |
-|---|---|---|---|---|
-| **AUF-39** | **L5 — Wizard-Schritte aus dem Modell ableiten** statt hartkodierter Status/Prüfungen. Steht seit `5af3e18` im Layout-Fahrplan und hatte bis 25.07. **keinen Posten** — gemessen: null Treffer auf `L5` in dieser Tafel. Guardrail aus dem Fahrplan: an vorhandene Services andocken, **kein zweiter Snapshot-/Hash-/Projektions-Mechanismus** **Playwright-Lauf 25.07. bestätigt und ergänzt:** von **elf Schritten sind auf Desktop nur ~fünf sichtbar**, der waagerechte Rest hat **keine erkennbare Scroll-Hilfe**. Der Stepper gehört mit in diesen Posten — er ist dieselbe Datei (`GuidedView.tsx`). | Planner → Generator | `BERICHTET — wartet auf Evaluator` — umgesetzt `b3a6210`, Bundle `cb3d17e`. Die elf Schritte kommen aus dem Modell statt aus `STEPS`. **Der einzige Posten im Stapel** | `generator-auftrag-auf39-wizard-schritte.md` |
+> **Leer — zum ersten Mal seit Beginn der Tafel.** Jeder gebaute Posten hat sein Votum;
+> der letzte war AUF-39 (`486570b`, 25.07. 22:32). Sobald der Generator wieder meldet, steht hier
+> eine Zeile. Ein leerer Stapel heißt **nicht**, dass nichts läuft — er heißt, dass die Prüfung
+> mit dem Bauen Schritt hält.
+
 
 ---
 
@@ -245,7 +247,7 @@ Vertretung entscheidet (§5) — nicht, weil auf sie gewartet würde.
 ### 3d. Abgeschlossen — im Archiv
 
 Abgenommen, entschieden oder entfallen, wortgleich in **`docs/auftraege/AUFTRAGSTAFEL-ARCHIV.md`** —
-**26 Posten**: AUF-1 · AUF-2 · AUF-3 · AUF-4 · AUF-9 · AUF-11 · AUF-12 · AUF-14 · AUF-15a · AUF-16 ·
+**27 Posten**: AUF-1 · AUF-2 · AUF-3 · AUF-4 · AUF-9 · AUF-11 · AUF-12 · AUF-14 · AUF-15a · AUF-16 ·
 AUF-19 · AUF-20 · AUF-24 · AUF-25 · AUF-21 · AUF-26 · AUF-27 · AUF-28 · AUF-30 · AUF-31 · AUF-32 · AUF-33 · AUF-34 · AUF-35a · AUF-36 · AUF-37. Nicht gelöscht, nur nicht mehr im Weg.
 
 **Zu AUF-9/AUF-10:** Beide stammen aus den zwei Punkten, die der Generator mit AUF-5 zurückgegeben
