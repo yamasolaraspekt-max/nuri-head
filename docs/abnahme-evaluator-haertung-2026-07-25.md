@@ -436,6 +436,51 @@ ein vollstaendiges Votum inkl. der geforderten Sichtproben. Kein deferred-Rest m
 Wahrheit (setActiveLevel bleibt einzig), ohne neues Command/Schema; Stapel als reine Daten geprueft,
 Name-Doppel beseitigt, am Schirm belegt. Mutationsfest. Der 375-Rest gehoert AUF-46, nicht hierher.
 
+## AUF-45 - erster Schritt gezaehlt statt behauptet + B8 (b9861d7, Bundle ab7f2c1) - FREIGABE
+
+**Reihenfolge:** erst blind gegen b9861d7 gemessen (/tmp-Auszug), dann Generator-Bericht +
+Planner-Bestaetigung gelesen.
+**Klasse: sichtbar** - Sichtprobe Teil der Abnahme.
+
+- **Umfang (git show --name-status):** 6 Dateien - NEU tools/naechsterSchritt.ts +
+  __tests__/naechsterSchritt.test.ts ; M HausplanerApp.tsx, dashboard/GeschossFlaeche.tsx,
+  tools/vorbedingungen.ts, tools/werkzeugVertrag.ts. store/domain/geometry/renderers/public: null.
+- **Guardrails belegt (Grep + Test):**
+  - **naechsterSchritt liest nur resolveToolState** (keine eigene Sperr-Regel) - Test K3 'wertet
+    keine Vorbedingung aus, zaehlt nur Zustaende'.
+  - **keine Sperre gelockert** - Test K4 'die gesperrten Mengen sind exakt die gemessenen (73/53/28)'.
+  - kein applyCommand/Store-Schreiben (Grep leer).
+- **Gates im Auszug:** schema 0 . test **930/930 pass, 0 skip** (916->930) . tsc 0 . build ok.
+  14 naechsterSchritt-Subtests gruen.
+- **Gegen-Beweis (zwei, /tmp-Kopie):**
+  A) Kandidaten-Filter '> 0' -> '>= 0' (ein Schritt der nichts loest qualifiziert) -> **1 rot** (13/1).
+  B) 'pointerPosition' aus GESTEN_EINGABEN entfernt (Markieren gilt nicht mehr als gestenbasiert)
+     -> **2 rot** ('Markieren braucht keine Optionen - nicht in Entwicklung' + 'Auftragsregel haette
+     niemanden getroffen') (12/2).
+- **Sichtprobe (iframe 1440, fixture decke-treppe, Bundle ab7f2c1):**
+  - **Teil b / B8 sichtbar behoben:** Kontextleiste bei 'Markieren' liest 'Dieses Werkzeug braucht
+    keine Optionen' - **kein 'in Entwicklung'-Badge** (0 Badges im View; vorher stand dort
+    '...keine Optionen hinterlegt . in Entwicklung'). Der Platzhalter verwechselt 'braucht nichts'
+    nicht mehr mit 'ist nicht fertig'.
+  - **Teil a / Wegweiser dormant:** kein Schild erscheint - eine Szene traegt immer ein Geschoss,
+    also feuert der 'Geschoss anlegen'-Hinweis nie. Deckt sich mit Test K6.
+- **Zwei selbstkorrigierte Auftragsannahmen des Generators (belegt, testverriegelt):** (1) die blosse
+  Haeufigkeit zeigt auf den falschen Schritt (im leeren Plan sperrt 'auswaehlen' 23 > Geschoss 22,
+  aber auswaehlen kann man dort nichts) -> es gewinnt der gemessen meist-entsperrende Schritt;
+  (2) die genannte Zahl ist die entsperrte Differenz (20), nicht die Zahl der Wartenden (22);
+  (3) die Auftragsregel 'Werkzeug ohne eingaben' haette NIEMANDEN getroffen (kein Vertrag hat leere
+  eingaben) -> stattdessen Gesten-Eingaben vs Optionen (trifft 3 Werkzeuge).
+
+- **Teil a erscheint nie = Planner-Spezifikationsfehler, NICHT Generator-Mangel (Planner bestaetigt):**
+  der Wegweiser ist korrekt gebaut, aber seine Vorbedingung (kein Geschoss) tritt nie ein, weil eine
+  Szene immer ein Geschoss traegt. Der Generator hat das gemessen und zurueckgegeben; die Folge (wo
+  gehoert der Hinweis hin) liegt als **AUF-57 beim Planner**. Zaehlt NICHT gegen dieses Votum.
+
+**Urteil: FREIGABE.** Der Wegweiser zaehlt statt zu behaupten (reuse resolveToolState, keine zweite
+Regel, keine Sperre gelockert), die Zahl ist die gemessene Differenz; B8 ist sichtbar behoben und
+unterscheidet 'braucht nichts' von 'unfertig'. Mutationsfest. Die schlafende Teil-a-Anzeige ist ein
+Spec-Fehler des Planners (AUF-57), kein Mangel der Umsetzung.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -463,6 +508,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-39L5  b3a6210  Auszug: schema 0 / test 900/900 0-skip / tsc 0 / build ok ; Guardrail kein 2. Snapshot/Hash/Projektion (grep leer), ableitenSchritte rein ; 12 Subtests ; Gegen-Beweis A offen->ok = K5 rot (10/2), B fenster->tuer = K7 rot (11/1) ; Sichtprobe: frisch Schritt 2/11 'Offen', keine Waende, 0 Fenster/Tuer/Treppe, Expertenmodus bestaetigt 0 Bauteile ; Adjacent Demo-Canvas (68a7f7e, nicht AUF-39)
   Sichtprobe-Nachtrag  Bundle cb3d17e  1440: docOvfX 0, arb einzeilig, 3 Reiter, WZ sichtbar . 1024: docOvfX 0, arbH 27 einzeilig . 375: docOvfX 298 (Quelle: obere Aktionsleiste 'Speichern' right=1156, NICHT AUF-27/34/I4), arb bricht 82px arbOvfX 0, 3 Reiter da
   AUF-43    43a287f  Auszug: schema 0 / test 916/916 0-skip / tsc 0 / build ok ; Guardrails Undo/2D-3D nicht in Flaeche, kein Command/Schema, geschossStapel rein, setActiveLevel einzig, Name einmal ; 16 Subtests ; Gegen-Beweis Sortierung 3 rot + aktiv-Flip 5 rot ; Sichtprobe 1440 Knopf 'EG +-0 1 von 1' + Stapel-Flaeche ; 375 docOvf 298 bleibt (AUF-46, nicht AUF-43)
+  AUF-45    b9861d7  Auszug: schema 0 / test 930/930 0-skip / tsc 0 / build ok ; naechsterSchritt liest nur resolveToolState (K3/K4), keine Sperre gelockert (73/53/28) ; 14 Subtests ; Gegen-Beweis Filter >0->>=0 = 1 rot, Gesten-Regex brechen = 2 rot (B8) ; Sichtprobe 1440: Markieren 'braucht keine Optionen' kein in-Entwicklung-Badge ; Wegweiser dormant (Geschoss immer da = Planner-Spec AUF-57)
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
