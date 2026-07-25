@@ -1360,3 +1360,51 @@ bleiben unangetastet** und weiterhin gestaged für den eigenen Commit des Genera
 
 Aufträge 3–5 (stopp-1 Teil I · `auto/hausplaner-ui-3a` · Branch-Hygiene) sind Willensfragen und
 bleiben ausdrücklich bei Yama. Ich entscheide sie nicht in Vertretung.
+
+---
+
+## ⇒ ALLE — AUFTRAGSTAFEL angelegt: Aufträge werden ab sofort **geholt**, nicht zugerufen (Planner, 25.07.)
+
+Yama hat zwei Dinge gesagt, und das zweite ist das schwerere:
+1. „so kannst du für den generator aufgaben hinterlegen dass er sich holen kann"
+2. „ausserdem habe ich fest gestellt dass der wächter pausiert weil die verbindung nicht da ist"
+
+### 1. Warum die zweite Beobachtung die Bauweise bestimmt
+Ein Verteilweg, der eine laufende Verbindung braucht — Cron, offene Sitzung, erreichbare Instanz —
+fällt **genau dann aus, wenn er gebraucht wird**. Der Überwacher-Cron pausiert bereits aus diesem
+Grund (Block Z. 741). Eine Auftragskette, die daran hängt, hat denselben Bruchpunkt.
+
+Deshalb ist der Abholplatz **eine Datei im Repo**, kein Dienst: `docs/auftraege/AUFTRAGSTAFEL.md`.
+Hol-Prinzip statt Bring-Prinzip; kein Netz nötig; der Zustand steht im Commit, nicht im Kopf einer
+Sitzung. Fällt eine Instanz aus, ist der letzte committete Stand vollständig. **Die Wahrheit bleibt
+der Ledger** — die Tafel ist Register und Zeiger, nicht Beleg; weicht sie ab, gilt diese Datei hier.
+
+### 2. Was auf der Tafel steht
+Acht Posten mit Rolle, Status und Zeiger auf die Auftragsdatei. `OFFEN` sind **AUF-1**
+(A1-Wiederholungsabnahme, frische Evaluator-Instanz, kritischer Pfad) und **AUF-2** (Generator
+committet T1 + `decke` als eigenen Commit). `GESPERRT` sind AUF-3 (T1-Abnahme, braucht den Hash
+aus AUF-2) und AUF-4 (A2, braucht das Votum aus AUF-1). AUF-5 liegt beim Planner. AUF-6 bis AUF-8
+stehen auf `BEI YAMA` und werden von keiner Instanz in seiner Vertretung entschieden.
+
+Ziehen heißt: Status auf `IN ARBEIT` setzen und **nur die Tafel** committen. Melden heißt: Block in
+diesen Ledger, dann `BERICHTET`. **Niemand setzt seinen eigenen Auftrag auf `ERLEDIGT`** — das tut
+die abnehmende Rolle. Kein Selbst-Abnehmen.
+
+### 3. Zwei Richtigstellungen zum Sammel-Block (Z. 1196)
+- **„A2 braucht eine Planner-Spezifikation, die es noch nicht gibt"** — überholt. Der A2-Auftrag
+  liegt seit `d530da3` als Datei vor und ist mit `78d384d` um §8 erweitert (Sperre,
+  P9-Memoisierung, drei neue Abnahmekriterien). Punkt 7 des Sammel-Blocks ist damit erledigt.
+- **„A1 erneut abnehmen — ja oder nein?"** — Yama hat es bereits entschieden: **ja**, wörtlich als
+  Auftrag 1 in seiner eigenen Auftragsdatei, mit dem Zusatz „Kritischer Pfad: A2 bleibt blockiert,
+  bis das durch ist." Steht als AUF-1 auf der Tafel. Punkt 3 des Sammel-Blocks ist damit
+  beantwortet, ohne dass Yama ein zweites Mal gefragt werden muss.
+
+### 4. Was der Planner in diesem Takt selbst getan hat
+`78d384d` — zwei Auftragsdateien, **ausschließlich eigene Pfade**, mit ausdrücklicher Pfadangabe:
+§10 des T1-Evaluator-Auftrags (E1/E2 eingearbeitet) und §8 des A2-Generator-Auftrags. Die **sechs
+gestagten T1-Code-Dateien blieben unangetastet** und stehen weiter für den eigenen Commit des
+Generators bereit (AUF-2). Nachgemessen: `git status --porcelain` zeigt sie unverändert als `M `.
+
+Push-Stand: `fde4f32` ist auf `fork` gesichert; ungesichert ist nur noch `78d384d` (und alles, was
+noch nie ein Commit gesehen hat — der blinde Fleck aus dem Sammel-Block gilt weiter, die sechs
+gestagten Dateien liegen ohne Kopie außerhalb der Maschine).
