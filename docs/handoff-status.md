@@ -2972,3 +2972,54 @@ Registry), nicht „Summe 110 Paket-Einträge". Der Test muss die zusammengefüh
 
 **AUF-31 ist entsperrt**, Umfang 101 statt 110. Alles Übrige am Auftrag bleibt gültig.
 **Ballbesitz → Generator.**
+
+---
+
+## ⇒ PLANNER — Zwei verschiedene „I3", und Yama sieht seine Werkzeuge weiterhin nicht
+
+**Gemessen, nicht vermutet.** Nach `ccdc93b`:
+
+```
+zone: 'fix'        7
+zone: 'kontext'    2
+zone: 'versteckt' 110
+```
+
+**Alle 110 Fach-Werkzeuge stehen unverändert auf `versteckt`.** In der Leiste stehen weiterhin
+`auswahl · wand · fenster · tuer · dach · decke · treppe`. Für Yama hat sich auf dem Schirm
+**nichts** geändert — und genau das war seine Anordnung: *„ich will alle werkzeugstool icon
+frontendlayout"*.
+
+### Was passiert ist — ein Namenszusammenstoß, kein Fehler des Generators
+
+Es gab **zwei verschiedene Dinge, die beide „I3" hießen**:
+
+| | Inhalt | Stand |
+|---|---|---|
+| **I3 (nativ, `ccdc93b`)** | die **sechs Werkzeug-Zustände** ★ angeheftet · empfohlen · ▶ aktiv · ◌ gesperrt · ⋯ weitere · ⌂ system, dazu `canPin`/`prioritaet` in der Kuratierung | **gebaut**, 782/782 |
+| **I3 (Planner-Auftrag, `4b8f300`)** | die **110 sichtbar machen**, gruppiert nach den 22 Kategorien in der oberen Leiste | **nicht begonnen** |
+
+Der native Auftrag lief **drei Minuten vor** meinem Auftragstext ein. Beide sind richtig und
+notwendig — das Zustandsmodell ist die Voraussetzung dafür, dass die Werkzeuge überhaupt sinnvoll
+angezeigt werden können. **Aber sie sind nicht dasselbe, und der zweite ist der, den Yama sieht.**
+
+**Auflösung:** Der native `ccdc93b` behält den Namen **I3**. Mein Auftrag wird zu **I4 —
+„Werkzeuge sichtbar machen"**, Datei `generator-auftrag-i4-werkzeuge-sichtbar.md`. Der Inhalt bleibt
+unverändert gültig; nur die Nummer wechselt, damit niemand mehr zwei Dinge unter einem Namen sucht.
+**Das ist derselbe Fehler wie „Welle A2 = AUF-4" — deshalb steht die Legende auf der Tafel.**
+
+### Die Reihenfolge, damit der Fokus nicht weiter driftet
+
+Der Generator hat gerade **AUF-30** (Render-Testinfra) gezogen. Das ist ein guter Posten, aber er ist
+**ausdrücklich als nicht blockierend** eingetragen — und er bringt Yama seinem Ziel nicht näher.
+
+**Verbindliche Reihenfolge, bis die Werkzeugleiste steht:**
+
+1. **AUF-31** — die 101 IDs eindeutschen (entschieden, entsperrt, Weg 1). Yamas Anordnung „alles auf
+   deutsch" ist bis heute **nicht** umgesetzt: `werkzeugPaket.ts` trägt weiterhin `u-value`,
+   `thermal-envelope`, `floor-heating`, `import-file`.
+2. **I4** — die 110 nach den 22 Kategorien in die obere Leiste. **Das ist der Schritt, nach dem
+   Yama seine Icons sieht.**
+3. Danach erst AUF-30, AUF-26, AUF-27 — alle drei nicht blockierend.
+
+**Ballbesitz → Generator, Posten AUF-31.**
