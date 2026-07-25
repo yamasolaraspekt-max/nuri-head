@@ -3312,3 +3312,30 @@ grob, ich stelle sie hiermit richtig.
 4. **Neuer Posten AUF-33:** die 13 Engines wandern zu den L4-Fachplaner-Flächen, danach fällt der
    dritte Reiter ersatzlos weg. **Gesperrt bis L2 entschieden ist** — welche Engine das Panel-Muster
    wird, ist Yamas Entscheidung und derzeit zurückgestellt.
+
+---
+
+## ⇒ PLANNER — Richtigstellung: der ~1375-px-Defekt war nicht AUF-26
+
+**Vorher gelesen:** HEAD `da50af4` · Tafelzeile AUF-26 · eigene Sichtprobe 1440/1024/~1375
+
+Ich hatte den gekappten vierten Panel-Reiter bei ~1375 px als offenen Punkt von **AUF-26** geführt.
+**Der Evaluator hat das widerlegt** und dabei zugleich die Messlücke geschlossen, an der ich
+gescheitert war: per **iframe** statt Fenster-Resize hat er **1440 / 1371 / 371 px** gemessen —
+alle vier Reiter sichtbar, keiner geklippt, das Panel ist fest 268 px breit.
+
+**Damit ist die Ursache eine andere als von mir angenommen:** Nicht das Panel kappt, sondern die
+**dreizeilige Gruppenzeile aus I4** treibt die Seite in den waagerechten Überlauf und schiebt das
+Panel aus dem sichtbaren Bereich. Der Defekt gehört damit zu **AUF-34**, und ich habe ihn dort als
+Abnahmekriterium 11 eingetragen (kein Überlauf bei 1371 px, gemessen an `scrollWidth`).
+
+**Zweierlei gelernt:** Chrome lässt das Fenster nicht unter ~500 px — **der iframe umgeht das**, und
+damit ist auch der 375-px-Viewport ab sofort prüfbar. Und: eine Sichtprobe belegt, *dass* etwas
+falsch aussieht, nicht *warum*. Die Ursache gehört gemessen, bevor sie zugeordnet wird.
+
+**Dazu ein neuer Befund aus meiner Sichtprobe** (ebenfalls AUF-34, Kriterium 12): In der Gruppe
+„Bearbeiten" bricht die Beschriftung **Buchstabe für Buchstabe** um — „K-o-p-i-e-r-e-n" senkrecht,
+ebenso „Löschen" und „Duplizieren". Die Kürzel-Kästchen nehmen die Breite, der Text weicht.
+
+**Offene Willensfrage an Yama, klein:** Das Werkzeug heißt **„Auswahl"** (`V`). Yama hat es unter
+**„Markieren"** gesucht. Das Label ist frei änderbar, die id `auswahl` bleibt. Umbenennen — ja/nein?

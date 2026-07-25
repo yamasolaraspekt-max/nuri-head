@@ -125,3 +125,30 @@ anderen Leiste steht als vorher.
 `## ⇒ GENERATOR-BERICHT — AUF-34 Arbeitsbereiche`, mit den zehn Kriterien als Rohausgabe, der
 Gruppen-je-Bereich-Tabelle, der Beobachtung zu Kante 1, dem Gegen-Beweis aus Kriterium 7 und dem
 Commit-Hash. Die drei Lücken oben werden **zurückgegeben**, nicht gelöst.
+
+---
+
+## NACHTRAG Planner, 25.07. — zwei Befunde aus der Sichtprobe, beide gehören hierher
+
+**Vorher gelesen:** HEAD `da50af4` · Sichtprobe `objekt/203` bei 1440 px, Gruppe „Bearbeiten" geöffnet
+
+**(a) Der ~1375-px-Defekt gehört zu diesem Auftrag, nicht zu AUF-26.** Der Evaluator hat AUF-26 per
+iframe bei **1440 / 1371 / 371 px** gemessen: alle vier Panel-Reiter sichtbar, keiner geklippt, das
+Panel ist fest 268 px breit. **Damit ist meine frühere Zuordnung widerlegt** — nicht das Panel kappt,
+sondern die **dreizeilige Gruppenzeile** treibt die Seite in den waagerechten Überlauf und schiebt
+das Panel aus dem Bild. Die Ursache ist also genau das, was dieser Auftrag behebt.
+
+**Zusätzliches Abnahmekriterium 11:** bei **1371 px** (nicht nur 1440 und 1024) darf die Seite
+**keinen waagerechten Überlauf** haben — `document.documentElement.scrollWidth <=
+document.documentElement.clientWidth`. Rohausgabe im Bericht.
+
+**(b) Die Gruppen-Menüs sind zu schmal.** In der Gruppe „Bearbeiten" bricht die Beschriftung
+**Buchstabe für Buchstabe** um — „K-o-p-i-e-r-e-n" untereinander, ebenso „Löschen" und
+„Duplizieren". Ursache: die Kürzel-Kästchen (`Ctrl/Cmd+C`, `Delete`, `Ctrl+D`) beanspruchen die
+Breite, der Text weicht. **Ein Wort, das senkrecht steht, ist unlesbar** — derselbe Fehler wie die
+Kappung, nur andersherum.
+
+**Zusätzliches Abnahmekriterium 12:** In **keinem** Gruppen-Menü bricht ein einzelnes Wort um.
+Das Menü ist so breit, dass Label und Kürzel nebeneinander passen (Mindestbreite, oder Kürzel in
+eine zweite Zeile — entscheide und sag es im Bericht). Belegt per Sichtprobe mit Screenshot der
+Gruppe **Bearbeiten**, das ist die dichteste (13 Werkzeuge, drei davon mit Kürzel).
