@@ -2722,3 +2722,55 @@ echtem Fenster-Resize (`resize_window`), nicht per DevTools-Emulation:
 Mindestbreiten von Rail (220) + Zeichenfläche + Panel übersteigen dort die Fensterbreite, die Seite
 läuft waagerecht über statt umzubrechen. **375 px bleibt offen** — Chrome lässt das Fenster nicht so
 schmal werden; dafür braucht es die DevTools-Geräteleiste.
+
+## ⇒ GENERATOR-BERICHT — I2 (AUF-21) UMGESETZT: `289ccc8` — der Katalog-Tausch
+Tafel-Posten I2 gezogen, nachdem die A2-Abnahme (`32b1862`) die Sperre auf `toolPresentation.ts`
+aufgehoben hat. **„umgesetzt", nicht „grün".**
+
+**Yamas Ziel, wörtlich geprüft:** kein Seitenwerkzeug, kein Textwerkzeug, keine Pipette mehr —
+`katalogTool('page' | 'type' | 'eyedropper' | 'pen' | 'preflight' | …)` liefert **`undefined`**,
+und die ids stehen in **keiner** Zonen-Regel mehr. Die **15 falschen Versprechen** in der Navi sind
+mit weg: `zoneTools('weitere')` = **0**, also kein `cad-*`-Eintrag mehr in `FAEHIGKEITEN`.
+
+**Gemessen statt angenommen:** von den 54 Katalog-Einträgen haben **47** im 110er-Fachpaket keine
+Entsprechung — exakt die Zahl, die der Ledger nannte. Sieben ids (`line`, `polygon`, `rectangle`,
+`rotate`, `scale`, `search`, `settings`) kommen im Paket erneut vor, dort mit Fach- statt
+DTP-Bedeutung.
+
+**Drei neue Dateien:**
+- `werkzeugPaket.ts` — die 110 als typisierte Daten, erzeugt aus `tool-registry-paket.json`.
+- `paketAdapter.ts` — Paket → `ToolDefinition`. **Richtung ist Vorschrift:** der neue Code passt sich
+  dem Bestand an; kein Feld von `ToolDefinition` wurde geändert oder ergänzt.
+- `toolCatalogStillgelegt.ts` — die alten 54 als **Trail**. Stillgelegt, **nicht gelöscht**: „eine
+  Wahrheit je Sachverhalt" verlangt das Ende der produktiven Nutzung, nicht das Verschwinden des Belegs.
+
+**Auflage 1 der A2-Abnahme baulich erfüllt.** Das Paket bringt kollidierende Kürzel mit: paketintern
+`g`, `s`, `Ctrl/Cmd+K` je zweimal, dazu `V`, `W`, `R`, `Delete` aus der Registry. Der Adapter
+übernimmt diese **10** Kürzel nicht und weist sie über `verworfeneKuerzel()` **mit Grund** aus. Ein
+Kürzel, das zwei Werkzeuge auslöst, ist schlimmer als keins.
+
+**Zahlen:** Katalog **110** · Regeln **119** (9 Registry + 110) · fix **7** · kontext **2** ·
+weitere **0** · versteckt **110** · `verwaisteRegeln()` `[]` · `regelloseWerkzeuge()` `[]`.
+
+**Warum alle 110 in `versteckt` landen:** Sie sind als Daten vorhanden, aber noch ohne Handler. Sie
+in `weitere` zu stellen hieße, 110 neue falsche Versprechen an die Stelle der 15 alten zu setzen.
+**Wohin sie gehören, entscheidet I3** anhand von `prioritaet`/`anheftbar` aus dem Paket.
+
+**Gate, HEAD vor == nach:** `tsc` **0** · `schema:check` **0** (kein Zod berührt) · `test`
+**771/771 pass, 0 fail** (vorher 768) · `build` **0**.
+**Gegen-Beweis rot gesehen:** einen DTP-Rest (`type`) zurück in den Katalog ⇒ **4 Tests rot**;
+danach zurückgesetzt, `diff` identisch.
+
+**Vier Testdateien nachgezogen — und einer davon prüft jetzt das Gegenteil von vorher.** Der
+`faehigkeiten`-Test verlangte bisher, dass `cad-rotate` & Co. **vorhanden** sind; jetzt verlangt er,
+dass sie **fehlen**. Das ist die beabsichtigte Wirkung von AUF-28, kein weichgespültes Kriterium —
+ich sage es ausdrücklich, weil „Test angepasst, damit er grün wird" sonst genau so aussieht.
+
+**Offene Frage an Yama (Operanden-Gate, nicht eigenmächtig entschieden):** Die 110 Paket-ids sind
+**englisch** (`select`, `wall`, `room`), Labels und Feldnamen sind deutsch. Dein Entscheid „alles
+deutsch" betraf die **Nicht-Umbenennung** der 9 Registry-ids. Eine Eindeutschung der Paket-ids
+würde **110 Icon-Dateinamen** mitbetreffen (`icons/tools/<id>.svg`) — das ist eine eigene
+Entscheidung mit Rückbau-Kosten. Der Nutzer sieht heute ausschließlich Deutsch.
+
+**Ballbesitz → Evaluator.** Danach **I3**: `anheftbar`/`prioritaet` in die Zonen — Anheften (★),
+Kontext-Zone, Überlauf.
