@@ -26,6 +26,10 @@ import { SCHIENEN_REITER, SCHIENE_STANDARD, type SchienenReiterId } from './dash
 import { ARBEITSBEREICHE, arbeitsbereich } from './dashboard/arbeitsbereiche';
 import { gruppenFuer } from './dashboard/werkzeugGruppen';
 import { ladeArbeitsbereich, speichereArbeitsbereich } from './state/arbeitsbereichSpeicher';
+import {
+  FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_GESCHOSS_DA, FAEHIGKEIT_WAND_DA,
+  FAEHIGKEIT_ANSICHT_BEREIT, RECHT_BEARBEITEN,
+} from './tools/vorbedingungen';
 import { projektBaum, PROJEKTBAUM_LEER } from './dashboard/projektBaum';
 import { befundeAus, BEFUNDE_LEER, BEFUNDE_UMFANG } from './dashboard/befunde';
 import { palettenEintraege, PALETTE_LEER } from './dashboard/palette';
@@ -352,9 +356,24 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         selectionTypes: selectedNodeIds
           .map((id) => nodes.find((n) => n.id === id)?.type)
           .filter((t): t is NonNullable<typeof t> => Boolean(t)) as ObjectType[],
-        permissions: ['Hausplaner,update'],
+        permissions: [RECHT_BEARBEITEN],
+        /**
+         * AUF-36: die vier **messbaren** Vorbedingungen des Funktionsvertrags. Sie sind keine
+         * Erfindung, sondern Tatsachen, die diese Komponente ohnehin kennt: Szene geladen, aktives
+         * Geschoss, Wände im Geschoss, Zeichenfläche gemountet. Sie fließen über die **vorhandene**
+         * `capabilities`-Liste — der dafür vorgesehene Haken, der bisher leer lag. Was der Planer
+         * nicht messen kann (freigegebene Heizlast, ausgelegte Heizflächen …), steht hier
+         * bewusst NICHT: ein Wert, den niemand kennt, wird nicht behauptet.
+         */
+        capabilities: [
+          ...(scene ? [FAEHIGKEIT_PROJEKT_OFFEN] : []),
+          ...(level ? [FAEHIGKEIT_GESCHOSS_DA] : []),
+          ...(waende.length > 0 ? [FAEHIGKEIT_WAND_DA] : []),
+          // Die Zeichenfläche ist gemountet, sobald diese Komponente rendert.
+          FAEHIGKEIT_ANSICHT_BEREIT,
+        ],
       }),
-    [activeWorkspace, modus, selectedNodeIds, nodes],
+    [activeWorkspace, modus, selectedNodeIds, nodes, scene, level, waende.length],
   );
   /**
    * AUF-34 / Kante 3 — gilt das aktive Werkzeug im gewählten Arbeitsbereich? Der Name des fremden

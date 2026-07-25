@@ -7,8 +7,11 @@
  * Kein Feld von `ToolDefinition` wird geändert, keins ergänzt.
  *
  * **Was der Adapter NICHT tut:**
- * - Er erfindet keine Aktivierungsregeln. `activationRules` bleibt leer; die einzige Wahrheit über
- *   „darf ich das jetzt?" ist weiterhin `resolveToolState` (A1-Guardrail: kein zweiter Mechanismus).
+ * - Er erfindet keine Aktivierungsregeln. Seit **AUF-36** trägt er welche ein — aber **keine
+ *   erfundenen**: sie kommen als Daten aus dem Funktionsvertrag (`werkzeugVertrag.ts`) und werden
+ *   über die Tabelle in `vorbedingungen.ts` übersetzt. Ausgewertet werden sie weiterhin
+ *   ausschließlich von `resolveToolState` (A1-Guardrail: kein zweiter Mechanismus, insbesondere
+ *   kein zweites `resolveDisabledReasons`). Nicht messbare Vorbedingungen erzeugen **keine** Regel.
  * - Er weist keine Zone zu. Wohin ein Werkzeug in der Leiste gehört, entscheidet
  *   `toolPresentation.ts` — und für die 110 entscheidet es **I3** anhand von `prioritaet`/`anheftbar`.
  * - Er vergibt keine kollidierenden Tastenkürzel (siehe unten).
@@ -25,6 +28,8 @@ import { PAKET_WERKZEUGE, type PaketWerkzeug } from './werkzeugPaket';
 import { TOOL_DEFINITIONS } from './toolRegistry';
 import { themaVonWerkzeug } from './werkzeugThemen';
 import { bereichVonThema } from '../dashboard/arbeitsbereiche';
+import { vertrag } from './werkzeugVertrag';
+import { regelnFuer } from './vorbedingungen';
 
 /** Kürzel, die die bestehende Registry bereits belegt (klein geschrieben). */
 const REGISTRY_KUERZEL = new Set(
@@ -94,6 +99,9 @@ export function paketZuTool(w: PaketWerkzeug): ToolDefinition {
     art: 'werkzeug',
     supportedWorkspaces: arbeitsbereicheVon(w.id),
     supportedViews: ansichten(w),
+    // AUF-36: die Vorbedingungen des Funktionsvertrags — als DATEN in die bestehende Engine.
+    // `regelnFuer` lässt nicht messbare Vorbedingungen aus, statt sie zu raten (Operanden-Gate).
+    activationRules: regelnFuer(vertrag(w.id)?.vorbedingungen ?? []),
     ...(kuerzel ? { shortcut: kuerzel } : {}),
     helpText: w.funktion,
     meaning: w.funktion,

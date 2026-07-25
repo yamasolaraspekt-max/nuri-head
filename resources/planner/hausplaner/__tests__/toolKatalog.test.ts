@@ -1,6 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { TOOL_KATALOG, katalogTool } from '../app/tools/toolCatalog';
+import {
+  FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_GESCHOSS_DA, FAEHIGKEIT_WAND_DA,
+  FAEHIGKEIT_ANSICHT_BEREIT, RECHT_BEARBEITEN,
+} from '../app/tools/vorbedingungen';
 import { STILLGELEGT_INDESIGN_KATALOG } from '../app/tools/toolCatalogStillgelegt';
 import { verworfeneKuerzel, kuerzelFrei } from '../app/tools/paketAdapter';
 import { resolveToolState } from '../app/tools/activation';
@@ -59,11 +63,24 @@ test('Metadaten übernommen: Funktion, Einsatzbereich, Tooltip', () => {
   assert.ok(t.tooltip?.title && t.tooltip?.body && t.tooltip?.usage);
 });
 
+/**
+ * AUF-36 hat die **Daten** geändert, nicht die Engine: die Katalog-Werkzeuge tragen jetzt die
+ * Vorbedingungen ihres Funktionsvertrags als `activationRules`. Der Kontext dieses Tests bildet
+ * deshalb ab, was die App tatsächlich mitgibt — offener Plan, aktives Geschoss, Bearbeitungsrecht.
+ * Ein Kontext ohne all das ist kein „Normalfall", sondern der Fall „nichts geladen"; er steht
+ * unten als eigene, rote Gegenprobe.
+ */
+const NORMALFALL = {
+  workspace: 'architektur', view: '2d' as const, selectionTypes: [],
+  permissions: [RECHT_BEARBEITEN],
+  capabilities: [FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_GESCHOSS_DA, FAEHIGKEIT_ANSICHT_BEREIT, FAEHIGKEIT_WAND_DA],
+};
+
 test('Activation-Engine greift unverändert auf den neuen Katalog', () => {
   const werkzeug = katalogTool('raum')!;
-  const kontext2d = baueAktivierungsKontext({ workspace: 'architektur', view: '2d', selectionTypes: [], permissions: [] });
+  const kontext2d = baueAktivierungsKontext(NORMALFALL);
   assert.equal(resolveToolState(werkzeug, kontext2d).enabled, true);
-  const kontext3d = baueAktivierungsKontext({ workspace: 'architektur', view: '3d', selectionTypes: [], permissions: [] });
+  const kontext3d = baueAktivierungsKontext({ ...NORMALFALL, view: '3d' });
   const z3 = resolveToolState(werkzeug, kontext3d);
   if (!werkzeug.supportedViews.includes('3d')) {
     assert.equal(z3.enabled, false, 'ein 2D-Werkzeug ist in der 3D-Ansicht nicht bedienbar');
