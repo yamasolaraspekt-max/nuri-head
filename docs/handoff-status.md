@@ -3399,3 +3399,60 @@ muss erst stehen. Aber er rückt **vor L2/L3**, weil er deren Vorbedingung ist.
 
 **Das Label von `auswahl` bleibt „Auswahl".** Es umzubenennen wäre die falsche Antwort auf eine
 richtige Frage: „Markieren" ist ein zweites Werkzeug, nicht ein anderer Name für das erste.
+
+---
+
+## ⇒ PLANNER — Bewertung des Funktionsvertrag-Pakets (110 Werkzeuge, 15 Themen)
+
+**Vorher gelesen:** HEAD `ac0d9b3` · `app/tools/activation.ts:18,19,87,122` ·
+`domain/commands.types.ts` (19 Command-Typen, `AblehnungsGrund`) ·
+`commands/applyCommand.ts:3,11,15` (Undo = inverse Patches, `CommandAbgelehnt` **vor** jeder
+Mutation) · `app/tools/werkzeugPaket.ts` (22 Kategorien) · `~/Downloads` (Paket **nicht** vorhanden)
+
+**Die Dateien liegen nicht vor.** In `~/Downloads` ist seit 17:35 nichts Neues. Bewertet ist die
+**Beschreibung**, nicht der Code. Sobald die ZIP dort liegt, wird gegen den Inhalt gemessen.
+
+### Was das Paket richtig trifft
+
+Es liefert genau das, was gestern noch fehlte: **`inputs`, `preconditions` und `outputs` je
+Werkzeug** — also den **Eingang**, an dem die 13 Fach-Engines bisher scheiterten (AUF-35).
+Und die Abgrenzung stimmt fachlich: *„Die eigentlichen Fachalgorithmen werden bewusst nicht in den
+Buttons dupliziert"* — das ist wörtlich die Bauordnungsregel „eine Wahrheit je Sachverhalt".
+
+### Drei Kollisionen mit dem Bestand — vor jeder Integration zu entscheiden
+
+**K1 — Zwei Aktivierungssysteme.** Das Paket bringt `resolveDisabledReasons(tool, ctx): string[]`.
+Der Bestand hat `resolveToolState(tool, ctx): WerkzeugZustand` (`activation.ts:87`) mit
+`{ enabled, reason }` (`:18/:19`) und Regel-Gründen (`:122`). Beides beantwortet dieselbe Frage.
+**Entscheidung: der Bestand bleibt.** `preconditions` werden als **Daten** in die vorhandene Engine
+gefüttert — `resolveToolState` lernt die neuen Regeln, es entsteht **keine zweite Funktion**.
+Ein Unterschied ist dabei zu behalten: der Bestand liefert **einen** Grund, das Paket eine **Liste**.
+Die Liste ist die bessere Auskunft — sie wird **additiv** ergänzt, nicht als Ersatz.
+
+**K2 — Zwei Command-Schichten.** Das Paket bringt `ToolCommandDefinition.execute(input, ctx)` und
+eine `tool-engine`. Der Bestand hat **19 Command-Typen** (`ADD_NODE`, `UPDATE_NODE`, `MOVE_NODE`,
+`ADD_ROOF` …), Undo über **inverse Immer-Patches** und `CommandAbgelehnt` **vor** jeder Mutation.
+**Entscheidung: der Bestand bleibt.** `commandId`, `undoable` und `auditRequired` sind **Metadaten
+am Werkzeug**, kein zweiter Ausführungsweg. Ein `execute`, das an `applyCommand` vorbei schreibt,
+verliert Undo und die Ablehnungsprüfung — das wäre der teuerste Fehler des ganzen Pakets.
+`WallCommand` bildet also auf `ADD_NODE type:'wall'` ab, nicht auf einen neuen Mechanismus.
+
+**K3 — 15 Themen gegen 22 Kategorien, und das ist eilig.** Der Bestand führt **22 Kategorien**;
+**AUF-34 wird gerade darauf gebaut** (fünf Arbeitsbereiche, acht durchgängige Gruppen). Das Paket
+bringt **15 Themenbereiche**. Zwei Sortierungen nebeneinander sind eine zweite Wahrheit.
+**Das muss entschieden werden, bevor AUF-34 fertig ist** — sonst wird zweimal gebaut.
+
+### Vierter Punkt, kleiner: die IDs
+
+Die Beispiele sind englisch (`id: "wall"`, `commandId: "WallCommand"`, `themeId: "07-architektur"`).
+Yamas Anordnung lautet **alles deutsch**, und AUF-31 hat 101 IDs bereits eingedeutscht. Das Paket
+wird beim Einlesen über `docs/planner/eindeutschung-110-paket-ids.md` gemappt — **nicht** werden die
+IDs zurückgedreht.
+
+### Was ich brauche
+
+1. **Die ZIP nach `~/Downloads`.**
+2. **Eine Entscheidung zu K3**: 15 Themen **oder** 22 Kategorien. Meine Empfehlung steht im
+   Antworttext; sie blockiert AUF-34.
+
+**Ballbesitz → Yama** für K3 und die Datei. K1 und K2 habe ich entschieden.
