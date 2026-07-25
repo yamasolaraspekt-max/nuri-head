@@ -1568,3 +1568,63 @@ keine Schichtfrage. Die drei Grüns existieren weiterhin — sie sind jetzt nur 
 statt falsch behauptet. Die Entscheidung, ob sie zusammengeführt werden, ist **T2b** und gehört Yama.
 
 **Ballbesitz → Evaluator.** AUF-9 steht auf `BERICHTET`; auf `ERLEDIGT` setzt es die abnehmende Rolle.
+
+---
+
+## ⇒ PLANNER — Dashboard v2 als Auftrag hinterlegt (AUF-12) + Wiedereinstiegspunkt
+
+**Stand:** 25.07.2026, 11:40 UTC · **Rolle:** Planner · **Branch:** `auto/hausplaner-integration`
+**HEAD vor der Messung:** `7f1ecd6` · **HEAD nach der Messung:** `7f1ecd6` (C-Auflage erfüllt)
+**Neue Commits:** `686d4ef` (Fahrplan + Auftrag + Tafel), `e6eea96` (Wiedereinstieg + Zeiger)
+
+**Anlass:** Yama, 25.07.: *„wir haben dashboard design fest gelegt sollst als erstes fertig gestellt
+werden v1 usw"*. Damit rückt das Werkzeug-Dashboard **vor** den Layout-Fahrplan L1–L7 (AUF-11).
+Nicht weil dessen Inventur falsch wäre — ihre **Reihenfolge** folgte einer anderen Entscheidung.
+
+**Was hinterlegt wurde:**
+
+- `docs/fahrplan-dashboard-versionen.md` (162 Z.) — v1 mit Commit-Tabelle, die gemessene
+  Scheibentabelle UI-1…UI-12, v2…v6, die Zuordnung v1–v6 → L1–L7 (kein L-Posten fällt weg),
+  fünf stehende Regeln.
+- `docs/auftraege/generator-auftrag-dashboard-v2-flaechen.md` (279 Z.) — zwei Batches
+  (v2.1 Kontext-Options-Leiste + v2.2 Panel-Reiter / v2.3 Projektbrowser + v2.4 Prüfungscenter
+  + v2.5 Befehlspalette), Nahtstellen mit Zeilenankern, zehn Kanten, zwölf Abnahmekriterien.
+- `docs/WIEDEREINSTIEG-HAUSPLANER.md` (98 Z.) — die Tür für eine neue Sitzung.
+
+**Zehn Messblöcke vor dem Schreiben — drei davon haben meinen eigenen Fahrplan korrigiert:**
+
+| Behauptung (auch meine eigene) | gemessen |
+|---|---|
+| „UI-4: kein `optionsSchema`-Konsument, 0 Dateien" | **falsch** — `HausplanerApp.tsx:655–666` verdrahtet Fenstertyp/Türtyp von Hand. §19 ist ein **Umzug**, keine Neuerfindung. |
+| Werkzeugleiste = Topbar (so in Code-Landkarte und `frontend-entwickler`) | **falsch** — linke Schiene, **220 px** (`:795`–`:814`). Der Projektbrowser liegt deshalb **in** dieser Schiene, damit `:590` (`− 220 − 268`) unberührt bleibt. |
+| „50 Test-Dateien / 286 Tests" (Designdoc, `2f12c64`) | **veraltet** — `__tests__/` listet **81** Dateien. Der Auftrag nennt keine Zahl, sondern verlangt vorher/nachher vom Generator. |
+
+**Die härteste Entscheidung: v2 ändert den Store nicht.** Kein neues Feld, kein Command, kein Zod.
+Alles, was v2 zeigt, ist bereits lesbar (`activeToolId`, `alleTools()`, `resolveToolState`,
+`selectNodes`, `letzteAblehnung`). Das hält v2 additiv, hält `schema:hausplaner:check` **ohne** Regen
+grün und hält v2 **außerhalb** des Sperrbereichs von AUF-1 — AUF-1 sperrt AUF-4, weil A2
+`toolPresentation.ts` liest; v2 fasst die Datei nicht an.
+
+**Zwei Grenzen, die der Auftrag ausspricht statt umgeht:**
+
+- **Render-Tests sind unmöglich.** Der Runner ist `node:test` mit `--experimental-strip-types`, kein
+  jsdom, keine testing-library (`package.json:10`). Deshalb wandert jede beweisbare Entscheidung in
+  vier reine Module unter `app/dashboard/` — die JSX bleibt bewusst dünn.
+- **Das Prüfungscenter kann heute nur 0 oder 1 Befund zeigen.** Der Store hält **eine**
+  Ablehnung als `string | null` und verwirft `CommandAbgelehnt.grund` (`store:34`,`:110`;
+  `commands.types.ts:70-78`). Statt eine Liste vorzutäuschen, nennt der Auftrag die Grenze, schreibt
+  den ehrlichen Leertext („Keine offenen Befunde.", nicht „keine Daten") und legt die Store-Änderung
+  als **v3** ab.
+
+**Yamas Layout-Regel ist als Abnahmekriterium übersetzt:** eine leere Fläche ist nur zulässig, wenn
+sie ihren Zustand ausspricht — **mit Text und Symbol, nicht nur Farbe** (WCAG 1.4.1). Kriterium 12
+verlangt jede neue leere Fläche einzeln aufgeführt als Fläche → Zustand → Text.
+
+**Push steht aus.** `686d4ef` und `e6eea96` liegen **nur lokal**. Der Geräte-Mount hat kein Netz:
+`./push-integration-sicher.command` lief 11:31 UTC und endete für **jeden** Branch und **beide**
+Remotes mit `HTTP 403 from proxy after CONNECT` (Beleg: `push-result.log`). Der Push gehört einer
+nativen Instanz oder Yama — Remotes bleiben `fork` + `backup-private`, **nie** `upstream`, nie `--force`.
+
+**Ballbesitz → Generator** für AUF-12 (Batch 1 zuerst, Bericht und Abnahme **vor** Batch 2).
+Unverändert offen: AUF-1 und AUF-3 beim Evaluator, AUF-9 `BERICHTET`. Bei Yama liegen AUF-5/6/7/8/10/11
+sowie die drei Willensfragen in Fahrplan §6 und die drei in Auftrag §10 — **keine davon blockiert v2.**
