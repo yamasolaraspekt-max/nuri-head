@@ -572,6 +572,47 @@ innerText im contentDocument) UND am Screenshot:
 
 Beide Statusanzeigen sagen dieselbe Wahrheit; die Luege ist weg. **Auflage erfuellt -> volle FREIGABE.**
 
+## AUF-53 - Import-Recht = Hausplaner,add (b4e5f03, Bundle 581f457) - FREIGABE
+
+**Reihenfolge:** erst blind gegen b4e5f03 gemessen (/tmp-Auszug), dann Generator-Bericht.
+**Klasse: Vorarbeit** (kein sichtbarer Effekt in der Insel - die 8 Werkzeuge waren gesperrt und
+bleiben gesperrt; die Wirkung ist server-seitig, zurueckgegeben). **Spur A (Rechte)** - besonders
+genau gemessen.
+
+- **Umfang (git show --name-status):** 3 Dateien - NEU __tests__/importRecht.test.ts ; M
+  __tests__/werkzeugVertrag.test.ts, app/tools/vorbedingungen.ts.
+- **Kein Tor-1 (selbst geprueft):** der Commit enthaelt KEINE Datei unter database/migrations/,
+  app/Models/User.php, routes/, Controller. Nur Insel-Code + Tests. hasPermission unberuehrt (K3:
+  weiterhin genau vier Aktionen).
+- **Die is_read-Falle vermieden (Kern):** User::hasPermission schickt jede unbekannte Aktion in den
+  default-Zweig = is_read; ein Recht 'Hausplaner,import' saehe geschuetzt aus und waere fuer jeden
+  Leseberechtigten offen. Test K4 verriegelt: die Aktion 'import' taucht NIRGENDS als Berechtigungs-
+  aktion auf. Stattdessen RECHT_IMPORTIEREN = 'Hausplaner,add' (Z.105), permission.import mappt darauf
+  (Z.161 operator contains). add existiert als Spalte seit 2023, von keiner Route benutzt.
+- **Sicherheits-Kernpruefung (Insel erteilt sich das Recht NICHT selbst):** HausplanerApp setzt
+  permissions: [RECHT_BEARBEITEN] = ['Hausplaner,update'] (Z.407/919) - **nicht** 'Hausplaner,add'.
+  Also bleiben die 8 Import-Werkzeuge in der Insel GESPERRT; sie werden NICHT faelschlich freigeschaltet.
+  Der Generator hat ausdruecklich zurueckgegeben (Paragraph 4), das Recht nicht durchzureichen - ein
+  von der Insel selbst erteiltes Recht schuetzt nichts und haette die acht fuer JEDEN geoeffnet.
+- **Gates im Auszug:** schema 0 . test **956/956 pass, 0 skip** (948->956) . tsc 0 . build ok.
+  8 importRecht-Subtests (K4 import-nirgends-Aktion, K3 hasPermission 4 Aktionen unberuehrt, K5 8
+  Vertraege -> add, K6 ohne Recht alle 8 gesperrt gleicher Grund, K7 mit Recht -8 genau, 'schaltet
+  keine Import-FUNKTION frei - 8 bleiben ohne Handler').
+- **Gegen-Beweis (/tmp-Kopie):** Zuordnung 'Hausplaner,add' -> 'Hausplaner,update' (breit UND gezielt
+  am Mapping-Wert) -> je **3 rot** (K5/K6/K7). Der Generator meldete 4; seine Mutation brach zusaetzlich
+  den 'erfuellbar'-Test, vermutlich Zuordnung auf ein NICHT existierendes Recht - meine mappt auf
+  update (existiert), daher bleibt 'erfuellbar' gruen. Differenz erklaert, Zaehne bestaetigt.
+  (Beweis-statt-Bericht: gemeldet sind meine gemessenen 3, nicht die behaupteten 4.)
+- **Sichtprobe (iframe 1440, Bundle 581f457):** kein sichtbarer Effekt in der Insel - der Sperrgrund
+  'Keine Berechtigung zum Importieren' erscheint nicht als Klartext (vorkommen 0), er lebt als Tooltip/
+  im 'weitere'-Ueberlauf an den gesperrten Werkzeugen. Konsistent mit Vorarbeit; der sichere Zustand
+  (8 gesperrt) ist code-seitig belegt, nicht am Schirm.
+
+**Urteil: FREIGABE.** Zwei Sicherheitsfallen sauber umgangen: die is_read-Vortaeuschung (Recht auf
+add statt import) und das Selbst-Erteilen in der Insel (nicht durchgereicht, ehrlich zurueckgegeben).
+Additiv, kein Tor-1, hasPermission unberuehrt, mutationsfest. Die tatsaechliche Durchsetzung gehoert
+server-seitig und ist bewusst ausserhalb dieses Postens.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -602,6 +643,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-45    b9861d7  Auszug: schema 0 / test 930/930 0-skip / tsc 0 / build ok ; naechsterSchritt liest nur resolveToolState (K3/K4), keine Sperre gelockert (73/53/28) ; 14 Subtests ; Gegen-Beweis Filter >0->>=0 = 1 rot, Gesten-Regex brechen = 2 rot (B8) ; Sichtprobe 1440: Markieren 'braucht keine Optionen' kein in-Entwicklung-Badge ; Wegweiser dormant (Geschoss immer da = Planner-Spec AUF-57)
   AUF-51    74fdcb4  Auszug: schema 0 / test 938/938 0-skip / tsc 0 / build ok ; Pan-Zustand null-Start + onDragMove + Herkunftspruefung (HausplanerApp 339/1300/1301) ; 8 Subtests ; Gegen-Beweis panAus ignoriert Wert = 1 rot, Herkunft ===->!== = 2 rot ; Sichtprobe 1440: Drag ~250/120 -> Inhalt wandert, 2 Klicks danach -> Verschub BLEIBT (kein Snap-back)
   AUF-47    79bf47c  Auszug: schema 0 / test 948/948 0-skip / tsc 0 / build ok ; speicherAnzeige rein, kannSpeichern===false schlaegt alles, save() unberuehrt (Diff leer) ; 10 Subtests ; Gegen-Beweis Faehigkeit ausgehebelt = 2 rot ; Bundle fca2fc6 traegt 'wird nicht gespeichert' ; visuelle Sichtprobe AUFLAGE (Browser weg, nicht sichtgeprueft)
+  AUF-53    b4e5f03  Auszug: schema 0 / test 956/956 0-skip / tsc 0 / build ok ; kein Tor-1 (keine PHP/Migration/Route) ; is_read-Falle vermieden (K4 import nirgends Aktion), RECHT_IMPORTIEREN=Hausplaner,add ; Insel erteilt nur update (nicht add) -> 8 bleiben gesperrt ; 8 Subtests ; Gegen-Beweis Mapping->update = 3 rot (Generator 4, Delta erklaert) ; Sichtprobe: kein sichtbarer Effekt (Vorarbeit, Grund im Tooltip)
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
