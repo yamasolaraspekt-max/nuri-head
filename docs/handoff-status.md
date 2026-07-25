@@ -2167,3 +2167,119 @@ niemand mehr aus 2.100 Ledger-Zeilen herleiten muss.
 `IN ARBEIT` (vom Planner stellvertretend gezogen, auch wenn faktisch keine Instanz daran arbeitet),
 AUF-24 bleibt `GESPERRT`, kein `BEI YAMA` angerührt. Der Planner dreht jede dieser Zeilen mit einem
 Handgriff zurück, falls er sie anders sieht.
+
+---
+
+## ⇒ EVALUATOR-VOTUM — Wizard-Welle A1 (`c0ffe31`), Wiederholung nach E1/E2
+
+**Frische Instanz.** HEAD Anfang `680714f` == HEAD Ende — unbewegt. Gemessen wurde gegen feste
+Objekt-Hashes (`git archive c0ffe31` / `3229866` nach `/tmp`), **nie** gegen den Arbeitsbaum.
+
+**E1 eingehalten:** Gates, sieben Zahlen, Querprobe, fünf Gegen-Beweise, alle Gruppen, Guardrails,
+Bundle-Analyse und Kantenliste liefen **vor** dem Öffnen von Generator-Bericht und Erst-Votum.
+
+### Gates und Baseline — selbst erzeugt
+
+`tsc` **0** · `schema:check` **0** (ohne Regen) · `test` **0** — `695/695`.
+**Baseline selbst nachgefahren:** `3229866` → `684/684`. **Die 684 ist verifiziert, +11 stimmt.**
+`build:hausplaner` **nicht ausführbar** (aarch64/rollup) — weder grün noch rot.
+
+### Die sieben Zahlen, direkt am Modul erzeugt
+
+`RULES.length` **63** · fix **7** · kontext **2** · weitere **15** · versteckt **39** ·
+`verwaisteRegeln()` `[]` · `regelloseWerkzeuge()` `[]`.
+**Querprobe:** Registry 9 + Katalog 54, Überschneidung `[]`, Union **63**, Regel-ids eindeutig **63**.
+Alle 63 `herkunft`-Felder selbst gegen die Wirklichkeit geprüft — stimmen.
+
+### Fünf Gegen-Beweise statt der geforderten drei
+
+(a) `wand`→`versteckt` → **5/11 rot** · (b) erfundene id → **3/11 rot** · (c) Regel `more` entfernt →
+**3/11 rot**. **Abweichung offengelegt:** Erst-Votum maß 4/11 (`rotate`), Kreuzcheck 5/11 (`auswahl`).
+Kein Widerspruch — die Trefferzahl hängt daran, *welche* id fehlt. Die Aussage hält in allen drei
+Fällen. Zusätzlich, von niemandem verlangt: (d) Reihenfolge *innerhalb* `weitere` vertauscht →
+**1 rot** (Regressionsanker ist echt, kein Mengen-Vergleich) · (e) `herkunft` gefälscht →
+**0 rot, Suite bleibt grün** → Befund.
+
+### Verhaltensgleichheit A1.2 — der eigentliche Risikopunkt, und er hält
+
+Beide Fassungen von `faehigkeiten.ts` **ausgeführt**, Ausgabe über **alle neun** Gruppen
+(nicht nur `werkzeuge`): `4599 Bytes` gegen `4599 Bytes`, **diff identisch**. 37 Einträge,
+`doppelteIds()` `[]`. Keine unberichtete Verhaltensänderung.
+
+### Guardrails byte-genau
+
+6 angefasste Dateien, **0** in `HausplanerApp.tsx`, `toolTypes.ts`, `toolRegistry.ts`, `activation.ts`,
+`domain/`, `geometry/`, `renderers/`, PHP, Migrationen, Schema. `toolCatalog.ts` nur Kommentar —
+md5 des Datenteils in beiden Ständen `fb36df5e…`. Kein Katalog-Werkzeug in fix/kontext, keine
+Registry-Regel außerhalb. Kein zweiter Deaktivierungs-Mechanismus. **`CAD_TEILMENGE` ist restlos weg** —
+auch im Bundle.
+
+### Bundle — was messbar war
+
+„Committeter Bundle == frischer Build?" **nicht beantwortbar** auf aarch64, wird nicht als grün geführt.
+Gemessen: Größe 1.287.291 → 1.292.694 Bytes, sha256 deckt sich mit dem der Re-Abnahme.
+Anker-gestützter Delta-Vergleich: Hex-Farben, `label:`, `id:`, `/icons/`-Pfade, Hilfetexte
+**identisch**; `toolId:` 0→63, `zone:` 0→63 (7/2/15/39). **Das Delta ist exakt die
+Präsentationsschicht — keine fremde Farbe, kein fremdes Label.**
+*Ein eigener Messfehler offengelegt:* ein erster String-Mengen-Vergleich meldete „100 neue Strings" —
+Artefakt der Quote-Paarung im neu minifizierten Bundle, per Direktprobe widerlegt.
+
+### Was E2 zutage förderte
+
+1. **`herkunft` ist ungesichert.** Gefälscht → Suite bleibt grün; `loeseAuf()` liest das Feld nie.
+   Ein Feld, das kein Code liest und fast kein Test bewacht, driftet still.
+2. **Latente Tastatur-Kollision.** Die 15 Katalog-Werkzeuge in Zone `weitere` tragen Kürzel
+   `["R","S","E","H","Z","K","F7"]` — **`R` kollidiert mit Treppe, `K` mit Decke**. Heute harmlos,
+   weil `toolFuerShortcut` nur die Registry liest; **kein Test sichert das ab**
+   (`grep shortcut` in `toolPresentation.test.ts` → 0). **A2 schaltet sie scharf.**
+3. **P8 Render-Pfad:** 0 von 81 Testdateien importieren `HausplanerApp`. Für A1 vertretbar (die UI
+   durfte nicht angefasst werden), für A2 **nicht mehr**. Geführt als **n.z. mit Begründung**.
+4. **P9:** `faehigkeiten.ts:96` ist eine Top-Level-Konstante — heute folgenlos. Ab A2 sind es
+   63 Allokationen pro Render.
+
+### Zur Frage, die A2 schließen soll — selbst nachgemessen
+
+`zoneTools` hat **genau einen** Produktiv-Verbraucher (`faehigkeiten.ts:96`); die Leiste rendert die
+flache Registry. **An HEAD unverändert.** Damit: **15 von 63 Regeln (24 %) haben einen Verbraucher,
+48 (76 %) werden von keiner Produktivzeile gelesen.**
+
+**Das erfüllt A1 trotzdem** — und zwar ausdrücklich: der Generator-Auftrag §1 verbot den UI-Umbau
+wörtlich („eine halbe Rail ohne Anheften wäre eine zweite, widersprüchliche Wahrheit"). Hätte der
+Generator die Leiste angeschlossen, wäre **das** der Verstoß gewesen. Unangenehm bleibt: der Name
+überzeichnet (es ist heute eine Kuratierungs-Registry), `versteckt` versteckt nichts, und die
+Zwischenstufe trägt Kosten, bevor sie Nutzen trägt — sie hat bereits AUF-24 blockiert.
+
+### Urteil: **FREIGABE MIT AUFLAGE** — Auflagen binden **A2**, nicht A1
+
+1. **Shortcut-Kollision verriegeln**, bevor ein Katalog-Werkzeug in die Leiste kommt (`R`, `K`).
+2. **`zoneTools` aus dem Render-Pfad heben oder je Zone memoisieren** (Aufruf-Memoisierung, kein
+   Modul-Cache — so steht es bereits im A2-Auftrag §8/P9).
+3. **Mindestens ein Test durch den echten Render-Pfad**, sobald die Leiste aus den Zonen rendert.
+4. **`herkunft` entscheiden:** alle 63 per Test verriegeln oder das Feld streichen.
+
+### **AUF-4 (Welle A2) ist damit ENTSPERRT.**
+
+### Befund über den Baum, nicht über A1
+
+`git status` Anfang leer, Ende `M public/hausplaner/hausplaner.js` — **gestaged, nicht committet**,
+Datei-mtime 13:58:19, Index-mtime 14:01:05, HEAD währenddessen still. Nicht vom Evaluator: sein
+einziger Build-Versuch scheiterte an aarch64 und schrieb nichts. **Ein erfolgreicher Build ist auf
+dieser Maschine nicht möglich — das stammt von einer nativen Instanz.**
+**Warnung an alle:** wer als Nächstes ohne `-- <eigene Pfade>` committet, nimmt diesen Bundle als
+Beifang mit.
+
+---
+
+## ⇒ PLANNER — Tor auf: der Layout-Fahrplan läuft wieder
+
+`docs/fahrplan-frontend-layout-hausplaner.md` §3 sagt es klar: **L1 ist der Engpass des gesamten
+Layouts** („die Kuratierung ist gebaut und wirkt nicht; jede spätere Layout-Arbeit an der Leiste
+würde doppelt"), Vorbedingung **AUF-1-Votum**. Das Votum liegt vor. **L1 = AUF-4 = Welle A2 ist frei
+und wird jetzt gezogen.**
+
+Die vier Auflagen des Evaluators sind **nicht optional** für A2 — Auflage 1 (Kürzel `R`/`K`) und
+Auflage 3 (Render-Pfad-Test) betreffen genau den Schritt, den A2 tut.
+
+**Ebenfalls sofort ziehbar, ohne jede Vorbedingung: L4** — die 20 Fachplaner-Untermodule zeigen heute
+nur den Toast „Konfigurator folgt" (`HausplanerStudio.tsx:70`). 20 Klicks ins Nichts. L4 hängt an
+nichts und ist die sichtbarste Fläche im ganzen Fahrplan.
