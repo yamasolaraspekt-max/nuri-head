@@ -5874,3 +5874,70 @@ Umzüge sind die Gelegenheit, bei der so etwas still verschwindet.
 - **Yama:** eine Willensfrage (**W-Login**), sie blockiert nichts.
 
 **Fünf Voten heute in der letzten Stunde, kein Posten älter als sein Bericht.**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-69: die Rechteberechnung zieht in den Controller
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commit:** `ea60d9e` · **Ballbesitz:** Evaluator.
+
+### 1. Zur Vorgeschichte, kurz und ohne Ausrede
+
+Ich habe AUF-64 als **Inline-Variante** gebaut, obwohl der Auftrag den Weg entschieden hatte. Der
+Ablauf, gemessen an den Zeitstempeln: meine Tafel-Lesung **00:47**, die Entscheidung `7f38674`
+**00:50**. Ich habe also den Stand von vor der Entscheidung gelesen — **und die Auftragsdatei
+`generator-auftrag-auf64-objekt-route.md` gar nicht geöffnet.** Das ist der eigentliche Fehler:
+die Tafelzeile ist der Zeiger, die Auftragsdatei ist der Auftrag. Ab sofort lese ich beim Ziehen
+zuerst die verlinkte Datei.
+
+Der Planner hat daraus AUF-69 gemacht und **Tor 1 verneint** — das nehme ich an; meine Vermutung
+war Vorsicht an der falschen Stelle, `User::hasPermission` wird nicht angefasst.
+
+### 2. Was gebaut wurde
+
+| Stelle | Vorher | Jetzt |
+|---|---|---|
+| `HausplanerController` | — | `HAUSPLANER_AKTIONEN` (die vier) + `hausplanerRechte(?User): string` |
+| `seite()` | drei Variablen | vier — `hpRechte`, aus dem **injizierten** `$request->user()` |
+| `objekt.blade.php` | `@php(...)`-Zeile mit der ganzen Kette | **eine** Zeile `data-rechte="{{ $hpRechte }}"` |
+
+`User::hasPermission` unverändert · keine Migration · keine neue Aktion · das inline `@php(...)`
+beim Übernahme-Knopf **unangetastet** (fremder Posten W-A — es ist nicht der Fehler, es ist das
+Opfer) · `public/*` null Zeilen, kein Bundle nötig.
+
+### 3. Das Kriterium mit Vorrang — der leere Fall
+
+Der Planner hat es benannt: *„ohne angemeldeten Nutzer bleibt der Wert leer, nicht voll."*
+
+```php
+if ($nutzer === null) {
+    return '';
+}
+```
+
+**Und er ist geprüft, nicht nur geschrieben.** Über die Route ist der Fall **nicht erreichbar** —
+dort steht `auth`. Deshalb wird die private Methode im Test direkt gerufen (Reflection), und zwar
+ausdrücklich, weil der wichtigste Fall sonst der einzige ungeprüfte wäre.
+
+`tests/Feature/Hausplaner/HausplanerRechteTest.php`, 6 Zusagen:
+kein Nutzer ⇒ leer · Admin ⇒ genau die vier · Nutzer ohne Recht ⇒ leer · keine fünfte Aktion
+erfunden (`Hausplaner,import` nicht enthalten) · `data-rechte` steht im Markup · die Seite lädt.
+
+### 4. Belege
+
+| Was | Ergebnis |
+|---|---|
+| Gates | tsc **0** · schema:check **0** · test **0** · build **0** |
+| Insel-Tests | 1009 → **1010** |
+| PHP `tests/Feature/Hausplaner` | 38 → **44**, alle grün |
+| `objekt/203` als angemeldeter Admin | **HTTP 200**, 13 659 Bytes, **0** Fehlerspuren, `data-rechte` = alle vier, Inhalt „Hausplaner — EVALUATOR-MESSWELLE" |
+| `grep -c "@endphp"` im Blade | **0** |
+| Regressionssperre vorgeführt | absichtlicher PHP-Block ⇒ **5 PHP-Tests rot** (`BladeKompiliertTest` 2 · `HausplanerRechteTest` 2 · der vorhandene `UebernahmeKnopfTest` 1) **+ 1 JS-Test rot**; zurückgebaut alles grün |
+
+Die PHP-Suite lief mit — **§9 Blade-Regel eingehalten**, und zwar aus eigenem Antrieb: sie ist die
+Lehre aus meinem eigenen Ausfall, nicht eine Auflage, die mir jemand nachtragen musste.
+
+### 5. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Fremde Arbeitsbaum-Änderungen
+(`AUFTRAGSTAFEL.md` des Planners) **nicht** mitcommittet.
