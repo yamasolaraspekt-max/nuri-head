@@ -44,6 +44,21 @@ const ICON_BASE = new URL('.', import.meta.url).href;
 
 type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe' | 'decke';
 
+/**
+ * Dashboard v2 / B3 (§20 UI-5, Nacharbeit N3) — die Verknüpfung Reiter ↔ Inhaltsbereich.
+ *
+ * Es gibt EINEN Inhaltsbereich für alle vier Reiter (der Inhalt wird ausgetauscht, nicht das
+ * Element). Deshalb zeigt `aria-controls` jedes Reiters auf DIESELBE, immer vorhandene `id` —
+ * ein Verweis ins Leere wäre schlimmer als kein Verweis. Umgekehrt sagt `aria-labelledby` am
+ * Panel, welcher Reiter es gerade beschriftet.
+ *
+ * Kante 5 (ID-Kollision): beide IDs tragen das Präfix `hp-eigenschaften-`. Stünde das Panel
+ * eines Tages zweimal im Baum, ist das Präfix die Stelle, an der eine Instanz-Nummer eingezogen
+ * wird — nicht 20 verstreute Zeichenketten.
+ */
+const PANEL_ID = 'hp-eigenschaften-panel';
+const reiterId = (id: PanelTabId): string => `hp-eigenschaften-tab-${id}`;
+
 const FARBEN = {
   text: T.ink, gedaempft: T.muted, linie: T.faint, raster: T.canvasGrid, rasterGrob: T.canvasGridStrong,
   wand: T.canvasWall, wandFuellung: T.canvasWallFill, auswahl: T.brand, raum: T.brandGhost,
@@ -218,6 +233,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   /** Dashboard v2.2: aktiver Panel-Reiter. Bewusst LOKAL, kein Store-Feld — der Wert hat genau
    *  einen Leser; ob Panelzustand in den UI-State gehört, ist eine v4-Frage (F1). */
   const [aktiverTab, setAktiverTab] = useState<PanelTabId>('allgemein');
+  /** B4 (Nacharbeit N3): DOM-Referenzen der Reiter, damit die Pfeiltasten den Fokus mitziehen.
+   *  Nur Lese-/Fokus-Zugriff — kein Zustand, kein zweiter Auswahl-Weg neben `aktiverTab`. */
+  const reiterRefs = useRef<Partial<Record<PanelTabId, HTMLButtonElement | null>>>({});
   /** Dashboard v2.5: Zustand der Command-Palette. Ebenfalls LOKAL — der Wert hat genau einen
    *  Leser, und v2 ändert den Store nicht. `paletteOffenRef` spiegelt `paletteOffen` für den
    *  globalen Tastatur-Handler, dessen Closure sonst veraltet wäre (Kante 8). */
@@ -1298,13 +1316,20 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               return (
                 <button
                   key={tab.id} type="button" role="tab" aria-selected={aktivT} tabIndex={aktivT ? 0 : -1}
+                  id={reiterId(tab.id)} aria-controls={PANEL_ID}
+                  ref={(el) => { reiterRefs.current[tab.id] = el; }}
                   title={tab.hinweis}
                   onClick={() => setAktiverTab(tab.id)}
                   onKeyDown={(e) => {
                     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
                     e.preventDefault();
                     const d = e.key === 'ArrowRight' ? 1 : -1;
-                    setAktiverTab(PANEL_TABS[(i + d + PANEL_TABS.length) % PANEL_TABS.length].id);
+                    const ziel = PANEL_TABS[(i + d + PANEL_TABS.length) % PANEL_TABS.length].id;
+                    setAktiverTab(ziel);
+                    // B4 + Kante 6: der DOM-Fokus wandert MIT der Auswahl — aber ausschliesslich
+                    // hier im Tasten-Zweig. `onClick` ruft das nicht auf, also springt der
+                    // Fokusring nicht bei jedem Mausklick auf.
+                    reiterRefs.current[ziel]?.focus();
                   }}
                   style={{
                     padding: '5px 8px', fontSize: 11.5, cursor: 'pointer', background: 'transparent',
@@ -1317,6 +1342,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               );
             })}
           </div>
+          {/* B3 (Nacharbeit N3): DER Inhaltsbereich der Reiter. Bis hierher trug er keine Rolle —
+              die Reiterleiste versprach ein Tabpanel, das im Baum nicht existierte. `aria-labelledby`
+              zeigt auf den GERADE aktiven Reiter, `id` ist das Ziel aller vier `aria-controls`. */}
+          <div role="tabpanel" id={PANEL_ID} aria-labelledby={reiterId(aktiverTab)}>
           {aktiverTab === 'pruefungen' ? (
             /* Dashboard v2.4 (§34 / UI-10): Prüfungscenter. Die Liste kommt aus `befundeAus`
                (rein, getestet) und hat heute 0 oder 1 Eintrag — der Store hält genau EINE
@@ -1663,6 +1692,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           )}
             </>
           )}
+          </div>
         </div>
       </div>
 
