@@ -3339,3 +3339,63 @@ ebenso „Löschen" und „Duplizieren". Die Kürzel-Kästchen nehmen die Breite
 
 **Offene Willensfrage an Yama, klein:** Das Werkzeug heißt **„Auswahl"** (`V`). Yama hat es unter
 **„Markieren"** gesucht. Das Label ist frei änderbar, die id `auswahl` bleibt. Umbenennen — ja/nein?
+
+---
+
+## ⇒ PLANNER — „Markieren" ist kein Label, sondern ein fehlendes Werkzeug. Und es ist die fehlende Naht.
+
+**Vorher gelesen:** HEAD `ef07630` · `domain/scene-document-v2.schema.json` (`zoneType`) ·
+`app/tools/werkzeugPaket.ts` (Kategorie Auswahl) · `domain/commands.types.ts` +
+`commands/applyCommand.ts` (Grep `ZONE` → **kein Treffer**)
+
+**Anlass, wörtlich:** Yama, 25.07.: *„markieren ist dass ich später module, fenster, tür markiere,
+dann kann ich sie schieben, bearbeiten usw. — fläche markieren bevor ich etwas mit einem produkt
+mache. du sollst aus sicht ein architekt sehen."*
+
+**Er meint nicht das Label von `auswahl`.** Aus der Sicht eines Architekten sind das **drei
+verschiedene Vorgänge**, und nur einer davon existiert:
+
+| | was es tut | Stand |
+|---|---|---|
+| **1 · Objektauswahl** | ein Bauteil greifen — Wand, Fenster, Tür — um es zu verschieben oder zu bearbeiten | **existiert** (`auswahl`, `V`); im Paket dazu `direktauswahl · rechteckauswahl · lassoauswahl`, alle noch ohne Funktion |
+| **2 · Flächenauswahl** | eine **Seite** eines Bauteils greifen: die Außenschale einer Wand, eine einzelne Dachfläche. Voraussetzung für Material, Fassade, Dachdeckung | **fehlt vollständig** — kein Werkzeug im 110er-Paket, kein Begriff im Code |
+| **3 · Bereich markieren (Zone)** | eine Fläche als **Zone mit Zweck** auszeichnen: PV-Feld, FBH-Bereich, Wartungsfläche | **Datenmodell existiert, Werkzeug fehlt** |
+
+### Der eigentliche Befund: das Schema ist dafür längst gebaut, der Weg dorthin fehlt
+
+```
+zoneType = room · underfloor_heating · pv_area · maintenance_area · sound_area · restricted_area
+```
+
+**Sechs Zonentypen im persistierten Schema.** Im Werkzeugpaket gibt es dafür **genau eines**:
+`raum`. Für `pv_area`, `underfloor_heating`, `maintenance_area`, `sound_area`, `restricted_area`
+gibt es **kein Werkzeug**. Und ein Grep nach `ZONE` in `commands.types.ts` und `applyCommand.ts`
+liefert **null Treffer** — ob `ADD_NODE` Zonen generisch trägt, ist **nicht geprüft** und gehört
+gemessen, bevor jemand baut.
+
+### Warum das mehr ist als ein fehlendes Werkzeug
+
+**Es ist die Naht zwischen Geometrie und Fachmodulen.** Genau das beschreibt Yamas Satz *„Fläche
+markieren, bevor ich etwas mit einem Produkt mache"*:
+
+- Dachfläche markieren → **dann** PV-Module belegen (`engine-pv` braucht eine `pv_area`)
+- Raum markieren → **dann** Fußbodenheizung auslegen (`engine-fbh` braucht `underfloor_heating`)
+- Wandfläche markieren → **dann** Fassade oder U-Wert-Aufbau zuweisen (`engine-uwert`)
+
+**Das erklärt rückwirkend, warum die 13 Engines bisher kein Panel haben können: ihnen fehlt der
+Eingang.** L2/L3 stand die ganze Zeit an einer Frage, die niemand gestellt hat — woher die Engine
+ihre Fläche bekommt. Die Antwort ist dieses Werkzeug.
+
+### Entscheidung
+
+**Neuer Posten AUF-35 — „Markieren": Flächen- und Zonenauswahl.** **Spur A** (neuer Datenpfad,
+erzeugt Knoten). **Er wird nicht nebenbei gebaut** und er kommt **nicht** vor AUF-34 — die Leiste
+muss erst stehen. Aber er rückt **vor L2/L3**, weil er deren Vorbedingung ist.
+
+**Zuerst zu messen, bevor ein Auftrag geschrieben wird** (Planner, nicht Generator):
+1. Trägt `ADD_NODE` bereits `type: 'zone'`, oder braucht es einen eigenen Command?
+2. Kann `roomDetection` aus `geometry/` für die Flächenerkennung wiederverwendet werden?
+3. Was rendert eine Zone heute in 2D und 3D — gibt es überhaupt eine Darstellung?
+
+**Das Label von `auswahl` bleibt „Auswahl".** Es umzubenennen wäre die falsche Antwort auf eine
+richtige Frage: „Markieren" ist ein zweites Werkzeug, nicht ein anderer Name für das erste.
