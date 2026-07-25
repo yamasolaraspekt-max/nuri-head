@@ -74,3 +74,46 @@ trivial — betroffen sind Registry, Aktivierung, Zonen-Kuratierung, Commands, F
   - **I3** — `canPin`/`priority` in die Zonen-Kuratierung (schließt „angeheftet").
 - **AUF-24** neu — die 9 Registry-IDs umbenennen. **Vor I2**, sonst baut I2 den Adapter gegen eine
   Benennung, die gleich danach wechselt.
+
+---
+
+## ⛔ ÜBERSTIMMT — Yama, 25.07.: alles auf Deutsch
+
+**Wörtlich:** *„ich will ids nicht auf englisch ich will alles auf deutsch"*
+
+**Die Entscheidung oben ist damit aufgehoben.** Yamas Anordnung gilt. Neue Festlegung:
+
+**Werkzeug-IDs bleiben deutsch.** `auswahl · wand · fenster · tuer · dach · decke · treppe ·
+loeschen · duplizieren` bleiben, wie sie sind. **AUF-24 (Umbenennung auf Englisch) entfällt
+ersatzlos** — und damit auch der Grund, aus dem es an `toolPresentation.ts` und am A1-Sperrbereich
+hing. **Das verkürzt die Kette zur fertigen Werkzeugleiste von vier Schritten auf drei.**
+
+**Stattdessen werden die 110 Paket-IDs eingedeutscht** — Dateinamen der Icons und die Registry.
+Mechanisch, kein Datenpfad, keine Migration.
+
+### Eine Grenze, die technisch gezogen bleibt — und warum
+
+Die **gespeicherten Werte** im Szenendokument bleiben unverändert:
+`type: wall | window | door | opening | object | zone | route | roof | ceiling`,
+`objectType: radiator | heat_pump_indoor | wallbox | …`, `zoneType`, `routeType`.
+
+Das ist **keine Sprachentscheidung**, sondern der Datenschutz aus der DAUERDIREKTIVE: diese Werte
+stehen in `scene-document-v2.schema.json`, werden vom PHP-Validator gelesen und liegen in
+gespeicherten Szenen. Sie umzubenennen wäre eine **Datenmigration an Bestandsdaten** — ein eigener,
+ausdrücklich zu beauftragender Posten, niemals Beifang einer Oberflächenarbeit. Ein Umbenennen ohne
+Migration erzeugt sofort 422-Fehler bei jedem Speichern.
+
+**Für den Nutzer ist das unsichtbar.** Er sieht nur Labels, und die sind ohnehin deutsch.
+
+**Regel ab jetzt: alles, was der Mensch sieht oder anfasst, ist deutsch — Labels, Werkzeug-IDs,
+Icon-Dateinamen, Kategorien, Hilfetexte. Nur die gespeicherten Datenwerte bleiben unberührt,
+bis jemand eine Migration beauftragt.**
+
+### Folge für die Kette
+
+| alt | neu |
+|---|---|
+| 1. A2 abnehmen | **1. A2 abnehmen** (unverändert der Engpass) |
+| 2. IDs auf Englisch (AUF-24) | **entfällt** |
+| 3. Katalog tauschen (I2) | **2. Katalog tauschen** — Adapter bildet die 110 Paket-IDs auf deutsche IDs ab |
+| 4. Anheften/Zonen (I3) | **3. Anheften/Zonen** |
