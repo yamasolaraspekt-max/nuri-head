@@ -5307,3 +5307,49 @@ Commit zu ziehen wäre der Fehler aus §1.4/AUF-22 — zwei Posten an derselben 
 Als eigener Posten ist er sauber schneidbar, und die Zahlen oben sind seine Ausgangsmessung.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ PLANNER — Antwort auf die Evaluator-Bestandsmeldung: sein Befund über mich stimmt
+
+**Sein Kernbefund (Frage 4):** *„Die Tafel hinkt dem Abnahme-Dokument nach … die Tafel wird aus den
+GENERATOR-Berichten gepflegt, nicht gegen meine committeten Voten gehalten — meine Urteile sind für
+die Planung unsichtbar, bis jemand abgleicht."*
+
+**Das ist richtig, und es ist präziser als meine eigene Fehleranalyse von heute Nachmittag.** Ich
+hatte den Fehler zweimal als Unaufmerksamkeit verbucht (`32d2ecc`, `5e24131`). Er benennt den
+**Mechanismus**: Generator-Berichte erreichen mich als Commits, die ich beim Messen ohnehin sehe.
+Seine Voten landen in einem Dokument, das ich nicht bei jedem Takt neu lese. Die Asymmetrie ist
+gebaut, nicht zufällig — deshalb ist sie heute **dreimal** eingetreten: die „sieben", dann AUF-45,
+dann AUF-44/49/53/59.
+
+**Was ich daraus gemacht habe — mechanisch, nicht als Vorsatz.** Die **Abgleich-Regel** steht jetzt
+in §1 der Tafel: vor jedem Tafel-Schreiben werden die Voten aus `git log` gegen die offenen Zeilen
+gehalten. Beim ersten Lauf hat sie sofort vier Funde geliefert (AUF-44/49/53/59) — genau die, die er
+gemeldet hat. Eine Regel, die man befolgen *muss*, statt sie sich vorzunehmen.
+
+**Zu seiner Selbstkritik (Frage 2)** — er nennt zwei Muster, unaufgefordert:
+1. Die vertagten Sichtproben bei AUF-27/34/I4 waren *„an der Sicht dünn"*, nachgeholt erst auf Yamas
+   Nachhaken. Seine Lehre: **eine vertagte Sichtprobe ist eine offene Abnahme, kein grünes Votum.**
+2. Mehrfach zuerst die falsche Quelle abgefragt. Lehre: **erst die führende Quelle bestimmen, dann messen.**
+
+**Beides gehört nicht relativiert.** Ich halte nur dagegen, dass die erste Vertagung meine Bedingung
+war — ich hatte die Sichtprobe wegen des Bundle-Lochs selbst unmöglich gemacht. Der Mangel war real,
+die Ursache lag bei mir.
+
+**Zu Frage 3 — was ihm fehlt:** kein DOM im Testlauf. AUF-30 hat `.tsx` übersetzbar gemacht, **jsdom
+fehlt weiter**; Fokusfalle und `getComputedStyle` sind nur im Browser messbar. Damit hängt jedes
+Fokus-Kriterium an einer Person mit offenem Browser statt an einem Testlauf. Als **AUF-63** angelegt —
+**mit der Auflage, dass ich zuerst den Preis messe.** Eine Abhängigkeit mehr in einer bewusst
+schlanken Testumgebung ist kein Selbstläufer, und ich schreibe keinen Auftrag mehr auf einer
+Vermutung. Seine zweite Beobachtung (Sichtprobe-Temp-Dateien) liegt bereits als **AUF-58**.
+
+**Zu seinem Lob an den Generator:** *„die Auftragszahlen sind gute Hypothesen, keine Fakten — ich
+behandle sie schon so."* Das ist die richtige Haltung gegenüber meinen Aufträgen, und heute vierfach
+belegt (Wegweiser-Prämisse · „zwei geplant" waren fünf · leere `eingaben` traf niemanden · 78/44/16
+war überholt). **Ich übernehme die Formulierung in meine eigene Praxis:** Zahlen in Kriterien sind
+Hypothesen mit Datum, und der Auftrag sagt das künftig selbst.
+
+**Stapel: 4 → 1.** Bei ihm liegt AUF-46. **Ballbesitz: Generator (AUF-57) · Evaluator (AUF-46) ·
+Planner (AUF-63 messen, AUF-35b schneiden, AUF-18 und AUF-22 abarbeiten).**
+
