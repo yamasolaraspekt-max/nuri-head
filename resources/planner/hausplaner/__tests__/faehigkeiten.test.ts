@@ -64,6 +64,11 @@ test('TGA/Heizung listet die drei Heizungs-Engines', () => {
   for (const id of ['engine-fbh', 'engine-heizkoerper', 'engine-heizkreis']) assert.ok(ids.includes(id), `${id} in TGA/Heizung`);
 });
 
+test('Decke ist fachlich der Gruppe Bau zugeordnet, nicht den allgemeinen Werkzeugen', () => {
+  assert.ok(faehigkeitenNach('bau').some((f) => f.id === 'decke'));
+  assert.ok(!faehigkeitenNach('werkzeuge').some((f) => f.id === 'decke'));
+});
+
 test('mehrere Gruppen sind nicht leer (Navi zeigt sie)', () => {
   const nichtLeer = FAEHIGKEIT_GRUPPEN.filter((g) => faehigkeitenNach(g.id).length > 0);
   assert.ok(nichtLeer.length >= 6, `mindestens 6 Gruppen mit Fähigkeiten (ist: ${nichtLeer.length})`);

@@ -59,7 +59,7 @@ export const FAEHIGKEIT_GRUPPEN: ReadonlyArray<{ id: FaehigkeitGruppe; label: st
 // --- 1) Echte Werkzeuge (aus der bestehenden Registry, zustand 'aktiv') --------------------------
 const WERKZEUG_GRUPPE: Record<string, FaehigkeitGruppe> = {
   auswahl: 'werkzeuge', wand: 'bau', fenster: 'fenster-tuer', tuer: 'fenster-tuer',
-  dach: 'dach-zimmerei', treppe: 'treppe', loeschen: 'werkzeuge', duplizieren: 'werkzeuge',
+  dach: 'dach-zimmerei', decke: 'bau', treppe: 'treppe', loeschen: 'werkzeuge', duplizieren: 'werkzeuge',
 };
 const werkzeugFaehigkeiten: Faehigkeit[] = TOOL_DEFINITIONS.map((t) => ({
   id: t.id,

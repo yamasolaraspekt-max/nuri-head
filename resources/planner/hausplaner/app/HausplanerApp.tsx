@@ -40,16 +40,16 @@ const ICON_BASE = new URL('.', import.meta.url).href;
 type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe' | 'decke';
 
 const FARBEN = {
-  text: '#1f2937', gedaempft: '#6b7280', linie: '#9ca3af', raster: '#eef0f2', rasterGrob: '#e2e4e7',
-  wand: '#374151', wandFuellung: '#4b5563', auswahl: '#93c21c', raum: 'rgba(147,194,28,0.06)',
-  warnung: '#d97706', gefahr: '#b91c1c', erfolg: '#15803d',
+  text: T.ink, gedaempft: T.muted, linie: T.faint, raster: T.canvasGrid, rasterGrob: T.canvasGridStrong,
+  wand: T.canvasWall, wandFuellung: T.canvasWallFill, auswahl: T.brand, raum: T.brandGhost,
+  warnung: T.warnInk, gefahr: T.errInk, erfolg: T.okInk,
 } as const;
 
 // L1 Layout-Aktivierung — Navigations-Stile (tokens-konform: neutral, Marke nur als Auswahl-Akzent).
-const navGrp: React.CSSProperties = { fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#9ca3af', padding: '12px 12px 4px' };
-const navItem = (aktiv: boolean): React.CSSProperties => ({ display: 'flex', alignItems: 'center', gap: 9, textAlign: 'left', width: 'calc(100% - 12px)', margin: '1px 6px', padding: '8px 8px', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 13, background: aktiv ? 'rgba(147,194,28,0.12)' : 'transparent', color: aktiv ? '#3f5a00' : '#1f2937', fontWeight: aktiv ? 700 : 500 });
-const navHub: React.CSSProperties = { fontSize: 12.5, fontWeight: 600, color: '#1f2937', padding: '8px 12px 2px' };
-const navSub: React.CSSProperties = { fontSize: 12.5, color: '#6b7280', padding: '6px 12px 6px 22px' };
+const navGrp: React.CSSProperties = { fontSize: 10, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: T.muted, padding: '12px 12px 4px' };
+const navItem = (aktiv: boolean): React.CSSProperties => ({ display: 'flex', alignItems: 'center', gap: 9, textAlign: 'left', width: 'calc(100% - 12px)', margin: '1px 6px', padding: '8px 8px', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 13, background: aktiv ? T.brandWash : 'transparent', color: aktiv ? T.brandInk : T.ink, fontWeight: aktiv ? 700 : 500 });
+const navHub: React.CSSProperties = { fontSize: 12.5, fontWeight: 600, color: T.ink, padding: '8px 12px 2px' };
+const navSub: React.CSSProperties = { fontSize: 12.5, color: T.muted, padding: '6px 12px 6px 22px' };
 // Batch 0: die frühere FACHPLANER-Attrappe (inerte `geplant`-Labels) ist durch die datengetriebene
 // Fähigkeiten-Navi (app/tools/faehigkeiten.ts + FaehigkeitenNavi) ersetzt — eine Wahrheit, mit Zustand.
 
@@ -276,12 +276,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   }
   const OpBtn = ({ title, onClick, icon, disabled, aktiv, geplant }: { title: string; onClick?: () => void; icon: string; disabled?: boolean; aktiv?: boolean; geplant?: boolean }): React.ReactElement => (
     <button type="button" title={geplant ? `${title} (geplant)` : title} onClick={geplant ? undefined : onClick} disabled={disabled || geplant}
-      style={{ display: 'grid', placeItems: 'center', width: 32, height: 30, borderRadius: 8, border: `1px solid ${aktiv ? FARBEN.auswahl : '#e5e7eb'}`, background: aktiv ? 'rgba(147,194,28,0.12)' : '#fff', color: (disabled || geplant) ? '#c7ccd2' : FARBEN.text, cursor: (disabled || geplant) ? 'not-allowed' : 'pointer' }}>
+      style={{ display: 'grid', placeItems: 'center', width: 32, height: 30, borderRadius: 8, border: `1px solid ${aktiv ? T.brandInk : T.controlBorder}`, background: aktiv ? T.brandWash : T.surface, color: (disabled || geplant) ? T.faint : FARBEN.text, cursor: (disabled || geplant) ? 'not-allowed' : 'pointer' }}>
       {opIcon(icon)}
     </button>
   );
-  const opSep = (): React.ReactElement => <span style={{ width: 1, height: 20, background: '#e5e7eb', margin: '0 4px' }} />;
-  const opLbl = (t: string): React.ReactElement => <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: '#9aa0a8', marginRight: 2 }}>{t}</span>;
+  const opSep = (): React.ReactElement => <span style={{ width: 1, height: 20, background: T.hair, margin: '0 4px' }} />;
+  const opLbl = (t: string): React.ReactElement => <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.muted, marginRight: 2 }}>{t}</span>;
   function dupliziere(): void {
     const jetzt = new Date().toISOString();
     const neu: string[] = [];
@@ -562,29 +562,29 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   }
 
   const statusPill = {
-    gespeichert: { text: 'Gespeichert', farbe: FARBEN.erfolg, grund: '#ecfdf5' },
-    ungespeichert: { text: 'Ungespeicherte Änderungen', farbe: FARBEN.warnung, grund: '#fff7ed' },
-    speichert: { text: 'Wird gespeichert …', farbe: FARBEN.gedaempft, grund: '#f3f4f6' },
-    konflikt: { text: `Konflikt: Plan wurde von anderer Seite geändert (Revision ${konfliktRevision ?? '?'}) — Seite neu laden`, farbe: FARBEN.gefahr, grund: '#fef2f2' },
-    fehler: { text: 'Speichern fehlgeschlagen — erneut versuchen', farbe: FARBEN.gefahr, grund: '#fef2f2' },
+    gespeichert: { text: 'Gespeichert', farbe: FARBEN.erfolg, grund: T.okSoft },
+    ungespeichert: { text: 'Ungespeicherte Änderungen', farbe: FARBEN.warnung, grund: T.warnSoft },
+    speichert: { text: 'Wird gespeichert …', farbe: FARBEN.gedaempft, grund: T.hair2 },
+    konflikt: { text: `Konflikt: Plan wurde von anderer Seite geändert (Revision ${konfliktRevision ?? '?'}) — Seite neu laden`, farbe: FARBEN.gefahr, grund: T.errSoft },
+    fehler: { text: 'Speichern fehlgeschlagen — erneut versuchen', farbe: FARBEN.gefahr, grund: T.errSoft },
   }[speicherStatus];
 
   const knopf = (aktiv: boolean): React.CSSProperties => ({
     padding: '6px 12px', fontSize: 12.5, fontWeight: 600, borderRadius: 8, cursor: 'pointer',
-    border: `1px solid ${aktiv ? FARBEN.auswahl : '#d1d5db'}`,
-    background: aktiv ? '#f4fae7' : '#fff', color: aktiv ? '#4d7c0f' : '#374151',
+    border: `1px solid ${aktiv ? T.brandInk : T.controlBorder}`,
+    background: aktiv ? T.brandSoft : T.surface, color: aktiv ? T.brandInk : T.canvasWall,
   });
 
   const panelLabel: React.CSSProperties = { display: 'block', color: FARBEN.gedaempft, marginBottom: 8 };
-  const panelInput: React.CSSProperties = { width: '100%', marginTop: 3, padding: '5px 8px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 12.5 };
+  const panelInput: React.CSSProperties = { width: '100%', marginTop: 3, padding: '5px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}`, fontSize: 12.5 };
 
   const railIcon = (w: string): string => (({ auswahl: '\u2196', wand: '\u25AC', fenster: '\u25A2', tuer: '\u25D7', dach: '\u25B3' } as Record<string, string>)[w] ?? '\u2022');
   const railBtn = (aktiv: boolean): React.CSSProperties => ({
     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
     height: 46, borderRadius: 9, cursor: 'pointer', fontWeight: 600,
-    border: `1px solid ${aktiv ? 'var(--sa-accent, #93c21c)' : 'transparent'}`,
-    background: aktiv ? 'var(--sa-accent-light, #f4fae7)' : 'transparent',
-    color: aktiv ? 'var(--sa-accent-hover, #4d7c0f)' : FARBEN.gedaempft,
+    border: `1px solid ${aktiv ? T.brandInk : 'transparent'}`,
+    background: aktiv ? T.brandSoft : 'transparent',
+    color: aktiv ? T.brandInk : FARBEN.gedaempft,
   });
 
   const breite = (typeof window !== 'undefined' ? window.innerWidth : 1200) - 220 - 268; // minus Werkzeugleiste + Panel
@@ -614,8 +614,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     const bb = bem.bbox;
     const tick = 120;
     const sw = 1 / zoom;
-    const mfarbe = '#6b7280';
-    const gfarbe = '#374151';
+    const mfarbe = T.muted;
+    const gfarbe = T.canvasWall;
     type Seg = { von: number; bis: number; laenge: number };
     const ketteX = (segs: ReadonlyArray<Seg>, yl: number, kp: string, farbe: string, fs: number) => {
       segs.forEach((seg, i) => {
@@ -640,25 +640,25 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   }
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', color: FARBEN.text, height: imStudio ? '100%' : '100vh', display: 'flex', flexDirection: 'column', background: '#f9fafb' }}>
+    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', color: FARBEN.text, height: imStudio ? '100%' : '100vh', display: 'flex', flexDirection: 'column', background: T.bg }}>
       {/* Werkzeugleiste — neutral, Marke nur für Primäraktion */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: '#fff', borderBottom: '1px solid #e5e7eb' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: T.surface, borderBottom: `1px solid ${T.hair}` }}>
         {!imStudio && (
           <span style={{ display: 'flex', alignItems: 'center', gap: 9, marginRight: 8 }}>
-            <span style={{ width: 26, height: 26, borderRadius: 7, background: FARBEN.auswahl, display: 'grid', placeItems: 'center', color: '#1e2b00' }}>{svgWrap(<><path d="M3 11l9-7 9 7" /><path d="M5 10v10h14V10" /></>)}</span>
+            <span style={{ width: 26, height: 26, borderRadius: 7, background: FARBEN.auswahl, display: 'grid', placeItems: 'center', color: T.ink }}>{svgWrap(<><path d="M3 11l9-7 9 7" /><path d="M5 10v10h14V10" /></>)}</span>
             <strong style={{ fontSize: 14 }}>Hausplaner <span style={{ fontWeight: 600, color: FARBEN.gedaempft, fontSize: 11.5 }}>· Solar Aspekt</span></strong>
           </span>
         )}
         <button type="button" style={knopf(false)} title="Rückgängig (⌘Z)" aria-label="Rückgängig" onClick={() => store.getState().undo()} disabled={!store.getState().kannUndo()}>↶</button>
         <button type="button" style={knopf(false)} title="Wiederholen (⌘⇧Z)" aria-label="Wiederholen" onClick={() => store.getState().redo()} disabled={!store.getState().kannRedo()}>↷</button>
-        <span style={{ width: 1, height: 22, background: '#e5e7eb', margin: '0 4px' }} />
+        <span style={{ width: 1, height: 22, background: T.hair, margin: '0 4px' }} />
         {(werkzeug === 'fenster' || werkzeug === 'tuer') && (
           <label style={{ fontSize: 12, color: FARBEN.gedaempft, display: 'flex', alignItems: 'center', gap: 5 }}>
             {werkzeug === 'fenster' ? 'Fenstertyp' : 'Türtyp'}
             <select
               value={werkzeug === 'fenster' ? fensterTypWahl : tuerTypWahl}
               onChange={(e) => (werkzeug === 'fenster' ? setFensterTypWahl(e.target.value as FensterTyp) : setTuerTypWahl(e.target.value as TuerTyp))}
-              style={{ fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: '1px solid #d1d5db' }}
+              style={{ fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}` }}
             >
               {(werkzeug === 'fenster' ? FENSTER_TYPEN : TUER_TYPEN).map((v) => (
                 <option key={v.typ} value={v.typ}>{v.label} · {v.breite}×{v.hoehe} mm</option>
@@ -683,7 +683,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               <>
                 {pfeil('◀', 'Geschoss darunter', -1, idx <= 0)}
                 <select value={level.id} title="Geschoss wählen" onChange={(e) => store.getState().setActiveLevel(e.target.value)}
-                  style={{ fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: `1px solid ${T.hair}` }}>
+                  style={{ fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}` }}>
                   {sortiert.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
                 </select>
                 {pfeil('▶', 'Geschoss darüber', 1, idx >= sortiert.length - 1)}
@@ -707,7 +707,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               e.target.value = level.name; // leeren/unveränderten Namen zurücksetzen
             }
           }}
-          style={{ width: 104, fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: '1px solid #d1d5db' }}
+          style={{ width: 104, fontSize: 12.5, padding: '5px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}` }}
         />
         <button
           type="button"
@@ -746,7 +746,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             }
           }}
         >− Geschoss</button>
-        <span style={{ width: 1, height: 22, background: '#e5e7eb', margin: '0 4px' }} />
+        <span style={{ width: 1, height: 22, background: T.hair, margin: '0 4px' }} />
         {/* P1c: Modus-Schalter — 3D ist der zweite Renderer DERSELBEN Daten (ein Store). */}
         <button type="button" title="2D-Grundriss" style={knopf(modus === '2d')} onClick={() => store.getState().setModus('2d')}>2D</button>
         <button type="button" title="2D und 3D nebeneinander" style={knopf(modus === 'split')} onClick={() => store.getState().setModus('split')}>Split</button>
@@ -756,14 +756,14 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         <button
           type="button"
           onClick={() => void store.getState().save()}
-          style={{ padding: '7px 16px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none', cursor: 'pointer', background: 'var(--sa-accent, #93c21c)', color: 'var(--sa-accent-ink, #1e2b00)' }}
+          style={{ padding: '7px 16px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none', cursor: 'pointer', background: T.brand, color: T.ink }}
         >
           Speichern (Strg+S)
         </button>
       </div>
 
       {/* Bedien-Werkzeugleiste — Icons, jedes mit Tooltip + Funktionsbeschreibung */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: '#f6f7f8', borderBottom: '1px solid #e5e7eb', flex: '0 0 auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: T.bg, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}>
         {opLbl('Ansicht')}
         <OpBtn title="Vergrößern (Zoom +) — näher an den Grundriss heranzoomen" icon="zoom-in" onClick={() => setZoom((z) => Math.min(1, z * 1.2))} />
         <OpBtn title="Verkleinern (Zoom −) — weiter herauszoomen" icon="zoom-out" onClick={() => setZoom((z) => Math.max(0.02, z / 1.2))} />
@@ -792,7 +792,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           bleibt erhalten; dispose() erst beim Verlassen der Seite (Kante 6). */}
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
         {/* L1: Planer-Navigation — Werkzeuge (aktiv) + Fachplaner-Struktur (Navi). */}
-        <div style={{ width: 220, flex: '0 0 auto', background: '#fff', borderRight: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
+        <div style={{ width: 220, flex: '0 0 auto', background: T.surface, borderRight: `1px solid ${T.hair}`, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
           <div style={navGrp}>Werkzeuge</div>
           {/* UI-3: Werkzeugleiste datengetrieben aus der Tool-Registry (§22) mit Aktivierung (§21). */}
           {werkzeugTools().map((tool) => {
@@ -806,7 +806,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 style={{ ...navItem(aktiv), ...(zustand.enabled ? {} : { opacity: 0.4, cursor: 'not-allowed' }) }}>
                 <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>{werkzeugIcon(tool.id)}</span>
                 <span style={{ flex: 1 }}>{tool.label}</span>
-                {tool.shortcut && <span style={{ fontSize: 10.5, color: '#9ca3af', border: '1px solid #e5e7eb', borderRadius: 4, padding: '1px 5px' }}>{tool.shortcut}</span>}
+                {tool.shortcut && <span style={{ fontSize: 10.5, color: T.muted, border: `1px solid ${T.controlBorder}`, borderRadius: 4, padding: '1px 5px' }}>{tool.shortcut}</span>}
               </button>
             );
           })}
@@ -814,9 +814,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             activeToolId={werkzeug}
             onAktivieren={(id) => { setWerkzeug(id as Werkzeug); setWandStart(null); setTreppeStart(null); }}
           />
-          <div style={{ padding: '10px 12px', fontSize: 11, color: '#9ca3af', borderTop: '1px solid #eef0f2', marginTop: 'auto' }}>Erweiterbar – Module folgen.</div>
+          <div style={{ padding: '10px 12px', fontSize: 11, color: T.muted, borderTop: `1px solid ${T.canvasGrid}`, marginTop: 'auto' }}>Erweiterbar – Module folgen.</div>
         </div>
-        <div style={{ display: modus === '3d' ? 'none' : 'block', width: stageBreite, borderRight: modus === 'split' ? '1px solid #e5e7eb' : 'none' }}>
+        <div style={{ display: modus === '3d' ? 'none' : 'block', width: stageBreite, borderRight: modus === 'split' ? `1px solid ${T.hair}` : 'none' }}>
         <Stage
           ref={stageRef as never}
           width={stageBreite}
@@ -943,7 +943,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 >
                   <Rect
                     x={-o.width / 2} y={-(wand.thickness / 2 + 40)} width={o.width} height={wand.thickness + 80}
-                    fill="#ffffff" stroke={ausgewaehlt ? FARBEN.auswahl : o.type === 'door' ? FARBEN.gedaempft : FARBEN.linie}
+                    fill={T.surface} stroke={ausgewaehlt ? FARBEN.auswahl : o.type === 'door' ? FARBEN.gedaempft : FARBEN.linie}
                     strokeWidth={30}
                     onClick={(e) => {
                       if (werkzeug === 'auswahl') {
@@ -984,7 +984,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               }
               const halb = (sMax - sMin) / 2;
               const ausgewaehlt = selectedNodeIds.includes(r.id);
-              const farbe = ausgewaehlt ? FARBEN.auswahl : '#b08968';
+              const farbe = ausgewaehlt ? FARBEN.auswahl : T.materialWood;
 
               return (
                 <Group key={r.id}>
@@ -1040,7 +1040,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                   }}
                   onClick={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([st.id]); } }}
                 >
-                  <Line points={sym.umriss.flatMap((q) => [q.x, q.y])} closed stroke={farbe} strokeWidth={40 / zoom} fill={ausgewaehlt ? 'rgba(147,194,28,0.10)' : 'rgba(55,65,81,0.05)'} />
+                  <Line points={sym.umriss.flatMap((q) => [q.x, q.y])} closed stroke={farbe} strokeWidth={40 / zoom} fill={ausgewaehlt ? T.brandWash : T.canvasWallGhost} />
                   {sym.stufen.map((s, i) => (
                     <Line key={i} points={[s[0].x, s[0].y, s[1].x, s[1].y]} stroke={farbe} strokeWidth={25 / zoom} listening={false} />
                   ))}
@@ -1070,7 +1070,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                   }}
                   onClick={(e) => { if (werkzeug === 'auswahl') { e.cancelBubble = true; store.getState().selectNodes([ob.id]); } }}
                 >
-                  <Rect x={0} y={0} width={laenge} height={tiefe} cornerRadius={30} stroke={farbe} strokeWidth={40 / zoom} fill={ausgewaehlt ? 'rgba(147,194,28,0.12)' : 'rgba(55,65,81,0.06)'} />
+                  <Rect x={0} y={0} width={laenge} height={tiefe} cornerRadius={30} stroke={farbe} strokeWidth={40 / zoom} fill={ausgewaehlt ? T.brandWash : T.canvasWallGhost} />
                   <Text x={0} y={-90} width={laenge} align="center" scaleY={-1} text={label} fontSize={150} fill={FARBEN.gedaempft} listening={false} />
                 </Group>
               );
@@ -1096,7 +1096,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         </div>
         <DreiDBereich sichtbar={modus !== '2d'} />
         {/* Rechtes Eigenschaften-Panel (immer sichtbar; Dach-Parameter oder Kontext) */}
-        <div style={{ width: 268, flex: '0 0 auto', background: '#fff', borderLeft: '1px solid #e5e7eb', padding: 14, overflowY: 'auto', fontSize: 12.5, color: FARBEN.text }}>
+        <div style={{ width: 268, flex: '0 0 auto', background: T.surface, borderLeft: `1px solid ${T.hair}`, padding: 14, overflowY: 'auto', fontSize: 12.5, color: FARBEN.text }}>
           <div style={{ fontWeight: 800, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '.04em', color: FARBEN.gedaempft, marginBottom: 12 }}>Eigenschaften</div>
           {/* Dashboard v1 §5: Sicht (Auge) + Sperre (Schloss) je selektiertem Node → vorhandene Commands
               SET_NODES_SICHTBAR/SET_NODES_GESPERRT. Zustand als Text UND Symbol (A11y). Entsperren fragt nach. */}
@@ -1219,16 +1219,16 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 };
                 return (
                   <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', color: '#9aa0a8', marginBottom: 6 }}>Bauart</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', color: T.muted, marginBottom: 6 }}>Bauart</div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, maxHeight: 220, overflowY: 'auto', paddingRight: 2 }}>
                       {katalog.map((t) => {
                         const aktivT = aktuellTyp === t.id;
                         return (
                           <button key={t.id} type="button" title={t.label} onClick={() => waehleTyp(t)}
                             style={{ display: 'grid', gap: 3, placeItems: 'center', padding: 5, borderRadius: 8, cursor: 'pointer',
-                              border: `1.5px solid ${aktivT ? FARBEN.auswahl : '#e5e7eb'}`, background: aktivT ? 'rgba(147,194,28,0.12)' : '#fff' }}>
+                              border: `1.5px solid ${aktivT ? T.brandInk : T.controlBorder}`, background: aktivT ? T.brandWash : T.surface }}>
                             <img src={`${ICON_BASE}icons/${istFenster ? 'fenster' : 'tuer'}/${t.datei}`} alt={t.label} loading="lazy" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                            <span style={{ fontSize: 8.5, lineHeight: 1.15, color: aktivT ? FARBEN.text : '#6b7280', textAlign: 'center', height: 20, overflow: 'hidden' }}>{t.label}</span>
+                            <span style={{ fontSize: 8.5, lineHeight: 1.15, color: aktivT ? FARBEN.text : T.muted, textAlign: 'center', height: 20, overflow: 'hidden' }}>{t.label}</span>
                           </button>
                         );
                       })}
@@ -1279,7 +1279,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 const preis = preisFenster({ breiteMm: selectedOpening.width, hoeheMm: selectedOpening.height, profil: prof, verglasung: verg, oeffnungsArt: oa, rc });
                 const setP = (aend: Partial<NonNullable<OpeningNode['produkt']>>) => aktualisiereOeffnung({ produkt: { ...prod, ...aend } });
                 return (
-                  <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid #e5e7eb' }}>
+                  <div style={{ marginTop: 12, paddingTop: 10, borderTop: `1px solid ${T.hair}` }}>
                     <div style={{ fontWeight: 700, marginBottom: 8 }}>Produkt (Fensterbau)</div>
                     <label style={panelLabel}>Profilsystem
                       <select value={prof.id} onChange={(e) => setP({ profilId: e.target.value })} style={panelInput}>
@@ -1308,7 +1308,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                         <option value="RC3">RC3</option>
                       </select>
                     </label>
-                    <div style={{ marginTop: 8, padding: 10, background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 12, lineHeight: 1.7, color: FARBEN.text }}>
+                    <div style={{ marginTop: 8, padding: 10, background: T.bg, border: `1px solid ${T.hair}`, borderRadius: 8, fontSize: 12, lineHeight: 1.7, color: FARBEN.text }}>
                       <div>U-Wert (U<sub>w</sub>): <strong>{uw.uw.toFixed(2)}</strong> W/(m²·K)</div>
                       <div>RC {rc === 'ohne' ? '' : rc}: <strong style={{ color: rc === 'ohne' ? FARBEN.gedaempft : rcOk ? FARBEN.erfolg : FARBEN.gefahr }}>{rc === 'ohne' ? 'kein Nachweis' : rcOk ? 'mit dieser Verglasung möglich' : 'Verglasung reicht nicht'}</strong></div>
                       <div>Preis (netto): <strong>{preis.gesamt.toLocaleString('de-DE')} €</strong></div>
@@ -1330,16 +1330,16 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 const aktuellTyp = selectedStairParams.typ;
                 return (
                   <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', color: '#9aa0a8', marginBottom: 6 }}>Bauart</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', color: T.muted, marginBottom: 6 }}>Bauart</div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, maxHeight: 200, overflowY: 'auto', paddingRight: 2 }}>
                       {TREPPEN_BAUARTEN.map((t) => {
                         const aktivT = aktuellTyp === t.id;
                         return (
                           <button key={t.id} type="button" title={t.label} onClick={() => aktualisiereTreppe({ typ: t.id })}
                             style={{ display: 'grid', gap: 3, placeItems: 'center', padding: 5, borderRadius: 8, cursor: 'pointer',
-                              border: `1.5px solid ${aktivT ? FARBEN.auswahl : '#e5e7eb'}`, background: aktivT ? 'rgba(147,194,28,0.12)' : '#fff' }}>
+                              border: `1.5px solid ${aktivT ? T.brandInk : T.controlBorder}`, background: aktivT ? T.brandWash : T.surface }}>
                             <img src={`${ICON_BASE}icons/treppe/${t.datei}`} alt={t.label} loading="lazy" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                            <span style={{ fontSize: 8.5, lineHeight: 1.15, color: aktivT ? FARBEN.text : '#6b7280', textAlign: 'center', height: 20, overflow: 'hidden' }}>{t.label}</span>
+                            <span style={{ fontSize: 8.5, lineHeight: 1.15, color: aktivT ? FARBEN.text : T.muted, textAlign: 'center', height: 20, overflow: 'hidden' }}>{t.label}</span>
                           </button>
                         );
                       })}
@@ -1353,7 +1353,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               {(() => {
                 const erg = berechneTreppe({ geschosshoehe: selectedStairParams.geschosshoehe, laufbreite: selectedStairParams.laufbreite, gewuenschteSteigung: selectedStairParams.gewuenschteSteigung, bereich: selectedStairParams.bereich, verfuegbareLauflaenge: Math.hypot(selectedStairParams.endX - selectedStairParams.startX, selectedStairParams.endY - selectedStairParams.startY) || undefined });
                 return (
-                  <div style={{ marginBottom: 10, padding: 10, background: erg.bestanden ? '#f0fdf4' : '#fef2f2', border: `1px solid ${erg.bestanden ? '#bbf7d0' : '#fecaca'}`, borderRadius: 8, fontSize: 11.5, lineHeight: 1.6, color: FARBEN.text }}>
+                  <div style={{ marginBottom: 10, padding: 10, background: erg.bestanden ? T.okSoft : T.errSoft, border: `1px solid ${erg.bestanden ? T.okBorder : T.errBorder}`, borderRadius: 8, fontSize: 11.5, lineHeight: 1.6, color: FARBEN.text }}>
                     <div><strong>{erg.anzahlSteigungen}</strong> Steigungen · <strong>{erg.anzahlAuftritte}</strong> Auftritte</div>
                     <div>Steigung {erg.steigungshoehe} mm · Auftritt {erg.auftritt} mm</div>
                     <div>Schrittmaß {erg.schrittmass} mm · {erg.bestanden ? 'DIN 18065 erfüllt' : 'DIN 18065 verletzt'}</div>
@@ -1406,7 +1406,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               <div style={{ fontSize: 12 }}>Werkzeug: <strong style={{ color: FARBEN.text }}>{werkzeug}</strong></div>
               <div style={{ fontSize: 12 }}>Geschoss: <strong style={{ color: FARBEN.text }}>{level.name}</strong></div>
               <div style={{ fontSize: 12 }}>Räume: {raeume.length} · {(raeume.reduce((acc, r) => acc + r.flaecheMm2, 0) / 1_000_000).toFixed(2)} m²</div>
-              <div style={{ marginTop: 12, padding: 10, background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 11.5 }}>
+              <div style={{ marginTop: 12, padding: 10, background: T.bg, border: `1px solid ${T.hair}`, borderRadius: 8, fontSize: 11.5 }}>
                 Ein Dach auswählen zeigt hier seine Parameter. Ablauf: Wand ziehen (W) → Dach (D) über den Umriss → 3D.
               </div>
             </div>
@@ -1415,7 +1415,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       </div>
 
       {/* Statusleiste */}
-      <div style={{ display: 'flex', gap: 16, alignItems: 'center', padding: '7px 14px', background: '#fff', borderTop: '1px solid #e5e7eb', fontSize: 12, color: FARBEN.gedaempft }}>
+      <div style={{ display: 'flex', gap: 16, alignItems: 'center', padding: '7px 14px', background: T.surface, borderTop: `1px solid ${T.hair}`, fontSize: 12, color: FARBEN.gedaempft }}>
         <span>x {cursor.x} mm · y {cursor.y} mm</span>
         <span>Zoom {(zoom * 100).toFixed(0)} %</span>
         <span>Räume: {raeume.length} · Fläche gesamt: {(raeume.reduce((s, r) => s + r.flaecheMm2, 0) / 1_000_000).toFixed(2)} m²</span>

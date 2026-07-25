@@ -5,13 +5,18 @@
 
 export const T = {
   bg: '#f5f7f8', surface: '#ffffff', surface2: '#fafbfc',
-  ink: '#232a31', muted: '#697079', faint: '#a7aeb7', hair: '#edf0f2', hair2: '#f2f4f6',
+  ink: '#232a31', muted: '#697079', faint: '#a7aeb7',
+  controlBorder: '#8b949e', hair: '#edf0f2', hair2: '#f2f4f6',
   accent: '#12807d', accentSoft: '#e6f2f1', accentInk: '#0c5f5d',
-  brand: '#7fae1c', brandInk: '#496700',
-  ok: '#1a9e5f', okSoft: '#e6f5ec', okInk: '#137a49',
+  brand: '#7fae1c', brandSoft: '#f4f8e9', brandWash: 'rgba(127,174,28,0.12)',
+  brandGhost: 'rgba(127,174,28,0.06)', brandInk: '#496700',
+  ok: '#1a9e5f', okSoft: '#e6f5ec', okInk: '#137a49', okBorder: '#bbf7d0',
   info: '#2f6df0', infoSoft: '#e9f0fd', infoInk: '#2358c9',
   warn: '#d98218', warnSoft: '#fdf2e3', warnInk: '#9c5c0d',
-  err: '#d24b3e',
+  err: '#d24b3e', errSoft: '#fef2f2', errInk: '#b91c1c', errBorder: '#fecaca',
+  canvasGrid: '#eef0f2', canvasGridStrong: '#e2e4e7',
+  canvasWall: '#374151', canvasWallFill: '#4b5563', canvasWallGhost: 'rgba(55,65,81,0.06)',
+  materialWood: '#b08968',
 } as const;
 
 export type StudioModus = 'start' | 'guided' | 'expert';

@@ -109,10 +109,11 @@ test('Registry-Vorrang: verschiedene ids werden nicht vereinheitlicht (auswahl �
 });
 
 // --- 5) Regressionsanker: die Navi verhält sich unverändert ------------------------------------
-test('Regressionsanker: faehigkeitenNach(werkzeuge) liefert dieselben ids in derselben Reihenfolge', () => {
-  // Hart hinterlegt = Stand VOR der Umstellung (aus Registry-Reihenfolge + bisheriger CAD_TEILMENGE).
+test('Regressionsanker: faehigkeitenNach(werkzeuge) bleibt nach der Fachzuordnung in derselben Reihenfolge', () => {
+  // `decke` wurde nach Yamas Fachentscheidung bewusst nach `bau` verschoben; der übrige Stand bleibt
+  // hart hinterlegt aus Registry-Reihenfolge + bisheriger CAD_TEILMENGE.
   const vorher = [
-    'auswahl', 'decke', 'loeschen', 'duplizieren',
+    'auswahl', 'loeschen', 'duplizieren',
     'cad-rotate', 'cad-scale', 'cad-free-transform',
     'cad-align-left', 'cad-align-center', 'cad-align-right',
     'cad-align-top', 'cad-align-middle', 'cad-align-bottom',
