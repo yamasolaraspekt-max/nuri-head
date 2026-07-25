@@ -126,3 +126,50 @@ Faustregel für die Spalte: Posten, deren Abnahme `build:hausplaner` oder eine S
 1. **Freigabe dieses Vorschlags** — er bindet erst dann.
 2. **Soll die Spalte `Laufzeit` in die Tafel?** Sie kostet einmal Umbau und spart jedes Ziehen.
 3. **Darf Cowork in Ausnahmefällen bauen** (wenn nativ nicht läuft), oder nie?
+
+---
+
+## 7. Planner-Sorgfaltspflicht (Yama, 25.07., bindend)
+
+**Anlass:** Am 25.07. hat der Planner gegen seine eigene, im selben Repo committete Messung
+geschrieben — er hatte vormittags belegt, dass neun Paket-IDs exakt die neun Registry-IDs treffen,
+und nachmittags einen Auftrag verfasst, in dem stand, genau das könne nicht passieren. Der Generator
+brach an dieser Stelle ab. Dazu: Arbeit im falschen Repo, ein Auftrag gegen einen drei Minuten alten
+fremden Commit, eine doppelt begonnene Tabelle, und eine Regel, die den Generator leerlaufen ließ.
+
+**Gemeinsames Muster: auf ein plausibles Bild hin handeln, statt vorher den Stand zu prüfen.**
+Die Gegenmaßnahme ist keine Absichtserklärung, sondern eine Formvorschrift.
+
+### 7.1 Jeder Planner-Auftrag und jede Planner-Entscheidung beginnt mit „Vorher gelesen"
+
+Vor dem eigentlichen Text steht ein Block:
+
+```
+**Vorher gelesen:** HEAD <hash> · git log -5 · Tafelzeile <AUF-x> · <Datei:Zeile der geprüften Behauptung>
+```
+
+**Fehlt der Block, ist der Auftrag ungültig** — jede Rolle darf ihn ohne Diskussion zurückweisen.
+Das ist dieselbe Regel, die für den Evaluator gilt („Artefakt statt Behauptung"), angewandt auf den
+Planner.
+
+### 7.2 Keine ungeprüfte Behauptung in einem Auftrag
+
+Sätze der Form „das kann nicht passieren", „X existiert nicht", „Y ist eindeutig" stehen **nur** im
+Auftrag, wenn sie **selbst gemessen** wurden — mit der Messung daneben. Was nicht geprüft werden
+konnte, steht als **offene Frage**, nicht als Tatsache. Eine Kantenliste darf eine Kante beschreiben,
+ohne ihr Eintreten auszuschließen.
+
+### 7.3 Jede neue Regel wird einmal durchgespielt, bevor sie geschrieben wird
+
+Ein Satz genügt: „Wenn diese Regel gestern gegolten hätte — was wäre passiert?"
+Die AKTIV-Regel hätte den Generator bei jeder Abnahme angehalten. Das fällt in dreißig Sekunden auf.
+
+### 7.4 Kein neues Dokument, das nicht ein bestehendes ersetzt
+
+Jede zusätzliche Datei ist zusätzliche Fläche für Widersprüche — und sie kostet Yama den Überblick,
+den der Planner ihm eigentlich verschaffen soll. Ergänzen schlägt Anlegen. Wird doch eine neue Datei
+nötig, wird die abgelöste im selben Commit **stillgelegt**, nicht danebengelegt.
+
+### 7.5 Antwortform
+
+Befund · Entscheidung · nächster Schritt. Details nur auf Nachfrage.
