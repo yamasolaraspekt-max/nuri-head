@@ -3723,3 +3723,71 @@ statt sie unter „Gruppenzeile" zu verbuchen.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
 **Ballbesitz → Evaluator** (getrennte Sitzung, nicht diese).
+
+
+---
+
+## ⇒ PLANNER — EIGENER FEHLER: die Tafel wurde gegen sich selbst gepflegt, nicht gegen die Voten (`32d2ecc`)
+
+**Anlass:** Yama, 25.07.: *„evaluator hat was hinterlassen als bericht"*.
+
+**Befund:** Das Abnahme-Dokument `docs/abnahme-evaluator-haertung-2026-07-25.md` (187 Zeilen) trägt
+**13 Voten mit Beleg-SHA**. Acht davon standen auf der Tafel weiterhin als `BERICHTET — wartet auf
+Evaluator` bzw. `Abnahme offen`:
+
+| Posten | Tafel sagte | Votum lag vor seit |
+|---|---|---|
+| AUF-3 (T1) | `OFFEN — Vorbedingung erfüllt: 9ec3b25` | FREIGABE `9ec3b25`, test 696/696, build EXIT 0 |
+| AUF-2 | `BERICHTET — wartet auf Evaluator (AUF-3)` | mit T1 mit abgenommen — `9ec3b25` **ist** dieser Commit |
+| AUF-9 | `BERICHTET — wartet auf Evaluator` | FREIGABE `fbc5308` |
+| AUF-15a | `UMGESETZT — Abnahme offen` | FREIGABE `2d927fc`, test 734/734 |
+| AUF-16 | `BERICHTET — wartet auf Evaluator` | FREIGABE `982384d`, test 739/739 |
+| AUF-19 | `UMGESETZT — Abnahme offen` | FREIGABE `8587ce7`, test 746/746 |
+| AUF-25 | `BERICHTET — wartet auf Evaluator` | FREIGABE `17c8be2`, test 768/768 |
+| AUF-31 | `BERICHTET — wartet auf Evaluator` | FREIGABE `2deb6a5`, Bijektion 9+101=110, test 788/788 |
+
+Die SHA auf der Tafel und die SHA im Votum sind in **allen acht** Fällen dieselbe — es gab keine
+Zuordnungsfrage, nur eine ungelesene Datei.
+
+**Ursache — und sie liegt bei mir.** Ich habe die Tafel vor einer Stunde aufgeräumt (`9ca73af`) und
+dabei die **Statusspalte der Tafel** als Wahrheit genommen, statt sie gegen das Abnahme-Dokument zu
+halten. Das ist derselbe Fehlertyp, den ich dem Bericht-ohne-Beleg vorwerfe: eine Angabe übernommen,
+weil sie dastand. Ergebnis: ich habe Yama einen Abnahme-Stapel von zehn Posten gemeldet und daraus
+abgeleitet, der Evaluator sei der Engpass der Kette. **Beides war falsch.** Der Stapel war drei.
+
+**Was ich daraus als Regel setze** (gilt für diese Tafel, ab sofort): Ein Tafelstatus ist erst
+gepflegt, wenn er **gegen das Abnahme-Dokument** gehalten wurde — nicht gegen die vorige Tafelzeile.
+Bei jeder Tafel-Pflege läuft der Abgleich Tafel-SHA gegen Votums-SHA über alle Zeilen, nicht nur über
+die angefasste. Das kostet einen Durchlauf und hätte diesen Fehler verhindert.
+
+**Neuer Stand (gemessen, `32d2ecc`):** Arbeitsvorrat 10 · Abnahme-Stapel **3** · bei Yama 11 ·
+Archiv **15**. Summe 24 + 15 = 39, vor dem Schreiben geprüft.
+
+**Der Abnahme-Stapel ist damit real:**
+
+- **AUF-27** — FREIGABE **mit Auflage**. Die Auflage ist AUF-37 (Bundle-Rebuild); ohne ihn sind die
+  drei Reiter im laufenden App nicht sichtbar, die Sichtprobe ist bis dahin nicht führbar.
+- **AUF-21 / I1** (`7bbf9ff`, 110 Icons ablegen) — der einzige Teil des Icon-Pakets **ohne** Votum.
+  I2 (`289ccc8`), I3 (`ccdc93b`) und I4 (`4932b36`) sind freigegeben.
+- **AUF-30** (Render-Pfad-Testinfra) — der einzige Posten, der überhaupt noch nie geprüft wurde. Er
+  trägt zugleich A2-Auflage 3 (Render-Pfad-Test), die der Generator mangels `.tsx`/DOM-Infra
+  zurückgegeben hat.
+
+**Was der Evaluator zusätzlich geliefert hat — meine vier Auflagen sind alle beantwortet:**
+
+1. AUF-9-Widerspruch aufgelöst (die Zeile unter „Nicht abgenommen/offen" ist gestrichen).
+2. `sichtbar`/`Vorarbeit` steht jetzt an jedem Votum. Seine eigene Einordnung: **Vorarbeit** für T1 ·
+   AUF-15a · AUF-16 · AUF-19 · A2 · AUF-9 · I2 · I3 — **sichtbar** für Batch 1 · Batch 2 · AUF-25 ·
+   AUF-26 · I4. Er benennt seine I3-Freigabe selbst als die Blindstelle.
+3. Rohbelege liegen als Anhang **in der Datei** (Z. 161–187): Gates je SHA, Mutations-Gegenbeweise,
+   Bijektionszahlen, die Farb-Grep-Bilanz, die Sichtprobe-Messung.
+4. Das Viewport-Limit ist **gelöst** — iframe fester Breite, `contentDocument` messbar. Das ist ab
+   jetzt das Sichtprobe-Werkzeug für 1440/1024/375.
+
+**Ein Residuum ist bereits in Arbeit:** Der Evaluator meldet zu AUF-31, die führende Tabelle zeige
+noch `ffnung`/`bergabepaket` (Umlautverlust). Der native Generator hat das im Rahmen von AUF-34
+berichtigt — die Änderung liegt uncommittet im Arbeitsbaum (`docs/planner/eindeutschung-110-paket-ids.md`,
+Zeilen 41 und 98, mit Nachtrag). **Ich fasse sie nicht an**, sie gehört zu seinem laufenden Posten.
+
+**Ballbesitz danach:** AUF-34 beim nativen Generator (⚡). AUF-37 offen und klein — er entriegelt die
+AUF-27-Sichtprobe. Beim Evaluator liegen drei Posten, nicht zehn. Push weiter bei Yama.
