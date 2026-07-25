@@ -440,3 +440,102 @@ Stand `auto/hausplaner-integration @ 050f55f`. Beweis statt Bericht — selbst n
 **VERDIKT: Dashboard v1 = unbedingte FREIGABE** (Auflage aufgelöst, kein offener RED). **Ballbesitz → Planner.**
 
 **Tor-2-Grenze (Evaluator-Klarstellung, kein Veto):** `integration → lokales main` + Push **nur** auf Yamas eigene Remotes (fork/backup) ist unter der Live-lokal-Klarstellung + Yamas Vollmacht gedeckt — ich blockiere das nicht. **Ein echter upstream-/Hetzner-Deploy (3000 Kunden) bleibt Yamas bewusster, separater Schritt** — den würde ich sofort flaggen, nicht als Zyklus-Automatik durchwinken.
+
+## ⇒ EVALUATOR — Tor-2-Grenzverifikation (read-only, selbst gemessen 3-min-Takt)
+Nach der FREIGABE festgestellt: `main` == `auto/hausplaner-integration` == `9bcc9c3` → **Tor 2 als lokaler main-FF ausgeführt** (Dashboard v1 auf lokalem main). Grenze geprüft:
+- Push von `9bcc9c3` **nur** auf Yamas eigene Remotes (`backup-private`/`fork`/`origin` = alle `yamasolaraspekt-max`), **nur** Branch `auto/hausplaner-integration`.
+- **`upstream` (fremd, `raminsadid2021`) unberührt; `main` auf KEIN Remote gepusht.** → Grenze **intakt**, kein Escalation-Fall. (`origin`≡`fork`-URL = Yama-eigen; alte „origin"-Rot-Flagge damit aufgelöst.)
+- **Hygiene-Hinweis an Planner:** die Tor-2-Ausführung ist bisher **nicht als Bericht dokumentiert** (Z.423 ist nur Plan) — bitte einen Ausführungs-Eintrag (was gemerged/gepusht, welche Remotes) nachtragen, damit die Chronologie lückenlos bleibt.
+- Reiner **Live-/Hetzner-Deploy bleibt offen bei Yama** — korrekt nicht angefasst.
+
+## ⇒ EVALUATOR — Guardrail-Baseline für die Wizard-Welle (proaktiv, read-only gemessen, idle-Takt)
+Damit die Wizard-Abnahme später sofort + hart gegen Dubletten läuft, habe ich die **SSOT-Fläche** vermessen, an die verdrahtet werden MUSS (Ledger-Guardrail Z.335: „kein zweiter Snapshot-/Hash-/Projektions-Mechanismus"). Alle 10 Dienste existieren; die vier Kern-Aufruf-Ziele:
+- **Hash:** `App\Services\BuildingModel\CanonicalHash::of(array $data): string` (static) — **die** eine Hash-Wahrheit.
+- **Versionierte Projektion:** `DerivedBuildingModelVersionStore::projiziere(array $canonicalModel, SourceGeometryRef $source): BuildingModelVersion` (+ `BuildingModelVersionImmutableException`, `ProjectionConflictException`=409).
+- **Hausplaner→Modell:** `App\Services\Geometrie\SzeneProjektionService::projiziere(array $scene): array`.
+- **Topologie-Tor:** `TopologieGate::pruefePolygon(array): TopologieErgebnis` · `pruefeOeffnungen(array): TopologieErgebnis` · `flaecheOderException(array): float`.
+- Ergänzend vorhanden: `CanonicalBuildingModelValidator`, `SourceGeometryRef`, `Auslegung\WpAuslegungsketteService`, `Heizkoerper\HydraulicService`.
+
+**Abnahme-Regel Wizard (vorab fixiert):** eine neue Hash-/Snapshot-/Version-/Projektions-Klasse im Wizard-Slice = **RED** (Dublette). Der Wizard **ruft** diese Methoden auf; er **rechnet keine zweite Wahrheit**. Operanden-Gate gilt: fehlt ein Operand → Vorschlag+Bestätigung, kein stilles Weiterrechnen.
+
+## ⇒ GENERATOR-BERICHT — Pre-Push-Siegel: Bundle-Drift-Beweis erbracht (2026-07-25 09:32, nativ)
+Erledigt den offenen Generator-Posten aus Z.241 („Bundle aus Quellen, keine Drift" — die EINE Aussage, die der
+Evaluator rollenbedingt nicht selbst messen kann, weil `build` die Datei mutiert).
+- **Stand:** `auto/hausplaner-integration @ 9bcc9c3` (== `main`), nativ auf dem Mac (node v26.5.0 / npm 11.17.0).
+- **Messung:** `md5 public/hausplaner/hausplaner.js` **vor** dem Build = `571f60392a46ea5031f407e4ddd89b61` →
+  `npm run build:hausplaner` (Exit 0, schema:check + tsc --noEmit + vite; 283 Module, 1.287,29 kB) →
+  `md5` **nach** dem Build = `571f60392a46ea5031f407e4ddd89b61` (identisch) ·
+  `git status --porcelain public/hausplaner/hausplaner.js` = **leere Ausgabe**.
+- **Verdikt:** Das committete Bundle ist **byte-identisch** zu einem frischen Rebuild aus den Quellen →
+  **keine Drift**. Der Rest-Vorbehalt des Evaluators (Z.382) ist damit aufgelöst; das Tor-2-Ziel ist versiegelt.
+- Kein Commit nötig (Baum sauber bzgl. Bundle), kein Push.
+
+## ⇒ GENERATOR — Weckerlage (gemessen, 2026-07-25 09:32)
+Auf Yamas Frage „wo ist dein Wecker": `RemoteTrigger list` (20 Trigger) zeigt —
+- **Generator-Autopilot `trig_01BY6JAqqKXDVskxDwczDnYi`: `enabled=false`** (Cron `24 * * * *`, letzter Lauf
+  2026-07-23 12:24). Ebenso **Evaluator `trig_01Gb5BHynnNGHHZdq9t1n61x`: false** und der alte
+  **Planner-Autopilot `trig_0179RLPqfLMDtXcQnoWPuqSv`: false**. → Abschaltung von 2026-07-23 (Ledger §2,
+  git-Lock-Kollision im gemounteten Ordner) ist **bis heute in Kraft**; der Generator wird nicht geweckt.
+- Aktiv sind nur: die **Planner-Heartbeat-Kette** (`trig_013kVy7G67yE2eriiRn6kY2k`, send_later-Re-Arm, 3-Min-Takt)
+  und der **Überwacher-Cron** (`trig_01Mzj9p5TiXsZM9FrSTLJ5EG`, alle 3 h).
+- **Zweite Ursache (nicht nur der Wecker):** im Ledger stand für den Generator **kein offener Auftrag** —
+  letzter Generator-Bericht (1-Token-Fix `050f55f`) → Evaluator-FREIGABE → Ballbesitz Planner. Der nächste
+  Generator-Auftrag (Wizard-Welle A1, Schritt 4 der Planner-Heartbeat-Nachricht) ist **noch nicht geschrieben**
+  (`grep` im Ledger = 0 Treffer). Ein scharfer Wecker allein hätte mich also auf ein leeres Auftragsfach geweckt.
+- **Ball:** Yama — (a) Generator-Wecker wieder scharf schalten? (nativ auf dem Mac entfällt das damalige
+  `unlink`-Problem) und (b) Planner soll den A1-Auftrag ins Fach legen.
+
+**NACHTRAG 09:38 — Wecker gestellt (Yama-Anweisung „alle 3 Minuten nachschauen"):**
+- **Cron scheidet aus (gemessen):** `RemoteTrigger update {cron:"*/3 * * * *"}` → **HTTP 400 „minimum interval
+  is 1 hour"**. Ein 3-Min-Takt ist als Server-Cron nicht stellbar — deshalb fährt auch der Planner eine
+  `send_later`-Selbst-Re-Arm-Kette statt eines Crons. `trig_01BY6JAqqKXDVskxDwczDnYi` bleibt vorerst `false`.
+- **Gestellt stattdessen:** lokaler **3-Minuten-Takt in der nativen Mac-Session** (Job `45c3c505`, `*/3 * * * *`).
+  Prüft je Takt Ledger + Branch-Spitzen, setzt einen offenen Generator-Auftrag um (Gate selbst, kein Push,
+  kein main-Merge, Commit nur auf Yamas Wort), bleibt bei leerem Fach still. Vorteil gegenüber dem Cloud-Wecker:
+  **echte Toolchain** (Build/Tests laufen hier — s. Drift-Beweis oben) und **keine `.git/*.lock`-Kollision**
+  (nativ, `unlink` erlaubt). Grenze: läuft nur, solange Yamas Session offen ist; Auto-Ablauf nach 7 Tagen.
+- **Takt 1 (09:38) gefahren:** kein offener Generator-Auftrag. Alle ⇒-GENERATOR-Posten haben einen Bericht
+  (Konsolidierung → `c5afcee` · Verdrahtung #1 → `176aa48` · Dashboard v1 → `4cde0be`/`a1215a3` · 1-Token →
+  `050f55f` · Pre-Push-Siegel → oben). `integration` == `main` == `9bcc9c3`. **Ballbesitz weiter Planner**
+  (Wizard-A1-Auftrag noch nicht geschrieben). Nichts angefasst.
+
+## ⇒ GENERATOR — AUFTRAG Wizard-Welle A1: Werkzeug-Präsentation (Planner, 2026-07-25)
+**Datei:** `docs/auftraege/generator-auftrag-wizard-welle-a1-werkzeug-praesentation.md` (159 Zeilen)
+**Ballbesitz: GENERATOR.** Das Auftragsfach ist damit nicht mehr leer.
+
+**Vorher gemessen (Regel 1 „Messen vor Behaupten"), korrigiert eine frühere Planner-Annahme:**
+- `app/tools/toolRegistry.ts` → `TOOL_DEFINITIONS` = **9 Einträge** (7 × `art:'werkzeug'`: auswahl/wand/
+  fenster/tuer/dach/decke/treppe · 2 × `art:'aktion'`: loeschen/duplizieren). Das ist die **einzige** Quelle
+  der Werkzeugleiste (`HausplanerApp.tsx:790–815`, `werkzeugTools().map(...)` in der linken 220px-Spalte —
+  **nicht** die in der Code-Landkarte behauptete Topbar ~Z.731).
+- `app/tools/toolCatalog.ts` → `TOOL_KATALOG` = **54 Einträge**, davon nachweislich DTP (type, page,
+  *-frame, preflight, swatches-panel, pen, scissors, …). **Kein einziger Konsument in der Werkzeugleiste.**
+  Der Kopfkommentar „DTP/Druck-Tools bewusst NICHT enthalten" ist **messbar falsch**.
+- Die eigentliche **Kuratierung existiert schon**, aber versteckt als lokale Konstante `CAD_TEILMENGE`
+  (15 ids) in `app/tools/faehigkeiten.ts`. → „Kuratieren" heißt hier **nicht** löschen, sondern diese
+  verborgene Auswahl in eine benannte, getestete Datenschicht heben.
+- Deaktivierungs-Wahrheit (`activation.ts::resolveToolState`) und Tooltip-Metadaten (`toolTypes.ts`)
+  sind **schon da** → A1 darf davon **keine zweite Version** bauen.
+
+**Auftrag (additiv, kein UI-Wechsel in A1):** neue Datei `app/tools/toolPresentation.ts` mit
+`RailZone = 'fix'|'kontext'|'weitere'|'versteckt'`, `ToolPresentationRule {toolId, zone, ordnung,
+herkunft, begruendung}`, `TOOL_PRESENTATION_RULES`, `praesentation()`, `zoneTools()`, `verwaisteRegeln()`.
+A1.2: `faehigkeiten.ts` liest die 15 ids aus der neuen Schicht (verhaltensgleich). A1.3: falschen
+Katalog-Kopfkommentar korrigieren. A1.4: `__tests__/toolPresentation.test.ts` (6 Prüfungen inkl.
+Navi-Regressionsanker + 2 rote Gegenbeweise).
+
+**Abnahme-Zahlen (prüfbar, nicht Gefühl):** Regeln **63** · fix **7** · kontext **2** · weitere **15** ·
+versteckt **39** (54−15) · `verwaisteRegeln()` = `[]` · `test:hausplaner` ≥ 684 + neue.
+
+**Guardrails:** `TOOL_DEFINITIONS` und `resolveToolState` bleiben unberührt · kein Katalog-Eintrag wird
+gelöscht · **kein Katalog-Werkzeug wird in A1 in die Leiste gehoben** (das ist Yamas Fachentscheidung,
+Regel 4) · kein zweiter Deaktivierungs-Mechanismus · **kein Beifang** — der rohe Hex `#fff`/`#e5e7eb`/
+`#9ca3af` in `HausplanerApp.tsx` ~Z.796–812 ist ausdrücklich **nicht** Teil von A1 (eigener Auftrag) ·
+BuildingModel-Guardrail gilt (keine neue Hash-/Snapshot-/Version-/Projektions-Klasse) · `geometry/*` bytetreu.
+
+**Offene Planner-Posten (nicht A1, hier nur hinterlegt):**
+1. Token-Verstoß: roher Hex in `HausplanerApp.tsx` ~Z.796–812 → eigener Auftrag.
+2. **Fachfrage an Yama:** `WERKZEUG_GRUPPE` in `faehigkeiten.ts` hat **keinen `decke`-Eintrag** → Decke
+   fällt auf 'werkzeuge', während wand→'bau' und dach→'dach-zimmerei'. Gehört Decke zu 'bau'?
+3. Widerspruch: `__tests__/toolKatalog.test.ts:13` behauptet `katalogTool(<DTP-id>) === undefined`,
+   der Katalog enthält aber DTP-ids → Generator/Evaluator müssen abgleichen, welche ids der Test nennt.
