@@ -4992,3 +4992,67 @@ Import-Routen gibt es nicht, der Punkt bleibt vorbereitet (§3.3). **Keine Recht
 | `K7: fünf Vorbedingungen sind heute unerfüllbar — benannt, nicht ausgelassen` | `K7: die Fach-Vorbedingungen sind unerfüllbar — benannt, nicht ausgelassen` | `permission.import` ist aus der Lückenliste heraus: seit der Zuordnung hängt sie an einem Recht, das es wirklich gibt. Übrig bleiben die vier Fach-Operanden. |
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-44: die „(geplant)"-Knöpfe
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `47addd1` (Code) · `0bde0d9` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+**Ohne Auftragsdatei** — die Tafelzeile war der Auftrag.
+
+### Der Willensteil hat sich durch die Messung erledigt
+
+Die Tafel parkt die Entscheidung „entfernen oder ehrlich ausweisen" bei AUF-59. **Ich musste sie
+nicht beantworten** — die Messung hat sie beantwortet:
+
+| „(geplant)"-Knopf | Werkzeug im Katalog | Thema |
+|---|---|---|
+| Auswahl um 90° drehen | **`drehen`** | Bearbeiten & Transformieren |
+| Messwerkzeug — Abstand | **`distanz-messen`** | Messen & Bemaßen |
+| Bemaßung — Maßkette | **`bemassen`** | Messen & Bemaßen |
+| Als PDF-Planblatt exportieren | **`pdf`** | System, Suche & Export |
+| Ansicht einpassen | **keines** | — |
+
+**Vier von fünf sind Dubletten.** Die Werkzeuge existieren wirklich und stehen in ihrer
+Themen-Gruppe mit ehrlichem Zustand. Entfernt wurde die **tote Kopie in der Icon-Zeile**, nicht das
+Werkzeug — damit bleibt auch die Forderung des Nachbarpostens AUF-59 gewahrt („kein Werkzeug
+verschwindet"). Bilanz unverändert **110**.
+
+**Die Tafelzeile nennt zwei, es waren fünf.** Auch das ist Messung, nicht Auslegung.
+
+### Der fünfte bleibt — und wird zurückgegeben
+
+**„Ansicht einpassen" hat als einziger kein Gegenstück im Katalog.** Ihn zu entfernen hieße, die
+Funktion **ganz** aus der Oberfläche zu tilgen statt eine Dublette. Er bleibt stehen, inert und mit
+„(geplant)" im Tooltip. **Ob er ein Werkzeug bekommt oder bewusst gestrichen wird, ist eine
+Willensfrage** — sie gehört Yama/Planner, nicht mir. Ein Test hält fest, dass er als einziger übrig
+ist, und belegt mit, **warum**: es gibt kein `einpassen`/`ansicht-einpassen`/`zoom-einpassen`.
+
+### Rohausgabe
+
+| # | Prüfung | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` · `build` | **0 / 0 / 0 / 0** — **956 → 962**, **0 verschwunden** |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen** |
+| 3 | Mutations-Gegenbeweis | einen entfernten Knopf wieder eingesetzt ⇒ **2 Tests rot**; zurückgebaut ⇒ `diff` leer, 962/962 |
+| 4 | `public/*` im Code-Commit null, Bundle eigener zweiter Commit | erfüllt: `47addd1` → `0bde0d9` |
+| 5 | Rebuild-Beleg (`0bde0d9`, 1.409.158 Bytes, 25.07. 23:38) | `grep -c 'Als PDF-Planblatt exportieren'` = **0** · `'Ansicht einpassen'` = **1** |
+
+**Sichtprobe, 1440 px:** Die Icon-Zeile trägt jetzt **11 statt 15** Knöpfe; genau **einer** meldet
+noch „(geplant)":
+
+```
+Vergrößern · Verkleinern · Zoom zurücksetzen · Ansicht einpassen (geplant) · Raster · Fang
+Auswahl duplizieren · Auswahl löschen · Grundriss links/rechts · Grundriss oben/unten
+Als PNG-Bild exportieren
+```
+
+### Eine Randbemerkung zur Nachbarschaft
+
+AUF-59 fasst **dieselbe Zeile** an (Lesbarkeit von „bedienbar" gegen „gesperrt"). Die Zeile ist
+durch diesen Posten **kürzer** geworden, aber kein Zustand hat sich geändert — die vier
+Verschwundenen waren dauerhaft gesperrt. AUF-59 findet damit dieselbe Aufgabe vor, nur an vier
+Kästchen weniger. **Gleichzeitig gebaut wurde nichts** (AUF-22).
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
