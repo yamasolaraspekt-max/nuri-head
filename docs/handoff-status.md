@@ -2870,3 +2870,57 @@ Zonen, Stern, Überlauf, Befehlspalette — und dafür braucht es Yamas Entschei
 Anheftungen. **Das ist kein Rückstand, sondern die Grenze dieses Postens.**
 
 **Ballbesitz → Evaluator.**
+
+## ⇒ PLANNER — AUF-31 ABGEBROCHEN nach Kante 1: neun ID-Kollisionen (Generator, gemessen)
+Ich habe AUF-31 gezogen (`…`), die Tabelle maschinell ausgewertet und **nicht umbenannt**. Der
+Auftrag schreibt für genau diesen Fall vor: *„Eine deutsche ID kollidiert nach dem Umbenennen mit
+einer Bestands-ID → **Abbruch und melden**, nicht auflösen. Die Tabelle sagt, das kann nicht
+passieren; wenn doch, ist die Tabelle falsch."* Der Fall ist eingetreten — **neunmal**.
+
+**Die Tabelle ist sonst sauber:** 110 Zeilen, alle 110 Paket-IDs abgedeckt, **keine** doppelte
+Ziel-ID innerhalb der Tabelle, 16 schema-gebundene Zeilen mit Schutzwert markiert.
+
+**Aber neun Ziel-IDs sind exakt die neun Bestands-IDs:**
+
+| # | Paket-ID | Ziel-ID | zugleich Bestands-ID | Schutzwert |
+|--:|---|---|---|---|
+| 1 | `select` | `auswahl` | ✔ | — |
+| 11 | `duplicate` | `duplizieren` | ✔ | — |
+| 12 | `delete` | `loeschen` | ✔ | — |
+| 31 | `wall` | `wand` | ✔ | ⛔ `type: wall` |
+| 33 | `door` | `tuer` | ✔ | ⛔ `type: door` |
+| 34 | `window` | `fenster` | ✔ | ⛔ `type: window` |
+| 35 | `stairs` | `treppe` | ✔ | ⛔ `objectType: stair` |
+| 36 | `roof` | `dach` | ✔ | ⛔ `type: roof` |
+| 43 | `slab` | `decke` | ✔ | ⛔ `type: ceiling` |
+
+**Was passieren würde, wenn ich es trotzdem umbenenne** — gemessen an der jetzigen Struktur:
+1. `TOOL_PRESENTATION_RULES` hätte **zwei Regeln mit derselben `toolId`** (z. B. `wand`: Registry in
+   `fix`, Katalog in `versteckt`). Die id→Regel-`Map` behält die letzte; der Vollständigkeitstest
+   („keine doppelte toolId") wird rot — zu Recht.
+2. `zoneTools('versteckt')` löst `wand` über die **Registry** auf (Vorrang) — dasselbe Werkzeug
+   stünde in zwei Zonen. Die Zonen-Zahlen (7/2/0/110) stimmen dann nicht mehr.
+3. Der A1-Test „Registry-Vorrang: verschiedene ids werden nicht vereinheitlicht" prüft genau das
+   Gegenteil dessen, was dann gälte.
+
+**Das ist keine Formatfrage, sondern eine Sachfrage**, und sie gehört nicht mir: **Sind das je zwei
+Werkzeuge oder eines?** Ein Paket-Werkzeug „Wand" und ein Registry-Werkzeug „Wand" mit derselben id
+sind entweder dasselbe — dann müssen sie **zusammengeführt** werden (eine Wahrheit, ein Eintrag) —
+oder sie sind verschieden, dann brauchen sie **verschiedene** ids.
+
+**Drei Wege, ich empfehle den ersten:**
+1. **Zusammenführen:** die neun Paket-Werkzeuge fallen weg, die Registry-Einträge übernehmen deren
+   Metadaten (Icon, Kategorie, Einsatz). Ergebnis: 110 → **101** Katalog-Einträge, die neun
+   Bestands-IDs bleiben byte-genau, keine Dublette. Das ist der einzige Weg, der „eine Wahrheit je
+   Sachverhalt" wirklich herstellt — und er erklärt auch, warum die Tabelle sie so abbildet: es
+   **sind** dieselben Werkzeuge.
+2. **Unterscheiden:** die neun bekommen abweichende ids (`wand-paket` o. ä.). Ehrlich gesagt: das
+   verewigt die Doppelung, die A1/A2 gerade abgebaut haben.
+3. **Diese neun englisch lassen.** Widerspricht „alles deutsch".
+
+**Nicht angefasst:** kein `werkzeugPaket.ts`, keine Icon-Datei, kein Sprite, kein Adapter. Die
+16 schema-gebundenen Schutzwerte habe ich nur gelesen — ihre Trennung UI-ID ↔ gespeicherter Wert ist
+im Auftrag korrekt beschrieben und wäre umsetzbar; sie ist **nicht** der Grund des Abbruchs.
+
+**Tafel:** AUF-31 → `GESPERRT` mit Sperrgrund, damit nicht die nächste Instanz dieselbe Wand trifft.
+**Ballbesitz → Planner/Yama.**
