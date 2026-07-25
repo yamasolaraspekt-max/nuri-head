@@ -69,10 +69,11 @@ Und `-m` steht **vor** dem `--`, sonst frisst der Pathspec den Text.
 
 ---
 
-## 3. Die Tafel (Stand 25.07., HEAD `6fed416`)
+## 3. Die Tafel (Stand 25.07., gemessen gegen HEAD `7f1ecd6`)
 
 | Nr | Auftrag | Rolle | Status | Datei / Beleg |
 |---|---|---|---|---|
+| **AUF-12** | **Dashboard v2 — Flächen des Werkzeug-Dashboards** (v2.1 Kontext-Options-Leiste, v2.2 Panel-Reiter, v2.3 Projektbrowser, v2.4 Prüfungscenter, v2.5 Befehlspalette). **Vorrang vor AUF-11** — Yama, 25.07.: „wir haben dashboard design fest gelegt sollst als erstes fertig gestellt werden v1 usw". Zwei Batches, Batch 1 wird berichtet und abgenommen, bevor Batch 2 beginnt. Ändert den Store **nicht** und liegt damit **außerhalb** des Sperrbereichs von AUF-1 | Generator | `OFFEN` | `generator-auftrag-dashboard-v2-flaechen.md` (Auftrag) + `docs/fahrplan-dashboard-versionen.md` (Fahrplan v1–v6) |
 | **AUF-1** | **A1-Abnahme wiederholen** (Gegenstand `c0ffe31`), unter den zwei neuen Auflagen E1 (erst messen, dann lesen) und E2 (voller Prüfrahmen, nicht nur N1–N7) | Evaluator, **frische Instanz** | `OFFEN` | `evaluator-auftrag-wizard-welle-a1-werkzeug-praesentation.md` + Ledger-Block „ZWEI ERGÄNZUNGEN" (Z. 1103) |
 | **AUF-2** | **T1 + `decke` committen** — die sechs gestagten Dateien als **eigener** Commit mit Pfadangabe | Generator (nativ) | `BERICHTET — wartet auf Evaluator (AUF-3)` | COMMIT-FREIGABE im Ledger (Z. 1006), Dateiliste dort |
 | **AUF-3** | **T1-Abnahme** (Token-Konsolidierung + `decke → bau`) | Evaluator | `OFFEN` — Vorbedingung erfüllt: Hash `9ec3b25` | `evaluator-auftrag-t1-token-konsolidierung-und-decke.md` **inkl. §10** |
@@ -83,7 +84,17 @@ Und `-m` steht **vor** dem `--`, sonst frisst der Pathspec den Text.
 | **AUF-8** | Branch-Hygiene — welche der 27 Branches dürfen weg | — | `BEI YAMA` | Yamas Auftragsdatei, Auftrag 5 |
 | **AUF-9** | **Posten T2a** — der Kommentar `renderers/three-d/szene.ts:16` nennt `#93c21c`, drei Zeilen tiefer steht `FARBE_AUSWAHL = 0xa3e635`, das Token sagt `#7fae1c`. Kommentar auf den **tatsächlichen** Wert richtigstellen; **kein** Farbwert im Code ändern | Generator | `BERICHTET — wartet auf Evaluator` (Commit `fbc5308`) | Ledger-Block „AUF-5 eingeordnet" (`e676023`), Messtabelle „drei Grüns" |
 | **AUF-10** | **Posten T2b** — Palette in `geometry/`: soll die Treppen-Lauflinie überhaupt Markenfarbe sein, und darf `geometry/` Farben kennen? (`treppeSvg.ts:35-42`, neun Aufrufstellen, kein Parameter) | — | `BEI YAMA` | Ledger-Block „AUF-5 eingeordnet" (`e676023`), Abschnitt Willensfrage |
-| **AUF-11** | **Layout-Fahrplan L1–L7** — gemessene Inventur der fünf Layout-Ebenen (17 Dateien / 3.343 Zeilen) plus Fahrplan; enthält drei Willensfragen an Yama (welche Engine wird Panel-Muster, wie tief eine leere L4-Fläche, darf L4 vorgezogen werden) | Planner | `BEI YAMA` — Fach-Freigabe | `docs/fahrplan-frontend-layout-hausplaner.md` (Commit `5af3e18`) |
+| **AUF-11** | **Layout-Fahrplan L1–L7** — gemessene Inventur der fünf Layout-Ebenen (17 Dateien / 3.343 Zeilen) plus Fahrplan; enthält drei Willensfragen an Yama (welche Engine wird Panel-Muster, wie tief eine leere L4-Fläche, darf L4 vorgezogen werden). **Reihenfolge abgelöst** durch AUF-12 — die Inventur bleibt gültig, die L1–L7-Abfolge ist es nicht mehr | Planner | `BEI YAMA` — Fach-Freigabe, **hinter AUF-12** | `docs/fahrplan-frontend-layout-hausplaner.md` (Commit `5af3e18`) |
+
+**Zu AUF-12 (Vorrang):** Yama hat am 25.07. entschieden, dass das Dashboard-Design steht und
+**zuerst fertiggestellt** wird — versionsweise, v1 ist gebaut, v2 ist dieser Auftrag. Damit rückt AUF-12
+vor AUF-11: nicht weil die L1–L7-Inventur falsch wäre, sondern weil ihre **Reihenfolge** einer anderen
+Entscheidung folgte. Die Zuordnung v1–v6 → L1–L7 steht in `docs/fahrplan-dashboard-versionen.md` §4;
+kein Posten aus L1–L7 fällt weg, jeder bekommt eine Versionsnummer.
+
+**Warum AUF-12 nicht hinter AUF-1 gesperrt ist:** AUF-1 sperrt AUF-4, weil A2 `toolPresentation.ts`
+liest. Dashboard v2 fasst weder `toolPresentation.ts` noch den Store noch Zod an — gemessen und in §5
+des Auftrags als Guardrail festgeschrieben. Die beiden Arbeitsflächen überschneiden sich nicht.
 
 **Zu AUF-9/AUF-10:** Beide stammen aus den zwei Punkten, die der Generator mit AUF-5 zurückgegeben
 hat. Sie sind **kein** T1-Nachtrag — T1 gilt für die React-Insel (`app/*`), und die ist mit 0 rohen
