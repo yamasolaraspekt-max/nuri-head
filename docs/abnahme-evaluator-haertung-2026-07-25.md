@@ -722,6 +722,39 @@ Gegen die konkreten Nachfragen nachgeprueft:
   Werkzeuge (drehen/distanz-messen/bemassen/pdf) je Katalog+Thema+Vertrag vorhanden - nur die tote
   Icon-Kopie raus.
 
+## AUF-46 - Seite laeuft bei 390 px nicht mehr ueber + tote Schaltflaeche weg (1ee27a4, Bundle a02b52f) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 1ee27a4 gemessen (/tmp-Auszug + Browser), dann Generator-Bericht.
+**Klasse: sichtbar** - Sichtprobe Teil der Abnahme. **Schliesst meinen eigenen 375-px-Befund** (Nachtrag oben).
+
+- **Umfang (git show --name-status):** 5 Dateien - NEU __tests__/breiten.test.ts ; M ConfigWizard/
+  GuidedView/HausplanerStudio/StartView. store/domain/geometry/renderers/public: null.
+- **Ursache + Fix (Grep + Test):** drei feste Breiten - Kopfzeile height 62 ohne flexWrap;
+  StartView repeat(3,1fr); GuidedView '1fr 320px' (das aside legte sich UEBER den Inhalt und fing
+  die Klicks ab = sichtbare, aber tote Schaltflaeche), ConfigWizard '1fr 300px'. Ohne Media Queries
+  in Inline-Styles geloest via auto-fit/minmax + flexWrap (keine zweite Stilschicht).
+- **Gates im Auszug:** schema 0 . test **987/987 pass, 0 skip** (982->987) . tsc 0 . build ok.
+  5 breiten-Subtests (keine feste zweite Spalte in gefuehrter Planung/Konfigurator, StartView auto-fit,
+  Kopfzeile bricht um, keine der vier Flaechen mit fester Spaltenbreite).
+- **Gegen-Beweis (/tmp-Kopie):** feste Spalte '1fr 320px' in GuidedView wieder eingesetzt -> **2 rot**
+  ('keine feste zweite Spalte' + 'keine feste Spaltenbreite'). Deckt Generator.
+- **Browser-Sichtprobe (iframe, docOverflowX selbst gemessen):**
+  - **390 px:** StartView Ueberlauf **0**, gefuehrte Planung Ueberlauf **0** - einspaltig gestapelt,
+    kein ueberlagerndes totes aside.
+  - **375 px:** StartView **0**, gefuehrte Planung **0**.
+  - **Kopfzeile-flexWrap loest auch meinen frueheren Expertenmodus-Ueberlauf:** vor AUF-46 mass ich
+    dort 298 px (Quelle: obere Aktionsleiste); jetzt docOverflowX **0** bei 390. Mein 375-Befund ist
+    damit geschlossen.
+- **Rueckgabe bestaetigt (Expertenmodus, mit Zahlen zurueckgegeben):** bei 390 px Leinwand **0 px**
+  (Schiene 220 + Panel 268 fest lassen keinen Platz) - **aber docOverflowX 0**. Also eine Usability-
+  Frage (Leinwand zu klein), KEIN Seiten-Ueberlauf; sie beruehrt AUF-27/34/43/59 gemeinsam und ist
+  richtig getrennt zurueckgegeben, kein Mangel an AUF-46.
+
+**Urteil: FREIGABE.** Die gefuehrte Planung, StartView, Konfigurator und Kopfzeile laufen an allen
+Pflichtbreiten nicht mehr ueber; die tote ueberlagernde Schaltflaeche ist weg (Spalten stapeln).
+Mutationsfest, Ueberlauf selbst gemessen. Nebenbei geschlossen: mein frueherer 375-px-Expertenmodus-
+Befund. Die zu kleine Leinwand ist eine sauber getrennte Layout-Rueckgabe.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -756,6 +789,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-44    47addd1  Auszug: schema 0 / test 962/962 0-skip / tsc 0 / build ok ; ALLE(Katalog+Registry)=110, drehen/distanz-messen/bemassen/pdf je Katalog+Thema+Vertrag=true (einpassen fehlt korrekt) ; 6 Subtests ; Gegen-Beweis Knopf wieder eingesetzt = 2 rot ; Sichtprobe 1440: genau 1 '(geplant)' (einpassen), 4 tote weg, 15->11 ; Selbstkorrektur FEHLT-Artefakt (falsche Registry)
   AUF-59    8f34fc5  Auszug: schema 0 / test 971/971 0-skip / tsc 0 / build ok ; opKnopfZustand rein (Token, keine Farbe), Regel liest gesperrt ; K2 Kappungs-Test ersetzt nicht entfallen ; 9 Subtests ; Gegen-Beweis gesperrt->1 Unterschied = 2 rot ; Sichtprobe 1440 getComputedStyle: 11 Knoepfe, 2 mit Rahmen (Raster/Fang), gesperrt Grund rgb(242,244,246)+Deckkraft 0.6 vs bedienbar weiss+1, Spiegeln-Textknoepfe weg
   AUF-49    f83cf11  Auszug: schema 0 / test 982/982 0-skip / tsc 0 / build ok ; ConfigWizard role=dialog/aria-modal (war 0), istAusloeser Enter+Space, eine Regel 3 Dialoge ; 11 Subtests ; Gegen-Beweis % anzahl weg = 3 rot ; Browser activeElement: Fokus rein 'Zurueck zum Planer', 6x Tab+ShiftTab bleiben im Dialog, Escape schliesst, Fokus zurueck ausserhalb ; 44px zurueckgegeben (Ziel 55x26 <44, nicht angefasst)
+  AUF-46    1ee27a4  Auszug: schema 0 / test 987/987 0-skip / tsc 0 / build ok ; auto-fit/minmax+flexWrap statt 3 fester Breiten ; 5 Subtests ; Gegen-Beweis feste Spalte wieder = 2 rot ; Sichtprobe docOverflowX: 390 Start 0/guided 0, 375 Start 0/guided 0, Expertenmodus 390 = 0 (Kopfzeile-flexWrap schliesst meinen 375-Befund) ; Rueckgabe Leinwand 0px@390 bestaetigt (Usability, kein Ueberlauf)
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
