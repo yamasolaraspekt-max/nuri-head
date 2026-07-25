@@ -2330,3 +2330,87 @@ indem ich den Kommentar weggelassen habe.
 
 **Ballbesitz → Evaluator.** Damit ist die Kette frei: **AUF-24** (ID-Umbenennung) ist als Nächstes
 dran — seine Sperre bestand nur, solange `toolPresentation.ts` im AUF-1-Sperrbereich lag.
+
+---
+
+## ⇒ PLANNER — Strang-Zuteilung: der native Strang baut, der Cowork-Strang misst
+
+**Befund, dreifach belegt am 25.07.:** Zwei vollständige Stränge arbeiten dieselbe Tafel ab — ein
+**nativer** auf Yamas Rechner und ein **Cowork/remote**-Strang über die Geräte-Brücke. Drei
+Cowork-Generator-Läufe hintereinander haben **abgebrochen statt zu schreiben**:
+
+| Posten | Kollision | Beleg |
+|---|---|---|
+| N2 (AUF-16) | `HausplanerApp.tsx` unter dem Generator bereits umgebaut, fremder untracked Test im Baum | `982384d` (nativ) |
+| AUF-4 / A2 | nativ zieht denselben Posten und schreibt `HausplanerApp.tsx` + `leisteAusZonen.test.ts` | `a61f10e` (nativ) |
+| AUF-25 / L4 | nativ zieht L4, schreibt `HausplanerStudio.tsx` + `fachFlaechen.test.ts`, rollt 40 s später zurück | `a4bc277` (nativ) |
+
+**Die Pfadangabe-Regel und die Abbruchklausel haben gehalten** — kein Byte fremder Arbeit ist
+verloren gegangen. Aber zwei Stränge auf einer Datei erzeugen keinen doppelten Fortschritt, sondern
+halben: einer arbeitet, einer bricht ab.
+
+**Zuteilung ab sofort — bis Yama es anders anordnet:**
+
+- **Der native Strang baut.** Er sitzt auf der Maschine, kann `build:hausplaner` auf x64 fahren und
+  hat AUF-4 und AUF-25 gezogen. Generator-Posten gehören ihm.
+- **Der Cowork-Strang misst und plant.** Planner-Entscheidungen, Inventuren, Aufträge — und die eine
+  Sache, die nur er kann: **die Browser-Sichtprobe** über die Chrome-Anbindung. Beide bisherigen
+  Abnahmen führen „nicht sichtgeprüft" als offenen Punkt; das schließt der Cowork-Strang.
+- **Keine zwei Generatoren auf einer Datei.** Wer einen Posten zieht, zieht ihn auf der Tafel,
+  **bevor** er die erste Zeile schreibt. Das ist AUF-22 und es ist keine Empfehlung mehr.
+
+---
+
+## ⇒ PLANNER — Browser-Sichtprobe `objekt/203`, 25.07. (schließt „nicht sichtgeprüft" teilweise)
+
+Gefahren über die Chrome-Anbindung gegen `http://ticket.test/admin/hausplaner/objekt/203`, echter
+Build, echter Stack. **Das ist die erste Sichtprobe des Strangs überhaupt.**
+
+**Bestätigt, dass es real läuft — nicht nur im Test:**
+
+| Fläche | Beobachtung |
+|---|---|
+| v2.1 Kontext-Options-Leiste | sichtbar: „Auswahl · Für dieses Werkzeug sind noch keine Optionen hinterlegt." + Badge `in Entwicklung` |
+| v2.3 Projektbrowser | sichtbar: `PROJEKT` → **Wände 7** (Wand 1–7), **Öffnungen 6** (Tür 1–2, Fenster 3–6), **Dächer 1**, mit Gruppen-Zählern |
+| v2.4 Prüfungscenter | sichtbar: „Keine offenen Befunde." + Badge `verfügbar` + Umfangs-Hinweis |
+| v2.5 Command-Palette | **⌘K öffnet sie**; Filterfeld, Kürzel rechts, deaktivierte Einträge mit Grund als rotem Text („Löschen" braucht eine Auswahl), aktivierbare zuerst |
+
+**Drei Befunde, die nur der Browser zeigt:**
+
+1. **Das rechte Eigenschaften-Panel wird horizontal gekappt.** Bei 1375 px sind nur **drei** Reiter
+   sichtbar — **„Historie" fehlt im Bild**, obwohl `PANEL_TABS` vier Einträge hat und der Test das
+   belegt. Ebenfalls gekappt: „↕ Oben/Unten" und der Hinweistext, der mitten im Wort abbricht
+   („…brauch", „ein eigener Po"). **Die Daten stimmen, die Darstellung nicht.** Kriterium K3 ist im
+   Test grün und auf dem Schirm nicht erfüllt — genau die Lücke, die „nicht sichtgeprüft" meint.
+2. **Das DTP-Erbe steht dem Nutzer vor Augen.** Die Fähigkeiten-Navi zeigt „Drehen · Skalieren ·
+   Freie Transformation · Links/Rechts/Oben ausrichten · Vertikal zentrieren · Horizontal/Vertikal
+   verteilen · Hand · Zoom · Messen · Ebenen" als `in Entwicklung` — das sind die **15 Werkzeuge der
+   Zone `weitere`**, der einzigen Zone mit einem Verbraucher (`faehigkeiten.ts:96`). Ausgerechnet die
+   Layout-Werkzeuge aus dem Ursprungspaket versprechen dem Nutzer, dass sie „bald kommen".
+   **Zusammenhang mit der Icon-Inventur:** von 54 Katalogeinträgen sind 47 DTP-Erbe. Hier sieht man,
+   was die Zahl bedeutet.
+3. **Die 220-px-Leiste ist zu schmal:** „Horizont…", „Vertikal z…", „Sparren-…", „Holz-Me…",
+   „Schifter-…" sind abgeschnitten.
+
+---
+
+## ⇒ PLANNER — Vorarbeit für L4, damit sie dem nativen Strang nicht verlorengeht
+
+Der Cowork-Generator hat vor dem Abbruch **gemessen** statt geraten. Übergabe an den nativen L4-Bau:
+
+- **Es sind 19, nicht 20.** Die „20" des Fahrplans zählt alle Hub-Untermodule, zieht aber die drei
+  bereits konfigurierten (Fenster · Tür · Heizkörper) nicht ab und die zwei Direkt-Module (Bad ·
+  Küche) nicht dazu. Gezählt an `studioDaten.FACH`: Haustechnik 8 (davon 7 Toast) · PV-Planer 10
+  (10 Toast) · Bauelemente 2 (0 Toast) · Bad/Küche 2 (2 Toast) = **19 Klicks ins Nichts**.
+- **Nebenbefund:** „Neue Anfrage / Lead" in der Navi zeigt ebenfalls einen Toast „(folgt)" —
+  anderer Text, außerhalb L4, aber ein weiteres totes Element.
+- **Fünf Feldstrukturen sind am Code gemessen, nicht geraten** — echte DTO-Namen der fertigen
+  Engines: `FbhEingabe/FbhErgebnis` · `HeizkreisEingabe[]/VerteilerErgebnis` · `PvEingabe/PvBelegung`
+  · `AbwasserEingabe/AbwasserErgebnis` · `Arbeitsdreieck/DreieckErgebnis`.
+- **Der Entwurf liegt geparkt** unter `docs/auftraege/l4-generator-beiseite-25-07/` (`fachFlaechen.ts`
+  mit 19 Flächen, `FachFlaeche.tsx`, `LIESMICH.txt`) — **außerhalb** von `resources/planner`, damit
+  weder `tsc` noch `test` noch der native Strang ihn berührt. **Materialspende, keine zweite
+  Wahrheit.** Wer L4 nativ zu Ende baut, kann ihn nehmen oder verwerfen.
+
+**Ballbesitz:** AUF-4 und AUF-25 liegen beim **nativen** Generator. Der Cowork-Strang wartet auf
+Sichtprobe-Aufträge.
