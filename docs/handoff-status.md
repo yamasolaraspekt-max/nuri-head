@@ -4453,3 +4453,76 @@ Sperren sagt, nicht die Sperren selbst. Und die Zahl 34 wird berechnet, nicht ha
 
 **Tafel:** Arbeitsvorrat 16 · Abnahme 7 · bei Yama 10 · Archiv 19 = **52**, geprüft.
 
+---
+
+## ⇒ PLANNER — Playwright-Audit nachgemessen (Yama, 25.07.)
+
+**Gegenstand:** echter Browser-Lauf einer weiteren Instanz gegen `8dea959` / Bundle `1c3aa31`,
+Breiten 1440×1000 · 768×1024 · 390×844. Urteil: *Desktop bedienbar, Tablet stark eingeschränkt,
+Mobile kaputt.* **Ich habe jeden neuen Befund im Code nachgemessen**, bevor er auf die Tafel kam.
+
+### Der schwerste neue Befund — und er ist kein Layout-Fehler
+
+Der Lauf meldete nur eine **react-konva-Warnung** (`draggable` ohne `onDragMove`/`onDragEnd`).
+**Nachgemessen ist das kein Warnhinweis, sondern ein Richtigkeitsfehler:**
+
+```
+HausplanerApp.tsx:1280   <Stage … draggable={werkzeug === 'auswahl'}   ← KEIN Drag-Handler
+             1332/1386/1481/1521  Node-Ebenen: onDragStart + onDragEnd vorhanden
+             1290/1291  x={80}  y={hoehe - 80}      ← gesteuert, ohne Zustand dahinter
+grep 'setPan|panX|panY|stageX|stageY'  =  leer      ← es gibt keinen Pan-Zustand
+             1282  onMouseMove={(e) => setCursor(weltPunkt(e))}   ← rendert bei JEDER Bewegung
+```
+
+**Die Kette:** Die Bühne ist als verschiebbar erklärt. Konva verschiebt sie intern. Die nächste
+Mausbewegung löst `setCursor` aus, React rendert, und die gesteuerten Werte `x={80}`/`y={…}` setzen
+die Bühne zurück. **Der Nutzer schiebt, und es springt zurück.** `weltPunkt` (Z. 626-634) liest
+`stage.x()`, also die *echte* Position — für die Dauer des Zurückspringens widersprechen sich
+Anzeige und Koordinate.
+
+Angelegt als **AUF-51**. Entweder Pan-Zustand einführen oder `draggable` an der Bühne entfernen, bis
+es einen gibt. **Der Zwischenzustand — verschiebbar aussehen und nicht sein — ist der schlechteste.**
+
+### Die Mobile-Ursache, gemessen statt beschrieben
+
+Der Lauf meldet: *„Fenster konfigurieren ist sichtbar, aber nicht anklickbar — das Aufgaben-`aside`
+fängt die Zeigerereignisse ab."* **Ursache:** `GuidedView.tsx:59`
+`gridTemplateColumns: '1fr 320px'` — eine **feste** zweite Spalte. Bei 390 px passt
+`1fr + 320px + 20px gap` nicht; das `aside` legt sich über den Inhalt. Damit ist auch mein eigener
+Befund B5 (`scrollWidth 658` bei 375 px) erklärt: **derselbe eine Wert.**
+
+Das ist der Unterschied zwischen „Mobile sieht schlecht aus" und „eine Schaltfläche ist tot".
+**AUF-46** trägt die Ursache jetzt in der Zeile.
+
+### ConfigWizard — der Vergleich, der etwas über den Zustand des Projekts sagt
+
+| | `role="dialog"` | `aria-modal` | Escape | Fokusfalle |
+|---|---|---|---|---|
+| `ConfigWizard.tsx` (alt) | **nein** | **nein** | **nein** | nein |
+| `FachFlaeche.tsx` (AUF-33, heute) | **ja** (Z. 139) | **ja** | **ja** (Z. 125) | nein |
+
+`grep` auf `ConfigWizard.tsx` findet **null** Treffer für alle drei. **Die neue Schicht ist richtig
+gebaut, die Schuld liegt in der alten** — das ist ein gutes Zeichen für die Richtung und ein
+schlechtes für alles, was vor der Bauordnung entstanden ist. Dazu die Zielgrößen: Chips 27–40 px,
+CAD-Schaltflächen ~30×32 px, WCAG 2.5.5 verlangt 44. Alles in **AUF-49**.
+
+### Was der Lauf bestätigt hat, ohne dass es neu wäre
+
+Die geführte Planung mit ihren erfundenen Zuständen (sein 3/10) ist **derselbe** Befund wie mein B6
+und ist als **AUF-39** beauftragt — er ergänzt nur, dass von **elf Schritten nur ~fünf sichtbar**
+sind, ohne Scroll-Hilfe. Das ist dieselbe Datei und wandert in denselben Posten.
+Speichern-Affordance = **AUF-47**. `HausplanerApp` 2.000+ Zeilen = **AUF-48** (bewusst gesperrt).
+
+### Zwei Richtigstellungen
+
+**(a)** Der Lauf schreibt *„Planner hat AUF-33 während der Untersuchung abgeschlossen"*. **Der
+Planner baut nichts.** AUF-33 hat der Generator gebaut (`9d0c12a`), abgenommen wird es vom Evaluator.
+
+**(b)** Sein Urteil zur Treppen-Fläche (8/10, *„die UI ruft die vorhandene Engine auf und rechnet
+nicht selbst"*) ist die **unabhängige Bestätigung von Abnahmekriterium 3** aus dem AUF-33-Auftrag —
+gemessen an der laufenden Anwendung, nicht am Quelltext. 16 Steigungen · 175 mm · 280 mm Auftritt ·
+4.200 mm Lauflänge · sieben bestandene Prüfungen. Das ersetzt die Evaluator-Abnahme nicht, aber es
+ist der erste Beleg, dass das Muster für die übrigen zwölf trägt.
+
+**Tafel:** Arbeitsvorrat 17 · Abnahme 7 · bei Yama 10 · Archiv 19 = **53**, geprüft.
+
