@@ -1,11 +1,12 @@
 #!/bin/bash
-# Sichert main + alle auto/-Branches auf DEINE Remotes fork + backup-private.
+# Sichert ALLE lokalen Branches auf DEINE Remotes fork + backup-private.
+# Ein Backup filtert nicht — aufgeraeumt wird durch Loeschen, nicht durch Nicht-Sichern.
 # NIE upstream (raminsadid2021 = fremd). Kein --force. Ergebnis -> push-result.log.
 exec > "$(dirname "$0")/push-result.log" 2>&1
 cd "$(dirname "$0")" || { echo "REPO_NICHT_GEFUNDEN"; exit 1; }
 rm -f .git/index.lock .git/HEAD.lock 2>/dev/null
 echo "START $(date)"
-BRANCHES=$(git branch --format='%(refname:short)' | grep -E '^(auto/|main$)')
+BRANCHES=$(git branch --format='%(refname:short)')
 echo "BRANCHES:"; echo "$BRANCHES" | sed 's/^/  /'
 for remote in fork backup-private; do
   git remote | grep -qx "$remote" || { echo "SKIP $remote (fehlt)"; continue; }
@@ -15,6 +16,6 @@ for remote in fork backup-private; do
     git push "$remote" "$b:$b" && echo "   OK" || echo "   FEHLER"
   done
 done
-echo "== ls-remote fork (main + auto/) =="
-git ls-remote fork 2>&1 | grep -E "refs/heads/(main$|auto/)"
+echo "== ls-remote fork (alle Branches) =="
+git ls-remote --heads fork 2>&1
 echo "FERTIG $(date)"
