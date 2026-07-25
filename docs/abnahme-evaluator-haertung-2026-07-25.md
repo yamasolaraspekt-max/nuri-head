@@ -23,6 +23,7 @@
 | **I2 / AUF-21** Katalog-Tausch 54→110 Fachpaket | `289ccc8` | **FREIGABE** | Bijektion hält (9+110=119, verwaiste/regellos leer); 54 InDesign belegt stillgelegt; Adapter passt sich ToolDefinition an; Kürzel-Kollisionen weggelassen |
 | **I3 / AUF-21** 6 Werkzeug-Zustände + canPin/priority | `ccdc93b` | **FREIGABE** | reine Funktion, ZustandKontext als Parameter (kein gespeicherter Zustand); Bijektion 119 hält; Mutation gesperrt→weitere = 2 rot |
 | **AUF-25** L4 — 19 Fachplaner-Flächen statt Toast | `17c8be2` | **FREIGABE** | tiefe Fläche (Kopf/Zweck/Feldvorschau/Leerzustand+Badge); Reuse T/Ikon/ZustandBadge; HausplanerApp unberührt; Blindtext-Verbot testverriegelt (Mutation 1 rot) |
+| **AUF-31** IDs eingedeutscht + 9 dedupliziert (**Vorarbeit**) | `2deb6a5` | **FREIGABE** | Bijektion 9+101=110 hält; 2 Umlaut-Tabellenfehler korrekt gesetzt (oeffnung/uebergabepaket) + gemeldet; Spec-Tabelle-Residuum an Planner |
 
 ---
 
@@ -125,6 +126,13 @@ Route `/admin/hausplaner/studio?fixture=decke-treppe` → **Expertenmodus**, ger
 *Kern-Rohbelege ab hier in der Datei (Anhang). Weitere Rohausgaben reproduzierbar gegen die feste SHA; ab dem nächsten Votum liegen ALLE Rohausgaben committet daneben (Planner-Auflage 3).*
 
 
+
+## AUF-31 (`2deb6a5`) — FREIGABE · Klassifikation **Vorarbeit** (nichts wird sichtbar; Icons bleiben bis I4 versteckt)
+- 110 Icon-Dateien auf deutsche IDs umbenannt (select→auswahl …) + Sprite neu; **9 Dubletten zusammengeführt (110→101 Paket-IDs; Metadaten additiv in die Registry)**.
+- **Bijektion hält:** „9 + 101 = 110, keine Dublette" ✔, `verwaisteRegeln()` leer ✔, GEGENPROBE ✔. Gates tsc 0 · schema 0 · **test 788/788** · K4 store/domain/geometry unberührt.
+- **2 selbstgemeldete Tabellenfehler:** führende Tabelle hatte Umlaut-Verlust (`ffnung`/`bergabepaket`); Generator setzte korrekt `oeffnung`/`uebergabepaket` (oe/ue-Konvention) und meldete den Widerspruch → sound. **Residuum:** Spec-Tabelle zeigt noch die falschen Werte (Doku-Hygiene, Planner/Yama).
+- **Trennschärfe:** eingebaute GEGENPROBE (erfundene id→verwaist) grün; künstliche ID-Dublette → toolPresentation.test rot.
+
 ---
 
 ## ⇒ NACHARBEIT — vier Planner-Auflagen (`1955311`, Evaluator, 25.07.)
@@ -150,6 +158,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   I2        289ccc8  tsc 0 · schema 0 · test 771/771
   I3        ccdc93b  tsc 0 · schema 0 · test 782/782
   AUF-25    17c8be2  tsc 0 · schema 0 · test 768/768
+  AUF-31    2deb6a5  tsc 0 · schema 0 · test 788/788 ; Bijektion 9+101=110
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
