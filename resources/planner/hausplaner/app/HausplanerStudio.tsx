@@ -10,6 +10,8 @@ import { StartView } from './StartView';
 import { GuidedView } from './GuidedView';
 import { T, FACH, PROJ, type StudioModus } from './studioDaten';
 import { ConfigWizard, type KonfigArt } from './ConfigWizard';
+import { FachFlaeche as FachFlaecheAnsicht } from './FachFlaeche';
+import { fachFlaecheNach, KONFIGURATOR_NAMEN, type FachFlaeche, type FlaechenHerkunft } from './dashboard/fachFlaechen';
 import { Ikon } from './studioUi';
 import { useHausplanerStore, type SpeicherStatus } from '../store/hausplanerStore';
 
@@ -20,6 +22,9 @@ export function HausplanerStudio(): React.ReactElement {
   const [offeneHubs, setOffeneHubs] = React.useState<Record<string, boolean>>({});
   const [toast, setToast] = React.useState<string | null>(null);
   const [konfig, setKonfig] = React.useState<KonfigArt | null>(null);
+  /** L4 (AUF-25): offene Fachplaner-Fläche samt Herkunft — die Herkunft bestimmt die Beschriftung
+   *  des Zurück-Wegs (Kante 2: nie pauschal „zur Startseite"). */
+  const [fachOffen, setFachOffen] = React.useState<{ flaeche: FachFlaeche; herkunft: FlaechenHerkunft } | null>(null);
   const scene = useHausplanerStore((s) => s.scene);
   const speicherStatus = useHausplanerStore((s) => s.speicherStatus);
   const modell = React.useMemo(() => {
@@ -58,12 +63,15 @@ export function HausplanerStudio(): React.ReactElement {
   }, []);
 
   const gehGeführt = (s?: number): void => { if (typeof s === 'number') setSchritt(s); setModus('guided'); };
-  const öffneKonfigurator = (name: string, fenster?: boolean): void => {
-    if (fenster || name === 'Fenster') { setKonfig('fenster'); return; }
-    if (name === 'Tür') { setKonfig('tuer'); return; }
-    if (name === 'Treppe') { setKonfig('treppe'); return; }
-    if (name === 'Heizkörper') { setKonfig('heizkoerper'); return; }
-    zeigeToast(`${name} autark gestartet — kein Gebäude nötig. (Konfigurator folgt.)`);
+  const öffneKonfigurator = (name: string, fenster?: boolean, herkunft: FlaechenHerkunft = 'navi'): void => {
+    // L4 (AUF-25): Welche Module einen echten Konfigurator haben, steht an EINER Stelle —
+    // `KONFIGURATOR_NAMEN` in `dashboard/fachFlaechen.ts`. Vorher standen die vier Namen hier
+    // ein zweites Mal; damit hätte eine Ergänzung dort still ins Leere gelaufen.
+    const art = fenster ? 'fenster' : KONFIGURATOR_NAMEN[name];
+    if (art) { setKonfig(art); return; }
+    // Kein Toast mehr: das Modul bekommt seine Fläche mit der Feldstruktur des späteren Panels.
+    const flaeche = fachFlaecheNach(name);
+    if (flaeche) setFachOffen({ flaeche, herkunft });
   };
 
   const navBreit = navZu ? 66 : 266;
@@ -136,7 +144,7 @@ export function HausplanerStudio(): React.ReactElement {
                   {!navZu && f.sub && offeneHubs[f.name] && (
                     <div style={{ display: 'flex', flexDirection: 'column', margin: '2px 0 6px 22px', paddingLeft: 11, borderLeft: `1px solid ${T.hair}` }}>
                       {f.sub.map((sub) => (
-                        <div key={sub[0]} role="button" tabIndex={0} onClick={() => öffneKonfigurator(sub[0], sub[1])} onKeyDown={(e) => { if (e.key === 'Enter') öffneKonfigurator(sub[0], sub[1]); }}
+                        <div key={sub[0]} role="button" tabIndex={0} onClick={() => öffneKonfigurator(sub[0], sub[1], 'navi')} onKeyDown={(e) => { if (e.key === 'Enter') öffneKonfigurator(sub[0], sub[1], 'navi'); }}
                           style={{ padding: '7px 10px', borderRadius: 9, fontSize: 13, color: T.muted, cursor: 'pointer' }}>{sub[0]}</div>
                       ))}
                     </div>
@@ -150,7 +158,7 @@ export function HausplanerStudio(): React.ReactElement {
 
         {/* Inhalt */}
         <div style={{ flex: 1, minHeight: 0, position: 'relative', overflow: imExperte ? 'hidden' : 'auto' }}>
-          {modus === 'start' && <StartView onGuided={gehGeführt} onKonfigurator={öffneKonfigurator} />}
+          {modus === 'start' && <StartView onGuided={gehGeführt} onKonfigurator={(n, f) => öffneKonfigurator(n, f, 'start')} />}
           {modus === 'guided' && <GuidedView schritt={schritt} setSchritt={setSchritt} onExperte={() => setModus('expert')} onKonfigurator={(art) => setKonfig(art)} modell={modell} />}
           {imExperte && (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>
@@ -171,6 +179,11 @@ export function HausplanerStudio(): React.ReactElement {
       )}
       {konfig && (
         <ConfigWizard art={konfig} onClose={() => setKonfig(null)} onÜbernehmen={(nachricht) => { setKonfig(null); zeigeToast(nachricht); }} />
+      )}
+      {/* L4 (AUF-25): Fachplaner-Fläche statt „Konfigurator folgt"-Toast. Darstellung liegt in
+          `FachFlaeche.tsx`, Inhalt in `dashboard/fachFlaechen.ts` — hier nur das Einhängen. */}
+      {fachOffen && (
+        <FachFlaecheAnsicht flaeche={fachOffen.flaeche} herkunft={fachOffen.herkunft} onZurueck={() => setFachOffen(null)} />
       )}
     </div>
   );

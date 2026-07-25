@@ -1,0 +1,17 @@
+BEISEITEGESCHOBEN — L4 / AUF-25, Generator (Cowork-Instanz), 25.07.2026
+
+Grund: ABBRUCH wegen Doppelbelegung. Waehrend dieser Arbeit hat eine ZWEITE Generator-
+Instanz ("Generator nativ", Commit a4bc277) denselben Auftrag AUF-25 (L4) gezogen und in
+denselben Pfaden geschrieben (app/HausplanerStudio.tsx, __tests__/fachFlaechen.test.ts,
+app/dashboard/fachFlaechen.ts). Die Abbruchklausel des Auftrags ist damit erfuellt.
+
+Inhalt: der unfertige Entwurf dieser Instanz. NICHT abgenommen, NICHT eingebunden,
+NICHT getestet (der zugehoerige Test wurde nicht mehr geschrieben).
+  fachFlaechen.ts  - reines Datenmodul, 19 Fachplaner-Flaechen
+  FachFlaeche.tsx  - Darstellung (Kopf/Zweck/Feldstruktur/Leerzustand)
+
+Bewusst AUSSERHALB resources/planner geparkt, damit weder tsc:hausplaner noch
+test:hausplaner noch die native Instanz davon beruehrt werden.
+
+Verwendung: entweder als Materialspende fuer die native L4-Umsetzung, oder loeschen.
+Entscheidung liegt bei Yama / Koordinator.
