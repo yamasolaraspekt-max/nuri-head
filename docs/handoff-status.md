@@ -3041,3 +3041,89 @@ Bei Yama liegt **nichts** — keine offene Willensfrage blockiert die Kette.
 **Zurückgestellt, bis Yama seine Werkzeugleiste gesehen hat:** AUF-26 (Kappung ~1375 px),
 AUF-27 (linke Spalte, drei Jobs), AUF-13/14/17/23 (Willensfragen), L2/L3 (Engine-Panels).
 Vorher lohnt die Diskussion darüber nicht.
+
+---
+
+## ⇒ PLANNER — Vier Auffälligkeiten im Abnahme-Dokument des Evaluators
+
+**Gegenstand:** `docs/abnahme-evaluator-haertung-2026-07-25.md` (126 Zeilen, 12 Urteile).
+**Vorweg, weil es sonst falsch klingt:** Die Arbeit ist gut. Jede Abnahme führt einen
+**Mutations-Gegen-Beweis** mit rotem Test, die Bijektion wird bei jedem Katalog-Eingriff neu
+geprüft, und der Prüfer legt seine eigene Ankerlage offen, statt sie zu verschweigen. Die vier
+Punkte unten sind Befunde am Dokument, nicht am Fleiß.
+
+### 1. `AUF-9` steht gleichzeitig als freigegeben und als nicht abgenommen
+
+```
+Z.  22  | **AUF-9** … | `fbc5308` | **FREIGABE** | …
+Z.  87  ## AUF-9 (`fbc5308`) — FREIGABE (T2a Kommentar-Fix)
+Z. 123  - **AUF-9** (T2a Kommentar-Fix) — ich anchored (Fund stammt von mir).   ← unter „Nicht abgenommen / offen"
+```
+
+Derselbe Posten, zwei entgegengesetzte Aussagen im selben Dokument. Die nächste Instanz liest
+je nach Einstieg das eine oder das andere.
+
+**Planner-Entscheidung: die Freigabe zählt, der Widerspruch wird aufgelöst.** Begründung: Gebaut hat
+der Generator, geprüft der Evaluator — die eiserne Regel ist erfüllt. Der Gegenstand ist ein
+**Kommentar gegen den tatsächlichen Codewert** (`#93c21c` behauptet, `0xa3e635` gemessen); dieser
+Abgleich ist auch für einen anchored Prüfer objektiv, weil beide Werte im Code stehen und
+nachlesbar sind. **Zeile 123 gehört gestrichen**, nicht die Freigabe.
+
+### 2. Zwölf Urteile, elfmal Freigabe, einmal Freigabe mit Auflage, **null Rot**
+
+Gezählt: T1 · Batch 1 · Batch 2 · AUF-15a · AUF-16 · AUF-19 · AUF-26 · A2 · AUF-9 · I2 · I3 ·
+AUF-25. **Kein einziger roter Befund.**
+
+Das ist für sich kein Fehler — die Mutations-Gegen-Beweise sprechen dagegen, dass hier
+durchgewunken wird. **Aber eine Blindstelle ist belegbar:** Der Evaluator hat **I3 mit FREIGABE**
+abgenommen (`782/782`, „Bijektion hält") — und **nach dieser Freigabe standen alle 110 Werkzeuge
+weiterhin auf `versteckt`.** Für Yama hat sich auf dem Schirm nichts geändert, obwohl seine
+ausdrückliche Anordnung lautete, die Werkzeuge sichtbar zu machen. Technisch war das Votum richtig.
+Die Frage „**ändert sich für den Nutzer etwas?**" wurde nicht gestellt.
+
+**Auflage an den Prüfrahmen:** Jede Abnahme beantwortet ab sofort ausdrücklich
+**`sichtbar` oder `Vorarbeit`** — dieselbe Spalte, die seit `01ca596` für Berichte gilt, gilt jetzt
+auch für Voten. Ein technisch grünes Votum zu einem Posten, der nichts sichtbar macht, ist korrekt —
+aber es muss **so dastehen**.
+
+### 3. Die Rohausgaben liegen nicht im Repo
+
+> *„Belege sind reproduzierbar gegen die jeweilige feste SHA; Rohausgaben liegen im Chat-Protokoll
+> dieser Instanz."* (Z. 126)
+
+Der Prüfrahmen verlangt **Artefakt statt Behauptung** — ausdrücklich mit der Begründung, dass
+„Testsuite selbst ausgeführt, grün" von „Testsuite behauptet grün" nicht unterscheidbar ist, wenn
+nur der Satz ankommt. **Ein Chat-Protokoll ist beim nächsten Sitzungsstart weg.** Zwölf Freigaben
+stützen sich damit auf Zusammenfassungen. Dass man sie gegen die SHA **nachfahren kann**, stimmt —
+aber das ist eine Anleitung zum Messen, kein Beleg.
+
+Genau dieser Fehler hat heute schon zweimal einen Schritt gekostet: sechs Voten lagen nur im Chat,
+und eine Vorlage lag uncommittet im Arbeitsbaum — deshalb baute I2 mit englischen IDs.
+
+**Auflage:** Rohausgaben (Exit-Codes, Testzähler vorher/nachher, Grep-Trefferlisten, das Ergebnis
+jeder Mutation) gehören **in die Abnahme-Datei oder einen Anhang daneben**, committet.
+Nicht rückwirkend für die zwölf — aber ab dem nächsten Votum.
+
+### 4. Die Sichtprobe nennt keine Fensterbreite — und AUF-26 bleibt dort unbelegt, wo der Fehler war
+
+`749ae12` bestätigt visuell u. a. „Umbruch statt Kappung" und schließt damit AUF-26.
+**Die Breite fehlt.** Meine eigene Messung mit echtem Fenster-Resize:
+
+| Breite | Befund |
+|---|---|
+| **1440 px** | alle vier Reiter, nichts gekappt — **sauber** |
+| **1024 px** | Reiterzeile zweizeilig, nichts gekappt — **sauber** |
+| **~1375 px** | vierter Reiter unsichtbar, Text im Wort abgebrochen — **Defekt** |
+
+**Der Fehler saß in einem mittleren Band.** Eine Sichtprobe bei 1440 trifft ihn nicht. Solange die
+Breite nicht dokumentiert ist, ist unklar, ob die Bestätigung den defekten Bereich überhaupt berührt
+hat. **AUF-26 gilt für ~1375 px als weiterhin unbelegt**, bis eine Sichtprobe **mit genannter
+Fensterbreite** vorliegt. 375 px ist ohnehin offen.
+
+**Auflage:** Jede Sichtprobe nennt die **Fensterbreite** und legt den Screenshot bei —
+`1440 · 1024 · 375` sind die drei Pflicht-Viewports aus L7.
+
+---
+
+**Nichts davon nimmt eine Freigabe zurück.** Drei der vier Punkte sind Beleg-Hygiene, einer ist ein
+Widerspruch, der zu streichen ist. **Ballbesitz → Evaluator** für die vier Nacharbeiten.
