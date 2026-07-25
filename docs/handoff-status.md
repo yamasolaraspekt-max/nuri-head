@@ -5121,3 +5121,73 @@ Unterschiede: Grund · Farbe · Deckkraft          Textknopf im Panel: nein
    älter.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-49: Dialog-Fokus und Tastatur
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `f83cf11` (Code) · `c4e8cc4` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+**Ohne Auftragsdatei** — die Tafelzeile war die Forderung.
+
+### Was gebaut wurde
+
+`dashboard/dialogFokus.ts` baut die Regel **einmal** für alle drei Dialoge (`FachFlaeche`,
+`EngineFlaeche` über dieselbe Hülle, `ConfigWizard`):
+
+1. Beim Öffnen wandert der Fokus **hinein**.
+2. `Tab`/`Shift+Tab` laufen **im Kreis** innerhalb des Dialogs.
+3. `Escape` schließt.
+4. Beim Schließen kehrt der Fokus **dorthin zurück**, wo er herkam.
+
+**Drei eigene Fokusfallen wären drei Gelegenheiten, es unterschiedlich falsch zu machen** — dasselbe
+Argument wie bei der `ReiterLeiste` (AUF-27). Beide Dialoge bauen ihren Escape-Handler jetzt **nicht
+mehr selbst**; ein Test schließt das aus.
+
+**`istAusloeser()`** macht Enter **und** Leertaste zum Auslöser — mit `preventDefault` **nur** bei
+der Leertaste, sonst scrollt die Seite, während sie auslöst. **Sieben** Stellen umgestellt; kein
+Handler hört mehr allein auf Enter. `tabindex="-1"` gehört bewusst **nicht** in die Falle: solche
+Elemente sind programmatisch erreichbar, aber nicht Teil der Tab-Reihenfolge.
+
+### Rohausgabe
+
+| # | Prüfung | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` · `build` | **0 / 0 / 0 / 0** — **971 → 982**, **0 verschwunden** |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen** |
+| 3 | Mutations-Gegenbeweis | Modulo aus der Index-Rechnung entfernt ⇒ **3 Tests rot**; zurückgebaut ⇒ `diff` leer, 982/982 |
+| 4 | `public/*` im Code-Commit null, Bundle eigener zweiter Commit | erfüllt: `f83cf11` → `c4e8cc4` |
+| 5 | Rebuild-Beleg (`c4e8cc4`, 1.410.196 Bytes, 26.07. 00:01) | `grep -c 'aria-modal'` = 1 · `'Spacebar'` = 2 |
+
+**Sichtprobe, 1440 px, an der Engine-Fläche — alle vier Zusagen einzeln:**
+
+```
+Fokus VOR dem Öffnen     „Treppen-Auslegung …"        (der Auslöser)
+nach dem Öffnen          „Zurück zum Planer"          fokusImDialog: true · aria-modal: true
+nach 20× Tab             noch im Dialog: true         zuletzt: INPUT (Laufbreite 1000)
+nach Escape              Dialog weg · Fokus zurück auf „Treppen-Auslegung …"
+```
+
+### Was der Test kann — und was nicht
+
+Die **Indexrechnung** der Fokusfalle ist rein und wird wirklich gerechnet (Umschlag an beiden
+Rändern, Fokus außerhalb, leerer Dialog, einziger Knopf). Den **DOM-Teil** kann die Testumgebung
+nicht ausführen — sie hat kein DOM. Er ist an der Verdrahtung geprüft und **nicht** als
+Verhaltensbeleg behauptet; die Sichtprobe oben holt das nach. Das steht hier, statt es zu verschweigen.
+
+### Zurückgegeben statt mitgebaut: die Zielgrößen
+
+Die Tafelzeile nennt zusätzlich **WCAG 2.5.5** — Chips 27–40 px, CAD-Schaltflächen ~30×32 px, gefordert
+44. **Nicht gebaut**, und zwar aus zwei Gründen:
+
+1. Es ist **kein Tastatur-, sondern ein Layout-Posten**. 44 px an jedem Icon-Knopf ändert die Höhe
+   der Bedienzeile, den Umbruch bei 1024/1371 px und die Dichte der ganzen Kopfzone — genau die
+   Flächen, die AUF-34/AUF-43/AUF-59 gerade in Ordnung gebracht haben.
+2. Er würde **AUF-59 wieder aufmachen**, dessen Zustandsbild (32×30, Rahmen nur am Schalter) eben
+   erst gebaut wurde. Zwei Posten an derselben Zeile gleichzeitig ist der Fehler aus §1.4/AUF-22.
+
+**Als eigener Posten sauber schneidbar** — mit der Frage, ob 44 px für **alle** gilt oder nur für
+die Flächen außerhalb dichter Werkzeugleisten (WCAG lässt für „inline"- und Dichte-Fälle Ausnahmen zu).
+Das ist eine Willensfrage mit Layout-Folgen, keine mechanische.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
