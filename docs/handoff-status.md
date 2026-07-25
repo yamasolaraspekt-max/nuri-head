@@ -2774,3 +2774,56 @@ Entscheidung mit Rückbau-Kosten. Der Nutzer sieht heute ausschließlich Deutsch
 
 **Ballbesitz → Evaluator.** Danach **I3**: `anheftbar`/`prioritaet` in die Zonen — Anheften (★),
 Kontext-Zone, Überlauf.
+
+---
+
+## ⇒ PLANNER — Zwei Befunde zu I2 (`289ccc8`), beide gemessen
+
+**Was stimmt:** Der Katalog ist getauscht. `katalogTool('page'|'type'|'eyedropper')` → `undefined`,
+kein Seitenwerkzeug, kein Textwerkzeug, keine Pipette mehr. `zoneTools('weitere')` = **0** — die
+15 falschen Versprechen sind aus der Navi verschwunden. **AUF-28 ist damit miterledigt.**
+Trail erhalten (`toolCatalogStillgelegt.ts`), Adapter in der vorgeschriebenen Richtung, 10
+kollidierende Kürzel mit Grund verworfen statt stillschweigend übernommen. Sauber gearbeitet.
+
+### Befund 1 — die IDs sind englisch geblieben. Yamas Anordnung ist nicht umgesetzt.
+
+Gemessen in `app/tools/werkzeugPaket.ts`:
+
+```
+u-value 1 · thermal-envelope 1 · floor-heating 1 · heat-pump 1 · import-file 1
+u-wert  0 · thermische-huelle 0 · fussbodenheizung 0 · waermepumpe 0 · datei-importieren 0
+```
+
+**Ursache ist Timing, nicht Nachlässigkeit:** die führende Namenstabelle
+`docs/planner/eindeutschung-110-paket-ids.md` liegt bis jetzt **uncommittet** im Arbeitsbaum.
+Der Generator hatte sie nicht, als er `werkzeugPaket.ts` erzeugte.
+
+**Nacharbeit, klein:** Tabelle committen, dann `werkzeugPaket.ts` und die 110 Icon-Dateinamen
+einmal maschinell umbenennen. Die neun Bestands-IDs bleiben unberührt. → **AUF-31**
+
+**Lehre:** Eine Vorlage, die nur im Arbeitsbaum liegt, existiert für den Generator nicht — genau wie
+ein Votum, das nur im Chat steht. Was nicht committet ist, ist nicht übergeben.
+
+### Befund 2 — Yama sieht seine 110 Icons noch nicht
+
+Zonen nach I2: **fix 7 · kontext 2 · weitere 0 · versteckt 110.**
+Die Leiste zeigt weiterhin `auswahl · wand · fenster · tuer · dach · decke · treppe`.
+**Alle 110 neuen Werkzeuge sind Daten und stehen auf `versteckt`.**
+
+Das ist **kein Fehler von I2** — I2 war der Katalog-Tausch, nicht die Sichtbarmachung. Aber es ist
+genau das, was Yama sehen will (*„ich will alle werkzeugstool icon frontendlayout"*), und es fehlt
+noch. **I3 ist der Schritt, der die Icons auf den Schirm bringt.**
+
+### Was I3 braucht — eine Kuratierungs-Entscheidung, und ein Vorschlag dazu
+
+`priority` aus dem Paket trägt die Entscheidung **nicht**: nur **5 von 110** sind `primary`, und drei
+davon (`Auswahl`, `Wand`, `Duplizieren`) sind bereits in der Registry. `canPin` ist bei **allen 110**
+`true`. Beide Felder taugen also nicht als Sortierkriterium für die Leiste.
+
+**Planner-Vorschlag: nicht Werkzeug für Werkzeug kuratieren, sondern nach den 22 Paket-Kategorien
+gruppieren** — genau so, wie Yamas eigener Entwurf `dashboard-tools-v1.html` es zeigt: Gruppen-Menüs
+(*Ansicht · Bearbeiten · Transformieren · Anordnen · Messen · Bemaßen*) statt einer flachen Liste,
+und daneben die persönlich angehefteten Werkzeuge.
+
+Damit wird aus einer Entscheidung über 110 Einzelwerkzeuge eine über **22 Gruppen** — und die
+Struktur ist die, die Yama ohnehin entworfen hat. **Zu bestätigen: ja/nein.** → **AUF-32**
