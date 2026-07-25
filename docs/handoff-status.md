@@ -4915,3 +4915,80 @@ Bild stand. Gefunden hat ihn die Sichtprobe — und zwar erst die **zweite**, na
 Korrektur.
 
 **Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-53: das Import-Recht
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `b4e5f03` (Code) · `581f457` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+**Zum Ziehen (§7):** Yama hat mir den Auftrag direkt übergeben. **Tor 1 wurde dabei nicht berührt:**
+`routes/` und `database/migrations/` sind **null Zeilen** im Commit — der Weg über `Hausplaner,add`
+macht den Eingriff zu einer Zuordnung.
+
+### Die Falle ist bestätigt
+
+`User::hasPermission()` bildet auf genau vier feste Spalten ab und schickt jede unbekannte Aktion in
+den `default`-Zweig — also auf **`is_read`**. Eine Route, die `Hausplaner` mit der Aktion `import`
+schützen wollte, sähe geschützt aus und wäre **für jeden Leseberechtigten offen**. Zugeordnet ist
+deshalb **`Hausplaner,add`**: eigenes Recht, getrennt von `update`, seit 2023 als Spalte vorhanden,
+in der Rechteverwaltung gepflegt, von keiner Route benutzt.
+
+### Die elf Kriterien, Rohausgabe
+
+| # | Kriterium | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` · `build` | **0 / 0 / 0 / 0** — **948 → 956** |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen** |
+| 3 | keine Migration, `hasPermission` unverändert | **0 Zeilen** in `database/migrations/` und `app/Models/User.php`; Test prüft die vier Spalten und schließt eine fünfte Aktion aus |
+| 4 | die Aktion `import` erscheint nirgends | **0 Treffer** über `app/`, `routes/`, `resources/planner/` — *(mein erster Durchlauf hatte 1 Treffer: meinen eigenen Erklärtext. Umformuliert, damit ein späterer `grep` sauber bleibt.)* |
+| 5 | die acht sind zugeordnet | **8**, namentlich im Test: `beschneiden · bild-importieren · datei-importieren · erkennung-bestaetigen · grundriss-erkennen · kalibrieren · ki-assistent · nordrichtung-setzen` |
+| 6 | ohne Recht gesperrt, Grund unverändert | grün — „Keine Berechtigung zum Importieren." |
+| 7 | mit Recht entsperrt, **nur** diese acht | **79 → 71 gesperrt**, Differenz **genau 8**; ein zweiter Test belegt, dass **kein** anderes Werkzeug Zustand oder Grund ändert |
+| 8 | Herkunft der Rechte gemessen | **siehe unten — das ist die Rückgabe** |
+| 9 | Mutations-Gegenbeweis | Zuordnung auf `Hausplaner,update` verfälscht ⇒ **4 Tests rot**; zurückgebaut ⇒ `diff` leer, 956/956 |
+| 10 | `public/*` im Code-Commit null, Bundle eigener zweiter Commit | erfüllt: `b4e5f03` → `581f457`; `grep -c 'Hausplaner,add'` = 1 |
+| 11 | Sichtprobe mit und ohne Recht | **nicht führbar — siehe Rückgabe** |
+
+### §4, die gemessene Stelle: die Insel kennt überhaupt keine Nutzerrechte
+
+**Gemessen an der Mount-Naht:**
+
+```
+objekt.blade.php:92-95   data-project-id · data-speichern-url · data-snapshots-url · data-katalog-url
+main.tsx:63-66           liest Szene, speichernUrl, CSRF — KEINE Rechte
+HausplanerApp.tsx:407    permissions: [RECHT_BEARBEITEN]   ← fest gesetzt, nicht vom Nutzer
+```
+
+**Die Insel erteilt sich ihr einziges Recht selbst.** Damit ist §3.2 („das Recht durchreichen, **nur
+wenn der angemeldete Nutzer es wirklich hat**") heute **nicht erfüllbar** — und ich habe es
+**nicht** gebaut. `Hausplaner,add` fest einzutragen hätte die acht Werkzeuge für **jeden** Nutzer
+freigeschaltet, gerade auch für den ohne das Recht. Genau davor warnt §4.
+
+**Das ist folgenlos für die Sicherheit des Servers** — die Routen sind serverseitig geschützt
+(`read`/`update`), und der Rechte-Eintrag der Insel steuert allein die **Anzeige**. Aber es heißt:
+solange die Rechte nicht aus dem angemeldeten Nutzer kommen, ist jede Rechteangabe im Planer eine
+Behauptung über sich selbst.
+
+**Zurückgegeben, nicht nebenbei gebaut** — wie §4 verlangt: **„Rechte des angemeldeten Nutzers an die
+Insel reichen"** ist ein eigener Posten. Er berührt Blade, den Controller und `main.tsx`; er ist
+klein, aber er ist Tor 1 (Rechte-Naht).
+
+**Deshalb ist auch Kriterium 11 nicht führbar:** „mit und ohne Recht" lässt sich im Browser nicht
+zeigen, weil die Insel gar nicht unterscheiden kann. Die Unterscheidung ist stattdessen an den
+Daten belegt (K6/K7). Das steht hier, statt eine Sichtprobe zu behaupten, die nichts prüft.
+
+### Was NICHT gebaut wurde
+
+Keine neue Aktion, keine Spalte, keine Migration. **Keine Import-Funktion** — die acht Werkzeuge
+bleiben ohne Handler; dieser Posten vergibt ein Recht, er baut kein Werkzeug. Keine Route:
+Import-Routen gibt es nicht, der Punkt bleibt vorbereitet (§3.3). **Keine Rechtevergabe** — wer
+`Hausplaner,add` bekommt, entscheidet Yama in der Rechteverwaltung.
+
+### Ein ersetzter Testname
+
+| vorher | nachher | Grund |
+|---|---|---|
+| `K7: fünf Vorbedingungen sind heute unerfüllbar — benannt, nicht ausgelassen` | `K7: die Fach-Vorbedingungen sind unerfüllbar — benannt, nicht ausgelassen` | `permission.import` ist aus der Lückenliste heraus: seit der Zuordnung hängt sie an einem Recht, das es wirklich gibt. Übrig bleiben die vier Fach-Operanden. |
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
