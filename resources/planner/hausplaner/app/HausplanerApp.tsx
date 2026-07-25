@@ -27,6 +27,11 @@ import { EngineFlaeche } from './EngineFlaeche';
 import { enginePanel } from './dashboard/enginePanels';
 import { faehigkeitNach } from './tools/faehigkeiten';
 import { GeschossFlaeche } from './dashboard/GeschossFlaeche';
+import { naechsterSchritt, wegweiserSatz } from './tools/naechsterSchritt';
+import { TOOL_DEFINITIONS } from './tools/toolRegistry';
+import { TOOL_KATALOG } from './tools/toolCatalog';
+import { handlungZuGrund } from './tools/vorbedingungen';
+import { brauchtOptionen } from './tools/werkzeugVertrag';
 import { ReiterLeiste } from './dashboard/ReiterLeiste';
 import { SCHIENEN_REITER, SCHIENE_STANDARD, type SchienenReiterId } from './dashboard/schienenReiter';
 import { ARBEITSBEREICHE, arbeitsbereich } from './dashboard/arbeitsbereiche';
@@ -221,10 +226,17 @@ function KontextOptionenLeiste({
         );
       }
       default:
-        return (
+        // AUF-45/B8: Zwei Fälle, die vorher einer waren. Ein Werkzeug, dessen Vertragseingaben nur
+        // Gesten sind (Zeiger, Auswahlmodus), BRAUCHT keine Optionen — es ist nicht unfertig. Der
+        // alte Platzhalter sagte „in Entwicklung" und machte aus „braucht nichts" ein Versprechen.
+        return brauchtOptionen(werkzeug) ? (
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 12, color: FARBEN.gedaempft }}>
             Für dieses Werkzeug sind noch keine Optionen hinterlegt.
             <ZustandBadge zustand="in_entwicklung" />
+          </span>
+        ) : (
+          <span style={{ fontSize: 12, color: FARBEN.gedaempft }}>
+            Dieses Werkzeug braucht keine Optionen.
           </span>
         );
     }
@@ -397,6 +409,35 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       }),
     [activeWorkspace, modus, selectedNodeIds, nodes, scene, level, waende.length],
   );
+  /**
+   * AUF-45 — der Wegweiser. **Keine zweite Aktivierungs-Engine:** gezählt werden die Zustände, die
+   * `resolveToolState` ohnehin liefert; die Zahl im Satz ist die **gemessene** Differenz zwischen
+   * jetzt und dem Zustand nach dem Schritt — dieselbe Engine, nur ein zweites Mal gefragt.
+   * Ohne benannte Handlung zu dem Grund schweigt der Wegweiser, statt zu raten.
+   */
+  const wegweiser = useMemo(() => {
+    const alle = [...TOOL_DEFINITIONS, ...TOOL_KATALOG];
+    const jetzt = alle.map((t) => resolveToolState(t, werkzeugKontext));
+    // Kandidaten sind die Sperrgründe, zu denen es eine benannte Handlung UND eine erfüllbare
+    // Fähigkeit gibt. Der hypothetische Kontext entsteht durch Ergänzen EINES Werts aus der
+    // Tabelle — eine Nachschlage-Operation, keine eigene Regel. Bewertet wird von derselben Engine.
+    const kandidaten = [...new Set(jetzt.filter((z) => !z.enabled).map((z) => z.reason ?? ''))]
+      .map((grund) => ({ grund, h: handlungZuGrund(grund) }))
+      .filter((k) => k.h?.faehigkeit)
+      .map((k) => ({
+        grund: k.grund,
+        handlung: k.h!.handlung,
+        danach: alle.map((t) => resolveToolState(t, {
+          ...werkzeugKontext,
+          capabilities: [...werkzeugKontext.capabilities, k.h!.faehigkeit as string],
+        })),
+      }));
+    const w = naechsterSchritt(jetzt, kandidaten);
+    if (!w) return null;
+    const handlung = kandidaten.find((k) => k.grund === w.grund)?.handlung ?? handlungZuGrund(w.grund)?.handlung;
+    return handlung ? { satz: wegweiserSatz(w, handlung), grund: w.grund } : null;
+  }, [werkzeugKontext]);
+
   /**
    * AUF-34 / Kante 3 — gilt das aktive Werkzeug im gewählten Arbeitsbereich? Der Name des fremden
    * Bereichs, sonst `undefined`. Gelesen wird `supportedWorkspaces`, also **dieselbe** Quelle, die
@@ -982,6 +1023,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         <GeschossFlaeche
           levels={scene.levels}
           aktivId={level.id}
+          wegweiser={wegweiser?.grund === 'Kein aktives Geschoss.' ? wegweiser.satz : null}
           offen={geschossOffen}
           setOffen={setGeschossOffen}
           onWechseln={(id) => store.getState().setActiveLevel(id)}

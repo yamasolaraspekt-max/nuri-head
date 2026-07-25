@@ -1395,3 +1395,25 @@ export function doppelteVertraege(): string[] {
   for (const v of WERKZEUG_VERTRAEGE) zaehler.set(v.werkzeugId, (zaehler.get(v.werkzeugId) ?? 0) + 1);
   return [...zaehler].filter(([, n]) => n > 1).map(([id]) => id);
 }
+
+/**
+ * AUF-45 — Eingaben, die aus der **Geste** kommen, nicht aus einem Formular: Zeigerposition,
+ * Auswahlmodus, Ansicht. Ein Werkzeug, das nur solche Eingaben hat, hat nichts zu konfigurieren.
+ *
+ * **Gemessen, und es korrigiert die Annahme des Auftrags:** *kein einziges* der 110 Werkzeuge hat
+ * eine **leere** `eingaben`-Liste — die Regel „ohne Eingaben braucht es keine Optionen" träfe also
+ * auf niemanden zu. Der Unterschied, den die Daten wirklich hergeben, ist dieser hier: `auswahl`
+ * nimmt `pointerPosition` und `selectionMode`, eine Wand dagegen `wallTypeId`, `height`,
+ * `thickness` — das erste ist eine Geste, das zweite sind Optionen.
+ */
+export const GESTEN_EINGABEN = /^(pointerPosition|selectionMode|selection|viewport|camera)/i;
+
+/**
+ * Braucht dieses Werkzeug eine Options-Leiste? **Nein**, wenn alle seine Vertragseingaben Gesten
+ * sind. Ohne Vertrag: `true` — lieber „Optionen folgen" sagen, als Vollständigkeit zu behaupten.
+ */
+export function brauchtOptionen(werkzeugId: string): boolean {
+  const v = vertrag(werkzeugId);
+  if (!v) return true;
+  return !v.eingaben.every((e) => GESTEN_EINGABEN.test(e));
+}

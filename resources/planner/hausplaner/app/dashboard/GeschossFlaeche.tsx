@@ -31,6 +31,12 @@ import type { Level } from '../../domain/scene.types';
 interface Props {
   levels: readonly Level[];
   aktivId: string | null;
+  /**
+   * AUF-45: der Wegweiser-Satz, wenn das fehlende Geschoss gerade der größte Hemmschuh ist —
+   * sonst `null`. Er steht DORT, wo die Handlung stattfindet, nicht in einem Banner irgendwo,
+   * und **verschwindet**, sobald er erfüllt ist (der Aufrufer gibt dann `null`).
+   */
+  wegweiser?: string | null;
   offen: boolean;
   setOffen: (offen: boolean) => void;
   onWechseln: (levelId: string) => void;
@@ -46,7 +52,7 @@ const knopfStil: React.CSSProperties = {
 };
 
 export function GeschossFlaeche({
-  levels, aktivId, offen, setOffen, onWechseln, onUmbenennen, onAnlegen, onDuplizieren, onLoeschen,
+  levels, aktivId, wegweiser = null, offen, setOffen, onWechseln, onUmbenennen, onAnlegen, onDuplizieren, onLoeschen,
 }: Props): React.ReactElement {
   const s = stapel(levels, aktivId);
   const huelle = useRef<HTMLSpanElement>(null);
@@ -141,6 +147,18 @@ export function GeschossFlaeche({
               style={{ width: '100%', boxSizing: 'border-box', ...knopfStil, cursor: 'text' }}
             />
           </label>
+
+          {/* AUF-45: der Wegweiser — ein Satz, kein Assistent, keine Tour. */}
+          {wegweiser && (
+            <div style={{
+              display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10, padding: '9px 11px',
+              borderRadius: 10, background: T.brandWash, border: `1px solid ${T.brandInk}`,
+              fontSize: 12.5, color: T.brandInk, lineHeight: 1.4, overflowWrap: 'anywhere',
+            }}>
+              <span aria-hidden style={{ flex: '0 0 auto' }}>→</span>
+              <span style={{ flex: '1 1 160px', minWidth: 0 }}>{wegweiser}</span>
+            </div>
+          )}
 
           {/* 3 · Verwaltung. Löschen bleibt so vorsichtig wie bisher: Titel nennt den Grund. */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>

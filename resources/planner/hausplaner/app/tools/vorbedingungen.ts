@@ -55,6 +55,12 @@ import type { ToolActivationRule } from './toolTypes';
 export interface VorbedingungAbbildung {
   regel: ToolActivationRule;
   heuteErfuellbar: boolean;
+  /**
+   * AUF-45: die **Aufforderung** in Klartext („Lege ein Geschoss an"). Sie steht hier und nicht in
+   * einem eigenen Register: derselbe Eintrag, der die Sperre erklärt, sagt auch, was sie aufhebt.
+   * Fehlt sie, gibt es für diese Vorbedingung keinen Wegweiser — kein erfundener Ratschlag.
+   */
+  handlung?: string;
   /** Warum sie heute nicht erfüllbar ist — leer, wenn sie es ist. Gehört in Bericht und Test. */
   lueckeGrund?: string;
 }
@@ -104,20 +110,21 @@ export const VORBEDINGUNGEN: Readonly<Record<string, VorbedingungAbbildung>> = {
     FAEHIGKEIT_ANSICHT_BEREIT,
     'Die Zeichenfläche ist noch nicht bereit.',
   ),
-  'activeLevel.exists': faehigkeit(
-    FAEHIGKEIT_GESCHOSS_DA,
-    'Kein aktives Geschoss.',
-  ),
-  'hostWall.exists': faehigkeit(
-    FAEHIGKEIT_WAND_DA,
-    'Dafür braucht es zuerst eine Wand, in die das Bauteil gesetzt wird.',
-  ),
+  'activeLevel.exists': {
+    ...faehigkeit(FAEHIGKEIT_GESCHOSS_DA, 'Kein aktives Geschoss.'),
+    handlung: 'Lege ein Geschoss an',
+  },
+  'hostWall.exists': {
+    ...faehigkeit(FAEHIGKEIT_WAND_DA, 'Dafür braucht es zuerst eine Wand, in die das Bauteil gesetzt wird.'),
+    handlung: 'Zeichne eine Wand',
+  },
   'selection.count >= 1': {
     regel: {
       type: 'selection-count', operator: 'greater-than', value: 0,
       grund: 'Dafür muss zuerst etwas ausgewählt sein.',
     },
     heuteErfuellbar: true,
+    handlung: 'Wähle ein Bauteil aus',
   },
   'selection.hasRoofFace': {
     regel: {
@@ -198,4 +205,21 @@ export function offeneLuecken(): Array<{ vorbedingung: string; grund: string }> 
 /** Vorbedingungen aus dem Vertrag, die in dieser Tabelle fehlen — muss leer sein. */
 export function unbekannteVorbedingungen(ausVertraegen: readonly string[]): string[] {
   return ausVertraegen.filter((v) => !(v in VORBEDINGUNGEN));
+}
+
+/**
+ * AUF-45 — die Aufforderung zu einem **Sperrgrund** (nicht zur Vorbedingung: der Wegweiser kennt
+ * nur den Grundtext, den `resolveToolState` geliefert hat). `undefined`, wenn es zu diesem Grund
+ * keine benannte Handlung gibt — dann schweigt der Wegweiser, statt zu raten.
+ */
+export function handlungZuGrund(grund: string): { handlung: string; faehigkeit?: string } | undefined {
+  for (const a of Object.values(VORBEDINGUNGEN)) {
+    if (a.regel.grund !== grund || !a.handlung) continue;
+    return {
+      handlung: a.handlung,
+      // Nur Fähigkeits-Regeln lassen sich hypothetisch erfüllen (Kontext um einen Wert ergänzen).
+      faehigkeit: a.regel.type === 'capability' ? String(a.regel.value) : undefined,
+    };
+  }
+  return undefined;
 }
