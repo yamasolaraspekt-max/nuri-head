@@ -318,6 +318,48 @@ Fund-Fix mit Test verriegelt UND am Schirm belegt, Operanden-Gate greift. L3 dar
 gemessenen Einschraenkung aus Rueckgabe 4 (nicht 13x identisch). Das Gate war gruen, als der Anzeige-
 fehler im Bild stand - die Sichtprobe blieb der Fangmechanismus, wie schon bei AUF-34/AUF-36.
 
+## AUF-39 L5 - Wizard-Schritte aus dem Modell (b3a6210, Bundle cb3d17e) - FREIGABE
+
+**Reihenfolge:** erst blind gegen b3a6210 gemessen (/tmp-Auszug), dann Generator-Bericht.
+**Klasse: sichtbar** - Sichtprobe Teil der Abnahme.
+
+- **Umfang (git show --name-status):** 5 Dateien - NEU dashboard/fahrschritte.ts,
+  __tests__/fahrschritte.test.ts ; M GuidedView.tsx, HausplanerStudio.tsx, studioDaten.ts.
+  store/domain/geometry/renderers/public: null Zeilen (selbst geprueft).
+- **Guardrail (kein zweiter Snapshot-/Hash-/Projektions-Mechanismus):** Grep auf
+  snapshot/hash/projekt/createHash/JSON.stringify/structuredClone in fahrschritte.ts = **leer**.
+  ableitenSchritte(scene) ist rein (kein Store/Datum/Zufall), liest das SceneDocument direkt.
+- **Gates im Auszug:** schema:check 0 . test **900/900 pass, 0 skip** (888->900) . tsc 0 . build ok.
+  12 fahrschritte-Subtests gruen (K2 liest-nicht-aendert . K3 deterministisch . K4 elf Titel/Reihenfolge .
+  K5 leeres Dok kein gruener Schritt . K6 kein leerer/vertroestender Hinweis . K7 bebauteGeschosse/
+  Oeffnungszahlen/verletzter Zwang warn . statusAus . nichts rendert Demo-Daten mehr).
+- **Gegen-Beweis (zwei, /tmp-Kopie, Repo unberuehrt):**
+  A) 'offen' liefert status:'ok' (leeres Dok wuerde gruen) -> **K5 'leeres Dokument liefert keinen
+     gruenen Schritt' rot** + K7 Geschosse rot (10 pass / 2 fail). Kernkriterium hat Zaehne.
+  B) Fensterzahl auf Tuerzahl gelegt -> **K7 '12 Fenster und 3 Tueren' rot** (11/1) - die
+     Generator-Mutation unabhaengig nachgestellt.
+- **Sichtprobe (iframe 1440, frisches Hausplaner-Projekt, Bundle cb3d17e serviert):**
+  Gefuehrte Planung, **Schritt 2/11 'Import oder Grundriss'**: Status **'Offen'** (grau, NICHT gruen),
+  Text 'Ob ... Massstab bestaetigt wurde, fuehrt das Dokument nicht ... Es sind keine Waende vorhanden',
+  'Im Modell: 1 Geschoss . 0 Fenster . 0 Tueren . 0 Treppen'. Der alte Defekt ('Massstab erkannt 1:50 ok'
+  auf leerem Dokument) ist weg - der Massstab wird ausdruecklich NICHT behauptet.
+  **Gegenmessung des Modells (Expertenmodus, 'dasselbe Modell und dieselbe Revision'):** Projektbaum
+  'Noch keine Bauteile', Eigenschaften 'Raeume: 0 . 0.00 m2', Canvas leer -> die Schritt-Zeile ist
+  KORREKT, das Modell hat wirklich 0 Waende/Raeume.
+
+- **Adjacent-Befund (NICHT AUF-39, bereits verfolgt, kein Blocker):** der GuidedView-Canvas in
+  Schritt 2 rendert einen Demo-/Platzhalter-Grundriss (Raeume 'Wohnen/Kueche' mit Wandumriss), den
+  das leere Modell nicht enthaelt - ein Canvas-vs-Modell-Mismatch. AUF-39 hat den Canvas nicht
+  angefasst und den Mismatch nicht verursacht; es macht die Schritt-ZEILE ehrlich, waehrend der
+  Canvas weiter das Demo zeigt. Bereits im Ledger 68a7f7e ('Wizard zeigt 5 Raeume erkannt neben
+  0 Fenster'). Als bestaetigt und separat verfolgt vermerkt.
+
+**Urteil: FREIGABE.** Der Stepper leitet ehrlich aus dem Modell ab - was das Modell nicht weiss,
+wird nicht behauptet (Operanden-Gate). Kernkriterium (leeres Dokument => kein gruener Schritt) per
+Test, Mutation UND Sichtprobe belegt; sechs Schritte ohne Modellgrundlage bleiben offen und sagen,
+was fehlt. STEPS stillgelegt statt geloescht, Test verriegelt das Nicht-Rendern. Der Demo-Canvas
+ist ein bekannter Nachbar-Posten, kein Mangel an dieser Ableitung.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -342,6 +384,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   I1        7bbf9ff  diff-filter=A: 110 Icon-SVG + _sprite + 3 Referenz-Docs ; kein Code (Nicht-Asset-Liste leer) ; Stichprobe 370-393 B valide SVG ; Selbstkorrektur 106(--stat gekuerzt)->110
   AUF-30    56cc734  Auszug: schema 0 / test 788/788 0-skip / tsc 0 / build ok ; test-hooks nur .tsx via esbuild ; 6 renderPfad-Subtests ueber react-dom/server ; Gegen-Beweis A disabled-weg='Kante 4' rot, B zweck-Literal='Zweck im Markup' rot (je 5/1)
   AUF-33L2  9d0c12a  Auszug: schema 0 / test 888/888 0-skip / tsc 0 / build ok ; 3 Grenzen (keine Rechnung/statischer Aufruf/kein Modell-Schreiben) ; 14 Subtests ; Gegen-Beweis Fund-Fix + Operanden-Gate je 13/1 rot ; Sichtprobe 1440: Wohnung 7x erfuellt, Aussentreppe 2 Fehler+5 erfuellt (Fund-Fix am Schirm)
+  AUF-39L5  b3a6210  Auszug: schema 0 / test 900/900 0-skip / tsc 0 / build ok ; Guardrail kein 2. Snapshot/Hash/Projektion (grep leer), ableitenSchritte rein ; 12 Subtests ; Gegen-Beweis A offen->ok = K5 rot (10/2), B fenster->tuer = K7 rot (11/1) ; Sichtprobe: frisch Schritt 2/11 'Offen', keine Waende, 0 Fenster/Tuer/Treppe, Expertenmodus bestaetigt 0 Bauteile ; Adjacent Demo-Canvas (68a7f7e, nicht AUF-39)
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
