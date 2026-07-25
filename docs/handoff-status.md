@@ -5766,3 +5766,111 @@ Als **W-Login** in §3c eingetragen. Sie blockiert nichts — sie hält einen ei
 
 **Ballbesitz: Evaluator** (zwei Posten) **und Generator** (AUF-68). Zum ersten Mal heute laufen
 beide gleichzeitig, ohne aufeinander zu warten.
+
+---
+
+## PLANNER 26.07., 01:35 — Rückgängig ist nicht kaputt, es ist unlesbar
+
+**Anlass:** Yama: *„die zwei Werkzeuge … sind Rückgängig und das Gegenteil — bitte beide
+funktionstüchtig machen. Und bitte alle Werkzeuge auf eine Linie bringen."*
+
+**Vorher gelesen/gemessen:** `HausplanerApp.tsx:980-984, 1060-1061, 1103-1105, 1142-1175` ·
+`store/hausplanerStore.ts:120-165` · `store/history.ts` · **Browser, `studio?fixture=decke-treppe`,
+1440 px** — nicht der Quelltext, das laufende Programm.
+
+### 1. Die Messung, die den Auftrag halbiert hat
+
+| Schritt | Rückgängig | Wiederholen |
+|---|---|---|
+| Testfläche frisch geladen | gesperrt | gesperrt |
+| nach einem echten Befehl | **frei** | gesperrt |
+| nach Rückgängig | gesperrt | **frei** |
+| nach Wiederholen | **frei** | gesperrt |
+
+**Die Umkehr arbeitet fehlerfrei** — Immer-Patches, verworfener Wiederholen-Stapel nach einem neuen
+Befehl, alles wie spezifiziert. **Es gibt nichts funktionstüchtig zu machen.**
+
+### 2. Warum Yama trotzdem recht hat
+
+| gemessen | Rückgängig (**gesperrt**) | Split (**frei**) |
+|---|---|---|
+| Deckkraft | 1 | 1 |
+| Mauszeiger | pointer | pointer |
+| Schrift | rgb(55, 65, 81) | rgb(55, 65, 81) |
+| Rahmen | rgb(139, 148, 158) | rgb(139, 148, 158) |
+| Hintergrund | rgb(255, 255, 255) | rgb(255, 255, 255) |
+
+**Kein einziger Wert unterscheidet sich.** Ein gesperrter Knopf sieht Pixel für Pixel aus wie ein
+freier — und reagiert nicht. Die einzig mögliche Deutung für den, der davorsitzt, ist „kaputt".
+
+**Das ist derselbe Mangel, den AUF-59 behoben hat — dort für `OpBtn` in der Icon-Zeile. `knopf()`
+ist liegengeblieben.** Eine Regel, die die halbe Oberfläche erreicht, ist keine Regel; sie ist eine
+Stelle, an der es zufällig stimmt.
+
+**Für mich selbst:** Ich habe AUF-59 als „die drei Zustände der Icon-Zeile" beauftragt und
+abgenommen — mit der Zeile im Titel. **Ein Posten, der eine Wahrnehmungsregel herstellt, gehört
+nicht an eine Zeile gebunden, sondern an die Darstellung.** Beim nächsten Posten dieser Art frage
+ich zuerst: *wo gilt das noch, und warum nicht dort?*
+
+### 3. Der zweite Teil bleibt und ist echt
+
+| y | Inhalt | Knöpfe |
+|---|---|---|
+| 179 | Rückgängig · Wiederholen · Geschosse · 2D · Split · 3D · Status · Speichern | 7 |
+| 224 | Arbeitsbereiche | 5 |
+| 269 | Zoom ×3 · Einpassen · Raster · Fang ⏐ Duplizieren · Löschen · Spiegeln ×2 ⏐ PNG | 11 |
+
+**Werkzeuge stehen heute in zwei Zeilen.** Yamas Wunsch löst eine Doppelung auf, kein
+Geschmacksurteil. Zielbild: oben die **Dokumentzeile** (Geschoss · Status · Speichern), unten die
+**Werkzeugzeile** — Rückgängig zuerst, weil es die Rettungsleine ist, dann der Ansichtsmodus, weil
+er bestimmt, worauf alles Folgende wirkt.
+
+**2D · Split · 3D behalten ihre Wörter.** Drei Zeichen, drei Zustände, keine gängige Bildsprache —
+ein Icon wäre hier Ratearbeit. Sie übernehmen aber die Darstellung der Zeile, in die sie ziehen.
+
+### 4. Sequenz — ausdrücklich, nicht implizit
+
+**AUF-70 ist `GESPERRT`, bis AUF-68 committet ist.** Beide fassen dieselben Zeilen in derselben
+Datei an. Zwei gleichzeitige Änderungen an derselben Stelle sind genau der Fehler, der heute Nacht
+`objekt/203` gekostet hat — und diesmal weiß ich es vorher.
+
+**Ballbesitz: Generator (AUF-68), danach AUF-70. Evaluator: AUF-64 und AUF-60.**
+
+---
+
+## PLANNER 26.07., 01:40 — AUF-64 **und** AUF-60 freigegeben, AUF-69 entsperrt
+
+**Vorher gelesen:** `git log -5` · `git show f43bc14` · Tafel §3a/§3b · Archiv.
+
+### 1. Das Votum
+
+**AUF-64 (`1b2b26d`): FREIGABE** — der Evaluator hat blind gegen den Commit gemessen, bevor er den
+Bericht gelesen hat. Der committete `objekt/203` geht durch Laravels echten Compiler und `php -l`
+sagt *„No syntax errors detected"* — **genau der Fall, den er gegen den alten Stand als
+„Parse error line 53" bewiesen hatte.** Die Rechte-Zeile lebt weiter, `BladeKompiliertTest` ist mit
+**5** grünen Tests verriegelt, darunter eine **Selbst-Zahn-Probe**: ein Test, der die gemischte Form
+absichtlich herstellt und den `ParseError` erwartet. *Ein Test, der nie ausschlägt, sieht aus wie
+ein bestandener — dass er das selbst prüft, ist der Unterschied zwischen Abdeckung und Beruhigung.*
+
+**AUF-60 (`e0d1144`): NACHBESSERN → FREIGABE.** Die Bedingung seines eigenen Votums ist erfüllt.
+Beide zusammen ins Archiv; **§3b ist wieder leer.**
+
+### 2. AUF-69 entsperrt — und die Tor-1-Frage beantwortet
+
+Beide Vorbedingungen sind erfüllt. **Kein Tor 1:** eine Rechteberechnung aus einer Vorlage in ihren
+Controller zu ziehen ist Software-Struktur, keine Fachentscheidung; `User::hasPermission` — die
+Rechte-Wahrheit — wird nicht angefasst. Der Generator hat Tor 1 vermutet und **deshalb nicht
+gebaut**. Das war die richtige Vorsicht, und sie ist hiermit beantwortet, nicht gerügt.
+
+Seine Arbeit liegt bereits im Arbeitsbaum. Das eine Kriterium, das beim Umzug nicht verlorengehen
+darf: **ohne angemeldeten Nutzer bleibt der Wert leer, nicht voll.** Es ist der Kern von AUF-60, und
+Umzüge sind die Gelegenheit, bei der so etwas still verschwindet.
+
+### 3. Stand
+
+- **§3b leer** — jeder gebaute Posten trägt sein Votum.
+- **Generator:** AUF-68 ⚡ AKTIV, danach AUF-70 (gesperrt hinter 68, gleiche Zeilen), AUF-69 offen.
+- **Evaluator:** nichts offen.
+- **Yama:** eine Willensfrage (**W-Login**), sie blockiert nichts.
+
+**Fünf Voten heute in der letzten Stunde, kein Posten älter als sein Bericht.**
