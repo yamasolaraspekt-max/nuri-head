@@ -648,7 +648,20 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     else if (tool.id === 'duplizieren') dupliziere();
   }
   const opSep = (): React.ReactElement => <span style={{ width: 1, height: 20, background: T.hair, margin: '0 4px' }} />;
-  const opLbl = (t: string): React.ReactElement => <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.muted, marginRight: 2 }}>{t}</span>;
+  /**
+   * AUF-68 — die Gruppen der Bedienleiste. **Der Name bleibt, er wird nur unsichtbar.**
+   *
+   * Yama wollte die drei ausgeschriebenen Wörter („Ansicht", „Bearbeiten", „Messen & Export") aus
+   * der Zeile haben — sie standen VOR den Icons und belegten rund 150 px. Für das Auge tragen die
+   * Trennstriche (`opSep`) die Gruppierung ohnehin schon.
+   *
+   * **Wer die Zeile mit einem Vorleseprogramm bedient, hätte die Gruppen sonst verloren.** Deshalb
+   * ist das hier keine Zutat, sondern die Bedingung, unter der das Wort gehen darf: die Gruppe
+   * bleibt als `role="group"` mit `aria-label` bestehen — unsichtbar, aber vorhanden.
+   */
+  const OpGruppe = ({ name, children }: { name: string; children: React.ReactNode }): React.ReactElement => (
+    <div role="group" aria-label={name} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>{children}</div>
+  );
   function dupliziere(): void {
     const jetzt = new Date().toISOString();
     const neu: string[] = [];
@@ -1141,34 +1154,38 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
 
       {/* Bedien-Werkzeugleiste — Icons, jedes mit Tooltip + Funktionsbeschreibung */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: T.bg, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}>
-        {opLbl('Ansicht')}
-        <OpBtn title="Vergrößern (Zoom +) — näher an den Grundriss heranzoomen" icon="zoom-in" onClick={() => setZoom((z) => Math.min(1, z * 1.2))} />
-        <OpBtn title="Verkleinern (Zoom −) — weiter herauszoomen" icon="zoom-out" onClick={() => setZoom((z) => Math.max(0.02, z / 1.2))} />
-        <OpBtn title="Zoom zurücksetzen — Standardmaßstab wiederherstellen" icon="zoom-reset" onClick={() => setZoom(0.12)} />
-        {/* AUF-44: BLEIBT. „Ansicht einpassen" hat als einziger der fünf **kein** Werkzeug im
-            Katalog — es zu entfernen hieße, die Funktion ganz aus der Oberfläche zu tilgen, nicht
-            nur eine Dublette. Ob sie ein Werkzeug bekommt oder bewusst gestrichen wird, ist eine
-            Willensfrage und im Bericht zurückgegeben. */}
-        <OpBtn title="Ansicht einpassen — gesamten Grundriss ins Bild rücken" icon="einpassen" geplant />
-        <OpBtn title="Raster ein-/ausblenden — Hintergrund-Hilfslinien" icon="grid" aktiv={rasterAn} onClick={() => setRasterAn((v) => !v)} />
-        <OpBtn title="Fang ein-/ausschalten — an Punkten und Raster einrasten" icon="fang" aktiv={scene.settings.snapEnabled} onClick={() => store.getState().executeCommand({ type: 'UPDATE_SETTINGS', changes: { snapEnabled: !scene.settings.snapEnabled } })} />
-        {/* AUF-44: Hier stand „Auswahl um 90° drehen (geplant)" — ein Knopf, der nichts tat und es
-            nur im Tooltip zugab. Das Werkzeug `drehen` gibt es wirklich: es steht in seiner
-            Themen-Gruppe („Bearbeiten & Transformieren") mit ehrlichem Zustand. Entfernt wurde die
-            tote Dublette, nicht das Werkzeug. */}
+        {/* AUF-68: die drei Wörter sind weg — der Name lebt als `aria-label` weiter. */}
+        <OpGruppe name="Ansicht">
+          <OpBtn title="Vergrößern (Zoom +) — näher an den Grundriss heranzoomen" icon="zoom-in" onClick={() => setZoom((z) => Math.min(1, z * 1.2))} />
+          <OpBtn title="Verkleinern (Zoom −) — weiter herauszoomen" icon="zoom-out" onClick={() => setZoom((z) => Math.max(0.02, z / 1.2))} />
+          <OpBtn title="Zoom zurücksetzen — Standardmaßstab wiederherstellen" icon="zoom-reset" onClick={() => setZoom(0.12)} />
+          {/* AUF-44: BLEIBT. „Ansicht einpassen" hat als einziger der fünf **kein** Werkzeug im
+              Katalog — es zu entfernen hieße, die Funktion ganz aus der Oberfläche zu tilgen, nicht
+              nur eine Dublette. Ob sie ein Werkzeug bekommt oder bewusst gestrichen wird, ist eine
+              Willensfrage und im Bericht zurückgegeben. */}
+          <OpBtn title="Ansicht einpassen — gesamten Grundriss ins Bild rücken" icon="einpassen" geplant />
+          <OpBtn title="Raster ein-/ausblenden — Hintergrund-Hilfslinien" icon="grid" aktiv={rasterAn} onClick={() => setRasterAn((v) => !v)} />
+          <OpBtn title="Fang ein-/ausschalten — an Punkten und Raster einrasten" icon="fang" aktiv={scene.settings.snapEnabled} onClick={() => store.getState().executeCommand({ type: 'UPDATE_SETTINGS', changes: { snapEnabled: !scene.settings.snapEnabled } })} />
+          {/* AUF-44: Hier stand „Auswahl um 90° drehen (geplant)" — ein Knopf, der nichts tat und es
+              nur im Tooltip zugab. Das Werkzeug `drehen` gibt es wirklich: es steht in seiner
+              Themen-Gruppe („Bearbeiten & Transformieren") mit ehrlichem Zustand. Entfernt wurde die
+              tote Dublette, nicht das Werkzeug. */}
+        </OpGruppe>
         {opSep()}
-        {opLbl('Bearbeiten')}
-        <OpBtn title="Auswahl duplizieren — Kopie versetzt daneben einfügen" icon="dup" disabled={selectedNodeIds.length === 0} onClick={dupliziere} />
-        <OpBtn title="Auswahl löschen (Entf) — markiertes Objekt entfernen" icon="del" disabled={selectedNodeIds.length === 0} onClick={loescheAuswahl} />
-        <OpBtn title="Grundriss links/rechts spiegeln" icon="mirror-h" disabled={waende.length === 0} onClick={() => spiegeleGrundriss('vertikal')} />
-        <OpBtn title="Grundriss oben/unten spiegeln" icon="mirror-v" disabled={waende.length === 0} onClick={() => spiegeleGrundriss('horizontal')} />
-        {/* AUF-44: Ebenso „Messwerkzeug", „Bemaßung" und „Als PDF-Planblatt exportieren". Alle drei
-            existieren als Werkzeuge (`distanz-messen`, `bemassen`, `pdf`) in „Messen & Bemaßen" bzw.
-            „System, Suche & Export" — dort mit Zustand und Grund. In der Icon-Zeile waren sie
-            Versprechen ohne Deckung, genau die Sorte, die I2 aus dem Katalog entfernt hat. */}
+        <OpGruppe name="Bearbeiten">
+          <OpBtn title="Auswahl duplizieren — Kopie versetzt daneben einfügen" icon="dup" disabled={selectedNodeIds.length === 0} onClick={dupliziere} />
+          <OpBtn title="Auswahl löschen (Entf) — markiertes Objekt entfernen" icon="del" disabled={selectedNodeIds.length === 0} onClick={loescheAuswahl} />
+          <OpBtn title="Grundriss links/rechts spiegeln" icon="mirror-h" disabled={waende.length === 0} onClick={() => spiegeleGrundriss('vertikal')} />
+          <OpBtn title="Grundriss oben/unten spiegeln" icon="mirror-v" disabled={waende.length === 0} onClick={() => spiegeleGrundriss('horizontal')} />
+          {/* AUF-44: Ebenso „Messwerkzeug", „Bemaßung" und „Als PDF-Planblatt exportieren". Alle drei
+              existieren als Werkzeuge (`distanz-messen`, `bemassen`, `pdf`) in „Messen & Bemaßen" bzw.
+              „System, Suche & Export" — dort mit Zustand und Grund. In der Icon-Zeile waren sie
+              Versprechen ohne Deckung, genau die Sorte, die I2 aus dem Katalog entfernt hat. */}
+        </OpGruppe>
         {opSep()}
-        {opLbl('Messen & Export')}
-        <OpBtn title="Als PNG-Bild exportieren — aktuelle 2D-Ansicht herunterladen" icon="export" onClick={exportPng} />
+        <OpGruppe name="Messen & Export">
+          <OpBtn title="Als PNG-Bild exportieren — aktuelle 2D-Ansicht herunterladen" icon="export" onClick={exportPng} />
+        </OpGruppe>
         <span style={{ fontSize: 12, color: FARBEN.gedaempft, marginLeft: 'auto', fontVariantNumeric: 'tabular-nums' }}>Zoom {(zoom * 100).toFixed(0)} %</span>
       </div>
 
