@@ -18,6 +18,7 @@
 | AUF-16 Kontext-Leiste auf Modulebene | `982384d` | **FREIGABE** | Test-Trennschärfe per Struktur-Mutation bestätigt |
 | AUF-19 Reiter-Muster N3 (B3/B4) | `8587ce7` | **FREIGABE** | `aria-controls`-Verknüpfung mutationsgeprüft (1 Test rot) |
 | AUF-26 Kappungs-Schutz (B3/B4) | `4c9bc04` | **FREIGABE** (Code; Sichtprobe offen) | Kappung→Umbruch mutationsgeprüft (1 Test rot) |
+| **A2 / AUF-4** Leiste liest Präsentationsschicht | `acdb987` | **FREIGABE** | art/zone→eine Wahrheit; verhaltensneutral bewiesen; P9 useMemo (kein Modul-Cache) mutationsgeprüft |
 
 ---
 
@@ -69,6 +70,14 @@
 - Test `keineKappung.test.ts` prüft die **Ursache (CSS)**, nicht den Screenshot. Gates tsc 0 · schema 0 ·
   test 759/759. K4 unberührt. Trennschärfe: Mutation „Kappung zurück" → 1 Test rot.
 - **Offen: Sichtprobe** — ob der Text visuell sauber umbricht (kein Overflow/Clipping), braucht Browser.
+
+## A2 / AUF-4 (`acdb987`) — FREIGABE
+- **Kern:** Werkzeugleiste liest `zoneTools('fix')` statt `werkzeugTools()` → art/zone-Doppelwahrheit auf **eine** reduziert.
+- **Verhaltensneutral (Krit. 6):** Test belegt `zoneTools('fix')` === `werkzeugTools()` === `[auswahl,wand,fenster,tuer,dach,decke,treppe]` — keine Icon-Wanderung.
+- **P9 §8:** `useMemo(() => zoneTools('fix'), [])` komponenten-lokal, **kein Modul-Cache** (sonst brächen die A1-`zoneToolsIn`-Gegenproben). Mutation (useMemo entfernt) → 1 Test rot.
+- K4 unberührt · Gates tsc 0 · schema 0 · test 754/754.
+- **Operanden-Gate-Rückgabe:** A1-Auflage 3 vom Generator zurückgegeben (mangels `.tsx`-Testinfra) — offen benannt, eigener Posten.
+- **Wirkung:** entsperrt AUF-27 + Layout-Kette L1→…
 
 ---
 
