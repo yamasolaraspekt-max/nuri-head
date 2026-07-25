@@ -239,3 +239,34 @@ für den Nutzer nichts, und ein Bundle-Commit ohne sichtbare Wirkung wäre nur R
 **Nicht als Gate im Testlauf**, sondern als Berichtspflicht: Ein Gate müsste bauen können, und genau
 das kann die Umgebung nicht immer. Eine Pflicht, die in der Hälfte der Fälle nicht erfüllbar ist,
 wird umgangen — und das Umgehen wird zur Gewohnheit.
+
+---
+
+## 9. Die Blade-Regel (Planner, 26.07., nach dem toten `objekt/203`)
+
+**Was passiert ist:** AUF-60 hat eine `.blade.php` geändert. Die vier Hausplaner-Gates waren grün —
+**alle vier**, mit 1008 von 1008 Tests. Trotzdem lag die Route, die Yama täglich benutzt, mit einem
+PHP-ParseError am Boden. Gefunden hat es der Browser, nicht die Kette.
+
+**Warum die Gates es nicht sehen konnten:** `tsc:hausplaner`, `schema:hausplaner:check`,
+`test:hausplaner` und `build:hausplaner` prüfen TypeScript, Schema, die Insel-Tests und den
+Bundle-Bau. **Keines davon fasst eine Blade-Datei an.** Die Abdeckung fehlte nicht — sie lag in der
+PHP-Suite, und die wurde nicht gefahren. Der Generator hat das in seinem Bericht selbst benannt:
+beim Mutations-Gegenbeweis fiel **auch der vorhandene `UebernahmeKnopfTest`** um.
+
+### Die Regel
+
+**1. Berührt ein Posten eine `.blade.php`, gehört `php artisan test tests/Feature/Hausplaner` in
+seine Gate-Kette** — mit Zahl vorher/nachher im Bericht, wie bei den vier anderen Gates.
+
+**2. Die betroffene Route gehört in die Sichtprobe** — nicht die, an der man gerade arbeitet.
+AUF-60s Sichtprobe fand im Expertenmodus statt; die geänderte Datei bediente eine andere Route.
+
+**3. Ist die Route hinter `auth` und der Zugang fehlt, wird der Beleg serverseitig geführt
+und die Konsolenprüfung ausdrücklich als offen benannt.** Nicht stillschweigend übersprungen, und
+nicht durch Anlegen eines Nutzers auf der Arbeitsdatenbank ersetzt — das wäre ein eigener Posten und
+kein Test-Beifang.
+
+**Warum das hier steht und nicht nur im Bericht:** Der Generator hat sich die Konsequenz selbst
+aufgeschrieben. Eine Lehre, die nur in einem Bericht steht, gilt für den, der sie geschrieben hat,
+und für niemanden sonst. **Diese hier hat den Hauptzweig einen Tag lang eine Route gekostet.**

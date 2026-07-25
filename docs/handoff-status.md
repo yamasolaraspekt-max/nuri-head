@@ -5705,3 +5705,64 @@ nicht gelöscht**.
 ### 8. Nicht getan
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün.
+
+---
+
+## PLANNER 26.07., 01:15 — AUF-64 ist committet, die Kette läuft weiter
+
+**Vorher gelesen:** HEAD `fc28a56` · `git log -6` · `git show 1b2b26d --stat` ·
+`grep -c "@endphp" objekt.blade.php` · Tafel §3a/§3b/§3c · GENERATOR-BERICHT AUF-64.
+
+### 1. Selbst nachgemessen, nicht aus dem Bericht übernommen
+
+| geprüft | Ergebnis |
+|---|---|
+| Schließendes Gegenstück in `objekt.blade.php` | **0** — die Datei trägt nur noch die einzeilige Form |
+| `public/*` im Code-Commit `1b2b26d` | **null Zeilen** — drei Dateien, keine davon ausgeliefert |
+| Arbeitsbaum nach dem Commit | **sauber** — nichts liegt mehr herum |
+
+**Damit ist die Lage aufgehoben, die ich vor einer Stunde als kritisch gemeldet habe.** Der
+ausgelieferte Stand und der Arbeitsbaum sagen wieder dasselbe.
+
+### 2. Was der Bericht zusätzlich liefert — und es ist mehr als die Behebung
+
+**Der Generator hat die Lücke selbst benannt, ohne dass jemand danach gefragt hat:** beim
+Mutations-Gegenbeweis fiel **auch der vorhandene `UebernahmeKnopfTest`** um, mit genau diesem
+`ParseError`. **Die Abdeckung existierte.** Was fehlte, war ein Lauf der PHP-Suite bei einer
+Blade-Änderung.
+
+Das ist die wertvollere Hälfte des Postens. Ein Fehler, der durch eine fehlende Prüfung schlüpft,
+kostet einmal; ein Fehler, der durch eine **vorhandene, nicht gefahrene** Prüfung schlüpft, kostet
+so oft, wie er nicht gefahren wird.
+
+**Deshalb ist es jetzt eine Regel, nicht eine Selbstverpflichtung:**
+`docs/agents/06-laufzeiten-und-takt.md` **§9 — die Blade-Regel**. Drei Punkte: PHP-Suite in die
+Gate-Kette, die **betroffene** Route in die Sichtprobe, und bei fehlendem Zugang der serverseitige
+Beleg **plus ausdrückliche Benennung der offenen Konsolenprüfung**.
+
+*Grund für die Erhebung zur Regel: eine Lehre im Bericht gilt für den, der sie schrieb. Diese hier
+hat den Hauptzweig eine Route gekostet.*
+
+### 3. Die eine Sache, die offen bleibt — und sie gehört Yama
+
+Der Generator konnte die **Konsolenprüfung im Browser** nicht führen: die Route liegt hinter `auth`,
+der hinterlegte Zugang `admin@ticket.test` wird abgewiesen. **Er hat es gelassen, statt sich einen
+Nutzer anzulegen** — ein Schreibvorgang auf der Arbeitsdatenbank `ticket` ist kein Test-Beifang.
+**Das war die richtige Entscheidung**, und ich schreibe sie hier auf, damit sie beim nächsten Mal
+nicht als Zögern gelesen wird.
+
+Als **W-Login** in §3c eingetragen. Sie blockiert nichts — sie hält einen einzelnen Beleg offen.
+
+### 4. Tafel nachgezogen
+
+- **AUF-64** → §3b, `BERICHTET`, Ballbesitz Evaluator.
+- **AUF-60** → §3b, `NACHBESSERN → erneut zur Prüfung`. Die Bedingung des Evaluators
+  („AUF-64 committen, dann den committeten `objekt/203` belegen") ist **erfüllt**; es fehlt nur
+  sein zweiter Blick. **Wer AUF-64 prüft, hat AUF-60 halb mitgeprüft** — deshalb stehen sie
+  nebeneinander und nicht in zwei Wellen.
+- **AUF-68** ⚡ **AKTIV** — die drei Gruppenwörter. Gezogen, weil es Yamas frischester Wunsch ist,
+  weil es klein ist und weil es dieselbe Zeile betrifft, die er gerade vor Augen hat.
+- **W-Login** neu in §3c.
+
+**Ballbesitz: Evaluator** (zwei Posten) **und Generator** (AUF-68). Zum ersten Mal heute laufen
+beide gleichzeitig, ohne aufeinander zu warten.
