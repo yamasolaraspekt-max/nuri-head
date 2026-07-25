@@ -5941,3 +5941,50 @@ Lehre aus meinem eigenen Ausfall, nicht eine Auflage, die mir jemand nachtragen 
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Fremde Arbeitsbaum-Änderungen
 (`AUFTRAGSTAFEL.md` des Planners) **nicht** mitcommittet.
+
+---
+
+## PLANNER 26.07., 01:55 — Bestandsaufnahme zur Nacht
+
+**Anlass:** Yama geht schlafen und möchte den Stand.
+
+### 1. AUF-69 ist gebaut und committet
+
+`ea60d9e` — der Commit-Titel nennt AUF-64, gemeint ist dieser Posten. Vier Dateien: Controller,
+Blade, `rechte.test.ts`, neuer `HausplanerRechteTest.php`. **PHP-Suite `tests/Feature/Hausplaner`
+38 → 44**, alle grün. **`public/*`: null Zeilen** — selbst nachgemessen. Im Blade steht nur noch
+`data-rechte="{{ $hpRechte }}"` (Z. 107).
+
+**Bemerkenswert:** Das ist der erste Posten nach Aufnahme der Blade-Regel (§9) — **und er hält
+sie.** Die PHP-Suite lief mit, ohne dass jemand daran erinnert hat. Eine Regel, die beim ersten
+Anlass von selbst greift, ist eine gute Regel; eine, an die man erinnern muss, ist eine Bitte.
+
+**In §3b eingetragen, Ballbesitz Evaluator.** Mit einer Prüfauflage im Vordergrund: **ohne
+angemeldeten Nutzer bleibt der Wert leer, nicht voll.** Das ist der Kern von AUF-60, und ein Umzug
+ist genau die Gelegenheit, bei der so ein Kriterium still verschwindet.
+
+### 2. Zahlen zum Stand
+
+| | |
+|---|---|
+| Archiv (abgenommen) | **51** |
+| Arbeitsvorrat | **21** |
+| Abnahme-Stapel | **1** (AUF-69) |
+| Bei Yama | **1** (W-Login, blockiert nichts) |
+| Voten heute | **29** |
+
+### 3. Was ich mir selbst vorhalte
+
+**AUF-18 und AUF-22 sind Planner-Schulden**, keine Bauposten. Sie stehen seit gestern im
+Arbeitsvorrat und sehen dort aus wie Arbeit für andere. Sie sind Arbeit für mich. **In der
+Bestandsaufnahme habe ich das ausdrücklich so benannt** — ein Rückstand, der als Vorrat getarnt im
+Register steht, ist die bequemste Art, ihn nicht zu sehen.
+
+### 4. Reihenfolge, die ich für morgen vorschlage
+
+**AUF-68 → AUF-70 → AUF-62.** Alle drei betreffen dieselbe Werkzeugzeile, alle drei sind klein, und
+danach ist das obere Drittel des Bildschirms **fertig statt halb**. Dann AUF-65 (dafür fehlt noch
+mein Auftrag), dann meine zwei Schulden. Danach steht AUF-50 — die 110 Werkzeuge — und das ist ein
+Wochenstück, kein Abendstück.
+
+**Ballbesitz über Nacht: Generator (AUF-68) und Evaluator (AUF-69).**
