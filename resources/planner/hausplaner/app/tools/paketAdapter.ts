@@ -112,3 +112,42 @@ export function verworfeneKuerzel(): Array<{ id: string; shortcut: string; grund
 export function paketWerkzeug(id: string): PaketWerkzeug | undefined {
   return PAKET_WERKZEUGE.find((w) => w.id === id);
 }
+
+/**
+ * AUF-31 — **die harte Grenze zwischen Anzeige und Speicherung.**
+ *
+ * Die Eindeutschung betrifft **UI-ID · Icon-Dateiname · Label**. Sie betrifft **NICHT** die im
+ * Szenendokument gespeicherten Werte (`type`, `objectType`, `zoneType`, `routeType`). Diese stehen
+ * in `scene-document-v2.schema.json`, werden vom PHP-Validator gelesen und liegen in bereits
+ * gespeicherten Szenen. Sie umzubenennen wäre eine **Migration an Bestandsdaten** — DAUERDIREKTIVE,
+ * niemals Beifang — und erzeugte sonst **422 beim Speichern**.
+ *
+ * Diese Tabelle bildet die deutsche UI-ID auf den englischen Schutzwert ab. Sonderfälle aus der
+ * führenden Namenstabelle: Paket `slab` → Schema **`ceiling`**, Paket `stairs` → Schema **`stair`**
+ * (das Schema gewinnt). Wo ein Werkzeug zwei Schutzwerte bedienen kann (Wärmepumpe innen/außen,
+ * Rohrleitung Heizung/Wasser), steht der **erste** — die Auswahl trifft die Fachlogik, nicht diese
+ * Abbildung.
+ */
+export const SCHEMA_SCHUTZWERT: Readonly<Record<string, { feld: string; wert: string }>> = {
+  'batteriespeicher': { feld: 'objectType', wert: 'battery' },
+  'dach': { feld: 'type', wert: 'roof' },
+  'decke': { feld: 'type', wert: 'ceiling' },
+  'fenster': { feld: 'type', wert: 'window' },
+  'fussbodenheizung': { feld: 'zoneType', wert: 'underfloor_heating' },
+  'heizkoerper': { feld: 'objectType', wert: 'radiator' },
+  'oeffnung': { feld: 'type', wert: 'opening' },
+  'pv-modul': { feld: 'zoneType', wert: 'pv_area' },
+  'raum': { feld: 'zoneType', wert: 'room' },
+  'rohrleitung': { feld: 'routeType', wert: 'heating_pipe' },
+  'sanitaeranschluss': { feld: 'objectType', wert: 'sanitary' },
+  'treppe': { feld: 'objectType', wert: 'stair' },
+  'tuer': { feld: 'type', wert: 'door' },
+  'waermepumpe': { feld: 'objectType', wert: 'heat_pump_indoor' },
+  'wallbox': { feld: 'objectType', wert: 'wallbox' },
+  'wand': { feld: 'type', wert: 'wall' },
+};
+
+/** Der gespeicherte Schema-Wert zu einer deutschen UI-ID — oder undefined, wenn nichts gespeichert wird. */
+export function schemaSchutzwert(uiId: string): { feld: string; wert: string } | undefined {
+  return SCHEMA_SCHUTZWERT[uiId];
+}

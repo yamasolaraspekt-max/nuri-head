@@ -31,6 +31,12 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     supportedViews: [],
     shortcut: 'V',
     helpText: 'Objekte anklicken zum Markieren, ziehen zum Bewegen.',
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'select' war dasselbe Werkzeug.
+    meaning: 'Einzelne Objekte auswählen.',
+    usageArea: 'Alle Workspaces; Ausgangspunkt jeder Bearbeitung.',
+    group: 'Auswahl',
+    tooltip: { title: 'Auswahl', body: 'Einzelne Objekte auswählen.', usage: 'Einsatzbereich: Alle Workspaces; Ausgangspunkt jeder Bearbeitung.' },
   },
   {
     id: 'wand',
@@ -44,6 +50,12 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     bauteilKind: 'wall',
     helpText: 'Wände zeichnen — Punkt für Punkt klicken (Polygonzug).',
     disabledReasonDefault: 'Wände werden im Architektur-Arbeitsbereich gezeichnet.',
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'wall' war dasselbe Werkzeug.
+    meaning: 'Parametrische Wand mit Aufbau, Höhe und Dicke erzeugen.',
+    usageArea: 'Architektur, Bauphysik, Heizlast.',
+    group: 'Architektur',
+    tooltip: { title: 'Wand', body: 'Parametrische Wand mit Aufbau, Höhe und Dicke erzeugen.', usage: 'Einsatzbereich: Architektur, Bauphysik, Heizlast.' },
   },
   {
     id: 'fenster',
@@ -56,6 +68,12 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     shortcut: 'F',
     bauteilKind: 'window',
     helpText: 'Fenster auf eine Wand setzen — Typ oben wählbar.',
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'window' war dasselbe Werkzeug.
+    meaning: 'Fenster mit Profil, Glas und Öffnungsart platzieren.',
+    usageArea: 'Architektur, Fassade, Heizlast.',
+    group: 'Architektur',
+    tooltip: { title: 'Fenster', body: 'Fenster mit Profil, Glas und Öffnungsart platzieren.', usage: 'Einsatzbereich: Architektur, Fassade, Heizlast.' },
   },
   {
     id: 'tuer',
@@ -68,6 +86,12 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     shortcut: 'T',
     bauteilKind: 'door',
     helpText: 'Tür auf eine Wand setzen — Typ oben wählbar.',
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'door' war dasselbe Werkzeug.
+    meaning: 'Türöffnung und Türelement platzieren.',
+    usageArea: 'Architektur, Bad, Küche.',
+    group: 'Architektur',
+    tooltip: { title: 'Tür', body: 'Türöffnung und Türelement platzieren.', usage: 'Einsatzbereich: Architektur, Bad, Küche.' },
   },
   {
     id: 'dach',
@@ -80,6 +104,12 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     shortcut: 'D',
     bauteilKind: 'roof',
     helpText: 'Dach über den Gebäudeumriss aufsetzen — dann in 3D betrachten.',
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'roof' war dasselbe Werkzeug.
+    meaning: 'Dach aus Kontur oder Dachform erzeugen.',
+    usageArea: 'Dachplanung und Bauphysik.',
+    group: 'Architektur',
+    tooltip: { title: 'Dach', body: 'Dach aus Kontur oder Dachform erzeugen.', usage: 'Einsatzbereich: Dachplanung und Bauphysik.' },
   },
   {
     id: 'decke',
@@ -92,6 +122,12 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     shortcut: 'K',
     bauteilKind: 'ceiling',
     helpText: 'Geschossdecke aus dem Grundriss aufsetzen (Treppen werden ausgespart) — Etagen-Basis.',
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'slab' war dasselbe Werkzeug.
+    meaning: 'Massive oder mehrschichtige Decke erzeugen.',
+    usageArea: 'Architektur, Statik, Heizlast.',
+    group: 'Architektur',
+    tooltip: { title: 'Decke / Bodenplatte', body: 'Massive oder mehrschichtige Decke erzeugen.', usage: 'Einsatzbereich: Architektur, Statik, Heizlast.' },
   },
   {
     id: 'treppe',
@@ -104,6 +140,12 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     shortcut: 'R',
     bauteilKind: 'stair',
     helpText: 'Treppe setzen — zwei Klicks: Lauflinie Anfang→Ende (DIN 18065).',
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'stairs' war dasselbe Werkzeug.
+    meaning: 'Treppe zwischen Ebenen parametrisch erzeugen.',
+    usageArea: 'Erschließung und Schnittplanung.',
+    group: 'Architektur',
+    tooltip: { title: 'Treppe', body: 'Treppe zwischen Ebenen parametrisch erzeugen.', usage: 'Einsatzbereich: Erschließung und Schnittplanung.' },
   },
 
   // --- Globale Aktionen (§6): keine Zeichenwerkzeuge, aber Teil der Registry, damit die
@@ -125,6 +167,12 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
       { type: 'object-state', operator: 'not-equals', value: 'locked', grund: 'Ein gesperrtes Objekt kann nicht gelöscht werden.' },
       { type: 'project-state', operator: 'not-equals', value: 'readonly', grund: 'Der Plan ist schreibgeschützt.' },
     ],
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'delete' war dasselbe Werkzeug.
+    meaning: 'Auswahl nach Abhängigkeitsprüfung entfernen.',
+    usageArea: 'Alle bearbeitbaren Objekte.',
+    group: 'Bearbeiten',
+    tooltip: { title: 'Löschen', body: 'Auswahl nach Abhängigkeitsprüfung entfernen.', usage: 'Einsatzbereich: Alle bearbeitbaren Objekte.' },
   },
   {
     id: 'duplizieren',
@@ -141,6 +189,12 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     activationRules: [
       { type: 'project-state', operator: 'not-equals', value: 'readonly', grund: 'Der Plan ist schreibgeschützt.' },
     ],
+    // I2/AUF-31: Metadaten aus dem Werkzeugpaket zusammengeführt (Weg 1) — additiv,
+    //   kein Bestandsfeld geändert. Das Paket-Werkzeug 'duplicate' war dasselbe Werkzeug.
+    meaning: 'Sofortige Kopie am aktuellen Ort erzeugen.',
+    usageArea: 'Fenster, Möbel, technische Objekte.',
+    group: 'Bearbeiten',
+    tooltip: { title: 'Duplizieren', body: 'Sofortige Kopie am aktuellen Ort erzeugen.', usage: 'Einsatzbereich: Fenster, Möbel, technische Objekte.' },
   },
 ];
 

@@ -23,11 +23,11 @@ import { TOOL_KATALOG } from '../app/tools/toolCatalog';
 import { faehigkeitenNach, doppelteIds } from '../app/tools/faehigkeiten';
 
 // --- 1) Vollständigkeit ---------------------------------------------------------------------
-test('jede Registry- und Katalog-id hat genau eine Regel (9 + 110 = 119, keine Dublette)', () => {
+test('jede Registry- und Katalog-id hat genau eine Regel (9 + 101 = 110, keine Dublette)', () => {
   // I2: der Katalog ist seit dem Tausch das 110er-Fachpaket (vorher 54 InDesign-Einträge).
   assert.equal(TOOL_DEFINITIONS.length, 9);
-  assert.equal(TOOL_KATALOG.length, 110);
-  assert.equal(TOOL_PRESENTATION_RULES.length, 119);
+  assert.equal(TOOL_KATALOG.length, 101);
+  assert.equal(TOOL_PRESENTATION_RULES.length, 110);
 
   const ids = TOOL_PRESENTATION_RULES.map((r) => r.toolId);
   assert.equal(new Set(ids).size, ids.length, 'keine doppelte toolId');
@@ -38,14 +38,14 @@ test('jede Registry- und Katalog-id hat genau eine Regel (9 + 110 = 119, keine D
   assert.deepEqual(regelloseWerkzeuge(), [], 'kein Werkzeug ohne Zone');
 });
 
-test('Zonen nach I2: 7 fix · 2 kontext · 0 weitere · 110 versteckt', () => {
+test('Zonen nach I2/AUF-31: 7 fix · 2 kontext · 0 weitere · 101 versteckt', () => {
   assert.equal(zoneTools('fix').length, 7);
   assert.equal(zoneTools('kontext').length, 2);
   // DER Punkt von AUF-28: `weitere` ist LEER. Vorher standen dort 15 Werkzeuge, die die Navi
   // anzeigte, ohne dass ein Klick etwas tat — falsche Versprechen. Die neuen 110 versprechen
   // nichts, solange I3 sie nicht einordnet.
   assert.equal(zoneTools('weitere').length, 0, 'kein Werkzeug ohne Handler in der sichtbaren Zone');
-  assert.equal(zoneTools('versteckt').length, 110);
+  assert.equal(zoneTools('versteckt').length, 101);
 });
 
 // --- 2) Keine verwaisten Regeln (+ Rot-Gegenprobe) -------------------------------------------
@@ -99,20 +99,21 @@ test('die DTP-Reste sind aus den Regeln verschwunden — nicht nur versteckt', (
     assert.ok(!alle.includes(id), `${id} ist ein DTP-Rest und darf in keiner Zone mehr auftauchen`);
   }
   const versteckt = zoneTools('versteckt').map((t) => t.id);
-  assert.equal(versteckt.length, 110);
+  assert.equal(versteckt.length, 101);
   // kein Datenverlust: der Katalog trägt sie weiterhin
   for (const id of versteckt) {
     assert.ok(TOOL_KATALOG.some((t) => t.id === id), `${id} bleibt als Katalog-Eintrag erhalten`);
   }
 });
 
-test('Registry-Vorrang: verschiedene ids werden nicht vereinheitlicht (auswahl ≠ select)', () => {
-  // Das deutsche Registry-Werkzeug und das gleichbedeutende Paket-Werkzeug bleiben getrennt —
-  // Yamas Entscheid „alles deutsch, keine Umbenennung" (14e6346) gilt für die Registry-ids.
+test('AUF-31: gleichbedeutende Werkzeuge sind zusammengeführt, nicht doppelt geführt', () => {
+  // Vorher: `auswahl` (Registry) und `select` (Paket) waren zwei Einträge für dasselbe Werkzeug.
+  // Nach Weg 1 gibt es je EINE Regel — in der Registry, mit den Metadaten des Pakets.
   assert.equal(praesentation('auswahl')?.herkunft, 'registry');
-  assert.equal(praesentation('select')?.herkunft, 'katalog');
+  assert.equal(praesentation('select'), undefined, 'die englische Dublette ist verschwunden');
   assert.equal(praesentation('auswahl')?.zone, 'fix');
-  assert.equal(praesentation('select')?.zone, 'versteckt');
+  // ein echtes Paket-Werkzeug bleibt Katalog-Herkunft
+  assert.equal(praesentation('raum')?.herkunft, 'katalog');
 });
 
 // --- 5) Regressionsanker: die Navi verhält sich unverändert ------------------------------------

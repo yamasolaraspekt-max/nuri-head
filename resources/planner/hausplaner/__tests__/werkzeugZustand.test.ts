@@ -52,13 +52,13 @@ test('system schlägt angeheftet — Pflicht bleibt Pflicht', () => {
 });
 
 test('angeheftet schlägt empfohlen — die eigene Entscheidung vor dem Vorschlag', () => {
-  const wall = katalogTool('wall')!;
-  const k: ZustandKontext = { ...leer(), angeheftet: new Set(['wall']), empfohlen: new Set(['wall']) };
+  const wall = katalogTool('raum')!;
+  const k: ZustandKontext = { ...leer(), angeheftet: new Set(['raum']), empfohlen: new Set(['raum']) };
   assert.equal(werkzeugAnzeige(wall, k), 'angeheftet');
 });
 
 test('ohne alles: weitere — im Überlauf, über die Befehlspalette erreichbar', () => {
-  const room = katalogTool('room')!;
+  const room = katalogTool('gaube')!;
   assert.equal(werkzeugAnzeige(room, leer()), 'weitere');
 });
 
@@ -70,14 +70,16 @@ test('Pflichtwerkzeuge lassen sich nicht anheften — ein Stern ohne Wirkung wä
 });
 
 test('Paket-Werkzeuge sind anheftbar — canPin kommt aus dem Paket, nicht aus einer Annahme', () => {
-  assert.equal(darfAngeheftetWerden('room'), true);
+  assert.equal(darfAngeheftetWerden('gaube'), true);
   const mitFlag = TOOL_PRESENTATION_RULES.filter((r) => r.anheftbar === true).length;
-  assert.equal(mitFlag, 110, 'alle 110 Paket-Regeln tragen das Flag aus dem Paket');
+  assert.equal(mitFlag, 101, 'alle 101 Paket-Regeln tragen das Flag aus dem Paket');
 });
 
 test('die fünf primary-Werkzeuge des Pakets sind Pflichtwerkzeuge', () => {
   const primary = TOOL_PRESENTATION_RULES.filter((r) => r.prioritaet === 'primary');
-  assert.equal(primary.length, 5, 'gemessen am Paket: 5 primary, 105 secondary');
+  // Nach AUF-31 sind drei der fünf primary-Werkzeuge in die Registry zusammengeführt
+  // (Auswahl, Wand, …) — sie sind dort ohnehin Pflicht. Übrig: 2 im Katalog.
+  assert.equal(primary.length, 2, 'gemessen nach der Zusammenführung');
   for (const r of primary) assert.equal(istPflichtwerkzeug(r.toolId), true);
 });
 
