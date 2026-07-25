@@ -13,7 +13,6 @@
  * Regel: geometry/*-Engines werden NUR referenziert/aufgerufen, nie geändert (Byte-Treue).
  */
 import { TOOL_DEFINITIONS } from './toolRegistry';
-import { zoneTools } from './toolPresentation';
 
 export type FaehigkeitGruppe =
   | 'dach-zimmerei' | 'tga-heizung' | 'energie-pv' | 'sanitaer' | 'kueche'
@@ -88,20 +87,13 @@ const engineFaehigkeiten: Faehigkeit[] = [
   { id: 'engine-schifter', label: 'Schifter-Liste', gruppe: 'dach-zimmerei', art: 'engine', zustand: 'in_entwicklung', funktion: 'Schiftsparren klassifizieren + Stückliste', eingang: 'Fläche (u/v)', ausgang: 'SchifterSparren[]', engineModul: 'geometry/schifterListe', engineExport: 'klassifiziereSchifter' },
 ];
 
-// --- 3) CAD-Teilmenge aus dem InDesign-Katalog (remappt, DTP raus) -------------------------------
-// A1: Die Kuratierung steht nicht mehr hier als lokale Liste, sondern in `toolPresentation.ts`
-// (Zone 'weitere') — EINE Kuratierungs-Wahrheit statt zweier Stellen. Bewusst NUR Transform/
-// Ausrichten/Navigation; literale DTP-Tools liegen dort in Zone 'versteckt' (Produkt-Scope).
-// zustand 'in_entwicklung' (Handler folgt A2/A3).
-const werkzeugKatalogFaehigkeiten: Faehigkeit[] = zoneTools('weitere')
-  .map((t) => ({
-    id: `cad-${t.id}`,
-    label: t.label,
-    gruppe: 'werkzeuge' as const,
-    art: t.art,
-    zustand: 'in_entwicklung' as const,
-    funktion: t.helpText,
-  }));
+// --- 3) Werkzeug-Katalog: seit I4 NICHT mehr hier -----------------------------------------------
+// Bis I2 spiegelte die Fähigkeiten-Navi eine Teilmenge des Werkzeug-Katalogs als `cad-*`-Einträge.
+// Das waren anklickbare Zeilen ohne Handler — falsche Versprechen (AUF-28). Seit I4 stehen die 110
+// Werkzeuge dort, wo sie hingehören: in den Kategorie-Gruppen der oberen Werkzeugleiste
+// (`dashboard/werkzeugGruppen.ts`). Die Navi führt wieder nur das, was sie meint — Fachbereiche und
+// Rechen-Engines. EINE Wahrheit je Sachverhalt, und keine Zeile, die etwas verspricht.
+const werkzeugKatalogFaehigkeiten: Faehigkeit[] = [];
 
 /** DIE eine Fähigkeiten-Liste — Navi rendert ausschließlich hieraus. */
 export const FAEHIGKEITEN: readonly Faehigkeit[] = [

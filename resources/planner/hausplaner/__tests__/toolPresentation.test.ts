@@ -38,14 +38,14 @@ test('jede Registry- und Katalog-id hat genau eine Regel (9 + 101 = 110, keine D
   assert.deepEqual(regelloseWerkzeuge(), [], 'kein Werkzeug ohne Zone');
 });
 
-test('Zonen nach I2/AUF-31: 7 fix · 2 kontext · 0 weitere · 101 versteckt', () => {
+test('Zonen nach I4: 7 fix · 2 kontext · 101 weitere · 0 versteckt', () => {
   assert.equal(zoneTools('fix').length, 7);
   assert.equal(zoneTools('kontext').length, 2);
-  // DER Punkt von AUF-28: `weitere` ist LEER. Vorher standen dort 15 Werkzeuge, die die Navi
-  // anzeigte, ohne dass ein Klick etwas tat — falsche Versprechen. Die neuen 110 versprechen
-  // nichts, solange I3 sie nicht einordnet.
-  assert.equal(zoneTools('weitere').length, 0, 'kein Werkzeug ohne Handler in der sichtbaren Zone');
-  assert.equal(zoneTools('versteckt').length, 101);
+  // I4: alle Fach-Werkzeuge sind über ihre Kategorie-Gruppe erreichbar, also nicht mehr
+  // `versteckt`. Die Zone sagt „über den Überlauf erreichbar" — sie flutet die linke Leiste NICHT;
+  // dort stehen weiter nur `fix` und persönlich Angeheftetes.
+  assert.equal(zoneTools('weitere').length, 101);
+  assert.equal(zoneTools('versteckt').length, 0, 'kein Werkzeug bleibt unerreichbar');
 });
 
 // --- 2) Keine verwaisten Regeln (+ Rot-Gegenprobe) -------------------------------------------
@@ -60,7 +60,7 @@ test('GEGENPROBE: eine erfundene id in einer lokalen Regel-Kopie wird als verwai
   ];
   assert.deepEqual(verwaisteRegelnIn(kopie), ['gibt-es-nicht']);
   // und sie taucht NICHT in der Zone auf (auslassen statt werfen)
-  assert.equal(zoneToolsIn(kopie, 'weitere').length, 0);
+  assert.equal(zoneToolsIn(kopie, 'weitere').length, 101);
 });
 
 // --- 3) Invariante Fix-Zone (+ Rot-Gegenprobe) -----------------------------------------------
@@ -98,10 +98,10 @@ test('die DTP-Reste sind aus den Regeln verschwunden — nicht nur versteckt', (
   ]) {
     assert.ok(!alle.includes(id), `${id} ist ein DTP-Rest und darf in keiner Zone mehr auftauchen`);
   }
-  const versteckt = zoneTools('versteckt').map((t) => t.id);
-  assert.equal(versteckt.length, 101);
-  // kein Datenverlust: der Katalog trägt sie weiterhin
-  for (const id of versteckt) {
+  const erreichbar = zoneTools('weitere').map((t) => t.id);
+  assert.equal(erreichbar.length, 101);
+  // kein Datenverlust: jedes erreichbare Werkzeug steht auch im Katalog
+  for (const id of erreichbar) {
     assert.ok(TOOL_KATALOG.some((t) => t.id === id), `${id} bleibt als Katalog-Eintrag erhalten`);
   }
 });

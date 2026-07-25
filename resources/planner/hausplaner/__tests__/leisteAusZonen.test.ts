@@ -43,8 +43,14 @@ test('Leiste == Fix-Zone: dieselben ids in derselben Reihenfolge wie die alte Re
 // --- 2) Es gibt nur noch EINE zuständige Stelle (Abnahmekriterium 5) ---------------------------
 test('die Leiste liest zoneTools, nicht mehr werkzeugTools', () => {
   assert.doesNotMatch(appQuelle, /werkzeugTools\(\)/, 'werkzeugTools darf in der App nicht mehr vorkommen');
+  // Seit I4 zwei Aufrufe: die Fix-Zone selbst und die Rail (fix + persönlich Angeheftetes).
+  // Beide stehen in einem useMemo — der Punkt von P9 war der Render-Pfad, nicht die Anzahl.
   const treffer = appQuelle.match(/zoneTools\(/g) ?? [];
-  assert.equal(treffer.length, 1, 'genau eine Aufrufstelle');
+  assert.equal(treffer.length, 2, 'Fix-Zone und Rail-Ableitung');
+  for (const m of appQuelle.matchAll(/zoneTools\('fix'\)/g)) {
+    const davor = appQuelle.slice(Math.max(0, m.index - 200), m.index);
+    assert.match(davor, /useMemo/, 'jeder Aufruf gehört in ein useMemo, nicht in den JSX-Ausdruck');
+  }
 });
 
 // --- 3) §8.2 / P9: memoisiert am Aufrufort, KEIN Modul-Cache ----------------------------------

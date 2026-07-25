@@ -27,6 +27,9 @@ import { palettenEintraege, PALETTE_LEER } from './dashboard/palette';
 import { usePlannerUiStore } from './state/uiState';
 import { toolFuerShortcut, toolNach } from './tools/toolRegistry';
 import { zoneTools } from './tools/toolPresentation';
+import { WERKZEUG_GRUPPEN } from './dashboard/werkzeugGruppen';
+import { WerkzeugGruppenMenue } from './dashboard/WerkzeugGruppenMenue';
+import { ladeAngeheftet, speichereAngeheftet, umschalten } from './state/angeheftet';
 import { resolveToolState } from './tools/activation';
 import { baueAktivierungsKontext } from './tools/toolContext';
 import type { ObjectType, ViewType } from './tools/toolTypes';
@@ -234,6 +237,15 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   /** Dashboard v2.2: aktiver Panel-Reiter. Bewusst LOKAL, kein Store-Feld — der Wert hat genau
    *  einen Leser; ob Panelzustand in den UI-State gehört, ist eine v4-Frage (F1). */
   const [aktiverTab, setAktiverTab] = useState<PanelTabId>('allgemein');
+  /** I4: persoenlich angeheftete Werkzeuge (★). Liegt in localStorage, NIE im Szenendokument —
+   *  eine Vorliebe des Bedieners ist keine Eigenschaft des Gebaeudes. */
+  const [angeheftet, setAngeheftet] = useState<Set<string>>(() => ladeAngeheftet());
+  const [offeneGruppe, setOffeneGruppe] = useState<string | null>(null);
+  const heftUm = (id: string): void => {
+    const neu = umschalten(angeheftet, id);
+    setAngeheftet(neu);
+    speichereAngeheftet(neu);
+  };
   /** B4 (Nacharbeit N3): DOM-Referenzen der Reiter, damit die Pfeiltasten den Fokus mitziehen.
    *  Nur Lese-/Fokus-Zugriff — kein Zustand, kein zweiter Auswahl-Weg neben `aktiverTab`. */
   const reiterRefs = useRef<Partial<Record<PanelTabId, HTMLButtonElement | null>>>({});
@@ -273,6 +285,14 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * über 9 Registry-Einträge — `onMouseMove` rendert in Mausbewegungs-Frequenz.
    */
   const leistenWerkzeuge = useMemo(() => zoneTools('fix'), []);
+  /** I4: die linke Leiste = Pflichtwerkzeuge + persoenlich Angeheftetes. Bewusst NICHT die 110 —
+   *  eine Leiste mit 110 Eintraegen ist keine Leiste mehr. */
+  const railWerkzeuge = useMemo(() => {
+    const fix = zoneTools('fix');
+    const feste = new Set(fix.map((w) => w.id));
+    const zusatz = WERKZEUG_GRUPPEN.flatMap((g) => g.werkzeuge).filter((w) => angeheftet.has(w.id) && !feste.has(w.id));
+    return [...fix, ...zusatz];
+  }, [angeheftet]);
   const werkzeugKontext = useMemo(
     () =>
       baueAktivierungsKontext({
@@ -943,6 +963,17 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         <OpBtn title="Bemaßung — Maßkette am Grundriss anlegen" icon="bemassung" geplant />
         <OpBtn title="Als PNG-Bild exportieren — aktuelle 2D-Ansicht herunterladen" icon="export" onClick={exportPng} />
         <OpBtn title="Als PDF-Planblatt exportieren" icon="pdf" geplant />
+        {opSep()}
+        {/* I4: die 22 Kategorie-Gruppen des Werkzeugpakets. Sie fuellen die vorhandene Leiste,
+            statt eine zweite zu bauen — Yamas Entwurf zeigt genau diese Struktur. */}
+        <WerkzeugGruppenMenue
+          offen={offeneGruppe}
+          setOffen={setOffeneGruppe}
+          kontext={werkzeugKontext}
+          aktivId={werkzeug}
+          angeheftet={angeheftet}
+          onAnheften={heftUm}
+        />
         <span style={{ fontSize: 12, color: FARBEN.gedaempft, marginLeft: 8, fontVariantNumeric: 'tabular-nums' }}>Zoom {(zoom * 100).toFixed(0)} %</span>
       </div>
 
@@ -970,7 +1001,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               Regeln); sie stimmten nur zufällig überein. Jetzt ist es eine Wahrheit: wer ein Werkzeug
               aus der Leiste nehmen will, ändert eine Regel in `toolPresentation.ts`.
               Aktivierung bleibt `resolveToolState` — kein zweiter Filter. */}
-          {leistenWerkzeuge.map((tool) => {
+          {railWerkzeuge.map((tool) => {
             const zustand = resolveToolState(tool, werkzeugKontext);
             const aktiv = werkzeug === tool.id;
             return (
