@@ -1324,12 +1324,14 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         </div>
         <DreiDBereich sichtbar={modus !== '2d'} />
         {/* Rechtes Eigenschaften-Panel (immer sichtbar; Dach-Parameter oder Kontext) */}
-        <div style={{ width: 268, flex: '0 0 auto', background: T.surface, borderLeft: `1px solid ${T.hair}`, padding: 14, overflowY: 'auto', fontSize: 12.5, color: FARBEN.text }}>
+        {/* AUF-26/B3: `overflowWrap` + `boxSizing` — Text bricht um, statt im Wort abgeschnitten zu
+            werden. Ein Hinweis, der bei „…brauch" endet, ist kein Hinweis. */}
+        <div style={{ width: 268, flex: '0 0 auto', background: T.surface, borderLeft: `1px solid ${T.hair}`, padding: 14, overflowY: 'auto', overflowWrap: 'anywhere', boxSizing: 'border-box', fontSize: 12.5, color: FARBEN.text }}>
           <div style={{ fontWeight: 800, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '.04em', color: FARBEN.gedaempft, marginBottom: 8 }}>Eigenschaften</div>
           {/* Dashboard v2.2 (§20 / UI-5): Reiter aus PANEL_TABS (Daten, nicht Markup). Aktiver Reiter
               ist an Schriftschnitt UND Unterstrich erkennbar, nicht nur farblich (WCAG 1.4.1).
               Pfeiltasten links/rechts wechseln; `allgemein` zeigt den unveränderten Panelinhalt. */}
-          <div role="tablist" aria-label="Eigenschaften-Bereiche" style={{ display: 'flex', gap: 2, borderBottom: `1px solid ${T.hair}`, marginBottom: 12 }}>
+          <div role="tablist" aria-label="Eigenschaften-Bereiche" style={{ display: 'flex', flexWrap: 'wrap', gap: 2, borderBottom: `1px solid ${T.hair}`, marginBottom: 12 }}>
             {PANEL_TABS.map((tab, i) => {
               const aktivT = tab.id === aktiverTab;
               return (
@@ -1696,9 +1698,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           ) : (
             <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>
               <div style={{ fontWeight: 700, color: FARBEN.text, marginBottom: 6 }}>Grundriss spiegeln</div>
-              <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
-                <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={() => spiegeleGrundriss('vertikal')} disabled={waende.length === 0}>↔ Links/Rechts</button>
-                <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={() => spiegeleGrundriss('horizontal')} disabled={waende.length === 0}>↕ Oben/Unten</button>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
+                <button type="button" style={{ ...knopf(false), flex: '1 1 108px' }} onClick={() => spiegeleGrundriss('vertikal')} disabled={waende.length === 0}>↔ Links/Rechts</button>
+                <button type="button" style={{ ...knopf(false), flex: '1 1 108px' }} onClick={() => spiegeleGrundriss('horizontal')} disabled={waende.length === 0}>↕ Oben/Unten</button>
               </div>
               <div style={{ fontSize: 11.5, marginBottom: 10 }}>Objekt anklicken (Auswahl-Werkzeug) = markieren; dann ziehen zum Bewegen, oder Duplizieren/Löschen.</div>
               <div style={{ fontSize: 12 }}>Werkzeug: <strong style={{ color: FARBEN.text }}>{werkzeug}</strong></div>

@@ -47,7 +47,9 @@ export function FaehigkeitenNavi(
                     color: klickbar ? T.ink : T.muted,
                   }}
                 >
-                  <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.label}</span>
+                  {/* AUF-26/B4: umbrechen statt kappen. „Horizont…", „Sparren-…" sind informationslos; zwei
+                      Zeilen kosten weniger als ein unlesbarer Eintrag. Der `title` der Zeile bleibt. */}
+                  <span style={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere', whiteSpace: 'normal', lineHeight: 1.25 }}>{f.label}</span>
                   <ZustandBadge zustand={f.zustand} />
                 </button>
               );
