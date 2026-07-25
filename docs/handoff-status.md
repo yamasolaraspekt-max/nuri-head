@@ -2042,3 +2042,40 @@ anderen Instanz gebaut — vier Dateien lagen dazu im Baum, ich bin ihnen ausgew
 dieselbe Datei; er wird **einzeln** gezogen, nicht hier mitgebaut.
 
 **Ballbesitz → Evaluator.**
+
+## ⇒ PLANNER — AUF-24 kollidiert mit dem AUF-1-Sperrbereich (Generator, gemessen, nicht begonnen)
+Ich habe AUF-24 (die 9 Registry-IDs auf Englisch) **nicht gezogen und nicht begonnen**. Er ist in der
+vorliegenden Form nicht ausführbar, ohne eine der beiden geltenden Regeln zu brechen. Gemessen an
+HEAD `d2c52b2`, Hash vor == nach.
+
+**Der Befund:**
+- Die Entscheidung `entscheidung-id-sprache-werkzeuge.md` nennt die betroffenen Bereiche selbst:
+  „Registry, Aktivierung, **Zonen-Kuratierung**, Commands, Fixtures und Tests". Zonen-Kuratierung =
+  `app/tools/toolPresentation.ts`.
+- Dieselbe Datei ist **ausdrücklich gesperrt**: `generator-auftrag-dashboard-v2-nacharbeit.md:60` —
+  *„`app/tools/toolPresentation.ts` — AUF-1-Sperrbereich, unverändert gesperrt."* AUF-1 steht
+  weiterhin auf `OFFEN` (frische Evaluator-Instanz, kein Votum).
+- **Umfang in der gesperrten Datei:** alle neun IDs kommen dort als `toolId` vor, je **1×** —
+  `auswahl · wand · fenster · tuer · dach · decke · treppe · loeschen · duplizieren`.
+
+**Warum ein Teil-Umbau keine Option ist:** Benenne ich die Registry um und lasse die gesperrte Datei
+stehen, liefert `verwaisteRegeln()` neun alte IDs und `regelloseWerkzeuge()` neun neue. Beide
+A1-Invarianten (`toolPresentation.test.ts:37` und `:49`) prüfen auf **leer** — die Suite ginge rot,
+und `zoneTools('fix')` wäre leer. Rot stehen lassen ist keine Lieferung.
+
+**Eine Beobachtung, die den Knoten vielleicht löst — Entscheidung liegt beim Planner, nicht bei mir:**
+AUF-1 misst **den Commit `c0ffe31`**, nicht den Arbeitsbaum. Die bisherigen Evaluator-Instanzen haben
+genau so gearbeitet (Wegwerf-Worktrees auf `3229866` und `c0ffe31`). Ein Commit ist unveränderlich;
+eine heutige Umbenennung in HEAD entwertet die Messgrundlage von AUF-1 also **nicht**. Wenn das der
+Zweck der Sperre war, ist sie hier zu streng.
+
+**Drei Wege, ich empfehle den zweiten:**
+1. AUF-24 wartet auf das AUF-1-Votum. Sicher, aber die Kette steht — AUF-21/I2 hängt daran.
+2. **Der Planner hebt die Sperre für genau diesen Umbau auf** und hält im Ledger fest, dass AUF-1
+   gegen `c0ffe31` misst und davon unberührt bleibt. Dann ziehe ich AUF-24 sofort und vollständig.
+3. AUF-24 wird auf die Registry beschränkt und die Zonen-Kuratierung zieht später nach. **Davon rate
+   ich ab:** dazwischen ist die Suite rot, und „später" ist genau der Moment, in dem es vergessen wird.
+
+**Tafel:** Ich habe AUF-24 von `OFFEN` auf `GESPERRT` gesetzt — mit dem Sperrgrund in der Zeile, damit
+nicht die nächste Instanz in dieselbe Wand läuft. Das ist Schadensvermeidung, keine Planungs-
+entscheidung; der Planner dreht es mit einem Handgriff zurück, sobald Weg 2 oder 3 gewählt ist.
