@@ -207,6 +207,32 @@ Route `/admin/hausplaner/studio?fixture=decke-treppe` → **Expertenmodus**, ger
 **Urteil: FREIGABE.** Auswahl-Logik rein/getestet, Modi mutationsfest, Store additiv ohne
 zweite Wahrheit, Selektion sichtbar am echten Datensatz. Nicht-Bauten sind AUF-35b, kein Mangel.
 
+## AUF-21 / I1 - 110 Werkzeug-Icons ablegen (7bbf9ff) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 7bbf9ff gemessen, dann Auftragstext gelesen.
+**Klasse: Vorarbeit** (reine Assets; sichtbar erst, wenn der Katalog/Adapter sie referenziert
+= I2, bereits FREIGABE, + Build). I1 allein aendert nichts am Schirm -> keine Sichtprobe fuer I1.
+
+- **Bilanz (git show --diff-filter=A 7bbf9ff):** 110 Icon-SVG + _sprite.svg nach
+  public/hausplaner/icons/tools/ ; 3 Referenz-Docs nach docs/planner
+  (tool-registry-paket.json 1761 Z, werkzeug-galerie.html, werkzeug-inventar.md 223 Z).
+- **Kein Code (Auftrag: 'reine Assets, kein Code'):** Liste der Nicht-Asset/Doc-Dateien im
+  Commit ist **leer** - keine .ts/.tsx/.php/.blade beruehrt. Bestaetigt.
+- **Icons echt (Gegen-Beweis gegen leere Platzhalter):** Stichprobe align/bath/door/dormer
+  je 370-393 Bytes, valides '<svg xmlns=...>'. Nicht 0-Byte, nicht leer.
+- **Baum heute:** weiterhin 110 Icons - der spaetere EN->DE-Rename (I4/AUF-31) ist
+  verlustfrei (110 -> 110).
+
+**Korrektur an mir selbst (Beweis gilt auch gegen mich):** mein erster Zaehl-Grep lief auf
+`git show --stat` und zaehlte 106 - `--stat` kuerzt lange Pfade mit '...', mein auf den vollen
+Pfad verankertes Muster uebersah die 4 langnamigen Dateien (approve-detection, distribution-board,
+...). `--diff-filter=A --name-only` ist die belastbare Quelle: **110**. Dieselbe Fehlerklasse wie
+frueher head-Abschnitt / TAP-Reporter - im Votum offengelegt statt ueberspielt.
+
+**Urteil: FREIGABE.** 110 Assets korrekt platziert, kein Code, Icons real, Zahl selbst-korrigiert.
+Damit ist das Icon-Paket AUF-21 komplett belegt: I1 (Assets) + I2/I3/I4 (Katalog/Anheften/Zonen)
+alle FREIGABE.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -228,6 +254,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-37    91d9592  build 0 ; committeter Bundle == frischer Build (byte-identisch) ; Sichtprobe 1371+375: AUF-27 3 Reiter, AUF-34 5 Bereiche kein Ueberlauf/Umbruch
   AUF-36    d106445  tsc 0 / schema 0 / test 853/853 ; Mutation Grund-verfaelscht = 1 rot ; Bundle eigener Rebuild 368f2d7 ; Sichtprobe Grund-Text rendert
   AUF-35a   35fbfde  tsc 0 / schema 0 / test 874/874 ; Store +31 nur Auswahl-UI-State (kein SceneDocument) ; Mutation shift add->replace = 1 rot ; Bundle 4dce1cc ; Sichtprobe Klick-Treppe -> Panel 'Treppe'
+  I1        7bbf9ff  diff-filter=A: 110 Icon-SVG + _sprite + 3 Referenz-Docs ; kein Code (Nicht-Asset-Liste leer) ; Stichprobe 370-393 B valide SVG ; Selbstkorrektur 106(--stat gekuerzt)->110
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
