@@ -791,6 +791,43 @@ haengt am Ort statt an einem toten Grund, schweigt wenn nichts entsperrt, und ae
 (73/53/28). Der Arbeitsbereich ist als Anlass sauber widerlegt statt erzwungen. Mutationsfest; am
 Schirm einmal sichtbar und nach Auswahl weg. Schliesst die AUF-45-Rueckgabe.
 
+## AUF-60 - Insel liest die Rechte des Nutzers (e0d1144, Bundle 416aeb2) - NACHBESSERN (blockierende Blade-Regression)
+
+**Reihenfolge:** erst blind gegen e0d1144 gemessen (/tmp-Auszug + echter Blade-Compile + Browser),
+dann Generator-Bericht.
+**Klasse: sichtbar** (Route objekt/{id}). **Erst-committet-dann-Bundle-Regel diesmal eingehalten**
+(e0d1144 Code -> 416aeb2 Bundle daraus). *(Zwischenstand hatte ich geflaggt: Bundle vor Quelle; behoben.)*
+
+### Was gut ist - die Rechte-Logik (TS)
+- **rechte.ts liest statt setzt:** leseRechte(roh) - fehlt/leer das Attribut => LEERE Liste = Minimum
+  (rechte.ts:31), NICHT Maximum. Genau das Planner-Kernkriterium. Split am Leerraum (ein Recht traegt
+  selbst ein Komma: 'Hausplaner,add'). 45 Werkzeuge am Bearbeiten-Recht, 8 am Import-Recht - aus dem
+  Nutzer, nicht aus dem Quelltext.
+- **TS-Gates:** tsc 0 . test **1008/1008, 0 skip**. 15 rechte-Subtests (K5 fehlt=Minimum, K4 nirgends
+  ein Recht selbst ermittelt, K3 import keine Aktion, App SETZT kein Recht mehr, main.tsx dieselbe Naht
+  wie speichern-URL, kein Modell-Store/Route/Rechtemodell beruehrt).
+
+### Warum trotzdem NICHT FREIGABE - die Blade-Regression (blockierend, reproduzierbar)
+- **e0d1144 hat objekt.blade.php einen `@php ... @endphp`-BLOCK hinzugefuegt** (Z.97-103). Gemessen:
+  vor AUF-60 (7b18ed4) = 0 Block-`@endphp`, e0d1144 = 1. Zeile 62 traegt bereits ein **inline**
+  `@php(...)` ohne `@endphp`; Blades Rohblock-Extraktion `@php(.*?)@endphp` paart das `@endphp` (Z.103)
+  mit jenem inline-`@php(` (Z.62) - alles dazwischen (Formular, @csrf, {{...}}) wird roher PHP-Code.
+- **Reproduzierbarer Beleg (Arbeitsbaum unberuehrt):** HEAD-Blade durch Laravels echten BladeCompiler
+  -> `php -l` = **'Parse error: syntax error, unexpected token "class", line 53'**. objekt/203 wuerde
+  im committeten Stand 500en. Zur Gegenprobe: die Arbeitsbaum-Version kompiliert **sauber**.
+- **Die TS-Gates fingen es NICHT** (kein Blade-Compile im Gate) - der Browser/Compile faengt es. Das
+  ist dieselbe Luecke wie AUF-36/47, hier mit Route-500 statt Anzeige-Luege.
+- **Aktuell nur maskiert:** objekt/203 rendert live, WEIL die App aus dem Arbeitsbaum serviert und dort
+  der **uncommittete** AUF-64-Fix liegt (objekt.blade.php `M` = inline-`@php`, `BladeKompiliertTest.php`
+  `??`). Im ausgelieferten HEAD-Commit ist die Route kaputt.
+
+**Urteil: NACHBESSERN.** Die Rechte-Logik ist FREIGABE-reif und trifft das Kernkriterium (fehlend =
+Minimum). Aber der Commit e0d1144 bricht eine live-Route (objekt/{id}) per PHP-ParseError - kein gruen,
+solange eine Regression offen ist. **Zum Schliessen:** AUF-64 committen (die inline-`@php`-Korrektur
+UND `BladeKompiliertTest.php`, damit das Gate den Bruch kuenftig faengt), dann belegen, dass der
+COMMITTETE objekt/203 kompiliert. Dann ist AUF-60 als Ganzes abnahmefaehig. Die Regression ist bereits
+als AUF-64 DRINGEND erfasst - mein Votum bestaetigt sie unabhaengig und mit reproduzierbarem Fall.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -827,6 +864,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-49    f83cf11  Auszug: schema 0 / test 982/982 0-skip / tsc 0 / build ok ; ConfigWizard role=dialog/aria-modal (war 0), istAusloeser Enter+Space, eine Regel 3 Dialoge ; 11 Subtests ; Gegen-Beweis % anzahl weg = 3 rot ; Browser activeElement: Fokus rein 'Zurueck zum Planer', 6x Tab+ShiftTab bleiben im Dialog, Escape schliesst, Fokus zurueck ausserhalb ; 44px zurueckgegeben (Ziel 55x26 <44, nicht angefasst)
   AUF-46    1ee27a4  Auszug: schema 0 / test 987/987 0-skip / tsc 0 / build ok ; auto-fit/minmax+flexWrap statt 3 fester Breiten ; 5 Subtests ; Gegen-Beweis feste Spalte wieder = 2 rot ; Sichtprobe docOverflowX: 390 Start 0/guided 0, 375 Start 0/guided 0, Expertenmodus 390 = 0 (Kopfzeile-flexWrap schliesst meinen 375-Befund) ; Rueckgabe Leinwand 0px@390 bestaetigt (Usability, kein Ueberlauf)
   AUF-57    7cac7cb  Auszug: schema 0 / test 993/993 0-skip / tsc 0 / build ok ; hartkod. 'Kein aktives Geschoss'=0, WegweiserOrt geschoss|schiene, reuse resolveToolState, Aktivierung 73/53/28 ; Arbeitsbereich widerlegt (-26/-26/-22/-19) ; 20 Subtests ; Gegen-Beweis Ort vertauscht = 1 rot ; Sichtprobe: Wegweiser 1x in Schiene (N=18 live gemessen, nicht hartkod. 25), nach Auswahl weg
+  AUF-60    e0d1144  NACHBESSERN: Rechte-Logik solide (tsc 0/test 1008/1008/15 Subtests, K5 fehlt=Minimum, K4 liest-nicht-setzt) ABER objekt.blade.php @php...@endphp-Block (0->1 seit e0d1144) bricht Blade: HEAD-Compile -> php -l 'Parse error line 53', objekt/203 500 im committeten Stand ; Arbeitsbaum kompiliert sauber (AUF-64-Fix uncommittet: blade M + BladeKompiliertTest ??) ; Gate fing es nicht (kein Blade-Compile)
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
