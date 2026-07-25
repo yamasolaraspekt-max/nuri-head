@@ -1,5 +1,6 @@
 /** Geführte Planung — WizardBase (v9). Stepper + Fokus-Schrittkarte + Aufgabe-Panel + Navigation. */
 import React from 'react';
+import { istAusloeser } from './dashboard/dialogFokus';
 import { T, STATUS_LABEL, type SchrittStatus, type Fahrschritt } from './studioDaten';
 import type { KonfigArt } from './ConfigWizard';
 import { Ikon } from './studioUi';
@@ -43,7 +44,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
             <React.Fragment key={st.titel}>
               <div
                 role="button" tabIndex={0} onClick={() => setSchritt(i)}
-                onKeyDown={(e) => { if (e.key === 'Enter') setSchritt(i); }}
+                onKeyDown={(e) => { if (istAusloeser(e)) setSchritt(i); }}
                 style={{ display: 'flex', alignItems: 'center', gap: 10, flex: '0 0 auto', cursor: 'pointer', opacity: aktiv ? 1 : 0.6 }}
               >
                 <span style={{ width: 30, height: 30, borderRadius: '50%', background: rn, color: rnInk, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 13, boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>{sym}</span>

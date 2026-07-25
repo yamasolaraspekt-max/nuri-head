@@ -6,6 +6,7 @@
  * ins Gebäudemodell (Command) bleibt die nächste Scheibe.
  */
 import React from 'react';
+import { istAusloeser, useDialogFokus } from './dashboard/dialogFokus';
 import { T } from './studioDaten';
 import { Ikon } from './studioUi';
 import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, type OeffnungsBauart } from '../geometry/oeffnungsBauarten';
@@ -50,15 +51,28 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
   const iconUrl = (k: Kachel): string => `${ICON_BASE}icons/${ordner}/${k.datei}`;
   const letzter = schritt === SCHRITTE.length - 1;
 
+  const huelle = React.useRef<HTMLDivElement>(null);
+  const titelId = React.useId();
+  useDialogFokus(huelle, onClose);
+
   const feld: React.CSSProperties = { width: '100%', border: `1px solid ${T.hair}`, borderRadius: 10, padding: '10px 12px', font: 'inherit', fontSize: 13.5, boxSizing: 'border-box' };
   const feldLabel: React.CSSProperties = { display: 'block', fontSize: 12.5, color: T.muted, marginBottom: 5 };
 
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(24,34,38,.30)', backdropFilter: 'blur(2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 90, padding: 24 }}>
-      <div onClick={(e) => e.stopPropagation()} style={{ width: 'min(900px, 100%)', maxHeight: '92%', background: T.surface, borderRadius: 24, boxShadow: '0 10px 34px rgba(28,50,55,.18)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      {/* AUF-49: Diese Fläche trug bis hierher KEINE Dialogsemantik — kein `role`, kein
+          `aria-modal`, keinen Escape-Handler. Der Fokus blieb beim Öffnen auf dem Knopf dahinter,
+          der erste Tab-Sprung landete HINTER dem Dialog. Jetzt dieselbe Regel wie in den
+          Fachflächen: `dashboard/dialogFokus.ts`, einmal gebaut. */}
+      <div
+        ref={huelle}
+        role="dialog" aria-modal="true" aria-labelledby={titelId}
+        onClick={(e) => e.stopPropagation()}
+        style={{ width: 'min(900px, 100%)', maxHeight: '92%', background: T.surface, borderRadius: 24, boxShadow: '0 10px 34px rgba(28,50,55,.18)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+      >
         {/* Kopf */}
         <div style={{ padding: '22px 26px 14px', textAlign: 'center', position: 'relative' }}>
-          <div style={{ fontSize: 20, fontWeight: 800 }}>{titel}</div>
+          <div id={titelId} style={{ fontSize: 20, fontWeight: 800 }}>{titel}</div>
           <div style={{ color: T.muted, fontSize: 13.5, marginTop: 3 }}>{standalone ? 'Autark — kein Gebäude nötig. Live-Vorschau bei jedem Schritt.' : 'Im Projekt — schreibt als Command ins Gebäudemodell.'}</div>
           <button type="button" onClick={onClose} aria-label="Schließen" style={{ position: 'absolute', top: 18, right: 20, width: 34, height: 34, borderRadius: 10, border: 0, background: T.surface2, color: T.muted, cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
             <Ikon inhalt='<path d="M6 6l12 12M18 6L6 18"/>' size={16} />
@@ -69,7 +83,7 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px 26px 18px', flexWrap: 'wrap' }}>
           {SCHRITTE.map((n, i) => (
             <React.Fragment key={n}>
-              <div role="button" tabIndex={0} onClick={() => setSchritt(i)} onKeyDown={(e) => { if (e.key === 'Enter') setSchritt(i); }} style={{ display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer' }}>
+              <div role="button" tabIndex={0} onClick={() => setSchritt(i)} onKeyDown={(e) => { if (istAusloeser(e)) setSchritt(i); }} style={{ display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer' }}>
                 <span style={{ width: 26, height: 26, borderRadius: '50%', background: i === schritt ? T.accent : (i < schritt ? T.ok : T.surface2), color: (i === schritt || i < schritt) ? T.surface : T.muted, display: 'grid', placeItems: 'center', fontSize: 12, fontWeight: 700, boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>{i < schritt ? '✓' : i + 1}</span>
                 {i === schritt && <span style={{ fontSize: 12, color: T.ink, fontWeight: 600 }}>{n}</span>}
               </div>

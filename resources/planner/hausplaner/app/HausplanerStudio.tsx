@@ -5,6 +5,7 @@
  * Additiv: die HausplanerApp bleibt unverändert (nur ein optionales Flag blendet ihre Markenzeile aus).
  */
 import React from 'react';
+import { istAusloeser } from './dashboard/dialogFokus';
 import { HausplanerApp } from './HausplanerApp';
 import { StartView } from './StartView';
 import { GuidedView } from './GuidedView';
@@ -135,7 +136,7 @@ export function HausplanerStudio(): React.ReactElement {
             <div style={{ flex: 1, overflow: 'auto', padding: '4px 10px 12px' }}>
               {!navZu && <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.faint, margin: '14px 10px 5px' }}>Projekt</div>}
               {PROJ.map((p) => (
-                <div key={p.name} role="button" tabIndex={0} onClick={() => gehGeführt(1)} onKeyDown={(e) => { if (e.key === 'Enter') gehGeführt(1); }}
+                <div key={p.name} role="button" tabIndex={0} onClick={() => gehGeführt(1)} onKeyDown={(e) => { if (istAusloeser(e)) gehGeführt(1); }}
                   style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '9px 11px', borderRadius: 11, cursor: 'pointer', color: '#3f464e', fontSize: 14, justifyContent: navZu ? 'center' : 'flex-start' }}>
                   <span style={{ color: T.muted, display: 'grid', placeItems: 'center' }}><Ikon inhalt={p.icon} size={19} /></span>{!navZu && <span>{p.name}</span>}
                 </div>
@@ -145,7 +146,7 @@ export function HausplanerStudio(): React.ReactElement {
                 <div key={f.name}>
                   <div role="button" tabIndex={0}
                     onClick={() => (f.sub ? setOffeneHubs((o) => ({ ...o, [f.name]: !o[f.name] })) : öffneKonfigurator(f.name))}
-                    onKeyDown={(e) => { if (e.key === 'Enter') (f.sub ? setOffeneHubs((o) => ({ ...o, [f.name]: !o[f.name] })) : öffneKonfigurator(f.name)); }}
+                    onKeyDown={(e) => { if (istAusloeser(e)) (f.sub ? setOffeneHubs((o) => ({ ...o, [f.name]: !o[f.name] })) : öffneKonfigurator(f.name)); }}
                     style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '9px 11px', borderRadius: 11, cursor: 'pointer', color: '#3f464e', fontSize: 14, justifyContent: navZu ? 'center' : 'flex-start' }}>
                     <span style={{ color: T.muted, display: 'grid', placeItems: 'center' }}><Ikon inhalt={f.icon} size={19} /></span>
                     {!navZu && <span>{f.name}</span>}
@@ -154,7 +155,7 @@ export function HausplanerStudio(): React.ReactElement {
                   {!navZu && f.sub && offeneHubs[f.name] && (
                     <div style={{ display: 'flex', flexDirection: 'column', margin: '2px 0 6px 22px', paddingLeft: 11, borderLeft: `1px solid ${T.hair}` }}>
                       {f.sub.map((sub) => (
-                        <div key={sub[0]} role="button" tabIndex={0} onClick={() => öffneKonfigurator(sub[0], sub[1], 'navi')} onKeyDown={(e) => { if (e.key === 'Enter') öffneKonfigurator(sub[0], sub[1], 'navi'); }}
+                        <div key={sub[0]} role="button" tabIndex={0} onClick={() => öffneKonfigurator(sub[0], sub[1], 'navi')} onKeyDown={(e) => { if (istAusloeser(e)) öffneKonfigurator(sub[0], sub[1], 'navi'); }}
                           style={{ padding: '7px 10px', borderRadius: 9, fontSize: 13, color: T.muted, cursor: 'pointer' }}>{sub[0]}</div>
                       ))}
                     </div>

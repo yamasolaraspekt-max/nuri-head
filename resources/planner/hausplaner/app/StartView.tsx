@@ -1,5 +1,6 @@
 /** Start-Launcher „Was möchtest du planen?" (v9). Projekt-Karten + Fachplaner-Hubs + Zuletzt. */
 import React from 'react';
+import { istAusloeser } from './dashboard/dialogFokus';
 import { T, FACH, PROJ, ZULETZT, type FachHub } from './studioDaten';
 import { Ikon } from './studioUi';
 
@@ -24,7 +25,7 @@ function Karte({ ico, titel, desc, onClick }: { ico: string; titel: string; desc
   return (
     <div
       role="button" tabIndex={0} onClick={onClick}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onClick(); }}
+      onKeyDown={(e) => { if (istAusloeser(e)) onClick(); }}
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
       style={{ ...cardBase, transform: hover ? 'translateY(-3px)' : 'none', boxShadow: hover ? '0 10px 34px rgba(28,50,55,.10)' : cardBase.boxShadow, borderColor: hover ? '#dcebe9' : 'transparent', transition: 'transform .14s, box-shadow .14s, border-color .14s' }}
     >
@@ -52,7 +53,7 @@ function HubKarte({ f, onKonfigurator }: { f: FachHub; onKonfigurator: Props['on
             <span
               key={s[0]} role="button" tabIndex={0}
               onClick={() => onKonfigurator(s[0], s[1])}
-              onKeyDown={(e) => { if (e.key === 'Enter') onKonfigurator(s[0], s[1]); }}
+              onKeyDown={(e) => { if (istAusloeser(e)) onKonfigurator(s[0], s[1]); }}
               style={{ fontSize: 12.5, fontWeight: 600, color: T.accentInk, background: T.accentSoft, borderRadius: 999, padding: '6px 13px', cursor: 'pointer' }}
             >{s[0]}</span>
           ))}
@@ -76,7 +77,7 @@ export function StartView({ onGuided, onKonfigurator }: Props): React.ReactEleme
             <div
               key={z.name} role="button" tabIndex={0}
               onClick={() => (z.win ? onKonfigurator('Fenster', true) : onGuided(z.goto))}
-              onKeyDown={(e) => { if (e.key === 'Enter') (z.win ? onKonfigurator('Fenster', true) : onGuided(z.goto)); }}
+              onKeyDown={(e) => { if (istAusloeser(e)) (z.win ? onKonfigurator('Fenster', true) : onGuided(z.goto)); }}
               style={{ display: 'flex', alignItems: 'center', gap: 12, background: T.surface, borderRadius: 14, padding: '12px 16px', boxShadow: '0 1px 2px rgba(28,40,48,.05)', border: '1px solid transparent', cursor: 'pointer', minWidth: 230 }}
             >
               <span style={{ width: 38, height: 38, borderRadius: 11, background: T.accentSoft, color: T.accentInk, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}><Ikon inhalt={z.icon} size={20} /></span>

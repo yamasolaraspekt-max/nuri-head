@@ -21,6 +21,7 @@
 import React from 'react';
 import { T } from './studioDaten';
 import { Ikon, ZustandBadge, type StudioZustand } from './studioUi';
+import { useDialogFokus } from './dashboard/dialogFokus';
 import {
   GRUND_DEAKTIVIERT,
   HINWEIS_ENGINE,
@@ -119,13 +120,14 @@ export function FlaechenHuelle({
   children: React.ReactNode;
 }): React.ReactElement {
   const titelId = React.useId();
+  const huelle = React.useRef<HTMLDivElement>(null);
 
-  // Escape schließt — derselbe Rückweg wie die Schaltfläche, nicht die Startseite (Kante 2).
-  React.useEffect(() => {
-    const beiTaste = (e: KeyboardEvent): void => { if (e.key === 'Escape') onZurueck(); };
-    window.addEventListener('keydown', beiTaste);
-    return () => window.removeEventListener('keydown', beiTaste);
-  }, [onZurueck]);
+  /**
+   * AUF-49: Escape **und** Fokus. Vorher schloss Escape zwar, aber der Fokus blieb beim Öffnen
+   * draußen stehen, lief beim Tabben hinter den Dialog und kehrte beim Schließen nicht zurück.
+   * Die Regel steht einmal in `dashboard/dialogFokus.ts` und gilt für alle Dialoge.
+   */
+  useDialogFokus(huelle, onZurueck);
 
   return (
     <div
@@ -136,6 +138,7 @@ export function FlaechenHuelle({
       }}
     >
       <div
+        ref={huelle}
         role="dialog" aria-modal="true" aria-labelledby={titelId}
         onClick={(e) => e.stopPropagation()}
         style={{
