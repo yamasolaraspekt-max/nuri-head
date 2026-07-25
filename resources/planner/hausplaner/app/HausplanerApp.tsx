@@ -27,6 +27,7 @@ import { EngineFlaeche } from './EngineFlaeche';
 import { enginePanel } from './dashboard/enginePanels';
 import { faehigkeitNach } from './tools/faehigkeiten';
 import { GeschossFlaeche } from './dashboard/GeschossFlaeche';
+import { panAus, type Pan } from './dashboard/pan';
 import { naechsterSchritt, wegweiserSatz } from './tools/naechsterSchritt';
 import { TOOL_DEFINITIONS } from './tools/toolRegistry';
 import { TOOL_KATALOG } from './tools/toolCatalog';
@@ -330,6 +331,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const [wandStart, setWandStart] = useState<Punkt | null>(null);
   const [cursor, setCursor] = useState<Punkt>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(0.12); // px pro mm
+  /**
+   * AUF-51: die Lage der Zeichenfläche. `null` = nie verschoben ⇒ die Standardlage folgt weiter der
+   * Fensterhöhe. Vorher stand die Position als gesteuerter Wert OHNE Zustand im JSX — jedes Rendern
+   * (und `onMouseMove` rendert bei jeder Bewegung) setzte den Verschub zurück.
+   */
+  const [pan, setPan] = useState<Pan | null>(null);
   const [rasterAn, setRasterAn] = useState(true);
   const stageRef = useRef<Konva.Stage | null>(null);
 
@@ -1286,8 +1293,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           }}
           scaleX={zoom}
           scaleY={-zoom}
-          x={80}
-          y={hoehe - 80}
+          {...panAus(pan, hoehe)}
+          // AUF-51: WÄHREND des Ziehens mitschreiben, nicht erst am Ende. `onMouseMove` rendert in
+          // Mausbewegungs-Frequenz; ohne `onDragMove` setzte das laufende Rendern die Bühne auf den
+          // alten Wert zurück, und der Verschub ruckelte gegen den Zeiger.
+          onDragMove={(e) => { if (e.target === e.currentTarget) setPan({ x: e.target.x(), y: e.target.y() }); }}
+          onDragEnd={(e) => { if (e.target === e.currentTarget) setPan({ x: e.target.x(), y: e.target.y() }); }}
         >
           <Layer>
             {rasterAn && rasterLinien}
