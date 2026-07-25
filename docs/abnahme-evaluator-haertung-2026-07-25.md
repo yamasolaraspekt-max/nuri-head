@@ -516,6 +516,47 @@ Pan-Zustand geloest statt die Funktion zu entfernen; die drei Feinheiten (null-S
 Herkunftspruefung) sind begruendet und testverriegelt. Mutationsfest, und der bleibende Verschub ist
 am Schirm belegt - genau der Teil, den ein Test ohne DOM/Konva nicht zeigen kann.
 
+## AUF-47 - Speichern-Knopf + beide Statusanzeigen ehrlich (79bf47c, Bundle fca2fc6) - FREIGABE MIT AUFLAGE
+
+**Reihenfolge:** erst blind gegen 79bf47c gemessen (/tmp-Auszug), dann Generator-Bericht.
+**Klasse: sichtbar** - Sichtprobe Teil der Abnahme; visuelle Sichtprobe hier als AUFLAGE offen
+(Browser-Tab-Gruppe dieser Session geschlossen - 'No tab available'; nicht sichtgeprueft, nicht als
+gruen gefuehrt).
+
+- **Umfang (git show --name-status):** 4 Dateien - NEU dashboard/speicherAnzeige.ts +
+  __tests__/speicherAnzeige.test.ts ; M HausplanerApp.tsx, HausplanerStudio.tsx.
+  store/domain/geometry/renderers/public: null.
+- **Der Widerspruch (am Code bestaetigt):** Testflaeche setzt keine data-speichern-url, save() no-op -
+  trotzdem gruener Knopf + Plakette 'Gespeichert - Rev. 1' neben 'Testflaeche - wird NICHT gespeichert'.
+  Zwei Aussagen waren zu einer verschmolzen: 'nichts zu speichern' (speicherStatus) vs 'kann hier gar
+  nicht speichern' (speichernUrl, wurde nie gelesen).
+- **Fix (Grep + Test):** speicherAnzeige(status, kannSpeichern) ist rein - liefert Text/Gewichtung/
+  Knopf-Sperre/Tooltip; kannSpeichern===false schlaegt jeden Zustand (Z.43 'if (!kannSpeichern)' ->
+  'Testflaeche - wird nicht gespeichert'), 'Gespeichert' nur bei kannSpeichern (Z.66). **Keine Farbwerte
+  in der Regel** (Grep leer; Oberflaeche bildet Gewichtung auf Token ab).
+- **save()-No-Op unangetastet:** der Diff von HausplanerApp.tsx beruehrt KEINE save()-Zeile (git show
+  grep leer); Test 'der save()-No-Op bleibt unangetastet - er war gewollt' verriegelt es.
+- **Beide Anzeigen lesen dieselbe Regel:** Test 'auch die Studio-Kopfzeile liest die Regel - nicht ihre
+  eigene Tabelle' (die zweite Anzeige, die Yama gesehen hatte); '- Rev. N' haengt an der Faehigkeit.
+- **Gates im Auszug:** schema 0 . test **948/948 pass, 0 skip** (938->948) . tsc 0 . build ok.
+  10 speicherAnzeige-Subtests (u.a. 'Gespeichert steht NIE auf einer Flaeche die nicht speichern kann',
+  'Knopf wirklich sperrbar - vorher KEIN disabled', 'App liest Faehigkeit aus dem Store, raet nicht').
+- **Gegen-Beweis (/tmp-Kopie):** Faehigkeitspruefung ausgehebelt ('!kannSpeichern' -> 'false') ->
+  **2 rot** ('Plakette sagt Wahrheit in JEDEM Zustand' + 'Gespeichert steht NIE auf nicht-speichernder
+  Flaeche') (8/2). Deckt Generator 'Faehigkeitspruefung ausgehebelt = 2 rot'.
+- **Bundle-Beleg (statt Pixel):** das servierte Bundle fca2fc6 traegt die Strings 'Testflaeche' und
+  'wird nicht gespeichert' (grep) - die ehrliche Anzeige ist im Artefakt ausgeliefert.
+
+- **AUFLAGE (visuelle Sichtprobe):** beide Anzeigen am Schirm pruefen (Studio-Kopfzeile + Knopf/Plakette):
+  auf der Testflaeche kein 'Gespeichert', keine 'Rev. N', Knopf gesperrt mit Grund im Tooltip. In dieser
+  Sitzung nicht ausfuehrbar (Browser weg) - hole ich nach, sobald ein Tab verfuegbar ist. Ich habe die
+  ALTE Luege ('Gespeichert - Rev. 1' auf der Testflaeche) in jedem frueheren Screenshot dieser Sitzung
+  gesehen; Code + Test + Bundle-String belegen die Behebung, nur die Pixel-Bestaetigung fehlt.
+
+**Urteil: FREIGABE MIT AUFLAGE.** Der Widerspruch ist an der richtigen Stelle geloest (Anzeige ehrlich,
+save()-No-Op bewusst unberuehrt), beide Anzeigen lesen eine Regel, mutationsfest, im Bundle ausgeliefert.
+Einzige offene Auflage: die visuelle Sichtprobe, in dieser Umgebung nicht fahrbar - nachzuholen.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -545,6 +586,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-43    43a287f  Auszug: schema 0 / test 916/916 0-skip / tsc 0 / build ok ; Guardrails Undo/2D-3D nicht in Flaeche, kein Command/Schema, geschossStapel rein, setActiveLevel einzig, Name einmal ; 16 Subtests ; Gegen-Beweis Sortierung 3 rot + aktiv-Flip 5 rot ; Sichtprobe 1440 Knopf 'EG +-0 1 von 1' + Stapel-Flaeche ; 375 docOvf 298 bleibt (AUF-46, nicht AUF-43)
   AUF-45    b9861d7  Auszug: schema 0 / test 930/930 0-skip / tsc 0 / build ok ; naechsterSchritt liest nur resolveToolState (K3/K4), keine Sperre gelockert (73/53/28) ; 14 Subtests ; Gegen-Beweis Filter >0->>=0 = 1 rot, Gesten-Regex brechen = 2 rot (B8) ; Sichtprobe 1440: Markieren 'braucht keine Optionen' kein in-Entwicklung-Badge ; Wegweiser dormant (Geschoss immer da = Planner-Spec AUF-57)
   AUF-51    74fdcb4  Auszug: schema 0 / test 938/938 0-skip / tsc 0 / build ok ; Pan-Zustand null-Start + onDragMove + Herkunftspruefung (HausplanerApp 339/1300/1301) ; 8 Subtests ; Gegen-Beweis panAus ignoriert Wert = 1 rot, Herkunft ===->!== = 2 rot ; Sichtprobe 1440: Drag ~250/120 -> Inhalt wandert, 2 Klicks danach -> Verschub BLEIBT (kein Snap-back)
+  AUF-47    79bf47c  Auszug: schema 0 / test 948/948 0-skip / tsc 0 / build ok ; speicherAnzeige rein, kannSpeichern===false schlaegt alles, save() unberuehrt (Diff leer) ; 10 Subtests ; Gegen-Beweis Faehigkeit ausgehebelt = 2 rot ; Bundle fca2fc6 traegt 'wird nicht gespeichert' ; visuelle Sichtprobe AUFLAGE (Browser weg, nicht sichtgeprueft)
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
