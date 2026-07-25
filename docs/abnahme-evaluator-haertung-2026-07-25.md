@@ -828,6 +828,37 @@ UND `BladeKompiliertTest.php`, damit das Gate den Bruch kuenftig faengt), dann b
 COMMITTETE objekt/203 kompiliert. Dann ist AUF-60 als Ganzes abnahmefaehig. Die Regression ist bereits
 als AUF-64 DRINGEND erfasst - mein Votum bestaetigt sie unabhaengig und mit reproduzierbarem Fall.
 
+## AUF-64 - objekt/203 laedt wieder (Rechte-Zeile inline) (1b2b26d) - FREIGABE + schliesst AUF-60
+
+**Reihenfolge:** erst blind gegen 1b2b26d gemessen (echter Blade-Compile + phpunit + TS-Gates), dann Bericht.
+**Klasse: sichtbar** (Route objekt/{id}). Fix meiner AUF-60-NACHBESSERN-Regression.
+
+- **Umfang (git show --name-status):** 3 Dateien - M objekt.blade.php, M rechte.test.ts,
+  A tests/Feature/Hausplaner/BladeKompiliertTest.php. Kein Bundle noetig (kein Insel-TS am Renderpfad).
+- **Entscheidend - der committete objekt/203 kompiliert wieder:** 1b2b26d-Blade hat nur noch **inline**
+  `@php(...)` (Z.62 + Z.109), **keinen `@php...@endphp`-Block**. Durch Laravels echten BladeCompiler
+  + `php -l` -> **'No syntax errors detected'**. Genau der Fall, den ich gegen HEAD als 'Parse error
+  line 53' bewiesen hatte - jetzt grün. objekt/203 500t nicht mehr.
+- **AUF-60-Funktion erhalten:** die Rechte-Zeile lebt weiter (`$hpRechte` Z.109 inline, `data-rechte`
+  Z.112); rechte.test.ts an die inline-Form angepasst und um den Nullsafe-Guard ergaenzt
+  (`user()?->` - ohne Anmeldung null -> leere Rechte = Minimum, staerkt K5).
+- **Regressionssperre mit ZAEHNEN (BladeKompiliertTest, 5 Tests grün, phpunit gegen ticket_testing):**
+  kompiliert ALLE Blades via `Blade::compileString` + `token_get_all(TOKEN_PARSE)` (kein Unterprozess,
+  kein DB). Enthaelt eine **Selbst-Zahn-Probe** 'der bekannte fehlerfall wird wirklich erkannt'
+  (`expectException(ParseError)` auf die gemischte Form) + 'objekt blade mischt die beiden php formen
+  nicht'. Die Luecke, die 1007 Tests offen liessen (keiner fasste ein Blade an), ist geschlossen.
+- **TS-Gates:** tsc 0 . test **1009/1009, 0 skip**.
+
+**Urteil AUF-64: FREIGABE.** Der committete objekt/203 kompiliert sauber (reproduzierbar belegt),
+die AUF-60-Rechtefunktion ist intakt, und die Regressionssperre faengt genau diesen Bruch kuenftig
+(mit eigener Zahn-Probe). Weg-Abweichung (inline statt Controller) ist vom Planner freigegeben,
+Controller-Umzug ist AUF-69.
+
+### AUF-60 (e0d1144) - Upgrade NACHBESSERN -> FREIGABE
+Die blockierende Blade-Regression, die mein AUF-60-Votum (e4f2a25) offenhielt, ist durch AUF-64
+(1b2b26d) behoben und mit einem verzahnten Kompilier-Test verriegelt. Die Rechte-Logik war bereits
+FREIGABE-reif (fehlt=Minimum K5, liest-statt-setzt K4, 1008/1008). Beides zusammen: **AUF-60 FREIGABE.**
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -865,6 +896,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-46    1ee27a4  Auszug: schema 0 / test 987/987 0-skip / tsc 0 / build ok ; auto-fit/minmax+flexWrap statt 3 fester Breiten ; 5 Subtests ; Gegen-Beweis feste Spalte wieder = 2 rot ; Sichtprobe docOverflowX: 390 Start 0/guided 0, 375 Start 0/guided 0, Expertenmodus 390 = 0 (Kopfzeile-flexWrap schliesst meinen 375-Befund) ; Rueckgabe Leinwand 0px@390 bestaetigt (Usability, kein Ueberlauf)
   AUF-57    7cac7cb  Auszug: schema 0 / test 993/993 0-skip / tsc 0 / build ok ; hartkod. 'Kein aktives Geschoss'=0, WegweiserOrt geschoss|schiene, reuse resolveToolState, Aktivierung 73/53/28 ; Arbeitsbereich widerlegt (-26/-26/-22/-19) ; 20 Subtests ; Gegen-Beweis Ort vertauscht = 1 rot ; Sichtprobe: Wegweiser 1x in Schiene (N=18 live gemessen, nicht hartkod. 25), nach Auswahl weg
   AUF-60    e0d1144  NACHBESSERN: Rechte-Logik solide (tsc 0/test 1008/1008/15 Subtests, K5 fehlt=Minimum, K4 liest-nicht-setzt) ABER objekt.blade.php @php...@endphp-Block (0->1 seit e0d1144) bricht Blade: HEAD-Compile -> php -l 'Parse error line 53', objekt/203 500 im committeten Stand ; Arbeitsbaum kompiliert sauber (AUF-64-Fix uncommittet: blade M + BladeKompiliertTest ??) ; Gate fing es nicht (kein Blade-Compile)
+  AUF-64    1b2b26d  FREIGABE + schliesst AUF-60: committeter objekt-Blade inline (kein @php-Block), BladeCompiler+php -l 'No syntax errors' (war 'Parse error line 53' gegen HEAD) ; Rechte-Zeile erhalten (hpRechte/data-rechte, Nullsafe) ; BladeKompiliertTest 5 grün mit Selbst-Zahn-Probe (expectException ParseError) ; tsc 0 / test 1009/1009
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
