@@ -1,5 +1,22 @@
 # Stopp-1 — Eintrittsgate zu Phase 1 (EIN Prüfgegenstand)
 
+> **Status: abgeschlossenes Gate-Protokoll (04.07.) — Teil I weiterhin gültig.** Teil A–H ist Historie
+> (Gate geschlossen, Phase-1-Freigabe erteilt, seit `9b4e070` vom 2026-07-04 unverändert). **Teil I**
+> (Ein-Befehl-Re-Check + Cut-over-Kriterium) ist **lebend**: `scripts/wberechnung-mysql-check.sh`
+> existiert und `docs/wberechnung-transplant-vorbereitung-landkarte.md` verweist für den Cut-over-
+> Zeitpunkt ausdrücklich auf I.2.
+>
+> **Nicht verwechseln:** `docs/audit/stopp-1.md` ist ein **anderes** Dokument (paralleles Audit, P0-Liste
+> + Architektur-Urteil). Alle „stopp-1"-Verweise in `docs/audit/**` zeigen dorthin, nicht hierher.
+>
+> **🟡 OFFENER PUNKT AN YAMA (nicht selbst entschieden):** Die Re-Check-Pflicht aus Teil I („bei jeder
+> wberechnung-Änderung neu ziehen") wurde **seit dem 04.07. nicht gezogen** — die Historie in I.1 hat
+> weiterhin genau eine Zeile. Gleichzeitig liegen inzwischen **21 Services in `app/Services/Heizlast/`**
+> in ticket (u. a. `d8d3870` byte-genauer HeizlastRechner-Port, `17da20e` 13 Rechenkerne). Der
+> 271/271-Nachweis ist damit ein drei Wochen alter Schnappschuss einer Lage, die sich bewegt hat.
+> Zu entscheiden: Re-Check neu fahren · oder Teil I als erledigt schließen, weil der Transplant
+> ohnehin läuft · oder Dokument auf den tatsächlichen Transplant-Stand nachziehen.
+
 > **Rolle:** Planer/Überwacher (diese Instanz plant & prüft, die Executor-Instanz führt Code aus).
 > **Zweck:** Alle Phase-0-Ergebnisse in **einem** Dokument bündeln, damit Stopp 1 als **ein**
 > Prüfgegenstand freigegeben werden kann. Phase 1 startet **nicht**, bevor dieses Gate grün ist.
