@@ -8,7 +8,7 @@
  * | ★ | `angeheftet` | persönlich, bleibt sichtbar |
  * | — | `empfohlen`  | vom Wizard empfohlen, temporär im Kontext |
  * | ▶ | `aktiv`      | aktuell gewähltes Werkzeug |
- * | ◌ | `gesperrt`   | angeheftet, aber Voraussetzung fehlt (Grund im Tooltip) |
+ * | ◌ | `gesperrt`   | Voraussetzung fehlt — der Grund steht im Tooltip |
  * | ⋯ | `weitere`    | im Überlauf, per Befehlspalette erreichbar |
  * | ⌂ | `system`     | Pflichtwerkzeug, nicht entfernbar |
  *
@@ -43,7 +43,7 @@ export const ANZEIGE_ZEICHEN: Readonly<Record<WerkzeugAnzeige, string>> = {
 export const ANZEIGE_TEXT: Readonly<Record<WerkzeugAnzeige, string>> = {
   system: 'Pflichtwerkzeug — nicht entfernbar',
   aktiv: 'aktuell gewähltes Werkzeug',
-  gesperrt: 'angeheftet, aber Voraussetzung fehlt',
+  gesperrt: 'Voraussetzung fehlt — Grund im Tooltip',
   angeheftet: 'angeheftet — bleibt sichtbar',
   empfohlen: 'vom Wizard empfohlen — temporär im Kontext',
   weitere: 'im Überlauf — über die Befehlspalette erreichbar',
@@ -65,18 +65,26 @@ export interface ZustandKontext {
  *
  * **Reihenfolge ist bewusst und nicht beliebig:**
  * 1. `aktiv` schlägt alles — was der Nutzer gerade benutzt, muss er sehen.
- * 2. `gesperrt` vor `angeheftet`: ein angehefteter, aber unbenutzbarer Knopf muss den **Grund**
- *    zeigen, nicht den Stern. Genau das meint der Entwurf mit „angeheftet, aber Voraussetzung fehlt".
+ * 2. `gesperrt` schlägt **jeden** anderen Zustand: ein unbenutzbarer Knopf muss den **Grund**
+ *    zeigen, nicht seinen Stern, seine Herkunft oder seine Zone.
  * 3. `system` vor `angeheftet`: ein Pflichtwerkzeug bleibt Pflichtwerkzeug, auch wenn es zusätzlich
  *    angeheftet ist — sonst verspricht der Stern eine Entfernbarkeit, die es nicht gibt.
  * 4. `angeheftet` vor `empfohlen`: die persönliche Entscheidung schlägt den Vorschlag des Wizards.
  * 5. sonst `weitere`.
+ *
+ * **AUF-36 hat hier einen Fehler sichtbar gemacht.** Bis dahin galt `gesperrt` nur für angeheftete
+ * oder Pflichtwerkzeuge; ein Katalog-Werkzeug in der Zone `weitere` fiel trotz fehlender
+ * Voraussetzung auf `weitere` durch — die Zeile las sich „in Entwicklung", obwohl das Werkzeug
+ * gesperrt war. Folgenlos war das nur, solange Katalog-Werkzeuge **nie** gesperrt sein konnten
+ * (keine Aktivierungsregeln). Seit der Funktionsvertrag Vorbedingungen liefert, können sie es —
+ * und die Anzeige log. In der Sichtprobe: „Hydraulischer Abgleich" war ausgegraut und meldete
+ * „in Entwicklung" statt „gesperrt: Dafür muss das Heiznetz verbunden sein."
  */
 export function werkzeugAnzeige(tool: ToolDefinition, k: ZustandKontext): WerkzeugAnzeige {
   if (k.aktivId === tool.id) return 'aktiv';
   const regel = praesentation(tool.id);
   const istSystem = regel?.zone === 'fix' && regel.herkunft === 'registry';
-  if (!k.aktivierung.enabled && (k.angeheftet.has(tool.id) || istSystem)) return 'gesperrt';
+  if (!k.aktivierung.enabled) return 'gesperrt';
   if (istSystem) return 'system';
   if (k.angeheftet.has(tool.id)) return 'angeheftet';
   if (k.empfohlen.has(tool.id)) return 'empfohlen';

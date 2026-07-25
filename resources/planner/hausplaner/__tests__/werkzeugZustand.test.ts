@@ -87,3 +87,28 @@ test('unbekannte id: keine Anheftung, keine Pflicht, kein Wurf', () => {
   assert.equal(darfAngeheftetWerden('gibt-es-nicht'), false);
   assert.equal(istPflichtwerkzeug('gibt-es-nicht'), false);
 });
+
+/**
+ * AUF-36 — der Fall, den es vorher nicht geben konnte und den deshalb kein Test abdeckte:
+ * ein **Katalog**-Werkzeug der Zone `weitere`, das gesperrt ist.
+ *
+ * Bis zum Funktionsvertrag trugen Katalog-Werkzeuge keine Aktivierungsregeln, konnten also nie
+ * gesperrt sein — `gesperrt` galt nur für angeheftete und Pflichtwerkzeuge. Seit sie
+ * Vorbedingungen tragen, fiel ein gesperrtes Werkzeug auf `weitere` durch und die Zeile las sich
+ * „in Entwicklung", obwohl das Icon ausgegraut war. Die Sichtprobe hat es gezeigt
+ * („Hydraulischer Abgleich"), nicht der Test — deshalb steht er jetzt hier.
+ */
+test('AUF-36: ein gesperrtes Katalog-Werkzeug meldet `gesperrt`, nicht `weitere`', () => {
+  const abgleich = katalogTool('hydraulischer-abgleich');
+  assert.ok(abgleich, 'Werkzeug nicht gefunden');
+  const gesperrt = { enabled: false, reason: 'Dafür muss das Heiznetz verbunden sein.' };
+  assert.equal(werkzeugAnzeige(abgleich, { ...leer(), aktivierung: gesperrt }), 'gesperrt');
+  // und erfüllt ist es wieder das, was es ist: ein Werkzeug im Überlauf
+  assert.equal(werkzeugAnzeige(abgleich, { ...leer(), aktivierung: AN }), 'weitere');
+});
+
+test('AUF-36: `gesperrt` schlägt auch `system` — der Grund vor der Herkunft', () => {
+  const wand = toolNach('wand')!;
+  assert.equal(werkzeugAnzeige(wand, { ...leer(), aktivierung: AN }), 'system');
+  assert.equal(werkzeugAnzeige(wand, { ...leer(), aktivierung: AUS }), 'gesperrt');
+});
