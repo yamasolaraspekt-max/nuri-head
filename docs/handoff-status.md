@@ -2414,3 +2414,37 @@ Der Cowork-Generator hat vor dem Abbruch **gemessen** statt geraten. Übergabe a
 
 **Ballbesitz:** AUF-4 und AUF-25 liegen beim **nativen** Generator. Der Cowork-Strang wartet auf
 Sichtprobe-Aufträge.
+
+## ⇒ GENERATOR-BERICHT — AUF-26 (B3/B4) UMGESETZT: `4c9bc04` · Spur B
+Tafel-Posten gezogen (`4f33b36`), umgesetzt, hier gemeldet. **„umgesetzt", nicht „grün".**
+
+**B3 — das Panel kappt keinen Text mehr:**
+- **Reiterzeile** `flexWrap: 'wrap'` — sie bricht um, statt „Historie" abzuschneiden.
+- **Panel-Container** `overflowWrap: 'anywhere'` + `boxSizing: 'border-box'` — der Hinweistext bricht
+  um, statt mitten im Wort zu enden („…brauch", „ein eigener Po").
+- **Spiegel-Schaltflächen** `flexWrap: 'wrap'` + `flex: '1 1 108px'` — „↕ Oben/Unten" rutscht in die
+  zweite Zeile, statt gekappt zu werden.
+
+**B4 — das Fähigkeiten-Label bricht um** statt `ellipsis`/`nowrap`/`overflow:hidden`. „Horizont…",
+„Sparren-…", „Schifter-…" waren informationslos. Der `title` der Zeile bleibt — der Umbruch ersetzt
+ihn nicht, er ergänzt ihn.
+
+**Gate, HEAD vor == nach:** `tsc` **0** · `schema:check` **0** · `test` **759/759 pass, 0 fail**
+(vorher **754**, +5) · `build` **0**.
+**Gegen-Beweis rot gesehen:** `flexWrap` wieder entfernt ⇒ „B3: die Reiterzeile bricht um" rot;
+danach zurückgesetzt, `diff` identisch.
+
+**Zwei eigene Testfehler, offengelegt statt geglättet:**
+1. `[^}]*`-Ausdrücke brechen an `${…}`-Templates ab — drei Tests waren rot, obwohl der Code stimmte.
+   Zeilenweise gemessen statt über `}`-Grenzen.
+2. `findIndex` auf `spiegeleGrundriss('vertikal')` traf den **Icon-Knopf der Werkzeugleiste** statt
+   des Panel-Knopfs — der Aufruf steht **zweimal** in der Datei. Über den Beschriftungstext
+   „↔ Links/Rechts" eindeutig gemacht.
+
+**Was dieser Test NICHT leistet, ausdrücklich:** Er prüft die **Ursache** (die kappenden
+CSS-Eigenschaften), nicht die **Wirkung** (den Schirm). Genau diese Lücke hat B3 aufgedeckt — ein
+Kriterium war grün, der vierte Reiter trotzdem unsichtbar. **Die Sichtprobe in 1440/1024/375 px
+bleibt Pflicht** und ist Sache des messenden Strangs; dieser Test verhindert nur den Rückfall.
+
+**Ballbesitz → Evaluator (Cowork-Strang, misst).** Bitte die drei Pflicht-Viewports am echten
+Rendern prüfen — insbesondere, ob die umgebrochene Reiterzeile bei 375 px noch bedienbar bleibt.
