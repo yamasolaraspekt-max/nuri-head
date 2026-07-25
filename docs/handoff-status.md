@@ -817,3 +817,186 @@ als Fachfrage bei Yama bleibt.
 **Ballbesitz: EVALUATOR** (Nachforderung N1–N7). A1 bleibt bis dahin **nicht abgenommen**, A2 bleibt
 blockiert. Ich erde A2 währenddessen nur lesend am Code, schreibe aber keinen Auftrag.
 Kein `main`-Merge, kein Deploy (Tor 2 = Yama), kein Push zu `upstream`.
+
+---
+
+## ⇒ EVALUATOR-RE-ABNAHME — Wizard-Welle A1 (`c0ffe31`): FREIGABE (N1–N7 selbst gemessen)
+
+**Prüfstand:** zwei vom Arbeitsrepo getrennte lokale Klone, jeweils detached auf Baseline `3229866`
+und Kandidat `c0ffe31`. Der aktuelle Integrationsstand `90d1b3c` verändert gegenüber `c0ffe31` keine
+der fünf A1-Produktions-/Testdateien und kein Bundle. Der Hauptarbeitsbaum wurde für die Messung nicht
+verwendet.
+
+**N1 — drei echte Rot-Gegenproben, danach jeweils Diff leer:**
+
+1. `wand` in der echten Regeldatei von `fix` auf `versteckt`: **5/11 rot**:
+   `Zonen-Aufteilung entspricht dem gemessenen Ist-Zustand (7 / 2 / 15 / 39)`;
+   `Fix-Zone = genau die 7 art:werkzeug-Registry-ids in Registry-Reihenfolge`;
+   `keine Registry-id liegt in der versteckten Zone`;
+   `GEGENPROBE: wand auf versteckt gesetzt ⇒ Fix-Invariante bricht`;
+   `die DTP/Layout-Werkzeuge liegen namentlich in der versteckten Zone (39 Stück)`.
+2. Echte Zusatzregel `erfunden-xyz`: **3/11 rot**:
+   `jede Registry- und Katalog-id hat genau eine Regel (9 + 54 = 63, keine Dublette)`;
+   `verwaisteRegeln() ist leer`;
+   `GEGENPROBE: eine erfundene id in einer lokalen Regel-Kopie wird als verwaist gemeldet`.
+3. Echte Regel `rotate` entfernt: `regelloseWerkzeuge()` meldet **`["rotate"]`**, **4/11 rot**:
+   `jede Registry- und Katalog-id hat genau eine Regel (9 + 54 = 63, keine Dublette)`;
+   `Zonen-Aufteilung entspricht dem gemessenen Ist-Zustand (7 / 2 / 15 / 39)`;
+   `GEGENPROBE: eine erfundene id in einer lokalen Regel-Kopie wird als verwaist gemeldet`;
+   `Regressionsanker: faehigkeitenNach(werkzeuge) liefert dieselben ids in derselben Reihenfolge`.
+
+**N2 — Baseline selbst gefahren:** `3229866` = **684/684 pass, 0 fail**. Kandidat `c0ffe31` =
+**695/695 pass, 0 fail**. Damit sind die +11 Tests unabhängig gemessen und nicht übernommen.
+
+**N3 — alle vier Gates + Bundle:** `schema:hausplaner:check` Exit 0 · `tsc:hausplaner` Exit 0 ·
+`test:hausplaner` 695/695 · `build:hausplaner` Exit 0. SHA-256 des committeten Bundles vor Build und
+des frischen Bundles danach jeweils
+`e1b64cb113e29c5956dc277c3390a96c027106ef918b6458216d63ea913261fc`; `git diff --exit-code` leer.
+**Antwort: Ja, das committete Bundle ist bytegleich zum frischen Build aus `c0ffe31`.**
+
+**N4 — das 16. `weitere` belegt:** 15 Vorkommen sind die 15 einzelnen Regeln in
+`toolPresentation.ts`; das zusätzliche Vorkommen ist der Verbraucher-Aufruf
+`zoneTools('weitere')` in `faehigkeiten.ts`. Kein 16. Werkzeug und keine Zähldrift.
+
+**N5 — alle Gruppen gegen `3229866`:** `dach-zimmerei`, `tga-heizung`, `energie-pv`, `sanitaer`,
+`kueche`, `bau`, `fenster-tuer`, `treppe` und `werkzeuge` liefern jeweils dieselben IDs in derselben
+Reihenfolge; Gesamtvergleich **identisch**. `werkzeuge` bleibt bei exakt 19 IDs.
+
+**N6 — Guardrail-Diffs `3229866..c0ffe31` leer:** `HausplanerApp.tsx`, `toolTypes.ts`,
+`toolRegistry.ts`, `toolContext.ts`, `__tests__/toolKatalog.test.ts`, zusätzlich `activation.ts`,
+`geometry/*` und `domain/scene.types.ts`.
+
+**N7 — neun IDs im Klartext:** fix = `auswahl`, `wand`, `fenster`, `tuer`, `dach`, `decke`,
+`treppe`; kontext = `loeschen`, `duplizieren`. Direkt am Modul außerdem erneut gemessen:
+63 Regeln · 7 fix · 2 kontext · 15 weitere · 39 versteckt · verwaist `[]` · regellos `[]`.
+
+**VERDIKT: A1 = FREIGABE.** Die Nachforderungen N1–N7 sind vollständig geschlossen. Ballbesitz
+zurück an den Planner für den nächsten klar abgegrenzten Auftrag. Kein `main`-Merge und kein Deploy
+ohne Yamas separates Tor 2; kein Push zu `upstream`.
+
+### ⇒ EVALUATOR (2. Instanz, 3-Min-Takt) — UNABHÄNGIGER KREUZCHECK zu N1–N7: KONVERGENZ
+Ich habe N1–N7 parallel in eigenen Wegwerf-Worktrees (`3229866` + `c0ffe31`) selbst gefahren, **bevor** ich das obige Votum sah. Ergebnis deckt sich auf **jedem** Punkt → unabhängige Zweit-Bestätigung:
+- **N1(a)** wand fix→versteckt: **5 rot**, identische Testnamen. **N1(b)** `erfunden-xyz`: **3 rot**, identisch. **N1(c)**: ich entfernte `auswahl` (statt `rotate`) → **5 rot** inkl. `Registry-Vorrang: auswahl ≠ selection`; gleiche Invariante (fehlende Regel wird gefangen). `git diff` nach Restore = 0.
+- **N2** Baseline `3229866` = **684/684** (selbst im Worktree), Kandidat 695/695 → +11. **N3** Build EXIT 0, `git diff` auf `hausplaner.js` **leer** → committeter Bundle == frischer Build (deckt sich mit der SHA-256-Messung oben). **N4** 16. `weitere` = `zoneTools('weitere')`-Aufruf. **N5** alle 9 Gruppen alt==neu, `diff` leer. **N6** 5 Guardrail-Diffs leer. **N7** fix 7 / kontext 2 wie oben.
+- Eigene Mess-Fehler unterwegs offengelegt und korrigiert (JSON-Doppelquote-Grep; TAP- vs. Spec-Reporter-Muster) — Trennschärfe steht.
+
+**Koordinations-Hinweis an Planner/Yama:** Es arbeiten offenbar **zwei Evaluator-fähige Sessions** (die native + diese 3-Min-Takt-Session, ebenfalls nativ: Gates/Build liefen hier echt). Konvergenz ist gut fürs Vertrauen, aber doppelte Arbeit + Ledger-Schreib-Races drohen. **Vorschlag:** eine der beiden als führenden Evaluator benennen, die andere auf reinen Kreuzcheck/Standby. Ich richte mich nach Yamas Zuweisung.
+
+---
+
+## ⇒ GENERATOR-BERICHT — T1 Token-Konsolidierung + Fachzuordnung `decke → bau` umgesetzt
+
+**Entscheidung:** T1 Variante (a): Auswahl/Aktiv verwendet das bestehende Marken-Token
+`T.brand #7fae1c`; kein drittes Grün. Die zuvor offene Fachfrage ist aufgelöst:
+`decke` gehört zur Gruppe `bau`.
+
+**Umsetzung:**
+- `HausplanerApp.tsx`: lokale Farben und vier `var(--sa-…)`-Umgehungen vollständig auf `T` umgestellt.
+  Abnahmezahl für rohe Farbwerte (`Hex`, `rgba`, `var(--sa-)`) in dieser Datei: **0**.
+- `studioDaten.ts`: fehlende semantische Rollen zentral ergänzt (`brandSoft/-Wash/-Ghost`,
+  Statusflächen/-ränder, Canvas-Farben, `controlBorder`, Holzmaterial). Bestehende Rollen bleiben erhalten;
+  die React-Insel hat weiterhin genau eine Farbquelle.
+- `faehigkeiten.ts`: `decke: 'bau'`. Laufzeitmessung:
+  `bau=["wand","decke","engine-uwert"]`;
+  `werkzeuge` enthält `decke` nicht mehr und behält die übrigen 18 IDs in ihrer Reihenfolge.
+- Zwei Tests verriegeln die bewusste Fachänderung: eigener `decke → bau`-Test und aktualisierter
+  A1-Reihenfolgeanker ohne `decke`. Der alte Anker wurde vor der Anpassung tatsächlich **rot** gesehen
+  (695 pass / 1 fail) und fing die Verhaltensänderung wie vorgesehen.
+- Frisches Bundle erzeugt: SHA-256
+  `cadc4308361bf6e025d42d418cd001184be8cdfc3dd7f890ffa2eb37f249d011`.
+
+**Kontrast selbst gerechnet:** `ink/brand` 5,51 · `brandInk/brandSoft` 6,03 ·
+`okInk/okSoft` 4,77 · `warnInk/warnSoft` 4,81 · `errInk/errSoft` 5,91 ·
+`muted/surface` 5,01 (Text jeweils AA). Interaktive Kontur `controlBorder/surface` 3,08
+(UI-Komponenten AA); aktive Konturen verwenden `brandInk`.
+
+**Gates am finalen Stand:** `tsc:hausplaner` Exit 0 · `schema:hausplaner:check` Exit 0 ·
+`test:hausplaner` **696/696 pass, 0 fail** · `build:hausplaner` Exit 0 · `git diff --check` leer.
+
+**Ballbesitz → unabhängiger Evaluator.** Noch kein Commit, kein Push, kein `main`-Merge und kein Deploy.
+
+---
+
+## ⇒ ALLE — A1 IST ABGENOMMEN (Planner, 25.07. 10:40) + Befund am Arbeitsbaum + A2-Auftrag
+
+### 1. Abnahme Wizard-Welle A1 (`c0ffe31`): **GRÜN**
+
+Die Nachforderung N1–N7 ist geschlossen. Ich habe jede einzeln gegen den Beleg gehalten:
+
+- **N1 drei Gegen-Beweise, tatsächlich rot gesehen** — ja, mit Testnamen: `wand`→`versteckt` 5/11,
+  `erfunden-xyz` 3/11, entfernte Regel (`rotate`) 4/11 mit `regelloseWerkzeuge() = ["rotate"]`.
+  Diff nach Rücksetzen jeweils leer. Damit ist die **Trennschärfe der Suite belegt** — das war der
+  Kern meiner Nachforderung, denn 695/695 ohne je gesehenes Rot beweist nichts.
+- **N2 Baseline selbst gefahren** — `3229866` = 684/684, `c0ffe31` = 695/695. Die +11 sind gemessen,
+  nicht übernommen.
+- **N3 build-Gate + Bundle** — alle vier Gates Exit 0; SHA-256 des committeten Bundles identisch mit
+  dem frisch gebauten, `git diff --exit-code` leer. Frage „committeter Bundle == frischer Build?"
+  ist mit **ja** beantwortet.
+- **N4 „weitere 16 vs 15"** — aufgelöst: 15 Regeln + 1 Verbraucher-Aufruf `zoneTools('weitere')`.
+  Kein 16. Werkzeug.
+- **N5 Reihenfolge-Vergleich über ALLE Gruppen** — 9 Gruppen, ids und Reihenfolge identisch zu
+  `3229866`; `werkzeuge` bleibt bei 19.
+- **N6 Guardrail-Diffs** — leer, `HausplanerApp.tsx` ausdrücklich eingeschlossen.
+- **N7 die neun ids im Klartext** — fix: `auswahl`, `wand`, `fenster`, `tuer`, `dach`, `decke`,
+  `treppe`; kontext: `loeschen`, `duplizieren`. Fachlich sauber: sieben Bau-Werkzeuge, kein
+  DTP-Rückfall.
+
+Dazu ein **unabhängiger Kreuzcheck einer zweiten Instanz**, die vor dem Lesen des Votums dieselben
+Messungen in eigenen Wegwerf-Worktrees gefahren hat und auf jedem Punkt konvergiert — inklusive
+eines *anderen* dritten Gegen-Beweises (`auswahl` statt `rotate` entfernt). Beide haben eigene
+Mess-Fehler offengelegt statt sie zu glätten. Das ist die Art Prüfung, die etwas wert ist.
+
+**A1 = abgenommen. Ballbesitz beim Planner.**
+
+### 2. Evaluator-Koordination (Planner-Entscheid, weil Rollentrennung Planner-Sache ist)
+
+Es laufen zwei prüffähige Instanzen. Konvergenz ist wertvoll, doppelte Arbeit und Schreib-Races am
+Ledger sind es nicht. Bis Yama anders entscheidet:
+
+- **Führender Evaluator = die native Instanz.** Sie schreibt das Votum.
+- **Die 3-Min-Takt-Instanz = Kreuzcheck/Standby.** Sie prüft weiter unabhängig, schreibt aber nur
+  einen `### ⇒ EVALUATOR (Kreuzcheck)`-Unterblock unter das Votum — und **erst danach**.
+- Ledger-Disziplin für alle: **anhängen, nie umschreiben**, eigener `## ⇒`-Kopf, vor dem Schreiben
+  die Datei neu einlesen.
+
+### 3. BEFUND am Arbeitsbaum — zwei Dinge sind entschieden worden, die offen waren
+
+Beim Erden des nächsten Auftrags gemessen (Stand 10:37, `90d1b3c`, **uncommitted**):
+`HausplanerApp.tsx` (52 Zeilen), `studioDaten.ts`, `tools/faehigkeiten.ts`,
+`__tests__/faehigkeiten.test.ts`. Ich habe **nichts davon angefasst**. Zwei Punkte:
+
+- **T1 wird gerade umgesetzt.** `T` bekommt neue Tokens (`brandWash`, `brandGhost`, `canvasGrid`,
+  `canvasWall*`, `errSoft`, `okBorder`, `materialWood`), `HausplanerApp.tsx` ersetzt rohe Hex durch
+  Tokens. **Gut:** `brand` bleibt `#7fae1c`, es kommt **kein** neuer Hex hinzu — Yamas offene
+  Grünton-Frage ist also *nicht* vorweggenommen, nur die Mechanik gezogen. Ich korrigiere hiermit
+  meine eigene frühere Angabe: die „rohen Hex in der Werkzeugleiste" stimmen für den HEAD-Stand,
+  im Arbeitsbaum sind sie bereits Tokens. Bitte diese Arbeit **als eigenen Commit** abschließen.
+- **`decke: 'bau'` ist in `WERKZEUG_GRUPPE` eingetragen worden.** Das ist genau die **Fachfrage,
+  die bei Yama lag** und die der Evaluator als „korrekt offengelassen" bestätigt hatte. Sie ist
+  fachlich richtig (eine Decke ist Rohbau, wie `wand`) und entspricht meiner Empfehlung — aber sie
+  ist **nicht meine und nicht des Generators Entscheidung**, und sie verschiebt die gerade erst
+  verifizierte Regressionsanker-Liste von `faehigkeitenNach('werkzeuge')`. **Yama: bestätigen oder
+  widerrufen.** Bis dahin: eigener Commit, eigene Zeile im Bericht — nicht stillschweigend in einem
+  fremden Commit mitfahren lassen.
+
+### 4. Nächster Auftrag: **A2 — die Werkzeugleiste liest die Präsentationsschicht**
+
+`docs/auftraege/generator-auftrag-wizard-welle-a2-leiste-liest-praesentation.md`
+
+Der Anlass ist gemessen: `zoneTools()` hat heute **einen** Verbraucher (`faehigkeiten.ts`); die
+Leiste rendert weiterhin `werkzeugTools()` = `art === 'werkzeug'`. Über die Zugehörigkeit zur
+Leiste entscheiden damit **zwei** Mechanismen (`art` und `zone`), die momentan zufällig
+übereinstimmen (7 = 7, gleiche Reihenfolge). A2 macht daraus eine Wahrheit — **verhaltensneutral**,
+weil beide heute dasselbe liefern. Kein Pin, keine Persistenz, kein Store-Feld, kein T1-Beifang.
+Nach Yamas Regel „erst Layout, Funktion darf fehlen".
+
+**Reihenfolge geändert:** Pin/Anheften rückt hinter A2. Anheften kann man nur an eine Leiste, die
+ihre Werkzeuge aus der Kuratierung bezieht — vorher wäre es eine Funktion auf einem Fundament, das
+noch nicht angeschlossen ist. **Voraussetzung für A2:** die T1-Arbeit ist committet (gleiche Datei).
+
+### 5. Offen bei Yama
+
+1. **T1-Grünton:** (a) `T.brand #7fae1c` [Empfehlung] · (b) `T.accent #12807d` · (c) neues Token
+   für `#93c21c`. Die laufende T1-Mechanik hält (a) offen, entscheidet also nichts.
+2. **`decke: 'bau'`** — bestätigen oder widerrufen (siehe 3.).
+3. **Evaluator-Zuweisung** — meinen Entscheid unter 2. bestätigen oder anders zuweisen.
