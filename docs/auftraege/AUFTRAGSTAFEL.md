@@ -11,6 +11,11 @@ auf der jede Rolle in zehn Sekunden sieht, was sie abholen darf.
 
 ---
 
+**Neue Sitzung?** Zuerst `docs/WIEDEREINSTIEG-HAUSPLANER.md` lesen — eine Seite, die sagt, in
+welcher Reihenfolge nachgesehen wird und was gerade Ballbesitz ist. Dann hierher zurück.
+
+---
+
 ## 0. Die Tafel läuft ohne Verbindung — das ist Absicht
 
 Yamas zweite Beobachtung ist die wichtigere: **der Wächter pausiert, weil die Verbindung fehlt**
@@ -73,7 +78,7 @@ Und `-m` steht **vor** dem `--`, sonst frisst der Pathspec den Text.
 
 | Nr | Auftrag | Rolle | Status | Datei / Beleg |
 |---|---|---|---|---|
-| **AUF-12** | **Dashboard v2 — Flächen des Werkzeug-Dashboards** (v2.1 Kontext-Options-Leiste, v2.2 Panel-Reiter, v2.3 Projektbrowser, v2.4 Prüfungscenter, v2.5 Befehlspalette). **Vorrang vor AUF-11** — Yama, 25.07.: „wir haben dashboard design fest gelegt sollst als erstes fertig gestellt werden v1 usw". Zwei Batches, Batch 1 wird berichtet und abgenommen, bevor Batch 2 beginnt. Ändert den Store **nicht** und liegt damit **außerhalb** des Sperrbereichs von AUF-1 | Generator | `OFFEN` | `generator-auftrag-dashboard-v2-flaechen.md` (Auftrag) + `docs/fahrplan-dashboard-versionen.md` (Fahrplan v1–v6) |
+| **AUF-12** | **Dashboard v2 — Flächen des Werkzeug-Dashboards** (v2.1 Kontext-Options-Leiste, v2.2 Panel-Reiter, v2.3 Projektbrowser, v2.4 Prüfungscenter, v2.5 Befehlspalette). **Vorrang vor AUF-11** — Yama, 25.07.: „wir haben dashboard design fest gelegt sollst als erstes fertig gestellt werden v1 usw". Zwei Batches, Batch 1 wird berichtet und abgenommen, bevor Batch 2 beginnt. Ändert den Store **nicht** und liegt damit **außerhalb** des Sperrbereichs von AUF-1 | Generator | `IN ARBEIT — Generator (nativ), Batch 1` | `generator-auftrag-dashboard-v2-flaechen.md` (Auftrag) + `docs/fahrplan-dashboard-versionen.md` (Fahrplan v1–v6) |
 | **AUF-1** | **A1-Abnahme wiederholen** (Gegenstand `c0ffe31`), unter den zwei neuen Auflagen E1 (erst messen, dann lesen) und E2 (voller Prüfrahmen, nicht nur N1–N7) | Evaluator, **frische Instanz** | `OFFEN` | `evaluator-auftrag-wizard-welle-a1-werkzeug-praesentation.md` + Ledger-Block „ZWEI ERGÄNZUNGEN" (Z. 1103) |
 | **AUF-2** | **T1 + `decke` committen** — die sechs gestagten Dateien als **eigener** Commit mit Pfadangabe | Generator (nativ) | `BERICHTET — wartet auf Evaluator (AUF-3)` | COMMIT-FREIGABE im Ledger (Z. 1006), Dateiliste dort |
 | **AUF-3** | **T1-Abnahme** (Token-Konsolidierung + `decke → bau`) | Evaluator | `OFFEN` — Vorbedingung erfüllt: Hash `9ec3b25` | `evaluator-auftrag-t1-token-konsolidierung-und-decke.md` **inkl. §10** |
