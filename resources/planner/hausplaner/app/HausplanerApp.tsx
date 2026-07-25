@@ -433,25 +433,32 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const wegweiser = useMemo(() => {
     const alle = [...TOOL_DEFINITIONS, ...TOOL_KATALOG];
     const jetzt = alle.map((t) => resolveToolState(t, werkzeugKontext));
-    // Kandidaten sind die Sperrgründe, zu denen es eine benannte Handlung UND eine erfüllbare
-    // Fähigkeit gibt. Der hypothetische Kontext entsteht durch Ergänzen EINES Werts aus der
-    // Tabelle — eine Nachschlage-Operation, keine eigene Regel. Bewertet wird von derselben Engine.
+    // Vorhandene Bauteiltypen — gemessen, nicht erfunden. Ohne Bauteile hat „wähle etwas aus"
+    // keinen Sinn, egal was die Zählung sagt.
+    const typenImPlan = [...new Set(nodes.map((n) => n.type))] as ObjectType[];
+
+    /**
+     * AUF-57: Kandidaten sind die Sperrgründe mit benannter Handlung UND einem Ort. Der
+     * hypothetische Kontext entsteht durch **ein geändertes Feld desselben Kontexts** — eine
+     * Fähigkeit mehr oder eine Auswahl. Das ist eine Nachschlage-Operation, keine zweite Regel;
+     * bewertet wird ausschliesslich von `resolveToolState`.
+     */
     const kandidaten = [...new Set(jetzt.filter((z) => !z.enabled).map((z) => z.reason ?? ''))]
       .map((grund) => ({ grund, h: handlungZuGrund(grund) }))
-      .filter((k) => k.h?.faehigkeit)
+      .filter((k) => k.h?.ort && (k.h.faehigkeit || (k.h.brauchtAuswahl && typenImPlan.length > 0)))
       .map((k) => ({
         grund: k.grund,
         handlung: k.h!.handlung,
-        danach: alle.map((t) => resolveToolState(t, {
-          ...werkzeugKontext,
-          capabilities: [...werkzeugKontext.capabilities, k.h!.faehigkeit as string],
-        })),
+        ort: k.h!.ort!,
+        danach: alle.map((t) => resolveToolState(t, k.h!.faehigkeit
+          ? { ...werkzeugKontext, capabilities: [...werkzeugKontext.capabilities, k.h!.faehigkeit as string] }
+          : { ...werkzeugKontext, selection: { count: 1, types: typenImPlan, states: [] } })),
       }));
     const w = naechsterSchritt(jetzt, kandidaten);
     if (!w) return null;
-    const handlung = kandidaten.find((k) => k.grund === w.grund)?.handlung ?? handlungZuGrund(w.grund)?.handlung;
-    return handlung ? { satz: wegweiserSatz(w, handlung), grund: w.grund } : null;
-  }, [werkzeugKontext]);
+    const gewaehlt = kandidaten.find((k) => k.grund === w.grund);
+    return gewaehlt ? { satz: wegweiserSatz(w, gewaehlt.handlung), ort: gewaehlt.ort } : null;
+  }, [werkzeugKontext, nodes]);
 
   /**
    * AUF-34 / Kante 3 — gilt das aktive Werkzeug im gewählten Arbeitsbereich? Der Name des fremden
@@ -1060,7 +1067,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         <GeschossFlaeche
           levels={scene.levels}
           aktivId={level.id}
-          wegweiser={wegweiser?.grund === 'Kein aktives Geschoss.' ? wegweiser.satz : null}
+          wegweiser={wegweiser?.ort === 'geschoss' ? wegweiser.satz : null}
           offen={geschossOffen}
           setOffen={setGeschossOffen}
           onWechseln={(id) => store.getState().setActiveLevel(id)}
@@ -1222,6 +1229,20 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}
           >
           {schienenTab === 'werkzeuge' && (<>
+          {/* AUF-57: der Wegweiser an SEINEM Ort. „Wähle ein Bauteil aus" gehört dorthin, wo die
+              Werkzeuge stehen — nicht in einen Balken über dem Plan. Er erscheint nur, wenn die
+              Messung sagt, dass dieser Schritt wirklich etwas löst, und verschwindet danach. */}
+          {wegweiser?.ort === 'schiene' && (
+            <div style={{
+              display: 'flex', alignItems: 'flex-start', gap: 8, margin: '8px 10px 4px',
+              padding: '8px 10px', borderRadius: 9, background: T.brandWash,
+              border: `1px solid ${T.brandInk}`, fontSize: 12, color: T.brandInk,
+              lineHeight: 1.35, overflowWrap: 'anywhere',
+            }}>
+              <span aria-hidden style={{ flex: '0 0 auto' }}>→</span>
+              <span style={{ flex: '1 1 120px', minWidth: 0 }}>{wegweiser.satz}</span>
+            </div>
+          )}
           {/* Welle A2 (§19/UI-4): Die Leiste bezieht ihre Zugehörigkeit AUSSCHLIESSLICH aus der
               Präsentationsschicht — `zoneTools('fix')` statt `werkzeugTools()`. Vorher entschieden
               zwei Mechanismen unabhängig über dieselbe Frage (`art` in der Registry UND `zone` in den

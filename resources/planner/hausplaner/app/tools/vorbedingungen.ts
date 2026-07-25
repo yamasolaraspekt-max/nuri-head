@@ -47,6 +47,9 @@
  */
 import type { ToolActivationRule } from './toolTypes';
 
+/** AUF-57 — die Flächen, an denen ein Wegweiser stehen kann. Jede gehört zu einer Handlung. */
+export type WegweiserOrt = 'geschoss' | 'schiene';
+
 /**
  * Was aus einer Vorbedingung wird. **Jede** der zwölf liefert eine Regel — `heuteErfuellbar`
  * sagt nur, ob sie im heutigen Planer überhaupt zutreffen *kann*. Das ist kein zweiter
@@ -61,6 +64,12 @@ export interface VorbedingungAbbildung {
    * Fehlt sie, gibt es für diese Vorbedingung keinen Wegweiser — kein erfundener Ratschlag.
    */
   handlung?: string;
+  /**
+   * AUF-57: **wo** der Hinweis erscheint — dort, wo die Handlung stattfindet. Ein Wegweiser an
+   * anderer Stelle ist ein Banner, und Banner werden weggeklickt, nicht gelesen. Ohne Ort gibt es
+   * keinen Hinweis; lieber keiner als einer an der falschen Stelle.
+   */
+  ort?: WegweiserOrt;
   /** Warum sie heute nicht erfüllbar ist — leer, wenn sie es ist. Gehört in Bericht und Test. */
   lueckeGrund?: string;
 }
@@ -127,10 +136,12 @@ export const VORBEDINGUNGEN: Readonly<Record<string, VorbedingungAbbildung>> = {
   'activeLevel.exists': {
     ...faehigkeit(FAEHIGKEIT_GESCHOSS_DA, 'Kein aktives Geschoss.'),
     handlung: 'Lege ein Geschoss an',
+    ort: 'geschoss',
   },
   'hostWall.exists': {
     ...faehigkeit(FAEHIGKEIT_WAND_DA, 'Dafür braucht es zuerst eine Wand, in die das Bauteil gesetzt wird.'),
     handlung: 'Zeichne eine Wand',
+    ort: 'schiene',
   },
   'selection.count >= 1': {
     regel: {
@@ -139,6 +150,7 @@ export const VORBEDINGUNGEN: Readonly<Record<string, VorbedingungAbbildung>> = {
     },
     heuteErfuellbar: true,
     handlung: 'Wähle ein Bauteil aus',
+    ort: 'schiene',
   },
   'selection.hasRoofFace': {
     regel: {
@@ -225,13 +237,20 @@ export function unbekannteVorbedingungen(ausVertraegen: readonly string[]): stri
  * nur den Grundtext, den `resolveToolState` geliefert hat). `undefined`, wenn es zu diesem Grund
  * keine benannte Handlung gibt — dann schweigt der Wegweiser, statt zu raten.
  */
-export function handlungZuGrund(grund: string): { handlung: string; faehigkeit?: string } | undefined {
+export function handlungZuGrund(grund: string): {
+  handlung: string; ort?: WegweiserOrt; faehigkeit?: string; brauchtAuswahl?: boolean;
+} | undefined {
   for (const a of Object.values(VORBEDINGUNGEN)) {
     if (a.regel.grund !== grund || !a.handlung) continue;
     return {
       handlung: a.handlung,
-      // Nur Fähigkeits-Regeln lassen sich hypothetisch erfüllen (Kontext um einen Wert ergänzen).
+      ort: a.ort,
+      // Fähigkeits-Regeln erfüllt man hypothetisch, indem der Kontext einen Wert mehr trägt.
       faehigkeit: a.regel.type === 'capability' ? String(a.regel.value) : undefined,
+      // AUF-57: Auswahl-Regeln ebenso — nur an einem anderen Feld DESSELBEN Kontexts. Das ist
+      // dieselbe Nachschlage-Operation, keine zweite Regel; bewertet wird weiter von
+      // `resolveToolState`.
+      brauchtAuswahl: a.regel.type === 'selection-count' ? true : undefined,
     };
   }
   return undefined;

@@ -123,9 +123,13 @@ test('K6: mit aktivem Geschoss nennt der Wegweiser das Geschoss nicht mehr', () 
   assert.equal(ohneKandidaten.grund, 'Dafür muss zuerst etwas ausgewählt sein.', 'der nächste Hemmschuh rückt nach');
 });
 
-test('K6: die Fläche zeigt den Wegweiser nur, solange er das Geschoss betrifft', () => {
+test('K6: der Wegweiser hängt am ORT, nicht mehr an einem hartkodierten Grund', () => {
+  // AUF-57 hat genau diese Zeile ersetzt: sie war auf den einen Grund festgenagelt, der nie
+  // eintritt (eine Szene hat immer ein Geschoss) — der Wegweiser konnte also nie erscheinen.
   const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
-  assert.match(app, /wegweiser\?\.grund === 'Kein aktives Geschoss\.' \? wegweiser\.satz : null/);
+  assert.doesNotMatch(app, /wegweiser\?\.grund === 'Kein aktives Geschoss\.'/, 'der Grund ist wieder hartkodiert');
+  assert.match(app, /wegweiser\?\.ort === 'geschoss' \? wegweiser\.satz : null/);
+  assert.match(app, /wegweiser\?\.ort === 'schiene' &&/);
 });
 
 // --- Die Handlung kommt aus der Vorbedingungs-Tabelle -------------------------------------------
@@ -172,4 +176,71 @@ test('K8: kein Wegweiser-Satz ist leer oder vertröstet', () => {
     assert.doesNotMatch(satz, /folgt|in Kürze|demnächst|bald/i);
     assert.match(satz, /\d+ Werkzeug/, 'ohne Zahl ist es kein Wegweiser, sondern ein Spruch');
   }
+});
+
+// ================= AUF-57: Anlass und Ort ======================================================
+
+/**
+ * AUF-57 — der Wegweiser hängt jetzt am **Ort**, nicht an einem hartkodierten Grund. Jede benannte
+ * Handlung hat genau eine Fläche, dort wo die Handlung stattfindet.
+ */
+test('AUF-57: jede benannte Handlung hat genau einen Ort — und die Orte sind verschieden', () => {
+  const mitHandlung = Object.entries(VORBEDINGUNGEN).filter(([, a]) => a.handlung);
+  assert.equal(mitHandlung.length, 3, 'drei benannte Handlungen: Geschoss, Auswahl, Wand');
+  for (const [name, a] of mitHandlung) {
+    assert.ok(a.ort, `${name}: Handlung ohne Ort — dann erschiene sie nirgends oder überall`);
+    assert.match(a.ort, /^(geschoss|schiene)$/);
+  }
+  assert.equal(VORBEDINGUNGEN['activeLevel.exists'].ort, 'geschoss');
+  assert.equal(VORBEDINGUNGEN['selection.count >= 1'].ort, 'schiene');
+  assert.equal(VORBEDINGUNGEN['hostWall.exists'].ort, 'schiene');
+});
+
+test('AUF-57: ein Grund ohne Handlung hat auch keinen Ort — kein erfundener Ratschlag', () => {
+  for (const [name, a] of Object.entries(VORBEDINGUNGEN)) {
+    if (!a.handlung) assert.equal(a.ort, undefined, `${name}: Ort ohne Handlung`);
+  }
+  assert.equal(handlungZuGrund('Keine Berechtigung zum Importieren.'), undefined);
+});
+
+test('AUF-57: die Auswahl ist ein messbarer Anlass — dieselbe Engine, ein anderes Feld', () => {
+  const h = handlungZuGrund('Dafür muss zuerst etwas ausgewählt sein.');
+  assert.equal(h?.brauchtAuswahl, true, 'ohne diese Kennzeichnung baut niemand den Vergleich');
+  assert.equal(h?.faehigkeit, undefined, 'die Auswahl ist keine Fähigkeit');
+  // Gemessen: mit einer Auswahl werden 25 Werkzeuge bedienbar.
+  const mitAuswahl = ALLE.map((t) => resolveToolState(t, kontext(
+    [FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_ANSICHT_BEREIT, FAEHIGKEIT_GESCHOSS_DA], ['wall'],
+  )));
+  const w = naechsterSchritt(zustaende(MIT_GESCHOSS), [{ grund: 'Dafür muss zuerst etwas ausgewählt sein.', danach: mitAuswahl }])!;
+  assert.equal(w.grund, 'Dafür muss zuerst etwas ausgewählt sein.');
+  assert.equal(w.entsperrt, 25, 'die Zahl ist gemessen, nicht gesetzt');
+  assert.match(wegweiserSatz(w, 'Wähle ein Bauteil aus'), /das schaltet 25 Werkzeuge frei/);
+});
+
+test('AUF-57: der Arbeitsbereich ist KEIN Anlass — gemessen sperrt jeder Wechsel MEHR', () => {
+  // Das Ergebnis, mit dem dieser Posten rechnet (§5): nichts erfinden, damit etwas erscheint.
+  // Architektur ist der grösste Bereich; ihn zu verlassen kostet Werkzeuge, statt welche zu bringen.
+  const jetzt = zustaende(MIT_GESCHOSS);
+  const gesperrtJetzt = jetzt.filter((z) => !z.enabled).length;
+  for (const ws of ['import', 'bauphysik', 'heizung', 'elektro-pv']) {
+    const danach = ALLE.map((t) => resolveToolState(t, {
+      ...kontext([FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_ANSICHT_BEREIT, FAEHIGKEIT_GESCHOSS_DA]), workspace: ws,
+    }));
+    const differenz = gesperrtJetzt - danach.filter((z) => !z.enabled).length;
+    assert.ok(differenz < 0, `${ws}: entsperrt ${differenz} — dann wäre es doch ein Anlass`);
+    // Und der Mechanismus lehnt ihn von selbst ab: nur `entsperrt > 0` gewinnt.
+    assert.equal(naechsterSchritt(jetzt, [{ grund: 'Bereichswechsel', danach }]), null);
+  }
+});
+
+test('AUF-57: Schweigen bleibt möglich — löst kein Kandidat etwas, erscheint nirgends ein Hinweis', () => {
+  const jetzt = zustaende(MIT_AUSWAHL);
+  // Ein Kandidat, der nichts ändert: derselbe Zustand als „danach".
+  assert.equal(naechsterSchritt(jetzt, [{ grund: 'egal', danach: jetzt }]), null);
+});
+
+test('AUF-57: die Aktivierung ist unverändert — dieselben Mengen wie zu AUF-45', () => {
+  assert.equal(gesperrt(LEER).length, 73);
+  assert.equal(gesperrt(MIT_GESCHOSS).length, 53);
+  assert.equal(gesperrt(MIT_AUSWAHL).length, 28);
 });
