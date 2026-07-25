@@ -5238,3 +5238,72 @@ selbst-erteilt - die Rueckgabe ist vollstaendig.
 
 **Ballbesitz: Planner.**
 
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-46: die vier Pflichtbreiten
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `1ee27a4` (Code) · `a02b52f` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+**Ohne Auftragsdatei** — die Tafelzeile war die Forderung.
+
+### Vorher / nachher, an allen vier Breiten gemessen
+
+| Breite | Startseite vorher | Startseite nachher | Seitenüberlauf nachher (geführt **und** Experte) |
+|---|---|---|---|
+| **390** | `scrollWidth 656` · **47** Elemente über dem Rand | `scrollWidth 375` · **0** | **nein** |
+| **768** | 753 · 0 | 753 · 0 | **nein** |
+| **1024** | 1009 · 0 | 1009 · 0 | **nein** |
+| **1440** | 1425 · 0 | 1425 · 0 | **nein** |
+
+**Die Elemente, die rechnerisch über den Rand ragen, liegen ausnahmslos in einem inneren Scroller**
+— 38/38 · 31/31 · 30/30 · 23/23. Das ist zulässiges Scrollen, kein Kappen; ich habe es einzeln
+geprüft, statt die Zahl als Rest stehen zu lassen.
+
+### Drei feste Breiten waren die Ursache
+
+| Stelle | vorher | jetzt |
+|---|---|---|
+| Kopfzeile `HausplanerStudio` | `height: 62`, **kein** `flexWrap` | `minHeight: 62` + Umbruch |
+| `StartView` | `repeat(3, 1fr)` | `repeat(auto-fit, minmax(230px, 1fr))` |
+| `GuidedView` | **`1fr 320px`** | `repeat(auto-fit, minmax(280px, 1fr))` |
+| `ConfigWizard` | `1fr 300px` | `repeat(auto-fit, minmax(260px, 1fr))` |
+
+**Der harte Fall war `GuidedView`:** Bei 390 px passte `1fr + 320px + Lücke` nicht mehr, das
+Aufgaben-`aside` legte sich **über** den Inhalt und fing die Zeigerereignisse ab — eine sichtbare,
+aber **tote Schaltfläche**. Jetzt stapeln die Spalten, statt sich zu überlagern. Dieselbe Ursache im
+Konfigurator habe ich gleich mitbehoben, bevor sie dort einzeln auffällt.
+
+**Media Queries gibt es in Inline-Styles nicht.** Die Lösung ist deshalb `auto-fit`/`minmax` und
+`flexWrap` — dieselbe Wirkung, ohne eine zweite Stilschicht neben `studioDaten.ts` aufzumachen.
+
+### Rohausgabe
+
+| # | Prüfung | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` · `build` | **0 / 0 / 0 / 0** — **982 → 987**, **0 verschwunden** |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen** |
+| 3 | Mutations-Gegenbeweis | `1fr 320px` wieder eingesetzt ⇒ **2 Tests rot**; zurückgebaut ⇒ `diff` leer, 987/987 |
+| 4 | `public/*` im Code-Commit null, Bundle eigener zweiter Commit | erfüllt: `1ee27a4` → `a02b52f` |
+| 5 | Rebuild-Beleg (`a02b52f`, 1.410.304 Bytes, 26.07. 00:11) | `grep -c 'auto-fit, minmax(280px'` = 1 |
+
+### Zurückgegeben mit Zahlen: der Expertenmodus bei ≤768 px
+
+```
+Leinwandbreite im Expertenmodus
+  1440 px → 952 px      1024 px → 536 px      768 px → 280 px      390 px → 0 px
+```
+
+Die Schiene (220) und das Eigenschaften-Panel (268) sind **fest** — zusammen 488 px, unabhängig von
+der Fensterbreite. Bei 768 bleibt der Leinwand ein Streifen, bei 390 nichts. **Kein
+Seitenüberlauf**, aber unbenutzbar.
+
+**Nicht behoben, und zwar bewusst:** Ob die Schiene, das Panel oder beide weichen — und ob sie
+einklappen, überlagern oder unter den Plan rutschen — ist eine **Layout-Entscheidung, die
+gleichzeitig AUF-27 (Schienen-Reiter), AUF-34 (Arbeitsbereich-Zeile), AUF-43 (Geschoss-Fläche) und
+AUF-59 (Icon-Zustände) anfasst**. Alle vier sind gerade erst abgenommen worden. Das in denselben
+Commit zu ziehen wäre der Fehler aus §1.4/AUF-22 — zwei Posten an derselben Fläche.
+
+Als eigener Posten ist er sauber schneidbar, und die Zahlen oben sind seine Ausgangsmessung.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
