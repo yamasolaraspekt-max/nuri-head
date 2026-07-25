@@ -2079,3 +2079,66 @@ Zweck der Sperre war, ist sie hier zu streng.
 **Tafel:** Ich habe AUF-24 von `OFFEN` auf `GESPERRT` gesetzt — mit dem Sperrgrund in der Zeile, damit
 nicht die nächste Instanz in dieselbe Wand läuft. Das ist Schadensvermeidung, keine Planungs-
 entscheidung; der Planner dreht es mit einem Handgriff zurück, sobald Weg 2 oder 3 gewählt ist.
+
+---
+
+## ⇒ GENERATOR-BERICHT — I1 Werkzeug-Icons abgelegt
+
+**Commit:** `7bbf9ff` (Tafel-Ziehung `adb699b`) · **Spur:** B · **Rolle:** Generator — meldet
+**umgesetzt**, nicht abgenommen. 114 Dateien, +2207/−0, **rein additiv, kein Code**.
+
+**Abgelegt:** 110 SVGs → `public/hausplaner/icons/tools/<id>.svg` · `_sprite.svg` ebenda ·
+`docs/planner/werkzeug-galerie.html` · `docs/planner/werkzeug-inventar.md` ·
+`docs/planner/tool-registry-paket.json`.
+
+**Alle sieben Kriterien erfüllt, Rohausgaben im Bericht:** 110 Dateien + Sprite · ID-Gegenprobe in
+**beide** Richtungen leer (auch gegen die 110 Sprite-`symbol`-IDs) · `<script`/`@font-face`/
+`xlink:href="http`/`<image` → **je 0** · `viewBox="0 0 24 24"` **110/110** · `currentColor`
+**110/110**, **kein einziger harter Farbwert** (`110× stroke="currentColor"`, `110× fill="none"`) ·
+null Zeilen in `resources/`, `routes/`, `database/`, `hausplaner.js` und den vier Bestands-Icon-Ordnern,
+**keine einzige `.ts`/`.tsx`** · Gates `tsc` **0** · `schema:check` **0** · `test` **0** (746/746);
+`build:hausplaner` unverändert nicht ausführbar (aarch64/rollup).
+
+**Kantenliste — alle vier geprüft, keine Abweichung.** Keine Namenskollision (die Bestandsordner
+führen deutsche Nummernnamen wie `01_festverglasung.svg`), kein unsauberes SVG, Anzahl exakt 110,
+keine abweichende `viewBox`.
+
+**Vier Funde, gemeldet statt korrigiert:**
+
+1. **Die Galerie zeigt ins Leere.** `werkzeug-galerie.html` referenziert relativ `icons/<id>.svg`;
+   unter `docs/planner/` gibt es kein `icons/`. Einzeiler-Posten, gehört nicht in I1.
+2. **Das Sprite braucht Styling vom Aufrufer.** Die `<symbol>`-Inhalte tragen keine `stroke`/`fill`-
+   Attribute; ein nacktes `<use>` rendert schwarz gefüllt statt als Linien-Icon. **Hinweis für I2:**
+   `stroke="currentColor" fill="none" stroke-width="1.8"` am Konsumenten setzen.
+3. **`src/tool-registry.ts` bewusst nicht abgelegt** — I1 ist codefrei, nur die JSON als Referenz.
+4. **`slab`/`stairs`** liegen unter den englischen Paket-IDs; die Schema-Konflikte löst der Adapter
+   in I2, nicht der Dateiname.
+
+**Zweiter Zwischenfall mit einer parallelen Instanz — diesmal ohne Schaden.** Zwischen Tafel-Ziehung
+und Arbeits-Commit liefen zwei fremde Commits ein (`54998c9`, `036297c`). Weil der Generator mit
+Pfadangabe committet hat, wurde nichts mitgenommen; beide Tafelzeilen koexistieren korrekt. **Die
+Pfadangabe-Regel hat gehalten, wofür sie gedacht ist.**
+
+---
+
+## ⇒ PLANNER — Korrektur meiner eigenen Reihenfolge (AUF-24)
+
+Die parallele Instanz hat einen Fehler in meiner Planung gefunden und ihn belegt: **AUF-24 (die neun
+Werkzeug-IDs auf Englisch umbenennen) berührt `toolPresentation.ts`** — und die Datei liegt im
+**AUF-1-Sperrbereich**, weil Welle A2 sie liest und A1 noch kein Wiederholungsvotum hat. Ich hatte
+den Umfang gemessen (210 Treffer in ~30 Dateien), aber nicht gegen den Sperrbereich gehalten.
+**Die Sperre ist richtig, meine Reihenfolge war es nicht.**
+
+**Folge — die Kette hängt jetzt vollständig an AUF-1:**
+
+| Posten | Zustand | weil |
+|---|---|---|
+| AUF-24 (ID-Umbenennung) | `GESPERRT` | berührt `toolPresentation.ts` |
+| AUF-21 / I2 (Adapter + Fach-Katalog) | blockiert | „erst nach AUF-24" |
+| AUF-21 / I3 (`canPin`/`priority` in die Zonen) | blockiert | berührt ebenfalls `toolPresentation.ts` |
+| AUF-4 (Welle A2) | `GESPERRT` | seit jeher hinter AUF-1 |
+
+**Damit ist AUF-1 nicht mehr nur ein offener Posten, sondern der einzige Engpass des gesamten
+Strangs.** Vier Nachfolgeposten warten darauf. Das gehört vor jede weitere Planung.
+
+**Ballbesitz → Evaluator (frische Instanz), AUF-1.**
