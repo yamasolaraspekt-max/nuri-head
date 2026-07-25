@@ -3267,3 +3267,48 @@ dieser einen Datei.
 Anheften; die linke Leiste bleibt bei den sieben plus dem, was angeheftet ist. Besonders zu prüfen:
 **Bearbeiten** und **Architektur** mit je 15 Einträgen bei **1440/1024/375 px** — sie sollen
 scrollen und umbrechen, nicht kappen.
+
+---
+
+## ⇒ PLANNER — Der Begriff „Fähigkeiten" wird abgeschafft
+
+**Vorher gelesen:** HEAD `067f329` · `docs/fahrplan-frontend-layout-hausplaner.md` Z. 27–35 (die fünf
+Ebenen) und Z. 33 · `app/tools/faehigkeiten.ts` · `app/dashboard/fachFlaechen.ts`
+
+**Anlass:** Yama, 25.07.: *„ich komme mit dem begriff fähigkeiten nicht zu recht und in layout
+inventur ist auch nicht vorgesehen"*. **Beides trifft zu, gemessen:**
+
+**„Fähigkeiten" ist in der Layout-Inventur keine Fläche.** Die fünf Ebenen sind Studio-Rahmen ·
+Start/Launcher · Geführte Planung · Konfigurator · Expertenmodus. `FaehigkeitenNavi.tsx` erscheint
+**einmal**, in Zeile 33 unter *„Daten/Bausteine"* — als Datei, nicht als geplante Fläche.
+Sie ist in die 220-px-Schiene hineingewachsen, ohne dort vorgesehen zu sein.
+
+**Und der Begriff ist Jargon.** Er beschreibt nicht, was der Nutzer sieht. Was dahintersteckt, sind
+**zwei verschiedene Dinge**, gemessen:
+
+| | Anzahl | was es ist | wo es laut Inventur hingehört |
+|---|---|---|---|
+| Fachgruppen | 9 | `dach-zimmerei · tga-heizung · energie-pv · sanitaer · kueche · bau · fenster-tuer · treppe · werkzeuge` | Ebene 2, „5 Fach-Hub-Karten" |
+| Rechen-Engines | 13 | `engine-fbh · -heizkoerper · -heizkreis · -abwasser · -kueche · -pv · -uwert · -fensterprodukt · -sparren · -treppe · -holzmengen · -holzbauteile · -schifter` | **L2/L3** — „13 fertige Engines warten auf je ein Panel" |
+
+**Überschneidung mit den 19 L4-Flächen, genau gezählt:** drei klare Paare
+(`engine-fbh`↔`fach-fbh`, `engine-pv`↔`fach-pv-module`, `engine-kueche`↔`fach-kueche`),
+**zehn Engines ohne Entsprechung**, **sechzehn L4-Flächen ohne Engine**. Das ist **keine Doppelung**,
+sondern zwei Sortierungen derselben Domäne — meine frühere Formulierung „teilweise Doppelung" war zu
+grob, ich stelle sie hiermit richtig.
+
+### Entscheidung
+
+1. **Der Begriff verschwindet.** In der Oberfläche heißt es künftig **„Fachplaner"** — der Begriff,
+   den Ebene 2 der Inventur (`5 Fach-Hub-Karten`) und Yamas eigene Entwürfe bereits benutzen.
+   Kein neues Wort, sondern das vorhandene.
+2. **Die Fläche bleibt vorerst**, umbenannt. Sie zu löschen wäre erst richtig, wenn L2/L3 die
+   13 Engines als Panels hat — vorher ginge Erreichbarkeit verloren. **Sie ist ausdrücklich eine
+   Übergangslösung**, und das gehört so in den Code-Kommentar, damit die nächste Instanz sie nicht
+   für Absicht hält.
+3. **AUF-27 wird angepasst:** die drei Reiter heißen `Werkzeuge · Projekt · **Fachplaner**`.
+   Zwei davon sind in der Inventur vorgesehen (Ebene 5: Werkzeugleisten und Projektbaum), der dritte
+   ist die benannte Übergangslösung.
+4. **Neuer Posten AUF-33:** die 13 Engines wandern zu den L4-Fachplaner-Flächen, danach fällt der
+   dritte Reiter ersatzlos weg. **Gesperrt bis L2 entschieden ist** — welche Engine das Panel-Muster
+   wird, ist Yamas Entscheidung und derzeit zurückgestellt.

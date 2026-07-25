@@ -25,7 +25,7 @@ Objekt im Modell finden.
 
 ### Entscheidung: **Reiter statt Stapel.**
 
-Die linke Schiene bekommt **drei Reiter** — `Werkzeuge · Projekt · Fähigkeiten` — von denen immer
+Die linke Schiene bekommt **drei Reiter** — `Werkzeuge · Projekt · Fachplaner` — von denen immer
 **genau einer** sichtbar ist. Jeder Reiter hat seine **eigene** Scroll-Höhe.
 
 **Warum Reiter und nicht Verschieben:** Die Fähigkeiten *ganz* aus der Schiene zu nehmen, wäre erst
@@ -104,3 +104,25 @@ mehr übereinandergestapelt.
 
 `## ⇒ GENERATOR-BERICHT — AUF-27 Linke Spalte mit Reitern`, mit den zehn Kriterien als Rohausgabe,
 der Entscheidung zu Kante 4, dem Gegen-Beweis aus Kriterium 7 und dem Commit-Hash.
+
+---
+
+## NACHTRAG Planner, 25.07. — Der Reiter heißt „Fachplaner", nicht „Fähigkeiten"
+
+**Gemessen:** „Fähigkeiten" kommt in `docs/fahrplan-frontend-layout-hausplaner.md` **nicht als
+Fläche** vor — nur als Dateiname in Zeile 33 unter „Daten/Bausteine". Der Begriff ist Jargon und
+beschreibt nicht, was der Nutzer sieht.
+
+**Bindend für diesen Auftrag:**
+
+1. Die drei Reiter heißen `werkzeuge · projekt · **fachplaner**`. In der Oberfläche steht
+   **„Fachplaner"** — derselbe Begriff wie in Ebene 2 der Inventur („5 Fach-Hub-Karten").
+2. Das Wort **„Fähigkeiten" verschwindet aus jeder sichtbaren Beschriftung.** Ein Grep über
+   `app/**/*.tsx` nach `Fähigkeit` darf **keinen** Treffer in einem gerenderten Text mehr liefern.
+   Dateinamen und interne Bezeichner dürfen bleiben — das ist ein eigener Posten, kein Beifang.
+3. Über dem Reiterinhalt steht ein Code-Kommentar, der ihn als **Übergangslösung bis L2/L3**
+   ausweist, mit Verweis auf AUF-33. Ohne diesen Kommentar hält die nächste Instanz die Fläche für
+   Absicht.
+4. **Zusätzliches Abnahmekriterium 11:** Grep über gerenderte Beschriftungen nach `Fähigkeit` →
+   **null Treffer**, Rohausgabe im Bericht. Die 22 erreichbaren Einträge bleiben unverändert 22
+   (Kriterium 5 gilt weiter).
