@@ -516,7 +516,7 @@ Pan-Zustand geloest statt die Funktion zu entfernen; die drei Feinheiten (null-S
 Herkunftspruefung) sind begruendet und testverriegelt. Mutationsfest, und der bleibende Verschub ist
 am Schirm belegt - genau der Teil, den ein Test ohne DOM/Konva nicht zeigen kann.
 
-## AUF-47 - Speichern-Knopf + beide Statusanzeigen ehrlich (79bf47c, Bundle fca2fc6) - FREIGABE MIT AUFLAGE
+## AUF-47 - Speichern-Knopf + beide Statusanzeigen ehrlich (79bf47c, Bundle fca2fc6) - FREIGABE (Auflage nachtraeglich erfuellt)
 
 **Reihenfolge:** erst blind gegen 79bf47c gemessen (/tmp-Auszug), dann Generator-Bericht.
 **Klasse: sichtbar** - Sichtprobe Teil der Abnahme; visuelle Sichtprobe hier als AUFLAGE offen
@@ -557,6 +557,21 @@ gruen gefuehrt).
 save()-No-Op bewusst unberuehrt), beide Anzeigen lesen eine Regel, mutationsfest, im Bundle ausgeliefert.
 Einzige offene Auflage: die visuelle Sichtprobe, in dieser Umgebung nicht fahrbar - nachzuholen.
 
+## NACHTRAG AUF-47 - visuelle Sichtprobe nachgeholt (Auflage erfuellt) - FREIGABE
+
+Browser wieder verfuegbar; die in der Abnahme offene visuelle Sichtprobe nachgeholt.
+iframe 1440, fixture decke-treppe, Bundle fca2fc6, Expertenmodus. Gemessen (getBoundingClientRect/
+innerText im contentDocument) UND am Screenshot:
+
+- **'Gespeichert' kommt 0x vor** (vorher in jedem Screenshot dieser Sitzung sichtbar).
+- **keine 'Rev. N'** irgendwo (revNummerDa=false).
+- **'wird nicht gespeichert' 3x** - Top-Badge, Kopfzeilen-Plakette (genau die Stelle, wo vorher
+  'Gespeichert . Rev. 1' stand, die Yama gesehen hatte) und Knopfbereich.
+- **Speichern-Knopf disabled=true** (vorher gruen/primaer/aktiv), Tooltip nennt den Grund:
+  'Diese Flaeche hat kein Speicherziel. Der Plan am Objekt wird gespeicher[t]...'.
+
+Beide Statusanzeigen sagen dieselbe Wahrheit; die Luege ist weg. **Auflage erfuellt -> volle FREIGABE.**
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -587,6 +602,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-45    b9861d7  Auszug: schema 0 / test 930/930 0-skip / tsc 0 / build ok ; naechsterSchritt liest nur resolveToolState (K3/K4), keine Sperre gelockert (73/53/28) ; 14 Subtests ; Gegen-Beweis Filter >0->>=0 = 1 rot, Gesten-Regex brechen = 2 rot (B8) ; Sichtprobe 1440: Markieren 'braucht keine Optionen' kein in-Entwicklung-Badge ; Wegweiser dormant (Geschoss immer da = Planner-Spec AUF-57)
   AUF-51    74fdcb4  Auszug: schema 0 / test 938/938 0-skip / tsc 0 / build ok ; Pan-Zustand null-Start + onDragMove + Herkunftspruefung (HausplanerApp 339/1300/1301) ; 8 Subtests ; Gegen-Beweis panAus ignoriert Wert = 1 rot, Herkunft ===->!== = 2 rot ; Sichtprobe 1440: Drag ~250/120 -> Inhalt wandert, 2 Klicks danach -> Verschub BLEIBT (kein Snap-back)
   AUF-47    79bf47c  Auszug: schema 0 / test 948/948 0-skip / tsc 0 / build ok ; speicherAnzeige rein, kannSpeichern===false schlaegt alles, save() unberuehrt (Diff leer) ; 10 Subtests ; Gegen-Beweis Faehigkeit ausgehebelt = 2 rot ; Bundle fca2fc6 traegt 'wird nicht gespeichert' ; visuelle Sichtprobe AUFLAGE (Browser weg, nicht sichtgeprueft)
+  AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
