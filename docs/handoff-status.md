@@ -1505,3 +1505,37 @@ seinen Zug committet hat. Dieser Block ist bis dahin der Beleg.
 
 **Nachgemessen:** dieser Commit fasst ausschließlich `docs/handoff-status.md` an. Die sechs
 gestagten T1-Dateien bleiben `M `, die Tafel bleibt fremd-modifiziert und uncommittet.
+
+## ⇒ GENERATOR-BERICHT — AUF-2 UMGESETZT: T1 + `decke` committet als `9ec3b25` (25.07. 11:2x)
+Auftragstafel-Posten AUF-2 gezogen (`6fed416`), ausgeführt, hier gemeldet. **Ich melde „umgesetzt",
+nicht „grün"** — die Abnahme ist AUF-3 und gehört einer anderen Rolle.
+
+**Commit-Hash für AUF-3: `9ec3b25`.** Sechs Pfade, ausdrücklich benannt, kein `-A`, kein Punkt:
+`studioDaten.ts` · `HausplanerApp.tsx` · `tools/faehigkeiten.ts` · `__tests__/faehigkeiten.test.ts` ·
+`__tests__/toolPresentation.test.ts` · `public/hausplaner/hausplaner.js`. Arbeitsbaum danach sauber.
+
+**Gehalt (gebaut hat eine andere Generator-Instanz; ich habe abgeschlossen, nicht neu gebaut):**
+- T1 Variante (a): `T.brand` bleibt `#7fae1c`, kein drittes Grün; semantische Rollen in
+  `studioDaten.ts` ergänzt. `HausplanerApp.tsx`: **0** rohe Farbwerte; `FARBEN` = Alias auf `T`.
+- `decke → bau` in `faehigkeiten.ts:62`, verriegelt durch zwei Assertions in `faehigkeiten.test.ts`;
+  A1-Reihenfolgeanker in `toolPresentation.test.ts` nachgezogen.
+
+**Gate selbst gefahren, HEAD vor == nach der Messung (C-Auflage aus Schritt 0):**
+`tsc:hausplaner` **0** · `schema:hausplaner:check` **0** · `test:hausplaner` **696/696 pass, 0 fail** ·
+`build:hausplaner` **0**.
+**Bundle aus den Quellen belegt:** `sha256` **vor** dem Build == **nach** dem Build ==
+`cadc4308361bf6e025d42d418cd001184be8cdfc3dd7f890ffa2eb37f249d011` → **keine Drift**; das committete
+Bundle stammt aus genau diesen Quellen. (Das ist eine Generator-Messung, keine Abnahme — AUF-3 misst selbst.)
+
+**Zwischenfall unterwegs, offengelegt:** Der erste Zug-Commit scheiterte an `.git/HEAD.lock` +
+`next-index-20.lock` (11:15, vom Planner-Commit `e33cb19`). Nach 25 s unverändert, Größe konstant,
+kein schreibender git-Prozess ⇒ abgestanden. Nach der **Lock-Regel der Tafel** (`mv`, niemals `rm`)
+nach `.git/_locks_beiseite/2026-07-25-1120/` verschoben — nichts gelöscht, jederzeit zurückholbar.
+Beobachtung nebenbei: die `next-index-<n>.lock` sind **flüchtige** Artefakte eines mitlaufenden
+Werkzeugs (Kennung wechselt: 8 → 20 → 14, verschwinden von selbst) und blockieren **nicht** —
+blockiert hat allein `HEAD.lock`. Wer künftig auf Locks trifft, sollte die beiden nicht verwechseln.
+
+**Ballbesitz → Evaluator (AUF-3).** Vorbedingung „braucht den Hash aus AUF-2" ist mit `9ec3b25`
+erfüllt; ich habe AUF-3 auf der Tafel entsprechend von `GESPERRT` auf `OFFEN` gesetzt — das ist die
+mechanische Folge der erfüllten Vorbedingung, kein Urteil über den Inhalt. AUF-2 steht auf
+`BERICHTET`; auf `ERLEDIGT` setzt es die abnehmende Rolle, nicht ich.
