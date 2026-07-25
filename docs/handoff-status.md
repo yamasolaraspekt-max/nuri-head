@@ -2670,3 +2670,55 @@ als Ersatzbeleg. Für den Moment gilt die Sichtprobe; sie hat bei 1440 und 1024 
 die Leiste real rendert.
 
 **Damit ist `toolPresentation.ts` entsperrt. Der nächste Schritt ist I2.**
+
+---
+
+## ⇒ PLANNER — Die fünf Kuratier-Overrides entschieden (Operanden-Gate)
+
+Der Cowork-Evaluator hat fünf Namensvorschläge und zwei Fach-Label-Fragen ausdrücklich **offen
+gelassen statt sie zu erfinden** — richtig, das ist das Operanden-Gate. Fach-/Benennungsentscheidungen
+trifft der Planner, nicht der Umsetzer. **Hier sind sie, damit I2 nicht wartet:**
+
+| Paket-ID | Entscheidung | Begründung |
+|---|---|---|
+| `pan` | **`hand`** | „Verschieben" ist mit `move` belegt; „Hand" ist im deutschen CAD-Sprachgebrauch etabliert und steht so in Yamas Entwurf. |
+| `wizard` | **`assistent`** | deutsch, unmissverständlich. |
+| `command-palette` | **`befehlspalette`** | steht wörtlich so in `dashboard-tools-v1.html`. |
+| `orbit` | **`umkreisen`** | „Orbit" ist Anglizismus; Yamas Anordnung lautet „alles auf deutsch". |
+| `elevation` | **`aufriss`**, Label **„Ansicht/Aufriss"** | **Fachlich richtig, guter Fund.** „Fassade" ist `facade` und ein anderes Werkzeug. Ein Aufriss ist eine Projektionsart, keine Bauteilgruppe. |
+
+**Die zwei Fach-Labels:**
+
+- **`brick` → „Klinker-Verband" bleibt.** Das Werkzeug steht in der Kategorie **Fassade**, dort ist
+  Klinker die Vorsatzschale. „Mauerwerk" wäre das tragende Gefüge und gehört fachlich zu `wall`.
+- **`beam` → „Unterzug"**, nicht „Balken". Es steht neben `column` („Stütze") in der Kategorie
+  Architektur — ein horizontal tragendes Bauteil zwischen Stützen heißt im Hochbau Unterzug.
+  „Balken" ist der Zimmerei-Begriff und hat in `dach-zimmerei` eigene Werkzeuge.
+
+## ⇒ PLANNER — Zweite Wahrheit vermieden: eine Namenstabelle, nicht zwei
+
+Zwei Cowork-Instanzen haben unabhängig dieselbe Tabelle gebaut.
+**Führend: `docs/planner/eindeutschung-110-paket-ids.md`** — weil sie die 16 schema-gebundenen IDs
+**einzeln** mit Schutzwert markiert statt die Grenze nur zu beschreiben. Das ist der Unterschied
+zwischen „funktioniert" und 422 beim Speichern.
+`docs/planner/werkzeug-namen-deutsch.md` (`1c97c65`) ist **stillgelegt**, Trail bleibt erhalten.
+
+**Ursache, offen benannt:** Der Planner hat den Posten begonnen, ohne zu prüfen, ob eine zweite
+Cowork-Instanz darauf sitzt. **AUF-22 gilt auch innerhalb von Cowork** — ein Posten, ein Strang,
+und zwar auch dann, wenn beide Instanzen nur `docs/` schreiben.
+
+## ⇒ PLANNER — Sichtprobe: 1024 px ist bereits belegt
+
+Der Vorbehalt „1024 + 375 offen" ist **für 1024 erledigt**. Gemessen über die Chrome-Anbindung mit
+echtem Fenster-Resize (`resize_window`), nicht per DevTools-Emulation:
+
+- **1440 px:** alle vier Panel-Reiter sichtbar (Historie bricht in Zeile 2), „↕ Oben/Unten"
+  vollständig, Rail-Labels **brechen um** statt zu kappen. **Sauber.**
+- **1024 px:** Reiterzeile zweizeilig, alle vier Reiter sichtbar, nichts abgeschnitten. **Sauber.**
+- **~1375 px:** vierter Reiter unsichtbar, Hinweistext im Wort abgebrochen, Labels mit Ellipse.
+  **Defekt reproduzierbar.**
+
+**Damit ist AUF-26 kein Responsivitäts-Umbau, sondern ein Loch in einem mittleren Band** — die festen
+Mindestbreiten von Rail (220) + Zeichenfläche + Panel übersteigen dort die Fensterbreite, die Seite
+läuft waagerecht über statt umzubrechen. **375 px bleibt offen** — Chrome lässt das Fenster nicht so
+schmal werden; dafür braucht es die DevTools-Geräteleiste.

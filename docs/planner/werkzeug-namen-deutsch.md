@@ -244,3 +244,26 @@
 ---
 
 **Maschinell erzeugt und geprüft:** 110 Werkzeuge, 110 eindeutige deutsche IDs, 9 Bestands-IDs unverändert. Die Maschinenfassung liegt daneben als `werkzeug-namen-deutsch.json` (`{paket-id: {de, label, kategorie}}`) — direkt im Adapter verwendbar.
+
+---
+
+## ⛔ STILLGELEGT — zusammengeführt in `eindeutschung-110-paket-ids.md`
+
+**25.07., Planner.** Zwei Cowork-Instanzen haben unabhängig voneinander dieselbe Namenstabelle
+gebaut. **Das ist eine zweite Wahrheit und wird nicht nebeneinander gehalten.**
+Führend ist **`docs/planner/eindeutschung-110-paket-ids.md`**. Diese Datei bleibt als Trail stehen,
+wird aber **nicht** mehr gepflegt und **nicht** von I2 gelesen.
+
+**Warum die andere gewinnt — ein sachlicher Grund, keine Reihenfolge:** Sie markiert die
+**16 schema-gebundenen IDs einzeln mit ⛔ und dem exakten Schutzwert** (`wall`, `ceiling`,
+`radiator`, `stair`, inklusive der Sonderfälle `slab→ceiling` und `stairs→stair`). Diese Datei hier
+nennt die Grenze nur als Prosaregel. Der Unterschied ist der zwischen „funktioniert" und
+**422 beim Speichern** — und damit genau der Punkt, an dem die DAUERDIREKTIVE greift.
+
+**Was aus dieser Datei übernommen wird:** die Maschinenfassung `werkzeug-namen-deutsch.json`
+bleibt nur gültig, wenn sie **aus der führenden Tabelle neu erzeugt** wird. Bis dahin gilt sie als
+stillgelegt.
+
+**Verursacht durch:** Der Planner hat die Tabelle begonnen, ohne zu prüfen, ob eine zweite
+Cowork-Instanz auf demselben Posten sitzt. Die Regel „ein Posten, ein Strang" (AUF-22) gilt auch
+**innerhalb** von Cowork, nicht nur zwischen nativ und Cowork. → als Ergänzung zu AUF-22 vermerkt.
