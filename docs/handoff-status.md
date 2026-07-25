@@ -4526,3 +4526,81 @@ ist der erste Beleg, dass das Muster für die übrigen zwölf trägt.
 
 **Tafel:** Arbeitsvorrat 17 · Abnahme 7 · bei Yama 10 · Archiv 19 = **53**, geprüft.
 
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-39 / L5: die elf Wizard-Schritte kommen aus dem Modell
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `b3a6210` (Code) · `cb3d17e` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+
+### Was gebaut wurde
+
+`dashboard/fahrschritte.ts` → `ableitenSchritte(scene)`: **rein**, kein Store, kein Datum, kein
+Zufall. `GuidedView` ist **nicht umgebaut** — es bekommt die Schritte als Prop. `STEPS` in
+`studioDaten.ts` ist **stillgelegt, nicht gelöscht** (`STEPS_STILLGELEGT`, Muster
+`toolCatalogStillgelegt.ts`); ein Test verriegelt, dass sie niemand mehr rendert.
+
+### Die zehn Kriterien, Rohausgabe
+
+| # | Kriterium | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` | **0 / 0 / 0** — **888 → 900**, **0 verschwunden** |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen**; ein Test belegt zusätzlich, dass die Ableitung das Dokument nicht anfasst (`JSON.stringify` vorher = nachher) |
+| 3 | rein: zweimal derselbe Aufruf ⇒ tief gleich | grün, für leeres **und** gefülltes Dokument |
+| 4 | elf Titel byte-genau wie die stillgelegten `STEPS` | grün |
+| 5 | **leeres Dokument ⇒ kein grüner Schritt, kein grüner Prüfpunkt** | grün für `null` **und** für ein leeres Dokument; Gegenprobe an den Demo-Daten belegt, dass die **5 grüne Prüfpunkte** trugen, darunter „Maßstab erkannt · 1:50" |
+| 6 | kein Blindtext | grün: kein Hinweis unter 15 Zeichen, keiner mit „folgt/in Kürze/demnächst"; Schritte ohne Grundlage tragen **null** Prüfpunkte |
+| 7 | Nachrechenbarkeit an gebauten Dokumenten | drei Tests: Geschosse · Öffnungen (12 Fenster / 3 Türen / 1 Treppe) · der verletzte Zwang |
+| 8 | Mutations-Gegenbeweis | Fensterzahl auf Türzahl gelegt ⇒ **1 Test rot**; zurückgebaut ⇒ `diff` leer, 900/900 |
+| 9 | `public/*` im Code-Commit null Zeilen, Bundle eigener zweiter Commit | erfüllt: `b3a6210` → `cb3d17e` |
+| 10 | Sichtprobe **mit leerem Projekt** + Rebuild-Beleg | siehe unten |
+
+**Rebuild-Beleg** (`cb3d17e`, 1.403.174 Bytes, 25.07. 22:17):
+`grep -c 'Geschossen bebaut'` = 1 · `'noch nichts darin gebaut'` = 1 · `'Solange der Planer sie nicht liest'` = 1.
+
+### Sichtprobe, 1440 px — leeres Projekt gegen gefülltes
+
+| | Haken im Stepper | „Maßstab erkannt" | „Bauherr & Adresse ✓" |
+|---|---|---|---|
+| **leeres Projekt** | **0** | nein | nein |
+| Modell mit 8 Wänden + Dach | 3 | nein | nein |
+
+Schritt 2 im leeren Projekt liest sich jetzt: *„Offen · Ob eine Vorlage importiert und ihr Maßstab
+bestätigt wurde, führt das Dokument nicht. Sichtbar ist nur, ob Wände vorhanden sind. Es sind keine
+Wände vorhanden."* Vorher stand dort „Datei geladen (PDF) ✓ · Maßstab erkannt · 1:50 ✓".
+
+### Eine Messung, die den Auftrag präzisiert hat
+
+Beim ersten Durchlauf war K5 **rot** — mit einem grünen Prüfpunkt „1 Geschoss angelegt". Der war
+sachlich wahr und trotzdem falsch: **ein frisches Projekt hat bereits ein Geschoss, weil die
+Anwendung es anlegt, nicht der Nutzer.** Ein grüner Haken dafür ist dieselbe Sorte Behauptung, die
+dieser Posten beseitigen soll. Gezählt wird jetzt, was ein Geschoss **trägt** (`bebauteGeschosse`) —
+messbar, nicht erfunden, und K5 ist damit ohne Aufweichung erfüllt.
+
+### Zurückgegeben statt mitgebaut (§7)
+
+**Sechs der elf Schritte haben heute keine Grundlage im `SceneDocument`.** Sie stehen zusammen in
+`SCHRITTE_OHNE_GRUNDLAGE`, damit die Lücke zählbar ist — das ist die Liste für den nächsten Posten:
+
+| Schritt | was fehlt |
+|---|---|
+| Projektgrundlagen | Bauherr, Adresse, Grundstück stehen im **CRM**, nicht im Gebäudemodell |
+| Import oder Grundriss | ob importiert und Maßstab bestätigt wurde, führt das Dokument nicht |
+| Räume und Einrichtung | Raumnutzung und Möblierung sind keine Schema-Eigenschaft |
+| Küche und Bad | keine eigene Objektart; nur Sanitärobjekte zählbar |
+| Prüfung und Koordination | kein gespeicherter Prüflauf, keine Freigabe im Dokument |
+| Dokumentation und Rendering | erzeugte Pläne/Listen/Renderings werden nicht vermerkt |
+
+**Kein zweiter Snapshot-/Hash-/Projektions-Mechanismus** gebaut (Guardrail Fahrplan Z. 90) — die
+Ableitung liest das Dokument bei jedem Aufruf neu und merkt sich nichts.
+
+### Ein Befund daneben, ausdrücklich NICHT mitgebaut
+
+Unter dem Schritt steht in `GuidedView` weiterhin eine **Demo-Grundrisszeichnung** („Erdgeschoss ·
+Grundriss · 1:50" mit den Räumen *Wohnen* und *Küche*) — auch im leeren Projekt. Das ist dasselbe
+falsche Versprechen wie die Demo-Schritte, aber es liegt im Markup von `GuidedView`, und der
+Auftrag sagt ausdrücklich: *„`GuidedView` wird nicht umgebaut."* **Eigener Posten** — ich habe ihn
+nicht angefasst.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
