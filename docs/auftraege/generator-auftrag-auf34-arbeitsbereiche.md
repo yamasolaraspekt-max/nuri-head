@@ -152,3 +152,65 @@ Kappung, nur andersherum.
 Das Menü ist so breit, dass Label und Kürzel nebeneinander passen (Mindestbreite, oder Kürzel in
 eine zweite Zeile — entscheide und sag es im Bericht). Belegt per Sichtprobe mit Screenshot der
 Gruppe **Bearbeiten**, das ist die dichteste (13 Werkzeuge, drei davon mit Kürzel).
+
+---
+
+## NACHTRAG 2 Planner, 25.07. — **15 Themen statt 22 Kategorien** (Yama entschieden)
+
+**Vorher gelesen:** `~/Downloads/hausplaner_svg_tool_functions.zip` (ausgepackt und vermessen) ·
+`src/tool-themes.json` · `src/tool-registry.json` (110 Werkzeuge, Feld `code`) ·
+`docs/planner/eindeutschung-110-paket-ids.md`
+
+**Yama, 25.07.: „15".** Die Gruppierung dieses Auftrags wechselt von den **22 Kategorien** auf die
+**15 Themen** des Funktionsvertrag-Pakets. **Alles Übrige am Auftrag bleibt gültig** — die fünf
+Arbeitsbereiche, die zwei Klassen, die Kriterien 1–12.
+
+**Gemessen, warum die 15 tragen:** Ihre Summe ist **exakt 110** — eine vollständige Zerlegung, kein
+Werkzeug fällt heraus, keines doppelt. Und sie beheben genau das Problem, das diesen Auftrag
+ausgelöst hat: die Kategorien `TGA` und `Sanitär` hatten **je ein** Werkzeug; die Themen fassen sie
+zu *„Heizung, Hydraulik & TGA"* (6) und *„Sanitär, Bad & Küche"* (7) zusammen.
+
+| Nr | Thema | Werkzeuge |
+|---|---|---|
+| 01 | Grundbedienung & Auswahl | 4 |
+| 02 | Bearbeiten & Transformieren | 15 |
+| 03 | Zeichnen & CAD | 11 |
+| 04 | Ansicht & Navigation | 7 |
+| 05 | Messen & Bemaßen | 5 |
+| 06 | Import, Nachzeichnen & Erkennung | 8 |
+| 07 | Architektur & Gebäude | 15 |
+| 08 | Material, Textur & Fassade | 5 |
+| 09 | Bauphysik, U-Werte & Lüftung | 4 |
+| 10 | Heizung, Hydraulik & TGA | 6 |
+| 11 | Sanitär, Bad & Küche | 7 |
+| 12 | Elektro, PV & Energie | 8 |
+| 13 | Wizard, Workflow & Übergabe | 4 |
+| 14 | Prüfung, Zusammenarbeit & Revision | 6 |
+| 15 | System, Suche & Export | 5 |
+
+**Neue Zuordnung der fünf Arbeitsbereiche:**
+
+| Klasse | Themen |
+|---|---|
+| **durchgängig** (6) | 01 Grundbedienung · 02 Bearbeiten · 04 Ansicht · 05 Messen · 14 Prüfung/Zusammenarbeit · 15 System |
+| **Import & Nachzeichnen** | 06 |
+| **Architektur** | 03 Zeichnen & CAD · 07 Architektur · 08 Material/Fassade · 11 Sanitär/Bad/Küche |
+| **Bauphysik** | 09 |
+| **Heizung** | 10 |
+| **Elektro · PV** | 12 |
+| **überall, weil Ablauf** | 13 Wizard/Workflow → **durchgängig**, siehe unten |
+
+Damit sind **7 durchgängig** (01·02·04·05·13·14·15) und **8 gebunden** (03·06·07·08·09·10·11·12).
+**Begründung für 13 als durchgängig:** Wizard und Übergabe hängen nicht am Gewerk, sondern am
+Projektfortschritt — sie in einen Bereich zu sperren würde den Ablauf zerschneiden.
+
+**Die IDs bleiben deutsch.** Das Paket liefert englische ids (`select`, `wall`); die Zuordnung steht
+in `docs/planner/eindeutschung-110-paket-ids.md` und ist mit AUF-31 bereits umgesetzt.
+**Nicht zurückdrehen.** Gleiches gilt für die Themenbeschriftungen: die deutschen Labels aus
+`tool-themes.json` werden übernommen, die `themeId` bleibt technisch (`07-architektur`).
+
+**Kriterium 4 und 5 werden ersetzt:**
+- **4′** Ein Test belegt je Arbeitsbereich die erwartete **Themenmenge** aus der Tabelle oben.
+- **5′** Ein Test belegt: **Summe über alle Bereiche = 15 Themen, 110 Werkzeuge**, jedes Werkzeug in
+  **genau einem** Thema, keine Dublette. Die 22 Kategorien bleiben als **Datenfeld** erhalten
+  (`kategorie`), werden aber **nicht mehr zur Gruppierung** benutzt — Trail, keine zweite Wahrheit.
