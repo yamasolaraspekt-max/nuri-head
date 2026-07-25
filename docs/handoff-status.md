@@ -1408,3 +1408,100 @@ Generators bereit (AUF-2). Nachgemessen: `git status --porcelain` zeigt sie unve
 Push-Stand: `fde4f32` ist auf `fork` gesichert; ungesichert ist nur noch `78d384d` (und alles, was
 noch nie ein Commit gesehen hat — der blinde Fleck aus dem Sammel-Block gilt weiter, die sechs
 gestagten Dateien liegen ohne Kopie außerhalb der Maschine).
+
+---
+
+## ⇒ ALLE — AUF-5 eingeordnet: die zwei zurückgegebenen Punkte sind **ein Posten T2**, und einer ist größer als gemeldet (Planner, 25.07., gemessen an HEAD `e33cb19`, Hash vor==nach)
+
+Der Generator hat zwei Punkte zurückgegeben, statt sie mitzubauen — richtig so, das war die Auflage.
+Ich habe beide **selbst am Code nachgemessen**, bevor ich sie einordne. Ergebnis: Punkt 1 ist ein
+Ausschnitt aus einem größeren Muster, Punkt 2 ist **kein Doku-Problem, sondern ein Wert-Widerspruch**.
+
+### 1. Gemessen (Belege, nicht Bericht)
+
+```
+grep -rn "93c21c" resources/planner/hausplaner/
+  renderers/three-d/szene.ts:16   (Kommentar)
+  geometry/treppeSvg.ts:38        (Code)
+grep -rn "7fae1c" resources/planner/hausplaner/
+  app/studioDaten.ts:11           (T.brand — die eine Token-Stelle)
+```
+
+**Drei verschiedene Grüns für dieselbe Rolle „Marken-/Akzent-Grün":**
+
+| Wert | Ort | was er behauptet zu sein |
+|---|---|---|
+| `#7fae1c` | `studioDaten.ts:11` `brand` | die Marke (Token-Wahrheit) |
+| `#93c21c` | `treppeSvg.ts:38` `lauflinie` · `szene.ts:16` Kommentar | „Marken-Grün" |
+| `0xa3e635` | `szene.ts:90` `FARBE_AUSWAHL` | „Marken-/Akzent-Grün (**einzige** Akzentfarbe)" |
+
+Der Kommentar in `szene.ts:16` ist damit **nicht bloß veraltet**: er nennt einen Wert (`#93c21c`),
+der drei Zeilen weiter unten im selben Modul gar nicht steht — dort steht `0xa3e635`. Und **beide**
+sind nicht `T.brand`. Der Zusatz „einzige Akzentfarbe" in Z. 90 erhebt genau den Anspruch, den `T`
+erhebt — mit einem Wert, den `T` nicht kennt.
+
+### 2. Punkt 1 ist größer als gemeldet
+
+Der Generator hat **eine** Zeile genannt, weil nur sie grün war. Gemessen ist das Muster breiter:
+
+```
+grep -rn "'#[0-9a-fA-F]\{6\}'" resources/planner/hausplaner/geometry/  ⇒ 9 Treffer
+  treppeSvg.ts:36-41   — die komplette Palette F (umriss/stufe/lauflinie/text/rahmen/bg)
+  dachformVorlagen.ts:1119,1120,1243 — je eine Zeile mit ~10 Farbwerten (hell/dunkel/Hintergrund)
+```
+
+`F` in `treppeSvg.ts` ist **nicht überschreibbar** — kein Parameter, keine Option, hart im Modul
+(genutzt in Z. 77–116 an neun Stellen). Das heißt: **`geometry/` enthält SVG-Ausgabe-Engines mit
+eigener, hartkodierter Palette.** Das ist keine vergessene Zeile, das ist eine Schichtfrage.
+
+### 3. Planner-Einordnung: kein T1-Nachtrag, kein A1/A2-Befund, sondern **T2**
+
+**T1 bleibt erfüllt.** Der Token-Scope-ADR bindet `T` an die **React-Insel**; `HausplanerApp.tsx`
+hat 0 rohe Werte. `geometry/*` ist nicht die Insel. Wer das hier zum T1-Mangel erklärt, verschiebt
+nachträglich den Auftragsumfang — das tue ich nicht.
+
+**Aber der Scope-Schnitt hat ein Loch, und das gehört benannt:** Die Insel ist sauber, die SVG-
+Ausgabe daneben landet trotzdem im Auge des Nutzers. Ein Nutzer sieht keine Architekturschichten,
+er sieht zwei Grüns nebeneinander. Das ist ein **eigener Posten T2**, nicht der Rest von T1.
+
+T2 zerfällt in zwei Teile, die **nicht** dieselbe Rolle entscheiden darf:
+
+- **T2a — der falsche Kommentar** (`szene.ts:16`). Ausführbar, keine Fachentscheidung nötig: der
+  Kommentar muss sagen, was `FARBE_AUSWAHL` tatsächlich ist. → Generator-Posten, winzig, aber
+  **nicht** vom Planner selbst gefixt (kein Code-Fix durch den Planner, auch nicht „schnell die
+  eine Zeile" — genau diese Formulierung steht als Verbot im A1-Evaluator-Auftrag).
+- **T2b — die Paletten-Frage.** Zwei Entscheidungen, die **Yama** gehören und die ich nicht in
+  seiner Vertretung treffe:
+  1. **Soll die Treppen-Lauflinie Markenfarbe sein?** Fachlich ist die Lauflinie ein Zeichnungs-
+     element nach DIN 1356-1, kein Marken-Moment. Eine Norm-Zeichnung in Firmengrün ist eine
+     bewusste Entscheidung, keine Selbstverständlichkeit.
+  2. **Darf `geometry/` überhaupt Farben kennen?** Alternative: die Engine gibt Geometrie, der
+     Aufrufer färbt (dann wandert `F` als Parameter nach außen und die Insel färbt aus `T`).
+     Das ist die saubere Schichtung — aber es ist ein Eingriff in **byte-treu geschützte** Module
+     und damit kein Nebenbei-Umbau.
+
+**Meine Empfehlung, damit Yama nur ja/nein sagen muss:** T2a sofort als Generator-Posten; T2b
+zurückstellen, bis das Layout steht („wir machen erst layout fertig"). Ein Paletten-Umbau in
+`geometry/` mitten in der Wizard-Kette kauft Ordnung mit Risiko an einer Stelle, die heute niemanden
+blockiert. Die drei Grüns sind ein Schönheitsfehler, kein Fehlverhalten.
+
+### 4. Befund an meinem eigenen Verfahren — die Tafel ist zu leicht zu übergehen
+
+Die Auftragstafel ist 14 Minuten alt und wurde bereits genutzt: **AUF-2 steht auf
+`IN ARBEIT — Generator (nativ)`.** Das Hol-Prinzip funktioniert also. Aber der Zug ist
+**nicht committet** — die Zeile liegt unstaged im Arbeitsbaum (` M docs/auftraege/AUFTRAGSTAFEL.md`,
+mtime 09:20). Schritt 2 meines eigenen Protokolls verlangt Ziehen **und** Committen; der erste
+Nutzer hat den zweiten Halbsatz übergangen.
+
+Das ist kein Vorwurf an den Generator, sondern ein Konstruktionsfehler an meiner Tafel: **ein
+Zustand, der nur im Arbeitsbaum steht, ist für jede andere Instanz unsichtbar** — genau der blinde
+Fleck, den der Sammel-Block schon für die sechs gestagten Dateien benannt hat. Er wiederholt sich
+sofort an der Stelle, die ihn verhindern sollte.
+
+**Ich habe die Tafel deshalb in diesem Takt nicht angefasst.** Hätte ich meine neuen T2-Posten
+eingetragen und committet, hätte ich die fremde Zeile mitgenommen — derselbe Fehler wie heute früh
+beim Acht-Dateien-Commit, nur kleiner. Die T2-Posten kommen auf die Tafel, sobald der Generator
+seinen Zug committet hat. Dieser Block ist bis dahin der Beleg.
+
+**Nachgemessen:** dieser Commit fasst ausschließlich `docs/handoff-status.md` an. Die sechs
+gestagten T1-Dateien bleiben `M `, die Tafel bleibt fremd-modifiziert und uncommittet.
