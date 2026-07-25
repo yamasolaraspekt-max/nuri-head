@@ -859,6 +859,41 @@ Die blockierende Blade-Regression, die mein AUF-60-Votum (e4f2a25) offenhielt, i
 (1b2b26d) behoben und mit einem verzahnten Kompilier-Test verriegelt. Die Rechte-Logik war bereits
 FREIGABE-reif (fehlt=Minimum K5, liest-statt-setzt K4, 1008/1008). Beides zusammen: **AUF-60 FREIGABE.**
 
+## AUF-69 - Rechteberechnung in den Controller (ea60d9e) - FREIGABE
+
+**Reihenfolge:** erst blind gegen ea60d9e gemessen (Blade-Compile + PHP-Suite + TS-Gates + Browser
+inkl. Konsole), dann Generator-Bericht.
+**Klasse: sichtbar** (Route objekt/{id}). **Erster Posten unter meiner Regel #9** - und er haelt sie.
+
+- **Umfang (git show --name-status):** 4 Dateien - M HausplanerController.php, M objekt.blade.php,
+  M rechte.test.ts, A tests/Feature/Hausplaner/HausplanerRechteTest.php.
+- **Tor-1-Blick:** KEINE Route/Migration - die vorhandene seite()-Methode wird erweitert, keine neue
+  Autorisierungsflaeche. Kein Tor 1.
+- **Verschiebung sauber:** die vier hasPermission-Aufrufe sind aus dem Blade raus, jetzt in
+  HausplanerController::hausplanerRechte(?User). Der Blade liest nur noch `data-rechte="{{ \$hpRechte }}"`.
+  Methode: `if (kein Nutzer) return ''` (Minimum), sonst filter(hasPermission)->implode(' ') -
+  'entscheidet nichts, fragt und gibt weiter'.
+- **Regel #9 angewandt (Blade beruehrt):**
+  - Blade-Compile: committeter ea60d9e-Blade durch BladeCompiler + php -l = 'No syntax errors'.
+  - PHP-Suite (ticket_testing): **44 grün** (148 Assertions), inkl. BladeKompiliertTest UND
+    HausplanerRechteTest. Dessen Zähne sind eingebaut: `test_ohne_angemeldeten_nutzer_bleibt_die_liste_leer`
+    -> assertSame('', rechteFuer(null)) via Reflection ('ein fehlender Nutzer darf nie darf-alles
+    heissen'); dazu 'wer nichts darf bekommt nichts' und 'keine unbekannten Aktionen erfunden'.
+  - **Sichtprobe objekt/203 (Route in die Sichtprobe):** laedt sauber, `data-rechte` aus dem Controller
+    befuellt ('Hausplaner,read add update delete' fuer den YS-Admin), Insel gemountet.
+  - **Konsolen-Blick: KEINE Fehler/Exceptions** (nach frischem Reload mit aktivem Tracking).
+- **TS-Gates:** tsc 0 . test **1020/1020, 0 skip**.
+
+**Urteil: FREIGABE.** Die Rechte-Berechnung ist saubere Anwendungslogik im Controller (leerer Fall =
+Minimum, mit Reflection-Test verzahnt), der Blade liest nur, die Route traegt data-rechte end-to-end,
+und die Blade-Regression kann per Kompilier-Test nicht wiederkommen. Der erste Slice, der Regel #9
+vollstaendig durchlaeuft - PHP-Suite in der Gate-Kette, Route in der Sichtprobe, Konsole geprueft.
+
+**Hinweis zu W-Login (Tafel §3c):** die Konsolenpruefung fuer die Objekt-Route fuehrt die Tafel als
+offen (Generator-Login abgewiesen). In MEINER authentifizierten MCP-Chrome-Sitzung (YS) war sie
+fuehrbar und ist grün. Der W-Login-Posten bleibt fuer eine reproduzierbare/fremde Anmeldung sinnvoll,
+hat AUF-69 aber nicht blockiert.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -897,6 +932,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-57    7cac7cb  Auszug: schema 0 / test 993/993 0-skip / tsc 0 / build ok ; hartkod. 'Kein aktives Geschoss'=0, WegweiserOrt geschoss|schiene, reuse resolveToolState, Aktivierung 73/53/28 ; Arbeitsbereich widerlegt (-26/-26/-22/-19) ; 20 Subtests ; Gegen-Beweis Ort vertauscht = 1 rot ; Sichtprobe: Wegweiser 1x in Schiene (N=18 live gemessen, nicht hartkod. 25), nach Auswahl weg
   AUF-60    e0d1144  NACHBESSERN: Rechte-Logik solide (tsc 0/test 1008/1008/15 Subtests, K5 fehlt=Minimum, K4 liest-nicht-setzt) ABER objekt.blade.php @php...@endphp-Block (0->1 seit e0d1144) bricht Blade: HEAD-Compile -> php -l 'Parse error line 53', objekt/203 500 im committeten Stand ; Arbeitsbaum kompiliert sauber (AUF-64-Fix uncommittet: blade M + BladeKompiliertTest ??) ; Gate fing es nicht (kein Blade-Compile)
   AUF-64    1b2b26d  FREIGABE + schliesst AUF-60: committeter objekt-Blade inline (kein @php-Block), BladeCompiler+php -l 'No syntax errors' (war 'Parse error line 53' gegen HEAD) ; Rechte-Zeile erhalten (hpRechte/data-rechte, Nullsafe) ; BladeKompiliertTest 5 grün mit Selbst-Zahn-Probe (expectException ParseError) ; tsc 0 / test 1009/1009
+  AUF-69    ea60d9e  FREIGABE: kein Tor-1 (keine Route/Migration) ; Rechte aus Blade in Controller::hausplanerRechte(?User) - kein Nutzer=='' Minimum (Reflection-Test verzahnt) ; Regel #9: Blade-Compile 'No syntax errors', PHP-Suite 44 grün (BladeKompiliert+HausplanerRechte), objekt/203 laedt + data-rechte aus Controller + Konsole ohne Fehler ; tsc 0 / test 1020/1020 ; W-Login-Konsolencheck in YS-Sitzung fuehrbar+grün
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
