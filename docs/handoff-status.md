@@ -5353,3 +5353,84 @@ Hypothesen mit Datum, und der Auftrag sagt das künftig selbst.
 **Stapel: 4 → 1.** Bei ihm liegt AUF-46. **Ballbesitz: Generator (AUF-57) · Evaluator (AUF-46) ·
 Planner (AUF-63 messen, AUF-35b schneiden, AUF-18 und AUF-22 abarbeiten).**
 
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-57: der Wegweiser hat einen Anlass und einen Ort
+
+**Rolle:** Generator (nativ, Mac) · **Commits:** `7cac7cb` (Code) · `e391e73` (Bundle)
+**Status:** **umgesetzt**, nicht abgenommen. **Ballbesitz → Evaluator.**
+
+### Die eine Zeile, die den Posten ausgelöst hat
+
+```diff
+- wegweiser={wegweiser?.grund === 'Kein aktives Geschoss.' ? wegweiser.satz : null}
++ wegweiser={wegweiser?.ort === 'geschoss' ? wegweiser.satz : null}
+```
+
+Die Anzeige hing an dem einen Grund, der **nie eintritt**. `grep` auf einen Sperrgrund als
+Anzeigebedingung in `HausplanerApp.tsx`: **0 Treffer** (Kriterium 6).
+
+### Anlass und Ort
+
+| Anlass | Ort | gemessene Wirkung |
+|---|---|---|
+| „Lege ein Geschoss an" | Geschoss-Fläche | feuert nie (Szene hat immer ein Geschoss) |
+| **„Wähle ein Bauteil aus"** | **Werkzeug-Schiene** | **25 Werkzeuge** |
+| „Zeichne eine Wand" | Werkzeug-Schiene | 0 — bleibt still |
+| Arbeitsbereich wechseln | — | **kein Anlass**, siehe unten |
+
+**Der Auswahl-Anlass ist neu messbar.** Die hypothetische Bewertung ändert jetzt wahlweise **ein
+Feld desselben Kontexts** — eine Fähigkeit mehr **oder** eine Auswahl. Das ist dieselbe
+Nachschlage-Operation, keine zweite Regel; bewertet wird weiterhin **ausschließlich** von
+`resolveToolState` (Kriterium 3, erneut testverriegelt). Der Kandidat entsteht **nur**, wenn
+überhaupt Bauteile im Plan sind — sonst wäre der Rat zirkulär („wähle etwas aus", wo nichts ist).
+
+### Das Ergebnis, das ich stehen lasse statt es zu drehen (§5)
+
+**Der Arbeitsbereich ist kein Anlass.** Jeder Wechsel weg von Architektur **sperrt mehr**:
+
+```
+Import & Nachzeichnen  −26      Bauphysik  −26      Heizung  −22      Elektro · PV  −19
+```
+
+Architektur ist der größte Bereich; ihn zu verlassen kostet Werkzeuge, statt welche zu bringen. Der
+Mechanismus lehnt den Kandidaten **von selbst** ab, weil nur `entsperrt > 0` gewinnt — ich musste
+dafür keine Ausnahme bauen. **Nichts erfunden, damit etwas erscheint.**
+
+### Rohausgabe
+
+| # | Kriterium | Ergebnis |
+|---|---|---|
+| 1 | `tsc` · `schema:check` · `test` · `build` | **0 / 0 / 0 / 0** — **987 → 993** |
+| 2 | `store/` `domain/` `geometry/` `renderers/` unberührt | **0 Zeilen** |
+| 3 | keine zweite Aktivierungsquelle | `naechsterSchritt.ts` enthält weiterhin kein `resolveToolState`, keine `capabilities`, keine `VORBEDINGUNGEN` — auch nicht für Auswahl oder Bereich |
+| 4 | Aktivierung unverändert | **73 / 53 / 28** wie zu AUF-45, hart im Test |
+| 5 | Zahl gemessen, nicht gesetzt | `entsperrt === 25` aus dem Vergleich zweier Zustandslisten |
+| 6 | kein Grund mehr hartkodiert | `grep -c "wegweiser?.grund ==="` = **0** |
+| 7 | Ort je Anlass, testverriegelt | drei Handlungen, jede mit genau einem Ort; ein Grund ohne Handlung hat auch keinen Ort |
+| 8 | Schweigen bleibt möglich | Kandidat, der nichts ändert ⇒ `null`; Bereichswechsel ⇒ `null` |
+| 9 | kein Blindtext | jeder Satz > 20 Zeichen, keiner mit „folgt", jeder mit Zahl |
+| 10 | Mutations-Gegenbeweis | Ortszuordnung vertauscht (`schiene` → `geschoss`) ⇒ **1 Test rot**; zurückgebaut ⇒ `diff` leer, 993/993 |
+| 11 | `public/*` null, Bundle eigener Commit | erfüllt: `7cac7cb` → `e391e73`; `grep -c 'Wähle ein Bauteil aus'` = 1 |
+| 12 | **Sichtprobe mit sichtbarem Wegweiser** | siehe unten — bei AUF-45 war das der offene Punkt |
+
+**Sichtprobe, 1440 px, Fixture mit 8 Wänden:**
+
+```
+ohne Auswahl   „→ Wähle ein Bauteil aus — das schaltet 25 Werkzeuge frei."
+               steht GENAU EINMAL im Dokument, und zwar in der Werkzeug-Schiene
+               nicht in der Geschoss-Fläche · kein Balken über dem Plan
+nach Klick auf „Wand 1"   Wegweiser weg, Bauteil im Panel
+```
+
+### Ein ersetzter Testname
+
+| vorher | nachher |
+|---|---|
+| `K6: die Fläche zeigt den Wegweiser nur, solange er das Geschoss betrifft` | `K6: der Wegweiser hängt am ORT, nicht mehr an einem hartkodierten Grund` |
+
+Die alte Zusage beschrieb genau die Zeile, die dieser Posten beseitigt hat; der neue Test verriegelt,
+dass sie **nicht zurückkommt**.
+
+**Kein Push, kein Merge, kein Deploy. „umgesetzt", nicht „abgenommen".**
