@@ -2283,3 +2283,50 @@ Auflage 3 (Render-Pfad-Test) betreffen genau den Schritt, den A2 tut.
 **Ebenfalls sofort ziehbar, ohne jede Vorbedingung: L4** — die 20 Fachplaner-Untermodule zeigen heute
 nur den Toast „Konfigurator folgt" (`HausplanerStudio.tsx:70`). 20 Klicks ins Nichts. L4 hängt an
 nichts und ist die sichtbarste Fläche im ganzen Fahrplan.
+
+## ⇒ GENERATOR-BERICHT — Welle A2 (AUF-4) UMGESETZT: `acdb987`
+Tafel-Posten AUF-4 gezogen (`a61f10e`), umgesetzt, hier gemeldet. **„umgesetzt", nicht „grün".**
+Das war der Engpass des Layout-Fahrplans — entsperrt durch das A1-Wiederholungsvotum.
+
+**Die Sache selbst:** Über „welches Werkzeug steht in der Leiste?" entschieden **zwei** Mechanismen
+unabhängig voneinander — `art === 'werkzeug'` in der Registry **und** `zone === 'fix'` in den
+Präsentationsregeln. Sie stimmten zufällig überein. Jetzt entscheidet nur noch die Zone.
+`werkzeugTools()` kommt in `HausplanerApp.tsx` nicht mehr vor (per Test verriegelt).
+
+**Verhaltensneutral, und das ist belegt statt behauptet:** `zoneTools('fix')` liefert dieselben
+**7** ids in derselben Reihenfolge wie vorher `werkzeugTools()` — eigener Test, der beide Quellen
+gegeneinander hält.
+
+**Die vier Auflagen des A1-Votums:**
+1. **Shortcut-Kollision verriegelt** — `shortcutKollisionen()` leer, Leisten-Kürzel eindeutig, und
+   kein Katalog-Werkzeug in der Fix-Zone (alle sieben `herkunft: 'registry'`).
+2. **`zoneTools` aus dem Render-Pfad** — `useMemo(() => zoneTools('fix'), [])` am Aufrufort. **Kein**
+   Modul-Cache; ein Test verriegelt, dass `toolPresentation.ts` ohne veränderlichen Modul-Zustand
+   bleibt (`let`/`var`/`cache`/`new Map<RailZone` je 0). Grund ist nicht Stil: ein Cache würde die
+   A1-Gegenproben über `zoneToolsIn` mit veränderten Regelsätzen stillschweigend entwerten.
+3. **Test durch den echten Render-Pfad — NICHT erfüllbar, und das ist gemessen, nicht vermutet.**
+   Probe: `import('…/HausplanerApp.tsx')` im Testlauf ⇒ **`ERR_UNKNOWN_FILE_EXTENSION` für `.tsx`**.
+   `jsdom`, `happy-dom`, `@testing-library/react`, `react-test-renderer` sind **nicht installiert**
+   (nur `react-dom`). Ein Render-Test verlangt also **neue Test-Infrastruktur** — das ist ein eigener
+   Posten mit eigener Entscheidung, kein Beifang von A2. **Zurückgegeben, nicht übergangen.**
+4. **`herkunft` verriegelt** statt gestrichen — ein Test prüft alle **63** Regeln gegen die
+   Wirklichkeit: `registry`-ids stehen in `TOOL_DEFINITIONS`, `katalog`-ids im `TOOL_KATALOG` **und
+   nicht** in der Registry; Anzahl `registry` == `TOOL_DEFINITIONS.length`.
+
+**Gate, HEAD vor == nach:** `tsc:hausplaner` **0** · `schema:hausplaner:check` **0** ·
+`test:hausplaner` **754/754 pass, 0 fail** (vorher **746**, +8) · `build:hausplaner` **0**.
+
+**Gegen-Beweis tatsächlich rot gesehen (§8.3 verlangt ihn nach der Memoisierung erneut):** `dach` in
+der **echten** Regeldatei auf `versteckt` ⇒ **2 von 8 Tests rot** — „Leiste == Fix-Zone" und
+„GEGENPROBE: … schrumpft auf 6". Danach zurückgesetzt, `diff` identisch, `git status` auf der
+Regeldatei leer.
+
+**Ein Testfehler von mir, offengelegt:** Mein erster Entwurf prüfte den Quelltext **mit** Kommentaren
+und schlug auf meinen eigenen Erklärkommentar an („`zoneTools('fix')` statt `werkzeugTools()`").
+Der Test maß Prosa statt Code. Behoben, indem der Test Kommentare entfernt, bevor er prüft — nicht,
+indem ich den Kommentar weggelassen habe.
+
+**Bundle mitgebaut**, damit die Änderung im Browser sichtbar ist (1.303,48 kB).
+
+**Ballbesitz → Evaluator.** Damit ist die Kette frei: **AUF-24** (ID-Umbenennung) ist als Nächstes
+dran — seine Sperre bestand nur, solange `toolPresentation.ts` im AUF-1-Sperrbereich lag.
