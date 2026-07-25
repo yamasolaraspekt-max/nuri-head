@@ -157,3 +157,18 @@ Legende: **📌** = `canPin` im Paket · ⛔ = schema-gebunden (Wert bleibt engl
 ## Ballbesitz
 
 Führende Vorlage für **Generator I2** — er übernimmt die Spalte **dt. ID** direkt und baut den Adapter so, dass die 16 ⛔-Zeilen auf ihren englischen Schema-Wert mappen. Cowork hat **keinen Code** angefasst.
+
+---
+
+## Nachtrag Planner, 25.07. — Status und Geltung
+
+**Diese Tabelle ist ab jetzt committet und damit übergeben.** Solange sie nur im Arbeitsbaum lag,
+existierte sie für den Generator nicht — genau deshalb trägt `werkzeugPaket.ts` aus I2 (`289ccc8`)
+noch die **englischen** Paket-IDs. Das wird mit **AUF-31** nachgezogen; I2 selbst bleibt gültig.
+
+**Führend:** diese Datei. `docs/planner/werkzeug-namen-deutsch.md` (`1c97c65`) ist **stillgelegt**,
+Trail erhalten — eine Wahrheit je Sachverhalt.
+
+**Ratifiziert und eingearbeitet:** die fünf Kuratier-Overrides (`hand · assistent · befehlspalette ·
+umkreisen · aufriss`) und die zwei Fach-Labels (`brick` = Klinker-Verband, Kategorie Fassade;
+`beam` = Unterzug, weil neben `column`/Stütze im Hochbau).
