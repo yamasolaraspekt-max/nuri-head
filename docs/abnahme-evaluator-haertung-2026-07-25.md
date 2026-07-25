@@ -179,6 +179,34 @@ Route `/admin/hausplaner/studio?fixture=decke-treppe` → **Expertenmodus**, ger
 3. **Rohbelege in der Datei** (Anhang unten) statt nur im Chat; ab dem nächsten Votum vollständig committet.
 4. **Sichtprobe mit Breite - GELOEST via iframe fester Breite** (same-origin, inneres innerWidth = iframe-Breite, contentDocument messbar). Gemessen 1440 / 1371 / 371 px: Panel-Reiter ueberall alle 4 sichtbar, keiner geklippt -> AUF-26 auf FREIGABE hochgestuft. ~1375px-Defekt betrifft die 22-Gruppen-Leiste (AUF-34). Dieses iframe-Verfahren ist ab jetzt das Viewport-Sichtprobe-Werkzeug (loest das resize-Limit).
 
+## AUF-35a - Markieren / Mehrfachauswahl (35fbfde, Bundle 4dce1cc) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 35fbfde gemessen, dann Generator-Bericht gelesen.
+**Klasse: sichtbar** (interaktive Auswahl) - Sichtprobe Teil der Abnahme.
+
+- **Gates selbst gefahren:** tsc 0 / schema:check 0 (Schema unveraendert) / test **874/874**.
+- **Umfang (git show --stat 35fbfde):** 8 Dateien - markieren.test.ts (+203),
+  auswahlModus.ts (+98, aufloeseAuswahlmodus), auswahlDarstellung.ts, auswahlUebersicht.ts,
+  trefferSuche.ts (Hit-Test), HausplanerApp.tsx (+93), toolRegistry.ts (+5),
+  store/hausplanerStore.ts (+31).
+- **K4 / Store-Beruehrung geprueft (erste Slice, die den Store anfasst):** die +31 erweitern
+  NUR den bestehenden Auswahl-UI-State - selectNodes bekommt primaerId (Primaerobjekt der
+  Auswahl), ausdruecklich 'Kein zweiter Auswahlzustand'. **Kein SceneDocument, kein Schema**
+  (schema:check gruen, git status leer). Additiv, keine zweite Wahrheit. -> K4 sauber.
+- **Auswahlmodi (plattform-bewusst):** {}=replace, shift=add, ctrl/meta=toggle, alt=remove.
+- **Mutations-Gegenbeweis (Kopie /tmp):** shift-Zweig 'add'->'replace' -> markieren.test
+  21 pass -> **20 pass / 1 fail**. Zaehne bestaetigt.
+- **2 bewusste Nicht-Bauten (ehrlich benannt, Folge AUF-35b):** Hover-Vorschau
+  ('reine Anzeige, nie im Dokument') und shortLabel-Verdrahtung.
+- **Sichtprobe (interaktiv, authentifiziertes iframe, innerWidth 1440, fixture decke-treppe):**
+  Expertenmodus -> Werkzeug heisst jetzt 'Markieren' (V). Klick auf die Treppe -> selektiert:
+  Eigenschaften-Panel wechselt auf 'Treppe' (BAUART-Auswahl, '16 Steigungen . 15 Auftritte,
+  Steigung 175 mm . Auftritt 200 mm . DIN 18065', Sicht/Sperren erscheinen). panelZeigtTreppe=true.
+  Bundle 4dce1cc ausgeliefert (servierbar, sonst Sichtprobe unmoeglich).
+
+**Urteil: FREIGABE.** Auswahl-Logik rein/getestet, Modi mutationsfest, Store additiv ohne
+zweite Wahrheit, Selektion sichtbar am echten Datensatz. Nicht-Bauten sind AUF-35b, kein Mangel.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -199,6 +227,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-34    8b2b9e6  tsc 0 / schema 0 / test 830/830 ; Mutation Thema-entfernt = 4 rot ; BUNDLE NICHT rebuilt
   AUF-37    91d9592  build 0 ; committeter Bundle == frischer Build (byte-identisch) ; Sichtprobe 1371+375: AUF-27 3 Reiter, AUF-34 5 Bereiche kein Ueberlauf/Umbruch
   AUF-36    d106445  tsc 0 / schema 0 / test 853/853 ; Mutation Grund-verfaelscht = 1 rot ; Bundle eigener Rebuild 368f2d7 ; Sichtprobe Grund-Text rendert
+  AUF-35a   35fbfde  tsc 0 / schema 0 / test 874/874 ; Store +31 nur Auswahl-UI-State (kein SceneDocument) ; Mutation shift add->replace = 1 rot ; Bundle 4dce1cc ; Sichtprobe Klick-Treppe -> Panel 'Treppe'
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
