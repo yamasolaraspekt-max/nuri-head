@@ -670,3 +670,57 @@ mitrepariert (eigener Posten T1).
 
 **Ballbesitz → EVALUATOR.** Bitte selbst nachmessen (Gates + die 6 Zahlen + beide Gegen-Beweise
 nachstellen) und Votum hier hinterlegen. **Kein `main`-Merge (Tor 2 = Yama).**
+
+---
+
+## ⇒ EVALUATOR — AUFTRAG: Abnahme Wizard-Welle A1 (Planner, 25.07. vormittags)
+
+**Ballbesitz: EVALUATOR.** Der Auftrag steht vollständig in
+`docs/auftraege/evaluator-auftrag-wizard-welle-a1-werkzeug-praesentation.md`. Prüfgegenstand ist Commit
+`c0ffe31` gegen `docs/auftraege/generator-auftrag-wizard-welle-a1-werkzeug-praesentation.md`.
+
+**Kurzfassung der Pflicht:** Der Generator-Bericht darüber ist sauber und ausführlich — das ist **kein
+Grund, ihm zu glauben**. Alle Zahlen selbst erzeugen: vier Gates mit Exit-Codes (behauptet 695/695, vorher
+684 — auch die 684 selbst nachfahren oder ausdrücklich als „nicht verifiziert" kennzeichnen), die sieben
+Kennzahlen (63/7/2/15/39, `verwaisteRegeln()`=[], `regelloseWerkzeuge()`=[]) direkt am Modul, dazu die vom
+Planner ergänzte Querprobe `new Set([...registryIds, ...katalogIds]).size` — geht die 63 wirklich auf oder
+rettet eine id-Überschneidung die Summe zufällig?
+
+**Drei Gegen-Beweise**, nicht zwei: (a) `wand`→`versteckt` und (b) erfundene id nachstellen (behauptet 5/11
+und 3/11 rot), **(c) neu vom Planner:** eine id aus den Regeln entfernen — wird kein Test rot, deckt die
+Suite den Vollständigkeits-Anspruch nicht ab.
+
+**Der eigentliche Risikopunkt** ist A1.2: `faehigkeiten.ts` liest die 15 ids jetzt aus `zoneTools('weitere')`.
+Reihenfolge-Vergleich gegen `git show 3229866:…` selbst ausführen — und zwar für **alle** Gruppen, nicht nur
+`'werkzeuge'`, über die der Bericht allein spricht.
+
+**Neu aufgenommen, weil es sonst niemand liest:** der Commit enthält `public/hausplaner/hausplaner.js`
+(408 Zeilen). Das ist hier etablierte Praxis (`050f55f`, `a1215a3`, `4cde0be`, `176aa48` ebenso), also kein
+Regelbruch — aber ungeprüft. Der Evaluator baut frisch und vergleicht gegen den committeten Bundle, prüft
+die md5-Nicht-Drift `be0f864c0b722573acdda978c1e6cd70` und sieht nach, ob der Bundle-Delta **mehr** enthält,
+als der Quell-Delta erklärt.
+
+**Grenzen:** kein `main`-Merge, kein Deploy (Tor 2 = Yama) · kein Push zu `upstream` (fremdes Konto), Push
+nur `fork`/`backup-private` via `push-integration-sicher.command`, nie `--force` · **keine Code-Korrektur
+durch den Evaluator** (Befund → Planner) · `decke` in `WERKZEUG_GRUPPE` bleibt Yamas Fachfrage, nur
+bestätigen, dass der Generator sie korrekt offengelassen hat · die 31 rohen Hex-Werte in `HausplanerApp.tsx`
+sind bewusst ausgeklammert (Posten T1) und **kein** A1-Befund.
+
+**Votum** als Block `## ⇒ EVALUATOR-VOTUM — Wizard-Welle A1` hier hinterlegen, Grün/Rot in der ersten Zeile
+ohne Weichmacher, plus die 9 Fix-/Kontext-ids im Klartext, damit Yama sie fachlich sehen kann.
+**Rot blockiert A2.**
+
+---
+
+## ⇒ YAMA — zwei offene Entscheidungen + eine Bitte (Stand 25.07., Planner)
+
+1. **T1 Grün-Entscheidung** (Konzept: `docs/auftraege/planner-konzept-token-konsolidierung-hausplanerapp.md`):
+   `HausplanerApp.tsx` führt eine zweite Farbwahrheit (`FARBEN`) plus 31 verschiedene Hex-Werte in 79
+   Vorkommen. Das Akzent-Grün dort ist `#93c21c`, das Marken-Token ist `T.brand #7fae1c`. Deine Wahl:
+   (a) auf `T.brand #7fae1c` ziehen [meine Empfehlung] · (b) auf `T.accent` Teal `#12807d` ·
+   (c) neues Token für `#93c21c`. Erst danach wird T1 ein Generator-Auftrag.
+2. **`decke` in `WERKZEUG_GRUPPE`** (`faehigkeiten.ts`): fehlt und fällt auf `'werkzeuge'`, während
+   `wand → 'bau'` und `dach → 'dach-zimmerei'`. Gehört `decke` fachlich zu `'bau'`?
+3. **Bitte:** `push-integration-sicher.command` doppelklicken. `push-result.log` steht noch auf
+   Fr. 24.07. 23:21, der fork auf `9bcc9c3`; lokal ungesichert sind `cf54ffc`, `2b9d468`, `9e11457`,
+   `3229866`, `c0ffe31`. Aus der Cloud geht Push nicht (403 am Proxy).
