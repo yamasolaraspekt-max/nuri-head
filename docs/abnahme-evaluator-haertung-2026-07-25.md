@@ -360,6 +360,38 @@ Test, Mutation UND Sichtprobe belegt; sechs Schritte ohne Modellgrundlage bleibe
 was fehlt. STEPS stillgelegt statt geloescht, Test verriegelt das Nicht-Rendern. Der Demo-Canvas
 ist ein bekannter Nachbar-Posten, kein Mangel an dieser Ableitung.
 
+## NACHTRAG - vertagte Sichtproben 1440/1024/375 nachgeholt (AUF-27 / AUF-34 / AUF-21-I4)
+
+Die drei 'FREIGABE mit Auflage / Sichtprobe deferred'-Posten hatten nur Teil-Viewports
+(1371/375 bzw. 1512). Jetzt gegen das aktuelle servierte Bundle (cb3d17e, traegt AUF-27/34/I4)
+an allen drei Board-Viewports gemessen - iframe fester Breite, innerWidth == CSS-Breite bestaetigt,
+Messwerte per getBoundingClientRect im contentDocument.
+
+| Viewport | innerWidth | docOverflowX | Arbeitsbereich-Zeile (AUF-34) | 3 Reiter (AUF-27) | Werkzeuge (I4) |
+|---|---|---|---|---|---|
+| 1440 | 1440 | **0** | kein Ueberlauf, einzeilig | 3/3 da | sichtbar |
+| 1024 | 1024 | **0** | Hoehe 27 px = einzeilig, Ueberlauf 0 | 3/3 da | sichtbar |
+| 375  | 375  | 298 | Zeile bricht auf 82 px (3 Zeilen), **eigener Ueberlauf 0** | 3/3 da | sichtbar |
+
+- **AUF-27 (drei Reiter Werkzeuge/Projekt/Fachplaner):** an 1440/1024/375 alle drei vorhanden.
+  Auflage (Bundle-Rebuild via AUF-37) erfuellt, Reiter im laufenden App sichtbar. **Sichtprobe erledigt.**
+- **AUF-34 (Arbeitsbereich-Leiste, kein waagerechter Ueberlauf / keine Wortumbrueche):** bei 1440
+  und 1024 einzeilig ohne Ueberlauf; bei 375 bricht die Leiste auf drei Zeilen um, aber mit
+  **eigenem Ueberlauf 0** (graceful, kein Abschneiden). Das deferred-Kriterium ('kein Ueberlauf
+  bei 1371 px, keine Wortumbrueche im Menue') ist an den Zielbreiten erfuellt. **Sichtprobe erledigt.**
+- **AUF-21/I4 (110 Werkzeuge sichtbar):** Werkzeugliste an 1440/1024/375 sichtbar; die frueher
+  offenen 1024/375 sind damit nachgeholt. **Sichtprobe erledigt.**
+
+- **Ehrlicher Befund bei 375 (NICHT AUF-27/34/I4):** die Seite hat bei 375 px ~298 px waagerechten
+  Ueberlauf. Quelle gemessen: die **obere Aktionsleiste** (Geschoss . 2D/Split/3D . Gespeichert .
+  'Speichern (Strg+S)' bei right=1156) - eine feste Horizontalzeile, die bei 375 nicht umbricht/scrollt.
+  Das ist die Kopfleiste des **Expertenmodus** (Desktop-Ansicht; mobil laeuft die gefuehrte Planung),
+  ein bekanntes Mobil-Thema (AUF-46-Umfeld), **nicht** von diesen drei Slices verursacht. Als
+  Beobachtung vermerkt, kein Blocker fuer die drei Voten.
+
+**Ergebnis:** alle sieben archivierten Posten (AUF-21 . 27 . 33 . 34 . 35a . 36 . 37) haben jetzt
+ein vollstaendiges Votum inkl. der geforderten Sichtproben. Kein deferred-Rest mehr offen.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -385,6 +417,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-30    56cc734  Auszug: schema 0 / test 788/788 0-skip / tsc 0 / build ok ; test-hooks nur .tsx via esbuild ; 6 renderPfad-Subtests ueber react-dom/server ; Gegen-Beweis A disabled-weg='Kante 4' rot, B zweck-Literal='Zweck im Markup' rot (je 5/1)
   AUF-33L2  9d0c12a  Auszug: schema 0 / test 888/888 0-skip / tsc 0 / build ok ; 3 Grenzen (keine Rechnung/statischer Aufruf/kein Modell-Schreiben) ; 14 Subtests ; Gegen-Beweis Fund-Fix + Operanden-Gate je 13/1 rot ; Sichtprobe 1440: Wohnung 7x erfuellt, Aussentreppe 2 Fehler+5 erfuellt (Fund-Fix am Schirm)
   AUF-39L5  b3a6210  Auszug: schema 0 / test 900/900 0-skip / tsc 0 / build ok ; Guardrail kein 2. Snapshot/Hash/Projektion (grep leer), ableitenSchritte rein ; 12 Subtests ; Gegen-Beweis A offen->ok = K5 rot (10/2), B fenster->tuer = K7 rot (11/1) ; Sichtprobe: frisch Schritt 2/11 'Offen', keine Waende, 0 Fenster/Tuer/Treppe, Expertenmodus bestaetigt 0 Bauteile ; Adjacent Demo-Canvas (68a7f7e, nicht AUF-39)
+  Sichtprobe-Nachtrag  Bundle cb3d17e  1440: docOvfX 0, arb einzeilig, 3 Reiter, WZ sichtbar . 1024: docOvfX 0, arbH 27 einzeilig . 375: docOvfX 298 (Quelle: obere Aktionsleiste 'Speichern' right=1156, NICHT AUF-27/34/I4), arb bricht 82px arbOvfX 0, 3 Reiter da
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
   Batch1 K3: Reihenfolge-Swap → 1 rot   · Batch2 K9: enabled:true → 5 rot
