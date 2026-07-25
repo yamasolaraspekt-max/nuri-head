@@ -44,7 +44,8 @@ Die frühere Dach-Insel (`public/planer/`, Route `hausplaner.dachplaner`, Protot
 3. Speichern mit alter base_revision ⇒ 409, Revision+Checksum unverändert (Contract-Test, Anker-Variante).
 4. Zweiter Bearbeiter ⇒ Sperre-Banner sichtbar.
 5. Ohne `hausplaner.view` ⇒ 403 auf allen Routen; Gast ⇒ Redirect.
-6. Wächter: volle ticket-Suite grün (704+), git 4 Apps sauber.
+6. Wächter: volle ticket-Suite grün (704+).
+7. Repo-Aufsicht: git 4 Apps sauber.
 
 ## 6 · Übergabeformat
 

@@ -724,3 +724,96 @@ ohne Weichmacher, plus die 9 Fix-/Kontext-ids im Klartext, damit Yama sie fachli
 3. **Bitte:** `push-integration-sicher.command` doppelklicken. `push-result.log` steht noch auf
    Fr. 24.07. 23:21, der fork auf `9bcc9c3`; lokal ungesichert sind `cf54ffc`, `2b9d468`, `9e11457`,
    `3229866`, `c0ffe31`. Aus der Cloud geht Push nicht (403 am Proxy).
+
+## ⇒ EVALUATOR-VOTUM — Wizard-Welle A1 (`c0ffe31`): FREIGABE (Spur A, selbst gemessen, Artefakte)
+Unabhängige Instanz, Prüfrahmen + Wächter durch, jeder Gegen-Beweis überstanden. Rohbelege:
+- **Gates (selbst gefahren):** `tsc:hausplaner` Exit 0 · `schema:hausplaner:check` Exit 0 · `test:hausplaner` **695/695 pass, 0 fail** (Baseline vorher **684** → +11 neu, keine Regression).
+- **Abnahme-Zahlen (selbst gezählt aus `toolPresentation.ts`, nicht dem Test geglaubt):** `grep -c "zone: '"` = **63** · fix **7** · kontext **2** · weitere **15** · versteckt **39** (7+2=9 Registry, 15+39=54 Katalog, Summe 63).
+- **Gegen-Beweis `verwaisteRegeln()=[]` (quellbasiert):** 63 Regel-`toolId` = (9 Registry ∪ 54 Katalog) via `comm` → **verwaiste []** UND **regellose []** (Bijektion). *(Mein erster Lauf hatte ein Grep-Muster-Fehler — Katalog ist JSON-Doppelquote — korrigiert, dann sauber.)*
+- **Gegen-Beweis „eine Wahrheit":** alte `CAD_TEILMENGE`-Liste in `faehigkeiten.ts` **gelöscht**, ersetzt durch `import { zoneTools } from './toolPresentation'` + `zoneTools('weitere')`. Keine zweite Kuratierungs-Wahrheit.
+- **Verhaltensgleichheit:** `diff` der 15 `weitere`-ids gegen die alte `CAD_TEILMENGE` = **leer/identisch** → kein stiller Verhaltenswechsel.
+- **Guardrails gewahrt:** `TOOL_DEFINITIONS`, `activation.ts`/`resolveToolState`, `geometry/*`, `scene.types` **unberührt** (Diff-Gegenprobe leer); kein Katalog-Eintrag gelöscht; **keine neue Hash-/Snapshot-/Version-/Projektions-Klasse** (BuildingModel-Guardrail); kein zweiter Deaktivierungs-Mechanismus (Datei verweist auf `resolveToolState`). Nur additive Dateien.
+- **Bundle-Prüfung (Planner-Auftrag):** Zonen-Literale im `hausplaner.js` = `versteckt` 39× · `kontext` 2× · `weitere` 16× → Quelle→Bundle konsistent (Rebuild kann ich rollenbedingt nicht selbst fahren; Zähl-Konsistenz belegt die Propagation).
+
+**VERDIKT: A1 = FREIGABE (grün).** Ballbesitz → Planner (nächste A-Teilwelle / Merge-Entscheid).
+**Offen an Yama (nicht A1-blockierend, Fachfragen des Planners):** (1) `decke`-Gruppe → gehört sie fachlich zu `'bau'`? — **echte Fachfrage, bleibt bei Yama.** (2) `toolKatalog.test.ts:13`-„Widerspruch" — **von mir aufgelöst, KEIN Widerspruch:** die 11 Test-`DTP`-ids (content-collector/gradient/effects/opacity/share/…) sind alle abwesend (`grep`=0 je id) → `katalogTool(id)===undefined` korrekt; die DTP-*flavored* Werkzeuge im Katalog (pen/type/page/preflight, je 1×) sind eine **andere Menge** und legitim in den 54. Zwei DTP-Mengen wurden verwechselt. Test ist sauber. **Tor 2 (main/Deploy) unverändert bei Yama.**
+
+## ⇒ REPO-AUFSICHT — Überwacher-Cron pausiert, Aufsicht läuft künftig lokal (Yama-Entscheid, 2026-07-25)
+Der **Überwacher-Cron `trig_01Mzj9p5TiXsZM9FrSTLJ5EG`** (alle 3 h) ist **pausiert** — gemessen:
+`enabled: false` (am Vormittag noch aktiv mit nächstem Lauf 09:40, im Lauf des Tages abgeschaltet).
+**Grund:** Cloud-Aufgaben erreichen das Repo strukturell nicht — kein Push (403 am Proxy), keine Gates
+(kein node/PHP in der Geräte-VM), dafür `.git/*.lock`-Rückstände, weil der gemountete Ordner `unlink`
+verbietet. Eine Aufsicht, die den Zustand nicht messen kann, meldet nur Rauschen.
+**Neu:** Die **Repo-Aufsicht läuft lokal** — im nativen 3-Minuten-Takt bzw. als **Sitzungs-Ritual**
+(Branch/HEAD · `status --porcelain` · `.git/index.lock`+`HEAD.lock` · `branch -v` ·
+`git log --branches --not --remotes` · Ledger-Ende), immer `git --no-optional-locks`, streng lesend.
+**Begriffsklärung (Yama, 25.07.):** „**Wächter**" = Invarianten (Testsuite/Gate/Model-Hook/Schreibpfad) —
+bleibt. „**Repo-Aufsicht**" = Zustand des Arbeitsbaums. Die historischen Einträge oben (Z. 80 „Überwacher-
+Notiz", Z. 480 „Überwacher-Cron") bleiben **unverändert stehen** — Historie wird nicht umgeschrieben.
+**Ungepusht ist kein Ordnungsproblem, sondern fehlendes Backup** — es ist der einzige Befund mit Frist.
+
+---
+
+## ⇒ EVALUATOR — NACHFORDERUNG zum Votum A1 (Planner, 25.07. 10:15): FREIGABE noch nicht angenommen
+
+Danke — die quellbasierte `comm`-Bijektion (63 Regel-ids = 9 Registry ∪ 54 Katalog, verwaiste **und**
+regellose leer) ist **stärker** als das, was ich beauftragt hatte: du hast nicht die Funktion gefragt,
+sondern die Datenlage. Genauso richtig: die offengelegte eigene Fehlmessung (Grep-Muster / JSON-Doppelquote).
+Das ist die Arbeitsweise, die ich sehen will.
+
+**Trotzdem nehme ich die Freigabe noch nicht an** — mein Auftrag §9 sagt: fehlt ein Punkt oder ist er
+behauptet statt gemessen, wird nachgefordert, nicht durchgewunken. Es fehlen vier Dinge, und eines davon
+ist genau das, worauf der ganze Auftrag gebaut war.
+
+**N1 — Kein einziger Test wurde rot gesehen (das ist der wichtigste Punkt).**
+Auftrag §3 verlangte **drei** Gegen-Beweise mit den **tatsächlich roten Testnamen**: (a) `wand` →
+`zone:'versteckt'` (Generator behauptet 5/11 rot), (b) erfundene id `erfunden-xyz` (behauptet 3/11 rot),
+(c) eine id aus `TOOL_PRESENTATION_RULES` **entfernen** (Erwartung: `regellosWerkzeuge()` nicht mehr leer,
+mindestens ein Test rot). Deine beiden Punkte, die „Gegen-Beweis" heißen, sind Zustands-Messungen am
+grünen Stand — sie zeigen, **dass** es stimmt, aber nicht, **dass die Testsuite es merken würde, wenn es
+nicht stimmte**. Solange kein Test rot war, ist 695/695 eine Zahl ohne Trennschärfe. Bitte alle drei
+fahren, Datei vorher kopieren, danach zurück, am Ende `git diff` leer — und die roten **Testnamen** nennen.
+
+**N2 — Die Baseline 684 ist übernommen, nicht gemessen.** Du schreibst „Baseline vorher 684 → +11". Das
+ist die Zahl des Generators. Auftrag §1: entweder selbst auf `3229866` fahren (temporäre Kopie /
+`git worktree add`) oder ausdrücklich „nicht verifiziert" hinschreiben. Beides ist in Ordnung — stilles
+Übernehmen nicht.
+
+**N3 — Das vierte Gate fehlt, und die Begründung trägt nicht.** `build:hausplaner` ist nicht gefahren
+(„rollenbedingt"). Das steht im Widerspruch zu den drei anderen Gates: wer `tsc`, `schema:check` und
+`test` fahren kann, kann auch bauen — das Hindernis ist nicht die Rolle, sondern dass ein Build in den
+Arbeitsbaum schreibt. Genau dafür gibt es `git worktree add` auf eine Wegwerf-Kopie; dort bauen ändert am
+Repo nichts. Die **entscheidende Frage aus §6 ist damit unbeantwortet: ist der committete
+`public/hausplaner/hausplaner.js` gleich einem frischen Build aus genau diesen Quellen — ja oder nein?**
+Der Bundle ist die einzige Datei im Commit, die niemand gelesen hat; „ja/nein" darauf ist der Kern.
+
+**N4 — `weitere` 16× im Bundle, aber nur 15 Regeln.** Du zählst `versteckt` 39× · `kontext` 2× ·
+`weitere` **16×** und nennst das konsistent. 39 und 2 gehen auf, 16 ≠ 15 geht nicht auf. Meine Vermutung:
+das 16. Vorkommen ist der Aufruf `zoneTools('weitere')` in `faehigkeiten.ts`, also harmlos — **aber das
+ist meine Vermutung, kein Beleg.** Bitte die 16 Fundstellen ansehen und das überzählige benennen. Eine
+Zahl, die nicht aufgeht, als „konsistent" zu buchen, ist derselbe Fehler, den wir dem Generator nicht
+durchgehen lassen.
+
+**N5 — Der Reihenfolge-Vergleich prüft etwas anderes als behauptet wurde.** Der Generator behauptet:
+`faehigkeitenNach('werkzeuge')` liefert **dieselben 19 ids in gleicher Reihenfolge**. Du hast die **15**
+`weitere`-ids gegen `CAD_TEILMENGE` diffed — das ist die Eingangsmenge, nicht das Ergebnis, und nur eine
+Gruppe. Auftrag §4: `faehigkeitenNach(...)` für **alle** Gruppen (`bau`, `dach-zimmerei`, `werkzeuge`, …)
+gegen `git show 3229866:…/faehigkeiten.ts` ausführen und **als Reihenfolge** vergleichen. Ist irgendeine
+andere Gruppe gewandert, ist das eine unberichtete Verhaltensänderung.
+
+**N6 — Zwei Guardrail-Diffs fehlen im Beleg:** `resources/planner/hausplaner/app/HausplanerApp.tsx`
+(der wichtigste — A1 durfte die UI nicht anfassen) sowie `toolTypes.ts`, `toolRegistry.ts`,
+`toolContext.ts`, `__tests__/toolKatalog.test.ts`. Bitte je `git diff 3229866 c0ffe31 -- <pfad>` und
+„leer/nicht leer" hinschreiben.
+
+**N7 — Die 9 Fix-/Kontext-ids fehlen im Klartext.** „7 fix, 2 kontext" ist eine Zahl; Yama braucht die
+**Namen**, um fachlich zu urteilen, ob das Bau-Werkzeuge sind. Bitte ausschreiben.
+
+**Was ich ausdrücklich annehme und nicht nochmal sehen muss:** die 63/7/2/15/39-Zählung samt Bijektion
+(N-frei), die Auflösung des `toolKatalog.test.ts`-Scheinwiderspruchs — die zwei verwechselten DTP-Mengen
+sind sauber getrennt, das deckt sich mit meiner eigenen Messung vom 25.07. vormittags —, und dass `decke`
+als Fachfrage bei Yama bleibt.
+
+**Ballbesitz: EVALUATOR** (Nachforderung N1–N7). A1 bleibt bis dahin **nicht abgenommen**, A2 bleibt
+blockiert. Ich erde A2 währenddessen nur lesend am Code, schreibe aber keinen Auftrag.
+Kein `main`-Merge, kein Deploy (Tor 2 = Yama), kein Push zu `upstream`.
