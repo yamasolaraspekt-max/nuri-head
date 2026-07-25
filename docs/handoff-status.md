@@ -2578,3 +2578,59 @@ entfernt. Der gemeinsame Helfer oben ist die eigentliche Abhilfe.
 **Ballbesitz → Evaluator (Cowork-Strang).** Für die Sichtprobe: 19 Flächen, erreichbar über
 Navigation und Startseite; zu prüfen ist besonders, ob die Feldstruktur bei **375 px** umbricht statt
 zu kappen — genau der Fehler, den AUF-26 gerade behoben hat.
+
+---
+
+## ⇒ COWORK REAKTIVIERT — der „SITZUNGSENDE"-Abschluss ist überholt (Yama, 25.07.)
+
+**Yama-Entscheidung in dieser Sitzung:** Der Cowork-Strang wird **weitergeführt**, nicht geschlossen.
+Der oben stehende Block „SITZUNGSENDE — Cowork-Strang wird geschlossen" ist damit **überholt** — er
+stammt aus einem früheren Stand, bevor Cowork in dieser Sitzung reaktiviert wurde. Er bleibt als
+Protokoll stehen, gilt aber als aufgehoben.
+
+**Erstes Ergebnis nach Reaktivierung — belegt, nicht nur im Chat:** Die Cowork-Sichtprobe AUF-26
+(Abschnitt oben, objekt/203, Expertenmodus, aktueller Bundle) zeigt am Schirm bei **1440 px**: die vier
+Kappungen der Erst-Sichtprobe (Historie-Reiter · ↕ Oben/Unten · Wort-Abbruch · Rail-Labels) sind
+**behoben** — Reiterzeile bricht um, „Historie" sichtbar. **1024/375 px misst Yama direkt**
+(Werkzeuggrenze der Chrome-Anbindung: `resize_window` reflowt den Viewport nicht). Kein offener Punkt
+gegen AUF-26 aus Cowork-Sicht; die Schmalviewport-Messung liegt bei Yama.
+
+---
+
+## ⇒ YAMA, 25.07.: NEUE PRIORITÄT — Werkzeugleiste mit allen Icons, nicht die Engine-Panels
+
+**Wörtlich:** *„ich will kein u wert, ich will alle werkzeugstool icon frontendlayout"*
+
+**Damit ist L2/L3 (Panel-Muster + 13 Engine-Panels) zurückgestellt** — nicht verworfen, aber nicht
+mehr der nächste Schritt. Die offene Willensfrage „welche Engine wird das Muster" ist damit
+**gegenstandslos**, bis Yama sie wieder aufruft.
+
+**Der neue Fokus ist die Werkzeugleiste aus `dashboard-tools-v1.html`** — die personalisierbare
+Leiste mit Zonen, Anheften und Überlauf, gespeist aus dem 110er-Werkzeugpaket. Die Bausteine liegen
+alle schon:
+
+| Baustein | Zustand |
+|---|---|
+| **110 SVG-Icons** | **liegen** in `public/hausplaner/icons/tools/` (I1, `7bbf9ff`) |
+| **110er-Registry** mit `function`/`usage`/`shortcut`/`views`/`priority`/`canPin` | liegt als Referenz in `docs/planner/tool-registry-paket.json` |
+| **Zonen-Mechanik** (`fix`/`kontext`/`weitere`/`versteckt`) | gebaut und abgenommen (A1) |
+| **Leiste liest die Zonen** | gebaut (A2, `acdb987`), Abnahme offen |
+| **ID-Sprache** | entschieden: englisch, Labels deutsch (`c1c60ea`) |
+
+### Die Kette bis „Werkzeugleiste fertig" — vier Posten, in dieser Reihenfolge
+
+1. **A2 abnehmen** (`acdb987`) — Evaluator, frische Instanz. Entsperrt `toolPresentation.ts`.
+2. **AUF-24** — die 9 Werkzeug-IDs auf Englisch, damit Registry und Paket dieselbe Sprache sprechen.
+   Berührt kein persistiertes Schema (dort stehen die IDs nicht).
+3. **AUF-21 / I2** — Adapter Paket→`ToolDefinition`, der Fach-Katalog ersetzt die 47 DTP-Reste
+   (belegt stillgelegt, Trail erhalten). **Danach zeigt die Leiste echte Werkzeuge statt
+   Seitenwerkzeug, Textwerkzeug und Pipette.**
+4. **AUF-21 / I3** — `canPin` und `priority` in die Zonen-Kuratierung. Das ist der Kern des
+   Entwurfs: **Anheften (★), Kontext-Empfehlung, Überlauf, Command-Palette** — die sechs
+   Werkzeug-Zustände aus `dashboard-tools-v1`.
+
+**AUF-28** (die 15 DTP-Werkzeuge aus der Navi nehmen) wird von I2 mit erledigt — sie verschwinden,
+wenn der Katalog getauscht ist. **AUF-26** (Kappung bei ~1375 px) bleibt ein eigener, kleiner Posten.
+
+**Der einzige Engpass ist Schritt 1.** Alles Weitere hängt daran, dass `toolPresentation.ts`
+freigegeben wird. **Ballbesitz: Evaluator (nativ, frische Instanz), Posten A2 `acdb987`.**
