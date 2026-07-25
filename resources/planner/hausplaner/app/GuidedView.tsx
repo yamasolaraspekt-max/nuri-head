@@ -1,6 +1,6 @@
 /** Geführte Planung — WizardBase (v9). Stepper + Fokus-Schrittkarte + Aufgabe-Panel + Navigation. */
 import React from 'react';
-import { T, STEPS, STATUS_LABEL, type SchrittStatus } from './studioDaten';
+import { T, STATUS_LABEL, type SchrittStatus, type Fahrschritt } from './studioDaten';
 import type { KonfigArt } from './ConfigWizard';
 import { Ikon } from './studioUi';
 
@@ -10,6 +10,8 @@ interface Props {
   onExperte: () => void;
   onKonfigurator: (art: KonfigArt) => void;
   modell: { geschosse: number; fenster: number; tuer: number; treppe: number };
+  /** AUF-39/L5: die elf Schritte, abgeleitet aus dem Modell (`dashboard/fahrschritte.ts`). */
+  schritte: readonly Fahrschritt[];
 }
 
 const badgeFarbe: Record<SchrittStatus, { bg: string; fg: string }> = {
@@ -21,7 +23,10 @@ const checkFarbe: Record<SchrittStatus, { bg: string; fg: string; sym: string }>
   open: { bg: T.hair2, fg: T.faint, sym: '' }, prog: { bg: T.infoSoft, fg: T.infoInk, sym: '' },
 };
 
-export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, modell }: Props): React.ReactElement {
+export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, modell, schritte }: Props): React.ReactElement {
+  // AUF-39/L5: Die Schritte kommen als Daten herein — abgeleitet aus dem Modell, nicht mehr aus
+  // hartkodierten Demo-Werten. Die Ansicht selbst ist unverändert; sie hat nur eine andere Quelle.
+  const STEPS = schritte;
   const s = STEPS[schritt];
   const n = STEPS.length;
 

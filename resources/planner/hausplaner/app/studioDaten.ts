@@ -85,8 +85,17 @@ export interface Fahrschritt {
   empfehlung: Empfehlung | null;
 }
 
-/** 11-Schritt-Projektfahrplan (v9). Präsentativ — echte Zustands-Ableitung folgt aus dem Modell. */
-export const STEPS: readonly Fahrschritt[] = [
+/**
+ * L5 (AUF-39) — **STILLGELEGT.** Diese elf Schritte waren „präsentativ": sie behaupteten Tatsachen
+ * über ein Projekt, das der Nutzer gerade erst angelegt hatte — „Bauherr & Adresse ✓", „Maßstab
+ * erkannt · 1:50 ✓" in einem leeren Dokument. Seit AUF-39 leitet `dashboard/fahrschritte.ts` die
+ * Schritte aus dem `SceneDocument` ab.
+ *
+ * **Nicht gelöscht, sondern stillgelegt** (Muster `toolCatalogStillgelegt.ts`): die Demo-Daten
+ * bleiben als Beleg dafür, was vorher behauptet wurde — und als Vergleichsgrundlage für den Test,
+ * der die elf Titel byte-genau gegenprüft. **Nichts rendert sie mehr.**
+ */
+export const STEPS_STILLGELEGT: readonly Fahrschritt[] = [
   {
     titel: 'Projektgrundlagen', status: 'ok', hinweis: 'Projektstammdaten sind erfasst und freigegeben.',
     checks: [{ status: 'ok', text: 'Bauherr & Adresse' }, { status: 'ok', text: 'Grundstück & Ausrichtung' }],

@@ -11,6 +11,7 @@ import { GuidedView } from './GuidedView';
 import { T, FACH, PROJ, type StudioModus } from './studioDaten';
 import { ConfigWizard, type KonfigArt } from './ConfigWizard';
 import { FachFlaeche as FachFlaecheAnsicht } from './FachFlaeche';
+import { ableitenSchritte } from './dashboard/fahrschritte';
 import { fachFlaecheNach, KONFIGURATOR_NAMEN, type FachFlaeche, type FlaechenHerkunft } from './dashboard/fachFlaechen';
 import { Ikon } from './studioUi';
 import { useHausplanerStore, type SpeicherStatus } from '../store/hausplanerStore';
@@ -27,6 +28,11 @@ export function HausplanerStudio(): React.ReactElement {
   const [fachOffen, setFachOffen] = React.useState<{ flaeche: FachFlaeche; herkunft: FlaechenHerkunft } | null>(null);
   const scene = useHausplanerStore((s) => s.scene);
   const speicherStatus = useHausplanerStore((s) => s.speicherStatus);
+  /**
+   * AUF-39/L5: die elf Fahrplan-Schritte, **aus dem Dokument abgeleitet** statt hartkodiert.
+   * Rein und ohne Nebenwirkung — dieselbe Szene ergibt dieselben Schritte.
+   */
+  const schritte = React.useMemo(() => ableitenSchritte(scene), [scene]);
   const modell = React.useMemo(() => {
     const nodes = scene?.nodes ?? [];
     return {
@@ -159,7 +165,7 @@ export function HausplanerStudio(): React.ReactElement {
         {/* Inhalt */}
         <div style={{ flex: 1, minHeight: 0, position: 'relative', overflow: imExperte ? 'hidden' : 'auto' }}>
           {modus === 'start' && <StartView onGuided={gehGeführt} onKonfigurator={(n, f) => öffneKonfigurator(n, f, 'start')} />}
-          {modus === 'guided' && <GuidedView schritt={schritt} setSchritt={setSchritt} onExperte={() => setModus('expert')} onKonfigurator={(art) => setKonfig(art)} modell={modell} />}
+          {modus === 'guided' && <GuidedView schritt={schritt} setSchritt={setSchritt} onExperte={() => setModus('expert')} onKonfigurator={(art) => setKonfig(art)} modell={modell} schritte={schritte} />}
           {imExperte && (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 16px', background: T.surface, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}>
