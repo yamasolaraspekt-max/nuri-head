@@ -3023,3 +3023,21 @@ Der Generator hat gerade **AUF-30** (Render-Testinfra) gezogen. Das ist ein gute
 3. Danach erst AUF-30, AUF-26, AUF-27 — alle drei nicht blockierend.
 
 **Ballbesitz → Generator, Posten AUF-31.**
+
+---
+
+## ⇒ YAMA, 25.07.: Fokus angenommen — die Kette läuft ohne ihn
+
+**Angenommen:** `⚡ AKTIV` auf **AUF-31**, danach **I4**. Nichts dazwischen.
+Bei Yama liegt **nichts** — keine offene Willensfrage blockiert die Kette.
+
+- **Generator:** AUF-31 (Entscheidung liegt seit `456bcea`: Weg 1, zusammenführen, 101 statt 110),
+  danach I4. **Kein anderer Posten**, auch kein kleiner.
+- **Evaluator:** die offenen Abnahmen abräumen — AUF-25 (L4), AUF-26, AUF-15a, AUF-19, AUF-16,
+  AUF-21/I1, AUF-21/I3. Keine blockiert, aber sie stauen sich.
+- **Planner/Cowork:** Browser-Sichtprobe, sobald I4 berichtet ist. Sie gehört in die Abnahme.
+- **Yama:** nach I4 einmal `npm run build:hausplaner`, dann `objekt/203` neu laden.
+
+**Zurückgestellt, bis Yama seine Werkzeugleiste gesehen hat:** AUF-26 (Kappung ~1375 px),
+AUF-27 (linke Spalte, drei Jobs), AUF-13/14/17/23 (Willensfragen), L2/L3 (Engine-Panels).
+Vorher lohnt die Diskussion darüber nicht.
