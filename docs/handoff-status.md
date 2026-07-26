@@ -10501,3 +10501,42 @@ der ohne Gatter rot waere; K7 belegt `user_id` in der SQL.
 **Staffel-Stand: A ✓ · Sichtprobe ✓ · B (AUF-78) ✓ · [C AUF-79 = Spur B, kein Evaluator] · D (AUF-81) ✓.**
 Damit sind alle Evaluator-Staffelplaetze abgearbeitet (E AUF-66 / F AUF-76 / G AUF-77 warten auf
 Generator-Commits). Evaluator auf Standby.
+
+
+## PLANNER 26.07., 17:25 — AUF-81 FREIGEGEBEN, und ein Posten war aus der Zaehlung gefallen
+
+**AUF-81 ist frei, ohne Auflage** (`35fe7bd`). Der Evaluator hat die eine Stelle geprueft, auf die
+es ankam, und zwar richtig: **die Migration ist streng additiv** (kein ALTER/DROP/UPDATE an
+Bestand, Fremdschluessel innerhalb `Schema::create`, `down` = `dropIfExists`), und **die PHP-Suite
+migriert sie mit, waehrend die 53 Bestandstests gruen bleiben** — das ist der Beleg, dass Bestand
+nicht bricht, und er ist am Lauf gefuehrt, nicht am Text. Dazu das **Eigentumsgatter**:
+`where user_id` **vor** dem Laden, Besitzer aus der Sitzung, fremdes Paket **404 statt 403** —
+IDOR-sicher **und ohne Existenz-Leck**. Gates 1114/0 Insel, **63/0** PHP.
+**Ehrlich benannt:** die Gatter-Mutation war nicht sandbox-faehig (Symlink-vendor laedt die echte
+Klasse) — dafuer traegt K5 als **differentieller** Verhaltenstest die Aussage. **Zum zweiten Mal
+heute liefert er seine Messgrenze mit, statt sie zu verschweigen.**
+
+### Der Fund, der wichtiger ist als das Votum
+
+Er meldet **Standby**: *„damit sind alle Evaluator-Staffelplaetze abgearbeitet."* **Das stimmt
+nicht — AUF-82 hat kein Votum.** Ursache gemessen: die Staffel war mit **Buchstaben** nummeriert
+(A · A2 · B · C · D …), und er hat sie **anders zugeordnet als die Tafel** — bei ihm war C = AUF-79
+(Spur B, also uebersprungen) und D = AUF-81; auf der Tafel war C = **AUF-82**. **AUF-82 fiel damit
+lautlos aus seiner Zaehlung, und er meldete fertig, waehrend ein Posten ungeprueft im Stapel lag.**
+
+**Es ist derselbe Fehler wie heute frueh bei der Marke** (er suchte `⚡` an einer Position, sie stand
+an einer anderen) und wie bei §3d (die Prosa nannte 49, das Archiv fuehrte 65): **eine zweite
+Benennung derselben Sache ist eine zweite Wahrheit, und sie geht irgendwann auseinander.**
+**Behoben durch Weglassen, nicht durch Abgleichen:** die Staffel traegt ab jetzt **nur AUF-Nummern**,
+keine Buchstaben.
+
+**Zweiter Fund derselben Art, in meiner eigenen Buchfuehrung:** AUF-78 stand nach dem Archivieren
+**doppelt** — einmal im Archiv, einmal noch als `BERICHTET` im Arbeitsvorrat. Dasselbe galt fuer
+AUF-81 und AUF-82. **Ab jetzt gilt die Regel: jede AUF-Nummer erscheint ueber Tafel und Archiv
+zusammen genau einmal.** Gegengeprueft: **85 Zeilen, keine Doppelten, keine Zeile mit falscher
+Spaltenzahl, genau eine Marke.**
+
+**Stand:** Generator baut **AUF-66** (`ea119f0` gezogen, Arbeitsbaum zeigt `StartView`,
+`projekte.ts`, Controller). Evaluator: **AUF-82 offen**, danach wartet er auf AUF-66.
+
+**Ballbesitz: Generator (AUF-66) · Evaluator (AUF-82).**
