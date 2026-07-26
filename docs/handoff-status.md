@@ -7731,3 +7731,49 @@ Damit ist die Zustands-Inventur vollständig abgearbeitet — Befund, Posten, Ba
 **Yamas Entscheidung zum Qualitätsagenten steht: kleine Scheibe, mein Vorschlag angenommen.**
 
 **Ballbesitz: Generator (AUF-40 A) · Evaluator (Sichtprobe-Standard) · Planner (nichts offen).**
+
+---
+
+## PLANNER 26.07., 09:15 — AUF-58 vorgezogen, weil eine neue Regel stumpf zu werden droht
+
+**Vorher gemessen:** `git log c8058cd..HEAD` = **leer** · Arbeitsbaum: `studioDaten.ts` geändert
+(AUF-40 A läuft) · `.gitignore` 41 Zeilen · eigene `git status`-Beobachtungen vom Vormittag.
+
+### 1. Der Anlass ist nicht der Befund, sondern sein Umfeld
+
+AUF-58 steht seit gestern als „sehr klein" im Vorrat: Sichtprobe-Kladden, die nie committet wurden.
+**Der Befund ist unverändert** — gemessen **neun** Kladden an einem Tag, **null** committet, die
+Disziplin hält.
+
+**Geändert hat sich die Umgebung.** Seit gestern gilt **§10.2**: *fremde untracked Dateien sind ein
+Haltesignal, kein Hintergrundrauschen.* **Ich bin heute Vormittag viermal darauf getroffen** — bei
+AUF-62, AUF-64, AUF-71 und AUF-73 — und musste jedes Mal entscheiden: fremde Arbeit oder Kladde?
+**Viermal war es eine Kladde.**
+
+**Das ist der Schaden, und er trifft nicht die Dateien, sondern die Regel.** Ein Haltesignal, das
+meistens harmlos ist, wird nach dem fünften Mal überlesen. **§10.2 ist einen Tag alt und schon dabei,
+stumpf zu werden** — nicht weil sie falsch ist, sondern weil das Rauschen sie übertönt.
+
+**Zehn Minuten Arbeit halten die Regel scharf, die uns heute Nacht den uncommitteten AUF-64-Fix
+gezeigt hat.** Das ist ein besseres Verhältnis als jeder große Posten im Vorrat.
+
+### 2. Spur B — und warum das hier zulässig ist
+
+**Reine Werkzeugkonfiguration:** kein Datenpfad, keine Logik, keine Query, kein ausgeliefertes
+Artefakt. **Ein benanntes Kriterium, selbst abgehakt, eine Zeile im Ledger.** Das ist der erste
+Posten seit Tagen, der die Kurzspur wirklich verdient — und ich schreibe das hin, weil die Kurzspur
+sonst zur Gewohnheit wird, statt eine Ausnahme zu bleiben.
+
+**Das Kriterium hat zwei Proben, und die zweite ist die wichtigere:** `public/_auf99-sichtprobe.html`
+muss verschwinden, `public/auf99-sichtprobe.html` **ohne** Unterstrich muss **erscheinen**.
+**Ein zu weites Muster verschluckt eines Tages eine echte Datei — und das merkt niemand, weil sie in
+keinem `git status` mehr auftaucht.** Das ist der gefährlichere der beiden Fehler.
+
+### 3. Stand
+
+Nichts Neues committet seit `c8058cd`. **Generator baut AUF-40 Teil A** (`studioDaten.ts` liegt
+geändert im Baum). **Evaluator:** Sichtprobe-Standard.
+
+**Warteschlange Generator: AUF-40 A · AUF-74 · AUF-58 · AUF-75.** Alle vier tragen ihre
+Auftragsdatei. **Ich lege nichts Neues an, solange diese vier stehen** — ein Vorrat, der schneller
+wächst als er abfließt, ist kein Plan, sondern eine Liste.
