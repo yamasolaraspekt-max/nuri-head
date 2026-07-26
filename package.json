@@ -8,6 +8,7 @@
     "schema:hausplaner": "./scripts/node-runtime.sh --experimental-strip-types ./scripts/hausplaner-schema.mts",
     "schema:hausplaner:check": "./scripts/node-runtime.sh --experimental-strip-types ./scripts/hausplaner-schema.mts --check",
     "test:hausplaner": "npm run schema:hausplaner:check && ./scripts/node-runtime.sh --experimental-strip-types --import ./resources/planner/hausplaner/test-register.mjs --test \"resources/planner/hausplaner/__tests__/*.test.ts\"",
+    "test:hausplaner:dom": "./scripts/node-runtime.sh --experimental-strip-types --import ./resources/planner/hausplaner/dom-register.mjs --test \"resources/planner/hausplaner/__domtests__/*.test.ts\"",
     "tsc:hausplaner": "./scripts/node-runtime.sh ./node_modules/typescript/bin/tsc -p tsconfig.hausplaner.json --noEmit",
     "waechter": "./scripts/waechter.sh"
   },
@@ -19,6 +20,7 @@
     "autoprefixer": "^10.4.22",
     "axios": "^1.1.2",
     "html5-qrcode": "^2.3.8",
+    "jsdom": "^29.1.1",
     "laravel-echo": "^1.19.0",
     "laravel-vite-plugin": "^1.2.0",
     "postcss": "^8.5.6",
