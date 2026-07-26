@@ -12608,3 +12608,81 @@ ein P1, und wir haben **null Zeilen** dafuer. Das ist kein Detail am Rand von AU
 eigenes Vorhaben in der Groessenordnung von AUF-50 selbst.
 
 **Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52. Kein neuer Posten (§14).
+
+
+## PLANNER 26.07., 23:45 — Werkzeuge und Objekte trennen. Yama hat recht, meine Zaehlung war schief, und der Mechanismus laeuft laengst
+
+Yama hat die Architekturergaenzung uebergeben: Verben gegen Substantive, Capabilities, universelles
+Objektmodell, Parameterschema, Object Type Registry.
+Papier: `docs/planner/werkzeuge-und-objekte-trennung-2026-07-26.md`.
+
+**Zuerst eine Richtigstellung an mir selbst.** Ich habe heute mehrfach geschrieben *"83 Werkzeuge
+sind aktivierbar und haben keinen Empfaenger"*. Nach der Trennung neu gezaehlt: **75 echte Verben,
+16 Katalog-Objekte, 7 parametrische Bauteile, 2 typisierte gezeichnete Knoten, 1 Struktur.**
+**Sechzehn Zeilen, die ich als fehlende Werkzeuge gezaehlt habe, sind gar keine Werkzeuge.**
+`heizkoerper` ist kein Verb, sondern `ADD_NODE` mit `objectType: 'radiator'` und einem
+Katalogeintrag. Sechzehn Empfaenger schrumpfen auf **einen**. Das ist Yamas "vielleicht wird vieles
+einfacher" in Zahlen — und es aendert, was ein neues Objekt kostet: heute Code, danach ein
+Katalogeintrag.
+
+**Der Capability-Mechanismus laeuft bereits — nur auf der falschen Ebene.** `activation.ts` fuehrt
+seit UI-2 eine Regelart `capability`, und `werkzeugKontext.capabilities` ist heute eine Liste von
+Zeichenketten (`FAEHIGKEIT_PROJEKT_OFFEN`, `_GESCHOSS_DA`, `_WAND_DA`). **Der Unterschied zu Yamas
+Entwurf ist genau einer: heute beschreiben die Faehigkeiten die *Welt*, seine beschreiben das
+*Objekt*.** Dieselbe Liste, dieselbe Regelart, dieselbe Engine. Die Rohrleitung ist verlegt; es
+fehlt der Inhalt. **Ich sage ausdruecklich nicht, es sei eine Zeile** — Mehrfachauswahl braucht
+eine Schnittmenge und 75 Verben je eine Angabe. Aber die Frage lautet "welche Daten schreiben wir",
+nicht "welchen Mechanismus bauen wir".
+
+**Seine Regel 3 verletzen wir an genau einer Stelle**, gemessen: im Werkzeugkatalog steht **keine**
+`selection-type`-Regel. Die feste Objektliste steht in `type Werkzeug = 'auswahl' | 'wand' | ...`
+mit sieben Zweigen — **dieselbe Zeile, die AUF-50.1 ohnehin wegraeumt.** Entwurf und Zuschnitt
+zeigen auf denselben Punkt.
+
+**Zwei Warnungen, und die erste entscheidet ueber die Machbarkeit.**
+
+**(1) Was ins Dokument gehoert und was in die Registry.** Sein `ModelObject` traegt
+`capabilities` **am Objekt**. Persistiert heisst das: jedes gespeicherte Objekt traegt eine Kopie
+der Faehigkeiten seines Typs — zweite Wahrheit, die still veraltet — plus eine Migration von
+Live-Daten bei ~3000 Kunden. **Aufloesung, und sie kostet nichts: Faehigkeiten gehoeren zum Typ,
+nicht zur Instanz.** Sie stehen in der Registry, also im Code. Dasselbe fuer Parameterdefinitionen,
+Geometrie-Erzeuger, Renderer-Verweise, Validierungsregeln — **alles Typwissen, nichts davon
+Instanzdaten. Damit wird aus einer Schema-Migration eine reine Code-Aenderung.** Das halte ich fuer
+den wichtigsten Satz des Papiers. Was am gespeicherten Objekt wirklich fehlt, ist klein — `name`,
+`category`, `approved`, `outdated`, `revision`, Materialien, explizite Beziehungen — und **additiv
+und optional**, genau das Muster, das im Schema schon zweimal steht: *"kein 422, kein
+Migrations-Zwang"*. Vorhanden sind bereits `transform`, `parameters`, `color` (Zeile 74),
+`locked`/`hidden`, `catalogItemId` (**Pflichtfeld**) und `hostWallId` als Wirtsbindung.
+
+**(2) Das Wort "Faehigkeit" ist vergeben.** `app/tools/faehigkeiten.ts` fuehrt eine
+Faehigkeiten-Registry im Sinne von *was kann die Anwendung, gruppiert nach Gewerk*
+(`dach-zimmerei`, `tga-heizung`, …). Das ist **nicht** `ObjectCapability`. Zwei Dinge unter einem
+Namen sind der Anfang der zweiten Wahrheit — dieselbe Falle wie zwei Register und zwei
+Dokumentenwelten. Vorschlag im Geist von "alles deutsch": die Objekt-Faehigkeiten heissen
+**Eignungen**, als Eigenschaftswoerter — `verschiebbar`, `drehbar`, `teilbar`, `wirtsfaehig`,
+`faerbbar`, `mengenrelevant`. *"Verschieben braucht verschiebbar"* liest sich ohne Uebersetzung.
+(`faehigkeiten.ts` ist eine der vier Dateien, die der Generator gerade unter AUF-52 bearbeitet —
+ich habe sie nur gelesen.)
+
+**Was der Entwurf nicht loest**, damit "vieles" nicht zu "alles" wird: die **75 Verben brauchen
+weiterhin Empfaenger** (7 haben einen); die **Wandecke bleibt** — `MOVE_NODE` kennt keine
+Nachbarschaft, daran aendert kein Capability-Modell etwas, sie gehoert in die Dependency Engine
+seines §19, und die ist der Teil, den wir am wenigsten haben; **Touch bleibt**. Und die sieben
+parametrischen Bauteile bleiben Fachbau, egal wie gut die Registry ist.
+
+**AUF-50 umsortiert — besser, nicht groesser:** 50.1 Eignungen und Voraussetzungen (die sieben
+festen Zweige weg) - **50.2 Objekt-Katalog, weit nach vorn**, weil nach der Trennung die billigste
+und zugleich sichtbarste Stufe - **50.3 generisches Eigenschaftenpanel aus dem Parameterschema**,
+der eigentliche Gewinn, weil es jedes kuenftige Objekt mitbedient - 50.4 die Zahl - 50.5 Griffe -
+50.6 der sprechende Fang. Jede Stufe traegt ihre Probe des Erprobers.
+
+**Testebenen A und B uebernehme ich.** Statt *Verben mal Objekte* nur noch *Verben plus Objekte* —
+bei 75 Verben und wachsend vielen Objekten der Unterschied zwischen einer Matrix, die man fuehren
+kann, und einer, die man aufgibt.
+
+**Zwei neue Punkte bei Yama** (zu den fuenf offenen): heissen die Objekt-Faehigkeiten
+**Eignungen**? Und: bestaetigt er, dass Eignungen und Parameterschemas **in die Registry** gehoeren
+und nicht ins gespeicherte Dokument? **Meine Empfehlung dazu ist deutlich: in die Registry** —
+alles andere kauft uns eine Migration fuer Daten, die den Wert gar nicht tragen sollen.
+
+**Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52. Kein neuer Posten (§14).
