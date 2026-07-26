@@ -12825,3 +12825,96 @@ bekommt `permission.import` ein eigenes Recht oder haengt es an `Hausplaner,upda
 AUF-36, blockiert acht Werkzeuge) — beginnen wir mit den 16 eigenen Objekten statt mit dem Import?
 
 **Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52. Kein neuer Posten (§14).
+
+
+## PLANNER 26.07., 20:45 UTC — Mein Merge-Block war zum zweiten Mal falsch. §16 richtiggestellt, und zwei Entscheidungen von Yama
+
+**Der Fehler zuerst.** Mein Block lautete `git fetch . 59318a7:main` und lief auf
+`fatal: couldn't find remote ref 59318a7`. **`git fetch` nimmt einen Ref-Namen, keinen Commit** —
+§16 verlangt aber ausdruecklich einen Commit. **Die Regel war richtig, das Werkzeug dazu konnte
+nicht, was die Regel fordert.** Das ist der zweite Merge-Block hintereinander, der nicht lief; der
+erste nannte einen Zweig statt einer Nummer, dieser eine Nummer, die der Befehl nicht annimmt.
+*Ich habe die Regel geschrieben und nie geprueft, ob der Befehl sie erfuellen kann.*
+
+**Richtiggestellt und gemessen, nicht angenommen:**
+
+```
+git push . <commit>:refs/heads/main
+```
+
+Probe auf einem Wegwerf-Zweig: `git push . 59318a7:refs/heads/zz-planner-probe` legte ihn auf
+**59318a7** an. **Gegenprobe:** derselbe Befehl mit `e9de9ab` — also ein Rueckschritt — wurde
+**abgewiesen** mit dem Fast-forward-Hinweis. Damit erfuellt `push` beides, was `fetch` nicht
+konnte: **benannter Commit** und **erzwungener Fast-forward**, ohne `checkout`.
+`merge-base --is-ancestor e9de9ab 59318a7` ⇒ **ja**, der Sprung ist ein Fast-forward.
+
+**Mein eigener Unrat, gemeldet statt verschwiegen:** der Probezweig liess sich nicht loeschen
+(`unlink` auf dem Mount), also nach Regel per `mv` nach `.git/_locks_beiseite/` — **wichtig, weil
+`push-integration-sicher.command` alle lokalen Zweige pusht** und er sonst auf `fork` und
+`backup-private` gelandet waere. 27 Zweige, Arbeitsbaum unberuehrt.
+
+**Die gute Nachricht dazu: das Skript hat gelaufen und die Sicherung steht.**
+
+```
+fork/auto/hausplaner-integration           59318a7      ungesichert: 0
+backup-private/auto/hausplaner-integration 59318a7      ungesichert: 0
+fork/main · backup-private/main            e9de9ab
+```
+
+**Es gibt keine ungesicherte Arbeit.** Offen ist nur der `main`-Sprung selbst — kein Backup-Risiko,
+eine Freigabe-Entscheidung.
+
+---
+
+## Yamas zwei Entscheidungen
+
+**1. AUF-48 laeuft vor AUF-50.** Auf der Tafel in der AUF-48-Zelle vermerkt. Begruendung steht:
+beide fassen `HausplanerApp.tsx` tief an, die Werkzeug-Schicht baut danach auf zerlegten Dateien.
+
+**2. Wandecke: erst messen, dann entscheiden.** Gemacht — mit einer Einschraenkung, die ich
+voranstelle.
+
+### Was ich **nicht** messen konnte
+
+*"Wie oft tritt der Fall in realen Grundrissen auf"* — **gar nicht.** Im Repo liegt **ein** Fixture
+mit **einer** Wand; echte Grundrisse gibt es hier nicht, und Kundendaten fasse ich nicht an. **Eine
+Haeufigkeit haette ich nur erfinden koennen**, und das ist heute schon zweimal schiefgegangen.
+Wenn die Zahl gebraucht wird, muss sie aus gespeicherten Projekten kommen — das ist eine
+Auswertung, die Yama anstoessen muss, nicht ich.
+
+### Was messbar war: zwei Bauarten der Absicherung
+
+Beide gegen dieselben Grundrisse gefahren, echter Code, nicht beschrieben:
+
+| Grundriss | A) globaler Scan nach losen Enden | B) differenziell: was hat **diese** Aenderung geloest |
+|---|---|---|
+| geschlossenes Rechteck | 0 | — |
+| nach Kuerzung 8000 → 6000 | 2 | **1 geloeste Verbindung**, benannt: Punkt (8000,0), Partner `w2` |
+| Rechteck **+ legitime Stichwand** | **2 — Fehlalarm** | **0** |
+
+**Der globale Scan ist unbrauchbar.** Eine freistehende Stichwand hat von Natur aus zwei lose
+Enden; er wuerde bei jedem legitimen Entwurf warnen — und eine Warnung, die immer kommt, wird
+weggeklickt, so wie die Repo-Aufsicht, die immer scheitert.
+
+**Die differenzielle Pruefung trifft genau.** Sie fragt nicht *"gibt es lose Enden"*, sondern
+*"war hier vorher eine Verbindung, und ist sie jetzt weg"*. Umfang: **14 Zeilen gegen 6** — acht
+Zeilen mehr fuer den Unterschied zwischen brauchbar und Laerm.
+
+### Die Kostenleiter, damit Yama entscheiden kann
+
+| Stufe | was sie tut | was sie kostet |
+|---|---|---|
+| **0 — nichts** | heute | eine Flaechenliste, der still ein Raum fehlt |
+| **1 — melden** | die geloeste Verbindung benennen | 14 Zeilen Pruefung **+ ein Meldekanal**, den es nicht gibt: der Store fuehrt `letzteAblehnung`, aber **keine Warnung** |
+| **2 — ablehnen** | die Aenderung verweigern | nutzt den vorhandenen `CommandAbgelehnt`-Weg, **aber verbietet das absichtliche Trennen** — falsch |
+| **3 — mitnehmen** | Nachbarwand folgt der Ecke | die eigentliche Loesung, und die groesste; gehoert in die Dependency Engine |
+
+**Kein Schema, kein `domain/`, kein `store/`-Umbau fuer Stufe 1** — bis auf das eine fehlende Feld
+fuer die Warnung. *Der Sprung von 0 auf 1 ist klein; der von 1 auf 3 ist ein Posten.*
+
+**Meine Empfehlung, ausdruecklich als Empfehlung:** Stufe 1, und zwar **als Teil von AUF-48**, wenn
+`HausplanerApp.tsx` ohnehin auseinandergenommen wird — dann ist es kein neuer Posten nach §14,
+sondern eine Auflage an einen bestehenden. Stufe 3 nach 50.3, mit der Dependency Engine.
+
+**Ballbesitz:** Generator AUF-52 Scheibe 1 (sieben Dateien im Baum), Stapel leer, Marke AUF-52.
+Tafel 84 Zeilen, 0 fehlerhaft, eine Marke.
