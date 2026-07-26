@@ -9614,3 +9614,32 @@ schreiben. Die stehende Sperre (`pid 79`) ist der neue Pruefstein und wird nicht
 von Generator oder Evaluator, Arbeitsbaum leer, keine Sperre im Index. Der Generator hat AUF-78
 (gross, Spur A), der Evaluator die Sichtprobe-Erstanwendung (eine Stunde angesetzt). **Beide sind
 versorgt; nachlegen waere Vorrat, kein Durchsatz** (§13.3). **Ballbesitz unveraendert.**
+
+
+## PLANNER 26.07., 14:20 — Der Generator stand still, und der Grund stand in meiner eigenen Tafelzeile
+
+**Yama meldet: der Generator hat nichts zu tun.** Nachgesehen, und der Fund ist unangenehm.
+
+Die Zeile AUF-78 trug seit 13:32 die Marke `⚡ AKTIV` — **und direkt dahinter, im selben Feld, den
+alten Sperrgrund im Wortlaut:** *„AUF-78 fasst `app/Http` an — committet er waehrenddessen, misst
+die Suite einen Stand, den es nicht mehr gibt. **Deshalb laeuft zuerst AUF-58.**"*
+
+**Wer diese Zelle von links nach rechts liest, liest: aktiv, aber zuerst etwas anderes.** AUF-58
+ist seit dem Vormittag abgenommen und im Archiv; der Generator findet dort nichts zu tun und bleibt
+stehen. **Die Marke war gesetzt, die Anweisung daneben widersprach ihr.**
+
+**Das ist mein Fehler beim Entsperren um 13:32:** ich habe den **ersten Satz** der Statuszelle
+ersetzt und die ganze alte Begruendung dahinter stehen lassen. Aus §10.7 kannte ich die Regel
+bereits — *wer eine Marke wegnimmt, setzt im selben Schritt die naechste* — aber sie deckt nur die
+Marke ab, nicht den Text daneben. **Deshalb als Zusatz zu §10.7: wer eine Sperre aufhebt, entfernt
+die Begruendung der Sperre mit. Ein aufgehobener Grund, der stehen bleibt, wirkt weiter — er sieht
+aus wie eine Anweisung, weil er eine war.**
+
+Richtiggestellt: die Zelle sagt jetzt **„Es wartet nichts mehr davor — dieser Posten wird jetzt
+gezogen."** Inhalt und Kriterien unveraendert; verriegelt bleibt, was verriegelt war (nur in
+`seite()`, Studio-Route unberuehrt, Kriterium 1 prueft es, Kriterium 11 per Mutation).
+
+**Die Auftragsdatei war die ganze Zeit sauber** — kein Sperrwort, kein AUF-58. Der Widerspruch
+stand ausschliesslich auf der Tafel. **Gemessene Kosten: rund 45 Minuten Stillstand des
+Generators** (13:32 bis 14:20), waehrend ich in derselben Zeit drei Untersuchungen geschrieben
+habe. **Ballbesitz: Generator (AUF-78), unveraendert.**
