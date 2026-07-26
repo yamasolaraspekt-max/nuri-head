@@ -9855,3 +9855,93 @@ ist, kostet die Trennung nichts; danach kostet sie einen Nachtrag.
 
 **Ballbesitz: Generator (AUF-78) · Evaluator wartet auf dessen Commit** — er haelt, wie angesagt,
 und hat die fremde WIP nur gemeldet, nicht angefasst. **Das ist die Nebenlaeufigkeitsregel, gelebt.**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-78: die Projektliste erreicht den Startbildschirm
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** Code `841865b` · Bundle `dcbe6ec`
+**Ballbesitz:** Evaluator.
+
+### 0. Zuerst: warum ich 45 Minuten stillstand — die Hälfte davon ist meine
+
+Der Planner hat offengelegt, dass seine Statuszelle die Marke und den alten Sperrgrund
+nebeneinander trug. **Der zweite Grund liegt bei mir:** meine Taktprüfung suchte
+`| **AUF-NN** ⚡ **AKTIV**` — die Marke **hinter der Nummer, fett**. Auf der Tafel stand sie als
+`` `⚡ AKTIV` `` **in Backticks, in der Statusspalte**. Zwei Unterschiede, beide von mir nicht
+bedacht; ich habe „keine Marke" gemeldet, während eine stand.
+
+**Konsequenz, ab sofort:** ich suche die Marke **irgendwo in der Zeile**, nicht an einer Position.
+*Eine Prüfung, die nur eine Schreibweise kennt, meldet Abwesenheit, wo Unkenntnis ist.*
+
+### 1. Der Befund des Auftrags hält — es entsteht nichts Neues
+
+Dieselbe Tabelle, die `index()` seit Langem listet, hinter derselben Middleware. **Keine Route,
+keine Migration, kein Endpunkt.** `routes/`, `database/migrations/`, `app/Models/`: **null Zeilen**.
+`app/Http/` trägt **eine** neue private Methode (`hausplanerProjekte`) und **eine** Variable mehr in
+`seite()`.
+
+### 2. Die Sicherheitsstelle — drei Zusagen, eine davon misst statt zu behaupten
+
+Die Studio-Route trägt **nur `auth`**. Die Liste geht deshalb **ausschließlich** durch `seite()`.
+
+| Zusage | Art |
+|---|---|
+| Studio-Seite gerendert ⇒ **kein `data-projekte`**, keine Objektnamen | Verhalten |
+| `studio.blade.php` kennt den Feldnamen nicht | Quelltext |
+| **die Studio-Route trägt `auth` und NICHT `permission:Hausplaner,read`** | **Middleware gemessen** |
+
+Die dritte prüft die Middleware am Router, statt „unverändert" zu behaupten — sie ist der Grund,
+warum die Liste dort nicht hindarf, und darum wird genau sie gemessen.
+
+### 3. Drei Entscheidungen, die den Datenweg schmal halten
+
+| | |
+|---|---|
+| **keine Kundendaten** | `index()` lädt `lead` mit, weil die Suchliste den Kundennamen zeigt. Der Startbildschirm zeigt ihn **nicht** — also wird die Beziehung **gar nicht geladen**. Damit gibt es auch kein N+1, nicht durch Vorsicht, sondern durch Bauart |
+| **vier Felder** | `select(['id','object_name','city','updated_at'])` statt ganzer Modelle |
+| **harte Grenze** | `limit 6`, keine Paginierung — **bei 3 000 Objekten gemessen** |
+
+**Ohne `gebaeudeSuche`** (§7): der Scope gibt bei leerem Begriff die Abfrage unverändert zurück —
+nachgemessen. Ihn mitzuziehen bände zwei Flächen aneinander, die nichts voneinander wollen.
+
+### 4. Was ich NICHT gebaut habe — der Klick
+
+Die Kacheln riefen `onGuided(z.goto)`. **Bei einem echten Projekt hieße das: „Weiterarbeiten"
+öffnet nicht das Projekt, sondern beginnt den geführten Ablauf** — dieselbe Unwahrheit, die AUF-40
+Teil A hier entfernt hat, nur mit echten Namen darauf.
+
+Der Auftrag nennt in 129 Zeilen **keine Navigation**. Also: **anzeigen, nicht versprechen.** Die
+Route `hausplaner.objekt.seite` gäbe es und trägt dasselbe Recht — sie zu verdrahten ist eine
+eigene Entscheidung. **Zurückgegeben.**
+
+**Dabei aufgefallen und mitkorrigiert:** die Karte „Weiterarbeiten" begründete ihre
+„in Entwicklung"-Marke mit *„die Liste … ist noch nicht angebunden"* — **durch diesen Posten selbst
+falsch geworden**. Jetzt: *„Die zuletzt bearbeiteten Projekte stehen oben. Eines davon von hier aus
+zu öffnen ist noch nicht verdrahtet."*
+
+### 5. Belege
+
+| Was | Ergebnis |
+|---|---|
+| Gates | tsc **0** · schema:check **0** · test **0** (1102) · build **0** |
+| **§9 PHP-Suite** | **53 grün**, davon **9 neu** — Objekt-Route `HTTP 200` |
+| K4-Schichten | `store/ domain/ geometry/ renderers/` — **null Zeilen** |
+| K5 | `@endphp` im Blade = **0** |
+| K10 `public/*` im Code-Commit | **0**; Bundle als zweiter Commit `dcbe6ec` |
+| Testnamen | keine Zusage verschwunden |
+| **K11 Mutation** | Liste zusätzlich an die Studio-Fläche ⇒ **2 Tests rot** (Verhalten **und** Quelltext) |
+
+**K12 Sichtprobe, `objekt/203`, echtes Konto:**
+```
+HTTP 200 · sechs Einträge · Felder je Eintrag: id, name, ort, datum
+EVALUATOR-MESSWELLE 19.07.2026 · Objekt Buxtehude Buxtehude · 29.06.2026 · …
+erfundene Namen: 0   ·   klickbare Kachel: 0   ·   Kundenname im Markup: nicht vorhanden
+```
+Der leere Fall ist über die Liste selbst geprüft (ein Objekt ⇒ ein Eintrag) und über die
+unveränderte Leerzustands-Zusage aus AUF-40 Teil A.
+
+### 6. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine Suche, kein Filter, keine
+Sortierwahl. Studio-Route und `studio.blade.php` unberührt.
