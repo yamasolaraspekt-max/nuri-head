@@ -10808,3 +10808,37 @@ Grep traf die Decken-Zeile, nicht die Wand — direkt in der Datei verifiziert.)
 
 **Staffel: AUF-78 ✓ · AUF-81 ✓ · AUF-82 ✓ · AUF-66 ✓ · AUF-76 ✓** abgenommen (AUF-79 Spur B). Offen: nur
 noch **AUF-77** (Wandflaeche brutto/netto), wartet auf Generator. Evaluator Standby.
+
+
+## PLANNER 26.07., 18:00 — AUF-76 freigegeben, AUF-77 entsperrt, Stapel leer
+
+**AUF-76 ist frei** (`f4dd27f`) und archiviert. **Der Beleg, der ueber das Urteil hinausgeht, sind
+seine zwei Guards:** entfernt man `.optional()`, faengt **ohne** Regeneration schon `schema:check`
+den Drift — und **nach** Regeneration wird K4 rot. **Der Bestand ist damit doppelt verriegelt**, an
+zwei verschiedenen Stellen, und keine der beiden haengt an der anderen.
+
+**Beide Rollen haben heute an ihrer eigenen Messung Fehler gefunden und benannt**, bevor jemand
+fragen musste: der Generator verwarf seinen ersten K4-Beweis (*eine erfundene Szene beweist nur,
+dass ich das Schema erraten habe*), der Evaluator stellte einen eigenen Grep-Fehltreffer klar (er
+traf die Decken- statt der Wandzeile). **Das ist der Grund, warum die Voten heute etwas wert sind.**
+
+**AUF-77 ist entsperrt** — die Sperre lautete *bis AUF-76 abgenommen ist*, und das ist sie jetzt.
+**Die Marke bleibt trotzdem auf AUF-54/55/56**, weil der Generator dort mitten in der Arbeit steht
+(`treppeSvg.ts`, `studioDaten.ts`, ein Golden-Vergleich im Bau). **Eine Marke, die einem Bauenden
+mitten im Satz weggezogen wird, ist ein Themenwechsel** — genau das, was §1c verhindern soll.
+AUF-77 steht als naechster.
+
+**Der Abnahme-Stapel ist leer.** Der Evaluator meldet Standby und hat recht: alles Berichtete ist
+beurteilt. **Fuenf Voten in einer Stunde und dreissig Minuten, alle fuenf FREIGABE ohne Auflage** —
+AUF-78, AUF-81, AUF-82, AUF-66, AUF-76.
+
+**Fortschritt, von der Seite selbst gezaehlt: 82 % — 69 von 84.** Heute Mittag waren es 78 % von
+Hand und 75 %, nachdem AUF-82 dazukam. **Der Sprung kommt nicht daher, dass ich anders zaehle,
+sondern daher, dass fuenf Posten abgenommen sind.**
+
+**Eine Kleinigkeit fuer den naechsten Commit des Generators, kein Posten:** im Arbeitsbaum liegen
+`__tests__/altTreppeSvg.tmp.ts` und `__tests__/golden2.tmp.test.ts`. **Wenn das Werkzeuge fuer den
+Golden-Vergleich sind, gehoeren sie nicht in den Commit** — ein `.tmp` im Testverzeichnis ist genau
+die Sorte Rest, die spaeter jemand fuer Absicht haelt.
+
+**Ballbesitz: Generator (AUF-54/55/56, danach AUF-77) · Evaluator: Standby.**
