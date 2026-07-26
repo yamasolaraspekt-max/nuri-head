@@ -8311,3 +8311,11 @@ der Aufwand, der die Kette trägt.**
 
 *Ich habe ihn gefragt, ob er die Grenze anders zieht. Zieht er sie anders, halte ich mich daran —
 aber ich schreibe hier auf, wofür ich argumentiert habe.*
+
+**Nachtrag 10:30 — Yamas Entscheidung:** *„Ich melde, du merged."* **Die Grenze steht damit fest und
+ist protokolliert:** Der Planner bestimmt den Zeitpunkt, prüft die fünf Bedingungen und legt den
+Merge als **eine Zeile mit den Zahlen daneben** vor. **Ausgeführt wird er von Yama.** Der Deploy
+bleibt ohnehin außerhalb — in jeder Variante.
+
+**Damit ist Tor 2 unverändert das, was es sein soll:** eine Stelle, an der ein Mensch den Stand
+einmal ansieht, bevor er zu 3 000 Kunden geht.
