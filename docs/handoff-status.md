@@ -13417,3 +13417,61 @@ vorhandene Kette nicht laeuft, vergroessert jedes zusaetzliche Material dieselbe
 Module, die richtig rechnen und die niemand ruft.**
 
 **Ballbesitz:** Evaluator (AUF-52 Scheibe B), Generator Scheibe C, Marke AUF-52.
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-52 Scheibe C (der Rest) — L3 ist durch
+
+**Commits:** Code `97e941a1` (`public/*` = **0 Zeilen**) · Bundle `7cf7f6ae`.
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1288 · pass 1288 ·
+fail 0`, vorher 1278) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+`store/` · `domain/` · `renderers/` · `geometry/` **null Zeilen**. **Rebuild-Beleg:**
+`PV-Schnellbelegung` im Bündel, **1** Treffer. **Klassifikation: `sichtbar`.**
+
+**Angeschlossen:** `engine-fensterprodukt` (Uw nach DIN EN ISO 10077-1) · `engine-abwasser`
+(Gefälle gegen Mindestgefälle) · `engine-kueche` (Arbeitsdreieck aus sechs Koordinaten) ·
+`engine-pv` (Schnellbelegung).
+
+**Zurückgegeben: `engine-uwert`.** `berechneUWert` nimmt eine **Liste von Schichten mit Lambda**. Das
+Modell führt seit AUF-76 zwar `WallNode.schichten` — aber als `{materialId, dickeMm}` **ohne
+Lambda**. **Das ist genau die Nichtdeckung, die ich in AUF-77 gemeldet habe, und sie tritt hier zum
+zweiten Mal auf, an anderer Stelle.** Aus Feldern eine Schichtliste zu bauen hieße,
+Wärmeleitfähigkeiten zu erfinden.
+
+### Eine Erweiterung der Hülle — und sie ist keine Rechnung
+
+Die **Bestehens-Plakette wird nur gezeigt, wenn die Engine ein Bestehens-Merkmal liefert.**
+`berechneUw` und `pvSchnellBelegung` rechnen Werte aus — **sie bestehen nichts**. Eine Plakette
+„nicht bestanden" wäre dort eine **erfundene Bewertung**. Testverriegelt in beide Richtungen: die
+beiden liefern **kein** `bestanden`, Abwasser und Küche liefern eines.
+
+- **K8 — der Gegenbeweis steht wieder auf handgeschriebenen Engine-Eingaben**, je Engine mindestens
+  ein Satz, bei Uw und Abwasser zwei (mit und ohne Vorgabewert, damit auch das Weglassen leerer
+  Felder belegt ist). **Mutation** (`ug` liest `uf`) ⇒ **1 rot**.
+- **K6 — acht verfügbare Engines, acht Flächen, exakt gleich.**
+
+### L3 ist durch — die Bilanz über alle drei Scheiben
+
+**Acht von dreizehn Engines haben eine Fläche. Fünf sind mit Messung zurückgegeben:**
+
+| Engine | Grund |
+|---|---|
+| `engine-holzmengen` · `engine-holzbauteile` | **Holzliste** — im Modell nicht vorhanden |
+| `engine-heizkreis` | **Liste von Heizkreisen** — das Muster kennt nur einzelne Felder |
+| `engine-uwert` | **Schichtliste mit Lambda** — das Modell führt Schichten ohne Lambda |
+| `engine-schifter` | **Ergebnisform ohne Zahlen** — eine bloße Klassifikation als Zeichenkette |
+
+**Vier der fünf scheitern am selben Punkt: das Muster übergibt Felder, diese Engines brauchen
+Listen.** Das ist kein Zufall und keine Nachlässigkeit des Musters — es ist die **nächste Frage**:
+woher eine Liste kommt (aus dem Modell, aus einer Auswahl, aus mehreren Eingabezeilen), ist eine
+Entscheidung, keine Umsetzung. **Sie gehört in einen eigenen Posten, nicht in diesen.**
+
+### Zur Reihenfolge — ich habe meine eigene Haltung korrigiert
+
+Bei Scheibe B habe ich zwei Takte gewartet und §13.6 als Sperre gelesen. **Das war zu eng:** §13.6
+ist eine **Messanweisung an den Evaluator** (`git status public/*` vor und nach der Sichtprobe),
+formuliert genau *weil* parallel gebaut wird — keine Sperre für den Generator. Und der Auftrag
+koppelt textlich nur **B an A**, nicht C an B. Deshalb ist C sofort gelaufen. **Der Evaluator prüft
+B und C gegen dieselbe `public/hausplaner/`** — das gehört gesagt, nicht geglättet.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
