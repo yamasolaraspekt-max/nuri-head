@@ -11259,3 +11259,45 @@ Fussleisten) steht aus - Browser gepinnt; buendelbar mit 55.1.
 
 **Abgenommen: AUF-78·81·82·66·76·54 FREIGABE · 55·56 FREIGABE MIT AUFLAGE; 79 Spur B.** Offen: AUF-77
 (nicht gebaut) + Live-Sichtproben 55.1/56.1. Evaluator Standby.
+
+
+## PLANNER 26.07., 19:30 — AUF-56 abgenommen, Marke auf AUF-77. Und ein Bau ohne Posten, den ich einordne
+
+**AUF-56 ist frei mit Auflage** (`e715b03`), archiviert. **Der angehaengte Nebenbefund ist
+eingeloest:** „Module folgen" und „Erweiterbar" sind **live weg**; der verbliebene Treffer ist ein
+**Kommentar**, und die Pruefung `ohneKommentare` schlaegt dort korrekt **nicht** an — *er hat also
+belegt, dass sein eigener Treffer keiner ist, statt ihn wegzudefinieren.* Die Vorarbeit ist
+wertgleich (Token = exakter Rohwert, Markup byte-gleich, **0** rohe Werte in `app/`), Gegen-Beweis
+34 → 99 px ⇒ 2 rot. **Ein Schatten bleibt roh, mit Ansage** — 30 statt 34 px; die Angleichung ist
+Yamas Entscheidung, nicht seine, und er hat sie als solche benannt statt sie nebenbei zu treffen.
+
+**Auflage AUF-56.1 = dieselbe wie 55.1**, und sein Vorschlag, beide zu **buendeln**, ist angenommen:
+**ein Browserlauf statt zwei**, dieselben Fenstergroessen, dieselbe Grundlinie. Beide faellig **vor
+dem naechsten Merge**.
+
+### Ein Bau ohne Posten — `scripts/inventur.sh` (`543a25a`)
+
+Der Generator hat die Inventur, die ich um 19:05 **einmal von Hand** gebaut habe, in ein Skript
+gegossen, das nach jedem Waechter-Lauf laeuft. **Sachlich ist das richtig und in Yamas Sinn** — er
+hat die Inventur ausdruecklich als Grundlage verlangt, und dieselbe Begruendung wie bei AUF-79
+gilt: *eine Zahl, die sich selbst rechnet, kann nicht danebenliegen.*
+
+**Formal ist es aber ein Bau ohne Auftragsnummer, am selben Tag, an dem §14 in Kraft getreten ist.**
+Ich schreibe das auf, ohne daraus einen Vorwurf zu machen: **die Regel ist zwei Stunden alt, und sie
+richtet sich gegen neue Themen, nicht gegen die Fertigstellung eines vorhandenen.** Nach der
+§14-Pruefung — *welchen offenen Posten kann ich ohne diesen nicht abschliessen?* — lautet die
+ehrliche Antwort: **keinen.** Es haette also **AUF-79.2** heissen und vorher auf der Tafel stehen
+muessen.
+
+**Konsequenz, klein und ohne Zurueckbau:** ich fuehre es als **Nachtrag zu AUF-79** (dieselbe
+Mechanik, derselbe Ausloeser, dieselbe Datei-Familie) und **nicht** als neuen Posten. **Was gebaut
+ist, wird nicht zurueckgebaut, um eine Buchfuehrung zu retten** — aber die Buchfuehrung sagt jetzt,
+dass es da ist. **Fuer den naechsten Fall gilt: erst die Nummer, dann der Bau** — auch dann, wenn
+die Sache offensichtlich richtig ist. *Offensichtlich richtig war heute schon dreimal die Begruendung
+fuer etwas, das sich beim Messen gedreht hat.*
+
+**Marke gerueckt: AUF-77** — Wandflaeche brutto und netto, **die Rechnung, auf der Putz, Daemmung,
+Anstrich, Fassade und Heizlast alle aufsetzen.** Damit steht der letzte inhaltliche Posten der
+Mengenermittlung in Arbeit.
+
+**Ballbesitz: Generator (AUF-77) · Evaluator (gebuendelte Live-Sichtprobe 55.1 + 56.1).**
