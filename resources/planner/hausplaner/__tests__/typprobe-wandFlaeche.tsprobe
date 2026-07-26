@@ -1,0 +1,35 @@
+// AUF-77 K4 — **Typprobe, kein Test.**
+//
+// Diese Datei wird NICHT vom Testläufer ausgeführt und NICHT vom Projekt-`tsc` erfasst (die
+// Endung ist absichtlich `.tsprobe`). Sie wird von `wandFlaeche.test.ts` in eine `.ts` kopiert und
+// durch einen **echten Compiler-Lauf** geschickt.
+//
+// **Warum so umständlich:** Kriterium 4 verlangt, dass ein Ergebnis ohne Bezugsmaß ein *Typfehler*
+// ist. Das lässt sich zur Laufzeit nicht prüfen — ein Test, der nur `assert('bezug' in x)` sagt,
+// belegt Sorgfalt, nicht Unmöglichkeit. `@ts-expect-error` dreht die Aussage um: der Lauf ist
+// **grün, wenn der Fehler eintritt**, und rot, sobald jemand `bezug` optional macht.
+import type { WandMengen } from '../geometry/wandFlaeche';
+
+const vollstaendig: WandMengen = {
+  bezug: 'roh',
+  nodeId: 'w1',
+  laengeMm: 5000, hoeheMm: 2500, dickeMm: 300,
+  bruttoM2: 12.5, oeffnungenM2: 1.68, nettoM2: 10.82,
+  bruttoM3: 3.75, oeffnungenM3: 0.504, nettoM3: 3.246,
+  rohmassRest: [],
+};
+
+// @ts-expect-error — OHNE `bezug` darf es kein `WandMengen` geben. Faellt dieser Fehler weg,
+// scheitert der Compiler-Lauf an dieser Zeile, und der Test wird rot.
+const ohneBezug: WandMengen = {
+  nodeId: 'w1',
+  laengeMm: 5000, hoeheMm: 2500, dickeMm: 300,
+  bruttoM2: 12.5, oeffnungenM2: 1.68, nettoM2: 10.82,
+  bruttoM3: 3.75, oeffnungenM3: 0.504, nettoM3: 3.246,
+  rohmassRest: [],
+};
+
+// @ts-expect-error — und auch kein anderes Bezugsmass als die zwei erlaubten.
+const falscherBezug: WandMengen = { ...vollstaendig, bezug: 'ungefaehr' };
+
+export const proben = [vollstaendig, ohneBezug, falscherBezug];
