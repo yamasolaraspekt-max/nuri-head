@@ -13112,3 +13112,40 @@ geometry), 1x die Ergebnisform - anderer Fehlertyp als "Empfaenger fehlt", kann 
 **Gates rein** tsc0·schema0·test **1268/0**·build0, Bundle byte-gleich.
 
 **Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.
+
+
+## PLANNER 26.07., 22:55 (CEST) — AUF-52 Scheibe A freigegeben. Vierzehnter Posten heute, kein rotes Votum
+
+**FREIGABE** (`497215c6`) fuer Code `644d7be5` + Bundle `e47ef915`. Gates **1268/0**, Bundle
+byte-gleich.
+
+**Er hat genau das geprueft, worum ich gebeten hatte, und nicht den bequemeren Teil.** Mein Auftrag
+lautete: *zuerst die Selbstanzeige nachmessen, nicht den Bau — eine gemeldete Reparatur ist eine
+Meldung, kein Beleg.* Sein Beleg: `panel.berechne` **deepEquals** `berechneSparren` an drei Faellen,
+und der Gegen-Beweis **Panel ueberschreibt das Ergebnis ⇒ K4 rot**. Damit ist belegt, was zaehlte:
+**der Vergleich schlaegt wieder aus.** Genau das konnte er vor der Reparatur nicht.
+
+**Ein Rest, den ich benenne statt ihn zu verschweigen:** sein Gegen-Beweis verfaelscht das
+**Ergebnis**, der urspruengliche Defekt sass in der **Feldzuordnung**. Der Generator hat die
+Zuordnungs-Mutation selbst gefahren (2 rot), der Evaluator die Ergebnis-Mutation. **Zusammen ist
+beides gedeckt, aber von zwei verschiedenen Haenden** — und die eine Haelfte ist eine
+Selbstauskunft. Kein Grund fuer Rot, ein Grund fuer eine Zeile: *bei der naechsten Scheibe gehoert
+die Mutation an derselben Stelle, an der der Fehler sass.*
+
+**Und er hat meine Unterscheidung von vor zehn Minuten uebernommen**, ohne dass sie in einem
+Abnahmekriterium stand: *"anderer Fehlertyp als 'Empfaenger fehlt'"*. Das ist heute das zweite Mal,
+dass ein Befund des Planners ohne Auftrag zum Handgriff des Evaluators wird — beim ersten Mal war
+es die Orphan-Zaehlung. **Der Zyklus traegt Erkenntnisse quer, nicht nur Posten laengs.**
+
+**Kein Archiveintrag** — eine abgenommene Scheibe ist kein abgeschlossener Posten. Stand steht in
+der AUF-52-Zelle: **Scheibe A abgenommen, Scheibe B (tga-heizung) laeuft.** Tafel **84 Zeilen, 0
+fehlerhaft, eine Marke (AUF-52), Stapel leer.**
+
+**Vierzehn Posten heute abgenommen, kein einziges rotes Votum** — AUF-78 · 81 · 82 · 66 · 76 · 54 ·
+77 · 63 · 42 · 67 · 55 · 56 · 35b · 38-A · 52-A. Dazu AUF-79 auf Spur B und zwei Auflagen.
+
+**Neuer Merge-Punkt fuer Yama:** mit dieser Freigabe ist **alles bis `e47ef915` abgenommen**. Der
+naechste Block darf auf den Kopf dieses Eintrags zeigen — ich nenne ihn, sobald er committet ist,
+und nach §16 als Nummer, nicht als Zweigname.
+
+**Ballbesitz:** Generator (AUF-52 Scheibe B), Evaluator wartet, Marke AUF-52.
