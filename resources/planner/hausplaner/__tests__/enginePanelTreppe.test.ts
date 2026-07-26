@@ -36,13 +36,14 @@ const TREPPE = enginePanel('engine-treppe')!;
  */
 test('das Muster wird kopiert, nicht vorweggenommen — nur angeschlossene Engines haben ein Panel', () => {
   assert.ok(ENGINE_PANELS.length >= 1);
-  assert.deepEqual([...ENGINE_PANELS.map((p) => p.engineId)].sort(), ['engine-sparren', 'engine-treppe']);
+  assert.deepEqual([...ENGINE_PANELS.map((p) => p.engineId)].sort(),
+    ['engine-fbh', 'engine-heizkoerper', 'engine-sparren', 'engine-treppe']);
   // Die Scheiben B und C sind nicht vorweggenommen.
-  for (const spaeter of ['engine-fbh', 'engine-heizkoerper', 'engine-uwert', 'engine-pv']) {
+  for (const spaeter of ['engine-uwert', 'engine-pv', 'engine-abwasser', 'engine-fensterprodukt']) {
     assert.equal(enginePanel(spaeter), undefined, `${spaeter} gehoert in eine spaetere Scheibe`);
   }
   // Und die drei zurueckgegebenen der eigenen Gruppe ebenso wenig.
-  for (const zurueck of ['engine-holzmengen', 'engine-holzbauteile', 'engine-schifter']) {
+  for (const zurueck of ['engine-holzmengen', 'engine-holzbauteile', 'engine-schifter', 'engine-heizkreis']) {
     assert.equal(enginePanel(zurueck), undefined, `${zurueck} ist begruendet zurueckgegeben`);
   }
 });

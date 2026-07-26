@@ -22,6 +22,9 @@ import { berechneTreppe, type TreppenEingabe, type TreppenErgebnis } from '../..
 // AUF-52 Scheibe A — **statischer** Import, wie AUF-33 §3b es verlangt: der Bundler muss das Ziel
 // sehen. `import(variable)` ueberlebt das Bundling nicht zuverlaessig.
 import { berechneSparren, type SparrenEingabe, type SparrenErgebnis } from '../../geometry/sparrenBerechnung';
+// AUF-52 Scheibe B (tga-heizung) — wieder statisch, wieder ohne Rechnung in dieser Datei.
+import { fbhAuslegung, type FbhEingabe } from '../../geometry/fbhAuslegung';
+import { bewerteDeckung, type BetriebsBedingung } from '../../geometry/heizkoerperLeistung';
 
 /** Ein Eingabefeld der Fläche. Beschreibt das Feld — es rechnet nichts. */
 export interface EngineFeld {
@@ -201,6 +204,75 @@ export const ENGINE_PANELS: readonly EnginePanel[] = [
     ],
     berechne: (werte) => berechneSparren(alsSparrenEingabe(werte)) as unknown as EngineErgebnis,
   },
+  {
+    // AUF-52 Scheibe B, erste von drei der Gruppe tga-heizung.
+    engineId: 'engine-fbh',
+    titel: 'Fussbodenheizung-Auslegung',
+    zweck: 'Ermittelt Rohrlaenge, Anzahl und Laenge der Heizkreise sowie die spezifische Leistung '
+      + 'aus Flaeche, Heizlast und Verlegeabstand.',
+    grundlage: 'Auslegung nach Verlegeabstand und maximaler Heizkreislaenge; Pruefpunkte zu Leistung und Kreislaenge',
+    felder: [
+      { schluessel: 'flaeche', label: 'Beheizbare Grundflaeche', einheit: 'm²', pflicht: true, vorgabe: 20 },
+      { schluessel: 'heizlast', label: 'Raumheizlast', einheit: 'W', pflicht: true, vorgabe: 1400 },
+      {
+        schluessel: 'verlegeabstand', label: 'Verlegeabstand', einheit: 'mm', pflicht: false,
+        hinweis: 'Leer ⇒ die Engine setzt ihre Vorgabe. Enger verlegt heisst mehr Rohr und mehr Leistung.',
+      },
+      {
+        schluessel: 'sperrflaeche', label: 'Sperrflaeche', einheit: 'm²', pflicht: false,
+        hinweis: 'Flaeche unter Einbauten, die nicht beheizt wird.',
+      },
+      { schluessel: 'maxKreisLaenge', label: 'Maximale Heizkreislaenge', einheit: 'm', pflicht: false },
+      { schluessel: 'anbindungProKreis', label: 'Anbindeleitung je Kreis', einheit: 'm', pflicht: false },
+    ],
+    ergebnisFelder: [
+      { schluessel: 'nutzflaeche', label: 'Beheizte Nutzflaeche', einheit: 'm²' },
+      { schluessel: 'rohrlaengeGesamt', label: 'Rohrlaenge gesamt (inkl. Anbindung)', einheit: 'm' },
+      { schluessel: 'anzahlHeizkreise', label: 'Heizkreise' },
+      { schluessel: 'rohrProKreis', label: 'Rohr je Kreis (laengster)', einheit: 'm' },
+      { schluessel: 'spezifischeLeistung', label: 'Spezifische Leistung', einheit: 'W/m²' },
+    ],
+    berechne: (werte) => fbhAuslegung(alsFbhEingabe(werte)) as unknown as EngineErgebnis,
+  },
+  {
+    engineId: 'engine-heizkoerper',
+    titel: 'Heizkoerper-Leistung',
+    zweck: 'Rechnet die Normleistung auf die tatsaechlichen Betriebstemperaturen um und prueft, ob '
+      + 'sie die Raumheizlast deckt.',
+    grundlage: 'Leistungsumrechnung ueber die arithmetische Uebertemperatur mit dem Heizkoerper-Exponenten n',
+    felder: [
+      { schluessel: 'normLeistung', label: 'Normleistung', einheit: 'W', pflicht: true, vorgabe: 1500 },
+      { schluessel: 'raumheizlast', label: 'Raumheizlast', einheit: 'W', pflicht: true, vorgabe: 1200 },
+      { schluessel: 'vorlauf', label: 'Vorlauftemperatur', einheit: '°C', pflicht: true, vorgabe: 55 },
+      { schluessel: 'ruecklauf', label: 'Ruecklauftemperatur', einheit: '°C', pflicht: true, vorgabe: 45 },
+      { schluessel: 'raumtemp', label: 'Raumtemperatur', einheit: '°C', pflicht: true, vorgabe: 20 },
+      {
+        schluessel: 'n', label: 'Heizkoerper-Exponent n', pflicht: false,
+        hinweis: 'Leer ⇒ die Engine setzt ihre Vorgabe fuer einen typischen Kompaktheizkoerper.',
+      },
+      {
+        schluessel: 'normUebertemperatur', label: 'Norm-Uebertemperatur', einheit: 'K', pflicht: false,
+        hinweis: 'Uebertemperatur, auf die sich die Normleistung bezieht (50 K = 75/65/20).',
+      },
+    ],
+    ergebnisFelder: [
+      { schluessel: 'betriebsLeistung', label: 'Leistung im Betrieb', einheit: 'W' },
+      { schluessel: 'deckungsgrad', label: 'Deckungsgrad', einheit: '%' },
+      { schluessel: 'hinweis', label: 'Bewertung' },
+    ],
+    /**
+     * **Eine Umbenennung, keine Rechnung — und sie wird hier offen ausgewiesen.**
+     * `bewerteDeckung` nennt sein Bestehens-Merkmal `ausreichend`; die Huelle liest `bestanden`.
+     * Der Wert wird **unveraendert durchgereicht**, nur unter dem Namen, den die Huelle kennt.
+     * Nichts wird gerechnet, nichts entschieden — waere hier ein eigener Grenzwert, waere es ein
+     * Defekt nach AUF-33 §3a.
+     */
+    berechne: (werte) => {
+      const zahl = (k: string): number => Number((werte[k] ?? '').trim() || '0');
+      const r = bewerteDeckung(zahl('normLeistung'), zahl('raumheizlast'), alsBetriebsBedingung(werte));
+      return { ...r, bestanden: r.ausreichend } as unknown as EngineErgebnis;
+    },
+  },
 ];
 
 /**
@@ -227,6 +299,45 @@ export function alsSparrenEingabe(werte: Record<string, string>): SparrenEingabe
     gelaendehoeheM: zahl('gelaendehoeheM') ?? 0,
     ...(zahl('eigenlastKnM2') !== undefined ? { eigenlastKnM2: zahl('eigenlastKnM2') } : {}),
     ...(werte.holzklasse ? { holzklasse: werte.holzklasse as SparrenEingabe['holzklasse'] } : {}),
+  };
+}
+
+/**
+ * AUF-52 Scheibe B — Feldwerte in die FBH-Eingabe. **Dieselbe Regel wie ueberall:** leere Felder
+ * werden weggelassen, nicht auf 0 gesetzt; die Engine hat eigene Vorgaben (150 mm Verlegeabstand,
+ * 100 m Kreislaenge, 5 m Anbindung). Eine 0 waere eine erfundene Angabe.
+ */
+export function alsFbhEingabe(werte: Record<string, string>): FbhEingabe {
+  const zahl = (k: string): number | undefined => {
+    const roh = (werte[k] ?? '').trim();
+    if (roh === '') return undefined;
+    const n = Number(roh);
+    return Number.isFinite(n) ? n : undefined;
+  };
+  return {
+    flaeche: zahl('flaeche') ?? 0,
+    heizlast: zahl('heizlast') ?? 0,
+    ...(zahl('verlegeabstand') !== undefined ? { verlegeabstand: zahl('verlegeabstand') } : {}),
+    ...(zahl('sperrflaeche') !== undefined ? { sperrflaeche: zahl('sperrflaeche') } : {}),
+    ...(zahl('maxKreisLaenge') !== undefined ? { maxKreisLaenge: zahl('maxKreisLaenge') } : {}),
+    ...(zahl('anbindungProKreis') !== undefined ? { anbindungProKreis: zahl('anbindungProKreis') } : {}),
+  };
+}
+
+/** AUF-52 Scheibe B — die Betriebsbedingung des Heizkoerpers, gelesen und weitergereicht. */
+export function alsBetriebsBedingung(werte: Record<string, string>): BetriebsBedingung {
+  const zahl = (k: string): number | undefined => {
+    const roh = (werte[k] ?? '').trim();
+    if (roh === '') return undefined;
+    const n = Number(roh);
+    return Number.isFinite(n) ? n : undefined;
+  };
+  return {
+    vorlauf: zahl('vorlauf') ?? 0,
+    ruecklauf: zahl('ruecklauf') ?? 0,
+    raumtemp: zahl('raumtemp') ?? 0,
+    ...(zahl('n') !== undefined ? { n: zahl('n') } : {}),
+    ...(zahl('normUebertemperatur') !== undefined ? { normUebertemperatur: zahl('normUebertemperatur') } : {}),
   };
 }
 

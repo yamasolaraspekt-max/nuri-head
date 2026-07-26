@@ -22,9 +22,10 @@ test('alle 13 Rechen-Engines sind registriert (echtes Modul + Ein-/Ausgang) — 
   const verfuegbar = engines.filter((e) => e.zustand === 'verfuegbar');
   // Nach der Reihenfolge des Registers, nicht nach der des Anschlusses — sortiert verglichen,
   // damit die Zusage nicht an der Zeilennummer im Register haengt.
-  assert.deepEqual([...verfuegbar.map((e) => e.id)].sort(), ['engine-sparren', 'engine-treppe'],
+  assert.deepEqual([...verfuegbar.map((e) => e.id)].sort(),
+    ['engine-fbh', 'engine-heizkoerper', 'engine-sparren', 'engine-treppe'],
     'genau die angeschlossenen Engines');
-  const angeschlossen = new Set(['engine-treppe', 'engine-sparren']);
+  const angeschlossen = new Set(['engine-treppe', 'engine-sparren', 'engine-fbh', 'engine-heizkoerper']);
   for (const e of engines) {
     if (!angeschlossen.has(e.id)) {
       assert.equal(e.zustand, 'in_entwicklung', `${e.id} sollte schlafen (Fläche folgt in einer spaeteren Scheibe)`);
