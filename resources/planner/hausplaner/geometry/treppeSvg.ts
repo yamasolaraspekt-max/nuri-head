@@ -21,7 +21,38 @@ export interface TreppenZeichnung {
   pfeilBis: SvgP;
 }
 
+/**
+ * AUF-54 — **die sechs Farbrollen dieser Zeichnung, hereingereicht statt gekannt.**
+ *
+ * Hier stehen **Rollen, keine Werte**. Welcher Farbwert eine Rolle trägt, entscheidet die
+ * aufrufende Schicht — `geometry/` ist reine Geometrie und hat über Aussehen nicht zu befinden.
+ * Vorher lagen hier sechs rohe Werte, darunter ein drittes Grün für dieselbe Rolle, für die
+ * `studioDaten.ts` bereits eines führt und `szene.ts` ein weiteres rendert.
+ */
+export interface TreppenFarben {
+  /** Gesamt-Umriss der Treppe. */
+  umriss: string;
+  /** Trittstufen-Grenzlinien. */
+  stufe: string;
+  /** Lauflinie und Aufwärts-Pfeil. */
+  lauflinie: string;
+  /** Stufennummern, Titel, Gesamtmaß. */
+  text: string;
+  /** Rahmen der Zeichenfläche. */
+  rahmen: string;
+  /** Hintergrund der Zeichenfläche. */
+  bg: string;
+}
+
 export interface SvgOptionen {
+  /**
+   * **Pflicht, nicht optional.** Der Auftrag erlaubte einen Standardwert, damit „die neun
+   * Aufrufstellen nicht alle gleichzeitig geändert werden müssen" — **es sind zwei**, beide im
+   * Test (gemessen, nicht angenommen). Der Grund für den Standardwert besteht also nicht, und
+   * ohne ihn kann in dieser Datei **kein** Farbwert überleben. Das ist Kriterium 1 in seiner
+   * strengsten Form: nicht „keiner außer dem Standard", sondern keiner.
+   */
+  farben: TreppenFarben;
   /** Zielbreite der Zeichenfläche in px (Höhe folgt dem Seitenverhältnis). Default 480. */
   breitePx?: number;
   /** Rand in px. Default 28. */
@@ -31,15 +62,6 @@ export interface SvgOptionen {
   /** Titel/Beschriftung (z. B. „Gerade Treppe · 16 Steig."). */
   titel?: string;
 }
-
-const F = {
-  umriss: '#374151',
-  stufe: '#9ca3af',
-  lauflinie: '#93c21c',
-  text: '#6b7280',
-  rahmen: '#e5e7eb',
-  bg: '#ffffff',
-};
 
 interface Bbox { minX: number; minY: number; maxX: number; maxY: number }
 
@@ -55,7 +77,8 @@ function bboxVon(z: TreppenZeichnung): Bbox {
  * Weltkoordinaten (mm, Nord=+y) werden auf die px-Fläche skaliert und Y gespiegelt (SVG y zeigt nach
  * unten), sodass „oben" in der Zeichnung auch oben ist.
  */
-export function treppeAlsSvg(z: TreppenZeichnung, opt: SvgOptionen = {}): string {
+export function treppeAlsSvg(z: TreppenZeichnung, opt: SvgOptionen): string {
+  const F = opt.farben;
   const breitePx = opt.breitePx ?? 480;
   const rand = opt.randPx ?? 28;
   const nummern = opt.nummern ?? true;

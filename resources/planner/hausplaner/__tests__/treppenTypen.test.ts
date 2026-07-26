@@ -2,6 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { treppenTyp, type TreppenTyp } from '../geometry/treppenTypen';
 import { treppeAlsSvg } from '../geometry/treppeSvg';
+// AUF-54: die Farben kommen aus der aufrufenden Schicht — `geometry/` kennt keine mehr.
+import { TREPPE_FARBEN } from '../app/studioDaten';
 
 const typen: TreppenTyp[] = ['gerade', 'l-podest', 'u-podest', 'spindel'];
 
@@ -35,7 +37,7 @@ test('Spindel passt in ein Quadrat ≈ Durchmesser', () => {
 
 test('treppeAlsSvg liefert gültigen SVG-String mit Stufen + Lauflinie', () => {
   const r = treppenTyp({ typ: 'gerade', geschosshoehe: 2800, laufbreite: 1000 });
-  const svg = treppeAlsSvg(r.zeichnung, { titel: 'Gerade' });
+  const svg = treppeAlsSvg(r.zeichnung, { farben: TREPPE_FARBEN, titel: 'Gerade' });
   assert.ok(svg.startsWith('<svg') && svg.endsWith('</svg>'));
   assert.ok(svg.includes('<polygon'));   // Umriss
   assert.ok(svg.includes('<line'));      // Stufen
@@ -45,5 +47,5 @@ test('treppeAlsSvg liefert gültigen SVG-String mit Stufen + Lauflinie', () => {
 
 test('SVG numeriert Stufen (Text 1)', () => {
   const r = treppenTyp({ typ: 'gerade', geschosshoehe: 2800, laufbreite: 1000 });
-  assert.ok(treppeAlsSvg(r.zeichnung).includes('>1</text>'));
+  assert.ok(treppeAlsSvg(r.zeichnung, { farben: TREPPE_FARBEN }).includes('>1</text>'));
 });

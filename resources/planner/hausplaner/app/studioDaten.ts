@@ -19,6 +19,37 @@ export const T = {
   materialWood: '#b08968',
 } as const;
 
+/**
+ * AUF-54 — **die Farben der Treppen-Grundrisszeichnung, hier statt in `geometry/`.**
+ *
+ * Yamas Entscheidung vom 25.07.: *„Farbe als Parameter."* Vorher standen diese sechs Werte roh in
+ * `geometry/treppeSvg.ts` — eine reine Geometrie-Datei, die über Aussehen entschied.
+ *
+ * **Wert- und verhaltenstreu:** jeder der sechs Werte ist zeichengleich der, der vorher gerendert
+ * wurde. Dieser Posten verschiebt **Herkunft, nicht Aussehen**; der Beweis ist ein Byte-Vergleich
+ * des erzeugten SVG über vier Treppenarten.
+ *
+ * **Warum hier rohe Werte und keine `T`-Rollen:** zwei der sechs sind zeichengleich mit
+ * vorhandenen Rollen (`umriss` = `T.canvasWall`, `bg` = `T.surface`) — vier haben **keine**. Sie
+ * an `T` zu binden hieße, für vier Farben neue Rollen zu erfinden oder sie an fremde anzugleichen,
+ * und **Angleichung ist ausdrücklich Yamas Entscheidung** (Auftrag AUF-56 §„nicht zu bauen").
+ * Die zwei Überschneidungen sind gemessen und im Test festgehalten, damit die Rollen-Entscheidung
+ * später auf Zahlen trifft und nicht auf Erinnerung.
+ *
+ * **`lauflinie` ist das dritte Grün für dieselbe Rolle** (`#93c21c` hier · `#7fae1c` als `brand` ·
+ * `0xa3e635` in `szene.ts`). Es bleibt vorerst, was es ist: **ob die Lauflinie überhaupt
+ * Markenfarbe tragen soll, ist nicht entschieden** — und ein stiller Tausch wäre genau die
+ * sichtbare Änderung, die dieser Posten nicht machen darf.
+ */
+export const TREPPE_FARBEN = {
+  umriss: '#374151',
+  stufe: '#9ca3af',
+  lauflinie: '#93c21c',
+  text: '#6b7280',
+  rahmen: '#e5e7eb',
+  bg: '#ffffff',
+} as const;
+
 export type StudioModus = 'start' | 'guided' | 'expert';
 
 export interface FachHub {
