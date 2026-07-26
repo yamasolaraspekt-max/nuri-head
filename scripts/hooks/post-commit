@@ -17,7 +17,34 @@
 WURZEL="$(git --no-optional-locks rev-parse --show-toplevel 2>/dev/null)" || exit 0
 [ -x "$WURZEL/scripts/waechter.sh" ] || exit 0
 
-# `setsid` gibt es auf macOS nicht; `nohup … &` mit abgetrennten Strömen genügt, damit der Commit
-# nicht auf den Testlauf wartet.
-nohup "$WURZEL/scripts/waechter.sh" >/dev/null 2>&1 &
+# AUF-82 (b) — **ein Scheitern darf nicht spurlos nach /dev/null gehen.**
+#
+# Gemessen: `nohup … >/dev/null 2>&1 &` gefolgt von `exit 0` verschluckte alles. Der eigens
+# gebaute exit 2 erreichte den einzigen realen Auslösepfad nie — am Commit war nichts zu sehen.
+# **Ein Wächter, der scheitert und dabei gesund aussieht, ist der Zustand, gegen den AUF-75
+# angetreten ist.**
+#
+# **Die Bedingung bleibt:** der Hook blockiert nicht und gibt 0 zurück. Ein blockierender Hook wird
+# nach dem dritten Mal umgangen, und ein umgangener Wächter ist schlechter als keiner.
+#
+# **Gewählte Form: eine Meldedatei** — `docs/befunde/GESCHEITERT-<commit>.txt`. Begründung in einem
+# Satz: sie überlebt das Terminal, in dem niemand mehr hinsieht, sie steht neben den Rohausgaben,
+# die man ohnehin liest, und sie ist an ihrem Namen zu finden, ohne dass man das Log durchsucht.
+#
+# `setsid` gibt es auf macOS nicht; `nohup … &` mit abgetrennten Strömen genügt.
+(
+  KURZ="$(git --no-optional-locks rev-parse --short HEAD 2>/dev/null)"
+  if ! "$WURZEL/scripts/waechter.sh" >/dev/null 2>&1; then
+    {
+      echo "Der Waechter ist mit einem Fehler geendet."
+      echo "Commit    : ${KURZ:-unbekannt}"
+      echo "Zeitpunkt : $(date '+%Y-%m-%dT%H:%M:%S')"
+      echo "Naechster Schritt: docs/befunde/waechter.log ansehen — die letzte Zeile nennt den Grund."
+      echo "Diese Datei entsteht NUR bei einem Fehlschlag; sie ist der Beleg, dass er nicht"
+      echo "stillschweigend passiert ist."
+    } >"$WURZEL/docs/befunde/GESCHEITERT-${KURZ:-unbekannt}.txt" 2>/dev/null
+  fi
+) >/dev/null 2>&1 &
+
+# Der Commit wartet auf nichts und schlaegt nie wegen des Waechters fehl.
 exit 0

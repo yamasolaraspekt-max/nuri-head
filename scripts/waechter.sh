@@ -52,10 +52,40 @@ mkdir -p "$BEFUNDE"
 # Prozesskennung zufällig wiederverwendet wurde (PIDs werden vom System recycelt).
 HOECHSTDAUER=1800   # Sekunden
 
+# ── AUF-82 (a): die Sperre kommt ohne `unlink` aus ────────────────────────────
+# **Gemessen vom Evaluator:** über die Cowork-Brücke ist `unlink` auf dem Mount verboten. Beide
+# beiden Löschaufrufe — in `erobern()` und im EXIT-Trap — scheiterten dort **still**. Die Sperre blieb liegen,
+# und der eigens gebaute exit 2 erreichte den einzigen realen Auslösepfad nie.
+#
+# **Ich weiche vom vorgeschlagenen Weg ab und sage es:** der Auftrag schlägt `mv` in eine datierte
+# Ablage vor. Das löst das `unlink`-Problem, schafft aber ein zweites — eine Ablage, die mit jedem
+# Lauf wächst, und deren Aufräumen wieder `unlink` bräuchte. **Deshalb wird gar nichts entfernt und
+# nichts verschoben:** das Sperrverzeichnis ist ein **Platz**, der einmal entsteht und danach nur
+# noch **beschrieben** wird. Belegen heißt „meine Kennung eintragen", Freigeben heißt „Kennung
+# leeren". Kein `rm`, kein `mv`, kein Wachstum.
+#
+# ── AUF-82 (c): eine Prozessnummer ist keine Identität ────────────────────────
+# **Der gefährlichste der drei Fälle**, ebenfalls gemessen: um 14:08 schrieb der Wächter
+# `uebersprungen (Lauf aktiv, pid 79)` — die Zeile des **Gesundzustands** — obwohl der Halter
+# längst beendet war. `kill -0 79` war wahr, weil **ein anderer Prozess dieselbe Nummer trug**.
+# Ein Wächter, der eine fremde Nummer für sich selbst hält, sieht in jeder Auswertung gesund aus.
+#
+# Deshalb trägt die Sperre zusätzlich den **Startzeitpunkt** des Halters (`ps -o lstart=`).
+# **Lebendig heißt: Nummer da UND Startzeitpunkt gleich.** Stimmt nur die Nummer, ist es ein
+# anderer Prozess — und dann wird nicht übersprungen.
+
+startzeit_von() {
+  ps -o lstart= -p "$1" 2>/dev/null | tr -s ' ' | sed 's/^ *//;s/ *$//'
+}
+
+# Der Halter lebt nur, wenn Nummer UND Startzeitpunkt passen.
 halter_lebt() {
-  local pid="$1"
+  local pid="$1" start="$2" jetzt
   [ -n "$pid" ] || return 1
-  kill -0 "$pid" 2>/dev/null
+  kill -0 "$pid" 2>/dev/null || return 1
+  jetzt="$(startzeit_von "$pid")"
+  [ -n "$start" ] || return 1          # alte Sperre ohne Startzeit: NICHT als lebend zählen
+  [ "$jetzt" = "$start" ]
 }
 
 sperre_alter() {
@@ -66,10 +96,22 @@ sperre_alter() {
   echo $((jetzt - geboren))
 }
 
+# Belegen: die eigene Kennung eintragen. Reines Schreiben — kein rm, kein mv.
+belegen() {
+  echo $$ >"$SPERRE/pid" 2>/dev/null || return 1
+  startzeit_von $$ >"$SPERRE/lstart" 2>/dev/null || return 1
+  date +%s >"$SPERRE/geboren" 2>/dev/null || return 1
+  return 0
+}
+
+# Freigeben: Kennung leeren. Das Verzeichnis bleibt stehen — es ist der Platz, nicht der Besitz.
+freigeben() {
+  : >"$SPERRE/pid" 2>/dev/null
+}
+
 erobern() {
   local grund="$1"
-  rm -rf "$SPERRE" 2>/dev/null
-  if mkdir "$SPERRE" 2>/dev/null; then
+  if belegen; then
     printf '%s %s %s WARNUNG verwaiste-sperre-zurueckerobert (%s)\n' \
       "$(date '+%Y-%m-%dT%H:%M:%S')" "-" "-" "$grund" >>"$LOG"
     return 0
@@ -77,30 +119,30 @@ erobern() {
   return 1
 }
 
-if ! mkdir "$SPERRE" 2>/dev/null; then
-  HALTER="$(cat "$SPERRE/pid" 2>/dev/null)"
-  ALTER="$(sperre_alter)"
-  if halter_lebt "$HALTER"; then
-    # Der gesunde Fall: ein anderer Lauf arbeitet wirklich. Nur DIESER ist exit 0.
-    printf '%s %s %s uebersprungen (Lauf aktiv, pid %s)\n' \
-      "$(date '+%Y-%m-%dT%H:%M:%S')" "-" "-" "$HALTER" >>"$LOG"
-    exit 0
-  elif [ -n "$ALTER" ] && [ "$ALTER" -gt "$HOECHSTDAUER" ] 2>/dev/null; then
-    erobern "alter=${ALTER}s" || { printf '%s - - uebersprungen OHNE lebenden Halter (nicht eroberbar)\n' "$(date '+%Y-%m-%dT%H:%M:%S')" >>"$LOG"; exit 2; }
-  elif [ -n "$HALTER" ] || [ -n "$ALTER" ]; then
-    erobern "halter-tot=${HALTER:-unbekannt}" || { printf '%s - - uebersprungen OHNE lebenden Halter (nicht eroberbar)\n' "$(date '+%Y-%m-%dT%H:%M:%S')" >>"$LOG"; exit 2; }
-  else
-    # Weder Kennung noch Zeitpunkt: eine Sperre aus einer älteren Fassung oder von Hand angelegt.
-    # Sie wird zurückerobert — aber laut, denn hier ist nichts zu klären.
-    erobern "ohne-kennung" || { printf '%s - - uebersprungen OHNE lebenden Halter (nicht eroberbar)\n' "$(date '+%Y-%m-%dT%H:%M:%S')" >>"$LOG"; exit 2; }
-  fi
+mkdir -p "$SPERRE" 2>/dev/null
+HALTER="$(cat "$SPERRE/pid" 2>/dev/null)"
+HSTART="$(cat "$SPERRE/lstart" 2>/dev/null)"
+ALTER="$(sperre_alter)"
+
+if [ -z "$HALTER" ]; then
+  # Ordentlich freigegeben oder fabrikneu — der Normalfall, ohne Warnung.
+  belegen || { printf '%s - - uebersprungen OHNE lebenden Halter (Platz nicht beschreibbar)\n' "$(date '+%Y-%m-%dT%H:%M:%S')" >>"$LOG"; exit 2; }
+elif halter_lebt "$HALTER" "$HSTART"; then
+  # AUF-82 (10): DIESE Zeile gehört ausschließlich dem gesunden Fall.
+  printf '%s %s %s uebersprungen (Lauf aktiv, pid %s)\n' \
+    "$(date '+%Y-%m-%dT%H:%M:%S')" "-" "-" "$HALTER" >>"$LOG"
+  exit 0
+elif kill -0 "$HALTER" 2>/dev/null; then
+  # Die Nummer lebt, der Startzeitpunkt passt nicht: ein FREMDER Prozess. Eigene Zeile — er darf
+  # nicht wie der gesunde Fall aussehen, das war der ganze Fehler.
+  erobern "nummer-wiederverwendet=${HALTER}" || { printf '%s - - uebersprungen OHNE lebenden Halter (Platz nicht beschreibbar)\n' "$(date '+%Y-%m-%dT%H:%M:%S')" >>"$LOG"; exit 2; }
+elif [ -n "$ALTER" ] && [ "$ALTER" -gt "$HOECHSTDAUER" ] 2>/dev/null; then
+  erobern "alter=${ALTER}s" || { printf '%s - - uebersprungen OHNE lebenden Halter (Platz nicht beschreibbar)\n' "$(date '+%Y-%m-%dT%H:%M:%S')" >>"$LOG"; exit 2; }
+else
+  erobern "halter-tot=${HALTER}" || { printf '%s - - uebersprungen OHNE lebenden Halter (Platz nicht beschreibbar)\n' "$(date '+%Y-%m-%dT%H:%M:%S')" >>"$LOG"; exit 2; }
 fi
 
-# Der Halter schreibt sich in die Sperre — das ist der Unterschied zwischen „jemand arbeitet" und
-# „hier liegt etwas herum".
-echo $$ >"$SPERRE/pid"
-date +%s >"$SPERRE/geboren"
-trap 'rm -rf "$SPERRE" 2>/dev/null' EXIT
+trap 'freigeben' EXIT
 
 # ── Der Commit und sein Diff ──────────────────────────────────────────────────
 # Kante 1: JEDER git-Aufruf trägt `--no-optional-locks`. Ein Wächter, der selbst Locks erzeugt,
