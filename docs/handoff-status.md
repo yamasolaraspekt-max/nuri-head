@@ -10409,3 +10409,69 @@ was tatsächlich passiert. Zwei weitere Muster mussten nach der Bedingungs-Ände
 unberührt · `@endphp`-Block im Blade **0** (nur einzeilige Datenattribute).
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator** (Staffel-Punkt E).
+
+
+## PLANNER 26.07., 17:20 — AUF-78 FREIGEGEBEN und archiviert · AUF-81 im Stapel · Marke auf AUF-66
+
+**Zuerst mein eigener Fehler:** waehrend das Votum zu AUF-78 (17:08) und der ganze Posten AUF-81
+(17:13/17:17) hereinkamen, habe ich auf einen Weckerlauf mit *keine Antwort noetig* geantwortet.
+**Der Takt hat gemeldet, ich habe nicht gehandelt** — das ist derselbe Fehler wie heute Mittag, nur
+mit Ansage. Yama musste nachfragen. **Ein Wecker, der klingelt und den niemand ernst nimmt, ist
+schlechter als keiner** — dieselbe Begruendung, mit der AUF-75 gegen den stummen Waechter angetreten
+ist. Konsequenz: bei **jedem** Lauf mit neuem Commit wird gehandelt, auch wenn ich mitten in etwas
+anderem stecke.
+
+### AUF-78 — FREIGABE ohne Auflage, und ein Votum, das mehr wert ist als sein Urteil
+
+Alle fuenf verlangten Messungen sind **unabhaengig** gefuehrt. Hervorzuheben:
+- **Das Rechtegatter am Router**, nicht an der Routendatei: `hausplaner.studio => web, auth` gegen
+  `objekt.seite => web, auth, permission:Hausplaner,read`. **Genau die Unterscheidung, an der der
+  Posten haengt.**
+- **K11-Mutation: beide** Tests rot (Verhalten **und** Quelltext) — **volle** Verriegelung, nicht
+  die halbe, vor der ich gewarnt hatte.
+- **Keine Kundendaten durch Bauart**, belegt an der **SQL** (`select id, object_name, city,
+  updated_at … limit 6`, kein `lead`) und am Markup.
+- **Die Kachel verspricht nichts** — am **lebenden DOM**: `role=null`, `tabindex=null`,
+  `cursor=auto`, kein `onclick`. Die Rueckgabe des Generators ist damit echt.
+- **Der frische Bundle-Build ist byte-gleich mit `dcbe6ec`.**
+- **Die vertagte Sichtprobe ist eingeloest:** Oberkante **369 = Grundlinie**, Ueberstand **0** —
+  **AUF-78 hat nichts verschoben**, obwohl er `StartView` und `uiState` anfasst.
+
+**Was dieses Votum ueber das Urteil hinaus wertvoll macht: er hat zwei eigene Messfehler
+offengelegt.** Der erste K11-Gegenbeweis war **ungueltig** (ein `APP_BASE_PATH`-Artefakt liess die
+Tests das echte Repository lesen) — gefunden, benannt, mit erzwungenem Pfad gueltig wiederholt.
+Und die K4-Mutation am Controller war nicht sandbox-faehig (Symlink-vendor laedt die echte Klasse),
+also hat er `limit 6` direkt am echten Code belegt **und die Abweichung genannt**.
+**Ein Pruefer, der seine eigenen Fehlversuche mitliefert, ist der einzige, dessen Gruen etwas wert
+ist.** Die zwei nicht gemessenen Punkte (1024-Viewport, gefuellte Optionen-Zeile) hat er
+ausdruecklich als **Messgrenzen, nicht als Defekte** benannt — richtig, und sie bleiben in der
+Grundlinie offen.
+
+**AUF-78 ist archiviert** (Archiv 65 → 66 Zeilen).
+
+### AUF-81 — die erste Migration des Projekts, berichtet
+
+`69f9df2` + Bundle `0b17315`, §8 2b eingehalten. Waechter gruen inklusive PHP:
+`tsc=0 schema=0 test=0 phpsuite=0`. **Insel 1114 (vorher 1102), PHP-Suite 788 gruen** (2 720
+Zusagen), davon 10 + 12 neu.
+
+**Drei Stellen, die ich hervorhebe, weil sie ueber den Auftrag hinausgehen:**
+- **K5, das Eigentumsgatter:** der Besitzer kommt **aus der Sitzung**, nie aus der Anfrage — *eine
+  mitgeschickte Kennung waere das Gatter, das man selbst aufsperrt.* Und ein fremdes Paket ergibt
+  **404, nicht 403**: der Aufrufer erfaehrt nicht einmal, dass es existiert.
+- **K7 prueft die abgesetzte Abfrage** (`DB::listen`), nicht das Ergebnis — *eine Liste, die alles
+  laedt und die Haelfte ausblendet, ist bereits geleakt.*
+- **K2 woertlich statt sinngemaess:** die Fremdschluessel stehen **innerhalb** von `Schema::create`,
+  damit die Datei **keinen einzigen** nachtraeglichen Aenderungsaufruf enthaelt (`Schema::table` 0,
+  `dropColumn` 0). **Der Rueckweg verwirft eine Tabelle, die es vorher nicht gab.**
+
+**Selbst gefunden und behoben:** der ConfigWizard versprach „gespeichert in deiner Paketliste"
+**auch ohne Speicherziel** — ein Versprechen ohne Deckung, **derselbe Fehler wie AUF-74, mit neuem
+Vorzeichen.** Und er hat offengelegt, dass **vier geerbte AUF-74-Zusagen rot wurden** und
+nachgezogen sind, weil dieser Posten ihre Tatsache aendert — **gemeldet, nicht stillschweigend
+umgeschrieben.**
+
+**Marke gerueckt: AUF-66 traegt jetzt `⚡ AKTIV`** — der Auftrag dafuer liegt seit 17:00.
+**§3b traegt zwei Posten: AUF-82 und AUF-81.**
+
+**Ballbesitz: Generator (AUF-66) · Evaluator (AUF-82, danach AUF-81).**
