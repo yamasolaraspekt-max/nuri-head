@@ -8458,3 +8458,52 @@ damit später niemand rechnen muss.
 | 5 | keine Migration | **erfüllt (0)** |
 
 **Ballbesitz: Generator (AUF-75) · Evaluator (volle Suite) · Planner (wacht).**
+
+---
+
+## PLANNER 26.07., 12:25 — Der Wächter läuft bereits. Und ein Fehlalarm von mir, den die Messung widerlegt hat
+
+### 1. Beinahe hätte ich einen Befund gemeldet, den es nicht gibt
+
+Beim Blick in den Baum zeigte mir `git diff -- package.json` scheinbar die **ganze Datei** als
+geändert (Einrückung 2 → 4). **Ich war einen Satz davon entfernt, das als Verstoß gegen mein
+eigenes Kriterium 1 zu melden** („höchstens ein neuer Eintrag, keine geänderten").
+
+**Nachgemessen mit `--numstat`: 2 eingefügt, 1 entfernt** — mit und ohne Leerraum-Ignorierung.
+Inhaltlich ist es **eine** neue Zeile (`"waechter": "./scripts/waechter.sh"`) plus das Komma
+darüber. **Kein Verstoß.**
+
+Entweder hat der Generator die Einrückung binnen fünf Minuten selbst zurückgebaut, oder ich habe
+einen Zwischenstand erwischt. **In beiden Fällen gilt dieselbe Lehre, und sie ist meine:
+`git diff` ansehen ist kein Messen. `--numstat` ist Messen.** Ein Blick auf ein bewegtes Ziel
+erzeugt Befunde, die keine sind — und ein falscher Befund kostet den Generator eine Runde, die er
+nicht gebraucht hätte.
+
+### 2. Der Wächter hat schon gelaufen — und er kann, was er soll
+
+`docs/befunde/waechter.log`, zehn Zeilen, selbst gelesen:
+
+```
+12:22:33  e0d1144  insel,php  tsc=0 schema=0 test=1 phpsuite=1   rot
+12:23:15  7ca21c1  bundle-ohne-code                              gruen (Hinweis)
+12:23:15  8dd3e81  keiner  nichts-zu-pruefen                     gruen
+12:24:32  1b2b26d  tsc=nicht-gelaufen(npm-fehlt) …               unvollstaendig
+12:24:33  -        uebersprungen (Lauf aktiv)
+```
+
+**Zeile 1 ist das Beweiskriterium aus §5.3 des Auftrags: gegen `e0d1144` — den Commit, der
+`objekt/203` zerbrochen hat — meldet er ROT.** Genau der Fall, für den er gebaut wurde, und der
+Fall, den vier grüne Gates und 1007 Tests damals durchgelassen haben.
+
+**Und die Zeile, die mir am wichtigsten war, steht auch da:**
+`tsc=nicht-gelaufen(npm-fehlt) … unvollstaendig` — **ein nicht gelaufener Test sieht nicht aus wie
+ein bestandener.** Dazu die Sperre gegen zwei gleichzeitige Läufe (`uebersprungen (Lauf aktiv)`) und
+die Betroffenheits-Erkennung inklusive „Bündel ohne Code" und „nichts zu prüfen".
+
+**Das ist noch kein Votum** — er hat nicht committet und nicht berichtet, und geprüft wird von einem
+anderen. **Aber die Kriterien, an denen der Posten hängt, sind im Log bereits sichtbar erfüllt.**
+
+### 3. Stand
+
+**Evaluator: die volle Suite ist weiter nicht gemeldet** (beauftragt 12:09, jetzt 12:25).
+**Merge-Bedingungen unverändert vier von fünf.**
