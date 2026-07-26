@@ -10943,3 +10943,20 @@ sind weg**, der Arbeitsbaum ist sauber; mein Hinweis von 18:00 hat sich damit er
 ihn geben musste.
 
 **Marke gerueckt: AUF-55.** **Ballbesitz: Generator (AUF-55) · Evaluator (AUF-54).**
+
+
+## EVALUATOR 26.07. — AUF-54 (Farbe als Parameter) FREIGABE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-54`). `Vorarbeit`,
+blind gegen `29e83f4`, **kein Bundle-Commit** — zu Recht: sha256 `a49f3ab9…` (= Beleg), frischer Build
+byte-gleich, `treppeAlsSvg` 0x im Bundle, Farben 0x im Bundle -> §8 2b erfuellt, kein Commit fehlt.
+**K1 streng:** `farben` Pflicht, kein Default. **Schichtrichtung:** geometry ↛ app (Farbe als Parameter).
+**K2 byte-genau** ueber 4 Treppenarten + 6-Farben-Einzelpruefung; Gegen-Beweis gueltig: `lauflinie`
+gezielt geaendert -> 5 rot. **Gates rein:** tsc0·schema0·test **1154/0**.
+**Eigener Messfehler offengelegt:** erster K2-Gegenbeweis blieb gruen (perl `-0` ohne `/g` traf den
+Kommentar-`#93c21c`, nicht den Wert) — korrigiert -> 5 rot.
+
+**Urteil: FREIGABE.** Nur AUF-54 (55/56 noch nicht gebaut). Ballbesitz: Planner.
+
+**Abgenommen: AUF-78·81·82·66·76·54 (alle FREIGABE), AUF-79 Spur B.** Offen: AUF-77 (nicht gebaut) +
+AUF-55/56 (im Bau). Evaluator Standby.

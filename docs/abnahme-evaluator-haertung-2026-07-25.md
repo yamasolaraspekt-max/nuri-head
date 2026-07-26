@@ -1492,6 +1492,44 @@ Urteil: FREIGABE. Streng additiv (optional, kein Drift, Bestand bleibt gueltig),
 (feldgleich Decke, thickness getrennt), Reihenfolge bewusst bedeutungslos (als Frage zurueckgegeben),
 alle Gates gruen, Bundle reproduzierbar. Ballbesitz: Planner.
 
+### AUF-54 (Code 29e83f4 · KEIN Bundle-Commit) - Farbe als Parameter statt in geometry/ - FREIGABE
+
+`Vorarbeit`-Refactor, wert-/verhaltenstreu. Blind gegen 29e83f4 gemessen. Umfang: nur
+geometry/treppeSvg.ts, app/studioDaten.ts, 2 Tests - kein Controller/Route/Migration/PHP/Blade.
+
+Die fehlende zweite (Bundle-)Zeile fehlt zu Recht - §8 2b unabhaengig nachgemessen:
+- committetes Bundle sha256 = a49f3ab97327783e (= Generator-Beleg).
+- frischer `build:hausplaner` von 29e83f4 == committetes Bundle (byte-gleich) -> kein Rebuild noetig,
+  Bundle NICHT veraltet.
+- `treppeAlsSvg` 0x im ausgelieferten Bundle; die 6 Treppen-Farbwerte 0x im Bundle. Der geaenderte
+  Code liegt nicht im ausgelieferten Pfad (treppeAlsSvg wird aus dem Bundle nicht aufgerufen; 2
+  Aufrufstellen, beide im Test - Auftragspraemisse "9 Stellen" vom Generator selbst auf 2 korrigiert).
+  => Kein Commit fehlt.
+
+K1 (streng): `SvgOptionen.farben: TreppenFarben` ist PFLICHT (kein `?`, kein Default) - hinter dem
+kein roher Farbwert ueberleben kann. `treppeSvg.ts` enthaelt 0 rohe Farbwerte (Grep + Test K1).
+
+Schichtrichtung: `geometry/treppeSvg.ts` importiert NICHT aus `app/` - die Farbe kommt als Parameter
+herein, der Aufrufer in `app/` reicht `TREPPE_FARBEN` (studioDaten, die einzige Quelle) herein.
+
+K2 wert-/verhaltenstreu, byte-genau: der Test rendert die vier Treppenarten und vergleicht sha256 +
+Laenge gegen den eingefrorenen d8038bf-Stand; zusaetzlich sucht er die sechs Farbwerte EINZELN im SVG
+(eine Pruefsumme allein bliebe gruen, wenn zwei Farben getauscht waeren und die Summe zufaellig traefe).
+Gegen den echten Code gruen. Gegen-Beweis (gueltig, /tmp): `lauflinie` gezielt auf #ff0000 -> 5 rot
+(K2 fuer alle vier Arten + "die Lauflinie behaelt ihr eigenes Gruen"). Zaehne bestaetigt.
+
+Gates (rein, /tmp-Auszug 29e83f4): tsc 0 · schema 0 · test 1154 pass/0 fail. (build: fresh == committet,
+s.o.)
+
+Eigener Messfehler offengelegt: mein erster K2-Gegenbeweis blieb faelschlich gruen - `perl -0 s///` ohne
+`/g` ersetzte das ERSTE `#93c21c` (den Kommentar in studioDaten Z.39), nicht den Wert in Z.47. Direkt
+in der Datei geprueft, gezielt auf die Wert-Zeile mutiert -> dann 5 rot. Ohne die Selbstpruefung haette
+ich "kein Gegenbeweis noetig / Test ohne Zaehne" gefolgert, was falsch gewesen waere.
+
+Urteil: FREIGABE. Verhaltenstreu (Bundle byte-gleich, K2 byte-genau ueber 4 Arten mit Zaehnen), farben
+Pflicht ohne Default, Schichtrichtung sauber (geometry unabhaengig von app), additiv, 0 Erzeugnis-Wirkung.
+Umfang ist nur AUF-54 (55/56 tragen die Marke nicht, noch nicht gebaut). Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
