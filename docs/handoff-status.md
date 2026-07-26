@@ -6974,3 +6974,105 @@ sieht: er hat sie im Betrieb gesehen, ich nicht.
 
 **Ballbesitz: Generator (AUF-65 läuft, danach AUF-73, dann AUF-71) · Evaluator
 (Sichtprobe-Standard) · Planner (nichts offen).**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-65: zwei Drittel gebaut, eins zurückgegeben
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** Code `5ac811c` · Bundle `06bd6e4`
+**Ballbesitz:** Evaluator.
+
+*(Auftragsdatei vollständig gelesen — 116 Zeilen, fünf Abschnitte.)*
+
+### 1. Der Befund des Auftrags stimmt nicht mehr — und die verworfene Meldung hatte recht
+
+Der Auftrag hielt der UX-Bewertung entgegen: *„Das Panel ist nicht leer. Es ist erfunden"* — und
+belegte das damit, dass jeder der elf Schritte in `studioDaten.ts` Einträge trägt.
+
+**Gemessen an dem, was die Fläche wirklich bekommt:**
+
+```
+ableitenSchritte(scene)   11 Schritte · 5 mit Prüfpunkten   ← aus dem Dokument
+        davon mit Aufgaben      0
+        davon mit Empfehlung    0
+STEPS_STILLGELEGT         trägt die erfundenen Einträge — und rendert NICHTS
+```
+
+**Seit AUF-39 kommen Titel, Hinweis, Prüfpunkte und Status aus der Szene.** Die Einträge, die der
+Auftrag gezählt hat, stehen in `STEPS_STILLGELEGT` — einer Konstante, die ihren Zustand im Namen
+führt und deren eigener Kommentar sagt: *„Nichts rendert sie mehr."*
+
+**Damit war die ursprüngliche UX-Meldung richtig: das Panel ist leer.** Die Gegenmessung des
+Auftrags las die falsche Quelle. Ich sage das nicht, um recht zu behalten, sondern weil der Auftrag
+daraus eine Handlung ableitete, die dadurch falsch geworden wäre — siehe §3.
+
+### 2. Was gebaut wurde
+
+**(a) Das Statuswort behauptet keinen Vorgang mehr.** `ok` heißt jetzt **„Vollständig"**. Der Wert
+wird aus dem Dokument abgeleitet und bedeutet „alle Prüfpunkte dieses Schrittes erfüllt" — genau
+das sagt jetzt auch die Beschriftung. **Die Schlüssel `ok`/`prog`/`warn`/`open` sind unverändert**,
+ebenso die drei übrigen Wörter und die Ableitungsregel (`statusAus`), beides testverriegelt.
+
+**(c) Eine leere Aufgabenliste hinterlässt keine leere Überschrift.** Muster wie beim Wegweiser
+(AUF-45): ist nichts zu sagen, wird geschwiegen. Die Überschrift steht **innerhalb** der Bedingung —
+sonst bliebe sie stehen.
+
+### 3. Was NICHT gebaut wurde — (b), zurückgegeben
+
+Der Auftrag wollte den Satz *„Beispielablauf — die Schritte stammen noch nicht aus deinem Projekt."*
+
+**Dieser Satz wäre heute falsch.** Die Schritte stammen aus dem Projekt, seit AUF-39. Was **nicht**
+aus dem Projekt kommt, sind Aufgaben und Empfehlungen — und die gibt es gar nicht mehr, sie sind
+seit demselben Posten leer. **Ein Hinweis wäre also eine zweite Behauptung an einer Fläche, die
+gerade von Behauptungen befreit wird** — diesmal eine falsche.
+
+**Und er ist auch nicht nötig:** die Schrittkarte sagt es bereits selbst, pro Schritt und in echten
+Worten. Im Bild:
+
+> *„Ob eine Vorlage importiert und ihr Maßstab bestätigt wurde, führt das Dokument nicht. Sichtbar
+> ist nur, ob Wände vorhanden sind. Gezeichnet sind 8 Wände."*
+
+Das ist genau die Ehrlichkeit, die §2(b) herstellen wollte — an der Stelle, wo die Aussage gilt.
+
+**Damit ist (c) auch kein Vorgriff auf später**, wie der Auftrag annahm („bei den heutigen Daten
+tritt der Fall nicht ein"), sondern **der Regelfall von heute**.
+
+### 4. Belege
+
+| Was | Ergebnis |
+|---|---|
+| Gates | tsc **0** · schema:check **0** · test **0** · build **0** |
+| Tests | **1060 → 1068** · Namensvergleich: keine Zusage verschwunden |
+| K2 | `store/ domain/ geometry/ renderers/` — **null Zeilen** |
+| K3 | `grep` auf das Freigabe-Wort in der Insel = **0** (auch in Kommentaren — der Kommentar hatte es zuerst wieder eingeschleppt) |
+| K4 | Schlüssel unverändert; elf Schritte, Reihenfolge und Status unverändert |
+| K9 `public/*` im Code-Commit | **0**; Bundle als zweiter Commit `06bd6e4` |
+| **Mutationen** | altes Statuswort zurück ⇒ **1 rot** · Bedingung um die Karte entfernt ⇒ **1 rot** |
+
+**Sichtprobe 1440 × 900, geführte Planung, Schritt 2 von 11:** keine „Aufgabe"-Überschrift, keine
+Empfehlungskarte, Statuswort **„Vollständig"**, kein Freigabe-Wort auf der Fläche.
+Bild: `auf65-gefuehrt.png`.
+
+### 5. Beobachtung, kein Eingriff (§5)
+
+**Die rechte Spalte trägt jetzt nur noch einen Knopf** („Erweiterte Bearbeitung"), oben allein in
+einer Spalte, die für Karten gedacht war. Das ist die ehrliche Folge davon, dass es weder Aufgaben
+noch Empfehlungen gibt — aber es sieht aus wie ein Rest. **Ein Umbau der geführten Planung ist ein
+eigener Posten**, so steht es in §5 des Auftrags; ich habe die Fläche nicht angefasst.
+
+### 6. Offen aus AUF-72 — die Auflage des Evaluators
+
+Der Evaluator hat AUF-72 **mit Auflage** freigegeben: im Zustand mit **allen** Leisten bleiben
+**18 px** Überstand, weil die Optionszeile (~46 px) in seinem Zustand hinzukommt. **Die Auflage
+trägt noch keine Marke und keinen Posten.**
+
+Ich habe sie **nicht nebenbei mitgebaut** — sie gehört nicht in AUF-65. Meine Vermutung zur Ursache,
+ungeprüft und deshalb als Vermutung gekennzeichnet: der gemessenen Reihe fehlt `minHeight: 0`;
+ohne das kann ein `flex: 1`-Element nicht unter seine Inhaltsgröße schrumpfen, und die Spalte
+überragt das Fenster um genau den Rest. **Das ist zu messen, nicht zu glauben** — und braucht einen
+Posten mit Marke.
+
+### 7. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine Ableitung aus dem Dokument
+(das ist AUF-40), kein zweiter Hinweisort, kein Umbau der Fläche.
