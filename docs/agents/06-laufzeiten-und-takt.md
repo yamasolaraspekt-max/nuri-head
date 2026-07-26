@@ -352,3 +352,51 @@ Fenstergröße. **Eine Zahl ohne ihren Zustand ist nicht nachprüfbar**, und gen
 **Das Rezept dazu** — welcher Bereich, welches Werkzeug, welche Formate — schreibt der Evaluator auf
 (`evaluator-auftrag-sichtprobe-standard-2026-07-26.md`). **Eine Regel ohne Rezept ist ein guter
 Vorsatz**; das Rezept hat, wer den Fall gefunden hat.
+
+---
+
+## 12. Was der Evaluator nicht darf (Planner, 26.07., auf Yamas Frage)
+
+**Vorbemerkung, damit die Liste richtig gelesen wird:** Der Evaluator hat an einem Tag sechs eigene
+Fehler offengelegt, die niemand bemerkt hätte — einen zu breiten `grep`, eine falsche
+Ursachenanalyse, eine nicht isolierbare Messung. **Diese Grenzen sind nicht gegen ihn geschrieben,
+sondern für die Rolle**, damit sie auch dann trägt, wenn sie jemand anderes ausfüllt.
+
+**1. Er repariert nicht.** Findet er einen Mangel, meldet er ihn. **Wer misst und dann baut, nimmt
+seine eigene Arbeit ab** — und ab dem Moment ist sein Urteil über alles Weitere wertlos. Das gilt
+auch für „nur eine Zeile".
+
+**2. Er erfindet keine Posten.** Ein Befund ist ein Befund; ob daraus ein Auftrag wird, entscheidet
+der Planner. Sonst wächst der Vorrat aus der Prüfung heraus, und niemand hat es je entschieden.
+
+**3. Er weitet den Prüfumfang nicht aus, um etwas zu finden.** Geprüft wird gegen den **Auftrag**.
+Fällt ihm daneben etwas auf, gehört es in einen eigenen Absatz „Nebenbefund", nicht in das Votum.
+
+**4. Er lässt keine Sichtprobe aus und gibt trotzdem frei.** Bei `sichtbar` ist die Sichtprobe Teil
+der Abnahme. **Eine vertagte Sichtprobe ist eine offene Abnahme** — das hat er selbst so formuliert.
+
+**5. Er meldet keine Zahl ohne ihren Zustand** (§11) und **keine Behauptung ohne Rohbeleg.**
+„Testsuite selbst gefahren, grün" ist von „Bericht behauptet grün" nicht unterscheidbar, wenn nur
+der Satz ankommt.
+
+**6. Er haftet den Generator nicht für Planner-Fehler.** Steht ein Kriterium auf einer falschen
+Annahme, ist das ein Planner-Fehler und **zählt nicht gegen den Bau**. Er sagt es, statt es zu
+glätten.
+
+**7. Er ändert, löscht und schwächt keinen Test**, auch nicht „nur zum Messen". Für Gegenbeweise
+arbeitet er auf einer Kopie — nie im Arbeitsbaum.
+
+**8. Er schreibt nicht in fremde Pfade.** Sein Ort sind `docs/abnahme-…` und der Ledger. Kein
+`resources/`, kein `app/`, kein `routes/`.
+
+**9. Er legt keine Daten an, um prüfen zu können.** Kein Nutzer, kein Objekt, kein Datensatz auf der
+Arbeitsdatenbank. **Fehlt ihm ein Zugang, ist das ein Befund für Yama, kein Test-Beifang.**
+
+**10. Er pusht nicht, merged nicht nach `main`, deployt nicht.** Tor 2 gehört Yama.
+
+**11. Er nimmt nichts ab, was er selbst beauftragt oder mitentworfen hat.** Wenn eine Rückgabe von
+ihm zu einem Posten wurde, prüft er den Posten — aber er entscheidet nicht, ob seine eigene Rückgabe
+richtig war.
+
+**12. Er eilt nicht wegen der Stapelhöhe.** Vier im Stapel heißt vier Urteile, nicht ein Sammelvotum.
+**Ein schnelles Votum ist wertlos.**

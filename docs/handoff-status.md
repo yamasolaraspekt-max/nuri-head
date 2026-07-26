@@ -7984,3 +7984,71 @@ heutige Zustand ist zwar ehrlich, aber nutzlos: „Noch kein Projekt geöffnet" 
 wenn Yama zwanzig Projekte hat.**
 
 **Ballbesitz: Generator (AUF-74) · Evaluator (Sichtprobe-Standard) · Yama (W-Projektliste).**
+
+---
+
+## PLANNER 26.07., 10:20 — Zwei Anordnungen: Evaluator-Grenzen (§12) und AUF-78 in eigener Verantwortung
+
+### 1. Was der Evaluator nicht darf — §12, zwölf Punkte
+
+Yama fragt nach den Weisungen. Sie stehen jetzt als **§12** in
+`docs/agents/06-laufzeiten-und-takt.md`, mit einer Vorbemerkung, die dazugehört:
+
+**Der Evaluator hat an einem Tag sechs eigene Fehler offengelegt, die niemand bemerkt hätte.** Die
+Grenzen sind **nicht gegen ihn** geschrieben, sondern **für die Rolle** — damit sie auch dann trägt,
+wenn sie jemand anderes ausfüllt.
+
+Die tragenden vier: **er repariert nicht** (wer misst und dann baut, nimmt seine eigene Arbeit ab —
+auch bei „nur einer Zeile"); **er erfindet keine Posten** (sonst wächst der Vorrat aus der Prüfung
+heraus, und niemand hat es entschieden); **er haftet den Generator nicht für Planner-Fehler**; und
+**er legt keine Daten an, um prüfen zu können** — fehlt ihm ein Zugang, ist das ein Befund für Yama,
+kein Test-Beifang. *(Genau so hat er es bei `admin@ticket.test` gehalten, bevor die Regel geschrieben
+war.)*
+
+### 2. AUF-78 — Tor 1, von mir entschieden, mit ausgeschriebener Haftung
+
+Yama: *„Projektliste Tor 1 — das kannst du selber entscheiden und die Verantwortung übernehmen; es
+darf dadurch kein Fehler passieren."*
+
+**Ich habe zuerst gemessen, bevor ich entschieden habe. Der Fund ändert die Lage:**
+
+```php
+HausplanerController::index()   // seit Langem in Produktion
+    ->with('lead:id,…')         // eager load — kein N+1
+    ->paginate(25)
+Route: permission:Hausplaner,read
+```
+
+**Die Naht existiert bereits.** Es wird keine Abfrage erfunden, kein Endpunkt angelegt, kein
+Zugriffsweg geöffnet — **derselbe Weg ein zweites Mal, hinter demselben Recht.**
+
+**Und dann der Punkt, an dem es hätte schiefgehen können — gemessen:**
+
+| Route | Middleware |
+|---|---|
+| `/admin/hausplaner` | `auth` + **`permission:Hausplaner,read`** |
+| `/admin/hausplaner/objekt/{objekt}` | `auth` + **`permission:Hausplaner,read`** |
+| `/admin/hausplaner/studio` | **nur `auth`** |
+
+**Die Studio-Route trägt das Hausplaner-Recht nicht.** Wer die Liste dorthin durchreicht — und das
+wäre die naheliegende Bequemlichkeit, weil `StartView` dort ebenfalls gerendert wird — **zeigt die
+Objektliste jedem angemeldeten Nutzer.**
+
+**Das ist der Fehler, der nicht passieren darf. Er ist im Auftrag an drei Stellen verriegelt:**
+Kriterium 1 prüft, dass die Studio-Fläche eine leere Liste bekommt; Kriterium 11 verlangt den
+**Mutations-Gegenbeweis** (Liste zusätzlich an die Studio-Fläche hängen ⇒ Kriterium 1 muss rot
+werden); und §4 verbietet das Anfassen der Studio-Route ausdrücklich.
+
+**Dazu drei Auflagen, die nicht verhandelbar sind:** nur die Felder, die `StartView` **anzeigt**
+(keine Kundendaten vorsorglich — *Daten, die man „vielleicht später braucht", sind der übliche Anfang
+einer Leckage*); **eine** Abfrage mit harter Obergrenze, geprüft **bei 3 000 Objekten**; und **kein
+`@php`-Block im Blade**, weil genau so `objekt/203` heute Nacht zerbrochen ist.
+
+**Was ich ausgeschrieben habe, statt es zu behaupten (§6 des Auftrags):** wofür ich hafte und was
+ich **nicht** freigegeben hätte — eine neue Route, eine Abfrage im Blade, eine Liste ohne
+Obergrenze, oder die Übergabe an eine Fläche mit schwächerem Recht. **Jedes davon steht unter „wird
+nicht gebaut", nicht als Formalie, sondern weil es die Punkte sind, an denen ich nein gesagt hätte.**
+
+**§3c ist damit wieder leer.** Die Frage ist entschieden, nicht vertagt.
+
+**Ballbesitz: Generator (AUF-74, dann AUF-78) · Evaluator (Sichtprobe-Standard) · Yama (nichts).**
