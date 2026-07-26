@@ -146,7 +146,7 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
         </div>
 
         <div style={{ marginTop: 34, display: 'inline-flex', alignItems: 'center', gap: 8, background: T.accentSoft, color: T.accentInk, borderRadius: 999, padding: '6px 14px', fontSize: 12.5, fontWeight: 600 }}>
-          <Ikon inhalt='<path d="M20 6L9 17l-5-5"/>' size={16} />Fachplaner — jeder läuft autark, ohne Gebäude, und ist später verlustfrei ins Projekt übernehmbar
+          <Ikon inhalt='<path d="M20 6L9 17l-5-5"/>' size={16} />Fachplaner — jeder läuft autark, ohne Gebäude. Fenster, Türen, Treppen und Heizkörper setzt der Experte ins Gebäude; sonst entsteht eine Datei zum Herunterladen
         </div>
 
         {/* Fachplaner */}

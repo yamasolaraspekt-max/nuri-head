@@ -140,7 +140,12 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
             {schritt === 4 && (
               <>
                 <div style={{ fontWeight: 700, marginBottom: 8 }}>Übernehmen</div>
-                <div style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.6 }}>Als Fachobjekt speichern — {standalone ? 'autark als ConfiguratorPackage (Vorlage/Angebot), später verlustfrei ins Projekt.' : 'als ein Command ins Gebäudemodell, Undo/Redo inklusive.'}</div>
+                {/* AUF-74: Der autarke Zweig versprach eine spätere, verlustfreie Übernahme ins Projekt
+                    — das beschreibt etwas, das es nicht gibt. Jetzt steht dort, was wirklich
+                    entsteht: eine Datei.
+                    **Der andere Zweig ist wahr und bleibt Zeichen für Zeichen stehen**, samt
+                    seiner Einleitung — deshalb wanderte auch sie in den Zweig. */}
+                <div style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.6 }}>{standalone ? 'Ergebnis: eine Datei zum Herunterladen — mit Bauart, Maßen und Material. Im Programm lässt sie sich noch nicht wieder öffnen; ins Gebäude kommt das Bauteil über den Experten, indem du eine Wand wählst.' : 'Als Fachobjekt speichern — als ein Command ins Gebäudemodell, Undo/Redo inklusive.'}</div>
               </>
             )}
           </div>
@@ -156,7 +161,7 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
 
         {/* Fuß */}
         <div style={{ padding: '16px 30px 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ fontSize: 12.5, color: T.muted }}>Status: <b style={{ color: T.accentInk }}>Entwurf</b> · {standalone ? 'als ConfiguratorPackage speicherbar' : 'Undo/Redo im Modell'}</span>
+          <span style={{ fontSize: 12.5, color: T.muted }}>Status: <b style={{ color: T.accentInk }}>Entwurf</b> · {standalone ? 'Ergebnis: Datei zum Herunterladen' : 'Undo/Redo im Modell'}</span>
           <span style={{ marginLeft: 'auto', display: 'flex', gap: 10 }}>
             <button type="button" onClick={() => setSchritt(Math.max(0, schritt - 1))} style={{ border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600, fontSize: 14, padding: '11px 20px', borderRadius: 12, cursor: 'pointer' }}>Zurück</button>
             <button type="button" onClick={() => {
@@ -229,14 +234,24 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
                 parameters: { bauart: wahl.id, bauartLabel: wahl.label, breiteMm: breite, hoeheMm: hoehe, autark: true },
                 geometry: { breite, hoehe },
               });
+              // AUF-74, vierte Stelle — im Auftrag nicht enthalten, beim Messen aufgefallen:
+              // der Fehlerfall wurde verschluckt und die Erfolgsmeldung trotzdem gezeigt. Wer
+              // zehn Minuten konfiguriert und dann eine Erfolgsmeldung ohne Datei bekommt, sucht
+              // sie im Download-Ordner. Jetzt sagt die Fläche, was wirklich geschehen ist.
+              const dateiname = `konfigurator-${art}-${wahl.id}.json`;
+              let entstanden = true;
               try {
                 const blob = new Blob([JSON.stringify(paket, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url; a.download = `konfigurator-${art}-${wahl.id}.json`; a.click();
+                a.href = url; a.download = dateiname; a.click();
                 URL.revokeObjectURL(url);
-              } catch { /* Download optional */ }
-              onÜbernehmen(`${wahl.label} als ConfiguratorPackage gespeichert (Download). Für Platzierung: im Experten eine Wand wählen.`);
+              } catch {
+                entstanden = false;
+              }
+              onÜbernehmen(entstanden
+                ? `${wahl.label}: Datei „${dateiname}" heruntergeladen. Ins Gebäude kommt das Bauteil über den Experten — dort eine Wand wählen.`
+                : `${wahl.label}: Die Datei konnte nicht erzeugt werden — es ist nichts entstanden. Ins Gebäude kommt das Bauteil über den Experten, dort eine Wand wählen.`);
             }} style={{ border: 0, background: T.brand, color: T.surface, fontWeight: 700, fontSize: 14, padding: '11px 26px', borderRadius: 12, cursor: 'pointer' }}>{letzter ? 'Übernehmen' : 'Weiter'}</button>
           </span>
         </div>
