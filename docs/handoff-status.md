@@ -7398,3 +7398,68 @@ Frage vor, statt sie zu vertagen: sie ist der letzte offene Befund der Inventur.
 
 **Ballbesitz: Generator (AUF-71, danach AUF-40 A) · Evaluator (AUF-73, danach Sichtprobe-Standard) ·
 Yama (Freigabe Teil B).**
+
+---
+
+## PLANNER 26.07., 09:10 — Yamas Entscheidung zu B7: erst ehrlich, dann irgendwann echt
+
+**Vorgelegt** als letzte offene Frage der Layout-Inventur. **Entschieden:** *„Noch nicht — erst den
+Satz ehrlich machen."*
+
+### 1. Die Entscheidung und ihre Begründung
+
+**Kein Datenbankeingriff.** Der Fenster-Konfigurator hört auf zu behaupten, er speichere etwas im
+Programm, und sagt stattdessen, was tatsächlich passiert: **eine Datei zum Herunterladen.**
+
+**Warum das die richtige Reihenfolge ist:** Eine Unehrlichkeit kostet an jedem Tag, an dem sie
+steht. Eine Migration kostet einmal — an einer Datenbank mit echten Kunden — und gehört geplant.
+**Das eine ist heute behebbar, das andere gehört auf den Tisch, nicht in einen Nebensatz.**
+
+**AUF-40 Teil B bleibt unverändert auf der Tafel: nicht gestrichen, nicht dran.** Der Unterschied
+ist wichtig — ein Posten, der aus dem Register verschwindet, weil er unbequem war, kommt als
+Überraschung zurück.
+
+### 2. AUF-74 beauftragt
+
+`generator-auftrag-auf74-konfigurator-ehrlich.md`. **Spur A** — es geht um eine Zusage an den
+Nutzer über den Verbleib seiner Arbeit.
+
+**Selbst nachgemessen, nicht aus der Inventur übernommen:**
+
+```
+$ grep -rl "ConfiguratorPackage" app/ database/migrations/ routes/
+(leer)
+```
+
+Drei Textstellen behaupten heute etwas anderes (`ConfigWizard.tsx:143, 159, 239`), darunter
+*„später verlustfrei ins Projekt"* — **eine Beschreibung von etwas, das es nicht gibt.**
+
+**Zwei Punkte habe ich bindend gemacht, weil sie den Unterschied zwischen ehrlich und mutlos
+ausmachen:**
+
+1. **Kein „noch nicht" ohne Aussage darüber, was stattdessen geht.** Ein Hinweis, der nur eine Lücke
+   benennt, macht die stärkste Fläche des Programms schwächer, statt sie ehrlich zu machen. **Der
+   Download ist ein Ergebnis** — er soll als solches dastehen.
+2. **Kein Versprechen auf später.** Kein „folgt", kein „in Kürze". **Genau diese Sorte Satz hat
+   AUF-44 aus der Icon-Zeile entfernt**, und sie kommt hier nicht durch die Hintertür zurück.
+
+**Und ein Kriterium, das leicht untergeht:** der Nicht-autarke Fall („als ein Command ins
+Gebäudemodell, Undo/Redo inklusive") **stimmt**. Er bleibt Zeichen für Zeichen stehen und ist
+testverriegelt. **Beim Aufräumen einer Unwahrheit verschwindet leicht die Wahrheit daneben mit.**
+
+**Zur Prüfung habe ich ausdrücklich einen engen `grep` verlangt** — der Evaluator hat gestern bei
+AUF-65 offengelegt, dass sein breiter Suchausdruck legitime Treffer meldete. Diesmal von vornherein
+eng.
+
+### 3. Stand der Layout-Inventur nach dieser Entscheidung
+
+| | |
+|---|---|
+| geschlossen | **7 von 9** (B1, B2, B3/B8, B5, B6 · B9 war kein Defekt) |
+| offen, baubar | **B4** ⇒ AUF-40 Teil A |
+| offen, entschieden | **B7** ⇒ **AUF-74** (ehrlicher Satz statt Persistenz) |
+
+**Nach AUF-40 Teil A und AUF-74 ist die Layout-Inventur vom 25.07. vollständig abgearbeitet.**
+
+**Ballbesitz: Generator (AUF-71, dann AUF-40 A, dann AUF-74) · Evaluator (AUF-73, dann
+Sichtprobe-Standard) · Yama (nichts offen).**
