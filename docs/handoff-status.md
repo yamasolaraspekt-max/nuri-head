@@ -13743,3 +13743,50 @@ davon, wo sie wohnt.
 **Kommentar, der erklärt, dass `hover` dort nicht steht.**
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## PLANNER 26.07., 23:35 (CEST) — AUF-38 Scheibe 2: die erste Scheibe, die wirklich umstellt. Und ein Fund, der mich selbst betrifft
+
+**Bericht:** Code `e862b8f2`, Artefakt `8ed190e3`. Acht konstante `React.CSSProperties`-Objekte
+sind Klassen geworden; Farben als `--hp-*` aus `T`, **null rohe Farbwerte in der CSS**, jede
+benutzte Variable existiert wirklich in `T`. Gates **1292/0** (vorher 1288), PHP 789.
+**K9 buchstaeblich belegt:** dieselbe Seite vorher/nachher, drei Viewports, ganzseitige
+Bildschirmfotos sha256-verglichen ⇒ **dreimal PIXELGLEICH.**
+
+**Die Grenze ist die eigentliche Leistung, nicht die Umstellung.** Nicht gewandert ist alles, was
+aus dem Zeiger, einem Zustand oder einer Messung kommt: *"Ziel ist null **statische** Inline-Stile,
+nicht null Inline-Stile."* Testverriegelt in beide Richtungen — der Schwebezustand steht weiter
+inline, und weder `hover` noch `dominant` sind in die CSS gewandert. **Ein Zustand, der in die CSS
+wandert, ist eingefroren; das faellt in keinem Gate auf und in keiner Sichtprobe, solange man den
+Zustand nicht umschaltet.** Deshalb prueft der Evaluator das zuerst und K9 danach.
+
+**Und jetzt der Teil, der mich betrifft.** Er meldet: *"Die Auftragszahl ist gewandert: der Auftrag
+nannte 20 Stellen fuer StartView, gemessen sind es heute 34. AUF-56 und AUF-66 haben welche
+dazugelegt."*
+
+**Das ist mein Fehler, und er hat heute schon einen Zwilling.** Im selben Bericht steht: zwei
+geerbte Zusagen mussten nachgezogen werden, *"beide derselbe Bautyp: eine nagelte die Spaltenregel
+auf den Inline-Stil fest, eine die **ANZAHL** der Schatten-Fundstellen (10 und 3). Beide gingen rot,
+obwohl die geschuetzte Eigenschaft unberuehrt war — **zum dritten und vierten Mal in diesem
+Zyklus**."*
+
+**Ein Test, der eine Zahl festnagelt statt einer Eigenschaft, geht rot, wenn sich etwas anderes
+aendert.** Und **ein Auftrag, der eine Zahl nennt statt eines Kriteriums, altert genauso.** Mein
+"20 Stellen" war dasselbe wie ihre "10 und 3": eine Momentaufnahme, die sich als Bedingung
+ausgab.
+
+**Das ist der fuenfte und sechste Fall desselben Musters an einem Tag** — nach den vier Casts, der
+Tafelzaehlung, dem K4-Vergleich durch denselben Uebersetzer und meinem Waisen-Zaehler, der
+`import type` mitzaehlte. **Alle sechs haben dieselbe Form: geprueft wird die Gestalt, nicht die
+Wirkung.**
+
+**Regel fuer meine Auftraege, ab sofort:** *eine Zahl im Auftrag ist eine Messung zum Zeitpunkt des
+Schreibens, nie eine Abnahmebedingung.* Wenn die Zahl zaehlt, gehoert der **Messbefehl** in den
+Auftrag, nicht sein Ergebnis. Der Generator hat richtig gehandelt, indem er die Abweichung
+gemeldet statt sie stillschweigend ausgeglichen hat.
+
+**An den Evaluator (§15):** AUF-38 Scheibe 2 liegt im Stapel. **Zuerst die Grenze** (Zustand
+umschalten — aendert sich noch etwas?), **dann K9** (hier zum ersten Mal mit Bedeutung), **zuletzt**
+ob die acht Umgestellten wirklich die statischen sind. §13.6 gilt.
+
+**Tafel:** 85 Zeilen, 0 fehlerhaft, Marke bleibt auf AUF-38 (Scheiben 3-8 offen), Stapel 1.
