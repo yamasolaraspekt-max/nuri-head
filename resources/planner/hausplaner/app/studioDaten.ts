@@ -66,7 +66,20 @@ export const PROJ: readonly ProjektEintrag[] = [
 ];
 
 export interface ZuletztEintrag { name: string; meta: string; icon: string; goto?: number; win?: boolean; }
-export const ZULETZT: readonly ZuletztEintrag[] = [
+/**
+ * AUF-40 Teil A — **stillgelegt, nicht gelöscht** (Muster `toolCatalogStillgelegt.ts`,
+ * `STEPS_STILLGELEGT`).
+ *
+ * Diese drei Einträge erschienen bei **jedem** Nutzer, auch beim allerersten Start, auch ohne ein
+ * einziges eigenes Projekt: „EFH Mustermann", „Fenster-Angebot Hahn", „Sanierung Musterstr. 5".
+ * **Ein Startbildschirm, der fremde Projekte zeigt, ist keine Vorschau — er ist eine Falschauskunft
+ * über den eigenen Bestand.**
+ *
+ * Sie bleiben als Beleg dessen stehen, was vorher behauptet wurde, und als Vergleichsgrundlage für
+ * den Test. **Nichts rendert sie mehr.** Die echte Liste kommt aus dem Bestand und braucht eine
+ * Route — das ist **Teil B** und liegt bei Yama.
+ */
+export const ZULETZT_STILLGELEGT: readonly ZuletztEintrag[] = [
   { name: 'EFH Mustermann', meta: 'Rev. 42 · Schritt 2/11', icon: '<path d="M3 21h18M5 21V8l7-4 7 4v13"/>', goto: 1 },
   { name: 'Fenster-Angebot Hahn', meta: 'ConfiguratorPackage · gestern', icon: '<rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 4v16M4 12h16"/>', win: true },
   { name: 'Sanierung Musterstr. 5', meta: 'Rev. 12 · vor 3 Tagen', icon: '<path d="M3 21h18M6 21V11l6-4 6 4v10"/>', goto: 1 },

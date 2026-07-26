@@ -1,7 +1,8 @@
 /** Start-Launcher „Was möchtest du planen?" (v9). Projekt-Karten + Fachplaner-Hubs + Zuletzt. */
 import React from 'react';
 import { istAusloeser } from './dashboard/dialogFokus';
-import { T, FACH, PROJ, ZULETZT, type FachHub } from './studioDaten';
+import { T, FACH, PROJ, type FachHub, type ZuletztEintrag } from './studioDaten';
+import { ZustandBadge } from './studioUi';
 import { Ikon } from './studioUi';
 
 interface Props {
@@ -9,6 +10,13 @@ interface Props {
   onGuided: (schritt?: number) => void;
   /** Öffnet einen Konfigurator (autark); Name des Moduls. */
   onKonfigurator: (name: string, fenster?: boolean) => void;
+  /**
+   * AUF-40 Teil A — **die zuletzt bearbeiteten Projekte des Nutzers.** Leer heißt leer: dann steht
+   * dort „Noch kein Projekt geöffnet.", **keine Beispielzeile**, die wie ein Projekt aussieht.
+   * Der Grundzustand ist bewusst die leere Liste — beim ersten Start ist sie der Normalfall.
+   * Gefüllt wird sie in **Teil B** (Route + Controller, bei Yama).
+   */
+  projekte?: readonly ZuletztEintrag[];
 }
 
 const wrap: React.CSSProperties = { maxWidth: 1080, margin: '0 auto', padding: '20px 16px 70px' };
@@ -23,8 +31,27 @@ const grid3: React.CSSProperties = { display: 'grid', gap: 16, gridTemplateColum
 const cardBase: React.CSSProperties = { background: T.surface, borderRadius: 16, padding: 22, cursor: 'pointer', boxShadow: '0 1px 2px rgba(28,40,48,.05)', border: '1px solid transparent' };
 const icoBox: React.CSSProperties = { width: 52, height: 52, borderRadius: 13, background: T.accentSoft, color: T.accentInk, display: 'grid', placeItems: 'center', marginBottom: 16 };
 
-function Karte({ ico, titel, desc, onClick }: { ico: string; titel: string; desc: string; onClick: () => void }): React.ReactElement {
+/**
+ * AUF-40 Teil A — eine Karte **ohne** Ziel wird nicht klickbar gemacht, damit sie beschäftigt
+ * aussieht. Sie trägt `in Entwicklung` (vorhandenes `ZustandBadge`, Muster AUF-25) und **den
+ * Grund**, warum sie noch nirgendwohin führt. Ohne `onClick` ist sie keine Schaltfläche: keine
+ * Rolle, kein Tastaturfokus, kein Zeiger — sonst wäre sie eine Schaltfläche, die nichts tut.
+ */
+function Karte({ ico, titel, desc, onClick, grund }: { ico: string; titel: string; desc: string; onClick?: () => void; grund?: string }): React.ReactElement {
   const [hover, setHover] = React.useState(false);
+  if (!onClick) {
+    return (
+      <div style={{ ...cardBase, cursor: 'default' }} title={grund}>
+        <span style={icoBox}><Ikon inhalt={ico} size={26} /></span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          <div style={{ fontSize: 15.5, fontWeight: 700 }}>{titel}</div>
+          <ZustandBadge zustand="in_entwicklung" />
+        </div>
+        <div style={{ fontSize: 13, color: T.muted, marginTop: 4, lineHeight: 1.45 }}>{desc}</div>
+        {grund && <div style={{ fontSize: 12, color: T.faint, marginTop: 6, lineHeight: 1.4 }}>{grund}</div>}
+      </div>
+    );
+  }
   return (
     <div
       role="button" tabIndex={0} onClick={onClick}
@@ -66,7 +93,7 @@ function HubKarte({ f, onKonfigurator }: { f: FachHub; onKonfigurator: Props['on
   );
 }
 
-export function StartView({ onGuided, onKonfigurator }: Props): React.ReactElement {
+export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): React.ReactElement {
   return (
     <div style={{ minHeight: '100%', background: 'radial-gradient(1100px 420px at 82% -8%, #e9f4f2 0%, transparent 60%), radial-gradient(900px 400px at 5% 0%, #eef3e6 0%, transparent 55%)' }}>
       <div style={wrap}>
@@ -74,9 +101,21 @@ export function StartView({ onGuided, onKonfigurator }: Props): React.ReactEleme
         <div style={h1}>Was möchtest du planen?</div>
         <p style={lead}>Ein ganzes Gebäude — oder nur ein einzelnes Bauteil. Jeder Konfigurator führt dich Schritt für Schritt und läuft auch <b>autark</b>, ganz ohne Gebäude.</p>
 
-        {/* Zuletzt bearbeitet */}
+        {/* AUF-40 Teil A — **Zuletzt bearbeitet: der Bestand, nicht drei erfundene Namen.**
+            Hier standen „EFH Mustermann", „Fenster-Angebot Hahn" und „Sanierung Musterstr. 5" —
+            bei jedem Nutzer, auch beim allerersten Start. Die Liste kommt jetzt herein; solange
+            sie leer ist, sagt die Fläche das, statt Beispiele zu zeigen, die wie Projekte aussehen.
+            **Die echte Liste braucht eine Route und ist Teil B** (bei Yama). */}
+        {projekte.length === 0 ? (
+          <div style={{ marginTop: 24, background: T.surface, borderRadius: 14, padding: '14px 16px', boxShadow: '0 1px 2px rgba(28,40,48,.05)', maxWidth: 520 }}>
+            <div style={{ fontSize: 13.5, fontWeight: 700 }}>Noch kein Projekt geöffnet.</div>
+            <div style={{ fontSize: 12.5, color: T.muted, marginTop: 4 }}>
+              Ein Vorhaben beginnt unten mit <b>Hausplaner</b> — oder mit einem der Fachplaner, die auch ohne Gebäude laufen.
+            </div>
+          </div>
+        ) : (
         <div style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap' }}>
-          {ZULETZT.map((z) => (
+          {projekte.map((z) => (
             <div
               key={z.name} role="button" tabIndex={0}
               onClick={() => (z.win ? onKonfigurator('Fenster', true) : onGuided(z.goto))}
@@ -88,14 +127,21 @@ export function StartView({ onGuided, onKonfigurator }: Props): React.ReactEleme
             </div>
           ))}
         </div>
+        )}
 
         {/* Projekt */}
         <div style={{ marginTop: 40 }}>
           <div style={themeHead}><span style={{ fontSize: 16, fontWeight: 700 }}>Projekt</span><span style={{ fontSize: 13, color: T.faint }}>Das komplette Vorhaben, alle Gewerke</span></div>
           <div style={grid3}>
-            <Karte ico={PROJ[0].icon} titel="Sanierungsplan" desc="Bestand aufnehmen, Maßnahmen planen, Schritt für Schritt sanieren." onClick={() => onGuided(1)} />
+            {/* AUF-40 Teil A — **drei Karten, drei Ziele.** Vorher riefen alle drei `onGuided(1)`
+                auf: drei Versprechen, ein Ziel. „Weiterarbeiten" öffnete kein Bestandsprojekt,
+                sondern begann bei Schritt 1. Wo ein Ziel fehlt, sagt die Karte das jetzt — statt
+                auf den geführten Ablauf umgeleitet zu werden, damit sie beschäftigt aussieht. */}
+            <Karte ico={PROJ[0].icon} titel="Sanierungsplan" desc="Bestand aufnehmen, Maßnahmen planen, Schritt für Schritt sanieren."
+              grund="Der Sanierungsablauf ist ein eigener Weg — er unterscheidet sich noch nicht vom Neubau-Ablauf." />
             <Karte ico={PROJ[1].icon} titel="Hausplaner" desc="Neubau / Gesamtgebäude über alle Geschosse und Gewerke." onClick={() => onGuided(1)} />
-            <Karte ico={PROJ[2].icon} titel="Weiterarbeiten" desc="Bestandsprojekt öffnen und fortsetzen." onClick={() => onGuided(1)} />
+            <Karte ico={PROJ[2].icon} titel="Weiterarbeiten" desc="Bestandsprojekt öffnen und fortsetzen."
+              grund="Braucht die Liste der eigenen Projekte — die kommt aus dem Bestand und ist noch nicht angebunden." />
           </div>
         </div>
 
