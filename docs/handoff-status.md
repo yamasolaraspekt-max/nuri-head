@@ -9945,3 +9945,44 @@ unveränderte Leerzustands-Zusage aus AUF-40 Teil A.
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine Suche, kein Filter, keine
 Sortierwahl. Studio-Route und `studio.blade.php` unberührt.
+
+
+## PLANNER 26.07., 16:45 — Referenzliste: die Dashboard-Mockups gegen den gebauten Stand
+
+Yamas Auftrag: die Layouts aus `~/Downloads/dashboard-*.html` mit dem aktuellen vergleichen und
+**erst einmal** auflisten — haben / fehlt / zusaetzlich. **Kein Posten daraus beauftragt.**
+Ergebnis: `docs/planner/referenzliste-mockups-2026-07-26.md`.
+
+**Zuerst eine Zahl, die Arbeit spart:** 16 Dateien der Familie, aber nur **9 verschiedene**.
+`dashboard-wizard-v1` = `_1` = `_2`, `dashboard-tools-v1` = `_1` = `_2`, `import-v3` = `v3_1`,
+`v1-mockup_1` = `_2` — nach Pruefsumme byte-gleich. **Die von Yama genannte Datei ist byte-gleich
+mit `dashboard-wizard-v1.html`.** Wer alle 16 durchsieht, prueft dreimal dasselbe.
+
+**Die Kette, und sie ist eine:** 1–3 bauen die **Huelle** (drei Ebenen, Werkzeugleiste mit ehrlichen
+Zustaenden, Befehlspalette, Projektbaum) · 4 den **Ablauf** (Wizard 20 Schritte, Pruefungscenter,
+Uebersichtskarte) · 5–8 den **Eingang** (Import & Nachzeichnen: Quelle, Kalibrierung, Erkennung mit
+Vertrauensstufen, Referenz-Layer, Kontextleiste, Projektidentitaet) · 9 die **Fach-Uebergabe**
+(technischer Wizard mit Abhaengigkeitskette und Datencheck) · 10 die **Personalisierung**
+(sechs Werkzeug-Zustaende, Workspace-Vorlagen, Leisten-Editor).
+
+**Der eine Satz, auf den es hinauslaeuft: die Huelle ist weitgehend gebaut, der Eingang fehlt ganz.**
+Aus 1–4 steht das meiste im Code — drei Ebenen, 2D/Split/3D, gruppierte Werkzeugzeile, ehrliche
+Zustaende, Befehlspalette (Quelle Registry, keine zweite Aktivierungslogik), fuenf Arbeitsbereiche
+**einschliesslich `WORKSPACE_IMPORT`**, angeheftete Werkzeuge, Projektbaum, Geschossstapel,
+Panel-Reiter, Fahrschritte. Aus 5–8 existieren **Werkzeugnamen und sonst nichts**:
+`Vertrauen` **0** Fundstellen, `Projektident` **0**, `Anwesend` **0**, `Schreibrecht` **0**,
+`Auto-Speichern` **0**, `Datencheck` **1**, `Fachmodul` **1**.
+
+**Zwei Stellen, an denen ich ausdruecklich widerspreche, statt zu uebernehmen:**
+- **Die Kontextleiste** (Mockup 7) ist eine **zweite obere Zeile** — AUF-70 hat gerade **eine**
+  hergestellt, und die Grundlinie sagt Oberkante 369/405. Das ist eine **Willensfrage an Yama**,
+  kein Selbstlaeufer, und sie kostet Hoehe an genau der Stelle, an der AUF-72/73 schon einmal riss.
+- **Anwesenheit/Mehrbenutzer** ist **kein Layout-Posten, sondern ein Nebenlaeufigkeits-System**
+  (Sperren, Konfliktaufloesung, Uebertragungsweg). **Wer das nebenbei baut, baut es falsch.**
+
+**Und was wir zusaetzlich haben, in keinem Mockup:** Funktionsvertrag (1 419 Zeilen),
+Rechte-Durchreichung, Vorbedingungen als **Daten** statt als Text, Buehnenhoehe/Ueberstand,
+stillgelegte Kataloge statt geloeschter, Schema-Pruefung und Waechter — und die
+**Mengenermittlung**, die in keinem Entwurf vorkommt und Yamas eigentliches Ziel ist.
+
+**Ballbesitz: Yama** (welche Zeile der Liste ein Posten wird). Generator und Evaluator unberuehrt.
