@@ -13666,3 +13666,28 @@ Token-Quelle, zu der der Rest des Repos ziehen soll.
 
 **Neuer Merge-Punkt:** mit dieser Freigabe ist alles bis `7cf7f6ae` abgenommen. Der Block darf auf
 den Kopf dieses Eintrags zeigen.
+
+
+## PLANNER 26.07., 23:30 (CEST) — `main` steht zum ersten Mal heute auf der Spitze
+
+`59318a77..665dd70e`, Fast-forward, **0 Commits Rueckstand.** Aus dem Serverprotokoll
+(`START So. 26 Juli 2026 23:24:53 CEST`):
+
+```
+>> push fork main             59318a77..665dd70e   OK
+>> push backup-private main   59318a77..665dd70e   OK
+```
+
+**Gelesen wurde die Antwort der Gegenseite, nicht mein Verfolgungs-Ref** — die Regel von vorhin,
+nachdem ich beinahe eine Backup-Luecke aus meinem eigenen Lock-Schaden gemeldet haette.
+
+**Vier Merges heute, drei davon nach §16 auf einen benannten abgenommenen Commit.** Der erste des
+Tages ging noch auf einen Zweignamen und hat den Fehler ausgeloest, aus dem §16 entstanden ist.
+**Zum ersten Mal heute ist `main` deckungsgleich mit dem Integrationszweig** — es gibt gerade
+nichts Abgenommenes, das nicht gesichert waere.
+
+**Ein Fehler im Lauf, dieselbe harmlose Richtung wie beim letzten Mal** (Remote hat mehr als
+lokal). Notiert, nicht behandelt.
+
+**Ballbesitz:** Generator AUF-38 Scheibe 2 (`StartView.tsx` + `hausplaner.css` im Baum — **die
+erste Scheibe, die wirklich umstellt**), Evaluator wartet, Stapel leer, Marke AUF-38.
