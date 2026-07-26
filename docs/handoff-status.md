@@ -13196,3 +13196,57 @@ es im Modell nicht gibt, einmal eine **Ergebnisform ohne Zahlen**. Scheibe C (U-
 · Abwasser · Küche · PV) ist offen.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## PLANNER 26.07., 23:10 (CEST) — Dach, Zimmerei und PV durchgemessen. Yamas Arbeit ist hier und wird nicht gerufen
+
+Papier: `docs/planner/dach-zimmerei-pv-bestandsaufnahme-2026-07-26.md` (mit zwei Nachtraegen).
+
+**Yamas Frage war: aus Playground rueberholt oder liegt es dort?** Antwort: **rueberholt, bewusst
+ausgewaehlt**, nach `Playground/docs/hausplaner/dach-andock-spec.md` vom **16.07.** Fuenf von sechs
+Dach-Utils sind **byte-identisch**; `dachVerschneidung` ist bei uns weiter. Die Spec sagt
+ausdruecklich: *keine Klassen-Transplantation* — der 3786-Zeilen-`@ts-nocheck`-Monolith
+`DachplanerProPage.tsx` bleibt draussen (gemessen: exakt 3786 Zeilen). **Aus Playground
+zurueckzuholen gibt es beim Dach-3D nichts**; unsere Renderer sind neuer (`szene.ts` 663 gegen 285,
+`dachMesh.ts` 355 gegen 108).
+
+**Dann hat Yama widersprochen — und er hat recht.** Ich hatte Zeilenzahlen verglichen und daraus
+"die Insel ist weiter" gemacht. **Mehr Zeilen ist kein Qualitaetsmass.** Die richtige Frage ist, ob
+die Arbeit ankommt.
+
+**`geometry/dachformVorlagen.ts`, 2399 Zeilen, rund 150 Eintraege** — Sattel, Pult, Walm, Flach in
+Deckungen und Neigungen, dazu Zeltdach, Krueppelwalm, Mansard, Mansardwalm, Schleppdach,
+Schmetterling, Grabendach, Sheddach, Tonnendach, mit `standardAufbauten()` und Kommentaren, die
+erklaeren, warum ein L-Grundriss keine eindeutige Hauptflaeche hat. **Zur Laufzeit ruft das
+niemand:** beide Verweise sind `import type` bzw. Prosa. **Ein `import type` verschwindet beim
+Uebersetzen restlos.** Der Nutzer sieht ein `<select>` mit **8** Dachformen
+(`HausplanerApp.tsx:1885`), weil `RoofShape` acht Werte hat; **11** Vorlagen tragen
+`status: 'verfuegbar'`.
+
+**Und das korrigiert meine eigene Zaehlung.** Mein Waisen-Zaehler wertete jeden `from`-Treffer als
+Aufrufer — auch reine Typ-Importe. Neu gemessen mit Unterscheidung: **28 statt 25**, neu dabei
+**`dachformVorlagen`**, `treppeSvg`, `toolTypes`. **Vierter Fall desselben Musters heute: ein
+Zaehler, der die Form prueft statt die Wirkung.** Ein Import sieht aus wie ein Aufruf und ist
+keiner.
+
+**Die ganze Kette, Glied fuer Glied gezaehlt** (Insel · Blade · Playground). Drei Aussagen:
+**(1) Der Dachstuhl ist gerechnet, aber nicht gezeigt** — `sparrenBerechnung` heute angeschlossen,
+`schifterListe`/`holzBauteile`/`holzMengen` verwaist; die Blade-Datei zeichnet Sparren, Pfetten,
+Latten, Pfannen. Anzeige und Rechnung existieren beide und kennen einander nicht.
+**(2) Dachhaken, Unterkonstruktion, Montagesystem sind die einzige echte Luecke** — ueberall
+duenn (Insel 1, Blade 4, Playground 3), in keinem Baum ein Modell. Das Einzige, das wirklich neu
+gebaut werden muesste.
+**(3) Die Wechselrichter-Auslegung existiert im CRM, nicht im Planer** —
+`admin/energie/wr_auslegung.blade.php` (193 Z) plus Dokumentfassung; im Planer null Treffer fuer
+`wechselrichter`/`mppt`. **Sie gehoert dorthin, wo `ProductPV` und `DistributorPrice` liegen; der
+Planer soll sie nicht nachbauen, sondern fuettern** — und der Vertrag dafuer steht bereits in der
+Spec vom 16.07.: `dach_flaechen[]` mit `flaeche_m2, azimut_grad, neigung_grad, first_laenge_mm`.
+**Entworfen, nicht gebaut.**
+
+**Aufraeum-Beobachtung, kein Vorschlag:** in `roof_config/` liegen **sieben `copy`-Fassungen**
+derselben Datei. Bevor jemand daraus etwas holt, gehoert geklaert, welche gilt — Frage an Yama.
+
+**Vorgeschlagener Waechter** (kostet weniger als eine Vorlage): ein Zaehler, der Module meldet,
+deren einzige Verweise `import type` sind. Er haette heute drei gefunden.
+
+**Kein Posten (§14).** Ballbesitz: Generator AUF-52 Scheibe B, Stapel leer, Marke AUF-52.
