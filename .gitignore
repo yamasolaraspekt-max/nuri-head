@@ -69,3 +69,4 @@ _to_delete/
 # Versioniert wäre sie bei jedem Commit verändert und damit ein Dauer-Haltesignal für drei
 # Instanzen (§10.2); der Wächter darf sie ausserdem nicht selbst committen (AUF-75, Kante 2).
 /docs/fortschritt.html
+/docs/inventur.html

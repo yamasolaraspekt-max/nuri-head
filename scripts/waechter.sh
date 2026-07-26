@@ -232,6 +232,9 @@ printf '%s %s %s%s %s\n' "$(date '+%Y-%m-%dT%H:%M:%S')" "$KURZ" "$AUSLOESER" "$Z
 # aufhalten und sein Urteil nicht verändern — deshalb hier ganz am Ende und ohne Einfluss auf
 # `STATUS`.
 [ -x scripts/fortschritt.sh ] && scripts/fortschritt.sh "$KURZ" >/dev/null 2>&1
+# Dieselbe Begruendung fuer die Inventur (Yama, 26.07.): eine Liste, die von Hand angestossen
+# werden muss, ist beim ersten Blick veraltet. Sie haengt am selben Takt, ohne Einfluss auf $STATUS.
+[ -x scripts/inventur.sh ] && scripts/inventur.sh >/dev/null 2>&1
 
 [ "$STATUS" = "gruen" ] && exit 0
 exit 1
