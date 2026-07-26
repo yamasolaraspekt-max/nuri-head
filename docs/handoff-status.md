@@ -10317,3 +10317,33 @@ Migration, Routing, Pagination. **Die erste Migration des Projekts.** Meine Bedi
 Mittag ist erfuellt: `main` stand nach dem Merge eine Runde unveraendert.
 
 **Ballbesitz: Generator (AUF-81) · Evaluator (AUF-78, danach AUF-82).**
+
+
+## EVALUATOR 26.07. — AUF-78 (Projektliste) FREIGABE (Staffel B)
+
+Volles Votum mit Rohbelegen in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-78`). Blind
+gegen Code `841865b` / Bundle `dcbe6ec` gemessen. Die fuenf verlangten unabhaengigen Messungen:
+1. **Rechtegatter am Router:** `hausplaner.studio => web, auth` (kein Hausplaner-Recht) ·
+   `objekt.seite => web, auth, permission:Hausplaner,read`. Liste nur auf der recht-gegateten Route.
+2. **K11-Mutation:** Liste an die Studio-Flaeche -> **beide** Tests rot (Verhalten `k1_studio_flaeche`
+   + Quelltext `k1_studio_vorlage`) = **volle Verriegelung**.
+3. **Keine Kundendaten (Bauart):** SQL `select id, object_name, city, updated_at ... limit 6`, kein
+   `lead`/`new_leads` -> kein N+1; Markup (K3) genau {id,name,ort,datum}, kein `GEHEIM`.
+4. **Harte Grenze:** `limit 6` in der SQL, count <= 6 bei 3000.
+5. **Kachel verspricht nichts (live DOM):** role=null, tabindex=null, cursor=auto, kein onclick.
+
+**Gates rein (/tmp dcbe6ec):** tsc 0 · schema 0 (kein Drift, keine Migration in AUF-78) · test 1102/0 ·
+build 0. **PHP-Suite (ticket_testing):** 53/0. **Bundle** frischer Build byte-gleich dcbe6ec.
+**Vertagte P6 eingeloest:** 1440 Oberkante **369 = Grundlinie**, Ueberstand 0 -> kein Shift durch AUF-78.
+
+**Nicht gemessen (Messgrenzen, keine Defekte, keine Auflage):** 1024-Viewport gegen dcbe6ec (Fenster-
+Viewport war auf 1440x726 gepinnt, resize griff nicht) · Worst-Case mit gefuellter Optionen-Zeile
+(Werkzeuge gesperrt bis Bauteil-Wahl; Optionen-Zeile ist feste Zeile -> 369 sehr wahrscheinlich schon
+Worst-Case). **Eigene Messfehler offengelegt:** erster K11-Gegen-Beweis war ungueltig (APP_BASE_PATH-
+Artefakt -> Tests lasen echtes Repo; per Diagnose gefunden, mit erzwungenem APP_BASE_PATH=/tmp -> gueltig
+2 rot); K4-Controller-Mutation nicht sandbox-faehig (symlink-vendor-Autoload laedt echte Klasse) - K4
+gegen echten Code gruen belegt `limit 6` direkt.
+
+**Urteil: FREIGABE** (kein Defekt, keine Auflage; die zwei nicht gemessenen Punkte sind Layout-Baseline,
+kein Blocker). Hinweis: der Baum traegt bereits **AUF-81-WIP** (ConfigWizard, routes, neue Model+Migration)
+- fremde WIP, nur gemeldet. **Ballbesitz: Planner** (Staffel: als Naechstes C = AUF-79).

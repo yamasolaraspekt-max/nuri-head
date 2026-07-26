@@ -1271,6 +1271,67 @@ Urteil: FREIGABE. Kein neuer Auflagen-Bedarf. Meine Auflage AUF-75.1 ist damit g
 Fakt fuer Tor 2 (keine Auslegung, §7.6): AUF-80 ist abgenommen; die Entscheidung bleibt Yamas.
 
 
+### AUF-78 (Code 841865b · Bundle dcbe6ec) - die Projektliste erreicht den Startbildschirm - FREIGABE
+
+Blind gegen die committeten SHA gemessen, dann Bericht gelesen. serviert==gemessen belegt: das im
+Browser (`cache:no-store`) geladene Bundle ist byte-gleich dcbe6ec (1 414 365 B, Pruefsumme 124543524);
+der frische `build:hausplaner` ist ebenfalls byte-gleich (reproduzierbar). §8-Zwei-Commit-Split sauber:
+Code-Commit ohne Bundle, Bundle-Commit nur Artefakt.
+
+§13-Gates (rein, /tmp-Auszug dcbe6ec, isoliert vom parallelen AUF-81-WIP): tsc 0 · schema 0 (KEIN
+Drift - additiv, keine Migration in 841865b) · test 1102 pass/0 fail · build 0.
+PHP-Suite (Regel #9, ticket_testing, sauberer Baum): 53 pass / 177 Assertions / 0 fail (+9 ggü 44).
+
+Die fuenf vom Auftrag verlangten unabhaengigen Messungen:
+1. Rechtegatter AM ROUTER (nicht an der Datei): `hausplaner.studio => web, auth` (nur auth, KEIN
+   Hausplaner-Recht) · `hausplaner.objekt.seite => web, auth, permission:Hausplaner,read`. Die Liste
+   sitzt ausschliesslich auf der recht-gegateten Route.
+2. K11 als Mutation (Liste an die Studio-Flaeche): BEIDE Tests rot - `k1_die_studio_flaeche` (Verhalten,
+   HTTP) UND `k1_die_studio_vorlage` (Quelltext). Nicht nur einer -> die Verriegelung ist voll, nicht
+   halb. (Gegen-Beweis gueltig erst nach Fix eines eigenen Messfehlers, s.u.)
+3. Keine Kundendaten durch Bauart - an Abfrage UND Markup: die reale SQL =
+   `select id, object_name, city, updated_at ... order by updated_at desc limit 6`, KEIN `lead`-Join,
+   KEIN `new_leads` -> keine Kundendaten, kein N+1. Markup (K3, live): data-projekte traegt genau
+   {id,name,ort,datum}, kein `GEHEIM`.
+4. Harte Grenze Zahl gegen Zahl: `limit 6` steht IN der SQL (nicht erst nachtraeglich); count <= 6 auch
+   bei 3000 Objekten (K4). PROJEKTLISTE_MAX = 6.
+5. Kachel verspricht nichts (live DOM, StartView mit 6 echten Projekten): die Kacheln haben role=null,
+   tabindex=null, cursor=auto, kein onclick. Sie zeigen, sie versprechen nicht. Deckt sich mit dem
+   Quelltext (onClick/role/tabIndex/cursor:pointer in StartView.tsx entfernt) und dem ehrlichen
+   grund-Text der "Weiterarbeiten"-Karte.
+
+Vertagte Messung eingeloest (P6 Worst-Case-Ueberstand gegen dcbe6ec): bei 1440x726 Canvas-Oberkante
+369, Ueberstand 0 - IDENTISCH zur Grundlinie (369). AUF-78 fasst StartView/uiState an (Launcher),
+verschiebt die Zeichenflaechen-Oberkante bei 1440 NICHT. Kein Befund an dieser Stelle.
+
+NICHT gemessen (ehrlich benannt, keine Auflage - Messgrenzen, keine Defekte):
+- 1024-Viewport gegen dcbe6ec: in dieser Browser-Session war innerWidth/innerHeight auf 1440x726
+  GEPINNT (outerWidth 778 bei innerWidth 1440; resize_window aenderte den Viewport nicht - anders als
+  in der ersten Session). Die 1024-Oberkante (Grundlinie 405) konnte ich nicht neu messen. Ein Shift
+  ist unwahrscheinlich (1440 identisch; AUF-78 fasst keine Werkzeugleiste/Canvas-Layout an), aber
+  ungemessen.
+- Worst-Case mit GEFUELLTER Optionen-Zeile: die 6 Zeichen-Werkzeuge sind gesperrt (aria-disabled,
+  "gesperrt und richtig") bis ein Bauteil selektiert ist; der Werkzeug-mit-Optionen-Zustand wurde
+  nicht erreicht. Die Optionen-Zeile ist eine feste Zeile (Oberkante 369 konstant) - 369 ist daher
+  sehr wahrscheinlich schon der Worst-Case, aber ein 2-Zeilen-Umbruch bei 1024 bleibt ungemessen.
+
+Eigene Messfehler offengelegt (Beweis gilt gegen mich):
+- Mein erster K11-Gegen-Beweis meldete faelschlich GRUEN: der /tmp-Archiv-Lauf loeste unter phpunit
+  `resource_path` aufs ECHTE Repo auf (APP_BASE_PATH-Artefakt der kopierten .env), die Tests sahen
+  meine /tmp-Mutation nie. Per Diagnose gefunden, mit erzwungenem `APP_BASE_PATH=/tmp` behoben -> dann
+  gueltig 2 rot. Ohne diese Selbstpruefung haette ich "Zaehne bestaetigt" behauptet, was falsch gewesen
+  waere.
+- K4-Zaehne per Controller-MUTATION nicht sandbox-faehig: das symlink-`vendor` traegt Composers
+  PSR-4-Map mit echtem Repo-Pfad, also laedt der Test die echte Controller-Klasse, nicht die
+  /tmp-Mutation; `composer dump-autoload` in /tmp wuerde das echte vendor ueberschreiben (nicht
+  gemacht). K4 ist gegen den ECHTEN Code gruen und behauptet `limit 6` woertlich in der SQL - das ist
+  der direkte Beleg; die Mutation-Teeth-Bestaetigung fuer K4 bleibt offen.
+
+Urteil: FREIGABE. Sicherheit (K11 voll verriegelt), keine Kundendaten (Bauart), harte Grenze, kein
+N+1, ehrliche nicht-versprechende Kachel, Leerzustand (Teil A) erhalten, AUF-64 (kein @php-Block),
+additiv (keine Migration in AUF-78), Bundle reproduzierbar, alle Gates gruen. Die zwei nicht gemessenen
+Layout-Punkte sind Messgrenzen, keine Defekte - kein Merge-/Ketten-Blocker. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
