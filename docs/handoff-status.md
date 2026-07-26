@@ -11045,3 +11045,39 @@ Live-Sichtprobe, sobald belastbarer Browser).
 
 **Abgenommen: AUF-78·81·82·66·76·54 FREIGABE, AUF-55 FREIGABE MIT AUFLAGE; AUF-79 Spur B.** Offen:
 AUF-77 (nicht gebaut), AUF-56 (im Bau). Evaluator Standby.
+
+
+## PLANNER 26.07., 18:55 — AUF-54 freigegeben, AUF-55 im Stapel, Marke auf AUF-56
+
+**AUF-54 ist frei** (`19317b6`) und archiviert. Der Evaluator hat die fehlende zweite Zeile
+**bestaetigt statt beanstandet** — Pruefsumme, frischer Build byte-gleich, `treppeAlsSvg` und die
+Farben **0x** im Buendel: **§8 2b erfuellt, kein Commit fehlt.** Und er hat **wieder einen eigenen
+Messfehler offengelegt**: sein erster Gegenbeweis blieb gruen, weil `perl -0` ohne `/g` den
+**Kommentar** `#93c21c` traf statt den Wert. Korrigiert wurden es 5 rot. **Das ist heute der
+vierte offengelegte eigene Fehlversuch — und jedes Mal wird das Votum dadurch mehr wert, nicht
+weniger.**
+
+### AUF-55 — meine Auftragspraemisse hat sich gedreht, und er hat es gemessen statt gebaut
+
+Ich hatte im Auftrag angenommen, im Studio gebe es eine **wirkungslose** Snapshot-Flaeche, die als
+*in Entwicklung* zu kennzeichnen sei. **Gemessen gibt es gar keine.** Was es gibt: die Naht
+(`objekt.blade.php:116` setzt `data-snapshots-url`), **drei Routen, die wirklich arbeiten**
+(`snapshotErstellen` legt an, `snapshotListe` liest, `wiederherstellen` stellt zurueck — im
+Controller nachgelesen) — **und eine Insel, die davon kein Zeichen liest.**
+
+**Damit war mein Befund falsch herum:** nicht eine Flaeche ohne Wirkung, sondern **eine Wirkung ohne
+Flaeche.** Der Server fuehrt versionierte Planungsstaende, und die Oberflaeche verschweigt sie. Der
+einzige Ort, der ueberhaupt einen Verlauf andeutete, war der Panel-Reiter **Historie** — und dessen
+Satz meinte die **Befehlshistorie eines Bauteils**, also gerade **nicht** die versionierten Staende.
+**Zwei verschiedene Dinge unter einem Wort — heute zum fuenften Mal dasselbe Muster.**
+
+**Er hat die Praemisse gemeldet und trotzdem geliefert**, statt zurueckzugeben und zu warten. Das war
+richtig, weil die **Richtung** des Auftrags stimmte (die Flaeche soll die Wahrheit sagen) und nur
+meine **Annahme ueber den Ist-Zustand** falsch war. Kriterium 2 blieb dabei unveraendert erfuellt:
+`resources/views/` und `routes/` **null Zeilen** — die tote Naht bleibt stehen.
+
+**Was der Evaluator zuerst pruefen soll, steht im Stapel: die Drehung, nicht den Bau.** Stimmt sie,
+war mein Befund falsch und seiner richtig — und das gehoert belegt, nicht geglaubt.
+
+**Marke gerueckt: AUF-56** (zwei Elevation-Token). Danach **AUF-77** (Wandflaeche, seit 17:55 frei).
+**Ballbesitz: Generator (AUF-56) · Evaluator (AUF-55).**
