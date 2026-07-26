@@ -7870,3 +7870,56 @@ sein Ziel bekommen kann.
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. **Teil B nicht begonnen** — keine
 Migration, keine Route, kein Controller. Keine Demo-Daten „nur für die Vorschau".
+
+---
+
+## PLANNER 26.07., 10:00 — Mengenermittlung: zwei Entscheidungen von Yama, zwei Posten
+
+### 1. Entscheidung 1 — beide Bezugsmaße
+
+**Rohbaumaß und Fertigmaß werden beide geführt.** Daraus die Regel, die in AUF-77 zum härtesten
+Kriterium wird: **jedes Ergebnis trägt sein Bezugsmaß als Pflichtangabe.** Ein Rückgabewert ohne sie
+muss ein **Typfehler** sein — nicht eine Nachlässigkeit, die im Bericht auffällt. *Eine Fläche ohne
+die Angabe, ob sie roh oder fertig ist, ist die „Zahl ohne Herkunft", vor der die ganze Vorlage warnt.*
+
+### 2. Entscheidung 2 — Tor 1 für die Wandschichten
+
+**Beim Messen kam sofort die Voraussetzung heraus:** `WallNode` trägt **eine einzige** `thickness`
+und keine Schichtenliste, während `CeilingNode.schichten[]` bereits existiert. `wandaufbau.ts` kennt
+`Schicht` — **aber die Schichten hängen an keiner Wand.** Ohne sie ist „fertig" nicht berechenbar.
+
+**Yama hat den additiven Weg freigegeben:** dasselbe optionale Feld, feldgleich mit der Decke.
+**Vierter Fall desselben Musters** nach `roofs`, `ceilings` und `aufbauten` — kein neuer Mechanismus,
+kein umbenannter Wert, keine Migration.
+
+**Was ich im Auftrag ausdrücklich verboten habe: eine Vorbelegung mit Standardaufbauten.** *Eine
+erfundene Schichtung wäre schlimmer als keine — sie sähe aus wie eine Angabe.* Fehlt das Feld, gilt
+`fertig = roh`, **und das Ergebnis sagt es.**
+
+### 3. Eine eigene Aussage zurückgenommen
+
+Ich hatte geschrieben, ohne die Übermessungs-Regel würde ich M1 nicht beauftragen. **Das nehme ich
+zurück, mit Begründung:** M1 liefert **Bruttofläche** und **Nettofläche mit vollem Abzug** — beide
+eindeutig und von keiner Gewerkeregel abhängig. **Die Übermessung ist eine Regel *auf* diese Zahlen**
+und gehört in das versionierte Regelwerk (M2). Sie ändert kein Ergebnis von M1, sie leitet ein
+drittes daraus ab.
+
+**Damit ist die zweite Fachfrage weiterhin offen — und hält nichts mehr auf.**
+
+### 4. Zwei Posten, ans Ende der Reihe
+
+**AUF-76** (Schema, klein) und **AUF-77** (M1, gesperrt dahinter). **Beide stehen hinter AUF-40 A,
+AUF-74, AUF-58 und AUF-75** — die Layout-Inventur wird zuerst zu Ende gebracht.
+
+**M2 bis M6 stehen nicht auf der Tafel.** Sie stehen in der Bestandsaufnahme, und dort bleiben sie,
+bis der jeweils vorige Posten abgenommen ist. *Ein Vorrat, der schneller wächst als er abfließt, ist
+kein Plan, sondern eine Liste* — und dieses Vorhaben ist groß genug, um genau so zu enden.
+
+### 5. Die Grenze, die ich in AUF-77 offen benannt habe
+
+**Die Länge im Fertigmaß ist zurückgestellt.** Ob eine Wand fertig kürzer ist, hängt von den
+angrenzenden Wänden und deren Schichten ab — das ist eine Rechnung über den Wandverbund und ein
+eigener Posten. **Bis dahin ist die Länge in beiden Bezugsmaßen dieselbe, und das Ergebnis benennt
+diese Grenze, statt sie zu verschweigen.**
+
+**Ballbesitz: Generator (AUF-40 A) · Evaluator (Sichtprobe-Standard) · Planner (nichts offen).**
