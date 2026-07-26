@@ -434,3 +434,37 @@ richtig war.
 
 **12. Er eilt nicht wegen der Stapelhöhe.** Vier im Stapel heißt vier Urteile, nicht ein Sammelvotum.
 **Ein schnelles Votum ist wertlos.**
+
+---
+
+## 13. Einspurbetrieb — Yamas Entscheidung vom 26.07., bindend
+
+**Wortlaut:** *„ich glaube die Gefahr ist zu groß, wir bleiben dabei wie es ist."*
+
+Die Untersuchung `docs/planner/parallelbetrieb-2026-07-26.md` hatte drei Spuren für machbar
+gehalten. **Yama hat anders entschieden, und die Entscheidung gilt.** Sie bleibt trotzdem im
+Bestand, weil sie die Begründung trägt — und weil eine verworfene Untersuchung, die man später
+noch einmal führen muss, doppelt bezahlt wird.
+
+**Was jetzt gilt:**
+
+1. **Ein bauender Posten zur Zeit. Ein Arbeitsbaum. Ein Zweig.** Kein zweiter `git worktree`,
+   keine zweite Test-Datenbank, keine zweite ausgelieferte Anwendung. §1c (**genau eine** Marke
+   `⚡ AKTIV`) bleibt unverändert in Kraft und ist damit nicht nur eine Fokus-Regel, sondern die
+   Betriebsregel.
+2. **Der Ausgleich für die fehlende Parallelität ist die Staffel, nicht die Gleichzeitigkeit.**
+   Generator und Evaluator bekommen ihre Reihenfolge **im Voraus** — beide wissen ohne Rückfrage,
+   was nach dem aktuellen Posten kommt. **Der Planner ist damit kein Nadelöhr mehr zwischen zwei
+   Posten**, und genau dieses Nadelöhr hat am 26.07. fünf fertige Aufträge 35 Minuten liegen
+   lassen.
+3. **Leerlauf wird gemeldet, nicht überbrückt.** Wer seine Staffel abgearbeitet hat und nichts
+   Neues vorfindet, meldet **„Staffel leer"** in den Ledger und wartet. Er zieht sich **nichts**
+   aus dem Vorrat, was nicht in seiner Staffel steht — das wäre der Themenwechsel, den §1c
+   verhindern soll, nur mit besserer Begründung.
+4. **Der Evaluator misst nicht, während der Generator schreibt.** Das war schon §10.3; unter
+   Einspurbetrieb ist es die tragende Regel und keine Vorsichtsmaßnahme. Der Evaluator prüft
+   **gegen einen benannten Commit**, nicht gegen den Arbeitsbaum — dann ist es gleichgültig, ob
+   der Generator inzwischen weitergeschrieben hat.
+5. **Der einzige zulässige Parallelfall bleibt: einer baut, einer nimmt einen *anderen,
+   bereits committeten* Posten ab.** Das ist keine Ausnahme von Punkt 1, denn abnehmen ist kein
+   Bauen — es erzeugt keine Änderung im Baum.

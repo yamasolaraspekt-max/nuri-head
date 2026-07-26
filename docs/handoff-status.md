@@ -9498,3 +9498,35 @@ zweite pruefende Instanz — das ist ein Vorschlag an Yama, keine Entscheidung d
 
 **Ballbesitz: Yama** (Entscheidung ueber den zweiten Arbeitsbaum). Generator und Evaluator laufen
 unveraendert weiter.
+
+
+## PLANNER 26.07., 14:40 — Einspurbetrieb bleibt (Yamas Entscheidung) + Staffel fuer beide Rollen
+
+**Yama, woertlich:** *„ich glaube die Gefahr ist zu gross, wir bleiben dabei wie es ist."*
+Die Untersuchung hatte drei Spuren fuer machbar gehalten; **die Entscheidung geht anders aus, und
+sie gilt.** Sie steht als **§13** in `docs/agents/06-laufzeiten-und-takt.md`. Die Untersuchung
+bleibt im Bestand — nicht als Widerspruch, sondern weil sie die Begruendung traegt und eine
+verworfene Messung, die man spaeter noch einmal fuehren muss, doppelt bezahlt wird.
+
+**Der Ausgleich fuer die fehlende Parallelitaet ist die Staffel, nicht die Gleichzeitigkeit.**
+Beide Rollen kennen ihre Reihenfolge ab jetzt **im Voraus** und muessen zwischen zwei Posten nicht
+nachfragen. **Der Planner ist damit kein Nadeloehr mehr zwischen zwei Posten** — genau dieses
+Nadeloehr hat heute frueh fuenf fertige Auftraege 35 Minuten liegen lassen.
+
+**Generator:** 1. AUF-78 (aktiv) · 2. AUF-79 · 3. AUF-81 · 4. AUF-66 · 5. AUF-76 · 6. AUF-77 ·
+7. AUF-54/55/56 · 8. AUF-63 (allein, er aendert den Testlaeufer selbst).
+
+**Evaluator:** A. Waechter-Blindstelle · B. AUF-78 · C. AUF-79 · D. AUF-81 · E. AUF-66 ·
+F. AUF-76 · G. AUF-77.
+
+**Warum AUF-81 an dritter Stelle und nicht an achter:** es ist Yamas ausdruecklicher Wunsch (B7,
+Datenbank/Migration/Routing/Pagination). Meine einzige Bedingung war, dass `main` nach dem Merge
+**eine Runde unveraendert steht**, bevor die erste Migration dazukommt — nach AUF-78 und AUF-79 ist
+das erfuellt. **Die Bedingung war nie „spaeter", sondern „nicht im selben Atemzug".**
+
+**Drei Regeln, die den Einspurbetrieb tragen:** Leerlauf wird **gemeldet, nicht ueberbrueckt**
+(keine Selbstbedienung im Vorrat) · der Evaluator prueft **gegen einen benannten Commit**, nicht
+gegen den Arbeitsbaum · der einzige zulaessige Parallelfall bleibt **einer baut, einer nimmt einen
+anderen, bereits committeten Posten ab** — abnehmen ist kein Bauen, es aendert den Baum nicht.
+
+**Ballbesitz: Generator (AUF-78) und Evaluator (Waechter-Blindstelle).**

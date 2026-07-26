@@ -218,6 +218,18 @@ Zeilen war der eine Posten, der gezogen werden darf, nicht mehr zu finden. Kein 
 **Der erste Posten trägt ⚡ und ist der einzige, der gezogen werden darf** (§1c) — alles darunter ist
 Reihenfolge, kein Angebot. `GESPERRT`: Vorbedingung nicht erfüllt, Grund steht in der Zeile.
 
+**Die Staffel (Yama, 26.07.: einspurig, kein Parallelbetrieb — §13).** Beide Rollen kennen ihre
+Reihenfolge im Voraus und müssen zwischen zwei Posten nicht nachfragen:
+
+**Generator:** 1. **AUF-78** (⚡) · 2. **AUF-79** · 3. **AUF-81** · 4. **AUF-66** · 5. **AUF-76** ·
+6. **AUF-77** · 7. **AUF-54/55/56** · 8. **AUF-63** (allein — er ändert den Testläufer selbst).
+
+**Evaluator:** A. Wächter-Blindstelle (Messung) · B. Abnahme AUF-78 · C. Abnahme AUF-79 ·
+D. Abnahme AUF-81 · E. Abnahme AUF-66 · F. Abnahme AUF-76 · G. Abnahme AUF-77.
+
+**Leerlauf wird gemeldet, nicht überbrückt** (§13.3): Staffel leer → eine Zeile in den Ledger,
+dann warten. Nichts aus dem Vorrat ziehen, was nicht in der Staffel steht.
+
 | Nr | Auftrag | Rolle | Status | Datei / Beleg |
 |---|---|---|---|---|
 | **AUF-40** | **L6 — Start/Zuletzt an echte Projekte + Konfigurator-Paket serverseitig speichern.** Gemessen offen: `app/StartView.tsx:75` rendert die Demo-Liste `ZULETZT`, `app/ConfigWizard.tsx` lädt das `ConfiguratorPackage` als JSON **herunter**, statt es zu speichern. Hatte bis 25.07. ebenfalls **keinen Posten** (null Treffer auf `L6`). Braucht Backend-Anschluss, blockiert kein Layout **Zielbild aus der UX-Bewertung 26.07.:** je Eintrag Projektname · letzter Zeitpunkt · aktueller Schritt · offene Aufgaben · Speicherstatus · **direkte Fortsetzen-Aktion**. | Yama | **Teil A `ABGENOMMEN`** — FREIGABE (`865a545`) fuer `4cc9f6e` + Bundle `10f7dd7`. Die drei erfundenen Projekte sind **stillgelegt statt geloescht** (Muster `toolCatalogStillgelegt`/`STEPS_STILLGELEGT`) und rendern nichts; ehrlicher Leerzustand statt Beispielzeilen; **drei Karten, drei Ziele** — die zwei ohne Ziel sind **keine Schaltflaeche mehr** (keine Rolle, kein Fokus, kein Zeiger), sonst waeren sie fokussierbar und taeten nichts. Tests 1082 auf **1091**; Sichtprobe: **0 erfundene Namen**, wo sie vorher in **jedem** Screenshot standen. **Rest `GESPERRT` — wartet auf Yama:** (1) die **Zulieferung der echten Projektliste** (eine Variable im Controller, **Tor 1**) — zurueckgegeben statt nebenbei gebaut, siehe `W-Projektliste`; (2) **Teil B** (Konfigurator-Persistenz) ist von Yama am 26.07. **vertagt**, stattdessen laeuft AUF-74 | `generator-auftrag-auf40-start-und-persistenz.md` |
