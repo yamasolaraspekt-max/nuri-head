@@ -550,3 +550,32 @@ Ein neuer Posten ist zulässig, **wenn er gebraucht wird, um einen vorhandenen z
 **Der Grund, in einem Satz:** angefangene Posten altern. Ein Posten, der drei Wochen offen liegt,
 wird gegen einen Stand gemessen, den es nicht mehr gibt — **und dann ist die Arbeit, die schon drin
 steckt, nicht halb fertig, sondern weg.**
+
+---
+
+## 15. Die Tafel erreicht den Generator, nicht den Evaluator (Planner, 26.07., nach dem dritten Fall)
+
+**Die beiden Rollen holen ihre Arbeit nicht auf demselben Weg**, und das ist heute dreimal Zeit
+gekostet:
+
+| Rolle | Wie er zu Arbeit kommt | Beleg |
+|---|---|---|
+| **Generator** | **holt selbst** von der Tafel — er liest die Marke `⚡ AKTIV` und zieht | „Auftragstafel: AUF-77 gezogen (Generator, nativ)" — er hat 90 Sekunden nach dem Setzen gezogen |
+| **Evaluator** | **wartet auf Zuruf** — er sieht Voten und Auflagen nicht von selbst | 14:40: er war seit 13:53 fertig und wartete · Buchstaben-Staffel: AUF-82 fiel aus seiner Zaehlung, er meldete Standby |
+
+### Die Regel
+
+1. **Ein Posten fuer den Generator ist verteilt, sobald die Marke steht.** Mehr ist nicht noetig;
+   ein zusaetzlicher Zuruf schadet aber nie.
+2. **Eine Abnahme oder Auflage fuer den Evaluator ist erst verteilt, wenn sie ihm als Nachricht
+   zugegangen ist.** **Die Tafel allein reicht nicht.** Wer sie nur eintraegt und weitergeht, hat
+   nichts uebergeben, sondern etwas notiert.
+3. **Der Planner traegt die Bringschuld.** Steht etwas im Abnahme-Stapel und ist kein Zuruf
+   herausgegangen, ist das **sein** Versaeumnis, nicht das Warten des Evaluators.
+4. **„Standby" vom Evaluator ist eine Meldung an den Planner, keine Feststellung ueber die Lage.**
+   Er kann nur wissen, was ihm gesagt wurde. **Wer Standby liest und nichts tut, laesst eine Rolle
+   im Leerlauf, die auf ihn wartet.**
+
+**Der Grund, warum das keine Formalie ist:** unter Einspurbetrieb (§13) ist der Pruefende ohnehin
+der Engpass. **Ein Evaluator, der wartet, obwohl Arbeit fuer ihn dasteht, kostet doppelt** — die
+Zeit, die er stillsteht, und die Zeit, die der Merge dadurch spaeter kommt.

@@ -11301,3 +11301,38 @@ Anstrich, Fassade und Heizlast alle aufsetzen.** Damit steht der letzte inhaltli
 Mengenermittlung in Arbeit.
 
 **Ballbesitz: Generator (AUF-77) · Evaluator (gebuendelte Live-Sichtprobe 55.1 + 56.1).**
+
+
+## PLANNER 26.07., 19:35 — §15: die Tafel erreicht den Generator, nicht den Evaluator
+
+**Yamas Frage *„hast du Aufgaben verteilt"* hat einen Unterschied freigelegt, den ich drei Mal
+uebersehen habe:** die beiden Rollen holen ihre Arbeit **nicht auf demselben Weg.**
+
+**Der Generator holt selbst.** Beleg von eben: die Marke stand um 19:30 auf AUF-77, um 19:32 stand
+`Auftragstafel: AUF-77 gezogen (Generator, nativ)` im Log — **90 Sekunden.** Bei ihm ist die Marke
+die Uebergabe.
+
+**Der Evaluator wartet auf Zuruf.** Er sieht Voten und Auflagen nicht von selbst. Zweimal heute hat
+mich das Zeit gekostet: um **14:40** war er seit 13:53 fertig und wartete auf mich, waehrend ich
+schrieb, er sei dran — und in der **Buchstaben-Staffel** fiel AUF-82 aus seiner Zaehlung, worauf er
+**Standby meldete, obwohl ein Posten ungeprueft im Stapel lag.**
+
+**Daraus §15, vier Punkte** — der dritte ist der, der mich betrifft:
+1. Fuer den Generator ist ein Posten verteilt, **sobald die Marke steht**.
+2. Fuer den Evaluator ist eine Abnahme oder Auflage **erst verteilt, wenn sie ihm als Nachricht
+   zugegangen ist**. **Die Tafel allein reicht nicht** — wer sie nur eintraegt und weitergeht, hat
+   nichts uebergeben, sondern etwas notiert.
+3. **Der Planner traegt die Bringschuld.** Steht etwas im Stapel und ist kein Zuruf herausgegangen,
+   ist das **mein** Versaeumnis, nicht sein Warten.
+4. **„Standby" ist eine Meldung an mich, keine Feststellung ueber die Lage.** Er kann nur wissen,
+   was ihm gesagt wurde. **Wer Standby liest und nichts tut, laesst eine Rolle im Leerlauf, die auf
+   ihn wartet.**
+
+**Warum das keine Formalie ist:** unter Einspurbetrieb ist der Pruefende ohnehin der Engpass — das
+stand heute Mittag in der Parallelbetriebs-Untersuchung und ist seither zweimal eingetreten.
+**Ein Evaluator, der wartet, obwohl Arbeit fuer ihn dasteht, kostet doppelt:** die Zeit, die er
+stillsteht, und die Zeit, die der Merge dadurch spaeter kommt.
+
+**Offen und zugestellt:** die gebuendelte Live-Sichtprobe **55.1 + 56.1** gegen `17c9c06`, mit
+`git status` auf `public/*` davor (§13.6). **Sie sind der einzige Grund, warum ich den Merge nach
+`main` noch nicht vorschlage.**
