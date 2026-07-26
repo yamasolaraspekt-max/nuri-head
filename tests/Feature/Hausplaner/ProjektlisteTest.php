@@ -100,7 +100,13 @@ class ProjektlisteTest extends TestCase
     }
 
     // --- K3: nur die nötigen Felder ---------------------------------------------------------------
-    public function test_k3_das_buendel_traegt_genau_vier_felder_und_keine_kundendaten(): void
+    /**
+     * **Umbenannt in AUF-66 (vorher „genau vier Felder").** Die Absicht ist unverändert: *nur das,
+     * was die Fläche braucht — jedes zusätzliche Feld ist eine mögliche Leckage.* Nur ist es jetzt
+     * ein Feld mehr, weil die Fläche eine Sache mehr tut: sie führt zum Projekt. **Die Zahl war nie
+     * das Kriterium, die Notwendigkeit war es.**
+     */
+    public function test_k3_das_buendel_traegt_genau_die_fuenf_noetigen_felder_und_keine_kundendaten(): void
     {
         $id = $this->objekte(2);
         $antwort = $this->actingAs($this->admin())->get(route('hausplaner.objekt.seite', $id));
@@ -113,11 +119,39 @@ class ProjektlisteTest extends TestCase
         $this->assertNotEmpty($liste);
 
         foreach ($liste as $eintrag) {
-            $this->assertSame(['id', 'name', 'ort', 'datum'], array_keys($eintrag),
+            $this->assertSame(['id', 'name', 'ort', 'datum', 'adresse'], array_keys($eintrag),
                 'mehr Felder als die Flaeche anzeigt — jedes zusaetzliche ist eine moegliche Leckage');
         }
         // Der Kundenname steht in der Datenbank und darf die Seite nicht erreichen.
         $antwort->assertDontSee('GEHEIM', false);
+    }
+
+    // --- AUF-66 K2: jeder Eintrag traegt die Adresse SEINES Objekts -------------------------------
+    /**
+     * **Der haeufigste Fehler solcher Listen ist die geteilte Adresse:** alle Eintraege zeigen auf
+     * dasselbe Ziel, meistens auf das gerade geoeffnete Objekt. Das faellt niemandem auf, solange
+     * nur ein Projekt existiert — und ist von da an falsch.
+     *
+     * **Und die Adresse entsteht auf dem Server**, nicht in der Insel: `route()` kennt das Praefix.
+     */
+    public function test_auf66_jeder_eintrag_zeigt_auf_sein_eigenes_objekt(): void
+    {
+        $id = $this->objekte(3);   // 7200, 7201, 7202 — geoeffnet wird 7200
+        $antwort = $this->actingAs($this->admin())->get(route('hausplaner.objekt.seite', $id));
+        $antwort->assertOk();
+
+        preg_match('/data-projekte="([^"]*)"/', $antwort->getContent(), $treffer);
+        $liste = json_decode(html_entity_decode($treffer[1], ENT_QUOTES), true);
+        $this->assertGreaterThan(1, count($liste), 'fuer diesen Test braucht es mehr als einen Eintrag');
+
+        $ziele = [];
+        foreach ($liste as $eintrag) {
+            $this->assertSame(route('hausplaner.objekt.seite', $eintrag['id']), $eintrag['adresse'],
+                'die Adresse gehoert zu genau diesem Eintrag');
+            $this->assertStringContainsString((string) $eintrag['id'], $eintrag['adresse']);
+            $ziele[] = $eintrag['adresse'];
+        }
+        $this->assertCount(count($ziele), array_unique($ziele), 'keine zwei Eintraege teilen sich ein Ziel');
     }
 
     // --- K4: genau eine Abfrage, hart begrenzt ----------------------------------------------------

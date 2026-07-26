@@ -24,11 +24,27 @@ export interface ProjektEintrag {
   name: string;
   ort: string;
   datum: string;
+  /**
+   * AUF-66 — **die Adresse, unter der genau dieses Projekt geöffnet wird.**
+   *
+   * **Sie kommt fertig vom Server** (`route(...)` im Controller) und wird hier nur gelesen. Die
+   * Insel setzt keinen Pfad zusammen: ein zusammengebauter Pfad wäre eine zweite Wahrheit über das
+   * Routing und bräche beim ersten Präfix — der Server weiß, wo er liegt, die Insel nicht.
+   *
+   * **Freiwillig, und das mit Absicht.** Fehlt sie, bleibt der Eintrag *sichtbar*, aber er wird
+   * **keine Schaltfläche** — kein Ziel, kein Versprechen. Die Liste deswegen ganz zu verwerfen
+   * wäre der größere Schaden: AUF-78 hat sie überhaupt erst wahr gemacht, und ein Projekt, das
+   * es gibt, verschweigt man nicht, nur weil ein Verweis fehlt.
+   */
+  adresse?: string;
 }
 
 function istEintrag(x: unknown): x is ProjektEintrag {
   if (typeof x !== 'object' || x === null) return false;
   const o = x as Record<string, unknown>;
+  // Die Adresse darf fehlen — steht sie aber da, muss sie eine Zeichenkette sein. Eine Zahl oder
+  // ein Objekt an dieser Stelle landete sonst ungeprüft in einem `href`.
+  if (o.adresse !== undefined && typeof o.adresse !== 'string') return false;
   return typeof o.id === 'number' && typeof o.name === 'string'
     && typeof o.ort === 'string' && typeof o.datum === 'string';
 }

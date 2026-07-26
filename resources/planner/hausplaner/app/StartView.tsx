@@ -74,6 +74,83 @@ function Karte({ ico, titel, desc, onClick, grund }: { ico: string; titel: strin
   );
 }
 
+/**
+ * AUF-66 — **ein Listeneintrag, der wirklich hinführt.**
+ *
+ * Bis hierher war der Eintrag ein `div`: sichtbar, aber tot. AUF-78 hat das ausdrücklich so
+ * gelassen und die Frage zurückgegeben — *wohin ein Klick führen soll, ist nicht entschieden.*
+ * Der Planner hat entschieden: **auf die Objektseite genau dieses Projekts.**
+ *
+ * **Warum ein Verweis und keine `role="button"`-Fläche** (Abweichung vom Wortlaut „Schaltfläche",
+ * bewusst und hier begründet): Das Ziel ist eine **Adresse**, kein Vorgang. Ein Verweis bringt von
+ * sich aus mit, was eine nachgebaute Schaltfläche erst nachbilden müsste — Fokus, Enter, Anzeige
+ * des Ziels in der Statuszeile, mittlere Maustaste, „in neuem Tab öffnen", Lesezeichen. Eine
+ * `role="button"`, die `location` setzt, nimmt all das weg und gibt nichts dafür. **Die eine
+ * Sache, die dem Verweis fehlt — Auslösen mit der Leertaste — wird ergänzt**, damit Kriterium 3
+ * buchstäblich erfüllt ist und nicht nur sinngemäß.
+ *
+ * **Ohne Adresse bleibt der Eintrag sichtbar, wird aber keine Schaltfläche.** Kein Ziel, kein
+ * Versprechen — dasselbe Prinzip wie bei den zielllosen Karten (AUF-40 Teil A) und bei der
+ * Icon-Zeile (AUF-44).
+ *
+ * Der Fokusring ist **nicht neu**: `.hp-studio :focus-visible` in `HausplanerStudio.tsx` deckt das
+ * ganze Studio ab. Ein zweiter Ring wäre eine zweite Wahrheit über dieselbe Sache.
+ */
+function ProjektKachel({ z, dominant }: { z: ProjektEintrag; dominant: boolean }): React.ReactElement {
+  const [hover, setHover] = React.useState(false);
+  const zeile = [z.ort, z.datum].filter(Boolean).join(' · ');
+
+  const rumpf = (
+    <>
+      <span style={{ width: dominant ? 46 : 38, height: dominant ? 46 : 38, borderRadius: dominant ? 13 : 11, background: T.accentSoft, color: T.accentInk, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>
+        <Ikon inhalt={HAUS_ZEICHEN} size={dominant ? 24 : 20} />
+      </span>
+      <div style={{ minWidth: 0 }}>
+        {dominant && <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: T.accent }}>Weiterarbeiten</div>}
+        <div style={{ fontSize: dominant ? 17 : 13.5, fontWeight: dominant ? 800 : 700, letterSpacing: dominant ? '-.01em' : undefined, marginTop: dominant ? 2 : 0 }}>{z.name}</div>
+        <div style={{ fontSize: dominant ? 12.5 : 11.5, color: T.muted, marginTop: dominant ? 2 : 0 }}>
+          {dominant ? [zeile, 'zuletzt bearbeitet'].filter(Boolean).join(' · ') : zeile}
+        </div>
+      </div>
+      {dominant && <span style={{ flex: '1 1 auto' }} />}
+      {dominant && <Ikon inhalt='<path d="M5 12h14M13 6l6 6-6 6"/>' size={20} />}
+    </>
+  );
+
+  const grund: React.CSSProperties = {
+    display: 'flex', alignItems: 'center', gap: dominant ? 14 : 12,
+    background: dominant ? T.accentSoft : T.surface,
+    color: dominant ? T.accentInk : T.ink,
+    borderRadius: 14, padding: dominant ? '16px 20px' : '12px 16px',
+    boxShadow: '0 1px 2px rgba(28,40,48,.05)',
+    border: dominant ? `1px solid ${T.accent}` : '1px solid transparent',
+    minWidth: dominant ? 0 : 230,
+    ...(dominant ? { maxWidth: 560 } : {}),
+  };
+
+  // Kein Ziel ⇒ keine Schaltfläche: kein Fokus, kein Zeiger, kein Tastaturweg.
+  if (!z.adresse) {
+    return <div style={{ ...grund, cursor: 'default' }}>{rumpf}</div>;
+  }
+
+  return (
+    <a
+      href={z.adresse}
+      // Enter löst der Verweis selbst aus; die Leertaste tut er nicht. Nur sie wird hier ergänzt.
+      // Bewusst NICHT `istAusloeser`: das prüft Enter mit — und Enter käme dann zweimal an,
+      // einmal vom Verweis und einmal von hier.
+      onKeyDown={(e) => { if (e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); e.currentTarget.click(); } }}
+      onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+      style={{
+        ...grund, cursor: 'pointer', textDecoration: 'none',
+        transform: hover ? 'translateY(-2px)' : 'none',
+        boxShadow: hover ? '0 10px 30px rgba(28,50,55,.10)' : grund.boxShadow,
+        transition: 'transform .14s, box-shadow .14s',
+      }}
+    >{rumpf}</a>
+  );
+}
+
 function HubKarte({ f, onKonfigurator }: { f: FachHub; onKonfigurator: Props['onKonfigurator'] }): React.ReactElement {
   const [hover, setHover] = React.useState(false);
   return (
@@ -122,22 +199,19 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
             </div>
           </div>
         ) : (
-        <div style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap' }}>
-          {/* AUF-78: **kein Klick.** Die Kacheln riefen `onGuided(...)` — bei einem echten
-              Projekt hieße das: „Weiterarbeiten" öffnet nicht das Projekt, sondern beginnt den
-              geführten Ablauf. Das wäre dieselbe Unwahrheit, die AUF-40 Teil A hier entfernt
-              hat, nur mit echten Namen darauf. **Wohin ein Klick führen soll, ist nicht
-              entschieden** — die Route gäbe es, sie zu verdrahten ist eine eigene Entscheidung
-              und im Bericht zurückgegeben. Bis dahin: anzeigen, nicht versprechen. */}
-          {projekte.map((z) => (
-              <div
-                key={z.id}
-                style={{ display: 'flex', alignItems: 'center', gap: 12, background: T.surface, borderRadius: 14, padding: '12px 16px', boxShadow: '0 1px 2px rgba(28,40,48,.05)', border: '1px solid transparent', minWidth: 230 }}
-            >
-              <span style={{ width: 38, height: 38, borderRadius: 11, background: T.accentSoft, color: T.accentInk, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}><Ikon inhalt={HAUS_ZEICHEN} size={20} /></span>
-              <div><div style={{ fontSize: 13.5, fontWeight: 700 }}>{z.name}</div><div style={{ fontSize: 11.5, color: T.muted }}>{[z.ort, z.datum].filter(Boolean).join(' · ')}</div></div>
+        <div style={{ marginTop: 24 }}>
+          {/* AUF-66 — **die dominante Handlung, und sie steht ganz oben.**
+              AUF-78 hat die Kacheln bewusst tot gelassen und die Frage zurückgegeben, wohin ein
+              Klick führen soll. Sie ist entschieden: auf die Objektseite genau dieses Projekts.
+              **Der erste Eintrag ist der Weg zurück in die Arbeit** — größer, hervorgehoben, als
+              erster in der Tastfolge, und **ein Klick genügt**. Die übrigen bleiben, wie sie
+              waren, nur eben erreichbar. */}
+          <ProjektKachel z={projekte[0]} dominant />
+          {projekte.length > 1 && (
+            <div style={{ display: 'flex', gap: 12, marginTop: 12, flexWrap: 'wrap' }}>
+              {projekte.slice(1).map((z) => <ProjektKachel key={z.id} z={z} dominant={false} />)}
             </div>
-          ))}
+          )}
         </div>
         )}
 
@@ -152,8 +226,15 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
             <Karte ico={PROJ[0].icon} titel="Sanierungsplan" desc="Bestand aufnehmen, Maßnahmen planen, Schritt für Schritt sanieren."
               grund="Der Sanierungsablauf ist ein eigener Weg — er unterscheidet sich noch nicht vom Neubau-Ablauf." />
             <Karte ico={PROJ[1].icon} titel="Hausplaner" desc="Neubau / Gesamtgebäude über alle Geschosse und Gewerke." onClick={() => onGuided(1)} />
-            <Karte ico={PROJ[2].icon} titel="Weiterarbeiten" desc="Bestandsprojekt öffnen und fortsetzen."
-              grund="Die zuletzt bearbeiteten Projekte stehen oben. Eines davon von hier aus zu öffnen ist noch nicht verdrahtet." />
+            {/* AUF-66 — **die Karte „Weiterarbeiten" ist fort, nicht verstummt.**
+                Sie ist überflüssig geworden: fortsetzen geht jetzt oben, mit einem Klick, am
+                Projekt selbst. Zwei Wege zu derselben Handlung sind kein Angebot, sondern eine
+                Frage, die der Nutzer beantworten muss, bevor er arbeiten darf — und der untere
+                Weg wäre der schlechtere gewesen, weil er das Projekt erst noch erfragen müsste.
+                Steht kein Projekt in der Liste, sagt der Leerzustand von AUF-40 Teil A das
+                unverändert; eine Karte, die dann „fortsetzen" anbietet, hätte nichts, was sie
+                fortsetzen könnte. `PROJ[2]` bleibt in den Daten stehen — stillgelegt, nicht
+                gelöscht, wie bei den Werkzeugen und den Demo-Projekten. */}
           </div>
         </div>
 

@@ -63,25 +63,33 @@ test('K4: der Grundzustand IST leer — beim ersten Start ist das der Normalfall
 });
 
 // --- K5: drei Karten, drei Ziele ----------------------------------------------------------------
+/**
+ * **Nachgezogen in AUF-66 — die Absicht ist unverändert:** *keine zwei Karten führen zur selben
+ * Handlung.* Die Zahl war nie das Kriterium. Sie steht jetzt auf **zwei**, weil AUF-66 die dritte
+ * („Weiterarbeiten") entfernt hat: fortsetzen geht seither oben, am Projekt selbst, mit einem
+ * Klick. **Die Karte war die schwächere Doppelung** — sie hätte erst noch fragen müssen, welches
+ * Projekt gemeint ist.
+ */
 test('K5: keine zwei Karten rufen dasselbe Ziel auf', () => {
   const karten = [...start.matchAll(/<Karte [^>]*titel="([^"]+)"[^>]*?(?:onClick=\{\(\) => ([^}]+)\})?[^>]*\/>/gs)];
-  assert.equal(karten.length, 3, 'die drei Projektkarten');
+  assert.equal(karten.length, 2, 'die zwei verbliebenen Projektkarten');
   const ziele = karten.map((m) => m[2]).filter((z): z is string => Boolean(z));
   assert.equal(new Set(ziele).size, ziele.length, `zwei Karten mit demselben Ziel: ${ziele.join(' / ')}`);
-  // Genau eine Karte hat heute ein echtes Ziel; die anderen beiden sagen es.
+  // Genau eine Karte hat ein echtes Ziel; die andere sagt, warum sie keins hat.
   assert.deepEqual(ziele, ['onGuided(1)']);
+  // Und die entfernte Karte hat keinen Rest hinterlassen.
+  assert.doesNotMatch(start, /titel="Weiterarbeiten"/, 'sie ist fort, nicht nur stumm');
 });
 
 test('K5: eine Karte ohne Ziel ist als `in Entwicklung` ausgewiesen — mit Grund', () => {
   assert.match(start, /<ZustandBadge zustand="in_entwicklung" \/>/);
-  for (const grund of [
-    /grund="Der Sanierungsablauf ist ein eigener Weg/,
-    // AUF-78: der alte Grund („die Liste ist noch nicht angebunden") wurde durch diesen Posten
-    // selbst falsch — sie IST angebunden. Was fehlt, ist das Öffnen von dort aus.
-    /grund="Die zuletzt bearbeiteten Projekte stehen oben/,
-  ]) {
-    assert.match(start, grund, 'ohne Grund wäre die Marke nur ein Etikett');
-  }
+  // **AUF-66:** der zweite Grund ist mit seiner Karte gegangen. AUF-78 hatte ihn schon einmal
+  // nachziehen müssen („die Liste ist noch nicht angebunden" wurde falsch, als sie ankam); jetzt
+  // ist auch der Nachfolger überholt — das Öffnen von dort aus **gibt es**. Ein Grund, der eine
+  // behobene Lücke beschreibt, ist keine Erklärung mehr, sondern eine Falschauskunft.
+  assert.match(start, /grund="Der Sanierungsablauf ist ein eigener Weg/,
+    'ohne Grund wäre die Marke nur ein Etikett');
+  assert.doesNotMatch(start, /noch nicht verdrahtet/, 'die Lücke ist geschlossen — der Satz muss weg');
 });
 
 test('eine Karte ohne Ziel ist KEINE Schaltfläche mehr', () => {

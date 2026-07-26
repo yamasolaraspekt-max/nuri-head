@@ -88,6 +88,12 @@ class HausplanerController extends Controller
                 'name' => (string) ($o->object_name ?: 'Objekt #'.$o->id),
                 'ort' => (string) ($o->city ?? ''),
                 'datum' => optional($o->updated_at)->format('d.m.Y') ?? '',
+                // AUF-66 — die Adresse wird HIER erzeugt, nicht in der Insel. `route()` kennt
+                // Praefix und Namen; ein in TypeScript zusammengesetzter Pfad waere eine zweite
+                // Wahrheit ueber das Routing und braeche beim ersten Praefixwechsel.
+                // Dasselbe Recht wie die Liste selbst (`permission:Hausplaner,read`): wer den
+                // Eintrag sehen darf, darf die Seite oeffnen — es entsteht kein zweiter Zugang.
+                'adresse' => route('hausplaner.objekt.seite', $o->id),
             ])
             ->all();
     }
