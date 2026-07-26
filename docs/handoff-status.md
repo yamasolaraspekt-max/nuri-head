@@ -11416,3 +11416,49 @@ Höhe (fehlender Operand). Testverriegelt.
    ist eine Fachfrage für Yama**, und sie entscheidet, ob hier ein weiterer Meldefall gehört.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## PLANNER 26.07., 19:45 — AUF-77 berichtet: die Mengenermittlung rechnet. Marke auf AUF-63
+
+**Sieben Minuten nach dem Ziehen.** `a331fce`, Insel **1200** (vorher 1179), PHP unveraendert.
+**Damit rechnet die Mengenermittlung zum ersten Mal** — M0 legte das Feld an, M1 zieht die Zahl
+daraus.
+
+**Die Stelle, an der er mein Kriterium ernster genommen hat als ich es formulieren konnte:** ich
+verlangte, ein Ergebnis ohne Bezugsmass muesse ein **Typfehler** sein. Er hat gemessen, dass das mit
+den ueblichen Mitteln nicht geht — **die Testdateien sind aus `tsconfig.hausplaner.json` ausgenommen,
+ein `@ts-expect-error` dort waere wirkungslos** — und statt das Kriterium auf „Test prueft es zur
+Laufzeit" abzuschwaechen, hat er eine **Typprobe mit fremder Endung** gebaut, die im Test kopiert und
+durch einen echten `tsc --noEmit` geschickt wird. **Der Lauf ist gruen, WEIL der Fehler eintritt.**
+Mutation: `bezug` optional gemacht ⇒ der Fehler verschwindet ⇒ **1 rot**. *Ein Test, der
+`assert('bezug' in x)` sagt, belegt Sorgfalt, nicht Unmoeglichkeit.*
+
+**Drei weitere Saetze aus dem Bericht, die ich mir merke:**
+- *Eine Formel, die sich selbst nachrechnet, prueft nichts* — deshalb die **Handrechnung als Zahl**
+  (12,5 / 1,68 / **10,82 m²**).
+- *Zwei Rundungsorte ergeben zwei Summen, die sich um Cents unterscheiden — daran zerbricht spaeter
+  ein Angebot.* Genau **eine** Rundungsstelle, gemessen.
+- *Ein Fehlalarm bringt einen Pruefschritt schneller zu Fall als eine fehlende Meldung* — deshalb
+  prueft er die Ueberlappung in **zwei Achsen**: Tuer + Oberlicht rechnen 2,4 m² und melden **nicht**.
+
+**Er hat einen sechsten Meldefall selbst ergaenzt:** eine **fremde Oeffnung** (`hostWallId` zeigt auf
+eine andere Wand) wird gemeldet statt stillschweigend abgezogen. Begruendung: der Aufrufer darf die
+Oeffnungen der ganzen Szene uebergeben — *sie ungefiltert mitzurechnen waere ein Fehler, den niemand
+mehr findet.*
+
+### Die Abweichung vom Wortlaut, und sie ist richtig
+
+Mein Auftrag sagte: *„Fertig: Dicke **und Hoehe** abzueglich der Schichten aus AUF-76."* **Die Dicke:
+ja. Die Hoehe: nein** — die Schichten liegen **quer zur Dicke**; sie von der Hoehe abzuziehen hat
+keine fachliche Grundlage. Was eine Wand fertig niedriger macht, ist der Fussboden- und
+Deckenaufbau — der haengt an `CeilingNode.schichten` und **liegt nicht im Eingang dieser Funktion**.
+**Einen fehlenden Operanden zu erfinden ist genau das, was das Operanden-Gate verbietet.** Statt zu
+rechnen, fuehrt `rohmassRest` jedes Mass auf, das bei `fertig` trotzdem das Rohmass ist — **mit
+Begruendung**, testverriegelt. **Das ist besser als mein Wortlaut, und ich uebernehme es.**
+
+**Zurueckgegeben: die Laibungen** (die umlaufenden Wandflanken in der Oeffnung). Der volle Abzug
+rechnet die Oeffnung als Loch; die Laibungsflaeche ist in Yamas Vorlage eine **eigene Groesse**.
+**Nach §14 wird daraus kein Posten** — der Befund liegt im Ledger und wartet, bis die Liste leer ist.
+
+**Marke gerueckt: AUF-63** (jsdom) — **er laeuft allein**, weil er den Testlaeufer selbst aendert.
+**Ballbesitz: Generator (AUF-63) · Evaluator (AUF-77, dazu die gebuendelte Sichtprobe 55.1+56.1).**
