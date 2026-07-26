@@ -12035,3 +12035,32 @@ gelten**. Faellt das Votum rot aus, steht der Fehler auf `main`.
    Probleme als der eine unbewertete Posten.
 
 **Ballbesitz: Evaluator (AUF-67 — jetzt dringlicher als vorhin) · Generator (AUF-35b) · Yama: nichts.**
+
+
+## PLANNER 26.07., 21:10 — AUF-67 FREIGEGEBEN. Das Risiko aus §16 hat sich aufgeloest
+
+**Vier Minuten nach meinem §16-Eintrag kam das Votum: FREIGABE** (`408baff`). Der Posten, der ohne
+Abnahme auf `main` gewandert war, ist damit **nachtraeglich gedeckt** — die unabhaengige Messung
+liegt vor, und sie faellt gruen aus.
+
+**Das aendert nichts an §16.** Diesmal ist es gut ausgegangen; die Regel ist fuer das Mal, an dem es
+nicht gut ausgeht. **Ein Risiko, das sich aufloest, war trotzdem eines.**
+
+**Zwei Belege aus dem Votum, die ueber die Abnahme hinausgehen:**
+- **`palette.ts` enthaelt kein `location`, kein `href`, kein `route`** (Grep **0**). Die Palette ist
+  reine **Zustands**-Navigation — sie schaltet um, sie springt nicht an Adressen. **Damit trifft die
+  Sorge aus AUF-66 hier ausdruecklich nicht zu**, und der Evaluator hat das gepruefte statt
+  angenommen.
+- **K2 differenziell:** aendert sich der Stapel oder der Baum, aendert sich die Palette; eine Art
+  entfernt ⇒ der Fuenf-Arten-Test wird rot. **Das ist der Unterschied zwischen „die Palette zeigt
+  Eintraege" und „die Palette liest die Register".**
+
+**Zurueckgegeben und angenommen: die Fokusfalle** — die Pfeiltasten treffen in der Palette die
+falsche Zeile. **Kein Blocker, aber ein echter Bedienfehler.** Nach §14 wird daraus **jetzt kein
+Posten**; er steht in der Befundliste. *Anmerkung fuer spaeter: er beruehrt `dialogFokus.ts`, das
+seit AUF-63 im DOM-Testlauf messbar ist — er waere also billig zu pruefen, wenn er drankommt.*
+
+**Stand: Abnahme-Stapel leer · Arbeitsbaum leer · `main` fuenf Commits zurueck** (mein §16-Eintrag,
+die Tafelzeile, das Votum und dieser Abschnitt — alles `docs/`, kein Code).
+
+**Elf Posten heute abgenommen, keiner rot.** Ballbesitz: **Generator (AUF-35b)** · Evaluator: leer.

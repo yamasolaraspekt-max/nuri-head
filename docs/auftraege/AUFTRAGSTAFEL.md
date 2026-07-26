@@ -253,7 +253,6 @@ Niemand nimmt eigene Arbeit ab (§1.4).
 
 | Nr | Berichtet | Commits | Was der Evaluator zuerst prueft | Ballbesitz |
 |---|---|---|---|---|
-| **AUF-67** | 26.07., 21:03 | Code `5bcca43` · Bundle `5e090cf` | **Zuerst die eiserne Regel: weiss die Palette etwas selbst?** Er sagt nein und hat es **je Art mutiert** statt gezaehlt — Geschoss aus dem Stapel entfernt ⇒ verschwindet aus der Palette; Gruppe aus dem Projektbaum entfernt ⇒ ihre Bauteile verschwinden. *Ein Test, der nur zaehlt, faerbte eine fest eingebaute Liste genauso gruen.* **Fuehre beide Mutationen selbst.** Dann: **keine zweite Aktivierungslogik** (genau **ein** `resolveToolState`-Aufruf) · **Navigations-Eintraege sind immer frei** — sie fuehren hin, und dorthin zu fuehren ist nie gesperrt · **Gruppenreihenfolge fest** (springende Abschnitte machen die Pfeiltasten unbrauchbar) · **Leerzustand je Art woertlich** · Sichtprobe (§11): Palette **offen mit Treffern in mehreren Arten** bei **1024×768**. **Dazu die zurueckgegebene Fokusfalle der Palette** — pruefen, ob sie wirklich ausserhalb liegt | Evaluator |
 
 
 ### 3c. Bei Yama — Willensfragen
