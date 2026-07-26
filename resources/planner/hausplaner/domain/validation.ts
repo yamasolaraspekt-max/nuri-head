@@ -49,6 +49,13 @@ export const wallNodeSchema = z
       })
       .strict()
       .optional(),
+    // AUF-76 — Wandaufbau (M0). **Zeichengleich mit der Decke** (siehe `ceilingNodeSchema`):
+    // dieselben Feldnamen, dasselbe `mmPos` (ganze mm > 0), dasselbe `.strict()`, dasselbe
+    // `.optional()`. Bewusst als zweiter Wortlaut und nicht als geteilte Konstante: eine gemeinsame
+    // Konstante liesse den Erzeuger einen `$ref` schreiben und veraenderte damit das *bestehende*
+    // Decken-Stueck der abgelegten Datei. Dass beide gleich bleiben, sichert stattdessen ein Test,
+    // der die erzeugten Teilschemata vergleicht — gemessen statt zugesagt.
+    schichten: z.array(z.object({ materialId: z.string().optional(), dickeMm: mmPos }).strict()).optional(),
   })
   .strict()
   .superRefine((w, ctx) => {

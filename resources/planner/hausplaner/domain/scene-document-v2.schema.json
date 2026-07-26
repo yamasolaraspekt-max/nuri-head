@@ -151,6 +151,24 @@
                   }
                 },
                 "additionalProperties": false
+              },
+              "schichten": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "materialId": {
+                      "type": "string"
+                    },
+                    "dickeMm": {
+                      "$ref": "#/$defs/__schema0"
+                    }
+                  },
+                  "required": [
+                    "dickeMm"
+                  ],
+                  "additionalProperties": false
+                }
               }
             },
             "required": [

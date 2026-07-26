@@ -108,6 +108,27 @@ export interface WallNode extends BaseNode {
     insulationThickness?: number;    // mm
     uValue?: number;                 // W/(m²K)
   };
+
+  /**
+   * AUF-76 — **Wandaufbau (Mengenermittlung M0).** Feldgleich mit `CeilingNode.schichten`: dieselben
+   * zwei Feldnamen, dieselbe Einheit, dieselbe Optionalität. *Zwei Schreibweisen für dieselbe Sache
+   * wären der Anfang der zweiten Wahrheit.*
+   *
+   * **`thickness` bleibt unberührt und bleibt die Wahrheit für den Rohbau.** Diese Liste sagt, woraus
+   * die Wand besteht — nicht, wie dick sie ist. Beide Bezugsmaße werden geführt (Yama, 26.07.).
+   *
+   * **Optional, und ohne Vorbelegung.** Ein Bestandsdokument ohne dieses Feld bleibt gültig; es wird
+   * nichts nachgetragen. *Eine erfundene Schichtung wäre schlimmer als keine — sie sähe aus wie eine
+   * Angabe.*
+   *
+   * **Nicht** `geometry/wandaufbau.Schicht`: das ist ein Rechentyp mit `dicke` und `lambda`, dies ist
+   * ein Modellfeld mit `dickeMm`. Sie zusammenzuziehen ist eine eigene Entscheidung.
+   *
+   * **Die Reihenfolge trägt (noch) keine Bedeutung** — innen→außen liegt nahe, ist aber eine
+   * Festlegung und keine Beobachtung. Sie ist als Frage zurückgegeben; bis sie beantwortet ist,
+   * darf sich niemand auf die Reihenfolge verlassen.
+   */
+  schichten?: Array<{ materialId?: string; dickeMm: number }>;
 }
 
 /** Öffnung ist WANDGEBUNDEN: lebt relativ zur Wirtswand, wandert/verschwindet mit ihr. */
