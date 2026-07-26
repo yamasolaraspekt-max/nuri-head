@@ -1147,6 +1147,38 @@ stillgelegt, 0 gerendert, Leerzustand ehrlich), die drei Karten haben drei Ziele
 und Teil B ist sauber als Tor-1-Rueckgabe belegt (keine Route/Migration). Mutationsfest; die Kern-
 Ehrlichkeit am Schirm belegt, die Karten-Rolle am Code.
 
+## AUF-74 - der Konfigurator sagt was wirklich passiert, funf Stellen (16fd2e8, Bundle 7ca21c1) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 16fd2e8 gemessen (/tmp + Browser), dann Bericht. **Klasse: sichtbar.**
+Letzter Layout-Inventur-Befund (B7). Yamas Entscheidung: nicht bauen, den Satz wahr machen.
+
+- **Umfang:** 3 Dateien - NEU konfiguratorEhrlich.test.ts; M ConfigWizard/StartView. **Tor-1: keine
+  Datei unter routes/ app/Http/ database/** - hier kein Formalkriterium, sondern der Inhalt der B7-Entscheidung.
+- **Drei beauftragte Stellen ehrlich (K3x3):** Beschreibung/Statuszeile/Meldung sagen 'Ergebnis: Datei
+  zum Herunterladen' + den Weg ins Gebaeude (ueber den Experten, eine Wand waehlen) statt
+  'ConfiguratorPackage speicherbar/gespeichert' (grep = 0).
+- **Zwei selbst gefundene Stellen (Paragraf 6):** (4) der **Fehlerfall** - `catch { entstanden=false }`
+  statt Fehler zu verschlucken; die Meldung haengt am tatsaechlichen Ausgang (kein Erfolg ohne Datei).
+  (5) StartView 'verlustfrei ins Projekt' - dieselbe Zusage eine Flaeche weiter, ersetzt durch das,
+  was die vier KonfigArt-Typen wirklich koennen.
+- **K6:** der WAHRE Zweig (Uebernahme ueber den Experten 'als Command ins Gebaeudemodell, Undo/Redo
+  inklusive') bleibt Zeichen fuer Zeichen - er war schon wahr. Kein 'folgt/in Kuerze/geplant/demnaechst' (K5, grep 0).
+- **Gates:** schema 0 . test **1102/1102, 0 skip** (1091->1102) . tsc 0 . build ok. 11 Subtests.
+- **Gegen-Beweis (/tmp):** catch verschluckt wieder (entstanden bleibt true) -> **'die VIERTE Stelle:
+  fehlgeschlagener Download meldet nicht mehr Erfolg' rot** (10/1). Der Fehlerfall-Fix hat Zaehne.
+- **Sichtprobe (iframe 1440x900, StartView; Screenshot timte aus, JS-Messung eindeutig):** **'verlustfrei'
+  nirgends sichtbar** (false), 'ConfiguratorPackage speicherbar/gespeichert' weg (false); die Fachplaner-
+  Zeile ist ehrlich ('jeder laeuft autark, ohne Gebaeude. Fenster/Tueren/Treppen/Heizkoerper setzt der
+  Experte...'). Die 3 Konfigurator-internen Stellen fuehre ich code+test-verifiziert (K3x3, keinen
+  Konfigurator geoeffnet); die StartView-Ehrlichkeit ist browser-belegt.
+- **Selbstkorrektur:** mein grep fand 'verlustfrei' 1x in ConfigWizard - es ist die Aenderungs-Doku im
+  Kommentar (Z.143), keine nutzersichtbare Zeichenkette. Live-Falschaussage = 0.
+
+**Urteil: FREIGABE.** Der Konfigurator behauptet keine Speicherung mehr, die es nicht gibt; er nennt
+das Ergebnis (Datei) und den echten Weg ins Modell; der Fehlerfall meldet keinen Erfolg ohne Datei;
+und dieselbe Zusage eine Flaeche weiter (StartView) ist mitgeraeumt. Mutationsfest. Damit ist die
+Layout-Inventur (B1-B8) vollstaendig abgearbeitet.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -1194,6 +1226,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-73    088c186  FREIGABE + schliesst AUF-72-Auflage: sichtbareHoehe=floor(min(hoehe,fenster-oben)) klemmt auf Sichtbares (abgerundet) ; schema 0/test 1073/1073/tsc 0/build ok, 14 Subtests inkl. AUF-72 K6 Verschub gruen ; Gegen-Beweis floor->ceil rot ; Sichtprobe Regel 11 (u-dach Wand top 369): 900 Ueberstand 0 (war 18), 813 Ueberstand 0 ; ehrlich: mein Befund 18px stimmte, meine Ursache (Optionen-Zeile) nicht - Wurzel war studio.blade min-height, Fix ursachen-robust
   AUF-71    04062fe  FREIGABE (schliesst Zustands-Inventur): gesperrtStil.ts EINE Quelle (liest opKnopfBild), alle 6 Flaechen lesen sie, eigene 0.4/0.45/0.6 = 0 (grep) ; schema 0/test 1082/1082/tsc 0/build ok, 9 Subtests ; Haertungsforderung: K8-Mutation an der Quelle = 9 rot ueber 3 Dateien (AUF-59/70/71) ; Kontrast selbst gerechnet faint 2.03 (Bild)/muted 4.54 (Label WCAG 1.4.3) ; WCAG jede Flaeche nicht-farblich, Menue-Eintrag aria-disabled ; Sichtprobe Geschoss-Loeschen 0.6 (war 0.4) ; ehrlich: Inventur fand 4, Generator 6 (0.45 uebersehen)
   AUF-40A   4cc9f6e  FREIGABE: kein Tor-1 (keine Route/Migration, Teil B bei Yama) ; 3 erfundene Projekte stillgelegt (ZULETZT_STILLGELEGT, K3), ehrlicher Leerzustand, 3 Karten 3 Ziele (2 in Entwicklung keine Schaltflaeche) ; schema 0/test 1091/1091/tsc 0/build ok, 9 Subtests ; Gegen-Beweis Demo-Liste zurueck K3 rot ; Sichtprobe 1440x900: 0 erfundene Namen (waren immer da), Leerzustand steht, 2x in Entwicklung mit Grund ; Karten-Rolle code-verifiziert (Browser-Selektor traf NAV, ehrlich benannt)
+  AUF-74    16fd2e8  FREIGABE: kein Tor-1 (B7 = Satz wahr machen, keine Route/DB) ; 3 Stellen ehrlich (Ergebnis Datei statt speicherbar, K3x3, grep speicherbar 0) + 2 selbst gefunden (4. Fehlerfall entstanden-Flag, 5. StartView verlustfrei) ; K6 wahrer Uebernahme-Zweig unberuehrt, kein folgt/geplant (grep 0) ; schema 0/test 1102/1102/tsc 0/build ok, 11 Subtests ; Gegen-Beweis catch verschluckt = VIERTE rot ; Sichtprobe StartView: verlustfrei/speicherbar 0 sichtbar, Fachplaner-Zeile ehrlich ; Selbstkorrektur verlustfrei-Treffer war Kommentar
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
