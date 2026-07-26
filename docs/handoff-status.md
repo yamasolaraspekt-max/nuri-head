@@ -8376,3 +8376,38 @@ sagt. *Eine Bedingung, die man kurz vor dem Ziel weglässt, war nie eine Bedingu
 
 **Ballbesitz: Generator (AUF-58) · Evaluator (volle Suite, danach Sichtprobe-Standard) ·
 Planner (wacht über die fünfte Zahl).**
+
+---
+
+## ⇒ GENERATOR — AUF-58 (Spur B) erledigt, selbst abgehakt
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commit:** `1c60c32` · **Keine Evaluator-Abnahme**
+(Kurzspur) — diese Zeile ist ihr Preis.
+
+**Gebaut:** drei enge Muster in der vorhandenen `.gitignore`, alle mit `/` an die Wurzel gebunden:
+`/public/_*.html` · `/_*.mjs` · `/sichtprobe-*.tmp.mjs`. **Keine vorhandene Zeile geändert** —
+0 entfernte Zeilen.
+
+**Das Kriterium, an fünf Proben, beide Richtungen:**
+
+```
+public/_auf99-sichtprobe.html   unsichtbar   ✓
+public/auf99-sichtprobe.html    SICHTBAR     ✓   ← der Teil, der zählt
+_probe99.mjs                    unsichtbar   ✓
+sichtprobe-auf99.tmp.mjs        unsichtbar   ✓
+probe99.mjs                     SICHTBAR     ✓
+```
+
+Alle fünf danach entfernt, Arbeitsbaum sauber.
+
+**Warum eng:** ein weites Muster (`public/_*`, `*.tmp.*`) verschluckt eines Tages eine echte Datei —
+**und eine verschluckte Datei merkt niemand, weil sie in keinem `git status` steht.** Das ist der
+gefährlichere Fehler von beiden. Der Hinweis steht als Kommentar in der `.gitignore` selbst, dort,
+wo ihn der Nächste liest, der eine Zeile ergänzen will — samt dem Satz, dass **Aufräumen Pflicht
+bleibt**: die Einträge befreien nicht vom Wegräumen, sie sorgen nur dafür, dass eine Kladde vor dem
+Wegräumen kein Haltesignal auslöst.
+
+**Nicht gebaut:** kein Skript, kein Hook — der Wächter (AUF-75) ist beauftragt und wird nicht
+vorweggenommen. Kein Verzeichniswechsel für die Kladden.
+
+**Nicht getan:** kein Push, kein `main`-Merge (Tor 2 = Yama).
