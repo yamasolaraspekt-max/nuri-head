@@ -7149,3 +7149,116 @@ hat er gesehen und benannt.
 
 **Ballbesitz: Generator (AUF-73, danach AUF-71) · Evaluator (AUF-65 zuerst, dann der
 Sichtprobe-Standard) · Planner (nichts offen).**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-73: der Restüberstand, und eine abweichende Ursache
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** Code `088c186` · Bundle `86eefb1`
+**Ballbesitz:** Evaluator.
+
+*(Auftragsdatei vollständig gelesen — 98 Zeilen, sechs Abschnitte.)*
+
+### 1. Zuerst reproduzieren — und das ging nicht auf Anhieb
+
+Der Auftrag definiert den ungünstigsten Zustand als *„Architektur-Bereich · ein Werkzeug gewählt,
+so dass die Optionen-Zeile steht · Expertenmodus"*. **Genau so gemessen, in meinem Blatt:**
+
+```
+Markieren (Optionen-Zeile „braucht keine Optionen")   Oberkante 323   Überstand 0
+Wand gewählt (Optionen-Zeile mit Inhalt)              Oberkante 323   Überstand 0
+```
+
+**Die Optionen-Zeile ändert die Oberkante nicht.** Sie steht in beiden Fällen, und der Canvas
+beginnt in beiden Fällen bei 323.
+
+Erst der **Nachbau der Studio-Seite** zeigte den Fehler:
+
+```
+Studio-Blatt   1440 × 900   Oberkante 359   Überstand 8   Seite scrollt
+Studio-Blatt   1440 × 813   Oberkante 359   Überstand 8   Seite scrollt
+```
+
+Konstant über beide Fensterhöhen — dasselbe Muster, das der Evaluator beschrieben hat.
+
+### 2. Die Ursache — hier weiche ich vom Votum ab, und sage es deutlich
+
+Das Votum nennt als Ursache die Werkzeug-Optionen-Zeile zwischen Messstelle und Canvas (~46 px).
+**Ich habe die Elternkette des Canvas durchgemessen: dazwischen liegt nichts.** Messstelle und
+Canvas haben **dieselbe Oberkante** (323 bzw. 359) — es gibt kein übersprungenes Element.
+
+**Der Überstand entsteht unten.** `studio.blade.php` gibt der Insel nur
+`min-height: calc(100vh - 46px)`. Ohne **feste** Höhe hat die Flex-Spalte keine Grundlage zum
+Schrumpfen: die Inhaltsreihe wächst auf ihren Inhalt und reicht unter das Fenster. **Die
+beanspruchte Höhe war richtig gemessen — sie war nur die falsche Größe.**
+
+Die 46 px Unterschied in der Oberkante (323 → 359) sind **die Studio-Leiste des Blattes selbst**
+(`.hp-bar`), nicht die Optionen-Zeile. Das erklärt zugleich, warum meine AUF-72-Messung „323" ergab
+und die beiden anderen „369": **wir haben auf verschiedenen Seiten gemessen, nicht in verschiedenen
+Werkzeugzuständen.**
+
+*Der Auftrag hatte recht mit „zwei von drei Messungen sagen 369" — nur war die Erklärung eine
+andere, und meine Zahl war für ihr Blatt korrekt.*
+
+### 3. Was gebaut wurde
+
+**`sichtbareHoehe(oben, hoehe, fenster)`** — der beanspruchte Platz, **begrenzt auf das, was
+zwischen Oberkante und Fensterunterkante übrig ist**. Rein, ohne DOM, damit prüfbar.
+
+Das ist **Weg A im Geist des Auftrags**: nicht auf einen Vorfahren schätzen, sondern messen, was
+wirklich zur Verfügung steht. **Eine Zeichenfläche ist so hoch, wie man sie sieht.**
+
+**Kein Ausgleich per fester Zahl** — es steht keine Pixelkonstante in der Rechnung, testverriegelt.
+**Keine zweite Messstelle** — genau ein `getBoundingClientRect`, derselbe Beobachter, dieselbe
+Ersatzhöhe 700, dieselbe Mindesthöhe 200.
+
+**Abgerundet statt gerundet:** ein aufgerundetes Pixel ist genau das Pixel, das unten wieder
+heraussteht. Der Weg war messbar: **8 → 1 → 0 px**.
+
+### 4. K3/K4/K5 — beide Blätter, drei Formate, Werkzeug „Wand" gewählt
+
+| Blatt | Format | Oberkante | Bühne | Überstand |
+|---|---|---|---|---|
+| Objekt (günstig) | 1440 × 900 | **323** | 548 | **0** |
+| Objekt | 1440 × 813 | **323** | 461 | **0** |
+| Objekt | 1024 × 768 | **323** | 416 | **0** |
+| Studio (ungünstig) | 1440 × 900 | **359** | 541 | **0** *(vorher 8)* |
+| Studio | 1440 × 813 | **359** | 454 | **0** *(vorher 8)* |
+| Studio | 1024 × 768 | **359** | 409 | **0** |
+
+Die Oberkante steht jetzt in jeder Zeile — sie war die Zahl, an der die Messungen auseinandergingen,
+und gehört nach §5 des Auftrags von jetzt an in jeden Bericht zu dieser Fläche.
+
+### 5. Belege
+
+| Was | Ergebnis |
+|---|---|
+| Gates | tsc **0** · schema:check **0** · test **0** · build **0** |
+| Tests | **1068 → 1073** · keine Zusage verschwunden |
+| K2 | `store/ domain/ geometry/ renderers/` — **null Zeilen** |
+| K6 | keine Pixelkonstante in der Rechnung (testverriegelt) |
+| K7 | die AUF-72-Zusagen grün, namentlich **der Verschub überlebt jede Höhenänderung** |
+| K9 `public/*` im Code-Commit | **0**; Bundle als zweiter Commit `86eefb1` |
+| **K8 Mutation** | Begrenzung entfernt ⇒ **3 Tests rot** |
+
+### 6. Was offen bleibt — benannt, nicht gebaut
+
+**Die Studio-Seite scrollt weiterhin** (`scrollHeight` > Fenster), weil ihre eigene Leiste plus
+`min-height` mehr beanspruchen als das Fenster hat. **Der Canvas ragt nicht mehr heraus** — das war
+die Auflage —, aber die Seite selbst ist um ihre Leistenhöhe zu hoch.
+
+Das zu beheben hieße, `studio.blade.php` anzufassen (feste Höhe statt `min-height`). **Das ist ein
+eigener Posten**: es ist ein anderes Blatt, es betrifft nur die Testfläche, und §4 des Auftrags
+verbietet ausdrücklich, bei der Gelegenheit Nachbarbaustellen mitzunehmen.
+
+### 7. Zum Ablauf
+
+Die Regel aus §6 des Auftrags — *„eine Sichtprobe wird im ungünstigsten Zustand gemessen"* —
+übernehme ich. **Und ich ergänze sie um das, was dieser Posten gezeigt hat: auch auf der
+ungünstigsten Seite.** Mein Fehler in AUF-72 war nicht der Werkzeugzustand, sondern das Blatt: ich
+habe auf meinem Prüfblatt gemessen, nicht auf dem mit der zusätzlichen Leiste.
+
+### 8. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine zweite Messstelle, keine feste
+Zahl, kein Umbau der Optionen-Zeile, kein Anfassen der Studio-Seite.
