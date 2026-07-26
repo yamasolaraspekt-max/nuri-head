@@ -13349,3 +13349,71 @@ eines laufenden Postens, kein neuer nach §14. **Nur Stufe 1 ist heute frei**; 2
 Schema-Entscheidung, 3 haengt an AUF-48, 4 und 5 kommen danach.
 
 **Ballbesitz:** Evaluator (AUF-52 Scheibe B), Generator Scheibe C, Marke AUF-52.
+
+
+## PLANNER 26.07., 23:25 (CEST) — Entschieden. Und beim Heizlast-Material ist die Lage eine andere als erwartet: die Kette ist fertig, es fehlt ein Tor
+
+Yama hat mir die Entscheidung ueberlassen. **Erste Amtshandlung: meinen eigenen Vorschlag von vor
+zwanzig Minuten verwerfen.**
+
+Ich hatte geschrieben, Dach-Stufe 1 passe als Auflage an **AUF-52 Scheibe C**, *"weil sie dieselbe
+Fachflaechen-Huelle beruehrt"*. **Gemessen: sie tut es nicht.** Scheibe C arbeitet in
+`EngineFlaeche.tsx`/`enginePanels.ts`; das Dachform-Auswahlfeld sitzt in `HausplanerApp.tsx:1884`.
+`roofType` kommt in der Engine-Huelle **nicht ein einziges Mal** vor. **Null Ueberschneidung** — ich
+hatte die Naehe behauptet, statt sie zu pruefen.
+
+**Entscheidung: die Auflage geht an AUF-48**, nicht an AUF-52 C. Das ist der Posten, der genau
+diese Datei oeffnet, und er ist nach Yamas Entscheid von heute der naechste nach AUF-52. Kein
+neuer Posten (§14), kein erzwungener Sitz.
+
+Auf der Tafel eingetragen, mit Probe des Erprobers: *"Er oeffnet die Dachform-Auswahl und findet
+dort die fertigen Vorlagen mit Deckung und Neigung — Sattel Schiefer steil, Pult Blech, Flach
+Gruendach — statt acht nackter Formnamen."* **Grenze:** nur Vorlagen, deren `shapeKey` einer der
+acht `RoofShape`-Werte ist; die 14 nicht speicherbaren Formen bleiben aussen vor, bis Yama ueber
+die Schema-Erweiterung entschieden hat.
+
+---
+
+## Heizlast, Waermepumpe, Heizkoerper, FBH — Papier: `docs/planner/heizlast-kette-2026-07-26.md`
+
+**Eine Grenze zuerst: `wberechnung` ist an diese Sitzung nicht angebunden.** Ich habe es nicht
+gesehen und behaupte darueber nichts. Dasselbe gilt fuer die Ordner auf dem Schreibtisch.
+
+**Gezaehlt, wo das Material liegt** (Dateien je Baum): Heizlast **58** im CRM gegen 22 in der Insel
+und 4 in Playground · Waermepumpe **36** gegen 11 gegen **0** · DIN 12831 **12** gegen 1 gegen 0 ·
+JAZ **12** gegen 0 gegen 0. **Playground traegt hier nichts bei.** Dasselbe Bild wie bei der
+Wechselrichter-Auslegung: **die Rechnung wohnt dort, wo die Produkte wohnen.**
+
+**Und die Naht ist auf beiden Seiten gebaut.** Im CRM fertig **und geroutet**:
+`POST /objekt/{objekt}/uebernehmen` mit `permission:Hausplaner,update` →
+`HausplanerController::uebernehmen` → `UebernehmeSzeneInAuslegung`, dazu `ErmittleUebernahmeStatus`,
+`SzeneProjektionService`, `GeometrieAbleitungService`, `RaumGeometrie`, `HeizlastRaum`.
+Im Planer gebaut und ungerufen: `projection/raumProjektion.ts` (98 Z) und `dachProjektion.ts`
+(43 Z) — einziger Aufrufer je die eigene Testdatei.
+
+**Der entscheidende Satz steht im Quelltext, nicht von mir.** Kopf von `SzeneProjektionService.php`:
+
+> *"Verdrahtung/Schreiben nach gebaeude_geometrie = **P2-2 (Yama-Go)**. Diese Klasse schreibt
+> NICHTS und wird von KEINEM Produktivpfad aufgerufen."*
+
+Und was darueber steht, ist keine Skizze: planare Raumerkennung, **Mehrraum**, Innen/Aussen ueber
+beide Halbkanten, Azimut aus der rechten Normale, `decke`/`boden` **ehrlich null** statt still
+gefuellt. **Das ist ein fertiges Bauteil mit einem Schild davor.** Das Recht existiert bereits —
+anders als beim Import ist hier nichts offen.
+
+**Damit ist die Antwort auf Yamas Frage nicht "genug Material", sondern:** es ist **fertige Arbeit,
+die auf ein Wort wartet.** Die Frage lautet nicht *wollen wir das bauen*, sondern:
+
+> **P2-2 Go: darf `SzeneProjektionService` verdrahtet werden und nach `gebaeude_geometrie`
+> schreiben?**
+
+**Reihenfolge:** (1) Yama-Go fuer P2-2 — kostet nichts, entscheidet alles. (2) `raumProjektion`
+anschliessen, nimmt zwei Waisen von der Liste. (3) `dach_flaechen[]` aus der Andock-Spec dazu,
+damit auch PV/WR ihre Eingangsdaten bekommen — dieselbe Naht. (4) **Erst danach** die Frage, ob in
+wberechnung oder auf dem Schreibtisch etwas liegt, das **fehlt**.
+
+**Was ich ausdruecklich nicht vorschlage:** irgendetwas abzutippen, bevor 1–3 stehen. Solange die
+vorhandene Kette nicht laeuft, vergroessert jedes zusaetzliche Material dieselbe Halde — **28
+Module, die richtig rechnen und die niemand ruft.**
+
+**Ballbesitz:** Evaluator (AUF-52 Scheibe B), Generator Scheibe C, Marke AUF-52.
