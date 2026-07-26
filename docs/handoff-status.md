@@ -9416,3 +9416,50 @@ ist und es niemand gemerkt haette.
 
 **Ballbesitz: Generator (AUF-78) und Evaluator (Waechter-Blindstelle) — beide gleichzeitig, sie
 beruehren einander nicht.**
+
+
+## EVALUATOR 26.07. — Reichweite der Wächter-Blindstelle gemessen (Auftrag `…waechter-blindstelle…`, nur Messung)
+
+Drei Fragen, Zahl gegen Zahl. Beleg-Sperre nicht angefasst, `scripts/` null Zeilen, kein Commit-Gegenbeweis nötig (Q2 aus dem Code).
+
+**Q1 — wie viele Läufe getroffen (65 Aufrufe im `waechter.log`):**
+- **45 echte Prüfläufe** (39 grün · 3 rot · 3 unvollständig)
+- **10 gesunde Skips** (`Lauf aktiv`): 6 Alt-Format ohne pid, 4 mit pid
+- **7 gelungene Selbstheilungen** (`WARNUNG …zurueckerobert`)
+- **3 stumme** (`OHNE lebenden Halter (nicht eroberbar)`, exit 2)
+- **Entscheidend:** alle 3 stummen tragen **keinen Commit** (bare `- -`) → **0 Code-Commits ohne Gate-Deckung** bis jetzt. Realer Schaden bislang = null verpasste Prüfläufe, 3 No-op-Skips.
+
+**Q2 — schluckt der Hook den exit 2? JA, vollständig (aus dem Code, definitiv).** `scripts/hooks/post-commit`
+Z.22–23: `nohup "$WURZEL/scripts/waechter.sh" >/dev/null 2>&1 &` + `exit 0`. Ausgabe nach `/dev/null`,
+Lauf im Hintergrund, Hook gibt **immer 0**. → Der als „sieht nie wie Erfolg aus" gebaute **exit 2
+erreicht den einzigen realen Auslöse-Pfad nicht**; am Commit ist nichts zu sehen. Einzige Spur ist die
+Log-Zeile (sie WIRD geschrieben — forensisch auffindbar, aber kein Alarm). **Das ist der stumme, nicht
+der laute Zustand.**
+
+**Q3 — heilt er aus einer nativen Shell? JA — empirisch 7×.** Der Log trägt **zwei Kontexte mit ~2 h
+Uhr-Versatz**: die **13:xx-Einträge (nativ, `rm` erlaubt) erobern zurück** (die 7 WARNUNG-Zeilen), die
+**11:xx-Einträge (Cowork-Brücke, `unlink` verboten) enden stumm** (die 3 nicht-eroberbar). Mein eigener
+Kontext auf dem Mount: **`rm -rf` UND `mv` funktionieren** (Scratch-Test, nicht die Beleg-Sperre).
+→ **Der Schaden ist begrenzt und transient:** eine stehende Sperre räumt der **nächste native Commit**;
+sie bleibt nur über **aufeinanderfolgende Cowork-Brücke-Commits** stehen. **NICHT „seit 13:42 tot".**
+Aktuell steht eine (pid **76**, tot); der nächste native Commit räumt sie.
+
+**Was ich NICHT gemessen habe (ehrlich benannt):** ich konnte die `unlink`-Sperre **nicht direkt
+reproduzieren** — mein Bash-Kontext ist nativ (rm erlaubt), nicht die Cowork-Brücke. Für den
+Fehler-Kontext stütze ich mich auf deine Messung + die 11:xx-Log-Evidenz. **Direkt belegt** habe ich nur,
+dass **`mv` unlink-frei und auf dem Mount erlaubt** ist — relevant für den Fix, den der Generator baut.
+
+**Owning der Abnahme-Lücke:** meine AUF-80-FREIGABE prüfte `erobern()` im `/tmp`-Mini-Repo, wo `rm`
+erlaubt ist — nicht auf dem unlink-verbotenen Mount, wo der Wächter real läuft. Die Drei-Fälle-**Logik**
+stimmt; die Umgebungsabhängigkeit von `rm` lag außerhalb des Geprüften. Deckt sich mit „dieser Weg war
+nicht Gegenstand der Prüfung".
+
+**Größe des Postens (deine Entscheidungsfrage):** **kleiner, nicht der dringendste** — der Wächter ist
+nicht tot, er heilt beim nächsten nativen Commit (7× belegt). ABER Q2 hebt die Priorität etwas: weil der
+Hook exit 2 schluckt, wäre ein etwaiger Verlust von Gate-Deckung (ein Cowork-**Code**-Commit auf
+stehender Sperre) unsichtbar — bis jetzt 0×, aber möglich. Zwei kleine, **unabhängige** Fixe drängen sich
+auf (Generator entscheidet/baut, nicht ich): **(a)** `erobern()` + trap **`mv` statt `rm -rf`** (unlink-frei,
+mv belegt-erlaubt) → heilt auch über die Cowork-Brücke; **(b)** der Hook sollte einen Wächter-Exit ≠ 0
+wenigstens sichtbar machen, statt ihn nach `/dev/null` zu schlucken.
+
+Beleg-Sperre steht unangetastet weiter da. **Ballbesitz: Planner.**
