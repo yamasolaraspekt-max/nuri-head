@@ -13915,3 +13915,64 @@ wieder gestartet. **Stand:** Arbeitsbaum sauber, `main` auf der Spitze, AUF-38 S
 Abnahme-Stapel, Scheiben 3–8 offen.
 
 **Kein Push, kein main-Merge.** **Ballbesitz: Evaluator (AUF-38 Scheibe 2).**
+
+
+## PLANNER 26.07., 23:42 (CEST) — TAGESABSCHLUSS. Achtzehn Posten, kein rotes Votum, und der letzte Akt ist eine Rueckgabe
+
+**AUF-38 Scheibe 2 FREIGEGEBEN** (`265cfe55`). Gates 1292/0, beide Artefakte byte-gleich zum
+frischen Build, K9 dreimal pixelgleich.
+
+**Er hat den Punkt geprueft, den ich benannt hatte — und mit dem richtigen Werkzeug.** Sein Satz:
+*"kein Gate faengt einen eingefrorenen Zustand"* — deshalb **von Hand am Diff**: `cardBase`,
+`kicker`, `h1` sind Klassen geworden, die hover- und Zustandsstile stehen weiter inline
+(`className` + `style={{ hover ? }}`). Dazu ein Test, der es festhaelt, und der Gegen-Beweis
+*rohe Farbe in die CSS ⇒ "jede Farbe eine Variable" rot*. **Er hat nicht das Leichte geprueft,
+sondern das, was kein Automat sieht.**
+
+**Und der letzte Akt des Tages ist eine Rueckgabe, keine Lieferung.** Der Generator hat AUF-38
+Scheibe 3 gezogen (eine Minute vor dem Feierabend) und **ohne eine Zeile Code wieder freigegeben.**
+Sein Grund, gemessen statt geschaetzt: `FachFlaeche` ist ein **Dialog**; der K9-Beleg verlangt
+Bildschirmfotos mit **geoeffnetem** Dialog, und der laesst sich nur headful oeffnen — headless
+rendert die Insel nicht, gemessen **null Reiter**. *"Ohne ihn waere die Wertgleichheit nur
+behauptet."*
+
+**Das ist der beste moegliche Tagesabschluss**, weil er dasselbe sagt wie alles andere heute:
+**niemand behauptet, was er nicht messen kann.** Ein zurueckgelegter Posten ohne Codeaenderung ist
+kein verlorener Takt — er ist der Takt, in dem jemand nicht geraten hat.
+
+**Auflage fuer die Restscheiben, auf der Tafel eingetragen:** vor dem Ziehen pruefen, ob die Datei
+einen Dialog traegt. **Wenn ja, gehoert der headful-Lauf in den Auftrag und nicht in die
+Ueberraschung.** Das ist wieder mein Fehler und derselbe wie die "20 Stellen": ich habe die Scheiben
+nach **Dateigroesse** geschnitten, nicht nach **Pruefbarkeit**.
+
+---
+
+## Bilanz 26.07.
+
+| | |
+|---|---|
+| abgenommen gesamt | **80** |
+| **heute abgenommen** | **18 — kein einziges rotes Votum** |
+| offen | 4 · **kein aktiver Posten** (Feierabend) |
+| Abnahme-Stapel | **leer** |
+| `main` | `665dd70e`, beide Kopien nachgezogen |
+| ungesicherte Arbeit | **keine** |
+| Tafel | 84 Zeilen, 0 fehlerhaft, 0 Marken |
+
+**Entschieden heute:** P2-2 Go (Verdrahtung `SzeneProjektionService`) · **Weg B** fuer das Frontend ·
+AUF-48 vor AUF-50 · Wandecke erst messen.
+
+**Offen bei Yama:** Schema-Erweiterung `RoofShape` (14 von 22 Dachformen nicht speicherbar) ·
+Erprober als vierte Rolle und sein Urteilsrang · **Eignungen** als Name und **Registry statt
+Dokument** · Bibliothek verweist auf `Product` · `git config gc.auto 0`.
+
+**Die Lehre des Tages, sechs Faelle, eine Form:** vier Casts, die die Typpruefung stilllegten · meine
+Tafelzaehlung · ein K4-Vergleich durch denselben Uebersetzer · mein Waisen-Zaehler, der
+`import type` mitzaehlte · zwei Zusagen, die eine Anzahl festnagelten · mein Auftrag mit "20
+Stellen", wo 34 standen.
+**Immer wurde die Gestalt geprueft und nicht die Wirkung.**
+*Ein Pruefer, der den Weg des Geprueften teilt, prueft nichts. Eine Zahl, die sich als Bedingung
+ausgibt, ist eine Momentaufnahme. Ein Import ist kein Aufruf. Und ein Gate faengt keinen
+eingefrorenen Zustand.*
+
+**Feierabend.**
