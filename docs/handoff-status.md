@@ -9643,3 +9643,50 @@ gezogen."** Inhalt und Kriterien unveraendert; verriegelt bleibt, was verriegelt
 stand ausschliesslich auf der Tafel. **Gemessene Kosten: rund 45 Minuten Stillstand des
 Generators** (13:32 bis 14:20), waehrend ich in derselben Zeit drei Untersuchungen geschrieben
 habe. **Ballbesitz: Generator (AUF-78), unveraendert.**
+
+
+## EVALUATOR 26.07. — Sichtprobe-Erstanwendung: Grundlinie gegen `f9c837e` (§11-Rezept, erstmals angewandt)
+
+**Gemessen gegen den benannten Commit `f9c837e`** (nicht den Arbeitsbaum). `serviert==gemessen`
+**hart belegt:** das im Browser frisch (`cache:no-store`) geladene Bundle ist **byte-identisch** zum
+f9c837e-Bundle — 1 414 020 Bytes, Prüfsumme 124512981, beide Seiten gleich. Fläche: `objekt/203`,
+**Expertenmodus**, Arbeitsbereich **Heizung**, Ebene Erdgeschoss, Werkzeug **Markieren**
+(Optionen-Zeile steht als feste Zeile).
+
+**Grundlinie Zeichenfläche — Oberkante zuerst (3 Fenstergrößen, tatsächlicher Viewport gemessen):**
+
+| Fenster | Viewport (inner) | Canvas-Oberkante | Höhe | Fensterhöhe | **Überstand** |
+|---|---|--:|--:|--:|--:|
+| 1440×900 | 1440×757 | 369 | 388 | 757 | **0** |
+| 1440×813 | 1440×670 | 369 | 301 | 670 | **0** |
+| 1024×768 | 1024×625 | **405** | 220 | 625 | **0** |
+
+**Frage 1 (trägt der Abstand die Gruppierung bei 16 Knöpfen, auch bei 1024?): JA, an beiden Breiten.**
+Werkzeugleiste = **16 Knöpfe**, Lücken `[6,21,6,6,21,6,6,6,6,6,21,6,6,6,21]` bei 1440 **und** bei 1024
+identisch → 5 Gruppen, **21 px zwischen gegen 6 px innerhalb (3,5:1)**. Bei 1024 endet die Leiste bei
+x=697 < 1024 → **kein Umbruch**, Gruppierung intakt. (Gemessen ist der **Abstand** — der laut Vorbefund
+tragende Teil —, nicht die Trennstrich-Kontrastzahl.)
+
+**Frage 2 (ragt wieder etwas unter das Fenster?): NEIN — Überstand 0 an allen drei Viewports.** Der
+Canvas schrumpft (388→301→220), statt überzulaufen. **AUF-72/73 hält nach den 291 gemergten Dateien** —
+jetzt gemessen, nicht behauptet.
+
+**Baseline-Notiz Reflow:** bei 1024 bricht oben eine Leiste um → Oberkante 369 → **405** (+36 px);
+Überstand bleibt 0. Das ist der Bezugswert, an dem AUF-38/AUF-50/AUF-66 später gemessen werden.
+
+**Konsole:** `objekt/203` erzeugt beim Laden **0 Meldungen** (keine Fehler/Warnungen). Erfassung per
+injizierten Markern als funktionierend verifiziert — der Nullbefund ist echt, nicht Erfassungsdefekt.
+
+**Ehrlich als NICHT gemessen benannt:**
+- **Gefüllte Optionen-Zeile:** der Werkzeugwechsel von „Markieren" gelang weder per Klick noch per
+  Taste (ohne den Canvas anzuklicken = Zeichen-Risiko). Die Optionen-Zeile ist eine **feste** Zeile
+  (Oberkante 369 konstant); ob eine *gefüllte* Zeile bei 1024 auf zwei Zeilen umbricht (zusätzliche
+  Oberkante), ist **nicht gemessen**.
+- **Trennstrich-Kontrast** selbst (nur der Abstand gemessen). **375 px** bewusst außerhalb (mein Rezept:
+  höhengetriebener Fall).
+- **Methodenabweichung, offen:** `objekt/203` bettet die Insel **direkt** ein (kein iframe), daher
+  Fenster-Resize statt der iframe-CSS-Technik meines Rezepts (die gilt dem Studio-Embed). Die
+  „Resize≠Viewport"-Falle trat einmal auf (Stale-Read direkt nach Resize) — gelöst, indem ich nach dem
+  Settle die tatsächliche `innerWidth×innerHeight` gelesen habe.
+
+**Grundlinie steht.** Keine Reparatur, kein Posten erfunden. **Ballbesitz: Planner.**
