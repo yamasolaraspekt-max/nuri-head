@@ -12296,3 +12296,50 @@ blockiert nichts, denn 50.1 und 50.2 kommen ohne sie aus.
 
 **Ballbesitz unveraendert:** Generator auf AUF-38 Scheibe 1 (Stilschicht im Arbeitsbaum, sechs
 Pfade), Evaluator wartet auf die AUF-38-Abnahme, Stapel leer.
+
+
+## PLANNER 26.07., 22:05 — Bedienprobe: drei Behauptungen nachgemessen, alle drei stimmen. Und ein Muster, das dreimal am selben Tag auftaucht
+
+Von Yama kam eine **Bedienprobe** gegen Buendel `022021f`: vier Ablaeufe von Hand mit Playwright,
+nichts gespeichert. Das ist keine Abnahme, sondern eine Messung **quer** zu den Posten statt
+entlang — genau das, was uns bisher fehlte. Papier: `docs/planner/bedienprobe-befunde-2026-07-26.md`.
+
+Ich habe die drei tragenden Behauptungen nicht geglaubt, sondern nachgesehen. **Alle drei stimmen,
+und zwei stehen woertlich in unseren eigenen Kommentaren.**
+
+- **Wandlaenge loest die Ecke.** `HausplanerApp.tsx:612` reicht `start` unveraendert durch und
+  rechnet nur `end`. Es gibt keine Zeile, die eine Nachbarschaft kennt — also kann keine sie
+  erhalten. **Was ich nicht gemessen habe und was zaehlt:** ob eine geloeste Ecke die Raumerkennung
+  still kippt. `zone/room` ist laut Schema ausschliesslich abgeleitet. Davon haengt ab, ob das ein
+  Komfort-Posten ist oder ein Richtigkeits-Posten, und die Messung dauert Minuten.
+- **`fangKern` ist an nichts angeschlossen.** `grep -rl fangKern` liefert zwei Dateien: den Kern
+  und seinen Test. Die Zeichenflaeche fangt selbst, mit festem 150-mm-Radius (`:825`) — fest in
+  Millimetern heisst, die Maus-Toleranz aendert sich mit dem Zoom.
+- **Werkzeug bleibt aktiv** — aber nur bei `wand`/`fenster`/`tuer`; `dach`, `decke` und `treppe`
+  springen zurueck. Die **Uneinheitlichkeit** ist der Befund, nicht das Bleiben.
+
+**Das Muster ist die eigentliche Nachricht.** Dreimal an einem Tag, drei unabhaengige Stellen:
+83 Werkzeuge aktivierbar ohne Empfaenger (heute Nachmittag gemessen) - `fangKern` gruen getestet
+und von niemandem gerufen - Teil-Identitaet aus AUF-35b gebaut, Renderer-Anteil zurueckgegeben.
+**Wir bauen zuverlaessig richtig rechnende Teile und schliessen sie nicht an.** Ein gruener Test
+beweist, dass ein Modul richtig rechnet — nicht, dass jemand es fragt. Daraus die Regel, die ich
+mir selbst aufschreibe: *ein Modul, dessen einziger Aufrufer seine eigene Testdatei ist, ist ein
+Hinweis auf einen fehlenden Empfaenger, kein Beleg fuer eine Funktion.* Das ist zaehlbar und waere
+ein besserer Waechter als jede Absichtserklaerung — Kandidat, kein Posten.
+
+**Nach §14 wird daraus nichts.** Der Test lautet *"welchen offenen Posten kann ich ohne diesen hier
+nicht abschliessen?"* — fuer alle vier Befunde: keinen. Sie kommen auf die Befundliste und warten.
+Einzige Ausnahme, die ich pruefe: faellt die Raumerkennungs-Messung schlecht aus, ist Befund 1
+keine Bedienfrage mehr, sondern falsche Zahlen aus richtig aussehender Geometrie.
+
+**Tafel:** AUF-38 **Scheibe 1** liegt im Abnahme-Stapel (Code `cca1837` - Artefakte `022021f` -
+Bericht `e944514`), AUF-38 selbst bleibt in 3a, weil Scheiben 2-8 offen sind. Deshalb stehen
+jetzt **85** AUF-Zeilen statt 84 — der Posten und seine berichtete Scheibe stehen nebeneinander;
+das ist Absicht und keine Doppelung. Marke auf **AUF-52**. Fehlerhafte Zeilen 0, genau eine Marke.
+
+**An den Evaluator (§15, Bringschuld):** AUF-38 Scheibe 1. **Nicht K9 zuerst.** Die Scheibe stellt
+nichts um, also *muss* die Seite gleich aussehen — K9 ist hier die leichteste Frage. Die wichtigste
+ist **K5: sind die `--hp-*` abgeleitet oder abgeschrieben?** Gegen-Beweis: einen Token in
+`studioDaten.ts` aendern und nachsehen, ob die CSS-Variable mitwandert. Wandert sie nicht, steht
+ein Farbwert neben `T` und altert dort still. Und **13.6**: `git status public/*` unmittelbar vor
+*und* nach der Sichtprobe — der Generator baut parallel AUF-52 in dieselbe `public/hausplaner/`.
