@@ -13149,3 +13149,50 @@ naechste Block darf auf den Kopf dieses Eintrags zeigen — ich nenne ihn, sobal
 und nach §16 als Nummer, nicht als Zweigname.
 
 **Ballbesitz:** Generator (AUF-52 Scheibe B), Evaluator wartet, Marke AUF-52.
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-52 Scheibe B (tga-heizung)
+
+**Commits:** Code `b5af4196` (`public/*` = **0 Zeilen**) · Bundle `890a3f70` (eigener zweiter Commit).
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1278 · pass 1278 ·
+fail 0`, vorher 1268) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+`store/` · `domain/` · `renderers/` · `geometry/` **null Zeilen**. **Rebuild-Beleg:**
+`Fussbodenheizung-Auslegung` im Bündel, **1** Treffer. **Klassifikation: `sichtbar`.**
+
+**Scheibe B durfte beginnen:** Scheibe A ist mit `497215c6` freigegeben — die Bedingung aus §2
+(*„Scheibe B beginnt erst, wenn A abgenommen ist"*) ist erfüllt. Zwei Takte lang habe ich sie nicht
+begonnen und den Grund gemeldet; jetzt lag er nicht mehr vor.
+
+### Zwei von drei angeschlossen
+
+- **`engine-fbh`** — sechs Eingabefelder, fünf Ergebniszahlen. Sie liefert **eigene Prüfpunkte**,
+  also zeigt die Hülle sie auch; im Panel entsteht keine Prüfung.
+- **`engine-heizkoerper`** — sieben Felder, drei Ergebnisse, darunter die **Bewertung als Text**.
+  Die Hülle gibt `String(wert)` aus, also trägt sie auch einen Satz.
+
+**Zurückgegeben: `engine-heizkreis`.** Sie nimmt eine **Liste** von Heizkreisen. Das Muster kennt nur
+einzelne Felder; aus einem Satz Feldern eine **einelementige** Liste zu bauen hieße, den Zweck der
+Engine zu verstecken — sie legt einen Verteiler mit **mehreren** Kreisen aus. Dieselbe Klasse wie die
+zwei Holz-Engines aus Scheibe A.
+
+### Eine Umbenennung, offen ausgewiesen
+
+`bewerteDeckung` nennt sein Bestehens-Merkmal **`ausreichend`**, die Hülle liest **`bestanden`**. Der
+Wert wird **unverändert durchgereicht**, nur unter dem Namen, den die Hülle kennt — testverriegelt in
+beide Richtungen, und das Original bleibt daneben stehen. **Nichts gerechnet, nichts entschieden;**
+ein eigener Grenzwert an dieser Stelle wäre ein Defekt nach AUF-33 §3a.
+
+- **K8 — der Gegenbeweis steht wie in Scheibe A auf handgeschriebenen Engine-Eingaben**, zwei Sätze
+  je Engine. **Mutation** (`ruecklauf` liest `vorlauf`) ⇒ **1 rot**. *Nach dem Fehler aus Scheibe A
+  führe ich beide Seiten des Vergleichs bewusst getrennt.*
+- **K6 — nach B: vier verfügbare Engines, vier Flächen, exakt gleich.** Kein Zustand auf Vorrat.
+- **Ein Fall mit verletztem Prüfpunkt** ist geprüft: `bestanden: false` bleibt ein gültiger Zustand
+  mit sichtbaren Zahlen, kein Fehlerbildschirm.
+
+**Stand über beide Scheiben:** von sieben Engines der Gruppen A+B sind **vier angeschlossen**
+(Treppe aus L2 mitgezählt) und **vier begründet zurückgegeben** — dreimal ein **Listeneingang**, den
+es im Modell nicht gibt, einmal eine **Ergebnisform ohne Zahlen**. Scheibe C (U-Wert · Fensterprodukt
+· Abwasser · Küche · PV) ist offen.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
