@@ -8256,3 +8256,58 @@ meine**; er steht oben vollständig, damit du ihn ändern kannst, ohne den Code 
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine Persistenz, keine Route, keine
 Migration — AUF-40 Teil B bleibt unverändert stehen. Kein Umbau des Konfigurators.
+
+---
+
+## PLANNER 26.07., 10:25 — Die Merge-Vorbereitung übernommen. Was ich entscheide und was nicht
+
+**Yama:** *„Kannst du diese Aufgabe für mich übernehmen und selber bestimmen, wann du das für
+sinnvoll hältst?"*
+
+### 1. Übernommen, und zwar vollständig
+
+**Die Vorbereitung, die Prüfung, die Beurteilung und die Bestimmung des Zeitpunkts nehme ich.**
+Yama soll nicht die Kette beobachten müssen, um zu wissen, wann ein Stand merge-fähig ist.
+
+**Erster Schritt, sofort:** der Evaluator fährt die **volle** PHP-Suite gegen `ticket_testing` —
+Auftrag liegt (`evaluator-auftrag-full-suite-vor-merge-2026-07-26.md`), **jetzt, parallel zu AUF-74.**
+
+**Zwei Zahlen habe ich ergänzt, die in seiner Prüfung fehlten:**
+
+1. **Dieselbe Suite gegen `main`.** **Ohne Vergleichsstand ist „grün" wertlos** — sind dort dieselben
+   Tests rot, hat der Branch nichts kaputt gemacht, und das ist eine völlig andere Aussage.
+2. **Die Laufzeit beider Läufe.** Eine Suite, die nach dem Merge doppelt so lange braucht, ist ein
+   Befund, auch wenn sie grün ist.
+
+### 2. Die Bedingungen, unter denen ich den Zeitpunkt für gekommen halte
+
+**Alle fünf müssen gleichzeitig gelten. Ich schreibe sie auf, bevor der Moment da ist — damit ich
+sie nicht im Moment selbst zurechtbiege.**
+
+1. **AUF-74 abgenommen** ⇒ die Layout-Inventur vom 25.07. ist **vollständig** abgearbeitet. Eine
+   inhaltliche Kante, kein Zufallsstand.
+2. **Abnahme-Stapel leer**, kein `NACHBESSERN`, keine offene Auflage.
+3. **Arbeitsbaum sauber**, kein Bau in Bewegung, **0 ungepusht**.
+4. **Volle Suite gefahren**, mit `main` als Vergleichsstand, Differenz benannt.
+5. **Keine Migration im Merge** — heute gemessen: **0**. Bleibt es dabei, ist der Deploy ein reiner
+   Code-Deploy, und der Rückweg heißt „vorherigen Stand ausrollen".
+
+**Sind alle fünf erfüllt, melde ich: der Zeitpunkt ist da — mit den Zahlen daneben, nicht mit einem
+Gefühl.**
+
+### 3. Was ich nicht übernehme, und warum es keine Bürokratie ist
+
+**Den Merge nach `main` und den Deploy führe ich nicht aus.**
+
+**Nicht, weil eine Regel es verbietet, sondern weil das Tor genau dann seinen Wert verliert.** Der
+Sinn von Tor 2 ist, dass **ein Mensch den Stand einmal ansieht, bevor er zu 3 000 Kunden geht.**
+Wenn dieselbe Instanz den Zeitpunkt bestimmt **und** ausführt, ist niemand mehr dazwischen — und der
+Schutz besteht nur noch aus meiner Sorgfalt. **Meine Sorgfalt hat heute ein Archiv gelöscht und
+fünf Aufträge ohne Marke liegen lassen.**
+
+**Ich lege Yama den Merge als eine Zeile vor, im richtigen Moment, mit den fünf Zahlen daneben.**
+Er sagt ein Wort, oder er sagt es nicht. **Das ist der ganze Aufwand, der ihm bleibt — und er ist
+der Aufwand, der die Kette trägt.**
+
+*Ich habe ihn gefragt, ob er die Grenze anders zieht. Zieht er sie anders, halte ich mich daran —
+aber ich schreibe hier auf, wofür ich argumentiert habe.*
