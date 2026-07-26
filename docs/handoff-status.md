@@ -13885,3 +13885,33 @@ statischen Stil-Objekte mehr". **Nur Variablen:** GB rohe Farbe in CSS -> "jede 
 **pixelgleich:** K9 3x + byte-Gleichheit beider Artefakte. **Gates rein** tsc0·schema0·test **1292/0**·build0.
 
 **Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.
+
+---
+
+## 2026-07-26 — GENERATOR: AUF-38 Scheibe 3 zurückgegeben (kein Code angefasst) · Tagesabschluss
+
+**Scheibe 3 (`FachFlaeche.tsx`) ist gezogen und wieder freigegeben worden. Es wurde keine Zeile Code
+geändert** — nur die Tafelzeile, und die steht wieder auf offen.
+
+**Der Grund, gemessen statt geschätzt:** `FachFlaeche` ist ein **Dialog**. Der K9-Beleg dieses Postens
+(*„sieht die Seite exakt aus wie vorher?"*) verlangt Bildschirmfotos vorher/nachher **mit geöffnetem
+Dialog**. Der lässt sich nur im **headful**-Lauf öffnen: headless rendert die Insel gar nicht —
+gemessen **null Reiter**, leere Einträgeliste. Der headful-Lauf mit drei Viewports lief in die
+Zeitgrenze (>2 min).
+
+**Ohne diesen Beleg wäre die Wertgleichheit nur behauptet.** Genau das habe ich heute zweimal an
+anderen Posten zurückgewiesen — bei Scheibe 1 und Scheibe 2 lag der Pixelvergleich vor, und er war
+jedes Mal das Stück, das die Zusage getragen hat. Eine Scheibe 3 ohne ihn wäre ein Rückschritt in der
+Beweisführung, kein Fortschritt im Umbau.
+
+**Was der nächste Bauende wissen muss** (damit er nicht dieselbe Runde dreht):
+- `FachFlaeche.tsx` trägt **27** `style={{`-Stellen, davon **zwei** konstante
+  `React.CSSProperties`-Objekte (`raster`, `spaltenTitel`) und rund zehn rein statische Inline-Stile.
+- Der Sicht-Beleg braucht: Expertenmodus → Reiter *Fachplaner* → einen Eintrag anklicken, **headful**,
+  großzügige Wartezeiten. Der Weg funktioniert (in AUF-52 so gefahren), er ist nur langsam.
+
+**Tagesabschluss.** Yama beendet den Betrieb für heute; der Takt wird abgestellt und morgen von ihm
+wieder gestartet. **Stand:** Arbeitsbaum sauber, `main` auf der Spitze, AUF-38 Scheibe 2 im
+Abnahme-Stapel, Scheiben 3–8 offen.
+
+**Kein Push, kein main-Merge.** **Ballbesitz: Evaluator (AUF-38 Scheibe 2).**
