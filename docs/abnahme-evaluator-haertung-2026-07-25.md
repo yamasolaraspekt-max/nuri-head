@@ -957,6 +957,36 @@ jetzt liest knopf() die eine Zustandsregel und gesperrt ist in vier Merkmalen ab
 eine Zeile loest keine Sperre (K7) und ruehrt Undo nicht an (K2/K8). Kein Ueberlauf, und die Gliederung
 traegt der Abstand auch bei 16 Knoepfen (mein AUF-68-Kriterium, gemessen bestanden). Mutationsfest.
 
+## AUF-62 - 'Ansicht einpassen' rechnet, der letzte geplant-Knopf tut etwas (bae4596, Bundle 38a855e) - FREIGABE
+
+**Reihenfolge:** erst blind gegen bae4596 gemessen (/tmp + Browser), dann Generator-Bericht.
+**Spur A** . **Klasse: sichtbar** - Sichtprobe Teil der Abnahme. Schliesst den 5. geplant-Knopf aus AUF-44.
+
+- **Umfang (git show --name-status):** 6 Dateien - NEU dashboard/einpassen.ts + einpassen.test.ts;
+  3 geerbte Tests M (geplantKnoepfe/opGruppen/eineWerkzeugzeile - einpassen ist nicht mehr geplant);
+  M HausplanerApp.tsx.
+- **K2/K9 - Ansicht ist Anzeige, kein Modell:** einpassen.ts ist rein (grep getState/applyCommand/
+  dispatch/document/window = leer); bbox() wird gelesen, nicht geaendert; kein Befehl, kein Speicher-
+  status (Test K9). store/domain/geometry/renderers: null Zeilen.
+- **Gates im Auszug:** schema 0 . test **1051/1051, 0 skip** (1034->1051) . tsc 0 . build ok.
+  17 einpassen-Subtests - der Test RECHNET NACH (jeder Weltpunkt via aufSchirm() gegen die Buehne):
+  6 Kanten (leer/Split-stageBreite/y-Spiegelung/Nullflaeche/Grenzen 0.02-1/Rand 40px), unbekannter
+  Knotentyp uebersprungen, K10 Knopf nicht mehr geplant.
+- **3 geerbte Zusagen nachgezogen, keine ersatzlos gestrichen** (AUF-44 'EIN geplant'->null; AUF-68/70
+  einpassen faellt aus der Sperrmenge). Testzahl +17 netto, keine verschwunden.
+- **Gegen-Beweis (/tmp-Kopie):** y-Spiegelung in der Pan-Formel gebrochen ('+ mitteY*zoom' -> '-') ->
+  **7 rot** (K3x2, K6, Mitte-auf-Mitte, K5, K7x2). Deckt Generator 'Mutation C 7 rot' exakt.
+  (A Rand 0 = 1 rot, B stageBreite->breite = 1 rot laut Bericht - ich fuhr die staerkste.)
+- **Sichtprobe (iframe 1440, fixture u-dach):** Knopf 'Ansicht einpassen' enabled (nicht mehr geplant);
+  Klick -> Zoom **12% -> 6%**, der ganze U-Grundriss wird ins Bild gerahmt. Der Knopf tut jetzt etwas.
+- **Rueckgabe (Bestand, nicht AUF-62):** die Buehne ragt 227 px unter das Fenster - vorbestehend;
+  einpassen.ts ist reine Rechnung und aendert die Buehnenhoehe nicht. Als Bestand-Beobachtung vermerkt.
+
+**Urteil: FREIGABE.** Der letzte geplant-Knopf rechnet jetzt eine reine Fit-View (Anzeige, kein Modell,
+K9), sechs Kanten sind nachgerechnet-verriegelt (nicht per Screenshot behauptet), die y-Spiegelung ist
+mutationsfest, und am Schirm rahmt der Klick den Grundriss. Die drei geerbten Zusagen sind ohne Verlust
+neu formuliert.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -998,6 +1028,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-69    ea60d9e  FREIGABE: kein Tor-1 (keine Route/Migration) ; Rechte aus Blade in Controller::hausplanerRechte(?User) - kein Nutzer=='' Minimum (Reflection-Test verzahnt) ; Regel #9: Blade-Compile 'No syntax errors', PHP-Suite 44 grün (BladeKompiliert+HausplanerRechte), objekt/203 laedt + data-rechte aus Controller + Konsole ohne Fehler ; tsc 0 / test 1020/1020 ; W-Login-Konsolencheck in YS-Sitzung fuehrbar+grün
   AUF-68    b5c231e  FREIGABE: opLbl weg (grep 0), sichtbare Gruppenwoerter 0, aber role=group+aria-label je Gruppe (K6, Zahn: aria-label leer=1 rot) ; 11 Knoepfe 6/4/1 keine Sperre/Reihenfolge geaendert ; schema 0/test 1020/1020/tsc 0/build ok ; Sichtprobe 1440: 3 Gruppen (Ansicht 6/Bearbeiten 4/Messen&Export 1), keine Woerter, docOvf 0, Abstand 21px zwischen vs 6px innerhalb ; eigene Kontrast-Rechnung Trennstrich 1.09-1.14:1 << 3:1 (Rueckgabe bestaetigt)
   AUF-70    4c1ce13  FREIGABE (Spur A): knopf() liest opKnopfBild (eine Wahrheit, K6), gesperrt ablesbar (K4/K5) ; K2 Undo unberuehrt ; schema 0/test 1033/1033/tsc 0/build ok ; 13 Subtests ; Gegen-Beweis gesperrt=frei 3 rot (6 ueber Suite) ; Sichtprobe 1440+1024: eine Zeile 16 Knoepfe (2.3.6.4.1), docOvf 0 beide, gesperrt vs frei 4 Werte, 2D/Split/3D Wort ; AUF-68-Kriterium: Abstand 21px zwischen allen Gruppen (auch 2 neue) vs 6px innerhalb, NICHT verengt bei 16
+  AUF-62    bae4596  FREIGABE (Spur A): einpassen.ts reine Fit-View (K2/K9 kein Modell/Befehl, grep leer) ; schema 0/test 1051/1051/tsc 0/build ok ; 17 Subtests rechnen via aufSchirm() nach, 6 Kanten ; 3 geerbte Zusagen ohne Verlust ; Gegen-Beweis y-Spiegelung gebrochen = 7 rot ; Sichtprobe u-dach: Knopf enabled (nicht geplant), Klick Zoom 12%->6% rahmt Grundriss ; Rueckgabe Buehne 227px unter Fenster (Bestand)
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
