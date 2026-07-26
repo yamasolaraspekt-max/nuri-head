@@ -1082,6 +1082,42 @@ gemessen), der Verschub-Erhalt aus AUF-72 bleibt, und die Rechnung ist rein + mu
 Damit ist AUF-72 als Ganzes abgenommen (FREIGABE, Auflage erfuellt). Meine Ursachen-Fehldeutung
 offengelegt - der Befund stimmte, die Diagnose nicht.
 
+## AUF-71 - eine Beschreibung fuer 'gesperrt', sechs Flaechen eine Quelle (04062fe, Bundle 38723e7) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 04062fe gemessen (/tmp + Browser + eigene Kontrast-Rechnung), dann
+Bericht. **Klasse: sichtbar.** Fix meiner Zustands-Inventur (die 0.4-vs-0.6-Spaltung).
+
+- **Umfang:** 7 Dateien - NEU dashboard/gesperrtStil.ts + Test; M EngineFlaeche/FachFlaeche/
+  HausplanerApp/GeschossFlaeche/WerkzeugGruppenMenue. K2 null Modell.
+- **Eine Quelle:** gesperrtStil.ts liest den gesperrten Zustand EINMAL aus opKnopfBild (AUF-59) und
+  uebersetzt die Token in Werte; opKnopfBild bleibt token-rein. **Alle 6 Flaechen importieren
+  gesperrtStil**, KEINE traegt mehr eigene 0.4/0.45/0.6 (grep leer). Die Spaltung ist aufgeloest (K5).
+- **Gates:** schema 0 . test **1082/1082, 0 skip** (1073->1082) . tsc 0 . build ok. 9 Subtests.
+- **Meine Haertungsforderung erfuellt (Gegenbeweis ueber alle Flaechen):** K8-Mutation an der EINEN
+  Quelle (opKnopfBild gesperrt=frei) -> **9 rot, verteilt ueber DREI Testdateien** (AUF-59: gesperrt
+  >=2 Merkmale/schlaegt aktiv; AUF-70: gesperrt!=Nachbar/Cursor luegt nicht; AUF-71: Werte aus
+  opKnopfBild/vier Werte unveraendert/zwei Textfarben). Beweist: die Flaechen lesen wirklich aus einer
+  Quelle, nicht zufaellig gleiche Zahlen.
+- **Kontrast selbst gerechnet (Frontend-Linse, zwei Textfarben begruendet):** faint auf hair2 =
+  **2.03:1** (Bildzeichen, darf verblassen), muted auf hair2 = **4.54:1** (Beschriftung, WCAG 1.4.3
+  verlangt 4,5:1 - knapp erfuellt). Deckt Generator 2,03/4,54 auf die Stelle.
+- **WCAG-Haertung:** jede der 6 Flaechen traegt ein nicht-farbliches, nicht zeigerabhaengiges Merkmal;
+  der Menue-Eintrag (WerkzeugGruppenMenue) hat in diesem Posten aria-disabled bekommen (war die einzige
+  Flaeche ohne Zustandsattribut). K4: Icon-Zeile unveraendert (die vier AUF-70-Werte).
+- **Sichtprobe (Regel 11, iframe 1440, decke-treppe, Geschoss-Flaeche):** '- Loeschen' (gesperrt =
+  letztes Geschoss) traegt jetzt **Deckkraft 0.6** (war in meiner Inventur 0.4), disabled, not-allowed.
+  Die Spaltung ist auf meiner Inventur-Flaeche am Schirm aufgeloest.
+
+- **Ehrlich, Beweis gilt gegen mich:** meine Zustands-Inventur nannte VIER Flaechen; der Generator mass
+  SECHS (ich uebersah WerkzeugGruppenMenue bei 0.45 und den Speichern-Knopf) und drei Deckkraft-Werte
+  (0.4/0.45/0.6), nicht zwei. Mein Befund stimmte in der Richtung (die Spaltung existiert), war aber
+  unvollstaendig - eine Inventur per grep findet, was sie kennt; die 0.45 stand nicht auf meiner Liste.
+
+**Urteil: FREIGABE.** Die sechs gesperrt-Beschreibungen sind auf EINE Quelle (opKnopfBild via
+gesperrtStil) gezogen, ohne opKnopfBild token-unrein zu machen; die zwei Textfarben sind kontrast-
+begruendet, die WCAG-Haertung deckt alle sechs, und der Gegenbeweis rot ueber drei Dateien belegt die
+eine Quelle. Genau die Vereinheitlichung, die aus meiner Inventur kam - vollstaendiger, als ich sie sah.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -1127,6 +1163,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-72    2e56fcb  FREIGABE MIT AUFLAGE: Messansatz (ResizeObserver statt innerHeight-96, K3 grep 0), Verschub ueberlebt (K6 verriegelt), Ersatz 700/Min 200 (Mutation 2 rot); schema 0/test 1060/1060/tsc 0/build ok ; ABER Sichtprobe widerlegt 'Ueberstand 0': konstant 18px bei 900 UND 813 im Maximal-Leisten-Zustand (Optionen-Zeile, Canvas-top 369 vs Generator 323) - Kern-Bug 227->18px, Rest via einpassen/Verschub erreichbar, kein Blocker; Auflage Optionen-Zeile einrechnen o. 'Ueberstand 0' praezisieren
   AUF-65    5ac811c  FREIGABE: STATUS_LABEL.ok 'Freigegeben'->'Vollstaendig' (Schluessel unveraendert K4), leere Liste keine Ueberschrift (K6), (b) zurueckgegeben weil Praemisse falsch (Schritte aus Szene seit AUF-39, gezaehlte Eintraege stillgelegt) ; schema 0/test 1068/1068/tsc 0/build ok ; 8 Subtests ; Gegen-Beweis Freigabe-Wort zurueck K3 rot ; Sichtprobe 1440x900 decke-treppe: Plakette 'Vollstaendig' kein 'Freigegeben', keine leere Aufgaben-Ueberschrift ; K3-grep-Selbstkorrektur (Treffer alle legitim)
   AUF-73    088c186  FREIGABE + schliesst AUF-72-Auflage: sichtbareHoehe=floor(min(hoehe,fenster-oben)) klemmt auf Sichtbares (abgerundet) ; schema 0/test 1073/1073/tsc 0/build ok, 14 Subtests inkl. AUF-72 K6 Verschub gruen ; Gegen-Beweis floor->ceil rot ; Sichtprobe Regel 11 (u-dach Wand top 369): 900 Ueberstand 0 (war 18), 813 Ueberstand 0 ; ehrlich: mein Befund 18px stimmte, meine Ursache (Optionen-Zeile) nicht - Wurzel war studio.blade min-height, Fix ursachen-robust
+  AUF-71    04062fe  FREIGABE (schliesst Zustands-Inventur): gesperrtStil.ts EINE Quelle (liest opKnopfBild), alle 6 Flaechen lesen sie, eigene 0.4/0.45/0.6 = 0 (grep) ; schema 0/test 1082/1082/tsc 0/build ok, 9 Subtests ; Haertungsforderung: K8-Mutation an der Quelle = 9 rot ueber 3 Dateien (AUF-59/70/71) ; Kontrast selbst gerechnet faint 2.03 (Bild)/muted 4.54 (Label WCAG 1.4.3) ; WCAG jede Flaeche nicht-farblich, Menue-Eintrag aria-disabled ; Sichtprobe Geschoss-Loeschen 0.6 (war 0.4) ; ehrlich: Inventur fand 4, Generator 6 (0.45 uebersehen)
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
