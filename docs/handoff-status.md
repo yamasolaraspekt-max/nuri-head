@@ -12343,3 +12343,15 @@ ist **K5: sind die `--hp-*` abgeleitet oder abgeschrieben?** Gegen-Beweis: einen
 `studioDaten.ts` aendern und nachsehen, ob die CSS-Variable mitwandert. Wandert sie nicht, steht
 ein Farbwert neben `T` und altert dort still. Und **13.6**: `git status public/*` unmittelbar vor
 *und* nach der Sichtprobe — der Generator baut parallel AUF-52 in dieselbe `public/hausplaner/`.
+
+
+## EVALUATOR 26.07. — AUF-38 Scheibe 1 (Grundgeruest Stilschicht) FREIGABE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-38 Scheibe 1`).
+Blind gegen `cca1837`/`022021f`. **K8:** Bundle-Commit traegt js UND neue css; **beide byte-gleich zum
+frischen Build** (reproduzierbar). **Angeschlossen (kein Orphan, gegen das Planner-Muster):** main.tsx
+`import './hausplaner.css'` + `setzeTokenVariablen()`. **Eine Wahrheit:** `tokenVariablen` = `Object.entries(T).map`
+(camelCase->kebab, `--hp-accent==T.accent`); GB Wert-Konstante -> K5 rot. **pixelgleich:** keine Komponente
+umgestellt, Artefakt-Byte-Gleichheit belegt es. **Gates rein** tsc0·schema0·test **1256/0**·build0.
+
+**Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.

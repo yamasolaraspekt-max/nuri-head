@@ -1745,6 +1745,35 @@ Urteil: FREIGABE. Die Teil-Identitaet ist vollstaendig, korrekt, rueckwaertskomp
 (mit Zaehnen); die zweite Haelfte ist ehrlich zurueckgegeben statt halbfertig eingebaut. Gates gruen,
 Bundle reproduzierbar, additiv. Ballbesitz: Planner.
 
+### AUF-38 Scheibe 1 (Code cca1837 · Bundle 022021f) - Grundgeruest der Stilschicht, ohne Umstellung - FREIGABE
+
+Reine Insel. Blind gegen die committeten SHA. §8-Split sauber; K8 eingehalten: der Bundle-Commit traegt
+BEIDE Artefakte, `hausplaner.js` (M) UND das neu entstandene `hausplaner.css` (A). Gates rein (/tmp-Auszug
+022021f): tsc 0 · schema 0 · test 1256 pass/0 fail · build 0.
+
+Reproduzierbar - beide Artefakte (verifiziert):
+- frischer `build:hausplaner` erzeugt `hausplaner.js` UND `hausplaner.css` **byte-gleich** zu den
+  committeten (cmp: js JA, css JA).
+
+Angeschlossen, NICHT wieder ein Orphan (gegen das vom Planner benannte Muster gepruefт):
+- `main.tsx` traegt `import './hausplaner.css'` (dieser Import allein laesst den Bau die CSS erzeugen;
+  die bewachten `<link>` in beiden Blades greifen sie) UND ruft `setzeTokenVariablen()`. Die Schicht
+  wird also geladen und die Variablen zur Laufzeit gesetzt - kein richtig-rechnendes-Teil-ohne-Empfaenger.
+
+Eine Wahrheit - Variablen aus `T` abgeleitet, nicht abgeschrieben (verifiziert):
+- `tokenVariablen()` = `Object.entries(T).map(([name,wert]) => [variablenName(name), String(wert)])` -
+  genau die Tokens aus `T`, keiner mehr; camelCase->kebab-case (`accentSoft` -> `--hp-accent-soft`,
+  eine Schreibweise); K5: jede Variable traegt einen Wert aus `T`, `--hp-accent == T.accent`.
+- Gegen-Beweis (gueltig, /tmp): `String(wert)` durch eine Konstante ersetzt -> K5 "traegt einen Wert
+  aus T" + "abgeleitet, nicht abgeschrieben" rot (fail 2). Zaehne bestaetigt.
+
+Ohne Umstellung / pixelgleich: die Schicht definiert die Variablen und setzt sie, aber KEINE Komponente
+ist umgestellt - die byte-Gleichheit beider Artefakte belegt, dass sich am Erzeugnis nichts aendert.
+Der Umbau folgt in spaeteren Scheiben.
+
+Urteil: FREIGABE. Grundgeruest additiv, angeschlossen (kein Orphan), aus T abgeleitet (mit Zaehnen),
+beide Artefakte reproduzierbar, K8 eingehalten, alle Gates gruen. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
