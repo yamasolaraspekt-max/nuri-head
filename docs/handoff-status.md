@@ -6432,3 +6432,41 @@ Tastaturbedienung schlechter machen, nicht sauberer.
 
 **Ballbesitz: Generator (AUF-62, danach AUF-65 · Nachtrag: Bericht zu AUF-70) ·
 Evaluator (AUF-70, danach die Zustands-Inventur).**
+
+---
+
+## <= EVALUATOR — ZUSTANDS-INVENTUR gesperrt vs frei (26.07., Planner-Bitte 4f3e3b9)
+
+Nach dem AUF-70-Votum (031b07d), gegen den neuen Stand gemessen (grep an app/ + Token aus studioDaten.ts).
+
+**Frage 3 - wie viele Beschreibungen des gesperrten Aussehens gibt es? VIER, nicht eine:**
+1. **opKnopfBild** (dashboard/opKnopfZustand.ts:60) - Icon-Zeile/OpBtn/knopf(): Deckkraft **0.6** +
+   Grund `hair2` + Icon `faint` + Cursor `not-allowed`. Die durch AUF-59/70 konsolidierte Wahrheit -
+   aber nur fuer diese eine Flaeche.
+2. **Werkzeug-Navi + Geschoss-Loeschen** (HausplanerApp.tsx:1339, GeschossFlaeche.tsx:169): Deckkraft
+   **0.4** + `not-allowed`. Andere Deckkraft (0.4 != 0.6), kein Grund/Icon-Token.
+3. **EngineFlaeche Berechnen** (EngineFlaeche.tsx:101-102): KEIN opacity - stattdessen Grund `hair2` +
+   Textfarbe `muted` (#697079) + `not-allowed`. Dritte, wieder andere Kodierung (Farbe statt Deckkraft).
+4. **FachFlaeche-Felder** (FachFlaeche.tsx:71) + **Listen-Eintrag** (HausplanerApp.tsx:2175): Farbe
+   `faint`/`muted` + `not-allowed`, kein opacity. Cursor + Farbe.
+-> Die 'eine Wahrheit' (opKnopfBild) deckt NUR die Icon-Zeile. App-weit stehen 4 uneinheitliche
+   Beschreibungen nebeneinander - auffaelligster Bruch: Deckkraft 0.6 (Icon-Zeile) gegen 0.4 (Navi/Geschoss).
+
+**Frage 1 - wo unterscheidet sich gesperrt messbar von frei?** Auf ALLEN geprueften Flaechen mindestens
+Cursor (`not-allowed`) + ein visuelles Merkmal. Staerkste Unterscheidung: Icon-Zeile (4 Merkmale, AUF-59/70).
+Schwaechste: die farb-lastigen (FachFlaeche-Felder, Listen-Eintrag). Kein Feld/Knopf ist mehr pixelgleich.
+
+**Frage 2 - etwas das gesperrt aussieht aber frei ist (oder umgekehrt)?** Der einzige pixelgleiche Fall
+(Icon-Zeile knopf(): gesperrt sah aus wie frei) ist mit AUF-70 behoben. **Kein weiterer pixelgleicher
+Fall gefunden.** Rest-Risiko: die Flaechen, die den Zustand vor allem ueber FARBE kodieren (FachFlaeche-
+Felder, Listen-Eintrag) - WCAG-Wachpunkt 'Zustand nicht allein ueber Farbe'; sie tragen aber zusaetzlich
+`not-allowed` und (bei Feldern) die leere/readOnly-Erscheinung, also nicht rein farbcodiert.
+
+**Fazit (Befund, kein Auftrag von mir):** AUF-59/70 haben die Icon-Zeile auf eine Beschreibung gezogen;
+der Rest der App nicht. Ein Folge-Posten koennte den gesperrt-Look app-weit vereinheitlichen (die
+0.4-vs-0.6-Spaltung aufloesen, die farb-lastigen Flaechen an dieselbe Regel haengen) - analog zu AUF-59
+fuer die Icon-Zeile. **Nicht dringend:** jede Flaeche unterscheidet gesperrt messbar; es geht um
+Konsistenz + WCAG-Haertung, nicht um einen offenen Defekt.
+
+**Ballbesitz: Planner.**
+
