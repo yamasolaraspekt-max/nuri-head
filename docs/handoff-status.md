@@ -12992,3 +12992,55 @@ Leerzustand („Noch nicht gerechnet…"), **kein waagerechter Überlauf**. In d
 `Sparren-Vorbemessung` auf **verfügbar**, die drei zurückgegebenen auf **in Entwicklung**.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## PLANNER 26.07., 22:45 (CEST) — AUF-52 Scheibe A: eins von vier, und die drei Rueckgaben treffen genau meine Zaehlung
+
+*Zeitkonvention, damit die Drift nicht wiederkommt: Ueberschriften in **CEST** = Commit-Zeit aus
+`git log` (UTC) **+ 2 Stunden**. Der Eintrag um 20:45 stand in UTC — beide Formen sind richtig,
+aber nur eine ist einheitlich.*
+
+**Bericht:** Code `644d7be`, Artefakt `e47ef915`. **Eins von vier angeschlossen**
+(`engine-sparren`), drei mit Messung zurueckgegeben.
+
+**Die drei Rueckgaben sind der eigentliche Ertrag.** `engine-holzmengen` und `engine-holzbauteile`
+erwarten eine **Holzliste** — und die gibt es im Modell nicht: `grep` ueber `domain/`, `store/`,
+`app/` = **0 Treffer**; sie entsteht ausschliesslich *innerhalb* der geometry-Module.
+`engine-schifter` liefert eine blosse Zeichenkette statt eines Ergebnisobjekts mit `bestanden` und
+Zahlen. **Er hat nicht drei Panels gebaut, die leer bleiben, sondern gemessen, warum sie leer
+blieben.** Alle drei stehen `in_entwicklung` mit Grund, testverriegelt.
+
+**Das trifft genau meine Zaehlung von heute Nachmittag.** 28 von 128 Modulen der Insel haben als
+einzigen Aufrufer ihre eigene Testdatei; ich hatte elf davon als AUF-52 "bestellt" gefuehrt. **Jetzt
+ist gemessen, dass mindestens drei davon nicht angeschlossen werden koennen, weil ihnen der
+Eingang fehlt — nicht der Empfaenger.** Das ist eine andere Krankheit als die 83 Werkzeuge ohne
+Empfaenger, und ich hatte beide in einen Topf geworfen.
+
+**Und die fehlende Holzliste hat in Yamas Objektmodell bereits ihren Platz:** sie ist ein
+**Mengenergebnis**, und §15 seiner Architekturergaenzung sieht dafuer je Objekt einen
+`QuantityCalculator` vor. Die Rueckgabe ist damit kein offenes Ende, sondern ein benannter
+Anschlusspunkt an eine Architektur, die noch nicht beschlossen ist. **Auf die Befundliste, kein
+Posten (§14).**
+
+**Sein eigener Fehler, und er hat ihn selbst gemeldet** — das ist der Teil, der mir am meisten
+sagt: *"Der erste K4-Vergleich schickte BEIDE Seiten durch denselben Uebersetzer. Die Mutation
+blieb gruen — eine verfaelschte Feldzuordnung war unsichtbar. Ein Vergleich, der beide Seiten durch
+denselben Defekt schickt, beweist nichts."* Jetzt steht die Engine-Eingabe von Hand daneben,
+Mutation **2 rot**.
+
+**Das ist dieselbe Krankheit wie meine vier Casts und wie meine Tafelzaehlung**, die die *Form*
+prueft statt die *Wirkung*. Drei unabhaengige Faelle an einem Tag, in denen ein Pruefer schweigt,
+weil er durch dieselbe Stelle laeuft wie das Gepruefte. **Das ist kein Zufall mehr, das ist ein
+Muster mit einem Namen:** *ein Pruefer, der den Weg des Geprueften teilt, prueft nichts.*
+
+Dazu drei geerbte L2-Zusagen nachgezogen, die die **Zahl 1** festnagelten statt der Absicht —
+gemessen wird jetzt die Gleichheit, nicht eine Konstante. Und die siebte und achte Kommentar-Falle.
+
+**An den Evaluator (§15, Bringschuld):** AUF-52 Scheibe A liegt im Stapel.
+**Zuerst die Selbstanzeige nachmessen, nicht den Bau.** Eine gemeldete Reparatur ist eine Meldung,
+kein Beleg — selbst verfaelschen, selbst zaehlen, und pruefen, ob die beiden Seiten des Vergleichs
+wirklich getrennte Wege nehmen. **Danach die drei Rueckgaben** (existiert die Holzliste wirklich
+nirgends?). **Zuletzt erst** `engine-sparren`. §13.6 gilt.
+
+**Ballbesitz:** Evaluator. Generator faehrt mit AUF-52 Scheibe B fort (tga-heizung), Marke bleibt
+auf AUF-52. Tafel 85 Zeilen (Posten + berichtete Scheibe nebeneinander), 0 fehlerhaft, eine Marke.
