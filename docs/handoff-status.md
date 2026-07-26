@@ -10560,3 +10560,86 @@ vollstaendig geschlossen. Ballbesitz: Planner.
 
 **Staffel bereinigt (nur AUF-Nummern): AUF-78 ✓ · AUF-81 ✓ · AUF-82 ✓** abgenommen; AUF-79 war Spur B
 (kein Evaluator). Offen (warten auf Generator): AUF-66 (baut gerade), AUF-76, AUF-77. Evaluator Standby.
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-66 (Ein Klick zurück in die Arbeit)
+
+**Commits:** Code `c3de05a` (`public/*` = **0 Zeilen**, §8 2b) · Bundle `3d54ad0` (eigener zweiter
+Commit). HEAD vorher/nachher verglichen.
+
+**Gates (Exit-Codes, selbst gefahren):** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0**
+(`tests 1129 · pass 1129 · fail 0`, vorher 1114) · `build` **0**.
+**Volle PHP-Suite: 789 grün (2729 Zusagen)** — 15 neue Insel-Zusagen, 1 neue PHP-Zusage.
+
+**Klassifikation: `sichtbar`.**
+
+### Die eine Abweichung, offen begründet: ein Verweis statt einer `role="button"`-Fläche
+
+Der Auftrag sagt „der Listeneintrag wird eine **Schaltfläche**". Gebaut ist ein **Verweis** (`<a href>`).
+**Das Ziel ist eine Adresse, kein Vorgang.** Ein Verweis bringt von sich aus mit, was eine nachgebaute
+Schaltfläche erst nachbilden müsste: Fokus, Enter, das Ziel in der Statuszeile, mittlere Maustaste, „in
+neuem Tab öffnen", Lesezeichen. Eine `role="button"`, die `location` setzt, nimmt all das weg und gibt
+nichts dafür. **Die eine Sache, die dem Verweis fehlt — Auslösen mit der Leertaste — ist ergänzt**, damit
+Kriterium 3 buchstäblich erfüllt ist und nicht nur sinngemäß. **Enter wird bewusst NICHT zusätzlich
+abgefangen:** er käme sonst zweimal an, einmal vom Verweis und einmal vom Tastaturzweig.
+
+### Die Kriterien, gemessen
+
+- **K2 — ein Klick genügt, und er führt zum EIGENEN Projekt.** Gemessen am **echten Render-Pfad**
+  (`react-dom/server`), nicht am Quelltext: **die geteilte Adresse — der häufigste Fehler solcher Listen —
+  steht im Quelltext genauso richtig da wie die getrennte.** Eintrag `203` ⇒ Ziel trägt `203`; der Bereich
+  vor dem zweiten Eintrag enthält `203` **nicht**. Zusätzlich serverseitig: jede Adresse ist identisch mit
+  `route('hausplaner.objekt.seite', <eigene id>)`, und keine zwei Einträge teilen sich ein Ziel.
+- **K3 — Tastatur.** Leertaste mit `preventDefault` (sonst rollt die Seite, statt zu öffnen), Enter vom
+  Verweis. **Fokussierbare Elemente: 0 Einträge ohne Liste → 3 bei drei Projekten** (Differenz 3, gemessen
+  über den Render-Pfad). Der dominante Eintrag ist **erstes fokussierbares Element der Startfläche**.
+  *Genau gesagt, damit es niemand falsch liest:* seitenweit steht davor die Kopfzeile mit
+  „Übersicht"/„Expertenmodus" — die gab es vorher schon und dieser Posten fasst sie nicht an.
+- **Der Fokusring ist NICHT neu.** `.hp-studio :focus-visible` deckt das ganze Studio ab, und die
+  Startfläche liegt darin. Ein zweiter Ring wäre eine zweite Wahrheit über dieselbe Sache — wiederverwendet
+  statt gebaut, testverriegelt.
+- **K4 — die Insel baut keine Adresse.** `route()` im Controller, gelesen in der Insel. **Null Treffer im
+  ausgelieferten Inselcode.** *Buchstäblich null im ganzen Verzeichnis ist nicht erreichbar* — und zwar aus
+  einem Grund, der mit dem Kriterium nichts zu tun hat: `__tests__/rechte.test.ts` liest die Blade-Vorlage
+  über ihren **Pfad auf der Platte** (`resources/views/…`). Das ist kein Ziel, das jemand anklickt.
+  **Statt die Messung stillschweigend zu verkleinern, ist der eine Treffer namentlich testverriegelt** —
+  samt Prüfung, dass er nur gelesen und nie als Ziel gesetzt wird.
+- **K5 — Leerzustand unverändert.** Beide Sätze aus AUF-40 Teil A zeichengleich, **kein einziger Verweis**,
+  und das Wort „Weiterarbeiten" erscheint im Inhalt nicht: es gibt nichts fortzusetzen, also verspricht es
+  auch niemand. Im Browser nachgemessen.
+- **K6 — Mutation (der Gegenbeweis).** Ohne Adresse bleibt der Eintrag **sichtbar**, wird aber **keine**
+  Schaltfläche: kein Verweis, kein Zeiger, kein Tastaturweg. Ein Eintrag mit Ziel und einer ohne stehen
+  nebeneinander, ohne sich zu verwechseln. **Die Liste wegen einer fehlenden Adresse ganz zu verwerfen wäre
+  der größere Schaden** — AUF-78 hat sie überhaupt erst wahr gemacht; ein Projekt, das es gibt, verschweigt
+  man nicht, weil ein Verweis fehlt. Deshalb ist `adresse` freiwillig und nicht Pflichtfeld.
+- **K7/K8 — Umfang.** `routes/` **0 Zeilen** · `database/migrations/` **0 Zeilen** · K4-Schichten
+  (`store`/`domain`/`geometry`/`renderers`) **0 Zeilen** · `app/Http/` **genau das eine neue Feld** (6
+  Zeilen, davon 5 Begründung). Studio-Route und `studio.blade.php` unberührt.
+- **K10 — Sichtprobe (Teil der Abnahme, nicht Anhang).** Drei Viewports, Echtdaten-Form:
+  **1440×900** Unterkante 327 px · **1024×768** Unterkante **327 px bei 768 px Fensterhöhe — ohne Scrollen
+  sichtbar** · **375×780** Unterkante 520 px. **Kein waagerechter Überlauf** in allen dreien. Drei Verweise,
+  drei verschiedene Ziele.
+
+**Die untere Karte „Weiterarbeiten" ist fort.** Zwei Wege zur selben Handlung sind kein Angebot, sondern
+eine Frage, die der Nutzer beantworten muss, bevor er arbeiten darf — und der untere wäre der schlechtere
+gewesen, weil er das Projekt erst noch erfragen müsste. `PROJ[2]` bleibt in den Daten: stillgelegt, nicht
+gelöscht, wie bei den Werkzeugen und den Demo-Projekten.
+
+**Offengelegt: zwei geerbte AUF-40-Zusagen wurden rot** und sind nachgezogen — „drei Karten" steht jetzt auf
+zwei, und der Grund der entfernten Karte ist mit ihr gegangen. **Die Absicht beider ist unverändert:** keine
+zwei Karten führen zur selben Handlung, und eine Karte ohne Ziel sagt warum. Die Zahl war nie das Kriterium.
+Ergänzt um die Prüfung, dass die entfernte Karte **keinen Rest** hinterlassen hat. Ebenso umbenannt:
+`test_k3_…genau_vier_felder…` → `…genau_die_fuenf_noetigen_felder…`; das Bündel trägt ein Feld mehr, weil die
+Fläche eine Sache mehr tut.
+
+### ZURÜCKGEGEBEN, nicht nebenbei gebaut — ein Befund außerhalb des Auftrags
+
+**Die linke Navigation trägt weiterhin einen Eintrag „Weiterarbeiten"** (`HausplanerStudio.tsx:146-150`), und
+**alle drei Projekt-Einträge dort — Sanierungsplan, Hausplaner, Weiterarbeiten — rufen `gehGeführt(1)`.**
+Das ist derselbe Fehler, den AUF-40 Teil A aus den Karten entfernt hat („drei Versprechen, ein Ziel"), eine
+Ebene weiter: **„Weiterarbeiten" beginnt dort den geführten Ablauf bei Schritt 1, statt ein Projekt zu
+öffnen.** Im DOM gemessen (die zweite Fundstelle fiel erst bei der Sichtprobe auf, nicht im Quelltext-Test).
+Der Auftrag sagt zur Navigation nichts — **also gemeldet und nicht angefasst**, kein Beifang.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator** (Staffel-Punkt F).
