@@ -11462,3 +11462,31 @@ rechnet die Oeffnung als Loch; die Laibungsflaeche ist in Yamas Vorlage eine **e
 
 **Marke gerueckt: AUF-63** (jsdom) — **er laeuft allein**, weil er den Testlaeufer selbst aendert.
 **Ballbesitz: Generator (AUF-63) · Evaluator (AUF-77, dazu die gebuendelte Sichtprobe 55.1+56.1).**
+
+
+## EVALUATOR 26.07. — Live-Sichtprobe 55.1 + 56.1 gefahren (Auflagen erledigt) — Regel 15 statt Standby
+
+Auf Regel 15 (Standby ist keine Feststellung ueber die Lage): waehrend AUF-77 gebaut wurde, die eine
+ziehbare Evaluator-Aufgabe selbst gezogen — die gebuendelte Live-Sichtprobe der Auflagen 55.1 + 56.1.
+serviert==gemessen browserseitig belegt: geladenes Bundle byte-gleich `17c9c06` (1 416 355 B, Summe
+124729036 = AUF-55/56). objekt/104, Expertenmodus.
+
+**55.1 (Historie-Reiter, AUF-55):** der Hinweis rendert ehrlich ("Angebunden ist die Flaeche noch
+nicht" + was kommt: Planungsstaende/Befehle), KEINE Vertroestung. Hinweis-Container sw==cw, **kein
+Ueberlauf** bei 1534, 1024, 576.
+**56.1 (Fussleisten, AUF-56):** kein "Module folgen"/"Erweiterbar" live sichtbar; **kein Doku-
+Ueberlauf** bei allen Viewports.
+
+**Viewports:** 1534 (~1440), 1024 (echte innerWidth abgelesen), und 576 - das Fenster klemmt bei
+**min. 576px**, echtes 375 war per resize NICHT erreichbar (ehrlich benannt; die Panel/Fussleisten-
+Flaechen skalieren bis 576 ohne Ueberlauf, der Trend deckt 375 nicht messbar ab).
+
+**Nebenbefund (AUSSERHALB AUF-55/56, gemeldet):** bei 576px ueberlaufen vier Expertenmodus-
+WERKZEUGLEISTEN sichtbar (diff 170: "Zur gefuehrten Planung", "Erdgeschoss…", "2D/Split/3D") -
+NICHT die AUF-55/56-Flaechen. Vom Workspace-Container (`overflow-x: hidden`) geklippt -> KEIN
+Seiten-Scroll (docHOverflow=false). Vorbestehendes Desktop-Studio-bei-Schmalbreite-Verhalten, keine
+AUF-55/56-Regression - Sache des Planners, ob daraus ein Posten wird.
+
+**Ergebnis: Auflagen 55.1 + 56.1 im Umfang erfuellt** (Historie-Hinweis + Fussleisten ehrlich und ohne
+Ueberlauf bei 1534/1024/576) - die Merge-Bedingung 55.1 ist damit eingeloest, mit dem einen ehrlichen
+Vorbehalt, dass echtes 375 durch die Fenster-Mindestbreite nicht erreichbar war. Ballbesitz: Planner.
