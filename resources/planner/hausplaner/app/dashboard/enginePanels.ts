@@ -25,6 +25,11 @@ import { berechneSparren, type SparrenEingabe, type SparrenErgebnis } from '../.
 // AUF-52 Scheibe B (tga-heizung) — wieder statisch, wieder ohne Rechnung in dieser Datei.
 import { fbhAuslegung, type FbhEingabe } from '../../geometry/fbhAuslegung';
 import { bewerteDeckung, type BetriebsBedingung } from '../../geometry/heizkoerperLeistung';
+// AUF-52 Scheibe C (der Rest) — vier statische Importe, wieder ohne Rechnung in dieser Datei.
+import { berechneUw, type UwEingabe } from '../../geometry/fensterProdukt';
+import { pruefeAbwasser, type AbwasserEingabe } from '../../geometry/abwassergefaelle';
+import { bewerteArbeitsdreieck, type Arbeitsdreieck } from '../../geometry/kuecheArbeitsdreieck';
+import { pvSchnellBelegung, type PvEingabe } from '../../geometry/pvBelegung';
 
 /** Ein Eingabefeld der Fläche. Beschreibt das Feld — es rechnet nichts. */
 export interface EngineFeld {
@@ -273,6 +278,98 @@ export const ENGINE_PANELS: readonly EnginePanel[] = [
       return { ...r, bestanden: r.ausreichend } as unknown as EngineErgebnis;
     },
   },
+  {
+    engineId: 'engine-fensterprodukt',
+    titel: 'Fenster Uw',
+    zweck: 'Rechnet den Waermedurchgang des ganzen Fensters aus Glas, Rahmen und Randverbund.',
+    grundlage: 'DIN EN ISO 10077-1 — Uw = (Ag·Ug + Af·Uf + lg·Psi) / (Ag + Af)',
+    felder: [
+      { schluessel: 'breiteMm', label: 'Fensterbreite', einheit: 'mm', pflicht: true, vorgabe: 1200 },
+      { schluessel: 'hoeheMm', label: 'Fensterhoehe', einheit: 'mm', pflicht: true, vorgabe: 1400 },
+      { schluessel: 'uf', label: 'Uf Rahmen', einheit: 'W/(m²·K)', pflicht: true, vorgabe: 1.3 },
+      { schluessel: 'ug', label: 'Ug Glas', einheit: 'W/(m²·K)', pflicht: true, vorgabe: 0.6 },
+      { schluessel: 'ansichtsbreiteMm', label: 'Rahmen-Ansichtsbreite', einheit: 'mm', pflicht: true, vorgabe: 70 },
+      {
+        schluessel: 'psiRandverbund', label: 'Psi Randverbund', einheit: 'W/(m·K)', pflicht: false,
+        hinweis: 'Leer ⇒ die Engine setzt ihre Vorgabe fuer eine warme Kante.',
+      },
+    ],
+    ergebnisFelder: [
+      { schluessel: 'uw', label: 'Uw', einheit: 'W/(m²·K)' },
+      { schluessel: 'agM2', label: 'Glasflaeche', einheit: 'm²' },
+      { schluessel: 'afM2', label: 'Rahmenflaeche', einheit: 'm²' },
+      { schluessel: 'lgM', label: 'Sichtbarer Glasumfang', einheit: 'm' },
+    ],
+    berechne: (werte) => berechneUw(alsUwEingabe(werte)) as unknown as EngineErgebnis,
+  },
+  {
+    engineId: 'engine-abwasser',
+    titel: 'Abwasser-Gefaelle',
+    zweck: 'Prueft das Gefaelle einer liegenden Leitung gegen das Mindestgefaelle ihrer Nennweite '
+      + 'und nennt den Hoehenverlust ueber die Laenge.',
+    grundlage: 'Mindestgefaelle je Nennweite; Hoehenverlust = Gefaelle x Laenge',
+    felder: [
+      { schluessel: 'dn', label: 'Nennweite DN', pflicht: true, vorgabe: 100 },
+      { schluessel: 'laenge', label: 'Leitungslaenge horizontal', einheit: 'm', pflicht: true, vorgabe: 8 },
+      {
+        schluessel: 'gefaelle', label: 'Gefaelle', einheit: '%', pflicht: false,
+        hinweis: 'Leer ⇒ die Engine rechnet mit dem Mindestgefaelle der Nennweite.',
+      },
+    ],
+    ergebnisFelder: [
+      { schluessel: 'gefaelle', label: 'Verwendetes Gefaelle', einheit: '%' },
+      { schluessel: 'mindestGefaelle', label: 'Mindestgefaelle', einheit: '%' },
+      { schluessel: 'hoehenverlust', label: 'Hoehenverlust', einheit: 'mm' },
+    ],
+    berechne: (werte) => pruefeAbwasser(alsAbwasserEingabe(werte)) as unknown as EngineErgebnis,
+  },
+  {
+    engineId: 'engine-kueche',
+    titel: 'Kuechen-Arbeitsdreieck',
+    zweck: 'Misst die Wege zwischen Spuele, Kochstelle und Kuehlgeraet und bewertet das Dreieck.',
+    grundlage: 'Arbeitsdreieck der Kuechenplanung — Summe der drei Wege und Einzelstrecken',
+    felder: [
+      { schluessel: 'spueleX', label: 'Spuele X', einheit: 'mm', pflicht: true, vorgabe: 0 },
+      { schluessel: 'spueleY', label: 'Spuele Y', einheit: 'mm', pflicht: true, vorgabe: 0 },
+      { schluessel: 'kochenX', label: 'Kochen X', einheit: 'mm', pflicht: true, vorgabe: 1800 },
+      { schluessel: 'kochenY', label: 'Kochen Y', einheit: 'mm', pflicht: true, vorgabe: 0 },
+      { schluessel: 'kuehlenX', label: 'Kuehlen X', einheit: 'mm', pflicht: true, vorgabe: 900 },
+      { schluessel: 'kuehlenY', label: 'Kuehlen Y', einheit: 'mm', pflicht: true, vorgabe: 2200 },
+    ],
+    ergebnisFelder: [
+      { schluessel: 'wegSpKo', label: 'Spuele ↔ Kochen', einheit: 'mm' },
+      { schluessel: 'wegKoKu', label: 'Kochen ↔ Kuehlen', einheit: 'mm' },
+      { schluessel: 'wegKuSp', label: 'Kuehlen ↔ Spuele', einheit: 'mm' },
+      { schluessel: 'summe', label: 'Summe der Wege', einheit: 'mm' },
+    ],
+    berechne: (werte) => bewerteArbeitsdreieck(alsArbeitsdreieck(werte)) as unknown as EngineErgebnis,
+  },
+  {
+    engineId: 'engine-pv',
+    titel: 'PV-Schnellbelegung',
+    zweck: 'Legt Module auf eine Dachflaeche und nennt Anzahl, Leistung und Flaechennutzung.',
+    grundlage: 'Rasterbelegung mit Randabstand und Modulspalt; hoch- und querformatig verglichen',
+    felder: [
+      { schluessel: 'dachLaenge', label: 'Dachbreite horizontal', einheit: 'mm', pflicht: true, vorgabe: 10000 },
+      { schluessel: 'dachBreite', label: 'Dachlaenge in Falllinie', einheit: 'mm', pflicht: true, vorgabe: 6000 },
+      { schluessel: 'modulBreite', label: 'Modulbreite', einheit: 'mm', pflicht: true, vorgabe: 1134 },
+      { schluessel: 'modulHoehe', label: 'Modulhoehe', einheit: 'mm', pflicht: true, vorgabe: 1762 },
+      { schluessel: 'modulLeistung', label: 'Modul-Nennleistung', einheit: 'Wp', pflicht: true, vorgabe: 440 },
+      { schluessel: 'randabstand', label: 'Randabstand', einheit: 'mm', pflicht: false },
+      { schluessel: 'modulabstand', label: 'Spalt zwischen Modulen', einheit: 'mm', pflicht: false },
+    ],
+    ergebnisFelder: [
+      { schluessel: 'orientierung', label: 'Ausrichtung' },
+      { schluessel: 'spalten', label: 'Spalten' },
+      { schluessel: 'reihen', label: 'Reihen' },
+      { schluessel: 'moduleGesamt', label: 'Module gesamt' },
+      { schluessel: 'kWp', label: 'Leistung', einheit: 'kWp' },
+      { schluessel: 'dachFlaecheM2', label: 'Dachflaeche', einheit: 'm²' },
+      { schluessel: 'belegteFlaecheM2', label: 'Belegte Flaeche', einheit: 'm²' },
+      { schluessel: 'flaechennutzung', label: 'Flaechennutzung', einheit: '%' },
+    ],
+    berechne: (werte) => pvSchnellBelegung(alsPvEingabe(werte)) as unknown as EngineErgebnis,
+  },
 ];
 
 /**
@@ -338,6 +435,54 @@ export function alsBetriebsBedingung(werte: Record<string, string>): BetriebsBed
     raumtemp: zahl('raumtemp') ?? 0,
     ...(zahl('n') !== undefined ? { n: zahl('n') } : {}),
     ...(zahl('normUebertemperatur') !== undefined ? { normUebertemperatur: zahl('normUebertemperatur') } : {}),
+  };
+}
+
+/** Eine Zahl aus einem Feld, oder `undefined` bei leer — die gemeinsame Lesehilfe aller Uebersetzer. */
+function feldZahl(werte: Record<string, string>, k: string): number | undefined {
+  const roh = (werte[k] ?? '').trim();
+  if (roh === '') return undefined;
+  const n = Number(roh);
+  return Number.isFinite(n) ? n : undefined;
+}
+
+/** AUF-52 Scheibe C — Fenster-Uw. Sechs Zahlen, gelesen und weitergereicht. */
+export function alsUwEingabe(werte: Record<string, string>): UwEingabe {
+  return {
+    breiteMm: feldZahl(werte, 'breiteMm') ?? 0,
+    hoeheMm: feldZahl(werte, 'hoeheMm') ?? 0,
+    uf: feldZahl(werte, 'uf') ?? 0,
+    ug: feldZahl(werte, 'ug') ?? 0,
+    ansichtsbreiteMm: feldZahl(werte, 'ansichtsbreiteMm') ?? 0,
+    ...(feldZahl(werte, 'psiRandverbund') !== undefined ? { psiRandverbund: feldZahl(werte, 'psiRandverbund') } : {}),
+  };
+}
+
+/** AUF-52 Scheibe C — Abwassergefaelle. Ohne Gefaelle-Angabe setzt die Engine das Mindestgefaelle. */
+export function alsAbwasserEingabe(werte: Record<string, string>): AbwasserEingabe {
+  return {
+    dn: feldZahl(werte, 'dn') ?? 0,
+    laenge: feldZahl(werte, 'laenge') ?? 0,
+    ...(feldZahl(werte, 'gefaelle') !== undefined ? { gefaelle: feldZahl(werte, 'gefaelle') } : {}),
+  };
+}
+
+/** AUF-52 Scheibe C — das Arbeitsdreieck aus sechs Koordinaten. Drei Punkte, nicht drei Annahmen. */
+export function alsArbeitsdreieck(werte: Record<string, string>): Arbeitsdreieck {
+  const punkt = (p: string) => ({ x: feldZahl(werte, `${p}X`) ?? 0, y: feldZahl(werte, `${p}Y`) ?? 0 });
+  return { spuele: punkt('spuele'), kochen: punkt('kochen'), kuehlen: punkt('kuehlen') };
+}
+
+/** AUF-52 Scheibe C — PV-Schnellbelegung. */
+export function alsPvEingabe(werte: Record<string, string>): PvEingabe {
+  return {
+    dachLaenge: feldZahl(werte, 'dachLaenge') ?? 0,
+    dachBreite: feldZahl(werte, 'dachBreite') ?? 0,
+    modulBreite: feldZahl(werte, 'modulBreite') ?? 0,
+    modulHoehe: feldZahl(werte, 'modulHoehe') ?? 0,
+    modulLeistung: feldZahl(werte, 'modulLeistung') ?? 0,
+    ...(feldZahl(werte, 'randabstand') !== undefined ? { randabstand: feldZahl(werte, 'randabstand') } : {}),
+    ...(feldZahl(werte, 'modulabstand') !== undefined ? { modulabstand: feldZahl(werte, 'modulabstand') } : {}),
   };
 }
 

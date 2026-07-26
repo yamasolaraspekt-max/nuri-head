@@ -133,12 +133,12 @@ test('die Flaeche rechnet nicht, solange ein Pflichtfeld fehlt', () => {
 test('K6: die Zahl der verfuegbaren Engines ist EXAKT die Zahl der angeschlossenen', () => {
   const verfuegbar = FAEHIGKEITEN.filter((f) => f.art === 'engine' && f.zustand === 'verfuegbar');
   assert.equal(verfuegbar.length, ENGINE_PANELS.length);
-  assert.equal(verfuegbar.length, 4, 'nach Scheibe B: Treppe + Sparren + FBH + Heizkoerper');
+  assert.equal(verfuegbar.length, 8, 'nach Scheibe C: acht von dreizehn angeschlossen');
 });
 
 // --- K7: die drei Rueckgaben sind benannt und schlafen weiter -------------------------------------------
 test('K7: die drei zurueckgegebenen Engines bleiben `in_entwicklung` — mit Grund, ohne Vertroestung', () => {
-  for (const id of ['engine-holzmengen', 'engine-holzbauteile', 'engine-schifter', 'engine-heizkreis']) {
+  for (const id of ['engine-holzmengen', 'engine-holzbauteile', 'engine-schifter', 'engine-heizkreis', 'engine-uwert']) {
     const e = FAEHIGKEITEN.find((f) => f.id === id)!;
     assert.equal(e.zustand, 'in_entwicklung', `${id} darf nicht auf Vorrat verfuegbar stehen`);
     assert.equal(enginePanel(id), undefined, `${id} hat keine Flaeche`);

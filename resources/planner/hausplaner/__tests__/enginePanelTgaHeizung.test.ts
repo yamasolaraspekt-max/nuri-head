@@ -85,10 +85,10 @@ test('K3: in den beiden neuen Flaechen steht keine Rechnung', () => {
 });
 
 // --- K6 / K7 ------------------------------------------------------------------------------------------
-test('K6: vier verfuegbare Engines, vier Flaechen — exakt gleich', () => {
+test('K6: verfuegbare Engines und Flaechen — exakt gleich', () => {
   const verfuegbar = FAEHIGKEITEN.filter((f) => f.art === 'engine' && f.zustand === 'verfuegbar');
   assert.equal(verfuegbar.length, ENGINE_PANELS.length);
-  assert.equal(verfuegbar.length, 4);
+  assert.equal(verfuegbar.length, 8);
 });
 
 test('K7: `engine-heizkreis` ist zurueckgegeben — Listeneingang, wie die zwei Holz-Engines', () => {

@@ -128,15 +128,21 @@ export function EngineFlaeche({ panel, gruppe, zustand, zurueck, onZurueck }: Pr
             ) : (
               <>
                 {/* Gesamturteil — Wort UND Zeichen, nicht nur Farbe. */}
-                <div style={{
-                  display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 12,
-                  padding: '9px 12px', borderRadius: 10,
-                  background: ergebnis.bestanden ? T.okSoft : T.errSoft,
-                  color: ergebnis.bestanden ? T.okInk : T.errInk, fontWeight: 700, fontSize: 13,
-                }}>
-                  <span>{ergebnis.bestanden ? '✓' : '✕'}</span>
-                  <span>{ergebnis.bestanden ? 'Alle Prüfungen bestanden' : 'Eine Prüfung ist nicht bestanden'}</span>
-                </div>
+                {/* AUF-52 Scheibe C: **Die Plakette nur, wenn die Engine ein Bestehens-Merkmal
+                    liefert.** `berechneUw` und `pvSchnellBelegung` rechnen Werte aus — sie bestehen
+                    nichts. Eine Plakette „nicht bestanden" waere dort eine **erfundene Bewertung**;
+                    die Huelle zeigt, was da ist, und wo nichts ist, steht nichts. */}
+                {typeof ergebnis.bestanden === 'boolean' && (
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 12,
+                    padding: '9px 12px', borderRadius: 10,
+                    background: ergebnis.bestanden ? T.okSoft : T.errSoft,
+                    color: ergebnis.bestanden ? T.okInk : T.errInk, fontWeight: 700, fontSize: 13,
+                  }}>
+                    <span>{ergebnis.bestanden ? '✓' : '✕'}</span>
+                    <span>{ergebnis.bestanden ? 'Alle Prüfungen bestanden' : 'Eine Prüfung ist nicht bestanden'}</span>
+                  </div>
+                )}
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 14 }}>
                   {panel.ergebnisFelder.map((f) => (
