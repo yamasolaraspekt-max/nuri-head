@@ -9385,3 +9385,34 @@ AUF-78 direkt **AUF-66** („Letztes Projekt fortsetzen"), das ohne echte Projek
 fortsetzen koennte.
 
 **Ballbesitz: Generator** (AUF-78). Evaluator: Stapel leer, naechstes Votum ist AUF-78.
+
+
+## PLANNER 26.07., 13:55 — Fortschritt gezaehlt, zwei kaputte Tafelzeilen repariert, ein Befund am Waechter
+
+**Fortschritt, von Hand gezaehlt** (die Automatik ist AUF-79 und ist **nicht gebaut** — die Seite
+sagt das selbst, in der ersten Zeile): **65 von 83 Posten abgeschlossen = 78,3 %.**
+Probe nach dem AUF-79-Kriterium: 65 Archiv + 1 abgenommen + 1 aktiv + 0 in Pruefung + 10 offen +
+6 gesperrt = **83**, und beide Dateien fuehren zusammen **83** AUF-Zeilen. Die Summe geht auf.
+
+**Beim Zaehlen zwei kaputte Zeilen gefunden und repariert** (`098e282`): AUF-21 trug **sechs**
+Spalten, AUF-75 **sieben** — ein Nachtrag und eine doppelte Rollenzelle standen als eigene Zellen.
+Kein Wort geloescht, nur einsortiert, 106 Zeilen vorher wie nachher. **Der Punkt ist nicht die
+Kosmetik:** AUF-79 soll aus genau diesen zwei Dateien zaehlen, und eine Zeile mit sechs Spalten
+haette die Zaehlung still um eins verfehlt. Jetzt tragen **alle 83** AUF-Zeilen exakt fuenf Spalten.
+**Das gehoert als Kriterium in AUF-79** — wer zaehlt, prueft zuerst die Form der Quelle.
+
+**Befund am Waechter — an den Evaluator gegeben, nicht selbst zu Ende untersucht.**
+Log 13:42: `uebersprungen OHNE lebenden Halter (nicht eroberbar)`. Gemessen: die Sperre
+`docs/befunde/.waechter-laeuft` steht noch (pid 76, geboren 13:35 = mein Commit `ec7f22d`);
+`erobern()` beginnt mit `rm -rf`, der EXIT-Trap ebenso — und **ueber die Cowork-Bruecke ist
+`unlink` auf dem Mount verboten**. Beide `rm` scheitern still, `mkdir` scheitert danach, exit 2.
+**Das ist kein verspaeteter Einwand gegen die Abnahme von AUF-80:** die Selbstheilung ist richtig
+gedacht, sie haengt nur an einem Werkzeug, das an einer Stelle fehlt, und dieser Weg war nicht
+Gegenstand der Pruefung. Auftrag liegt:
+`docs/auftraege/evaluator-auftrag-waechter-blindstelle-2026-07-26.md`. **Die entscheidende Frage
+darin ist die dritte** — heilt er sich beim naechsten Commit aus einer echten Shell? Sie
+entscheidet, ob der Schaden auf Planner-Commits begrenzt ist oder ob der Waechter seit 13:42 tot
+ist und es niemand gemerkt haette.
+
+**Ballbesitz: Generator (AUF-78) und Evaluator (Waechter-Blindstelle) — beide gleichzeitig, sie
+beruehren einander nicht.**
