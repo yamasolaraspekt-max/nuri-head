@@ -12918,3 +12918,77 @@ sondern eine Auflage an einen bestehenden. Stufe 3 nach 50.3, mit der Dependency
 
 **Ballbesitz:** Generator AUF-52 Scheibe 1 (sieben Dateien im Baum), Stapel leer, Marke AUF-52.
 Tafel 84 Zeilen, 0 fehlerhaft, eine Marke.
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-52 Scheibe A (dach-zimmerei)
+
+**Commits:** Code `644d7be` (`public/*` = **0 Zeilen**) · Bundle `e47ef915` (eigener zweiter Commit).
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1268 · pass 1268 ·
+fail 0`, vorher 1256) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+`store/` · `domain/` · `renderers/` · **`geometry/` null Zeilen** — die Engines werden gelesen, nicht
+geändert. **Rebuild-Beleg:** `Sparren-Vorbemessung` im Bündel, **1** Treffer.
+**Klassifikation: `sichtbar`.**
+
+### Eins von vier — und das ist das Ergebnis, nicht der Rest
+
+Der Auftrag sagt es vorweg: *„Ein Auftrag, der zwölf von zwölf meldet, ist verdächtiger als einer,
+der neun meldet und drei begründet zurückgibt."* Gemessen sind es hier **eins von vier**.
+
+**Angeschlossen: `engine-sparren`** — neun Eingabefelder, elf Ergebniszahlen, Grundlage sichtbar
+(Eurocode 5, Schneelast nach DIN EN 1991-1-3), **statischer** Import wie AUF-33 §3b verlangt.
+
+**Zurückgegeben — mit Messung, nicht mit Einschätzung:**
+
+| Engine | Grund |
+|---|---|
+| `engine-holzmengen` | nimmt eine **Holzliste**. Die gibt es im Modell **nicht**: `grep` über `domain/`, `store/`, `app/` = **0 Treffer**; sie entsteht nur *innerhalb* der geometry-Module. |
+| `engine-holzbauteile` | dieselbe Lage, dieselbe Liste. |
+| `engine-schifter` | liefert eine **bloße Klassifikation als Zeichenkette** — kein Ergebnisobjekt mit `bestanden` und Zahlen. Die Hülle könnte es nur zeigen, wenn ich eine Ergebnisform **erfinde**. |
+
+*Ohne bildbaren Eingang wäre jedes Feld ein Platzhalter — und §4 verbietet genau das.* Alle drei
+bleiben `in_entwicklung` **mit Grund**, testverriegelt, damit sie niemand still nachträgt.
+
+- **K3 — keine Rechnung im Panel:** gemessen am **Code ohne Kommentare und ohne Zeichenketten**;
+  kein `Math.*`, keine Einheitenumrechnung, keine gerechnete Zahl.
+- **Eine Änderung an der Hülle, und sie ist keine Rechnung:** die Prüfliste wird nur gezeigt, **wenn
+  die Engine eine liefert**. `SparrenErgebnis` hat `bestanden`, aber keine Prüflisten-Einträge. Eine
+  im Panel zu bilden wäre eine Rechnung im Panel — genau das verbietet AUF-33 §3a.
+- **K6 — `verfuegbar` genau für das Gebaute:** die Zahl der verfügbaren Engines ist **exakt** die
+  Zahl der angeschlossenen (2 nach Scheibe A), nicht eine feste Zahl.
+
+### Mein eigener Fehler — und er war der wichtigste Fund des Postens
+
+Der erste K4-Vergleich stellte `panel.berechne(werte)` gegen
+`berechneSparren(alsSparrenEingabe(werte))`. **Beide Seiten liefen durch denselben Übersetzer.** Die
+Mutation aus Kriterium 8 — eine verfälschte Feldzuordnung — blieb damit **grün**, und ich hätte einen
+Gegenbeweis gemeldet, der keiner ist. *Ein Vergleich, der beide Seiten durch denselben Defekt
+schickt, beweist nichts.*
+
+Jetzt steht die Engine-Eingabe **von Hand geschrieben** daneben, in zwei Sätzen mit verschiedenen
+Werten. **Mutation danach: 2 rot.**
+
+**Drei geerbte L2-Zusagen nachgezogen:** sie nagelten die Zahl **1** fest. Die Absicht war nie die
+Zahl, sondern *nur das Angeschlossene ist verfügbar* — geprüft wird jetzt die **Gleichheit**.
+
+**Siebte und achte Kommentar-Falle dieses Zyklus:** eine Zusage verbot `import(` und traf den
+Kommentar, der erklärt, warum es keinen gibt; eine andere hielt die Norm-Angabe *„Durchbiegung
+L/300"* in einem Anzeigetext für eine Rechnung.
+
+### Zwischenfall beim Commit — gemeldet, nicht übergangen
+
+Ein **verwaister `.git`-Lock** (0 Bytes, 127 s alt, kein laufender git-Prozess) hat den ersten
+Commit-Versuch abgebrochen. Regelkonform **mit `mv` beiseite geschoben, nicht gelöscht**
+(`.git/_locks_beiseite/2026-07-26/`). **Vor dem zweiten Versuch im Log geprüft, dass der Commit
+nicht durchgegangen war** — HEAD hatte sich inzwischen bewegt, und ein blind wiederholter Commit
+wäre der AUF-75-Fehler gewesen.
+
+**Der Bericht kam einen Takt später als der Code:** `docs/handoff-status.md` war mit **+93 Zeilen**
+einer anderen Instanz gestaged. Hätte ich angehängt und per Pfad committet, hätte mein Commit ihren
+Text mitgenommen. **Gewartet statt eingesammelt.**
+
+**Sichtprobe 1440 und 375:** Fläche offen, neun Eingaben mit Vorbelegung, ehrlicher Ergebnis-
+Leerzustand („Noch nicht gerechnet…"), **kein waagerechter Überlauf**. In der Schiene steht
+`Sparren-Vorbemessung` auf **verfügbar**, die drei zurückgegebenen auf **in Entwicklung**.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
