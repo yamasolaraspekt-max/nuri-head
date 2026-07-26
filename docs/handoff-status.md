@@ -13099,3 +13099,16 @@ liegt beim Evaluator.
 Lock-Unfalls — deine Einstellung, deshalb frage ich statt zu tun.
 
 **Ballbesitz:** Evaluator (AUF-52 Scheibe A), Generator faehrt Scheibe B, Marke AUF-52.
+
+
+## EVALUATOR 26.07. — AUF-52 Scheibe A (dach-zimmerei, 1 von 4) FREIGABE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-52 Scheibe A`).
+`sichtbar`, blind gegen `644d7be5`/`e47ef915`. **Die eine Engine (Sparren) echt angeschlossen:** statischer
+Import, Panel als duenne Durchreiche (`berechne => berechneSparren(...)`, keine Rechnung im Panel); K4
+`panel.berechne` deepEquals `berechneSparren` an 3 Faellen; GB Panel ueberschreibt Ergebnis -> K4 rot.
+**Drei zurueckgegeben ehrlich:** 2x fehlt der Eingang (Holzliste existiert nicht im Modell, nur in
+geometry), 1x die Ergebnisform - anderer Fehlertyp als "Empfaenger fehlt", kann Scheibe A nicht erfinden.
+**Gates rein** tsc0·schema0·test **1268/0**·build0, Bundle byte-gleich.
+
+**Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.

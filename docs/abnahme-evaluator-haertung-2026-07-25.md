@@ -1774,6 +1774,33 @@ Der Umbau folgt in spaeteren Scheiben.
 Urteil: FREIGABE. Grundgeruest additiv, angeschlossen (kein Orphan), aus T abgeleitet (mit Zaehnen),
 beide Artefakte reproduzierbar, K8 eingehalten, alle Gates gruen. Ballbesitz: Planner.
 
+### AUF-52 Scheibe A (Code 644d7be5 · Bundle e47ef915) - dach-zimmerei: 1 von 4 angeschlossen, 3 begruendet zurueckgegeben - FREIGABE
+
+`sichtbar`, reine Insel. Blind gegen die committeten SHA. §8-Split sauber. Gates rein (/tmp-Auszug
+e47ef915): tsc 0 · schema 0 · test 1268 pass/0 fail · build 0 · Bundle byte-gleich (reproduzierbar).
+
+Die EINE angeschlossene Engine (Sparren) - echt angeschlossen, keine zweite Rechnung (verifiziert):
+- statischer Import `berechneSparren` (bewusst KEIN dynamischer Import - `import(variable)` ueberlebt
+  das Vite-Bundling nicht zuverlaessig). Das Panel ist eine duenne Durchreiche:
+  `berechne: (werte) => berechneSparren(alsSparrenEingabe(werte))`. **Keine Rechnung im Panel** - jede
+  Zahl entsteht in der Engine; eine Zahl, die im Panel entstuende, waere ein Defekt.
+- K4 (drei Eingabefaelle: Vorgabe, knapper Querschnitt, hohe Schneelast): `panel.berechne(werte)`
+  deepEquals `berechneSparren(...)` - "reicht durch, rechnet nicht nach".
+- Gegen-Beweis (gueltig, /tmp): das Panel ein Ergebnisfeld ueberschreiben lassen (`schrittmass: 999`)
+  -> K4 an allen drei Faellen rot (fail 5). Die Durchreiche/eine-Wahrheit hat Zaehne.
+- Eingabefelder beschreiben, was die Engine entgegennimmt; Vorbelegung KOMMT aus der Engine-Doku
+  (keine eigene Annahme der Flaeche); die Norm steht sichtbar.
+
+Die DREI zurueckgegebenen - ehrlich, mit Messung (nicht verschwiegen, nicht halb angeschlossen):
+- Begruendet zurueckgegeben: zweimal fehlt der EINGANG (die Holzliste, die zwei Engines erwarten,
+  existiert im Modell nicht - null Treffer ueber domain/store/app, sie entsteht nur INNERHALB der
+  geometry-Module), einmal die Ergebnisform. Das ist ein anderer Fehlertyp als "Empfaenger fehlt" -
+  hier fehlt der Eingang, und das kann eine Scheibe A nicht erfinden (Operanden-Gate).
+
+Urteil: FREIGABE. Die angeschlossene Engine ist echt verdrahtet und rechnet nicht selbst (mit Zaehnen),
+die drei nicht-anschliessbaren sind mit gemessenem Grund zurueckgegeben statt halb eingebaut. Gates
+gruen, Bundle reproduzierbar, additiv. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
