@@ -9530,3 +9530,52 @@ gegen den Arbeitsbaum · der einzige zulaessige Parallelfall bleibt **einer baut
 anderen, bereits committeten Posten ab** — abnehmen ist kein Bauen, es aendert den Baum nicht.
 
 **Ballbesitz: Generator (AUF-78) und Evaluator (Waechter-Blindstelle).**
+
+
+## PLANNER 26.07., 15:05 — Mein Fehler, zum dritten Mal am selben Tag: Bericht gelesen, nachdem ich schon geantwortet hatte
+
+**Der Evaluator hat um 13:53 (`1a8f43e`) geliefert und den Ball an mich gegeben.** Ich habe um
+14:40 in den Ledger geschrieben *„Ballbesitz: Evaluator (Waechter-Blindstelle)"* — **47 Minuten
+nachdem er damit fertig war.** Ich habe ihm die Aufgabe erneut zugewiesen, die er schon erledigt
+hatte, weil ich angehaengt habe, statt zuerst zu lesen. **Das ist derselbe Fehler wie um 09:00 und
+um 13:20.** Zweimal habe ich die Lehre aufgeschrieben, dreimal habe ich sie gebrochen. Eine Lehre,
+die nur im Ledger steht, ist keine — deshalb steht sie ab jetzt als Handgriff und nicht als Satz:
+**vor jedem Ledger-Anhang zuerst `git log -8` und der Ledger-Schwanz, dann schreiben.**
+
+**Warum beide Rollen leerliefen — der ehrliche Teil:**
+1. **Der Evaluator war fertig und wartete auf mich.** Seine Staffelplaetze B bis G haengen **alle**
+   an Generator-Commits. **Unter Einspurbetrieb ist der Evaluator leer, solange gebaut wird** — das
+   ist keine Panne, das ist die Bauart der Entscheidung von heute Mittag, **und ich haette es beim
+   Schreiben der Staffel nennen muessen.**
+2. **Der Generator hat seit 13:32 eine Aufgabe** (AUF-78, Marke gesetzt). **Eine Marke auf der
+   Tafel ist aber kein Zuruf** — sie wirkt erst, wenn der Auftrag uebergeben ist.
+
+### Der Bericht, den ich zu spaet gelesen habe — und was daraus folgt
+
+**Q1:** 65 Aufrufe, **45 echte Pruefläufe** (39 gruen · 3 rot · 3 unvollstaendig), 10 gesunde Skips,
+7 gelungene Selbstheilungen, **3 stumme**. **Alle drei stummen tragen keinen Commit** → **null**
+Code-Commits ohne Gate-Deckung. **Q2:** der Hook schluckt den exit 2 **vollstaendig**
+(`>/dev/null 2>&1 &` + `exit 0`) — der eigens gebaute Fehlerausgang erreicht den einzigen realen
+Ausloese-Pfad **nie**. **Q3:** er heilt aus einer nativen Shell, **7× belegt**; stehen bleibt die
+Sperre nur ueber aufeinanderfolgende Bruecken-Commits. **Also nicht „seit 13:42 tot" — meine
+Formulierung war die schaerfere der beiden Lesarten, und sie war falsch.**
+
+Vorbildlich: er hat **selbst benannt, was er nicht messen konnte** (den unlink-verbotenen Kontext)
+und **die Luecke seiner eigenen AUF-80-Abnahme eingeraeumt**, bevor ich danach fragen musste.
+
+**Entscheidung daraus: AUF-82** — klein, Spur A, `scripts/` allein.
+`generator-auftrag-auf82-waechter-unlinkfrei.md`. **(a)** `mv` statt `rm -rf`, Drei-Faelle-Logik
+unveraendert; **(b)** ein Waechter-Ende ≠ 0 hinterlaesst eine auffindbare Spur, **ohne** dass der
+Hook blockiert — die Begruendung aus AUF-75 gilt unveraendert. **Die stehende Sperre (pid 76) wird
+nicht von Hand geraeumt: sie ist der Pruefstein.** Der Posten steht **unmittelbar vor AUF-79**,
+weil beide `scripts/waechter.sh` anfassen.
+
+**Und fuer den Evaluator sofort:** `evaluator-auftrag-sichtprobe-erstanwendung-2026-07-26.md` —
+die **erste Anwendung seines eigenen Sichtprobe-Standards**, gegen einen **benannten Commit**
+(§13.4), nicht gegen den Arbeitsbaum. Seit 13:32 gibt es zum ersten Mal einen Stand, der eine
+Grundlinie verdient, **und es existiert keine Aufnahme davon**. Zwei Fragen tragen ihn: traegt der
+Abstand die Gruppierung bei **16** Knoepfen noch (nach AUF-70, vorher 11), und ragt nach 291
+geaenderten Dateien wieder etwas unter das Fenster (AUF-72/73 hatten 227–273 px auf 0 gebracht)?
+**Kommt ein AUF-78-Commit, hat dessen Abnahme Vorrang.**
+
+**Ballbesitz: Generator (AUF-78) · Evaluator (Sichtprobe-Erstanwendung).**
