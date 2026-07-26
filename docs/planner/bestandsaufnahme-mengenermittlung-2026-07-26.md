@@ -180,3 +180,70 @@ ginge, sondern weil die Zahl sonst richtig gerechnet und fachlich falsch wäre.
 **Und die laufende Arbeit ist unberührt:** AUF-40 Teil A, AUF-74, AUF-58 und AUF-75 stehen, die
 Layout-Inventur ist nach zwei Posten abgeschlossen. **Dieses Vorhaben ist größer als alles davon
 zusammen und darf es nicht verdrängen, solange es nicht entschieden ist.**
+
+---
+
+## 8. Nachtrag 26.07. — Yamas Entscheidung zur ersten Frage
+
+**Entschieden: es werden BEIDE Bezugsmaße geführt — Rohbaumaß und Fertigmaß.**
+
+### 8.1 Was daraus folgt, und es ist mehr als eine Einstellung
+
+**Jedes Ergebnis muss sein Bezugsmaß mitführen — als Pflichtfeld, nicht als Option.** Eine Fläche
+ohne die Angabe, ob sie roh oder fertig gerechnet ist, ist genau die „Zahl ohne Herkunft", vor der
+Abschnitt 4 warnt. **In der Oberfläche steht nie eine Zahl ohne ihre Bezugsangabe.**
+
+### 8.2 Die Voraussetzung, die dabei sichtbar wird — gemessen
+
+**Für Wände ist „fertig" heute nicht berechenbar.** Gemessen:
+
+```
+WallNode:     thickness: number        ← EINE Zahl
+              construction?: { materialId?, insulationType?, insulationThickness?, uValue? }
+              (keine Schichtenliste)
+
+CeilingNode:  schichten?: Array<{ materialId?, dickeMm }>   ← die Decke hat sie
+```
+
+`geometry/wandaufbau.ts` kennt `Schicht { dicke, lambda }` und rechnet damit U-Werte — **aber die
+Schichten hängen an keiner Wand.** Nutzer von `wandaufbau` sind gemessen nur `faehigkeiten.ts` und
+`scene.types.ts`.
+
+**Ohne Schichten weiß niemand, welcher Teil der 300 mm Konstruktion ist und welcher Putz.**
+Rohbaumaß ist heute rechenbar, Fertigmaß nicht.
+
+### 8.3 Der Weg, den ich vorschlage — additiv, nach vorhandenem Muster
+
+**Die Wand bekommt dasselbe optionale Feld, das die Decke schon hat:**
+
+```
+schichten?: Array<{ materialId?: string; dickeMm: number }>
+```
+
+**Warum genau so:**
+
+1. **Es ist kein neuer Mechanismus.** `CeilingNode` trägt das Feld bereits, feldgleich; `roofs`,
+   `ceilings` und `aufbauten` sind alle **additiv** an dieses Schema gekommen, ohne Migrationszwang.
+2. **Kein persistierter Wert wird umbenannt** — die Dauerdirektive bleibt unberührt. `thickness`
+   bleibt, was es ist, und bleibt die Wahrheit für den Rohbau.
+3. **Bestandsdokumente ohne das Feld sind gültig.** Fehlt es, gilt: Fertigmaß = Rohbaumaß, und das
+   Ergebnis sagt es. **Ein fehlender Wert darf nie stillschweigend zu einer geschätzten Zahl
+   werden.**
+
+**Das ist eine Schema-Erweiterung und damit Tor 1 — Yamas Freigabe, nicht meine.** Sie gehört vor
+M1, nicht hinein.
+
+### 8.4 Die zweite Frage blockiert M1 nicht mehr
+
+Ich hatte geschrieben, ohne die Übermessungs-Regel würde ich M1 nicht beauftragen. **Das nehme ich
+zurück, und zwar mit Begründung:**
+
+**M1 liefert zwei Zahlen, die in jeder Regelwelt gebraucht werden:** die **Bruttofläche** und die
+**Nettofläche mit vollem Abzug**. Beide sind eindeutig und von keiner Gewerkeregel abhängig.
+
+**Die Übermessung ist eine Regel, die auf diese zwei Zahlen angewendet wird** — sie gehört in das
+versionierte Regelwerk (Abschnitt 24 der Vorlage) und damit nach M2. **Sie ändert kein Ergebnis von
+M1, sie leitet ein drittes daraus ab.**
+
+*Damit ist M1 baubar, sobald die Schichten an der Wand entschieden sind — und die Gewerkefrage
+bleibt offen, ohne etwas aufzuhalten.*
