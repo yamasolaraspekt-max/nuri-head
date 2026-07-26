@@ -6312,3 +6312,45 @@ Fehler**, sondern der Standardmaßstab.
 
 **Ballbesitz: Generator (AUF-62 · Nachtrag: Bericht zu AUF-70) · Evaluator (AUF-70, danach die
 Inventur) · Planner (AUF-65, 18, 22).**
+
+---
+
+## ⇒ GENERATOR-NACHTRAG — AUF-70, Kriterium 13 (aus §8 des Auftrags)
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commit:** `4f3e3b9` · **Ballbesitz:** Evaluator.
+
+### 1. Mein Versäumnis, zuerst
+
+Der Auftrag hat um **07:25** einen **§8** bekommen (`d2e9c79`) — Spur A begründet, dazu **Kriterium
+13** aus dem AUF-68-Votum des Evaluators. Ich habe die Auftragsdatei vor dem Bauen gelesen und
+**den Nachtrag nicht abgearbeitet**. Der Text war da; ich habe ihn nicht bis zum Ende gelesen.
+
+Das ist dieselbe Sorte Fehler wie bei AUF-64 (dort: Tafelzeile statt Auftragsdatei), nur eine Stufe
+feiner: **Auftragsdatei gelesen — aber nicht zu Ende.** Konsequenz für mich: beim Ziehen die
+**Länge** der Datei prüfen und den letzten Abschnitt ausdrücklich gegen die Kriterienliste halten.
+
+### 2. Die Messung — der Abstand trägt weiter
+
+Der Evaluator hat gerechnet: Trennstrich **1,09–1,14 : 1**, WCAG 1.4.11 verlangt **3 : 1**. Der
+Strich trägt die Gliederung nicht, **der Abstand tut es**. Die Zeile ist von **11 auf 16** Knöpfe
+gewachsen — die Frage aus §8 lautet: hat sie sich dafür ihre einzige Gliederung genommen?
+
+| Breite | zwischen den Gruppen | innerhalb | Verhältnis |
+|---|---|---|---|
+| **1440 px** | **21 · 21 · 21 · 21 px** | 6 px | **3,5 ×** |
+| **1024 px** | **21 · 21 · 21 · 21 px** | 6 px | **3,5 ×** |
+
+**Vorher (11 Knöpfe, AUF-68): 21 px gegen 6 px.** Identisch. **Es wurde kein Platz aus dem Abstand
+genommen** — die fünf zusätzlichen Knöpfe haben in der vorhandenen Breite Platz gefunden. Die in
+§8 vorgesehene Meldung entfällt, weil es nichts zu melden gibt.
+
+### 3. Und damit es so bleibt
+
+Die Zusage **K13** verriegelt die Geometrie im Quelltext: `gap: 6` in der Zeile **und** in der
+Gruppen-Umhüllung, `opSep` mit `width: 1` und `margin: '0 4px'` — zusammen genau die gemessenen
+21 px. **Ohne sie wäre ein späteres „ein bisschen enger, dann passt es" im Quelltext unsichtbar**,
+und genau davor warnt §8.
+
+**Mutation** (`gap: 6` → `2`): **1 Test rot**.
+**Gates:** tsc **0** · schema:check **0** · test **0** · build **0**. Tests **1033 → 1034**.
+Kein `public/*`-Anteil, kein Bundle-Rebuild — es ist nur eine Testdatei.
