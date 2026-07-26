@@ -12064,3 +12064,58 @@ seit AUF-63 im DOM-Testlauf messbar ist — er waere also billig zu pruefen, wen
 die Tafelzeile, das Votum und dieser Abschnitt — alles `docs/`, kein Code).
 
 **Elf Posten heute abgenommen, keiner rot.** Ballbesitz: **Generator (AUF-35b)** · Evaluator: leer.
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-35b (Teil-Identität gebaut, Renderer-Anteil zurückgegeben)
+
+**Commits:** Code `1164321` (`public/*` = **0 Zeilen**) · Bundle `7fd8749` (eigener zweiter Commit).
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1246 · pass 1246 ·
+fail 0`, vorher 1231) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+**Klassifikation: `Vorarbeit`** — nicht `sichtbar`, und das ist eine Feststellung, keine Ausrede
+(unten).
+
+**Dies ist ein halber Posten mit Begründung.** Der Auftrag sieht diesen Ausgang in §6 ausdrücklich
+vor: *„Ein halber Posten mit Begründung ist besser als ein ganzer mit gebrochenem K4."* Die Messung
+führt dorthin.
+
+### Gebaut — die Teil-Identität
+
+- **Wandseiten** aus `start`/`end` gerechnet; **Dachflächen** aus dem Knoten **gelesen** — fehlt die
+  Angabe, wird **keine erfunden**. *Was `geometry/` schon kann, wird nicht ein zweites Mal gerechnet.*
+- **Kennung bauen und zerlegen** (`"<nodeId>#seite:links"`), an **einer** Stelle — sonst entstünden
+  zwei Schreibweisen für dieselbe Sache. Unfug wird abgewiesen statt halb gelesen; **eine reine
+  Knoten-id ist kein Fehler, sie ist der Normalfall.**
+- **Die Seite eines Klickpunkts** über das Kreuzprodukt. **Genau auf der Achse gibt es keine Seite** —
+  dort kommt `null` statt einer geratenen.
+- **Die Übersicht zählt einen Teil als seinen Knoten.** Ohne das fände `find` nichts, und das Panel
+  sähe leer aus, obwohl etwas gewählt ist.
+- **K3 — kein Schema, kein Command, keine Persistenz:** testverriegelt über **alle** Dateien in
+  `domain/` · `store/` · `geometry/` · `renderers/` — **null Treffer**. Die Kennung ist
+  Anzeige-Zustand und überlebt kein Neuladen, genau wie die heutige Auswahl.
+- **K5 — deterministisch:** drei Wandrichtungen, davon eine senkrechte; dieselben Daten neu
+  aufgebaut ergeben dieselbe Zuordnung. **Mutation** (Seitenzuordnung gespiegelt) ⇒ **1 rot**.
+- **K2 gehalten:** `store/` · `domain/` · `geometry/` · `renderers/` **null Zeilen**.
+- **Die Seiten heißen geometrisch** (links/rechts der Achsrichtung), nicht innen/außen: **eine Wand
+  kennt ihre Innenseite nicht von allein** — das braucht den Raumbezug (§6 nennt genau diesen Fall).
+
+### ZURÜCKGEGEBEN — drei Messungen, die den Zuschnitt bestimmt haben
+
+1. **Das 3D-Picking kann keine Teil-Information liefern, ohne `renderers/` zu ändern.**
+   `renderers/three-d/szene.ts:659-661` bildet den Strahl, nimmt `treffer[0]` und **reduziert ihn
+   sofort auf `nodeId`**; Schnittpunkt, Fläche und `faceIndex` verlassen `renderers/` **nie**. Genau
+   der Fall aus §6 — der Renderer-Anteil ist ein **eigener Posten**.
+2. **Es gibt kein Werkzeug, das Flächen wählt.** §3.2 sagt: *„Ein Teil gewinnt nur, wenn das Werkzeug
+   Flächen wählt."* Gemessen kennt `toolRegistry` **ein** Auswahl-Werkzeug, und keines davon wählt
+   Flächen. **Ohne Auslöser wird nichts sichtbar** — und einen zu erfinden (eine neue Taste, ein
+   neues Werkzeug) wäre eine **Entscheidung**, keine Umsetzung.
+3. **Deshalb `Vorarbeit` und nicht `sichtbar`, und Kriterium 10 ist ausdrücklich NICHT erfüllt.**
+   Es gibt nichts zu sehen, also gibt es keine Sichtprobe. **Das sage ich lieber, als eine Sichtprobe
+   zu behaupten, die nichts zeigen kann** — eine grüne Abnahme über eine Fläche, die niemand
+   aufrufen kann, wäre genau die Art Zusage, die dieser Zyklus dreimal korrigiert hat.
+
+**Sechste Kommentar-Falle dieses Zyklus, im Test festgehalten:** eine Zusage verbot das Wort
+`persist` im Quelltext und schlug auf **meinen eigenen Erklärsatz** an („eine neue *persistierte*
+Struktur"). *Ein Verbot, das die Begründung für das Verbot trifft, prüft den Text und nicht den Code.*
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
