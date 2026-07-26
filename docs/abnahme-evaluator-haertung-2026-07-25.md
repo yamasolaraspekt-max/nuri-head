@@ -1600,6 +1600,39 @@ Urteil: FREIGABE MIT AUFLAGE. Substanz (Wertgleichheit + Ehrlichkeit) mit Zaehne
 Bundle reproduzierbar; offen allein die unabhaengige Live-Sichtprobe (visueller Ueberlauf). Ballbesitz:
 Planner (Evaluator fuer die gebuendelte Live-Sichtprobe 55.1+56.1, sobald belastbarer Browser).
 
+### AUF-77 (Code a331fce · KEIN Bundle-Commit) - Wandflaeche brutto und netto (Mengenermittlung M1) - FREIGABE
+
+Spur A (abgeleiteter Wert). Blind gegen a331fce. Reine Insel-geometry: `wandFlaeche.ts` neu +
+`wandFlaeche.test.ts` + Typprobe; vorhandene Dateien 0 Zeilen -> additiv. Kein Bundle-Commit zu Recht:
+frischer `build:hausplaner` == committetes a331fce-Bundle (byte-gleich) - M1 liegt nicht im
+ausgelieferten Pfad. Gates rein (/tmp): tsc 0 · schema 0 · test 1200 pass/0 fail · build 0.
+
+Kernkriterium - kein Ergebnis ohne Bezugsmass, als TYPFEHLER erzwungen (verifiziert):
+- `Bezugsmass = 'roh' | 'fertig'`, `WandMengen.bezug` ist PFLICHT (readonly, kein `?`). Die Typprobe
+  (`.tsprobe`, absichtlich nicht vom Projekt-tsc erfasst) wird von `wandFlaeche.test.ts` in eine `.ts`
+  kopiert und durch einen ECHTEN Compiler-Lauf geschickt; `@ts-expect-error` ist gruen genau dann,
+  wenn `WandMengen` ohne `bezug` ein Fehler ist.
+- Gegen-Beweis (gueltig, /tmp): `bezug` optional gemacht -> K4 "ein Buendel OHNE die Angabe ist ein
+  Typfehler - mit echtem Compiler belegt" rot (fail 1). Der Kern des Postens hat Zaehne (kein
+  Laufzeit-`assert('bezug' in x)`, sondern Unmoeglichkeit).
+
+Zweifelsfall -> Meldung, keine Zahl:
+- `WandFlaecheErgebnis` ist eine DISKRIMINIERTE Union `{art:'mengen'} | {art:'meldung'}` - nie beides,
+  nie halb (man kann nicht die Zahlen nehmen und die Meldungen uebersehen). Jede Meldung traegt
+  Klartext + Kennungen.
+- Meldefaelle in `wandFlaeche.test` belegt: Oeffnung ragt ueber die Wand hinaus (`oeffnung-ragt-hinaus`,
+  Meldung nennt 5700 mm), zwei Oeffnungen ueberlappen (`oeffnungen-ueberlappen` - der haeufigste
+  Fehler), Oeffnung hoeher als die Wand. Plus Fehlalarm-Schutz: ein Oberlicht UEBER einer Tuer ist
+  KEINE Ueberlappung.
+
+Weiteres: `rohmassRest` nennt bei `fertig` das Nicht-Umrechenbare, statt es als geschaetzte Zahl
+auszugeben (kein erfundener Wert); K6 ohne Schichten fertig=roh, ausdruecklich gesagt; die Grenzen des
+Fertigmasses werden benannt. Genau EINE Rundungsstelle (`Math.round(wert*faktor)/faktor`, grep=1).
+
+Urteil: FREIGABE. Bezugsmass compile-time erzwungen (mit Zaehnen), Zweifelsfaelle als Meldung statt
+Zahl, kein erfundener Wert, additiv, kein Rebuild noetig, alle Gates gruen. Damit ist der Merge-Weg
+frei bis auf AUF-63 und Yamas Tor 2. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):

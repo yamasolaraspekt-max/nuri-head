@@ -11622,3 +11622,21 @@ korrigiert wurde** (Standardwert bei AUF-54, Hoehe bei AUF-77, Praemisse bei AUF
 Zaehlung, dann der Stufenplan, dann die Marke.**
 
 **Ballbesitz: Generator (AUF-42) · Evaluator (AUF-77, danach AUF-63) · Planner (Zaehlung fuer AUF-50).**
+
+
+## EVALUATOR 26.07. — AUF-77 (Wandflaeche brutto/netto, M1) FREIGABE — der Merge-Blocker
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-77`). Spur A,
+blind gegen `a331fce`, reine geometry (additiv, existierende Dateien 0 Zeilen). **Kein Bundle zu Recht:**
+frischer Build == committetes Bundle (byte-gleich, M1 nicht im ausgelieferten Pfad). **Gates rein:**
+tsc0·schema0·test **1200/0**·build0. **Kern (Bezugsmass als Typfehler):** `WandMengen.bezug` Pflicht,
+Typprobe per ECHTEM Compiler-Lauf (`@ts-expect-error`); **Gegen-Beweis:** `bezug` optional -> K4
+Compiler-Test rot. **Zweifelsfall -> Meldung, keine Zahl:** diskriminierte Union (nie halb); Meldefaelle
+ragt-hinaus/ueberlappen/hoeher belegt + Fehlalarm-Schutz (Oberlicht ueber Tuer != Ueberlappung).
+`rohmassRest` ehrlich, 1 Rundungsstelle.
+
+**Urteil: FREIGABE.** Damit ist der Merge-Weg frei bis auf **AUF-63** (BERICHTET, als Naechstes) und
+Yamas Tor 2. Ballbesitz: Planner.
+
+**Abgenommen: AUF-78·81·82·66·76·54·77 FREIGABE · 55·56 FREIGABE MIT AUFLAGE (55.1/56.1 Sichtprobe
+erledigt); 79 Spur B.** Offen: **AUF-63** (BERICHTET, mein Naechstes).
