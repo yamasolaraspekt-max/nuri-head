@@ -10752,3 +10752,42 @@ es bei einem rein additiven Feld sein muss. **Klassifikation: `Vorarbeit`.**
    er gehört nicht in diesen Posten.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## PLANNER 26.07., 17:45 — AUF-66 freigegeben, AUF-76 im Stapel, Marke auf AUF-54/55/56 (und ausdruecklich NICHT auf AUF-77)
+
+**AUF-66 ist frei** (`5dfb1c1`). Der Evaluator hat die Kehrseite von AUF-78 genau dort gemessen, wo
+sie sitzt: **die Insel baut keine Adresse** — das Ziel kommt vom Server, die Insel liest nur, und der
+Gegen-Beweis ist gueltig gefuehrt (`href` fest ⇒ K2 rot). **Ohne Adresse bleibt der Eintrag ein
+blosses `<div>`: kein Ziel, kein Versprechen.** Die Abweichung des Generators (`<a href>` statt
+`role="button"`) ist gedeckt, und Kriterium 3 ist **buchstaeblich** erfuellt, weil er die Leertaste
+ergaenzt hat, statt sich auf den Sinn zu berufen. Gates 1129/0, PHP 64/0. **Archiviert.**
+
+**AUF-76 ist gebaut** (`26a544f` + Bundle `8b43e13`), Insel **1143** (vorher 1129), **PHP-Suite
+unveraendert bei 789** — genau so muss es bei einem rein additiven Feld aussehen, und dass er das
+als Beleg *anfuehrt* statt es nur nicht zu erwaehnen, ist der Unterschied.
+
+**Die Stelle, die ich hervorhebe, weil sie eine Selbstkorrektur ist:** sein erster K4-Beweis lief
+gegen ein **von Hand geschriebenes** Szenendokument und fiel durch, weil ihm `units`, `settings` und
+`sortOrder` fehlten. Seine eigene Schlussfolgerung: *eine erfundene Szene beweist nur, dass ich das
+Schema erraten habe.* Jetzt steht eine **echte Fixture** (`u-dach`) da. **Das ist dieselbe Lehre wie
+bei AUF-65 heute Vormittag, nur diesmal von ihm selbst gezogen, bevor jemand widersprechen musste.**
+Dazu **K7 am erzeugten Schema statt am Quelltext** — *gleich aussehender Zod-Code kann verschiedenes
+Schema erzeugen.*
+
+### Die Marke geht **nicht** auf AUF-77, und das ist eine Entscheidung, keine Nachlaessigkeit
+
+Die Reihenfolge der Staffel saehe AUF-77 vor. **Seine Sperre lautet aber woertlich: *bis AUF-76
+abgenommen ist.* AUF-76 ist berichtet, nicht abgenommen.** Nach §1c wandert die Marke beim Bericht —
+**aber sie wandert nur auf einen Posten, der auch gezogen werden darf.**
+
+**Ich koennte mir das zurechtlegen:** AUF-76 ist sauber gebaut, alle Gates gruen, das Votum kommt
+vermutlich in Minuten. Genau diese Auslegung habe ich heute frueh schon einmal gemacht, und Yama hat
+sie kassiert: **„ja ich nehme es strenger als du."** Daraus wurde §7.6 — *buchstaeblich oder gar
+nicht; aendern nur vorher.* **Also buchstaeblich.**
+
+**Die Marke geht auf AUF-54/55/56** — drei kleine Posten ohne Vorbedingung, Auftrag liegt seit
+Tagen. Der Generator laeuft damit nicht leer, und AUF-77 wird frei, **sobald das Votum zu AUF-76 da
+ist** — dann steht er als naechster.
+
+**Ballbesitz: Generator (AUF-54/55/56) · Evaluator (AUF-76).**
