@@ -11888,3 +11888,60 @@ meiner Sichtprobe-Beobachtung; Folgeposten, kein Blocker). **Eigener Messfehler 
 Regex traf `, rechte]` statt des mittigen `rechte,` -> korrigiert, dann rot.
 
 **Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-67 (Die Befehlspalette wird globale Navigation)
+
+**Commits:** Code `5bcca43` (`public/*` = **0 Zeilen**) · Bundle `5e090cf` (eigener zweiter Commit).
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1231 · pass 1231 ·
+fail 0`, vorher 1216) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+`store/` · `domain/` · `geometry/` · `renderers/` **null Zeilen**. **Klassifikation: `sichtbar`.**
+
+**Der Befund:** die Palette konnte genau **eine** Art von Sache. Alles andere, wonach jemand sucht,
+existierte bereits als **Register** — und sie fragte keines davon.
+
+- **Die eiserne Regel ist eingehalten und testverriegelt:** *Die Palette weiß nichts selbst.* Für
+  jede Art **genau eine** Quelle, und es ist die, die die Oberfläche ohnehin benutzt. **Die Register
+  werden nicht erneut gerechnet, sondern als fertiges Ergebnis hereingereicht** — dasselbe Ergebnis,
+  das angezeigt wird. Eine zweite Berechnung wäre eine zweite Wahrheit gewesen.
+- **K2 — Mutation je Art, nicht nur „es sind Einträge da":** ein Geschoss aus dem Stapel entfernt ⇒
+  es verschwindet aus der Palette; eine Gruppe aus dem Projektbaum entfernt ⇒ ihre Bauteile
+  verschwinden. *Ein Test, der nur zählt, färbte eine fest eingebaute Liste genauso grün.*
+- **Der Fall aus der Auftragszeile ist gemessen, nicht behauptet:** „dach" führt zum **Dachwerkzeug**
+  **und** zum vorhandenen **Dachobjekt** — im Browser abgelesen: `WERKZEUGE: Dach (D)` ·
+  `BAUTEILE: Dach 1 · Dächer`.
+- **K3 — keine zweite Aktivierungslogik:** genau **ein** `resolveToolState`-Aufruf, und jedes
+  `enabled` ist entweder aus der Engine gelesen oder `true`. **Navigations-Einträge sind immer frei**
+  — sie *führen hin*, und dorthin zu führen ist nie gesperrt.
+- **K5/K6:** der Filter trifft `label` **und** `id` über alle Arten, ohne Groß-/Kleinschreibung; die
+  Gruppenreihenfolge ist **fest** (eine Palette, deren Abschnitte springen, macht das Laufen mit den
+  Pfeiltasten unbrauchbar), und die Navigations-Reihenfolge hängt nicht an der Auswahl.
+- **K7 — Leerzustand je Art wörtlich:** fünf Sätze, keiner vertröstet. Ohne jeden Treffer werden alle
+  fünf gezeigt — so lernt man nebenbei, **wonach die Palette überhaupt sucht**, statt einen leeren
+  Kasten zu sehen.
+- **K9 — Sichtprobe 1024×768, Palette offen mit Treffern in zwei Arten:** **Überstand 0**, kein
+  waagerechter Überlauf.
+- **Die Palette führt hin; sie erfindet nichts.** Jede Art bildet auf eine Handlung ab, die es ohne
+  sie auch gibt: `setActiveLevel`, `selectNodes`, `waehleBereich`, Werkzeugwahl. **Keine neue Aktion.**
+- **Der Wegweiser liefert höchstens EINEN Schritt.** Mehr weiß das Register nicht, und mehr wird hier
+  nicht erfunden.
+
+**Zwei eigene zu grobe Zusagen korrigiert und im Test festgehalten** — eine verbot jedes `enabled:`
+ohne `true`/`false` und schlug damit auf genau die Zeile an, die den Wert **richtigerweise aus der
+Engine liest**. *Ein Verbot, das den erlaubten Fall trifft, prüft nicht die Regel, sondern die
+Schreibweise.* Die andere hielt eine Typdeklaration für eine Zuweisung.
+
+### ZURÜCKGEGEBEN
+
+**Die Fokusfalle fehlt dieser Palette weiterhin.** Die **Gegenstandsspalte** der Tafelzeile nennt sie
+(*„Dazu die Lücke aus AUF-49"*), die **Abnahmekriterien der Auftragsdatei nennen sie nicht** — §1 bis
+§3 sprechen ausschließlich von den Arten und Registern. Gemessen: `useDialogFokus` wird von
+`FachFlaeche` und `ConfigWizard` benutzt, **von der Palette nicht**; sie hat `role="dialog"`,
+`aria-modal` und `autoFocus`, aber **keine Fokusfalle und keine Fokus-Rückgabe**.
+
+**Nicht nebenbei mitgebaut** — es ist eine eigene, prüfbare Änderung, und seit AUF-63 wäre sie im
+DOM-Testlauf sogar verriegelbar. **Ein Posten dafür ist billig und die Lücke ist benannt;** ich habe
+sie nicht angefasst, weil sie in den Kriterien nicht steht und der Auftrag sonst vollständig ist.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
