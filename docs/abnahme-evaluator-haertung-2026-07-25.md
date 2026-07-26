@@ -1659,6 +1659,40 @@ Die Geometrie-Grenze ist verdrahtet (der Kern):
 Urteil: FREIGABE. Zwei getrennte Laeufe, jsdom nur Werkzeug (nicht Bundle/Laufzeit), Geometrie-Grenze
 verdrahtet und mit Zaehnen belegt, additiv, kein Bundle. Ballbesitz: Planner.
 
+### AUF-42 (Code 08f7cde · Bundle 269d7fa) - viewport.ready sagte immer ja, jetzt sagt es die Messung - FREIGABE
+
+`sichtbar`, reine Insel. Blind gegen die committeten SHA. §8-Split sauber. Gates rein (/tmp-Auszug
+269d7fa): tsc 0 · schema 0 · test 1216 pass/0 fail · build 0 · Bundle byte-gleich (reproduzierbar).
+
+Kern - die Faehigkeit an die Messung gebunden (verifiziert):
+- `FAEHIGKEIT_ANSICHT_BEREIT` stand UNBEDINGT in der Faehigkeitsliste ("immer ja"); fuenf Werkzeuge
+  (bemassen, distanz/flaeche/volumen/winkel-messen) trugen eine Vorbedingung, die nichts prueft. Jetzt:
+  `...(stageBreite > 0 ? [FAEHIGKEIT_ANSICHT_BEREIT] : [])` - die Bedingung steht in der Liste selbst.
+- Gegen-Beweis (gueltig, /tmp): die Faehigkeit wieder unbedingt gemacht -> ansichtBereit "die Faehigkeit
+  steht NICHT mehr unbedingt in der Liste" rot (fail 1). Zaehne bestaetigt.
+- Eine Wahrheit: die Buehnenbreite wird an GENAU EINER Stelle bestimmt (`const stageBreite`, 1x, per Test
+  belegt) - der zweite Rechen-Ort ist entfernt.
+
+rechte.test - Robustheit erhoeht OHNE den Sicherheits-Check zu schwaechen (§12 "keinen Test geschwaecht"):
+- Die alte Zusage nagelte die VOLLSTAENDIGE Dep-Liste fest und brach an der harmlosen `stageBreite`-
+  Ergaenzung. Jetzt prueft sie die Eigenschaft: `rechte` steht in den Deps.
+- Gegen-Beweis (gueltig, /tmp): `rechte` aus den Deps entfernt -> rechte.test rot ("und sie steht in den
+  Abhaengigkeiten"). Der Rechte-Check faengt die Entfernung weiterhin - nicht geschwaecht, nur entsproedet.
+
+Resize-Befund (vom Generator ehrlich zurueckgegeben, kein AUF-42-Defekt): die Buehnenbreite wird aus
+`window.innerWidth` gerechnet, aber es gibt KEINEN `resize`-Zuhoerer - sie rechnet bei Fenster-Resize
+nicht neu (Ausgang 1 = minimaler Fix). Das deckt sich mit meiner eigenen Sichtprobe-Beobachtung (der
+App-Viewport aenderte sich bei resize nicht) - ein Befund fuer einen Folgeposten, kein Blocker.
+
+Eigener Messfehler offengelegt (der sechste heute): mein erster rechte-Gegenbeweis blieb gruen, weil mein
+Regex `, rechte]` suchte, `rechte` aber MITTEN in der Liste steht (`…, rechte, stageBreite]`). Direkt in
+der Datei geprueft, gezielt `rechte,` entfernt -> dann rot. Ohne die Selbstpruefung haette ich "Test ohne
+Zaehne" gefolgert, was falsch gewesen waere.
+
+Urteil: FREIGABE. Faehigkeit messungsgebunden (mit Zaehnen), eine Wahrheit fuer die Breite, Rechte-Check
+entsproedet ohne Schwaechung, Resize-Grenze ehrlich zurueckgegeben, Gates gruen, Bundle reproduzierbar.
+Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):

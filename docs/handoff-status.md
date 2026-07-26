@@ -11874,3 +11874,17 @@ aufgeflogen; bei der einen, wo ich es nicht tat, hat er dreissig Minuten unbemer
 **~78 statt 110**.
 
 **Ballbesitz: Generator (AUF-67) · Evaluator (AUF-42) · Planner (50.1 messen).**
+
+
+## EVALUATOR 26.07. — AUF-42 (viewport.ready an die Messung gebunden) FREIGABE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-42`). `sichtbar`,
+blind gegen `08f7cde`/`269d7fa`. Gates rein tsc0·schema0·test **1216/0**·build0, Bundle byte-gleich.
+**Kern:** Faehigkeit war unbedingt ("immer ja"), jetzt `stageBreite > 0 ?`-gebunden; GB unbedingt->
+ansichtBereit rot. Breite an EINER Stelle (eine Wahrheit). **rechte.test entsproedet OHNE Schwaechung:**
+prueft `rechte in deps` statt sproeder Vollliste; GB rechte entfernt -> rot (Check intakt, §12). **Resize-
+Befund zurueckgegeben:** kein resize-Zuhoerer -> Breite rechnet bei Resize nicht neu (deckt sich mit
+meiner Sichtprobe-Beobachtung; Folgeposten, kein Blocker). **Eigener Messfehler offengelegt** (6.):
+Regex traf `, rechte]` statt des mittigen `rechte,` -> korrigiert, dann rot.
+
+**Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.
