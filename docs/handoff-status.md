@@ -11802,3 +11802,53 @@ an `store/` oder `domain/` moeglich ist** — falls nicht, ist das eine **Rueckg
 Entscheidung des Planners.
 
 **Ballbesitz: Generator (AUF-42) · Evaluator: Stapel leer · Planner: 50.1 messen.**
+
+
+## PLANNER 26.07., 20:50 — Das Controller-Urteil gegen die Messung gehalten
+
+**Zuerst die Uebereinstimmung, und sie ist bemerkenswert:** der Controller schaetzt **80–85 %**,
+unsere Inventur zaehlt **82 %**. Zwei Wege, dieselbe Groessenordnung — das spricht fuer beide.
+Auch sein Kern stimmt: *der groesste verbleibende Aufwand liegt nicht mehr im Kernmodell.* Genau
+das sagt die AUF-50-Zaehlung von vorhin mit anderen Zahlen.
+
+**Drei seiner Punkte sind jedoch am Stand von gestern gemessen. Nachgeprueft, nicht widersprochen:**
+
+1. *„Dashboard verwendet weiterhin teilweise statische Beispielprojekte."* — **Gemessen: nein.**
+   `ZULETZT_STILLGELEGT` ist **stillgelegt und wird nirgends gerendert** (`grep ZULETZT` in
+   `StartView.tsx`: **0 Treffer**). Die Liste kommt seit **AUF-78** aus `HausplanerController` —
+   vier Felder, Grenze 6, hinter `permission:Hausplaner,read`. **Freigegeben um 17:08.**
+2. *„Mehrere Projektkarten fuehren zum gleichen Einstieg."* — **Gemessen: nein.** **AUF-40 Teil A**
+   hat das entfernt: drei Karten, drei Ziele; die zwei ohne Ziel sind **keine Schaltflaeche mehr**
+   (keine Rolle, kein Fokus, kein Zeiger) und nennen ihren Grund. Nur **eine** `onGuided`-Karte ist
+   uebrig.
+3. *„Einen dominanten Knopf anbieten: Projekt fortsetzen."* — **Das ist AUF-66**, gebaut und
+   **freigegeben um 20:05**: der Eintrag oeffnet `hausplaner.objekt.seite`, ein Klick, dieselbe
+   Route, dasselbe Recht.
+
+**Und eine Zahl ist zu optimistisch:** *„Branch und Sicherungs-Remote: synchron."* Gemessen:
+`fork` **0** zurueck, **`backup-private` 52**. Eine von zwei Fernkopien ist aktuell, nicht beide.
+
+**Was er richtig sieht und was schon beauftragt ist:**
+- **Prioritaet 6 (Befehlspalette ausbauen)** ist **wortgleich AUF-67** — Projekte, Geschosse,
+  Wizard-Schritte, offene Pruefungen, Objekte. Der Auftrag liegt seit **19:20**. **Marke gerueckt:
+  AUF-67 ist jetzt aktiv.**
+- **Prioritaet 4 (Expertenmodus vereinfachen)** beruehrt **AUF-38** und **AUF-35b**, beide offen mit
+  Auftrag.
+- **Prioritaet 5 (mobiler Expertenmodus)** deckt sich mit dem Evaluator-Befund von 19:44: bei
+  **576 px** laufen vier Werkzeugleisten um **170 px** ueber und werden vom Container **geklippt
+  statt gescrollt**. **Sein Eindruck ist gemessen richtig** — und es gibt dafuer **keinen Posten**.
+- **Prioritaet 2 (Aufgabenpanel)** und **Prioritaet 3 (Statusbezeichnungen)** und **Prioritaet 7
+  (Playwright-Gates)** haben ebenfalls **keinen Posten**.
+
+**Nach §14 entstehen daraus jetzt keine Auftraege.** Die Pruefrage — *welchen offenen Posten kann
+ich ohne diesen nicht abschliessen?* — beantwortet keiner der drei. **Sie sind Befunde, sie sind
+gut, und sie warten**, bis die verbleibenden zehn durch sind. **Das ist keine Ablehnung, sondern
+genau die Regel, die Yama heute Abend gesetzt hat** — und ohne sie waere seine Liste am naechsten
+Morgen der Grund, warum AUF-38 und AUF-50 wieder liegen bleiben.
+
+**Seine empfohlene Reihenfolge, gegen unsere gehalten:** Punkt 1 (*AUF-42 unabhaengig abnehmen*) ist
+**genau der naechste Schritt** — AUF-42 ist um 20:40 berichtet und liegt jetzt im Stapel. Punkte 2
+und 3 sind **erledigt bzw. beauftragt**. Punkt 4 und 5 sind die Befunde ohne Posten. **Punkt 6
+seiner Liste — „danach erst zusaetzliche Werkzeuge" — ist wortgleich §14.**
+
+**Ballbesitz: Generator (AUF-67) · Evaluator (AUF-42) · Yama (Merge, sobald AUF-42 abgenommen ist).**
