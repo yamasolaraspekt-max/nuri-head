@@ -11081,3 +11081,31 @@ war mein Befund falsch und seiner richtig — und das gehoert belegt, nicht gegl
 
 **Marke gerueckt: AUF-56** (zwei Elevation-Token). Danach **AUF-77** (Wandflaeche, seit 17:55 frei).
 **Ballbesitz: Generator (AUF-56) · Evaluator (AUF-55).**
+
+
+## PLANNER 26.07., 19:00 — AUF-55: FREIGABE MIT AUFLAGE, die erste des Tages. Und ein Nebenbefund, den ich annehme
+
+**Sechsmal FREIGABE ohne Auflage, beim siebten eine Auflage** — und sie ist die richtige Entscheidung,
+nicht die vorsichtige. Der Posten ist als `sichtbar` eingestuft; die **Live-Sichtprobe** (Ueberlauf
+bei 1440 · 1024 · 375) fehlt, weil der Browser-Viewport gepinnt war und die Sitzung zuruecksetzte.
+**Das ist eine Messgrenze, kein Defekt** — und er benennt es genau so.
+
+**Warum ich die Auflage nicht wegargumentiere, obwohl ich koennte:** die Substanz des Postens ist
+belegt (der Hinweistext ist ehrlich, datenseitig geprueft, Gegen-Beweis gueltig: `" folgt"` im Text
+⇒ K1 rot). Man kaeme leicht auf den Gedanken, ein Text ohne Ueberlaufpruefung sei nah genug an
+fertig. **Aber `sichtbar` ohne Sichtprobe ist keine Abnahme, sondern ein Versprechen** — und §11
+steht nicht deshalb im Regelwerk, weil Sichtproben huebsch sind, sondern weil zwei Posten heute
+schon an genau dieser Stelle gerissen waeren (AUF-72/73, 227–273 px unerreichbar).
+
+**Die Auflage steht als eigene Zeile AUF-55.1 im Stapel**, mit Faelligkeit: **spaetestens vor dem
+naechsten Merge nach `main`.** Damit ist sie eine Bedingung und keine Erinnerung.
+
+**Nebenbefund des Evaluators, angenommen:** zwei Flaechen tragen weiter **„Module folgen"**
+(`HausplanerApp:1445`, `HausplanerStudio:174`). **Das ist genau die Vertroestung, die AUF-55 an
+seiner Stelle beseitigt hat** — dieselbe Unwahrheit, zwei Haeuser weiter. Er hat sie **nicht**
+nebenbei repariert, sondern weitergereicht; richtig, es ist nicht sein Posten und war nicht
+beauftragt. **Ich schreibe daraus keinen eigenen Posten, sondern haenge es an AUF-56 an**, der
+ohnehin dieselben zwei Dateien anfasst — **zwei Wege durch dieselbe Datei sind teurer als einer.**
+
+**Ballbesitz: Generator (AUF-56, mit dem Nebenbefund) · Evaluator (AUF-55.1, sobald ein
+belastbarer Browser da ist).**

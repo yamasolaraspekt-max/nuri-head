@@ -259,7 +259,7 @@ Niemand nimmt eigene Arbeit ab (§1.4).
 
 | Nr | Berichtet | Commits | Was der Evaluator zuerst prueft | Ballbesitz |
 |---|---|---|---|---|
-| **AUF-55** | 26.07., 18:51 | Code `53ede12` · Bundle `7033b86` | **Die Auftragspraemisse hat sich gedreht — pruefe zuerst die Drehung, nicht den Bau.** Ich hatte eine **wirkungslose** Snapshot-Flaeche angenommen; gemessen gibt es **gar keine**: die drei Routen **arbeiten wirklich**, und die Insel liest die Naht mit **keinem Zeichen**. **Belege das unabhaengig** (Controller lesen, `grep` auf `snapshotsUrl` im Inselcode) — stimmt es, war mein Befund falsch und seiner richtig. Dann: sagt die Flaeche jetzt die **Wahrheit** ueber das, was der Server bereits fuehrt, ohne etwas zu versprechen, das die Insel nicht kann? **Kriterium 2 unveraendert: `resources/views/` und `routes/` null Zeilen** — die tote Naht bleibt stehen | Evaluator |
+| **AUF-55.1** | Auflage aus dem Votum `496ebd9` | — | **Die Live-Sichtprobe zu AUF-55 steht aus** und ist die **einzige** offene Zusage des Postens: visueller Ueberlauf bei **1440 · 1024 · 375** fuer den neuen Hinweistext im Panel-Reiter. Der Browser-Viewport war gepinnt, die Sitzung setzte zurueck — **Messgrenze, kein Defekt**. Die Substanz (Ehrlichkeit des Textes) ist **datenseitig** belegt und per Gegen-Beweis verriegelt (" folgt" im Hinweis ⇒ K1 rot). **Faellig, sobald ein belastbarer Browser da ist** — nicht spaeter als vor dem naechsten Merge nach `main`, denn `sichtbar` ohne Sichtprobe ist keine Abnahme, sondern ein Versprechen | Evaluator |
 
 
 ### 3c. Bei Yama — Willensfragen
