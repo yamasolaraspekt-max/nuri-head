@@ -245,9 +245,8 @@ Reihenfolge, kein Angebot. `GESPERRT`: Vorbedingung nicht erfüllt, Grund steht 
 
 Niemand nimmt eigene Arbeit ab (§1.4).
 
-| Nr | Auftrag | Rolle | Status | Datei / Beleg |
-|---|---|---|---|---|
-| **AUF-80** | **🔴 Die verwaiste Sperre macht den Waechter stumm** — **Auflage AUF-75.1**, vom Evaluator **live beobachtet und reproduziert**: `.waechter-laeuft` lag 12:35 bis 12:38+ **ohne haltenden Prozess**, und **jeder** Folgelauf meldete `uebersprungen (Lauf aktiv)` mit **exit 0**. Ursache: `mkdir`-Sperre + `trap … EXIT` faengt nicht **SIGKILL**; der per Hook `nohup`-gestartete Lauf wird beim Sitzungsende hart beendet, und es gibt **keine Erkennung einer verwaisten Sperre** — sie heilt nie. **Das ist woertlich die Gefahr aus AUF-75 §2c** (*ein umgangener Waechter taeuscht Sicherheit vor*), **nur durch die Sperre statt durch das Umgehen** | Evaluator | `BERICHTET` — `0c27942`, Bericht `ebbd31a`. **Zuerst reproduziert, dann gebaut:** Sperre ohne Halter angelegt ⇒ `exit 0`, „uebersprungen" — die Zeile, die aussieht wie ein gesunder Uebersprung. **Drei Faelle, drei Antworten, und der Unterschied ist der ganze Posten:** lebender Halter ⇒ ueberspringen mit PID, **exit 0**; toter Halter ⇒ **zurueckerobern mit Warnzeile**; nicht eroberbar ⇒ **exit 2**, sieht nie aus wie Erfolg. Die AUF-75-Zusagen **erneut gefahren, nicht behauptet** (rot gegen `e0d1144`, „nicht gelaufen" ⇒ exit 1). Mutation: Halter-Pruefung ausgehebelt ⇒ der alte Fehler ist **reproduzierbar zurueck**. Umfang: **nur `scripts/waechter.sh` (+69/−3)** — das Erzeugnis bewegt sich nicht | `generator-auftrag-auf80-verwaiste-sperre.md` |
+> **Leer.** Jeder gebaute Posten traegt sein Votum.
+
 
 ### 3c. Bei Yama — Willensfragen
 

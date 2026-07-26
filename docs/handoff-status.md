@@ -9228,3 +9228,55 @@ mehr.** Das ist der Unterschied, den Yama heute eingezogen hat.*
 
 **Umfang zur Erinnerung:** 388 Commits · außerhalb der Insel eine PHP-Datei, zwei Testdateien, ein
 Skript · **keine Migration, keine Route** ⇒ reiner Code-Deploy.
+
+---
+
+## PLANNER 26.07., 13:20 — ⚑ FÜNF VON FÜNF. Der Zeitpunkt ist da
+
+### 0. Zuerst mein eigener Fehler, denn er ist derselbe wie heute Vormittag
+
+**Ich habe das AUF-80-Votum übersehen.** Mein Abgleich lief als `git log 8c36972..HEAD` — und
+`8c36972` ist **mein eigener** Commit und damit HEAD. **Das Votum `1a25533` lag darunter.**
+
+**Genau diesen Fehler habe ich heute um 09:00 schon einmal gemacht und aufgeschrieben:** *„Der
+Abgleich gegen ‚seit meinem letzten Stand' ist blind, sobald ich selbst zuletzt committet habe.
+Richtig ist die Liste, nicht die Differenz."* **Ich habe die Lehre notiert und nicht angewendet.**
+
+*Eine Lehre, die nur im Ledger steht, ist keine. Ab sofort: Abgleich immer als `log -8`, nie als
+Differenz gegen den eigenen Stand — und beim nächsten Mal prüfe ich, ob ich es getan habe.*
+
+### 1. AUF-80 — FREIGABE, die Auflage ist geschlossen
+
+Umfang **buchstäblich** geprüft: `git show --numstat` = **69/3 in `scripts/waechter.sh`, 0
+Erzeugnis-Dateien.** Fünf Fälle **blind im Mini-Repo** getrieben:
+
+- **T1** sein Original-Fund (Sperre ohne Kennung) ⇒ Warnzeile **und eine echte Statuszeile** —
+  zurückerobert **und gelaufen**. *„Der Bug, den ich fand, ist zu."*
+- **T3** lebender Halter ⇒ `exit 0` — **keine falsche Enteignung eines echten Laufs.**
+- **T4** nicht eroberbar ⇒ **exit 2.**
+- **T5 Mutation:** Halter gilt immer als lebend ⇒ **der alte Fehler ist reproduzierbar zurück.**
+  Die Halter-Prüfung ist tragend.
+
+Die AUF-75-Zusagen hat er **erneut gefahren, nicht behauptet.**
+
+### 2. Die fünf Bedingungen — selbst gemessen, buchstäblich
+
+| | Bedingung | Beleg |
+|---|---|---|
+| 1 | Layout-Inventur vollständig | **9 von 9**, AUF-74 archiviert |
+| 2 | Abnahme-Stapel leer, keine offene Auflage | **0 Zeilen in §3b**; AUF-75.1 durch AUF-80 **geschlossen** |
+| 3 | Baum sauber, 0 ungepusht | **0 / 0** (Yama hat gepusht) |
+| 4 | volle Suite mit `main`-Vergleich | **main 758 → HEAD 769**, 0 rot, Laufzeit 44,03 → **43,89 s** |
+| 5 | keine Migration | **0** |
+
+**Keine Auslegung. Keine Ersatzmessung. Fünf von fünf, wörtlich.**
+
+### 3. Gemeldet
+
+**389 Commits.** Außerhalb der Insel: **eine** PHP-Datei (37 Zeilen), zwei Testdateien, ein Skript.
+**Keine Migration, keine Route** ⇒ **reiner Code-Deploy**, Rückweg = vorherigen Stand ausrollen.
+
+**Der Merge ist Yamas Hand. Ich führe ihn nicht aus** — und der **Deploy bleibt ein eigener Tag**,
+mit einmal ausprobiertem Rückweg, nicht angenommenem.
+
+**Ballbesitz: Yama.**
