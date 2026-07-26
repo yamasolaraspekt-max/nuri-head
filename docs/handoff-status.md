@@ -12119,3 +12119,48 @@ führt dorthin.
 Struktur"). *Ein Verbot, das die Begründung für das Verbot trifft, prüft den Text und nicht den Code.*
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## PLANNER 26.07., 21:20 — AUF-35b: ein halber Posten, und der halbe Teil ist die bessere Haelfte
+
+**Gebaut** (`1164321` + Buendel `7fd8749`), Insel **1246** (vorher 1231), PHP 789, K4-Schichten null.
+
+**Er liefert die Haelfte und begruendet die andere — und mein eigener Auftrag hat das vorgesehen:**
+§6 lautet woertlich *„Ein halber Posten mit Begruendung ist besser als ein ganzer mit gebrochenem
+K4."* **Er hat den Satz nicht als Ausweg benutzt, sondern die Messung dorthin gefuehrt.**
+
+**Drei Rueckgaben, jede mit einer Zeilennummer statt einer Einschaetzung:**
+1. **Das 3D-Picking kann keine Teil-Information liefern, ohne `renderers/` zu aendern.**
+   `renderers/three-d/szene.ts:659-661` bildet den Strahl, nimmt `treffer[0]` und **reduziert ihn
+   sofort auf `nodeId`** — Schnittpunkt, Flaeche und `faceIndex` verlassen `renderers/` **nie**.
+2. **Es gibt kein Werkzeug, das Flaechen waehlt.** Der Auftrag sagt: *ein Teil gewinnt nur, wenn das
+   Werkzeug Flaechen waehlt.* Gemessen: keines tut das. **Einen Ausloeser zu erfinden — eine neue
+   Taste, ein neues Werkzeug — waere eine Entscheidung, keine Umsetzung.**
+3. **Deshalb `Vorarbeit` statt `sichtbar`, und Kriterium 10 ausdruecklich NICHT erfuellt.** Sein
+   Satz dazu ist der beste des Berichts: *„Es gibt nichts zu sehen, also gibt es keine Sichtprobe.
+   Das sage ich lieber, als eine Sichtprobe zu behaupten, die nichts zeigen kann."*
+
+**Was gebaut ist, ist sauber geschnitten:** Wandseiten **gerechnet**, Dachflaechen **gelesen** —
+*was `geometry/` schon kann, wird nicht ein zweites Mal gerechnet* · Kennung an **einer** Stelle
+gebaut und zerlegt · **auf der Achse gibt es keine Seite**, dort `null` statt einer geratenen ·
+**die Uebersicht zaehlt einen Teil als seinen Knoten**, sonst saehe das Panel leer aus, obwohl etwas
+gewaehlt ist.
+
+**Und die Namensfrage hat er richtig entschieden:** die Seiten heissen **geometrisch**
+(links/rechts der Achsrichtung), nicht innen/aussen — **eine Wand kennt ihre Innenseite nicht von
+allein**, das braucht den Raumbezug.
+
+**Sechste Kommentar-Falle des Zyklus, und diesmal in einer Zusage:** ein Test verbot das Wort
+`persist` im Quelltext und schlug auf **seinen eigenen Erklaersatz** an. *Ein Verbot, das die
+Begruendung fuer das Verbot trifft, prueft den Text und nicht den Code.* **Sechsmal heute dasselbe
+Muster** — und jedes Mal hat es die Rolle selbst gefunden.
+
+**Nach §14 entsteht aus den Rueckgaben jetzt kein Posten.** Beide beantworten die Pruefrage nicht:
+weder der Renderer-Anteil noch ein Flaechen-Werkzeug schliesst einen offenen Posten ab. **Sie stehen
+in der Befundliste** — und sie sind der Grund, warum AUF-35b **inhaltlich** noch nicht fertig ist,
+obwohl der Posten es formal ist.
+
+**Marke gerueckt: AUF-38** (Inline-Styles, acht Scheiben). **Er laeuft neben nichts** — acht
+Oberflaechendateien, darunter `HausplanerApp.tsx`.
+
+**Ballbesitz: Generator (AUF-38) · Evaluator (AUF-35b).**
