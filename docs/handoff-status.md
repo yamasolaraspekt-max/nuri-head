@@ -13044,3 +13044,58 @@ nirgends?). **Zuletzt erst** `engine-sparren`. §13.6 gilt.
 
 **Ballbesitz:** Evaluator. Generator faehrt mit AUF-52 Scheibe B fort (tga-heizung), Marke bleibt
 auf AUF-52. Tafel 85 Zeilen (Posten + berichtete Scheibe nebeneinander), 0 fehlerhaft, eine Marke.
+
+
+## PLANNER 26.07., 22:50 (CEST) — Merge durch: `main` e9de9ab -> 59318a7. Und eine Luecke, die ich fast gemeldet haette, obwohl es keine ist
+
+**Der Merge lief, diesmal mit der richtigen Befehlsform.** `git push . 59318a7:refs/heads/main` ⇒
+`e9de9ab1..59318a77`. Fast-forward, kein `checkout`, der Generator wurde nicht gestoert. **Dritter
+Merge des Tages**, und der erste, bei dem der Block auf Anhieb lief.
+
+**Der Push ging auf beide Kopien.** Aus `push-result.log`, Lauf `START So. 26 Juli 2026 22:45:04
+CEST`, 54 Push-Versuche:
+
+```
+>> push fork main               e9de9ab1..59318a77  main -> main   OK
+>> push backup-private main     e9de9ab1..59318a77  main -> main   OK
+```
+
+**Beinahe-Fehlmeldung, und sie gehoert hierher.** Meine lokale Ansicht zeigte
+`backup-private/main` weiterhin auf `e9de9ab1`, und ich war im Begriff, eine Backup-Luecke zu
+melden — dieselbe Sorte Befund, die ich heute Vormittag schon einmal geliefert habe
+("backup-private haengt hinterher"). **Es gibt keine Luecke.** Der Server hat den Sprung
+angenommen; **nur mein lokaler Verfolgungs-Ref ist veraltet, weil mein eigener gc-Unfall die
+`refs/remotes/backup-private/main.lock` hinterlassen hat** und die Aktualisierung deshalb nicht
+schreiben konnte.
+
+*Die Lehre ist unangenehm und einfach:* **ich habe fast einen Befund aus meinem eigenen Schaden
+gemacht.** Der Beleg lag im Protokoll des Servers, nicht in meinem lokalen Zeiger — und ich haette
+ihn beinahe nicht gelesen. **Regel fuer mich: bei einer Aussage ueber eine Kopie ausserhalb zaehlt
+die Antwort der Gegenseite, nicht mein Verfolgungs-Ref.**
+
+**Ein einziger Fehler im ganzen Lauf**, und er ist die harmlose Richtung:
+
+```
+! [rejected]  auto/hausplaner-ui-3a -> auto/hausplaner-ui-3a (non-fast-forward)
+              "a pushed branch tip is behind its remote counterpart"
+```
+
+**Der Remote hat mehr als lokal**, nicht umgekehrt. Es geht also nichts verloren; ein alter Zweig
+ist lokal hinter seinem Stand. Kein Handlungsbedarf, aber notiert, damit es beim naechsten Lauf
+niemand fuer neu haelt.
+
+**Stand jetzt:**
+
+| | |
+|---|---|
+| `main` (lokal · fork · backup-private) | **59318a7** |
+| `auto/hausplaner-integration` (alle drei) | **14f23ac0**, ungesichert **0** |
+| `main` hinter der Spitze | 5 Commits — AUF-52 Scheibe A (noch nicht abgenommen) + zwei `docs/` |
+
+**Der Abstand ist gewollt:** nach §16 wandert `main` nur auf abgenommene Staende, und Scheibe A
+liegt beim Evaluator.
+
+**Offen an Yama, unveraendert:** `git config gc.auto 0` gegen die Wiederholung meines
+Lock-Unfalls — deine Einstellung, deshalb frage ich statt zu tun.
+
+**Ballbesitz:** Evaluator (AUF-52 Scheibe A), Generator faehrt Scheibe B, Marke AUF-52.
