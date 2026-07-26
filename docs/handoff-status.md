@@ -11144,3 +11144,41 @@ den es nicht mehr gibt — **und dann ist die Arbeit, die schon drin steckt, nic
 sondern weg.**
 
 **Ballbesitz unveraendert: Generator (AUF-56) · Evaluator (AUF-55.1).**
+
+
+## PLANNER 26.07., 19:20 — Vier Posten hatten keinen Auftrag. Zwei sind geschrieben, zwei brauchen erst eine Messung
+
+**§14 hat sofort etwas sichtbar gemacht.** Wenn die zwoelf Posten vollstaendig abgearbeitet werden
+sollen, muss jeder davon einen Auftrag haben. **Gezaehlt: acht hatten einen, vier nicht** — AUF-67,
+AUF-42, AUF-48 und AUF-50. In ihrer Belegspalte stand jeweils ein **Befund**, kein Auftrag. **Das ist
+dieselbe Falle wie bei AUF-66 heute Mittag, viermal** — dort hat sie 45 Minuten Stillstand gekostet.
+**Auftraege zu schreiben ist nichts Neues im Sinne von §14, sondern die Papierarbeit zu Vorhandenem.**
+
+**AUF-42 — und der Befund ist besser als der Posten.** Gemessen: `FAEHIGKEIT_ANSICHT_BEREIT` steht
+**ohne Bedingung** in der Faehigkeitsliste (`HausplanerApp.tsx:435`, Kommentar: *„gemountet, sobald
+diese Komponente rendert"*). **Die Faehigkeit sagt also immer ja.** Damit wird der Grundtext *„Die
+Zeichenflaeche ist noch nicht bereit"* **nie gezeigt**, und **fuenf** Werkzeuge tragen eine
+Vorbedingung, die nichts prueft.
+
+**Deshalb ist der erste Schritt des Auftrags eine Messung, kein Bau**, mit drei erlaubten Ausgaengen:
+binden (wenn es einen messbaren Zustand gibt), zurueckgeben (wenn er nur einen Rahmen dauert), oder
+**den Posten schliessen und die Vorbedingung streichen**. **Eine Vorbedingung, die nie eintritt, ist
+eine Luege in die andere Richtung** — und sie zu erfinden, nur damit der Posten „gebaut" aussieht,
+waere schlechter als ihn zu schliessen.
+
+**AUF-67 — die Sperre ist gefallen, und niemand hatte es gemerkt.** Sie lautete *erst wenn AUF-65 die
+Aufgaben liefert*; **AUF-65 ist abgenommen und im Archiv.** Gemessen: die Palette kennt heute genau
+**eine** Art (Werkzeuge aus `alleTools()`), waehrend vier Register ungefragt danebenliegen —
+`geschossStapel`, `projektBaum`, `arbeitsbereiche`, `naechsterSchritt`. Der Auftrag traegt die eiserne
+Regel im Klartext: **die Palette weiss nichts selbst, sie fragt die vorhandenen Register** — und die
+Mutation dazu: ein Geschoss aus dem Stapel entfernt ⇒ es verschwindet aus der Palette.
+
+**Was ich noch nicht geschrieben habe, und warum:** **AUF-48** (die 2 229-Zeilen-Datei zerlegen) und
+**AUF-50** (die 110 Werkzeuge funktionstuechtig machen). Beide brauchen **erst eine Messung**, bevor
+ein ehrlicher Auftrag moeglich ist — bei AUF-50 steht das seit dem 25.07. so auf der Tafel
+(*„Planner schreibt danach den Stufenplan"*). **Einen Auftrag fuer 110 Werkzeuge zu schreiben, ohne
+vorher gezaehlt zu haben, welche davon schon tun und welche nur aussehen, waere genau die Sorte
+Auftrag, die der Generator heute dreimal zu Recht korrigiert hat.** Ich messe das, wenn die Kette
+naeher heranrueckt — es ist die naechste Planner-Arbeit, nicht die naechste Generator-Arbeit.
+
+**Ballbesitz unveraendert: Generator (AUF-56) · Evaluator (AUF-55.1).**
