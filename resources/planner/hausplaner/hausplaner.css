@@ -1,0 +1,20 @@
+/*
+ * AUF-38 Scheibe 1 — **das Grundgeruest der Stilschicht. Noch keine einzige Umstellung.**
+ *
+ * Diese Datei existiert, damit der Bau sie erzeugt: `vite.hausplaner.config.ts` bildet jede
+ * CSS-Ausgabe auf `hausplaner.css` ab, und beide Blades binden sie bereits bewacht ein
+ * (`@if (file_exists(...))`). Es brauchte weder eine Bau- noch eine Blade-Aenderung — nur den
+ * ersten Import. Scheibe 1 beweist genau diese Mechanik, **bevor** irgendetwas umgebaut wird:
+ * geht sie schief, ist nichts umgestellt.
+ *
+ * **HIER STEHT KEIN FARBWERT.** Die Werte kommen zur Laufzeit aus `studioDaten.ts` als
+ * `--hp-*`-Variablen (siehe `app/stil/tokenVariablen.ts`). Eine Farbe in dieser Datei waere die
+ * zweite Wahrheit, die T1 beseitigt hat — sie stuende neben `T` und altert dort still.
+ *
+ * **Die eine Regel unten ist absichtlich wirkungslos.** Eine leere CSS-Datei wird vom Bau
+ * verworfen; eine eigene Eigenschaft, die niemand liest, kann kein Pixel verschieben. Damit gilt
+ * Kriterium 9 dieser Scheibe buchstaeblich: *die Seite sieht exakt aus wie vorher.*
+ */
+:root {
+  --hp-stilschicht: 1;
+}

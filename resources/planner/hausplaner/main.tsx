@@ -5,6 +5,10 @@
  * Die Szene wird VOR dem Mount mit Zod validiert: unbekannte Schema-Version oder
  * unbekannter Node-Typ ⇒ Laden wird mit sichtbarer Meldung verweigert (Kante).
  */
+// AUF-38 Scheibe 1 — der erste Import der Stilschicht. Er allein laesst den Bau
+// `public/hausplaner/hausplaner.css` erzeugen; die bewachten `<link>` in beiden Blades greifen
+// daraufhin von selbst. Keine Bau-, keine Blade-Aenderung noetig.
+import './hausplaner.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HausplanerStudio } from './app/HausplanerStudio';
@@ -13,6 +17,7 @@ import { usePlannerUiStore } from './app/state/uiState';
 import { leseRechte, RECHTE_ATTRIBUT } from './app/state/rechte';
 import { leseProjekte, PROJEKTE_ATTRIBUT } from './app/state/projekte';
 import { setzePaketZiel, PAKETE_URL_ATTRIBUT } from './app/state/paketSpeichern';
+import { setzeTokenVariablen } from './app/stil/tokenVariablen';
 import { sceneDocumentSchema, validateSceneIntegrity, migriereSzene } from './domain/validation';
 import { ladeFixture, fixtureNameAusSearch } from './fixtures/studioFixtures';
 import type { SceneDocument } from './domain/scene.types';
@@ -75,6 +80,9 @@ if (mount && szenenElement) {
       usePlannerUiStore.getState().setProjekte(leseProjekte(mount.dataset[PROJEKTE_ATTRIBUT]));
       // AUF-81: dieselbe Naht — ohne Ziel wird nicht gespeichert und nichts behauptet.
       setzePaketZiel(mount.dataset[PAKETE_URL_ATTRIBUT] ?? null, csrf);
+      // AUF-38 Scheibe 1: die Tokens als CSS-Variablen — erzeugt aus `T`, nicht abgeschrieben.
+      // Noch benutzt sie niemand; das ist der Boden, auf dem die Scheiben 2-8 stehen.
+      setzeTokenVariablen();
       ReactDOM.createRoot(mount).render(
         <React.StrictMode>
           <HausplanerStudio />
