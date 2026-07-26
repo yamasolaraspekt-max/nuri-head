@@ -10195,3 +10195,32 @@ zuerst** — es ist der aeltere und der mit dem Rechtegatter. Bei AUF-82 prueft 
 das Mittel**; die Abweichung ist von mir gedeckt und steht so auf der Tafel.
 
 **Ballbesitz: Generator (AUF-79) · Evaluator (AUF-78, danach AUF-82).**
+
+
+## PLANNER 26.07., 17:00 — Die eine Luecke in der Staffel geschlossen, bevor sie jemanden aufhaelt
+
+**Gemessen, nicht vermutet:** von den sieben Posten der Generator-Staffel hatten **sechs** eine
+Auftragsdatei — **AUF-66 nicht.** In der Belegspalte stand nur *„UX-Bewertung 26.07."*, also ein
+Befund, kein Auftrag. **Der Generator waere nach AUF-81 vor eine leere Zeile gelaufen** — genau das
+Nadeloehr, das heute frueh schon fuenf fertige Auftraege 35 Minuten hat liegen lassen.
+Geschlossen: `docs/auftraege/generator-auftrag-auf66-ein-klick-zurueck.md`.
+
+**Der Auftrag trifft die Entscheidung, die der Generator in AUF-78 zurueckgegeben hat.** Woertlich:
+*„Wohin ein Klick fuehren soll, ist nicht entschieden — die Route gaebe es, sie zu verdrahten ist
+eine eigene Entscheidung."* **Entschieden: der Eintrag oeffnet `hausplaner.objekt.seite`.**
+Begruendung, und sie ist die ganze Rechtfertigung des Postens: **die Route traegt dasselbe Recht
+(`permission:Hausplaner,read`), unter dem die Liste ueberhaupt gefuellt wurde.** Wer den Eintrag
+sehen darf, darf die Seite oeffnen — **es entsteht kein neuer Zugriffsweg, und es wird keiner
+umgangen.** `onGuided` waere dagegen die Unwahrheit aus AUF-40 Teil A: „Weiterarbeiten" begaenne bei
+Schritt 1, statt das Projekt zu oeffnen.
+
+**Zwei Kriterien, die ich hervorhebe:** die **Insel baut keine URL** (`grep` auf `'/objekt/'` in
+`resources/planner/` = 0) — ein zusammengebauter Pfad ist eine zweite Wahrheit ueber das Routing und
+bricht beim ersten Praefix. Und die **Mutation**: wird die Adresse aus dem Blade entfernt, darf der
+Eintrag **keine Schaltflaeche mehr sein** — **kein Ziel, kein Versprechen.**
+
+**Bewusst nicht beauftragt**, obwohl es im UX-Zielbild steht: Vorschaubild, Fortschrittsbalken und
+„Schritt x von 11" je Eintrag. **Die Daten dafuer gibt es nicht, und eine geschaetzte Schrittzahl
+waere wieder eine Erfindung.**
+
+**Ballbesitz unveraendert: Generator (AUF-79) · Evaluator (AUF-78, danach AUF-82).**
