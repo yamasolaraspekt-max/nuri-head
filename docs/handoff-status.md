@@ -13475,3 +13475,58 @@ koppelt textlich nur **B an A**, nicht C an B. Deshalb ist C sofort gelaufen. **
 B und C gegen dieselbe `public/hausplaner/`** — das gehört gesagt, nicht geglättet.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## PLANNER 26.07., 23:20 (CEST) — P2-2 Go erhalten. Und Yamas Bedingung gemessen: fuenf Stilwelten
+
+**Yama:** *"Wir koennen es verdrahten, aber Frontend und Layout muss ueberall gleich sein, darum
+geht es mir."* Papier: `docs/planner/frontend-einheitlichkeit-2026-07-26.md`.
+
+**Der Go steht.** Und die Bedingung ist keine Vorsichtsmassnahme, sondern eine Beschreibung des
+Ist-Zustands. Gezaehlt in `resources/views/`: **Bootstrap 62** Dateien · **lucide 71** ·
+**unpkg 64** · **cdnjs 37** · **Tailwind ueber CDN 36** · font-awesome 16 · phosphor 2 —
+und **nur 8** Dateien ueber den gebauten Weg (`@vite`). Bootstrap und Tailwind stehen nebeneinander,
+die Icons kommen aus drei Familien, und `cdn.tailwindcss.com` ist der Entwicklungsmodus, der im
+Browser des Nutzers uebersetzt.
+
+**Aber die Kette, um die es geht, ist bereits einheitlich.** `wp_auslegung`, `energiekonzept`,
+`fussboden_check`, `plan_upload` haengen alle an `@extends('admin.layouts.app')`. **Und die
+Verdrahtung selbst bringt gar keine Oberflaeche mit** — P2-2 ist ein Datenpfad
+(`POST /objekt/{objekt}/uebernehmen` → `gebaeude_geometrie`), kein Panel, kein Stylesheet, keine
+Seite. **Der Go kann also genommen werden, ohne die Layoutfrage zu beruehren; es ist die einzige
+der besprochenen Arbeiten, die gar keine Oberflaeche anfasst.**
+
+**Wo Yamas Satz heute wirklich verletzt wird: bei den Prototypen.** `roof_config/*` und
+`layouts/roof.blade.php` laden Tailwind ueber CDN plus eigene Icon-Sets. **Das bestaetigt die
+Entscheidung von vorhin**, aus ihnen die **Geometrie-Funktionen** zu nehmen und **nicht die
+Dateien** — die Formgeber sind stilfrei, sie liefern Koerper und keine Knoepfe. Wer die Dateien
+hineinzoege, zoege die fuenfte Stilwelt mit.
+
+**Und jetzt die unangenehme Stelle.** Gemessen: `hausplaner/objekt.blade.php` und `studio.blade.php`
+haben ein **eigenes `<!DOCTYPE>`** und laden **`hausplaner.css` — und sonst nichts.** Kein CDN, kein
+Bootstrap, kein zweites Icon-Set. **Der Planer ist heute die disziplinierteste Oberflaeche im
+ganzen Repo** (eine Token-Quelle, seit AUF-38 Scheibe 1 belegt abgeleitet statt abgeschrieben) —
+**und er ist nicht dieselbe Huelle wie der Rest.**
+
+Daraus eine Gabelung, die eine Entscheidung ist und keine Messung:
+**A — der Planer zieht in `admin.layouts.app`**: gleich im Sinne von *dieselbe Seite*, aber er erbt
+Bootstrap, Tailwind-CDN und drei Icon-Familien. *Einheitlicher aussehen und unordentlicher sein.*
+**B — der Rest zieht zum Planer**: eine Token-Quelle, eine gebaute CSS, kein CDN. Gross, aber die
+Richtung, in die AUF-38 ohnehin laeuft.
+
+**Meine Empfehlung ist B**, und nicht aus Geschmack: **A macht das Problem groesser.** Eine
+Oberflaeche, die heute aus einer Quelle gespeist wird, an vier Quellen anzuschliessen, ist keine
+Vereinheitlichung — es ist die vierte Quelle.
+
+**Was B zuerst braucht, und beides ist klein:** eine Antwort darauf, **was die eine Wahrheit ist**
+(Vorschlag: `studioDaten.ts`, weil sie es heute schon ist), und **ein Zaehler**, der meldet, wie
+viele Dateien noch an CDN, Bootstrap oder einem zweiten Icon-Set haengen — heute 36 · 62 · 71.
+*Ohne Zahl ist „ueberall gleich" ein Gefuehl; mit Zahl ist es ein Fortschritt, den man sieht.*
+
+**Konsequenz fuer die Tafel:** **bis Weg A oder B entschieden ist, schreibe ich keinen Posten, der
+Layout anfasst** — auch die AUF-48-Auflage zum Dachform-Feld nicht. Sie sitzt in der Planer-Huelle
+und waere unter A anders zu bauen als unter B. **Die Auflage bleibt auf der Tafel stehen, aber mit
+diesem Vorbehalt.**
+
+**Ballbesitz:** Evaluator (AUF-52 Scheibe B), Generator Scheibe C (acht Dateien im Baum),
+Marke AUF-52.
