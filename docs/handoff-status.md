@@ -11655,3 +11655,43 @@ Merge-Weg ist Evaluator-frei; offen bleibt allein **Yamas Tor 2**. Ballbesitz: P
 
 **Abgenommen heute: AUF-78·81·82·66·76·54·77·63 FREIGABE · 55·56 FREIGABE MIT AUFLAGE (55.1/56.1
 Sichtprobe erledigt); 79 Spur B.** Evaluator-Stapel leer.
+
+
+## PLANNER 26.07., 20:35 — Der Abnahme-Stapel ist leer. Merge-Bedingungen: drei von vier
+
+**AUF-77 und AUF-63 sind beide freigegeben** (`f330400`, `dd80dfd`) und archiviert. Damit ist
+**jede berichtete Scheibe des Tages abgenommen** — zehn Posten, davon acht ohne Auflage und zwei
+mit Auflage, die inzwischen erledigt ist.
+
+**Bei AUF-77 hebt der Evaluator dieselbe Stelle hervor wie ich, und das ist ein gutes Zeichen:**
+das Bezugsmass ist ein **Typfehler**, kein Test — belegt per echtem Compiler-Lauf, **gruen, weil der
+Fehler eintritt**. Dazu der **Fehlalarm-Schutz** (Oberlicht ueber Tuer ist keine Ueberlappung), den
+weder mein Auftrag noch mein Stapel-Hinweis verlangt hatte.
+
+**Bei AUF-63 ist der Beleg die Grenze, nicht die Zahl:** `dom-register` **sperrt sechs DOM-Zugaenge**
+(*kein Layout*) — die Trennung zwischen „Fokus und Tastatur" und „Geometrie" ist **gebaut**, nicht
+versprochen, und mutiert man sie, wird es rot. **jsdom ist devDep, 0 Treffer im Buendel**, selbst
+gegrept.
+
+### Die Merge-Bedingungen, buchstaeblich gemessen (§7.6)
+
+| # | Bedingung | Stand |
+|---|---|---|
+| 1 | **Abnahme-Stapel leer** | **erfuellt** — §3b traegt nur noch die Kopfzeile |
+| 2 | **Keine offene Auflage** | **erfuellt** — 55.1 und 56.1 sind um 19:44 gefahren worden |
+| 3 | **Beide Suiten gruen gegen den zu mergenden Stand** | **erfuellt** — 1206/0 + 11/0 Insel, 789 PHP, Waechter gruen |
+| 4 | **Arbeitsbaum leer** | **NICHT erfuellt** — der Generator baut AUF-42: `HausplanerApp.tsx`, ein neuer Test, das Buendel, dazu `sicht-auf42.tmp.mjs` |
+
+**Also: drei von vier, und die vierte ist keine Formalie.** `git checkout main` **nimmt ungespeicherte
+Aenderungen mit hinueber** — genau die Falle 1 aus meiner Merge-Anleitung von heute Vormittag.
+**Ich schlage den Merge deshalb noch nicht vor.** Sobald AUF-42 berichtet und der Baum leer ist,
+melde ich mich mit den vier Zeilen zum Kopieren — **und nicht vorher, auch wenn drei von vier
+verlockend nah aussehen.** Genau diese Auslegung hat Yama heute frueh kassiert.
+
+**Zwei Dinge fuer den AUF-42-Commit, damit sie nicht hineinrutschen:** `sicht-auf42.tmp.mjs` liegt
+**im Wurzelverzeichnis**, nicht in `__tests__` — ein `.tmp` dort faellt spaeter niemandem mehr auf.
+Und das Buendel ist bereits neu gebaut, gehoert nach §8 2b aber in den **zweiten** Commit.
+
+**Stand nach dem Merge, wenn er kommt:** `main` haengt aktuell **90 Commits** zurueck.
+
+**Ballbesitz: Generator (AUF-42) · Evaluator: Stapel leer · Planner: Zaehlung fuer AUF-50.**
