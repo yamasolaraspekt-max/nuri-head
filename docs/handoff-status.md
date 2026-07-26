@@ -9465,7 +9465,7 @@ wenigstens sichtbar machen, statt ihn nach `/dev/null` zu schlucken.
 Beleg-Sperre steht unangetastet weiter da. **Ballbesitz: Planner.**
 
 
-## PLANNER 26.07., 14:20 — Wie viele Posten wirklich parallel laufen koennen (Untersuchung)
+## PLANNER 26.07., 13:54 (richtiggestellt, siehe unten) — Wie viele Posten wirklich parallel laufen koennen (Untersuchung)
 
 Yamas Frage, gruendlich gemessen: `docs/planner/parallelbetrieb-2026-07-26.md`.
 
@@ -9500,7 +9500,7 @@ zweite pruefende Instanz — das ist ein Vorschlag an Yama, keine Entscheidung d
 unveraendert weiter.
 
 
-## PLANNER 26.07., 14:40 — Einspurbetrieb bleibt (Yamas Entscheidung) + Staffel fuer beide Rollen
+## PLANNER 26.07., 13:57 (richtiggestellt, siehe unten) — Einspurbetrieb bleibt (Yamas Entscheidung) + Staffel fuer beide Rollen
 
 **Yama, woertlich:** *„ich glaube die Gefahr ist zu gross, wir bleiben dabei wie es ist."*
 Die Untersuchung hatte drei Spuren fuer machbar gehalten; **die Entscheidung geht anders aus, und
@@ -9532,7 +9532,7 @@ anderen, bereits committeten Posten ab** — abnehmen ist kein Bauen, es aendert
 **Ballbesitz: Generator (AUF-78) und Evaluator (Waechter-Blindstelle).**
 
 
-## PLANNER 26.07., 15:05 — Mein Fehler, zum dritten Mal am selben Tag: Bericht gelesen, nachdem ich schon geantwortet hatte
+## PLANNER 26.07., 14:08 (richtiggestellt, siehe unten) — Mein Fehler, zum dritten Mal am selben Tag: Bericht gelesen, nachdem ich schon geantwortet hatte
 
 **Der Evaluator hat um 13:53 (`1a8f43e`) geliefert und den Ball an mich gegeben.** Ich habe um
 14:40 in den Ledger geschrieben *„Ballbesitz: Evaluator (Waechter-Blindstelle)"* — **47 Minuten
@@ -9579,3 +9579,38 @@ geaenderten Dateien wieder etwas unter das Fenster (AUF-72/73 hatten 227–273 p
 **Kommt ein AUF-78-Commit, hat dessen Abnahme Vorrang.**
 
 **Ballbesitz: Generator (AUF-78) · Evaluator (Sichtprobe-Erstanwendung).**
+
+
+## PLANNER 26.07., 14:15 — Zwei Richtigstellungen an mir selbst, und ein dritter Waechter-Fall
+
+**1. Ich habe Uhrzeiten erfunden statt abgelesen.** Meine letzten drei Ledger-Ueberschriften trugen
+14:20, 14:40 und 15:05. Die Commits liegen bei **13:54, 13:57 und 14:08**. Ich habe plausible
+Zeiten geschrieben, statt auf die Uhr zu sehen — **genau die Sorte unbelegter Angabe, die ich beiden
+Rollen jede Woche anstreiche.** Die drei Ueberschriften sind richtiggestellt und als
+richtiggestellt gekennzeichnet; geloescht wird nichts.
+
+**2. Damit faellt auch meine eigene Zahl von vorhin.** Ich schrieb, der Evaluator habe **47 Minuten**
+auf mich gewartet. Gemessen sind es **15** (13:53 -> 14:08). **Der Fehler bleibt derselbe — die Zahl
+war erfunden, und eine erfundene Zahl macht ein ehrliches Eingestaendnis nicht ehrlicher, sondern
+wertloser.**
+
+**3. Ein dritter Waechter-Fall, gemessen, und er ist gefaehrlicher als die beiden bekannten.**
+Log 14:08: `uebersprungen (Lauf aktiv, pid 79)` — **die Zeile des Gesundzustands, exit 0.** Die
+Sperre stammt aber von **13:54**, von meinem eigenen, laengst beendeten Lauf. `kill -0 79` lieferte
+um 14:08 **wahr**, weil inzwischen ein **anderer** Prozess dieselbe Nummer trug; die Gegenprobe eben
+liefert **falsch**. **Eine Prozessnummer ist keine Identitaet.**
+
+Warum das schlimmer ist als der stumme Fall: der stumme schreibt wenigstens `OHNE lebenden Halter`
+und ist auffindbar. **Dieser schreibt die Zeile, die Gesundheit bedeutet.** Ein uebersprungener Lauf,
+der eine fremde Nummer fuer sich selbst hielt, sieht in jeder Auswertung aus wie Ordnung. Die
+Zeitgrenze rettet nicht: `HOECHSTDAUER=1800`, die Sperre ist **1036 s** alt.
+
+**AUF-82 ist um Stueck (c) erweitert** (Nummer **plus** Startzeitpunkt, oder ein Lebenszeichen) und
+um zwei Kriterien: der Fall wird nachgestellt und erkannt, und **die Zeile fuer den gesunden Fall
+bleibt dem gesunden Fall vorbehalten** — es darf keine zwei Zustaende geben, die dieselbe Zeile
+schreiben. Die stehende Sperre (`pid 79`) ist der neue Pruefstein und wird nicht von Hand geraeumt.
+
+**Stand der beiden Rollen, gemessen und nicht angenommen:** seit `1a8f43e` (13:53) **kein** Commit
+von Generator oder Evaluator, Arbeitsbaum leer, keine Sperre im Index. Der Generator hat AUF-78
+(gross, Spur A), der Evaluator die Sichtprobe-Erstanwendung (eine Stunde angesetzt). **Beide sind
+versorgt; nachlegen waere Vorrat, kein Durchsatz** (§13.3). **Ballbesitz unveraendert.**

@@ -82,3 +82,51 @@ Kennzeichnung — **entscheidest du und begründest es in einem Satz.**
 **AUF-82 läuft unmittelbar vor AUF-79.** Beide fassen `scripts/waechter.sh` an. Liegt etwas
 dazwischen, baut AUF-79 auf einer Fassung, die es beim Committen nicht mehr gibt. **Zwei Posten in
 derselben Datei gehören nebeneinander oder in einen — nicht auseinandergerissen.**
+
+---
+
+## 6. NACHTRAG 26.07., 14:15 — ein dritter Fall, und er ist der gefährlichste
+
+**Gemessen, nicht vermutet.** Im Log steht um 14:08:
+
+```
+2026-07-26T14:08:11 - - uebersprungen (Lauf aktiv, pid 79)
+```
+
+Das ist die Zeile für den **gesunden** Fall: ein anderer Lauf arbeitet, also überspringen, exit 0.
+**Sie ist falsch.** Die Sperre wurde um **13:54** von pid 79 angelegt — meinem eigenen Lauf über
+die Cowork-Brücke, der längst beendet war. Zum Zeitpunkt der Prüfung um 14:08 hat `kill -0 79`
+trotzdem **wahr** geliefert, weil in diesem Kontext inzwischen **ein anderer Prozess dieselbe
+Nummer trug**. Gegenprobe eben ausgeführt: `kill -0 79` liefert jetzt **falsch**.
+
+**Warum das schlimmer ist als der stumme Fall aus §1:** Der stumme Fall schreibt wenigstens
+`OHNE lebenden Halter` ins Log — forensisch auffindbar. **Dieser hier schreibt die Zeile des
+Gesundzustands** und endet mit **exit 0**. Ein Wächter, der übersprungen hat, weil er eine fremde
+Prozessnummer für sich selbst hielt, **sieht in jeder Auswertung aus wie ein Wächter, bei dem alles
+in Ordnung war.** Das ist genau die Richtung, nach der bei der Zustands-Inventur schon einmal
+niemand gesucht hatte: etwas, das gesund aussieht und es nicht ist.
+
+**Die Zeitgrenze rettet hier nicht.** `HOECHSTDAUER=1800`; die Sperre ist gemessen **1036 s** alt.
+Das Alter greift also erst nach einer halben Stunde — und danach landet es wieder im `rm`-Problem
+aus §2(a).
+
+### (c) Was zusätzlich gebaut wird: eine Prozessnummer ist keine Identität
+
+Die Sperre muss ihren Halter **eindeutig** ausweisen, nicht nur nummerisch. Der Weg ist deine
+Entscheidung; zwei liegen nahe, und beide sind mit Bordmitteln zu haben:
+
+- **Nummer plus Startzeitpunkt des Prozesses** — stimmt die Nummer, aber nicht der Startzeitpunkt,
+  ist es ein anderer Prozess. `ps -o lstart= -p <pid>` liefert ihn.
+- **Ein Lebenszeichen**, das der laufende Wächter regelmäßig erneuert. Ist es älter als ein
+  benanntes Maß, lebt niemand mehr, ganz gleich, was die Nummer sagt.
+
+**Kriterium, zusätzlich zu §4:**
+9. **Der Fall ist nachgestellt und wird erkannt:** eine Sperre mit einer Nummer, die es gibt, aber
+   von einem anderen Prozess — der Wächter darf sie **nicht** als lebenden Halter behandeln. Der
+   Test dazu wird rot, wenn die Prüfung wieder auf die Nummer allein zurückfällt. Zahl nennen.
+10. **Die Zeile für den gesunden Fall bleibt dem gesunden Fall vorbehalten.** Wer aus einem
+    anderen Grund überspringt, schreibt eine andere Zeile. **Es darf keine zwei Zustände geben,
+    die dieselbe Zeile schreiben** — das war der ganze Fehler.
+
+**Die jetzt stehende Sperre (`pid 79`, geboren 13:54) ist der neue Prüfstein.** Nicht von Hand
+räumen.
