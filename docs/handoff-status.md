@@ -11109,3 +11109,38 @@ ohnehin dieselben zwei Dateien anfasst — **zwei Wege durch dieselbe Datei sind
 
 **Ballbesitz: Generator (AUF-56, mit dem Nebenbefund) · Evaluator (AUF-55.1, sobald ein
 belastbarer Browser da ist).**
+
+
+## PLANNER 26.07., 19:10 — Yamas Regel: nichts Neues, bevor das Offene fertig ist
+
+**Wortlaut:** *„keine neuen Aufgaben — alles was hier offen, gesperrt und teilweise in Arbeit ist,
+muss vollstaendig abgearbeitet werden, bevor wir was Neues anfangen; es sei denn, wir brauchen neue
+Sachen, damit wir die Aufgaben zu Ende abarbeiten."* Steht als **§14** in
+`docs/agents/06-laufzeiten-und-takt.md`.
+
+**Der Umfang ist zwoelf Posten und eine Auflage**, und ich schreibe sie hin, damit sie nicht spaeter
+verhandelbar sind: AUF-56 (in Arbeit) · AUF-55.1 (Auflage) · AUF-77 · AUF-63 · AUF-52 · AUF-35b ·
+AUF-38 (offen) · AUF-40 Rest · AUF-67 · AUF-42 · AUF-48 · AUF-50 (gesperrt).
+
+**Die Gesperrten sind mit gemeint, und das ist die Stelle, an der die Regel Zaehne hat.**
+„Gesperrt" heisst *Vorbedingung nicht erfuellt*, nicht *spaeter*. **Damit sind AUF-48 (die
+2 229-Zeilen-Datei zerlegen) und AUF-50 (die 110 Werkzeuge funktionstuechtig machen) ab jetzt im
+Umfang** — die beiden groessten Posten des Projekts. Wer die Regel ausspricht, muss das aushalten,
+und wer sie aufschreibt, muss es dazuschreiben.
+
+**Die Ausnahme ist eine Frage, keine Ermessenssache:** *welchen offenen Posten kann ich ohne diesen
+hier nicht abschliessen?* **Antwort mit Nummer ⇒ zulaessig** (so entstand AUF-82: ohne ihn blieb
+AUF-75.1 offen). **Keine Antwort mit Nummer ⇒ kein Posten** — der Befund wird aufgeschrieben, nicht
+beauftragt.
+
+**Was das fuer meine eigene Arbeit heisst, ausdruecklich:** die Referenzliste der Mockups und der
+Fahrplan (Phasen 2–4) sind ab jetzt **Vorrat, kein Auftrag**. Ich habe heute beides geschrieben und
+werde es **nicht** anfassen, bis die zwoelf durch sind. **Befunde melde ich weiter — melden ist
+kein Beauftragen.**
+
+**Der Grund, den ich mitschreibe, weil er in einem halben Jahr nicht mehr erinnerlich ist:**
+angefangene Posten altern. Ein Posten, der drei Wochen offen liegt, wird gegen einen Stand gemessen,
+den es nicht mehr gibt — **und dann ist die Arbeit, die schon drin steckt, nicht halb fertig,
+sondern weg.**
+
+**Ballbesitz unveraendert: Generator (AUF-56) · Evaluator (AUF-55.1).**

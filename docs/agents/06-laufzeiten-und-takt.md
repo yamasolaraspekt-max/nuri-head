@@ -498,3 +498,55 @@ gewesen wäre und es nicht war.
 3. **Wer eine Sichtprobe vertagt, weil `serviert != gemessen`, hat richtig gehandelt** — auch wenn
    am Ende keine Zahl herauskommt. **Eine falsch etikettierte Zahl ist schlimmer als keine**, weil
    sie später als Grundlinie zitiert wird.
+
+---
+
+## 14. Nichts Neues, bevor das Offene fertig ist (Yama, 26.07., bindend)
+
+**Wortlaut:** *„keine neuen Aufgaben — alles was hier offen, gesperrt und teilweise in Arbeit ist,
+muss vollständig abgearbeitet werden, bevor wir was Neues anfangen; es sei denn, wir brauchen neue
+Sachen, damit wir die Aufgaben zu Ende abarbeiten."*
+
+**Was das umfasst — nicht „das Meiste", sondern die ganze Liste.** Am 26.07., 19:10 sind das
+**zwölf Posten und eine Auflage**:
+
+| Zustand | Posten |
+|---|---|
+| in Arbeit | AUF-56 |
+| offene Auflage | AUF-55.1 |
+| offen | AUF-77 · AUF-63 · AUF-52 · AUF-35b · AUF-38 |
+| gesperrt | AUF-40 (Rest) · AUF-67 · AUF-42 · AUF-48 · AUF-50 |
+
+**Die Gesperrten sind ausdrücklich mit gemeint.** „Gesperrt" heißt *Vorbedingung nicht erfüllt*,
+nicht *später*. **Damit sind AUF-48 (die 2 229-Zeilen-Datei zerlegen) und AUF-50 (die 110 Werkzeuge
+funktionstüchtig machen) ab jetzt im Umfang** — die beiden größten Posten des Projekts. Wer diese
+Regel ausspricht, muss auch das aushalten; deshalb steht es hier und nicht im Kleingedruckten.
+
+### Die einzige Ausnahme, und wie sie geprüft wird
+
+Ein neuer Posten ist zulässig, **wenn er gebraucht wird, um einen vorhandenen zu Ende zu bringen.**
+**Die Prüfung ist eine Frage, und sie wird schriftlich beantwortet:**
+
+> **Welchen offenen Posten kann ich ohne diesen hier nicht abschließen?**
+
+- **Es gibt eine Antwort mit Nummer** → zulässig. Die Nummer steht in der Zeile des neuen Postens,
+  und der bediente Posten verweist zurück. *(So entstand AUF-82: ohne ihn blieb die Auflage
+  AUF-75.1 offen.)*
+- **Es gibt keine Antwort mit Nummer** → **kein Posten.** Der Befund wird aufgeschrieben, nicht
+  beauftragt. Er wartet, bis die Liste leer ist.
+
+### Was daraus **nicht** folgt
+
+1. **Befunde werden weiter gemeldet.** Wer etwas findet, sagt es — Melden ist kein Beauftragen.
+   Sie sammeln sich in `docs/planner/` und werden zu Posten, **wenn** die Liste leer ist.
+2. **Nebenbefunde dürfen an einen laufenden Posten angehängt werden**, wenn er dieselbe Datei
+   ohnehin anfasst. *(So ging „Module folgen" an AUF-56.)* **Ein zusätzlicher Weg durch dieselbe
+   Datei ist teurer als ein Satz mehr im selben Weg.**
+3. **Auflagen aus Voten sind keine neuen Aufgaben**, sondern der unfertige Teil einer alten.
+4. **Der Fahrplan bleibt liegen, wo er liegt.** `docs/planner/fahrplan-hausplaner-2026-07-26.md`
+   Phasen 2–4 (Eingang · Fach-Übergabe · Personalisierung) und die Referenzliste der Mockups sind
+   **Vorrat, kein Auftrag** — sie werden nicht angefasst, bis die zwölf durch sind.
+
+**Der Grund, in einem Satz:** angefangene Posten altern. Ein Posten, der drei Wochen offen liegt,
+wird gegen einen Stand gemessen, den es nicht mehr gibt — **und dann ist die Arbeit, die schon drin
+steckt, nicht halb fertig, sondern weg.**
