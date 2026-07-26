@@ -13615,3 +13615,54 @@ Listeneingang (eine Schicht, die es im Modell nicht gibt), Operanden-Gate. **Gat
 test **1288/0**·build0, Bundle byte-gleich.
 
 **Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.
+
+
+## PLANNER 26.07., 23:30 (CEST) — AUF-52 freigegeben und archiviert. Sechzehnter Posten heute, kein rotes Votum
+
+**FREIGABE** (`c91ff677`) fuer `97e941a1`/`7cf7f6ae`, kumulativ ueber alle drei Scheiben; Scheibe A
+eigens (`497215c6`). Gates **1288/0**, PHP 789, Buendel byte-gleich. **AUF-52 ist der erste Posten
+dieser Kette, der vollstaendig durch ist** — deshalb Archiveintrag, anders als bei den einzelnen
+Scheiben.
+
+**Er hat meine Frage beantwortet, und zwar die, die ich gestellt habe — nicht die, die der
+Generator zugesagt hatte.** Der Generator sagte *"der Wert wird unveraendert durchgereicht"*; ich
+hatte gefragt, ob die beiden Woerter **dasselbe bedeuten**. Seine Antwort:
+**`ausreichend = q >= raumheizlast` ist das einzige Bestehens-Urteil des Deckungs-Checks — also
+bedeutungserhaltend.** Und der Gegen-Beweis sass **an der Zuordnungsstelle** (`bestanden:
+r.ausreichend` → `true` ⇒ Umbenennungs-Test rot), nicht am Ergebnis. Er schreibt dazu selbst:
+*"Mutation am Fehlerort, deine Verfeinerung."*
+
+**Damit ist die Auflage aus Scheibe A zweimal unabhaengig eingeloest:** der Generator hat sie von
+sich aus angewandt, der Evaluator hat sie noch einmal an der richtigen Stelle geprueft. **Der
+Fehler, den beide heute Nachmittag gemacht haben — ein Pruefer, der den Weg des Geprueften teilt —
+ist damit an derselben Baustelle geschlossen, an der er entstanden ist.**
+
+**Eine Stelle bleibt offen, und ich benenne sie, statt sie unter dem gruenen Votum verschwinden zu
+lassen.** Meine Gegenprobe zu `engine-uwert` — `app/Models/Material.php` fuehrt `lambda_w_mk` seit
+dem 05.07. — hat er nicht aufgegriffen; er bewertet die Rueckgabe als *"ehrlich: fehlender
+Listeneingang"*. **Beides stimmt, und es ist kein Widerspruch:** in der **Insel** gibt es kein
+Lambda, und es von dort zu holen waere ein Datenpfad, den es nicht gibt. **Die Rueckgabe war
+richtig; meine Gegenprobe aendert nicht das Urteil, sondern die Aussicht** — sie sagt, dass die
+Loesung ein Nachschlag ist und keine Schema-Erweiterung. **Auf die Befundliste, nicht ins Votum.**
+
+**Bilanz AUF-52:** 8 von 13 Engines haben eine Flaeche, 5 mit Messung zurueckgegeben, **vier davon
+an derselben Ursache** — die Huelle uebergibt Felder, diese Engines brauchen Listen. *Ein Auftrag,
+der zwoelf von zwoelf gemeldet haette, waere verdaechtiger gewesen.*
+
+**Tafel:** AUF-52 aus §3a ins Archiv, beide Scheibenzeilen aus §3b entfernt.
+**84 Zeilen, 0 fehlerhaft, eine Marke (AUF-38), Stapel leer.**
+
+**Heute abgenommen: sechzehn Posten, kein einziges rotes Votum** — AUF-78 · 81 · 82 · 66 · 76 · 54 ·
+77 · 63 · 42 · 67 · 55 · 56 · 35b · 38-A · 52-A · 52 (B+C, kumulativ). Dazu AUF-79 auf Spur B und
+drei Auflagen.
+
+**An den Evaluator (§15):** Stapel leer, kein Zuruf noetig. Als naechstes kommt **AUF-38 Scheibe 2**
+— die erste Scheibe, die tatsaechlich Inline-Angaben umstellt (Scheibe 1 war das Grundgeruest und
+ausdruecklich pixelgleich). **Dort wird Kriterium 9 zum ersten Mal etwas zu bedeuten haben**, denn
+ab jetzt kann sich etwas verschieben.
+
+**An den Generator:** AUF-38 Scheibe 2 laeuft. **Mit Weg B ist dieser Posten der tragende** — die
+Token-Quelle, zu der der Rest des Repos ziehen soll.
+
+**Neuer Merge-Punkt:** mit dieser Freigabe ist alles bis `7cf7f6ae` abgenommen. Der Block darf auf
+den Kopf dieses Eintrags zeigen.
