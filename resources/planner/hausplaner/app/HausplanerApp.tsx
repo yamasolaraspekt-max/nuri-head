@@ -148,6 +148,9 @@ function opIcon(name: string): React.ReactElement {
     case 'messen': return svgWrap(<><path d="M3 15l12-12 6 6-12 12z" /><path d="M8 8l2 2M11 5l2 2M5 11l2 2" /></>);
     case 'bemassung': return svgWrap(<path d="M3 8h18M5 6v4M19 6v4M9 6v4M13 6v4M8 16h8" />);
     case 'export': return svgWrap(<path d="M12 3v12M8 7l4-4 4 4M5 15v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-4" />);
+    // AUF-70: Rückgängig/Wiederholen ziehen in diese Zeile und brauchen dort ein Icon.
+    case 'undo': return svgWrap(<><path d="M3 12a9 9 0 1 1 3 6.7" /><path d="M3 3v5h5" /></>);
+    case 'redo': return svgWrap(<><path d="M21 12a9 9 0 1 0-3 6.7" /><path d="M21 3v5h-5" /></>);
     case 'pdf': return svgWrap(<><path d="M7 3h7l4 4v14H7z" /><path d="M9 13h2a1.5 1.5 0 0 0 0-3H9v6M15 11h-2v5" /></>);
     default: return svgWrap(<circle cx="12" cy="12" r="3" />);
   }
@@ -622,10 +625,19 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     opacity: b.deckkraft,
     cursor: b.cursor,
   });
-  const OpBtn = ({ title, onClick, icon, disabled, aktiv, geplant }: { title: string; onClick?: () => void; icon: string; disabled?: boolean; aktiv?: boolean; geplant?: boolean }): React.ReactElement => (
-    <button type="button" title={geplant ? `${title} (geplant)` : title} onClick={geplant ? undefined : onClick} disabled={disabled || geplant}
-      style={opStil(opKnopfBild(Boolean(aktiv), Boolean(disabled || geplant)))}>
-      {opIcon(icon)}
+  /**
+   * AUF-70 — `OpBtn` kann statt eines Icons eine **kurze Beschriftung** tragen (`label`).
+   * Grund: 2D · Split · 3D ziehen in diese Zeile, und für drei Ansichtsmodi gibt es keine gängige
+   * Bildsprache — ein Icon wäre Ratearbeit. Eine Beschriftung ist die kleinere Änderung als ein
+   * zweiter Knopftyp in derselben Zeile. **Der Zustand kommt unverändert aus `opKnopfBild`.**
+   */
+  const OpBtn = ({ title, onClick, icon, label, disabled, aktiv, geplant, ariaLabel }: { title: string; onClick?: () => void; icon?: string; label?: string; disabled?: boolean; aktiv?: boolean; geplant?: boolean; ariaLabel?: string }): React.ReactElement => (
+    <button type="button" title={geplant ? `${title} (geplant)` : title} aria-label={ariaLabel} onClick={geplant ? undefined : onClick} disabled={disabled || geplant}
+      style={{
+        ...opStil(opKnopfBild(Boolean(aktiv), Boolean(disabled || geplant))),
+        ...(label ? { width: 'auto', padding: '0 9px', fontSize: 12, fontWeight: 600 } : null),
+      }}>
+      {label ?? opIcon(icon ?? '')}
     </button>
   );
   /**
@@ -990,11 +1002,31 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   };
   const statusPill = { text: anzeige.text, ...ANZEIGE_TOKEN[anzeige.art] };
 
-  const knopf = (aktiv: boolean): React.CSSProperties => ({
-    padding: '6px 12px', fontSize: 12.5, fontWeight: 600, borderRadius: 8, cursor: 'pointer',
-    border: `1px solid ${aktiv ? T.brandInk : T.controlBorder}`,
-    background: aktiv ? T.brandSoft : T.surface, color: aktiv ? T.brandInk : T.canvasWall,
-  });
+  /**
+   * AUF-70 — der Textknopf liest jetzt **dieselbe** Zustandsregel wie die Icon-Knöpfe.
+   *
+   * **Der gemessene Mangel:** `Rückgängig` (gesperrt) und `Split` (frei) waren Pixel für Pixel
+   * gleich — Deckkraft 1, Mauszeiger `pointer`, Schrift `rgb(55,65,81)`, Rahmen und Hintergrund
+   * identisch. Wer die Fläche frisch öffnet, sieht zwei Knöpfe, die aussehen wie alle anderen und
+   * nicht reagieren; **die einzig mögliche Deutung ist „kaputt".** Die Umkehr ist aber heil — der
+   * Fehler lag in der Darstellung.
+   *
+   * AUF-59 hat das für `OpBtn` gelöst und `knopf()` dabei liegenlassen. Eine Regel, die nur die
+   * halbe Oberfläche erreicht, ist keine Regel. Hier wird deshalb **gelesen, nicht kopiert**:
+   * `opKnopfBild` bleibt die einzige Beschreibung der drei Zustände; diese Funktion steuert nur
+   * die Geometrie des Textknopfes bei (Polsterung, Schriftgröße) — nicht seine Zustandsfarben.
+   */
+  const knopf = (aktiv: boolean, gesperrt = false): React.CSSProperties => {
+    const b = opKnopfBild(aktiv, gesperrt);
+    return {
+      padding: '6px 12px', fontSize: 12.5, fontWeight: 600, borderRadius: 8,
+      border: `1px solid ${b.rahmenToken ? OP_TOKEN[b.rahmenToken] : T.controlBorder}`,
+      background: OP_TOKEN[b.grundToken],
+      color: OP_TOKEN[b.iconToken],
+      opacity: b.deckkraft,
+      cursor: b.cursor,
+    };
+  };
 
   const panelLabel: React.CSSProperties = { display: 'block', color: FARBEN.gedaempft, marginBottom: 8 };
   const panelInput: React.CSSProperties = { width: '100%', marginTop: 3, padding: '5px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}`, fontSize: 12.5 };
@@ -1070,9 +1102,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             <strong style={{ fontSize: 14 }}>Hausplaner <span style={{ fontWeight: 600, color: FARBEN.gedaempft, fontSize: 11.5 }}>· Solar Aspekt</span></strong>
           </span>
         )}
-        <button type="button" style={knopf(false)} title="Rückgängig (⌘Z)" aria-label="Rückgängig" onClick={() => store.getState().undo()} disabled={!store.getState().kannUndo()}>↶</button>
-        <button type="button" style={knopf(false)} title="Wiederholen (⌘⇧Z)" aria-label="Wiederholen" onClick={() => store.getState().redo()} disabled={!store.getState().kannRedo()}>↷</button>
-        <span style={{ width: 1, height: 22, background: T.hair, margin: '0 4px' }} />
+        {/* AUF-70: Rückgängig und Wiederholen sind in die Werkzeugzeile gezogen. Oben steht das
+            DOKUMENT (Geschoss, Status, Speichern), unten das WERKZEUG — vorher standen Werkzeuge
+            in zwei Zeilen. */}
         {/* Dashboard v2.1: Die Fenstertyp/Türtyp-Auswahl stand hier und ist byte-treu in die
             Kontext-Options-Leiste unter der Werkzeugleiste gewandert (§19/UI-4). Gleiche States,
             gleiche Optionslisten, gleiches onChange — der Platzierungspfad ist unberührt. */}
@@ -1111,11 +1143,6 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             }
           }}
         />
-        <span style={{ width: 1, height: 22, background: T.hair, margin: '0 4px' }} />
-        {/* P1c: Modus-Schalter — 3D ist der zweite Renderer DERSELBEN Daten (ein Store). */}
-        <button type="button" title="2D-Grundriss" style={knopf(modus === '2d')} onClick={() => store.getState().setModus('2d')}>2D</button>
-        <button type="button" title="2D und 3D nebeneinander" style={knopf(modus === 'split')} onClick={() => store.getState().setModus('split')}>Split</button>
-        <button type="button" title="3D-Ansicht" style={knopf(modus === '3d')} onClick={() => store.getState().setModus('3d')}>3D</button>
         <span style={{ flex: 1 }} />
         <span style={{ fontSize: 12, fontWeight: 600, padding: '4px 12px', borderRadius: 999, color: statusPill.farbe, background: statusPill.grund }}>{statusPill.text}</span>
         <button
@@ -1154,7 +1181,24 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
 
       {/* Bedien-Werkzeugleiste — Icons, jedes mit Tooltip + Funktionsbeschreibung */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: T.bg, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}>
-        {/* AUF-68: die drei Wörter sind weg — der Name lebt als `aria-label` weiter. */}
+        {/* AUF-68: die drei Wörter sind weg — der Name lebt als `aria-label` weiter.
+            AUF-70: davor stehen jetzt Verlauf und Ansichtsmodus — eine Werkzeugzeile statt zwei.
+            Rückgängig zuerst: es ist die Rettungsleine und gehört an den Anfang. Dann der
+            Ansichtsmodus, weil er bestimmt, worauf alle folgenden Werkzeuge wirken. */}
+        <OpGruppe name="Verlauf">
+          <OpBtn title="Rückgängig (⌘Z)" ariaLabel="Rückgängig" icon="undo" onClick={() => store.getState().undo()} disabled={!store.getState().kannUndo()} />
+          <OpBtn title="Wiederholen (⌘⇧Z)" ariaLabel="Wiederholen" icon="redo" onClick={() => store.getState().redo()} disabled={!store.getState().kannRedo()} />
+        </OpGruppe>
+        {opSep()}
+        {/* P1c: Modus-Schalter — 3D ist der zweite Renderer DERSELBEN Daten (ein Store).
+            AUF-70 §4c: die Wörter bleiben — für drei Ansichtsmodi gibt es keine gängige
+            Bildsprache, ein Icon wäre Ratearbeit. */}
+        <OpGruppe name="Ansichtsmodus">
+          <OpBtn title="2D-Grundriss" label="2D" aktiv={modus === '2d'} onClick={() => store.getState().setModus('2d')} />
+          <OpBtn title="2D und 3D nebeneinander" label="Split" aktiv={modus === 'split'} onClick={() => store.getState().setModus('split')} />
+          <OpBtn title="3D-Ansicht" label="3D" aktiv={modus === '3d'} onClick={() => store.getState().setModus('3d')} />
+        </OpGruppe>
+        {opSep()}
         <OpGruppe name="Ansicht">
           <OpBtn title="Vergrößern (Zoom +) — näher an den Grundriss heranzoomen" icon="zoom-in" onClick={() => setZoom((z) => Math.min(1, z * 1.2))} />
           <OpBtn title="Verkleinern (Zoom −) — weiter herauszoomen" icon="zoom-out" onClick={() => setZoom((z) => Math.max(0.02, z / 1.2))} />
