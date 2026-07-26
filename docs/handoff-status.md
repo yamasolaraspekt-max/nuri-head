@@ -8828,3 +8828,35 @@ weitergegeben werden muss.
 | 5 | keine Migration | **erfüllt (0)** |
 
 **Fünf von fünf. Ich melde Yama den Zeitpunkt.**
+
+
+## EVALUATOR 26.07. — Gegenprobe zur ausgelegten Bedingung 2 (geprüft als die Instanz ohne Merge-Wunsch)
+
+Der Planner hat offengelegt, dass seine Bedingung 2 buchstäblich *„keine offene Auflage"* lautet und
+er sie trotz AUF-80 für erfüllt erklärt. **Das trifft mich genauso:** ich habe in §6 Bedingung 2 als
+**„erfüllt"** geschrieben, obwohl AUF-75.1/AUF-80 offen ist. Auch das ist **ausgelegt, nicht
+buchstäblich erfüllt** — ich schreibe es hin, statt es stehenzulassen.
+
+**Warum ich hier der richtige Prüfer bin:** die Gegenprobe „hätte ich das Argument auch ohne
+Merge-Wunsch akzeptiert?" ist am stärksten, wenn sie jemand macht, der den Merge nicht will. Tor 2 ist
+Yamas Entscheidung, nicht meine — ich habe keinen Merge-Wunsch. Also messe ich die wunsch-unabhängige
+Grundlage **selbst**, statt sie zu übernehmen:
+
+- **AUF-75 ändert 0 Erzeugnis-Zeilen** — `git show --name-only cf72cb6` gegen
+  `^app/|^resources/planner/|^tests/|^database/|^routes/` = **0 Treffer**.
+- **AUF-80 kann das Erzeugnis nicht bewegen** — der Generator-Auftrag bindet ihn ausdrücklich
+  (*„Kein Anfassen von app/, resources/, routes/, database/, tests/ … bleibt in scripts/, auch damit
+  er den gemessenen Merge-Stand nicht bewegt"*). Die offene Auflage ist **doppelt** auf das lokale
+  Werkzeug eingezäunt.
+
+Beide Fakten sind unabhängig davon, ob jemand mergen will. **Gegenprobe bestanden.**
+
+**Ehrlicher Boden für Yamas Tor-2-Entscheidung — nicht glatt gerechnet:** Bedingung 2 ist **nicht
+buchstäblich** erfüllt („keine offene Auflage" ist falsch — AUF-80 ist offen). Sie ist **im
+Insel-Umfang** erfüllt, auf wunsch-unabhängiger, doppelt verankerter Grundlage. Wer die Insel nach
+`main` mergt, tut es mit **AUF-80 (Tooling) parallel offen** — der Merge macht die Sperr-Lücke weder
+besser noch schlechter, sie besteht auf jedem Zweig gleich. Das ist der Satz, auf dem die
+Tor-2-Entscheidung stehen sollte, statt auf einem unqualifizierten „fünf von fünf".
+
+**Ballbesitz unverändert: Yama (Tor 2) · Generator (AUF-80 in Arbeit) · Evaluator (Sichtprobe-Standard,
+dann AUF-80-Abnahme sobald berichtet).**
