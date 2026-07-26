@@ -12,6 +12,7 @@
  * deutsches Panel. Die Tabelle steht hier, weil sie zur Zählung gehört und nicht ins Markup.
  */
 import type { SceneNode } from '../../domain/scene.types';
+import { knotenVon } from './teilKennung';
 
 /** Typ-Bezeichnung Einzahl/Mehrzahl. Nur Anzeige — der gespeicherte `type` bleibt englisch. */
 const BEZEICHNUNG: Readonly<Record<string, { eins: string; viele: string }>> = {
@@ -47,8 +48,11 @@ export interface MehrfachUebersicht {
  * folgen) — sie werfen nicht und erscheinen nicht als „0 undefined".
  */
 export function mehrfachUebersicht(ids: readonly string[], nodes: readonly SceneNode[]): MehrfachUebersicht {
+  // AUF-35b: Eine Auswahl kann eine **Teil-Kennung** tragen (`wall-7#seite:links`). Gezaehlt wird
+  // der Knoten dahinter — sonst faende `find` nichts und die Uebersicht saehe leer aus, obwohl
+  // etwas gewaehlt ist. `knotenVon` gibt eine reine Knoten-id unveraendert zurueck.
   const gewaehlt = ids
-    .map((id) => nodes.find((n) => n.id === id))
+    .map((id) => nodes.find((n) => n.id === knotenVon(id)))
     .filter((n): n is SceneNode => Boolean(n));
 
   const zaehler = new Map<string, number>();
