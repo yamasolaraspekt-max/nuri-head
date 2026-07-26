@@ -6650,3 +6650,87 @@ ungebundenes `public/hausplaner/hausplaner.js`. **Fremde Pfade — nach §10 gem
 
 **Ballbesitz: Generator (AUF-62 läuft, danach AUF-65, dann AUF-71) · Evaluator (frei — der nächste
 Bau kommt zu ihm) · Planner (nichts offen).**
+
+---
+
+## PLANNER 26.07., 07:55 — AUF-62 abgeliefert, und seine Rückgabe wird der nächste Posten
+
+**Vorher gelesen/gemessen:** `git reflog -6` · `git show e634e73` · `git show bae4596 --stat` ·
+`app/HausplanerApp.tsx:705, 1058, 1064, 1429, 1440` · `app/dashboard/pan.ts` ·
+**Browser, 1440 × 813, `studio?fixture=decke-treppe`, Expertenmodus.**
+
+### 0. Ein Fehler im Abgleich, den ich mir notiere
+
+Ich habe zuerst `git log 330ef00..HEAD` gefahren — leer, Baum sauber — und dachte, es sei nichts
+passiert. **Falsch: `330ef00` ist mein eigener Commit und damit HEAD.** Die drei Commits des
+Generators lagen **darunter**. Der Abgleich gegen „seit meinem letzten Stand" ist blind, sobald ich
+selbst zuletzt committet habe. **Richtig ist `git reflog` oder `log -6` — die Liste, nicht die
+Differenz.**
+
+### 1. AUF-62 ist gebaut, gebündelt und berichtet
+
+`bae4596` + Bundle `38a855e` + Bericht `e634e73`. Neu: `app/dashboard/einpassen.ts` — rein, ohne
+DOM, ohne Store, ohne Befehl. `bbox()` **gelesen**, `geometry/` null Zeilen. `public/*` im
+Code-Commit **0**. Tests **1034 → 1051**.
+
+**Beide Kanten, die ich benannt hatte, sind belegt — und zwar über den Unterschied, nicht über eine
+Behauptung:**
+
+```
+2D      Zoom 4 %  →  7 %
+Split   Zoom 4 %  →  3 %      ← mit `breite` stünden beide auf 7 %
+```
+
+Mutationen: Rand → 0 ⇒ **1 rot** · `stageBreite` → `breite` ⇒ **1 rot** · y-Vorzeichen gedreht ⇒
+**7 rot**.
+
+**Zwei Dinge, die ich ausdrücklich lobe, weil sie schwerer sind als der Posten:**
+
+**(a) Er hat drei geerbte Zusagen offengelegt, statt sie zu streichen.** AUF-44 hatte festgehalten,
+genau ein `geplant`-Knopf sei übrig; jetzt sind es null. Er hat die Zusage **neu formuliert**, so
+dass sie ihre Absicht behält: sie verriegelt nun, dass die Zahl **nicht wieder steigt**. *Eine
+Zusage, die durch den eigenen Erfolg falsch wird, still zu löschen, ist die bequemste Art, Abdeckung
+zu verlieren.*
+
+**(b) Sein eigener Test hat einen Fehler in seinem eigenen Testfall gefunden** — ein 40-m-Fall
+bräuchte Maßstab 0,0155 und prüfte damit die Grenze statt des Vorzeichens. Korrigiert und
+offengelegt.
+
+**In §3b. Ballbesitz Evaluator.**
+
+### 2. Die Rückgabe ist der ernstere Befund — AUF-72, und er geht vor
+
+**Zwei unabhängige Messungen, ein Befund:**
+
+| | Bühne unter dem Fenster | sichtbar |
+|---|---|---|
+| Generator, 1440 × 900 | **227 px** | 72 % |
+| Planner, 1440 × 813 | **273 px** | **62 %** |
+
+**Und es ist nicht wegzuscrollen:** die Seite hat 859 px Scrollhöhe gegen 813 px Sichtfenster — 46 px
+Spielraum für 273 px Überstand. **Bei mir sind 38 % der Zeichenfläche unerreichbar.**
+
+**Ursache, `HausplanerApp.tsx:1058`:** `window.innerHeight - 96`. Die **96** stammt aus einer Zeit
+mit **einer** Leiste über der Bühne. Heute stehen dort **323–369 px** — Arbeitsbereich-Wähler
+(AUF-34), Werkzeugzeile, Optionszeile. **Die Zahl hat einmal gestimmt und ist seither dreimal
+überholt worden, ohne dass sie jemand angefasst hat.**
+
+**Entschieden:** Die Höhe wird **am tragenden Element gemessen**, nicht subtrahiert. Dann stimmt sie
+auch beim nächsten Mal, wenn oben eine Zeile dazukommt — und genau das ist in drei Tagen dreimal
+passiert. Ein Fenster-Zuhörer allein reicht nicht: erscheint eine Zeile, ändert sich das Fenster
+nicht.
+
+**Härtestes Kriterium: der Verschub des Nutzers überlebt die Höhenänderung.** Daran fliegt ein
+„einfach neu berechnen" auf — und es ist der Punkt, an dem so ein Posten dem Nutzer Arbeit wegnimmt,
+statt ihm welche abzunehmen.
+
+**Vorgezogen vor AUF-65 und AUF-71**, weil es ein echter sichtbarer Defekt der Hauptarbeitsfläche
+ist und die Wirkung von AUF-62 begrenzt.
+
+**Und die Einordnung, die dazugehört: AUF-62 ist nicht falsch.** Das Einpassen zentriert korrekt in
+der Bühne; K3 war gegen die Bühne gerechnet und ist erfüllt. **AUF-62 ist das erste Werkzeug, das
+den Bestandsfehler sichtbar macht.** Der Generator hat ihn gefunden, **nicht ausgeglichen** und
+zurückgegeben — mit der Begründung, zwei Wahrheiten über die Bühnenhöhe wären schlimmer als eine zu
+große Bühne. **Das ist genau die Entscheidung, die ich sehen will.**
+
+**Ballbesitz: Generator (AUF-72, danach AUF-65, dann AUF-71) · Evaluator (AUF-62).**
