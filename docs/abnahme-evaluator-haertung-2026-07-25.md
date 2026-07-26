@@ -987,6 +987,42 @@ K9), sechs Kanten sind nachgerechnet-verriegelt (nicht per Screenshot behauptet)
 mutationsfest, und am Schirm rahmt der Klick den Grundriss. Die drei geerbten Zusagen sind ohne Verlust
 neu formuliert.
 
+## AUF-72 - Buehnenhoehe gemessen statt geschaetzt (2e56fcb, Bundle c5a7ee5) - FREIGABE MIT AUFLAGE
+
+**Reihenfolge:** erst blind gegen 2e56fcb gemessen (/tmp + Browser getComputedStyle/Container-Kette),
+dann Generator-Bericht. **Klasse: sichtbar** - Sichtprobe Teil der Abnahme. Folge aus MEINER AUF-62-Rueckgabe.
+
+- **Umfang:** 3 Dateien - NEU dashboard/buehnenHoehe.ts + Test; M HausplanerApp.tsx.
+- **Substanz solide:** Hoehe kommt per ResizeObserver (+resize) von der Inhaltsreihe (flex:1,
+  overflow:hidden) statt `innerHeight - 96`. K3: innerHeight = 0, feste `-96` = 0 (grep). Kanten:
+  ErsatzHoehe 700 (Hoehe 0 -> keine leere Buehne), MinHoehe 200. **Haertestes Kriterium test-verriegelt
+  (K6): der Verschub des Nutzers ueberlebt jede Hoehenaenderung**; K7 ohne Verschub folgt die Standardlage.
+  K2 null Modell; kein Flackern; rein (kein Store/Szene).
+- **Gates:** schema 0 . test **1060/1060, 0 skip** (1051->1060) . tsc 0 . build ok. 9 Subtests.
+- **Gegen-Beweis (/tmp):** ErsatzHoehe 700->0 -> K9+K5 2 rot; MinHoehe-Guard entfernt -> K5 1 rot.
+
+### AUFLAGE - die Sichtprobe widerlegt 'Ueberstand 0' im Maximal-Leisten-Zustand
+Der Generator meldete Ueberstand 0 bei 1440x900/813/1024x768. **Gegengemessen (getComputedStyle,
+Container-Kette): konstanter 18-px-Ueberstand bei 900 UND 813** in meinem Zustand. Der Unterschied
+ist nicht das Fenster, sondern die **Leistenhoehe oben**: mein Canvas beginnt bei y=369 (Generator ~323),
+weil die **Werkzeug-Optionen-Zeile** ('Markieren - braucht keine Optionen') ~46 px hinzufuegt. Die
+gemessene Canvas-HOEHE (549) ist identisch zur Generator-Zahl - korrekt gemessen -, aber der flex:1-
+Traeger sitzt im Studio-Layout (container flex:1, 698 px ab y=169), das bei 820-900 px + Maximal-Leisten
+das Fenster um ~18 px ueberragt. Der Ueberstand ist **konstant 18 px ueber alle Fensterhoehen** -> ein
+festes, unberuecksichtigtes Element (die Optionen-Zeile), kein Timing-Artefakt.
+
+**Einordnung:** kein Blocker. Der Kern-Bug (227 px, 28-38% unerreichbar EVEN mit Scroll) ist auf ~18 px
+reduziert, und der Rest ist ueber 'Ansicht einpassen' (AUF-62) + Verschub (AUF-51) **erreichbar** - der
+Grundriss ist nicht verloren. Aber 'Ueberstand 0' gilt nur im Zustand mit weniger Leisten, den der
+Generator testete; im gewoehnlichen Architektur+Werkzeug-Zustand bleiben 18 px.
+
+**Urteil: FREIGABE MIT AUFLAGE.** Der Messansatz (statt Schaetzung), der Verschub-Erhalt (haertestes
+Kriterium, verriegelt) und die 92%-Reduktion sind abgenommen. **Auflage:** die 18 px im Maximal-Leisten-
+Zustand - entweder die Optionen-Zeile in die gemessene Hoehe einrechnen (auf das echte Canvas-
+Elternelement messen, nicht auf einen Traeger darueber), ODER belegen, dass 'Ansicht einpassen' den Rest
+immer abfaengt und 'Ueberstand 0' entsprechend praezisiert wird. Reproduzierbar: 1440x900 UND 1440x813,
+Architektur-Bereich, Werkzeug mit Optionen-Zeile -> Canvas-Unterkante 18 px unter dem Fenster.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -1029,6 +1065,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-68    b5c231e  FREIGABE: opLbl weg (grep 0), sichtbare Gruppenwoerter 0, aber role=group+aria-label je Gruppe (K6, Zahn: aria-label leer=1 rot) ; 11 Knoepfe 6/4/1 keine Sperre/Reihenfolge geaendert ; schema 0/test 1020/1020/tsc 0/build ok ; Sichtprobe 1440: 3 Gruppen (Ansicht 6/Bearbeiten 4/Messen&Export 1), keine Woerter, docOvf 0, Abstand 21px zwischen vs 6px innerhalb ; eigene Kontrast-Rechnung Trennstrich 1.09-1.14:1 << 3:1 (Rueckgabe bestaetigt)
   AUF-70    4c1ce13  FREIGABE (Spur A): knopf() liest opKnopfBild (eine Wahrheit, K6), gesperrt ablesbar (K4/K5) ; K2 Undo unberuehrt ; schema 0/test 1033/1033/tsc 0/build ok ; 13 Subtests ; Gegen-Beweis gesperrt=frei 3 rot (6 ueber Suite) ; Sichtprobe 1440+1024: eine Zeile 16 Knoepfe (2.3.6.4.1), docOvf 0 beide, gesperrt vs frei 4 Werte, 2D/Split/3D Wort ; AUF-68-Kriterium: Abstand 21px zwischen allen Gruppen (auch 2 neue) vs 6px innerhalb, NICHT verengt bei 16
   AUF-62    bae4596  FREIGABE (Spur A): einpassen.ts reine Fit-View (K2/K9 kein Modell/Befehl, grep leer) ; schema 0/test 1051/1051/tsc 0/build ok ; 17 Subtests rechnen via aufSchirm() nach, 6 Kanten ; 3 geerbte Zusagen ohne Verlust ; Gegen-Beweis y-Spiegelung gebrochen = 7 rot ; Sichtprobe u-dach: Knopf enabled (nicht geplant), Klick Zoom 12%->6% rahmt Grundriss ; Rueckgabe Buehne 227px unter Fenster (Bestand)
+  AUF-72    2e56fcb  FREIGABE MIT AUFLAGE: Messansatz (ResizeObserver statt innerHeight-96, K3 grep 0), Verschub ueberlebt (K6 verriegelt), Ersatz 700/Min 200 (Mutation 2 rot); schema 0/test 1060/1060/tsc 0/build ok ; ABER Sichtprobe widerlegt 'Ueberstand 0': konstant 18px bei 900 UND 813 im Maximal-Leisten-Zustand (Optionen-Zeile, Canvas-top 369 vs Generator 323) - Kern-Bug 227->18px, Rest via einpassen/Verschub erreichbar, kein Blocker; Auflage Optionen-Zeile einrechnen o. 'Ueberstand 0' praezisieren
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
