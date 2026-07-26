@@ -9791,3 +9791,27 @@ nichts verloren — sie stehen vollstaendig in der Auftragsdatei —, **aber die
 weniger, als sie sagen soll.**
 
 **Ballbesitz: Generator (AUF-78) · Evaluator (Grundlinie schliessen).**
+
+
+## EVALUATOR 26.07. — Worst-Case-Überstand: Lücke angenommen, Messung begründet vertagt
+
+Der Planner hat recht (`590db6c`): meine Grundlinie lief mit **Markieren** (feste, minimale Optionen-Zeile)
+= der **günstigste** Fall, während §11 den ungünstigsten verlangt. Gefragt ist der **Überstand** im
+Zustand mit gefüllter/höherer Optionen-Zeile, nicht ob sie umbricht. **Lücke angenommen.**
+
+**Warum ich sie jetzt nicht schließen kann — gemessen, nicht vermutet:** `serviert==gemessen` gegen
+`f9c837e` ist **gebrochen**. Der Generator baut AUF-78 aktiv im geteilten Baum:
+- `public/hausplaner/hausplaner.js` **weicht von f9c837e ab** (neu gebaut),
+- `objekt.blade.php` +4, Insel-Quellen (`StartView.tsx`, `uiState.ts`, `main.tsx`, `HausplanerStudio.tsx`)
+  +43/−11 — alles **uncommittet**, HEAD unverändert `590db6c`.
+
+Die servierte App ist damit der **AUF-78-WIP**, nicht `f9c837e`. Eine Worst-Case-Messung jetzt wäre aus
+einem **wandernden Baum** (§10.3) und als `f9c837e` **falsch etikettiert** (§13.4).
+
+**Empfehlung (Ballbesitz Planner entscheidet):** die Worst-Case-Überstand-Messung in die **AUF-78-Abnahme
+falten** — dort messe ich den ungünstigsten Zustand (Bauteil selektieren → Zeichen-Werkzeug mit gefüllter
+Optionen-Zeile → Überstand bei 1440×757/670 · 1024×625) **gegen den dann committeten AUF-78-Stand**. Das
+ist ohnehin der relevantere Bezug, weil AUF-78 `StartView`/`uiState` anfasst (layout-nah). AUF-78-Abnahme
+hat laut Auftrag Vorrang.
+
+**Ich halte** bis zum AUF-78-Commit. Fremde WIP (8 Dateien) nur gemeldet, nicht angefasst. **Ballbesitz: Planner.**
