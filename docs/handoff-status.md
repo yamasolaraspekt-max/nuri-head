@@ -11490,3 +11490,41 @@ AUF-55/56-Regression - Sache des Planners, ob daraus ein Posten wird.
 **Ergebnis: Auflagen 55.1 + 56.1 im Umfang erfuellt** (Historie-Hinweis + Fussleisten ehrlich und ohne
 Ueberlauf bei 1534/1024/576) - die Merge-Bedingung 55.1 ist damit eingeloest, mit dem einen ehrlichen
 Vorbehalt, dass echtes 375 durch die Fenster-Mindestbreite nicht erreichbar war. Ballbesitz: Planner.
+
+
+## PLANNER 26.07., 20:15 — Beide Auflagen erledigt. §15 hat nach 9 Minuten gewirkt
+
+**Der Evaluator hat sich die Arbeit selbst geholt** — und schreibt als Begruendung §15 in die
+Ueberschrift: *Standby ist keine Feststellung ueber die Lage.* **Die Regel ist um 19:35 entstanden,
+um 19:44 hat er danach gehandelt.** Er hat nicht auf meinen Zuruf gewartet, sondern die eine
+ziehbare Aufgabe gezogen, waehrend der Generator baute. **Genau so war die Regel gemeint, und sie
+nimmt mir die Bringschuld nicht ab — aber sie halbiert den Schaden, wenn ich sie wieder vergesse.**
+
+**Beide Auflagen sind erfuellt.** `serviert==gemessen` **browserseitig** belegt (geladenes Buendel
+byte-gleich `17c9c06`, 1 416 355 B, Summe 124729036). **55.1:** der Historie-Hinweis rendert ehrlich
+(*„Angebunden ist die Flaeche noch nicht"* plus was kommt), **kein Ueberlauf** bei 1534 · 1024 · 576.
+**56.1:** kein „Module folgen"/„Erweiterbar" live sichtbar, **kein Ueberlauf** bei allen Viewports.
+
+**Ehrlich benannt statt gerundet:** das Fenster klemmt bei **576 px**, echte **375** waren per
+Resize **nicht** erreichbar. Er schreibt dazu: *die Flaechen skalieren bis 576 ohne Ueberlauf, der
+Trend deckt 375 nicht messbar ab.* **Das ist der Unterschied zwischen „geprueft" und „vermutlich
+auch bei 375" — und er sagt, welches von beidem es ist.**
+
+### Der Nebenbefund ist groesser als die Auflage
+
+Bei **576 px laufen vier Werkzeugleisten des Expertenmodus sichtbar ueber** — „Zur gefuehrten
+Planung", „Erdgeschoss…", „2D/Split/3D", Differenz **170 px**. **Nicht** die AUF-55/56-Flaechen;
+**keine Regression**, sondern vorbestehendes Verhalten des Desktop-Studios bei Schmalbreite. Kein
+Seiten-Scroll, weil der Workspace-Container es mit `overflow-x: hidden` **klippt** — *also
+unsichtbar abgeschnitten statt sichtbar ueberlaufend.* **Das ist die gefaehrlichere Variante:
+etwas ist weg, und nichts zeigt an, dass es weg ist.**
+
+**Nach §14 wird daraus jetzt kein Posten.** Er beantwortet die Pruefrage nicht — kein offener
+Posten haengt daran. **Er wandert in die Befundliste** und wartet, bis die zwoelf durch sind.
+**Ich schreibe ihn aber mit der Zahl auf** (576 px, Differenz 170, geklippt statt gescrollt), damit
+spaeter niemand neu messen muss.
+
+**Damit ist der Merge-Weg frei bis auf einen Punkt: AUF-77 braucht sein Votum.** Danach steht
+`main` gegen den Arbeitszweig bei ueber 70 Commits, und das waere das zweite Paket des Tages.
+
+**Ballbesitz: Generator (AUF-63) · Evaluator (AUF-77).**
