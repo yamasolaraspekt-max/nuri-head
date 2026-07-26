@@ -10224,3 +10224,66 @@ Eintrag **keine Schaltflaeche mehr sein** — **kein Ziel, kein Versprechen.**
 waere wieder eine Erfindung.**
 
 **Ballbesitz unveraendert: Generator (AUF-79) · Evaluator (AUF-78, danach AUF-82).**
+
+---
+
+## ⇒ GENERATOR — AUF-79 (Spur B) erledigt, selbst abgehakt
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commit:** `5556e67` · **Keine Evaluator-Abnahme**
+(Kurzspur) — diese Zeile ist ihr Preis. **Direkt auf `f4202f6` gebaut**, wie §5 von AUF-82 es
+verlangt: beide Posten fassen `scripts/waechter.sh` an, es liegt nichts dazwischen.
+
+### 1. Das Kriterium — die Summe geht auf
+
+| | |
+|---|---|
+| abgenommen (Archiv) | **65** |
+| in Arbeit (⚡ aktiv) | **1** |
+| in Prüfung (§3b) | **2** |
+| offen (§3a) | **11** |
+| gesperrt (§3a) | **7** |
+| bei Yama (§3c) | **0** |
+| **Summe** | **86** |
+
+**Handzählung zum Vergleich:** 19 (§3a) + 2 (§3b) + 0 (§3c) + 65 (Archiv) = **86**. ✔
+Anzeige: **75 %** (65 von 86).
+
+*(Der Vergleichswert im Auftrag lautete 80 — dazwischen sind AUF-78, 82 und dieser Posten
+hinzugekommen bzw. gewandert.)*
+
+### 2. Die Kanten
+
+| Kante | Antwort |
+|---|---|
+| **committeter Stand** | `git show HEAD:…`, nie der Arbeitsbaum — sonst zählte er einen halb geschriebenen Zustand |
+| **§3c** | ist **wirklich leer** (Prosa-Hinweis, keine Zeilen) — kein Formatproblem, also keine Meldung nach §6 |
+| **fremde Zeilen** | werden gezählt **und im Kasten benannt**, nicht still übersprungen |
+| **null Posten** | **0 %**, kein Absturz, beschrifteter Balken — mit einem Stub nachgestellt |
+| **Ort** | `docs/`, nicht `public/`; kein Netz, keine Schrift von außen, kein Skript |
+
+### 3. Eine Entscheidung, die ich begründe: die Seite ist gitignoriert
+
+Sie entsteht **nach jedem Commit** neu. Versioniert wäre sie damit **bei jedem Commit verändert** —
+ein Dauer-Haltesignal für drei Instanzen (§10.2), und der Wächter dürfte sie ohnehin nicht selbst
+committen (AUF-75, Kante 2). **Sie ist die Darstellung der Tafel, nicht deren Quelle**; die Quelle
+ist versioniert, die Ansicht muss es nicht sein.
+
+### 4. Laufzeit (§6)
+
+```
+fortschritt.sh allein   0,065 s
+waechter.sh gesamt      0,111 s
+```
+Der Wächter blockiert ohnehin nicht (Hintergrund) — **spürbar langsamer ist er nicht**.
+
+### 5. Ein Befund nebenbei — nicht repariert, weil er nicht mir gehört
+
+**§3d der Tafel nennt in Prosa „49 Posten". Das Archiv führt 65 Zeilen.** Eine von Hand gepflegte
+Zahl, die ihrer eigenen Quelle widerspricht — **genau die Sorte zweiter Buchführung, die dieser
+Posten ersetzen soll.** Die Tafel gehört dem Planner; ich habe sie nicht angefasst.
+
+### 6. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Keine Historie, keine Prognose, kein Sprachmodell,
+keine Änderung an der Wächter-Logik — nur ein Aufruf am Ende. `resources/`, `app/`, `routes/`:
+**null Zeilen**.
