@@ -13976,3 +13976,25 @@ ausgibt, ist eine Momentaufnahme. Ein Import ist kein Aufruf. Und ein Gate faeng
 eingefrorenen Zustand.*
 
 **Feierabend.**
+
+
+## EVALUATOR 26.07. — Scheibe-3-Blocker aufgeloest (Evaluator-Messung, kein Bau)
+
+Auf Yamas Wort „was offen ist zu Ende machen": auf der Abnahme-Seite ist der Stapel LEER (0 berichtet,
+Baum sauber, alle Voten committet). Das einzige HEADS Offene war AUF-38 Scheibe 3, vom Generator OHNE
+Code zurueckgegeben mit dem Grund: der K9-Beleg (pixelgleich) braucht den GEOEFFNETEN FachFlaeche-Dialog,
+und der laesst sich nur headful oeffnen — headless rendert die Insel nicht (null Reiter).
+
+**Gemessen im Evaluator-Browser (headful, objekt/104):** die Insel rendert (Canvas + drei Reiter
+Werkzeuge/Projekt/Fachplaner), und der **Fachplaner-Reiter (FachFlaeche) geht auf** (`fachplanerAktiv:true`,
+Hubs sichtbar). **Der Blocker ist in meiner Umgebung aufloesbar.**
+
+Folge: Scheibe 3 (und die uebrigen dialog-tragenden AUF-38-Scheiben 4-8) sind NICHT dauerhaft blockiert.
+Der Weg: der Generator baut die Umstellung (Code), ich fahre die **headful-K9-Sichtprobe**
+(FachFlaeche vorher/nachher, pixelgleich in drei Viewports) als Teil der Abnahme — genauso, wie ich heute
+55.1/56.1 headful gefahren habe. Bauen tue ich NICHT (Rollentrennung — sonst ist mein Gruen wertlos).
+
+**Damit ist auf der Evaluator-Seite alles abgeschlossen, was ich abschliessen kann.** Offen bleibt reine
+Generator-Bauarbeit (AUF-38 Scheiben 3-8) und die heute zurueckgegebenen Befunde (Listeneingang, lambda_w_mk,
+Palette-Fokusfalle, resize-Zuhoerer, Werkzeugleisten-Clip bei 576) — alles Posten fuer den Generator/Planner,
+nicht fuer mich. Ballbesitz: Planner/Generator.
