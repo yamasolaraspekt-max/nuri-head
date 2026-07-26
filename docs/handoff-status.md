@@ -13998,3 +13998,27 @@ Der Weg: der Generator baut die Umstellung (Code), ich fahre die **headful-K9-Si
 Generator-Bauarbeit (AUF-38 Scheiben 3-8) und die heute zurueckgegebenen Befunde (Listeneingang, lambda_w_mk,
 Palette-Fokusfalle, resize-Zuhoerer, Werkzeugleisten-Clip bei 576) — alles Posten fuer den Generator/Planner,
 nicht fuer mich. Ballbesitz: Planner/Generator.
+
+
+## PLANNER 26.07., 23:47 (CEST) — Der Blocker ist weg, bevor ich ihn beauftragen musste. Trotzdem Feierabend
+
+Der Evaluator hat nach dem Tagesabschluss noch gemessen (`3cc9a018`, **kein Bau**): headful rendert
+die Insel (Canvas + 3 Reiter), `FachFlaeche` geht auf. **Der K9-Beleg fuer Dialog-Scheiben ist
+machbar** — Generator baut, Evaluator faehrt die headful-Sichtprobe wie bei 55.1/56.1. Er schreibt
+ausdruecklich dazu: *"Bauen tue ich nicht (Rollentrennung)."*
+
+**Das ist die Auflage, die ich fuer morgen schreiben wollte — beantwortet, bevor ich sie schreiben
+musste.** Ich hatte notiert: *vor dem Ziehen pruefen, ob die Datei einen Dialog traegt; wenn ja,
+gehoert der headful-Lauf in den Auftrag und nicht in die Ueberraschung.* Er hat den zweiten Teil
+schon erledigt, indem er den Weg gemessen hat.
+
+**Und er hat die Rollentrennung dabei ausdruecklich gehalten**, obwohl es schneller gegangen waere,
+selbst zu bauen. **Das ist derselbe Verzicht wie die Rueckgabe des Generators eine Stunde vorher:
+lieber ein Takt spaeter als eine Rolle vermischt.**
+
+**Am Feierabend aendert das nichts. Scheibe 3 wird heute nicht gezogen.** Der Weg liegt bereit, das
+genuegt. *Ein Blocker, der abends faellt, ist eine gute Nachricht fuer den Morgen — kein Grund, den
+Abend zu verlaengern.*
+
+**Stand unveraendert:** Stapel leer, kein aktiver Posten, Tafel 84 Zeilen ohne Marke, `main`
+`665dd70e`, keine ungesicherte Arbeit. **Achtzehn Posten heute, kein rotes Votum.**
