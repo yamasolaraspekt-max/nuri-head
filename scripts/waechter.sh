@@ -30,11 +30,77 @@ mkdir -p "$BEFUNDE"
 # Drei Instanzen arbeiten in derselben Arbeitskopie. Committen zwei kurz nacheinander, liefen zwei
 # Wächter. Der zweite wartet NICHT — er meldet und geht. Warten hieße, zwei Testläufe gleichzeitig
 # auf dieselben Dateien loszulassen.
+#
+# ── AUF-80: die Sperre muss sich selbst heilen ────────────────────────────────
+# **Live beobachtet:** die Sperre lag drei Minuten OHNE haltenden Prozess, und jeder Folgelauf
+# meldete „uebersprungen" mit exit 0. **Der Wächter war stumm geschaltet — und sah dabei gesund
+# aus.** Ursache: `trap … EXIT` fängt das normale Ende und die meisten Signale, **aber nicht
+# SIGKILL**; der per `nohup` gestartete Hintergrundlauf wird beim Sitzungsende hart beendet, bevor
+# der Trap läuft.
+#
+# Das ist wörtlich die Gefahr, die dieses Skript selbst benennt — *„ein umgangener Wächter ist
+# schlechter als keiner"* — nur kommt sie nicht durch das Umgehen, sondern durch die Sperre.
+#
+# **Deshalb trägt die Sperre ihren Halter.** Drei Fälle, drei verschiedene Antworten:
+#   lebender Halter   → überspringen, exit 0. Das ist der gesunde Parallelfall.
+#   toter Halter      → zurückerobern MIT Warnzeile. Ein Wächter, der sich selbst repariert und
+#                        nichts sagt, verbirgt, dass etwas nicht stimmte.
+#   nicht zu klären   → NICHT exit 0. Eine Zeile, die aussieht wie ein erfolgreicher Lauf, obwohl
+#                        nichts gelaufen ist, ist genau der Fehler dieses Postens.
+
+# Die längste plausible Laufdauer. Darüber gilt eine Sperre als verwaist, auch wenn eine
+# Prozesskennung zufällig wiederverwendet wurde (PIDs werden vom System recycelt).
+HOECHSTDAUER=1800   # Sekunden
+
+halter_lebt() {
+  local pid="$1"
+  [ -n "$pid" ] || return 1
+  kill -0 "$pid" 2>/dev/null
+}
+
+sperre_alter() {
+  local jetzt geboren
+  jetzt=$(date +%s)
+  geboren=$(cat "$SPERRE/geboren" 2>/dev/null)
+  [ -n "$geboren" ] || return 1
+  echo $((jetzt - geboren))
+}
+
+erobern() {
+  local grund="$1"
+  rm -rf "$SPERRE" 2>/dev/null
+  if mkdir "$SPERRE" 2>/dev/null; then
+    printf '%s %s %s WARNUNG verwaiste-sperre-zurueckerobert (%s)\n' \
+      "$(date '+%Y-%m-%dT%H:%M:%S')" "-" "-" "$grund" >>"$LOG"
+    return 0
+  fi
+  return 1
+}
+
 if ! mkdir "$SPERRE" 2>/dev/null; then
-  printf '%s %s %s uebersprungen (Lauf aktiv)\n' "$(date '+%Y-%m-%dT%H:%M:%S')" "-" "-" >>"$LOG"
-  exit 0
+  HALTER="$(cat "$SPERRE/pid" 2>/dev/null)"
+  ALTER="$(sperre_alter)"
+  if halter_lebt "$HALTER"; then
+    # Der gesunde Fall: ein anderer Lauf arbeitet wirklich. Nur DIESER ist exit 0.
+    printf '%s %s %s uebersprungen (Lauf aktiv, pid %s)\n' \
+      "$(date '+%Y-%m-%dT%H:%M:%S')" "-" "-" "$HALTER" >>"$LOG"
+    exit 0
+  elif [ -n "$ALTER" ] && [ "$ALTER" -gt "$HOECHSTDAUER" ] 2>/dev/null; then
+    erobern "alter=${ALTER}s" || { printf '%s - - uebersprungen OHNE lebenden Halter (nicht eroberbar)\n' "$(date '+%Y-%m-%dT%H:%M:%S')" >>"$LOG"; exit 2; }
+  elif [ -n "$HALTER" ] || [ -n "$ALTER" ]; then
+    erobern "halter-tot=${HALTER:-unbekannt}" || { printf '%s - - uebersprungen OHNE lebenden Halter (nicht eroberbar)\n' "$(date '+%Y-%m-%dT%H:%M:%S')" >>"$LOG"; exit 2; }
+  else
+    # Weder Kennung noch Zeitpunkt: eine Sperre aus einer älteren Fassung oder von Hand angelegt.
+    # Sie wird zurückerobert — aber laut, denn hier ist nichts zu klären.
+    erobern "ohne-kennung" || { printf '%s - - uebersprungen OHNE lebenden Halter (nicht eroberbar)\n' "$(date '+%Y-%m-%dT%H:%M:%S')" >>"$LOG"; exit 2; }
+  fi
 fi
-trap 'rmdir "$SPERRE" 2>/dev/null' EXIT
+
+# Der Halter schreibt sich in die Sperre — das ist der Unterschied zwischen „jemand arbeitet" und
+# „hier liegt etwas herum".
+echo $$ >"$SPERRE/pid"
+date +%s >"$SPERRE/geboren"
+trap 'rm -rf "$SPERRE" 2>/dev/null' EXIT
 
 # ── Der Commit und sein Diff ──────────────────────────────────────────────────
 # Kante 1: JEDER git-Aufruf trägt `--no-optional-locks`. Ein Wächter, der selbst Locks erzeugt,
