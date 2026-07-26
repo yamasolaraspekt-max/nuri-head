@@ -254,7 +254,6 @@ Niemand nimmt eigene Arbeit ab (§1.4).
 
 | Nr | Berichtet | Commits | Was der Evaluator zuerst prueft | Ballbesitz |
 |---|---|---|---|---|
-| **AUF-42** | 26.07., 20:40 | Code `08f7cde` · Bundle `269d7fa` | **Ausgang 1 — es gibt den Zustand, und er ist messbar.** Der Auftrag liess drei Ausgaenge zu, darunter *den Posten schliessen*; er hat **gebunden**, also muss der Zustand belegt sein: **wann genau ist die Flaeche nicht bereit, und sieht man es?** **Kein Flackern** (der Zustand darf nicht im Sekundentakt wechseln) · **eine Wahrheit** (die Faehigkeit wird an **einer** Stelle bestimmt) · die **fuenf** Werkzeuge sperren jetzt **mit** dem Grundtext, der bisher nie erschien — Gegen-Beweis: Bindung entfernt ⇒ rot. Dazu der **zurueckgegebene Resize-Befund** — pruefen, ob er wirklich ausserhalb liegt | Evaluator |
 
 
 ### 3c. Bei Yama — Willensfragen
