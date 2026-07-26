@@ -6818,3 +6818,83 @@ und Optionszeile.
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Kein Umbau des Seitenaufbaus, kein
 Scrollen als Lösung, keine zweite Wahrheit über die Bühnenhöhe — es gibt weiterhin **genau eine**
 Stelle, die sie bestimmt.
+
+---
+
+## PLANNER 26.07., 08:05 — mein Skript hat das Archiv zerstört. Wiederhergestellt, und so ist es passiert
+
+**Zuerst der Schaden und die Behebung, dann alles andere.**
+
+### 1. Was passiert ist
+
+In `330ef00` steht in meinem Tafel-Skript diese Zeile:
+
+```python
+io.open(a, 'w').write(io.open(a).read().rstrip('\n') + '\n' + r70 + '\n')
+```
+
+**Python wertet das äußere `open(a, 'w')` zuerst aus — und `'w'` kürzt die Datei auf null Bytes.
+Erst danach liest das innere `open` — aus der bereits geleerten Datei.** Ergebnis: das Archiv trug
+statt **55** Zeilen genau **eine**.
+
+**Gefunden habe ich es nur, weil ich für Yamas Fortschrittsübersicht die Zahlen zählen wollte** und
+„ARCHIV: 1" gelesen habe. **Ohne diese Bitte hätte es länger gelegen** — die Datei wird selten
+gelesen, und der Commit meldete brav „3 files changed".
+
+### 2. Wiederhergestellt, geprüft
+
+Aus `21b016a` zurückgeholt (**55** Zeilen), die eine echte neue Zeile (AUF-70) angehängt ⇒ **56**.
+Mit Zusicherungen im Wiederherstellungs-Skript: genau eine AUF-70-Zeile vorhanden, Altstand genau 55.
+
+**Meine drei anderen Tafel-Skripte desselben Tages tragen den Fehler nicht** — dort steht der
+Lesevorgang in einer eigenen Zeile, vor dem Schreiben. Nachgesehen, nicht angenommen.
+
+### 3. Was ich daraus mitnehme
+
+**Der Fehler ist nicht „Python-Feinheit", sondern fehlende Gegenprobe.** Meine Tafel-Skripte prüfen
+seit gestern die **Rohr-Zahl jeder Zeile** — aber nichts prüfte, ob die Datei am Ende noch so viele
+Zeilen hat wie vorher. **Ab sofort in jedem Skript, das an Tafel oder Archiv schreibt: Zeilenzahl
+vorher/nachher vergleichen und bei Schrumpfen abbrechen.** Eine Datei darf wachsen; sie darf nicht
+schrumpfen, außer der Vorgang heißt ausdrücklich „verschieben".
+
+*Und die unbequeme Einordnung: Ich habe heute drei Rollen daran erinnert, gegen Belege statt gegen
+Behauptungen zu prüfen. Mein eigenes Skript hat mir eine Erfolgsmeldung geliefert, und ich habe sie
+geglaubt.*
+
+---
+
+## PLANNER 26.07., 08:05 — AUF-72 abgeliefert, AUF-65 gezogen
+
+### 4. AUF-72: Überstand null, in allen drei Formaten
+
+`2e56fcb` + Bundle `c5a7ee5`, Bericht `c23ec6a`.
+
+| Format | Überstand vorher | jetzt |
+|---|---|---|
+| 1440 × 900 | 227 px | **0** |
+| 1440 × 813 | 273 px | **0** |
+| 1024 × 768 | — | **0** |
+
+**Die Entscheidung ist genau so umgesetzt worden, wie sie gemeint war:** die Höhe kommt von der
+Inhaltsreihe, die die Bühne trägt. **Es gibt keine Zahl mehr, die jemand nachpflegen müsste.**
+
+**Und der Punkt, an dem er weiter gedacht hat als mein Auftrag:** der Beobachter hängt am
+**Element**, nicht nur am Fenster — *„ein reiner `resize`-Zuhörer bemerkt ausgerechnet den Fall
+nicht, der den Fehler erzeugt hat."* Das ist richtig und war in meinem Auftrag nur als Halbsatz
+angedeutet.
+
+Kanten alle beantwortet, darunter mein härtestes Kriterium: **der Verschub des Nutzers überlebt
+unverändert.** Tests **1051 → 1060**, keine Zusage verschwunden.
+
+**K8 schließt den Bogen:** nach „Ansicht einpassen" steht der ganze Grundriss im **sichtbaren**
+Bereich — damit leistet AUF-62, was es versprochen hat.
+
+**In §3b. Der Evaluator hat jetzt zwei: AUF-62 und AUF-72 — und sie hängen zusammen.**
+
+### 5. AUF-65 gezogen
+
+Auftrag liegt seit heute früh. **Der gemeldete Befund ist gemessen falsch** — das Panel ist nicht
+leer, sondern erfunden (`studioDaten.ts` hat null Importe). **Gebaut wird Ehrlichkeit, nicht
+Allwissen.**
+
+**Ballbesitz: Generator (AUF-65, danach AUF-71) · Evaluator (AUF-62 und AUF-72).**
