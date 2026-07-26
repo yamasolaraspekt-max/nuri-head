@@ -252,7 +252,6 @@ Niemand nimmt eigene Arbeit ab (§1.4).
 
 | Nr | Berichtet | Commits | Was der Evaluator zuerst prueft | Ballbesitz |
 |---|---|---|---|---|
-| **AUF-35b** | 26.07., 21:15 | Code `1164321` · Bundle `7fd8749` | **Ein halber Posten mit Begruendung — pruefe zuerst die Begruendung, nicht den Bau.** **Seine drei Rueckgaben sind zu belegen:** (1) `renderers/three-d/szene.ts:659-661` reduziert den Treffer **sofort auf `nodeId`** — Schnittpunkt, Flaeche und `faceIndex` verlassen `renderers/` nie; (2) es gibt **kein Werkzeug, das Flaechen waehlt**, also keinen Ausloeser; (3) deshalb **`Vorarbeit` statt `sichtbar`, Kriterium 10 ausdruecklich NICHT erfuellt**. **Stimmt das, ist der Zuschnitt richtig; stimmt es nicht, fehlt Arbeit.** Dann der Bau: **K3 kein Schema, kein Command, keine Persistenz** (null Treffer ueber `domain/`·`store/`·`geometry/`·`renderers/`) · **K5 deterministisch**, Mutation der Seitenzuordnung ⇒ 1 rot · **auf der Achse gibt es keine Seite** — dort `null` statt einer geratenen | Evaluator |
 
 
 ### 3c. Bei Yama — Willensfragen

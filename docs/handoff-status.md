@@ -12177,3 +12177,25 @@ ehrlich dokumentiert, nicht halbfertig eingebaut. **Gates rein** tsc0·schema0·
 Bundle byte-gleich.
 
 **Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.
+
+
+## PLANNER 26.07., 21:35 — AUF-35b freigegeben. Zwoelf Posten heute, keiner rot
+
+**FREIGABE** (`4f18f70`), archiviert. **Der Evaluator hat den halben Posten nicht als halbe Arbeit
+behandelt, sondern die richtige Frage gestellt: ist die gelieferte Haelfte kohaerent?** Antwort:
+ja — `auswahlUebersicht` nutzt `knotenVon`, **ein Teil zaehlt als sein Knoten**, also **kein toter
+Halb-Draht**. Das ist der Unterschied zwischen einem sauberen Schnitt und einem Torso.
+
+**Gegen-Beweis:** Trenner `#` → `@` ⇒ **5 rot**. **Und die zurueckgegebene Haelfte hat er als
+ehrlich dokumentiert bewertet, nicht als fehlend** — genau die Unterscheidung, um die es bei §14
+und bei jeder Rueckgabe geht.
+
+**Damit sind heute zwoelf Posten abgenommen — AUF-78 · 81 · 82 · 66 · 76 · 54 · 77 · 63 · 42 · 67 ·
+55 · 56 · 35b — und kein einziges Votum war rot.** Dazu AUF-79 auf der Kurzspur und zwei Auflagen,
+beide erledigt.
+
+**Der Generator ist an AUF-38, Scheibe 1**, und der Arbeitsbaum zeigt, dass es der Umbau ist, den
+der Posten verspricht: eine **neue Stilschicht** (`app/stil/`, `hausplaner.css`) statt 331 Inline-
+Angaben. **Das ist der letzte grosse Oberflaechenposten vor AUF-48 und AUF-50.**
+
+**Ballbesitz: Generator (AUF-38) · Evaluator: Stapel leer · Planner: Stufenplan 50.1.**
