@@ -1380,6 +1380,44 @@ IDOR-sicher, keine Loesch-/Aender-Route, alle recht-gegated, additiv (Szene-Sche
 Gates gruen, Bundle reproduzierbar. Tor 1 (B7) liegt beim Planner/Yama; Tor 2 (Deploy) bei Yama.
 Ballbesitz: Planner.
 
+### AUF-82 (f4202f6) - der Waechter heilt sich ohne unlink, und sein Scheitern wird sichtbar - FREIGABE
+
+Nachgeholtes Votum (in der Buchstaben-Staffel war AUF-82 lautlos aus meiner Zaehlung gefallen - eine
+doppelte Benennung derselben Sache; Fehler in der Staffel-Beschriftung, behoben durch nur-AUF-Nummern).
+AUF-82 schliesst BEIDE meiner Reichweite-Funde (Mount-unlink + Hook-Schlucken) plus die PID-Identitaet.
+
+Zweck statt Mittel geprueft: der Generator ist vom beauftragten `mv`-Weg abgewichen (der Auftrag war
+widerspruechlich - `mv` in datierte Ablage UND kein Wachstum braucht ein unlink) und hat die Abweichung
+angesagt. Gedeckt. Der Zweck ist erreicht:
+
+Umfang: nur scripts/waechter.sh + scripts/hooks/post-commit, 0 Erzeugnis-Dateien. §8 n/a (kein Insel-Code).
+
+(a) UNLINK-FREI - der Fix zu meinem Mount-Fund. Selbst gemessen (Mini-Repo, blind gegen f4202f6):
+- Kein rm/mv/rmdir-BEFEHL im Skript (grep ohne Kommentarzeilen = 0). Die Sperre ist ein Platz, der nur
+  beschrieben wird: `belegen()` = echo/date > Dateien, `freigeben()` = `:>pid` (leeren), `erobern()` =
+  `belegen`, `mkdir -p`. Kein unlink noetig -> funktioniert auf dem unlink-verbotenen Mount.
+- T1 toter Halter: zurueckerobert (WARNUNG halter-tot) UND gelaufen; der Platz bleibt stehen (nicht
+  geloescht). Der stehende Pruefstein wird beim ersten Lauf selbst zurueckerobert.
+
+(b) SICHTBARES SCHEITERN - der Fix zu meinem Q2-Fund (Hook schluckte exit 2 nach /dev/null):
+- T4: roter Gate -> waechter exit 1 -> der Hook legt `docs/befunde/GESCHEITERT-<commit>.txt` an (ueberlebt
+  das Terminal). Ein Fehlschlag geht nicht mehr spurlos.
+- Hook bleibt nicht-blockierend: exit 0 in 0,013 s, obwohl der Gate 3 s schlaeft.
+
+PID-IDENTITAET (Planners 3. Fall - eine Prozessnummer ist keine Identitaet):
+- `halter_lebt(pid,lstart)` = `kill -0` UND `ps -o lstart=` muessen passen.
+- T3 echt lebend (pid + passender lstart) -> `uebersprungen (Lauf aktiv)` exit 0 (gesunder Parallelfall).
+- T2/K9 reused Nummer (lebende pid, FALSCHER lstart) -> eigene Zeile `nummer-wiederverwendet`, NICHT die
+  Gesund-Zeile. Jede Lage schreibt eine eigene Log-Zeile (kein Zustand teilt eine Zeile mit einem anderen).
+- K4-Mutation (Identitaet auf kill-0-only zurueckgedreht) -> die reused Nummer wird wieder
+  `uebersprungen (Lauf aktiv)` = der alte Fehler reproduzierbar zurueck. Die Identitaet traegt.
+
+Nicht eroberbar (Platz nicht beschreibbar) -> exit 2, nie exit 0. Drei-Faelle-Logik unveraendert.
+
+Urteil: FREIGABE. Alle drei Zwecke belegt (unlink-frei, sichtbares Scheitern, PID-Identitaet), Mutation
+bringt den alten Fehler zurueck (Zaehne), Hook nicht-blockierend, 0 Erzeugnis. Meine offene Auflage aus
+AUF-75.1/Reichweite ist damit vollstaendig geschlossen. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):

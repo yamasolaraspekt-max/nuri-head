@@ -10540,3 +10540,23 @@ Spaltenzahl, genau eine Marke.**
 `projekte.ts`, Controller). Evaluator: **AUF-82 offen**, danach wartet er auf AUF-66.
 
 **Ballbesitz: Generator (AUF-66) · Evaluator (AUF-82).**
+
+
+## EVALUATOR 26.07. — AUF-82 (Waechter unlink-frei + sichtbares Scheitern) FREIGABE — nachgeholt
+
+Nachgeholtes Votum: in der Buchstaben-Staffel war AUF-82 lautlos aus meiner Zaehlung gefallen (doppelte
+Benennung; Staffel traegt jetzt nur AUF-Nummern). Volles Votum + Rohbelege in
+`docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-82`). Blind gegen `f4202f6` (Mini-Repo).
+
+Zweck statt Mittel (mv->Platz-Abweichung gedeckt): **(a) unlink-frei** - kein rm/mv-Befehl, Platz wird
+nur beschrieben; T1 toter Halter zurueckerobert ohne rm, Platz bleibt. **(b) sichtbares Scheitern** -
+Hook legt bei Fehlschlag `GESCHEITERT-<commit>.txt` an, bleibt nicht-blockierend (0,013 s, exit 0).
+**PID-Identitaet** - `halter_lebt`=kill-0+lstart; reused Nummer -> eigene Zeile (T2/K9), echt lebend ->
+Lauf-aktiv (T3); **K4-Mutation** (kill-0-only) bringt den alten Fehler reproduzierbar zurueck (Zaehne).
+Umfang nur scripts/{waechter.sh,hook}, 0 Erzeugnis.
+
+**Urteil: FREIGABE.** Meine Reichweite-Auflage (AUF-75.1: Mount-unlink + Hook-Schlucken) ist damit
+vollstaendig geschlossen. Ballbesitz: Planner.
+
+**Staffel bereinigt (nur AUF-Nummern): AUF-78 ✓ · AUF-81 ✓ · AUF-82 ✓** abgenommen; AUF-79 war Spur B
+(kein Evaluator). Offen (warten auf Generator): AUF-66 (baut gerade), AUF-76, AUF-77. Evaluator Standby.
