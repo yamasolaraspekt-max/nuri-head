@@ -8097,3 +8097,75 @@ Die Tafel ist mein Werkzeug; sie zu pflegen ist keine Nebenarbeit, sondern die A
 **Reihenfolge steht: AUF-74 ⚡ → AUF-78 → AUF-58 → AUF-75 → AUF-76 → AUF-77.**
 
 **Ballbesitz: Generator (AUF-74) · Evaluator (Sichtprobe-Standard) · Planner (nichts offen).**
+
+---
+
+## PLANNER 26.07., 10:15 — Die Merge-Reife-Prüfung eingeordnet. Tor 2 bleibt bei Yama
+
+**Anlass:** Der Evaluator hat eine Merge-Reife-Prüfung gefahren und legt sie vor. Yama fragt, was
+damit zu tun ist.
+
+**Ich habe den Umfang selbst nachgemessen**, statt ihn zu übernehmen — `git diff --numstat
+main...HEAD`, nach Verzeichnis summiert.
+
+### 1. Sein Bericht ist gut, und seine Vorsicht ist richtig
+
+**Was er richtig gemacht hat, und es ist §12.3 in Anwendung auf sich selbst:** Er zertifiziert die
+**Insel**, nicht den CRM-Stand. *„Ich habe die Slices geprüft, die mir übergeben wurden … eine
+Full-CRM-Prüfung ist eine eigene, breitere Prüfung, die ich hier nicht gefahren habe."*
+
+**Ein Prüfer, der die Grenze seiner Prüfung mitliefert, ist mehr wert als einer, der alles grün
+meldet.** Das ist heute die siebte Selbstbegrenzung von ihm.
+
+### 2. Nachgemessen — die Grenze ist kleiner, als er annimmt
+
+**Merge-Umfang `main...HEAD`, 355 Commits:**
+
+| Bereich | Zeilen | Dateien |
+|---|---|---|
+| `resources/planner` (die Insel) | 13 172 | 93 |
+| `docs/*` | ~19 300 | 68 |
+| `public/hausplaner` (Bündel) | 652 | 112 |
+| `tests/Feature` | 223 | 2 |
+| **`app/Http`** | **38** | **1** — `HausplanerController` |
+| **`database/migrations`** | **0** | **0** |
+| **`routes/`** | **0** | **0** |
+| `push-integration-sicher.command` | 21 | 1 |
+
+**Außerhalb der Insel stehen: eine PHP-Datei mit 37 neuen Zeilen, zwei Testdateien, ein Skript.
+Sonst Dokumentation und das Bündel.** Seine Sorge vor „vor-dieser-Sitzung-Arbeit, die ich nicht
+abgenommen habe" ist im Grundsatz richtig — **gemessen fällt sie auf diese vier Dateien zusammen.**
+
+**Und der wichtigste Einzelbefund für Yamas Entscheidung: keine Migration, keine Route.**
+Der Deploy wäre ein **reiner Code-Deploy**. Das ändert die Risikofrage grundlegend — der Rückweg ist
+„vorherigen Stand ausrollen", nicht „Datenbank wiederherstellen".
+
+### 3. Was ich empfehle
+
+**(a) Nicht in diesem Moment mergen.** `git status` zeigt gerade `ConfigWizard.tsx` und die Tafel
+geändert — **AUF-74 ist mitten im Bau.** Ein Merge, während ein Posten halb gebaut ist, friert einen
+Stand ein, den niemand als Ganzes gemessen hat. *(Die uncommittete Arbeit wandert nicht mit — aber
+der Zeitpunkt taugt trotzdem nichts.)*
+
+**(b) Der natürliche Merge-Punkt ist nach AUF-74 und seinem Votum.** Dann ist die **Layout-Inventur
+vom 25.07. vollständig abgearbeitet** — neun Befunde, alle zu oder als Nicht-Defekt gemessen. Ein
+Merge an einer inhaltlichen Kante ist später erklärbar; einer mitten in einer Reihe nicht.
+
+**(c) Sein Angebot annehmen — aber vor dem Merge, nicht erst vor dem Deploy.** Er hat
+`tests/Feature/Hausplaner` gefahren (44 grün). **Die übrige Suite ist gegen diesen Branch nicht
+gelaufen.** Gemessen ist die Fläche außerhalb der Insel winzig — **das ist ein Argument dafür, dass
+der Lauf billig ist, nicht dafür, ihn zu lassen.**
+
+**(d) Merge und Deploy trennen, an verschiedenen Tagen.** Der Merge ist zurückdrehbar; der Deploy
+ist der Schritt mit den 3 000 Kunden. **Und der Rückweg wird einmal ausprobiert, nicht angenommen** —
+ein nie erprobter Wiederherstellungsweg ist kein Rückweg, sondern eine Absicht. Bei einem reinen
+Code-Deploy heißt das: den vorherigen Stand einmal ausrollen und sehen, dass er läuft.
+
+### 4. Was ich ausdrücklich **nicht** tue
+
+**Ich merge nicht und ich deploye nicht.** Tor 2 gehört Yama — das gilt für den Planner genauso wie
+für die anderen beiden Rollen. **Ich bereite die Entscheidung vor; ich nehme sie ihm nicht ab.**
+
+*Und ich schreibe hier keine Freigabe hin, die nach einer aussieht: „merge-reif" ist die Aussage des
+Evaluators über die Insel. Meine Aussage ist, dass der Umfang außerhalb der Insel gemessen vier
+Dateien groß ist und keine Migration enthält — mehr sage ich nicht, weil ich mehr nicht gemessen habe.*
