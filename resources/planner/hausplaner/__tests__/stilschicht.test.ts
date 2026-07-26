@@ -68,11 +68,57 @@ test('K4: und auch die GEBAUTE Datei traegt keinen', () => {
 });
 
 // --- Scheibe 1 stellt NICHTS um ----------------------------------------------------------------------
-test('Scheibe 1 aendert keine einzige Stelle — die CSS ist absichtlich wirkungslos', () => {
-  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '').trim();
-  // Genau eine Regel, genau eine Eigenschaft, und die liest niemand.
-  assert.match(ohneKommentare, /^:root \{\s*--hp-stilschicht: 1;\s*\}$/);
-  // Eine leere Datei wuerde der Bau verwerfen; eine eigene Eigenschaft kann kein Pixel verschieben.
+test('die wirkungslose Grundregel aus Scheibe 1 steht unveraendert', () => {
+  // **Nachgezogen in Scheibe 2:** die Zusage pruefte, dass die CSS AUSSER dieser Regel nichts
+  // enthaelt — das galt fuer Scheibe 1, die nichts umstellte. Scheibe 2 stellt um, also traegt die
+  // Datei jetzt Klassen. **Die Absicht bleibt:** die Grundregel ist da und weiterhin wirkungslos.
+  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.match(ohneKommentare, /:root \{\s*--hp-stilschicht: 1;\s*\}/);
+});
+
+// --- AUF-38 Scheibe 2 --------------------------------------------------------------------------------
+test('Scheibe 2: jede Farbe in der CSS ist eine Variable, kein Wert', () => {
+  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
+  const farben = ohneKommentare.match(/#[0-9a-fA-F]{3,8}\b|rgba?\(/g) ?? [];
+  assert.deepEqual(farben, [], `Farbwerte statt Variablen: ${farben.join(', ')}`);
+  // Und die benutzten Variablen gibt es wirklich in `T`.
+  const benutzt = [...ohneKommentare.matchAll(/var\((--hp-[a-z0-9-]+)\)/g)].map((m) => m[1]!);
+  const bekannt = new Set(tokenVariablen().map(([n]) => n));
+  for (const v of new Set(benutzt)) {
+    assert.ok(bekannt.has(v), `${v} kommt in T nicht vor`);
+  }
+  assert.ok(benutzt.length > 0, 'Scheibe 2 benutzt ueberhaupt Variablen?');
+});
+
+test('Scheibe 2: kein `!important` und keine Medienabfrage', () => {
+  // Braucht es ein `!important`, stimmt die Reihenfolge nicht — dann melden. Responsive ist L7.
+  assert.doesNotMatch(quelle, /!important/);
+  assert.doesNotMatch(quelle, /@media/);
+});
+
+test('Scheibe 2: `StartView` traegt keine statischen Stil-Objekte mehr', () => {
+  const start = readFileSync(join(hier, '../app/StartView.tsx'), 'utf8');
+  for (const name of ['const wrap:', 'const kicker:', 'const h1:', 'const lead:',
+    'const themeHead:', 'const grid3:', 'const cardBase:', 'const icoBox:']) {
+    assert.ok(!start.includes(name), `${name} steht noch als Inline-Objekt da`);
+  }
+  for (const klasse of ['hp-start-wrap', 'hp-start-kicker', 'hp-start-titel', 'hp-start-lead',
+    'hp-start-themenkopf', 'hp-start-raster3', 'hp-karte', 'hp-karte-icon']) {
+    assert.ok(start.includes(klasse), `${klasse} wird nicht benutzt`);
+    assert.ok(quelle.includes(`.${klasse}`), `${klasse} fehlt in der CSS`);
+  }
+});
+
+test('Scheibe 2: was aus Zeiger oder Zustand kommt, blieb INLINE', () => {
+  // Ziel ist null STATISCHE Inline-Stile, nicht null Inline-Stile. Eine gerechnete Breite in eine
+  // Klasse zu pressen baut einen Fehler.
+  const start = readFileSync(join(hier, '../app/StartView.tsx'), 'utf8');
+  assert.match(start, /boxShadow: hover \? T\.schattenGehoben : T\.schattenFlach/, 'der Schwebezustand bleibt inline');
+  assert.match(start, /width: dominant \? 46 : 38/, 'der Zustand der Kachel bleibt inline');
+  // Und keine dieser Bedingungen ist in die CSS gewandert — **kommentarfrei gemessen**: der
+  // erklaerende Kopf der CSS nennt `hover` und `dominant`, um zu sagen, dass sie dort NICHT stehen.
+  // Ein Verbot, das seine eigene Begruendung trifft, prueft den Text und nicht den Code.
+  assert.doesNotMatch(quelle.replace(/\/\*[\s\S]*?\*\//g, ''), /hover|dominant/);
 });
 
 test('die Stilschicht wird genau einmal importiert — in `main.tsx`', () => {

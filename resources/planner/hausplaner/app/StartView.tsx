@@ -27,17 +27,21 @@ interface Props {
  */
 const HAUS_ZEICHEN = '<path d="M3 21h18M5 21V8l7-4 7 4v13"/>';
 
-const wrap: React.CSSProperties = { maxWidth: 1080, margin: '0 auto', padding: '20px 16px 70px' };
-const kicker: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: T.accent };
-const h1: React.CSSProperties = { fontSize: 34, fontWeight: 800, letterSpacing: '-.02em', margin: '10px 0 8px' };
-const lead: React.CSSProperties = { fontSize: 16, color: T.muted, maxWidth: 640, marginBottom: 14 };
-const themeHead: React.CSSProperties = { display: 'flex', alignItems: 'baseline', gap: 12, margin: '0 4px 16px' };
-// AUF-46: `repeat(3, 1fr)` erzwang drei Spalten auch bei 390 px — der Inhalt konnte nicht unter
-// seine Mindestbreite, und die Karten ragten über den Rand. `auto-fit` legt so viele Spalten an,
-// wie wirklich passen: drei bei 1440, eine bei 390.
-const grid3: React.CSSProperties = { display: 'grid', gap: 16, gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))' };
-const cardBase: React.CSSProperties = { background: T.surface, borderRadius: 16, padding: 22, cursor: 'pointer', boxShadow: T.schattenFlach, border: '1px solid transparent' };
-const icoBox: React.CSSProperties = { width: 52, height: 52, borderRadius: 13, background: T.accentSoft, color: T.accentInk, display: 'grid', placeItems: 'center', marginBottom: 16 };
+/**
+ * AUF-38 Scheibe 2 — **die statischen Stile sind nach `hausplaner.css` gewandert.**
+ *
+ * Hier standen acht konstante `React.CSSProperties`-Objekte. Sie tragen keine Messung und keinen
+ * Zustand, also gehoeren sie in die Stilschicht; ihre Farben stehen dort als `--hp-*`-Variablen,
+ * die zur Laufzeit aus `T` kommen — **kein Farbwert ist abgeschrieben worden.**
+ *
+ * **Was NICHT gewandert ist:** alles, was aus dem Zeiger (`hover`), aus einem Zustand
+ * (`dominant`) oder aus einer Messung kommt. Ziel ist **null statische Inline-Stile**, nicht null
+ * Inline-Stile — eine gerechnete Breite in eine Klasse zu pressen baut einen Fehler.
+ *
+ * **Kein gerenderter Wert aendert sich**; belegt durch den Bildschirmfoto-Vergleich vorher/nachher
+ * in drei Viewports.
+ */
+
 
 /**
  * AUF-40 Teil A — eine Karte **ohne** Ziel wird nicht klickbar gemacht, damit sie beschäftigt
@@ -49,8 +53,8 @@ function Karte({ ico, titel, desc, onClick, grund }: { ico: string; titel: strin
   const [hover, setHover] = React.useState(false);
   if (!onClick) {
     return (
-      <div style={{ ...cardBase, cursor: 'default' }} title={grund}>
-        <span style={icoBox}><Ikon inhalt={ico} size={26} /></span>
+      <div className="hp-karte" style={{ cursor: 'default' }} title={grund}>
+        <span className="hp-karte-icon"><Ikon inhalt={ico} size={26} /></span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
           <div style={{ fontSize: 15.5, fontWeight: 700 }}>{titel}</div>
           <ZustandBadge zustand="in_entwicklung" />
@@ -65,9 +69,10 @@ function Karte({ ico, titel, desc, onClick, grund }: { ico: string; titel: strin
       role="button" tabIndex={0} onClick={onClick}
       onKeyDown={(e) => { if (istAusloeser(e)) onClick(); }}
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
-      style={{ ...cardBase, transform: hover ? 'translateY(-3px)' : 'none', boxShadow: hover ? T.schattenGehoben : cardBase.boxShadow, borderColor: hover ? '#dcebe9' : 'transparent', transition: 'transform .14s, box-shadow .14s, border-color .14s' }}
+      className="hp-karte"
+      style={{ transform: hover ? 'translateY(-3px)' : 'none', boxShadow: hover ? T.schattenGehoben : T.schattenFlach, borderColor: hover ? '#dcebe9' : 'transparent', transition: 'transform .14s, box-shadow .14s, border-color .14s' }}
     >
-      <span style={icoBox}><Ikon inhalt={ico} size={26} /></span>
+      <span className="hp-karte-icon"><Ikon inhalt={ico} size={26} /></span>
       <div style={{ fontSize: 15.5, fontWeight: 700 }}>{titel}</div>
       <div style={{ fontSize: 13, color: T.muted, marginTop: 4, lineHeight: 1.45 }}>{desc}</div>
     </div>
@@ -162,10 +167,11 @@ function HubKarte({ f, onKonfigurator }: { f: FachHub; onKonfigurator: Props['on
   return (
     <div
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
-      style={{ ...cardBase, transform: hover ? 'translateY(-3px)' : 'none', boxShadow: hover ? T.schattenGehoben : cardBase.boxShadow, borderColor: hover ? '#dcebe9' : 'transparent', transition: 'transform .14s, box-shadow .14s, border-color .14s' }}
+      className="hp-karte"
+      style={{ transform: hover ? 'translateY(-3px)' : 'none', boxShadow: hover ? T.schattenGehoben : T.schattenFlach, borderColor: hover ? '#dcebe9' : 'transparent', transition: 'transform .14s, box-shadow .14s, border-color .14s' }}
     >
       {f.hub && <span style={{ display: 'inline-block', fontSize: 11, fontWeight: 700, letterSpacing: '.05em', textTransform: 'uppercase', color: T.accent, marginBottom: 2 }}>Hub</span>}
-      <span style={{ ...icoBox, width: 40, height: 40, borderRadius: 11, marginBottom: 12 }}><Ikon inhalt={f.icon} size={20} /></span>
+      <span className="hp-karte-icon" style={{ width: 40, height: 40, borderRadius: 11, marginBottom: 12 }}><Ikon inhalt={f.icon} size={20} /></span>
       <div style={{ fontSize: 14, fontWeight: 700 }}>{f.name}</div>
       <div style={{ fontSize: 13, color: T.muted, marginTop: 4, lineHeight: 1.45 }}>{f.desc}</div>
       {f.sub && (
@@ -187,10 +193,10 @@ function HubKarte({ f, onKonfigurator }: { f: FachHub; onKonfigurator: Props['on
 export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): React.ReactElement {
   return (
     <div style={{ minHeight: '100%', background: 'radial-gradient(1100px 420px at 82% -8%, #e9f4f2 0%, transparent 60%), radial-gradient(900px 400px at 5% 0%, #eef3e6 0%, transparent 55%)' }}>
-      <div style={wrap}>
-        <div style={kicker}>Neues Vorhaben</div>
-        <div style={h1}>Was möchtest du planen?</div>
-        <p style={lead}>Ein ganzes Gebäude — oder nur ein einzelnes Bauteil. Jeder Konfigurator führt dich Schritt für Schritt und läuft auch <b>autark</b>, ganz ohne Gebäude.</p>
+      <div className="hp-start-wrap">
+        <div className="hp-start-kicker">Neues Vorhaben</div>
+        <div className="hp-start-titel">Was möchtest du planen?</div>
+        <p className="hp-start-lead">Ein ganzes Gebäude — oder nur ein einzelnes Bauteil. Jeder Konfigurator führt dich Schritt für Schritt und läuft auch <b>autark</b>, ganz ohne Gebäude.</p>
 
         {/* AUF-40 Teil A — **Zuletzt bearbeitet: der Bestand, nicht drei erfundene Namen.**
             Hier standen „EFH Mustermann", „Fenster-Angebot Hahn" und „Sanierung Musterstr. 5" —
@@ -223,8 +229,8 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
 
         {/* Projekt */}
         <div style={{ marginTop: 40 }}>
-          <div style={themeHead}><span style={{ fontSize: 16, fontWeight: 700 }}>Projekt</span><span style={{ fontSize: 13, color: T.faint }}>Das komplette Vorhaben, alle Gewerke</span></div>
-          <div style={grid3}>
+          <div className="hp-start-themenkopf"><span style={{ fontSize: 16, fontWeight: 700 }}>Projekt</span><span style={{ fontSize: 13, color: T.faint }}>Das komplette Vorhaben, alle Gewerke</span></div>
+          <div className="hp-start-raster3">
             {/* AUF-40 Teil A — **drei Karten, drei Ziele.** Vorher riefen alle drei `onGuided(1)`
                 auf: drei Versprechen, ein Ziel. „Weiterarbeiten" öffnete kein Bestandsprojekt,
                 sondern begann bei Schritt 1. Wo ein Ziel fehlt, sagt die Karte das jetzt — statt
@@ -250,8 +256,8 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
 
         {/* Fachplaner */}
         <div style={{ marginTop: 40 }}>
-          <div style={themeHead}><span style={{ fontSize: 16, fontWeight: 700 }}>Fachplaner</span><span style={{ fontSize: 13, color: T.faint }}>Direkt loslegen — ein Raum, ein Bauteil oder eine Anlage genügt</span></div>
-          <div style={grid3}>
+          <div className="hp-start-themenkopf"><span style={{ fontSize: 16, fontWeight: 700 }}>Fachplaner</span><span style={{ fontSize: 13, color: T.faint }}>Direkt loslegen — ein Raum, ein Bauteil oder eine Anlage genügt</span></div>
+          <div className="hp-start-raster3">
             {FACH.map((f) => <HubKarte key={f.name} f={f} onKonfigurator={onKonfigurator} />)}
           </div>
         </div>

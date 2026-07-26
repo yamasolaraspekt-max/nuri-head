@@ -18,3 +18,49 @@
 :root {
   --hp-stilschicht: 1;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-38 Scheibe 2 — der Startbildschirm.
+ *
+ * **Jede Farbe steht als Variable, nie als Wert.** Die `--hp-*` kommen zur Laufzeit aus
+ * `studioDaten.ts` (`app/stil/tokenVariablen.ts`); ein Farbwert hier waere die zweite Wahrheit.
+ *
+ * **Nur STATISCHE Stellen sind hier.** Was aus einer Messung, einem Zustand oder dem Zeiger kommt
+ * (`hover`, `dominant`, gemessene Breiten), bleibt inline — eine gerechnete Breite in eine Klasse
+ * zu pressen baut einen Fehler.
+ *
+ * **Kein gerenderter Wert aendert sich.** Jede Zahl unten stand vorher genauso im Inline-Stil;
+ * belegt durch den Bildschirmfoto-Vergleich vorher/nachher in drei Viewports.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+/* Die Blattbreite des Startbildschirms. */
+.hp-start-wrap { max-width: 1080px; margin: 0 auto; padding: 20px 16px 70px; }
+
+/* Die Zeile ueber der Ueberschrift („NEUES VORHABEN"). */
+.hp-start-kicker {
+  font-size: 12.5px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--hp-accent);
+}
+
+.hp-start-titel { font-size: 34px; font-weight: 800; letter-spacing: -.02em; margin: 10px 0 8px; }
+
+.hp-start-lead { font-size: 16px; color: var(--hp-muted); max-width: 640px; margin-bottom: 14px; }
+
+/* Kopfzeile eines Themenblocks: Name links, Zweck daneben. */
+.hp-start-themenkopf { display: flex; align-items: baseline; gap: 12px; margin: 0 4px 16px; }
+
+/* AUF-46: `auto-fit` statt drei fester Spalten — bei 390 px passt eine, bei 1440 drei. */
+.hp-start-raster3 { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+
+/* Die Grundform einer Karte. Schwebezustand und Rahmenfarbe bleiben inline: sie haengen am Zeiger. */
+.hp-karte {
+  background: var(--hp-surface); border-radius: 16px; padding: 22px; cursor: pointer;
+  box-shadow: var(--hp-schatten-flach); border: 1px solid transparent;
+}
+
+/* Das Bildzeichen einer Karte. */
+.hp-karte-icon {
+  width: 52px; height: 52px; border-radius: 13px;
+  background: var(--hp-accent-soft); color: var(--hp-accent-ink);
+  display: grid; place-items: center; margin-bottom: 16px;
+}

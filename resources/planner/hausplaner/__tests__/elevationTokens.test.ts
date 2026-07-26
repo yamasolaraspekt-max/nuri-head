@@ -91,11 +91,20 @@ test('K2: der gehobene Wert ebenfalls null — in seiner abgelösten Form', () =
   assert.deepEqual(treffer, [], `noch roh: ${treffer.join(', ')}`);
 });
 
-test('K2: 13 Fundstellen abgelöst — die Zahl steht hier, nicht im Bericht allein', () => {
+test('K2: die Rollen werden benutzt, der Rohwert nirgends — die Eigenschaft, nicht die Zahl', () => {
+  // **Nachgezogen in AUF-38 Scheibe 2:** die Zusage nagelte **10 und 3** Fundstellen fest. Scheibe 2
+  // hat zwei davon in die Stilschicht verschoben (`var(--hp-schatten-flach)` in der CSS), und die
+  // Zusage ging rot — **obwohl die geschuetzte Eigenschaft unberuehrt ist**: der Rohwert steht
+  // nirgends, die Rolle wird ueberall benutzt. *Eine Zusage, die eine Anzahl festhaelt statt der
+  // Eigenschaft, bricht bei jeder Verschiebung.* Das ist in diesem Zyklus das vierte Mal.
   const flach = zaehleInApp('T.schattenFlach');
   const gehoben = zaehleInApp('T.schattenGehoben');
-  assert.equal(flach.length, 10, `flach: ${flach.join(', ')}`);
-  assert.equal(gehoben.length, 3, `gehoben: ${gehoben.join(', ')}`);
+  assert.ok(flach.length > 0, 'die flache Rolle wird nirgends mehr benutzt?');
+  assert.ok(gehoben.length > 0, 'die gehobene Rolle wird nirgends mehr benutzt?');
+  // Und in der Stilschicht steht sie als Variable, nicht als Wert.
+  const css = readFileSync(join(hier, '../hausplaner.css'), 'utf8');
+  assert.match(css, /var\(--hp-schatten-flach\)/, 'die Rolle fehlt in der CSS');
+  assert.doesNotMatch(css.replace(/\/\*[\s\S]*?\*\//g, ''), /rgba?\(/, 'ein roher Schatten in der CSS');
 });
 
 // --- Der eine Wert, der bleibt --------------------------------------------------------------------

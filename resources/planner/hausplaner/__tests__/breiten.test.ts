@@ -34,9 +34,13 @@ test('der Konfigurator ebenso — dieselbe Ursache, dieselbe Behebung', () => {
 });
 
 test('die Startseite legt so viele Spalten an, wie passen — nicht drei um jeden Preis', () => {
-  const start = lies('StartView.tsx');
-  assert.doesNotMatch(start, /gridTemplateColumns: 'repeat\(3, 1fr\)'/, 'drei feste Spalten passen bei 390 px nicht');
-  assert.match(start, /gridTemplateColumns: 'repeat\(auto-fit, minmax\(230px, 1fr\)\)'/);
+  // **Nachgezogen in AUF-38 Scheibe 2:** die Regel stand als Inline-Stil in `StartView.tsx` und
+  // steht jetzt als Klasse in `hausplaner.css`. **Die Absicht ist unveraendert** — so viele Spalten,
+  // wie passen. Geprueft wird deshalb die Eigenschaft, unabhaengig davon, wo sie wohnt.
+  const beides = lies('StartView.tsx')
+    + readFileSync(new URL('../hausplaner.css', import.meta.url), 'utf8');
+  assert.doesNotMatch(beides, /repeat\(3, ?1fr\)/, 'drei feste Spalten passen bei 390 px nicht');
+  assert.match(beides, /repeat\(auto-fit, ?minmax\(230px, ?1fr\)\)/);
 });
 
 test('die Kopfzeile bricht um, statt zu schieben', () => {
