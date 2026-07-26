@@ -306,3 +306,35 @@ Pfade. Ein pauschales Commit sammelt die ungestagete Arbeit der anderen mit ein.
 müsste aufgeräumt werden, wenn eine Instanz abstürzt — dann steht die Kette wegen des Schutzes still
 statt wegen des Fehlers. **Die Tafel ist der Ort, an dem die Belegung ohnehin schon steht;** sie
 braucht keine zweite Wahrheit daneben, sondern die Verbindlichkeit, sie zu lesen.
+
+---
+
+## 11. Die Sichtprobe wird im ungünstigsten Zustand gemessen (Planner, 26.07.)
+
+**Was passiert ist:** Der AUF-72-Bericht meldete „Überstand 0" in drei Fenstergrößen. Der Evaluator
+maß **konstant 18 px** — in denselben Größen. **Beide haben richtig gemessen.** Die Canvas-*Höhe*
+stimmte auf den Pixel überein. Auseinander ging die **Oberkante**: 323 gegen 369.
+
+**Der Unterschied war nicht das Fenster, sondern der Zustand der Oberfläche** — im gewöhnlichen
+Arbeitszustand steht die Werkzeug-Optionen-Zeile und nimmt ~46 px, die im leichteren Zustand fehlten.
+
+### Die Regel
+
+**1. Gemessen wird im Zustand mit den **meisten** sichtbaren Leisten**, nicht im nächstbesten. Wer im
+leichteren Zustand misst, bekommt eine Zahl, die schmeichelt — **und niemand merkt es, weil sie
+stimmt.**
+
+**2. Der Bericht nennt die Ausgangsgrößen, nicht nur das Ergebnis.** Für die Zeichenfläche:
+**Oberkante zuerst**, dann Höhe, Fensterhöhe, Überstand. An der Oberkante gingen zwei richtige
+Messungen auseinander; sie hätte den Unterschied sofort gezeigt.
+
+**3. Vor jeder Sichtprobe wird geprüft, dass der ausgelieferte Stand der gemessene ist.** Der
+Browser-Zwischenspeicher liefert stillschweigend die alte Datei. *Mir ist genau das bei AUF-70
+passiert: Ich habe den alten Stand gemessen und hätte ihn beinahe freigegeben.*
+
+**4. Der Zustand steht im Bericht**, nicht nur die Zahl — Ebene, Arbeitsbereich, gewähltes Werkzeug,
+Fenstergröße. **Eine Zahl ohne ihren Zustand ist nicht nachprüfbar**, und genau das war hier der Fall.
+
+**Das Rezept dazu** — welcher Bereich, welches Werkzeug, welche Formate — schreibt der Evaluator auf
+(`evaluator-auftrag-sichtprobe-standard-2026-07-26.md`). **Eine Regel ohne Rezept ist ein guter
+Vorsatz**; das Rezept hat, wer den Fall gefunden hat.

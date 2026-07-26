@@ -6898,3 +6898,79 @@ leer, sondern erfunden (`studioDaten.ts` hat null Importe). **Gebaut wird Ehrlic
 Allwissen.**
 
 **Ballbesitz: Generator (AUF-65, danach AUF-71) · Evaluator (AUF-62 und AUF-72).**
+
+---
+
+## PLANNER 26.07., 08:15 — beide Voten gelesen. Das zweite ist das wertvollere
+
+**Vorher gelesen:** `git log -6` · `git show 84942b0` (AUF-62) · `git show fe2eb6b` (AUF-72) ·
+`git show c23ec6a` · eigene Browser-Messung 1440 × 813.
+
+### 1. AUF-62 — FREIGABE, glatt
+
+Blind gegen `bae4596` gemessen, dann der Bericht. **Der Test rechnet nach, statt zu glauben:** jeder
+Weltpunkt über `aufSchirm()` gegen die Bühne, 17 Untertests über sechs Kanten. `einpassen.ts` ist
+rein — `grep` auf `getState`, `applyCommand`, `document`, `window` leer. Tests 1034 → **1051**.
+
+**Sein Gegen-Beweis war schärfer als der des Generators:** y-Spiegelung in der Pan-Formel gebrochen
+⇒ **7 rot**, mit der Bemerkung *„ich fuhr die stärkste"*. Sichtprobe: Zoom 12 % → 6 %, der ganze
+U-Grundriss im Bild.
+
+### 2. AUF-72 — FREIGABE **mit Auflage**, und die Auflage ist das Wertvolle
+
+**Er hat freigegeben und im selben Atemzug die Aussage darin widerlegt.**
+
+| | Canvas-Oberkante | Überstand |
+|---|---|---|
+| Generator | ~**323** px | 0 |
+| Evaluator | **369** px | **18 px** |
+| Planner (unabhängig) | **369** px | — |
+
+**Beide haben richtig gemessen.** Die Canvas-*Höhe* stimmt auf den Pixel überein. **Der Unterschied
+ist der Zustand:** im gewöhnlichen Arbeitszustand steht die **Werkzeug-Optionen-Zeile** und nimmt
+~46 px. Der Generator maß in einem Zustand mit weniger Leisten.
+
+**Dass der Überstand über alle Fensterhöhen konstant 18 px ist, ist der Beweis** — ein festes, nicht
+eingerechnetes Element, kein Zeitproblem.
+
+**Seine Einordnung übernehme ich unverändert: kein Blocker.** 227 → 18 px sind **92 %**, und der Rest
+ist über Einpassen und Verschub **erreichbar**. Es geht um die Aussage, nicht um die Substanz.
+
+**Das ist das Urteil, das ein Prüfer fällen können muss:** *Substanz abgenommen, Behauptung
+eingeschränkt.* Schwerer als ein glattes Grün und schwerer als ein Rot — und es hat mir die
+Entscheidung abgenommen.
+
+### 3. AUF-73 — Weg A, entschieden
+
+Er bot zwei Wege. **Weg A** (auf das echte Eltern-Element des Canvas messen) **statt Weg B**
+(belegen, dass Einpassen den Rest abfängt). **Grund: B macht die Richtigkeit davon abhängig, dass
+der Nutzer einen Knopf drückt.** Eine Zeichenfläche, die erst nach einem Klick vollständig ist, ist
+nicht vollständig — derselbe Gedanke wie „kein Scrollen als Lösung" in AUF-72 §5.
+
+**Und A ist die Fortsetzung derselben Entscheidung, keine neue:** auf einen Träger *über* dem Canvas
+zu messen, ist noch immer eine halbe Schätzung — es unterstellt, dazwischen liege nichts. **Genau
+das lag dazwischen.**
+
+**Ausdrücklich verboten: der Ausgleich per fester Zahl.** Wer 18 abzieht, hat die 96 aus AUF-72 durch
+eine kleinere ersetzt und sitzt in vier Wochen wieder hier.
+
+### 4. Daraus §11 — und ein Rezept, das ich nicht schreiben kann
+
+**§11: Die Sichtprobe wird im ungünstigsten Zustand gemessen, nicht im nächstbesten.** Dazu: der
+Bericht nennt die **Ausgangsgrößen** (Oberkante zuerst), der **Zustand** gehört in den Bericht, und
+vor jeder Sichtprobe wird geprüft, dass der ausgelieferte Stand der gemessene ist.
+
+*Der letzte Punkt ist meiner: Ich habe AUF-70 an einer Datei aus dem Browser-Zwischenspeicher
+gemessen und hätte den alten Stand beinahe freigegeben.*
+
+**Eine Regel ohne Rezept ist ein guter Vorsatz.** Das Rezept — welcher Bereich, welches Werkzeug,
+welche Formate — schreibt der Evaluator auf; er hat den Fall gefunden. Auftrag liegt, und ich habe
+ihn ausdrücklich gebeten, **meinen Vorschlag der drei Formate zu bestreiten**, wenn er es anders
+sieht: er hat sie im Betrieb gesehen, ich nicht.
+
+### 5. Stand
+
+**Archiv 56 → 58. Arbeitsvorrat 21 → 20. §3b leer.**
+
+**Ballbesitz: Generator (AUF-65 läuft, danach AUF-73, dann AUF-71) · Evaluator
+(Sichtprobe-Standard) · Planner (nichts offen).**
