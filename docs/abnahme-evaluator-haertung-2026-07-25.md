@@ -1332,6 +1332,54 @@ N+1, ehrliche nicht-versprechende Kachel, Leerzustand (Teil A) erhalten, AUF-64 
 additiv (keine Migration in AUF-78), Bundle reproduzierbar, alle Gates gruen. Die zwei nicht gemessenen
 Layout-Punkte sind Messgrenzen, keine Defekte - kein Merge-/Ketten-Blocker. Ballbesitz: Planner.
 
+### AUF-81 (Code 69f9df2 · Bundle 0b17315) - Konfigurator-Pakete serverseitig (B7 / AUF-40 Teil B) - FREIGABE
+
+Spur A (Migration/DB/Routing/Sicherheit). Blind gegen die committeten SHA gemessen. §8-Split sauber
+(Code-Commit ohne Bundle, Bundle-Commit nur Artefakt). Bundle 0b17315 byte-gleich zum frischen Build
+(reproduzierbar).
+
+MIGRATION additiv - oberstes Tor der DAUERDIREKTIVE, verifiziert:
+- `create_hausplaner_configurator_packages_table`: EINE neue Tabelle. KEIN `Schema::table()`/ALTER,
+  KEIN DROP/UPDATE an Bestand. Fremdschluessel stehen INNERHALB von `Schema::create` (kein
+  nachgelagerter Aenderungs-Aufruf an users/lead_alternative_adds) - Kriterium 2 woertlich.
+- Idempotent (`if hasTable return`), `down()` = `dropIfExists` (Rueckweg ohne Kundendatenverlust,
+  weil nur Neues drinsteht). FK defensiv (nur wenn Ziel existiert): user_id->users cascadeOnDelete,
+  alternative_id->lead_alternative_adds nullOnDelete.
+- `user_id` NOT NULL (Besitzer = Basis des Gatters), `alternative_id` nullable (autark, ohne Gebaeude).
+- Verifiziert am Lauf: die PHP-Suite (RefreshDatabase) migriert sie mit und die 53 Bestandstests
+  bleiben gruen (63/0) -> kein Bestandsbruch. K2 (keine Bestandstabelle) + K3 (idempotent) gruen.
+
+EIGENTUMSGATTER serverseitig - der #1-Sicherheitspunkt, verifiziert:
+- `paketSpeichern`: `user_id = $request->user()->id` - Besitzer aus der SITZUNG, nie aus der Anfrage.
+  status serverseitig 'entwurf'. Eingabe validiert (art in fenster/tuer/treppe/heizkoerper, titel,
+  paket array, alternative_id nullable).
+- `paketListe`: `->vonNutzer($request->user()?->id)` schraenkt VOR dem Laden ein (Model-Scope
+  `where('user_id', $userId ?? 0)`; ohne Nutzer -> 0 -> nichts, da user_id NOT NULL). Kein
+  laden-dann-ausblenden. Paginiert 25.
+- `paketZeigen`: `->vonNutzer(...)->whereKey($paket)->first()` - die ID aus der Anfrage NIE ohne
+  Eigentumspruefung; fremd -> 404 (nicht 403: kein Existenz-Leck). Saubere IDOR-Sperre.
+- Routen: 3, recht-gegated (POST speichern `Hausplaner,add`; GET Liste/eines `Hausplaner,read`),
+  whereNumber am Parameter. KEIN Loeschen/Aendern (bewusst - Fachfrage, keine Route).
+- Tests (gegen echten Code gruen): K5 fremde Pakete nicht in Liste + fremdes -> 404 (differentieller
+  Verhaltenstest ueber zwei Nutzer), K7 `user_id` in der SQL, K6 ohne read/add-Recht gesperrt,
+  K8 Pagination 25+5, K9 autark speicher-/abrufbar.
+
+§13-Gates (rein, /tmp-Auszug 0b17315): tsc 0 · schema 0 (KEIN Drift - AUF-81s schema_version ist das
+Paket-Schema in der DB, nicht das Szene-Schema) · test 1114 pass/0 fail · build 0.
+PHP-Suite (ticket_testing, sauberer Baum): 63 pass/207 Assertions/0 fail.
+
+Ehrlich benannt: die Gatter-MUTATIONS-Zaehne (vonNutzer/Session-Owner entfernen -> Test rot) sind in
+der Sandbox nicht fahrbar - das symlink-`vendor` traegt Composers PSR-4 mit echtem Repo-Pfad, der Test
+laedt die echte Klasse (dieselbe Grenze wie AUF-78-K4; APP_BASE_PATH fixt nur View-Pfade, nicht die
+Klassen-Autoload). Ersatz: K5 ist ein DIFFERENTIELLER Verhaltenstest (User A speichert, User B sieht
+nicht), der ohne greifendes Gatter rot waere - der Zahn steckt im Testaufbau, nicht in einer
+Code-Praesenz-Zusicherung; K7 belegt `user_id` in der SQL direkt.
+
+Urteil: FREIGABE. Migration streng additiv (DAUERDIREKTIVE erfuellt), Eigentumsgatter serverseitig +
+IDOR-sicher, keine Loesch-/Aender-Route, alle recht-gegated, additiv (Szene-Schema kein Drift), alle
+Gates gruen, Bundle reproduzierbar. Tor 1 (B7) liegt beim Planner/Yama; Tor 2 (Deploy) bei Yama.
+Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):

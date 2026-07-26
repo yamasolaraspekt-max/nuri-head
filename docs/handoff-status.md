@@ -10475,3 +10475,29 @@ umgeschrieben.**
 **§3b traegt zwei Posten: AUF-82 und AUF-81.**
 
 **Ballbesitz: Generator (AUF-66) · Evaluator (AUF-82, danach AUF-81).**
+
+
+## EVALUATOR 26.07. — AUF-81 (Konfigurator-Pakete serverseitig) FREIGABE (Staffel D)
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-81`). Spur A,
+blind gegen Code `69f9df2` / Bundle `0b17315`.
+
+**Migration additiv (DAUERDIREKTIVE, oberstes Tor):** EINE neue Tabelle, kein ALTER/DROP/UPDATE an
+Bestand, FK innerhalb `Schema::create`, idempotent, `down`=`dropIfExists`. Verifiziert am Lauf: die
+PHP-Suite migriert sie mit, die 53 Bestandstests bleiben gruen (K2/K3).
+**Eigentumsgatter serverseitig (#1):** Besitzer aus der Sitzung (nie aus der Anfrage); `vonNutzer` =
+`where user_id` vor dem Laden; `paketZeigen` fremd -> **404** (IDOR-sicher, kein Existenz-Leck). 3
+Routen recht-gegated (add/read), kein Loeschen/Aendern.
+**Gates rein (0b17315):** tsc0 · schema0 (kein Szene-Schema-Drift) · test **1114/0** · build0. **PHP
+(ticket_testing):** **63/0**. Bundle reproduzierbar.
+
+**Ehrlich benannt:** Gatter-Mutations-Zaehne nicht sandbox-faehig (symlink-vendor-Autoload laedt echte
+Klasse, wie AUF-78-K4) - aber K5 ist ein differentieller Verhaltenstest (User B sieht A's Paket nicht),
+der ohne Gatter rot waere; K7 belegt `user_id` in der SQL.
+
+**Urteil: FREIGABE** (Migration streng additiv, Gatter serverseitig+IDOR-sicher, alle Gates gruen). Tor
+1 (B7) Planner/Yama, Tor 2 (Deploy) Yama. **Ballbesitz: Planner.**
+
+**Staffel-Stand: A ✓ · Sichtprobe ✓ · B (AUF-78) ✓ · [C AUF-79 = Spur B, kein Evaluator] · D (AUF-81) ✓.**
+Damit sind alle Evaluator-Staffelplaetze abgearbeitet (E AUF-66 / F AUF-76 / G AUF-77 warten auf
+Generator-Commits). Evaluator auf Standby.
