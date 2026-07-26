@@ -8319,3 +8319,60 @@ bleibt ohnehin außerhalb — in jeder Variante.
 
 **Damit ist Tor 2 unverändert das, was es sein soll:** eine Stelle, an der ein Mensch den Stand
 einmal ansieht, bevor er zu 3 000 Kunden geht.
+
+---
+
+## PLANNER 26.07., 12:15 — Die Layout-Inventur ist vollständig. Und die Reihenfolge ändert sich aus einem Messgrund
+
+### 1. AUF-74 abgenommen — neun von neun
+
+**FREIGABE** (`65b7522`). Tests 1091 → **1102**.
+
+**Er hat fünf Stellen ehrlich gemacht, beauftragt waren drei.** Die beiden selbst gefundenen sind
+die wertvolleren:
+
+- **Der Fehlerfall.** Das `catch` verschluckte den Fehler — **ein fehlgeschlagener Download meldete
+  Erfolg.** Jetzt hängt die Meldung am tatsächlichen Ausgang. **Das ist kein Wortfehler, das ist ein
+  Richtigkeitsfehler**, gefunden in einem Posten, der nur Sätze umschreiben sollte.
+- **Dieselbe Zusage eine Fläche weiter** in `StartView` — „verlustfrei ins Projekt", die ich in
+  meinem Auftrag nicht erfasst hatte.
+
+**Gegen-Beweis mit Zähnen:** das `catch` wieder verschlucken lassen ⇒ rot.
+
+**Damit ist die Layout-Inventur vom 25.07. vollständig abgearbeitet:** B1, B2, B3/B8, B4, B5, B6, B7
+geschlossen; B9 war beim Nachmessen kein Defekt. **Neun Befunde, keiner offen.**
+
+### 2. Die Marke — diesmal im selben Schritt
+
+**§10.7 angewendet:** AUF-74 verlässt die Reihe, **AUF-58 bekommt die Marke im selben Edit.**
+*(Beim letzten Mal habe ich genau das vergessen und die Kette 35 Minuten angehalten.)*
+
+### 3. Warum AUF-58 und nicht AUF-78 — eine Messentscheidung, keine Laune
+
+**Der Evaluator fährt gerade die volle PHP-Suite gegen den jetzigen HEAD.**
+
+**AUF-78 fasst `app/Http` an.** Committet der Generator währenddessen, misst die Suite einen Stand,
+den es nicht mehr gibt — **§10.3: Messwerte aus einem wandernden Baum sind keine Messwerte.**
+
+**AUF-58 berührt nur `.gitignore`** — kein PHP, kein `app/`, keine Insel. **Der Suite-Lauf bleibt
+gültig, und der Generator steht nicht still.** Inhalt und Kriterien von AUF-78 sind unverändert; es
+ist eine Reihenfolge-, keine inhaltliche Entscheidung, und sie steht so auf der Tafel.
+
+### 4. Stand der fünf Merge-Bedingungen — selbst gemessen
+
+| | Bedingung | Stand |
+|---|---|---|
+| 1 | AUF-74 abgenommen, Layout-Inventur vollständig | **erfüllt** |
+| 2 | Abnahme-Stapel leer, kein NACHBESSERN, keine Auflage | **erfüllt** (0 Zeilen in §3b) |
+| 3 | Arbeitsbaum sauber, kein Bau in Bewegung | **erfüllt** — bis AUF-58 startet |
+| 4 | volle Suite gefahren, `main` als Vergleich | **offen — läuft** |
+| 5 | keine Migration im Merge | **erfüllt** — gemessen **0** |
+
+**Vier von fünf. Es fehlt genau eine Zahl, und sie ist unterwegs.**
+
+**Was ich Yama ausdrücklich noch nicht melde:** dass der Zeitpunkt da ist. **Vier von fünf ist nicht
+fünf von fünf** — und die fehlende ist die einzige, die etwas über den CRM-Stand außerhalb der Insel
+sagt. *Eine Bedingung, die man kurz vor dem Ziel weglässt, war nie eine Bedingung.*
+
+**Ballbesitz: Generator (AUF-58) · Evaluator (volle Suite, danach Sichtprobe-Standard) ·
+Planner (wacht über die fünfte Zahl).**
