@@ -7328,3 +7328,73 @@ gemessen — er schon.*
 
 **Ballbesitz: Generator (AUF-71) · Evaluator (AUF-73, danach der Sichtprobe-Standard, der weiter
 offen ist).**
+
+---
+
+## PLANNER 26.07., 09:00 — Die Layout-Inventur abgerechnet: sieben von neun sind zu
+
+**Anlass:** Yama: *„was ist der nächste Schritt, bitte denk an die Layout-Inventur — wie weit sind
+wir und wieviel ist im Vergleich dazu noch offen."*
+
+**Vorher gelesen/gemessen:** `docs/planner/ux-befund-layout-alle-ebenen-2026-07-25.md` (193 Z., B1–B9)
+· Archiv und Tafel je Posten gezählt · `app/HausplanerApp.tsx:239-247` (B8 gegengeprüft) ·
+`docs/auftraege/generator-auftrag-auf40-start-und-persistenz.md` (Teil A / Teil B).
+
+### 1. Die Abrechnung, Befund für Befund
+
+| Befund | Ebene | Posten | Stand |
+|---|---|---|---|
+| **B1** Geschosszeile trägt vier Aufgaben, nennt das Geschoss zweimal | Studio-Rahmen | AUF-43 | **zu** |
+| **B2** zwei „(geplant)"-Knöpfe, Spiegeln im leeren Plan | Studio-Rahmen | AUF-44 | **zu** |
+| **B3/B8** erster Schritt nirgends sichtbar · Standardwerkzeug meldet „in Entwicklung" | Expertenmodus | AUF-45 | **zu** |
+| **B4** drei erfundene Projekte, drei Karten ein Ziel | Start | AUF-40 **A** | **offen** |
+| **B5** bei 375 px läuft die Startseite 283 px über | Start | AUF-46 | **zu** |
+| **B6** der Wizard widerspricht sich nebeneinander | Geführte Planung | AUF-39 | **zu** |
+| **B7** „speicherbar" ohne Persistenz | Konfigurator | AUF-40 **B** | **offen — bei Yama** |
+| **B9** Knopf sah abgeschnitten aus | Expertenmodus | — | **kein Defekt** (Messung) |
+
+**Sieben geschlossen, einer war beim Nachmessen kein Defekt, zwei offen — und beide stecken in
+demselben Posten.**
+
+**B8 selbst gegengeprüft, nicht aus der Tafel übernommen:** `HausplanerApp.tsx:247` sagt heute
+*„Dieses Werkzeug braucht keine Optionen."*, und der Kommentar darüber nennt den alten Text
+ausdrücklich: *„der alte Platzhalter sagte ‚in Entwicklung' und machte aus ‚braucht nichts' ein
+Versprechen."* **Der Befund ist nicht nur beauftragt, er ist im Code sichtbar erledigt.**
+
+### 2. Der Satz von damals hält — und er ist eingelöst
+
+Die Inventur endete mit: *„Die Oberfläche ist nicht kaputt — sie ist an vier Stellen **unehrlich**
+(B2, B4, B6, B7) und an zwei Stellen **stumm** (B1, B3)."*
+
+**Das Stumme ist vollständig weg** (B1 und B3 beide zu). **Vom Unehrlichen sind zwei von vier weg**
+(B2, B6); die anderen zwei sind B4 und B7 — **wieder derselbe Posten.**
+
+### 3. Was seit der Inventur dazugekommen ist — und warum das gut ist
+
+Die Inventur vom 25.07. kannte sie nicht, weil sie noch niemand gemessen hatte:
+
+- **AUF-68 / AUF-70** — zwei Werkzeugzeilen statt einer; gesperrt sah aus wie frei. **Beide zu.**
+- **AUF-72 / AUF-73** — die Bühne ragte 227 px unter das Fenster, **38 % der Zeichenfläche
+  unerreichbar.** AUF-72 zu, AUF-73 in Prüfung.
+- **AUF-62** — der letzte tote „(geplant)"-Knopf rechnet. **Zu.**
+- **AUF-65** — die geführte Planung sagt kein „Freigegeben" mehr. **Zu.**
+- **AUF-71** — vier Beschreibungen für „gesperrt". **In Arbeit.**
+
+**Das ist mehr Layout-Arbeit nach der Inventur als in ihr.** Kein Widerspruch: eine Inventur findet,
+was man sehen kann. **AUF-72 hat niemand gesehen — er wurde gerechnet**, und zwar erst, als AUF-62
+ihn sichtbar machte.
+
+### 4. Der nächste Schritt, und er ist eindeutig
+
+**AUF-40 Teil A** — direkt nach AUF-71. Es ist **der letzte Befund der Layout-Inventur, der ohne
+Yama baubar ist.** Reine Insel-Arbeit: die Demo-Liste `ZULETZT` (`StartView.tsx:75`) weicht echten
+Projekten, und die drei Karten hören auf, alle dasselbe zu tun (`StartView.tsx:92-94` ruft dreimal
+`onGuided(1)`, auch „Weiterarbeiten").
+
+**Teil B ist Yamas Entscheidung und beginnt nicht ohne sie.** Der Auftrag sagt es selbst: *„Wer A
+meldet und B mitliefert, hat an einer Datenbank vorbei gearbeitet."* Es geht um Migration und Route
+— `ConfiguratorPackage` serverseitig speichern, damit „speicherbar" wahr wird. **Ich lege ihm die
+Frage vor, statt sie zu vertagen: sie ist der letzte offene Befund der Inventur.**
+
+**Ballbesitz: Generator (AUF-71, danach AUF-40 A) · Evaluator (AUF-73, danach Sichtprobe-Standard) ·
+Yama (Freigabe Teil B).**
