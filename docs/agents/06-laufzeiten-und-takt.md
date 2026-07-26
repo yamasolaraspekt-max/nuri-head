@@ -270,3 +270,39 @@ kein Test-Beifang.
 **Warum das hier steht und nicht nur im Bericht:** Der Generator hat sich die Konsequenz selbst
 aufgeschrieben. Eine Lehre, die nur in einem Bericht steht, gilt für den, der sie geschrieben hat,
 und für niemanden sonst. **Diese hier hat den Hauptzweig einen Tag lang eine Route gekostet.**
+
+---
+
+## 10. Kollisionsschutz im geteilten Baum (Planner, 26.07., erledigt AUF-22)
+
+**Was am 25.07. beinahe passiert ist:** Zwei Generator-Instanzen (nativ und Cowork) arbeiteten
+gleichzeitig an derselben Nacharbeit. `HausplanerApp.tsx` war unter der einen bereits umgebaut, ein
+fremder untracked Test lag im Baum. **Nichts ist überschrieben worden — aber nur, weil beide
+freiwillig vorher auf der Tafel gezogen hatten** (`c3249d4`, `ca4153b`).
+
+§1 der Tafel schreibt das Ziehen vor. **Durchgesetzt hat es nichts.** Eine Regel, deren Einhaltung
+vom guten Willen abhängt, ist eine Bitte.
+
+### Die Regel
+
+**1. Ziehen ist Vorbedingung, nicht Höflichkeit.** Kein Generator schreibt die erste Zeile, bevor
+der Posten auf der Tafel als ⚡ **AKTIV** auf ihn gezogen ist. **Steht dort ein anderer Posten
+aktiv, wird nicht gebaut, sondern gefragt.**
+
+**2. Vor dem ersten Schreibzugriff ein `git status`** — und **fremde untracked Dateien oder fremde
+Änderungen sind ein Haltesignal, kein Hintergrundrauschen.** Wer sie sieht, meldet sie, statt
+danebenzuschreiben. *(Genau dieser Blick hat heute Nacht gezeigt, dass der AUF-64-Fix uncommittet
+im Baum lag — er kostet zehn Sekunden und hat schon einmal einen halben Tag gerettet.)*
+
+**3. Wer merkt, dass der HEAD sich unter ihm bewegt hat, hört auf zu messen und meldet es.**
+Messwerte aus einem wandernden Baum sind keine Messwerte. *(Mir selbst sind an einem Tag mehrere
+Tafel-Skripte mitten im Lauf abgebrochen, weil nebenher committet wurde. In jedem Fall war Abbruch
+richtig und Weitermachen falsch.)*
+
+**4. Gestagt wird nur, was man selbst geschrieben hat** — nie `-A`, nie `.`, immer die eigenen
+Pfade. Ein pauschales Commit sammelt die ungestagete Arbeit der anderen mit ein.
+
+**Warum keine technische Sperre:** Eine Sperrdatei im Repo wäre selbst ein geteilter Zustand und
+müsste aufgeräumt werden, wenn eine Instanz abstürzt — dann steht die Kette wegen des Schutzes still
+statt wegen des Fehlers. **Die Tafel ist der Ort, an dem die Belegung ohnehin schon steht;** sie
+braucht keine zweite Wahrheit daneben, sondern die Verbindlichkeit, sie zu lesen.

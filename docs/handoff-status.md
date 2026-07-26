@@ -6359,3 +6359,76 @@ Kein `public/*`-Anteil, kein Bundle-Rebuild — es ist nur eine Testdatei.
 Ledger-Commit des AUF-70-Berichts. Der K13-Commit ist **`3b9d4ec`**. Ursache: ich hatte die Testdatei
 nicht zur Ablage vorgemerkt, der Commit lief ins Leere, und ich habe den zurückgegebenen Hash
 übernommen, statt ihn zu prüfen. **Ein Hash, den man nicht nachschlägt, ist eine Behauptung.**
+
+---
+
+## PLANNER 26.07., 07:55 — der nächste Posten vorbereitet, und zwei Schulden beglichen
+
+**Vorher gelesen/gemessen:** `git --no-optional-locks log 4f3e3b9..HEAD` (leer) · Arbeitsbaum ·
+`app/studioDaten.ts:1-40, 84, 100-158` · `app/GuidedView.tsx:118-133` · Tafelzeilen AUF-65/18/22.
+
+### 1. Abgleich zuerst
+
+**Keine neuen Commits.** Im Baum liegt `__tests__/eineWerkzeugzeile.test.ts` als geändert — das ist
+laufende Arbeit an AUF-70, nicht mein Pfad. **Ich fasse nichts davon an und melde es nur.**
+
+### 2. AUF-65 — der gemeldete Befund war ein anderer als der wirkliche
+
+Die UX-Bewertung sagte: *„das Aufgaben-Panel ist leer."* **Gemessen ist es das nicht** — jeder der
+elf Schritte in `studioDaten.ts` trägt Einträge, einer sagt sogar „Abgeschlossen · Nichts zu tun".
+
+**Der wirkliche Befund steht im Kopf der Datei:**
+
+```
+$ grep -n "^import" app/studioDaten.ts
+(kein Treffer)
+```
+
+**Null Importe.** Die geführte Planung ist reine feste Datei-Konstante, **ohne jede Verbindung zum
+Dokument des Nutzers**. „5 Räume erkannt", „1 Wand unsicher erkannt", „3 Objekte zuordnen" — diese
+Zahlen stehen im Quelltext, nicht in der Szene.
+
+**Das Panel ist nicht leer, es ist erfunden** — und das ist der schlechtere von beiden Zuständen.
+Ein leeres Panel sagt „ich weiß nichts"; ein gefülltes sagt „ich weiß das hier" und liegt falsch.
+Dasselbe gilt für „Freigegeben": **niemand hat etwas freigegeben.** Yamas Gefühl, das Wort sei zu
+stark, trifft genau den Punkt — es behauptet einen Vorgang, den es nicht gegeben hat.
+
+**Die Entscheidung im Auftrag: Ehrlichkeit, nicht Allwissen.** Statuswörter ohne behaupteten
+Vorgang, **ein** Satz an **einem** Ort, dass die Schritte noch nicht aus dem Projekt kommen, und ein
+leeres Panel verschwindet statt leer dazustehen (Muster AUF-45). **Die echte Anbindung ist AUF-40
+und wird hier nicht zum zweiten Mal gebaut** — zwei Stellen, die dieselbe Ableitung erfinden, sind
+die verwaiste zweite Wahrheit, gegen die die Bauordnung steht.
+
+### 3. AUF-22 erledigt — Kollisionsschutz ist jetzt eine Regel
+
+**§10** in `docs/agents/06-laufzeiten-und-takt.md`. Kern: **Ziehen ist Vorbedingung, nicht
+Höflichkeit**; `git status` vor dem ersten Schreibzugriff, und **fremde untracked Dateien sind ein
+Haltesignal**; wer merkt, dass der HEAD sich unter ihm bewegt, hört auf zu messen.
+
+**Keine technische Sperre** — eine Sperrdatei wäre selbst ein geteilter Zustand und stünde bei einem
+Absturz im Weg; dann steht die Kette wegen des Schutzes still statt wegen des Fehlers. Die Tafel
+trägt die Belegung ohnehin und braucht keine zweite Wahrheit daneben.
+
+*Der zweite Punkt hat sich heute Nacht schon bezahlt gemacht: derselbe Blick hat gezeigt, dass der
+AUF-64-Fix uncommittet im Baum lag.*
+
+### 4. AUF-18 erledigt — alle drei Punkte entschieden
+
+**(a) `RouteNode` bekommt keine Gruppe im Projektbaum.** Gemessen erzeugt heute **kein** Werkzeug
+Routen. Eine Gruppe für einen Knotentyp, den niemand herstellt, ist eine leere Schublade und sieht
+aus wie ein Versprechen. Sie entsteht mit dem ersten Werkzeug, das Routen erzeugt — in dessen Posten.
+
+**(b) Befund-Historie: vertagt, und zwar sichtbar.** Sie braucht eine Store-Änderung und damit K4;
+das ist kein Nebenbei. **Sie steht nicht mehr im Arbeitsvorrat**, sondern ist als v3-Kandidat
+benannt — damit sie nicht als offene Arbeit mitzählt, an der niemand arbeitet.
+
+**(c) `Enter` auf `loeschen`/`duplizieren` bleibt.** Es ruft die vorhandenen Funktionen und ist das
+Standardverhalten eines fokussierten Knopfes. Ein Rückbau wäre eine Zeile und würde die
+Tastaturbedienung schlechter machen, nicht sauberer.
+
+### 5. Stand
+
+**Arbeitsvorrat 21 → 16.** Archiv **51 → 55**. **Kein Posten mehr, an dem ich schulde.**
+
+**Ballbesitz: Generator (AUF-62, danach AUF-65 · Nachtrag: Bericht zu AUF-70) ·
+Evaluator (AUF-70, danach die Zustands-Inventur).**
