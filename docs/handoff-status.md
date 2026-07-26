@@ -12247,3 +12247,52 @@ Variablen kommen dabei wirklich an:** `--hp-accent` steht im Browser auf `#12807
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator**
 (Scheibe 1 wird laut Auftrag **eigens** abgenommen, bevor Scheibe 2 beginnt).
+
+
+## PLANNER 26.07., 21:50 — AUF-50: beide offenen Messungen liegen vor. Der Empfaenger darf gebaut werden, das Schema nicht
+
+Am 20:45 hatte ich zwei Messungen zurueckgestellt, bevor 50.1 ein Auftrag wird. Beide sind gemacht.
+Papier: `docs/planner/auf50-stufenplan-2026-07-26.md`.
+
+**Messung A — 11 von 101 stehen gesperrt, nicht 94.** Acht Import an `permission.import`, drei
+fachlich (`u-wert`, `hydraulischer-abgleich`, `waermepumpe`). Damit ist die Lage haerter als
+gedacht: **90 sind aktivierbar, 7 haben einen Empfaenger, 83 haben keinen**. Ein gesperrtes
+Werkzeug luegt nicht — ein aktives ohne Empfaenger schon. Die 83 sind der Schaden, nicht die 94.
+
+**Messung B — der Empfaenger geht ohne `store/` und ohne `domain/`.** Der Store fuehrt seit P0
+`executeCommand(command)`; eine generische Annahmestelle ist da. Es fehlt die Zuordnung davor. Und
+die sitzt an vier Zeilen in `HausplanerApp.tsx` (719, 1054, 1415, 1435), jede davon
+`setWerkzeug(tool.id as Werkzeug)`.
+
+**Der Cast ist die Luecke.** Er behauptet, jede der 101 ids sei einer der sieben Modi. Klickt der
+Nutzer `heizkoerper`, steht danach `werkzeug === 'heizkoerper'` und kein Zweig faengt es. Ohne
+diese vier Casts haette `tsc:hausplaner` die fehlenden Empfaenger **seit dem ersten Tag** gemeldet.
+Das ist kein fehlendes Feature, das ist eine abgeschaltete Typpruefung. Es ist dieselbe Sorte
+Fehler wie meine Zaehlung, die die Form der Tafel prueft und nicht, ob meine Aenderung gelandet
+ist: ein Pruefer, der auf Zuruf schweigt, ist schlimmer als keiner.
+
+**Die Rueckgabe an Yama faellt an — aber an anderer Stelle als vermutet.** Nicht beim Empfaenger.
+Bei den Erzeugen-Werkzeugen: **20 der 40 landen auf einem vorhandenen Schema-Platz, 20 nicht.**
+Sechs davon sind schon verdrahtet, `waermepumpe` ist gesperrt, also sind **13 heute ohne jede
+Schema-Aenderung erreichbar**. Die anderen 20 brauchen einen neuen `objectType` oder Knotentyp —
+Elektro (4), freie CAD-Geometrie (6), Ansichten (2), Tragwerk (3), PV, Pumpe, `raum`,
+`kuechenplanung`, `sanitaeranschluss`. Eine persistierte Aufzaehlung zu erweitern erzeugt
+Bestandsdaten, die aeltere Staende nicht lesen — das ist eine Schema-Entscheidung und gehoert nach
+der Bauordnung nicht dem Planner.
+
+`raum` ist der interessanteste Fall: der Platz `zone/room` **existiert**, aber das Schema sagt
+ausdruecklich *nur abgeleitet, Feld `derived`*. Ein Raum-Werkzeug zeichnet von Hand. Das ist kein
+fehlender Platz, das ist ein Widerspruch zur P0-Regel — und der loest sich nicht durch Bauen.
+
+**Zugeschnittener Stufenplan.** In der Bestandsaufnahme standen vier Stufen mit Umfang ~78. Nach
+der Messung ist er kleiner: 50.1 Empfaenger (kein neues Werkzeug wird benutzbar — Absicht, die
+Stufe macht sichtbar, was heute still scheitert; Abnahme ist ein Gegen-Beweis, der heute rot sein
+muss) · 50.2 die 13 erreichbaren · 50.3 Auswahl/Ansicht/Messen · 50.4 modify. Import bleibt
+Phase 2, assign-or-calculate bleibt AUF-52.
+
+**Nach §14 wird daraus kein neuer Posten.** AUF-50 steht bereits auf der Tafel, dieses Papier
+schneidet ihn nur zu. Die Frage an Yama steht am Ende des Papiers in einem Satz und wartet — sie
+blockiert nichts, denn 50.1 und 50.2 kommen ohne sie aus.
+
+**Ballbesitz unveraendert:** Generator auf AUF-38 Scheibe 1 (Stilschicht im Arbeitsbaum, sechs
+Pfade), Evaluator wartet auf die AUF-38-Abnahme, Stapel leer.
