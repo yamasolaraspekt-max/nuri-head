@@ -9085,3 +9085,72 @@ deutlich länger braucht") tritt **nicht** ein.
 
 Keine Bewertung, kein Audit — §7.6: das ist die Messung, die Entscheidung ist Yamas. **Ballbesitz:
 Planner.** (Danach bei mir offen: AUF-80-Abnahme sobald berichtet + der Sichtprobe-Standard.)
+
+---
+
+## PLANNER 26.07., 13:15 — Yamas zwei Ansagen: die restlichen 20 % heute, und B7 mit Datenbank
+
+### 1. Zu den 20 % — ich muss widersprechen, und zwar mit Zahlen
+
+**Yama:** *„Wir sind fast bei 80 %, wir müssen die 20 % heute schaffen."*
+
+**Die 80 % sind eine Zahl über Posten, nicht über das Erzeugnis. Und die verbliebenen 17 sind nicht
+der Rest — sie sind die größten.** Ausgezählt:
+
+| Größe | Posten | Anzahl |
+|---|---|---|
+| **klein** (Minuten bis eine Stunde) | AUF-76 · 78 · 79 · 63 · 54 · 55 · 56 · 42 · 66 | **9** |
+| **mittel** (ein bis drei Stunden) | AUF-77 · 35b · 67 | **3** |
+| **groß** (Tage bis Wochen) | AUF-38 (331 Stellen, acht Scheiben) · AUF-48 (2 000+ Zeilen zerlegen) · AUF-52 (zwölf Engines, drei Scheiben) · **AUF-50 (die 110 Werkzeuge, vier Stufen)** · **AUF-81** (Datenbank) | **5** |
+
+**Heute erreichbar sind die neun kleinen und mit Glück die drei mittleren.** Das brächte die Zahl
+auf **~91 %** — **und ließe genau die Arbeit übrig, um die es eigentlich geht.**
+
+**AUF-50 allein ist der Fahrplan für 110 Werkzeuge in vier Stufen.** Den an einem Sonntagnachmittag
+zu versprechen, wäre dieselbe Sorte Unehrlichkeit, die wir heute den ganzen Tag aus der Oberfläche
+entfernt haben — **„speicherbar", „Freigegeben", „5 Räume erkannt".** *Ich sage lieber eine Zahl,
+die stimmt.*
+
+**Was ich stattdessen zusage:** die neun kleinen heute, in der Reihenfolge, in der sie einander nicht
+blockieren — und **ehrlich gemeldet, wenn eine nicht mehr geht.**
+
+### 2. Zu B7 — angenommen, beauftragt, und bewusst hinter den Merge gestellt
+
+**Yama dreht seine Vormittags-Entscheidung weiter:** statt „erst den Satz ehrlich machen" jetzt
+**Datenbank, Migration, Routing, Pagination.** **Das ist seine Entscheidung, und AUF-74 war trotzdem
+richtig** — der Satz war den ganzen Tag über falsch und ist es jetzt nicht mehr.
+
+**Als AUF-81 beauftragt, `GESPERRT` bis der Merge durch ist. Der Grund ist nicht Vorsicht, sondern
+Zurechenbarkeit:**
+
+**Merge-Bedingung 5 lautet „keine Migration" — heute gemessen 0.** Das macht den Deploy zu einem
+**reinen Code-Deploy**: Rückweg = vorherigen Stand ausrollen. **AUF-81 bringt die erste Migration**
+und ändert damit die Risikoklasse. **Wer beides in einem Schritt ausliefert, kann bei einem Fehler
+nicht mehr sagen, welche Hälfte ihn verursacht hat.**
+
+**Die Sicherheitseigenschaft, auf der der ganze Posten ruht:** **eine neue Tabelle, keine bestehende
+angefasst.** Kein Bestandsdatensatz wird verändert, keine Kette (Angebot → Auftrag → Rechnung)
+berührt. **Der Rückweg ist das Verwerfen einer Tabelle, die es vorher nicht gab** — dabei geht kein
+Kundendatensatz verloren, weil in ihr nur Neues steht. **Verlangt die Umsetzung eine Änderung an
+einer bestehenden Tabelle: melden, nicht bauen.**
+
+**Das wichtigste Kriterium ist nicht die Migration, sondern das Eigentumsgatter:** Nutzer B darf
+A's Paket weder in der Liste sehen noch einzeln abrufen — **und die Liste filtert am Server, nicht
+in der Anzeige.** *Eine Liste, die alles lädt und die Hälfte ausblendet, ist bereits geleakt.*
+
+**Und der Rückweg wird ausgeführt, nicht behauptet:** `migrate` → `rollback` → `migrate`, alle drei
+mit Ausgabe im Bericht. Governance-Pflicht bei Live-Daten — und heute Vormittag habe ich selbst
+geschrieben, dass ein nie erprobter Wiederherstellungsweg keine Sicherung ist, sondern eine Absicht.
+
+### 3. Was daraus für heute folgt
+
+**Die Reihenfolge steht damit fest und ist kurz:**
+
+1. **AUF-80 Votum** + **`main`-Lauf** ⇒ Merge-Bedingungen buchstäblich erfüllt
+2. **Yama merged** (Tor 2)
+3. dann **AUF-78 · 79 · 76 · 63 · 54 · 55 · 56 · 42 · 66** — die neun kleinen
+4. dann **AUF-81** (Datenbank) als eigener, sichtbarer Vorgang
+5. **AUF-50** ist kein Sonntagsstück und wird auch nicht als eines geplant
+
+**Ballbesitz: Evaluator (AUF-80, `main`-Lauf) · Generator (hält an bis zum Merge) · Yama (der Merge,
+sobald ich melde).**
