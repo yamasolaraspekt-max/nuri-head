@@ -226,5 +226,12 @@ printf '%s %s %s%s %s\n' "$(date '+%Y-%m-%dT%H:%M:%S')" "$KURZ" "$AUSLOESER" "$Z
 # Text. Wächst es unangenehm, ist das Aufräumen ein eigener, entschiedener Posten — nicht etwas,
 # das ein Messwerkzeug still selbst tut.
 
+# ── AUF-79: der Fortschritt schreibt sich selbst ──────────────────────────────
+# Eine zweite Aufgabe, kein zweiter Mechanismus. Der Wächter kennt den Commit ohnehin; die Seite
+# entsteht aus Tafel und Archiv, nicht aus einer eigenen Buchführung. Sie darf den Wächter nicht
+# aufhalten und sein Urteil nicht verändern — deshalb hier ganz am Ende und ohne Einfluss auf
+# `STATUS`.
+[ -x scripts/fortschritt.sh ] && scripts/fortschritt.sh "$KURZ" >/dev/null 2>&1
+
 [ "$STATUS" = "gruen" ] && exit 0
 exit 1

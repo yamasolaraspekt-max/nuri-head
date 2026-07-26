@@ -63,3 +63,9 @@ _to_delete/
 # nichts (Kante 2). Das Verzeichnis selbst bleibt versioniert (.gitkeep).
 /docs/befunde/*
 !/docs/befunde/.gitkeep
+
+# Fortschrittsseite (AUF-79): wird nach JEDEM Commit vom Wächter neu geschrieben.
+# Sie ist die Darstellung der Tafel, nicht deren Quelle — und ein Erzeugnis dieser Maschine.
+# Versioniert wäre sie bei jedem Commit verändert und damit ein Dauer-Haltesignal für drei
+# Instanzen (§10.2); der Wächter darf sie ausserdem nicht selbst committen (AUF-75, Kante 2).
+/docs/fortschritt.html
