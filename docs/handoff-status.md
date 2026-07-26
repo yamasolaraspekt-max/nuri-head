@@ -7463,3 +7463,59 @@ eng.
 
 **Ballbesitz: Generator (AUF-71, dann AUF-40 A, dann AUF-74) · Evaluator (AUF-73, dann
 Sichtprobe-Standard) · Yama (nichts offen).**
+
+---
+
+## PLANNER 26.07., 09:00 — AUF-73 freigegeben. Ein Prüfer widerruft seine eigene Ursache
+
+**Vorher gelesen:** `git log -8` · `git show 64f7280` · Arbeitsbaum · Tafel §3b.
+
+### 1. Das Votum
+
+**FREIGABE, und es schließt die eigene Auflage.** Gemessen in **seinem** ungünstigsten Zustand
+(Regel 11: Expertenmodus, Werkzeug „Wand", also Optionen-Zeile; Canvas-Oberkante **369** — seine
+exakte AUF-72-Reproduktion): **900 und 813 je Überstand 0**, war je 18. Tests 1068 → **1073**;
+Gegen-Beweis `Math.floor` → `Math.ceil` ⇒ rot.
+
+**Damit ist die Zahlen-Diskrepanz aufgelöst, die ich ihm mitgegeben hatte:** er hat nicht behauptet,
+der Generator habe in seinem Zustand gemessen — er hat **seinen eigenen** Zustand wiederhergestellt
+und dort gegengeprüft. Genau das war die Bitte.
+
+### 2. Der Satz, der heute am meisten wert ist
+
+> *„Ehrlich, Beweis gilt gegen mich: … Ich hatte die Ursache benannt, ohne die Elternkette bis unten
+> durchzumessen."*
+
+**Sein Befund war richtig (18 px), seine Ursache falsch** (er tippte auf die Optionen-Zeile; die
+Wurzel liegt unten, in einer Spalte mit `min-height` ohne Höhe). **Er schreibt es hin, obwohl es
+niemand bemerkt hätte** — der Fix ist ursachen-robust und löst beide Zahlen auf 0.
+
+**Damit stehen heute drei Selbstkorrekturen von drei verschiedenen Rollen:** der Generator hat einen
+Fehler in seinem eigenen Testfall gefunden, der Evaluator seinen zu breiten `grep` und jetzt seine
+Ursachenanalyse, und ich zwei falsche Prämissen und ein Skript, das ein Archiv gelöscht hat.
+**Keiner davon wurde von außen erzwungen.** Das ist der Zustand, in dem eine Kette wirklich trägt —
+nicht der, in dem niemand einen Fehler meldet.
+
+### 3. Meine zweite Frage bleibt offen — und ich parke sie sichtbar
+
+Ich hatte gefragt: **verdeckt die Begrenzung einen Layout-Fehler, der anderswo zuschlägt?** Er
+antwortet indirekt („ursachen-robust"), nicht direkt.
+
+**Ich mache daraus keinen Posten** — es gibt keinen gemessenen Schaden, und ein Posten ohne Befund
+ist Vorrat ohne Grund. **Ich schreibe stattdessen die Auslösebedingung auf:** Kämpft künftig
+irgendein Posten wieder mit der Seitenhöhe, mit Bildlauf oder mit einer Spalte, die nicht schrumpft,
+dann ist **`studio.blade.php` mit `min-height: calc(100vh - 46px)` und ohne feste Höhe** die erste
+Stelle, an der zu schauen ist — und dann gilt §9 (Blade-Regel).
+
+*Ein Verdacht ohne Schaden gehört nicht in den Arbeitsvorrat. Er gehört dorthin, wo ihn der Nächste
+findet, der stolpert.*
+
+### 4. Stand
+
+**Archiv 60 · Arbeitsvorrat 19 · Abnahme-Stapel leer.**
+
+**Generator:** AUF-71 läuft (neu im Baum: `dashboard/gesperrtStil.ts`, `gesperrtAppWeit.test.ts`,
+fünf Flächen geändert) → danach **AUF-40 Teil A** → dann **AUF-74**.
+**Evaluator:** der **Sichtprobe-Standard** ist jetzt seine einzige offene Sache — und nach heute
+Vormittag hat er drei Fälle beisammen, die hineingehören: der Zwischenspeicher, der Leisten-Zustand
+und die Elternkette bis unten.

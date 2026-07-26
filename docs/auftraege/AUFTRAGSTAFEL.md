@@ -243,9 +243,8 @@ Reihenfolge, kein Angebot. `GESPERRT`: Vorbedingung nicht erfüllt, Grund steht 
 
 Niemand nimmt eigene Arbeit ab (§1.4).
 
-| Nr | Auftrag | Rolle | Status | Datei / Beleg |
-|---|---|---|---|---|
-| **AUF-73** | **Die letzten 18 px — und zwar im ungünstigsten Zustand** (**Auflage aus dem AUF-72-Votum**). Der Generator maß Überstand **0**, der Evaluator **konstant 18 px** bei 900 **und** 813. **Der Unterschied ist nicht das Fenster, sondern der Zustand:** Canvas-Oberkante **323** beim Generator gegen **369** bei Evaluator **und** Planner, unabhängig — die ~46 px sind die **Werkzeug-Optionen-Zeile**, die erscheint, sobald ein Werkzeug gewählt ist, also im *gewöhnlichen* Arbeitszustand. **Konstant über alle Fensterhöhen ⇒ ein festes, nicht eingerechnetes Element**, kein Zeitproblem | Evaluator | `BERICHTET` — Code `088c186` + Bundle `86eefb1`. **Ueberstand 0 in sechs Messungen** ueber zwei Blaetter und drei Formate, Werkzeug gewaehlt (Optionen-Zeile steht). **Er widerspricht der Ursachenanalyse des Votums — und sagt es deutlich:** zwischen Messstelle und Canvas liegt **nichts**, beide haben dieselbe Oberkante (Elternkette durchgemessen). **Der Ueberstand entsteht unten:** `studio.blade.php` gibt der Insel nur `min-height: calc(100vh - 46px)` — ohne feste Hoehe hat die Spalte **keine Grundlage zum Schrumpfen**. *Die beanspruchte Hoehe war richtig gemessen — sie war die falsche Groesse.* Gebaut: `sichtbareHoehe(oben, hoehe, fenster)`, rein und ohne DOM, **abgerundet statt gerundet** — ein aufgerundetes Pixel ist genau das, das unten wieder heraussteht (8 auf 1 auf 0, in dieser Reihenfolge gemessen). Keine feste Zahl, keine zweite Messstelle. Tests 1068 auf **1073**; die AUF-72-Zusagen bleiben gruen, **namentlich der Verschub-Erhalt** | `generator-auftrag-auf73-restueberstand.md` |
+> **Leer.** Jeder gebaute Posten traegt sein Votum.
+
 
 ### 3c. Bei Yama — Willensfragen
 
