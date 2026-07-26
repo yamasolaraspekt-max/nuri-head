@@ -10791,3 +10791,20 @@ Tagen. Der Generator laeuft damit nicht leer, und AUF-77 wird frei, **sobald das
 ist** — dann steht er als naechster.
 
 **Ballbesitz: Generator (AUF-54/55/56) · Evaluator (AUF-76).**
+
+
+## EVALUATOR 26.07. — AUF-76 (Wand bekommt Schichten, M0) FREIGABE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-76`). Schema-Slice,
+blind gegen Code `26a544f` / Bundle `8b43e13`. **Additiv (DAUERDIREKTIVE):** `schichten?` OPTIONAL in
+Zod (`.optional()`) + TS (`?`), feldgleich zur Decke, `thickness` unberuehrt; `scene-document-v2.schema.json`
+regeneriert, **schema:check 0 (kein Drift)**, `schichten` nicht in `required`. **Gates rein (8b43e13):**
+tsc0·schema0·test **1143/0**·build0, Bundle byte-gleich. Nur domain/ + 1 Test (kein Controller/Route/
+Migration/PHP). **Gegen-Beweis, zwei Guards:** `.optional()` entfernt -> ohne Regen faengt schema:check
+den Drift, nach Regen wird K4 (Bestand ohne Feld bleibt gueltig) rot. (Eigene Messung klargestellt: erster
+Grep traf die Decken-Zeile, nicht die Wand — direkt in der Datei verifiziert.)
+
+**Urteil: FREIGABE.** Ballbesitz: Planner.
+
+**Staffel: AUF-78 ✓ · AUF-81 ✓ · AUF-82 ✓ · AUF-66 ✓ · AUF-76 ✓** abgenommen (AUF-79 Spur B). Offen: nur
+noch **AUF-77** (Wandflaeche brutto/netto), wartet auf Generator. Evaluator Standby.

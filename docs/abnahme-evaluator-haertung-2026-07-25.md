@@ -1455,6 +1455,43 @@ fokussierbar; Leertaste loest aus), K4 (Adressen im Test frei erfunden - Insel k
 Urteil: FREIGABE. Insel baut keine URL (Gegen-Beweis mit Zaehnen), ohne Ziel keine Schaltflaeche,
 Tastatur buchstaeblich, alle Gates gruen, Bundle reproduzierbar, additiv. Ballbesitz: Planner.
 
+### AUF-76 (Code 26a544f · Bundle 8b43e13) - Die Wand bekommt ihre Schichten (Mengenermittlung M0) - FREIGABE
+
+Schema-Slice (aendert das Szene-Schema) - der #1-Check ist Additivitaet. Blind gegen die committeten SHA.
+§8-Split sauber, Bundle 8b43e13 byte-gleich zum frischen Build. Yama gab Tor 1.
+
+ADDITIV (DAUERDIREKTIVE) - verifiziert:
+- `scene.types.ts`: `schichten?: Array<{materialId?; dickeMm}>` OPTIONAL (`?`), feldgleich zu
+  `CeilingNode.schichten` (keine zweite Schreibweise), `thickness` unberuehrt (Rohbau-Wahrheit),
+  keine Vorbelegung.
+- `validation.ts`: `z.array(z.object({materialId: z.string().optional(), dickeMm: mmPos}).strict()).optional()`
+  - `.optional()` = additiv; bewusst zeichengleich zur Decke (kein geteilter `$ref`, damit der Erzeuger
+  das bestehende Decken-Stueck der abgelegten Datei nicht anfasst).
+- `scene-document-v2.schema.json` regeneriert und committet; `schema:hausplaner:check` = 0 -> KEIN Drift
+  (committetes JSON == regeneriertes Zod). `schichten` steht NICHT in der `required`-Liste der Wand.
+
+§13-Gates (rein, /tmp-Auszug 8b43e13): tsc 0 · schema:check 0 · test 1143 pass/0 fail · build 0 · Bundle
+byte-gleich. Umfang: nur domain/ (types, validation, JSON-Schema) + 1 Test; kein Controller, keine Route,
+keine Migration, kein PHP - reiner Insel-Schema-Slice.
+
+Tests (wandSchichten.test): K4 die Wand OHNE das Feld bleibt gueltig (kein 422, keine Migration) + das
+Feld ist im abgelegten Schema NICHT verlangt + K4 an der echten Fixture; K5 Rundlauf (zwei Schichten
+ueberstehen Speichern/Laden, `thickness` bleibt daneben, beide Bezugsmasse); K6 `dickeMm=0`/negativ
+abgelehnt (mmPos). Ein Test vergleicht Wand- und Decken-Teilschema (gleich, gemessen statt zugesagt).
+
+Gegen-Beweis (gueltig, /tmp - Insel-Schema, kein Autoload-Problem), ZWEI Guards mit Zaehnen:
+- `.optional()` an der WAND entfernt, OHNE Regen -> `schema:hausplaner:check` faengt den Drift
+  ("JSON-Schema ist nicht aktuell").
+- danach regeneriert -> `schichten` wird bei der Wand `required` -> K4 wird rot (3 Tests: Bestand ohne
+  Feld nicht mehr gueltig, Feld im Schema verlangt, Fixture abgelehnt). Die Additivitaet ist ein Test
+  mit Zaehnen, nicht nur eine Zusage.
+(Klarstellung eigener Messung: mein erster Grep zaehlte die DECKEN-Zeile mit `.optional()` und schien der
+Mutation zu widersprechen; direkt in der Datei geprueft - die Wand-Zeile 58 trug die Mutation korrekt.)
+
+Urteil: FREIGABE. Streng additiv (optional, kein Drift, Bestand bleibt gueltig), keine zweite Wahrheit
+(feldgleich Decke, thickness getrennt), Reihenfolge bewusst bedeutungslos (als Frage zurueckgegeben),
+alle Gates gruen, Bundle reproduzierbar. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
