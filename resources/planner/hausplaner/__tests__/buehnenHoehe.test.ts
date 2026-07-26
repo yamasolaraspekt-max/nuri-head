@@ -18,7 +18,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { buehnenHoehe, ERSATZ_HOEHE, MIN_HOEHE } from '../app/dashboard/buehnenHoehe';
+import { buehnenHoehe, sichtbareHoehe, ERSATZ_HOEHE, MIN_HOEHE } from '../app/dashboard/buehnenHoehe';
 import { standardPan, panAus } from '../app/dashboard/pan';
 
 const hier = dirname(fileURLToPath(import.meta.url));
@@ -66,6 +66,44 @@ test('K5: eine echte Messung gilt — aber nie unter dem benannten Mindestwert',
   for (const m of [null, 0, -1, 1, 120, 445, 900]) {
     assert.ok(buehnenHoehe(m) >= MIN_HOEHE, `${m} ⇒ ${buehnenHoehe(m)}`);
   }
+});
+
+// --- AUF-73: der sichtbare Teil, nicht der beanspruchte -----------------------------------------
+test('AUF-73 K3: der beanspruchte Platz wird auf das begrenzt, was man sieht', () => {
+  // Der Regelfall: die Reihe passt ins Fenster — dann gilt sie unverändert.
+  assert.equal(sichtbareHoehe(323, 462, 813), 462);
+  // Der gemessene Fehlerfall (Studio-Blatt): sie beansprucht mehr, als unter ihr Platz ist.
+  assert.equal(sichtbareHoehe(359, 462, 813), 454, '813 − 359 = 454; die 8 px Überstand entfallen');
+  assert.equal(sichtbareHoehe(359, 549, 900), 541);
+});
+
+test('AUF-73: abgerundet, nicht gerundet — ein aufgerundetes Pixel steht unten wieder heraus', () => {
+  assert.equal(sichtbareHoehe(359.6, 462, 813), 453, 'gerundet wären es 454 und damit 1 px zu viel');
+  assert.equal(sichtbareHoehe(0, 462.9, 813), 462);
+});
+
+test('AUF-73: eine gescrollte oder abwesende Oberkante bringt die Rechnung nicht durcheinander', () => {
+  // Negative Oberkante heißt „nach oben aus dem Bild gescrollt" — dann ist das ganze Fenster
+  // verfügbar, nicht mehr.
+  assert.equal(sichtbareHoehe(-100, 900, 813), 813);
+  // Liegt das Element ganz unterhalb des Fensters, bleibt nichts sichtbar — und das ist kein
+  // negativer Wert, sondern null. `buehnenHoehe` fängt es danach mit der Ersatzhöhe ab.
+  assert.equal(sichtbareHoehe(900, 400, 813), 0);
+  assert.equal(buehnenHoehe(sichtbareHoehe(900, 400, 813)), ERSATZ_HOEHE);
+});
+
+test('AUF-73 K6: keine feste Zahl zur Höhenkorrektur', () => {
+  // Wer einen festen Betrag abzöge, hätte die alte Konstante nur durch eine kleinere ersetzt.
+  const fn = regel.match(/export function sichtbareHoehe[\s\S]*?\n\}/);
+  assert.ok(fn, '`sichtbareHoehe` nicht gefunden');
+  assert.doesNotMatch(fn[0], /[-+]\s*\d{2,}/, 'eine Pixelkonstante in dieser Rechnung wäre der alte Fehler');
+  assert.match(fn[0], /fenster - Math\.max\(0, oben\)/, 'gerechnet wird aus Gemessenem');
+});
+
+test('AUF-73: der Hook benutzt die reine Rechnung — die Messstelle bleibt dieselbe', () => {
+  assert.match(regel, /sichtbareHoehe\(r\.top, r\.height, window\.innerHeight\)/);
+  // Es bleibt bei EINER Messstelle; AUF-72s Beobachter ist unverändert.
+  assert.equal((regel.match(/getBoundingClientRect\(\)/g) ?? []).length, 1);
 });
 
 // --- K6/K7: der Verschub ------------------------------------------------------------------------

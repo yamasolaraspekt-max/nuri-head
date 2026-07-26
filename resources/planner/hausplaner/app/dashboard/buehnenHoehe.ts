@@ -19,6 +19,11 @@
  * der Bühne, ändert sich das **Fenster nicht**. Ein `resize`-Zuhörer bemerkt genau diesen Fall
  * nicht — also den, der den Fehler überhaupt erzeugt hat.
  *
+ * **AUF-73 — was gemessen wird, ist der SICHTBARE Teil.** Der Evaluator fand nach AUF-72 einen
+ * konstanten Restüberstand; nachgemessen tritt er auf der Studio-Seite auf, die der Insel nur eine
+ * `min-height` gibt. Ohne feste Höhe wächst die Reihe auf ihren Inhalt und reicht unter das
+ * Fenster. **Die beanspruchte Höhe war richtig gemessen — sie war nur die falsche Größe.**
+ *
  * **Keine Rückkopplung:** Gemessen wird die Inhaltsreihe (`flex: 1, overflow: hidden`). Ihre Höhe
  * ergibt sich aus dem Fenster minus der Zeilen darüber — **nicht** aus der Bühne, die in ihr liegt.
  * Die Bühne kann also nicht ihre eigene Messung verschieben; ein Messen⇒Zustand⇒Layout⇒Messen-Kreis
@@ -57,6 +62,33 @@ export function buehnenHoehe(gemessen: number | null): number {
 }
 
 /**
+ * AUF-73 — **der sichtbare Teil, nicht der beanspruchte.**
+ *
+ * **Der Restüberstand nach AUF-72, nachgemessen:** Auf der Studio-Seite gibt das Blatt der Insel
+ * nur eine `min-height` (`calc(100vh - 46px)`). Ohne feste Höhe hat die Spalte keine Grundlage zum
+ * Schrumpfen: die Inhaltsreihe wächst auf ihren Inhalt und reicht unter das Fenster. **Die
+ * beanspruchte Höhe war richtig gemessen — sie war nur die falsche Größe.**
+ *
+ * Eine Zeichenfläche ist so hoch, **wie man sie sieht**. Deshalb: der beanspruchte Platz, begrenzt
+ * auf das, was zwischen Oberkante und Fensterunterkante übrig ist.
+ *
+ * **Kein Ausgleich per fester Zahl.** Hier steht keine Pixelkonstante; es wird gerechnet, was
+ * gemessen ist. Wer stattdessen einen festen Betrag abzöge, hätte die alte Konstante nur durch
+ * eine kleinere ersetzt — und säße in vier Wochen wieder hier.
+ *
+ * **Abgerundet, nicht gerundet:** ein aufgerundetes Pixel ist genau das Pixel, das unten wieder
+ * heraussteht. Zu klein ist bei einer Zeichenfläche harmlos, zu groß nicht.
+ *
+ * @param oben    Oberkante des tragenden Elements, relativ zum Fenster (kann negativ sein: gescrollt)
+ * @param hoehe   der Platz, den es beansprucht
+ * @param fenster sichtbare Fensterhöhe
+ */
+export function sichtbareHoehe(oben: number, hoehe: number, fenster: number): number {
+  const sichtbar = Math.max(0, fenster - Math.max(0, oben));
+  return Math.floor(Math.min(hoehe, sichtbar));
+}
+
+/**
  * Misst die Höhe des tragenden Elements und hält sie aktuell.
  *
  * Gibt `null` zurück, solange nichts gemessen ist — die Unterscheidung „noch nicht gemessen" von
@@ -74,7 +106,8 @@ export function useGemesseneHoehe(traeger: RefObject<HTMLElement | null>): numbe
     // Nur setzen, wenn sich der Wert wirklich ändert: ein unveränderter Zustand löst kein Rendern
     // aus und kann damit auch keine Schleife tragen.
     const messen = (): void => {
-      const h = Math.round(knoten.getBoundingClientRect().height);
+      const r = knoten.getBoundingClientRect();
+      const h = sichtbareHoehe(r.top, r.height, window.innerHeight);
       setHoehe((alt) => (alt === h ? alt : h));
     };
 
