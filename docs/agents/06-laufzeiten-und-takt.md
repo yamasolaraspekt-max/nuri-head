@@ -316,6 +316,14 @@ weggenommen.*
 Messung läuft mit `git --no-optional-locks`. **Ein Beobachter, der den Beobachteten blockiert, ist
 Teil des Problems.**
 
+**7. Wer eine Marke wegnimmt, setzt im selben Schritt die nächste.** Die Tafel darf nie ohne ⚡
+**AKTIV** dastehen, solange es einen ziehbaren Posten gibt. **Sonst hält Punkt 1 die Kette an — und
+zwar genau so, wie er soll, nur ohne Grund.**
+
+*Am 26.07. ist mir das passiert: AUF-40 Teil A ging von AKTIV in die Abnahme, und ich habe keine
+neue Marke gesetzt. Fünf fertige Aufträge lagen 35 Minuten ohne Marke; der Generator hat korrekt
+nicht gebaut, sondern gemeldet. **Die Regel hat funktioniert. Der Fehler war meiner.***
+
 **Warum keine technische Sperre:** Eine Sperrdatei im Repo wäre selbst ein geteilter Zustand und
 müsste aufgeräumt werden, wenn eine Instanz abstürzt — dann steht die Kette wegen des Schutzes still
 statt wegen des Fehlers. **Die Tafel ist der Ort, an dem die Belegung ohnehin schon steht;** sie

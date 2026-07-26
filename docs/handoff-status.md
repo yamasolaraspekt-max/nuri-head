@@ -8052,3 +8052,48 @@ nicht gebaut", nicht als Formalie, sondern weil es die Punkte sind, an denen ich
 **§3c ist damit wieder leer.** Die Frage ist entschieden, nicht vertagt.
 
 **Ballbesitz: Generator (AUF-74, dann AUF-78) · Evaluator (Sichtprobe-Standard) · Yama (nichts).**
+
+---
+
+## PLANNER 26.07., 10:55 — Fünf Aufträge lagen ohne Marke. Das war mein Fehler
+
+**Meldung des Generators:** *„Der Planner ist seit 10:20 still. Fünf Aufträge liegen fertig ohne
+Marke (AUF-58, 74, 76, 77, 78)."*
+
+**Nachgemessen und bestätigt:** `grep` auf `AKTIV` in der Tafel ⇒ **keine einzige Zeile** trug die
+Marke. **Kein Posten war gezogen.**
+
+### 1. Wie es entstanden ist
+
+AUF-40 Teil A ging von ⚡ **AKTIV** in die Abnahme. **Ich habe die Marke entfernt und keine neue
+gesetzt** — und danach 35 Minuten lang Aufträge geschrieben (AUF-76, 77, 78, §12), ohne zu prüfen,
+ob überhaupt jemand ziehen kann.
+
+**Der Generator hat genau richtig gehandelt.** §10.1 sagt: *kein Generator schreibt die erste Zeile,
+bevor der Posten als ⚡ AKTIV auf ihn gezogen ist.* Er hat nicht gebaut, er hat gemeldet. **Die
+Regel, die heute früh geschrieben wurde, hat beim ersten echten Anlass funktioniert** — sie hat
+einen ungezogenen Bau verhindert.
+
+**Der Fehler war meiner, und er ist die unangenehmere Sorte:** kein falscher Inhalt, sondern eine
+Kette, die stillsteht, während der Planner beschäftigt aussieht. **Fünf fertige Aufträge sind kein
+Fortschritt, wenn keiner gezogen ist.**
+
+### 2. Behoben und verriegelt
+
+- **AUF-74 trägt die Marke** — der Konfigurator, letzter offener Befund der Layout-Inventur.
+- **AUF-66 nachgezogen:** sein Sperrgrund war „hinter AUF-40 Teil A". **Teil A ist abgenommen**; was
+  fehlt, ist die Zulieferung — also **AUF-78**. Der Grund stand veraltet auf der Tafel und hätte
+  beim nächsten Abgleich falsch gelesen werden können.
+- **§10 Punkt 7 neu:** *Wer eine Marke wegnimmt, setzt im selben Schritt die nächste.* Mit dem
+  heutigen Fall als Begründung darunter — **damit die Regel eine Erfahrung hat und nicht nur eine
+  Absicht.**
+
+### 3. Was ich mir daraus notiere
+
+**Ich habe heute drei Regeln geschrieben, die andere in die Pflicht nehmen** (§10 Kollisionsschutz,
+§11 Sichtprobe, §12 Evaluator-Grenzen) — **und bin selbst an der einfachsten davon hängengeblieben.**
+Die Tafel ist mein Werkzeug; sie zu pflegen ist keine Nebenarbeit, sondern die Arbeit.
+
+**Reihenfolge steht: AUF-74 ⚡ → AUF-78 → AUF-58 → AUF-75 → AUF-76 → AUF-77.**
+
+**Ballbesitz: Generator (AUF-74) · Evaluator (Sichtprobe-Standard) · Planner (nichts offen).**
