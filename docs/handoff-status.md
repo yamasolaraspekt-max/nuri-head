@@ -11182,3 +11182,62 @@ Auftrag, die der Generator heute dreimal zu Recht korrigiert hat.** Ich messe da
 naeher heranrueckt — es ist die naechste Planner-Arbeit, nicht die naechste Generator-Arbeit.
 
 **Ballbesitz unveraendert: Generator (AUF-56) · Evaluator (AUF-55.1).**
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-56 (Zwei Elevation-Rollen) + Nachtrag Yama (die letzten zwei Vertröstungen)
+
+**Commits:** Code `aaacb8b` (`public/*` = **0 Zeilen**) · Bundle `17c9c06`.
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1179 · pass 1179 ·
+fail 0`, vorher 1164) · `build` **0**. **Volle PHP-Suite: 789 grün — unverändert.**
+K4-Schichten **null**. **Klassifikation: `Vorarbeit` (Teil 1) + `sichtbar` (Teil 2).**
+
+### Teil 1 — zwei Elevation-Rollen
+
+**Eine Rolle ist die ganze Aussage „wie hoch schwebt diese Fläche"** — Versatz, Weichzeichnung und
+Farbwert zusammen. Ein reiner Farb-Token hätte die Geometrie weiterhin an jeder Stelle einzeln stehen
+lassen; die zweite Wahrheit wäre nur kleiner geworden.
+
+- **Der Auftrag nannte zwölf Vorkommen — gemessen waren es vierzehn.** Die zwei zusätzlichen stammen
+  aus **AUF-66, also von mir**. *Jede neue Fläche legt einen weiteren Rohwert dazu — genau das ist
+  der Grund für diesen Posten, und er hat sich beim Bauen selbst bestätigt.*
+- **13 abgelöst** (10 × `schattenFlach`, 3 × `schattenGehoben`), **wertgleich Zeichen für Zeichen**.
+  **Belegt am erzeugten Markup, nicht am Quelltext:** der Quelltext könnte einen Token nennen und
+  trotzdem etwas anderes ausgeben — das Markup kann es nicht.
+- **Einer bleibt roh, mit Ansage:** `0 10px 30px` statt `0 10px 34px`, dieselbe Farbe, andere
+  Geometrie. Auch er stammt aus AUF-66: ich habe die 30 ohne Grund geschrieben, während dieselbe
+  Datei zwei Zeilen höher 34 führt. **Ihn anzugleichen wäre eine sichtbare Änderung** und bleibt
+  Yamas Entscheidung — dieselbe Regel, unter der die acht „nah dran"-Werte stehen bleiben.
+  **Testverriegelt, damit er nicht als Versehen durchgeht.** *Damit ist Kriterium 2 nicht buchstäblich
+  erfüllt: `rgba(28,50,55,.10)` hat in `app/` noch genau einen Treffer. Die Alternativen wären ein
+  sichtbarer Eingriff oder ein Token für einen einzigen Aufruf — beides ausdrücklich verboten.*
+- **Kein weiterer Wert angefasst:** `.18` (2×), `.30` (2×) und der weiße (1×) bleiben roh, Zahl für
+  Zahl testverriegelt.
+- **Mutation:** Rollenwert verstellt ⇒ **3 rot**.
+
+### Teil 2 — Nachtrag Yama (26.07.): die zwei „Module folgen"-Fußleisten
+
+Der Befund stammt aus meiner eigenen AUF-55-Sichtprobe. Yama hat ihn in denselben Durchgang gelegt,
+weil beide Dateien für die Rollen ohnehin angefasst werden — **derselbe Maßstab: sagen, was da ist,
+statt zu versprechen, was kommt.**
+
+- **Vorher gemessen, ob dahinter doch etwas steht** (Yamas Auflage): **nein.** Beides sind Fußzeilen
+  unter fertigen Listen — kein Knopf, kein Ziel, keine tote Naht. Also umformuliert, nicht gemeldet.
+- **Die Schiene zeigt jetzt den Satz, den `SCHIENEN_REITER` je Reiter ohnehin führt.** Er lag bis
+  heute **nur im Tooltip**, also faktisch nirgends. Drei Reiter, drei verschiedene Sätze —
+  testverriegelt, dass der Fuß wirklich mitwechselt und nicht dreimal dasselbe zeigt.
+- **Die Studio-Navigation zählt** aus `PROJ` und `FACH`: *„3 Projekt-Einstiege · 5 Fachplaner mit 20
+  Untermodulen"*. **Eine gezählte Zahl kann nicht veralten; eine abgetippte schon** — testverriegelt,
+  dass dort keine feste Zahl im Markup steht.
+- **Mutation:** Vertröstung zurückgedreht ⇒ **3 rot**.
+- **Sichtprobe 1440, im Browser abgelesen** (nicht aus dem Quelltext geschlossen):
+  Navi-Fuß „3 Projekt-Einstiege · 5 Fachplaner mit 20 Untermodulen" · Schienen-Fuß je Reiter
+  „Die Pflichtwerkzeuge und alles, was du dir angeheftet hast (★)." / „Alle Bauteile des Plans, nach
+  Art gruppiert — zum Auffinden und Auswählen." / „Die Fachgewerke und Rechenkerne — je Eintrag steht
+  sein Zustand dabei." **Keine Vertröstung in keiner der vier Ablesungen.**
+
+**Vierte Kommentar-Falle dieses Zyklus, im Test festgehalten:** mein eigener Kommentar nennt den Token
+beim Namen — der Zähler meldete **vier statt drei** Fundstellen. Er entfernt Kommentare jetzt
+**zeilentreu**. *Ein Zähler, der Erklärungen für Code hält, zählt Erklärungen.*
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
