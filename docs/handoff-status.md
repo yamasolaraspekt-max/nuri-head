@@ -13854,3 +13854,21 @@ festnagelten · und mein Auftrag, der **20 Stellen** nannte, wo heute 34 stehen.
 **Alle sechs haben dieselbe Form: geprueft wird die Gestalt, nicht die Wirkung.**
 *Ein Pruefer, der den Weg des Geprueften teilt, prueft nichts. Eine Zahl, die sich als Bedingung
 ausgibt, ist eine Momentaufnahme. Und ein Import ist kein Aufruf.*
+
+
+## PLANNER 26.07., 23:38 (CEST) — Nachtrag zum Feierabend: Scheibe 3 wurde eine Minute zu frueh gezogen
+
+**Gemessen, nicht vermutet:** `b961f05a` *"Auftragstafel: AUF-38 Scheibe 3 gezogen"* traegt **23:35**,
+mein Feierabend-Eintrag `2284d0fc` traegt **23:36**. **Der Generator hat gezogen, bevor die
+Anweisung existierte** — das ist ein Wettlauf, kein Verstoss, und ich halte das ausdruecklich fest,
+damit ihm morgen niemand etwas unterstellt.
+
+**Regel dafuer, auf der Tafel eingetragen:**
+**Ist noch nichts gebaut** — Scheibe 3 zurueckleger, `SCHEIBE 3 ZURUECKGELEGT` in die Zelle, fertig.
+**Ist schon etwas gebaut** — zu Ende bauen und melden. *Eine halb umgestellte Datei ueber Nacht ist
+schlimmer als eine Scheibe mehr*, und der Arbeitsbaum ist die einzige Stelle, an der ein halber
+Stand keinen Namen hat.
+**In beiden Faellen: danach Schluss. Scheibe 4 wird nicht gezogen.**
+
+*Das ist derselbe Gedanke wie §13.6 und wie die Sperre von AUF-48: nicht die Regel zaehlt, sondern
+der Zustand, den sie hinterlaesst.*
