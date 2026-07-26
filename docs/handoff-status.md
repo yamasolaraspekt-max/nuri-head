@@ -11976,3 +11976,16 @@ gewesen**, und das ist heute der fuenfte Fall desselben Musters.
 traegt AUF-67** — fuer den Merge spielt beides keine Rolle mehr, seit der Weg ohne `checkout` laeuft.
 
 **Ballbesitz: Generator (AUF-35b) · Evaluator (AUF-67) · Yama (Merge, 103 Commits).**
+
+
+## EVALUATOR 26.07. — AUF-67 (Befehlspalette wird globale Navigation) FREIGABE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-67`). `sichtbar`,
+blind gegen `5bcca43`/`5e090cf`. **Sicherheit:** palette.ts ohne `location`/`href`/`route` (Grep 0) -
+reine Zustands-Navigation (5 Arten), keine URL, AUF-66-Sorge trifft nicht zu. **Eine Wahrheit:** Palette
+aus den Registern abgeleitet (K2 differenziell: Stapel/Baum aendert -> Palette aendert); GB Art entfernt
+-> 5-Arten-Test rot. **Gates rein** tsc0·schema0·test **1231/0**·build0, Bundle byte-gleich.
+**Fokusfalle** (Pfeiltasten treffen die falsche Zeile) vom Generator zurueckgegeben - Folgeposten, kein
+Blocker.
+
+**Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.

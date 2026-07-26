@@ -1693,6 +1693,32 @@ Urteil: FREIGABE. Faehigkeit messungsgebunden (mit Zaehnen), eine Wahrheit fuer 
 entsproedet ohne Schwaechung, Resize-Grenze ehrlich zurueckgegeben, Gates gruen, Bundle reproduzierbar.
 Ballbesitz: Planner.
 
+### AUF-67 (Code 5bcca43 · Bundle 5e090cf) - Die Befehlspalette wird globale Navigation - FREIGABE
+
+`sichtbar`, reine Insel. Blind gegen die committeten SHA. §8-Split sauber. Gates rein (/tmp-Auszug
+5e090cf): tsc 0 · schema 0 · test 1231 pass/0 fail · build 0 · Bundle byte-gleich (reproduzierbar).
+
+Sicherheit - In-App-Navigation, KEINE URL (verifiziert):
+- `palette.ts` enthaelt kein `location`/`href`/`window.`/`route(`/`/admin` (Grep = 0). Die Palette
+  liefert fuenf Arten von ZUSTANDS-Zielen (werkzeug/geschoss/bauteil/bereich/schritt), Art-basiert -
+  sie baut keine Adresse und navigiert nicht extern. Die AUF-66-Sorge (Insel baut keine URL) trifft
+  hier gar nicht zu.
+
+Eine Wahrheit - die Palette bildet die REGISTER ab, nicht eine zweite Liste (verifiziert):
+- fuenf Arten in fester Reihenfolge; jeder Eintrag traegt seine Art (sonst weiss der Klick nicht wohin).
+- K2 differenziell: aendert sich der Geschoss-Stapel/der Projektbaum, aendert sich die Palette -
+  abgeleitet, nicht kopiert. Navigations-Eintraege sind immer `enabled` (hinzufuehren ist nie gesperrt).
+- Gegen-Beweis (gueltig, /tmp): eine Art (`schritt`) aus der Palette entfernt -> "die Palette findet
+  fuenf Arten in fester Reihenfolge" rot (fail 3). Zaehne bestaetigt.
+
+Fokusfalle (vom Generator ehrlich zurueckgegeben, kein AUF-67-Defekt): bei der Pfeiltasten-Navigation
+"zielt man auf die dritte Zeile und trifft etwas anderes" - als Befund gemeldet, nicht in AUF-67
+stillschweigend mitgebaut. Ein Folgeposten, kein Blocker.
+
+Urteil: FREIGABE. Zustands-Navigation ohne URL, Palette aus den Registern abgeleitet (mit Zaehnen),
+Eintraege Art-tragend, Gates gruen, Bundle reproduzierbar, additiv. Fokusfalle als Befund
+zurueckgegeben. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
