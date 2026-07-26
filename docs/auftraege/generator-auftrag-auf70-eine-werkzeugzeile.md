@@ -135,3 +135,26 @@ zweiter Knopftyp in derselben Zeile.
   melden. Dann trägt AUF-70 den Umzug, und die gemeinsame Grundlage wird ein eigener Posten. **Ein
   halber Posten mit Begründung ist besser als ein ganzer mit einer zweiten Wahrheit.**
 - **Reicht die Breite bei 1024 nicht:** benennen, mit Zahl. Nicht heimlich kleiner setzen.
+
+---
+
+## 8. Nachtrag vom 26.07., 07:15 — Spur A und das Abstands-Kriterium
+
+**Spur A**, nicht Kurzspur. Begründung in einem Halbsatz: der gesperrte Zustand trägt Bedeutung —
+ein fälschlich frei aussehender Löschknopf ist kein Schönheitsfehler, sondern eine Einladung.
+Voller Zyklus, Evaluator-Votum.
+
+**Aus dem AUF-68-Votum, vom Evaluator selbst gerechnet:** der Trennstrich zwischen den
+Werkzeuggruppen hat **1,09–1,14:1** Kontrast. WCAG 1.4.11 verlangt **3:1** für bedeutungstragende
+Grafik. **Der Strich trägt die Gliederung also nicht — der Abstand tut es:** gemessen **21 px**
+zwischen Gruppen gegen **6 px** innerhalb.
+
+**Daraus Kriterium 13:** Diese Zeile wächst von **11 auf 16** Knöpfe. **Zu belegen ist, dass der
+Abstand zwischen den Gruppen die Gliederung weiterhin trägt** — Zahl vorher/nachher. **Wird er
+verengt, um Platz zu schaffen, ist das ein Befund und keine Feinjustierung**: dann nimmt die Zeile
+ihre einzige wirksame Gliederung weg, und im Quelltext sähe das nach nichts aus. In dem Fall:
+**melden**, nicht ausgleichen.
+
+*(Anmerkung zu meinem eigenen Text: In §1 dieses Auftrags und in AUF-68 hatte ich geschrieben, die
+Gliederung stehe „in der Trennung". Das war im Ergebnis richtig und in der Begründung falsch — sie
+steht im Abstand. Gemessen hat es jemand anderes.)*
