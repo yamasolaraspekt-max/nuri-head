@@ -12249,7 +12249,7 @@ Variablen kommen dabei wirklich an:** `--hp-accent` steht im Browser auf `#12807
 (Scheibe 1 wird laut Auftrag **eigens** abgenommen, bevor Scheibe 2 beginnt).
 
 
-## PLANNER 26.07., 21:50 — AUF-50: beide offenen Messungen liegen vor. Der Empfaenger darf gebaut werden, das Schema nicht
+## PLANNER 26.07., 21:43 (richtiggestellt) — AUF-50: beide offenen Messungen liegen vor. Der Empfaenger darf gebaut werden, das Schema nicht
 
 Am 20:45 hatte ich zwei Messungen zurueckgestellt, bevor 50.1 ein Auftrag wird. Beide sind gemacht.
 Papier: `docs/planner/auf50-stufenplan-2026-07-26.md`.
@@ -12298,7 +12298,7 @@ blockiert nichts, denn 50.1 und 50.2 kommen ohne sie aus.
 Pfade), Evaluator wartet auf die AUF-38-Abnahme, Stapel leer.
 
 
-## PLANNER 26.07., 22:05 — Bedienprobe: drei Behauptungen nachgemessen, alle drei stimmen. Und ein Muster, das dreimal am selben Tag auftaucht
+## PLANNER 26.07., 21:49 (richtiggestellt) — Bedienprobe: drei Behauptungen nachgemessen, alle drei stimmen. Und ein Muster, das dreimal am selben Tag auftaucht
 
 Von Yama kam eine **Bedienprobe** gegen Buendel `022021f`: vier Ablaeufe von Hand mit Playwright,
 nichts gespeichert. Das ist keine Abnahme, sondern eine Messung **quer** zu den Posten statt
@@ -12357,7 +12357,7 @@ umgestellt, Artefakt-Byte-Gleichheit belegt es. **Gates rein** tsc0·schema0·te
 **Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.
 
 
-## PLANNER 26.07., 22:35 — Die Raumerkennung ist gemessen. Sie faellt schlechter aus als befuerchtet. Dazu: Bedienmodell, vierte Rolle, Benchmark
+## PLANNER 26.07., 22:01 (richtiggestellt) — Die Raumerkennung ist gemessen. Sie faellt schlechter aus als befuerchtet. Dazu: Bedienmodell, vierte Rolle, Benchmark
 
 Vier Papiere, alle aus Messung, keines aus Einschaetzung:
 `messung-raumerkennung-ecke-2026-07-26.md` - `bedienmodell-110-werkzeuge-2026-07-26.md` -
@@ -12439,7 +12439,7 @@ freie Geometrie Plaetze im Schema, oder bleiben die 20 sichtbar gesperrt? - wird
 **Ballbesitz unveraendert:** Generator AUF-52, Evaluator AUF-38 Scheibe 1, Stapel 1, Marke AUF-52.
 
 
-## PLANNER 26.07., 22:45 — AUF-38 Scheibe 1 freigegeben. Der Evaluator hat mein eigenes Muster gegen die Lieferung gehalten
+## PLANNER 26.07., 22:02 (richtiggestellt) — AUF-38 Scheibe 1 freigegeben. Der Evaluator hat mein eigenes Muster gegen die Lieferung gehalten
 
 **FREIGABE** (`ba47815`) fuer Code `cca1837` + Artefakte `022021f`. Dreizehnter abgenommener Posten
 heute, weiterhin **kein einziges rotes Votum**.
@@ -12474,7 +12474,7 @@ Ergebnis".** Vier Module weniger auf der Halde waeren ein messbarer Fortschritt;
 getestete Engines hinter einem Panel, das niemand oeffnet, waeren keiner.
 
 
-## PLANNER 26.07., 23:05 — Master-Prompt Usability eingeordnet. Er bestaetigt unseren Zuschnitt, er aendert ihn nicht
+## PLANNER 26.07., 22:09 (richtiggestellt) — Master-Prompt Usability eingeordnet. Er bestaetigt unseren Zuschnitt, er aendert ihn nicht
 
 Yama hat einen Master-Prompt mit 40 Abschnitten uebergeben und um Einordnung gebeten.
 Papier: `docs/planner/masterprompt-usability-einordnung-2026-07-26.md`.
@@ -12546,7 +12546,7 @@ Bedienung hat, die man pruefen koennte.
 zugeschnitten wie um 22:35. **Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52.
 
 
-## PLANNER 26.07., 23:25 — Tester-Master-Prompt eingeordnet. Sein eigener Massstab sagt: wir sind heute GELB, nicht GRUEN
+## PLANNER 26.07., 22:12 (richtiggestellt) — Tester-Master-Prompt eingeordnet. Sein eigener Massstab sagt: wir sind heute GELB, nicht GRUEN
 
 Papier: `docs/planner/tester-masterprompt-einordnung-2026-07-26.md`. Es ist der **Rollenbrief der
 vierten Rolle**, die ich um 22:35 skizziert hatte — und er ist an drei Stellen besser als mein
@@ -12610,7 +12610,7 @@ eigenes Vorhaben in der Groessenordnung von AUF-50 selbst.
 **Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52. Kein neuer Posten (§14).
 
 
-## PLANNER 26.07., 23:45 — Werkzeuge und Objekte trennen. Yama hat recht, meine Zaehlung war schief, und der Mechanismus laeuft laengst
+## PLANNER 26.07., 22:22 (richtiggestellt) — Werkzeuge und Objekte trennen. Yama hat recht, meine Zaehlung war schief, und der Mechanismus laeuft laengst
 
 Yama hat die Architekturergaenzung uebergeben: Verben gegen Substantive, Capabilities, universelles
 Objektmodell, Parameterschema, Object Type Registry.
@@ -12688,7 +12688,7 @@ alles andere kauft uns eine Migration fuer Daten, die den Wert gar nicht tragen 
 **Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52. Kein neuer Posten (§14).
 
 
-## PLANNER 27.07., 00:05 — Schichtenmodell eingeordnet. Drei Messungen, und eine nimmt eine Aussage von mir zurueck
+## PLANNER 26.07., 22:27 (richtiggestellt) — Schichtenmodell eingeordnet. Drei Messungen, und eine nimmt eine Aussage von mir zurueck
 
 Papier: `docs/planner/schichtenmodell-eingabe-werkzeug-command-2026-07-26.md`.
 Yamas Kette: Eingabe → Werkzeug → Command → Eignung → Objekt → 2D/3D.
@@ -12746,5 +12746,82 @@ Eigenschaft des Fundaments wird* · **50.1c** Eignungen je Objekttyp.
 AUF-48 zerlegen soll. **Beides gleichzeitig geht nicht.** Entweder AUF-48 zuerst und 50.1 baut auf
 zerlegten Dateien, oder umgekehrt. Ich halte die erste Reihenfolge fuer richtig, aber es kostet in
 beide Richtungen und gehoert zu Yamas offener Frage 3.
+
+**Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52. Kein neuer Posten (§14).
+
+
+## PLANNER 26.07., 22:30 — Bibliothek und Import eingeordnet. Und derselbe Fehler wie heute Morgen, nur leiser
+
+**Zuerst der Fehler, weil er meiner ist.** Ich habe heute Morgen eingetragen, dass ich Uhrzeiten
+erfunden hatte, und den Satz dazugeschrieben: *eine erfundene Zahl macht ein Eingestaendnis nicht
+ehrlicher, sondern wertloser.* **Und dann habe ich es acht Mal wieder getan.** Meine
+Ueberschriften der letzten Stunde lauteten 21:50, 22:05, 22:35, 22:45, 23:05, 23:25, 23:45 und
+**27.07., 00:05** — die tatsaechlichen Zeiten waren 21:43 bis 22:27, alle am **26.07.** Die Drift
+wuchs auf anderthalb Stunden, und am Ende habe ich den Tag gewechselt, an dem nichts gewechselt
+hat.
+
+**Die Ursache ist gemessen, nicht geraten:** `date` im Arbeitsbaum liefert **UTC**, die Commits des
+Generators tragen **CEST**. Ich habe aus zwei Uhren eine dritte geschaetzt, statt eine zu lesen.
+Alle acht Ueberschriften sind in der Datei richtiggestellt und als `(richtiggestellt)` markiert.
+**Regel fuer mich: die Uhrzeit einer Ledger-Ueberschrift kommt aus `git log` des zugehoerigen
+Commits, nicht aus meinem Kopf.**
+
+---
+
+Papier: `docs/planner/bibliothek-und-import-objekte-2026-07-26.md`.
+
+**Der wichtigste Punkt ist keine Architekturfrage.** Gemessen im CRM: **410 Modelle, davon 34 fuer
+Produkte, Artikel und Preise** — `Product`, `ProductType`, `ProductFormula`, `ProductHistory`,
+`ArticleGroup`, `SupplierArticleMap`, `DistributorPrice`, `Material`, fachlich einschlaegig
+**`ProductPV`** und **`ProductWP`**. Und eines heisst **`PlannerItemMaterial`** — die Bruecke
+zwischen Planer und Material ist bereits gedacht.
+
+Yamas `ConfigurableLibraryObject` traegt `manufacturer` und `commercial { price, leadTimeDays }`.
+**Werden diese Felder mit eigenen Werten gefuellt, entsteht ein zweiter Produktstamm neben
+vierunddreissig Modellen, in einem System mit ~3000 echten Kunden.** Das ist nicht dieselbe
+Groessenordnung wie unsere bisherigen zweiten Wahrheiten: ein doppelter Werkzeugkatalog kostet
+Verwirrung, **ein doppelter Produktstamm kostet falsche Preise in Angeboten.**
+
+**Vorgeschlagene Regel: das Bibliotheksobjekt verweist auf `Product`, es kopiert ihn nicht.**
+`articleNumber` ist ein Schluessel, kein Wert; Preis und Lieferzeit werden zur Laufzeit gelesen,
+nie im Szenendokument gespeichert. Damit ist auch beantwortet, was sonst spaeter kommt — *was
+passiert, wenn der Hersteller den Preis aendert?* Wird verwiesen: nichts. Wird kopiert: jedes
+Projekt traegt einen alten Preis und niemand weiss, welche. (Die Ausnahme denke ich mit: ein
+Angebot muss den Preis einfrieren — das ist Aufgabe von `OfferProductList` im CRM, nicht des
+Bauplans.)
+
+**Die drei Objektklassen sind im Schema angedeutet.** `scene.types.ts:194` traegt
+`scale` mit dem Kommentar `(placement.allowScaling gate)` — **der Gedanke "nicht jedes Objekt darf
+skaliert werden" steht da, der Mechanismus fehlt.** Wie fast alles heute. `geometryMode` ist damit
+keine Fremdidee, sondern die Ausformulierung einer markierten Stelle. **Seine Warnung vor globaler
+Mesh-Skalierung teile ich uneingeschraenkt**, und sie ist bei uns schaerfer: wir rechnen in ganzen
+Millimetern ohne Toleranz. Ein Unterschrank von 600 auf 800 skaliert bekommt 25,33 mm
+Plattenstaerke — in unserer Welt nicht darstellbar, und in einer Mengenermittlung, aus der bestellt
+wird, schlicht falsch.
+
+**Der Import ist heute doppelt verschlossen** und damit sauber: acht Werkzeuge haengen an
+`permission.import`, einem Recht, das das CRM nicht kennt — **und es gibt keinen einzigen Treffer**
+fuer `gltf`, `GLTFLoader`, `.glb`, `dxf` oder `ifc` in der ganzen Insel. Nichts Halbfertiges steht
+im Weg.
+
+**Mein Vorschlag zur Reihenfolge — Empfehlung, keine Entscheidung: nicht mit dem Import
+anfangen.** Die 16 Katalog-Objekte aus meiner Zaehlung **sind bereits die ersten
+Bibliotheksobjekte**, nur eigene statt importierte. Sie zuerst durch die volle Kette schicken —
+Registry, Parameterschema, Materialslots, Massgrenzen, bei `wc`/`dusche`/`geraet` auch
+Anschlussports und Bewegungsflaechen. **Ein Regal, das traegt, bevor Fremddaten hineinkommen.**
+Der Grund ist nicht Bequemlichkeit: ein Import bringt drei Fehlersorten gleichzeitig — Format,
+Zuordnung, Bibliothek. Laeuft die Bibliothek vorher mit eigenen Daten, ist beim ersten DWG nur noch
+**eine** Quelle offen. Und die 16 decken die Klassen ab: `wc` starr, `schrank` parametrisch,
+`geraet` im Schrank hybrid. Man muss nichts erfinden, um die Dreiteilung zu erproben.
+
+**Drei Punkte, die keine Architekturfragen sind:** Ein falsches Mass in einer Kuechenplanung
+**wird bestellt** — derselbe Sprung wie heute bei der Raumerkennung, nur teurer; deshalb sind
+Yamas `allowedValues` keine Bequemlichkeit, sondern die Absicherung. Herstellerdaten gehoeren
+jemandem, und ob wir sie uebernehmen duerfen, ist keine Planner-Frage. Und Aktualisierung: solange
+verwiesen wird, ist es eine Versionsfrage im CRM, und `ProductHistory` gibt es dort schon.
+
+**Drei neue Punkte bei Yama:** verweist die Bibliothek auf `Product` (*meine Empfehlung: ja*) —
+bekommt `permission.import` ein eigenes Recht oder haengt es an `Hausplaner,update` (offen seit
+AUF-36, blockiert acht Werkzeuge) — beginnen wir mit den 16 eigenen Objekten statt mit dem Import?
 
 **Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52. Kein neuer Posten (§14).
