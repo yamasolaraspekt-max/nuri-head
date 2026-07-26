@@ -8,7 +8,8 @@
     "schema:hausplaner": "./scripts/node-runtime.sh --experimental-strip-types ./scripts/hausplaner-schema.mts",
     "schema:hausplaner:check": "./scripts/node-runtime.sh --experimental-strip-types ./scripts/hausplaner-schema.mts --check",
     "test:hausplaner": "npm run schema:hausplaner:check && ./scripts/node-runtime.sh --experimental-strip-types --import ./resources/planner/hausplaner/test-register.mjs --test \"resources/planner/hausplaner/__tests__/*.test.ts\"",
-    "tsc:hausplaner": "./scripts/node-runtime.sh ./node_modules/typescript/bin/tsc -p tsconfig.hausplaner.json --noEmit"
+    "tsc:hausplaner": "./scripts/node-runtime.sh ./node_modules/typescript/bin/tsc -p tsconfig.hausplaner.json --noEmit",
+    "waechter": "./scripts/waechter.sh"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",

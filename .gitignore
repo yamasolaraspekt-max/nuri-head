@@ -57,3 +57,9 @@ _to_delete/
 /public/_*.html
 /_*.mjs
 /sichtprobe-*.tmp.mjs
+
+# Wächter-Befunde (AUF-75): Laufprotokoll und Rohausgaben der Fehlschläge.
+# Sie sind Messwerte dieser Maschine, kein Repo-Inhalt — und der Wächter committet
+# nichts (Kante 2). Das Verzeichnis selbst bleibt versioniert (.gitkeep).
+/docs/befunde/*
+!/docs/befunde/.gitkeep

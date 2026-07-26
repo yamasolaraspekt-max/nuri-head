@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# AUF-75 — der Auslöser des Wächters. **Er blockiert nicht.**
+#
+# Grund, gemessen: Der Testlauf dauert. Ein blockierender Hook macht aus jedem Commit eine Pause
+# und wird nach dem dritten Mal umgangen — und **ein umgangener Wächter ist schlechter als keiner**,
+# weil er im Repository steht und Sicherheit vortäuscht.
+#
+# Der Hook startet das Skript im Hintergrund, löst es vom Terminal und kehrt sofort zurück.
+#
+# EINRICHTEN (eine Zeile, `.git/hooks` ist nicht versioniert):
+#   ln -sf ../../scripts/hooks/post-commit .git/hooks/post-commit
+#
+# ABSCHALTEN:
+#   rm .git/hooks/post-commit
+#
+WURZEL="$(git --no-optional-locks rev-parse --show-toplevel 2>/dev/null)" || exit 0
+[ -x "$WURZEL/scripts/waechter.sh" ] || exit 0
+
+# `setsid` gibt es auf macOS nicht; `nohup … &` mit abgetrennten Strömen genügt, damit der Commit
+# nicht auf den Testlauf wartet.
+nohup "$WURZEL/scripts/waechter.sh" >/dev/null 2>&1 &
+exit 0
