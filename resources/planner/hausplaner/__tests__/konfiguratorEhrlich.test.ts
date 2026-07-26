@@ -32,26 +32,28 @@ const autark = (m: RegExpMatchArray | null): string => {
 };
 
 // --- K3: keine Stelle behauptet mehr eine Speicherung im Programm -------------------------------
-test('K3: die Beschreibung nennt das Ergebnis — eine Datei, kein Versprechen', () => {
-  const stelle = autark(wizard.match(/\{standalone \? '(Ergebnis: eine Datei[^']*)'/));
-  assert.doesNotMatch(stelle, /verlustfrei/, 'das Versprechen ins Projekt ist weg');
-  assert.doesNotMatch(stelle, /speicherbar|gespeichert/);
-  assert.match(stelle, /Datei zum Herunterladen/, 'das tatsächliche Ergebnis steht da');
-  // §3.1: kein „noch nicht" ohne Aussage darüber, was stattdessen geht.
-  assert.match(stelle, /über den Experten/, 'der Weg ins Gebäude wird genannt');
+test('K3: die Beschreibung nennt das Ergebnis — jetzt zwei Wege, keiner davon versprochen', () => {
+  // AUF-81 hat diese Stelle geändert, und zwar in die richtige Richtung: es WIRD jetzt gespeichert.
+  // Die Absicht von AUF-74 bleibt — die Fläche sagt, was tatsächlich passiert, nicht was gut klingt.
+  const stelle = autark(wizard.match(/\? '(Ergebnis: gespeichert[^']*)'/));
+  assert.doesNotMatch(stelle, /verlustfrei/, 'das Versprechen ins Projekt bleibt weg');
+  assert.match(stelle, /gespeichert in deiner Paketliste/, 'das ist seit AUF-81 wahr');
+  assert.match(stelle, /zusätzlich als Datei zum Herunterladen/, 'der Download bleibt genannt');
+  assert.match(stelle, /über den Experten/, 'der Weg ins Gebäude wird weiter genannt');
 });
 
-test('K3: die Statuszeile ebenso', () => {
-  const stelle = autark(wizard.match(/\{standalone \? '(Ergebnis: Datei[^']*)' : 'Undo\/Redo im Modell'\}/));
-  assert.doesNotMatch(stelle, /speicherbar/);
-  assert.match(stelle, /Datei zum Herunterladen/);
+test('K3: die Statuszeile ebenso — sie nennt beide Wege', () => {
+  const stelle = autark(wizard.match(/\? '(Ergebnis: Paketliste[^']*)'/));
+  assert.doesNotMatch(stelle, /speicherbar/, 'das alte Möglichkeitswort bleibt weg');
+  assert.match(stelle, /Paketliste \+ Datei/);
 });
 
-test('K3: die Meldung nach dem Klick sagt, was entstanden ist', () => {
-  const stelle = autark(wizard.match(/\? `(\$\{wahl\.label\}: Datei[^`]*)`/));
-  assert.doesNotMatch(stelle, /gespeichert/, 'nichts wurde gespeichert — es wurde heruntergeladen');
-  assert.match(stelle, /heruntergeladen/);
-  assert.match(stelle, /\$\{dateiname\}/, 'der Nutzer erfährt, wie die Datei heißt');
+test('K3: die Meldung nach dem Klick sagt, was WIRKLICH geschehen ist — Weg für Weg', () => {
+  // AUF-81: es gibt jetzt zwei Wege, und jeder wird EINZELN gemeldet. Ein „gespeichert", das nur
+  // den Versuch meldet oder den anderen Weg mitmeint, wäre der alte Fehler mit neuem Vorzeichen.
+  assert.match(wizard, /if \(gespeichert\) teile\.push\('in deiner Paketliste gespeichert'\)/);
+  assert.match(wizard, /if \(entstanden\) teile\.push\(`als Datei „\$\{dateiname\}" heruntergeladen`\)/);
+  assert.match(wizard, /teile\.length > 0/, 'ohne Ergebnis wird kein Erfolg gemeldet');
 });
 
 // --- K4: der Download bleibt --------------------------------------------------------------------
@@ -95,10 +97,14 @@ test('die VIERTE Stelle: ein fehlgeschlagener Download meldet nicht mehr Erfolg'
   assert.doesNotMatch(wizard, /Download optional/, 'der verschluckte Fehler ist weg');
   assert.match(wizard, /let entstanden = true;/);
   assert.match(wizard, /catch \{\s*entstanden = false;\s*\}/);
-  assert.match(wizard, /onÜbernehmen\(entstanden\s*\?/, 'die Meldung hängt am tatsächlichen Ausgang');
-  const fehler = autark(wizard.match(/: `(\$\{wahl\.label\}: Die Datei konnte nicht[^`]*)`/));
-  assert.match(fehler, /es ist nichts entstanden/);
-  // Auch im Fehlerfall: kein „noch nicht" ohne den Weg, der offen steht.
+  // AUF-81: die Meldung hängt jetzt an ZWEI Ausgängen — sie wird aus dem zusammengesetzt, was
+  // wirklich geklappt hat, statt an einer einzelnen Bedingung zu hängen.
+  assert.match(wizard, /const teile: string\[\] = \[\];/);
+  assert.match(wizard, /onÜbernehmen\(teile\.length > 0/, 'die Meldung hängt am tatsächlichen Ausgang');
+  // AUF-81: der Fehlerfall deckt jetzt BEIDE Wege ab — schlägt auch das Speichern fehl, sagt die
+  // Fläche genau das, statt einen der beiden Wege stillschweigend zu unterstellen.
+  const fehler = autark(wizard.match(/: `(\$\{wahl\.label\}: Es ist nichts entstanden[^`]*)`/));
+  assert.match(fehler, /weder gespeichert noch heruntergeladen/);
   assert.match(fehler, /über den Experten/);
 });
 

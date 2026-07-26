@@ -12,6 +12,7 @@ import { useHausplanerStore } from './store/hausplanerStore';
 import { usePlannerUiStore } from './app/state/uiState';
 import { leseRechte, RECHTE_ATTRIBUT } from './app/state/rechte';
 import { leseProjekte, PROJEKTE_ATTRIBUT } from './app/state/projekte';
+import { setzePaketZiel, PAKETE_URL_ATTRIBUT } from './app/state/paketSpeichern';
 import { sceneDocumentSchema, validateSceneIntegrity, migriereSzene } from './domain/validation';
 import { ladeFixture, fixtureNameAusSearch } from './fixtures/studioFixtures';
 import type { SceneDocument } from './domain/scene.types';
@@ -72,6 +73,8 @@ if (mount && szenenElement) {
       usePlannerUiStore.getState().setRechte(leseRechte(mount.dataset[RECHTE_ATTRIBUT]));
       // AUF-78: dieselbe Naht — die Liste kommt fertig aus dem Controller, hier wird nur gelesen.
       usePlannerUiStore.getState().setProjekte(leseProjekte(mount.dataset[PROJEKTE_ATTRIBUT]));
+      // AUF-81: dieselbe Naht — ohne Ziel wird nicht gespeichert und nichts behauptet.
+      setzePaketZiel(mount.dataset[PAKETE_URL_ATTRIBUT] ?? null, csrf);
       ReactDOM.createRoot(mount).render(
         <React.StrictMode>
           <HausplanerStudio />

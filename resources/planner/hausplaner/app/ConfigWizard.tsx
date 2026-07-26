@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import { istAusloeser, useDialogFokus } from './dashboard/dialogFokus';
+import { speicherePaket, kannPaketSpeichern } from './state/paketSpeichern';
 import { T } from './studioDaten';
 import { Ikon } from './studioUi';
 import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, type OeffnungsBauart } from '../geometry/oeffnungsBauarten';
@@ -145,7 +146,9 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
                     entsteht: eine Datei.
                     **Der andere Zweig ist wahr und bleibt Zeichen für Zeichen stehen**, samt
                     seiner Einleitung — deshalb wanderte auch sie in den Zweig. */}
-                <div style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.6 }}>{standalone ? 'Ergebnis: eine Datei zum Herunterladen — mit Bauart, Maßen und Material. Im Programm lässt sie sich noch nicht wieder öffnen; ins Gebäude kommt das Bauteil über den Experten, indem du eine Wand wählst.' : 'Als Fachobjekt speichern — als ein Command ins Gebäudemodell, Undo/Redo inklusive.'}</div>
+                <div style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.6 }}>{standalone ? (kannPaketSpeichern()
+                  ? 'Ergebnis: gespeichert in deiner Paketliste — und zusätzlich als Datei zum Herunterladen. Ins Gebäude kommt das Bauteil über den Experten, indem du eine Wand wählst.'
+                  : 'Ergebnis: eine Datei zum Herunterladen. Ins Gebäude kommt das Bauteil über den Experten, indem du eine Wand wählst.') : 'Als Fachobjekt speichern — als ein Command ins Gebäudemodell, Undo/Redo inklusive.'}</div>
               </>
             )}
           </div>
@@ -161,7 +164,7 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
 
         {/* Fuß */}
         <div style={{ padding: '16px 30px 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ fontSize: 12.5, color: T.muted }}>Status: <b style={{ color: T.accentInk }}>Entwurf</b> · {standalone ? 'Ergebnis: Datei zum Herunterladen' : 'Undo/Redo im Modell'}</span>
+          <span style={{ fontSize: 12.5, color: T.muted }}>Status: <b style={{ color: T.accentInk }}>Entwurf</b> · {standalone ? (kannPaketSpeichern() ? 'Ergebnis: Paketliste + Datei' : 'Ergebnis: Datei zum Herunterladen') : 'Undo/Redo im Modell'}</span>
           <span style={{ marginLeft: 'auto', display: 'flex', gap: 10 }}>
             <button type="button" onClick={() => setSchritt(Math.max(0, schritt - 1))} style={{ border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600, fontSize: 14, padding: '11px 20px', borderRadius: 12, cursor: 'pointer' }}>Zurück</button>
             <button type="button" onClick={() => {
@@ -249,9 +252,19 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
               } catch {
                 entstanden = false;
               }
-              onÜbernehmen(entstanden
-                ? `${wahl.label}: Datei „${dateiname}" heruntergeladen. Ins Gebäude kommt das Bauteil über den Experten — dort eine Wand wählen.`
-                : `${wahl.label}: Die Datei konnte nicht erzeugt werden — es ist nichts entstanden. Ins Gebäude kommt das Bauteil über den Experten, dort eine Wand wählen.`);
+              // AUF-81: **zusätzlich** speichern, nicht statt. Der Download bleibt der Weg für
+              // alle ohne Speicherrecht, und er funktioniert heute — ihn zu ersetzen hieße, einen
+              // Weg zu schließen, bevor der neue bewiesen ist.
+              void speicherePaket(art, wahl.label, paket).then((gespeichert) => {
+                // Dieselbe Sorgfalt wie in AUF-74: gemeldet wird, was WIRKLICH geschehen ist —
+                // beide Wege einzeln, kein „gespeichert", wenn nur der Download geklappt hat.
+                const teile: string[] = [];
+                if (gespeichert) teile.push('in deiner Paketliste gespeichert');
+                if (entstanden) teile.push(`als Datei „${dateiname}" heruntergeladen`);
+                onÜbernehmen(teile.length > 0
+                  ? `${wahl.label}: ${teile.join(' und ')}. Ins Gebäude kommt das Bauteil über den Experten — dort eine Wand wählen.`
+                  : `${wahl.label}: Es ist nichts entstanden — weder gespeichert noch heruntergeladen. Ins Gebäude kommt das Bauteil über den Experten, dort eine Wand wählen.`);
+              });
             }} style={{ border: 0, background: T.brand, color: T.surface, fontWeight: 700, fontSize: 14, padding: '11px 26px', borderRadius: 12, cursor: 'pointer' }}>{letzter ? 'Übernehmen' : 'Weiter'}</button>
           </span>
         </div>

@@ -8,6 +8,7 @@ use App\Domain\Hausplaner\Actions\SpeichereHausplanerDokument;
 use App\Domain\Hausplaner\Actions\StelleSnapshotWieder;
 use App\Domain\Hausplaner\Actions\UebernehmeSzeneInAuslegung;
 use App\Domain\Hausplaner\Models\HausplanerCatalogItem;
+use App\Domain\Hausplaner\Models\HausplanerConfiguratorPackage;
 use App\Domain\Hausplaner\Models\HausplanerDocument;
 use App\Domain\Hausplaner\Models\HausplanerSnapshot;
 use App\Http\Controllers\Controller;
@@ -116,6 +117,74 @@ class HausplanerController extends Controller
             ->filter(fn (string $aktion) => $nutzer->hasPermission('Hausplaner', $aktion))
             ->map(fn (string $aktion) => 'Hausplaner,'.$aktion)
             ->implode(' ');
+    }
+
+    // ── AUF-81: Konfigurator-Pakete ─────────────────────────────────────────────────────────────
+    /**
+     * Ein Paket speichern. **Der Besitzer kommt aus der Sitzung, nie aus der Anfrage** — eine
+     * Kennung, die der Aufrufer mitschickt, wäre das Gatter, das man selbst aufsperrt.
+     */
+    public function paketSpeichern(Request $request): JsonResponse
+    {
+        $daten = $request->validate([
+            'art' => ['required', 'string', 'in:fenster,tuer,treppe,heizkoerper'],
+            'titel' => ['required', 'string', 'max:255'],
+            'alternative_id' => ['nullable', 'integer'],   // autark erlaubt: kein Gebäude nötig
+            'schema_version' => ['nullable', 'integer', 'min:1'],
+            'paket' => ['required', 'array'],
+        ]);
+
+        $paket = HausplanerConfiguratorPackage::query()->create([
+            'user_id' => $request->user()->id,             // aus der Sitzung, nicht aus der Anfrage
+            'alternative_id' => $daten['alternative_id'] ?? null,
+            'art' => $daten['art'],
+            'titel' => $daten['titel'],
+            'status' => 'entwurf',
+            'schema_version' => $daten['schema_version'] ?? 1,
+            'paket' => $daten['paket'],
+        ]);
+
+        return response()->json(['id' => $paket->id, 'titel' => $paket->titel], 201);
+    }
+
+    /**
+     * Die Liste der **eigenen** Pakete, paginiert.
+     *
+     * **Serverseitig gefiltert:** `vonNutzer` schränkt die Abfrage ein, bevor etwas geladen wird.
+     * Eine Liste, die alles lädt und die Hälfte ausblendet, ist bereits geleakt.
+     * Paginierung wie in `index()` — dieselbe Mechanik, kein eigenes Blätterwerk.
+     */
+    public function paketListe(Request $request): JsonResponse
+    {
+        $seite = HausplanerConfiguratorPackage::query()
+            ->vonNutzer($request->user()?->id)
+            ->select(['id', 'art', 'titel', 'status', 'alternative_id', 'created_at'])
+            ->orderByDesc('created_at')
+            ->paginate(25)
+            ->appends($request->query());
+
+        return response()->json($seite);
+    }
+
+    /**
+     * Ein einzelnes Paket — **nur das eigene.**
+     *
+     * Die Kennung stammt aus der Anfrage und wird deshalb **niemals ohne Eigentumsprüfung**
+     * benutzt (Bauordnung `ticket`). Fremd ⇒ 404: der Aufrufer erfährt nicht einmal, dass es
+     * existiert.
+     */
+    public function paketZeigen(Request $request, int $paket): JsonResponse
+    {
+        $eintrag = HausplanerConfiguratorPackage::query()
+            ->vonNutzer($request->user()?->id)
+            ->whereKey($paket)
+            ->first();
+
+        if ($eintrag === null) {
+            return response()->json(['message' => 'Nicht gefunden.'], 404);
+        }
+
+        return response()->json($eintrag);
     }
 
     /**

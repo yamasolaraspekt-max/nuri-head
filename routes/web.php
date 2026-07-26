@@ -5007,6 +5007,19 @@ Route::middleware(['auth'])->prefix('admin/hausplaner')->name('hausplaner.objekt
         ->whereNumber('objekt')->whereNumber('snapshotId')->middleware('permission:Hausplaner,update')->name('snapshots.wiederherstellen');
     Route::get('/katalog', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'katalog'])
         ->middleware('permission:Hausplaner,read')->name('katalog');
+
+    // AUF-81 — Konfigurator-Pakete. DREI Routen, nicht mehr: speichern, Liste, eines.
+    // Kein Loeschen, kein Aendern — was mit einem Paket passiert, das schon in einem Angebot
+    // steckt, ist eine Fachfrage und keine Route.
+    // `Hausplaner,add` zum Speichern ist die Zuordnung aus AUF-53 und nicht neu erfunden:
+    // hasPermission kennt genau read/add/update/delete und schickt jede unbekannte Aktion auf
+    // is_read — eine erfundene Aktion haette nichts geschuetzt.
+    Route::post('/konfigurator-pakete', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'paketSpeichern'])
+        ->middleware('permission:Hausplaner,add')->name('pakete.speichern');
+    Route::get('/konfigurator-pakete', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'paketListe'])
+        ->middleware('permission:Hausplaner,read')->name('pakete.liste');
+    Route::get('/konfigurator-pakete/{paket}', [\App\Http\Controllers\Hausplaner\HausplanerController::class, 'paketZeigen'])
+        ->whereNumber('paket')->middleware('permission:Hausplaner,read')->name('pakete.zeigen');
 });
 
 // Styleguide — lebende Komponentenbibliothek (UI-Bauordnung 2026-07-16).

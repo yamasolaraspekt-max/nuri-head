@@ -109,6 +109,9 @@
               rechnet nicht — und schon gar nicht in einem PHP-Block: genau ein solcher hat in
               AUF-64 diese Route zerbrochen. --}}
          data-projekte="{{ json_encode($hpProjekte, JSON_UNESCAPED_UNICODE) }}"
+         {{-- AUF-81: Ziel fuer das Speichern von Konfigurator-Paketen. Nur hier, nicht auf der
+              Studio-Flaeche — dieselbe Ueberlegung wie bei der Projektliste (AUF-78). --}}
+         data-pakete-url="{{ route('hausplaner.objekt.pakete.speichern') }}"
          data-speichern-url="{{ route('hausplaner.objekt.speichern', $objekt) }}"
          data-snapshots-url="{{ route('hausplaner.objekt.snapshots.liste', $objekt) }}"
          data-katalog-url="{{ route('hausplaner.objekt.katalog') }}">
