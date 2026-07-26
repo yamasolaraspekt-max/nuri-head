@@ -1565,6 +1565,41 @@ Urteil: FREIGABE MIT AUFLAGE. Substanz (Ehrlichkeit) verifiziert mit Zaehnen, Ga
 Bundle reproduzierbar; die eine offene Auflage ist die unabhaengige Live-Sichtprobe (visueller Ueberlauf).
 Ballbesitz: Planner (bzw. Evaluator fuer die Live-Sichtprobe, sobald ein belastbarer Browser da ist).
 
+### AUF-56 (Code aaacb8b · Bundle 17c9c06) - Zwei Elevation-Rollen + die letzten zwei Vertroestungen - FREIGABE MIT AUFLAGE
+
+`Vorarbeit` + `sichtbar`, reine Insel. Blind gegen die committeten SHA. §8-Split sauber. Gates rein
+(/tmp-Auszug 17c9c06): tsc 0 · schema 0 · test 1179 pass/0 fail · build 0 · Bundle byte-gleich
+(reproduzierbar).
+
+Vorarbeit - Token-Konsolidierung, wertgleich (verifiziert):
+- `elevationTokens.test` K1: `T.schattenFlach`/`T.schattenGehoben` tragen EXAKT den abgeloesten Rohwert
+  (`0 10px 34px rgba(28,50,55,.10)` etc.); das erzeugte Markup zeigt denselben Wert, der Token-NAME
+  landet nicht im Markup. K2: der rohe Flachwert steht in `app/` nirgends mehr (0 Treffer).
+- Gemessen 14 statt 12 Vorkommen (zwei aus AUF-66); 13 abgeloest, 1 bleibt roh MIT ANSAGE (30px statt
+  34px - die Angleichung waere sichtbar und bleibt Yamas Entscheidung; ehrlich dokumentiert, kein Leck).
+- Gegen-Beweis (gueltig, /tmp): Token-Wert 34px->99px -> elevationTokens rot (K1 wertgleich + Markup,
+  2 rot). Zaehne bestaetigt.
+
+sichtbar - die letzten zwei Vertroestungen weg (verifiziert, datenseitig):
+- Live "Module folgen"/"Erweiterbar" in beiden Fussleisten entfernt; der einzige verbliebene Treffer ist
+  ein KOMMENTAR, der die Entfernung dokumentiert - `fussleistenEhrlich.test` liest die Quelle
+  `ohneKommentare` und schlaegt daran korrekt NICHT an. Die Schiene zeigt den vorhandenen
+  `SCHIENEN_REITER`-Satz; die Studio-Navigation ZAEHLT aus `PROJ`/`FACH` (eine gezaehlte Zahl veraltet nicht).
+- Gegen-Beweis (gueltig, /tmp): eine LIVE (nicht-Kommentar) "Module folgen" in HausplanerApp ->
+  `fussleistenEhrlich` "keine der beiden Fussleisten verspricht noch etwas" rot (1 rot). Zaehne bestaetigt.
+
+AUFLAGE - die unabhaengige LIVE-Sichtprobe steht aus (§12.4, wie AUF-55.1):
+- AUF-56 ist `sichtbar`. Der Token-Teil ist byte-identisch (Schatten rendern unveraendert - kein
+  visueller Unterschied); die EINE neue sichtbare Sache ist der Fussleisten-Inhalt (echter Reiter-Satz /
+  Zaehlung statt Platzhalter). Der GENERATOR hat 1440 abgelesen; ich habe die 3-Viewport-Sichtprobe
+  (kein waagerechter Ueberlauf bei 1440/1024/375) nicht unabhaengig live gefahren (Browser-Viewport
+  gepinnt/Session-Reset diese Session). Kriterium: die zwei Fussleisten in einer belastbaren
+  Browser-Session bei 1440/1024/375 auf Ueberlauf pruefen - buendelbar mit der AUF-55.1-Sichtprobe.
+
+Urteil: FREIGABE MIT AUFLAGE. Substanz (Wertgleichheit + Ehrlichkeit) mit Zaehnen belegt, Gates gruen,
+Bundle reproduzierbar; offen allein die unabhaengige Live-Sichtprobe (visueller Ueberlauf). Ballbesitz:
+Planner (Evaluator fuer die gebuendelte Live-Sichtprobe 55.1+56.1, sobald belastbarer Browser).
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):

@@ -11241,3 +11241,21 @@ beim Namen — der Zähler meldete **vier statt drei** Fundstellen. Er entfernt 
 **zeilentreu**. *Ein Zähler, der Erklärungen für Code hält, zählt Erklärungen.*
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## EVALUATOR 26.07. — AUF-56 (Elevation-Rollen + letzte Vertroestungen) FREIGABE MIT AUFLAGE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-56`). `Vorarbeit`+
+`sichtbar`, blind gegen `aaacb8b`/`17c9c06`. §8 sauber, **Gates rein** tsc0·schema0·test **1179/0**·build0,
+Bundle byte-gleich. **Vorarbeit wertgleich:** Token = exakter Rohwert, Markup byte-gleich, 0 roh in app/;
+GB Token 34->99px -> 2 rot. **sichtbar ehrlich:** "Module folgen"/"Erweiterbar" live weg (verbliebener
+Treffer = Kommentar, `ohneKommentare` schlaegt korrekt nicht an), Schiene/Studio-Nav zeigen echten
+Inhalt; GB Live-Vertroestung -> fussleistenEhrlich rot. 1 Schatten bleibt roh MIT Ansage (30 vs 34px,
+Yamas Angleichung).
+**AUFLAGE (§12.4, wie 55.1):** unabhaengige LIVE-Sichtprobe (Ueberlauf 1440/1024/375 der zwei
+Fussleisten) steht aus - Browser gepinnt; buendelbar mit 55.1.
+
+**Urteil: FREIGABE MIT AUFLAGE.** Ballbesitz: Planner (Evaluator fuer gebuendelte Live-Sichtprobe 55.1+56.1).
+
+**Abgenommen: AUF-78·81·82·66·76·54 FREIGABE · 55·56 FREIGABE MIT AUFLAGE; 79 Spur B.** Offen: AUF-77
+(nicht gebaut) + Live-Sichtproben 55.1/56.1. Evaluator Standby.
