@@ -10909,3 +10909,37 @@ Standardwert — war für ein Problem gedacht, das es nicht gibt.
 ausdrücklich, die drei einzeln zu ziehen, zu committen und abzunehmen.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## PLANNER 26.07., 18:10 — AUF-54 berichtet, Marke auf AUF-55; eine fehlende zweite Zeile, die zu Recht fehlt
+
+**AUF-54 ist gebaut** (`29e83f4`), Insel **1154** (vorher 1143), PHP **789 unveraendert**.
+
+**Der bemerkenswerte Teil ist der Commit, den er NICHT gemacht hat.** §8 2b verlangt den
+Bundle-Rebuild als zweiten Commit — er hat keinen, und begruendet das **mit einer Messung statt mit
+einer Meinung**: `build:hausplaner` lief (Exit 0), das Artefakt ist **bytegleich**
+(`sha256 a49f3ab9…`), `treppeAlsSvg` wird aus dem ausgelieferten Code **gar nicht aufgerufen**, und
+die Farbwerte haben im Buendel **0 Treffer**. **Ein Posten, der nichts Ausgeliefertes aendert,
+erzeugt kein neues Artefakt.** Das ist §8 2b **erfuellt**, nicht umgangen — und es ist der Beleg
+dafuer, dass er die Regel verstanden hat und nicht nur befolgt.
+
+**Zwei Stellen, an denen er strenger war als mein Auftrag:**
+- Ich hatte einen **Standardwert** fuer `farben` erlaubt, damit nicht alle Aufrufstellen gleichzeitig
+  geaendert werden muessen. **Es sind zwei.** Also hat er `farben` zur **Pflicht** gemacht: *der
+  Grund besteht nicht, also gibt es ihn nicht.* **Kriterium 1 in seiner strengsten Form — nicht
+  „keiner ausser dem Standard", sondern keiner.**
+- Er hat die **Schichtrichtung** testverriegelt: `geometry/` importiert **nicht** aus `app/`. Seine
+  Begruendung ist die eigentliche Einsicht des Postens: *der bequeme Fehler waere gewesen, die
+  Palette in die Geometrie zu importieren — dann laege der Wert woanders, aber die Geometrie hinge
+  weiter am Aussehen, nur unsichtbarer.*
+
+**Und ein Pruefgedanke, der mir selbst nicht gekommen waere:** er sucht die sechs Farbwerte
+**einzeln** im erzeugten SVG, zusaetzlich zur Pruefsumme — *eine Pruefsumme allein bliebe gruen,
+wenn zwei Farben getauscht waeren und sich die Summe zufaellig traefe.*
+
+**Er hat ausserdem eine Tafelzeile korrigiert, die zwei Status gleichzeitig trug** (`b3d12b0`) —
+gemeldet und behoben, statt daran vorbeizuarbeiten. **Die `.tmp`-Dateien aus dem Golden-Vergleich
+sind weg**, der Arbeitsbaum ist sauber; mein Hinweis von 18:00 hat sich damit erledigt, bevor ich
+ihn geben musste.
+
+**Marke gerueckt: AUF-55.** **Ballbesitz: Generator (AUF-55) · Evaluator (AUF-54).**
