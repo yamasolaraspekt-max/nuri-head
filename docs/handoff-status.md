@@ -13790,3 +13790,67 @@ umschalten — aendert sich noch etwas?), **dann K9** (hier zum ersten Mal mit B
 ob die acht Umgestellten wirklich die statischen sind. §13.6 gilt.
 
 **Tafel:** 85 Zeilen, 0 fehlerhaft, Marke bleibt auf AUF-38 (Scheiben 3-8 offen), Stapel 1.
+
+
+## PLANNER 26.07., 23:40 (CEST) — FEIERABEND. Keine neuen Auftraege mehr heute
+
+**Yama, 23:35:** *"keine weitere aufgaben an den beiden, wir machen schluss. das letzte nimmst ab
+und sagst du den beiden, die sollen die offenen aufgaben beenden, dann ist fuer heute schluss."*
+
+**An den Generator:** **Scheibe 3 wird nicht gezogen.** AUF-38 Scheibe 2 ist gebaut, gemeldet und
+liegt beim Evaluator — damit ist deine Arbeit fuer heute abgeschlossen. Der Arbeitsbaum ist sauber,
+es liegt nichts Halbfertiges. **Nichts anfangen, was ueber Nacht offen bliebe.**
+
+**An den Evaluator (§15, Bringschuld):** **AUF-38 Scheibe 2 ist die letzte Abnahme des Tages.**
+Danach Schluss. Die Reihenfolge steht in §3b: **zuerst die Grenze** (haelt sie? Zustand umschalten
+— aendert sich noch etwas, oder ist etwas Zustandstragendes in die CSS eingefroren), **dann K9**
+(hier zum ersten Mal mit Bedeutung, weil sich anders als bei Scheibe 1 etwas verschieben *koennte*),
+**zuletzt** ob die acht Umgestellten wirklich die statischen sind.
+
+**Die Marke ist bewusst von der Tafel genommen.** Es gibt heute **keinen aktiven Posten** mehr —
+das ist kein Versehen und kein Leerlauf, den jemand fuellen soll. **Wer die Tafel liest und keine
+Marke findet, hat Feierabend**, nicht einen Auftrag zu suchen.
+
+---
+
+## Stand zum Feierabend
+
+| | |
+|---|---|
+| abgenommen | **80** |
+| offen | **4** (AUF-38 · AUF-48 gesperrt · AUF-50 ohne Auftrag · AUF-40 Rest bei Yama) |
+| im Abnahme-Stapel | **1** — AUF-38 Scheibe 2 |
+| aktiver Posten | **keiner** (Absicht) |
+| `main` | `665dd70e`, beide Kopien nachgezogen |
+| ungesicherte Arbeit | **keine** |
+
+**Heute abgenommen: siebzehn Posten, kein einziges rotes Votum.**
+AUF-78 · 81 · 82 · 66 · 76 · 54 · 77 · 63 · 42 · 67 · 55 · 56 · 35b · 38-A · 52-A · 52 (B+C) —
+und AUF-38 Scheibe 2 als letzte, sobald das Votum vorliegt. Dazu AUF-79 auf Spur B und drei
+Auflagen.
+
+**Vier Merges auf `main`**, drei davon nach §16 auf einen benannten abgenommenen Commit.
+
+## Was morgen bei Yama liegt
+
+1. **Schema-Erweiterung `RoofShape`** — 14 der 22 Dachformen sind heute nicht speicherbar.
+2. **Erprober: kommt die vierte Rolle**, und gilt sein Urteil als Empfehlung an Yama statt als
+   Freigabe der Tafel?
+3. **Objekt-Faehigkeiten: heissen sie „Eignungen"** (Kollision mit `faehigkeiten.ts`), und gehoeren
+   sie **in die Registry statt ins gespeicherte Dokument**?
+4. **Bibliothek: verweist sie auf `Product`** statt eigene Artikeldaten zu fuehren?
+5. **`git config gc.auto 0`** gegen die Wiederholung meines Lock-Unfalls.
+
+**Entschieden ist heute:** P2-2 Go (Verdrahtung `SzeneProjektionService`) · **Weg B** fuer das
+Frontend · AUF-48 vor AUF-50 · Wandecke erst messen, dann entscheiden.
+
+## Sechs Faelle, ein Muster — die Lehre des Tages
+
+Vier Casts, die die Typpruefung stilllegten · meine Tafelzaehlung, die die Form prueft statt die
+Wirkung · ein K4-Vergleich, der beide Seiten durch denselben Uebersetzer schickte · mein
+Waisen-Zaehler, der `import type` als Aufruf zaehlte · zwei geerbte Zusagen, die eine **Anzahl**
+festnagelten · und mein Auftrag, der **20 Stellen** nannte, wo heute 34 stehen.
+
+**Alle sechs haben dieselbe Form: geprueft wird die Gestalt, nicht die Wirkung.**
+*Ein Pruefer, der den Weg des Geprueften teilt, prueft nichts. Eine Zahl, die sich als Bedingung
+ausgibt, ist eine Momentaufnahme. Und ein Import ist kein Aufruf.*
