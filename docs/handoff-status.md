@@ -6065,3 +6065,76 @@ Vorschlag, keine Änderung.
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. `WerkzeugGruppenMenue` (die
 Themenzeile darunter) unberührt — dort standen andere Wörter, sie waren nicht gemeint.
+
+---
+
+## PLANNER 26.07., 07:15 — Nachtbilanz und die zwei nächsten Aufträge
+
+**Vorher gelesen (Repo-Aufsicht, streng lesend):** `git --no-optional-locks status -sb` ·
+`log 66fcfe1..HEAD` · Arbeitsbaum · Locks · Rückstand gegen `fork`.
+
+### 1. Zustand des Baums — sauber
+
+| geprüft | Ergebnis |
+|---|---|
+| Zweig | `auto/hausplaner-integration` → `fork/…`, wie erwartet |
+| Arbeitsbaum | **leer** — nichts liegt herum |
+| hängende Locks | **keine** |
+| ungepushter Rückstand | **0** |
+
+**Kein Beifang, keine ungesicherte Arbeit.** Nach einer Nacht mit fünf Commits von drei Instanzen
+ist das die Auskunft, die ich hören wollte.
+
+### 2. Was über Nacht durchgelaufen ist
+
+- **AUF-68 — FREIGABE** (`373dfe9` für `b5c231e` + Bundle `d59dd8d`). `opLbl` restlos weg,
+  sichtbare Gruppenwörter **0**, jede Gruppe mit `role="group"` und nichtleerem `aria-label`.
+  Tests **1010 → 1020**, 0 Skip. Gegen-Beweis: Gruppen-Label leeren ⇒ rot.
+- **AUF-69 — FREIGABE** (`54a7c74` für `ea60d9e`). PHP-Suite 38 → 44 grün.
+
+**Beide archiviert; §3b ist leer.** Drei Freigaben in gut sechs Stunden, keine davon auf Zuruf.
+
+### 3. Der Nebenbefund, der ein Kriterium wird
+
+Der Evaluator hat den **Kontrast des Trennstrichs selbst gerechnet: 1,09–1,14:1.** WCAG 1.4.11
+verlangt **3:1** für bedeutungstragende Grafik. **Damit trägt der Strich die Gliederung nicht — der
+Abstand tut es** (21 px zwischen Gruppen gegen 6 px innerhalb, gemessen).
+
+Das ist wichtig, weil ich in AUF-68 geschrieben hatte, die Gliederung stehe „in der Trennung statt
+in der Schrift". **Das stimmte im Ergebnis und war in der Begründung falsch** — sie steht im
+Abstand. Der Unterschied zählt: **AUF-70 verdoppelt fast die Knopfzahl dieser Zeile** (11 → 16). Wer
+dabei den Abstand verengt, um Platz zu machen, nimmt der Zeile ihre einzige Gliederung, ohne dass es
+im Quelltext nach einer Entscheidung aussieht. **Als Kriterium in AUF-70 aufgenommen.**
+
+*Für mich: Ich hatte einen Träger benannt, ohne ihn zu messen. Er trug zufällig nicht, und ein
+anderer sprang ein. Das ist genau der Fall, für den die Regel aus AUF-45 gilt — Zahlen in Aufträgen
+sind Hypothesen mit Datum.*
+
+### 4. Die beiden Aufträge
+
+**Generator — AUF-70, ⚡ AKTIV, Spur A.** Entsperrt, weil AUF-68 committet **und** abgenommen ist.
+**Spur A ausdrücklich:** der gesperrte Zustand trägt Bedeutung — ein fälschlich frei aussehender
+Löschknopf ist kein Schönheitsfehler. Voller Zyklus mit Evaluator-Votum. Auftrag liegt seit
+gestern, ergänzt um das Abstands-Kriterium aus §3.
+
+**Evaluator — Zustands-Inventur**, `evaluator-auftrag-zustands-inventur-2026-07-26.md`.
+**Keine Abnahme, eine Messung.** Für jedes bedienbare Element der Insel über alle fünf Ebenen:
+unterscheidet sich der gesperrte Zustand **messbar** vom freien — Deckkraft, Zeiger, Schrift,
+Rahmen, Hintergrund, und der Kontrast des Unterschieds als Zahl.
+
+**Warum er und nicht der Generator:** Es ist eine Wahrnehmungsfrage, und er hat gestern bewiesen,
+dass er Kontrast selbst rechnet statt ihn zu übernehmen. **Und der Anlass ist mein Fehler:** AUF-59
+hat die drei Zustände an eine *Zeile* gebunden statt an die *Darstellung*. **Ich weiß nicht, wo das
+sonst noch fehlt — das ist der ganze Auftrag.**
+
+Drei Fragen darin, die ich ohne ihn nicht beantworten kann: wo ist der Unterschied am schwächsten;
+**gibt es ein Element, das gesperrt aussieht, aber frei ist** (danach hat noch niemand gesucht);
+und wie viele Beschreibungen des gesperrten Aussehens es heute im Quelltext gibt.
+
+### 5. Was bei mir liegt
+
+**AUF-65 braucht einen Auftrag von mir** — leeres Aufgaben-Panel, „Freigegeben" zu stark. Dazu die
+zwei Planner-Schulden **AUF-18** und **AUF-22**. Das ist meine Reihenfolge, während die beiden
+anderen laufen.
+
+**Ballbesitz: Generator (AUF-70) · Evaluator (Zustands-Inventur) · Planner (AUF-65, 18, 22).**
