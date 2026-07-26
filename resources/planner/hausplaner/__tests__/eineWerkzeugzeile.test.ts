@@ -184,6 +184,28 @@ test('K8: die Umkehr stellt den Wert wirklich zurück — nicht nur den Knopf', 
   assert.equal((store.getState().scene!.nodes[0] as WallNode).thickness, vorher);
 });
 
+// --- K13 (Nachtrag §8): der Abstand trägt die Gliederung ----------------------------------------
+test('K13: der Gruppenabstand ist NICHT verengt worden, um Platz für fünf Knöpfe zu schaffen', () => {
+  // Der Evaluator hat am AUF-68-Votum gerechnet: der Trennstrich hat 1,09–1,14:1 Kontrast, WCAG
+  // 1.4.11 verlangt 3:1. **Der Strich trägt die Gliederung also nicht — der Abstand tut es.**
+  // Diese Zeile ist von 11 auf 16 Knöpfe gewachsen; würde der Abstand zum Platzschaffen verengt,
+  // nähme sie sich ihre einzige wirksame Gliederung, und im Quelltext sähe das nach nichts aus.
+  // Gemessen 26.07. im Browser, 1440 UND 1024: zwischen Gruppen 21 px, innerhalb 6 px — beides
+  // unverändert gegenüber der Messung mit elf Knöpfen.
+  const q = ohneKommentare(quelle);
+  const leiste = q.match(/<div style=\{\{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px'/);
+  assert.ok(leiste, 'die Werkzeugzeile trägt nicht mehr den erwarteten Abstand von 6 px');
+
+  const sep = q.match(/const opSep = \(\)[^;]*;/);
+  assert.ok(sep, '`opSep` nicht gefunden');
+  assert.match(sep[0], /margin: '0 4px'/, '4 + 1 + 4 plus zweimal 6 ergibt die gemessenen 21 px');
+  assert.match(sep[0], /width: 1/);
+
+  // Und die Gruppen tragen keinen eigenen, engeren Abstand, der den der Zeile unterliefe.
+  const huelle = q.match(/const OpGruppe = [\s\S]*?\);/);
+  assert.match(huelle![0], /gap: 6/, 'innerhalb einer Gruppe gilt derselbe Abstand wie in der Zeile');
+});
+
 // --- Was NICHT angefasst wurde ------------------------------------------------------------------
 test('die Arbeitsbereich-Zeile bleibt, wo sie ist — sie war nicht gemeint', () => {
   assert.match(ohneKommentare(quelle), /ARBEITSBEREICH/);
