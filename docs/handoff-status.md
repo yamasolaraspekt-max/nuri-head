@@ -7777,3 +7777,96 @@ geändert im Baum). **Evaluator:** Sichtprobe-Standard.
 **Warteschlange Generator: AUF-40 A · AUF-74 · AUF-58 · AUF-75.** Alle vier tragen ihre
 Auftragsdatei. **Ich lege nichts Neues an, solange diese vier stehen** — ein Vorrat, der schneller
 wächst als er abfließt, ist kein Plan, sondern eine Liste.
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-40 Teil A: der Startbildschirm sagt, was es gibt
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** Code `4cc9f6e` · Bundle `10f7dd7`
+**Ballbesitz:** Evaluator. **Teil B bleibt unangetastet bei Yama.**
+
+*(Auftragsdatei vollständig gelesen — 111 Zeilen, sieben Abschnitte. Die Tafelzeile gibt
+ausdrücklich nur Teil A frei.)*
+
+### 1. Was gebaut wurde
+
+**(a) Die drei erfundenen Projekte sind aus dem Auslieferungspfad.** „EFH Mustermann",
+„Fenster-Angebot Hahn", „Sanierung Musterstr. 5" erschienen bei **jedem** Nutzer, auch beim
+allerersten Start. **Stillgelegt, nicht gelöscht** (`ZULETZT_STILLGELEGT`, Muster
+`toolCatalogStillgelegt` / `STEPS_STILLGELEGT`) — sie bleiben als Beleg dessen, was vorher
+behauptet wurde, und als Vergleichsgrundlage für den Test. **Nichts rendert sie mehr.**
+
+**(b) Ehrlicher Leerzustand.**
+
+> **Noch kein Projekt geöffnet.**
+> Ein Vorhaben beginnt unten mit **Hausplaner** — oder mit einem der Fachplaner, die auch ohne
+> Gebäude laufen.
+
+Kein Beispiel, das wie ein Projekt aussieht; und der Satz nennt den Weg, statt zu vertrösten.
+
+**(c) Drei Karten, drei Ziele.** Vorher riefen alle drei `onGuided(1)` auf.
+
+| Karte | vorher | jetzt |
+|---|---|---|
+| Sanierungsplan | `onGuided(1)` | **in Entwicklung** — *„Der Sanierungsablauf ist ein eigener Weg — er unterscheidet sich noch nicht vom Neubau-Ablauf."* |
+| Hausplaner | `onGuided(1)` | `onGuided(1)` — das echte Ziel |
+| Weiterarbeiten | `onGuided(1)` | **in Entwicklung** — *„Braucht die Liste der eigenen Projekte — die kommt aus dem Bestand und ist noch nicht angebunden."* |
+
+**Eine Karte ohne Ziel ist keine Schaltfläche mehr:** keine Rolle, kein Tastaturfokus, kein Zeiger.
+Sonst wäre sie fokussierbar und täte nichts — genau das, was AUF-44 aus der Icon-Zeile entfernt hat.
+
+### 2. Zurückgegeben statt gebaut — die Projektliste
+
+**§3 Punkt 1 verlangt die echte Liste über „die vorhandene Naht". Die gibt es für Projekte nicht.**
+Gemessen: `objekt.blade.php` bekommt vom Controller `$objekt`, `$dokument`, `$uebernahme`, seit
+AUF-69 `$hpRechte` — **keine Objektliste**. Sie zu beschaffen hieße:
+
+- eine Abfrage im Blade — Anwendungslogik im Template, genau das, was AUF-69 dort herausgeholt hat, **oder**
+- eine Variable mehr aus dem Controller — und damit `app/Http/`.
+
+**§7 verbietet beides in Teil A ausdrücklich.** Deshalb nimmt `StartView` die Liste als Eigenschaft
+entgegen, **Grundwert leer**; befüllt wird sie in Teil B. Die Insel-Seite steht, die Zulieferung
+fehlt — und das steht hier, statt dass ich nebenbei eine Route angelegt hätte.
+
+*Die einzeilige Ergänzung im Controller ist klein. Sie ist trotzdem Tor 1, und Tor 1 überspringt man
+nicht, weil etwas klein ist.*
+
+### 3. Belege
+
+| Was | Ergebnis |
+|---|---|
+| Gates | tsc **0** · schema:check **0** · test **0** · build **0** |
+| Tests | **1082 → 1091** · keine Zusage verschwunden |
+| K2 | `store/ domain/ geometry/ renderers/` — **null Zeilen** |
+| **§7** | `routes/` · `app/Http/` · `database/migrations/` — **null Zeilen** |
+| K3 | „Mustermann" nur noch in der stillgelegten Datei |
+| K11 `public/*` im Code-Commit | **0**; Bundle als zweiter Commit `10f7dd7` |
+| **K6 Mutationen** | zwei Karten auf dasselbe Ziel ⇒ **2 rot** · Demo-Liste zurück ⇒ **1 rot** |
+
+**K12 Sichtprobe, 1440 × 900, Zustand ohne eigene Projekte** — genau der Fall, in dem der Mangel
+sichtbar war:
+
+```
+erfundene Namen im Text   0
+Leerzustand               „Noch kein Projekt geöffnet." + Weg
+Sanierungsplan            klickbar nein · Marke ja
+Hausplaner                klickbar ja   · Marke nein
+Weiterarbeiten            klickbar nein · Marke ja
+```
+Bild: `auf40-start.png`.
+
+### 4. Beobachtung, nicht gebaut
+
+**Derselbe Mangel steht eine Fläche weiter:** die linke Navigation führt dieselben drei Namen
+(`HausplanerStudio.tsx:143`) — und **alle drei rufen `gehGeführt(1)`**, unverändert. Der Auftrag
+nennt in Befund (b) ausdrücklich `StartView.tsx:92-94`, also die Karten; die Navigation steht nicht
+darin.
+
+**Ich habe sie nicht mitgenommen.** Sie ist derselbe Befund an anderer Stelle und gehört in einen
+eigenen Posten — oder in Teil B, wo die Projektliste ohnehin entsteht und „Weiterarbeiten" dort
+sein Ziel bekommen kann.
+
+### 5. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. **Teil B nicht begonnen** — keine
+Migration, keine Route, kein Controller. Keine Demo-Daten „nur für die Vorschau".
