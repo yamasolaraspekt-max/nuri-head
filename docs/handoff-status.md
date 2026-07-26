@@ -12544,3 +12544,67 @@ Bedienung hat, die man pruefen koennte.
 
 **Kein Posten, kein Rahmen-Paragraph, bevor Yama Topf D und C3 entschieden hat.** AUF-50 bleibt
 zugeschnitten wie um 22:35. **Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52.
+
+
+## PLANNER 26.07., 23:25 — Tester-Master-Prompt eingeordnet. Sein eigener Massstab sagt: wir sind heute GELB, nicht GRUEN
+
+Papier: `docs/planner/tester-masterprompt-einordnung-2026-07-26.md`. Es ist der **Rollenbrief der
+vierten Rolle**, die ich um 22:35 skizziert hatte — und er ist an drei Stellen besser als mein
+Entwurf: das Befundformat (§34) ist vollstaendiger als meine Protokollpflicht, die Schweregrade
+P0–P3 sind der Massstab, der meiner Befundliste gefehlt hat, und ein Satz gehoert eigentlich in
+unseren Rahmen und steht dort nicht: *"Der Tester darf keine Tests abschwaechen, nur damit der
+Testlauf gruen wird."*
+
+**Ein Widerspruch, und er ist nicht klein.** Ich hatte geschrieben, der Erprober bekommt
+**ausdruecklich keine** Abnahmekriterien. Der Prompt gibt ihm Freigabekriterien (§39) und ein
+Urteil GRUEN/GELB/ROT/BLOCKIERT. Das ist eine **zweite Abnahmeinstanz**, und die einzige Frage,
+die zaehlt, beantwortet niemand: **was gilt, wenn Evaluator und Erprober verschieden urteilen?**
+
+**Meine Aufloesung: die beiden urteilen ueber verschiedene Gegenstaende.** Der Evaluator prueft den
+**Posten** gegen seinen Auftrag, sein Urteil geht an die Tafel. Der Erprober prueft die
+**Anwendung** gegen die Bedienung, sein Urteil geht an Yama und kann den **Merge** aufhalten, nicht
+den Posten. Damit darf er ROT sagen, ohne den Zyklus zu zerreissen. **Ein Posten kann sauber
+abgenommen und die Anwendung trotzdem rot sein** — genau das ist heute der Fall, und es ist kein
+Widerspruch, sondern die Wahrheit ueber unseren Stand.
+
+**Die nuetzlichste Uebung des Papiers dauert zehn Minuten: seinen Massstab auf unsere Messungen
+anwenden.** Nach §34 ist die Wandecke ein **P1** (*"falsche Geometrie"*, *"Objektbeziehungen
+brechen"*), und **Touch mit null Behandlungen ist ebenfalls P1** (*"Touch oder Tastatur
+unbrauchbar"* — fuer Persona C, den mobilen Bauleiter, ist die Anwendung nicht bedienbar). §39
+verlangt fuer GRUEN *"keine offenen P0/P1"*.
+
+> **Damit ist der Hausplaner nach seinem eigenen Papier heute nicht freigabefaehig — GELB, mit
+> zwei benannten Restmaengeln.**
+
+Das ist keine schlechte Nachricht. **Es ist das erste Mal, dass unser Stand eine Note hat, die
+nicht ich vergeben habe**, und es macht meine Rangfolge zu einer Rechnung statt zu einer Meinung:
+wer GRUEN will, traegt zuerst die zwei P1 ab.
+
+**Was sich heute lohnt und was Leerlauf waere** — der Unterschied ist nicht Aufwand gegen Nutzen,
+sondern: *kann die Messung ueberhaupt etwas anderes ergeben als das, was wir schon wissen?*
+**Sofort lohnend: §36 Property-based Tests** — zufaellige Laengen, Winkel, Konturen, geprueft auf
+keine NaN, keine Selbstueberschneidung, kein verlorener Raumbezug, Undo exakt reversibel. Laeuft im
+vorhandenen Testrahmen, ohne Geraete, ohne Browser — und greift **genau die Fehlerklasse an, die
+wir heute gemessen haben**. Ein Satz *"die Zahl der Raeume aendert sich nur, wenn eine Wand
+entfernt oder hinzugefuegt wird"* haette Fall B1 gefunden, bevor ihn ein Mensch bemerkt. **Bester
+Nutzen je Aufwand im ganzen Papier.**
+**Heute Leerlauf: §10/§11 Touch und Stift, §7/§8 Geraete- und Browsermatrix in voller Breite.**
+Neunzehn Pruefpunkte gegen Code ohne einen einzigen Touch-Zweig ergeben *einen* Befund, den wir
+haben. Playwright kann Touch nachstellen, aber weder Stift noch Screenreader — **ein nachgestellter
+Touch-Test auf touchlosem Code ist ein gruener Haken ohne Deckung**, und davor warnt §2 Grundsatz
+18 selbst. Keine Kuerzung des Anspruchs: sobald Touch gebaut ist, wird die Matrix voll gefahren.
+
+**22 Dokumente werden neun.** Der erste Prompt fordert 10, dieser 12, mit erheblicher
+Ueberschneidung. **Zwei Dokumentenwelten sind dasselbe Muster wie zwei Register** — sie driften,
+und dann sagt eine etwas Falsches. Vier liegen bereits, **fuenf fehlen** und entstehen unter
+unseren Namen. Yamas Pruefblock je Werkzeug uebernehme ich unveraendert; er haengt unter der Zeile
+*Probe des Erprobers*: der Satz sagt, wozu das Werkzeug gut ist, der Block sagt, wie man es bricht.
+
+**Fuenf Punkte bei Yama**, vier alte plus einer: **Erprober-Urteil = Empfehlung an Yama, nicht
+Freigabe der Tafel?** Ohne diese Festlegung haben wir zwei Abnahmeinstanzen ohne Schiedsregel.
+
+**Und eine Feststellung, die ich nicht weicher formuliere:** Touch ist nach seinem eigenen Massstab
+ein P1, und wir haben **null Zeilen** dafuer. Das ist kein Detail am Rand von AUF-50, sondern ein
+eigenes Vorhaben in der Groessenordnung von AUF-50 selbst.
+
+**Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52. Kein neuer Posten (§14).
