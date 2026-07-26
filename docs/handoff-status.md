@@ -12355,3 +12355,85 @@ frischen Build** (reproduzierbar). **Angeschlossen (kein Orphan, gegen das Plann
 umgestellt, Artefakt-Byte-Gleichheit belegt es. **Gates rein** tsc0·schema0·test **1256/0**·build0.
 
 **Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.
+
+
+## PLANNER 26.07., 22:35 — Die Raumerkennung ist gemessen. Sie faellt schlechter aus als befuerchtet. Dazu: Bedienmodell, vierte Rolle, Benchmark
+
+Vier Papiere, alle aus Messung, keines aus Einschaetzung:
+`messung-raumerkennung-ecke-2026-07-26.md` - `bedienmodell-110-werkzeuge-2026-07-26.md` -
+`vierte-rolle-erprober-benchmark-2026-07-26.md` (+ Anhang) - dazu das Bedienprobe-Papier von 22:05.
+
+**1. Die Messung, die ich schuldig war.** `roomDetection.ts` im Wortlaut genommen, ausserhalb des
+Repos uebersetzt (die `node_modules` sind macOS-Binaerdateien) und mit vier Grundrissen gefahren.
+**Kein nachgezeichneter Algorithmus, das echte Modul.** Der Arbeitsbaum blieb unberuehrt.
+
+| Fall | Raeume | Flaeche |
+|---|---|---|
+| Rechteck geschlossen | 1 | 40,00 m² |
+| Laenge 8000 -> 6000 | **0** | — |
+| Laenge 8000 -> **7999** (1 mm) | **0** | — |
+| mit Trennwand, geschlossen | 2 | 20,00 - 20,00 m² |
+| mit Trennwand, Aussenwand gekuerzt | **1** | **20,00 m²** |
+
+**Der letzte Fall ist der schlimme, und zwar weil so wenig verschwindet.** Ein Raum bleibt uebrig
+mit einer glatten, plausiblen, richtig gerechneten Zahl. Nichts ist rot, nichts fehlt sichtbar.
+Die Flaechenliste ist um 20 m² zu kurz, und niemand kann es sehen. **Was ich mittags als Sorge
+formuliert hatte, ist jetzt ein Messwert: falsche Zahlen aus richtig aussehender Geometrie.**
+1 mm wirkt dabei wie 2 Meter — das Modul arbeitet bewusst ohne Toleranz, und das ist richtig, macht
+den Fehler aber binaer. Das Modul haelt seine Zusage (keine falschen Raeume, nur keine). **Der
+Schaden entsteht nicht im Modul, sondern in der Liste daneben** — eine Aufstellung, der ein Raum
+fehlt, ist falsch, auch wenn jeder enthaltene Wert stimmt.
+
+**2. Bedienmodell fuer die 110 Werkzeuge.** Ich bin davon ausgegangen, kontextabhaengige Bedienung
+muesse erst entstehen. **Falsch.** `HausplanerApp.tsx:421` speist die Auswahl bereits in den
+Aktivierungskontext, `toolContext.ts:31` zaehlt sie, `:1409` fragt `resolveToolState` je Werkzeug.
+27 Werkzeuge haengen an `selection.count >= 1` und gehen auf, sobald etwas gewaehlt ist. **Und dann
+passiert nichts.** Das ist schlimmer als eine dumme Oberflaeche: eine dumme verspricht nichts.
+Diese zeigt, dass sie den Nutzer versteht, und liefert nicht. Beim dritten Mal glaubt er ihr auch
+dort nicht mehr, wo sie recht hat. **Die Intelligenz ist gebaut, sie ist hohl.**
+
+Durchgezaehlt: **28 von 128 Modulen der Insel haben als einzigen Aufrufer ihre eigene Testdatei.**
+Rund elf davon sind als AUF-52 bestellt. Bleiben siebzehn ungerufene — darunter `fangKern` und
+`auswahlDarstellung`, das **entscheidet, ob Griffe gezeichnet werden**, dreifach getestet, und der
+Renderer fragt nie. Wir haben die Entscheidung ueber Griffe gebaut, bevor es Griffe gab.
+Und: **null Doppelklick-Griffe in der gesamten Insel** — die selbstverstaendlichste Geste eines
+Zeichners ist hier keine Geste. Keine Zahleneingabe waehrend des Zeichnens; der einzige numerische
+Weg ist das Panel, und genau der loest Ecken.
+
+AUF-50 ist damit neu zugeschnitten — nicht nach Vertragsfamilien, sondern nach Bedienung:
+50.1 Empfaenger - 50.2 die Zahl - 50.3 die drei Tiefen - 50.4 der Fang, der spricht -
+50.5 die 13 erreichbaren Erzeugen-Werkzeuge - 50.6 der Rest. **Kein neuer Posten (§14).**
+
+**3. Vierte Rolle (Yama).** Der Beweis liegt von heute vor, und er ist unangenehm: aus einer
+Bedienprobe kamen vier Befunde, drei nachgemessen, alle drei richtig — **und kein einziges Votum
+war falsch.** Jeder Posten wurde korrekt abgenommen. Die Fehler liegen nicht in den Posten, sondern
+zwischen ihnen. Der Evaluator prueft "tut es, was bestellt wurde"; niemand prueft "was passiert,
+wenn jemand etwas tut, das niemand bestellt hat". Der **Erprober** bekommt eine Rolle, ein Ziel und
+einen benannten Commit — **und ausdruecklich keine Abnahmekriterien**; gaebe man sie ihm, waere er
+ein zweiter Evaluator. Er nimmt nichts ab, schreibt keinen Code, und **jede Handlung wird
+mitgeschrieben**: Zufall ist erlaubt, Unreproduzierbarkeit nicht.
+
+**Benchmark:** sechs feste Aufgaben mit pruefbaren Sollwerten, fuenf Messgroessen (Handgriffe gegen
+ausgezaehlten Bestwert - Leerlaeufe - Masstreue in mm - Rueckweg - **stille Abweichungen**).
+**Aufgabe P6 faellt heute durch** — Absicht: eine Pruefstrecke, die alles besteht, misst nichts.
+**Zeit wird nicht gemessen** — Sekunden messen die Maschine und die Tagesform, nicht die Anwendung.
+Echter Konflikt, ungeglaettet: Engpass 3, es gibt nur **eine** servierte Anwendung. Drei
+Moeglichkeiten stehen im Papier, meine Empfehlung ist die Pruefstrecke **nach jedem Merge auf
+`main`** — fester Takt, ruhiger Baum, benannter Stand, und der Benchmark bekommt genau die Punkte,
+die eine Kurve ergeben. **Ich schreibe §17 nicht in den Rahmen, bevor Yama die drei Punkte
+bestaetigt hat** — sonst steht dort eine Regel, die niemand beschlossen hat.
+
+**4. Regel ueber meine eigene Arbeit (Yama).** Jeder Auftrag bekommt kuenftig **oben** einen Satz:
+*"Probe des Erprobers: Jemand, der dieses Programm nicht gebaut hat, tut ___ und sieht ___."* Kann
+ich ihn nicht schreiben, ist der Auftrag nicht fertig — dann weiss ich selbst nicht, was der Nutzer
+davon hat. **Meine bisherigen Auftraege haetten das teilweise nicht bestanden:** AUF-50 hiess "110
+Werkzeuge funktionstuechtig machen", darin steht keine Handlung und keine Beobachtung. KISS
+konkret: eine Geste, die ueberall gilt, schlaegt fuenf kluge - zwei Zustaende statt sechs - **ein**
+Empfaenger statt neun - erst die Grundgeste, dann die Klugheit. Gegenprobe, damit KISS kein
+Vorwand wird: einfach heisst *wenig zu lernen*, nicht *wenig gebaut*.
+
+**Drei Fragen liegen bei Yama:** Ecke halten bei Laengenaenderung? - bekommen Elektro/PV/Tragwerk/
+freie Geometrie Plaetze im Schema, oder bleiben die 20 sichtbar gesperrt? - wird AUF-48 vorgezogen
+(50.2 und 50.3 landen beide in `HausplanerApp.tsx`)?
+
+**Ballbesitz unveraendert:** Generator AUF-52, Evaluator AUF-38 Scheibe 1, Stapel 1, Marke AUF-52.
