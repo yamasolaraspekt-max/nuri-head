@@ -10152,3 +10152,46 @@ Stand davor.
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine Änderung an der
 Drei-Fälle-Logik, an `HOECHSTDAUER` oder daran, was der Wächter prüft. Kein `rm` an anderer Stelle
 „bei der Gelegenheit".
+
+
+## PLANNER 26.07., 16:55 — AUF-82 berichtet, und mein Auftrag war widerspruechlich
+
+**Der wichtigste Satz zuerst, und er geht gegen mich:** der Generator ist vom beauftragten Weg
+abgewichen, **und er hatte recht.** Mein §2(a) verlangte, die verwaiste Sperre per `mv` in eine
+**datierte Ablage** zu schieben — und im selben Absatz, dass diese Ablage **nicht unbegrenzt
+waechst**. **Beides zusammen verlangt ein `unlink`, und genau das ist auf dem Mount verboten.**
+Ich habe also ein Mittel vorgeschrieben, das den eigenen Zweck nicht erreichen konnte.
+
+Seine Loesung ist besser als meine Vorgabe: **die Sperre ist ein Platz, der einmal entsteht und
+danach nur noch beschrieben wird** — belegen heisst Kennung eintragen, freigeben heisst Kennung
+leeren. Kein `rm`, kein `mv`, keine Ablage, kein Wachstum. **Die Drei-Faelle-Logik bleibt Zeichen
+fuer Zeichen** — es aendert sich das Werkzeug, nicht das Verhalten.
+
+**Und er hat es angesagt, statt es stillschweigend anders zu machen** — als erster Punkt seines
+Berichts, mit Begruendung. Das ist genau der Umgang mit einer Abweichung, den die Rollentrennung
+verlangt: **melden statt umgehen, und den Zweck ueber das Mittel stellen.**
+
+**Der gefaehrlichste Fall aus §6 ist geschlossen.** Die Sperre traegt jetzt den **Startzeitpunkt**
+des Halters: *lebendig heisst Nummer da UND Startzeitpunkt gleich.* Stimmt nur die Nummer, wird
+**nicht uebersprungen**, sondern zurueckerobert — **mit eigener Zeile**
+(`nummer-wiederverwendet=<pid>`). Damit gehoert die Gesund-Zeile ausschliesslich dem gesunden Fall.
+**Es gibt keine zwei Zustaende mehr, die dieselbe Zeile schreiben** — das war das ganze Kriterium 10.
+
+**Belege, die ich hervorhebe, weil sie am lebenden Objekt gefuehrt sind und nicht im Mini-Repo:**
+der **stehende Pruefstein** (pid 79, ohne Startzeit) wurde beim **ersten** Lauf zurueckerobert ·
+K9 mit einem untergeschobenen `sleep`-Prozess auf einer wiederverwendeten Nummer · K6 mit
+erzwungenem Fehlschlag ⇒ Waechter **exit 2**, Hook **exit 0 in 0,029 s**, Spur
+`GESCHEITERT-76b6108.txt` geschrieben · K1 `grep "rm -rf"` = **0**, **auch im Kommentar**, der es
+zuerst wieder eingeschleppt hatte. **Und K4 hat er ehrlich angepasst:** mutiert wurde die
+Uebernahme statt des `mv`-Aufrufs, **weil dieser Bau keinen `mv` benutzt** — er hat die Aenderung
+benannt, statt ein Kriterium zu erfuellen, das ins Leere zeigt.
+
+**Marke gerueckt: AUF-79 traegt jetzt `⚡ AKTIV`** — mit dem Zusatz aus seinem eigenen §5:
+**auf `f4202f6` ziehen, nicht auf dem Stand davor.** `scripts/waechter.sh` ist gerade umgebaut;
+wer die alte Fassung als Grundlage nimmt, baut gegen eine Datei, die es nicht mehr gibt.
+
+**§3b traegt jetzt zwei Posten** (AUF-82 und AUF-78). **Reihenfolge fuer den Evaluator: AUF-78
+zuerst** — es ist der aeltere und der mit dem Rechtegatter. Bei AUF-82 prueft er **den Zweck, nicht
+das Mittel**; die Abweichung ist von mir gedeckt und steht so auf der Tafel.
+
+**Ballbesitz: Generator (AUF-79) · Evaluator (AUF-78, danach AUF-82).**
