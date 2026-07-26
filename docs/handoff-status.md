@@ -10643,3 +10643,35 @@ Ebene weiter: **„Weiterarbeiten" beginnt dort den geführten Ablauf bei Schrit
 Der Auftrag sagt zur Navigation nichts — **also gemeldet und nicht angefasst**, kein Beifang.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator** (Staffel-Punkt F).
+
+
+## PLANNER 26.07., 17:35 — AUF-82 freigegeben (Auflage 75.1 zu), AUF-66 gebaut, Marke auf AUF-76
+
+**AUF-82 ist frei** (`f176cd1`) — und damit ist **die Auflage AUF-75.1 vollstaendig geschlossen**,
+die heute Vormittag zum Merge gehoerte. Der Evaluator hat **den Zweck geprueft, nicht das Mittel**,
+wie beauftragt: kein `rm`, kein `mv`, der Platz wird nur beschrieben; toter Halter zurueckerobert,
+Platz bleibt · Hook legt bei Fehlschlag `GESCHEITERT-<commit>.txt` an und bleibt nicht-blockierend
+(**0,013 s**, exit 0) · Prozess-Identitaet aus `kill -0` **plus** Startzeitpunkt, und die Mutation
+auf `kill -0` allein bringt den alten Fehler reproduzierbar zurueck.
+
+**Das Votum war nachgeholt** — der Posten war in der Buchstaben-Staffel aus der Zaehlung gefallen.
+**Er hat es kommentarlos nachgeholt, ohne die Ursache mir anzulasten, und den Grund trotzdem
+aufgeschrieben.** Beides zusammen ist die richtige Reaktion auf einen Fehler, der nicht seiner war.
+
+**AUF-66 ist gebaut** (`c3de05a` + Bundle `3d54ad0`, §8 2b eingehalten): 6 Zeilen im Controller,
+**202 Zeilen neuer Test** (`projektKlick.test.ts`), `StartView` +98/−17, PHP-Test +36.
+**Damit ist die Entscheidung, die ich um 17:00 getroffen habe, gebaut:** der Eintrag oeffnet
+`hausplaner.objekt.seite` — dieselbe Route, dasselbe Recht, unter dem die Liste gefuellt wurde.
+
+**Was der Evaluator zuerst pruefen muss, steht im Stapel:** ob jeder Eintrag die Adresse des
+**eigenen** Objekts traegt. **Der haeufigste Fehler solcher Listen ist die geteilte Adresse** — sechs
+Kacheln, die alle dasselbe Projekt oeffnen, sehen richtig aus und sind es nicht. Dazu die
+K6-Mutation: **kein Ziel, kein Versprechen.**
+
+**Marke gerueckt: AUF-76** (Wandschichten, Mengenermittlung M0) — Yamas eigentliches Ziel ruecht
+damit in die Arbeit. **Buchfuehrung gegengeprueft: 84 Zeilen, keine Doppelten, eine Marke.**
+
+**Ballbesitz: Generator (AUF-76) · Evaluator (AUF-66).**
+
+**Weiterhin offen an Yama: 39 Commits liegen nur auf der Platte** —
+`./push-integration-sicher.command`. **Das ist inzwischen der ganze Nachmittag.**
