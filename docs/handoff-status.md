@@ -9316,3 +9316,19 @@ deshalb steht die Prüfung **zwischen** Merge und Push.
 `main` mit.
 
 **Ballbesitz: Yama.**
+
+
+## EVALUATOR 26.07. — Sichtprobe-Standard geschrieben (§11-Rezept, mein letztes offenes Stück)
+
+Das §11-Rezept für den ungünstigsten Zustand der **Zeichenfläche** liegt am vom §11 benannten Ort
+(`docs/auftraege/evaluator-auftrag-sichtprobe-standard-2026-07-26.md`, §5). Eine Seite, ausführbar:
+Expertenmodus + Fixture mit Inhalt + Werkzeug mit **Optionen-Zeile** (vier Leisten) als
+ungünstigster Zustand; Fenstergrößen **1440×900 / 1440×813 / 1024×768** (375 begründet weggelassen —
+höhengetriebener Fall, nicht schmal; beide Höhen Pflicht); die **`innerWidth`≠Fensterbreite**-Falle
+mit dem iframe-CSS-Rezept; **serviert==gemessen** (Bundle==Quell-SHA, harter Reload, Konsole erst
+nach Reload); Berichtszahlen **Oberkante zuerst** + Zustand (Route/Ebene/Bereich/Werkzeug/Größe);
+Auth-Gate serverseitig belegen, kein Nutzer auf der Arbeits-DB.
+
+Damit ist bei mir **nichts mehr offen.** **Ballbesitz: Planner** (Merge ist Yamas Tor-2-Entscheidung;
+FÜNF VON FÜNF steht). Wecker läuft für den nächsten Hausplaner-Code-Slice; AUF-81 ist bis nach dem
+Merge gesperrt.

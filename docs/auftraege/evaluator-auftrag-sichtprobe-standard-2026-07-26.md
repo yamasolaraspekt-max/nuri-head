@@ -59,3 +59,61 @@ zwischen *Substanz abgenommen* und *Behauptung eingeschränkt* hat mir die Entsc
 abgenommen.
 
 **Ballbesitz nach deiner Meldung: Planner.**
+
+---
+
+## 5. Das Rezept (Evaluator, 26.07.) — der ungünstigste Zustand der Zeichenfläche, ausführbar
+
+**Fläche:** die 2D-Zeichenfläche im **Objekt-Modus** (`/admin/hausplaner/objekt/{id}`, hinter `auth`)
+bzw. Studio (`/admin/hausplaner/studio?fixture=u-dach`). **Nicht** StartView — das ist der leichtere
+Zustand mit weniger Leisten, genau der, der schmeichelt.
+
+**1. Ungünstigster Zustand — so stellt man ihn her (alle Leisten stehen):**
+- **Expertenmodus** an (nicht der geführte Startzustand).
+- Ein **Fixture mit Inhalt** laden, damit die Fläche nicht leer ist: `?fixture=u-dach` oder
+  `?fixture=decke-treppe` (beide in `resources/planner/hausplaner/fixtures/studioFixtures.ts`).
+- Einen **Arbeitsbereich + ein Zeichen-Werkzeug** wählen, das seine **Werkzeug-Optionen-Zeile**
+  zeigt — die ~46-px-Leiste, an der AUF-72 auseinanderging. Prüfen, dass **vier** Leisten
+  gleichzeitig stehen: Kopfzeile · Werkzeugleiste · **Optionen-Zeile** · Statuszeile. Steht die
+  Optionen-Zeile nicht, ist es **nicht** der ungünstigste Zustand.
+
+**2. Fenstergrößen — verbindlich (meine Einordnung auf deine Bitte):**
+- **1440 × 900** (Desktop großzügig) · **1440 × 813** (realer Laptop mit Browser-Chrome — die
+  **ungünstigste Höhe**, hier konkurrieren Fläche und Leisten am stärksten) · **1024 × 768**
+  (schmaler Desktop/Tablet — schmaler heißt, die Werkzeugleiste **bricht in mehr Zeilen** = mehr
+  Leisten = schlimmerer Fall).
+- **375 lasse ich bewusst weg** für DIESE Fläche: das Studio ist ein Profi-Desktop-Werkzeug, und der
+  §11-Fall ist **höhen**getrieben (Oberkante/Überstand), nicht extrem-schmal. Die allgemeine
+  UI-Bauordnung (1440/1024/375) bleibt für gewöhnliche CRM-Views gültig; die Zeichenfläche weicht
+  hier begründet ab. Kommt je ein Schmal-Regressionsverdacht, wird 375 als **eigener** Fall
+  aufgenommen — nicht auf Vorrat.
+- **Immer beide Höhen (900 und 813)** fahren — sonst fehlt genau der Zustand, der den Befund trug.
+
+**3. Die Falle, die Breiten unbrauchbar macht — `innerWidth` ≠ Fensterbreite:**
+- `resize_window` / ein Zug am äußeren Fenster ändert **nicht** `iframe.contentWindow.innerWidth`.
+  Wer nur das Fenster zieht, misst weiter die alte Breite und merkt es nicht.
+- **Rezept:** die Insel läuft im iframe → die **iframe-Breite per CSS auf das Ziel** setzen
+  (`iframe.style.width='1024px'`) und die Wahrheit aus `contentWindow.innerWidth` **auslesen und im
+  Bericht nennen**. Erst wenn `innerWidth` == Ziel, ist die Größe echt.
+
+**4. Der ausgelieferte Stand muss der gemessene sein (§11.3):**
+- Vor jeder Probe: der **servierte** `public/hausplaner/hausplaner.js` == frischer Build der
+  Quell-SHA (Slice-Marker im Bundle, oder Bundle byte-gleich zu `build:hausplaner`). Der
+  Browser-Zwischenspeicher liefert sonst still die alte Datei — genau das hätte bei AUF-70 beinahe
+  eine falsche Freigabe erzeugt.
+- **Harter Reload** (Cache aus) vor der Messung; die **Konsole wird erst nach einem Reload** scharf
+  gelesen (das Lauschen greift erst nach Neuladen).
+
+**5. Welche Zahlen jeder Bericht nennt — Oberkante zuerst:**
+- **Canvas-Oberkante** (die Zahl, an der zwei richtige Messungen auseinandergingen) · Canvas-Höhe ·
+  Fensterhöhe (`innerHeight`) · **Überstand** (= Oberkante + Höhe − Fensterhöhe).
+- **Der Zustand dazu, immer:** Route · Ebene · Arbeitsbereich · gewähltes Werkzeug ·
+  `innerWidth × innerHeight`. Eine Zahl ohne diesen Zustand ist nicht nachprüfbar (§11.4) — und
+  damit kein Beleg.
+
+**6. Route hinter `auth`, Zugang fehlt:** der Beleg wird **serverseitig** geführt und die
+Konsolenprüfung **ausdrücklich als offen** benannt (§9.3) — **nicht** durch Anlegen eines Nutzers
+auf der Arbeits-DB ersetzt (eigener Posten, kein Test-Beifang).
+
+**Grenze:** dieses Rezept gilt der **Zeichenfläche**. Andere Flächen bekommen ihr eigenes, wenn sie
+es brauchen — kein Vorrat.
