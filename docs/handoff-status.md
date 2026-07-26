@@ -8169,3 +8169,90 @@ für die anderen beiden Rollen. **Ich bereite die Entscheidung vor; ich nehme si
 *Und ich schreibe hier keine Freigabe hin, die nach einer aussieht: „merge-reif" ist die Aussage des
 Evaluators über die Insel. Meine Aussage ist, dass der Umfang außerhalb der Insel gemessen vier
 Dateien groß ist und keine Migration enthält — mehr sage ich nicht, weil ich mehr nicht gemessen habe.*
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-74: fünf Stellen statt drei
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** Code `16fd2e8` · Bundle `7ca21c1`
+**Ballbesitz:** Evaluator.
+
+*(Auftragsdatei vollständig gelesen — 103 Zeilen, sechs Abschnitte.)*
+
+### 1. Die drei beauftragten Stellen
+
+| | vorher | jetzt |
+|---|---|---|
+| Beschreibung | „autark als ConfiguratorPackage (Vorlage/Angebot), später **verlustfrei ins Projekt**." | „**Ergebnis: eine Datei zum Herunterladen** — mit Bauart, Maßen und Material. Im Programm lässt sie sich noch nicht wieder öffnen; ins Gebäude kommt das Bauteil über den Experten, indem du eine Wand wählst." |
+| Statuszeile | „als ConfiguratorPackage **speicherbar**" | „**Ergebnis: Datei zum Herunterladen**" |
+| Meldung | „als ConfiguratorPackage **gespeichert** (Download)." | nennt **den Dateinamen** und den Weg ins Gebäude |
+
+**§3.1 eingehalten:** kein „noch nicht" ohne Aussage darüber, was stattdessen geht — jede der drei
+Stellen nennt den Weg über den Experten. **§3.2 eingehalten:** `grep` = **0** für „folgt",
+„in Kürze", „geplant", „demnächst".
+
+### 2. Zwei Stellen mehr, als der Auftrag kannte
+
+**§6 verlangt, solche Funde aufzunehmen statt abzuzählen** — hier sind sie:
+
+**Die vierte: der Fehlerfall.** `catch { /* Download optional */ }` verschluckte den Fehler, und die
+**Erfolgsmeldung lief trotzdem**. Wer zehn Minuten konfiguriert und danach „gespeichert" liest, ohne
+dass eine Datei entstanden ist, sucht sie im Download-Ordner. Die Meldung hängt jetzt am
+tatsächlichen Ausgang; im Fehlerfall steht dort *„Die Datei konnte nicht erzeugt werden — es ist
+nichts entstanden"* **plus** dem Weg, der offen bleibt.
+
+**Die fünfte: der Startbildschirm.** *„Fachplaner — jeder läuft autark, ohne Gebäude, und ist später
+**verlustfrei ins Projekt** übernehmbar."* Wörtlich dieselbe Zusage, eine Fläche weiter.
+
+**Gefunden hat sie die Sichtprobe, nicht der Quelltext:** nach dem Umbau prüfte ich die Seite auf
+die alten Wörter — und „verlustfrei" stand noch im Text, obwohl der Konfigurator sauber war. Erst
+das führte auf `StartView.tsx:149`. **Hätte ich nur die drei beauftragten Zeilen geprüft, wäre das
+Versprechen stehen geblieben — auf der Fläche, die der Nutzer zuerst sieht.**
+
+Ersetzt durch das, was die vier Arten in `KonfigArt` wirklich können: *„Fenster, Türen, Treppen und
+Heizkörper setzt der Experte ins Gebäude; sonst entsteht eine Datei zum Herunterladen."* Die Zusage
+ist damit **nicht größer als die Funktion** — testverriegelt gegen die vier Platzierungswege.
+
+### 3. Was unberührt blieb
+
+**K6 — die wahre Aussage steht Zeichen für Zeichen:** *„Als Fachobjekt speichern — als ein Command
+ins Gebäudemodell, Undo/Redo inklusive."* Sie ist richtig und darf beim Aufräumen nicht mitgehen.
+Damit sie es nicht tut, ist **ihre Einleitung mit in den Zweig gewandert** — sonst hätte die
+Änderung am gemeinsamen Vorspann auch den wahren Satz verändert.
+
+**Der Entscheidungsinhalt:** `routes/`, `app/Http/`, `database/` — **null Zeilen**. Das ist hier
+kein Formalkriterium, sondern das, was Yama entschieden hat.
+
+### 4. Belege
+
+| Was | Ergebnis |
+|---|---|
+| Gates | tsc **0** · schema:check **0** · test **0** · build **0** |
+| Tests | **1091 → 1102** · keine Zusage verschwunden |
+| K2 | `store/ domain/ geometry/ renderers/` — **null Zeilen** |
+| K4 | `a.download` unverändert, derselbe Dateiname |
+| K8 `public/*` im Code-Commit | **0**; Bundle als zweiter Commit `7ca21c1` |
+| **K7 Mutationen** | altes Wort zurück ⇒ **1 rot** · Fehlerfall verschlucken ⇒ **1 rot** · fünfte Stelle zurück ⇒ **1 rot** |
+
+**K9 Sichtprobe nach §11, mit Zustand — und mit echtem Download:**
+
+```
+Statuszeile     „Status: Entwurf · Ergebnis: Datei zum Herunterladen"
+Beschreibung    „Ergebnis: eine Datei zum Herunterladen — … über den Experten …"
+nach Übernehmen „Festverglasung: Datei „konfigurator-fenster-01_festverglasung.json"
+                 heruntergeladen. Ins Gebäude kommt das Bauteil über den Experten …"
+Datei           konfigurator-fenster-01_festverglasung.json · 636 Bytes · wirklich entstanden
+```
+Bild: `auf74-konfigurator.png`.
+
+### 5. Zur Formulierung — §6, zweiter Punkt
+
+Der Auftrag lädt ein zu sagen, wenn die ehrliche Fassung die Fläche schwach wirken lässt. **Sie tut
+es meines Erachtens nicht** — „Ergebnis: eine Datei zum Herunterladen" ist eine Zusage, die hält,
+und der Satz nennt zusätzlich den Weg ins Gebäude. **Aber der Wortlaut ist deine Entscheidung, nicht
+meine**; er steht oben vollständig, damit du ihn ändern kannst, ohne den Code zu lesen.
+
+### 6. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine Persistenz, keine Route, keine
+Migration — AUF-40 Teil B bleibt unverändert stehen. Kein Umbau des Konfigurators.
