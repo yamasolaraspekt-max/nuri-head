@@ -7262,3 +7262,69 @@ habe auf meinem Prüfblatt gemessen, nicht auf dem mit der zusätzlichen Leiste.
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine zweite Messstelle, keine feste
 Zahl, kein Umbau der Optionen-Zeile, kein Anfassen der Studio-Seite.
+
+---
+
+## PLANNER 26.07., 08:45 — AUF-65 freigegeben, AUF-73 gebaut. Und die Zahlen gehen noch auseinander
+
+**Vorher gelesen:** `git log -8` · `git show 13be5cb` (Votum AUF-65) · `git show 088c186` (AUF-73) ·
+Arbeitsbaum · Votum AUF-72.
+
+### 1. AUF-65 — FREIGABE
+
+`STATUS_LABEL.ok` = **„Vollständig"**, Schlüssel unverändert, kein Schritt wechselt seinen Status.
+Tests 1060 → **1068**. **Die Rückgabe von (b) hat der Evaluator bestätigt** — die Prämisse meines
+Auftrags war gemessen falsch, und er hat es sauber getrennt: Planner-Fehler, nicht Generator-Fehler.
+
+**Er hat dabei einen eigenen Fehler offengelegt:** sein erster `grep` war zu breit und fand drei
+Treffer, alle legitim. *„Grep zu breit, offengelegt."* — **Das ist die zweite Selbstkorrektur eines
+Prüfers heute**, und sie kostet ihn nichts außer Ehrlichkeit. Genau deshalb tragen seine Voten.
+
+### 2. AUF-73 — gebaut, und er widerspricht der Ursachenanalyse des Votums
+
+**Er konnte die 18 px zuerst nicht reproduzieren** — im Objekt-Blatt maß er Oberkante 323 und
+Überstand 0, **mit und ohne** Optionen-Zeile. Erst im **Studio-Blatt** trat es auf: Oberkante 359,
+Überstand konstant **8 px**.
+
+**Sein Befund weicht ab, und er sagt es deutlich:** zwischen Messstelle und Canvas liegt **nichts**
+— beide haben dieselbe Oberkante, die Elternkette ist durchgemessen. **Der Überstand entsteht
+unten:** `studio.blade.php` gibt der Insel nur `min-height: calc(100vh - 46px)`. **Ohne feste Höhe
+hat die Spalte keine Grundlage zum Schrumpfen**; die Inhaltsreihe wächst auf ihren Inhalt.
+
+> *„Die beanspruchte Höhe war richtig gemessen — sie war die falsche Größe."*
+
+**Gebaut:** `sichtbareHoehe(oben, hoehe, fenster)` — rein, ohne DOM, **abgerundet statt gerundet**,
+weil *„ein aufgerundetes Pixel genau das Pixel ist, das unten wieder heraussteht"* (8 → 1 → 0, in
+dieser Reihenfolge gemessen). **Überstand 0 in sechs Messungen** über zwei Blätter und drei Formate.
+
+### 3. Was ich dem Evaluator ausdrücklich mitgebe
+
+**Die Zahlen gehen immer noch auseinander, und das ist der Punkt, an dem geprüft werden muss:**
+
+| | Oberkante | Überstand vorher |
+|---|---|---|
+| Evaluator (Votum AUF-72) | **369** | **18 px** |
+| Planner (unabhängig) | **369** | — |
+| Generator (Studio-Blatt, AUF-73) | **359** | **8 px** |
+| Generator (Objekt-Blatt) | 323 | 0 |
+
+**Drei Messungen, drei Zahlen.** Der Fix meldet überall 0 — aber **die Ausgangslage stimmt zwischen
+Prüfer und Bauer nicht überein**, und solange sie das nicht tut, ist „jetzt 0" eine Aussage über
+zwei verschiedene Zustände. **Das ist genau der Fall, für den §11 geschrieben wurde** — und er ist
+noch nicht ausgeräumt, nur überdeckt.
+
+**Zweiter Punkt: begrenzen ist nicht dasselbe wie beheben.** `sichtbareHoehe` schneidet die Bühne auf
+das Sichtbare zu. Die **Ursache** — eine Spalte mit `min-height` und ohne Höhe — steht weiter im
+Blade. Die Frage an den Prüfer: **Verdeckt die Begrenzung einen Layout-Fehler, der an anderer Stelle
+zuschlägt?** Wenn ja, ist das ein eigener Posten, und dann gilt §9 (Blade-Regel): PHP-Suite in die
+Gate-Kette, betroffene Route in die Sichtprobe.
+
+*Ich entscheide das nicht vorab. Der Weg des Generators ist sauber begründet, und ich habe ihn nicht
+gemessen — er schon.*
+
+### 4. Stand
+
+**Archiv 59 · Arbeitsvorrat 19 · Abnahme-Stapel 1.**
+
+**Ballbesitz: Generator (AUF-71) · Evaluator (AUF-73, danach der Sichtprobe-Standard, der weiter
+offen ist).**
