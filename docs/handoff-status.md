@@ -13691,3 +13691,55 @@ lokal). Notiert, nicht behandelt.
 
 **Ballbesitz:** Generator AUF-38 Scheibe 2 (`StartView.tsx` + `hausplaner.css` im Baum — **die
 erste Scheibe, die wirklich umstellt**), Evaluator wartet, Stapel leer, Marke AUF-38.
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-38 Scheibe 2 (`StartView.tsx`)
+
+**Commits:** Code `e862b8f2` (`public/*` = **0 Zeilen**) · Artefakte `8ed190e3` (`hausplaner.js`
+**und** `hausplaner.css`).
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1292 · pass 1292 ·
+fail 0`, vorher 1288) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+K4-Schichten **null Zeilen**. **Klassifikation: `sichtbar`.**
+
+**Acht konstante `React.CSSProperties`-Objekte sind Klassen geworden.** Ihre Farben stehen in der CSS
+als `--hp-*`-Variablen, die zur Laufzeit aus `T` kommen — **kein Farbwert ist abgeschrieben**.
+Gemessen: **null rohe Farbwerte** in der CSS, und **jede benutzte Variable gibt es wirklich in `T`**.
+
+### Kriterium 9 buchstäblich belegt
+
+Dieselbe Seite **vorher und nachher**, drei Viewports, **ganzseitige** Bildschirmfotos
+sha256-verglichen:
+
+| Viewport | Ergebnis |
+|---|---|
+| 1440×900 | **PIXELGLEICH** (`417af3d338b32b84`) |
+| 1024×768 | **PIXELGLEICH** (`7737718ffb400b7e`) |
+| 375×780 | **PIXELGLEICH** (`15ef14f4aded8ef2`) |
+
+*Ein sichtbarer Unterschied wäre hier ein Fehler, kein Fortschritt.*
+
+- **Was NICHT gewandert ist:** alles, was aus dem Zeiger (`hover`), einem Zustand (`dominant`) oder
+  einer Messung kommt. **Ziel ist null *statische* Inline-Stile, nicht null Inline-Stile** —
+  testverriegelt in beide Richtungen: der Schwebezustand steht weiter inline, und weder `hover` noch
+  `dominant` sind in die CSS gewandert.
+- **Kein `!important`** (bräuchte es eins, stimmte die Reihenfolge nicht), **keine Medienabfrage**
+  (responsive ist L7), **keine Struktur-Änderung** — kein `div` kommt dazu, keins fällt weg.
+- **Mutation:** Variablenwert verfälscht ⇒ **2 rot**.
+
+**Die Auftragszahl ist gewandert:** der Auftrag nannte **20** Stellen für `StartView`, gemessen sind
+es heute **34** — AUF-56 und AUF-66 haben welche dazugelegt. Umgestellt sind die **acht statischen**
+Objekte; der Rest trägt Zustand oder Messung und bleibt **bewusst** inline.
+
+### Zwei geerbte Zusagen nachgezogen — zum dritten und vierten Mal derselbe Bautyp
+
+Eine nagelte die Spaltenregel auf den **Inline-Stil** fest, eine die **Anzahl** der
+Schatten-Fundstellen (10 und 3). Beide gingen rot, **obwohl die geschützte Eigenschaft unberührt
+war** — die Regel ist nur umgezogen. *Eine Zusage, die eine Fundstelle oder eine Anzahl festhält
+statt der Eigenschaft, bricht bei jeder Verschiebung.* Sie prüfen jetzt die Eigenschaft, unabhängig
+davon, wo sie wohnt.
+
+**Neunte Kommentar-Falle dieses Zyklus:** eine Zusage verbot `hover` in der CSS und traf den
+**Kommentar, der erklärt, dass `hover` dort nicht steht.**
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
