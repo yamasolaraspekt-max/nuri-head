@@ -1801,6 +1801,38 @@ Urteil: FREIGABE. Die angeschlossene Engine ist echt verdrahtet und rechnet nich
 die drei nicht-anschliessbaren sind mit gemessenem Grund zurueckgegeben statt halb eingebaut. Gates
 gruen, Bundle reproduzierbar, additiv. Ballbesitz: Planner.
 
+### AUF-52 Scheibe B+C (Code 97e941a1 · Bundle 7cf7f6ae) - L3 der Rest: 8 von 13 Engines angeschlossen - FREIGABE
+
+Deckt den kumulativen Stand seit Scheibe A: Scheibe B (tga-heizung, 2 von 3) hatte KEIN Votum (wie
+AUF-67 nachtraeglich mitgemessen), Scheibe C (der Rest, 4 von 5) ist BERICHTET. `sichtbar`, reine Insel.
+§8-Split sauber. Gates rein (/tmp-Auszug 7cf7f6ae): tsc 0 · schema 0 · test 1288 pass/0 fail · build 0 ·
+Bundle byte-gleich (reproduzierbar).
+
+Muster wie Scheibe A - angeschlossene Engines sind duenne Durchreichen, keine Rechnung im Panel:
+statische Imports (berechneTreppe/Sparren/Uw/... ), K8-Tests vergleichen `panel.berechne` gegen die
+Engine an HANDGESCHRIEBENEN Eingaben (FBH, Heizkoerper: deepEqual, betriebsLeistung/deckungsgrad/hinweis
+identisch).
+
+Die vom Planner gestellte Semantik-Frage (`ausreichend` -> `bestanden`): BEDEUTUNGSERHALTEND, gemessen.
+- `bewerteDeckung` (heizkoerperLeistung.ts): `const ausreichend = q >= raumheizlast` - das ist das
+  EINZIGE Bestehens-Urteil eines Deckungs-Checks (deckungsgrad = Zahl, hinweis = Text; der Boolean IST
+  `ausreichend`). Fuer eine Heizungs-Deckung heisst "ausreichend" (Waerme deckt die Heizlast) genau
+  "bestanden". Die Huelle fuehrt ein einheitliches `bestanden`; die Zuordnung `bestanden: r.ausreichend`
+  benennt um, ohne die Bedeutung zu verschieben - kein verstecktes zweites Kriterium geht verloren.
+- Gegen-Beweis AN DER ZUORDNUNGSSTELLE (Verfeinerung aus Scheibe A): `bestanden: r.ausreichend` -> fest
+  `true` -> "`ausreichend` wird zu `bestanden` UMBENANNT - der Wert bleibt unveraendert" rot (fail 2).
+  Die Mutation sitzt diesmal am Ort des moeglichen Fehlers (Feldzuordnung), nicht an einer
+  Ersatzstelle.
+
+Die zurueckgegebenen (ueber A+B+C: vier begruendet) - ehrlich, gleiche Ursache: dreimal ein
+LISTENEINGANG, den es im Modell nicht gibt (die Huelle kennt nur Einzelfelder; Engines, die einen Satz
+auslegen, haben keinen Weg hinein) - eine fehlende Schicht dazwischen, die in Yamas Objektmodell bereits
+einen Namen hat, kein Empfaenger-Problem. Eine Scheibe kann den Eingang nicht erfinden (Operanden-Gate).
+
+Urteil: FREIGABE. Die angeschlossenen Engines rechnen nicht selbst (Durchreiche, mit Zaehnen am richtigen
+Ort), die Umbenennung ist bedeutungserhaltend, die zurueckgegebenen sind mit gemessenem Grund
+zurueckgegeben. Gates gruen, Bundle reproduzierbar, additiv. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):

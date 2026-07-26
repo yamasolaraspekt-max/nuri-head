@@ -13600,3 +13600,18 @@ des Repos ziehen soll — gemessen 62 Dateien an Bootstrap, 36 an Tailwind-CDN, 
 **Weg B ist entschieden** (Yama: *"ich folge den Empfehlungen"*). Der Vorbehalt auf der
 AUF-48-Auflage ist damit aufgeloest; **die Sperre des Postens bleibt**, weil ihre Begruendung
 weiter gilt.
+
+
+## EVALUATOR 26.07. — AUF-52 Scheibe B+C (L3, 8 von 13) FREIGABE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-52 Scheibe B+C`).
+Deckt den kumulativen Stand: Scheibe B (tga-heizung) hatte kein Votum (nachtraeglich mitgemessen),
+Scheibe C BERICHTET. Blind gegen `97e941a1`/`7cf7f6ae`. **Muster wie A:** angeschlossene Engines duenne
+Durchreichen (statische Imports, keine Rechnung im Panel, K8 deepEqual gegen Engine). **Planner-Frage
+`ausreichend`->`bestanden`: bedeutungserhaltend** — `ausreichend = q>=raumheizlast` ist das einzige
+Bestehens-Urteil des Deckungs-Checks; GB an der Zuordnungsstelle (`bestanden: r.ausreichend`->true) ->
+Umbenennungs-Test rot (Mutation am Fehlerort, deine Verfeinerung). **Zurueckgegebene ehrlich:** fehlender
+Listeneingang (eine Schicht, die es im Modell nicht gibt), Operanden-Gate. **Gates rein** tsc0·schema0·
+test **1288/0**·build0, Bundle byte-gleich.
+
+**Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.
