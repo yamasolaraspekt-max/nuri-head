@@ -118,6 +118,15 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
 
         {/* Seitenpanel: Aufgabe + Empfehlung + Erweiterte Bearbeitung */}
         <aside style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* AUF-65: **Ist nichts zu sagen, wird geschwiegen** — dasselbe Muster wie beim Wegweiser
+              (AUF-45). Vorher stand die Überschrift „Aufgabe" über nichts und nahm Platz; eine
+              leere Überschrift sieht aus wie ein Ladefehler, nicht wie „nichts zu tun".
+              **Gemessen ist das heute der Regelfall, nicht die Ausnahme:** seit AUF-39 kommen die
+              Schritte aus dem Dokument (`dashboard/fahrschritte.ts`), und dort trägt **kein
+              einziger** der elf Schritte Aufgaben — die früheren stammten aus der inzwischen
+              stillgelegten Demo-Konstante. Solange Aufgaben nicht abgeleitet werden, zeigt diese
+              Fläche nichts an, statt eine leere Hülle zu zeigen. */}
+          {s.aufgaben.length > 0 && (
           <div style={{ background: T.surface, borderRadius: 22, padding: 20, boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>
             <h4 style={{ margin: '0 0 12px', fontSize: 12.5, fontWeight: 700, letterSpacing: '.09em', textTransform: 'uppercase', color: T.faint }}>Aufgabe</h4>
             {s.aufgaben.map((a) => (
@@ -130,6 +139,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
               </div>
             ))}
           </div>
+          )}
           {s.empfehlung && (
             <div style={{ background: T.accentSoft, borderRadius: 16, padding: 18 }}>
               <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: T.accentInk }}>Nächste empfohlene Aktion</div>

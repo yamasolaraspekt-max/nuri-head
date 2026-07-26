@@ -154,6 +154,16 @@ export const STEPS_STILLGELEGT: readonly Fahrschritt[] = [
   },
 ];
 
+/**
+ * AUF-65 — die Statuswörter beschreiben einen **Zustand**, sie behaupten keinen **Vorgang**.
+ *
+ * `ok` trug hier ein Wort aus der Freigabe-Sprache. Es behauptet einen Vorgang, den es nicht
+ * gegeben hat — **niemand hat etwas geprüft und bestätigt.** Der Wert wird aus dem Dokument abgeleitet (`dashboard/fahrschritte.ts`) und heißt „alle
+ * Prüfpunkte dieses Schrittes sind erfüllt". Genau das sagt jetzt auch die Beschriftung.
+ *
+ * **Die Schlüssel bleiben unverändert** (`ok`/`prog`/`warn`/`open`) — geändert ist das Wort, nicht
+ * der Wert. Die drei übrigen Beschriftungen beschreiben bereits Zustände und bleiben, wie sie sind.
+ */
 export const STATUS_LABEL: Record<SchrittStatus, string> = {
-  ok: 'Freigegeben', prog: 'In Bearbeitung', warn: 'Prüfung erforderlich', open: 'Offen',
+  ok: 'Vollständig', prog: 'In Bearbeitung', warn: 'Prüfung erforderlich', open: 'Offen',
 };
