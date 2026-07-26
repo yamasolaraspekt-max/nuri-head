@@ -9986,3 +9986,46 @@ stillgelegte Kataloge statt geloeschter, Schema-Pruefung und Waechter — und di
 **Mengenermittlung**, die in keinem Entwurf vorkommt und Yamas eigentliches Ziel ist.
 
 **Ballbesitz: Yama** (welche Zeile der Liste ein Posten wird). Generator und Evaluator unberuehrt.
+
+
+## PLANNER 26.07., 16:50 — AUF-78 berichtet, Marke rueckt auf AUF-82, Abnahme beauftragt
+
+**Der Generator hat geliefert** — Code `841865b`, Bundle `dcbe6ec`, Bericht `444f329`. Gemessen,
+bevor ich urteile: der Code-Commit traegt **0 Zeilen** in `public/`, der Bundle-Commit **nur**
+`public/hausplaner/hausplaner.js` (32/32). **§8 2b eingehalten, ohne dass ich es nachtragen muss** —
+meine Warnung von 16:30 kam an. Der Waechter lief auf `841865b` durch:
+`tsc=0 schema=0 test=0 phpsuite=0 gruen`.
+
+**Was mich an dem Bericht ueberzeugt, sind zwei Stellen, an denen er weniger behauptet als er
+duerfte.** Erstens misst er die **Middleware am Router**, statt „unveraendert" zu schreiben — das
+ist die Zusage, an der der ganze Posten haengt, und er belegt sie statt sie zu versichern.
+Zweitens hat er den **Klick auf eine Kachel bewusst nicht verdrahtet** und zurueckgegeben: bei einem
+echten Projekt hiesse „Weiterarbeiten" sonst, den gefuehrten Ablauf zu starten statt das Projekt zu
+oeffnen — **dieselbe Unwahrheit, die AUF-40 Teil A hier entfernt hat, nur mit echten Namen darauf.**
+Der Auftrag nannte in 129 Zeilen keine Navigation; er hat sie nicht dazuerfunden.
+
+**Dabei hat er einen Fehler mitkorrigiert, den ich nicht gesehen habe:** die Karte
+„Weiterarbeiten" begruendete ihre *in Entwicklung*-Marke mit *„die Liste ist noch nicht
+angebunden"* — **durch diesen Posten selbst falsch geworden.** Eine Begruendung, die der eigene
+Fortschritt widerlegt, ist genau die Sorte Rest, die spaeter jemand fuer Absicht haelt.
+
+**Und die andere Haelfte des Stillstands von heute Mittag ist jetzt auch geklaert, von ihm selbst:**
+seine Taktpruefung suchte die Marke als `| **AUF-NN** ⚡ **AKTIV**` — **hinter der Nummer, fett**.
+Auf der Tafel stand sie als `` `⚡ AKTIV` `` **in Backticks, in der Statusspalte**. Er hat „keine
+Marke" gemeldet, waehrend eine stand. Seine Konsequenz: die Marke **irgendwo in der Zeile** suchen,
+nicht an einer Position. **Ein Pruefer, der nur eine Schreibweise kennt, meldet Abwesenheit, wo
+Unkenntnis ist** — der Satz gilt weit ueber diesen Fall hinaus.
+
+**Marke gerueckt (§1c/§10.7): AUF-82 traegt jetzt `⚡ AKTIV`.** Sie wandert beim **Bericht**, nicht
+bei der Abnahme — sonst liefe der Generator bei jeder Pruefung leer.
+**§3b ist nicht mehr leer:** AUF-78 steht im Abnahme-Stapel, mit der Angabe, was zuerst zu pruefen ist.
+
+**Abnahme beauftragt:** `docs/auftraege/evaluator-auftrag-abnahme-auf78-2026-07-26.md`. Fuenf
+Stellen, an denen ich eine **unabhaengige** Messung will — allen voran das Rechtegatter und K11 als
+Mutation (**2 Tests rot, Verhalten *und* Quelltext; wird nur einer rot, ist die Verriegelung halb**).
+**Und die heute vertagte Worst-Case-Messung wird hier eingeloest:** der Grund ihrer Vertagung ist
+weg, der Arbeitsbaum ist leer, das Bundle gehoert wieder zu einem benannten Commit — **gemessen
+wird gegen `dcbe6ec`**. Reicht die Zeit nicht fuer beides: **Votum zuerst**, Messung als nicht
+gemessen melden. Ein Votum, das auf eine Zusatzmessung wartet, blockiert die Kette.
+
+**Ballbesitz: Evaluator (Abnahme AUF-78) · Generator (AUF-82).**
