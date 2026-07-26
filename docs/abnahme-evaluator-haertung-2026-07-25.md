@@ -1179,6 +1179,66 @@ das Ergebnis (Datei) und den echten Weg ins Modell; der Fehlerfall meldet keinen
 und dieselbe Zusage eine Flaeche weiter (StartView) ist mitgeraeumt. Mutationsfest. Damit ist die
 Layout-Inventur (B1-B8) vollstaendig abgearbeitet.
 
+### AUF-75 (cf72cb6) - der Waechter - FREIGABE MIT AUFLAGE
+
+Abgenommen als Erstanwendung der §13-Checkliste. AUF-75 ist reines Tooling
+(scripts/waechter.sh + scripts/hooks/post-commit + .gitignore + ein package.json-
+Script-Eintrag + docs/befunde/.gitkeep) - KEINE Insel-TS, kein app/, keine Route,
+keine Migration. Tor-1-Blick: kein Fach-/Rechts-Gate.
+
+Selbst gemessen (nicht aus dem Bericht uebernommen):
+- deterministisch, kein LLM: Skript gelesen; ruft nur `npm run ...` / `php artisan
+  test`, interpretiert nichts (Z.13-15, 71-88).
+- Betroffenheit aus dem Diff: Z.47-54 selbst nachvollzogen; eigener Grep gegen
+  e0d1144 -> `.blade.php` im Diff -> PHP-Gate=1 (phpsuite wuerde laufen).
+- ROT gegen e0d1144 (K3): waechter.log `12:22:33 e0d1144 ... test=1 phpsuite=1 rot`
+  (12:29:53 reproduziert), eingerahmt durch `12:21:05 ... gruen` mit repariertem
+  Baum - beweist, dass der Waechter den ARBEITSBAUM prueft und den kaputten Blade
+  echt faengt. Deckt sich mit meiner Komposition (Betroffenheit->php + AUF-64-
+  BladeCompiler-Beweis, dass der e0d1144-Blade die phpsuite rot macht).
+- Eigener Rot-Pfad-Beweis (Mini-Repo /tmp): Gate mit exit 3 erzwungen -> Log
+  `insel tsc=3 ... rot`, Rohausgabe `5be3f8d-tsc.txt` mit dem echten Gate-Output
+  (BOOM_TSC_FAIL_MARKER woertlich, KEINE Zusammenfassung), Waechter exit 1.
+- Eigener Beweis "nicht-gelaufen ist nie gruen": PATH ohne npm/php -> Log
+  `... nicht-gelaufen(npm-fehlt) ... nicht-gelaufen(php-fehlt) unvollstaendig`,
+  Waechter exit 1. Ein nicht gelaufener Test sieht nachweislich NICHT wie ein
+  bestandener aus - das Kernkriterium des Postens, mit eigener Hand belegt.
+- Hook nicht-blockierend: `nohup "$WURZEL/scripts/waechter.sh" >/dev/null 2>&1 &`,
+  danach `exit 0` - der Commit wartet nicht.
+- Nahtstellen additiv: package.json = genau ein neuer Eintrag (`"waechter"`),
+  Insel 0 Zeilen; `.gitignore` deckt `docs/befunde/*` (git check-ignore bestaetigt
+  waechter.log + .waechter-laeuft) -> Waechter-Laeufe schmutzen den Baum nicht.
+- --no-optional-locks 3/3 (2 im Skript Z.43/47 + 1 im Hook); kein Commit durch den
+  Waechter.
+
+AUFLAGE AUF-75.1 - die verwaiste Sperre self-heilt nicht (reproduzierbar):
+Live beobachtet: `docs/befunde/.waechter-laeuft` lag 12:35 -> 12:38+ OHNE haltenden
+Prozess (ps: kein waechter), und jeder Folgelauf meldete `uebersprungen (Lauf
+aktiv)` mit exit 0 - der Waechter war stumm geschaltet. Ursache: `mkdir`-Lock +
+`trap 'rmdir ...' EXIT` faengt normales Ende und die meisten Signale, aber NICHT
+SIGKILL; der per Hook nohup-gestartete Hintergrund-Lauf wird beim Session-/Terminal-
+Ende hart gekillt, bevor der trap laeuft. Keine Stale-Lock-Erkennung (keine PID,
+kein Alter) -> der Lock self-heilt nie. Folge: genau die vom Posten benannte Falle
+"ein umgangener Waechter ist schlechter als keiner, weil er Sicherheit vortaeuscht"
+- durch eine andere Tuer. Reproduktion: Waechter starten, `kill -9` (oder
+Hintergrund-Hook bei Session-Ende), danach meldet JEDER Commit dauerhaft
+`uebersprungen`, exit 0, ohne lebenden Halter. Richtung (baut der Generator, nicht
+ich): PID in den Lock schreiben; bei mkdir-Fehlschlag pruefen, ob der Halter lebt
+bzw. ob der Lock aelter als die laengste Laufdauer ist -> zurueckerobern +
+sichtbarer WARN statt stiller Dauer-Skip; `uebersprungen` nicht als exit 0 fuehren,
+wenn kein lebender Halter existiert.
+
+Hygiene (gemeldet, kein Code): den geleckten Laufzeit-Lock (gitignoriertes Scratch)
+entfernt, damit der Live-Waechter nicht stumm bleibt; danach `fc5e1d0 ...
+nichts-zu-pruefen gruen`, exit 0 - er greift wieder. §6: Baum danach sauber, kein
+Beifang von mir.
+
+Urteil: FREIGABE MIT AUFLAGE. Der Posten erfuellt jedes gestellte Kriterium; die
+Auflage AUF-75.1 ist ein Tooling-Folgeposten (Ballbesitz Generator), KEIN Insel-
+Merge-Blocker - AUF-75 aendert 0 Zeilen unter app/ resources/planner/ tests/
+database/ routes/.
+
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):

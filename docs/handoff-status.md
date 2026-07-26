@@ -8726,3 +8726,40 @@ ebenso.**
 
 **Ballbesitz: Evaluator (AUF-75, danach Sichtprobe-Standard) · Generator (hält an) · Planner (wacht
 auf die fünfte Zahl).**
+
+### 6. AUF-75-Votum (Evaluator) — FREIGABE MIT AUFLAGE
+
+**AUF-75 (`cf72cb6`) ist abgenommen** — Erstanwendung der §13-Checkliste. Volles Votum mit
+Rohbelegen in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-75`). Selbst gemessen,
+nicht aus dem Bericht: **rot gegen e0d1144** (Log `test=1 phpsuite=1 rot`, eingerahmt durch grün
+mit repariertem Baum + eigener Rot-Pfad-Beweis im Mini-Repo: exit-3-Gate → rot + Rohausgabe +
+exit 1), **nicht-gelaufen ≠ grün** (eigener Beweis: PATH ohne npm/php → `unvollstaendig`, exit 1),
+Rohausgabe roh, Hook nicht-blockierend, package.json additiv (1 Zeile, Insel 0), `.gitignore` deckt
+`docs/befunde` (check-ignore).
+
+**Auflage AUF-75.1 — die verwaiste Sperre self-heilt nicht (Ballbesitz Generator).** Live
+beobachtet: `docs/befunde/.waechter-laeuft` lag ohne haltenden Prozess, jeder Folgelauf
+„uebersprungen" exit 0 — der Wächter war stumm. `trap … EXIT` fängt SIGKILL nicht (nohup-Hintergrund-
+Lauf wird beim Session-Ende gekillt), keine Stale-Lock-Erkennung → genau die „täuscht Sicherheit
+vor"-Falle. Richtung: PID/Alter im Lock, zurückerobern + sichtbarer WARN statt stiller Dauer-Skip.
+Ich habe den geleckten Lock als Hygiene entfernt (gitignoriertes Scratch, gemeldet); der Wächter
+greift wieder (`fc5e1d0 … nichts-zu-pruefen gruen`).
+
+**Damit Bedingung 2:** AUF-75 ist abgenommen → der Abnahme-Stapel ist frei von AUF-75. Die Auflage
+AUF-75.1 ist ein **Tooling-Folgeposten, kein Insel-Merge-Blocker** — AUF-75 ändert 0 Zeilen unter
+`app/ resources/planner/ tests/ database/ routes/` (deckt sich mit §2). Aktualisierte Tabelle:
+
+| | Bedingung | Stand |
+|---|---|---|
+| 1 | Layout-Inventur vollständig | **erfüllt** |
+| 2 | Abnahme-Stapel leer | **erfüllt** (AUF-75 FREIGABE MIT AUFLAGE; AUF-75.1 = Tooling-Folge, kein Insel-Blocker) |
+| 3 | Baum sauber, 0 ungepusht | **erfüllt** (mein Beifang 0) |
+| 4 | volle Suite | **erfüllt** (§1) |
+| 5 | keine Migration | **erfüllt (0)** |
+
+**Fünf von fünf für die Insel** — Tor 2 (Merge nach main / Deploy) bleibt Yamas Entscheidung.
+Hinweis: HEAD ist inzwischen `fc5e1d0` (AUF-79, „Fortschritt schreibt sich selbst") — ebenfalls
+reines Tooling (`scripts/`, doc), berührt die Insel nicht; separater Posten für die nächste Runde.
+
+**Ballbesitz: Yama (Tor-2-Entscheidung) · Generator (Auflage AUF-75.1 + AUF-79 berichtet?) ·
+Evaluator (Sichtprobe-Standard, dann AUF-79/76/77/78).**
