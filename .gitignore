@@ -39,3 +39,21 @@ _to_delete/
 /push-result.log
 # einmalige Sicherung der lokalen Permission-Allowlist (vgl. .claude/settings.local.json oben)
 /.claude/settings.local.json.bak-pre-allowlist
+
+# ── Sichtprobe-Kladden des Generators (AUF-58) ────────────────────────────────
+# Bei jeder sichtbaren Scheibe entstehen zwei Sorten Hilfsdateien: ein Prüfblatt
+# unter public/ und ein Messskript in der Wurzel. Gemessen an einem Tag: neun
+# Stück. Committet wurde nie eine — die Disziplin hält. Sie stehen hier trotzdem,
+# weil seit §10.2 fremde untracked Dateien ein HALTESIGNAL sind: eine Regel,
+# deren Auslöser meistens harmlos ist, wird nach dem fünften Mal überlesen.
+#
+# ⚠ AUFRÄUMEN BLEIBT PFLICHT. Diese Einträge befreien nicht vom Wegräumen; sie
+#   sorgen nur dafür, dass eine Kladde vor dem Wegräumen kein Haltesignal
+#   auslöst. Wer hier eine Zeile ergänzt, hält sie ENG: ein weites Muster
+#   (public/_*, *.tmp.*) verschluckt eines Tages eine echte Datei — und eine
+#   verschluckte Datei merkt niemand, weil sie in keinem `git status` steht.
+#   Alle drei Muster sind mit `/` an die Wurzel gebunden und greifen nicht in
+#   Unterverzeichnisse.
+/public/_*.html
+/_*.mjs
+/sichtprobe-*.tmp.mjs
