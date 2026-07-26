@@ -17,6 +17,21 @@ export const T = {
   canvasGrid: '#eef0f2', canvasGridStrong: '#e2e4e7',
   canvasWall: '#374151', canvasWallFill: '#4b5563', canvasWallGhost: 'rgba(55,65,81,0.06)',
   materialWood: '#b08968',
+
+  // AUF-56 — **zwei Elevation-Rollen, wertgleich Zeichen für Zeichen.**
+  //
+  // Eine Rolle ist die ganze Aussage „wie hoch schwebt diese Fläche", nicht nur ihre Farbe: Versatz,
+  // Weichzeichnung und Farbwert gehören zusammen. Ein reiner Farb-Token liesse die Geometrie
+  // weiterhin an jeder Stelle einzeln stehen — die zweite Wahrheit wäre nur kleiner geworden.
+  //
+  // **Was NICHT angeglichen wird:** die rund acht „nah dran"-Werte und die selteneren Schatten
+  // (`.18`, `.30`, der weisse). Ihre Angleichung waere eine **sichtbare** Farbaenderung und bleibt
+  // Yamas Entscheidung. Ein Token fuer einen einzigen Aufruf ist ausserdem keine Rolle, sondern eine
+  // Umbenennung.
+  /** Ruhende Flaeche: Karte, Plakette, Panel. 10 Fundstellen am 26.07. */
+  schattenFlach: '0 1px 2px rgba(28,40,48,.05)',
+  /** Angehobene Flaeche: Karte unter dem Zeiger. 3 Fundstellen am 26.07. */
+  schattenGehoben: '0 10px 34px rgba(28,50,55,.10)',
 } as const;
 
 /**

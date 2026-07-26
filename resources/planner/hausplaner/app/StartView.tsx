@@ -36,7 +36,7 @@ const themeHead: React.CSSProperties = { display: 'flex', alignItems: 'baseline'
 // seine Mindestbreite, und die Karten ragten über den Rand. `auto-fit` legt so viele Spalten an,
 // wie wirklich passen: drei bei 1440, eine bei 390.
 const grid3: React.CSSProperties = { display: 'grid', gap: 16, gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))' };
-const cardBase: React.CSSProperties = { background: T.surface, borderRadius: 16, padding: 22, cursor: 'pointer', boxShadow: '0 1px 2px rgba(28,40,48,.05)', border: '1px solid transparent' };
+const cardBase: React.CSSProperties = { background: T.surface, borderRadius: 16, padding: 22, cursor: 'pointer', boxShadow: T.schattenFlach, border: '1px solid transparent' };
 const icoBox: React.CSSProperties = { width: 52, height: 52, borderRadius: 13, background: T.accentSoft, color: T.accentInk, display: 'grid', placeItems: 'center', marginBottom: 16 };
 
 /**
@@ -65,7 +65,7 @@ function Karte({ ico, titel, desc, onClick, grund }: { ico: string; titel: strin
       role="button" tabIndex={0} onClick={onClick}
       onKeyDown={(e) => { if (istAusloeser(e)) onClick(); }}
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
-      style={{ ...cardBase, transform: hover ? 'translateY(-3px)' : 'none', boxShadow: hover ? '0 10px 34px rgba(28,50,55,.10)' : cardBase.boxShadow, borderColor: hover ? '#dcebe9' : 'transparent', transition: 'transform .14s, box-shadow .14s, border-color .14s' }}
+      style={{ ...cardBase, transform: hover ? 'translateY(-3px)' : 'none', boxShadow: hover ? T.schattenGehoben : cardBase.boxShadow, borderColor: hover ? '#dcebe9' : 'transparent', transition: 'transform .14s, box-shadow .14s, border-color .14s' }}
     >
       <span style={icoBox}><Ikon inhalt={ico} size={26} /></span>
       <div style={{ fontSize: 15.5, fontWeight: 700 }}>{titel}</div>
@@ -122,7 +122,7 @@ function ProjektKachel({ z, dominant }: { z: ProjektEintrag; dominant: boolean }
     background: dominant ? T.accentSoft : T.surface,
     color: dominant ? T.accentInk : T.ink,
     borderRadius: 14, padding: dominant ? '16px 20px' : '12px 16px',
-    boxShadow: '0 1px 2px rgba(28,40,48,.05)',
+    boxShadow: T.schattenFlach,
     border: dominant ? `1px solid ${T.accent}` : '1px solid transparent',
     minWidth: dominant ? 0 : 230,
     ...(dominant ? { maxWidth: 560 } : {}),
@@ -144,6 +144,12 @@ function ProjektKachel({ z, dominant }: { z: ProjektEintrag; dominant: boolean }
       style={{
         ...grund, cursor: 'pointer', textDecoration: 'none',
         transform: hover ? 'translateY(-2px)' : 'none',
+        // AUF-56 — **der eine Wert, der roh bleibt, und zwar mit Ansage.** Er ist der Rolle
+        // `T.schattenGehoben` nah, aber nicht gleich: 30 px Weichzeichnung statt 34. Ihn
+        // anzugleichen waere eine **sichtbare** Aenderung, und die bleibt Yamas Entscheidung —
+        // dieselbe Regel, unter der die acht anderen „nah dran"-Werte stehen bleiben.
+        // **Er stammt aus AUF-66, also von mir**: ich habe die 30 ohne Grund geschrieben, waehrend
+        // dieselbe Datei zwei Zeilen hoeher 34 fuehrt. Gemeldet, nicht heimlich geradegezogen.
         boxShadow: hover ? '0 10px 30px rgba(28,50,55,.10)' : grund.boxShadow,
         transition: 'transform .14s, box-shadow .14s',
       }}
@@ -156,7 +162,7 @@ function HubKarte({ f, onKonfigurator }: { f: FachHub; onKonfigurator: Props['on
   return (
     <div
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
-      style={{ ...cardBase, transform: hover ? 'translateY(-3px)' : 'none', boxShadow: hover ? '0 10px 34px rgba(28,50,55,.10)' : cardBase.boxShadow, borderColor: hover ? '#dcebe9' : 'transparent', transition: 'transform .14s, box-shadow .14s, border-color .14s' }}
+      style={{ ...cardBase, transform: hover ? 'translateY(-3px)' : 'none', boxShadow: hover ? T.schattenGehoben : cardBase.boxShadow, borderColor: hover ? '#dcebe9' : 'transparent', transition: 'transform .14s, box-shadow .14s, border-color .14s' }}
     >
       {f.hub && <span style={{ display: 'inline-block', fontSize: 11, fontWeight: 700, letterSpacing: '.05em', textTransform: 'uppercase', color: T.accent, marginBottom: 2 }}>Hub</span>}
       <span style={{ ...icoBox, width: 40, height: 40, borderRadius: 11, marginBottom: 12 }}><Ikon inhalt={f.icon} size={20} /></span>
@@ -192,7 +198,7 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
             sie leer ist, sagt die Fläche das, statt Beispiele zu zeigen, die wie Projekte aussehen.
             **Die echte Liste braucht eine Route und ist Teil B** (bei Yama). */}
         {projekte.length === 0 ? (
-          <div style={{ marginTop: 24, background: T.surface, borderRadius: 14, padding: '14px 16px', boxShadow: '0 1px 2px rgba(28,40,48,.05)', maxWidth: 520 }}>
+          <div style={{ marginTop: 24, background: T.surface, borderRadius: 14, padding: '14px 16px', boxShadow: T.schattenFlach, maxWidth: 520 }}>
             <div style={{ fontSize: 13.5, fontWeight: 700 }}>Noch kein Projekt geöffnet.</div>
             <div style={{ fontSize: 12.5, color: T.muted, marginTop: 4 }}>
               Ein Vorhaben beginnt unten mit <b>Hausplaner</b> — oder mit einem der Fachplaner, die auch ohne Gebäude laufen.

@@ -119,7 +119,7 @@ export function HausplanerStudio(): React.ReactElement {
         </div>
         <span style={{ display: 'flex', alignItems: 'center', gap: 7, color: T.muted, fontSize: 13 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: st.farbe }} />{st.label}{scene && kannSpeichern ? ` · Rev. ${scene.revision}` : ''}</span>
         <span style={{ flex: 1 }} />
-        <div style={{ display: 'flex', background: T.surface, borderRadius: 12, padding: 4, boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>
+        <div style={{ display: 'flex', background: T.surface, borderRadius: 12, padding: 4, boxShadow: T.schattenFlach }}>
           {modeBtn('start', 'Übersicht', '<path d="M4 5h16M4 12h16M4 19h10"/>')}
           {modeBtn('expert', 'Expertenmodus', '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>')}
         </div>
@@ -171,7 +171,12 @@ export function HausplanerStudio(): React.ReactElement {
                 </div>
               ))}
             </div>
-            {!navZu && <div style={{ padding: '12px 16px', borderTop: `1px solid ${T.hair2}`, fontSize: 12, color: T.faint }}>Erweiterbar — weitere Module folgen.</div>}
+            {/* AUF-56 (Nachtrag Yama, 26.07.): Hier stand **„Erweiterbar — weitere Module
+                folgen."** Derselbe Fall wie in der Schiene und wie in AUF-55: ein Versprechen auf
+                später, das über den Inhalt nichts sagt. **Jetzt zählt der Fuss, was in der Liste
+                darüber wirklich steht** — gerechnet aus `PROJ` und `FACH`, nicht abgeschrieben.
+                Eine gezählte Zahl kann nicht veralten; eine abgetippte schon. */}
+            {!navZu && <div style={{ padding: '12px 16px', borderTop: `1px solid ${T.hair2}`, fontSize: 12, color: T.faint }}>{PROJ.length} Projekt-Einstiege · {FACH.length} Fachplaner mit {FACH.reduce((n, f) => n + (f.sub?.length ?? 0), 0)} Untermodulen</div>}
           </nav>
         )}
 
@@ -194,7 +199,7 @@ export function HausplanerStudio(): React.ReactElement {
       </div>
 
       {toast && (
-        <div style={{ position: 'fixed', left: '50%', bottom: 34, transform: 'translateX(-50%)', background: '#1a262a', color: T.surface, padding: '12px 20px', borderRadius: 12, fontSize: 13.5, boxShadow: '0 10px 34px rgba(28,50,55,.10)', zIndex: 80, maxWidth: 560 }}>{toast}</div>
+        <div style={{ position: 'fixed', left: '50%', bottom: 34, transform: 'translateX(-50%)', background: '#1a262a', color: T.surface, padding: '12px 20px', borderRadius: 12, fontSize: 13.5, boxShadow: T.schattenGehoben, zIndex: 80, maxWidth: 560 }}>{toast}</div>
       )}
       {konfig && (
         <ConfigWizard art={konfig} onClose={() => setKonfig(null)} onÜbernehmen={(nachricht) => { setKonfig(null); zeigeToast(nachricht); }} />

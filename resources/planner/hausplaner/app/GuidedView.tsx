@@ -51,7 +51,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
                 onKeyDown={(e) => { if (istAusloeser(e)) setSchritt(i); }}
                 style={{ display: 'flex', alignItems: 'center', gap: 10, flex: '0 0 auto', cursor: 'pointer', opacity: aktiv ? 1 : 0.6 }}
               >
-                <span style={{ width: 30, height: 30, borderRadius: '50%', background: rn, color: rnInk, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 13, boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>{sym}</span>
+                <span style={{ width: 30, height: 30, borderRadius: '50%', background: rn, color: rnInk, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 13, boxShadow: T.schattenFlach }}>{sym}</span>
                 <span style={{ fontSize: 13, fontWeight: 600, color: aktiv ? T.ink : T.muted, whiteSpace: 'nowrap' }}>{st.titel}</span>
               </div>
               {i < n - 1 && <span style={{ width: 26, height: 2, background: T.hair, borderRadius: 2, margin: '0 2px', flex: '0 0 auto' }} />}
@@ -63,7 +63,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
       {/* Board: Fokus + Seitenpanel */}
       <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, minHeight: 0 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
-          <div style={{ background: T.surface, borderRadius: 22, padding: '26px 28px', boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>
+          <div style={{ background: T.surface, borderRadius: 22, padding: '26px 28px', boxShadow: T.schattenFlach }}>
             <div style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: T.accent }}>Schritt {schritt + 1} von {n}</div>
             <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-.01em', margin: '6px 0 4px' }}>{s.titel}</div>
             <div style={{ color: T.muted, fontSize: 14.5 }}>{s.hinweis}</div>
@@ -95,7 +95,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
           </div>
 
           {/* Fokus-Canvas (Muster-Grundriss) */}
-          <div style={{ flex: 1, minHeight: 280, background: T.surface, borderRadius: 22, boxShadow: '0 1px 2px rgba(28,40,48,.05)', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ flex: 1, minHeight: 280, background: T.surface, borderRadius: 22, boxShadow: T.schattenFlach, position: 'relative', overflow: 'hidden' }}>
             <span style={{ position: 'absolute', top: 14, left: 16, fontSize: 12, color: T.muted, background: 'rgba(255,255,255,.7)', padding: '3px 10px', borderRadius: 8 }}>{schritt <= 2 ? 'Erdgeschoss · Grundriss · 1:50' : s.titel}</span>
             <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} viewBox="0 0 640 360" preserveAspectRatio="xMidYMid meet">
               <g>
@@ -127,7 +127,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
               stillgelegten Demo-Konstante. Solange Aufgaben nicht abgeleitet werden, zeigt diese
               Fläche nichts an, statt eine leere Hülle zu zeigen. */}
           {s.aufgaben.length > 0 && (
-          <div style={{ background: T.surface, borderRadius: 22, padding: 20, boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>
+          <div style={{ background: T.surface, borderRadius: 22, padding: 20, boxShadow: T.schattenFlach }}>
             <h4 style={{ margin: '0 0 12px', fontSize: 12.5, fontWeight: 700, letterSpacing: '.09em', textTransform: 'uppercase', color: T.faint }}>Aufgabe</h4>
             {s.aufgaben.map((a) => (
               <div key={a.titel} style={{ display: 'flex', flexDirection: 'column', gap: 5, padding: '12px 0', borderBottom: `1px solid ${T.hair2}` }}>
@@ -155,7 +155,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
 
       {/* Navigation */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '18px 2px 2px' }}>
-        <button type="button" onClick={() => setSchritt(Math.max(0, schritt - 1))} style={{ border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600, fontSize: 14, padding: '11px 20px', borderRadius: 12, cursor: 'pointer', boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>Zurück</button>
+        <button type="button" onClick={() => setSchritt(Math.max(0, schritt - 1))} style={{ border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600, fontSize: 14, padding: '11px 20px', borderRadius: 12, cursor: 'pointer', boxShadow: T.schattenFlach }}>Zurück</button>
         <span style={{ flex: 1 }} />
         <span style={{ fontSize: 13, color: T.muted }}>Schritt {schritt + 1} von {n}</span>
         <button type="button" onClick={() => setSchritt(Math.min(n - 1, schritt + 1))} style={{ border: 0, background: T.brand, color: T.surface, fontWeight: 600, fontSize: 14, padding: '11px 26px', borderRadius: 12, cursor: 'pointer' }}>Weiter</button>

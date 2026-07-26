@@ -39,7 +39,7 @@ import { TOOL_KATALOG } from './tools/toolCatalog';
 import { handlungZuGrund } from './tools/vorbedingungen';
 import { brauchtOptionen } from './tools/werkzeugVertrag';
 import { ReiterLeiste } from './dashboard/ReiterLeiste';
-import { SCHIENEN_REITER, SCHIENE_STANDARD, type SchienenReiterId } from './dashboard/schienenReiter';
+import { SCHIENEN_REITER, SCHIENE_STANDARD, schienenReiter, type SchienenReiterId } from './dashboard/schienenReiter';
 import { ARBEITSBEREICHE, arbeitsbereich } from './dashboard/arbeitsbereiche';
 import { gruppenFuer } from './dashboard/werkzeugGruppen';
 import { ladeArbeitsbereich, speichereArbeitsbereich } from './state/arbeitsbereichSpeicher';
@@ -1441,8 +1441,16 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           </>)}
           </div>
           {/* Fuss der Schiene: steht UNTER dem Inhaltsbereich, gehört also keinem Reiter und
-              scrollt nicht mit — er gilt für alle drei. */}
-          <div style={{ padding: '10px 12px', fontSize: 11, color: T.muted, borderTop: `1px solid ${T.canvasGrid}`, flex: '0 0 auto' }}>Erweiterbar – Module folgen.</div>
+              scrollt nicht mit — er gilt für alle drei.
+
+              AUF-56 (Nachtrag Yama, 26.07.): Hier stand **„Erweiterbar – Module folgen."** — genau
+              die Vertröstung, die AUF-55 eine Fläche weiter entfernt hat. Sie sagte nichts über den
+              Inhalt und alterte zu einer Unwahrheit, sobald niemand sie einlöst. **Jetzt sagt der
+              Fuss, was im gerade sichtbaren Reiter steht** — und zwar mit dem Satz, den
+              `SCHIENEN_REITER` ohnehin führt. Der lag bis heute nur im Tooltip, also faktisch
+              nirgends; sichtbar gemacht statt neu erfunden. Kein zweiter Text, keine zweite
+              Wahrheit. */}
+          <div style={{ padding: '10px 12px', fontSize: 11, color: T.muted, borderTop: `1px solid ${T.canvasGrid}`, flex: '0 0 auto' }}>{schienenReiter(schienenTab)?.hinweis}</div>
         </div>
         <div style={{ display: modus === '3d' ? 'none' : 'block', width: stageBreite, borderRight: modus === 'split' ? `1px solid ${T.hair}` : 'none' }}>
         <Stage

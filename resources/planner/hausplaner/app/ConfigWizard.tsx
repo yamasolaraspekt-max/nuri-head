@@ -87,7 +87,7 @@ export function ConfigWizard({ art, standalone = true, onClose, onÜbernehmen }:
           {SCHRITTE.map((n, i) => (
             <React.Fragment key={n}>
               <div role="button" tabIndex={0} onClick={() => setSchritt(i)} onKeyDown={(e) => { if (istAusloeser(e)) setSchritt(i); }} style={{ display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer' }}>
-                <span style={{ width: 26, height: 26, borderRadius: '50%', background: i === schritt ? T.accent : (i < schritt ? T.ok : T.surface2), color: (i === schritt || i < schritt) ? T.surface : T.muted, display: 'grid', placeItems: 'center', fontSize: 12, fontWeight: 700, boxShadow: '0 1px 2px rgba(28,40,48,.05)' }}>{i < schritt ? '✓' : i + 1}</span>
+                <span style={{ width: 26, height: 26, borderRadius: '50%', background: i === schritt ? T.accent : (i < schritt ? T.ok : T.surface2), color: (i === schritt || i < schritt) ? T.surface : T.muted, display: 'grid', placeItems: 'center', fontSize: 12, fontWeight: 700, boxShadow: T.schattenFlach }}>{i < schritt ? '✓' : i + 1}</span>
                 {i === schritt && <span style={{ fontSize: 12, color: T.ink, fontWeight: 600 }}>{n}</span>}
               </div>
               {i < SCHRITTE.length - 1 && <span style={{ width: 20, height: 2, background: T.hair, margin: '0 6px' }} />}
