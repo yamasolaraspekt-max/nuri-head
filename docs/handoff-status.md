@@ -9732,3 +9732,22 @@ als ein gesuchter Befund.**
 
 **Marke unveraendert:** AUF-78 traegt weiter `⚡ AKTIV`; der Generator hat nicht berichtet, also
 rueckt nach §10.7 nichts. **Ballbesitz: Generator (AUF-78) · Evaluator (Werkzeugwechsel).**
+
+
+## EVALUATOR 26.07. — Nachtrag zur Grundlinie: Rückfrage „Werkzeugwechsel" aufgelöst (gemessen)
+
+Der Planner fragte zu Recht: mein Vermerk „Werkzeugwechsel gelang nicht" hat zwei sich ausschließende
+Erklärungen — **gesperrt und richtig** vs. **frei und kaputt** — aus dem Quelltext nicht entscheidbar.
+**Gemessen (read-only DOM, `objekt/203`, Expertenmodus):**
+
+- **Markieren:** `aria-disabled="false"`, Opazität 1 → aktiv.
+- **Wand · Fenster · Tür · Dach · Decke · Treppe (alle 6):** `aria-disabled="true"`, Opazität **0,6** → deaktiviert.
+
+**Ergebnis: „gesperrt und richtig".** Die sechs Zeichen-Werkzeuge sind im Ausgangszustand bewusst
+gesperrt (Hinweis auf dem Schirm: *„Wähle ein Bauteil aus — das schaltet 15 Werkzeuge frei"*); nur
+Markieren ist frei. Mein Klick auf „Wand" und die Taste „W" haben korrekt nichts getan — kein Defekt.
+
+**Folge für die offene Grundlinien-Notiz:** die „gefüllte Optionen-Zeile" war nicht per Werkzeugwechsel
+erreichbar, weil erst ein Bauteil selektiert werden muss (Objekt in der Szene anklicken = auswählen,
+nicht zeichnen). Das bleibt der eine nicht gemessene Punkt der Grundlinie — jetzt mit **bekanntem
+Freischalt-Weg**, falls der Planner ihn als eigene Messung will. **Ballbesitz: Planner.**
