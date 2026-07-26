@@ -13298,3 +13298,54 @@ wirklich getrennt laufen. **Zuletzt** die Rueckgabe. §13.6 gilt.
 
 **Ballbesitz:** Evaluator. Generator faehrt Scheibe C (U-Wert · Fensterprodukt · Abwasser · Kueche ·
 PV). Tafel 85 Zeilen, 0 fehlerhaft, eine Marke (AUF-52).
+
+
+## PLANNER 26.07., 23:15 (CEST) — Wann die Dachdaten sichtbar werden. Fuenf Stufen, ein gemessener Takt, keine Termine
+
+Yama: *"Wann sind die Daten bei uns implementiert, sichtbar und funktionstuechtig?"*
+Papier: Nachtrag 3 in `docs/planner/dach-zimmerei-pv-bestandsaufnahme-2026-07-26.md`.
+
+**Zuerst eine Richtigstellung meiner eigenen Zahl.** Ich hatte *"rund 150 Eintraege"* geschrieben —
+Zaehlfehler, ich habe jede `id:` gezaehlt, auch die der Aufbauten. Genau:
+
+```
+Vorlagen-Eintraege                72   (64 pitched + 8 flat)
+verschiedene Dachformen           22
+Formen, die RoofShape kennt        8
+```
+
+**22 Dachformen liegen da, 8 kann das Schema darstellen.** Die 14 anderen — Mansard, Mansardwalm,
+Krueppelwalm, Zeltdach, Schleppdach, versetztes Pult, Schmetterling, Grabendach, Sheddach,
+Tonnendach, Bogendach, Pyramidendach, Halle, Mehrkoerper — sind **nicht speicherbar**, nicht nur
+nicht waehlbar. *Kleiner als meine 150, groesser als es klingt.*
+
+**Fuenf Stufen, geordnet nach dem, was zuerst sichtbar wird:**
+**1** Voreinstellungen (das `<select>` aus `dachformVorlagen` speisen statt aus einer festen Liste)
+— **klein, haengt an nichts**, kein Schema, keine Entscheidung.
+**2** die 14 fehlenden Formen — braucht **Yamas Schema-Entscheidung** (additiv, Bestandsdaten
+bleiben gueltig).
+**3** Tragwerk sichtbar (Sparren/Pfetten/Latten/Pfannen aus `sparrenBerechnung`) — **gross**,
+haengt an AUF-48, Formgeber aus der Blade-Datei als **Vorlage, nicht als Bauteil**.
+**4** PV-Kette: `pvBelegung` + `belegungStatus`, und `dach_flaechen[]` an die **vorhandene**
+WR-Auslegung im CRM — der Vertrag steht seit 16.07.
+**5** Dachhaken/Unterkonstruktion/Montagesystem — **echter Neubau**, setzt die Bibliotheksfrage
+voraus.
+
+**Zum "wann" — was ich ehrlich sagen kann und was nicht.**
+**Keine Termine.** Ich habe heute zweimal Zahlen erfunden und beide Male richtigstellen muessen;
+eine Terminzusage waere die dritte.
+**Wohl aber einen gemessenen Takt**, aus dem Ledger von heute: **15 Posten abgenommen, kein rotes
+Votum**; AUF-52 Scheibe A gezogen 21:54, berichtet 22:41, abgenommen 22:46 = **52 Minuten**;
+Scheibe B berichtet **14 Minuten** nach der Freigabe von A. **Eine Scheibe dieser Groesse laeuft in
+einer halben bis knappen Stunde durch, Abnahme eingerechnet.** Stufe 1 ist eine Scheibe dieser
+Groesse. Stufe 3 und 5 sind es nicht.
+
+**Der Takt gilt aber nur fuer den Posten, der dran ist.** Vor dem Dach stehen AUF-52 Scheibe C,
+dann AUF-48 (Yamas Entscheidung von heute), dann AUF-50 mit sechs Stufen.
+
+**Meine Empfehlung, und sie kommt ohne Regelbruch aus:** **Stufe 1 als Auflage an AUF-52 Scheibe C**
+statt als neuer Posten. Scheibe C beruehrt dieselbe Fachflaechen-Huelle — es waere die Erweiterung
+eines laufenden Postens, kein neuer nach §14. **Nur Stufe 1 ist heute frei**; 2 braucht die
+Schema-Entscheidung, 3 haengt an AUF-48, 4 und 5 kommen danach.
+
+**Ballbesitz:** Evaluator (AUF-52 Scheibe B), Generator Scheibe C, Marke AUF-52.

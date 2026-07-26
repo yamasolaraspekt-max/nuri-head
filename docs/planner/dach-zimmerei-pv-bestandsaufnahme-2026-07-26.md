@@ -312,3 +312,70 @@ benannte Naht zwischen zwei Dingen, die es beide gibt.
    wirklich neu gebaut werden muss, und weil es die Bibliotheksfrage voraussetzt.
 
 **Nichts davon ist heute ein Posten (§14).** Alles steht auf der Befundliste.
+
+
+---
+
+# NACHTRAG 3 — Wann sind die Daten hier sichtbar und benutzbar?
+
+Yamas Frage: *"Wie gehen wir mit den Daten um, wann sind sie bei uns implementiert, sichtbar und
+funktionstuechtig?"*
+
+**Zuerst eine Richtigstellung meiner eigenen Zahl.** Ich hatte oben *"rund 150 Eintraege"*
+geschrieben — das war ein Zaehlfehler (ich habe jede `id:` gezaehlt, auch die der Aufbauten).
+Genau gezaehlt:
+
+```
+Vorlagen-Eintraege (category)              72   (64 'pitched' + 8 'flat')
+verschiedene Dachformen (shapeKey)         22
+Formen, die das Schema kennt (RoofShape)    8
+```
+
+**22 Dachformen liegen in den Vorlagen, 8 kann das Schema darstellen.** Die 14 anderen —
+`mansard`, `mansardwalm`, `krueppelwalm`, `zeltdach`, `schleppdach`, `versetztes-pult`,
+`schmetterling`, `grabendach`, `sheddach`, `tonnendach`, `bogendach`, `pyramidendach`, `halle`,
+`mehrkoerper`/`mehrfluegel` — sind **nicht speicherbar**, nicht nur nicht waehlbar.
+
+*Kleiner als 150, groesser als es klingt:* 22 Dachformen mit 72 fertigen Voreinstellungen sind
+ein Katalog, den niemand an einem Tag baut.
+
+## Fuenf Stufen, nach dem geordnet, was zuerst **sichtbar** wird
+
+| Stufe | Was der Nutzer danach sieht | Groesse | Haengt an |
+|---|---|---|---|
+| **1 · Voreinstellungen** | Statt 8 nackter Formen die fertigen Vorlagen mit Deckung und Neigung: *Sattel Schiefer steil*, *Sattel Blech flachgeneigt*, *Pult Blech*, *Pult Ziegel*, *Flach Gruendach* … Das `<select>` wird aus `dachformVorlagen` gespeist statt aus einer festen Liste. | **klein** — eine Scheibe | **nichts.** Kein Schema, keine Entscheidung. Die Formen sind darstellbar. |
+| **2 · Die 14 fehlenden Formen** | Mansard, Krueppelwalm, Zeltdach, Sheddach, Tonnendach … waehlbar **und speicherbar** | mittel | **Yamas Entscheidung:** `RoofShape` erweitern = persistierte Aufzaehlung = Tor 2. Additiv, Bestandsdaten bleiben gueltig. |
+| **3 · Tragwerk sichtbar** | Sparren, Pfetten, Latten, Pfannen als Koerper im 3D, mit Massketten — gespeist aus `sparrenBerechnung` (heute abgenommen) | **gross** | AUF-48 (dieselbe Datei). Formgeber aus `roof.blade.php` als Vorlage, **nicht** die Datei. |
+| **4 · PV-Kette** | Belegung sichtbar, Status *pruefpflichtig* statt stillem Verschwinden, und `dach_flaechen[]` an die **vorhandene** WR-Auslegung im CRM | mittel | Vertrag steht seit 16.07. im Papier. `pvBelegung` + `belegungStatus` anschliessen. |
+| **5 · Dachhaken, Unterkonstruktion, Montagesystem** | Stueckliste bis zum Montageteil | **gross, echter Neubau** | Bibliotheksfrage (Produkt verweisen statt kopieren) |
+
+## Was ich zum „wann" ehrlich sagen kann — und was nicht
+
+**Nicht sagen kann ich Termine.** Ich habe heute zweimal Zahlen erfunden und beide Male
+richtigstellen muessen; eine Terminzusage waere die dritte.
+
+**Sagen kann ich einen gemessenen Takt.** Heute, aus dem Ledger:
+
+- **15 Posten abgenommen**, kein rotes Votum.
+- **AUF-52 Scheibe A**: gezogen 21:54, berichtet 22:41, abgenommen 22:46 — **52 Minuten**.
+- **AUF-52 Scheibe B**: berichtet 22:55 — **14 Minuten** nach der Freigabe von A.
+
+**Eine Scheibe dieser Groesse laeuft also in einer halben bis knappen Stunde durch**, Abnahme
+eingerechnet. **Stufe 1 ist eine Scheibe dieser Groesse.** Stufe 3 und 5 sind es nicht — die sind
+mehrere.
+
+**Aber der Takt gilt nur fuer den Posten, der gerade dran ist.** Vor dem Dach stehen: AUF-52
+Scheibe C, dann **AUF-48** (Yamas Entscheidung von heute), dann AUF-50 mit seinen sechs Stufen.
+**Nach §14 kommt das Dach danach.**
+
+## Die eine Frage, die Yama beantworten muss
+
+**§14 ist seine Regel, und nur er kann sie fuer diesen Fall beugen.** Zwei Wege:
+
+- **Reihe halten:** Dach-Stufe 1 kommt nach AUF-50. Ehrlich, aber die Vorlagen liegen weiter still.
+- **Stufe 1 vorziehen** als **Auflage an AUF-52 Scheibe C** — sie beruehrt dieselbe Fachflaechen-
+  Huelle, also waere es kein neuer Posten, sondern eine Erweiterung eines laufenden. **Das ist der
+  Weg, den ich empfehle**, weil er ohne Regelbruch auskommt und weil Stufe 1 nichts voraussetzt.
+
+Stufe 2 braucht ohnehin seine Schema-Entscheidung, Stufe 3 haengt an AUF-48, Stufe 4 und 5 sind
+danach. **Nur Stufe 1 ist heute frei.**
