@@ -11528,3 +11528,63 @@ spaeter niemand neu messen muss.
 `main` gegen den Arbeitszweig bei ueber 70 Commits, und das waere das zweite Paket des Tages.
 
 **Ballbesitz: Generator (AUF-63) · Evaluator (AUF-77).**
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-63 (jsdom für Fokus und Tastatur, nicht für Geometrie)
+
+**Commit:** Code `5883dcf` (`public/*` = **0 Zeilen**). **Kein Bundle-Rebuild** — das Artefakt ist
+bytegleich, Testinfrastruktur berührt kein ausgeliefertes Artefakt. *(Der Auftrag hat diesen Fall in
+K7 vorweggenommen; damit ist §8 erfüllt, nicht umgangen.)*
+
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1206 · pass 1206 ·
+fail 0`, vorher 1200) · **neu `test:hausplaner:dom` 0** (11 Zusagen) · `build` **0**.
+**Volle PHP-Suite: 789 grün — unverändert.** K4-Schichten **null**. **Klassifikation: `Vorarbeit`.**
+
+### Was jetzt im Gate steht, das vorher nur im Browser messbar war
+
+Fokusfalle, Fokus-Rückgabe und Leertaste waren mit **null** Tests gedeckt. AUF-49 hat sie gebaut —
+und im Kopf von `dialogFokus.ts` steht bis heute wörtlich: *„den DOM-Teil kann die Testumgebung
+nicht sehen"*. **Jetzt kann sie ihn sehen:** Tab am Ende springt an den Anfang, Shift+Tab am Anfang
+ans Ende, Escape schließt, der Fokus kehrt beim Schließen zu seinem Auslöser zurück (**der Fall, den
+der Playwright-Lauf am 25.07. als fehlend gemeldet hat**), und die Leertaste löst auf einer echten
+`role="button"`-Fläche aus.
+
+- **K1 — der schnelle Lauf bleibt schnell:** **2,28 / 2,05 / 2,10 s** vorher, **2,03 / 2,04 / 2,05 s**
+  nachher. Ein **zweiter** Lauf, kein umgebauter erster: ein DOM für alle 125 Dateien zu stellen
+  macht 125 Dateien langsamer, damit ein Dutzend etwas prüfen kann. Die `esbuild`-Übersetzung aus
+  AUF-30 wird **wiederverwendet**, nicht ersetzt — testverriegelt.
+- **K3 — Preis gemessen, nicht geschätzt:** **27 Verzeichnisse / 25 MB** (`node_modules` 272 → 299,
+  312 → 337 MB). Der Auftrag nannte 39 Pakete / 27 MB. **jsdom ist `devDependency`, nicht
+  `dependency`**, und kommt im Bündel **nicht** vor — beides testverriegelt, und zwar im **schnellen**
+  Lauf: eine Zusicherung über den DOM-Lauf, die nur im DOM-Lauf gilt, fällt mit ihm zusammen aus.
+- **K4 — die Grenze setzt sich selbst durch, und sie ist vorgeführt.** jsdom hat keine
+  Layout-Engine; dort ist jede Breite `0`, und ein Test darauf wäre *immer* grün oder *immer* rot —
+  beides sieht aus wie eine Messung. Der Bootstrap sperrt **acht** Zugänge
+  (`getBoundingClientRect`, `getClientRects`, `offset/scroll/clientWidth`, `…Height`) und wirft mit
+  Begründung. **Vorgeführt:** ein absichtlich falscher Test, der `getBoundingClientRect` misst,
+  **fällt durch** (12 Tests, 1 rot); danach zurückgebaut, Lauf wieder 11/11.
+- **K5/K6 — Mutations-Gegenbeweis, ausgeführt:** Fokusfalle entfernt ⇒ **2 rot** · Fokus-Rückgabe
+  entfernt ⇒ **1 rot** · Leertaste entfernt ⇒ **2 rot**. Danach jeweils zurückgenommen.
+
+### Mein eigener Fehler, im Test festgehalten
+
+Der erste Anlauf wartete mit `setTimeout(0)` auf React — und **die Ergebnisse schwankten von Lauf zu
+Lauf**: mal vier rote Zusagen, mal zwei, jedes Mal andere. **Eine Nebenläufigkeit, die mal grün und
+mal rot ist, ist schlimmer als gar kein Test:** sie bringt einen Testlauf in Verruf, den man danach
+nicht mehr ernst nimmt. React 19 rendert nebenläufig; nur `act` sagt zu, dass Rendern **und** Effekte
+durch sind. Jetzt `act` — **fünf Läufe hintereinander je 11/11**, nachgemessen.
+
+### Was ausdrücklich NICHT passiert ist
+
+**Der DOM-Lauf ersetzt die Sichtprobe nicht.** Sie bleibt Teil jeder `sichtbar`-Abnahme — der
+Evaluator hat selbst benannt, dass eine vertagte Sichtprobe eine offene Abnahme ist, und ein grünes
+DOM-Gate darf nicht der neue Grund werden, sie zu vertagen. Das steht im Kopf der DOM-Testdatei, wo
+der Nächste es liest. **Kein Umbau der vorhandenen Tests, keine zweite Test-Bibliothek**
+(`node:test` bleibt), **kein jsdom im Bündel.**
+
+**happy-dom** habe ich **nicht** gemessen und deshalb auch nicht gewählt: der Auftrag lässt die
+Alternative zu, verlangt für den Wechsel aber eine eigene Messung. Eine ungemessene Wahl wäre keine
+Begründung, sondern eine Meinung. **jsdom trägt** — wer happy-dom will, misst es.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
