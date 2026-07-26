@@ -9332,3 +9332,56 @@ Auth-Gate serverseitig belegen, kein Nutzer auf der Arbeits-DB.
 Damit ist bei mir **nichts mehr offen.** **Ballbesitz: Planner** (Merge ist Yamas Tor-2-Entscheidung;
 FÜNF VON FÜNF steht). Wecker läuft für den nächsten Hausplaner-Code-Slice; AUF-81 ist bis nach dem
 Merge gesperrt.
+
+
+## PLANNER 26.07., 13:35 — DER MERGE IST DURCH UND GESICHERT (Tor 2, von Yama ausgefuehrt)
+
+**Gemessen, nicht berichtet** (`git --no-optional-locks`, nach dem Lauf):
+
+```
+main                                    f9c837e
+fork/main                               f9c837e
+backup-private/main                     f9c837e
+fork/auto/hausplaner-integration        f9c837e
+backup-private/auto/hausplaner-integration  f9c837e
+upstream/main                           b477ad5  (unberuehrt, fremdes Konto)
+ungepusht auf main / auf dem Arbeitszweig:  0 / 0
+Arbeitskopie steht auf: auto/hausplaner-integration
+Arbeitsbaum: leer
+push-result.log: FERTIG So. 26 Juli 2026 13:32:48 CEST
+```
+
+Merge als **Fast-forward** `9bcc9c3..f9c837e`, **291 Dateien, 35141 Zeilen dazu, 619 weg**.
+Die beiden Suiten waren vor dem Merge gegen genau diesen Stand gezaehlt: **769 passed
+(2661 Assertions, 44,22 s)** PHP und **1102 pass / 0 fail** auf der Insel — beides exakt die
+Zahlen, die als Erwartung im Ledger standen.
+
+**Der erste Anlauf war um 13:24 schon einmal gelungen und wurde danach mit
+`git reset --hard 9bcc9c3` wieder zurueckgenommen** — das war der Rueckweg aus meiner eigenen
+Anleitung, gedacht fuer den Fall *rot*. Er lief nach *gruen*. Verloren ging nichts, weil der Push
+noch nicht gelaufen war und der Arbeitszweig unangetastet auf `f9c837e` stand. **Die Lehre gehoert
+in die Anleitung, nicht in die Erinnerung:** ein Rueckweg und ein Abschluss duerfen nicht
+nebeneinander in einem Block stehen, ohne dass die Bedingung *davor* steht. Beim naechsten Mal
+steht der Rueckweg in einem eigenen Abschnitt mit der Ueberschrift **„nur wenn rot"**.
+
+**Zweite Falle hat sich bestaetigt:** nach dem Reset stand die Arbeitskopie auf `main` — der
+naechste Commit einer beliebigen der drei Instanzen waere dort gelandet. Deshalb steht der
+Rueckweg auf den Arbeitszweig jetzt **im selben Handgriff** wie der Merge, und er ist diesmal auch
+so gelaufen.
+
+### Was damit faellt (drei Sperren, alle mit demselben Grund)
+
+| Posten | vorher | jetzt |
+|---|---|---|
+| **AUF-78** Projektliste | `GESPERRT` bis Merge | **`⚡ AKTIV`** — der einzige Posten, der gezogen wird |
+| **AUF-81** Konfigurator-Persistenz (B7) | `GESPERRT` bis Merge | `OFFEN` |
+| **AUF-79** Fortschritt automatisch | `GESPERRT` bis AUF-75 | `OFFEN` (AUF-75 abgenommen, Auflage 75.1 mit AUF-80 `1a25533` geschlossen) |
+
+**Warum AUF-78 die Marke bekommt und nicht AUF-81:** AUF-78 war nur aus **Reihenfolge** gesperrt
+(der Evaluator fuhr die volle PHP-Suite, und AUF-78 fasst `app/Http` an — §10.3). Dieser Grund ist
+weg. AUF-81 bringt die **erste Migration**; sie gehoert nicht in denselben Atemzug wie ein frisch
+gemergter Stand, sondern hinter eine Runde, in der `main` unveraendert steht. Ausserdem entsperrt
+AUF-78 direkt **AUF-66** („Letztes Projekt fortsetzen"), das ohne echte Projekte nichts hat, was es
+fortsetzen koennte.
+
+**Ballbesitz: Generator** (AUF-78). Evaluator: Stapel leer, naechstes Votum ist AUF-78.
