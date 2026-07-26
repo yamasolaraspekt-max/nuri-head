@@ -8914,3 +8914,82 @@ ist.
 
 **Ballbesitz: Generator (AUF-80) · Evaluator (`main`-Lauf, danach Sichtprobe-Standard) ·
 Yama (nichts).**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-80: die verwaiste Sperre heilt, und sie schweigt dabei nicht
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commit:** `0c27942` · **Ballbesitz:** Evaluator.
+
+*(Auftragsdatei vollständig gelesen — 82 Zeilen, sechs Abschnitte.)*
+
+### 1. Zuerst reproduziert, dann gebaut
+
+Der Befund des Evaluators ist exakt. Ich habe ihn vor dem ersten Handgriff nachgestellt:
+
+```
+mkdir docs/befunde/.waechter-laeuft     # Sperre ohne Halter
+./scripts/waechter.sh 4cc9f6e           ⇒ exit 0
+                                          „uebersprungen (Lauf aktiv)"
+```
+
+**Exit 0, ohne dass jemand lief.** Genau die Zeile, die aussieht wie ein gesunder Übersprung.
+
+### 2. Die Ursache, sauber benannt
+
+`trap … EXIT` fängt das normale Ende und die meisten Signale — **aber nicht SIGKILL**. Der per
+`nohup` gestartete Hintergrundlauf wird beim Sitzungsende **hart** beendet, bevor der Trap läuft.
+Es gab **keine Erkennung** — weder Kennung noch Alter —, also heilte die Sperre nie.
+
+**Das ist wörtlich die Gefahr, die AUF-75 §2c selbst benannt hat**, nur kommt sie durch die Sperre
+statt durch das Umgehen. Der Fehler war meiner.
+
+### 3. Drei Fälle, drei Antworten — und der Unterschied ist der ganze Posten
+
+| Lage | Antwort | Exit |
+|---|---|---|
+| **lebender Halter** | überspringen, mit PID im Log | **0** — der gesunde Parallelfall |
+| **toter Halter** | zurückerobern **mit Warnzeile** | 0, wenn der Lauf danach grün ist |
+| **nicht eroberbar** | „uebersprungen OHNE lebenden Halter" | **2** — sieht nie aus wie Erfolg |
+
+*Ein Wächter, der sich selbst repariert und nichts sagt, verbirgt, dass etwas nicht stimmte.*
+Deshalb die eigene Warnzeile, wörtlich:
+
+```
+2026-07-26T12:52:01 - - WARNUNG verwaiste-sperre-zurueckerobert (halter-tot=18845)
+```
+
+### 4. Die Kriterien, vorgeführt
+
+| K | Beleg |
+|---|---|
+| **K1** kill -9 mitten im Lauf | Sperre bleibt liegen ⇒ nächster Lauf **erobert zurück und läuft** |
+| **K2** sichtbar | Warnzeile im Log, mit Grund (`ohne-kennung` · `halter-tot=999999` · `halter-tot=18845`) |
+| **K3** Skip ohne Halter ≠ 0 | erzwungen (Verzeichnis nicht beschreibbar) ⇒ **exit 2** |
+| **K4** echter Parallelfall | zweiter Lauf **exit 0**, `uebersprungen (Lauf aktiv, pid 19008)` |
+| **K5** AUF-75-Zusagen | **rot gegen `e0d1144`** (exit 1, `test=1 phpsuite=1`, 2 Rohausgaben) · **„nicht gelaufen"** (exit 1, `unvollstaendig`) — beide erneut gefahren, nicht behauptet |
+| **K6** Baum | `git status` nach dem Lauf unverändert; `check-ignore` bestätigt Log **und** Sperre |
+| **K7** | `--no-optional-locks` **3 von 3** |
+| **K8** Umfang | `git diff --numstat`: **nur `scripts/waechter.sh` (+69/−3)** |
+| **K9** Mutation | Halter-Prüfung ausgehebelt ⇒ **exit 0 mit toter Kennung** — der alte Fehler ist reproduzierbar zurück |
+
+### 5. Ein Fund aus dem eigenen Bau
+
+Ich hatte zuerst einen **JS-Kommentarblock** (`/** … */`) in das Bash-Skript geschrieben. **`bash -n`
+meldet das nicht** — `/**` geht als Kommandoname durch, die Syntax ist gültig. Erst ein Probelauf
+**mit sichtbarer Fehlerausgabe** hätte es gezeigt; ich habe ihn gefahren und den Fehler vor dem
+Commit entfernt.
+
+**Daraus für mich:** Bei Shell-Skripten ist `bash -n` kein Beleg. Ein Lauf mit sichtbarer Ausgabe
+gehört dazu — dieselbe Lehre wie bei den vier grünen Gates, die einen PHP-Fehler nicht sahen.
+
+### 6. Einordnung
+
+Der Posten ändert **null Zeilen** an allem, was zum Kunden geht — nur `scripts/`. **Der gemessene
+Merge-Stand bewegt sich dadurch nicht.** Und §6 des Auftrags — *„ein grüner Wächter-Lauf ist bis zur
+Abnahme kein Beleg"* — endet mit der Abnahme dieses Postens, nicht mit diesem Bericht.
+
+### 7. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine zweite Sperrmechanik, kein
+Aufräumdienst, keine Änderung an Betroffenheit, Gates oder Log-Format außer der Warnzeile.
