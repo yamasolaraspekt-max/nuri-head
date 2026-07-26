@@ -11760,3 +11760,45 @@ fest und ging rot, als eine Abhängigkeit dazukam — obwohl die geschützte Eig
 gemeint war: `rechte` steht in der Liste.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## PLANNER 26.07., 20:45 — Die Zaehlung fuer AUF-50. Die entscheidende Zahl ist 7
+
+`docs/planner/bestandsaufnahme-auf50-werkzeuge-2026-07-26.md`. **Kein Auftrag, eine Zaehlung** —
+genau die, die die Tafel seit dem 25.07. vom Planner verlangt.
+
+**Vier Zahlen, und die dritte entscheidet alles:**
+101 Werkzeuge im Paket · 110 Funktionsvertraege · **7 Werkzeug-Modi, die die Zeichenflaeche kennt**
+· 19 ausfuehrbare Command-Typen im Modell.
+
+```ts
+type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe' | 'decke'
+```
+
+**Sieben.** Jedes andere Werkzeug **setzt zwar `activeToolId`** — der Klick geht also nicht ins
+Leere —, **aber niemand hoert zu.** **7 von 101 sind angeschlossen; 94 haben keinen Empfaenger.**
+
+**Und die Falle, in die man beim Zaehlen laeuft:** der Vertrag fuehrt **110 verschiedene
+`commandId`** (`WallCommand`, `RotateCommand` …). Das sieht nach 110 Befehlen aus. **Der Vertrag
+sagt selbst, dass es keine sind** — *„Metadatum, kein Aufruf"* — und das Modell kennt **19**
+Command-Typen, ausgeloest an **34** Stellen. **Wer die Vertraege fuer Funktion haelt, verzaehlt sich
+um den Faktor fuenf.** Das ist kein Vorwurf an AUF-36: die Vertraege sind die *Beschreibung*, und sie
+sind der Grund, warum diese Zaehlung ueberhaupt moeglich war.
+
+**Daraus vier Stufen statt 110 Posten** — und die erste ist die einzige wirklich neue:
+**50.1 ein generischer Empfaenger** (die Flaeche reagiert auf `activeToolId`, statt sieben feste
+Namen zu kennen) · **50.2 `create` in Scheiben nach Bauteil** (40) · **50.3 `modify` + `selection`**
+(24) · **50.4 `view` + `measurement`** (12).
+**Die billigste Stufe ist bewusst die letzte:** `view` und `measurement` schreiben nichts und waeren
+schnell fertig — **sie wuerden dem Fortschritt schmeicheln, ohne das Fundament zu legen.**
+
+**Und AUF-50 ist ein Posten ueber ~78 Werkzeuge, nicht ueber 110:** die **8 `import`** gehoeren in
+Phase 2 (steht nach §14 still), die **9 `assign-or-calculate`** haengen an AUF-52 und sind dort
+schon beauftragt. **Diese Unterscheidung gehoert in den Auftrag, nicht in die Ausrede hinterher.**
+
+**Zwei Dinge messe ich noch, bevor 50.1 ein Auftrag wird:** wie viele der 101 heute `gesperrt`
+stehen (andere Frage als „hat einen Empfaenger"), und **ob der generische Empfaenger ohne Aenderung
+an `store/` oder `domain/` moeglich ist** — falls nicht, ist das eine **Rueckgabe an Yama**, keine
+Entscheidung des Planners.
+
+**Ballbesitz: Generator (AUF-42) · Evaluator: Stapel leer · Planner: 50.1 messen.**
