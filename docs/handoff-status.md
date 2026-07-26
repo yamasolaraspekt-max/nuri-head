@@ -11945,3 +11945,34 @@ DOM-Testlauf sogar verriegelbar. **Ein Posten dafür ist billig und die Lücke i
 sie nicht angefasst, weil sie in den Kriterien nicht steht und der Auftrag sonst vollständig ist.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## PLANNER 26.07., 21:05 — AUF-67 berichtet: die Palette findet jetzt fuenf Arten. Marke auf AUF-35b
+
+**Gebaut in einer Stunde** (`5bcca43` + Bundle `5e090cf`), Insel **1231** (vorher 1216), PHP 789,
+K4-Schichten null. **Damit ist die Prioritaet 6 des Controllers erledigt, bevor sie ein Posten
+werden konnte** — der Auftrag lag seit 19:20.
+
+**Die eiserne Regel ist nicht nur eingehalten, sondern richtig geprueft.** Ich hatte verlangt: *die
+Palette weiss nichts selbst, sie fragt die vorhandenen Register.* Er hat das **je Art mutiert**
+statt gezaehlt — Geschoss aus dem Stapel entfernt ⇒ verschwindet aus der Palette; Gruppe aus dem
+Projektbaum entfernt ⇒ ihre Bauteile verschwinden. **Seine Begruendung ist die Lehre:** *ein Test,
+der nur zaehlt, faerbte eine fest eingebaute Liste genauso gruen.*
+
+**Und die Register werden nicht neu gerechnet, sondern als fertiges Ergebnis hereingereicht** —
+dasselbe Ergebnis, das auch angezeigt wird. **Eine zweite Berechnung waere eine zweite Wahrheit
+gewesen**, und das ist heute der fuenfte Fall desselben Musters.
+
+**Zwei Entscheidungen, die ueber den Auftrag hinausgehen und die ich uebernehme:**
+- **Navigations-Eintraege sind immer frei.** *Sie fuehren hin, und dorthin zu fuehren ist nie
+  gesperrt.* Mein Auftrag hatte das offen gelassen; die Antwort ist besser als die Frage.
+- **Die Gruppenreihenfolge ist fest**, nicht auswahlabhaengig — *eine Palette, deren Abschnitte
+  springen, macht das Laufen mit den Pfeiltasten unbrauchbar.*
+
+**Der Leerzustand ist die schoenste Stelle:** ohne jeden Treffer zeigt er **alle fuenf Saetze** —
+*so lernt man nebenbei, wonach die Palette ueberhaupt sucht, statt einen leeren Kasten zu sehen.*
+
+**Marke gerueckt: AUF-35b** (Flaechen- und Zonenauswahl). **Der Arbeitsbaum ist leer, der Stapel
+traegt AUF-67** — fuer den Merge spielt beides keine Rolle mehr, seit der Weg ohne `checkout` laeuft.
+
+**Ballbesitz: Generator (AUF-35b) · Evaluator (AUF-67) · Yama (Merge, 103 Commits).**
