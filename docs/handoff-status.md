@@ -11695,3 +11695,68 @@ Und das Buendel ist bereits neu gebaut, gehoert nach §8 2b aber in den **zweite
 **Stand nach dem Merge, wenn er kommt:** `main` haengt aktuell **90 Commits** zurueck.
 
 **Ballbesitz: Generator (AUF-42) · Evaluator: Stapel leer · Planner: Zaehlung fuer AUF-50.**
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-42 (`viewport.ready` sagte immer ja)
+
+**Commits:** Code `08f7cde` (`public/*` = **0 Zeilen**) · Bundle `269d7fa` (eigener zweiter Commit).
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1216 · pass 1216 ·
+fail 0`, vorher 1206) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+K4-Schichten **null**. **Klassifikation: `sichtbar`.**
+
+### Kriterium 1 war eine MESSUNG — hier ist sie
+
+**Ergebnis: Ausgang 1.** Es gibt einen Zustand, in dem die Komponente rendert und die Zeichenfläche
+nicht benutzbar ist — und er ist **messbar, dauerhaft und beobachtbar**, kein Übergangsrahmen.
+
+| Kandidat | gemessen | Ergebnis |
+|---|---|---|
+| erster Rahmen vor dem ersten Layout | **79 Rahmen** verfolgt | **kein einziger** mit Breite oder Höhe ≤ 0 — `buehnenHoehe` fängt die 0 mit einer Ersatzhöhe ab. **Fällt aus.** |
+| Wechsel 2D · Split · 3D | je **12 Proben** | Split 476 konstant, 2D 952 konstant, 3D 0. **Kein Flackern.** Die 0 in 3D ist die **versteckte** 2D-Leinwand, nicht eine kaputte Fläche. **Fällt aus.** |
+| schmales Fenster | 1440 → 375 | **ab 488 px abwärts** wird `breite` null oder negativ, und die Leinwand ist wirklich **0 px breit**. **Trifft zu.** |
+
+**Frisch geladen abgelesen, nicht geschlossen:** bei **1440** Leinwand **952 px** (Rechnung 952,
+Fähigkeit gilt) · bei **420** Leinwand **0 px** (Rechnung −68, Fähigkeit gilt nicht).
+
+**Auf einer 0 px breiten Fläche lässt sich nichts anklicken und nichts messen.** Deshalb ist die
+Fähigkeit dort weg — und der Grundtext *„Die Zeichenfläche ist noch nicht bereit"* wird zum ersten
+Mal wahr, statt ein Satz zu sein, den niemand jemals sieht.
+
+**Die Schwelle ist `> 0` und keine erfundene Mindestbreite.** Null ist die einzige Grenze, die nicht
+ausgedacht ist: dort hört die Fläche auf zu existieren. Jede andere Zahl wäre eine Meinung mit
+Nachkommastelle — und dieser Posten existiert, weil eine unbegründete Bedingung schlimmer ist als
+keine.
+
+- **Eine Wahrheit:** die Bühnenbreite wird an **einer** Stelle gerechnet. Sie stand 600 Zeilen
+  **unter** der Fähigkeiten-Liste und ist nach oben gezogen — **die Rechnung ist unverändert, nur ihr
+  Ort**. Testverriegelt, dass es bei einer bleibt und dass sie vor ihrer Verwendung steht.
+- **K3 — beide Seiten an der ECHTEN Aktivierungs-Engine:** ohne die Fähigkeit liefert
+  `resolveToolState` für **alle fünf** Werkzeuge `enabled: false` **mit dem Grundtext**, mit ihr
+  `enabled: true`. *Eine Zusage, die nur prüft, ob eine Zeichenkette in einem Array steht, belegt
+  meine Absicht — nicht das Verhalten der Engine.* Die fünf werden aus den **Verträgen gelesen**,
+  nicht getippt.
+- **Was ausdrücklich nicht geprüft wird, mit Begründung:** die **Höhe** (kann nicht 0 werden) und der
+  **3D-Modus** (dort ist die Leinwand versteckt, nicht unbrauchbar) — beides testverriegelt, damit
+  niemand später eine Bedingung darauf setzt.
+- **Mutation:** Bindung zurück auf unbedingt ⇒ **1 rot**.
+
+### ZURÜCKGEGEBEN — ein Befund außerhalb dieses Postens
+
+**Die Bühnenbreite folgt dem Fenster nicht.** `breite` wird bei jedem Rendern aus
+`window.innerWidth` gerechnet, aber **es gibt keinen `resize`-Zuhörer für sie** — nur
+`useGemesseneHoehe` hört zu, und der ändert den Zustand nur, wenn sich die **Höhe** ändert. Gemessen:
+ein Sprung 1440 → 420 ohne Neuladen ließ die Leinwand bei **952 px** stehen (sie ragt dann über ihren
+Behälter), während dieselbe Breite **frisch geladen** korrekt 0 ergibt. Die Breite folgt dem Fenster
+also **nur zufällig**, wenn ein anderer Grund ein Rendern auslöst.
+
+**Das ist vorbestehend und nicht Gegenstand dieses Auftrags** — aber es begrenzt die Wirkung der neuen
+Bindung: beim *Verkleinern* des Fensters greift sie erst, wenn ohnehin neu gerendert wird. **Gemeldet,
+nicht nebenbei gebaut.**
+
+**Geerbte Zusage nachgezogen:** eine AUF-60-Zusage nagelte die **vollständige** Abhängigkeitsliste
+fest und ging rot, als eine Abhängigkeit dazukam — obwohl die geschützte Eigenschaft unberührt war.
+**Dieselbe zu enge Bauart wie in AUF-66 und AUF-55; das ist das dritte Mal.** Sie prüft jetzt, was
+gemeint war: `rechte` steht in der Liste.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
