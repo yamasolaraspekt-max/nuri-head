@@ -6470,3 +6470,107 @@ Konsistenz + WCAG-Haertung, nicht um einen offenen Defekt.
 
 **Ballbesitz: Planner.**
 
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-62: „Ansicht einpassen" rechnet
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** Code `bae4596` · Bundle `38a855e`
+**Ballbesitz:** Evaluator.
+
+*(Auftragsdatei vollständig gelesen — 110 Zeilen, sechs Abschnitte, Länge vorher geprüft. Das ist
+die Konsequenz aus dem AUF-70-Versäumnis.)*
+
+### 1. Der Befund des Planners hält
+
+Alles lag da außer der Rechnung: `zoom` (px pro mm), `pan` (seit AUF-51), `bbox()` und der Knopf.
+Neu ist **`app/dashboard/einpassen.ts`** — rein, ohne DOM, ohne Store, ohne Befehl.
+**`bbox()` wurde gelesen, nicht nachgebaut**; `geometry/` trägt null geänderte Zeilen.
+
+### 2. Die sechs Kanten aus §3 — alle beantwortet
+
+| Kante | Antwort |
+|---|---|
+| **leeres Geschoss** | Standardmaßstab **0,12** + `standardPan(hoehe)`. Kein Sprung, kein Fehler |
+| **Split** | eingepasst wird in **`stageBreite`**, nicht in `breite` |
+| **y-Vorzeichen** | `scaleY = −zoom`; zwei Seitenverhältnisse prüfen es getrennt |
+| **Nullfläche** | eine Achse ohne Ausdehnung stellt **keine** Forderung — kein `Infinity`, kein `NaN` |
+| **Maßstabsgrenzen** | **0,02 … 1 gewinnen.** Passt es nicht ganz, steht der Maßstab **auf** der Grenze — und der Test hält genau das fest, damit niemand sie später „nur ein bisschen" lockert |
+| **Rand** | `EINPASS_RAND = 40` px, ein benannter Wert |
+
+### 3. Der Test rechnet nach, statt zu glauben
+
+„Der ganze Grundriss ist im Bild" ist eine Aussage über **Schirmkoordinaten**. Deshalb rechnet
+jeder Fall jeden Weltpunkt über `aufSchirm()` um und prüft ihn gegen die Bühnenfläche. Ein
+Screenshot könnte dasselbe behaupten, aber nicht belegen.
+
+**Der Test hat dabei einen eigenen Fehler gefunden:** mein erster K6-Fall (40 m hoch auf 700 px)
+bräuchte Maßstab **0,0155** — unter der Grenze 0,02. Er prüfte damit die Grenze statt des
+Vorzeichens. Korrigiert auf 25 m, mit einer Zusage, die sicherstellt, dass der Fall **innerhalb**
+der Grenzen bleibt.
+
+### 4. Drei geerbte Zusagen nachgezogen — offengelegt
+
+Dieser Posten ändert eine Tatsache, die drei ältere Zusagen festhielten:
+
+| Zusage aus | hielt fest | jetzt |
+|---|---|---|
+| AUF-44 | „genau **ein** `geplant`-Knopf ist übrig" | **null** — der letzte hat seine Funktion bekommen |
+| AUF-44 | „`Ansicht einpassen` bleibt … `geplant`" | bleibt — **und tut etwas** |
+| AUF-68 / AUF-70 | `einpassen:geplant` in der Sperrmenge | fällt heraus |
+
+**Keine wurde ersatzlos gestrichen.** Jede ist neu formuliert und hält ihre ursprüngliche Absicht:
+die AUF-44-Zusage verriegelt jetzt, dass die Zahl der `geplant`-Knöpfe **nicht wieder steigt** (ein
+neues Versprechen ohne Deckung wäre genau das, was AUF-44 abgeräumt hat); die Sperrmengen-Zusagen
+nennen die Abweichung ausdrücklich als **die einzige zulässige**.
+
+### 5. Belege
+
+| Was | Ergebnis |
+|---|---|
+| Gates | tsc **0** · schema:check **0** · test **0** · build **0** |
+| Tests | **1034 → 1051** |
+| K2 | `store/ domain/ geometry/ renderers/` — **null Zeilen** |
+| K9 nichts gespeichert | `grep`: kein `executeCommand`, kein Store, kein `speicherStatus` in der Rechnung; der Aufrufer setzt **genau zwei** Anzeige-Zustände |
+| K10 Knopf | `geplant` = **0**, `onClick={passeAnsichtEin}`, nicht `disabled` |
+| K12 `public/*` im Code-Commit | **0**; Bundle als zweiter Commit `38a855e` |
+
+**Mutationen:** Rand → 0 ⇒ **1 rot** · `stageBreite` → `breite` ⇒ **1 rot** · y-Vorzeichen gedreht
+⇒ **7 rot**.
+
+**Sichtprobe 1440 px, `u-dach`, sechsmal herausgezoomt, dann Knopf:**
+```
+2D      Zoom 4 %  →  Zoom 7 %
+Split   Zoom 4 %  →  Zoom 3 %
+```
+Der **Unterschied** ist der Beleg: in Split wird in die halbe Fläche eingepasst, deshalb bleibt der
+Maßstab kleiner. Wäre `breite` genommen worden, stünden beide auf 7 %.
+
+### 6. Rückgabe — ein Bestandsfehler, den dieser Posten sichtbar macht
+
+**Die Bühne ist höher als das Fenster.** Gemessen bei 1440 × 900:
+
+```
+Bühnenhöhe      804 px      (hoehe = window.innerHeight − 96)
+Bühne oben      y = 323     (darüber: Kopf, Modusleiste, Arbeitsbereiche, Werkzeugzeile, Optionen)
+Bühne unten     y = 1127    ⇒ 227 px UNTERHALB des Fensters
+sichtbar        578 von 804 px = 72 %
+die Seite scrollt nicht
+```
+
+Das Einpassen zentriert **korrekt in der Bühne** — K3 ist gegen die Bühne gerechnet und erfüllt.
+Aber die unteren **28 %** der Bühne sieht niemand. Ein eingepasster Grundriss kann also unten
+angeschnitten wirken, obwohl die Rechnung stimmt.
+
+**Ursache ist Bestand, nicht dieser Posten:** die `−96` stammt aus einer Zeit mit **einer** Leiste
+über der Bühne; seither sind Arbeitsbereiche (AUF-34), Werkzeugzeile und Optionszeile dazugekommen
+— jetzt sind es 323 px.
+
+**Ich habe es nicht ausgeglichen.** Die Bühnenhöhe zu ändern berührt `standardPan`, den Verschub
+und jeden Renderer, der sie liest — das ist ein eigener Posten und keine Feinjustierung an einem
+Einpass-Knopf. **Zwei Wahrheiten über die Bühnenhöhe wären schlimmer als eine zu große Bühne.**
+
+### 7. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Kein automatisches Einpassen, keine
+Animation, kein Eingriff in die Werkzeugzeile außer diesem einen Knopf.
