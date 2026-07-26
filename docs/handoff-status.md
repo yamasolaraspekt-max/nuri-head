@@ -10073,3 +10073,82 @@ erste Stufe **vor** dem Bauen gemessen, wie bei AUF-78: erst der Befund, dann de
 
 **Ballbesitz: Yama** (Freigabe von Phasen). Generator (AUF-82) und Evaluator (Abnahme AUF-78)
 laufen unveraendert weiter.
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-82: der Wächter heilt ohne `unlink`, und sein Scheitern wird sichtbar
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commit:** `f4202f6` · **Ballbesitz:** Evaluator.
+
+*(Auftragsdatei vollständig gelesen — 132 Zeilen, inklusive Nachtrag §6.)*
+
+### 1. Eine Abweichung vom vorgeschlagenen Weg — und warum
+
+Der Auftrag schlägt vor, die verwaiste Sperre per `mv` in eine **datierte Ablage** zu schieben, und
+verlangt im selben Absatz, dass diese Ablage nicht unbegrenzt wächst. **Beides zusammen geht nicht
+ohne `unlink`** — und genau das ist auf dem Mount verboten.
+
+**Deshalb wird gar nichts entfernt und nichts verschoben.** Das Sperrverzeichnis ist ein **Platz**,
+der einmal entsteht und danach nur noch **beschrieben** wird:
+
+```
+belegen   = eigene Kennung eintragen      (pid · lstart · geboren)
+freigeben = Kennung leeren                (: > pid)
+```
+
+Kein `rm`, kein `mv`, keine Ablage, kein Wachstum. **Die Drei-Fälle-Logik bleibt Zeichen für
+Zeichen** — es ändert sich das Werkzeug, nicht das Verhalten. *Ich nenne das hier zuerst, weil ich
+vom beauftragten Mittel abgewichen bin; der Zweck war „ohne unlink und ohne zweites Problem", und
+den erfüllt der Platz besser als eine Ablage.*
+
+### 2. Der gefährlichste Fall (§6) — eine Nummer ist keine Identität
+
+Gemessen war: `uebersprungen (Lauf aktiv, pid 79)` — **die Zeile des Gesundzustands** — obwohl der
+Halter längst beendet war; ein fremder Prozess trug dieselbe Nummer.
+
+Die Sperre trägt jetzt zusätzlich den **Startzeitpunkt** des Halters (`ps -o lstart=`).
+
+> **Lebendig heißt: Nummer da UND Startzeitpunkt gleich.**
+
+Stimmt nur die Nummer, ist es ein anderer Prozess — dann wird **nicht übersprungen**, sondern
+zurückerobert, **mit eigener Zeile**: `nummer-wiederverwendet=<pid>`. Damit gehört die Gesund-Zeile
+ausschließlich dem gesunden Fall (Kriterium 10). **Es gibt keine zwei Zustände mehr, die dieselbe
+Zeile schreiben.**
+
+### 3. Der Hook macht ein Scheitern sichtbar (§2b)
+
+**Gewählte Form: eine Meldedatei** `docs/befunde/GESCHEITERT-<commit>.txt`.
+
+**Begründung in einem Satz:** sie überlebt das Terminal, in dem niemand mehr hinsieht, sie steht
+neben den Rohausgaben, die man ohnehin liest, und sie ist an ihrem Namen zu finden, ohne das Log zu
+durchsuchen.
+
+**Die Bedingung ist eingehalten:** der Hook blockiert nicht und gibt weiterhin **0** zurück.
+
+### 4. Die Kriterien — am lebenden Objekt, nicht im Mini-Repo
+
+| K | Beleg |
+|---|---|
+| **K1** | `grep "rm -rf" scripts/waechter.sh` = **0** (auch in Kommentaren — der Kommentar hatte es zuerst wieder eingeschleppt) |
+| **K2** | der **stehende Prüfstein** (pid 79, ohne Startzeit) wurde beim **ersten** Lauf zurückerobert: `WARNUNG verwaiste-sperre-zurueckerobert (halter-tot=79)`, danach ordentlich freigegeben |
+| **K3** | gesunder Parallelfall mit **echtem laufendem Wächter**: `uebersprungen (Lauf aktiv, pid 48802)`, **exit 0** |
+| **K9** | Nummer lebt, Startzeitpunkt passt nicht (`sleep`-Prozess untergeschoben, pid 48759): `WARNUNG … (nummer-wiederverwendet=48759)` — **nicht** die Gesund-Zeile |
+| **K6** | Fehlschlag erzwungen (Kennung nicht beschreibbar) ⇒ Wächter **exit 2**, Hook **exit 0 in 0,029 s**, Spur `GESCHEITERT-76b6108.txt` geschrieben und im Bericht abgedruckt |
+| **K5** | Hook-Dauer **0,029 s** — gemessen, nicht zugesichert |
+| **K4** | **Mutation:** Übernahme entfernt ⇒ `exit 0` **mit Gesund-Zeile** — der alte Fehler ist reproduzierbar zurück. *Mutiert wurde die Übernahme statt des `mv`-Aufrufs, weil dieser Bau keinen `mv` benutzt* |
+| **K7** | `resources/ app/ routes/ public/` — **0 Änderungen**. Nur `scripts/` |
+| **K8** | Klassifikation `unsichtbar` — keine Sichtprobe, der Beleg ist das Log |
+
+**Der Prüfstein wurde nicht von Hand geräumt** (§3): er lag bis zum ersten Lauf des neuen Standes da.
+
+### 5. Was offen bleibt
+
+**§5 des Auftrags:** AUF-82 sollte **unmittelbar vor AUF-79** laufen, weil beide dieselbe Datei
+anfassen. AUF-79 ist noch nicht markiert — **wer es zieht, zieht es auf `f4202f6`**, nicht auf dem
+Stand davor.
+
+### 6. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine Änderung an der
+Drei-Fälle-Logik, an `HOECHSTDAUER` oder daran, was der Wächter prüft. Kein `rm` an anderer Stelle
+„bei der Gelegenheit".
