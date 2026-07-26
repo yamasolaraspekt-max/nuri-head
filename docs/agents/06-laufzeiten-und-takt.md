@@ -302,6 +302,20 @@ richtig und Weitermachen falsch.)*
 **4. Gestagt wird nur, was man selbst geschrieben hat** — nie `-A`, nie `.`, immer die eigenen
 Pfade. Ein pauschales Commit sammelt die ungestagete Arbeit der anderen mit ein.
 
+**5. Sperrdateien werden erwartet, nicht weggeräumt.** Drei Instanzen teilen eine Arbeitskopie;
+`index.lock` bedeutet zunächst **„ein anderer schreibt gerade"**, nicht „kaputt". **Wer auf ein Lock
+trifft: warten und erneut versuchen.** Erst wenn eine Sperrdatei **älter als zwei Minuten** ist und
+kein git-Prozess läuft, gilt sie als verwaist — dann wird sie **verschoben** (`.git/_locks_beiseite/
+<datum>/`), **nie gelöscht**.
+
+*Gemessen an einem Tag: dreimal habe ich auf ein Lock getroffen; zweimal war es echt, einmal
+verwaist. Hätte ich beim ersten Mal beiseitegeräumt, hätte ich einem laufenden Commit die Sperre
+weggenommen.*
+
+**6. Lesende Prüfungen erzeugen keine Sperren.** Jeder Abgleich, jede Repo-Aufsicht und jede
+Messung läuft mit `git --no-optional-locks`. **Ein Beobachter, der den Beobachteten blockiert, ist
+Teil des Problems.**
+
 **Warum keine technische Sperre:** Eine Sperrdatei im Repo wäre selbst ein geteilter Zustand und
 müsste aufgeräumt werden, wenn eine Instanz abstürzt — dann steht die Kette wegen des Schutzes still
 statt wegen des Fehlers. **Die Tafel ist der Ort, an dem die Belegung ohnehin schon steht;** sie

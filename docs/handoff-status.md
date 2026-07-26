@@ -7614,3 +7614,97 @@ rot — der Weg ist belegt, nur nicht das Pixel.
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Kein `aktiv`, kein `frei` —
 **ein** Zustand, nicht alle. Keine Sperre neu gesetzt oder gelöst.
+
+---
+
+## PLANNER 26.07., 09:30 — Der Qualitätsagent-Vorschlag, gegen den Ist-Stand gemessen
+
+**Anlass:** Yama legt einen Architekturvorschlag für einen lokalen Dauer-Qualitätsdienst vor
+(Sentinel → Tests → Analyse-Agent → Befunddatenbank → Ticket → Claude Code → Prüfung → PR → Mensch)
+und fragt, was ich für am effizientesten halte.
+
+**Vorher gemessen, nicht angenommen:** `.github/workflows` **nicht vorhanden** · `.git/hooks`
+**leer** · `package.json` **7 Skripte**, davon 4 Gates · `playwright.config.*` **nicht vorhanden** ·
+`.mcp.json` **nicht vorhanden** · `tests/Feature`, `tests/Unit` vorhanden.
+
+### 1. Die Bewertung in einem Satz
+
+**Der Vorschlag ist gut und beschreibt zu etwa zwei Dritteln etwas, das hier bereits steht — unter
+anderen Namen.** Das letzte Drittel benennt eine echte Lücke, und sie ist präzise:
+**es läuft nichts von selbst.**
+
+| im Vorschlag | Stand hier |
+|---|---|
+| Planner / Generator / Evaluator getrennt, niemand nimmt eigene Arbeit ab | **steht** seit Wochen, §1.4 |
+| Human Gate für kritische Änderungen | **steht** — Tor 1 (Fach) und Tor 2 (main/Deploy) gehören Yama |
+| Befund mit Evidenz, Reproduktion, Schweregrad, Status | **steht** als Auftragstafel + Ledger, 60 archivierte Posten |
+| Gegenbeweis-Pflicht je Kriterium | **steht** — jedes Votum führt heute eine Mutation |
+| Skills als versionierte Module mit Regeln und Grenzen | **steht** als `docs/agents/` §7–§11 und die Auftragsvorlagen |
+| Dedupliziertes Wiedererkennen von Befunden | **von Hand** — die Abgleich-Regel ist der Fingerabdruck |
+| Isolierte Umgebung für die Prüfung | **steht** — der Evaluator misst gegen `/tmp`-Kopien |
+| Dashboard für Yama | **steht** als Fortschrittsübersicht |
+| **Sentinel: automatische, ereignisgesteuerte Ausführung** | **fehlt vollständig** |
+
+### 2. Warum ausgerechnet die fehlende Stelle die teuerste ist
+
+**Nicht aus Prinzip, sondern gemessen an einem einzigen Tag:**
+
+**AUF-64.** `objekt/203` lag mit einem PHP-Parse-Fehler **im Hauptzweig**. **Vier Gates grün, 1007
+Tests grün.** Die Abdeckung existierte — in der PHP-Suite — und **wurde nicht gefahren.** Gefunden
+hat es der Browser, Stunden später. Der Generator hat es selbst so aufgeschrieben.
+
+Daraus wurde §9. **Und §9 hat dasselbe Problem wie §1 der Tafel vor §10: durchgesetzt wird sie von
+nichts.** Heute Vormittag hat sie gehalten, weil sich jemand erinnert hat. Das ist keine Sicherheit,
+das ist Glück mit guter Gewohnheit.
+
+### 3. Was ich **nicht** empfehle, und warum
+
+- **Kein Dauerdienst mit Sprachmodell über dem Repository.** Die Ursachenanalyse ist genau das, was
+  die drei Rollen tun — und sie tun es besser, weil sie gegen einen Auftrag prüfen und nicht gegen
+  ein Gefühl. **Ein vierter Agent, der Befunde erfindet, erzeugt Vorrat ohne Grund.**
+- **Kein automatischer Reparatur-Worker.** Der Generator **ist** dieser Worker, mit Ticket, Grenzen
+  und Abnahme. Ihn zu automatisieren hieße, den Auftrag wegzunehmen — und der Auftrag ist der Ort,
+  an dem heute die Fehler gefunden werden, **bevor** gebaut wird. *Zweimal heute stand meine falsche
+  Annahme im Auftrag und wurde vor dem Bauen umgeworfen.*
+- **Keine neun Architekturpapiere.** Die Hälfte gäbe es doppelt; Papier ohne gebaute erste Scheibe
+  veraltet, bevor es gelesen wird.
+- **Nicht jetzt in voller Breite.** Yamas stehendes Ziel ist das fertige Hausplaner-Frontend, und
+  davon sind nach der Layout-Inventur noch **zwei** Befunde offen. Ein Wochenprojekt daneben
+  verschiebt genau das.
+
+### 4. Was ich empfehle — eine Scheibe, und sie ist klein
+
+**AUF-75, der Wächter.** Ein deterministisches Skript, kein Sprachmodell, keine Reparatur: es leitet
+aus dem Diff des Commits ab, **was zu prüfen ist**, fährt die **vorhandenen** Gates und hängt das
+Ergebnis an. Dazu ein `post-commit`-Hook, der **nicht blockiert**.
+
+**Das Beweiskriterium ist der Punkt:** Der Wächter muss gegen `e0d1144` **rot** melden — den Commit,
+der `objekt/203` zerbrochen hat. **Fängt er den einen Fall nicht, für den er gebaut wird, ist er
+wertlos.**
+
+**Und das wichtigste Einzelkriterium:** *Ein nicht gelaufener Test darf nie wie ein bestandener
+aussehen.* Fehlt `php` im Pfad, sagt die Zeile „nicht gelaufen" und der Gesamtstatus ist nicht grün.
+**Genau daran scheitern solche Dienste** — sie melden grün, weil sie nichts gefunden haben, und
+niemand fragt, ob sie gesucht haben.
+
+### 5. Die kleine Sache, die ich selbst erledigt habe
+
+**§10 um zwei Punkte ergänzt** (Sperrdateien und lesende Prüfungen). Anlass gemessen: **dreimal auf
+`index.lock` getroffen, zweimal war es echt, einmal verwaist.** Hätte ich beim ersten Mal
+beiseitegeräumt, hätte ich einem laufenden Commit die Sperre weggenommen.
+
+**Kein neues Regelwerk, sondern zwei Sätze in einer bestehenden Regel** — der Vorschlag hätte daraus
+ein Teilsystem gemacht.
+
+### 6. Was ich bewusst offenlasse
+
+**Getrennte Worktrees je Rolle** — im Vorschlag ein Kernstück. **Ich beauftrage sie nicht.** Der
+Evaluator isoliert sich bereits über `/tmp`-Kopien, und getrennte Arbeitskopien würden aus einem
+funktionierenden Ablauf drei Zusammenführungen machen. **Die Locks waren ein Symptom, kein Grund
+zum Umbau** — und sie sind mit §10.5 adressiert.
+
+*Wird der Wächter über mehrere Wochen brauchbar, ist die nächste sinnvolle Scheibe die
+Wiedererkennung von Befunden (Fingerabdruck), nicht der Reparatur-Worker.*
+
+**Ballbesitz: Generator (AUF-71 läuft, dann AUF-40 A, AUF-74, AUF-75) · Evaluator
+(Sichtprobe-Standard) · Yama (nichts offen).**
