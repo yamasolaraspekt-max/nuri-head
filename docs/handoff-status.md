@@ -9463,3 +9463,38 @@ mv belegt-erlaubt) → heilt auch über die Cowork-Brücke; **(b)** der Hook sol
 wenigstens sichtbar machen, statt ihn nach `/dev/null` zu schlucken.
 
 Beleg-Sperre steht unangetastet weiter da. **Ballbesitz: Planner.**
+
+
+## PLANNER 26.07., 14:20 — Wie viele Posten wirklich parallel laufen koennen (Untersuchung)
+
+Yamas Frage, gruendlich gemessen: `docs/planner/parallelbetrieb-2026-07-26.md`.
+
+**Das Ergebnis widerspricht der naheliegenden Annahme.** Parallelitaet wird **nicht an Dateien**
+entschieden, sondern an **Messwegen**. Der Beweis steht in einer Zeile:
+`tsconfig.hausplaner.json` traegt `include: ["resources/planner"]` — **tsc uebersetzt die ganze
+Insel, nicht die Dateien eines Postens.** Zwei Posten mit **leerer** Datei-Schnittmenge zerstoeren
+sich trotzdem: der eine misst rot an der halb geschriebenen Datei des anderen. Das ist §10.3, nur
+zu Ende gedacht: *Messwerte aus einem wandernden Baum sind keine Messwerte.*
+
+**Fuenf Engpaesse, jeder einzeln gemessen:** ein Uebersetzer-Lauf je Arbeitsbaum ·
+**eine** Test-Datenbank (`phpunit.xml:28`, `ticket_testing`, `force="true"`) · **eine**
+ausgelieferte Anwendung (Herd bedient nur den Hauptbaum) · **ein** Ledger (jede Instanz haengt an
+derselben letzten Zeile an) · **ein** Evaluator.
+
+**Von zehn offenen Posten sind acht `sichtbar` und zwei fassen PHP an.** Genau **zwei** brauchen
+weder das eine noch das andere: **AUF-77** und **AUF-79**.
+
+**Empfehlung: drei Spuren.** Spur 1 Hauptbaum (AUF-78 -> 66 -> 81, muss seriell: gleiche DB,
+gleiche ausgelieferte App). Spur 2 zweiter Arbeitsbaum (AUF-76 -> 77, reine Insel).
+Spur 3 Hauptbaum ohne Baum-Messung (AUF-79, nur `docs/` und `scripts/`).
+**Nicht parallel: AUF-63** (aendert den Testlaeufer selbst) und **AUF-38** (fasst acht Dateien der
+Oberflaeche an, kollidiert mit 78, 54 und 52).
+
+**Gegenprobe geschrieben, beide Richtungen.** Der Einwand *„76 und 78 haben null gemeinsame
+Dateien"* faellt an der tsconfig-Zeile. Der Einwand *„drei Spuren bringen keinen dreifachen
+Durchsatz, solange einer prueft"* **haelt stand** — der ehrliche Gewinn ist anderthalb bis zwei.
+Deshalb Regelpunkt 5: **mehr Spuren als Abnahmen bringt nichts.** Wer mehr will, braucht eine
+zweite pruefende Instanz — das ist ein Vorschlag an Yama, keine Entscheidung des Planners.
+
+**Ballbesitz: Yama** (Entscheidung ueber den zweiten Arbeitsbaum). Generator und Evaluator laufen
+unveraendert weiter.
