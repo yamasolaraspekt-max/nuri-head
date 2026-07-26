@@ -49,7 +49,8 @@ import {
 } from './tools/vorbedingungen';
 import { projektBaum, PROJEKTBAUM_LEER } from './dashboard/projektBaum';
 import { befundeAus, BEFUNDE_LEER, BEFUNDE_UMFANG } from './dashboard/befunde';
-import { palettenEintraege, PALETTE_LEER } from './dashboard/palette';
+import { palettenGruppen, palettenFlach, PALETTE_LEER, type PaletteEintrag } from './dashboard/palette';
+import { stapel } from './dashboard/geschossStapel';
 import { usePlannerUiStore } from './state/uiState';
 import { toolFuerShortcut, toolNach } from './tools/toolRegistry';
 import { zoneTools } from './tools/toolPresentation';
@@ -532,10 +533,22 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const befunde = useMemo(() => befundeAus(letzteAblehnung), [letzteAblehnung]);
   /** Dashboard v2.5: Paletten-Einträge im AKTUELLEN Werkzeug-Kontext — dieselbe Aktivierungs-
    *  Wahrheit wie die Werkzeugleiste, keine zweite Logik. */
-  const paletteListe = useMemo(
-    () => palettenEintraege(werkzeugKontext, paletteFilter),
-    [werkzeugKontext, paletteFilter],
+  /**
+   * AUF-67 — **die Palette fragt die Register, sie weiss nichts selbst.** `baum` und `wegweiser`
+   * sind dieselben Ergebnisse, die die Oberflaeche ohnehin anzeigt; der Geschoss-Stapel kommt aus
+   * derselben Funktion, die die Geschossflaeche benutzt. Kein Register wird hier zweimal gerechnet.
+   */
+  const paletteGruppen = useMemo(
+    () => palettenGruppen({
+      kontext: werkzeugKontext,
+      stapel: scene ? stapel(scene.levels, activeLevelId) : null,
+      baum,
+      schritt: wegweiser,
+    }, paletteFilter),
+    [werkzeugKontext, paletteFilter, scene, activeLevelId, baum, wegweiser],
   );
+  /** Eine Liste, zwei Darstellungen: die Tastatur laeuft ueber genau die Reihenfolge, die man sieht. */
+  const paletteListe = useMemo(() => palettenFlach(paletteGruppen), [paletteGruppen]);
   /** Markierte Zeile, gegen die Listenlänge geklemmt — die Liste kann sich unter der Palette
    *  ändern (z. B. wenn die Auswahl wegfällt), ohne dass der Index nachgeführt wurde. */
   const paletteMarkiert = paletteListe.length === 0 ? -1 : Math.min(paletteIndex, paletteListe.length - 1);
@@ -680,8 +693,23 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * Aktionen rufen die BEREITS VORHANDENEN Funktionen `loescheAuswahl`/`dupliziere`. Es entsteht
    * kein zweiter Ausführungsweg; deaktivierte Einträge werden hier hart abgewiesen.
    */
-  function aktivierePaletteEintrag(id: string, enabled: boolean): void {
-    if (!enabled) return;
+  /**
+   * AUF-67 — **die Palette fuehrt hin; sie erfindet nichts.** Jede Art bildet auf eine Handlung ab,
+   * die es ohne die Palette auch gibt: Geschoss wechseln, Bauteil auswaehlen, Bereich wechseln.
+   * Keine dieser Zeilen ist eine neue Aktion.
+   */
+  function aktivierePaletteEintrag(eintrag: PaletteEintrag): void {
+    if (!eintrag.enabled) return;
+    const id = eintrag.id;
+    if (eintrag.art === 'geschoss') { schliessePalette(); store.getState().setActiveLevel(id); return; }
+    if (eintrag.art === 'bauteil') { schliessePalette(); store.getState().selectNodes([id]); return; }
+    if (eintrag.art === 'bereich') { schliessePalette(); waehleBereich(id); return; }
+    if (eintrag.art === 'schritt') {
+      // Der Wegweiser nennt einen ORT, keine Aktion — dorthin wird gefuehrt, mehr sagt er nicht.
+      schliessePalette();
+      if (id === 'schiene') setSchienenTab('werkzeuge');
+      return;
+    }
     schliessePalette();
     const tool = toolNach(id);
     if (!tool) return;
@@ -2203,25 +2231,36 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 if (e.key === 'Enter') {
                   e.preventDefault();
                   const treffer = paletteListe[paletteMarkiert];
-                  if (treffer) aktivierePaletteEintrag(treffer.id, treffer.enabled);
+                  if (treffer) aktivierePaletteEintrag(treffer);
                 }
               }}
               style={{ width: '100%', boxSizing: 'border-box', padding: '11px 14px', fontSize: 13.5, border: 'none', borderBottom: `1px solid ${T.hair}`, color: FARBEN.text, background: T.surface }}
             />
             <div style={{ maxHeight: '46vh', overflowY: 'auto', padding: 6 }}>
               {paletteListe.length === 0 ? (
-                /* Kante 7: kein leerer Kasten — der Leerzustand spricht aus, was los ist. */
-                <div style={{ padding: '14px 10px', fontSize: 12.5, color: T.muted }}>{PALETTE_LEER}</div>
+                /* Kante 7 / AUF-67: kein leerer Kasten — und der Leerzustand spricht JE ART aus,
+                   was los ist. So lernt man nebenbei, wonach die Palette ueberhaupt sucht. */
+                <div style={{ padding: '10px' }}>
+                  {paletteGruppen.map((g) => (
+                    <div key={g.art} style={{ fontSize: 12.5, color: T.muted, padding: '3px 0' }}>{g.leer}</div>
+                  ))}
+                </div>
               ) : (
-                paletteListe.map((eintrag, i) => {
+                paletteGruppen.filter((g) => g.eintraege.length > 0).map((gruppe) => (
+                  <div key={gruppe.art}>
+                    {/* AUF-67: die Art steht als Ueberschrift — sonst stuenden Werkzeug und
+                        Geschoss ununterscheidbar untereinander. */}
+                    <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.faint, padding: '10px 10px 4px' }}>{gruppe.titel}</div>
+                    {gruppe.eintraege.map((eintrag) => {
+                  const i = paletteListe.indexOf(eintrag);
                   const markiert = i === paletteMarkiert;
                   return (
                     <button
-                      key={eintrag.id} type="button" tabIndex={-1}
+                      key={`${eintrag.art}:${eintrag.id}`} type="button" tabIndex={-1}
                       aria-disabled={!eintrag.enabled}
                       title={eintrag.enabled ? eintrag.label : (eintrag.grund ?? eintrag.label)}
                       onMouseEnter={() => setPaletteIndex(i)}
-                      onClick={() => aktivierePaletteEintrag(eintrag.id, eintrag.enabled)}
+                      onClick={() => aktivierePaletteEintrag(eintrag)}
                       style={{
                         display: 'flex', alignItems: 'center', gap: 8, width: '100%', textAlign: 'left',
                         padding: '7px 10px', border: 'none', borderRadius: 8, fontSize: 12.5,
@@ -2235,11 +2274,13 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                       <span style={{ flex: '0 0 auto', minWidth: 74 }}>{eintrag.label}</span>
                       {/* Der Grund steht als sichtbarer TEXT, nicht nur als Ausgrauen (§28). */}
                       {!eintrag.enabled && <span style={{ flex: 1, fontSize: 11, color: T.warnInk }}>{eintrag.grund}</span>}
-                      {eintrag.enabled && <span style={{ flex: 1 }} />}
+                      {eintrag.enabled && <span style={{ flex: 1, fontSize: 11, color: T.faint, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{eintrag.zusatz ?? ''}</span>}
                       {eintrag.shortcut && <span style={{ flex: '0 0 auto', fontSize: 10.5, color: T.muted, border: `1px solid ${T.controlBorder}`, borderRadius: 4, padding: '1px 5px' }}>{eintrag.shortcut}</span>}
                     </button>
                   );
-                })
+                    })}
+                  </div>
+                ))
               )}
             </div>
           </div>
