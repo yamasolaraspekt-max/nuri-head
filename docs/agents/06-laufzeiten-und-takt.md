@@ -579,3 +579,36 @@ gekostet:
 **Der Grund, warum das keine Formalie ist:** unter Einspurbetrieb (§13) ist der Pruefende ohnehin
 der Engpass. **Ein Evaluator, der wartet, obwohl Arbeit fuer ihn dasteht, kostet doppelt** — die
 Zeit, die er stillsteht, und die Zeit, die der Merge dadurch spaeter kommt.
+
+---
+
+## 16. Gemergt wird auf einen **benannten abgenommenen Commit**, nie auf die Spitze (Planner, 26.07., nach dem zweiten Merge)
+
+**Was passiert ist:** Um **20:59** habe ich die vier Merge-Bedingungen gemessen — Stapel leer,
+keine Auflage, Suiten grün, Baum leer — und den Block herausgegeben. Um **21:02/21:03** hat der
+Generator **AUF-67** committet und berichtet. Um **21:05** hat Yama den Block ausgeführt.
+
+**Ergebnis: `5bcca43` (AUF-67 Code) und `5e090cf` (Bündel) liegen auf `main`, ohne Votum.**
+Drei Minuten zwischen Messung und Ausführung haben gereicht.
+
+**Der Fehler steckt nicht in der Bedingung, sondern im Bezug.** „Der Stapel ist leer" ist eine
+Aussage über **einen Zeitpunkt**; der Befehl `git fetch . auto/hausplaner-integration:main` nimmt
+aber **die Spitze im Moment der Ausführung**. **Zwischen beiden liegt so viel Zeit, wie Yama zum
+Lesen und Einfügen braucht — und der Generator committet in Minuten.**
+
+### Die Regel
+
+1. **Der Merge nennt einen Commit, keinen Zweig.** Nicht
+   `git fetch . auto/hausplaner-integration:main`, sondern
+   **`git fetch . <sha>:main`** mit dem **letzten abgenommenen** Stand.
+2. **Der Planner nennt diesen `<sha>` beim Herausgeben des Blocks** und schreibt dazu, **welcher
+   Posten der letzte abgenommene ist**. Dann ist gleichgültig, wie viel Zeit vergeht und was in der
+   Zwischenzeit committet wird.
+3. **Was nach diesem Commit liegt, wandert beim nächsten Merge mit** — kein Verlust, nur eine
+   Verzögerung um eine Abnahme.
+4. **Nur so ist Bedingung 1 überhaupt prüfbar.** „Stapel leer" gilt für einen Stand, nicht für eine
+   Uhrzeit; ein Zweigname zeigt auf etwas, das sich bewegt.
+
+**Was das nicht heißt:** Der Weg **ohne `checkout`** bleibt richtig — er hat heute die zwei Fallen
+vermieden, an denen der erste Merge des Tages gescheitert war. **Falsch war allein, dass ich einen
+beweglichen Namen statt einer festen Nummer hingeschrieben habe.**

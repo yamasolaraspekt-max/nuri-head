@@ -11989,3 +11989,49 @@ aus den Registern abgeleitet (K2 differenziell: Stapel/Baum aendert -> Palette a
 Blocker.
 
 **Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.
+
+
+## PLANNER 26.07., 21:15 — AUF-67 ist bereits auf `main`, und zwar ohne Votum. Mein Fehler
+
+**Yama moechte AUF-67 mergen, „wenn vollstaendig". Gemessen: er ist schon drauf.**
+
+```
+git log 269d7fa..main
+  e9de9ab  GENERATOR-BERICHT AUF-67
+  5e090cf  Bundle-Rebuild fuer AUF-67
+  5bcca43  AUF-67: Die Befehlspalette wird globale Navigation      <- ohne Votum
+```
+
+**Der letzte abgenommene Stand war `269d7fa`** (Buendel AUF-42, freigegeben 20:48). Alles danach
+ist mitgewandert.
+
+**Wie es dazu kam, ohne Beschoenigung:** ich habe die vier Bedingungen um **20:59** gemessen und
+den Block herausgegeben. Um **21:02/21:03** hat der Generator AUF-67 committet. Um **21:05** hat
+Yama eingefuegt. **Drei Minuten.** Der Block lautete
+`git fetch . auto/hausplaner-integration:main` — **ein Zweigname, und der zeigt auf das, was im
+Moment der Ausfuehrung oben liegt**, nicht auf das, was ich gemessen hatte.
+
+**Der Fehler steckt nicht in der Bedingung, sondern im Bezug.** „Der Stapel ist leer" ist eine
+Aussage ueber **einen Stand**; ich habe sie an **einen beweglichen Namen** gehaengt. **Genau
+dieselbe Sorte Fehler wie die Buchstaben-Staffel und die 49-gegen-65-Zaehlung: zwei Dinge, die
+dasselbe zu meinen scheinen, und eines davon bewegt sich.**
+
+**Daraus §16, und er ist knapp:** **gemergt wird auf einen benannten abgenommenen Commit, nie auf
+die Spitze.** `git fetch . <sha>:main`. Der Planner nennt den `<sha>` und den Posten, zu dem er
+gehoert. Dann ist gleichgueltig, wie viel Zeit zwischen Messung und Einfuegen vergeht.
+
+**Wie gross ist der Schaden? Ehrlich: klein, aber nicht null.** Die Gates waren gruen
+(1231/0 Insel, 789 PHP), der Waechter lief auf **jedem** dieser Commits gruen, und §8 2b ist
+eingehalten. **Was fehlt, ist die unabhaengige Messung** — und die ist bei AUF-67 kein Formalismus:
+der Posten fasst die Palette an, und die Palette entscheidet mit, **welche Werkzeuge als aktivierbar
+gelten**. Faellt das Votum rot aus, steht der Fehler auf `main`.
+
+**Was jetzt zu tun ist — nichts Hektisches:**
+1. **Das Votum abwarten.** Es liegt beim Evaluator, mit den zwei Mutationen als erster Pruefung.
+2. **FREIGABE** ⇒ nachtraeglich in Ordnung, und §16 verhindert die Wiederholung.
+3. **ROT** ⇒ die Nachbesserung geht denselben Weg wie jeder Posten, **und danach ein zweiter Merge
+   auf den dann abgenommenen Commit.** Ein Rueckbau von `main` waere die schlechtere Antwort:
+   `main` ist gepusht, und Geschichte umzuschreiben, die schon zweimal aussen liegt, schafft mehr
+   Probleme als der eine unbewertete Posten.
+
+**Ballbesitz: Evaluator (AUF-67 — jetzt dringlicher als vorhin) · Generator (AUF-35b) · Yama: nichts.**
