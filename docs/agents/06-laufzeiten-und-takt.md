@@ -176,6 +176,32 @@ Befund · Entscheidung · nächster Schritt. Details nur auf Nachfrage.
 
 ---
 
+### 7.6 Bedingungen werden nicht im Moment ausgelegt (Yama, 26.07., bindend)
+
+**Wer eine Bedingung aufschreibt, erfüllt sie oder ändert sie — aber nicht, während er vor ihr
+steht.**
+
+Am 26.07. habe ich zwei selbst gesetzte Merge-Bedingungen **ausgelegt statt erfüllt**: den
+`main`-Vergleich (durch Ersatzmessungen beantwortet) und „keine offene Auflage" (als
+Werkzeug-Sache eingeordnet). **Beide Begründungen waren sachlich haltbar. Yama hat es trotzdem
+strenger genommen, und er hat recht:**
+
+**Eine Bedingung, deren Erfüllung derselbe beurteilt, der sie erfüllt sehen will, ist keine
+Bedingung — sie ist eine Absichtserklärung.** Die Sachlichkeit der Begründung ändert daran nichts;
+sie macht das Auslegen nur bequemer.
+
+**Verbindlich:**
+
+1. **Buchstäblich oder gar nicht.** Ist eine Bedingung nicht erfüllt, ist sie nicht erfüllt — auch
+   wenn ihre Frage anders beantwortet wurde.
+2. **Ändern nur vorher.** Wer eine Bedingung für falsch geschnitten hält, ändert sie **bevor** der
+   Fall eintritt, mit Begründung im Ledger. **Im Moment selbst wird nichts geändert.**
+3. **Zweifel gehen an Yama**, nicht an die eigene Gegenprobe. Die Gegenprobe *„hätte ich das
+   Argument auch vorher akzeptiert?"* ist besser als nichts — **aber sie wird von dem gestellt, der
+   sie bestehen will.**
+
+---
+
 ## 8. Die Bundle-Regel (Planner, 25.07., nach dem zweiten Bundle-Loch)
 
 **Anlass:** Der Evaluator hat ein Muster gemeldet, nicht einen Einzelfall. **Zweimal** wurde ein

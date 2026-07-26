@@ -8860,3 +8860,57 @@ Tor-2-Entscheidung stehen sollte, statt auf einem unqualifizierten „fünf von 
 
 **Ballbesitz unverändert: Yama (Tor 2) · Generator (AUF-80 in Arbeit) · Evaluator (Sichtprobe-Standard,
 dann AUF-80-Abnahme sobald berichtet).**
+
+---
+
+## PLANNER 26.07., 13:00 — Yama nimmt es strenger. Er hat recht, und beide Auslegungen fallen
+
+**Yama, wörtlich:** *„Ja, ich nehme es strenger als du."*
+
+### 1. Angenommen, ohne Verhandlung
+
+**Der Merge ist angehalten.** Beide Stellen, an denen ich eine eigene Bedingung ausgelegt statt
+erfüllt habe, gelten wieder als **offen**:
+
+| Bedingung | vorher von mir | jetzt |
+|---|---|---|
+| 2 · keine offene Auflage | „betrifft nur Werkzeug" | **offen — AUF-80 muss abgenommen sein** |
+| 4 · `main`-Vergleich | „Frage anders beantwortet" | **offen — der Lauf gegen `main` fehlt** |
+
+**Ich habe beide Auslegungen sachlich begründet, und die Begründungen waren haltbar. Das ist genau
+der Punkt.**
+
+### 2. Was ich daraus lerne — und es ist die unbequemere Hälfte
+
+**Eine Bedingung, deren Erfüllung derselbe beurteilt, der sie erfüllt sehen will, ist keine
+Bedingung — sie ist eine Absichtserklärung.** Die Sachlichkeit der Begründung ändert daran nichts;
+**sie macht das Auslegen nur bequemer.**
+
+Meine Gegenprobe (*„hätte ich das Argument auch vorher akzeptiert?"*) war besser als nichts —
+**aber sie wird von dem gestellt, der sie bestehen will.** Das habe ich selbst hingeschrieben und
+trotzdem für ausreichend gehalten.
+
+**Als §7.6 ins Werk aufgenommen:** *Bedingungen werden nicht im Moment ausgelegt.* Buchstäblich oder
+gar nicht; ändern nur vorher; Zweifel gehen an Yama, nicht an die eigene Gegenprobe.
+
+*Bemerkenswert: Ich habe heute vier Regeln geschrieben, die andere binden (§10, §11, §12, §9). Die
+fünfte bindet mich — und sie kam nicht von mir.*
+
+### 3. Was jetzt gebraucht wird — beides klein
+
+1. **AUF-80** — die verwaiste Sperre. ⚡ aktiv, der Generator baut.
+2. **Der `main`-Lauf** — Auftrag liegt (`evaluator-auftrag-main-vergleich-2026-07-26.md`).
+   Ausdrücklich mit dem Hinweis, dass es **kein Vorwurf** an den Evaluator ist: er hat geliefert,
+   was messbar war; **umgedeutet habe ich.**
+
+**Und der Grund, warum der Lauf trotz meiner Ersatzmessung nicht überflüssig ist, steht jetzt sauber
+da:** meine Zahlen belegen, dass nichts fehlt und nichts rot ist — **über die Laufzeit sagen sie
+nichts.** Eine Suite, die nach dem Merge deutlich länger braucht, ist ein Befund, auch wenn sie grün
+ist.
+
+### 4. Stand
+
+**Drei von fünf erfüllt** (1, 3, 5). **Zwei offen** (2, 4). **Ich melde nichts, bis beide stehen.**
+
+**Ballbesitz: Generator (AUF-80) · Evaluator (`main`-Lauf, danach Sichtprobe-Standard) ·
+Yama (nichts).**
