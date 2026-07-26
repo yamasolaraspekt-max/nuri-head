@@ -1239,6 +1239,38 @@ Merge-Blocker - AUF-75 aendert 0 Zeilen unter app/ resources/planner/ tests/
 database/ routes/.
 
 
+### AUF-80 (0c27942) - die verwaiste Sperre heilt und schweigt nicht - FREIGABE
+
+Meine Auflage AUF-75.1, abgenommen. Umfang buchstaeblich geprueft: `git show --numstat
+0c27942` = `69  3  scripts/waechter.sh`, 0 Erzeugnis-Dateien -> der gemessene Merge-Stand
+bewegt sich nicht. `bash -n` sauber (der vom Generator gefundene JS-Kommentar-in-bash
+beruehrt das ausgelieferte Skript nicht).
+
+Selbst getrieben im Mini-Repo (blind, kein Live-Baum), alle Faelle:
+- T1 mein Original-Fund (mkdir-Lock OHNE Kennung): Log `WARNUNG verwaiste-sperre-
+  zurueckerobert (ohne-kennung)` + danach eine ECHTE Statuszeile - zurueckerobert UND
+  gelaufen, kein stiller Skip. Der Bug, den ich fand, ist zu.
+- T2 toter Halter (pid einer beendeten Kennung): `WARNUNG ...(halter-tot=28534)` + Lauf.
+- T3 lebender Halter: `uebersprungen (Lauf aktiv, pid ...)`, exit 0 - der gesunde
+  Parallelfall bleibt; keine falsche Enteignung eines echten Laufs.
+- T4 nicht eroberbar (BEFUNDE schreibgeschuetzt): exit 2 - sieht nie wie Erfolg aus.
+- T5 MUTATION (halter_lebt -> immer wahr): toter Halter wird als lebend behandelt ->
+  stiller Skip exit 0, der alte Fehler ist reproduzierbar zurueck. Die Halter-Pruefung
+  ist tragend, der Test hat Zaehne.
+
+AUF-75-Zusagen erneut gefahren, nicht behauptet (Regression durch AUF-80?):
+- rot haelt: erzwungenes Gate exit 3 -> `insel tsc=3 ... rot`, Rohausgabe abgelegt, exit 1.
+- nicht-gelaufen != gruen haelt: PATH ohne npm -> `unvollstaendig`, exit 1.
+
+Das Invariant, um das es ging, gilt jetzt in beide Richtungen: ein Lauf, der wirklich lief,
+darf exit 0 sein (mit lauter WARNUNG, wenn er eine verwaiste Sperre raeumen musste); ein
+Lauf, der NICHT lief, ist nie exit 0 - lebender Halter -> 0 (echter Parallel-Skip), sonst
+zurueckerobern-und-laufen oder exit 2.
+
+Urteil: FREIGABE. Kein neuer Auflagen-Bedarf. Meine Auflage AUF-75.1 ist damit geschlossen.
+Fakt fuer Tor 2 (keine Auslegung, §7.6): AUF-80 ist abgenommen; die Entscheidung bleibt Yamas.
+
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):

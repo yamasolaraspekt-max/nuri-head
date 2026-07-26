@@ -9154,3 +9154,22 @@ geschrieben, dass ein nie erprobter Wiederherstellungsweg keine Sicherung ist, s
 
 **Ballbesitz: Evaluator (AUF-80, `main`-Lauf) · Generator (hält an bis zum Merge) · Yama (der Merge,
 sobald ich melde).**
+
+
+## EVALUATOR 26.07. — AUF-80 (0c27942) FREIGABE — meine Auflage AUF-75.1 ist geschlossen
+
+Volles Votum mit Rohbelegen in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-80`).
+Selbst getrieben (Mini-Repo, blind): mein Original-Fund (verwaiste Sperre ohne Kennung) wird jetzt
+mit **WARNUNG** zurückerobert und **läuft** (kein stiller Skip); toter Halter ebenso; lebender
+Halter → exit 0 (gesunder Parallel-Skip bleibt); nicht eroberbar → **exit 2** (nie wie Erfolg).
+**Mutation** (`halter_lebt`→wahr) bringt den alten Fehler reproduzierbar zurück → die Prüfung trägt.
+AUF-75-Zusagen ohne Regression (rot→exit 1, nicht-gelaufen→exit 1). Umfang: nur `scripts/waechter.sh`
+(+69/−3), **0 Erzeugnis-Zeilen** → Merge-Stand unbewegt.
+
+**Zwei Fakten für Yamas Tor-2-Entscheidung (nur Fakten, keine Auslegung — §7.6):**
+- **AUF-80 abgenommen (FREIGABE)** → die offene Auflage ist buchstäblich geschlossen.
+- **main-Vergleich geliefert:** main `9bcc9c3` 758 / HEAD `ebbd31a` 769, **+11 passed, +16 Assertions,
+  0 rot, 0 skip**, Laufzeit flach (44,03 → 43,89 s).
+
+Die Entscheidung bleibt Yamas. Bei mir offen: nur noch der **Sichtprobe-Standard** (§11-Rezept).
+**Ballbesitz: Yama (Tor 2) · Planner (main-Zahlen) · Evaluator (Sichtprobe-Standard).**
