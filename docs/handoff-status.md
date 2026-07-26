@@ -10347,3 +10347,65 @@ gegen echten Code gruen belegt `limit 6` direkt.
 **Urteil: FREIGABE** (kein Defekt, keine Auflage; die zwei nicht gemessenen Punkte sind Layout-Baseline,
 kein Blocker). Hinweis: der Baum traegt bereits **AUF-81-WIP** (ConfigWizard, routes, neue Model+Migration)
 - fremde WIP, nur gemeldet. **Ballbesitz: Planner** (Staffel: als Naechstes C = AUF-79).
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-81 (Konfigurator-Pakete serverseitig, B7 / AUF-40 Teil B)
+
+**Commits:** Code `69f9df2` (public/* = **0 Zeilen**, §8 2b eingehalten) · Bundle `0b17315` (zweiter,
+eigener Commit, nur das Artefakt). HEAD vorher/nachher verglichen, beide Hashes verifiziert.
+
+**Gates (Exit-Codes, selbst gefahren, kein Selbst-grün):**
+`tsc:hausplaner` **0** · `schema:hausplaner:check` **0** · `test:hausplaner` **0** (`tests 1114 · pass
+1114 · fail 0`, vorher 1102) · `build:hausplaner` **0**.
+**Volle PHP-Suite: 788 grün (2720 Zusagen)** — davon **10 neu** in `KonfiguratorPaketeTest.php` (30 Zusagen),
+**12 neu** in `paketSpeichern.test.ts`.
+
+**Der erste Posten mit Migration — deshalb kam er nach dem Merge, nicht davor.**
+
+- **K2 (die Sicherheitseigenschaft aus §2 des Auftrags):** EINE neue Tabelle, **keine bestehende
+  angefasst**. Gemessen am Dateiinhalt, nicht behauptet: `Schema::table(` **0** · `dropColumn` **0** ·
+  `renameColumn` **0** · `dropIfExists` vorhanden. Die Fremdschlüssel stehen **innerhalb** von
+  `Schema::create`, damit die Datei keinen einzigen nachträglichen Änderungs-Aufruf enthält — Kriterium 2
+  wörtlich, nicht nur sinngemäß. Der Rückweg verwirft eine Tabelle, die es vorher nicht gab; es geht kein
+  Bestandsdatensatz verloren. DAUERDIREKTIVE: rein additiv.
+- **K4 ausgeführt, nicht behauptet:** `migrate` → `rollback` → `migrate`, **alle drei DONE**, ausschließlich
+  gegen `ticket_testing`. Die Arbeits-DB `ticket` wurde **nicht** geschrieben.
+- **K3 idempotent:** zweimaliges Migrieren scheitert nicht (Wächter `Schema::hasTable` am Anfang von `up()`),
+  testverriegelt.
+- **K5 — das wichtigste Kriterium dieses Postens, das Eigentumsgatter:** der Besitzer kommt **aus der
+  Sitzung** (`$request->user()->id`), **nie** aus der Anfrage — eine mitgeschickte Kennung wäre das Gatter,
+  das man selbst aufsperrt. Ein fremdes Paket ergibt **404, nicht 403**: der Aufrufer erfährt nicht einmal,
+  dass es existiert. Beides testverriegelt (Liste sieht `total: 0`, Einzelabruf `assertNotFound` +
+  `assertDontSee`). Auch die Insel schickt keine Kennung mit — im Anfragekörper stehen genau
+  `art · paket · schema_version · titel`, und `user_id` kommt im Quelltext der Regel überhaupt nicht vor.
+- **K6:** ohne `Hausplaner,read` keine Liste; ohne `Hausplaner,add` kein Speichern — und dabei **null Zeilen
+  geschrieben** (mitgezählt, nicht nur der Status geprüft).
+- **K7 — serverseitig gefiltert:** geprüft wird die **abgesetzte Abfrage** (`DB::listen`), nicht das Ergebnis.
+  Eine Liste, die alles lädt und die Hälfte ausblendet, ist bereits geleakt.
+- **K8 — Paginierung:** 30 Pakete ⇒ Seite 1 = 25, Seite 2 = 5, `total` 30, und **genau eine Abfrage je
+  Seite** (kein N+1, mitgezählt).
+- **K9 — autark bleibt autark:** `alternative_id` nullable; ein Paket **ohne** Gebäude lässt sich speichern
+  und abrufen. Ein Pflichtfeld hätte genau den Fall verboten, der den Konfigurator stark macht.
+- **K10 — der Download bleibt:** gespeichert wird **zusätzlich**, nicht statt. Der Download ist der Weg für
+  alle ohne Speicherrecht. **Beide Wege werden EINZELN gemeldet**; klappt keiner, sagt die Fläche genau das
+  („Es ist nichts entstanden — weder gespeichert noch heruntergeladen"). `speicherePaket` meldet den
+  **Ausgang**, nicht den Versuch: 403/422/500 ⇒ `false`, Netz weg ⇒ `false` statt Wurf.
+
+**Drei Routen, nicht mehr** (`pakete.speichern` mit `Hausplaner,add`; `pakete.liste` und `pakete.zeigen` mit
+`Hausplaner,read`). **Kein Löschen, kein Ändern** — was mit einem Paket passiert, das schon in einem Angebot
+steckt, ist eine Fachfrage und gehört nicht in diesen Posten.
+
+**Selbst gefunden und behoben (Sichtprobe):** der Beschreibungstext im ConfigWizard versprach „gespeichert in
+deiner Paketliste" **auch ohne Speicherziel** — ein Versprechen ohne Deckung, also genau der Fehler, den
+AUF-74 beseitigt hat, mit neuem Vorzeichen. Der Text folgt jetzt `kannPaketSpeichern()`; ohne Ziel nennt er
+nur den Download. Testverriegelt.
+
+**Offengelegt:** **vier geerbte AUF-74-Zusagen wurden rot** und sind nachgezogen (drei umformuliert, eine
+ergänzt), weil dieser Posten ihre Tatsache ändert. **Die Absicht jeder Zusage ist erhalten:** die Fläche sagt,
+was tatsächlich passiert. Zwei weitere Muster mussten nach der Bedingungs-Änderung angepasst werden.
+
+**Umfang gemessen:** AP-4-Schichten (`store`/`domain`/`geometry`/`renderers`) **0 Zeilen** · `HausplanerDocument`
+unberührt · `@endphp`-Block im Blade **0** (nur einzeilige Datenattribute).
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator** (Staffel-Punkt E).
