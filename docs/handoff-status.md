@@ -12437,3 +12437,38 @@ freie Geometrie Plaetze im Schema, oder bleiben die 20 sichtbar gesperrt? - wird
 (50.2 und 50.3 landen beide in `HausplanerApp.tsx`)?
 
 **Ballbesitz unveraendert:** Generator AUF-52, Evaluator AUF-38 Scheibe 1, Stapel 1, Marke AUF-52.
+
+
+## PLANNER 26.07., 22:45 — AUF-38 Scheibe 1 freigegeben. Der Evaluator hat mein eigenes Muster gegen die Lieferung gehalten
+
+**FREIGABE** (`ba47815`) fuer Code `cca1837` + Artefakte `022021f`. Dreizehnter abgenommener Posten
+heute, weiterhin **kein einziges rotes Votum**.
+
+**Das Bemerkenswerte steht nicht im Urteil, sondern in einer Klammer.** Der Evaluator schreibt:
+*"Angeschlossen (kein Orphan, gegen das Planner-Muster): `main.tsx import './hausplaner.css'` +
+`setzeTokenVariablen()`"*. Er hat meine Zaehlung von 22:35 gelesen — 28 von 128 Modulen ohne
+Aufrufer ausser dem eigenen Test — und **sie als Pruefkriterium gegen die frische Lieferung
+gewendet**, obwohl sie in keinem Abnahmekriterium stand. Genau so soll der Zyklus arbeiten: ein
+Befund des einen wird zum Handgriff des anderen, ohne dass ihn jemand dazu beauftragen muss.
+
+Und er hat den Gegen-Beweis gefuehrt, den ich verlangt hatte, statt bei K9 stehenzubleiben:
+`tokenVariablen` ist `Object.entries(T).map` (camelCase -> kebab, `--hp-accent == T.accent`),
+Wert-Konstante eingesetzt ⇒ **K5 rot**. Damit ist belegt, was zaehlte: **die Tokens sind
+abgeleitet, nicht abgeschrieben.** K8 zusaetzlich haerter als bestellt — js **und** css byte-gleich
+zum frischen Build, also reproduzierbar. Gates 1256/0.
+
+**Kein Archiveintrag.** Eine abgenommene Scheibe ist kein abgeschlossener Posten; wer Scheiben
+archiviert, blaeht das Archiv mit Halbfertigem und zaehlt spaeter falsch — dieselbe Sorte Fehler
+wie die 49-gegen-65-Zaehlung. Der Stand steht in der AUF-38-Zelle: **Scheibe 1 abgenommen, Scheibe
+2 frei.** Tafel: **84 AUF-Zeilen, 0 fehlerhaft, Marke auf AUF-52, Abnahme-Stapel leer.**
+
+**Scheibe 2 laeuft nicht sofort.** Der Generator hat AUF-52 Scheibe 1 gezogen; ein Bauender je
+Posten (§13). AUF-38 Scheibe 2 ist frei und wartet, das ist kein Leerlauf, sondern die Staffel.
+
+**An den Evaluator (§15):** Stapel leer, kein Zuruf noetig. Der naechste Posten ist AUF-52 Scheibe 1
+(dach-zimmerei: Sparren, Holzmengen, Holzbauteile, Schifter). **Vorabhinweis, damit er nicht
+ueberrascht wird:** genau diese vier Module stehen auf meiner Liste der 28 ohne Aufrufer. AUF-52 ist
+damit der erste Posten, der das Muster nicht beschreibt, sondern abtraegt — **die passende Frage
+lautet nicht "rechnet die Engine richtig", sondern "ruft sie jetzt jemand, und sieht der Nutzer das
+Ergebnis".** Vier Module weniger auf der Halde waeren ein messbarer Fortschritt; vier gruen
+getestete Engines hinter einem Panel, das niemand oeffnet, waeren keiner.
