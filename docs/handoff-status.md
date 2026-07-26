@@ -10692,3 +10692,63 @@ role=button (Fokus/Enter/neuer Tab gratis; Leertaste ergaenzt) - gedeckt, Kriter
 
 **Staffel: AUF-78 ✓ · AUF-81 ✓ · AUF-82 ✓ · AUF-66 ✓** abgenommen (AUF-79 Spur B). Offen (warten auf
 Generator): **AUF-76, AUF-77.** Evaluator Standby.
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-76 (Die Wand bekommt ihre Schichten, M0)
+
+**Commits:** Code `26a544f` (`public/*` = **0 Zeilen**) · Bundle `8b43e13` (eigener zweiter Commit).
+HEAD vorher/nachher verglichen.
+
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1143 · pass 1143 ·
+fail 0`, vorher 1129) · `build` **0**. **Volle PHP-Suite: 789 grün (2729 Zusagen) — unverändert**, wie
+es bei einem rein additiven Feld sein muss. **Klassifikation: `Vorarbeit`.**
+
+**Ein Feld, feldgleich mit der Decke.** Der vierte Fall desselben additiven Musters nach `roofs`,
+`ceilings`, `aufbauten`. **Dieser Posten legt es an und rechnet nichts** — wer damit rechnet, ist AUF-77.
+
+- **K1/K2 — Umfang:** `store/` · `geometry/` · `renderers/` · `app/` — **null Dateien**. Berührt sind
+  ausschließlich `domain/scene.types.ts`, `domain/validation.ts`, die erzeugte
+  `scene-document-v2.schema.json` und die neue Testdatei.
+- **K3 — kein persistierter Wert umbenannt:** `thickness`, `height`, `type`, `objectType`, `zoneType`,
+  `routeType` unverändert — im Modell **und** im erzeugten Schema geprüft. **`thickness` bleibt die
+  Wahrheit für den Rohbau**; die Liste sagt, *woraus* die Wand besteht, nicht *wie dick* sie ist. Beide
+  Bezugsmaße werden geführt (Yama, 26.07.).
+- **K4 — der Bestand bleibt gültig:** eine Wand ohne das Feld validiert; das Feld steht in der abgelegten
+  Datei **nicht** unter `required`; und **eine echte Fixture** (`u-dach`, alle Wände ohne Schichten) lädt
+  unverändert. *Der erste Anlauf hier war ein von Hand geschriebenes Dokument — es fiel durch, weil ihm
+  `units`, `settings` und `sortOrder` fehlten. Eine erfundene Szene beweist nur, dass ich das Schema
+  erraten habe; deshalb steht jetzt die Fixture da.*
+- **K5 — Rundlauf:** zwei Schichten überstehen Ablage und Laden **wertgleich**, auch durch
+  `JSON.stringify/parse`; `thickness` daneben unverändert.
+- **K6 — ganze mm > 0:** `0`, `-5` und `12.5` werden **abgelehnt**; ebenso ein unbekanntes Feld in einer
+  Schicht (`.strict()` wie bei der Decke) — ein Tippfehler „dicke" statt „dickeMm" soll auffallen und
+  nicht als Zusatzfeld mitlaufen.
+- **K7 — feldgleich, und zwar gemessen:** verglichen wird das **erzeugte** Teilschema von Wand und Decke,
+  nicht der Quelltext — *gleich aussehender Zod-Code kann verschiedenes Schema erzeugen.* Ergebnis:
+  `deepEqual`, Feldnamen beidseitig `['dickeMm', 'materialId']`.
+  **Bewusst kein geteilter Zod-Baustein:** eine gemeinsame Konstante hätte den Erzeuger einen `$ref`
+  schreiben lassen und damit das **bestehende** Decken-Stück der abgelegten Datei verändert. Dass beide
+  gleich bleiben, sichert stattdessen der Test. **Der Diff der abgelegten Datei ist rein additiv: +18/−0.**
+- **K8 — Mutations-Gegenbeweis, ausgeführt statt behauptet:** das Feld auf **Pflicht** gesetzt (nur die
+  Wand-Zeile, die Decke unberührt), Schema neu erzeugt ⇒ **4 Zusagen rot, darunter alle drei K4** (Zod-
+  Ebene, abgelegte Datei, echte Fixture) und der Rundlauf am echten Dokument. Danach zurückgenommen und
+  die Schema-Datei als **bytegleich** zur Ausgangsfassung belegt (`diff -q`).
+
+### ZURÜCKGEGEBEN — zwei Fachfragen und ein Bestandsbefund
+
+1. **Summenprüfung Schichten gegen `thickness`:** **nicht** eingebaut. Eine Wand mit 300 mm und 320 mm
+   Schichten wird **angenommen** — testverriegelt, damit die Nicht-Entscheidung sichtbar bleibt. Ob das
+   ein Fehler oder eine zulässige Überdeckung ist, ist eine **Fachfrage für Yama**. Eine still eingebaute
+   Regel wäre eine Fachentscheidung, die sich niemand ausgesucht hat.
+2. **Bedeutung der Reihenfolge** (innen → außen): **liegt nahe, ist aber eine Festlegung und keine
+   Beobachtung.** Im Feldkommentar steht deshalb ausdrücklich, dass sich bis zur Antwort niemand auf die
+   Reihenfolge verlassen darf.
+3. **Befund am Bestand, gemeldet statt repariert:** der Kommentar an `CeilingNode.schichten` sagt
+   *„feldgleich mit `wandaufbau.Schicht`"* — **das ist messbar falsch.** `geometry/wandaufbau.ts:9-14`
+   führt `{ name?, dicke, lambda }`, das Modellfeld führt `{ materialId?, dickeMm }`. **Kein einziger
+   Feldname stimmt überein.** Der neue Wand-Kommentar übernimmt die Behauptung deshalb **nicht**, sondern
+   sagt umgekehrt, dass die beiden Typen getrennt sind. Den Deckenkommentar habe ich **nicht** angefasst —
+   er gehört nicht in diesen Posten.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
