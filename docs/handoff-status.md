@@ -6354,3 +6354,8 @@ und genau davor warnt §8.
 **Mutation** (`gap: 6` → `2`): **1 Test rot**.
 **Gates:** tsc **0** · schema:check **0** · test **0** · build **0**. Tests **1033 → 1034**.
 Kein `public/*`-Anteil, kein Bundle-Rebuild — es ist nur eine Testdatei.
+
+**Berichtigung zum Nachtrag oben:** Der genannte Commit `4f3e3b9` ist **falsch** — das ist der
+Ledger-Commit des AUF-70-Berichts. Der K13-Commit ist **`3b9d4ec`**. Ursache: ich hatte die Testdatei
+nicht zur Ablage vorgemerkt, der Commit lief ins Leere, und ich habe den zurückgegebenen Hash
+übernommen, statt ihn zu prüfen. **Ein Hash, den man nicht nachschlägt, ist eine Behauptung.**
