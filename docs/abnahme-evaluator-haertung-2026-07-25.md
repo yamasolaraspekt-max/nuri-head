@@ -1118,6 +1118,35 @@ gesperrtStil) gezogen, ohne opKnopfBild token-unrein zu machen; die zwei Textfar
 begruendet, die WCAG-Haertung deckt alle sechs, und der Gegenbeweis rot ueber drei Dateien belegt die
 eine Quelle. Genau die Vereinheitlichung, die aus meiner Inventur kam - vollstaendiger, als ich sie sah.
 
+## AUF-40 Teil A - der Startbildschirm sagt was es gibt (4cc9f6e, Bundle 10f7dd7) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 4cc9f6e gemessen (/tmp + Browser), dann Bericht. **Klasse: sichtbar.**
+
+- **Umfang:** 3 Dateien - NEU startEhrlich.test.ts; M StartView.tsx, studioDaten.ts. K2 null Modell.
+- **Tor-1-Blick:** KEINE Datei unter routes/ app/Http/ database/migrations/ - reine Insel; Teil B
+  (echte Projektliste, Route+Controller) bleibt bei Yama, nicht angefasst (Test 'weder Route noch
+  Controller beruehrt').
+- **(a) erfundene Projekte stillgelegt:** 'EFH Mustermann'/'Fenster-Angebot Hahn'/'Sanierung Musterstr.'
+  in ZULETZT_STILLGELEGT (Muster toolCatalogStillgelegt/STEPS_STILLGELEGT), nicht geloescht, rendern
+  nichts (K3). **(b) ehrlicher Leerzustand** 'Noch kein Projekt geoeffnet' statt Beispielzeilen.
+  **(c) drei Karten drei Ziele:** Hausplaner traegt das echte Ziel; die zwei anderen 'in Entwicklung'
+  mit Grund und sind KEINE Schaltflaeche mehr (Test 'Karte ohne Ziel ist keine Schaltflaeche').
+- **Gates:** schema 0 . test **1091/1091, 0 skip** (1082->1091) . tsc 0 . build ok. 9 Subtests.
+- **Gegen-Beweis (/tmp):** StartView greift nach der stillgelegten Demo-Liste -> **K3 rot** (deckt
+  Generator 'Mutation B: Demo-Liste zurueck 1 rot'; K3 faengt jede StartView-Referenz auf die Demo-Daten).
+- **Sichtprobe (iframe 1440x900, Konto ohne eigene Projekte):** **0 erfundene Namen** (waren in JEDEM
+  frueheren StartView-Screenshot), **Leerzustand steht** ('Noch kein Projekt geoeffnet. Ein Vorhaben
+  beginnt unten mit Hausplaner...'), **2x 'in Entwicklung'** (Sanierungsplan + Weiterarbeiten, mit Grund
+  - Weiterarbeiten nennt sogar Teil B: 'Braucht die Liste der eigenen Projekte - noch nicht angebunden').
+  *(Die feingranulare Karten-Rolle button-vs-nicht konnte ich im Browser nach drei Selektor-Versuchen
+  nicht sauber isolieren - mein Selektor traf zuerst die gleichnamigen NAV-Links; (c) fuehre ich
+  code-verifiziert (Test gruen) + die sichtbaren Badges, nicht browser-gemessen. Ehrlich benannt.)*
+
+**Urteil: FREIGABE.** Der Startbildschirm behauptet keine Projekte mehr, die es nicht gibt (3 erfundene
+stillgelegt, 0 gerendert, Leerzustand ehrlich), die drei Karten haben drei Ziele statt drei Versprechen,
+und Teil B ist sauber als Tor-1-Rueckgabe belegt (keine Route/Migration). Mutationsfest; die Kern-
+Ehrlichkeit am Schirm belegt, die Karten-Rolle am Code.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -1164,6 +1193,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-65    5ac811c  FREIGABE: STATUS_LABEL.ok 'Freigegeben'->'Vollstaendig' (Schluessel unveraendert K4), leere Liste keine Ueberschrift (K6), (b) zurueckgegeben weil Praemisse falsch (Schritte aus Szene seit AUF-39, gezaehlte Eintraege stillgelegt) ; schema 0/test 1068/1068/tsc 0/build ok ; 8 Subtests ; Gegen-Beweis Freigabe-Wort zurueck K3 rot ; Sichtprobe 1440x900 decke-treppe: Plakette 'Vollstaendig' kein 'Freigegeben', keine leere Aufgaben-Ueberschrift ; K3-grep-Selbstkorrektur (Treffer alle legitim)
   AUF-73    088c186  FREIGABE + schliesst AUF-72-Auflage: sichtbareHoehe=floor(min(hoehe,fenster-oben)) klemmt auf Sichtbares (abgerundet) ; schema 0/test 1073/1073/tsc 0/build ok, 14 Subtests inkl. AUF-72 K6 Verschub gruen ; Gegen-Beweis floor->ceil rot ; Sichtprobe Regel 11 (u-dach Wand top 369): 900 Ueberstand 0 (war 18), 813 Ueberstand 0 ; ehrlich: mein Befund 18px stimmte, meine Ursache (Optionen-Zeile) nicht - Wurzel war studio.blade min-height, Fix ursachen-robust
   AUF-71    04062fe  FREIGABE (schliesst Zustands-Inventur): gesperrtStil.ts EINE Quelle (liest opKnopfBild), alle 6 Flaechen lesen sie, eigene 0.4/0.45/0.6 = 0 (grep) ; schema 0/test 1082/1082/tsc 0/build ok, 9 Subtests ; Haertungsforderung: K8-Mutation an der Quelle = 9 rot ueber 3 Dateien (AUF-59/70/71) ; Kontrast selbst gerechnet faint 2.03 (Bild)/muted 4.54 (Label WCAG 1.4.3) ; WCAG jede Flaeche nicht-farblich, Menue-Eintrag aria-disabled ; Sichtprobe Geschoss-Loeschen 0.6 (war 0.4) ; ehrlich: Inventur fand 4, Generator 6 (0.45 uebersehen)
+  AUF-40A   4cc9f6e  FREIGABE: kein Tor-1 (keine Route/Migration, Teil B bei Yama) ; 3 erfundene Projekte stillgelegt (ZULETZT_STILLGELEGT, K3), ehrlicher Leerzustand, 3 Karten 3 Ziele (2 in Entwicklung keine Schaltflaeche) ; schema 0/test 1091/1091/tsc 0/build ok, 9 Subtests ; Gegen-Beweis Demo-Liste zurueck K3 rot ; Sichtprobe 1440x900: 0 erfundene Namen (waren immer da), Leerzustand steht, 2x in Entwicklung mit Grund ; Karten-Rolle code-verifiziert (Browser-Selektor traf NAV, ehrlich benannt)
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
