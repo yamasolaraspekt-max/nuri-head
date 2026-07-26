@@ -1530,6 +1530,41 @@ Urteil: FREIGABE. Verhaltenstreu (Bundle byte-gleich, K2 byte-genau ueber 4 Arte
 Pflicht ohne Default, Schichtrichtung sauber (geometry unabhaengig von app), additiv, 0 Erzeugnis-Wirkung.
 Umfang ist nur AUF-54 (55/56 tragen die Marke nicht, noch nicht gebaut). Ballbesitz: Planner.
 
+### AUF-55 (Code 53ede12 · Bundle 7033b86) - Snapshot-Flaeche ehrlich ausweisen - FREIGABE MIT AUFLAGE
+
+`sichtbar`, reine Insel (panelTabs.ts + 2 Tests). Blind gegen die committeten SHA. §8-Split sauber
+(Code ohne Bundle, 7033b86 nur Artefakt). views/ und routes/ null Zeilen -> additiv. Auftragspraemisse
+vom Generator gedreht: es gab keine wirkungslose Snapshot-Flaeche, sondern gar keine - der ehrliche
+Zustand steht jetzt im vorhandenen Reiter Historie, kein neuer Reiter, keine tote Naht neu gebaut.
+
+Gates (rein, /tmp-Auszug 7033b86): tsc 0 · schema 0 · test 1164 pass/0 fail · build 0 · Bundle
+byte-gleich zum frischen Build (reproduzierbar).
+
+Ehrlichkeit (die Substanz) - datenseitig verifiziert (renderToStaticMarkup/panelTabs, kein Live-DOM
+noetig), snapshotFlaecheEhrlich.test:
+- der Historie-Hinweis ist nicht leer und nicht duenn (>40 Zeichen).
+- KEIN Reiter endet auf eine Vertroestung (kein 'folgt'/'in Kuerze'/'demnaechst'/'coming soon'/
+  'keine Daten').
+- er sagt, WAS entstehen wird (Befehle, Planungsstaende) UND was heute schon da ist ("der Server
+  heute schon anlegt, listet und wiederherstellt ... Angebunden ist die Flaeche noch nicht").
+Gegen-Beweis (gueltig, /tmp): " folgt" gezielt in den Historie-Hinweis -> K1 "KEIN Reiter endet auf
+eine Vertroestung" rot (fail 1). Zaehne bestaetigt.
+
+AUFLAGE - die unabhaengige LIVE-Sichtprobe steht aus (§12.4: vertagte Sichtprobe = offene Abnahme):
+- AUF-55 ist `sichtbar`; die visuelle 3-Viewport-Pruefung (kein waagerechter Ueberlauf des laengeren
+  Hinweistexts bei 1440/1024/375) hat der GENERATOR gemeldet, ich habe sie in dieser Session nicht
+  unabhaengig live gefahren - der Browser-Viewport war gepinnt (innerWidth 1440 trotz resize) und die
+  Tab-Gruppe brach weg. Die Ehrlichkeit (der Kern) ist datenseitig + per Gegen-Beweis abgedeckt; offen
+  ist allein der visuelle Ueberlauf-Blick. Kriterium der Auflage: den Historie-Reiter-Hinweis in einer
+  belastbaren Browser-Session bei 1440/1024/375 rendern und auf waagerechten Ueberlauf pruefen.
+
+Nebenbefund (vom Generator gemeldet, nur weitergereicht): zwei Flaechen tragen weiterhin "Module folgen"
+(`HausplanerApp.tsx:1445`, `HausplanerStudio.tsx:174`) - ausserhalb des AUF-55-Umfangs, Sache des Planners.
+
+Urteil: FREIGABE MIT AUFLAGE. Substanz (Ehrlichkeit) verifiziert mit Zaehnen, Gates gruen, additiv,
+Bundle reproduzierbar; die eine offene Auflage ist die unabhaengige Live-Sichtprobe (visueller Ueberlauf).
+Ballbesitz: Planner (bzw. Evaluator fuer die Live-Sichtprobe, sobald ein belastbarer Browser da ist).
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):

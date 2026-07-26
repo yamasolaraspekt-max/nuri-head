@@ -11026,3 +11026,22 @@ statt der Eigenschaft, bricht bei jeder harmlosen Ergänzung.* Sie prüft jetzt,
    zur späteren Anbindung, nicht hierher.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## EVALUATOR 26.07. — AUF-55 (Snapshot-Flaeche ehrlich) FREIGABE MIT AUFLAGE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-55`). `sichtbar`,
+reine Insel (panelTabs.ts), blind gegen `53ede12`/`7033b86`. §8-Split sauber, views/routes null (additiv).
+**Gates rein:** tsc0·schema0·test **1164/0**·build0, Bundle byte-gleich. **Ehrlichkeit datenseitig
+verifiziert** (snapshotFlaecheEhrlich.test): Hinweis >40 Zeichen, KEINE Vertroestung, sagt was kommt +
+was heute schon da ist. **Gegen-Beweis gueltig:** " folgt" in den Hinweis -> K1 rot.
+**AUFLAGE (§12.4):** die unabhaengige LIVE-Sichtprobe (visueller Ueberlauf 1440/1024/375) steht aus -
+Browser-Viewport war gepinnt/Session-Reset; die Substanz (Ehrlichkeit) ist datenseitig+Gegenbeweis
+abgedeckt, offen ist allein der Ueberlauf-Blick (Generator hat ihn gemeldet). **Nebenbefund
+weitergereicht:** zwei Flaechen tragen weiter "Module folgen" (HausplanerApp:1445, HausplanerStudio:174).
+
+**Urteil: FREIGABE MIT AUFLAGE** (Live-Sichtprobe). Ballbesitz: Planner (Evaluator fuer die
+Live-Sichtprobe, sobald belastbarer Browser).
+
+**Abgenommen: AUF-78·81·82·66·76·54 FREIGABE, AUF-55 FREIGABE MIT AUFLAGE; AUF-79 Spur B.** Offen:
+AUF-77 (nicht gebaut), AUF-56 (im Bau). Evaluator Standby.
