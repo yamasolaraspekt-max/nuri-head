@@ -150,7 +150,12 @@ export function EngineFlaeche({ panel, gruppe, zustand, zurueck, onZurueck }: Pr
                   ))}
                 </div>
 
-                {/* Prüfliste — auch bei „nicht bestanden" bleiben die Zahlen oben stehen. */}
+                {/* AUF-52 Scheibe A: **Prüfliste nur, wenn die Engine eine liefert.**
+                    `SparrenBerechnung` gibt Ausnutzungsgrade und `bestanden` zurueck, aber KEINE
+                    Prueflisten-Eintraege. Hier eine zu bilden, waere eine Rechnung im Panel — und
+                    genau die verbietet AUF-33 §3a. Also zeigt die Huelle, was da ist, und wo nichts
+                    ist, steht nichts. */}
+                {ergebnis.pruefungen !== undefined && (<>
                 <h3 style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.faint, margin: '0 0 8px' }}>
                   Prüfungen ({ergebnis.pruefungen.length})
                 </h3>
@@ -174,6 +179,7 @@ export function EngineFlaeche({ panel, gruppe, zustand, zurueck, onZurueck }: Pr
                     );
                   })}
                 </div>
+                </>)}
               </>
             )}
           </section>

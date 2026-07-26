@@ -28,16 +28,32 @@ const panelQuelle = ohneKommentare(readFileSync(join(hier, '../app/dashboard/eng
 const TREPPE = enginePanel('engine-treppe')!;
 
 // --- L2 ist L2: genau ein Panel -----------------------------------------------------------------
-test('L2: genau EIN Engine-Panel — das Muster wird erst abgenommen, dann kopiert', () => {
-  assert.equal(ENGINE_PANELS.length, 1);
-  assert.equal(ENGINE_PANELS[0].engineId, 'engine-treppe');
-  assert.equal(enginePanel('engine-fbh'), undefined, 'L3 ist nicht Teil dieses Auftrags');
+/**
+ * **Nachgezogen in AUF-52 Scheibe A — die Absicht ist unveraendert:** *das Muster wird erst
+ * abgenommen, dann kopiert.* Die Zahl war nie das Kriterium; sie stand auf **1**, weil L2 genau
+ * eine Engine anschloss. Scheibe A haengt die zweite an (Sparren). **Geprueft wird jetzt, was
+ * gemeint war:** kein Panel ohne angeschlossene Engine, und nichts aus einer spaeteren Scheibe.
+ */
+test('das Muster wird kopiert, nicht vorweggenommen — nur angeschlossene Engines haben ein Panel', () => {
+  assert.ok(ENGINE_PANELS.length >= 1);
+  assert.deepEqual([...ENGINE_PANELS.map((p) => p.engineId)].sort(), ['engine-sparren', 'engine-treppe']);
+  // Die Scheiben B und C sind nicht vorweggenommen.
+  for (const spaeter of ['engine-fbh', 'engine-heizkoerper', 'engine-uwert', 'engine-pv']) {
+    assert.equal(enginePanel(spaeter), undefined, `${spaeter} gehoert in eine spaetere Scheibe`);
+  }
+  // Und die drei zurueckgegebenen der eigenen Gruppe ebenso wenig.
+  for (const zurueck of ['engine-holzmengen', 'engine-holzbauteile', 'engine-schifter']) {
+    assert.equal(enginePanel(zurueck), undefined, `${zurueck} ist begruendet zurueckgegeben`);
+  }
 });
 
-test('K7: genau eine der 13 Engines steht auf `verfuegbar`, und sie hat auch ein Panel', () => {
+test('K7: genau die angeschlossenen Engines stehen auf `verfuegbar` — und jede hat ihre Flaeche', () => {
   const engines = FAEHIGKEITEN.filter((f) => f.art === 'engine');
   const verfuegbar = engines.filter((e) => e.zustand === 'verfuegbar');
-  assert.equal(verfuegbar.length, 1);
+  // **AUF-52 K6:** die Zahl der `verfuegbar`-Engines ist EXAKT die Zahl der angeschlossenen —
+  // nicht eine feste Zahl, sondern die Gleichheit. Eine Engine, die auf Vorrat verfuegbar stuende,
+  // waere ein Versprechen ohne Flaeche.
+  assert.equal(verfuegbar.length, ENGINE_PANELS.length);
   assert.ok(enginePanel(verfuegbar[0].id), 'eine verfügbare Engine ohne Fläche wäre ein falsches Versprechen');
   // und umgekehrt: kein Panel ohne verfügbare Engine
   for (const p of ENGINE_PANELS) {
