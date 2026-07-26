@@ -24,6 +24,7 @@
  * Steuerelemente, und die App rendert in Mausbewegungs-Frequenz.
  */
 import React, { useEffect, useRef, useState } from 'react';
+import { GESPERRT_DECKKRAFT, GESPERRT_ZEIGER } from './gesperrtStil';
 import { T } from '../studioDaten';
 import { stapel, kurzfassung, type StapelEintrag } from './geschossStapel';
 import type { Level } from '../../domain/scene.types';
@@ -166,7 +167,7 @@ export function GeschossFlaeche({
             <button type="button" style={knopfStil} title="Aktuelles Geschoss als Vorlage duplizieren — Wände, Öffnungen und Dach werden ein Stockwerk höher kopiert" onClick={onDuplizieren}>⧉ Duplizieren</button>
             <button
               type="button" disabled={s.anzahl <= 1}
-              style={{ ...knopfStil, opacity: s.anzahl <= 1 ? 0.4 : 1, cursor: s.anzahl <= 1 ? 'not-allowed' : 'pointer' }}
+              style={{ ...knopfStil, opacity: s.anzahl <= 1 ? GESPERRT_DECKKRAFT : 1, cursor: s.anzahl <= 1 ? GESPERRT_ZEIGER : 'pointer' }}
               title={s.anzahl <= 1 ? 'Das letzte Geschoss kann nicht gelöscht werden' : 'Aktives Geschoss löschen (muss leer sein)'}
               onClick={onLoeschen}
             >− Löschen</button>

@@ -19,6 +19,7 @@
  * Expertenmodus bei 1375 px den vierten Reiter verschluckt, wird hier nicht wiederholt.
  */
 import React from 'react';
+import { GESPERRT_ZEIGER, GESPERRT_GRUND, GESPERRT_BESCHRIFTUNG } from './dashboard/gesperrtStil';
 import { T } from './studioDaten';
 import { Ikon, ZustandBadge, type StudioZustand } from './studioUi';
 import { useDialogFokus } from './dashboard/dialogFokus';
@@ -67,8 +68,8 @@ function EingangFeld({ feld, grundId }: { feld: FeldVorschau; grundId: string })
         type="text" value="" readOnly disabled aria-describedby={grundId} placeholder="—"
         style={{
           width: '100%', boxSizing: 'border-box', border: `1px solid ${T.hair}`, borderRadius: 10,
-          padding: '9px 12px', font: 'inherit', fontSize: 13.5, background: T.surface2,
-          color: T.faint, cursor: 'not-allowed',
+          padding: '9px 12px', font: 'inherit', fontSize: 13.5, background: GESPERRT_GRUND,
+          color: GESPERRT_BESCHRIFTUNG, cursor: GESPERRT_ZEIGER,
         }}
       />
     </label>

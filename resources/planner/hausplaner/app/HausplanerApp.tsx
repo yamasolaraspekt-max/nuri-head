@@ -30,6 +30,7 @@ import { GeschossFlaeche } from './dashboard/GeschossFlaeche';
 import { panAus, type Pan } from './dashboard/pan';
 import { einpassen, knotenPunkte } from './dashboard/einpassen';
 import { buehnenHoehe, useGemesseneHoehe } from './dashboard/buehnenHoehe';
+import { GESPERRT_DECKKRAFT, GESPERRT_ZEIGER, GESPERRT_GRUND, GESPERRT_BESCHRIFTUNG } from './dashboard/gesperrtStil';
 import { opKnopfBild, type OpKnopfBild } from './dashboard/opKnopfZustand';
 import { speicherAnzeige, type AnzeigeArt } from './dashboard/speicherAnzeige';
 import { naechsterSchritt, wegweiserSatz } from './tools/naechsterSchritt';
@@ -1180,9 +1181,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           title={anzeige.knopfTitel}
           style={{
             padding: '7px 16px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none',
-            cursor: anzeige.gesperrt ? 'not-allowed' : 'pointer',
-            background: anzeige.gesperrt ? T.hair2 : T.brand,
-            color: anzeige.gesperrt ? T.muted : T.ink,
+            /* AUF-71: sechste Sperr-Fläche, in der Inventur nicht enthalten — beim Messen
+               aufgefallen. Sie trug bereits genau die Werte der Quelle; jetzt liest sie sie,
+               statt sie zu wiederholen. Wertgleich, kein sichtbarer Unterschied. */
+            cursor: anzeige.gesperrt ? GESPERRT_ZEIGER : 'pointer',
+            background: anzeige.gesperrt ? GESPERRT_GRUND : T.brand,
+            color: anzeige.gesperrt ? GESPERRT_BESCHRIFTUNG : T.ink,
           }}
         >
           Speichern (Strg+S)
@@ -1354,7 +1358,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                 aria-disabled={!zustand.enabled}
                 aria-pressed={aktiv}
                 onClick={() => { if (!zustand.enabled) return; setWerkzeug(tool.id as typeof werkzeug); setWandStart(null); setTreppeStart(null); }}
-                style={{ ...navItem(aktiv), ...(zustand.enabled ? {} : { opacity: 0.4, cursor: 'not-allowed' }) }}>
+                style={{ ...navItem(aktiv), ...(zustand.enabled ? {} : { opacity: GESPERRT_DECKKRAFT, cursor: GESPERRT_ZEIGER }) }}>
                 <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>{werkzeugIcon(tool.id)}</span>
                 <span style={{ flex: 1 }}>{tool.label}</span>
                 {tool.shortcut && <span style={{ fontSize: 10.5, color: T.muted, border: `1px solid ${T.controlBorder}`, borderRadius: 4, padding: '1px 5px' }}>{tool.shortcut}</span>}
@@ -2189,8 +2193,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
                         /* Markierung als Hintergrund UND Schriftschnitt, nicht nur farblich. */
                         background: markiert ? T.brandWash : 'transparent',
                         fontWeight: markiert ? 700 : 500,
-                        color: eintrag.enabled ? FARBEN.text : T.muted,
-                        cursor: eintrag.enabled ? 'pointer' : 'not-allowed',
+                        color: eintrag.enabled ? FARBEN.text : GESPERRT_BESCHRIFTUNG,
+                        cursor: eintrag.enabled ? 'pointer' : GESPERRT_ZEIGER,
                       }}
                     >
                       <span style={{ flex: '0 0 auto', minWidth: 74 }}>{eintrag.label}</span>

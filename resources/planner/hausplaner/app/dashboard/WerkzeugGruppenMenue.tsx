@@ -15,6 +15,7 @@
  * definierte Komponente verlöre bei jeder Bewegung Fokus und Tastaturbedienung.
  */
 import React, { useEffect, useRef } from 'react';
+import { GESPERRT_DECKKRAFT } from './gesperrtStil';
 import { T } from '../studioDaten';
 import { resolveToolState } from '../tools/activation';
 import type { AktivierungsKontext } from '../tools/toolTypes';
@@ -100,10 +101,10 @@ export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angehe
                   });
                   const fest = angeheftet.has(tool.id);
                   return (
-                    <div key={tool.id} role="menuitem" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 6px', borderRadius: 7 }}>
+                    <div key={tool.id} role="menuitem" aria-disabled={!zustand.enabled} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 6px', borderRadius: 7 }}>
                       <img
                         src={iconPfad(tool)} alt="" aria-hidden width={18} height={18}
-                        style={{ flex: '0 0 auto', opacity: zustand.enabled ? 1 : 0.45 }}
+                        style={{ flex: '0 0 auto', opacity: zustand.enabled ? 1 : GESPERRT_DECKKRAFT }}
                         // Kante 3: fehlendes Icon ⇒ Platzhalter mit Grund, kein Absturz, kein Loch.
                         onError={(e) => {
                           const el = e.currentTarget;

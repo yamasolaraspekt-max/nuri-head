@@ -20,6 +20,7 @@
  * (`FachFlaeche.tsx`), nicht aus einem zweiten Rahmen.
  */
 import React, { useState } from 'react';
+import { GESPERRT_ZEIGER, GESPERRT_GRUND, GESPERRT_BESCHRIFTUNG } from './dashboard/gesperrtStil';
 import { T } from './studioDaten';
 import { FlaechenHuelle } from './FachFlaeche';
 import {
@@ -98,8 +99,8 @@ export function EngineFlaeche({ panel, gruppe, zustand, zurueck, onZurueck }: Pr
               type="button" onClick={rechnen} disabled={fehlt.length > 0}
               title={fehlt.length > 0 ? `Es fehlt: ${fehlt.map((f) => f.label).join(', ')}` : 'Auslegung berechnen'}
               style={{
-                marginTop: 16, width: '100%', padding: '10px 14px', borderRadius: 11, cursor: fehlt.length > 0 ? 'not-allowed' : 'pointer',
-                border: 'none', background: fehlt.length > 0 ? T.hair2 : T.accent, color: fehlt.length > 0 ? T.muted : T.surface,
+                marginTop: 16, width: '100%', padding: '10px 14px', borderRadius: 11, cursor: fehlt.length > 0 ? GESPERRT_ZEIGER : 'pointer',
+                border: 'none', background: fehlt.length > 0 ? GESPERRT_GRUND : T.accent, color: fehlt.length > 0 ? GESPERRT_BESCHRIFTUNG : T.surface,
                 fontWeight: 700, fontSize: 14,
               }}
             >
