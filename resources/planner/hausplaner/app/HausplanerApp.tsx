@@ -29,6 +29,7 @@ import { faehigkeitNach } from './tools/faehigkeiten';
 import { GeschossFlaeche } from './dashboard/GeschossFlaeche';
 import { panAus, type Pan } from './dashboard/pan';
 import { einpassen, knotenPunkte } from './dashboard/einpassen';
+import { buehnenHoehe, useGemesseneHoehe } from './dashboard/buehnenHoehe';
 import { opKnopfBild, type OpKnopfBild } from './dashboard/opKnopfZustand';
 import { speicherAnzeige, type AnzeigeArt } from './dashboard/speicherAnzeige';
 import { naechsterSchritt, wegweiserSatz } from './tools/naechsterSchritt';
@@ -355,6 +356,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const [pan, setPan] = useState<Pan | null>(null);
   const [rasterAn, setRasterAn] = useState(true);
   const stageRef = useRef<Konva.Stage | null>(null);
+  /** AUF-72: das Element, das die Bühne trägt — sein Platz IST die Bühnenhöhe. */
+  const inhaltRef = useRef<HTMLDivElement | null>(null);
+  const gemesseneHoehe = useGemesseneHoehe(inhaltRef);
 
   const level = scene?.levels.find((l) => l.id === activeLevelId) ?? scene?.levels[0] ?? null;
   const nodes = useMemo(
@@ -1055,7 +1059,18 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
 
   const breite = (typeof window !== 'undefined' ? window.innerWidth : 1200) - 220 - 268; // minus Werkzeugleiste + Panel
   const stageBreite = modus === 'split' ? Math.floor(breite / 2) : breite; // P1c: Split teilt die Fläche
-  const hoehe = typeof window !== 'undefined' ? window.innerHeight - 96 : 700;
+  /**
+   * AUF-72 — die Bühnenhöhe kommt aus dem Platz, den sie **wirklich** hat.
+   *
+   * Hier stand die Fensterhöhe minus einer festen 96. Die stammte aus einer Zeit mit **einer** Leiste über
+   * der Bühne; seither sind drei dazugekommen (AUF-34, AUF-68, AUF-70), gemessen 323–369 px. Die
+   * Folge: die Bühne ragte 227–273 px unter das Fenster, und 28–38 % der Zeichenfläche waren
+   * unerreichbar — nicht wegzuscrollen.
+   *
+   * Gemessen wird die **Inhaltsreihe** (`inhaltRef`): Fenster minus alles darüber, ohne dass
+   * irgendwo eine Zahl gepflegt werden muss.
+   */
+  const hoehe = buehnenHoehe(gemesseneHoehe);
 
   // Raster-Linien (nur grobe Linien, Performance).
   const rasterSchritt = Math.max(scene.settings.gridSize * 5, 500);
@@ -1283,7 +1298,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       {/* Canvas: 2D (Konva) + 3D (three) nebeneinander — beide lesen DENSELBEN Store.
           Der 3D-Bereich bleibt über Moduswechsel gemountet (nur ausgeblendet) ⇒ Kamera
           bleibt erhalten; dispose() erst beim Verlassen der Seite (Kante 6). */}
-      <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
+      {/* AUF-72: DIESE Reihe ist das Maßband. Ihre Höhe ist das Fenster minus der Zeilen darüber
+          und hängt NICHT von der Bühne ab (`overflow: hidden`) — deshalb kann die Messung sich
+          nicht selbst verschieben. */}
+      <div ref={inhaltRef} style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
         {/* L1: Planer-Schiene — AUF-27: DREI REITER statt drei gestapelter Blöcke.
             Vorher trugen Werkzeuge, Fachplaner und Projektbrowser eine gemeinsame Scroll-Höhe;
             der Projektbrowser war erst nach rund 20 Scroll-Ticks sichtbar. Jetzt ist immer genau
