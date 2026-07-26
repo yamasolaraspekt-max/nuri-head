@@ -13250,3 +13250,51 @@ derselben Datei. Bevor jemand daraus etwas holt, gehoert geklaert, welche gilt �
 deren einzige Verweise `import type` sind. Er haette heute drei gefunden.
 
 **Kein Posten (§14).** Ballbesitz: Generator AUF-52 Scheibe B, Stapel leer, Marke AUF-52.
+
+
+## PLANNER 26.07., 23:05 (CEST) — AUF-52 Scheibe B: zwei von drei. Und die vierte Rueckgabe hat dieselbe Ursache wie die zweite und dritte
+
+**Bericht:** Code `b5af4196`, Bundle `890a3f70`. Gates **1278/0**, PHP 789 gruen,
+`store/`·`domain/`·`renderers/`·`geometry/` **null Zeilen**.
+
+**Angeschlossen:** `engine-fbh` (sechs Felder, fuenf Ergebnisse, **eigene Pruefpunkte** — deshalb
+zeigt die Huelle sie, ohne selbst zu pruefen) und `engine-heizkoerper` (sieben Felder, drei
+Ergebnisse). **Zurueckgegeben:** `engine-heizkreis` — sie nimmt eine **Liste** von Heizkreisen,
+und *"aus einem Satz Feldern eine einelementige Liste zu bauen hiesse, den Zweck der Engine zu
+verstecken — sie legt einen Verteiler mit mehreren Kreisen aus."*
+
+**Das ist jetzt ein Muster mit einer Ursache, und es ist gross genug fuer eine eigene Zeile.**
+Ueber beide Scheiben: **vier von sieben angeschlossen, vier begruendet zurueck** — **dreimal ein
+Listeneingang, den es im Modell nicht gibt** (Holzliste ×2, Heizkreisliste), einmal eine
+Ergebnisform ohne Zahlen.
+
+**Die Huelle kennt nur Einzelfelder. Engines, die einen *Satz* auslegen, haben keinen Weg
+hinein.** Das ist keine Schwaeche der Engines und keine der Huelle — es ist eine fehlende Schicht
+dazwischen. **Und sie hat in Yamas Objektmodell bereits einen Namen:** eine Holzliste ist ein
+**Mengenergebnis** (§15, `QuantityCalculator`), ein Verteiler mit mehreren Kreisen ist eine
+**Sammlung von Objekten** mit Parameterschema. **Drei Rueckgaben, eine Ursache, und die Ursache
+zeigt auf eine Architektur, die noch nicht beschlossen ist.** Auf die Befundliste, kein Posten
+(§14).
+
+**Er hat die Auflage aus Scheibe A von sich aus umgesetzt.** Ich hatte um 22:55 notiert: *bei der
+naechsten Scheibe gehoert die Mutation an dieselbe Stelle, an der der Fehler sass.* Sein Bericht:
+*"Nach dem Fehler aus Scheibe A fuehre ich beide Seiten des Vergleichs bewusst getrennt."* K8 auf
+handgeschriebenen Engine-Eingaben, Mutation `ruecklauf` liest `vorlauf` ⇒ **1 rot**.
+**Und er hat zwei Takte lang nicht angefangen und den Grund gemeldet**, weil Scheibe A noch nicht
+abgenommen war — §2 des Auftrags eingehalten, ohne dass jemand nachfragen musste.
+
+**Eine Umbenennung, offen ausgewiesen — und sie ist die Stelle, die ich pruefen lasse.**
+`bewerteDeckung` nennt sein Merkmal `ausreichend`, die Huelle liest `bestanden`. Er sagt:
+unveraendert durchgereicht, testverriegelt in beide Richtungen, Original bleibt daneben.
+**Meine Frage an den Evaluator ist eine andere als seine Zusage:** nicht *bleibt der Wert gleich*,
+sondern **bedeuten die beiden Woerter dasselbe**. *"Ausreichend" ist eine Aussage ueber eine
+Deckung, "bestanden" eine ueber eine Pruefung.* Ein durchgereichter Wert unter falschem Namen ist
+kein Rechenfehler, sondern ein Bedeutungsfehler — und der faellt in keinem Gate auf.
+
+**An den Evaluator (§15, Bringschuld):** AUF-52 Scheibe B liegt im Stapel. **Zuerst die
+Umbenennung** (Gegen-Beweis: Wert am Ursprung verfaelschen, sehen ob er ungefiltert ankommt; und
+pruefen, ob dabei ein Grenzwert erfunden wurde). **Danach**, ob die beiden Seiten des K8-Vergleichs
+wirklich getrennt laufen. **Zuletzt** die Rueckgabe. §13.6 gilt.
+
+**Ballbesitz:** Evaluator. Generator faehrt Scheibe C (U-Wert · Fensterprodukt · Abwasser · Kueche ·
+PV). Tafel 85 Zeilen, 0 fehlerhaft, eine Marke (AUF-52).
