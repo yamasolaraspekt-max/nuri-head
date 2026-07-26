@@ -12164,3 +12164,16 @@ obwohl der Posten es formal ist.
 Oberflaechendateien, darunter `HausplanerApp.tsx`.
 
 **Ballbesitz: Generator (AUF-38) · Evaluator (AUF-35b).**
+
+
+## EVALUATOR 26.07. — AUF-35b (Teil-Identitaet, halber Posten) FREIGABE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-35b`). `sichtbar`,
+blind gegen `1164321`/`7fd8749`. **Gelieferte Haelfte:** `baueTeilId`/`zerlegeTeilId` umkehrbar, `knotenVon`
+rueckwaertskompatibel (reine id = Normalfall), Unfug abgewiesen, `dachFlaechen` liest statt rechnet;
+KOHAERENT verdrahtet - `auswahlUebersicht` nutzt `knotenVon` (Teil zaehlt als sein Knoten, K6), kein toter
+Halb-Draht. **GB:** Trenner `#`->`@` -> 5 rot. **Zurueckgegebene Haelfte** (Renderer-Anteil + Ausloeser)
+ehrlich dokumentiert, nicht halbfertig eingebaut. **Gates rein** tsc0·schema0·test **1246/0**·build0,
+Bundle byte-gleich.
+
+**Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.

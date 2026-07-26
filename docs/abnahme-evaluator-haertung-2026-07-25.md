@@ -1719,6 +1719,32 @@ Urteil: FREIGABE. Zustands-Navigation ohne URL, Palette aus den Registern abgele
 Eintraege Art-tragend, Gates gruen, Bundle reproduzierbar, additiv. Fokusfalle als Befund
 zurueckgegeben. Ballbesitz: Planner.
 
+### AUF-35b (Code 1164321 · Bundle 7fd8749) - Teil-Identitaet gebaut, Renderer-Anteil zurueckgegeben (halber Posten) - FREIGABE
+
+`sichtbar`, reine Insel. Blind gegen die committeten SHA. §8-Split sauber. Gates rein (/tmp-Auszug
+7fd8749): tsc 0 · schema 0 · test 1246 pass/0 fail · build 0 · Bundle byte-gleich (reproduzierbar).
+
+Die gelieferte Haelfte - Teil-Identitaet (verifiziert):
+- `baueTeilId`/`zerlegeTeilId` umkehrbar (`wall-7#seite:links` <-> {nodeId,art,wert}); `knotenVon`
+  gibt eine reine Knoten-id UNVERAENDERT zurueck (rueckwaertskompatibel - eine reine id ist der
+  Normalfall, kein Fehler); Unfug wird abgewiesen statt halb gelesen; K5 jede Wand mit Laenge hat
+  genau zwei Seiten. `dachFlaechen` LIEST vorhandene Flaechen, rechnet nicht neu (eine Wahrheit).
+- Kohaerent verdrahtet, kein toter Halb-Draht: `auswahlUebersicht` importiert `knotenVon` und loest
+  Teil-Kennungen wirklich auf (`nodes.find(n => n.id === knotenVon(id))`) - eine Auswahl mit
+  Teil-Kennung zaehlt als ihr Knoten, nicht als Nichts (K6).
+- Gegen-Beweis (gueltig, /tmp): Trenner `#`->`@` -> 5 rot (Roundtrip "umkehrbar" + K6-Integration).
+  Zaehne bestaetigt.
+
+Die zurueckgegebene Haelfte - ehrlich, nicht verschwiegen:
+- Der Renderer-Anteil (das Mesh am Teil auswaehlen) und der fehlende Ausloeser sind ausdruecklich
+  zurueckgegeben (Bericht + Kopf-Kommentar, der den Ist-Zustand benennt: Auswahl ist heute
+  knotenweise, `surfaceId` existiert nur INNERHALB der Meshes, nicht als Daten). Ein halber Posten
+  mit Begruendung - die Datenschicht steht und ist nutzbar, der Renderer folgt als eigener Posten.
+
+Urteil: FREIGABE. Die Teil-Identitaet ist vollstaendig, korrekt, rueckwaertskompatibel und verdrahtet
+(mit Zaehnen); die zweite Haelfte ist ehrlich zurueckgegeben statt halbfertig eingebaut. Gates gruen,
+Bundle reproduzierbar, additiv. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
