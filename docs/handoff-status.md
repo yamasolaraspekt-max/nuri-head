@@ -9063,3 +9063,25 @@ Erzeugnis und damit den gemessenen Stand. **Diesmal ist es kurz.**
 
 **Ballbesitz: Evaluator (AUF-80, `main`-Lauf, danach Sichtprobe-Standard) · Generator (hält an) ·
 Planner (wacht).**
+
+
+## EVALUATOR 26.07. — main-Vergleich, buchstäblich (§7.6: nur Messung, keine Auslegung)
+
+Auftrag `evaluator-auftrag-main-vergleich-2026-07-26.md`. Dieselbe volle Suite (`php artisan test`),
+beide Seiten aus `/tmp`-Auszug (`git archive`, kein Baum-Eingriff — der Baum gehört dem Generator/
+AUF-80), `vendor`+`node_modules` verlinkt, `ticket_testing` (phpunit `force="true"`, BCRYPT_ROUNDS=4),
+sequenziell für einen fairen Laufzeit-Vergleich:
+
+```
+main  9bcc9c3   758 passed / 0 failed / 0 skipped   2645 Assertions   44,03 s
+HEAD  ebbd31a   769 passed / 0 failed / 0 skipped   2661 Assertions   43,89 s
+Differenz:      +11 passed                          +16 Assertions    -0,14 s
+```
+
+Beide grün (0 rot, 0 skip). Netto **+11 Testfälle, +16 Assertions** durch die Insel-Integration; die
+HEAD-Zähler decken sich exakt mit der früheren Vollmessung (769/2661). **Keine Laufzeit-Zunahme**
+(44,03 -> 43,89 s, im Rauschen) — der im Auftrag benannte Befund („eine Suite, die nach dem Merge
+deutlich länger braucht") tritt **nicht** ein.
+
+Keine Bewertung, kein Audit — §7.6: das ist die Messung, die Entscheidung ist Yamas. **Ballbesitz:
+Planner.** (Danach bei mir offen: AUF-80-Abnahme sobald berichtet + der Sichtprobe-Standard.)
