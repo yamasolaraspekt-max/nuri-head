@@ -8993,3 +8993,73 @@ Abnahme kein Beleg"* — endet mit der Abnahme dieses Postens, nicht mit diesem 
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine zweite Sperrmechanik, kein
 Aufräumdienst, keine Änderung an Betroffenheit, Gates oder Log-Format außer der Warnzeile.
+
+---
+
+## PLANNER 26.07., 13:05 — AUF-80 gebaut. Und eine Gegenprobe, die niemand verlangt hatte
+
+### 1. Der Bericht — er hat zuerst reproduziert, dann gebaut
+
+**Vor dem ersten Handgriff nachgestellt:** Sperre ohne Halter angelegt ⇒ `exit 0`,
+„uebersprungen (Lauf aktiv)". **Exit 0, ohne dass jemand lief.**
+
+**Drei Fälle, drei Antworten — und der Unterschied ist der ganze Posten:**
+
+| Lage | Antwort | Exit |
+|---|---|---|
+| lebender Halter | überspringen, PID im Log | **0** — der gesunde Parallelfall |
+| toter Halter | **zurückerobern mit Warnzeile** | 0, wenn der Lauf grün ist |
+| nicht eroberbar | „uebersprungen OHNE lebenden Halter" | **2** |
+
+Die Warnzeile wörtlich: `WARNUNG verwaiste-sperre-zurueckerobert (halter-tot=18845)`.
+*Ein Wächter, der sich selbst repariert und nichts sagt, verbirgt, dass etwas nicht stimmte.*
+
+**Die AUF-75-Zusagen hat er erneut gefahren, nicht behauptet** — rot gegen `e0d1144`, „nicht
+gelaufen" ⇒ exit 1. **Mutation:** Halter-Prüfung ausgehebelt ⇒ der alte Fehler ist **reproduzierbar
+zurück**. Umfang: **nur `scripts/waechter.sh`, +69/−3.**
+
+### 2. Sein Fund aus dem eigenen Bau — und warum ich daraus **keine** Regel mache
+
+Er hatte zuerst einen **JS-Kommentarblock** (`/** … */`) in ein Bash-Skript geschrieben.
+**`bash -n` meldet das nicht** — `/**` geht als Kommandoname durch, die Syntax ist gültig. Gefunden
+hat er es durch einen Probelauf **mit sichtbarer Ausgabe**, vor dem Commit.
+
+**Seine Lehre ist richtig:** bei Shell-Skripten ist `bash -n` kein Beleg — dieselbe Sorte Lücke wie
+die vier grünen Gates, die einen PHP-Fehler nicht sahen.
+
+**Ich mache trotzdem keine neue Regel daraus, und das ist eine bewusste Entscheidung.** Ich habe
+heute **fünf** Regeln geschrieben (§9, §10, §11, §12, §7.6). **Regeln, die schneller wachsen als sie
+gelesen werden, schützen nichts — sie werden überflogen.** Die Lehre steht in seinem Bericht, wo sie
+hingehört; sie ist ein Anwendungsfall von etwas, das schon geregelt ist: **ein Gate, das den Fall
+nicht anfassen kann, ist kein Beleg.**
+
+### 3. Die Gegenprobe des Evaluators — unverlangt und richtig gestellt
+
+Er hat von sich aus geprüft, dass **auch er** Bedingung 2 als „erfüllt" geschrieben hatte, obwohl
+die Auflage offen war — *„Das trifft mich genauso"* — und dann die wunsch-unabhängige Grundlage
+**selbst gemessen**, mit der Begründung: **die Gegenprobe ist am stärksten, wenn sie jemand macht,
+der den Merge nicht will.**
+
+**Das ist die sauberste Anwendung von §7.6, und sie kam von der Rolle, für die §7.6 gar nicht
+geschrieben ist.**
+
+**Aber sie ändert nichts an Yamas Entscheidung, und das gehört klargestellt:** Yama nimmt es
+strenger. **Die Bedingungen werden buchstäblich erfüllt, nicht durch eine bessere Begründung.**
+Der Evaluator sagt das selbst — *„Tor 2 ist Yamas Entscheidung, nicht meine"*. **„Gegenprobe
+bestanden" heißt hier: der Beleg ist sauber. Es heißt nicht: die Bedingung ist erfüllt.**
+
+### 4. Stand
+
+| | Bedingung | Stand |
+|---|---|---|
+| 1 · 3 · 5 | Inventur · Baum · Migration | **erfüllt** |
+| 2 | keine offene Auflage | **AUF-80 ist gebaut — es fehlt das Votum** |
+| 4 | `main`-Lauf | **offen, beauftragt** |
+
+**Beide offenen Bedingungen liegen jetzt beim Evaluator, und beide sind klein.**
+
+**Der Generator hält wieder an** — dasselbe Argument wie vorhin: jeder ziehbare Posten bewegt das
+Erzeugnis und damit den gemessenen Stand. **Diesmal ist es kurz.**
+
+**Ballbesitz: Evaluator (AUF-80, `main`-Lauf, danach Sichtprobe-Standard) · Generator (hält an) ·
+Planner (wacht).**
