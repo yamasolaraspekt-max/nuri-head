@@ -10029,3 +10029,47 @@ wird gegen `dcbe6ec`**. Reicht die Zeit nicht fuer beides: **Votum zuerst**, Mes
 gemessen melden. Ein Votum, das auf eine Zusatzmessung wartet, blockiert die Kette.
 
 **Ballbesitz: Evaluator (Abnahme AUF-78) · Generator (AUF-82).**
+
+
+## PLANNER 26.07., 17:05 — Fahrplan geschrieben, Staffel unberuehrt
+
+**Yamas Entscheidung, zwei Fragen:** Ziel ist **„Huelle fertig"** (nicht alles aus den Mockups),
+Form ist **ein Fahrplan-Dokument** (keine 20 neuen Tafelzeilen).
+`docs/planner/fahrplan-hausplaner-2026-07-26.md`.
+
+**Der Fahrplan aendert an der laufenden Arbeit nichts.** Ich schreibe nur `docs/`; Generator und
+Evaluator sind versorgt (AUF-82 aktiv, Abnahme AUF-78 liegt). **Der Engpass unter Einspurbetrieb
+ist der eine Bauende, nicht der Planende** — deshalb kostet dieses Dokument die beiden keine Minute.
+**Kein Posten entsteht daraus von selbst:** erst wenn Yama eine Phase freigibt, schreibe ich die
+Auftraege.
+
+**Der Ertrag, der am Anfang steht, weil er sonst untergeht:** *„Frontend fertig" heisst 78 % — und
+40 %, je nachdem was man zaehlt.* **Beide Zahlen sind wahr; sie beantworten verschiedene Fragen.**
+Yama hat entschieden, welche gilt, und damit ist die Zahl ab jetzt eindeutig statt verhandelbar.
+
+**Phase 1 (laeuft) — Huelle fertig, 19 offene Tafelposten, Ende = 83 von 83.** Neun Stufen, von
+1.1 (AUF-78/82/79) bis 1.9 (**AUF-50, die 110 Werkzeuge**). **Ehrlich zur Zeit: 1.1–1.5 sind
+Tagesarbeit, 1.6–1.9 sind es nicht.** AUF-50 ist ein Fahrplan in sich, AUF-52 hat drei einzeln
+abzunehmende Scheiben. **Wer „diese Woche" sagen will, meint 1.1 bis 1.5.**
+
+**Phase 2 — der Eingang**, sechs Stufen, und die Reihenfolge ist begruendet: Quelle → Kalibrierung
+→ Referenz-Layer → **manuelles Nachzeichnen** → Erkennung → Overlay/Split/Differenz.
+**Manuell vor automatisch, ausdruecklich:** ein Werkzeug, das der Mensch fuehrt, ist pruefbar; eine
+Erkennung, die niemand nachzeichnen kann, ist es nicht. Der Satz, an dem die Phase haengt, steht im
+Mockup selbst: **erkannte Objekte werden erst nach Bestaetigung zu Bauteilen.**
+
+**Phase 3 — Fach-Uebergabe** (Datencheck, Abhaengigkeitskette, Uebergabepaket). Sie setzt **1.8**
+voraus: ohne angeschlossene Rechenwege gibt es nichts zu uebergeben. **Das ist der Punkt, an dem
+der Hausplaner aufhoert, ein Zeichenprogramm zu sein.**
+**Phase 4 — Personalisierung.** Kleiner als sie aussieht, weil die Daten schon liegen
+(`angeheftet.ts`, `arbeitsbereichSpeicher.ts`); es fehlt die Bedienoberflaeche.
+
+**Ausdruecklich nicht im Fahrplan: Anwesenheit/Mehrbenutzer** — kein Layout-Posten, sondern ein
+Nebenlaeufigkeits-System in der Groessenordnung von Phase 2.
+
+**Als Schaetzung gekennzeichnet, nicht als Messung:** die Groessenangaben der Phasen 2–4.
+**Gemessen ist nur, was fehlt** (Fundstellen im Code), nicht was es kostet. Bei Freigabe wird die
+erste Stufe **vor** dem Bauen gemessen, wie bei AUF-78: erst der Befund, dann der Auftrag.
+
+**Ballbesitz: Yama** (Freigabe von Phasen). Generator (AUF-82) und Evaluator (Abnahme AUF-78)
+laufen unveraendert weiter.
