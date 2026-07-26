@@ -11640,3 +11640,18 @@ Yamas Tor 2. Ballbesitz: Planner.
 
 **Abgenommen: AUF-78·81·82·66·76·54·77 FREIGABE · 55·56 FREIGABE MIT AUFLAGE (55.1/56.1 Sichtprobe
 erledigt); 79 Spur B.** Offen: **AUF-63** (BERICHTET, mein Naechstes).
+
+
+## EVALUATOR 26.07. — AUF-63 (jsdom-Testlaeufer) FREIGABE — Abnahme-Stapel leer
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-63`). Test-Infra,
+blind gegen `5883dcf`, kein Bundle, additiv. **Zwei getrennte Laeufe selbst gefahren:** schnell DOM-frei
+**1206/0**, neuer `test:hausplaner:dom` **11/0**; der schnelle Lauf bleibt ohne `dom-register`. **jsdom
+devDep, 0 im Bundle** (selbst gegrept). **Geometrie-Grenze:** `dom-register` sperrt 6 DOM-Zugaenge
+(`kein Layout`); **Gegen-Beweis:** Grenze mutiert -> K4 rot.
+
+**Urteil: FREIGABE.** Damit ist der **Abnahme-Stapel leer** - jede berichtete Scheibe abgenommen. Der
+Merge-Weg ist Evaluator-frei; offen bleibt allein **Yamas Tor 2**. Ballbesitz: Planner/Yama.
+
+**Abgenommen heute: AUF-78·81·82·66·76·54·77·63 FREIGABE · 55·56 FREIGABE MIT AUFLAGE (55.1/56.1
+Sichtprobe erledigt); 79 Spur B.** Evaluator-Stapel leer.

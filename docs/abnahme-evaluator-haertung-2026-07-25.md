@@ -1633,6 +1633,32 @@ Urteil: FREIGABE. Bezugsmass compile-time erzwungen (mit Zaehnen), Zweifelsfaell
 Zahl, kein erfundener Wert, additiv, kein Rebuild noetig, alle Gates gruen. Damit ist der Merge-Weg
 frei bis auf AUF-63 und Yamas Tor 2. Ballbesitz: Planner.
 
+### AUF-63 (Code 5883dcf · KEIN Bundle) - jsdom fuer Fokus und Tastatur, NICHT fuer Geometrie - FREIGABE
+
+Test-Infrastruktur (der Generator aendert den Testlaeufer selbst). Blind gegen 5883dcf. Kein Bundle
+(Test-Infra); additiv (neue Dateien + package.json-Script + jsdom devDep). Gates rein (/tmp):
+tsc 0 · schema 0.
+
+Zwei Testlaeufe, nicht ein umgebauter (verifiziert selbst gefahren):
+- schneller Lauf `test:hausplaner` bleibt DOM-frei: 1206 pass/0 fail.
+- neuer `test:hausplaner:dom` (dom-register.mjs + eigenes `__domtests__/`): 11 pass/0 fail.
+- der schnelle Lauf enthaelt `dom-register` NICHT (Grenz-Test K3 + selbst geprueft) - kein umgebauter,
+  sondern ein zweiter.
+
+jsdom bleibt Werkzeug, nicht Laufzeit (verifiziert):
+- devDependency, NICHT dependency (K3).
+- im ausgelieferten Bundle 0 Treffer (selbst gegrept: `git show 5883dcf:public/...hausplaner.js | grep -c jsdom` = 0).
+
+Die Geometrie-Grenze ist verdrahtet (der Kern):
+- `dom-register.mjs` sperrt sechs DOM-Zugaenge (window/document/navigator/HTMLElement/Element/Node/Event
+  ...) im Bootstrap und nennt den Grund (`kein Layout`) - damit kann eine Geometrie-Aussage nicht
+  heimlich vom DOM abhaengen. `domTestlaufGrenze.test` K4 prueft alle sechs + den benannten Grund.
+- Gegen-Beweis (gueltig, /tmp): den Grund/die Grenze in `dom-register` mutiert -> K4 "die
+  Geometrie-Grenze ist im Bootstrap verdrahtet - alle sechs Zugaenge" rot (fail 1). Zaehne bestaetigt.
+
+Urteil: FREIGABE. Zwei getrennte Laeufe, jsdom nur Werkzeug (nicht Bundle/Laufzeit), Geometrie-Grenze
+verdrahtet und mit Zaehnen belegt, additiv, kein Bundle. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
