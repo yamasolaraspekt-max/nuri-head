@@ -12199,3 +12199,51 @@ der Posten verspricht: eine **neue Stilschicht** (`app/stil/`, `hausplaner.css`)
 Angaben. **Das ist der letzte grosse Oberflaechenposten vor AUF-48 und AUF-50.**
 
 **Ballbesitz: Generator (AUF-38) · Evaluator: Stapel leer · Planner: Stufenplan 50.1.**
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-38 Scheibe 1 (Grundgerüst der Stilschicht)
+
+**Commits:** Code `cca1837` (`public/*` = **0 Zeilen**) · Artefakte `022021f` — `hausplaner.js`
+**und** die neu entstandene `hausplaner.css`, die nach K8 ausdrücklich in **denselben** Commit
+gehört.
+
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1256 · pass 1256 ·
+fail 0`, vorher 1246) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+K4-Schichten **null Zeilen**. **Klassifikation: `sichtbar`** — und die Sichtprobe sagt: **nichts
+sichtbar verändert.**
+
+**Scheibe 1 stellt nichts um.** Sie beweist die Mechanik, **bevor** irgendetwas umgebaut wird: CSS
+entsteht, das Blade zieht sie, die Variablen kommen an. *Geht dabei etwas schief, ist nichts
+umgestellt.* **Keine einzige `style={{`-Stelle angefasst; die Scheiben 2–8 sind offen.**
+
+- **Der Boden lag wirklich schon:** keine Bau-Änderung, keine Blade-Änderung. **Der erste Import hat
+  gereicht.** `vite.hausplaner.config.ts` bildet jede CSS-Ausgabe auf `hausplaner.css` ab, beide
+  Blades binden sie bewacht ein — gemessen: `public/hausplaner/hausplaner.css` entsteht, **27 Bytes**.
+- **K5 — die Tokens sind abgeleitet, nicht abgeschrieben:** jede `--hp-*`-Variable trägt den Wert aus
+  `studioDaten.ts`, und es sind **genau** die Tokens aus `T`, keiner mehr. *Ein Farbwert in der CSS
+  stünde neben `T` und altert dort still — genau die zweite Wahrheit, die T1 beseitigt hat.*
+- **K4 — null Farbwerte**, in der CSS-Quelle **und** in der gebauten Datei.
+- **Die eine Regel in der CSS ist absichtlich wirkungslos.** Eine leere Datei würde der Bau
+  verwerfen; eine eigene Eigenschaft, die niemand liest, kann kein Pixel verschieben.
+- **Rein bis auf den letzten Schritt:** `tokenVariablen()` rechnet, `setzeTokenVariablen()` setzt.
+  Ohne DOM tut sie **nichts** statt zu werfen — der Testlauf hat kein Fenster, und ein Wurf dort wäre
+  ein Fehler über eine Lage, die keiner ist.
+- **K7 — Mutation:** Variablenwert verfälscht ⇒ **2 rot**.
+
+### Kriterium 9 buchstäblich belegt — *„sieht die Seite exakt aus wie vorher?"*
+
+Dieselbe Seite **zweimal geladen**, einmal **mit** und einmal **ohne** die neue CSS, in drei
+Viewports; die Bildschirmfotos **sha256-verglichen**:
+
+| Viewport | Ergebnis |
+|---|---|
+| 1440×900 | **PIXELGLEICH** (`8866144ed2de…`) |
+| 1024×768 | **PIXELGLEICH** (`d90c42c36d68…`) |
+| 375×780 | **PIXELGLEICH** (`f5b90e0957a3…`) |
+
+*Ein sichtbarer Unterschied wäre hier ein Fehler, kein Fortschritt* — es gibt keinen. **Und die
+Variablen kommen dabei wirklich an:** `--hp-accent` steht im Browser auf `#12807d`, dem Wert aus `T`.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator**
+(Scheibe 1 wird laut Auftrag **eigens** abgenommen, bevor Scheibe 2 beginnt).
