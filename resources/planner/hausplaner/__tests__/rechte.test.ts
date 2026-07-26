@@ -115,7 +115,15 @@ test('die App SETZT kein Recht mehr — sie liest es aus dem UI-State', () => {
   assert.match(app, /permissions: usePlannerUiStore\.getState\(\)\.rechte,/, 'auch der Tastenkürzel-Pfad');
   assert.match(app, /const rechte = usePlannerUiStore\(\(s\) => s\.rechte\);/);
   // Ändern sich die Rechte, muss der Kontext neu gebaut werden — sonst bleibt die alte Sperre stehen.
-  assert.match(app, /\[activeWorkspace, modus, selectedNodeIds, nodes, scene, level, waende\.length, rechte\]/);
+  //
+  // **Nachgezogen in AUF-42, und der Grund gehört hierher:** die erste Fassung nagelte die
+  // **vollständige** Abhängigkeitsliste fest. AUF-42 hat eine Abhängigkeit ergänzt (`stageBreite`),
+  // und die Zusage ging rot — obwohl die geschützte Eigenschaft unberührt war. *Eine Zusage, die
+  // eine Liste festhält statt der Eigenschaft, bricht bei jeder harmlosen Ergänzung.* Geprüft wird
+  // deshalb, was gemeint war: **`rechte` steht in der Liste.**
+  const deps = app.match(/\[activeWorkspace, modus, selectedNodeIds[^\]]*\]/);
+  assert.ok(deps, 'die Abhängigkeitsliste des Kontexts fehlt');
+  assert.match(deps[0], /\brechte\b/, '`rechte` muss darin stehen, sonst bleibt die alte Sperre');
 });
 
 test('main.tsx liest die Rechte über dieselbe Naht wie die Speichern-URL', () => {

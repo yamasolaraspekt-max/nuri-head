@@ -360,6 +360,13 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   /** AUF-72: das Element, das die Bühne trägt — sein Platz IST die Bühnenhöhe. */
   const inhaltRef = useRef<HTMLDivElement | null>(null);
   const gemesseneHoehe = useGemesseneHoehe(inhaltRef);
+  /**
+   * AUF-42 — **die Bühnenbreite steht jetzt HIER oben**, weil die Fähigkeit `viewport.ready` sie
+   * braucht. Vorher stand sie 600 Zeilen tiefer; die Rechnung ist **unverändert**, nur ihr Ort.
+   * *Eine Wahrheit: die Breite wird an einer Stelle bestimmt, nicht zweimal.*
+   */
+  const breite = (typeof window !== 'undefined' ? window.innerWidth : 1200) - 220 - 268; // minus Werkzeugleiste + Panel
+  const stageBreite = modus === 'split' ? Math.floor(breite / 2) : breite; // P1c: Split teilt die Fläche
 
   const level = scene?.levels.find((l) => l.id === activeLevelId) ?? scene?.levels[0] ?? null;
   const nodes = useMemo(
@@ -431,11 +438,33 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           ...(scene ? [FAEHIGKEIT_PROJEKT_OFFEN] : []),
           ...(level ? [FAEHIGKEIT_GESCHOSS_DA] : []),
           ...(waende.length > 0 ? [FAEHIGKEIT_WAND_DA] : []),
-          // Die Zeichenfläche ist gemountet, sobald diese Komponente rendert.
-          FAEHIGKEIT_ANSICHT_BEREIT,
+          /**
+           * AUF-42 — **die Fähigkeit ist nicht mehr unbedingt.**
+           *
+           * Hier stand sie ohne Bedingung, mit dem Satz *„Die Zeichenfläche ist gemountet, sobald
+           * diese Komponente rendert."* Das war wahr und trotzdem wertlos: die Fähigkeit sagte
+           * **immer ja**, fünf Werkzeuge trugen eine Vorbedingung, die nichts prüfte, und der
+           * Grundtext *„Die Zeichenfläche ist noch nicht bereit"* war ein Text, den **niemand
+           * jemals sah**.
+           *
+           * **Gemessen (26.07., Browser):** bei einer Fensterbreite ab **488 px abwärts** wird
+           * `breite` null oder negativ, und die Zeichenfläche ist wirklich **0 px breit** — kein
+           * Übergangsrahmen, sondern ein Zustand, der bleibt, solange das Fenster schmal ist. Auf
+           * einer 0 px breiten Fläche lässt sich nichts anklicken und nichts messen.
+           *
+           * **Was ausdrücklich NICHT geprüft wird:** die Höhe (`buehnenHoehe` fängt die 0 mit einer
+           * Ersatzhöhe ab, sie kann gar nicht 0 werden — gemessen über 79 Rahmen) und der
+           * 3D-Modus (dort ist die 2D-Leinwand nur *versteckt*, nicht unbrauchbar — der Zustand
+           * hängt an `breite`, das modusunabhängig ist).
+           *
+           * **Die Schwelle ist `> 0` und keine erfundene Mindestbreite.** Null ist die einzige
+           * Grenze, die nicht ausgedacht ist: dort hört die Fläche auf zu existieren. Jede andere
+           * Zahl wäre eine Meinung mit Nachkommastelle.
+           */
+          ...(stageBreite > 0 ? [FAEHIGKEIT_ANSICHT_BEREIT] : []),
         ],
       }),
-    [activeWorkspace, modus, selectedNodeIds, nodes, scene, level, waende.length, rechte],
+    [activeWorkspace, modus, selectedNodeIds, nodes, scene, level, waende.length, rechte, stageBreite],
   );
   /**
    * AUF-45 — der Wegweiser. **Keine zweite Aktivierungs-Engine:** gezählt werden die Zustände, die
@@ -1058,8 +1087,6 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     color: aktiv ? T.brandInk : FARBEN.gedaempft,
   });
 
-  const breite = (typeof window !== 'undefined' ? window.innerWidth : 1200) - 220 - 268; // minus Werkzeugleiste + Panel
-  const stageBreite = modus === 'split' ? Math.floor(breite / 2) : breite; // P1c: Split teilt die Fläche
   /**
    * AUF-72 — die Bühnenhöhe kommt aus dem Platz, den sie **wirklich** hat.
    *
