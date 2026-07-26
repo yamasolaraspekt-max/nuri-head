@@ -6138,3 +6138,98 @@ zwei Planner-Schulden **AUF-18** und **AUF-22**. Das ist meine Reihenfolge, wäh
 anderen laufen.
 
 **Ballbesitz: Generator (AUF-70) · Evaluator (Zustands-Inventur) · Planner (AUF-65, 18, 22).**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-70: eine Werkzeugzeile, und der gesperrte Zustand ist ablesbar
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** Code `4c1ce13` · Bundle `0045ea2`
+**Ballbesitz:** Evaluator.
+
+### 1. Der Befund bestätigt sich — Yamas Meldung war richtig, die Diagnose lag daneben
+
+Rückgängig und Wiederholen sind **nicht kaputt**. Der Planner hat das im laufenden Programm
+durchgespielt; ich habe es zusätzlich **im Test verriegelt**, damit es so bleibt:
+
+```
+Befehl            ⇒ kannUndo = true
+Rückgängig        ⇒ kannRedo = true
+neuer Befehl      ⇒ Wiederholen-Stapel leer
+Rückgängig        ⇒ der WERT steht wieder auf dem alten Stand (nicht nur der Knopf)
+```
+
+Der letzte Punkt steht bewusst dabei: ein Test, der nur die Knopfzustände prüft, ginge auch dann
+durch, wenn die Umkehr nichts zurücksetzt.
+
+### 2. (a) Eine Wahrheit über Zustände — gelesen, nicht kopiert
+
+`knopf()` liest jetzt **`opKnopfBild`** aus AUF-59. Es entsteht keine zweite Beschreibung; die
+Funktion steuert nur noch die **Geometrie** des Textknopfes bei (Polsterung, Schriftgröße).
+
+Der Auftrag hat für diesen Fall zwei Wege offengelassen (gemeinsame Grundlage bauen — oder melden
+statt kopieren). **Keiner von beiden war nötig:** die Grundlage lag schon da, sie war nur nicht
+gelesen. `grep` belegt **zwei Leser** (`knopf`, `OpBtn`) und **einen Autor**.
+
+### 3. (b)/(c) Der Umzug
+
+```
+[↶ ↷] ⏐ [2D Split 3D] ⏐ [Zoom+ Zoom− Reset Einpassen Raster Fang] ⏐ [Dupl. Löschen Spiegeln×2] ⏐ [PNG]   Zoom %
+ Verlauf   Ansichtsmodus              Ansicht                            Bearbeiten                Messen & Export
+```
+
+Fünf Gruppen, **2 · 3 · 6 · 4 · 1 = 16 Knöpfe**. Oben bleibt die **Dokumentzeile** (Geschoss,
+Status, Speichern) — sie verschwindet nicht, sie wird ehrlich.
+
+2D · Split · 3D behalten ihre Wörter: `OpBtn` kann jetzt eine kurze Beschriftung statt eines Icons
+tragen. Das war die kleinere Änderung als ein zweiter Knopftyp in derselben Zeile — und für drei
+Ansichtsmodi gibt es keine gängige Bildsprache.
+
+### 4. Gemessen im Browser — frisch geladen, `u-dach`, Expertenmodus
+
+| | `Rückgängig` (gesperrt) | `Split` (frei) |
+|---|---|---|
+| Deckkraft | **0,6** | 1 |
+| Mauszeiger | **`not-allowed`** | `pointer` |
+| Schrift | **`rgb(167,174,183)`** | `rgb(35,42,49)` |
+| Hintergrund | **`rgb(242,244,246)`** | `rgb(255,255,255)` |
+
+**Vier unterschiedliche Werte — vorher unterschied sich kein einziger.** K4 verlangte *mindestens
+einen*.
+
+| Kriterium | Beleg |
+|---|---|
+| K3 eine Zeile | alle 16 Knöpfe auf **y = 223**, auch Zoom+ — vorher y = 179 gegen y = 269 |
+| K9 kein Überlauf | `scrollWidth` = `clientWidth` bei **1440 und 1024** |
+| K2 Modellschichten | `store/ domain/ geometry/ renderers/` **null Zeilen**, ausdrücklich auch `store/history.ts` |
+| K7 Sperren | dieselben sieben Bedingungen an denselben Knöpfen, als Menge festgehalten |
+| K11 `public/*` im Code-Commit | **0**; Bundle als zweiter Commit `0045ea2` |
+
+**Gates:** tsc **0** · schema:check **0** · test **0** · build **0**. Tests **1020 → 1033**.
+Testnamen-Vergleich: **keine** Zusage verschwunden.
+**K10 Mutation** (gesperrt sieht aus wie frei): **6 Tests rot**.
+
+### 5. Zwei Nebenwirkungen, die ich nicht verschweige
+
+**(a) Der freie Textknopf ist minimal dunkler geworden.** Die gemeinsame Regel liefert für den
+freien Zustand `ink` (`#232a31`); vorher stand dort `canvasWall` (`#374151`). Beides dunkel auf
+Weiß, der Kontrast **steigt**. Das ist die unvermeidliche Folge davon, dass es jetzt **eine**
+Beschreibung gibt statt zweier — ich halte es für richtig, nenne es aber, statt es als „unverändert"
+zu verkaufen. Betroffen sind alle Textknöpfe, die `knopf()` benutzen (13 Stellen).
+
+**(b) Der aktive Zustand wechselt von `brandSoft` auf `brandWash`** — beides ein heller
+Marken-Grünton, derselbe Grund. Sichtbar an 2D/Split/3D.
+
+### 6. Rückgabe
+
+**Die Rückgabe aus AUF-68 wiegt jetzt schwerer:** der Trennstrich zwischen den Gruppen hat
+**1,07 : 1** Kontrast und trägt die Gliederung nicht — was gliedert, ist der Abstand (21 px gegen
+6 px). Mit **fünf** Gruppen statt dreier ist das kein Randthema mehr. Ich habe erneut **nichts
+daran geändert**: es bleibt ein eigener Posten und Yamas Entscheidung.
+
+**Kein Überlauf bei 1024** — die im Auftrag vorgesehene Meldung entfällt, die Zeile trägt die 16
+Knöpfe ohne Notlösung.
+
+### 7. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Die Arbeitsbereich-Zeile (y = 224)
+unberührt.
