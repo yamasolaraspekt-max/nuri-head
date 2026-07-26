@@ -7519,3 +7519,98 @@ fünf Flächen geändert) → danach **AUF-40 Teil A** → dann **AUF-74**.
 **Evaluator:** der **Sichtprobe-Standard** ist jetzt seine einzige offene Sache — und nach heute
 Vormittag hat er drei Fälle beisammen, die hineingehören: der Zwischenspeicher, der Leisten-Zustand
 und die Elternkette bis unten.
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-71: sechs Flächen, eine Quelle
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** Code `04062fe` · Bundle `38723e7`
+**Ballbesitz:** Evaluator.
+
+*(Auftragsdatei vollständig gelesen — 108 Zeilen, sieben Abschnitte.)*
+
+### 1. Es waren nicht vier Stellen, sondern sechs
+
+Die Inventur nannte vier. Beim Messen kamen **zwei dazu, die darin fehlten**:
+
+| # | Stelle | wie sie „gesperrt" sagte |
+|---|---|---|
+| **5** | `WerkzeugGruppenMenue.tsx:106` | Deckkraft **0,45** — ein dritter Wert neben 0,4 und 0,6 |
+| **6** | Speichern-Knopf, `HausplanerApp.tsx:1183` | `hair2`/`muted`, eigene Werte |
+
+Die fünfte fiel beim Lesen auf, **die sechste erst im Browser** — sie tauchte in einem Rechen über
+alle Elemente mit `cursor: not-allowed` auf. Ohne diesen Rechen hätte ich sie übersehen; die
+Quelltext-Suche allein hat sie nicht gezeigt.
+
+**Damit standen drei Deckkraft-Werte nebeneinander, nicht zwei.**
+
+### 2. Was gebaut wurde
+
+**`app/dashboard/gesperrtStil.ts` — sie erfindet nichts.** Sie liest den gesperrten Zustand
+**einmal** aus `opKnopfBild` (AUF-59) und übersetzt seine Token in Werte, damit auch Flächen
+außerhalb der Icon-Zeile daraus lesen können.
+
+**`opKnopfBild` bleibt token-rein** — die Übersetzung gehört nicht dorthin. Damit bleibt auch die
+Zusage aus AUF-59 („keine Farbwerte in der Regel") grün, die sonst gebrochen worden wäre.
+
+### 3. Zwei Textfarben — gemessen begründet, nicht erfunden
+
+Die Quelle nennt fürs Bildzeichen `faint`. Auf **Text** angewandt wäre das ein Rückschritt:
+
+| | Kontrast auf `hair2` |
+|---|---|
+| `faint` (Bildzeichen) | **2,03 : 1** |
+| `muted` (Beschriftung) | **4,54 : 1** |
+
+**Ein Bildzeichen darf verblassen; eine Beschriftung muss lesbar bleiben.** `GESPERRT_BESCHRIFTUNG`
+ist deshalb **aus derselben Datei abgeleitet** und trägt einen Namen, der sagt, wofür sie gilt —
+genau der Fall, den §3 Punkt 3 vorgesehen hat. **Keine zweite Quelle.**
+
+### 4. Die WCAG-Härtung
+
+Alle sechs Flächen tragen ein nicht-farbliches, nicht zeigerabhängiges Merkmal. **Fünf hatten es
+schon** (`disabled` bzw. `aria-disabled`). **Der Menü-Eintrag hat es in diesem Posten bekommen** —
+er war die einzige Fläche ohne Zustandsattribut; seine Sperre stand nur im Text („◌ gesperrt") und
+in der Deckkraft. Beides bleibt, das Attribut kommt dazu.
+
+### 5. K4 — die Icon-Zeile ist unverändert
+
+Im Browser nachgemessen, `Rückgängig` (gesperrt):
+
+```
+Deckkraft 0,6 · not-allowed · rgb(167,174,183) · rgb(242,244,246)
+```
+
+**Exakt die vier Werte aus dem AUF-70-Bericht.** Das Menü-Icon steht jetzt auf **0,6** statt 0,45,
+der Menü-Eintrag meldet `aria-disabled="true"`.
+
+### 6. Belege
+
+| Was | Ergebnis |
+|---|---|
+| Gates | tsc **0** · schema:check **0** · test **0** · build **0** |
+| Tests | **1073 → 1082** · keine Zusage verschwunden |
+| K2 | `store/ domain/ geometry/ renderers/` — **null Zeilen** |
+| K3 | jede der sechs Flächen liest aus der Quelle; keine legt Deckkraft, Grund oder Textfarbe selbst fest |
+| K5 | `0.4` und `0.45` als Sperr-Deckkraft: **0 Treffer** |
+| K9 `public/*` im Code-Commit | **0**; Bundle als zweiter Commit `38723e7` |
+
+**K8 — der Gegenbeweis, der den Posten trägt:** die gemeinsame Beschreibung so geändert, dass
+gesperrt wie frei aussieht ⇒ **9 Tests rot, verteilt über drei Testdateien** (AUF-59, AUF-70,
+AUF-71). **Das ist der Beleg, dass die Flächen wirklich aus einer Quelle lesen** und nicht zufällig
+dieselben Zahlen tragen.
+
+### 7. Was ich nicht belegen konnte
+
+**Zwei der sechs Flächen habe ich im Browser nicht erreicht:** „Berechnen" (`EngineFlaeche`) und das
+gesperrte Fachfeld (`FachFlaeche`) — sie liegen hinter dem Fachplaner-Weg, den mein Prüfblatt in
+dieser Runde nicht geöffnet bekam. **Sie sind am Quelltext geprüft, nicht am Bild.** Ich sage das
+lieber, als eine Sichtprobe zu behaupten, die ich nicht gefahren habe.
+
+Für beide gilt: sie lesen dieselben Konstanten wie die vier gemessenen, und die Mutation macht sie
+rot — der Weg ist belegt, nur nicht das Pixel.
+
+### 8. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Kein `aktiv`, kein `frei` —
+**ein** Zustand, nicht alle. Keine Sperre neu gesetzt oder gelöst.
