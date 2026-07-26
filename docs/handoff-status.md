@@ -12686,3 +12686,65 @@ und nicht ins gespeicherte Dokument? **Meine Empfehlung dazu ist deutlich: in di
 alles andere kauft uns eine Migration fuer Daten, die den Wert gar nicht tragen sollen.
 
 **Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52. Kein neuer Posten (§14).
+
+
+## PLANNER 27.07., 00:05 — Schichtenmodell eingeordnet. Drei Messungen, und eine nimmt eine Aussage von mir zurueck
+
+Papier: `docs/planner/schichtenmodell-eingabe-werkzeug-command-2026-07-26.md`.
+Yamas Kette: Eingabe → Werkzeug → Command → Eignung → Objekt → 2D/3D.
+
+**Messung 1: modal gegen sofort steht bereits.** `faehigkeiten.ts:22` fuehrt
+`FaehigkeitArt = 'werkzeug' | 'aktion' | 'engine'` mit dem Kommentar *"'werkzeug' = setzt
+activeToolId, 'aktion' = Sofortbefehl"*. Das ist woertlich sein `ToolExecutionMode`. **Und wir
+haben eine dritte Art, die er nicht nennt: `engine`** — eine reine Rechnung hat keinen Zeiger,
+keine Vorschau, kein Abbrechen. Keine Abweichung, eine Ergaenzung aus unserem Fach.
+
+**Messung 2: der Command-Bus steht, die Werkzeug-Schicht fehlt.** `executeCommand` mit 19 Typen und
+inversen Patches ist genau seine "atomare validierte Aenderung". Auf der anderen Seite: **kein
+`interface Werkzeug`**, sondern **29 Stellen** `werkzeug === '…'` in `HausplanerApp.tsx`. Der
+Bedienmodus ist kein Gegenstand, sondern eine Zeichenkette ueber 29 Bedingungen. **Damit war meine
+Beschreibung von 50.1 als "Zuordnungstabelle" zu klein gedacht** — es ist die fehlende Schicht.
+
+**Messung 3, und hier nehme ich etwas zurueck.** Ich hatte geschrieben: *"Touch ist ein eigenes
+Vorhaben in der Groessenordnung von AUF-50 selbst."* **In der Groesse richtig, in der Form falsch.**
+Gemessen: `HausplanerApp.tsx:1517  onMouseMove={...}` — **die Zeichenflaeche spricht an genau einer
+Stelle mit dem Eingabegeraet, und sie spricht nur Maus.** Kein `onPointerDown`, kein
+`onTouchStart`. Das ist die Wurzel der Null: **nicht 75 Werkzeuge ohne Touch, sondern eine
+Ereignisquelle, die nur eine Sprache kennt.** Sein `NormalizedPointerEvent` beseitigt genau das —
+wird normalisiert, bekommt jedes Werkzeug Touch, ohne dass ein Werkzeug etwas von Touch weiss.
+**Die Korrektur lautet nicht "Touch ist billig", sondern: die Reihenfolge entscheidet ueber den
+Preis.** Nach 50.1 ist Touch ein Adapter plus Toleranzen; davor muesste dieselbe Arbeit in 29
+Bedingungen einer 2.052-Zeilen-Datei eingewebt werden.
+
+**Warnung 1 — `commandId` als Zeichenkette holt die Blindheit zurueck.** Sein Entwurf ruft
+`commandBus.execute("MoveObject", …)`. **Das ist die Bauart, die uns heute den groessten Befund
+eingebracht hat:** vier `as`-Umdeutungen haben die Typpruefung stillgelegt, und deshalb hat der
+Compiler seit dem ersten Tag nicht gemeldet, dass 83 Werkzeuge ins Leere zeigen. Ein Command, der
+ueber seinen Namen als Text gerufen wird, faellt erst zur Laufzeit auf — und nur, wenn jemand
+hinsieht. **Vorschlag: die Zuordnung zeigt auf den typisierten Command, nicht auf seinen Namen.**
+Braucht die Befehlspalette oder eine KI-Anweisung doch einen Textschluessel, dann **an genau einer
+Stelle uebersetzt**, mit einer Vollstaendigkeitspruefung, die rot wird, wenn ein Command keinen
+Schluessel hat. *Ein Register, das auf Namen zeigt, ist ein Register ohne Pruefer.*
+
+**Warnung 2 — die Namenstrennung haben wir nur zufaellig.** Sein Hinweis, `objectTypeId: window`
+und `toolId: create-window` nicht gleich zu benennen, trifft bei uns nicht zu — **aber aus dem
+falschen Grund**: unsere Werkzeug-ids sind deutsch (`wand`, `fenster`, `heizkoerper`), die
+Schema-Typen englisch (`wall`, `window`, `radiator`). Die Trennung existiert, weil zwei Sprachen
+im Spiel sind, nicht weil jemand sie entschieden hat. Gehoert als Regel aufgeschrieben.
+
+**Uebernommen ohne Vorbehalt:** der Grundsatz *"Das Icon gibt der Maus keine Faehigkeit"* und die
+vier Saetze darunter — Objekt: was darf mit mir gemacht werden · Werkzeug: welche Aktion · Eingabe:
+wie ausgeloest · Command: wie sicher durchgefuehrt. Die beste Zusammenfassung des ganzen Tages.
+Die Begriffstabelle gilt, mit der einen Ersetzung `Capability` → **Eignung**.
+
+**50.1 bekommt drei Teile:** **50.1a** Werkzeug-Schicht (29 Bedingungen → ein `interface Werkzeug`
+mit fuenf Methoden, die vier Umdeutungen weg) · **50.1b Eingabe-Normalisierung** an der einen
+Ereignisquelle — *neu und bewusst frueh, es ist die Stelle, an der Touch vom eigenen Vorhaben zur
+Eigenschaft des Fundaments wird* · **50.1c** Eignungen je Objekttyp.
+
+**Eine Grenze, die ich ziehe:** 50.1a beruehrt `HausplanerApp.tsx` tief — dieselbe Datei, die
+AUF-48 zerlegen soll. **Beides gleichzeitig geht nicht.** Entweder AUF-48 zuerst und 50.1 baut auf
+zerlegten Dateien, oder umgekehrt. Ich halte die erste Reihenfolge fuer richtig, aber es kostet in
+beide Richtungen und gehoert zu Yamas offener Frage 3.
+
+**Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52. Kein neuer Posten (§14).
