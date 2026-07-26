@@ -13,6 +13,7 @@ import { T, FACH, PROJ, type StudioModus } from './studioDaten';
 import { ConfigWizard, type KonfigArt } from './ConfigWizard';
 import { FachFlaeche as FachFlaecheAnsicht } from './FachFlaeche';
 import { ableitenSchritte } from './dashboard/fahrschritte';
+import { usePlannerUiStore } from './state/uiState';
 import { speicherAnzeige, type AnzeigeArt } from './dashboard/speicherAnzeige';
 import { fachFlaecheNach, KONFIGURATOR_NAMEN, type FachFlaeche, type FlaechenHerkunft } from './dashboard/fachFlaechen';
 import { Ikon } from './studioUi';
@@ -35,6 +36,9 @@ export function HausplanerStudio(): React.ReactElement {
    * Rein und ohne Nebenwirkung — dieselbe Szene ergibt dieselben Schritte.
    */
   const schritte = React.useMemo(() => ableitenSchritte(scene), [scene]);
+  // AUF-78: die Liste kommt aus dem UI-Zustand, den `main.tsx` aus dem Blade befüllt hat.
+  // Auf der Studio-Fläche ist sie leer — dorthin reicht der Controller sie bewusst nicht durch.
+  const projekte = usePlannerUiStore((st) => st.projekte);
   const modell = React.useMemo(() => {
     const nodes = scene?.nodes ?? [];
     return {
@@ -173,7 +177,7 @@ export function HausplanerStudio(): React.ReactElement {
 
         {/* Inhalt */}
         <div style={{ flex: 1, minHeight: 0, position: 'relative', overflow: imExperte ? 'hidden' : 'auto' }}>
-          {modus === 'start' && <StartView onGuided={gehGeführt} onKonfigurator={(n, f) => öffneKonfigurator(n, f, 'start')} />}
+          {modus === 'start' && <StartView onGuided={gehGeführt} onKonfigurator={(n, f) => öffneKonfigurator(n, f, 'start')} projekte={projekte} />}
           {modus === 'guided' && <GuidedView schritt={schritt} setSchritt={setSchritt} onExperte={() => setModus('expert')} onKonfigurator={(art) => setKonfig(art)} modell={modell} schritte={schritte} />}
           {imExperte && (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>

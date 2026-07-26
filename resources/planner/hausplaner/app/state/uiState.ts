@@ -15,6 +15,7 @@
 import { create } from 'zustand';
 import { WORKSPACE_ARCHITEKTUR } from '../tools/toolRegistry';
 import type { WorkspaceId } from '../tools/toolTypes';
+import type { ProjektEintrag } from './projekte';
 
 export interface PlannerUiState {
   /** Aktives Werkzeug (id aus der Tool-Registry). Ersetzt das lokale `werkzeug` in HausplanerApp. */
@@ -28,11 +29,19 @@ export interface PlannerUiState {
    * Hier und nicht im Modell-Store: Rechte gehören zum Bedien-Zustand, nicht ins Gebäudemodell.
    */
   rechte: string[];
+  /**
+   * AUF-78 — die zuletzt bearbeiteten Projekte des Nutzers, **wie das Blade sie liefert**.
+   * Grundzustand ist die leere Liste: der Startbildschirm zeigt dann den ehrlichen Leerzustand
+   * aus AUF-40 Teil A, keine Beispielzeile.
+   */
+  projekte: ProjektEintrag[];
 
   setActiveTool: (id: string) => void;
   setActiveWorkspace: (id: WorkspaceId) => void;
   /** Die gelesenen Rechte hinterlegen. Setzt nur ab, was `leseRechte` liefert — kein Ableiten. */
   setRechte: (rechte: string[]) => void;
+  /** Die gelesenen Projekte hinterlegen. Wie bei den Rechten: nur ablegen, nichts ableiten. */
+  setProjekte: (projekte: ProjektEintrag[]) => void;
   /** Auf den Grundzustand zurücksetzen (Mount/Neuladen). */
   reset: () => void;
 }
@@ -48,8 +57,10 @@ export const usePlannerUiStore = create<PlannerUiState>((set) => ({
   // (Werkzeug/Arbeitsbereich) und läuft beim Mount — es darf die vom Server gelesenen Rechte
   // weder löschen noch wiederherstellen.
   rechte: [],
+  projekte: [],
   setActiveTool: (id) => set({ activeToolId: id }),
   setActiveWorkspace: (id) => set({ activeWorkspace: id }),
   setRechte: (rechte) => set({ rechte }),
+  setProjekte: (projekte) => set({ projekte }),
   reset: () => set({ ...DEFAULTS }),
 }));

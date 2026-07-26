@@ -57,7 +57,9 @@ test('K4: ohne Projekte kein Listeneintrag — und ein Satz, der nichts verspric
 
 test('K4: der Grundzustand IST leer — beim ersten Start ist das der Normalfall', () => {
   assert.match(start, /projekte = \[\]/, 'ohne Zulieferung zeigt die Fläche nichts, statt zu erfinden');
-  assert.match(start, /projekte\?: readonly ZuletztEintrag\[\]/);
+  // AUF-78: die Liste kommt jetzt wirklich — der Typ ist der des Servers (`ProjektEintrag`),
+  // der Grundwert bleibt leer.
+  assert.match(start, /projekte\?: readonly ProjektEintrag\[\]/);
 });
 
 // --- K5: drei Karten, drei Ziele ----------------------------------------------------------------
@@ -74,7 +76,9 @@ test('K5: eine Karte ohne Ziel ist als `in Entwicklung` ausgewiesen — mit Grun
   assert.match(start, /<ZustandBadge zustand="in_entwicklung" \/>/);
   for (const grund of [
     /grund="Der Sanierungsablauf ist ein eigener Weg/,
-    /grund="Braucht die Liste der eigenen Projekte/,
+    // AUF-78: der alte Grund („die Liste ist noch nicht angebunden") wurde durch diesen Posten
+    // selbst falsch — sie IST angebunden. Was fehlt, ist das Öffnen von dort aus.
+    /grund="Die zuletzt bearbeiteten Projekte stehen oben/,
   ]) {
     assert.match(start, grund, 'ohne Grund wäre die Marke nur ein Etikett');
   }

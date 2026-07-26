@@ -1,7 +1,8 @@
 /** Start-Launcher „Was möchtest du planen?" (v9). Projekt-Karten + Fachplaner-Hubs + Zuletzt. */
 import React from 'react';
 import { istAusloeser } from './dashboard/dialogFokus';
-import { T, FACH, PROJ, type FachHub, type ZuletztEintrag } from './studioDaten';
+import { T, FACH, PROJ, type FachHub } from './studioDaten';
+import type { ProjektEintrag } from './state/projekte';
 import { ZustandBadge } from './studioUi';
 import { Ikon } from './studioUi';
 
@@ -16,8 +17,15 @@ interface Props {
    * Der Grundzustand ist bewusst die leere Liste — beim ersten Start ist sie der Normalfall.
    * Gefüllt wird sie in **Teil B** (Route + Controller, bei Yama).
    */
-  projekte?: readonly ZuletztEintrag[];
+  projekte?: readonly ProjektEintrag[];
 }
+
+/**
+ * AUF-78 — das Bildzeichen der Projektkacheln steht in der Insel, nicht in den Daten.
+ * Der Server liefert vier Felder (Bezeichnung, Ort, Datum, Kennung) und **kein Markup**: ein
+ * SVG-Pfad aus der Datenbank wäre ein Weg, auf dem Fremdes in die Seite käme.
+ */
+const HAUS_ZEICHEN = '<path d="M3 21h18M5 21V8l7-4 7 4v13"/>';
 
 const wrap: React.CSSProperties = { maxWidth: 1080, margin: '0 auto', padding: '20px 16px 70px' };
 const kicker: React.CSSProperties = { fontSize: 12.5, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: T.accent };
@@ -115,15 +123,19 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
           </div>
         ) : (
         <div style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap' }}>
+          {/* AUF-78: **kein Klick.** Die Kacheln riefen `onGuided(...)` — bei einem echten
+              Projekt hieße das: „Weiterarbeiten" öffnet nicht das Projekt, sondern beginnt den
+              geführten Ablauf. Das wäre dieselbe Unwahrheit, die AUF-40 Teil A hier entfernt
+              hat, nur mit echten Namen darauf. **Wohin ein Klick führen soll, ist nicht
+              entschieden** — die Route gäbe es, sie zu verdrahten ist eine eigene Entscheidung
+              und im Bericht zurückgegeben. Bis dahin: anzeigen, nicht versprechen. */}
           {projekte.map((z) => (
-            <div
-              key={z.name} role="button" tabIndex={0}
-              onClick={() => (z.win ? onKonfigurator('Fenster', true) : onGuided(z.goto))}
-              onKeyDown={(e) => { if (istAusloeser(e)) (z.win ? onKonfigurator('Fenster', true) : onGuided(z.goto)); }}
-              style={{ display: 'flex', alignItems: 'center', gap: 12, background: T.surface, borderRadius: 14, padding: '12px 16px', boxShadow: '0 1px 2px rgba(28,40,48,.05)', border: '1px solid transparent', cursor: 'pointer', minWidth: 230 }}
+              <div
+                key={z.id}
+                style={{ display: 'flex', alignItems: 'center', gap: 12, background: T.surface, borderRadius: 14, padding: '12px 16px', boxShadow: '0 1px 2px rgba(28,40,48,.05)', border: '1px solid transparent', minWidth: 230 }}
             >
-              <span style={{ width: 38, height: 38, borderRadius: 11, background: T.accentSoft, color: T.accentInk, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}><Ikon inhalt={z.icon} size={20} /></span>
-              <div><div style={{ fontSize: 13.5, fontWeight: 700 }}>{z.name}</div><div style={{ fontSize: 11.5, color: T.muted }}>{z.meta}</div></div>
+              <span style={{ width: 38, height: 38, borderRadius: 11, background: T.accentSoft, color: T.accentInk, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}><Ikon inhalt={HAUS_ZEICHEN} size={20} /></span>
+              <div><div style={{ fontSize: 13.5, fontWeight: 700 }}>{z.name}</div><div style={{ fontSize: 11.5, color: T.muted }}>{[z.ort, z.datum].filter(Boolean).join(' · ')}</div></div>
             </div>
           ))}
         </div>
@@ -141,7 +153,7 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
               grund="Der Sanierungsablauf ist ein eigener Weg — er unterscheidet sich noch nicht vom Neubau-Ablauf." />
             <Karte ico={PROJ[1].icon} titel="Hausplaner" desc="Neubau / Gesamtgebäude über alle Geschosse und Gewerke." onClick={() => onGuided(1)} />
             <Karte ico={PROJ[2].icon} titel="Weiterarbeiten" desc="Bestandsprojekt öffnen und fortsetzen."
-              grund="Braucht die Liste der eigenen Projekte — die kommt aus dem Bestand und ist noch nicht angebunden." />
+              grund="Die zuletzt bearbeiteten Projekte stehen oben. Eines davon von hier aus zu öffnen ist noch nicht verdrahtet." />
           </div>
         </div>
 

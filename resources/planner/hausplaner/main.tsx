@@ -11,6 +11,7 @@ import { HausplanerStudio } from './app/HausplanerStudio';
 import { useHausplanerStore } from './store/hausplanerStore';
 import { usePlannerUiStore } from './app/state/uiState';
 import { leseRechte, RECHTE_ATTRIBUT } from './app/state/rechte';
+import { leseProjekte, PROJEKTE_ATTRIBUT } from './app/state/projekte';
 import { sceneDocumentSchema, validateSceneIntegrity, migriereSzene } from './domain/validation';
 import { ladeFixture, fixtureNameAusSearch } from './fixtures/studioFixtures';
 import type { SceneDocument } from './domain/scene.types';
@@ -69,6 +70,8 @@ if (mount && szenenElement) {
       // AUF-60: die Rechte des angemeldeten Nutzers über DIESELBE Naht wie `data-speichern-url`.
       // Fehlt das Attribut, liefert `leseRechte` die leere Liste — das Minimum, nicht das Maximum.
       usePlannerUiStore.getState().setRechte(leseRechte(mount.dataset[RECHTE_ATTRIBUT]));
+      // AUF-78: dieselbe Naht — die Liste kommt fertig aus dem Controller, hier wird nur gelesen.
+      usePlannerUiStore.getState().setProjekte(leseProjekte(mount.dataset[PROJEKTE_ATTRIBUT]));
       ReactDOM.createRoot(mount).render(
         <React.StrictMode>
           <HausplanerStudio />

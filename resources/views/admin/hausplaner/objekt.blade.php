@@ -105,6 +105,10 @@
     <div id="hausplaner-root"
          data-project-id="{{ $objekt->id }}"
          data-rechte="{{ $hpRechte }}"
+         {{-- AUF-78: die Liste kommt fertig aus dem Controller. Das Blade reicht weiter, es
+              rechnet nicht — und schon gar nicht in einem PHP-Block: genau ein solcher hat in
+              AUF-64 diese Route zerbrochen. --}}
+         data-projekte="{{ json_encode($hpProjekte, JSON_UNESCAPED_UNICODE) }}"
          data-speichern-url="{{ route('hausplaner.objekt.speichern', $objekt) }}"
          data-snapshots-url="{{ route('hausplaner.objekt.snapshots.liste', $objekt) }}"
          data-katalog-url="{{ route('hausplaner.objekt.katalog') }}">

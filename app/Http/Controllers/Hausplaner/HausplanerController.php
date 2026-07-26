@@ -34,6 +34,12 @@ class HausplanerController extends Controller
      */
     private const HAUSPLANER_AKTIONEN = ['read', 'add', 'update', 'delete'];
 
+    /**
+     * AUF-78 — wie viele zuletzt bearbeitete Objekte der Startbildschirm zeigt.
+     * **Hart begrenzt, keine Paginierung:** die Fläche zeigt die letzten wenigen, nicht alle.
+     */
+    private const PROJEKTLISTE_MAX = 6;
+
     public function seite(Request $request, LeadAlternativeAdd $objekt)
     {
         $dokument = $this->dokumentFuer($objekt);
@@ -43,7 +49,46 @@ class HausplanerController extends Controller
             'dokument' => $dokument,
             'uebernahme' => app(ErmittleUebernahmeStatus::class)->ausfuehren($objekt, $dokument),
             'hpRechte' => $this->hausplanerRechte($request->user()),
+            // AUF-78: NUR hier. Die Studio-Route traegt kein Hausplaner-Recht (nur `auth`) —
+            // wer die Liste dorthin durchreicht, zeigt sie jedem angemeldeten Nutzer.
+            'hpProjekte' => $this->hausplanerProjekte(),
         ]);
+    }
+
+    /**
+     * AUF-78 — die zuletzt bearbeiteten Objekte für den Startbildschirm.
+     *
+     * **Es wird nichts erfunden:** dieselbe Tabelle, die `index()` seit Langem listet, hinter
+     * derselben Middleware (`permission:Hausplaner,read`). Ein zweiter Zugriffsweg entsteht nicht.
+     *
+     * **Drei Entscheidungen, die die Sicherheit dieses Postens tragen:**
+     *
+     * 1. **Keine Kundendaten.** `index()` lädt `lead` mit, weil die Suchliste den Kundennamen
+     *    zeigt. Der Startbildschirm zeigt ihn **nicht** — also wird die Beziehung gar nicht erst
+     *    geladen. *Was nicht durchgereicht wird, kann nicht versehentlich sichtbar werden* — und
+     *    ohne Beziehung gibt es auch kein N+1.
+     * 2. **Nur die vier Felder, die die Fläche anzeigt.** `select()` statt ganzer Modelle.
+     * 3. **Harte Obergrenze.** `limit`, keine Paginierung: auch bei 3 000 Objekten sind es sechs.
+     *
+     * **Ohne `gebaeudeSuche`:** der Scope gibt bei leerem Begriff die Abfrage unverändert zurück
+     * (nachgemessen) — er würde hier also nichts tun. Er wird von der Index-Seite mitbenutzt;
+     * ihn ohne Not mitzuziehen, bindet zwei Flächen aneinander, die nichts voneinander wollen.
+     */
+    private function hausplanerProjekte(): array
+    {
+        return LeadAlternativeAdd::query()
+            ->select(['id', 'object_name', 'city', 'updated_at'])
+            ->orderByDesc('updated_at')
+            ->limit(self::PROJEKTLISTE_MAX)
+            ->get()
+            ->map(fn ($o) => [
+                'id' => (int) $o->id,
+                // Ohne Bezeichnung bleibt die Nummer — sie ist das, was der Nutzer im CRM sieht.
+                'name' => (string) ($o->object_name ?: 'Objekt #'.$o->id),
+                'ort' => (string) ($o->city ?? ''),
+                'datum' => optional($o->updated_at)->format('d.m.Y') ?? '',
+            ])
+            ->all();
     }
 
     /**
