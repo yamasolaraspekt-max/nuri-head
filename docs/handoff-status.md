@@ -11588,3 +11588,37 @@ Alternative zu, verlangt für den Wechsel aber eine eigene Messung. Eine ungemes
 Begründung, sondern eine Meinung. **jsdom trägt** — wer happy-dom will, misst es.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## PLANNER 26.07., 20:25 — Der Generator stand ohne Marke. Mein Fehler, zum zweiten Mal heute
+
+**Yama meldet: der Generator hat keine Aufgabe.** Nachgesehen: AUF-63 ist um **20:20** berichtet,
+und die Zeile trug danach **beides** — `⚡ AKTIV` **und** `BERICHTET`. **Die Marke ist also nicht
+gerueckt, weil ich sie nicht gerueckt habe.** §10.7 sagt genau das: *wer eine Marke wegnimmt, setzt
+im selben Schritt die naechste* — und §15 sagt, dass die Marke fuer den Generator **die** Uebergabe
+ist. **Beides von mir geschrieben, beides von mir gerissen.** Fuenf Minuten Stillstand, diesmal von
+Yama gemeldet statt vom Takt.
+
+**AUF-63 ist gebaut** (`5883dcf`): `test:hausplaner:dom` mit **11 Zusagen**, Insel 1206.
+**Die Zahl, die den Posten rechtfertigt, ist eine andere als die Zusagenzahl:** Fokusfalle,
+Fokus-Rueckgabe und Leertaste waren mit **null** Tests gedeckt, obwohl AUF-49 sie gebaut hat — und
+im Kopf von `dialogFokus.ts` steht bis heute woertlich *„den DOM-Teil kann die Testumgebung nicht
+sehen"*. **Jetzt kann sie ihn sehen**, einschliesslich des Falls, den der Playwright-Lauf am 25.07.
+als fehlend gemeldet hatte. **Und der schnelle Lauf bleibt schnell** — 2,03 statt 2,28 s, weil er
+einen **zweiten** Lauf gebaut hat statt den ersten umzubauen.
+
+**Marke gerueckt: AUF-42.** Der Posten beginnt mit einer Messung und darf sich selbst schliessen.
+
+### AUF-50 ist entsperrt — und damit beginnt meine eigene Arbeit
+
+Die Sperre lautete *erst Layout fertig (AUF-39 · 43 · 45 · 44 · 47)*. **Gemessen: alle fuenf liegen
+im Archiv.** Die Bedingung ist buchstaeblich erfuellt, und nach §14 gehoert AUF-50 damit in den
+Umfang.
+
+**Der Zustand heisst jetzt `OFFEN OHNE AUFTRAG`, und die Rolle steht auf Planner** — nicht auf
+Generator. **Ein Auftrag ueber 110 Werkzeuge, ohne vorher gezaehlt zu haben, welche davon schon
+etwas tun und welche nur aussehen, waere genau die Sorte Auftrag, die heute dreimal zu Recht
+korrigiert wurde** (Standardwert bei AUF-54, Hoehe bei AUF-77, Praemisse bei AUF-55). **Zuerst die
+Zaehlung, dann der Stufenplan, dann die Marke.**
+
+**Ballbesitz: Generator (AUF-42) · Evaluator (AUF-77, danach AUF-63) · Planner (Zaehlung fuer AUF-50).**
