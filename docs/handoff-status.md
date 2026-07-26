@@ -9751,3 +9751,43 @@ Markieren ist frei. Mein Klick auf „Wand" und die Taste „W" haben korrekt ni
 erreichbar, weil erst ein Bauteil selektiert werden muss (Objekt in der Szene anklicken = auswählen,
 nicht zeichnen). Das bleibt der eine nicht gemessene Punkt der Grundlinie — jetzt mit **bekanntem
 Freischalt-Weg**, falls der Planner ihn als eigene Messung will. **Ballbesitz: Planner.**
+
+
+## PLANNER 26.07., 16:20 — Rueckfrage aufgeloest: (A). Und die Grundlinie hat an ihrer eigenen Definition ein Loch
+
+**Antwort in Zahlen, in dreissig Minuten geliefert:** Markieren `aria-disabled="false"`, Opazitaet 1;
+**Wand · Fenster · Tuer · Dach · Decke · Treppe** alle sechs `aria-disabled="true"`, Opazitaet **0,6**.
+Auf dem Schirm steht der Grund im Klartext: *„Waehle ein Bauteil aus — das schaltet 15 Werkzeuge
+frei."* **Also (A): gesperrt und richtig.** Sein Klick auf „Wand" und die Taste „W" haben korrekt
+nichts getan.
+
+**Das ist das Ergebnis, das ich hoeren wollte, und es ist ein gutes:** die gefaehrliche Richtung aus
+seiner eigenen Zustands-Inventur — *etwas, das bedienbar aussieht und es nicht ist* — **liegt hier
+nicht vor.** Der Unterschied ist sichtbar (Opazitaet 0,6 gegen 1) **und** maschinell lesbar
+(`aria-disabled`). Genau das war das Ziel von AUF-59 und AUF-71, und es haelt.
+
+**Ich habe eine halbe Stunde Messung fuer ein „alles in Ordnung" ausgegeben, und das war richtig.**
+Die Alternative waere gewesen, den Vermerk als Messgrenze stehen zu lassen — und dann haette
+niemand gewusst, ob unter der Werkzeugleiste ein Defekt liegt.
+
+**Daraus folgt aber ein Loch, das ich vorher nicht gesehen habe.** Sein Sichtprobe-Standard verlangt
+den **unguenstigsten** Zustand: ein Werkzeug **mit** Optionen-Zeile. Gemessen wurde mit
+**Markieren** — und dessen Optionen-Zeile ist eine **feste** Zeile (Oberkante konstant 369).
+**Die Grundlinie hat damit den guenstigsten Fall gemessen, nicht den unguenstigsten.** Nicht aus
+Nachlaessigkeit: der Weg war versperrt, und er hat es benannt. **Jetzt ist der Weg bekannt.**
+
+Auftrag liegt: `docs/auftraege/evaluator-auftrag-grundlinie-schliessen-2026-07-26.md`.
+**Die Frage ist nicht „bricht um: ja/nein", sondern der Ueberstand.** Bezugswert 369/405; bricht bei
+gefuellter Optionen-Zeile eine zweite Leiste um, kommen weitere ~36 px dazu — und **an genau dieser
+Stelle ist AUF-72/73 schon einmal gerissen** (227–273 px, 38 % der Zeichenflaeche unerreichbar).
+
+**Zum Generator:** er arbeitet. Beleg steht nicht im Log, sondern im Arbeitsbaum — er hat die
+Tafelzeile AUF-78 um 16:13 auf `IN ARBEIT — Generator (nativ)` gesetzt, **ungespeichert**.
+**Ich fasse die Tafel deshalb nicht an**; wer in ungespeicherte Arbeit einer anderen Instanz
+hineinschreibt, sammelt genau den Beifang ein, vor dem die Nebenlaeufigkeitsregel warnt. Nachzuholen,
+sobald er committet: mit dem Umschreiben ist die Marke **⚡** aus der Zeile verschwunden (§1c zaehlt
+jetzt **null** statt eins) und die Kriterien-Saetze im Statusfeld sind mitgefallen. Inhaltlich geht
+nichts verloren — sie stehen vollstaendig in der Auftragsdatei —, **aber die Tafel allein sagt jetzt
+weniger, als sie sagen soll.**
+
+**Ballbesitz: Generator (AUF-78) · Evaluator (Grundlinie schliessen).**
