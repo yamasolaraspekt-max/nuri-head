@@ -11852,3 +11852,25 @@ und 3 sind **erledigt bzw. beauftragt**. Punkt 4 und 5 sind die Befunde ohne Pos
 seiner Liste — „danach erst zusaetzliche Werkzeuge" — ist wortgleich §14.**
 
 **Ballbesitz: Generator (AUF-67) · Evaluator (AUF-42) · Yama (Merge, sobald AUF-42 abgenommen ist).**
+
+
+## PLANNER 26.07., 20:55 — AUF-50 wirklich entsperrt, und ein Fehler in meiner eigenen Arbeitsweise
+
+**Die Entsperrung von 20:25 war nie angekommen.** Ich hatte sie mit `str.replace()` **ohne
+Zusicherung** geschrieben — der Suchtext passte nicht (die Zeile traegt Sternchen, mein Muster
+nicht), **`replace` hat stillschweigend nichts getan, und mein Pruefdruck meldete trotzdem
+„84 Zeilen, 0 fehlerhaft, 1 Marke".** Die Pruefung war richtig und trotzdem blind: sie zaehlt die
+**Form** der Tafel, nicht ob meine Aenderung eingetreten ist.
+
+**Das ist genau der Fehler, den ich heute beiden Rollen angestrichen habe** — der Evaluator mit
+`perl -0` ohne `/g`, der auf den Kommentar traf; ich mit einem `replace`, das ins Leere lief.
+**Eine Ersetzung ohne Zusicherung meldet Erfolg, auch wenn sie nichts getroffen hat.**
+**Konsequenz ab sofort: jede Ersetzung an der Tafel wird zugesichert (`assert`), nicht nur
+gezaehlt.** Bei den beiden Stellen, wo ich das heute befolgt habe, ist der Fehler sofort
+aufgeflogen; bei der einen, wo ich es nicht tat, hat er dreissig Minuten unbemerkt gestanden.
+
+**Jetzt steht es richtig:** AUF-50 ist `OFFEN OHNE AUFTRAG`, mit der Zaehlung in der Zeile —
+**7 von 101 mit Empfaenger**, 110 `commandId` gegen **19** echte Commands, vier Stufen, Umfang
+**~78 statt 110**.
+
+**Ballbesitz: Generator (AUF-67) · Evaluator (AUF-42) · Planner (50.1 messen).**
