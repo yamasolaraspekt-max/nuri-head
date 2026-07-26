@@ -11336,3 +11336,83 @@ stillsteht, und die Zeit, die der Merge dadurch spaeter kommt.
 **Offen und zugestellt:** die gebuendelte Live-Sichtprobe **55.1 + 56.1** gegen `17c9c06`, mit
 `git status` auf `public/*` davor (§13.6). **Sie sind der einzige Grund, warum ich den Merge nach
 `main` noch nicht vorschlage.**
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-77 (Wandfläche brutto und netto, M1)
+
+**Commit:** Code `a331fce` (`public/*` = **0 Zeilen**). **Kein Bundle-Commit — das Artefakt ist
+bytegleich**, und das ist hier kein Versäumnis, sondern die Lage: eine reine Rechen-Datei, die noch
+niemand aufruft, erscheint nicht im Bündel.
+
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1200 · pass 1200 ·
+fail 0`, vorher 1179) · `build` **0**. **Volle PHP-Suite: 789 grün — unverändert.**
+**Klassifikation: `Vorarbeit`.**
+
+- **K2 — Umfang:** eine neue Datei `geometry/wandFlaeche.ts`; **alle vorhandenen Dateien in
+  `geometry/` null Zeilen**, `store/` · `domain/` · `renderers/` · `app/` **null**.
+- **K3 — rein:** kein `window`, kein `document`, kein `getState`, kein `executeCommand` (gemessen,
+  0 Treffer). Zweimal dieselbe Eingabe ⇒ tiefengleiches Ergebnis, testverriegelt.
+- **K5 — Handrechnung als Zahl, nicht als Formel:** 5 000 × 2 500 mit Fenster 1 200 × 1 400 ⇒
+  brutto **12,5** · Öffnung **1,68** · netto **10,82 m²**. *Eine Formel, die sich selbst nachrechnet,
+  prüft nichts.* Dazu die Volumen: 3,75 / 0,504 / 3,246 m³.
+- **K8 — eine Rundungsstelle:** genau **1** Treffer (`Math.round`), in einem Helfer. *Zwei
+  Rundungsorte ergeben zwei Summen, die sich um Cents unterscheiden — daran zerbricht später ein
+  Angebot.*
+
+### K4 — kein Ergebnis ohne Bezugsmaß, und zwar als Typfehler
+
+**Zur Laufzeit lässt sich Unmöglichkeit nicht prüfen.** Ein Test, der `assert('bezug' in x)` sagt,
+belegt Sorgfalt, nicht Unmöglichkeit — und der Auftrag verlangt ausdrücklich einen **Typfehler**.
+Die Testdateien sind aus `tsconfig.hausplaner.json` **ausgenommen** (gemessen), ein
+`@ts-expect-error` dort wäre also wirkungslos gewesen.
+
+**Gelöst mit einem echten Compiler-Lauf:** eine Typprobe (`typprobe-wandFlaeche.tsprobe`, absichtlich
+mit fremder Endung, damit sie nirgends mitläuft) wird im Test kopiert und durch `tsc --noEmit`
+geschickt. `@ts-expect-error` dreht die Aussage um: **der Lauf ist grün, WEIL der Fehler eintritt.**
+
+- **Mutation 2 (`bezug` optional gemacht):** der Fehler verschwindet, der Compiler-Lauf schlägt fehl
+  ⇒ **1 rot.** Ausgeführt, nicht behauptet.
+- **Mutation 1 (Öffnungsabzug entfernt):** ⇒ **1 rot.**
+
+### Ein Zweifelsfall liefert keine Zahl
+
+Fünf Meldefälle aus §4 je ein Test — **und keiner liefert eine Zahl.** *Plausibel falsch ist
+schlimmer als offensichtlich fehlend.* **Ein sechster Fall ergänzt:** eine **fremde Öffnung**
+(`hostWallId` zeigt auf eine andere Wand) wird gemeldet statt stillschweigend abgezogen. Der Aufrufer
+darf die Öffnungen der ganzen Szene übergeben; sie ungefiltert mitzurechnen wäre ein Fehler, den
+niemand mehr findet.
+
+**Die Überlappung wird in ZWEI Achsen geprüft, nicht nur waagerecht.** Ein Oberlicht über einer Tür
+teilt sich den Abschnitt der Wandachse, überlappt aber nicht. **Ein Fehlalarm bringt einen Prüfschritt
+schneller zu Fall als eine fehlende Meldung** — deshalb beide Richtungen testverriegelt: die echte
+Überlappung meldet, Tür + Oberlicht rechnen 2,4 m² und melden nicht.
+
+### ABWEICHUNG VOM WORTLAUT — offen begründet
+
+Der Auftrag sagt: *„Fertig: Dicke **und Höhe** abzüglich der Schichten aus AUF-76."* **Die Dicke: ja.
+Die Höhe: nein** — und das ist kein Vergessen.
+
+Die Schichten aus AUF-76 liegen **quer zur Dicke**; sie von der **Höhe** abzuziehen hat keine
+fachliche Grundlage. Was eine Wand fertig niedriger macht, ist der **Fußboden- und Deckenaufbau** —
+der hängt an `CeilingNode.schichten`, nicht an dieser Wand, und **liegt nicht im Eingang dieser
+Funktion**. **Einen fehlenden Operanden zu erfinden ist genau das, was das Operanden-Gate verbietet.**
+
+Deshalb: nicht gerechnet, sondern **im Ergebnis benannt**. `rohmassRest` führt bei `fertig` jedes Maß
+auf, das trotzdem das Rohmaß ist, **mit Begründung** — die Länge (Wandverbund, Auftrag §3) und die
+Höhe (fehlender Operand). Testverriegelt.
+
+### ZURÜCKGEGEBEN
+
+1. **Die Laibungen.** Der volle Abzug rechnet die Öffnung als Loch. Die Laibungsflächen (die
+   umlaufenden Wandflanken in der Öffnung) sind in der Vorlage eine **eigene Größe** und gehören
+   nicht heimlich in den Abzug — sie **fehlen** hier bewusst und sind keine Nachlässigkeit.
+2. **Die Rückverfolgbarkeit ist drin:** `nodeId` steht im Bündel (Auftrag §7). Mehr war nicht nötig —
+   was darüber hinausgeht, wäre der Beginn von M2.
+3. **Die Fachfrage aus AUF-76 wird hier scharf:** dessen Feldkommentar sagt, die Schichten
+   beschreiben, **woraus** die Wand besteht. Summieren sie sich zur vollen Dicke, ergibt
+   `fertig = thickness − Σ` **null**. Der Auftrag deckt nur `Σ > thickness` als Meldefall ab, nicht
+   `Σ = thickness`. **Welche Lesart gilt — Schichten als Teil der Dicke oder als Auftrag auf sie —
+   ist eine Fachfrage für Yama**, und sie entscheidet, ob hier ein weiterer Meldefall gehört.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
