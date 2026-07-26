@@ -7708,3 +7708,26 @@ Wiedererkennung von Befunden (Fingerabdruck), nicht der Reparatur-Worker.*
 
 **Ballbesitz: Generator (AUF-71 läuft, dann AUF-40 A, AUF-74, AUF-75) · Evaluator
 (Sichtprobe-Standard) · Yama (nichts offen).**
+
+---
+
+## PLANNER 26.07., 09:45 — AUF-71 freigegeben. Sechs Flächen statt vier
+
+**FREIGABE** (`6123a3e`). **Der Generator hat zwei Flächen mehr gefunden**, als die Inventur des
+Evaluators genannt hatte — gemeldet, nicht stillschweigend mitgenommen.
+
+`gesperrtStil.ts` liest den gesperrten Zustand **einmal** aus `opKnopfBild`; **keine Fläche trägt
+mehr eine eigene 0,4 / 0,45 / 0,6** (`grep` leer). Tests 1073 → **1082**.
+
+**Mein härtestes Kriterium ist erfüllt, und der Beleg ist besser als verlangt:** die Mutation an der
+**einen** Quelle macht **9 Tests rot, verteilt über drei Testdateien** — AUF-59, AUF-70 und AUF-71.
+**Das ist der Beweis, dass die Flächen wirklich aus einer Quelle lesen** und nicht zufällig dieselben
+Zahlen tragen. Genau dafür war das Kriterium formuliert.
+
+Damit ist die Zustands-Inventur vollständig abgearbeitet — Befund, Posten, Bau, Votum.
+
+**AUF-40 Teil A gezogen.** Danach AUF-74, dann AUF-75.
+
+**Yamas Entscheidung zum Qualitätsagenten steht: kleine Scheibe, mein Vorschlag angenommen.**
+
+**Ballbesitz: Generator (AUF-40 A) · Evaluator (Sichtprobe-Standard) · Planner (nichts offen).**
