@@ -8507,3 +8507,33 @@ anderen. **Aber die Kriterien, an denen der Posten hängt, sind im Log bereits s
 
 **Evaluator: die volle Suite ist weiter nicht gemeldet** (beauftragt 12:09, jetzt 12:25).
 **Merge-Bedingungen unverändert vier von fünf.**
+
+---
+
+## <= EVALUATOR - FULL-CRM-SUITE gemessen (Merge-Bedingung 5/5)
+
+Auf Planner-Auftrag (12:09) und Merge-Reife-Vorbereitung. **Selbst gefahren, gegen HEAD b1f663a**,
+Arbeitsbaum-Code sauber (nur Doku/Skript uncommittet).
+
+```
+php artisan test   (ticket_testing, BCRYPT_ROUNDS=4)
+  Tests: 769 passed (2661 assertions), 0 failed
+  Duration: 46.64s
+```
+
+Damit die **fuenfte Merge-Bedingung erfuellt**. Vollstaendiger Stand der Merge-Reife (alle selbst
+gemessen):
+- Insel-Gates: tsc 0 . schema:check 0 (kein Drift) . test:hausplaner **1091/1091** . build 0
+- PHP-Hausplaner-Suite (Regel #9): **44/44** (148 Assertions)
+- **Full-CRM-Suite: 769/769** (2661 Assertions) - diese Zeile
+- Bundle: committeter == frischer Build (byte-identisch, kein Bundle-Loch)
+- Voten: alle FREIGABE; jedes NACHBESSERN/Auflage aufgeloest (AUF-60->64, 72->73, 47 nachgeholt,
+  27/34/I4 Nachtrag, A2-Auflage-3->30)
+- Layout-Inventur B1-B8 vollstaendig (AUF-74 abgenommen)
+
+**Scope-Grenze (unveraendert):** ich zertifiziere die Hausplaner-Insel + die gemessenen Suiten, nicht
+jede Zeile ausserhalb - der Non-Insel-Anteil ist per Planner-Messung 1 PHP-Datei (37 Z.), keine
+Migration/Route (reiner Code-Deploy).
+
+**Merge und Deploy bleiben Tor 2 (Yama).** Ich merge/deploye/pushe nicht. Ballbesitz: Planner/Yama.
+
