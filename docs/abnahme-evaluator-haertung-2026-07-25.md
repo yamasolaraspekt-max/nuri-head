@@ -1833,6 +1833,35 @@ Urteil: FREIGABE. Die angeschlossenen Engines rechnen nicht selbst (Durchreiche,
 Ort), die Umbenennung ist bedeutungserhaltend, die zurueckgegebenen sind mit gemessenem Grund
 zurueckgegeben. Gates gruen, Bundle reproduzierbar, additiv. Ballbesitz: Planner.
 
+### AUF-38 Scheibe 2 (Code e862b8f2 · Bundle 8ed190e3) - StartView: statische Stile wandern in die Stilschicht - FREIGABE
+
+`sichtbar`, reine Insel. Blind gegen die committeten SHA. §8/K8: der Bundle-Commit traegt beide Artefakte
+(`hausplaner.js` und `hausplaner.css`). Gates rein (/tmp-Auszug 8ed190e3): tsc 0 · schema 0 · test 1292
+pass/0 fail · build 0 · beide Artefakte byte-gleich zum frischen Build (js JA, css JA - reproduzierbar).
+
+Der kritische Punkt (Planner): NUR Statisches gewandert, KEIN Zustand eingefroren (verifiziert):
+- Verschoben in `.hp-karte` etc.: `cardBase`, `kicker`, `h1` - statische Objekte, jetzt CSS-Klassen.
+- INLINE GEBLIEBEN sind die zustandsabhaengigen Stile: die Kachel traegt `className="hp-karte"` PLUS
+  `style={{ transform: hover ? …, boxShadow: hover ? T.schattenGehoben : T.schattenFlach, borderColor:
+  hover ? … , transition: … }}`. Der Kommentar benennt es: "Was NICHT gewandert ist: alles, was aus dem
+  Zeiger (hover) [oder] aus einem Zustand [kommt]". Ein in CSS eingefrorener JS-Zustand faellt in keinem
+  Gate auf (Planner) - deshalb am Diff manuell geprueft: kein hover/State-Stil ist in die CSS gewandert.
+- Und es IST getestet: "Scheibe 2: StartView traegt keine statischen Stil-Objekte mehr" (Objekte gone aus
+  inline + Klasse benutzt + Klasse in der CSS vorhanden).
+
+Eine Wahrheit / saubere CSS (verifiziert, mit Zaehnen):
+- "jede Farbe in der CSS ist eine Variable, kein Wert" - alle `--hp-`-Variablen aus `T`, kein roher Wert;
+  "kein !important, keine @media"; die wirkungslose Scheibe-1-Grundregel (`--hp-stilschicht: 1`) steht
+  unveraendert.
+- Gegen-Beweis (gueltig, /tmp): einen rohen Farbwert (`#ff0000`) in die CSS gesetzt -> "jede Farbe ist
+  eine Variable, kein Wert" rot (fail 2). Zaehne bestaetigt.
+
+pixelgleich: K9 dreimal pixelgleich laut Bericht; die byte-Gleichheit beider Artefakte gegen den frischen
+Build stuetzt es unabhaengig - die Umstellung aendert das Erzeugnis nicht.
+
+Urteil: FREIGABE. Nur Statisches gewandert (Zustand bleibt inline, manuell + per Test belegt), CSS nur
+Variablen (mit Zaehnen), beide Artefakte reproduzierbar, K8 eingehalten, Gates gruen. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):

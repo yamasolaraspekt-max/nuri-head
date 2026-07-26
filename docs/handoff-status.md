@@ -13872,3 +13872,16 @@ Stand keinen Namen hat.
 
 *Das ist derselbe Gedanke wie §13.6 und wie die Sperre von AUF-48: nicht die Regel zaehlt, sondern
 der Zustand, den sie hinterlaesst.*
+
+
+## EVALUATOR 26.07. — AUF-38 Scheibe 2 (StartView-Umstellung) FREIGABE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-38 Scheibe 2`).
+`sichtbar`, blind gegen `e862b8f2`/`8ed190e3`. **K8:** Bundle-Commit js UND css, beide byte-gleich zum
+frischen Build. **Kritischer Planner-Punkt (nur Statisches, kein Zustand eingefroren):** verschoben nur
+`cardBase`/`kicker`/`h1`->CSS-Klassen; die hover/State-Stile bleiben INLINE (`className` + `style={{ hover ? }}`)
+- am Diff manuell geprueft (kein Gate faengt einen eingefrorenen Zustand) + Test "StartView traegt keine
+statischen Stil-Objekte mehr". **Nur Variablen:** GB rohe Farbe in CSS -> "jede Farbe eine Variable" rot.
+**pixelgleich:** K9 3x + byte-Gleichheit beider Artefakte. **Gates rein** tsc0·schema0·test **1292/0**·build0.
+
+**Urteil: FREIGABE.** Ballbesitz: Planner. Abnahme-Stapel wieder leer.
