@@ -7923,3 +7923,64 @@ eigener Posten. **Bis dahin ist die Länge in beiden Bezugsmaßen dieselbe, und 
 diese Grenze, statt sie zu verschweigen.**
 
 **Ballbesitz: Generator (AUF-40 A) · Evaluator (Sichtprobe-Standard) · Planner (nichts offen).**
+
+---
+
+## PLANNER 26.07., 10:10 — AUF-40 Teil A abgenommen. Die Layout-Inventur steht bei acht von neun
+
+**Vorher gelesen:** `git log -6` · `git show e0f04ef` (Bericht) · `git show 865a545` (Votum) ·
+`docs/planner/ux-befund-layout-alle-ebenen-2026-07-25.md` §B4.
+
+### 1. Das Votum
+
+**FREIGABE.** Tests 1082 → **1091**. Sichtprobe im Konto **ohne** eigene Projekte: **0 erfundene
+Namen** — sie standen vorher in **jedem** Screenshot dieser Fläche.
+
+**Drei Dinge, die ich hervorhebe:**
+
+**(a) Stillgelegt statt gelöscht.** `ZULETZT_STILLGELEGT`, nach dem Muster von
+`toolCatalogStillgelegt` und `STEPS_STILLGELEGT`. **Die Demo-Daten bleiben als Beleg dessen, was
+vorher behauptet wurde** — und als Vergleichsgrundlage für den Test, der prüft, dass sie nichts mehr
+erreichen. *Das ist besser als löschen: ein gelöschter Beleg lässt sich nicht gegenprüfen.*
+
+**(b) Eine Karte ohne Ziel ist keine Schaltfläche mehr** — keine Rolle, kein Tastaturfokus, kein
+Zeiger. Sonst wäre sie fokussierbar und täte nichts, **genau das, was AUF-44 aus der Icon-Zeile
+entfernt hat.** Er hat die Regel von dort selbst hierher übertragen, ohne dass sie im Auftrag stand.
+
+**(c) Der Evaluator hat eine Messgrenze offengelegt:** die feingranulare Karten-Rolle konnte er im
+Browser nach drei Selektor-Versuchen nicht sauber isolieren (sein Selektor traf zuerst die
+gleichnamigen Navigationslinks) und hat **(c) ausdrücklich als code-verifiziert statt
+browser-gemessen** ausgewiesen. **Das ist die sechste Selbstkorrektur heute** — und die
+unbequemste Art: eine, die die eigene Prüftiefe einschränkt.
+
+### 2. Die Layout-Inventur: acht von neun
+
+**B4 ist geschlossen.** Der Befund lautete: *„drei erfundene Projekte, die echt aussehen"* und
+*„alle drei Karten rufen `onGuided(1)`"*. **Beides ist weg.**
+
+**Offen ist damit nur noch B7** — der Konfigurator, der „speicherbar" sagt. Das ist **AUF-74**,
+beauftragt, in der Reihe.
+
+**Nach AUF-74 ist die Layout-Inventur vom 25.07. vollständig abgearbeitet.**
+
+### 3. Die Rückgabe — und warum sie mir wichtiger ist als der Posten
+
+**§3 meines Auftrags verlangte die echte Projektliste „über die vorhandene Naht". Die gibt es
+nicht.** Gemessen: der Controller reicht `objekt`, `dokument`, `uebernahme` und `hpRechte` durch —
+**keine Objektliste**. Sie zu beschaffen hieße entweder eine Abfrage im Blade (genau das, was AUF-69
+dort herausgeholt hat) oder eine Variable mehr aus dem Controller — **und damit `app/Http/`, also
+Tor 1.**
+
+**Er hat es nicht gebaut**, obwohl es eine Zeile ist, und schreibt dazu:
+
+> *„Tor 1 überspringt man nicht, weil etwas klein ist."*
+
+**Das ist der Satz des Tages.** Die Versuchung, eine Freigabegrenze zu übergehen, ist bei einer Zeile
+am größten — und ein einmal übergangenes Tor ist keines mehr.
+
+**Als `W-Projektliste` in §3c eingetragen, mit meiner Empfehlung: freigeben.** Es ist eine Variable
+mehr in einer Methode, die schon vier durchreicht — derselbe Mechanismus, kein neuer. **Und der
+heutige Zustand ist zwar ehrlich, aber nutzlos: „Noch kein Projekt geöffnet" steht auch dann da,
+wenn Yama zwanzig Projekte hat.**
+
+**Ballbesitz: Generator (AUF-74) · Evaluator (Sichtprobe-Standard) · Yama (W-Projektliste).**
