@@ -8537,3 +8537,114 @@ Migration/Route (reiner Code-Deploy).
 
 **Merge und Deploy bleiben Tor 2 (Yama).** Ich merge/deploye/pushe nicht. Ballbesitz: Planner/Yama.
 
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-75: der Wächter läuft. Und ein Vorfall, der zuerst gehört
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** `cf72cb6` (Wächter) · `988a515`
+(Nachräumen) · **Ballbesitz:** Evaluator.
+
+### 1. Zuerst: ich habe eigene Arbeit mit `git reset --hard` vernichtet
+
+**Was passierte.** Für die Zeitmessung (K5) wollte ich einen Commit ohne Hook und einen mit Hook
+vergleichen und die beiden Mess-Commits danach zurücknehmen. Dabei ist mir Folgendes passiert:
+
+1. Mein **Wächter-Commit war stillschweigend fehlgeschlagen** — die Nachricht kam per Heredoc an
+   `git commit -F -`, und das stand innerhalb einer Befehlsersetzung (`$( { time …; } | grep )`).
+   Git bekam nichts auf der Standardeingabe und brach ab.
+2. Ich habe danach `git rev-parse --short HEAD` ausgegeben, **einen Hash gesehen und ihn für meinen
+   gehalten**. Es war der des Planners.
+3. Dann `git reset --hard HEAD~1` — **zweimal**. Damit waren die vorgemerkten, nicht committeten
+   Dateien weg: `scripts/waechter.sh`, der Hook, der `package.json`-Eintrag, der
+   `.gitignore`-Block, `.gitkeep`.
+
+**Schaden, geprüft:** Am Reflog nachgewiesen, dass **ausschließlich meine eigene, nicht committete
+Arbeit** betroffen war. Die Commits des Planners (`9d79f78`, `b1f663a`) sind vollständig in der
+Kette; kein fremder Commit ist verwaist. **Kein fremder Arbeitsbaum-Stand ging verloren** — es gab
+zu dem Zeitpunkt keinen.
+
+**Die beiden Fehler, getrennt benannt:**
+- **Ich habe eine destruktive Operation für eine Bequemlichkeit benutzt.** `reset --hard` in einer
+  Arbeitskopie, in der drei Instanzen arbeiten, um zwei Mess-Commits loszuwerden. Dafür gibt es
+  keinen Anlass, der stark genug wäre.
+- **Ich habe einen Hash ausgegeben, statt ihn zu prüfen.** Genau der Fehler, den ich heute früh bei
+  AUF-70 schon einmal gemacht und im Ledger als *„ein Hash, den man nicht nachschlägt, ist eine
+  Behauptung"* aufgeschrieben habe. **Er ist mir am selben Tag ein zweites Mal passiert** — diesmal
+  mit Folgen, weil eine destruktive Operation danach kam.
+
+**Konsequenz, ab sofort:** kein `reset --hard` in dieser Arbeitskopie. Und ein Commit gilt erst als
+erfolgt, wenn `HEAD` **vorher und nachher** verglichen wurde — so ist `cf72cb6` entstanden.
+
+**Wiederhergestellt** wurde alles aus dem Gesprächsverlauf; der Wächter ist Zeichen für Zeichen der,
+der vorher gebaut war. Die Kriterien sind danach **erneut** und ohne destruktive Operation belegt.
+
+### 2. Was gebaut wurde
+
+`scripts/waechter.sh` — führt die vorhandenen Gates nach Betroffenheit aus und schreibt Exit-Codes
+auf. Kein Sprachmodell, keine Ursachenanalyse, kein Dauerdienst. Bei Rot legt er die **Rohausgabe**
+ab, keine Zusammenfassung: *eine Zusammenfassung eines Fehlschlags ist bereits eine Interpretation.*
+
+`scripts/hooks/post-commit` — startet ihn im Hintergrund und kehrt sofort zurück.
+
+### 3. Die Kriterien
+
+**K2 — Betroffenheit, vier vorgeführte Läufe:**
+```
+nur Insel    4cc9f6e  insel              tsc=0 schema=0 test=0                gruen
+Blade        1b2b26d  insel,php          tsc=0 schema=0 test=0 phpsuite=0     gruen
+nur public   7ca21c1  bundle-ohne-code   hinweis=bundle-ohne-code             gruen
+nichts davon 8dd3e81  keiner             nichts-zu-pruefen                    gruen
+```
+
+**K3 — der Beweis, für den er gebaut ist:**
+```
+e0d1144  insel,php  tsc=0 schema=0 test=1 phpsuite=1  ROT   + 2 Rohausgaben
+```
+**Wichtig zur Methode:** Der Wächter prüft den **Arbeitsbaum**, nicht die Geschichte — er darf
+nichts auschecken (Kante 1). Für diesen Nachweis habe ich deshalb **die eine Blade-Datei** auf den
+Stand von `e0d1144` zurückgesetzt, den Lauf gefahren und sie sofort zurückgestellt (`git status`
+danach: 0 Änderungen). **Das ist ein rekonstruierter Zustand, keine Zeitmaschine**, und es steht
+hier, damit niemand mehr hineinliest, als der Lauf zeigt.
+
+**K4 — nicht gelaufen ≠ bestanden** (das wichtigste Kriterium):
+```
+1b2b26d  tsc=nicht-gelaufen(npm-fehlt) … phpsuite=nicht-gelaufen(php-fehlt)  unvollstaendig
+exit 1 — nicht grün
+```
+
+**K5 — er blockiert nicht**, je zwei Messungen:
+```
+ohne Hook  0,035 s · 0,033 s
+mit  Hook  0,041 s · 0,043 s      ⇒ rund 7 ms Aufschlag
+```
+
+**K6 — er stört den Baum nicht:** `--no-optional-locks` an **3 von 3** git-Aufrufen; nach einem
+Lauf ist `git status --porcelain` außerhalb von `docs/befunde/` unverändert.
+
+**K7 — zwei Läufe gleichzeitig:** der zweite endet mit `uebersprungen (Lauf aktiv)`, nicht mit
+einem zweiten Testlauf.
+
+**K1 — die Gates unverändert grün** (tsc 0 · schema 0 · test 0 · build 0); `package.json` trägt
+**einen** neuen Eintrag, keine geänderte Zeile außer dem Komma davor. **Insel: null Zeilen.**
+
+### 4. K8 — die Einrichtung, eine Zeile, selbst ausgeführt
+
+```
+ln -sf ../../scripts/hooks/post-commit .git/hooks/post-commit
+```
+Abschalten: `rm .git/hooks/post-commit`. **Belegt, dass er von selbst läuft:** die letzten beiden
+Log-Zeilen stammen von Commits, die ich nicht von Hand geprüft habe.
+
+### 5. Zwei Dinge, die im Repository stehen bleiben
+
+- **`docs/befunde/` ist ignoriert** (nur `.gitkeep` versioniert). Die Läufe sind Messwerte dieser
+  Maschine, kein Repo-Inhalt — und der Wächter committet nichts (Kante 2).
+- **Vier Commits „messung ohne-1/2, mit-1/2"** stehen in der Historie. Sie sind das Rauschen aus dem
+  Blockier-Nachweis. **Ich habe sie stehen lassen**, statt die Historie in einer geteilten
+  Arbeitskopie umzuschreiben — nach dem Vorfall oben ist das die einzige vertretbare Wahl.
+
+### 6. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Sprachmodell, kein Dauerdienst, kein Dashboard,
+keine neue Abhängigkeit, kein GitHub/CI/MCP. Die Insel unberührt.
