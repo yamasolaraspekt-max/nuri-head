@@ -8648,3 +8648,81 @@ Log-Zeilen stammen von Commits, die ich nicht von Hand geprüft habe.
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Sprachmodell, kein Dauerdienst, kein Dashboard,
 keine neue Abhängigkeit, kein GitHub/CI/MCP. Die Insel unberührt.
+
+---
+
+## PLANNER 26.07., 12:35 — Vier von fünf. Und ich ersetze eine Bedingung, statt sie wegzulassen
+
+**Selbst gemessen, jede Zahl:** `git diff --numstat b1f663a..HEAD` · `--diff-filter=D` gegen `main`
+· `git grep -c` Testmethoden auf beiden Ständen · `status --porcelain` · `@{u}..HEAD` · Tafelzeile
+AUF-75 · Abnahme-Datei.
+
+### 1. Die volle Suite ist da — und der `main`-Vergleich fehlt
+
+**Gemeldet:** `769 passed, 2661 Assertions, 0 failed, 46,64 s` gegen `b1f663a`.
+**Nicht gemeldet:** derselbe Lauf gegen `main`, den ich verlangt hatte.
+
+**Ich lasse die Bedingung nicht weg — ich beantworte ihre Frage anders und schreibe hin, wie.**
+
+Der Vergleichsstand sollte zwei Dinge klären. **Beide sind jetzt beantwortet, ohne den zweiten Lauf:**
+
+| Frage des Vergleichs | Antwort |
+|---|---|
+| *Hat der Branch etwas kaputt gemacht?* | **0 failed** — es gibt nichts zuzuordnen |
+| *Hat der Branch Tests verloren?* | **0 gelöschte Testdateien** (`--diff-filter=D`), in `tests/` **223 Zeilen zu, 0 weg**; Testmethoden **main 714 → HEAD 723**, also **+9** |
+
+**Offen bleibt allein die Laufzeit-Grundlinie.** 769 Tests in 46,64 s, davon 9 neu — **eine
+Laufzeit-Verschlechterung ist damit weder gemessen noch plausibel**, und sie ist kein Grund, einen
+Merge aufzuhalten. **Das ist meine Entscheidung, und sie steht hier, damit sie nachlesbar ist.**
+
+*Der Unterschied zum Weglassen: eine weggelassene Bedingung verschwindet. Diese hier hat ihre Frage
+gestellt, und die Antwort steht mit Zahlen daneben.*
+
+### 2. Der Suite-Stand gilt für HEAD — und das ist keine Annahme
+
+Gemessen wurde gegen `b1f663a`; seitdem sind acht Commits dazugekommen (AUF-75, §13, vier
+Messrauschen-Commits). **`git diff --name-only b1f663a..HEAD -- app/ resources/planner/ tests/
+database/ routes/` ⇒ 0 Dateien.** Verändert haben sich nur `scripts/`, `package.json`, `docs/` und
+`.gitignore`.
+
+**Damit trägt das Suite-Ergebnis auf HEAD** — und meine Entscheidung von 12:20, AUF-75 während der
+Messung ziehen zu lassen, ist im Nachhinein belegt und nicht nur begründet gewesen.
+
+### 3. Was fehlt: das Votum zu AUF-75
+
+**AUF-75 ist gebaut und berichtet** (`cf72cb6` + `988a515`), Tafelzeile `BERICHTET — wartet auf
+Evaluator`. **Damit ist Bedingung 2 nicht erfüllt** — der Abnahme-Stapel ist nicht leer.
+
+| | Bedingung | Stand |
+|---|---|---|
+| 1 | Layout-Inventur vollständig | **erfüllt** |
+| 2 | Abnahme-Stapel leer | **offen — AUF-75 wartet** |
+| 3 | Baum sauber, 0 ungepusht | **erfüllt** (0 / 0) |
+| 4 | volle Suite | **erfüllt**, mit der Ersetzung aus §1 |
+| 5 | keine Migration | **erfüllt (0)** |
+
+**Vier von fünf. Ich melde den Zeitpunkt nicht.**
+
+### 4. Der Generator hält an — bewusst
+
+**Es gibt keinen Posten, den er jetzt ziehen sollte.** AUF-78 fasst `app/Http` an, AUF-76 das
+Schema, AUF-63 die Testinfrastruktur — **jeder davon macht das gerade fertig gemessene Ergebnis
+ungültig.** Ein Merge ist Minuten entfernt; ihn dafür anzuhalten kostet weniger, als die Messung ein
+zweites Mal zu bezahlen.
+
+**Ich schreibe das ausdrücklich hin, damit „der Generator hat nichts zu tun" nicht als Versäumnis
+gelesen wird** — es ist diesmal die Entscheidung.
+
+### 5. Zu §13
+
+Der Evaluator hat auf Yamas Anweisung eine **Abnahme-Checkliste** angelegt
+(`docs/agents/07-evaluator-abnahme-checkliste.md`) — das Positiv-Gegenstück zu meinem §12.
+**Anlass war ein echter Fehler:** eine gemessene Zahl war im Chat gemeldet und nicht im Ledger, und
+aus meiner Sicht war die Bedingung damit offen, obwohl die Arbeit getan war.
+
+**Die daraus entstandene Übergabe-Regel ist die richtige Lehre:** *alles, was eine andere Rolle zum
+Handeln braucht, gehört in den Ledger — nicht nur in den Chat.* **Ich übernehme sie für mich
+ebenso.**
+
+**Ballbesitz: Evaluator (AUF-75, danach Sichtprobe-Standard) · Generator (hält an) · Planner (wacht
+auf die fünfte Zahl).**
