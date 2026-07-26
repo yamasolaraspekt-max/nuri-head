@@ -6734,3 +6734,87 @@ zurückgegeben — mit der Begründung, zwei Wahrheiten über die Bühnenhöhe w
 große Bühne. **Das ist genau die Entscheidung, die ich sehen will.**
 
 **Ballbesitz: Generator (AUF-72, danach AUF-65, dann AUF-71) · Evaluator (AUF-62).**
+
+---
+
+## ⇒ GENERATOR-BERICHT — AUF-72: die Bühne passt ins Fenster
+
+**Vom:** Generator (nativ) · **26.07.2026** · **Commits:** Code `2e56fcb` · Bundle `c5a7ee5`
+**Ballbesitz:** Evaluator.
+
+*(Auftragsdatei vollständig gelesen — 125 Zeilen, sieben Abschnitte, Länge vorher geprüft.)*
+
+### 1. Was gebaut wurde
+
+**Ein Maßband statt einer Schätzung.** Die Bühnenhöhe kommt jetzt von der **Inhaltsreihe**
+(`flex: 1, overflow: hidden`) — dem Element, das die Bühne trägt. Kommt oben eine Zeile dazu oder
+fällt eine weg, stimmt die Höhe automatisch mit. **Es gibt keine Zahl mehr, die jemand nachpflegen
+müsste und vergessen könnte** — und genau das ist in den letzten Tagen dreimal passiert.
+
+**Der Beobachter hängt am Element, nicht nur am Fenster.** Erscheint eine Zeile über der Bühne,
+ändert sich das Fenster **nicht**: ein reiner `resize`-Zuhörer bemerkt ausgerechnet den Fall nicht,
+der den Fehler erzeugt hat. `ResizeObserver` deckt ihn ab; `resize` bleibt zusätzlich (Browser-Zoom).
+
+### 2. Das Ergebnis — drei Formate, gemessen
+
+| Format | Bühne | unten | Fenster | **Überstand** | vorher |
+|---|---|---|---|---|---|
+| 1440 × 900 | 549 px | 872 | 900 | **0** | 227 px |
+| 1440 × 813 | 462 px | 785 | 813 | **0** | 273 px |
+| 1024 × 768 | 417 px | 740 | 768 | **0** | — |
+
+Die Seite scrollt in keinem Format. **K8 belegt:** nach „Ansicht einpassen" steht der ganze
+Grundriss im **sichtbaren** Bereich — nicht nur in der Bühne. Damit leistet AUF-62, was es
+versprochen hat. Bilder: `auf72-1440x900.png` · `auf72-1440x813.png` · `auf72-1024x768.png`.
+
+### 3. Die Kanten
+
+| Kante | Antwort |
+|---|---|
+| **erstes Rendern** | gemessene Höhe **0** ⇒ Ersatzhöhe **700**. Eine Bühne mit Höhe 0 wäre ein leerer Bildschirm |
+| **„noch nicht gemessen"** | `null` bleibt von `0` unterschieden — entschieden wird es in der reinen Funktion, nicht im Hook |
+| **Mindesthöhe** | **200 px**, benannt. Aus einem winzigen Fenster wird kein unbenutzbarer Streifen |
+| **Verschub des Nutzers** | überlebt jede Höhenänderung **unverändert** — das Kriterium, an dem ein „einfach neu berechnen" auffliegt |
+| **Standardlage** | folgt weiterhin der Höhe, solange niemand selbst verschoben hat (wie `pan.ts` es beschreibt) |
+| **Split** | die Höhe ist in beiden Modi dieselbe — hier ändert sich nichts |
+| **Flackern** | keins beobachtet. Zwei Gründe, beide testverriegelt: die gemessene Reihe trägt `overflow: hidden` und wächst nicht mit der Bühne in ihr; und der Zustand wird **nur bei echter Änderung** gesetzt |
+
+### 4. Belege
+
+| Was | Ergebnis |
+|---|---|
+| Gates | tsc **0** · schema:check **0** · test **0** · build **0** |
+| Tests | **1051 → 1060** · Namensvergleich: keine Zusage verschwunden |
+| K2 | `store/ domain/ geometry/ renderers/` — **null Zeilen** |
+| K3 | `grep` auf die feste Subtraktion = **0**; `window.innerHeight` kommt **gar nicht mehr** vor; keine neue Zahl in der Höhen-Zeile (testverriegelt) |
+| K11 `public/*` im Code-Commit | **0**; Bundle als zweiter Commit `c5a7ee5` |
+| **K10 Mutation** | feste Subtraktion zurück ⇒ **2 Tests rot** |
+
+**Eine Anmerkung zur eigenen Falle:** Mein erster Erklär-Kommentar enthielt die alte Formel als
+Literal — `grep -c` hätte **1** gemeldet, obwohl der Code sie nicht mehr benutzt. Umformuliert. Das
+ist dasselbe Muster wie in AUF-64 (Marke im Kommentartext zählt mit); ich erkenne es inzwischen,
+bevor es rot wird, aber es entsteht immer noch.
+
+### 5. Rückgabe nach §7 — die Zahl für 1024 × 768
+
+Der Auftrag fragt, ob bei 1024 × 768 „kaum Bühne übrig bleibt". Gemessen:
+
+```
+Zeilen über der Bühne   323 px   =  42 % des Fensters
+Bühne                   417 px   =  54 %
+Statusleiste unten       28 px
+```
+
+**Mehr als die Hälfte bleibt der Zeichenfläche** — es ist also keine Notlage. Aber 42 % für
+Bedienzeilen sind viel, und auf einem kürzeren Gerät kippt das Verhältnis. **Welche Zeile
+gegebenenfalls weicht, ist eine Willensfrage für Yama** und wird hier nicht im Vorbeigehen
+entschieden. Zum Vergleich: die drei Zeilen sind Arbeitsbereiche (AUF-34), Werkzeugzeile (AUF-70)
+und Optionszeile.
+
+**Kein Flackern zu melden** — die zweite Rückgabe-Bedingung aus §7 entfällt.
+
+### 6. Nicht getan
+
+Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Kein Umbau des Seitenaufbaus, kein
+Scrollen als Lösung, keine zweite Wahrheit über die Bühnenhöhe — es gibt weiterhin **genau eine**
+Stelle, die sie bestimmt.
