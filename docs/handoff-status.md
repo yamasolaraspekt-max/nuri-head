@@ -10842,3 +10842,70 @@ Golden-Vergleich sind, gehoeren sie nicht in den Commit** — ein `.tmp` im Test
 die Sorte Rest, die spaeter jemand fuer Absicht haelt.
 
 **Ballbesitz: Generator (AUF-54/55/56, danach AUF-77) · Evaluator: Standby.**
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-54 (Farbe als Parameter statt in `geometry/`)
+
+**Commit:** Code `29e83f4` (`public/*` darin **0 Zeilen**). **Kein zweiter Commit für das Bündel —
+und das ist hier kein Versäumnis, sondern der Beleg:** `build:hausplaner` lief (Exit 0), und das
+Artefakt ist **bytegleich** (`sha256 a49f3ab9…`, identisch mit `HEAD`). `treppeAlsSvg` wird aus dem
+ausgelieferten Code **gar nicht aufgerufen**; die Farbwerte stehen nicht einmal im Bündel (`93c21c`:
+**0 Treffer**). Ein Posten, der nichts Ausgeliefertes ändert, erzeugt kein neues Artefakt.
+
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1154 · pass 1154 ·
+fail 0`, vorher 1143) · `build` **0**. **Volle PHP-Suite: 789 grün — unverändert.**
+**Klassifikation: `Vorarbeit`.**
+
+- **K1 — `geometry/treppeSvg.ts` enthält keinen rohen Farbwert mehr:** gemessen **0** Treffer.
+  **Und keinen Standardwert, hinter dem einer überleben könnte:** `farben` ist **Pflicht**, nicht
+  optional. *Der Auftrag erlaubte einen Standardwert, damit „die neun Aufrufstellen nicht alle
+  gleichzeitig geändert werden müssen" — es sind zwei.* Der Grund besteht nicht, also gibt es ihn
+  nicht. Das ist Kriterium 1 in seiner strengsten Form: nicht „keiner außer dem Standard", sondern
+  keiner.
+- **Die Schichtrichtung bleibt gewahrt:** `geometry/` importiert **nicht** aus `app/` — testverriegelt.
+  *Der bequeme Fehler wäre gewesen, die Palette in die Geometrie zu importieren: dann läge der Wert
+  woanders, aber die Geometrie hinge weiter am Aussehen, nur unsichtbarer.*
+- **K2 — wertgleich, Byte für Byte, über vier Treppenarten** (gerade · L-Podest · U-Podest · Spindel;
+  gefordert waren zwei). Länge **und** SHA-256 je Fall. Zusätzlich eine Zusage, die die sechs
+  Farbwerte **einzeln** im erzeugten SVG sucht — die Prüfsumme allein bliebe grün, wenn zwei Farben
+  getauscht wären und sich die Summe zufällig träfe.
+- **K3 — `geometry/` sonst unberührt:** genau **eine** Datei (`treppeSvg.ts`). K4-Schichten
+  (`store`/`domain`/`renderers`) **null**. Berührt sind sonst `app/studioDaten.ts` (die Palette) und
+  die zwei Aufrufstellen im Test.
+- **Mutations-Gegenbeweis:** ein Farbwert getauscht (`lauflinie` auf die Markenfarbe) ⇒ **6 Zusagen
+  rot** — alle vier Byte-Vergleiche und zwei Palette-Zusagen; danach zurückgenommen und der
+  Ausgangswert belegt.
+
+**Mein eigener Fehler, offen im Test dokumentiert:** der erste Anlauf des Wertgleichheits-Beweises war
+**wertlos**. Ich hatte die Eingabefelder erfunden — `geschosshoeheMm`/`laufbreiteMm`, während
+`TreppenTypEingabe` `geschosshoehe`/`laufbreite` heißt. Die Felder liefen ins Leere, die Treppe war
+entartet, und die Prüfsummen verglichen eine Zeichnung **ohne Trittstufen** mit sich selbst. **Ein
+Vergleich, der immer grün ist, prüft nichts.** Aufgefallen ist es nur, weil eine zweite Zusage den
+Farbwert `stufe` im SVG suchte und ihn nicht fand. Die jetzigen Prüfsummen stammen aus der Datei, wie
+sie in `d8038bf` lag (`git show`), gerendert mit demselben Aufruf.
+
+### KORREKTUR AN DER AUFTRAGSPRÄMISSE (Code als Wahrheit)
+
+Der Auftrag sagt, `treppeAlsSvg` werde **an neun Stellen** ohne Farbparameter aufgerufen. **Gemessen
+sind es zwei — beide im Test.** Aus dem ausgelieferten Inselcode ruft **niemand** diese Funktion auf;
+sie steht heute nur unter Test. Das ändert am Auftragsziel nichts (die Farben gehören nicht in
+`geometry/`), aber es ändert die Bauweise: die im Auftrag vorgesehene Erleichterung — ein
+Standardwert — war für ein Problem gedacht, das es nicht gibt.
+
+### ZURÜCKGEGEBEN — nicht angeglichen, nur gemessen
+
+- **Zwei der sechs Werte sind zeichengleich mit vorhandenen Rollen** (`umriss` = `T.canvasWall`,
+  `bg` = `T.surface`), **vier haben keine** (`stufe`, `lauflinie`, `text`, `rahmen`). Für vier neue
+  Rollen zu erfinden oder sie an fremde anzugleichen wäre eine **sichtbare** Farbänderung und bleibt
+  Yamas Entscheidung (so auch im AUF-56-Auftrag festgehalten). **Die Zahl ist testverriegelt**, damit
+  die Rollen-Entscheidung später auf Messwerte trifft und nicht auf Erinnerung.
+- **Die Lauflinie behält ihr eigenes Grün** (`#93c21c`) — das dritte für dieselbe Rolle neben
+  `#7fae1c` (Marke) und `0xa3e635` (`szene.ts`). Ob sie Markenfarbe tragen soll, ist **nicht**
+  entschieden; ein stiller Tausch wäre genau die sichtbare Änderung, die dieser Posten nicht machen
+  darf. Testverriegelt.
+
+**AUF-55 und AUF-56 bleiben ungezogen** — sie tragen die Marke nicht, und der Auftrag verlangt
+ausdrücklich, die drei einzeln zu ziehen, zu committen und abzunehmen.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
