@@ -923,6 +923,40 @@ aria-label, mit Zahn-Test), die Leiste ist unveraendert in Zahl/Sperre/Reihenfol
 und die Gliederung traegt messbar der Abstand. Die zu schwache Trennlinie ist sauber als Willensfrage
 zurueckgegeben, nicht stillschweigend hingenommen.
 
+## AUF-70 - eine Werkzeugzeile, gesperrter Zustand ablesbar (4c1ce13, Bundle 0045ea2) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 4c1ce13 gemessen (/tmp + Browser inkl. getComputedStyle + Abstand),
+dann Generator-Bericht. **Spur A** (fälschlich frei aussehender Loeschknopf ist kein Schoenheitsfehler).
+**Klasse: sichtbar** - Sichtprobe Teil der Abnahme. Traegt MEIN AUF-68-Abstands-Kriterium.
+
+- **Umfang (git show --name-status):** 2 Dateien - NEU __tests__/eineWerkzeugzeile.test.ts;
+  M HausplanerApp.tsx. **K2: keine store/domain/geometry/renderers/history-Datei -> Undo unberuehrt.**
+- **Eine Wahrheit ueber Zustaende:** knopf() LIEST jetzt opKnopfBild (AUF-59) statt eine zweite
+  Beschreibung danebenzustellen (Z.1020 'einzige Beschreibung'); K6 testverriegelt. Gesperrt ist damit
+  auch fuer Textknoepfe ablesbar.
+- **Gates im Auszug:** schema 0 . test **1033/1033, 0 skip** (1020->1033) . tsc 0 . build ok.
+  13 eineWerkzeugzeile-Subtests (eine Zeile, 2.3.6.4.1, K4 gesperrt!=frei, K5 Cursor luegt nicht,
+  K6 knopf liest die Regel, K7 keine Sperre geloest, K8 Umkehr stellt den Wert wirklich zurueck).
+- **Gegen-Beweis (/tmp-Kopie):** gesperrt = frei (Deckkraft/Grund/Icon/Cursor wie bedienbar) -> **3 rot**
+  in eineWerkzeugzeile.test.ts (Generator meldete 6 ueber die ganze Suite - die AUF-59-opKnopfZustand-
+  Tests teilen dasselbe Token und fallen mit; Delta = Suite-Umfang, Zaehne bestaetigt).
+- **Sichtprobe (iframe 1440 + 1024, fixture u-dach, getComputedStyle):**
+  - **Eine Werkzeugzeile:** 5 Gruppen, 16 Knoepfe (2 Verlauf . 3 Ansichtsmodus . 6 Ansicht . 4 Bearbeiten
+    . 1 Messen&Export), alle auf EINER Zeile (top=269); Dokumentzeile oben traegt keine Werkzeuge mehr.
+    docOverflowX **0 bei 1440 UND 1024**.
+  - **Gesperrt ablesbar:** Rueckgaengig (gesperrt) Deckkraft 0.6 / not-allowed / rgb(167,174,183) /
+    rgb(242,244,246) **vs** Split (frei) 1 / pointer / rgb(35,42,49) / rgb(255,255,255) = **4 Werte**
+    verschieden (vorher keiner). 2D/Split/3D als Wort.
+  - **MEIN AUF-68-Kriterium erfuellt (bei 16 Knoepfen gemessen):** Abstand zwischen ALLEN Gruppen
+    **21 px** (105-84, 255-234, 498-477, 665-644), innerhalb 6 px - **nicht verengt**, exakt wie bei 11.
+    Der Abstand traegt die Gliederung auch bei 16. Die zwei NEUEN Gruppen (Verlauf, Ansichtsmodus)
+    tragen ebenfalls role=group + aria-label - accessible name auch dort erhalten.
+
+**Urteil: FREIGABE.** Der gemeldete 'kaputte' Zustand war die Darstellung: gesperrt sah aus wie frei;
+jetzt liest knopf() die eine Zustandsregel und gesperrt ist in vier Merkmalen ablesbar. Der Umzug in
+eine Zeile loest keine Sperre (K7) und ruehrt Undo nicht an (K2/K8). Kein Ueberlauf, und die Gliederung
+traegt der Abstand auch bei 16 Knoepfen (mein AUF-68-Kriterium, gemessen bestanden). Mutationsfest.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -963,6 +997,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-64    1b2b26d  FREIGABE + schliesst AUF-60: committeter objekt-Blade inline (kein @php-Block), BladeCompiler+php -l 'No syntax errors' (war 'Parse error line 53' gegen HEAD) ; Rechte-Zeile erhalten (hpRechte/data-rechte, Nullsafe) ; BladeKompiliertTest 5 grün mit Selbst-Zahn-Probe (expectException ParseError) ; tsc 0 / test 1009/1009
   AUF-69    ea60d9e  FREIGABE: kein Tor-1 (keine Route/Migration) ; Rechte aus Blade in Controller::hausplanerRechte(?User) - kein Nutzer=='' Minimum (Reflection-Test verzahnt) ; Regel #9: Blade-Compile 'No syntax errors', PHP-Suite 44 grün (BladeKompiliert+HausplanerRechte), objekt/203 laedt + data-rechte aus Controller + Konsole ohne Fehler ; tsc 0 / test 1020/1020 ; W-Login-Konsolencheck in YS-Sitzung fuehrbar+grün
   AUF-68    b5c231e  FREIGABE: opLbl weg (grep 0), sichtbare Gruppenwoerter 0, aber role=group+aria-label je Gruppe (K6, Zahn: aria-label leer=1 rot) ; 11 Knoepfe 6/4/1 keine Sperre/Reihenfolge geaendert ; schema 0/test 1020/1020/tsc 0/build ok ; Sichtprobe 1440: 3 Gruppen (Ansicht 6/Bearbeiten 4/Messen&Export 1), keine Woerter, docOvf 0, Abstand 21px zwischen vs 6px innerhalb ; eigene Kontrast-Rechnung Trennstrich 1.09-1.14:1 << 3:1 (Rueckgabe bestaetigt)
+  AUF-70    4c1ce13  FREIGABE (Spur A): knopf() liest opKnopfBild (eine Wahrheit, K6), gesperrt ablesbar (K4/K5) ; K2 Undo unberuehrt ; schema 0/test 1033/1033/tsc 0/build ok ; 13 Subtests ; Gegen-Beweis gesperrt=frei 3 rot (6 ueber Suite) ; Sichtprobe 1440+1024: eine Zeile 16 Knoepfe (2.3.6.4.1), docOvf 0 beide, gesperrt vs frei 4 Werte, 2D/Split/3D Wort ; AUF-68-Kriterium: Abstand 21px zwischen allen Gruppen (auch 2 neue) vs 6px innerhalb, NICHT verengt bei 16
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
