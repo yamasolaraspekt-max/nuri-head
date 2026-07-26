@@ -8411,3 +8411,50 @@ Wegräumen kein Haltesignal auslöst.
 vorweggenommen. Kein Verzeichniswechsel für die Kladden.
 
 **Nicht getan:** kein Push, kein `main`-Merge (Tor 2 = Yama).
+
+---
+
+## PLANNER 26.07., 12:20 — AUF-58 in 30 Sekunden, AUF-75 gezogen. Die fünfte Zahl fehlt weiter
+
+### 1. AUF-58 — erledigt, Kurzspur, selbst abgehakt
+
+`1c60c32`, **dreißig Sekunden nach der Marke.** Drei **enge** Muster, alle mit `/` an die Wurzel
+gebunden; **keine vorhandene Zeile geändert.**
+
+**Das Kriterium, das mir wichtig war, hat er in beide Richtungen belegt** — an fünf Proben: die
+Kladde verschwindet, **die gleichnamige echte Datei ohne Unterstrich erscheint.** Genau das war die
+Sorge: ein zu weites Muster verschluckt eines Tages eine echte Datei, und **das merkt niemand, weil
+sie in keinem `git status` mehr auftaucht.**
+
+**Und er hat die Begründung in die `.gitignore` selbst geschrieben**, nicht nur in den Bericht —
+dorthin, wo sie der Nächste liest, der eine Zeile ergänzen will. *Das stand nicht im Auftrag.*
+
+**Die Kurzspur hat sich damit bewährt:** ein Kriterium, selbst geprüft, eine Zeile im Ledger, kein
+Evaluator gebunden — bei einem Posten, der zehn Minuten wert ist und keine Logik anfasst.
+
+### 2. AUF-75 gezogen — wieder aus dem Messgrund
+
+**Der Wächter fasst weder PHP noch die Insel an** (`scripts/`, ein Hook, `docs/befunde/`).
+**Der laufende Suite-Messstand bleibt damit gültig** — dasselbe Argument wie bei AUF-58.
+
+**Nicht gezogen: AUF-76.** Es ändert `domain/` und das Schema — also die Insel, deren Gates der
+Evaluator bereits mit **1102/1102** zertifiziert hat. **Ein Merge-Kandidat, dessen Insel-Zahl
+während der Messung wandert, ist keiner.**
+
+*Für die Zeit nach dem Merge steht damit fest: AUF-78, dann AUF-76, dann AUF-77.*
+
+### 3. Die fünfte Zahl — Stand
+
+**Die volle Suite ist noch nicht gemeldet.** Beauftragt um 12:09, seitdem hat der Evaluator
+zwischendurch AUF-74 zu Ende geprüft. **Sieben Minuten sind kein Rückstand** — ich notiere es nur,
+damit später niemand rechnen muss.
+
+| | Bedingung | Stand |
+|---|---|---|
+| 1 | Layout-Inventur vollständig | **erfüllt** |
+| 2 | Abnahme-Stapel leer | **erfüllt** |
+| 3 | Baum sauber | **erfüllt** — bis AUF-75 startet |
+| 4 | volle Suite mit `main`-Vergleich | **offen** |
+| 5 | keine Migration | **erfüllt (0)** |
+
+**Ballbesitz: Generator (AUF-75) · Evaluator (volle Suite) · Planner (wacht).**
