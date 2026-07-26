@@ -1023,6 +1023,33 @@ Elternelement messen, nicht auf einen Traeger darueber), ODER belegen, dass 'Ans
 immer abfaengt und 'Ueberstand 0' entsprechend praezisiert wird. Reproduzierbar: 1440x900 UND 1440x813,
 Architektur-Bereich, Werkzeug mit Optionen-Zeile -> Canvas-Unterkante 18 px unter dem Fenster.
 
+## AUF-65 - gefuehrte Planung sagt was sie weiss (5ac811c, Bundle 06bd6e4) - FREIGABE
+
+**Reihenfolge:** erst blind gegen 5ac811c gemessen (/tmp + Browser, Regel 11 Zustand berichtet),
+dann Generator-Bericht. **Klasse: sichtbar** - Sichtprobe Teil der Abnahme.
+
+- **Umfang:** 3 Dateien - NEU gefuehrteEhrlich.test.ts; M GuidedView.tsx, studioDaten.ts. K2 null Modell.
+- **(a) Statuswort ehrlich:** STATUS_LABEL.ok = **'Vollstaendig'** (war 'Freigegeben'), Schluessel
+  ok/prog/warn/open unveraendert (K4 - Wort geaendert, nicht Wert). Kein Schritt wechselt seinen Status.
+- **(c) leere Aufgabenliste -> keine leere Ueberschrift** (K6, Muster wie Wegweiser AUF-45).
+- **(b) zurueckgegeben, weil die Auftrags-Praemisse gemessen falsch war:** der Hinweis 'die Schritte
+  stammen noch nicht aus deinem Projekt' waere FALSCH - seit AUF-39 kommen Titel/Hinweis/Pruefpunkte/
+  Status aus der Szene (ableitenSchritte). Die gezaehlten Eintraege stehen in STEPS_STILLGELEGT und
+  rendern nichts (Test 'erfundene Daten erreichen die Flaeche nicht'). Sauber getrennt, wie AUF-45.
+- **Gates:** schema 0 . test **1068/1068, 0 skip** (1060->1068) . tsc 0 . build ok. 8 Subtests.
+- **Gegen-Beweis (/tmp):** ok 'Vollstaendig' -> 'Freigegeben' zurueck -> **K3 rot** (deckt Generator).
+- **K3 Selbstkorrektur:** mein breiter grep fand 'Freigabe' in 3 Dateien - alle legitim (Kommentare,
+  ein ehrlicher Schritt-Hinweis 'keine Freigabe im Dokument', ein stillgelegter Demo-Pruefpunkt,
+  Fach-Freigabe-Kommentar). KEIN Statuswort; der praezise K3-Test ist 0. Grep zu breit, offengelegt.
+- **Sichtprobe (iframe 1440x900, fixture decke-treppe, gefuehrte Planung):** Schritt 2/11 Plakette
+  **'Vollstaendig'** (nicht 'Freigegeben', freigegeben=false), Statusart nur 'Vollstaendig', **keine
+  leere Aufgaben-Ueberschrift**. Der Vollstaendig-Schritt ist ableitungsecht (4 Waende im Fixture).
+
+**Urteil: FREIGABE.** Die Flaeche behauptet keine Freigabe mehr (Wort ehrlich, Wert unveraendert),
+schweigt bei leerer Liste, und der dritte Teil ist mit gemessener Begruendung zurueckgegeben (die
+Auftrags-Praemisse las die stillgelegte Demo-Quelle) - genau die Ehrlichkeit, die der Posten baut.
+Mutationsfest, am Schirm belegt.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -1066,6 +1093,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-70    4c1ce13  FREIGABE (Spur A): knopf() liest opKnopfBild (eine Wahrheit, K6), gesperrt ablesbar (K4/K5) ; K2 Undo unberuehrt ; schema 0/test 1033/1033/tsc 0/build ok ; 13 Subtests ; Gegen-Beweis gesperrt=frei 3 rot (6 ueber Suite) ; Sichtprobe 1440+1024: eine Zeile 16 Knoepfe (2.3.6.4.1), docOvf 0 beide, gesperrt vs frei 4 Werte, 2D/Split/3D Wort ; AUF-68-Kriterium: Abstand 21px zwischen allen Gruppen (auch 2 neue) vs 6px innerhalb, NICHT verengt bei 16
   AUF-62    bae4596  FREIGABE (Spur A): einpassen.ts reine Fit-View (K2/K9 kein Modell/Befehl, grep leer) ; schema 0/test 1051/1051/tsc 0/build ok ; 17 Subtests rechnen via aufSchirm() nach, 6 Kanten ; 3 geerbte Zusagen ohne Verlust ; Gegen-Beweis y-Spiegelung gebrochen = 7 rot ; Sichtprobe u-dach: Knopf enabled (nicht geplant), Klick Zoom 12%->6% rahmt Grundriss ; Rueckgabe Buehne 227px unter Fenster (Bestand)
   AUF-72    2e56fcb  FREIGABE MIT AUFLAGE: Messansatz (ResizeObserver statt innerHeight-96, K3 grep 0), Verschub ueberlebt (K6 verriegelt), Ersatz 700/Min 200 (Mutation 2 rot); schema 0/test 1060/1060/tsc 0/build ok ; ABER Sichtprobe widerlegt 'Ueberstand 0': konstant 18px bei 900 UND 813 im Maximal-Leisten-Zustand (Optionen-Zeile, Canvas-top 369 vs Generator 323) - Kern-Bug 227->18px, Rest via einpassen/Verschub erreichbar, kein Blocker; Auflage Optionen-Zeile einrechnen o. 'Ueberstand 0' praezisieren
+  AUF-65    5ac811c  FREIGABE: STATUS_LABEL.ok 'Freigegeben'->'Vollstaendig' (Schluessel unveraendert K4), leere Liste keine Ueberschrift (K6), (b) zurueckgegeben weil Praemisse falsch (Schritte aus Szene seit AUF-39, gezaehlte Eintraege stillgelegt) ; schema 0/test 1068/1068/tsc 0/build ok ; 8 Subtests ; Gegen-Beweis Freigabe-Wort zurueck K3 rot ; Sichtprobe 1440x900 decke-treppe: Plakette 'Vollstaendig' kein 'Freigegeben', keine leere Aufgaben-Ueberschrift ; K3-grep-Selbstkorrektur (Treffer alle legitim)
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
