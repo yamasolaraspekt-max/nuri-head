@@ -6574,3 +6574,79 @@ Einpass-Knopf. **Zwei Wahrheiten über die Bühnenhöhe wären schlimmer als ein
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Kein automatisches Einpassen, keine
 Animation, kein Eingriff in die Werkzeugzeile außer diesem einen Knopf.
+
+---
+
+## PLANNER 26.07., 07:50 — die Zustands-Inventur gelesen. Sie beantwortet drei Fragen und deckt einen Fehler von mir auf
+
+**Vorher gelesen:** `git log fa5da64..HEAD` · `git show 21b016a` · `git show 031b07d` ·
+`git show 3b9d4ec`, `ea05213` · Arbeitsbaum · `app/dashboard/opKnopfZustand.ts:60`.
+
+### 1. Was er geliefert hat
+
+**Zur Reihenfolge:** Er hat sich an die Umstellung gehalten — **erst das Votum zu AUF-70
+(`031b07d`, FREIGABE), dann die Inventur gegen den neuen Stand.** Genau richtig; eine Inventur gegen
+den alten Stand hätte einen Zustand gemessen, den es nicht mehr gibt.
+
+**Frage 1 — wo unterscheidet sich gesperrt messbar von frei?** Auf **allen** geprüften Flächen:
+mindestens `not-allowed` plus ein sichtbares Merkmal. Stärkste Unterscheidung: die Icon-Zeile
+(vier Merkmale). Schwächste: die farb-lastigen Flächen.
+
+**Frage 2 — etwas, das gesperrt aussieht, aber frei ist?** **Kein weiterer Fall.** Der einzige
+pixelgleiche war die Icon-Zeile, und der ist mit AUF-70 behoben. *Das war die Frage, nach der noch
+niemand gesucht hatte — jetzt ist sie beantwortet, und die Antwort ist die beruhigende.*
+
+**Frage 3 — wie viele Beschreibungen des gesperrten Aussehens gibt es? VIER.**
+
+| # | wo | wie |
+|---|---|---|
+| 1 | `opKnopfZustand.ts:60` — Icon-Zeile, `OpBtn`, `knopf()` | Deckkraft **0,6** · `hair2` · `faint` · `not-allowed` |
+| 2 | `HausplanerApp.tsx:1339` · `GeschossFlaeche.tsx:169` | Deckkraft **0,4** · `not-allowed` — keine Token |
+| 3 | `EngineFlaeche.tsx:101-102` | **keine** Deckkraft — Grund `hair2` · Text `muted` · `not-allowed` |
+| 4 | `FachFlaeche.tsx:71` · `HausplanerApp.tsx:2175` | Farbe `faint`/`muted` · `not-allowed` |
+
+### 2. Mein Fehler, und er gehört benannt
+
+Ich hatte ihm geschrieben: *„Nach AUF-70 soll es eine Beschreibung geben. **Findest du zwei, ist
+AUF-70 unvollständig** — und das fällt in dein Votum."*
+
+**Das war falsch, und zwar meinerseits.** Mein AUF-70-Auftrag hat den Umfang selbst auf **eine
+Zeile** begrenzt — §3 sagt wörtlich „Kein Anfassen … der Themenzeile darunter". Der Generator hat
+genau das gebaut, und er hat es richtig gebaut: **`knopf()` liest heute `opKnopfBild`, statt eine
+zweite Beschreibung danebenzustellen** — vom Evaluator testverriegelt bestätigt.
+
+**Die Unvollständigkeit liegt im Zuschnitt meines Auftrags, nicht in der Ausführung.** AUF-70 ist zu
+Recht freigegeben, und ich habe den Evaluator mit einem Kriterium losgeschickt, das den Generator für
+meinen Zuschnitt hätte haften lassen. **Er hat es nicht getan** — er hat gemessen und die Zuordnung
+selbst richtig gezogen, wie schon bei AUF-45.
+
+*Daraus für mich: Ein Kriterium, das eine fremde Rolle für meinen Umfang haftbar macht, ist keine
+Schärfe, sondern eine verschobene Verantwortung. Der Satz „findest du zwei, ist X unvollständig"
+gilt nur, wenn X überhaupt beauftragt war, alle zu erfassen.*
+
+### 3. Was daraus wird — AUF-71, und ausdrücklich nicht vorn
+
+**Der Evaluator hält fest: kein offener Defekt.** Jede Fläche unterscheidet gesperrt messbar; es
+geht um Einheitlichkeit und eine WCAG-Härtung. **Das steht so im Auftrag, damit niemand den Posten
+für dringlicher hält, als er ist.**
+
+**Der auffälligste Bruch ist der leiseste: Deckkraft 0,6 gegen 0,4.** Zwei Flächen derselben
+Anwendung sagen dasselbe verschieden laut, und **entschieden hat das nie jemand** — es ist zweimal
+unabhängig entstanden. Genau dafür gibt es die Inventur.
+
+**Die Härtung ist der einzige Punkt, an dem sich etwas ändert:** #3 und #4 kodieren den Zustand über
+Farbe **und Mauszeiger**. **Einen Mauszeiger gibt es für Tastatur- und Touch-Bedienung nicht.**
+Deshalb verbindlich: mindestens ein nicht-farbliches, nicht zeigerabhängiges Merkmal je Fläche.
+
+**Härtestes Kriterium:** Der Gegen-Beweis muss Tests auf **allen vier** Flächen rot machen, nicht
+auf einer. Nur das belegt, dass sie wirklich aus **einer** Quelle lesen und nicht bloß dieselben
+Zahlen tragen.
+
+### 4. Zustand des Baums — beobachtet, nicht angefasst
+
+`git status` zeigt laufende AUF-62-Arbeit des Generators: neu `app/dashboard/einpassen.ts` und
+`__tests__/einpassen.test.ts`, geändert `HausplanerApp.tsx` und drei Testdateien, dazu ein
+ungebundenes `public/hausplaner/hausplaner.js`. **Fremde Pfade — nach §10 gemeldet, nicht berührt.**
+
+**Ballbesitz: Generator (AUF-62 läuft, danach AUF-65, dann AUF-71) · Evaluator (frei — der nächste
+Bau kommt zu ihm) · Planner (nichts offen).**
