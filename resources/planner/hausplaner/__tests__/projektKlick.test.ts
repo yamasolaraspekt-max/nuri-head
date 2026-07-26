@@ -139,17 +139,28 @@ test('K4: im ausgelieferten Inselcode wird kein Pfad zusammengesetzt — null Tr
   assert.deepEqual(treffer, [], `die ausgelieferte Insel kennt das Routing nicht; gesehen: ${treffer.join(', ')}`);
 });
 
-test('K4: der eine Treffer im Baum ist ein DATEIPFAD, keine Adresse — er wird benannt, nicht versteckt', () => {
+test('K4: jeder Treffer im Baum ist ein DATEIPFAD, keine Adresse — benannt, nicht versteckt', () => {
   // **Buchstäblich null im ganzen Verzeichnis ist nicht erreichbar** — und zwar aus einem Grund,
-  // der mit dem Kriterium nichts zu tun hat: `rechte.test.ts` liest die Blade-Vorlage über ihren
-  // Pfad auf der Platte (`resources/views/…`). Das ist kein Ziel, das jemand anklickt.
-  // Statt die Messung stillschweigend zu verkleinern, steht der Treffer hier namentlich.
+  // der mit dem Kriterium nichts zu tun hat: Tests lesen die Blade-Vorlage über ihren Pfad auf der
+  // Platte (`resources/views/…`). Das ist kein Ziel, das jemand anklickt. Statt die Messung
+  // stillschweigend zu verkleinern, wird hier **jeder** Treffer geprüft und aufgezählt.
+  //
+  // **Nachgezogen in AUF-55, und der Grund gehört hierher:** die erste Fassung nagelte die
+  // Trefferliste auf genau eine Datei fest. Beim nächsten Test, der die Vorlage liest, ging sie
+  // rot — obwohl die geschützte Eigenschaft unberührt war. *Eine Zusage, die eine Dateiliste
+  // festhält statt der Eigenschaft, bricht bei jeder harmlosen Ergänzung.* Geprüft wird deshalb,
+  // was gemeint war: **kein Treffer ist ein Ziel.**
   const alle = durchsuchen(join(hier, '..'), true);
-  assert.deepEqual(alle.map((t) => t.split(' → ')[0]), ['__tests__/rechte.test.ts'],
-    'genau dieser eine, sonst keiner');
-  const roh = readFileSync(join(hier, 'rechte.test.ts'), 'utf8');
-  for (const zeile of roh.split('\n').filter((z) => z.includes(NADELN[0]!))) {
-    assert.match(zeile, /readFileSync|resources\/views/, 'nur als Datei gelesen, nie als Ziel gesetzt');
+  assert.ok(alle.every((t) => t.startsWith('__tests__/')),
+    `Treffer außerhalb der Tests: ${alle.filter((t) => !t.startsWith('__tests__/')).join(', ')}`);
+
+  for (const treffer of alle) {
+    const datei = treffer.split(' → ')[0]!.replace('__tests__/', '');
+    const roh = readFileSync(join(hier, datei), 'utf8');
+    for (const zeile of roh.split('\n').filter((z) => NADELN.some((n) => z.includes(n)))) {
+      assert.match(zeile, /readFileSync|resources\/views|\/\*|\/\//,
+        `${datei}: „${zeile.trim().slice(0, 70)}" ist kein Dateizugriff`);
+    }
   }
 });
 

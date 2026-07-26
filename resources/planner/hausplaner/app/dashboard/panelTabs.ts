@@ -13,6 +13,12 @@
  *
  * `pruefungen` ist seit **Batch 2** (v2.4 Prüfungscenter) `verfuegbar` — die Fläche zeigt jetzt
  * echte Befunde aus `befunde.ts`. `beziehungen` und `historie` bleiben Fläche.
+ *
+ * **AUF-55 (26.07.):** `historie` ist der Ort, an dem das Studio einen Verlauf andeutet — und der
+ * einzige. Deshalb wird die **Snapshot-Naht** dort ausgesprochen statt in einer neuen Fläche.
+ * *Gemessen, bevor gebaut wurde:* im Studio gibt es **keine wirkungslose Snapshot-Fläche**, die man
+ * hätte kennzeichnen können; es gibt gar keine. Was es gibt, ist eine Naht in `objekt.blade.php`
+ * und drei arbeitende Routen, von denen die Insel nichts weiß.
  */
 import type { StudioZustand } from '../studioUi';
 
@@ -51,7 +57,15 @@ export const PANEL_TABS: readonly PanelTab[] = [
     id: 'historie',
     label: 'Historie',
     zustand: 'in_entwicklung',
-    hinweis: 'Zeigt später, welche Befehle dieses Bauteil verändert haben.',
+    // AUF-55 — **die Snapshot-Naht wird hier ausgesprochen.** Der Satz nannte bisher nur die
+    // Befehlshistorie eines Bauteils. Gemessen ist aber mehr da: `objekt.blade.php` setzt
+    // `data-snapshots-url`, drei Routen legen Planungsstände an, listen und stellen sie wieder her
+    // — und **niemand in der Insel liest davon auch nur ein Zeichen**. Eine Naht, die niemand
+    // sieht, ist schlimmer als eine leere Fläche: sie wird beim nächsten Mal neu erfunden.
+    // **Was fehlt, ist die Fläche, nicht der Server** — genau das sagt der Satz jetzt.
+    hinweis: 'Zeigt später beides: welche Befehle dieses Bauteil verändert haben — und die '
+      + 'gespeicherten Planungsstände des Objekts, die der Server heute schon anlegt, listet und '
+      + 'wiederherstellt. Angebunden ist die Fläche noch nicht.',
   },
 ];
 
