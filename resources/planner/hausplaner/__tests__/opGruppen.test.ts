@@ -89,7 +89,8 @@ test('K5: keine Sperre geändert — dieselben Bedingungen an denselben Knöpfen
   const gesperrt = [...l.matchAll(/icon="([^"]+)"[^/]*?(disabled=\{([^}]*)\}|geplant)/g)]
     .map((m) => `${m[1]}:${m[3] ?? 'geplant'}`);
   assert.deepEqual(gesperrt, [
-    'einpassen:geplant',
+    // AUF-62: `einpassen` ist aus dieser Liste verschwunden, weil der Knopf seine Funktion bekommen
+    // hat — nicht, weil eine Sperre gelöst wurde. Die vier übrigen sind unverändert.
     'dup:selectedNodeIds.length === 0',
     'del:selectedNodeIds.length === 0',
     'mirror-h:waende.length === 0',

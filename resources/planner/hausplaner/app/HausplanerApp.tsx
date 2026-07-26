@@ -28,6 +28,7 @@ import { enginePanel } from './dashboard/enginePanels';
 import { faehigkeitNach } from './tools/faehigkeiten';
 import { GeschossFlaeche } from './dashboard/GeschossFlaeche';
 import { panAus, type Pan } from './dashboard/pan';
+import { einpassen, knotenPunkte } from './dashboard/einpassen';
 import { opKnopfBild, type OpKnopfBild } from './dashboard/opKnopfZustand';
 import { speicherAnzeige, type AnzeigeArt } from './dashboard/speicherAnzeige';
 import { naechsterSchritt, wegweiserSatz } from './tools/naechsterSchritt';
@@ -694,6 +695,18 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     }
     if (neu.length) store.getState().selectNodes(neu);
   }
+  /**
+   * AUF-62 — „Ansicht einpassen". **Anzeige, kein Modellzustand:** setzt `zoom` und `pan`, löst
+   * keinen Befehl aus und rührt das Dokument nicht an. Eingepasst wird in `stageBreite` — in der
+   * Split-Ansicht ist das die **halbe** Fensterbreite; wer `breite` nähme, passte in eine Fläche
+   * ein, die es nicht gibt, und der halbe Grundriss stünde außerhalb.
+   */
+  function passeAnsichtEin(): void {
+    const e = einpassen(knotenPunkte(nodes), stageBreite, hoehe);
+    setZoom(e.zoom);
+    setPan(e.pan);
+  }
+
   function spiegeleGrundriss(achse: Achse): void {
     const b = punkteBbox(waende.flatMap((w) => [w.start, w.end]));
     if (!b) return;
@@ -1207,7 +1220,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               Katalog — es zu entfernen hieße, die Funktion ganz aus der Oberfläche zu tilgen, nicht
               nur eine Dublette. Ob sie ein Werkzeug bekommt oder bewusst gestrichen wird, ist eine
               Willensfrage und im Bericht zurückgegeben. */}
-          <OpBtn title="Ansicht einpassen — gesamten Grundriss ins Bild rücken" icon="einpassen" geplant />
+          <OpBtn title="Ansicht einpassen — gesamten Grundriss ins Bild rücken" icon="einpassen" onClick={passeAnsichtEin} />
           <OpBtn title="Raster ein-/ausblenden — Hintergrund-Hilfslinien" icon="grid" aktiv={rasterAn} onClick={() => setRasterAn((v) => !v)} />
           <OpBtn title="Fang ein-/ausschalten — an Punkten und Raster einrasten" icon="fang" aktiv={scene.settings.snapEnabled} onClick={() => store.getState().executeCommand({ type: 'UPDATE_SETTINGS', changes: { snapEnabled: !scene.settings.snapEnabled } })} />
           {/* AUF-44: Hier stand „Auswahl um 90° drehen (geplant)" — ein Knopf, der nichts tat und es

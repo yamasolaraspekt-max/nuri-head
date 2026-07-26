@@ -119,7 +119,8 @@ test('K7: dieselben Sperrbedingungen an denselben Knöpfen — der Umzug hat kei
   assert.deepEqual(gesperrt, [
     'undo:!store.getState().kannUndo()',
     'redo:!store.getState().kannRedo()',
-    'einpassen:geplant',
+    // AUF-62 hat `einpassen:geplant` aus dieser Liste genommen — der Knopf tut jetzt etwas.
+    // Das ist die EINZIGE zulässige Abweichung; jede weitere wäre eine gelöste Sperre.
     'dup:selectedNodeIds.length === 0',
     'del:selectedNodeIds.length === 0',
     'mirror-h:waende.length === 0',

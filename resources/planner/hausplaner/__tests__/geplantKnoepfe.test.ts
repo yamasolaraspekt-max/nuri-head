@@ -50,19 +50,23 @@ test('aber das WERKZEUG ist jeweils geblieben — mit Thema und Vertrag', () => 
   }
 });
 
-test('„Ansicht einpassen" bleibt — es ist als einziger KEINE Dublette', () => {
-  assert.match(app, /title="Ansicht einpassen — gesamten Grundriss ins Bild rücken" icon="einpassen" geplant/);
-  // Der Beleg für „bleibt": es gibt kein Werkzeug dieses Zwecks.
+test('„Ansicht einpassen" ist geblieben — und tut seit AUF-62 etwas', () => {
+  // AUF-44 hat vier tote Knöpfe entfernt und diesen EINEN behalten, weil er als einziger keine
+  // Dublette war: es gibt kein Werkzeug dieses Zwecks. Die Begründung gilt unverändert — nur ist
+  // der Knopf seit AUF-62 kein Versprechen mehr, sondern eine Handlung.
+  assert.match(app, /title="Ansicht einpassen — gesamten Grundriss ins Bild rücken" icon="einpassen" onClick=\{passeAnsichtEin\}/);
   for (const id of ['einpassen', 'ansicht-einpassen', 'zoom-einpassen']) {
     assert.equal(ALLE.find((t) => t.id === id), undefined, `${id} existiert doch — dann wäre auch dieser Knopf eine Dublette`);
   }
 });
 
-test('genau EIN „geplant"-Knopf ist übrig — nicht null, nicht fünf', () => {
-  assert.equal((app.match(/geplant \/>/g) ?? []).length, 1);
+test('KEIN „geplant"-Knopf ist mehr übrig — der letzte hat mit AUF-62 seine Funktion bekommen', () => {
+  // Vorher war es genau einer. Steigt die Zahl wieder, hat jemand ein neues Versprechen ohne
+  // Deckung in die Zeile gestellt — genau das, was AUF-44 abgeräumt hat.
+  assert.equal((app.match(/geplant \/>/g) ?? []).length, 0);
 });
 
-test('der verbliebene Knopf bleibt inert und sagt es — er verspricht nichts', () => {
+test('die `geplant`-Mechanik bleibt erhalten — für den nächsten Knopf, der sie braucht', () => {
   const opbtn = app.match(/const OpBtn = [\s\S]*?\n  \);/);
   assert.ok(opbtn, 'OpBtn nicht gefunden');
   assert.match(opbtn[0], /title=\{geplant \? `\$\{title\} \(geplant\)` : title\}/);
