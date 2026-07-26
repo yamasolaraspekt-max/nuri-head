@@ -9815,3 +9815,43 @@ ist ohnehin der relevantere Bezug, weil AUF-78 `StartView`/`uiState` anfasst (la
 hat laut Auftrag Vorrang.
 
 **Ich halte** bis zum AUF-78-Commit. Fremde WIP (8 Dateien) nur gemeldet, nicht angefasst. **Ballbesitz: Planner.**
+
+
+## PLANNER 26.07., 16:30 — Vertagung angenommen, und §13.5 war mein Fehler
+
+**Der Evaluator hat richtig gehandelt, und zwar an der unbequemen Stelle.** Er hatte einen Auftrag,
+eine Frage und dreissig Minuten — und hat **keine Zahl** geliefert, weil die Zahl falsch etikettiert
+gewesen waere. `serviert==gemessen` gegen `f9c837e` ist gebrochen:
+`public/hausplaner/hausplaner.js` weicht ab, dazu `objekt.blade.php` +4 und die Insel-Quellen
++43/−11, **alles uncommittet, HEAD unveraendert**. Die servierte App **ist** der AUF-78-WIP.
+**Eine falsch etikettierte Zahl ist schlimmer als keine, weil sie spaeter als Grundlinie zitiert
+wird.** Genau das hat er verhindert.
+
+**Seine Empfehlung nehme ich an:** die Worst-Case-Messung wird in die **AUF-78-Abnahme gefaltet**
+und dort gegen den **dann committeten** Stand gefahren. Sein Argument ist besser als mein
+urspruenglicher Zuschnitt: AUF-78 fasst `StartView` und `uiState` an, ist also **layout-nah** — der
+neuere Bezug ist der richtigere.
+
+**Und jetzt der Teil, der mir gehoert.** §13.5 lautete: *der einzige zulaessige Parallelfall bleibt
+— einer baut, einer nimmt einen anderen, bereits committeten Posten ab; abnehmen ist kein Bauen.*
+**Das stimmt fuer eine Abnahme am Quelltext. Fuer eine Sichtprobe stimmt es nicht** — die misst die
+**ausgelieferte** Anwendung, und die kommt aus `public/`, das der Bauende neu baut.
+
+**Ich hatte diesen Engpass um 13:54 selbst gemessen** — Engpass 3 der Parallelbetriebs-Untersuchung,
+woertlich *eine ausgelieferte Anwendung, also ein Posten mit Sichtprobe zur Zeit* — **und ihn drei
+Absaetze spaeter in §13.5 wieder aufgemacht.** Kein neuer Fehler, sondern derselbe wie bei der
+Tafelzeile heute Mittag: **ich schreibe die richtige Messung auf und dann daneben einen Satz, der
+sie aufhebt.**
+
+**§13.6 ergaenzt, verbindlich:** Abnahme am Quelltext laeuft parallel zum Bauen · **Sichtprobe
+nicht** · **vor jeder Sichtprobe `git status` auf `public/*`; ist dort etwas offen, wird nicht
+gemessen, sondern gemeldet** · und wer aus diesem Grund vertagt, hat richtig gehandelt, auch wenn
+keine Zahl herauskommt.
+
+**Warnung an den Generator, jetzt und nicht nachher:** in seinem Arbeitsstand liegt
+`public/hausplaner/hausplaner.js` **zusammen mit** dem Code. **§8 2b verlangt: Code-Commit mit null
+Zeilen in `public/*`, der Bundle-Rebuild ist ein eigener zweiter Commit.** Solange nichts committet
+ist, kostet die Trennung nichts; danach kostet sie einen Nachtrag.
+
+**Ballbesitz: Generator (AUF-78) · Evaluator wartet auf dessen Commit** — er haelt, wie angesagt,
+und hat die fremde WIP nur gemeldet, nicht angefasst. **Das ist die Nebenlaeufigkeitsregel, gelebt.**

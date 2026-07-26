@@ -468,3 +468,33 @@ noch einmal führen muss, doppelt bezahlt wird.
 5. **Der einzige zulässige Parallelfall bleibt: einer baut, einer nimmt einen *anderen,
    bereits committeten* Posten ab.** Das ist keine Ausnahme von Punkt 1, denn abnehmen ist kein
    Bauen — es erzeugt keine Änderung im Baum.
+
+### 13.6 Nachtrag vom 26.07., 16:30 — eine Sichtprobe ist **kein** reines Abnehmen
+
+**§13.5 war zu weit gefasst, und der Fehler ist meiner.** Dort steht: *der einzige zulässige
+Parallelfall bleibt — einer baut, einer nimmt einen anderen, bereits committeten Posten ab; denn
+abnehmen ist kein Bauen, es erzeugt keine Änderung im Baum.* **Das stimmt für eine Abnahme am
+Quelltext. Für eine Sichtprobe stimmt es nicht.**
+
+Eine Sichtprobe misst die **ausgelieferte** Anwendung. Die kommt aus `public/`, und `public/` wird
+vom Bauenden **neu gebaut**. Damit hängt sie an Engpass 3 aus
+`docs/planner/parallelbetrieb-2026-07-26.md` — *eine ausgelieferte Anwendung, also ein Posten mit
+Sichtprobe zur Zeit*. **Ich hatte den Engpass gemessen und ihn drei Absätze später selbst wieder
+aufgemacht.**
+
+Eingetreten am 26.07., 16:28: der Evaluator wollte den Worst-Case-Überstand gegen `f9c837e` messen
+und fand `public/hausplaner/hausplaner.js` **abweichend** — der Generator hatte für AUF-78 neu
+gebaut, uncommittet, HEAD unverändert. Die servierte App war der **AUF-78-WIP**. Er hat die Messung
+**abgebrochen und begründet vertagt**, statt eine Zahl zu liefern, die als `f9c837e` etikettiert
+gewesen wäre und es nicht war.
+
+**Also, verbindlich:**
+
+1. **Abnahme am Quelltext** (Diff, Tests, `grep`, Mutation) — läuft parallel zum Bauen, wie in
+   §13.5, solange gegen einen **benannten Commit** gemessen wird.
+2. **Sichtprobe** — **nicht** parallel zum Bauen. Sie verlangt, dass `public/` zu einem benannten
+   Commit gehört. **Vor jeder Sichtprobe: `git status` auf `public/*`. Ist dort etwas offen, wird
+   nicht gemessen, sondern gemeldet.**
+3. **Wer eine Sichtprobe vertagt, weil `serviert != gemessen`, hat richtig gehandelt** — auch wenn
+   am Ende keine Zahl herauskommt. **Eine falsch etikettierte Zahl ist schlimmer als keine**, weil
+   sie später als Grundlinie zitiert wird.
