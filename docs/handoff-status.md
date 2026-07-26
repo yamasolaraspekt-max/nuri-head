@@ -9173,3 +9173,58 @@ AUF-75-Zusagen ohne Regression (rot→exit 1, nicht-gelaufen→exit 1). Umfang: 
 
 Die Entscheidung bleibt Yamas. Bei mir offen: nur noch der **Sichtprobe-Standard** (§11-Rezept).
 **Ballbesitz: Yama (Tor 2) · Planner (main-Zahlen) · Evaluator (Sichtprobe-Standard).**
+
+---
+
+## PLANNER 26.07., 13:15 — Noch nicht. Drei von fünf, und beide Lücken sind klein
+
+**Yama fragt, ob der Zeitpunkt da ist. Er ist es nicht — und zwar buchstäblich, weil er es so
+verlangt hat.**
+
+### 1. Bedingung 4 ist jetzt erfüllt — der `main`-Lauf ist da
+
+```
+main  9bcc9c3   758 passed / 0 failed / 0 skipped   2645 Assertions   44,03 s
+HEAD  ebbd31a   769 passed / 0 failed / 0 skipped   2661 Assertions   43,89 s
+Differenz:      +11 passed                          +16 Assertions    −0,14 s
+```
+
+**Beide grün, 0 rot, 0 übersprungen.** Netto **+11 Testfälle** durch die Insel-Integration, und die
+HEAD-Zähler decken sich exakt mit der früheren Vollmessung.
+
+**Und der Befund, den ich als einzigen offenen Punkt meiner Ersatzmessung benannt hatte, tritt nicht
+ein:** die Laufzeit steigt nicht — **44,03 → 43,89 s**, im Rauschen. *Meine Ersatzmessung war
+inhaltlich richtig; sie war trotzdem keine Erfüllung. Genau das ist §7.6.*
+
+**Er hat beide Seiten aus `/tmp`-Auszügen gefahren** (`git archive`, kein Eingriff in den Baum — der
+gehörte dem Generator) und **sequenziell**, damit der Laufzeitvergleich fair ist. Und er schreibt
+dazu: *„Keine Bewertung, kein Audit — §7.6: das ist die Messung, die Entscheidung ist Yamas."*
+
+### 2. Was fehlt — zwei kleine Dinge
+
+| | Bedingung | Stand |
+|---|---|---|
+| 1 | Layout-Inventur vollständig | **erfüllt** |
+| 2 | Abnahme-Stapel leer | **offen — AUF-80 ist gebaut und berichtet, das Votum fehlt** |
+| 3 | Baum sauber, **0 ungepusht** | **offen — Baum sauber (0), aber 1 Commit ungepusht** |
+| 4 | volle Suite mit `main`-Vergleich | **erfüllt** |
+| 5 | keine Migration | **erfüllt (0)** |
+
+**Drei von fünf.**
+
+**Bedingung 3 fällt an meinem eigenen letzten Commit.** Vor dem Merge gilt: der gepushte Stand ist
+die einzige Kopie außerhalb der Maschine — **ein ungepushter Commit ist kein Unordnungspunkt, er ist
+eine fehlende Sicherung.**
+
+*Ich könnte den Punkt für unerheblich erklären — es ist eine Doku-Zeile. **Genau das tue ich nicht
+mehr.** Das ist der Unterschied, den Yama heute eingezogen hat.*
+
+### 3. Zwei Handgriffe, dann melde ich
+
+1. **Der Evaluator votiert AUF-80** (gebaut `0c27942`, berichtet `ebbd31a`).
+2. **Yama pusht** — `./push-integration-sicher.command`, ein Commit.
+
+**Danach sind alle fünf buchstäblich erfüllt, und ich melde den Merge mit den Zahlen daneben.**
+
+**Umfang zur Erinnerung:** 388 Commits · außerhalb der Insel eine PHP-Datei, zwei Testdateien, ein
+Skript · **keine Migration, keine Route** ⇒ reiner Code-Deploy.
