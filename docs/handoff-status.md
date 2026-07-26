@@ -6233,3 +6233,82 @@ Knöpfe ohne Notlösung.
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Die Arbeitsbereich-Zeile (y = 224)
 unberührt.
+
+---
+
+## PLANNER 26.07., 07:40 — AUF-70 nachgemessen, AUF-62 gezogen, und eine Übergabe fehlt
+
+**Vorher gelesen/gemessen:** `git --no-optional-locks log d2e9c79..HEAD` · Arbeitsbaum · Locks ·
+`git show 4c1ce13 --stat` · **Browser, `studio?fixture=decke-treppe`, 1440 px, nach hartem Neuladen**
+· `app/HausplanerApp.tsx:348, 354, 999, 1210, 1427` · `app/dashboard/pan.ts` ·
+`geometry/editierGeometrie.ts:63`.
+
+### 1. Der Abgleich zuerst — und er ergibt etwas anderes als „fertig"
+
+Yama meldet, beide seien fertig. **Gegen die Commits gehalten stimmt das für keinen von beiden ganz:**
+
+| | Stand |
+|---|---|
+| **AUF-70** | **gebaut und committet** (`4c1ce13` + Bundle `0045ea2`), **aber ohne Ledger-Bericht** |
+| **Zustands-Inventur** | **nichts committet** — keine Datei, kein Ledger-Eintrag, Arbeitsbaum leer |
+
+**Das ist keine Rüge, sondern der Grund, warum es die Abgleich-Regel gibt.** Die Commit-Nachricht
+von `4c1ce13` trägt die Messung vollständig — der Generator hat also berichtet, nur an der falschen
+Stelle. **Der Ledger ist die Übergabefläche; was nicht dort steht, ist nicht übergeben.** Für den
+Evaluator ist der Unterschied nicht kosmetisch: er prüft gegen einen Auftrag und einen Bericht.
+
+### 2. AUF-70 unabhängig nachgemessen — es hält
+
+**Erst nach hartem Neuladen sichtbar** (die erste Messung zeigte den alten Stand aus dem
+Browser-Zwischenspeicher; das notiere ich, weil eine Sichtprobe auf einer alten Datei die
+schlechteste Art von grün ist).
+
+| gemessen | Ergebnis |
+|---|---|
+| Werkzeugzeile | **16 Knöpfe in einer Zeile** (vorher 11 + 5 in zwei Zeilen) |
+| obere Zeile | nur noch **Geschosse** und **Speichern** — die Dokumentzeile |
+| Rückgängig (gesperrt) | Deckkraft **0,6** · `not-allowed` · rgb(167,174,183) · rgb(242,244,246) |
+| Split (frei) | Deckkraft **1** · `pointer` · rgb(35,42,49) · rgb(255,255,255) |
+| Unterschied | **vier** Werte — **vorher unterschied sich keiner** |
+| dritter Zustand | vorhanden: 2D aktiv trägt Markenfarbe |
+| Überlauf | `docOverflow` = **0** |
+| Abstand (Kriterium 13) | **38 px** innerhalb der Gruppen gegen **52–57 px** zwischen ihnen |
+
+**Das Abstands-Kriterium ist erfüllt** — der Träger der Gliederung ist gewachsen, nicht verengt.
+Generator meldet Tests 1020 → **1033** und Mutation **6 rot**; das prüft der Evaluator, nicht ich.
+
+**In §3b eingetragen. Ballbesitz Evaluator.**
+
+### 3. Die Reihenfolge für den Evaluator ändert sich — zu seinem Vorteil
+
+Die **Zustands-Inventur zuerst zu messen wäre jetzt falsch**: AUF-70 hat `knopf()` gerade umgebaut.
+Eine Inventur gegen den alten Stand misst einen Zustand, den es nicht mehr gibt.
+
+**Also: erst das Votum zu AUF-70, dann die Inventur gegen den neuen Stand.** Das ist keine
+Verzögerung, sondern der Unterschied zwischen einer Messung und einer Momentaufnahme von gestern.
+**Und die dritte Frage der Inventur bekommt damit ihre Schärfe:** nach AUF-70 soll es **eine**
+Beschreibung des gesperrten Aussehens geben. Findet er zwei, ist AUF-70 unvollständig — und das
+fällt in sein Votum, nicht in die Inventur.
+
+### 4. AUF-62 gezogen — Spur A
+
+**Spur A**, begründet: der Posten rechnet Bounding-Box, Maßstab und Verschub. Das ist Logik, nicht
+Markup; die Kurzspur wäre hier eine Ausrede.
+
+**Gemessen, bevor ich den Auftrag geschrieben habe:** alles Nötige liegt vor — `zoom` (`:348`),
+`pan` aus AUF-51 (`:354`), `bbox()` (`geometry/editierGeometrie.ts:63`, rein und ohne DOM). **Es
+fehlt eine Rechnung und ihre Verdrahtung.**
+
+**Zwei Kanten, die ich beim Lesen gefunden habe und die man beim Bauen nicht vor Augen hat:**
+
+1. **Split.** `:999` — `stageBreite = modus === 'split' ? Math.floor(breite / 2) : breite`. Wer
+   `breite` nimmt, passt in eine Fläche ein, die es nicht gibt, und die Hälfte steht draußen.
+2. **Die Welt wächst nach oben.** `standardPan` rechnet `y = hoehe - RAND`. Ein vertauschtes
+   Vorzeichen sieht bei quadratischen Grundrissen richtig aus und bei länglichen falsch — deshalb
+   ein Test mit **zwei** Seitenverhältnissen.
+
+Dazu Yamas eigenes Kriterium von der Tafel als erster Punkt: **leeres Geschoss ⇒ kein Sprung, kein
+Fehler**, sondern der Standardmaßstab.
+
+**Ballbesitz: Generator (AUF-62 · Nachtrag: Bericht zu AUF-70) · Evaluator (AUF-70, danach die
+Inventur) · Planner (AUF-65, 18, 22).**
