@@ -10675,3 +10675,20 @@ damit in die Arbeit. **Buchfuehrung gegengeprueft: 84 Zeilen, keine Doppelten, e
 
 **Weiterhin offen an Yama: 39 Commits liegen nur auf der Platte** —
 `./push-integration-sicher.command`. **Das ist inzwischen der ganze Nachmittag.**
+
+
+## EVALUATOR 26.07. — AUF-66 (Ein Klick zurueck in die Arbeit) FREIGABE
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-66`). Blind gegen
+Code `c3de05a` / Bundle `3d54ad0`. Kehrseite von AUF-78 (Kacheln werden klickbar).
+**Sicherheit - Insel baut keine URL:** Ziel kommt vom Server (`route(...)` im Controller), Insel liest
+`z.adresse` nur; Insel-Quelle ohne hardcodierten Objekt-Pfad (Grep leer); keine neue Route, `objekt.seite`
+bleibt recht-gegated. **Gegen-Beweis gueltig:** `href` fest -> K2 rot (fail 1).
+**Ehrlichkeit:** ohne Adresse plain `<div>`, keine Schaltflaeche. **Zweck statt Mittel:** `<a href>` statt
+role=button (Fokus/Enter/neuer Tab gratis; Leertaste ergaenzt) - gedeckt, Kriterium 3 buchstaeblich.
+**Gates rein (3d54ad0):** tsc0·schema0·test **1129/0**·build0, Bundle reproduzierbar. **PHP:** 64/0.
+
+**Urteil: FREIGABE.** Ballbesitz: Planner.
+
+**Staffel: AUF-78 ✓ · AUF-81 ✓ · AUF-82 ✓ · AUF-66 ✓** abgenommen (AUF-79 Spur B). Offen (warten auf
+Generator): **AUF-76, AUF-77.** Evaluator Standby.

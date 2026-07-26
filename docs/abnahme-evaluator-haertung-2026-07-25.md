@@ -1418,6 +1418,43 @@ Urteil: FREIGABE. Alle drei Zwecke belegt (unlink-frei, sichtbares Scheitern, PI
 bringt den alten Fehler zurueck (Zaehne), Hook nicht-blockierend, 0 Erzeugnis. Meine offene Auflage aus
 AUF-75.1/Reichweite ist damit vollstaendig geschlossen. Ballbesitz: Planner.
 
+### AUF-66 (Code c3de05a · Bundle 3d54ad0) - Ein Klick zurueck in die Arbeit - FREIGABE
+
+Kehrseite von AUF-78: die Projektkacheln werden klickbar. Blind gegen die committeten SHA gemessen.
+§8-Split sauber (Code ohne Bundle, Bundle nur Artefakt). Bundle 3d54ad0 byte-gleich zum frischen Build.
+
+Sicherheits-Kern - die Insel baut KEINE URL (verifiziert):
+- Das Ziel kommt fertig vom Server: `'adresse' => route('hausplaner.objekt.seite', $o->id)` im
+  Controller. Die Insel liest `z.adresse` nur, sie konstruiert nichts. Grep der Insel-Quelle nach
+  `admin/hausplaner/objekt|/objekt/|hausplaner.objekt` = LEER -> kein hardcodierter Pfad. Keine neue
+  Route; geoeffnet wird die bereits `permission:Hausplaner,read`-gegatete `objekt.seite` - kein zweiter
+  Zugang, keiner umgangen.
+- Gegen-Beweis (gueltig, /tmp): `href` auf eine feste Adresse gesetzt -> K2 ("jeder Eintrag traegt die
+  Adresse seines EIGENEN Objekts") wird rot (fail 1, exit 1). Die Nicht-Weitergabe fremder Ziele ist
+  ein Test mit Zaehnen.
+
+Ehrlichkeit - ohne Ziel keine Schaltflaeche:
+- `if (!z.adresse) return <div cursor:default>` - ohne Adresse bleibt der Eintrag sichtbar, wird aber
+  KEINE Schaltflaeche (kein href, kein Fokus, kein Zeiger). Dasselbe Prinzip wie AUF-40 Teil A / AUF-44.
+- Leerzustand (Teil A) unveraendert; die redundante "Weiterarbeiten"-Karte wurde entfernt (zwei Wege
+  zur selben Handlung waeren eine Frage, kein Angebot) - PROJ[2] stillgelegt, nicht geloescht.
+
+Zweck statt Mittel (Abweichung offengelegt, gedeckt): echter `<a href>`-Verweis statt `role="button"`.
+Begruendung des Generators: ein Verweis bringt Fokus/Enter/Statuszeile/mittlere Maustaste/neuer Tab/
+Lesezeichen mit, eine location-setzende role=button nimmt das weg. Die eine Luecke (Leertaste) ist
+ergaenzt (`onKeyDown` Space) -> Kriterium 3 (Tastatur) buchstaeblich erfuellt, nicht nur sinngemaess.
+Ich pruefe den Zweck: keyboard-erreichbare, ehrliche Ein-Klick-Navigation ohne Insel-URL-Bau - erreicht.
+
+§13-Gates (rein, /tmp-Auszug 3d54ad0): tsc 0 · schema 0 (kein Drift) · test 1129 pass/0 fail · build 0.
+PHP-Suite (ticket_testing): 64 pass/216 Assertions/0 fail. Umfang: Controller + 4 Insel-Dateien + 2
+Tests, kein Blade, keine Migration, 0 andere Erzeugnis-Bereiche.
+Tests decken: K2 (eigenes Ziel, keine Weitergabe), Ein-Klick (Name im Verweis, genau 1 Fokussierbares),
+dominant=erster in der Tastfolge + heisst "Weiterarbeiten" (einmal), K3 (jeder Eintrag mit Ziel
+fokussierbar; Leertaste loest aus), K4 (Adressen im Test frei erfunden - Insel kennt den echten Pfad nicht).
+
+Urteil: FREIGABE. Insel baut keine URL (Gegen-Beweis mit Zaehnen), ohne Ziel keine Schaltflaeche,
+Tastatur buchstaeblich, alle Gates gruen, Bundle reproduzierbar, additiv. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
