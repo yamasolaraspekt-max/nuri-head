@@ -7076,3 +7076,76 @@ Posten mit Marke.
 
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Kein Selbst-Grün. Keine Ableitung aus dem Dokument
 (das ist AUF-40), kein zweiter Hinweisort, kein Umbau der Fläche.
+
+---
+
+## PLANNER 26.07., 08:30 — AUF-65: der Generator hat meinen §1 widerlegt, und er hat recht
+
+**Vorher gelesen/gemessen:** `git log -7` · `git show 6be9f3c` · **selbst nachgeprüft:**
+`grep -n "STEPS_STILLGELEGT" app/studioDaten.ts` (Z. 98) · `grep -rn "STEPS_STILLGELEGT"` über die
+Insel · `app/HausplanerStudio.tsx:15, 37`.
+
+### 1. Mein Fehler, und diesmal ist er lehrreicher als der letzte
+
+Ich hatte geschrieben — mit Messung, mit Codeblock, mit Nachdruck:
+
+> *„Das Panel ist nicht leer. Es ist erfunden. `studioDaten.ts` hat null Importe."*
+
+**Beides stimmt und ist trotzdem falsch.** Die Einträge, die ich gezählt habe, stehen in
+`STEPS_STILLGELEGT` (`studioDaten.ts:98`) — **einer Konstante, die ihren Zustand im Namen führt.**
+
+**Selbst nachgeprüft, nicht übernommen:**
+
+```
+$ grep -rn "STEPS_STILLGELEGT" --include=*.tsx --include=*.ts . | grep -v studioDaten.ts
+__tests__/gefuehrteEhrlich.test.ts : ...
+__tests__/fahrschritte.test.ts     : ...
+(keine einzige Fläche)
+
+app/HausplanerStudio.tsx:37   const schritte = ableitenSchritte(scene)
+```
+
+**Die Fläche rendert `ableitenSchritte(scene)`** — 11 Schritte aus dem Dokument, davon **0 mit
+Aufgaben** und **0 mit Empfehlung**. **Das Panel ist wirklich leer. Die ursprüngliche UX-Meldung
+hatte recht, und ich habe sie mit einer Messung an der falschen Datei widerlegt.**
+
+**Die Lehre ist nicht „genauer hinsehen".** Sie ist konkreter: **Ich habe gemessen, was in einer
+Datei steht, und daraus geschlossen, was auf dem Schirm steht — ohne zu prüfen, ob irgendetwas diese
+Datei liest.** Der Beweis dafür ist ein einziger `grep`, und er hätte zwanzig Sekunden gedauert.
+
+**Formuliert für den nächsten Auftrag: Wer eine Aussage über die Oberfläche mit einer Datei belegt,
+muss zuerst belegen, dass die Oberfläche diese Datei benutzt.** Eine Konstante, die niemand liest,
+ist kein Befund — sie ist Möblierung.
+
+*Und die unbequeme Wiederholung: das ist heute die zweite Prämisse, die jemand anderes umgeworfen
+hat. Beim Trennstrich hat der Evaluator gemessen, hier der Generator. Beide Male hat mein Auftrag
+funktioniert, weil ihn jemand nicht geglaubt hat.*
+
+### 2. Die Rückgabe von (b) ist richtig — und sie löst den Punkt auf, statt ihn zu vertagen
+
+Mein Auftrag wollte den Satz *„Beispielablauf — die Schritte stammen noch nicht aus deinem
+Projekt."* **Dieser Satz wäre heute schlicht falsch:** die Schritte stammen aus dem Projekt, seit
+AUF-39. Was fehlt, sind Aufgaben und Empfehlungen.
+
+**Ein Hinweis wäre eine zweite Behauptung an einer Fläche, die gerade von Behauptungen befreit
+wird** — diesmal eine falsche. Und er ist nicht nötig: die Schrittkarte sagt es bereits selbst, pro
+Schritt, in echten Worten:
+
+> *„Ob eine Vorlage importiert und ihr Maßstab bestätigt wurde, führt das Dokument nicht. Sichtbar
+> ist nur, ob Wände vorhanden sind. Gezeichnet sind 8 Wände."*
+
+**(b) ist damit erledigt, nicht vertagt.** Kein Folgeposten. Es entfällt beim Messen — wie AUF-28,
+AUF-29 und AUF-6 gestern.
+
+**Und (c) ist dadurch kein Vorgriff auf später**, wie ich im Auftrag angenommen hatte
+(„bei den heutigen Daten tritt der Fall nicht ein"), sondern **der Regelfall von heute**. Auch das
+hat er gesehen und benannt.
+
+### 3. Stand
+
+**Archiv 58 · Arbeitsvorrat 16 (11 offen, 5 gesperrt) · Abnahme-Stapel 1 · gesamt 75 ⇒ 77 %.**
+
+**AUF-73 gezogen** (die 18 px, Weg A). **AUF-65 in §3b.**
+
+**Ballbesitz: Generator (AUF-73, danach AUF-71) · Evaluator (AUF-65 zuerst, dann der
+Sichtprobe-Standard) · Planner (nichts offen).**
