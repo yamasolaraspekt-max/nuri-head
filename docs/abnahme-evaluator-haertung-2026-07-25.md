@@ -1050,6 +1050,38 @@ schweigt bei leerer Liste, und der dritte Teil ist mit gemessener Begruendung zu
 Auftrags-Praemisse las die stillgelegte Demo-Quelle) - genau die Ehrlichkeit, die der Posten baut.
 Mutationsfest, am Schirm belegt.
 
+## AUF-73 - Restueberstand weg, gemessen wird der sichtbare Teil (088c186) - FREIGABE + schliesst AUF-72-Auflage
+
+**Reihenfolge:** erst blind gegen 088c186 gemessen (/tmp + Browser, Regel 11 Max-Leisten-Zustand),
+dann Bericht. **Klasse: sichtbar.** Fix meiner AUF-72-Auflage (die 18 px).
+
+- **Umfang:** 2 Dateien - M buehnenHoehe.ts + Test. K2 null Modell.
+- **Fix:** sichtbareHoehe(oben,hoehe,fenster) = Math.floor(Math.min(hoehe, fenster - max(0,oben))) -
+  klemmt die beanspruchte Hoehe auf den sichtbaren Teil unter der Oberkante, **abgerundet** (ein
+  aufgerundetes Pixel stuende unten wieder heraus). Rein, EIN getBoundingClientRect, gleiche
+  Ersatzhoehe 700 / Mindest 200, keine feste Zahl, keine zweite Messstelle.
+- **Gates:** schema 0 . test **1073/1073, 0 skip** (1068->1073) . tsc 0 . build ok. 14 Subtests -
+  5 neue (Platz auf Sichtbares begrenzt, abgerundet, gescrollte/abwesende Oberkante robust, keine
+  feste Zahl, Hook nutzt die reine Rechnung) + die **AUF-72-Zusagen bleiben gruen, namentlich K6
+  Verschub-Erhalt**.
+- **Gegen-Beweis (/tmp):** Math.floor -> Math.ceil -> 'abgerundet, nicht gerundet' rot.
+- **Sichtprobe (Regel 11, iframe 1440, u-dach, Expertenmodus, Werkzeug Wand = Optionen-Zeile):** meine
+  exakte AUF-72-Reproduktion (Canvas-top 369) -> **900: Ueberstand 0** (war 18), **813: Ueberstand 0**
+  (war 18). Canvas-Unterkante trifft die Fensterkante genau. Meine Auflage ist geschlossen.
+
+- **Ehrlich, Beweis gilt gegen mich:** meine Auflage benannte den BEFUND (18 px im Max-Leisten-Zustand)
+  korrekt - das war der Wert. Meine URSACHEN-Hypothese (Werkzeug-Optionen-Zeile) traf NICHT: der
+  Generator konnte 18 px nicht reproduzieren (er mass 8 px am Studio-Blatt, 0 am Objekt-Blatt) und fand
+  die Wurzel tiefer - Oberkante identisch, der Ueberstand entsteht UNTEN, weil studio.blade der Insel
+  nur min-height gibt und die Spalte keine Grundlage zum Schrumpfen hat. Ich hatte die Ursache benannt,
+  ohne die Elternkette bis unten durchzumessen. Der Fix (Klemmung auf den sichtbaren Teil) ist
+  ursachen-robust und loest beide Zahlen (18 wie 8) auf 0.
+
+**Urteil: FREIGABE.** Der Restueberstand ist in meinem eigenen unguenstigsten Zustand weg (18 -> 0,
+gemessen), der Verschub-Erhalt aus AUF-72 bleibt, und die Rechnung ist rein + mutationsfest (floor).
+Damit ist AUF-72 als Ganzes abgenommen (FREIGABE, Auflage erfuellt). Meine Ursachen-Fehldeutung
+offengelegt - der Befund stimmte, die Diagnose nicht.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
@@ -1094,6 +1126,7 @@ Gates je SHA (npm run …, EXIT / Testzähler):
   AUF-62    bae4596  FREIGABE (Spur A): einpassen.ts reine Fit-View (K2/K9 kein Modell/Befehl, grep leer) ; schema 0/test 1051/1051/tsc 0/build ok ; 17 Subtests rechnen via aufSchirm() nach, 6 Kanten ; 3 geerbte Zusagen ohne Verlust ; Gegen-Beweis y-Spiegelung gebrochen = 7 rot ; Sichtprobe u-dach: Knopf enabled (nicht geplant), Klick Zoom 12%->6% rahmt Grundriss ; Rueckgabe Buehne 227px unter Fenster (Bestand)
   AUF-72    2e56fcb  FREIGABE MIT AUFLAGE: Messansatz (ResizeObserver statt innerHeight-96, K3 grep 0), Verschub ueberlebt (K6 verriegelt), Ersatz 700/Min 200 (Mutation 2 rot); schema 0/test 1060/1060/tsc 0/build ok ; ABER Sichtprobe widerlegt 'Ueberstand 0': konstant 18px bei 900 UND 813 im Maximal-Leisten-Zustand (Optionen-Zeile, Canvas-top 369 vs Generator 323) - Kern-Bug 227->18px, Rest via einpassen/Verschub erreichbar, kein Blocker; Auflage Optionen-Zeile einrechnen o. 'Ueberstand 0' praezisieren
   AUF-65    5ac811c  FREIGABE: STATUS_LABEL.ok 'Freigegeben'->'Vollstaendig' (Schluessel unveraendert K4), leere Liste keine Ueberschrift (K6), (b) zurueckgegeben weil Praemisse falsch (Schritte aus Szene seit AUF-39, gezaehlte Eintraege stillgelegt) ; schema 0/test 1068/1068/tsc 0/build ok ; 8 Subtests ; Gegen-Beweis Freigabe-Wort zurueck K3 rot ; Sichtprobe 1440x900 decke-treppe: Plakette 'Vollstaendig' kein 'Freigegeben', keine leere Aufgaben-Ueberschrift ; K3-grep-Selbstkorrektur (Treffer alle legitim)
+  AUF-73    088c186  FREIGABE + schliesst AUF-72-Auflage: sichtbareHoehe=floor(min(hoehe,fenster-oben)) klemmt auf Sichtbares (abgerundet) ; schema 0/test 1073/1073/tsc 0/build ok, 14 Subtests inkl. AUF-72 K6 Verschub gruen ; Gegen-Beweis floor->ceil rot ; Sichtprobe Regel 11 (u-dach Wand top 369): 900 Ueberstand 0 (war 18), 813 Ueberstand 0 ; ehrlich: mein Befund 18px stimmte, meine Ursache (Optionen-Zeile) nicht - Wurzel war studio.blade min-height, Fix ursachen-robust
   AUF-47-Sicht  Bundle fca2fc6  Testflaeche: 'Gespeichert' 0x, 'Rev. N' 0x, 'wird nicht gespeichert' 3x (Top-Badge + Kopfzeile + Knopf), Speichern-Knopf disabled=true mit Grund-Tooltip -> Auflage erfuellt, volle FREIGABE
 Mutations-Gegenbeweise (Mutation → rote Tests):
   T1: wand fix→versteckt 5 rot · erfunden-xyz 3 rot · Regel entfernt (auswahl/rotate) 5/4 rot
