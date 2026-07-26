@@ -10287,3 +10287,33 @@ Posten ersetzen soll.** Die Tafel gehört dem Planner; ich habe sie nicht angefa
 Kein Push, kein `main`-Merge (Tor 2 = Yama). Keine Historie, keine Prognose, kein Sprachmodell,
 keine Änderung an der Wächter-Logik — nur ein Aufruf am Ende. `resources/`, `app/`, `routes/`:
 **null Zeilen**.
+
+
+## PLANNER 26.07., 17:05 — AUF-79 erledigt (Spur B), Marke auf AUF-81, und eine zweite Buchfuehrung entfernt
+
+**Drei Posten in fuenfundzwanzig Minuten:** AUF-78 (16:37), AUF-82 (16:50), AUF-79 (16:58).
+Der Fortschritt schreibt sich ab jetzt selbst — **75 %, 65 von 86**, und die Probe geht auf:
+65 Archiv + 1 aktiv + 2 in Pruefung + 11 offen + 7 gesperrt + 0 bei Yama = **86**, Handzaehlung
+identisch. Laufzeit **0,065 s**; der Waechter ist dadurch nicht spuerbar langsamer (0,111 s gesamt).
+
+**Zwei Entscheidungen des Generators, die ich ausdruecklich stuetze.** Er zaehlt **`git show HEAD:`**
+statt des Arbeitsbaums — sonst zaehlte die Seite einen halb geschriebenen Zustand. Und er hat die
+Seite **gitignoriert**: sie entsteht nach jedem Commit neu, waere also **bei jedem Commit
+veraendert** — ein Dauer-Haltesignal fuer drei Instanzen (§10.2). **Sie ist die Darstellung der
+Tafel, nicht deren Quelle; die Quelle ist versioniert, die Ansicht muss es nicht sein.**
+
+**Und er hat einen Befund gemeldet, statt ihn zu reparieren — richtig so, die Tafel gehoert mir:**
+§3d nannte in Prosa **„49 Posten"** und listete **26** Nummern, waehrend das Archiv **65** Zeilen
+fuehrt. **Eine von Hand gepflegte Zahl, die ihrer eigenen Quelle um 16 widerspricht** — genau die
+Sorte zweiter Buchfuehrung, die AUF-79 ersetzen soll. **Dass ausgerechnet der Posten sie findet,
+der das Zaehlen von Hand abloest, ist kein Zufall, sondern der Beweis, dass er noetig war.**
+
+**Behoben, aber nicht durch Nachfuehren der Zahl.** Die Aufzaehlung ist **entfernt**; es steht dort
+jetzt die gezaehlte Zahl **als Momentaufnahme** mit dem Satz: **die Wahrheit ist das Archiv.**
+Eine Liste haendisch nachzupflegen haette den Fehler nur vertagt.
+
+**Marke gerueckt: AUF-81 traegt jetzt `⚡ AKTIV`** — B7, Yamas ausdruecklicher Wunsch: Datenbank,
+Migration, Routing, Pagination. **Die erste Migration des Projekts.** Meine Bedingung von heute
+Mittag ist erfuellt: `main` stand nach dem Merge eine Runde unveraendert.
+
+**Ballbesitz: Generator (AUF-81) · Evaluator (AUF-78, danach AUF-82).**
