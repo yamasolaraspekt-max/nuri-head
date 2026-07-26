@@ -10960,3 +10960,69 @@ Kommentar-`#93c21c`, nicht den Wert) — korrigiert -> 5 rot.
 
 **Abgenommen: AUF-78·81·82·66·76·54 (alle FREIGABE), AUF-79 Spur B.** Offen: AUF-77 (nicht gebaut) +
 AUF-55/56 (im Bau). Evaluator Standby.
+
+---
+
+## 2026-07-26 — GENERATOR-BERICHT AUF-55 (Snapshot-Fläche ehrlich ausweisen)
+
+**Commits:** Code `53ede12` (`public/*` = **0 Zeilen**) · Bundle `7033b86` (eigener zweiter Commit).
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1164 · pass 1164 ·
+fail 0`, vorher 1154) · `build` **0**. **Volle PHP-Suite: 789 grün — unverändert.**
+**Klassifikation: `sichtbar`.**
+
+### Die Auftragsprämisse dreht sich um — gemessen, bevor gebaut wurde
+
+Der Auftrag geht davon aus, im Studio gebe es eine **wirkungslose Snapshot-Fläche**, die als
+`in Entwicklung` zu kennzeichnen sei. **Gemessen gibt es gar keine.** Was es gibt:
+
+- `objekt.blade.php:116` setzt `data-snapshots-url` — **die Naht.**
+- `routes/web.php:5002-5008`: drei Routen, und sie **arbeiten wirklich** (`snapshotErstellen` legt
+  eine Zeile an, `snapshotListe` liest, `wiederherstellen` stellt zurück — im Controller nachgelesen).
+- Die Insel liest davon **kein Zeichen**. Kein `snapshotsUrl` irgendwo im ausgelieferten Inselcode.
+- Der einzige Ort, an dem das Studio überhaupt einen Verlauf andeutet, ist der Panel-Reiter
+  **Historie** — und dessen Satz nannte nur die *Befehlshistorie eines Bauteils*, also gerade nicht
+  die versionierten Planungsstände, die der Server bereits führt. *(Die Werkzeugzeile „Verlauf" ist
+  Rückgängig/Wiederholen und funktioniert; `Rev. N` in der Kopfzeile ist der echte
+  Optimistic-Lock-Zähler — beides keine Snapshot-Flächen.)*
+
+**Eine Naht, die niemand sieht, ist schlimmer als eine leere Fläche:** sie wird beim nächsten Mal neu
+erfunden, weil niemand weiß, dass sie schon da ist. Deshalb wird der ehrliche Zustand dort
+ausgesprochen, wo der Nutzer den Verlauf sucht — **im vorhandenen Reiter, nicht in einem neuen**.
+
+- **K1 — kein Blindtext, keine Vertröstung:** der Hinweis nennt **beides**, was entstehen wird, und
+  sagt dazu, **was heute schon da ist**: *„…die der Server heute schon anlegt, listet und
+  wiederherstellt. Angebunden ist die Fläche noch nicht."* Testverriegelt gegen `folgt` · `in Kürze`
+  · `demnächst` · `coming soon` · `keine Daten` — **für alle vier Reiter**, nicht nur den geänderten.
+  Der Zustand steht als **Text und Symbol** da (`ZustandBadge` gerendert und geprüft), nicht nur als
+  Farbe.
+- **K2 — nichts angebunden, nichts angefasst:** `resources/views/` **0 Zeilen** · `routes/` **0
+  Zeilen** · K4-Schichten **0**. Kein `fetch`. **Die tote Adresse im Blade bleibt stehen** —
+  testverriegelt, dass sie noch da ist. *Wer sie wegräumt, muss sie später neu finden; genau daran
+  ist dieser Zustand entstanden.*
+- **Kein neuer Reiter:** es sind weiterhin **vier**, in unveränderter Reihenfolge; die anderen drei
+  sind testverriegelt unberührt. Eine fünfte Fläche wäre eine Layout-Entscheidung, und die hat
+  dieser Posten nicht.
+- **Mutations-Gegenbeweis:** den Hinweis auf `'Historie folgt.'` zurückgedreht ⇒ **4 Zusagen rot**
+  (zu dünn · Vertröstung · nennt nicht was kommt · nennt nicht die Naht); danach zurückgenommen.
+- **K3 — Sichtprobe, Teil der Abnahme:** Expertenmodus → Reiter *Historie*, drei Viewports.
+  **1440×900** und **1024×768**: Text vollständig sichtbar, Unterkante 581 px. **375×780**: die
+  letzte Zeile endet bei 790 px, also **10 px unter der Fensterkante** — das Panel scrollt, der Text
+  ist erreichbar. **Kein waagerechter Überlauf** in allen dreien.
+
+**Eine eigene Zusage aus AUF-66 nachgezogen:** sie nagelte die K4-Trefferliste auf **genau eine
+Datei** fest statt auf die Eigenschaft und ging rot, sobald ein zweiter Test dieselbe Blade-Vorlage
+liest — obwohl die geschützte Eigenschaft unberührt war. *Eine Zusage, die eine Dateiliste festhält
+statt der Eigenschaft, bricht bei jeder harmlosen Ergänzung.* Sie prüft jetzt, was gemeint war:
+**kein Treffer ist ein Ziel**, jeder ist ein Dateizugriff — und jeder wird benannt.
+
+### ZURÜCKGEGEBEN — zwei Befunde aus der Sichtprobe
+
+1. **Zwei Flächen tragen „Module folgen"** — `HausplanerApp.tsx:1445` („Erweiterbar – Module
+   folgen.") und `HausplanerStudio.tsx:174` („Erweiterbar — weitere Module folgen."). Das ist genau
+   das Wort, das Kriterium 1 dieses Postens verbietet, nur an einer anderen Fläche. **Außerhalb des
+   Auftrags — gemeldet, nicht angefasst.**
+2. **Die drei Snapshot-Routen haben keinen einzigen PHP-Test.** `tests/Feature/Hausplaner/` enthält
+   nichts zu `snapshot`. Sie arbeiten (im Controller nachgelesen), aber nichts hält sie fest. Gehört
+   zur späteren Anbindung, nicht hierher.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
