@@ -12472,3 +12472,75 @@ damit der erste Posten, der das Muster nicht beschreibt, sondern abtraegt — **
 lautet nicht "rechnet die Engine richtig", sondern "ruft sie jetzt jemand, und sieht der Nutzer das
 Ergebnis".** Vier Module weniger auf der Halde waeren ein messbarer Fortschritt; vier gruen
 getestete Engines hinter einem Panel, das niemand oeffnet, waeren keiner.
+
+
+## PLANNER 26.07., 23:05 — Master-Prompt Usability eingeordnet. Er bestaetigt unseren Zuschnitt, er aendert ihn nicht
+
+Yama hat einen Master-Prompt mit 40 Abschnitten uebergeben und um Einordnung gebeten.
+Papier: `docs/planner/masterprompt-usability-einordnung-2026-07-26.md`.
+**Einordnen heisst nicht abnicken** — ich habe jeden Abschnitt gegen den gemessenen Stand gehalten.
+
+**Das Papier bestaetigt drei meiner heutigen Messungen, ohne sie zu kennen.** §13 verlangt
+woertlich *"angrenzende Waende bleiben verbunden"* — genau die Stelle, an der Fall B1 einen Raum
+verschwinden laesst. §12 verlangt anklickbare Direktmasse — 0 Doppelklick in der Insel. §6 verlangt
+ausreichend grosse Griffe — es gibt keine. **Zwei unabhaengige Wege zum selben Befund.**
+
+**Vier Toepfe.**
+
+**A — steht schon, muss nur angeschlossen werden.** Der groesste. `werkzeugVertrag` (110 Eintraege)
+ist die geforderte `ToolUsabilityDefinition`; `naechsterSchritt.ts` ist Smart Tool Chaining und
+**laeuft**; `masskette`/`bemassung` sind angeschlossen; Vorbedingungen mit Handlung und Ort sind
+die geforderte Fehlervermeidung mit Loesungsangebot. **Die wichtigste Folgerung des ganzen
+Papiers:** §17 und §36 verlangen ein neues Register — wir haben es. **Ein zweites Register neben
+`werkzeugVertrag` waere die klassische zweite Wahrheit.** Es fehlen Felder *in* dem vorhandenen,
+kein Register daneben.
+
+**B — gemessen nicht vorhanden.** Touch: **0 Treffer** fuer `onTouch`/`onPointer`/`touchstart` in
+`app/`. Kontextmenue: existiert nicht, der einzige Fund steht im **stillgelegten** Katalog.
+Shortcuts: **16 von 101**. Touch ist eine eigene Groessenordnung und gehoert **nicht** in AUF-50
+hineingemischt.
+
+**C — vier echte Widersprueche.** (1) Zwei Shortcut-Kollisionen **in unseren eigenen Daten**:
+`G` = verschieben *und* raster, `S` = skalieren *und* fang; die vom Master geforderte
+Konfliktpruefung haette heute schon zwei Treffer. (2) §6 warnt vor Doppelklick, Yama fordert ihn —
+vereinbar mit einer Regel: **der Doppelklick ist nie der einzige Weg**, sonst ist die Funktion auf
+Touch unerreichbar. (3) §35 *"keine Funktion gilt als fertig, bevor…"* — **gilt das rueckwirkend,
+sind alle dreizehn heutigen Posten wieder offen.** Vorschlag: gilt ab Beschluss, fuer Bestehendes
+wird es Befundliste statt Ruecknahme; eine Regel, die die Vergangenheit umschreibt, wird beim
+ersten Anwenden umgangen. (4) **Die 0-bis-5-Skala ist die eine Stelle, an der ich widerspreche** —
+sie sieht aus wie eine Messung und ist ein Urteil. Genau diese Verwechslung hat uns heute zweimal
+getroffen (erfundene Uhrzeiten, 49 gegen 65). Ich verwerfe sie nicht, ich haenge eine Bedingung
+an: **jede Ziffer traegt ihren Beleg daneben, sonst wird sie nicht geschrieben.**
+
+**D — Yamas Entscheidungen.** Telemetrie (§22) ist bei ~3000 echten Kunden eine Datenschutzfrage,
+keine Bauaufgabe. Das Datenmodell (§36) ist Schema und damit Tor 2 — **Zwischenweg: die ersten
+Berichte als Dateien unter `docs/`**, denn ein Datenmodell fuer Befunde, die es noch nicht gibt,
+ist Vorratsbau, also genau das Muster, das uns die 28 unangeschlossenen Module eingebracht hat.
+Zum Quality Agent (§38) sage ich nichts, weil ich nicht weiss, ob er laeuft — ich behaupte es nicht.
+
+**Der entscheidende Schnitt verlaeuft zwischen §40 und den USABILITY-Phasen.** §40 sagt selbst
+"read-only, keine Implementierung" — das verletzt **weder §13 noch §14**: §13 regelt den Bauenden,
+eine Analyse baut nicht; §14 verbietet neue Posten, eine Planner-Untersuchung ist keiner. **Ich
+fange in den Luecken der Wache damit an.** Von den zehn geforderten Dokumenten sind vier im Kern
+schon geschrieben; **sechs fehlen wirklich** und entstehen unter unseren Dateinamen, nicht unter
+zehn neuen — sonst haben wir zwei Dokumentenwelten. USABILITY-01 bis -10 sind Posten und warten
+unter §14. **USABILITY-10 ist die beste Nachricht darin:** die vorgeschlagenen Pilotwerkzeuge sind
+deckungsgleich mit unseren sieben angeschlossenen — fuer den Piloten muss nichts freigeschaltet
+werden.
+
+**Yamas Bedienkette ersetzt Satz 2 meines Bedienmodells**, weil sie besser ist: sie benennt die
+**fachliche Pruefung vor dem Bestaetigen** ausdruecklich — und genau dort sitzt der
+Wandlaengen-Fehler. Gemessen gehen heute Schritt 1, 2, 10 und 11; 3 bis 8 fehlen.
+
+**Testaufgaben werden zusammengelegt, nicht verdoppelt.** Meine sechs bleiben die feste
+Pruefstrecke mit nachrechenbaren Sollwerten (sie ergeben die Kurve), seine zwanzig werden der
+Aufgabenvorrat des Erprobers (dort gehoert die Willkuer hinein). Seine Nr. 1 — Wand auf exakt
+4,25 m — **ist unser P6 in anderer Kleidung.**
+
+**Den Qualitaetsgrundsatz uebernehme ich ohne Vorbehalt** und ergaenze ihn um den einen Fall, den
+kein Abschnitt des Papiers faengt: *"Und sie ist nicht fertig, wenn sie richtig rechnet und niemand
+sie ruft."* Ein Modul ohne Aufrufer wird von **keiner** Usability-Regel je erwischt, weil es keine
+Bedienung hat, die man pruefen koennte.
+
+**Kein Posten, kein Rahmen-Paragraph, bevor Yama Topf D und C3 entschieden hat.** AUF-50 bleibt
+zugeschnitten wie um 22:35. **Ballbesitz:** Generator AUF-52 Scheibe 1, Stapel leer, Marke AUF-52.
