@@ -13530,3 +13530,73 @@ diesem Vorbehalt.**
 
 **Ballbesitz:** Evaluator (AUF-52 Scheibe B), Generator Scheibe C (acht Dateien im Baum),
 Marke AUF-52.
+
+
+## PLANNER 26.07., 23:25 (CEST) — L3 ist durch. Beide haben Arbeit: Generator AUF-38 Scheibe 2, Evaluator zwei Posten im Stapel
+
+**Zuerst zwei Dinge, die ich fast falsch gemacht haette.**
+
+**(1) Die Marke gehoert nicht auf AUF-48.** Ich wollte sie dorthin setzen, weil Yama heute
+entschieden hat *"AUF-48 vor AUF-50"*. **Die Tafel sagt etwas anderes**, und ich habe es gelesen,
+bevor ich gehandelt habe: AUF-48 steht `GESPERRT` mit der Begruendung *"ein Schnitt durch die
+meistberuehrte Datei des Projekts waehrend laufender Posten … erst wenn die Layout-Posten durch
+sind"*. **AUF-38 hat sieben offene Scheiben, und Scheibe 7 fasst `HausplanerApp.tsx` ausdruecklich
+an.** Yamas Entscheid betraf das Verhaeltnis AUF-48 zu AUF-50, nicht zu AUF-38. **Die Marke geht
+auf AUF-38 Scheibe 2.**
+
+**(2) Ein Eintrag von mir ist vorhin nicht gelandet** — die Bruecke zum Rechner war zwei Versuche
+lang weg. Gepruefte Folge: der Stapel stand noch auf 1, die Scheibe C fehlte. **Ich habe es an der
+Zahl gemerkt, nicht am Gefuehl.** Jetzt nachgetragen: Stapel **2**, Tafel **86 Zeilen, 0
+fehlerhaft, eine Marke (AUF-38)**.
+
+---
+
+## AUF-52 Scheibe C — L3 ist durch
+
+Code `97e941a1`, Bundle `7cf7f6ae`, Gates **1288/0**, PHP 789 gruen,
+`store/`·`domain/`·`renderers/`·`geometry/` **null Zeilen**.
+**Angeschlossen:** `engine-fensterprodukt` (Uw nach DIN EN ISO 10077-1) · `engine-abwasser` ·
+`engine-kueche` · `engine-pv`. **Zurueckgegeben:** `engine-uwert`.
+
+**Die Bilanz ueber alle drei Scheiben: 8 von 13 Engines haben eine Flaeche, 5 sind mit Messung
+zurueckgegeben.** Und **vier der fuenf scheitern am selben Punkt: die Huelle uebergibt Felder,
+diese Engines brauchen Listen** (Holzliste ×2, Heizkreisliste, Schichtliste). Der fuenfte ist eine
+Ergebnisform ohne Zahlen.
+
+**Zu einer der fuenf habe ich eine Gegenprobe, und sie entwertet die Ruecknahme teilweise.**
+Er gibt `engine-uwert` zurueck, weil `WallNode.schichten` als `{materialId, dickeMm}` **ohne
+Lambda** gefuehrt wird. Gemessen: **`app/Models/Material.php` fuehrt `lambda_w_mk`**, Migration
+`2026_07_05_170001_create_materials_table.php`, *"[W/mK] Bemessungswert Waermeleitfaehigkeit"*.
+**Es fehlt kein Feld — es fehlt ein Nachschlag ueber die `materialId`, die die Wand bereits
+traegt.** Das ist woertlich dieselbe Regel, die ich heute Abend fuer den Produktstamm vorgeschlagen
+habe: **verweisen statt kopieren.** Seine Beobachtung stimmt, seine Folgerung greift zu kurz.
+*Und er hat richtig gehandelt, indem er nichts erfunden hat* — Waermeleitfaehigkeiten aus Feldern
+zu bilden waere der schlimmere Fehler gewesen.
+
+**Er hat ausserdem eine Nichtdeckung zum zweiten Mal gemeldet** (schon in AUF-77), an anderer
+Stelle. **Ein Befund, der zweimal an verschiedenen Orten auftaucht, ist kein Einzelfall mehr** — er
+gehoert auf die Befundliste mit dieser Eigenschaft vermerkt.
+
+**Eine Erweiterung der Huelle, und sie ist keine Rechnung:** die Bestehens-Plakette erscheint nur,
+wenn die Engine ein Bestehens-Merkmal liefert. `berechneUw` und `pvSchnellBelegung` rechnen Werte
+aus und **bestehen nichts** — eine Plakette *"nicht bestanden"* waere dort eine **erfundene
+Bewertung**. Testverriegelt in beide Richtungen. **Das ist der gefaehrlichere Fehler als eine
+fehlende Plakette**, und er hat ihn vermieden.
+
+---
+
+**An den Evaluator (§15, Bringschuld): zwei Posten im Stapel.**
+**Scheibe B zuerst** (liegt laenger): die Umbenennung `ausreichend` → `bestanden` — nicht *bleibt
+der Wert gleich*, sondern **bedeuten die Woerter dasselbe**.
+**Dann Scheibe C:** zuerst die Plaketten-Regel (erscheint bei Uw und PV wirklich **keine**
+Plakette?), danach die Rueckgabe `engine-uwert` **mit meiner Gegenprobe zu `lambda_w_mk`**,
+zuletzt K8/K6. §13.6 gilt fuer beide.
+
+**An den Generator:** **AUF-38 Scheibe 2** ist gezogen. Mit Yamas Entscheid fuer **Weg B** ist
+AUF-38 kein Aufraeumposten mehr, sondern **der tragende Posten**: die Token-Quelle, zu der der Rest
+des Repos ziehen soll — gemessen 62 Dateien an Bootstrap, 36 an Tailwind-CDN, 71 an lucide,
+**nur 8** am gebauten Weg.
+
+**Weg B ist entschieden** (Yama: *"ich folge den Empfehlungen"*). Der Vorbehalt auf der
+AUF-48-Auflage ist damit aufgeloest; **die Sperre des Postens bleibt**, weil ihre Begruendung
+weiter gilt.
