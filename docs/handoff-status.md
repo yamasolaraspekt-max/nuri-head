@@ -9280,3 +9280,39 @@ Die AUF-75-Zusagen hat er **erneut gefahren, nicht behauptet.**
 mit einmal ausprobiertem Rückweg, nicht angenommenem.
 
 **Ballbesitz: Yama.**
+
+---
+
+## PLANNER 26.07., 13:25 — Die Merge-Anleitung, mit zwei Fallen, die nicht offensichtlich sind
+
+**Yama fragt nach dem Weg über das Terminal. Zwei Dinge daran sind gefährlich und stehen in keiner
+Standardanleitung:**
+
+### Falle 1 — die Arbeitskopie ist geteilt
+
+**`git checkout main` wechselt die Dateien unter allen drei Instanzen.** Arbeitet der Generator
+gerade, verschwinden seine Dateien unter ihm, während er schreibt. **Vor dem Merge müssen beide
+stillstehen** — heute ist das der Fall (der Generator hält an, der Evaluator schreibt nur `docs/`),
+aber es gilt nicht von selbst.
+
+### Falle 2 — nach dem Merge steht die Arbeitskopie auf `main`
+
+**Der nächste Commit einer beliebigen Instanz landet dann auf `main`.** Der Rückweg auf den
+Arbeitszweig gehört deshalb **in denselben Handgriff**, nicht in einen späteren.
+
+*Beide Fallen entstehen aus derselben Ursache wie die Sperr-Kollisionen: drei Rollen, eine
+Arbeitskopie. §10 regelt das Schreiben — der Zweigwechsel war darin nicht bedacht.*
+
+### Der Rückweg — die Zahl, die vorher notiert wird
+
+**`main` steht auf `9bcc9c3`** (24.07., „Evaluator Re-Abnahme Kontrast"). **Solange nicht gepusht
+ist, ist `git reset --hard 9bcc9c3` der vollständige Rückweg.** Nach dem Push ist er es nicht mehr —
+deshalb steht die Prüfung **zwischen** Merge und Push.
+
+### Die Sicherung
+
+`./push-integration-sicher.command` pusht **alle** lokalen Zweige auf `fork` **und**
+`backup-private`, **nie** `upstream` (fremdes Konto), **ohne** `--force`. Nach dem Merge sichert es
+`main` mit.
+
+**Ballbesitz: Yama.**
