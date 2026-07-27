@@ -52,15 +52,19 @@ interface Props {
 function EingangFeld({ feld, grundId }: { feld: FeldVorschau; grundId: string }): React.ReactElement {
   return (
     <label className="hp-fach-feld">
-      <span style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap', fontSize: 12.5, color: T.muted, marginBottom: 5, overflowWrap: 'anywhere' }}>
-        <span style={{ color: T.ink }}>{feld.label}</span>
-        {feld.einheit && <span style={{ color: T.faint }}>{feld.einheit}</span>}
+      <span className="hp-fach-feldkopf">
+        <span className="hp-fach-feldname">{feld.label}</span>
+        {feld.einheit && <span className="hp-fach-einheit">{feld.einheit}</span>}
         {feld.typ && (
-          <span style={{ fontSize: 10.5, color: T.accentInk, background: T.accentSoft, borderRadius: 6, padding: '0 6px' }}>{feld.typ}</span>
+          <span className="hp-fach-typ">{feld.typ}</span>
         )}
       </span>
       <input
         type="text" value="" readOnly disabled aria-describedby={grundId} placeholder="—"
+        /* AUF-38 Scheibe 3, Nachbesserung: **bleibt inline.** Die Sperr-Werte kommen aus
+           `gesperrtStil.ts` — der EINEN Wahrheit darueber, wie eine gesperrte Flaeche aussieht
+           (AUF-71). Sie hier als Variable nachzubauen hiesse, diese Wahrheit zu verdoppeln: aendert
+           das Modul seinen Token, folgte die CSS nicht mit. */
         style={{
           width: '100%', boxSizing: 'border-box', border: `1px solid ${T.hair}`, borderRadius: 10,
           padding: '9px 12px', font: 'inherit', fontSize: 13.5, background: GESPERRT_GRUND,
@@ -76,20 +80,16 @@ function AusgangZeile({ feld, grundId }: { feld: FeldVorschau; grundId: string }
   return (
     <div
       aria-describedby={grundId}
-      style={{
-        display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 10,
-        flexWrap: 'wrap', minWidth: 0, background: T.surface2, border: `1px solid ${T.hair}`,
-        borderRadius: 10, padding: '9px 12px',
-      }}
+      className="hp-fach-ausgang"
     >
-      <span style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap', fontSize: 13, color: T.ink, overflowWrap: 'anywhere' }}>
+      <span className="hp-fach-ausgang-kopf">
         {feld.label}
-        {feld.einheit && <span style={{ fontSize: 12, color: T.faint }}>{feld.einheit}</span>}
+        {feld.einheit && <span className="hp-fach-ausgang-einheit">{feld.einheit}</span>}
         {feld.typ && (
-          <span style={{ fontSize: 10.5, color: T.accentInk, background: T.accentSoft, borderRadius: 6, padding: '0 6px' }}>{feld.typ}</span>
+          <span className="hp-fach-typ">{feld.typ}</span>
         )}
       </span>
-      <span style={{ fontSize: 13.5, color: T.faint, fontVariantNumeric: 'tabular-nums' }}>—</span>
+      <span className="hp-fach-leerwert">—</span>
     </div>
   );
 }
@@ -128,6 +128,10 @@ export function FlaechenHuelle({
   return (
     <div
       onClick={onZurueck}
+      /* AUF-38 Scheibe 3, Nachbesserung: **bleibt inline.** `rgba(24,34,38,.30)` hat in `T` keinen
+         Token — AUF-56 hat die selteneren Schattenwerte ausdruecklich roh gelassen, weil ein Token
+         fuer einen einzigen Aufruf keine Rolle ist, sondern eine Umbenennung. In der CSS waere es
+         ein roher Farbwert in einer Regel und damit ein Verstoss gegen Kriterium 4. */
       style={{
         position: 'fixed', inset: 0, background: 'rgba(24,34,38,.30)', backdropFilter: 'blur(2px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 90, padding: 16,
@@ -137,6 +141,8 @@ export function FlaechenHuelle({
         ref={huelle}
         role="dialog" aria-modal="true" aria-labelledby={titelId}
         onClick={(e) => e.stopPropagation()}
+        /* AUF-38 Scheibe 3, Nachbesserung: **bleibt inline.** Derselbe Grund — der Schatten
+           `rgba(28,50,55,.18)` hat keinen Token (AUF-56, seltenere Schattenwerte). */
         style={{
           width: 'min(880px, 100%)', maxHeight: '94%', background: T.surface, borderRadius: 20,
           boxShadow: '0 10px 34px rgba(28,50,55,.18)', display: 'flex', flexDirection: 'column',
@@ -146,16 +152,12 @@ export function FlaechenHuelle({
         <div className="hp-fach-kopf">
           <button
             type="button" onClick={onZurueck}
-            style={{
-              border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600,
-              fontSize: 13, padding: '7px 13px', borderRadius: 10, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 7, flex: '0 0 auto',
-            }}
+            className="hp-fach-zurueck"
           >
             <Ikon inhalt='<path d="M15 6l-6 6 6 6"/>' size={15} />{zurueck}
           </button>
           <div className="hp-fach-kopf-text">
-            <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.09em', textTransform: 'uppercase', color: T.accent }}>
+            <div className="hp-fach-gruppe">
               Fachplaner · {gruppe}
             </div>
             <div className="hp-fach-titelzeile">
@@ -167,7 +169,7 @@ export function FlaechenHuelle({
           </div>
         </div>
 
-        <p style={{ margin: 0, padding: '0 24px', fontSize: 14.5, color: T.muted, lineHeight: 1.5, overflowWrap: 'anywhere' }}>
+        <p className="hp-fach-zweck">
           {zweck}
         </p>
 
@@ -190,13 +192,9 @@ export function FachFlaeche({ flaeche, herkunft, onZurueck }: Props): React.Reac
         {/* 4 · Leerzustand: der Grund steht als Text, nicht nur als Tooltip (Kante 4). */}
         <div
           id={grundId}
-          style={{
-            margin: '14px 24px 0', display: 'flex', alignItems: 'flex-start', gap: 10, flexWrap: 'wrap',
-            background: T.hair2, border: `1px solid ${T.hair}`, borderRadius: 12, padding: '11px 14px',
-            fontSize: 12.5, color: T.muted, lineHeight: 1.45,
-          }}
+          className="hp-fach-grund"
         >
-          <span style={{ color: T.faint, flex: '0 0 auto', marginTop: 1 }}>
+          <span className="hp-fach-grund-icon">
             <Ikon inhalt='<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>' size={16} titel="Hinweis" />
           </span>
           <span className="hp-fach-hinweis">

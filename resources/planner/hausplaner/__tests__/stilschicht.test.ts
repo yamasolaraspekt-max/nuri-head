@@ -198,6 +198,36 @@ test('Scheibe 3: die zwei konstanten Stil-Objekte sind fort', () => {
   assert.ok(!fach.includes('const spaltenTitel:'), '`spaltenTitel` steht noch als Inline-Objekt da');
 });
 
+/**
+ * **Die WIRKUNG, nicht die Gestalt — das Votum zu Scheibe 3 hatte recht.**
+ *
+ * Mein erster Test pruefte, dass zwei benannte Objekte fort sind. Er war gruen, waehrend **sechs
+ * statische Inline-Stile stehen blieben** — die erklaerte Leistung („null statische Inline-Stile")
+ * trat nicht ein, und kein Gate merkte es. *Die Gestalt geprueft, nicht die Wirkung* — genau das
+ * Muster, das ich in diesem Zyklus fuenfmal an fremden Zusagen bemaengelt habe.
+ *
+ * Diese Zusage prueft die Wirkung: **jeder verbliebene Inline-Stil muss einen Grund haben**, und der
+ * Grund muss einer von zweien sein — Sperr-Werte aus `gesperrtStil.ts` (eine Wahrheit, AUF-71) oder
+ * ein Rohwert ohne Token (Kriterium 4 verbietet ihn in der CSS). Alles andere gehoert umgestellt.
+ */
+test('Scheibe 3 (Wirkung): jeder verbliebene Inline-Stil in FachFlaeche hat einen benannten Grund', () => {
+  const fach = readFileSync(join(hier, '../app/FachFlaeche.tsx'), 'utf8');
+  const bloecke = [...fach.matchAll(/style=\{\{([\s\S]*?)\}\}/g)].map((m) => m[1]!);
+  assert.ok(bloecke.length > 0, 'gar kein Inline-Stil mehr? Dann ist die Zusage stumpf geworden');
+  const ohneGrund = bloecke.filter((b) =>
+    !b.includes('GESPERRT_') && !/rgba?\(|#[0-9a-fA-F]{3,8}\b/.test(b));
+  assert.deepEqual(ohneGrund, [],
+    `Inline-Stile ohne Grund (nur Token und Literale — gehoeren in die Stilschicht):\n${ohneGrund.join('\n---\n')}`);
+});
+
+test('Scheibe 3 (Wirkung): und es sind genau die drei benannten Ausnahmen', () => {
+  const fach = readFileSync(join(hier, '../app/FachFlaeche.tsx'), 'utf8');
+  const bloecke = [...fach.matchAll(/style=\{\{([\s\S]*?)\}\}/g)];
+  assert.equal(bloecke.length, 3, `${bloecke.length} Inline-Stile — erwartet drei mit Grund`);
+  const gruende = bloecke.map(([, b]) => (b!.includes('GESPERRT_') ? 'sperrstil' : 'rohwert'));
+  assert.deepEqual(gruende.sort(), ['rohwert', 'rohwert', 'sperrstil']);
+});
+
 test('Scheibe 2: was aus Zeiger oder Zustand kommt, blieb INLINE', () => {
   // Ziel ist null STATISCHE Inline-Stile, nicht null Inline-Stile. Eine gerechnete Breite in eine
   // Klasse zu pressen baut einen Fehler.
