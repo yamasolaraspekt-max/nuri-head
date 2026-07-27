@@ -14257,3 +14257,60 @@ auch benutzt wird** — keine Regel ins Leere.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator**
 (einschließlich der headful-K9).
+
+## PLANNER 27.07., 13:52 (CEST) — Scheibe 3 eingeordnet, und eine Auflage, die zu eng formuliert war
+
+*Uhrzeit aus `git log` von `7da45f7c`, nicht aus dem Kopf.*
+
+**Bericht angenommen, Stapel auf 1.** AUF-38 Scheibe 3 steht in §3b, Ballbesitz Evaluator.
+
+**Was der Generator besser gemacht hat als mein Auftrag verlangte:** ich hatte fuer Kriterium 3
+eine *Tabelle im Bericht* gefordert — Paar fuer Paar, vorher-Wert → CSS-Regel. Er hat sie als
+**Test** gebaut, mit dem Wortlaut, der vorher inline stand, **und** einer zweiten Zusage, dass jede
+Klasse auch benutzt wird. Eine Tabelle im Bericht altert ab dem Moment, in dem sie geschrieben ist;
+ein Test altert nicht. **Das gehoert in die naechsten Auftraege: Belege, die ausfuehrbar sind,
+schlagen Belege, die man liest.**
+
+**Ein Verdacht von mir war voreilig.** Um 11:53 sah ich zwei Commits ohne Ledger-Eintrag und war
+dabei, den fehlenden Eintrag festzuhalten. Er kam eine Minute spaeter als eigener Commit
+(`1ea1f567`). **Zwei Minuten sind kein Versaeumnis** — ich habe zu frueh geschaut und haette den
+Vorwurf beinahe geschrieben. Regel fuer mich: bei einem frisch laufenden Bericht erst der zweite
+Blick, dann das Urteil.
+
+### Die Auflage fuer die Restscheiben war zu eng — nachgebessert
+
+Ich hatte am 26.07. geschrieben: *„vor dem Ziehen pruefen, ob die Datei einen Dialog traegt“.*
+Naechste Scheibe ist `HausplanerStudio.tsx` (34 Stellen). **Sie traegt keinen Dialog** — und faellt
+trotzdem unter die Auflage: `Z202` ist ein **Toast** (`position: 'fixed'`, `zIndex: 80`), sichtbar
+nur, solange `toast` gesetzt ist.
+
+**Das ist dieselbe Falle wie der Dialog, nur unauffaelliger.** Ein Standard-Screenshot zeigt ihn
+nie. Wandert dort ein statischer Stil in die CSS und bricht dabei, faellt es **in keinem Gate und
+in keiner Sichtprobe** auf — es faellt dem Kunden auf, Wochen spaeter, in dem Moment, in dem er die
+Meldung braucht.
+
+**Die Auflage heisst ab jetzt:** *traegt die Datei eine Flaeche, die nur unter Zustand erscheint?*
+— Dialog, Toast, Aufklappmenue, Fehlerband. Wenn ja, gehoert **der Ausloeser** in den Auftrag,
+nicht nur der Hinweis. Beim Toast ist er benannt: Konfigurator oeffnen, uebernehmen, Toast steht.
+
+Meine Formulierung von gestern war am **Beispiel** entlanggeschrieben, das gerade vor mir lag
+(`FachFlaeche` ist ein Dialog), statt an der **Eigenschaft**, die das Problem macht (nur unter
+Zustand sichtbar). Genau der Fehler, den ich bei Zahlen schon abgestellt hatte.
+
+**Scheibe 4 wird nicht gezogen, solange Scheibe 3 in der Abnahme liegt.** Grund ist nicht Ordnung,
+sondern gemessen: **jede Scheibe schreibt in dieselbe `hausplaner.css`.** Ein rotes Votum zu
+Scheibe 3 waehrend Scheibe 4 laeuft ist genau die Kollision, die der Einspurbetrieb verhindert.
+
+### Nebenbei gemessen, und ausdruecklich KEINE Bedingung
+
+`grep -ro "style={{"` unter `resources/planner/hausplaner`: **383 Vorkommen in 13 Dateien.** Der
+Auftrag nennt **331 in 35 Dateien**. **Ich vergleiche diese Zahlen nicht** — 13 gegen 35 Dateien
+sagt, dass anders gezaehlt wurde, nicht dass Dateien verschwunden sind, und ich kenne die
+Messmethode des Auftrags nicht. Was daraus folgt, ist trotzdem planungsrelevant: **Scheibe 8 („29
+Restdateien, 38 Stellen“) stimmt so nicht.** Nach meiner Zaehlung liegen in den nicht benannten
+Dateien **73 Stellen in 7 Dateien** — `EngineFlaeche` 29 · `GeschossFlaeche` 19 ·
+`WerkzeugGruppenMenue` 12 · `DreiDBereich` 5 · `FaehigkeitenNavi` 4 · `studioUi` 2 · `ReiterLeiste`
+2. **Der Generator misst das bei Scheibe 8 selbst neu**; meine Zahl ist ein Hinweis, dass die
+Scheibe groesser ist als angekuendigt, nicht ihre Groesse.
+
+**Ballbesitz: Evaluator.** Aufgabe geht ihm als Nachricht zu (§15).
