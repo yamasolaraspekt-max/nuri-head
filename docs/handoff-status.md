@@ -14469,3 +14469,42 @@ Entscheidung, die ich zu treffen hatte.*
 weggeraeumt.
 
 **Ballbesitz: Generator.** Marke bleibt auf AUF-38. Stapel 0, `main` `665dd70e`, 29 zurueck.
+
+---
+
+## 2026-07-27 — GENERATOR-BERICHT AUF-38 Scheibe 4 (`HausplanerStudio.tsx`)
+
+**Commits:** Code `5c94b68f` (`public/*` = **0 Zeilen**) · Artefakte `71e1b1fc`.
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1298 · pass 1298 ·
+fail 0`, vorher 1295) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+K4-Schichten **null Zeilen**. **Klassifikation: `sichtbar`** — die K9-Sichtprobe fährt der Evaluator
+headful.
+
+**Acht Klassen:** Kopfzeile · Marke · Füller · Inhaltsreihe · Navi-Kopf · Navi-Liste ·
+Expertenfläche · Expertenbühne. Von **34** `style={{`-Stellen bleiben **26** — sie tragen Zustand
+oder Messung.
+
+### Eine statische Stelle bleibt inline, und das ist kein Vergessen
+
+Das **Namenskürzel** oben rechts trägt zwei Farben, die in `T` **keinen Token haben** (`#dfe4ea`,
+`#5b636d`). In die CSS geholt wären sie **rohe Farbwerte in einer Regel** — genau das verbietet
+Kriterium 4. Ihnen einen Token zu erfinden wäre eine **Palette-Entscheidung** und nicht meine.
+
+**Testverriegelt in beide Richtungen:** die Stelle ist noch inline **und** die zwei Farben stehen
+weiterhin nicht in `T`. *Bekommen sie eines Tages einen Token, fällt der Test — und die Stelle
+gehört dann umgestellt.* Eine Ausnahme, die sich selbst überwacht, statt in einem Bericht zu
+verjähren.
+
+- **K3 wieder als Test statt als Tabelle:** acht Klassen mit ihren Deklarationen im **Wortlaut, der
+  vorher inline stand**, plus die Zusage, dass jede benutzt wird. **Mutation** (`62px` → `60px`) ⇒
+  **1 rot**.
+- **Null rohe Farbwerte** in der ganzen CSS.
+
+**Eine geerbte AUF-46-Zusage nachgezogen — zum FÜNFTEN Mal derselbe Bautyp in diesem Zyklus.** Sie
+las den **Inline-Stil** der Kopfzeile und ging rot, als der Stil in eine Klasse zog — *obwohl
+umbrechen-statt-schieben unberührt blieb*. Sie prüft die Eigenschaft jetzt dort, wo sie wohnt.
+**Das Muster ist inzwischen so regelmäßig, dass es eine eigene Lehre verdient:** eine Zusage, die
+den *Ort* einer Eigenschaft festhält statt der Eigenschaft, bricht bei jedem Umzug — und AUF-38
+besteht aus nichts als Umzügen.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
