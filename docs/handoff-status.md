@@ -14182,3 +14182,40 @@ Zeilen; getrennt zu bauen waere teurer. **Nicht jetzt eingestellt:** der Verteil
 (`FachFlaeche.tsx`, `hausplaner.css`, `stilschicht.test.ts`), seit 41 Minuten unveraendert. Ob
 gerade Gates laufen oder nichts passiert, sehe ich von hier nicht — ich stelle die Abweichung
 fest und behaupte keine Ursache. Stapel 0, `main` `665dd70e`, 17 Commits zurueck.
+
+## PLANNER 27.07., 11:20 — Interaktionsmuster gezaehlt: der Planer kennt drei Gesten
+
+Zweites §40/§41-Papier: `docs/planner/interaktionsmuster-inventar-2026-07-27.md` (137 Zeilen).
+
+**Gezaehlt: 0 Doppelklick, 0 Kontextmenue, 0 Rechtsklick.** Der Planer kennt **Klicken, Ziehen,
+Rad** — sonst nichts. Yamas Frage vom 26.07. (*„Maße ändern, und zwar mit Doppelklick auf Tür oder
+Fenster“*) hat im Code **keine Entsprechung**. Ich hatte sie damals konzeptionell beantwortet, ohne
+nachzusehen, ob die Geste existiert. Sie existiert nicht — und das haette im ersten Satz stehen
+muessen, nicht im zweiten Papier.
+
+**Der einzige Weg zur Tuerbreite heute** (`HausplanerApp.tsx:2025`): Werkzeug auf Auswahl · Tuer
+treffen · Blick nach rechts ueber die volle Breite · Feld unter mehreren finden · Zahl markieren ·
+tippen · Blick zurueck. **Sieben Schritte, zwei Blickwechsel** — im Zeichenprogramm sind es zwei.
+Es fehlt kein Bedienelement, es steht am falschen Ort: heute am Rand, gewuenscht am Objekt.
+
+**Befund C, halb gebaut:** `auswahlDarstellung.ts:34/67` berechnet `griffe` sauber, inklusive
+Sperr-Beruecksichtigung — **und niemand zeichnet sie.** Der Wert faellt auf den Boden. Das ist die
+halbe Antwort auf den Doppelklick, denn Griffe ziehen genau das, was das Zahlenfeld tippt.
+
+**Lieferung ist der Musterkatalog:** acht Gesten mit je einer festen Bedeutung und einem
+Gegenbeispiel, plus zwei Regeln — **M1** eine Geste, eine Bedeutung, im ganzen Planer; **M2** jede
+Geste hat einen zweiten Weg (der Griff ist die Abkuerzung, nicht der einzige Weg), sonst wird das
+rechte Panel zur Attrappe.
+
+**Probe des Erprobers, die wichtigste Zeile:** *zieht einen Anfasser auf 1010 mm — dieselbe Zahl
+steht im rechten Feld.* Das ist der Gegen-Beweis gegen die zweite Rechenquelle; driften wuerden
+Griff und Feld still.
+
+**Reihenfolge, keiner davon jetzt** (§13/§14, alles fasst `HausplanerApp.tsx` an): (1) Griffe
+zeichnen — kleinster Posten, der Wert liegt schon vor; (2) Doppelklick → Maß am Objekt, braucht die
+Gestaltung aus Weg B; (3) Kontextmenue, groesster Schnitt in die Leiste. **Alle drei nach AUF-48**,
+sonst schreiben sie in eine Datei, die kurz darauf zerschnitten wird.
+
+**Lage 11:20:** AUF-38 Scheibe 3 seit 10:16 in Arbeit, Arbeitsbaum unveraendert bei 101 Zeilen ueber
+drei Dateien — **64 Minuten ohne Aenderung**, gestern lagen zwischen den Takten 1–2 Minuten. Ich
+stelle die Abweichung fest und behaupte keine Ursache. Stapel 0, `main` `665dd70e`, 18 zurueck.
