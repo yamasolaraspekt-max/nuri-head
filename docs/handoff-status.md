@@ -14133,3 +14133,52 @@ Vier Dinge stehen drin, die gestern nicht drinstanden:
 **Beobachtung, gemeldet statt ueberbrueckt (§13):** die Marke liegt seit **16 Minuten** unberuehrt.
 Gestern lagen zwischen Marke und Ziehen ein bis zwei Minuten. **Ob die Instanzen laufen, kann ich
 von hier nicht sehen** — ich stelle nur die Abweichung fest und behaupte keine Ursache.
+
+## PLANNER 27.07., 10:57 — Eingabe-Papier: meine eigene Vorannahme war falsch, das Loch ist groesser
+
+Erstes der fuenf offenen Papiere aus §40/§41 geschrieben:
+`docs/planner/maus-tastatur-touch-regeln-2026-07-27.md` (191 Zeilen).
+
+**Ich hatte im Kopf „zwei Kuerzel-Kollisionen, G und S“ — das war eine Erinnerung, keine Messung.**
+Gemessen: `paketAdapter.ts` behandelt G und S bereits sauber (zaehlt, laesst weg, weist ueber
+`verworfeneKuerzel()` nach). Das eigentliche Loch liegt woanders.
+
+**Befund A (P1), das Modifikator-Leck:** der Tastatur-Verteiler prueft `Strg`/`Cmd` nur fuer
+`Z Y S K`. Alles andere faellt in `toolFuerShortcut(e.key)` — und `e.key` traegt den Modifikator
+nicht. **Strg+V schaltet auf Auswahl, Strg+W auf Wand, Strg+F auf Fenster, Strg+T auf Tuer,
+Strg+D auf Dach, Strg+R auf Treppe** — jeweils zusaetzlich zur Browser-Wirkung, denn im
+Schlusszweig steht kein `preventDefault`. Still, plausibel, falsch — dasselbe Muster wie die
+20-m²-Raumliste. Behebung ist ein Halbsatz: `if (e.ctrlKey || e.metaKey || e.altKey) return;`.
+
+**Befund B, zwei Kuerzel nur auf dem Papier:** `Delete` und `Ctrl+D` stehen mit `art: 'aktion'` in
+der Registry, der Verteiler laesst nur `art === 'werkzeug'` durch. `Delete` funktioniert ueber
+einen frueheren Sonderzweig — der Registry-Eintrag ist Zierde. **`Ctrl+D` funktioniert gar
+nicht**, `e.key` ist dort `'d'` und `'d'` gehoert dem Dach. Der Tooltip zeigt das Kuerzel
+trotzdem an. Ein angezeigtes Kuerzel, das nichts tut, ist eine Luege an den Nutzer.
+
+**Befund C:** der Eingabefeld-Schutz vergleicht `tagName === 'INPUT'`. **15 `<select>`** sind
+nicht ausgenommen — wer im Dachform-Feld `D` tippt, springt zum Eintrag **und** schaltet auf Dach.
+
+**Befund D, die Touch-Null beziffert: 91 Maus-Ereignisse in `.tsx`, 0 Touch-/Pointer-Ereignisse.**
+Einzige zeigerneutrale Stelle im ganzen Planer: die 3D-Szene (`pointerdown`). Wichtiger als die
+Zahl ist die Folge: die Fangvorschau haengt an `onMouseMove` **vor** dem Druecken (Zeile 1517), und
+auf einem Tablet gibt es keinen schwebenden Zeiger. **Sie ist auf Touch nicht schwach, sie ist
+abwesend.** Das ist kein Umbau von Ereignisnamen, sondern ein zweites Bedienmodell — **Frage an
+Yama, nicht Nebenprodukt.**
+
+**Befund E:** 92 von 101 Paket-Werkzeugen tragen kein Kuerzel. Das ist **kein Versaeumnis** — bei
+101 Werkzeugen und 26 Buchstaben ist eins-je-Werkzeug arithmetisch unmoeglich. Die Antwort ist die
+Befehls-Palette (`Strg+K`, gebaut), nicht mehr Kuerzel.
+
+**Sieben Regeln R1–R7** im Papier, mit einer Probe des Erprobers je Regel — jede ohne Debugger und
+ohne Zahl pruefbar (*„drueckt Strg+V, es aendert sich nichts“*).
+
+**Postenvorschlag: ein Posten, Spur A** — R2+R3+R4+R5+R6 sitzen alle im selben Verteiler von 59
+Zeilen; getrennt zu bauen waere teurer. **Nicht jetzt eingestellt:** der Verteiler liegt in
+`HausplanerApp.tsx`, und **AUF-38 Scheibe 7 fasst dieselbe Datei an** — ein Bauender je Posten
+(§13). Der Posten geht in den Vorrat, nachdem die Scheiben durch sind.
+
+**Lage:** AUF-38 Scheibe 3 ist seit 10:16 in Arbeit, Arbeitsbaum 101 Zeilen ueber drei Dateien
+(`FachFlaeche.tsx`, `hausplaner.css`, `stilschicht.test.ts`), seit 41 Minuten unveraendert. Ob
+gerade Gates laufen oder nichts passiert, sehe ich von hier nicht — ich stelle die Abweichung
+fest und behaupte keine Ursache. Stapel 0, `main` `665dd70e`, 17 Commits zurueck.
