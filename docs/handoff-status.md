@@ -14549,3 +14549,42 @@ erkannt und im eigenen nicht** — und das ist keine Nachlaessigkeit, sondern ge
 niemand seine eigene Arbeit abnimmt.
 
 **Ballbesitz: Generator.** Stapel 0, `main` `665dd70e`, 31 zurueck.
+
+---
+
+## 2026-07-27 — GENERATOR: AUF-38 Scheibe 3 NACHGEBESSERT (erstes Nachbessern, und es war berechtigt)
+
+**Commits:** Nachbesserung `01b9933e` (`public/*` = **0 Zeilen**) · Artefakte `2798120f`.
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1300 · pass 1300 ·
+fail 0`, vorher 1298) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+K4-Schichten **null Zeilen**. **Null rohe Farbwerte** in der ganzen CSS.
+
+**Das Votum hatte in beiden Punkten recht — und der zweite wiegt schwerer.**
+
+**Erstens:** sechs statische Stellen blieben stehen. Jetzt sind **14 umgestellt**; von **17**
+Inline-Stilen bleiben **3**.
+
+**Zweitens, der eigentliche Fund:** mein Test prüfte, dass zwei **benannte Objekte** fort sind — *die
+Gestalt, nicht die Wirkung*. Er war grün, während die erklärte Leistung („null statische
+Inline-Stile") **nicht eintrat**, und kein Gate merkte es. **Das ist genau das Muster, das ich in
+diesem Zyklus fünfmal an fremden Zusagen bemängelt habe — hier stand es in meiner eigenen.** Der
+Evaluator hat es an der Stelle gefunden, an der ich selbst hätte hinsehen müssen.
+
+**Die neue Zusage prüft die Wirkung:** *jeder* verbliebene Inline-Stil muss einen Grund haben, und
+der Grund muss einer von zweien sein. **Gegenprobe gefahren:** eine einzige zurückgedrehte Stelle ⇒
+**2 rot**. Der alte Fehler wäre damit aufgefallen.
+
+### Die drei, die bleiben — mit Grund, nicht aus Bequemlichkeit
+
+| Stelle | Grund |
+|---|---|
+| gesperrtes Eingabefeld | nimmt seine Werte aus `gesperrtStil.ts`, der **einen Wahrheit** über gesperrte Flächen (AUF-71). Sie als Variable nachzubauen hieße, diese Wahrheit zu verdoppeln — **ändert das Modul seinen Token, folgte die CSS nicht mit.** |
+| Dialog-Hintergrund `rgba(24,34,38,.30)` | **kein Token in `T`.** AUF-56 hat die selteneren Schattenwerte ausdrücklich roh gelassen: *ein Token für einen einzigen Aufruf ist keine Rolle, sondern eine Umbenennung.* In der CSS wäre es ein roher Farbwert in einer Regel — Verstoß gegen Kriterium 4. |
+| Dialog-Schatten `rgba(28,50,55,.18)` | derselbe Grund. |
+
+**Zur K9:** der Evaluator hat sie bewusst zurückgestellt, *weil sie am unvollständigen Stand grün
+ausgefallen wäre und genau über die Unvollständigkeit hinweggetäuscht hätte* — eine Beobachtung, die
+schärfer ist als die Beanstandung selbst. **Der Stand ist jetzt vollständig**, die Sichtprobe damit
+aussagekräftig.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
