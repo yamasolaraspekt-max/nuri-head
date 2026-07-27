@@ -14056,3 +14056,57 @@ kein Pixel verschoben, und der Schwebezustand reagiert weiter.*
 darueber, alle abgenommen oder Planner-Papiere). **Bei Yama liegen fuenf Entscheidungen** —
 `RoofShape` erweitern · Erprober und sein Urteilsrang · **Eignungen** als Name und Registry statt
 Dokument · Bibliothek verweist auf `Product` · `gc.auto 0`.
+
+
+## PLANNER 27.07., 10:05 — Alle fuenf offenen Entscheidungen getroffen (Yama: „du machst selbststaendig")
+
+Eingetragen als **§17–§20** in `docs/agents/06-laufzeiten-und-takt.md`.
+
+**1 · `RoofShape` wird NICHT auf Vorrat erweitert — und die Messung hat das entschieden, nicht ich.**
+Ich wollte erweitern. Dann gemessen:
+
+```
+RoofShape:          sattel walm pult flach rect l-shape t-shape u-shape   (8)
+dachMesh zeichnet:  dieselben acht                                        (8)
+```
+
+**Aufzaehlung und Geometrie sind exakt deckungsgleich.** Die acht Werte sind kein Versaeumnis,
+**sie sind ehrlich** — das Schema sagt genau, was der Renderer kann. Vierzehn Werte ohne Renderer
+erzeugen **speicherbare Daecher, die nichts zeichnen**, und das ist woertlich die Krankheit, die uns
+gestern sechsmal begegnet ist: es sieht vorhanden aus und ist es nicht.
+**Also: die Aufzaehlung waechst mit ihrer Geometrie, eine Form nach der anderen.** Reihenfolge nach
+dem Gewicht der Vorlagen: **Mansard zuerst** (3 Vorlagen, plus 2 Mansardwalm mit demselben Profil =
+5 auf einen Schlag), dann Krueppelwalm und Sheddach.
+**Und was frueher kommt und nichts kostet:** die acht darstellbaren Formen tragen bereits fertige
+Vorlagen mit Deckung und Neigung, und die Oberflaeche zeigt sie nicht. **Das ist die AUF-48-Auflage
+— kein Schema, keine Geometrie, nur die Auswahl aus den Daten speisen.**
+
+**2 · Der Erprober kommt (§17), aber sein Urteil ist eine Empfehlung an Yama, keine Freigabe der
+Tafel.** Evaluator prueft den **Posten**, Erprober die **Anwendung**; sein Rot haelt den **Merge**
+auf, nicht den Posten. Damit darf er rot sagen, ohne den Zyklus zu zerreissen. Takt: **Pruefstrecke
+nach jedem Merge auf `main`** (Engpass 3 — es gibt nur eine servierte Anwendung). Befundformat und
+P0–P3 aus Yamas Tester-Prompt uebernommen, **mit einer Bedingung: jede Bewertungsziffer traegt
+ihren Beleg daneben.** **Er startet nach §14 nicht heute.**
+
+**3 · Objekt-Faehigkeiten heissen `Eignungen` (§18)** — als Eigenschaftswoerter (`verschiebbar`,
+`teilbar`, `wirtsfaehig`, `faerbbar`). `faehigkeiten.ts` fuehrt den Namen bereits fuer etwas
+anderes, und zwei Dinge unter einem Namen sind der Anfang der zweiten Wahrheit.
+**Und sie gehoeren zum TYP, also in die Registry — nicht ins gespeicherte Dokument.** Persistiert
+waere jede Instanz eine Kopie, die still veraltet, plus eine Migration bei ~3000 Kunden.
+**Damit wird aus einer Schema-Migration eine reine Code-Aenderung.**
+
+**4 · Die Bibliothek verweist auf `Product`, sie kopiert ihn nicht (§19).** `articleNumber` ist ein
+**Schluessel, kein Wert**. *Ein doppelter Werkzeugkatalog kostet Verwirrung, ein doppelter
+Produktstamm kostet falsche Preise in Angeboten.* **Erste Anwendung ist schon faellig:**
+`engine-uwert` ging zurueck, weil `WallNode.schichten` kein Lambda fuehrt — `Material.php` fuehrt
+`lambda_w_mk` seit dem 05.07. Es fehlt kein Feld, sondern ein Nachschlag.
+
+**5 · `gc.auto 0` ist gesetzt** (`git config --local`, geprueft: `0`). Verhindert die Wiederholung
+meines Lock-Unfalls von gestern, bei dem eine automatische Aufraeumung **128 Ref-Locks** hinterliess
+und jeden Commit blockierte — auch den des Generators.
+
+**Vier davon konnte ich sofort entscheiden. Bei der ersten habe ich meine eigene Absicht verworfen,
+weil die Messung dagegen sprach** — und das halte ich fuer die richtigste der fuenf.
+
+**Kein neuer Posten (§14).** Ballbesitz: Generator an AUF-38 Scheibe 3, Evaluator wartet, Stapel
+leer, Marke AUF-38.

@@ -612,3 +612,116 @@ Lesen und Einfügen braucht — und der Generator committet in Minuten.**
 **Was das nicht heißt:** Der Weg **ohne `checkout`** bleibt richtig — er hat heute die zwei Fallen
 vermieden, an denen der erste Merge des Tages gescheitert war. **Falsch war allein, dass ich einen
 beweglichen Namen statt einer festen Nummer hingeschrieben habe.**
+
+
+---
+
+## 17. Der Erprober — vierte Rolle (Yama delegiert, Planner entschieden, 27.07.)
+
+**Warum es sie gibt, in einem Satz:** am 26.07. kamen aus einer einzigen Bedienprobe vier Befunde,
+drei davon im Code nachgemessen und alle drei richtig — **und kein einziges Votum war falsch.**
+Jeder Posten war korrekt abgenommen. **Die Fehler lagen nicht in den Posten, sondern zwischen
+ihnen.**
+
+**Auftrag:** die laufende Anwendung benutzen wie ein Fachmann, der sie nicht gebaut hat.
+Er bekommt eine **Rolle** (Zeichner, Bauleiter, Elektromeister), ein **Ziel**, einen **benannten
+Commit** — und **ausdruecklich keine Abnahmekriterien.** *Gaebe man sie ihm, waere er ein zweiter
+Evaluator und faende dieselben Dinge wie der erste.*
+
+**§17.1 — Sein Urteil ist eine Empfehlung an Yama, keine Freigabe der Tafel.**
+Evaluator und Erprober urteilen ueber **verschiedene Gegenstaende**:
+
+| | Evaluator | Erprober |
+|---|---|---|
+| prueft | den **Posten** gegen seinen Auftrag | die **Anwendung** gegen die Bedienung |
+| Urteil geht an | die Tafel | Yama (Tor 1) |
+| haelt auf | den Posten | den **Merge**, nicht den Posten |
+
+**Ein Posten kann sauber abgenommen und die Anwendung trotzdem rot sein.** Das ist kein
+Widerspruch, sondern der heutige Zustand.
+
+**§17.2 — Vier Grenzen.** Er nimmt nichts ab und stimmt nicht ab · er schreibt keinen
+Produktionscode · **jede Handlung wird mitgeschrieben** (Zufall ist erlaubt,
+Unreproduzierbarkeit nicht) · er misst gegen einen benannten Commit und nie gegen die Spitze.
+
+**§17.3 — Takt: die Pruefstrecke laeuft nach jedem Merge auf `main`.** Grund ist gemessen
+(Engpass 3): es gibt **eine** servierte Anwendung, und Erprober, Evaluator und Generator greifen
+auf dieselbe zu. Nach einem Merge ist der Baum ruhig und der Stand hat einen Namen. Willkuer
+dazwischen nur, wenn der Abnahme-Stapel leer ist.
+
+**§17.4 — Befundformat und Schweregrade** werden aus Yamas Tester-Prompt uebernommen (§34: Befund-ID,
+Ausgangszustand, Reproduktionsschritte, Ist gegen Soll, Beleg; P0–P3).
+**Mit einer Bedingung: jede Bewertungsziffer traegt ihren Beleg daneben, sonst wird sie nicht
+geschrieben.** *Eine Skala von 0 bis 5 sieht aus wie eine Messung und ist ein Urteil* — genau diese
+Verwechslung hat am 26.07. zweimal zu falschen Zahlen gefuehrt.
+
+**§17.5 — Er startet nicht heute.** Nach §14 erst, wenn der offene Vorrat durch ist.
+
+## 18. Objekt-Eignungen — Name und Ort (Planner, 27.07.)
+
+**§18.1 — Sie heissen `Eignungen`, nicht `Faehigkeiten`.** `app/tools/faehigkeiten.ts` fuehrt
+bereits eine Faehigkeiten-Registry im Sinne von *was kann die Anwendung, gruppiert nach Gewerk*.
+**Zwei Dinge unter einem Namen sind der Anfang der zweiten Wahrheit.** Geschrieben als
+Eigenschaftswoerter: `verschiebbar`, `drehbar`, `skalierbar`, `kopierbar`, `loeschbar`,
+`spiegelbar`, `messbar`, `flaechenmessbar`, `volumenmessbar`, `teilbar`, `verbindbar`,
+`wirtsfaehig`, `gehostet`, `faerbbar`, `materialisierbar`, `parametrierbar`, `mengenrelevant`.
+*"Verschieben braucht verschiebbar" liest sich ohne Uebersetzung.*
+
+**§18.2 — Eignungen gehoeren zum TYP, nicht zur INSTANZ — und damit in die Registry, nicht ins
+gespeicherte Dokument.** Persistiert traegt jedes Objekt eine **Kopie** der Eignungen seines Typs:
+eine zweite Wahrheit, die beim naechsten Typ-Update still veraltet, plus eine Migration von
+Live-Daten bei ~3000 Kunden. **Dasselbe gilt fuer Parameterschemas, Geometrie-Erzeuger,
+Renderer-Verweise und Validierungsregeln.**
+**Damit wird aus einer Schema-Migration eine reine Code-Aenderung.**
+
+**§18.3 — Der Mechanismus wird erweitert, nicht neu gebaut.** `activation.ts` fuehrt seit UI-2 eine
+Regelart `capability`; `werkzeugKontext.capabilities` ist heute eine Liste von Zeichenketten.
+Der Unterschied ist genau einer: **heute beschreiben sie die Welt, kuenftig auch das Objekt.**
+Dieselbe Liste, dieselbe Regelart, dieselbe Engine.
+
+## 19. Die Bibliothek verweist auf `Product`, sie kopiert ihn nicht (Planner, 27.07.)
+
+Gemessen: **410 CRM-Modelle, davon 34 fuer Produkte, Artikel und Preise** — `Product`,
+`ProductFormula`, `ProductHistory`, `ArticleGroup`, `SupplierArticleMap`, `DistributorPrice`,
+`Material` (mit `lambda_w_mk`), fachlich einschlaegig `ProductPV` und `ProductWP`. Und
+`PlannerItemMaterial` als bereits gedachte Bruecke.
+
+**Regel:** `articleNumber` ist ein **Schluessel, kein Wert**. Preis, Lieferzeit, Varianten und
+Materialkennwerte werden zur Laufzeit gelesen, **nie im Szenendokument gespeichert.**
+
+*Ein doppelter Werkzeugkatalog kostet Verwirrung. Ein doppelter Produktstamm kostet falsche Preise
+in Angeboten.* Die Ausnahme ist mitgedacht: ein **Angebot** friert den Preis ein — das ist Aufgabe
+von `OfferProductList` im CRM, nicht des Bauplans.
+
+**Erste Anwendung, schon faellig:** `engine-uwert` wurde zurueckgegeben, weil `WallNode.schichten`
+kein Lambda fuehrt. **Es fehlt kein Feld, sondern ein Nachschlag ueber `materialId`.**
+
+## 20. `RoofShape` wird NICHT auf Vorrat erweitert (Planner, 27.07.)
+
+**Die Frage war: 14 der 22 Dachformen aus `dachformVorlagen.ts` sind nicht speicherbar — erweitern
+wir die Aufzaehlung?**
+
+**Gemessen, und die Messung entscheidet:**
+
+```
+RoofShape        sattel · walm · pult · flach · rect · l-shape · t-shape · u-shape   (8)
+dachMesh zeichnet  case 'sattel' 'walm' 'pult' 'flach' 'rect'
+                   + ltFormFlaechen (l/t) + uFormFlaechen (u)                        (8)
+```
+
+**Aufzaehlung und Geometrie sind exakt deckungsgleich.** Die acht Werte sind kein Versaeumnis —
+**sie sind ehrlich.** Das Schema sagt genau, was der Renderer zeichnen kann.
+
+**Entscheidung: die Aufzaehlung waechst nur zusammen mit ihrer Geometrie, eine Form nach der
+anderen.** Vierzehn Werte ohne Renderer erzeugen **speicherbare Daecher, die nichts zeichnen** —
+und das ist dieselbe Krankheit, die uns am 26.07. sechsmal begegnet ist: etwas sieht vorhanden aus
+und ist es nicht.
+
+**Reihenfolge nach dem Gewicht der Vorlagen selbst** (nicht nach Geschmack): `mansard` traegt 3
+Vorlagen, `mansardwalm` 2 und teilt sich das Profil ⇒ **Mansard zuerst, 5 Vorlagen auf einen
+Schlag.** Danach `krueppelwalm` (2) und `sheddach` (2).
+
+**Was frueher kommt und nichts kostet:** die **8 darstellbaren** Formen tragen bereits fertige
+Vorlagen mit Deckung und Neigung (`sattel-schiefer-steil`, `pult-blech`, `flach-gruendach` …), und
+die Oberflaeche zeigt sie nicht. **Das ist die Auflage an AUF-48** — kein Schema, keine Geometrie,
+nur die Auswahl aus den Daten speisen.
