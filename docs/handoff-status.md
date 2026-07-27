@@ -14219,3 +14219,41 @@ sonst schreiben sie in eine Datei, die kurz darauf zerschnitten wird.
 **Lage 11:20:** AUF-38 Scheibe 3 seit 10:16 in Arbeit, Arbeitsbaum unveraendert bei 101 Zeilen ueber
 drei Dateien — **64 Minuten ohne Aenderung**, gestern lagen zwischen den Takten 1–2 Minuten. Ich
 stelle die Abweichung fest und behaupte keine Ursache. Stapel 0, `main` `665dd70e`, 18 zurueck.
+
+---
+
+## 2026-07-27 — GENERATOR-BERICHT AUF-38 Scheibe 3 (`FachFlaeche.tsx`)
+
+**Commits:** Code `7da45f7c` (`public/*` = **0 Zeilen**) · Artefakte `a7fc9f39` (`hausplaner.js`
+**und** `hausplaner.css`).
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1295 · pass 1295 ·
+fail 0`, vorher 1292) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+K4-Schichten **null Zeilen**. **Klassifikation: `sichtbar`.**
+
+**Der Blocker von gestern ist weg — und nicht durch mich.** Der Evaluator hat headful gemessen
+(`3cc9a018`), dass sich die Fachplaner-Fläche in seiner Umgebung öffnen lässt, und fährt die
+**K9-Sichtprobe als Teil der Abnahme**. *Ich baue, er misst* — genau die Rollentrennung, die sein
+Grün überhaupt erst wert macht. Gestern habe ich die Scheibe ohne Code zurückgegeben, weil mir der
+Beleg fehlte; heute liefert ihn der, dem er zusteht.
+
+**Umgestellt:** die zwei konstanten `React.CSSProperties`-Objekte und **neun** rein statische
+Inline-Stile — zusammen **elf Klassen**. Von **27** `style={{`-Stellen bleiben **17**: sie tragen
+Zustand oder Messung. **Ziel ist null *statische* Inline-Stile, nicht null Inline-Stile.**
+
+### Kriterium 3 in ausführbarer Form
+
+Der Auftrag verlangt *„für jede umgestellte Stelle das Paar vorher-Wert → CSS-Regel, keine Stelle
+ohne Zuordnung"*. Statt einer Tabelle im Bericht steht sie **als Test**: elf Klassen mit je ihren
+Deklarationen im **Wortlaut, der vorher inline stand**, und eine zweite Zusage, dass **jede Klasse
+auch benutzt wird** — keine Regel ins Leere.
+
+| Klasse | Herkunft |
+|---|---|
+| `.hp-fach-raster` · `.hp-fach-spaltentitel` | die zwei konstanten Stil-Objekte |
+| `.hp-fach-feld` · `.hp-fach-kopf` · `.hp-fach-kopf-text` · `.hp-fach-titelzeile` · `.hp-fach-titel` · `.hp-fach-hinweis` · `.hp-fach-rumpf` · `.hp-fach-spalte` · `.hp-fach-liste` | neun statische Inline-Stile |
+
+- **Mutation:** eine Zahl in einer Regel verstellt (`21px` → `22px`) ⇒ **1 rot**.
+- **Farben wieder nur als Variablen:** **null** rohe Farbwerte in der ganzen CSS.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator**
+(einschließlich der headful-K9).
