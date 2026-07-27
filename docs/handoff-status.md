@@ -14508,3 +14508,44 @@ den *Ort* einer Eigenschaft festhält statt der Eigenschaft, bricht bei jedem Um
 besteht aus nichts als Umzügen.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+## PLANNER 27.07., 19:21 (CEST) — Der Auftrag steht jetzt IN der Marke, nicht daneben
+
+*Uhrzeit aus `git log` von `391f8b85`.*
+
+Der Generator hat seinen Scheibe-4-Bericht nachgeliefert und schliesst mit **„Ballbesitz:
+Evaluator“**. Er weiss nicht, dass Scheibe 4 seit 19:11 angehalten ist und der Ball bei **ihm**
+liegt.
+
+**Und das ist zum zweiten Mal heute derselbe Fehler von mir.** Um 18:15 hat meine Sperre nicht
+gehalten, weil sie im Fliesstext stand statt in der Marke. Um 19:11 habe ich das Nachbessern
+**wieder in den Fliesstext geschrieben** — an dieselbe Stelle, aus der die Sperre nicht gelesen
+wurde. *Ich habe die Lehre aufgeschrieben und drei Stunden spaeter nicht angewandt.*
+
+**Korrigiert:** die Zelle beginnt jetzt mit
+`>>> AKTIVER AUFTRAG: NACHZUG SCHEIBEN 2-3-4 <<< — NICHT Scheibe 5.` Wer die Marke liest, liest den
+Auftrag. Nichts Wichtiges steht hinter dem ersten Absatz.
+
+### Der Auftrag selbst
+
+Ein Auftrag, drei Dateien, eine Definition: in `StartView.tsx`, `FachFlaeche.tsx` und
+`HausplanerStudio.tsx` bleibt **keine statische Stelle** — statisch = **kein Ternaer und kein
+Bezeichner ausser den Token aus `T`**.
+
+**Je Datei eine Zusage, die die Wirkung prueft** (*„keine statische Stelle mehr“*), nicht die
+Gestalt. **Ausnahmen sind erlaubt, aber nur testverriegelt in beide Richtungen** — genau die Form,
+die er beim Namenskuerzel von selbst gewaehlt hat. *Er hatte die richtige Bauart schon, bevor ich
+sie zur Regel gemacht habe; sie fehlte nur dort, wo mein Auftrag sie nicht verlangt hat.*
+
+**Zahlen im Auftrag sind Messungen, keine Bedingungen** (grob: StartView 29/36, FachFlaeche 16/17,
+Studio 19/27). Er misst beim Bauen selbst nach und berichtet seine Zahl.
+
+### Was er in seinem Bericht selbst gesehen hat
+
+*„Eine Zusage, die den **Ort** einer Eigenschaft festhaelt statt der Eigenschaft, bricht bei jedem
+Umzug — und AUF-38 besteht aus nichts als Umzuegen.“* Das ist dieselbe Lehre, die der Evaluator
+zwei Stunden spaeter gegen seinen eigenen Test gewendet hat. **Er hat das Muster am fremden Code
+erkannt und im eigenen nicht** — und das ist keine Nachlaessigkeit, sondern genau der Grund, warum
+niemand seine eigene Arbeit abnimmt.
+
+**Ballbesitz: Generator.** Stapel 0, `main` `665dd70e`, 31 zurueck.
