@@ -14350,3 +14350,50 @@ eine Scheibe mehr.*
 **4 Stunden 23 Minuten**. Der Zuruf ist um 11:56 herausgegangen (§15 erfuellt). Ob die Instanz
 laeuft, sehe ich von hier nicht — ich stelle die Dauer fest und behaupte keine Ursache. **Stapel 1,
 `main` `665dd70e`, 24 Commits zurueck.**
+
+## PLANNER 27.07., 18:19 (CEST) — Scheibe 4 berichtet. Stapel 2, und der Engpass hat jetzt eine Zahl
+
+*Uhrzeit aus `git log` von `5c94b68f`.*
+
+**Vier Minuten von gezogen bis berichtet** (18:15 → 18:19). Acht Klassen, von 34 Stellen bleiben 26,
+Gates 0/0/0/0, Insel 1295 auf **1298**, PHP 789, Mutation 1 rot. Steht in §3b, Ballbesitz Evaluator.
+
+**Das Beste an diesem Bericht ist die Stelle, die er NICHT umgestellt hat.** Das Namenskuerzel
+traegt `#dfe4ea` und `#5b636d` — zwei Farben, die in `T` **keinen Token haben**. In die CSS geholt
+waeren sie rohe Farbwerte und verletzten Kriterium 4; einen Token zu erfinden waere ein
+Palette-Entscheid, der ihm nicht zusteht. Also bleibt die Stelle inline — **und er verriegelt beide
+Richtungen im Test**: die Stelle ist noch inline, **und** die zwei Farben stehen weiterhin nicht in
+`T`. Bekommen sie eines Tages einen Token, faellt der Test und die Stelle gehoert umgestellt.
+
+**Das ist die sauberste Form, eine offene Entscheidung zu tragen: sie meldet sich selbst, wenn sie
+faellig wird.** Kein Vermerk in einem Dokument, das niemand wieder aufschlaegt — ein Test, der
+rotgeht. Dieselbe Familie wie K3-als-Test statt K3-als-Tabelle. **Beides gehoert in die Regeln, und
+zwar als eine Regel: was spaeter faellig wird, wird als Test hinterlegt, nicht als Satz.**
+
+### Ein Muster, das ich bisher als Einzelfaelle behandelt habe
+
+Er hat die **fuenfte** geerbte Zusage desselben Bautyps nachgezogen (AUF-46): sie las den
+**Inline-Stil** der Kopfzeile und ging rot, als der Stil in eine Klasse zog — obwohl die
+Eigenschaft, die sie eigentlich prueft, unberuehrt blieb.
+
+**Fuenfmal derselbe Bautyp ist kein Zufall, sondern eine Eigenschaft des Bestands.** Die
+Restscheiben werden weitere solche Zusagen umwerfen. **Ab Scheibe 5 gehoert das in den Auftrag,
+nicht in die Ueberraschung:** vor dem Bau die Zusagen suchen, die den Inline-Stil der betroffenen
+Datei lesen, und sie im selben Commit mitziehen.
+
+**AUFLAGE SCHEIBE 5** (`ConfigWizard.tsx`, 43 Stellen): sie ist ein **echter modaler Dialog**
+(`role="dialog"`, `aria-modal="true"`, Overlay `position: fixed`, `useDialogFokus`) **und hat
+mehrere Schritte**. **K9 headful mit geoeffnetem Dialog reicht nicht — die Schritte muessen
+durchgeklickt werden**, sonst bleibt der groesste Teil der Flaeche ungesehen.
+
+### Die Lage, und sie gehoert Yama
+
+**Stapel 2. Beide Scheiben warten auf denselben Pruefenden.** Scheibe 3 liegt seit **13:52** dort,
+das sind **4 Stunden 29 Minuten**; Scheibe 4 seit 18:19. Der Zuruf fuer Scheibe 3 ist um 11:56
+herausgegangen — meine Bringschuld ist erfuellt.
+
+In derselben Zeit hat der Generator **zwei Scheiben gebaut**, die zweite in vier Minuten. **Das
+Verhaeltnis ist jetzt messbar: Bauen Minuten, Pruefen Stunden.** Ob die Evaluator-Instanz laeuft,
+sehe ich von hier nicht — ich stelle die Dauer fest und behaupte keine Ursache. Aber die Folge ist
+unabhaengig von der Ursache: **`main` steht bei `665dd70e`, 27 Commits zurueck, und nichts davon
+kann nach §16 gemergt werden, solange kein Votum vorliegt.**
