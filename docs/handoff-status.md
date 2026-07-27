@@ -14415,3 +14415,57 @@ fahre ich am VOLLSTAENDIGEN Stand - jetzt waere er gruen und wuerde ueber die Un
 **Auflage:** restliche statische Inline-Stile in die `.hp-fach-*`-Schicht + Test auf "keine statische
 Inline-Zeile mehr" erweitern. ODER Scope-Ausschluss der Feld-Unterkomponenten dokumentieren -> dann
 FREIGABE fuer den Teil. **Ballbesitz: Generator (bzw. Planner fuer die Scope-Entscheidung).**
+
+## PLANNER 27.07., 19:08 (CEST) — Erstes NACHBESSERN, und der Fehler liegt in meinem Auftrag
+
+*Uhrzeit aus `git log` von `198cf391`.*
+
+**Das Votum ist berechtigt, und die Ursache bin ich.**
+
+Der Evaluator hat nachgemessen statt geglaubt: `FachFlaeche` traegt noch **17** `style={{`, davon
+nur **2** bedingt. Belegbar statisch bleiben `EingangFeld`/`AusgangZeile` (Z.55/56/85/92 mit
+`T.muted/ink/faint`, dazu 64/79). Der Test geht trotzdem gruen — **er prueft die zwei benannten
+const-Objekte, also die Gestalt des Gebauten, nicht die Wirkung des Auftrags.**
+
+### Warum das nicht der Fehler des Generators ist
+
+*„Statisch“* war im Auftrag **nie mechanisch definiert.** Der Generator hat *„traegt Zustand oder
+Messung“* weit gelesen (alles, was `T.*` benutzt), der Evaluator eng (`T.x` ist ein Token, kein
+Zustand). **Beide haben nach ihrer Lesart ehrlich gemessen und kommen zu gegensaetzlichen
+Ergebnissen. Das heisst: die Definition fehlt, nicht die Sorgfalt.**
+
+Ich habe im Auftragsblatt viel Muehe darauf verwendet, **keine Zahl als Bedingung** zu setzen — und
+dabei uebersehen, dass ich stattdessen ein **Wort** als Bedingung gesetzt habe, das zwei Lesarten
+hat. Eine unscharfe Zahl faellt auf; ein unscharfes Wort nicht.
+
+**DEFINITION AB SOFORT:** ein `style={{…}}` ist **statisch**, wenn das Objektliteral **weder einen
+Ternaer (`?`) noch einen Bezeichner ausser den Token aus `T`** enthaelt. `T.muted` ist ein Token
+und macht eine Stelle **nicht** dynamisch.
+
+**UND DIE ZUSAGE PRUEFT DIE WIRKUNG:** nicht *„diese elf Klassen existieren“*, sondern *„in dieser
+Datei gibt es keine statische Stelle mehr“*. **Eine Zusage, die nur die gebaute Gestalt festhaelt,
+geht nie rot, wenn etwas fehlt.** Das ist dieselbe Familie wie die geerbten AUF-46-Zusagen, die den
+Inline-Stil lasen statt die Eigenschaft — heute zum sechsten Mal, diesmal von uns selbst gebaut.
+
+### Was ich daraufhin gemacht habe
+
+**Scheibe 4 wird angehalten, bevor sie geprueft wird.** Grobzaehlung mit derselben Definition:
+`HausplanerStudio` **19 statisch von 27**, `FachFlaeche` **16 von 17**. Sie bekaeme dasselbe Votum.
+**Den Evaluator zweimal dasselbe finden zu lassen, waere Verschwendung seiner knappsten
+Ressource** — heute war die Abnahme fuenf Stunden lang der Engpass. Sie geht **ohne Pruefung**
+zurueck an den Generator und wird mit Scheibe 3 zusammen nachgezogen. **Stapel 2 → 0.**
+
+**Und der unangenehme Teil: Scheibe 2 ist abgenommen und erfuellt das Kriterium ebenfalls nicht.**
+Grobzaehlung: `StartView` **29 statisch von 36**. **Ich nehme die Freigabe nicht zurueck** — sie
+war nach dem damals geltenden, unscharfen Kriterium korrekt, und **ein rueckwirkend geaendertes
+Mass entwertet jede Abnahme, die je erteilt wurde.** Sie laeuft als `SCHEIBE 2 NACHZUG` und faellt
+mit 3 und 4 zusammen an.
+
+*Meine Zahlen sind eine Grobzaehlung mit benannter Methode, keine Wahrheit — der Generator misst
+beim Bauen selbst nach. Sie decken sich in der Richtung mit dem Evaluator, und das genuegt fuer die
+Entscheidung, die ich zu treffen hatte.*
+
+**Der Fehler war meiner; die Kosten traegt der Generator dreifach.** Das gehoert benannt, nicht
+weggeraeumt.
+
+**Ballbesitz: Generator.** Marke bleibt auf AUF-38. Stapel 0, `main` `665dd70e`, 29 zurueck.
