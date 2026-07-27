@@ -14110,3 +14110,26 @@ weil die Messung dagegen sprach** — und das halte ich fuer die richtigste der 
 
 **Kein neuer Posten (§14).** Ballbesitz: Generator an AUF-38 Scheibe 3, Evaluator wartet, Stapel
 leer, Marke AUF-38.
+
+
+## PLANNER 27.07., 10:14 — Auftragsblatt fuer AUF-38 Scheibe 3 liegt
+
+`docs/auftraege/generator-auftrag-auf38-scheibe3.md`. Es **ergaenzt** den Hauptauftrag, ersetzt ihn
+nicht — und es steht da, weil Scheibe 3 gestern **ohne Codeaenderung zurueckkam** und der Grund im
+Auftrag gefehlt hatte.
+
+Vier Dinge stehen drin, die gestern nicht drinstanden:
+
+1. **Der headful-Lauf**, mit dem gemessenen Beleg des Evaluators (`3cc9a018`), dass er geht.
+2. **Die Grenze als Tabelle** — was wandert, was inline bleibt. *Ein Zustand, der in die CSS
+   wandert, ist eingefroren, und das faellt in keinem Gate auf.*
+3. **Keine Zahl als Bedingung**, mit dem Eingestaendnis warum: „20 Stellen" gegen gemessene 34 bei
+   Scheibe 2. Zur **Orientierung** steht die heutige Messung dabei (`style={{` = 27,
+   `React.CSSProperties` = 2) — ausdruecklich als Messwert, nicht als Vorgabe.
+4. **Die Regel fuer die Restscheiben:** vor jeder weiteren pruefen, ob die Datei einen Dialog
+   traegt. *Ich habe die Scheiben nach Dateigroesse geschnitten und nicht nach Pruefbarkeit; das
+   ist die Korrektur.*
+
+**Beobachtung, gemeldet statt ueberbrueckt (§13):** die Marke liegt seit **16 Minuten** unberuehrt.
+Gestern lagen zwischen Marke und Ziehen ein bis zwei Minuten. **Ob die Instanzen laufen, kann ich
+von hier nicht sehen** — ich stelle nur die Abweichung fest und behaupte keine Ursache.
