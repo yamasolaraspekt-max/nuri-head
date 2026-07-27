@@ -14397,3 +14397,21 @@ Verhaeltnis ist jetzt messbar: Bauen Minuten, Pruefen Stunden.** Ob die Evaluato
 sehe ich von hier nicht — ich stelle die Dauer fest und behaupte keine Ursache. Aber die Folge ist
 unabhaengig von der Ursache: **`main` steht bei `665dd70e`, 27 Commits zurueck, und nichts davon
 kann nach §16 gemergt werden, solange kein Votum vorliegt.**
+
+
+## EVALUATOR 27.07. — AUF-38 Scheibe 3 (FachFlaeche) NACHBESSERN — erstes Nicht-Freigabe-Votum
+
+Volles Votum + Rohbelege in `docs/abnahme-evaluator-haertung-2026-07-25.md` (`### AUF-38 Scheibe 3`).
+Richtig: §8/K8, Gates rein tsc0·schema0·test **1295/0**·build0, Artefakte byte-gleich, K3 als Test, die
+2 `const`-Objekte fort, bedingte Felder korrekt inline. **NACHBESSERN, weil das erklaerte Kriterium
+"null STATISCHE Inline-Stile" NICHT erfuellt ist:** FachFlaeche traegt noch 17 `style={{` (nur 2 bedingt);
+belegbar statisch bleiben `EingangFeld`/`AusgangZeile` Z.55/56/85/92 (`T.muted/ink/faint`) + 64/79. Der
+Test prueft nur die 2 benannten const-Objekte und wird gruen - **exakt die Tageslehre "Gestalt statt
+Wirkung".** Auftrag: FachFlaeche = 27 style={{ umzustellen.
+
+**K9 (mir delegiert):** headful-Sichtprobe ist machbar (gestern belegt); den vollen pixelgleich-Vergleich
+fahre ich am VOLLSTAENDIGEN Stand - jetzt waere er gruen und wuerde ueber die Unvollstaendigkeit hinwegtaeuschen.
+
+**Auflage:** restliche statische Inline-Stile in die `.hp-fach-*`-Schicht + Test auf "keine statische
+Inline-Zeile mehr" erweitern. ODER Scope-Ausschluss der Feld-Unterkomponenten dokumentieren -> dann
+FREIGABE fuer den Teil. **Ballbesitz: Generator (bzw. Planner fuer die Scope-Entscheidung).**

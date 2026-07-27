@@ -1862,6 +1862,41 @@ Build stuetzt es unabhaengig - die Umstellung aendert das Erzeugnis nicht.
 Urteil: FREIGABE. Nur Statisches gewandert (Zustand bleibt inline, manuell + per Test belegt), CSS nur
 Variablen (mit Zaehnen), beide Artefakte reproduzierbar, K8 eingehalten, Gates gruen. Ballbesitz: Planner.
 
+### AUF-38 Scheibe 3 (Code 7da45f7c · Bundle a7fc9f39) - FachFlaeche - NACHBESSERN
+
+`sichtbar`, reine Insel. Blind gegen die committeten SHA. Was RICHTIG ist: §8/K8 sauber (Bundle-Commit
+js+css), Gates rein (/tmp 7da45f7c): tsc 0 · schema 0 · test 1295/0 · build 0, beide Artefakte byte-gleich
+zum frischen Build; K3 "Eigenschaft fuer Eigenschaft" als TEST (nicht Tabelle) - gute Loesung; die zwei
+benannten `const`-Stil-Objekte (`raster`, `spaltenTitel`) sind fort und als Klassen belegt; die bedingten
+Felder (`{feld.einheit && …}`, `{feld.typ && …}`) sind korrekt INLINE geblieben (zustands-only).
+
+Der Grund fuer NACHBESSERN - das erklaerte Kriterium ist nicht erfuellt (gemessen, nicht behauptet):
+- Kriterium (Planner heute, 61c451da/5443a21a): "null STATISCHE Inline-Stile ist die eigentliche
+  Leistung, nicht null Inline-Stile." Auftrag: FachFlaeche = 27 `style={{` umzustellen.
+- Gemessen @ 7da45f7c: FachFlaeche traegt noch **17 `style={{`**, davon nur **2 bedingt**. Belegbar
+  STATISCH (immer gerendert, reine Token-Werte, keine Zustands-/Messungsabhaengigkeit) bleiben:
+  `EingangFeld` Z.55 (Label-Zeile, `color: T.muted`), Z.56 (`color: T.ink`); `AusgangZeile` Z.85
+  (`color: T.ink`), Z.92 (`—`, `color: T.faint`); dazu Z.64 (Input) und Z.79 (Ergebniszeile, `T.surface2`).
+  Das sind ~6 statische Inline-Stile, die nach dem Kriterium in die Stilschicht gehoert haetten.
+- **Der Test faengt es NICHT:** `stilschicht.test` prueft nur, dass die ZWEI benannten `const`-Objekte
+  fort sind - er wird gruen, obwohl die Wirkung ("null statische Inline-Stile") nicht eintritt. Das ist
+  genau das Muster, das der Planner heute als Tageslehre benannt hat: die Gestalt geprueft, nicht die
+  Wirkung. Ein eingefrorener Stil in einer dieser Zeilen faellt in keinem Gate auf.
+
+Zur K9 (mir delegiert): die headful-Sichtprobe ist in meiner Umgebung machbar (gestern belegt: Insel +
+FachFlaeche rendern headful). Ich fahre den vollen pixelgleich-Vergleich am VOLLSTAENDIGEN Stand - jetzt
+waere er verfrueht: er wuerde gruen ausfallen (die verbliebenen Inline-Stile rendern unveraendert) und
+genau ueber die Unvollstaendigkeit hinwegtaeuschen.
+
+NACHBESSERN: die verbliebenen statischen Inline-Stile in `EingangFeld`/`AusgangZeile` in die `.hp-fach-*`-
+Schicht ueberfuehren, UND den Test von "die zwei const-Objekte sind fort" auf "keine statische
+Inline-Stil-Zeile mehr in FachFlaeche" erweitern (die Wirkung pruefen, nicht die zwei Namen). ODER, falls
+die Feld-Unterkomponenten bewusst aus Scheibe 3 herausgescopet wurden: den Scope-Ausschluss im Auftrag
+dokumentieren - dann wird es FREIGABE fuer den umgestellten Teil. Bis dahin ist das erklaerte Ziel nicht
+erreicht. Reproduzierbar: `git show 7da45f7c:…/FachFlaeche.tsx | grep -nE "color: T\.(muted|ink|faint)"`.
+
+Ballbesitz: Generator (bzw. Planner fuer die Scope-Entscheidung).
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
