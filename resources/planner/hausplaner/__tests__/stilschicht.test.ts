@@ -150,6 +150,48 @@ test('K3 Scheibe 3: jede Klasse wird auch benutzt — keine Regel ins Leere', ()
   }
 });
 
+// --- AUF-38 Scheibe 4 --------------------------------------------------------------------------------
+const SCHEIBE4: ReadonlyArray<[string, string[]]> = [
+  ['.hp-studio-kopf', ['min-height: 62px', 'flex: 0 0 auto', 'display: flex', 'align-items: center',
+    'flex-wrap: wrap', 'gap: 12px', 'padding: 8px 16px']],
+  ['.hp-studio-marke', ['display: flex', 'align-items: center', 'gap: 11px', 'font-weight: 700', 'font-size: 16px', 'min-width: 0']],
+  ['.hp-fueller', ['flex: 1']],
+  ['.hp-studio-reihe', ['flex: 1', 'min-height: 0', 'display: flex']],
+  ['.hp-navi-kopf', ['display: flex', 'align-items: center', 'gap: 10px', 'padding: 16px 16px 8px']],
+  ['.hp-navi-liste', ['flex: 1', 'overflow: auto', 'padding: 4px 10px 12px']],
+  ['.hp-experte', ['position: absolute', 'inset: 0', 'display: flex', 'flex-direction: column']],
+  ['.hp-experte-buehne', ['flex: 1', 'min-height: 0']],
+];
+
+test('K3 Scheibe 4: jede Regel traegt genau die Werte, die vorher inline standen', () => {
+  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const [klasse, deklarationen] of SCHEIBE4) {
+    const block = ohneKommentare.match(new RegExp(`\\${klasse}\\s*\\{([^}]*)\\}`));
+    assert.ok(block, `${klasse} fehlt in der CSS`);
+    for (const d of deklarationen) {
+      assert.ok(block[1]!.includes(d), `${klasse}: „${d}" fehlt`);
+    }
+  }
+});
+
+test('K3 Scheibe 4: jede Klasse wird auch benutzt', () => {
+  const studio = readFileSync(join(hier, '../app/HausplanerStudio.tsx'), 'utf8');
+  for (const [klasse] of SCHEIBE4) {
+    assert.ok(studio.includes(klasse.slice(1)), `${klasse} steht in der CSS, aber niemand benutzt sie`);
+  }
+});
+
+test('Scheibe 4: das Namenskuerzel bleibt inline — seine Farben haben keinen Token', () => {
+  // **Der ehrliche Rest.** Rohe Farbwerte in einer CSS-Regel verbietet Kriterium 4; einen Token zu
+  // erfinden waere eine Palette-Entscheidung. Also bleibt die Stelle, wo sie ist — mit Begruendung.
+  const studio = readFileSync(join(hier, '../app/HausplanerStudio.tsx'), 'utf8');
+  assert.match(studio, /background: '#dfe4ea'/, 'die Stelle ist noch inline');
+  const werte = new Set<string>(Object.values(T).map(String));
+  for (const farbe of ['#dfe4ea', '#5b636d']) {
+    assert.ok(!werte.has(farbe), `${farbe} hat inzwischen einen Token — dann gehoert die Stelle in die CSS`);
+  }
+});
+
 test('Scheibe 3: die zwei konstanten Stil-Objekte sind fort', () => {
   const fach = readFileSync(join(hier, '../app/FachFlaeche.tsx'), 'utf8');
   assert.ok(!fach.includes('const raster:'), '`raster` steht noch als Inline-Objekt da');

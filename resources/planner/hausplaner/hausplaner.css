@@ -100,3 +100,32 @@
 .hp-fach-rumpf { padding: 18px 24px 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
 .hp-fach-spalte { min-width: 0; }
 .hp-fach-liste { display: flex; flex-direction: column; gap: 8px; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-38 Scheibe 4 — die Studio-Huelle (`HausplanerStudio.tsx`).
+ *
+ * Wieder nur Statisches, wieder Wortlaut fuer Wortlaut. **Eine statische Stelle bleibt bewusst
+ * inline** (das Namenskuerzel oben rechts): sie traegt zwei Farben, die in `T` **keinen Token
+ * haben**. Sie hierher zu holen hiesse, rohe Farbwerte in die Stilschicht zu schreiben — genau
+ * das, was Kriterium 4 verbietet; ihnen einen Token zu erfinden waere eine Palette-Entscheidung
+ * und nicht meine. Im Bericht benannt.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+/* Kopfzeile des Studios. AUF-46: Mindesthoehe statt fester Hoehe, umbrechen statt schieben. */
+.hp-studio-kopf { min-height: 62px; flex: 0 0 auto; display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 8px 16px; }
+.hp-studio-marke { display: flex; align-items: center; gap: 11px; font-weight: 700; font-size: 16px; min-width: 0; }
+
+/* Der Platzhalter, der die Kopfzeile auseinanderdrueckt. */
+.hp-fueller { flex: 1; }
+
+/* Die Reihe unter der Kopfzeile: Navigation links, Inhalt rechts. */
+.hp-studio-reihe { flex: 1; min-height: 0; display: flex; }
+
+/* Kopf der Navigationsspalte. */
+.hp-navi-kopf { display: flex; align-items: center; gap: 10px; padding: 16px 16px 8px; }
+/* Der scrollende Teil der Navigation. */
+.hp-navi-liste { flex: 1; overflow: auto; padding: 4px 10px 12px; }
+
+/* Die Expertenflaeche fuellt ihren Platz vollstaendig aus. */
+.hp-experte { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.hp-experte-buehne { flex: 1; min-height: 0; }

@@ -111,27 +111,30 @@ export function HausplanerStudio(): React.ReactElement {
           390 px schob sie Titel, Status, Moduswechsel und Namenskürzel über den rechten Rand und
           riss die ganze Seite in den waagerechten Überlauf (gemessen: scrollWidth 656 bei 390).
           Jetzt: umbrechen statt schieben, Mindesthöhe statt fester Höhe. */}
-      <header style={{ minHeight: 62, flex: '0 0 auto', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 12, padding: '8px 16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 11, fontWeight: 700, fontSize: 16, minWidth: 0 }}>
+      <header className="hp-studio-kopf">
+        <div className="hp-studio-marke">
           <span style={{ width: 30, height: 30, borderRadius: 9, background: T.brand, display: 'grid', placeItems: 'center', color: T.surface }}><Ikon inhalt='<path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/>' size={16} /></span>
           Hausplaner
           <span style={{ fontWeight: 600, color: T.muted, fontSize: 13.5 }}>· Solar Aspekt</span>
         </div>
         <span style={{ display: 'flex', alignItems: 'center', gap: 7, color: T.muted, fontSize: 13 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: st.farbe }} />{st.label}{scene && kannSpeichern ? ` · Rev. ${scene.revision}` : ''}</span>
-        <span style={{ flex: 1 }} />
+        <span className="hp-fueller" />
         <div style={{ display: 'flex', background: T.surface, borderRadius: 12, padding: 4, boxShadow: T.schattenFlach }}>
           {modeBtn('start', 'Übersicht', '<path d="M4 5h16M4 12h16M4 19h10"/>')}
           {modeBtn('expert', 'Expertenmodus', '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>')}
         </div>
+        {/* AUF-38 Scheibe 4: **bleibt bewusst inline.** Diese zwei Farben haben in `T` keinen
+            Token. In die CSS geholt waeren sie rohe Farbwerte in einer Regel — Kriterium 4 verbietet
+            das; ihnen einen Token zu erfinden waere eine Palette-Entscheidung und nicht meine. */}
         <span style={{ width: 32, height: 32, borderRadius: '50%', background: '#dfe4ea', display: 'grid', placeItems: 'center', fontSize: 12, fontWeight: 700, color: '#5b636d' }}>YS</span>
       </header>
 
       {/* Bühne */}
-      <div style={{ flex: 1, minHeight: 0, display: 'flex' }}>
+      <div className="hp-studio-reihe">
         {/* Navigation (nur außerhalb Experte — Experte hat eigene Werkzeugleiste) */}
         {!imExperte && (
           <nav style={{ width: navBreit, flex: '0 0 auto', background: T.surface, borderRight: `1px solid ${T.hair}`, display: 'flex', flexDirection: 'column', transition: 'width .18s', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '16px 16px 8px' }}>
+            <div className="hp-navi-kopf">
               {!navZu && <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: T.faint }}>Navigation</span>}
               <button type="button" onClick={() => setNavZu((v) => !v)} title="Ein-/ausklappen" style={{ marginLeft: 'auto', width: 30, height: 30, border: 0, background: T.surface2, borderRadius: 9, color: T.muted, cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
                 <Ikon inhalt={navZu ? '<path d="M9 6l6 6-6 6"/>' : '<path d="M15 6l-6 6 6 6"/>'} size={16} />
@@ -141,7 +144,7 @@ export function HausplanerStudio(): React.ReactElement {
               style={{ margin: '4px 12px 8px', display: 'flex', alignItems: 'center', gap: 10, background: T.accent, color: T.surface, border: 0, borderRadius: 12, padding: navZu ? 12 : '12px 14px', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', justifyContent: navZu ? 'center' : 'flex-start' }}>
               <Ikon inhalt='<path d="M12 5v14M5 12h14"/>' size={16} />{!navZu && <span>Neue Anfrage / Lead</span>}
             </button>
-            <div style={{ flex: 1, overflow: 'auto', padding: '4px 10px 12px' }}>
+            <div className="hp-navi-liste">
               {!navZu && <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.faint, margin: '14px 10px 5px' }}>Projekt</div>}
               {PROJ.map((p) => (
                 <div key={p.name} role="button" tabIndex={0} onClick={() => gehGeführt(1)} onKeyDown={(e) => { if (istAusloeser(e)) gehGeführt(1); }}
@@ -185,14 +188,14 @@ export function HausplanerStudio(): React.ReactElement {
           {modus === 'start' && <StartView onGuided={gehGeführt} onKonfigurator={(n, f) => öffneKonfigurator(n, f, 'start')} projekte={projekte} />}
           {modus === 'guided' && <GuidedView schritt={schritt} setSchritt={setSchritt} onExperte={() => setModus('expert')} onKonfigurator={(art) => setKonfig(art)} modell={modell} schritte={schritte} />}
           {imExperte && (
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>
+            <div className="hp-experte">
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 16px', background: T.surface, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}>
                 <button type="button" onClick={() => setModus('guided')} style={{ border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600, fontSize: 13, padding: '7px 14px', borderRadius: 10, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7 }}>
                   <Ikon inhalt='<path d="M15 6l-6 6 6 6"/>' size={15} />Zur geführten Planung
                 </button>
                 <span style={{ fontSize: 13, color: T.muted }}>Experte — alle Werkzeuge, Projektbaum und Eigenschaften. Dasselbe Modell und dieselbe Revision.</span>
               </div>
-              <div style={{ flex: 1, minHeight: 0 }}><HausplanerApp imStudio /></div>
+              <div className="hp-experte-buehne"><HausplanerApp imStudio /></div>
             </div>
           )}
         </div>

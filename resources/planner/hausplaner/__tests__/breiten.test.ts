@@ -44,12 +44,15 @@ test('die Startseite legt so viele Spalten an, wie passen — nicht drei um jede
 });
 
 test('die Kopfzeile bricht um, statt zu schieben', () => {
-  const studio = lies('HausplanerStudio.tsx');
-  const kopf = studio.match(/<header style=\{\{[^}]*\}\}>/);
-  assert.ok(kopf, 'Kopfzeile nicht gefunden');
-  assert.match(kopf[0], /flexWrap: 'wrap'/, 'ohne Umbruch schiebt sie die ganze Seite über den Rand');
-  assert.match(kopf[0], /minHeight: 62/, 'Mindesthöhe statt fester Höhe — sonst überlappt die zweite Zeile');
-  assert.doesNotMatch(kopf[0], /height: 62,/, 'die feste Höhe war die halbe Ursache');
+  // **Nachgezogen in AUF-38 Scheibe 4:** die Kopfzeile trug ihren Stil inline, jetzt traegt sie die
+  // Klasse `.hp-studio-kopf`. **Die Absicht ist unveraendert** — umbrechen statt schieben, und
+  // Mindesthoehe statt fester Hoehe. Geprueft wird die Eigenschaft dort, wo sie heute wohnt.
+  const css = readFileSync(new URL('../hausplaner.css', import.meta.url), 'utf8');
+  const kopf = css.match(/\.hp-studio-kopf \{([^}]*)\}/);
+  assert.ok(kopf, 'Kopfzeilen-Regel nicht gefunden');
+  assert.match(kopf[1]!, /flex-wrap: wrap/, 'ohne Umbruch schiebt sie die ganze Seite über den Rand');
+  assert.match(kopf[1]!, /min-height: 62px/, 'Mindesthöhe statt fester Höhe — sonst überlappt die zweite Zeile');
+  assert.doesNotMatch(kopf[1]!, /[^-]height: 62px/, 'die feste Höhe war die halbe Ursache');
 });
 
 test('keine der vier Flächen trägt noch eine feste Spaltenbreite in der Grid-Vorlage', () => {
