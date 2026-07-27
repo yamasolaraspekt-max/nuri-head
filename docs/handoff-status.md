@@ -14314,3 +14314,39 @@ Dateien **73 Stellen in 7 Dateien** — `EngineFlaeche` 29 · `GeschossFlaeche` 
 Scheibe groesser ist als angekuendigt, nicht ihre Groesse.
 
 **Ballbesitz: Evaluator.** Aufgabe geht ihm als Nachricht zu (§15).
+
+## PLANNER 27.07., 18:15 (CEST) — Meine Sperre hat nicht gehalten, und sie war auch falsch
+
+*Uhrzeit aus `git log` von `c4a35f76`.*
+
+Der Generator hat **Scheibe 4** (`HausplanerStudio.tsx`) gezogen. In der AUF-38-Zelle stand seit
+11:56 mein Satz *„Scheibe 4 wird NICHT gezogen, solange Scheibe 3 in der Abnahme liegt“*. Der Satz
+stand noch da, als er zog — gemessen, nicht vermutet.
+
+**Das ist mein Konstruktionsfehler.** Der Generator zieht nach §15, indem er die **Marke** liest.
+Die Marke stand auf `⚡ AKTIV`. Meine Sperre stand als **Satz im Fliesstext** einer Zelle mit
+mehreren tausend Zeichen. **Zwei widersprechende Signale am selben Posten — das lautere gewinnt,
+und die Marke ist lauter als jeder Satz.** Ich habe eine Sperre gebaut, die keine ist.
+
+**Regel daraus, ab sofort: wer sperren will, nimmt die Marke weg oder setzt sie auf `GESPERRT`.
+Fliesstext sperrt nicht.** Genau derselbe Fehler wie bei der Dialog-Auflage heute Mittag: Ich
+schreibe die Absicht dorthin, wo ich gerade schreibe — nicht dorthin, wo der andere entscheidet.
+
+**Und sachlich war sein Zug der richtige.** Scheibe 3 lag zu dem Zeitpunkt **vier Stunden zwanzig**
+beim Evaluator, ohne Votum. Meine Sperre haette bedeutet: **beide Bauenden warten auf einen
+Pruefenden, der nicht antwortet.** Er hat die Zeit genutzt statt stillzustehen, und das ist unter
+§13 richtig, nicht falsch. **Der Engpass ist die Abnahme, nicht das Ziehen** — das war schon der
+Befund aus §15, und ich habe ihn heute mit einer Sperre noch verschaerfen wollen.
+
+**Was bleibt, ist ein gemessenes Restrisiko, kein Verbot:** Scheibe 3 und Scheibe 4 fassen
+**dieselbe** `hausplaner.css` und **denselben** `stilschicht.test.ts` an. Kommt Scheibe 3 rot
+zurueck, hat der Generator zwei Baustellen in einer Datei. **Die Regel dafuer ist eine
+Vorrangregel, keine Sperre:** faellt Scheibe 3 rot, **hat die Nachbesserung Vorrang**, Scheibe 4
+wird angehalten. **Scheibe 4 laeuft bis dahin zu Ende** — dieselbe Regel wie beim Wettlauf am
+26.07.: *was schon gebaut ist, wird fertig gebaut; eine halb umgestellte Datei ist schlimmer als
+eine Scheibe mehr.*
+
+**Offen an Yama:** der Evaluator hat seit **13:52** kein Votum abgegeben, das sind bis jetzt
+**4 Stunden 23 Minuten**. Der Zuruf ist um 11:56 herausgegangen (§15 erfuellt). Ob die Instanz
+laeuft, sehe ich von hier nicht — ich stelle die Dauer fest und behaupte keine Ursache. **Stapel 1,
+`main` `665dd70e`, 24 Commits zurueck.**
