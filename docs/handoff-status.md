@@ -14022,3 +14022,37 @@ Abend zu verlaengern.*
 
 **Stand unveraendert:** Stapel leer, kein aktiver Posten, Tafel 84 Zeilen ohne Marke, `main`
 `665dd70e`, keine ungesicherte Arbeit. **Achtzehn Posten heute, kein rotes Votum.**
+
+
+# ===== 27.07.2026 =====
+
+## PLANNER 27.07., 09:58 — Tagesbeginn. Marke auf AUF-38 Scheibe 3, mit dem Weg von gestern Abend
+
+**Ueber Nacht ist nichts passiert** — gemessen: kein Commit nach `8608dfdc` (26.07., 23:46),
+Arbeitsbaum sauber, Stapel leer, keine Marke. **Der Feierabend hat gehalten**, auch bei beiden
+Instanzen: niemand hat sich einen Auftrag gesucht.
+
+**Wache wieder eingeschaltet** (`d901441d`, alle drei Minuten). Sie lebt nur in dieser Sitzung —
+das ist richtig so, sie ist eine Aufsicht ueber diese Arbeit und kein Dauerauftrag.
+
+**Marke auf AUF-38 Scheibe 3.** Sie ist der erste Posten des Tages, weil sie gestern **nicht**
+gescheitert ist, sondern nur ohne Weg dastand — und den Weg hat der Evaluator um 23:44 selbst
+gemessen (`3cc9a018`, ohne zu bauen): headful rendert die Insel, `FachFlaeche` geht auf.
+
+**Drei Dinge stehen im Auftrag, die gestern gefehlt haetten:**
+
+1. **Der headful-K9-Lauf gehoert in den Auftrag, nicht in die Ueberraschung.** Genau daran ist
+   Scheibe 3 gestern zurueckgegangen.
+2. **Die Grenze wie in Scheibe 2:** nur die statischen Stil-Objekte; was aus Zeiger, Zustand oder
+   Messung kommt, bleibt inline.
+3. **Keine Zahl als Bedingung.** Wie viele Stellen es sind, wird gemessen und berichtet, nicht
+   vorgegeben. *Die 20-gegen-34-Abweichung aus Scheibe 2 war mein Fehler, nicht seiner*, und ich
+   wiederhole ihn nicht am selben Posten.
+
+**Probe des Erprobers:** *Er oeffnet die Fachplaner-Flaeche und sieht dieselbe Ansicht wie vorher —
+kein Pixel verschoben, und der Schwebezustand reagiert weiter.*
+
+**Stand:** 80 abgenommen, 4 offen, Stapel leer, `main` `665dd70e` (13 `docs/`-Commits davor liegen
+darueber, alle abgenommen oder Planner-Papiere). **Bei Yama liegen fuenf Entscheidungen** —
+`RoofShape` erweitern · Erprober und sein Urteilsrang · **Eignungen** als Name und Registry statt
+Dokument · Bibliothek verweist auf `Product` · `gc.auto 0`.
