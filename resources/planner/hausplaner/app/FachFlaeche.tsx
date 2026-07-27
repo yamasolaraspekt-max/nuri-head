@@ -42,21 +42,16 @@ interface Props {
 }
 
 /** Raster, das umbricht statt abzuschneiden — eine Spalte ab ca. 375 px, sonst so viele wie passen. */
-const raster: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-  gap: 12,
-};
-
-const spaltenTitel: React.CSSProperties = {
-  fontSize: 11.5, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase',
-  color: T.faint, margin: '0 0 10px',
-};
+/**
+ * AUF-38 Scheibe 3 — die statischen Stile stehen jetzt in `hausplaner.css` (`.hp-fach-*`).
+ * Ihre Farben sind dort `--hp-*`-Variablen aus `T`; **kein Wert ist abgeschrieben.** Was aus
+ * Zustand oder Messung kommt, blieb inline — Ziel ist null *statische* Inline-Stile.
+ */
 
 /** Ein deaktiviertes Eingangsfeld: Beschriftung, Einheit, leerer Eingang. Nimmt nichts entgegen. */
 function EingangFeld({ feld, grundId }: { feld: FeldVorschau; grundId: string }): React.ReactElement {
   return (
-    <label style={{ display: 'block', minWidth: 0 }}>
+    <label className="hp-fach-feld">
       <span style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap', fontSize: 12.5, color: T.muted, marginBottom: 5, overflowWrap: 'anywhere' }}>
         <span style={{ color: T.ink }}>{feld.label}</span>
         {feld.einheit && <span style={{ color: T.faint }}>{feld.einheit}</span>}
@@ -148,7 +143,7 @@ export function FlaechenHuelle({
           overflowX: 'hidden', overflowY: 'auto',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap', padding: '20px 24px 12px' }}>
+        <div className="hp-fach-kopf">
           <button
             type="button" onClick={onZurueck}
             style={{
@@ -159,12 +154,12 @@ export function FlaechenHuelle({
           >
             <Ikon inhalt='<path d="M15 6l-6 6 6 6"/>' size={15} />{zurueck}
           </button>
-          <div style={{ flex: '1 1 240px', minWidth: 0 }}>
+          <div className="hp-fach-kopf-text">
             <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.09em', textTransform: 'uppercase', color: T.accent }}>
               Fachplaner · {gruppe}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginTop: 4 }}>
-              <h2 id={titelId} style={{ fontSize: 21, fontWeight: 800, letterSpacing: '-.01em', margin: 0, overflowWrap: 'anywhere' }}>
+            <div className="hp-fach-titelzeile">
+              <h2 id={titelId} className="hp-fach-titel">
                 {titel}
               </h2>
               <ZustandBadge zustand={zustand} />
@@ -204,22 +199,22 @@ export function FachFlaeche({ flaeche, herkunft, onZurueck }: Props): React.Reac
           <span style={{ color: T.faint, flex: '0 0 auto', marginTop: 1 }}>
             <Ikon inhalt='<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>' size={16} titel="Hinweis" />
           </span>
-          <span style={{ flex: '1 1 220px', minWidth: 0 }}>
+          <span className="hp-fach-hinweis">
             {GRUND_DEAKTIVIERT} {flaeche.engine ? HINWEIS_ENGINE : HINWEIS_OHNE_ENGINE}
           </span>
         </div>
 
         {/* 3 · Feldstruktur-Vorschau — die Form des späteren Panels, ohne Werte. */}
-        <div style={{ padding: '18px 24px 24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 22 }}>
-          <section style={{ minWidth: 0 }}>
-            <h3 style={spaltenTitel}>Eingangsgrößen ({flaeche.eingaenge.length})</h3>
-            <div style={raster}>
+        <div className="hp-fach-rumpf">
+          <section className="hp-fach-spalte">
+            <h3 className="hp-fach-spaltentitel">Eingangsgrößen ({flaeche.eingaenge.length})</h3>
+            <div className="hp-fach-raster">
               {flaeche.eingaenge.map((f) => <EingangFeld key={f.label} feld={f} grundId={grundId} />)}
             </div>
           </section>
-          <section style={{ minWidth: 0 }}>
-            <h3 style={spaltenTitel}>Ergebnisse ({flaeche.ausgaenge.length})</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <section className="hp-fach-spalte">
+            <h3 className="hp-fach-spaltentitel">Ergebnisse ({flaeche.ausgaenge.length})</h3>
+            <div className="hp-fach-liste">
               {flaeche.ausgaenge.map((f) => <AusgangZeile key={f.label} feld={f} grundId={grundId} />)}
             </div>
           </section>

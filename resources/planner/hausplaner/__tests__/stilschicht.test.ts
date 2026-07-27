@@ -109,6 +109,53 @@ test('Scheibe 2: `StartView` traegt keine statischen Stil-Objekte mehr', () => {
   }
 });
 
+// --- AUF-38 Scheibe 3 --------------------------------------------------------------------------------
+/**
+ * **Der Wortlaut, der vorher inline stand — Eigenschaft fuer Eigenschaft.**
+ *
+ * Das ist Kriterium 3 in ausfuehrbarer Form: *fuer jede umgestellte Stelle das Paar vorher-Wert →
+ * CSS-Regel, keine Stelle ohne Zuordnung.* Steht hier eine Zahl anders als vorher, faellt der Test —
+ * den Bildvergleich faehrt der Evaluator headful (Blocker `3cc9a018` aufgeloest).
+ */
+const SCHEIBE3: ReadonlyArray<[string, string[]]> = [
+  ['.hp-fach-raster', ['display: grid', 'grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))', 'gap: 12px']],
+  ['.hp-fach-spaltentitel', ['font-size: 11.5px', 'font-weight: 700', 'letter-spacing: .07em',
+    'text-transform: uppercase', 'color: var(--hp-faint)', 'margin: 0 0 10px']],
+  ['.hp-fach-feld', ['display: block', 'min-width: 0']],
+  ['.hp-fach-kopf', ['display: flex', 'align-items: flex-start', 'gap: 12px', 'flex-wrap: wrap', 'padding: 20px 24px 12px']],
+  ['.hp-fach-kopf-text', ['flex: 1 1 240px', 'min-width: 0']],
+  ['.hp-fach-titelzeile', ['display: flex', 'align-items: center', 'gap: 10px', 'flex-wrap: wrap', 'margin-top: 4px']],
+  ['.hp-fach-titel', ['font-size: 21px', 'font-weight: 800', 'letter-spacing: -.01em', 'margin: 0', 'overflow-wrap: anywhere']],
+  ['.hp-fach-hinweis', ['flex: 1 1 220px', 'min-width: 0']],
+  ['.hp-fach-rumpf', ['padding: 18px 24px 24px', 'display: grid', 'grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))', 'gap: 22px']],
+  ['.hp-fach-spalte', ['min-width: 0']],
+  ['.hp-fach-liste', ['display: flex', 'flex-direction: column', 'gap: 8px']],
+];
+
+test('K3 Scheibe 3: jede Regel traegt genau die Werte, die vorher inline standen', () => {
+  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const [klasse, deklarationen] of SCHEIBE3) {
+    const block = ohneKommentare.match(new RegExp(`\\${klasse}\\s*\\{([^}]*)\\}`));
+    assert.ok(block, `${klasse} fehlt in der CSS`);
+    for (const d of deklarationen) {
+      assert.ok(block[1]!.includes(d), `${klasse}: „${d}" fehlt`);
+    }
+  }
+});
+
+test('K3 Scheibe 3: jede Klasse wird auch benutzt — keine Regel ins Leere', () => {
+  const fach = readFileSync(join(hier, '../app/FachFlaeche.tsx'), 'utf8');
+  for (const [klasse] of SCHEIBE3) {
+    assert.ok(fach.includes(klasse.slice(1)), `${klasse} steht in der CSS, aber niemand benutzt sie`);
+  }
+});
+
+test('Scheibe 3: die zwei konstanten Stil-Objekte sind fort', () => {
+  const fach = readFileSync(join(hier, '../app/FachFlaeche.tsx'), 'utf8');
+  assert.ok(!fach.includes('const raster:'), '`raster` steht noch als Inline-Objekt da');
+  assert.ok(!fach.includes('const spaltenTitel:'), '`spaltenTitel` steht noch als Inline-Objekt da');
+});
+
 test('Scheibe 2: was aus Zeiger oder Zustand kommt, blieb INLINE', () => {
   // Ziel ist null STATISCHE Inline-Stile, nicht null Inline-Stile. Eine gerechnete Breite in eine
   // Klasse zu pressen baut einen Fehler.

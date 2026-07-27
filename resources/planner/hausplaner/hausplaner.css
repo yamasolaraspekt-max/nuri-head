@@ -64,3 +64,39 @@
   background: var(--hp-accent-soft); color: var(--hp-accent-ink);
   display: grid; place-items: center; margin-bottom: 16px;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-38 Scheibe 3 — die Fachplaner-Flaeche (`FachFlaeche.tsx`).
+ *
+ * Dieselbe Regel wie in Scheibe 2: **nur Statisches**, jede Farbe als Variable, kein Wert.
+ * Was aus Zustand oder Messung kommt, blieb inline.
+ *
+ * **Jede Zeile unten ist der Wortlaut, der vorher inline stand** — Eigenschaft fuer Eigenschaft,
+ * ohne Zutat. Den Bildvergleich faehrt der Evaluator headful (Blocker `3cc9a018`).
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+/* Raster der Ein-/Ausgangsfelder. */
+.hp-fach-raster { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+
+/* Ueberschrift einer Spalte („EINGAENGE", „ERGEBNIS"). */
+.hp-fach-spaltentitel {
+  font-size: 11.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--hp-faint); margin: 0 0 10px;
+}
+
+/* Ein Feld der Vorschau: Beschriftung ueber leerem Eingang. */
+.hp-fach-feld { display: block; min-width: 0; }
+
+/* Kopfzeile des Dialogs: Zurueck-Knopf, Titel, Zustand. */
+.hp-fach-kopf { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; padding: 20px 24px 12px; }
+.hp-fach-kopf-text { flex: 1 1 240px; min-width: 0; }
+.hp-fach-titelzeile { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.hp-fach-titel { font-size: 21px; font-weight: 800; letter-spacing: -.01em; margin: 0; overflow-wrap: anywhere; }
+
+/* Der Hinweistext neben dem Zustand. */
+.hp-fach-hinweis { flex: 1 1 220px; min-width: 0; }
+
+/* Der Rumpf: zwei Spalten, die bei schmaler Flaeche untereinander rutschen. */
+.hp-fach-rumpf { padding: 18px 24px 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+.hp-fach-spalte { min-width: 0; }
+.hp-fach-liste { display: flex; flex-direction: column; gap: 8px; }
