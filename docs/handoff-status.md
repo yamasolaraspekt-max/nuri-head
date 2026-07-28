@@ -14588,3 +14588,40 @@ schärfer ist als die Beanstandung selbst. **Der Stand ist jetzt vollständig**,
 aussagekräftig.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+## PLANNER 27.07., 20:18 (CEST) — Nachbesserung eingeordnet, und mein Auftragsschnitt war falsch
+
+*Uhrzeit aus `git log` von `01b9933e`.*
+
+**Scheibe 3 ist erledigt und liegt in der Abnahme.** Von 17 Inline-Stilen bleiben **3**, die neue
+Zusage verlangt fuer *jeden* verbliebenen einen von zwei Gruenden, und er hat die **Gegenprobe
+selbst gefahren**: eine zurueckgedrehte Stelle ⇒ 2 rot. Der alte Fehler waere damit aufgefallen.
+Gates 0/0/0/0, Insel 1298 auf **1300**, PHP 789.
+
+**Sein eigener Satz dazu ist der wichtigste im ganzen Bericht:** *„Das ist genau das Muster, das
+ich in diesem Zyklus fuenfmal an fremden Zusagen bemaengelt habe — hier stand es in meiner
+eigenen.“* Genau deshalb nimmt niemand seine eigene Arbeit ab. Das ist kein Vorwurf an ihn, das ist
+der Beleg, dass die Rollentrennung ihr Geld wert ist.
+
+### Mein Auftragsschnitt war falsch
+
+Ich hatte geschrieben: *„ein Auftrag, drei Dateien, eine Definition“*. Er hat **eine** Datei
+geliefert und **„Ballbesitz: Evaluator“** gemeldet. **Beides ist vertretbar — und genau das ist der
+Fehler: bei drei Dateien in einem Auftrag ist „fertig“ nicht definiert.**
+
+Gemessen 20:37 mit der Definition: `FachFlaeche` **2 statisch** (fertig) · `HausplanerStudio` **19
+von 27** (offen) · `StartView` **29 von 36** (offen).
+
+**Ab jetzt: ein Auftrag = eine abnehmbare Einheit.** Die Aufteilung ist auch sachlich besser — drei
+Dateien auf einmal haetten den Pruefenden wieder mit einem Paket belastet, und der ist seit heute
+Mittag der gemessene Engpass. Aktiv ist jetzt **Scheibe 4 allein**, danach Scheibe 2.
+
+**Und das ist bereits ein Befund fuer das Auftragsschema, das wir gerade bauen:** der `scope` eines
+Auftrags muss so geschnitten sein, dass *„fertig“* eine Ja/Nein-Frage ist. Ein Auftrag mit drei
+Grundgesamtheiten hat drei Antworten und damit keine.
+
+**Ballbesitz: Evaluator** (Scheibe 3) **und Generator** (Scheibe 4) — zum ersten Mal heute laufen
+beide, ohne sich in dieselbe Datei zu schreiben. Stapel 1, `main` `665dd70e`, 35 zurueck.
+
+**Repo-Beifang gemeldet, nicht angefasst:** `.rm_probe_tmp` und neu `.ai-workflow/` liegen
+unverfolgt im Baum. Beides nicht von mir; ich raeume in fremden Pfaden nichts weg.
