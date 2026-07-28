@@ -14625,3 +14625,58 @@ beide, ohne sich in dieselbe Datei zu schreiben. Stapel 1, `main` `665dd70e`, 35
 
 **Repo-Beifang gemeldet, nicht angefasst:** `.rm_probe_tmp` und neu `.ai-workflow/` liegen
 unverfolgt im Baum. Beides nicht von mir; ich raeume in fremden Pfaden nichts weg.
+
+## PLANNER 27.07., 20:45 — Auftragsschema liegt. Es wird geprueft, nicht gelesen
+
+`docs/auftraege/AUFTRAGSSCHEMA.md` (214 Zeilen). Yama hat nach einer fundierten Fremdbewertung
+gefragt und eine bekommen; sie war an vier Stellen besser als mein Vorschlag, und die vier sind
+eingearbeitet.
+
+**Was die Bewertung besser hatte:**
+
+1. **Vollstaendigkeit ist eine eigene Beweisart.** *„29 statisch von 36“* ist kein
+   Korrektheitsfehler — die elf umgestellten Stellen waren richtig. Keine meiner fuenf Regeln
+   haette es gefangen. Jetzt ein eigener Prueftyp `coverage`.
+2. **`absence` allein genuegt nie** — *„keine statische Stelle mehr“* ist auch gruen, wenn die
+   Datei geloescht wird. Braucht einen `presence`/`behavioural`-Partner.
+3. **Mein Skript-Entwurf war naiv:** *„pruefe, ob die Zusage negativ formuliert ist“* heisst
+   Grammatik pruefen — trivial zu umgehen. Jetzt strukturierte Typen statt Textanalyse.
+4. **Wiederholungsfehler brauchen eine Barriere**, nicht noch einen Absatz. Fehlte mir komplett,
+   und ist der Befund von heute 18:15/19:11.
+
+**Was ich ergaenzt habe, weil die Bewertung an vier Stellen mit unseren eigenen Regeln kollidiert:**
+
+- **`expected_population: 36` ist selbst eine Behauptung.** Woher die 36? Aus meiner Messung beim
+  Schreiben — genau das, wovor die Zahl-Regel warnt und was gestern *„20 genannt, 34 gemessen“*
+  ergeben hat. Deshalb: **`population_command` statt `population`.** Die Grundgesamtheit ist ein
+  Befehl, der zum Pruefzeitpunkt neu misst, plus eine Zahl, die ausdruecklich Messung heisst.
+- **Kein Preflight-Gate als vierte Instanz.** Wir haben drei Rollen. Faehrt *der Planner* den
+  Preflight, ist er wieder im Pruefpfad. **Der Generator faehrt ihn selbst, vor der Uebergabe, und
+  die Ausgabe gehoert in den Bericht.** Er schuldet die Selbstpruefung ohnehin; ich lese nur, ob
+  sie beiliegt.
+- **`manual` ist ein Schlupfloch, wenn es unbewacht bleibt** — derselbe Mechanismus wie bei Spur B.
+  Bei P0/P1 stimmt **der Evaluator** zu, nicht ich; sonst genehmigt der Auftraggeber sich die
+  bequeme Pruefung selbst.
+- **`adversarial` nur bei den Spur-A-Ausloesern, nicht pauschal bei P1.** Bei einer Stilschicht
+  gibt es keinen Angreifer, der eine CSS-Klasse umgeht. Ein Pflichtfeld dort erzeugt Alibi-Tests
+  und entwertet den Typ dort, wo er zaehlt.
+
+**Und ein Punkt, den erst der heutige Abend geliefert hat:** der `scope` muss so geschnitten sein,
+dass *„fertig“* eine Ja/Nein-Frage ist. Mein *„ein Auftrag, drei Dateien“* hatte drei
+Grundgesamtheiten und damit keine Antwort — steht jetzt als Regel im Schema.
+
+**Aufwandsbremse eingebaut:** Spur A voller Kopf, **Spur B ein Kriterium mit Befehl**. Ein Schema,
+das vierzig Minuten Ausfuellen kostet, macht den Planner zum neuen Engpass — und es dockt an die
+**bestehende** Spur an, statt eine zweite Einstufung einzufuehren. Zwei Einstufungssysteme waeren
+eine zweite Wahrheit, dieselbe Krankheit, die wir im Code bekaempfen.
+
+**Naechster Schritt, aber NICHT jetzt (§14):** der Validator `scripts/auftrag-pruefen.sh` mit
+**fuenf** harten Pruefungen. **Ich kann ihn nicht bauen** — Cowork schreibt nur `docs/`, und das
+ist hier sogar richtig: sonst baute ich das Werkzeug, das meine eigene Arbeit prueft. Er wird ein
+eigener Posten **nach** AUF-38, und seine erste Bewaehrung ist eine **Rueckwaerts-Probe ohne
+Folgen**: das alte Blatt von Scheibe 3 durchschicken. **Findet er die Luecke nicht, die uns das
+NACHBESSERN eingebracht hat, taugt er nichts** — und das merken wir, bevor er im Weg steht.
+
+**Ehrliche Grenze, im Schema als eigener Abschnitt:** es macht Kriterien nicht richtig, nur
+pruefbar. Ein mechanisch sauberes, fachlich falsches Kriterium geht glatt durch. Der ganze Gewinn
+ist, **aus einem stillen Fehler einen lauten zu machen.**
