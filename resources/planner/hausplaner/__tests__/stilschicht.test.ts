@@ -305,6 +305,54 @@ test('Scheibe 4: das Namenskuerzel bleibt inline — seine Farben haben keinen T
   }
 });
 
+/**
+ * **Befund AUF38-S4-1 des Evaluators, behoben.**
+ *
+ * Von den zwei Rohwert-Ausnahmen in `HausplanerStudio` war nur das Namenskuerzel beidseitig
+ * verriegelt. Der **Toast** traegt `#1a262a` — gleichartige Ausnahme, **ohne jede Verriegelung**.
+ * Der Wirkungs-Test fing den Fall *„`1a262a` bekommt einen Token und bleibt trotzdem inline"* nicht:
+ * er verlangt nur *irgendeinen* Grund, und ein Rohwert bleibt ein Rohwert, auch wenn er inzwischen
+ * einen Namen hat.
+ *
+ * **Beide Richtungen, wie beim Namenskuerzel:** die Stelle ist noch inline **und** die Farbe steht
+ * weiterhin nicht in `T`. Bekommt sie einen Token, faellt der Test — und die Stelle gehoert in die
+ * Schicht.
+ */
+test('Scheibe 4: der Toast bleibt inline — seine Farbe hat keinen Token', () => {
+  const studio = readFileSync(join(hier, '../app/HausplanerStudio.tsx'), 'utf8');
+  assert.match(studio, /background: '#1a262a'/, 'die Stelle ist noch inline');
+  const werte = new Set<string>(Object.values(T).map(String));
+  assert.ok(!werte.has('#1a262a'),
+    '#1a262a hat inzwischen einen Token — dann gehoert der Toast in die Stilschicht');
+});
+
+/**
+ * **Und die Regel dahinter, damit die naechste Ausnahme nicht wieder einzeln vergessen wird.**
+ *
+ * Bisher stand je Ausnahme eine eigene Zusage — wer eine neue anlegt, muss daran denken, auch die
+ * Zusage zu schreiben. Genau das ist beim Toast unterblieben. Diese Zusage prueft die **Menge**:
+ * jede Rohfarbe, die in `HausplanerStudio` inline steht, muss in dieser Liste stehen, und keine
+ * davon darf einen Token haben.
+ */
+/**
+ * **Befund beim Anlegen dieser Zusage:** es sind nicht drei Rohfarben, sondern **vier**. `#3f464e`
+ * steht in den zwei Navi-Eintraegen (Z151/Z161) und war ebenfalls unverriegelt — dieselbe Klasse wie
+ * der Toast, nur hat sie niemand gezaehlt. **Keine dieser Zeilen wurde geaendert**; sie werden hier
+ * benannt, damit die Verriegelung vollstaendig ist.
+ */
+const STUDIO_ROHFARBEN = ['#dfe4ea', '#5b636d', '#1a262a', '#3f464e'] as const;
+
+test('Scheibe 4: JEDE inline gebliebene Rohfarbe ist benannt und keine hat einen Token', () => {
+  const studio = readFileSync(join(hier, '../app/HausplanerStudio.tsx'), 'utf8');
+  const gefunden = [...new Set([...studio.matchAll(/#[0-9a-fA-F]{6}\b/g)].map((m) => m[0]!.toLowerCase()))];
+  assert.deepEqual(gefunden.sort(), [...STUDIO_ROHFARBEN].sort(),
+    'eine Rohfarbe ist dazugekommen oder verschwunden — sie braucht ihre Verriegelung');
+  const werte = new Set<string>(Object.values(T).map(String));
+  for (const farbe of gefunden) {
+    assert.ok(!werte.has(farbe), `${farbe} hat inzwischen einen Token — dann gehoert die Stelle in die CSS`);
+  }
+});
+
 test('Scheibe 3: die zwei konstanten Stil-Objekte sind fort', () => {
   const fach = readFileSync(join(hier, '../app/FachFlaeche.tsx'), 'utf8');
   assert.ok(!fach.includes('const raster:'), '`raster` steht noch als Inline-Objekt da');
