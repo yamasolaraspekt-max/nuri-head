@@ -1897,6 +1897,300 @@ erreicht. Reproduzierbar: `git show 7da45f7c:…/FachFlaeche.tsx | grep -nE "col
 
 Ballbesitz: Generator (bzw. Planner fuer die Scope-Entscheidung).
 
+### AUF-38 Scheibe 3 NACHGEBESSERT (Code 01b9933e * Bundle 2798120f) - FachFlaeche - FREIGABE
+
+Re-Abnahme des nachgebesserten Stands. serviert==gemessen: Arbeitsbaum-Bundle == 2798120f, im
+Browser gefetcht js 1433071 B / Pruefsumme 126232895, css 3945 B / 368662 - identisch. Gates rein:
+tsc 0 * schema 0 * test 1300/0 * build 0; beide Artefakte byte-gleich zum frischen Build.
+
+Die NACHBESSERN ist aufgeloest - Punkt fuer Punkt:
+- Die statischen token-wertigen Inline-Stile, die ich blind bei 7da45f7c gemessen hatte (color:
+  T.muted/ink/faint in EingangFeld/AusgangZeile), sind fort: `grep -nE "color: T\.(muted|ink|faint)"`
+  auf 01b9933e ist leer. Sie liegen jetzt als .hp-fach-*-Klassen in der Stilschicht.
+- Der Test prueft jetzt die WIRKUNG, nicht die zwei Namen: "jeder verbliebene Inline-Stil in
+  FachFlaeche hat einen benannten Grund" + "es sind genau die drei benannten Ausnahmen".
+- GEGEN-BEWEIS mit Zaehnen: token-wertigen Inline-Stil in die /tmp-Kopie eingeschleust
+  (`<span style={{ color: T.muted }}>`) -> test:1 (rot), 2 Tests fallen (beide Wirkungs-Tests),
+  2 von 1300. Der Test faellt genau an der Wirkung, die vorher unbemerkt blieb.
+
+K9 headful (mir delegiert) - am VOLLSTAENDIGEN Stand gefahren, Dialog "Bad" real geoeffnet:
+- Die umgestellte Klasse traegt real: .hp-fach-spaltentitel ("Eingangsgroessen (5)") hat
+  element.style.color = (keiner), getComputedStyle.color = rgb(167,174,183) == #a7aeb7 ==
+  --hp-faint-Token; textTransform uppercase, letterSpacing aus der Klasse. Kein Cascade-Override.
+- Quelle == DOM == 3 Ausnahmen: FachFlaeche.tsx traegt in der Quelle genau 3 `style={{`
+  (Z.68 GESPERRT-Input aus gesperrtStil.ts=eine Wahrheit, Z.135 Overlay rgba ohne Token,
+  Z.146/148 Dialog-Box boxShadow ohne Token). Alle drei dokumentiert + testverriegelt.
+- Zweifel im DOM aufgeloest: 7 Inline-Stile im Dialog-Subtree, davon die GESPERRT-Inputs (eine
+  Quell-Zeile, N-fach gerendert) plus `?`-Spans des "in Entwicklung"-Badges. Diese Spans rendert
+  <ZustandBadge> (import Z.24 aus ./studioUi) - eigene Datei, ausserhalb Scheibe-3-Scope. Kein
+  Befund gegen FachFlaeche.
+
+NEBENBEFUND (nicht angefasst, zur Planner-Entscheidung): ZustandBadge in studioUi.tsx traegt
+statische token-wertige Inline-Stile (font-size 10px, color, background=faint). Im Geist von
+AUF-38, aber ausserhalb dieses Scheibe-3-Scopes - gehoert in eine eigene Scheibe/AUF, nicht hier
+nachgeschoben. Nur gemeldet.
+
+Urteil: FREIGABE. Die von mir gemeldete Unvollstaendigkeit ist behoben, der Test hat jetzt Zaehne,
+die Klassen greifen pixelwirksam. Meine NACHBESSERN hat eine echte Verbesserung getrieben.
+Ballbesitz: Planner.
+
+### AUF-38 Scheibe 4 (Code 37094c5b * Bundle 0d5cd975) - HausplanerStudio - NACHBESSERN
+
+Neues REGELWERK (00-REGELWERK.md, gilt ab 28.07. 23:30) angewandt: Votum je Kriterium, Wirkung
+statt Gestalt (R2), fehlender Beleg = nie erfuellt (R8), Ausnahmen nur beidseitig verriegelt (Sec.4).
+Blind gegen die committeten SHA gemessen, dann Bericht gelesen.
+
+K1 - Zahlenkorrektur 19->17: **ERFUELLT.** Selbst nachgezaehlt @ 37094c5b: 10 style={{ bleiben,
+Klassifikation 8 dynamisch (on? / st.farbe / navBreit / navZu? x3 / offeneHubs? / imExperte?) +
+2 Rohwert (L129 Namenskuerzel #dfe4ea/#5b636d, L205 Toast #1a262a). Die Planner-19 enthielt
+navBreit (=navZu?66:266, dynamisch) und den #3f464e-Navi-Eintrag (roh, ohnehin dynamisch) - beide
+nach Definition nicht in der Grundgesamtheit. Wer nachmisst, findet 17.
+
+K2 - 15 Klassen fuer 17 Stellen, von 27 bleiben 10: **ERFUELLT.** K3-Tests (jede Regel = vorheriger
+Inline-Wortlaut; jede Klasse wird benutzt) gruen; Diff 37094c5b: 17 Insertions/17 Deletions, 17x
+className="hp-. Toast-Zeile (L205) im Diff NICHT angefasst (bewusst inline belassen, keine Konversion).
+
+K3 - Gates: **ERFUELLT.** /tmp @ 37094c5b: tsc 0 * schema 0 * test 1302/1302/0 * test:dom 11/11 *
+build 0.
+
+K4 - serviert==gemessen / Bundle reproduzierbar: **ERFUELLT (Artefakt).** Frischer /tmp-Build byte-
+gleich zu 0d5cd975 (js + css, cmp -s). ANMERKUNG: der LIVE servierte Bundle ist NICHT 0d5cd975
+(css 7584 vs 5809) - der Arbeitsbaum ist vom Generator auf das Scheibe-5-Bundle vorgelaufen. Belegt
+als treue Teilmenge: alle 55 Scheibe-4-CSS-Regeln stehen verbatim im servierten Bundle (comm -23
+leer), Scheibe 5 hat nur 22 ergaenzt. Der headful-Render der Scheibe-4-Klassen ist damit treu.
+
+K5 - Gegen-Beweis mit Zaehnen: **ERFUELLT.** token-wertigen statischen Inline-Stil in /tmp
+eingeschleust (color: T.muted, padding: 8) -> test:1 rot, genau "Scheibe 4 (Wirkung): jeder
+verbliebene Inline-Stil hat einen Grund" faellt (1301/1). Der Wirkungs-Test faengt den Rueckfall.
+
+K6 - Sec.4-Ausnahmen beidseitig verriegelt: **NICHT ERFUELLT (Befund AUF38-S4-1).** Zwei Rohwert-
+Ausnahmen. Das Namenskuerzel (L129) ist beidseitig verriegelt (Test: "die Stelle ist noch inline"
++ #dfe4ea/#5b636d nicht in T). Der Toast (L205, background: '#1a262a') ist eine gleichartige
+Rohwert-Ausnahme, aber es gibt KEINE Verriegelung fuer ihn (grep 1a262a im Test leer; #1a262a hat
+keinen Token in T - selbst geprueft). Der Wirkungs-Test (Z232) laesst ihn generisch ueber den
+rohwert-Zweig durch, faengt aber NICHT den Fall "1a262a bekommt einen Token, bleibt aber inline"
+(die Stelle traegt den Rohwert weiter -> Test bleibt gruen). Genau diese Richtung sichert die
+Namenskuerzel-Verriegelung, und sie fehlt dem Toast. Nach Sec.4 ("nur testverriegelt in beide
+Richtungen") + R8 (fehlender Beleg = nie erfuellt) ist das Kriterium fuer die Toast-Stelle nicht
+erfuellt. VORSCHLAG (Planner entscheidet, Generator baut): einen Test analog zum Namenskuerzel -
+Toast noch inline (background: '#1a262a') UND #1a262a nicht in T; bekommt er einen Token, faellt
+der Test und die Stelle gehoert in die Schicht. Schweregrad: Konsistenz/Robustheit (kein
+Korrektheits-/Sicherheits-/Datenfehler) - Klassifizierung beim Planner.
+
+K7 - K9 headful mit ausgeloestem Toast: **TEILWEISE / NICHT VOLLSTAENDIG GEPRUEFT.** Klassen-Render
+treu belegt: getComputedStyle auf hp-studio-kopf (flex/center), hp-status (flex/center/13px),
+hp-title (800/14px), hp-bar (flex) - alle greifen, KEIN Inline-Override; CSS-Subset byte-gleich zu
+0d5cd975. ABER: Live-Screenshot + Toast-Ausloesung NICHT erfasst - der Arbeitsbaum wird vom
+Generator aktiv fuer Scheibe 5 umgebaut, der Renderer timeoutet zweimal (30s). Ich fake keine
+Sichtprobe. Zudem: der Toast wird nur ueber ConfigWizard-Uebernehmen ausgeloest - das ist die
+Scheibe-5-WIP-Flaeche. Vollstaendige headful-Sicht mit Toast gehoert in die Re-Abnahme, wenn der
+Baum stabil / das Scheibe-4-Bundle der servierte Stand ist. (Milderung: die Toast-Zeile ist
+diff-unveraendert und rein inline - bundle-unabhaengig; das Render-Risiko der Konversion liegt in
+der Shell, die treu belegt ist.)
+
+Selbst-gemeldeter Nebenbefund des Generators (im Commit, nicht mitgebaut, korrekt): Laufzeit-
+<style>-Injection .hp-studio :focus-visible mit ${T.accent} - ausserhalb der Grundgesamtheit (kein
+style={{). Zur Planner-Entscheidung als eigener Posten, nicht hier.
+
+Gesamtvotum: **NACHBESSERN** (K6 NICHT ERFUELLT + K7 offen). Ballbesitz: Generator (Toast-
+Verriegelung) bzw. Planner (Klassifizierung + Entscheid zu K7-Re-Abnahme). Kein Commit durch mich
+(Yamas Wort), kein Push/Tor-2 (Yama).
+
+### AUF-38 Nachzug Scheibe 2 (Code 5382cb3a * Bundle a2a83e72) - StartView - NACHBESSERN
+
+Nach REGELWERK, Votum je Kriterium. Blind gegen 5382cb3a gemessen.
+
+K1 Wirkung: **ERFUELLT.** 8 style={{ bleiben @ 5382cb3a. Selbst klassifiziert: 7 dynamisch
+(L73/171 hover?, L110/115/116 dominant?, L138 Spread ...grund [=die 29->28-Abweichung], L149 Spread
++ hover?) + 1 Rohwert-Ausnahme (L195 Hintergrund-Gradient mit #e9f4f2/#eef3e6, kein Token). Der
+Wirkungs-Test (L142) prueft die Wirkung mit dynamisch/rohwert-Regex.
+
+K2 22 Klassen/28 Stellen: **ERFUELLT.** K3-Tests (jede Regel = vorheriger Inline-Wortlaut; jede
+Klasse benutzt) gruen; die acht alten const-Stil-Objekte (wrap/kicker/h1/lead/themeHead/grid3/
+cardBase/icoBox) sind fort (Test L153).
+
+K3 Gates: **ERFUELLT.** /tmp @ 5382cb3a: tsc 0 * schema 0 * test 1305/1305/0 * dom 11/11 * build 0.
+
+K4 Byte-Identitaet: **ERFUELLT.** frischer Build byte-gleich zu a2a83e72 (js+css).
+
+K5 Zahlenabweichung 29->28: **ERFUELLT (Abweichung korrekt).** Der Generator meldete 28 statt 29;
+die Differenz ist L138 { ...grund, cursor: 'default' } - grund haengt an dominant, also dynamisch,
+nicht in der Grundgesamtheit. Selbst am Code bestaetigt. Zahl ist Messung, keine Bedingung (P-04).
+
+K6 serviert==gemessen + K9 headful: **ERFUELLT.** Arbeitsbaum-Bundle IST a2a83e72 (git diff leer,
+css 7584/711212, 77 Regeln identisch) - serviert==gemessen sauber. StartView ist immer sichtbar
+(kein Dialog/Toast). getComputedStyle auf die umgestellten Klassen: hp-start-kicker (uppercase/
+12.5px/#12807d=accent), hp-start-titel (34px/800), hp-start-lead (#697079=muted), hp-karte (block/
+16px), hp-karte-icon (grid), hp-start-raster3 (grid) - alle greifen, KEIN Inline-Override.
+
+K5b Gegen-Beweis mit Zaehnen: **ERFUELLT.** token-wertigen statischen Inline-Stil in /tmp
+eingeschleust (color: T.muted, padding: 8) -> 1 rot, "Nachzug Scheibe 2 (Wirkung)" faellt (1304/1).
+
+K7 Sec.4-Ausnahmen beidseitig verriegelt: **NICHT ERFUELLT (Befund AUF38-NZ2-1).** Die einzige reine
+Rohwert-Ausnahme (L195 Gradient #e9f4f2/#eef3e6) hat KEINE beidseitige Verriegelung (grep
+e9f4f2/eef3e6/gradient im Test leer). Sie geht nur ueber den generischen rohwert-Zweig des
+Wirkungs-Tests durch - der faengt aber NICHT "die Farbe bekommt einen Token, bleibt aber inline"
+(der Rohwert steht weiter in der Quelle -> Test bleibt gruen). Sec.4 verlangt aber ausdruecklich
+"faellt der Grund weg, geht der Test rot"; der Grund einer Rohwert-Ausnahme ist "kein Token" -
+genau diese Richtung fehlt. Nach Sec.4 + R8 nicht erfuellt.
+
+**WICHTIGER ALS DER EINZELBEFUND - R9 (an den PLANNER):** dies ist die ZWEITE Wiederholung derselben
+Fehlerklasse (Scheibe-4-Toast #1a262a, Befund AUF38-S4-1, hatte dieselbe Luecke). R9 verlangt bei
+der zweiten Wiederholung eine technische/strukturelle BARRIERE, nicht noch einen Einzel-Flicken.
+VORSCHLAG (Planner entscheidet, Generator baut): EIN generischer Test, der fuer JEDE verbliebene
+Rohwert-Inline-Stelle (aller Scheiben) prueft, dass ihre Farbwerte NICHT in T stehen - faellt rot,
+sobald ein Token entsteht. Das deckt Toast + Gradient + kuenftige Scheiben in einem und ist genau
+die Barriere-Form, die der Planner fuer Scheibe 5 mit scripts/statische-inline-stile.mjs ohnehin
+baut. Per-Scheibe-Namenskuerzel-Locks skalieren nicht. Schweregrad: Konsistenz/Robustheit (kein
+Korrektheits-/Sicherheits-/Datenfehler) - Klassifizierung beim Planner.
+
+Zwei vom Generator gemeldete Nebensachen bestaetigt: eine geerbte AUF-40-Zusage las cursor:'default'
+inline und ging rot, als der Zeiger nach .hp-start-nichtklick zog - prueft jetzt die Eigenschaft am
+richtigen Ort (Absicht unveraendert). Der AUF-56-Schatten rgba(28,50,55,.10) in L149 bleibt inline,
+liegt aber in einer dynamischen (hover?) Stelle - keine eigene Ausnahme.
+
+Gesamtvotum: **NACHBESSERN** (K7). Ballbesitz: Planner (R9-Barriere-Entscheid, deckt auch AUF38-S4-1)
++ Generator (Umsetzung nach Planner-Entscheid). Kein Commit durch mich (Yamas Wort), kein Push/Tor-2.
+
+### AUF-38 Messwerkzeug + generische Rohwert-Zusage (Code 42b88b85) - Spur A - NACHBESSERN
+
+Spur A (vom Planner nachtraeglich hochgestuft, zu Recht: das Skript erzeugt den abgeleiteten Wert,
+an dem jede weitere Scheibe gemessen wird). Blind gegen 42b88b85 gemessen, dann den Bericht gelesen.
+Geprueft am Commit; Arbeitsbaum public/ leer, Buendel unberuehrt (git status --porcelain public leer).
+
+K1 - (a) die Definition aus der Quittung als ausfuehrbares Skript: **NICHT ERFUELLT.**
+  Beleg des Generators: 316 Stellen / 197 offen, Eichung FachFlaeche 0 * Studio 0 * StartView 0 *
+  ConfigWizard 43/40/2/38.
+  Meine Methode: Skript selbst gefahren (Zahlen reproduziert, identisch). Danach eine zweite,
+  unabhaengige Fassung derselben Definition gebaut - mit Kommentar-Ueberspringung - und beide
+  ueber alle 13 Dateien gegeneinander gerechnet.
+  Mein Gegen-Beweis: derselbe Block mit und ohne Kommentar.
+    istStatisch("style={{ // die Farbe bleibt ...\n color: T.muted, fontSize: 13, }}") = false
+    istStatisch(derselbe Block ohne den Kommentar)                                     = true
+  Beobachtet: **Kommentare werden nirgends uebersprungen.** istStatisch entwertet Zeichenketten
+  (Zeile 111), aber keine Kommentare - der Kommentartext bleibt als Bezeichner stehen und faellt in
+  die Schlusspruefung /[A-Za-z_$]/. Jeder kommentierte Stil-Block gilt dadurch als "dynamisch".
+  **Live-Fundstelle:** resources/planner/hausplaner/app/dashboard/WerkzeugGruppenMenue.tsx:82 -
+  position/top/left/zIndex/marginTop, background: T.surface, border: `1px solid ${T.hair}`,
+  boxShadow: `0 10px 28px ${T.canvasWallGhost}`, padding/maxHeight/overflowY/maxWidth. **Nur Literale
+  und T.* - statisch und offen.** Das Werkzeug zaehlt sie nicht.
+  **Der Sollwert ist damit zu klein: 198 offen, nicht 197; WerkzeugGruppenMenue 8, nicht 7.**
+  Befund-ID: AUF38-MW-1 (P1).
+
+K2 - Klammerzaehlung statt "bis zum ersten }}": **NICHT ERFUELLT.**
+  Beleg des Generators: Test "die Klammerzaehlung schneidet verschachtelte Objekte nicht mitten
+  durch" + "eine Vorlagen-Zeichenkette mit } beendet den Block nicht" - beide gruen.
+  Meine Methode: nicht die zwei synthetischen Einzeiler, sondern **alle 316 Bloecke der echten
+  Insel** auf Abgrenzung geprueft (faengt mit style={{ an, endet auf }}, Klammerbilanz 0
+  ausserhalb von Zeichenketten).
+  Beobachtet: 316 geprueft, **1 nicht sauber abgegrenzt** - StartView.tsx:149, Bilanz +2, der
+  Blocktext laeuft bis zum **Dateiende** ("...</div>\n    </div>\n  );\n}\n").
+  Ursache selbst lokalisiert: StartView.tsx:155 traegt im Kommentar `„nah dran"` - ein einzelnes
+  ASCII-Anfuehrungszeichen. Der Zeichenketten-Scanner (Zeile 75) kennt keine Kommentare, geht in
+  den Zeichenketten-Modus und ueberspringt ab da alle Klammern.
+  Wirkung heute gemessen: Farbtreffer fuer StartView **7 statt 4** - die generische Zusage
+  schreibt Farben aus Z171/Z195 der Zeile 149 zu (in meiner Probe 2 sichtbar: Z149 meldete
+  #e9f4f2/#eef3e6, die zu Z195 gehoeren). **Falsch-rot ist erreichbar**, sobald irgendeine Farbe
+  hinter der Desynchronisation einen Token bekommt. Die Zahlen 316/197 bleiben davon unberuehrt
+  (gegengerechnet). Befund-ID: AUF38-MW-2 (P1).
+
+K3 - (b) Ausnahmen-Erkennung Rohwert UND GESPERRT_*: **ERFUELLT.**
+  Meine Methode: istAusnahme direkt gegen Rohwert, rgba, GESPERRT_ZEIGER und reinen Token gefahren.
+  Mein Gegen-Beweis: reiner Token ist KEINE Ausnahme -> false (sonst waere jede Token-Stelle
+  freigestellt und die Zusage stumm). Beobachtet: #1a262a true * rgba(...) true * GESPERRT_ZEIGER
+  true * T.ink false. Die Eichung stimmt: FachFlaeche 0 offen nur, weil Z68 GESPERRT_GRUND traegt.
+
+K4 - (c) generische Rohwert-Zusage ueber ALLE Dateien, mit Zaehnen: **ERFUELLT.**
+  Meine Methode: den echten Testlauf gegen eine **Kopie** der Insel gefahren (WURZEL ist relativ,
+  also cwd auf die Kopie) - identischer Testcode, identisches Skript, nur ein anderer Dateibaum.
+  Kontrolllauf ohne Eingriff: 8/8 gruen.
+  Mein Gegen-Beweis, vier Proben:
+    Probe 1  Token fuer #1a262a und #dfe4ea eingeschleust -> ROT, nennt HausplanerStudio.tsx:205
+             und :129 -> deckt **AUF38-S4-1**.
+    Probe 2  Token fuer #e9f4f2 und #eef3e6 eingeschleust -> ROT, nennt StartView.tsx:149 und :195
+             -> deckt **AUF38-NZ2-1**.
+    Probe 3  vorhandener Tokenwert #232a31 (T.ink) roh inline geschrieben -> ROT, nennt die Stelle.
+             (die Rueckfall-Richtung, die keine Einzelzusage abdeckt)
+    Probe 4  neue Rohfarbe #123457 OHNE Token -> GRUEN. Kein Fehlalarm.
+  Beobachtet: **die Barriere traegt.** R9 ist erfuellt - beide Befunde fallen mit EINEM Test, und
+  die Zusage faengt zusaetzlich den Rueckfall, den vorher nichts gefangen haette. Der Waechter
+  "die Zusage misst ueberhaupt etwas" ist der richtige Partner nach R2.
+
+K5 - Gates ohne Regression: **ERFUELLT.** Selbst gefahren, nicht uebernommen:
+  npm run test:hausplaner      EXIT 0   tests 1315  pass 1315  fail 0
+  npm run tsc:hausplaner       ohne Ausgabe (0 Fehler)
+  npm run schema:hausplaner:check  ohne Ausgabe (0)
+  npm run test:hausplaner:dom  tests 11  pass 11  fail 0
+  +8 gegenueber 1307 = genau die 8 Tests der neuen Datei.
+
+K6 - kein Produktivcode, Buendel unbewegt: **ERFUELLT.**
+  git show --name-status 42b88b85 = genau 2 Dateien, beide neu (scripts/statische-inline-stile.mjs,
+  __tests__/rohwertZusage.test.ts). git show --name-only 42b88b85 -- public: leer.
+  git status --porcelain public: leer. Die Sichtproben-Regel von 00:06 ist eingehalten.
+
+K7 - Messwert zum Nebenbefund studioUi: **ERFUELLT, und meine eigene Meldung war die ungenauere.**
+  Der Generator misst 2 Stellen / 0 statisch / 0 offen. Selbst nachgesehen: studioUi.tsx:44 liest
+  `color: z.fg, background: z.bg` aus ZUSTAND[zustand] - blanke Fremdbezeichner, nach der Definition
+  **dynamisch**. Meine Nebenbefund-Formulierung "statische token-wertige Inline-Stile" war
+  umgangssprachlich (die Werte stehen in einer Konstantentabelle), nach dem jetzt ausfuehrbaren
+  Massstab ist sie falsch. Seine Zahl steht, meine Wortwahl nicht. Klassifizierung bleibt beim Planner.
+
+K8 - Wirkung auf den Nachbesserungs-Beleg des Generators (00:2x, "Sollwert 20 in 5 Dateien"):
+  **Der Sollwert ist zu gross: 17, nicht 20.** Selbst gerechnet, dieselbe Extraktion einmal mit und
+  einmal ohne Kommentar-Ueberspringung:
+    Werkzeug                  20 Vorkommen
+    Kommentare uebersprungen  17 Vorkommen
+    NUR im Werkzeug (Scheintreffer): 3 - #dcebe9, #e9f4f2, #eef3e6, **alle drei an StartView.tsx:149**
+    NUR korrigiert (uebersehen): 0
+  Alle drei Scheintreffer sind Artefakte von AUF38-MW-2: der Block Z149 laeuft bis Dateiende und
+  sammelt deshalb die Farben von Z171 (#dcebe9) und Z195 (#e9f4f2/#eef3e6) ein.
+  **Damit ist auch seine Schlussfolgerung teilweise Artefakt:** *"#e9f4f2 steht auch in Z149"* und
+  *"#dcebe9 an drei Stellen (Z73, Z149, Z171)"* - Z149 ist in beiden Faellen keine echte Fundstelle.
+  Die zwei echten sind Z73 und Z171 bzw. Z195. **Seine Lehre bleibt trotzdem richtig**, nur nicht an
+  diesem Beispiel: `GuidedView.tsx` (4 Rohfarben) und `DreiDBereich.tsx` (4) tragen echte Rohfarben,
+  obwohl sie nie eine Scheibe gesehen haben. Das ist der belastbare Teil seines Befunds.
+
+K9 - Wirkung auf die beiden bereits abgenommenen Eichwerte: **keine.** Gegengerechnet mit der
+  korrigierten Fassung ueber alle 13 Dateien: einzige Abweichung ist WerkzeugGruppenMenue.tsx.
+  `StartView` bleibt 8/1/1/**0 offen**, `HausplanerStudio` 10/2/2/**0 offen**, `FachFlaeche`
+  3/2/2/**0 offen**. Die Eichung der drei abgenommenen Scheiben traegt also auch unter dem
+  korrigierten Massstab - der Fehler trifft nur eine Datei, die noch keine Scheibe gesehen hat.
+
+HEAD-Bewegung waehrend meiner Messung, gemeldet wie verlangt: `1f3dda52` -> `274d21d8`
+  (Planner-Tafelzeile + Regelwerk-§0b). `git diff --name-only 1e8648e9 274d21d8 -- resources scripts
+  public` ist **leer** - keine Quelldatei beruehrt. Ich habe beide P1-Befunde am **jetzigen** HEAD
+  erneut gefahren; sie reproduzieren unveraendert.
+
+Weitere Befunde, gemessen aber heute ohne Wirkung - zur Planner-Entscheidung:
+- **AUF38-MW-3 (P2):** `?` und `...` werden in istStatisch **vor** dem Entwerten der Zeichenketten
+  geprueft (Z110 vor Z111). `style={{ content: '?' }}` und `style={{ fontFamily: 'Foo ... Bar' }}`
+  gelten dadurch als dynamisch. Heute **0 Fundstellen** in der Insel (gemessen).
+- **AUF38-MW-4 (P2, gefaehrliche Richtung):** `${…}` wird zwar aufgeloest, der Ausdruck bleibt aber
+  **innerhalb der Backticks** und wird eine Zeile spaeter mit der Zeichenkette entwertet.
+  `style={{ width: \`${breite}px\` }}` gilt dadurch als **statisch** - ein dynamischer Stil wuerde
+  zur Umstellung in eine Klasse beauftragt. Der vorhandene Test prueft nur den Token-Fall
+  (`${T.hair}`) und geht deshalb gruen. Heute ohne Wirkung: der einzige Fall (studioUi.tsx:44
+  `${z.rand}`) ist ueber `color: z.fg` ohnehin dynamisch. Gemessen: 9 Vorlagen-Ausdruecke mit
+  fremdem Bezeichner, 8 davon durch das `?` der Ternaere gefangen, 1 durch den Rest des Blocks.
+- **AUF38-MW-5 (P3):** `T.a.b` gilt als dynamisch (Z114 nimmt nur eine Ebene). Keine Fundstelle.
+- **Reichweite (kein Befund, nur benannt):** die Grundgesamtheit sind `.tsx`. Von 114 `.ts`-Dateien
+  der Insel traegt genau eine `style={{` - `app/stil/tokenVariablen.ts`, die Token-Datei selbst.
+  Kein Loch, aber es steht nirgends geschrieben.
+
+Gesamtvotum: **NACHBESSERN.** Zwei P1 am Messwerkzeug selbst. FREIGABE ist ausgeschlossen, solange
+K1 und K2 auf NICHT ERFUELLT stehen. **Die Barriere (K4) traegt und ist das Wertvolle an diesem
+Commit** - was fehlt, ist die Verlaesslichkeit des Massstabs daneben. Der Planner hat den Anlass
+selbst benannt: *"wer einen findet, koennte zwei haben"* - es waren zwei, und beide haben dieselbe
+Wurzel: **Kommentare werden weder beim Abgrenzen noch beim Einstufen uebersprungen.**
+Ein Nachtrag von zwei Stellen (Kommentar-Ueberspringung in stilBloecke und in istStatisch) loest
+beide; die Wirkung ist an WerkzeugGruppenMenue.tsx:82 und StartView.tsx:149 nachpruefbar.
+**Vorschlag fuer die Zusage, die dann fehlt** (Planner entscheidet): eine Zusage, dass **jeder**
+Block sauber abgegrenzt ist - beginnt mit style={{, endet auf }}, Klammerbilanz 0 - ueber alle
+Dateien. Das ist die Gestalt-unabhaengige Form von K2 und faengt die naechste Desynchronisation
+selbst, ohne dass jemand sie vorher zaehlt.
+Ballbesitz: Planner (Klassifizierung + Nachtrag der Kriterien), danach Generator.
+Kein Commit durch mich (Yamas Wort), kein Push/Tor-2.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
