@@ -15281,3 +15281,39 @@ Maßstab — ist jetzt **dreimal** aufgetreten. Die Barriere wäre der Befehl se
 `population_command` steht und im Gate mitläuft. **Ich baue es auf Auftrag, nicht von selbst.**
 
 **Ballbesitz: Planner.**
+
+## PLANNER 28.07., 23:50 (CEST) — Die erste Quittung sagte TRÄGT NICHT, und sie hatte recht
+
+**Der erste Auftrag unter dem neuen Regelwerk wurde vom Generator zurueckgewiesen, bevor eine Zeile
+Code entstand.** Genau dafuer ist Schritt 2 gebaut.
+
+**Der Mangel:** *„statisch“* stand seit **drei Scheiben** ohne Definition in meinen Auftraegen. Der
+Generator: *„Wenn der Ausfuehrende den Massstab improvisiert, ist er im ersten Anlauf falsch“* — und
+er belegt es an sich selbst: **seine eigene erste Fassung der Definition war falsch** und lieferte
+`0 von 43`.
+
+**Ich uebernehme seine Definition unveraendert:**
+
+> Ein `style={{…}}` ist **statisch**, wenn sein Ausdruck ausschliesslich aus **Literalen** und
+> **`T.*`-Zugriffen** besteht: kein `?:`, kein Spread, kein Aufruf, kein anderer Bezeichner als `T`.
+> **Ausnahme (bleibt inline):** Rohwert ohne Token (`#…`/`rgba(`) **oder** Ein-Wahrheit-Modul
+> (`GESPERRT_*`).
+
+**Ich habe unabhaengig nachgeeicht — und meine Nachpruefung war falscher als seine.** Meine Fassung
+kannte nur Rohwerte als Ausnahme und gab `FachFlaeche` mit **1 offen** statt 0; `Z68` traegt
+`background: GESPERRT_GRUND`, also das Ein-Wahrheit-Modul aus AUF-71. **Seine Definition eicht alle
+drei abgenommenen Dateien auf 0, meine nicht.** *Ich habe geprueft, ob seine Definition taugt, und
+dabei gelernt, dass meine es nicht tat.*
+
+**Sollwert korrigiert: 38, nicht 43.** Und der Widerspruch, den er gefunden hat, ist der
+eigentliche Fund: **meine 43 und die 39 im AUF-38-Kopf waren beide richtig** — `grep -c` zaehlt
+Zeilen, ein Vorkommenszaehler zaehlt Vorkommen. **Die Zaehlweise stand nirgends. Das ist P-04 eine
+Ebene tiefer: nicht nur die Zahl veraltet, auch die Methode fehlt.**
+
+**Barriere nach R9 — die Fehlerklasse „improvisierter Massstab“ ist jetzt dreimal aufgetreten:**
+`scripts/statische-inline-stile.mjs` macht Definition und Ausnahmen ausfuehrbar und wird
+`population_command`. **Als Spur B vorgezogen** — es ist ein Messwerkzeug, kein Produktionscode.
+**Reihenfolge: erst das Skript, dann Scheibe 5 mit Sollwert 38.** Ohne Barriere waere Scheibe 5 der
+vierte Auftrag mit improvisiertem Massstab.
+
+**Ballbesitz: Generator** (Skript, Spur B). Stapel 2, `main` `057e6417`, 38 zurueck.
