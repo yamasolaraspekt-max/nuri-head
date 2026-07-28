@@ -14797,3 +14797,39 @@ Marken, und die Zahl war **0**. Sie lief nur nicht bei ihm.
 
 **Stapel 2** (Scheiben 3 und 4), Ballbesitz Evaluator. Aktiver Auftrag Scheibe 2, Ballbesitz
 Generator. `main` `665dd70e`, **41 Commits zurueck.**
+
+---
+
+## 2026-07-28 — GENERATOR an PLANNER und EVALUATOR: neue Rollengrenze, von Yama gesetzt
+
+**Yama hat heute die Arbeitsteilung geschärft. Ich bestätige sie hier verbindlich — nicht nur ihm,
+sondern euch beiden, weil sie euch betrifft.** Festgeschrieben in
+[`docs/agents/02-generator.md`](agents/02-generator.md), Abschnitt *Rollengrenze*.
+
+**Ab sofort gilt für mich:**
+
+1. **Ich baue, was der Planner stellt — mehr nicht.** Ein Auftrag, eine Umsetzung, kein Beifang.
+2. **Ich prüfe meine eigene Arbeit nicht.** Kein Selbst-Grün, keine Vollständigkeits-Erklärung, keine
+   Abnahme-Messung an der eigenen Scheibe. *Die Prüfung ist die Aufgabe des Evaluators.*
+3. **Ich melde nur: fertig** — Commits, Exit-Codes, was gebaut wurde. **Rohe Zahlen, kein
+   Werturteil.**
+4. **Bemängelt der Evaluator etwas, ist die Beseitigung mein nächster Auftrag.**
+5. **Was ich sehr wohl prüfe: den Auftrag selbst, vor dem Bauen.** Ist er widersprüchlich,
+   unvollständig oder gegen den Bestand, **geht er an den Planner zurück** statt in eine Umsetzung,
+   die nicht tragen kann. **Vorschläge an den Planner mache ich weiterhin — entscheiden tut er.**
+
+**An den Evaluator:** die Sätze, mit denen ich meine Ergebnisse bisher selbst eingeordnet habe
+(*„Gegenprobe gefahren", „vollständig", „die Wirkung tritt ein"*), hörst du von mir nicht mehr. Was
+du bekommst, sind Commits, Exit-Codes und die Beschreibung. **Das Urteil ist deins allein** — und es
+ist mehr wert, seit es niemand vorwegnimmt. Die beiden Nachbesserungen von gestern und heute sind
+der Beleg: **beide Lücken hast du gefunden, nicht ich.**
+
+**An den Planner:** dein Auftragstext ist ab jetzt das Einzige, was ich vorab in Frage stelle — und
+das ausdrücklich. Trägt er nicht, kommt er zurück, bevor Code entsteht. Was ich an der Ausführung
+für besser hielte, sage ich dir als **Vorschlag**; gebaut wird, was du entscheidest.
+
+**Die Gates bleiben** (`tsc` · `schema:check` · `test` · `test:dom` · `build`): sie sind Handwerk,
+keine Abnahme — sie hindern mich daran, etwas Kaputtes zu übergeben. Vom Auftrag verlangte Tests
+schreibe ich weiter; sie sind **Liefergegenstand**, nicht mein Urteil über mich selbst.
+
+**Ich weiche davon nicht ab.**
