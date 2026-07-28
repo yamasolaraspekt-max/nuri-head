@@ -22,6 +22,17 @@
  *
  * **Offen** = statisch und keine Ausnahme. *Das ist die Zahl, die eine Scheibe abarbeitet.*
  *
+ * ## Reichweite — was gezählt wird und was nicht
+ *
+ * **Die Grundgesamtheit sind die `.tsx`-Dateien der Insel** (Testverzeichnisse bleiben draußen).
+ * Von den **114** `.ts`-Dateien trägt **genau eine** ein `style={{` — `app/stil/tokenVariablen.ts`,
+ * die Token-Datei selbst. **Das ist kein Loch**, aber es stand nirgends geschrieben, und jeder
+ * Prüfende musste die Frage neu stellen. *(Benannt vom Evaluator, 29.07.)*
+ *
+ * Bewusst **keine Zusage** daraus: eine Zusage über die `.ts`-Dateien wäre eine Zusage über eine
+ * Menge, die niemand pflegt — sie ginge beim ersten neuen Token-Modul rot, ohne dass ein Fehler
+ * vorliegt. Ein Satz im Kopf ist hier die richtige Form.
+ *
  * ## Aufruf
  *
  * ```sh
@@ -171,11 +182,26 @@ export function rohfarben(text) {
  */
 export function istStatisch(rohtext) {
   const text = ohneKommentare(rohtext);
-  const aufgeloest = text.replace(/\$\{([^}]*)\}/g, '$1');
-  if (aufgeloest.includes('?') || aufgeloest.includes('...')) return false;
-  let kern = aufgeloest.replace(/'[^']*'|"[^"]*"|`[^`]*`/g, '0');
-  kern = kern.slice('style={{'.length, -2);
+
+  // **Vorlagen-Ausdrücke werden HERAUSGEHOBEN, nicht an Ort und Stelle aufgelöst.** *(Befund
+  // `AUF38-MW-4`.)* An Ort und Stelle aufgelöst blieb der Ausdruck innerhalb der Backticks und
+  // wurde eine Zeile später mit der Zeichenkette entwertet — eine Breite aus einem fremden
+  // Bezeichner galt dadurch als **statisch**. Das ist die gefährliche Richtung: `MW-1` und `MW-2`
+  // zählen zu wenig, `MW-4` zählt zu viel — und nur zu viel erzeugt falsche Arbeit, weil die
+  // Stelle dann zur Umstellung in eine Klasse beauftragt würde.
+  const ausdruecke = [...text.matchAll(/\$\{([^}]*)\}/g)].map((m) => m[1]).join(' ');
+  const ohneAusdruecke = text.replace(/\$\{[^}]*\}/g, '');
+
+  // **Zeichenketten werden ZUERST entwertet, dann wird auf `?` und `...` geprüft.** *(Befund
+  // `AUF38-MW-3`.)* In der umgekehrten Reihenfolge machte ein Fragezeichen oder eine Ellipse **im
+  // Text** eine statische Stelle dynamisch — ein Fragezeichen als Inhalt ist kein Ternär.
+  const entwertet = ohneAusdruecke.replace(/'[^']*'|"[^"]*"|`[^`]*`/g, '0');
+  if (`${entwertet} ${ausdruecke}`.includes('?')) return false;
+  if (`${entwertet} ${ausdruecke}`.includes('...')) return false;
+
+  let kern = entwertet.slice('style={{'.length, -2);
   kern = kern.replace(/[A-Za-z_$][\w$]*\s*:/g, '');   // Eigenschaftsnamen sind keine Bezeichner
+  kern = `${kern} ${ausdruecke}`;                     // die herausgehobenen Ausdrücke zählen mit
   kern = kern.replace(/\bT\.[A-Za-z0-9_]+/g, '');     // Token-Zugriffe sind erlaubt
   return !/[A-Za-z_$]/.test(kern);
 }

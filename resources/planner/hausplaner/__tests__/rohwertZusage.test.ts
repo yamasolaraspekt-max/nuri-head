@@ -135,11 +135,36 @@ test('AUF38-MW-2: ein einzelnes Anführungszeichen im Kommentar entgleist den Sc
 });
 
 test('AUF38-MW-1: ein Kommentar macht einen statischen Block nicht dynamisch', () => {
-  const mitKommentar = "style={{ // die Farbe bleibt, mit Ansage\n  color: T.muted, fontSize: 13 }}";
+  // **Beide Richtungen**, wie im Auftrag verlangt: `//` und `/* */`. Und beide Male gegen denselben
+  // Block ohne Kommentar geprüft — die Aussage ist „gleich eingestuft", nicht „zufällig statisch".
   const ohne = 'style={{ color: T.muted, fontSize: 13 }}';
+  const zeilenkommentar = "style={{ // die Farbe bleibt, mit Ansage\n  color: T.muted, fontSize: 13 }}";
+  const blockkommentar = 'style={{ /* die Farbe bleibt, mit Ansage */ color: T.muted, fontSize: 13 }}';
   assert.equal(istStatisch(ohne), true, 'Grundfall');
-  assert.equal(istStatisch(mitKommentar), true,
-    'derselbe Block mit Kommentar — der Kommentartext stand als Bezeichner in der Prüfung');
+  assert.equal(istStatisch(zeilenkommentar), istStatisch(ohne), '// verändert die Einstufung');
+  assert.equal(istStatisch(blockkommentar), istStatisch(ohne), '/* */ verändert die Einstufung');
+});
+
+test('AUF38-MW-4: ein Vorlagen-Ausdruck mit fremdem Bezeichner ist DYNAMISCH', () => {
+  // Die gefährliche Richtung. MW-1 und MW-2 zählten zu wenig; dieser hier zählt zu **viel** — und
+  // nur zu viel erzeugt falsche Arbeit: die Stelle wäre zur Umstellung in eine Klasse beauftragt
+  // worden, obwohl sie eine Messung trägt.
+  assert.equal(istStatisch('style={{ width: `${breite}px` }}'), false,
+    'der Ausdruck wurde mit der Vorlagen-Zeichenkette entwertet und verschwand aus der Prüfung');
+  // Der Token-Fall muss weiterhin statisch bleiben — sonst hätte die Korrektur nur die Seite
+  // gewechselt, statt zu unterscheiden.
+  assert.equal(istStatisch('style={{ border: `1px solid ${T.hair}`, gap: 4 }}'), true,
+    'ein Token im Vorlagen-Ausdruck ist erlaubt');
+});
+
+test('AUF38-MW-3: `?` und `...` IM Text machen eine Stelle nicht dynamisch', () => {
+  // Geprüft wurde vor dem Entwerten der Zeichenketten — ein Fragezeichen als Inhalt galt dadurch
+  // als Ternär.
+  assert.equal(istStatisch("style={{ content: '?' }}"), true, 'ein Fragezeichen ist kein Ternär');
+  assert.equal(istStatisch("style={{ fontFamily: 'Foo ... Bar' }}"), true, 'eine Ellipse ist kein Spread');
+  // Gegenrichtung: die echten Fälle bleiben dynamisch.
+  assert.equal(istStatisch('style={{ color: an ? T.ink : T.muted }}'), false, 'echter Ternär');
+  assert.equal(istStatisch("style={{ ...grund, cursor: 'default' }}"), false, 'echter Spread');
 });
 
 test('AUF38-MW-1: die Fundstelle WerkzeugGruppenMenue Z82 wird als statisch gezählt', () => {
