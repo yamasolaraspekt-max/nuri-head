@@ -96,6 +96,60 @@ test('Scheibe 2: kein `!important` und keine Medienabfrage', () => {
   assert.doesNotMatch(quelle, /@media/);
 });
 
+const NACHZUG2: ReadonlyArray<[string, string[]]> = [
+  ['.hp-start-nichtklick', ['cursor: default']],
+  ['.hp-start-kopfzeile', ['display: flex', 'align-items: center', 'gap: 8px', 'flex-wrap: wrap']],
+  ['.hp-start-name', ['font-size: 15.5px', 'font-weight: 700']],
+  ['.hp-start-zeile', ['font-size: 13px', 'color: var(--hp-muted)', 'margin-top: 4px', 'line-height: 1.45']],
+  ['.hp-start-fussnote', ['font-size: 12px', 'color: var(--hp-faint)', 'margin-top: 6px', 'line-height: 1.4']],
+  ['.hp-start-eng', ['min-width: 0']],
+  ['.hp-start-rubrik', ['font-size: 11.5px', 'font-weight: 700', 'letter-spacing: .1em', 'text-transform: uppercase', 'color: var(--hp-accent)']],
+  ['.hp-start-dehnt', ['flex: 1 1 auto']],
+  ['.hp-start-marke', ['display: inline-block', 'font-size: 11px', 'font-weight: 700', 'letter-spacing: .05em', 'text-transform: uppercase', 'color: var(--hp-accent)', 'margin-bottom: 2px']],
+  ['.hp-start-bild', ['width: 40px', 'height: 40px', 'border-radius: 11px', 'margin-bottom: 12px']],
+  ['.hp-start-kartentitel', ['font-size: 14px', 'font-weight: 700']],
+  ['.hp-start-chips', ['display: flex', 'flex-wrap: wrap', 'gap: 8px', 'margin-top: 16px']],
+  ['.hp-start-chip', ['font-size: 12.5px', 'font-weight: 600', 'color: var(--hp-accent-ink)', 'background: var(--hp-accent-soft)', 'border-radius: 999px', 'padding: 6px 13px', 'cursor: pointer']],
+  ['.hp-start-hinweiskasten', ['margin-top: 24px', 'background: var(--hp-surface)', 'border-radius: 14px', 'padding: 14px 16px', 'box-shadow: var(--hp-schatten-flach)', 'max-width: 520px']],
+  ['.hp-start-hinweistitel', ['font-size: 13.5px', 'font-weight: 700']],
+  ['.hp-start-hinweistext', ['font-size: 12.5px', 'color: var(--hp-muted)', 'margin-top: 4px']],
+  ['.hp-start-abstand', ['margin-top: 24px']],
+  ['.hp-start-reihe', ['display: flex', 'gap: 12px', 'margin-top: 12px', 'flex-wrap: wrap']],
+  ['.hp-start-abschnitt', ['margin-top: 40px']],
+  ['.hp-start-abschnitttitel', ['font-size: 16px', 'font-weight: 700']],
+  ['.hp-start-abschnittzusatz', ['font-size: 13px', 'color: var(--hp-faint)']],
+  ['.hp-start-schild', ['margin-top: 34px', 'display: inline-flex', 'align-items: center', 'gap: 8px', 'background: var(--hp-accent-soft)', 'color: var(--hp-accent-ink)', 'border-radius: 999px', 'padding: 6px 14px', 'font-size: 12.5px', 'font-weight: 600']],
+];
+
+test('K3 Nachzug Scheibe 2: jede Regel traegt genau die Werte, die vorher inline standen', () => {
+  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const [klasse, deklarationen] of NACHZUG2) {
+    const block = ohneKommentare.match(new RegExp(`\\${klasse} \\{([^}]*)\\}`));
+    assert.ok(block, `${klasse} fehlt in der CSS`);
+    for (const d of deklarationen) {
+      assert.ok(block[1]!.includes(d), `${klasse}: „${d}" fehlt`);
+    }
+  }
+});
+
+test('Nachzug Scheibe 2: jede Klasse wird auch benutzt', () => {
+  const sv = readFileSync(join(hier, '../app/StartView.tsx'), 'utf8');
+  for (const [klasse] of NACHZUG2) {
+    assert.ok(sv.includes(klasse.slice(1)), `${klasse} steht in der CSS, aber niemand benutzt sie`);
+  }
+});
+
+test('Nachzug Scheibe 2 (Wirkung): jeder verbliebene Inline-Stil in StartView hat einen Grund', () => {
+  const sv = readFileSync(join(hier, '../app/StartView.tsx'), 'utf8');
+  const bloecke = [...sv.matchAll(/style=\{\{([\s\S]*?)\}\}/g)].map((m) => m[1]!);
+  assert.ok(bloecke.length > 0, 'gar kein Inline-Stil mehr? Dann ist die Zusage stumpf geworden');
+  const dynamisch = /\?|hover|dominant|grund|\bp\.|\bk\.|\bt\./;
+  const rohwert = /#[0-9a-fA-F]{3,8}\b|rgba?\(/;
+  const ohneGrund = bloecke.filter((b) => !dynamisch.test(b) && !rohwert.test(b));
+  assert.deepEqual(ohneGrund, [],
+    `Inline-Stile ohne Grund (nur Token und Literale — gehoeren in die Stilschicht):\n${ohneGrund.join('\n---\n')}`);
+});
+
 test('Scheibe 2: `StartView` traegt keine statischen Stil-Objekte mehr', () => {
   const start = readFileSync(join(hier, '../app/StartView.tsx'), 'utf8');
   for (const name of ['const wrap:', 'const kicker:', 'const h1:', 'const lead:',

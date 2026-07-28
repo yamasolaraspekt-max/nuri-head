@@ -53,14 +53,14 @@ function Karte({ ico, titel, desc, onClick, grund }: { ico: string; titel: strin
   const [hover, setHover] = React.useState(false);
   if (!onClick) {
     return (
-      <div className="hp-karte" style={{ cursor: 'default' }} title={grund}>
+      <div className="hp-karte hp-start-nichtklick" title={grund}>
         <span className="hp-karte-icon"><Ikon inhalt={ico} size={26} /></span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-          <div style={{ fontSize: 15.5, fontWeight: 700 }}>{titel}</div>
+        <div className="hp-start-kopfzeile">
+          <div className="hp-start-name">{titel}</div>
           <ZustandBadge zustand="in_entwicklung" />
         </div>
-        <div style={{ fontSize: 13, color: T.muted, marginTop: 4, lineHeight: 1.45 }}>{desc}</div>
-        {grund && <div style={{ fontSize: 12, color: T.faint, marginTop: 6, lineHeight: 1.4 }}>{grund}</div>}
+        <div className="hp-start-zeile">{desc}</div>
+        {grund && <div className="hp-start-fussnote">{grund}</div>}
       </div>
     );
   }
@@ -73,8 +73,8 @@ function Karte({ ico, titel, desc, onClick, grund }: { ico: string; titel: strin
       style={{ transform: hover ? 'translateY(-3px)' : 'none', boxShadow: hover ? T.schattenGehoben : T.schattenFlach, borderColor: hover ? '#dcebe9' : 'transparent', transition: 'transform .14s, box-shadow .14s, border-color .14s' }}
     >
       <span className="hp-karte-icon"><Ikon inhalt={ico} size={26} /></span>
-      <div style={{ fontSize: 15.5, fontWeight: 700 }}>{titel}</div>
-      <div style={{ fontSize: 13, color: T.muted, marginTop: 4, lineHeight: 1.45 }}>{desc}</div>
+      <div className="hp-start-name">{titel}</div>
+      <div className="hp-start-zeile">{desc}</div>
     </div>
   );
 }
@@ -110,14 +110,14 @@ function ProjektKachel({ z, dominant }: { z: ProjektEintrag; dominant: boolean }
       <span style={{ width: dominant ? 46 : 38, height: dominant ? 46 : 38, borderRadius: dominant ? 13 : 11, background: T.accentSoft, color: T.accentInk, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>
         <Ikon inhalt={HAUS_ZEICHEN} size={dominant ? 24 : 20} />
       </span>
-      <div style={{ minWidth: 0 }}>
-        {dominant && <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: T.accent }}>Weiterarbeiten</div>}
+      <div className="hp-start-eng">
+        {dominant && <div className="hp-start-rubrik">Weiterarbeiten</div>}
         <div style={{ fontSize: dominant ? 17 : 13.5, fontWeight: dominant ? 800 : 700, letterSpacing: dominant ? '-.01em' : undefined, marginTop: dominant ? 2 : 0 }}>{z.name}</div>
         <div style={{ fontSize: dominant ? 12.5 : 11.5, color: T.muted, marginTop: dominant ? 2 : 0 }}>
           {dominant ? [zeile, 'zuletzt bearbeitet'].filter(Boolean).join(' · ') : zeile}
         </div>
       </div>
-      {dominant && <span style={{ flex: '1 1 auto' }} />}
+      {dominant && <span className="hp-start-dehnt" />}
       {dominant && <Ikon inhalt='<path d="M5 12h14M13 6l6 6-6 6"/>' size={20} />}
     </>
   );
@@ -170,18 +170,18 @@ function HubKarte({ f, onKonfigurator }: { f: FachHub; onKonfigurator: Props['on
       className="hp-karte"
       style={{ transform: hover ? 'translateY(-3px)' : 'none', boxShadow: hover ? T.schattenGehoben : T.schattenFlach, borderColor: hover ? '#dcebe9' : 'transparent', transition: 'transform .14s, box-shadow .14s, border-color .14s' }}
     >
-      {f.hub && <span style={{ display: 'inline-block', fontSize: 11, fontWeight: 700, letterSpacing: '.05em', textTransform: 'uppercase', color: T.accent, marginBottom: 2 }}>Hub</span>}
-      <span className="hp-karte-icon" style={{ width: 40, height: 40, borderRadius: 11, marginBottom: 12 }}><Ikon inhalt={f.icon} size={20} /></span>
-      <div style={{ fontSize: 14, fontWeight: 700 }}>{f.name}</div>
-      <div style={{ fontSize: 13, color: T.muted, marginTop: 4, lineHeight: 1.45 }}>{f.desc}</div>
+      {f.hub && <span className="hp-start-marke">Hub</span>}
+      <span className="hp-karte-icon hp-start-bild"><Ikon inhalt={f.icon} size={20} /></span>
+      <div className="hp-start-kartentitel">{f.name}</div>
+      <div className="hp-start-zeile">{f.desc}</div>
       {f.sub && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
+        <div className="hp-start-chips">
           {f.sub.map((s) => (
             <span
               key={s[0]} role="button" tabIndex={0}
               onClick={() => onKonfigurator(s[0], s[1])}
               onKeyDown={(e) => { if (istAusloeser(e)) onKonfigurator(s[0], s[1]); }}
-              style={{ fontSize: 12.5, fontWeight: 600, color: T.accentInk, background: T.accentSoft, borderRadius: 999, padding: '6px 13px', cursor: 'pointer' }}
+              className="hp-start-chip"
             >{s[0]}</span>
           ))}
         </div>
@@ -204,14 +204,14 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
             sie leer ist, sagt die Fläche das, statt Beispiele zu zeigen, die wie Projekte aussehen.
             **Die echte Liste braucht eine Route und ist Teil B** (bei Yama). */}
         {projekte.length === 0 ? (
-          <div style={{ marginTop: 24, background: T.surface, borderRadius: 14, padding: '14px 16px', boxShadow: T.schattenFlach, maxWidth: 520 }}>
-            <div style={{ fontSize: 13.5, fontWeight: 700 }}>Noch kein Projekt geöffnet.</div>
-            <div style={{ fontSize: 12.5, color: T.muted, marginTop: 4 }}>
+          <div className="hp-start-hinweiskasten">
+            <div className="hp-start-hinweistitel">Noch kein Projekt geöffnet.</div>
+            <div className="hp-start-hinweistext">
               Ein Vorhaben beginnt unten mit <b>Hausplaner</b> — oder mit einem der Fachplaner, die auch ohne Gebäude laufen.
             </div>
           </div>
         ) : (
-        <div style={{ marginTop: 24 }}>
+        <div className="hp-start-abstand">
           {/* AUF-66 — **die dominante Handlung, und sie steht ganz oben.**
               AUF-78 hat die Kacheln bewusst tot gelassen und die Frage zurückgegeben, wohin ein
               Klick führen soll. Sie ist entschieden: auf die Objektseite genau dieses Projekts.
@@ -220,7 +220,7 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
               waren, nur eben erreichbar. */}
           <ProjektKachel z={projekte[0]} dominant />
           {projekte.length > 1 && (
-            <div style={{ display: 'flex', gap: 12, marginTop: 12, flexWrap: 'wrap' }}>
+            <div className="hp-start-reihe">
               {projekte.slice(1).map((z) => <ProjektKachel key={z.id} z={z} dominant={false} />)}
             </div>
           )}
@@ -228,8 +228,8 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
         )}
 
         {/* Projekt */}
-        <div style={{ marginTop: 40 }}>
-          <div className="hp-start-themenkopf"><span style={{ fontSize: 16, fontWeight: 700 }}>Projekt</span><span style={{ fontSize: 13, color: T.faint }}>Das komplette Vorhaben, alle Gewerke</span></div>
+        <div className="hp-start-abschnitt">
+          <div className="hp-start-themenkopf"><span className="hp-start-abschnitttitel">Projekt</span><span className="hp-start-abschnittzusatz">Das komplette Vorhaben, alle Gewerke</span></div>
           <div className="hp-start-raster3">
             {/* AUF-40 Teil A — **drei Karten, drei Ziele.** Vorher riefen alle drei `onGuided(1)`
                 auf: drei Versprechen, ein Ziel. „Weiterarbeiten" öffnete kein Bestandsprojekt,
@@ -250,13 +250,13 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
           </div>
         </div>
 
-        <div style={{ marginTop: 34, display: 'inline-flex', alignItems: 'center', gap: 8, background: T.accentSoft, color: T.accentInk, borderRadius: 999, padding: '6px 14px', fontSize: 12.5, fontWeight: 600 }}>
+        <div className="hp-start-schild">
           <Ikon inhalt='<path d="M20 6L9 17l-5-5"/>' size={16} />Fachplaner — jeder läuft autark, ohne Gebäude. Fenster, Türen, Treppen und Heizkörper setzt der Experte ins Gebäude; sonst entsteht eine Datei zum Herunterladen
         </div>
 
         {/* Fachplaner */}
-        <div style={{ marginTop: 40 }}>
-          <div className="hp-start-themenkopf"><span style={{ fontSize: 16, fontWeight: 700 }}>Fachplaner</span><span style={{ fontSize: 13, color: T.faint }}>Direkt loslegen — ein Raum, ein Bauteil oder eine Anlage genügt</span></div>
+        <div className="hp-start-abschnitt">
+          <div className="hp-start-themenkopf"><span className="hp-start-abschnitttitel">Fachplaner</span><span className="hp-start-abschnittzusatz">Direkt loslegen — ein Raum, ein Bauteil oder eine Anlage genügt</span></div>
           <div className="hp-start-raster3">
             {FACH.map((f) => <HubKarte key={f.name} f={f} onKonfigurator={onKonfigurator} />)}
           </div>

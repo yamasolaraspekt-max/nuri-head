@@ -100,7 +100,12 @@ test('eine Karte ohne Ziel ist KEINE Schaltfläche mehr', () => {
   assert.doesNotMatch(ohneZiel[0], /role="button"/);
   assert.doesNotMatch(ohneZiel[0], /tabIndex/);
   assert.doesNotMatch(ohneZiel[0], /onKeyDown/);
-  assert.match(ohneZiel[0], /cursor: 'default'/);
+  // **Nachgezogen im Nachzug Scheibe 2:** der Zeiger stand inline, jetzt traegt ihn die Klasse
+  // `.hp-start-nichtklick`. Die Absicht ist unveraendert — eine ziellose Karte sieht nicht
+  // anklickbar aus. Geprueft wird die Eigenschaft dort, wo sie heute wohnt.
+  assert.match(ohneZiel[0], /hp-start-nichtklick/);
+  const css = readFileSync(new URL('../hausplaner.css', import.meta.url), 'utf8');
+  assert.match(css, /\.hp-start-nichtklick \{[^}]*cursor: default/);
 });
 
 test('die Karte MIT Ziel ist unverändert bedienbar', () => {
