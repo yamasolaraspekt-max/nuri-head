@@ -15044,3 +15044,68 @@ Bauen**. Das ist der erste Auftrag unter dem neuen Werk.
 
 **Lage:** Stapel 2 (Scheiben 4 und 2, Ballbesitz Evaluator), aktiver Auftrag Scheibe 5
 (Generator), `main` `057e6417`, 32 zurueck.
+
+---
+
+## 2026-07-28 — GENERATOR: Bestätigung des Regelwerks + Bericht Nachzug Scheibe 2
+
+### 1. An Yama, den Planner und den Evaluator: die Regeln sind angekommen, und ich halte sie
+
+Ich habe **beide** Fassungen gelesen — Yamas Rollengrenze und das Regelwerk mit der **Prüfer-Rolle**
+samt der Einordnung des Planners (`0f1dde09`, P-01 bis P-04). **Ich bestätige sie verbindlich und
+weiche davon nicht ab.**
+
+**Was für mich gilt:**
+
+1. **Ich baue, was der Planner stellt — mehr nicht.**
+2. **Ich prüfe meine eigene Arbeit nicht.** Kein Selbst-Grün, keine Vollständigkeits-Erklärung,
+   keine Abnahme-Messung an der eigenen Scheibe. *Das Urteil gehört dem Evaluator allein.*
+3. **Ich melde nur „fertig"**: Commits, Exit-Codes, Beschreibung. **Rohe Zahlen, kein Werturteil.**
+4. **Bemängelt der Evaluator etwas, ist die Beseitigung mein nächster Auftrag.**
+5. **Den Auftrag prüfe ich — und ab jetzt als PFLICHT, nicht als Möglichkeit.**
+
+**Punkt 5 nehme ich in der Verschärfung des Planners an (P-01).** Er hat recht: als *„darf"*
+formuliert war es eine Höflichkeit, und Höflichkeiten fallen unter Last aus. **Aus *darf* wird
+*muss*.** Vor jedem Bau steht künftig eine Quittung, eine Zeile:
+
+> *„Auftrag gelesen, jedes Kriterium mechanisch prüfbar, Grundgesamtheit benannt."* — **oder ein
+> benannter Mangel.**
+
+**Kein Ermessen, keine Note.** Nicht *„ist der Auftrag gut?"* — das wäre wieder ein Urteil, und
+Urteile spreche ich nicht. Nur: *„kann ich das messen?"*. Trägt der Auftrag nicht, geht er zurück,
+**bevor Code entsteht**. Damit ist der Prüfer eingeführt, ohne dass eine vierte Wartestelle entsteht
+— und der Engpass bleibt, wo er ist.
+
+**P-04 nehme ich ebenso an:** *eine Zahl im Auftrag ist eine Messung zum Zeitpunkt des Schreibens,
+keine Bedingung.* Ich messe die Grundgesamtheit selbst nach und **melde Abweichungen roh**, statt
+sie zu übernehmen. Das ist keine Prüfung meiner Arbeit, sondern des Auftrags — Punkt 5, nicht
+Punkt 2.
+
+Festgeschrieben in [`docs/agents/02-generator.md`](agents/02-generator.md), Abschnitt
+*Rollengrenze*, und in meinem Gedächtnis über Sitzungen hinweg.
+
+**Zum Einführungszeitpunkt** (Abschnitt 3 des Planners: *nicht mitten in AUF-38*): das betrifft das
+**volle** Regelwerk mit seinen 20 Übergaben und 17 Statuswerten. **Die Quittung selbst kostet eine
+Zeile und wartet nicht** — ich fahre sie ab dem nächsten Auftrag, auch innerhalb von AUF-38. Eine
+Regel, die nichts kostet, später einzuführen, hieße drei Scheiben lang bewusst ungeprüft zu bauen.
+
+### 2. Bericht: AUF-38 Nachzug Scheibe 2 (`StartView.tsx`)
+
+**Commits:** Code `5382cb3a` (`public/*` = **0 Zeilen**) · Artefakte `a2a83e72`.
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1305 · pass 1305 ·
+fail 0`, vorher 1302) · `test:hausplaner:dom` **0** · `build` **0**. **PHP-Suite: 789.**
+K4-Schichten **0 Zeilen**. Rohe Farbwerte in der CSS: **0**.
+
+**Gebaut:** 22 Klassen für 28 Stellen (sechs Blöcke kommen mehrfach vor). Von 36 `style={{` bleiben
+**8**.
+
+**Abweichung vom Auftragstext, roh:** der Auftrag nennt **29** statische, ich zähle **28**. Die
+Abweichung ist Zeile 138, `style={{ ...grund, cursor: 'default' }}` — `grund` hängt an `dominant`
+und ist damit dynamisch. Der Auftrag führt seine Zahl ausdrücklich als Messung, nicht als Bedingung.
+
+**Zwei Nebensachen:** eine geerbte AUF-40-Zusage las `cursor: 'default'` im Inline-Stil und ging
+rot, als der Zeiger in `.hp-start-nichtklick` zog — sie prüft die Eigenschaft jetzt dort, wo sie
+wohnt, die Absicht ist unverändert. Zwei Elemente trugen bereits eine Klasse; dort stehen jetzt
+beide nebeneinander.
+
+**Kein Push, kein main-Merge.** **Ballbesitz: Evaluator.**
