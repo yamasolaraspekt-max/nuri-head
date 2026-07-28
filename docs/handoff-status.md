@@ -15543,3 +15543,39 @@ haben.
 
 *Zur Datei: dieser Commit setzt auch das darüberstehende, noch nicht committete Votum des Evaluators
 unverändert mit — so, wie der Planner es beim letzten Mal gehalten hat. Sein Text ist unangetastet.*
+
+## PLANNER 29.07., 00:15 (CEST) — Barriere steht. Und ich habe die Spur falsch gesetzt
+
+**Das Messwerkzeug ist gebaut** (`42b88b85`): die Definition aus der Quittung als ausfuehrbares
+Skript, Ausnahmen-Erkennung fuer Rohwert **und** `GESPERRT_*`, und **eine generische Zusage ueber
+alle Dateien der Insel** — keine inline gebliebene Rohfarbe darf einen Token in `T` haben. Tests
+1307 auf **1315**, Gates 0/0/0/0, PHP 789. **Das Buendel hat er nicht bewegt** — die
+Sichtproben-Regel von 00:06 ist befolgt, neun Minuten nachdem sie geschrieben wurde.
+
+**Die erste vollstaendige Messung der Insel liegt damit vor: 316 Stellen, davon 197 offen.** Bisher
+hatten wir nur Schaetzungen (331 im Auftrag, 383 in meiner Grobzaehlung). **Der Restumfang von
+AUF-38 ist ab jetzt gemessen, nicht geschaetzt.**
+
+### Mein Fehler: die Spur war falsch
+
+Ich habe das Werkzeug als **Spur B** beauftragt, mit der Begruendung *„ein Messwerkzeug, kein
+Produktionscode“*. **Das ist falsch.** Die Spur-Regel nennt **abgeleitete Werte** als Ausloeser fuer
+Spur A — und dieses Skript **erzeugt** ab jetzt den Wert, an dem jede weitere Abnahme gemessen wird.
+**Misst es falsch, sind alle folgenden Voten falsch.**
+
+**Nachtraeglich auf Spur A hochgestuft.** Hochstufen ist jederzeit erlaubt, herunterstufen nie —
+die Regel greift auch, wenn der Planner sich selbst korrigiert. Es geht in den Abnahme-Stapel
+(**Stapel 3**), statt vom Generator selbst abgehakt zu werden.
+
+**Der Anlass, es besonders genau zu pruefen, kommt von ihm selbst:** *„Ein Fehler im eigenen
+Werkzeug gefunden und behoben: der Block war um ein Zeichen zu lang (`slice j+2` statt `j+1`). Der
+Test mit der Vorlagen-Zeichenkette hat ihn gefangen.“* **Wer einen findet, koennte zwei haben** —
+und ein Messwerkzeug, das um ein Zeichen daneben liegt, verschiebt jede Zahl, die es je liefert.
+
+**Zuruf an den Evaluator** (§15): Klammerzaehlung gegen verschachtelte Objekte, Vorlagen-Zeichen-
+ketten und `${…}` selbst gegenpruefen · Eichung nachvollziehen (`FachFlaeche 0 · Studio 0 ·
+StartView 0 · ConfigWizard 43/40/2/38`) · **und die generische Zusage auf Zaehne pruefen**: einer
+inline gebliebenen Rohfarbe einen Token in `T` geben ⇒ muss rot werden.
+
+**Stapel 3**, `main` `057e6417`, 43 zurueck. Danach loesen beide Nachbesserungen (`AUF38-S4-1`,
+`AUF38-NZ2-1`) mit **einem** Test, dann Re-Abnahme bei stabilem Baum, **dann erst** Scheibe 5.
