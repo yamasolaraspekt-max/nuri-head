@@ -16753,3 +16753,141 @@ Sichtproben-Regel heisst es:** das Buendel hat sich bewegt, und zwar durch mich,
 
 **Ballbesitz unveraendert:** Generator — Scheibe 5 weiterbauen. Evaluator — B-01 (K-01 bis K-04).
 Yama — Entwurfsfreigabe und der Merge auf `8fb7b990`.
+
+## 2026-07-29 — GENERATOR: AUF-38 Scheibe 5 (ConfigWizard) — von 38 offenen bleiben 0
+
+**Der Code liegt in `f5b9feaf`** — nicht in einem Commit von mir. Der Planner hat meine gestagten
+Dateien mitgenommen und es in `fa560259` selbst als dritten Fall benannt. **Inhalt unverändert**,
+gemessen am Arbeitsbaum. Weil damit meine Commit-Zeile samt Evidenz verlorenging, steht sie hier
+vollständig.
+
+Berührt: `ConfigWizard.tsx` · `hausplaner.css` · `stilschicht.test.ts` · `breiten.test.ts` ·
+`public/hausplaner/hausplaner.{css,js}` (Bündel mitgebaut, §8).
+
+### Die Zahlen
+
+```text
+Befehl:   node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/ConfigWizard.tsx
+Vorher:   43 gesamt · 40 statisch · 2 Ausnahme · 38 offen
+Nachher:   5 gesamt ·  2 statisch · 2 Ausnahme ·  0 offen
+```
+
+**33 Klassen für 38 Stellen** — mehrere Blöcke sind wortgleich: vier Abschnitts-Überschriften, vier
+Feldzeilen, drei Prüfzeilen (die sich nur in der Farbe der Marke unterscheiden, jetzt
+`--ok`/`--warn` als Zustandsklasse).
+
+**Was bleibt und warum:**
+
+```text
+Ausnahme  Overlay-Flaeche   rgba(24,34,38,.30)              Rohwert ohne Token in T
+Ausnahme  Dialog-Schatten   0 10px 34px rgba(28,50,55,.18)  Rohwert ohne Token in T
+Zustand   Schritt-Punkt     i === schritt
+Zustand   Kachel            on
+Zustand   Kachel-Label      on
+```
+
+Beide Ausnahmen in die CSS zu holen hieße, rohe Farbwerte hineinzuschreiben — das verbietet
+Kriterium 4. Einen Token dafür zu erfinden wäre ein Palette-Entscheid, der mir nicht zusteht.
+**Die generische Rohwert-Zusage bewacht beide**, seit `42b88b85` über alle Dateien.
+
+### Die Zusage misst mit demselben Werkzeug, das zählt
+
+Scheibe 4 trug dafür eine handgeschriebene Bezeichnerliste (`navZu`, `offeneHubs`, …). Die musste
+jeder neue Bezeichner nachziehen, und sie war **ein zweiter Maßstab neben dem Skript**. Scheibe 5
+ruft `messeDatei()` — dasselbe Werkzeug, das die Grundgesamtheit zählt. *Zwei Maßstäbe für dieselbe
+Sache sind der Fehler, gegen den das Skript gebaut wurde.*
+
+Vier Zusagen: die Wirkung (`offen === []`), ihr presence-Partner (das Werkzeug findet überhaupt
+noch Stellen), die **Mengenzusage** über die Ausnahmen (genau zwei, beide benannt, beide ohne
+Token — fällt auch bei einer dritten, die niemand gezählt hat), und die Gegenrichtung: **jede
+angelegte Klasse hat einen Träger**, keine Regel ins Leere.
+
+```text
+Gegenprobe:  eine Stelle zurueckgedreht (hp-kw-vorschau-titel)  =>  2 rot
+             "Scheibe 5 (Wirkung): keine offene statische Stelle"
+             "Scheibe 5: jede angelegte Klasse wird auch benutzt"
+             danach wiederhergestellt, byte-gleich zur Sicherung, 33/33 gruen
+```
+
+Dass **beide** Richtungen fallen, ist der Punkt: die Stelle taucht wieder inline auf *und* ihre
+Klasse steht ohne Träger da.
+
+### Zwei Dinge, die ich offenlegen muss
+
+**(1) Meine Quittung war an einer Stelle falsch.** Ich hatte gemeldet: *„Auflage geerbte Zusagen:
+GEMESSEN, KEINE."* **Das stimmte nicht.** `breiten.test.ts:30` las `gridTemplateColumns` aus dem
+**Inline-Stil** von ConfigWizard und ging rot, als die Regel nach `.hp-kw-koerper` zog.
+
+Mein Fehler war die Suche, nicht die Sorgfalt: ich habe nach `style` und `inline` gegriffen — **die
+Zusage nennt aber nur die Eigenschaft**, ohne beide Wörter. Ein Griff, der das gesuchte Muster nicht
+enthält, findet zuverlässig nichts und sieht dabei aus wie ein Beleg. *Dieselbe Klasse wie
+„grep zählt Zeilen, ein Vorkommenszähler zählt Vorkommen" — die Zählweise entscheidet, nicht der
+Fleiß.*
+
+Nachgezogen wie in Scheibe 2: die Zusage prüft die **Eigenschaft dort, wo sie wohnt** (Quelle plus
+CSS). Die alte Fassung wäre grün geblieben, wenn die Regel ersatzlos verschwunden wäre.
+**Das ist der sechste Beleg desselben Bautyps** — der Planner hat nach dem fünften geschrieben, das
+sei *„eine Eigenschaft des Bestands"*. Er hat recht behalten.
+
+**(2) Zwei Stellen über die Grundgesamtheit hinaus.** Die konstanten `React.CSSProperties`-Objekte
+`feld` und `feldLabel` sind mitgewandert. Sie stehen als `style={feld}`, nicht als `style={{`, und
+werden vom Zählwerkzeug deshalb **nicht** gezählt — derselbe Sachverhalt, andere Schreibweise.
+Scheibe 3 hat es genauso gehalten. **Klassifizierung beim Planner**; wenn er es als Überschreitung
+wertet, sind es zwei Zeilen zurück.
+
+### Gates — selbst gemessen
+
+```text
+Befehl:      npm run test:hausplaner            Exit 0   Tests 1327   Fehler 0   (vorher 1323)
+Befehl:      npm run test:hausplaner:dom        Exit 0   Tests   11   Fehler 0
+Befehl:      npm run tsc:hausplaner             Exit 0
+Befehl:      npm run schema:hausplaner:check    Exit 0
+Befehl:      npm run build:hausplaner           Exit 0
+Befehl:      php artisan test                   Exit 0   Tests  789   (2729 Zusicherungen)
+K4:          0 Rohfarben in der gebauten public/hausplaner/hausplaner.css
+```
+
+### K9 ist NICHT erfüllt und wird von mir nicht so gemeldet
+
+Die Auflage verlangt die Sichtprobe **headful mit Durchklicken aller fünf Schritte** — der Dialog
+ist modal, ein Standard-Screenshot zeigt ihn nie, und die Schritte 2 bis 5 sieht sonst niemand.
+**Ich habe sie nicht gefahren.** Sie gehört zum Evaluator, wie bei den Scheiben davor.
+
+**Status nach §2: `BERICHTET`.**
+
+
+### Nachtrag 01:20 CEST — der erste Entwurf war hingerotzt, und Yama hat es beim Namen genannt
+
+*„du bist echt faul, haesslicher geht es nicht oder — dein layout gefaellt mir nicht es ist hin
+gerotzt.“* **Er hat recht, und der Fehler ist benennbar, nicht bloss Geschmack.**
+
+**Was ich abgeliefert hatte:** einen Drahtrahmen. Platzhalter-Zeichen `⌂ ↰ ↱ ⋯` statt Icons,
+eine schraffierte Flaeche mit dem Wort ZEICHENBEREICH statt eines Grundrisses, gestrichelte
+Messbaender quer durch die Ansicht. **Das ist kein Entwurf, das ist eine Skizze meiner eigenen
+Notizen** — und ich habe sie ihm zur *Freigabe* vorgelegt.
+
+**Der handwerkliche Kern des Fehlers: ich habe die Bestandteile nicht benutzt, die im Repo liegen.**
+`studioDaten.ts:84-111` traegt **echte Icon-Pfade** fuer Wand, Fenster, Tuer, Treppe, Geschoss und
+Projekt; `studioDaten.ts:7-10` traegt die **Token-Farben**. Ich habe stattdessen Zeichen aus der
+Zeichentabelle genommen. **Das ist derselbe Verstoss gegen Bestandscode-first, den sein Auftrag in
+Punkt 6 ausdruecklich verlangt** — nur an meiner eigenen Arbeit statt an seiner.
+
+**Neu gebaut:**
+- **Echte Icons** aus `studioDaten.ts` als SVG, 24er-Raster. **Ausgewiesen** ist, dass Rueckgaengig,
+  Wiederholen und Ueberlauf **von mir ergaenzt** sind — die gibt es im Code noch nicht.
+- **Ein echter Grundriss** auf der Flaeche: Waende in Staerke, Fensteroeffnung mit Bruestungsstrich,
+  Tuer mit Anschlagbogen, zwei Raumbeschriftungen mit Flaeche, Massketten. **Damit ist sichtbar, was
+  der gewonnene Platz eigentlich traegt** — das war der Sinn der Uebung.
+- **Werkzeugschiene und Eigenschaften-Panel** sind mitgezeichnet, weil sie den Massstab geben. Ohne
+  sie schwebt die Kopfleiste im Nichts.
+- **Die Messung steht neben der Ansicht, nicht darin.** Gestrichelte Baender quer durch den Entwurf
+  waren Debug-Ansicht, keine Gestaltung.
+
+**Die Lehre, die ueber diesen einen Entwurf hinausgeht:** wenn ich etwas zur **Freigabe** vorlege,
+ist die Darstellung Teil der Sache und nicht Verpackung. Er kann nur freigeben, was er sich
+vorstellen kann. **Ein Entwurf, der schlechter aussieht als der Ist-Zustand, laesst die Frage
+unbeantwortet, die er stellen sollte.**
+
+Inhaltlich unveraendert: dieselben sieben Wanderungen, derselbe geschaetzte Gewinn von 93 px,
+dieselben zwei Vorbehalte (Breite haengt an T4/T5, Ticket-Navigation an T1). **Das Blatt bleibt
+`GESPERRT`.**

@@ -3,193 +3,383 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Entwurf — Studio-Kopfleiste (AUF-83 T2+T3)</title>
+<title>Entwurf — Studio-Kopfleiste · AUF-83</title>
 <style>
   :root{
-    --bg:#f5f7f8; --surface:#fff; --ink:#232a31; --muted:#697079; --faint:#a7aeb7;
-    --hair:#edf0f2; --hair2:#dfe3e6; --accent:#12807d; --accentSoft:#e6f2f1;
+    /* Token der Insel — studioDaten.ts:7-10 */
+    --bg:#f5f7f8; --surface:#ffffff; --surface2:#f7f9fa;
+    --ink:#232a31; --muted:#697079; --faint:#a7aeb7;
+    --hair:#edf0f2; --hair2:#dfe3e6; --controlBorder:#8b949e;
+    --accent:#12807d; --accentSoft:#e6f2f1;
+    /* CI Solar Aspekt — Ledger F1 */
+    --sa-blau:#2B4290; --sa-gruen:#94C11C; --sa-grau:#4A4E57;
     --warnInk:#b45309; --warnBg:#fff7ed; --warnBorder:#fed7aa;
-    --rot:#c63533; --rotBg:#fdeceb; --gruen:#94c11c;
+    --schattenFlach:0 1px 2px rgba(28,50,55,.10);
+    --schattenGehoben:0 10px 34px rgba(28,50,55,.10);
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
-       font:14px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;padding:28px 22px 60px}
-  h1{font-size:21px;margin:0 0 4px;font-weight:800;letter-spacing:-.2px}
-  .sub{color:var(--muted);font-size:13px;margin:0 0 26px}
-  .sub code{background:var(--surface);border:1px solid var(--hair2);border-radius:5px;padding:1px 5px;font-size:12px}
-  h2{font-size:15px;margin:30px 0 10px;font-weight:800;display:flex;align-items:center;gap:9px}
-  .tag{font-size:11px;font-weight:800;border-radius:999px;padding:3px 9px;letter-spacing:.3px}
-  .tag.alt{background:var(--rotBg);color:var(--rot)}
-  .tag.neu{background:var(--accentSoft);color:var(--accent)}
-  .rahmen{background:var(--surface);border:1px solid var(--hair2);border-radius:12px;overflow:hidden;
-          box-shadow:0 1px 2px rgba(28,50,55,.05)}
-  .messband{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);
-            padding:5px 12px;background:#fafbfc;border-bottom:1px dashed var(--hair2)}
-  .messband b{color:var(--ink);font-weight:800}
+  html{-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--bg);color:var(--ink);padding:40px 32px 72px;
+       font:14px/1.6 Inter,-apple-system,"Segoe UI",system-ui,sans-serif}
+  .huelle{max-width:1180px;margin:0 auto}
 
-  /* ---------- VORHER ---------- */
-  .bar1{display:flex;align-items:center;gap:12px;padding:8px 14px;background:#fff;
-        border-bottom:1px solid #e5e7eb;min-height:46px}
-  .bar1 .t{font-size:14px;font-weight:800}
-  .bar1 a{color:#374151;text-decoration:none;font-size:13px;font-weight:600;
-          border:1px solid #d1d5db;border-radius:8px;padding:6px 12px}
-  .scratch{margin-left:auto;font-size:12px;font-weight:700;color:var(--warnInk);
-           background:var(--warnBg);border:1px solid var(--warnBorder);border-radius:999px;padding:4px 12px}
-  .bar2{min-height:62px;display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:8px 16px;
-        background:#fff;border-bottom:1px solid var(--hair)}
-  .marke{display:flex;align-items:center;gap:7px;font-weight:800;font-size:14px}
-  .marke .zeichen{width:26px;height:26px;border-radius:8px;background:var(--accentSoft);color:var(--accent);
-                  display:grid;place-items:center}
-  .zusatz{color:var(--muted);font-weight:600}
-  .status{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
-  .punkt{width:8px;height:8px;border-radius:50%;background:var(--gruen);display:inline-block}
-  .fueller{flex:1}
-  .modus{display:flex;background:#f2f5f6;border-radius:12px;padding:4px;gap:2px}
-  .modus button{border:0;background:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--muted);
-                border-radius:9px;padding:6px 13px;cursor:default}
-  .modus button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(28,50,55,.10)}
-  .ys{width:32px;height:32px;border-radius:50%;background:#dfe4ea;display:grid;place-items:center;
-      font-size:12px;font-weight:700;color:#5b636d}
-  .bar3{display:flex;align-items:center;gap:10px;padding:6px 16px;background:#fff;
-        border-bottom:1px solid var(--hair);min-height:33px}
-  .zurueck{display:flex;align-items:center;gap:6px;border:0;background:none;font:inherit;font-size:13px;
-           font-weight:700;color:var(--accent);cursor:default;padding:0}
-  .hinweis{font-size:13px;color:var(--muted)}
-  .canvas{background:repeating-linear-gradient(45deg,#eef1f3 0 10px,#f5f7f8 10px 20px);
-          display:grid;place-items:center;color:var(--faint);font-size:12px;font-weight:700;letter-spacing:.4px}
+  header.kopf{margin-bottom:34px}
+  h1{font-size:23px;font-weight:800;letter-spacing:-.3px;margin:0 0 6px}
+  .unter{color:var(--muted);font-size:13.5px;margin:0;max-width:74ch}
+  .unter code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+              background:var(--surface);border:1px solid var(--hair2);border-radius:5px;padding:1px 6px}
 
-  /* ---------- NACHHER ---------- */
-  .neu1{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:8px 14px;background:#fff;
-        border-bottom:1px solid var(--hair);min-height:48px}
-  .trenner{width:1px;height:20px;background:var(--hair2)}
-  .geschoss{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--ink);
-            background:#f6f8f9;border:1px solid var(--hair2);border-radius:9px;padding:5px 10px}
-  .geschoss small{color:var(--muted);font-weight:600}
-  .badge{font-size:11px;font-weight:800;color:var(--warnInk);background:var(--warnBg);
-         border:1px solid var(--warnBorder);border-radius:999px;padding:3px 9px;white-space:nowrap}
-  .ikon{width:30px;height:30px;border-radius:9px;border:1px solid var(--hair2);background:#fff;
-        display:grid;place-items:center;color:var(--muted);font-size:14px}
-  .prim{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border:0;border-radius:9px;
-        padding:7px 14px;cursor:default}
+  .stufe{margin-top:38px}
+  .stufe-kopf{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+  .stufe-kopf h2{font-size:16px;font-weight:800;margin:0}
+  .marker{font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;
+          border-radius:999px;padding:4px 11px}
+  .marker.ist{background:#fdeceb;color:#c63533}
+  .marker.soll{background:var(--accentSoft);color:var(--accent)}
+  .stufe-kopf .note{color:var(--muted);font-size:13px;margin-left:auto}
 
-  /* ---------- Beiwerk ---------- */
-  .kommentar{margin:9px 0 0;font-size:12.5px;color:var(--muted)}
-  .kommentar b{color:var(--ink)}
-  table{border-collapse:collapse;width:100%;margin:14px 0 0;font-size:13px;background:var(--surface);
-        border:1px solid var(--hair2);border-radius:10px;overflow:hidden}
-  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--hair)}
-  th{background:#fafbfc;font-size:11.5px;letter-spacing:.3px;color:var(--muted);font-weight:800}
-  tr:last-child td{border-bottom:0}
-  td code{font-size:12px;background:#f4f6f7;border-radius:4px;padding:1px 5px}
-  .kasten{border-left:3px solid var(--accent);background:var(--accentSoft);border-radius:0 10px 10px 0;
-          padding:13px 16px;margin:22px 0 0;font-size:13px}
-  .kasten.warn{border-left-color:var(--warnInk);background:var(--warnBg)}
-  .kasten p{margin:0 0 7px}
-  .kasten p:last-child{margin:0}
-  .pfeil{text-align:center;color:var(--faint);font-size:20px;margin:16px 0 4px}
-  .gewinn{display:inline-block;font-size:12px;font-weight:800;color:var(--accent);
-          background:var(--accentSoft);border-radius:6px;padding:2px 8px}
+  /* ---------- Bildschirmrahmen ---------- */
+  .schirm{border:1px solid var(--hair2);border-radius:14px;overflow:hidden;background:var(--surface);
+          box-shadow:var(--schattenGehoben)}
+  .schirm-fuss{display:flex;align-items:center;gap:14px;padding:7px 14px;background:var(--surface2);
+               border-top:1px solid var(--hair);font-size:11.5px;color:var(--faint)}
+  .schirm-fuss b{color:var(--muted);font-weight:700}
+
+  /* ---------- Leisten ---------- */
+  .blade{display:flex;align-items:center;gap:12px;padding:8px 16px;height:46px;
+         background:#fff;border-bottom:1px solid #e5e7eb}
+  .blade .t{font-size:14px;font-weight:800}
+  .blade .lnk{color:#374151;font-size:12.5px;font-weight:600;
+              border:1px solid #d1d5db;border-radius:8px;padding:5px 11px}
+  .pille{font-size:11.5px;font-weight:700;color:var(--warnInk);background:var(--warnBg);
+         border:1px solid var(--warnBorder);border-radius:999px;padding:4px 12px}
+
+  .kopfleiste{display:flex;align-items:center;gap:12px;padding:8px 16px;min-height:62px;
+              background:#fff;border-bottom:1px solid var(--hair)}
+  .kopfleiste.kompakt{min-height:48px;height:48px;gap:10px;padding:0 14px}
+
+  .marke{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14.5px;letter-spacing:-.1px}
+  .marke .z{width:27px;height:27px;border-radius:8px;background:var(--accentSoft);color:var(--accent);
+            display:grid;place-items:center;flex:0 0 auto}
+  .zusatz{color:var(--muted);font-weight:600;font-size:13.5px}
+  .trenn{width:1px;height:22px;background:var(--hair2);flex:0 0 auto}
+  .fuell{flex:1}
+
+  .status{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);white-space:nowrap}
+  .punkt{width:8px;height:8px;border-radius:50%;background:var(--sa-gruen);flex:0 0 auto}
+
+  .segment{display:flex;background:var(--surface2);border:1px solid var(--hair2);border-radius:11px;padding:3px;gap:2px}
+  .segment button{border:0;background:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--muted);
+                  border-radius:8px;padding:6px 14px;cursor:default;display:flex;align-items:center;gap:6px}
+  .segment button.an{background:#fff;color:var(--ink);box-shadow:var(--schattenFlach)}
+
+  .waehler{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;
+           background:var(--surface2);border:1px solid var(--hair2);border-radius:9px;padding:6px 10px;white-space:nowrap}
+  .waehler .hoehe{color:var(--muted);font-weight:600}
+  .ikonknopf{width:31px;height:31px;border-radius:9px;border:1px solid var(--hair2);background:#fff;
+             display:grid;place-items:center;color:var(--muted);flex:0 0 auto}
+  .primaer{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:#fff;
+           background:var(--accent);border:0;border-radius:9px;padding:8px 14px;cursor:default}
+  .ys{width:31px;height:31px;border-radius:50%;background:#dfe4ea;display:grid;place-items:center;
+      font-size:11.5px;font-weight:800;color:#5b636d;flex:0 0 auto}
+  .badge-test{font-size:11px;font-weight:800;color:var(--warnInk);background:var(--warnBg);
+              border:1px solid var(--warnBorder);border-radius:999px;padding:3px 10px;white-space:nowrap}
+
+  .expertenzeile{display:flex;align-items:center;gap:10px;padding:6px 16px;height:33px;
+                 background:#fff;border-bottom:1px solid var(--hair)}
+  .zurueck{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;color:var(--accent)}
+  .erklaer{font-size:12.5px;color:var(--muted)}
+
+  /* ---------- Arbeitsfläche ---------- */
+  .buehne{display:flex;background:var(--bg)}
+  .schiene{width:56px;flex:0 0 auto;background:#fff;border-right:1px solid var(--hair);
+           padding:10px 0;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .schiene .w{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:var(--muted)}
+  .schiene .w.an{background:var(--accentSoft);color:var(--accent)}
+  .schiene .sp{height:1px;width:26px;background:var(--hair);margin:4px 0}
+
+  .plan{flex:1;position:relative;overflow:hidden;
+        background:
+          linear-gradient(var(--hair) 1px,transparent 1px) 0 0/28px 28px,
+          linear-gradient(90deg,var(--hair) 1px,transparent 1px) 0 0/28px 28px,
+          var(--bg)}
+  .plan svg{position:absolute;inset:0;width:100%;height:100%}
+
+  .panel{width:210px;flex:0 0 auto;background:#fff;border-left:1px solid var(--hair);padding:12px 13px}
+  .panel h3{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);
+            margin:0 0 10px;font-weight:800}
+  .feld{margin-bottom:9px}
+  .feld label{display:block;font-size:11px;color:var(--muted);margin-bottom:3px}
+  .feld .wert{border:1px solid var(--hair2);border-radius:7px;padding:5px 8px;font-size:12.5px;
+              font-weight:600;background:var(--surface2)}
+  .reiter{display:flex;gap:3px;margin-bottom:11px}
+  .reiter span{font-size:11px;font-weight:700;color:var(--muted);padding:4px 8px;border-radius:7px}
+  .reiter span.an{background:var(--accentSoft);color:var(--accent)}
+
+  /* ---------- Messspalte ---------- */
+  .mess{display:grid;grid-template-columns:1fr 232px;gap:22px;align-items:start}
+  .messkarte{background:var(--surface);border:1px solid var(--hair2);border-radius:12px;padding:14px 15px;
+             font-size:12.5px}
+  .messkarte h4{margin:0 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:.6px;
+                color:var(--faint);font-weight:800}
+  .zeile{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--hair)}
+  .zeile:last-of-type{border-bottom:0}
+  .zeile span:first-child{color:var(--muted)}
+  .zeile b{font-variant-numeric:tabular-nums;font-weight:800}
+  .summe{margin-top:9px;padding-top:9px;border-top:1px solid var(--hair2);display:flex;
+         justify-content:space-between;font-weight:800}
+  .summe.gut{color:var(--accent)}
+  .summe.schlecht{color:#c63533}
+
+  /* ---------- Text ---------- */
+  table.wandern{border-collapse:separate;border-spacing:0;width:100%;margin-top:16px;font-size:13px;
+                background:var(--surface);border:1px solid var(--hair2);border-radius:12px;overflow:hidden}
+  table.wandern th{text-align:left;padding:10px 14px;background:var(--surface2);font-size:10.5px;
+                   letter-spacing:.5px;text-transform:uppercase;color:var(--faint);font-weight:800;
+                   border-bottom:1px solid var(--hair2)}
+  table.wandern td{padding:11px 14px;border-bottom:1px solid var(--hair);vertical-align:top}
+  table.wandern tr:last-child td{border-bottom:0}
+  table.wandern td:nth-child(2){font-weight:700;white-space:nowrap}
+  table.wandern td:nth-child(3){color:var(--muted)}
+  .weg{color:#c63533;font-weight:800}
+  .bleibt{color:var(--accent);font-weight:800}
+
+  .hinweis{border-left:3px solid var(--accent);background:var(--accentSoft);border-radius:0 11px 11px 0;
+           padding:14px 17px;margin-top:24px;font-size:13px}
+  .hinweis.achtung{border-left-color:var(--warnInk);background:var(--warnBg)}
+  .hinweis p{margin:0 0 8px}
+  .hinweis p:last-child{margin:0}
+  .fuss{margin-top:30px;padding-top:18px;border-top:1px solid var(--hair2);color:var(--muted);font-size:12.5px}
 </style>
 </head>
 <body>
+<div class="huelle">
 
-<h1>Entwurf — Studio-Kopfleiste</h1>
-<p class="sub">AUF-83, Teile T2+T3 · Planner, 29.07.2026 · Höhen aus der echten CSS gemessen:
-<code>.hp-bar</code> 46 px · <code>.hp-studio-kopf</code> 62 px · <code>.hp-experte-leiste</code> ~33 px</p>
+<header class="kopf">
+  <h1>Studio-Kopfleiste — Entwurf zur Freigabe</h1>
+  <p class="unter">AUF-83, Teile T2 + T3 · Planner, 29.07.2026 · Alle Höhen aus der ausgelieferten CSS gemessen:
+  <code>.hp-bar</code> 46 px · <code>.hp-studio-kopf</code> 62 px · <code>.hp-experte-leiste</code> 33 px.
+  Farben und Icons stammen aus <code>studioDaten.ts</code>; die drei Icons für Rückgängig, Wiederholen und
+  Überlauf sind von mir ergänzt, weil es sie im Code noch nicht gibt.</p>
+</header>
 
-<h2><span class="tag alt">HEUTE</span> drei Leisten übereinander, Expertenmodus bei 1440 px</h2>
-<div class="rahmen">
-  <div class="messband"><b>Schicht 1 — Blade</b> <code>studio.blade.php:31</code> · 46 px</div>
-  <div class="bar1">
-    <span class="t">Hausplaner · Studio</span>
-    <a href="#">‹ Zurück</a>
-    <span class="scratch">Testfläche — wird NICHT gespeichert</span>
+<!-- ============ IST ============ -->
+<section class="stufe">
+  <div class="stufe-kopf">
+    <h2>Heute</h2><span class="marker ist">Ist-Zustand</span>
+    <span class="note">Expertenmodus, 1440 px</span>
   </div>
+  <div class="mess">
+    <div class="schirm">
+      <div class="blade">
+        <span class="t">Hausplaner · Studio</span>
+        <span class="lnk">‹ Zurück</span>
+        <span class="fuell"></span>
+        <span class="pille">Testfläche — wird NICHT gespeichert</span>
+      </div>
+      <div class="kopfleiste">
+        <span class="marke">
+          <span class="z"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span>
+          Hausplaner<span class="zusatz">· Solar Aspekt</span>
+        </span>
+        <span class="status"><span class="punkt"></span>Testfläche — wird nicht gespeichert</span>
+        <span class="fuell"></span>
+        <span class="segment">
+          <button>Übersicht</button><button class="an">Expertenmodus</button>
+        </span>
+        <span class="ys">YS</span>
+      </div>
+      <div class="expertenzeile">
+        <span class="zurueck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>Zur geführten Planung</span>
+        <span class="erklaer">Experte — alle Werkzeuge, Projektbaum und Eigenschaften. Dasselbe Modell und dieselbe Revision.</span>
+      </div>
 
-  <div class="messband"><b>Schicht 2 — Insel</b> <code>HausplanerStudio.tsx:114</code> · 62 px</div>
-  <div class="bar2">
-    <span class="marke"><span class="zeichen">⌂</span>Hausplaner<span class="zusatz">· Solar Aspekt</span></span>
-    <span class="status"><span class="punkt"></span>Testfläche — wird nicht gespeichert</span>
-    <span class="fueller"></span>
-    <span class="modus"><button>Übersicht</button><button class="on">Expertenmodus</button></span>
-    <span class="ys">YS</span>
+      <div class="buehne" style="height:236px">
+        <div class="schiene">
+          <span class="w an"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 16 2-6 6-2z"/></svg></span>
+          <span class="w"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M8 3v18M12 3v18M16 3v18"/></svg></span>
+          <span class="w"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M3 8h18M3 12h18M9 4v12M15 4v12"/></svg></span>
+          <span class="w"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M6 12V6a2 2 0 0 1 4 0"/></svg></span>
+          <span class="sp"></span>
+          <span class="w"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15h18M8 3v6"/></svg></span>
+        </div>
+        <div class="plan">
+          <svg viewBox="0 0 620 236" preserveAspectRatio="xMidYMid meet">
+            <g stroke="#5b636d" stroke-width="7" fill="none" stroke-linecap="square">
+              <path d="M120 46 H430"/><path d="M430 46 V186"/><path d="M430 186 H120"/>
+              <path d="M120 186 V128"/><path d="M120 96 V46"/>
+              <path d="M300 46 V186"/>
+            </g>
+            <path d="M120 96 V128" stroke="#12807d" stroke-width="7" fill="none"/>
+            <path d="M242 46 H286" stroke="#fff" stroke-width="9"/>
+            <path d="M242 46 H286" stroke="#8b949e" stroke-width="2.4" fill="none"/>
+            <path d="M242 41 H286 M242 51 H286" stroke="#8b949e" stroke-width="1.4"/>
+            <path d="M300 128 A32 32 0 0 0 332 96" stroke="#a7aeb7" stroke-width="1.6" fill="none" stroke-dasharray="4 4"/>
+            <path d="M300 128 V96" stroke="#fff" stroke-width="9"/>
+            <text x="200" y="122" fill="#697079" font-family="Inter,sans-serif" font-size="13" font-weight="700">Wohnen</text>
+            <text x="200" y="140" fill="#a7aeb7" font-family="Inter,sans-serif" font-size="11.5">24,30 m²</text>
+            <text x="352" y="122" fill="#697079" font-family="Inter,sans-serif" font-size="13" font-weight="700">Küche</text>
+            <text x="352" y="140" fill="#a7aeb7" font-family="Inter,sans-serif" font-size="11.5">11,80 m²</text>
+            <g stroke="#a7aeb7" stroke-width="1.2">
+              <path d="M120 210 H430"/><path d="M120 205 V215"/><path d="M430 205 V215"/>
+            </g>
+            <rect x="252" y="200" width="52" height="16" fill="#f5f7f8"/>
+            <text x="258" y="212" fill="#697079" font-family="Inter,sans-serif" font-size="11">6,20 m</text>
+          </svg>
+        </div>
+        <div class="panel">
+          <div class="reiter"><span class="an">Allgemein</span><span>Bauteil</span><span>Prüfung</span></div>
+          <h3>Eigenschaften</h3>
+          <div class="feld"><label>Wandstärke</label><div class="wert">24,0 cm</div></div>
+          <div class="feld"><label>Mauerwerk</label><div class="wert">Kalksandstein</div></div>
+          <div class="feld"><label>Länge</label><div class="wert">3,10 m</div></div>
+        </div>
+      </div>
+      <div class="schirm-fuss"><b>141 px</b> Kopfleisten über der Arbeitsfläche · drei Schichten · zwei davon sagen dasselbe</div>
+    </div>
+
+    <div class="messkarte">
+      <h4>Höhe über der Fläche</h4>
+      <div class="zeile"><span>Blade <code>.hp-bar</code></span><b>46 px</b></div>
+      <div class="zeile"><span>Insel <code>.hp-studio-kopf</code></span><b>62 px</b></div>
+      <div class="zeile"><span>Insel <code>.hp-experte-leiste</code></span><b>33 px</b></div>
+      <div class="summe schlecht"><span>zusammen</span><span>141 px</span></div>
+    </div>
   </div>
+</section>
 
-  <div class="messband"><b>Schicht 3 — Insel</b> <code>HausplanerStudio.tsx:192</code> · ~33 px</div>
-  <div class="bar3">
-    <button class="zurueck">‹ Zur geführten Planung</button>
-    <span class="hinweis">Experte — alle Werkzeuge, Projektbaum und Eigenschaften. Dasselbe Modell und dieselbe Revision.</span>
+<!-- ============ SOLL ============ -->
+<section class="stufe">
+  <div class="stufe-kopf">
+    <h2>Entwurf</h2><span class="marker soll">Vorschlag</span>
+    <span class="note">eine Leiste, gleicher Bildschirm</span>
   </div>
+  <div class="mess">
+    <div class="schirm">
+      <div class="kopfleiste kompakt">
+        <span class="marke">
+          <span class="z"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span>
+          Hausplaner
+        </span>
+        <span class="trenn"></span>
+        <span style="font-weight:700;font-size:13.5px">Solar Aspekt</span>
+        <span class="waehler">
+          Erdgeschoss <span class="hoehe">· ±0 mm</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </span>
+        <span class="badge-test">Testfläche</span>
+        <span class="fuell"></span>
+        <span class="segment">
+          <button>Übersicht</button><button>Geführt</button><button class="an">Experte</button>
+        </span>
+        <span class="fuell"></span>
+        <span class="status"><span class="punkt"></span>Gespeichert · Rev. 1</span>
+        <span class="ikonknopf"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></span>
+        <span class="ikonknopf"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></span>
+        <button class="primaer">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+          Speichern
+        </button>
+        <span class="ikonknopf"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg></span>
+        <span class="ys">YS</span>
+      </div>
 
-  <div class="canvas" style="height:150px">ZEICHENBEREICH</div>
-</div>
+      <div class="buehne" style="height:329px">
+        <div class="schiene">
+          <span class="w an"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 16 2-6 6-2z"/></svg></span>
+          <span class="w"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M8 3v18M12 3v18M16 3v18"/></svg></span>
+          <span class="w"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M3 8h18M3 12h18M9 4v12M15 4v12"/></svg></span>
+          <span class="w"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M6 12V6a2 2 0 0 1 4 0"/></svg></span>
+          <span class="sp"></span>
+          <span class="w"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15h18M8 3v6"/></svg></span>
+        </div>
+        <div class="plan">
+          <svg viewBox="0 0 620 329" preserveAspectRatio="xMidYMid meet">
+            <g stroke="#5b636d" stroke-width="7" fill="none" stroke-linecap="square">
+              <path d="M120 62 H430"/><path d="M430 62 V258"/><path d="M430 258 H120"/>
+              <path d="M120 258 V178"/><path d="M120 134 V62"/>
+              <path d="M300 62 V258"/>
+            </g>
+            <path d="M120 134 V178" stroke="#12807d" stroke-width="7" fill="none"/>
+            <path d="M242 62 H286" stroke="#fff" stroke-width="9"/>
+            <path d="M242 62 H286" stroke="#8b949e" stroke-width="2.4" fill="none"/>
+            <path d="M242 57 H286 M242 67 H286" stroke="#8b949e" stroke-width="1.4"/>
+            <path d="M300 178 A44 44 0 0 0 344 134" stroke="#a7aeb7" stroke-width="1.6" fill="none" stroke-dasharray="4 4"/>
+            <path d="M300 178 V134" stroke="#fff" stroke-width="9"/>
+            <text x="196" y="164" fill="#697079" font-family="Inter,sans-serif" font-size="13.5" font-weight="700">Wohnen</text>
+            <text x="196" y="183" fill="#a7aeb7" font-family="Inter,sans-serif" font-size="12">24,30 m²</text>
+            <text x="352" y="164" fill="#697079" font-family="Inter,sans-serif" font-size="13.5" font-weight="700">Küche</text>
+            <text x="352" y="183" fill="#a7aeb7" font-family="Inter,sans-serif" font-size="12">11,80 m²</text>
+            <g stroke="#a7aeb7" stroke-width="1.2">
+              <path d="M120 288 H430"/><path d="M120 283 V293"/><path d="M430 283 V293"/>
+            </g>
+            <rect x="252" y="278" width="52" height="16" fill="#f5f7f8"/>
+            <text x="258" y="290" fill="#697079" font-family="Inter,sans-serif" font-size="11">6,20 m</text>
+          </svg>
+        </div>
+        <div class="panel">
+          <div class="reiter"><span class="an">Allgemein</span><span>Bauteil</span><span>Prüfung</span></div>
+          <h3>Eigenschaften</h3>
+          <div class="feld"><label>Wandstärke</label><div class="wert">24,0 cm</div></div>
+          <div class="feld"><label>Mauerwerk</label><div class="wert">Kalksandstein</div></div>
+          <div class="feld"><label>Länge</label><div class="wert">3,10 m</div></div>
+        </div>
+      </div>
+      <div class="schirm-fuss"><b>48 px</b> Kopfleiste · eine Schicht · Geschosswähler ist aus der Werkzeugzeile nach oben gewandert</div>
+    </div>
 
-<p class="kommentar"><b>Zweimal derselbe Hinweis, zweimal „Hausplaner“, und ein Erklärtext, der jeden Tag Höhe kostet.</b>
-Die Doppelung entsteht nicht durch Nachlässigkeit — <b>Schicht 1 kommt aus der Blade, Schicht 2 aus der React-Insel.</b>
-Zwei Ebenen zeichnen unabhängig voneinander eine Kopfleiste.</p>
-
-<div class="pfeil">↓</div>
-
-<h2><span class="tag neu">ENTWURF</span> eine Leiste</h2>
-<div class="rahmen">
-  <div class="messband"><b>Eine Schicht — Insel</b> <code>HausplanerStudio.tsx</code> · ~48 px</div>
-  <div class="neu1">
-    <span class="marke"><span class="zeichen">⌂</span>Hausplaner</span>
-    <span class="trenner"></span>
-    <span style="font-weight:700;font-size:13px">Solar Aspekt</span>
-    <span class="geschoss">Erdgeschoss <small>· ±0 mm</small> ▾</span>
-    <span class="badge">Testfläche</span>
-    <span class="fueller"></span>
-    <span class="modus"><button>Übersicht</button><button>Geführt</button><button class="on">Experte</button></span>
-    <span class="fueller"></span>
-    <span class="status"><span class="punkt"></span>Gespeichert · Rev. 1</span>
-    <button class="prim">Speichern</button>
-    <span class="ikon">↰</span><span class="ikon">↱</span><span class="ikon">⋯</span>
-    <span class="ys">YS</span>
+    <div class="messkarte">
+      <h4>Höhe über der Fläche</h4>
+      <div class="zeile"><span>eine Leiste</span><b>48 px</b></div>
+      <div class="zeile"><span>entfällt</span><b>—</b></div>
+      <div class="zeile"><span>entfällt</span><b>—</b></div>
+      <div class="summe gut"><span>gewonnen</span><span>+ 93 px</span></div>
+      <p style="margin:12px 0 0;font-size:11.5px;color:var(--faint);line-height:1.5">
+        Geschätzt aus den CSS-Höhen. Gemessen wird per <code>getBoundingClientRect</code> vorher/nachher
+        als Kriterium K‑05.</p>
+    </div>
   </div>
-  <div class="canvas" style="height:243px">ZEICHENBEREICH <span class="gewinn" style="margin-left:10px">+ ~93 px</span></div>
-</div>
+</section>
 
-<p class="kommentar"><b>Der Rückweg bleibt erreichbar</b> — „‹ Zur geführten Planung“ ist jetzt der Modusschalter selbst
-(<i>Übersicht | Geführt | Experte</i>), er braucht keine eigene Zeile mehr. Der Erklärtext wandert an den
-Schalter als Titel bzw. Popover; er wird <b>nicht gelöscht</b>.</p>
-
-<table>
-  <tr><th>Was heute doppelt/verstreut ist</th><th>Wohin es wandert</th><th>Warum</th></tr>
-  <tr><td><code>hp-scratch</code> in der Blade</td><td><b>entfällt</b></td>
+<table class="wandern">
+  <tr><th>Heute</th><th>Entwurf</th><th>Begründung</th></tr>
+  <tr><td><code>hp-scratch</code> in der Blade</td><td class="weg">entfällt</td>
       <td>Der Insel-Hinweis ist an das fehlende Speicherziel gekoppelt und testverriegelt. Die Blade-Zeichenkette steht immer da, egal was gilt.</td></tr>
-  <tr><td><code>hp-title</code> „Hausplaner · Studio“</td><td><b>entfällt</b></td>
+  <tr><td><code>hp-title</code> „Hausplaner · Studio“</td><td class="weg">entfällt</td>
       <td>Die Insel führt Marke und Projektnamen bereits.</td></tr>
-  <tr><td>Insel-Statustext „Testfläche — …“</td><td>kompakter <b>Badge</b></td>
-      <td>Einmal, kurz, an der Marke — statt eines Satzes mitten in der Leiste.</td></tr>
-  <tr><td><code>hp-experte-hinweis</code></td><td>Titel/Popover am Modusschalter</td>
-      <td>Beantwortet eine Frage, die man <i>einmal</i> hat. Kostet heute jeden Tag ~33 px.</td></tr>
-  <tr><td>„‹ Zur geführten Planung“</td><td>dritter Knopf im Modusschalter</td>
-      <td>Modus wechseln ist Modus wechseln — kein zweiter Mechanismus.</td></tr>
-  <tr><td>„‹ Zurück“ (Blade)</td><td><b>bleibt vorerst</b></td>
+  <tr><td>Statustext „Testfläche — wird nicht gespeichert“</td><td>kompakter Badge</td>
+      <td>Einmal, kurz, an der Marke — statt eines ganzen Satzes mitten in der Leiste.</td></tr>
+  <tr><td><code>hp-experte-hinweis</code></td><td>Popover am Modusschalter</td>
+      <td>Beantwortet eine Frage, die man <em>einmal</em> hat. Kostet heute jeden Tag 33 px. Der Text bleibt auffindbar, er wird nicht gelöscht.</td></tr>
+  <tr><td>„‹ Zur geführten Planung“</td><td>dritter Knopf im Schalter</td>
+      <td>Modus wechseln ist Modus wechseln — kein zweiter Mechanismus daneben.</td></tr>
+  <tr><td>Geschoss + Höhenlage</td><td>Wähler in der Leiste</td>
+      <td>Aus der Layout-Inventur, Befund B1: das Geschoss ist das Tor zu 34 Werkzeugen und steckt heute in einem 111‑px‑Dropdown zwischen „Rückgängig“ und „Speichern“.</td></tr>
+  <tr><td>„‹ Zurück“ in der Blade</td><td class="bleibt">bleibt vorerst</td>
       <td>Solange es keine Ticket-Navigation gibt, ist er der einzige Weg aus dem Studio. Er fällt erst mit T1.</td></tr>
 </table>
 
-<div class="kasten">
-  <p><b>Der Höhengewinn ist geschätzt, nicht gemessen.</b> 46 + 62 + 33 = 141 px heute, ~48 px im Entwurf.
-  Die <b>tatsächliche</b> Zahl misst der Evaluator per <code>getBoundingClientRect</code> vorher/nachher —
-  sie steht als Kriterium K-05 im Auftrag.</p>
-  <p><b>Und wenn die Bühne nicht wächst, ist das der eigentliche Befund</b> und geht zurück an mich,
-  statt als „aufgeräumt“ durchzugehen. Dein Ziel ist Platz, nicht Ordnung.</p>
+<div class="hinweis">
+  <p><strong>Der Höhengewinn ist geschätzt, nicht gemessen.</strong> 46 + 62 + 33 = 141 px heute gegen 48 px im Entwurf.
+  Die tatsächliche Zahl misst der Evaluator per <code>getBoundingClientRect</code> vorher und nachher — sie steht als
+  Kriterium K‑05 im Auftrag.</p>
+  <p><strong>Wächst die Bühne nicht, ist das der Befund</strong> und geht zurück an mich, statt als „aufgeräumt“
+  durchzugehen. Dein Ziel ist Platz, nicht Ordnung.</p>
 </div>
 
-<div class="kasten warn">
-  <p><b>Was dieser Entwurf ausdrücklich nicht zeigt — und warum die Bühne trotzdem noch nicht breiter wird.</b></p>
-  <p>Die <i>Breite</i> des Zeichenbereichs kommt nicht aus dem Layout, sondern aus einer Rechnung:
-  <code>HausplanerApp.tsx:369</code> → <code>innerWidth − 220 − 268</code>. Solange die steht, ändert das
-  Aufräumen der Kopfleisten nur die Höhe. <b>Die Breite und die klappbaren Panels sind T4/T5</b> — ein
-  eigener Schritt, und zugleich der erste Zerlegungsschritt von AUF-48.</p>
-  <p>Ebenso nicht enthalten: die <b>Ticket-Navigation</b>. Die gibt es heute nicht (beide Blades haben
-  <code>0× @extends</code>) — das ist <b>T1</b> und liegt bei dir.</p>
+<div class="hinweis achtung">
+  <p><strong>Was dieser Entwurf nicht zeigt — und warum die Fläche noch nicht breiter wird.</strong></p>
+  <p>Die <em>Breite</em> kommt nicht aus dem Layout, sondern aus einer Rechnung: <code>HausplanerApp.tsx:369</code> →
+  <code>innerWidth − 220 − 268</code>. Solange die steht, ändert das Aufräumen der Kopfleisten nur die Höhe.
+  Breite und klappbare Panels sind <strong>T4/T5</strong> — ein eigener Schritt, und zugleich der erste
+  Zerlegungsschritt von AUF‑48.</p>
+  <p>Ebenso nicht enthalten: die <strong>Ticket-Navigation</strong>. Die gibt es heute nicht — beide Blades haben
+  <code>0× @extends</code>. Das ist <strong>T1</strong> und liegt bei dir.</p>
 </div>
 
-<p class="kommentar" style="margin-top:22px">Freigabe heißt hier: <b>so schneide ich das Auftragsblatt</b>.
-Änderst du etwas am Entwurf, ändert sich das Blatt mit — es ist noch nichts gebaut.</p>
+<p class="fuss">Freigabe heißt: <strong>so schneide ich das Auftragsblatt</strong>. Änderst du etwas am Entwurf,
+ändert sich das Blatt mit — es ist noch nichts gebaut, und das Blatt steht auf <code>GESPERRT</code>.</p>
 
+</div>
 </body>
 </html>
