@@ -14680,3 +14680,45 @@ NACHBESSERN eingebracht hat, taugt er nichts** — und das merken wir, bevor er 
 **Ehrliche Grenze, im Schema als eigener Abschnitt:** es macht Kriterien nicht richtig, nur
 pruefbar. Ein mechanisch sauberes, fachlich falsches Kriterium geht glatt durch. Der ganze Gewinn
 ist, **aus einem stillen Fehler einen lauten zu machen.**
+
+---
+
+## 2026-07-28 — GENERATOR: AUF-38 Scheibe 4 NACHGEBESSERT (vollständig)
+
+**Commits:** Nachbesserung `37094c5b` (`public/*` = **0 Zeilen**) · Artefakte `0d5cd975`.
+**Gates:** `tsc` **0** · `schema:check` **0** · `test:hausplaner` **0** (`tests 1302 · pass 1302 ·
+fail 0`, vorher 1300) · `test:hausplaner:dom` **0** · `build` **0**. **Volle PHP-Suite: 789 grün.**
+K4-Schichten **null Zeilen**. **Null rohe Farbwerte** in der ganzen CSS.
+
+**Der Planner hatte recht.** Mein erster Anlauf stellte **acht** Stellen um und ließ **siebzehn**
+stehen — *dieselbe Lücke wie bei Scheibe 3, und derselbe Grund: gezählt wurde, was leicht zu greifen
+war, nicht das, was die Definition verlangt.* Zweimal derselbe Fehler an zwei aufeinanderfolgenden
+Scheiben; die Wirkungs-Zusage steht deshalb ab jetzt in jeder Scheibe **von vornherein**, nicht erst
+nach einem Votum.
+
+**Jetzt vollständig:** **15 Klassen für 17 Stellen** (zwei Paare sind wortgleich —
+Gruppen-Überschriften und Navi-Icons). Von **27** `style={{`-Stellen bleiben **10**, jede mit Grund:
+**acht dynamisch**, **zwei mit Rohwert ohne Token**. **Gegenprobe:** eine zurückgedrehte Stelle ⇒
+**1 rot**.
+
+### Eine Zahl weicht ab — gemeldet, nicht übernommen
+
+Der Planner zählt **19** statische, ich messe **17**. Die zwei Mehr sind:
+
+| Stelle | warum sie nicht zur Grundgesamtheit gehört |
+|---|---|
+| Navigationsspalte | ihre Breite ist `navBreit`, und das ist `navZu ? 66 : 266` — **dynamisch** |
+| ein Navi-Eintrag | trägt `#3f464e` **roh** — Rohwert ohne Token, gehört nach K4 nicht in die CSS |
+
+*Wer nachmisst, findet 17.* Der Befund ist klein, aber er gehört gemeldet: hätte ich 19 gebaut,
+wären zwei Werte in der Stilschicht gelandet, die dort nicht hingehören.
+
+### Befund ohne Posten: die Datei spritzt Stil zur Laufzeit ein
+
+`HausplanerStudio` erzeugt ein `<style>`-Element mit `.hp-studio :focus-visible` und `${T.accent}`
+darin. **Das ist derselbe Fehler in anderer Form** — ein Stilwert, der in JS gebacken wird, statt in
+der Schicht zu stehen. Er gehört **nicht** zur gezählten Grundgesamtheit (kein `style={{`), und nach
+der Lehre des Planners von heute — *ein Auftrag, eine abnehmbare Einheit* — baue ich ihn **nicht
+ungefragt** mit dazu. Als eigener Posten wären es drei Zeilen.
+
+**Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
