@@ -15915,3 +15915,92 @@ zu behaupten — derselbe improvisierte Maßstab, nur zwei Ebenen tiefer.
 
 *Zur Datei: dieser Commit setzt das darüberstehende Votum des Evaluators unverändert mit — sein Text
 ist unangetastet.*
+
+
+---
+
+## 29.07.2026, 00:55 CEST — Planner: die Sperre war meine, und der Leerlauf auch
+
+**Yama hat es vor mir gesehen:** *„generator hat nichts zutun, und was muss er machen warum gibst
+du ihn keine aufgabe“*. Er hat recht, und es ist **dieselbe Fehlerklasse wie am 27.07. um 18:15** —
+eine Sperre von mir liess den Bauenden auf den Pruefenden warten. Damals habe ich sie selbst
+zurueckgenommen mit der Begruendung *„der Engpass ist die Abnahme, nicht das Ziehen“*, es
+aufgeschrieben, und **einen Tag spaeter dieselbe Sperre neu gesetzt.** Das ist kein Willensfehler,
+es ist ein Beleg gegen das Medium: eine Lehre in Prosa aendert Verhalten nicht.
+
+**Praezisierung der Sichtproben-Regel (gilt ab sofort, ersetzt die Fassung von 00:06):**
+waehrend einer gemeldeten Sichtprobe wird **`public/*` nicht bewegt** — nicht *„nichts gebaut“*.
+Bauen, messen und committen an allem anderen ist erlaubt. Der Grund der Regel ist ein stillstehendes
+Buendel, nicht ein stillstehender Generator. **Gemessen:** `public/*` steht unbewegt auf `a2a83e72`,
+`git diff --name-only 1e8648e9 274d21d8 -- resources scripts public` ist leer — **der Generator hat
+die Regel eingehalten, meine Sperre hat ihn ohne Not stillgelegt.**
+
+### Was ich beim Nachsehen sonst noch gefunden habe — und es war das Wichtigere
+
+**1. Ein unverarbeitetes Votum lag unversioniert im Arbeitsbaum.**
+`docs/abnahme-evaluator-haertung-2026-07-25.md` traegt **294 ungesicherte Zeilen**, darunter das
+Votum zum Messwerkzeug: **`NACHBESSERN`, zwei P1.** Der Evaluator committet nicht (Yamas Wort), also
+lag es dort. **Ballbesitz stand seit ueber einer halben Stunde bei mir, und ich habe stattdessen
+ueber eine Sperre nachgedacht.** Der Ledger-Eintrag dazu war da — das Votum in voller Laenge nicht.
+
+**2. 223 Commits sind ungesichert. Das ist der groesste offene Posten, und er stand nirgends.**
+```
+git rev-list --count origin/auto/hausplaner-integration..HEAD   ->  223
+git branch -r --contains HEAD                                   ->  (leer)
+letzter gesicherter Stand: 432c179b, 26.07. 13:20
+```
+**Zwei volle Arbeitstage liegen auf genau einer Platte.** Vor dem Deploy ist der Remote die einzige
+Kopie ausserhalb der Maschine; *„nicht gepusht“* heisst hier nicht unordentlich, sondern **kein
+Backup**. Die 76 KB `.ai-workflow/` aus Befund B-01 sind der kleinere Teil davon — deshalb steht die
+Sicherung jetzt **als Kriterium K-05 in B-01** und nicht in einem eigenen Posten, den wieder niemand
+zieht. *Ich habe B-01 zweimal gemeldet; melden aendert nichts, beauftragen schon.*
+
+### Zwei Auftraege liegen, beide ohne `public/*`
+
+**B-01 — `.ai-workflow/` versionieren und den Rueckstand sichern** (Spur B).
+Blatt: `docs/auftraege/generator-auftrag-b01-ai-workflow-sichern.md`. Fuenf Kriterien; K-02
+(*„kein absoluter Benutzerpfad“*) traegt nach R2 einen **presence-Partner**: derselbe Befehl ohne
+Pfadfilter muss Treffer liefern, sonst prueft er nichts. K-05 laeuft ueber Yamas eigenes
+`push-integration-sicher.command` — **nie `upstream` (`raminsadid2021` = fremdes Konto), nie
+`--force`, und bei Fehlschlag wird gemeldet statt von Hand nachgeholt.**
+
+**AUF-38-MW-N1 — das Messwerkzeug ueberspringt Kommentare** (Spur A).
+Blatt: `docs/auftraege/generator-auftrag-auf38-mw-kommentare.md`. Acht Kriterien.
+
+**Klassifizierung der zwei P1 — Planner-Entscheid: Implementierungsmangel, nicht
+Spezifikationsmangel.** Das ist der Unterschied zu `AUF38-S4-1` und `AUF38-NZ2-1` von gestern: dort
+fehlte in meinem Auftrag die Mengenzusage. **Hier stand die Aufgabe vollstaendig im Auftrag** —
+*„die Definition aus der Quittung als ausfuehrbares Skript“* —, und die Umsetzung trifft sie an zwei
+Stellen nicht. **Der Auftrag traegt keine Mitschuld.**
+
+**Eine Wurzel, zwei Symptome:** Kommentare werden weder beim Abgrenzen der Bloecke noch beim
+Einstufen uebersprungen. Deshalb **ein** Auftrag und nicht zwei — R5 verlangt eine unabhaengig
+abnehmbare Einheit, und *„das Werkzeug misst korrekt“* ist genau eine.
+
+**Uebernommen habe ich den Vorschlag des Evaluators unveraendert** (K-03): eine Zusage, dass **jeder**
+Block sauber abgegrenzt ist — beginnt mit `style={{`, endet auf `}}`, Klammerbilanz 0 — ueber alle
+Dateien. Das ist die gestaltunabhaengige Form nach R2 und faengt die naechste Desynchronisation
+selbst, **ohne dass jemand sie vorher zaehlt.**
+
+**Mitgenommen, obwohl P2 — `AUF38-MW-4` (K-04).** Heute null Wirkung. Die **Richtung** ist die
+gefaehrliche: `style={{ width: \`${breite}px\` }}` gilt als **statisch**. MW-1 und MW-2 zaehlen zu
+wenig, **MW-4 zaehlt zu viel — nur MW-4 erzeugt falsche Arbeit.**
+
+**Ausgeschlossen mit Grund — `AUF38-MW-5` (P3).** `T.a.b` gilt als dynamisch, null Fundstellen
+gemessen. Eine Aenderung an der Token-Tiefe waere eine Aenderung **der Definition**, und die steht
+in einer Nachbesserung nicht zur Debatte.
+
+**K-06 ist ein Kriterium, obwohl der Evaluator es schon gegengerechnet hat:** ein Massstab, der sich
+aendert, muss beweisen, dass er **keine erteilte Freigabe rueckwirkend entwertet.** Faellt eine der
+drei abgenommenen Scheiben von `0 offen` weg, ist das ein Halt an den Planner, keine Nachbesserung.
+
+### Was der Evaluator hier richtig gemacht hat
+
+Er hat das Skript nicht nur gefahren, sondern **eine zweite, unabhaengige Fassung derselben
+Definition gebaut** und beide ueber alle 13 Dateien gegeneinander gerechnet. Eine Differenzrechnung
+zwischen zwei Implementierungen derselben Regel findet genau die Stellen, an denen eine von beiden
+die Regel verfehlt — **und sie sagt auch, in welche Richtung.** Und er hat den Anlass beim Namen
+genannt, den ich selbst geliefert hatte: *„wer einen findet, koennte zwei haben.“* **Es waren zwei.**
+
+**Ballbesitz: Generator** (B-01, dann AUF-38-MW-N1). Der Evaluator ist frei fuer die aufgeschobene
+**headful-K7** an Scheibe 4 — das Buendel steht still, und keiner der beiden neuen Auftraege bewegt es.
