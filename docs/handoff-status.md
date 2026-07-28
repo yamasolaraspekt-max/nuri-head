@@ -14722,3 +14722,78 @@ der Lehre des Planners von heute — *ein Auftrag, eine abnehmbare Einheit* — 
 ungefragt** mit dazu. Als eigener Posten wären es drei Zeilen.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
+
+
+## ⇒ EVALUATOR — AUF-38 Scheibe 3 NACHGEBESSERT: FachFlaeche FREIGABE (2026-07-28)
+
+Re-Abnahme des nachgebesserten Stands (Code 01b9933e, Bundle 2798120f). Meine NACHBESSERN vom
+25.07. (statische token-wertige Inline-Stile in FachFlaeche.tsx nicht umgestellt; Test prueft die
+Gestalt statt der Wirkung) ist aufgeloest:
+- `grep color: T.(muted|ink|faint)` auf 01b9933e leer -> die Stile liegen als .hp-fach-*-Klassen.
+- Test prueft jetzt die Wirkung (jeder Inline-Rest hat benannten Grund; genau 3 Ausnahmen).
+- Gegen-Beweis mit Zaehnen: token-wertiger Inline-Stil in /tmp eingeschleust -> 2 Wirkungs-Tests
+  rot (2/1300).
+- serviert==gemessen (Browser-Fetch == 2798120f), Gates rein (tsc/schema/test 1300-0/build),
+  Artefakte byte-gleich.
+- K9 headful (Dialog "Bad" real): .hp-fach-spaltentitel traegt kein Inline, computedColor ==
+  --hp-faint-Token, kein Cascade-Override. Quelle == DOM == 3 Ausnahmen (GESPERRT/Overlay/Box).
+
+NEBENBEFUND (nicht angefasst): ZustandBadge in studioUi.tsx traegt statische token-wertige
+Inline-Stile (font-size/color/background=faint) - im Geist von AUF-38, aber eigene Datei/Scope,
+gehoert in eine eigene Scheibe. Zur Planner-Entscheidung, nicht hier nachgeschoben.
+
+Votum: **FREIGABE**. Kein Commit durch mich (Tor: Yamas Wort), kein Push/main-Merge (Tor 2 = Yama).
+Voll in docs/abnahme-evaluator-haertung-2026-07-25.md. **Ballbesitz: Planner.**
+
+OFFEN bei mir (zwei neue Planner-Auftraege gesichtet, noch nicht bearbeitet):
+- main-Vergleich (evaluator-auftrag-main-vergleich-2026-07-26.md): zwei Zahlen, Suite main vs HEAD.
+- Waechter-Blindstelle (evaluator-auftrag-waechter-blindstelle-2026-07-26.md): Messung, keine Abnahme.
+
+## PLANNER 27.07., 22:45 (CEST) — Scheibe 4 vollstaendig. Und die Tafel hat 15.000 Zeichen verloren
+
+*Uhrzeit aus `git log` von `37094c5b`.*
+
+**Scheibe 4 ist vollstaendig nachgebessert.** 15 Klassen fuer 17 Stellen, von 27 bleiben **10** —
+acht dynamisch, zwei Rohwert ohne Token. Gegenprobe: eine zurueckgedrehte Stelle ⇒ 1 rot. Gates
+0/0/0/0, Insel 1300 auf **1302**, PHP 789. Steht in §3b.
+
+**Er hat meine Zahl korrigiert, und das ist die beste Nachricht des Abends.** Ich zaehlte **19**
+statische Stellen, er misst **17** — und benennt die zwei Abweichler statt sie zu uebernehmen: die
+Navigationsspalte traegt `navZu ? 66 : 266` (dynamisch), ein Navi-Eintrag `#3f464e` roh (gehoert
+nach K4 nicht in die CSS). *Haette er meine 19 gebaut, waeren zwei Werte in der Stilschicht
+gelandet, die dort nicht hingehoeren.* **Genau dafuer steht die Regel, dass Zahlen im Auftrag
+Messungen sind und keine Bedingungen** — heute zum ersten Mal hat sie gegriffen.
+
+Und er zieht dieselbe Lehre wie ich, unabhaengig: *„Zweimal derselbe Fehler an zwei
+aufeinanderfolgenden Scheiben; die Wirkungs-Zusage steht deshalb ab jetzt in jeder Scheibe von
+vornherein, nicht erst nach einem Votum.“*
+
+### Der Zwischenfall: die AUF-38-Zelle war ueberschrieben
+
+Zwischen `f3b30206` (mein Stand) und `60d410d9` ist die AUF-38-Zelle im Arbeitsvorrat von **15.691
+auf 623 Zeichen** gefallen. Sie wurde durch eine Stapel-Zeile **ersetzt statt ergaenzt**. Verloren
+gingen: die **Marke `⚡ AKTIV`** (es gab danach **keinen aktiven Posten** — der Zyklus stand
+still), die Definition von *statisch*, die Vorrangregel bei rotem Votum, die Regel zu Flaechen, die
+nur unter Zustand erscheinen, und der Vermerk zu Scheibe 2.
+
+**Wiederhergestellt aus `f3b30206`**, Marke neu gesetzt, aktiver Auftrag jetzt **Scheibe 2
+(StartView)** — die letzte Nachzug-Datei, 29 statisch von 36.
+
+**Das ist kein Vorwurf, sondern ein Strukturbefund: zwei Schreiber, eine Zeile.** Wir haben heute
+Abend die Worktree-Trennung geprueft, die genau das verhindern soll — und waehrend wir sie prueften,
+ist der Fall eingetreten. **Der beste Beleg fuer den Nutzen ist der Schaden, den man ohne sie
+nimmt.**
+
+Zwei Regeln daraus, klein und mechanisch:
+
+1. **Wer die Marke entfernt, setzt sie weiter oder sagt an, dass nichts aktiv ist.** Ein leeres
+   Markenfeld ist zweideutig: es sieht aus wie „nichts zu tun“ und heisst „niemand weiss es“.
+2. **Eine Zelle wird ergaenzt, nie ersetzt.** Sie traegt die Geschichte des Postens; ein Ueberschreiben
+   loescht Auflagen, von denen der Schreibende nichts weiss.
+
+**Beide gehoeren in den Validator**, nicht in einen Absatz — die Tafel-Integritaetspruefung, die ich
+nach jeder Aenderung fahre (Spaltenzahl, Markenzahl), haette den Verlust **gesehen**: sie zaehlt
+Marken, und die Zahl war **0**. Sie lief nur nicht bei ihm.
+
+**Stapel 2** (Scheiben 3 und 4), Ballbesitz Evaluator. Aktiver Auftrag Scheibe 2, Ballbesitz
+Generator. `main` `665dd70e`, **41 Commits zurueck.**
