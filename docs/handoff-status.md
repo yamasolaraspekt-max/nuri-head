@@ -15317,3 +15317,161 @@ Ebene tiefer: nicht nur die Zahl veraltet, auch die Methode fehlt.**
 vierte Auftrag mit improvisiertem Massstab.
 
 **Ballbesitz: Generator** (Skript, Spur B). Stapel 2, `main` `057e6417`, 38 zurueck.
+
+
+## ⇒ EVALUATOR — AUF-38 Scheibe 4 (HausplanerStudio): NACHBESSERN (2026-07-28)
+
+Abnahme gegen Code `37094c5b` / Bundle `0d5cd975`, nach dem neuen REGELWERK (Votum je Kriterium).
+Voll in docs/abnahme-evaluator-haertung-2026-07-25.md.
+
+ERFUELLT: K1 Zahlenkorrektur 19->17 (selbst nachgezaehlt: 10 Rest = 8 dyn + 2 roh) · K2 15 Klassen/
+17 Stellen (K3-Tests gruen, Toast-Zeile diff-unangetastet) · K3 Gates 0/0/0/0, test 1302/0, dom 11/
+11 · K4 Bundle byte-gleich zu 0d5cd975 · K5 Gegen-Beweis 1 rot (Wirkungs-Test hat Zaehne).
+
+**NICHT ERFUELLT — Befund AUF38-S4-1 (an GENERATOR, Planner klassifiziert):** von zwei Rohwert-
+Ausnahmen ist nur das Namenskuerzel (#dfe4ea/#5b636d) beidseitig testverriegelt. Der **Toast
+`#1a262a`** (L205) ist eine gleichartige Rohwert-Ausnahme **ohne jede Verriegelung** (grep leer;
+#1a262a hat keinen Token in T). Der Wirkungs-Test faengt NICHT "1a262a bekommt Token, bleibt inline".
+Nach Sec.4 (Ausnahmen nur beidseitig verriegelt) + R8 nicht erfuellt. **VORSCHLAG (Planner
+entscheidet):** Test analog Namenskuerzel — Toast noch inline UND #1a262a nicht in T. Schweregrad:
+Konsistenz/Robustheit, kein Korrektheitsfehler — Klassifizierung beim Planner.
+
+**K7 K9 headful mit Toast — TEILWEISE:** Klassen-Render treu belegt (getComputedStyle: hp-studio-
+kopf/-status/-title/-bar greifen, kein Inline-Override; CSS-Subset byte-gleich zu 0d5cd975, alle 55
+Scheibe-4-Regeln verbatim im servierten Bundle). **Live-Screenshot + Toast-Ausloesung nicht
+erfasst:** Arbeitsbaum wird vom Generator aktiv fuer Scheibe 5 umgebaut, Renderer timeoutet 2x;
+serviert != gemessen (Bundle vorgelaufen). Ich fake keine Sichtprobe. Vollstaendige Toast-Sicht in
+die Re-Abnahme, wenn der Baum stabil ist. (Milderung: Toast-Zeile diff-unveraendert + rein inline,
+bundle-unabhaengig.)
+
+**Prozess-Beobachtung (an Planner):** die parallele Scheibe-5-Bauarbeit im geteilten Arbeitsbaum
+macht den live-headful-K9 fuer Scheibe 4 gerade unfuehrbar (Bundle vorgelaufen, Renderer instabil).
+Genau die Zwei-Schreiber-Lage, gegen die die Worktree-Trennung gedacht ist.
+
+Gesamtvotum: **NACHBESSERN.** Ballbesitz: Generator (Toast-Verriegelung) + Planner (Klassifizierung,
+Entscheid K7-Re-Abnahme). Kein Commit durch mich (Yamas Wort), kein Push/Tor-2 (Yama).
+
+
+## ⇒ EVALUATOR — AUF-38 Nachzug Scheibe 2 (StartView): NACHBESSERN (2026-07-29)
+
+Abnahme gegen Code `5382cb3a` / Bundle `a2a83e72`, nach REGELWERK (Votum je Kriterium). Voll in
+docs/abnahme-evaluator-haertung-2026-07-25.md.
+
+ERFUELLT: K1 Wirkung (8 Rest = 7 dynamisch + 1 Rohwert-Gradient, selbst klassifiziert) · K2 22
+Klassen/28 Stellen (K3-Tests gruen, 8 alte const-Objekte fort) · K3 Gates 0/0/0/0, test 1305/0 ·
+K4 byte-gleich zu a2a83e72 · K5 Zahlenabweichung 29->28 korrekt (Z138 ...grund/dominant dynamisch,
+am Code bestaetigt) · K6 **serviert==gemessen sauber** (Arbeitsbaum-Bundle IST a2a83e72) + K9
+headful: hp-start-kicker/-titel/-lead/-raster3, hp-karte/-icon greifen, kein Inline-Override ·
+Gegen-Beweis 1 rot (Wirkungs-Test hat Zaehne).
+
+**NICHT ERFUELLT — Befund AUF38-NZ2-1:** die Rohwert-Ausnahme L195 (Hintergrund-Gradient
+#e9f4f2/#eef3e6) hat KEINE beidseitige Verriegelung (nur generischer rohwert-Zweig, faengt nicht
+"Farbe bekommt Token"). Sec.4 + R8 nicht erfuellt.
+
+**R9 — an den PLANNER (wichtiger als der Einzelbefund):** ZWEITE Wiederholung derselben Fehlerklasse
+(Scheibe-4-Toast AUF38-S4-1 hatte dieselbe Luecke). R9 verlangt eine BARRIERE, nicht zwei
+Einzel-Flicken. **VORSCHLAG (Planner entscheidet):** EIN generischer Test - fuer jede verbliebene
+Rohwert-Inline-Stelle aller Scheiben pruefen, dass ihre Farbwerte NICHT in T stehen; deckt Toast +
+Gradient + kuenftige Scheiben, passt zur ohnehin geplanten scripts/statische-inline-stile.mjs.
+Per-Scheibe-Locks skalieren nicht. Schweregrad: Konsistenz/Robustheit - Klassifizierung Planner.
+
+Gesamtvotum: **NACHBESSERN.** Ballbesitz: Planner (R9-Barriere-Entscheid, deckt auch AUF38-S4-1) +
+Generator (Umsetzung). Kein Commit durch mich (Yamas Wort), kein Push/Tor-2 (Yama).
+
+---
+
+## 2026-07-29 — GENERATOR: Befund AUF38-S4-1 behoben (Toast-Verriegelung)
+
+**Commit:** `7f33ef06` — **1 Datei** (Test), **0 Produktivcode**, **0 `public/*`**. Kein
+Bündel-Rebuild nötig.
+
+```text
+Befehl:      npm run test:hausplaner
+Exit-Code:   0
+Tests:       1307   Fehler: 0   (vorher 1305)
+Weitere:     tsc 0 · schema:check 0 · test:dom 0 · build 0 · PHP 789
+Population:  Rohfarben in HausplanerStudio · grep '#[0-9a-fA-F]{6}' · gefunden 4 · verriegelt 4 · Rest 0
+Gegenprobe:  eine Farbe aus der Liste genommen ⇒ 1 rot
+```
+
+**Umgesetzt wie beauftragt:** der Toast `#1a262a` trägt jetzt dieselbe beidseitige Zusage wie das
+Namenskürzel — Stelle noch inline **und** Farbe nicht in `T`.
+
+**Dazu eine zweite Zusage auf Mengen-Ebene.** Die Lücke entstand dadurch, dass **jede Ausnahme ihre
+eigene Zusage brauchte** — wer eine neue anlegt, muss daran denken, auch die Zusage zu schreiben, und
+beim Toast ist das unterblieben. Die neue prüft die **Menge**: jede inline gebliebene Rohfarbe muss
+in der benannten Liste stehen, und keine darf einen Token haben.
+
+**BEFUND — es sind vier Rohfarben, nicht zwei:** beim Anlegen dieser Zusage kam **`#3f464e`** heraus,
+in den zwei Navi-Einträgen (Z151/Z161), **ebenfalls unverriegelt**. Dieselbe Klasse wie der Toast,
+nur hat sie niemand gezählt — auch die Abnahme nicht, die von *„zwei Rohwert-Ausnahmen"* ausging.
+**Keine dieser Zeilen wurde geändert**; sie sind benannt, damit die Verriegelung vollständig ist.
+
+### Zwei Richtigstellungen zur Abnahme — Tatsachen, kein Widerspruch zum Votum
+
+**(1) Der Arbeitsbaum wurde nicht für Scheibe 5 umgebaut.** Die Abnahme nennt als Ursache des
+abgebrochenen K9: *„Arbeitsbaum wird vom Generator aktiv für Scheibe 5 umgebaut."* **Ich habe an
+Scheibe 5 keine Zeile gebaut** — meine Quittung dazu lautet `TRÄGT NICHT` (`d4e73fe2`), der Auftrag
+liegt beim Planner, und ich habe dafür keine Quelldatei angefasst.
+
+**(2) Die tatsächliche Ursache ist eine andere und harmloser:** das Bündel im Baum stammt vom
+**Nachzug Scheibe 2** (`a2a83e72`), der nach Scheibe 4 gelandet ist. *„Bündel vorgelaufen"* stimmt —
+es ist aber die normale Folge einer später abgeschlossenen Scheibe, **keine Zwei-Schreiber-Lage**.
+
+Das ist wichtig, weil aus der Beobachtung eine Prozess-Empfehlung an den Planner wurde
+(Worktree-Trennung). **Die Empfehlung mag trotzdem richtig sein — die Begründung trägt hier nicht.**
+Für eine Re-Abnahme am stabilen Baum genügt es, das Bündel auf den Stand der zu prüfenden Scheibe zu
+bauen; ein zweiter Schreiber war nie da.
+
+**Ballbesitz: Evaluator** (Re-Abnahme K7) **und Planner** (Klassifizierung, `#3f464e`).
+
+*Hinweis zur Datei: dieser Eintrag steht unter dem noch nicht committeten Votum des Evaluators. Ich
+committe seinen Text nicht — er hat ausdrücklich auf Yamas Wort verwiesen.*
+
+## PLANNER 29.07., 00:06 (CEST) — Zwei Voten, eine Barriere, und ich habe den Evaluator blockiert
+
+**Zwei NACHBESSERN verarbeitet:** Scheibe 4 (Befund `AUF38-S4-1`, Toast `#1a262a` ohne
+Verriegelung) und Nachzug Scheibe 2 (`AUF38-NZ2-1`, Gradient `#e9f4f2/#eef3e6`, dieselbe Luecke).
+
+**Beide klassifiziere ich als SPEZIFIKATIONSMANGEL, nicht als Implementierungsmangel.** Meine
+Auflage verlangte *„Ausnahmen testverriegelt in beide Richtungen“* — aber **nie, dass alle
+Ausnahmen erfasst sind.** Es fehlte die Mengenzusage. **Der Generator hat verriegelt, was ich
+benannt habe; was er nicht benannt bekam, hat er nicht verriegelt.** Das ist mein Fehler.
+
+### Der Evaluator hat R9 vor mir gesehen
+
+Sein Satz: *„ZWEITE Wiederholung derselben Fehlerklasse. R9 verlangt eine BARRIERE, nicht zwei
+Einzel-Flicken. Per-Scheibe-Locks skalieren nicht.“*
+
+**Er hat recht, und der Generator hat in derselben Stunde den zweiten Einzelflicken gebaut**
+(`7f33ef06`, Toast verriegelt) — korrekt nach Auftrag, aber genau das, was R9 verbietet. *Dass er
+dabei eine **vierte** Rohfarbe fand (`#3f464e` in zwei Navi-Eintraegen, ebenfalls unverriegelt),
+belegt den Punkt zusaetzlich: Einzelzusagen finden nur, was jemand vorher gezaehlt hat.*
+
+**Seinem Vorschlag folge ich unveraendert:** **ein generischer Test — fuer jede verbliebene
+Rohwert-Inline-Stelle aller Scheiben pruefen, dass ihre Farbwerte nicht in `T` stehen.** Er wird
+Teil von `scripts/statische-inline-stile.mjs` und loest beide Befunde mit **einem** Test.
+
+### Meine Fehlentscheidung: ich habe den Evaluator blockiert
+
+Seine Prozess-Beobachtung: *„die parallele Scheibe-5-Bauarbeit im geteilten Arbeitsbaum macht den
+live-headful-K9 fuer Scheibe 4 unfuehrbar — Bundle vorgelaufen, Renderer timeoutet 2x; serviert !=
+gemessen. **Ich fake keine Sichtprobe.**“*
+
+**Ich habe Scheibe 5 aktiv gesetzt, waehrend zwei Scheiben in der Abnahme lagen.** §13 verbietet
+zwei Bauende **je Posten** — es fehlte die Regel, dass **waehrend einer laufenden Sichtprobe
+niemand das Buendel bewegt.** Der Evaluator konnte K7 deshalb nur teilweise belegen und hat das
+sauber als `TEILWEISE` ausgewiesen, statt es gruen zu schreiben.
+
+**Neue Regel, ab sofort:** meldet der Evaluator eine laufende headful-Messung, **ruht der Bau bis
+zu seinem Votum.** Und: *„Genau die Zwei-Schreiber-Lage, gegen die die Worktree-Trennung gedacht
+ist“* — **das ist heute der dritte Beleg fuer die Worktrees an einem Tag**, nach der
+ueberschriebenen Tafelzelle und dem Beifang im Ledger.
+
+### Was jetzt gilt
+
+**Scheibe 5 ist angehalten.** Aktiv ist das **Messskript mit generischer Rohwert-Zusage (Spur B)**.
+Danach loesen beide Nachbesserungen mit einem Test, dann Re-Abnahme bei stabilem Baum, **dann erst**
+Scheibe 5.
+
+Stapel 2 (Scheiben 4 und 2, beide nachzubessern), `main` `057e6417`, **40 zurueck.**
