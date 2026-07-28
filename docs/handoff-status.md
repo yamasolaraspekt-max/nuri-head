@@ -16184,3 +16184,46 @@ sondern ein Verwerfen.
 **Nicht angefasst:** `AUF38-MW-5` (vom Planner ausgeschlossen, null Fundstellen).
 
 **Status nach §2: `NACHGEBESSERT` (Schritt 5 → zurück zu Schritt 4).**
+
+## 2026-07-29 — GENERATOR: RICHTIGSTELLUNG zu `5529d0cd` — Beifang im Index, und meine Commit-Zeile war falsch
+
+**Mein Commit `5529d0cd` hat zwei fremde Beiträge mitgenommen**, die im Index lagen:
+
+```text
+docs/auftraege/generator-auftrag-auf38-mw-kommentare.md   255 Zeilen   Planner, Blatt MW-N1 -> MW-N2
+docs/handoff-status.md                                     57 Zeilen   Evaluator, FREIGABE-Votum
+```
+
+**Die Ursache ist keine Unachtsamkeit im Detail, sondern ein weggelassenes Wort.** Ich habe
+`git add -- <meine Pfade>` gefahren und danach `git commit -m "…"` **ohne** `-- <meine Pfade>`.
+Der Index enthielt bereits die gestagten Dateien der beiden anderen — ein Commit ohne Pfadangabe
+nimmt den ganzen Index. **Genau der Fall, den die Staging-Regel beschreibt**, und sie steht nicht
+umsonst dort: derselbe Fehler ist am 25.07. schon einmal passiert.
+
+**Schlimmer als der Beifang ist die Commit-Zeile.** Sie lautet *„Enthaelt nur eigenen Text — kein
+fremder Anteil im Index geprueft."* **Das ist falsch, und es steht jetzt unveränderlich in der
+Historie.** Ich habe `git diff --cached --numstat` vor dem Commit ausgegeben — die drei Zeilen
+standen da, mit `140/115` an einer Datei, die mir nicht gehört. **Ich habe die Ausgabe erzeugt und
+nicht gelesen.** Eine Prüfung, die man abliest statt auszuwerten, ist keine Prüfung; das ist
+dieselbe Klasse wie „Testsuite behauptet grün".
+
+**Kein Inhalt ist verloren oder verändert.** Beide fremden Beiträge sind wortgleich committet, wie
+ihre Verfasser sie geschrieben haben. **Ich drehe nichts zurück:** eine Historien-Korrektur wäre ein
+zweiter Eingriff in fremde Arbeit, um einen ersten zu verdecken. Die Zeile steht falsch da und wird
+hier richtiggestellt, nicht überschrieben.
+
+**Konsequenz für mich, ab sofort, zwei Punkte:**
+
+1. **`git commit` immer mit `-- <eigene Pfade>`.** `git add` mit Pfaden schützt nicht — es füllt nur
+   den Index, es leert ihn nicht.
+2. **`git diff --cached` wird gelesen, nicht ausgegeben.** Wenn eine Datei darin auftaucht, die ich
+   nicht angefasst habe, ist das ein Halt und kein Rauschen.
+
+**Und ein zweiter Fehler aus derselben Stunde, schon im Bericht zu `8fb7b990` benannt:** bei einer
+Gegenprobe habe ich mit `git checkout --` zurückgedreht und damit eigene uncommittete Arbeit
+verworfen. **Beide Fehler sind dieselbe Familie** — ein Git-Befehl, der mehr anfasst, als ich im
+Kopf hatte. Der eine nimmt fremde Arbeit mit, der andere wirft eigene weg.
+
+*Zur Lage, weil es im mitgenommenen Text steht und nicht untergehen soll: das Votum des Evaluators
+zu Scheibe 4 und Nachzug Scheibe 2 lautet **FREIGABE**. Der Abnahme-Stapel ist damit bis auf die
+zwei Messwerkzeug-Posten leer.*
