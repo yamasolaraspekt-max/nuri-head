@@ -15817,6 +15817,63 @@ fahre ich als Nächstes.** Belege im Anhang von `docs/abnahme-evaluator-haertung
 Ballbesitz: **Planner** (Klassifizierung der zwei P1 + Nachtrag der Kriterien), danach Generator.
 Kein Commit durch mich, kein Push, kein Tor 2.
 
+## ⇒ EVALUATOR — AUF-38 Scheibe 4 + Nachzug Scheibe 2: **FREIGABE** (2026-07-29, 00:45 CEST)
+
+**Der Stapel ist leer. Die headful-K7, die am 28.07. am wandernden Bündel scheiterte, ist gefahren.**
+
+**serviert == gemessen, zuerst:** `git status --porcelain public/hausplaner` **leer** — der
+Arbeitsbaum trägt den committeten Stand `a2a83e72`. Im Browser gefetcht: `hausplaner.js`
+**1 430 974 B**, `hausplaner.css` **7 584 B** — byte-gleich zu den Dateien im Baum. **Das Bündel hat
+sich während der Messung nicht bewegt** — die Regel von 00:06 hat genau das ermöglicht, was sie
+schützen sollte.
+
+**Scheibe 4 — der Toast, real ausgelöst.** Nicht simuliert, nicht aus dem Zustand gestellt:
+Startfläche → Chip „Fenster" → `ConfigWizard` (`role=dialog`) → 3× „Weiter" → **„Übernehmen"**.
+Gemessen im *selben* Aufruf, weil er nach 2 600 ms verschwindet:
+
+```text
+position=fixed  bottom=34px  left=712.5px  zIndex=80
+backgroundColor=rgb(26, 38, 42)              == #1a262a
+color=rgb(255, 255, 255)                     == T.surface
+fontSize=13.5px · borderRadius=12px · padding=12px 20px · maxWidth=560px
+boxShadow=rgba(28, 50, 55, 0.1) 0px 10px 34px == T.schattenGehoben
+klassen=(keine)  — vollständig inline, die gewollte Ausnahme
+```
+
+**Quelle == DOM, Wert für Wert** gegen `HausplanerStudio.tsx:205` — alle zehn Eigenschaften stimmen.
+Bildschirmfoto mit sichtbarem Toast erfasst (600×56 bei x=413/y=667). *Der erste Foto-Versuch kam zu
+spät und der Toast war fort — ich habe ihn nicht nachgestellt, sondern den Ablauf gebündelt
+wiederholt.* Schale: `.hp-studio-kopf` · `.hp-status` · `.hp-title` · `.hp-bar` — **Inline-Länge 0**,
+alle Werte aus der Schicht. Konsole nach frischem Laden mit aktiver Aufzeichnung: **0 Fehler.**
+
+**Nachzug Scheibe 2 — die Klassen greifen live.** 23 `hp-start-*` real im DOM, Stichproben alle mit
+`inline=""`: Kicker `rgb(18,128,125)` = `#12807d` = `T.accent`, 12.5px/700 · Kartentitel
+`rgb(35,42,49)` = `#232a31` = `T.ink`, 14px/700 · Karte `rgb(255,255,255)`. **Kein Inline-Override.**
+
+**Beide Befunde sind aufgelöst — über die Barriere, nicht über Einzelflicken**, und von mir
+unabhängig belegt: `#1a262a`+`#dfe4ea` einen Token gegeben ⇒ rot, nennt `HausplanerStudio.tsx:205`
+und `:129` (**`AUF38-S4-1`**) · `#e9f4f2`+`#eef3e6` ⇒ rot, nennt `StartView.tsx:195`
+(**`AUF38-NZ2-1`**) · vorhandener Tokenwert `#232a31` roh inline ⇒ rot · neue Rohfarbe `#123457`
+ohne Token ⇒ **grün**. Rücknahme jeweils grün, alles gegen eine **Kopie**, Arbeitsbaum unberührt.
+
+**Warum das trotz meines NACHBESSERN am Messwerkzeug trägt:** der Zählfehler (`AUF38-MW-2`) macht
+den Block an `StartView.tsx:149` **zu groß** — die Zusage meldet dort **mehr**, nie weniger. Eine
+übersehene Stelle kann daraus nicht entstehen: jede der 316 Stellen wird unabhängig gefunden, und
+die Desynchronisation trifft **1 von 316**. **Korrekturbedürftig ist die Zahl, nicht der Schutz.**
+Deshalb: Freigabe für die zwei Scheiben, Nachbesserung am Werkzeug — das sind zwei verschiedene Dinge.
+
+**Gesamtvoten: `FREIGABE` für Scheibe 4 · `FREIGABE` für Nachzug Scheibe 2.**
+
+**Lage aus meiner Sicht:** kein Slice mehr im Abnahme-Stapel. Offen ist allein die Nachbesserung am
+Messwerkzeug (zwei P1, Ballbesitz Planner → Generator). **Scheibe 5 (`ConfigWizard`) ist damit frei**
+— mit einer Bitte an den Planner: **erst das Werkzeug geradeziehen, dann Scheibe 5.** Ihr Sollwert
+kommt aus genau diesem Skript, und `ConfigWizard.tsx` trägt 43 Stellen. Ein Maßstab, der bei einer
+Datei um eine Stelle danebenlag, gehört nicht ungeprüft an die größte Scheibe. *Das ist ein
+Vorschlag, keine Sperre — die Reihenfolge setzt der Planner.*
+
+Belege in voller Länge: `docs/abnahme-evaluator-haertung-2026-07-25.md`.
+Kein Commit durch mich, kein Push, kein Tor 2.
+
 ## 2026-07-29 — GENERATOR: Nachbesserung `AUF38-MW-1` + `AUF38-MW-2` — eine Wurzel, zwei Stellen
 
 **Commit:** `c895061d` — 2 Dateien (`scripts/statische-inline-stile.mjs`,
@@ -16004,3 +16061,126 @@ genannt, den ich selbst geliefert hatte: *„wer einen findet, koennte zwei habe
 
 **Ballbesitz: Generator** (B-01, dann AUF-38-MW-N1). Der Evaluator ist frei fuer die aufgeschobene
 **headful-K7** an Scheibe 4 — das Buendel steht still, und keiner der beiden neuen Auftraege bewegt es.
+
+## 2026-07-29 — GENERATOR: `AUF-38-MW-N2` umgesetzt — und keine Zahl hat sich bewegt
+
+**Commit:** `8fb7b990` — 2 Dateien (`scripts/statische-inline-stile.mjs`,
+`__tests__/rohwertZusage.test.ts`). **0 Produktivcode · 0 `public/*` · Bündel byte-gleich.**
+
+```text
+QUITTUNG — AUF-38-MW-N2
+Je Kriterium Prüfverfahren vorhanden?   K-01 … K-06: JA
+Grundgesamtheit ausführbar:             JA
+Widersprüche:                           KEINE
+Nicht ausführbare Punkte:               KEINE
+Ergebnis:                               TRÄGT
+```
+
+### K-01 — `AUF38-MW-4`, die gefährliche Richtung
+
+Vorlagen-Ausdrücke werden jetzt **herausgehoben** statt an Ort und Stelle aufgelöst. Vorher blieb
+der Ausdruck **innerhalb** der Backticks und wurde eine Zeile später mit der Zeichenkette entwertet
+— er verschwand aus der Prüfung, und die Stelle galt als statisch.
+
+```text
+istStatisch("style={{ width: `${breite}px` }}")             vorher true    jetzt false
+istStatisch("style={{ border: `1px solid ${T.hair}` … }}")  vorher true    jetzt true
+```
+
+Die zweite Zeile ist die wichtigere: **die Korrektur unterscheidet, statt die Seite zu wechseln.**
+
+### K-02 — `AUF38-MW-3`
+
+Zeichenketten werden zuerst entwertet, dann wird auf `?` und `...` geprüft.
+
+```text
+istStatisch("style={{ content: '?' }}")              vorher false   jetzt true
+istStatisch("style={{ fontFamily: 'Foo ... Bar' }}") vorher false   jetzt true
+istStatisch("style={{ color: an ? T.ink : … }}")     vorher false   jetzt false
+istStatisch("style={{ ...grund, cursor: 'default' }}") vorher false jetzt false
+```
+
+### K-03 — Reichweite, als Satz und nicht als Zusage
+
+**Selbst nachgemessen**, nicht aus dem Votum übernommen:
+
+```text
+Befehl:   find … -name '*.ts' (ohne Tests/node_modules) | wc -l        114
+Befehl:   grep -rl 'style={{' --include='*.ts'                          app/stil/tokenVariablen.ts
+```
+
+Steht jetzt im Kopf des Skripts. **Bewusst keine Zusage** — sie wäre eine Zusage über eine Menge,
+die niemand pflegt, und ginge beim ersten neuen Token-Modul rot, ohne dass ein Fehler vorliegt.
+
+### K-04 — der neue Sollwert, und der eigentliche Befund daran
+
+```text
+Befehl:   node scripts/statische-inline-stile.mjs
+          316 Stellen insgesamt, davon 198 offen
+          ConfigWizard.tsx      43 gesamt / 40 statisch / 2 Ausnahme / 38 offen
+          EngineFlaeche.tsx     29 / 25 / 0 / 25          HausplanerApp.tsx  138 / 78 / 0 / 78
+          GuidedView.tsx        41 / 34 / 5 / 29          GeschossFlaeche    19 / 14 / 0 / 14
+          WerkzeugGruppenMenue  12 /  8 / 0 /  8          FaehigkeitenNavi    4 /  3 / 0 /  3
+          DreiDBereich           5 /  4 / 2 /  2          ReiterLeiste        2 /  1 / 0 /  1
+```
+
+**Der Auftrag sagte: *„Ändert sich durch MW-4 eine Zahl, ist das der eigentliche Befund."* — Es hat
+sich keine bewegt.** 198 offen wie nach `c895061d`, ConfigWizard unverändert bei 38. Das deckt sich
+mit der Messung des Evaluators (9 Vorlagen-Ausdrücke mit fremdem Bezeichner, 8 davon ohnehin über
+das `?` der Ternäre gefangen, 1 über den Rest des Blocks). **Der Sollwert für Scheibe 5 ist 38.**
+
+### K-05 — Eichung trägt
+
+```text
+StartView 0 offen · HausplanerStudio 0 offen · FachFlaeche 0 offen
+```
+
+Keine erteilte Freigabe wird rückwirkend entwertet.
+
+### K-06 — kein Produktivcode, Bündel unberührt, Gates
+
+```text
+Befehl:      npm run test:hausplaner            Exit 0   Tests 1323   Fehler 0   (vorher 1321)
+Befehl:      npm run test:hausplaner:dom        Exit 0   Tests   11   Fehler 0
+Befehl:      npm run tsc:hausplaner             Exit 0
+Befehl:      npm run schema:hausplaner:check    Exit 0
+Befehl:      php artisan test                   Exit 0   Tests  789   (2729 Zusicherungen)
+Buendel:     sha256 ueber public/hausplaner + public/planer
+             vorher  7c607c4dee1e7aebbdefd95436ab1a648035fd81d57b745d599def957491a1bb
+             nachher 7c607c4dee1e7aebbdefd95436ab1a648035fd81d57b745d599def957491a1bb
+             git status --porcelain public: 0 Zeilen. Nicht gebaut.
+```
+
+**`build:hausplaner` habe ich bewusst NICHT gefahren.** Es stand in der ersten Fassung des Blattes
+(`MW-N1`, K-08), in `MW-N2` nicht mehr — und es hätte das Bündel angefasst, während die headful-K7
+des Evaluators aussteht. Die Sichtproben-Regel schlägt einen Gate-Befehl, der inhaltlich nichts
+prüfen kann: an der Insel hat sich keine Zeile geändert.
+
+### Gegenproben — je Korrektur einzeln zurückgedreht
+
+```text
+A  stilBloecke liest wieder die Rohquelle         => 3 rot   (MW-2 + Kommentar-Farbe)
+B  istStatisch blendet nicht mehr aus             => 1 rot   (MW-1)
+C  Vorlagen-Ausdruck bleibt in der Zeichenkette   => 1 rot   (MW-4)
+D  ? und ... werden vor dem Entwerten geprueft    => 1 rot   (MW-3)
+Endstand wiederhergestellt, byte-gleich zur Sicherung, 16/16 gruen
+```
+
+**Jede Gegenprobe trifft genau ihre Zusage** — keine fängt fremde Fehler mit, keine bleibt stumm.
+
+### Ein Fehler von mir, der Beleg hinterlassen hat
+
+Bei Gegenprobe C habe ich zum Zurückdrehen `git checkout -- scripts/statische-inline-stile.mjs`
+benutzt. **Das holt den Commit-Stand und verwirft die uncommittete Arbeit** — meine K-01/K-02-
+Änderungen an der Datei waren damit weg. Nur meine eigene, nur diese eine Datei, die Testdatei war
+unberührt, und der Stand war in zwei Minuten wiederhergestellt. **Trotzdem gehört es hierher:** die
+Wiederherstellung ist nicht überprüfbar gewesen, sie war ein zweites Mal Schreiben.
+
+**Konsequenz, ab sofort für mich:** zum Zurückdrehen einer Probe **nie `git checkout`**, sondern
+eine Kopie in den Notizordner und `cp` zurück — so, wie ich es für die Proben A bis D dann auch
+gemacht habe, samt `diff -q` gegen die Sicherung als Beleg. `git checkout` ist kein Rückweg,
+sondern ein Verwerfen.
+
+**Nicht angefasst:** `AUF38-MW-5` (vom Planner ausgeschlossen, null Fundstellen).
+
+**Status nach §2: `NACHGEBESSERT` (Schritt 5 → zurück zu Schritt 4).**
