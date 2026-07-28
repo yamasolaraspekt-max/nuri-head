@@ -15204,3 +15204,80 @@ Nachmittag meine eigene Sperre zurueckgenommen habe. Er liest das Ledger nicht n
 
 **Lage:** Stapel 2 (Scheiben 4 und 2, Evaluator), aktiver Auftrag Scheibe 5 mit Quittung,
 `main` `057e6417`, 36 zurueck.
+
+---
+
+## 2026-07-28 — GENERATOR: QUITTUNG zu AUF-38 Scheibe 5 (`ConfigWizard.tsx`) — **TRÄGT NICHT**
+
+*Erster Auftrag unter `docs/agents/00-REGELWERK.md`. Schritt 2, vor dem Bauen. **Ich habe nicht
+gebaut.***
+
+```text
+QUITTUNG
+Task:              AUF-38 Scheibe 5 — ConfigWizard.tsx
+Auftragsversion:   Tafelzeile 242, Stand 46769c10
+Je Kriterium — Prüfverfahren vorhanden?
+  K-01 statische Inline-Stile wandern in die Stilschicht:      NEIN  (》statisch《 ohne Definition)
+  K-02 wert- und verhaltenstreu, kein Farbwert ändert sich:    JA
+  K-03 Farben nur über Token, kein Rohwert in der CSS:         JA
+  K-04 K9 headful, Dialog geöffnet, Schritte durchgeklickt:    JA
+Grundgesamtheit ausführbar (Definition + Befehl + Sollwert):   NEIN
+Kriterien mit fehlendem Feld:                                  K-01 — Prüfverfahren
+Widersprüche:                                                  1 (siehe unten)
+Nicht ausführbare Punkte:                                      1 (siehe unten)
+Ergebnis:                                                      TRÄGT NICHT
+```
+
+### Der Mangel: „statisch" ist das Wort, an dem schon drei Scheiben hingen — und es ist immer noch nicht definiert
+
+Der Auftrag nennt eine **Zahl** (43, korrekt als Messung gekennzeichnet), aber **keine Definition und
+keinen Befehl**. Damit muss ich mir je Datei selbst einen Maßstab bauen — und genau das ist zweimal
+auseinandergelaufen (*19 ↔ 17*, *29 ↔ 28*). Der Planner hat es selbst benannt: *„Ein Prüfer, der vor
+dem Bauen gefragt hätte, was genau heißt statisch und wie misst man es, hätte alle drei
+verhindert."* **Ich frage jetzt.**
+
+**Wie ernst das ist, zeigt mein eigener Versuch:** ich habe die Definition zweimal hingeschrieben und
+sie war **beim ersten Mal falsch** — sie hielt Eigenschaftsnamen für fremde Bezeichner und lieferte
+`0 von 43`. *Wenn der Ausführende den Maßstab improvisiert, ist er im ersten Anlauf falsch. Er
+gehört in den Auftrag.*
+
+### Der Widerspruch: zwei Zahlen für dieselbe Datei, beide richtig
+
+| Ort | Zahl |
+|---|---|
+| Auftragszeile Scheibe 5 | **43** Stellen |
+| AUF-38-Kopf (Scheiben-Schnitt) | **39** Stellen |
+
+Beide stimmen — mit **verschiedener Zählweise**: `grep -c` zählt **Zeilen mit** `style={{` (39), ein
+Vorkommens-Zähler zählt **Vorkommen** (43). **Die Zählweise steht nirgends.** Das ist P-04 eine Ebene
+tiefer: nicht nur die Zahl veraltet, auch die Methode fehlt.
+
+### Vorschlag — entscheiden tut der Planner
+
+**Definition (dateiunabhängig, mechanisch):**
+
+> Ein `style={{…}}`-Block ist **statisch**, wenn sein Ausdruck ausschließlich aus **Literalen** und
+> **`T.*`-Zugriffen** besteht: kein `?:`, kein Spread, kein Aufruf, kein anderer Bezeichner als `T`
+> (Eigenschaftsnamen zählen nicht als Bezeichner, `${…}` wird vorher aufgelöst).
+>
+> **Ausnahme** — bleibt zulässig inline: der Block trägt einen **Rohwert ohne Token** (`#…`/`rgba(`)
+> **oder** stammt aus einem **Ein-Wahrheit-Modul** (`GESPERRT_*`).
+
+**Eichung an den drei bereits abgenommenen Dateien** — die Definition muss sie auf **0** bringen,
+sonst taugt sie nichts:
+
+| Datei | gesamt | statisch | davon Ausnahme | **offen** |
+|---|---|---|---|---|
+| `FachFlaeche.tsx` | 3 | 2 | 2 | **0** ✓ |
+| `HausplanerStudio.tsx` | 10 | 2 | 2 | **0** ✓ |
+| `StartView.tsx` | 8 | 1 | 1 | **0** ✓ |
+| **`ConfigWizard.tsx`** | **43** | **40** | **2** | **38** |
+
+**Der Sollwert für Scheibe 5 wäre demnach 38, nicht 43.**
+
+**Zu R9** (*zweite Wiederholung ⇒ Barriere, kein Absatz*): dieselbe Fehlerklasse — improvisierter
+Maßstab — ist jetzt **dreimal** aufgetreten. Die Barriere wäre der Befehl selbst: ein Skript
+`scripts/statische-inline-stile.mjs`, das Definition und Ausnahmen ausführbar macht, im Auftrag als
+`population_command` steht und im Gate mitläuft. **Ich baue es auf Auftrag, nicht von selbst.**
+
+**Ballbesitz: Planner.**
