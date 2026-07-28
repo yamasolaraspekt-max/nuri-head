@@ -103,7 +103,7 @@ export function HausplanerStudio(): React.ReactElement {
   };
 
   return (
-    <div className="hp-studio" style={{ fontFamily: 'Inter, system-ui, sans-serif', color: T.ink, minHeight: '100vh', display: 'flex', flexDirection: 'column', background: T.bg }}>
+    <div className="hp-studio">
       {/* Sichtbarer Tastatur-Fokus über das ganze Studio (ux-Rubrik: Fokus sichtbar). */}
       <style>{`.hp-studio :focus-visible{outline:2px solid ${T.accent};outline-offset:2px;border-radius:6px;}`}</style>
       {/* Kopfzeile */}
@@ -113,13 +113,13 @@ export function HausplanerStudio(): React.ReactElement {
           Jetzt: umbrechen statt schieben, Mindesthöhe statt fester Höhe. */}
       <header className="hp-studio-kopf">
         <div className="hp-studio-marke">
-          <span style={{ width: 30, height: 30, borderRadius: 9, background: T.brand, display: 'grid', placeItems: 'center', color: T.surface }}><Ikon inhalt='<path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/>' size={16} /></span>
+          <span className="hp-marke-zeichen"><Ikon inhalt='<path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/>' size={16} /></span>
           Hausplaner
-          <span style={{ fontWeight: 600, color: T.muted, fontSize: 13.5 }}>· Solar Aspekt</span>
+          <span className="hp-marke-zusatz">· Solar Aspekt</span>
         </div>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 7, color: T.muted, fontSize: 13 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: st.farbe }} />{st.label}{scene && kannSpeichern ? ` · Rev. ${scene.revision}` : ''}</span>
+        <span className="hp-status"><span style={{ width: 8, height: 8, borderRadius: '50%', background: st.farbe }} />{st.label}{scene && kannSpeichern ? ` · Rev. ${scene.revision}` : ''}</span>
         <span className="hp-fueller" />
-        <div style={{ display: 'flex', background: T.surface, borderRadius: 12, padding: 4, boxShadow: T.schattenFlach }}>
+        <div className="hp-modusschalter">
           {modeBtn('start', 'Übersicht', '<path d="M4 5h16M4 12h16M4 19h10"/>')}
           {modeBtn('expert', 'Expertenmodus', '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>')}
         </div>
@@ -135,8 +135,8 @@ export function HausplanerStudio(): React.ReactElement {
         {!imExperte && (
           <nav style={{ width: navBreit, flex: '0 0 auto', background: T.surface, borderRight: `1px solid ${T.hair}`, display: 'flex', flexDirection: 'column', transition: 'width .18s', overflow: 'hidden' }}>
             <div className="hp-navi-kopf">
-              {!navZu && <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: T.faint }}>Navigation</span>}
-              <button type="button" onClick={() => setNavZu((v) => !v)} title="Ein-/ausklappen" style={{ marginLeft: 'auto', width: 30, height: 30, border: 0, background: T.surface2, borderRadius: 9, color: T.muted, cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
+              {!navZu && <span className="hp-navi-titel">Navigation</span>}
+              <button type="button" onClick={() => setNavZu((v) => !v)} title="Ein-/ausklappen" className="hp-navi-klapp">
                 <Ikon inhalt={navZu ? '<path d="M9 6l6 6-6 6"/>' : '<path d="M15 6l-6 6 6 6"/>'} size={16} />
               </button>
             </div>
@@ -145,29 +145,29 @@ export function HausplanerStudio(): React.ReactElement {
               <Ikon inhalt='<path d="M12 5v14M5 12h14"/>' size={16} />{!navZu && <span>Neue Anfrage / Lead</span>}
             </button>
             <div className="hp-navi-liste">
-              {!navZu && <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.faint, margin: '14px 10px 5px' }}>Projekt</div>}
+              {!navZu && <div className="hp-navi-gruppe">Projekt</div>}
               {PROJ.map((p) => (
                 <div key={p.name} role="button" tabIndex={0} onClick={() => gehGeführt(1)} onKeyDown={(e) => { if (istAusloeser(e)) gehGeführt(1); }}
                   style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '9px 11px', borderRadius: 11, cursor: 'pointer', color: '#3f464e', fontSize: 14, justifyContent: navZu ? 'center' : 'flex-start' }}>
-                  <span style={{ color: T.muted, display: 'grid', placeItems: 'center' }}><Ikon inhalt={p.icon} size={19} /></span>{!navZu && <span>{p.name}</span>}
+                  <span className="hp-navi-icon"><Ikon inhalt={p.icon} size={19} /></span>{!navZu && <span>{p.name}</span>}
                 </div>
               ))}
-              {!navZu && <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.faint, margin: '14px 10px 5px' }}>Fachplaner</div>}
+              {!navZu && <div className="hp-navi-gruppe">Fachplaner</div>}
               {FACH.map((f) => (
                 <div key={f.name}>
                   <div role="button" tabIndex={0}
                     onClick={() => (f.sub ? setOffeneHubs((o) => ({ ...o, [f.name]: !o[f.name] })) : öffneKonfigurator(f.name))}
                     onKeyDown={(e) => { if (istAusloeser(e)) (f.sub ? setOffeneHubs((o) => ({ ...o, [f.name]: !o[f.name] })) : öffneKonfigurator(f.name)); }}
                     style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '9px 11px', borderRadius: 11, cursor: 'pointer', color: '#3f464e', fontSize: 14, justifyContent: navZu ? 'center' : 'flex-start' }}>
-                    <span style={{ color: T.muted, display: 'grid', placeItems: 'center' }}><Ikon inhalt={f.icon} size={19} /></span>
+                    <span className="hp-navi-icon"><Ikon inhalt={f.icon} size={19} /></span>
                     {!navZu && <span>{f.name}</span>}
                     {!navZu && f.sub && <span style={{ marginLeft: 'auto', color: T.faint, transform: offeneHubs[f.name] ? 'rotate(90deg)' : 'none', transition: 'transform .15s' }}><Ikon inhalt='<path d="M9 6l6 6-6 6"/>' size={16} /></span>}
                   </div>
                   {!navZu && f.sub && offeneHubs[f.name] && (
-                    <div style={{ display: 'flex', flexDirection: 'column', margin: '2px 0 6px 22px', paddingLeft: 11, borderLeft: `1px solid ${T.hair}` }}>
+                    <div className="hp-navi-unterliste">
                       {f.sub.map((sub) => (
                         <div key={sub[0]} role="button" tabIndex={0} onClick={() => öffneKonfigurator(sub[0], sub[1], 'navi')} onKeyDown={(e) => { if (istAusloeser(e)) öffneKonfigurator(sub[0], sub[1], 'navi'); }}
-                          style={{ padding: '7px 10px', borderRadius: 9, fontSize: 13, color: T.muted, cursor: 'pointer' }}>{sub[0]}</div>
+                          className="hp-navi-untereintrag">{sub[0]}</div>
                       ))}
                     </div>
                   )}
@@ -179,7 +179,7 @@ export function HausplanerStudio(): React.ReactElement {
                 später, das über den Inhalt nichts sagt. **Jetzt zählt der Fuss, was in der Liste
                 darüber wirklich steht** — gerechnet aus `PROJ` und `FACH`, nicht abgeschrieben.
                 Eine gezählte Zahl kann nicht veralten; eine abgetippte schon. */}
-            {!navZu && <div style={{ padding: '12px 16px', borderTop: `1px solid ${T.hair2}`, fontSize: 12, color: T.faint }}>{PROJ.length} Projekt-Einstiege · {FACH.length} Fachplaner mit {FACH.reduce((n, f) => n + (f.sub?.length ?? 0), 0)} Untermodulen</div>}
+            {!navZu && <div className="hp-navi-fuss">{PROJ.length} Projekt-Einstiege · {FACH.length} Fachplaner mit {FACH.reduce((n, f) => n + (f.sub?.length ?? 0), 0)} Untermodulen</div>}
           </nav>
         )}
 
@@ -189,11 +189,11 @@ export function HausplanerStudio(): React.ReactElement {
           {modus === 'guided' && <GuidedView schritt={schritt} setSchritt={setSchritt} onExperte={() => setModus('expert')} onKonfigurator={(art) => setKonfig(art)} modell={modell} schritte={schritte} />}
           {imExperte && (
             <div className="hp-experte">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 16px', background: T.surface, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}>
-                <button type="button" onClick={() => setModus('guided')} style={{ border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600, fontSize: 13, padding: '7px 14px', borderRadius: 10, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7 }}>
+              <div className="hp-experte-leiste">
+                <button type="button" onClick={() => setModus('guided')} className="hp-experte-zurueck">
                   <Ikon inhalt='<path d="M15 6l-6 6 6 6"/>' size={15} />Zur geführten Planung
                 </button>
-                <span style={{ fontSize: 13, color: T.muted }}>Experte — alle Werkzeuge, Projektbaum und Eigenschaften. Dasselbe Modell und dieselbe Revision.</span>
+                <span className="hp-experte-hinweis">Experte — alle Werkzeuge, Projektbaum und Eigenschaften. Dasselbe Modell und dieselbe Revision.</span>
               </div>
               <div className="hp-experte-buehne"><HausplanerApp imStudio /></div>
             </div>

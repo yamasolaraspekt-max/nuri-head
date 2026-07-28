@@ -181,6 +181,65 @@ test('K3 Scheibe 4: jede Klasse wird auch benutzt', () => {
   }
 });
 
+const SCHEIBE4B: ReadonlyArray<[string, string[]]> = [
+  ['.hp-studio', ['font-family: Inter, system-ui, sans-serif', 'color: var(--hp-ink)', 'min-height: 100vh',
+    'display: flex', 'flex-direction: column', 'background: var(--hp-bg)']],
+  ['.hp-marke-zeichen', ['width: 30px', 'height: 30px', 'border-radius: 9px', 'background: var(--hp-brand)',
+    'display: grid', 'place-items: center', 'color: var(--hp-surface)']],
+  ['.hp-marke-zusatz', ['font-weight: 600', 'color: var(--hp-muted)', 'font-size: 13.5px']],
+  ['.hp-status', ['display: flex', 'align-items: center', 'gap: 7px', 'color: var(--hp-muted)', 'font-size: 13px']],
+  ['.hp-modusschalter', ['display: flex', 'background: var(--hp-surface)', 'border-radius: 12px', 'padding: 4px',
+    'box-shadow: var(--hp-schatten-flach)']],
+  ['.hp-navi-titel', ['font-size: 11.5px', 'font-weight: 700', 'letter-spacing: .08em', 'text-transform: uppercase',
+    'color: var(--hp-faint)']],
+  ['.hp-navi-klapp', ['margin-left: auto', 'width: 30px', 'height: 30px', 'border: 0', 'background: var(--hp-surface2)',
+    'border-radius: 9px', 'color: var(--hp-muted)', 'cursor: pointer', 'display: grid', 'place-items: center']],
+  ['.hp-navi-gruppe', ['font-size: 10.5px', 'font-weight: 700', 'letter-spacing: .07em', 'text-transform: uppercase',
+    'color: var(--hp-faint)', 'margin: 14px 10px 5px']],
+  ['.hp-navi-icon', ['color: var(--hp-muted)', 'display: grid', 'place-items: center']],
+  ['.hp-navi-unterliste', ['display: flex', 'flex-direction: column', 'margin: 2px 0 6px 22px', 'padding-left: 11px',
+    'border-left: 1px solid var(--hp-hair)']],
+  ['.hp-navi-untereintrag', ['padding: 7px 10px', 'border-radius: 9px', 'font-size: 13px', 'color: var(--hp-muted)',
+    'cursor: pointer']],
+  ['.hp-navi-fuss', ['padding: 12px 16px', 'border-top: 1px solid var(--hp-hair2)', 'font-size: 12px', 'color: var(--hp-faint)']],
+  ['.hp-experte-leiste', ['display: flex', 'align-items: center', 'gap: 10px', 'padding: 6px 16px',
+    'background: var(--hp-surface)', 'border-bottom: 1px solid var(--hp-hair)', 'flex: 0 0 auto']],
+  ['.hp-experte-zurueck', ['border: 1px solid var(--hp-hair)', 'background: var(--hp-surface)', 'color: var(--hp-ink)',
+    'font-weight: 600', 'font-size: 13px', 'padding: 7px 14px', 'border-radius: 10px', 'cursor: pointer',
+    'display: flex', 'align-items: center', 'gap: 7px']],
+  ['.hp-experte-hinweis', ['font-size: 13px', 'color: var(--hp-muted)']],
+];
+
+test('K3 Scheibe 4 (Rest): jede Regel traegt genau die Werte, die vorher inline standen', () => {
+  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const [klasse, deklarationen] of SCHEIBE4B) {
+    const block = ohneKommentare.match(new RegExp(`\\${klasse} \\{([^}]*)\\}`));
+    assert.ok(block, `${klasse} fehlt in der CSS`);
+    for (const d of deklarationen) {
+      assert.ok(block[1]!.includes(d), `${klasse}: „${d}" fehlt`);
+    }
+  }
+});
+
+/**
+ * **Die Wirkung, wie bei Scheibe 3 — und diesmal von vornherein.**
+ *
+ * Der erste Anlauf an dieser Datei stellte acht Stellen um und liess **siebzehn** stehen; die
+ * Zusagen daneben waren gruen, weil sie die acht pruefen. *Dieselbe Luecke, die das Votum zu
+ * Scheibe 3 aufgedeckt hat.* Diese Zusage prueft, was uebrig ist: **jeder verbliebene Inline-Stil
+ * muss dynamisch sein oder einen Rohwert ohne Token tragen.** Alles andere gehoert in die Schicht.
+ */
+test('Scheibe 4 (Wirkung): jeder verbliebene Inline-Stil in HausplanerStudio hat einen Grund', () => {
+  const studio = readFileSync(join(hier, '../app/HausplanerStudio.tsx'), 'utf8');
+  const bloecke = [...studio.matchAll(/style=\{\{([\s\S]*?)\}\}/g)].map((m) => m[1]!);
+  assert.ok(bloecke.length > 0, 'gar kein Inline-Stil mehr? Dann ist die Zusage stumpf geworden');
+  const dynamisch = /\?|navZu|offeneHubs|imExperte|navBreit|\bst\.|\bp\.|\bf\./;
+  const rohwert = /#[0-9a-fA-F]{3,8}\b|rgba?\(/;
+  const ohneGrund = bloecke.filter((b) => !dynamisch.test(b) && !rohwert.test(b));
+  assert.deepEqual(ohneGrund, [],
+    `Inline-Stile ohne Grund (nur Token und Literale — gehoeren in die Stilschicht):\n${ohneGrund.join('\n---\n')}`);
+});
+
 test('Scheibe 4: das Namenskuerzel bleibt inline — seine Farben haben keinen Token', () => {
   // **Der ehrliche Rest.** Rohe Farbwerte in einer CSS-Regel verbietet Kriterium 4; einen Token zu
   // erfinden waere eine Palette-Entscheidung. Also bleibt die Stelle, wo sie ist — mit Begruendung.
