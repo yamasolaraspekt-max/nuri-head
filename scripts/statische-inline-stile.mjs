@@ -52,13 +52,70 @@ export function tsxDateien(wurzel = WURZEL) {
 }
 
 /**
+ * **Kommentare ausblenden — längentreu.**
+ *
+ * *Nachtrag nach den Befunden `AUF38-MW-1` und `AUF38-MW-2` (Evaluator, 29.07.).* Beide hatten
+ * dieselbe Wurzel: **Kommentare wurden nirgends übersprungen.** Das hat zweierlei angerichtet —
+ *
+ * 1. Ein Kommentar **im** Block liess seinen Text als Bezeichner stehen; jeder kommentierte, sonst
+ *    rein statische Stil-Block galt dadurch als „dynamisch" (Fundstelle: `WerkzeugGruppenMenue.tsx`
+ *    Z82 — nur Literale und `T.*`, und trotzdem nicht gezählt).
+ * 2. Ein **einzelnes** Anführungszeichen in einem Kommentar (`StartView.tsx` Z155 trägt
+ *    `„nah dran"`) schickte den Zeichenketten-Scanner in einen Modus, aus dem er nicht mehr
+ *    herausfand: ab dort wurden **alle** Klammern übersprungen und der Block lief bis zum
+ *    Dateiende. Falsch-rot war damit erreichbar, sobald irgendeine Farbe dahinter einen Token
+ *    bekommt.
+ *
+ * **Längentreu** ist die Bedingung, an der alles hängt: jedes Zeichen wird durch ein Leerzeichen
+ * ersetzt, Zeilenumbrüche bleiben stehen. Dadurch stimmen Abstände und Zeilennummern weiterhin mit
+ * der Originalquelle überein — die Maske darf gefahrlos anstelle des Originals gelesen werden.
+ *
+ * Und sie ist **zeichenketten-bewusst**: ein `//` in `'url(//cdn…)'` ist kein Kommentar. Die
+ * umgekehrte Reihenfolge wäre genau der Fehler, der hier behoben wird, nur andersherum.
+ */
+export function ohneKommentare(quelle) {
+  let aus = '';
+  let zeichenkette = null;
+  for (let i = 0; i < quelle.length; i++) {
+    const c = quelle[i];
+    if (zeichenkette) {
+      aus += c;
+      if (c === '\\') { aus += quelle[++i] ?? ''; continue; }
+      if (c === zeichenkette) zeichenkette = null;
+      continue;
+    }
+    if (c === "'" || c === '"' || c === '`') { zeichenkette = c; aus += c; continue; }
+    if (c === '/' && quelle[i + 1] === '/') {
+      while (i < quelle.length && quelle[i] !== '\n') { aus += ' '; i++; }
+      aus += quelle[i] ?? '';                       // der Zeilenumbruch bleibt
+      continue;
+    }
+    if (c === '/' && quelle[i + 1] === '*') {
+      const ende = quelle.indexOf('*/', i + 2);
+      const bis = ende === -1 ? quelle.length : ende + 2;
+      for (; i < bis; i++) aus += quelle[i] === '\n' ? '\n' : ' ';
+      i--;
+      continue;
+    }
+    aus += c;
+  }
+  return aus;
+}
+
+/**
  * Die `style={{…}}`-Blöcke einer Quelle — **mit echter Klammerzählung**.
  *
  * Ein naives „bis zum ersten `}}`" schneidet verschachtelte Objekte und Vorlagen-Zeichenketten
  * mitten durch und misst dann etwas anderes, als dasteht. Deshalb wird hier gezählt, und
  * Zeichenketten werden übersprungen.
+ *
+ * **Gelesen wird die kommentarfreie Maske**, nicht die Rohquelle (siehe `ohneKommentare`). Weil die
+ * Maske längentreu ist, bleiben Zeilennummern gültig; und weil die zurückgegebenen Blöcke aus ihr
+ * stammen, ist ein Kommentar für **jeden** nachgelagerten Schritt unsichtbar — Einstufung wie
+ * Farbsuche. *Eine Farbe, die nur im Kommentar steht, ist kein Stilwert.*
  */
-export function stilBloecke(quelle) {
+export function stilBloecke(rohquelle) {
+  const quelle = ohneKommentare(rohquelle);
   const bloecke = [];
   const marke = 'style={{';
   for (let i = quelle.indexOf(marke); i !== -1; i = quelle.indexOf(marke, i + 1)) {
@@ -104,8 +161,16 @@ export function rohfarben(text) {
   return [...new Set((text.match(HEXFARBE) ?? []).map((f) => f.toLowerCase()))];
 }
 
-/** **Die Definition.** Nur Literale und `T.*` — sonst nichts. */
-export function istStatisch(text) {
+/**
+ * **Die Definition.** Nur Literale und `T.*` — sonst nichts.
+ *
+ * Kommentare werden **hier noch einmal** ausgeblendet, obwohl `stilBloecke` das bereits tut. Grund:
+ * die Funktion wird auch direkt aufgerufen — von den Zusagen und von jedem, der die Definition an
+ * einem Schnipsel nachrechnet. Ein Maßstab, der nur über einen bestimmten Einstieg richtig misst,
+ * ist der Fehler, gegen den dieses Skript gebaut wurde. *(Befund `AUF38-MW-1`.)*
+ */
+export function istStatisch(rohtext) {
+  const text = ohneKommentare(rohtext);
   const aufgeloest = text.replace(/\$\{([^}]*)\}/g, '$1');
   if (aufgeloest.includes('?') || aufgeloest.includes('...')) return false;
   let kern = aufgeloest.replace(/'[^']*'|"[^"]*"|`[^`]*`/g, '0');
