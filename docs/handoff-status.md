@@ -15732,3 +15732,186 @@ Ich habe ihn zweimal gemeldet; melden ändert nichts.
 **Lage:** Stapel 3 (Messwerkzeug · Scheibe 4 · Nachzug Scheibe 2), Ballbesitz Evaluator, `main`
 `057e6417`, 44 zurück. Merge-Kandidat liegt: **`2798120f`** (Scheibe 3, abgenommen) — **wartet auf
 Yama**, wie es sich gehört.
+
+---
+
+## ⇒ EVALUATOR — AUF-38 Messwerkzeug (`42b88b85`, Spur A): NACHBESSERN (2026-07-29, 00:29 CEST)
+
+*Zeit aus `TZ=Europe/Berlin date`.* Geprüft am Commit, blind gemessen, danach den Bericht gelesen.
+
+**Die Barriere trägt — der Maßstab daneben nicht.** Das ist das ganze Votum in einem Satz.
+
+**Was hält (selbst belegt, nicht übernommen):**
+- **Die generische Zusage hat Zähne**, vier Proben: `#1a262a`+`#dfe4ea` einen Token gegeben ⇒ rot,
+  nennt `HausplanerStudio.tsx:205` + `:129` (**deckt `AUF38-S4-1`**) · `#e9f4f2`+`#eef3e6` ⇒ rot,
+  nennt `StartView.tsx:195` (**deckt `AUF38-NZ2-1`**) · **Rückfall-Richtung**: vorhandenen Tokenwert
+  `#232a31` roh inline geschrieben ⇒ rot · neue Rohfarbe `#123457` ohne Token ⇒ **grün**, kein
+  Fehlalarm. Gefahren gegen eine **Kopie** der Insel (`WURZEL` ist relativ, also `cwd` verlegt) —
+  identischer Testcode, identisches Skript, nur ein anderer Dateibaum. **R9 ist damit erfüllt:
+  beide Befunde fallen mit EINEM Test.**
+- Ausnahmen-Erkennung Rohwert **und** `GESPERRT_*`: erfüllt, mit Gegenprobe (reiner Token ist
+  *keine* Ausnahme).
+- Gates selbst gefahren: `test:hausplaner` **1315/0** · `tsc` 0 · `schema:check` 0 · `dom` **11/0**.
+  `git show --name-status 42b88b85` = 2 neue Dateien, `-- public` leer, `status --porcelain public`
+  leer. **Bündel unbewegt — die Regel von 00:06 ist eingehalten.**
+
+**Zwei P1 am Werkzeug, eine Wurzel: Kommentare werden weder beim Abgrenzen noch beim Einstufen
+übersprungen.**
+
+- **`AUF38-MW-1` — der Sollwert ist zu klein: 198 offen, nicht 197.**
+  `istStatisch` entwertet Zeichenketten (Z111), aber keine Kommentare; der Kommentartext bleibt als
+  Bezeichner stehen und fällt in die Schlussprüfung. **Jeder kommentierte Block gilt als
+  „dynamisch".** Live-Fundstelle: **`WerkzeugGruppenMenue.tsx:82`** — nur Literale und `T.*`
+  (`background: T.surface`, `` border: `1px solid ${T.hair}` ``, `boxShadow`, `maxHeight`…),
+  **statisch und offen**, wird nicht gezählt. Gegen-Beweis: derselbe Block ohne den Kommentar ⇒
+  `istStatisch = true`.
+- **`AUF38-MW-2` — ein Block läuft bis Dateiende.** Nicht die zwei synthetischen Einzeiler des
+  Tests geprüft, sondern **alle 316 Blöcke der echten Insel** auf Abgrenzung: **1 defekt** —
+  `StartView.tsx:149`, Klammerbilanz **+2**, Blocktext endet am Dateiende. Ursache lokalisiert:
+  `StartView.tsx:155` trägt im Kommentar `„nah dran"` — **ein einzelnes ASCII-Anführungszeichen**
+  schaltet den Zeichenketten-Scanner (Z75) scharf, ab da werden alle Klammern übersprungen.
+
+**Und damit ein Befund an deinem Nachbesserungs-Beleg, Generator:** dein Sollwert **20 Rohfarben in
+5 Dateien** enthält **3 Scheintreffer — `#dcebe9`, `#e9f4f2`, `#eef3e6`, alle drei an
+`StartView.tsx:149`**. Echt sind **17**. Die drei sind Artefakte von `MW-2`: der überlaufende Block
+sammelt die Farben von Z171 und Z195 ein. **Deine Sätze *„#e9f4f2 steht auch in Z149"* und
+*„#dcebe9 an drei Stellen"* stehen deshalb nicht** — Z149 ist in beiden Fällen keine Fundstelle.
+**Deine Lehre bleibt trotzdem richtig, nur nicht an diesem Beispiel:** `GuidedView.tsx` (4) und
+`DreiDBereich.tsx` (4) tragen echte Rohfarben, ohne je eine Scheibe gesehen zu haben. Das ist der
+belastbare Teil.
+
+**Was das für die drei abgenommenen Scheiben heißt: nichts.** Korrigierte Fassung über alle 13
+Dateien gegengerechnet — einzige Abweichung ist `WerkzeugGruppenMenue`. `StartView` bleibt
+**0 offen**, `HausplanerStudio` **0 offen**, `FachFlaeche` **0 offen**. **Die Eichung trägt auch
+unter dem korrigierten Maßstab**; der Fehler trifft nur eine Datei, die noch keine Scheibe gesehen hat.
+
+**Drei kleinere Befunde, heute ohne Wirkung, zur Klassifizierung:** `?`/`...` werden **vor** dem
+Entwerten der Zeichenketten geprüft (`content: '?'` gilt als dynamisch, 0 Fundstellen) ·
+**`${…}` wird aufgelöst, bleibt aber in den Backticks und wird danach mitentwertet** — `` width:
+`${breite}px` `` gilt als **statisch**, also die *gefährliche* Richtung; der vorhandene Test prüft
+nur den Token-Fall und geht deshalb grün (0 Fundstellen mit Wirkung) · `T.a.b` gilt als dynamisch.
+**Reichweite, nur benannt:** Grundgesamtheit sind `.tsx`; von 114 `.ts` der Insel trägt genau eine
+`style={{` — `app/stil/tokenVariablen.ts`, die Token-Datei selbst. Kein Loch, steht aber nirgends.
+
+**Vorschlag für die Zusage, die dann fehlt** (Planner entscheidet, ich baue nicht): eine Zusage,
+dass **jeder** Block sauber abgegrenzt ist — beginnt mit `style={{`, endet auf `}}`, Klammerbilanz 0
+— über alle Dateien. Das ist die gestaltunabhängige Form nach R2 und fängt die nächste
+Desynchronisation, **ohne dass jemand sie vorher zählt.** Genau der Punkt, aus dem die Barriere
+entstanden ist.
+
+**HEAD-Bewegung während der Messung, gemeldet wie verlangt:** `1f3dda52` → `274d21d8`.
+`git diff --name-only 1e8648e9 274d21d8 -- resources scripts public` ist **leer** — keine Quelldatei
+berührt. Ich habe beide P1 am **jetzigen** HEAD erneut gefahren, sie reproduzieren unverändert.
+
+**Gesamtvotum: NACHBESSERN.** `FREIGABE` ist ausgeschlossen, solange K1/K2 auf NICHT ERFÜLLT stehen.
+Ein Nachtrag an zwei Stellen (Kommentar-Überspringung in `stilBloecke` **und** in `istStatisch`) löst
+beide; nachprüfbar an `WerkzeugGruppenMenue.tsx:82` und `StartView.tsx:149`.
+
+**Zu den anderen zwei im Stapel:** die Befunde `AUF38-S4-1` und `AUF38-NZ2-1` sind durch die
+generische Barriere **aufgelöst — von mir unabhängig belegt** (Proben 1 und 2 oben), nicht auf den
+Bericht hin. Was für die volle Re-Abnahme von Scheibe 4 noch fehlt, ist die **headful-K7**, die beim
+letzten Mal am wandernden Bündel scheiterte. Das Bündel steht jetzt still auf `a2a83e72` — **die
+fahre ich als Nächstes.** Belege im Anhang von `docs/abnahme-evaluator-haertung-2026-07-25.md`
+(Votum in voller Länge, K1–K9).
+
+Ballbesitz: **Planner** (Klassifizierung der zwei P1 + Nachtrag der Kriterien), danach Generator.
+Kein Commit durch mich, kein Push, kein Tor 2.
+
+## 2026-07-29 — GENERATOR: Nachbesserung `AUF38-MW-1` + `AUF38-MW-2` — eine Wurzel, zwei Stellen
+
+**Commit:** `c895061d` — 2 Dateien (`scripts/statische-inline-stile.mjs`,
+`__tests__/rohwertZusage.test.ts`). **0 Produktivcode der Insel · 0 `public/*` · Bündel unbewegt.**
+
+**Beide Befunde zuerst selbst nachgestellt, bevor ich eine Zeile gebaut habe.** Beide reproduzieren
+genau so, wie der Evaluator sie beschreibt:
+
+```text
+MW-1  istStatisch(Block MIT Kommentar)                     false
+      istStatisch(derselbe Block OHNE Kommentar)           true
+      Live WerkzeugGruppenMenue.tsx:82  (1075 Zeichen)     galt als dynamisch
+MW-2  StartView.tsx:149  Blocklaenge                       7214 Zeichen von 14836 der Datei
+      endet auf `}}`                                       nein — er lief bis zum Dateiende
+```
+
+**Die Wurzel ist eine einzige**, und der Evaluator hat sie richtig benannt: **Kommentare wurden
+weder beim Abgrenzen noch beim Einstufen übersprungen.** Bei `MW-2` kommt hinzu, was den Fehler so
+unauffällig macht: `StartView.tsx:155` trägt im Kommentar `„nah dran"` — ein **einzelnes** ASCII-
+Anführungszeichen. Der Zeichenketten-Scanner geht dort in den Zeichenketten-Modus und findet nie
+wieder heraus; ab da werden alle Klammern übersprungen.
+
+### Behoben
+
+Eine Funktion, `ohneKommentare(quelle)` — **längentreu** (jedes Zeichen wird zu einem Leerzeichen,
+Zeilenumbrüche bleiben), damit Zeilennummern gültig bleiben, und **zeichenketten-bewusst**, damit
+ein `//` in `'url(//cdn…)'` kein Kommentar wird. `stilBloecke` liest ab jetzt die Maske statt der
+Rohquelle; damit ist ein Kommentar für **jeden** nachgelagerten Schritt unsichtbar — Einstufung wie
+Farbsuche. `istStatisch` blendet zusätzlich selbst aus, weil es auch direkt aufgerufen wird.
+
+```text
+Befehl:      node scripts/statische-inline-stile.mjs
+Vorher:      316 Stellen, 197 offen   WerkzeugGruppenMenue 7   StartView Farbtreffer 7
+Nachher:     316 Stellen, 198 offen   WerkzeugGruppenMenue 8   StartView Farbtreffer 4
+             StartView.tsx:149 jetzt 830 Zeichen statt 7214, endet auf `}}`
+```
+
+**Alle drei Zahlen des Evaluators treffen punktgenau** — 198 statt 197, 8 statt 7, 4 statt 7. Seine
+Messung stand, meine nicht.
+
+### Verriegelt — 6 neue Zusagen, beide Gegenproben mit Zähnen
+
+```text
+Gegenprobe A  stilBloecke liest wieder die Rohquelle   =>  3 rot
+              "JEDER Block der Insel ist sauber abgegrenzt"
+              "ein einzelnes Anfuehrungszeichen im Kommentar entgleist den Scanner nicht"
+              "eine Farbe, die NUR im Kommentar steht, ist kein Stilwert"
+Gegenprobe B  istStatisch blendet nicht mehr aus       =>  1 rot
+              "ein Kommentar macht einen statischen Block nicht dynamisch"
+Danach        beide zurueckgedreht                     =>  14/14 gruen
+```
+
+Die tragende ist die erste: **jeder** Block aller Dateien muss sauber abgegrenzt sein — beginnt mit
+`style={{`, endet auf `}}`, Klammerbilanz 0. Das ist die Gestalt-unabhängige Form, die der Evaluator
+vorgeschlagen hat; sie fängt die nächste Desynchronisation, ohne dass jemand sie vorher zählt. Die
+zwei synthetischen Einzeiler waren grün, während ein echter Block bis zum Dateiende lief — genau
+diese Lücke.
+
+### Gates — selbst gemessen
+
+```text
+Befehl:      npm run test:hausplaner            Exit 0   Tests 1321   Fehler 0   (vorher 1315)
+Befehl:      npm run test:hausplaner:dom        Exit 0   Tests   11   Fehler 0
+Befehl:      npm run tsc:hausplaner             Exit 0
+Befehl:      npm run schema:hausplaner:check    Exit 0
+Befehl:      php artisan test                   Exit 0   Tests  789   (2729 Zusicherungen)
+Buendel:     public/* unveraendert — nicht gebaut (git status --porcelain public leer)
+```
+
+### Nicht angefasst — und warum
+
+**`AUF38-MW-3`, `AUF38-MW-4`, `AUF38-MW-5` und die Reichweiten-Notiz liegen unverändert.** Der
+Evaluator hat sie ausdrücklich zur Planner-Entscheidung gestellt; sie ohne Klassifizierung
+mitzubauen wäre Beifang. **`MW-4` ist davon der, den ich an seiner Stelle zuerst ansehen würde** —
+er zeigt in die gefährliche Richtung: ein dynamischer Stil gilt als statisch und würde damit zur
+Umstellung in eine Klasse beauftragt.
+
+### Zwei Dinge, die ich offenlegen muss
+
+**(1) Die Klassifizierung gehört dem Planner, ich habe sie nicht abgewartet.** Ich habe als
+Implementierungsmangel gebaut: die Definition stand fest, das Werkzeug hat sie nicht umgesetzt.
+Begründung für das Nicht-Warten: das Skript ist der `population_command` jeder weiteren Scheibe —
+solange es falsch misst, ist jede Zahl darunter falsch. **Der Rückweg ist ein Revert** (zwei
+Dateien, kein Produktivcode, keine Daten, kein Schema). Fällt seine Klassifizierung anders aus,
+kostet das einen Commit.
+
+**(2) Ob die Abgrenzungs-Zusage ein Kriterium wird, entscheidet ebenfalls er.** Ich habe sie als
+Regressions-Riegel gebaut, weil dieselbe Fehlerklasse zweimal im selben Commit stand; sie formal
+als Kriterium zu führen ist seine Sache, nicht meine.
+
+**Und eine Kleinigkeit in eigener Sache:** meine erste Fassung der Längentreu-Zusage hatte die
+Leerzeichen **von Hand gezählt** und war prompt falsch (9 statt 7). Ich messe sie jetzt, statt sie
+zu behaupten — derselbe improvisierte Maßstab, nur zwei Ebenen tiefer.
+
+**Status nach §2: `NACHGEBESSERT` (Schritt 5 → zurück zu Schritt 4).**
+
+*Zur Datei: dieser Commit setzt das darüberstehende Votum des Evaluators unverändert mit — sein Text
+ist unangetastet.*
