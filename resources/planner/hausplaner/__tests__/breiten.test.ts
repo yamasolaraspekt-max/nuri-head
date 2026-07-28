@@ -28,9 +28,16 @@ test('die geführte Planung hat KEINE feste zweite Spalte mehr — das war die t
 });
 
 test('der Konfigurator ebenso — dieselbe Ursache, dieselbe Behebung', () => {
-  const wizard = lies('ConfigWizard.tsx');
-  assert.doesNotMatch(wizard, /gridTemplateColumns: '1fr 300px'/);
-  assert.match(wizard, /gridTemplateColumns: 'repeat\(auto-fit, minmax\(260px, 1fr\)\)'/);
+  // **Nachgezogen in AUF-38 Scheibe 5** — dieselbe Nachfuehrung wie bei der Startseite unten.
+  // Die Regel stand als Inline-Stil in `ConfigWizard.tsx` und steht jetzt als `.hp-kw-koerper`
+  // in `hausplaner.css`. **Die Absicht ist unveraendert:** so viele Spalten, wie passen, damit
+  // bei 390 px gestapelt statt ueberlagert wird. Geprueft wird deshalb die **Eigenschaft**,
+  // unabhaengig davon, wo sie wohnt — die alte Fassung las den Inline-Stil und waere gruen
+  // geblieben, wenn die Regel ersatzlos verschwunden waere.
+  const beides = lies('ConfigWizard.tsx')
+    + readFileSync(new URL('../hausplaner.css', import.meta.url), 'utf8');
+  assert.doesNotMatch(beides, /1fr 300px/, 'die feste zweite Spalte ist zurueck');
+  assert.match(beides, /repeat\(auto-fit, ?minmax\(260px, ?1fr\)\)/);
 });
 
 test('die Startseite legt so viele Spalten an, wie passen — nicht drei um jeden Preis', () => {

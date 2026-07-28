@@ -15,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { T } from '../app/studioDaten';
 import { tokenVariablen, variablenName, setzeTokenVariablen, HP_PRAEFIX } from '../app/stil/tokenVariablen';
+import { messeDatei, stilBloecke, istStatisch, istAusnahme } from '../../../../scripts/statische-inline-stile.mjs';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const quelle = readFileSync(join(hier, '../hausplaner.css'), 'utf8');
@@ -410,4 +411,61 @@ test('die Stilschicht wird genau einmal importiert — in `main.tsx`', () => {
 test('das Blade bindet die CSS bewacht ein — es brauchte keine Aenderung', () => {
   const blade = readFileSync(join(hier, '../../../views/admin/hausplaner/objekt.blade.php'), 'utf8');
   assert.match(blade, /@if \(file_exists\(public_path\('hausplaner\/hausplaner\.css'\)\)\)/);
+});
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-38 Scheibe 5 — der Konfigurator.
+ *
+ * **Der Unterschied zu den Scheiben davor: hier misst die Zusage mit DEMSELBEN Werkzeug, das die
+ * Grundgesamtheit zaehlt.** Scheibe 4 trug dafuer eine handgeschriebene Regex-Liste (`navZu`,
+ * `offeneHubs`, …) — die musste jeder neue Bezeichner nachziehen, und sie war ein zweiter Massstab
+ * neben dem Skript. Genau die Sorte Doppelung, gegen die `scripts/statische-inline-stile.mjs`
+ * gebaut wurde. **Zwei Massstaebe fuer dieselbe Sache sind der Fehler, nicht die Loesung.**
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+const KONFIG = join(hier, '../app/ConfigWizard.tsx');
+
+test('Scheibe 5 (Wirkung): in ConfigWizard bleibt KEINE offene statische Stelle', () => {
+  // Die Wirkungs-Aussage nach R2: nicht „diese 33 Klassen existieren", sondern „es ist nichts mehr
+  // offen". Eine Gestalt-Zusage geht nie rot, wenn etwas FEHLT.
+  const m = messeDatei(KONFIG);
+  assert.deepEqual(m.offen, [],
+    `offene statische Stellen (nur Literale und Token — gehoeren in die Stilschicht): Z${m.offen.join(', Z')}`);
+});
+
+test('Scheibe 5: die Zusage misst ueberhaupt etwas — es gibt noch Inline-Stellen', () => {
+  // Der presence-Partner nach R2. Ohne ihn waere die Zusage oben auch dann gruen, wenn die Datei
+  // geloescht wird oder das Werkzeug nichts mehr findet.
+  const m = messeDatei(KONFIG);
+  assert.ok(m.gesamt >= 5, `nur ${m.gesamt} Stellen gefunden — das Werkzeug greift nicht`);
+});
+
+test('Scheibe 5: genau ZWEI Ausnahmen, beide benannt, beide ohne Token', () => {
+  // **Die Mengenzusage.** Sie ist die Lehre aus AUF38-S4-1 und AUF38-NZ2-1: eine Einzelzusage je
+  // Ausnahme findet nur, was jemand vorher gezaehlt hat. Diese hier faellt auch, wenn eine DRITTE
+  // Ausnahme dazukommt, die niemand benannt hat.
+  const quelltext = readFileSync(KONFIG, 'utf8');
+  const ausnahmen = stilBloecke(quelltext).filter((b) => istStatisch(b.text) && istAusnahme(b.text));
+  assert.equal(ausnahmen.length, 2, 'die Zahl der zugelassenen Ausnahmen hat sich geaendert');
+
+  // Die Overlay-Flaeche und der Dialog-Schatten. Beide tragen Rohwerte OHNE Token in `T`; in die
+  // CSS geholt waeren es rohe Farbwerte und verletzten Kriterium 4, und einen Token dafuer zu
+  // erfinden waere ein Palette-Entscheid, der dem Bauenden nicht zusteht.
+  assert.match(quelltext, /background: 'rgba\(24,34,38,\.30\)'/, 'die Overlay-Flaeche ist nicht mehr inline');
+  assert.match(quelltext, /boxShadow: '0 10px 34px rgba\(28,50,55,\.18\)'/, 'der Dialog-Schatten ist nicht mehr inline');
+  const werte = new Set<string>(Object.values(T).map((w) => String(w).toLowerCase()));
+  for (const roh of ['rgba(24,34,38,.30)', 'rgba(28,50,55,.18)']) {
+    assert.ok(!werte.has(roh), `${roh} hat inzwischen einen Token — dann gehoert die Stelle in die Schicht`);
+  }
+});
+
+test('Scheibe 5: jede angelegte Klasse wird auch benutzt — keine Regel ins Leere', () => {
+  // Die andere Richtung. Eine Klasse in der CSS, die niemand traegt, ist tote Regel; sie faellt in
+  // keinem Gate auf und wird beim naechsten Aufraeumen mitgeschleppt.
+  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
+  const klassen = [...ohneKommentare.matchAll(/\.(hp-kw-[a-z0-9-]+)\s*\{/g)].map((m) => m[1]!);
+  assert.ok(klassen.length >= 30, `nur ${klassen.length} Scheibe-5-Klassen in der CSS`);
+  const quelltext = readFileSync(KONFIG, 'utf8');
+  const unbenutzt = [...new Set(klassen)].filter((k) => !quelltext.includes(k));
+  assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
 });

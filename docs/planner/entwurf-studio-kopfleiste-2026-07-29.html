@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entwurf — Studio-Kopfleiste (AUF-83 T2+T3)</title>
+<style>
+  :root{
+    --bg:#f5f7f8; --surface:#fff; --ink:#232a31; --muted:#697079; --faint:#a7aeb7;
+    --hair:#edf0f2; --hair2:#dfe3e6; --accent:#12807d; --accentSoft:#e6f2f1;
+    --warnInk:#b45309; --warnBg:#fff7ed; --warnBorder:#fed7aa;
+    --rot:#c63533; --rotBg:#fdeceb; --gruen:#94c11c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;padding:28px 22px 60px}
+  h1{font-size:21px;margin:0 0 4px;font-weight:800;letter-spacing:-.2px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 26px}
+  .sub code{background:var(--surface);border:1px solid var(--hair2);border-radius:5px;padding:1px 5px;font-size:12px}
+  h2{font-size:15px;margin:30px 0 10px;font-weight:800;display:flex;align-items:center;gap:9px}
+  .tag{font-size:11px;font-weight:800;border-radius:999px;padding:3px 9px;letter-spacing:.3px}
+  .tag.alt{background:var(--rotBg);color:var(--rot)}
+  .tag.neu{background:var(--accentSoft);color:var(--accent)}
+  .rahmen{background:var(--surface);border:1px solid var(--hair2);border-radius:12px;overflow:hidden;
+          box-shadow:0 1px 2px rgba(28,50,55,.05)}
+  .messband{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);
+            padding:5px 12px;background:#fafbfc;border-bottom:1px dashed var(--hair2)}
+  .messband b{color:var(--ink);font-weight:800}
+
+  /* ---------- VORHER ---------- */
+  .bar1{display:flex;align-items:center;gap:12px;padding:8px 14px;background:#fff;
+        border-bottom:1px solid #e5e7eb;min-height:46px}
+  .bar1 .t{font-size:14px;font-weight:800}
+  .bar1 a{color:#374151;text-decoration:none;font-size:13px;font-weight:600;
+          border:1px solid #d1d5db;border-radius:8px;padding:6px 12px}
+  .scratch{margin-left:auto;font-size:12px;font-weight:700;color:var(--warnInk);
+           background:var(--warnBg);border:1px solid var(--warnBorder);border-radius:999px;padding:4px 12px}
+  .bar2{min-height:62px;display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:8px 16px;
+        background:#fff;border-bottom:1px solid var(--hair)}
+  .marke{display:flex;align-items:center;gap:7px;font-weight:800;font-size:14px}
+  .marke .zeichen{width:26px;height:26px;border-radius:8px;background:var(--accentSoft);color:var(--accent);
+                  display:grid;place-items:center}
+  .zusatz{color:var(--muted);font-weight:600}
+  .status{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+  .punkt{width:8px;height:8px;border-radius:50%;background:var(--gruen);display:inline-block}
+  .fueller{flex:1}
+  .modus{display:flex;background:#f2f5f6;border-radius:12px;padding:4px;gap:2px}
+  .modus button{border:0;background:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--muted);
+                border-radius:9px;padding:6px 13px;cursor:default}
+  .modus button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(28,50,55,.10)}
+  .ys{width:32px;height:32px;border-radius:50%;background:#dfe4ea;display:grid;place-items:center;
+      font-size:12px;font-weight:700;color:#5b636d}
+  .bar3{display:flex;align-items:center;gap:10px;padding:6px 16px;background:#fff;
+        border-bottom:1px solid var(--hair);min-height:33px}
+  .zurueck{display:flex;align-items:center;gap:6px;border:0;background:none;font:inherit;font-size:13px;
+           font-weight:700;color:var(--accent);cursor:default;padding:0}
+  .hinweis{font-size:13px;color:var(--muted)}
+  .canvas{background:repeating-linear-gradient(45deg,#eef1f3 0 10px,#f5f7f8 10px 20px);
+          display:grid;place-items:center;color:var(--faint);font-size:12px;font-weight:700;letter-spacing:.4px}
+
+  /* ---------- NACHHER ---------- */
+  .neu1{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:8px 14px;background:#fff;
+        border-bottom:1px solid var(--hair);min-height:48px}
+  .trenner{width:1px;height:20px;background:var(--hair2)}
+  .geschoss{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--ink);
+            background:#f6f8f9;border:1px solid var(--hair2);border-radius:9px;padding:5px 10px}
+  .geschoss small{color:var(--muted);font-weight:600}
+  .badge{font-size:11px;font-weight:800;color:var(--warnInk);background:var(--warnBg);
+         border:1px solid var(--warnBorder);border-radius:999px;padding:3px 9px;white-space:nowrap}
+  .ikon{width:30px;height:30px;border-radius:9px;border:1px solid var(--hair2);background:#fff;
+        display:grid;place-items:center;color:var(--muted);font-size:14px}
+  .prim{font-size:12.5px;font-weight:800;color:#fff;background:var(--accent);border:0;border-radius:9px;
+        padding:7px 14px;cursor:default}
+
+  /* ---------- Beiwerk ---------- */
+  .kommentar{margin:9px 0 0;font-size:12.5px;color:var(--muted)}
+  .kommentar b{color:var(--ink)}
+  table{border-collapse:collapse;width:100%;margin:14px 0 0;font-size:13px;background:var(--surface);
+        border:1px solid var(--hair2);border-radius:10px;overflow:hidden}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--hair)}
+  th{background:#fafbfc;font-size:11.5px;letter-spacing:.3px;color:var(--muted);font-weight:800}
+  tr:last-child td{border-bottom:0}
+  td code{font-size:12px;background:#f4f6f7;border-radius:4px;padding:1px 5px}
+  .kasten{border-left:3px solid var(--accent);background:var(--accentSoft);border-radius:0 10px 10px 0;
+          padding:13px 16px;margin:22px 0 0;font-size:13px}
+  .kasten.warn{border-left-color:var(--warnInk);background:var(--warnBg)}
+  .kasten p{margin:0 0 7px}
+  .kasten p:last-child{margin:0}
+  .pfeil{text-align:center;color:var(--faint);font-size:20px;margin:16px 0 4px}
+  .gewinn{display:inline-block;font-size:12px;font-weight:800;color:var(--accent);
+          background:var(--accentSoft);border-radius:6px;padding:2px 8px}
+</style>
+</head>
+<body>
+
+<h1>Entwurf — Studio-Kopfleiste</h1>
+<p class="sub">AUF-83, Teile T2+T3 · Planner, 29.07.2026 · Höhen aus der echten CSS gemessen:
+<code>.hp-bar</code> 46 px · <code>.hp-studio-kopf</code> 62 px · <code>.hp-experte-leiste</code> ~33 px</p>
+
+<h2><span class="tag alt">HEUTE</span> drei Leisten übereinander, Expertenmodus bei 1440 px</h2>
+<div class="rahmen">
+  <div class="messband"><b>Schicht 1 — Blade</b> <code>studio.blade.php:31</code> · 46 px</div>
+  <div class="bar1">
+    <span class="t">Hausplaner · Studio</span>
+    <a href="#">‹ Zurück</a>
+    <span class="scratch">Testfläche — wird NICHT gespeichert</span>
+  </div>
+
+  <div class="messband"><b>Schicht 2 — Insel</b> <code>HausplanerStudio.tsx:114</code> · 62 px</div>
+  <div class="bar2">
+    <span class="marke"><span class="zeichen">⌂</span>Hausplaner<span class="zusatz">· Solar Aspekt</span></span>
+    <span class="status"><span class="punkt"></span>Testfläche — wird nicht gespeichert</span>
+    <span class="fueller"></span>
+    <span class="modus"><button>Übersicht</button><button class="on">Expertenmodus</button></span>
+    <span class="ys">YS</span>
+  </div>
+
+  <div class="messband"><b>Schicht 3 — Insel</b> <code>HausplanerStudio.tsx:192</code> · ~33 px</div>
+  <div class="bar3">
+    <button class="zurueck">‹ Zur geführten Planung</button>
+    <span class="hinweis">Experte — alle Werkzeuge, Projektbaum und Eigenschaften. Dasselbe Modell und dieselbe Revision.</span>
+  </div>
+
+  <div class="canvas" style="height:150px">ZEICHENBEREICH</div>
+</div>
+
+<p class="kommentar"><b>Zweimal derselbe Hinweis, zweimal „Hausplaner“, und ein Erklärtext, der jeden Tag Höhe kostet.</b>
+Die Doppelung entsteht nicht durch Nachlässigkeit — <b>Schicht 1 kommt aus der Blade, Schicht 2 aus der React-Insel.</b>
+Zwei Ebenen zeichnen unabhängig voneinander eine Kopfleiste.</p>
+
+<div class="pfeil">↓</div>
+
+<h2><span class="tag neu">ENTWURF</span> eine Leiste</h2>
+<div class="rahmen">
+  <div class="messband"><b>Eine Schicht — Insel</b> <code>HausplanerStudio.tsx</code> · ~48 px</div>
+  <div class="neu1">
+    <span class="marke"><span class="zeichen">⌂</span>Hausplaner</span>
+    <span class="trenner"></span>
+    <span style="font-weight:700;font-size:13px">Solar Aspekt</span>
+    <span class="geschoss">Erdgeschoss <small>· ±0 mm</small> ▾</span>
+    <span class="badge">Testfläche</span>
+    <span class="fueller"></span>
+    <span class="modus"><button>Übersicht</button><button>Geführt</button><button class="on">Experte</button></span>
+    <span class="fueller"></span>
+    <span class="status"><span class="punkt"></span>Gespeichert · Rev. 1</span>
+    <button class="prim">Speichern</button>
+    <span class="ikon">↰</span><span class="ikon">↱</span><span class="ikon">⋯</span>
+    <span class="ys">YS</span>
+  </div>
+  <div class="canvas" style="height:243px">ZEICHENBEREICH <span class="gewinn" style="margin-left:10px">+ ~93 px</span></div>
+</div>
+
+<p class="kommentar"><b>Der Rückweg bleibt erreichbar</b> — „‹ Zur geführten Planung“ ist jetzt der Modusschalter selbst
+(<i>Übersicht | Geführt | Experte</i>), er braucht keine eigene Zeile mehr. Der Erklärtext wandert an den
+Schalter als Titel bzw. Popover; er wird <b>nicht gelöscht</b>.</p>
+
+<table>
+  <tr><th>Was heute doppelt/verstreut ist</th><th>Wohin es wandert</th><th>Warum</th></tr>
+  <tr><td><code>hp-scratch</code> in der Blade</td><td><b>entfällt</b></td>
+      <td>Der Insel-Hinweis ist an das fehlende Speicherziel gekoppelt und testverriegelt. Die Blade-Zeichenkette steht immer da, egal was gilt.</td></tr>
+  <tr><td><code>hp-title</code> „Hausplaner · Studio“</td><td><b>entfällt</b></td>
+      <td>Die Insel führt Marke und Projektnamen bereits.</td></tr>
+  <tr><td>Insel-Statustext „Testfläche — …“</td><td>kompakter <b>Badge</b></td>
+      <td>Einmal, kurz, an der Marke — statt eines Satzes mitten in der Leiste.</td></tr>
+  <tr><td><code>hp-experte-hinweis</code></td><td>Titel/Popover am Modusschalter</td>
+      <td>Beantwortet eine Frage, die man <i>einmal</i> hat. Kostet heute jeden Tag ~33 px.</td></tr>
+  <tr><td>„‹ Zur geführten Planung“</td><td>dritter Knopf im Modusschalter</td>
+      <td>Modus wechseln ist Modus wechseln — kein zweiter Mechanismus.</td></tr>
+  <tr><td>„‹ Zurück“ (Blade)</td><td><b>bleibt vorerst</b></td>
+      <td>Solange es keine Ticket-Navigation gibt, ist er der einzige Weg aus dem Studio. Er fällt erst mit T1.</td></tr>
+</table>
+
+<div class="kasten">
+  <p><b>Der Höhengewinn ist geschätzt, nicht gemessen.</b> 46 + 62 + 33 = 141 px heute, ~48 px im Entwurf.
+  Die <b>tatsächliche</b> Zahl misst der Evaluator per <code>getBoundingClientRect</code> vorher/nachher —
+  sie steht als Kriterium K-05 im Auftrag.</p>
+  <p><b>Und wenn die Bühne nicht wächst, ist das der eigentliche Befund</b> und geht zurück an mich,
+  statt als „aufgeräumt“ durchzugehen. Dein Ziel ist Platz, nicht Ordnung.</p>
+</div>
+
+<div class="kasten warn">
+  <p><b>Was dieser Entwurf ausdrücklich nicht zeigt — und warum die Bühne trotzdem noch nicht breiter wird.</b></p>
+  <p>Die <i>Breite</i> des Zeichenbereichs kommt nicht aus dem Layout, sondern aus einer Rechnung:
+  <code>HausplanerApp.tsx:369</code> → <code>innerWidth − 220 − 268</code>. Solange die steht, ändert das
+  Aufräumen der Kopfleisten nur die Höhe. <b>Die Breite und die klappbaren Panels sind T4/T5</b> — ein
+  eigener Schritt, und zugleich der erste Zerlegungsschritt von AUF-48.</p>
+  <p>Ebenso nicht enthalten: die <b>Ticket-Navigation</b>. Die gibt es heute nicht (beide Blades haben
+  <code>0× @extends</code>) — das ist <b>T1</b> und liegt bei dir.</p>
+</div>
+
+<p class="kommentar" style="margin-top:22px">Freigabe heißt hier: <b>so schneide ich das Auftragsblatt</b>.
+Änderst du etwas am Entwurf, ändert sich das Blatt mit — es ist noch nichts gebaut.</p>
+
+</body>
+</html>

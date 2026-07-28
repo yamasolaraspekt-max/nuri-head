@@ -16603,3 +16603,78 @@ Nacharbeit.
 **T1 bis T3 sind sofort baubar, sobald T1 entschieden ist**, und liefern schon den groessten Teil des
 sichtbaren Aufraeumens: aus drei Kopfleisten wird eine. **Generator und Evaluator sind unberuehrt** —
 Scheibe 5 und die B-01-Abnahme laufen weiter.
+
+
+### Nachtrag 01:15 CEST — Entwurf vor Umsetzung, und T1 ist ein Zweischritt geworden
+
+**Yama:** *„kannst du die aenderung als entwurflayout hier zeigen damit ich es freigeben kann bevor
+es umgesetzt wird“*. **Richtig, und es haette in meinem Vorschlag stehen muessen.** Ich hatte T2+T3
+als *sofort baubar* bezeichnet — baubar heisst nicht *ohne Ansicht*. Bei einer Aenderung, die **rein
+visuell** ist und die kein Gate faengt, ist der Entwurf die einzige Stelle, an der er widersprechen
+kann, bevor Arbeit entsteht.
+
+**Entwurf liegt:** `docs/planner/entwurf-studio-kopfleiste-2026-07-29.html` — drei Leisten gegen
+eine, mit den **gemessenen** Hoehen aus der echten CSS (`.hp-bar` 46 · `.hp-studio-kopf` 62 ·
+`.hp-experte-leiste` ~33 = **141 px** heute gegen **~48 px**). **Der Gewinn ist als Schaetzung
+ausgewiesen, nicht als Zahl** — gemessen wird er als K-05, und **waechst die Buehne nicht, ist das
+der Befund** statt eines Hakens. Yamas Ziel ist Platz, nicht Ordnung.
+
+**Blatt liegt und ist GESPERRT** (`generator-auftrag-auf83-t2t3-kopfleiste.md`, acht Kriterien,
+Spur B). **Die Sperre steht in der Marke, nicht im Fliesstext** — die Lehre vom 27.07.
+
+**Eine eigene Korrektur:** ich hatte T2 an T1 gehaengt. **Zu eng.** An T1 haengt nur der *Wegfall*
+der Blade-Leiste, nicht das *Entfernen der Doppelung*. Der Zurueck-Link bleibt, solange es keine
+Ticket-Navigation gibt — sonst waere die Studio-Flaeche eine Sackgasse.
+
+### M8 — und warum T1 und T4 dieselbe Aufgabe sind
+
+Gemessen fuer die T1-Entscheidungsgrundlage:
+
+```text
+studio.blade.php:24   #hausplaner-root { min-height: calc(100vh - 46px); }
+app.blade.php:4836      <div class="main-content-scroll" id="mainContentScroll">
+app.blade.php:4837        @yield('content')
+```
+
+**`100vh` innerhalb eines Scroll-Containers ist falsch.** Eingebettet wuerde die Insel die volle
+Fensterhoehe beanspruchen, obwohl darueber eine Kopfzeile und daneben zwei Leisten stehen — zweiter
+Bildlauf, Zeichenbereich unter der Falz. **Das Gegenteil von Yamas Ziel.**
+
+**Und es ist dieselbe Fehlerklasse wie M4:**
+
+| | Rechnung | misst gegen |
+|---|---|---|
+| **M4** | `breite = innerWidth − 220 − 268` (`HausplanerApp.tsx:369`) | das **Fenster** |
+| **M8** | `min-height: calc(100vh − 46px)` (beide Blades) | das **Fenster** |
+
+**Die Insel rechnet ihre Masse aus Fensterkonstanten aus, statt sie von ihrem Behaelter zu nehmen.**
+Solange das so ist, ist sie weder einbettbar (M8) noch overlay-faehig (M4). **Es sind nicht zwei
+Aufgaben, sondern zweimal dieselbe.**
+
+**Daraus wird T1 ein Zweischritt:** **T1a** — die Insel nimmt ihre Masse vom Behaelter. Kein
+Blade-Umbau, keine Auth, kein Routing. **Das ist zugleich T4 und der erste Zerlegungsschritt von
+AUF-48** — drei Posten, ein Stueck Arbeit. **T1b** — der Blade-Umbau, dadurch kleiner, bleibt bei
+Yama.
+
+*Damit ist auch meine a/b-Frage von 01:03 erledigt, und sie war von Anfang an eine
+Scheinalternative: T4 IST ein Stueck von AUF-48, keine Konkurrenz dazu.*
+
+### Zwei Entwarnungen und ein Nebenbefund
+
+**Die Auth fehlt nicht.** Beide Routen liegen bereits hinter `auth` (`routes/web.php:4983/4988`) —
+es fehlt **nur die Layout-Vererbung**. Das nimmt T1 den groessten Teil seines Risikos.
+
+**Die Anschlusspunkte sind mechanisch:** `@yield('title')` Z11 · `@yield('style')`/`@stack('style')`
+Z2535/2536 · `@include('admin.layouts.sidebar')` Z4452 · `@yield('content')` Z4837 ·
+`@stack('scripts')`/`@yield('script')` Z11148/11149.
+
+**Nebenbefund (P2, eigener Posten, ausdruecklich nicht Teil von T1):** `hausplaner.index` traegt
+`permission:Hausplaner,read`, **`hausplaner.studio` nicht** — nur `auth`. **Kein Sicherheitsloch:**
+die Flaeche ist persistenzfrei, `save()` ist ein No-Op, es gibt dort keine Kundendaten. **Aber eine
+Asymmetrie ohne begruendeten Anlass**, und sie faellt genau dann auf, wenn die Flaeche spaeter doch
+ein Speicherziel bekommt.
+
+**Ballbesitz:** **Yama** — Entwurfsfreigabe (dann faellt die Sperre auf T2T3), spaeter T1b.
+**Generator** — Scheibe 5 laeuft, der Arbeitsbaum zeigt seine Arbeit an `ConfigWizard.tsx`,
+`hausplaner.css` und zwei Zusagen; er bewegt `public/*`, und das ist **erlaubt**, weil keine
+Sichtprobe gemeldet ist. **Evaluator** — B-01, Kriterien K-01 bis K-04.
