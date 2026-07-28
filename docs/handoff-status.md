@@ -16948,3 +16948,93 @@ und schlechter. **Auflage fuer mich, ab sofort:** vor jedem Planner-Papier zu ei
 die eigene Arbeit.**
 
 **Ballbesitz Yama:** Entwurf freigeben oder aendern. Das Blatt bleibt `GESPERRT`.
+
+
+---
+
+## 2026-07-29, 01:28 CEST — PLANNER: Scheibe 5 eingeordnet, zwei Offenlegungen klassifiziert, Scheibe 7 gesperrt
+
+*Zeit unmittelbar vor dem Schreiben gemessen; letzter fremder Commit `71d3f1ca`, 01:22.*
+
+**Scheibe 5 ist `BERICHTET`** — `ConfigWizard` von **38 offenen auf 0**, 33 Klassen fuer 38 Stellen,
+Tests 1323 auf **1327**. **Ballbesitz Evaluator.**
+
+**Was ich an seinem Bericht hervorhebe, weil es eine Regel wert ist:** die Zusage von Scheibe 5 ruft
+`messeDatei()` — **dasselbe Werkzeug, das die Grundgesamtheit zaehlt.** Scheibe 4 trug dafuer noch
+eine handgeschriebene Bezeichnerliste, die jeder neue Bezeichner haette nachziehen muessen. *Zwei
+Massstaebe fuer dieselbe Sache sind der Fehler, gegen den das Skript gebaut wurde* — er hat das
+selbst gesehen und umgestellt. **Ab Scheibe 6 ist das die Form: die Zusage misst mit dem Werkzeug,
+nicht neben ihm.**
+
+### Klassifizierung (1) — die falsche Quittung ist MEIN Spezifikationsmangel
+
+Er meldete *„Auflage geerbte Zusagen: GEMESSEN, KEINE“*, und es stimmte nicht: `breiten.test.ts:30`
+las `gridTemplateColumns` aus dem Inline-Stil und ging rot. **Sein Fehler war der Griff, nicht die
+Sorgfalt** — er suchte nach `style` und `inline`, **die Zusage nennt aber nur die Eigenschaft**.
+
+**Und die Auflage ist meine.** Sie lautete *„suche die Zusagen, die den Inline-Stil der betroffenen
+Datei lesen“* — das beschreibt **was** zu finden ist, aber nicht **wie**. Eine Suche, die das
+gesuchte Muster nicht enthaelt, findet zuverlaessig nichts **und sieht dabei aus wie ein Beleg.**
+Das ist dieselbe Klasse wie *„grep zaehlt Zeilen, ein Vorkommenszaehler zaehlt Vorkommen“*.
+
+**Auflage praezisiert, ab Scheibe 6:** geerbte Zusagen werden **ueber die Eigenschaftsnamen des
+verschobenen Blocks** gesucht (`gridTemplateColumns`, `cursor`, `boxShadow` …), **nicht** ueber die
+Woerter `style` oder `inline`. **Sechster Beleg desselben Bautyps** — ich hatte nach dem fuenften
+geschrieben, das sei *„eine Eigenschaft des Bestands“*. Es ist eine.
+
+### Klassifizierung (2) — keine Ueberschreitung, sondern eine Luecke im Massstab
+
+Er hat zwei konstante `React.CSSProperties`-Objekte mitgenommen, die als `style={feld}` stehen und
+vom Werkzeug **nicht gezaehlt** werden. **Das ist keine Ueberschreitung** — derselbe Sachverhalt in
+anderer Schreibweise, und Scheibe 3 hat es genauso gehalten. **Zurueckdrehen waere falsch.**
+
+**Aber es ist ein Befund am Massstab, und der wiegt schwerer als die zwei Zeilen:**
+
+> **`AUF38-MW-7` (P2, neu):** die Grundgesamtheit erfasst nur `style={{`. Ein `style={bezeichner}`
+> mit konstantem `CSSProperties`-Objekt ist **derselbe statische Inline-Stil**, wird aber nicht
+> gezaehlt. **Damit ist `0 offen` fuer die abgenommenen Scheiben nicht dasselbe wie `nichts mehr
+> inline`** — es heisst `nichts mehr in der gezaehlten Schreibweise`.
+
+**Kein Bauauftrag jetzt**, und der Grund ist derselbe wie bei `MW-6`: die Zahl bewegt sich nicht,
+solange niemand die Schreibweise neu einfuehrt, und die Scheiben raeumen sie ohnehin mit ab.
+**Aber er gehoert gezaehlt, bevor AUF-38 als fertig gilt** — sonst steht am Ende eine Null, die
+etwas anderes bedeutet als das, was auf dem Blatt steht. Posten fuer den Abschluss von AUF-38.
+
+### Scheibe 7 wird gesperrt — und die Sperre steht in der Marke
+
+**Neue Messung ueber die Insel: 278 Stellen, 160 offen.** `HausplanerApp` **78** · `GuidedView`
+**29** · `EngineFlaeche` **25** · `GeschossFlaeche` **14** · `WerkzeugGruppenMenue` **8** ·
+`FaehigkeitenNavi` **3** · `DreiDBereich` **2** · `ReiterLeiste` **1**.
+
+**Scheibe 6 ist `GuidedView` (29). Scheibe 7 (`HausplanerApp`, 78) ist `GESPERRT`** — mit einem
+gemessenen Grund: diese Datei traegt gleichzeitig **AUF-48**, **T4/T1a** aus AUF-83 und diese 78
+Stellen. **Drei Posten in einer 2305-Zeilen-Datei sind genau die Kollision, die §13 verhindern
+soll.** `GuidedView` beruehrt weder AUF-83 noch AUF-48.
+
+*Die Sperre steht in der Marke, nicht im Fliesstext — und sie haelt den Bauenden nicht auf, weil
+Scheibe 6 daneben frei ist. Das ist der Unterschied zur Sperre von 00:06, die ich zuruecknehmen
+musste.*
+
+**Auflage fuer Scheibe 6:** `GuidedView` traegt **5 Ausnahmen** — die hoechste Zahl aller Dateien.
+Einzeln benennen und beidseitig verriegeln; die generische Rohwert-Zusage allein reicht nicht.
+
+**Restschnitt, damit „fertig“ definiert bleibt (R5):** **8a** `EngineFlaeche` (25) · **8b**
+`GeschossFlaeche` (14) · **8c** die vier Kleinen zusammen (14 Stellen) — eine Einheit, weil der
+`population_command` sie in einem Lauf misst.
+
+### §15 — Bringschuld an den Evaluator
+
+**Deine naechste Abnahme ist AUF-38 Scheibe 5** (Code in `f5b9feaf`, vom Planner mitcommittet,
+`fa560259` benennt es). **Drei Dinge zuerst:**
+
+1. **`K9 ist NICHT erfuellt und er meldet es selbst so.** Die Auflage verlangt **headful mit
+   Durchklicken aller fuenf Schritte** — der Dialog ist modal, ein Standard-Screenshot zeigt ihn
+   nie, und die Schritte 2 bis 5 sieht sonst niemand. **Ohne diesen Beleg keine Freigabe.**
+2. **Die Mengenzusage ueber die Ausnahmen**: genau zwei (Overlay `rgba(24,34,38,.30)`,
+   Dialog-Schatten `rgba(28,50,55,.18)`), beide ohne Token. Bitte pruefen, ob sie **auch bei einer
+   dritten faellt**, die niemand gezaehlt hat — das ist die Zusage, die Scheibe 4 gefehlt hat.
+3. **Die geerbte Zusage `breiten.test.ts:30`**: sie las `gridTemplateColumns` aus dem Inline-Stil
+   und prueft die Eigenschaft jetzt dort, wo sie wohnt. **Waere sie ersatzlos verschwunden, waere
+   die alte Fassung gruen geblieben** — genau die Richtung bitte gegenpruefen.
+
+**Danach liegt B-01 (K-01 bis K-04, nicht K-05).**
