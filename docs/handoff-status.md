@@ -15475,3 +15475,71 @@ Danach loesen beide Nachbesserungen mit einem Test, dann Re-Abnahme bei stabilem
 Scheibe 5.
 
 Stapel 2 (Scheiben 4 und 2, beide nachzubessern), `main` `057e6417`, **40 zurueck.**
+
+
+## ⇒ EVALUATOR — Standby + zwei überfällige Aufträge (2026-07-29)
+
+**Lage-Bestätigung (Beweis, nicht Bericht):** HEAD `ac9b24f9`. Der Planner hat beide meiner Voten
+verarbeitet (Befunde AUF38-S4-1 + AUF38-NZ2-1 als Spezifikationsmangel klassifiziert, R9-Barriere
+= generischer Rohwert-Token-Test übernommen). **Es wartet gerade KEIN BERICHTET-Slice auf mich** —
+die Re-Abnahmen (Scheibe 4 + Nachzug Scheibe 2) sind laut Ledger bewusst aufgeschoben: erst das
+Messskript (Spur B, Ballbesitz Generator), dann beide Nachbesserungen mit einem Test, dann
+Re-Abnahme **bei stabilem Baum**. Ich stehe bereit und ziehe die Re-Abnahme, sobald sie BERICHTET
+ist. (Zwischenstand gesehen: `7f33ef06` verriegelt den Toast bereits per-Scheibe — die generische
+Barriere ersetzt das laut Planner-Entscheid; das prüfe ich in der Re-Abnahme mit.)
+
+**Zwei überfällige Aufträge — zur Planner-Entscheidung (ich schließe keinen Auftrag selbst):**
+- `evaluator-auftrag-main-vergleich-2026-07-26.md` — liegt seit 3 Tagen (terminiert „20 Min, danach
+  Planner"). Sein Anlass (Merge-Sorge) ist **erledigt**: `main` steht auf `057e6417`, §16 vom Planner
+  verifiziert; die genannten SHAs sind veraltet. **Vorschlag: schließen** oder als „Suite-Laufzeit
+  main vs HEAD, aktuelle SHAs" neu schneiden.
+- `evaluator-auftrag-waechter-blindstelle-2026-07-26.md` — ebenfalls 3 Tage. Der TZ-Fix (`46769c10`)
+  betrifft ein anderes Wächter-Problem; die Kernfrage (schluckt der post-commit-Hook exit 2) sehe ich
+  nicht gemessen, aber das Thema ist durch die Worktree-/Regelwerk-Arbeit überholt. **Vorschlag:
+  schließen oder neu schneiden.** Wenn die exit-2-Frage noch zählt, messe ich sie in 20 Min.
+
+Ballbesitz: Planner (Auftrags-Entscheid) + Generator (Messskript). Kein Commit durch mich (Yamas
+Wort), kein Push/Tor-2.
+
+---
+
+## 2026-07-29 — GENERATOR: Messwerkzeug + generische Rohwert-Zusage (Spur B)
+
+**Commit:** `42b88b85` — 2 Dateien (`scripts/statische-inline-stile.mjs`, `__tests__/rohwertZusage.test.ts`),
+**0 Produktivcode**, **0 `public/*`**.
+
+```text
+Befehl:      node scripts/statische-inline-stile.mjs
+Ausgabe:     316 Stellen insgesamt, davon 197 offen
+             FachFlaeche 0 offen · HausplanerStudio 0 offen · StartView 0 offen
+             ConfigWizard 43 gesamt / 40 statisch / 2 Ausnahme / 38 offen
+Befehl:      npm run test:hausplaner
+Exit-Code:   0
+Tests:       1315   Fehler: 0   (vorher 1307)
+Weitere:     tsc 0 · schema:check 0 · test:dom 0 · build 0 · PHP 789
+Bündel:      public/* unverändert
+```
+
+**(a)** Das Skript trägt die Definition aus der Quittung: *statisch = nur Literale und
+`T.*`-Zugriffe; kein `?:`, kein Spread, kein Aufruf, kein anderer Bezeichner als `T`.*
+Eigenschaftsnamen zählen nicht, `${…}` wird vorher aufgelöst. **Klammerzählung statt „bis zum ersten
+`}}`"**, damit verschachtelte Objekte und Vorlagen-Zeichenketten nicht mitten durchgeschnitten
+werden. **(b)** Ausnahmen: Rohwert (`#`/`rgb`/`rgba`) **oder** `GESPERRT_*`. **(c)** Eine generische
+Zusage über **alle** Dateien der Insel: keine inline gebliebene Rohfarbe darf einen Token in `T`
+haben.
+
+**Die vorhandenen Einzelzusagen bleiben stehen** — ich entferne kein Kriterium (§4).
+
+**Fehler im eigenen Werkzeug gefunden und behoben:** der ausgelesene Block war um ein Zeichen zu lang
+(`slice(i, j+2)` statt `j+1`). Der Test mit der Vorlagen-Zeichenkette hat ihn gefangen.
+
+**MESSWERT zum Nebenbefund `studioUi` — Klassifizierung beim Planner:** das Skript meldet dort
+**2 Stellen, 0 statisch, 0 offen**. Beide lesen `z.fg`/`z.bg`/`z.rand`/`z.punkt` aus
+`ZUSTAND[zustand]` und sind nach der Definition **dynamisch**. Der Nebenbefund nannte sie statisch.
+
+**Die neue Regel ist eingehalten: das Bündel hat sich nicht bewegt.**
+
+**Ballbesitz: Evaluator.**
+
+*Zur Datei: dieser Commit setzt auch das darüberstehende, noch nicht committete Votum des Evaluators
+unverändert mit — so, wie der Planner es beim letzten Mal gehalten hat. Sein Text ist unangetastet.*
