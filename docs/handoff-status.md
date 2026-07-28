@@ -14892,3 +14892,49 @@ nichts dagegen spricht.
 
 Stapel 2 (Scheiben 3 und 4, Ballbesitz Evaluator), aktiver Auftrag Scheibe 2 (Ballbesitz
 Generator), `main` `057e6417`, **25 zurueck**.
+
+## PLANNER 27.07., 21:20 — Scheibe 3 abgenommen. Und ich habe das Votum 30 Minuten lang nicht gesehen
+
+**AUF-38 Scheibe 3 ist FREIGEGEBEN** (Evaluator, fuer `01b9933e` + `2798120f`). Aus dem Stapel,
+Vermerk in der Zelle. Stapel 2 → 1.
+
+**Sein Gegen-Beweis war schaerfer als seine urspruengliche Beanstandung:** er hat einen
+token-wertigen Inline-Stil **in `/tmp` eingeschleust** ⇒ 2 Wirkungs-Tests rot. Damit ist belegt,
+dass die neue Zusage nicht nur den gebauten Zustand festhaelt, sondern **den Rueckfall faengt** —
+genau der Unterschied zwischen Gestalt und Wirkung, an dem die erste Fassung gescheitert war. Dazu
+`serviert == gemessen` und K9 headful am echten Dialog: `Quelle == DOM == 3 Ausnahmen`.
+
+**Nebenbefund von ihm, gemeldet statt mitgenommen:** `ZustandBadge` in `studioUi.tsx` traegt
+statische token-wertige Inline-Stile — *im Geist von AUF-38, aber eigene Datei, eigener Scope*.
+**Mein Entscheid: gehoert in Scheibe 8 (Restdateien), nicht in eine eigene Scheibe** — `studioUi`
+hat 2 Stellen, ein eigener Posten waere mehr Verwaltung als Arbeit. **Dass er ihn gemeldet statt
+gebaut hat, ist genau die Rollengrenze in Anwendung.**
+
+### Der unangenehme Teil: das Votum lag 30 Minuten unbearbeitet, und ich habe es selbst committet
+
+Das Votum kam **mit `f349d653` — meinem eigenen Commit um 20:54.** Der Evaluator hatte
+`handoff-status.md` im Arbeitsbaum geaendert; ich habe die Datei mit `git add docs/handoff-status.md`
+mitgenommen, **ohne seinen Eintrag darin zu lesen.**
+
+Zwei Fehler in einem:
+
+**1. Beifang im Index.** Die Regel *„nie `git add -A`, nur eigene Pfade“* hat nicht geschuetzt,
+weil `handoff-status.md` **eine geteilte Datei** ist — mein Pfad und seiner sind derselbe Pfad.
+**Verschaerfung: vor jedem Commit einer geteilten Datei pruefen, ob fremde Aenderungen darin
+stehen** (`git diff --cached` lesen, nicht nur `git add` tippen).
+
+**2. Meine Wache schaut an der falschen Stelle.** Sie liest
+`grep -n "^## " docs/handoff-status.md | tail -3` — **die letzten drei Ueberschriften.** Der
+Evaluator ordnet seine Eintraege aber **chronologisch ein**, nicht ans Ende: sein Votum steht auf
+Zeile 14727, meine spaeteren Eintraege auf 14752, 14837, 14874. `tail -3` konnte es nie sehen.
+
+**Das ist R2 in eigener Sache: meine Wache prueft die Gestalt (die letzten drei) statt der Wirkung
+(gibt es ein unverarbeitetes Votum?).** Denselben Fehler habe ich heute zweimal an fremden Tests
+bemaengelt.
+
+**Korrektur der Wache:** statt `tail -3` kuenftig gezielt auf **unverarbeitete Voten** pruefen —
+jedes `FREIGABE`/`NACHBESSERN` gegen die Stapelzeilen halten, die es aufloesen muesste. Ein Votum
+ohne Bewegung im Stapel ist ein Befund, kein Zustand.
+
+**Lage:** Stapel 1 (Scheibe 4, Ballbesitz Evaluator), aktiver Auftrag Scheibe 2 (Ballbesitz
+Generator), `main` `057e6417`, 28 zurueck.
