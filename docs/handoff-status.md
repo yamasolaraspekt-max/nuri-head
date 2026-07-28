@@ -14589,7 +14589,7 @@ aussagekräftig.
 
 **Kein Push, kein main-Merge** — Tor 2 bleibt Yamas Entscheidung. **Ballbesitz: Evaluator.**
 
-## PLANNER 27.07., 20:18 (CEST) — Nachbesserung eingeordnet, und mein Auftragsschnitt war falsch
+## PLANNER 28.07., 22:18 (CEST) — Nachbesserung eingeordnet, und mein Auftragsschnitt war falsch
 
 *Uhrzeit aus `git log` von `01b9933e`.*
 
@@ -14626,7 +14626,7 @@ beide, ohne sich in dieselbe Datei zu schreiben. Stapel 1, `main` `665dd70e`, 35
 **Repo-Beifang gemeldet, nicht angefasst:** `.rm_probe_tmp` und neu `.ai-workflow/` liegen
 unverfolgt im Baum. Beides nicht von mir; ich raeume in fremden Pfaden nichts weg.
 
-## PLANNER 27.07., 20:45 — Auftragsschema liegt. Es wird geprueft, nicht gelesen
+## PLANNER 28.07., 22:45 (CEST) — Auftragsschema liegt. Es wird geprueft, nicht gelesen
 
 `docs/auftraege/AUFTRAGSSCHEMA.md` (214 Zeilen). Yama hat nach einer fundierten Fremdbewertung
 gefragt und eine bekommen; sie war an vier Stellen besser als mein Vorschlag, und die vier sind
@@ -14871,7 +14871,7 @@ vorhersehbar rote Runde erspart.*
 
 Stapel 2, aktiver Auftrag Scheibe 2, `main` `665dd70e`, 43 zurueck.
 
-## PLANNER 27.07., 21:01 — Merge durch Yama: `main` steht auf `057e6417`
+## PLANNER 28.07., 23:01 (CEST) — Merge durch Yama: `main` steht auf `057e6417`
 
 **Yama hat den Block ausgefuehrt.** `main` ist von `665dd70e` (26.07.) auf **`057e6417`** (27.07.,
 11:20) gewandert, der Rueckstand faellt von **43 auf 25**.
@@ -14893,7 +14893,7 @@ nichts dagegen spricht.
 Stapel 2 (Scheiben 3 und 4, Ballbesitz Evaluator), aktiver Auftrag Scheibe 2 (Ballbesitz
 Generator), `main` `057e6417`, **25 zurueck**.
 
-## PLANNER 27.07., 21:20 — Scheibe 3 abgenommen. Und ich habe das Votum 30 Minuten lang nicht gesehen
+## PLANNER 28.07., 23:20 (CEST) — Scheibe 3 abgenommen. Und ich habe das Votum 30 Minuten lang nicht gesehen
 
 **AUF-38 Scheibe 3 ist FREIGEGEBEN** (Evaluator, fuer `01b9933e` + `2798120f`). Aus dem Stapel,
 Vermerk in der Zelle. Stapel 2 → 1.
@@ -14939,7 +14939,7 @@ ohne Bewegung im Stapel ist ein Befund, kein Zustand.
 **Lage:** Stapel 1 (Scheibe 4, Ballbesitz Evaluator), aktiver Auftrag Scheibe 2 (Ballbesitz
 Generator), `main` `057e6417`, 28 zurueck.
 
-## PLANNER 27.07., 21:30 — REGELWERK IN KRAFT. Alte Ablaufregeln aufgehoben
+## PLANNER 28.07., 23:30 (CEST) — REGELWERK IN KRAFT. Alte Ablaufregeln aufgehoben
 
 **`docs/agents/00-REGELWERK.md` ist ab sofort die Arbeitsgrundlage für alle drei Rollen.**
 271 Zeilen, mit je einem eigenständigen Abschnitt für Generator, Evaluator und Planner — jeder
@@ -14998,3 +14998,49 @@ Yama.**
 
 **Lage unverändert:** Stapel 1 (Scheibe 4, Evaluator), aktiver Auftrag Scheibe 2 (Generator),
 `main` `057e6417`, 29 zurück.
+
+## PLANNER 28.07., 23:37 (CEST) — Nachzug komplett. Und meine Uhr lief zwei Stunden nach
+
+*Uhrzeit aus `git log` von `5382cb3a`.*
+
+**AUF-38 Nachzug Scheibe 2 (`StartView.tsx`) ist berichtet** — 22 Klassen fuer 28 Stellen, von 36
+bleiben 8. Gates 0/0/0/0, Insel 1302 auf **1305**, PHP 789. **Damit ist der Nachzug 2-3-4
+vollstaendig:** Scheibe 3 abgenommen, Scheiben 4 und 2 im Stapel.
+
+**Zum zweiten Mal in Folge hat er meine Zahl richtiggestellt:** der Auftrag nannte 29 statische
+Stellen, er zaehlt **28** — die Abweichung ist `Z138`, `style={{ ...grund, cursor: 'default' }}`,
+wo `grund` an `dominant` haengt und damit dynamisch ist. **Die Regel „Zahlen sind Messungen, keine
+Bedingungen“ hat jetzt zweimal an aufeinanderfolgenden Scheiben gegriffen** — beide Male haette
+meine Zahl zu einer falschen Umstellung gefuehrt.
+
+### Mein Fehler des Abends: falsche Zeitquelle, und dadurch auch das falsche Datum
+
+Yama hat es bemerkt, nicht ich: **es ist der 28.07., 23:38 CEST — ich habe den ganzen Abend
+„27.07.“ und UTC-Uhrzeiten gestempelt.** Der Container laeuft auf UTC, ihr arbeitet in CEST; zwei
+Stunden Versatz, und weil es nach 22:00 UTC war, sprang zusaetzlich das Datum.
+
+**Richtiggestellt:** der Kopf von `00-REGELWERK.md` (gilt ab **28.07., 23:30 CEST**) und fuenf
+Ledger-Ueberschriften von heute Abend. **Die Dateinamen `…-2026-07-27.md` bleiben** — ein
+Umbenennen braeche die Verweise, und der Inhalt nennt jetzt das richtige Datum.
+
+**Warum das trotz bestehender Regel passiert ist:** Seit dem 26.07. gilt *„die Uhrzeit einer
+Ledger-Ueberschrift kommt aus `git log`, nicht aus dem Kopf“*. Ich habe sie **nur dort angewandt,
+wo ich einen fremden Commit einordnete** — bei meinen eigenen Eintraegen habe ich weiter `date`
+benutzt. **Das ist R2 zum dritten Mal an einem Tag: die Regel prueft die Gestalt (Ueberschriften
+mit Commit-Bezug) statt der Wirkung (jede Zeitangabe stimmt).**
+
+**Barriere statt Absatz (R9, zweite Wiederholung ist erreicht):** die Wache misst ab sofort mit
+`TZ=Europe/Berlin date`, und **jede** Zeitangabe von mir — nicht nur die mit Commit-Bezug — kommt
+aus einer Quelle mit ausgewiesener Zeitzone.
+
+### Aktiver Auftrag jetzt: Scheibe 5 (`ConfigWizard.tsx`)
+
+43 Stellen (Messung). **Sie ist ein echter modaler Dialog und hat mehrere Schritte** —
+K9 headful mit geoeffnetem Dialog reicht **nicht**, die Schritte muessen durchgeklickt werden,
+sonst bleibt der groesste Teil der Flaeche ungesehen.
+
+**Ab dieser Scheibe gilt `docs/agents/00-REGELWERK.md`** — also mit **Readiness-Quittung vor dem
+Bauen**. Das ist der erste Auftrag unter dem neuen Werk.
+
+**Lage:** Stapel 2 (Scheiben 4 und 2, Ballbesitz Evaluator), aktiver Auftrag Scheibe 5
+(Generator), `main` `057e6417`, 32 zurueck.

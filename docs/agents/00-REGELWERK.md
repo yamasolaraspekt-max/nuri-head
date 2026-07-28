@@ -1,4 +1,6 @@
-# REGELWERK — gültig ab 27.07.2026, 21:30
+# REGELWERK — gültig ab **28.07.2026, 23:30 (CEST)**
+
+> *Richtiggestellt 23:40: der Kopf trug „27.07., 21:30“. Meine Zeitquelle war die UTC-Uhr des Containers — zwei Stunden zurück und dadurch auch einen Tag daneben. Yama hat es bemerkt, nicht ich.*
 
 **Diese Datei ist die Arbeitsgrundlage für Planner, Generator und Evaluator.
 Sie löst die Ablaufregeln aller älteren Dokumente ab.**
