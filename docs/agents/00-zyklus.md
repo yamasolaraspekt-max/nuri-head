@@ -1,3 +1,7 @@
+> **⚠ Der Ablauf gilt ab 27.07.2026, 21:30 nach `docs/agents/00-REGELWERK.md`.**
+> Dieses Dokument bleibt als Herkunft und fuer alles gueltig, was dort nicht geregelt ist.
+> **Bei Widerspruch gewinnt `00-REGELWERK.md`.**
+
 # 00 — DER ZYKLUS: Drei-Rollen-Agentensystem für CRM/ERP-Optimierung
 
 > **Zweck:** Kontinuierliche, sichere Optimierung des ticket CRM/ERP durch drei getrennte Rollen — **PLANNER** (Strategie) · **GENERATOR** (Umsetzung) · **EVALUATOR** (Kontrolle+Veto). Dies ist das **Team + Regelwerk + der Zyklus** — **noch kein CRM-Umbau**.

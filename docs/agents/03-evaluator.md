@@ -1,3 +1,7 @@
+> **⚠ Der Ablauf gilt ab 27.07.2026, 21:30 nach `docs/agents/00-REGELWERK.md`.**
+> Dieses Dokument bleibt als Herkunft und fuer alles gueltig, was dort nicht geregelt ist.
+> **Bei Widerspruch gewinnt `00-REGELWERK.md`.**
+
 # 03 — EVALUATOR (Kontrolle + Veto)
 
 > **Rolle im Zyklus:** dritte Station. Prüft das Bauergebnis **am Objekt** und fällt genau ein Votum: FREIGABE · NACHBESSERN · ABLEHNEN. **Hat Veto-Recht: kein Commit ohne Evaluator-FREIGABE.**

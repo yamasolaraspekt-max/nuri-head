@@ -14938,3 +14938,63 @@ ohne Bewegung im Stapel ist ein Befund, kein Zustand.
 
 **Lage:** Stapel 1 (Scheibe 4, Ballbesitz Evaluator), aktiver Auftrag Scheibe 2 (Ballbesitz
 Generator), `main` `057e6417`, 28 zurueck.
+
+## PLANNER 27.07., 21:30 — REGELWERK IN KRAFT. Alte Ablaufregeln aufgehoben
+
+**`docs/agents/00-REGELWERK.md` ist ab sofort die Arbeitsgrundlage für alle drei Rollen.**
+271 Zeilen, mit je einem eigenständigen Abschnitt für Generator, Evaluator und Planner — jeder
+Abschnitt allein lesbar und weitergebbar.
+
+### Aufgehoben
+
+`06-laufzeiten-und-takt.md` **§0–§7 · §10 · §12–§17.** Aufhebungsvermerk steht oben in der Datei;
+in `00-zyklus`, `01-planner`, `02-generator`, `03-evaluator` steht ein Vorrangvermerk. **Bei
+Widerspruch gewinnt `00-REGELWERK.md`.**
+
+**Gelöscht wurde nichts.** Eine Regel ohne ihre Herkunft ist beim nächsten Zweifel nicht
+verteidigbar — wer wissen will *warum*, liest weiter in `06`; wer wissen will *was gilt*, liest
+`00`.
+
+### Ausdrücklich NICHT aufgehoben — das war die heikelste Stelle
+
+**§8 Bundle-Regel · §9 Blade-Regel · §11 Sichtprobe im ungünstigsten Zustand · §18
+Objekt-Eignungen · §19 Bibliothek verweist auf `Product` · §20 `RoofShape` nicht auf Vorrat.**
+
+Das sind **Fachentscheidungen, kein Ablauf.** Ein pauschales *„alte Regeln aufheben“* hätte sechs
+inhaltliche Festlegungen mitgenommen, von denen drei aus Schäden entstanden sind — die
+Bundle-Regel steht dort seit dem **zweiten** Bundle-Loch.
+
+### Was gegenüber meinem Vorschlag von 21:16 geändert ist
+
+Sechs Korrekturen aus der Fremdbewertung, alle eingearbeitet:
+
+1. **„Readiness-Quittung“ statt „Prüfer“** — der Generator stellt Ausführbarkeit fest, **nicht
+   fachliche Richtigkeit**. Der alte Name hätte falsche Sicherheit erzeugt.
+2. **„Reproduzierbares Prüfverfahren“ statt „Messbefehl“** — visuelle, manuelle und rechnerische
+   Nachweise sind zulässig; bei P0/P1 stimmt der **Evaluator** dem `manual` zu.
+3. **Grundgesamtheit = Definition + Befehl + Sollwert.** *Ein falscher Befehl liefert
+   reproduzierbar die falsche Zahl* — der Befehl allein reicht nicht. Das war der stärkste Punkt
+   der Bewertung.
+4. **Tor 2 mit sechs mechanischen Punkten** statt „Archiv, Marke, Ledger“.
+5. **Nach `FREIGABE` ist der geprüfte Commit unveränderlich.** Kommt Code dazu, gilt das Votum für
+   einen anderen Stand.
+6. **R9 zählt nur technische oder strukturelle Barrieren** — ein Absatz oder ein Hinweis zählt
+   ausdrücklich nicht.
+
+Dazu aus dem heutigen Abend: **Spur B ist enger definiert** (nicht nur „ohne Datenpfad“, sondern
+ohne Daten, Zustand, Routing, Rechte, Validierung, Events, API, Persistenz und bestehendes
+Verhalten), und **die Beifang-Regel ist verschärft**: bei geteilten Dateien reicht „nur eigene
+Pfade“ nicht — der `--cached`-Diff wird gelesen. *Diese Regel stammt aus meinem eigenen Fehler von
+20:54.*
+
+### Was offen bleibt, und es steht als eigener Abschnitt im Werk
+
+**Die fachliche Prüfung des Auftrags ist nicht besetzt.** Der Generator prüft Ausführbarkeit, der
+Evaluator prüft die Umsetzung **gegen meine Kriterien**. Ist ein Kriterium fachlich falsch, prüft
+er sauber gegen ein falsches Maß und kann es nicht bemerken. **Geschlossen wird die Lücke heute
+nur durch Yama am Tor 2.** Eine vierte Instanz würde sie systematisch schließen und Wartezeit an
+der Stelle kosten, die ohnehin der Engpass ist — **das ist eine Ressourcenentscheidung und gehört
+Yama.**
+
+**Lage unverändert:** Stapel 1 (Scheibe 4, Evaluator), aktiver Auftrag Scheibe 2 (Generator),
+`main` `057e6417`, 29 zurück.

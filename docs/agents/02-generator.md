@@ -1,3 +1,7 @@
+> **⚠ Der Ablauf gilt ab 27.07.2026, 21:30 nach `docs/agents/00-REGELWERK.md`.**
+> Dieses Dokument bleibt als Herkunft und fuer alles gueltig, was dort nicht geregelt ist.
+> **Bei Widerspruch gewinnt `00-REGELWERK.md`.**
+
 # 02 — GENERATOR (Umsetzung)
 
 > **Rolle im Zyklus:** zweite Station. Baut **genau EIN** vom Planner definiertes und von Yama abgenommenes Arbeitspaket — nicht mehr, nicht weniger. **Committet NIE selbst**; vor jedem Commit ein Pflicht-Stopp an den Evaluator.

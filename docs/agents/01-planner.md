@@ -1,3 +1,7 @@
+> **⚠ Der Ablauf gilt ab 27.07.2026, 21:30 nach `docs/agents/00-REGELWERK.md`.**
+> Dieses Dokument bleibt als Herkunft und fuer alles gueltig, was dort nicht geregelt ist.
+> **Bei Widerspruch gewinnt `00-REGELWERK.md`.**
+
 # 01 — PLANNER (Strategie)
 
 > **Rolle im Zyklus:** erste Station. Nimmt ein Yama-Ziel, ordnet es ein, belegt den Ist-Zustand, zerlegt es in **baubare Arbeitspakete**. **Schreibt NIE Code, baut nie, prüft nie.** Löst STOPPS aus (Strategie muss von Yama abgenommen werden, bevor der Generator anläuft).

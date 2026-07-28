@@ -1,3 +1,20 @@
+> # ⚠ ABLAUFREGELN AUFGEHOBEN — 27.07.2026, 21:30
+>
+> **Die geltende Fassung steht in `docs/agents/00-REGELWERK.md`.**
+>
+> **Abgelöst und nicht mehr geltend:** §0–§7 · §10 · §12 · §13 · §14 · §15 · §16 · §17.
+> Sie bleiben hier als **Begründung** lesbar — wer wissen will, *warum* eine Regel existiert,
+> findet es hier. Wer wissen will, *was gilt*, liest `00-REGELWERK.md`.
+>
+> **UNVERÄNDERT GÜLTIG (Fachregeln, kein Ablauf):**
+> **§8** Bundle-Regel · **§9** Blade-Regel · **§11** Sichtprobe im ungünstigsten Zustand ·
+> **§18** Objekt-Eignungen · **§19** Bibliothek verweist auf `Product` · **§20** `RoofShape` nicht
+> auf Vorrat.
+>
+> *Aufgehoben heißt abgelöst, nicht widerlegt: fast jede dieser Regeln steht inhaltlich im neuen
+> Werk, nur kürzer und an einer Stelle. Gelöscht wird nichts — eine Regel ohne ihre Herkunft ist
+> beim nächsten Zweifel nicht verteidigbar.*
+
 # ⇒ VORSCHLAG — Laufzeiten und Takt (nativ · Cowork)
 
 **Angelegt:** 25.07.2026 · **Vom:** Planner (Cowork) · **Status: VORSCHLAG.**
