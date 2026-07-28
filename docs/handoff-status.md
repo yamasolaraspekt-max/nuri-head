@@ -16891,3 +16891,60 @@ unbeantwortet, die er stellen sollte.**
 Inhaltlich unveraendert: dieselben sieben Wanderungen, derselbe geschaetzte Gewinn von 93 px,
 dieselben zwei Vorbehalte (Breite haengt an T4/T5, Ticket-Navigation an T1). **Das Blatt bleibt
 `GESPERRT`.**
+
+
+### Nachtrag 01:30 CEST — Vollentwurf, und was das Lesen der Inventuren geaendert hat
+
+Yama: *„ich will eine vollwertige entwurf schau doch dein inventur sachen genauer an.“* **Er hat auf
+einen Stapel Papiere gezeigt, den ich selbst geschrieben habe und nicht benutzt hatte.**
+`docs/planner/` traegt **30 Dateien**; ich hatte fuer AUF-83 genau **eine** gelesen.
+
+**Vollentwurf:** `docs/planner/entwurf-studio-vollbild-2026-07-29.html` — acht Abschnitte: Ist-Zustand,
+Entwurf angedockt, Panels als Ueberlagerung, Befehlspalette, Tablet und Telefon, Hoehenbilanz,
+Herkunft jeder Entscheidung, und was bewusst fehlt.
+
+### Was das Lesen geaendert hat — vier Dinge, die der erste Entwurf falsch hatte
+
+**(1) Die linke Spalte war gar nicht im Entwurf.** `ux-befund-expertenmodus-2026-07-25.md` **B1**:
+*„Die linke Spalte macht drei Jobs“* — Werkzeuge (9), Faehigkeiten (37 in 9 Gruppen), Projektbrowser,
+alles in **einer** scrollenden Spalte; der Projektbrowser war erst nach **zweimal zehn Scroll-Ticks**
+sichtbar. **Genau die Flaeche, die Yamas Punkt 4 als „Werkzeuge · Projekt · Fachplaner“ verlangt.**
+Ich hatte nur die Kopfleiste gezeichnet und den strukturellen Befund uebersehen, der daneben lag.
+
+**(2) Der vierte Panel-Reiter fehlt im Ist-Zustand.** **B3**, und das Papier nennt ihn *„den teuersten
+Befund des Tages“*: bei 1375 px ist **„Historie“ abgeschnitten**, obwohl `PANEL_TABS` vier Eintraege
+hat und sechs Tests das belegen. *„Kriterium K3 ist im Test gruen und auf dem Schirm nicht erfuellt.“*
+Der Entwurf zeigt jetzt beides — die Kappung im Ist, alle vier Reiter im Soll.
+
+**(3) Die leeren Reiter tragen ihren Zustand als Datum, nicht als Meinung.** `panelTabs.ts` fuehrt je
+Reiter `zustand` **und** einen Hinweissatz: *„Zeigt spaeter, woran ein Bauteil haengt: Wand ↔ Oeffnung,
+Geschoss, Dachflaeche.“* **Das gehoert in den Entwurf, nicht erfunden** — und der Reiter `historie`
+spricht sogar die Snapshot-Naht aus, die der Server heute schon bedient und die Insel nicht liest.
+
+**(4) Fuenf Arbeitsbereiche liegen fertig im Code und waren nirgends sichtbar.**
+`arbeitsbereiche.ts`: Import & Nachzeichnen · Architektur · Bauphysik · Heizung · Elektro · PV.
+Ebenso die **Befehlspalette** (`dashboard/palette.ts`, speist aus der Registry, keine zweite
+Aktivierungslogik). **Yamas Punkt 5 verlangt eine Command-Palette — sie ist gebaut, sie ist nur nicht
+erreichbar.** Bestandscode-first heisst hier: einen Einstieg zeigen, nichts bauen.
+
+### Eine Zahl, die der Entwurf nach unten korrigiert
+
+**Der erste Entwurf versprach +93 px, der Vollentwurf verspricht +51 px.** Grund: er **fuegt eine
+Arbeitszeile hinzu** (42 px) fuer Arbeitsbereiche, 2D/Split/3D, Werkzeuge und Suche. Dafuer
+verschwindet die 13-teilige Geschosszeile aus dem Plan, und die linke Spalte hoert auf, drei Jobs zu
+stapeln. **Das ist der ehrlichere Handel, und ich schreibe die kleinere Zahl hin statt der
+schoeneren.**
+
+### Der Fehler dahinter, benannt
+
+Zweimal hintereinander habe ich etwas **zur Freigabe** vorgelegt, das nicht vorlagereif war: erst
+einen Drahtrahmen mit Zeichen aus der Zeichentabelle, dann einen Entwurf, der **ein Achtel des
+Bildschirms** zeigte, waehrend der Auftrag sieben Punkte hat. **Beide Male war die Ursache dieselbe:
+ich habe gemessen, was ich gerade brauchte, statt zu lesen, was schon gemessen war.**
+
+`docs/planner/` ist kein Archiv, es ist die **Vorarbeit**. Wer sie nicht liest, misst zum zweiten Mal
+und schlechter. **Auflage fuer mich, ab sofort:** vor jedem Planner-Papier zu einem Gebiet erst
+`ls docs/planner/` und die einschlaegigen Dateien lesen — **das ist Bestandscode-first, angewandt auf
+die eigene Arbeit.**
+
+**Ballbesitz Yama:** Entwurf freigeben oder aendern. Das Blatt bleibt `GESPERRT`.
