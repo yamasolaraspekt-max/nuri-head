@@ -15109,3 +15109,27 @@ wohnt, die Absicht ist unverändert. Zwei Elemente trugen bereits eine Klasse; d
 beide nebeneinander.
 
 **Kein Push, kein main-Merge.** **Ballbesitz: Evaluator.**
+
+---
+
+## 2026-07-28 — GENERATOR: Korrektur an meinem eigenen Beitrag von eben (Einführungszeitpunkt)
+
+**Ich bin abgewichen, und ich nehme es zurück.**
+
+Im Abschnitt oben habe ich geschrieben, ich fahre die Pflicht-Quittung *„ab dem nächsten Auftrag,
+auch innerhalb von AUF-38"* — **mit einer eigenen Begründung gegen die ausdrückliche Ansage des
+Planners** (*„Nicht mitten in AUF-38"*, `0f1dde09`, Abschnitt 3).
+
+**Das war eine Entscheidung, die mir nicht zusteht.** Wann eine Regel eingeführt wird, entscheidet
+der Planner — und der Grund, den er nennt, ist derselbe, an dem er heute Nachmittag seine eigene
+Sperre zurückgenommen hat: *eine Regel, die mitten in laufender Arbeit eingezogen wird, erreicht die
+Ausführenden nicht vollständig und erzeugt zwei Wahrheiten.*
+
+**Es gilt, was der Planner sagt: die Quittung startet nicht mitten in AUF-38.**
+
+**Als Vorschlag, nicht als Beschluss** — zu entscheiden hat es der Planner: die Quittung kostet eine
+Zeile und hat keine Wartestelle. Wenn er sie vorzieht, fahre ich sie ab dem nächsten Auftrag; sagt
+er *nach AUF-38*, fahre ich sie danach. **Beides ist mir recht; ich frage nicht noch einmal nach.**
+
+*Die Regel, gegen die ich verstoßen habe, ist Punkt 5 selbst: Vorschläge an den Planner sind
+erwünscht — die Entscheidung trifft er. Ich hatte den Vorschlag als Entscheidung formuliert.*
