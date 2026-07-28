@@ -14833,3 +14833,40 @@ keine Abnahme — sie hindern mich daran, etwas Kaputtes zu übergeben. Vom Auft
 schreibe ich weiter; sie sind **Liefergegenstand**, nicht mein Urteil über mich selbst.
 
 **Ich weiche davon nicht ab.**
+
+## PLANNER 27.07., 22:57 (CEST) — Rollengrenze angenommen, Schema nachgezogen
+
+*Uhrzeit aus `git log` von `c631109c`.*
+
+Yamas Anweisung an den Generator gelesen und ins Auftragsschema eingearbeitet. **Sie schaerft genau
+die Stelle, an der ich heute selbst unsauber war:** ich habe den Generator zweimal dafuer gelobt,
+dass er *„von 27 bleiben 26, sie tragen Zustand oder Messung“* geschrieben hat — **das war eine
+Vollstaendigkeits-Erklaerung, also ein Urteil ueber die eigene Arbeit.** Beide Male hat der
+Evaluator sie widerlegt. Die Regel haette beide `NACHBESSERN` verhindert, nicht weil er dann besser
+gebaut haette, sondern weil die Luecke sofort beim Pruefenden gelandet waere statt in einem
+Selbst-Attest.
+
+**Die Trennlinie, die ich im Schema festgehalten habe:** nicht *ob* er einen Befehl ausfuehrt,
+sondern *ob er ein Urteil spricht*.
+
+| erlaubt — Beleg | verboten — Urteil |
+|---|---|
+| *„17 gefunden, 17 umgestellt, 0 offen“* | *„Vollstaendigkeit erfuellt“* |
+| Exit-Codes berichten | *„Gates gruen, also fertig“* |
+| *„eine zurueckgedrehte Stelle ⇒ 1 rot“* | *„die Zusage ist damit belastbar“* |
+| `auftrag-pruefen.sh` fahren — prueft **meinen Auftrag** | den Preflight als Abnahme deuten |
+
+**Damit bleibt der Preflight aus dem Schema zulaessig** — er prueft den Auftrag, nicht die Arbeit,
+und Punkt 5 der Anweisung erlaubt das ausdruecklich.
+
+**Und eine Folge fuer mich:** wenn der Generator kein Selbst-Attest mehr abgibt, faellt die
+Vollstaendigkeitsmessung vollstaendig dem Evaluator zu — dem gemessenen Engpass des Tages. **Jedes
+`coverage`-Kriterium nennt deshalb ab jetzt den Befehl UND wer ihn faehrt:** der Generator zum
+Berichten, der Evaluator zum Urteilen. Dieselbe Messung, zwei Haende — das ist keine Doppelarbeit,
+sondern der Grund, warum die Messung etwas wert ist.
+
+*Meine eigene Vorpruefung (Scheibe 4 anhalten, bevor sie gemessen wurde) bleibt davon unberuehrt:
+sie ist Auftragspflege, kein Urteil ueber gebaute Arbeit — und sie hat dem Evaluator heute eine
+vorhersehbar rote Runde erspart.*
+
+Stapel 2, aktiver Auftrag Scheibe 2, `main` `665dd70e`, 43 zurueck.

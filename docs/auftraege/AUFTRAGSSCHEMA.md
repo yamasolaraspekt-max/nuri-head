@@ -123,6 +123,29 @@ dort erzeugt Alibi-Tests und entwertet den Typ da, wo er zaehlt.
 | **Preflight-Skript** | mechanische Mindestbedingungen | interpretieren, Ausnahmen erfinden |
 | **Evaluator** | jedes Kriterium einzeln pruefen, eigene Pruefpfade entwickeln, Gegen-Beweis | fehlende Umsetzung selbst ergaenzen |
 
+### Nachtrag 27.07., 22:57 — Yamas Rollengrenze (`c631109c`) und was sie hier aendert
+
+Yama hat dem Generator dauerhaft untersagt, die eigene Arbeit zu pruefen: *„kein Selbst-Gruen, keine
+Vollstaendigkeits-Erklaerung, keine Abnahme-Messung an der eigenen Scheibe“* — und ihm ausdruecklich
+erlaubt, **den Auftrag** vor dem Bauen zu pruefen und zurueckzugeben.
+
+**Das Schema bleibt gueltig, aber zwei Dinge muessen scharf getrennt bleiben:**
+
+| erlaubt (Beleg) | verboten (Urteil) |
+|---|---|
+| `population_command` fahren und die **rohe Zahl** melden: *„17 gefunden, 17 umgestellt, 0 offen“* | *„Vollstaendigkeit erfuellt“*, *„K-02 gruen“* |
+| Exit-Codes der Gates berichten | *„die Gates sind gruen, also ist es fertig“* |
+| Gegenprobe fahren und das Ergebnis nennen: *„eine zurueckgedrehte Stelle ⇒ 1 rot“* | daraus schliessen, die Zusage sei belastbar |
+| `auftrag-pruefen.sh` fahren — **das prueft meinen Auftrag, nicht seine Arbeit** | den Preflight als Abnahme deuten |
+
+**Die Trennlinie ist nicht, ob er einen Befehl ausfuehrt, sondern ob er ein Urteil spricht.** Eine
+Zahl ist ein Beleg; *„damit ist das Kriterium erfuellt“* ist eine Abnahme, und die gehoert dem
+Evaluator.
+
+**Folge fuer meine Auftragsblaetter:** jedes `coverage`-Kriterium nennt den Befehl **und** wer ihn
+faehrt — der Generator zum Berichten, der Evaluator zum Urteilen. **Dieselbe Messung, zwei Haende.**
+Das ist keine Doppelarbeit, sondern der Grund, warum die Messung ueberhaupt etwas wert ist.
+
 **Der Preflight ist keine vierte Instanz.** Er ist ein Skript, das **der Generator vor der
 Uebergabe selbst ausfuehrt**; seine Ausgabe gehoert in den Bericht. Damit bleibt der Planner
 vollstaendig aus dem Pruefpfad — sonst pruefte ich Arbeit gegen Kriterien, die ich selbst
