@@ -118,3 +118,48 @@ des Auftrags als Guardrail festgeschrieben. Die beiden Arbeitsflächen überschn
 | **AUF-42** | **`viewport.ready` sagte immer ja — jetzt sagt es die Messung** | Generator | `ERLEDIGT` — **FREIGABE** (`57c32c4`) fuer Code `08f7cde` + Bundle `269d7fa`. **Ausgang 1 von dreien:** der Auftrag liess auch zu, den Posten zu **schliessen** — es gibt den Zustand aber, und er ist messbar. **Der Grundtext *Die Zeichenflaeche ist noch nicht bereit* erscheint jetzt**, statt nie; **fuenf** Werkzeuge tragen nicht laenger eine Vorbedingung, die nichts prueft. **Eine Wahrheit** (die Faehigkeit wird an einer Stelle bestimmt), **kein Flackern**, Gegen-Beweis: Bindung entfernt ⇒ rot. **Resize-Befund zurueckgegeben** statt nebenbei gebaut | `generator-auftrag-auf42-ansicht-bereit.md` |
 | **AUF-67** | **Die Befehlspalette wird globale Navigation** — fuenf Arten statt einer | Generator | `ERLEDIGT` — **FREIGABE** (`408baff`) fuer Code `5bcca43` + Bundle `5e090cf`. **Eine Wahrheit, differenziell belegt:** die Palette ist aus den Registern **abgeleitet** — aendert sich Stapel oder Baum, aendert sich die Palette; Gegen-Beweis: eine Art entfernt ⇒ der Fuenf-Arten-Test rot. **Sicherheit gemessen:** `palette.ts` ohne `location`/`href`/`route` (Grep **0**) — reine **Zustands**-Navigation, keine URL; die AUF-66-Sorge trifft hier nicht zu. **Navigations-Eintraege sind immer frei** (sie fuehren hin) · Gruppenreihenfolge **fest** · Leerzustand je Art woertlich, ohne Treffer alle fuenf Saetze. Gates **1231/0**, Buendel byte-gleich. **Zurueckgegeben: die Fokusfalle** (Pfeiltasten treffen die falsche Zeile) — Folgeposten, kein Blocker | `generator-auftrag-auf67-palette-navigation.md` |
 | **AUF-35b** | **Teil-Identitaet** (Wandseite, Dachflaeche) — **halber Posten mit Begruendung**, der Renderer-Anteil zurueckgegeben | Generator | `ERLEDIGT` — **FREIGABE** (`4f18f70`) fuer Code `1164321` + Buendel `7fd8749`. **Die gelieferte Haelfte ist kohaerent verdrahtet, nicht halb:** `auswahlUebersicht` nutzt `knotenVon`, **ein Teil zaehlt als sein Knoten** — kein toter Halb-Draht. `baueTeilId`/`zerlegeTeilId` umkehrbar, reine id **rueckwaertskompatibel** (der Normalfall), Unfug abgewiesen, `dachFlaechen` **liest statt rechnet**. Gegen-Beweis: Trenner `#`→`@` ⇒ **5 rot**. **Die zurueckgegebene Haelfte ist ehrlich dokumentiert statt halbfertig eingebaut** — `renderers/szene.ts:659-661` reduziert den Treffer sofort auf `nodeId`, und es gibt **kein Werkzeug, das Flaechen waehlt**. **Kriterium 10 ausdruecklich nicht erfuellt:** *es gibt nichts zu sehen, also gibt es keine Sichtprobe.* Gates **1246/0** | `generator-auftrag-auf35b-flaechenauswahl.md` |
+
+
+## Zugang 29.07.2026, 00:55 — AUF-38 Scheiben 4 und Nachzug 2
+
+> **Beide mit derselben Freigabe.** Der Evaluator hat die am 28.07. am wandernden Buendel
+> gescheiterte **headful-K7** nachgeholt, nachdem das Buendel auf `a2a83e72` stillstand.
+>
+> **Der bemerkenswerte Teil ist, dass er gegen sich selbst argumentiert:** er hielt das Messwerkzeug
+> zur selben Stunde auf `NACHBESSERN` und begruendete trotzdem, warum die zwei Freigaben davon
+> unberuehrt sind — *„der Zaehlfehler macht den Block an `StartView.tsx:149` **zu gross** — die
+> Zusage meldet dort mehr, nie weniger. Eine uebersehene Stelle kann daraus nicht entstehen: jede
+> der 316 Stellen wird unabhaengig gefunden, und die Desynchronisation trifft 1 von 316.
+> **Korrekturbeduerftig ist die Zahl, nicht der Schutz.**“*
+>
+> **Beide Befunde (`AUF38-S4-1`, `AUF38-NZ2-1`) sind ueber die Barriere aufgeloest, nicht ueber
+> Einzelflicken** — vier Proben, jeweils mit Ruecknahme, alles gegen eine Kopie.
+
+| Nr | Auftrag | Rolle | Status | Beleg |
+|---|---|---|---|---|
+| **AUF-38 Scheibe 4** | **Scheibe 4 NACHGEBESSERT** (`HausplanerStudio.tsx`), 27.07. 22:45 | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07., 00:45). **Der Toast wurde real ausgeloest, nicht simuliert:** Startflaeche, Chip Fenster, `ConfigWizard`, dreimal Weiter, Uebernehmen — und **im selben Aufruf gemessen**, weil er nach 2600 ms verschwindet. `position=fixed · backgroundColor=rgb(26,38,42)` = `#1a262a` · `boxShadow=rgba(28,50,55,0.1)` = `T.schattenGehoben` · **klassen=(keine)**, vollstaendig inline — die gewollte Ausnahme. Quelle == DOM ueber alle zehn Eigenschaften. Schale `.hp-studio-kopf`/`.hp-status`/`.hp-title`/`.hp-bar` mit **Inline-Laenge 0**. Konsole 0 Fehler. *Der erste Foto-Versuch kam zu spaet und der Toast war fort — er hat ihn nicht nachgestellt, sondern den Ablauf gebuendelt wiederholt.* **Der Pruefstoff, wortgleich aus der Tafel uebernommen:** **Zuerst seine Zahlenkorrektur pruefen:** Planner zaehlte 19 statisch, er misst **17** — Navigationsspalte ist `navZu ? 66 : 266` (dynamisch), ein Navi-Eintrag traegt `#3f464e` roh (gehoert nach K4 nicht in die CSS). **Wer nachmisst, findet 17.** Dann: 15 Klassen fuer 17 Stellen (zwei Paare wortgleich), von 27 bleiben 10 — acht dynamisch, zwei Rohwert. Gegenprobe: eine zurueckgedrehte Stelle ⇒ 1 rot. Dann **K9 headful mit ausgeloestem Toast** (Konfigurator oeffnen, uebernehmen) | `37094c5b` · Artefakte `0d5cd975` |
+| **AUF-38 Nachzug Scheibe 2** | **Nachzug Scheibe 2** (`StartView.tsx`), 28.07. 23:37 | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07., 00:45). **23 `hp-start-*` real im DOM**, Stichproben alle mit `inline=""`: Kicker `rgb(18,128,125)` = `T.accent` · Kartentitel `rgb(35,42,49)` = `T.ink` · **kein Inline-Override.** `serviert == gemessen` sauber: `git status --porcelain public/hausplaner` leer, Browser-Fetch byte-gleich zu `a2a83e72`. **Das Buendel hat sich waehrend der Messung nicht bewegt — die Regel von 00:06 hat genau das ermoeglicht, was sie schuetzen sollte.** **Der Pruefstoff, wortgleich aus der Tafel uebernommen:** **Zuerst wieder seine Zahlenkorrektur:** Auftrag nannte 29 statische, er zaehlt **28** — Abweichung ist `Z138`, `style={{ ...grund, cursor: 'default' }}`, und `grund` haengt an `dominant`, ist also dynamisch. **Zweite Scheibe in Folge, in der er die Planner-Zahl richtigstellt.** Dann: 22 Klassen fuer 28 Stellen (sechs Bloecke mehrfach), von 36 bleiben **8**. Geerbte AUF-40-Zusage nachgezogen (las `cursor: 'default'` inline, prueft die Eigenschaft jetzt dort wo sie wohnt). Gates 0/0/0/0, Insel 1302 auf **1305**, PHP 789. **Pruefen:** ob die 8 verbliebenen je einen Grund tragen, und **K9 headful** — StartView ist die erste Flaeche, die ein Kunde sieht | `5382cb3a` · Artefakte `a2a83e72` |
+
+
+## Zugang 29.07.2026, 01:00 — AUF-38 Messwerkzeug (die Barriere) und die Sicherung
+
+> **Vier Befunde, zwei Nachbesserungen, ein Votum.** `42b88b85` bekam `NACHBESSERN` (zwei P1),
+> `c895061d` behob `MW-1`/`MW-2`, `8fb7b990` behob `MW-4`/`MW-3` und schrieb die Reichweite in den
+> Kopf. **`FREIGABE` fuer den nachgebesserten Stand** (Evaluator, 00:51).
+>
+> **Die Zahl, die zaehlt: durch `MW-3` und `MW-4` hat sich keine Zahl bewegt** — und der Evaluator
+> benennt, warum das die *richtige* Erwartung ist: beide hatten null Fundstellen, **eine Bewegung
+> waere ein Alarm gewesen.**
+>
+> **Sieben Gegen-Beweise, und jede Mutation vorher auf Auffinden geprueft** — *denn eine Mutation,
+> die nicht greift, liefert ein falsches Gruen.* Das ist der Satz, der diese Abnahme von einer
+> Behauptung unterscheidet.
+>
+> **Die Laengentreue hat er eigens geprueft, weil alles daran haengt:** waere die Maske nicht
+> laengentreu, verschoeben sich saemtliche Zeilennummern und **jede Fundstelle zeigte auf die
+> falsche Zeile** — 14/14 Dateien, Zeichenlaenge und Zeilenzahl identisch zur Rohquelle.
+
+| Nr | Auftrag | Rolle | Status | Beleg |
+|---|---|---|---|---|
+| **AUF-38 Messwerkzeug** | **`scripts/statische-inline-stile.mjs` — die Definition von *statisch* als ausfuehrbares Skript, plus die generische Rohwert-Zusage ueber alle Dateien** (Spur A, vom Planner nachtraeglich hochgestuft: das Skript erzeugt den abgeleiteten Wert, an dem jede weitere Scheibe gemessen wird) | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07., 00:51) fuer `c895061d` + `8fb7b990`. **`MW-1`** Kommentar machte statisch zu dynamisch ⇒ behoben, `WerkzeugGruppenMenue` steht auf **8** · **`MW-2`** ein Block lief bis Dateiende ⇒ **alle 316 Bloecke neu auf Abgrenzung geprueft, 0 nicht sauber** (vorher 1) · **`MW-4`** Vorlagen-Ausdruck galt als statisch ⇒ dynamisch, **und `` `${T.hair}` `` bleibt statisch — die Reparatur schiesst nicht ueber** · **`MW-3`** `?`/`...` im Text ⇒ statisch. 316 gesamt / **198 offen**, `ConfigWizard` **43/40/2/38**, Eichung der drei abgenommenen Scheiben unveraendert `0/0/0`. Gates 1323/0, `tsc` 0, `schema` 0, `dom` 11/0, `public` unberuehrt. **`MW-5` vom Planner ausgeschlossen** (P3, null Fundstellen; die Token-Tiefe ist **die Definition**, nicht das Werkzeug) | `42b88b85` (beanstandet) · `c895061d` · `8fb7b990` |
+| **B-01, Teil Sicherung** | **Der Rueckstand liegt ausserhalb der Maschine** — 230 Commits, zwei Arbeitstage, existierten nur auf einer Platte | **Yama** | `ERLEDIGT` — von Yama selbst gefahren, 29.07. 00:45, **und das war der einzige zulaessige Weg**: der Generator hatte das Kriterium verweigert, weil `CLAUDE.md` jeder Instanz das Pushen untersagt. `c631109c..a849e030` mit `OK` auf **beiden** Remotes; `git branch -r --contains HEAD` nennt `fork` und `backup-private`. **Ein Fehler steht im Log und ist harmlos:** `auto/hausplaner-ui-3a` von `fork` abgelehnt, *„tip is behind its remote counterpart“* — **der Remote hat mehr als der Rechner, nicht weniger.** Auffaellig bleibt, dass `backup-private` fuer denselben Branch `up-to-date` meldet: **die zwei Remotes stehen dort auseinander.** Kein Handlungsbedarf, aber zu messen, bevor jemand diesen Branch anfasst | `push-result.log`, 00:45:02–00:45:42 |

@@ -16227,3 +16227,302 @@ Kopf hatte. Der eine nimmt fremde Arbeit mit, der andere wirft eigene weg.
 *Zur Lage, weil es im mitgenommenen Text steht und nicht untergehen soll: das Votum des Evaluators
 zu Scheibe 4 und Nachzug Scheibe 2 lautet **FREIGABE**. Der Abnahme-Stapel ist damit bis auf die
 zwei Messwerkzeug-Posten leer.*
+
+---
+
+## ⇒ EVALUATOR — AUF-38 Messwerkzeug NACHGEBESSERT (`c895061d` + `8fb7b990`): **FREIGABE** (29.07., 00:51 CEST)
+
+**Der Maßstab trägt jetzt. Alle vier Befunde behoben, jeder einzeln verriegelt, die Zahlen stimmen
+auf die Stelle.** `git diff --name-only 8fb7b990 HEAD -- scripts resources public` ist **leer** —
+mein Messstand gilt trotz der zwei Doku-Commits dazwischen.
+
+| Befund | Meine Gegenprobe | Beobachtet |
+|---|---|---|
+| **MW-1** Kommentar machte statisch → dynamisch | derselbe Block mit/ohne Kommentar | beide `statisch` · `WerkzeugGruppenMenue` steht auf **8** |
+| **MW-2** Block lief bis Dateiende | **alle 316 Blöcke** neu auf Abgrenzung geprüft | **0 nicht sauber** (vorher 1) |
+| **MW-4** Vorlagen-Ausdruck galt als statisch | `` `${offset}px` `` · `` `${breite(3)}px` `` | **dynamisch** — und `` `${T.hair}` `` bleibt statisch, die Reparatur schießt nicht über |
+| **MW-3** `?`/`...` im Text | `content: '?'` · `'Foo ... Bar'` | **statisch** |
+
+**Die Zahlen, die ich gemeldet hatte, treffen alle drei:** 316 gesamt / **198 offen** (war 197) ·
+`WerkzeugGruppenMenue` **8** (war 7) · `StartView` Farbtreffer **4** (war 7). Eichung unverändert
+`0 / 0 / 0`, `ConfigWizard` **43/40/2/38**. **Durch MW-3 und MW-4 hat sich keine Zahl bewegt** — das
+ist die richtige Erwartung, weil beide null Fundstellen hatten; eine Bewegung wäre ein Alarm gewesen.
+
+**Sieben Gegen-Beweise, alle in einer Kopie, Arbeitsbaum unberührt** — und jede Mutation vorher auf
+Auffinden geprüft, *denn eine Mutation, die nicht greift, liefert ein falsches Grün*:
+
+```text
+A  stilBloecke liest wieder die Rohquelle      => 3 rot   (u.a. "JEDER Block ist sauber abgegrenzt")
+B  istStatisch blendet nicht mehr aus          => 1 rot
+C  Vorlagen-Ausdruck bleibt an Ort und Stelle  => 1 rot
+D  ? und ... vor dem Entwerten geprüft         => 1 rot
+E  #1a262a bekommt einen Token                 => 1 rot   (ältere Barriere ungeschmälert)
+F  #e9f4f2 bekommt einen Token                 => 1 rot
+G  unverändert                                 => 16/16 grün
+```
+
+**Die Längentreue habe ich eigens geprüft, weil alles daran hängt:** wäre die Maske nicht
+längentreu, verschöben sich sämtliche Zeilennummern und jede Fundstelle zeigte auf die falsche
+Zeile. **14/14 Dateien, Zeichenlänge und Zeilenzahl identisch zur Rohquelle.**
+
+Gates selbst gefahren: `test:hausplaner` **1323/0** · `tsc` 0 · `schema` 0 · `dom` 11/0 ·
+`status --porcelain public` leer. Beide Commits zusammen **2 Dateien**, kein Produktivcode.
+
+**Ein Nebenbefund, `AUF38-MW-6` (P3, Planner entscheidet, nicht gebaut):** `ohneKommentare` ist
+zeichenketten-bewusst, aber **nicht JSX-bewusst**. Ein unpaariges Anführungszeichen im JSX-**Text**
+schickt die Maske in den Zeichenketten-Modus; ab dort wird in dieser Datei kein Kommentar mehr
+ausgeblendet. **Die Auslösebedingung steht live im Baum:** `FaehigkeitenNavi.tsx:73` trägt
+`· „schläft" =` — dasselbe Muster wie das `„nah dran"`, aus dem MW-2 entstand, nur in der Textzeile
+statt im Kommentar. **Wirkung heute: keine** (die vier Blöcke der Datei stehen in Z34/53/63/71, die
+Textzeile in Z73).
+
+**Und der Grund, warum ich das nicht als Befund führe:** beide Richtungen sind gedeckt. Die laute
+Richtung — Block wird abgeschnitten — fängt die **neue** Abgrenzungs-Zusage; synthetisch
+nachgestellt, sie geht rot. Die leise Richtung — statischer Block gilt als dynamisch, Zusage bleibt
+grün — ist zu, **weil `istStatisch` den Block noch einmal selbst maskiert**. Das ist genau die
+Doppelung, die der Generator mit *„wird auch direkt aufgerufen"* begründet hat; **sie trägt hier
+mehr, als ihre Begründung sagt.** Nachgestellt: statischer Block mit Kommentar hinter einem
+unpaarigen Zeichen ⇒ weiterhin statisch.
+
+`AUF38-MW-5` (`T.a.b`) bleibt offen wie beauftragt — keine Fundstelle, bewusst nicht im Auftrag.
+
+**Gesamtvotum: `FREIGABE`.** Damit ist die Bedingung erfüllt, unter der ich empfohlen hatte,
+Scheibe 5 zurückzustellen — **sie kann laufen**, und ihr Sollwert 38 kommt jetzt aus einem Werkzeug,
+das an vier Stellen gegengeprüft ist. **Der Abnahme-Stapel ist leer.** Ballbesitz: Planner.
+
+Belege in voller Länge: `docs/abnahme-evaluator-haertung-2026-07-25.md`.
+Kein Commit durch mich, kein Push, kein Tor 2.
+
+## 2026-07-29 — GENERATOR: B-01 gebaut bis K-04. **K-05 liegt bei Yama, und es eilt.**
+
+```text
+QUITTUNG — B-01
+Je Kriterium Prüfverfahren vorhanden?   K-01 … K-05: JA
+Grundgesamtheit ausführbar:             JA (15 Dateien, selbst gezählt)
+Widersprüche:                           EINER — K-05, siehe unten
+Nicht ausführbare Punkte:               K-05 (nicht technisch, sondern governance-seitig)
+Ergebnis:                               TRÄGT für K-01…K-04 · TRÄGT NICHT für K-05
+```
+
+**Commit:** `af0e0c93` — 15 Dateien, alle unter `.ai-workflow/`. **0 Produktivcode · 0 `public/*`.**
+
+### K-01 bis K-04 — belegt
+
+```text
+K-01  git show --name-only --pretty=format: HEAD | sort     ->  15 Pfade, alle .ai-workflow/
+      Index VOR dem Commit gelesen: 0 Fremdpfade. (Nach dem Beifang von 00:48 lese ich ihn.)
+K-02  git grep -n '/Users/' -- .ai-workflow                 ->  leer, exit 1
+      Partner ohne Pfadfilter                               ->  3 Treffer, u.a. config/ignition.php
+      Der Befehl KANN also finden — sonst wäre die Leere kein Beleg, sondern ein stummer Test.
+K-03  bash -n über alle fünf Skripte                        ->  keine Fehlerzeile
+      git ls-files -s .ai-workflow/scripts/                 ->  100755 für alle fünf
+K-04  git show --name-only … HEAD -- resources scripts public app database  ->  leer
+```
+
+**Warum das Werkzeug überhaupt fehlte, ist der eigentliche Witz an B-01:** unverfolgte Dateien
+wandern nicht in einen neuen Worktree. Das Werkzeug, das die Rollentrennung herstellen soll, fehlte
+genau dort, wo sie hergestellt wird.
+
+### K-05 — NICHT ausgeführt. Echter Governance-Widerspruch, vorgelegt statt geraten
+
+Der Auftrag verlangt `./push-integration-sicher.command`. **Dagegen steht eine stehende Regel, die
+über dem Auftrag liegt:**
+
+```text
+CLAUDE.md, Git-Disziplin (2):  "Niemals pushen — kein git push aus irgendeiner Instanz,
+                                auch nicht nach grüner Abnahme; pushen macht ausschließlich Yama."
+§0b, stehende Verbote:         "Push nur über ./push-integration-sicher.command"
+```
+
+**Die zweite Zeile regelt den Weg, die erste den Handelnden — und die erste steht in `CLAUDE.md`,
+die bei Konflikt gewinnt.** Der Planner darf mir viel beauftragen, aber keine Regel aufheben, die
+über ihm steht. Ich rate hier nicht, ich lege vor.
+
+**Der Befund selbst ist der wichtigste des Tages, und er ist seit meiner letzten Messung größer
+geworden:**
+
+```text
+git rev-list --count origin/auto/hausplaner-integration..HEAD   ->  230   (Planner maß 223 um 00:40)
+git branch -r --contains HEAD                                   ->  leer
+letzter gesicherter Stand                                       ->  432c179b, 26.07. 13:20
+```
+
+**Zwei volle Arbeitstage liegen auf genau einer Platte.** Vor dem Deploy ist der Remote die einzige
+Kopie außerhalb der Maschine — *„nicht gepusht"* heißt hier nicht unordentlich, sondern **kein
+Backup**. Die 76 KB `.ai-workflow/` sind der kleinere Teil; **der Rückstand ist der Posten.**
+
+**Was Yama tun muss — ein Befehl:**
+
+```sh
+./push-integration-sicher.command && cat push-result.log
+```
+
+Erwartet: `OK` bei **beiden** Remotes (`fork`, `backup-private`) für
+`auto/hausplaner-integration`; danach ist `git branch -r --contains HEAD` **nicht** mehr leer.
+**Nie `upstream`** (`raminsadid2021` = fremdes Konto), **nie `--force`**. Schlägt es fehl: melden,
+nichts von Hand nachholen.
+
+*Hebt Yama die Regel für diesen Fall auf, fahre ich den Befehl sofort. Solange sie steht, fahre ich
+ihn nicht — auch nicht, weil es eilt. Eine Regel, die man bei Eile beugt, ist bei Eile nicht da.*
+
+### Zwei Nebenbefunde — gemeldet, nicht angefasst
+
+**(1) Zwei leere Dateien namens `fork` und `backup-private` liegen im Wurzelverzeichnis**, beide
+0 Byte, beide um **00:47** entstanden. Das sind die Namen zweier Remotes — der Verdacht liegt bei
+einem Befehl, dessen Ausgabe versehentlich in eine Datei umgeleitet wurde. **Sie sind unverfolgt und
+würden von einem `git add .` mitgenommen.** Nicht gelöscht (kein `rm` auf dem Mount), nicht
+committet, nur benannt.
+
+**(2) `.rm_probe_tmp`** liegt weiterhin da — im Auftrag ausdrücklich ausgeschlossen, hier nur der
+Vollständigkeit halber wiederholt.
+
+**Status: K-01…K-04 `BERICHTET` · K-05 `BLOCKIERT — Ballbesitz Yama`.**
+
+
+---
+
+## 2026-07-29, 00:55 CEST — PLANNER: zwei Freigaben verarbeitet, ein Beifang gefunden, Scheibe 5 ist aktiv
+
+*Zeit aus `TZ=Europe/Berlin`; Commit-Zeiten aus `git log --date=format-local:`.*
+
+### Verarbeitet
+
+**`FREIGABE` fuer AUF-38 Scheibe 4 und Nachzug Scheibe 2** (Evaluator, 00:45). Beide Zeilen sind
+**wortgleich ins Archiv** gewandert, mit dem Pruefstoff und dem Votum. **Der Abnahme-Stapel enthaelt
+keine Scheibe mehr.**
+
+**Zwei weitere Stapelzeilen eingefaltet, nicht erledigt.** *„NACHGEBESSERT — beide Befunde belegt“*
+trug den Beleg zu `AUF38-S4-1`/`AUF38-NZ2-1`; beide sind mit derselben Freigabe aufgeloest, sie hat
+kein eigenes Votum mehr zu erwarten. *„Messwerkzeug + generische Rohwert-Zusage“* (`42b88b85`) steht
+nicht mehr einzeln, **weil ihr `NACHBESSERN` durch `c895061d` und `8fb7b990` beantwortet ist** — der
+Pruefende nimmt den nachgebesserten Stand ab, nicht den beanstandeten. Der Zeiger auf `42b88b85`
+bleibt in der Zeile zu `c895061d`, damit die Spur nicht reisst.
+
+### Entscheidung zur Reihenfolge — und warum sie diesmal keine Sperre ist
+
+Der Evaluator hat gebeten: *„erst das Werkzeug geradeziehen, dann Scheibe 5“* — **ausdruecklich als
+Vorschlag, nicht als Sperre**, und mit einem tragenden Grund: `ConfigWizard.tsx` traegt 43 Stellen,
+ihr Sollwert kommt aus genau dem Skript, das bei einer Datei um eine Stelle danebenlag.
+
+**Der Grund ist inzwischen weggefallen, also faellt die Reihenfolge mit.** Das Werkzeug ist zweimal
+nachgebessert (`c895061d` fuer `MW-1`/`MW-2`, `8fb7b990` fuer `MW-4`/`MW-3`/Reichweite), und **keine
+Zahl hat sich dabei bewegt** — 198 offen, `ConfigWizard` unveraendert **38**. **Scheibe 5 ist aktiv,
+ohne Sperre.** Die Abnahme von `c895061d`/`8fb7b990` laeuft daneben; sie beruehrt `public/*` nicht.
+
+**Die 38 ist eine Messung, keine Bedingung.** Sie wird in der Readiness-Quittung neu gefahren; weicht
+sie ab, ist die Abweichung der Bericht und nicht der Fehler.
+
+### Ein Strukturbefund, der heute zum zweiten Mal auftritt: Beifang beim Commit
+
+`5529d0cd` (Generator, 00:48) enthaelt **drei** Dateien: seinen Bericht, seine Tafelzeile — **und
+zwei fremde Dateien**, die Yama zu diesem Zeitpunkt im Index liegen hatte: das Auftragsblatt
+`MW-N2` und den Ledger-Eintrag mit dem **FREIGABE-Votum des Evaluators**. Beides gehoert inhaltlich
+dorthin, es ist kein Schaden — **aber niemand hat es gelesen, bevor es committet wurde.**
+
+**Die bestehende Regel deckt diesen Fall nicht ab.** Sie lautet *„niemand stagt mit `-A` oder `.`,
+sondern nur die Pfade, die er selbst geschrieben hat“* — und **gegen die hat niemand verstossen**:
+gestagt hat Yama seine Pfade, committet hat der Generator seine. **Der Index ist geteilter Zustand,
+und `git commit` nimmt ihn ganz.** Genau derselbe Mechanismus wie am 27.07., als ich ein fremdes
+Votum mitcommittete.
+
+**Regel, ab sofort:** **wer committet, liest vorher `git diff --cached` — auch wenn er selbst nichts
+gestagt hat.** Findet er Fremdes im Index, committet er es entweder bewusst und benennt es in der
+Nachricht, oder er nimmt es mit `git restore --staged <pfad>` heraus. **Nicht** unbesehen mitnehmen.
+
+### Zwei Kleinigkeiten aus dem Arbeitsbaum
+
+**`fork` und `backup-private` sind als leere Dateien im Repo-Wurzelverzeichnis entstanden** — Yama
+hat meine Messausgabe in die Shell kopiert, und `zsh` hat die Pfeile `-> fork` als
+**Ausgabeumleitung** gelesen. Mein Fehler in der Darstellung: ich habe Messwerte in einem Block
+gezeigt, der wie ein Befehl aussah. **Ab jetzt trennen sich Ausgabe und Befehl sichtbar.** Die zwei
+Dateien liegen unter `_to_delete/` (geloescht wird nicht von mir).
+
+**Der Generator hat einen eigenen Fehler offengelegt, der Beleg hinterlassen hat:** er hat eine
+Gegenprobe mit `git checkout -- <datei>` zurueckgedreht und damit seine uncommittete Arbeit an
+derselben Datei verworfen. Zwei Minuten Verlust, nur seine eigene Datei — **aber die
+Wiederherstellung war nicht ueberpruefbar, sie war ein zweites Mal Schreiben.** Seine Konsequenz,
+und ich uebernehme sie als Auflage fuer alle: **zum Zurueckdrehen einer Probe nie `git checkout`,
+sondern Kopie beiseite und `cp` zurueck, mit `diff -q` gegen die Sicherung als Beleg. `git checkout`
+ist kein Rueckweg, sondern ein Verwerfen.**
+
+### Ballbesitz
+
+**Generator:** **AUF-38 Scheibe 5** (`ConfigWizard.tsx`, Sollwert 38, Readiness-Quittung zuerst,
+mehrschrittiger Dialog — die Schritte muessen durchgeklickt werden).
+**Evaluator:** **Abnahme von `c895061d` + `8fb7b990`** — die zwei Nachbesserungen am Messwerkzeug,
+**einschliesslich der Abgrenzungs-Zusage, die ich als Kriterium bestaetigt habe** und nicht nur als
+Riegel. Sie beruehrt `public/*` nicht und laeuft parallel zu Scheibe 5.
+**Yama:** nichts offen. **NACHTRAG 00:58 — B-01 ist ganz erledigt:** 227 Commits gesichert auf `fork`
+und `backup-private` (`a849e030`), und `af0e0c93` versioniert die 15 Dateien von `.ai-workflow/`.
+*Ich hatte im Absatz darueber noch geschrieben, es bleibe ein Restposten — das stimmte, als ich
+mass, und stimmte drei Minuten spaeter nicht mehr. Wieder eine Aussage, die aelter war als der
+Baum; deshalb steht sie hier korrigiert und nicht ueberschrieben.* **B-01 geht in den
+Abnahme-Stapel, nicht ins Archiv** — versioniert ist nicht abgenommen. **Merge nach `main` steht bei
+52 Commits Rueckstand an, sobald du willst; der benannte abgenommene Commit dafuer folgt.**
+
+
+### Nachtrag 01:00 CEST — drei Voten und zwei eigene Fehler, in dieser Reihenfolge
+
+**`FREIGABE` fuer das Messwerkzeug** (`c895061d` + `8fb7b990`, Evaluator 00:51). Damit ist die
+Barriere abgenommen und der Massstab steht. Ins Archiv gewandert, zusammen mit dem Sicherungsteil
+von B-01.
+
+**Der Satz aus diesem Votum, den ich mir merke:** *„jede Mutation vorher auf Auffinden geprueft —
+denn eine Mutation, die nicht greift, liefert ein falsches Gruen.“* Das ist die Gegenprobe **zur
+Gegenprobe**, und sie hat in unseren Regeln bisher gefehlt. **Sie gehoert in R2:** wer mit einer
+Mutation belegt, dass eine Zusage Zaehne hat, muss zeigen, dass die Mutation ueberhaupt angekommen
+ist — sonst belegt das Rot nichts und das Gruen erst recht nicht.
+
+#### Mein erster Fehler: ich habe eine Regel beauftragt, die ueber mir steht
+
+**B-01, `K-05`: ich habe dem Generator den Push als Kriterium geschrieben.** Er hat ihn **verweigert
+und vorgelegt statt geraten** — `CLAUDE.md`, Git-Disziplin: *„niemals pushen — kein `git push` aus
+irgendeiner Instanz, auch nicht nach gruener Abnahme; pushen macht ausschliesslich Yama.“*
+
+**Er hat recht, und die Begruendung ist praeziser als meine Regel es war:** §0b regelt den **Weg**
+(*„Push nur ueber `./push-integration-sicher.command`“*), `CLAUDE.md` regelt den **Handelnden** — und
+**ich habe den Weg gelesen und daraus eine Erlaubnis fuer den Handelnden gemacht.** Der Planner darf
+viel beauftragen, aber keine Regel aufheben, die ueber ihm steht.
+
+**Sein Satz dazu steht ab jetzt in meinem Kopf:** *„eine Regel, die man bei Eile beugt, ist bei Eile
+nicht da.“* Der Druck war echt — 230 ungesicherte Commits —, und genau deshalb war es der Moment, in
+dem eine Regel sich beweist. **Erledigt hat es Yama um 00:45 selbst, auf dem einzigen zulaessigen
+Weg.**
+
+#### Mein zweiter Fehler: eine zweite Buchfuehrung, drei Minuten nachdem ich sie ins Archiv geschrieben hatte
+
+Ich habe eine **B-01-Zeile in den Abnahme-Stapel gesetzt, waehrend der Generator seine eigene schon
+dort hatte.** Zwei Zeilen fuer denselben Posten — genau das, was am 26.07. schon einmal auffiel
+(*„eine zweite Benennung ist eine zweite Wahrheit“*). **Seine Zeile bleibt** — der Bauende berichtet
+seine Arbeit selbst —, mein Pruefstoff ist hineingewandert, meine Zeile ist fort.
+
+**Warum es passiert ist, ist wichtiger als dass es passiert ist:** ich habe um 00:49 gemessen, dann
+geschrieben, und in der Zwischenzeit hat er berichtet. **Das ist heute das dritte Mal, dass ich auf
+einer Messung arbeite, die aelter ist als der Baum** (die Sperre um 00:31, das Auftragsblatt um
+00:40, diese Zeile um 00:55). **Der Befund ist nicht Unaufmerksamkeit, sondern die Taktung:** ich
+messe einmal und schreibe dann minutenlang, waehrend zwei Instanzen im selben Baum committen.
+
+**Konsequenz, ab sofort fuer mich:** vor jedem Schreiben in Tafel oder Ledger **unmittelbar davor**
+`git log -1` und `git status --porcelain` — nicht am Anfang des Gedankens, sondern am Anfang des
+Schreibens. Und bei Tafelzeilen: **erst pruefen, ob der Bauende die Zeile schon gesetzt hat.**
+
+#### `AUF38-MW-6` (P3) — klassifiziert, kein Bauauftrag, und der Grund ist der interessante Teil
+
+Der Evaluator meldet: `ohneKommentare` ist zeichenketten-bewusst, aber **nicht JSX-bewusst**. Ein
+unpaariges Anfuehrungszeichen im JSX-**Text** schickt die Maske in den Zeichenketten-Modus.
+**Die Ausloesebedingung steht live im Baum** — `FaehigkeitenNavi.tsx:73` traegt `· „schlaeft" =`,
+dasselbe Muster wie das `„nah dran"`, aus dem `MW-2` entstand, nur in der Textzeile statt im
+Kommentar. Wirkung heute: keine (die vier Bloecke der Datei stehen in Z34/53/63/71, die Textzeile in
+Z73).
+
+**Kein Bauauftrag — und zwar nicht, weil es klein ist, sondern weil die Barriere es faengt.** Die
+Zusage *„jeder Block ist sauber abgegrenzt, Klammerbilanz 0“* laeuft ueber **alle** Bloecke aller
+Dateien. Traefe `MW-6` je zu, wuerden Bloecke desynchronisieren und **die Zusage ginge rot** — sie
+meldet sich selbst, statt still falsch zu zaehlen. **Das ist genau das, wofuer R9 eine Barriere
+verlangt hat: die dritte Auspraegung derselben Fehlerklasse braucht keinen dritten Flicken, sie
+braucht einen Test, der sie beim Auftreten meldet — und der steht.** Notiert als Fehlerklasse, nicht
+als Posten.
+
+**Ballbesitz unveraendert:** Generator — **AUF-38 Scheibe 5** (`ConfigWizard`, Sollwert **38**,
+Readiness-Quittung zuerst, mehrschrittiger Dialog). Evaluator — **B-01, Kriterien K-01 bis K-04**
+(nicht K-05). Yama — nichts offen.

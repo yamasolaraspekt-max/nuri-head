@@ -2191,6 +2191,143 @@ selbst, ohne dass jemand sie vorher zaehlt.
 Ballbesitz: Planner (Klassifizierung + Nachtrag der Kriterien), danach Generator.
 Kein Commit durch mich (Yamas Wort), kein Push/Tor-2.
 
+### AUF-38 Scheibe 4 RE-ABNAHME (Bundle a2a83e72) - HausplanerStudio - FREIGABE
+
+Loest die NACHBESSERN von 28.07. auf. Beide offenen Punkte waren K6 (Toast nicht beidseitig
+verriegelt) und K7 (headful nicht vollstaendig fuehrbar, weil der Baum unter mir umgebaut wurde).
+
+K6 - Toast-Ausnahme beidseitig verriegelt: **ERFUELLT.** Nicht ueber den Einzelflicken, sondern
+  ueber die generische Barriere. Mein eigener Gegen-Beweis (nicht der Bericht): `#1a262a` und
+  `#dfe4ea` in einer **Kopie** der Insel je einen Token in `T` gegeben -> Zusage **rot**, nennt
+  `HausplanerStudio.tsx:205` **und** `:129`. Zuruecknahme -> wieder gruen. Die Richtung, die vorher
+  fehlte ("Rohwert bekommt einen Token, bleibt aber inline"), ist damit erfasst - und zwar fuer alle
+  Stellen, nicht nur die benannten.
+
+K7 - headful mit ausgeloestem Toast: **ERFUELLT.** Am stillstehenden Buendel gefahren.
+  *serviert == gemessen:* `git status --porcelain public/hausplaner` leer (Arbeitsbaum == committeter
+  Stand `a2a83e72`); im Browser gefetcht `hausplaner.js` **1 430 974 B** / `hausplaner.css`
+  **7 584 B** - byte-gleich zu den Dateien im Baum.
+  *Der Toast wurde real ausgeloest*, nicht simuliert: Startflaeche -> Chip "Fenster" -> ConfigWizard
+  (`role=dialog`) -> 3x "Weiter" -> "Uebernehmen". Gemessen im selben Aufruf, weil er nach 2 600 ms
+  verschwindet:
+    position=fixed  bottom=34px  left=712.5px  zIndex=80
+    backgroundColor=rgb(26, 38, 42)   == #1a262a
+    color=rgb(255, 255, 255)          == T.surface
+    fontSize=13.5px  borderRadius=12px  padding=12px 20px  maxWidth=560px
+    boxShadow=rgba(28, 50, 55, 0.1) 0px 10px 34px  == T.schattenGehoben
+    klassen=(keine)   Stil vollstaendig inline - die gewollte Ausnahme
+  **Quelle == DOM, Wert fuer Wert** gegen `HausplanerStudio.tsx:205` geprueft: alle zehn
+  Eigenschaften stimmen ueberein. Bildschirmfoto mit sichtbarem Toast erfasst (600x56 bei x=413/y=667).
+  *Anmerkung zur Ehrlichkeit:* der erste Foto-Versuch kam zu spaet, der Toast war schon fort - ich
+  habe ihn nicht nachgestellt, sondern den Ablauf gebuendelt wiederholt.
+  *Schale:* `.hp-studio-kopf`, `.hp-status`, `.hp-title`, `.hp-bar` - **inline-Laenge 0**, alle Werte
+  aus der Stilschicht (flex/center, 13px, 800/14px). Kein Cascade-Override.
+  Konsole nach frischem Laden mit aktiver Aufzeichnung: **0 Fehler, 0 Ausnahmen.**
+
+Gesamtvotum: **FREIGABE.** Ballbesitz: Planner.
+
+### AUF-38 Nachzug Scheibe 2 RE-ABNAHME (Bundle a2a83e72) - StartView - FREIGABE
+
+K - Gradient-Ausnahme beidseitig verriegelt (Befund AUF38-NZ2-1): **ERFUELLT**, ueber dieselbe
+  Barriere. Eigener Gegen-Beweis: `#e9f4f2` und `#eef3e6` je einen Token gegeben -> Zusage **rot**,
+  nennt `StartView.tsx:195`. Zuruecknahme -> gruen. Zusaetzlich die Rueckfall-Richtung geprueft:
+  vorhandenen Tokenwert `#232a31` roh inline geschrieben -> **rot**; neue Rohfarbe `#123457` ohne
+  Token -> **gruen**, kein Fehlalarm.
+
+K - Klassen greifen live: **ERFUELLT.** 23 `hp-start-*`-Klassen real im DOM. Stichproben, alle mit
+  **inline=""**: `.hp-start-kicker` color rgb(18,128,125)=`#12807d`=T.accent, 12.5px/700 ·
+  `.hp-start-kartentitel` rgb(35,42,49)=`#232a31`=T.ink, 14px/700 · `.hp-karte` bg rgb(255,255,255) ·
+  `.hp-start-marke` T.accent. **Kein Inline-Override, die Werte kommen aus der Schicht.**
+
+K - serviert == gemessen: **ERFUELLT**, wie oben (Buendel `a2a83e72`, byte-gleich, Baum sauber).
+
+Gesamtvotum: **FREIGABE.** Ballbesitz: Planner.
+
+**Eine Einschraenkung, die zu beiden Voten gehoert und nicht gegen sie spricht:** die Grundgesamtheit,
+mit der der Generator seine Belege gerechnet hat (*"20 Rohfarben in 5 Dateien"*), ist um **3 zu gross**
+(Befund AUF38-MW-2, siehe Votum zum Messwerkzeug). Das aendert an diesen beiden Freigaben nichts:
+der Fehler laesst den Block an `StartView.tsx:149` **zu gross** werden, die Zusage meldet dort also
+**mehr** statt weniger. Eine uebersehene Stelle kann daraus nicht entstehen - jede der 316 Stellen
+wird unabhaengig gefunden, und die Desynchronisation trifft genau 1 von 316. **Die Schutzwirkung der
+Barriere ist fuer diese zwei Scheiben ungeschmaelert;** korrekturbeduerftig ist die Zahl, nicht der Schutz.
+
+### AUF-38 Messwerkzeug NACHGEBESSERT (Code c895061d + 8fb7b990) - Spur A - FREIGABE
+
+Re-Abnahme meines eigenen NACHBESSERN von 00:29. Zwei Nachbesserungsrunden: `c895061d` loest
+MW-1+MW-2, `8fb7b990` loest MW-4+MW-3 und traegt die Reichweite in den Kopf. Blind gegen den
+Arbeitsbaum gemessen, danach die Berichte gelesen. `git diff --name-only 8fb7b990 HEAD -- scripts
+resources public` ist **leer** - mein Messstand gilt trotz zweier Doku-Commits weiter.
+
+K1 - MW-1 (Kommentar macht statischen Block dynamisch): **ERFUELLT.**
+  Meine Methode: denselben Block mit und ohne Kommentar. Beobachtet: beide `istStatisch = true`.
+  Live: `WerkzeugGruppenMenue.tsx` steht jetzt auf **12/8/0/8** - die Stelle Z82, die ich gemeldet
+  hatte, wird gezaehlt.
+  Gegen-Beweis (Kopie): `istStatisch` blendet nicht mehr aus -> **1 rot**,
+  "AUF38-MW-1: ein Kommentar macht einen statischen Block nicht dynamisch".
+
+K2 - MW-2 (Block laeuft bis Dateiende): **ERFUELLT.**
+  Meine Methode: nicht die Zusage geglaubt, sondern **alle 316 Bloecke** erneut auf Abgrenzung
+  geprueft (Anfang `style={{`, Ende `}}`, Klammerbilanz 0 ausserhalb von Zeichenketten).
+  Beobachtet: **316 geprueft, 0 nicht sauber** (vorher 1). `StartView.tsx:149` endet wieder auf `}}`.
+  Gegen-Beweis: `stilBloecke` liest wieder die Rohquelle -> **3 rot**, darunter die tragende
+  "AUF38-MW-2: JEDER Block der Insel ist sauber abgegrenzt".
+
+K3 - MW-4 (Vorlagen-Ausdruck mit fremdem Bezeichner galt als statisch): **ERFUELLT.**
+  `` `${offset}px` ``, `` `${breite}px` ``, `` `${breite(3)}px` `` -> alle **dynamisch**.
+  Der Token-Fall `` `1px solid ${T.hair}` `` bleibt **statisch** - die Reparatur schiesst nicht
+  ueber. Gegen-Beweis: Ausdruck bleibt an Ort und Stelle -> **1 rot**.
+
+K4 - MW-3 (`?`/`...` im Text): **ERFUELLT.** `content: '?'`, `'Foo ... Bar'`, `'a ? b'` -> alle
+  **statisch**. Gegen-Beweis: Pruefung wieder vor das Entwerten gezogen -> **1 rot**.
+
+K5 - Laengentreue der Kommentar-Maske: **ERFUELLT.** Das ist die Bedingung, an der alles haengt -
+  waere die Maske nicht laengentreu, verschoeben sich alle Zeilennummern und jede Fundstelle
+  zeigte auf die falsche Zeile. Selbst geprueft ueber **14/14 Dateien**: Zeichenlaenge und
+  Zeilenzahl identisch zur Rohquelle.
+
+K6 - Sollwert und Eichung: **ERFUELLT, meine drei Zahlen treffen.**
+  gemessen: **316 gesamt, 198 offen** (war 197) · `WerkzeugGruppenMenue` **8** (war 7) ·
+  `StartView` Farbtreffer **4** (war 7). Eichung unveraendert: `StartView` 8/1/1/**0** ·
+  `HausplanerStudio` 10/2/2/**0** · `FachFlaeche` 3/2/2/**0** · `ConfigWizard` **43/40/2/38**.
+  **Keine Zahl hat sich durch MW-3/MW-4 bewegt** - das ist die richtige Erwartung, weil beide
+  heute null Fundstellen hatten; haette sich eine bewegt, waere das ein Alarm gewesen.
+
+K7 - keine Regression an der aelteren Barriere: **ERFUELLT.** Die generische Rohwert-Zusage haelt
+  weiter: `#1a262a` einen Token gegeben -> rot · `#e9f4f2` -> rot · unveraendert -> gruen.
+
+K8 - Gates: **ERFUELLT, selbst gefahren.** `test:hausplaner` **1323/0** (war 1315, +8 neue Zusagen) ·
+  `tsc` 0 · `schema:check` 0 · `dom` 11/0. `git status --porcelain public` **leer**, Buendel
+  unbewegt. Beide Commits zusammen: **genau 2 Dateien**, kein Produktivcode der Insel.
+
+**Alle sieben Gegen-Beweise in einer Kopie gefahren, der Arbeitsbaum blieb unberuehrt.** Jede
+Mutation habe ich vorher auf Auffinden geprueft - eine Mutation, die nicht greift, liefert ein
+falsches Gruen.
+
+**NEBENBEFUND `AUF38-MW-6` (P3, zur Planner-Entscheidung, nicht bauen):** `ohneKommentare` ist
+zeichenketten-bewusst, aber **nicht JSX-bewusst**. Ein unpaariges Anfuehrungszeichen im JSX-**Text**
+schickt die Maske in den Zeichenketten-Modus; ab dort wird in dieser Datei kein Kommentar mehr
+ausgeblendet. **Die Ausloesebedingung steht live im Baum:** `FaehigkeitenNavi.tsx:73` traegt
+`Jeder Eintrag · „schläft" = …` - dasselbe Muster wie das `„nah dran"`, aus dem MW-2 entstand, nur
+in der Textzeile statt im Kommentar.
+**Wirkung heute: keine.** Die vier Stil-Bloecke der Datei stehen in Z34/53/63/71, die Textzeile in
+Z73 - alles Relevante liegt davor; alle 316 Bloecke sind sauber.
+**Und das Wichtigere: beide Richtungen sind gedeckt.** Die laute Richtung (Block wird abgeschnitten)
+faengt die neue Abgrenzungs-Zusage - synthetisch nachgestellt, sie geht **rot**. Die leise Richtung
+(statischer Block gilt als dynamisch, Zusage bleibt gruen) ist zu, **weil `istStatisch` den Block
+noch einmal selbst maskiert** - genau die Doppelung, die der Generator als "wird auch direkt
+aufgerufen" begruendet hat. Sie traegt hier mehr, als ihre Begruendung sagt. Nachgestellt: statischer
+Block mit Kommentar hinter einem unpaarigen Zeichen -> weiterhin `istStatisch = true`.
+*Empfehlung: keine Eile. Wenn, dann die Maske JSX-Text ueberspringen lassen - aber der Detektor
+steht bereits, und das ist der Teil, der zaehlt.*
+
+**`AUF38-MW-5` bleibt offen wie beauftragt** (`T.a.b` gilt als dynamisch). Keine Fundstelle in der
+Insel; der Planner hat sie bewusst nicht in den Auftrag genommen. Kein Befund, nur der Vollstaendigkeit halber.
+
+Gesamtvotum: **FREIGABE.** Alle vier von mir gemeldeten Befunde sind behoben, jeder einzeln
+testverriegelt, die Zahlen stimmen auf die Stelle, und die aeltere Barriere ist nicht beschaedigt.
+**Der Massstab traegt jetzt.** Damit ist die Bedingung erfuellt, unter der ich Scheibe 5 empfohlen
+hatte zurueckzustellen - sie kann laufen. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
