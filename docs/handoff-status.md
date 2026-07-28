@@ -15579,3 +15579,156 @@ inline gebliebenen Rohfarbe einen Token in `T` geben ⇒ muss rot werden.
 
 **Stapel 3**, `main` `057e6417`, 43 zurueck. Danach loesen beide Nachbesserungen (`AUF38-S4-1`,
 `AUF38-NZ2-1`) mit **einem** Test, dann Re-Abnahme bei stabilem Baum, **dann erst** Scheibe 5.
+
+## 2026-07-29 — GENERATOR: Nachbesserung `AUF38-S4-1` + `AUF38-NZ2-1` — Beleg je Befund
+
+**Kein Commit, keine Codeänderung.** Die Barriere, die der Planner am 29.07., 00:06 entschieden hat
+(*„ein generischer Test — für jede verbliebene Rohwert-Inline-Stelle aller Scheiben prüfen, dass ihre
+Farbwerte nicht in `T` stehen"*), steht bereits in `42b88b85`. Was fehlte, war der **Beleg je
+Befund** — Schritt 5 des Regelwerks. Den liefere ich hier.
+
+**0 Produktivcode · 0 neue Dateien · 0 `public/*` · Bündel unbewegt.**
+
+### Grundgesamtheit (R3 — Definition · Befehl · Sollwert)
+
+**Definition:** jede Hexfarbe, die in einem `style={{…}}`-Block einer `.tsx`-Datei der Insel **roh**
+dasteht (Extraktion über `stilBloecke` + `rohfarben` aus dem Messwerkzeug — **derselbe** Maßstab, den
+die Zusage benutzt).
+
+```text
+Befehl:  node --input-type=module -e "import {tsxDateien,stilBloecke,rohfarben} from
+         './scripts/statische-inline-stile.mjs'; import {readFileSync} from 'node:fs';
+         for (const p of tsxDateien()) for (const b of stilBloecke(readFileSync(p,'utf8')))
+         for (const f of rohfarben(b.text)) console.log(f, p+':'+b.zeile)"
+Sollwert: 20 Vorkommen in 5 Dateien
+```
+
+| Datei | Rohfarben inline |
+|---|---|
+| `DreiDBereich.tsx` | `#ffffffcc` `#e5e7eb` `#6b7280` (Z70) · `#d1d5db` (Z82) |
+| `GuidedView.tsx` | `#eef3f2` (Z112) · `#7fd8d3` (Z113) · `#0a4f4d` (Z146) · `#d3dbdb` (Z150) |
+| `HausplanerStudio.tsx` | `#dfe4ea` `#5b636d` (Z129) · `#3f464e` (Z151, Z161) · `#1a262a` (Z205) |
+| `StartView.tsx` | `#dcebe9` (Z73, Z149, Z171) · `#e9f4f2` `#eef3e6` (Z149, Z195) |
+
+**Alle 20 liegen in der Zusage** — sie läuft über `tsxDateien()`, nicht über eine gepflegte Liste.
+
+---
+
+### Befund `AUF38-S4-1` — Toast `#1a262a` (`HausplanerStudio.tsx:205`)
+
+```text
+In der Grundgesamtheit:  JA (Z205)
+Gegenprobe:              probeS4: '#1a262a' in T eingesetzt
+Beobachtet:              3 rot
+                           rohwertZusage  — "KEINE inline gebliebene Rohfarbe hat einen Token"
+                                             -> HausplanerStudio.tsx:205 — #1a262a
+                           stilschicht    — "Scheibe 4: der Toast bleibt inline …"
+                           stilschicht    — "Scheibe 4: JEDE inline gebliebene Rohfarbe ist benannt …"
+Nach Rücknahme:          wieder grün, Arbeitsbaum unverändert (git diff 0 Zeilen)
+```
+
+### Befund `AUF38-NZ2-1` — Gradient `#e9f4f2`/`#eef3e6` (`StartView.tsx:195`)
+
+```text
+In der Grundgesamtheit:  JA (Z195 — und Z149, siehe Befund unten)
+Gegenprobe:              probeNZ2: '#e9f4f2' in T eingesetzt
+Beobachtet:              1 rot
+                           rohwertZusage  — "KEINE inline gebliebene Rohfarbe hat einen Token"
+                                             -> StartView.tsx:149 — #e9f4f2
+                                             -> StartView.tsx:195 — #e9f4f2
+Nach Rücknahme:          wieder grün, Arbeitsbaum unverändert (git diff 0 Zeilen)
+```
+
+### Die zweite Richtung — gemessen, nicht gelesen
+
+Die generische Zusage fängt *„Farbe bekommt einen Token"*. Die Gegenrichtung *„Stelle wandert als
+Rohwert in die Stilschicht"* fängt **K4**, ebenfalls dateiunabhängig — CSS-Quelle **und** gebaute
+Datei:
+
+```text
+Gegenprobe:  `.hp-probe-k4 { color: #e9f4f2; }` an hausplaner.css angehängt
+Beobachtet:  2 rot ("K4: die CSS-Quelle enthaelt in KEINER Regel einen Farbwert" +
+             "Scheibe 2: jede Farbe in der CSS ist eine Variable, kein Wert")
+Nach Rücknahme: wieder grün, Datei byte-gleich (git diff 0 Zeilen)
+```
+
+**Damit ist jede der 20 Stellen in beide Richtungen erfasst, ohne dass jemand sie vorher zählen
+muss.** Das war der Punkt an der Barriere.
+
+### Befund aus der Gegenprobe — die Menge war wieder größer als die Zählung
+
+Die Gegenprobe zu `NZ2-1` nennt **zwei** Fundstellen, das Votum nannte eine: `#e9f4f2` steht
+**auch in Z149**. Dazu steht `#dcebe9` in `StartView` an **drei** Stellen (Z73, Z149, Z171) und
+wurde nie benannt. Und `GuidedView.tsx` (4 Rohfarben) sowie `DreiDBereich.tsx` (4 Rohfarben) tragen
+Rohfarben, **obwohl sie noch keine Scheibe gesehen haben**.
+
+Das ist derselbe Mechanismus, der schon den Toast und die vierte Rohfarbe `#3f464e` hat durchrutschen
+lassen: **eine Zählung findet, was jemand gezählt hat.** Die Zusage zählt nicht — sie läuft über das
+Verzeichnis. Ich melde die Zahlen; die Bewertung liegt beim Planner.
+
+### Gates — selbst gemessen
+
+```text
+Befehl:      npm run test:hausplaner            Exit 0   Tests 1315   Fehler 0
+Befehl:      npm run test:hausplaner:dom        Exit 0   Tests   11   Fehler 0
+Befehl:      npm run tsc:hausplaner             Exit 0
+Befehl:      npm run schema:hausplaner:check    Exit 0
+Befehl:      php artisan test                   Exit 0   Tests  789   (2729 Zusicherungen)
+Bündel:      public/* unverändert — nicht gebaut, kein Rebuild
+Arbeitsbaum: nach beiden Gegenproben git diff 0 Zeilen an allen berührten Dateien
+```
+
+### Zwei Lage-Hinweise, die nicht in meinen Bericht gehören, aber gemeldet sein müssen
+
+**(1) Der HEAD hat sich unter der Messung bewegt:** `1e8648e9` → `1f3dda52` (Planner, 00:15). Der
+Commit fasst **nur** `AUFTRAGSTAFEL.md` und `handoff-status.md` an — **keine Quelldatei**. Die oben
+gemessenen Zahlen stehen deshalb; ich melde die Bewegung trotzdem, weil die Regel das verlangt und
+nicht mein Urteil darüber.
+
+**(2) Unversioniertes im Baum**, nicht von mir und von mir nicht angefasst: das Votum des Evaluators
+in `docs/abnahme-evaluator-haertung-2026-07-25.md` (155 Zeilen, weiterhin uncommittet) · `.ai-workflow/`
+· `.rm_probe_tmp`. **Kein `rm`** — nur gemeldet.
+
+**Status nach §2: `NACHGEBESSERT` (Schritt 5 → zurück zu Schritt 4).** Das Bündel steht unbewegt auf
+`a2a83e72`, damit die aufgeschobene headful-K7 an einem stabilen Baum laufen kann.
+
+## PLANNER 29.07., 00:20 (CEST) — AUTONOMIE ERTEILT. Und wo ich sie eng auslege
+
+**Yama, 00:20:** *„ab jetzt können generator und evaluator ohne unterbrechung durcharbeiten und
+brauchen mich nicht mehr um freigaben fragen, das gleiche gilt für dich … bitte sei sorgsam mit
+meinen daten, nichts kaputt machen, ich habe euch viel vertraut.“*
+
+**In `00-REGELWERK.md` als §0b verankert.** Der Zyklus läuft ab sofort durch: Aufträge, Spuren,
+Klassifizierungen, Voten, Nachbesserungen, Reihenfolge, Archiv — **niemand wartet auf Zuruf, wo
+eine Regel die Antwort schon gibt.**
+
+### Vier Dinge lege ich ausdrücklich NICHT als freigegeben aus
+
+1. **Tor 2** — Merge nach `main` und Deploy. Dahinter stehen ~3000 echte Kunden. Wir arbeiten bis
+   zur Merge-Reife und legen sie vor; **den Schritt tut Yama.**
+2. **Bestandsdaten und persistiertes Schema.**
+3. **Willensfragen** — was das Produkt tun *soll*.
+4. **Alles ohne Rückweg.** Fehlt der Rückweg, wird nicht entschieden, sondern vorgelegt.
+
+**Begründung:** sein Satz betont *„sorgsam mit meinen Daten, nichts kaputt machen“* — das ist eine
+Betonung von Vorsicht, nicht von Tempo. **Autonomie im Verfahren ist nicht Autonomie über den
+Bestand.** Und: *ist meine Auslegung zu eng, korrigiert er sie mit einem Satz; zu weit ausgelegt
+und Bestand beschädigt lässt sich nicht mit einem Satz korrigieren.*
+
+**Die stehenden Verbote sind von der Autonomie ausdrücklich nicht berührt** — nie `upstream`, nie
+`--force`, kein `rm` auf dem Mount, nie `git add -A`, Cowork schreibt nur `docs/`.
+
+### Was sich praktisch ändert
+
+**Gemeldet wird, was er wissen muss, nicht was ihn um Erlaubnis fragt.** Merge-Reife ·
+Willensfragen · Schäden · Abweichungen von seinen Ansagen. **Nicht mehr:** Rückfragen, die eine
+Regel bereits beantwortet.
+
+**Erste autarke Entscheidung, statt sie zu melden:** Befund **B-01** (`.ai-workflow/` ist nicht
+committed, 76 KB, und **unverfolgte Dateien wandern nicht in einen neuen Worktree** — das Werkzeug
+fehlte dort, wo es die Trennung herstellen soll) wird ein **Auftrag**, sobald der Stapel frei ist.
+Ich habe ihn zweimal gemeldet; melden ändert nichts.
+
+**Lage:** Stapel 3 (Messwerkzeug · Scheibe 4 · Nachzug Scheibe 2), Ballbesitz Evaluator, `main`
+`057e6417`, 44 zurück. Merge-Kandidat liegt: **`2798120f`** (Scheibe 3, abgenommen) — **wartet auf
+Yama**, wie es sich gehört.

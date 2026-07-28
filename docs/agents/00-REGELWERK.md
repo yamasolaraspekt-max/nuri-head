@@ -46,6 +46,52 @@ Sie bleiben als Begründung lesbar, sind aber **nicht mehr die geltende Fassung*
 
 ---
 
+## 0b. AUTONOMIE — Yamas Entscheidung vom 29.07.2026, 00:20
+
+**Wortlaut:** *„ab jetzt können generator und evaluator ohne unterbrechung durcharbeiten und
+brauchen mich nicht mehr um freigaben fragen, das gleiche gilt für dich, ihr könnt ab jetzt autark
+selbstständig arbeiten — bitte sei sorgsam mit meinen daten, nichts kaputt machen, ich habe euch
+viel vertraut."*
+
+### Was ab sofort ohne Rückfrage entschieden wird
+
+| Wer | Entscheidet selbst |
+|---|---|
+| **Planner** | Aufträge, Reihenfolge, Spur, Klassifizierung von Befunden, Auflagen, Marke, Archiv, Regeln |
+| **Generator** | Umsetzung im Auftragsrahmen, Quittung, Nachbesserung nach Votum |
+| **Evaluator** | Prüfmethoden, Gegen-Beweise, Voten, Befundschwere |
+
+**Der Zyklus läuft durch. Niemand wartet auf Zuruf, wo eine Regel die Antwort schon gibt.**
+
+### Was NICHT freigegeben ist — und warum ich es eng auslege
+
+**Autonomie im Verfahren heißt nicht Autonomie über den Bestand.** Yamas Satz betont *„sorgsam mit
+meinen Daten, nichts kaputt machen“* — das ist eine Betonung von Vorsicht, nicht von Tempo. Deshalb
+bleibt **unverändert bei Yama**:
+
+1. **Tor 2 — Merge nach `main` und Deploy.** Dahinter stehen ~3000 echte Kunden. Der Zyklus arbeitet
+   bis zur Merge-Reife und legt sie vor; **den Schritt selbst tut Yama.**
+2. **Änderungen an Bestandsdaten und am persistierten Schema.** Umbenennungen bleiben verboten
+   (Dauerdirektive 1).
+3. **Willensfragen** (§3c der Tafel): was das Produkt tun *soll*, nicht wie es gebaut wird.
+4. **Alles, wofür es keinen Rückweg gibt.** Fehlt der Rückweg, wird nicht entschieden, sondern
+   vorgelegt.
+
+**Die stehenden Verbote gelten unverändert und sind von der Autonomie ausdrücklich nicht berührt:**
+nie `upstream` · nie `--force` · kein `rm` auf dem Mount · nie `git add -A` · Cowork schreibt nur
+`docs/` · Push nur über `./push-integration-sicher.command`.
+
+### Was sich an der Berichterstattung ändert
+
+**Gemeldet wird, was Yama wissen muss — nicht mehr, was ihn um Erlaubnis fragt.** Also: Merge-Reife,
+Willensfragen, Schäden, Abweichungen von seinen Ansagen, und was er selbst wissen wollte. **Nicht
+mehr:** Rückfragen, die eine Regel bereits beantwortet.
+
+*Wenn diese Auslegung enger ist als gemeint, korrigiert Yama sie mit einem Satz. Die umgekehrte
+Richtung — zu weit ausgelegt und Bestand beschädigt — lässt sich nicht mit einem Satz korrigieren.*
+
+---
+
 ## 1. Die zwei Spuren
 
 **Die Spur setzt der Planner, bevor gebaut wird. Der Ausführende stuft nie ein. Im Zweifel A.
