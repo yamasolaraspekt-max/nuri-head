@@ -16526,3 +16526,80 @@ als Posten.
 **Ballbesitz unveraendert:** Generator — **AUF-38 Scheibe 5** (`ConfigWizard`, Sollwert **38**,
 Readiness-Quittung zuerst, mehrschrittiger Dialog). Evaluator — **B-01, Kriterien K-01 bis K-04**
 (nicht K-05). Yama — nichts offen.
+
+
+---
+
+## 2026-07-29, 01:03 CEST — PLANNER: neuer Auftrag von Yama (AUF-83), Bestandsaufnahme statt Auftragsblatt
+
+*Zeit aus `TZ=Europe/Berlin`, unmittelbar vor dem Schreiben gemessen — nach der Konsequenz von 01:00.*
+
+**Yama beauftragt:** *„Raeume die Oberflaeche des Hausplaner-Studios auf. Der Zeichenbereich soll
+deutlich mehr Platz erhalten.“* Kompakte Topbar statt dreier Kopfleisten, beide Sidebars unabhaengig
+klappbar als Overlay, Notion-nahe Bedienung. **Punkt 6 seines Auftrags verlangt Bestandscode-first —
+deshalb liegt hier eine Messung und kein Auftragsblatt.**
+
+**Und er hat mich auf Material hingewiesen, das ich nicht benutzt hatte:** *„du hast einige layout
+auch in inventur datei“*. Das ist `docs/planner/ux-befund-layout-alle-ebenen-2026-07-25.md` — die
+Layout-Untersuchung ueber fuenf Ebenen, aus der AUF-43 bis AUF-46 entstanden sind. **Er hatte recht,
+sie zu nennen:** ihr Befund **B1** (die Geschosszeile traegt 13 Bedienelemente und vier
+voneinander unabhaengige Aufgaben) ist genau das Gebiet, das der neue Auftrag betrifft, und ihre
+Methode ist die, an die ich mich hier halte — **unter jedem Sichtbefund eine Messung, und wo die
+Messung dem Eindruck widerspricht, gewinnt die Messung** (Befund B9: der Knopf, den ich abgeschnitten
+zu sehen glaubte, endete 13 px vor dem Rand).
+
+### Die Korrektur, die alles andere verschiebt
+
+**Punkt 1 lautet *„Ticket-Navigation beibehalten“*. Sie ist nicht da.**
+
+```text
+grep -c "@extends" resources/views/admin/hausplaner/studio.blade.php   ->  0
+grep -c "@extends" resources/views/admin/hausplaner/objekt.blade.php   ->  0
+jede andere Admin-View                                                 ->  @extends('admin.layouts.app')
+```
+
+Beide Blades sind **eigene HTML-Dokumente** und ziehen aus der Ticket-Anwendung genau eine Sache:
+die CI-Farbtokens. `studio.blade.php:11` sagt es selbst — *„STANDALONE-Testflaeche“*.
+
+**Damit ist Punkt 1 ein Herstellungs- und kein Erhaltungsauftrag**, und der einzige Spur-A-Teil, der
+Auth, Rollen und Routing beruehrt. **Er erklaert zugleich zwei von Yamas Beobachtungen als Folge
+statt als Ursache:** Testflaechen-Hinweis und Hausplaner-Bezeichnung stehen doppelt, **weil zwei
+Schichten unabhaengig voneinander eine Kopfleiste zeichnen.** Wer nur in der Insel aufraeumt,
+entfernt jeweils die Haelfte.
+
+### Der technische Kern — eine Zeile entscheidet ueber „mehr Platz“
+
+`HausplanerApp.tsx:369`: `const breite = window.innerWidth - 220 - 268`. **Die Canvas-Breite kommt
+nicht aus dem Layout, sie kommt aus einer Subtraktion** — und die zwei Zahlen sind die fest
+verdrahteten Breiten von Werkzeugleiste (`Z1371`) und Eigenschaften-Panel (`Z1796`).
+
+**Solange diese Zeile steht, kann kein Panel als Overlay laufen.** Und **die Formel steht als Zusage
+im Test** (`Z1442`) — derselbe Bautyp, der uns in AUF-38 fuenfmal begegnet ist: eine geerbte Zusage,
+die den alten Zustand festhaelt. Wer die Zeile aendert, zieht sie mit, sonst geht sie rot, ohne dass
+ein Fehler vorliegt.
+
+**Von drei Flaechen ist heute eine klappbar** (`navZu`, 266↔66 px, und sie klappt bei schmalem
+Fenster selbst zu — ein gutes Muster zum Abschauen). Werkzeugleiste und Eigenschaften-Panel haben
+**keinen Zustand**; letzteres steht im Code ausdruecklich als *„immer sichtbar“*.
+
+### Was ich aus dem Auftrag herausgeschnitten habe, und warum
+
+**Kontextmenues.** Punkt 5 verlangt *„klare Kontextmenues“*. Gemessen: **0 `onContextMenu`,
+0 `onDoubleClick`** in der ganzen Insel — das deckt sich mit dem Interaktionsmuster-Inventar vom
+27.07. **Das ist kein Aufraeumen, sondern ein neues Bedienmuster.** Bliebe es drin, waere aus
+*aufraeumen* ein Neubau geworden, und der Posten waere nie fertig geworden. Eigener Auftrag, spaeter.
+
+**Command-Palette dagegen bleibt drin — weil sie schon existiert** (`tools/werkzeugPaket.ts:427`,
+`werkzeugVertrag.ts:1309`). Bestandscode-first heisst hier: nicht bauen, sondern erreichbar machen.
+
+### Ballbesitz: Yama — zwei Entscheidungen
+
+**(1) T1** — die Blades an `admin.layouts.app` haengen. Auth, Rollen, Routing: seine Entscheidung.
+**(2) AUF-48 vorziehen** und T4/T5 auf zerlegten Dateien bauen, **oder** T4/T5 in der ungeteilten
+2305-Zeilen-Datei? **Meine Empfehlung ist das Zweite, mit Auflage:** T4 so schneiden, dass die
+Breitenrechnung an **einer** Stelle landet — dann ist die Arbeit fuer AUF-48 Vorarbeit statt
+Nacharbeit.
+
+**T1 bis T3 sind sofort baubar, sobald T1 entschieden ist**, und liefern schon den groessten Teil des
+sichtbaren Aufraeumens: aus drei Kopfleisten wird eine. **Generator und Evaluator sind unberuehrt** —
+Scheibe 5 und die B-01-Abnahme laufen weiter.
