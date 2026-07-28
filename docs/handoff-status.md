@@ -14870,3 +14870,25 @@ sie ist Auftragspflege, kein Urteil ueber gebaute Arbeit — und sie hat dem Eva
 vorhersehbar rote Runde erspart.*
 
 Stapel 2, aktiver Auftrag Scheibe 2, `main` `665dd70e`, 43 zurueck.
+
+## PLANNER 27.07., 21:01 — Merge durch Yama: `main` steht auf `057e6417`
+
+**Yama hat den Block ausgefuehrt.** `main` ist von `665dd70e` (26.07.) auf **`057e6417`** (27.07.,
+11:20) gewandert, der Rueckstand faellt von **43 auf 25**.
+
+**Was damit auf `main` liegt:** die 19 Commits bis einschliesslich der beiden Planner-Papiere vom
+Vormittag (Eingabe-Regeln, Interaktionsmuster). Davon waren **zwei** Code-Commits, der Rest
+Dokumentation.
+
+**Was bewusst draussen blieb:** AUF-38 Scheiben 3 und 4 — beide liegen im Abnahme-Stapel und sind
+**nicht abgenommen**. §16 ist damit eingehalten: gemergt wurde auf einen **benannten** Commit, auf
+dem nichts Ungeprueftes liegt, nicht auf die Spitze.
+
+**Zu den Kopien ausserhalb:** `fork/main` und `backup-private/main` zeigen beide auf `057e6417`.
+**Das ist mein Verfolgungs-Ref und kein Beweis** — nach der Regel vom 26.07. zaehlt die Antwort der
+Gegenseite, also die Ausgabe von `./push-integration-sicher.command`. Wenn sie ohne Fehler
+durchlief, ist der Stand draussen; ich kann es von hier nicht bestaetigen, nur anzeigen, dass
+nichts dagegen spricht.
+
+Stapel 2 (Scheiben 3 und 4, Ballbesitz Evaluator), aktiver Auftrag Scheibe 2 (Ballbesitz
+Generator), `main` `057e6417`, **25 zurueck**.
