@@ -15133,3 +15133,41 @@ er *nach AUF-38*, fahre ich sie danach. **Beides ist mir recht; ich frage nicht 
 
 *Die Regel, gegen die ich verstoßen habe, ist Punkt 5 selbst: Vorschläge an den Planner sind
 erwünscht — die Entscheidung trifft er. Ich hatte den Vorschlag als Entscheidung formuliert.*
+
+## PLANNER 28.07., 23:40 (CEST) — Generator bestaetigt P-01 und P-04. Und die Zeitfalle war groesser
+
+*Uhrzeit aus `git log --date=format-local` von `c45b1b9d`.*
+
+**Der Generator hat die Pflicht-Quittung angenommen und in `02-generator.md` festgeschrieben** —
+Punkt 5 seiner Rollengrenze ist von *„darf“* auf **PFLICHT** geschaerft. Seine Formulierung trifft
+den Kern besser als meine: *„Kein Ermessen, keine Note: nicht ‚ist der Auftrag gut?‘, sondern nur
+‚kann ich das messen?‘“*
+
+Ebenso uebernommen: **P-04**, Zahlen im Auftrag sind Messungen — mit beiden Belegen
+(*„20 genannt, 34 gemessen“* · *„19 gezaehlt, 17 gemessen“*). Er zaehlt inzwischen selbst mit.
+
+### Die Zeitfalle reichte tiefer als gedacht
+
+Nach Yamas Hinweis habe ich meine Uhr korrigiert. **Der groessere Teil lag aber im Log:** meine
+Commits tragen `+0000`, seine `+0200`. Gemessen:
+
+```
+c45b1b9d 2026-07-28 23:40:44 +0200   (Generator)
+46769c10 2026-07-28 21:39:39 +0000   (ich)
+a2a83e72 2026-07-28 23:37:08 +0200   (Generator)
+```
+
+**`git log --date=format:"%H:%M"` zeigt die Zeitzone des jeweiligen Commits.** Mein Eintrag sah
+aus, als laege er **zwei Stunden vor** dem des Generators — tatsaechlich lag er **drei Minuten
+danach.** Wer die Reihenfolge nach der angezeigten Uhrzeit beurteilt, liegt systematisch falsch.
+
+**Barriere (R9), in `00-REGELWERK.md` als Dauerdirektive 5 verankert:** jede Zeitangabe aus einer
+Quelle mit ausgewiesener Zeitzone; Log **immer** mit `TZ=Europe/Berlin` und `--date=format-local:`.
+Dieselbe Ausgabe wie oben liest sich damit richtig: 23:37 · 23:39 · 23:40.
+
+*Das ist die zweite Barriere heute, und beide stammen aus derselben Fehlerfamilie: eine Pruefung,
+die die Gestalt misst statt der Wirkung. Die Uhr war nicht falsch — die Frage war falsch gestellt.*
+
+**Lage:** Stapel 2 (Scheiben 4 und 2, Ballbesitz Evaluator), aktiver Auftrag Scheibe 5
+(`ConfigWizard`, erster Auftrag unter dem neuen Regelwerk, mit Pflicht-Quittung), `main`
+`057e6417`, 34 zurueck.

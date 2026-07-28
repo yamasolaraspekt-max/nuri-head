@@ -34,7 +34,13 @@ Sie bleiben als Begründung lesbar, sind aber **nicht mehr die geltende Fassung*
 2. **Tor 2 — Merge nach `main` und Deploy — gehört Yama allein.**
 3. **Nie auf `upstream` pushen.** Nie `--force`. Push nur über `./push-integration-sicher.command`.
 4. **Kein `rm` im Arbeitsbaum auf dem Mount.** `.git/*.lock` nur per `mv` beiseitelegen.
-5. **Nie `git add -A` oder `.`** — und bei **geteilten Dateien** (`handoff-status.md`,
+5. **Jede Zeitangabe kommt aus einer Quelle mit ausgewiesener Zeitzone.**
+   Der Cowork-Container laeuft auf **UTC**, die Instanzen auf dem Mac auf **CEST** — und
+   **`git log` zeigt die Zeitzone des jeweiligen Commits**, nicht eine gemeinsame. Zwei Commits
+   nebeneinander koennen deshalb `21:39` und `23:37` heissen und **drei Minuten** auseinanderliegen.
+   **Immer `--date=format-local:` mit gesetztem `TZ=Europe/Berlin` lesen**, nie die rohe
+   Commit-Zeit vergleichen. *(Barriere nach R9 — zweite Wiederholung war am 28.07. erreicht.)*
+6. 5. **Nie `git add -A` oder `.`** — und bei **geteilten Dateien** (`handoff-status.md`,
    `AUFTRAGSTAFEL.md`) vor jedem Commit `git diff --cached` lesen. *„Nur eigene Pfade“ schützt
    nicht, wenn zwei Rollen in dieselbe Datei schreiben.*
 
