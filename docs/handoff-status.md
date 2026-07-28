@@ -16678,3 +16678,78 @@ ein Speicherziel bekommt.
 **Generator** — Scheibe 5 laeuft, der Arbeitsbaum zeigt seine Arbeit an `ConfigWizard.tsx`,
 `hausplaner.css` und zwei Zusagen; er bewegt `public/*`, und das ist **erlaubt**, weil keine
 Sichtprobe gemeldet ist. **Evaluator** — B-01, Kriterien K-01 bis K-04.
+
+
+---
+
+## 2026-07-29, 01:16 CEST — PLANNER: ich habe die Arbeit des Generators mitcommittet. Dritte Wiederholung, jetzt kommt die Barriere
+
+**An den Generator, zuerst und wichtigst: DEINE ARBEIT IST NICHT WEG. Sie liegt in `f5b9feaf`.**
+
+```text
+git show --name-only --pretty=format: f5b9feaf | grep -v '^docs/'
+  public/hausplaner/hausplaner.css
+  public/hausplaner/hausplaner.js
+  resources/planner/hausplaner/__tests__/breiten.test.ts
+  resources/planner/hausplaner/__tests__/stilschicht.test.ts
+  resources/planner/hausplaner/app/ConfigWizard.tsx
+  resources/planner/hausplaner/hausplaner.css
+```
+
+**Du findest einen sauberen Arbeitsbaum vor und koenntest denken, deine Scheibe-5-Arbeit sei
+verschwunden. Ist sie nicht — sie steht in meinem Commit, unter meiner Nachricht.** Bau weiter auf
+dem jetzigen Stand; berichte den Commit als Teil von Scheibe 5 und benenne, dass der Erstcommit
+`f5b9feaf` heisst und von mir stammt. **Nichts zurueckdrehen.**
+
+### Was passiert ist
+
+Ich habe um 01:12 `git add` mit fuenf `docs/`-Pfaden gefahren und den Index gelesen — **er war
+sauber, nur `docs/`**. Der Commit lief in einem **zweiten** Aufruf um 01:13. **In der Luecke
+dazwischen hat der Generator seine Dateien gestagt**, und mein `git commit` hat den Index ganz
+genommen.
+
+### Warum die Regel von 00:55 nicht gereicht hat
+
+Ich hatte geschrieben: *„wer committet, liest vorher `git diff --cached` — auch wenn er selbst nichts
+gestagt hat.“* **Ich habe ihn gelesen.** Die Regel war richtig und hat trotzdem nicht getragen,
+**weil sie ein Zeitfenster offen laesst, das sie nicht benennt**: zwischen Lesen und Committen. In
+einem Baum mit drei Schreibern ist dieses Fenster nicht klein, es ist der Normalfall.
+
+**Das ist die dritte Auspraegung derselben Fehlerklasse an einem Abend:**
+
+| Zeit | Wer nahm wessen Arbeit mit | Was danach geschah |
+|---|---|---|
+| 00:48 | Generator (`5529d0cd`) nahm Yamas gestagte Dateien | er hat es selbst gemeldet (`3cfe78d2`) |
+| 00:55 | — | ich schreibe die Regel *„Index vor dem Commit lesen“* |
+| **01:13** | **ich (`f5b9feaf`) nehme die Arbeit des Generators** | **dieser Eintrag** |
+
+**R9 verlangt bei der zweiten Wiederholung eine technische Barriere und keinen dritten Vorsatz.**
+Ich habe stattdessen einen Vorsatz aufgeschrieben und ihn selbst gebrochen — genau das Muster, das
+im Auftragsschema unter *„Prosa in einem langen Dokument aendert Verhalten nicht“* steht.
+
+### DIE BARRIERE — ab sofort, fuer alle drei Rollen
+
+**`git add` gefolgt von `git commit` ist verboten. Es gilt nur noch:**
+
+```sh
+git commit -- <pfad> [<pfad> …]
+```
+
+**`git commit -- <pfade>` committet genau diese Pfade aus dem Arbeitsbaum und laesst den Index
+unberuehrt.** Damit ist es **strukturell unmoeglich**, fremde gestagte Arbeit mitzunehmen — es gibt
+kein Zeitfenster mehr, das jemand einhalten muesste. **Das ist der Unterschied zwischen einer Regel
+und einer Barriere:** die Regel verlangt Aufmerksamkeit im richtigen Moment, die Barriere braucht
+keine.
+
+*Dieser Eintrag ist mit `git commit -- docs/handoff-status.md` committet. Die Barriere gilt ab ihrem
+eigenen ersten Einsatz.*
+
+### Was zu pruefen bleibt
+
+**Der Stand von Scheibe 5 in `f5b9feaf` ist ein Zwischenstand, kein berichteter Bau.** Er kann
+unfertig sein, und `public/*` ist mitgewandert. **Fuer den Evaluator heisst das: `f5b9feaf` ist
+KEIN Pruefgegenstand** — gewartet wird auf den Bericht des Generators zu Scheibe 5. **Fuer die
+Sichtproben-Regel heisst es:** das Buendel hat sich bewegt, und zwar durch mich, nicht durch ihn.
+
+**Ballbesitz unveraendert:** Generator — Scheibe 5 weiterbauen. Evaluator — B-01 (K-01 bis K-04).
+Yama — Entwurfsfreigabe und der Merge auf `8fb7b990`.
