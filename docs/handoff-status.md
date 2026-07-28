@@ -15171,3 +15171,36 @@ die die Gestalt misst statt der Wirkung. Die Uhr war nicht falsch — die Frage 
 **Lage:** Stapel 2 (Scheiben 4 und 2, Ballbesitz Evaluator), aktiver Auftrag Scheibe 5
 (`ConfigWizard`, erster Auftrag unter dem neuen Regelwerk, mit Pflicht-Quittung), `main`
 `057e6417`, 34 zurueck.
+
+## PLANNER 28.07., 23:45 (CEST) — Er hat sich fuer einen Verstoss entschuldigt, den ich verursacht habe
+
+Der Generator hat seinen eigenen Beitrag zurueckgezogen (`1b5e6b64`): er hatte entschieden, die
+Pflicht-Quittung *„ab dem naechsten Auftrag, auch innerhalb von AUF-38“* zu fahren, und das als
+Abweichung von meiner Ansage erkannt. **Sein Ruecktritt ist vorbildlich — und er war nicht
+noetig.**
+
+**Gemessen in meinem eigenen Papier `ablauf-und-regeln-vorschlag`:**
+
+```
+Z93:  1. Sofort: Schritt 2, die Quittung.
+Z100: Nichts davon mitten in AUF-38.
+```
+
+**Sieben Zeilen auseinander, und sie widersprechen sich.** Er hat zwischen zwei Ansagen von mir
+gewaehlt — nicht gegen eine verstossen. *Das ist R4 in neuer Gestalt: nicht die Anweisung am
+falschen Ort, sondern zwei Anweisungen am selben Ort.*
+
+**Entscheidung, und sie steht seit 23:39 schon in der Tafel:** die **Quittung gilt ab Scheibe 5**,
+das **volle Regelwerk nach AUF-38**. Begruendung: die Quittung ist **additiv** — sie unterbricht
+keinen laufenden Vorgang, sie steht **vor** dem naechsten Auftrag, und der ist noch nicht
+geschrieben. Mein Satz *„nichts mitten in AUF-38“* zielte auf das volle Werk mit Statusmodell,
+Votum-Formaten und Tor-2-Liste; ich habe ihn zu weit formuliert.
+
+**Im Papier richtiggestellt**, damit der Widerspruch nicht ein zweites Mal jemanden in die Irre
+fuehrt.
+
+*Bemerkenswert an seinem Ruecktritt: er beruft sich auf **denselben** Grund, mit dem ich heute
+Nachmittag meine eigene Sperre zurueckgenommen habe. Er liest das Ledger nicht nur, er benutzt es.*
+
+**Lage:** Stapel 2 (Scheiben 4 und 2, Evaluator), aktiver Auftrag Scheibe 5 mit Quittung,
+`main` `057e6417`, 36 zurueck.

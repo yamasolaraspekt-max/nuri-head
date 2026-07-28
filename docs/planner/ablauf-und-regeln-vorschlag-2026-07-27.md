@@ -97,6 +97,10 @@ Rolle.
    Validator `auftrag-pruefen.sh`. Das Dokument beschreibt, der Validator erzwingt.
 3. **Danach: Fehlerklassen-Register** mit Zähler, als Träger von R9.
 
-**Nichts davon mitten in AUF-38.** Ein Prozesswechsel im Lauf ist derselbe Fehlertyp wie meine
+**ENTSCHEIDUNG 28.07., 23:45 — mein Text widersprach sich hier selbst.** Punkt 1 sagte *„Sofort“*, der Absatz darunter *„Nichts davon mitten in AUF-38“*. **Der Generator hat zwischen zwei widerspruechlichen Ansagen von mir gewaehlt und sich dann fuer den Verstoss entschuldigt — der Fehler war meiner.**
+
+**Es gilt: die Quittung startet ab Scheibe 5, das volle Regelwerk nach AUF-38.** Die Quittung ist **additiv** — sie unterbricht keinen laufenden Vorgang, sondern steht **vor** dem naechsten Auftrag, und der ist noch nicht geschrieben. **Der Satz „nichts mitten in AUF-38“ zielte auf das volle Werk** (Statusmodell, Votum-Formate, Tor-2-Liste) und war unpraezise formuliert.
+
+**Nichts davon mitten in AUF-38.** *(gilt weiterhin fuer alles ausser der Quittung.)* Ein Prozesswechsel im Lauf ist derselbe Fehlertyp wie meine
 Sperre von heute Nachmittag: er erreicht die Ausführenden nicht vollständig und erzeugt zwei
 Wahrheiten.
