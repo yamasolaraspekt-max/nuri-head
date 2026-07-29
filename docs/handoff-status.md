@@ -17038,3 +17038,209 @@ Einzeln benennen und beidseitig verriegeln; die generische Rohwert-Zusage allein
    die alte Fassung gruen geblieben** — genau die Richtung bitte gegenpruefen.
 
 **Danach liegt B-01 (K-01 bis K-04, nicht K-05).**
+
+---
+
+## ⇒ EVALUATOR — AUF-38 Scheibe 5 (ConfigWizard, Code in `f5b9feaf`): **FREIGABE** (29.07., 07:49 CEST)
+
+**Zuerst die Zeitlücke, weil sie die Belege einordnet.** Gemessen habe ich **01:19–01:26**, an einem
+sauberen Baum auf `f5b9feaf`. Geschrieben wird das Votum **07:49** — dazwischen liegen über sechs
+Stunden, HEAD steht auf `e3b24324`, und **Scheibe 6 (`GuidedView`) wird gerade im Baum gebaut**
+(`GuidedView.tsx`, `gefuehrteEhrlich.test.ts`, Bündel neu). **Was davon gilt weiter, was nicht:**
+
+- `git diff --stat f5b9feaf -- …/ConfigWizard.tsx` ist **leer** — der geprüfte Code ist unverändert.
+  **Das Code-Urteil trägt.**
+- Meine Gate- und Bündelzahlen sind der **Stand von 01:19** und werden nicht als heutige ausgegeben.
+  Ein Nachfahren jetzt würde Scheibe 5 und Scheibe 6 vermischen und wäre kein Beleg für Scheibe 5.
+
+**K1 — die Zahlen: ERFÜLLT, selbst gemessen.** `ConfigWizard` **43/40/2/38 → 5/2/2/0**. Insel
+316 → 278 gesamt, 198 → 160 offen. Die Differenz ist **genau 38** — sie geht auf.
+
+**K2 — 33 Klassen: ERFÜLLT, und ich habe es schärfer geprüft als der Bericht.** Nicht die Anzahl
+verglichen, sondern die **Mengen**: `comm -3` zwischen den `.hp-kw-*`-Selektoren der CSS und den
+`hp-kw-*`-Vorkommen der TSX ist **leer**. Keine Regel ohne Träger, kein Träger ohne Regel. *Gleiche
+Anzahl wäre auch bei zwei verschiedenen Mengen gleich.*
+
+**K3 — genau zwei Ausnahmen: ERFÜLLT.** Overlay `rgba(24,34,38,.30)` und Dialog-Schatten
+`rgba(28,50,55,.18)`, beide Rohwerte ohne Token. **Gegen-Beweis:** eine *dritte* Rohwert-Ausnahme
+eingeschleust ⇒ **rot**, „Scheibe 5: genau ZWEI Ausnahmen, beide benannt, beide ohne Token". Das ist
+die Mengenzusage, die im ganzen AUF-38 zweimal gefehlt hat — hier steht sie.
+
+**K4 — keine Rohfarben in der CSS: ERFÜLLT.** Quelle 0, **gebaute Datei 0** (die zwei Treffer in der
+Quelle stehen in einem Kommentar).
+
+**K5 — Gates (Stand 01:19, selbst gefahren): ERFÜLLT.** `test:hausplaner` **1327/0** · `tsc` 0 ·
+`schema` 0 · `dom` 11/0 · `status --porcelain public` leer · Bündel im **selben** Commit (§8).
+
+**K6 — Gegen-Beweis mit Zähnen: ERFÜLLT, beide Richtungen.** Eine umgestellte Stelle (`hp-kw-kopf`)
+wieder inline ⇒ **2 rot**: „keine offene statische Stelle" *und* „jede angelegte Klasse wird auch
+benutzt". Dass beide fallen, ist der Punkt — die Stelle taucht wieder inline auf **und** ihre Klasse
+steht ohne Träger da. *Anmerkung zur Sauberkeit: mein erster Kontrolllauf hatte zwei Rote, die nicht
+zur Sache gehörten — der Kopie fehlten die gebaute CSS und das Blade. Ich habe die Kopie
+vervollständigt und neu gefahren: **33/33 grün**, erst dann sind die Mutationen ein Beweis.*
+
+**K7 — serviert == gemessen (01:19): ERFÜLLT.** Im Browser gefetcht `hausplaner.js` **1 429 241 B**,
+`hausplaner.css` **10 525 B** — byte-gleich zu den Dateien im Baum, und der Baum war deckungsgleich
+mit dem committeten Stand. **33 `hp-kw-`-Regeln in den geladenen Stylesheets**, also genau die 33.
+
+**K9 — headful, alle fünf Schritte: ERFÜLLT.** Der Generator hat sie ausdrücklich mir überlassen,
+und sie war nötig: der Dialog ist modal, die Schritte 2–5 sieht sonst niemand. Durchgeklickt,
+`hp-kw`-Klassen je Schritt sichtbar **23 / 24 / 24 / 25 / 22**. **Quelle == DOM, vollständig
+aufgelöst** — 7 Inline-Elemente im Dialogbaum aus **5** Quell-Konstrukten:
+
+```text
+1  Overlay        position=fixed   bg=rgba(24, 34, 38, 0.3)     -> Ausnahme 1 (Quelle Z60)
+2  Dialog-Kasten  bg=rgb(255,255,255) + Schatten                -> Ausnahme 2 (Quelle Z69)
+3-7  fünf Schritt-Punkte aus EINER Quellzeile (Z87, `i === schritt ? …`)
+     bg=rgb(26,158,95)=#1a9e5f=T.ok (erledigt) · rgb(18,128,125)=#12807d=T.accent (aktuell)
+```
+
+**Keine weitere statische Inline-Stelle im gerenderten Dialog.** Konsole nach frischem Laden mit
+aktiver Aufzeichnung: **0 Fehler.** Bildschirmfotos von Schritt 1 und Schritt 5 erfasst.
+
+**Zu `AUF38-MW-7` liefere ich die Zahl, die dem Befund noch fehlt.** Der Planner hat die Lücke
+richtig benannt — `style={bezeichner}` wird nicht gezählt. **Gemessen sind es 58 Stellen:**
+
+```text
+app/HausplanerApp.tsx            56   (28x style={panelLabel}, 28x style={panelInput})
+app/dashboard/GeschossFlaeche.tsx 2   (style={knopfStil})
+zum Vergleich: style={{ in der Insel   249
+```
+
+**Das ist kein Randfall: 58 gegen 249 sind knapp ein Fünftel**, und **alle 56 liegen in
+`HausplanerApp.tsx` — der Datei von Scheibe 7.** Der Satz *„die Scheiben räumen sie ohnehin mit ab"*
+trägt also nur, wenn Scheibe 7 sie ausdrücklich im Auftrag hat; das Werkzeug wird sie ihr nicht
+zeigen. **Vorschlag, Planner entscheidet:** die Grundgesamtheit von Scheibe 7 nennt beide
+Schreibweisen, oder `MW-7` wird vorher gebaut. *Kein Widerspruch zur Klassifizierung — nur die Zahl
+dazu.*
+
+**Ein Prozess-Befund, den ich melden muss.** Scheibe 5 lag mit Ballbesitz Evaluator, und der Baum
+ist trotzdem auf Scheibe 6 weitergelaufen. Dadurch kann ich die Gates **nicht mehr am
+Scheibe-5-Stand nachfahren** — ein Nachlauf misst heute beide Scheiben. Das ist dieselbe Klasse wie
+das vorgelaufene Bündel vom 28.07., nur langsamer sichtbar: **die Regel schützt die laufende
+Sichtprobe, nicht den unabgenommenen Stand.** Diesmal ohne Schaden, weil ich die Zahlen um 01:19
+festgehalten hatte und der Code unverändert ist. **Beim nächsten Mal wäre es einer.**
+
+**Gesamtvotum: `FREIGABE`.** Die Zusage misst mit demselben Werkzeug, das zählt — das ist die
+Verbesserung, die diese Scheibe über ihre eigene Aufgabe hinaus bringt. Ballbesitz: Planner.
+Kein Commit durch mich, kein Push, kein Tor 2.
+
+## 2026-07-29, 07:50 CEST — GENERATOR: AUF-38 Scheibe 6 (GuidedView) — von 29 offenen bleiben 0
+
+**Commit:** `11e23016` — 7 Dateien, Bündel im selben Commit (§8).
+
+```text
+QUITTUNG — AUF-38 Scheibe 6
+Grundgesamtheit selbst gemessen:   41 gesamt · 34 statisch · 5 Ausnahme · 29 offen
+                                   deckt sich mit dem Sollwert 29
+Auflage „5 Ausnahmen benennen":    erfuellt, einzeln gelistet
+Auflage „geerbte Zusagen":         ZWEI gefunden
+Flaeche nur unter Zustand:         drei bedingte Bloecke, einer davon nicht ausloesbar
+Ergebnis:                          TRAEGT
+```
+
+### Die Zahlen
+
+```text
+Befehl:   node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/GuidedView.tsx
+Vorher:   41 gesamt · 34 statisch · 5 Ausnahme · 29 offen
+Nachher:  12 gesamt ·  5 statisch · 5 Ausnahme ·  0 offen
+Insel:    278 -> 249 Stellen, 160 -> 131 offen
+```
+
+**29 Klassen für 29 Stellen, eins zu eins** — kein wortgleicher Block, anders als in Scheibe 5.
+Umgestellt wurde mit exakten Zeichenketten-Ersetzungen, nicht per Regex; das Skript meldet
+`29 Paare · 29 ersetzte Vorkommen`, und eine Abweichung wäre daran sofort sichtbar gewesen.
+
+### Die fünf Ausnahmen — einzeln, wie beauftragt
+
+```text
+rgba(255,255,255,.7)   Massstab-Schild ueber der Buehne
+rgba(20,30,34,.92)     Hinweisband am Fuss der Buehne
+#eef3f2                Schrift des Hinweisbands
+#7fd8d3                Symbol im Hinweisband
+#0a4f4d                Titel der empfohlenen Aktion
+#d3dbdb                Rahmen der erweiterten Bearbeitung
+```
+
+*(Sechs Rohwerte in fünf Blöcken — das Hinweisband trägt zwei.)*
+
+**Warum einzeln und nicht nur generisch:** die generische Zusage fängt *„Farbe bekommt einen
+Token"*. Die andere Richtung — *„die Stelle ist noch inline"* — steht jetzt daneben, je Ausnahme.
+**Dazu eine Mengenzusage:** genau fünf Ausnahme-Blöcke, **und jeder trägt einen der benannten
+Rohwerte**. Ohne den zweiten Teil hätte eine Ausnahme durch eine andere ersetzt werden können, und
+die Zahl allein hätte es verdeckt.
+
+### Die präzisierte Auflage hat beim ersten Einsatz zwei Treffer geliefert
+
+Gesucht wurde über die **Eigenschaftsnamen** der verschobenen Blöcke, nicht über die Wörter `style`
+oder `inline`:
+
+```text
+breiten.test.ts:26        las gridTemplateColumns aus dem Inline-Stil
+gefuehrteEhrlich.test.ts  las den Detail-Stil Zeichen fuer Zeichen
+```
+
+**Mit meinem alten Griff hätte ich beide verfehlt** — genau wie bei Scheibe 5. Beide prüfen die
+Eigenschaft jetzt dort, wo sie wohnt: die erste über Quelle plus CSS, die zweite über die Klasse
+**und** deren Werte in der Schicht, damit der Umzug nicht stillschweigend Werte verliert. *Die
+Auflage ist nach einem Fehler geschrieben worden und hat beim ersten Lauf zwei Dinge gefunden — das
+ist der Unterschied zwischen einem Hinweis und einer Barriere.*
+
+### Gegenproben
+
+```text
+A  eine umgestellte Stelle zurueckgedreht    =>  2 rot  (Wirkung + Klasse ohne Traeger)
+B  eine Ausnahme in die Schicht geholt       =>  3 rot  (Wirkung + Verriegelung + Mengenzusage)
+Endstand wiederhergestellt, byte-gleich zur Sicherung, 38/38 gruen
+```
+
+### Gates — selbst gemessen
+
+```text
+Befehl:      npm run test:hausplaner            Exit 0   Tests 1332   Fehler 0   (vorher 1327)
+Befehl:      npm run test:hausplaner:dom        Exit 0   Tests   11   Fehler 0
+Befehl:      npm run tsc:hausplaner             Exit 0
+Befehl:      npm run schema:hausplaner:check    Exit 0
+Befehl:      npm run build:hausplaner           Exit 0
+Befehl:      php artisan test                   Exit 0   Tests  789   (2729 Zusicherungen)
+K4:          0 Rohfarben in der gebauten CSS
+```
+
+### Zwei Befunde — gemeldet, nicht gebaut
+
+**(1) Die SVG-Bühne trägt drei Rohfarben als *Attribute*:** `stroke="#9aa4af"`, `fill="#7c8590"`,
+`fill="#aab2bb"`. Das sind keine `style`-Blöcke — sie liegen damit **außerhalb der Grundgesamtheit
+und außerhalb der generischen Rohwert-Zusage**. Dieselbe Klasse wie `AUF38-MW-7`: die Schreibweise
+entscheidet, ob gezählt wird. Gehört zum Abschluss-Posten von AUF-38.
+
+**(2) Eine der drei zustandsabhängigen Flächen ist heute nicht auslösbar.** `s.aufgaben.length > 0`
+ist nach der eigenen Messung im Bestand **nie wahr** — kein Schritt trägt Aufgaben, seit sie aus
+`dashboard/fahrschritte.ts` kommen. **Die Aufgaben-Karte kann in einer Sichtprobe nicht gesehen
+werden.** Das ist kein Mangel meiner Umstellung, aber es begrenzt, was K9 belegen kann, und gehört
+gesagt, bevor jemand einen Haken dafür setzt. Auslösbar sind die anderen beiden: der
+Konfigurator-Knopfblock (Schritt mit „Türen" im Titel) und die Empfehlungs-Karte (`s.empfehlung`).
+
+### K9 ist nicht erfüllt und wird nicht so gemeldet
+
+Die Sichtprobe fährt der Evaluator. Auslösbare Flächen sind oben benannt, die nicht auslösbare auch.
+
+### Betriebsbefund: das Repo war sechs Stunden für jeden Commit gesperrt
+
+```text
+letzter Commit vor mir   e3b24324, 01:29
+mein Commit              11e23016, 07:49
+Lock-Alter beim Raeumen  22 804 s  (~6 h 20 min), unveraendert
+```
+
+`.git/HEAD.lock` und `.git/next-index-24.lock` lagen seit **~01:27** und lösten sich nicht.
+**In dieser Zeit hätte keine Rolle etwas committen können** — nicht der Planner, nicht der
+Evaluator, nicht ich. Ich habe erst gewartet und den Zeitstempel zweimal verglichen, bevor ich sie
+nach der Lock-Regel per `mv` beiseitegelegt habe (`.git/_locks_beiseite/0747/`), **nicht gelöscht**.
+
+**Das ist der dritte Lock-Rest heute Nacht** (01:14, 01:18, 01:27) und der erste, der wirklich
+Schaden angerichtet hat. Die zwei davor habe ich innerhalb von Minuten geräumt; dieser lag über
+Nacht. **Der Vorschlag gehört dem Planner**, aber die Zahl gehört ins Papier: drei Reste an einem
+Abend sind kein Zufall, und eine Wache, die den Baum liest, sollte auch das Lock-Alter melden.
+
+**Status nach §2: `BERICHTET`.**
