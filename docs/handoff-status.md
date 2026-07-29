@@ -19337,3 +19337,137 @@ K-04:        eine Datei im Commit · public/* unberuehrt · Scheibe 7 nicht ange
 ```
 
 **Status nach §2: `BERICHTET`.** Nach der Reihenfolge des Planners folgt **T3**.
+
+---
+
+## ⇒ EVALUATOR — AUF-83-T2 (`45656ac1` + `86059540`): **NICHT PRÜFBAR** an K-06, acht von neun erfüllt (29.07., 21:31 CEST)
+
+Gemessen auf einem **commit-exakten Prüfstand** (`git archive 86059540`) — im Arbeitsbaum lag
+`buehnenBreite.test.ts` bereits geändert (T1a-N1), und **meine erste Gate-Zahl war dadurch
+verunreinigt: ich maß 1365, seine 1363 stimmen.** Am Stand gemessen: Kontrolllauf 58/58.
+
+**K-01 ERFÜLLT** — `hp-navi` Insel 0 · CSS 0 · **DOM 0**. `FACH`/`PROJ` unberührt (Ausschluss gewahrt).
+**K-01b ERFÜLLT** — sein Prüfbefehl (`hp-title|url()->previous` in `objekt.blade`) ist leer.
+*Mein erster Griff war breiter und meldete zwei Treffer; sie sind der `hp-bar`-Rest mit Objektname
+und Übernehmen-Knopf — und den nennt die `grenze` des Blattes ausdrücklich als **Inhalt, kein
+doppelter Kopf**. Mein Suchmuster war falsch, nicht sein Bau.*
+**K-02 ERFÜLLT** — im DOM **genau ein** sichtbarer Hinweis: `<span class="hp-status">Testfläche —
+wird nicht gespeichert</span>`. *Meine erste Zählung ergab 0, weil ich zu eng gefiltert hatte.*
+**K-03 ERFÜLLT** — Marke und Titel: Insel 0, beide Blades 0, DOM 0.
+**K-04 ERFÜLLT** — Gegen-Beweise unten.
+**K-05 ERFÜLLT** *(mein Kriterium)* — im Kopf der Insel stehen **drei Modusschalter auf einer
+Zeile** (`Übersicht` 116×35 · `Geführte Planung` 165×35 · `Expertenmodus` 154×35, alle y=102), und
+**keine eigene breite Zeile** trägt den Wechsel. Genau die Form, die das Blatt verlangt.
+**K-07 ERFÜLLT** · **K-08 ERFÜLLT** — `HausplanerApp.tsx` **nicht angefasst**, Insel 191 Stellen und
+**78 offen unverändert** (Scheibe 7 gewahrt), tsc 0 · schema 0 · dom 11/0 · 0 Rohfarben in der CSS.
+
+### Seine sieben neuen Zusagen — fünf Mutationen, alle rot
+
+**Der Kern seines Berichts stimmt und ist der wichtigste Teil:** die `absence`-Kriterien wurden per
+`grep` geprüft, und das Zurückholen der Navigation machte **keinen einzigen Test rot**. Er hat das
+selbst gefunden und sieben Zusagen nachgezogen. Ich habe sie gegengeprobt:
+
+```text
+A   hp-navi wieder in der Insel        => K-01 rot
+D   Erklaertext GELOESCHT              => K-04 rot      <- Grenzwaechter
+D2  Erklaertext zurueck in eigene Zeile => K-01 + K-04 rot
+F   Uebernehmen-Knopf entfernt         => K-03 rot      <- Grenzwaechter
+F2  Staleness-Pille entfernt           => K-03 rot
+G   FACH-Daten geloescht               => K-01/DATEN rot
+```
+
+**Beide Grenzwächter halten** — sie fangen nicht nur das Zuwenig, sondern das Zuviel. Das ist die
+Form, die dem Auftrag gefehlt hat.
+
+**Drei meiner Mutationen blieben zuerst grün, und alle drei waren mein Fehler:** `hp-obj` traf nur
+das erste Vorkommen (`String.replace` ersetzt eine Stelle), `FACH → FACH_WEG` **enthält weiter
+`FACH`**, und mein `title="…"`-Anker existierte nicht (es ist `title={titel}`). *Zum zweiten Mal
+heute hat mich die Teilzeichenkette erwischt — ich habe nachgesehen statt eine Schwäche zu melden,
+die keine war.*
+
+### K-06 — `NICHT GEPRÜFT`, und der Grund ist ein Konstruktionsfehler am Kriterium
+
+K-06 verlangt *„getBoundingClientRect der Bühne **vorher und nachher**"*. **Den Vorher-Wert gibt es
+nirgends.** Ich habe heute um 10:39 `#hausplaner-root` mit **1077 × 701** festgehalten — das ist der
+Mountpunkt auf der Startfläche, nicht die Bühne im Expertenmodus. Heute nach T2: Wurzel
+**unverändert 1077 × 701**, Leinwand **589 × 451**. Ohne Vorher-Wert der Leinwand ist *„wächst sie"*
+nicht entscheidbar, und den Stand vor T2 kann ich nicht ausliefern, ohne in den geteilten Baum zu
+schreiben — dort läuft gerade T1a-N1.
+
+**Das ist heute das zweite Mal:** `T1a/K-07` verlangte Bilder gegen den Stand davor und wurde
+unmessbar, sobald T1b landete. **Jetzt dieselbe Klasse bei `T2/K-06`.** *Ein Kriterium, das einen
+Vorher-Wert braucht, muss ihn im Auftrag festhalten lassen — vom Generator vor dem Bau, in einer
+Zeile. Wer ihn der Abnahme überlässt, verliert ihn in dem Moment, in dem der Commit landet.*
+**Zur Planner-Entscheidung; nach R9 wäre es die zweite Wiederholung und damit barrierepflichtig.**
+
+### Und die Spur ist damit beantwortet
+
+Ich hatte um 21:20 beanstandet, dass T2 als **Spur B** geführt wird. **Diese Abnahme belegt es:**
+neun Kriterien, sieben P1, zwei mir zugewiesen — und der Generator musste **sieben Zusagen
+nachträglich erfinden**, weil die `grep`-Kriterien nichts verriegelten. Eine Sache, die man so prüfen
+muss, ist keine *„eine Ledger-Zeile"*-Sache. Ich stufe nicht ein, aber der Befund steht jetzt auf
+Messwerten statt auf Papier.
+
+**Gesamtvotum: `NICHT PRÜFBAR`** — nach §5 ausgeschlossen ist `FREIGABE`, solange ein P1 auf
+`NICHT GEPRÜFT` steht, und K-06 ist P1. **Es ist kein Befund gegen den Bau:** acht von neun
+Kriterien sind erfüllt und mit eigenen Gegen-Beweisen belegt. Was fehlt, ist eine Zahl, die niemand
+aufgeschrieben hat.
+
+Ballbesitz: **Planner** (K-06 neu schneiden oder schließen · Spur). Kein Commit durch mich, kein
+Push, kein Tor 2.
+
+## 2026-07-29, 21:31 CEST — GENERATOR: QUITTUNG zu `AUF-83-T3` — **TRÄGT**, und der Auftrag ist kleiner als sein Blatt
+
+**Nicht gebaut.** Ballbesitz Planner für eine Zeile, dann baue ich.
+
+```text
+Sperre                    ENDET. Sperrgrund: „wartet auf den BAU von AUF-83-T2" — T2 steht seit
+                          45656ac1/86059540. Nur das Feld  ist wieder stehengeblieben,
+                          VIERTER Fall. Gehoert nachgezogen.
+Je Kriterium Pruefverfahren  K-01..K-09: JA
+Ergebnis                  TRAEGT
+```
+
+### Der Befund: die Grundgesamtheit im Blatt ist überholt
+
+Sie stammt aus der **Layout-Inventur vom 25.07.** (Befund B1). Ich habe unmittelbar vor dem
+Schreiben gemessen (R14) — **AUF-43 hat seither zwei P1-Kriterien bereits erfüllt:**
+
+```text
+Blatt:     13 Bedienelemente in vier Aufgaben — 111-px-Select, ein Textfeld mit DEMSELBEN Wert
+           daneben, Anlegen/Duplizieren/Loeschen, 2D/Split/3D, Speichern
+gemessen:  die Zeile (Z1183–1251) traegt 1 Knopf (Speichern) + <GeschossFlaeche>
+           0 <select> · 0 <input>
+
+K-02  „das Textfeld mit dem doppelten Geschossnamen ist ersatzlos fort"   BEREITS ERFUELLT
+      Das Eingabefeld sitzt im Menue des Waehlers (GeschossFlaeche.tsx:138), nicht in der Zeile.
+K-03  „Anlegen, Duplizieren und Loeschen liegen im Menue des Waehlers"    BEREITS ERFUELLT
+      Alle drei sind Knoepfe im Menue (Z157/158/163).
+```
+
+**Warum ich das melde, statt es einfach abzuhaken:** zwei P1-Kriterien sind ohne mein Zutun grün.
+Wer das nicht weiß, liest den späteren Bau als Erfolg an einer Stelle, **an der nichts geschehen
+ist** — und die nächste Inventur schreibt die Zahl aus dem Blatt fort statt der gemessenen. *Nach
+R3 sind die Zahlen im Auftrag Messungen, keine Bedingungen; hier ist meine.*
+
+### Was wirklich offen ist
+
+```text
+K-04  Die Hoehenlage steht nirgends.  kommt in GeschossFlaeche.tsx nur in einem
+      Kommentar vor — angezeigt wird sie nicht.
+K-05   liegt und wird von SECHS Stellen benutzt (toolRegistry, palette,
+      werkzeugGruppen, paketAdapter, arbeitsbereichSpeicher, HausplanerApp) — aber es gibt
+      keine Arbeitszeile, die die fuenf Bereiche fuehrt.
+K-06  Die Befehlspalette EXISTIERT und ist verdrahtet (,  in
+      HausplanerApp) — ihr fehlt nur der sichtbare Einstieg. Deckt sich mit dem Planner-Befund
+      vom 01:26: „sie ist gebaut, sie ist nur nicht erreichbar."
+K-07  Ausgangswert gemessen: HausplanerApp 138 gesamt / 78 statisch / 78 offen.
+K-09  27 Testdateien lesen die drei betroffenen Dateien — ueber die Menge zu pruefen (R12),
+      nicht ueber ein Muster.
+```
+
+**Der eigentliche Bau ist damit: Höhenlage sichtbar machen · die Arbeitszeile bauen · den Einstieg
+zur Palette setzen.** Kein Abriss der Geschosszeile mehr — der hat schon stattgefunden.
+
+**Eine Zeile vom Planner genügt:** bestätigt er die Messung, baue ich die drei offenen Punkte und
+führe K-02/K-03 als *bereits erfüllt durch AUF-43* statt als eigene Leistung.
