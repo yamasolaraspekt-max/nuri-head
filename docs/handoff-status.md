@@ -18270,3 +18270,70 @@ nach dem Buendel, nach der Sichtprobe.
 **Ballbesitz: Generator — T1a Fassung 2.** Danach T1b (liegt fertig, gesperrt bis T1a abgenommen).
 **Evaluator — Stapel leer**, naechste Abnahme ist T1a. **Yama — Merge moeglich**, der jetzt juengste
 abgenommene Commit ist `cca4cd20` (Scheibe 8c).
+
+## 2026-07-29, 09:59 CEST — GENERATOR: AUF-83-T1a umgesetzt — die Breite wird gemessen
+
+**Commit:** `97a2e2a4` — 6 Dateien, Bündel im selben Commit (§8). **Quittung zu Fassung 2: TRÄGT.**
+
+### Was gebaut ist
+
+`buehnenBreite.ts` nach dem Vorbild von `buehnenHoehe.ts` — Ersatzwert, Mindestwert, abgerundet
+statt aufgerundet, `ResizeObserver` am Element **plus** Fenster-Zuhörer. **Keine Pixelkonstante für
+eine Schiene im Modul**; die Schienen melden sich über `data-schiene` selbst, statt gezählt zu
+werden. Eine Liste von Breiten wäre beim ersten neuen Panel falsch — dieselbe Falle wie die 220 und
+die 268.
+
+**Der Beobachter hängt zusätzlich an den Schienen einzeln.** Klappt eine zu, ändert sich die *Reihe*
+nicht, sondern nur die Schiene — genau dieser Fall ist der Grund für das Modul und die Vorbedingung
+für T5.
+
+```text
+K-01  grep -n innerWidth HausplanerApp.tsx
+      vorher   Z369 Formel + Z1442 Kommentar
+      nachher  kein Treffer — der Kommentar beschrieb die Formel und ist richtiggestellt
+      Partner  der Fenster-Zuhoerer bleibt, in beiden Modulen
+K-03  height: imStudio ? '100%' : '100vh'  ->  height: '100%'
+K-05  buehnenHoehe.test.ts unberuehrt — leerer diff
+K-06  Scheibe 7 unveraendert bei 78 offen
+Gegenprobe  Pixelkonstante ins Modul geschmuggelt  =>  1 rot
+            alte Fensterrechnung zurueckgeholt     =>  2 rot
+Tests 1345 auf 1355 · dom 11 · tsc 0 · schema 0 · build 0 · PHP 789
+```
+
+### Meine Quittung hat zwei geerbte Zusagen übersehen
+
+Ich hatte gemeldet: *„21 Testdateien lesen HausplanerApp; genau EINE hängt an einer Layout-Zahl."*
+**Es waren drei.** Die zwei zusätzlichen stehen in `ansichtBereit.test.ts` und hängen an der
+**Gestalt der Formel**, nicht an ihren Zahlen:
+
+```text
+const stellen = app.match(/const breite = \(typeof window/g)     zaehlte die Formel
+assert.match(app, /const breite = \(typeof window/)              belegte die Modusunabhaengigkeit
+```
+
+**Mein Griff suchte nach `innerWidth`, `220`, `268` — die Regex dieser Zusagen enthält keines
+davon.** Sie brechen beim Wort `window` ab. Gefunden hat sie erst die volle Suite, nicht meine
+Quittung.
+
+*Das ist dieselbe Lektion ein Stockwerk tiefer.* Erst suchte ich nach den Wörtern `style`/`inline`
+und übersah Zusagen, die nur die Eigenschaft nennen. Dann nach Eigenschaftsnamen und übersah
+Zusagen, die über Variablen lesen. Jetzt nach Zahlen und übersehe Zusagen, die den Ausdruck zitieren.
+**Was jedes Mal getragen hätte: die Tests, die die Datei einlesen, tatsächlich anzusehen — alle 21,
+nicht nur die, die mein Muster trifft.** Bei 21 Dateien ist das Arbeit, aber es ist die Arbeit, die
+die Zusage wert ist.
+
+Alle drei prüfen jetzt die **Eigenschaft** statt der Formel: die Breite wird an einer Stelle
+bestimmt, sie nennt `modus` nicht, und das Panel wird über das gefunden, was es *ist* — eine
+Schiene mit linker Trennlinie.
+
+### Offen
+
+**K-06 und K-07 sind visuell und gehören dem Evaluator:** die Bühne muss einem auf 900 px
+verschmälerten Behälter folgen, und bei unveränderten Panelbreiten muss der Bildschirm in drei
+Viewports pixelgleich bleiben. **Dieser Auftrag ändert das Verfahren, nicht das Bild** — sieht es
+anders aus, ist das der Befund.
+
+*Zur Lage im Baum: ein Lock-Rest von 68 Minuten lag im Weg, nach der Lock-Regel per `mv`
+beiseitegelegt (`.git/_locks_beiseite/`), nicht gelöscht. Vierter Rest heute.*
+
+**Status nach §2: `BERICHTET`.**
