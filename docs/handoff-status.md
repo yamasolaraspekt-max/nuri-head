@@ -19132,6 +19132,49 @@ dritten Mal **vernichtet** statt verzoegert; Barriere ist der R10-Zusatz).
 **Evaluator:** frei — naechste Abnahme ist T1a-N1.
 **Yama:** Merge moeglich; juengster abgenommener Commit ist **`a14abb53`** (T1b).
 
+---
+
+## ⇒ EVALUATOR — SPUR-BEANSTANDUNG zu `AUF-83-T2` (29.07., 21:20 CEST)
+
+**Kein Votum, keine Abnahme** — T2 ist als **Spur B** geführt, und Spur B kennt keinen Evaluator.
+**Genau das ist der Befund.**
+
+Ich habe die Wartezeit genutzt, um das Soll aus dem Auftragsblatt zu rekonstruieren, bevor ein
+Bericht kommt. Dabei stimmt die Spur mit dem Blatt selbst nicht überein:
+
+```text
+Blatt:  spur: B
+Blatt:  9 Kriterien, davon 7 mit kritikalitaet: P1
+Blatt:  2x  ausgefuehrt_von: evaluator   (K-05, K-06)
+Regelwerk §1: "Spur B: Auftrag mit EINEM Kriterium und Pruefverfahren
+               -> Quittung -> Bau -> EINE Ledger-Zeile. Kein Evaluator."
+Stand:  45656ac1 ist bereits committet — Produktivcode, Buendel, zwei Testdateien
+```
+
+**Der Widerspruch steht im Blatt selbst:** es weist mir zwei Kriterien zu und wählt zugleich die
+Spur, die mich ausschließt. Eines von beiden muss falsch sein.
+
+**Inhaltlich spricht mehr für Spur A, und zwar aus deinem eigenen Text:** Spur B verlangt
+*„ausschließlich statische Darstellung … weder Zustand, Routing, Events noch bestehendes
+Verhalten"*. T2 entfernt eine Navigation und den Zurück-Link — und **dein Sperrgrund nennt ihn
+selbst „der einzige Weg aus dem Studio"**. Dazu ist `K-04` als `behavioural` typisiert und `K-05`
+sichert zu, dass ein *Weg erreichbar bleibt*. Das ist Verhalten, nicht Darstellung.
+
+**Warum es eilt:** bliebe es bei Spur B, ginge ein Commit mit **sieben P1-Kriterien** ohne Abnahme
+durch — darunter zwei, die ausdrücklich ich fahren soll. Und die Regel kennt nur eine Richtung:
+*hochstufen jederzeit, herunterstufen nie; im Zweifel A.*
+
+**Ich stufe nicht ein — das ist deine Entscheidung** (§0b: der Planner entscheidet die Spur). Ich
+melde nur, dass die Spur und der Inhalt des Blattes auseinanderlaufen. **Sagst du Spur A, liegt der
+Posten sofort bei mir**; `45656ac1` ist gebaut und der Baum steht still, das ist ein guter
+Messzeitpunkt. Sagst du, es bleibt B, gehören die zwei `ausgefuehrt_von: evaluator` aus dem Blatt
+gestrichen, sonst liest die nächste Instanz denselben Widerspruch noch einmal.
+
+*Zur Vollständigkeit: einen Bericht zu `45656ac1` gibt es noch nicht — ohne ihn ist der Commit nach
+der Hausregel nicht übergeben. Ich habe ihn nicht gemessen und kein Urteil dazu.*
+
+Ballbesitz: **Planner** (Spur). Kein Commit durch mich, kein Push, kein Tor 2.
+
 
 ---
 
@@ -19187,3 +19230,65 @@ gegen ein Kriterium prueft, das beim Bauen nicht dastand.
 **Ballbesitz: Generator** — `K-01b` nachtragen (zwei Zeilen in `objekt.blade`), dann berichten.
 Danach **T1a-N1** und **T3**. **Evaluator:** T2 erst nach dem Nachtrag, sonst prueft er einen
 halben Umfang.
+
+## 2026-07-29, 21:22 CEST — GENERATOR: AUF-83-T2 umgesetzt — eine Navigation, in beiden Blades
+
+**Commits:** `45656ac1` (Studio, 7 Dateien) + `86059540` (Erweiterung auf `objekt.blade`).
+*Der erste lag acht Minuten vor dem Planner-Entscheid von 21:10 und kannte den erweiterten Umfang
+noch nicht; der zweite trägt ihn nach.*
+
+```text
+K-01  hp-navi   Insel 11 -> 0 · CSS 9 -> 0        PROJ/FACH unberuehrt (Ausschluss des Auftrags)
+K-02  Blade-Leiste des Studios fort               speicherAnzeige bleibt gruen (10/10)
+K-03  hp-marke / hp-title                         Insel 0 · studio.blade 0 · objekt.blade 0
+K-04  Erklaertext ohne eigene Zeile               ERHALTEN als Titel am Modusschalter
+K-05  Weg in die gefuehrte Planung                eigener Schalter im Kopf, in jedem Modus
+Tests 1356 -> 1363 · dom 11 · tsc 0 · schema 0 · build 0 · PHP 789 · 0 Rohfarben in der CSS
+Insel 196 -> 191 Stellen · 78 offen unveraendert (Scheibe 7 unberuehrt)
+```
+
+### Die Gegenprobe hat eine Lücke aufgedeckt, die der Auftrag nicht sehen konnte
+
+**K-01 bis K-04 sind `absence`-Kriterien, und ihr Prüfverfahren ist ein `grep`.** Ich habe die
+zweite Navigation testweise zurückgeholt — **kein einziger Test wurde rot.** Ein grep zur Abnahme
+misst einmal und schweigt danach; *eine Abwesenheit, die niemand bewacht, ist eine Absicht und kein
+Zustand.*
+
+Deshalb sechs Zusagen, die der Auftrag nicht verlangt hat, jede einzeln gegengeprobt:
+
+```text
+A  Navigation zurueck                  => K-01 rot
+B  Marke zurueck (Insel)               => K-03 rot
+C  Blade-Leiste zurueck                => K-02 rot
+D  Erklaertext GELOESCHT statt umgezogen => K-04 rot
+E  Marke zurueck (objekt.blade)        => K-03 rot
+F  Uebernehmen-Knopf mitgenommen       => Grenz-Zusage rot
+```
+
+**D und F sind die wichtigeren.** Sie bewachen nicht die Richtung des Auftrags, sondern seine
+**Grenzen**: der Erklärtext darf nicht gelöscht werden, und der Übernehmen-Knopf gehört zu T3, nicht
+zu T2. *Eine Zusage, die nur das Entfernen prüft, hätte beim Zuviel geschwiegen.*
+
+### Fünf geerbte Zusagen mitgezogen — über die Menge gesucht (R12)
+
+Sieben Testdateien lesen `HausplanerStudio.tsx`; fünf Zusagen wurden rot.
+
+**Eine davon hat sich selbst bewährt:** mit den zwei Navi-Einträgen ist die Rohfarbe `#3f464e`
+gefallen, und die **Mengen**-Zusage aus dem Toast-Befund hat es gemeldet. Genau dafür gibt es sie —
+eine Einzelzusage je Farbe hätte die vierte lautlos verschwinden lassen.
+
+Der gezählte Navigations-Fuß ist mit der Navigation gefallen. **Seine Absicht bleibt** und prüft
+jetzt die Abwesenheit *beider* Formen (keine feste Zahl, kein Versprechen auf später), dazu neu:
+**die Daten sind nicht gelöscht** — sonst hätte T2 stillschweigend T3 vorweggenommen.
+
+15 verwaiste CSS-Regeln entfernt; Klassen ohne Träger danach: **0**.
+
+### Zum Entscheid des Planners
+
+Sein Satz *„ihn halb zu beheben hieße, zwei Hausplaner-Flächen mit verschiedenem Kopf zu
+hinterlassen"* trifft es genauer als mein Befund. **Ich hatte den Widerspruch gemeldet und die
+Entscheidung liegen lassen — richtig; aber ich hatte ihn als Scope-Frage gelesen, nicht als das,
+was er ist: dieselbe zweite Wahrheit, gegen die der ganze Auftrag läuft.**
+
+**K-05 und K-06 sind sichtbar und gehören dem Evaluator** — der Weg in die geführte Planung und der
+gewonnene Platz. **Status nach §2: `BERICHTET`.**
