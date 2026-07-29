@@ -17963,3 +17963,63 @@ daran.** Zur Planner-Entscheidung, unverändert: Versionskennung an beide `asset
 **Voten: Scheibe 8b `FREIGABE` · Scheibe 8a `FREIGABE` (Rest geschlossen).** Ballbesitz: Planner.
 **Scheibe 8c (`cca4cd20`) liegt bereits** und ist mein nächster Posten.
 Kein Commit durch mich, kein Push, kein Tor 2.
+
+
+---
+
+## 2026-07-29, 08:24 CEST — PLANNER: AUF-83 freigegeben und vorgezogen, zwei Blaetter liegen
+
+**Yama, 08:20:** *„jetzt sieht es besser aus und ich gebe das jetzt frei bitte diese aufgabe
+vorziehen und ich moechte das sehen auf den dashboard bzw bildschirm.“*
+
+**Meine Auslegung, offengelegt statt angenommen:** ich lese das als Freigabe des **ganzen** Entwurfs
+**einschliesslich T1b** — die Blades an die Ticket-Shell haengen. **Begruendung:** sein Kernsatz
+war *„ich moechte dass du die navi von ticket sein“*, und *„auf dem Bildschirm sehen“* meint den
+gebauten Zustand, nicht ein weiteres Bild. **Tor 2 — Merge nach `main` und Deploy — bleibt bei ihm.**
+*Ist die Auslegung zu weit, korrigiert er sie mit einem Satz; T1b steht deshalb `GESPERRT` und nicht
+`aktiv`.*
+
+### Der Zeitpunkt ist der bestmoegliche, und zwar ohne mein Zutun
+
+Der Generator hat zwischen 07:50 und 08:18 **Scheibe 6, 8a, 8b und 8c** durchgezogen — `GuidedView`,
+`EngineFlaeche`, `GeschossFlaeche` und die vier kleinen Flaechen, **je von n offenen auf 0**. Insel
+jetzt **196 Stellen, 78 offen** (von 316/198 um Mitternacht). **Alle 78 liegen in `HausplanerApp.tsx`
+— der einen Datei, die gesperrt ist.** Er hatte also nichts mehr zu bauen, genau als die Freigabe kam.
+
+### Zwei Blaetter
+
+**`AUF-83-T1a` — Masse vom Behaelter (aktiv, Spur A).**
+`generator-auftrag-auf83-t1a-masse-vom-behaelter.md`, sieben Kriterien.
+**Warum das und nicht die Kopfleiste:** Yamas Ziel ist Platz. **Aufraeumen allein gibt keinen Platz** —
+die Planbreite kommt aus `HausplanerApp.tsx:369` (`innerWidth - 220 - 268`), die Hoehe aus
+`calc(100vh - 46px)`. Beide messen gegen das Fenster. **K-04 verlangt ausdruecklich Pixelgleichheit:**
+dieser Auftrag aendert das **Verfahren**, nicht das Bild — sieht es anders aus, ist etwas anderes
+passiert als beauftragt.
+
+**`AUF-83-T1b` — die Ticket-Shell (gesperrt bis T1a abgenommen, Spur A).**
+`generator-auftrag-auf83-t1b-ticket-shell.md`, acht Kriterien.
+**Die Sperre hat einen gemessenen Grund:** `@yield('content')` sitzt in `.main-content-scroll` —
+ohne T1a ergaebe der Umbau einen zweiten Bildlauf und einen Zeichenbereich unter der Falz.
+**K-02 ist kein Vorhandenseins-, sondern ein Zustandstest:** der Eintrag *Hausplaner* in der Gruppe
+*Planung & 3D* muss den **Aktiv-Zustand** tragen. *Nicht „eine Navigation da haben“ — sehen, wo man
+ist.* **K-03 ist der eigentliche Beweis, dass T1a getragen hat:** beide Ticket-Leisten zuklappen,
+der Plan gewinnt 229 + 280 px. **Faellt K-03, geht es an T1a zurueck, nicht in eine Nachbesserung
+bei T1b.**
+
+### Drei Grenzen, die beide Blaetter ausdruecklich ziehen
+
+**(1) `HausplanerApp.tsx` — nur die Layout-Rechnung.** Die Datei traegt 78 offene Inline-Stellen
+(Scheibe 7, gesperrt) und wird von AUF-48 beansprucht. *Faellt beim Bauen eine Inline-Stelle im Weg
+auf: melden, nicht mitnehmen. Ein Auftrag, der nebenbei eine gesperrte Scheibe baut, macht beide
+unpruefbar.*
+
+**(2) Die Shell wird benutzt, nicht geaendert.** `app.blade.php` hat 11.189 Zeilen und traegt jede
+CRM-Ansicht. T1b greift ueber ihre fuenf Anschlusspunkte zu und aendert dort keine Zeile.
+
+**(3) Die fehlende `permission:Hausplaner,read` bleibt draussen.** Eigener P2-Posten. *Sie hier
+mitzunehmen hiesse, eine Rechteaenderung in einem Layout-Auftrag zu verstecken.*
+
+**Ballbesitz:** **Generator — T1a, sofort.** **Evaluator** — der Stapel ist auf **fuenf** gewachsen
+(Scheibe 6, 8a, 8b, 8c, B-01); drei Voten davon liegen bereits unversioniert im Arbeitsbaum und
+werden von mir gesichert. **Yama** — nichts Blockierendes; der Merge auf den naechsten abgenommenen
+Stand kommt, sobald die Voten verarbeitet sind.
