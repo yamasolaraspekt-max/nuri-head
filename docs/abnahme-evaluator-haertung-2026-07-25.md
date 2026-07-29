@@ -2328,6 +2328,43 @@ testverriegelt, die Zahlen stimmen auf die Stelle, und die aeltere Barriere ist 
 **Der Massstab traegt jetzt.** Damit ist die Bedingung erfuellt, unter der ich Scheibe 5 empfohlen
 hatte zurueckzustellen - sie kann laufen. Ballbesitz: Planner.
 
+### AUF-38 Scheibe 5 (Code in f5b9feaf, Buendel im selben Commit) - ConfigWizard - FREIGABE
+
+Gemessen 01:19-01:26 an einem sauberen Baum auf f5b9feaf; Votum geschrieben 07:49. Die Zeitluecke
+steht im Ledger-Eintrag. `git diff --stat f5b9feaf -- ConfigWizard.tsx` leer - das Code-Urteil traegt;
+die Gate-Zahlen sind ausdruecklich der Stand von 01:19, weil der Baum inzwischen auf Scheibe 6 laeuft.
+
+K1 Zahlen: **ERFUELLT.** 43/40/2/38 -> 5/2/2/0. Insel 316->278 gesamt, 198->160 offen, Differenz
+   genau 38 - die Rechnung geht auf.
+K2 33 Klassen: **ERFUELLT.** Mengenvergleich statt Zaehlvergleich: `comm -3` zwischen den
+   `.hp-kw-*`-Selektoren der CSS und den `hp-kw-*`-Vorkommen der TSX ist leer.
+K3 genau zwei Ausnahmen: **ERFUELLT.** Overlay rgba(24,34,38,.30) + Dialog-Schatten
+   rgba(28,50,55,.18). Gegen-Beweis: dritte Rohwert-Ausnahme eingeschleust -> rot.
+K4 Rohfarben in der CSS: **ERFUELLT.** Quelle 0, gebaute Datei 0.
+K5 Gates (01:19): **ERFUELLT.** test 1327/0 - tsc 0 - schema 0 - dom 11/0 - public sauber - Buendel
+   im selben Commit (§8).
+K6 Gegen-Beweis: **ERFUELLT, beide Richtungen.** hp-kw-kopf wieder inline -> 2 rot (Wirkung +
+   Klasse ohne Traeger). Kontrolllauf zuerst bereinigt (der Kopie fehlten gebaute CSS und Blade),
+   danach 33/33 gruen - erst dann ist eine Mutation ein Beweis.
+K7 serviert==gemessen (01:19): **ERFUELLT.** js 1 429 241 B, css 10 525 B, byte-gleich zum Baum;
+   33 hp-kw-Regeln in den geladenen Stylesheets.
+K9 headful, alle fuenf Schritte: **ERFUELLT.** hp-kw sichtbar je Schritt 23/24/24/25/22.
+   Quelle == DOM vollstaendig aufgeloest: 7 Inline-Elemente aus 5 Quell-Konstrukten - Overlay
+   (Ausnahme 1), Dialog-Kasten (Ausnahme 2), fuenf Schritt-Punkte aus EINER Quellzeile Z87
+   (rgb(26,158,95)=#1a9e5f=T.ok, rgb(18,128,125)=#12807d=T.accent). Keine weitere statische
+   Inline-Stelle. Konsole 0 Fehler. Bildschirmfotos Schritt 1 und Schritt 5.
+
+Zahl zu AUF38-MW-7 (Planner-Befund, ihm fehlte die Menge): **58 Stellen** `style={bezeichner}` -
+`HausplanerApp.tsx` **56** (28x panelLabel, 28x panelInput), `GeschossFlaeche.tsx` 2. Gegenueber
+249 `style={{` in der Insel. **Alle 56 liegen in der Datei von Scheibe 7** - der Satz "die Scheiben
+raeumen sie ohnehin mit ab" traegt nur, wenn Scheibe 7 beide Schreibweisen im Auftrag hat.
+
+Prozess-Befund: Scheibe 5 lag mit Ballbesitz Evaluator, der Baum lief trotzdem auf Scheibe 6 weiter.
+Gates sind am Scheibe-5-Stand nicht mehr nachfahrbar. Diesmal ohne Schaden (Zahlen festgehalten,
+Code unveraendert) - beim naechsten Mal waere es einer.
+
+Gesamtvotum: **FREIGABE.** Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
