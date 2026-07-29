@@ -18762,3 +18762,149 @@ Tests zaehlen das Vorkommen im **Rohtext**. *Eine Messung sieht den Text, nicht 
 
 **Ballbesitz: Generator** — Zusage praezisieren, Gegenprobe fuehren, committen, berichten.
 **Yama** — AUF-84 und, falls meine Auslegung zur Willensfrage nicht stimmt, ein Satz dazu.
+
+## 2026-07-29, 10:32 CEST — GENERATOR: AUF-83-T1b umgesetzt — die Zusage präzisiert, mit beiden Pflicht-Gegenproben
+
+**Commit:** `a14abb53` — 3 Dateien. **Kein Insel-Code angefasst**, kein Bündel bewegt.
+
+Der Entscheid des Planners von 10:28 ist umgesetzt, **einschließlich der Bedingung, an die er ihn
+geknüpft hat**:
+
+```text
+Pflicht-Gegenprobe 1   Kundenname in data-projekte eingeschleust   =>  ROT
+                       „ein Kundenname ist in das Buendel der Insel geraten"
+Pflicht-Gegenprobe 2   derselbe Name nur im Auswahlfeld der Shell  =>  GRUEN
+Controller danach      byte-gleich zur Sicherung
+```
+
+*Ohne die erste Probe wäre die neue Fassung stumm gewesen — und der Entscheid damit falsch. Er hat
+sie deshalb zur Pflicht gemacht, und sie trägt.*
+
+**Geprüft wird mit `DOMDocument`, nicht per Regex.** Verschachtelte `<div>` lassen sich mit einem
+Ausdruck nicht verlässlich abgrenzen, und eine Zusage, die am falschen Ende abschneidet, prüft
+weniger als sie behauptet — dieselbe Klasse wie die Klammerzählung im Messwerkzeug. Der Teilbaum
+umfasst `#hausplaner-root` mit allen `data-*`-Attributen **und** die eingebettete Szene daneben.
+
+### Der Bau
+
+```text
+K-01  @extends('admin.layouts.app')   studio 1 · objekt 1
+      Partner: <!DOCTYPE               studio 0 · objekt 0
+K-05  eigene hp-Regeln                 studio 13 · objekt 39 Vorkommen
+      grep '100vh|calc(' in den Blades  kein Treffer
+Befehl:  php artisan test    Exit 0    789 passed (2730 Zusicherungen, vorher 2729)
+Insel:   1355/0 unveraendert
+```
+
+**Drei Entscheidungen sind im Code benannt statt still getroffen:** die alten `html, body`-Regeln
+fallen ersatzlos (aus einer Seite heraus hätten sie jede andere Admin-Ansicht umgestellt); der
+eigene `sa-ui`-Einschluss fällt (die Shell bindet die Tokens selbst, ein zweiter wäre eine zweite
+Quelle); `#hausplaner-root` bekommt `height: 100%` **ohne Ersatzkonstante**.
+
+### Offen, und nicht von mir
+
+**K-02, K-03, K-04, K-06 sind sichtbar und gehören dem Evaluator** — sie warten weiterhin darauf,
+dass die Browser-Sitzung wieder steht. Das ist dieselbe Blockade wie bei T1a; **zwei fertige Bauten
+warten inzwischen auf einen Anmeldevorgang.**
+
+**AUF-84 nicht angefasst.** Der Nebenbefund liegt beim Planner und bei Yama.
+
+**Status nach §2: `BERICHTET`.**
+
+
+---
+
+## 2026-07-29, 10:40 CEST — PLANNER: Auswertung des Tages, sieben neue Regeln, und R9 bekommt endlich einen Traeger
+
+**Yama:** *„was lernt ihr aus dieser erfahrung welche regeln muessen optimiert werden damit die
+arbeit reibungslos funktioniert, und die effiziens gesteigert wird.“*
+
+**Ausgewertet wurde das Protokoll von 00:00 bis 10:30, nicht die Erinnerung.**
+Papier: `docs/planner/lehren-2026-07-29.html`. Register: `docs/auftraege/FEHLERKLASSEN.md`.
+
+### Die Zahl, die alles andere ordnet: 11 von 44
+
+**44 Commits heute, davon 11 mit Produktivcode.** Drei Viertel sind Verwaltung. Ein Teil davon ist
+der Preis der Nachvollziehbarkeit und richtig so — **aber ein erheblicher Teil sind Korrekturen an
+meiner eigenen Arbeit:** zwei zurueckgewiesene Auftragsfassungen, drei zu enge Sperren, zwei
+unbrauchbare Entwuerfe.
+
+**Die Bauenden waren nie der Engpass.** Der Generator hat zwischen 07:50 und 08:18 **vier Scheiben**
+durchgezogen, je von n offenen Stellen auf 0. Er war genau dann schnell, wenn die Auftraege vor ihm
+lagen.
+
+### Sieben Fehlerklassen, gezaehlt — fuenf davon meine
+
+```text
+F-01  Suche nach Muster statt nach Menge            4x   Generator + Planner
+F-02  Sperre sperrt mehr als ihr Grund traegt       3x   Planner
+F-03  Messung aelter als der Baum                   3x   Planner
+F-04  Zahl/Artefakt behauptet statt gemessen        3x   Planner
+F-05  Beifang im Index                              2x   Generator + Planner
+F-06  Zusage prueft Gestalt statt Wirkung           6x   Bestand
+F-07  Bestand nicht gemessen, sondern nachgebaut    3x   Planner
+```
+
+**Das ist die unbequeme, aber nuetzliche Erkenntnis: der Engpass sitzt VOR dem Bauen, nicht danach.**
+Deshalb zielen die neuen Regeln auf die **Qualitaet des Auftrags** und ausdruecklich **nicht** auf
+mehr Pruefung dahinter. *Mehr Pruefung haette heute nichts beschleunigt — sie haette dieselben
+Fehler nur spaeter gefunden.*
+
+### Sieben neue Regeln, R10 bis R16
+
+| | Regel | Ausloeser |
+|---|---|---|
+| **R10** | Eine Sperre nennt eine **Bedingung**, keinen Meilenstein — und endet mit dem **Bau** | 3x, zuletzt T1b um 10:05 |
+| **R11** | Jedes Kriterium traegt den Befehl, der es belegt — **ausgefuehrt, bevor das Blatt liegt** | mein P1-Kriterium gegen eine Datei, die es nicht gibt |
+| **R12** | Geerbte Zusagen ueber die **Menge** suchen (Liste der einlesenden Testdateien), nicht ueber ein Muster | 4x |
+| **R13** | `git commit -- <pfade>` statt `git add` + `git commit` | 2x |
+| **R14** | Messen **unmittelbar** vor dem Schreiben | 3x |
+| **R15** | Vor jedem Entwurf die **Shell der Heimat-App** messen, nicht nur `docs/planner/` lesen | 3x an einer Aufgabe |
+| **R16** | **Leerlauf eines Bauenden ist ein Planner-Fehler**, kein Zustand — zwei baubare Auftraege liegen jederzeit vor der Front | 2x, beide von Yama gemeldet |
+
+### Der groesste Effizienzhebel liegt bereit und wird nicht benutzt
+
+**Drei verschiedene Probleme heute, eine Ursache — ein Baum, ein Index, ein `.git` fuer drei Rollen:**
+
+- Der Evaluator konnte die Gates von Scheibe 5 **nicht mehr nachfahren**, weil der Baum schon auf
+  Scheibe 6 lief.
+- **Zweimal Beifang im Index.**
+- **28 Lock-Reste**, die der Generator regelkonform wegraeumt — fuer ein Problem, das meines ist.
+
+**`.ai-workflow/` legt Worktrees je Rolle an. Es ist seit `af0e0c93` versioniert, seit 08:29
+abgenommen — und `.ai-workflow/tasks/` ist leer.** *Der Witz an B-01 war schon einmal derselbe:
+unverfolgte Dateien wandern nicht in einen neuen Worktree — das Werkzeug, das die Rollentrennung
+herstellen soll, fehlte genau dort, wo sie hergestellt wird. Jetzt liegt es im Repo und wird
+trotzdem nicht gezogen.*
+
+**Vorbedingung, bevor jemand Baeume anlegt: `B-02`.** `detect_base` liefert `main` statt der
+Integrationsbasis — **66 Commits Rueckstand.** Sonst startet jeder neue Baum veraltet.
+
+### Was heute nachweislich getragen hat
+
+**Die Readiness-Quittung ist der billigste Fundort, den wir haben** — **zweimal einen Mangel
+gefangen, bevor Code entstand** (eine fehlende Definition, ein nicht existierender Pruefgegenstand).
+Beides haette sonst erst der Evaluator gefunden: nach dem Bauen, nach dem Buendel, nach der
+Sichtprobe.
+
+**Die generische Barriere statt Einzelflicken** — zwei Befunde fielen mit *einem* Test, und die
+Zusage faengt zusaetzlich den Rueckfall. *Per-Scheibe-Zusagen skalieren nicht; das ist jetzt belegt.*
+
+**Eskalieren statt entscheiden** — der Generator hat den Push verweigert und T1b nicht committet,
+beide Male mit Begruendung. *„Eine Regel, die man bei Eile beugt, ist bei Eile nicht da.“*
+
+### R9 bekommt einen Traeger
+
+`docs/auftraege/FEHLERKLASSEN.md` — eine Zeile je Klasse, ein **Zaehler**, das Datum des letzten
+Vorkommens, die Barriere. **Wer einordnet, traegt zuerst dort ein.** Steht der Zaehler danach auf 2
+oder hoeher und die Barriere-Spalte ist leer, ist der naechste Schritt **eine Barriere und nicht die
+Behebung des Einzelfalls**.
+
+**Vier Klassen haben heute keine Barriere, nur eine Regel — und das steht so im Register**, nicht als
+erledigt gefuehrt. **F-04 wird zur Barriere, sobald `scripts/auftrag-pruefen.sh` existiert**: es
+faehrt jeden `pruefung.befehl` aus dem YAML-Kopf und meldet, welcher ins Leere greift.
+*Das ist der Validator, den ich seit dem 27.07. schulde — und er ist jetzt kein Nice-to-have mehr,
+sondern die Barriere zu meiner haeufigsten Fehlerklasse.*
+
+**Ballbesitz:** Generator — T1b fertigstellen, dann T2, T3. Yama — **AUF-84** und die Entscheidung
+zu den getrennten Arbeitsbaeumen.
