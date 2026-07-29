@@ -19292,3 +19292,48 @@ was er ist: dieselbe zweite Wahrheit, gegen die der ganze Auftrag läuft.**
 
 **K-05 und K-06 sind sichtbar und gehören dem Evaluator** — der Weg in die geführte Planung und der
 gewonnene Platz. **Status nach §2: `BERICHTET`.**
+
+## 2026-07-29, 21:27 CEST — GENERATOR: AUF-83-T1a-N1 umgesetzt — drei Zusagen, drei Gegenproben
+
+**Commit:** `d78c2466` — **eine** Datei, kein Produktivcode, kein Bündel. *Die Eigenschaften selbst
+sind unverändert; sie halten sich ab jetzt nur selbst.*
+
+### Beide Lücken vor dem Bau nachgemessen — beide bestehen
+
+```text
+Modus-Ternaer zurueckgeholt      -> Suite gruen, 0 Fehler
+data-schiene -> data-schienex    -> Suite gruen, 0 Fehler
+```
+
+**Das ist der Beleg, dass die Zusagen fehlten — nicht die Eigenschaften.** Der Evaluator hatte
+beides gemeldet, eines davon an seiner eigenen Mutation: sie blieb grün, und er hat das als
+*„meine Mutation war unwirksam"* ausgewiesen, statt es als bestandene Prüfung zu verbuchen.
+
+### Die drei Zusagen
+
+**K-01 — die Inselhöhe trägt keinen Modus-Ternär.** Mit T1b sitzt die Insel in
+`.main-content-scroll`; eine Fensterhöhe erzeugt dort einen zweiten Bildlauf — auf der Objektseite
+genauso wie im Studio. *Gegenprobe:* Ternär zurückgeholt ⇒ **rot** (vorher grün).
+
+**K-02 — die Schienen-Zusage prüft auf Wortgrenze.** *Gegenprobe:* `data-schienex` ⇒ **rot**
+(vorher grün). **Zweite Ausprägung derselben Sache:** Scheibe 8a hatte dieselbe Präfix-Schwäche
+(`hp-ef-wert` steckt in `hp-ef-wertzeile`). *Ein `includes` misst Enthaltensein, keine Identität* —
+das gehört ins Fehlerklassen-Register, so wie der Auftrag es verlangt.
+
+**K-03 — der Ersatz für das verlorene K-07, als Rechnung statt als Bild.** Bei unveränderten
+Schienenbreiten liefert die Messung denselben Wert wie die alte Formel, geprüft an fünf
+Fensterbreiten (1440 ⇒ 952, der Wert aus der Sichtprobe). **Dazu die Gegenrichtung, die den Sinn
+des Umbaus trägt:** ändert sich eine Schiene, *muss* die Messung abweichen — täte sie es nicht,
+wäre die Rechnung nur umgeschrieben und nicht behälterbezogen. *Gegenprobe:* `freieBreite` zieht
+die Schienen nicht ab ⇒ **rot**.
+
+*Ein Bild wäre hier ohnehin der schwächere Beleg: es zeigt, dass es gleich **aussieht**; die
+Rechnung zeigt, dass es gleich **ist**.*
+
+```text
+Befehl:      npm run test:hausplaner       Exit 0   Tests 1365   Fehler 0   (vorher 1363)
+Weitere:     tsc 0 · schema 0 · dom 11/11 · PHP 789
+K-04:        eine Datei im Commit · public/* unberuehrt · Scheibe 7 nicht angefasst
+```
+
+**Status nach §2: `BERICHTET`.** Nach der Reihenfolge des Planners folgt **T3**.
