@@ -15,11 +15,28 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { T } from '../app/studioDaten';
 import { tokenVariablen, variablenName, setzeTokenVariablen, HP_PRAEFIX } from '../app/stil/tokenVariablen';
-import { messeDatei, stilBloecke, istStatisch, istAusnahme } from '../../../../scripts/statische-inline-stile.mjs';
+import { messeDatei, stilBloecke, istStatisch, istAusnahme, rohfarben } from '../../../../scripts/statische-inline-stile.mjs';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const quelle = readFileSync(join(hier, '../hausplaner.css'), 'utf8');
 const gebaut = join(hier, '../../../../public/hausplaner/hausplaner.css');
+
+/**
+ * **Traegt die Quelle diese Klasse WIRKLICH?**
+ *
+ * Ein einfaches `includes` reicht nicht: `hp-ef-wert` steckt auch in `hp-ef-wertzeile`. Eine
+ * Zusage, die so prueft, bleibt gruen, obwohl die Klasse keinen Traeger hat.
+ *
+ * **Selbst gefunden, und zwar an der Gegenprobe:** beim Zurueckdrehen einer Stelle wurde nur
+ * *ein* Test rot statt zweier. Ein fehlender roter Test ist ein Befund — die Gegenprobe prueft
+ * nicht nur den Bau, sie prueft auch die Zusage.
+ *
+ * Geprueft wird deshalb auf Wortgrenze: die Klasse steht in Anfuehrungszeichen oder zwischen
+ * Leerzeichen, wie in `className="a b"`.
+ */
+function traegt(quelltext: string, klasse: string): boolean {
+  return new RegExp(`["' ]${klasse}["' ]`).test(quelltext);
+}
 
 // --- K5: die Variablen stammen aus T ---------------------------------------------------------------
 test('K5: jede Variable traegt einen Wert aus `studioDaten.ts` — keine Konstante daneben', () => {
@@ -466,7 +483,7 @@ test('Scheibe 5: jede angelegte Klasse wird auch benutzt — keine Regel ins Lee
   const klassen = [...ohneKommentare.matchAll(/\.(hp-kw-[a-z0-9-]+)\s*\{/g)].map((m) => m[1]!);
   assert.ok(klassen.length >= 30, `nur ${klassen.length} Scheibe-5-Klassen in der CSS`);
   const quelltext = readFileSync(KONFIG, 'utf8');
-  const unbenutzt = [...new Set(klassen)].filter((k) => !quelltext.includes(k));
+  const unbenutzt = [...new Set(klassen)].filter((k) => !traegt(quelltext, k));
   assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
 });
 
@@ -536,6 +553,46 @@ test('Scheibe 6: jede angelegte Klasse wird auch benutzt — keine Regel ins Lee
   const klassen = [...ohneKommentare.matchAll(/\.(hp-gf-[a-z0-9-]+)\s*\{/g)].map((m) => m[1]!);
   assert.ok(klassen.length >= 25, `nur ${klassen.length} Scheibe-6-Klassen in der CSS`);
   const guided = readFileSync(GEFUEHRT, 'utf8');
-  const unbenutzt = [...new Set(klassen)].filter((k) => !guided.includes(k));
+  const unbenutzt = [...new Set(klassen)].filter((k) => !traegt(guided, k));
+  assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
+});
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-38 Scheibe 8a — die Engine-Flaeche.
+ *
+ * **Die erste Scheibe ohne eine einzige Ausnahme.** Diese Datei traegt keinen Rohwert; alle Farben
+ * kommen aus `T`. Deshalb steht hier keine Ausnahme-Verriegelung — es gibt nichts zu verriegeln,
+ * und eine leere Liste als Zusage waere eine Zusage ueber nichts. **Stattdessen die schaerfere
+ * Aussage: es DARF keine Ausnahme geben**, und das faellt, sobald jemand einen Rohwert einfuehrt.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+const ENGINE = join(hier, '../app/EngineFlaeche.tsx');
+
+test('Scheibe 8a (Wirkung): in EngineFlaeche bleibt KEINE offene statische Stelle', () => {
+  const m = messeDatei(ENGINE);
+  assert.deepEqual(m.offen, [],
+    `offene statische Stellen — gehoeren in die Stilschicht: Z${m.offen.join(', Z')}`);
+});
+
+test('Scheibe 8a: die Zusage misst ueberhaupt etwas', () => {
+  const m = messeDatei(ENGINE);
+  assert.ok(m.gesamt >= 4, `nur ${m.gesamt} Stellen gefunden — das Werkzeug greift nicht`);
+});
+
+test('Scheibe 8a: die Datei traegt KEINEN Rohwert — und das bleibt so', () => {
+  // Die Umkehrung der Ausnahme-Zusage. Kommt ein Rohwert dazu, ist er entweder eine neue Ausnahme
+  // (dann gehoert sie benannt und verriegelt) oder ein Versehen — beides soll auffallen.
+  const m = messeDatei(ENGINE);
+  assert.equal(m.ausnahmen, 0, 'eine Ausnahme ist dazugekommen — sie braucht Namen und Verriegelung');
+  const farben = stilBloecke(readFileSync(ENGINE, 'utf8')).flatMap((b) => rohfarben(b.text));
+  assert.deepEqual(farben, [], `Rohfarben in EngineFlaeche: ${farben.join(', ')}`);
+});
+
+test('Scheibe 8a: jede angelegte Klasse wird auch benutzt — keine Regel ins Leere', () => {
+  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
+  const klassen = [...ohneKommentare.matchAll(/\.(hp-ef-[a-z0-9-]+)\s*\{/g)].map((m) => m[1]!);
+  assert.ok(klassen.length >= 20, `nur ${klassen.length} Scheibe-8a-Klassen in der CSS`);
+  const engine = readFileSync(ENGINE, 'utf8');
+  const unbenutzt = [...new Set(klassen)].filter((k) => !traegt(engine, k));
   assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
 });

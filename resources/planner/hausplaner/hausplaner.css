@@ -320,3 +320,44 @@
 .hp-gf-dehnt { flex: 1; }
 .hp-gf-zaehler { font-size: 13px; color: var(--hp-muted); }
 .hp-gf-weiter { border: 0; background: var(--hp-brand); color: var(--hp-surface); font-weight: 600; font-size: 14px; padding: 11px 26px; border-radius: 12px; cursor: pointer; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-38 Scheibe 8a — die Engine-Flaeche (`EngineFlaeche.tsx`).
+ *
+ * **Gemessen:** 29 Stellen · 25 statisch · **0 Ausnahmen** · 25 offen. **Die erste Scheibe ohne
+ * eine einzige Ausnahme** — diese Datei traegt keinen einzigen Rohwert; alle Farben kommen aus `T`.
+ *
+ * **22 Klassen fuer 25 Stellen:** drei Bloecke stehen doppelt — die Spalten-Huelle, die
+ * Rubrik-Ueberschrift und das Eingabefeld (Auswahl und Zahl tragen denselben Stil).
+ *
+ * **Was inline bleibt, weil es Zustand traegt:** der Berechnen-Knopf (`fehlt.length > 0` schaltet
+ * auf den Sperrstil aus dem Ein-Wahrheit-Modul), die Bestanden-Plakette (`ergebnis.bestanden`) und
+ * das Pruefzeichen (`T[a.token]` — der Token kommt aus dem Schweregrad).
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+.hp-ef-grundlage { margin: 12px 24px 0; font-size: 12px; color: var(--hp-faint); overflow-wrap: anywhere; }
+.hp-ef-raster { padding: 18px 24px 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+.hp-ef-spalte { min-width: 0; }
+.hp-ef-rubrik { font-size: 11.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--hp-faint); margin: 0 0 10px; }
+.hp-ef-rubrik-eng { font-size: 11.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--hp-faint); margin: 0 0 8px; }
+
+/* Eingabespalte. */
+.hp-ef-felder { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.hp-ef-feld { display: block; min-width: 0; }
+.hp-ef-feldkopf { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; font-size: 12.5px; margin-bottom: 5px; overflow-wrap: anywhere; }
+.hp-ef-label { color: var(--hp-ink); }
+.hp-ef-einheit { color: var(--hp-faint); }
+.hp-ef-pflicht { color: var(--hp-muted); font-size: 11px; }
+.hp-ef-eingabe { width: 100%; box-sizing: border-box; font-size: 13px; padding: 7px 9px; border-radius: 9px; border: 1px solid var(--hp-control-border); background: var(--hp-surface); color: var(--hp-ink); }
+.hp-ef-feldhinweis { display: block; margin-top: 4px; font-size: 11.5px; color: var(--hp-faint); line-height: 1.35; overflow-wrap: anywhere; }
+.hp-ef-fehlt { margin-top: 8px; font-size: 12px; color: var(--hp-muted); overflow-wrap: anywhere; }
+
+/* Ergebnisspalte. */
+.hp-ef-leer { font-size: 12.5px; color: var(--hp-muted); line-height: 1.45; background: var(--hp-hair2); border: 1px solid var(--hp-hair); border-radius: 12px; padding: 11px 14px; }
+.hp-ef-werte { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+.hp-ef-wertzeile { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; font-size: 13px; }
+.hp-ef-wertlabel { flex: 1 1 140px; min-width: 0; color: var(--hp-muted); overflow-wrap: anywhere; }
+.hp-ef-wert { font-weight: 700; color: var(--hp-ink); font-variant-numeric: tabular-nums; }
+.hp-ef-werteinheit { color: var(--hp-faint); font-size: 11.5px; }
+.hp-ef-pruefungen { display: flex; flex-direction: column; gap: 6px; }
+.hp-ef-pruefzeile { display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; line-height: 1.4; }
