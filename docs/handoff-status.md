@@ -17488,3 +17488,172 @@ in Scheibe 6.
 
 **Status nach §2: `BERICHTET`.** Nach dem Restschnitt folgen **8b** (`GeschossFlaeche`, 14) und
 **8c** (die vier Kleinen, 14).
+
+---
+
+## ⇒ EVALUATOR — AUF-38 Scheibe 8a (EngineFlaeche, `3c3b4657`): **FREIGABE MIT REST** (29.07., 08:04 CEST)
+
+`EngineFlaeche.tsx` ist seit `3c3b4657` unverändert. Gemessen 07:59–08:04.
+
+**K1 Zahlen: ERFÜLLT.** `29/25/0/25 → 4/0/0/0`, Insel `249 → 224` gesamt, `131 → 106` offen.
+Differenz **genau 25**.
+**K2 22 Klassen: ERFÜLLT.** Die 22 im Commit neu angelegten `.hp-ef-*` und die 22 Vorkommen in der
+TSX sind **dieselbe Menge** (`comm -3` leer).
+**K3 keine Ausnahme: ERFÜLLT** — und die schärfere Zusageform ist die richtige Wahl. Gegen-Beweis:
+Rohwert eingeschleust ⇒ rot, *„die Datei trägt KEINEN Rohwert — und das bleibt so"*.
+**K4 gebaute CSS: ERFÜLLT**, 0 Rohfarben.
+**K5 Gates selbst: ERFÜLLT.** `test` **1336/0** · `tsc` 0 · `schema` 0 · `dom` 11/0 · Bündel im
+selben Commit (§8) · Baum sauber.
+**K6 Gegen-Beweise: ERFÜLLT.** Kontrolllauf **42/42**. Stelle wieder inline ⇒ **2 rot** (nicht eine).
+
+**Seine selbst gemeldete Zusagen-Schwäche habe ich in der Form des Fehlers nachgestellt**, nicht in
+Worten geprüft: eine trägerlose Regel `.hp-ef-grundla` angelegt, die **Präfix** der benutzten
+`hp-ef-grundlage` ist. ⇒ **rot.** Mit dem alten `includes` wäre sie grün geblieben.
+
+**Und ich habe geprüft, was er nur behauptet: dass die Verschärfung Scheibe 5 und 6 mitzieht** —
+beide habe ich freigegeben, also ist es meine Sache:
+
+```text
+.hp-kw-vorschau-ma   (Praefix von hp-kw-vorschau-marke)     => Scheibe 5 rot
+.hp-gf-empfehlung-kic (Praefix von hp-gf-empfehlung-kicker)  => Scheibe 6 rot
+```
+
+Beide Zusagen sind heute schärfer als zum Zeitpunkt meiner Freigaben. *Meine damaligen Voten stehen
+trotzdem: ich hatte K2 über den **Mengenvergleich** geprüft, nicht über `includes` — der hätte die
+Präfix-Klasse als CSS-only ausgewiesen. Nicht als Verdienst, sondern weil es erklärt, warum die
+Lücke die Voten nicht berührt.*
+
+### Der offene Rest: K9 — ich habe die Fläche nicht aufbekommen
+
+`EngineFlaeche` hängt an der **Fachplaner-Schiene von `HausplanerApp`** (`onEngine → setOffeneEngine`),
+nicht an der Studio-Fläche. Ich habe Expertenmodus geöffnet, die vier Gruppenreiter und acht
+Fähigkeitsnamen durchprobiert — **hp-ef-Elemente im DOM: 0.** Ich habe nach mehreren Versuchen
+aufgehört, statt weiterzuraten.
+
+**Was ich stattdessen belegen kann:** das ausgelieferte Bündel trägt die Klassen — vom Server geholt
+**15 562 B**, darin **22 von 22** `hp-ef-`Klassen, Mengenvergleich gegen die Quell-CSS leer. Mit
+frischem Stylesheet-Verweis lädt der Browser **alle 22 Regeln**. Was fehlt, ist der Nachweis, dass
+sie an der echten Fläche greifen.
+**Bitte an den Planner:** den Auslöser benennen, wie bei Scheibe 4 der Toast. Dann fahre ich K9 nach.
+
+### Und der eigentliche Fund dieser Runde — er betrifft nicht nur 8a
+
+Bei der Sichtprobe stand im Dokument **`hp-ef-Regeln: 0`**, obwohl der Server sie liefert. Ursache
+gemessen, nicht vermutet:
+
+```text
+vom Server geholt (no-store):   15 562 B, 22 hp-ef-Klassen
+im Dokument geladene Regeln:     0
+nach frischem Verweis (?frisch): 22
+Verweis im Blade:                asset('hausplaner/hausplaner.css')  — OHNE Versionskennung
+```
+
+**Beide Blades binden `hausplaner.css` und `hausplaner.js` unter unveränderlichen Namen ein, ohne
+`?v=`, ohne Manifest-Hash.** Ein Browser mit warmem Cache bekommt nach einem Deploy die **alte CSS
+zur neuen JS** — und die beiden werden unabhängig voneinander gecacht.
+
+**Warum das gerade jetzt zählt:** vor AUF-38 standen die Stile inline **in der JS**. Eine veraltete
+CSS konnte das Aussehen nicht kaputtmachen, weil kaum Aussehen darin lag. **AUF-38 verlagert genau
+das in eine separat gecachte Datei** — je weiter die Scheiben kommen, desto mehr Oberfläche hängt an
+ihr. Heute sind es 224 → 106 offene Stellen; am Ende hängt praktisch die ganze Insel daran.
+**Am Deploy-Tag ist das ein Bild wie „ohne Stylesheet".**
+
+**Das ist kein Befund gegen Scheibe 8a** — der Bau ist sauber. Es ist ein Befund gegen die
+Auslieferung, und er wächst mit jeder abgenommenen Scheibe. **Zur Planner-Entscheidung, nicht von
+mir gebaut** (`AUF38-MW-8` oder eigener Posten): Versionskennung an beide `asset()`-Aufrufe, z. B.
+über `filemtime`. *Gefunden habe ich es, weil meine eigene Messung darauf hereingefallen ist — und
+das ist der Punkt: wenn es mich täuscht, während ich hinsehe, täuscht es einen Nutzer erst recht.*
+
+**Gesamtvotum: `FREIGABE MIT REST`.** Rest ist ausschließlich K9 (Sichtprobe an der echten Fläche),
+ausdrücklich benannt, kein P0/P1-Befund offen. Ballbesitz: Planner. Als Nächstes ziehe ich **B-01**.
+Kein Commit durch mich, kein Push, kein Tor 2.
+
+## 2026-07-29, 08:07 CEST — GENERATOR: AUF-38 Scheibe 8b (GeschossFlaeche) — beide Schreibweisen, 0 offen
+
+**Commit:** `a022452f` — 5 Dateien, Bündel im selben Commit (§8).
+
+```text
+QUITTUNG — AUF-38 Scheibe 8b
+Grundgesamtheit selbst gemessen:  19 gesamt · 14 statisch · 0 Ausnahmen · 14 offen
+Auflage „beide Schreibweisen":    plus `knopfStil` als style={bezeichner}, an ZWEI Knoepfen
+Geerbte Zusagen:                  KEINE (ueber alle Eigenschaftsnamen geprueft)
+Ergebnis:                         TRAEGT
+```
+
+### Die Zahlen
+
+```text
+Vorher:   19 gesamt · 14 statisch · 0 Ausnahme · 14 offen   + 2x style={bezeichner}
+Nachher:   5 gesamt ·  0 statisch · 0 Ausnahme ·  0 offen   + 0x style={bezeichner}
+Insel:    224 -> 210 Stellen, 106 -> 92 offen
+```
+
+### Die zweite Schreibweise braucht eine eigene Zusage — an der Gegenprobe belegt
+
+Das ist der Kern dieser Scheibe, und die Gegenprobe zeigt ihn schärfer als jede Erklärung:
+
+```text
+Gegenprobe A  eine style={{-Stelle zurueckgedreht   =>  2 rot
+Gegenprobe B  style={knopfStil} zurueckgedreht      =>  2 rot
+              ABER: die WIRKUNGS-Zusage bleibt in B GRUEN
+```
+
+**In Probe B meldet `messeDatei` weiterhin `0 offen`** — das Werkzeug sieht die zweite Schreibweise
+nicht. Nur die eigene Zusage fängt sie. **Genau das ist `AUF38-MW-7`:** eine Null aus dem Werkzeug
+allein hätte hier zwei Stellen verschwiegen. Der Planner hat es als Annahme benannt und der
+Evaluator mit der Zahl versehen; hier ist es an einer echten Umstellung nachgewiesen.
+
+### `knopfStil` bleibt — mit Grund, und der Grund ist testverriegelt
+
+Die Konstante wird an **drei weiteren Stellen per Spread** gemischt (`{ ...knopfStil, … }`). Diese
+Blöcke sind nach der Definition **dynamisch** und gehören nicht zu dieser Scheibe. Die Zusage hält
+das fest: **fällt die letzte Spread-Verwendung weg, ist die Konstante tot und gehört gelöscht** —
+dann geht der Test rot und meldet es, statt sie still liegen zu lassen.
+
+**0 Ausnahmen** — auch diese Datei trägt keinen Rohwert.
+
+### Gates — selbst gemessen
+
+```text
+Befehl:      npm run test:hausplaner            Exit 0   Tests 1341   Fehler 0   (vorher 1336)
+Befehl:      npm run test:hausplaner:dom        Exit 0   Tests   11   Fehler 0
+Befehl:      npm run tsc:hausplaner             Exit 0
+Befehl:      npm run schema:hausplaner:check    Exit 0
+Befehl:      npm run build:hausplaner           Exit 0
+Befehl:      php artisan test                   Exit 0   Tests  789   (2729 Zusicherungen)
+K4:          0 Rohfarben in der gebauten CSS
+```
+
+### K9 ist nicht erfüllt und wird nicht so gemeldet
+
+Das Geschoss-Menü erscheint nur unter Zustand (`offen`). **Auslöser benannt:** der Geschoss-Knopf in
+der Leiste. Es ist ein `role="dialog"` — ein Standard-Screenshot zeigt es nie.
+
+**Status nach §2: `BERICHTET`.** Nach dem Restschnitt bleibt **8c** (die vier Kleinen, zusammen
+14 Stellen: `WerkzeugGruppenMenue` 8 · `FaehigkeitenNavi` 3 · `DreiDBereich` 2 · `ReiterLeiste` 1).
+
+### Nachtrag an den Evaluator — der Auslöser für die K9 zu Scheibe 8a
+
+Du hast die Fläche nicht aufbekommen und um den Auslöser gebeten. **Gemessen im Code, nicht geraten:**
+
+```text
+HausplanerApp.tsx:1432   {schienenTab === 'fachplaner' && <FaehigkeitenNavi … />}
+HausplanerApp.tsx:1436   onEngine={(id) => setOffeneEngine(id)}
+HausplanerApp.tsx:2294   {offeneEngine && enginePanel(offeneEngine) && ( <EngineFlaeche … /> )}
+```
+
+**Drei Schritte:** linke Schiene → Reiter **„Fachplaner"** → im `FaehigkeitenNavi` einen Eintrag
+wählen, **der eine Engine trägt**. Der dritte Schritt ist die Falle: `EngineFlaeche` erscheint
+**nur**, wenn `enginePanel(id)` ein Panel liefert. Trägt der Eintrag keine Engine, passiert nichts —
+*„Unbekannte Engine ⇒ nichts, kein Wurf"*, so steht es im Code.
+
+**Acht IDs liefern ein Panel:** `engine-abwasser` · `engine-fbh` · `engine-fensterprodukt` ·
+`engine-heizkoerper` · `engine-kueche` · `engine-pv` · `engine-sparren` · `engine-treppe`.
+
+**Für die vier Zustandsflächen darin:** der Feldhinweis und die Fehlt-Meldung erscheinen ohne
+Eingabe (Pflichtfelder leer ⇒ *„Es fehlt: …"*); Plakette und Prüfliste erst nach **„Berechnen"**,
+und **nur bei Engines, die ein Bestehens-Merkmal liefern** — `engine-sparren` und `engine-treppe`
+tun das, `engine-pv` und `engine-fensterprodukt` rechnen nur Werte aus. *Das ist Absicht aus
+AUF-52 Scheibe C, keine Lücke.*
+
+Ich liefere den Weg, nicht das Urteil — gefahren wird die Sichtprobe von dir.
