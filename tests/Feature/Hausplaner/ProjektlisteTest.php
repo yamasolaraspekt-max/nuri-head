@@ -122,8 +122,49 @@ class ProjektlisteTest extends TestCase
             $this->assertSame(['id', 'name', 'ort', 'datum', 'adresse'], array_keys($eintrag),
                 'mehr Felder als die Flaeche anzeigt — jedes zusaetzliche ist eine moegliche Leckage');
         }
-        // Der Kundenname steht in der Datenbank und darf die Seite nicht erreichen.
-        $antwort->assertDontSee('GEHEIM', false);
+        // **Der Kundenname darf die INSEL nicht erreichen.**
+        //
+        // **Präzisiert in AUF-83-T1b, nicht abgeschwächt.** Vorher stand hier
+        // `$antwort->assertDontSee(...)` über die **ganze Seite**. Das war deckungsgleich mit „die
+        // Insel", **solange die Insel ein eigenes HTML-Dokument war** — die Seite *war* die Insel.
+        // Seit T1b erbt sie die Ticket-Shell, und die trägt ein eigenes Kundenauswahlfeld
+        // (`activity.blade.php`, auf **jeder** Admin-Seite; eigener Posten AUF-84).
+        //
+        // **Die Absicht dieser Zusage steht in ihrem eigenen Docblock:** *„jedes zusätzliche Feld
+        // ist eine mögliche Leckage … die Zahl war nie das Kriterium, die Notwendigkeit war es."*
+        // **Sie schützt das Bündel, nicht das Dokument.** Geprüft wird deshalb der Teilbaum
+        // `#hausplaner-root` samt seiner `data-*`-Attribute — genau das, was die Insel bekommt.
+        $this->assertStringNotContainsString('GEHEIM', $this->inselTeilbaum($antwort->getContent()),
+            'ein Kundenname ist in das Buendel der Insel geraten');
+    }
+
+    /**
+     * Der Teilbaum, den die Insel wirklich bekommt: `#hausplaner-root` mit allen `data-*`-Attributen
+     * **und** die eingebettete Szene daneben.
+     *
+     * **Warum DOM und nicht Regex:** verschachtelte `<div>` lassen sich mit einem Ausdruck nicht
+     * verlässlich abgrenzen, und eine Zusage, die am falschen Ende abschneidet, prüft weniger als
+     * sie behauptet — dieselbe Klasse wie die Klammerzählung in `statische-inline-stile.mjs`.
+     */
+    private function inselTeilbaum(string $html): string
+    {
+        $doc = new \DOMDocument();
+        $vorher = libxml_use_internal_errors(true);
+        $doc->loadHTML('<?xml encoding="UTF-8">' . $html);
+        libxml_clear_errors();
+        libxml_use_internal_errors($vorher);
+
+        $wurzel = $doc->getElementById('hausplaner-root');
+        $this->assertNotNull($wurzel, '#hausplaner-root nicht gefunden — dann prueft diese Zusage nichts');
+        $teilbaum = (string) $doc->saveHTML($wurzel);
+
+        // Die Szene liegt als Geschwister-Element daneben und gehoert zum Buendel.
+        $szene = $doc->getElementById('hausplaner-scene');
+        if ($szene !== null) {
+            $teilbaum .= (string) $doc->saveHTML($szene);
+        }
+
+        return $teilbaum;
     }
 
     // --- AUF-66 K2: jeder Eintrag traegt die Adresse SEINES Objekts -------------------------------
