@@ -22,9 +22,14 @@ const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '')
 const lies = (p: string): string => ohneKommentare(readFileSync(join(hier, '../app/', p), 'utf8'));
 
 test('die geführte Planung hat KEINE feste zweite Spalte mehr — das war die tote Schaltfläche', () => {
-  const guided = lies('GuidedView.tsx');
-  assert.doesNotMatch(guided, /gridTemplateColumns: '1fr 320px'/, 'die feste Spalte ist zurück');
-  assert.match(guided, /gridTemplateColumns: 'repeat\(auto-fit, minmax\(280px, 1fr\)\)'/);
+  // **Nachgezogen in AUF-38 Scheibe 6.** Die Regel stand als Inline-Stil und steht jetzt als
+  // `.hp-gf-board` in `hausplaner.css`. **Die Absicht ist unveraendert:** so viele Spalten, wie
+  // passen — bei 390 px stapeln statt ueberlagern, sonst faengt das `aside` die Zeigerereignisse
+  // ab und wird zur toten Schaltflaeche. Geprueft wird die **Eigenschaft dort, wo sie wohnt.**
+  const beides = lies('GuidedView.tsx')
+    + readFileSync(new URL('../hausplaner.css', import.meta.url), 'utf8');
+  assert.doesNotMatch(beides, /1fr 320px/, 'die feste Spalte ist zurück');
+  assert.match(beides, /repeat\(auto-fit, ?minmax\(280px, ?1fr\)\)/);
 });
 
 test('der Konfigurator ebenso — dieselbe Ursache, dieselbe Behebung', () => {

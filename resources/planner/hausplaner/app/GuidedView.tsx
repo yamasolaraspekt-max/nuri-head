@@ -32,13 +32,13 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
   const n = STEPS.length;
 
   return (
-    <div style={{ maxWidth: 1180, margin: '0 auto', padding: '14px 30px 30px', minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div className="hp-gf-wrap">
       {/* AUF-46: Die zweite Spalte war mit `1fr 320px` fest. Bei 390 px passte `1fr + 320 + Lücke`
           nicht mehr; das Aufgaben-`aside` legte sich über den Inhalt und fing die Zeigerereignisse
           ab — eine sichtbare, aber tote Schaltfläche. `auto-fit` stapelt die Spalten stattdessen
           untereinander, sobald der Platz fehlt. */}
       {/* Stepper */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, overflow: 'auto', padding: '12px 4px 20px' }}>
+      <div className="hp-gf-stepper">
         {STEPS.map((st, i) => {
           const aktiv = i === schritt;
           const rn = st.status === 'ok' ? T.ok : (st.status === 'warn' && !aktiv ? T.warn : (aktiv ? T.accent : T.surface));
@@ -54,28 +54,28 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
                 <span style={{ width: 30, height: 30, borderRadius: '50%', background: rn, color: rnInk, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 13, boxShadow: T.schattenFlach }}>{sym}</span>
                 <span style={{ fontSize: 13, fontWeight: 600, color: aktiv ? T.ink : T.muted, whiteSpace: 'nowrap' }}>{st.titel}</span>
               </div>
-              {i < n - 1 && <span style={{ width: 26, height: 2, background: T.hair, borderRadius: 2, margin: '0 2px', flex: '0 0 auto' }} />}
+              {i < n - 1 && <span className="hp-gf-strich" />}
             </React.Fragment>
           );
         })}
       </div>
 
       {/* Board: Fokus + Seitenpanel */}
-      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, minHeight: 0 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
-          <div style={{ background: T.surface, borderRadius: 22, padding: '26px 28px', boxShadow: T.schattenFlach }}>
-            <div style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: T.accent }}>Schritt {schritt + 1} von {n}</div>
-            <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-.01em', margin: '6px 0 4px' }}>{s.titel}</div>
-            <div style={{ color: T.muted, fontSize: 14.5 }}>{s.hinweis}</div>
+      <div className="hp-gf-board">
+        <div className="hp-gf-spalte">
+          <div className="hp-gf-karte">
+            <div className="hp-gf-kicker">Schritt {schritt + 1} von {n}</div>
+            <div className="hp-gf-titel">{s.titel}</div>
+            <div className="hp-gf-hinweis">{s.hinweis}</div>
             <div>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 12.5, fontWeight: 600, borderRadius: 999, padding: '6px 13px', marginTop: 14, background: badgeFarbe[s.status].bg, color: badgeFarbe[s.status].fg }}>{STATUS_LABEL[s.status]}</span>
-              <span style={{ marginLeft: 8, fontSize: 12, color: T.muted, fontVariantNumeric: 'tabular-nums' }}>Im Modell: {modell.geschosse} Geschoss{modell.geschosse === 1 ? '' : 'e'} · {modell.fenster} Fenster · {modell.tuer} Tür{modell.tuer === 1 ? '' : 'en'} · {modell.treppe} Treppe{modell.treppe === 1 ? '' : 'n'}</span>
+              <span className="hp-gf-modellzeile">Im Modell: {modell.geschosse} Geschoss{modell.geschosse === 1 ? '' : 'e'} · {modell.fenster} Fenster · {modell.tuer} Tür{modell.tuer === 1 ? '' : 'en'} · {modell.treppe} Treppe{modell.treppe === 1 ? '' : 'n'}</span>
             </div>
-            <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <div className="hp-gf-checks">
               {s.checks.map((c) => {
                 const cf = checkFarbe[c.status];
                 return (
-                  <div key={c.text} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '9px 0', fontSize: 14 }}>
+                  <div key={c.text} className="hp-gf-check">
                     <span style={{ width: 22, height: 22, borderRadius: '50%', flex: '0 0 auto', display: 'grid', placeItems: 'center', marginTop: 1, background: cf.bg, color: cf.fg, fontSize: 12, fontWeight: 700 }}>{cf.sym}</span>
                     <span style={{ color: c.status === 'open' ? T.faint : T.ink }}>{c.text}</span>
                   </div>
@@ -83,10 +83,10 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
               })}
             </div>
             {s.titel.includes('Türen') && (
-              <div style={{ display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap' }}>
+              <div className="hp-gf-knopfreihe">
                 {([['fenster', 'Fenster'], ['tuer', 'Tür'], ['treppe', 'Treppe']] as const).map(([a, l]) => (
                   <button key={a} type="button" onClick={() => onKonfigurator(a)}
-                    style={{ border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600, fontSize: 13, padding: '9px 16px', borderRadius: 11, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7 }}>
+                    className="hp-gf-knopf">
                     <Ikon inhalt='<rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 4v16M4 12h16"/>' size={15} />{l} konfigurieren
                   </button>
                 ))}
@@ -95,9 +95,9 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
           </div>
 
           {/* Fokus-Canvas (Muster-Grundriss) */}
-          <div style={{ flex: 1, minHeight: 280, background: T.surface, borderRadius: 22, boxShadow: T.schattenFlach, position: 'relative', overflow: 'hidden' }}>
+          <div className="hp-gf-buehne">
             <span style={{ position: 'absolute', top: 14, left: 16, fontSize: 12, color: T.muted, background: 'rgba(255,255,255,.7)', padding: '3px 10px', borderRadius: 8 }}>{schritt <= 2 ? 'Erdgeschoss · Grundriss · 1:50' : s.titel}</span>
-            <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} viewBox="0 0 640 360" preserveAspectRatio="xMidYMid meet">
+            <svg className="hp-gf-riss" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid meet">
               <g>
                 <polygon points="150,70 490,70 490,80 160,80" fill={T.canvasWallFill} />
                 <polygon points="150,70 160,80 160,270 150,280" fill={T.canvasWallFill} />
@@ -117,7 +117,7 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
         </div>
 
         {/* Seitenpanel: Aufgabe + Empfehlung + Erweiterte Bearbeitung */}
-        <aside style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <aside className="hp-gf-panel">
           {/* AUF-65: **Ist nichts zu sagen, wird geschwiegen** — dasselbe Muster wie beim Wegweiser
               (AUF-45). Vorher stand die Überschrift „Aufgabe" über nichts und nahm Platz; eine
               leere Überschrift sieht aus wie ein Ladefehler, nicht wie „nichts zu tun".
@@ -127,24 +127,24 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
               stillgelegten Demo-Konstante. Solange Aufgaben nicht abgeleitet werden, zeigt diese
               Fläche nichts an, statt eine leere Hülle zu zeigen. */}
           {s.aufgaben.length > 0 && (
-          <div style={{ background: T.surface, borderRadius: 22, padding: 20, boxShadow: T.schattenFlach }}>
-            <h4 style={{ margin: '0 0 12px', fontSize: 12.5, fontWeight: 700, letterSpacing: '.09em', textTransform: 'uppercase', color: T.faint }}>Aufgabe</h4>
+          <div className="hp-gf-panelkarte">
+            <h4 className="hp-gf-paneltitel">Aufgabe</h4>
             {s.aufgaben.map((a) => (
-              <div key={a.titel} style={{ display: 'flex', flexDirection: 'column', gap: 5, padding: '12px 0', borderBottom: `1px solid ${T.hair2}` }}>
+              <div key={a.titel} className="hp-gf-aufgabe">
                 <div style={{ fontSize: 13.5, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8, color: a.warn ? T.warnInk : T.ink }}>
                   {a.warn && <Ikon inhalt='<path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>' size={16} />}
                   {a.titel}
                 </div>
-                {a.detail && <div style={{ fontSize: 12.5, color: T.muted }}>{a.detail}</div>}
+                {a.detail && <div className="hp-gf-detail">{a.detail}</div>}
               </div>
             ))}
           </div>
           )}
           {s.empfehlung && (
-            <div style={{ background: T.accentSoft, borderRadius: 16, padding: 18 }}>
-              <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: T.accentInk }}>Nächste empfohlene Aktion</div>
+            <div className="hp-gf-empfehlung">
+              <div className="hp-gf-empfehlung-kicker">Nächste empfohlene Aktion</div>
               <div style={{ fontSize: 15, fontWeight: 700, margin: '6px 0 14px', color: '#0a4f4d' }}>{s.empfehlung.titel}</div>
-              <button type="button" onClick={() => (s.empfehlung?.cfg ? onKonfigurator('fenster') : undefined)} style={{ width: '100%', border: 0, background: T.accent, color: T.surface, fontWeight: 700, fontSize: 14, padding: 11, borderRadius: 11, cursor: 'pointer' }}>{s.empfehlung.aktion}</button>
+              <button type="button" onClick={() => (s.empfehlung?.cfg ? onKonfigurator('fenster') : undefined)} className="hp-gf-empfehlung-knopf">{s.empfehlung.aktion}</button>
             </div>
           )}
           <button type="button" onClick={onExperte} style={{ width: '100%', border: '1px dashed #d3dbdb', background: 'transparent', color: T.muted, fontWeight: 600, fontSize: 13, padding: 12, borderRadius: 12, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
@@ -154,11 +154,11 @@ export function GuidedView({ schritt, setSchritt, onExperte, onKonfigurator, mod
       </div>
 
       {/* Navigation */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '18px 2px 2px' }}>
-        <button type="button" onClick={() => setSchritt(Math.max(0, schritt - 1))} style={{ border: `1px solid ${T.hair}`, background: T.surface, color: T.ink, fontWeight: 600, fontSize: 14, padding: '11px 20px', borderRadius: 12, cursor: 'pointer', boxShadow: T.schattenFlach }}>Zurück</button>
-        <span style={{ flex: 1 }} />
-        <span style={{ fontSize: 13, color: T.muted }}>Schritt {schritt + 1} von {n}</span>
-        <button type="button" onClick={() => setSchritt(Math.min(n - 1, schritt + 1))} style={{ border: 0, background: T.brand, color: T.surface, fontWeight: 600, fontSize: 14, padding: '11px 26px', borderRadius: 12, cursor: 'pointer' }}>Weiter</button>
+      <div className="hp-gf-navi">
+        <button type="button" onClick={() => setSchritt(Math.max(0, schritt - 1))} className="hp-gf-zurueck">Zurück</button>
+        <span className="hp-gf-dehnt" />
+        <span className="hp-gf-zaehler">Schritt {schritt + 1} von {n}</span>
+        <button type="button" onClick={() => setSchritt(Math.min(n - 1, schritt + 1))} className="hp-gf-weiter">Weiter</button>
       </div>
     </div>
   );

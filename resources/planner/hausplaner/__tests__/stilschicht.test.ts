@@ -469,3 +469,73 @@ test('Scheibe 5: jede angelegte Klasse wird auch benutzt — keine Regel ins Lee
   const unbenutzt = [...new Set(klassen)].filter((k) => !quelltext.includes(k));
   assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
 });
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-38 Scheibe 6 — die gefuehrte Planung.
+ *
+ * **Die hoechste Ausnahmezahl aller Dateien: fuenf.** Der Auftrag verlangt sie **einzeln benannt
+ * und beidseitig verriegelt** — die generische Rohwert-Zusage allein reicht hier nicht, weil sie
+ * nur die eine Richtung faengt (*„Farbe bekommt einen Token"*). Die andere Richtung, *„die Stelle
+ * ist noch inline"*, steht hier.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+const GEFUEHRT = join(hier, '../app/GuidedView.tsx');
+
+test('Scheibe 6 (Wirkung): in GuidedView bleibt KEINE offene statische Stelle', () => {
+  const m = messeDatei(GEFUEHRT);
+  assert.deepEqual(m.offen, [],
+    `offene statische Stellen — gehoeren in die Stilschicht: Z${m.offen.join(', Z')}`);
+});
+
+test('Scheibe 6: die Zusage misst ueberhaupt etwas', () => {
+  // presence-Partner nach R2 — sonst waere die Zusage oben auch bei geloeschter Datei gruen.
+  const m = messeDatei(GEFUEHRT);
+  assert.ok(m.gesamt >= 12, `nur ${m.gesamt} Stellen gefunden — das Werkzeug greift nicht`);
+});
+
+/**
+ * **Die fuenf Ausnahmen, einzeln.** Jede Zeile nennt ihren Rohwert und ihren Grund. Faellt der
+ * Grund weg — bekommt die Farbe einen Token —, geht die Zusage rot und die Stelle gehoert in die
+ * Schicht. Das ist die Form, die AUF38-S4-1 und AUF38-NZ2-1 gefehlt hat.
+ */
+const GEFUEHRT_AUSNAHMEN: ReadonlyArray<[string, string]> = [
+  ['rgba(255,255,255,.7)', 'Massstab-Schild ueber der Buehne'],
+  ['rgba(20,30,34,.92)', 'Hinweisband am Fuss der Buehne'],
+  ['#eef3f2', 'Schrift des Hinweisbands'],
+  ['#7fd8d3', 'Symbol im Hinweisband'],
+  ['#0a4f4d', 'Titel der empfohlenen Aktion'],
+  ['#d3dbdb', 'gestrichelter Rahmen der erweiterten Bearbeitung'],
+];
+
+test('Scheibe 6: jede Ausnahme ist noch inline UND hat keinen Token', () => {
+  const guided = readFileSync(GEFUEHRT, 'utf8');
+  const werte = new Set<string>(Object.values(T).map((w) => String(w).toLowerCase()));
+  for (const [roh, grund] of GEFUEHRT_AUSNAHMEN) {
+    assert.ok(guided.includes(roh), `${roh} (${grund}) steht nicht mehr inline — Zusage nachfuehren`);
+    assert.ok(!werte.has(roh.toLowerCase()),
+      `${roh} (${grund}) hat inzwischen einen Token — dann gehoert die Stelle in die Stilschicht`);
+  }
+});
+
+test('Scheibe 6: es sind GENAU fuenf Ausnahme-Bloecke — keine sechste unbenannte', () => {
+  // **Die Mengenzusage.** Eine Liste findet nur, was jemand hineingeschrieben hat; diese Zusage
+  // faellt auch bei einer Ausnahme, die niemand gezaehlt hat.
+  const guided = readFileSync(GEFUEHRT, 'utf8');
+  const ausnahmen = stilBloecke(guided).filter((b) => istStatisch(b.text) && istAusnahme(b.text));
+  assert.equal(ausnahmen.length, 5, 'die Zahl der zugelassenen Ausnahme-Bloecke hat sich geaendert');
+  // Und jeder dieser Bloecke traegt mindestens einen der benannten Rohwerte — sonst ist eine
+  // Ausnahme durch eine andere ersetzt worden, und die Zahl allein haette es verdeckt.
+  for (const b of ausnahmen) {
+    const benannt = GEFUEHRT_AUSNAHMEN.some(([roh]) => b.text.includes(roh));
+    assert.ok(benannt, `Ausnahme in Z${b.zeile} traegt keinen der benannten Rohwerte`);
+  }
+});
+
+test('Scheibe 6: jede angelegte Klasse wird auch benutzt — keine Regel ins Leere', () => {
+  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
+  const klassen = [...ohneKommentare.matchAll(/\.(hp-gf-[a-z0-9-]+)\s*\{/g)].map((m) => m[1]!);
+  assert.ok(klassen.length >= 25, `nur ${klassen.length} Scheibe-6-Klassen in der CSS`);
+  const guided = readFileSync(GEFUEHRT, 'utf8');
+  const unbenutzt = [...new Set(klassen)].filter((k) => !guided.includes(k));
+  assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
+});

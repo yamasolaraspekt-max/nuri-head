@@ -263,3 +263,60 @@
 .hp-kw-knopfreihe { margin-left: auto; display: flex; gap: 10px; }
 .hp-kw-knopf-zurueck { border: 1px solid var(--hp-hair); background: var(--hp-surface); color: var(--hp-ink); font-weight: 600; font-size: 14px; padding: 11px 20px; border-radius: 12px; cursor: pointer; }
 .hp-kw-knopf-weiter { border: 0; background: var(--hp-brand); color: var(--hp-surface); font-weight: 700; font-size: 14px; padding: 11px 26px; border-radius: 12px; cursor: pointer; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-38 Scheibe 6 — die gefuehrte Planung (`GuidedView.tsx`).
+ *
+ * **Gemessen:** 41 Stellen · 34 statisch · **5 Ausnahmen** · **29 offen** — und diese 29 stehen
+ * hier. `GuidedView` traegt die hoechste Ausnahmezahl aller Dateien; sie sind einzeln benannt und
+ * beidseitig verriegelt, wie der Auftrag es verlangt.
+ *
+ * **Die fuenf Ausnahmen bleiben inline** — alle tragen Rohwerte ohne Token in `T`:
+ * das Massstab-Schild (`rgba(255,255,255,.7)`) · das Hinweisband (`rgba(20,30,34,.92)` + `#eef3f2`)
+ * · sein Symbol (`#7fd8d3`) · der Empfehlungstitel (`#0a4f4d`) · der Rahmen der erweiterten
+ * Bearbeitung (`#d3dbdb`). In die CSS geholt waeren es rohe Farbwerte und verletzten Kriterium 4.
+ *
+ * **Was inline bleibt, weil es Zustand traegt:** der Schritt-Punkt (`aktiv`), die Statusmarke
+ * (`badgeFarbe[s.status]`), das Pruefzeichen (`checkFarbe`), die Aufgabenzeile (`a.warn`).
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+/* Das Blatt und die Schrittleiste darueber. */
+.hp-gf-wrap { max-width: 1180px; margin: 0 auto; padding: 14px 30px 30px; min-height: 100%; display: flex; flex-direction: column; }
+.hp-gf-stepper { display: flex; align-items: center; gap: 6px; overflow: auto; padding: 12px 4px 20px; }
+.hp-gf-strich { width: 26px; height: 2px; background: var(--hp-hair); border-radius: 2px; margin: 0 2px; flex: 0 0 auto; }
+
+/* Die zwei Spalten. `auto-fit` stapelt sie, sobald der Platz fehlt (AUF-46). */
+.hp-gf-board { flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; min-height: 0; }
+.hp-gf-spalte { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+/* Die Schritt-Karte. */
+.hp-gf-karte { background: var(--hp-surface); border-radius: 22px; padding: 26px 28px; box-shadow: var(--hp-schatten-flach); }
+.hp-gf-kicker { font-size: 12.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--hp-accent); }
+.hp-gf-titel { font-size: 24px; font-weight: 800; letter-spacing: -.01em; margin: 6px 0 4px; }
+.hp-gf-hinweis { color: var(--hp-muted); font-size: 14.5px; }
+.hp-gf-modellzeile { margin-left: 8px; font-size: 12px; color: var(--hp-muted); font-variant-numeric: tabular-nums; }
+.hp-gf-checks { margin-top: 18px; display: flex; flex-direction: column; gap: 2px; }
+.hp-gf-check { display: flex; align-items: flex-start; gap: 12px; padding: 9px 0; font-size: 14px; }
+.hp-gf-knopfreihe { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.hp-gf-knopf { border: 1px solid var(--hp-hair); background: var(--hp-surface); color: var(--hp-ink); font-weight: 600; font-size: 13px; padding: 9px 16px; border-radius: 11px; cursor: pointer; display: flex; align-items: center; gap: 7px; }
+
+/* Die Buehne mit dem Muster-Grundriss. */
+.hp-gf-buehne { flex: 1; min-height: 280px; background: var(--hp-surface); border-radius: 22px; box-shadow: var(--hp-schatten-flach); position: relative; overflow: hidden; }
+.hp-gf-riss { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* Das Seitenpanel. */
+.hp-gf-panel { display: flex; flex-direction: column; gap: 16px; }
+.hp-gf-panelkarte { background: var(--hp-surface); border-radius: 22px; padding: 20px; box-shadow: var(--hp-schatten-flach); }
+.hp-gf-paneltitel { margin: 0 0 12px; font-size: 12.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--hp-faint); }
+.hp-gf-aufgabe { display: flex; flex-direction: column; gap: 5px; padding: 12px 0; border-bottom: 1px solid var(--hp-hair2); }
+.hp-gf-detail { font-size: 12.5px; color: var(--hp-muted); }
+.hp-gf-empfehlung { background: var(--hp-accent-soft); border-radius: 16px; padding: 18px; }
+.hp-gf-empfehlung-kicker { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--hp-accent-ink); }
+.hp-gf-empfehlung-knopf { width: 100%; border: 0; background: var(--hp-accent); color: var(--hp-surface); font-weight: 700; font-size: 14px; padding: 11px; border-radius: 11px; cursor: pointer; }
+
+/* Die Navigation am Fuss. */
+.hp-gf-navi { display: flex; align-items: center; gap: 14px; padding: 18px 2px 2px; }
+.hp-gf-zurueck { border: 1px solid var(--hp-hair); background: var(--hp-surface); color: var(--hp-ink); font-weight: 600; font-size: 14px; padding: 11px 20px; border-radius: 12px; cursor: pointer; box-shadow: var(--hp-schatten-flach); }
+.hp-gf-dehnt { flex: 1; }
+.hp-gf-zaehler { font-size: 13px; color: var(--hp-muted); }
+.hp-gf-weiter { border: 0; background: var(--hp-brand); color: var(--hp-surface); font-weight: 600; font-size: 14px; padding: 11px 26px; border-radius: 12px; cursor: pointer; }
