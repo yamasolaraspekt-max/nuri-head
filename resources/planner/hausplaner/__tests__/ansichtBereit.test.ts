@@ -51,8 +51,11 @@ test('die Breite wird an EINER Stelle bestimmt — kein zweiter Ort', () => {
   // **Die BUEHNENbreite**, nicht jede Groesse, die zufaellig `breite` heisst: in einem Handler
   // steht `const breite = vorlage.breite` fuer die Fensterbreite eines Bauteils. Mein erster
   // Anlauf zaehlte beide und meldete zwei Wahrheiten, wo eine ist.
-  const stellen = app.match(/const breite = \(typeof window/g) ?? [];
-  assert.equal(stellen.length, 1, `die Buehnenbreite wird an ${stellen.length} Stellen gerechnet`);
+  // **Nachgezogen in AUF-83-T1a:** die Buehnenbreite wird nicht mehr gerechnet, sondern gemessen
+  // (`buehnenBreite.ts`). **Die Aussage bleibt dieselbe** — sie wird an EINER Stelle bestimmt.
+  // Geprueft wird deshalb die Bestimmung, nicht die alte Formel.
+  const stellen = app.match(/const breite = buehnenBreite\(/g) ?? [];
+  assert.equal(stellen.length, 1, `die Buehnenbreite wird an ${stellen.length} Stellen bestimmt`);
   assert.equal((app.match(/const stageBreite = /g) ?? []).length, 1);
   // Und sie steht VOR der Faehigkeiten-Liste — sonst waere sie dort noch nicht bekannt.
   assert.ok(app.indexOf('const stageBreite = ') < app.indexOf('capabilities: ['),
@@ -126,8 +129,17 @@ test('die Hoehe wird bewusst nicht geprueft — sie kann gar nicht 0 werden', ()
 });
 
 test('der 3D-Modus sperrt die fuenf NICHT — dort ist die Leinwand versteckt, nicht kaputt', () => {
-  // `breite` haengt am Fenster, nicht am Modus. Waere die Bedingung an die sichtbare 2D-Leinwand
-  // gebunden, waeren die Messwerkzeuge in 3D faelschlich gesperrt.
-  assert.match(app, /const breite = \(typeof window/);
+  // `breite` haengt am **Behaelter**, nicht am Modus. Waere die Bedingung an die sichtbare
+  // 2D-Leinwand gebunden, waeren die Messwerkzeuge in 3D faelschlich gesperrt.
+  //
+  // **Nachgezogen in AUF-83-T1a:** frueher stand hier die Fensterrechnung als Beleg dafuer, dass
+  // die Breite modusunabhaengig ist. Seit T1a kommt sie aus der Messung der Inhaltsreihe — die
+  // ist es genauso. **Geprueft wird die Eigenschaft, nicht die Formel:** die Zeile, die `breite`
+  // bestimmt, darf `modus` nicht nennen.
+  const zeile = app.split('\n').find((z) => z.includes('const breite = buehnenBreite('));
+  assert.ok(zeile, 'die Bestimmung der Buehnenbreite ist fort');
+  assert.doesNotMatch(zeile, /modus/, 'die Breite darf nicht am Modus haengen');
+  assert.match(app, /const gemesseneBreite = useGemesseneBreite\(inhaltRef\)/,
+    'gemessen wird die Inhaltsreihe — sie steht in jedem Modus');
   assert.doesNotMatch(app, /modus === '3d' \? \[\] : \[FAEHIGKEIT_ANSICHT_BEREIT\]/);
 });

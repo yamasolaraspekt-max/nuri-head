@@ -45,8 +45,13 @@ test('B3: die Reiterzeile bricht um — sie kappt nicht', () => {
 });
 
 test('B3: das Eigenschaften-Panel bricht lange Wörter um, statt sie abzuschneiden', () => {
-  const panel = app.split('\n').find((l) => l.includes('width: 268,'));
-  assert.ok(panel, 'Panel-Container nicht gefunden');
+  // **Nachgezogen in AUF-83-T1a.** Die Zeile wurde bisher über die **Zahl** `width: 268,` gesucht.
+  // Seit T1a ist diese Zahl keine tragende Größe mehr: die Bühnenbreite wird gemessen, nicht aus
+  // ihr gerechnet. **Eine Zusage, die an einer Zahl hängt, die niemand mehr braucht, fällt beim
+  // nächsten Aufräumen mit „Panel-Container nicht gefunden" — ohne dass ein Fehler vorliegt.**
+  // Gesucht wird deshalb über das, was das Panel *ist*: eine Schiene mit linker Trennlinie.
+  const panel = app.split('\n').find((l) => l.includes('data-schiene') && l.includes('borderLeft'));
+  assert.ok(panel, 'Eigenschaften-Panel nicht gefunden — trägt es seine Schienen-Markierung nicht mehr?');
   assert.match(panel, /overflowWrap: 'anywhere'/, 'sonst bricht der Hinweistext mitten im Wort ab');
   assert.match(panel, /boxSizing: 'border-box'/, 'Padding darf die 268 px nicht sprengen');
 });

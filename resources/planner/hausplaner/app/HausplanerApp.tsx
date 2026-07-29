@@ -30,6 +30,7 @@ import { GeschossFlaeche } from './dashboard/GeschossFlaeche';
 import { panAus, type Pan } from './dashboard/pan';
 import { einpassen, knotenPunkte } from './dashboard/einpassen';
 import { buehnenHoehe, useGemesseneHoehe } from './dashboard/buehnenHoehe';
+import { buehnenBreite, useGemesseneBreite } from './dashboard/buehnenBreite';
 import { GESPERRT_DECKKRAFT, GESPERRT_ZEIGER, GESPERRT_GRUND, GESPERRT_BESCHRIFTUNG } from './dashboard/gesperrtStil';
 import { opKnopfBild, type OpKnopfBild } from './dashboard/opKnopfZustand';
 import { speicherAnzeige, type AnzeigeArt } from './dashboard/speicherAnzeige';
@@ -366,7 +367,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * braucht. Vorher stand sie 600 Zeilen tiefer; die Rechnung ist **unverändert**, nur ihr Ort.
    * *Eine Wahrheit: die Breite wird an einer Stelle bestimmt, nicht zweimal.*
    */
-  const breite = (typeof window !== 'undefined' ? window.innerWidth : 1200) - 220 - 268; // minus Werkzeugleiste + Panel
+  const gemesseneBreite = useGemesseneBreite(inhaltRef);
+  const breite = buehnenBreite(gemesseneBreite);
   const stageBreite = modus === 'split' ? Math.floor(breite / 2) : breite; // P1c: Split teilt die Fläche
 
   const level = scene?.levels.find((l) => l.id === activeLevelId) ?? scene?.levels[0] ?? null;
@@ -1177,7 +1179,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   }
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', color: FARBEN.text, height: imStudio ? '100%' : '100vh', display: 'flex', flexDirection: 'column', background: T.bg }}>
+    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', color: FARBEN.text, height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
       {/* Werkzeugleiste — neutral, Marke nur für Primäraktion */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: T.surface, borderBottom: `1px solid ${T.hair}` }}>
         {!imStudio && (
@@ -1368,7 +1370,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             `overflow` sitzt am Inhaltsbereich, NICHT mehr an dieser Spalte.
             Die Reiterleiste ist die gemeinsame `ReiterLeiste` (dasselbe Muster wie im
             Eigenschaften-Panel, AUF-19) — kein zweiter Tab-Mechanismus. */}
-        <div style={{ width: 220, flex: '0 0 auto', background: T.surface, borderRight: `1px solid ${T.hair}`, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div data-schiene style={{ width: 220, flex: '0 0 auto', background: T.surface, borderRight: `1px solid ${T.hair}`, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <ReiterLeiste
             reiter={SCHIENEN_REITER}
             aktiv={schienenTab}
@@ -1438,8 +1440,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           )}
 
           {/* Dashboard v2.3 (§32 / UI-8): Projektbrowser — seit AUF-27 ein eigener REITER derselben
-              220-px-Schiene, keine neue Spalte. Damit bleibt die Flächenrechnung
-              (innerWidth − 220 − 268) unberührt, und er ist ohne Scrollen erreichbar.
+              220-px-Schiene, keine neue Spalte. Damit wächst die Schiene nicht, und die Bühne
+              behält ihren Platz — seit AUF-83-T1a wird der ohnehin gemessen (`buehnenBreite.ts`)
+              statt aus Fensterkonstanten gerechnet. Er ist ohne Scrollen erreichbar.
               Inhalt kommt als DATEN aus `projektBaum` (rein, getestet); das Markup bleibt dünn.
               Bewusst KEINE eigene, im Rumpf definierte Komponente (Befund B1 aus dem Batch-1-Votum):
               die Einträge sind fokussierbare Knöpfe und dürften sonst bei jedem Render neu montiert
@@ -1793,7 +1796,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         {/* Rechtes Eigenschaften-Panel (immer sichtbar; Dach-Parameter oder Kontext) */}
         {/* AUF-26/B3: `overflowWrap` + `boxSizing` — Text bricht um, statt im Wort abgeschnitten zu
             werden. Ein Hinweis, der bei „…brauch" endet, ist kein Hinweis. */}
-        <div style={{ width: 268, flex: '0 0 auto', background: T.surface, borderLeft: `1px solid ${T.hair}`, padding: 14, overflowY: 'auto', overflowWrap: 'anywhere', boxSizing: 'border-box', fontSize: 12.5, color: FARBEN.text }}>
+        <div data-schiene style={{ width: 268, flex: '0 0 auto', background: T.surface, borderLeft: `1px solid ${T.hair}`, padding: 14, overflowY: 'auto', overflowWrap: 'anywhere', boxSizing: 'border-box', fontSize: 12.5, color: FARBEN.text }}>
           <div style={{ fontWeight: 800, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '.04em', color: FARBEN.gedaempft, marginBottom: 8 }}>Eigenschaften</div>
           {/* Dashboard v2.2 (§20 / UI-5): Reiter aus PANEL_TABS (Daten, nicht Markup). Seit AUF-27
               rendert sie die gemeinsame `ReiterLeiste` — dieselbe Verdrahtung wie die Schiene,
