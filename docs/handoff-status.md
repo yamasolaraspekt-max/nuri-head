@@ -18337,3 +18337,91 @@ anders aus, ist das der Befund.
 beiseitegelegt (`.git/_locks_beiseite/`), nicht gelöscht. Vierter Rest heute.*
 
 **Status nach §2: `BERICHTET`.**
+
+
+---
+
+## 2026-07-29, 10:00 CEST — PLANNER: T1a eingeordnet, R9 greift zum vierten Mal, und die Barriere ist seine
+
+*Zeit unmittelbar vor dem Schreiben gemessen. Letzter fremder Commit `41588e8f`, 09:59.*
+
+**AUF-83-T1a ist `BERICHTET`** (`97a2e2a4`, 6 Dateien, Buendel im selben Commit). Tests 1345 auf
+**1355**. **Ballbesitz Evaluator.**
+
+### Der Bau ist besser als der Auftrag
+
+Ich hatte `buehnenBreite.ts` nach dem Vorbild von `buehnenHoehe.ts` verlangt. **Er hat den Gedanken
+weitergefuehrt, und zwar an genau der Stelle, an der mein Auftrag zu kurz gedacht war:**
+
+**Die Schienen melden sich ueber `data-schiene` selbst, statt gezaehlt zu werden.** Mein Auftrag
+haette eine Liste der Panelbreiten zugelassen — und **eine Liste waere beim ersten neuen Panel
+falsch.** Das ist dieselbe Falle, aus der die `220` und die `268` ueberhaupt entstanden sind, nur
+eine Ebene hoeher. *Wer eine Konstante durch eine Liste von Konstanten ersetzt, hat nichts geloest.*
+
+**Und er haengt den Beobachter zusaetzlich an die Schienen einzeln.** Begruendung aus seinem
+Bericht: klappt eine zu, aendert sich **nicht die Reihe, sondern nur die Schiene**. **Das ist die
+Vorbedingung fuer T5 — mitgeliefert, ohne dass sie beauftragt war**, und ohne den Umfang zu
+sprengen: es ist dieselbe Datei, dasselbe Modul, kein zweiter Posten.
+
+### R9 greift — und die Barriere kommt von ihm
+
+Er legt offen, dass seine Quittung **zwei geerbte Zusagen uebersehen** hatte. Sie stehen in
+`ansichtBereit.test.ts` und haengen an der **Gestalt der Formel**:
+
+```text
+const stellen = app.match(/const breite = \(typeof window/g)
+assert.match(app, /const breite = \(typeof window/)
+```
+
+**Diese Regex enthaelt weder `innerWidth` noch `220` noch `268`** — sein Griff konnte sie nicht
+finden. Gefunden hat sie die volle Suite, nicht die Quittung.
+
+**Seine eigene Zusammenfassung ist die genaueste Beschreibung der Fehlerklasse, die wir haben:**
+
+> *„Erst suchte ich nach den Woertern `style`/`inline` und uebersah Zusagen, die nur die Eigenschaft
+> nennen. Dann nach Eigenschaftsnamen und uebersah Zusagen, die ueber Variablen lesen. Jetzt nach
+> Zahlen und uebersehe Zusagen, die den Ausdruck zitieren.“*
+
+**Das ist die dritte Auspraegung, und jedes Mal war die Antwort ein besseres Suchmuster.**
+Genau davor warnt R9: *bei der zweiten Wiederholung eine technische Barriere, keinen dritten
+Vorsatz.* Ich habe zweimal das Muster praezisiert — **einmal zu oft.**
+
+**BARRIERE, ab sofort, und sie ist seine Antwort:** die Quittung nennt **nicht** die Treffer eines
+Musters, sondern **die Liste der Testdateien, die die betroffene Datei EINLESEN**. Fuer
+`HausplanerApp.tsx` sind das **22 Dateien** (selbst nachgemessen: `grep -rl HausplanerApp
+__tests__/ | wc -l` = 22; seine Quittung nannte 21 — auch diese Zahl war ein Muster-Ergebnis).
+
+**Warum das eine Barriere ist und kein Vorsatz:** die Menge ist mechanisch bestimmt und
+vollstaendig. Sie haengt nicht daran, ob jemand das richtige Wort waehlt. **Was sie kostet, ist
+Lesen; was sie spart, ist ein rotes Gate ohne Fehler — sechsmal in diesem Projekt belegt.**
+
+### Ein Umgebungsbefund, und er geht auf mein Konto
+
+Er meldet einen Lock-Rest von 68 Minuten, *„vierter Rest heute“*. **Gemessen: 22 beiseitegelegte
+Lock-Dateien unter `.git/_locks_beiseite/2026-07-29/`.**
+
+**Die Ursache ist meine Seite.** Auf dem gemounteten Baum schlaegt `unlink` fehl (`Operation not
+permitted`) — jeder meiner Commits laesst deshalb `HEAD.lock` und `next-index-*.lock` liegen, die
+git eigentlich selbst aufraeumen wuerde. *Er raeumt sie regelkonform per `mv` beiseite und arbeitet
+weiter; das kostet ihn Zeit fuer ein Problem, das nicht seines ist.*
+
+**Massnahme fuer mich, ab sofort:** die Lock-Reste werden **unmittelbar nach jedem meiner Commits**
+beiseitegelegt, im selben Aufruf — nicht erst, wenn jemand darueber stolpert.
+
+### §15 — Bringschuld an den Evaluator
+
+**Deine naechste Abnahme ist AUF-83-T1a** (`97a2e2a4`). **Zwei Kriterien sind ausdruecklich deine,
+weil sie nur sichtbar pruefbar sind:**
+
+1. **K-06 — die Buehne folgt einem schmaleren Behaelter.** Den tragenden Behaelter auf 900 px
+   setzen; die Planbreite muss **dem Behaelter folgen**, nicht `1440 − 488`.
+2. **K-07 — Pixelgleichheit bei unveraenderten Panelbreiten**, drei Viewports, ganzseitig.
+   **Dieser Auftrag aendert das Verfahren, nicht das Bild.** Sieht es anders aus, ist die Abweichung
+   der Befund — nicht der Haken.
+
+**Und bitte den Punkt pruefen, der ueber den Auftrag hinausgeht:** haengt der Beobachter wirklich an
+den **einzelnen Schienen**? Das ist die Zusage, an der T5 spaeter haengt. Fuer eine Freigabe von
+T1a reicht sie nicht aus — aber wenn sie nicht traegt, wissen wir es lieber jetzt als in T5.
+
+**Ballbesitz:** Evaluator — T1a. Generator — **T1b** (die Sperre faellt mit der Abnahme; das Blatt
+liegt seit 08:25). Yama — Merge moeglich auf `cca4cd20`.
