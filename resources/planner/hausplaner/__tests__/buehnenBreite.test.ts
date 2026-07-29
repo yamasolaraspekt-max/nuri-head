@@ -48,9 +48,63 @@ test('K-02: das Modul trägt KEINE Pixelkonstante für eine Schiene', () => {
 });
 
 test('K-02: die Schienen melden sich selbst, statt gezählt zu werden', () => {
+  // **Nachgebessert in AUF-83-T1a-N1 (K-02): auf Wortgrenze geprüft.** Die erste Fassung suchte
+  // `data-schiene` als Teilzeichenkette — und `data-schienex` enthält sie. Der Evaluator hat es
+  // an seiner eigenen Mutation bemerkt: sie blieb grün, und er hat das ehrlich als *„meine
+  // Mutation war unwirksam"* ausgewiesen statt als bestandene Prüfung.
+  //
+  // **Es ist die zweite Ausprägung derselben Sache:** Scheibe 8a hatte dieselbe Präfix-Schwäche
+  // in der Klassen-Zusage (`hp-ef-wert` steckt in `hp-ef-wertzeile`). *Zweimal dieselbe Lücke aus
+  // demselben Grund — ein `includes` misst Enthaltensein, keine Identität.*
   assert.equal(SCHIENEN_MERKMAL, 'data-schiene');
-  const treffer = [...app.matchAll(/data-schiene/g)];
+  const treffer = [...app.matchAll(/data-schiene(?![\w-])/g)];
   assert.ok(treffer.length >= 2, `nur ${treffer.length} Schiene(n) markiert — links und rechts erwartet`);
+});
+
+// --- K-01: die Höhe hängt nicht am Modus ---------------------------------------------------------
+
+test('K-01: die Inselhöhe trägt keinen Modus-Ternär mehr', () => {
+  // **Das Gegenstück zur Breiten-Zusage, und bis jetzt fehlte es.** T1a hat
+  // `height: imStudio ? '100%' : '100vh'` auf `height: '100%'` gebracht — belegt war das nur durch
+  // einen `grep` zum Abnahmezeitpunkt. **Der Evaluator hat gemessen, dass die Mutation die Suite
+  // grün lässt**, und genau das macht den Unterschied zwischen einer Eigenschaft und einer Absicht.
+  //
+  // Warum die Eigenschaft zählt: mit T1b sitzt die Insel in `.main-content-scroll`. Eine
+  // Fensterhöhe erzeugt dort einen **zweiten Bildlauf** und schiebt den Zeichenbereich unter die
+  // Falz — auf der Objektseite genauso wie im Studio.
+  const codeZeilen = app.split('\n').filter((z) => !z.trim().startsWith('*') && !z.trim().startsWith('//'));
+  const mitVh = codeZeilen.filter((z) => z.includes('100vh'));
+  assert.deepEqual(mitVh, [], `die Fensterhöhe ist zurück:\n${mitVh.join('\n')}`);
+  const ternaer = codeZeilen.filter((z) => /height:\s*imStudio\s*\?/.test(z));
+  assert.deepEqual(ternaer, [], `die Höhe hängt wieder am Modus:\n${ternaer.join('\n')}`);
+  // presence-Partner nach R2: die Stelle gibt es überhaupt noch.
+  assert.match(app, /height: '100%'/, 'die Höhenangabe ist ersatzlos fort — dann prüft das hier nichts');
+});
+
+// --- K-03: der Ersatz für das verlorene K-07 -----------------------------------------------------
+
+test('K-03: bei unveränderten Schienen rechnet die Messung wie die alte Formel', () => {
+  // **Der Ersatz für ein Kriterium, das nicht mehr prüfbar ist.** T1a K-07 verlangte
+  // Bildschirmfotos gegen den Stand *vor* T1a — den kann niemand mehr ausliefern, seit T1b das
+  // Bild absichtlich verändert hat. **Ein Bild ist hier ohnehin der schwächere Beleg:** es zeigt,
+  // dass es gleich *aussieht*; die Rechnung zeigt, dass es gleich *ist*.
+  //
+  // Die alte Formel war `innerWidth − 220 − 268`. Bei unveränderten Schienenbreiten muss die
+  // Messung denselben Wert liefern — sonst hätte T1a das Bild verschoben, statt nur das Verfahren
+  // zu wechseln.
+  const ALT = (fenster: number): number => fenster - 220 - 268;
+  for (const fenster of [1440, 1920, 1280, 1024, 800]) {
+    assert.equal(freieBreite(fenster, [220, 268]), ALT(fenster),
+      `bei ${fenster} px weicht die Messung von der alten Rechnung ab`);
+  }
+  // Der bekannte Wert aus der Sichtprobe, ausgeschrieben: 1440 − 488 = 952.
+  assert.equal(freieBreite(1440, [220, 268]), 952);
+
+  // **Und die Gegenrichtung, die den Sinn des Umbaus trägt:** sobald sich eine Schiene ändert,
+  // MUSS die Messung von der alten Formel abweichen. Täte sie es nicht, wäre die Rechnung nur
+  // umgeschrieben und nicht behälterbezogen.
+  assert.notEqual(freieBreite(1440, [220, 0]), ALT(1440), 'ein zugeklapptes Panel ändert nichts?');
+  assert.notEqual(freieBreite(900, [220, 268]), ALT(1440), 'ein schmalerer Behälter ändert nichts?');
 });
 
 test('K-02: ohne Messung gilt die Ersatzbreite, nicht die Null', () => {
