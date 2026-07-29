@@ -2365,6 +2365,204 @@ Code unveraendert) - beim naechsten Mal waere es einer.
 
 Gesamtvotum: **FREIGABE.** Ballbesitz: Planner.
 
+### AUF-38 Scheibe 6 (11e23016) - GuidedView - FREIGABE
+
+Gemessen 07:52-07:56. GuidedView.tsx seit 11e23016 unveraendert.
+
+K1 Zahlen: **ERFUELLT.** 41/34/5/29 -> 12/5/5/0. Insel 278->249, 160->131. Differenz genau 29.
+K2 29 Klassen 1:1: **ERFUELLT.** Mengenvergleich CSS <-> TSX identisch (comm -3 leer), 29/29.
+K3 fuenf Ausnahmen / sechs Rohwerte: **ERFUELLT, selbst aufgeloest.**
+   Z99 rgba(255,255,255,.7) - Z112 rgba(20,30,34,.92)+#eef3f2 (der Block mit ZWEI) -
+   Z113 #7fd8d3 - Z146 #0a4f4d - Z150 #d3dbdb. Genau fuenf Bloecke.
+K4 gebaute CSS: **ERFUELLT.** 0 Rohfarben, 0 rgba(.
+K5 Gates selbst: **ERFUELLT.** test 1332/0 - tsc 0 - schema 0 - dom 11/0 - Buendel im selben
+   Commit (§8) - Baum zum Messzeitpunkt sauber.
+K6 Gegen-Beweise: **ERFUELLT, drei.** Kontrolllauf 38/38 gruen (Kopie zuvor um gebaute CSS und
+   Blade ergaenzt). A: hp-gf-wrap wieder inline -> 2 rot. B: #0a4f4d durch T.accentInk ersetzt,
+   Stelle bleibt inline -> 3 rot (genau die Richtung, die bei Scheibe 4 durchrutschte). C: sechste
+   Ausnahme -> 1 rot, nur die Mengenzusage. Die drei Zusagen pruefen nicht dieselbe Sache dreimal.
+K7 serviert==gemessen: **ERFUELLT.** js 1 427 410 B, css 13 559 B byte-gleich zum Baum,
+   status --porcelain public in diesem Moment leer; 29 hp-gf-Regeln geladen.
+K9 headful: **ERFUELLT in der Substanz, ohne Bild.** 12 Schritte durchgeklickt. Harter Beleg:
+   **28 Elemente mit hp-gf-Klasse, davon 0 mit eigenem Inline-Stil**; hp-gf-buehne und hp-gf-board
+   beziehen Anzeige/Farbe/Hintergrund aus der Schicht. Fuenf der sechs Rohwert-Flaechen im DOM
+   angetroffen; die sechste (#0a4f4d, empfohlene Aktion) nicht - bestaetigt seinen Befund (2)
+   unabhaengig. **Kein Bildschirmfoto:** Page.captureScreenshot dreimal nach 30 s abgelaufen,
+   waehrend die JS-Ebene normal antwortet. Nicht durch ein aelteres Bild ersetzt.
+
+Zu seinem Befund (1): SVG-Rohfarben selbst nachgezaehlt, exakt drei (stroke #9aa4af, fill #7c8590,
+fill #aab2bb) - als Attribute, also ausserhalb Grundgesamtheit UND generischer Zusage. "0 offen"
+heisst fuer diese Datei nicht "keine Rohfarbe mehr drin".
+
+Zahl gegen die MW-7-Sorge: GuidedView traegt **0** style={bezeichner} (gegen 12 style={{). Die
+Luecke greift hier nicht - sie greift bei Scheibe 7, wo 56 der 58 liegen.
+
+Prozess-Befund (zweite Wiederholung binnen einer Stunde): waehrend Scheibe 6 mit Ballbesitz
+Evaluator lag, lief der Baum weiter - EngineFlaeche im Bau, Buendel bereits ueber 11e23016 hinaus.
+Meine K7/K9 stammen von 07:53-07:55 bei sauberem Baum. Nach R9 ist eine Barriere faellig.
+Vorschlag: der Bericht nennt den Buendel-Stand (Bytes/Pruefsumme) mit.
+
+Gesamtvotum: **FREIGABE.** Ballbesitz: Planner. Als Naechstes: B-01 (K-01 bis K-04).
+
+### AUF-38 Scheibe 8a (3c3b4657) - EngineFlaeche - FREIGABE MIT REST
+
+Gemessen 07:59-08:04. EngineFlaeche.tsx seit 3c3b4657 unveraendert.
+
+K1 Zahlen: **ERFUELLT.** 29/25/0/25 -> 4/0/0/0. Insel 249->224, 131->106. Differenz genau 25.
+K2 22 Klassen: **ERFUELLT.** Mengenvergleich CSS <-> TSX identisch (comm -3 leer).
+K3 keine Ausnahme: **ERFUELLT.** Gegen-Beweis: Rohwert eingeschleust -> rot ("die Datei traegt
+   KEINEN Rohwert - und das bleibt so"). Die schaerfere Zusageform statt einer leeren Liste.
+K4 gebaute CSS: **ERFUELLT**, 0 Rohfarben.
+K5 Gates selbst: **ERFUELLT.** test 1336/0 - tsc 0 - schema 0 - dom 11/0 - Buendel im selben
+   Commit (§8) - Baum sauber.
+K6 Gegen-Beweise: **ERFUELLT.** Kontrolllauf 42/42. Stelle wieder inline -> 2 rot (nicht eine).
+   Seine gemeldete Zusagen-Schwaeche in der Form des Fehlers nachgestellt: traegerlose Regel
+   `.hp-ef-grundla` als Praefix der benutzten `hp-ef-grundlage` -> rot. Mit `includes` waere sie
+   gruen geblieben.
+K6b Verschaerfung traegt auch Scheibe 5 und 6 (die ich freigegeben habe - also meine Sache):
+   `.hp-kw-vorschau-ma` -> Scheibe 5 rot; `.hp-gf-empfehlung-kic` -> Scheibe 6 rot. Meine damaligen
+   Voten stehen, weil ich K2 ueber den Mengenvergleich geprueft hatte, nicht ueber `includes`.
+K9 Sichtprobe: **NICHT GEPRUEFT - offener Rest.** EngineFlaeche haengt an der Fachplaner-Schiene
+   von HausplanerApp, nicht an der Studio-Flaeche. Expertenmodus geoeffnet, vier Gruppenreiter und
+   acht Faehigkeitsnamen durchprobiert: hp-ef-Elemente im DOM = 0. Nach mehreren Versuchen
+   abgebrochen statt geraten. Belegbar ist: der Server liefert 15 562 B mit 22 von 22
+   hp-ef-Klassen (Mengenvergleich gegen die Quelle leer), und mit frischem Verweis laedt der
+   Browser alle 22 Regeln. Der Nachweis, dass sie an der echten Flaeche greifen, fehlt.
+   Bitte an den Planner: Ausloeser benennen wie bei Scheibe 4 der Toast.
+
+BEFUND ueber die Scheibe hinaus - Auslieferung ohne Versionskennung:
+   vom Server (no-store) 15 562 B mit 22 hp-ef-Klassen; im Dokument geladene Regeln 0;
+   nach frischem Verweis 22. Beide Blades binden hausplaner.css/js ueber asset() unter
+   unveraenderlichem Namen ein, ohne ?v= und ohne Manifest-Hash. Ein warmer Cache liefert nach
+   einem Deploy die alte CSS zur neuen JS; beide werden unabhaengig gecacht.
+   Warum es jetzt zaehlt: vor AUF-38 lagen die Stile inline in der JS, eine veraltete CSS konnte
+   das Aussehen nicht beschaedigen. AUF-38 verlagert genau das in eine separat gecachte Datei -
+   am Ende haengt praktisch die ganze Insel daran. Kein Befund gegen Scheibe 8a; ein Befund gegen
+   die Auslieferung, der mit jeder Scheibe waechst. Zur Planner-Entscheidung.
+
+Gesamtvotum: **FREIGABE MIT REST** (Rest ausschliesslich K9, benannt, kein P0/P1 offen).
+Ballbesitz: Planner. Als Naechstes: B-01.
+
+### B-01 (af0e0c93) - .ai-workflow/ versioniert - FREIGABE
+
+Geprueft K-01 bis K-04. K-05 (Push) gehoert nicht zu dieser Abnahme - Spezifikationsfehler des
+Planners, von Yama selbst gefahren 00:45 (c631109c..a849e030, beide Remotes).
+
+K-01 Umfang: **ERFUELLT.** 15 Pfade, 0 Fremdpfade, alle unter .ai-workflow/. Zusaetzlich geprueft:
+   status --untracked-files=all .ai-workflow ist leer - der Satz ist nicht nur sauber, sondern
+   vollstaendig.
+K-02 absolute Pfade: **ERFUELLT, mit presence-Partner.** /Users/ in .ai-workflow: 0. Derselbe
+   Befehl ohne Pfadfilter: 40 Dateien - der Befehl kann finden, die Leere ist ein Ergebnis.
+   Kriterium erweitert: /home/, /private/tmp, ~/Documents ebenfalls 0.
+K-03 Skripte: **ERFUELLT.** Alle fuenf bash -n sauber, alle fuenf 100755.
+K-04 kein Produktivcode: **ERFUELLT.** resources scripts public app database routes config: 0.
+
+Ueber die Kriterien hinaus (Syntax ist keine Funktion):
+  create-task-worktrees.sh --dry-run  exit 0, legt nichts an
+  remove-task-worktrees.sh --dry-run  exit 0, entfernt nichts
+  run-quality-gates.sh --dry-run      exit 0, listet Gates, ueberspringt undefinierte sauber
+  vorher wie nachher: 7 Worktrees, 0 Rollen-Branches.
+
+Destruktiver Befehl: git worktree remove (remove-task-worktrees.sh:86). Riegel gelesen, nicht
+geglaubt: Pruefschleife bricht mit exit 3 bei Aenderungen (status --porcelain, also auch
+unverfolgte) und exit 4 bei unerwartetem Branch, BEVOR entfernt wird; worktree remove ohne --force
+verweigert zusaetzlich. Kein rm -rf, kein --force, kein reset --hard, kein push, keiner fasst
+.git/*.lock an - per git grep geprueft.
+
+Verdacht geprueft und verworfen: das Gate-Skript sperrt build:hausplaner hinter einer Env-Variable,
+wuerde aber npm run build ungeschuetzt fahren. Nachgesehen: public/build ist gitignored, 0
+versionierte Dateien; public/hausplaner/* ist versioniert. Die Asymmetrie ist richtig. Zweiter
+Fehlalarm an diesem Tag, an mir selbst abgefangen.
+
+NEBENBEFUND (Planner): create-task-worktrees.sh verweigert bei unsauberem Hauptarbeitsbaum - der
+ist hier praktisch nie sauber. Das Werkzeug ist genau in dem Zustand unbenutzbar, fuer den es
+gedacht war. Kein Befund gegen den Commit, einer gegen die Nutzbarkeit: die Trennung braucht ein
+ausgerufenes Zeitfenster oder eine benannte Ausnahme.
+
+Gesamtvotum: **FREIGABE.** Ballbesitz: Planner. HEAD wanderte waehrend der Abnahme 8ae4a1f5 ->
+17a4dacd; .ai-workflow/ davon nicht beruehrt, das Urteil steht.
+
+### AUF-38 Scheibe 8b (a022452f) - GeschossFlaeche - FREIGABE
+### + Scheibe 8a: offener Rest K9 geschlossen -> FREIGABE
+
+RICHTIGSTELLUNG an mir selbst: um 08:04 schrieb ich, ich bekaeme die EngineFlaeche nicht auf. Falsche
+Ursache. Sie ging auf; die Seite rendert aus einem zwischengespeicherten Buendel, das aelter ist als
+Scheibe 5. Gemessen:
+  SERVIERTE hausplaner.js (1 422 946 B): hp-fach- 24, hp-kw- 33, hp-gf- 29, hp-ef- 22, hp-gs- 15
+  IM DOM vor hartem Neuladen:            hp-fach-  7, hp-kw-  0, hp-gf-  0, hp-ef-  0, hp-gs-  0
+Nach cmd+shift+r ist alles da.
+
+K1 Zahlen: **ERFUELLT nach Selbstkorrektur.** Erst 196/78 gemessen (Baum verunreinigt: 8c lag
+   unversioniert darin), gegen den Commit gemessen per `git archive a022452f`: **210/92, exakt
+   seine Zahlen**. GeschossFlaeche 19/14/0/14 + 2x style={bezeichner} -> 5/0/0/0 + 0.
+   Seitdem: commit-exakter Pruefstand statt Arbeitsbaum.
+K2 15 Klassen: **ERFUELLT**, Mengenvergleich identisch.
+K3 keine Ausnahme: **ERFUELLT**, 0 Rohwerte.   K4 gebaute CSS: **0**.
+K5 Gates: **ERFUELLT.** Am Commit-Stand stilschicht.test.ts 47/47; im Baum volle Insel 1345/0,
+   tsc 0, schema 0, dom 11/0 (1345 enthaelt 8c, deshalb nicht seine 1341). Buendel im Commit (§8).
+K6 Gegen-Beweise, der Kern der Scheibe:
+     A eine style={{-Stelle zurueckgedreht  => 2 rot   Werkzeug: 1 offen
+     B style={knopfStil} wieder eingesetzt  => 2 rot   Werkzeug: 0 offen   <<<
+     C alle Spread-Verwendungen entfernt    => 2 rot   Werkzeug: 2 offen
+   In B ist das Werkzeug blind, nur die eigene Zusage faengt es -> AUF38-MW-7 an einer echten
+   Umstellung nachgewiesen. Ehrlich zu C: meine Mutation machte die Bloecke statisch, rot wurde die
+   Wirkungs-Zusage - die Tot-Konstanten-Sperre habe ich NICHT isoliert geprueft.
+K9 headful: **ERFUELLT.** Geschoss-Menue (role=dialog, aria-label="Geschosse"): 13 Elemente,
+   12 hp-gs-Klassen, 0 mit eigenem Inline-Stil; .hp-gs-anker display:flex und Farbe aus der Schicht.
+
+Restumfang zweite Schreibweise: nach 8b liegen alle verbliebenen 56 in HausplanerApp.tsx - 8b hat
+die einzigen zwei ausserhalb von Scheibe 7 beseitigt.
+
+Scheibe 8a, K9 nachgeholt (Weg vom Generator, frisches Buendel): EngineFlaeche ueber
+"Treppen-Auslegung" - 43 Elemente, 13 hp-ef-Klassen, 0 mit Inline-Stil, .hp-ef-grundlage
+rgb(167,174,183)=#a7aeb7=T.faint aus der Schicht. Nach "Berechnen": 20 von 22 Klassen, 82 Elemente,
+weiterhin 0 mit Inline-Stil. Die zwei ungesehenen gehoeren zur Fehlt-Meldung.
+=> FREIGABE MIT REST von 08:04 aufgeloest: **FREIGABE**.
+
+Auslieferungs-Befund verschaerft: nicht nur die CSS, auch die JS wird unter unveraenderlichem Namen
+ueber asset() eingebunden. Veraltete JS + frische CSS (oder umgekehrt) heisst Markup und Stilschicht
+aus verschiedenen Staenden - genau das habe ich hier gesehen. Nach AUF-38 haengt praktisch die
+gesamte Darstellung daran. Zur Planner-Entscheidung: Versionskennung an beide asset()-Aufrufe.
+
+Gesamtvoten: Scheibe 8b **FREIGABE**, Scheibe 8a **FREIGABE**. Ballbesitz: Planner.
+
+### AUF-38 Scheibe 8c (cca4cd20) - die vier Kleinen - FREIGABE
+
+Gemessen auf commit-exaktem Pruefstand (git archive cca4cd20). Baum trug denselben Stand.
+
+K1 Zahlen: **ERFUELLT.** WerkzeugGruppenMenue 4/0/0/0, FaehigkeitenNavi 1/0/0/0, DreiDBereich
+   3/2/2/0, ReiterLeiste 1/0/0/0. Insel 210->196 gesamt, 92->78 offen. Nachgemessen statt
+   uebernommen: die 78 liegen restlos in HausplanerApp.tsx, keine andere Datei hat eine offene Stelle.
+K2 zwei Ausnahmen, beide in DreiDBereich: **ERFUELLT.** Die Mengenzusage bindet Zahl UND Ort.
+   Gegen-Beweis: dritte Rohwert-Stelle in ReiterLeiste -> rot. Eine Ausnahme, die die Datei
+   wechselt, faellt auf.
+K3 Klassen: **ERFUELLT.** Je eine Stelle in drei Dateien zurueckgedreht -> jedes Mal 2 rot
+   (Wirkung + Klasse ohne Traeger). Bei ReiterLeiste faellt zusaetzlich B3 - die geerbte Zusage
+   haengt wirklich an der umgestellten Stelle.
+K4 gebaute CSS: **0 Rohfarben.**
+K5 Gates: **ERFUELLT.** Pruefstand stilschicht+keineKappung 56/56; im Baum volle Insel 1345/0,
+   tsc 0, schema 0, dom 11/0. Buendel im selben Commit (§8), 10 Dateien.
+K6 geerbte Zusagen: **ERFUELLT.** Die bisherige Auflage (ueber Eigenschaftsnamen suchen) haette
+   beide verfehlt, weil keineKappung.test.ts die Dateien ueber Variablen liest. Sein Vorschlag -
+   erst suchen, welche Tests die Datei EINLESEN, dann diese auf Stil-Zusagen ansehen - ist
+   unabhaengig von der Variablenbenennung; ich unterstuetze ihn fuer die Auflage. Seine Gegenprobe
+   nachgestellt: Umbruch aus .hp-fn-label entfernt -> B4 rot. Die Zusage prueft die Regel, nicht
+   den Klassennamen.
+K9 headful (frisches Buendel via cmd+shift+r, sonst rendert die alte Fassung): **ERFUELLT.**
+   Werkzeug-Gruppenmenue "Grundbedienung": role=menu 1, 38 Elemente, 8 hp-wg-Klassen, 0 inline.
+   FaehigkeitenNavi 32 Elemente 0 inline; ReiterLeiste 3 Elemente 0 inline.
+   .hp-fn-label: white-space normal, overflow visible, text-overflow clip, overflow-wrap anywhere.
+   .hp-rl-leiste: flex-wrap wrap. Die geerbten Eigenschaften stehen im DOM, nicht nur im Test.
+
+Seine Ehrlichkeit geprueft statt geglaubt: er schreibt, die neue MW-1-Zusage habe an echten Daten
+keine Zaehne. Nachgezaehlt: 6 kommentierte Bloecke in der Insel, davon 0 statisch. Seine
+Einschraenkung ist korrekt und eher zu streng formuliert.
+
+Gesamtvotum: **FREIGABE.** Restschnitt durch (8a, 8b, 8c abgenommen). Offen bleibt Scheibe 7
+(HausplanerApp.tsx, 78 Stellen) - dort liegen zugleich die 56 verbliebenen style={bezeichner},
+also MW-7. Beides in derselben Datei; wer sie schneidet, sollte beide Schreibweisen in die
+Grundgesamtheit nehmen. Ballbesitz: Planner.
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
