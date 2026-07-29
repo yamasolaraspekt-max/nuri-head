@@ -29,11 +29,6 @@
         die CRM-CI-Tokens selbst ein (`app.blade.php:2541`); ein zweiter Einschluss wäre eine
         zweite Quelle für dieselben Werte.
     */
-    .hp-bar { display: flex; align-items: center; gap: 12px; padding: 8px 14px; background: #fff; border-bottom: 1px solid #e5e7eb; }
-    .hp-bar a { color: #374151; text-decoration: none; font-size: 13px; font-weight: 600; border: 1px solid #d1d5db; border-radius: 8px; padding: 6px 12px; }
-    .hp-bar a:hover { border-color: var(--sa-accent, #93c21c); color: var(--sa-accent-hover, #7baa18); }
-    .hp-title { font-size: 14px; font-weight: 800; }
-    .hp-scratch { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--sa-warning-ink, #b45309); background: var(--sa-warning-bg, #fff7ed); border: 1px solid var(--sa-warning-border, #fed7aa); border-radius: 999px; padding: 4px 12px; }
 
     /*
         **Die Höhe kommt aus dem Behälter, nicht aus dem Fenster.** Vorher stand hier
@@ -52,11 +47,21 @@
 @endpush
 
 @section('content')
-<div class="hp-bar">
-    <span class="hp-title">Hausplaner · Studio</span>
-    <a href="{{ url()->previous() }}">‹ Zurück</a>
-    <span class="hp-scratch">Testfläche — wird NICHT gespeichert</span>
-</div>
+{{--
+    AUF-83-T2: **Hier stand die eigene Leiste des Studios** — Marke, Zurück-Link und der
+    Testflächen-Hinweis. Alle drei sind fort, und jeder aus einem eigenen Grund:
+
+    * **Die Marke:** die Ticket-Navigation markiert den Bereich seit T1b selbst
+      (`sidebar.blade.php`, `active_routes`). Eine zweite Marke daneben ist Wiederholung.
+    * **Der Zurück-Link:** er war der einzige Weg aus dem Studio, **solange es keine
+      Ticket-Navigation gab**. Seit T1b gibt es sie — der Weg führt jetzt über die Navigation,
+      wie überall sonst im CRM.
+    * **Der Testflächen-Hinweis:** er stand zweimal auf demselben Schirm. Der hier war eine feste
+      Zeichenkette und stand **immer** da, unabhängig davon, ob wirklich nichts gespeichert wird.
+      Der in der Insel ist an das fehlende `data-speichern-url` gekoppelt und testverriegelt
+      (`speicherAnzeige.test.ts`) — **er sagt die Wahrheit, dieser sagte sie nur meistens.**
+      Deshalb bleibt der gekoppelte und dieser fällt.
+--}}
 
 {{-- Scratch-Dummy (bewusst absurd hoch): Studio ist persistenzfrei (kein data-speichern-url => save() ist No-Op) - NIE als echten Objekt-Anker verwenden. --}}
 @php

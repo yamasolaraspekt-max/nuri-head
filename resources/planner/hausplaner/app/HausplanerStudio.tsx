@@ -22,8 +22,6 @@ import { useHausplanerStore, type SpeicherStatus } from '../store/hausplanerStor
 export function HausplanerStudio(): React.ReactElement {
   const [modus, setModus] = React.useState<StudioModus>('start');
   const [schritt, setSchritt] = React.useState(1);
-  const [navZu, setNavZu] = React.useState(false);
-  const [offeneHubs, setOffeneHubs] = React.useState<Record<string, boolean>>({});
   const [toast, setToast] = React.useState<string | null>(null);
   const [konfig, setKonfig] = React.useState<KonfigArt | null>(null);
   /** L4 (AUF-25): offene Fachplaner-Fläche samt Herkunft — die Herkunft bestimmt die Beschriftung
@@ -61,15 +59,10 @@ export function HausplanerStudio(): React.ReactElement {
   const st = { label: anzeige.text, farbe: ART_FARBE[anzeige.art] };
   const toastTimer = React.useRef<number | undefined>(undefined);
 
-  // Schmale Viewports (Handy/Baustelle): Navigation automatisch auf die Icon-Leiste einklappen,
-  // damit der Inhalt nicht in einen Reststreifen gedrängt wird (ux-Rubrik: tragfähig auf dem Handy).
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return undefined;
-    const prüfe = (): void => setNavZu(window.innerWidth < 900);
-    prüfe();
-    window.addEventListener('resize', prüfe);
-    return () => window.removeEventListener('resize', prüfe);
-  }, []);
+  // AUF-83-T2: **Hier stand der Zuhoerer, der die Studio-Navigation auf schmalen Viewports
+  // einklappte.** Mit ihr faellt er weg — die Ticket-Shell bringt ihre eigenen Seitenleisten und
+  // deren Verhalten mit. **Ein Fenster-Zuhoerer ohne Wirkung waere genau die Sorte Rest, die
+  // spaeter jemand fuer Absicht haelt.**
 
   const zeigeToast = React.useCallback((t: string) => {
     setToast(t);
@@ -89,13 +82,12 @@ export function HausplanerStudio(): React.ReactElement {
     if (flaeche) setFachOffen({ flaeche, herkunft });
   };
 
-  const navBreit = navZu ? 66 : 266;
   const imExperte = modus === 'expert';
 
-  const modeBtn = (m: StudioModus, label: string, ico: string): React.ReactElement => {
-    const on = (m === 'expert' && imExperte) || (m === 'start' && !imExperte);
+  const modeBtn = (m: StudioModus, label: string, ico: string, titel?: string): React.ReactElement => {
+    const on = m === modus;
     return (
-      <button type="button" onClick={() => setModus(m)}
+      <button type="button" onClick={() => setModus(m)} title={titel}
         style={{ border: 0, background: on ? T.accentSoft : 'transparent', color: on ? T.accentInk : T.muted, fontWeight: 600, fontSize: 13, padding: '8px 16px', borderRadius: 9, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7 }}>
         <Ikon inhalt={ico} size={16} />{label}
       </button>
@@ -112,16 +104,12 @@ export function HausplanerStudio(): React.ReactElement {
           riss die ganze Seite in den waagerechten Überlauf (gemessen: scrollWidth 656 bei 390).
           Jetzt: umbrechen statt schieben, Mindesthöhe statt fester Höhe. */}
       <header className="hp-studio-kopf">
-        <div className="hp-studio-marke">
-          <span className="hp-marke-zeichen"><Ikon inhalt='<path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/>' size={16} /></span>
-          Hausplaner
-          <span className="hp-marke-zusatz">· Solar Aspekt</span>
-        </div>
         <span className="hp-status"><span style={{ width: 8, height: 8, borderRadius: '50%', background: st.farbe }} />{st.label}{scene && kannSpeichern ? ` · Rev. ${scene.revision}` : ''}</span>
         <span className="hp-fueller" />
         <div className="hp-modusschalter">
           {modeBtn('start', 'Übersicht', '<path d="M4 5h16M4 12h16M4 19h10"/>')}
-          {modeBtn('expert', 'Expertenmodus', '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>')}
+          {modeBtn('guided', 'Geführte Planung', '<path d="M15 6l-6 6 6 6"/>')}
+          {modeBtn('expert', 'Expertenmodus', '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>', 'Experte — alle Werkzeuge, Projektbaum und Eigenschaften. Dasselbe Modell und dieselbe Revision.')}
         </div>
         {/* AUF-38 Scheibe 4: **bleibt bewusst inline.** Diese zwei Farben haben in `T` keinen
             Token. In die CSS geholt waeren sie rohe Farbwerte in einer Regel — Kriterium 4 verbietet
@@ -131,70 +119,24 @@ export function HausplanerStudio(): React.ReactElement {
 
       {/* Bühne */}
       <div className="hp-studio-reihe">
-        {/* Navigation (nur außerhalb Experte — Experte hat eigene Werkzeugleiste) */}
-        {!imExperte && (
-          <nav style={{ width: navBreit, flex: '0 0 auto', background: T.surface, borderRight: `1px solid ${T.hair}`, display: 'flex', flexDirection: 'column', transition: 'width .18s', overflow: 'hidden' }}>
-            <div className="hp-navi-kopf">
-              {!navZu && <span className="hp-navi-titel">Navigation</span>}
-              <button type="button" onClick={() => setNavZu((v) => !v)} title="Ein-/ausklappen" className="hp-navi-klapp">
-                <Ikon inhalt={navZu ? '<path d="M9 6l6 6-6 6"/>' : '<path d="M15 6l-6 6 6 6"/>'} size={16} />
-              </button>
-            </div>
-            <button type="button" onClick={() => zeigeToast('Neue Anfrage / Lead: Planer wählen → Lead zuordnen → Dokumente → Formulardaten. (folgt)')}
-              style={{ margin: '4px 12px 8px', display: 'flex', alignItems: 'center', gap: 10, background: T.accent, color: T.surface, border: 0, borderRadius: 12, padding: navZu ? 12 : '12px 14px', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', justifyContent: navZu ? 'center' : 'flex-start' }}>
-              <Ikon inhalt='<path d="M12 5v14M5 12h14"/>' size={16} />{!navZu && <span>Neue Anfrage / Lead</span>}
-            </button>
-            <div className="hp-navi-liste">
-              {!navZu && <div className="hp-navi-gruppe">Projekt</div>}
-              {PROJ.map((p) => (
-                <div key={p.name} role="button" tabIndex={0} onClick={() => gehGeführt(1)} onKeyDown={(e) => { if (istAusloeser(e)) gehGeführt(1); }}
-                  style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '9px 11px', borderRadius: 11, cursor: 'pointer', color: '#3f464e', fontSize: 14, justifyContent: navZu ? 'center' : 'flex-start' }}>
-                  <span className="hp-navi-icon"><Ikon inhalt={p.icon} size={19} /></span>{!navZu && <span>{p.name}</span>}
-                </div>
-              ))}
-              {!navZu && <div className="hp-navi-gruppe">Fachplaner</div>}
-              {FACH.map((f) => (
-                <div key={f.name}>
-                  <div role="button" tabIndex={0}
-                    onClick={() => (f.sub ? setOffeneHubs((o) => ({ ...o, [f.name]: !o[f.name] })) : öffneKonfigurator(f.name))}
-                    onKeyDown={(e) => { if (istAusloeser(e)) (f.sub ? setOffeneHubs((o) => ({ ...o, [f.name]: !o[f.name] })) : öffneKonfigurator(f.name)); }}
-                    style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '9px 11px', borderRadius: 11, cursor: 'pointer', color: '#3f464e', fontSize: 14, justifyContent: navZu ? 'center' : 'flex-start' }}>
-                    <span className="hp-navi-icon"><Ikon inhalt={f.icon} size={19} /></span>
-                    {!navZu && <span>{f.name}</span>}
-                    {!navZu && f.sub && <span style={{ marginLeft: 'auto', color: T.faint, transform: offeneHubs[f.name] ? 'rotate(90deg)' : 'none', transition: 'transform .15s' }}><Ikon inhalt='<path d="M9 6l6 6-6 6"/>' size={16} /></span>}
-                  </div>
-                  {!navZu && f.sub && offeneHubs[f.name] && (
-                    <div className="hp-navi-unterliste">
-                      {f.sub.map((sub) => (
-                        <div key={sub[0]} role="button" tabIndex={0} onClick={() => öffneKonfigurator(sub[0], sub[1], 'navi')} onKeyDown={(e) => { if (istAusloeser(e)) öffneKonfigurator(sub[0], sub[1], 'navi'); }}
-                          className="hp-navi-untereintrag">{sub[0]}</div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-            {/* AUF-56 (Nachtrag Yama, 26.07.): Hier stand **„Erweiterbar — weitere Module
-                folgen."** Derselbe Fall wie in der Schiene und wie in AUF-55: ein Versprechen auf
-                später, das über den Inhalt nichts sagt. **Jetzt zählt der Fuss, was in der Liste
-                darüber wirklich steht** — gerechnet aus `PROJ` und `FACH`, nicht abgeschrieben.
-                Eine gezählte Zahl kann nicht veralten; eine abgetippte schon. */}
-            {!navZu && <div className="hp-navi-fuss">{PROJ.length} Projekt-Einstiege · {FACH.length} Fachplaner mit {FACH.reduce((n, f) => n + (f.sub?.length ?? 0), 0)} Untermodulen</div>}
-          </nav>
-        )}
-
+        {/* AUF-83-T2: **Hier stand die zweite Navigation.** Sie zeichnete Projekt-Einstiege und
+            Fachplaner als eigenen Baum — neben der Ticket-Navigation, die seit T1b dieselbe
+            Aufgabe erfuellt und den Bereich ueber `active_routes` selbst markiert. Zwei
+            Navigationsbaeume auf einem Schirm sind Wiederholung, keine Orientierung.
+            **Die Daten bleiben:** `PROJ` und `FACH` stehen unveraendert in `studioDaten.ts` und
+            wandern mit T3 in die Arbeitszeile — die Fachplaner SIND die Arbeitsbereiche. Hier
+            faellt die Darstellung als Baum, nicht der Inhalt. */}
         {/* Inhalt */}
         <div style={{ flex: 1, minHeight: 0, position: 'relative', overflow: imExperte ? 'hidden' : 'auto' }}>
           {modus === 'start' && <StartView onGuided={gehGeführt} onKonfigurator={(n, f) => öffneKonfigurator(n, f, 'start')} projekte={projekte} />}
           {modus === 'guided' && <GuidedView schritt={schritt} setSchritt={setSchritt} onExperte={() => setModus('expert')} onKonfigurator={(art) => setKonfig(art)} modell={modell} schritte={schritte} />}
           {imExperte && (
             <div className="hp-experte">
-              <div className="hp-experte-leiste">
-                <button type="button" onClick={() => setModus('guided')} className="hp-experte-zurueck">
-                  <Ikon inhalt='<path d="M15 6l-6 6 6 6"/>' size={15} />Zur geführten Planung
-                </button>
-                <span className="hp-experte-hinweis">Experte — alle Werkzeuge, Projektbaum und Eigenschaften. Dasselbe Modell und dieselbe Revision.</span>
-              </div>
+              {/* AUF-83-T2 / K-04: **Der Erklaertext ist erhalten, aber er kostet keine Zeile
+                  mehr.** Er stand als dauerhafte Leiste ueber der Buehne und beantwortete eine
+                  Frage, die man genau einmal hat. Jetzt traegt ihn der Modusschalter als Titel.
+                  **Der Weg zurueck in die gefuehrte Planung ist nicht verschwunden** — er steht
+                  als eigener Schalter im Kopf, sichtbar in jedem Modus (K-05). */}
               <div className="hp-experte-buehne"><HausplanerApp imStudio /></div>
             </div>
           )}

@@ -226,11 +226,8 @@ test('K3 Scheibe 3: jede Klasse wird auch benutzt — keine Regel ins Leere', ()
 const SCHEIBE4: ReadonlyArray<[string, string[]]> = [
   ['.hp-studio-kopf', ['min-height: 62px', 'flex: 0 0 auto', 'display: flex', 'align-items: center',
     'flex-wrap: wrap', 'gap: 12px', 'padding: 8px 16px']],
-  ['.hp-studio-marke', ['display: flex', 'align-items: center', 'gap: 11px', 'font-weight: 700', 'font-size: 16px', 'min-width: 0']],
   ['.hp-fueller', ['flex: 1']],
   ['.hp-studio-reihe', ['flex: 1', 'min-height: 0', 'display: flex']],
-  ['.hp-navi-kopf', ['display: flex', 'align-items: center', 'gap: 10px', 'padding: 16px 16px 8px']],
-  ['.hp-navi-liste', ['flex: 1', 'overflow: auto', 'padding: 4px 10px 12px']],
   ['.hp-experte', ['position: absolute', 'inset: 0', 'display: flex', 'flex-direction: column']],
   ['.hp-experte-buehne', ['flex: 1', 'min-height: 0']],
 ];
@@ -256,30 +253,9 @@ test('K3 Scheibe 4: jede Klasse wird auch benutzt', () => {
 const SCHEIBE4B: ReadonlyArray<[string, string[]]> = [
   ['.hp-studio', ['font-family: Inter, system-ui, sans-serif', 'color: var(--hp-ink)', 'min-height: 100vh',
     'display: flex', 'flex-direction: column', 'background: var(--hp-bg)']],
-  ['.hp-marke-zeichen', ['width: 30px', 'height: 30px', 'border-radius: 9px', 'background: var(--hp-brand)',
-    'display: grid', 'place-items: center', 'color: var(--hp-surface)']],
-  ['.hp-marke-zusatz', ['font-weight: 600', 'color: var(--hp-muted)', 'font-size: 13.5px']],
   ['.hp-status', ['display: flex', 'align-items: center', 'gap: 7px', 'color: var(--hp-muted)', 'font-size: 13px']],
   ['.hp-modusschalter', ['display: flex', 'background: var(--hp-surface)', 'border-radius: 12px', 'padding: 4px',
     'box-shadow: var(--hp-schatten-flach)']],
-  ['.hp-navi-titel', ['font-size: 11.5px', 'font-weight: 700', 'letter-spacing: .08em', 'text-transform: uppercase',
-    'color: var(--hp-faint)']],
-  ['.hp-navi-klapp', ['margin-left: auto', 'width: 30px', 'height: 30px', 'border: 0', 'background: var(--hp-surface2)',
-    'border-radius: 9px', 'color: var(--hp-muted)', 'cursor: pointer', 'display: grid', 'place-items: center']],
-  ['.hp-navi-gruppe', ['font-size: 10.5px', 'font-weight: 700', 'letter-spacing: .07em', 'text-transform: uppercase',
-    'color: var(--hp-faint)', 'margin: 14px 10px 5px']],
-  ['.hp-navi-icon', ['color: var(--hp-muted)', 'display: grid', 'place-items: center']],
-  ['.hp-navi-unterliste', ['display: flex', 'flex-direction: column', 'margin: 2px 0 6px 22px', 'padding-left: 11px',
-    'border-left: 1px solid var(--hp-hair)']],
-  ['.hp-navi-untereintrag', ['padding: 7px 10px', 'border-radius: 9px', 'font-size: 13px', 'color: var(--hp-muted)',
-    'cursor: pointer']],
-  ['.hp-navi-fuss', ['padding: 12px 16px', 'border-top: 1px solid var(--hp-hair2)', 'font-size: 12px', 'color: var(--hp-faint)']],
-  ['.hp-experte-leiste', ['display: flex', 'align-items: center', 'gap: 10px', 'padding: 6px 16px',
-    'background: var(--hp-surface)', 'border-bottom: 1px solid var(--hp-hair)', 'flex: 0 0 auto']],
-  ['.hp-experte-zurueck', ['border: 1px solid var(--hp-hair)', 'background: var(--hp-surface)', 'color: var(--hp-ink)',
-    'font-weight: 600', 'font-size: 13px', 'padding: 7px 14px', 'border-radius: 10px', 'cursor: pointer',
-    'display: flex', 'align-items: center', 'gap: 7px']],
-  ['.hp-experte-hinweis', ['font-size: 13px', 'color: var(--hp-muted)']],
 ];
 
 test('K3 Scheibe 4 (Rest): jede Regel traegt genau die Werte, die vorher inline standen', () => {
@@ -353,12 +329,16 @@ test('Scheibe 4: der Toast bleibt inline — seine Farbe hat keinen Token', () =
  * davon darf einen Token haben.
  */
 /**
- * **Befund beim Anlegen dieser Zusage:** es sind nicht drei Rohfarben, sondern **vier**. `#3f464e`
- * steht in den zwei Navi-Eintraegen (Z151/Z161) und war ebenfalls unverriegelt — dieselbe Klasse wie
- * der Toast, nur hat sie niemand gezaehlt. **Keine dieser Zeilen wurde geaendert**; sie werden hier
- * benannt, damit die Verriegelung vollstaendig ist.
+ * **Befund beim Anlegen dieser Zusage:** es waren nicht drei Rohfarben, sondern **vier**. `#3f464e`
+ * stand in den zwei Navi-Eintraegen und war ebenfalls unverriegelt — dieselbe Klasse wie der Toast,
+ * nur hatte sie niemand gezaehlt.
+ *
+ * **Nachgezogen in AUF-83-T2, und die Zusage hat sich dabei selbst bewaehrt:** mit der zweiten
+ * Navigation sind ihre beiden Eintraege gefallen und `#3f464e` mit ihnen. **Die Zusage ist rot
+ * geworden und hat es gemeldet** — genau dafuer gibt es die Mengen-Form. Waere hier nur eine
+ * Einzelzusage je Farbe gestanden, waere die vierte lautlos verschwunden.
  */
-const STUDIO_ROHFARBEN = ['#dfe4ea', '#5b636d', '#1a262a', '#3f464e'] as const;
+const STUDIO_ROHFARBEN = ['#dfe4ea', '#5b636d', '#1a262a'] as const;
 
 test('Scheibe 4: JEDE inline gebliebene Rohfarbe ist benannt und keine hat einen Token', () => {
   const studio = readFileSync(join(hier, '../app/HausplanerStudio.tsx'), 'utf8');
@@ -700,4 +680,67 @@ test('Scheibe 8c: jede angelegte Klasse wird auch benutzt — keine Regel ins Le
   const zusammen = KLEINE.map((p) => readFileSync(p, 'utf8')).join('\n');
   const unbenutzt = [...new Set(klassen)].filter((k) => !traegt(zusammen, k));
   assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
+});
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-83-T2 — die zweite und die dritte Navigation fallen.
+ *
+ * **Warum diese Zusagen hier stehen, obwohl der Auftrag sie nicht verlangt:** K-01 bis K-04 sind
+ * `absence`-Kriterien, und ihr Pruefverfahren ist ein `grep`. **Ein grep zur Abnahme verhindert
+ * keinen Rueckfall** — er misst einmal und schweigt danach. Die Gegenprobe hat es gezeigt: die
+ * zweite Navigation liess sich zurueckholen, **ohne dass ein einziger Test rot wurde.**
+ * *Eine Abwesenheit, die niemand bewacht, ist eine Absicht und kein Zustand.*
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+const STUDIO_TSX = join(hier, '../app/HausplanerStudio.tsx');
+const STUDIO_BLADE = readFileSync(join(hier, '../../../views/admin/hausplaner/studio.blade.php'), 'utf8');
+
+test('T2/K-01: der Studio-Bildschirm traegt keine zweite Navigation mehr', () => {
+  const studio = readFileSync(STUDIO_TSX, 'utf8');
+  assert.doesNotMatch(studio, /hp-navi/, 'die zweite Navigation ist zurueck');
+  assert.doesNotMatch(quelle, /\.hp-navi/, 'ihre Regeln stehen wieder in der Stilschicht');
+  // presence-Partner nach R2: die Datei existiert und traegt ueberhaupt noch Markup.
+  assert.match(studio, /className="hp-studio-kopf"/, 'die Kopfzeile ist fort — dann prueft das hier nichts');
+});
+
+test('T2/K-01: die DATEN der Navigation sind unberuehrt', () => {
+  // Der ausdrueckliche Ausschluss des Auftrags. Faellt `FACH` mit, hat T2 stillschweigend T3
+  // vorweggenommen — und die Fachplaner waeren aus dem Studio verschwunden statt umgezogen.
+  const daten = readFileSync(join(hier, '../app/studioDaten.ts'), 'utf8');
+  assert.match(daten, /export const FACH/, 'FACH ist geloescht — das war nicht beauftragt');
+  assert.match(daten, /export const PROJ/, 'PROJ ist geloescht — das war nicht beauftragt');
+});
+
+test('T2/K-03: die Hausplaner-Marke ist fort — in der Insel UND in der Blade', () => {
+  // Yama: „ich brauche kein logo fuer hausplaner oben." Der Grund ist nicht Geschmack: die
+  // Ticket-Sidebar markiert den Bereich seit T1b selbst. Eine zweite Marke ist Wiederholung.
+  assert.doesNotMatch(readFileSync(STUDIO_TSX, 'utf8'), /hp-marke|hp-title/);
+  assert.doesNotMatch(STUDIO_BLADE, /hp-marke|hp-title/);
+});
+
+test('T2/K-02: der Testflaechen-Hinweis steht nicht mehr in der Blade-Leiste', () => {
+  // **Der gekoppelte bleibt, der feste faellt.** Der Hinweis der Insel haengt am fehlenden
+  // `data-speichern-url` und ist testverriegelt (`speicherAnzeige.test.ts`); der in der Blade war
+  // eine feste Zeichenkette und stand immer da — auch dann, wenn gespeichert wuerde.
+  const blade = STUDIO_BLADE;
+  assert.doesNotMatch(blade, /class="hp-scratch"/, 'die feste Zeichenkette ist zurueck');
+  assert.doesNotMatch(blade, /class="hp-bar"/, 'die eigene Leiste ist zurueck');
+});
+
+test('T2/K-04: der Erklaertext kostet keine Zeile mehr — ist aber ERHALTEN', () => {
+  const studio = readFileSync(STUDIO_TSX, 'utf8');
+  assert.doesNotMatch(studio, /hp-experte-leiste|hp-experte-hinweis|hp-experte-zurueck/,
+    'die dauerhafte Zeile ist zurueck');
+  // **Die Grenze des Auftrags, woertlich: „Der Text wird NICHT geloescht."**
+  assert.match(studio, /Experte — alle Werkzeuge, Projektbaum und Eigenschaften/,
+    'der Erklaertext ist geloescht statt umgezogen');
+  assert.match(studio, /title=\{titel\}/, 'er haengt an keinem Titel-Attribut mehr');
+});
+
+test('T2/K-05: der Weg in die gefuehrte Planung ist direkt erreichbar', () => {
+  // Er lag im Zurueck-Knopf der Experten-Leiste, die mit K-04 faellt. **Ohne Ersatz waere er zwei
+  // Klicks entfernt gewesen** — deshalb steht er jetzt als eigener Schalter im Modusschalter,
+  // sichtbar in jedem Modus.
+  const studio = readFileSync(STUDIO_TSX, 'utf8');
+  assert.match(studio, /modeBtn\('guided', 'Geführte Planung'/, 'der direkte Weg fehlt');
 });
