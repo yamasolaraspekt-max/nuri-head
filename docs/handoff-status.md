@@ -18908,3 +18908,129 @@ sondern die Barriere zu meiner haeufigsten Fehlerklasse.*
 
 **Ballbesitz:** Generator — T1b fertigstellen, dann T2, T3. Yama — **AUF-84** und die Entscheidung
 zu den getrennten Arbeitsbaeumen.
+
+## 2026-07-29, 10:37 CEST — GENERATOR: QUITTUNG zu `AUF-83-T2` — **TRÄGT**, mit einem Befund am Auftrag
+
+*Nachgetragen. Ich hatte diese Quittung im Gespräch als „abgelegt" bezeichnet, bevor sie hier stand —
+sie stand nur dort. **Was nicht im Ledger steht, ist nicht übergeben**, und der Satz war falsch.*
+
+```text
+Sperre                     ENDET. Das Blatt sagt selbst „gesperrt, bis T1b GEBAUT ist
+                           (nicht: abgenommen)" — T1b ist seit `a14abb53` gebaut.
+                           Kein Widerspruch diesmal; nur das Feld `status:` ist wieder
+                           stehengeblieben und gehört nachgezogen (dritter Fall).
+Grundgesamtheit gemessen   hp-navi 11 (HausplanerStudio.tsx) · 9 (hausplaner.css) — deckt sich
+                           Blade: hp-bar Z55 · hp-title Z56 · Zurück Z57 · hp-scratch Z58
+                           (Zeilennummern durch T1b verschoben, die Elemente unverändert)
+                           Marke: HausplanerStudio.tsx Z118 `hp-marke-zusatz`
+Je Kriterium Prüfverfahren JA
+Ergebnis                   TRÄGT
+```
+
+### Befund am Auftrag — die Begründung des Ausschlusses stimmt nicht
+
+Der Ausschluss lautet: *„`objekt.blade.php` — sie trägt weder `hp-bar` noch `hp-scratch`. Sie
+anzufassen wäre Beifang."*
+
+```text
+grep -c 'hp-bar' resources/views/admin/hausplaner/objekt.blade.php   ->  4
+grep -n 'class="hp-bar"' …/objekt.blade.php                          ->  Z78
+```
+
+**Sie trägt `hp-bar`.** Nur der Teil über `hp-scratch` stimmt.
+
+**Die Entscheidung bleibt trotzdem richtig** — objekt.blade hier mitzunehmen wäre Beifang. Falsch
+ist ihre Begründung, und daraus folgt eine Frage, die **vor** dem Bau gehört:
+
+> **Die Objektseite erbt seit T1b dieselbe Shell und trägt dieselbe doppelte Kopfleiste.** Entfernt
+> T2 sie beim Studio, bleibt sie dort stehen — dann hat der Hausplaner zwei Flächen mit
+> unterschiedlichem Kopf. Das ist entweder ein zweiter Posten oder gehört in T2s Umfang.
+
+**Das ist keine Rückfrage, die eine Regel schon beantwortet:** der Auftrag schließt objekt.blade
+ausdrücklich aus, und ich erweitere keinen Umfang eigenmächtig (§4). **Ballbesitz Planner** für die
+eine Zeile: eigener Posten oder Umfang erweitern.
+
+*Nach R11 gehört der belegende Befehl ausgeführt, bevor das Blatt liegt — hier wäre es ein `grep`
+gewesen. Ich melde es in derselben Form, in der ich es heute selbst dreimal gebraucht habe.*
+
+**Ich habe nichts angefasst.**
+
+---
+
+## ⇒ EVALUATOR — AUF-83-T1b (`a14abb53`): **FREIGABE** · und T1a K-06 nachgeholt (29.07., 10:39 CEST)
+
+**Die Anmeldung stand wieder, also habe ich die Sichtkriterien gefahren** — die vier von T1b und die
+offene K-06 von T1a. Der Baum ist seit `a14abb53` unverändert.
+
+### Der Kern: präzisiert oder abgeschwächt?
+
+Ich hatte angesagt, dass sich das im Diff entscheidet und nicht in der Überschrift. **Ich habe es an
+ihrer eigenen Extraktion gemessen** — `inselTeilbaum()` per Reflexion aufgerufen, mit meinen Eingaben,
+ohne eine Datei im geteilten Baum anzulegen:
+
+```text
+A  Kundenname IM data-Attribut der Insel   -> im Teilbaum enthalten   => Leck wird gefunden
+B  Kundenname NUR im Shell-Auswahlfeld     -> NICHT enthalten         => kein Fehlalarm
+C  #hausplaner-root fehlt                  -> ExpectationFailedException
+                                              "nicht gefunden — dann prueft diese Zusage nichts"
+```
+
+**Alle drei sitzen. Die Zusage ist präzisiert, nicht entzahnt** — sie fängt weiterhin genau das, was
+sie schützen soll, und sie scheitert laut, wenn ihr Prüfgegenstand verschwindet. **Und eine Zahl
+dazu, die schwerer wiegt als jede Formulierung: die PHP-Suite steht auf 2729 → 2730 Zusicherungen.
+Die Zusage hat eine gewonnen, keine verloren.**
+
+### Die acht Kriterien
+
+**K-01 ERFÜLLT** — `@extends` je 1, `<!DOCTYPE` je **0**: beide Blades sind keine eigenen Dokumente mehr.
+**K-02 ERFÜLLT** — Shell-Navigation da, der Hausplaner-Verweis trägt `nav-item is-route-active`.
+**K-03 ERFÜLLT im Vergleich, und das sage ich genau so:** die Klapp-Schaltfläche ist
+`visibility:hidden; pointer-events:none` und erscheint erst beim Überfahren der Kante — **ich habe
+sie mit keiner meiner Methoden ausgelöst.** Deshalb der *vergleichende* Test, den das Kriterium
+verlangt: dieselbe Klickfolge auf `/admin/invoices`, einer Seite, die T1b nie angefasst hat ⇒
+Sidebar bleibt ebenfalls bei **229 px**. **Kein Unterschied zwischen Hausplaner und dem übrigen CRM.**
+*Was ich belegt habe, ist die Gleichheit — nicht das Klappen selbst.*
+**K-04 ERFÜLLT** — `scrollHeight 813 === clientHeight 813`: **kein zweiter Bildlauf.**
+`#hausplaner-root` misst **1077 × 701** zwischen den Schienen (`#leftSidebar` 229, `#rightSidebar` 80).
+**K-05 ERFÜLLT** — eigene Regeln mitgewandert (studio 13 · objekt 39 Vorkommen), `100vh|calc(` in
+beiden Blades **0 Treffer**.
+**K-06 ERFÜLLT** — die Insel mountet: 98 `hp-`-Elemente im Wurzelknoten, und die **eingebettete
+Szene** trägt 416 Zeichen (kein Lade-Fetch).
+**K-07 ERFÜLLT** — `routes app config resources/views/admin/layouts` im Commit: **0 Dateien.**
+**K-08 ERFÜLLT, selbst gefahren** — Insel **1355/0** · dom **11/0** · tsc 0 · schema 0 ·
+**PHP 789 grün / 2730 Zusicherungen**.
+
+**Gesamtvotum T1b: `FREIGABE`.**
+
+### T1a: K-06 ist nachgeholt und erfüllt
+
+Der Auftrag erlaubt DevTools ausdrücklich. Gemessen am tragenden Behälter `#mainContentScroll`:
+
+```text
+Behaelter 1131  ->  Insel 1077
+Behaelter  900  ->  Insel  846      die Insel folgt, der Abstand bleibt 54
+Behaelter 1131  ->  Insel 1077      umkehrbar
+alte Formel:  innerWidth(1440) - 220 - 268 = 952 — unabhaengig vom Behaelter
+```
+
+**Damit ist belegt, was T1a wollte: die Breite folgt dem Behälter, nicht dem Fenster.**
+
+### T1a K-07 bleibt `NICHT PRÜFBAR` — und der Grund gehört benannt
+
+K-07 verlangt Bildschirmfotos **gegen den Stand vor T1a**. Diesen Stand kann ich nicht mehr
+ausliefern: **T1b ist committet und hat das Bild absichtlich verändert** (die Insel sitzt jetzt in
+der Shell). Die Voraussetzung des Kriteriums — *„bei unveränderten Panelbreiten"* — trifft auf den
+heutigen Stand nicht mehr zu.
+
+**Das ist keine Nachlässigkeit des Generators und keine Ausrede von mir, sondern eine Folge der
+Reihenfolge:** T1a lag bei mir, ich war an der abgelaufenen Sitzung blockiert, und in dieser Zeit
+ist T1b gebaut und committet worden. **Es ist das dritte Mal heute, dass der vorlaufende Baum eine
+Messung kostet — und das erste Mal, dass er eine wirklich vernichtet.** Die zwei Male davor konnte
+ich die Zahlen retten, weil ich sie rechtzeitig festgehalten hatte.
+
+**Zur Planner-Entscheidung, nicht meine:** K-07 als *durch Umstände nicht mehr messbar* schließen
+(die Reihenfolge hast du bewusst freigegeben, mit guter Begründung), oder neu schneiden als
+*„Bild vor T1b ↔ Bild nach T1b"* — das wäre messbar, aber es prüfte dann T1b, nicht T1a.
+
+**Voten: T1b `FREIGABE` · T1a weiterhin `NICHT PRÜFBAR`, jetzt nur noch an K-07** (sechs von sieben
+erfüllt). Ballbesitz: Planner. Kein Commit durch mich, kein Push, kein Tor 2.
