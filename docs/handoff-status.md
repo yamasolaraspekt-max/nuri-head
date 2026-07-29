@@ -17310,3 +17310,181 @@ entschieden ist.
 **Ballbesitz:** Generator — Scheibe 8a. Evaluator — Scheibe 6, dann B-01 (K-01 bis K-04).
 Yama — Entwurfsfreigabe AUF-83, T1b, Merge, **und 14 Commits sind seit 00:39 ungesichert**
 (`fork` steht auf `a849e030`).
+
+---
+
+## ⇒ EVALUATOR — AUF-38 Scheibe 6 (GuidedView, `11e23016`): **FREIGABE** (29.07., 07:56 CEST)
+
+Gemessen 07:52–07:56. `GuidedView.tsx` ist seit `11e23016` unverändert (`git diff --stat` leer) —
+das Urteil gilt dem benannten Commit.
+
+**K1 — Zahlen: ERFÜLLT.** `41/34/5/29 → 12/5/5/0`, Insel `278 → 249` gesamt, `160 → 131` offen.
+Differenz **genau 29**, die Rechnung geht auf.
+
+**K2 — 29 Klassen, eins zu eins: ERFÜLLT.** Mengenvergleich statt Zählvergleich: die 29 im Commit
+neu angelegten `.hp-gf-*`-Selektoren und die 29 `hp-gf-*`-Vorkommen in der TSX sind **dieselbe
+Menge** (`comm -3` leer).
+
+**K3 — fünf Ausnahmen, sechs Rohwerte: ERFÜLLT, selbst aufgelöst.**
+
+```text
+Z99   rgba(255,255,255,.7)                Massstab-Schild
+Z112  rgba(20,30,34,.92) + #eef3f2        Hinweisband — der Block mit ZWEI Rohwerten
+Z113  #7fd8d3                             Symbol im Hinweisband
+Z146  #0a4f4d                             Titel der empfohlenen Aktion
+Z150  #d3dbdb                             Rahmen der erweiterten Bearbeitung
+```
+
+Genau **fünf** Ausnahme-Blöcke, kein sechster.
+
+**K4 — gebaute CSS: ERFÜLLT.** 0 Rohfarben, 0 `rgba(`.
+
+**K5 — Gates selbst gefahren: ERFÜLLT.** `test:hausplaner` **1332/0** · `tsc` 0 · `schema` 0 ·
+`dom` 11/0 · Bündel im **selben** Commit (§8) · Baum zum Messzeitpunkt sauber.
+
+**K6 — Gegen-Beweise: ERFÜLLT, drei statt zwei.** Kontrolllauf zuerst sauber gestellt (Kopie um
+gebaute CSS und Blade ergänzt): **38/38 grün**. Dann:
+
+```text
+A  hp-gf-wrap wieder inline          => 2 rot  (Wirkung + Klasse ohne Traeger)
+B  #0a4f4d durch T.accentInk ersetzt => 3 rot  (Wirkung + Verriegelung + Mengenzusage)
+C  eine SECHSTE Ausnahme angelegt    => 1 rot  (nur die Mengenzusage)
+```
+
+**Mutation B ist bewusst eine andere als seine.** Er hat eine Ausnahme *in die Schicht geholt*; ich
+habe ihren Rohwert *durch einen Token ersetzt* und die Stelle inline gelassen — **genau die
+Richtung, die bei Scheibe 4 durchgerutscht ist** (`AUF38-S4-1`). Sie fällt. Und dass **C allein die
+Mengenzusage** auslöst, zeigt, dass die drei Zusagen nicht dieselbe Sache dreimal prüfen.
+
+**K7 — serviert == gemessen: ERFÜLLT.** Gefetcht `hausplaner.js` **1 427 410 B**, `hausplaner.css`
+**13 559 B** — byte-gleich zum Baum, und `status --porcelain public` war in diesem Moment leer.
+**29 `hp-gf-`-Regeln in den geladenen Stylesheets.**
+
+**K9 — headful: ERFÜLLT in der Substanz, ohne Bild.** Geführte Fläche geöffnet, **12 Schritte
+durchgeklickt**. Der harte Beleg:
+
+> **28 Elemente tragen eine `hp-gf-`-Klasse — und davon haben 0 einen eigenen Inline-Stil.**
+> `hp-gf-buehne` und `hp-gf-board` beziehen Anzeige, Farbe und Hintergrund aus der Schicht,
+> Inline-Länge 0. **Die Umstellung greift real, nicht nur in der Quelle.**
+
+**Fünf der sechs Rohwert-Flächen habe ich im DOM angetroffen** — Maßstab-Schild, Hinweisband samt
+Schrift und Symbol, erweiterte Bearbeitung. **Die sechste, „empfohlene Aktion" (`#0a4f4d`), nicht.**
+Das bestätigt seinen Befund (2) unabhängig: die Fläche hängt an `s.aufgaben.length > 0` und ist
+heute nicht auslösbar. *Ich habe sie gesucht, nicht geglaubt.*
+
+**Kein Bildschirmfoto.** `Page.captureScreenshot` ist **dreimal nacheinander nach 30 s** gelaufen —
+der Renderer gibt kein Bild her, während die JS-Ebene normal antwortet. Ich habe es nicht durch ein
+älteres Bild ersetzt und melde es als das, was es ist: **eine Messgrenze, kein Beleg.** Die
+computed-style-Messung oben ist der tragende Teil der Sichtprobe und steht.
+
+**Zu seinem Befund (1) — die SVG-Rohfarben: selbst nachgezählt, exakt drei**
+(`stroke="#9aa4af"`, `fill="#7c8590"`, `fill="#aab2bb"`). Sie stehen als **Attribute**, nicht als
+`style`-Block, und liegen damit außerhalb der Grundgesamtheit *und* außerhalb der generischen
+Rohwert-Zusage. **Damit heißt „0 offen" für diese Datei nicht „keine Rohfarbe mehr drin"** — dieselbe
+Klasse wie `MW-7`. Gehört, wie er sagt, zum Abschluss-Posten.
+
+**Und eine Zahl, die die Sorge für diese Scheibe ausräumt:** `GuidedView.tsx` trägt **0** Stellen in
+der `style={bezeichner}`-Schreibweise (gegen 12 `style={{`). **Die `MW-7`-Lücke greift hier nicht** —
+gemessen, nicht angenommen. Sie greift bei Scheibe 7, wo 56 der 58 liegen.
+
+**Prozess-Befund, und es ist die zweite Wiederholung binnen einer Stunde.** Während Scheibe 6 mit
+Ballbesitz Evaluator lag, ist der Baum weitergelaufen: `EngineFlaeche.tsx` wird gebaut und **das
+Bündel steht bereits über `11e23016` hinaus**. Meine K7/K9 stammen von 07:53–07:55, als der Baum
+nachweislich sauber stand — hätte ich zehn Minuten später gemessen, hätte ich Scheibe 6 und die
+nächste zusammen gemessen und es womöglich nicht bemerkt. **Bei Scheibe 5 habe ich denselben Befund
+gemeldet; nach R9 ist damit die zweite Wiederholung erreicht und eine Barriere fällig, kein
+Hinweis.** *Vorschlag, Planner entscheidet:* der Bericht nennt den Bündel-Stand (Bytes oder Prüfsumme)
+mit, dann ist „serviert == gemessen" auch nachträglich noch entscheidbar statt nur im Moment.
+
+**Gesamtvotum: `FREIGABE`.** Ballbesitz: Planner. Als Nächstes ziehe ich **B-01 (K-01 bis K-04)**.
+Kein Commit durch mich, kein Push, kein Tor 2.
+
+## 2026-07-29, 07:58 CEST — GENERATOR: AUF-38 Scheibe 8a (EngineFlaeche) — von 25 offenen bleiben 0
+
+**Commit:** `3c3b4657` — 5 Dateien, Bündel im selben Commit (§8).
+
+**Zur Marke:** sie nannte noch Scheibe 6, weil der Planner seit `01:29` durch den Lock-Rest
+ausgesperrt war. **Ich habe sie nicht verschoben** — das ist seine Sache. Gezogen habe ich nach
+§1c: *„Ist der aktive Posten berichtet, rückt die Kette auf den nächsten"*, und der nächste ist
+**8a**, von ihm selbst geschnitten (`8a EngineFlaeche 25 · 8b GeschossFlaeche 14 · 8c die vier
+Kleinen`). Kein Themenwechsel, keine Kollision: Scheibe 7 ist gesperrt, AUF-83 fasst andere Dateien
+an. *Widerspricht er, ist es ein Revert.*
+
+```text
+QUITTUNG — AUF-38 Scheibe 8a
+Grundgesamtheit selbst gemessen:  29 gesamt · 25 statisch · 0 Ausnahmen · 25 offen
+Auflage „geerbte Zusagen":        KEINE — ueber alle 25 Eigenschaftsnamen gesucht
+Flaeche nur unter Zustand:        vier bedingte Bloecke
+Ergebnis:                         TRAEGT
+```
+
+### Die Zahlen
+
+```text
+Vorher:   29 gesamt · 25 statisch · 0 Ausnahme · 25 offen
+Nachher:   4 gesamt ·  0 statisch · 0 Ausnahme ·  0 offen
+Insel:    249 -> 224 Stellen, 131 -> 106 offen
+Umstellung: 22 Paare · 25 ersetzte Vorkommen (drei Bloecke stehen doppelt)
+```
+
+**Die erste Scheibe ohne eine einzige Ausnahme.** Diese Datei trägt keinen Rohwert; alle Farben
+kommen aus `T`. Eine leere Ausnahme-Liste als Zusage wäre eine Zusage über nichts — **stattdessen
+die schärfere Aussage: es *darf* keine geben.** Kommt ein Rohwert dazu, fällt sie.
+
+Was bleibt, ist durchweg Zustand: der Berechnen-Knopf (`fehlt.length > 0` schaltet auf den Sperrstil
+aus dem Ein-Wahrheit-Modul), die Bestanden-Plakette, das Prüfzeichen.
+
+### Ein Fehler in meiner eigenen Zusage — von der Gegenprobe gefunden
+
+Die Zusage *„jede angelegte Klasse wird auch benutzt"* prüfte mit `includes`. **`hp-ef-wert` steckt
+aber auch in `hp-ef-wertzeile`** — sie wäre grün geblieben, obwohl die Klasse keinen Träger hat.
+
+**Aufgefallen ist es nicht beim Schreiben, sondern an der Gegenprobe:** beim Zurückdrehen einer
+Stelle wurde **ein** Test rot statt zweier. *Ein fehlender roter Test ist ein Befund.* Die
+Gegenprobe prüft nicht nur den Bau, sie prüft auch die Zusage — das ist der Grund, warum sie nicht
+weggelassen werden darf, wenn „ohnehin alles grün" ist.
+
+Jetzt wird auf Wortgrenze geprüft. **Das verschärft zugleich die Zusagen der Scheiben 5 und 6**,
+die dieselbe Schwäche trugen.
+
+```text
+Gegenprobe  eine Stelle zurueckgedreht   =>  2 rot   (vor der Behebung: 1)
+Gegenprobe  einen Rohwert eingeschleust  =>  2 rot
+Endstand wiederhergestellt, byte-gleich zur Sicherung, 42/42 gruen
+```
+
+*Nebenbei, weil es zur selben Stunde gehört: die erste Fassung dieses Helfers habe ich per `perl`
+in der Shell eingesetzt, und die Shell hat die Rückwärts-Anführungszeichen im Kommentar
+ausgeführt — übrig blieb eine Funktion, die **nichts** prüfte und trotzdem 42 Tests grün meldete.
+Gefunden, weil ich die Datei nach dem Schreiben gelesen habe statt dem Testzähler zu glauben.
+Ab jetzt: Testcode nie per Shell-Ersetzung, sondern mit dem Editor.*
+
+### Gates — selbst gemessen
+
+```text
+Befehl:      npm run test:hausplaner            Exit 0   Tests 1336   Fehler 0   (vorher 1332)
+Befehl:      npm run test:hausplaner:dom        Exit 0   Tests   11   Fehler 0
+Befehl:      npm run tsc:hausplaner             Exit 0
+Befehl:      npm run schema:hausplaner:check    Exit 0
+Befehl:      npm run build:hausplaner           Exit 0
+Befehl:      php artisan test                   Exit 0   Tests  789   (2729 Zusicherungen)
+K4:          0 Rohfarben in der gebauten CSS
+```
+
+### Geerbte Zusagen: keine — und diesmal belastbar geprüft
+
+Über **alle 25 Eigenschaftsnamen** gesucht. Die Treffer lesen andere Dateien: `keineKappung`
+(HausplanerApp, FaehigkeitenNavi, ReiterLeiste), `breiten:74` (vier andere Flächen), `opGruppen`
+(andere Quelle, dazu ein `doesNotMatch`). **`gesperrtAppWeit:37` liest EngineFlaeche** — aber einen
+**dynamischen** Block (`fehlt.length > 0 ? GESPERRT_GRUND`), der nicht zu den 25 gehört und nicht
+angefasst wurde.
+
+### K9 ist nicht erfüllt und wird nicht so gemeldet
+
+Vier Flächen erscheinen nur unter Zustand: Feldhinweis (`f.hinweis`), Fehlt-Meldung
+(`fehlt.length > 0`), Bestanden-Plakette (`typeof ergebnis.bestanden === 'boolean'`), Prüfliste
+(`ergebnis.pruefungen !== undefined`). **Alle vier sind auslösbar** — anders als die Aufgaben-Karte
+in Scheibe 6.
+
+**Status nach §2: `BERICHTET`.** Nach dem Restschnitt folgen **8b** (`GeschossFlaeche`, 14) und
+**8c** (die vier Kleinen, 14).
