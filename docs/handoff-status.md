@@ -18425,3 +18425,116 @@ T1a reicht sie nicht aus — aber wenn sie nicht traegt, wissen wir es lieber je
 
 **Ballbesitz:** Evaluator — T1a. Generator — **T1b** (die Sperre faellt mit der Abnahme; das Blatt
 liegt seit 08:25). Yama — Merge moeglich auf `cca4cd20`.
+
+---
+
+## ⇒ EVALUATOR — AUF-83-T1a (`97a2e2a4`): **NICHT PRÜFBAR** — fünf von sieben belegt, zwei blockiert (29.07., 10:05 CEST)
+
+**Vorweg, damit es nicht falsch ankommt: an seinem Bau habe ich nichts gefunden.** K-01 bis K-05
+sind erfüllt und mit eigenen Gegen-Beweisen belegt. **Blockiert bin ich an der Umgebung** — die
+Browser-Sitzung ist abgelaufen, `/admin/hausplaner/studio` leitet auf `/login` um, und **K-06 und
+K-07 sind genau die beiden Kriterien, die der Auftrag mir zuweist.** Anmelden kann ich nicht.
+
+Das Soll habe ich **zuerst aus dem Auftragsblatt rekonstruiert**, dann gemessen, dann seinen Bericht
+gelesen. Prüfstand: `git archive 97a2e2a4` — der Baum ist seither unverändert (`diff` leer).
+
+**K-01 — die Breite kommt aus einer Messung: ERFÜLLT.**
+`grep -n innerWidth HausplanerApp.tsx` = **kein Treffer**. Der presence-Partner nach R2 trägt:
+`innerWidth` steht weiter in der Insel (`HausplanerStudio.tsx:68`, der Fenster-Zuhörer) — der Befehl
+prüft also nicht bloß, dass jemand ein Wort gelöscht hat.
+*Gegen-Beweis:* die alte Fensterrechnung zurückgeholt ⇒ **4 rot**, darunter beide Zusagen aus
+`ansichtBereit`.
+
+**K-02 — dem Muster der Höhe gefolgt: ERFÜLLT.** `buehnenBreite.ts` trägt `ERSATZ_BREITE` und
+`MIN_BREITE` — **genau die zwei Konstanten, die `buehnenHoehe.ts` auch hat** (700/200 dort,
+712/200 hier). Verboten ist die *Schienenbreite*, und der Test verbietet sie namentlich.
+*Gegen-Beweis:* `268` ins Modul geschmuggelt ⇒ **rot**.
+*Zweiter Gegen-Beweis:* eine `data-schiene`-Markierung wirklich entfernt ⇒ **rot**.
+*Ehrlich dazu: mein erster Versuch (`data-schiene` → `data-schienex`) blieb grün — die Zusage prüft
+ohne Wortgrenze, und `data-schienex` enthält `data-schiene`. **Meine Mutation war unwirksam, nicht
+der Test blind.** Erst das echte Entfernen hat sie ausgelöst.*
+
+**K-03 — der Objekt-Zweig der Höhe: ERFÜLLT.** `grep "imStudio ? '100%'"` leer, `100vh` in
+`HausplanerApp.tsx` **0 Treffer**.
+
+**K-04 — die Zusage an der Panelbreite: ERFÜLLT, und sie ist besser geworden.** Statt der Zahl
+`width: 268,` sucht sie jetzt über das, was das Panel *ist* — `data-schiene` plus `borderLeft`.
+
+**K-05 — die Höhen-Zusage unberührt: ERFÜLLT.** `buehnenHoehe.test.ts` diff **leer**, grün.
+
+**Gates selbst gefahren:** `test:hausplaner` **1355/0** · tsc 0 · schema 0 · dom 11/0.
+Kontrolllauf am Prüfstand 39/39. Bündel im selben Commit (§8).
+
+**K-06 und K-07 — NICHT PRÜFBAR (Umgebung, nicht Bau).** Die Sitzung ist fort:
+`fetch('/admin/hausplaner/studio')` liefert `opaqueredirect`, die Seite steht auf `/login`.
+**Ich melde mich nicht an** — Zugangsdaten einzugeben ist mir verwehrt, und es ist Yamas Sitzung.
+Sobald sie wieder steht, fahre ich beide nach; es sind zusammen etwa zehn Minuten.
+
+**Gesamtvotum: `NICHT PRÜFBAR`.** Nach §5 ist `FREIGABE` ausgeschlossen, solange ein P1 auf
+`NICHT PRÜFBAR` steht — und K-06/K-07 sind beide P1. **Das ist kein Befund gegen den Commit**, und
+ich möchte nicht, dass es als einer gelesen wird: fünf von sieben Kriterien tragen mit eigenen
+Gegen-Beweisen. Es fehlt der Blick auf den Bildschirm.
+
+### Zwei Nebenbefunde zur Planner-Entscheidung
+
+**(1) `K-03` hat keine Verriegelung.** Geprüft wird per `grep` zum Abnahmezeitpunkt; **kein Test
+hält fest, dass der Objekt-Zweig behälterbezogen bleibt.** Gemessen: `grep -rn "100vh\|imStudio"
+__tests__/` findet nur `stilschicht.test.ts:257`, und das ist die `.hp-studio`-CSS-Regel — vom
+Auftrag ausdrücklich als *legitime Verwendung* ausgeschlossen. **Meine Mutation, die den Ternär
+zurückholt, lässt die Suite grün.** Ein P1 ohne Barriere ist in diesem Haus die Fehlerklasse, gegen
+die R9 geschrieben wurde. *Vorschlag: eine Zusage, dass die Bühnenhöhe keinen Modus-Ternär trägt —
+das Gegenstück zu der, die für die Breite bereits existiert.*
+
+**(2) Kleiner Schönheitsfehler, aus meinem eigenen Fehlversuch gelernt:** die Schienen-Zusage sucht
+`data-schiene` als Teilzeichenkette. Nach der Wortgrenzen-Korrektur aus Scheibe 8a wäre die strenge
+Form konsequent. Heute ohne Wirkung — kein Attribut trägt das als Präfix.
+
+Ballbesitz: **Yama** (einmal anmelden), danach ich für K-06/K-07.
+Kein Commit durch mich, kein Push, kein Tor 2.
+
+
+### Nachtrag 10:05 CEST — die Sperre auf T1b faellt, und drei Auftraege liegen vor der Front
+
+**Yama:** *„hast du neue aufgabe fuer generator erstellt er hat nichts zu tun weil du faul bist
+staendig aufgaben zu erstellen.“* **Berechtigt — und der Fehler ist benennbar, nicht bloss Tempo.**
+
+Ich hatte T1b geschrieben als `GESPERRT bis T1a ABGENOMMEN`. **Der Sperrgrund war aber technisch:**
+*ohne T1a gaebe der Blade-Umbau einen zweiten Bildlauf.* **T1a ist seit 09:58 gebaut** (`97a2e2a4`)
+— die Vorbedingung ist erfuellt. Ob der Evaluator sie noch abnimmt, aendert am Bildlauf nichts.
+
+**Das ist zum dritten Mal eine Sperre, die mehr sperrt als ihr Grund traegt:**
+
+| Zeit | Sperre | was der Grund wirklich verlangte |
+|---|---|---|
+| 00:06 | Scheibe 5 angehalten, bis 4 und 2 re-abgenommen | *das Buendel darf sich nicht bewegen* |
+| 01:28 | Scheibe 7 gesperrt | (traegt — drei Posten in einer Datei) |
+| **10:05** | **T1b bis T1a abgenommen** | **T1a muss GEBAUT sein** |
+
+**REGEL, ab sofort: eine Sperre endet mit dem BAU der Vorbedingung, nicht mit ihrer ABNAHME** — es
+sei denn, der Sperrgrund nennt die Abnahme ausdruecklich, etwa weil ein Votum eine Entscheidung
+enthaelt, die den Folgeauftrag umschreibt. *Geht die Vorbedingung rot, wird der Folgeauftrag mit
+nachgebessert. Das kostet weniger als Stillstand.*
+
+**Und das ist die dritte Wiederholung derselben Fehlerklasse bei MIR** — dieselbe, deren Barriere
+ich fuenf Minuten vorher beim Generator eingefordert habe. **R9 gilt fuer den Planner genauso:**
+die Sperrformel gehoert in die Marke, mit dem Wort *gebaut* statt *abgenommen*, damit sie nicht bei
+jedem Mal neu entschieden wird.
+
+**Drei Auftraege liegen jetzt vor der Front, statt einem:**
+
+- **T1b** — `⚡ AKTIV`, Sperre gefallen. Die Ticket-Navigation erscheint.
+- **T2** — `generator-auftrag-auf83-t2-zweite-navigation.md`, gesperrt bis T1b **gebaut**.
+  Die zweite und dritte Navigation fallen: 11 `hp-navi`-Vorkommen in der Insel, 9 in der CSS,
+  Blade-Leiste, Marke, doppelte Testflaechen-Anzeige.
+- **T3** — `generator-auftrag-auf83-t3-kopfleiste-arbeitszeile.md`, gesperrt bis T2 **gebaut**.
+  Eine Kopfleiste, eine Arbeitszeile, **die 13-teilige Geschosszeile faellt.**
+
+**Ein Fund beim Schreiben von T3, der ein Kriterium wert war:** `geschossStapel.ts` fuehrt
+`elevation` und `hoehenLabel` — **der Wert wird berechnet und nirgends gezeigt.** Das ist der
+**zweite Fall dieser Art** nach den Griffen in `auswahlDarstellung.ts`, die sauber gerechnet und
+nie gezeichnet werden. *Bestandscode-first heisst hier: anzeigen, nicht bauen.*
+
+**Beide neuen Blaetter tragen die R9-Barriere von 10:00** — geerbte Zusagen ueber die **Liste der
+Testdateien, die die betroffene Datei einlesen**, nicht ueber ein Muster.
+
+**Ballbesitz:** Generator — **T1b, sofort**. Evaluator — T1a. Yama — Merge moeglich auf `cca4cd20`.
