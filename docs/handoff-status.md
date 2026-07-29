@@ -17800,3 +17800,166 @@ Ledger-Eintrag von 01:30 ist damit nicht falsch gewesen, nur zu eng.*
 
 **Ballbesitz Yama:** Entwurf 2 ansehen. **T1a kann ich als Blatt schreiben, ohne dass er entscheidet**
 — es beruehrt weder Rechte noch Routing, nur Layoutverhalten.
+
+## 2026-07-29, 08:19 CEST — GENERATOR: AUF-38 Scheibe 8c (die vier Kleinen) — 14 offen auf 0
+
+**Commit:** `cca4cd20` — 10 Dateien, Bündel im selben Commit (§8).
+
+```text
+QUITTUNG — AUF-38 Scheibe 8c
+Grundgesamtheit selbst gemessen:  WerkzeugGruppenMenue 8 · FaehigkeitenNavi 3 · DreiDBereich 2
+                                  · ReiterLeiste 1  =  14 offen, 2 Ausnahmen
+Zweite Schreibweise:              keine
+Geerbte Zusagen:                  ZWEI, beide in keineKappung.test.ts
+Ergebnis:                         TRAEGT
+```
+
+```text
+Vorher:   WerkzeugGruppenMenue 8 · FaehigkeitenNavi 3 · DreiDBereich 2 · ReiterLeiste 1
+Nachher:  alle vier auf 0 offen
+Insel:    210 -> 196 Stellen, 92 -> 78 offen
+```
+
+**Die verbliebenen 78 liegen vollständig in `HausplanerApp.tsx`** — der gesperrten Scheibe 7.
+
+**Zwei Ausnahmen**, beide in `DreiDBereich`: die Werkzeugleiste über dem 3D-Bild
+(`#ffffffcc`/`#e5e7eb`/`#6b7280`) und der Ladehinweis (`#d1d5db`). Die Mengenzusage hält fest, dass
+es **genau zwei** sind **und** dass beide in `DreiDBereich` liegen — eine Ausnahme, die in eine der
+anderen drei Dateien wandert, fällt auf.
+
+### Die Methode für geerbte Zusagen hat noch eine Lücke gehabt — jetzt geschlossen
+
+Die präzisierte Auflage lautet: *über die Eigenschaftsnamen suchen, nicht über `style`/`inline`*.
+**Das hätte hier beide verfehlt.** `keineKappung.test.ts` liest `FaehigkeitenNavi` und
+`ReiterLeiste` über **Variablen** (`navi`, `leiste`); ein Griff, der zusätzlich nach dem Dateinamen
+filtert, findet die Zeilen nicht.
+
+**Was trägt:** zuerst suchen, welche Tests die Datei überhaupt **einlesen**
+(`grep -l '<Datei>.tsx' __tests__/`), und *dann* diese Dateien auf Stil-Zusagen ansehen. Das ist
+unabhängig davon, wie der Testautor seine Variablen nennt. **Vorschlag an den Planner: so in die
+Auflage.**
+
+```text
+B2  las flexWrap aus dem Inline-Stil der Reiterzeile
+B4  las den Stil des Faehigkeiten-Labels Zeichen fuer Zeichen
+Gegenprobe: den Umbruch aus der Regel .hp-fn-label genommen  =>  B4 rot
+```
+
+**Die Gegenprobe ist der Punkt:** die nachgezogene Fassung prüft die **Regel**, nicht bloß, dass die
+Klasse dasteht. Hätte ich nur auf `className="hp-fn-label"` geprüft, wäre sie grün geblieben,
+während der Umbruch verschwindet — und *„Horizont…"* stünde wieder da.
+
+### Eine eigene Zusage ist rot geworden — und das war richtig so
+
+Die `MW-1`-Zusage hing an der Fundstelle `WerkzeugGruppenMenue` Z82, dem kommentierten, sonst
+statischen Block, an dem der Befund entstand. **Diese Scheibe hat genau ihn abgeräumt**, und die
+Zusage ging rot — mit dem Satz, den ich selbst dafür geschrieben hatte: *„die Stelle ist
+verschwunden — dann gehört diese Zusage nachgeführt."*
+
+*Sie hat funktioniert; sie hing nur am Einzelfall.* Jetzt steht die **Eigenschaft** statt der
+Stelle: an jedem kommentierten Block der Insel darf der Kommentar die Einstufung nicht ändern.
+
+**Ehrlich zur Reichweite dieser neuen Fassung:** sie greift nur, wenn ein kommentierter Block sonst
+**statisch** wäre. Heute sind alle sechs kommentierten Blöcke der Insel dynamisch — **die
+Zusage hat an echten Daten also gerade keine Zähne.** Was Zähne hat, ist der synthetische Test
+daneben (`istStatisch` mit und ohne Kommentar); der geht rot, sobald die Überspringung fällt —
+belegt. Die island-weite Fassung ist ein **Wächter für den Fall, dass so ein Block wiederkommt**,
+kein Beleg für heute. Das gehört so gesagt und nicht schöner.
+
+### Gates — selbst gemessen
+
+```text
+Befehl:      npm run test:hausplaner            Exit 0   Tests 1345   Fehler 0   (vorher 1341)
+Befehl:      npm run test:hausplaner:dom        Exit 0   Tests   11   Fehler 0
+Befehl:      npm run tsc:hausplaner             Exit 0
+Befehl:      npm run schema:hausplaner:check    Exit 0
+Befehl:      npm run build:hausplaner           Exit 0
+Befehl:      php artisan test                   Exit 0   Tests  789   (2729 Zusicherungen)
+K4:          0 Rohfarben in der gebauten CSS
+```
+
+### K9 ist nicht erfüllt und wird nicht so gemeldet
+
+Das Werkzeug-Gruppenmenü ist ein `role="menu"` und erscheint nur unter Zustand — **Auslöser:** eine
+Gruppe in der Werkzeugleiste anklicken. Die Reiterzeile und das Fähigkeiten-Label sind ohne Zustand
+sichtbar; für sie zählt der Umbruch bei schmalem Fenster (drei Reiter in 220 px).
+
+**Status nach §2: `BERICHTET`.** Damit ist der Restschnitt abgearbeitet: **8a, 8b und 8c sind
+durch.** Offen bleibt allein **Scheibe 7** (`HausplanerApp.tsx`, 78 Stellen) — gesperrt, solange sie
+AUF-48 und T4 aus AUF-83 gleichzeitig trägt.
+
+---
+
+## ⇒ EVALUATOR — Scheibe 8b **FREIGABE** · und der Rest von 8a ist geschlossen (29.07., 08:21 CEST)
+
+**Zuerst eine Richtigstellung an mir selbst, weil sie den Rest erklärt.** Um 08:04 schrieb ich zu
+Scheibe 8a, ich bekäme die `EngineFlaeche` nicht auf. **Das war die falsche Ursache.** Ich habe sie
+sehr wohl geöffnet — sie rendert nur aus einem **im Browser zwischengespeicherten Bündel**, das
+älter ist als Scheibe 5. Der Weg war nie das Problem.
+
+```text
+SERVIERTE hausplaner.js (1 422 946 B) enthaelt:  hp-fach- 24 · hp-kw- 33 · hp-gf- 29 · hp-ef- 22 · hp-gs- 15
+IM DOM gerendert (vor hartem Neuladen):          hp-fach-  7 · hp-kw-  0 · hp-gf-  0 · hp-ef-  0 · hp-gs-  0
+```
+
+**Die Seite lief auf Code von vor vier Scheiben, während der Server den aktuellen auslieferte.**
+Nach `cmd+shift+r` ist alles da. **Das ist derselbe Befund, den ich um 08:04 an der CSS gemeldet
+habe — jetzt an der JS, und viel deutlicher.** Beide unter unveränderlichem Namen über `asset()`,
+ohne `?v=`. *Er hat mich zweimal getäuscht, während ich hinsah, und beim zweiten Mal hätte er mich
+fast einen Bau-Befund melden lassen, der keiner ist.*
+
+### Scheibe 8b (`a022452f`): FREIGABE
+
+**K1 Zahlen: ERFÜLLT — nach einer Korrektur an mir selbst.** Erst maß ich die Insel auf **196/78**
+und hätte seine 210/92 beanstandet. **Der Baum war verunreinigt: 8c lag bereits unversioniert
+darin.** Gegen den Commit gemessen (`git archive a022452f`): **210 gesamt, 92 offen — exakt seine
+Zahlen.** `GeschossFlaeche` `19/14/0/14 + 2× style={bezeichner}` → **`5/0/0/0 + 0`**.
+*Seitdem messe ich Scheiben auf einem commit-exakten Prüfstand, nicht im Arbeitsbaum.*
+
+**K2 15 Klassen: ERFÜLLT** — Mengenvergleich CSS ↔ TSX identisch.
+**K3 keine Ausnahme: ERFÜLLT**, 0 Rohwerte. **K4 gebaute CSS: 0.**
+**K5 Gates: ERFÜLLT.** Am Commit-Stand `stilschicht.test.ts` **47/47**; im Arbeitsbaum die volle
+Insel **1345/0** · tsc 0 · schema 0 · dom 11/0. *(Die 1345 enthalten 8c — deshalb nicht seine 1341;
+grün ist sie in beiden Ständen.)* Bündel im selben Commit (§8).
+
+**K6 — und hier liegt der Kern der Scheibe, unabhängig belegt:**
+
+```text
+A  eine style={{-Stelle zurueckgedreht     => 2 rot   Werkzeug: 1 offen
+B  style={knopfStil} wieder eingesetzt     => 2 rot   Werkzeug: 0 offen  <<<
+C  alle Spread-Verwendungen entfernt       => 2 rot   Werkzeug: 2 offen
+```
+
+**In B meldet das Werkzeug weiterhin `0 offen`** — es sieht die zweite Schreibweise nicht, nur seine
+eigene Zusage fängt sie. **Damit ist `AUF38-MW-7` an einer echten Umstellung nachgewiesen**, nicht
+mehr als Annahme. *Zu C ehrlich: meine Mutation hat den Spread-Inhalt entfernt und die Blöcke
+dadurch statisch gemacht — rot wurde die Wirkungs-Zusage, nicht die Tot-Konstanten-Sperre. Die habe
+ich damit **nicht** isoliert geprüft.*
+
+**K9 headful: ERFÜLLT.** Geschoss-Menü geöffnet (`role=dialog`, `aria-label="Geschosse"`):
+**13 Elemente, 12 `hp-gs`-Klassen, davon 0 mit eigenem Inline-Stil**; `.hp-gs-anker` bezieht
+`display: flex` und Farbe aus der Schicht.
+
+**Restumfang der zweiten Schreibweise, gemessen:** nach 8b liegen alle verbliebenen **56** in
+`HausplanerApp.tsx` — **8b hat die einzigen zwei außerhalb von Scheibe 7 beseitigt.**
+
+### Scheibe 8a: der offene Rest ist geschlossen ⇒ **FREIGABE**
+
+Mit seinem Weg (linke Schiene → Reiter „Fachplaner" → Eintrag mit Engine) und einem frischen Bündel:
+`EngineFlaeche` offen über **„Treppen-Auslegung"** — **43 Elemente, 13 `hp-ef`-Klassen, 0 mit
+Inline-Stil**, `.hp-ef-grundlage` mit `rgb(167,174,183)` = `#a7aeb7` = `T.faint` aus der Schicht.
+Nach **„Berechnen"** erscheinen Werte und Prüfliste: **20 von 22 Klassen, 82 Elemente, weiterhin
+0 mit Inline-Stil.** Die zwei ungesehenen gehören zur Fehlt-Meldung (leere Pflichtfelder).
+**Damit ist `FREIGABE MIT REST` von 08:04 aufgelöst: `FREIGABE`.**
+
+### Der Auslieferungs-Befund ist jetzt belegt, nicht vermutet
+
+Um 08:04 habe ich ihn an der CSS gemeldet und als *„Befund gegen die Auslieferung"* eingestuft.
+**Er ist ernster:** die JS ist genauso betroffen, und eine veraltete JS zusammen mit einer frischen
+CSS (oder umgekehrt) ist kein Schönheitsfehler, sondern **Markup und Stilschicht aus verschiedenen
+Ständen**. Genau das habe ich hier gesehen. **Nach AUF-38 hängt praktisch die gesamte Darstellung
+daran.** Zur Planner-Entscheidung, unverändert: Versionskennung an beide `asset()`-Aufrufe.
+
+**Voten: Scheibe 8b `FREIGABE` · Scheibe 8a `FREIGABE` (Rest geschlossen).** Ballbesitz: Planner.
+**Scheibe 8c (`cca4cd20`) liegt bereits** und ist mein nächster Posten.
+Kein Commit durch mich, kein Push, kein Tor 2.
