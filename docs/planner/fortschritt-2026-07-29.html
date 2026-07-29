@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hausplaner — Fortschritt 29.07.2026</title>
+<style>
+  :root{
+    --bg:#f5f7f8; --surface:#fff; --surface2:#f7f9fa;
+    --ink:#232a31; --muted:#697079; --faint:#a7aeb7;
+    --hair:#edf0f2; --hair2:#dfe3e6;
+    --accent:#12807d; --accentSoft:#e6f2f1;
+    --gruen:#94C11C; --blau:#2B4290;
+    --warnInk:#b45309; --warnBg:#fff7ed; --warnBd:#fed7aa;
+    --rot:#c63533; --rotBg:#fdeceb;
+    --f1:0 1px 2px rgba(28,50,55,.08);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--bg);color:var(--ink);padding:38px 26px 80px;
+       font:14px/1.6 Inter,-apple-system,"Segoe UI",system-ui,sans-serif}
+  .h{max-width:1080px;margin:0 auto}
+  h1{font-size:24px;font-weight:800;letter-spacing:-.35px;margin:0 0 6px}
+  .lead{color:var(--muted);font-size:13.5px;margin:0 0 4px}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+       background:var(--surface);border:1px solid var(--hair2);border-radius:5px;padding:1px 5px}
+
+  section{margin-top:38px}
+  .kap{display:flex;align-items:baseline;gap:11px;margin-bottom:12px}
+  .kap h2{font-size:16.5px;font-weight:800;margin:0;letter-spacing:-.2px}
+  .nr{font-size:10.5px;font-weight:800;color:var(--accent);background:var(--accentSoft);
+      border-radius:6px;padding:3px 8px;letter-spacing:.4px}
+  .kap .r{margin-left:auto;font-size:12.5px;color:var(--faint)}
+
+  /* Kennzahlen */
+  .zahlen{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+  .z{background:var(--surface);border:1px solid var(--hair2);border-radius:12px;padding:14px 15px;box-shadow:var(--f1)}
+  .z .t{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);font-weight:800;margin-bottom:7px}
+  .z .v{font-size:27px;font-weight:800;letter-spacing:-.8px;line-height:1.1;font-variant-numeric:tabular-nums}
+  .z .n{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .z.gut .v{color:var(--accent)} .z.warn .v{color:var(--warnInk)} .z.rot .v{color:var(--rot)}
+
+  /* Balken */
+  .bal{background:var(--surface);border:1px solid var(--hair2);border-radius:12px;padding:16px 17px;box-shadow:var(--f1)}
+  .balz{display:flex;align-items:center;gap:12px;margin-bottom:9px;font-size:12.5px}
+  .balz:last-child{margin-bottom:0}
+  .balz .nm{width:190px;flex:0 0 auto;font-weight:600}
+  .balz .nm small{color:var(--faint);font-weight:400;margin-left:5px}
+  .balk{flex:1;height:19px;border-radius:6px;background:var(--surface2);overflow:hidden;display:flex}
+  .balk i{display:block;height:100%}
+  .balk i.fertig{background:var(--accent)}
+  .balk i.offen{background:repeating-linear-gradient(45deg,#e4e8ea 0 5px,#eef1f3 5px 10px)}
+  .balz .za{width:96px;text-align:right;flex:0 0 auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px}
+  .balz .za b{color:var(--ink)}
+  .balz.zu .nm{color:var(--warnInk)}
+
+  /* Tabellen */
+  table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;background:var(--surface);
+        border:1px solid var(--hair2);border-radius:12px;overflow:hidden;box-shadow:var(--f1)}
+  th{text-align:left;padding:10px 13px;background:var(--surface2);font-size:10.5px;letter-spacing:.5px;
+     text-transform:uppercase;color:var(--faint);font-weight:800;border-bottom:1px solid var(--hair2)}
+  td{padding:11px 13px;border-bottom:1px solid var(--hair);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  td.m{color:var(--muted)}
+  td.w{white-space:nowrap}
+  .pill{display:inline-block;font-size:10.5px;font-weight:800;border-radius:999px;padding:3px 9px;white-space:nowrap}
+  .pill.ok{background:var(--accentSoft);color:var(--accent)}
+  .pill.pruef{background:#eef2fb;color:var(--blau)}
+  .pill.bau{background:var(--warnBg);color:var(--warnInk)}
+  .pill.zu{background:var(--rotBg);color:var(--rot)}
+  .pill.yama{background:#f2f6e6;color:#5f7d0f}
+  .pill.p1{background:var(--rotBg);color:var(--rot)}
+  .pill.p2{background:var(--warnBg);color:var(--warnInk)}
+  .pill.p3{background:var(--surface2);color:var(--muted);border:1px solid var(--hair2)}
+
+  .kasten{border-left:3px solid var(--accent);background:var(--accentSoft);border-radius:0 11px 11px 0;
+          padding:14px 17px;margin-top:16px;font-size:13px}
+  .kasten.warn{border-left-color:var(--warnInk);background:var(--warnBg)}
+  .kasten p{margin:0 0 8px} .kasten p:last-child{margin:0}
+  .liste{margin:10px 0 0;padding-left:19px;font-size:13px}
+  .liste li{margin-bottom:6px}
+  .fuss{margin-top:34px;padding-top:16px;border-top:1px solid var(--hair2);color:var(--faint);font-size:12px}
+  @media(max-width:760px){.zahlen{grid-template-columns:repeat(2,1fr)} .balz .nm{width:120px}}
+</style>
+</head>
+<body>
+<div class="h">
+
+<h1>Hausplaner — Fortschritt</h1>
+<p class="lead">Stand <strong>29.07.2026, 07:56 CEST</strong> · Branch <code>auto/hausplaner-integration</code>
+· HEAD <code>71889bdd</code> · alle Zahlen aus dem Repo gemessen, keine geschätzt</p>
+
+<!-- ══ Kennzahlen ══ -->
+<section>
+  <div class="kap"><span class="nr">01</span><h2>Wo wir stehen</h2><span class="r">seit Mitternacht</span></div>
+  <div class="zahlen">
+    <div class="z gut"><div class="t">Freigaben heute</div><div class="v">5</div>
+      <div class="n">Scheibe 4 · Nachzug 2 · Messwerkzeug · Scheibe 5 · B-01 Sicherung</div></div>
+    <div class="z gut"><div class="t">Inline-Stellen offen</div><div class="v">131</div>
+      <div class="n">von 198 um Mitternacht · <strong>−34 %</strong></div></div>
+    <div class="z"><div class="t">Commits heute</div><div class="v">27</div>
+      <div class="n">Generator · Evaluator · Planner</div></div>
+    <div class="z warn"><div class="t">ungesichert</div><div class="v">15</div>
+      <div class="n">seit <code>a849e030</code>, 00:39</div></div>
+  </div>
+</section>
+
+<!-- ══ AUF-38 ══ -->
+<section>
+  <div class="kap"><span class="nr">02</span><h2>AUF-38 — Inline-Stile in die Stilschicht</h2>
+    <span class="r">der tragende Posten</span></div>
+  <div class="bal">
+    <div class="balz"><span class="nm">StartView <small>Scheibe 2</small></span>
+      <span class="balk"><i class="fertig" style="width:100%"></i></span><span class="za"><b>0</b> offen</span></div>
+    <div class="balz"><span class="nm">FachFlaeche <small>Scheibe 3</small></span>
+      <span class="balk"><i class="fertig" style="width:100%"></i></span><span class="za"><b>0</b> offen</span></div>
+    <div class="balz"><span class="nm">HausplanerStudio <small>Scheibe 4</small></span>
+      <span class="balk"><i class="fertig" style="width:100%"></i></span><span class="za"><b>0</b> offen</span></div>
+    <div class="balz"><span class="nm">ConfigWizard <small>Scheibe 5</small></span>
+      <span class="balk"><i class="fertig" style="width:100%"></i></span><span class="za"><b>0</b> offen</span></div>
+    <div class="balz"><span class="nm">GuidedView <small>Scheibe 6</small></span>
+      <span class="balk"><i class="fertig" style="width:100%"></i></span><span class="za"><b>0</b> offen</span></div>
+    <div class="balz"><span class="nm">EngineFlaeche <small>Scheibe 8a</small></span>
+      <span class="balk"><i class="fertig" style="width:0%"></i><i class="offen" style="width:100%"></i></span>
+      <span class="za"><b>25</b> offen</span></div>
+    <div class="balz"><span class="nm">GeschossFlaeche <small>Scheibe 8b</small></span>
+      <span class="balk"><i class="offen" style="width:100%"></i></span><span class="za"><b>14</b> offen</span></div>
+    <div class="balz"><span class="nm">vier kleine Dateien <small>Scheibe 8c</small></span>
+      <span class="balk"><i class="offen" style="width:100%"></i></span><span class="za"><b>14</b> offen</span></div>
+    <div class="balz zu"><span class="nm">HausplanerApp <small>Scheibe 7 · gesperrt</small></span>
+      <span class="balk"><i class="offen" style="width:100%"></i></span><span class="za"><b>78</b> + 56</span></div>
+  </div>
+  <div class="kasten">
+    <p><strong>Fünf von neun Scheiben sind durch.</strong> Was bleibt, sind <strong>131 Stellen</strong> —
+    und <strong>78 davon plus 56 in zweiter Schreibweise liegen in einer einzigen Datei</strong>,
+    <code>HausplanerApp.tsx</code> mit 2305 Zeilen. Sie ist gesperrt, weil dort gleichzeitig
+    <strong>AUF-48</strong> (Zerlegung) und <strong>T4</strong> aus deinem neuen Auftrag ansetzen.</p>
+    <p><strong>Zwei Werkzeug-Befunde haben die Zahlen selbst korrigiert:</strong> die Kommentar-Blindheit
+    (<code>MW-1</code>/<code>MW-2</code>) machte den Sollwert zu klein, und <code>MW-7</code> zeigt, dass
+    <code>style={bezeichner}</code> gar nicht gezählt wird — <strong>58 Stellen</strong>, davon 56 in Scheibe 7.
+    Beides ist jetzt beauftragt statt vermutet.</p>
+  </div>
+</section>
+
+<!-- ══ Ballbesitz ══ -->
+<section>
+  <div class="kap"><span class="nr">03</span><h2>Wer gerade woran ist</h2></div>
+  <table>
+    <tr><th>Posten</th><th>Zustand</th><th>bei</th><th>was als Nächstes</th></tr>
+    <tr><td><strong>AUF-38 Scheibe 8a</strong> — EngineFlaeche</td><td><span class="pill bau">im Bau</span></td>
+        <td class="w">Generator</td><td class="m">25 Stellen, keine Kollision mit anderen Posten</td></tr>
+    <tr><td><strong>AUF-38 Scheibe 6</strong> — GuidedView</td><td><span class="pill pruef">Abnahme</span></td>
+        <td class="w">Evaluator</td><td class="m">5 Ausnahmen — die höchste Zahl aller Dateien; einzeln zu verriegeln</td></tr>
+    <tr><td><strong>B-01</strong> — <code>.ai-workflow/</code> versioniert</td><td><span class="pill pruef">Abnahme</span></td>
+        <td class="w">Evaluator</td><td class="m">Kriterien K-01 bis K-04 (K-05 war mein Auftragsfehler, von dir erledigt)</td></tr>
+    <tr><td><strong>AUF-83</strong> — Studio-Rahmen</td><td><span class="pill zu">gesperrt</span></td>
+        <td class="w">Yama</td><td class="m">Entwurf freigeben, dann fällt die Sperre auf T2/T3</td></tr>
+    <tr><td><strong>AUF-38 Scheibe 7</strong> — HausplanerApp</td><td><span class="pill zu">gesperrt</span></td>
+        <td class="w">—</td><td class="m">wartet auf die Entscheidung zu T4 / AUF-48</td></tr>
+    <tr><td><strong>AUF-48</strong> — HausplanerApp zerlegen</td><td><span class="pill zu">gesperrt</span></td>
+        <td class="w">—</td><td class="m">T4 wäre der erste Zerlegungsschritt — das löst die Sperre auf</td></tr>
+    <tr><td><strong>AUF-50</strong> — 110 Werkzeuge funktionstüchtig</td><td><span class="pill zu">offen</span></td>
+        <td class="w">Planner</td><td class="m">Zuschnitt in vier Stufen liegt, das Auftragsblatt fehlt</td></tr>
+    <tr><td><strong>AUF-40 Rest</strong> — echte Projektliste</td><td><span class="pill yama">Willensfrage</span></td>
+        <td class="w">Yama</td><td class="m">Zulieferung der Projektliste (Tor 1)</td></tr>
+  </table>
+</section>
+
+<!-- ══ Bei Yama ══ -->
+<section>
+  <div class="kap"><span class="nr">04</span><h2>Was bei dir liegt</h2><span class="r">vier Dinge</span></div>
+  <table>
+    <tr><th>Was</th><th>warum bei dir</th><th>Aufwand</th></tr>
+    <tr><td><strong>15 Commits sichern</strong></td>
+        <td class="m"><code>fork</code> steht auf <code>a849e030</code> von 00:39. Kein Instanz darf pushen — das steht in <code>CLAUDE.md</code>, und der Generator hat den Auftrag deshalb zu Recht verweigert.</td>
+        <td class="w">1 Befehl</td></tr>
+    <tr><td><strong>Merge nach <code>main</code></strong></td>
+        <td class="m"><code>main</code> steht 65 Commits zurück auf <code>057e6417</code>. Benannter abgenommener Commit nach §16: <code>11e23016</code> (Scheibe 6 ist berichtet, aber Scheibe 5 ist freigegeben — sicher ist <code>f5b9feaf</code>). Tor 2 gehört dir.</td>
+        <td class="w">3 Befehle</td></tr>
+    <tr><td><strong>Entwurf AUF-83 freigeben</strong></td>
+        <td class="m">Der Vollentwurf liegt. Freigabe heißt: so schneide ich die Auftragsblätter. Danach kann T2/T3 sofort gebaut werden.</td>
+        <td class="w">Ansehen</td></tr>
+    <tr><td><strong>T1b entscheiden</strong></td>
+        <td class="m">Die Hausplaner-Blades an <code>admin.layouts.app</code> hängen. Auth liegt bereits — es fehlt nur die Layout-Vererbung. Trotzdem deine Entscheidung, weil Rollen und Routing berührt sind.</td>
+        <td class="w">Entscheidung</td></tr>
+  </table>
+  <div class="kasten warn">
+    <p><strong>Die Sicherung ist das Dringlichste davon.</strong> Vor dem Deploy ist der Remote die einzige
+    Kopie außerhalb deiner Platte. Heute Nacht standen <strong>230 Commits</strong> ungesichert — nach deinem
+    Push um 00:45 sind es wieder 15.</p>
+  </div>
+</section>
+
+<!-- ══ Offene Befunde ══ -->
+<section>
+  <div class="kap"><span class="nr">05</span><h2>Gemessene Befunde ohne Posten</h2>
+    <span class="r">liegen fest, sind nicht beauftragt</span></div>
+  <table>
+    <tr><th>Befund</th><th>Stufe</th><th>Beleg</th></tr>
+    <tr><td><strong>Modifikator-Leck in der Tastatursteuerung</strong> — <code>Strg+W</code> zeichnet eine Wand, <code>Strg+F</code> ein Fenster, <code>Strg+T</code> eine Tür; ohne <code>preventDefault</code></td>
+        <td><span class="pill p1">P1</span></td>
+        <td class="m"><code>HausplanerApp.tsx:1043</code> — <code>toolFuerShortcut(e.key)</code>; die Kette darüber fängt nur <code>z/y/s/k</code> ab. Heute nachgemessen: <strong>weiterhin offen</strong>.</td></tr>
+    <tr><td><strong>Keine Touch- oder Zeigerbedienung</strong> — der Planer kennt nur Maus</td>
+        <td><span class="pill p1">P1</span></td>
+        <td class="m"><code>onTouchStart</code> / <code>onPointerDown</code>: <strong>0 Treffer</strong> in der ganzen Insel. Auf einem Tablet ist der Planer nicht bedienbar.</td></tr>
+    <tr><td><strong>Griffe werden berechnet und nie gezeichnet</strong></td>
+        <td><span class="pill p1">P1</span></td>
+        <td class="m"><code>auswahlDarstellung.ts</code> rechnet sie sauber inklusive Sperre — genau <strong>eine</strong> Fundstelle in der ganzen Insel, kein Zeichner. Der Wert fällt auf den Boden.</td></tr>
+    <tr><td><strong>Kein Kontextmenü, kein Doppelklick</strong></td>
+        <td><span class="pill p2">P2</span></td>
+        <td class="m"><code>onContextMenu</code> / <code>onDoubleClick</code>: <strong>0 Treffer</strong>. Der Weg zur Türbreite sind heute sieben Schritte und zwei Blickwechsel.</td></tr>
+    <tr><td><strong><code>AUF38-MW-7</code></strong> — <code>style={bezeichner}</code> wird nicht gezählt</td>
+        <td><span class="pill p2">P2</span></td>
+        <td class="m"><strong>58 Stellen</strong>, davon 56 in <code>HausplanerApp.tsx</code>. Ab jetzt Kriterium in Scheibe 7 und 8b.</td></tr>
+    <tr><td><strong><code>hausplaner.studio</code> ohne Rechteprüfung</strong></td>
+        <td><span class="pill p2">P2</span></td>
+        <td class="m"><code>hausplaner.index</code> trägt <code>permission:Hausplaner,read</code>, die Studio-Route nur <code>auth</code>. Kein Loch (persistenzfrei), aber eine Asymmetrie ohne Anlass.</td></tr>
+    <tr><td><strong><code>B-02</code></strong> — <code>detect_base</code> liefert <code>main</code></td>
+        <td><span class="pill p2">P2</span></td>
+        <td class="m">Wer heute Worktrees erzeugt, bekommt einen 65 Commits alten Baum. Braucht eine <code>--base</code>-Option.</td></tr>
+    <tr><td><strong><code>MW-5</code> · <code>MW-6</code></strong> — Werkzeug-Randfälle</td>
+        <td><span class="pill p3">P3</span></td>
+        <td class="m">Beide ohne Fundstelle heute. <code>MW-6</code> ausdrücklich <em>kein</em> Bauauftrag, weil die Abgrenzungs-Zusage ihn beim Auftreten selbst meldet.</td></tr>
+  </table>
+</section>
+
+<!-- ══ Was der Rahmen gelernt hat ══ -->
+<section>
+  <div class="kap"><span class="nr">06</span><h2>Was der Rahmen heute Nacht dazugelernt hat</h2></div>
+  <table>
+    <tr><th>Neue Regel</th><th>ausgelöst durch</th></tr>
+    <tr><td><strong><code>git commit -- &lt;pfade&gt;</code> statt <code>git add</code> + <code>git commit</code></strong></td>
+        <td class="m">Dreimal an einem Abend nahm ein Commit fremde gestagte Arbeit mit. Die Regel „Index vor dem Commit lesen“ ließ ein Zeitfenster offen, das sie nicht benannte. <strong>Eine Barriere braucht keine Aufmerksamkeit im richtigen Moment.</strong></td></tr>
+    <tr><td><strong>Der Prüfstand muss nachfahrbar bleiben</strong></td>
+        <td class="m">Scheibe 5 lag beim Evaluator, während der Baum auf Scheibe 6 weiterlief — seine Gates waren nicht mehr nachfahrbar. §13 regelt das Bauen, nicht das Prüfen. Das Werkzeug liegt seit B-01 im Repo: Worktrees je Rolle.</td></tr>
+    <tr><td><strong>Während einer Sichtprobe bewegt niemand <code>public/*</code></strong></td>
+        <td class="m">Präzisierung einer zu weiten Sperre, die den Bauenden auf den Prüfenden warten ließ — zum zweiten Mal derselbe Fehler von mir.</td></tr>
+    <tr><td><strong>Eine Mutation, die nicht greift, liefert ein falsches Grün</strong></td>
+        <td class="m">Vom Evaluator: er prüft jede Gegenprobe erst auf <em>Auffinden</em>, bevor er sie als Beweis führt. Das ist die Gegenprobe zur Gegenprobe.</td></tr>
+    <tr><td><strong>Geerbte Zusagen werden über die Eigenschaft gesucht</strong>, nicht über die Wörter <code>style</code>/<code>inline</code></td>
+        <td class="m">Eine Suche, die das gesuchte Muster nicht enthält, findet zuverlässig nichts — <em>und sieht dabei aus wie ein Beleg.</em></td></tr>
+    <tr><td><strong>Maße kommen vom Behälter, nicht vom Fenster</strong></td>
+        <td class="m">Zweimal dieselbe Fehlerklasse gemessen: <code>innerWidth − 220 − 268</code> für die Breite, <code>calc(100vh − 46px)</code> für die Höhe. Solange das steht, ist die Insel weder einbettbar noch overlay-fähig.</td></tr>
+  </table>
+</section>
+
+<p class="fuss">Ledger: <code>docs/handoff-status.md</code> · Tafel: <code>docs/auftraege/AUFTRAGSTAFEL.md</code>
+· Archiv: 86 abgeschlossene Posten · Entwurf AUF-83: <code>docs/planner/entwurf-studio-vollbild-2026-07-29.html</code></p>
+
+</div>
+</body>
+</html>
