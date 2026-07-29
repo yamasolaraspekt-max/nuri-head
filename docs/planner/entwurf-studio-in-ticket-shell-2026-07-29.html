@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hausplaner im Ticket-Rahmen — Entwurf 2</title>
+<style>
+  :root{
+    --bg:#f5f7f8; --surface:#fff; --surface2:#f7f9fa; --surface3:#eef2f3;
+    --ink:#232a31; --muted:#697079; --faint:#a7aeb7;
+    --hair:#edf0f2; --hair2:#dfe3e6; --stift:#8b949e;
+    --accent:#12807d; --accentSoft:#e6f2f1;
+    --sa-blau:#2B4290; --sa-hell:#73B1D4; --sa-gruen:#94C11C; --sa-grau:#4A4E57;
+    --warnInk:#b45309; --warnBg:#fff7ed; --warnBd:#fed7aa;
+    --rot:#c63533; --rotBg:#fdeceb;
+    --f1:0 1px 2px rgba(28,50,55,.09); --f2:0 10px 34px rgba(28,50,55,.12);
+    --f3:0 18px 50px rgba(28,50,55,.17);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--bg);color:var(--ink);padding:38px 24px 90px;
+       font:14px/1.6 Inter,-apple-system,"Segoe UI",system-ui,sans-serif}
+  .h{max-width:1240px;margin:0 auto}
+  h1{font-size:24px;font-weight:800;letter-spacing:-.35px;margin:0 0 7px}
+  .lead{color:var(--muted);font-size:13.5px;margin:0;max-width:82ch}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+       background:var(--surface);border:1px solid var(--hair2);border-radius:5px;padding:1px 5px}
+  .lead code{font-size:11.5px}
+  section{margin-top:44px}
+  .kap{display:flex;align-items:baseline;gap:11px;margin-bottom:7px}
+  .kap h2{font-size:17px;font-weight:800;margin:0;letter-spacing:-.2px}
+  .nr{font-size:10.5px;font-weight:800;color:var(--accent);background:var(--accentSoft);
+      border-radius:6px;padding:3px 8px;letter-spacing:.4px}
+  .kap .r{margin-left:auto;font-size:12.5px;color:var(--faint)}
+  .kaptext{color:var(--muted);font-size:13px;margin:0 0 15px;max-width:88ch}
+
+  .schirm{border:1px solid var(--hair2);border-radius:14px;overflow:hidden;background:var(--surface);
+          box-shadow:var(--f2);position:relative}
+  .fuss{display:flex;gap:15px;align-items:center;padding:8px 15px;background:var(--surface2);
+        border-top:1px solid var(--hair);font-size:11.5px;color:var(--faint)}
+  .fuss b{color:var(--muted)} .fuss .sp{margin-left:auto}
+  .rahmen{display:flex;height:430px}
+
+  /* ── Ticket-Sidebar links ── */
+  .tsb{width:229px;flex:0 0 auto;background:#fff;border-right:1px solid var(--hair2);
+       display:flex;flex-direction:column;overflow:hidden}
+  .tsb.schmal{width:58px}
+  .tsbk{display:flex;align-items:center;gap:9px;padding:11px 12px;border-bottom:1px solid var(--hair)}
+  .tsbk .logo{width:26px;height:26px;border-radius:7px;background:var(--sa-blau);color:#fff;
+              display:grid;place-items:center;font-size:12px;font-weight:800;flex:0 0 auto}
+  .tsbk .nm{font-weight:800;font-size:13px;letter-spacing:-.1px}
+  .tsbk .kl{margin-left:auto;width:23px;height:23px;border-radius:6px;border:1px solid var(--hair2);
+            display:grid;place-items:center;color:var(--faint);flex:0 0 auto}
+  .tsbn{flex:1;overflow:hidden;padding:7px 8px}
+  .grp{font-size:9.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--faint);font-weight:800;
+       padding:9px 8px 4px}
+  .it{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:7px;font-size:12.5px;color:var(--sa-grau)}
+  .it .ic{color:var(--faint);display:grid;place-items:center;flex:0 0 auto}
+  .it .cnt{margin-left:auto;font-size:10px;font-weight:800;background:var(--surface3);color:var(--muted);
+           border-radius:999px;padding:1px 6px}
+  .it.an{background:var(--accentSoft);color:var(--accent);font-weight:700}
+  .it.an .ic{color:var(--accent)}
+  .it.an .cnt{background:#fff;color:var(--accent)}
+  .tsb.schmal .nm,.tsb.schmal .grp,.tsb.schmal .it span.tx,.tsb.schmal .cnt{display:none}
+  .tsb.schmal .it{justify-content:center;padding:7px 0}
+
+  /* ── Ticket-Sidebar rechts ── */
+  .trs{width:280px;flex:0 0 auto;background:#fff;border-left:1px solid var(--hair2);display:flex;flex-direction:column}
+  .trs.schmal{width:56px}
+  .trsk{display:flex;align-items:center;gap:9px;padding:11px 12px;border-bottom:1px solid var(--hair);font-size:12.5px;font-weight:700}
+  .trsk .kl{margin-left:auto;width:23px;height:23px;border-radius:6px;border:1px solid var(--hair2);
+            display:grid;place-items:center;color:var(--faint)}
+  .chat{padding:10px 12px;font-size:12px;color:var(--muted)}
+  .chatz{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--hair)}
+  .chatz .av{width:26px;height:26px;border-radius:50%;background:var(--surface3);flex:0 0 auto;
+             display:grid;place-items:center;font-size:10px;font-weight:800;color:var(--muted)}
+  .chatz .tx b{display:block;color:var(--ink);font-size:12px}
+  .trs.schmal .chat,.trs.schmal .trsk span{display:none}
+  .trs.schmal .trsk{justify-content:center;padding:11px 0}
+
+  /* ── Mitte: Ticket-Kopf + Hausplaner ── */
+  .mid{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
+  .tkopf{display:flex;align-items:center;gap:11px;height:52px;padding:0 15px;background:#fff;
+         border-bottom:1px solid var(--hair2)}
+  .krumen{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted)}
+  .krumen b{color:var(--ink);font-weight:700}
+  .krumen .sl{color:var(--faint)}
+  .tsuche{flex:1;max-width:230px;display:flex;align-items:center;gap:7px;background:var(--surface2);
+          border:1px solid var(--hair2);border-radius:9px;padding:6px 10px;font-size:12px;color:var(--faint)}
+  .fu{flex:1}
+  .ik{width:29px;height:29px;border-radius:8px;border:1px solid var(--hair2);background:#fff;
+      display:grid;place-items:center;color:var(--muted);flex:0 0 auto}
+  .ik.aus{color:var(--faint);background:var(--surface2)}
+  .ys{width:29px;height:29px;border-radius:50%;background:#dfe4ea;display:grid;place-items:center;
+      font-size:11px;font-weight:800;color:#5b636d;flex:0 0 auto}
+
+  .hpbar{display:flex;align-items:center;gap:9px;height:44px;padding:0 13px;background:#fff;
+         border-bottom:1px solid var(--hair)}
+  .proj{font-weight:800;font-size:13.5px;white-space:nowrap}
+  .proj small{color:var(--muted);font-weight:600;margin-left:6px}
+  .tr{width:1px;height:20px;background:var(--hair2);flex:0 0 auto}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;
+        background:var(--surface2);border:1px solid var(--hair2);border-radius:9px;padding:5px 10px;white-space:nowrap}
+  .chip .sub{color:var(--muted);font-weight:600}
+  .badge{font-size:10.5px;font-weight:800;color:var(--warnInk);background:var(--warnBg);
+         border:1px solid var(--warnBd);border-radius:999px;padding:3px 9px;white-space:nowrap}
+  .seg{display:flex;background:var(--surface2);border:1px solid var(--hair2);border-radius:10px;padding:3px;gap:2px}
+  .seg button{border:0;background:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--muted);
+              border-radius:7px;padding:5px 12px;cursor:default}
+  .seg button.an{background:#fff;color:var(--ink);box-shadow:var(--f1)}
+  .stat{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap}
+  .pkt{width:7px;height:7px;border-radius:50%;background:var(--sa-gruen);flex:0 0 auto}
+  .prim{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:#fff;
+        background:var(--accent);border:0;border-radius:8px;padding:7px 12px;cursor:default}
+
+  .wzeile{display:flex;align-items:center;gap:8px;height:40px;padding:0 13px;background:var(--surface2);
+          border-bottom:1px solid var(--hair)}
+  .ber{display:flex;gap:2px}
+  .ber button{border:0;background:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--muted);
+              border-radius:7px;padding:5px 10px;cursor:default;white-space:nowrap}
+  .ber button.an{background:#fff;color:var(--ink);box-shadow:var(--f1)}
+  .ber button.aus{color:var(--faint)}
+  .wz{display:flex;align-items:center;gap:3px}
+  .wz .b{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;color:var(--muted);
+         background:#fff;border:1px solid var(--hair2)}
+  .wz .b.an{background:var(--accent);border-color:var(--accent);color:#fff}
+  .wz .b.zu{color:var(--faint);background:var(--surface3);opacity:.55}
+  .wz .gt{width:1px;height:18px;background:var(--hair2);margin:0 3px}
+  .kbd{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--faint);
+       border:1px solid var(--hair2);background:#fff;border-radius:7px;padding:4px 8px}
+  .kbd b{font-family:ui-monospace,Menlo,monospace;color:var(--muted)}
+
+  .buehne{flex:1;display:flex;position:relative;min-height:0}
+  .rail{width:44px;flex:0 0 auto;background:#fff;border-right:1px solid var(--hair);
+        display:flex;flex-direction:column;align-items:center;padding:7px 0;gap:4px}
+  .rail .r{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:var(--muted)}
+  .rail .r.an{background:var(--accentSoft);color:var(--accent)}
+  .rail .sp{height:1px;width:20px;background:var(--hair);margin:3px 0}
+  .plan{flex:1;position:relative;overflow:hidden;
+        background:linear-gradient(var(--hair) 1px,transparent 1px) 0 0/25px 25px,
+                   linear-gradient(90deg,var(--hair) 1px,transparent 1px) 0 0/25px 25px,var(--bg)}
+  .plan svg{position:absolute;inset:0;width:100%;height:100%}
+  .planfuss{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--muted);
+            background:rgba(255,255,255,.93);border:1px solid var(--hair2);border-radius:8px;padding:4px 9px}
+  .pr{width:238px;flex:0 0 auto;background:#fff;border-left:1px solid var(--hair);display:flex;flex-direction:column}
+  .pkopf{display:flex;align-items:center;gap:6px;padding:7px 10px;border-bottom:1px solid var(--hair)}
+  .pkopf .tt{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);font-weight:800}
+  .pkopf .kl{margin-left:auto;width:22px;height:22px;border-radius:6px;border:1px solid var(--hair2);
+             display:grid;place-items:center;color:var(--faint)}
+  .reiter{display:flex;gap:2px;padding:6px 7px;border-bottom:1px solid var(--hair);flex-wrap:wrap}
+  .reiter span{font-size:11px;font-weight:700;color:var(--muted);padding:4px 8px;border-radius:7px;
+               display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+  .reiter span.an{background:var(--accentSoft);color:var(--accent)}
+  .reiter .we{width:5px;height:5px;border-radius:50%;background:var(--faint)}
+  .pin{padding:9px 10px;overflow:hidden}
+  .gr{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--faint);font-weight:800;margin:0 0 6px;
+      display:flex;gap:6px;align-items:center}
+  .gr .n{background:var(--surface3);border-radius:5px;padding:1px 5px;color:var(--muted);letter-spacing:0;text-transform:none}
+  .feld{margin-bottom:8px}
+  .feld label{display:block;font-size:10.5px;color:var(--muted);margin-bottom:3px}
+  .feld .w{border:1px solid var(--hair2);border-radius:7px;padding:5px 8px;font-size:12px;font-weight:600;
+           background:var(--surface2);display:flex;justify-content:space-between}
+  .feld .w em{font-style:normal;color:var(--faint);font-weight:500}
+  .griff{position:absolute;top:50%;transform:translateY(-50%);width:20px;height:48px;background:#fff;
+         border:1px solid var(--hair2);display:grid;place-items:center;color:var(--faint);z-index:3}
+  .griff.r{right:0;border-radius:8px 0 0 8px;border-right:0}
+
+  /* Menü */
+  .menue{position:absolute;background:#fff;border:1px solid var(--hair2);border-radius:11px;
+         box-shadow:var(--f3);padding:6px;z-index:9;width:238px}
+  .mz{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:8px;font-size:12.5px}
+  .mz.an{background:var(--accentSoft);color:var(--accent);font-weight:700}
+  .mz .ic{color:var(--faint);display:grid;place-items:center}
+  .mz.an .ic{color:var(--accent)}
+  .mz .rg{margin-left:auto;color:var(--faint);font-size:11px}
+  .mtr{height:1px;background:var(--hair);margin:5px 4px}
+  .mtitel{font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);font-weight:800;padding:6px 9px 3px}
+
+  table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;background:var(--surface);
+        border:1px solid var(--hair2);border-radius:12px;overflow:hidden;margin-top:14px;box-shadow:var(--f1)}
+  th{text-align:left;padding:10px 13px;background:var(--surface2);font-size:10.5px;letter-spacing:.5px;
+     text-transform:uppercase;color:var(--faint);font-weight:800;border-bottom:1px solid var(--hair2)}
+  td{padding:11px 13px;border-bottom:1px solid var(--hair);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  td.m{color:var(--muted)} td.w{white-space:nowrap;font-weight:700}
+  .weg{color:var(--rot);font-weight:800} .neu{color:var(--accent);font-weight:800}
+  .kasten{border-left:3px solid var(--accent);background:var(--accentSoft);border-radius:0 11px 11px 0;
+          padding:14px 17px;margin-top:20px;font-size:13px}
+  .kasten.warn{border-left-color:var(--warnInk);background:var(--warnBg)}
+  .kasten.rot{border-left-color:var(--rot);background:var(--rotBg)}
+  .kasten p{margin:0 0 8px} .kasten p:last-child{margin:0}
+  .fussn{margin-top:32px;padding-top:17px;border-top:1px solid var(--hair2);color:var(--muted);font-size:12.5px}
+  .zwei{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+</style>
+</head>
+<body>
+<div class="h">
+
+<h1>Der Hausplaner im Ticket-Rahmen</h1>
+<p class="lead">Entwurf 2 zu AUF-83 · Planner, 29.07.2026 · <strong>Deine sechs Korrekturen sind eingearbeitet.</strong>
+Eine davon stellt den Zuschnitt auf den Kopf: die Ticket-Shell hat <code>.sidebar-left</code> (229 px) und
+<code>.sidebar-right</code> (280 px) — <strong>zwei ein- und ausklappbare Seitenleisten, die es längst gibt</strong>.
+Der Hausplaner steht heute daneben statt darin.</p>
+
+<!-- ══ 1 ══ -->
+<section>
+  <div class="kap"><span class="nr">01</span><h2>Was ich übersehen hatte</h2><span class="r">gemessen im Repo</span></div>
+  <table>
+    <tr><th>Deine Korrektur</th><th>Messung</th><th>Folge</th></tr>
+    <tr><td><strong>Die zwei klappbaren Seitenleisten</strong></td>
+        <td class="m"><code>app.blade.php:131/132</code> — <code>--left-sidebar-width: 229px</code>, <code>--right-sidebar-width: 280px</code>; <code>.sidebar-left.collapsed</code>, <code>.sidebar-right.is-open</code>, <code>toggleRightSidebarDesktop()</code>. <strong>Beide existieren, beide klappen.</strong></td>
+        <td class="m">Mein Entwurf hat sie <em>nachgebaut</em> statt benutzt — genau die zweite App-Shell, die dein Punkt 1 verbietet.</td></tr>
+    <tr><td><strong>Kein Hausplaner-Logo oben</strong></td>
+        <td class="m"><code>sidebar.blade.php:570</code> führt <code>['label' =&gt; 'Hausplaner', 'icon' =&gt; 'home', 'active_routes' =&gt; ['/admin/hausplaner']]</code> in der Gruppe <strong>„Planung &amp; 3D“</strong>.</td>
+        <td class="m"><strong>Die Sidebar sagt bereits, wo du bist.</strong> Eine zweite Marke daneben ist Wiederholung, keine Orientierung.</td></tr>
+    <tr><td><strong>Fachplaner als Unter-Navipunkt</strong></td>
+        <td class="m"><code>HausplanerStudio.tsx:155–170</code> — eigene Navigation <code>hp-navi-*</code>, 266↔66 px, Gruppen „Projekt“ und „Fachplaner“, Untereinträge 13 px.</td>
+        <td class="m">Das ist die <strong>dritte</strong> Navigation auf einem Schirm. Die Fachplaner <em>sind</em> die Arbeitsbereiche — sie gehören in die Arbeitszeile, nicht in einen Baum.</td></tr>
+    <tr><td><strong>Etagen einfügen nicht runtergenommen</strong></td>
+        <td class="m"><code>HausplanerApp.tsx:1212/1222</code> — Anlegen und Duplizieren sitzen als eigene Knöpfe in der 13-teiligen Geschosszeile (Befund B1 der Layout-Inventur).</td>
+        <td class="m">Ich hatte nur den <em>Wähler</em> hochgezogen. Anlegen/Duplizieren/Löschen sind daneben stehengeblieben.</td></tr>
+  </table>
+  <div class="kasten rot">
+    <p><strong>Damit kippt der Zuschnitt.</strong> Ich hatte T2/T3 (kompakte Hausplaner-Kopfleiste) als ersten Schritt
+    geschnitten und T1 (Ticket-Shell) als letzten, weil T1 deine Entscheidung braucht.</p>
+    <p><strong>Das war falsch herum.</strong> T2/T3 poliert eine Leiste, die mit T1 ganz verschwindet — und solange der
+    Hausplaner sein eigenes Gehäuse hat, ist jedes Aufräumen darin Kosmetik am falschen Objekt.
+    <strong>T1 ist der erste Schritt, nicht der letzte.</strong></p>
+  </div>
+</section>
+
+<!-- ══ 2 ══ -->
+<section>
+  <div class="kap"><span class="nr">02</span><h2>Heute — drei Navigationen auf einem Schirm</h2>
+    <span class="r">Studio, 1440 px</span></div>
+  <div class="schirm">
+    <div class="rahmen" style="height:300px">
+      <div class="mid">
+        <div class="hpbar" style="height:46px;border-bottom:1px solid #e5e7eb">
+          <span style="font-size:14px;font-weight:800">Hausplaner · Studio</span>
+          <span style="font-size:12px;font-weight:600;color:#374151;border:1px solid #d1d5db;border-radius:8px;padding:4px 10px">‹ Zurück</span>
+          <span class="fu"></span><span class="badge">Testfläche — wird NICHT gespeichert</span>
+        </div>
+        <div class="hpbar" style="height:62px">
+          <span style="display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px">
+            <span style="width:26px;height:26px;border-radius:8px;background:var(--accentSoft);color:var(--accent);display:grid;place-items:center">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span>
+            Hausplaner<span style="color:var(--muted);font-weight:600">· Solar Aspekt</span></span>
+          <span class="stat"><span class="pkt"></span>Testfläche — wird nicht gespeichert</span>
+          <span class="fu"></span>
+          <span class="seg"><button>Übersicht</button><button class="an">Expertenmodus</button></span>
+          <span class="ys">YS</span>
+        </div>
+        <div class="buehne">
+          <div style="width:266px;flex:0 0 auto;background:#fff;border-right:1px solid var(--hair);padding:9px 10px">
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 6px 10px">
+              <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)">Navigation</span>
+              <span class="ik" style="margin-left:auto;width:26px;height:26px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span>
+            </div>
+            <div class="grp" style="padding:6px 8px 3px">Projekt</div>
+            <div class="it"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M6 21V11l6-4 6 4v10"/></svg></span><span class="tx">Sanierungsplan</span></div>
+            <div class="it"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span><span class="tx">Hausplaner</span></div>
+            <div class="grp" style="padding:9px 8px 3px">Fachplaner</div>
+            <div class="it"><span class="ic">▸</span><span class="tx">Bauphysik &amp; Hülle</span></div>
+            <div class="it"><span class="ic">▸</span><span class="tx">Heizlast &amp; Heizung</span></div>
+            <div class="it"><span class="ic">▸</span><span class="tx">Elektro, PV &amp; Speicher</span></div>
+            <div style="font-size:11px;color:var(--rot);font-weight:700;padding:8px 8px 0">
+              dritte Navigation · Untereinträge 13 px · Projektbaum erst nach 2× 10 Scroll-Ticks</div>
+          </div>
+          <div class="plan">
+            <svg viewBox="0 0 480 192" preserveAspectRatio="xMidYMid meet">
+              <g stroke="#5b636d" stroke-width="6" fill="none" stroke-linecap="square">
+                <path d="M96 34 H352"/><path d="M352 34 V152"/><path d="M352 152 H96"/>
+                <path d="M96 152 V104"/><path d="M96 76 V34"/><path d="M240 34 V152"/></g>
+              <path d="M96 76 V104" stroke="#12807d" stroke-width="6"/>
+              <path d="M186 34 H222" stroke="#fff" stroke-width="8"/><path d="M186 34 H222" stroke="#8b949e" stroke-width="2"/>
+              <text x="140" y="96" fill="#697079" font-size="12" font-weight="700" font-family="Inter,sans-serif">Wohnen</text>
+              <text x="280" y="96" fill="#697079" font-size="12" font-weight="700" font-family="Inter,sans-serif">Küche</text>
+            </svg>
+            <div class="planfuss" style="color:var(--rot);font-weight:700">↑ und darüber steht die Geschosszeile mit 13 Bedienelementen</div>
+          </div>
+          <div class="pr" style="width:268px">
+            <div class="reiter" style="flex-wrap:nowrap;overflow:hidden">
+              <span class="an">Allgemein</span><span>Beziehungen</span><span>Prüfungen</span>
+              <span style="opacity:.3">Histo</span>
+            </div>
+            <div class="pin">
+              <div class="feld"><label>Wandstärke</label><div class="w">24,0 cm</div></div>
+              <div style="font-size:11px;color:var(--rot);font-weight:700;margin-top:6px">„Historie“ gekappt · nicht klappbar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fuss"><b>Kein Ticket-Rahmen.</b> Drei Navigationen, drei Kopfschichten, kein Weg zurück außer einem Link
+      <span class="sp">Ist-Zustand</span></div>
+  </div>
+</section>
+
+<!-- ══ 3 ══ -->
+<section>
+  <div class="kap"><span class="nr">03</span><h2>Der Entwurf — der Hausplaner sitzt im Ticket</h2>
+    <span class="r">1440 px · beide Ticket-Leisten offen</span></div>
+  <p class="kaptext">Links die <strong>Ticket-Navigation</strong>, „Hausplaner“ in der Gruppe <em>Planung &amp; 3D</em>
+  aktiv markiert. Rechts die <strong>Ticket-Nachrichtenleiste</strong>. Dazwischen der Planer — <strong>ohne eigene
+  Marke, ohne eigene Navigation</strong>. Was bleibt, ist eine Zeile für das Projekt und eine für die Arbeit.</p>
+
+  <div class="schirm">
+    <div class="rahmen">
+      <!-- Ticket links -->
+      <div class="tsb">
+        <div class="tsbk"><span class="logo">SA</span><span class="nm">Solar Aspekt</span>
+          <span class="kl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span></div>
+        <div class="tsbn">
+          <div class="grp">Arbeitsbereich</div>
+          <div class="it"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span class="tx">Dashboard</span></div>
+          <div class="it"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5 6h14l3 6v6H2v-6z"/></svg></span><span class="tx">Arbeitsliste</span><span class="cnt">12</span></div>
+          <div class="it"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg></span><span class="tx">Meine Aufgaben</span><span class="cnt">4</span></div>
+          <div class="grp">Kunden &amp; Objekte</div>
+          <div class="it"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/></svg></span><span class="tx">Gebäudeakte</span></div>
+          <div class="grp">Planung &amp; 3D</div>
+          <div class="it"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18z"/></svg></span><span class="tx">Grundriss-Editor</span></div>
+          <div class="it"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M12 12v6M9 15l3-3 3 3"/></svg></span><span class="tx">Plan-Import</span></div>
+          <div class="it an"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span><span class="tx">Hausplaner</span></div>
+          <div class="grp">Energie-Rechner</div>
+          <div class="it"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span><span class="tx">PVGIS</span></div>
+        </div>
+      </div>
+
+      <!-- Mitte -->
+      <div class="mid">
+        <div class="tkopf">
+          <span class="krumen">Planung &amp; 3D <span class="sl">›</span> <b>Hausplaner</b> <span class="sl">›</span> Objekt 203</span>
+          <span class="tsuche"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Suchen …</span>
+          <span class="fu"></span>
+          <span class="ik"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+          <span class="ys">YS</span>
+        </div>
+
+        <div class="hpbar">
+          <span class="proj">Neubau EFH Berger <small>· H-2041</small></span>
+          <span class="tr"></span>
+          <span class="chip">Erdgeschoss <span class="sub">· ±0 mm</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          <span class="badge">Testfläche</span>
+          <span class="fu"></span>
+          <span class="seg"><button>Übersicht</button><button>Geführt</button><button class="an">Experte</button></span>
+          <span class="fu"></span>
+          <span class="stat"><span class="pkt"></span>Gespeichert · Rev. 12</span>
+          <span class="ik"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></span>
+          <span class="ik aus"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></span>
+          <button class="prim"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Speichern</button>
+          <span class="ik"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg></span>
+        </div>
+
+        <div class="wzeile">
+          <span class="ber">
+            <button class="aus">Import</button><button class="an">Architektur</button>
+            <button>Bauphysik</button><button>Heizung</button><button>Elektro · PV</button>
+          </span>
+          <span class="tr"></span>
+          <span class="seg" style="padding:2px"><button class="an" style="padding:4px 10px">2D</button><button style="padding:4px 10px">Split</button><button style="padding:4px 10px">3D</button></span>
+          <span class="tr"></span>
+          <span class="wz">
+            <span class="b an"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 16 2-6 6-2z"/></svg></span>
+            <span class="b"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v18M12 3v18M16 3v18"/></svg></span>
+            <span class="b"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M9 4v12M15 4v12"/></svg></span>
+            <span class="b"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M6 12V6a2 2 0 0 1 4 0"/></svg></span>
+            <span class="gt"></span>
+            <span class="b"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M4 20V9l8-5 8 5v11"/></svg></span>
+            <span class="b"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15h18M8 3v6"/></svg></span>
+            <span class="b zu" title="Voraussetzung fehlt: keine Außenwand"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 4v16M4 12h16"/></svg></span>
+          </span>
+          <span class="fu"></span>
+          <span class="kbd"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Suchen <b>⌘K</b></span>
+        </div>
+
+        <div class="buehne">
+          <div class="rail">
+            <span class="r an" title="Werkzeuge"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 0 1-5 5L5 16v3h3l4.7-4.7a4 4 0 0 1 5-5z"/></svg></span>
+            <span class="r" title="Projektbaum"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h6M4 12h10M4 18h7"/><circle cx="18" cy="6" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
+            <span class="r" title="Ebenen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg></span>
+            <span class="sp"></span>
+            <span class="r" title="Messen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h18M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4"/></svg></span>
+          </div>
+          <div class="plan">
+            <svg viewBox="0 0 700 250" preserveAspectRatio="xMidYMid meet">
+              <g stroke="#5b636d" stroke-width="7" fill="none" stroke-linecap="square">
+                <path d="M140 40 H556"/><path d="M556 40 V206"/><path d="M556 206 H140"/>
+                <path d="M140 206 V138"/><path d="M140 100 V40"/><path d="M372 40 V206"/>
+                <path d="M372 146 H556"/></g>
+              <path d="M140 100 V138" stroke="#12807d" stroke-width="7"/>
+              <path d="M232 40 H292" stroke="#fff" stroke-width="9"/><path d="M232 40 H292" stroke="#8b949e" stroke-width="2.4"/>
+              <path d="M232 35 H292 M232 45 H292" stroke="#8b949e" stroke-width="1.3"/>
+              <path d="M430 40 H492" stroke="#fff" stroke-width="9"/><path d="M430 40 H492" stroke="#8b949e" stroke-width="2.4"/>
+              <path d="M430 35 H492 M430 45 H492" stroke="#8b949e" stroke-width="1.3"/>
+              <path d="M372 138 A38 38 0 0 0 410 100" stroke="#a7aeb7" stroke-width="1.6" fill="none" stroke-dasharray="4 4"/>
+              <path d="M372 138 V100" stroke="#fff" stroke-width="9"/>
+              <text x="214" y="128" fill="#697079" font-size="14" font-weight="700" font-family="Inter,sans-serif">Wohnen</text>
+              <text x="214" y="147" fill="#a7aeb7" font-size="12" font-family="Inter,sans-serif">24,30 m²</text>
+              <text x="426" y="100" fill="#697079" font-size="14" font-weight="700" font-family="Inter,sans-serif">Küche</text>
+              <text x="426" y="119" fill="#a7aeb7" font-size="12" font-family="Inter,sans-serif">11,80 m²</text>
+              <text x="426" y="182" fill="#697079" font-size="14" font-weight="700" font-family="Inter,sans-serif">Bad</text>
+              <text x="426" y="201" fill="#a7aeb7" font-size="12" font-family="Inter,sans-serif">6,40 m²</text>
+              <g stroke="#12807d" stroke-width="1.4" fill="none">
+                <path d="M140 232 H372"/><path d="M140 227 V237"/><path d="M372 227 V237"/></g>
+              <rect x="220" y="222" width="66" height="18" fill="#f5f7f8"/>
+              <text x="228" y="236" fill="#12807d" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">4,64 m</text>
+            </svg>
+            <div class="planfuss">1 : 50 · Raster 25 cm · Fang an Wandachse</div>
+          </div>
+          <div class="pr">
+            <div class="pkopf"><span class="tt">Eigenschaften</span>
+              <span class="kl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></div>
+            <div class="reiter"><span class="an">Allgemein</span><span><span class="we"></span>Beziehungen</span><span>Prüfungen</span><span><span class="we"></span>Historie</span></div>
+            <div class="pin">
+              <p class="gr">Wand 3 <span class="n">Außenwand</span></p>
+              <div class="feld"><label>Wandstärke</label><div class="w">24,0 cm <em>KS</em></div></div>
+              <div class="feld"><label>Länge · Höhe</label><div class="w">4,64 m <em>· 2,75 m</em></div></div>
+              <div class="feld"><label>U-Wert</label><div class="w">0,24 W/m²K <em>berechnet</em></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ticket rechts -->
+      <div class="trs">
+        <div class="trsk"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Nachrichten</span>
+          <span class="kl"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></div>
+        <div class="chat">
+          <div class="chatz"><span class="av">MK</span><span class="tx"><b>M. Krause</b>Aufmaß Berger liegt bei</span></div>
+          <div class="chatz"><span class="av">TL</span><span class="tx"><b>T. Lehmann</b>Wann kommt die Heizlast?</span></div>
+          <div class="chatz" style="border-bottom:0"><span class="av">SB</span><span class="tx"><b>S. Bauer</b>Angebot 2041 freigegeben</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="fuss"><b>Eine Navigation.</b> Ticket links, Nachrichten rechts, dazwischen der Planer — ohne eigene Marke, ohne eigene Navigation
+      <span class="sp">Entwurf</span></div>
+  </div>
+</section>
+
+<!-- ══ 4 ══ -->
+<section>
+  <div class="kap"><span class="nr">04</span><h2>Geschoss: ein Wähler statt sieben Knöpfen</h2>
+    <span class="r">deine Korrektur „Etagen einfügen“</span></div>
+  <p class="kaptext">Anlegen, Duplizieren und Löschen standen als eigene Knöpfe in der Zeichenzeile — <strong>neben</strong>
+  dem Wähler, der denselben Wert schon führte. Sie wandern in das Menü des Wählers: <strong>ein Ort, an dem alles zum
+  Geschoss steht</strong>, inklusive der Höhenlage, die das Modell führt und heute nirgends zeigt.</p>
+
+  <div class="zwei">
+    <div class="schirm" style="height:230px;overflow:visible">
+      <div class="hpbar" style="border-radius:14px 14px 0 0">
+        <span class="proj">Neubau EFH Berger</span><span class="tr"></span>
+        <span class="chip" style="border-color:var(--accent);color:var(--accent);background:var(--accentSoft)">
+          Erdgeschoss <span class="sub" style="color:var(--accent)">· ±0 mm</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        <span class="fu"></span><span class="stat"><span class="pkt"></span>Gespeichert</span>
+      </div>
+      <div style="position:relative;height:180px;background:var(--bg)">
+        <div class="menue" style="left:118px;top:8px">
+          <div class="mtitel">Geschosse</div>
+          <div class="mz"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>Dachgeschoss<span class="rg">+5 500 mm</span></div>
+          <div class="mz"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>1. Obergeschoss<span class="rg">+2 750 mm</span></div>
+          <div class="mz an"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>Erdgeschoss<span class="rg">±0 mm</span></div>
+          <div class="mz"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>Keller<span class="rg">−2 600 mm</span></div>
+          <div class="mtr"></div>
+          <div class="mz"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>Geschoss anlegen</div>
+          <div class="mz"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5h10"/></svg></span>Darüber duplizieren</div>
+          <div class="mz" style="color:var(--rot)"><span class="ic" style="color:var(--rot)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></span>Geschoss löschen</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <table style="margin-top:0">
+        <tr><th>Heute in der Zeichenzeile</th><th>Entwurf</th></tr>
+        <tr><td>↰ ↱ Rückgängig / Wiederholen</td><td class="neu">Kopfleiste</td></tr>
+        <tr><td>◀ [Auswahl] ▶ Geschoss-Navigation, 111 px</td><td class="neu">Wähler in der Kopfleiste</td></tr>
+        <tr><td>[Erdgeschoss] Textfeld — <em>derselbe Wert wie der Wähler daneben</em></td><td class="weg">entfällt</td></tr>
+        <tr><td>+ ⧉ − Anlegen / Duplizieren / Löschen</td><td class="neu">im Menü des Wählers</td></tr>
+        <tr><td>2D Split 3D</td><td class="neu">Arbeitszeile</td></tr>
+        <tr><td>Speichern</td><td class="neu">Kopfleiste</td></tr>
+        <tr><td><strong>13 Bedienelemente, vier Aufgaben</strong></td><td class="neu"><strong>0 — die Zeile fällt weg</strong></td></tr>
+      </table>
+      <div class="kasten" style="margin-top:14px">
+        <p><strong>Warum das mehr ist als Ordnung.</strong> Die Layout-Inventur nennt das Geschoss <em>„das Tor“</em>:
+        ein angelegtes Geschoss entsperrt <strong>34 von 110 Werkzeugen</strong>. Die folgenreichste Handlung der
+        Oberfläche steckte in einem 111-px-Dropdown zwischen „Rückgängig“ und „Speichern“ — und daneben stand
+        derselbe Name noch einmal in einem Eingabefeld.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 5 ══ -->
+<section>
+  <div class="kap"><span class="nr">05</span><h2>Beide Ticket-Leisten zu — der Plan bekommt 509 px</h2>
+    <span class="r">deine Korrektur „ein- und ausklappbar“</span></div>
+  <p class="kaptext">Die Klapp-Zustände sind <strong>Ticket-Zustände</strong>, nicht neue: <code>.sidebar-left.collapsed</code>
+  und <code>toggleRightSidebarDesktop()</code> gibt es. Der Planer erbt sie, statt eigene zu bauen. Das
+  Eigenschaften-Panel klappt zusätzlich für sich — <strong>drei Flächen, drei unabhängige Griffe</strong>.</p>
+
+  <div class="schirm">
+    <div class="rahmen" style="height:330px">
+      <div class="tsb schmal">
+        <div class="tsbk" style="justify-content:center;padding:11px 0"><span class="logo">SA</span></div>
+        <div class="tsbn" style="padding:7px 0">
+          <div class="it"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span></div>
+          <div class="it"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 6h14l3 6v6H2v-6z"/></svg></span></div>
+          <div class="it"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg></span></div>
+          <div class="it"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M5 21V7l7-4 7 4v14"/></svg></span></div>
+          <div class="it an"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span></div>
+        </div>
+      </div>
+
+      <div class="mid">
+        <div class="tkopf" style="height:46px">
+          <span class="krumen"><b>Hausplaner</b> <span class="sl">›</span> Objekt 203</span>
+          <span class="fu"></span><span class="ys">YS</span>
+        </div>
+        <div class="hpbar" style="height:42px">
+          <span class="proj">Neubau EFH Berger</span><span class="tr"></span>
+          <span class="chip">Erdgeschoss <span class="sub">· ±0 mm</span></span>
+          <span class="fu"></span>
+          <span class="seg"><button>Übersicht</button><button>Geführt</button><button class="an">Experte</button></span>
+          <span class="fu"></span><span class="stat"><span class="pkt"></span>Gespeichert</span>
+          <button class="prim">Speichern</button>
+        </div>
+        <div class="wzeile" style="height:38px">
+          <span class="ber"><button class="an">Architektur</button><button>Bauphysik</button><button>Heizung</button></span>
+          <span class="tr"></span>
+          <span class="seg" style="padding:2px"><button class="an" style="padding:4px 9px">2D</button><button style="padding:4px 9px">3D</button></span>
+          <span class="fu"></span><span class="kbd">⌘K</span>
+        </div>
+        <div class="buehne">
+          <div class="rail">
+            <span class="r an"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 0 1-5 5L5 16v3h3l4.7-4.7a4 4 0 0 1 5-5z"/></svg></span>
+            <span class="r"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h6M4 12h10M4 18h7"/><circle cx="18" cy="6" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
+            <span class="r"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg></span>
+          </div>
+          <div class="plan">
+            <svg viewBox="0 0 900 250" preserveAspectRatio="xMidYMid meet">
+              <g stroke="#5b636d" stroke-width="7" fill="none" stroke-linecap="square">
+                <path d="M180 38 H720"/><path d="M720 38 V208"/><path d="M720 208 H180"/>
+                <path d="M180 208 V140"/><path d="M180 100 V38"/><path d="M480 38 V208"/>
+                <path d="M480 146 H720"/></g>
+              <path d="M180 100 V140" stroke="#12807d" stroke-width="7"/>
+              <path d="M290 38 H358" stroke="#fff" stroke-width="9"/><path d="M290 38 H358" stroke="#8b949e" stroke-width="2.4"/>
+              <path d="M290 33 H358 M290 43 H358" stroke="#8b949e" stroke-width="1.3"/>
+              <path d="M560 38 H636" stroke="#fff" stroke-width="9"/><path d="M560 38 H636" stroke="#8b949e" stroke-width="2.4"/>
+              <path d="M560 33 H636 M560 43 H636" stroke="#8b949e" stroke-width="1.3"/>
+              <path d="M480 140 A40 40 0 0 0 520 100" stroke="#a7aeb7" stroke-width="1.6" fill="none" stroke-dasharray="4 4"/>
+              <path d="M480 140 V100" stroke="#fff" stroke-width="9"/>
+              <text x="286" y="128" fill="#697079" font-size="15" font-weight="700" font-family="Inter,sans-serif">Wohnen</text>
+              <text x="286" y="148" fill="#a7aeb7" font-size="12.5" font-family="Inter,sans-serif">24,30 m²</text>
+              <text x="552" y="100" fill="#697079" font-size="15" font-weight="700" font-family="Inter,sans-serif">Küche</text>
+              <text x="552" y="120" fill="#a7aeb7" font-size="12.5" font-family="Inter,sans-serif">11,80 m²</text>
+              <text x="552" y="184" fill="#697079" font-size="15" font-weight="700" font-family="Inter,sans-serif">Bad</text>
+              <text x="552" y="204" fill="#a7aeb7" font-size="12.5" font-family="Inter,sans-serif">6,40 m²</text>
+            </svg>
+            <div class="planfuss" style="color:var(--accent);font-weight:700">Plan 509 px breiter als mit offenen Leisten</div>
+          </div>
+          <span class="griff r"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span>
+        </div>
+      </div>
+
+      <div class="trs schmal">
+        <div class="trsk"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      </div>
+    </div>
+    <div class="fuss"><b>229 + 280 = 509 px</b> gewonnen, ohne dass eine Zeile Planer-Code die Breite kennt
+      <span class="sp">Ticket-Zustände, geerbt statt gebaut</span></div>
+  </div>
+  <div class="kasten warn">
+    <p><strong>Und genau hier liegt der Haken, den kein Bild löst.</strong> Damit der Plan die Breite überhaupt
+    mitbekommt, darf sie nicht mehr gerechnet werden: <code>HausplanerApp.tsx:369</code> setzt
+    <code>innerWidth − 220 − 268</code>, die Blades setzen <code>min-height: calc(100vh − 46px)</code>.
+    <strong>Beide messen gegen das Fenster statt gegen ihren Behälter</strong> — im Ticket-Rahmen ergäbe das einen
+    zweiten Bildlauf und einen Plan unter der Falz. <strong>Das ist T1a, und es ist die erste Zeile Arbeit, nicht die letzte.</strong></p>
+  </div>
+</section>
+
+<!-- ══ 6 ══ -->
+<section>
+  <div class="kap"><span class="nr">06</span><h2>Der Zuschnitt, neu geordnet</h2></div>
+  <table>
+    <tr><th>#</th><th>Schritt</th><th>Spur</th><th>Warum in dieser Reihenfolge</th></tr>
+    <tr><td class="w">1</td><td><strong>T1a — Maße kommen vom Behälter</strong><br><span style="color:var(--muted);font-size:12.5px">Breite und Höhe aus dem Layout statt aus Fensterkonstanten</span></td><td class="w">A</td>
+        <td class="m">Ohne diesen Schritt ist die Insel weder einbettbar noch overlay-fähig. <strong>Er ist zugleich der erste Zerlegungsschritt von AUF-48</strong> — drei Posten, ein Stück Arbeit.</td></tr>
+    <tr><td class="w">2</td><td><strong>T1b — Blades an die Ticket-Shell</strong><br><span style="color:var(--muted);font-size:12.5px"><code>@extends('admin.layouts.app')</code>, vier Sections</span></td><td class="w">A</td>
+        <td class="m"><strong>Deine Entscheidung.</strong> Danach ist die Ticket-Navigation da, „Hausplaner“ markiert sich selbst — und die eigene Marke ist überflüssig, nicht bloß unerwünscht.</td></tr>
+    <tr><td class="w">3</td><td><strong>T2 — die zweite und dritte Navigation fallen</strong><br><span style="color:var(--muted);font-size:12.5px">Blade-Leiste, <code>hp-navi-*</code>, Marke, Testflächen-Doppelung</span></td><td class="w">B</td>
+        <td class="m">Erst jetzt sinnvoll: vorher wäre es Kosmetik an einem Gehäuse, das ohnehin verschwindet. <em>Das ist die Korrektur an meinem ersten Zuschnitt.</em></td></tr>
+    <tr><td class="w">4</td><td><strong>T3 — Kopfleiste und Arbeitszeile</strong><br><span style="color:var(--muted);font-size:12.5px">inkl. Geschoss-Wähler mit Anlegen/Duplizieren/Löschen</span></td><td class="w">B</td>
+        <td class="m">Die 13-teilige Geschosszeile fällt weg. Fachplaner sind die Arbeitsbereiche — kein eigener Baum.</td></tr>
+    <tr><td class="w">5</td><td><strong>T5 — Eigenschaften-Panel klappbar</strong><br><span style="color:var(--muted);font-size:12.5px">Overlay, Escape-Stapel, Zustand je Arbeitsbereich</span></td><td class="w">A</td>
+        <td class="m">Die zwei Ticket-Leisten klappen schon. Nur das Eigenschaften-Panel ist wirklich neu — <strong>eine Fläche statt dreien.</strong></td></tr>
+  </table>
+  <div class="kasten">
+    <p><strong>Was sich gegenüber Entwurf 1 geändert hat:</strong> T1 war dort Schritt 4 und 5, jetzt ist er
+    Schritt 1 und 2. <strong>Der Grund ist deine Korrektur, nicht meine Einsicht</strong> — ich hatte die zwei
+    Ticket-Leisten nicht gemessen und deshalb nachgebaut, was es gibt.</p>
+  </div>
+</section>
+
+<p class="fussn">Freigabe heißt: <strong>so schneide ich die Auftragsblätter</strong>. Es ist nichts gebaut, und das
+Blatt zu T2/T3 steht auf <code>GESPERRT</code>. Änderst du etwas, ändern sich die Blätter mit.</p>
+
+</div>
+</body>
+</html>

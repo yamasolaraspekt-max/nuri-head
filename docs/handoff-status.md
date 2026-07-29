@@ -17657,3 +17657,146 @@ tun das, `engine-pv` und `engine-fensterprodukt` rechnen nur Werte aus. *Das ist
 AUF-52 Scheibe C, keine Lücke.*
 
 Ich liefere den Weg, nicht das Urteil — gefahren wird die Sichtprobe von dir.
+
+---
+
+## ⇒ EVALUATOR — B-01 (`.ai-workflow/` versioniert, `af0e0c93`): **FREIGABE** (29.07., 08:11 CEST)
+
+Geprüft K-01 bis K-04. **K-05 gehört nicht zu dieser Abnahme** — der Planner hat den Push als sein
+eigenen Spezifikationsfehler eingeräumt, und Yama hat ihn um 00:45 selbst gefahren
+(`c631109c..a849e030`, beide Remotes). `.ai-workflow/` ist seit `af0e0c93` unverändert.
+
+**K-01 Umfang: ERFÜLLT.** `git show --name-only` = **15 Pfade, 0 Fremdpfade**, alle unter
+`.ai-workflow/`. Zusätzlich geprüft, was das Kriterium nicht verlangt: `status --untracked-files=all
+.ai-workflow` ist **leer** — es liegt nichts Unversioniertes mehr daneben. *Der Satz ist nicht nur
+sauber, er ist vollständig.*
+
+**K-02 keine absoluten Pfade: ERFÜLLT, mit seinem presence-Partner nachgefahren.** `/Users/` in
+`.ai-workflow`: **0 Treffer**. Derselbe Befehl ohne Pfadfilter: **40 Dateien** — der Befehl *kann*
+also finden, die Leere ist ein Ergebnis und kein stummer Test. **Ich habe das Kriterium erweitert**,
+weil `/Users/` nur die Mac-Form ist: `/home/`, `/private/tmp`, `~/Documents` — ebenfalls **0**.
+
+**K-03 Skripte: ERFÜLLT.** Alle fünf `bash -n`-sauber, alle fünf `100755`.
+
+**K-04 kein Produktivcode: ERFÜLLT.** `resources scripts public app database routes config` im
+Commit: **0 Dateien**.
+
+### Was die Kriterien nicht abdecken — und deshalb geprüft habe
+
+**Syntax ist keine Funktion.** Drei Trockenläufe gefahren, jeder read-only, und **vorher wie nachher
+7 Worktrees und 0 Rollen-Branches** — die Skripte haben nichts angelegt:
+
+```text
+create-task-worktrees.sh --dry-run   exit 0   nennt Basis + vier geplante Worktrees, legt nichts an
+remove-task-worktrees.sh --dry-run   exit 0   "NICHT VORHANDEN" x4, entfernt nichts
+run-quality-gates.sh --dry-run       exit 0   listet Gates, ueberspringt undefinierte sauber
+```
+
+**Ein destruktiver Befehl steckt drin** — `git worktree remove` in `remove-task-worktrees.sh:86.
+**Den Riegel habe ich gelesen, nicht geglaubt:** die Prüfschleife davor bricht mit `exit 3` ab,
+sobald ein Ziel-Worktree Änderungen trägt (`status --porcelain`, also **auch unverfolgte**), und mit
+`exit 4` bei unerwartetem Branch — **bevor irgendetwas entfernt wird.** Dazu verweigert
+`worktree remove` ohne `--force` einen schmutzigen Baum ohnehin. **Doppelt gesichert.** Kein `rm -rf`,
+kein `--force`, kein `reset --hard`, kein `push`, und **kein Skript fasst `.git/*.lock` an** —
+die Zusagen der README halten, geprüft per `git grep`.
+
+**Einem Verdacht bin ich nachgegangen und er war falsch — das gehört dazu.** Das Gate-Skript sperrt
+`build:hausplaner` hinter `AI_WORKFLOW_INCLUDE_ARTIFACT_BUILDS=1, *„kann eingecheckte Artefakte
+verändern"*, würde aber `npm run build` ungeschützt fahren. Nachgesehen: **`public/build` ist
+gitignored, 0 versionierte Dateien** — `vite build` kann dort nichts Eingechecktes anfassen,
+während `public/hausplaner/*` **versioniert ist**. Die Asymmetrie ist richtig und absichtlich.
+*Zweiter Fehlalarm, den ich heute an mir selbst abgefangen habe, bevor er im Ledger stand.*
+
+### Ein Nebenbefund, der den Zweck von B-01 betrifft
+
+`create-task-worktrees.sh --dry-run` meldete: **„WARN: Hauptarbeitsbaum ist nicht sauber; echte
+Erstellung würde abbrechen."** Der Riegel ist vernünftig — aber **der Arbeitsbaum ist hier praktisch
+nie sauber**, weil immer jemand baut. Damit ist das Werkzeug genau in dem Zustand unbenutzbar, für
+den es gedacht ist. **B-01 war angetreten, weil „unverfolgte Dateien nicht in einen neuen Worktree
+wandern" — das Werkzeug fehlte dort, wo die Trennung hergestellt wird.** Jetzt ist es da und
+verweigert die Arbeit, solange gebaut wird. *Kein Befund gegen den Commit; ein Befund gegen die
+Nutzbarkeit.* **Zur Planner-Entscheidung:** die Trennung braucht ein Zeitfenster, das jemand
+ausruft, oder das Skript muss eine benannte Ausnahme kennen. Sonst bleibt es liegen wie bisher.
+
+**Gesamtvotum: `FREIGABE`.** Vier Kriterien erfüllt, Verhalten belegt, Riegel geprüft, kein Befund.
+Ballbesitz: Planner.
+
+**Lage:** HEAD ist während dieser Abnahme von `8ae4a1f5` auf `17a4dacd` gewandert — `.ai-workflow/`
+war davon nicht berührt, das Urteil steht. **Scheibe 8b (`a022452f`) liegt bereits berichtet** und
+ist mein nächster Posten. Kein Commit durch mich, kein Push, kein Tor 2.
+
+
+---
+
+## 2026-07-29, 08:20 CEST — PLANNER: Yamas sechs Korrekturen am Entwurf, und eine davon kippt den Zuschnitt
+
+**Yama:** *„du hast bei entwurf nicht die sachen was in layout inventur gerade mit den beiden
+sideboard welche ein und ausklappbar sind beruecksichtigt, dann das feld etagen einfuegen nicht
+runter genommen, der fachplanner mit den grossen schriften was du in der linken seiten als unter
+navi punkt hast usw, es fehlt das richtig aufraeumen und ich brauche kein logo fuer hausplaner oben
+ich moechte dass du die navi von ticket sein wenn ich mich in einen bereich befinde dann sehe ich
+dort.“*
+
+**Alle sechs sind berechtigt. Gemessen:**
+
+```text
+app.blade.php:131/132   --left-sidebar-width: 229px · --right-sidebar-width: 280px
+app.blade.php:334/360   .sidebar-left · .sidebar-left.collapsed
+app.blade.php:683/698   .sidebar-right · .sidebar-right.is-open · toggleRightSidebarDesktop()
+sidebar.blade.php:570   ['label'=>'Hausplaner','icon'=>'home','active_routes'=>['/admin/hausplaner']]
+                        in der Gruppe "Planung & 3D"
+```
+
+**Die Ticket-Shell hat bereits zwei ein- und ausklappbare Seitenleisten, und die Navigation markiert
+den Bereich, in dem man sich befindet.** Genau das, was er verlangt — **es existiert.**
+
+**Mein Entwurf hat es nachgebaut statt benutzt.** Eine eigene Werkzeugschiene links, ein eigenes
+Panel rechts, eine eigene Marke oben. **Das ist die zweite App-Shell, die sein Auftrag in Punkt 1
+ausdruecklich verbietet, und ein Verstoss gegen Bestandscode-first aus Punkt 6** — zum zweiten Mal
+an derselben Aufgabe.
+
+### Die Korrektur, die den Zuschnitt kippt
+
+Ich hatte **T2/T3** (kompakte Hausplaner-Kopfleiste) als **ersten** Schritt geschnitten und **T1**
+(Ticket-Shell) als letzten, weil T1 Yamas Entscheidung braucht. **Das war falsch herum.**
+
+**T2/T3 poliert eine Leiste, die mit T1 ganz verschwindet.** Solange der Hausplaner sein eigenes
+Gehaeuse hat, ist jedes Aufraeumen darin Kosmetik am falschen Objekt. **T1 ist Schritt 1 und 2, nicht
+4 und 5.** Neue Reihenfolge: **T1a** (Masse vom Behaelter) → **T1b** (Blades an die Shell) → **T2**
+(zweite und dritte Navigation fallen) → **T3** (Kopfleiste + Arbeitszeile) → **T5** (Eigenschaften-Panel).
+
+### Die anderen drei Korrekturen, jede mit ihrer Fundstelle
+
+**„Kein Logo fuer Hausplaner oben.“** `sidebar.blade.php:570` markiert den Bereich bereits. **Eine
+zweite Marke daneben ist Wiederholung, keine Orientierung** — sie faellt ersatzlos, nicht als
+Geschmacksfrage, sondern weil ihre Aufgabe woanders erledigt wird.
+
+**„Der Fachplanner als Unter-Navipunkt.“** `HausplanerStudio.tsx:155-170` — eine eigene Navigation
+`hp-navi-*` mit den Gruppen *Projekt* und *Fachplaner*, Untereintraege 13 px. **Das ist die dritte
+Navigation auf einem Schirm.** Und sachlich falsch einsortiert: **die Fachplaner SIND die
+Arbeitsbereiche** (`arbeitsbereiche.ts`: Bauphysik, Heizung, Elektro · PV). Sie gehoeren in die
+Arbeitszeile, nicht in einen Baum daneben.
+
+**„Das Feld Etagen einfuegen nicht runtergenommen.“** `HausplanerApp.tsx:1212/1222` — Anlegen und
+Duplizieren stehen als eigene Knoepfe in der 13-teiligen Geschosszeile. **Ich hatte nur den Waehler
+hochgezogen und die Bedienung daneben stehenlassen** — also die Zeile halb geraeumt und dabei
+behauptet, sie falle weg. Im neuen Entwurf wandern Anlegen, Duplizieren und Loeschen **in das Menue
+des Waehlers**: ein Ort, an dem alles zum Geschoss steht, samt Hoehenlage.
+
+**Entwurf 2:** `docs/planner/entwurf-studio-in-ticket-shell-2026-07-29.html` — Ist-Zustand mit den
+drei Navigationen, der Planer im Ticket-Rahmen, das Geschoss-Menue, beide Ticket-Leisten zugeklappt
+(**509 px gewonnen, ohne dass eine Zeile Planer-Code die Breite kennt**), und der neue Zuschnitt.
+
+### Was daran mein Muster ist
+
+Dreimal an dieser einen Aufgabe: **ich habe gemessen, was ich brauchte, statt zu lesen, was schon
+da war.** Erst die Inventuren nicht gelesen, dann die Icons nicht benutzt, jetzt die Ticket-Shell
+nicht gemessen. **Die Auflage von 01:30 (*„vor jedem Planner-Papier erst den Bestand lesen“*) hat
+nicht getragen, weil sie nur `docs/planner/` nannte — nicht den Code der Heimat-App.**
+
+**Erweitert, ab sofort:** vor jedem Entwurf, der eine Flaeche beschreibt, wird **die Shell der
+Heimat-App gemessen** — Layout-Datei, Seitenleisten, Navigationseintraege, Klappzustaende. *Der
+Ledger-Eintrag von 01:30 ist damit nicht falsch gewesen, nur zu eng.*
+
+**Ballbesitz Yama:** Entwurf 2 ansehen. **T1a kann ich als Blatt schreiben, ohne dass er entscheidet**
+— es beruehrt weder Rechte noch Routing, nur Layoutverhalten.
