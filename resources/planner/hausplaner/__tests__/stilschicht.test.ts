@@ -694,6 +694,7 @@ test('Scheibe 8c: jede angelegte Klasse wird auch benutzt — keine Regel ins Le
 
 const STUDIO_TSX = join(hier, '../app/HausplanerStudio.tsx');
 const STUDIO_BLADE = readFileSync(join(hier, '../../../views/admin/hausplaner/studio.blade.php'), 'utf8');
+const OBJEKT_BLADE = readFileSync(join(hier, '../../../views/admin/hausplaner/objekt.blade.php'), 'utf8');
 
 test('T2/K-01: der Studio-Bildschirm traegt keine zweite Navigation mehr', () => {
   const studio = readFileSync(STUDIO_TSX, 'utf8');
@@ -711,11 +712,26 @@ test('T2/K-01: die DATEN der Navigation sind unberuehrt', () => {
   assert.match(daten, /export const PROJ/, 'PROJ ist geloescht — das war nicht beauftragt');
 });
 
-test('T2/K-03: die Hausplaner-Marke ist fort — in der Insel UND in der Blade', () => {
+test('T2/K-03: die Hausplaner-Marke ist fort — in der Insel UND in BEIDEN Blades', () => {
   // Yama: „ich brauche kein logo fuer hausplaner oben." Der Grund ist nicht Geschmack: die
   // Ticket-Sidebar markiert den Bereich seit T1b selbst. Eine zweite Marke ist Wiederholung.
+  //
+  // **Erweitert nach Planner-Entscheid 21:10.** Mein erster Schnitt nahm nur die Studio-Blade —
+  // meine eigene Messung hatte gezeigt, dass `objekt.blade` sehr wohl eine Leiste traegt. **Nur
+  // im Studio zu raeumen hiesse, zwei Hausplaner-Flaechen mit verschiedenem Kopf zu hinterlassen.**
   assert.doesNotMatch(readFileSync(STUDIO_TSX, 'utf8'), /hp-marke|hp-title/);
   assert.doesNotMatch(STUDIO_BLADE, /hp-marke|hp-title/);
+  assert.doesNotMatch(OBJEKT_BLADE, /hp-marke|hp-title/);
+  assert.doesNotMatch(OBJEKT_BLADE, /‹ Zurück/, 'der doppelte Zurueck-Weg ist zurueck');
+});
+
+test('T2/K-03: der EINZIGARTIGE Inhalt der Objektleiste bleibt stehen', () => {
+  // **Die Grenze des Entscheids.** Objektname mit Adresse und der Uebernehmen-Knopf sind kein
+  // Doppel der Shell — sie wandern mit T3 in die Kopfleiste. Faellt hier etwas davon, hat T2
+  // still T3 vorweggenommen und dabei Funktion entfernt statt Wiederholung.
+  assert.match(OBJEKT_BLADE, /class="hp-obj"/, 'die Objektidentitaet ist fort');
+  assert.match(OBJEKT_BLADE, /class="hp-uebernehmen"/, 'der Uebernehmen-Knopf ist fort');
+  assert.match(OBJEKT_BLADE, /hp-pill--aktuell|hp-pill--veraltet/, 'die Staleness-Pille ist fort');
 });
 
 test('T2/K-02: der Testflaechen-Hinweis steht nicht mehr in der Blade-Leiste', () => {

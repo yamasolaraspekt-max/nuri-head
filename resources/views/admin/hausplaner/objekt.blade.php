@@ -33,9 +33,6 @@
         (`app.blade.php:2541`).
     */
     .hp-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 8px 14px; background: #fff; border-bottom: 1px solid #e5e7eb; }
-    .hp-bar a { color: #374151; text-decoration: none; font-size: 13px; font-weight: 600; border: 1px solid #d1d5db; border-radius: 8px; padding: 6px 12px; }
-    .hp-bar a:hover { border-color: var(--sa-accent, #93c21c); color: var(--sa-accent-hover, #7baa18); }
-    .hp-title { font-size: 14px; font-weight: 800; }
     .hp-obj { font-size: 12.5px; color: var(--sa-info, #6b7280); }
     .hp-abnahme { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--sa-warning-ink, #b45309); background: var(--sa-warning-bg, #fff7ed); border: 1px solid var(--sa-warning-border, #fed7aa); border-radius: 999px; padding: 4px 12px; }
 
@@ -75,10 +72,22 @@
 @section('content')
 {{-- T-c: BearbeitungsSperre je OBJEKT (weiche Sperre; harte Wahrheit bleibt base_revision->409). --}}
 @include('admin.layouts.partials.bearbeitungs-sperre', ['bereich' => 'hausplaner', 'sperrId' => $objekt->id])
+{{--
+    AUF-83-T2 (erweiterter Umfang, Planner-Entscheid 21:10): **Der doppelte Teil dieser Leiste
+    faellt, der einzigartige bleibt.**
+
+    * **Fort:** die Marke „Hausplaner" und der Zurueck-Link. Beide sagen dasselbe wie die
+      Ticket-Navigation, die seit T1b danebensteht und den Bereich selbst markiert.
+    * **Bleibt:** Objektname mit Adresse und der Uebernehmen-Knopf samt Staleness-Pille. Das ist
+      echter, einzigartiger Inhalt dieser Flaeche — er wandert mit **T3** in die Kopfleiste,
+      dorthin, wo ohnehin *Projekt · Geschoss* steht.
+
+    **Warum beide Blades in EINEM Posten:** es ist derselbe Mangel aus derselben Ursache. Ihn nur
+    im Studio zu beheben hiesse, zwei Hausplaner-Flaechen mit verschiedenem Kopf zu hinterlassen —
+    genau die zweite Wahrheit, gegen die dieser Auftrag laeuft.
+--}}
 <div class="hp-bar">
-    <span class="hp-title">Hausplaner</span>
     <span class="hp-obj">{{ $objekt->object_name ?: ('Objekt #' . $objekt->id) }}{{ $objekt->full_address ? ' · ' . $objekt->full_address : '' }}</span>
-    <a href="{{ url()->previous() }}">‹ Zurück</a>
 
     {{-- W-A: expliziter Übernehmen-Knopf (Operanden-Gate: Fachentscheidung, Vorschlag + Bestätigung,
          KEIN Automatismus) + Staleness-Pill. Wahrheit: ErmittleUebernahmeStatus (source_hash der
