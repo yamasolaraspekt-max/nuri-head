@@ -19592,3 +19592,68 @@ K-09  27 Testdateien lesen die drei betroffenen Dateien
 
 **Ballbesitz: Planner** — eine Zeile zur Frage oben, dann baue ich K-05 (und K-06, wenn der Weg
 geklärt ist).
+
+
+---
+
+## ⇒ PLANNER — drei Entscheidungen zu AUF-83-T3, und K-06 von T2 wird geschlossen (29.07., 21:40 CEST)
+
+**Reihenfolge, wie sie seit 21:20 gilt: Blatt zuerst.** Das Auftragsblatt
+`docs/auftraege/generator-auftrag-auf83-t3-kopfleiste-arbeitszeile.md` ist um **21:35** nachgezogen
+worden, Tafel und Ledger erst danach. *Das ist keine Formalie — der letzte Fehler dieser Art hat
+einen halben Umfang gebaut, weil meine Erweiterung nur in Tafel und Ledger stand.*
+
+### 1. T3 ist entsperrt — und kleiner, als sein Blatt behauptet hat
+
+**Die Messung des Generators stimmt, ich habe sie nicht nachgerechnet, sondern seine Fundstellen
+angesehen.** Die Geschosszeile trägt heute **einen Knopf und `<GeschossFlaeche>`** — kein `<select>`,
+kein `<input>`. **AUF-43 hat K-02 und K-03 längst erfüllt** (`GeschossFlaeche.tsx:138`, Z157/158/163).
+
+**Sie werden als `BEREITS ERFUELLT DURCH AUF-43` geführt, nicht als seine Leistung.** Wer zwei P1
+abhakt, an denen niemand gearbeitet hat, hinterlässt einen Erfolg an einer leeren Stelle — und beim
+nächsten Rückbau sucht jemand die Ursache dort, wo nie etwas war.
+
+**Der Befund gehört ins Register, nicht nur ins Blatt:** meine Grundgesamtheit stammte aus der
+Layout-Inventur vom **25.07.** und war beim Schreiben vier Tage alt. **F-04, vierte Ausprägung.**
+*Gemeldet hat es der Bauende, dem das Abhaken billiger gekommen wäre.*
+
+### 2. T3 fährt Spur A, nicht B
+
+**Der Beleg kommt aus T2 und ist nicht meiner:** K-01 bis K-04 waren `absence`-Kriterien mit einem
+`grep` als Prüfverfahren. Der Evaluator hat die zweite Navigation **zurückgeholt — kein Test wurde
+rot.** Er hat daraufhin sechs Zusagen angelegt, die der Auftrag nicht verlangt hatte.
+
+**Eine Kurzspur, deren Kriterien nur ein `grep` bewacht, ist keine Kurzspur, sondern eine
+unbewachte.** T3 hat denselben Zuschnitt — also gilt *Zweifel heißt Spur A*. **Auch T2 wird
+nachträglich auf A korrigiert.** Am gebauten Stand ändert das nichts; es ändert, was beim nächsten
+Blatt dieser Art gilt. *Spurwechsel nur nach oben — auch rückwirkend.*
+
+### 3. K-06 von T2 wird geschlossen als **nicht mehr prüfbar** — und daraus wird eine Barriere
+
+**Acht von neun Kriterien stehen**, jedes mit eigenem Gegen-Beweis. **K-06 verlangte den
+Höhengewinn der Bühne gegen den Stand vor T2 — dieser Wert steht nirgends.**
+
+**Zweite Ausprägung derselben Sache wie T1a/K-07 innerhalb eines Tages, und beide Male ist die
+Ursache meine:** ein Kriterium mit Vorher-Bezug, dessen Ausgangswert niemand festhalten musste.
+Sein Satz ist die Regel:
+
+> *„Ein Kriterium, das einen Vorher-Wert braucht, muss ihn im Auftrag festhalten lassen — vom
+> Generator vor dem Bau, in einer Zeile."*
+
+> ### F-13 · `vorher_wert_pflicht` — ab sofort, und mechanisch
+> Trägt ein Kriterium einen Vorher-Bezug, **hält der Generator den Ausgangswert in der
+> Readiness-Quittung fest, VOR dem Bau.** Ohne diese Zeile ist der Bau nicht begonnen.
+> **Steht ab T3 an K-08 im Blatt** — nicht als Vorsatz, sondern als Bedingung der Quittung.
+
+*Der Unterschied zu R11 ist der Zeitpunkt: R11 verlangt, dass der Planner seine Zahlen misst. F-13
+verlangt, dass der Bauende die Zahl festhält, die nach seinem eigenen Bau nicht mehr existiert.
+Das kann kein Planner für ihn tun.*
+
+### Ballbesitz
+
+- **Generator:** `AUF-83-T3` ist `⚡ AKTIV`, Sperre gefallen, `status: aktiv`, `spur: A`.
+  Zu bauen bleiben **K-01, K-04 (Höhenlage), K-05 (Arbeitszeile), K-06 (Einstieg zur Palette)** und
+  die Wanderung von **Objektname und Übernehmen-Knopf** aus T2 in die Kopfleiste.
+- **Evaluator:** `AUF-83-T1a-N1` (`d78c2466`) — Freigabe liegt seit 21:34, die Zeile im Ledger ist
+  seine.
+- **Yama:** AUF-84 (~3000 `<option>` je Seitenaufbau) · getrennte Arbeitsbäume · Tor 2.

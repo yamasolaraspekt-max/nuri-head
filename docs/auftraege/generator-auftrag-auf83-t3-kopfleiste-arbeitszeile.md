@@ -10,9 +10,9 @@ von Yama am 29.07. um 08:20 freigegeben.*
 ```yaml
 auftrag:
   id: AUF-83-T3
-  status: gesperrt
-  sperrgrund: "wartet auf den BAU von AUF-83-T2"
-  spur: B
+  status: aktiv            # entsperrt: T2 ist gebaut (45656ac1 / 86059540)
+  spur: A                  # 21:40 KORRIGIERT, war B — der Evaluator hat es belegt, nicht behauptet
+  nachtrag: "29.07. 21:40 — Grundgesamtheit korrigiert · Vorher-Wert-Pflicht · Spur A"
   heimat: ticket
   ziel: >
     Der Planer traegt EINE Kopfleiste (Projekt, Geschoss, Modus, Speichern) und EINE Arbeitszeile
@@ -29,11 +29,13 @@ scope:
     sed -n '1195,1240p' resources/planner/hausplaner/app/HausplanerApp.tsx &&
     node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/HausplanerApp.tsx
   population_at_writing: >
-    Die Geschosszeile traegt 13 Bedienelemente in vier voneinander unabhaengigen Aufgaben
-    (Layout-Inventur 25.07., Befund B1): Rueckgaengig/Wiederholen · Geschoss-Navigation (111 px) ·
-    ein Textfeld mit DEMSELBEN Wert wie der Waehler daneben · Anlegen/Duplizieren/Loeschen ·
-    2D/Split/3D · Speichern. Scheibe 7 steht bei 78 offenen Inline-Stellen — diese Zahl muss
-    unveraendert bleiben. Messung des Planners, KEINE Bedingung.
+    KORRIGIERT 29.07., 21:40 — meine Zahl war ueberholt, und ich hatte sie nicht nachgemessen.
+    ICH SCHRIEB: 13 Bedienelemente in vier Aufgaben (Layout-Inventur vom 25.07., Befund B1).
+    GEMESSEN (Generator, 21:31, unmittelbar vor dem Schreiben nach R14):
+      Zeile Z1183-1251 traegt 1 Knopf (Speichern) + <GeschossFlaeche> · 0 <select> · 0 <input>
+    AUF-43 hat seither zwei P1-Kriterien dieses Blattes bereits erfuellt.
+    DER ABRISS DER GESCHOSSZEILE HAT STATTGEFUNDEN — nur nicht durch diesen Auftrag.
+    Scheibe 7: 138 gesamt / 78 statisch / 78 offen, unveraendert zu halten.
   pfade:
     - resources/planner/hausplaner/app/HausplanerStudio.tsx
     - resources/planner/hausplaner/app/HausplanerApp.tsx        # NUR die Geschosszeile
@@ -67,6 +69,12 @@ kriterien:
     ausgefuehrt_von: evaluator
 
   - id: K-02
+    status: BEREITS ERFUELLT DURCH AUF-43      # bestaetigt vom Planner, 21:40
+    nachweis: "GeschossFlaeche.tsx:138 — das Eingabefeld sitzt im Menue des Waehlers, nicht in der Zeile"
+    hinweis: >
+      NICHT als eigene Leistung berichten. Wer das nicht weiss, liest den Bau als Erfolg an einer
+      Stelle, an der nichts geschehen ist — und die naechste Inventur schreibt die Zahl aus dem
+      Blatt fort statt der gemessenen.
     aussage: "Das Textfeld mit dem doppelten Geschossnamen ist ersatzlos fort."
     typ: absence
     kritikalitaet: P1
@@ -81,6 +89,9 @@ kriterien:
       desselben Werts** — nicht die Faehigkeit.
 
   - id: K-03
+    status: BEREITS ERFUELLT DURCH AUF-43      # bestaetigt vom Planner, 21:40
+    nachweis: "GeschossFlaeche.tsx Z157/158/163 — alle drei sind Knoepfe im Menue"
+    hinweis: "NICHT als eigene Leistung berichten. Siehe K-02."
     aussage: "Anlegen, Duplizieren und Loeschen liegen im Menue des Waehlers."
     typ: behavioural
     kritikalitaet: P1
@@ -156,12 +167,23 @@ kriterien:
     aussage: "Der Zeichenbereich gewinnt messbar Hoehe."
     typ: coverage
     kritikalitaet: P1
+    vorher_wert_pflicht: >
+      DER GENERATOR HAELT DEN VORHER-WERT FEST, BEVOR ER BAUT — eine Zeile in der Quittung:
+      getBoundingClientRect der LEINWAND (nicht der Wurzel), 1440 px, Expertenmodus.
+      OHNE DIESE ZEILE IST DAS KRITERIUM NICHT ABNEHMBAR und der Bau beginnt nicht.
     pruefung:
       typ: visuell
-      schritte: "1440 px, getBoundingClientRect der Buehne vorher und nachher"
+      schritte: "1440 px, getBoundingClientRect der LEINWAND, gegen den Wert aus der Quittung"
       erwartet: "waechst; um wie viel, wird gemessen und berichtet — kein Sollwert"
-    beleg: zwei getBoundingClientRect-Ausgaben
+    beleg: der Vorher-Wert aus der Quittung + die Nachher-Messung
     ausgefuehrt_von: evaluator
+    barriere: >
+      R9-BARRIERE, 29.07. 21:40 — ZWEITE WIEDERHOLUNG DERSELBEN KLASSE. T1a/K-07 und T2/K-06 sind
+      beide unmessbar geworden, weil ihr Vorher-Wert nirgends stand und der Baum weiterlief.
+      VORSCHLAG DES EVALUATORS, unveraendert uebernommen: "Ein Kriterium, das einen Vorher-Wert
+      braucht, muss ihn im Auftrag festhalten lassen — vom Generator vor dem Bau, in einer Zeile.
+      Wer ihn der Abnahme ueberlaesst, verliert ihn in dem Moment, in dem der Commit landet."
+      GILT AB SOFORT FUER JEDES KRITERIUM MIT VORHER-BEZUG, in jedem Auftrag.
 
   - id: K-09
     aussage: "Geerbte Zusagen vollstaendig, nicht nach Muster."
@@ -210,3 +232,33 @@ ist. Deshalb wandern sie dorthin, wo sie hingehören — und nicht alle an dense
 **T5** — das Eigenschaften-Panel klappbar, Escape-Stapel, Zustand je Arbeitsbereich. Die
 Vorbedingung liegt seit T1a: der Beobachter hängt an den **einzelnen** Schienen, nicht nur an der
 Reihe. Das war die Zugabe des Generators, die niemand beauftragt hatte.
+
+
+---
+
+## Drei Entscheidungen vom 29.07., 21:40 — alle drei kommen von euch, nicht von mir
+
+**1. Die Grundgesamtheit war überholt, und ich hatte sie nicht nachgemessen.** Meine 13
+Bedienelemente stammten aus der Layout-Inventur vom 25.07. **AUF-43 hat zwei P1-Kriterien dieses
+Blattes seither bereits erfüllt** — das Textfeld sitzt im Menü, Anlegen/Duplizieren/Löschen sind
+Knöpfe dort. **Bestätigt.** Sie werden als *bereits erfüllt durch AUF-43* geführt, **nicht als
+eigene Leistung** — genau aus dem Grund, den der Generator nennt: sonst liest jemand den Bau als
+Erfolg an einer Stelle, an der nichts geschehen ist.
+
+*Das ist F-04, vierte Ausprägung: eine Zahl im Auftrag, die ich nicht selbst gemessen habe.
+**R11 hätte es gefangen** — ich habe den `population_command` hingeschrieben und nicht ausgeführt.*
+
+**2. Der Vorher-Wert wird künftig vom Generator festgehalten, nicht von der Abnahme.**
+`T1a/K-07` und `T2/K-06` sind beide unmessbar geworden, weil ihr Vorher-Wert nirgends stand.
+**Zweite Wiederholung ⇒ R9 verlangt eine Barriere**, und der Vorschlag des Evaluators ist die
+richtige: *eine Zeile in der Quittung, vor dem Bau.* **Kostet Sekunden, rettet ein P1.**
+
+**3. Die Spur wird auf A korrigiert — und der Beleg ist eine Messung, keine Meinung.**
+Der Evaluator hat es an T2 belegt: **neun Kriterien, sieben P1, zwei ihm zugewiesen — und der
+Generator musste sieben Zusagen nachträglich erfinden**, weil die `grep`-Kriterien nichts
+verriegelten. *„Eine Sache, die man so prüfen muss, ist keine ‚eine Ledger-Zeile'-Sache."*
+**Er stuft nicht ein, ich schon — und er hat recht.** T3 ist ab jetzt **Spur A**.
+
+*Alle drei Korrekturen stehen zuerst hier im Blatt und danach in Tafel und Ledger. Das ist die
+Reihenfolge, die ich um 21:20 festgelegt habe, nachdem ich sie genau einmal andersherum gemacht
+und damit einen halben Auftrag verursacht hatte.*
