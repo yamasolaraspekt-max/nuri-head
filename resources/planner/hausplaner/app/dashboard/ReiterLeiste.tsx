@@ -48,7 +48,7 @@ export function ReiterLeiste({ reiter, aktiv, setAktiv, ariaLabel, panelId, reit
     // statt gekappt zu werden. Ein Reiter, der „Fachpla…" heisst, ist kein Reiter.
     <div
       role="tablist" aria-label={ariaLabel}
-      style={{ display: 'flex', flexWrap: 'wrap', gap: 2, borderBottom: `1px solid ${T.hair}`, marginBottom: 12 }}
+      className="hp-rl-leiste"
     >
       {reiter.map((tab, i) => {
         const aktivT = tab.id === aktiv;

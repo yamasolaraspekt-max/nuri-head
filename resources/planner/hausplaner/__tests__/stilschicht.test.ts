@@ -650,3 +650,54 @@ test('Scheibe 8b: jede angelegte Klasse wird auch benutzt — keine Regel ins Le
   const unbenutzt = [...new Set(klassen)].filter((k) => !traegt(geschoss, k));
   assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
 });
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-38 Scheibe 8c — die vier kleinen Flaechen, eine Einheit.
+ *
+ * Vier Dateien, ein Posten — so geschnitten, weil der `population_command` sie in einem Lauf misst.
+ * Die Zusage prueft sie deshalb auch in einem Lauf: **keine der vier traegt noch eine offene
+ * statische Stelle.**
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+const KLEINE = [
+  '../app/dashboard/WerkzeugGruppenMenue.tsx',
+  '../app/FaehigkeitenNavi.tsx',
+  '../app/DreiDBereich.tsx',
+  '../app/dashboard/ReiterLeiste.tsx',
+].map((p) => join(hier, p));
+
+test('Scheibe 8c (Wirkung): keine der vier kleinen Flaechen hat noch eine offene Stelle', () => {
+  const offen = KLEINE.flatMap((p) => messeDatei(p).offen.map((z) => `${p.split('/').pop()}:Z${z}`));
+  assert.deepEqual(offen, [], `offene statische Stellen:\n${offen.join('\n')}`);
+});
+
+test('Scheibe 8c: die Zusage misst ueberhaupt etwas — alle vier Dateien werden gefunden', () => {
+  // presence-Partner nach R2. Ein Tippfehler im Pfad wuerde die Zusage oben still gruen lassen.
+  for (const p of KLEINE) {
+    assert.ok(messeDatei(p).gesamt >= 1, `${p.split('/').pop()}: keine einzige Stelle gefunden`);
+  }
+});
+
+test('Scheibe 8c: genau ZWEI Ausnahmen, beide in DreiDBereich, beide ohne Token', () => {
+  const werte = new Set<string>(Object.values(T).map((w) => String(w).toLowerCase()));
+  const ausnahmen = KLEINE.flatMap((p) => stilBloecke(readFileSync(p, 'utf8'))
+    .filter((b) => istStatisch(b.text) && istAusnahme(b.text))
+    .map((b) => ({ datei: p.split('/').pop()!, block: b })));
+  assert.equal(ausnahmen.length, 2, 'die Zahl der zugelassenen Ausnahmen hat sich geaendert');
+  for (const a of ausnahmen) {
+    assert.equal(a.datei, 'DreiDBereich.tsx', `unerwartete Ausnahme in ${a.datei}`);
+  }
+  // Die Werkzeugleiste ueber dem 3D-Bild und der Ladehinweis. Beide Rohwert ohne Token in `T`.
+  for (const roh of ['#ffffffcc', '#e5e7eb', '#6b7280', '#d1d5db']) {
+    assert.ok(!werte.has(roh), `${roh} hat inzwischen einen Token — dann gehoert die Stelle in die Schicht`);
+  }
+});
+
+test('Scheibe 8c: jede angelegte Klasse wird auch benutzt — keine Regel ins Leere', () => {
+  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
+  const klassen = [...ohneKommentare.matchAll(/\.(hp-(?:wg|fn|3d|rl)-[a-z0-9-]+)\s*\{/g)].map((m) => m[1]!);
+  assert.ok(klassen.length >= 13, `nur ${klassen.length} Scheibe-8c-Klassen in der CSS`);
+  const zusammen = KLEINE.map((p) => readFileSync(p, 'utf8')).join('\n');
+  const unbenutzt = [...new Set(klassen)].filter((k) => !traegt(zusammen, k));
+  assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
+});

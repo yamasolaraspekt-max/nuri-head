@@ -396,3 +396,43 @@
  * `style={knopfStil}` gesetzt — dieselbe statische Wahrheit, nur in der Schreibweise, die das
  * Zaehlwerkzeug nicht sieht (Befund `AUF38-MW-7`). */
 .hp-gs-knopf { font-size: 12.5px; padding: 5px 9px; border-radius: 8px; cursor: pointer; border: 1px solid var(--hp-control-border); background: var(--hp-surface); color: var(--hp-ink); }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-38 Scheibe 8c — die vier kleinen Flaechen.
+ *
+ * **Eine Einheit, vier Dateien** — so vom Planner geschnitten, weil der `population_command` sie
+ * in einem Lauf misst. Gemessen: `WerkzeugGruppenMenue` 8 · `FaehigkeitenNavi` 3 · `DreiDBereich` 2
+ * · `ReiterLeiste` 1 = **14 offen**, **2 Ausnahmen** (beide in `DreiDBereich`).
+ *
+ * **Die zwei Ausnahmen bleiben inline:** die Werkzeugleiste ueber dem 3D-Bild
+ * (`#ffffffcc`/`#e5e7eb`/`#6b7280`) und der Ladehinweis (`#d1d5db`). Rohwerte ohne Token in `T`.
+ *
+ * **Zwei geerbte Zusagen mitgezogen** (`keineKappung.test.ts`): der Umbruch der Reiterzeile und
+ * der Umbruch des Faehigkeiten-Labels. Beide lasen den Inline-Stil; sie pruefen die Eigenschaft
+ * jetzt dort, wo sie wohnt. **Die Absicht ist unveraendert: umbrechen statt kappen** — ein Reiter,
+ * der „Fachpla…" heisst, ist kein Reiter.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+/* Werkzeug-Gruppenmenue. */
+.hp-wg-leiste { display: inline-flex; align-items: center; gap: 2px; flex-wrap: wrap; position: relative; }
+.hp-wg-anker { position: relative; }
+.hp-wg-zaehler { font-size: 10px; color: var(--hp-muted); }
+.hp-wg-menue { position: absolute; top: 100%; left: 0; z-index: 60; margin-top: 4px; background: var(--hp-surface); border: 1px solid var(--hp-hair); border-radius: 10px; box-shadow: 0 10px 28px var(--hp-canvas-wall-ghost); padding: 6px; max-height: 60vh; overflow-y: auto; max-width: 90vw; min-width: 320px; }
+.hp-wg-zeile { display: flex; align-items: center; gap: 8px; padding: 5px 6px; border-radius: 7px; }
+.hp-wg-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.hp-wg-unterzeile { font-size: 10.5px; color: var(--hp-muted); }
+.hp-wg-kuerzel { flex: 0 0 auto; font-size: 10.5px; color: var(--hp-muted); border: 1px solid var(--hp-control-border); border-radius: 4px; padding: 1px 5px; white-space: nowrap; }
+
+/* Faehigkeiten-Navigation. `overflow-wrap: anywhere` traegt die geerbte Zusage B4 aus
+ * `keineKappung`: das Label bricht um, statt zu kappen — „Horizont…" ist informationslos. */
+.hp-fn-rubrik { padding: 8px 12px 3px; font-size: 10.5px; font-weight: 600; color: var(--hp-muted); text-transform: uppercase; letter-spacing: 0.3px; }
+.hp-fn-label { flex: 1; min-width: 0; overflow-wrap: anywhere; white-space: normal; line-height: 1.25; }
+.hp-fn-fuss { padding: 10px 12px; font-size: 11px; color: var(--hp-faint); border-top: 1px solid var(--hp-hair); margin-top: 8px; }
+
+/* 3D-Bereich. */
+.hp-3d-flaeche { position: absolute; inset: 0; }
+.hp-3d-mitte { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+
+/* Reiterzeile. `flex-wrap: wrap` traegt die geerbte Zusage B2 aus `keineKappung`: drei Reiter in
+ * 220 px brechen um, statt dass der dritte aus dem Bild faellt. */
+.hp-rl-leiste { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--hp-hair); margin-bottom: 12px; }

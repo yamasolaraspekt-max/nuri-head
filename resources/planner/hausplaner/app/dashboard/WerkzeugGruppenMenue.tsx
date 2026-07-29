@@ -53,11 +53,11 @@ export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angehe
   }, [offen, setOffen]);
 
   return (
-    <span ref={huelle} style={{ display: 'inline-flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', position: 'relative' }}>
+    <span ref={huelle} className="hp-wg-leiste">
       {gruppen.map((gruppe) => {
         const auf = offen === gruppe.id;
         return (
-          <span key={gruppe.id} style={{ position: 'relative' }}>
+          <span key={gruppe.id} className="hp-wg-anker">
             <button
               type="button" aria-expanded={auf} aria-haspopup="menu"
               // AUF-34: der Knopf trägt die KURZform, der Tooltip das volle Themen-Label. Elf volle
@@ -73,26 +73,17 @@ export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angehe
               }}
             >
               {gruppe.kurz}
-              <span style={{ fontSize: 10, color: T.muted }}>▾</span>
+              <span className="hp-wg-zaehler">▾</span>
             </button>
 
             {auf && (
               <div
                 role="menu" aria-label={gruppe.label}
-                style={{
-                  position: 'absolute', top: '100%', left: 0, zIndex: 60, marginTop: 4,
-                  background: T.surface, border: `1px solid ${T.hair}`, borderRadius: 10,
-                  boxShadow: `0 10px 28px ${T.canvasWallGhost}`, padding: 6,
-                  // Kante 1: 15 Einträge sprengen das Menü. Es scrollt und bricht um — es kappt nicht.
-                  maxHeight: '60vh', overflowY: 'auto', maxWidth: '90vw',
-                  // AUF-34 / Kriterium 12: 260 px waren zu wenig. In „Bearbeiten" brach die
-                  // Beschriftung Buchstabe für Buchstabe um — „K-o-p-i-e-r-e-n" untereinander —,
-                  // weil Kürzel-Kästchen, Zustandstext und Stern die Breite nahmen und der Text
-                  // ausweichen musste. Ein senkrecht stehendes Wort ist unlesbar; das ist derselbe
-                  // Fehler wie Kappung, nur andersherum. Deshalb: mehr Grundbreite UND der
-                  // Zustandstext in eine zweite Zeile (unten), statt in derselben Zeile zu drängeln.
-                  minWidth: 320,
-                }}
+                /* Die Begründungen zu diesen Werten stehen jetzt bei der Regel `.hp-wg-menue` in
+                   `hausplaner.css` — Kante 1 (15 Einträge sprengen das Menü: scrollen und
+                   umbrechen, nicht kappen) und AUF-34/Kriterium 12 (260 px waren zu wenig, das
+                   Wort brach Buchstabe für Buchstabe um). Sie sind beim Umzug mitgewandert. */
+                className="hp-wg-menue"
               >
                 {gruppe.werkzeuge.map((tool) => {
                   const zustand = resolveToolState(tool, kontext);
@@ -101,7 +92,7 @@ export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angehe
                   });
                   const fest = angeheftet.has(tool.id);
                   return (
-                    <div key={tool.id} role="menuitem" aria-disabled={!zustand.enabled} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 6px', borderRadius: 7 }}>
+                    <div key={tool.id} role="menuitem" aria-disabled={!zustand.enabled} className="hp-wg-zeile">
                       <img
                         src={iconPfad(tool)} alt="" aria-hidden width={18} height={18}
                         style={{ flex: '0 0 auto', opacity: zustand.enabled ? 1 : GESPERRT_DECKKRAFT }}
@@ -118,20 +109,20 @@ export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angehe
                           brach es dann Buchstabe für Buchstabe um. `break-word` statt `anywhere`
                           bricht nur, wenn ein ganzes Wort nicht passt; bei 320 px Menübreite
                           passiert das nicht mehr. */}
-                      <span style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                      <span className="hp-wg-text">
                         <span style={{ fontSize: 12.5, overflowWrap: 'break-word', color: zustand.enabled ? T.ink : T.muted }}>
                           {tool.label}
                         </span>
                         {/* Zustand als Zeichen UND Text — nie nur Farbe. Bei gesperrt steht der Grund dabei. */}
                         <span
                           title={zustand.enabled ? ANZEIGE_TEXT[anzeige] : `${ANZEIGE_TEXT[anzeige]}: ${zustand.reason ?? ''}`}
-                          style={{ fontSize: 10.5, color: T.muted }}
+                          className="hp-wg-unterzeile"
                         >
                           {ANZEIGE_ZEICHEN[anzeige]} {anzeige === 'gesperrt' ? 'gesperrt' : 'in Entwicklung'}
                         </span>
                       </span>
                       {tool.shortcut && (
-                        <span style={{ flex: '0 0 auto', fontSize: 10.5, color: T.muted, border: `1px solid ${T.controlBorder}`, borderRadius: 4, padding: '1px 5px', whiteSpace: 'nowrap' }}>{tool.shortcut}</span>
+                        <span className="hp-wg-kuerzel">{tool.shortcut}</span>
                       )}
                       <button
                         type="button"

@@ -58,13 +58,10 @@ export function DreiDBereich({ sichtbar }: { sichtbar: boolean }): React.ReactEl
 
   return (
     <div style={{ position: 'relative', flex: 1, minWidth: 0, display: sichtbar ? 'block' : 'none' }}>
-      <div ref={containerRef} style={{ position: 'absolute', inset: 0 }} />
+      <div ref={containerRef} className="hp-3d-flaeche" />
       {istLeer && (
         <div
-          style={{
-            position: 'absolute', inset: 0, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', pointerEvents: 'none',
-          }}
+          className="hp-3d-mitte"
         >
           <span
             style={{
