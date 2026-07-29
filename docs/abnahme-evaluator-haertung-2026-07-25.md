@@ -2563,6 +2563,87 @@ Gesamtvotum: **FREIGABE.** Restschnitt durch (8a, 8b, 8c abgenommen). Offen blei
 also MW-7. Beides in derselben Datei; wer sie schneidet, sollte beide Schreibweisen in die
 Grundgesamtheit nehmen. Ballbesitz: Planner.
 
+### AUF-83-T1a (97a2e2a4) - Buehnenbreite wird gemessen - NICHT PRUEFBAR (5 von 7 belegt)
+
+Soll zuerst aus dem Auftragsblatt rekonstruiert, dann gemessen, dann den Bericht gelesen.
+Pruefstand: git archive 97a2e2a4; Baum seither unveraendert.
+
+K-01 Breite aus Messung: **ERFUELLT.** grep innerWidth in HausplanerApp = 0 Treffer.
+   presence-Partner traegt: innerWidth weiter in HausplanerStudio.tsx:68 (Fenster-Zuhoerer).
+   Gegen-Beweis: alte Fensterrechnung zurueckgeholt -> 4 rot, darunter beide ansichtBereit-Zusagen.
+K-02 Muster der Hoehe: **ERFUELLT.** buehnenBreite.ts traegt ERSATZ_BREITE/MIN_BREITE - genau die
+   zwei Konstanten, die buehnenHoehe.ts auch hat (700/200 dort, 712/200 hier). Verboten ist die
+   Schienenbreite; der Test verbietet 220/268/488 namentlich.
+   Gegen-Beweis A: 268 ins Modul -> rot. Gegen-Beweis B: eine data-schiene-Markierung wirklich
+   entfernt -> rot. Ehrlich: mein erster Versuch (data-schiene -> data-schienex) blieb gruen, weil
+   die Zusage ohne Wortgrenze prueft und data-schienex die Zeichenkette enthaelt. Meine Mutation
+   war unwirksam, nicht der Test blind.
+K-03 Objekt-Zweig der Hoehe: **ERFUELLT.** grep "imStudio ? '100%'" leer, 100vh 0 Treffer.
+K-04 Zusage an der Panelbreite: **ERFUELLT und besser geworden** - sucht ueber data-schiene +
+   borderLeft statt ueber die Zahl width: 268.
+K-05 Hoehen-Zusage unberuehrt: **ERFUELLT.** diff leer, gruen.
+Gates: test:hausplaner 1355/0, tsc 0, schema 0, dom 11/0; Pruefstand-Kontrolllauf 39/39;
+   Buendel im selben Commit (§8).
+K-06 + K-07: **NICHT PRUEFBAR (Umgebung).** Die Browser-Sitzung ist abgelaufen -
+   fetch('/admin/hausplaner/studio') liefert opaqueredirect, Seite steht auf /login. Anmelden ist
+   mir verwehrt. Beides sind P1 und beide vom Auftrag ausdruecklich dem Evaluator zugewiesen.
+
+Gesamtvotum: **NICHT PRUEFBAR** (nach §5 ist FREIGABE ausgeschlossen, solange ein P1 auf
+NICHT PRUEFBAR steht). KEIN Befund gegen den Commit - fuenf von sieben Kriterien tragen mit
+eigenen Gegen-Beweisen; es fehlt der Blick auf den Bildschirm.
+
+NEBENBEFUND (1) K-03 hat keine Verriegelung: geprueft wird per grep zum Abnahmezeitpunkt, kein Test
+haelt fest, dass der Objekt-Zweig behaelterbezogen bleibt. grep -rn "100vh|imStudio" __tests__/
+findet nur stilschicht.test.ts:257 (.hp-studio-CSS, vom Auftrag als legitim ausgeschlossen). Meine
+Mutation, die den Ternaer zurueckholt, laesst die Suite gruen. Ein P1 ohne Barriere ist die
+Fehlerklasse, gegen die R9 geschrieben wurde. Vorschlag: Zusage, dass die Buehnenhoehe keinen
+Modus-Ternaer traegt - das Gegenstueck zur bereits vorhandenen Breiten-Zusage.
+NEBENBEFUND (2) Die Schienen-Zusage sucht data-schiene als Teilzeichenkette; nach der
+Wortgrenzen-Korrektur aus Scheibe 8a waere die strenge Form konsequent. Heute ohne Wirkung.
+
+Ballbesitz: Yama (einmal anmelden), danach Evaluator fuer K-06/K-07.
+
+### AUF-83-T1b (a14abb53) - Hausplaner erbt die Ticket-Shell - FREIGABE
+### + AUF-83-T1a K-06 nachgeholt (Sitzung war wieder da)
+
+DER KERN - praezisiert oder abgeschwaecht? An IHRER Extraktion gemessen (inselTeilbaum per
+Reflexion, meine Eingaben, keine Datei im geteilten Baum):
+  A Kundenname IM data-Attribut der Insel -> im Teilbaum   => Leck wird gefunden
+  B Kundenname NUR im Shell-Auswahlfeld   -> nicht drin    => kein Fehlalarm
+  C #hausplaner-root fehlt -> ExpectationFailedException "dann prueft diese Zusage nichts"
+Alle drei sitzen: praezisiert, nicht entzahnt. Und die Zahl dazu: PHP-Suite 2729 -> 2730
+Zusicherungen - die Zusage hat eine GEWONNEN, keine verloren.
+
+K-01 **ERFUELLT** @extends je 1, <!DOCTYPE je 0.
+K-02 **ERFUELLT** Shell-Navigation da, Hausplaner-Verweis mit nav-item is-route-active.
+K-03 **ERFUELLT IM VERGLEICH** - die Klappflaeche ist visibility:hidden/pointer-events:none und
+     erscheint erst beim Ueberfahren der Kante; ich habe sie mit keiner Methode ausgeloest.
+     Deshalb der vergleichende Test: dieselbe Klickfolge auf /admin/invoices (von T1b nie
+     angefasst) -> Sidebar bleibt ebenfalls 229px. Belegt ist die Gleichheit, nicht das Klappen.
+K-04 **ERFUELLT** scrollHeight 813 === clientHeight 813, kein zweiter Bildlauf; #hausplaner-root
+     1077x701 zwischen #leftSidebar 229 und #rightSidebar 80.
+K-05 **ERFUELLT** eigene Regeln mitgewandert (studio 13, objekt 39), 100vh|calc( 0 Treffer.
+K-06 **ERFUELLT** Insel mountet: 98 hp-Elemente im Wurzelknoten, eingebettete Szene 416 Zeichen.
+K-07 **ERFUELLT** routes/app/config/layouts im Commit: 0 Dateien.
+K-08 **ERFUELLT** Insel 1355/0, dom 11/0, tsc 0, schema 0, PHP 789 gruen / 2730 Zusicherungen.
+
+Gesamtvotum T1b: **FREIGABE.**
+
+T1a K-06 nachgeholt (DevTools vom Auftrag erlaubt), Behaelter #mainContentScroll:
+  1131 -> Insel 1077 | 900 -> Insel 846 | zurueck 1131 -> 1077
+  alte Formel innerWidth(1440)-220-268 = 952, unabhaengig vom Behaelter.
+=> die Breite folgt dem Behaelter. **ERFUELLT.**
+
+T1a K-07 bleibt **NICHT PRUEFBAR**: verlangt Bildschirmfotos gegen den Stand VOR T1a. Der ist nicht
+mehr auslieferbar - T1b ist committet und hat das Bild absichtlich veraendert; die Voraussetzung
+"bei unveraenderten Panelbreiten" trifft nicht mehr zu. Folge der Reihenfolge, nicht der Sorgfalt:
+T1a lag bei mir, ich war an der abgelaufenen Sitzung blockiert, in der Zeit wurde T1b gebaut und
+committet. Drittes Mal heute, dass der vorlaufende Baum eine Messung kostet - erstes Mal, dass er
+eine vernichtet. Planner entscheidet: schliessen oder als "Bild vor T1b <-> nach T1b" neu schneiden
+(das pruefte dann aber T1b, nicht T1a).
+
+Voten: T1b **FREIGABE**, T1a **NICHT PRUEFBAR** nur noch an K-07 (sechs von sieben erfuellt).
+
 ## Rohbelege (Anhang, selbst gemessen)
 ```
 Gates je SHA (npm run …, EXIT / Testzähler):
