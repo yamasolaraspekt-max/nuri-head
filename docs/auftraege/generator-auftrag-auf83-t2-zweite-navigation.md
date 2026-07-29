@@ -12,8 +12,8 @@ freigegeben.*
 ```yaml
 auftrag:
   id: AUF-83-T2
-  status: gesperrt
-  sperrgrund: "wartet auf den BAU von AUF-83-T1b (Ticket-Navigation muss da sein)"
+  status: aktiv            # entsperrt: T1b ist gebaut (a14abb53) und abgenommen
+  nachtrag: "29.07. 21:20 — Umfang um objekt.blade erweitert (K-01b); der alte Ausschluss war falsch begruendet"
   spur: B
   heimat: ticket
   ziel: >
@@ -48,8 +48,18 @@ scope:
         bereits: Import, Architektur, Bauphysik, Heizung, Elektro/PV). Hier faellt nur die
         Darstellung als Baum, nicht der Inhalt.
       entschieden_von: planner
-    - stelle: "objekt.blade.php"
-      grund: "Sie traegt weder hp-bar noch hp-scratch. Sie anzufassen waere Beifang."
+    # ---- 29.07., 21:20: DIESER AUSSCHLUSS IST AUFGEHOBEN ----
+    # Der urspruengliche Text lautete: "objekt.blade.php — sie traegt weder hp-bar noch
+    # hp-scratch. Sie anzufassen waere Beifang."
+    # DER GENERATOR HAT IHN IN DER QUITTUNG WIDERLEGT, und er hatte recht:
+    #   grep -c 'hp-bar' objekt.blade.php  ->  4   (CSS Z35-37, Element Z78)
+    # Nur der Teil ueber hp-scratch stimmte. Nach R11 waere hier ein grep faellig gewesen,
+    # bevor das Blatt liegt.
+    - stelle: "objekt.blade.php — Objektname, Adresse und der W-A-Uebernehmen-Knopf"
+      grund: >
+        NUR DIESE bleiben stehen. Sie sind echter, einzigartiger Inhalt an Fachlogik, kein
+        doppelter Kopf — sie wandern mit T3 in die Kopfleiste, dort wo ohnehin Projekt und
+        Geschoss stehen.
       entschieden_von: planner
 
 kriterien:
@@ -64,6 +74,26 @@ kriterien:
     partner: >
       presence-Partner nach R2: die TICKET-Navigation muss im DOM sein und `Hausplaner` als aktiv
       markieren — sonst hat man nicht aufgeraeumt, sondern die Navigation entfernt.
+
+  - id: K-01b
+    aussage: "Auch die Objektseite traegt den doppelten Kopf nicht mehr."
+    typ: absence
+    kritikalitaet: P1
+    nachgetragen: "29.07., 21:20 — Umfangserweiterung nach dem Befund des Generators"
+    pruefung:
+      befehl: "grep -n 'hp-title\\|url()->previous' resources/views/admin/hausplaner/objekt.blade.php"
+      erwartet: >
+        Kein Treffer mehr. `hp-title` ("Hausplaner") und der Zurueck-Link sind nach T1b in BEIDEN
+        Blades ueberfluessig — die Ticket-Navigation erledigt beides.
+    beleg: grepausgabe vorher/nachher
+    grenze: >
+      Objektname, Adresse und der Uebernehmen-Knopf mit Staleness-Pille BLEIBEN. Sie sind kein
+      doppelter Kopf, sondern Inhalt.
+    begruendung: >
+      Beide Seiten erben seit T1b dieselbe Shell. Nur eine zu raeumen hinterliesse zwei
+      Hausplaner-Flaechen mit verschiedenem Kopf — genau die zweite Wahrheit, gegen die dieser
+      ganze Auftrag laeuft. **Beifang waere gewesen, in objekt.blade etwas ANDERES anzufassen;
+      denselben Fehler an beiden Orten zu beheben ist keiner.**
 
   - id: K-02
     aussage: "Der Testflaechen-Hinweis erscheint fuer den Nutzer genau einmal."

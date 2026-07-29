@@ -19131,3 +19131,59 @@ dritten Mal **vernichtet** statt verzoegert; Barriere ist der R10-Zusatz).
 **Generator:** `AUF-83-T1a-N1` (liegt, drei Kriterien) → dann **T2** mit erweitertem Umfang → **T3**.
 **Evaluator:** frei — naechste Abnahme ist T1a-N1.
 **Yama:** Merge moeglich; juengster abgenommener Commit ist **`a14abb53`** (T1b).
+
+
+---
+
+## 2026-07-29, 21:20 CEST — PLANNER: T2 ist gebaut, und die Umfangserweiterung stand am falschen Ort
+
+*Zeit unmittelbar vor dem Schreiben gemessen. Letzter fremder Commit `45656ac1`, 21:18.*
+
+### Was steht
+
+**`hp-navi` = 0** in `HausplanerStudio.tsx` und in `hausplaner.css`. Die Studio-Leiste in der Blade
+ist fort — an ihrer Stelle steht ein Kommentar, der erklaert, **was dort stand und warum es gehen
+durfte** (u. a.: *„Der Zurueck-Link: er war der einzige Weg aus dem Studio, solange es keine
+Ticket-Navigation gab“*). **Das ist die richtige Form** — ein entfernter Weg, der begruendet ist,
+wird beim naechsten Lesen nicht versehentlich wieder eingebaut.
+
+Insel jetzt **191 Stellen, 78 offen** — alle 78 weiterhin in `HausplanerApp.tsx` (Scheibe 7,
+gesperrt).
+
+### Und jetzt der Teil, der mir gehoert: die Erweiterung stand am falschen Ort
+
+**`objekt.blade.php` ist unberuehrt.** `hp-title` (Z79) und der Zurueck-Link (Z81) stehen noch.
+
+**Warum, ist gemessen und nicht geraten:** meine Umfangserweiterung von 21:11 stand in **Tafel und
+Ledger** — **nicht im Auftragsblatt.** Das Blatt trug bis eben unveraendert meinen falschen
+Ausschluss (*„objekt.blade traegt weder hp-bar noch hp-scratch“*), obwohl der Generator ihn schon
+um 10:37 widerlegt hatte. **Er hat nach dem Blatt gebaut. Das ist genau richtig — das Blatt IST der
+Auftrag.**
+
+**Das ist F-08b, vierte Auspraegung — und die erste, die den UMFANG trifft.** Bisher war es immer
+nur das Feld `status:`, und der Generator hat es jedes Mal gemeldet. Diesmal hat es Arbeit gekostet:
+sieben Minuten nach meinem Entscheid hat er einen Auftrag gebaut, der die Erweiterung nicht enthielt.
+
+> **REGEL, ab sofort: Das Blatt wird ZUERST nachgezogen, dann Tafel und Ledger.**
+> Wer eine Entscheidung schreibt, die einen Auftrag aendert, oeffnet das **Auftragsblatt als
+> erstes** — nicht als letztes.
+>
+> *Das ist keine Aufmerksamkeitsregel, sondern eine Reihenfolgeregel:* schreibe ich das Blatt zuerst,
+> kann ich die Erweiterung nicht vergessen, denn Tafel und Ledger entstehen danach aus ihm.
+> **Bisher lief es andersherum — ich habe entschieden, es breit begruendet, und das Blatt zuletzt
+> angefasst. Oder eben nicht.**
+
+**Das Blatt ist jetzt nachgezogen:** der falsche Ausschluss ist mit seiner Widerlegung ersetzt
+(`grep -c 'hp-bar' objekt.blade.php` = **4**), und **`K-01b`** ist nachgetragen — der doppelte Kopf
+faellt in **beiden** Blades, Objektname, Adresse und der Uebernehmen-Knopf bleiben und wandern mit
+**T3**.
+
+### Zum Bau selbst
+
+Er hat gebaut, was im Blatt stand, und **es traegt**. Die Erweiterung ist ein **Nachtrag zu T2**,
+kein Mangel an seinem Bau — die Zeile in der Tafel sagt das ausdruecklich, damit die Abnahme nicht
+gegen ein Kriterium prueft, das beim Bauen nicht dastand.
+
+**Ballbesitz: Generator** — `K-01b` nachtragen (zwei Zeilen in `objekt.blade`), dann berichten.
+Danach **T1a-N1** und **T3**. **Evaluator:** T2 erst nach dem Nachtrag, sonst prueft er einen
+halben Umfang.
