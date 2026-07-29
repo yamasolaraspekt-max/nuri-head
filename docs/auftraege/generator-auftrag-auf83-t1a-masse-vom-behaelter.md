@@ -1,98 +1,166 @@
-# AUF-83-T1a — Die Insel nimmt ihre Maße vom Behälter
+# AUF-83-T1a — Die Breite lernt, was die Höhe schon kann
 
-*Planner, 29.07.2026, 08:25 CEST. Erster Schritt von AUF-83, von Yama am 29.07. um 08:20 freigegeben:
-„jetzt sieht es besser aus und ich gebe das jetzt frei bitte diese aufgabe vorziehen und ich möchte
-das sehen auf den dashboard bzw bildschirm".*
-
-**Grundlage:** `docs/planner/entwurf-studio-in-ticket-shell-2026-07-29.html` ·
-`docs/planner/t1-entscheidungsgrundlage-ticket-shell-2026-07-29.md`
+*Planner, 29.07.2026, 08:35 CEST. **Zweite Fassung.** Die erste hat der Generator mit
+`QUITTUNG: TRÄGT NICHT` zurückgewiesen — zwei Prüfverfahren trugen nicht. **Beide Beanstandungen
+sind berechtigt, beide Fehler sind meine**, und beim Nachmessen kam heraus, dass der Auftrag
+**kleiner** ist als ich ihn geschrieben hatte.*
 
 ```yaml
 auftrag:
   id: AUF-83-T1a
   status: aktiv
+  fassung: 2
   spur: A
   heimat: ticket
   ziel: >
-    Breite und Hoehe der Hausplaner-Insel kommen aus ihrem Behaelter statt aus Fensterkonstanten.
-    Danach ist sie einbettbar (T1b) und overlay-faehig (T5), ohne dass eine weitere Zeile
-    Layout-Rechnung entsteht.
+    Die BREITE der Zeichenflaeche folgt ihrem Behaelter — nach demselben Muster, mit dem die
+    HOEHE es seit AUF-72/73 bereits tut. Danach ist die Insel einbettbar (T1b) und
+    overlay-faehig (T5).
   nicht_ziel: >
-    KEIN Blade-Umbau, KEIN @extends, keine Aenderung an Routen, Rechten oder Auth — das ist T1b.
-    KEINE neue Optik: bei unveraenderten Panelbreiten muss der Bildschirm pixelgleich bleiben.
-    KEINE Umstellung von Inline-Stilen — AUF-38 Scheibe 7 bleibt gesperrt und wird nicht angefasst.
+    KEIN Blade-Umbau, KEIN @extends, keine Route, kein Recht — das ist T1b.
+    KEINE neue Optik: bei unveraenderten Panelbreiten bleibt der Bildschirm pixelgleich.
+    KEINE Umstellung von Inline-Stilen — AUF-38 Scheibe 7 bleibt gesperrt (78 offen).
+
+vorgeschichte:
+  quittung_1: "TRAEGT NICHT (Generator, 29.07. 08:29) — K-05 und K-02 der ersten Fassung"
+  planner_bestaetigt: >
+    BEIDE BEANSTANDUNGEN SIND BERECHTIGT, UND BEIDE FEHLER SIND SPEZIFIKATIONSMAENGEL.
+    K-05 nannte eine geerbte Zusage, DIE ES NICHT GIBT: `grep -rn innerWidth __tests__/` liefert
+    exit 1, und `HausplanerApp:1442` ist ein JSX-Kommentar, kein Test. Selbst nachgemessen.
+    Ein P1-Kriterium, das heute nichts findet und nach dem Umbau genauso gruen waere — eine
+    STUMME ZUSAGE, und zwar in dem Auftrag, der gegen genau diese Fehlerklasse gebaut wird.
+    K-02 liess Befehl und Sollzustand auseinanderlaufen: der Befehl griff auch die Insel, wo
+    `100vh` legitim ist — und eine der Fundstellen liegt in der GESPERRTEN Datei. Der Sollzustand
+    war ohne Regelbruch nicht erreichbar.
+  seine_methode: >
+    Er hat die echte Zusage mit der 8c-Methode gefunden — "welche Tests LESEN diese Datei" statt
+    "wo steht das Wort". Das ist die praezisierte Such-Auflage aus Scheibe 5, angewandt.
 
 scope:
   population_command: >
     grep -n 'innerWidth' resources/planner/hausplaner/app/HausplanerApp.tsx &&
-    grep -rn '100vh' resources/views/admin/hausplaner/
+    grep -n "100vh" resources/views/admin/hausplaner/*.blade.php resources/planner/hausplaner/app/HausplanerApp.tsx
   population_at_writing: >
-    Drei Rechnungen: HausplanerApp.tsx:369 (Breite), studio.blade.php:24 und objekt.blade.php:27
-    (Hoehe). Dazu EINE geerbte Zusage in Z1442. Messung des Planners, KEINE Bedingung.
+    BREITE: HausplanerApp:369 (`innerWidth - 220 - 268`) plus die zwei Breitenliterale, die sie
+    spiegelt (Z1371 `width: 220`, Z1796 `width: 268`).
+    HOEHE: HausplanerApp:1180 (`height: imStudio ? '100%' : '100vh'`) — der Studio-Zweig ist
+    BEREITS behaelterbezogen, nur der Objekt-Zweig nicht.
+    Messung des Planners, KEINE Bedingung.
   pfade:
     - resources/planner/hausplaner/app/HausplanerApp.tsx
-    - resources/views/admin/hausplaner/studio.blade.php
-    - resources/views/admin/hausplaner/objekt.blade.php
-    - resources/planner/hausplaner/hausplaner.css
-    - resources/planner/hausplaner/__tests__/breiten.test.ts
+    - resources/planner/hausplaner/app/dashboard/buehnenBreite.ts   # neu, Muster: buehnenHoehe.ts
+    - resources/planner/hausplaner/__tests__/buehnenBreite.test.ts  # neu
+    - resources/planner/hausplaner/__tests__/keineKappung.test.ts
   ausschluesse:
+    - stelle: "resources/views/admin/hausplaner/*.blade.php — min-height: calc(100vh - 46px)"
+      grund: >
+        GEHOERT ZU T1b, nicht hierher. Die 46 px sind die Hoehe der BLADE-Leiste; sie faellt mit
+        dem @extends. Sie hier zu entfernen hiesse, den Blade-Umbau halb vorzuziehen.
+        Das war ein Zuschnittfehler der ersten Fassung.
+      entschieden_von: planner
+    - stelle: "hausplaner.css:157 (.hp-studio) und stilschicht.test.ts:257"
+      grund: "Legitime Verwendung ausserhalb der Behaelter-Rechnung. Kein Befund."
+      entschieden_von: planner
+    - stelle: "buehnenHoehe.ts:68"
+      grund: "Ein KOMMENTAR, der den Blade-Rest beschreibt. Er dokumentiert, er rechnet nicht."
+      entschieden_von: planner
     - stelle: "die 78 offenen Inline-Stellen in HausplanerApp.tsx"
       grund: >
-        Das ist AUF-38 Scheibe 7 und ausdruecklich gesperrt. Zwei Posten in derselben Datei sind
-        die Kollision, die §13 verhindert. Wer hier eine Inline-Stelle umstellt, baut Scheibe 7
-        nebenbei — verboten.
+        AUF-38 Scheibe 7, gesperrt. Wer hier eine umstellt, baut Scheibe 7 nebenbei und macht
+        beide Posten unpruefbar. Faellt eine im Weg auf: melden, nicht mitnehmen.
       entschieden_von: planner
 
 kriterien:
   - id: K-01
-    aussage: "Die Planbreite folgt dem Behaelter, nicht dem Fenster."
-    typ: behavioural
-    kritikalitaet: P1
-    pruefung:
-      typ: visuell
-      schritte: >
-        Studio bei 1440 px oeffnen. Die Insel in einen Behaelter mit 900 px Breite setzen
-        (Testseite oder DevTools). Der Plan muss die 900 px ausfuellen, nicht 1440 minus 488.
-      erwartet: "gemessene Planbreite == Behaelterbreite minus tatsaechlicher Panelbreiten"
-    beleg: zwei getBoundingClientRect-Ausgaben, Behaelter und Plan
-    ausgefuehrt_von: evaluator
-    begruendung: >
-      `HausplanerApp.tsx:369` rechnet heute `innerWidth - 220 - 268`. Solange das steht, weiss der
-      Plan nichts von seinem Behaelter — und kein Panel kann als Overlay laufen, weil sein
-      Zuklappen die Rechnung nicht erreicht.
-
-  - id: K-02
-    aussage: "Die Inselhoehe folgt dem Behaelter, nicht dem Fensterausschnitt."
+    aussage: "Die Planbreite kommt aus einer Messung, nicht aus Fensterkonstanten."
     typ: absence
     kritikalitaet: P1
     pruefung:
-      befehl: "grep -rn '100vh' resources/views/admin/hausplaner/ resources/planner/hausplaner/"
-      erwartet: "kein Treffer mehr fuer #hausplaner-root"
-    beleg: grepausgabe
+      befehl: "grep -n 'innerWidth' resources/planner/hausplaner/app/HausplanerApp.tsx"
+      erwartet: "kein Treffer in der Breitenrechnung"
+    beleg: grepausgabe vorher/nachher
     partner: >
-      presence-Partner nach R2: derselbe Befehl ohne Pfadfilter muss Treffer liefern (es gibt
-      `100vh` anderswo im Projekt) — sonst prueft der Befehl nichts.
+      presence-Partner nach R2: `grep -rn 'innerWidth' resources/planner/hausplaner/` MUSS weiter
+      Treffer liefern (der Fenster-Zuhoerer bleibt) — sonst prueft der Befehl nur, dass jemand ein
+      Wort geloescht hat.
+
+  - id: K-02
+    aussage: "Die Breite folgt dem Muster, das die Hoehe bereits hat."
+    typ: presence
+    kritikalitaet: P1
+    pruefung:
+      befehl: "npm run test:hausplaner -- --filter=buehnenBreite"
+      erwartet: >
+        Ein Modul `buehnenBreite.ts` nach dem Vorbild von `buehnenHoehe.ts`: es misst den
+        Behaelter und rechnet, was uebrig bleibt. KEINE Pixelkonstante im Modul — dieselbe Regel,
+        die `buehnenHoehe.ts` sich selbst gibt und die `buehnenHoehe.test.ts:28` am Quelltext
+        nachprueft.
+    beleg: testausgabe + der Quelltext des neuen Moduls
     begruendung: >
-      `min-height: calc(100vh - 46px)` mit der Hoehe der EIGENEN Blade-Leiste. In der Ticket-Shell
-      sitzt `@yield('content')` in `.main-content-scroll` — `100vh` erzeugt dort einen ZWEITEN
-      Bildlauf und schiebt den Zeichenbereich unter die Falz.
+      DAS IST DER KERN DIESES AUFTRAGS, und er stand in der ersten Fassung nicht drin, weil ich
+      `buehnenHoehe.ts` nicht gemessen hatte. Die HOEHE ist seit AUF-72/73 geloest: gemessen statt
+      gerechnet, mit Ersatzwert, Mindestwert und abgerundet statt aufgerundet. Der Satz aus jenem
+      Modul gilt hier woertlich: *"Wer stattdessen einen festen Betrag abzoege, haette die alte
+      Konstante nur durch eine kleinere ersetzt - und saesse in vier Wochen wieder hier."*
+      Die Breite bekommt dasselbe. **Bestandscode-first heisst hier nicht wiederverwenden, sondern
+      derselben Loesung folgen, die fuer die andere Achse schon abgenommen ist.**
 
   - id: K-03
-    aussage: "Kein zweiter Bildlauf, wenn die Insel in einem Scroll-Container sitzt."
+    aussage: "Der Objekt-Zweig der Hoehe wird behaelterbezogen wie der Studio-Zweig."
+    typ: behavioural
+    kritikalitaet: P1
+    pruefung:
+      befehl: "grep -n \"imStudio ? '100%'\" resources/planner/hausplaner/app/HausplanerApp.tsx"
+      erwartet: >
+        Kein Ternaer mehr — beide Wege nehmen `100%`. Heute steht dort
+        `height: imStudio ? '100%' : '100vh'`: **der Studio-Zweig ist bereits richtig, der
+        Objekt-Zweig nicht.**
+    beleg: grepausgabe + Sichtprobe der Objektseite
+    begruendung: >
+      Mit T1b wird auch die Objektseite eingebettet. Bliebe dort `100vh`, entstuende genau der
+      zweite Bildlauf, den T1a verhindern soll. **Diese eine Stelle ist Layout-Rechnung und
+      damit ausdruecklich Teil dieses Auftrags — nicht Scheibe 7.**
+
+  - id: K-04
+    aussage: "Die Zusage, die die Panelbreite liest, ist mitgezogen."
+    typ: coverage
+    kritikalitaet: P1
+    pruefung:
+      befehl: "npm run test:hausplaner -- --filter=keineKappung"
+      erwartet: >
+        `keineKappung.test.ts:48` sucht die Panelzeile heute ueber die Zeichenkette `width: 268,`.
+        Nach dem Umbau muss sie die EIGENSCHAFT dort pruefen, wo sie wohnt — nicht die Zahl.
+    beleg: testausgabe + Wortlaut vorher/nachher
+    korrektur: >
+      DAS ERSETZT DAS FALSCHE K-05 DER ERSTEN FASSUNG. Ich hatte `breiten.test.ts` und
+      `innerWidth` genannt — beides existiert nicht. Der Generator hat die echte Stelle gefunden.
+
+  - id: K-05
+    aussage: "Die vorhandene Hoehen-Zusage bleibt gruen und unveraendert."
+    typ: presence
+    kritikalitaet: P1
+    pruefung:
+      befehl: "npm run test:hausplaner -- --filter=buehnenHoehe && git diff --stat -- resources/planner/hausplaner/__tests__/buehnenHoehe.test.ts"
+      erwartet: "gruen, und die Datei ist NICHT angefasst"
+    beleg: testausgabe + leerer diff
+    begruendung: >
+      `buehnenHoehe.test.ts` ist die abgenommene Zusage der anderen Achse. Wer sie beim Bauen
+      anfasst, aendert einen erteilten Beleg. Bleibt sie gruen, ohne beruehrt zu sein, ist das
+      der beste verfuegbare Beweis, dass die Hoehe unbeschaedigt geblieben ist.
+
+  - id: K-06
+    aussage: "Die Planbreite folgt einem schmaleren Behaelter."
     typ: behavioural
     kritikalitaet: P1
     pruefung:
       typ: visuell
       schritte: >
-        Testseite: `#hausplaner-root` in einen Behaelter mit `overflow:auto` und fester Hoehe
-        setzen, darueber eine 52-px-Kopfzeile.
-      erwartet: >
-        `document.scrollingElement.scrollHeight == clientHeight` — kein Seiten-Bildlauf.
-        Der Plan endet sichtbar innerhalb des Behaelters.
-    beleg: scrollHeight/clientHeight vorher und nachher
+        Studio bei 1440 px. Den tragenden Behaelter auf 900 px setzen (DevTools genuegt).
+      erwartet: "gemessene Planbreite folgt dem Behaelter, nicht 1440 minus 488"
+    beleg: zwei getBoundingClientRect-Ausgaben, Behaelter und Plan
     ausgefuehrt_von: evaluator
 
-  - id: K-04
+  - id: K-07
     aussage: "Bei unveraenderten Panelbreiten ist der Bildschirm pixelgleich."
     typ: behavioural
     kritikalitaet: P1
@@ -103,39 +171,19 @@ kriterien:
     beleg: sha256-Paare je Viewport
     ausgefuehrt_von: evaluator
     begruendung: >
-      Dieser Auftrag aendert das VERFAHREN, nicht das Bild. Sieht es anders aus, ist etwas
-      anderes passiert als beauftragt — dann ist die Abweichung der Befund, nicht der Haken.
+      Dieser Auftrag aendert das VERFAHREN, nicht das Bild. Sieht es anders aus, ist etwas anderes
+      passiert als beauftragt — dann ist die Abweichung der Befund, nicht der Haken.
 
-  - id: K-05
-    aussage: "Die geerbte Zusage ist mitgezogen und prueft die Wirkung."
-    typ: coverage
-    kritikalitaet: P1
-    pruefung:
-      befehl: "grep -n '220\\|268\\|innerWidth' resources/planner/hausplaner/__tests__/breiten.test.ts"
-      erwartet: >
-        Die Zusage haelt nicht mehr die FORMEL fest (`innerWidth - 220 - 268`), sondern die
-        WIRKUNG: der Plan fuellt den verbleibenden Raum seines Behaelters.
-    beleg: testausgabe + Wortlaut der geaenderten Zusage
-    begruendung: >
-      `HausplanerApp.tsx:1442` traegt die Formel als Zusage. Wer sie nicht mitzieht, bekommt ein
-      rotes Gate ohne Fehler — der sechste Beleg desselben Bautyps in diesem Projekt.
-    such_auflage: >
-      Gesucht wird ueber die EIGENSCHAFTSNAMEN (`width`, `gridTemplateColumns`, `minHeight`),
-      NICHT ueber die Woerter `style` oder `inline`. Auflage aus Scheibe 5.
-
-  - id: K-06
-    aussage: "Keine Inline-Stelle aus Scheibe 7 ist mitgewandert."
+  - id: K-08
+    aussage: "Scheibe 7 ist unberuehrt."
     typ: absence
     kritikalitaet: P1
     pruefung:
       befehl: "node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/HausplanerApp.tsx"
-      erwartet: "die Zahl der offenen Stellen ist unveraendert (heute 78)"
+      erwartet: "78 offen, unveraendert"
     beleg: rohausgabe vorher/nachher
-    begruendung: >
-      Die Sperre auf Scheibe 7 ist mit einem gemessenen Grund gesetzt. Dieser Auftrag darf sie
-      nicht durch die Hintertuer aufweichen.
 
-  - id: K-07
+  - id: K-09
     aussage: "Gates ohne Regression."
     typ: presence
     kritikalitaet: P1
@@ -145,44 +193,63 @@ kriterien:
     beleg: testzaehler vorher/nachher
 
 selbstnachweis:
-  quittung_zuerst: "Readiness-Quittung nach §2, bevor eine Zeile entsteht."
+  quittung_zuerst: "Zweite Readiness-Quittung nach §2, bevor eine Zeile entsteht."
   gegenprobe: >
-    Die alte Rechnung wieder einsetzen ⇒ K-01 und K-05 muessen rot werden. Faellt nur eine,
-    prueft die andere die Gestalt statt der Wirkung.
+    Die alte Rechnung wieder einsetzen ⇒ K-01, K-02 und K-06 muessen rot werden. Faellt nur eine,
+    prueft mindestens eine der anderen die Gestalt statt der Wirkung.
+  such_auflage: >
+    Geerbte Zusagen werden ueber die EIGENSCHAFTSNAMEN gesucht und ueber die Frage "welche Tests
+    LESEN diese Datei" — nicht ueber die Woerter `style` oder `inline`. Deine 8c-Methode; sie hat
+    in dieser Quittung meinen Fehler gefunden.
   rueckweg: >
-    Revert ueber vier Dateien. Kein Datenpfad, kein Schema, keine Migration, keine Route.
-    Zurueckdrehen einer Probe NIE mit `git checkout` — Kopie beiseite und `cp` zurueck,
-    mit `diff -q` als Beleg (Auflage aus AUF-38-MW-N2).
+    Revert ueber vier Dateien, davon zwei neu. Kein Datenpfad, kein Schema, keine Route.
+    Zum Zurueckdrehen einer Probe NIE `git checkout` — Kopie beiseite und `cp` zurueck,
+    mit `diff -q` als Beleg.
 ```
 
 ---
 
-## Warum dieser Schritt zuerst kommt
+## Was die Quittung an meinem Auftrag geändert hat
 
-Yamas Auftrag hieß *„räume auf, der Zeichenbereich soll mehr Platz bekommen"*. **Aufräumen allein
-gibt keinen Platz.** Die Breite des Plans kommt heute nicht aus dem Layout, sondern aus einer
-Subtraktion mit zwei fest verdrahteten Zahlen. Kopfleisten zusammenzulegen ändert daran nichts.
+**Der Auftrag ist kleiner geworden, nicht größer.** Ich hatte drei Rechnungen benannt — Breite plus
+zwei Blade-Höhen. **Zwei davon gehören nicht hierher:**
 
-**Und derselbe Fehler steckt in der Höhe.** Beide Rechnungen messen gegen das Fenster statt gegen
-den Behälter — deshalb ist die Insel heute weder in die Ticket-Shell einbettbar (T1b) noch
-overlay-fähig (T5). **Es sind nicht drei Aufgaben, sondern dreimal dieselbe.**
+- Die **Blade-Höhen** (`calc(100vh − 46px)`) hängen an der Blade-Leiste, die mit **T1b** ohnehin
+  fällt. Sie hier zu entfernen hieße, den Blade-Umbau halb vorzuziehen. Zuschnittfehler.
+- Die **Höhe der Insel ist längst gelöst.** `buehnenHoehe.ts` (AUF-72/73, 127 Zeilen) misst statt
+  zu rechnen, mit Ersatzwert, Mindestwert und der ausdrücklichen Regel, **keine Pixelkonstante**
+  zu setzen. `HausplanerApp:1180` nutzt im Studio bereits `100%`. **Offen ist nur der Objekt-Zweig.**
 
-**Dieser Auftrag ist zugleich der erste Zerlegungsschritt von AUF-48.** Wenn die Maße an *einer*
-Stelle liegen statt an dreien, ist die spätere Zerlegung von `HausplanerApp.tsx` Vorarbeit statt
-Nacharbeit. Das war die Auflage, mit der ich die Frage „AUF-48 vorziehen?" aufgelöst habe.
+**Was übrig bleibt, ist genau eine Achse: die Breite.** Und für sie existiert bereits das Muster,
+nach dem sie gebaut gehört — auf der anderen Achse, abgenommen und testverriegelt.
 
-## Die Auflage, die den Umfang begrenzt
+> *„Kein Ausgleich per fester Zahl. Hier steht keine Pixelkonstante; es wird gerechnet, was gemessen
+> ist. Wer stattdessen einen festen Betrag abzöge, hätte die alte Konstante nur durch eine kleinere
+> ersetzt — und säße in vier Wochen wieder hier."*
+> — `buehnenHoehe.ts`, geschrieben für die Höhe, gilt wörtlich für die Breite.
 
-`HausplanerApp.tsx` trägt **78 offene Inline-Stellen** (AUF-38 Scheibe 7) und wird von **AUF-48**
-beansprucht. **Dieser Auftrag fasst genau die Layout-Rechnung an — nichts sonst in dieser Datei.**
+## Meine zwei Fehler, benannt
 
-Wenn beim Bauen auffällt, dass eine Inline-Stelle im Weg steht: **melden, nicht mitnehmen.** Ein
-Auftrag, der nebenbei eine gesperrte Scheibe baut, macht beide unprüfbar.
+**(1) Ich habe ein P1-Kriterium gegen eine Zusage geschrieben, die ich nicht gemessen hatte.**
+`breiten.test.ts` mit `innerWidth` — beides existiert nicht. Der Prüfbefehl liefert `exit 1`.
+**Das ist eine stumme Zusage in genau dem Auftrag, der gegen stumme Zusagen gebaut wird.** Die ganze
+Nacht lautete die Regel *„eine Zahl im Auftrag ist eine Messung, keine Bedingung"* — hier war es
+nicht einmal eine Zahl, sondern eine behauptete Datei.
+
+**(2) Befehl und Sollzustand liefen auseinander.** Mein `grep 100vh` griff auch die Insel, wo die
+Verwendung legitim ist — und eine Fundstelle liegt in der **gesperrten** Datei. **Der Sollzustand
+war ohne Regelbruch nicht erreichbar.** Das ist derselbe Fehler wie eine Grundgesamtheit ohne
+Ausschlussliste, nur eine Ebene tiefer.
+
+**Die Readiness-Quittung hat damit zum zweiten Mal einen Mangel gefangen, bevor Code entstand.**
+Beim ersten Mal war es eine fehlende Definition, diesmal ein nicht existierender Prüfgegenstand.
+Beide hätten ohne sie erst der Evaluator gefunden — nach dem Bauen.
 
 ## Reihenfolge
 
-1. **Dieses Blatt (T1a)** — Maße vom Behälter. Danach ist der Weg frei.
-2. **T1b** — die Blades erben von `admin.layouts.app`; die Ticket-Navigation erscheint.
-3. **T2** — die zweite und dritte Navigation fallen (Blade-Leiste, `hp-navi-*`, Marke, Doppelung).
-4. **T3** — Kopfleiste und Arbeitszeile; die 13-teilige Geschosszeile fällt weg.
+1. **Dieses Blatt (T1a)** — die Breite lernt, was die Höhe kann.
+2. **T1b** — Blades an `admin.layouts.app`; die Ticket-Navigation erscheint. **Dort fallen auch die
+   `calc(100vh − 46px)` weg**, zusammen mit der Blade-Leiste, zu der die 46 px gehören.
+3. **T2** — die zweite und dritte Navigation fallen.
+4. **T3** — Kopfleiste und Arbeitszeile; die 13-teilige Geschosszeile verschwindet.
 5. **T5** — Eigenschaften-Panel klappbar, Escape-Stapel, Zustand je Arbeitsbereich.

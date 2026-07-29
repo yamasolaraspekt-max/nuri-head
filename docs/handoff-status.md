@@ -18023,3 +18023,250 @@ mitzunehmen hiesse, eine Rechteaenderung in einem Layout-Auftrag zu verstecken.*
 (Scheibe 6, 8a, 8b, 8c, B-01); drei Voten davon liegen bereits unversioniert im Arbeitsbaum und
 werden von mir gesichert. **Yama** — nichts Blockierendes; der Merge auf den naechsten abgenommenen
 Stand kommt, sobald die Voten verarbeitet sind.
+
+---
+
+## ⇒ EVALUATOR — AUF-38 Scheibe 8c (die vier Kleinen, `cca4cd20`): **FREIGABE** (29.07., 08:26 CEST)
+
+Gemessen auf einem **commit-exakten Prüfstand** (`git archive cca4cd20`), nicht im Arbeitsbaum —
+die Konsequenz aus der falschen Insel-Zahl bei 8b. Der Baum trägt hier denselben Stand
+(`diff cca4cd20 HEAD -- resources public` leer), aber der Prüfstand ist ab jetzt der Normalfall.
+
+**K1 Zahlen: ERFÜLLT.** Alle vier Dateien auf **0 offen** (`WerkzeugGruppenMenue` 4/0/0/0 ·
+`FaehigkeitenNavi` 1/0/0/0 · `DreiDBereich` 3/2/2/0 · `ReiterLeiste` 1/0/0/0). Insel
+**210 → 196** gesamt, **92 → 78** offen. **Seinen Satz habe ich nachgemessen, nicht übernommen:
+die 78 liegen restlos in `HausplanerApp.tsx`** — keine andere Datei hat eine offene Stelle.
+
+**K2 zwei Ausnahmen, beide in `DreiDBereich`: ERFÜLLT.** Die Mengenzusage bindet **Zahl und Ort**.
+Gegen-Beweis: eine dritte Rohwert-Stelle in `ReiterLeiste` eingeschleust ⇒ **rot**, *„genau ZWEI
+Ausnahmen, beide in DreiDBereich, beide ohne Token"*. **Eine Ausnahme, die die Datei wechselt, fällt
+auf** — das ist mehr, als eine reine Mengenzusage könnte.
+
+**K3 Klassen: ERFÜLLT.** Je eine Stelle in drei der vier Dateien zurückgedreht ⇒ jedes Mal **2 rot**
+(Wirkung + Klasse ohne Träger). Bei `ReiterLeiste` fällt zusätzlich **B3** — die geerbte Zusage
+hängt also wirklich an der umgestellten Stelle und nicht nur daneben.
+
+**K4 gebaute CSS: 0 Rohfarben.**
+**K5 Gates: ERFÜLLT, selbst gefahren.** Prüfstand `stilschicht` + `keineKappung` **56/56**; im Baum
+volle Insel **1345/0** · tsc 0 · schema 0 · dom 11/0. Bündel im selben Commit (§8), 10 Dateien.
+
+**K6 geerbte Zusagen: ERFÜLLT — und seine neue Suchmethode trägt.** Die bisherige Auflage
+(*über die Eigenschaftsnamen suchen*) hätte beide verfehlt, weil `keineKappung.test.ts` die Dateien
+über **Variablen** liest. Sein Vorschlag — *erst suchen, welche Tests die Datei überhaupt einlesen,
+dann diese auf Stil-Zusagen ansehen* — ist unabhängig davon, wie der Testautor seine Variablen
+nennt. **Ich unterstütze ihn ausdrücklich für die Auflage.** Seine Gegenprobe nachgestellt: den
+Umbruch aus `.hp-fn-label` entfernt ⇒ **B4 rot**. *Die Zusage prüft die Regel, nicht den Klassennamen.*
+
+**K9 headful: ERFÜLLT, mit frischem Bündel** (`cmd+shift+r`, sonst rendert die alte Fassung):
+
+```text
+Werkzeug-Gruppenmenue "Grundbedienung"  role=menu 1 · 38 Elemente · 8 hp-wg-Klassen · 0 inline
+FaehigkeitenNavi                        32 Elemente · 0 inline
+ReiterLeiste                             3 Elemente · 0 inline
+.hp-fn-label   white-space normal · overflow visible · text-overflow clip · overflow-wrap anywhere
+.hp-rl-leiste  flex-wrap wrap · display flex
+```
+
+**Die beiden geerbten Eigenschaften stehen damit nicht nur im Test, sondern im DOM** — *bricht um,
+kappt nicht*, an der echten Fläche gemessen. Das Gruppenmenü ist die Fläche, die ein
+Standard-Bildschirmfoto nie zeigt; sie ist jetzt gesehen.
+
+### Seine Ehrlichkeit habe ich geprüft, nicht geglaubt — und sie stimmt
+
+Er schreibt, die neue `MW-1`-Zusage habe *„an echten Daten gerade keine Zähne"*, weil sie nur greift,
+wenn ein kommentierter Block sonst statisch wäre. **Nachgezählt: 6 kommentierte Blöcke in der Insel,
+davon 0 statisch.** Seine Einschränkung ist korrekt und eher zu streng als zu milde formuliert.
+*Dass ein Generator die Grenze der eigenen Zusage von sich aus benennt, ist die Sorte Meldung, die
+diesen Zyklus trägt — sie kostet ihn nichts und erspart mir das Suchen.*
+
+**Gesamtvotum: `FREIGABE`.** Damit ist der Restschnitt durch: **8a, 8b, 8c abgenommen.** Offen
+bleibt allein **Scheibe 7** (`HausplanerApp.tsx`, 78 Stellen) — und dort liegen zugleich die
+**56 verbliebenen `style={bezeichner}`**, also `MW-7`. **Beides in derselben Datei; wer sie schneidet,
+sollte beide Schreibweisen in die Grundgesamtheit nehmen.** Ballbesitz: Planner.
+Kein Commit durch mich, kein Push, kein Tor 2.
+
+## 2026-07-29, 08:29 CEST — GENERATOR: QUITTUNG zu `AUF-83-T1a` — **TRÄGT NICHT**
+
+```text
+QUITTUNG
+Task:                AUF-83-T1a — Die Insel nimmt ihre Maße vom Behälter
+Auftragsversion:     Planner, 29.07., 08:25 CEST (`4b8be527`)
+Je Kriterium — Prüfverfahren vorhanden?
+  K-01 (Planbreite folgt dem Behälter)                    JA
+  K-02 (Inselhöhe folgt dem Behälter)                     NEIN — Befehl und Sollzustand widersprechen sich
+  K-03 (kein zweiter Bildlauf)                            JA
+  K-04 (pixelgleich bei unveränderten Panelbreiten)       JA
+  K-05 (geerbte Zusage mitgezogen)                        NEIN — die genannte Zusage existiert nicht
+  K-06 (keine Inline-Stelle aus Scheibe 7 gewandert)      JA   (Ausgangswert selbst gemessen: 78)
+  K-07 (Gates ohne Regression)                            JA
+Grundgesamtheit ausführbar:                               JA — 3 Rechnungen, selbst nachgezählt
+Widersprüche:                                             ZWEI, unten belegt
+Ergebnis:                                                 TRÄGT NICHT
+```
+
+**Ich habe nicht gebaut.** Ballbesitz Planner.
+
+*Vorab, weil es sonst untergeht: die Grundgesamtheit stimmt.* `HausplanerApp.tsx:369` trägt
+`innerWidth - 220 - 268`, und beide Blades tragen `min-height: calc(100vh - 46px)` (`studio` Z24,
+`objekt` Z27). **Drei Rechnungen, genau wie im Auftrag.** Der Befund M8 trägt, die Analyse dahinter
+ist richtig — es sind die zwei Prüfverfahren, die nicht tragen.
+
+### Befund 1 — `K-05`: die geerbte Zusage, die mitgezogen werden soll, **gibt es nicht**
+
+Der Auftrag sagt: *„`HausplanerApp.tsx:1442` trägt die Formel als Zusage"* und *„Wer sie nicht
+mitzieht, bekommt ein rotes Gate ohne Fehler."*
+
+```text
+Befehl (woertlich aus K-05):
+  grep -n '220\|268\|innerWidth' resources/planner/hausplaner/__tests__/breiten.test.ts
+  -> exit 1, KEIN Treffer
+
+Befehl:  grep -rn 'innerWidth' __tests__/ __domtests__/
+  -> exit 1, KEIN Treffer in der gesamten Testbasis
+
+Quelltext Z1442:
+  {/* Dashboard v2.3 (§32 / UI-8): Projektbrowser — seit AUF-27 ein eigener REITER derselben
+      220-px-Schiene … Damit bleibt die Flächenrechnung (innerWidth − 220 − 268) unberührt …
+```
+
+**Z1442 ist ein Kommentar im Quelltext, keine Zusage.** Die Formel ist **nicht testverriegelt** —
+es gibt kein rotes Gate, das beim Umbau anschlüge.
+
+**Warum das nicht harmlos ist:** K-05 ist P1, und sein Prüfbefehl **findet heute schon nichts**.
+Er wäre nach dem Umbau genauso grün wie davor — **ein Kriterium, das nicht messen kann, was es
+behauptet.** Genau die Klasse, die uns in diesem Auftrag sechsmal begegnet ist, diesmal auf der
+Prüfseite.
+
+**Was es stattdessen wirklich gibt** — gefunden mit der Methode aus Scheibe 8c (*welche Tests lesen
+die Datei ein?*, statt nach Wörtern zu greifen):
+
+```text
+keineKappung.test.ts:48   const panel = app.split('\n').find((l) => l.includes('width: 268,'));
+keineKappung.test.ts:51   assert.match(panel, /boxSizing: 'border-box'/, 'Padding darf die 268 px nicht sprengen');
+```
+
+**Das ist die betroffene geerbte Zusage:** sie hält die Panelbreite `268` als **Zeichenkette im
+Quelltext** fest — eine der beiden Konstanten der Formel. Wandert die Breite in den Behälter oder
+in die Schicht, findet `find(l => l.includes('width: 268,'))` die Zeile nicht mehr, und der Test
+fällt mit *„Panel-Container nicht gefunden"*. **Sie steht in einer anderen Datei als K-05 nennt und
+prüft eine andere Eigenschaft.**
+
+**Vorschlag (entscheiden tut der Planner):** K-05 auf `keineKappung.test.ts` umschreiben, Sollwert
+*„die Zusage hält nicht mehr die Zahl `268` im Quelltext fest, sondern die Wirkung: das Panel
+bricht lange Wörter um, unabhängig davon, woher seine Breite kommt."*
+
+### Befund 2 — `K-02`: Befehl und Sollzustand widersprechen sich
+
+```text
+Befehl (aus K-02):  grep -rn '100vh' resources/views/admin/hausplaner/ resources/planner/hausplaner/
+Erwartet:           "kein Treffer mehr fuer #hausplaner-root"
+```
+
+Der Befehl greift **auch die Insel** — und dort bleibt `100vh` **legitim** stehen:
+
+```text
+hausplaner.css:157        .hp-studio { … min-height: 100vh; … }
+HausplanerApp.tsx:1180    height: imStudio ? '100%' : '100vh'
+```
+
+Beide sind **nicht** `#hausplaner-root`, beide gehören nicht zu diesem Auftrag: die erste ist
+Scheibe 2/3-Bestand der Stilschicht, die zweite eine **dynamische** Stelle in `HausplanerApp` —
+also Scheibe 7, die der Auftrag in `ausschluesse` ausdrücklich sperrt.
+
+**Damit ist der Sollzustand mit diesem Befehl nicht erreichbar**, ohne genau das anzufassen, was
+der Auftrag verbietet. *Der presence-Partner trägt übrigens* — `login.blade.php:79` und die zwei
+oben zeigen, dass der Befehl grundsätzlich findet.
+
+**Vorschlag:** Befehl auf `resources/views/admin/hausplaner/` beschränken und den Sollwert auf
+*„keine `100vh`-Regel mehr für `#hausplaner-root` in den beiden Blades"* festziehen; die zwei
+Insel-Fundstellen ausdrücklich als Ausschluss aufnehmen, mit dem Vermerk, dass `HausplanerApp:1180`
+zu Scheibe 7 gehört.
+
+### Was ich schon gemessen habe, damit es nach der Präzisierung sofort weitergeht
+
+```text
+K-06 Ausgangswert (Scheibe 7 unberuehrt):   HausplanerApp 138 gesamt / 78 statisch / 0 / 78 offen
+Grundgesamtheit K-01:                        HausplanerApp.tsx:369  innerWidth - 220 - 268
+Grundgesamtheit K-02:                        studio.blade.php:24 · objekt.blade.php:27
+Geerbte Zusagen (Methode „wer liest die Datei"): 21 Testdateien lesen HausplanerApp;
+                                             genau EINE hängt an einer Layout-Zahl —
+                                             keineKappung.test.ts:48 (`width: 268,`)
+```
+
+**Ballbesitz: Planner.** Kommt die Präzisierung, quittiere ich neu und baue sofort — Yamas Wunsch
+*„ich möchte das sehen auf dem Bildschirm"* ist notiert, und der Bau selbst ist klein.
+
+
+---
+
+## 2026-07-29, 08:35 CEST — PLANNER: fuenf Freigaben verarbeitet, und meine Auftragsfassung zurueckgewiesen
+
+*Zeit unmittelbar vor dem Schreiben gemessen.*
+
+### Der Stapel ist leer — acht von neun Scheiben sind durch
+
+**FREIGABE fuer Scheibe 6, 8a, 8b, 8c und B-01.** Alle fuenf ins Archiv. **Die Insel ist von
+316 Stellen / 198 offen auf 196 / 78 gefallen**, und **alle 78 liegen in `HausplanerApp.tsx`** —
+der einen Datei, die mit gemessenem Grund gesperrt ist.
+
+**Das Votum zu 8a hebe ich hervor:** *FREIGABE MIT REST*, Rest ausschliesslich K9, benannt, kein
+P0/P1 — und danach der Rest geschlossen. **Ein Votum, das seinen eigenen Rest benennt und ihn
+anschliessend schliesst, statt ihn zu uebersehen oder das Ganze rot zu machen.** Das ist die Form,
+die ein knappes Pruefbudget vertraegt.
+
+### Meine T1a-Fassung 1 ist zurueckgewiesen — mit zwei Treffern
+
+**`QUITTUNG: TRAEGT NICHT`** (Generator, 08:29). **Beide Beanstandungen sind berechtigt, beide
+Fehler sind meine, und ich habe sie selbst nachgemessen, bevor ich sie bestaetigt habe:**
+
+```text
+grep -rn 'innerWidth' resources/planner/hausplaner/__tests__/     ->  exit 1, nichts
+sed -n '1442p' HausplanerApp.tsx                                  ->  JSX-Kommentar, kein Test
+```
+
+**Ich hatte ein P1-Kriterium gegen eine geerbte Zusage geschrieben, die es nicht gibt.** Ein
+Kriterium, das heute nichts findet und nach dem Umbau genauso gruen waere — **eine stumme Zusage,
+ausgerechnet in dem Auftrag, der gegen stumme Zusagen gebaut wird.** Die ganze Nacht lautete die
+Regel *„eine Zahl im Auftrag ist eine Messung, keine Bedingung“*; hier war es nicht einmal eine
+Zahl, sondern eine **behauptete Datei**.
+
+**Der zweite Treffer ist subtiler und ebenso richtig:** mein `grep 100vh` griff auch die Insel, wo
+die Verwendung legitim ist — und **eine der Fundstellen liegt in der gesperrten Datei**. Damit war
+der Sollzustand *„kein Treffer mehr“* **ohne Regelbruch nicht erreichbar.** Befehl und Sollzustand
+liefen auseinander; dieselbe Fehlerklasse wie eine Grundgesamtheit ohne Ausschlussliste, eine Ebene
+tiefer.
+
+**Seine Methode ist die praezisierte Such-Auflage aus Scheibe 5, angewandt:** er hat die echte
+Zusage (`keineKappung.test.ts:48`, sie haelt `width: 268,` als Zeichenkette) mit der 8c-Frage
+gefunden — *welche Tests LESEN diese Datei* statt *wo steht das Wort*.
+
+### Beim Nachmessen wurde der Auftrag kleiner, nicht groesser
+
+**Die Hoehe ist laengst geloest.** `buehnenHoehe.ts` (AUF-72/73, 127 Zeilen) misst statt zu rechnen —
+mit Ersatzwert, Mindestwert, abgerundet statt aufgerundet, und der ausdruecklichen Regel **keine
+Pixelkonstante**, die `buehnenHoehe.test.ts:28` sogar am Quelltext nachprueft.
+`HausplanerApp:1180` nutzt im Studio bereits `100%`; **offen ist nur der Objekt-Zweig.**
+
+**Die Blade-`calc(100vh - 46px)` gehoeren nicht in T1a, sondern in T1b** — die 46 px sind die Hoehe
+der Blade-Leiste, die dort ohnehin faellt. Sie hier zu entfernen hiesse, den Blade-Umbau halb
+vorzuziehen. **Zuschnittfehler, korrigiert.**
+
+**Uebrig bleibt genau eine Achse: die Breite.** Und fuer sie existiert das Muster bereits — auf der
+anderen Achse, abgenommen und testverriegelt. Neues **K-02: `buehnenBreite.ts` nach dem Vorbild von
+`buehnenHoehe.ts`**, kein Pixelwert im Modul. *Bestandscode-first heisst hier nicht wiederverwenden,
+sondern derselben Loesung folgen, die fuer die andere Achse schon abgenommen ist.*
+
+Der Satz aus jenem Modul gilt woertlich fuer die Breite:
+> *„Kein Ausgleich per fester Zahl. Wer stattdessen einen festen Betrag abzoege, haette die alte
+> Konstante nur durch eine kleinere ersetzt — und saesse in vier Wochen wieder hier.“*
+
+### Was das ueber das Verfahren sagt
+
+**Die Readiness-Quittung hat zum zweiten Mal einen Mangel gefangen, bevor Code entstand.** Beim
+ersten Mal war es eine fehlende Definition (*„statisch“*, Scheibe 5), diesmal ein **nicht
+existierender Pruefgegenstand**. Beide haette ohne sie erst der Evaluator gefunden — nach dem Bauen,
+nach dem Buendel, nach der Sichtprobe.
+
+**Ballbesitz: Generator — T1a Fassung 2.** Danach T1b (liegt fertig, gesperrt bis T1a abgenommen).
+**Evaluator — Stapel leer**, naechste Abnahme ist T1a. **Yama — Merge moeglich**, der jetzt juengste
+abgenommene Commit ist `cca4cd20` (Scheibe 8c).

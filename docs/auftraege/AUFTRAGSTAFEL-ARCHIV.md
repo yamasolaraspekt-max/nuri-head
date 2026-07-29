@@ -183,3 +183,20 @@ des Auftrags als Guardrail festgeschrieben. Die beiden Arbeitsflächen überschn
 | Nr | Auftrag | Rolle | Status | Beleg |
 |---|---|---|---|---|
 | **AUF-38 Scheibe 5** | **`ConfigWizard.tsx` — der mehrschrittige modale Konfigurator-Dialog, 43 Stellen** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07., 07:49). **43/40/2/38 ⇒ 5/2/2/0**, Insel 316 ⇒ 278 gesamt, 198 ⇒ 160 offen, **Differenz genau 38 — die Rechnung geht auf.** 33 Klassen, per **Mengenvergleich statt Zaehlvergleich** belegt (`comm -3` zwischen CSS-Selektoren und TSX-Vorkommen ist leer). Genau zwei Ausnahmen, beide Rohwert ohne Token; Gegen-Beweis mit einer dritten ⇒ rot. Gegenprobe in **beide** Richtungen: Klasse wieder inline ⇒ 2 rot (Wirkung **und** Klasse ohne Traeger). Gates (Stand 01:19) 1327/0, tsc 0, schema 0, dom 11/0, `serviert == gemessen` byte-gleich. **Die Zusage misst mit `messeDatei()`** — demselben Werkzeug, das die Grundgesamtheit zaehlt, statt mit einer handgeschriebenen Bezeichnerliste wie in Scheibe 4 | Code `f5b9feaf` (vom Planner mitcommittet, `fa560259` benennt es) |
+
+
+## Zugang 29.07.2026, 08:35 — AUF-38 ist bis auf Scheibe 7 durch, und B-01 ist abgenommen
+
+> **Fuenf Freigaben in einem Zug** (Evaluator, 07:49–08:29). Damit sind **acht von neun Scheiben**
+> abgenommen; offen bleibt allein **Scheibe 7** (`HausplanerApp.tsx`, 78 Stellen), und die ist mit
+> gemessenem Grund gesperrt: dieselbe Datei traegt AUF-48 und T1a/T4 aus AUF-83.
+>
+> **Die Insel ist von 316 Stellen / 198 offen auf 196 / 78 gefallen** — alle 78 in dieser einen Datei.
+
+| Nr | Auftrag | Rolle | Status | Beleg |
+|---|---|---|---|---|
+| **AUF-38 Scheibe 6** | **`GuidedView.tsx` — die gefuehrte Planung, 29 offene Stellen, fuenf Ausnahmen (die hoechste Zahl aller Dateien)** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.). Jede der fuenf Ausnahmen einzeln benannt und beidseitig verriegelt; die generische Rohwert-Zusage allein haette nicht gereicht | `11e23016` |
+| **AUF-38 Scheibe 8a** | **`EngineFlaeche.tsx` — 25 offene Stellen** | Generator | `ERLEDIGT` — zuerst **FREIGABE MIT REST** (Rest ausschliesslich K9, benannt, kein P0/P1), dann **Rest geschlossen ⇒ FREIGABE**. *Ein Votum, das seinen eigenen Rest benennt und ihn danach schliesst, statt ihn zu uebersehen oder das Ganze rot zu machen* | `3c3b4657` |
+| **AUF-38 Scheibe 8b** | **`GeschossFlaeche.tsx` — 14 offene Stellen** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.) | `a022452f` |
+| **AUF-38 Scheibe 8c** | **Die vier kleinen Flaechen** (`WerkzeugGruppenMenue` 8 · `FaehigkeitenNavi` 3 · `DreiDBereich` 2 · `ReiterLeiste` 1 = 14) — **eine abnehmbare Einheit, weil der `population_command` sie in einem Lauf misst** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.). Damit ist der Restschnitt durch | `cca4cd20` |
+| **B-01** | **`.ai-workflow/` versionieren — das Werkzeug, das die Rollentrennung herstellt, war nie im Repo** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.) fuer K-01 bis K-04. **K-05 (Sicherung) gehoerte nicht zu dieser Abnahme** — ich hatte den Push als Kriterium fuer den Generator geschrieben, obwohl `CLAUDE.md` jeder Instanz das Pushen untersagt; **er hat ihn zu Recht verweigert und vorgelegt statt geraten.** Yama hat am 29.07. um 00:45 selbst gesichert. *Der Witz an B-01: unverfolgte Dateien wandern nicht in einen neuen Worktree — das Werkzeug, das die Rollentrennung herstellen soll, fehlte genau dort, wo sie hergestellt wird* | `af0e0c93` |
