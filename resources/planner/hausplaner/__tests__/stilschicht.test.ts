@@ -596,3 +596,57 @@ test('Scheibe 8a: jede angelegte Klasse wird auch benutzt — keine Regel ins Le
   const unbenutzt = [...new Set(klassen)].filter((k) => !traegt(engine, k));
   assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
 });
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * AUF-38 Scheibe 8b — die Geschoss-Flaeche.
+ *
+ * **Die erste Scheibe, die BEIDE Schreibweisen abraeumt** — Auflage des Planners nach Befund
+ * `AUF38-MW-7`: `style={{…}}` **und** `style={bezeichner}`. Das Zaehlwerkzeug sieht nur die erste;
+ * eine Null aus seinem Lauf allein wuerde hier zwei Stellen verschweigen.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+const GESCHOSS = join(hier, '../app/dashboard/GeschossFlaeche.tsx');
+
+test('Scheibe 8b (Wirkung): in GeschossFlaeche bleibt KEINE offene statische Stelle', () => {
+  const m = messeDatei(GESCHOSS);
+  assert.deepEqual(m.offen, [],
+    `offene statische Stellen — gehoeren in die Stilschicht: Z${m.offen.join(', Z')}`);
+});
+
+test('Scheibe 8b: die Zusage misst ueberhaupt etwas', () => {
+  const m = messeDatei(GESCHOSS);
+  assert.ok(m.gesamt >= 5, `nur ${m.gesamt} Stellen gefunden — das Werkzeug greift nicht`);
+});
+
+test('Scheibe 8b (AUF38-MW-7): die ZWEITE Schreibweise ist ebenfalls abgeraeumt', () => {
+  // `style={knopfStil}` war ein konstantes Objekt an zwei Knoepfen — derselbe statische Inline-Stil,
+  // nur in der Schreibweise, die `messeDatei` nicht zaehlt. **Ohne diese Zusage bliebe die Null
+  // oben stehen und meinte zwei Stellen nicht.**
+  const geschoss = readFileSync(GESCHOSS, 'utf8');
+  assert.doesNotMatch(geschoss, /style=\{knopfStil\}/,
+    'die direkte Verwendung des konstanten Objekts ist zurueck — sie gehoert in die Klasse');
+  assert.ok(traegt(geschoss, 'hp-gs-knopf'), 'die Klasse dafuer wird nicht benutzt');
+  // **Was bleibt, bleibt mit Grund:** `knopfStil` wird an drei weiteren Stellen per Spread
+  // gemischt (`{ ...knopfStil, … }`). Diese Bloecke sind nach der Definition **dynamisch** und
+  // gehoeren nicht zu dieser Scheibe. Faellt die letzte Spread-Verwendung weg, gehoert die
+  // Konstante selbst fort — und dann faellt diese Zusage.
+  const spreads = (geschoss.match(/\.\.\.knopfStil/g) ?? []).length;
+  assert.ok(spreads > 0,
+    'keine Spread-Verwendung mehr — dann ist `knopfStil` tot und gehoert geloescht');
+});
+
+test('Scheibe 8b: die Datei traegt KEINEN Rohwert — und das bleibt so', () => {
+  const m = messeDatei(GESCHOSS);
+  assert.equal(m.ausnahmen, 0, 'eine Ausnahme ist dazugekommen — sie braucht Namen und Verriegelung');
+  const farben = stilBloecke(readFileSync(GESCHOSS, 'utf8')).flatMap((b) => rohfarben(b.text));
+  assert.deepEqual(farben, [], `Rohfarben in GeschossFlaeche: ${farben.join(', ')}`);
+});
+
+test('Scheibe 8b: jede angelegte Klasse wird auch benutzt — keine Regel ins Leere', () => {
+  const ohneKommentare = quelle.replace(/\/\*[\s\S]*?\*\//g, '');
+  const klassen = [...ohneKommentare.matchAll(/\.(hp-gs-[a-z0-9-]+)\s*\{/g)].map((m) => m[1]!);
+  assert.ok(klassen.length >= 14, `nur ${klassen.length} Scheibe-8b-Klassen in der CSS`);
+  const geschoss = readFileSync(GESCHOSS, 'utf8');
+  const unbenutzt = [...new Set(klassen)].filter((k) => !traegt(geschoss, k));
+  assert.deepEqual(unbenutzt, [], `Klassen ohne Traeger:\n${unbenutzt.join('\n')}`);
+});

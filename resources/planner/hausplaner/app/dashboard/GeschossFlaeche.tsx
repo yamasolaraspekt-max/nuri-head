@@ -94,8 +94,8 @@ export function GeschossFlaeche({
         color: e.aktiv ? T.brandInk : T.ink, fontWeight: e.aktiv ? 700 : 500,
       }}
     >
-      <span style={{ flex: '0 0 auto', fontVariantNumeric: 'tabular-nums', color: T.muted, fontSize: 11.5 }}>{e.position}</span>
-      <span style={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere' }}>{e.name}</span>
+      <span className="hp-gs-nummer">{e.position}</span>
+      <span className="hp-gs-name">{e.name}</span>
       <span style={{ flex: '0 0 auto', fontVariantNumeric: 'tabular-nums', color: e.aktiv ? T.brandInk : T.muted, fontSize: 11.5 }}>
         {e.hoehenLabel}
       </span>
@@ -103,7 +103,7 @@ export function GeschossFlaeche({
   );
 
   return (
-    <span ref={huelle} style={{ position: 'relative', display: 'inline-flex' }}>
+    <span ref={huelle} className="hp-gs-anker">
       <button
         type="button" aria-expanded={offen} aria-haspopup="dialog"
         onClick={() => setOffen(!offen)}
@@ -111,35 +111,30 @@ export function GeschossFlaeche({
         style={{ ...knopfStil, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 6 }}
       >
         {kurzfassung(s)}
-        <span style={{ fontSize: 10, color: T.muted }}>▾</span>
+        <span className="hp-gs-zaehler">▾</span>
       </button>
 
       {offen && (
         <div
           role="dialog" aria-label="Geschosse"
-          style={{
-            position: 'absolute', top: '100%', left: 0, zIndex: 70, marginTop: 5,
-            background: T.surface, border: `1px solid ${T.hair}`, borderRadius: 12,
-            boxShadow: `0 10px 28px ${T.canvasWallGhost}`, padding: 10, minWidth: 290, maxWidth: '92vw',
-            maxHeight: '70vh', overflowY: 'auto',
-          }}
+          className="hp-gs-menue"
         >
           {/* 1 · Der Stapel — von oben nach unten, wie ein Gebäudeschnitt gelesen wird. */}
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', color: T.faint, marginBottom: 6 }}>
+          <div className="hp-gs-rubrik">
             Stapel · {s.anzahl} {s.anzahl === 1 ? 'Geschoss' : 'Geschosse'}
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 4 }}>
+          <div className="hp-gs-liste">
             {s.eintraege.map(zeile)}
           </div>
-          <div style={{ fontSize: 11.5, color: T.muted, margin: '0 0 10px', overflowWrap: 'anywhere' }}>
+          <div className="hp-gs-lead">
             {s.aktiv
               ? `${s.darueber} darüber · ${s.darunter} darunter`
               : 'Kein Geschoss aktiv.'}
           </div>
 
           {/* 2 · Umbenennen — DAS eine Namensfeld, sichtbar beschriftet. */}
-          <label style={{ display: 'block', marginBottom: 10 }}>
-            <span style={{ display: 'block', fontSize: 11.5, color: T.muted, marginBottom: 4 }}>Name des aktiven Geschosses</span>
+          <label className="hp-gs-feld">
+            <span className="hp-gs-feldlabel">Name des aktiven Geschosses</span>
             <input
               type="text" value={name} disabled={!s.aktiv}
               onChange={(e) => setName(e.target.value)}
@@ -151,20 +146,16 @@ export function GeschossFlaeche({
 
           {/* AUF-45: der Wegweiser — ein Satz, kein Assistent, keine Tour. */}
           {wegweiser && (
-            <div style={{
-              display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10, padding: '9px 11px',
-              borderRadius: 10, background: T.brandWash, border: `1px solid ${T.brandInk}`,
-              fontSize: 12.5, color: T.brandInk, lineHeight: 1.4, overflowWrap: 'anywhere',
-            }}>
-              <span aria-hidden style={{ flex: '0 0 auto' }}>→</span>
-              <span style={{ flex: '1 1 160px', minWidth: 0 }}>{wegweiser}</span>
+            <div className="hp-gs-wegweiser">
+              <span aria-hidden className="hp-gs-symbol">→</span>
+              <span className="hp-gs-text">{wegweiser}</span>
             </div>
           )}
 
           {/* 3 · Verwaltung. Löschen bleibt so vorsichtig wie bisher: Titel nennt den Grund. */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            <button type="button" style={knopfStil} title="Neues Geschoss über dem obersten anlegen" onClick={onAnlegen}>+ Geschoss</button>
-            <button type="button" style={knopfStil} title="Aktuelles Geschoss als Vorlage duplizieren — Wände, Öffnungen und Dach werden ein Stockwerk höher kopiert" onClick={onDuplizieren}>⧉ Duplizieren</button>
+          <div className="hp-gs-knopfreihe">
+            <button type="button" className="hp-gs-knopf" title="Neues Geschoss über dem obersten anlegen" onClick={onAnlegen}>+ Geschoss</button>
+            <button type="button" className="hp-gs-knopf" title="Aktuelles Geschoss als Vorlage duplizieren — Wände, Öffnungen und Dach werden ein Stockwerk höher kopiert" onClick={onDuplizieren}>⧉ Duplizieren</button>
             <button
               type="button" disabled={s.anzahl <= 1}
               style={{ ...knopfStil, opacity: s.anzahl <= 1 ? GESPERRT_DECKKRAFT : 1, cursor: s.anzahl <= 1 ? GESPERRT_ZEIGER : 'pointer' }}
