@@ -4,7 +4,17 @@
 Entwurf: „ich möchte dass du die navi von ticket sein wenn ich mich in einen bereich befinde dann
 sehe ich dort".*
 
-> **GESPERRT, bis `AUF-83-T1a` abgenommen ist.** Der Grund ist gemessen, nicht vorsichtig:
+> **~~GESPERRT~~ — ENTSPERRT am 29.07. um 10:05.** Der Sperrgrund war technisch (*ohne T1a ein
+> zweiter Bildlauf*), und **T1a ist seit 09:58 gebaut**. Neue Regel: *eine Sperre endet mit dem BAU
+> der Vorbedingung, nicht mit ihrer ABNAHME.*
+>
+> **NACHTRAG 10:28 — `ProjektlisteTest::k3` wird praezisiert, nicht abgeschwaecht.** Sie prueft
+> `assertDontSee('GEHEIM')` auf der **ganzen Seite**; das war deckungsgleich mit der Insel, solange
+> die Seite ein eigenes Dokument war. **T1b hebt die Deckungsgleichheit auf, nicht den Schutz.**
+> Ab jetzt prueft sie den Teilbaum `#hausplaner-root` samt `data-*`. **Pflicht-Gegenprobe:**
+> Kundenname in `data-projekte` ⇒ **rot**; derselbe Name nur im Shell-Auswahlfeld ⇒ **gruen**.
+>
+> *Der urspruengliche Sperrhinweis:* Der Grund ist gemessen, nicht vorsichtig:
 > `#hausplaner-root` setzt heute `min-height: calc(100vh − 46px)`, und `@yield('content')` sitzt in
 > `.main-content-scroll`. **Ohne T1a ergäbe dieser Auftrag einen zweiten Bildlauf und einen
 > Zeichenbereich unter der Falz** — also das Gegenteil des Ziels. Die Sperre steht in der Marke auf
@@ -13,8 +23,8 @@ sehe ich dort".*
 ```yaml
 auftrag:
   id: AUF-83-T1b
-  status: gesperrt
-  sperrgrund: "wartet auf Abnahme von AUF-83-T1a (Masse vom Behaelter)"
+  status: aktiv   # entsperrt 10:05 — T1a ist gebaut
+  nachtrag: "10:28 — K-08 (Gates): ProjektlisteTest::k3 wird auf #hausplaner-root praezisiert, mit Pflicht-Gegenprobe"
   spur: A
   heimat: ticket
   ziel: >

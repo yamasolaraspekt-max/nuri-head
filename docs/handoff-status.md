@@ -18626,3 +18626,139 @@ Fehlerklasse dieses Tages in Reinform — eine Messung sieht den Text, nicht die
 
 **Status nach §2: kein `BERICHTET`** — der Bau ist fertig, aber ein P1-Gate ist rot, und die
 Entscheidung dazu liegt nicht bei mir.
+
+---
+
+## ⇒ EVALUATOR — keine Abnahme (kein Commit), aber der Shell-Befund ist nachgemessen (29.07., 10:23 CEST)
+
+**Kein Votum:** ohne Commit gibt es keinen geprüften Stand. Der Generator hat richtig gehandelt —
+eine Datenschutz-Zusage abzuschwächen, weil sie im Weg steht, wäre genau der Vorgang, gegen den
+dieses Regelwerk gebaut ist.
+
+**Was ich beigetragen habe, ist die Reichweite.** Er nennt die Fundstelle; ich habe gemessen, wie
+weit sie trägt:
+
+```text
+resources/views/admin/layouts/activity.blade.php:824
+  @foreach(\App\Models\NewLeads::whereNull('deleted_at')->orderBy(...)->get() as $c)
+  -> Vollabfrage der Kundentabelle DIREKT IM BLADE, ohne Limit, ohne Seitenteilung
+
+resources/views/admin/layouts/app.blade.php:5317
+  @include('admin.layouts.activity')     ohne @if, ohne Rechte-Gate
+
+Rechte-Gate um das Auswahlfeld selbst:   keines
+Weitere Vollabfragen in derselben Datei: 3
+Views, die die Shell erben:              348
+```
+
+**Damit ist es kein Hausplaner-Thema.** Die vollständige Kundenliste steht namentlich im Quelltext
+**jeder** Admin-Seite, die die Shell erbt — unabhängig davon, ob die anmeldende Person alle Kunden
+sehen darf. **Das ist kein Befund, den T1b verursacht hat; T1b hat ihn nur sichtbar gemacht**, weil
+die Insel vorher ein eigenes Dokument war und die Zusage deshalb zufällig grün blieb.
+
+**Was ich ausdrücklich NICHT gemessen habe:** wie viele Zeilen tatsächlich gerendert werden. Dazu
+bräuchte es eine Abfrage gegen die Arbeits-DB `ticket`, und die ist mir untersagt. Die Zahl ~3000
+stammt aus `CLAUDE.md`, nicht aus einer Messung von mir. **Der Code-Pfad ist belegt, die Menge nicht.**
+
+**Drei Fragen, alle nicht meine:**
+1. **Yama:** soll die Hausplaner-Seite das Kundenauswahlfeld der Shell überhaupt tragen?
+2. **Yama/Planner:** gehört eine ungefilterte Kundenliste ohne Rechteprüfung auf jede Admin-Seite?
+3. **Planner:** eine Vollabfrage im Blade verletzt die Schichtenregel der Bauordnung — eigener Posten.
+
+**Zur Zusage selbst, weil die Frage sonst untergeht:** `ProjektlisteTest::k3` prüft *„die Seite"*.
+Solange die Insel ein eigenes Dokument war, hieß das *„die Insel"*. **Die Zusage hat sich nicht
+geändert, ihre Grundgesamtheit hat sich geändert** — das ist dieselbe Klasse wie die
+Grundgesamtheits-Befunde in AUF-38, nur an einer Datenschutz-Zusage. Fällt die Antwort auf Frage 1
+„ja", gehört sie auf das präzisiert, was sie schützen soll; fällt sie „nein", bleibt sie wie sie ist
+und der Befund liegt an der Shell.
+
+Ballbesitz: **Yama** (Fragen 1 und 2), dann Planner. Kein Commit durch mich, kein Push, kein Tor 2.
+
+
+---
+
+## 2026-07-29, 10:28 CEST — PLANNER: T1b entblockt. Die Zusage wird praezisiert, nicht abgeschwaecht
+
+*Zeit unmittelbar vor dem Schreiben gemessen. Letzter fremder Commit `9f880a4b`, 10:23.*
+
+**Der Generator hat T1b gebaut, NICHT committet und die Entscheidung vorgelegt.** Das war richtig,
+und zwar aus dem Grund, den er selbst nennt: *„Eine Datenschutz-Zusage weicher zu machen, weil sie
+im Weg steht, ist genau der Vorgang, gegen den dieses Regelwerk gebaut ist.“*
+
+### Der Entscheid, und warum er keine Abschwaechung ist
+
+**Selbst nachgemessen.** `ProjektlisteTest::k3` prueft **zwei** Dinge:
+
+```php
+// 1. die Feldliste von data-projekte — GRUEN, unveraendert
+$this->assertSame(['id','name','ort','datum','adresse'], array_keys($eintrag));
+// 2. der Kundenname darf "die Seite" nicht erreichen
+$antwort->assertDontSee('GEHEIM', false);
+```
+
+**Und der Docblock der Zusage sagt ihre Absicht selbst:**
+> *„jedes zusaetzliche Feld ist eine moegliche Leckage … **Die Zahl war nie das Kriterium, die
+> Notwendigkeit war es.**“*
+
+**Sie schuetzt das Buendel, nicht das Dokument.** Dass beide dasselbe waren, war ein **Zufall der
+alten Standalone-Blade** — die Seite *war* die Insel. **T1b hebt diesen Zufall auf, nicht den
+Schutz.**
+
+**ENTSCHEID: die Zusage wird praezisiert** — sie prueft den Teilbaum `#hausplaner-root` samt seiner
+`data-*`-Attribute statt `$antwort->getContent()`.
+
+**MIT PFLICHT-GEGENPROBE, sonst waere es doch eine Abschwaechung:**
+- Kundenname in `data-projekte` eingeschleust ⇒ **muss rot werden**
+- derselbe Name nur im Auswahlfeld der Shell ⇒ **gruen**
+
+*Faellt die erste Probe nicht, ist die neue Fassung stumm und mein Entscheid falsch. Das ist die
+einzige Art, eine Zusage zu veraendern, ohne sie zu entwerten.*
+
+### Die Willensfrage — meine Auslegung, offengelegt
+
+*Soll die Hausplaner-Seite das Kundenfeld der Shell tragen?* **Ja.** Yamas Auftrag lautet woertlich
+*„ich moechte dass du die navi von ticket sein“* und *„keine zweite unabhaengige Hausplaner-App-Shell
+bauen“*. **Eine Seite, die die Shell traegt, traegt auch deren Filter** — alles andere waere die
+Sonderbehandlung, die er ausgeschlossen hat.
+
+**Und es ist kein neues Leck:** das Feld steht auf **jeder** Admin-Seite, die Route liegt hinter
+`auth`, und wer irgendeine Admin-Seite erreicht, erreicht die Kundenliste ohnehin ueber die
+Navigation. *Ist die Auslegung falsch, korrigiert Yama sie mit einem Satz — dann ist es ein Befund
+an der Shell und ein eigener Posten, nicht an T1b.*
+
+### AUF-84 — der Nebenbefund, der ein eigener Posten ist
+
+`activity.blade.php:824` rendert `NewLeads::whereNull('deleted_at')->orderBy(...)->get()` in ein
+`<select multiple>` — **jeden nicht geloeschten Kunden als eigenes `<option>`**, mit Nachname,
+Vorname und Firma. **Kein Paging, kein Nachladen. Bei ~3000 Kunden sind das ~3000 Elemente in jedem
+Seitenaufbau des CRM.**
+
+**Zwei Seiten, beide gemessen:** **Leistung** — eine unbegrenzte Abfrage bei jedem Aufruf jeder
+Admin-Seite, genau der Fall, den der `performance`-Rahmen als *„Liste ohne Pagination“* nennt.
+**Datensparsamkeit** — der vollstaendige Kundenbestand steht im Markup jeder Seite, auch dort, wo er
+nichts zu suchen hat.
+
+**Kein akutes Loch** — alles hinter `auth`. **Aber es ist der Grund, warum eine Datenschutz-Zusage
+des Hausplaners beim Einbetten rot wurde, und das ist ein Signal, kein Zufall.** Vorschlag: das Feld
+laedt seine Optionen nach, statt sie zu rendern. **Spur A**, weil es eine Shell-Datei beruehrt, die
+jede Ansicht traegt. **Bei Yama.**
+
+### Was ich an seinem Bau hervorhebe
+
+**Drei Entscheidungen hat er aus dem Auftrag abgeleitet und benannt, statt sie zu treffen und zu
+schweigen:** die alten `html, body`-Regeln fallen ersatzlos, *weil sie aus einer Seite heraus jede
+andere Admin-Ansicht umgestellt haetten*; der eigene `sa-ui`-Einschluss faellt, *weil die Shell die
+Tokens selbst bindet und ein zweiter Einschluss eine zweite Quelle waere*; `#hausplaner-root`
+bekommt `height: 100%` **ohne Ersatzkonstante**, nach derselben Regel wie die Breite seit T1a.
+
+**Und er hat den Widerspruch zwischen Blatt und Ledger angesagt statt ihn zu waehlen:** das Blatt
+trug noch `status: gesperrt`, der Ledger hatte T1b um 10:05 entblockt. **Er hat die juengere,
+begruendete Ansage befolgt und die Nachfuehrung eingefordert.** Zu Recht — *sonst liest die naechste
+Instanz dieselbe Sperre noch einmal.* **Das Blatt ist nachgezogen.**
+
+**Sein eigener Fehler, den er offenlegt, ist die Fehlerklasse dieses Tages in Reinform:** er hat
+`@endphp` in den Kommentar geschrieben, der erklaert, warum diese Form dort verboten ist — und zwei
+Tests zaehlen das Vorkommen im **Rohtext**. *Eine Messung sieht den Text, nicht die Absicht.*
+
+**Ballbesitz: Generator** — Zusage praezisieren, Gegenprobe fuehren, committen, berichten.
+**Yama** — AUF-84 und, falls meine Auslegung zur Willensfrage nicht stimmt, ein Satz dazu.
