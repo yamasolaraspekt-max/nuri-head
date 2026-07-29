@@ -18538,3 +18538,91 @@ nie gezeichnet werden. *Bestandscode-first heisst hier: anzeigen, nicht bauen.*
 Testdateien, die die betroffene Datei einlesen**, nicht ueber ein Muster.
 
 **Ballbesitz:** Generator — **T1b, sofort**. Evaluator — T1a. Yama — Merge moeglich auf `cca4cd20`.
+
+## 2026-07-29, 10:22 CEST — GENERATOR: AUF-83-T1b gebaut, **nicht committet** — eine Zusage blockiert, und die Frage dahinter ist keine Bau-Frage
+
+**Kein Commit.** Der Bau liegt uncommittet im Arbeitsbaum und zusätzlich als Kopie im Notizordner,
+damit ihn kein fremder Commit mitnimmt. **Grund: die PHP-Suite ist nicht grün**, und die rote Zusage
+ist keine, die ich wegflicken darf.
+
+### Quittung — und ein Widerspruch, den ich ansage statt ihn zu wählen
+
+```text
+K-01 (beide Blades erben)              JA (grep)
+K-02/K-03/K-04/K-06 (sichtbar)         JA — ausgefuehrt_von: evaluator
+K-05 (eigene Stile mitgewandert)       JA (grep)
+Grundgesamtheit ausfuehrbar            JA — beide Blades 0x @extends, Ankerpunkte selbst nachgeprueft
+Widerspruch                            EINER: das Blatt traegt `status: gesperrt` mit dem Grund
+                                       „wartet auf Abnahme von T1a"; der Ledger erklaert T1b um
+                                       10:05 zu `AKTIV` und hebt genau diesen Grund per neuer Regel
+                                       auf. Ich habe die juengere, ausdruecklich begruendete Ansage
+                                       befolgt — und sage den Widerspruch hier an. **Das Blatt
+                                       gehoert nachgezogen**, sonst liest die naechste Instanz
+                                       dieselbe Sperre noch einmal.
+Ergebnis                               TRAEGT
+```
+
+### Was steht
+
+```text
+K-01  @extends('admin.layouts.app')   studio 1 · objekt 1
+      Partner: <!DOCTYPE               studio 0 · objekt 0
+K-05  eigene hp-Regeln                 studio 13 · objekt 39 Vorkommen
+      grep '100vh|calc(' in den Blades  kein Treffer
+```
+
+**Drei Entscheidungen im Bau, alle aus dem Auftrag abgeleitet und hier benannt:**
+
+1. **Die alten `html, body`-Regeln fallen ersatzlos.** Aus einer Seite heraus gesetzt, hätten sie
+   **jede andere Admin-Ansicht** umgestellt — das wäre eine Änderung an der Shell, und die schließt
+   `ausschluesse` ausdrücklich aus.
+2. **Der eigene `sa-ui`-Einschluss fällt weg.** Die Shell bindet die CI-Tokens selbst ein
+   (`app.blade.php:2541`); ein zweiter Einschluss wäre eine zweite Quelle für dieselben Werte.
+3. **`#hausplaner-root` bekommt `height: 100%` ohne Ersatzkonstante.** Findet die Insel keine Höhe
+   im Behälter, misst sie selbst — dieselbe Regel wie bei der Breite seit T1a.
+
+### Der Blocker — gemessen, nicht vermutet
+
+`ProjektlisteTest::k3` fordert: *„Der Kundenname steht in der Datenbank und darf die Seite nicht
+erreichen."* Fundstelle in der gerenderten Seite:
+
+```html
+<select multiple data-placeholder="Kunden wählen...">
+    <option value="7100">GEHEIM Vorname</option>
+```
+
+**Quelle: `resources/views/admin/layouts/activity.blade.php:824`** — ein Bestandteil der Shell, der
+**alle Kunden namentlich in ein Auswahlfeld schreibt.**
+
+**Der Datenteil der Zusage ist weiterhin erfüllt:** `data-projekte` trägt exakt die fünf Felder,
+kein Kundenname (die Prüfung darüber ist grün). Geändert hat sich die **Seite drumherum** — die
+Zusage prüfte „die Seite", und das war deckungsgleich mit „die Insel", **solange die Seite ein
+eigenes Dokument war**. T1b hebt genau diese Deckungsgleichheit auf.
+
+**Zwei Wege wären falsch, und beide stehen mir nicht zu:**
+
+- **Die Zusage abschwächen.** §4: der Generator entfernt kein Kriterium und erklärt keinen Mangel
+  für irrelevant. Eine Datenschutz-Zusage weicher zu machen, weil sie im Weg steht, ist genau der
+  Vorgang, gegen den dieses Regelwerk gebaut ist.
+- **Die Frage selbst entscheiden.** *Soll die Hausplaner-Seite — wie jede andere Admin-Seite — das
+  Kundenauswahlfeld der Shell tragen?* Das ist eine Fach- und Datenfrage, kein Bauschritt.
+
+**Fällt die Antwort „ja"**, gehört die Zusage auf das präzisiert, was sie schützen soll: das Bündel
+der Insel. **Fällt sie „nein"**, ist es ein Befund **an der Shell** und ein eigener Posten — nicht
+an T1b.
+
+**Ballbesitz: Planner** (Klassifizierung) und **Yama** (die Datenfrage).
+
+### Zwei eigene Fehler, gefunden und behoben
+
+**Ich habe `@endphp` in den Kommentar geschrieben, der erklärt, warum diese Form in dieser Datei
+verboten ist.** `BladeKompiliertTest` und `ProjektlisteTest::k5` zählen das Vorkommen im **Rohtext**
+und unterscheiden nicht zwischen Code und Erklärung — zwei Tests rot, behoben, und im Kommentar
+steht jetzt der Hinweis, dass die Direktive dort auch als Zitat nicht vorkommen darf.
+
+Dasselbe wäre mir mit der Viewport-Höhe passiert: die stand zuerst als Literal in meinem
+Erklärtext. Dort habe ich es vor dem Testlauf gesehen und umformuliert. **Beides ist die
+Fehlerklasse dieses Tages in Reinform — eine Messung sieht den Text, nicht die Absicht.**
+
+**Status nach §2: kein `BERICHTET`** — der Bau ist fertig, aber ein P1-Gate ist rot, und die
+Entscheidung dazu liegt nicht bei mir.
