@@ -163,3 +163,23 @@ des Auftrags als Guardrail festgeschrieben. Die beiden Arbeitsflächen überschn
 |---|---|---|---|---|
 | **AUF-38 Messwerkzeug** | **`scripts/statische-inline-stile.mjs` — die Definition von *statisch* als ausfuehrbares Skript, plus die generische Rohwert-Zusage ueber alle Dateien** (Spur A, vom Planner nachtraeglich hochgestuft: das Skript erzeugt den abgeleiteten Wert, an dem jede weitere Scheibe gemessen wird) | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07., 00:51) fuer `c895061d` + `8fb7b990`. **`MW-1`** Kommentar machte statisch zu dynamisch ⇒ behoben, `WerkzeugGruppenMenue` steht auf **8** · **`MW-2`** ein Block lief bis Dateiende ⇒ **alle 316 Bloecke neu auf Abgrenzung geprueft, 0 nicht sauber** (vorher 1) · **`MW-4`** Vorlagen-Ausdruck galt als statisch ⇒ dynamisch, **und `` `${T.hair}` `` bleibt statisch — die Reparatur schiesst nicht ueber** · **`MW-3`** `?`/`...` im Text ⇒ statisch. 316 gesamt / **198 offen**, `ConfigWizard` **43/40/2/38**, Eichung der drei abgenommenen Scheiben unveraendert `0/0/0`. Gates 1323/0, `tsc` 0, `schema` 0, `dom` 11/0, `public` unberuehrt. **`MW-5` vom Planner ausgeschlossen** (P3, null Fundstellen; die Token-Tiefe ist **die Definition**, nicht das Werkzeug) | `42b88b85` (beanstandet) · `c895061d` · `8fb7b990` |
 | **B-01, Teil Sicherung** | **Der Rueckstand liegt ausserhalb der Maschine** — 230 Commits, zwei Arbeitstage, existierten nur auf einer Platte | **Yama** | `ERLEDIGT` — von Yama selbst gefahren, 29.07. 00:45, **und das war der einzige zulaessige Weg**: der Generator hatte das Kriterium verweigert, weil `CLAUDE.md` jeder Instanz das Pushen untersagt. `c631109c..a849e030` mit `OK` auf **beiden** Remotes; `git branch -r --contains HEAD` nennt `fork` und `backup-private`. **Ein Fehler steht im Log und ist harmlos:** `auto/hausplaner-ui-3a` von `fork` abgelehnt, *„tip is behind its remote counterpart“* — **der Remote hat mehr als der Rechner, nicht weniger.** Auffaellig bleibt, dass `backup-private` fuer denselben Branch `up-to-date` meldet: **die zwei Remotes stehen dort auseinander.** Kein Handlungsbedarf, aber zu messen, bevor jemand diesen Branch anfasst | `push-result.log`, 00:45:02–00:45:42 |
+
+
+## Zugang 29.07.2026, 07:55 — AUF-38 Scheibe 5 (ConfigWizard)
+
+> **Die erste Scheibe, deren Sichtprobe alle Schritte durchlaeuft.** Der Dialog ist modal und
+> mehrschrittig; ein Standardbild zeigt ihn nie. Der Evaluator hat alle fuenf Schritte durchgeklickt
+> und `hp-kw` je Schritt gezaehlt: **23 / 24 / 24 / 25 / 22**.
+>
+> **Quelle == DOM vollstaendig aufgeloest:** 7 Inline-Elemente aus **5** Quell-Konstrukten — Overlay
+> (Ausnahme 1), Dialog-Kasten (Ausnahme 2), und **fuenf Schritt-Punkte aus EINER Quellzeile** (Z87).
+> *Sieben Elemente im Bild, fuenf Stellen in der Quelle — wer nur zaehlt, findet einen Fehler, den
+> es nicht gibt.*
+>
+> **Und eine Methodennotiz, die bleibt:** sein Kontrolllauf war zuerst rot, weil der Kopie die
+> gebaute CSS und die Blade fehlten. Er hat **erst bereinigt, dann mutiert** — *„erst dann ist eine
+> Mutation ein Beweis“.*
+
+| Nr | Auftrag | Rolle | Status | Beleg |
+|---|---|---|---|---|
+| **AUF-38 Scheibe 5** | **`ConfigWizard.tsx` — der mehrschrittige modale Konfigurator-Dialog, 43 Stellen** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07., 07:49). **43/40/2/38 ⇒ 5/2/2/0**, Insel 316 ⇒ 278 gesamt, 198 ⇒ 160 offen, **Differenz genau 38 — die Rechnung geht auf.** 33 Klassen, per **Mengenvergleich statt Zaehlvergleich** belegt (`comm -3` zwischen CSS-Selektoren und TSX-Vorkommen ist leer). Genau zwei Ausnahmen, beide Rohwert ohne Token; Gegen-Beweis mit einer dritten ⇒ rot. Gegenprobe in **beide** Richtungen: Klasse wieder inline ⇒ 2 rot (Wirkung **und** Klasse ohne Traeger). Gates (Stand 01:19) 1327/0, tsc 0, schema 0, dom 11/0, `serviert == gemessen` byte-gleich. **Die Zusage misst mit `messeDatei()`** — demselben Werkzeug, das die Grundgesamtheit zaehlt, statt mit einer handgeschriebenen Bezeichnerliste wie in Scheibe 4 | Code `f5b9feaf` (vom Planner mitcommittet, `fa560259` benennt es) |

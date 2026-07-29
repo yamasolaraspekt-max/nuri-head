@@ -17244,3 +17244,69 @@ Nacht. **Der Vorschlag gehört dem Planner**, aber die Zahl gehört ins Papier: 
 Abend sind kein Zufall, und eine Wache, die den Baum liest, sollte auch das Lock-Alter melden.
 
 **Status nach §2: `BERICHTET`.**
+
+
+---
+
+## 2026-07-29, 07:55 CEST — PLANNER: Scheibe 5 abgenommen, Scheibe 6 berichtet, zwei Regeln nachgezogen
+
+*Zeit unmittelbar vor dem Schreiben gemessen. Letzte fremde Commits: `11e23016` (07:50, Scheibe 6).*
+
+**AUF-38 Scheibe 5 ist ABGENOMMEN** — FREIGABE (Evaluator, 07:49) fuer `f5b9feaf`. Ins Archiv
+gewandert. **Scheibe 6 ist BERICHTET** (`11e23016`, `GuidedView` von 29 offenen auf 0) und liegt
+beim Evaluator. **Insel jetzt 249 Stellen, 131 offen** (von urspruenglich 316 / 198).
+
+**Der Beleg, den ich hervorhebe:** die K9-Sichtprobe ist ueber **alle fuenf Schritte** gefahren,
+`hp-kw` je Schritt 23/24/24/25/22 — und *Quelle == DOM* vollstaendig aufgeloest: **7 Inline-Elemente
+aus 5 Quell-Konstrukten**, weil fuenf Schritt-Punkte aus **einer** Quellzeile stammen. *Wer nur
+zaehlt, findet dort einen Fehler, den es nicht gibt.* Dazu seine Methodennotiz: der Kontrolllauf war
+zuerst rot, weil der Kopie gebaute CSS und Blade fehlten — **erst bereinigt, dann mutiert**, denn
+*„erst dann ist eine Mutation ein Beweis“*.
+
+### Er hat meinen Befund `AUF38-MW-7` mit der Zahl versehen, die mir fehlte
+
+Ich hatte um 01:28 geschrieben, `style={bezeichner}` werde nicht gezaehlt, und dazu gesagt:
+*„die Scheiben raeumen sie ohnehin mit ab“*. **Das war eine Annahme ohne Messung.** Seine Zahl:
+
+```text
+style={bezeichner}          58 Stellen
+  HausplanerApp.tsx         56   (28x panelLabel, 28x panelInput)
+  GeschossFlaeche.tsx        2
+gegenueber style={{        249 Stellen in der Insel
+```
+
+**Alle 56 liegen in der Datei von Scheibe 7.** Mein Satz traegt also **nur dann**, wenn Scheibe 7
+**beide Schreibweisen** im Auftrag hat — sonst bleibt am Ende eine Null stehen, die 58 Stellen nicht
+meint. **Ab jetzt Kriterium in Scheibe 7 und in Scheibe 8b (`GeschossFlaeche`).**
+
+*Das ist heute das zweite Mal, dass eine Zahl von mir eine Schaetzung war, die als Feststellung
+aussah. Beim ersten Mal (die 93 px im Entwurf) habe ich es selbst gemerkt, hier hat er es gemerkt.*
+
+### Neue Regel: der Pruefstand muss nachfahrbar bleiben
+
+**Sein Prozess-Befund:** Scheibe 5 lag mit Ballbesitz Evaluator, **der Baum lief trotzdem auf
+Scheibe 6 weiter.** Seine Gates waren am Scheibe-5-Stand nicht mehr nachfahrbar; er hat das Votum
+deshalb ausdruecklich mit den Zahlen von 01:19 geschrieben und die Zeitluecke offengelegt.
+*Diesmal ohne Schaden — die Zahlen standen fest, der Code war unveraendert. Beim naechsten Mal
+waere es einer.*
+
+**Die Luecke ist strukturell und sie ist meine:** **§13 regelt das Bauen, nicht den Pruefstand.**
+Ich hatte am 29.07. um 00:06 eine Regel fuer die *laufende Sichtprobe* gemacht und sie um 00:45 auf
+*„`public/*` nicht bewegen“* praezisiert — aber **nachfahrbare Gates** brauchen mehr als ein
+stillstehendes Buendel, sie brauchen einen stillstehenden **Quellstand**.
+
+**Regel ab sofort:** *solange ein Posten im Abnahme-Stapel liegt, muss sein Stand nachfahrbar
+bleiben.* **Und das Werkzeug dafuer liegt seit B-01 im Repo** — `.ai-workflow/` legt Worktrees je
+Rolle an. **Der Pruefende arbeitet auf einem eigenen Baum, dann darf der Bauende weiterlaufen**, und
+niemand muss auf niemanden warten. *Damit beantwortet B-01 nachtraeglich genau die Frage, die es
+zwei Tage lang als unbeauftragter Befund nicht beantworten durfte.*
+
+### Was jetzt aktiv ist
+
+**Scheibe 8a — `EngineFlaeche` (25 offen).** Sie beruehrt weder AUF-83 noch AUF-48. **Scheibe 7
+(`HausplanerApp`, 78 + 56 in der zweiten Schreibweise) bleibt gesperrt**, solange T4 nicht
+entschieden ist.
+
+**Ballbesitz:** Generator — Scheibe 8a. Evaluator — Scheibe 6, dann B-01 (K-01 bis K-04).
+Yama — Entwurfsfreigabe AUF-83, T1b, Merge, **und 14 Commits sind seit 00:39 ungesichert**
+(`fork` steht auf `a849e030`).
