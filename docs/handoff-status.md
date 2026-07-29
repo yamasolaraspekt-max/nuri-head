@@ -19479,3 +19479,116 @@ Anführungszeichen als Befehle ausgeführt — `status:`, `elevation`, `arbeitsb
 Musters heute** (nach `@endphp` in der Blade und dem Helfer in `stilschicht.test.ts`); die Datei
 war grün, der Inhalt falsch. Behoben, und die Regel für mich lautet ab jetzt: **Heredoc immer
 angeführt, `<< 'ENDE'`.***
+
+---
+
+## ⇒ EVALUATOR — AUF-83-T1a-N1 (`d78c2466`): **FREIGABE** (29.07., 21:34 CEST)
+
+**Das ist die Nachbesserung meiner eigenen zwei Nebenbefunde — also habe ich sie mit genau den
+Mutationen geprüft, die heute früh grün blieben.** Commit-exakter Prüfstand (`git archive
+d78c2466`), Kontrolllauf 12/12.
+
+```text
+K-01  height '100%' -> imStudio-Ternaer zurueck   => ROT   "die Inselhoehe traegt keinen Modus-Ternaer mehr"
+      (heute frueh dieselbe Mutation: Suite GRUEN)
+K-02  data-schiene -> data-schienex               => ROT   "die Schienen melden sich selbst"
+      (heute frueh dieselbe Mutation: Suite GRUEN)
+K-03  belegt = 0, Schienen werden nicht abgezogen => 4 ROT, darunter
+      "K-03: bei unveraenderten Schienen rechnet die Messung wie die alte Formel"
+```
+
+**Beide Lücken, die ich gemeldet hatte, sind jetzt verriegelt** — und zwar an der Wirkung, nicht am
+Namen. **K-01 war der wichtigere:** ein P1-Kriterium, das nur ein `grep` zur Abnahme prüfte und dem
+nichts widersprochen hätte, wenn der Ternär zurückkommt.
+
+**K-03 ist der bessere Ersatz für das, was ich verloren hatte.** `T1a/K-07` verlangte
+Bildschirmfotos gegen einen Stand, der nicht mehr auslieferbar war. Die Rechnung bindet **beide**
+Richtungen: bei unveränderten Schienen derselbe Wert wie die alte Formel (1440 ⇒ 952), und bei
+geänderter Schiene *muss* sie abweichen — sonst wäre sie nur umgeschrieben und nicht
+behälterbezogen. *Sein Satz trifft es: ein Bild zeigt, dass es gleich **aussieht**; die Rechnung
+zeigt, dass es gleich **ist**.* **Das ist mehr, als K-07 je geliefert hätte.**
+
+*Ehrlich zu meiner Arbeit: mein erster K-03-Eingriff war zu grob — er zerlegte das Modul, die Datei
+lud nicht mehr, und das Rot war wertlos. Erst die saubere Mutation (`belegt = 0`, Syntax gültig) ist
+ein Beleg. Zwei zu grobe Mutationen an einem Tag; ich prüfe ab jetzt vor dem Urteil, ob die Datei
+überhaupt noch lädt.*
+
+**K-04 ERFÜLLT** — **eine** Datei im Commit (`buehnenBreite.test.ts`), **kein Produktivcode, kein
+Bündel**, Scheibe 7 nicht angefasst (Insel weiterhin 191/78). Gates selbst: `test:hausplaner`
+**1365/0** · dom 11/0 · tsc 0 · schema 0. Der Baum trägt den Prüfstand
+(`diff d78c2466 HEAD -- resources/planner/hausplaner public` leer).
+
+**Gesamtvotum: `FREIGABE`.** Vier von vier Kriterien erfüllt, jedes mit eigenem Gegen-Beweis.
+Ballbesitz: Planner.
+
+*Weiterhin offen aus meinen früheren Voten: `T2/K-06` (Vorher-Wert der Bühne fehlt) und die Spur von
+T2. Beides beim Planner.*
+
+## 2026-07-29, 21:39 CEST — GENERATOR: QUITTUNG zu `AUF-83-T3`, zweite Messung — **DREI** Kriterien sind schon erfüllt, und die zwei übrigen kollidieren
+
+**Nicht gebaut.** Der Planner hat um 21:40 meine erste Messung bestätigt und K-02/K-03 als
+*bereits erfüllt durch AUF-43* eingetragen. **Beim Bau von K-04 kam ein drittes dazu — und die
+zwei wirklich offenen stoßen an eine Wegbeschränkung im eigenen Blatt.**
+
+### K-04 ist ebenfalls bereits erfüllt
+
+Der Auftrag sagt: *„`geschossStapel.ts` führt `elevation` und `hoehenLabel` bereits — der Wert wird
+berechnet und nirgends gezeigt."* **Gemessen stimmt nur die erste Hälfte:**
+
+```text
+GeschossFlaeche.tsx:113   {kurzfassung(s)}   -> „Erdgeschoss · ±0 mm · 1 von 3"   am WAEHLER
+GeschossFlaeche.tsx:100   {e.hoehenLabel}    -> in jeder Zeile der LISTE
+GeschossFlaeche.tsx:87    title={`${e.name} — Höhenlage ${e.hoehenLabel}`}
+```
+
+**Der Wert wird berechnet UND gezeigt — an genau den zwei Orten, die K-04 verlangt.** Damit sind es
+drei Kriterien, die AUF-43 schon erledigt hat, nicht zwei.
+
+### Die zwei wirklich offenen kollidieren mit den `pfade` desselben Blatts
+
+```text
+ziel:   „EINE Arbeitszeile (Arbeitsbereiche, 2D/Split/3D, Werkzeuge, Suche)"
+pfade:  HausplanerStudio.tsx                    (ohne Einschraenkung)
+        HausplanerApp.tsx   # NUR die Geschosszeile
+```
+
+**Drei der vier genannten Inhalte wohnen in `HausplanerApp`:**
+
+```text
+2D / Split / 3D     HausplanerApp — der Ansichtsmodus
+Werkzeuge           HausplanerApp — die Werkzeugleiste
+Suche / Palette     HausplanerApp:347 `paletteOffen` · :560 `oeffnePalette` · :1037 der ⌘K-Griff
+Arbeitsbereiche     arbeitsbereiche.ts — die einzigen, die frei stehen
+```
+
+**K-06 ist der harte Fall.** Die Grenze im Blatt lautet: *„Nicht bauen — erreichbar machen. Eine
+zweite Aktivierungslogik wäre ein Fehler."* Genau das ist aus der Studio-Schale nicht möglich:
+`oeffnePalette` ist lokal in `HausplanerApp`, und in den Modi *Übersicht* und *Geführt* ist
+`HausplanerApp` gar nicht eingehängt — **dort gibt es die Palette nicht, die man erreichbar machen
+könnte.**
+
+**Drei Wege, und die Wahl gehört nicht mir:**
+
+1. **Die Arbeitszeile lebt in `HausplanerApp`** (dort, wo ihre Inhalte sind) — dann muss die
+   Wegbeschränkung *„nur die Geschosszeile"* aufgehoben oder präzisiert werden.
+2. **Sie lebt in der Studio-Schale** — dann trägt sie nur die Arbeitsbereiche, und 2D/Split/3D,
+   Werkzeuge und Suche bleiben, wo sie sind. Das Ziel wäre kleiner als geschrieben.
+3. **K-06 wird abgetrennt**, weil es an der Zerlegung von `HausplanerApp` hängt (AUF-48) und nicht
+   an dieser Kopfleiste.
+
+**Ich rate hier nicht.** Ein falscher Weg heißt entweder in der gesperrten Datei bauen oder eine
+zweite Aktivierungslogik anlegen — beides verbietet das Blatt ausdrücklich.
+
+### Was ich gemessen habe, damit es danach sofort weitergeht
+
+```text
+K-04  erfuellt   Waehler Z113 · Liste Z100 · Titel Z87
+K-05  offen      arbeitsbereiche.ts fuehrt genau die fuenf: Import & Nachzeichnen · Architektur ·
+                 Bauphysik · Heizung · Elektro · PV — als Daten, mit ids und labels
+K-06  offen      Palette vorhanden und verdrahtet, Ausloeser ist ⌘K in HausplanerApp:1037
+K-07  Ausgang    HausplanerApp 138 gesamt / 78 statisch / 78 offen
+K-09  27 Testdateien lesen die drei betroffenen Dateien
+```
+
+**Ballbesitz: Planner** — eine Zeile zur Frage oben, dann baue ich K-05 (und K-06, wenn der Weg
+geklärt ist).
