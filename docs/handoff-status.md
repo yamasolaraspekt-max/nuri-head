@@ -19422,7 +19422,7 @@ Push, kein Tor 2.
 
 ```text
 Sperre                    ENDET. Sperrgrund: „wartet auf den BAU von AUF-83-T2" — T2 steht seit
-                          45656ac1/86059540. Nur das Feld  ist wieder stehengeblieben,
+                          45656ac1/86059540. Nur das Feld `status:` ist wieder stehengeblieben,
                           VIERTER Fall. Gehoert nachgezogen.
 Je Kriterium Pruefverfahren  K-01..K-09: JA
 Ergebnis                  TRAEGT
@@ -19453,12 +19453,12 @@ R3 sind die Zahlen im Auftrag Messungen, keine Bedingungen; hier ist meine.*
 ### Was wirklich offen ist
 
 ```text
-K-04  Die Hoehenlage steht nirgends.  kommt in GeschossFlaeche.tsx nur in einem
+K-04  Die Hoehenlage steht nirgends. `elevation` kommt in GeschossFlaeche.tsx nur in einem
       Kommentar vor — angezeigt wird sie nicht.
-K-05   liegt und wird von SECHS Stellen benutzt (toolRegistry, palette,
+K-05  `arbeitsbereiche.ts` liegt und wird von SECHS Stellen benutzt (toolRegistry, palette,
       werkzeugGruppen, paketAdapter, arbeitsbereichSpeicher, HausplanerApp) — aber es gibt
       keine Arbeitszeile, die die fuenf Bereiche fuehrt.
-K-06  Die Befehlspalette EXISTIERT und ist verdrahtet (,  in
+K-06  Die Befehlspalette EXISTIERT und ist verdrahtet (`palettenGruppen`, `paletteOffen` in
       HausplanerApp) — ihr fehlt nur der sichtbare Einstieg. Deckt sich mit dem Planner-Befund
       vom 01:26: „sie ist gebaut, sie ist nur nicht erreichbar."
 K-07  Ausgangswert gemessen: HausplanerApp 138 gesamt / 78 statisch / 78 offen.
@@ -19471,3 +19471,11 @@ zur Palette setzen.** Kein Abriss der Geschosszeile mehr — der hat schon statt
 
 **Eine Zeile vom Planner genügt:** bestätigt er die Messung, baue ich die drei offenen Punkte und
 führe K-02/K-03 als *bereits erfüllt durch AUF-43* statt als eigene Leistung.
+
+*Nachtrag, weil es in dieselbe Familie gehört: die fünf Namen oben fehlten zunächst. Ich hatte den
+Block per Shell-Heredoc **ohne Anführung** geschrieben, und die Shell hat die Rückwärts-
+Anführungszeichen als Befehle ausgeführt — `status:`, `elevation`, `arbeitsbereiche.ts`,
+`palettenGruppen` und `paletteOffen` verschwanden spurlos aus dem Text. **Dritter Fall desselben
+Musters heute** (nach `@endphp` in der Blade und dem Helfer in `stilschicht.test.ts`); die Datei
+war grün, der Inhalt falsch. Behoben, und die Regel für mich lautet ab jetzt: **Heredoc immer
+angeführt, `<< 'ENDE'`.***
