@@ -19034,3 +19034,100 @@ ich die Zahlen retten, weil ich sie rechtzeitig festgehalten hatte.
 
 **Voten: T1b `FREIGABE` · T1a weiterhin `NICHT PRÜFBAR`, jetzt nur noch an K-07** (sechs von sieben
 erfüllt). Ballbesitz: Planner. Kein Commit durch mich, kein Push, kein Tor 2.
+
+
+---
+
+## 2026-07-29, 21:10 CEST — PLANNER: T1b abgenommen, T1a an K-07 verloren — durch meine eigene Regel
+
+*Zeit unmittelbar vor dem Schreiben gemessen. Letzter fremder Commit `6d4ee9f8`, 12:22.
+Neun Stunden Stillstand dazwischen; die Sitzung war weg, nicht die Arbeit.*
+
+### T1b ist ABGENOMMEN — der Hausplaner sitzt im Ticket
+
+**FREIGABE.** `@extends` je 1, `<!DOCTYPE` je 0, **die Shell-Navigation markiert den Hausplaner**
+(`nav-item is-route-active`). Kein zweiter Bildlauf: `scrollHeight 813 === clientHeight 813`, die
+Insel misst **1077×701** zwischen den beiden Ticket-Leisten. **Routen, App, Config, Layouts im
+Commit: 0 Dateien** — die Shell wurde benutzt, nicht geaendert.
+
+**Der Beleg zu meinem Entscheid von 10:28 ist der sauberste, den man sich wuenschen kann.** Ich
+hatte entschieden: `ProjektlisteTest::k3` wird **praezisiert, nicht abgeschwaecht**. Er hat genau
+diese Frage gestellt und drei Proben gefahren: Leck **wird** gefunden · Shell-Feld loest **keinen**
+Fehlalarm aus · fehlt `#hausplaner-root`, **faellt die Zusage mit „dann prueft diese Zusage
+nichts“**. **Und die Zahl: PHP 2729 ⇒ 2730 Zusicherungen — die Zusage hat eine GEWONNEN.**
+*Das ist der Unterschied zwischen Praezisieren und Entzahnen, in einer einzigen Zahl.*
+
+**Und ein Kriterium hat er ehrlich kleiner gefuehrt, als es klingen koennte:** K-03 steht als
+*ERFUELLT IM VERGLEICH* — die Klappflaeche liess sich mit keiner Methode ausloesen, also hat er
+dieselbe Klickfolge auf `/admin/invoices` gefahren. **Belegt ist die Gleichheit mit einer
+unberuehrten Seite, nicht das Klappen selbst.** *So sieht ein Kriterium aus, das nicht behauptet,
+was es nicht gesehen hat.*
+
+### T1a: sechs von sieben — und das siebte habe ich zerstoert
+
+**K-06 nachgeholt und eindeutig:** Behaelter 1131 ⇒ Insel 1077 · Behaelter 900 ⇒ Insel 846 ·
+zurueck 1131 ⇒ 1077. **Die alte Formel haette unabhaengig vom Behaelter 952 geliefert.**
+Die Breite folgt dem Behaelter — das war der ganze Auftrag.
+
+**K-07 ist nicht mehr pruefbar.** Es verlangte Bildschirmfotos **gegen den Stand vor T1a**, und der
+ist nicht mehr auslieferbar: T1b ist committet und hat das Bild **absichtlich** veraendert.
+
+> *„Folge der Reihenfolge, nicht der Sorgfalt: T1a lag bei mir, ich war an der abgelaufenen Sitzung
+> blockiert, in der Zeit wurde T1b gebaut und committet. **Drittes Mal heute, dass der vorlaufende
+> Baum eine Messung kostet — erstes Mal, dass er eine vernichtet.**“*
+
+**Der vorlaufende Baum lief, weil ich ihn losgelassen habe.** Um 10:05 habe ich **R10** aufgestellt:
+*eine Sperre endet mit dem Bau, nicht mit der Abnahme.* **Die Regel ist richtig** — sie hat den
+Leerlauf beendet, den Yama zweimal gemeldet hatte. **Sie hatte eine Ausnahme, die ich nicht gesehen
+habe:**
+
+> **R10-Zusatz, ab sofort:** Eine Sperre endet mit dem **Bau** — **es sei denn, der Folgeauftrag
+> zerstoert einen Pruefstand, den die ausstehende Abnahme braucht.** Prueffrage vor jedem
+> Entsperren: **„Braucht die offene Abnahme einen Zustand, den der naechste Auftrag veraendert?“**
+> Bei einem Vorher-Nachher-Bild ist die Antwort **immer ja**.
+
+*Das kostet fast nie Tempo — es betrifft nur Kriterien mit Vorher-Bezug, und die stehen im Blatt
+namentlich.*
+
+**ENTSCHEID: K-07 wird geschlossen als *nicht mehr pruefbar*, NICHT als erfuellt.** Ersatz in
+`AUF-83-T1a-N1`: **die Aussage wird eine Rechnung statt eines Bildes** — bei unveraenderten
+Schienenbreiten liefert `buehnenBreite` denselben Wert wie die alte Formel. **Das ist der bessere
+Beleg: jederzeit nachfahrbar, an keine Sitzung gebunden, und er faellt rot, wenn jemand das
+Verfahren spaeter doch aendert. Ein Foto haette das nie gekonnt.**
+
+### T2: sein Befund stimmt, meine Begruendung war falsch
+
+Mein Ausschluss lautete *„`objekt.blade.php` traegt weder `hp-bar` noch `hp-scratch`“*.
+**Selbst nachgemessen: sie traegt `hp-bar` viermal, das Element in Z78.** Nur die zweite Haelfte
+stimmte. *Nach R11 waere hier ein `grep` faellig gewesen, bevor das Blatt liegt.*
+
+**Aber die zwei Leisten sind nicht dasselbe, und das entscheidet den Schnitt:**
+
+```text
+studio.blade   hp-title + Zurueck + Testflaechen-Hinweis      -> nach T1b alle drei ueberfluessig
+objekt.blade   hp-title + Zurueck
+               + Objektname mit Adresse
+               + W-A-Uebernehmen-Knopf mit Staleness-Pille    -> echter, einzigartiger Inhalt
+```
+
+**ENTSCHEID: T2 nimmt in beiden Blades den doppelten Teil mit** (`hp-title`, Zurueck-Link).
+**Objektidentitaet und Uebernehmen-Knopf bleiben stehen** und wandern mit **T3** in die Kopfleiste,
+dort wo ohnehin *Projekt · Geschoss* steht.
+
+**Kein zweiter Posten** — es ist derselbe Mangel aus derselben Ursache, und ihn halb zu beheben
+hiesse, zwei Hausplaner-Flaechen mit verschiedenem Kopf zu hinterlassen: **genau die zweite
+Wahrheit, gegen die dieser ganze Auftrag laeuft.** *Beifang waere gewesen, in `objekt.blade` etwas
+ANDERES anzufassen. Denselben Fehler an beiden Orten zu beheben ist keiner.*
+
+### Register fortgeschrieben — drei Klassen dazu
+
+`F-08b` das `status:`-Feld bleibt stehen, wenn die Marke entsperrt (**3x**, er meldet es jedes Mal —
+Bringschuld statt Barriere) · `F-11` Zusage ohne Wortgrenze (**2x**, **beide Male vom Pruefenden an
+der EIGENEN Mutation gefunden**) · `F-12` der vorlaufende Baum kostet eine Messung (**3x**, beim
+dritten Mal **vernichtet** statt verzoegert; Barriere ist der R10-Zusatz).
+
+### Ballbesitz
+
+**Generator:** `AUF-83-T1a-N1` (liegt, drei Kriterien) → dann **T2** mit erweitertem Umfang → **T3**.
+**Evaluator:** frei — naechste Abnahme ist T1a-N1.
+**Yama:** Merge moeglich; juengster abgenommener Commit ist **`a14abb53`** (T1b).

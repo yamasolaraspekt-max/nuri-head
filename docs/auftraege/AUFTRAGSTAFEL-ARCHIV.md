@@ -200,3 +200,25 @@ des Auftrags als Guardrail festgeschrieben. Die beiden Arbeitsflächen überschn
 | **AUF-38 Scheibe 8b** | **`GeschossFlaeche.tsx` — 14 offene Stellen** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.) | `a022452f` |
 | **AUF-38 Scheibe 8c** | **Die vier kleinen Flaechen** (`WerkzeugGruppenMenue` 8 · `FaehigkeitenNavi` 3 · `DreiDBereich` 2 · `ReiterLeiste` 1 = 14) — **eine abnehmbare Einheit, weil der `population_command` sie in einem Lauf misst** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.). Damit ist der Restschnitt durch | `cca4cd20` |
 | **B-01** | **`.ai-workflow/` versionieren — das Werkzeug, das die Rollentrennung herstellt, war nie im Repo** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.) fuer K-01 bis K-04. **K-05 (Sicherung) gehoerte nicht zu dieser Abnahme** — ich hatte den Push als Kriterium fuer den Generator geschrieben, obwohl `CLAUDE.md` jeder Instanz das Pushen untersagt; **er hat ihn zu Recht verweigert und vorgelegt statt geraten.** Yama hat am 29.07. um 00:45 selbst gesichert. *Der Witz an B-01: unverfolgte Dateien wandern nicht in einen neuen Worktree — das Werkzeug, das die Rollentrennung herstellen soll, fehlte genau dort, wo sie hergestellt wird* | `af0e0c93` |
+
+
+## Zugang 29.07.2026, 21:10 — AUF-83-T1b: der Hausplaner sitzt im Ticket
+
+> **Der Beleg zur praezisierten Datenschutz-Zusage ist der sauberste, den man sich wuenschen kann.**
+> Mein Entscheid um 10:28 lautete: `ProjektlisteTest::k3` wird **praezisiert, nicht abgeschwaecht**.
+> Der Evaluator hat genau diese Frage gestellt — *praezisiert oder abgeschwaecht?* — und drei Proben
+> an **seiner eigenen** Extraktion gefahren:
+>
+> ```text
+> A  Kundenname IM data-Attribut der Insel   -> im Teilbaum      => Leck wird gefunden
+> B  Kundenname NUR im Shell-Auswahlfeld     -> nicht drin       => kein Fehlalarm
+> C  #hausplaner-root fehlt                  -> Exception        => "dann prueft diese Zusage nichts"
+> ```
+>
+> **Und die Zahl dazu: die PHP-Suite geht von 2729 auf 2730 Zusicherungen — die Zusage hat eine
+> GEWONNEN, keine verloren.** *Das ist der Unterschied zwischen Praezisieren und Entzahnen, in einer
+> einzigen Zahl.*
+
+| Nr | Auftrag | Rolle | Status | Beleg |
+|---|---|---|---|---|
+| **AUF-83-T1b** | **Der Hausplaner erbt die Ticket-Shell** — beide Blades `@extends('admin.layouts.app')`, keine zweite App-Shell mehr | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.). `@extends` je 1, `<!DOCTYPE` je 0. **Die Shell-Navigation ist da und markiert den Hausplaner** (`nav-item is-route-active`) — genau Yamas Satz *„ich moechte dass du die navi von ticket sein wenn ich mich in einen bereich befinde dann sehe ich dort“*. **Kein zweiter Bildlauf:** `scrollHeight 813 === clientHeight 813`; die Insel misst **1077×701** zwischen `#leftSidebar` 229 und `#rightSidebar` 80. Insel mountet mit 98 `hp`-Elementen, eingebettete Szene 416 Zeichen. **Routen, App, Config und Layouts im Commit: 0 Dateien** — die Shell wurde benutzt, nicht geaendert. Gates 1355/0, dom 11/0, tsc 0, schema 0, PHP 789 / **2730** Zusicherungen. **K-03 ehrlich als *ERFUELLT IM VERGLEICH* gefuehrt:** die Klappflaeche liess sich mit keiner Methode ausloesen, also hat er dieselbe Klickfolge auf `/admin/invoices` gefahren — **belegt ist die Gleichheit mit einer unberuehrten Seite, nicht das Klappen selbst.** *So sieht ein Kriterium aus, das nicht behauptet, was es nicht gesehen hat.* | `a14abb53` |
