@@ -174,6 +174,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-017 | (Arbeitsbaum) | **P1** | 466 geänderte + 8 neue Dateien ungesichert, im Ledger aber als geliefert und geprüft geführt | offen | — |
 | PB-016 | `inventur.sh` / `AUFTRAGSTAFEL.md` | P3 | Inventur zählt Zeilen: 21 Zeilen für 17 Posten (vier doppelt) | offen | — |
 | PB-015 | `AUFTRAGSTAFEL.md` | **P2** | zwei Posten tragen `⚡ AKTIV` (5 Vorkommen) — §1c verlangt genau einen | offen | — |
 | PB-013 | `docs/agents/regeln/kern.md` | **P1** | „wird IMMER geladen" — vom vorgeschriebenen Startpfad aus mit 0 Verweisen unerreichbar | **ANGENOMMEN** | 30.07. 09:20 — Kopfkasten in allen fuenf Startblaettern; Gegenprobe 5x 1 Treffer |
@@ -1479,3 +1480,86 @@ Commits gehen ausschließlich auf den Arbeitszweig, **pushen bleibt bei Dir**, u
 davon nicht berührt.
 
 **Bis Du entschieden hast, gilt A.** Ich setze meine eigene Fassung nicht per Kopfzeile durch.
+
+---
+
+## 22. Runde 15 (30.07.) — der Arbeitsbaum selbst
+
+**Gemessen gegen `bdf856e9`.** Keine Datei, sondern der **Zustand**: was existiert, ohne dass ein
+Commit es trägt.
+
+### PB-017 · P1 · Berichtete und bereits bewertete Arbeit existiert nur im Arbeitsbaum
+
+```yaml
+befund:
+  id: PB-017
+  datei: "(Arbeitsbaum-Zustand, kein Dokument)"
+  stelle: "git status gegen bdf856e9"
+  behauptung: |
+    Der Ledger fuehrt diese Dateien als geliefert und teilweise bereits geprueft, u.a.:
+      "objektkopf.ts: null-vs-undefined-Fix fuer revision ist im Code"
+      "auftrag-pruefen.mjs und sein Test um 08:14 geschrieben"
+      "Und er hat am Diff geprueft, nicht am Testergebnis"
+  gemessen: |
+    Kein Commit traegt diese Arbeit. Ausserhalb von docs/:
+      11 verfolgte Dateien geaendert   466 Zeilen +   232 Zeilen -
+       8 neue, unverfolgte Dateien/Ordner, darunter
+         resources/.../app/state/objektkopf.ts        (Produktivcode)
+         resources/.../__tests__/objektkopf.test.ts
+         resources/.../__tests__/arbeitszeileSuche.test.ts
+         resources/.../__tests__/reiterLeisteGeteilt.test.ts
+         resources/.../__domtests__/reiterLeiste.dom.test.ts
+         scripts/auftrag-pruefen.mjs · scripts/auftrag-pruefen.sh · scripts/__tests__/
+    Nennungen im Ledger:  objektkopf 13 · auftrag-pruefen 24 · arbeitszeileSuche 6
+                          reiterLeisteGeteilt 9 · reiterLeiste.dom 2
+  befehl: |
+    git status --porcelain
+    git diff --shortstat -- resources/ tests/ public/
+    grep -c "objektkopf" docs/handoff-status.md
+  commit: "bdf856e9"
+  schwere: P1
+  wirkung: |
+    Drei Folgen, alle real:
+    1. Ein "git checkout", ein Zweigwechsel oder ein Absturz loescht Arbeit, die das
+       Register als erledigt fuehrt. Es gibt keinen Stand, aus dem sie wiederkommt.
+    2. Die Voten des Evaluators zeigen auf einen Zustand, den kein Commit haelt.
+       "serviert == gemessen" ist spaeter nicht mehr reproduzierbar - der Beleg
+       verschwindet mit dem Arbeitsbaum.
+    3. Jede Messung des Pruefers gegen HEAD misst an dieser Arbeit vorbei. Genau das
+       ist PB-003 passiert (2370 statt 2308), und es wird wieder passieren.
+  eigenarbeit: nein
+```
+
+**Die Ursache ist keine Nachlässigkeit, sondern eine geltende Regel.** `CLAUDE.md`:
+*„Commits nur auf Yamas ausdrückliches Wort."* Jede Instanz hält sich daran — der Generator baut und
+wartet, der Evaluator prüft am Baum, der Planner schreibt. **Die Regel schützt vor ungewollten
+Commits und erzeugt dabei einen Zustand, in dem 466 geänderte und acht neue Dateien an einem
+einzigen Verzeichnis hängen.**
+
+**Das ist eine Entscheidung, die nur Yama treffen kann** — deshalb steht sie hier als Befund und
+nicht als Vorschlag an den Planner. **Drei Wege sind denkbar, ich empfehle keinen:**
+
+| Weg | was er kostet |
+|---|---|
+| Yama gibt das Wort, der Stand wird committet | einmal lesen, einmal freigeben |
+| eine stehende Ausnahme für den `auto/`-Zweig | Commits ohne Einzelfreigabe, dafür kein Verlustrisiko |
+| es bleibt, wie es ist | das Risiko bleibt, aber es ist dann ein **gewähltes** |
+
+**Erledigt wenn:** *`git status --porcelain | grep -v '^?? \.' | wc -l` liefert `0`, **oder** im
+Ledger steht eine Zeile, die den Zustand als bewusst gewählt benennt und sagt, wie lange er gelten
+soll.*
+
+*Der dritte Weg ist ausdrücklich einer.* **Ein bekanntes Risiko ist kein Fehler — ein unbenanntes
+schon.** Heute ist es unbenannt: kein Dokument sagt, dass 466 Zeilen ungesichert stehen.
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | **PB-017** — Register und Baum sagen Verschiedenes über denselben Bestand |
+| **L4 Kausalität** | **PB-017** — die Kette *gebaut → gesichert → nachmessbar* endet nach dem ersten Glied |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | **PB-017** — jede spätere Messung gegen `HEAD` misst an der Arbeit vorbei |
+
+**Ballbesitz: Planner** — mit ausdrücklicher Weiterleitung an **Yama**, weil nur er das Wort geben
+kann, das die Regel verlangt.
