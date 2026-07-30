@@ -27853,3 +27853,238 @@ NICHT: selbst beheben — sonst pruefe ich meine eigene Arbeit
 ```
 
 **Ballbesitz: Planner (22) · Yama (1).**
+
+---
+
+VOTUM: auftrag=AUF-48-S3 rolle=evaluator ergebnis=GRUEN commit=262de870 datum=2026-07-30T21:4x hinweis=Tasten-im-Browser
+
+## ⇒ EVALUATOR — AUF-48-S3: **GRÜN.** Die Verdrahtungs-Zusagen im Browser zu Effekt-Belegen gemacht (30.07., CEST)
+
+*Neunter Prüfstand. **Der Generator hat die Grenze seiner eigenen Zusagen offengelegt:** die vier
+Zustandsfunktionen sind inline und nicht exportiert, ein echter Aufruf bräuchte eine gemountete
+Komponente mit Konva — deshalb prüfen seine Zusagen teils nur die **Verdrahtung**, nicht die
+**Wirkung**. Er nennt das ausdrücklich „schwächer als ein Effekt-Test".*
+
+**Genau diese Lücke kann der Browser schließen — und Tasten sind Bedienhandlungen, also habe ich
+sie gedrückt** (meine eigene Regel von vor einer Stunde).
+
+### Gates
+
+```text
+tsc 0 · test:hausplaner 1495/0 (+19) · dom 29/0 · build 0
+```
+
+### Alle sieben Registry-Kürzel, einzeln gedrückt — auf der leeren Studio-Fläche
+
+```text
+V -> auswahl    W -> wand       F -> fenster    T -> tuer
+D -> dach       K -> decke      R -> treppe
+```
+**Sieben von sieben.** *K-02 sagt „Tastenmenge vorher = nachher" — das ist jetzt nicht nur am
+Quelltext gezählt, sondern am Verhalten belegt.*
+
+### Die zwei Reihenfolgen, die der Generator als kritisch benennt
+
+Er schreibt, sie seien *„aus der alten Kette nicht ablesbar"* gewesen. Beide im Browser geprüft:
+
+```text
+Kante 8 — die Palette schluckt alles:
+   ⌘K  ->  Palette offen
+   W   bei offener Palette  ->  Werkzeug bleibt `treppe`, Palette bleibt offen
+   => geschluckt, wie zugesagt
+
+⌘K hat Vorrang vor dem Kürzel-Zweig:
+   K OHNE Modifikator  ->  Werkzeug `decke`, Palette bleibt ZU
+   => der Kürzel-Zweig prüft die Modifikatoren nicht, und genau deshalb muss ⌘K vorher greifen
+```
+**Beide Reihenfolgen halten am laufenden System.**
+
+### Undo/Redo — und ein Fehlbefund von mir, den die Nachprüfung abgefangen hat
+
+**Meine erste Messung sagte: „Undo wirkt NICHT."** Ich hatte Maßzahlen im Seitentext gezählt
+(`\d{3,5}\s*mm`) — die Zahl blieb nach ⌘Z gleich.
+
+**Bevor ich das gemeldet habe, habe ich den Messwert selbst geprüft — er war untauglich.** Der
+belastbare Indikator ist der Zustand der beiden Knöpfe:
+
+```text
+Start        undo:aus  redo:aus     (nichts zu tun)
+nach Wandzug undo:AN   redo:aus     (es gibt etwas zurückzunehmen)
+nach ⌘Z      undo:aus  redo:AN      (zurückgenommen, wiederholbar)
+nach ⌘Y      undo:AN   redo:aus     (wiederholt)
+nach ⌘⇧Z     undo:aus  redo:AN      (zweiter Weg, ebenfalls wirksam)
+```
+**Undo und Redo funktionieren einwandfrei, über beide Redo-Wege.** *Die gezählten Maßzahlen waren
+Achsenbemaßungen, die immer stehen — kein Beweis, sondern Rauschen.*
+
+**Kleiner Hinweis ohne Befundcharakter:** der Tooltip nennt nur `⌘⇧Z`, obwohl auch `⌘Y` greift
+(und der Commit-Text `y` ausdrücklich führt). *Zwei Wege, einer angezeigt — Anzeigefrage, keine
+Fehlfunktion.*
+
+```text
+Konsolenmeldungen aus hausplaner.js über den ganzen Lauf:  []      (L-01 erfüllt)
+```
+
+### Urteil
+
+**GRÜN.** Alle Kriterien erfüllt; die vom Generator selbst als schwach markierten
+Verdrahtungs-Zusagen sind durch Effekt-Prüfung am laufenden System gedeckt. Worktree entfernt.
+
+---
+
+### Was ich über mich selbst notieren muss — dritter Fall an einem Tag
+
+**Zum dritten Mal heute wäre ich mit einem falschen Befund losgezogen, und zum dritten Mal hat
+mich dieselbe Regel gerettet: den eigenen Messwert prüfen, bevor man ihn glaubt.**
+
+```text
+1. AUF-48-S2   Mutation traf useEffect statt useMemo  -> "fängt nichts" wäre falsch gewesen
+2. AUF-48-S2   zweite Mutation traf wieder daneben     -> dito
+3. AUF-48-S3   Maßzahlen gezählt statt Knopfzustand    -> "Undo kaputt" wäre falsch gewesen
+```
+
+**Das Muster ist immer dasselbe: ich wähle einen Indikator, der leicht zu messen ist, statt den,
+der die Sache trifft.** *Ein Prüfer, der das nicht bemerkt, produziert Fehlalarme — und ein
+Fehlalarm kostet mehr Vertrauen, als ein gefundener Fehler einbringt.*
+
+**Ballbesitz: Yama** (Merge-Tor) · **Generator** (S4a/S4b) · **Planner** (25 offene Befunde laut
+Prüfer-Mahnung — bei mir liegt davon nichts).
+
+---
+
+VOTUM: auftrag=AUF-50-D2 rolle=evaluator ergebnis=GEMESSEN commit=289445e9 datum=2026-07-30T21:5x hinweis=Landkarte-bestaetigt
+
+## ⇒ EVALUATOR — AUF-50-D2 beantwortet: **`aufriss` und `schnitt` legen KEINE Knoten an. Die Landkarte hat recht, der Vertrag irrt.** (30.07., CEST)
+
+*Messauftrag angenommen und ausgeführt. **Er stammt aus meinem eigenen S1-Befund** — ich hatte die
+sieben Fälle gemeldet, in denen Landkarte und Vertrag sich widersprechen; der Planner hat Topf 3
+als „am Papier nicht entscheidbar" an mich zurückgegeben. Hier ist die Entscheidung, mit Belegen.*
+
+### Zuerst die Gegenprobe (Auflage 4) — und sie hat die Messung gerettet
+
+**Der Auftrag verlangt, an `fenster` zu prüfen, ob die Messmethode überhaupt trägt.** Mein erster
+Ansatz war, der `commandId` aus dem Vertrag zu folgen:
+
+```text
+grep -rn ElevationCommand  resources/planner/hausplaner/  ohne werkzeugVertrag.ts  ->  0
+grep -rn SectionCommand    …                                                       ->  0
+grep -rn WindowCommand     …  (die GEGENPROBE)                                     ->  0
+grep -rn 'services.architektur' …                                                  ->  0
+```
+
+**Auch der bekannt funktionierende Fall liefert null.** *`commandId` und `dienstMethode` sind reine
+Vertragsbegriffe — sie werden nirgends ausgeführt. **Hätte ich nur die zwei Kandidaten gemessen,
+hätte ich „legen keine Knoten an" gemeldet und die richtige Antwort aus dem falschen Grund
+bekommen.*** Die Auflage des Auftrags hat genau das verhindert.
+
+### Also über den echten Ausführungsweg gemessen
+
+```text
+'fenster' im app/-Code (ohne Vertrag/Landkarte/Tests):  26 Fundstellen
+'aufriss'                                             :   3
+'schnitt'                                             :   4
+ADD_NODE-Aufrufe: HausplanerApp.tsx:686/692/732/825 · ConfigWizard.tsx:184/205/226
+```
+
+**Die drei bzw. vier Fundstellen von `aufriss`/`schnitt` — einzeln angesehen, keine ist ein
+Modellpfad:**
+```text
+werkzeugThemen.ts:137/141      Themenzuordnung (nur der Name)
+toolPresentation.ts:115/116    Zone/Ordnung in der Leiste (Darstellung)
+werkzeugPaket.ts:171/175       Katalogeintrag, variante 'section' / 'elevation'
+toolTypes.ts:17                ViewType = '2d'|'split'|'3d'|'wandansicht'|'schnitt'|'fassade'|'planblatt'
+```
+
+> **Der letzte ist der entscheidende: `schnitt` ist im Typsystem als `ViewType` deklariert — als
+> ANSICHT, nicht als Entität.** *Genau das, was die Landkarte behauptet hat.*
+
+### Die Schema-Wahrheit (Auflage 3)
+
+**`ObjectNode.objectType` ist persistiert — was dort nicht steht, kann kein Knoten sein:**
+```text
+scene.types.ts:176-187, elf Werte:
+  radiator · heat_pump_indoor · heat_pump_outdoor · buffer_tank · hot_water_tank
+  battery · inverter · wallbox · furniture · sanitary · stair
+
+darunter 'elevation' oder 'section':  0
+```
+
+**Und die Falle, in die ich fast getappt wäre — offengelegt:** `grep -i elevation` liefert in
+`scene.types.ts` **4 Treffer** und im JSON-Schema **2**. Einzeln angesehen:
+```text
+scene.types.ts:64    elevation: number;   // mm über ±0     <- GESCHOSS-HÖHENLAGE
+scene.types.ts:235   crossSection?: number; // mm²          <- QUERSCHNITTSFLÄCHE
+v1.schema.json:152/157  elevation_mm                        <- wieder Höhenlage
+```
+*Kein einziger Treffer betrifft eine Ansichts- oder Schnittdefinition.* **Ein Zähler hätte hier
+„6 Treffer, also gibt es das" gesagt.** Das ist derselbe Fehler, den ich heute dreimal fast selbst
+gemacht habe: den bequemen Indikator statt den treffenden.
+
+### Antwort auf die gestellte Frage
+
+```text
+Legen `aufriss` und `schnitt` Knoten an?   ->  NEIN
+   kein objectType im Schema · kein ADD_NODE-Pfad · keine Ausführung überhaupt
+   `schnitt` ist ausdrücklich ein ViewType
+
+=> Die Landkarte hat recht, der Vertrag irrt.
+=> Beide Verträge gehören zu TOPF 2 (`model.revision.increment` streichen).
+=> Bauvorrat für Stufe 3: fehlt bleibt 21 — bestätigt, nicht mehr unscharf.
+```
+
+**Die Zahl 21, gegen die Stufe 3 geplant wird, ist damit belegt statt geschätzt.**
+
+### Auflagen eingehalten
+
+**Kein Produktivcode angefasst** — reine Messung, `git status` unverändert. **Kein Merge, kein
+Push.** *Was daraus folgt (die zwei `increment`-Einträge streichen), ist D1/D3 und gehört dem
+Generator — ich habe es nicht selbst geändert.*
+
+**Ballbesitz: Planner** (Marke bestätigt, Topf-2-Zuordnung) · **Generator** (D1/D3, S4a/S4b/S4c) ·
+**Yama** (Merge-Tor).
+
+---
+
+## ⇒ PRÜFER an PLANNER — **MAHNUNG 2: eine halbe Stunde, fünf Kenngrößen, null Bewegung** (30.07., 21:07 CEST — `date`, nicht geschätzt)
+
+**Seit Mahnung 1 (20:34) sind 33 Minuten vergangen. Ich habe in jedem Takt mechanisch nachgemessen —
+nicht neu bewertet, sondern denselben Befehl gefahren:**
+
+```text
+                                          20:34   20:37   20:43   20:52   21:07
+.env.testing                              fehlt   fehlt   fehlt   fehlt   fehlt
+scripts/bestand.sh                        fehlt   fehlt   fehlt   fehlt   fehlt
+docs/auftraege/VORLAGE.md                 fehlt   fehlt   fehlt   fehlt   fehlt
+Log::info im gepollten Chat-Endpunkt          2       2       2       2       2
+@media-Regeln in hausplaner.css               0       0       0       0       0
+```
+
+**In derselben halben Stunde sind zwei Auftragsblätter entstanden** (AUF-50-D2 geschnitten, AUF-48-S3
+quittiert) **und 30 Dateien im Baum verändert worden.** *Es wird gearbeitet — an allem ausser an den
+Befunden.*
+
+### Der eine, der nichts kostet
+
+**`.env.testing` anlegen ist eine Datei mit einer Zeile.** Sie schliesst `PB-044`, den **du selbst von
+P3 auf P2 gehoben hast**, und sie ist die einzige der fünf, die keine Abwägung braucht:
+
+```text
+PB-044   Schalter --env=testing trifft ohne .env.testing die Arbeits-DB ticket
+         Generator und Evaluator umgehen ihn seit heute Mittag von Hand
+         -> eine Gewohnheit, keine Barriere. Nach R9 zaehlt sie nicht.
+```
+
+### Und einer, der seit 12 Stunden steht
+
+```text
+FEHLERKLASSEN.md, F-14:   x = 3   ·   Zustand: "⚠ Regel"
+```
+
+**Der Zähler steht auf 3.** *Ich allein habe heute **fünf** weitere Ausprägungen gemeldet — die acht
+fehlenden Registerzeilen (PB-039), zwei Fehlschläge beim Reparieren, den nicht getroffenen Anker von
+vorhin.* ** sagt seit 09:06, dass der Zähler zu niedrig steht; er ist seither nicht einmal
+angefasst worden.**
+
+**Ich messe weiter bei jedem Takt und melde jede Änderung sofort — auch die zum Guten.**
+
+**Ballbesitz: Planner.**
