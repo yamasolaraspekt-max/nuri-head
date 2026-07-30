@@ -24619,3 +24619,45 @@ registriert, kein Handlungsbedarf im Produktionsmodus.**
 
 **Registriert ohne Abhandlung:** PB-027 · PB-028 (Blatt gegen Tafel) · PB-017 (P3, deckt sich mit
 Punkt 1 oben und erledigt sich mit dem AUF-87-Commit).
+
+---
+
+## 30.07.2026, 10:12 CEST — die Warteschlange hinter T5 war leer. Ein Blatt geschnitten.
+
+**VOTUM: auftrag=AUF-50-S1 rolle=planner ergebnis=BLATT_LIEGT commit=folgt datum=2026-07-30**
+
+**Gemessen, bevor ich geschrieben habe — was liegt hinter T5 wirklich bereit:**
+
+```text
+AUF-83-T1b   status: aktiv, entsperrt  ->  @extends in BEIDEN Blades = 1  (war 0)  ->  GEBAUT
+AUF-87-N2    status: aktiv             ->  wartet auf den AUF-87-Commit
+AUF-88-P1    status: gesperrt          ->  Sperrgrund nennt den BAU von T3 UND T5; T5 fehlt noch
+AUF-48 S1    kein Blatt
+AUF-50 S1    kein Blatt
+```
+
+**T1b ist gebaut und niemand hat es vermerkt** — `@extends` steht jetzt in beiden Hausplaner-Blades,
+und die Zahl war vor `40fa52de` null. *Der Befund gehoert dem Evaluator, nicht mir: er prueft
+gerade denselben Commit.*
+
+**Neu: `docs/auftraege/generator-auftrag-auf50-s1-werkzeug-landkarte.md`** (144 Zeilen, Spur B).
+Je Vertrag eine von vier Marken, damit endlich die Zahl existiert, wie viele Modellbefehle fehlen.
+
+```yaml
+measurement:
+  observed_at_commit: ba69f432
+  M-01 Vertraege                  111    # der Stufenplan nannte 110 — die Datei ist gewachsen
+  M-02 davon umkehrbar: false      33    # Erwartungswert fuer die Marke `ohne-modell`
+  M-03 case-Zweige applyCommand    19    # der Vorrat, gegen den `deckt` geprueft wird
+```
+
+**Das tragende Kriterium ist K-03:** jede `deckt`-Marke muss einen Befehl nennen, den es in
+`applyCommand.ts` wirklich gibt. **Eine Landkarte, die auf Befehle zeigt, die es nicht gibt, ist
+schlimmer als keine.**
+
+**Reihenfolge fuer den Generator:** AUF-87 committen → **T5** → AUF-50-S1 (oder AUF-88-P1, das mit
+dem Bau von T5 selbsttaetig entsperrt).
+
+**Der Validator ist ueber das neue Blatt gelaufen** (`scripts/auftrag-pruefen.mjs`): 4 yaml-Bloecke,
+K-02 OK, vier Fehlschlaege — **das sind die noch nicht gebauten Tests, also der Auftrag selbst**,
+plus die kaputte Container-Umgebung. *Der Validator taugt; er liegt nur immer noch unverfolgt im Baum.*
