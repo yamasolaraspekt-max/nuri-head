@@ -2202,3 +2202,88 @@ Existenz und Struktur geprüft** — die zehn Fragen sind ausformuliert (Runde 2
 den Code gehalten habe ich sie nicht; sie bleiben auf der Liste.*
 
 **Ballbesitz: Planner** (PB-024, PB-025) · **Evaluator** (PB-023, `eigenarbeit` an 60 von 175).
+
+---
+
+## 30. Runde 22 (30.07.) — `docs/agents/`, systematisch · Stand: 39 von 386
+
+**Gemessen gegen `ed326b36`.** Fünfzehn Dateien (5 Satz A, 5 Satz B, 5 weitere).
+
+### Was trägt — die Artefakt-Probe ist sauber
+
+```text
+Pfade in Rueckwaerts-Anfuehrungszeichen, die auf eine Datei zeigen:  14   davon fehlend: 0
+npm-Skripte, die die Blaetter nennen:                                 3   davon fehlend: 0
+./scripts/... die sie nennen:                                              davon fehlend: 0
+```
+
+**Kein einziges genanntes Artefakt fehlt** — anders als in `AUFTRAGSSCHEMA.md` (PB-020) und der
+UI-Bauordnung (PB-025).
+
+### PB-014 ist behoben — und ich messe das nach, statt es zu glauben
+
+`kern.md` trägt seit `a3549dfd` in **Zeile 1**:
+> *„⚠ NACHRANGIG — die Arbeitsgrundlage ist `docs/agents/00-REGELWERK.md`. … **Bei Widerspruch gilt
+> das Regelwerk** … Was hier steht, **schärft** und **ersetzt nicht**. — Befund PB-014."*
+
+**Damit ist die zweite Wahrheit aufgelöst:** es gibt weiter zwei Sätze, aber einer ist erklärt
+nachrangig. *Das ist die schnellste Behebung, die ich heute gesehen habe — der Befund lag zwölf
+Minuten.*
+
+### PB-026 · P3 · Zwei Sätze im selben Kopf sagen Verschiedenes über denselben Punkt
+
+```yaml
+befund:
+  id: PB-026
+  datei: "docs/agents/regeln/kern.md"
+  stelle: "Z1 gegen Z11"
+  behauptung: |
+    Z1:  "NACHRANGIG - die Arbeitsgrundlage ist docs/agents/00-REGELWERK.md"
+    Z11: "Eine Seite. Diese Regeln werden IMMER geladen, von allen Rollen, vor jedem Vorgang."
+  gemessen: |
+    Beide Saetze stehen unveraendert in derselben Datei, zehn Zeilen auseinander,
+    im Commit wie im Arbeitsbaum (je 163 Zeilen).
+  befehl: "sed -n '1,16p' docs/agents/regeln/kern.md"
+  commit: "ed326b36"
+  schwere: P3
+  wirkung: |
+    Der Nachtrag in Z1 hat den Rang geklaert, aber den Satz nicht mitgezogen, der den
+    Rang behauptet hatte. Wer bei Z11 einsteigt - und dort beginnt der Inhalt, Z1-5
+    sind ein Zitatblock - liest weiterhin "IMMER, von allen Rollen".
+    Kleine Wirkung, klare Ursache: dieselbe Klasse wie F-08b (die Entscheidung steht
+    an einer Stelle, der widersprechende Satz an der anderen).
+  eigenarbeit: nein
+```
+
+**Erledigt wenn:** *`grep -c "IMMER geladen" docs/agents/regeln/kern.md` liefert `0`, oder der Satz
+nennt den Vorrang mit.*
+
+### Und ein Nebenbefund, der nach der Behebung von PB-014 seine Schwere verliert
+
+**Satz B nennt drei Dauerregeln nicht, die Satz A führt:**
+
+| Regel | Satz A | Satz B |
+|---|--:|--:|
+| Tests nur gegen `ticket_testing` | **3**/5 | **0**/5 |
+| Verweis auf die Bauordnung | **4**/5 | **0**/5 |
+| BETRIEBSORDNUNG · Dauerdirektiven | 4/5 · 3/5 | **0**/5 · **0**/5 |
+
+**Ich schreibe daraus keinen eigenen Befund.** Vor der Behebung von PB-014 wäre es ein P1 gewesen —
+eine Instanz, die nur Satz B liest, hätte von `ticket_testing` nie erfahren. **Seit Zeile 1 gilt
+Satz A bei Widerspruch, und Satz A führt beide Regeln.** *Die Lücke besteht, aber sie ist gedeckt;
+das gehört in die Beobachtung, nicht ins Register.*
+
+**Auffällig bleibt eines:** *„Commit nur auf Yamas Wort"* steht in **0 von 10** Rollenblättern — die
+Regel lebt in `CLAUDE.md` und im Takt-Text. Und `PB-017` (466 ungesicherte Zeilen) ist genau ihre
+Folge. **Auch das ist Beobachtung, kein Befund:** die Regel ist bindend, wo sie steht.
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — alle genannten Artefakte existieren |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | **PB-026** — zwei Sätze im selben Kopf |
+| **L4 Kausalität** | keine Beanstandung — der Vorrang ist seit `a3549dfd` geklärt |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | keine Beanstandung |
+
+**Ballbesitz: Planner.**
