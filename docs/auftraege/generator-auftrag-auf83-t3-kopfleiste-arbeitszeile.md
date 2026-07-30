@@ -41,6 +41,7 @@ scope:
     - resources/planner/hausplaner/app/HausplanerApp.tsx        # NUR die Geschosszeile
     - resources/planner/hausplaner/app/dashboard/GeschossFlaeche.tsx
     - resources/planner/hausplaner/app/dashboard/ReiterLeiste.tsx   # 30.07. aufgenommen, siehe K-05 auflage_geteilte_leiste
+    - resources/planner/hausplaner/app/dashboard/arbeitsbereiche.ts  # 30.07. 06:45 nachgetragen — dein Befund 3: das Merkmal gehoert in die DATEN, nicht in HausplanerApp:105
     - resources/views/admin/hausplaner/objekt.blade.php          # Objektname + Uebernehmen-Knopf wandern (Zusage aus T2)
     - resources/planner/hausplaner/hausplaner.css
   ausschluesse:
@@ -110,15 +111,25 @@ kriterien:
       **Wird eine davon rot, ist der Bau falsch, nicht die Zusage.**
 
   - id: K-01b
-    status: WILLENSFRAGE — GEHT AN YAMA, BLOCKIERT DEN BAU NICHT
+    status: ENTSCHIEDEN VON YAMA 30.07. 06:44 — AUF-70 GILT, KEINE AENDERUNG
     aussage: "Rueckgaengig und Wiederholen: Kopfleiste oder Werkzeugzeile?"
     typ: behavioural
     kritikalitaet: P2
     pruefung:
       typ: entscheidung
       erwartet: "keine — der Bau laeuft ohne diese Antwort weiter"
+    entscheid_yama_0644: >
+      **Yamas Wortlaut: *„ja die Rueckgaengig und Wiederholen sollen dort sein wie gerade ist in
+      diese werkzeugzeile"*.** Damit gilt AUF-70 endgueltig, und zwar nicht als Notloesung bis
+      jemand anders entscheidet, sondern als Entscheid.
+      **Fuer den Bau heisst das: NICHTS zu tun.** Die vier Zusagen von AUF-70 bleiben, wo sie sind,
+      und `eineWerkzeugzeile` bleibt gruen — **die Gegenprobe an K-01 ist damit keine Auflage mehr,
+      sondern ein Waechter.**
+      *Und der Punkt 2 seines Auftrags vom 29.07. ist damit korrigiert, nicht uebergangen: er
+      nannte Undo/Redo in der Kopfleiste, er hat es sich angesehen und anders entschieden.
+      Das gehoert so festgehalten — sonst liest es beim naechsten Mal jemand als offen.*
     begruendung: >
-      **Das ist der EINZIGE echte Widerspruch, und er gehoert nicht mir.** Yamas Auftragspunkt 2
+      **Das war der EINZIGE echte Widerspruch, und er gehoerte nicht mir.** Yamas Auftragspunkt 2
       nennt fuer die Kopfleiste *„rechts Speicherstatus/Speichern/Undo/Redo/Overflow"*.
       AUF-70 hat Rueckgaengig und Wiederholen bewusst in die Werkzeugzeile gezogen, mit der
       Begruendung *„Rueckgaengig zuerst: es ist die Rettungsleine und gehoert an den Anfang"* —
@@ -322,6 +333,22 @@ kriterien:
       befehl: "npm run tsc:hausplaner && npm run schema:hausplaner:check && npm run test:hausplaner && npm run test:hausplaner:dom && npm run build:hausplaner"
       erwartet: "0/0/0/0/0"
     beleg: testzaehler vorher/nachher
+
+auflagen_reihenfolge:
+  buendel_still: >
+    **R18, 30.07. 06:45 — aus deinem Befund 1, und die Regel ist deine.**
+    Solange eine Sichtprobe **beauftragt** ist, bewegt niemand `public/hausplaner/*` und keine
+    Blade, die ohne Bau sofort wirkt. **Beauftragt zaehlt wie laufend** — der Pruefende kann
+    nicht erraten, wann er zu spaet ist.
+    *Du hast es selbst gesehen und zurueckgestellt, bevor es jemand gemerkt haette. Genau deshalb
+    steht es jetzt als Regel und nicht als Befund gegen dich.*
+  was_du_TROTZDEM_bauen_darfst: >
+    **K-05 (die freigegebene Haelfte) und K-05b — in den QUELLEN.** Bauen, Zusagen schreiben,
+    Gates fahren. **Nur `build:hausplaner` nicht ausfuehren und nicht committen**, bis Teil A
+    des Evaluators gemeldet ist. *Leerlauf ist ein Fehlzustand; ein stilles Buendel ist keiner.*
+  k01_wartet: >
+    **K-01 wartet auf `EVAL-2026-07-30-A`** — deine Lesart ist richtig und die Reihenfolge meine.
+    Sobald die sechs Bilder und die drei Zeilenhoehen liegen, ist der Weg frei.
 
 selbstnachweis:
   quittung_zuerst: "Readiness-Quittung nach §2, mit der Dateiliste aus K-09."

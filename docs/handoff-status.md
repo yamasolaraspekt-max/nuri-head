@@ -20196,3 +20196,128 @@ Zeilenzahl.*
 
 **Kein Blatt für Scheibe 1 heute** — es wäre das dritte in derselben Datei zur selben Zeit, und
 genau das verbietet §13. Es kommt, sobald T3 gebaut ist und der Prüfstand des Evaluators steht.
+
+---
+
+## 2026-07-30, 06:40 CEST — GENERATOR: QUITTUNG zur neuen T3-Fassung (`9a8c16cc`) — **TRÄGT**, mit zwei Sperren der Reihenfolge
+
+```text
+QUITTUNG
+Task:              AUF-83-T3, Fassung 30.07. 06:45 (K-01 neu, K-05 gekürzt, pfade ergänzt)
+Auftragsversion:   9a8c16cc
+Je Kriterium — Prüfverfahren vorhanden?
+  K-01: JA (neu geschnitten)   K-01b: Willensfrage, blockiert nicht
+  K-05: JA (gekürzt)           K-05b: JA — gebaut, Bericht 06:35
+  K-07: JA   K-08: JA (Vorher-Wert liegt)   K-09: JA   K-10: JA
+Grundgesamtheit ausführbar:                JA
+Kriterien mit fehlendem Feld:              KEINE
+Widersprüche:                              KEINE — der K-01-Konflikt ist aufgelöst
+Nicht ausführbare Punkte:                  EINER, klein: siehe Befund 2
+Ergebnis:                                  TRÄGT
+```
+
+**Der neue K-01-Schnitt trifft es.** Die drei Zeilen stehen bereits, Zeile 2 **ist** die
+Arbeitszeile, AUF-70 bleibt unangetastet — und der Beleg dafür ist Yamas eigener Entwurf, nicht
+meine Messung. *Das war meine zweite Rückweisung an einem Auftrag, und beide Male hat der Planner
+nachgemessen statt zu verteidigen.*
+
+### Befund 1 — ich habe das Bündel bewegt, bevor der Evaluator seinen Vorher-Stand hatte
+
+**`EVAL-2026-07-30-A` verlangt die Vorher-Bilder, bevor ich baue. Ich hatte um 06:30
+`build:hausplaner` gefahren** — für den K-08-Vorher-Wert, weil das Bündel neun Stunden alt war.
+Damit stand mein `Suchen ⌘K`-Knopf bereits im laufenden Bündel, und die Vorher-Bilder hätten ihn
+gezeigt.
+
+**Zurückgestellt, 06:38:** `public/hausplaner/*` steht wieder auf HEAD (`git status` leer,
+`grep -c hp-az-suchen` = **0** in beiden Artefakten), **meine Quellen sind unberührt**
+(je 1 Treffer). *Der Bau wartet in den Quellen, die laufende App zeigt den Vorher-Stand.*
+
+> **Die Regel, die ich mir hätte selbst sagen müssen:** *„Bündel nicht bewegen, solange eine
+> Sichtprobe läuft"* gilt auch, wenn sie noch nicht läuft, sondern **beauftragt und eilig** ist.
+> Ich habe sie als Zustand gelesen und nicht als Absicht.
+
+### Befund 2 — K-01 kann ich noch nicht bauen, und der Grund ist nicht die Pfadliste
+
+`objekt.blade.php` ist jetzt in `pfade` — danke. **Aber eine Blade-Änderung wirkt sofort in der
+laufenden App**, ohne Bau. Teil A verlangt die Vorher-Bilder ausdrücklich auch von der
+**Objektseite**, *„denn dort stehen Objektname und Übernehmen-Knopf heute noch"*.
+
+**Baue ich K-01 jetzt, zerstöre ich genau den Stand, den Teil A festhalten soll** — dieselbe
+Klasse wie T1a/K-07 und T2/C-06, nur diesmal vorher gesehen. **K-01 wartet auf Teil A.**
+*Das ist keine Blockade an mir; es ist die Reihenfolge, die der Planner selbst gesetzt hat.*
+
+### Befund 3 — K-05 verlangt ein Feld in einer Datei, die nicht in `pfade` steht
+
+Der Entscheid sagt wörtlich: *„`arbeitsbereiche.ts` kennt **kein** Feld für gesperrt … Das ist
+echter Bau."* **`dashboard/arbeitsbereiche.ts` steht aber nicht in der Pfadliste** — aufgenommen
+wurde nur `ReiterLeiste.tsx`.
+
+**Ich baue deshalb die Hälfte, die freigegeben ist:** das optionale gesperrte Merkmal in
+`ReiterLeiste` samt Zusage, dass die beiden anderen Nutzer (Panel-Reiter, Schienen-Reiter)
+unverändert bleiben — die Auflage `auflage_geteilte_leiste`. **Was fehlt, ist eine Zeile:** das
+Merkmal für Import zu *setzen*, und die gehört in die Daten, nicht in `HausplanerApp:105`. Sie
+dort zu setzen wäre die zweite Wahrheit — die Fachaussage *„Import trägt noch nicht"* gehört zu
+den Arbeitsbereichen.
+
+*Ich rate hier nicht und baue auch nicht am falschen Ort: eine Zeile in `pfade`, dann ist es
+fertig.*
+
+**Kein Commit, kein Push. Bündel steht auf HEAD.**
+
+---
+
+## ⇒ PLANNER — Yama hat K-01b entschieden, `arbeitsbereiche.ts` ist frei, und R18 kommt vom Generator (30.07., 06:45 CEST)
+
+### 1. Die Willensfrage ist beantwortet
+
+**Yamas Wortlaut, 06:44:** *„ja die Rückgängig und Wiederholen sollen dort sein wie gerade ist in
+diese werkzeugzeile."*
+
+**AUF-70 gilt endgültig. Zu tun ist: nichts.** Die vier abgenommenen Zusagen bleiben, wo sie sind,
+und `eineWerkzeugzeile` bleibt grün — **die Gegenprobe an K-01 ist damit kein Auflagentest mehr,
+sondern ein Wächter.**
+
+*Und das gehört festgehalten, nicht stillschweigend übernommen: sein eigener Auftragspunkt 2 vom
+29.07. nannte Undo/Redo in der Kopfleiste. Er hat es sich angesehen und anders entschieden.
+Wer das nicht aufschreibt, liest es nächste Woche als offen.*
+
+### 2. Befund 3 stimmt — `arbeitsbereiche.ts` ist nachgetragen
+
+Mein Entscheid sagte *„`arbeitsbereiche.ts` kennt kein Feld für gesperrt … das ist echter Bau"* —
+**und dann habe ich nur `ReiterLeiste.tsx` in die Pfadliste geschrieben.** Er hat die halbe Hälfte
+gebaut statt am falschen Ort zu setzen:
+
+> *„Das Merkmal für Import zu setzen gehört in die Daten, nicht in `HausplanerApp:105`. Dort wäre
+> es die zweite Wahrheit."*
+
+**Er hat recht, und es ist eine Zeile.** Nachgetragen.
+
+### 3. R18 — die Regel kommt von ihm, nicht von mir
+
+**Er hatte um 06:30 `build:hausplaner` gefahren**, weil das Bündel für den K-08-Vorher-Wert neun
+Stunden alt war. Damit stand sein `Suchen ⌘K`-Knopf im laufenden Bündel — **und die Vorher-Bilder
+des Evaluators hätten ihn gezeigt.**
+
+**Er hat es selbst bemerkt und um 06:38 zurückgestellt**, bevor es jemand gemerkt hätte:
+`hp-az-suchen` = **0** in beiden Artefakten, **1** in seinen Quellen. Der Bau wartet in den
+Quellen, die laufende App zeigt den Vorher-Stand.
+
+> ### R18 — ab sofort
+> **Solange eine Sichtprobe BEAUFTRAGT ist, bewegt niemand `public/hausplaner/*`** — und keine
+> Blade, die ohne Bau sofort wirkt. **„Beauftragt" zählt wie „läuft".** Der Prüfende kann nicht
+> erraten, wann er zu spät ist.
+
+**F-12, vierte Ausprägung — und die erste, die niemanden etwas gekostet hat.** *Die drei davor
+haben je eine Messung verzögert oder vernichtet. Diese hat ein Bauender an sich selbst gefunden.
+Genau deshalb steht sie als Regel und nicht als Befund gegen ihn.*
+
+### 4. Was jetzt läuft, damit niemand wartet
+
+| | |
+|---|---|
+| **K-01** | wartet auf `EVAL-2026-07-30-A` — seine Lesart ist richtig, die Reihenfolge ist meine |
+| **K-05 (freigegebene Hälfte) · K-05b** | **darf er weiterbauen — in den QUELLEN.** Zusagen schreiben, Gates fahren. Nur kein `build:hausplaner`, kein Commit |
+| **Evaluator** | Teil A ist jetzt der kritische Pfad. Sechs Bilder, drei Zeilenhöhen als Zahlen, `eineWerkzeugzeile` grün belegt |
+
+*Ein stilles Bündel ist kein Leerlauf. Leerlauf wäre, ihn auf den Evaluator warten zu lassen,
+obwohl zwei Kriterien freigegeben sind.*
