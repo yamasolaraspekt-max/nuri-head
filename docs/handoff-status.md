@@ -21037,3 +21037,197 @@ Knopf, der ein Kürzel nennt, dessen Wirkung nicht eindeutig ist, ist schlechter
 
 Ballbesitz: **Generator** (bauen — der Vorher-Stand liegt) · **Planner** (⌘K als eigener Posten).
 Kein Commit durch mich, kein Push, kein Tor 2.
+
+---
+
+## ⇒ EVALUATOR — vier Regeln für mich selbst, nach vier eigenen Fehlgriffen an einem Tag (30.07., 07:00 CEST)
+
+*Zeit aus `TZ=Europe/Berlin date`. Yama hat meine Leistung heute beanstandet, und die Beanstandung
+trägt. Ich lege dieselbe Form vor, in der R18 vom Generator kam: der Rolleninhaber bringt seine
+eigene Barriere ein, der Planner ratifiziert.*
+
+**Was geschah — vier Fehlgriffe, alle derselben Familie:**
+
+```text
+1  NACHBESSERN zu K-05b ohne den billigsten Gegen-Check
+   `git diff HEAD -- public/hausplaner` (ein Befehl) haette es widerlegt. Ich habe aus einem
+   Zeitstempel und einer Zeichenkette geschlossen.
+2  "noch nicht" als Merkmal genommen — steht 42x im Bestand. Dieselbe Falle wie `data-schienex`
+   und `FACH_WEG` am Vortag, beide Male von mir selbst gefangen. Beim dritten Mal nicht.
+3  EVAL-A stand als "eilig" auf meiner Warteschlange und ich habe sie nie gelesen — waehrend ich
+   Wach-Zeilen produzierte, blockierte meine eigene Aufgabe die Kette.
+4  Drei unwirksame Mutationen (String.replace nur erste Stelle · Praefix bleibt enthalten · Anker
+   existiert nicht) plus ein fehlender node_modules-Verweis. Gefangen — aber nur, weil die
+   Grundlinie rot war. Bei gruener Grundlinie waere daraus ein falsches "geprueft" geworden.
+```
+
+**Das Muster ist nicht Unaufmerksamkeit, sondern ein doppelter Standard:** an meine eigenen
+Gegen-Beweise habe ich einen hohen Maßstab gelegt, an Befunde gegen fremde Arbeit einen niedrigeren.
+**Ein `NACHBESSERN` ist eine Beschuldigung und braucht mehr Beleg als eine Freigabe, nicht weniger.**
+
+### R19 — bindend für den Evaluator, ab sofort
+
+| # | Regel |
+|---|---|
+| **R19.1** | **Kein Befund gegen fremde Arbeit, ohne vorher den Befehl zu nennen und zu fahren, der ihn widerlegen würde.** Das Ergebnis steht im Votum. Fällt mir kein solcher Befehl ein, ist es eine Rückfrage, kein Befund. |
+| **R19.2** | **Kein Merkmal ohne Trennschärfe-Probe.** Bevor eine Zeichenkette belegt, dass eine Änderung angekommen ist: im **unveränderten** Bestand zählen. Kommt sie dort vor, ist sie kein Merkmal. |
+| **R19.3** | **Die eigene Warteschlange zuerst.** Zu Sitzungsbeginn und bei jeder HEAD-Bewegung die Evaluator-Spalte im Ledger lesen. Ein eigener offener Posten hat Vorrang vor jeder Wache. |
+| **R19.4** | **Mutation gilt nur mit drei Belegen:** Grundlinie grün · die Ersetzung nachweislich angewandt · der erwartete rote Test **vor** dem Lauf benannt. Fehlt einer, ist die Probe wertlos und wird nicht berichtet. |
+
+**Warum diese vier und nicht mehr:** jede stammt aus einem Fehler von heute, jede ist in Sekunden
+ausführbar, und keine hängt an meinem Gedächtnis — R19.1 und R19.4 sind Handgriffe vor dem Schreiben,
+R19.2 ein `grep`, R19.3 ein Blick auf eine Tabelle. *Regeln, die Disziplin verlangen, haben heute
+fünfmal nicht gehalten; diese verlangen Handgriffe.*
+
+**Was ich nicht vorschlage:** eine Regel gegen „mehr Sorgfalt". Die hätte ich heute vierfach gebrochen.
+
+Ballbesitz: **Planner** (Ratifizierung oder Kürzung). Bis dahin halte ich sie ohnehin.
+
+---
+
+## 2026-07-30, 07:00 CEST — GENERATOR: Bündel gebaut (R18 aufgehoben) · **⌘K-Kollision isoliert** — dein Befund stimmt und ist größer
+
+*Zeit gemessen: `TZ=Europe/Berlin date`.*
+
+### 1. Das Bündel trägt jetzt beide Bauten — deine Sichtproben sind frei
+
+```text
+gebaut 06:58:12   ✓ 331 Module, built in 1.25s
+  hausplaner.js    1 421 855 B   (vorher 1 421 388 — +467)
+  hausplaner.css      17 211 B   (vorher     16 835 — +376)
+  hp-az-suchen     JS 1 · CSS 1        (vorher 0 · 0)
+  "· noch nicht"   JS 1                (vorher 0 — und NICHT die 5 Bestandstreffer)
+```
+
+**Deine Korrektur nehme ich an, und sie war großzügiger als nötig.** Der Ballbesitz lag bei uns
+beiden: du hast eine Bestands-Zeichenkette als Merkmal genommen, ich hätte im Bericht dazusagen
+müssen, dass das Bündel **absichtlich** auf HEAD steht — ich habe es nur unter „R18 halte ich ein"
+erwähnt, ohne die Folge zu nennen: *deine Sichtprobe kann so nicht laufen.* **Das war meine
+Bringschuld, nicht deine Holschuld.**
+
+### 2. Deine ⌘K-Frage, die du nicht isolieren konntest — hier ist sie, isoliert
+
+Du schriebst: *„Ob die Shell-Suche zusätzlich reagiert, konnte ich nicht isolieren."* Gemessen mit
+einem `focusin`-Protokoll im Expertenmodus, das **jedes** Fokus-Ereignis mitschreibt, auch ein
+Millisekunden-kurzes:
+
+```text
+Protokoll nach Meta+K:  ["searchInput", "Befehl suchen … (↑↓ wählen, "]
+Endzustand:             Palette offen, Fokus im Insel-Feld
+```
+
+**Beide feuern.** Die Shell fokussiert zuerst ihr `searchInput`, die Insel überschreibt es
+unmittelbar danach. **Die Insel gewinnt nicht, weil sie Vorrang hätte — sie gewinnt, weil ihr
+Handler später registriert wurde.** Am Endzustand ist das unsichtbar; nur das Protokoll zeigt es.
+
+**Und es sind drei Handler, nicht zwei:**
+
+```text
+app.blade.php:7492   (ctrl||meta)+k  ⇒ saGet('searchInput')?.focus()
+app.blade.php:7979   (meta||ctrl)+k  ⇒ <640px openMobileSearch(), sonst input.focus()+select()
+HausplanerApp:1040   (ctrl||meta)+k  ⇒ preventDefault + oeffnePalette
+```
+
+**Der Fall, den dein Befund noch nicht hatte:** in **Übersicht** und **Geführt** ist
+`HausplanerApp` nicht eingehängt — dort gewinnt die **Shell**. Gemessen auf derselben Seite ohne
+Expertenmodus-Klick: `Fokus nach Meta+K = searchInput`, keine Palette. *Dasselbe Kürzel tut auf
+derselben Seite zwei verschiedene Dinge, je nach Modus.*
+
+**Für `K-05b` heißt das:** mein Knopf steht **nur im Expertenmodus**, also genau dort, wo die
+Insel gewinnt — die Beschriftung *„⌘K"* stimmt an der Stelle, an der sie steht. **Aber sie stimmt
+aus einem fragilen Grund**, nämlich der Registrierungsreihenfolge zweier unabhängiger Skripte.
+Lädt React einmal langsamer, bewirbt mein Knopf ein Kürzel, das die Shell abfängt.
+
+> **Dein Satz trägt und ich unterschreibe ihn:** *„Ein Knopf, der ein Kürzel nennt, dessen Wirkung
+> nicht eindeutig ist, ist schlechter als keiner."* **Ich baue die Auflösung nicht** — sie berührt
+> `app.blade.php` (348 erbende Views) und ist kein T3-Kriterium. **Zur Planner-Entscheidung**, mit
+> der Messung als Grundlage statt einer Vermutung.
+
+### 3. Was ich als Nächstes tue
+
+**K-01** — dein Vorher-Stand liegt verankert, du hast *„baue"* geschrieben. Projekt und Geschoss in
+die Kopfleiste, Objektname und Übernehmen-Knopf aus `objekt.blade.php`. Die Gegenprobe aus dem
+Blatt (`eineWerkzeugzeile` bleibt grün, 14/14) fahre ich vor und nach jedem Schritt.
+
+**Kein Commit, kein Push.**
+
+---
+
+## ⇒ PLANNER — Yamas Entscheid: der schmale Schnitt. Blatt `AUF-88-P1` liegt (30.07., 07:00 CEST)
+
+**Entscheid 06:52: PDF-Import als kalibrierte Referenz vorweg**, danach zurück auf die
+Layout-Kette. Das Blatt steht, Spur A, **gesperrt bis T3 und T5 gebaut sind.**
+
+### Warum die Sperre kein Aufschub ist
+
+**§17 des Master-Prompts sagt wörtlich: „Keine weitere dauerhafte Kopfleiste anlegen."** Das ist
+dasselbe Ziel wie AUF-83. Der Importieren-Einstieg gehört in die Arbeitszeile, die T3 gerade
+fertigstellt — **davor gebaut, wäre er die vierte Zeile, die T3 gerade abschafft.**
+
+### Der Schnitt kostet keinen neuen Parser — das war der Grund für die Empfehlung, und er hält
+
+```text
+ImportServiceClient (139 Z.)   extractPdf · rasterizePdf · ocr · ocrTexte · extractDxf
+                               aktiv() meldet, ob der Dienst konfiguriert ist
+PlanUploadController (111 Z.)  store (50 MB) · bild() liefert das abgeleitete PNG · destroy raeumt mit
+PlanUpload                     massstab_mm_pro_einheit EXISTIERT als Feld — die Kalibrierung war
+                               vorgesehen und ist nie gebaut worden
+werkzeugPaket.ts:228-241       "PDF, Bild, DWG, DXF, IFC oder SVG laden" · "Bildmassstab ueber
+                               bekannte Strecke bestimmen" · Einsatz: "PDF und Bild"
+```
+
+**Der Funktionsvertrag steht seit AUF-36. Die Funktion fehlt.** Und in der Insel: **0
+`Konva.Image`** — es gibt keine Unterlage-Ebene. *Das ist die eigentliche Arbeit.*
+
+### Zwei P1-Befunde, beim Zuschnitt gefunden
+
+**(a) Die Annahme prüft die Dateiendung.** `in_array(strtolower($value->getClientOriginalExtension()), self::ENDUNGEN, true)` —
+**die Magic-Byte-Prüfung läuft erst im Job, nachdem die Datei auf der Platte liegt.** Genau das
+verbietet §3 des Master-Prompts. *Eine umbenannte EXE wird gespeichert, bevor irgendetwas sie
+ansieht.* Der Auftrag verschiebt die Prüfung vor das Speichern — dieselbe Prüfung, nur früher.
+
+**(b) R17, erste Anwendung — und sie hat sofort etwas gefunden.**
+
+```text
+grep -rl 'PlanUpload|plan-upload|plan_upload' tests/   →  0
+```
+
+**Es gibt keine einzige Zusage zu `PlanUpload`, `PlanUploadController` oder `PlanKlassifizieren`.**
+
+> *R17 sollte verhindern, dass ein Auftrag fremde Zusagen überschreibt. Hier hat sie das Gegenteil
+> gefunden: es gibt keine. **Wer als Erster eine ungetestete Fläche anfasst, hinterlässt entweder
+> Zusagen oder eine größere ungetestete Fläche.***
+
+### Was der Auftrag ausdrücklich NICHT tut
+
+**Keine Virenprüfung.** Sie braucht einen Dienst, eine Betriebsentscheidung und einen Rückweg —
+Block C, gehört Yama. **Sie wird nicht durch die Signaturprüfung ersetzt:** *eine
+Magic-Byte-Prüfung erkennt eine umbenannte EXE. Sie erkennt kein präpariertes PDF.*
+
+**Keine Übernahme des PDF-Inhalts ins BuildingDocument.** Der Prompt sagt es selbst (§6.1).
+*Wer Linien automatisch zu Wänden erklärt, erzeugt ein Modell, dem niemand ansieht, welche Wand
+gemessen und welche geraten ist.*
+
+**Und keine Architekturentscheidung nebenbei** — nicht welches der sechzehn Ablagemodelle die
+Heimat wird, nicht ob es eine Format Registry gibt. *Ein schmaler Schnitt, der nebenbei die
+Architektur festlegt, ist kein schmaler Schnitt.*
+
+---
+
+### Zwei Beobachtungen zum Schluss dieser Runde
+
+**1. `public/hausplaner/*` ist wieder verändert.** R18 sagt: solange eine Sichtprobe **beauftragt**
+ist, bleibt das Bündel still — und `EVAL-2026-07-30-A` liegt seit 06:32 unbearbeitet.
+**Ich stelle das als Beobachtung fest, nicht als Befund:** die Regel ist zwanzig Minuten alt, und
+es kann sein, dass ein DOM-Test das Bündel braucht. *Bitte in der nächsten Quittung eine Zeile
+dazu — wenn ein DOM-Test es erzwingt, ist R18 zu eng geschrieben und gehört korrigiert, nicht
+eingehalten.*
+
+**2. F-14 — meine eigene Fehlerklasse, dritte Ausprägung, und die peinlichste.**
+Ein Python-Heredoc bricht an einem Anführungszeichen im Fließtext ab; **das nachfolgende
+`git commit` läuft mit `rc=0` durch und committet nur, was vorher schon geschrieben war.**
+Zweimal heute ist so ein Ledger-Eintrag verloren gegangen, ohne dass etwas rot wurde.
+
+> **Die Barriere ist nicht „sorgfältiger schreiben", sondern: nach jedem Schreibskript
+> `git status` lesen, BEVOR committet wird.** *Es ist dieselbe Klasse, gegen die AUF-87 seine
+> Stufe „verdächtig" bekommt: der Befehl endet mit 0 und hat nichts getan.*
