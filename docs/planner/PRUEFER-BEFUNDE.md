@@ -206,9 +206,10 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-036 | `ticket-code-reuse/references/…md` | P3 | 2 von 59 Skill-Pfaden zeigen auf den Vor-Port-Zustand | offen | — |
 | PB-037 | `buehnenBreite.test.ts:23` | ~~P1~~ | Filter auf die Subtraktion geschärft, Rechnung unberührt, Gate 1409/1409 | **ERLEDIGT** | 30.07. |
 | PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt — offen nur: Passwort wechseln | Repo **ERLEDIGT** · Yama | 30.07. |
-| PB-040 | `db` + Ledger | Eine gelaufene Migration lag in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | **Teil A ERLEDIGT** (`fba60e6e`, 457+/17−) · Teil B offen | Generator |
+| PB-040 | `db` + Ledger | Eine gelaufene Migration lag in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | **ERLEDIGT** (A: `fba60e6e` · B: Ledger 12:28) | — |
 | PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4 trägt die Zahlen von **vor** der 08:12-Korrektur; F-04s Barriere-Zelle ist überholt; `bestand.sh`/`VORLAGE.md` fehlen | **P2** | offen | Planner |
 | PB-043 | `ChatController.php:70,281` + `config/logging.php:21,57` | Zwei unbedingte `Log::info` in einem gepollten Endpunkt schreiben **64 086** Zeilen in ein **212 MB** grosses, nicht rotierendes Log | **P2** | offen | Planner |
+| PB-044 | `--env=testing` ohne `.env.testing` | Ein Schalter, der auf die Test-Umgebung zeigt, trifft **stillschweigend die Arbeits-DB** | **P3** | offen | Planner |
 
 ---
 
@@ -4136,6 +4137,13 @@ Der GENERATOR-TAKT prueft VOR dem naechsten Auftrag:
 > **Teil B bleibt offen:** Ledger unverändert bei **25 282** Zeilen, **kein GENERATOR-BERICHT**. *Der
 > Evaluator hat jetzt einen SHA, aber keine Exit-Codes und keine Fertigmeldung.* **Ballbesitz weiter
 > Generator** — für den Bericht, nicht mehr für die Sicherung.
+>
+> **12:28 CEST — Teil B ebenfalls ERLEDIGT, PB-040 damit geschlossen.** Der Bericht steht im Ledger
+> (Z. 25 285 ff.): `Basis-SHA 9179edba` · `Generator-SHA fba60e6e` · **7 Dateien / 457 / 17** ·
+> Exit-Codes `12/0`, `801/0`, `tsc 0`, `1410`, `29` · ausdrücklich **TEILUMSETZUNG** mit K-03/K-05/K-07
+> als offen benannt · **Ballbesitz Evaluator**, kein Selbst-Grün. *Seine 801 gegen 789 sind dieselbe
+> Zahl, die ich in Runde 46 unabhängig gemessen habe — zwei Messungen, ein Wert.* **Der Bericht liegt
+> noch im Arbeitsbaum, nicht im Commit; das melde ich nicht erneut als Befund, sondern notiere es.**
 
 ---
 
@@ -4273,5 +4281,45 @@ nicht als Leck; die Einordnung gehört dem Planner.*
 Umgebung, und die dortige habe ich nicht gesehen und werde sie nicht ansehen. **Die Messung gilt für
 diesen Rechner; die Vorgabe im Code gilt überall, wo nichts anderes gesetzt ist.** *Das ist der
 Unterschied zwischen einem Befund und einer Warnung — und der Grund, warum hier P2 steht und nicht P1.*
+
+**Ballbesitz: Planner.**
+
+---
+
+## 67. Runde 65 — **PB-044 · P3: `--env=testing` zeigt auf die Test-Umgebung und trifft die Arbeits-DB**
+
+**Gemessen 12:28 CEST gegen `5dd9ff63`.** *Anlass ist die Selbstoffenlegung des Generators in seinem
+AUF-88-Bericht. **Der Befund richtet sich nicht gegen ihn** — er hat den Griff erkannt, gemeldet und
+den sauberen Weg danach genommen, und additive Migrationen auf der Dev-DB sind erlaubt. Der Befund
+richtet sich gegen den Schalter.*
+
+```text
+.env.testing            FEHLT
+.env.example            vorhanden
+
+phpunit.xml:27  DB_CONNECTION  mysql            force="true"
+phpunit.xml:28  DB_DATABASE    ticket_testing   force="true"
+```
+
+**Die Test-DB ist genau an einer Stelle erzwungen: in `phpunit.xml`.** Wer über `phpunit`/`artisan
+test` geht, kann die Arbeits-DB nicht treffen — **wer über `artisan <befehl> --env=testing` geht, ist
+außerhalb dieser Sperre.** Ohne `.env.testing` fällt Laravel auf `.env` zurück, also auf `ticket`.
+
+> **Der Schalter sagt „testing" und bedeutet „Arbeits-DB".** *Das ist die Klasse „stille Rückfallebene":
+> nicht ein Fehler, den man macht, sondern einer, den das Werkzeug anbietet.*
+
+**Warum P3 und nicht höher:** die Sperre für den Regelfall (Tests) hält, und für Migrationen gilt die
+Live-Klarstellung — additiv auf der Dev-DB ist erlaubt. **Die Schwere liegt nicht im Schaden, sondern
+in der Verwechselbarkeit.** *Mich selbst hat heute derselbe Bereich erwischt: mein `migrate:status` hat
+`ticket` gelesen (Abschnitt 64) — zwei Rollen, dieselbe Kante, an einem Tag.*
+
+**Vorschlag, mechanisch statt appellativ** — der Planner entscheidet:
+
+```text
+Entweder  .env.testing anlegen, das DB_DATABASE=ticket_testing setzt
+   -> dann bedeutet --env=testing, was es sagt
+oder      --env=testing in den Regeln ausdruecklich verbieten
+   -> Tests und Messungen laufen nur ueber phpunit/artisan test
+```
 
 **Ballbesitz: Planner.**
