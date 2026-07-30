@@ -20,7 +20,12 @@ import { leseObjektkopf, pillenText, kopfzeile, OBJEKTKOPF_ATTRIBUT } from '../a
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string =>
   s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^\s*\/\/.*$/gm, '');
-const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const app = ohneKommentare((readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
+  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
+  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
+  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
+  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
+  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8')));
 /** AUF-83-T3-N1 — der Übernehmen-Knopf, die Staleness-Pille und ihr `disabled`-Zustand wohnen seit
  *  dem Überlauf-Umbau hier, nicht mehr in `HausplanerApp.tsx`. Der Objektname bleibt dort. */
 const ueberlauf = ohneKommentare(readFileSync(join(hier, '../app/dashboard/ObjektkopfUeberlauf.tsx'), 'utf8'));
@@ -235,11 +240,21 @@ test('K-01 (Auflage): der Bau hat KEINE Zeile hinzugefügt — über dem Zeichen
   // nimmt Platz aus Zeile 1 — nicht aus der Höhe der Bühne."* Der Objektkopf ist in Zeile 1
   // eingezogen; die Zahl der Zeilen ist unverändert. Kommt eine hinzu, geht sie rot — egal ob
   // der Sollwert am Ende drei heißt oder vier.
-  const von = app.indexOf("<div style={{ fontFamily: 'Inter");
-  const bis = app.indexOf('<div ref={inhaltRef}');
-  assert.ok(von > 0 && bis > von, 'die Anker der Zeilenzählung stimmen nicht mehr — die Zusage misst Leere');
-  const geschwister = app.slice(von, bis).split('\n')
-    .filter((z) => /^ {6}<(div|button|span|form)\b/.test(z) || /^ {6}\{[a-zA-Z]/.test(z));
+  //
+  // **AUF-48 Scheibe 4a: die vier Zeilen stehen jetzt in ZWEI Dateien.** Drei sind mit dem
+  // Kopfrahmen ausgezogen, die Werkzeuggruppen-Zeile ist geblieben. **Gezählt wird weiterhin die
+  // Summe** — hätte ich nur noch die Hauptfunktion gezählt, meldete die Zusage „drei Zeilen
+  // verschwunden", und wer eine vierte im Kopfrahmen einzöge, käme ungesehen durch.
+  const zeilen = (text: string, von: number, bis: number): string[] => {
+    assert.ok(von >= 0 && bis > von, 'die Anker der Zeilenzählung stimmen nicht mehr — die Zusage misst Leere');
+    return text.slice(von, bis).split('\n')
+      .filter((z) => /^ {6}<(div|button|span|form)\b/.test(z) || /^ {6}\{[a-zA-Z]/.test(z));
+  };
+  const kopf = ohneKommentare(readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8'));
+  const rein = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+  const imKopfrahmen = zeilen(kopf, kopf.indexOf('    <>'), kopf.indexOf('    </>'));
+  const inDerApp = zeilen(rein, rein.indexOf('<Kopfrahmen'), rein.indexOf('<div ref={inhaltRef}'));
+  const geschwister = [...imKopfrahmen, ...inDerApp];
   assert.equal(geschwister.length, 4,
-    `${geschwister.length} Elemente über dem Zeichenbereich statt vier:\n${geschwister.map((z) => z.trim().slice(0, 70)).join('\n')}`);
+    `${geschwister.length} Elemente über dem Zeichenbereich statt vier (${imKopfrahmen.length} im Kopfrahmen, ${inDerApp.length} in der Hauptfunktion):\n${geschwister.map((z) => z.trim().slice(0, 70)).join('\n')}`);
 });

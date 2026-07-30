@@ -16,7 +16,12 @@ import {
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const modul = readFileSync(join(hier, '../app/dashboard/buehnenBreite.ts'), 'utf8');
-const app = readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8');
+const app = (readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
+  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
+  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
+  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
+  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
+  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8'));
 
 // --- K-01: die Fensterkonstante ist fort ---------------------------------------------------------
 

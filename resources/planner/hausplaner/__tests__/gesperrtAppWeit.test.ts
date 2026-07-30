@@ -37,7 +37,9 @@ const FLAECHEN = [
   { name: 'Berechnen', datei: 'EngineFlaeche.tsx', muster: /background: fehlt\.length > 0 \? GESPERRT_GRUND/ },
   { name: 'Fachfeld', datei: 'FachFlaeche.tsx', muster: /background: GESPERRT_GRUND/ },
   // Sechste Fläche: stand nicht in der Inventur, beim Messen im Browser aufgefallen.
-  { name: 'Speichern', datei: 'HausplanerApp.tsx', muster: /background: anzeige\.gesperrt \? GESPERRT_GRUND : T\.brand/ },
+  // AUF-48 Scheibe 4a: der Speichern-Knopf ist mit der Werkzeugzeile in den Kopfrahmen gezogen.
+  // **Die Sperr-Fassung ist zeichengleich dieselbe** — nur die Datei ist eine andere.
+  { name: 'Speichern', datei: 'dashboard/Kopfrahmen.tsx', muster: /background: anzeige\.gesperrt \? GESPERRT_GRUND : T\.brand/ },
 ] as const;
 
 // --- K3: eine Quelle ----------------------------------------------------------------------------
@@ -127,7 +129,7 @@ test('K6: jede gesperrte Fläche trägt ein nicht-farbliches, nicht zeigerabhän
     ['Menü-Eintrag', 'dashboard/WerkzeugGruppenMenue.tsx', /aria-disabled=\{!zustand\.enabled\}/],
     ['Berechnen', 'EngineFlaeche.tsx', /disabled=\{fehlt\.length > 0\}/],
     ['Fachfeld', 'FachFlaeche.tsx', /readOnly disabled/],
-    ['Speichern', 'HausplanerApp.tsx', /disabled=\{anzeige\.gesperrt\}/],
+    ['Speichern', 'dashboard/Kopfrahmen.tsx', /disabled=\{anzeige\.gesperrt\}/],
   ];
   for (const [name, datei, muster] of belege) {
     assert.match(lies(datei), muster, `${name}: kein Zustandsattribut — nur Farbe und Zeiger`);

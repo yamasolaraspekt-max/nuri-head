@@ -19,7 +19,12 @@ import { opKnopfBild, opZustand, unterschiede } from '../app/dashboard/opKnopfZu
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const app = ohneKommentare((readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
+  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
+  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
+  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
+  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
+  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8')));
 const regel = ohneKommentare(readFileSync(join(hier, '../app/dashboard/opKnopfZustand.ts'), 'utf8'));
 
 const BEDIENBAR = opKnopfBild(false, false);
@@ -74,7 +79,13 @@ test('keine Sperre ändert sich: die Regel liest `gesperrt`, sie ermittelt es ni
 test('keine Farbwerte in der Regel — sie liefert Token', () => {
   assert.doesNotMatch(regel, /#[0-9a-fA-F]{3,8}\b|rgba?\(/);
   assert.doesNotMatch(regel, /\bT\./);
-  assert.match(app, /const OP_TOKEN: Record<string, string>/);
+  // AUF-48 Scheibe 4a: die Token-Tabelle ist nach `studioDaten.ts` gezogen — sie hatte zwei
+  // Nutzer (`opStil` im Kopfrahmen, `knopf()` in der Hauptfunktion) und darf nicht doppelt
+  // stehen. **Die gepruefte Eigenschaft ist unveraendert:** die Regel liefert Token-NAMEN, und
+  // es gibt genau eine Tabelle, die daraus Farben macht.
+  const tokenTabelle = readFileSync(join(hier, '../app/studioDaten.ts'), 'utf8');
+  assert.match(tokenTabelle, /export const OP_TOKEN: Record<string, string>/);
+  assert.doesNotMatch(app, /const OP_TOKEN\b/, 'die Token-Tabelle steht ein zweites Mal im Planer');
 });
 
 // --- Die Dublette ist gewichen ------------------------------------------------------------------

@@ -24,7 +24,12 @@ const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string =>
   s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^\s*\/\/.*$/gm, '');
 const leiste = ohneKommentare(readFileSync(join(hier, '../app/dashboard/ReiterLeiste.tsx'), 'utf8'));
-const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const app = ohneKommentare((readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
+  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
+  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
+  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
+  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
+  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8')));
 
 // --- Das Merkmal existiert und ist optional -------------------------------------------------------
 
@@ -53,8 +58,13 @@ test('K-05 (Auflage): die beiden anderen Nutzer setzen es NICHT — sie sind unb
   // **Dritte Ausprägung derselben Klasse bei mir** (nach `hp-ef-wert` ⊂ `hp-ef-wertzeile` und
   // `data-schiene` ⊂ `data-schienex`): *ein Anker, den niemand gegengeprüft hat, misst Leere.*
   // Deshalb steht unten zuerst, dass es die drei Stellen überhaupt gibt.
-  const stellen = [...app.matchAll(/reiter=\{(\w+)\}/g)].map((m) => m[1]);
-  assert.deepEqual(stellen, ['bereichReiter', 'SCHIENEN_REITER', 'PANEL_TABS'],
+  // **AUF-48 Scheibe 4a: sortiert statt in Reihenfolge.** Der Bereich-Waehler ist in den
+  // Kopfrahmen gezogen; `app` ist seither die Verkettung zweier Dateien, und die Textreihenfolge
+  // waere ein Artefakt dieser Verkettung, keine Aussage ueber den Code. **Die Zusage selbst
+  // bleibt so scharf wie vorher:** es sind GENAU diese drei Nutzer — einer mehr oder weniger
+  // faellt weiterhin auf.
+  const stellen = [...app.matchAll(/reiter=\{(\w+)\}/g)].map((m) => m[1]).sort();
+  assert.deepEqual(stellen, ['PANEL_TABS', 'SCHIENEN_REITER', 'bereichReiter'],
     'die drei Nutzer der geteilten Leiste sind nicht mehr die erwarteten');
 
   // Beide anderen führen ihre Reiter in einer eigenen Datei — dort entstünde das Merkmal.

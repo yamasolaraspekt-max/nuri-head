@@ -16,7 +16,12 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const hier = dirname(fileURLToPath(import.meta.url));
-const app = readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8');
+const app = (readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
+  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
+  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
+  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
+  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
+  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8'));
 const navi = readFileSync(join(hier, '../app/FaehigkeitenNavi.tsx'), 'utf8');
 // AUF-27: die Reiterzeile steht seit dem Schienen-Umbau in der gemeinsamen `ReiterLeiste` — eine
 // Leiste, zwei Benutzer. Der Messpunkt wandert mit; die Zusage bleibt dieselbe.

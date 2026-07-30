@@ -740,7 +740,12 @@ test('T2/K-03: der EINZIGARTIGE Inhalt der Objektleiste ist NICHT verloren — e
   // sie zu gewinnen), der Uebernehmen-Knopf und die Staleness-Pille sind seither hinter einem
   // Ueberlauf-Knopf in einer eigenen Datei (`ObjektkopfUeberlauf.tsx`) — nicht geloescht, nur ein
   // zweites Mal umgezogen. Der Objektname bleibt sichtbar in `HausplanerApp.tsx`.
-  const app = readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8');
+  const app = (readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
+  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
+  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
+  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
+  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
+  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8'));
   const ueberlauf = readFileSync(join(hier, '../app/dashboard/ObjektkopfUeberlauf.tsx'), 'utf8');
   assert.match(app, /className="hp-ok-name"/, 'die Objektidentitaet ist auf dem Weg verloren gegangen');
   assert.match(ueberlauf, /In Auslegung übernehmen/, 'der Uebernehmen-Knopf ist auf dem Weg verloren gegangen');

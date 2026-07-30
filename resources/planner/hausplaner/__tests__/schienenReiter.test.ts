@@ -23,7 +23,12 @@ import { alleFaehigkeiten } from '../app/tools/faehigkeiten';
 const hier = dirname(fileURLToPath(import.meta.url));
 /** Siehe `leisteAusZonen.test.ts`: erklärende Kommentare dürfen den Befund nicht auslösen. */
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-const appQuelle = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const appQuelle = ohneKommentare((readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
+  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
+  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
+  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
+  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
+  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8')));
 const naviQuelle = ohneKommentare(readFileSync(join(hier, '../app/FaehigkeitenNavi.tsx'), 'utf8'));
 
 // --- K3: genau drei Reiter, feste Reihenfolge, Standard `werkzeuge` ----------------------------

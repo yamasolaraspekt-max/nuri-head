@@ -126,7 +126,12 @@ test('K6: mit aktivem Geschoss nennt der Wegweiser das Geschoss nicht mehr', () 
 test('K6: der Wegweiser hängt am ORT, nicht mehr an einem hartkodierten Grund', () => {
   // AUF-57 hat genau diese Zeile ersetzt: sie war auf den einen Grund festgenagelt, der nie
   // eintritt (eine Szene hat immer ein Geschoss) — der Wegweiser konnte also nie erscheinen.
-  const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+  const app = ohneKommentare((readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
+  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
+  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
+  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
+  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
+  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8')));
   assert.doesNotMatch(app, /wegweiser\?\.grund === 'Kein aktives Geschoss\.'/, 'der Grund ist wieder hartkodiert');
   assert.match(app, /wegweiser\?\.ort === 'geschoss' \? wegweiser\.satz : null/);
   assert.match(app, /wegweiser\?\.ort === 'schiene' &&/);
@@ -146,7 +151,12 @@ test('die Aufforderung steht bei der Vorbedingung — kein zweites Register', ()
 test('K7: „Markieren" braucht keine Optionen — es ist nicht in Entwicklung', () => {
   assert.equal(brauchtOptionen('auswahl'), false, 'Zeiger und Auswahlmodus sind Gesten, keine Optionen');
   assert.equal(brauchtOptionen('wand'), true, 'Wandtyp, Höhe, Dicke sind Optionen');
-  const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+  const app = ohneKommentare((readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
+  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
+  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
+  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
+  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
+  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8')));
   assert.match(app, /brauchtOptionen\(werkzeug\) \?/);
   assert.match(app, /Dieses Werkzeug braucht keine Optionen\./);
 });
