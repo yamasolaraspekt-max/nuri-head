@@ -2039,3 +2039,53 @@ unterscheiden; das ist eine Beobachtung, keine Messung.*
 | **L6 Workflow** | **PB-022** — wer der Regel folgt, liest neun Tage alte Lage |
 
 **Ballbesitz: Planner.**
+
+---
+
+## 28. Die Prüffläche, vollständig gezählt — und wie viel davon geprüft ist
+
+**Yamas Auftrag, 30.07.: „ja weiter prüfen alles raus finden und auflisten."** Damit ist der Umfang
+nicht mehr `docs/planner/`, sondern alles. **Bevor ich weitermache, die Zahl, gegen die der
+Fortschritt gemessen wird** — sonst ist „alles" eine Absicht ohne Nenner.
+
+```text
+docs/planner/            65   Papiere und Daten
+docs/auftraege/          91   Auftragsblaetter, Tafel, Archiv, Schema, Fehlerklassen
+docs/ (Wurzel)          192   Fahrplaene, Inventuren, Konzepte, Befunde
+docs/agents/             15   Rollen und Regeln (zwei Saetze, siehe PB-014)
+docs/architektur/         4   Bauordnung, UI-Bauordnung, Gap-Analysen
+Skills                   19   .claude/skills/ (16) + ~/.claude/skills/ (3)
+                        ---
+SUMME                   386   Flaechen
+```
+
+**Geprüft in 20 Runden: 20 Flächen** — 9 Papiere, 11 Verfahrensflächen. **Das sind 5 %.**
+
+**Die zwei größten sind ungeprüft und werden es teilweise bleiben:**
+
+| Datei | Zeilen | Lage |
+|---|--:|---|
+| `docs/handoff-status.md` | **24 218** | das Ledger. **Nach `docs/agents/regeln/kern.md` Z5 ausdrücklich „Historie und Beweisarchiv — kein Regelwerk."** Es Zeile für Zeile zu prüfen wäre falsch: ein Beweisarchiv darf alte Zustände enthalten. Prüfbar ist nur, wo es als Regel *benutzt* wird |
+| `docs/abnahme-evaluator-haertung-2026-07-25.md` | **3 111** | die Härtungsakte des Evaluators — **fremde Rolle.** Sie zu prüfen hieße, den Prüfer über den Evaluator zu setzen. Nur auf Yamas ausdrückliches Wort |
+
+### Die Reihenfolge, in der ich weitergehe
+
+**Nach Hebel, nicht nach Verzeichnis** — begründet mit dem, was 20 Runden gezeigt haben: *elf
+Befunde trafen Papier, neun das Verfahren, und sechs der sieben klassenlosen kamen aus dem
+Verfahren.*
+
+1. **`docs/architektur/` (4 Dateien)** — Bauordnung und UI-Bauordnung sind in `CLAUDE.md` als
+   verbindlich benannt. Kleinste Fläche mit der höchsten Bindung.
+2. **`docs/agents/` Restbestand (13 ungeprüfte)** — nach PB-013/PB-014 ist dort ein Strukturfehler
+   belegt; die Einzeldateien sind noch nicht gegen den Bestand gehalten.
+3. **`docs/auftraege/` Register (Tafel-Archiv, Fehlerklassen, Schema — teils geprüft)** und die
+   **15 aktiven Blätter** einzeln.
+4. **`docs/` Wurzel, nach Bindungsgrad sortiert:** zuerst die, auf die `CLAUDE.md` zeigt
+   (`systemoptimierung-fahrplan.md`, `architektur-entscheidungen.md`, `STRAENGE.md`), dann der Rest.
+5. **`docs/planner/` Restbestand** — 56 ungeprüfte, davon 23 ohne lebenden Leser (`PB-006`).
+   *Niedrigster Hebel: sechs von neun geprüften waren sauber.*
+6. **Die zehn vorhandenen Skills** — inhaltlich, nicht nur auf Existenz (`PB-021` hat nur gezählt).
+
+**Was ich dabei nicht tue:** Vollständigkeit behaupten, solange sie nicht gemessen ist. **Jede Runde
+nennt ab jetzt ihren Stand an dieser Zahl** — geprüft von 386. *Ein Prüfbericht ohne Nenner ist
+dieselbe Aussage wie „viel getestet".*
