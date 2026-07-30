@@ -174,6 +174,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-021 | `CLAUDE.md` (Skill-Pflicht) | **P2** | 12 von 22 vorgeschriebenen Fach-Linsen existieren an keinem der beiden Skill-Orte | offen | — |
 | PB-019 | `docs/auftraege/` (aktive Blätter) | **P2** | 6 von 15 aktiven Blättern ohne YAML-Kopf — der Validator findet dort nichts zu fahren | offen | — |
 | PB-020 | `AUFTRAGSSCHEMA.md` | P3 | Beispiel nennt `zaehle-statische-stile.sh` — die Datei gibt es nicht | offen | — |
 | PB-018 | `k01n1b.mjs` | **P2** | Klartext-Zugang im Wurzelverzeichnis; `.gitignore`-Muster greifen nur bei passendem Namen | **ANGENOMMEN** | 30.07. 09:28 — Sicherheitsposten an Yama: `.gitignore` + `mv`; liegt ausserhalb meiner Schreibflaeche |
@@ -1863,5 +1864,81 @@ Gedächtnis** (Runde 13).
 **Acht Fehler, alle in der Extraktion, keiner im Urteil.** Gefangen hat sie nie die Sorgfalt,
 sondern immer eine zweite Zahl, gegen die die erste stimmen musste. *Wenn aus dieser Bilanz eine
 Regel für die Prüfrolle folgt, dann diese.*
+
+**Ballbesitz: Planner.**
+
+---
+
+## 26. Runde 19 (30.07.) — die Skill-Pflicht aus `CLAUDE.md`
+
+**Gemessen gegen `9589b8f5`.** Fläche: die Dauerregel *„SKILL-PFLICHT FÜR ALLE ROLLEN (dauerhaft, ab
+2026-07-23)"* in `CLAUDE.md` — sie bindet Generator und Evaluator ausdrücklich, nicht nur den
+Planner.
+
+### PB-021 · P2 · Zwölf der zweiundzwanzig vorgeschriebenen Fach-Linsen gibt es nicht
+
+```yaml
+befund:
+  id: PB-021
+  datei: "CLAUDE.md (Abschnitt SKILL-PFLICHT FUER ALLE ROLLEN)"
+  stelle: "die Aufzaehlung 'Fachthema -> passende Meister-Linse'"
+  behauptung: |
+    "Fachthema -> passende Meister-Linse (Dach->dachdeckermeister/zimmermannmeister,
+    Heizung/Sanitaer->heizung-sanitaer-meister, Energie->energieberater,
+    Statik->statiker, Elektro->elektromeister, PV->pv-planer, TGA->tga-planer,
+    Bad->bad-planer, Kueche->kuechenplaner, Mauerwerk->maurer, Fliesen->fliesenleger,
+    Tueren/Moebel->schreiner, Oberflaechen->maler, Entwurf->architekt,
+    Darstellung->technischer-zeichner); Code -> software-architekt /
+    frontend-entwickler / backend-entwickler; plus governance-zyklus und ux-design."
+  gemessen: |
+    An BEIDEN Orten gesucht (.claude/skills/ und ~/.claude/skills/):
+      vorhanden  10 von 22
+      fehlen     12:
+        heizung-sanitaer-meister · energieberater · elektromeister · pv-planer
+        tga-planer · bad-planer · kuechenplaner · fliesenleger · schreiner
+        maler · architekt · technischer-zeichner
+    Vorhanden sind: bauplaner-3d · dachdeckermeister · zimmermannmeister · statiker
+      · maurer · software-architekt · frontend-entwickler · backend-entwickler
+      · governance-zyklus · ux-design
+  befehl: |
+    for s in <die 22 Namen>; do
+      { [ -d ".claude/skills/$s" ] || [ -d "$HOME/.claude/skills/$s" ]; } || echo "FEHLT $s"
+    done
+  commit: "9589b8f5"
+  schwere: P2
+  wirkung: |
+    Die Regel sagt "IMMER" und "verpflichtet". Bei zwoelf von zweiundzwanzig Themen
+    kann ihr niemand folgen - und was dann passiert, ist die eigentliche Kostenstelle:
+    entweder eine Instanz meldet "Skill nicht gefunden" und arbeitet ohne Fach-Linse
+    weiter, oder sie haelt die Regel fuer erfuellt, weil sie den Namen im
+    Auftragstext gelesen hat. Beides sieht im Bericht gleich aus.
+    Betroffen sind ausgerechnet die Domaenen, die Yamas Geschaeft ausmachen:
+    Heizung/Sanitaer, Energieberatung, PV, TGA, Elektro.
+  eigenarbeit: nein
+```
+
+**Zwei Lesarten, und der Planner muss sie trennen:**
+
+| Lesart | Folge |
+|---|---|
+| die zwölf sind **geplant, aber ungebaut** | dann ist die Regel eine Absichtserklärung, und das gehört in ihren Text — heute liest sie sich wie ein Bestand |
+| die zwölf sind **aufgegeben** | dann gehören die Namen aus `CLAUDE.md` heraus, sonst sucht sie jede neue Instanz erneut |
+
+**Erledigt wenn:** *jeder in `CLAUDE.md` genannte Skill-Name ist unter einem der beiden
+Skill-Verzeichnisse auffindbar — oder der Abschnitt trennt sichtbar zwischen „vorhanden" und
+„vorgesehen".*
+
+**Was ich NICHT als Befund schreibe:** dass die zehn vorhandenen Skills inhaltlich taugen. **Das
+habe ich nicht gemessen** — ich habe ihre Existenz geprüft, nicht ihren Inhalt. *Ein Befund über
+Qualität ohne Messung wäre genau die Sorte, die dieses Register nicht führt.*
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | **PB-021** — zwölf genannte Artefakte existieren nicht |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | keine Beanstandung — die zehn vorhandenen liegen sauber in zwei Ebenen (Projekt/Benutzer) |
+| **L4 Kausalität** | **PB-021** — die Kette *Pflicht → Linse → Fachurteil* endet bei zwölf Themen am ersten Glied |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | **PB-021** — wer der Regel folgt, sucht zwölfmal vergeblich und weiß nicht, ob er weitermachen darf |
 
 **Ballbesitz: Planner.**
