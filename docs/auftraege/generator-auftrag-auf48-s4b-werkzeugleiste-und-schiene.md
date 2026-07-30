@@ -131,3 +131,51 @@ statt die Sache.**
       ist nicht "wahrscheinlich richtig", sondern ununterscheidbar von einer Messung an der
       Login-Maske. *Herkunft: Prüfer, 30.07. 20:3x, an zwei eigenen Fehlmessungen belegt.*
 ```
+
+
+---
+
+## KORREKTUR 21:20 — dieses Blatt war ueberholt, bevor es gezogen wurde
+
+**Der Generator hat beim Bau von S4a einen Fehler in MEINEM Anker gefunden** (P-04 seines
+Berichts): *„Bedien-Werkzeugleiste = letzter Block vor der Buehne" stimmt nicht — zwei Bloecke
+folgen.* **Er hat recht, und die Folge ist groesser als der Befund:**
+
+Mit `cdc320c0` ist die **Bedien-Werkzeugleiste selbst nach `dashboard/Kopfrahmen.tsx` umgezogen.**
+Der Anfangs-Anker dieses Blattes — `{/* Bedien-Werkzeugleiste … */}` — **existiert in
+`HausplanerApp.tsx` nicht mehr.** Wer das Blatt so zieht, sucht einen Anker, der weg ist.
+
+### Neu gemessen gegen `cdc320c0`
+
+```text
+Datei gesamt        2175   (von 2382)
+Inline-Stellen      118    (von 133 — 15 sind mit dem Kopfrahmen gegangen)
+
+S4b  Themen-Gruppen + Kontext-Optionen + Schiene   1121–1341   221 Z.   20 Inline
+S4c  die Buehne                                    1342–1635   294 Z.    0 Inline
+S4d  Eigenschaften-Panel                           1636–2048   413 Z.   67 Inline
+S4e  Statusleiste + Command-Palette                2049–2175   127 Z.   20 Inline
+```
+
+### Die NEUEN Naehte dieses Blattes — wieder ueber Namen
+
+| Naht | Anker |
+|---|---|
+| Anfang | `{/* AUF-34: die Themen-Gruppen des GEWÄHLTEN Arbeitsbereichs …` |
+| Ende | die Zeile **vor** `<Stage` |
+
+Enthalten: die Themen-Gruppen-Zeile · die Kontext-Options-Leiste (§19/UI-4) · die Planer-Schiene
+mit ihren drei Reitern und dem Fuss. **Nicht mehr enthalten:** die Bedien-Werkzeugleiste — die
+ist in `Kopfrahmen.tsx` und dort bereits verriegelt.
+
+**K-01 (Inline-Summe) aendert sich entsprechend:** die Summe ueber `HausplanerApp.tsx` +
+`Kopfrahmen.tsx` + das neue Modul muss **133** bleiben, nicht 118. *Die 15 Stellen im Kopfrahmen
+zaehlen mit — sonst misst die Zusage nur noch einen Ausschnitt und wird gruen, weil Inhalt eine
+Datei weiter gezogen ist. Genau diese Falle hat der Generator in S4a fuer 24 geerbte Zusagen
+selbst geschlossen.*
+
+### Und die Lehre, die groesser ist als dieses Blatt
+
+**Ein Blatt, das drei Scheiben vorausgeschnitten wird, veraltet an seinen Ankern.** „Immer ein
+Blatt voraus" bleibt richtig — aber ab jetzt gilt: **vor dem Ziehen wird der Anfangs-Anker
+gegen HEAD geprueft.** Ein Anker, der nicht mehr trifft, ist kein Schnitt, sondern eine Suche.
