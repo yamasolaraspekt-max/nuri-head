@@ -35,6 +35,13 @@ const ohneKommentare = (s: string): string =>
 const lies = (p: string): string => ohneKommentare(readFileSync(join(hier, '../', p), 'utf8'));
 
 const app = lies('app/HausplanerApp.tsx');
+/**
+ * AUF-48 Scheibe 2 — der Aktivierungs-Kontext wird seit der Zerlegung in
+ * `ableitungen.werkzeugKontextAus` gebaut. **Die geprüfte Eigenschaft ist unverändert:** die Rechte
+ * werden GELESEN und durchgereicht, nirgends gesetzt. *Nur der Ort, an dem das steht, hat sich
+ * verschoben — deshalb wird beides gelesen und beides geprüft.*
+ */
+const ableitungen = lies('app/ableitungen.ts');
 const einstieg = lies('main.tsx');
 const blade = ohneKommentare(readFileSync(join(wurzel, 'resources/views/admin/hausplaner/objekt.blade.php'), 'utf8'));
 
@@ -109,9 +116,15 @@ test('K3: keine neue Aktion — `import` ist weiterhin keine Berechtigungsaktion
 
 // --- Die Verdrahtung: gelesen statt gesetzt -----------------------------------------------------
 test('die App SETZT kein Recht mehr — sie liest es aus dem UI-State', () => {
-  assert.doesNotMatch(app, /permissions: \[RECHT_BEARBEITEN\]/, 'der gesetzte Wert ist zurück');
-  assert.doesNotMatch(app, /permissions: \['Hausplaner,[a-z]+'\]/, 'auch die zweite Stelle war hart gesetzt');
-  assert.match(app, /permissions: rechte,/);
+  // **Das Verbot gilt für BEIDE Dateien** — ein hart gesetztes Recht wäre an jedem der zwei Orte
+  // derselbe Fehler. AUF-48-S2 hat den Kontextbau verschoben, nicht die Regel gelockert.
+  for (const [name, quelle] of [['HausplanerApp', app], ['ableitungen', ableitungen]] as const) {
+    assert.doesNotMatch(quelle, /permissions: \[RECHT_BEARBEITEN\]/, `${name}: der gesetzte Wert ist zurück`);
+    assert.doesNotMatch(quelle, /permissions: \['Hausplaner,[a-z]+'\]/, `${name}: auch die zweite Stelle war hart gesetzt`);
+  }
+  // Die Rechte werden DURCHGEREICHT: gelesen in der App, als Feld übergeben, im Kontextbau gesetzt.
+  assert.match(app, /rechte,/, 'die App reicht die gelesenen Rechte an den Kontextbau weiter');
+  assert.match(ableitungen, /permissions: e\.rechte,/, 'der Kontextbau nimmt sie aus seinen Eingaben');
   assert.match(app, /permissions: usePlannerUiStore\.getState\(\)\.rechte,/, 'auch der Tastenkürzel-Pfad');
   assert.match(app, /const rechte = usePlannerUiStore\(\(s\) => s\.rechte\);/);
   // Ändern sich die Rechte, muss der Kontext neu gebaut werden — sonst bleibt die alte Sperre stehen.

@@ -22,8 +22,17 @@ import { resolveToolState } from '../app/tools/activation';
 import type { AktivierungsKontext, ToolDefinition } from '../app/tools/toolTypes';
 
 const hier = dirname(fileURLToPath(import.meta.url));
-const app = readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
-  .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+const ohneKommentare = (s: string): string =>
+  s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+/**
+ * **AUF-48 Scheibe 2 — umgehängt, nicht geschwächt.** Die Fähigkeitsliste wird seit der Zerlegung
+ * in `ableitungen.werkzeugKontextAus` gebaut; `stageBreite` wird weiterhin in `HausplanerApp`
+ * gemessen und dorthin übergeben. **Die geprüfte Eigenschaft ist unverändert** — die Fähigkeit
+ * steht bedingt in der Liste, und die Breite wird an genau einer Stelle bestimmt. *Nur der Ort,
+ * an dem man das nachliest, ist ein anderer.*
+ */
+const ableitungen = ohneKommentare(readFileSync(join(hier, '../app/ableitungen.ts'), 'utf8'));
 
 /** Die fuenf Werkzeuge, die an der Zeichenflaeche haengen — aus den Vertraegen gelesen, nicht getippt. */
 const anDerFlaeche = WERKZEUG_VERTRAEGE
@@ -38,11 +47,17 @@ test('gemessen: genau fuenf Werkzeuge haengen an der Zeichenflaeche', () => {
 // --- Die Bindung -----------------------------------------------------------------------------------
 test('die Faehigkeit steht NICHT mehr unbedingt in der Liste', () => {
   // Der ganze Posten in einer Zusage: vorher stand hier der nackte Name.
-  assert.match(app, /\.\.\.\(stageBreite > 0 \? \[FAEHIGKEIT_ANSICHT_BEREIT\] : \[\]\)/);
+  // AUF-48-S2: die Liste wohnt jetzt in `ableitungen.werkzeugKontextAus` — dort steht `stageBreite`
+  // als Feld der Eingaben (`e.stageBreite`), die Bedingung selbst ist unveraendert.
+  assert.match(ableitungen, /\.\.\.\(e\.stageBreite > 0 \? \[FAEHIGKEIT_ANSICHT_BEREIT\] : \[\]\)/);
   // **Nur in der Faehigkeiten-Liste gemessen, nicht in der ganzen Datei.** Mein erster Anlauf
   // suchte die nackte Zeile ueberall — und fand den IMPORT. Ein Zaehler, der den Import fuer einen
   // Eintrag haelt, misst die falsche Sache.
-  const liste = app.slice(app.indexOf('capabilities: ['), app.indexOf('}),', app.indexOf('capabilities: [')));
+  const liste = ableitungen.slice(
+    ableitungen.indexOf('capabilities: ['),
+    ableitungen.indexOf('});', ableitungen.indexOf('capabilities: [')),
+  );
+  assert.ok(liste.length > 50, 'die Faehigkeitsliste wurde nicht gefunden — die Zusage misst Leere');
   assert.doesNotMatch(liste, /^\s*FAEHIGKEIT_ANSICHT_BEREIT,$/m, 'kein unbedingter Eintrag mehr');
   assert.match(liste, /stageBreite > 0/, 'die Bedingung steht in der Liste selbst');
 });
@@ -57,9 +72,12 @@ test('die Breite wird an EINER Stelle bestimmt — kein zweiter Ort', () => {
   const stellen = app.match(/const breite = buehnenBreite\(/g) ?? [];
   assert.equal(stellen.length, 1, `die Buehnenbreite wird an ${stellen.length} Stellen bestimmt`);
   assert.equal((app.match(/const stageBreite = /g) ?? []).length, 1);
-  // Und sie steht VOR der Faehigkeiten-Liste — sonst waere sie dort noch nicht bekannt.
-  assert.ok(app.indexOf('const stageBreite = ') < app.indexOf('capabilities: ['),
+  // Und sie steht VOR ihrer Verwendung — sonst waere sie dort noch nicht bekannt.
+  // **AUF-48-S2: die Verwendung ist der Aufruf, nicht mehr die Liste selbst** (die wohnt jetzt in
+  // `ableitungen.ts`). Die Aussage ist dieselbe: erst messen, dann uebergeben.
+  assert.ok(app.indexOf('const stageBreite = ') < app.indexOf('werkzeugKontextAus({'),
     'die Messung muss vor ihrer Verwendung stehen');
+  assert.match(app, /stageBreite,\n\s*\}\),/, 'stageBreite wird an den Kontextbau uebergeben');
 });
 
 test('und sie steht in den Abhaengigkeiten — sonst bliebe die Faehigkeit stehen', () => {

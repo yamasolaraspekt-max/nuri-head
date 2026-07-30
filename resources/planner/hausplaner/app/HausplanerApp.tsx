@@ -52,6 +52,12 @@ import { MASSSTAB_STANDARD } from './unterlage/kalibrierung';
 import { UnterlagenWerkzeuge } from './unterlage/UnterlagenWerkzeuge';
 // AUF-48 Scheibe 1: die sieben reinen Funktionen wohnen jetzt daneben — unveraendert, nur umgezogen.
 import { svgWrap, werkzeugIcon, opIcon, uuid, istWand, istOeffnung, lotAufWand } from './reineHelfer';
+// AUF-48 Scheibe 2: die reinen Ableitungen. Die useMemo-Huellen und ihre Abhaengigkeitslisten
+// bleiben hier stehen — sie sind React-Bindung, kein Rechenweg.
+import {
+  knotenImGeschoss, waendeAus, raeumeAus, leisteMitAngehefteten, werkzeugKontextAus,
+  ermittleWegweiser, fremderBereichVon, palettenGruppenFuer,
+} from './ableitungen';
 import { gruppenFuer } from './dashboard/werkzeugGruppen';
 import { ladeArbeitsbereich, speichereArbeitsbereich } from './state/arbeitsbereichSpeicher';
 import {
@@ -345,11 +351,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const stageBreite = modus === 'split' ? Math.floor(breite / 2) : breite; // P1c: Split teilt die Fläche
 
   const level = scene?.levels.find((l) => l.id === activeLevelId) ?? scene?.levels[0] ?? null;
-  const nodes = useMemo(
-    () => (scene && level ? scene.nodes.filter((n) => n.levelId === level.id) : []),
-    [scene, level],
-  );
-  const waende = useMemo(() => nodes.filter(istWand), [nodes]);
+  const nodes = useMemo(() => knotenImGeschoss(scene, level), [scene, level]);
+  const waende = useMemo(() => waendeAus(nodes), [nodes]);
   /** AUF-35a / Kante 4: Zählung der Auswahl je Typ — rein, getestet, nur Anzeige. */
   const auswahlUebersicht = useMemo(() => mehrfachUebersicht(selectedNodeIds, nodes), [selectedNodeIds, nodes]);
 
@@ -419,59 +422,19 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const leistenWerkzeuge = useMemo(() => zoneTools('fix'), []);
   /** I4: die linke Leiste = Pflichtwerkzeuge + persoenlich Angeheftetes. Bewusst NICHT die 110 —
    *  eine Leiste mit 110 Eintraegen ist keine Leiste mehr. */
-  const railWerkzeuge = useMemo(() => {
-    const fix = zoneTools('fix');
-    const feste = new Set(fix.map((w) => w.id));
-    const zusatz = WERKZEUG_GRUPPEN.flatMap((g) => g.werkzeuge).filter((w) => angeheftet.has(w.id) && !feste.has(w.id));
-    return [...fix, ...zusatz];
-  }, [angeheftet]);
+  const railWerkzeuge = useMemo(() => leisteMitAngehefteten(angeheftet), [angeheftet]);
   const werkzeugKontext = useMemo(
-    () =>
-      baueAktivierungsKontext({
-        workspace: activeWorkspace,
-        view: modus as ViewType,
-        selectionTypes: selectedNodeIds
-          .map((id) => nodes.find((n) => n.id === id)?.type)
-          .filter((t): t is NonNullable<typeof t> => Boolean(t)) as ObjectType[],
-        permissions: rechte,
-        /**
-         * AUF-36: die vier **messbaren** Vorbedingungen des Funktionsvertrags. Sie sind keine
-         * Erfindung, sondern Tatsachen, die diese Komponente ohnehin kennt: Szene geladen, aktives
-         * Geschoss, Wände im Geschoss, Zeichenfläche gemountet. Sie fließen über die **vorhandene**
-         * `capabilities`-Liste — der dafür vorgesehene Haken, der bisher leer lag. Was der Planer
-         * nicht messen kann (freigegebene Heizlast, ausgelegte Heizflächen …), steht hier
-         * bewusst NICHT: ein Wert, den niemand kennt, wird nicht behauptet.
-         */
-        capabilities: [
-          ...(scene ? [FAEHIGKEIT_PROJEKT_OFFEN] : []),
-          ...(level ? [FAEHIGKEIT_GESCHOSS_DA] : []),
-          ...(waende.length > 0 ? [FAEHIGKEIT_WAND_DA] : []),
-          /**
-           * AUF-42 — **die Fähigkeit ist nicht mehr unbedingt.**
-           *
-           * Hier stand sie ohne Bedingung, mit dem Satz *„Die Zeichenfläche ist gemountet, sobald
-           * diese Komponente rendert."* Das war wahr und trotzdem wertlos: die Fähigkeit sagte
-           * **immer ja**, fünf Werkzeuge trugen eine Vorbedingung, die nichts prüfte, und der
-           * Grundtext *„Die Zeichenfläche ist noch nicht bereit"* war ein Text, den **niemand
-           * jemals sah**.
-           *
-           * **Gemessen (26.07., Browser):** bei einer Fensterbreite ab **488 px abwärts** wird
-           * `breite` null oder negativ, und die Zeichenfläche ist wirklich **0 px breit** — kein
-           * Übergangsrahmen, sondern ein Zustand, der bleibt, solange das Fenster schmal ist. Auf
-           * einer 0 px breiten Fläche lässt sich nichts anklicken und nichts messen.
-           *
-           * **Was ausdrücklich NICHT geprüft wird:** die Höhe (`buehnenHoehe` fängt die 0 mit einer
-           * Ersatzhöhe ab, sie kann gar nicht 0 werden — gemessen über 79 Rahmen) und der
-           * 3D-Modus (dort ist die 2D-Leinwand nur *versteckt*, nicht unbrauchbar — der Zustand
-           * hängt an `breite`, das modusunabhängig ist).
-           *
-           * **Die Schwelle ist `> 0` und keine erfundene Mindestbreite.** Null ist die einzige
-           * Grenze, die nicht ausgedacht ist: dort hört die Fläche auf zu existieren. Jede andere
-           * Zahl wäre eine Meinung mit Nachkommastelle.
-           */
-          ...(stageBreite > 0 ? [FAEHIGKEIT_ANSICHT_BEREIT] : []),
-        ],
-      }),
+    () => werkzeugKontextAus({
+      workspace: activeWorkspace,
+      view: modus,
+      selectedNodeIds,
+      nodes,
+      rechte,
+      hatSzene: Boolean(scene),
+      hatGeschoss: Boolean(level),
+      wandZahl: waende.length,
+      stageBreite,
+    }),
     [activeWorkspace, modus, selectedNodeIds, nodes, scene, level, waende.length, rechte, stageBreite],
   );
   /**
@@ -480,47 +443,14 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * jetzt und dem Zustand nach dem Schritt — dieselbe Engine, nur ein zweites Mal gefragt.
    * Ohne benannte Handlung zu dem Grund schweigt der Wegweiser, statt zu raten.
    */
-  const wegweiser = useMemo(() => {
-    const alle = [...TOOL_DEFINITIONS, ...TOOL_KATALOG];
-    const jetzt = alle.map((t) => resolveToolState(t, werkzeugKontext));
-    // Vorhandene Bauteiltypen — gemessen, nicht erfunden. Ohne Bauteile hat „wähle etwas aus"
-    // keinen Sinn, egal was die Zählung sagt.
-    const typenImPlan = [...new Set(nodes.map((n) => n.type))] as ObjectType[];
-
-    /**
-     * AUF-57: Kandidaten sind die Sperrgründe mit benannter Handlung UND einem Ort. Der
-     * hypothetische Kontext entsteht durch **ein geändertes Feld desselben Kontexts** — eine
-     * Fähigkeit mehr oder eine Auswahl. Das ist eine Nachschlage-Operation, keine zweite Regel;
-     * bewertet wird ausschliesslich von `resolveToolState`.
-     */
-    const kandidaten = [...new Set(jetzt.filter((z) => !z.enabled).map((z) => z.reason ?? ''))]
-      .map((grund) => ({ grund, h: handlungZuGrund(grund) }))
-      .filter((k) => k.h?.ort && (k.h.faehigkeit || (k.h.brauchtAuswahl && typenImPlan.length > 0)))
-      .map((k) => ({
-        grund: k.grund,
-        handlung: k.h!.handlung,
-        ort: k.h!.ort!,
-        danach: alle.map((t) => resolveToolState(t, k.h!.faehigkeit
-          ? { ...werkzeugKontext, capabilities: [...werkzeugKontext.capabilities, k.h!.faehigkeit as string] }
-          : { ...werkzeugKontext, selection: { count: 1, types: typenImPlan, states: [] } })),
-      }));
-    const w = naechsterSchritt(jetzt, kandidaten);
-    if (!w) return null;
-    const gewaehlt = kandidaten.find((k) => k.grund === w.grund);
-    return gewaehlt ? { satz: wegweiserSatz(w, gewaehlt.handlung), ort: gewaehlt.ort } : null;
-  }, [werkzeugKontext, nodes]);
+  const wegweiser = useMemo(() => ermittleWegweiser(werkzeugKontext, nodes), [werkzeugKontext, nodes]);
 
   /**
    * AUF-34 / Kante 3 — gilt das aktive Werkzeug im gewählten Arbeitsbereich? Der Name des fremden
    * Bereichs, sonst `undefined`. Gelesen wird `supportedWorkspaces`, also **dieselbe** Quelle, die
    * `resolveToolState` als erste Regel prüft — keine zweite Beurteilung.
    */
-  const fremderBereich = useMemo(() => {
-    const t = toolNach(werkzeug);
-    if (!t || t.supportedWorkspaces.length === 0) return undefined;
-    if (t.supportedWorkspaces.includes(activeWorkspace)) return undefined;
-    return arbeitsbereich(t.supportedWorkspaces[0])?.label ?? t.supportedWorkspaces[0];
-  }, [werkzeug, activeWorkspace]);
+  const fremderBereich = useMemo(() => fremderBereichVon(werkzeug, activeWorkspace), [werkzeug, activeWorkspace]);
 
   // Fällt das aktive Werkzeug im aktuellen Kontext aus (z. B. Zeichnen in 3D), zurück auf Auswahl —
   // damit man nie in einem deaktivierten Werkzeug festhängt (§21/§28).
@@ -546,12 +476,13 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * derselben Funktion, die die Geschossflaeche benutzt. Kein Register wird hier zweimal gerechnet.
    */
   const paletteGruppen = useMemo(
-    () => palettenGruppen({
+    () => palettenGruppenFuer({
       kontext: werkzeugKontext,
       stapel: scene ? stapel(scene.levels, activeLevelId) : null,
       baum,
       schritt: wegweiser,
-    }, paletteFilter),
+      filter: paletteFilter,
+    }),
     [werkzeugKontext, paletteFilter, scene, activeLevelId, baum, wegweiser],
   );
   /** Eine Liste, zwei Darstellungen: die Tastatur laeuft ueber genau die Reihenfolge, die man sieht. */
@@ -569,10 +500,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     paletteOffenRef.current = false;
     setPaletteOffen(false);
   }, []);
-  const raeume = useMemo(
-    () => (level ? erkenneRaeume(waende, level.defaultWallHeight) : []),
-    [waende, level],
-  );
+  const raeume = useMemo(() => raeumeAus(waende, level), [waende, level]);
   // P2b-2: Wandbaender (gefuellte Polygone mit Gehrung an 2-Wand-Ecken).
   const bandVon = useMemo(() => {
     const m = new Map<string, ReturnType<typeof wandBaender>[number]>();
