@@ -16,6 +16,56 @@ welcher Reihenfolge nachgesehen wird und was gerade Ballbesitz ist. Dann hierher
 
 ---
 
+---
+
+## 0a. Das Regelwerk — seit 30.07. auf drei Ebenen, und der Ledger ist NICHT mehr eins davon
+
+**Wer hier etwas abholt, liest zuerst `docs/agents/regeln/kern.md`.** Eine Seite, zwölf Regeln,
+vier Gates, die sechs Aussagetypen. **Sie gilt für alle Rollen, immer.**
+
+| Ebene | Datei | für wen |
+|---|---|---|
+| **1** | `docs/agents/regeln/kern.md` | **alle, immer geladen** |
+| 2 | `docs/agents/regeln/planner.md` · `generator.md` · `evaluator.md` · `plan-reviewer.md` | je Rolle |
+| 3 | `docs/agents/regeln/<fach>.md` | noch leer — entsteht, wenn ein Fach zum **zweiten** Mal dieselbe Frage stellt |
+
+**Warum:** am 30.07. um 07:05 gemessen — die neun Regeln `R10`–`R18` kamen im Regelwerk **null Mal**
+vor und im Ledger (21 233 Zeilen) zwischen einmal und fünfzehnmal. **Eine Regel, die nur im Ledger
+steht, existiert nicht.** Der Ledger ist ab sofort **Historie und Beweisarchiv**, kein Regelwerk.
+
+**Das Konzept dahinter:** `docs/agents/KONZEPT-EVIDENZBASIERTE-PLANUNG.md` — die Grundformel
+*Bestand → Messung → Abweichung → Entscheidung → erst dann Auftrag*, die vier Gates mit dem Status
+`NICHT PLANUNGSREIF`, und die drei Phasen Discovery / Decision / Build.
+
+### Zwei neue Rollen seit dem 30.07.
+
+```text
+Planner → PLAN REVIEWER → Generator → Evaluator
+                                   ↑
+                          unabhaengiger PRUEFER (von Yama betrieben)
+```
+
+- **Plan Reviewer** (`docs/agents/regeln/plan-reviewer.md`, Startprompt in §6) prüft **Pläne, nie
+  Code**: Ist der Bestand korrekt? Ist der Auftrag nötig? Sind Konflikte berücksichtigt? Sind
+  Kriterien prüfbar? **Sein wertvollstes Votum ist `NICHT NOTWENDIG`.**
+  *Grund: der Generator darf einen Auftrag ablehnen — aber er soll nicht der Erste sein, der
+  offensichtliche Planungsfehler entdeckt. Am 30.07. hat er das dreimal getan.*
+- **Unabhängiger Prüfer** (von Yama am 30.07. aktiviert) prüft die Papiere in `docs/planner/`
+  gegen den Bestand. **Eingang: `docs/planner/PRUEFER-BEFUNDE.md`** — mit Form, Antwortpflicht und
+  Fristen. *Eine Ablehnung ohne Gegenmessung ist eine Ausrede.*
+
+### Die Votumszeile — Pflicht seit 30.07., 07:48
+
+Jedes Votum und jede Quittung beginnt mit **einer** maschinenlesbaren Zeile am **Zeilenanfang**
+(Beispiele werden eingerückt):
+
+```text
+  VOTUM: auftrag=AUF-83-T3 rolle=generator ergebnis=TRAEGT-NICHT commit=fe0af8df datum=2026-07-30T06:25
+```
+
+**Ohne sie ist keine Kennzahl zählbar** — gemessen: `TRÄGT NICHT` 12 gegen `TRAEGT NICHT` 1,
+`FREIGABE` 151 quer durch den Fließtext. *Ein `grep` auf Prosa zählt Erwähnungen, nicht Voten.*
+
 ## 0. Die Tafel läuft ohne Verbindung — das ist Absicht
 
 Yamas zweite Beobachtung ist die wichtigere: **der Wächter pausiert, weil die Verbindung fehlt**

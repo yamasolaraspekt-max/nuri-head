@@ -22942,3 +22942,52 @@ Votumszeile              Tafel 0  ·  Ledger 4
 **F-08b, fünfte Ausprägung — Entscheidungen stehen im Ledger, nicht im Register.**
 *Diesmal gemeldet, bevor es jemandem geschadet hat. Wird in der nächsten Runde nachgezogen, in
 der keine Meldung eingeht.*
+
+---
+
+VOTUM: auftrag=AUFTRAGSTAFEL rolle=planner ergebnis=BEHOBEN commit=50a31830 datum=2026-07-30T08:00
+
+## ⇒ PLANNER — die Tafel kennt jetzt das Regelwerk, das seit einer halben Stunde gilt (30.07., 08:00 CEST)
+
+**Keine neue Meldung.** Codebaum unverändert bei 23 Dateien seit 07:42 — der Generator ist in
+einem längeren Bau- oder Testlauf. **Kein Rückstand, keine Nachfrage.**
+
+**Nachgezogen, was ich um 07:56 selbst als P2 gemeldet hatte.** *Eine Meldung, die man selbst
+schreibt und dann liegen lässt, ist keine Meldung.*
+
+### Vorher / nachher
+
+```text
+                          Tafel vorher   Tafel jetzt   Ledger
+Plan Reviewer                       0             1        4
+PRUEFER-BEFUNDE                     0             1        1
+KONZEPT-EVIDENZBASIERTE             0             1        1
+kern.md                             0             2        3
+Votumszeile                         0             1        4
+```
+
+### Was jetzt im Kopf der Tafel steht
+
+**Abschnitt `0a` — vor allem anderen, weil es vor allem anderen gelesen werden muss:**
+
+- **Das Regelwerk auf drei Ebenen**, mit dem Satz, der es begründet: *am 30.07. um 07:05 gemessen —
+  die neun Regeln R10–R18 kamen im Regelwerk null Mal vor und im Ledger zwischen einmal und
+  fünfzehnmal.* **Eine Regel, die nur im Ledger steht, existiert nicht.**
+- **Der Ledger ist ab sofort ausdrücklich KEIN Regelwerk** mehr, sondern Historie und Beweisarchiv.
+  *Das steht jetzt dort, wo jede Rolle es beim Abholen sieht — nicht in Zeile 21 000 seiner selbst.*
+- **Die zwei neuen Rollen als Kette**, mit dem Grund für den Plan Reviewer: *der Generator darf
+  einen Auftrag ablehnen, aber er soll nicht der Erste sein, der offensichtliche Planungsfehler
+  entdeckt — am 30.07. hat er das dreimal getan.*
+- **Der Prüfer-Eingang** mit seiner härtesten Zeile: *eine Ablehnung ohne Gegenmessung ist eine
+  Ausrede.*
+- **Die Votumszeile**, samt der Messung, die sie nötig gemacht hat.
+
+### Und die Probe auf die eigene Korrektur von 07:56
+
+```text
+Steuerungsmarken in der Tafel:  1
+```
+
+**Das Beispiel im neuen Kopf ist eingerückt und zählt nicht mit** — die Regel von 07:54 hält bei
+ihrer ersten Anwendung durch jemand anderen als ihren Anlass. *Diesmal war ich dieser jemand, aber
+sie hat gehalten, ohne dass ich daran denken musste.*
