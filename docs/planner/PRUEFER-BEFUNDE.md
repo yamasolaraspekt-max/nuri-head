@@ -2382,3 +2382,105 @@ abweichen, weil nichts dasteht.*
 | **L6 Workflow** | **PB-028** — ein Posten außerhalb der Steuerung |
 
 **Ballbesitz: Planner.**
+
+---
+
+## 32. Runde 24 (30.07.) — `CLAUDE.md` und das Wissens-Register · Stand: 60 von 386
+
+**Gemessen gegen `9ea619be`.**
+
+### Was trägt: CLAUDE.md nennt 28 Pfade, 28 sind auffindbar
+
+```text
+Pfade in CLAUDE.md (Dateien, keine Prosa):  28
+nicht auffindbar:                            0
+```
+
+**Das ist bemerkenswert nach PB-020, PB-021 und PB-025** — das Dokument, das jede Instanz automatisch
+bekommt, nennt kein Artefakt, das fehlt. *Die zwei Treffer meiner ersten Messung
+(`ideensammlung.md`, `scan-log.md`) waren mein Fehler: ich habe nur im Repo gesucht, sie liegen in
+`~/wissensregister/`.*
+
+### PB-029 · P3 · Ein Register-Eintrag zeigt in ein Verzeichnis, das es nicht gibt
+
+```yaml
+befund:
+  id: PB-029
+  datei: "~/wissensregister/register.md"
+  stelle: "Z35, Eintrag CODE-001"
+  behauptung: "CODE-001 | ~/Projekte/altcrm/app/HeatCalc.php | Code |
+    PHP-Heizlast-Rechner, DIN-nah, reine Funktion"
+  gemessen: |
+    ~/Projekte/            existiert nicht
+    ~/Downloads ~/Documents ~/Desktop   existieren
+    Verweise auf ~/Projekte im ganzen Register:  1  (dieser)
+  befehl: "ls -d ~/Projekte ; grep -rn '~/Projekte' ~/wissensregister/"
+  commit: "9ea619be"
+  schwere: P3
+  wirkung: |
+    CLAUDE.md schickt vor jeder neuen Aufgabe ins Register und sagt: "Passende
+    Eintraege -> Originaldatei bei Bedarf voll lesen; so fliesst vorhandenes Wissen
+    in neue Arbeit ein statt neu erfunden zu werden." Genau dieser Eintrag ist ein
+    Heizlast-Rechner - und die Heizlast-Uebernahme ist ein laufender Strang
+    (wberechnung, Phase 1.4). Wer ihn sucht, findet die Zeile und nicht die Datei.
+    Ein Verweis-Index mit einem toten Verweis kostet nicht viel; er kostet
+    Vertrauen in die uebrigen 58.
+  eigenarbeit: nein
+```
+
+### PB-030 · P3 · Acht Verweise sind mit `…` oder `{` abgekürzt und damit nicht nachfahrbar
+
+```yaml
+befund:
+  id: PB-030
+  datei: "~/wissensregister/kategorien/*.md"
+  stelle: "die Spalte 'Datei' mehrerer Eintraege"
+  behauptung: |
+    register.md Z17: "Datei | Dateiname + absoluter Pfad (Verweis, keine Kopie)"
+  gemessen: |
+    Vorkommen von "…" in kategorien/:  8
+    Vorkommen von "{"  in kategorien/:  8
+    Beispiele der Form (Pfade gekuerzt wiedergegeben, keine Inhalte):
+      ~/Downloads/{claude_code_prompt_media...     Sammelklammer statt Einzelpfad
+      ~/Downloads/Gemini_Generated_Image_c6h7occ…png   Auslassung mitten im Namen
+      ~/Desktop/_Normen_SHK/…                      Verzeichnis ohne Datei
+  befehl: |
+    grep -roc '…' ~/wissensregister/kategorien/*.md
+    grep -roc '{'  ~/wissensregister/kategorien/*.md
+  commit: "9ea619be"
+  schwere: P3
+  wirkung: |
+    Das eigene Schema verlangt "absoluter Pfad". Eine Auslassung im Dateinamen ist
+    kein Pfad, sondern eine Beschreibung - man kann sie lesen, aber nicht oeffnen.
+    Fuer den Planner-Agenten, den CLAUDE.md ausdruecklich auf dieses Register
+    verweist, heisst das: acht Eintraege sind Hinweise, keine Verweise.
+  eigenarbeit: nein
+```
+
+### Und die achte Beinahe-Fehlmeldung, die diese Runde produziert hat
+
+Mein erster Abgleich meldete **18 tote Verweise von 59**. **Falsch.** Das Register kürzt Pfade mit
+`…` ab und enthält Dateinamen mit Leerzeichen und Klammern; meine leerzeichen-getrennte Zerlegung hat
+sie zerschnitten und die Bruchstücke als „nicht vorhanden" gezählt.
+
+**Gefangen hat es wieder die Unmöglichkeit:** *ein Dateiname, der ein Auslassungszeichen enthält,
+existiert nicht — also stimmt die Messung nicht, nicht die Datei.*
+
+**Bilanz meiner acht Extraktionsfehler:** *falsche Spalte · zsh-Modifikator · zu enges Muster ·
+Pfad-Präfix · Name statt Wirkung · Zahl aus dem Gedächtnis · Repo-only-Suche · leerzeichen-getrennte
+Pfade.* **Kein einziger im Urteil, alle acht im Zerlegen.** Und: **jeder einzelne wurde von einer
+zweiten Zahl gefangen, nie von Sorgfalt.** *Das ist inzwischen kein Nebensatz mehr, sondern der
+belastbarste Befund über die Prüfarbeit selbst.*
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | **PB-029** — ein Verweis ohne Ziel |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | **PB-030** — das Register verletzt sein eigenes Schema („absoluter Pfad") |
+| **L4 Kausalität** | **PB-029/030** — die Kette *Register → Originaldatei* endet bei neun von sechzig |
+| **L5 Plausibilität** | keine Beanstandung *(zum achten Mal die Linse, die meinen Fehler fing)* |
+| **L6 Workflow** | keine Beanstandung |
+
+**Ballbesitz: Planner** — mit dem Hinweis, dass das Register **außerhalb des Repositoriums** liegt
+und `CLAUDE.md` es aus Datenschutzgründen dort hält. **Änderungen daran sind Yamas Sache, nicht die
+des Zyklus.**
