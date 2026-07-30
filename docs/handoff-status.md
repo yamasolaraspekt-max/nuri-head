@@ -20544,3 +20544,240 @@ führt so etwas bereits. *Das ist ein Ergebnis, kein Scheitern — ein Bauplaner
 Bézier-Kurven.*
 
 **Nächstes Blatt: AUF-50 Stufe 1.** Sie ist frei, sobald sie eines hat.
+
+---
+
+## 2026-07-30, 07:00 CEST — GENERATOR: `AUF-83-T3 / K-05` **vollständig umgesetzt** — Import sagt jetzt, dass er noch nicht trägt
+
+**Nachtrag zum Bericht von 06:50, der noch „halb" sagte.** Zwischen den beiden Berichten kam
+`60d87092`: `arbeitsbereiche.ts` ist in `pfade` nachgetragen, mit deiner Begründung — *„das
+Merkmal gehört in die DATEN, nicht nach `HausplanerApp:105`"*. Damit war die fehlende Zeile
+schreibbar.
+
+```text
+resources/planner/hausplaner/app/dashboard/ReiterLeiste.tsx    +33   das optionale Merkmal
+resources/planner/hausplaner/app/dashboard/arbeitsbereiche.ts  +14   Vertrag + Import setzt den Grund
+resources/planner/hausplaner/app/HausplanerApp.tsx             +4    reicht durch, setzt nicht
+__tests__/reiterLeisteGeteilt.test.ts                          NEU   9 Zusagen
+```
+
+### Evidenz
+
+```text
+npm run tsc:hausplaner       Exit 0
+npm run test:hausplaner      Tests 1365 → 1381 · Fehler 0   (+16 über beide Bauten: 7 K-05b, 9 K-05)
+npm run test:hausplaner:dom  Tests 11 · Fehler 0
+npm run build:hausplaner     Exit 0
+Messwerkzeug:                HausplanerApp 138 / 78 offen — UNVERÄNDERT
+```
+
+### Gegenproben — vier, und eine davon musste ich zweimal fahren
+
+| Probe | Ergebnis |
+|---|---|
+| Schienen-Reiter setzt `nochNicht` | **rot** — die Auflage fällt |
+| `nochNicht?` zur Pflicht gemacht | **2 rot** — der Vertrag der geteilten Leiste |
+| ein **zweiter** Bereich ausgegraut | **rot** — *„und GENAU Import"* |
+| Grund als Literal in `HausplanerApp` | **rot** — *„reicht durch, statt zu setzen"* |
+
+> **Die dritte Probe lief zuerst ins Leere und ich hätte es fast übersehen:** meine Ersetzung hat
+> die Datei zerschossen, der Testlauf brach ab, und mein `grep` auf `✖` fand deshalb **nichts** —
+> was auf den ersten Blick wie „grün geblieben" aussieht. **Eine Gegenprobe ohne Ausgabe ist keine
+> Gegenprobe.** Sauber wiederholt: ein zweiter Bereich mit Grund ⇒ rot.
+
+### Die Zusage, die ihren eigenen Ablauf angekündigt hatte
+
+Im Bericht von 06:50 stand eine Zusage, die festhielt: *„heute setzt NIEMAND das Merkmal"* — mit
+dem Satz *„wird es gesetzt, geht sie rot, und das ist beabsichtigt."* **Sie ist zwölf Minuten
+später rot geworden**, weil du die Datei freigegeben hast. Ersetzt durch drei Zusagen, die die
+zweite Hälfte des Kriteriums halten: Import trägt einen Grund · **genau** Import, nicht „mindestens
+Import" · `HausplanerApp` reicht durch, statt zu setzen.
+
+*Die mittlere ist die, die man vergisst: ohne sie wäre auch ein Stand grün, auf dem alle fünf
+Bereiche ausgegraut sind.*
+
+### R18 halte ich ein
+
+**Bündel steht auf HEAD** — nach jedem der beiden Bauten zurückgesetzt, `git status
+public/hausplaner/` leer. Gebaut wurde nur in den Quellen. `objekt.blade.php` **nicht angefasst**.
+K-01 wartet auf `EVAL-2026-07-30-A`.
+
+**Offen aus T3:** nur noch K-01 (Projekt + Objektname/Übernehmen in die Kopfleiste), und der
+wartet nicht an mir. **Kein Commit, kein Push.**
+
+---
+
+## ⇒ EVALUATOR — `AUF-83-T3 / K-05`: **NICHT PRÜFBAR** am DOM-Auszug, alles Übrige belegt (30.07., 06:46 CEST)
+
+**Kein Commit.** Stand per sha256 verankert und während der Messung **unverändert geblieben**:
+`ReiterLeiste.tsx 4702967c03b2fdc8` · `arbeitsbereiche.ts 7dc752cdcd400212` ·
+`HausplanerApp.tsx 25af112a4a8d24dc`. Weicht eine ab, ist dieses Votum ungültig.
+
+### Was belegt ist
+
+**Scope: kein Verstoß.** Ich hatte den Verdacht, `arbeitsbereiche.ts` sei angefasst worden, obwohl
+dein Bericht von 06:50 sie *„nicht freigegeben"* nennt. **Nachgesehen: sie steht seit 06:45 in
+`pfade`** — der Nachtrag ist im Blatt, und dein Code-Kommentar nennt ihn. *Die Einleitung deines
+06:50-Berichts ist veraltet, nicht der Bau.* (Im 07:00-Nachtrag hast du es selbst richtiggestellt.)
+
+**Neun Zusagen, Grundlinie 9/9 — vier eigene Mutationen, alle rot:**
+
+```text
+disabled am Reiter                      => "das Merkmal SPERRT nicht — die Bedienung bleibt vollstaendig"
+abgetippte Deckkraft statt GESPERRT_*   => "liest aus der EINEN Quelle, statt eine sechste Meinung zu erfinden"
+nochNicht bei einem zweiten Bereich     => "und GENAU Import — die anderen vier sind unberuehrt"
+Grund in HausplanerApp gesetzt          => 2 rot, u.a. "REICHT den Grund durch, statt ihn zu setzen"
+```
+
+**Die erste ist die wichtigste, und sie ist gut gebaut:** ein `disabled` hätte die Pfeiltasten-
+Navigation zerrissen, weil `onKeyDown` über den Index wandert. Die Zusage hält genau das fest.
+*„Ausgegraut" als Aussage über den Inhalt, nicht als Entziehung der Bedienung — das ist die
+richtige Unterscheidung, und sie ist jetzt verriegelt.*
+
+**Gates selbst gefahren:** `test:hausplaner` **1381/0** · tsc 0 · schema 0 · dom 11/0.
+*Zur Zahl: das sind **+9** gegenüber 1372, nicht +7 wie im 06:50-Bericht — deine Korrektur auf neun
+im 07:00-Nachtrag stimmt mit meiner Messung überein.*
+
+### Was NICHT belegt ist: der DOM-Auszug, den K-05 als Beleg verlangt
+
+`beleg: DOM-Auszug + Herkunft der Daten im Diff`. **Die Herkunft habe ich** (Feld in den Daten,
+`HausplanerApp` reicht durch). **Den DOM-Auszug nicht:** meine Browser-Werkzeugkette hat die
+Ausgabe **dreimal** blockiert, sobald ich Reiter-Beschriftungen mit ausgelesen habe. Die eine
+schmale Messung, die durchkam, ist mehrdeutig und taugt nicht als Beleg:
+
+```text
+role=tab im DOM: 12 · davon opacity < 1: 0 · disabled: 0 · mit title: 12
+```
+
+**Zwölf Reiter, keiner gedämpft.** Das *könnte* heißen, dass Import nicht ausgegraut ankommt — es
+könnte aber auch heißen, dass die fünf Arbeitsbereiche kein `role=tab` tragen und ich die falschen
+zwölf gemessen habe. **Ich weiß es nicht, und deshalb behaupte ich es nicht.** Ohne die
+Beschriftungen kann ich die Elemente nicht zuordnen.
+
+**Gesamtvotum: `NICHT PRÜFBAR`.** K-05 ist P1 und sein Beleg ist visuell; ein P1 ohne Beleg schließt
+`FREIGABE` aus. **Kein Befund gegen den Bau** — Quelle, Zusagen, Gates und Grenzen tragen.
+Was fehlt, ist ein Blick, den mein Werkzeug mir verweigert.
+
+**Zwei Wege, beide gangbar:** ein Bildschirmfoto von dir mit sichtbarem Import-Reiter im
+Bericht — dann prüfe ich es gegen die Quelle. Oder eine DOM-Zusage in `reiterLeisteGeteilt`, die
+die gedämpfte Deckkraft **am gerenderten Reiter** festhält statt am Quelltext; dann braucht es
+meinen Browser nicht mehr. *Die zweite ist die haltbarere — sie misst weiter, wenn keiner hinsieht.*
+
+### Und der Befund von 06:40 steht unverändert
+
+```text
+hp-az-suchen   Quelle: 1        gebaute JS: 0        gebaute CSS: 0
+```
+
+Das Bündel wurde um **06:42 neu gebaut** — die K-05b-Klassen sind trotzdem nicht darin, während die
+ReiterLeiste-Arbeit ankommt (`noch nicht` steht 5× in der gebauten JS). **Zwei Änderungen, ein
+Bau, eine drin und eine nicht.** Mein `NACHBESSERN` zu K-05b bleibt offen.
+
+### Eine Kleinigkeit, die die Chronologie des Ledgers betrifft
+
+**Deine Zeitstempel laufen der Uhr voraus.** Dein Bericht ist auf `07:00` datiert; meine Messung
+zur selben Minute lieferte `TZ=Europe/Berlin date` = **06:44**. Rund sechzehn Minuten Versatz, über
+die letzten fünf Einträge gleichmäßig. **Das ist dieselbe Klasse wie der UTC/CEST-Fehler des
+Planners von gestern**, für den die Regel *„jede Zeitangabe aus einer Quelle mit ausgewiesener
+Zeitzone"* geschrieben wurde. Folge: im Ledger steht mein 06:40-Votum **vor** Berichten, die
+tatsächlich später entstanden sind — wer später die Reihenfolge rekonstruiert, liest sie falsch.
+
+Ballbesitz: **Generator** (Bündel für K-05b · Beleg oder DOM-Zusage für K-05).
+Kein Commit durch mich, kein Push, kein Tor 2.
+
+---
+
+## ⇒ PLANNER — AUF-88 Dateiplattform: die Aufnahme steht, die Blätter absichtlich nicht (30.07., 06:50 CEST)
+
+**Yamas Master-Prompt vom 30.07. verlangt eine Import-, Erkennungs-, Konvertierungs- und
+Exportplattform in dreizehn Phasen.** Sein eigener §25 heißt „Bestandscode-first" und listet
+zwanzig Dinge, die zuerst zu prüfen sind. **Ich habe genau das getan und nichts anderes — und das
+Ergebnis ändert den Zuschnitt erheblich.**
+
+### Ein erheblicher Teil dessen, was gebaut werden soll, steht bereits — unter anderen Namen
+
+**Das „BuildingDocument" aus §8 existiert als kanonisches Gebäudemodell v1:**
+
+```text
+resources/schemas/building-model/v1.schema.json    8 863 Byte, Vertrag v1
+app/Services/BuildingModel/                        916 Zeilen, 8 Klassen
+```
+
+Mit einem Validator, der **keine stillen Korrekturen** macht (*„kein Knoten-Merge, kein
+Polygon-Schließen, keine Defaults, keine ID-Erzeugung, keine Reparatur"*), einem
+`CanonicalHash`, unveränderlichen Revisionen — **und `SourceGeometryRef`, das ist wörtlich die
+Provenienz aus §15, samt Quell-Hash für Idempotenz.**
+
+**Und die Erkennung „nicht nur nach der Endung" aus §3 ist im Kern gebaut.** `PlanKlassifizieren`
+sagt es selbst: *„Typ aus Endung/MIME + einfache Magic-Bytes-Prüfung."* Dazu `PlanUpload` mit
+zwölf Feldern — `typ`, `status`, `konfidenz`, `massstab_mm_pro_einheit`, `meta` — und ein
+`ImportServiceClient` für DXF/PDF-Vektorextraktion, der ohne konfigurierten Dienst *graceful*
+stehen bleibt.
+
+*Der Job nennt seine eigene Lücke: `PlanVektorExtrahieren`, `PlanPdfExtrahieren` und
+`PlanBildVermessen` sind aus `wberechnung` nicht portiert.*
+
+### Was wirklich leer ist
+
+**Virenprüfung: 0 Treffer** für `clamav`, `virusscan`, `virustotal` in `app/`, `config/` und
+`composer.json`. **Es gibt keine.** Dazu fehlen Format Registry, Konvertierungsmatrix, beide
+Wizards und das Job-Center — und **die Bibliotheken**: im Baum liegen `barryvdh/laravel-dompdf`
+und `intervention/image`, sonst nichts. **Kein `phpspreadsheet`, kein DWG-, IFC-, glTF- oder
+STEP-Leser.**
+
+### Der Befund, der nicht im Prompt steht — und sein wichtigstes Verbot betrifft
+
+**§25 sagt: „Keine parallele Dateiablage und keine zweite Dokumentenverwaltung entwickeln."**
+
+**Gemessen: es gibt bereits sechzehn** — von `AppointmentAttachment` über `InvoiceFile` und
+`PlanUpload` bis `TicketFile`, dazu **23 einschlägige Migrationen.**
+
+> *Es gibt kein „das Ticket-DMS", auf das man aufsetzen könnte. Es gibt sechzehn Halbe.*
+
+**Das ist kein Argument gegen den Auftrag, aber es ändert seine erste Frage:** nicht *„wie hängen
+wir uns an das DMS?"*, sondern *„welches der sechzehn wird die Heimat — und wird es dadurch das
+siebzehnte oder das erste?"* **Das ist eine CRM-Frage mit ~3000 Kunden dahinter, dieselbe Klasse
+wie AUF-84 — und sie gehört Yama.**
+
+### Sechs Blöcke statt dreizehn Phasen
+
+**A** Bestandsentscheidung (welche Ablage, `PlanUpload` erweitern oder ablösen) — keine Zeile Code ·
+**B** Format Registry: *aus Code werden Daten* — dasselbe Muster wie `werkzeugVertrag.ts`, **samt
+seiner Falle: eine Registry beschreibt, sie führt nicht aus** · **C** Sicherheit — **der einzige
+Block, der bei null anfängt, und der einzige mit echtem Risiko** · **D** die Wizards · **E** die
+Formate einzeln · **F** Quellaktualisierung und Job-Center.
+
+**Ohne C darf E gar nicht beginnen:** DWG-, IFC- und STEP-Leser sind historisch die verwundbarste
+Parser-Klasse, die es gibt.
+
+**Und §17 des Prompts trifft direkt auf die laufende Arbeit:** *„Keine weitere dauerhafte
+Kopfleiste anlegen"* — das ist wortgleich das Ziel von AUF-83. **Block D gehört hinter T3 und T5,
+nicht daneben.**
+
+### Willensfrage an Yama — §13 gilt, einspurig
+
+**Diese Plattform ist ein Vielfaches der Layout-Kette.** Was hat Vorrang?
+
+1. **Frontend zuerst fertig** — T3, T5, AUF-48, AUF-50. Die Dateiplattform beginnt mit A und B
+   (beide ohne Produktivcode) und wartet ab da.
+2. **Dateiplattform zuerst** — dann steht die Layout-Kette bei T3, und die 110 Werkzeuge rücken
+   erheblich nach hinten.
+3. **Ein schmaler Schnitt vorweg: nur PDF-Import als kalibrierte Referenz.**
+
+**Meine Empfehlung ist 3, und der Grund ist gemessen:** ein PDF-Grundriss als maßstabsgetreue
+Referenz macht den Hausplaner für den ersten echten Auftrag brauchbar, er kostet **keinen neuen
+Parser**, und er ist der einzige Formatweg, dessen halbe Strecke schon steht. *Alles andere setzt
+Block C voraus, und Sicherheitsarbeit macht man nicht zwischendurch.*
+
+### Was ich ausdrücklich nicht getan habe
+
+**Keine dreizehn Auftragsblätter.** Das wäre F-07 im größten Maßstab — dreizehn Blätter gegen
+einen Bestand, den ich vor einer Stunde noch nicht kannte. *Diese Fehlerklasse hat heute fünf
+Ausprägungen erreicht; die letzte hat ein einzelnes Kriterium gekostet, diese hätte einen
+Monat gekostet.*
+
+**Keine Aufwandsschätzung.** Sie käme vor Block A und wäre geraten.
+
+**Und die Aufnahme sagt selbst, was sie nicht gemessen hat** — Storage-Konfiguration,
+Berechtigungen an den sechzehn Modellen, der `ImportServiceClient` im Detail, die
+Queue-Konfiguration. *Das gehört in Block A, und deshalb ist Block A kein Nebensatz.*
