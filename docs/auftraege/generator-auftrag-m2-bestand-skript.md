@@ -119,3 +119,46 @@ hier wieder wie ein Widerspruch ausgesehen.*
 die Menge, nicht ein Muster. Zu korrigieren ist die Zahl **22** im Register R12/F-01 — sie
 gilt fuer einen Dateizustand, den es seit dem 30.07. nicht mehr gibt.
 
+
+---
+
+## QUITTUNG — Planner, 30.07.2026 23:46 · Spur B, selbst nachgemessen
+
+**Prüfstand:** `323ba4ad` (30.07. 23:43) · **Basis:** `323ba4ad^` — die Datei entsteht mit
+diesem Commit, 151 Zeilen, ein Pfad.
+
+*Spur B heißt: kein separater Evaluator. Es heißt **nicht**: keine Messung. Alle vier
+Kriterien hier selbst gefahren, nicht aus dem Bericht übernommen.*
+
+```text
+K-03  grep -oE '>|>>|rm |mv |git (add|commit|checkout)' scripts/bestand.sh | wc -l   ->  0
+K-04  grep -oE 'artisan|npm ' scripts/bestand.sh | wc -l                             ->  0
+
+K-01  bash scripts/bestand.sh app/gibtsnicht.tsx
+      -> fuenf Angaben, jede belegt, leere als "keine", Rueckgabewert 0, kein Fehlschlag
+      -> [5] nennt sogar das Blatt, das den Pfad fuehrt
+K-01  bash scripts/bestand.sh   (ohne Argument)
+      -> Aufrufhilfe, Rueckgabewert 0
+
+K-02  bash scripts/bestand.sh resources/planner/hausplaner/app/HausplanerApp.tsx
+      -> direkt 16 · indirekt 29 ueber __tests__/_zerlegteApp.ts · zusammen 35
+```
+
+**K-02: der Generator hat mehr gefunden als ich.** Ich hatte um 23:15 belegt, dass die 22
+*überholt* ist — 29.07., 2308 Zeilen, `_zerlegteApp.ts` gab es noch nicht. Er zeigt, dass sie
+**auch nie ein Sollwert war**: direkt gezählt über die Scheiben hinweg `432c179b` 19 ·
+`262de870` 30 · `2eb16643` 14 · HEAD 17. *Eine Zahl, die zwischen 14 und 30 schwankt, ist ein
+Moment und kein Ziel — wer sie als Sollwert führt, misst den Kalender.* Das Blatt hatte beide
+Möglichkeiten genannt und „**beides gehört gemeldet**" verlangt; gemessen war es beides zugleich.
+
+**Zwei Dinge, die er über den Auftrag hinaus getan hat und die ich ausdrücklich behalte:**
+das leere Argument gab vorher ein rohes `fatal` aus — bei einem Werkzeug, das oft und unbedacht
+aufgerufen wird, die hässlichste Art zu sagen „hier ist nichts". Und K-03 ist **doppelt** belegt:
+der `grep` zeigt die Absicht, der byte-identische Arbeitsbaum nach einem Lauf über vier Pfade
+zeigt die Wirkung.
+
+**M2 ist abgehakt.** Nicht enthalten, wie das Blatt sagt: der Validator-Anschluss.
+
+*Anmerkung zur Rollentrennung: Spur B erlaubt dem Generator, selbst abzuhaken. Diese Quittung
+ersetzt das nicht, sie doppelt es — bei einem Werkzeug, das künftig jede Bestandsmessung trägt,
+ist die zweite Messung den Aufwand wert.*
