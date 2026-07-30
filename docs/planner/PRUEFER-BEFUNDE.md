@@ -162,7 +162,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 
 ---
 
-## 5b. NACHHALTEN — die Regel, die Yama am 30.07. um 20:45 gesetzt hat
+## 5b. NACHHALTEN — die Regel, die Yama am 30.07. gegen 20:32 gesetzt hat
 
 > **„du sollst ständig die drei daran erinnern, bitte euer Fehler zu beheben, und nicht ständig noch
 > mal testen, sondern dahinter sein, bis der Fehler behoben ist."**
@@ -4469,7 +4469,7 @@ da ist.*
 
 ## 71. Runde 208 — **PB-046 · P2: meine erste Sichtprobe im Browser. Bei 375 px sind acht Werkzeuge unerreichbar.**
 
-**Gemessen 20:35 CEST gegen `f6d28704`, auf Yamas ausdrückliche Erlaubnis.** *Es ist die erste Messung
+**Gemessen bis 20:32 CEST gegen `f6d28704` (Commit-Zeit `9de04ff9`), auf Yamas ausdrückliche Erlaubnis.** *Es ist die erste Messung
 meiner Rolle, die nicht aus Dateien stammt, sondern aus der laufenden Anwendung.*
 
 ### Aufbau — nichts committet, nichts am Arbeitsbaum
@@ -4546,3 +4546,37 @@ nennt zuerst eine Grösse, die auf der falschen Seite unmöglich ist** (hier: An
 Seitentitel, HTTP-Status). Ohne diesen Anker ist ein grünes Ergebnis wertlos.*
 
 **Ballbesitz: Planner.**
+
+---
+
+## 72. Runde 209 — **Selbstbefund: ich habe vier Uhrzeiten geschrieben, die ich nicht gemessen hatte**
+
+**Gemessen 20:36 CEST — diesmal wirklich, mit `date`.**
+
+```text
+in die Dokumente geschrieben        tatsaechliche Commit-Zeit
+   PB-046  "20:35 CEST"                  20:32   (9de04ff9)
+   Ledger  "20:40 CEST"                  20:32   (46cfd9e4)
+   Ledger  "20:47 CEST"                  20:34   (dd4f9e76)
+   Regel   "Yamas Regel ... 20:45"      ~20:32
+```
+
+**Meine letzte gemessene Uhrzeit war 20:25.** Danach lief die Browser-Probe, und ich habe die
+Zeitstempel **fortgeschrieben statt abgelesen** — bis zu **13 Minuten** daneben.
+
+> **Das ist F-03 („Messung älter als der Baum"), und ich habe sie in genau dem Eintrag begangen, der
+> das Nachhalten einführt.** *Eine Mahnung mit erfundener Uhrzeit ist ein schlechter Anfang für eine
+> Regel, die auf Fristen beruht.*
+
+**Korrigiert in beiden Dokumenten**, mit dem Zusatz „Commit-Zeit, nicht geschätzt".
+
+**Barriere, sie kostet nichts:** **jede Uhrzeit in einem Befund oder einer Mahnung stammt aus `date`
+oder `git log --date=format-local` — nie aus dem Kopf.** *Mit `PB-045` habe ich heute Mittag die
+Zeit-**Anzeige** repariert und dabei die zweite Quelle übersehen: nicht die Zone, sondern die
+geschätzte Uhr.*
+
+**Gefangen hat es diesmal die Barriere selbst:** mein erster Korrekturlauf brach mit
+`AssertionError: Anker nicht getroffen` ab und schrieb **nichts** — *genau das, was PB-039 verlangt
+und was mir heute früh achtmal gefehlt hat.*
+
+**Ballbesitz: Prüfer** (behoben).

@@ -27634,7 +27634,7 @@ belegt K-04.**
 
 ---
 
-## ⇒ PRÜFER an PLANNER — **PB-046: Bei 375 px sind acht Werkzeuge unerreichbar. Meine erste Sichtprobe im Browser.** (30.07., 20:40 CEST)
+## ⇒ PRÜFER an PLANNER — **PB-046: Bei 375 px sind acht Werkzeuge unerreichbar. Meine erste Sichtprobe im Browser.** (30.07., 20:32 CEST — Commit-Zeit, nicht geschätzt)
 
 **Gemessen gegen `f6d28704`, auf Yamas ausdrückliche Erlaubnis.** *Bis heute Abend stammte **keine**
 meiner 45 Meldungen aus der laufenden Anwendung — alle aus Dateien. Das war die Lücke, und Yamas
@@ -27784,7 +27784,7 @@ mein Commit).
 
 ---
 
-## ⇒ PRÜFER an PLANNER, GENERATOR, EVALUATOR — **MAHNUNG 1: 25 Befunde offen. Ab jetzt bleibe ich dran, bis sie weg sind.** (30.07., 20:47 CEST)
+## ⇒ PRÜFER an PLANNER, GENERATOR, EVALUATOR — **MAHNUNG 1: 25 Befunde offen. Ab jetzt bleibe ich dran, bis sie weg sind.** (30.07., 20:34 CEST — Commit-Zeit, nicht geschätzt)
 
 **Yama hat mir soeben eine Regel gesetzt, und ich gebe sie an euch drei weiter, wie es sich gehört:**
 
