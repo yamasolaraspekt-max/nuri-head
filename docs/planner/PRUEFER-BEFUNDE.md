@@ -595,3 +595,60 @@ nebeneinander, und es gibt kein `head`. Die Barriere schreibt fest, was dort zuf
 
 **Ballbesitz: Prüfer** (die Korrektur ist meine, nicht seine). **PB-003 und PB-004 bleiben
 `ANGENOMMEN`** — die Korrektur ändert die Zahlen, nicht die Befunde.
+
+---
+
+## 12. Runde 5 (30.07.) — `aufnahme-dateiplattform-2026-07-30.md`: **keine Beanstandung**
+
+**Gemessen gegen `01dfbae8`, durchgehend mit `git show HEAD:` statt gegen den Arbeitsbaum** (24
+unversionierte Änderungen) — die Barriere aus §11 zum ersten Mal angewandt. **Kein `head` in einem
+zählenden Befehl.**
+
+Diese Fläche steuert **AUF-88** und ist von **heute früh**. Ein frisches Papier, das aktiv steuert,
+ist der teuerste Ort für einen Fehler.
+
+| Behauptung | Gemessen | Befehl |
+|---|---|---|
+| Migration `create_plan_uploads_table` existiert | **1** | `git ls-tree -r --name-only HEAD \| grep -c …` |
+| `routes/web.php:5680-5684` → `/admin/energie/plan-upload` | Routen bei **5680, 5682, 5684**, 5686 | `git show HEAD:routes/web.php \| grep -n …` |
+| `v1.schema.json` **8 863 Byte** | **8863** | `git cat-file -s HEAD:…/v1.schema.json` |
+| `app/Services/BuildingModel/` **916 Zeilen, 8 Klassen** | **916** Zeilen, **8** Dateien | `git ls-tree … \| wc -l` · Zeilen über `git show` je Datei |
+| Virenprüfung: **0** Treffer | **0** | `grep -ril 'clamav\|virusscan\|virustotal' app/ config/ composer.json \| wc -l` |
+| keine Format-Bibliothek (Spreadsheet/DWG/IFC/glTF/STEP) | **0** | `grep -oE '"[a-z0-9._-]+/[a-z0-9._-]+"' composer.json \| grep -icE …` |
+| **23** Migrationen mit `attachment\|document\|file\|media` | **23** | `git ls-tree -r --name-only HEAD -- database/migrations/ \| grep -cEi …` |
+
+**Sieben von sieben, eine davon auf das Byte.**
+
+**Eine Ungenauigkeit, die ich geprüft und NICHT als Befund geschrieben habe:** die Zeilenangabe
+`5680-5684` umfasst drei der vier `plan-upload`-Routen; die vierte (`…/{planUpload}/bild`) steht bei
+**5686**. **Wirkung: keine** — wer der Angabe folgt, landet im richtigen Block und sieht die vierte
+Zeile zwei Zeilen weiter. Nach dem Raster ist das keine Beanstandung, sondern Geschmack, und
+Geschmack gehört nicht ins Register. *Ich nenne es hier, damit sichtbar ist, dass es geprüft wurde.*
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — sieben Zahlenaussagen, sieben Treffer |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | keine Beanstandung — das Papier verweist auf vorhandene Muster (`arbeitsbereiche.ts`, `werkzeugVertrag.ts`) statt neue zu erfinden |
+| **L4 Kausalität** | keine Beanstandung — die *Abwesenheits*-Aussagen (Virenprüfung, Format-Registry, Konvertierungsmatrix) sind die schwierigeren, und sie sind belegt |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | nicht geprüft — das Papier plant Wizards, die es noch nicht gibt; ein Arbeitsweg ist nicht messbar |
+
+**Kein Befund.**
+
+### Was der Vergleich der bisher fünf Flächen zeigt
+
+| Fläche | Alter | Ergebnis |
+|---|---|---|
+| `tool-dashboard-current-state.md` | 24.07. | **4 Befunde**, davon 1× P1 |
+| `eindeutschung-110-paket-ids.md` | 25.07. | sauber |
+| `ux-befund-layout-alle-ebenen…` | 25.07. | sauber (als Herkunft zitiert) |
+| `zuschnitt-auf48…` | 30.07. | **1 Befund** — Form, nicht Inhalt |
+| `aufnahme-dateiplattform-2026-07-30.md` | 30.07. | sauber, 7/7 |
+
+**Das Alter trennt nicht.** Zwei Papiere vom 25.07. tragen, eines vom 30.07. hat einen Formmangel.
+Was trennt, ist etwas anderes: **die tragenden Papiere nennen zu jeder Zahl den Befehl oder die
+Quelle** — `eindeutschung` führt seine Legende und den AUF-34-Nachtrag mit, `aufnahme-dateiplattform`
+schreibt *„0 Treffer für `clamav`… in `app/`, `config/`, `composer.json`"*. **Das eine Papier mit
+P1 nennt keinen einzigen.** *Nicht das Datum macht ein Papier haltbar, sondern ob es nachfahrbar
+ist — dieselbe Regel, die für meine eigenen Befunde gilt.*
