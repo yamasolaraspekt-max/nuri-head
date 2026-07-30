@@ -30223,3 +30223,157 @@ Scheiben). *Kein Prüfstand, solange kein Commit liegt — die Grundlinie dafür
 1544 / 29.*
 
 **Ballbesitz: Planner** (die vier oben) · **Generator** (Z-01) · **Yama** (nichts von mir).
+
+---
+
+## 2026-07-31, ~02:1x CEST — GENERATOR: `Z-01` committet — **Schritt 0 bestätigt die Erwartung, und „einfrieren" IST der Fehler**
+
+**VOTUM: auftrag=Z-01 rolle=generator ergebnis=UMGESETZT commit=30da5252 datum=2026-07-31**
+*(Schritt-0-Protokoll separat committet: `44771aad`, VOR dem Bau.)*
+
+### Schritt 0 — die Antwort, und warum sie mehr wert ist als ein „stimmt"
+
+```text
+Zeiger im Canvas        1500,1400 -> 3200,1400
+Zeiger ueber der Leiste 1500,1400 -> 3200,1400   unveraendert
+Zeiger wieder drin      1500,1400 -> 4152, 689   folgt wieder
+mousemove draussen      Konva-Container 0 · Fenster 1
+```
+
+**Der Strich folgt dem Zeiger nicht — er bleibt liegen.** Und das ist nicht der harmlose
+Zwischenzustand, für den man es halten könnte: bei menschenähnlicher Mausbewegung bleibt er dort
+stehen, wo der Zeiger die Fläche **zuletzt berührt** hat — `2930,3877`, quer über den halben
+Grundriss. *Eine eingefrorene Vorschau sieht aus wie ein gezeichnetes Bauteil.* **Das ist Yamas
+langer Strich, mit einer anderen Ursache als vermutet.**
+
+### Der eigentliche Fund des Blattes — und ein siebter, der nicht darin stand
+
+```text
+5 Kopien des Aufraeumens   HausplanerApp 494/778/829 · Schiene 334/354
+1 vergessene Stelle        der Rueckfall auf `auswahl` raeumte GAR NICHT auf
+1 weitere, ungenannt       der Treppen-Abschluss setzte Startpunkt und Werkzeug direkt
+```
+
+**Fünf Kopien einer Regel sind keine Regel, sondern fünf Gelegenheiten, sie zu vergessen — einmal
+ist sie vergessen worden.** Alle sieben laufen jetzt über `beendeWerkzeug()`.
+
+### K-04 — 8 Mutationen vor jeder Testzeile, **8 kamen durch**
+
+Erwartbar (das Modul war neu), und die Zahl gehört trotzdem in den Bericht — der Auftrag verlangt
+sie ausdrücklich *„auch wenn sie 0 ist"*. Alle acht geschlossen, jede gegengeprüft.
+
+### ⚠ Zwei eigene Befunde — **beide von meinen eigenen Zusagen gefangen**
+
+1. **Mein erster Pausentext war ein Inline-Stil** und hob die getrackte Zahl von 20 auf 21. Die
+   S4e-Zusage wurde rot. *Ich habe nicht den Sollwert angehoben, sondern das Markup umgebaut* —
+   `.hp-pause-hinweis` mit Token, nach der stehenden Auflage aus AUF-83-T3. **Inline-Vorkommen
+   gesamt: 138, unverändert.**
+2. **`beendeWerkzeug` rief die reine Entscheidung mit einem Attrappen-Zustand auf** und verwarf ein
+   Drittel des Ergebnisses. Das Ergebnis war richtig, die Aussage des Codes falsch. An den Ort
+   gerückt, wo der echte Zeichenzustand steht.
+
+### L-01 — drei Viewports
+
+```text
+1440  halb gezogen DA 1300,1400->2800,1400 · zur Leiste FORT + Hinweis
+      zurueck DA 1300,1400->2340,1121   (neue Geometrie: lebendig, nicht bloss eingeblendet)
+      E2E Yamas Fall: Fensterwerkzeug -> Werkzeug `fenster`, Reststrich FORT
+1024  dasselbe Bild
+ 375  MISST NICHTS — dort startet das Wand-Werkzeug keinen Zug
+```
+
+> **375 px ist als „nicht gemessen" gemeldet, nicht als grün.** `PB-046` hält fest, dass dort acht
+> Werkzeuge unerreichbar sind; `AUF-91` ist das Blatt dafür. *Eine Zeile, die Leere misst, als
+> Beleg zu führen, wäre genau die Sorte Grün, gegen die dieser Zyklus seine Regeln hat.*
+
+```text
+tsc 0 · test:hausplaner 1544 -> 1559 · dom 29/0 · build 0
+K-01 0 · K-02 0 · K-03 1 · K-05 1 · K-06 5   (Ausgangswerte 5·1·0·0·5 selbst bestaetigt)
+Scheibe 7 unveraendert: 195 Stellen, 77 offen · Inline-Vorkommen 138
+Ein neuer Haken: useCallback beendeWerkzeug => [zeichenZustand]
+Konsole aus hausplaner.js: 0
+```
+
+**Nicht in diesem Auftrag:** die zwölfmethodige Lebenslauf-Schnittstelle und der
+`fangKern`-Anschluss (Z-02).
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Evaluator** (`44771aad..30da5252`) · **Generator** (`AUF-38-P1` · `AUF-91` ·
+`PB-043 Teil 2`) · **Planner** (Z-02 hängt an dieser Scheibe — es gibt jetzt einen Ort, der löscht).
+
+---
+
+VOTUM: auftrag=Z-01 rolle=evaluator ergebnis=GRUEN commit=30da5252 datum=2026-07-31T03:0x hinweis=offene-Frage-beantwortet
+
+## ⇒ EVALUATOR — Z-01: **GRÜN.** Und die offene Frage des Planners ist beantwortet: **kein Reststrich, auch nicht vorher** (31.07., CEST)
+
+*Siebzehnter Prüfstand. Der Planner hat vor der Abnahme eine Messung benannt statt eine Meinung —
+`stage.find('Line').length` am Stand VOR dem Commit. **Genau die habe ich gefahren**, in zwei
+Worktrees parallel.*
+
+### Gates gegen die main-Grundlinie
+
+```text
+                    main 39b18514      Z-01 30da5252
+test:hausplaner        1544 / 0          1559 / 0     (+15)
+test:hausplaner:dom      29 / 0            29 / 0
+tsc                    Exit 0            Exit 0
+Scheibe 7 (ganze App)  195 / 77          195 / 77
+```
+
+### Die offene Frage — beide Stände, derselbe Zug
+
+**Seine Frage:** *„War die Ursache ein altes Konva-Bild statt ein fehlendes Aufräumen, ist der
+Fehler jetzt nur VERDECKT: `onMouseLeave` löst einen Render aus, der die Ebene nebenbei neu
+zeichnet."*
+
+```text
+                        VORHER (30da5252^)     NACHHER (30da5252)
+Start                        58 Linien              58
+halber Wandzug               59                     59      <- die Vorschau, messbar
+Klick auf „Fenster"          57                     57      <- Vorschau fort
+```
+
+**Identisch. Und der Klick lief über den DOM-Knopf, ohne Mausbewegung** — `onMouseLeave` wurde
+**nicht** ausgelöst. *Damit ist genau der isolierte Fall gemessen, den seine Frage meint.*
+
+> **Antwort: Der Leisten-Klick räumte schon vorher auf. Es gibt an dieser Stelle nichts zu
+> verdecken.** *K-01 prüft die Sache, nicht ihre Gestalt — die Vorschau-Linie ist in der Geometrie
+> messbar (58→59) und nach dem Werkzeugwechsel fort (57).*
+
+**Eine Beobachtung, die ich nicht erklären kann und deshalb nenne:** nach dem Wechsel sind es
+**57**, also eine Linie **weniger als am Start**. *Vermutlich ein Hilfselement des Wandwerkzeugs,
+das mit ihm verschwindet — geprüft habe ich es nicht.* **Für die gestellte Frage ohne Belang: der
+Reststrich wäre ein Zuwachs, nicht ein Abzug.**
+
+### Der Gegenbeweis, der mir NICHT gelungen ist — offengelegt
+
+**Um zu zeigen, dass meine Messung überhaupt etwas findet, wollte ich die Stelle treffen, die laut
+Bau wirklich nicht aufräumte** (Rückfall auf `auswahl` beim Bereichswechsel). **Das ist
+gescheitert:**
+
+```text
+halber Zug, dann Bereich Architektur -> Heizung
+   Linien 59 -> 59      Werkzeug: wand -> wand      <- KEIN Rückfall ausgelöst
+```
+*`wand` fällt in „Heizung" nicht aus; die Bedingung greift anders, als ich angenommen hatte.*
+**Die Zahl 59→59 sagt deshalb nichts über das Aufräumen — sie sagt nur, dass ich den Fall nicht
+getroffen habe.** *Ich hätte sie fast als „auch nachher wird nicht aufgeräumt" gemeldet.*
+
+**Was die Messung trotzdem trägt:** sie sieht die Vorschau-Linie (58→59) und ihr Verschwinden
+(→57). **Eine Methode, die den Zuwachs sieht, sieht auch einen Reststrich** — sie ist nicht blind,
+nur mein zweiter Testfall war es.
+
+### Urteil
+
+**GRÜN.** Gates gehalten, Scheibe 7 unverändert, die vom Planner benannte Frage mit einer Messung
+an beiden Ständen beantwortet: **kein Reststrich beim Leisten-Klick, vorher wie nachher.**
+
+*Nicht abgenommen habe ich die sieben Aufräumstellen einzeln — der Bau hat sie mit Mutationsprobe
+vor den Tests belegt (8 von 8 kamen durch, das Modul trug keine Zusage), und die Suite ist um 15
+Zusagen gewachsen. **Wenn du sie einzeln geprüft haben willst, sag es** — das wäre eine eigene
+Runde.*
+
+**Ballbesitz: Planner** (die vier offenen Befunde aus 02:3x) · **Generator** (Z-01 weiter) ·
+**Yama** (nichts von mir).
