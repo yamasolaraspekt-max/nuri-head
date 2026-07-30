@@ -21872,3 +21872,305 @@ P1-`absence` braucht einen `presence`-Partner) ist wörtlich die Regel, an der T
 **K-04 verlangt jetzt eine aggregierte Meldung**: eine Zeile mit Anzahl, die Liste hinter einem
 Schalter. **Ein Werkzeug, das bei jedem Lauf 67 Warnungen ausgibt, wird abgeschaltet** — und dann
 fängt es auch die 13 nicht mehr, für die es gebaut ist.
+
+---
+
+## ⇒ EVALUATOR — AUF-83-T3 / K-01: **NICHT ERFÜLLT (P1) → NACHBESSERN**. Der Objektkopf verschwindet auf 11 von 12 Objekten (30.07., 07:31 CEST)
+
+*Zeit aus `TZ=Europe/Berlin date`. Alle deine Zahlen habe ich zuerst nachgefahren — **jede einzelne
+stimmt.** Der Befund kommt nicht aus einem Gate, sondern aus der Sichtprobe, die mir zugewiesen war.*
+
+### 1. Deine Evidenz, unabhängig reproduziert — vollständig deckungsgleich
+
+```text
+Buendel     js 1423442 a42a4e6ffd16d30d · css 17973 80c9e9eca2818c6e   BYTEGLEICH mit deinem Bericht
+test:hausplaner   1392 / 0        dom 16 / 0        tsc exit 0        schema exit 0
+phpunit tests/Feature/Hausplaner  64 Tests, 232 Assertions, OK   (DB_DATABASE=ticket_testing erzwungen)
+eineWerkzeugzeile 14 / 0          Messwerkzeug HausplanerApp 138 / 78 — UNVERAENDERT trotz +32 Zeilen
+```
+
+**Und dein Inline-Stil am Übernehmen-Knopf ist regelkonform:** `GESPERRT_ZEIGER` / `GESPERRT_GRUND` /
+`GESPERRT_BESCHRIFTUNG` aus der EINEN Quelle (AUF-71), keine Rohfarbe. *Deshalb bleibt das
+Messwerkzeug bei 138/78 — du hast Markup hinzugefügt, ohne eine Rohfarbe einzuschleppen.*
+
+**`hp-bar` fällt wirklich:** `<div class="hp-bar">` (HEAD Z89) ist fort, im DOM der Objektseite
+`0` Treffer.
+
+### 2. Der Befund: `T3-K01-B1`, **P1** — die Naht verwirft den Kopf, sobald `revision` fehlt
+
+```ts
+// app/state/objektkopf.ts:67
+if (o.revision !== undefined && typeof o.revision !== 'number') return false;
+```
+
+```php
+// objekt.blade.php:155 — was der Server WIRKLICH sendet
+'revision' => $uebernahme['szene_revision'] ?? null,
+```
+
+**`?? null` erzeugt `null`, nicht `undefined`.** `null !== undefined` ist wahr, `typeof null` ist
+`"object"` — **die Prüfung gibt `false` zurück und `leseObjektkopf` verwirft den GANZEN Kopf.**
+Der Kommentar über der Zeile sagt *„Die Revision darf fehlen"* — genau das tut sie nicht.
+
+**Reproduziert am Modul, mit der echten Nutzlast der Seite:**
+
+```text
+{... status:"nie", revision:null }   ⇒ leseObjektkopf = null      ← was das Blade sendet
+{... status:"aktuell", revision:3 }  ⇒ GELESEN
+{... revision: undefined }           ⇒ GELESEN                    ← der Fall, den der Test prueft
+```
+
+**Und gemessen an allen Objekten, die die Übersicht anbietet** (gelesen über die Oberfläche als
+angemeldeter Nutzer, keine Probe-Query gegen `ticket`):
+
+```text
+geprueft 12 Objekte   ·   ohne Objektkopf: 11   ·   Anteil 11/12
+  203  veraltet  rev 9      Kopf SICHTBAR
+  154  nie       rev null   Kopf FEHLT      149  nie  rev null   Kopf FEHLT
+  153  nie       rev null   Kopf FEHLT      148  nie  rev null   Kopf FEHLT
+  152  nie       rev null   Kopf FEHLT      ... alle weiteren: status "nie", revision null
+```
+
+**Gegenprobe, die beweist, dass der Bau selbst richtig ist** — Objekt 203, Expertenmodus, gebautes
+Bündel, hart neu geladen:
+
+```text
+hp-ok-* Elemente 4 · Name "EVALUATOR-MESSWELLE" · Knopf "In Auslegung übernehmen" (nicht gesperrt)
+Pille "Übernommen — VERALTET (Szene geändert seit Übernahme)"  Klasse hp-ok-pille--veraltet
+```
+
+**Objekt 154, identisch gemessen: `hp-ok-*` = 0, Knopf = null, Pille = null.** Attribut vorhanden
+und wohlgeformt, Bündel trägt den Code (`hp-ok-name` 1×, `In Auslegung übernehmen` 1×).
+
+> **Die Wirkung, und deshalb P1:** auf 11 von 12 Objekten sind **Objektname, Adresse,
+> Staleness-Pille und der Übernehmen-Knopf gleichzeitig verschwunden** — und die Blade-Leiste, die
+> den Knopf vorher trug, **ist im selben Commit gefallen.** *Die Übernahme in die Auslegung ist auf
+> diesen Objekten über die Oberfläche nicht mehr erreichbar.* Betroffen ist genau der Normalfall:
+> ein Objekt, das noch nie übernommen wurde.
+
+**Zwei Wege, deine Entscheidung** — ich baue nicht: (a) die Prüfung behandelt `null` wie
+`undefined`; (b) das Blade lässt den Schlüssel weg, wenn kein Wert da ist. *(a) ist robuster, weil
+sie auch fremde Sender abfängt; (b) macht die Zusage „darf fehlen" wörtlich wahr.*
+
+### 3. Warum 1392 grün sind und der Fehler durchkam — die Zusage hat ein Loch an genau der Stelle
+
+```text
+"revision" in __tests__/objektkopf.test.ts:   8 Vorkommen
+davon mit dem Wert null:                      0
+verwendete Werte: 3 · 7 · 1 · 2 · '3' (Negativfall "Revision als Text")
+```
+
+**Elf Zusagen, und keine benutzt den einzigen Wert, den die Produktion für zwei von drei Zuständen
+sendet.** *Das ist keine Nachlässigkeit im Testen, sondern die Grundgesamtheit (R3): die Vorlagen
+kamen aus dem Typ, nicht aus dem Blade.* **Empfehlung: die Vorlage kommt aus `objekt.blade.php`,
+nicht aus dem Interface** — dann kann der Fall nicht wieder entstehen.
+
+### 4. Deine Frage „drei oder vier Zeilen" — ich messe **sechs**, und darum ist der Sollwert unbrauchbar
+
+Objektseite, 1440×813, Expertenmodus, alle vollbreiten Blöcke oberhalb der Leinwand:
+
+```text
+1  hp-studio-kopf   62 px   "Gespeichert · Rev. 1 | Übersicht | Geführte Planung | Experte"
+2  (Kopfleiste)     54 px   "Erdgeschoss · ±0 mm · 1 von 1 ▾ | Gespeichert | Speichern"
+3  (Arbeitszeile)   48 px   "Arbeitsbereich | Import & Nachzeichnen· noch nicht | ..."
+4  (Modus/Zoom)     43 px   "2D | Split | 3D | Zoom 12 %"
+5  role=tabpanel    39 px   "Grundbedienung ▾ Bearbeiten ▾ Zeichnen ▾ Ansicht ▾ Messen ▾ ..."
+6  (Werkzeugoption) 28 px   "Markieren — Dieses Werkzeug braucht keine Optionen."
+                   274 px Aufbau ueber der Buehne
+```
+
+**Drei Beobachter, drei Zahlen: das Blatt sagt 3, du sagst 4, ich messe 6.** Nicht weil einer
+falsch zählt, sondern **weil das Kriterium nicht sagt, was eine „Zeile" ist** — welcher Container,
+welche Mindesthöhe, zählt der Studio-Kopf außerhalb von `HausplanerApp` mit, zählt die
+Werkzeugoptionen-Zeile.
+
+> **`AUF-90` an den Planner, Spezifikationsmangel:** *„Es bleiben genau drei Zeilen" ist in dieser
+> Form nicht messbar.* Ein Zählkriterium braucht die Zählregel im Kriterium — sonst ist jedes Votum
+> dazu Auslegung. **Deine Umsetzung ist trotzdem die richtige:** eine Zusage, die den **Ist-Stand
+> einfriert und rot geht, sobald etwas dazukommt**, verriegelt die Absicht („nimm Platz aus Zeile 1,
+> nicht aus der Höhe der Bühne") auch ohne dass die absolute Zahl stimmt. *Der Sollwert ist der
+> gemessene Ist-Stand — nicht 3, nicht 4.*
+
+### 5. Zwei Kriterien, die ich dabei belegen konnte
+
+**`K-02` — die Hausplaner-Bezeichnung: `ERFÜLLT`.** Das Blatt verlangt den Beleg, dass das
+Skeleton-`h1` nach dem Mount **nicht mehr** im DOM steht und als Platzhalter erhalten bleibt:
+
+```text
+objekt.blade.php traegt <h1>Hausplaner — {{ ... }}</h1>   (Platzhalter steht, wie gefordert)
+DOM nach dem Mount:  #hausplaner-root h1  =  0            (der Mount ersetzt ihn)
+```
+
+**Der Rest von T3 ist unberührt:** `.hp-az-suchen` 1, Import gedämpft, kein zweiter Bildlauf
+(813/813), Wurzel 1077×701 wie im Vorher-Stand.
+
+**Kleiner Rest, `T3-K01-B2` (P3):** die Regel `.hp-bar { ... background: #fff; border-bottom: 1px
+solid #e5e7eb; }` steht weiter in `objekt.blade.php:35` — **jetzt toter Code**, und sie trägt zwei
+Rohfarben in einer View. Vorher war sie in Benutzung, jetzt nicht mehr.
+
+> ### GESAMTVOTUM AUF-83-T3 / K-01: **NICHT ERFÜLLT — NACHBESSERN**
+> Ein P1 (`T3-K01-B1`) blockiert. Alle Gates grün und reproduziert, der Bau ist im Kern richtig
+> (Gegenprobe an 203 beweist es) — aber auf dem Normalfall zeigt er nichts und nimmt dabei eine
+> Bedienung mit, die vorher da war. **K-02 `ERFÜLLT`.** `AUF-90` (Zählregel) und `T3-K01-B2` (P3)
+> gehen an den Planner bzw. in den Stapel.
+
+**Ballbesitz: Generator** (`T3-K01-B1`, ein Weg deiner Wahl + die Vorlage aus dem Blade).
+**Planner:** `AUF-90`. **Yama:** **18+ Commits auf keinem Remote**, letzter gesicherter Stand
+`8ae4a1f5` (29.07. 07:59).
+
+Kein Commit durch mich, kein Push, kein Tor 2, kein Produktivcode angefasst.
+
+---
+
+## 2026-07-30, 07:32 CEST — GENERATOR: `AUF-87` **umgesetzt** — der Validator läuft, und sein erster Lauf findet etwas
+
+*Zeit gemessen.*
+
+```text
+scripts/auftrag-pruefen.mjs            NEU   Logik + CLI
+scripts/auftrag-pruefen.sh             NEU   der Einstieg, den Menschen tippen
+scripts/__tests__/auftragPruefen.test.mjs   NEU   14 Zusagen
+docs/auftraege/AUFTRAGSSCHEMA.md       §7 Vollzugsvermerk (Befund 2 der Quittung)
+```
+
+### Evidenz
+
+```text
+node --test scripts/__tests__/auftragPruefen.test.mjs    14 / 14 · Fehler 0
+npm run tsc:hausplaner   Exit 0
+npm run test:hausplaner  1392 / 0        npm run test:hausplaner:dom   16 / 0
+Scope: AUF-87 hat GENAU seine drei Dateien angefasst (der Rest im Baum ist T3)
+```
+
+### K-07 — der erste Lauf über den echten Bestand. **Er findet sofort etwas, und es ist deins.**
+
+```text
+── generator-auftrag-auf83-t5-schienen-klappbar.md
+   FEHLSCHLAG       scope.population_command   exit 1
+   $ grep -rn 'data-schiene' … && grep -rn "key === 'Escape'" … && grep -rc 'collapsed\|klappZu\|schieneZu' … && node scripts/statische-inline-stile.mjs …
+```
+
+**Nachgemessen, Teil für Teil:**
+
+```text
+grep -rn 'data-schiene'          exit 0
+grep -rn "key === 'Escape'"      exit 0
+grep -rc 'collapsed|klappZu|…'   exit 1   ← liefert "0" und bricht die Kette
+node scripts/statische-inline-stile.mjs   NIE GELAUFEN
+```
+
+**Die Ursache ist genau die Klasse, gegen die dieses Werkzeug gebaut ist:** `grep -c` liefert bei
+**null Treffern exit 1** — und **null ist hier das erwartete Ergebnis** („0 Klappzustände in der
+Insel", deine Messung von 21:45). Die `&&`-Kette bricht daran ab, **der vierte Teil läuft nie.**
+
+> **Konkret heißt das:** die Scheibe-7-Zahl im T5-Blatt (138/78) stammt **nicht** aus diesem
+> Befehl — du hast sie einzeln gemessen (was du auch schreibst), aber wer den `population_command`
+> fährt, bekommt sie nicht. **Ich behebe es nicht** — der Ausschluss sagt: *„Findet er in einem
+> alten Blatt einen toten Befehl: melden, nicht beheben."*
+
+**Und ein zweiter Fund am T3-Blatt, ohne Fehlschlag:**
+
+```text
+── generator-auftrag-auf83-t3-kopfleiste-arbeitszeile.md
+   13 Einträge: 3 OK · 0 verdächtig · 0 Fehlschlag · 1 übersprungen · 9 NICHT MASCHINELL
+   UEBERSPRUNGEN    K-10    enthaelt "npm run build"
+```
+
+**Neun von dreizehn Kriterien sind visuell** — der Validator gibt diesem Blatt bewusst kein grünes
+Häkchen, sondern die Liste dessen, was ein Mensch ansehen muss. **Und K-10, das Gate-Kriterium,
+kann er nicht fahren:** es endet auf `npm run build:hausplaner`, und das steht auf der Denylist.
+*Das ist kein Zufall — genau dieses `build` hat heute Morgen mein Bündel überschrieben. R19.5 und
+die Denylist sagen dasselbe, an zwei Stellen.*
+
+### Die Gegenproben
+
+| Probe | Ergebnis |
+|---|---|
+| ein Kriterium mehr im Blatt | gefundene Zahl steigt 1 → 2 — er zählt die **Menge**, kein Muster |
+| `grep` auf etwas Nichtexistentes | `FEHLSCHLAG` mit Exitcode **und** Befehl im Bericht |
+| `true` als Befehl | `VERDÄCHTIG` — exit 0, keine Ausgabe, eigene Stufe |
+| Blatt ohne Kopf | `KEIN KOPF`, **kein** Fehlschlag |
+| Kopf mit kaputtem YAML | `KOPF UNLESBAR` — vom kopflosen Fall unterschieden |
+| `git commit -m x` | `ÜBERSPRUNGEN`, Grund genannt |
+| jedes der 11 Denylist-Muster einzeln | alle greifen — nicht nur das erste |
+
+### Drei Dinge, die beim Bauen dazukamen
+
+**a) Ein Blatt hat DREI yaml-Blöcke** (`evaluator-auftrag-vorherbilder-und-auf86`). Er prüft den
+**ersten** und **sagt, dass es mehr gibt** — stillschweigend den ersten zu nehmen wäre die stille
+Kappung, die dein Selbstnachweis verbietet.
+
+**b) Die Blätter sind nicht einheitlich gebaut:** manche setzen `scope`/`kriterien` auf oberster
+Ebene, manche unter `auftrag:`. **Beide Formen kommen im Bestand vor**, er liest beide.
+
+**c) Eine dritte Datei, die nicht in `pfade` steht.** Die Logik liegt in `auftrag-pruefen.mjs`
+neben dem `.sh`-Einstieg, weil die Zusagen sie **importieren** müssen — ein reiner Blackbox-Test
+über die Shell könnte die Denylist nicht Muster für Muster prüfen. *Gemeldet als
+Umfangs-Präzisierung, nicht als Erweiterung: es ist dieselbe Sache in zwei Dateien, und dein
+`pfade`-Eintrag trägt den Zusatz „oder der übliche Ort für Skript-Zusagen".*
+
+### Der Exitcode
+
+**Nur `FEHLSCHLAG` setzt ihn auf 1.** `VERDÄCHTIG` und `NICHT MASCHINELL` sind Hinweise an einen
+Menschen — würde er darauf rot, wäre er bei jedem visuellen Blatt rot, und dann wird er
+abgeschaltet. *Dieselbe Überlegung wie bei K-04.*
+
+**Kein Commit, kein Push. Nächster Posten laut Yamas Reihenfolge: `AUF-87-N1` (`scripts/bestand.sh`).**
+
+---
+
+## ⇒ PLANNER — Plan Reviewer beschlossen, Ausbau-Reihenfolge entschieden (30.07., 07:38 CEST)
+
+### 1. Vierte Instanz: der Plan Reviewer kommt
+
+**Yamas Entscheid 07:35.** Rollenblatt liegt: `docs/agents/regeln/plan-reviewer.md` — sieben
+Prüfungen, vier Votumswerte, Kennzahlen und ein **Startprompt zum Einfügen** in Abschnitt 6.
+
+```text
+Planner → PLAN REVIEWER → Generator → Evaluator
+```
+
+**Sein wertvollstes Votum ist `NICHT NOTWENDIG`** — nicht `PLANUNGSREIF`. *Vermiedene Arbeit ist
+die billigste Arbeit, die es gibt, und heute wären vier Kriterien eines einzigen Auftrags so
+gestoppt worden.*
+
+**Ausgangswert für seine Kennzahl:** der Generator hat am 30.07. **drei** Planungsfehler vor dem
+Bau gefunden. **Ziel: die drei findet künftig der Plan Reviewer, bevor der Generator den Auftrag
+zieht.**
+
+### 2. Ausbau — Yama hat mir die Wahl überlassen, hier ist sie mit Begründung
+
+**Entscheid: nur Punkt 12 (automatische Kennzahlen) wird vorgezogen. Ein halber Tag.**
+
+**Warum 12 und nicht 11 oder 13:**
+
+- **Der größte Hebel läuft bereits** — AUF-87 ist im Bau. Alles Weitere davorzuziehen hieße, ihn zu
+  unterbrechen.
+- **Ohne Messung wissen wir nicht, ob heute irgendetwas gewirkt hat.** Wir haben an einem Tag
+  vierzehn Fehlerklassen, dreizehn Regeln, vier Gates und ein Konzept beschlossen. **Kennzahlen,
+  die niemand erhebt, sind derselbe Fehler wie Regeln, die niemand liest** — und den haben wir
+  heute früh gerade erst gemessen.
+- **Punkt 11 (Skill-System) ist groß, und sein Zuschnitt hängt davon ab, welche Schwäche NACH den
+  heutigen Änderungen übrig bleibt.** Ihn jetzt zu bauen hieße, gegen die Diagnose von gestern zu
+  planen. *Das ist wörtlich F-07.*
+- **Punkt 13 (CI-Blockade) setzt einen reifen Linter voraus.** Ein Werkzeug, das blockiert, bevor
+  man ihm traut, wird abgeschaltet — dieselbe Klasse wie die 67 Warnungen aus der AUF-87-Quittung.
+- **Punkt 14 (Beispielsammlung) kostet ab sofort nichts**, wenn wir sie nebenbei führen: je
+  Rückweisung eine Zeile, je `NICHT NOTWENDIG` eine Zeile. **Sie wächst von selbst und wird nicht
+  eigens beauftragt.**
+
+**Reihenfolge damit:**
+
+```text
+JETZT    AUF-83-T3        im Bau
+DANN     AUF-87           Validator, Ausfuehrbarkeit          im Bau
+DANN     Punkt 12         Kennzahlen automatisch erfassen     halber Tag
+DANN     AUF-87-N2        Struktur (die fuenf aus Schema §7)
+DANN     AUF-83-T5 · AUF-88-P1 · AUF-48 Scheibe 1 · AUF-50 Stufe 1
+SPAETER  AUF-87-N3 Evidenz · Punkt 11 Skill-System · Punkt 13 CI
+LAUFEND  Punkt 14 Beispielsammlung — eine Zeile je Rueckweisung
+```
+
+*Die Begründung folgt derselben Logik wie der ganze Tag: **erst messen, dann bauen.** Ein
+Skill-System gegen eine Schwäche zu bauen, die wir vielleicht heute schon behoben haben, wäre die
+teuerste Form von Fleiß.*
