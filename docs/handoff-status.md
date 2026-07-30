@@ -21231,3 +21231,58 @@ Zweimal heute ist so ein Ledger-Eintrag verloren gegangen, ohne dass etwas rot w
 > **Die Barriere ist nicht „sorgfältiger schreiben", sondern: nach jedem Schreibskript
 > `git status` lesen, BEVOR committet wird.** *Es ist dieselbe Klasse, gegen die AUF-87 seine
 > Stufe „verdächtig" bekommt: der Befehl endet mit 0 und hat nichts getan.*
+
+---
+
+## ⇒ PLANNER — R22: ein Vorher-Stand ist ein Commit, kein Zeitpunkt (30.07., 07:12 CEST)
+
+**Weckerrunde 07:08. Keine neue Meldung — aber eine Beobachtung, die einen Fehler von mir
+aufgedeckt hat.**
+
+### Was ich gemessen habe
+
+Der Generator baut K-01. `resources/views/admin/hausplaner/objekt.blade.php` ist im Arbeitsbaum
+verändert; `hp-bar`, `hp-obj` und der Übernehmen-Knopf sind dort bereits entfernt.
+**Eine Blade wirkt sofort, ohne Bau.**
+
+Nach dem Buchstaben meines eigenen Auftrags wäre damit der Vorher-Stand der Objektseite verloren —
+den `EVAL-2026-07-30-A` ausdrücklich festhalten sollte, *„denn dort stehen Objektname und
+Übernehmen-Knopf heute noch"*. **Vierte Ausprägung derselben Klasse in zwei Tagen.**
+
+### Er ist nicht verloren
+
+```text
+git show d78c2466:resources/views/admin/hausplaner/objekt.blade.php
+  | grep -c 'hp-bar|hp-obj|In Auslegung übernehmen'      → 5
+```
+
+**Der Vorher-Stand steht in `d78c2466`** — dem letzten Commit, der die Insel oder die Blades
+berührt hat. Er ist jederzeit auslieferbar.
+
+> ### R22 — ab sofort im Regelwerk
+> **Ein Vorher-Stand ist ein Commit, kein Zeitpunkt.** Wer einen Vorher-Nachher-Beleg braucht,
+> nennt den **Commit**, aus dem er ihn holt (`git archive <commit>` in ein Verzeichnis, dort bauen
+> und messen) — **nicht die Uhrzeit, bis zu der jemand fertig sein muss.**
+
+**Das ist eine Barriere, keine Regel:** ein Folgeauftrag kann einen Commit nicht zerstören.
+**Damit lösen sich F-12 und ein großer Teil von F-13 mechanisch auf** — beide Klassen bestanden
+darin, dass ein Prüfstand unter dem Prüfenden weggezogen wurde.
+
+*Und das Verfahren ist nicht neu: der Evaluator hat es gestern selbst benutzt („Commit-exakter
+Prüfstand, `git archive d78c2466`"), der Generator heute für den K-08-Vorher-Wert. **Beide konnten
+es. Ich habe es nur nicht in den Auftrag geschrieben.***
+
+### Was ich geändert habe
+
+- **`EVAL-2026-07-30-A` verliert das Wort „eilig".** Prüfstand ist `d78c2466`, auch für A-03.
+- **`AUF-83-T3`: die Auflage `k01_wartet` fällt.** Der Generator baut K-01 zu Ende, ohne zu warten.
+- **R22 steht im Regelwerk** — dort, wo Regeln seit heute früh hingehören.
+
+**Der Wettlauf, den ich zwischen den beiden aufgemacht habe, war unnötig. Er stand nicht im
+Bestand, sondern in meiner Formulierung.**
+
+### Selbstauflage eingehalten
+
+**Kein neues Auftragsblatt in dieser Runde.** Das letzte war `AUF-88-P1` um 06:58; das nächste
+frühestens um 07:58. *Was hier steht, ist eine Korrektur an bestehenden Blättern — und sie kam
+aus dem Lesen des Arbeitsbaums, nicht aus dem Schreiben eines neuen Papiers.*

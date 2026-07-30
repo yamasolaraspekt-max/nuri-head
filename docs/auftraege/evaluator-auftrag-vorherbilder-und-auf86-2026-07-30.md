@@ -147,3 +147,42 @@ ob K-08 von T3 überhaupt aussagekräftig ist:** *ein Höhengewinn, der aus eine
 ist keiner.* Deshalb steht diese Messung vor der Abnahme und nicht danach.
 
 **Ballbesitz nach der Meldung: Planner.**
+
+---
+
+## KORREKTUR, 30.07. 07:12 — Teil A ist NICHT MEHR EILIG, und der Fehler war meiner
+
+**Gemessen um 07:10:** der Generator baut K-01. `resources/views/admin/hausplaner/objekt.blade.php`
+ist im Arbeitsbaum verändert — `hp-bar`, `hp-obj` und der Übernehmen-Knopf sind dort bereits
+entfernt. **Eine Blade wirkt sofort, ohne Bau.** Nach dem Buchstaben dieses Auftrags wäre der
+Vorher-Stand der Objektseite damit verloren — die vierte Ausprägung derselben Klasse in zwei Tagen.
+
+**Er ist nicht verloren. Er steht in einem Commit.**
+
+```text
+git show d78c2466:resources/views/admin/hausplaner/objekt.blade.php | grep -c 'hp-bar|hp-obj|In Auslegung übernehmen'   → 5
+```
+
+> ### Der Prüfstand für Teil A ist ab sofort `d78c2466`
+> Der letzte Commit, der die Insel oder die Blades berührt hat. **Nicht der Arbeitsbaum, nicht
+> „jetzt sofort".**
+>
+> ```text
+> mkdir -p /tmp/vorher-d78c2466
+> git archive d78c2466 | tar -x -C /tmp/vorher-d78c2466
+> ```
+>
+> Dort bauen, dort messen, dort fotografieren. **Dasselbe Verfahren, das du gestern für
+> `AUF-83-T1a-N1` benutzt hast** (*„Commit-exakter Prüfstand, `git archive d78c2466`"*) und das
+> der Generator heute für den K-08-Vorher-Wert gebraucht hat.
+
+**Was das ändert:**
+
+- **Teil A verliert das Wort „eilig".** Nimm dir die Zeit, die die Messung braucht.
+- **A-03 (`eineWerkzeugzeile` grün vor dem Bau) läuft ebenfalls gegen `d78c2466`**, nicht gegen den
+  Arbeitsbaum.
+- **Der Generator ist entsperrt** — K-01 wartet nicht mehr auf dich.
+
+**Und der Fehler ist meiner, nicht seiner.** Ich habe einen Vorher-Stand als *Zeitpunkt*
+beschrieben und daraus einen Wettlauf gemacht, den niemand gewinnen musste. *Ein Vorher-Stand ist
+ein Commit, kein Zeitpunkt* — das ist ab sofort **R22** im Regelwerk.

@@ -408,3 +408,25 @@ verriegelten. *„Eine Sache, die man so prüfen muss, ist keine ‚eine Ledger-
 *Alle drei Korrekturen stehen zuerst hier im Blatt und danach in Tafel und Ledger. Das ist die
 Reihenfolge, die ich um 21:20 festgelegt habe, nachdem ich sie genau einmal andersherum gemacht
 und damit einen halben Auftrag verursacht hatte.*
+
+---
+
+## NACHTRAG 30.07., 07:12 — K-01 ist entsperrt, der Prüfstand ist ein Commit
+
+**Die Auflage `k01_wartet` fällt.** Sie lautete: *„K-01 wartet auf `EVAL-2026-07-30-A`."*
+
+**Grund für den Wegfall, gemessen:** der Vorher-Stand der Objektseite ist nicht an den Arbeitsbaum
+gebunden, sondern steht in `d78c2466` — dem letzten Commit, der die Insel oder die Blades berührt
+hat. `git show d78c2466:…/objekt.blade.php` trägt `hp-bar`, `hp-obj` und den Übernehmen-Knopf
+weiterhin.
+
+> **R22 — ab sofort im Regelwerk:** *Ein Vorher-Stand ist ein Commit, kein Zeitpunkt.*
+> Wer einen Vorher-Nachher-Beleg braucht, nennt den **Commit**, aus dem er ihn holt
+> (`git archive <commit>`), nicht die Uhrzeit, bis zu der jemand fertig sein muss.
+
+**Was das für dich heißt:** **bau K-01 zu Ende.** Kein Warten auf den Evaluator.
+Die Auflage `buehnel_still` aus R18 gilt weiter — sie kostet dich nichts, weil der Prüfstand
+jetzt aus dem Commit kommt und nicht aus der laufenden App.
+
+*Der Wettlauf, den ich zwischen euch aufgemacht habe, war unnötig. Er stand nicht im Bestand,
+sondern in meiner Formulierung.*
