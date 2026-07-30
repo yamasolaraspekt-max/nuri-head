@@ -181,7 +181,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-021 | `CLAUDE.md` (Skill-Pflicht) | **P2** | 12 von 22 vorgeschriebenen Fach-Linsen existieren an keinem der beiden Skill-Orte | offen | — |
 | PB-019 | `docs/auftraege/` (aktive Blätter) | **P2** | 6 von 15 aktiven Blättern ohne YAML-Kopf — der Validator findet dort nichts zu fahren | offen | — |
 | PB-020 | `AUFTRAGSSCHEMA.md` | P3 | Beispiel nennt `zaehle-statische-stile.sh` — die Datei gibt es nicht | offen | — |
-| PB-033 | `probe_farbe_tmp.mjs` · `probe_shots_tmp.mjs` | **P2 · SICHERHEIT** | zwei NEUE Klartext-Kladden in 37 Min., `.gitignore` deckt keine — PB-018 verdreifacht | offen | — |
+| PB-033 | `probe_*_tmp.mjs` | ~~P2~~ | beide Kladden entfernt (3 → 1 Datei) | **ERLEDIGT** | 30.07. 10:0x |
 | PB-018 | `k01n1b.mjs` | **P2** | Klartext-Zugang im Wurzelverzeichnis; `.gitignore`-Muster greifen nur bei passendem Namen | **ANGENOMMEN** | 30.07. 09:28 — Sicherheitsposten an Yama: `.gitignore` + `mv`; liegt ausserhalb meiner Schreibflaeche |
 | PB-017 | (Arbeitsbaum) | **P1** | 466 geänderte + 8 neue Dateien ungesichert, im Ledger aber als geliefert und geprüft geführt | **ANGENOMMEN — Umfang groesser** | 30.07. 09:28 — gemessen 13 Dateien / 885+232 Zeilen / 10 unverfolgt; Ledger-Korrektur sofort, Sicherung haengt an Yamas A-oder-B-Entscheid |
 | PB-016 | `inventur.sh` / `AUFTRAGSTAFEL.md` | P3 | Inventur zählt Zeilen: 21 Zeilen für 17 Posten (vier doppelt) | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 09:28 — Zaehlfehler im Werkzeug, nicht im Bestand; Posten `scripts/inventur.sh` an den Generator |
@@ -2782,3 +2782,54 @@ unverfolgt                     7   davon 3 Kladden (PB-018/033), 1 Altlast (.rm_
 Blocker fuer eine Abnahme      keiner
 offene Befunde                 10  davon 1 Sicherheit (P2), 7 Papier (registriert, Papierstopp)
 ```
+
+---
+
+## 38. Runde 28 (30.07., Produktionsmodus) — die zwei Kladden sind fort, die Ursache steht
+
+**Gemessen gegen `0f3be79e`.** Kein Blocker: gestaged 0, im Baum geändert (ohne `docs/`) 0.
+
+### PB-033 erledigt — die Symptome
+
+```text
+probe_farbe_tmp.mjs   fort   (nirgends sonst im Baum)
+probe_shots_tmp.mjs   fort   (nirgends sonst im Baum)
+Dateien mit dem Kennwort:  3 -> 1     Historie: 0 (unveraendert)
+```
+
+**Zwei von drei sind innerhalb weniger Minuten verschwunden.** *Wer sie entfernt hat, hat richtig
+gehandelt — und schneller, als ein Vorgang gebraucht hätte.*
+
+### PB-018 bleibt offen, und zwar genau an dem Punkt, den er benannt hat
+
+```text
+.gitignore, letzte Aenderung:   543a25a4 (26.07., Inventur-Posten) - seither unberuehrt
+Muster fuer Kladden:            /_*.mjs   ·   /sichtprobe-*.tmp.mjs
+
+Probe mit erfundenen Namen (git check-ignore):
+  _probe.mjs             gedeckt
+  sichtprobe-a.tmp.mjs   gedeckt
+  probe_xy_tmp.mjs       NICHT gedeckt
+  k02n1b.mjs             NICHT gedeckt
+```
+
+**Die Ursache ist unangetastet.** Der Schutz hängt weiter am Namen: wer seine Kladde nach dem
+Hausmuster benennt, ist gedeckt; wer sie `probe_…` oder `k02n1b.mjs` nennt, nicht. **Und genau das
+ist heute schon zweimal passiert** — um 09:56 und 09:57, von zwei Kladden, deren Namen niemand
+absichtlich falsch gewählt hat.
+
+**Damit steht die Bilanz dieses Befundes so:**
+
+| | |
+|---|---|
+| Symptome behoben | **3 von 3 Vorfällen** (`k01n1b.mjs` verbleibt, aber ohne neue) |
+| Ursache behoben | **nein** — `.gitignore` seit 26.07. unberührt |
+| nächster Vorfall verhindert | **nein** — dieselbe Lücke, derselbe Weg |
+
+*Das ist die Unterscheidung, für die R9 gebaut ist: „ein Absatz, ein Hinweis oder ‚künftig darauf
+achten' zählt nicht als Barriere." Zweimal aufräumen ist zweimal aufräumen, keine Barriere.*
+
+**Erledigt wenn:** *`git check-ignore -q probe_xy_tmp.mjs` liefert `0`* — ein erfundener Name, der
+heute durchfällt. **Ein Muster, das die Klasse trifft, ist eine Zeile.**
+
+**Ballbesitz: Planner.** **PB-033 geschlossen, PB-018 offen mit geschärfter Begründung.**
