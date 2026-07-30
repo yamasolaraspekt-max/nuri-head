@@ -19657,3 +19657,57 @@ Das kann kein Planner für ihn tun.*
 - **Evaluator:** `AUF-83-T1a-N1` (`d78c2466`) — Freigabe liegt seit 21:34, die Zeile im Ledger ist
   seine.
 - **Yama:** AUF-84 (~3000 `<option>` je Seitenaufbau) · getrennte Arbeitsbäume · Tor 2.
+
+---
+
+## ⇒ PLANNER — T5 liegt, damit nach T3 kein Leerlauf entsteht (29.07., 21:55 CEST)
+
+**`docs/auftraege/generator-auftrag-auf83-t5-schienen-klappbar.md` — 265 Zeilen, acht Kriterien.**
+Yamas Punkt 4 aus dem Auftrag vom 29.07.: *„beide Sidebars unabhängig klappbar als Overlay,
+Escape schließt das oberste, Zustand pro Nutzer und Workspace."*
+
+### Zuerst gemessen, dann geschrieben — R11, und diesmal vorher
+
+**Die Grundgesamtheit von T3 war vier Tage alt** (F-04, vierte Ausprägung). Für T5 habe ich vor
+dem Schreiben gemessen und die Befehle danach noch einmal gefahren:
+
+| Was | Gemessen | Befehl |
+|---|---|---|
+| Schienen | **2** — `HausplanerApp.tsx:1373` (220 px), `:1799` (268 px) | `grep -c 'data-schiene'` |
+| Klappzustände in der Insel | **0** | `grep -c 'collapsed\|klappZu\|schieneZu'` |
+| `Escape`-Vorkommen | **6 in 4 Dateien**, davon **3** mit eigenem `document`-Listener | `grep -rc "key === 'Escape'"` |
+| Scheibe 7 | **138 Stellen, 78 offen** — und **`Z1373` ist eine davon** | `statische-inline-stile.mjs` |
+| Testdateien, die `HausplanerApp` einlesen | **22** | `grep -rl` (R12) |
+
+**Meine erste Zählung sagte fünf Escape-Stellen.** Beim Nachfahren des `population_command` waren
+es sechs — `HausplanerApp.tsx:2226`, der Escape im Filterfeld der Palette. **Das Blatt ist um
+21:52 korrigiert worden, bevor es hier steht.** *Der Validator hätte das ohne mich gefunden; er
+ist der dritte Posten in der Reihe.*
+
+### Zwei Dinge, die aus den Fehlern von heute in dieses Blatt eingebaut sind
+
+**1. Die Sperre ist enger geschnitten — und deshalb kürzer.** Sie endet mit dem **Bau von T3 und
+der eingetragenen K-08-Messung**, nicht mit T3s Abnahme. **T5 verändert die Breite derselben
+Bühne, deren Höhengewinn K-08 belegen soll** — ohne festgehaltene Zahl wäre das die dritte
+Ausprägung von F-13 an einem Tag.
+
+> **Und das ist der Ertrag der neuen Barriere, am ersten Tag:** weil der Vorher-Wert ab T3 in der
+> Quittung steht, ist der Prüfstand eine **Zahl** und kein **Zustand**. Eine Zahl kann kein
+> Folgeauftrag zerstören. **Die Barriere hat die Sperre verkürzt, nicht verlängert** — der
+> R10-Zusatz von heute Mittag greift hier gar nicht mehr.
+
+**2. Die Lücke steht im Blatt, nicht im Kleingedruckten.** Yama schrieb *„pro Nutzer und
+Workspace"*. Geliefert wird **pro Gerät und Arbeitsbereich** — `localStorage`, wie bei
+`arbeitsbereichSpeicher.ts` und `angeheftet.ts`. *Ein Auftrag, der eine Zusage halb einlöst und
+ganz abhakt, ist die teuerste Sorte.* „Pro Nutzer" heißt Migration, Endpunkt und Autorisierung
+und gehört damit zu Tor 1 — eigener Posten, nicht hier versteckt.
+
+### R16 ist eingehalten: zwei Aufträge liegen vor der Front
+
+1. **T3** — `⚡ AKTIV`, entsperrt, Spur A.
+2. **T5** — liegt, gesperrt mit benannter Bedingung.
+3. **`scripts/auftrag-pruefen.sh`** — der Validator, seit dem 27.07. offen. Er fährt jeden
+   `pruefung.befehl` aus dem YAML-Kopf und meldet, welcher ins Leere greift. **Er macht F-04 von
+   einer Regel zu einer Barriere.** *Vier Ausprägungen hat die Klasse; drei davon hätte er
+   abgefangen — meine falsche Testdatei in T1a, mein falscher Ausschluss in T2, meine veraltete
+   Grundgesamtheit in T3.*
