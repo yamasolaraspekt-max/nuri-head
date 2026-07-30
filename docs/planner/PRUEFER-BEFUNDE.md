@@ -174,6 +174,8 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-009 | `bestandsaufnahme-studio-rahmen-2026-07-29.md` | **P2** | Konflikttabelle sperrt eine freie Datei; Anker auf einen Rahmen, der seit T1/T3 umgebaut ist (217→159 Z.) | offen | — |
+| PB-010 | `stilschicht.test.ts` | P3 | Wirkungs-Zusage prüft gegen 3 tote Bezeichner — **`eigenarbeit: ja`, Urteil beim Evaluator** | offen | — |
 | PB-008 | `generator-auftrag-auf83-t2t3-kopfleiste.md` | P3 | aktives Blatt führt `T1a` als offenen Schritt — Code und Register führen ihn als erledigt (`97a2e2a4`) | offen | — |
 | PB-007 | `zuschnitt-auf48-hausplanerapp-zerlegen.md` | P2 | Schnittkanten als absolute Zeilennummern — am Commit korrekt, im Baum schon 4/62 Zeilen abgewandert | offen | — |
 
@@ -817,3 +819,114 @@ ihr.*
 | **L6 Workflow** | nicht geprüft |
 
 **Ballbesitz: Planner.**
+
+---
+
+## 15. Runde 8 (30.07.) — `bestandsaufnahme-studio-rahmen-2026-07-29.md` + ein Befund gegen mich selbst
+
+**Gemessen gegen `09781ce7`.** Das Papier ist die erklärte **„Grundlage"** des aktiven
+Auftragsblatts `generator-auftrag-auf83-t2t3-kopfleiste.md`.
+
+### Was trägt
+
+| Behauptung | Gemessen |
+|---|---|
+| `speicherAnzeige.ts:45` — `text: 'Testfläche — wird nicht gespeichert'` | **Z45**, wörtlich |
+| Kontextmenüs: `onContextMenu`/`onDoubleClick` **0 Treffer** in der Insel | **0** |
+| `befehlspalette` in `werkzeugPaket.ts:427` | **427** |
+| `befehlspalette` in `werkzeugVertrag.ts:1309` | **1309** |
+
+### PB-009 · P2 · Die Konflikttabelle des aktiven Blatts beschreibt einen Bestand von gestern Abend
+
+```yaml
+befund:
+  id: PB-009
+  datei: "docs/planner/bestandsaufnahme-studio-rahmen-2026-07-29.md"
+  stelle: "Abschnitt 'Wer hat die Datei heute' (Z165-172) und die Anker in Z47, Z109-111"
+  behauptung: |
+    HausplanerStudio.tsx (217 Z.) frei · HausplanerApp.tsx (2305 Z.) · ConfigWizard.tsx:
+    "AUF-38 Scheibe 5 - laeuft gerade" · Studio-Navigation klappbar 266<->66 px
+    (HausplanerStudio.tsx:25 navZu) · Werkzeugleiste HausplanerApp.tsx:1371 ·
+    Panel HausplanerApp.tsx:1793 · studio.blade.php:34 hp-scratch
+  gemessen: |
+    HausplanerStudio.tsx      159 Zeilen  (Papier 217)
+    navZu im Produktivcode    0 Treffer   (die klappbare Navigation gibt es nicht mehr)
+    studio.blade.php          hp-scratch 0 Treffer - absichtlich entfernt, das Blade
+                              dokumentiert es selbst in Z52/Z59
+    HausplanerApp.tsx         2308 Zeilen (Papier 2305); Z1371 und Z1793 tragen anderen Inhalt
+    ConfigWizard.tsx          Scheibe 5 laeuft NICHT - Tafel: "SCHEIBE 5 ANGEHALTEN",
+                              Quittung TRAEGT NICHT (d4e73fe2)
+  befehl: |
+    git show HEAD:resources/planner/hausplaner/app/HausplanerStudio.tsx | wc -l
+    git grep -ln "navZu" HEAD -- 'resources/planner/hausplaner'
+    git show HEAD:resources/views/admin/hausplaner/studio.blade.php | grep -c 'hp-scratch'
+  commit: "09781ce7"
+  schwere: P2
+  wirkung: |
+    Der Abschnitt existiert, um zwei Schreiber auf einer Datei zu verhindern - er ist das
+    Werkzeug gegen genau den Schaden, den der Evaluator am 28.07. gemeldet hat (Bundle
+    vorgelaufen, Sichtprobe unfuehrbar). Er fuehrt ConfigWizard.tsx als besetzt, obwohl die
+    Scheibe angehalten ist: eine Datei wird gesperrt, die frei ist. Und er beschreibt eine
+    klappbare Navigation als Muster zum Abschauen, die es nicht mehr gibt.
+    Die Zeilenzahlen sind der kleinere Teil - die Belegung ist der gefaehrliche.
+  eigenarbeit: nein
+```
+
+**Wie bei PB-007 ist das kein Sorgfaltsbefund:** die Aufnahme war am 28.07. um 23:05 richtig. Am
+nächsten Morgen hat **AUF-83-T1/T3 genau die Datei umgebaut, die sie beschreibt** — von 217 auf 159
+Zeilen. *Eine Aufnahme des Rahmens, die den Umbau des Rahmens überlebt, kann es nicht geben.*
+
+**Erledigt wenn:** *der Abschnitt „Wer hat die Datei heute" nennt für jede Datei einen Zustand, der
+mit der Tafel übereinstimmt — messbar: kein Eintrag führt eine Scheibe als „läuft gerade", die auf
+der Tafel angehalten oder abgenommen ist.*
+
+### PB-010 · P3 · Meine eigene Zusage prüft gegen drei Bezeichner, die es nicht mehr gibt
+
+```yaml
+befund:
+  id: PB-010
+  datei: "resources/planner/hausplaner/__tests__/stilschicht.test.ts"
+  stelle: "Z284 - die Wirkungs-Zusage aus AUF-38 Scheibe 4"
+  behauptung: "const dynamisch = /\?|navZu|offeneHubs|imExperte|navBreit|\bst\.|\bp\.|\bf\./"
+  gemessen: |
+    navZu       0 Treffer im Produktivcode
+    offeneHubs  0
+    navBreit    0
+    imExperte   3   (der einzige, der ueberlebt hat)
+    Die Suite ist gruen (1394/1394) und HausplanerStudio.tsx hat heute 5 Inline-Stile,
+    davon 0 offen - es entsteht also KEIN falsches Rot, heute.
+  befehl: |
+    for m in navZu offeneHubs imExperte navBreit; do
+      echo "$m $(git show HEAD:resources/planner/hausplaner/app/HausplanerStudio.tsx | grep -c $m)"
+    done
+  commit: "09781ce7"
+  schwere: P3
+  wirkung: |
+    Drei tote Bezeichner in einer Zusage sind ein zweiter Massstab neben
+    scripts/statische-inline-stile.mjs - genau die zweite Wahrheit, gegen die das Skript
+    gebaut wurde. Ein kuenftiger dynamischer Block mit einem NEUEN Bezeichner wird als
+    "ohne Grund" gemeldet, obwohl er einen hat: falsches Rot an einer Stelle, an der
+    niemand mehr hinsieht, weil die Zusage seit Wochen gruen ist.
+  eigenarbeit: JA
+```
+
+> **`eigenarbeit: ja` — dieser Befund trifft meine eigene Arbeit als Generator** (AUF-38 Scheibe 4).
+> **Das Urteil liegt beim Evaluator, nicht bei mir.** Meine Messung ist die Vorlage, nicht die
+> Entscheidung. *Ich melde ihn trotzdem, weil eine Prüfinstanz, die ihre eigenen Spuren auslässt,
+> ihre Unabhängigkeit von der falschen Seite her verliert.*
+
+**Bemerkenswert:** die Datei **weiß es schon**. In Z417 steht: *„Scheibe 4 trug dafür eine
+handgeschriebene Regex-Liste (`navZu`, `offeneHubs`, …) — die musste jeder neue Bezeichner
+nachziehen, und sie war ein zweiter Maßstab."* Der Nachfolger hat das Problem benannt und die
+Skript-Zusage danebengestellt — **aber die alte Liste steht weiter da und prüft weiter.**
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | PB-009 — Zeilenzahlen und Anker |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | PB-009, PB-010 — zwei Maßstäbe für dieselbe Sache, zweimal |
+| **L4 Kausalität** | PB-010 — die Kette *Marker → Einstufung* greift ins Leere |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | keine Beanstandung |
+
+**Ballbesitz: Planner** (PB-009) · **Evaluator** (PB-010, `eigenarbeit`).
