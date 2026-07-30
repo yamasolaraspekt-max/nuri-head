@@ -488,3 +488,60 @@ Zwei Laufzeitfehler an der Kalibrierung, **beide erst in der Sichtprobe gefunden
 | **BT-01** | Palette wechselt nicht mit dem Bereich — in Bauphysik/Heizung/Elektro·PV dieselben sieben Architektur-Werkzeuge, sechs ausgegraut | Planner-Browsertest 20:05; vom Evaluator **nicht** abgedeckt (er verglich nur innerhalb Architektur) |
 | **BT-03** | zwei JS-Fehler auf jeder Seite aus `chat-*.js` | von Generator **und** Evaluator unabhängig als vorbestehend/CRM bestätigt — **nicht** Hausplaner |
 | AUF-86 | oben aktualisiert: 56 px unter dem Fensterrand, `sichtbareHoehe` greift nicht für three.js | Evaluator, headful WebGL |
+
+---
+
+## ENTSCHEIDUNG 30.07. 20:28 — die überholte `nochNicht`-Marke (Ball vom Evaluator, seit dem T3-Prüfstand offen)
+
+### Gemessen, nicht angenommen
+
+```text
+Bereiche mit der Marke:  genau EINER  ->  'Import & Nachzeichnen' (WORKSPACE_IMPORT)
+Text der Marke:          "Die Werkzeuge sind benannt, aber noch nicht gebaut."
+```
+
+**Die Gegenprobe: sind sie gebaut?**
+
+```text
+resources/planner/hausplaner/app/unterlage/   3 Bauteile
+    UnterlagenEbene.tsx · UnterlagenWerkzeuge.tsx · kalibrierung.ts
+routes/web.php                                 PlanUploadController  index · store · destroy
+phpunit PlanUpload                             12/0
+Kalibrierung im Browser (Generator, 20:1x)     Maßstab 2.028 mm/Einheit berechnet und übernommen
+```
+
+**Im Browser gesehen** (Planner, 20:05, `hausplaner/studio`): der Reiter steht ausgegraut da als
+*„Import & Nachzeichnen · noch nicht"* — **während die Werkzeuge dahinter funktionieren.**
+
+### Der Text ist nicht falsch, er ist überholt — und das ist der Unterschied
+
+*„Benannt, aber noch nicht gebaut"* **stimmte, als er geschrieben wurde.** Inzwischen stehen
+Upload, Kalibrierung und die Unterlagen-Ebene. **Was fehlt, ist das Nachzeichnen selbst** — die
+Unterlage ist am Szenen-Ursprung verankert und lässt sich nicht platzieren *(Befund des Generators,
+20:2x — derselbe Ball liegt bei mir)*.
+
+**Deshalb keine Löschung.** Eine Marke zu entfernen, weil ein Teil fertig ist, tauscht eine
+überholte Aussage gegen eine falsche. **Entscheidung:**
+
+| | |
+|---|---|
+| **1. Text richtigstellen** | `nochNicht: 'Import und Kalibrieren stehen. Das Platzieren der Unterlage fehlt noch.'` |
+| **2. Die Marke bleibt**, bis das Platzieren gebaut ist | sie ist dann *wahr*, nicht mehr *überholt* |
+| **3. Der eigentliche Mangel** | die Marke ist ein **fester String im Datensatz**. Sie folgt aus keiner Bedingung, also veraltet sie lautlos — genau so ist es hier passiert. *Eine Marke, die niemand widerlegen kann, ist keine Aussage über den Bau, sondern über den Tag, an dem jemand sie tippte.* |
+
+### Daraus: AUF-90 *(klein, Spur B — ein Datensatzfeld und sein Test)*
+
+Text richtigstellen **und** eine Zusage dagegen setzen, die beim nächsten Mal anschlägt:
+
+```yaml
+  - id: K-01
+    aussage: "Die nochNicht-Marke veraltet nicht mehr lautlos."
+    gegenbeweis: >
+      Ein Test, der die Marke gegen die EXISTENZ der genannten Bauteile prüft:
+      trägt WORKSPACE_IMPORT die Marke, MUSS `app/unterlage/` unvollständig sein.
+      Lege die fehlende Datei an -> der Test wird rot und verlangt die Textänderung.
+      Das ist die Sache; ein Test auf den Wortlaut wäre die Gestalt.
+```
+
+**Nach AUF-48.** Ballbesitz: **Generator** (AUF-90) · **Planner** (Platzieren der Unterlage —
+eigener Entscheid, noch offen).
