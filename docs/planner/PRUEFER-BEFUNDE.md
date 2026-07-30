@@ -318,3 +318,61 @@ eine ungemessene Behauptung** — ich habe die Abschnitte nicht gegen die heutig
 Es steht hier als **Hinweis auf die nächste Runde**, nicht als Befund.
 
 **Ballbesitz: Planner.**
+
+---
+
+## 8. Runde 2 (30.07.) — `eindeutschung-110-paket-ids.md`: **keine Beanstandung**
+
+**Gemessen gegen `9e4fac05`.** Diese Fläche habe ich mir vorgenommen, weil sie das **am häufigsten
+referenzierte** alte Papier ist (fünf eingehende Verweise, u. a. *„Führende Quelle — nicht neu
+erfinden"* im Auftragsblatt zu AUF-31) und sich selbst **„führende Wahrheit"** nennt. Ein falscher
+führender Bestand wäre der teuerste Fund überhaupt.
+
+**Sie ist nicht falsch. Vier Aussagen, vier Treffer:**
+
+| Behauptung | Gemessen | Befehl |
+|---|---|---|
+| die vollständige Tabelle führt **110** | Tabelle hat **110** Zeilen, **110** verschiedene dt. IDs | `awk -F'\|' '/^\| *[0-9]+ *\|/' … \| wc -l` |
+| `tool-registry-paket.json` hat **110** Einträge | **110** | `python3 -c "import json; …len(x)"` |
+| **16** IDs sind schema-gebunden (⛔) | **16** | `grep -cE '⛔ \`' …` |
+| AUF-34-Nachtrag: Z41 `oeffnung`, Z98 `uebergabepaket` berichtigt | beide im Papier korrekt **und** beide im Code vorhanden | `grep -cE "id: '(oeffnung\|uebergabepaket)'" …/werkzeugPaket.ts` → 2 |
+
+**Der Abgleich Papier ↔ Code geht auf:** `werkzeugPaket.ts` führt **101** IDs, im Papier stehen
+**110**. Die **neun** Differenzen sind *exakt* die neun, die das Papier selbst mit `*(9)*` markiert
+— Legende: *„deckt eine der 9 bestehenden Registry-IDs (Konvergenz)"* — und alle neun sind im Code
+auffindbar (4–6 Fundstellen je ID). **101 + 9 = 110.** In der Gegenrichtung: **null** IDs im Code,
+die das Papier nicht kennt.
+
+```sh
+comm -23 papier.txt code.txt   # auswahl dach decke duplizieren fenster loeschen treppe tuer wand
+comm -13 papier.txt code.txt   # (leer)
+```
+
+### Eine Beinahe-Fehlmeldung, die ich offenlege
+
+**Mein erster Auszug war falsch** — er las die falsche Tabellenspalte und lieferte *„7 IDs im
+Papier, 0 im Code"*. Hätte ich das gemeldet, stünde hier ein P1 gegen ein Papier, das stimmt.
+Gefangen hat es die Plausibilität: *ein Papier mit „110" im Dateinamen kann keine 7 Zeilen führen.*
+
+**Die Lehre gehört ins Register, nicht in eine Fußnote:** die Extraktion einer Grundgesamtheit ist
+selbst ein Messwerkzeug und muss geeicht werden, bevor sie zum Befund wird — hier an der
+Zeilenzahl (110) und an der Gegenrichtung (leer). *Dieselbe Fehlerklasse, die AUF-38 vier Scheiben
+gekostet hat, nur diesmal auf der Prüfseite.*
+
+### Die sechs Linsen
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — vier Zahlenaussagen geprüft, alle vier treffen |
+| **L2 Effizienz** | keine Beanstandung — keine Aufwandsaussage im Papier |
+| **L3 Konsistenz** | keine Beanstandung — die parallele Tabelle `werkzeug-namen-deutsch.md` ist ausdrücklich **stillgelegt** und verweist hierher; **eine** führende Wahrheit, wie verlangt |
+| **L4 Kausalität** | keine Beanstandung — die Kette Papier → `werkzeugPaket.ts` → Registry ist in beide Richtungen geschlossen |
+| **L5 Plausibilität** | keine Beanstandung *(und die Linse, die meinen eigenen Messfehler gefangen hat)* |
+| **L6 Workflow** | keine Beanstandung — das Papier beschreibt keinen Arbeitsweg |
+
+**Kein Befund. Ballbesitz bleibt beim Prüfer** — hier ist nichts zu beantworten.
+
+*Für den Planner ist das trotzdem eine Information: **das meistreferenzierte alte Papier trägt.**
+Die sechs Tage Alter sagen nichts über die Haltbarkeit — `tool-dashboard-current-state.md` vom
+selben Tag ist an vier Stellen überholt, dieses hier an keiner. Der Unterschied ist nicht das
+Datum, sondern dass dieses Papier **gepflegt** wurde: der AUF-34-Nachtrag steht drin.*
