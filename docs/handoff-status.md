@@ -22501,3 +22501,187 @@ das ich vor zwanzig Minuten geschrieben habe.
 
 *Zwei der heutigen Korrekturen kamen von Yama und trafen meine eigenen Regeln von vor einer Stunde.
 Beide waren richtig. Das ist der Maßstab.*
+
+---
+
+## ⇒ EVALUATOR — `T3-K01-B1`: **BEHOBEN, bestätigt** · dein zweiter Befund unabhängig nachgemessen und als **P1** eingestuft (30.07., 07:47 CEST)
+
+*Zeit aus `TZ=Europe/Berlin date`. Nur lesende Gates gefahren (R19.5), Mutationen in der Kopie.*
+
+### 1. Die Behebung trägt
+
+```text
+Buendel  js 1423502 5a24127c1ef3f3c1 · css 17973 80c9e9eca2818c6e   BYTEGLEICH mit deinem Bericht
+test:hausplaner 1394 / 0 · dom 16 / 0 · tsc exit 0 · Messwerkzeug HausplanerApp 138 / 78 unveraendert
+```
+
+**Am Modul, mit der echten Nutzlast von Objekt 154:**
+
+```text
+revision null  ⇒ GELESEN, revision = undefined     ← und sauber auf "nicht gesetzt" normalisiert
+revision 3     ⇒ GELESEN
+revision "3"   ⇒ null                              ← der Negativfall beisst WEITER
+```
+
+**Und an den drei Objekten, die vorher leer blieben:** 154 · 153 · 152, alle `status: nie`,
+`revision: null` — **alle drei werden jetzt gelesen.**
+
+### 2. Deine verallgemeinernde Zusage ist in vier Richtungen verriegelt — das ist die eigentliche Arbeit
+
+Vier eigene Mutationen, Grundlinie 13/0 vor und nach jeder Probe:
+
+```text
+A  o.revision !== null wieder entfernt (Originalfehler)   ⇒ ROT (2 Zusagen)
+B  NEUES Feld 'ziel' => ?? null im Blade ergaenzt          ⇒ ROT   ← sie liest wirklich das Blade
+C  'adresse' im Blade zu 'adr' umbenannt                   ⇒ ROT
+D  ?? null zu ?? 0 gemacht (nichts mehr nullbar)           ⇒ ROT   ← der Waechter gegen LEERE greift
+```
+
+**D ist die Probe, die mir am wichtigsten war.** Eine Zusage, die eine Menge durchläuft, ist wertlos,
+wenn die Menge leer sein kann — genau der Fehler, den ich zwei Stunden vorher an `AUF-87`s
+Denylist-Zusage gefunden habe (`for (const muster of DENYLIST)`). **Hier hast du den Wächter
+eingebaut** (`assert.ok(nullbar.length > 0)`), und er schlägt an. *Das ist das Muster, das die
+`AUF-87`-Nachbesserung braucht — es liegt schon im Repo.*
+
+> **`T3-K01-B1`: `ERFÜLLT`.** Ursache behoben, Verallgemeinerung testverriegelt, Negativfall
+> unbeschädigt, keine Regression.
+
+### 3. Dein zweiter Befund — ich stufe ihn als **P1** ein und mache ihn zu `T3-K01-B3`
+
+Unabhängig nachgemessen, Objekt 203, gebautes Bündel, nach `cmd+shift+r`, alle vier Zustände:
+
+```text
+Zustand              Objektname            Übernehmen-Knopf            Pille          .hp-bar
+Startzustand         —                     —                           —              0
+Übersicht            —                     —                           —              0
+Geführte Planung     —                     —                           —              0
+Expertenmodus        EVALUATOR-MESSWELLE   In Auslegung übernehmen     VERALTET       0
+```
+
+**In drei von vier Zuständen, darunter dem Startzustand, sind Objektname, Übernehmen-Knopf und
+Staleness-Pille nicht erreichbar.** Vorher trug die Blade-Leiste sie **über** der Insel, in allen
+Modi — `.hp-bar` ist jetzt überall 0.
+
+**Warum P1 und nicht P2:** es ist der Verlust einer Bedienung, die vorher da war, im
+**Standardzustand** der Seite. Ein Nutzer, der die Übernahme auslösen will, findet sie ohne
+Vorwissen nicht mehr. *Das ist dieselbe Wirkung wie B1, nur mit anderer Ursache — und B1 war P1.*
+
+**Kein Vorwurf an dich:** du hast ihn selbst gemeldet, bevor ich ihn hatte, und **richtig nicht
+gebaut** — die Auflösung berührt `HausplanerStudio.tsx` und die Frage, wo Zustand wohnt (`AUF-48`).
+*Du hast außerdem selbst benannt, warum er dir beim Bauen entging: du hast in jeder eigenen
+Sichtprobe zuerst den Expertenmodus geklickt. Ich auch — zweimal heute, und beim ersten Mal hätte
+ich fast einen Fehlbefund daraus gemacht.*
+
+### 4. Und das Kriterium konnte diesen Fehler strukturell nicht sehen
+
+```yaml
+K-01: pruefung: { typ: visuell, schritte: "1440 px, Expertenmodus" }
+```
+
+**Das Kriterium schreibt genau den einen Modus vor, in dem die Sache funktioniert.** Wer es nach
+Vorschrift prüft, bekommt Grün — in drei anderen Zuständen ist die Funktion weg. **Nach der
+Vorschrift ist `K-01` erfüllt; nach der Aussage („die Kopfleiste trägt das DOKUMENT vollständig")
+ist sie es nicht.**
+
+> **Als Zusatz zu `AUF-90` an den Planner** (nicht als neue Nummer — Regel-Inflation hilft keinem):
+> `AUF-90` sagt bisher *„ein Zählkriterium braucht die Zählregel"*. Zweiter Teil: **ein Kriterium,
+> das seinen eigenen Messpunkt benennt, kann nur sich selbst bestätigen.** Wo ein Zustand mehrere
+> Ausprägungen hat (Modus, Rolle, leere/gefüllte Daten), muss die Prüfvorschrift **alle** nennen
+> oder sagen, warum eine genügt. *Dritter Fall heute derselben Familie: F-15 (Zähler kann
+> test-first-Rot nicht deuten), `AUF-90` (Zählregel fehlt), dieser hier.*
+
+### 5. Voten
+
+| Posten | Votum |
+|---|---|
+| `T3-K01-B1` (revision null) | **ERFÜLLT** — behoben, 4 Mutationen beißen, Negativfall intakt |
+| `K-01` nach Prüfvorschrift (Expertenmodus, 1440) | **ERFÜLLT** |
+| `K-01` nach Aussage (alle Zustände) | **NICHT ERFÜLLT** — `T3-K01-B3`, P1 |
+| `K-02` (eine Bezeichnung) | **ERFÜLLT** (Beleg 07:31) |
+| `K-05` / `K-05b` | **ERFÜLLT** (Beleg 07:12) |
+
+> ### GESAMTVOTUM `AUF-83-T3`: **KEINE FREIGABE — ein P1 offen (`T3-K01-B3`)**
+> Nach §5 ist FREIGABE ausgeschlossen, solange ein P1 nicht erfüllt ist. **Der Blocker ist kein
+> Baufehler mehr, sondern eine offene Planner-Entscheidung:** gehört der Objektkopf in die Schale
+> (dann `AUF-48`) oder nimmt T3 die Einschränkung bewusst an (dann ein Satz ins Blatt, warum der
+> Objektname im Startzustand fehlt). **Alles andere an T3 steht und ist belegt.**
+
+**Ballbesitz: Planner** (`T3-K01-B3` — Entscheid, wo der Kopf wohnt · `AUF-90` Teil 2 · die
+`AUF-87`-Gegenprobe). **Generator:** `AUF-87-B1` (P1, offen) — *und das Muster dafür ist dein eigener
+`nullbar.length > 0`-Wächter.* **Yama:** 18+ Commits auf keinem Remote, letzter gesicherter Stand
+`8ae4a1f5` (29.07. 07:59).
+
+Kein Commit durch mich, kein Push, kein Tor 2, kein Produktivcode angefasst.
+
+---
+
+## ⇒ PLANNER — Punkt 12 ist NICHT PLANUNGSREIF, und der Grund war eine Messung wert (30.07., 07:50 CEST)
+
+**Keine neue Meldung.** Der Generator baut weiter — 23 veränderte oder neue Dateien im Baum.
+
+**Diese Runde war eine Discovery für Punkt 12 (Kennzahlen automatisch erfassen).** Ergebnis:
+**PLANUNGSBLOCKIERT — und das ist ein gutes Ergebnis, weil es vor dem Blatt kam.**
+
+### Gate A — der Bestand ist besser, als ich dachte
+
+```text
+scripts/fortschritt.sh   127 Z.  (AUF-79)
+```
+
+**Es tut architektonisch bereits genau das Richtige** und sagt es selbst:
+
+> *„Keine zweite Buchführung. Die Tafel ist die Wahrheit, diese Seite ist ihre Darstellung. Hier
+> wird keine Zahl gepflegt … **Steht hier je eine Zahl im Quelltext, ist der Posten falsch
+> gebaut.**"*
+
+Es liest den **committeten** Stand (`git show HEAD:…`), nie den Arbeitsbaum, und es hängt am
+Wächter (`waechter.sh:234`), nicht an einer Uhr.
+
+**Damit ist die Frage beantwortet, die ich gar nicht gestellt hatte:** die Kennzahlen gehören
+**dorthin**, nicht in ein neues `scripts/kennzahlen.sh`. *Ein zweites Skript wäre genau der zweite
+Mechanismus, vor dem die Datei in ihrem eigenen Kopf warnt.*
+
+### Gate B — und hier bricht es
+
+**Die Kennzahlen sind heute nicht zählbar.** Gemessen:
+
+```text
+"TRÄGT NICHT"    12   ·   "TRAEGT NICHT"    1      zwei Schreibweisen
+"NICHT PRÜFBAR"  13   ·   "NICHT PRUEFBAR"  0
+"FREIGABE"      151                                das Wort steht ueberall im Fliesstext
+"BEREITS ERFUELLT" 3 ·   "BEREITS ERFÜLLT"  0
+```
+
+**Ein `grep` auf Fließtext zählt Erwähnungen, nicht Voten.** *Das ist F-09 — „Text wird gemessen,
+nicht Absicht" — und sie hätte hier ihre dritte Ausprägung bekommen, wenn ich das Blatt ohne diese
+Messung geschrieben hätte.*
+
+**Was zählbar IST:** die Zähler im Fehlerklassen-Register kommen sauber heraus
+(`4 3 4 5 2 6 5 2 4 2 4 2 3 2 28`). **Die Wiederholungsrate je Klasse ist also schon heute
+messbar** — sie ist die einzige der sieben Kennzahlen, die keine Vorarbeit braucht.
+
+### Die Vorbedingung — eine Zeile, und sie steht ab sofort in den Kernregeln
+
+```text
+VOTUM: auftrag=AUF-83-T3 rolle=generator ergebnis=TRAEGT-NICHT commit=fe0af8df datum=2026-07-30T06:25
+```
+
+**Feste Felder, feste Werte, keine Umlaute, keine Leerzeichen im Wert.** Die Prosa darunter bleibt,
+wie sie ist — *sie ist für Menschen, diese Zeile ist für `grep`.*
+
+**Was das kostet: eine Zeile je Votum. Was es liefert:** Rejection Rate, Already-Satisfied Rate,
+No-Build-Detection Rate, Time-to-Verdict, Wiederholungsrate und die Rollenverteilung — **alle aus
+einem einzigen `grep`, ohne zweite Buchführung.**
+
+### Reihenfolge damit
+
+```text
+1. Votumszeile ab sofort in jedem Votum und jeder Quittung  — kostet nichts, faengt sofort an zu sammeln
+2. Punkt 12 als Erweiterung von fortschritt.sh              — Blatt, sobald genug Zeilen liegen
+3. KEIN scripts/kennzahlen.sh                               — das waere die zweite Buchfuehrung
+```
+
+*Und ein Nebenbefund an mir selbst: meine erste Prüfung dieser Änderung lieferte **0**, weil ich
+`^VOTUM:` gesucht habe und die Zeile in einem Zitatblock steht. **Zweite Ausprägung von „meine
+Probe war kaputt, nicht die Datei"** — R21 in ihrer erweiterten Fassung, an mir selbst, zwei
+Stunden nachdem ich sie geschrieben habe.*

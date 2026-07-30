@@ -95,3 +95,39 @@ nächster erwarteter Status`.
   `zoneType`, `routeType`).
 - **Tor 2 (main-Merge, Deploy) gehört Yama allein.**
 - **Schreib-Heimat einhalten:** lesen überall, schreiben nur in der zugewiesenen App.
+
+---
+
+## Die Votumszeile — eine Zeile, die sechs Kennzahlen mechanisch macht
+
+**Gemessen am 30.07., 07:48:** die Voten sind heute **nicht zählbar**.
+
+```text
+"TRÄGT NICHT"   12   ·   "TRAEGT NICHT"    1     zwei Schreibweisen
+"NICHT PRÜFBAR" 13   ·   "NICHT PRUEFBAR"  0
+"FREIGABE"     151                               das Wort steht ueberall im Fliesstext
+```
+
+**Ein `grep` auf Fließtext zählt Erwähnungen, nicht Voten.** *Das ist F-09 — „Text wird gemessen,
+nicht Absicht" — und sie hätte hier ihre dritte Ausprägung bekommen.*
+
+> ### Jedes Votum und jede Quittung beginnt mit EINER maschinenlesbaren Zeile
+>
+> ```text
+> VOTUM: auftrag=AUF-83-T3 rolle=generator ergebnis=TRAEGT-NICHT commit=fe0af8df datum=2026-07-30T06:25
+> ```
+>
+> **Feste Felder:** `auftrag` · `rolle` (planner|generator|evaluator|plan-reviewer|pruefer) ·
+> `ergebnis` · `commit` · `datum` (ISO).
+>
+> **Erlaubte Werte für `ergebnis`:**
+> `TRAEGT` · `TRAEGT-NICHT` · `FREIGABE` · `NACHBESSERN` · `NICHT-PRUEFBAR` ·
+> `BEREITS-ERFUELLT` · `PLANUNGSREIF` · `NICHT-PLANUNGSREIF` · `NICHT-NOTWENDIG` ·
+> `PLANUNGSBLOCKIERT` · `ANGENOMMEN` · `ABGELEHNT` · `BEHOBEN`
+>
+> **Keine Umlaute, keine Leerzeichen im Wert.** Die Prosa darunter bleibt, wie sie ist —
+> *sie ist für Menschen, diese Zeile ist für `grep`.*
+
+**Was das kostet:** eine Zeile je Votum. **Was es liefert:** Rejection Rate, Already-Satisfied
+Rate, No-Build-Detection Rate, Time-to-Verdict, Wiederholungsrate und die Rollenverteilung —
+**alle aus `grep '^VOTUM: ' docs/handoff-status.md`**, ohne zweite Buchführung.
