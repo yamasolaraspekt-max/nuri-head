@@ -23386,3 +23386,157 @@ trotzdem angehängt.** Die Korrektur selbst fand nicht statt.
 > Aufgefallen ist es an einer Zeile: `grep -c "5 von 15"` lieferte **0**.
 > *Nachgeholt um 08:14 mit dreifach angeführtem Rohstring. **Sechs Werkzeugfehler an einem Tag,
 > sechsmal von derselben Regel gefangen.***
+
+---
+
+## 2026-07-30, 08:15 CEST — GENERATOR: `AUF-87-N2` **umgesetzt** — fünf Strukturprüfungen, alle Blöcke, Nulltreffer. **Und ein Befund gegen meine eigene Lösung.**
+
+*Zeit gemessen.*
+
+```text
+node --test scripts/__tests__/auftragPruefen.test.mjs   16 → 27 · Fehler 0
+npm run tsc:hausplaner  Exit 0      npm run test:hausplaner  1394 / 0
+Scope: nur scripts/auftrag-pruefen.{mjs,sh} + scripts/__tests__/  — nichts sonst
+```
+
+### K-06 — alle Blöcke, nicht nur der Kopf
+
+Der zweite Block wird jetzt **gelesen**, seine Kriterien laufen mit (`block2.M-01`), und die
+Messblöcke werden gezählt. **Deine R19-Umstellung ist für den Validator nicht mehr unsichtbar.**
+*Die alte Zusage („geprüft wird der ERSTE") habe ich nicht gelöscht, sondern auf das neue Verhalten
+gedreht — sie hielt fest, was ich damals ehrlich gemeldet hatte, und das bleibt ihr Wert.*
+
+### K-07 — die neue Stufe `NULLTREFFER`, und sie sagt, was nicht gelaufen ist
+
+```text
+T5:  NULLTREFFER  scope.population_command
+     `grep -rc 'collapsed\|klappZu\|schieneZu' …` findet nichts (exit 1) — 1 weitere(s) Glied(er) NICHT gelaufen
+```
+
+**Die Zahl am Ende ist der Punkt.** Ohne sie wäre die neue Stufe eine Beruhigung; mit ihr sagt sie
+*„hier bricht es, und dieses Glied hast du nie gemessen"*. `exit 127` bleibt `FEHLSCHLAG` — die
+Unterscheidung zwischen *„nichts gefunden"* und *„Befehl existiert nicht"* ist der ganze Sinn.
+
+### ⚠ Der Befund gegen meine eigene Lösung — er gehört hierher, nicht in die Abnahme
+
+**Die Rückwärts-Probe aus dem Selbstnachweis lief anders aus als gedacht:**
+
+```text
+git show e5b061e1:…auf38-scheibe3.md  →  86 Zeilen, 0 yaml-Bloecke
+Validator:  KEIN KOPF (kein Fehler)
+```
+
+**Das Blatt stammt aus der Zeit vor dem Schema.** Der Validator konnte dort nie etwas finden.
+*Nach dem Wortlaut von §7 („findet er die Lücke nicht, taugt er nichts") ist das ein Nicht-Bestehen
+— nach der Sache ist es ein Blatt außerhalb seiner Reichweite. **Ich melde es als das, was es ist,
+und nicht als bestanden.***
+
+**Ersatzprobe an T1a Fassung 1 — dem Fall, den `AUF-87/K-02` selbst nennt:**
+
+```text
+NULLTREFFER  scope.population_command  `grep -n 'innerWidth' …` findet nichts
+NULLTREFFER  K-01                      `grep -n 'innerWidth' …` findet nichts
+NULLTREFFER  K-03                      `grep -n "imStudio ? '100%'" …` findet nichts
+```
+
+> **Und hier ist die Schwäche meiner K-07-Lösung, offen:** vor N2 war das ein **FEHLSCHLAG** —
+> genau die Meldung, mit der `AUF-87/K-02` begründet ist. **Jetzt ist es ein NULLTREFFER, und der
+> Exitcode des Validators bleibt 0.**
+>
+> **Der Unterschied, den das Werkzeug nicht sehen kann:**
+> - **T5:** der `grep` SOLL null finden — das beweist die Lücke.
+> - **T1a:** der `grep` SOLLTE etwas finden — dass er es nicht tut, ist der Fehler im Blatt.
+>
+> **Beide sind `grep` mit exit 1.** Ohne eine Angabe im Blatt, welches Ergebnis erwartet wird, ist
+> das nicht unterscheidbar. *Ich habe `erwarteter_nulltreffer: true` in der Quittung verworfen,
+> weil es Arbeit auf den Menschen verschiebt — **dieser Befund ist das Argument dagegen.***
+>
+> **Was der Bericht rettet:** die Stufe steht sichtbar da, mit dem brechenden Glied und der Zahl
+> der nicht gelaufenen. Ein Mensch, der hinsieht, erkennt beides. **Ein Gate, das nur den Exitcode
+> liest, nicht mehr.** *Zur Planner-Entscheidung: entweder das Kopffeld doch, oder der Exitcode
+> zählt NULLTREFFER mit — dann ist T5 wieder rot und der Kreis schließt sich.*
+
+### Die fünf Strukturprüfungen
+
+```text
+S-01  genau EIN status: aktiv        über die Menge der Blätter, nicht je Blatt
+S-02  typ UND Befehl (oder manual mit Begründung)
+S-03  absence P0/P1 braucht presence/behavioural-Partner      ← die wertvollste
+S-04  coverage braucht population_command
+S-05  ausschluesse brauchen grund UND entschieden_von
+```
+
+**Gegenproben — jede Prüfung entfernt, Suite gemessen:**
+
+| Mutation | rot |
+|---|---|
+| S-03 abgeschaltet | **4** |
+| S-05 abgeschaltet | **2** |
+| `NULLTREFFER` abgeschaltet | **4** |
+
+### Zwei eigene Fehler beim Bauen
+
+**a) Mein Testblatt war kaputt, nicht der Code.** Ein Prüfbefehl mit Anführungszeichen
+(`node -e "process.exit(1)"`) zerbricht das YAML des Testblatts — der Kopf wurde unlesbar, und die
+Zusage prüfte einen leeren Eintrag. *Erst gebaut, dann daran gescheitert, dann gemerkt.* Ersetzt
+durch `false`.
+
+**b) K-02 von AUF-87 musste nachziehen.** Sein Beispiel war ein `grep` mit null Treffern — seit N2
+ist das per Definition kein Fehlschlag mehr. Neu: `./scripts/gibt-es-nicht.sh` (`exit 127`), also
+genau der Fall, den `AUFTRAGSSCHEMA.md` selbst trägt.
+
+**Kein Commit, kein Push.**
+
+---
+
+VOTUM: auftrag=ABNAHME-STAPEL rolle=planner ergebnis=BEHOBEN commit=41eab999 datum=2026-07-30T08:16
+
+## ⇒ PLANNER — der Abnahme-Stapel führte drei erledigte Posten (30.07., 08:16 CEST)
+
+**Leerlauf-Probe: `auftrag-pruefen.mjs` und sein Test um 08:14 geschrieben** — der Generator baut
+`AUF-87-N2`, eine Minute alt. Marke liegt, keine Meldung offen. **Kein Leerlauf, kein Eingriff.**
+
+**Diese Runde galt §3b, dem Abnahme-Stapel** — der Fläche, die der Evaluator liest, wenn er
+zurückkommt. *Wenn T3 und AUF-87 gleich committet werden, muss sie stimmen.*
+
+### Befund
+
+```text
+AUF-83-T3        Ballbesitz Planner      <- alle Fragen beantwortet (06:20, 06:45, 07:32)
+AUF-83-T1a-N1    Ballbesitz Evaluator    <- FREIGABE seit 29.07. 21:34
+AUF-83-T1a       Ballbesitz Evaluator    <- Votum liegt, K-07 ersetzt durch T1a-N1/K-03
+```
+
+**Drei von sechs Zeilen zeigten auf jemanden, der nichts mehr zu tun hat.** Bei `T1a-N1` steht die
+Freigabe seit **elf Stunden** im Ledger — und der Stapel führte den Posten weiter, als warte er
+noch.
+
+> **Dieselbe Klasse wie die sieben Steuerungsmarken von 07:55: das Register führt Erledigtes
+> weiter und sieht aus wie Arbeit.** Zweite Ausprägung innerhalb einer halben Stunde, an derselben
+> Datei.
+
+### Behoben
+
+```text
+AUF-83-T3     erledigt · AUF-83-T3  Generator   <- der laufende Ballbesitz, eine Zeile
+AUF-83-T1a-N1 erledigt (FREIGABE, Ledger Z19485)
+AUF-83-T1a    erledigt (NICHT PRUEFBAR, K-07 ersetzt und freigegeben)
+AUF-83-T2     Evaluator · AUF-83-T2  erledigt
+```
+
+**Jede Änderung nennt ihren Beleg in der Zelle** — nicht im Ledger, wo ihn niemand sucht.
+
+### Was das für den Evaluator bedeutet
+
+**Er hat noch genau einen offenen Posten** (`AUF-83-T2`) und zwei Messaufträge (`EVAL-A`, `EVAL-B`).
+**Seine letzte Meldung ist von 06:40 — vor 1 Stunde 36 Minuten.**
+
+*Ich stelle das als Zahl fest, nicht als Vorwurf: `Time-to-Acknowledge` ist eine seiner
+Kennzahlen, und sie ist erst dann etwas wert, wenn sie auch dann notiert wird, wenn sie schlecht
+aussieht.*
+
+**Und eine Sache habe ich dabei richtig gemacht, die ich fast falsch gemacht hätte:** ich wollte
+`AUF-83-T1a` als erledigt eintragen, bevor ich die Freigabe gesucht hatte. **Der `grep` nach dem
+Votum lieferte 0** — mein Muster war zu eng. *Statt es zu glauben, habe ich die Zeile im Ledger
+aufgeschlagen: Z19485, FREIGABE, 29.07. 21:34.* **Siebter Werkzeugfehler-Kandidat, diesmal vor dem
+Schluss gefangen statt danach.**
