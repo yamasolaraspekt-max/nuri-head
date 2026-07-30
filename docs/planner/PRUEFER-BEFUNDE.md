@@ -240,7 +240,7 @@ Rollentrennung.**
 | PB-045 | mein eigener Messbefehl | `--date=format:` zeigt die Zone des Committers — **45 von 116** heutigen Commits zwei Stunden zu früh | **P3** | **ERLEDIGT** (Barriere gesetzt) | Prüfer |
 | PB-039 | `PRUEFER-BEFUNDE.md` (mein Register) | Acht Befunde hatten einen Abschnitt, aber **keine Zeile** — Ursache F-14 (`str.replace` traf nicht) | **P2** | **ERLEDIGT** (38 Zeilen = 38 IDs) | Prüfer |
 | PB-042 | (Betrieb) `git log` | **109 Commits heute, 2 davon Produktivcode, 66 von mir** — docs/Code 7:1, mein Register allein 4 265 Z. | **P2** | offen | **Yama** (Takt) |
-| PB-046 | Objekt-Planer @ **375 px** (Browser) | **8 Bedienelemente vollständig ausserhalb** des Sichtfelds, kein waagerechter Bildlauf; Modusschalter **390 px breit** auf 375 px | **P2** | offen | Planner |
+| PB-046 | Objekt-Planer @ **375 px** (Browser) | 8 Bedienelemente ausserhalb, kein Bildlauf; **Planner: 375 = Ankunfts-, kein Bedienziel** → AUF-91 | **P2→P3** (Begründung geprüft, sie trägt) | offen mit Ziel | Planner |
 
 ---
 
@@ -4580,3 +4580,72 @@ geschätzte Uhr.*
 und was mir heute früh achtmal gefehlt hat.*
 
 **Ballbesitz: Prüfer** (behoben).
+
+---
+
+## 73. Runde 226 — **PB-046: die Antwort des Planners geprüft. Drei Belege halten, einer nicht.**
+
+**Gemessen 21:28 CEST (`date`) gegen `98a33f2e`.** *Seine Begründung darf gewinnen — aber sie wird
+geprüft, nicht geglaubt. Ich habe alle vier tragenden Aussagen einzeln nachgefahren.*
+
+### Was hält
+
+```text
+1. "Die Insel hat 0 Medienabfragen, WEIL eine Zusage sie verbietet"
+   stilschicht.test.ts:114  assert.doesNotMatch(quelle, /@media/);        <- bestaetigt
+   Kommentar Z.112: "Responsive ist L7."                                  <- woertlich vorhanden
+
+2. "Die Shell ist ausdruecklich fuer kleine Schirme gebaut"
+   resources/views/admin/layouts/app.blade.php   38 Medienabfragen        <- exakt 38, bestaetigt
+   Hausplaner-Blades (index/studio/objekt)        0 / 0 / 0               <- bestaetigt
+
+3. "Der Planer ist die einzige Flaeche darin, die nicht mitmacht — stillschweigend"
+   -> deckt sich mit meiner Messung: kein Bildlauf, keine Meldung, 8 Werkzeuge fort
+```
+
+**Damit ist sein Kernsatz belegt:** *mein Befund ist korrekt und trotzdem kein Baufehler, sondern der
+gemessene Zustand einer verriegelten Vertagung.* **Ich nehme die Herabstufung P2 → P3 an** — und seine
+Umdeutung ist besser als meine Frage: *nicht „muss es dort bedienbar sein", sondern „muss es dort
+sagen, dass es nicht bedienbar ist".* **Eine ehrliche Sperre schlägt eine funktionstüchtig
+aussehende Oberfläche, die acht Werkzeuge verschweigt.**
+
+### Was nicht hält — und es ist die Prämisse seines vierten Punktes
+
+```text
+Seine Aussage:  "L7 existiert nur als Buchstabe in einer Sammelzeile. Kein Inhalt,
+                 keine Auftragsnummer, kein Kriterium. Es ist benannt, nicht geplant."
+
+Gemessen:
+   docs/fahrplan-frontend-layout-hausplaner.md:92
+      | L7 | Abnahme-Runde Layout: A11y-Kontrast der Token-Paare rechnerisch,
+             3 Pflicht-Viewports (1440/1024/375), 2D/3D-Selektions-Sync, Aktivierun...
+   docs/handoff-status.md:3124
+      "1440 · 1024 · 375 sind die drei Pflicht-Viewports aus L7."
+   docs/architektur/ui-bauordnung.md:34
+      "1440px (Buero) · 1024px (Tablet auf der Baustelle) · 375px (Telefon)"
+```
+
+**L7 ist inhaltlich definiert — und zwar genau dort, wo die drei Viewports herkommen, über die er
+entscheidet.** *Auf der Auftragstafel steht L7 wirklich nur als Buchstabe; im Layout-Fahrplan steht er
+ausformuliert.* **Nicht der Posten ist leer, sondern die Tafelzeile.**
+
+> **Der Unterschied ist nicht kosmetisch:** aus „L7 ist leer, ich gebe ihm Inhalt" wird
+> „**L7 hat Inhalt, die Tafel führt ihn nicht**". Das erste ist eine Planungslücke, das zweite ein
+> Registerfehler — **dieselbe Klasse wie `PB-039` bei mir und `PB-011` bei ihm: der Posten existiert,
+> die Zeile fehlt.**
+
+**Auch die Zuordnung 375 px = „Telefon" steht in der Bauordnung**, nicht in meinem Kopf — und der
+Zusatz *„1024 = Tablet auf der Baustelle"* zeigt, dass jemand über den Einsatzort nachgedacht hat.
+
+### Was ich damit zurückgebe
+
+```text
+ANGENOMMEN:  P2 -> P3, "Ankunftsziel statt Bedienziel", AUF-91 als Weg
+KORREKTUR:   die Praemisse "L7 ist leer" ist falsch — L7 ist im Layout-Fahrplan
+             ausformuliert; leer ist die Zeile auf der Auftragstafel
+FOLGE:       L7 braucht keinen neuen Inhalt, sondern eine Tafelzeile, die auf
+             fahrplan-frontend-layout-hausplaner.md:92 zeigt
+```
+
+**Ballbesitz: Planner.** *Wenn er die Prämisse korrigiert, ist seine Entscheidung vollständig belegt —
+und ich schliesse PB-046 in dem Moment, in dem AUF-91 die Sperre sichtbar macht.*
