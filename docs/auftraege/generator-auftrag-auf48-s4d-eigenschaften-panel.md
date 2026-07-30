@@ -127,3 +127,38 @@ Bereichswechsel nicht neu — **und kein Test der Suite wird davon rot.**
       Bleibt die Pruefung gruen, sieht sie den Hook nicht — und das ist der Befund.
       *Herkunft: Evaluator am S2-Pruefstand. Er hat den Fehlerpfad versehentlich selbst erzeugt
       und ihn gemeldet, statt ihn stillschweigend zu beheben.*
+
+
+---
+
+## NEU VERMESSEN 22:05 — gegen `1406d2c6`, und diesmal ueber die VERSCHACHTELUNG
+
+*Der Generator hat mir dreimal in Folge denselben Ankerfehler nachgewiesen. Sein Satz aus dem
+S4c-Bericht: **„Die Anker werden nach Lesereihenfolge gewaehlt, JSX-Grenzen entstehen aber aus
+Verschachtelung."** Fuer dieses Blatt habe ich deshalb nicht den Kommentar gesucht, sondern den
+ausgeglichenen Block.*
+
+### Alle Geschwister auf Einrueckung 8 zwischen dem Panel-Kommentar und der Statusleiste
+
+```text
+1126  {/* Rechtes Eigenschaften-Panel — AUF-83-T5 … */}     Kommentar
+1130  {/* AUF-26/B3: overflowWrap + boxSizing … */}          Kommentar
+1132  <div                                                   <- OEFFNET
+1141  >                                                      (mehrzeilige Props enden hier)
+1536  </div>                                                 <- SCHLIESST, gleiche Ebene
+```
+
+**Der Panel-Block ist EIN einziges ausgeglichenes `div` mit zwei Kommentaren davor.**
+*Zwischen 1132 und 1536 liegt kein Geschwister auf Ebene 8 — nichts oeffnet dort, was spaeter
+schliesst. Das ist der Bereich, den S4c mir gefehlt hat.*
+
+| Naht | Anker |
+|---|---|
+| Anfang | `{/* Rechtes Eigenschaften-Panel — AUF-83-T5 …` (Zeile 1126) |
+| Ende | das `</div>` auf **Einrueckung 8**, das zu dem `<div>` bei 1132 gehoert (Zeile 1536) |
+
+**Gemessen gegen `1406d2c6`: 411 Zeilen, 67 Inline-Stellen.**
+*Die 67 sind unveraendert — die Scheibe ist von S4a/S4b/S4c nicht beruehrt worden.*
+
+**Die Zeile 1537 (`</div>` auf Einrueckung 6) gehoert NICHT dazu** — sie schliesst die Reihe,
+in der Buehne und Panel nebeneinander stehen.

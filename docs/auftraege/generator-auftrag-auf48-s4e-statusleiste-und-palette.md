@@ -181,3 +181,25 @@ Bereichswechsel nicht neu — **und kein Test der Suite wird davon rot.**
       Bleibt die Pruefung gruen, sieht sie den Hook nicht — und das ist der Befund.
       *Herkunft: Evaluator am S2-Pruefstand. Er hat den Fehlerpfad versehentlich selbst erzeugt
       und ihn gemeldet, statt ihn stillschweigend zu beheben.*
+
+
+---
+
+## NEU VERMESSEN 22:05 — gegen `1406d2c6`
+
+*Die Datei ist durch S4c von 1922 auf 1665 Zeilen geschrumpft; alle Zeilennummern im Blatt oben
+sind um 257 verschoben. **Die Struktur ist unveraendert** — nachgemessen, nicht angenommen:*
+
+```text
+1536  [8]   </div>        <- Panel schliesst
+1537  [6]   </div>        <- die Reihe schliesst
+1539  [6]   {/* Statusleiste */}      <- Anfang, gleiche Ebene wie 1537: SAUBER
+      …
+1662  [6]   )}            <- letztes Geschwister auf Ebene 6
+1663  [4]   </div>        <- die aeussere Huelle der Hauptfunktion
+1664  [2]   );
+1665  [0] }
+```
+
+**Gemessen: 124 Zeilen, 20 Inline-Stellen** — genau wie beim ersten Schnitt, nur verschoben.
+**Das Ende ist 1662, NICHT das Dateiende.**
