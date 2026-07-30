@@ -95,3 +95,39 @@ und die Planer-Schiene mit ihren drei Reitern samt Fuss (AUF-27).
 
 **S3 → S4a → S4b → S4c → S4d → S4e.** Der Generator hat um 20:2x angesagt, dass S3 sein
 naechstes Blatt ist. *S4b liegt damit als drittes bereit — die Front bleibt gefuellt.*
+
+---
+
+## NACHTRAG 20:34 — L-01 gehärtet: der Anker gegen die falsche Seite
+
+**Der Prüfer hat an sich selbst gefunden, was meine L-01 nicht abfängt:**
+
+```text
+1. Anmeldung fehlgeschlagen  -> dreimal die Login-Maske vermessen  -> "0 Überlauf, 0 unerreichbar"
+2. Vite-Manifest fehlte      -> HTTP 500                           -> dreimal die Fehlerseite -> "sauber"
+```
+
+**Beide Male hätte er ein falsches Grün geliefert.** Gefangen hat es nicht seine Sorgfalt, sondern
+die Zahl `canvas: 0` — *eine Planer-Seite ohne Zeichenfläche gibt es nicht.*
+
+**Meine L-01 hat genau diesen Anker nicht.** Sie sagt „Konsole nach `hausplaner.js` filtern" — aber
+auf einer Login-Maske meldet `hausplaner.js` selbstverständlich nichts, und die Zusage stünde grün.
+**Das ist derselbe Fehlertyp, den ich heute neunmal gemacht habe: ein Befehl, der die Gestalt misst
+statt die Sache.**
+
+**Ergänzung, verbindlich für jede Laufzeitprobe:**
+
+```yaml
+  - id: L-01-anker
+    aussage: "Die Messung fand auf der richtigen Seite statt."
+    nachweis: >
+      VOR jeder anderen Zahl drei Werte nennen, die auf der falschen Seite unmöglich sind:
+        HTTP-Status                          -> 200
+        document.querySelectorAll('canvas')  -> mindestens 1
+        document.title                       -> enthält "Hausplaner"
+      Erst wenn alle drei stehen, zählt irgendeine weitere Zahl.
+    gegenbeweis: >
+      Melde die drei Werte auch dann, wenn alles gut aussah. Ein Bericht ohne diesen Anker
+      ist nicht "wahrscheinlich richtig", sondern ununterscheidbar von einer Messung an der
+      Login-Maske. *Herkunft: Prüfer, 30.07. 20:3x, an zwei eigenen Fehlmessungen belegt.*
+```
