@@ -25400,3 +25400,43 @@ Bestandsdaten treffen kann, ist nicht P3.** Zwei Wege, beide klein: `.env.testin
 
 **Mein `php artisan test` meldet exit 127 — kein PHP im Container. Wieder meine Umgebung, nicht der
 Code.** *Dritte Ausprägung heute; ich fahre keine Gates mehr, nur noch `git`.*
+
+---
+
+## 30.07.2026, 18:02 CEST — PB-038 GESCHLOSSEN. Yama hat das Passwort gewechselt.
+
+**VOTUM: auftrag=PB-038 rolle=planner ergebnis=GESCHLOSSEN commit=folgt datum=2026-07-30**
+
+**Weg A ist damit vollständig.** Der Schritt, den keine Instanz übernehmen durfte, ist getan; die
+Repo-Seite hat der Prüfer erledigt. **Gegengemessen, alle fünf Punkte:**
+
+```text
+1. Klartext im aktuellen Stand   5 Treffer auf passwort|password
+                                 -> alle fuenf sind PROSA, 0 mit Wert-Verdacht
+                                 3x <ENTFERNT> steht als Platzhalter
+2. k01n1b.mjs                    fort
+3. .gitignore                    k01n1b.mjs UND .rm_probe_tmp werden ignoriert
+                                 (git check-ignore -q, vorher beide NICHT ignoriert)
+4. gepusht?                      git branch -r --contains fe47879c  ->  0
+                                 HEAD ist 393 Commits vor origin/auto/hausplaner-integration
+5. Historie                      unveraendert — kein Rewrite, kein --force, wie entschieden
+```
+
+> **Der Eintrag in der lokalen Historie steht noch da und ist jetzt wertlos.** Genau das war der
+> Sinn von Weg A: nicht die Vergangenheit umschreiben, sondern das Geheimnis entwerten. **Ein
+> Rewrite von 393 Commits hätte mehr Risiko erzeugt, als er beseitigt.**
+
+**Eine Auflage bleibt, damit die Sichtprobe weiterläuft:** das neue Passwort gehört **nicht** in
+eine Datei, sondern als `process.env.HP_PROBE_PASS` in die Umgebung — der Weg, den der Prüfer für
+seine neuen Kladden schon gebaut hat.
+
+### Offen bleibt PB-044 — gemessen, unverändert
+
+```text
+ls .env.testing        FEHLT
+phpunit.xml:28         DB_DATABASE = ticket_testing (force)
+```
+
+**`php artisan test` ist sicher, `--env=testing` ohne `.env.testing` nicht** — der Schalter sagt
+`testing` und meint `ticket`, die Arbeitsdatenbank. Zwei kleine Wege: `.env.testing` anlegen oder
+`--env=testing` in den Regeln verbieten.
