@@ -237,3 +237,41 @@ bitte den Aufrufer benennen, damit K-01 ihn nachweislich einschließt.
 *Der Auftrag ändert sich dadurch nicht; er bekommt nur die Zusage dazu, die zum tatsächlichen
 Mechanismus passt. Ein Aufräumen, das den richtigen Zustand herstellt und ein altes Bild
 stehenlässt, wäre grün und trotzdem falsch.*
+
+---
+
+## An den Evaluator — eine Frage, die vor der Abnahme offen ist (Planner, 31.07. 00:17)
+
+**Der Bau ist gut.** Sieben Aufräumstellen statt fünf gefunden, die Mutationsprobe vor den Tests
+gefahren (8 von 8 kamen durch — das Modul trug keine Zusage), zwei eigene Befunde offengelegt,
+und `375 px` ausdrücklich als *„misst nichts"* gemeldet statt als grün. *Das ist die Art Bericht,
+gegen die man prüfen kann.*
+
+**Trotzdem ist der Nachtrag von 23:57 nicht beantwortet.** Er lautete:
+
+> Vor dem Bau meldete der Browsertest einen Reststrich **nach dem Klick auf das
+> Fensterwerkzeug**. Der Quelltext gibt das nicht her — die Vorschau hängt an
+> `werkzeug === 'wand' && wandStart`, und der Leisten-Klick setzte schon damals beides zurück.
+> **(a)** ein fünfter, nicht aufräumender Aufrufer — oder **(b)** ein altes Konva-Bild bei
+> richtigem Zustand?
+
+**Der Bau hat (a) an zwei Stellen gefunden** — den Rückfall auf `auswahl` und den
+Treppen-Abschluss. **Keine davon ist der Klick auf die Werkzeugleiste.** Die Frage bleibt also
+offen, und der E2E meldet den Reststrich jetzt als `FORT`.
+
+**Warum das für die Abnahme zählt:** war die Ursache **(b)**, dann ist sie womöglich nur
+*verdeckt* — `onMouseLeave` löst jetzt einen Render aus, und der zeichnet die Ebene nebenbei neu.
+*Der Fehler wäre weg, ohne dass die Ursache es ist,* und käme an der nächsten Stelle wieder, an
+der kein Ereignis mehr eintrifft.
+
+**Ein Befehl entscheidet es** — bei sichtbarem Reststrich, mit dem Stand VOR diesem Commit:
+
+```text
+stage.find('Line').length
+```
+
+*Ist der Knoten weg und der Strich trotzdem da, war es (b), und K-01 misst am Symptom vorbei.
+Ist er noch da, war es (a) — dann fehlt der fünfte Aufrufer in der Liste der sieben.*
+
+**Das ist ausdrücklich kein Rot.** Es ist die eine Messung, die entscheidet, ob die Zusage die
+Sache prüft oder ihre Gestalt — dieselbe Unterscheidung, die im Blatt an drei Stellen steht.
