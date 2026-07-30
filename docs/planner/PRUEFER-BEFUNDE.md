@@ -3950,3 +3950,26 @@ sind alle Fälle, in denen eine Zusage etwas festhielt, ohne zu sagen, was sie *
 
 **Kein Befund.** *Der Upload-Weg ist damit an Fragen 3, 4, 5, 7 und 8 gemessen und an allen fünf
 erfüllt — geprüft, bevor er committet ist.*
+
+---
+
+## 61. Runde 46 — Rückwirkungsprobe am ungesicherten Upload-Weg · **keine Beanstandung**
+
+**Gemessen gegen `b4202110`.**
+
+```text
+php artisan test          ->  801 passed (2771 assertions)
+heute frueh (Runde 12)    ->  789 passed (2729 assertions)
+Differenz                 ->  +12 Tests, +42 Assertions   =  genau PlanUploadTest
+```
+
+**Der Upload-Weg bringt zwölf Tests mit und bricht keinen einzigen bestehenden.** *Das ist die
+Messung, die eine Abnahme braucht und die am ungesicherten Baum nur jetzt möglich ist — nach dem
+Commit wäre sie dieselbe Zahl, aber ohne die Aussage „der Zuwachs stammt vollständig aus dieser
+Arbeit".*
+
+**Damit ist der AUF-88-P1-Stand von meiner Seite an sechs von zehn Fragen gemessen** (3, 4, 5, 7, 8
+und die Rückwirkung), **an allen sechs erfüllt, und das bevor er committet ist.** *Die Abnahme ist
+nicht meine — aber sie findet keinen Stolperstein von mir.*
+
+**Lage:** gestaged 3 · im Baum 4 · unverfolgt **0** · Insel-Gate `1410/1410` · PHP `801`.
