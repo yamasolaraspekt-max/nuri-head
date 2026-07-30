@@ -234,7 +234,7 @@ Rollentrennung.**
 | PB-037 | `buehnenBreite.test.ts:23` | ~~P1~~ | Filter auf die Subtraktion geschärft, Rechnung unberührt, Gate 1409/1409 | **ERLEDIGT** | 30.07. |
 | PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt | **GESCHLOSSEN** — Yama hat gewechselt (18:02, `67903953`) | 30.07. |
 | PB-040 | `db` + Ledger | Eine gelaufene Migration lag in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | **ERLEDIGT** (A: `fba60e6e` · B: Ledger 12:28) | — |
-| PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4 trägt die Zahlen von **vor** der 08:12-Korrektur; F-04s Barriere-Zelle ist überholt; `bestand.sh`/`VORLAGE.md` fehlen | **P2** | offen | Planner |
+| PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4-Zahlen, F-04-Zelle, `bestand.sh`, `VORLAGE.md` | **P2** | **ERLEDIGT** 22:49 — alle fünf Punkte nachgemessen | — |
 | PB-043 | `ChatController.php` + `config/logging.php:57` | **Teil 1 ERLEDIGT** (`fddec527`, 21:48): drei — nicht zwei — `Log::info` hängen jetzt am `?debug=1`-Schalter · **Teil 2 offen: `single` ohne Rotation, 218 MB**; ~~zwei unbedingte `Log::info` schreiben 64 086 Zeilen in ein nicht rotierendes Log | **P2** | offen | Planner |
 | PB-044 | `--env=testing` ohne `.env.testing` | Ein Schalter, der auf die Test-Umgebung zeigt, traf **stillschweigend die Arbeits-DB** | P3→**P2** (Planner) | **ERLEDIGT** 21:43 — nachgemessen | — |
 | PB-045 | mein eigener Messbefehl | `--date=format:` zeigt die Zone des Committers — **45 von 116** heutigen Commits zwei Stunden zu früh | **P3** | **ERLEDIGT** (Barriere gesetzt) | Prüfer |
@@ -4743,3 +4743,55 @@ git show fddec527 -- config/logging.php  ->  leer    <- die Datei wurde nicht an
 weiter — langsamer, aber unbegrenzt, und die 2 054 Fehlermeldungen bleiben begraben.*
 
 **Ballbesitz: Planner** (Teil 2).
+
+---
+
+## 76. Runde 254 — **PB-041 vollständig erledigt. Fünf Punkte, alle nachgemessen.**
+
+**22:52 CEST (`date`).**
+
+```text
+1  FEHLERKLASSEN.md:36  F-04-Zustand      ⚠ -> ✅            (4ca61852, 22:24)
+2  massnahmenplan:113   "14 Klassen/sechs" -> "15 / ACHT"    (4ca61852, 22:24)
+3  massnahmenplan:124   "(heute sechs)"    -> "heute ACHT"   (22:31)
+      Gegenprobe am Register: ⚠-Zeilen = 8   -> deckungsgleich
+4  docs/auftraege/VORLAGE.md      angelegt, 76 Zeilen        (7d29a77c)
+5  scripts/bestand.sh             angelegt, 136 Zeilen       (22:48)
+```
+
+### Beide Werkzeuge sind besser als das, was ich verlangt habe
+
+**`VORLAGE.md`** führt Felder, die in keinem M3-Punkt standen: **`gegenbeweis`** je Kriterium — *das
+ist es, was ein Kriterium prüfbar macht* — und **Naht/Anker über NAMEN statt Zeilennummern**, was genau
+die Lehre aus `PB-007` ist. Die Begründung ist nachgemessen statt übernommen: **Ø 137 Zeilen über 76
+Blätter, die fünf längsten 262–434** — *er hat meine Zahl „Ø 285" nicht geglaubt, sondern selbst
+gezählt.*
+
+**`bestand.sh`**, an `HausplanerApp.tsx` gefahren:
+
+```text
+[3] Testdateien, die den Pfad einlesen
+       direkt   16
+       indirekt 29   (ueber __tests__/_zerlegteApp.ts)
+       zusammen 35
+```
+
+**Die Unterscheidung direkt/indirekt steht in keinem M2-Feld** — und genau daran ist `F-01` heute früh
+gescheitert: *wer nur direkt zählt, bekommt 16 und übersieht 19 Zusagen, die über eine Sammeldatei
+hängen.* **Das Werkzeug schliesst die Klasse an der Stelle, an der sie zuschlägt.** *Vor dem Lauf
+geprüft: 0 schreibende Befehle im Skript.*
+
+### Damit ist die Lage bei den Nicht-Papier-Befunden
+
+```text
+PB-040  ERLEDIGT  (Sicherung + Bericht)
+PB-044  ERLEDIGT  (.env.testing)
+PB-041  ERLEDIGT  (fuenf Punkte)
+PB-043  Teil 1 ERLEDIGT · Teil 2 OFFEN  — 'single' ohne Rotation, 218 MB
+PB-046  P3 mit Ziel      — AUF-91 geschnitten, Hinweis unter 1024 px
+PB-042  bei Yama         — der Takt
+```
+
+**Ein einziger technischer Rest.** *Die Quelle ist zu, das Fass hat noch keinen Boden.*
+
+**Ballbesitz: Planner** (PB-043 Teil 2).
