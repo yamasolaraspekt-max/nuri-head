@@ -174,6 +174,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-016 | `inventur.sh` / `AUFTRAGSTAFEL.md` | P3 | Inventur zählt Zeilen: 21 Zeilen für 17 Posten (vier doppelt) | offen | — |
 | PB-015 | `AUFTRAGSTAFEL.md` | **P2** | zwei Posten tragen `⚡ AKTIV` (5 Vorkommen) — §1c verlangt genau einen | offen | — |
 | PB-013 | `docs/agents/regeln/kern.md` | **P1** | „wird IMMER geladen" — vom vorgeschriebenen Startpfad aus mit 0 Verweisen unerreichbar | offen | — |
 | PB-014 | `docs/agents/` (Struktur) | **P1** | zwei vollständige Regelsätze für dieselben drei Rollen, 1534 Z., ohne Verweis aufeinander | offen | — |
@@ -1302,5 +1303,77 @@ Regel. Das ist genau der Punkt aus `PB-012`, hier mit einem Einzeiler lösbar.
 | **L4 Kausalität** | **PB-015** — die Kette *Marke → gezogener Posten* ist nicht mehr eindeutig |
 | **L5 Plausibilität** | keine Beanstandung |
 | **L6 Workflow** | **PB-015** — wer die Regel wörtlich befolgt, findet zwei Ziele |
+
+**Ballbesitz: Planner.**
+
+---
+
+## 21. Runde 14 (30.07.) — Tafel gegen Archiv, und die Zahl auf dem Schirm
+
+**Gemessen gegen `54e7416f`.**
+
+### Was trägt: die Trennung Tafel ↔ Archiv
+
+```text
+Posten auf der lebenden Tafel   10 verschiedene Nummern
+Posten im Archiv                81
+in beiden gefuehrt               0
+```
+
+**Keine Doppelführung.** Ein Posten, der zugleich als offen und als abgeschlossen geführt wird, wäre
+der teuerste Zustand dieser Ablage — den gibt es nicht.
+
+### PB-016 · P3 · Die Inventur zählt Zeilen, aber vier Posten belegen zwei Zeilen
+
+```yaml
+befund:
+  id: PB-016
+  datei: "scripts/inventur.sh (Z70-76) gegen docs/auftraege/AUFTRAGSTAFEL.md"
+  stelle: "zaehle() { ... grep -c . ; } auf die Abschnitte 3a/3b"
+  behauptung: "(implizit) eine Zeile = ein Posten"
+  gemessen: |
+    Abschnitt 3a "Arbeitsvorrat"       15 Zeilen  /  13 verschiedene Posten
+      doppelt: AUF-48 + "AUF-48 (Zuschnitt)"  ·  AUF-50 + "AUF-50 (Stufenplan)"
+    Abschnitt 3b "Abnahme-Stapel"       6 Zeilen  /   4 verschiedene Posten
+      doppelt: AUF-83-T3 zweimal  ·  AUF-83-T2 zweimal
+    Zusammen: 21 Zeilen fuer 17 Posten.
+  befehl: |
+    git show HEAD:docs/auftraege/AUFTRAGSTAFEL.md | awk '
+      /^### 3a\./ {a=1;next} /^### 3b\./ {a=2;next} /^### 3c\./ {a=3;next} /^## / {a=0}
+      /^\| \*\*AUF-/ && a {split($0,f,"|"); id=f[2]; gsub(/[* ]/,"",id); print a, id}'
+  commit: "54e7416f"
+  schwere: P3
+  wirkung: |
+    Die Inventur ist die Zahl, die Yama auf dem Schirm liest - sie entstand auf seine
+    Bitte "nicht in Prozent sondern wie eine Inventur". Sie meldet heute 15 offen und
+    6 im Stapel, wo 13 und 4 stehen. Der Fehler geht in die unguenstige Richtung: die
+    Liste sieht voller aus, als sie ist, und zwar genau dort, wo Nachtragszeilen
+    (Zuschnitt, Stufenplan, zweites Votum) gefuehrt werden - also bei den Posten, an
+    denen am meisten gearbeitet wurde.
+  eigenarbeit: nein
+```
+
+**Das ist kein Fehler im Skript, sondern eine ungeklärte Frage der Tafel:** *ist eine
+Nachtragszeile ein eigener Posten oder ein Status desselben?* Beide Antworten sind vertretbar —
+**aber sie muss einmal getroffen und dann gezählt werden.** Solange sie offen ist, zählt das Skript
+das eine und liest der Mensch das andere.
+
+**Erledigt wenn:** *die Zahl der Zeilen in 3a/3b stimmt mit der Zahl der verschiedenen Nummern
+überein — oder die Inventur zählt ausdrücklich verschiedene Nummern und sagt das im Kopf.*
+
+### Eine eigene Korrektur
+
+Ich habe in Runde 13 *„4 offen"* aus dem Kopf zitiert. **Das war eine Zahl von heute früh**, nicht
+die aktuelle. Aktuell sind es **15 Zeilen / 13 Posten**. *Eine Zahl aus dem Gedächtnis ist genau das,
+was K5 verbietet — und ich habe sie in einen Bericht geschrieben, statt sie zu messen.*
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — Tafel und Archiv sind sauber getrennt |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | **PB-016** — Zeile und Posten sind nicht dasselbe, werden aber gleich gezählt |
+| **L4 Kausalität** | keine Beanstandung |
+| **L5 Plausibilität** | **PB-016** — gefunden, weil 15 nicht zu der Zahl passte, die ich im Kopf hatte |
+| **L6 Workflow** | keine Beanstandung |
 
 **Ballbesitz: Planner.**
