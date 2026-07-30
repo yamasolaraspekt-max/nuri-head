@@ -24698,6 +24698,99 @@ dieser Nachlauf hat es gefunden.
 
 ---
 
+## 2026-07-30, ~10:20 CEST — GENERATOR: `AUF-83-T5` committet — beide Schienen klappbar, Escape mit Rangfolge
+
+*Auf Yamas Wort „T5" gezogen, nachdem T3+T3-N1 committet waren (beide Sperrbedingungen erfüllt:
+T3 gebaut, K-08-Messung in der Quittung). Messblock M-01/M-02/M-03 gegen den damaligen HEAD
+nachgemessen — Werte identisch zum Blatt, also ohne Rückfrage gebaut.*
+
+```text
+Branch:          auto/hausplaner-integration
+Basis-SHA:       56ff2c9e
+Generator-SHA:   74ad1075
+```
+
+### Was gebaut wurde
+
+```text
+NEU  app/dashboard/escapeStapel.ts       Rangfolge als Daten: Palette>Dialog>Menue>Schiene>Reset
+NEU  app/dashboard/SchienenSchalter.tsx  der Umschalt-Knopf, isoliert testbar (siehe Abweichung unten)
+NEU  app/state/schienenSpeicher.ts       Klappzustand je Arbeitsbereich, Muster arbeitsbereichSpeicher.ts
+GEÄNDERT  HausplanerApp.tsx              beide Schienen klappbar + Overlay <1024px + Escape-Registrierung
+GEÄNDERT  GeschossFlaeche.tsx, WerkzeugGruppenMenue.tsx, dialogFokus.ts   Escape an den Stapel delegiert
+```
+
+### K-02 — selbst gemessen, am echten Konva-`<canvas>`, nicht behauptet
+
+```text
+595 px (beide offen) → 783 px (links zu) → 1019 px (beide zu) → 595 px (wieder offen)
+```
+Rundungsfrei reproduzierbar, dreimal wiederholt. Kein zweiter Ort für die Rechnung — der
+`ResizeObserver` aus `buehnenBreite.ts` (T1a) beobachtete `[data-schiene]` bereits einzeln; das
+Klappen musste nur die tatsächliche Breite ändern, damit er von selbst nachzieht.
+
+### ⚠ Ein echter Fehler, bei der eigenen Sichtprobe gefunden — nicht vom Gate
+
+**Palette + Geschoss-Menü gleichzeitig offen, erster Escape schloss BEIDE** — genau der Fehler,
+den `escapeStapel.ts` beheben sollte. Isoliert (eigene `Ebene`-Testkomponente, kein volles
+`HausplanerApp`) war der Stapel korrekt; erst am echten Browser zeigte es sich.
+
+**Ursache, mit Logging nachgewiesen:** das Paletten-Filterfeld rief `schliessePalette()`
+zusätzlich **direkt** in seinem eigenen `onKeyDown` auf — parallel zum Stapel-Eintrag. Der dadurch
+ausgelöste Render meldete GeschossFlaeches Stapel-Eintrag **ab und mit neuer ID wieder an**, bevor
+der Stapel-Listener selbst zum Zug kam. Die Palette war damit aus der Rangliste verschwunden, und
+das rangniedrigere Menü gewann fälschlich mit.
+
+**Behoben:** der Direktaufruf ist raus, Escape läuft für die Palette ausschließlich über den
+Stapel (der lauscht auf `document`, unabhängig vom Fokus). Nachgemessen: erster Escape schließt
+nur die Palette, zweiter erst das Menü. Regressionstest `escapeStapel.test.ts` hält die
+Quelltext-Zusage fest (kein direkter `schliessePalette()`-Aufruf mehr im Filterfeld).
+
+### Prüfungen, Rohausgabe
+
+```text
+npm run tsc:hausplaner              Exit 0
+npm run schema:hausplaner:check     Exit 0
+npm run test:hausplaner             1410 / 0   (+16 gegenüber Vorquittung: escapeStapel + schienenSpeicher)
+npm run test:hausplaner:dom         29 / 0     (+10: escapeStapel.dom + schienen.dom)
+npm run build:hausplaner            Exit 0
+vendor/bin/phpunit UebernahmeKnopfTest.php   8 / 0, 67 Assertions
+node scripts/statische-inline-stile.mjs .../HausplanerApp.tsx   138/77 offen — unverändert zur Vorquittung (77)
+```
+
+**K-05 (Overlay <1024px), selbst per Screenshot geprüft** (nicht nur DOM/Rect — nach der
+Rückfrage „hast du nichts übersehen" bei T3-N1 diesmal von Anfang an mit Screenshot): bei 1000 px
+legt sich eine offene Schiene sichtbar über die Bühne, `data-schiene` fehlt in genau diesem
+Zustand (Overlay nimmt keinen Flex-Platz, `buehnenBreite.ts` darf ihn nicht abziehen) — verifiziert
+mit einer UND mit beiden Schienen offen, keine optischen Fehler.
+
+### Entscheidungen/Abweichungen — offen erklärt
+
+- **`SchienenSchalter.tsx` ist NICHT in `pfade` des Auftrags** — eine neue Datei, bewusst
+  hinzugefügt, damit K-01 einen echten DOM-Beleg bekommt (dieselbe Begründung wie bei
+  `ReiterLeiste`/`GeschossFlaeche`: eine fokussierbare Fläche gehört auf Modulebene, Befund B1).
+- **Drei geerbte Zusagen umgehängt** (`buehnenHoehe.test.ts`, `buehnenBreite.test.ts`,
+  `keineKappung.test.ts`) — derselbe Sachverhalt, neue Fundstelle im Quelltext, siehe Commit-Message
+  für Details je Datei.
+- **Zwei fremde Docs weiterhin nicht committet** (Evaluator- bzw. AUF-87-Scope), **`k01n1b.mjs` /
+  `.rm_probe_tmp` weiterhin nicht angefasst** — unverändert seit der letzten Meldung.
+- **Meine eigenen Sonden diesmal im Scratchpad, nicht im Repo-Wurzelverzeichnis** — Lehre aus
+  PB-033 (Klartext-Zugangsdaten in temporären Dateien dort), Zugangsdaten diesmal per Env-Variable
+  statt Literal im Skript.
+
+### Restpunkte für den Evaluator
+
+- K-07 (geerbte Zusagen vollständig): 28 Dateien treffen `HausplanerApp` in `__tests__`/`__domtests__`
+  — Liste oben in der Suchausgabe, **nicht einzeln durchgesehen**.
+- Meine K-01/K-02/K-05-Messungen sind oben mit Rohausgabe belegt, aber von MIR gemessen — der
+  Evaluator misst am `Generator-SHA` unabhängig nach.
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Evaluator.**
+
+---
+
 ## 30.07.2026, 10:40 CEST — PB-038 P1 SICHERHEIT: gemessen, und die entscheidende Zahl ist beruhigend
 
 **VOTUM: auftrag=PB-038 rolle=planner ergebnis=ANGENOMMEN commit=folgt datum=2026-07-30**
@@ -24734,3 +24827,52 @@ verlassen hat, tauscht ein kleines Risiko gegen ein großes.
 
 **Und der Prüfer hat es selbst gemeldet, binnen drei Minuten, gegen sich selbst.** *Das ist der
 Grund, warum die Rolle etwas wert ist — die teuerste Variante wäre gewesen, dass es niemand sagt.*
+
+---
+
+## 30.07.2026, 10:46 CEST — ENTSCHEIDUNG YAMA zu PB-038: Weg A. Der Prüfer führt aus.
+
+**VOTUM: auftrag=PB-038 rolle=yama ergebnis=ENTSCHIEDEN commit=folgt datum=2026-07-30**
+
+```text
+A — Passwort wechseln, Historie lassen. Kein Rewrite, kein --force, kein Push.
+```
+
+### Was der PRÜFER übernimmt — drei Schritte, alle im Arbeitsbaum
+
+```text
+1. HEAD saeubern (nicht die Historie):
+   docs/planner/PRUEFER-BEFUNDE.md fuehrt im AKTUELLEN Stand noch 2 Klartext-Stellen
+   (Zeile 1801 und 3267, gemessen 10:45). Beide durch <ENTFERNT — siehe PB-038>
+   ersetzen. Der Befund bleibt lesbar, der Wert verschwindet aus dem Arbeitsstand.
+
+2. .gitignore ergaenzen — zwei Zeilen, damit sich das nicht wiederholt:
+   k01n1b.mjs        (git check-ignore: NICHT IGNORIERT, gemessen 10:45)
+   .rm_probe_tmp     (dito)
+   Besser noch ein Muster fuer Kladden allgemein, mit Begruendung im Commit.
+
+3. k01n1b.mjs beiseite legen — NICHT loeschen:
+   mv k01n1b.mjs _to_delete/k01n1b.mjs.2026-07-30
+   Das Verzeichnis _to_delete/ existiert bereits. `rm` ist auf dem Mount verboten.
+```
+
+**Gegenprobe, die er anhaengt:**
+
+```text
+grep -c -iE 'passwort|password' docs/planner/PRUEFER-BEFUNDE.md   ->  0
+git check-ignore k01n1b.mjs .rm_probe_tmp                          ->  beide ignoriert
+git status --porcelain | grep -c 'k01n1b'                          ->  0
+```
+
+### Was NUR Yama kann — und was keine Instanz anfassen darf
+
+**Das Passwort selbst wechseln.** Keine Rolle in diesem System gibt Zugangsdaten ein, ändert sie
+oder liest sie aus einem Passwortspeicher. **Ohne diesen Schritt ist Weg A nicht abgeschlossen** —
+die zwei Repo-Schritte räumen auf, aber wertlos wird der Eintrag in der Historie erst durch das
+neue Passwort.
+
+### Was ausdrücklich NICHT passiert
+
+**Kein `git filter-repo`, kein `rebase`, kein `--force`, kein Push.** Die Historie bleibt, wie sie
+ist. **Gemessen 10:40:** `git branch -r --contains fe47879c` leer, HEAD 362 Commits vor
+`origin/auto/hausplaner-integration` — der Eintrag hat das Gerät nie verlassen.
