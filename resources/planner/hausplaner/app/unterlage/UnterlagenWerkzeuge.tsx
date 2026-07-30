@@ -84,26 +84,59 @@ export function UnterlagenWerkzeuge({ unterlage, csrfToken, stageRef, weltPunkt 
 
   // --- Kalibrieren -------------------------------------------------------------------------------
 
-  // AUF-83-T5 / K-03-Muster (escapeStapel) gilt hier nicht — Kalibrieren ist kein Escape-Fall,
-  // sondern ein eigener Modus mit eigenem Abbruch (nochmals klicken auf „Kalibrieren").
+  /**
+   * Der laufende Zustand als `ref` — **damit der Zuhörer nicht von wechselnden Identitäten
+   * abhängt.** `weltPunkt` und `ersterPunkt` ändern sich bei jedem Render der Hauptkomponente,
+   * und die rendert in Mausbewegungs-Frequenz.
+   */
+  const kalibrierRef = useRef<{ ersterPunkt: Punkt | null; weltPunkt: Props['weltPunkt'] }>({
+    ersterPunkt: null, weltPunkt,
+  });
+  kalibrierRef.current = { ersterPunkt, weltPunkt };
+
+  /**
+   * AUF-88-P1 / K-04 — die Kalibrier-Klicks.
+   *
+   * **Zwei Fehler der ersten Fassung, beide in der Sichtprobe gemessen, beide hier behoben:**
+   *
+   * **1. Sie brauchte DREI Klicks statt zwei.** Der Zuhörer hing im Abhängigkeitsfeld an
+   * `weltPunkt` und `ersterPunkt`; beide wechseln bei jedem Render die Identität, die Hauptkomponente
+   * rendert bei jeder Mausbewegung — und `mouse.click` bewegt die Maus. Der Zuhörer wurde also
+   * mitten in der Klickfolge ab- und neu angemeldet und lief mit **veralteter Closure**: der zweite
+   * Klick sah `ersterPunkt === null` und setzte ihn erneut. *Jetzt liest der Zuhörer den Zustand
+   * aus dem `ref`, und das Abhängigkeitsfeld enthält nur noch den Modus.*
+   *
+   * **2. Klicks auf ein Bauteil kamen NIE an.** Wände und Objekte setzen `e.cancelBubble = true`
+   * (Auswahl-Pfad) — damit endet Konvas Bubbling vor der Bühne. **Gemessen: Klick auf leere Fläche
+   * wirkte, Klick auf eine Wand nicht.** *Das ist bei einer Referenzunterlage genau der falsche
+   * Weg herum: die Unterlage liegt UNTER der Zeichnung, und die Punkte, die man kalibrieren will,
+   * liegen oft dort, wo schon etwas gezeichnet ist.*
+   *
+   * **Deshalb ein DOM-Zuhörer am Behälter statt eines Konva-Zuhörers.** `cancelBubble` ist eine
+   * Konva-interne Marke; das native Ereignis erreicht den Behälter unabhängig davon.
+   * `weltPunkt` wertet ohnehin nur `stage.getPointerPosition()` aus und ignoriert sein Argument —
+   * es braucht also gar kein Konva-Ereignis. *Kein zweiter Rechenweg: dieselbe Umrechnung wie beim
+   * Zeichnen, nur ein anderer Auslöser.*
+   */
   useEffect(() => {
     if (!kalibrierModus) return undefined;
-    const stage = stageRef.current;
-    if (!stage) return undefined;
+    const behaelter = stageRef.current?.container();
+    if (!behaelter) return undefined;
 
-    const beiKlick = (e: Konva.KonvaEventObject<MouseEvent>): void => {
-      const punkt = weltPunkt(e);
-      if (!ersterPunkt) {
+    const beiKlick = (): void => {
+      const { ersterPunkt: bisher, weltPunkt: umrechnen } = kalibrierRef.current;
+      const punkt = umrechnen(undefined as never);
+      if (!bisher) {
         setErsterPunkt(punkt);
         return;
       }
-      setZweiPunkte({ a: ersterPunkt, b: punkt });
+      setZweiPunkte({ a: bisher, b: punkt });
       setErsterPunkt(null);
       setKalibrierModus(false);
     };
-    stage.on('click.kalibrieren', beiKlick);
-    return () => { stage.off('click.kalibrieren'); };
-  }, [kalibrierModus, ersterPunkt, stageRef, weltPunkt]);
+    behaelter.addEventListener('click', beiKlick);
+    return () => behaelter.removeEventListener('click', beiKlick);
+  }, [kalibrierModus, stageRef]);
 
   const kalibrierungSpeichern = async (): Promise<void> => {
     if (!zweiPunkte || !aktuelle) return;
