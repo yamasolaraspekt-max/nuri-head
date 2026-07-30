@@ -203,3 +203,56 @@ sind um 257 verschoben. **Die Struktur ist unveraendert** — nachgemessen, nich
 
 **Gemessen: 124 Zeilen, 20 Inline-Stellen** — genau wie beim ersten Schnitt, nur verschoben.
 **Das Ende ist 1662, NICHT das Dateiende.**
+
+
+---
+
+## NEU VERMESSEN 22:22 — gegen `15de0857`, **und K-01 ist korrigiert**
+
+### Die Zeilennummern nach S4d
+
+```text
+Datei jetzt        1229 Zeilen   (war 1665 vor S4d)
+Statusleiste       1103  [Einr 6]     <- Anfang
+letztes Geschwister 1226  [Einr 6]  )}
+1227 [4] </div> · 1228 [2] ); · 1229 [0] }   <- die Hauptfunktion, NICHT mitnehmen
+```
+**124 Zeilen · 20 Inline-Stellen.** *Struktur unveraendert, nur verschoben.*
+
+### K-01 misst die falsche Groesse — Befund des Generators, angenommen
+
+**Er hat an S4d gemessen:** *„Die getrackte 133 ist eine ZEILEN-, keine Vorkommenszahl.
+`grep -c` zaehlt Zeilen; Vorkommen sind 138."*
+
+**Selbst nachgezaehlt ueber alle fuenf Dateien:**
+
+```text
+                                 Zeilen   Vorkommen
+HausplanerApp.tsx                   24        26
+Kopfrahmen.tsx                      15        15
+Buehne.tsx                           0         0
+EigenschaftenPanel.tsx              67        70
+GruppenzeileUndSchiene.tsx          27        27
+                                  ----      ----
+                                   133       138
+```
+
+**Er hat recht, und die Folge ist die, die zaehlt:** *wer eine Zeile mit zwei `style={{`
+aufteilt, hebt die Zahl — **ohne eine Inline-Stelle hinzuzufuegen.** Und wer zwei Stellen in eine
+Zeile zieht, senkt sie, ohne eine zu entfernen.* **Die Zusage misst die Gestalt, nicht die Sache.**
+*Dieselbe Klasse, die der Generator mir schon bei `useMemo` nachgewiesen hat.*
+
+```yaml
+  - id: K-01
+    aussage: "Keine Inline-Stelle verschwindet oder entsteht."
+    befehl: >
+      Ueber HausplanerApp.tsx + dashboard/Kopfrahmen.tsx + rahmen/*.tsx:
+        VORKOMMEN zaehlen (grep -o 'style={{' | wc -l), nicht Zeilen (grep -c).
+    erwartet: "138 — die VORKOMMEN. Die alte Zahl 133 war die Zeilenzahl."
+    gegenbeweis: >
+      Ziehe zwei `style={{` einer Datei in EINE Zeile zusammen, ohne etwas zu loeschen.
+      Faellt die Zahl, misst der Befehl die Gestalt. Bleibt sie, misst er die Sache.
+    hinweis: >
+      **Beide Zahlen waren richtig gemessen, mit verschiedenen Instrumenten.** Der Fehler
+      war nicht die Messung, sondern dass die Zusage nicht sagte, WELCHE Groesse sie meint.
+```
