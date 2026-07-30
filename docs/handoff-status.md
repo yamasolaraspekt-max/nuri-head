@@ -23809,7 +23809,7 @@ haben.
 
 ---
 
-VOTUM: auftrag=AUF-83-T3 rolle=evaluator ergebnis=ROT (ein P1) commit=kein-Commit datum=2026-07-30T08:47
+VOTUM: auftrag=AUF-83-T3 rolle=evaluator ergebnis=ROT commit=kein-Commit datum=2026-07-30T08:47 hinweis=ein-P1
 
 ## ⇒ EVALUATOR — AUF-83-T3: K-10/K-09/K-07/K-01/K-03/K-05/K-05b GRÜN, **K-08 ROT — Verlust statt Gewinn** (30.07., 08:47 CEST)
 
@@ -25443,7 +25443,7 @@ phpunit.xml:28         DB_DATABASE = ticket_testing (force)
 
 ---
 
-VOTUM: auftrag=AUF-88-P1 rolle=evaluator ergebnis=GRUEN (Backend-Teilumfang) commit=fba60e6e datum=2026-07-30T13:0x
+VOTUM: auftrag=AUF-88-P1-Backend rolle=evaluator ergebnis=GRUEN commit=fba60e6e datum=2026-07-30T13:0x hinweis=Teilumfang
 
 ## ⇒ EVALUATOR — AUF-88-P1 Backend: **GRÜN**, vierter Prüfstand der Session — Frontend bleibt ausdrücklich offen (30.07., CEST)
 
@@ -26475,3 +26475,558 @@ naechstgroesste Datei danach           27   (ein Test), dann 12, 8, 5, 5, 5, 4
 
 **Yamas Fokus deckt sich damit exakt mit der technischen Reihenfolge.** Es gibt nichts, was
 vorzuziehen wäre — außer der Abnahme, und die läuft parallel.
+
+---
+
+VOTUM: auftrag=AUF-48-S1 rolle=evaluator ergebnis=GRUEN commit=f7441518 datum=2026-07-30T19:3x
+
+## ⇒ EVALUATOR — AUF-48-S1: **GRÜN.** Die Kernbehauptung einer Extraktion mechanisch geprüft, nicht geglaubt (30.07., CEST)
+
+*Siebter Prüfstand. Worktree an `f7441518`, `node_modules` per Hardlink. Diff: 4 Dateien.*
+
+**Bei einer Extraktion ist die tragende Frage nicht „läuft es", sondern „ist es wirklich dasselbe".**
+Der Commit behauptet wörtlich: *„die Rümpfe sind Zeichen für Zeichen dieselben."* Ein grüner
+Testlauf beweist das **nicht** — er beweist nur, dass nichts kaputtging, was geprüft wird. Und
+genau dieser Bau hat selbst gemeldet, dass vorher **gar nichts** geprüft wurde.
+
+### Die Behauptung mechanisch geprüft — alte Fassung gegen neue, byteweise
+
+```text
+git show f7441518^:…/HausplanerApp.tsx   ->  Rümpfe extrahiert und verglichen
+
+  IDENTISCH  svgWrap         5 Zeilen
+  IDENTISCH  werkzeugIcon   12 Zeilen
+  IDENTISCH  opIcon         23 Zeilen
+  IDENTISCH  uuid            2 Zeilen   (einzeln nachgeprüft — mein Parser hatte hier
+                                         die Grenze falsch gesetzt, nicht der Bau)
+  IDENTISCH  istWand         3 Zeilen
+  IDENTISCH  istOeffnung     3 Zeilen
+  IDENTISCH  lotAufWand     13 Zeilen
+
+ERGEBNIS: 7 von 7 identisch — einziger Unterschied ist das `export`-Präfix.
+```
+**Die Behauptung hält, und zwar nachgemessen, nicht abgenommen.**
+
+### Kriterien, selbst gefahren
+
+```text
+K-01  je Definition in HausplanerApp.tsx:  0 · 0 · 0 · 0 · 0 · 0 · 0   (keine bleibt zurück)
+K-04  git diff --numstat:  7 Einfügungen / 71 Löschungen   (Entnahme, kein Zuwachs)
+K-03  tsc 0 · test:hausplaner 1456/0 · dom 29/0 · Scheibe 7 unverändert 77 offen
+```
+
+### Der eigentliche Prüfpunkt: tragen die neuen Zusagen wirklich?
+
+**Der Bau meldet einen Nebenbefund, der schwerer wiegt als der Umzug:** alle sieben Funktionen
+waren **vollständig unverriegelt** — sieben Mutationen, keine einzige der 1440 Zusagen wurde rot.
+Deshalb hat er 16 neue geschrieben. **Ob die etwas taugen, ist die Frage, die zählt** — und die
+kann nur eine unabhängige Mutation beantworten.
+
+**Mutation 1 — genau der Fall, den seine erste Fassung durchgelassen hat** (er hat das selbst
+offengelegt: „prüft nur Verschiedenheit, der Platzhalter bleibt eindeutig"):
+```text
+case 'treppe' entfernt  ->  fällt in den default-Platzhalter
+⇒ ROT: "werkzeugIcon: KEIN bekanntes Werkzeug fällt in den Platzhalter-Zweig"
+```
+**Die Nachbesserung wirkt. Seine Selbstkorrektur war echt, nicht behauptet.**
+
+**Mutation 2 — von ihm NICHT genannt**, um zu prüfen, ob die Verriegelung über die bekannten Fälle
+hinaus trägt:
+```text
+Klemmung `Math.max(0, Math.min(1, …))` in lotAufWand entfernt
+   (Wirkung: Fußpunkt auf der verlängerten Geraden statt am Wandende)
+⇒ ROT: "lotAufWand klemmt am Wandende — kein Fußpunkt jenseits der Strecke"
+```
+**Auch eine ungenannte Mutation wird gefangen.** Die Fläche ist wirklich verriegelt, nicht nur
+gegen die Beispiele aus der Quittung.
+
+```text
+Zurückgesetzt: git status leer, 1456/0 grün
+```
+
+### Die zwei offengelegten Abweichungen — beide geprüft, beide in Ordnung
+
+- **`.tsx` statt `.ts`**: drei der sieben Funktionen enthalten JSX (selbst gesehen: `svgWrap`,
+  `werkzeugIcon`, `opIcon`). TypeScript liest JSX nur in `.tsx`. Die Alternative wäre ein Umschreiben
+  auf `React.createElement` — **genau die Gestaltänderung, die `nicht_ziel` verbietet.** Die
+  Abweichung ist die Regeltreue, nicht ihr Bruch.
+- **Kommentar ohne die Bezeichner**: sein erklärender Satz nannte die drei toten Konstanten beim
+  Namen und machte damit K-02 (ein schlichtes `grep`) rot. Umformuliert. *Ein erklärender Satz darf
+  eine Prüfung nicht entwerten* — richtig entschieden.
+
+### Urteil
+
+**GRÜN.** Vier Kriterien erfüllt, die Extraktions-Kernbehauptung byteweise nachgewiesen, zwei
+unabhängige Mutationen gefahren (eine davon außerhalb der Beispiele des Bauenden) — beide gefangen.
+Worktree entfernt, Arbeitsbaum unberührt.
+
+**Und eine Anerkennung, die in ein Prüfprotokoll gehört, weil sie messbar ist:** dieser Bau hat
+gemeldet, dass sein eigener Gegenbeweis **nichts fand** — und daraus den Ertrag gemacht statt einen
+Haken. Er hat außerdem eine Schwäche seiner eigenen ersten Zusage offengelegt und behoben. *Beides
+habe ich nachgeprüft, beides stimmt.*
+
+**Kein Commit, kein Push von mir.** Ballbesitz: **Yama** (Merge-Tor) · **Generator** (AUF-48-S2 ist
+geschnitten und liegt bereit).
+
+---
+
+VOTUM: auftrag=SELBSTPRUEFUNG-EVALUATOR rolle=evaluator ergebnis=BEHOBEN commit=kein-Commit datum=2026-07-30T19:4x
+
+## ⇒ EVALUATOR — **zwei meiner eigenen neun Voten waren nicht zählbar.** Gefunden durch Messung, nicht durch Nachdenken (30.07., CEST)
+
+*Die Front ist leer: der Generator baut AUF-48-S2 (`ableitungen.ts` im Baum, kein Commit), es gibt
+nichts zu prüfen. Statt zu warten habe ich **meine eigene Arbeit** durch denselben Rahmen geschickt,
+den ich an die anderen anlege.*
+
+### Der Befund gegen mich selbst
+
+Ich wollte belegen, dass jedes meiner Voten auf einen **existierenden** Commit zeigt. Das Ergebnis
+war beruhigend — **aber die Liste war zu kurz.** Sie zeigte sieben Voten; geschrieben hatte ich neun.
+
+```text
+grep -cE "^VOTUM:.*rolle=evaluator ergebnis=[A-Za-z-]+ commit="   ->  7
+grep -cE "^VOTUM:.*rolle=evaluator"                               ->  9
+```
+
+**Zwei Zeilen von mir sind maschinell unlesbar, weil ich einen Klammerzusatz ins `ergebnis`-Feld
+geschrieben habe:**
+
+```text
+Z23812  ergebnis=ROT (ein P1) commit=…               <- nach "ROT" folgt nicht "commit="
+Z25446  ergebnis=GRUEN (Backend-Teilumfang) commit=… <- dasselbe
+```
+
+> **Das ist genau die Regel, die ich verletzt habe, und sie steht seit 07:48 auf der Tafel:**
+> *„Ohne sie ist keine Kennzahl zählbar — ein `grep` auf Prosa zählt Erwähnungen, nicht Voten."*
+> **Ich habe den Zusatz für Genauigkeit gehalten und dabei die Zählbarkeit zerstört, die der ganze
+> Zweck der Zeile ist.** *Dieselbe Klasse wie der Kommentar des Generators, der K-02 rot machte:
+> ein erklärender Zusatz entwertet eine Prüfung.*
+
+### Behoben — Format geändert, Urteil wortgleich
+
+```text
+-VOTUM: … ergebnis=ROT (ein P1) commit=kein-Commit …
++VOTUM: … ergebnis=ROT commit=kein-Commit … hinweis=ein-P1
+
+-VOTUM: auftrag=AUF-88-P1 … ergebnis=GRUEN (Backend-Teilumfang) commit=fba60e6e …
++VOTUM: auftrag=AUF-88-P1-Backend … ergebnis=GRUEN commit=fba60e6e … hinweis=Teilumfang
+
+zählbar jetzt: 9 von 9
+```
+**Kein Urteil ist verändert** — der Zusatz wandert in ein eigenes Feld, und `auftrag=` nennt jetzt
+den Teilumfang, statt ihn in eine Klammer zu verstecken. *Ich weise die Korrektur hier aus, statt
+sie still zu machen: eine Prüfinstanz, die ihre eigenen Spuren glättet, ist keine.*
+
+**Nebenbei belegt, was ich ursprünglich messen wollte:** alle neun Voten zeigen auf Commits, die
+wirklich existieren (`git cat-file -e` je Hash) — bzw. auf `kein-Commit`, wo das die bewusste
+Aussage war.
+
+---
+
+## Zwei offene Punkte, die ich melde statt sie zu umgehen
+
+### 1. Die Evaluator-Belegakte liegt seit zwölf Stunden ungesichert
+
+```text
+docs/abnahme-evaluator-haertung-2026-07-25.md    406 Zeilen, unversioniert
+letzter Commit der Datei:  af4e059b (29.07.)
+letzte Änderung:           30.07., 07:48   -> seit ~12 Stunden im Baum
+Inhalt: Rohbelege zu T1a-N1, T2, T3/K-01, T3/K-05, T3/K-05b, AUF-87
+```
+
+**Das sind die Artefakte, auf die meine Voten verweisen.** Geht die Datei verloren, zeigen die
+Belegsätze im Ledger ins Leere — **dieselbe Klasse wie PB-017 und PB-040**, nur auf meiner Seite
+des Zyklus statt auf der des Generators. *Die Klasse ist heute zweimal gemeldet worden; das hier
+ist die dritte Ausprägung, und sie ist meine.*
+
+**Ich committe sie nicht von mir aus.** `CLAUDE.md` bindet Commits an Yamas ausdrückliches Wort;
+die Freigabe von 09:45 (`e327e4d9`, Fassung B) nennt ausdrücklich den **Generator**. *Ich lege den
+Befehl bereit und warte — eine Regel zu dehnen, weil sie mir gerade im Weg ist, wäre genau der
+Vorgang, den ich bei anderen beanstande.*
+
+```text
+git add docs/abnahme-evaluator-haertung-2026-07-25.md
+git commit -m "Evaluator-Belegakte 30.07.: Rohbelege T1a-N1/T2/T3/AUF-87" -- docs/abnahme-evaluator-haertung-2026-07-25.md
+```
+
+### 2. Meine eigenen Sichtprobe-Belege liegen in `/tmp` — flüchtig
+
+```text
+17 Screenshots (T3-N1, T5, AUF-88-P1-Sichtprobe)  ->  /tmp/*.png
+```
+**`/tmp` überlebt keinen Neustart.** Das ist R22 in klein (*„ein Vorher-Stand ist ein Commit, kein
+Zeitpunkt"*), angewandt auf meine eigenen Belege. **Entschärft ist es dadurch, dass jede Messung
+in ihrem Votum mit Befehl, Objekt-Id, Viewport und Vorgehen steht** — sie ist reproduzierbar, nicht
+nur bebildert. *Aber ein Bild, das man neu erzeugen muss, ist kein Archiv.* Falls die Bilder
+aufgehoben werden sollen, braucht es einen Ort dafür — das ist eine Yama-Entscheidung, kein
+Alleingang von mir.
+
+### 3. Mein eigener Messmüll — gemeldet, nicht weggeräumt
+
+```text
+scratchpad/bundle-check   339 MB   (Hardlink-Kopie aus meiner Bündel-Prüfung, 09:xx)
+scratchpad/k08-backup     1,4 MB   (Sicherung vor dem K-08-Dateitausch)
+```
+**`rm -rf` ist mir verweigert worden — und das ist richtig so:** `kern.md` verbietet `rm` auf dem
+Mount und verlangt `mv` nach `_to_delete/`. **Ich habe die Sperre nicht umgangen**, sondern melde
+den Rest hier. *Es ist mein Müll, und er gehört in dieselbe Zeile wie meine Befunde über den Müll
+anderer.*
+
+---
+
+**Ballbesitz: Yama** (Commit-Freigabe für die Belegakte · Merge-Tor für sieben Prüfstände) ·
+**Generator** (AUF-48-S2 im Bau) · **Planner** (die 7 Dissens-Fälle aus AUF-50-S1, die überholte
+`nochNicht`-Marke am Import-Reiter).
+
+---
+
+VOTUM: auftrag=AUF-48-S2 rolle=evaluator ergebnis=BEFUND-VOR-DEM-BAU commit=bb8ef3a7 datum=2026-07-30T19:5x hinweis=Blattpruefung
+
+## ⇒ EVALUATOR an PLANNER — **ein P1-Kriterium von AUF-48-S2 ist maschinell blind, und der Validator nennt den falschen Grund** (30.07., CEST)
+
+*Der Generator baut S2 noch (`ableitungen.ts` liegt gestaged, kein Commit) — es gibt nichts
+abzunehmen. **Statt zu warten habe ich das frisch geschnittene Blatt durch den Validator geschickt,
+den ich heute selbst abgenommen habe.** Eine Lücke jetzt kostet einen Satz; nach dem Bau kostet sie
+eine Runde.*
+
+### Was der Validator meldet
+
+```text
+bash scripts/auftrag-pruefen.sh docs/auftraege/generator-auftrag-auf48-s2-ableitungen.md
+
+   OK               block4.K-01              1 Zeile(n)
+   UEBERSPRUNGEN    block4.K-02              enthaelt "umleitung"          <- P1
+   OK               block4.K-03              1536 Zeile(n)
+   OK               block4.K-04              1491 Zeile(n)
+   UEBERSPRUNGEN    block4.K-05              enthaelt "umleitung"
+```
+
+### Der Grund ist falsch — und das ist der eigentliche Befund
+
+**Die beiden Befehle enthalten keine Umleitung. Sie enthalten den Platzhalter `<basis>`** — und
+dessen schließende spitze Klammer trifft die Denylist-Regel `/>>?/`.
+
+```text
+Isoliert nachgestellt, zwei Blätter, nur ein Zeichen Unterschied:
+
+   befehl: "git diff <basis> HEAD --stat"   ->  UEBERSPRUNGEN  "enthaelt umleitung"
+   befehl: "git diff BASIS   HEAD --stat"   ->  FEHLSCHLAG     exit 128
+```
+
+**Derselbe unbrauchbare Befehl, zwei völlig verschiedene Meldungen.** *`FEHLSCHLAG` sagt „hier muss
+jemand ran". `UEBERSPRUNGEN` sagt „der Validator war vorsichtig" — und wird abgehakt.*
+
+> **Das ist wörtlich die Klasse, gegen die AUF-87 gebaut wurde.** Sein eigenes K-03 begründet die
+> Stufe `VERDAECHTIG` so: *„der zweite Fall ist der gefährlichere: **er sieht aus wie Erfolg**."*
+> **Hier sieht ein blindes P1 aus wie Sorgfalt.**
+
+### Warum es ausgerechnet dieses Kriterium trifft
+
+**K-02 ist P1 und lautet: *„Die useMemo-Hüllen und ihre Abhängigkeitslisten sind unverändert."***
+Bei einer Extraktion von Ableitungen ist das **das** Sicherheitsnetz — eine stillschweigend
+gekürzte Abhängigkeitsliste rechnet nicht neu und fällt in keinem Test auf, sondern erst im
+Betrieb an einem veralteten Wert.
+
+**Dieses Netz ist für den Validator dauerhaft unsichtbar** — nicht heute zufällig, sondern
+solange `<basis>` im Befehl steht.
+
+### Die Lösung steht im Blatt selbst — und in R22
+
+**Zeile 37 des Blattes nennt die Basis bereits: `observed_at_commit: f7441518`.** Sie steht nur
+nicht in den Befehlen.
+
+> **R22, wörtlich im Evaluator-Regelwerk (Z59): *„Ein Vorher-Stand ist ein Commit, kein
+> Zeitpunkt."*** Ein Platzhalter ist noch weniger als ein Zeitpunkt.
+
+**Gegenprobe gefahren — mit dem echten SHA laufen beide Befehle:**
+```text
+git diff f7441518 HEAD -- …/HausplanerApp.tsx | grep '^-' | grep -c 'useMemo('   ->  0
+git diff --numstat f7441518 HEAD -- …/HausplanerApp.tsx                          ->  (läuft, noch leer)
+```
+**Zwei Zeichenketten ersetzen, und ein blindes P1 wird ein geprüftes.** *Ich ändere das Blatt
+nicht selbst — es gehört dem Planner, und ein Prüfer, der Aufträge umschreibt, prüft danach seine
+eigene Arbeit.*
+
+### Zweiter Befund, kleiner: der Validator sollte Platzhalter benennen können
+
+`<...>` ist im ganzen Auftragswesen die übliche Platzhalter-Schreibweise (`<neu>`, `<commit>`,
+`<pfad>` stehen in mehreren Blättern). **Eine eigene Stufe `PLATZHALTER — Befehl unvollständig`
+wäre ehrlicher als `UEBERSPRUNGEN`** und würde die Verwechslung dauerhaft ausschließen.
+*Vorschlag, keine Forderung — es ist AUF-87-Gebiet und damit ein eigener Posten.*
+
+### Und der Teil, der gegen mich geht
+
+**Ich habe AUF-87 heute mit GRÜN abgenommen** (Ledger Z25128) — **und diesen Fall nicht geprüft.**
+Meine Denylist-Gegenprobe war `git commit` als Prüfbefehl: ich habe getestet, ob sie das Richtige
+**fängt**, aber nicht, ob sie Harmloses **falsch fängt**. *Das ist eine halbe Prüfung, und die
+fehlende Hälfte ist genau die, die hier zuschlägt.*
+
+**Die Abnahme bleibt trotzdem gültig:** die Denylist tut, was ihre Spezifikation sagt (`>` ist eine
+Umleitung), und der Fall „spitze Klammer als Platzhalter" stand in keinem Kriterium. **Das ist eine
+Lücke in der Spezifikation, kein Mangel am Bau** — aber ich hätte sie beim Prüfen finden können
+und habe es nicht.
+
+---
+
+**Ballbesitz: Planner** (zwei Zeichenketten im S2-Blatt; dazu weiterhin die 7 Dissens-Fälle aus
+AUF-50-S1 und die überholte `nochNicht`-Marke) · **Generator** (baut S2 — dieser Befund blockiert
+ihn nicht, er macht sein K-02 erst prüfbar) · **Yama** (Merge-Tor, Commit-Freigabe für die
+Belegakte).
+
+---
+
+## 2026-07-30, ~19:3x CEST — GENERATOR: `AUF-48-S2` committet — **derselbe Befund, acht von acht**
+
+**VOTUM: auftrag=AUF-48-S2 rolle=generator ergebnis=UMGESETZT commit=59e91b50 datum=2026-07-30**
+
+```text
+Basis-SHA       28c34c11
+Generator-SHA   59e91b50
+Umfang          7 Dateien, 700 Einfuegungen, 291 Loeschungen
+HausplanerApp   -98 / +26
+```
+
+### Ausgelagert: 8
+
+`knotenImGeschoss` · `waendeAus` · `raeumeAus` · `leisteMitAngehefteten` · `werkzeugKontextAus` ·
+`ermittleWegweiser` · `fremderBereichVon` · `palettenGruppenFuer`
+
+**Vier NICHT mitgenommen und gemeldet** — sie lesen oder schreiben Zustand, gehören in Scheibe 3:
+`waehleBereich` (UI-Store + `localStorage`) · `klappeSchiene` (React-Zustand + `localStorage`) ·
+`oeffnePalette` / `schliessePalette` (React-Zustand + `ref`).
+
+**Sechs weitere bewusst nicht**, obwohl rein: `auswahlUebersicht`, `sichtbareGruppen`,
+`leistenWerkzeuge`, `baum`, `befunde`, `paletteListe` bestehen aus **genau einem Aufruf einer
+bereits benannten reinen Funktion**. *Sie zu umhüllen ergäbe eine Schicht ohne Aussage — die
+Zerlegung soll Rechenwege sichtbar machen, nicht Aufrufe zählen.*
+
+### ⚠ K-04 — der Befund aus Scheibe 1 hat sich wiederholt, und das Blatt hat es vorhergesagt
+
+```text
+alle ACHT Ableitungen VOR dem Schreiben der Tests einzeln mutiert:
+  acht von acht  ->  KEINE der 1456 Zusagen wurde rot
+```
+
+**Scheibe 1: sieben von sieben. Scheibe 2: acht von acht.** *Fünfzehn Rechenwege in Folge, keiner
+verriegelt.* **Das ist kein Zufall mehr, sondern eine Eigenschaft der Datei** — und der Grund, warum
+die Zerlegung mehr einbringt als kürzere Zeilen.
+
+`ableitungen.test.ts` trägt deshalb **20 Zusagen**. Gegenprobe **nach** dem Schreiben: alle acht
+Mutationen werden gefangen (3 · 3 · 5 · 3 · 5 · 1 · 3 · 3 rote Zusagen).
+
+### K-02 — der Prüfbefehl meldet 6, die Sache ist trotzdem in Ordnung
+
+```text
+Blatt-Befehl (geloeschte Diff-Zeilen mit "useMemo(")   ->  6   (erwartet: 0)
+useMemo-Huellen vorher / nachher                       ->  15 / 15
+useCallback vorher / nachher                           ->   7 / 7
+alle acht Abhaengigkeitslisten (Klammerbilanz vergl.)  ->  BYTE-GLEICH
+```
+
+**Keine Hülle ist gelöscht** — mehrzeilige sind einzeilig geworden. *Der Befehl misst die Gestalt,
+das Kriterium meint die Sache.* **Ich melde die Abweichung, statt sie wegzuerklären**; der Beleg
+steht oben.
+
+*Und zweimal hat meine eigene Messung dabei danebengegriffen, bevor sie stimmte — erst ein Regex,
+der einzeilige Formen nicht traf, dann ein Textfenster, das in den Nachbarblock lief. **Beide Male
+war nicht der Bestand falsch, sondern meine Probe.** Erst die Klammerbilanz misst, was sie behauptet.*
+
+### Vier geerbte Zusagen umgehängt, nicht geschwächt
+
+```text
+ansichtBereit (2x)   die Faehigkeitsliste wohnt jetzt in ableitungen.ts
+leisteAusZonen       zaehlt zoneTools-Aufrufe jetzt ueber BEIDE Dateien
+rechte               prueft das Verbot harter Rechte jetzt in BEIDEN Dateien
+```
+
+Jede Umhängung ist im Test selbst begründet. **Die geprüften Eigenschaften sind unverändert** — nur
+der Ort, an dem man sie nachliest.
+
+### Zwei eigene Fehler, gefunden und behoben
+
+**1. Eine Zusage unter Vorbehalt ist keine Zusage.** Mein Test zu `ermittleWegweiser` stand unter
+`if (w !== null)` — er hätte auch gehalten, wenn der Wegweiser **immer** schweigt. Genau diese
+Mutation lief durch. Ersetzt durch eine, die das Sprechen **verlangt**, plus die Gegenrichtung.
+*Die Lage dafür ist gemessen, nicht geraten: mit Bearbeiten-Recht und Bauteilen, aber ohne Auswahl.*
+
+**2. Ich hatte einen Fähigkeitsnamen getippt statt gelesen** (`level.hasWalls`; sie heißt
+`hostWall.exists`). Jetzt werden die Konstanten importiert.
+
+### Prüfungen
+
+```text
+tsc 0 · test:hausplaner 1456 -> 1476 · test:hausplaner:dom 29/0 · build 0
+K-01  8 exportierte Funktionen      K-05  98 Loeschungen gegen 26 Einfuegungen
+Scheibe 7 unveraendert bei 77 offen
+```
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Planner** (Scheibe 3 — und die Frage, die sich nach fünfzehn unverriegelten
+Rechenwegen aufdrängt: **soll die Verriegelung ein eigener Posten werden**, statt sie je Scheibe
+nebenbei mitzunehmen?) · **Evaluator** (Prüfstand `28c34c11..59e91b50`).
+
+---
+
+VOTUM: auftrag=AUF-48-S2 rolle=evaluator ergebnis=BEFUND-VOR-DEM-BAU commit=kein-Commit datum=2026-07-30T20:0x hinweis=Nachmessung-K02
+
+## ⇒ EVALUATOR an PLANNER — **die Nachbesserung an K-02 ist gut. Sie schließt die Lücke, die ich gemeldet habe, aber nicht — und legt eine zweite frei** (30.07., CEST)
+
+*Der Planner hat auf meinen Befund von 19:5x reagiert, bevor ich ihn zu Ende geschrieben hatte.
+**Ich habe die Nachbesserung nachgemessen statt sie zu begrüßen.***
+
+### Was er gebaut hat — und es ist deutlich besser als mein Vorschlag
+
+Ich hatte vorgeschlagen, `<basis>` durch den SHA zu ersetzen. **Er hat stattdessen die ganze
+Prüfung ersetzt:** statt `grep -c 'useMemo('` auf Diff-Zeilen jetzt ein **AST-Vergleich**, der die
+Hooks und ihre zweiten Argumente wirklich liest.
+
+**Selbst gefahren, mit dem echten SHA `f7441518` gegen den Arbeitsbaum-Stand:**
+```text
+{"basis": 15, "kandidat": 15, "diff": []}      exit 0
+```
+**Der Befehl läuft, und der im Blatt genannte Erwartungswert stimmt aufs Zeichen.** *Zeilenumbrüche
+und Kommentare sind ihm gleichgültig — genau die Schwäche, die ein `grep` auf Diff-Zeilen gehabt
+hätte.*
+
+**Gegenbeweis gefahren, den das Blatt selbst verlangt** (an einer **Kopie**, nicht im Baum des
+Generators — er baut gerade):
+```text
+Z354  const nodes = useMemo(…, [scene, level])   ->   [scene]
+
+{"diff":[{"name":"nodes","basis":"[scene, level]","kandidat":"[scene]"}]}      exit 1
+echter Stand danach                                                            exit 0
+```
+**Er fängt wirklich, und er nennt Name, Soll und Ist.** *Das ist die beste Fassung dieses Kriteriums,
+die heute geschrieben wurde.*
+
+### Aber die Lücke, die ich gemeldet habe, ist offen — sie hat nur den Grund gewechselt
+
+```text
+bash scripts/auftrag-pruefen.sh …auf48-s2-ableitungen.md
+
+   UEBERSPRUNGEN    block4.K-02    enthaelt "umleitung"     <- jetzt ZU RECHT: echtes `>`
+   UEBERSPRUNGEN    block4.K-05    enthaelt "umleitung"     <- weiterhin `<basis>`, falscher Grund
+```
+
+**Vorher war K-02 blind, weil der Grund falsch war. Jetzt ist es blind, weil der Grund stimmt:**
+der neue Befehl schreibt eine Datei nach `/private/tmp` (`git show … > basis.tsx`), und das ist
+eine echte Umleitung, die die Denylist zu Recht anhält.
+
+> **Das P1-Kriterium ist damit besser geprüft, wenn ein Mensch es fährt — und unverändert
+> unsichtbar für das Werkzeug, das genau dafür gebaut wurde.** *Der Bau ist gestiegen, die
+> Messbarkeit nicht.*
+
+**Ein Weg ohne Umleitung wäre da** — der Vergleich braucht keine Zwischendatei: `git show` in einen
+Node-Puffer statt in eine Datei, dann fällt das `>` weg und der Validator kann den Befehl fahren.
+*Das ist ein Vorschlag, keine Forderung; die Entscheidung ist deine.*
+
+**K-05 ist unverändert:** `git diff --numstat <basis> HEAD` — kein `>` außer dem des Platzhalters,
+also weiterhin **falsch** als Umleitung gemeldet. Hier trägt mein ursprünglicher Vorschlag noch:
+SHA einsetzen, dann läuft er.
+
+---
+
+## Der zweite Befund — und ich bin über ihn gestolpert, statt ihn zu suchen
+
+**Meine erste Mutation traf versehentlich eine `useEffect`-Abhängigkeitsliste** (`}, [activeWorkspace]`
+→ `}, []`). Der Befehl meldete `diff: []` — **grün.**
+
+*Ich hätte das um ein Haar als „die Nachbesserung fängt nichts" gemeldet. **Die Mutationspflicht des
+Blattes hat mich davor bewahrt** („jede Gegenprobe wird ZUERST auf Auffinden geprüft"): ich habe
+nachgesehen, wo meine Mutation gelandet ist, und sie saß im falschen Hook-Typ. **Zweimal
+hintereinander** — mein Regex traf danach noch ein zweites `useEffect`.*
+
+**Das grüne Ergebnis war also richtig. Aber es zeigt, was K-02 nicht abdeckt:**
+
+```text
+Hooks mit Abhängigkeitsliste in HausplanerApp.tsx (per AST gezählt):
+   useMemo       15      <- von K-02 geprüft
+   useCallback    7      <- ungeprüft
+   useEffect      7      <- ungeprüft
+   ------------------------
+   UNGEPRÜFT:    14   von 29
+```
+
+**Fast die Hälfte der Abhängigkeitslisten fällt aus dem Sicherheitsnetz.** Und das ist bei genau
+diesem Auftrag nicht theoretisch: **eine Extraktion von Ableitungen fasst Werte an, die in
+`useCallback`- und `useEffect`-Listen stehen.** Die Mutation, die ich versehentlich fuhr, ist ein
+echter Fehlerpfad — `setSchienen(ladeSchienen(activeWorkspace))` ohne `activeWorkspace` in der
+Liste lädt beim Bereichswechsel nicht neu, und **kein Test der Suite wird davon rot.**
+
+**Der Aufwand, das zu schließen, ist ein Wort:** der Collector prüft
+`expression.endsWith("useMemo")` — daraus wird eine Prüfung auf drei Namen, der Rest des Befehls
+bleibt wie er ist.
+
+---
+
+### Was ich NICHT getan habe
+
+**Nicht in den Arbeitsbaum gegriffen.** Der Generator baut S2 gerade; alle Mutationen liefen auf
+Kopien unter `/private/tmp`, danach entfernt.
+```text
+git status -- …/HausplanerApp.tsx   ->  unverändert gegenüber seinem Stand
+```
+**Das Blatt nicht selbst geändert** — zum zweiten Mal heute derselbe Grund: wer Aufträge
+umschreibt, prüft danach seine eigene Arbeit.
+
+**Ballbesitz: Planner** (Umleitung in K-02 · `<basis>` in K-05 · die 14 ungeprüften
+Abhängigkeitslisten) · **Generator** (baut weiter — keiner dieser Punkte blockiert ihn, sie machen
+seine Abnahme schärfer) · **Yama** (Merge-Tor, Commit-Freigabe Belegakte).
+
+---
+
+## 30.07.2026, 19:48 CEST — AUF-48-S2 quittiert, S3 geschnitten. Und der Generator hat MEIN Kriterium widerlegt.
+
+**VOTUM: auftrag=AUF-48-S2 rolle=generator ergebnis=UMGESETZT commit=59e91b50 datum=2026-07-30**
+
+```text
+Basis-SHA      28c34c11
+Generator-SHA  59e91b50   (30.07. 19:40)
+Produkt        app/ableitungen.ts (NEU, 8 Funktionen) · HausplanerApp.tsx (Entnahme)
+Tests          ableitungen.test.ts (NEU) + drei bestehende verschaerft
+K-01  8        knotenImGeschoss · waendeAus · raeumeAus · leisteMitAngehefteten ·
+               werkzeugKontextAus · ermittleWegweiser · fremderBereichVon · palettenGruppenFuer
+K-03  tsc 0 · test 1456 -> 1476 · dom 29/0 · build 0
+K-05  2447 -> 2375 Zeilen (98 Loeschungen gegen 26 Einfuegungen)
+fremde Pfade   0
+```
+
+### Mein K-02 hat die Gestalt gemessen, nicht die Sache — und er hat es bewiesen
+
+```text
+mein Pruefbefehl:  geloeschte Diff-Zeilen mit 'useMemo('   ->  6
+seine Messung:     Huellen vorher / nachher                ->  15 / 15
+                   alle acht Abhaengigkeitslisten byte-gleich
+Ursache:           mehrzeilige Huellen sind einzeilig geworden — FORMWECHSEL, keine Loeschung
+```
+
+> **Und meine eigene Sorge von 19:40 war derselbe Fehler noch einmal.** Ich hatte gemeldet,
+> `useMemo` stehe bei 17 statt 16 und *„will erklärt sein"*. **Nackt gezählt stimmt das — mit
+> Klammer gezählt sind es 15 zu 15.** Die Differenz war eine Importzeile und ein **Kommentar**,
+> in dem das Wort vorkommt. **Siebte Ausprägung heute: die Probe zählt etwas anderes, als sie zu
+> zählen vorgibt.**
+
+**Das Kriterium war schlecht geschrieben, nicht der Commit schlecht gebaut.** *Genau das, wovor
+die Prüfung P4 des Plan Reviewers warnt: prüft das Kriterium die WIRKUNG oder nur die GESTALT.*
+
+### Was er gemeldet statt mitgenommen hat — zweimal richtig
+
+**Vier Funktionen lesen oder schreiben Zustand** (`waehleBereich`, `klappeSchiene`,
+`oeffnePalette`, `schliessePalette`) — **nicht ausgelagert, gemeldet, gehören in Scheibe 3.**
+**Sechs weitere sind rein und trotzdem geblieben**, weil sie aus genau einem Aufruf einer bereits
+benannten Funktion bestehen: *„sie zu umhüllen ergäbe eine Schicht ohne Aussage."* **Angenommen.**
+
+**Und der Befund aus S1 hat sich wiederholt** — die Fläche war wieder unverriegelt.
+
+### AUF-48-S3 liegt
+
+**`generator-auftrag-auf48-s3-tasten-und-zustand.md`** (145 Zeilen, Spur B). Gemessen gegen
+`59e91b50`: 2375 Zeilen, 7 `useEffect`, 4 `localStorage`-Zugriffe. **Ausgelagert wird nur die
+Zuordnung Taste → Absicht; die vier Zustandsfunktionen bleiben stehen und bekommen die Zusagen,
+die ihnen fehlen** — mit der Auflage, dass eine Zusage den gespeicherten Zustand prüfen muss, nicht
+den Rückgabewert.
+
+**Im Blatt steht diesmal ein Absatz über die Prüfbefehle selbst:** meldet einer etwas Unerwartetes,
+soll er zuerst prüfen, ob der Befehl die Sache misst oder die Gestalt — *und wenn er die Gestalt
+misst, es sagen und anders messen. Das ist kein Ungehorsam, das ist die Arbeit.*
