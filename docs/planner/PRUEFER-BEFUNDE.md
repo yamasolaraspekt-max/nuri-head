@@ -2649,3 +2649,64 @@ gehört gesagt, statt einen P1 stehen zu lassen, der nicht mehr trägt.*
 liefert `0`* — unverändert, aber jetzt drei Einträge statt einundzwanzig.
 
 **Ballbesitz: Generator** (die drei Dateien) — **PB-032 geschlossen.**
+
+---
+
+## 36. Runde 26 (30.07., Produktionsmodus) — `serviert == gemessen` für `40fa52de`: **keine Beanstandung**
+
+**Gemessen gegen `5af94b4d`.** Die einzige Frage, die in diesem Modus zählt: **blockiert etwas die
+Abnahme des frischen Generator-Commits?** *An genau dieser Stelle ist die Sichtprobe zu Scheibe 4
+gescheitert — „Bundle vorgelaufen, serviert != gemessen".*
+
+### Das Bündel ist auf dem Stand der Quelle
+
+```text
+public/hausplaner/hausplaner.css      188 verschiedene .hp-Klassen   18 683 Byte
+resources/.../hausplaner.css          188 verschiedene .hp-Klassen   38 155 Byte
+Klassen, die die Quelle hat und das Buendel nicht:   0
+```
+
+**CSS-Klassennamen werden nicht minifiziert** — sie müssen wortgleich auftauchen. 188 gegen 188,
+keine Lücke. *Das ist der belastbarste Nachweis, den man ohne einen Bau führen kann, und ich darf
+nicht bauen.*
+
+**Zweiter, unabhängiger Nachweis über die JS-Seite** — Zeichenketten überleben die Minifizierung,
+Komponentennamen nicht:
+
+```text
+aria-label="Übernahme und Speicherstatus"   (nur in ObjektkopfUeberlauf.tsx, NEU in 40fa52de)
+  -> im committeten Buendel: 1 Treffer
+```
+
+**Damit ist belegt, dass das Bündel die neue Komponente enthält.** Die Abnahme kann fahren; `serviert
+== gemessen` steht.
+
+### Die neunte Beinahe-Fehlmeldung — und sie wäre ein P1 gewesen
+
+Mein erster Griff war `grep -cE '^\.hp-'` auf beide CSS-Dateien:
+
+```text
+public CSS:  0 hp-Regeln        <- FALSCH
+Quell-CSS: 188 hp-Regeln
+```
+
+**Daraus wäre geworden: „das Bündel enthält keine einzige Stilregel — die Abnahme ist blockiert."**
+Ein P1 gegen einen Commit, der in Ordnung ist, mitten im Produktionsmodus. **Die Ursache: das
+Bündel ist minifiziert, alles steht auf einer Zeile, und mein Muster verlangte einen
+Zeilenanfang.**
+
+**Gefangen hat es dieselbe Frage wie die acht Male davor:** *kann das sein?* Ein ausgeliefertes
+Bündel ohne eine einzige Stilregel wäre eine Oberfläche ohne Farben — das hätte jemand gesehen.
+
+**Neun Extraktionsfehler in 26 Runden, keiner im Urteil.** Und die Barriere aus §11 muss um einen
+dritten Punkt wachsen: **kein `^`- oder `$`-Anker gegen erzeugte Dateien** — Bündel, minifizierte
+CSS, JSON aus einem Generator. *Der Anker prüft die Formatierung, nicht den Inhalt; das ist Gestalt
+statt Wirkung, an der eigenen Messung begangen.*
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung |
+| **L2/L3/L5/L6** | keine Beanstandung |
+| **L4 Kausalität** | keine Beanstandung — Quelle → Bündel → ausgelieferte Datei ist an zwei unabhängigen Merkmalen belegt |
+
+**Kein Befund. Die Abnahme von `40fa52de` ist von meiner Seite nicht blockiert.**
