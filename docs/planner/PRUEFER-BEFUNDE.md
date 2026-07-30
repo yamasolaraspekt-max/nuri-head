@@ -2869,3 +2869,50 @@ Ein Muster, das `*_tmp.*` und `*.generiert.*` erfasst, schließt alle drei.
 
 **Ballbesitz: Planner** (PB-018). *Der Testrest ist kein Vorgang für sich; er ist der Beleg, dass
 die Lücke nicht nur Kladden betrifft.*
+
+---
+
+## 40. Nachsuche auf Yamas Frage: „hast du Aufgaben von früher vergessen?"
+
+**Gemessen gegen `0dcf63f6`.** *Berechtigte Frage — ich habe die Rolle mitten in einer laufenden
+Kette gewechselt. Hier ist die Suche, nicht die Beruhigung.*
+
+### Was NICHT vergessen ist
+
+| Suche | Ergebnis |
+|---|---|
+| Aufträge an den **Prüfer** in Ledger/Tafel | **0 Treffer** — es gibt keinen; die Rolle arbeitet auf Yamas Zuruf |
+| `Ballbesitz: Generator`, offen | sechs Stellen, **alle nach 09:45** — sie gehören der jetzigen Generator-Instanz, nicht mir |
+| **AUF-38 Scheiben 5–8** (meine alte Kette) | ohne mich weitergelaufen: Scheibe 6 berichtet (`11e23016`), 7 und 8a/8b geschnitten. **Nichts hängt an mir** |
+| mein Messskript, im Betrieb | `194 Stellen, davon 78 offen` — bei seiner Abgabe waren es **316 / 197**. Es wird benutzt und die Zahl fällt |
+
+**Und ein Nebeneffekt, den ich nicht erwartet hatte:** AUF-38 steht seit 09:26 auf
+`⏸ ZURÜCKGESTELLT`, und die Tafel nennt als Grund *„§1c verlangt genau EINEN; Befund PB-015"*. **Ein
+Befund von mir hat die Postenlage verändert** — das ist mir bis zu dieser Nachsuche nicht aufgefallen.
+
+### Was ich SELBST zurückgestellt habe und nicht wieder aufgenommen — drei Posten
+
+**Das ist die Antwort auf die Frage.** Ich habe in eigenen Abschnitten festgehalten, dass etwas
+offen bleibt, und bin nicht zurückgekehrt:
+
+| # | offen seit | was ich schuldig bin |
+|---|---|---|
+| **N-1** | Runde 19 (`PB-021`) | **Die zehn vorhandenen Skills inhaltlich prüfen.** Wörtlich: *„habe ich nicht gemessen — ich habe ihre Existenz geprüft, nicht ihren Inhalt."* Zwölf fehlen (gemeldet); über die zehn, die da sind, weiß ich nichts |
+| **N-2** | Runde 21 | **`bauordnung.md`, `gap-analyse-3d-planer.md`, `bauordnung-monteur-app.md` inhaltlich gegen den Code.** Wörtlich: *„nur auf Existenz und Struktur geprüft … sie bleiben auf der Liste."* `bauordnung.md` ist das Dokument, dessen zehn Fragen vor **jedem** Produktiv-Commit stehen |
+| **N-3** | Runde 4 | **`tool-dashboard-current-state.md` §6/§8/§9 gegen die heutige Oberfläche.** Wörtlich: *„Das wäre eine ungemessene Behauptung … Hinweis auf die nächste Runde."* Diese Abschnitte dienen laut `fahrplan-dashboard-versionen.md` als **Design-Vorlage**, und die Oberfläche hat seither vier Layout-Wellen hinter sich |
+
+**Dazu der Rest der eigenen Reihenfolge aus Abschnitt 28**, die ich nach dem Papierstopp nicht
+weiterverfolgt habe: `docs/planner/` Restbestand (**56** ungeprüft) und `docs/` Wurzel jenseits von
+CLAUDE.md (**191** ungeprüft). *Das ist kein Vergessen — Yamas Papierstopp hat sie ausdrücklich
+zurückgestellt. Ich führe sie hier auf, damit sie nicht unter dem Stopp verschwinden.*
+
+### Was bei Yama liegt und von mir aus nicht weitergehen kann
+
+| | |
+|---|---|
+| **Härtungsakte des Evaluators** (3 111 Z.) | von mir ausgenommen — fremde Rolle. *„Nur auf Yamas ausdrückliches Wort"* |
+| **PRÜFER-TAKT** statt GENERATOR-TAKT | angeboten, nicht beantwortet. Der Takt sagt weiter *„vollständig umsetzen (Code+Tests)"* |
+
+**Vorschlag zur Reihenfolge, wenn der Papierstopp es zulässt: N-2 zuerst.** *Von den drei ist die
+Bauordnung die einzige, deren Inhalt vor jedem Commit angewandt werden muss — dort wiegt eine
+veraltete Aussage am schwersten.*
