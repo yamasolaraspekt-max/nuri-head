@@ -104,3 +104,37 @@ hier wird sie angewandt, nicht neu erfunden.*
 **P2 bis P5** je Datei: `GruppenzeileUndSchiene` (27) · `FussUndUeberlagerungen` (20) ·
 `Kopfrahmen` (16) · `HausplanerApp` (4). *`Buehne.tsx` hat null — dort ist nichts zu tun.*
 **Erst nach P1**, weil P1 die Mechanik an der schwersten Datei zeigt.
+
+
+---
+
+## NACHTRAG 22:54 — **K-03 steht auf einer Zusage, die selbst einen Befund traegt**
+
+**PB-010 (Pruefer):** *„`stilschicht.test.ts` — Wirkungs-Zusage prueft gegen **3 tote
+Bezeichner**."* Rang P3, Zustand *ANGENOMMEN, ABER ANDERS GESCHNITTEN*.
+
+**Das ist genau die Datei, auf die K-03 dieses Blattes sich stuetzt.** *Eine Zusage, die gegen
+Bezeichner prueft, die es nicht mehr gibt, ist an diesen Stellen gruen, ohne etwas zu pruefen.*
+
+### Was daraus folgt — und was ausdruecklich NICHT
+
+**K-03 bleibt gueltig.** Der Kern der Zusage — `assert.doesNotMatch(quelle, /@media/)` und
+`/!important/` — traegt unabhaengig davon; er prueft **Abwesenheit in der Quelle**, nicht
+einen Bezeichner. *Die drei toten Stellen betreffen die Wirkungs-Zusage, nicht diese beiden.*
+
+**Aber der Bericht nennt sie.** Wer P1 baut, faellt ueber sie:
+
+```yaml
+  - id: K-03b
+    aussage: "Die drei toten Bezeichner aus PB-010 sind benannt, nicht stillschweigend geheilt."
+    nachweis: >
+      Nenne im Bericht, WELCHE Bezeichner `stilschicht.test.ts` prueft, die es in der
+      gebauten CSS nicht gibt. **Beheben ist NICHT Teil dieses Auftrags** — PB-010 liegt
+      beim Evaluator und ist anders geschnitten worden.
+    warnung: >
+      *Meine eigene Zaehlung dazu war unbrauchbar: ich habe `hp-`-Vorkommen im Test gegen
+      die CSS gehalten und 26 "tote" gefunden — darunter `hp-accent` (das ist die CSS-Variable
+      `--hp-accent`, keine Klasse) und die Praefixe `hp-ef-` und `hp-gf-`.* **Der Befehl mass
+      die Gestalt, nicht die Sache.** Der Pruefer nennt drei; seine Messung gilt, meine nicht.
+      **Wer hier zaehlt, sagt dazu, WONACH er zaehlt.**
+```
