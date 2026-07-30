@@ -174,6 +174,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-008 | `generator-auftrag-auf83-t2t3-kopfleiste.md` | P3 | aktives Blatt führt `T1a` als offenen Schritt — Code und Register führen ihn als erledigt (`97a2e2a4`) | offen | — |
 | PB-007 | `zuschnitt-auf48-hausplanerapp-zerlegen.md` | P2 | Schnittkanten als absolute Zeilennummern — am Commit korrekt, im Baum schon 4/62 Zeilen abgewandert | offen | — |
 
 ---
@@ -729,3 +730,90 @@ oder `$` enthält, wird gequotet* (`<<'PY'`). Punkte 1 und 2 stehen schon in §1
 gegen die Erwartung. *Deshalb braucht jede Messung eine Gegenrechnung, auch die des Prüfers.*
 
 **Kein Befund. Ballbesitz: Prüfer.**
+
+---
+
+## 14. Runde 7 (30.07.) — `t1-entscheidungsgrundlage-ticket-shell-2026-07-29.md`
+
+**Gemessen gegen `769bc61d`, durchgehend mit `git show`** — `objekt.blade.php` liegt geändert im
+Arbeitsbaum, ein Blick in die Datei hätte gegen einen Stand gemessen, den es nicht gibt.
+
+### Was trägt — und es ist der größte Teil
+
+| Behauptung | Gemessen |
+|---|---|
+| `app.blade.php` = **11 189** Zeilen | **11189** |
+| `@yield('title')` **Z11** | **11** |
+| `@yield('style')` / `@stack('style')` **2535 / 2536** | **2535 / 2536** |
+| `@include('admin.layouts.sidebar')` **4452** | **4452** |
+| `@yield('content')` **4837** | **4837** |
+| `@stack('scripts')` / `@yield('script')` **11148 / 11149** | **11148 / 11149** |
+| `<main class="main-wrapper">` **4554** | **4554** |
+| `id="mainContentScroll"` **4836** | **4836** |
+| Routen **4983** / **4988** | **4983** / **4988** |
+
+**Neun Anker, neun Treffer, zeilengenau in einer Datei mit 11 189 Zeilen.**
+
+*Eine Ausnahme ohne Wirkung:* `</header>` steht bei **4833**, das Papier nennt **4835**. Zwei
+Zeilen, mitten in einem Block, den die Nachbarangaben eingrenzen. **Kein Befund** — wer der Angabe
+folgt, landet richtig.
+
+### PB-008 · P3 · Ein aktives Auftragsblatt führt einen Schritt als offen, den der Code erledigt hat
+
+```yaml
+befund:
+  id: PB-008
+  datei: "docs/auftraege/generator-auftrag-auf83-t2t3-kopfleiste.md"
+  stelle: "Abschnitt 'Die Reihenfolge, in der das steht', Punkt 3 (Z198)"
+  behauptung: "T1a / T4 - die Insel nimmt ihre Masse vom Behaelter statt vom Fenster.
+    Das ist zugleich der erste Zerlegungsschritt von AUF-48, siehe
+    t1-entscheidungsgrundlage-ticket-shell-2026-07-29.md"
+  gemessen: |
+    Beide Messungen, auf denen die Entscheidungsgrundlage steht, existieren nicht mehr:
+      min-height: calc(100vh - 46px)   -> 0 Treffer in beiden Hausplaner-Blades
+      innerWidth - 220 - 268           -> 0 Treffer in HausplanerApp.tsx
+    Stattdessen steht dort, was das Papier vorgeschlagen hat:
+      studio.blade.php:41   #hausplaner-root { width: 100%; height: 100%; }
+      HausplanerApp.tsx:370 const gemesseneBreite = useGemesseneBreite(inhaltRef)
+      HausplanerApp.tsx:371 const breite = buehnenBreite(gemesseneBreite)
+      eigenes Modul app/dashboard/buehnenBreite.ts
+    Der Code benennt es selbst als erledigt:
+      HausplanerApp.tsx:1444  "seit AUF-83-T1a wird der ohnehin gemessen (buehnenBreite.ts)"
+    Und das Register fuehrt es so:
+      "AUF-83-T1a  erledigt"  ·  "T1a ist seit 09:58 GEBAUT (97a2e2a4)"
+  befehl: |
+    git show HEAD:resources/views/admin/hausplaner/studio.blade.php | grep -c '100vh'
+    git grep -n "innerWidth" HEAD -- 'resources/planner/hausplaner' | grep -v __tests__
+    git show HEAD:resources/planner/hausplaner/app/HausplanerApp.tsx | grep -n 'buehnenBreite'
+  commit: "769bc61d"
+  schwere: P3
+  wirkung: |
+    Wer das aktive Blatt liest, um zu wissen was als naechstes kommt, sieht T1a als offenen
+    Schritt. Gebaut ist es seit 09:58. Fuer den Planner ist das folgenlos - er hat T1a selbst
+    abgenommen. Gefaehrlich wird es fuer eine Instanz, die neu dazukommt und das Blatt als
+    Fahrplan liest: sie baut die Behaelter-Messung ein zweites Mal. Das ist genau der Fall,
+    den CLAUDE.md am TopologieGate festhaelt - "Ist-Beleg aus dem CODE, nicht aus dem Papier".
+  eigenarbeit: nein
+```
+
+**Warum nur P3 und nicht P2:** die Tafel — das führende Register — zeigt `AUF-83-T3-N1` als aktiv
+und führt `T1a` als erledigt. **Das Blatt widerspricht dem Register, aber das Register gewinnt.**
+Der Schaden entstünde erst, wenn jemand das Blatt ohne die Tafel liest.
+
+**Erledigt wenn:** *Punkt 3 der Reihenfolge im Blatt nennt `T1a` als erledigt (mit `97a2e2a4`) oder
+enthält ihn nicht mehr; ein `grep -n "T1a" ` auf dem Blatt zeigt keine Zukunftsform.*
+
+**Zum Papier selbst: keine Beanstandung.** Eine Entscheidungsgrundlage, deren Vorschläge umgesetzt
+wurden, ist nicht falsch — sie ist eingelöst. *Der Mangel steckt im Blatt, das sie zitiert, nicht in
+ihr.*
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — neun Anker, neun Treffer |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | **PB-008** — Blatt und Register sagen Verschiedenes über denselben Schritt |
+| **L4 Kausalität** | keine Beanstandung — die Kette *Befund → Vorschlag → Code* ist geschlossen und im Code benannt |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | nicht geprüft |
+
+**Ballbesitz: Planner.**
