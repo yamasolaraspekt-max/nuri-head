@@ -40,7 +40,10 @@ scope:
   # Eine Zahl im Auftrag ist eine Messung zum Zeitpunkt des Schreibens und veraltet;
   # ein Befehl misst zum Pruefzeitpunkt neu. (Lehre vom 26.07.: "20 genannt, 34 gemessen".)
   population_command: "./scripts/zaehle-statische-stile.sh app/HausplanerStudio.tsx"
-  population_at_writing: 19         # Messung des Planners, ausdruecklich KEINE Bedingung
+  # population_at_writing:  ENTFAELLT seit 30.07.2026 (R19).
+  #   Grund: der Planner hat die Zahl fuenfmal an einem Tag behauptet statt gemessen (F-04).
+  #   Ein Auftrag nennt den BEFEHL. Wer die Zahl braucht, faehrt ihn — und das ist der
+  #   Bauende, weil er eine falsche Zahl sofort bezahlt und der Planner nie.
   pfade:
     - resources/planner/hausplaner/app/HausplanerStudio.tsx
   ausschluesse: []                  # jeder Ausschluss braucht 'grund' und 'entschieden_von'

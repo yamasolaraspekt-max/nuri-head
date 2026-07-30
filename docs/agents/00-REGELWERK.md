@@ -147,6 +147,46 @@ Jede stammt aus einem Schaden vom 27.07.2026.
 
 ---
 
+## 3b. Die Regeln R10 bis R18 — entstanden am 29./30.07.2026
+
+**Warum sie hier stehen und nicht mehr nur im Ledger:** am 30.07. um 07:05 gemessen —
+`R10` bis `R18` kamen im Regelwerk **null Mal** vor und im Ledger (21 233 Zeilen) zwischen einmal
+und fünfzehnmal. **Eine Regel, die nur im Ledger steht, existiert nicht.** *Das war die erste
+Erkenntnis aus Yamas Frage nach unserer Oberflächlichkeit.*
+
+Die Spalte **Form** sagt, ob die Regel nur Aufmerksamkeit verlangt (⚠ Vorsatz) oder ob sie
+mechanisch greift (✅ Barriere). **Der Tagesbeleg ist eindeutig: Barrieren hörten sofort auf zu
+wiederholen, Vorsätze wiederholten sich vier- bis fünfmal.**
+
+| # | Regel | Form |
+|---|---|---|
+| **R10** | **Eine Sperre nennt den Zustand, der sie aufhebt, und endet mit dem BAU der Vorbedingung — nicht mit ihrer Abnahme.** *Zusatz vom 29.07.:* **es sei denn, der Folgeauftrag zerstört einen Prüfstand, den die offene Abnahme braucht.** Prüffrage vor jedem Entsperren: *braucht die offene Abnahme einen Zustand, den der nächste Auftrag verändert?* | ⚠ Vorsatz |
+| **R11** | **Jedes Kriterium trägt den Befehl, der es belegt — und der Planner hat ihn gefahren, bevor das Blatt liegt.** | ⚠ Vorsatz (wird Barriere mit AUF-87) |
+| **R12** | **Nicht nach Mustern suchen, sondern die Menge aufzählen lassen.** Die Quittung nennt die **Liste der Testdateien, die die betroffene Datei einlesen** — nicht die Trefferzahl eines Suchbegriffs. | ✅ Barriere |
+| **R13** | **`git commit -- <pfade>` statt `git add` + `git commit`.** Der Index bleibt unberührt, fremde Arbeit kann nicht mitgenommen werden. | ✅ Barriere |
+| **R14** | **`git log -1` und `git status` unmittelbar vor dem Schreiben.** Bei Tafelzeilen zuerst prüfen, ob der Bauende sie schon gesetzt hat. | ⚠ Vorsatz |
+| **R15** | **Vor jedem Entwurf die Shell der Heimat-App messen** — Layout, Seitenleisten, Navigationseinträge, Klappzustände — **und `docs/planner/` lesen.** | ⚠ Vorsatz |
+| **R16** | **Mindestens zwei baubare Aufträge liegen jederzeit vor der Front.** Leerlauf eines Bauenden ist ein Fehlzustand, keine Ruhe. | ⚠ Vorsatz |
+| **R17** | **Der Auftrag nennt im Kopf die abgenommenen Zusagen, die dieselbe Fläche verriegeln** (`geerbte_zusagen`) — gefunden mit demselben Befehl wie R12. **Der Planner fährt ihn, bevor das Blatt liegt.** *R12 bewahrt den Bauenden davor, geerbte Zusagen zu übersehen; R17 bewahrt den Planner davor, sie zu überschreiben.* | ⚠ Vorsatz |
+| **R18** | **Solange eine Sichtprobe BEAUFTRAGT ist, bewegt niemand `public/hausplaner/*`** — und keine Blade, die ohne Bau sofort wirkt. **„Beauftragt" zählt wie „läuft".** | ⚠ Vorsatz |
+
+### R19 bis R21 — die drei Änderungen vom 30.07., 07:10
+
+Sie kommen aus Yamas Frage *„wie kann man die Schwäche von dir, Generator und Evaluator beheben"*
+und sind in `docs/planner/warum-wir-oberflaechlich-arbeiten-2026-07-30.md` begründet.
+
+| # | Regel | Form |
+|---|---|---|
+| **R19** | **Ein Auftrag enthält keine Zahl, nur den Befehl.** `population_at_writing` fällt aus dem Auftragsschema — es wird nicht sorgfältiger ausgefüllt, sondern gestrichen. *Begründung: der Bauende bezahlt eine falsche Zahl sofort, der Planner nie. Die Messung gehört zu dem, der die Rechnung bekommt.* | ✅ Barriere (Feld existiert nicht mehr) |
+| **R20** | **Nach jedem erzeugenden Befehl wird das ERGEBNIS gelesen, nie der Rückgabewert.** Gilt für alle drei Rollen. *Drei Ausprägungen an einem Tag: ein Heredoc verschluckte fünf Namen, zwei Ledger-Einträge gingen verloren, und der Commit lief jedes Mal grün durch.* | ⚠ Vorsatz |
+| **R21** | **Eine Mutation gilt erst als Gegenprobe, wenn die Datei danach noch LÄDT.** Ein Rot aus einer zerlegten Datei beweist nichts. *Vom Evaluator an sich selbst gefunden, zweimal.* | ⚠ Vorsatz |
+
+**Und eine Selbstauflage des Planners, die keine Regel für andere ist:**
+**höchstens EIN neues Auftragsblatt pro Stunde.** Am Vormittag des 30.07. waren es vier Blätter mit
+1 139 Zeilen in drei Stunden — bei zwei Rückweisungen. *Weniger Blätter, gemessene Blätter.*
+
+---
+
 ## 4. FÜR DEN GENERATOR
 
 ### Was du tust
