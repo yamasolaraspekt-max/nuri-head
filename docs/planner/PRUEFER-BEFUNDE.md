@@ -2484,3 +2484,65 @@ belastbarste Befund über die Prüfarbeit selbst.*
 **Ballbesitz: Planner** — mit dem Hinweis, dass das Register **außerhalb des Repositoriums** liegt
 und `CLAUDE.md` es aus Datenschutzgründen dort hält. **Änderungen daran sind Yamas Sache, nicht die
 des Zyklus.**
+
+---
+
+## 33. PRODUKTIONSMODUS ab 30.07., 09:45 — angenommen, und was sich für mich ändert
+
+**Yamas Ansage:** *„Papierstopp: P2/P3-Befunde zu Papieren werden registriert, aber nicht mehr
+ausführlich beantwortet. Melde weiter alles, aber priorisiere: P0/P1, Sicherheit, und alles, was den
+aktuellen Generator-Commit oder eine Evaluation blockiert."*
+
+**Umgesetzt ab hier:** Papierbefunde bekommen **eine Zeile im Register und keinen Abschnitt**.
+Ausführlich wird nur noch, was P0/P1 ist, Sicherheit betrifft oder einen Commit/eine Abnahme
+blockiert. *Gemeldet wird weiter alles — nur kürzer.*
+
+---
+
+### PB-017 nachgemessen: die **Ursache** ist weg, der **Zustand** ist geblieben — und größer
+
+**`e327e4d9`, 30.07. 09:44:** *„ENTSCHEIDUNG YAMA 09:45: Fassung B kontrolliert — der Generator
+committet auf der Aufgaben-Branch, niemals nach main."*
+
+**Damit ist die Regel gefallen, auf die PB-017 als Ursache verwies** (*„Commits nur auf Yamas
+ausdrückliches Wort"*). **Der Befund bleibt trotzdem offen, weil der gemessene Zustand fortbesteht:**
+
+```text
+gemessen gegen HEAD, 30.07. nach e327e4d9
+  verfolgt geaendert ausserhalb docs/     11 Dateien
+  unverfolgt (ohne die zwei Altlasten)    10 Dateien   (vorher 8)
+  weiterhin NICHT im Commit:
+    resources/planner/hausplaner/app/state/objektkopf.ts
+    resources/planner/hausplaner/app/dashboard/ObjektkopfUeberlauf.tsx      NEU seit Runde 15
+    resources/planner/hausplaner/__domtests__/objektkopf.dom.test.ts        NEU seit Runde 15
+    resources/planner/hausplaner/__domtests__/reiterLeiste.dom.test.ts
+    resources/planner/hausplaner/__tests__/{objektkopf,arbeitszeileSuche,reiterLeisteGeteilt}.test.ts
+    scripts/auftrag-pruefen.mjs · scripts/auftrag-pruefen.sh · scripts/__tests__/
+```
+
+**Zwei Dateien sind seit Runde 15 dazugekommen** — der Bestand ungesicherter Arbeit **wächst**,
+während die Erlaubnis zu committen bereits erteilt ist.
+
+**Das ist der Punkt, der nach Yamas eigener Priorität ganz oben steht:** *„alles, was den aktuellen
+Generator-Commit oder eine Evaluation blockiert."* **Eine Evaluation kann diesen Stand nicht
+reproduzieren** — er existiert in keinem Commit. `serviert == gemessen` ist am ungesicherten Baum
+nicht belegbar, und genau daran ist die Sichtprobe zu Scheibe 4 schon einmal gescheitert.
+
+**Erledigt wenn:** *`git status --porcelain | grep -vE '^\?\? (\.rm_probe_tmp|k01n1b\.mjs)' | wc -l`
+liefert `0`.* **Ballbesitz: Generator** — die Erlaubnis liegt seit 09:44 vor.
+
+*Korrektur an meinem eigenen Befund: PB-017 nannte als Ursache eine Regel, die es nicht mehr gibt.
+Die Ursache ist jetzt keine Regel, sondern ein offener Schritt.*
+
+---
+
+### Registriert, nicht ausgeführt (Papierstopp)
+
+**PB-031 · P3 · 68 in `docs/*.md` genannte Code-Pfade sind nicht auffindbar** (von 923 geprüften).
+Häufigste: `wp_material_sets.json` (4×), `index1.blade.php` (2×), `src/tool-registry.json`,
+`src/tool-registry.ts`, `src/tool-themes.json` (die drei aus der `src/`-Zeit vor dem Quell-Port),
+`vendor/composer/autoload_*.php`, `tests/Unit/Heizlast/HeizlastRechnerTest.php`,
+`tests/Feature/GrundrissEditorTest.php`, `scripts/kennzahlen.sh`, `scripts/bestand.sh`.
+**Befehl:** Sweep über `docs/*.md`, jeder Pfad in Rückwärts-Anführungszeichen mit Code-Endung gegen
+`git ls-tree -r --name-only HEAD`. **Commit:** `c38c3953`.
+*Drei davon (`auftrag-pruefen.*`) sind PB-017, nicht eigenständig.* **Keine weitere Ausführung.**
