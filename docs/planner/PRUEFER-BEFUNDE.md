@@ -2603,3 +2603,49 @@ oder weil zurückgenommen wurde. **Ballbesitz: Generator.**
 **Zur Sicherheit (PB-018), unverändert nachgemessen:** `k01n1b.mjs` liegt weiter im
 Wurzelverzeichnis, **unverfolgt**, **null Vorkommen in der Historie**. Kein neuer Schaden, keine
 Entwarnung — die Lage ist dieselbe wie in Runde 16.
+
+---
+
+## 35. Nachmessung 09:53 — PB-032 erledigt, PB-017 weitgehend erledigt
+
+**PB-032 lag eine Minute.** Der Generator hat die sieben gestagten Dateien in **`40fa52de`**
+committet: *„AUF-83-T3 + AUF-83-T3-N1: Kopfleiste/Arbeitszeile, Objektkopf-Umzug, Überlauf-Menü für
+K-08."* **Er hat gesichert — es war kein Beifang.**
+
+**Und die Gegenprobe an mir selbst, weil ich in derselben Minute committet habe:**
+
+```text
+git show --name-only 61a8961e   ->   docs/planner/PRUEFER-BEFUNDE.md   (eine Datei)
+```
+
+**Mein Commit trägt genau eine Datei.** Die Pfadangabe hat gehalten. *R13 (`git commit -- <pfade>`)
+ist der Grund, warum in 25 Runden kein Beifang von mir gekommen ist — und der Grund, warum ich das
+hier belegen kann statt es zu behaupten.*
+
+### Stand nach der Sicherung
+
+```text
+gemessen gegen 61a8961e
+  gestaged                                    0
+  im Baum geaendert ausserhalb docs/          0
+  unverfolgt (ohne die zwei Altlasten)        3
+    scripts/auftrag-pruefen.mjs
+    scripts/auftrag-pruefen.sh
+    scripts/__tests__/
+  npm run test:hausplaner                     tests 1394 · pass 1394 · fail 0
+```
+
+**PB-017 ist von 466 geänderten Zeilen und zehn ungesicherten Dateien auf drei Einträge
+geschrumpft** — und die drei gehören zu **AUF-87**, das laut Tafel `aktiv` ist, also laufende
+Bauarbeit. *Ein laufender Posten mit ungesicherten Dateien ist kein Befund, sondern der Normalfall
+zwischen zwei Commits.*
+
+**Ich lasse PB-017 offen, aber mit geänderter Begründung:** nicht mehr *„berichtete Arbeit ohne
+Stand"*, sondern *„drei Dateien eines aktiven Postens noch nicht gesichert"*. **Schwere von P1 auf
+P3.** *Die Ursache war eine Regel, dann ein offener Schritt, jetzt ist es normaler Baubetrieb — das
+gehört gesagt, statt einen P1 stehen zu lassen, der nicht mehr trägt.*
+
+**Erledigt wenn:** *`git status --porcelain | grep -vE '^\?\? (\.rm_probe_tmp|k01n1b\.mjs)' | wc -l`
+liefert `0`* — unverändert, aber jetzt drei Einträge statt einundzwanzig.
+
+**Ballbesitz: Generator** (die drei Dateien) — **PB-032 geschlossen.**
