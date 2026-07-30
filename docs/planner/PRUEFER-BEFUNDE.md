@@ -174,6 +174,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-018 | `k01n1b.mjs` | **P2** | Klartext-Zugang im Wurzelverzeichnis; `.gitignore`-Muster greifen nur bei passendem Namen | offen | — |
 | PB-017 | (Arbeitsbaum) | **P1** | 466 geänderte + 8 neue Dateien ungesichert, im Ledger aber als geliefert und geprüft geführt | offen | — |
 | PB-016 | `inventur.sh` / `AUFTRAGSTAFEL.md` | P3 | Inventur zählt Zeilen: 21 Zeilen für 17 Posten (vier doppelt) | offen | — |
 | PB-015 | `AUFTRAGSTAFEL.md` | **P2** | zwei Posten tragen `⚡ AKTIV` (5 Vorkommen) — §1c verlangt genau einen | offen | — |
@@ -1563,3 +1564,82 @@ schon.** Heute ist es unbenannt: kein Dokument sagt, dass 466 Zeilen ungesichert
 
 **Ballbesitz: Planner** — mit ausdrücklicher Weiterleitung an **Yama**, weil nur er das Wort geben
 kann, das die Regel verlangt.
+
+---
+
+## 23. Runde 16 (30.07.) — die zwei Wurzeldateien, die seit drei Tagen als „nicht angefasst" gemeldet werden
+
+**Gemessen gegen `03c7f6ad`.** Drei Instanzen haben sie gemeldet und keine hat sie geöffnet —
+richtig so, denn keiner war zuständig. **Öffnen ist meine Aufgabe.**
+
+### PB-018 · P2 · Ein Klartext-Zugang liegt im Wurzelverzeichnis, und die Regel, die ihn ausschließen sollte, greift nicht
+
+```yaml
+befund:
+  id: PB-018
+  datei: "k01n1b.mjs (Wurzelverzeichnis, unverfolgt)"
+  stelle: "Zeilen 8-9"
+  behauptung: "(keine - ein Sichtprobe-Skript, das niemand als solches erkennen kann)"
+  gemessen: |
+    1 714 Byte, zuletzt 30.07. 07:36. Ein Puppeteer-Skript, das sich an
+    http://ticket.test/login anmeldet und dafuer Benutzernamen UND Kennwort
+    im Klartext im Quelltext fuehrt (Z8/Z9 - der Wert wird hier nicht wiederholt).
+
+    Reichweite, gemessen:
+      Dateien im Arbeitsbaum mit diesem Kennwort   1   (nur diese)
+      davon verfolgt                                0
+      Vorkommen in der Git-Historie                 0   (git log -S, alle Zweige)
+
+    .gitignore fuehrt Muster fuer genau diese Dateiklasse:
+      Z43  "# Sichtprobe-Kladden des Generators (AUF-58)"
+      Z58  /_*.mjs
+      Z59  /sichtprobe-*.tmp.mjs
+    "k01n1b.mjs" passt auf KEINES der beiden.
+  befehl: |
+    grep -rl "<kennwort>" . --exclude-dir=node_modules --exclude-dir=vendor --exclude-dir=.git
+    git ls-files --error-unmatch k01n1b.mjs ; echo $?
+    git log --oneline -S"<kennwort>" --all
+    grep -nE "\.mjs|probe|tmp" .gitignore
+  commit: "03c7f6ad"
+  schwere: P2
+  wirkung: |
+    Heute ist der Schaden null: die Datei ist unverfolgt, war nie committet, und das
+    Kennwort gehoert zur lokalen Entwicklungsanmeldung. Der Befund ist die LAGE,
+    nicht der Schaden - ein Klartext-Zugang liegt einen falschen Befehl entfernt von
+    der Historie, und in diese Historie kaeme er dauerhaft: "nie --force" ist eine
+    stehende Regel, ein nachtraegliches Herausschreiben also ausgeschlossen.
+    Die Schutzregel existiert und hat nicht gegriffen, weil sie am NAMEN haengt:
+    wer eine Kladde "_probe.mjs" nennt, ist geschuetzt; wer sie "k01n1b.mjs" nennt,
+    nicht. Ein Schutz, der von der Namenswahl des Eiligen abhaengt, schuetzt am
+    wenigsten in dem Moment, in dem es eilig ist.
+  eigenarbeit: nein
+```
+
+**Zwei Wege, entscheiden tut der Planner** — *ich fasse die Datei nicht an:*
+
+| Weg | Wirkung |
+|---|---|
+| Muster erweitern (`/*.tmp.mjs`, oder Kladden nur noch im Scratchpad) | schützt die nächste Kladde, unabhängig vom Namen |
+| Anmeldung aus dem Quelltext heraus (Umgebungsvariable) | schützt auch die Kladde, die trotzdem im Wurzelverzeichnis landet |
+
+**Erledigt wenn:** *`grep -rl "<kennwort>" .` (ohne `node_modules`, `vendor`, `.git`) liefert keine
+Datei im Wurzelverzeichnis — **oder** `.gitignore` deckt die Datei ab, prüfbar mit
+`git check-ignore -q k01n1b.mjs`.*
+
+### `.rm_probe_tmp` — kein Befund
+
+**0 Byte, 27.07. 19:31.** Referenziert aus `generator-auftrag-b01-ai-workflow-sichern.md` und dem
+Ledger — eine Probe, ob Löschen auf dem Mount funktioniert. **Leer, ohne Inhalt, ohne Wirkung.**
+Nach dem Raster ist das Ballast, kein Fehler; es fällt unter `PB-006` und braucht keinen eigenen
+Vorgang.
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | **PB-018** — die Kladden-Konvention gilt für zwei Namensmuster, nicht für die Dateiklasse |
+| **L4 Kausalität** | **PB-018** — die Kette *Schutzregel → geschützte Datei* greift nur bei passendem Namen |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | keine Beanstandung |
+
+**Ballbesitz: Planner.**
