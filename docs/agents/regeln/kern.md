@@ -88,7 +88,12 @@ nächster erwarteter Status`.
 
 ## Betriebsgrenzen (unverhandelbar)
 
-- **Niemals pushen.** Kein `git push` aus irgendeiner Instanz, auch nicht nach grüner Abnahme.
+- **Committen ist PFLICHT, pushen ist VERBOTEN.** Das sind zwei verschiedene Dinge, und die
+  Verwechslung hat am 30.07. elf Stunden Arbeit im Arbeitsbaum liegen lassen.
+  **Wer baut, committet seinen eigenen Stand** (`git commit -- <pfade>`) — sonst ist die Arbeit
+  weder übergeben noch gesichert noch prüfbar. **`umgesetzt` ohne Commit gibt es nicht.**
+  **Kein `git push` aus irgendeiner Instanz**, auch nicht nach grüner Abnahme — pushen macht
+  ausschließlich Yama.
 - **Niemals `git add -A` oder `.`** — `git commit -- <pfade>`.
 - **Kein `rm`/`unlink` auf dem Mount** — `mv` nach `_to_delete/` bzw. `.git/_locks_beiseite/`.
 - **Persistierte Schema-Werte nicht umbenennen** (`type: wall|window|door|ceiling`, `objectType`,

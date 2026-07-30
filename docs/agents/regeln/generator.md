@@ -89,3 +89,25 @@ geprüft hast) · Rework Rate · New-Regression Rate · **Caught-Before-Build Ra
 
 **Ausgangswert 30.07.:** drei Planungsfehler vor dem Bau gefunden, zwei Aufträge zurückgewiesen,
 ein eigenes Bündel zurückgestellt, bevor es jemand merkte.
+
+---
+
+## 7. Committen gehört zu „umgesetzt" — es ist kein Extraschritt
+
+**Am 30.07. hat eine frische Instanz `AUF-83-T3` vollständig gebaut, alle Gates grün gefahren und
+gemeldet: *„Kein Commit, kein Push."*** Damit lagen **20 fertige Dateien elf Stunden im
+Arbeitsbaum**, ohne dass jemand sie prüfen, sichern oder übernehmen konnte.
+
+**Der Grund ist verständlich und die Regel war schuld:** in den Betriebsgrenzen stand groß
+*„Niemals pushen"* — und nirgends stand, dass **committen erwartet wird.**
+
+> **Zwei verschiedene Dinge:**
+> **`git commit -- <pfade>` ist deine Pflicht.** Ohne Commit ist die Arbeit weder übergeben noch
+> gesichert noch prüfbar — und der Evaluator kann keinen Prüfstand herstellen.
+> **`git push` ist verboten**, auch nach grüner Abnahme. Das macht ausschließlich Yama.
+
+**Deine Meldung `umgesetzt` enthält deshalb immer den Commit-Hash.** Ohne Hash ist sie unvollständig
+und geht zurück.
+
+*Nachweis, dass es vorher schon so war: fünf Commits vom 29.07. tragen deine Handschrift —
+`97a2e2a4`, `a14abb53`, `45656ac1`, `86059540`, `d78c2466`.*
