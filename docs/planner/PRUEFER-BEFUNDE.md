@@ -206,7 +206,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-036 | `ticket-code-reuse/references/…md` | P3 | 2 von 59 Skill-Pfaden zeigen auf den Vor-Port-Zustand | offen | — |
 | PB-037 | `buehnenBreite.test.ts:23` | ~~P1~~ | Filter auf die Subtraktion geschärft, Rechnung unberührt, Gate 1409/1409 | **ERLEDIGT** | 30.07. |
 | PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt — offen nur: Passwort wechseln | Repo **ERLEDIGT** · Yama | 30.07. |
-| PB-040 | `db` + Ledger | Eine gelaufene Migration liegt in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | offen | Generator |
+| PB-040 | `db` + Ledger | Eine gelaufene Migration lag in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | **Teil A ERLEDIGT** (`fba60e6e`, 457+/17−) · Teil B offen | Generator |
 | PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4 trägt die Zahlen von **vor** der 08:12-Korrektur; F-04s Barriere-Zelle ist überholt; `bestand.sh`/`VORLAGE.md` fehlen | **P2** | offen | Planner |
 | PB-043 | `ChatController.php:70,281` + `config/logging.php:21,57` | Zwei unbedingte `Log::info` in einem gepollten Endpunkt schreiben **64 086** Zeilen in ein **212 MB** grosses, nicht rotierendes Log | **P2** | offen | Planner |
 
@@ -4126,6 +4126,16 @@ Der GENERATOR-TAKT prueft VOR dem naechsten Auftrag:
 > stehen weiterhin bei **0 Commits**, der letzte Commit einer anderen Rolle ist von **10:51** —
 > **61 Minuten.** *Die Kenngröße dieses Befundes ist die Dauer, nicht die Zahl der Meldungen: seit
 > einer Stunde hängt die Datenbank dem Repository um eine Migration voraus.*
+
+> **12:25 CEST — Teil A ERLEDIGT.** `fba60e6e` *„AUF-88-P1 (Backend-Teil)"* trägt **7 Dateien,
+> 457 insertions / 17 deletions** — **genau die Zahlen, die ich um 11:26 am ungesicherten Baum
+> gemessen habe** (`355+` gestaged, `102+ / 17-` im Baum). *Nichts verloren, nichts dazugekommen,
+> kein Beifang: die Doku-Datei im Baum ist nicht mitgegangen.* Alle drei Pfade liegen in HEAD, die
+> Datenbank und das Repository sind wieder eine Wahrheit.
+>
+> **Teil B bleibt offen:** Ledger unverändert bei **25 282** Zeilen, **kein GENERATOR-BERICHT**. *Der
+> Evaluator hat jetzt einen SHA, aber keine Exit-Codes und keine Fertigmeldung.* **Ballbesitz weiter
+> Generator** — für den Bericht, nicht mehr für die Sicherung.
 
 ---
 
