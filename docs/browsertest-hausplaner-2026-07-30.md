@@ -208,3 +208,61 @@ statt die Sache.**
       ist nicht "wahrscheinlich richtig", sondern ununterscheidbar von einer Messung an der
       Login-Maske. *Herkunft: Prüfer, 30.07. 20:3x, an zwei eigenen Fehlmessungen belegt.*
 ```
+
+
+---
+
+# BT-01 ZURUECKGEZOGEN — 21:55. Richtig gemessen, falsch gedeutet.
+
+**Ich hatte gemeldet:** *„Die Palette wechselt nicht mit dem Bereich — in Bauphysik/Heizung/
+Elektro·PV stehen dieselben sieben Architektur-Werkzeuge, sechs davon ausgegraut."* Ich habe
+das als Befund geführt und wollte einen Auftrag daraus schneiden. **Bevor ich das tue, habe ich
+gemessen — und die Messung widerlegt den Befund.**
+
+## Was der Code tut
+
+```text
+palette.ts:115     palettenEintraege() ruft alleTools()          <- ALLE, ungefiltert nach Bereich
+palette.ts:118     resolveToolState(t, kontext)                  <- der Bereich wirkt hier
+
+activation.ts:88   if (tool.supportedWorkspaces.length > 0 && !tool.supportedWorkspaces.includes(ctx.workspace))
+activation.ts:89     return inaktiv(tool.disabledReasonDefault
+                       ?? `„${tool.label}" ist im aktuellen Arbeitsbereich nicht verfuegbar.`)
+```
+
+**Der Bereich steuert den ZUSTAND, nicht die AUSWAHL — und das ist eine Entscheidung, keine
+Luecke.** Ein Werkzeug ausserhalb seines Bereichs wird **ausgegraut mit einem lesbaren Grund**,
+statt zu verschwinden.
+
+*Das ist genau das Muster, das der Hausplaner an mehreren Stellen verfolgt und das ich an anderen
+Stellen selbst gelobt habe:* „Dieses Werkzeug braucht keine Optionen" statt einer leeren Leiste ·
+der Wegweiser, der seine gemessene Zahl nennt · die `nochNicht`-Marke, die den Bau benennt statt
+den Reiter zu verstecken. **Sagen statt verschweigen.** Eine Palette, die Werkzeuge stillschweigend
+entfernt, waere der Rueckschritt.
+
+## Was von der Beobachtung bleibt — und es ist kein Palettenfehler
+
+Der Nutzer sieht in Bauphysik, Heizung und Elektro·PV eine Flaeche, auf der praktisch alles grau
+ist. **Das ist richtig dargestellt und trotzdem unbefriedigend — aber die Ursache liegt woanders:**
+es gibt in diesen Bereichen kaum eigene Werkzeuge, die dort aktiv waeren.
+
+**Und das ist bereits gemessen und beauftragt:** die Werkzeug-Landkarte aus `AUF-50-S1` nennt
+`fehlt: 21` — Werkzeuge, deren Vertrag steht und deren Modellbefehl fehlt. *Der Bauvorrat fuer
+Stufe 3 ist genau diese Zahl, und sie ist seit 21:29 bestaetigt (AUF-50-D2).*
+
+**BT-01 wird deshalb nicht als Auftrag geschnitten.** Es ist keine eigene Sache, sondern die
+sichtbare Seite von `fehlt: 21`. *Wer daraus einen Auftrag macht, baut denselben Posten zum
+zweiten Mal — genau der Fehler, den ich heute bei `AUF-46`/`PB-046` gerade erst geheilt habe.*
+
+## Was ich daraus mitnehme
+
+**Meine Browserbeobachtung war korrekt: ich habe wirklich gesehen, was ich beschrieben habe.**
+Falsch war die **Deutung** — ich habe aus „sieht unbrauchbar aus" auf „ist falsch gebaut"
+geschlossen, ohne den Code zu lesen, der es erklaert.
+
+*Das ist die Kehrseite des Browsertests, den Yama zu Recht verlangt hat: die Laufzeitprobe zeigt,
+was der Nutzer sieht — sie sagt nicht, warum. **Ein Laufzeitbefund ist erst dann ein Befund, wenn
+ich die Stelle im Code gefunden habe, die ihn verursacht.*** Bis dahin ist er eine Beobachtung.
+
+**Regel fuer L-01:** ein roter Laufzeitbefund nennt die Codestelle. Findet man sie nicht, wird der
+Befund als **Beobachtung** gemeldet, nicht als Mangel.
