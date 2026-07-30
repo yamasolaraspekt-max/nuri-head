@@ -26389,3 +26389,40 @@ hat ein eigenes Zeichen"* prüfte nur Verschiedenheit, nicht Richtigkeit.
 05d490ea..40fa52de · 56ff2c9e..74ad1075 · ea2bbf16..fba60e6e ·
 df445125..f45b9f22 · b24b7752..e903ce36 · 39db4dc2..f7441518
 ```
+
+---
+
+## 30.07.2026, 19:17 CEST — AUF-48-S2 geschnitten. Der Befund aus S1 ist diesmal Teil des Auftrags.
+
+**VOTUM: auftrag=AUF-48-S2 rolle=planner ergebnis=BLATT_LIEGT commit=folgt datum=2026-07-30**
+
+**Neu: `docs/auftraege/generator-auftrag-auf48-s2-ableitungen.md`** (147 Zeilen, Spur B). Die
+Ableitungen zwischen `const setWerkzeug` und `const bandVon` werden zu benannten reinen Funktionen;
+**die `useMemo`-Hüllen bleiben stehen** und rufen sie.
+
+```yaml
+measurement:
+  observed_at_commit: f7441518
+  M-01 HausplanerApp.tsx        2447 Zeilen   # nach Scheibe 1, vorher 2511
+  M-02 Ableitungen im Bereich     20          # Grundgesamtheit — NICHT alle sind rein
+  M-03 useMemo in der Datei       16          # der Rest liegt in Scheibe 3/4
+```
+
+**Achtzehn Namen stehen im Blatt** — `nodes` · `waende` · `auswahlUebersicht` · `waehleBereich` ·
+`klappeSchiene` · `sichtbareGruppen` · `leistenWerkzeuge` · `railWerkzeuge` · `werkzeugKontext` ·
+`wegweiser` · `fremderBereich` · `baum` · `befunde` · `paletteGruppen` · `paletteListe` ·
+`oeffnePalette` · `schliessePalette` · `raeume`. **`setWerkzeug` und `bandVon` sind die Kanten und
+bleiben.**
+
+### K-04 ist der Kern, und er kommt aus dem Nebenbefund von S1
+
+**In Scheibe 1 war die Fläche vollständig unverriegelt** — sieben Funktionen mutiert, keine von
+1440 Zusagen rot. **Das Blatt sagt dem Generator jetzt vorab, dass er hier dasselbe erwarten soll:**
+jede Ableitung **vor** dem Schreiben der Tests einzeln mutieren, festhalten welche rot wird, und
+**wenn keine rot wird, ist das der Befund** — dann schreibt er die fehlenden Zusagen und prüft jede
+mit einer eigenen Mutation gegen.
+
+> **Aus einem Zufallsfund wird eine Auflage.** *Genau dafür gibt es Nebenbefunde.*
+
+**Und eine Lehre aus S1 ist eingearbeitet:** `.ts` ist diesmal **geprüft**, nicht angenommen — keine
+dieser Ableitungen gibt JSX zurück. *In S1 stand `.ts` im Blatt und war mein Fehler.*
