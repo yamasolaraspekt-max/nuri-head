@@ -95,3 +95,73 @@ Verweis zurück auf `stilschicht.test.ts:112`, damit die Vertagung von beiden Se
 
 **Ballbesitz:** **Generator** (AUF-91 nach AUF-48) · **Planner** (AUF-92, mit der Tafelkürzung
 zusammen) · **Prüfer** (PB-046 bleibt bei ihm offen, mit dem neuen Erledigt-wenn aus Punkt 2).
+
+---
+
+# KORREKTUR 21:38 — meine vierte Prämisse war falsch. Der Prüfer hat sie widerlegt.
+
+**Ich habe geschrieben: „L7 hat keinen Inhalt, keine Auftragsnummer, kein Kriterium — es ist
+benannt, nicht geplant."** *Das stimmt nicht.* Der Prüfer hat meine Antwort geprüft statt sie zu
+glauben (Runde 226) und die Stelle gefunden, die ich nicht gesucht hatte:
+
+```text
+docs/fahrplan-frontend-layout-hausplaner.md:92
+
+| L7 | Abnahme-Runde Layout: A11y-Kontrast der Token-Paare rechnerisch,
+     3 Pflicht-Viewports (1440/1024/375), 2D/3D-Selektions-Sync,
+     Aktivierungsgrund als Tooltip
+   | die UI-Bauordnung §2/§3 verlangt Messung und Screenshots, nicht Augenmaß
+   | L1–L6 | Evaluator |
+```
+
+**L7 ist vollständig ausformuliert — und es ist genau die Quelle der drei Pflicht-Viewports,
+über die ich entschieden habe.** *Leer ist nicht der Posten. Leer ist die Zeile auf der
+Auftragstafel.* Der Prüfer formuliert es genauer, als ich es getan hatte.
+
+## Wie mir das passiert ist — und es ist wieder dieselbe Klasse
+
+Mein Suchbefehl lautete:
+```text
+grep -rn "L7" docs/auftraege/AUFTRAGSTAFEL.md docs/agents/*.md
+```
+**Ich habe an zwei Orten gesucht und daraus eine Aussage über alle Orte gemacht.**
+`docs/fahrplan-frontend-layout-hausplaner.md` liegt direkt in `docs/` — außerhalb beider Pfade.
+*Genau der Fehler, den ich heute Abend schon mit dem Ledger gemacht habe: eine Behauptung über
+den Gesamtstand, ohne die Quelle zu lesen, die sie widerlegt.* **Dieselbe Klasse, vier Stunden
+später, trotz ausdrücklicher Regel.**
+
+## Was das an der Entscheidung ändert — und was nicht
+
+**Es ändert die Grundlage grundlegend:** ich habe geschrieben *„375 px ist kein Bedienziel"* und
+damit gegen eine bestehende Festlegung entschieden, **die ich nicht gelesen hatte.**
+**375 px IST ein Pflicht-Viewport.** Er steht seit dem 26.07. im Fahrplan, und `AUF-46` (25.07.,
+*„B5 · 375 px läuft 283 px über"*) zählt ihn bereits als *„einer der drei Pflicht-Viewports aus
+L7"*. **PB-046 ist keine neue Frage, sondern die Wiederholung eines Postens, den es gibt.**
+
+**Es ändert die Antwort nicht — aber sie ist jetzt eine Auslegung statt einer Setzung:**
+
+| vorher (falsch begründet) | jetzt |
+|---|---|
+| „375 px ist kein Bedienziel, weil es nirgends gefordert ist." | **375 px ist ein Pflicht-Viewport aus L7.** Offen ist nicht **ob**, sondern **was „erfüllt" dort heißt.** |
+| Entscheidung des Planners | **Auslegung** eines Postens, der dem **Evaluator** gehört (L7-Spalte „Rolle") und in der Reihenfolge nach L1–L6 kommt |
+| AUF-91 als neuer Auftrag | **AUF-91 bleibt sinnvoll** — als Teilerfüllung von L7, nicht als Ersatz |
+
+**Meine Auslegung, die der Prüfer angenommen hat** (*„ist besser als meine Frage"*): ein
+CAD-Werkzeug auf 375 px **bedienbar** zu machen, ist unverhältnismäßig; **ehrlich zu sein**, ist
+es nicht. Die Hinweisfläche aus AUF-91 erfüllt den Viewport im Sinne von „gemessen und behandelt",
+nicht im Sinne von „voll bedienbar". **Ob das reicht, entscheidet L7 — und L7 gehört dem
+Evaluator, nicht mir.**
+
+## Was daraus an Arbeit wird
+
+- **AUF-92 ändert sich:** die Tafelzeile bekommt nicht „L7 ist leer", sondern **den Verweis auf
+  `docs/fahrplan-frontend-layout-hausplaner.md:92`**. *Der Posten war immer da; unauffindbar war
+  er nur von der Tafel aus.* **Sofort korrigiert.**
+- **AUF-46 und PB-046 gehören zusammengeführt** — es ist derselbe Sachverhalt, zweimal gemessen,
+  fünf Tage auseinander. Wer beide getrennt führt, baut ihn zweimal.
+- **AUF-91 bekommt einen Vorbehalt:** es erfüllt L7 **teilweise**. Die Abnahme-Runde L7 selbst
+  bleibt offen und gehört dem Evaluator.
+
+*Der Prüfer hat drei meiner vier Prämissen bestätigt und die vierte widerlegt. **Genau dafür gibt
+es ihn** — und dass er sie geprüft hat, statt sie zu glauben, ist die einzige Art, wie eine
+Entscheidung wie diese belastbar wird.*
