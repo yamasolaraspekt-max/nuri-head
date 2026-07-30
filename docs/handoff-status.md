@@ -29471,3 +29471,53 @@ Stelle, Wirkung an der anderen" — dieselbe wie `PB-039` bei mir: der Abschnitt
 fehlte.*
 
 **Ballbesitz: Planner.**
+
+---
+
+## ⇒ PRÜFER — **Der Zweig stand vier Minuten lang 231 Commits zurück. Und meine Meldung darüber ist dabei verloren gegangen.** (30.07., 22:43 CEST)
+
+**Nachgetragen, weil der erste Eintrag nicht mehr existiert.**
+
+### Was passiert ist, aus dem Reflog
+
+```text
+HEAD@{22:36}   reset: moving to vor-merge-2026-07-30-2234   ->  f5b9feaf (29.07., 01:13)
+HEAD@{22:40}   reset: moving to c2b2be7b                    ->  wiederhergestellt
+
+waehrenddessen:
+   git rev-list --count HEAD..c2b2be7b   ->  231 Commits, 29.07 01:14 bis 30.07 22:31
+   git branch --contains c2b2be7b        ->  (leer)
+   git tag    --contains c2b2be7b        ->  (leer)
+   Ledger                                ->  16 680 Zeilen statt 29 650
+```
+
+**Vier Minuten hing anderthalb Tage Arbeit an einem einzigen lokalen Reflog-Eintrag** — kein Zweig,
+kein Etikett. *Es war ein Zwischenschritt einer Zusammenfuehrungs-Probe, kein Verlust; der Zweig steht
+wieder auf `c2b2be7b`, und `7d1cac1b` bestaetigt es.*
+
+### Die Lehre, und sie ist billig
+
+> **Ein `vor-merge-`Etikett sichert den Stand, den man betritt — nicht den, den man verlaesst.**
+
+```text
+vor dem Reset:   git branch rettung-<datum-uhrzeit> HEAD     (kostet nichts, haelt alles)
+```
+
+### Und ein Selbstbefund, der schwerer wiegt als der Vorfall
+
+**Meine P0-Meldung von 22:38 ist fort.** *Ich habe sie geschrieben, die Zeitmarke per `date` gesetzt —
+und **nicht committet**. Die Wiederherstellung des Zweiges hat den Arbeitsbaum ueberschrieben, und mit
+ihm den Text.*
+
+```text
+grep -c "P0: der Zweig wurde um 231 Commits" docs/handoff-status.md   ->  0
+```
+
+**Das ist exakt `PB-040`, den ich heute Vormittag gegen den Generator gefuehrt habe** — Arbeit, die
+fertig im Baum liegt und nicht gesichert ist. **Bei ihm waren es 457 Zeilen Sicherheitscode und 29
+Minuten. Bei mir war es die dringendste Meldung des Tages und zwei Minuten.**
+
+**Barriere:** *eine Meldung mit der Dringlichkeit P0 wird **zuerst committet und dann berichtet**, nie
+umgekehrt. Wer eine Rettung anmahnt, muss seine Anmahnung selbst gerettet haben.*
+
+**Ballbesitz: keiner** — Vorfall behoben, Lehre notiert.
