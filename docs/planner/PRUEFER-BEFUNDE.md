@@ -3551,3 +3551,58 @@ Runde und nicht diese. **L1 für diesen Teil: nicht geprüft**, nicht „keine B
 | **L2/L6** | nicht betroffen |
 
 **Kein Befund.**
+
+---
+
+## 53. Runde 38 — Bauordnung §5 Frage 6 (Transaktionen) am Hausplaner-Schreibweg · **keine Beanstandung**
+
+**Gemessen gegen `e317df30`.** *Frage 6: „Mehr-Tabellen-Schreiben immer in `DB::transaction`."* Der
+Anlass war eine Zahl, die verdächtig aussah: **null `DB::transaction` im
+`HausplanerController`.**
+
+### Die Zahl war richtig und die Schlussfolgerung wäre falsch gewesen
+
+**Der Controller schreibt fast nichts selbst** — 342 Zeilen, zwei direkte Schreibstellen
+(`HausplanerConfiguratorPackage`, `HausplanerSnapshot`), alles andere delegiert er an **Actions**:
+
+| Action | Zeilen | `DB::transaction` | Schreibstellen |
+|---|--:|--:|--:|
+| `SpeichereHausplanerDokument` | 73 | **1** | 1 |
+| `StelleSnapshotWieder` | 48 | **1** | 2 |
+| `UebernehmeSzeneInAuslegung` | 118 | **0** | 1 |
+| `ErstelleLeeresSzenenDokument` | 50 | **0** | 1 |
+
+**Die eine mit 118 Zeilen und ohne Klammer war der Prüfpunkt.** Sie ist die einzige, die eine
+Invariante über mehrere Schreibschritte hält: *„genau EIN aktives Profil je Verankerung"* (S5).
+
+### Und die Klammer sitzt — eine Ebene tiefer, wo sie hingehört
+
+`UebernehmeSzeneInAuslegung` schreibt über den **`AnforderungsprofilService`**, und dort ist **jede**
+der drei Schreibmethoden gekapselt:
+
+```text
+AnforderungsprofilService.php  (178 Z.)
+  anlegen()      Z25   DB::transaction(...)
+  aktivieren()   Z44   DB::transaction(...)
+  neueVersion()  Z67   DB::transaction(...)
+```
+
+**`aktivieren()` ist der Fall, um den es geht** — es sind zwei Anweisungen auf derselben Tabelle:
+
+```php
+Anforderungsprofil::query()->…->where('status', AKTIV)->update(['status' => ABGELOEST]);
+$profil->status = AKTIV; $profil->save();
+```
+
+**Genau hier bräche die Invariante, wenn der Vorgang dazwischen abbricht** — null aktive Profile oder
+zwei. **Die Klammer verhindert es.** *Und `RaumGeometrie`/`HeizlastRaum` werden in der Action mit
+`new` gebaut und über `setRelation` nur im Speicher verbunden — sie werden nie geschrieben. Das war
+der zweite Punkt, an dem ich eine Mehrfachschreibung vermutet habe, die es nicht gibt.*
+
+**Kein Befund. Frage 6 ist am Hausplaner-Schreibweg erfüllt** — nicht im Controller, sondern im
+Dienst, und das ist die Schicht, die Frage 9 („Logik im Service, Controller dünn") ohnehin verlangt.
+
+*Elfte vermiedene Fehlmeldung. Diesmal hätte sie **zwei** Stufen gebraucht: die fehlende Klammer im
+Controller ist echt, die fehlende Klammer in der Action ist echt — und beide sind richtig so, weil
+die Klammer dort sitzt, wo geschrieben wird.* **Eine Messung, die an der ersten Schicht stehen
+bleibt, meldet einen Fehler, der eine Ebene tiefer behoben ist.**
