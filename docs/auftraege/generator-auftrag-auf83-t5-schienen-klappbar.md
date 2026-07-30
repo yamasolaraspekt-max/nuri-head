@@ -1,6 +1,6 @@
 # AUF-83-T5 — Beide Schienen klappen, und Escape bekommt eine Rangfolge
 
-*Planner, 29.07.2026, 21:50 CEST. Letzter Schritt von AUF-83. Grundlage:
+*Planner, 30.07.2026, 06:05 CEST (Zeit korrigiert 06:30 — die Erstfassung trug 29.07. 21:50; zwischen Messung und Schreiben lag eine Sitzungspause, F-03). Letzter Schritt von AUF-83. Grundlage:
 `docs/planner/entwurf-studio-in-ticket-shell-2026-07-29.html` (Abschnitt 06), von Yama am 29.07.
 um 08:20 freigegeben — Punkt 4 seines Auftrags: **„beide Sidebars unabhängig klappbar als Overlay,
 Escape schließt das oberste, Zustand pro Nutzer und Workspace".***
@@ -44,14 +44,14 @@ scope:
     grep -rc 'collapsed\|klappZu\|schieneZu' resources/planner/hausplaner/app/HausplanerApp.tsx &&
     node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/HausplanerApp.tsx
   population_at_writing: >
-    Gemessen vom Planner am 29.07. um 21:45, nicht aus einer aelteren Inventur uebernommen
+    Gemessen vom Planner am 30.07. um 06:03, nicht aus einer aelteren Inventur uebernommen
     (F-04, vierte Auspraegung war genau das):
     (1) ZWEI Schienen tragen `data-schiene` — `HausplanerApp.tsx:1373` (links, `width: 220`) und
         `HausplanerApp.tsx:1799` (rechts, `width: 268`). KEINE von beiden hat einen Klappzustand;
         der Kommentar ueber der rechten sagt woertlich „(immer sichtbar; Dach-Parameter oder
         Kontext)“.
     (2) SECHS Vorkommen von `key === 'Escape'` in VIER Dateien, davon drei mit EIGENEM
-        document-Listener (nachgezaehlt 21:52 — meine erste Zaehlung sagte fuenf und uebersah
+        document-Listener (nachgezaehlt 30.07. 06:08 — meine erste Zaehlung sagte fuenf und uebersah
         `HausplanerApp.tsx:2226`, den Escape im Filterfeld der Palette):
         `HausplanerApp.tsx:1013` (Palette, hat Vorrang) · `HausplanerApp.tsx:1019`
         (Werkzeug-Reset) · `HausplanerApp.tsx:2226` (Filterfeld der Palette) ·
@@ -112,7 +112,7 @@ kriterien:
     beleg: testausgabe
     gegenprobe: >
       Beide Schalter auf denselben Zustand verdrahten ⇒ MUSS rot werden.
-    vorher_wert: "0 Klappzustaende in der Insel (gemessen 21:45; die Shell hat welche, die Insel nicht)"
+    vorher_wert: "0 Klappzustaende in der Insel (gemessen 30.07. 06:03; die Shell hat welche, die Insel nicht)"
 
   - id: K-02
     aussage: "Die Buehne gewinnt die Breite der zugeklappten Schiene — ohne zweite Rechnung."
@@ -146,7 +146,7 @@ kriterien:
     gegenprobe: >
       Zwei Ebenen gleichzeitig oeffnen und einen Escape senden ⇒ es darf sich genau EINE schliessen.
       Schliessen sich beide, ist die Rangfolge nicht wirksam, sondern nur aufgeschrieben.
-    vorher_wert: "6 Vorkommen in 4 Dateien, davon 3 mit eigenem document-Listener (nachgezaehlt 21:52)"
+    vorher_wert: "6 Vorkommen in 4 Dateien, davon 3 mit eigenem document-Listener (nachgezaehlt 30.07. 06:08)"
     begruendung: >
       **Heute entscheidet die Reihenfolge des Anhaengens, was zuerst schliesst.** Das ist keine
       Rangfolge, das ist ein Zufall, der sich beim naechsten Umbau anders entscheidet.

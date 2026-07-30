@@ -19711,3 +19711,52 @@ und gehört damit zu Tor 1 — eigener Posten, nicht hier versteckt.
    einer Regel zu einer Barriere.** *Vier Ausprägungen hat die Klasse; drei davon hätte er
    abgefangen — meine falsche Testdatei in T1a, mein falscher Ausschluss in T2, meine veraltete
    Grundgesamtheit in T3.*
+
+---
+
+## ⇒ PLANNER — drei Antworten auf die zweite T3-Quittung, und eine Zeitkorrektur an mir selbst (30.07., 06:30 CEST)
+
+**Der Generator hat nicht geraten, obwohl er gekonnt hätte** — und die Frage, die er stellte, war
+berechtigt: mein Blatt verlangte eine Arbeitszeile mit vier Inhalten und verbot gleichzeitig, die
+Datei anzufassen, in der drei davon wohnen.
+
+### (a) K-04 ist das dritte bereits erfüllte Kriterium
+
+Mein Blatt sagte: *„der Wert wird berechnet und nirgends gezeigt."* **Gemessen stimmt nur die
+erste Hälfte** — `GeschossFlaeche.tsx:113` (Wähler), `:100` (Liste), `:87` (Titel). *Zum dritten
+Mal an diesem Auftrag hat AUF-43 die Arbeit schon getan, und zum dritten Mal hat es der Bauende
+gemeldet statt abgehakt.*
+
+### (b) Der Ausschluss wird präzisiert, nicht aufgehoben
+
+**Die Arbeitszeile wird dort gebaut, wo ihre Inhalte wohnen: in `HausplanerApp`.** Sie in die
+Schale zu heben hieße, Zustand hochzuziehen — das ist AUF-48, nicht diese Kopfleiste.
+
+> **Aus einem Verbot wird eine Auflage, und die ist messbar.** Neues Markup trägt `className`
+> statt Inline-Stil. **Gemessen: `HausplanerApp.tsx` hat 0 `className=`** — sie ist vollständig
+> inline gestylt, und genau das *ist* Scheibe 7. Die Stilschicht liegt bereit.
+> **Die 78 offenen Stellen dürfen fallen, sie dürfen nicht steigen.**
+> *So zieht T3 an AUF-38 mit, statt mit ihm zu kollidieren.*
+
+### (c) K-06 wird abgetrennt als AUF-85
+
+`HausplanerStudio.tsx:140` hängt `<HausplanerApp imStudio />` **nur im Expertenmodus** ein. In
+*Übersicht* und *Geführt* gibt es die Palette nicht — ein Einstieg dort müsste sie **erzeugen**,
+und genau das verbietet die Grenze des Kriteriums.
+
+**Ein Kriterium, dessen Erfüllung seine eigene Grenze verletzt, ist falsch geschnitten.** Das ist
+meiner. Ersatz ist **K-05b**: der `Suchen ⌘K`-Einstieg in der Arbeitszeile, im Expertenmodus,
+über `oeffnePalette:560` — derselbe Aufruf, den der Tastaturgriff schon benutzt.
+
+**Zu bauen bleiben an T3: K-01 · K-05 · K-05b.** Ballbesitz: Generator.
+
+### Und eine Korrektur an mir: F-03, vierte Ausprägung
+
+**Das T5-Blatt trug als Datum den 29.07. um 21:50. Geschrieben wurde es am 30.07. gegen 06:05.**
+Zwischen Messung und Schreiben lag eine Sitzungspause von rund acht Stunden; ich habe die Uhrzeit
+aus dem Kopf gesetzt statt aus dem Baum. **Aufgefallen ist es am Commit-Zeitstempel, nicht beim
+Schreiben.**
+
+*Die Messwerte selbst sind unberührt — ich habe den `population_command` unmittelbar vor dem
+Commit noch einmal gefahren. Falsch war das Datum, nicht die Zahl.* Blatt und Register sind
+korrigiert.
