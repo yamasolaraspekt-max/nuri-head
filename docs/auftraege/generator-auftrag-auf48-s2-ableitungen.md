@@ -99,7 +99,7 @@ kriterien:
     kritikalitaet: P1
     pruefung:
       befehl: >
-        git show <basis>:resources/planner/hausplaner/app/HausplanerApp.tsx >
+        git show 28c34c11:resources/planner/hausplaner/app/HausplanerApp.tsx >
         /private/tmp/auf48-s2-basis.tsx &&
         ./scripts/node-runtime.sh -e 'const fs=require("fs"),ts=require("typescript");
         const collect=(p)=>{const s=fs.readFileSync(p,"utf8"),
@@ -151,7 +151,7 @@ kriterien:
     typ: structural
     kritikalitaet: P2
     pruefung:
-      befehl: "git diff --numstat <basis> HEAD -- resources/planner/hausplaner/app/HausplanerApp.tsx"
+      befehl: "git diff --numstat 28c34c11 HEAD -- resources/planner/hausplaner/app/HausplanerApp.tsx"
       erwartet: "Loeschungen groesser als Einfuegungen"
     gegenbeweis: "Kommt Logik hinzu, ist es Umbau statt Zerlegung."
 ```
@@ -163,3 +163,40 @@ niemals nach `main` mergen, niemals pushen, nur eigene Pfade stagen.
 
 **Faellt beim Lesen eine Ableitung auf, die doch Zustand liest: nicht mitnehmen, melden.**
 **Und die Zahl der ausgelagerten Funktionen gehoert in den Commit-Text** — wie bei AUF-50-S1.
+
+
+---
+
+## NACHTRAG 21:57 — der Platzhalter `<basis>` ist gefuellt
+
+**Evaluator-Befund:** in diesem Blatt stand `<basis>` als Platzhalter in einem Pruefbefehl —
+**2 mal**. *Ein Pruefbefehl mit einem Platzhalter ist nicht ausfuehrbar. Wer ihn kopiert,
+bekommt einen git-Fehler — und koennte ihn fuer einen Befund halten.*
+
+**Gefuellt mit dem belegten Wert:** Basis `28c34c11` → Generator `59e91b50` (S2).
+*Der Bau ist davon nicht betroffen — der Generator hat den richtigen Stand genommen und in
+seinem Bericht genannt. Der Platzhalter war ein Papierfehler, kein Baufehler. Geheilt, damit
+das Blatt spaeter nachvollziehbar bleibt.*
+
+**Regel daraus, ab sofort:** ein Blatt geht nicht heraus, solange ein `<…>` darin steht.
+Der Basis-SHA ist bekannt, sobald das Blatt geschnitten wird — er ist HEAD in dem Moment.
+**Barriere — und sie musste beim ersten Versuch gleich praezisiert werden:** meine erste
+Fassung lautete *"kein `<…>` im Blatt"*. Gemessen schlaegt die auf **diesen Erklaertext selbst**
+an, und ausserdem auf voellig richtige Stellen: `git commit -- <pfade>` ist eine **Anleitung**,
+kein auszufuellender Wert. *Gezaehlt ueber alle Auftragsblaetter: `<commit>` 20x, `<datum>` 8x,
+`<pfade>` 7x, `<pfad>` 5x — fast alles Anleitungen.*
+
+**Der Unterschied, auf den es ankommt:** ein Platzhalter in einer **Anleitung** ist richtig.
+Ein Platzhalter in einem **Pruefbefehl mit erwartetem Wert** ist ein Fehler — denn dort wird
+er ausgefuehrt, nicht gelesen.
+
+```text
+RICHTIG   git commit -m "..." -- <pfade>              (Anleitung: der Leser setzt ein)
+FALSCH    befehl: "git diff --numstat ‹basis› HEAD"   (Pruefbefehl: er wird ausgefuehrt)
+          ↑ im Beispiel mit ‹ › geschrieben, damit die Barriere nicht auf ihre eigene
+            Erklaerung anschlaegt — im echten Blatt stuenden hier spitze Klammern.
+          erwartet: "..."
+```
+
+**Die Barriere lautet deshalb:** in einem Block, der `befehl:` **und** `erwartet:` traegt,
+steht kein `<…>`. *Alles andere darf einen haben.*
