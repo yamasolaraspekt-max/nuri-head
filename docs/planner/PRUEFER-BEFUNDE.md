@@ -174,6 +174,9 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-023 | `ui-bauordnung.md` | **P2** | 175 `hp-`-Klassen, 0 im Styleguide — keine Regressionsfläche; **eigenarbeit an 60** | offen | — |
+| PB-024 | `ui-bauordnung.md` / `studioDaten.ts` | **P2** | Insel-Palette: 42 Hexwerte, 0 Verweise auf `--sa-` — nicht verdrahtet | offen | — |
+| PB-025 | `ui-bauordnung.md` | P3 | schützt `partials/sa-ui.blade.php` — die Datei gibt es nicht | offen | — |
 | PB-022 | `arbeitskompass-ticket.md` | **P2** | kennt 0 von 9 laufenden Posten; letzte Lage vom 21.07., CLAUDE.md schickt aber dorthin | offen | — |
 | PB-021 | `CLAUDE.md` (Skill-Pflicht) | **P2** | 12 von 22 vorgeschriebenen Fach-Linsen existieren an keinem der beiden Skill-Orte | offen | — |
 | PB-019 | `docs/auftraege/` (aktive Blätter) | **P2** | 6 von 15 aktiven Blättern ohne YAML-Kopf — der Validator findet dort nichts zu fahren | offen | — |
@@ -2089,3 +2092,113 @@ Verfahren.*
 **Was ich dabei nicht tue:** Vollständigkeit behaupten, solange sie nicht gemessen ist. **Jede Runde
 nennt ab jetzt ihren Stand an dieser Zahl** — geprüft von 386. *Ein Prüfbericht ohne Nenner ist
 dieselbe Aussage wie „viel getestet".*
+
+---
+
+## 29. Runde 21 (30.07.) — `docs/architektur/` · Stand: 24 von 386
+
+**Gemessen gegen `b4f69517`.** Vier Dateien, alle vorhanden:
+`bauordnung.md` (96 Z., 08.07.) · `ui-bauordnung.md` (57 Z., 16.07.) ·
+`gap-analyse-3d-planer.md` (88 Z., 16.07.) · `bauordnung-monteur-app.md` (48 Z., 16.07.).
+
+### PB-023 · P2 · 175 Insel-Klassen, null davon im Styleguide
+
+```yaml
+befund:
+  id: PB-023
+  datei: "docs/architektur/ui-bauordnung.md"
+  stelle: "Z10-13 (die Kernpflicht), von CLAUDE.md als STYLEGUIDE-PFLICHT bindend erklaert"
+  behauptung: |
+    "Unter /admin/styleguide liegt jede UI-Grundform. ... Existiert sie nicht ->
+    sie wird ZUERST im Styleguide angelegt (mit allen Zustaenden: normal, Hover,
+    Fokus, Fehler, inaktiv, leer)."
+  gemessen: |
+    Styleguide-View vorhanden, Route vorhanden, 191 Zeilen.
+    Treffer im Styleguide auf:  "hp-" 0 · "hausplaner" 0 · "planer" 0 · "Werkzeug" 0
+    Klassen in resources/planner/hausplaner/hausplaner.css:  175  (^\.hp-)
+  befehl: |
+    git show HEAD:resources/views/admin/styleguide/index.blade.php | grep -c 'hp-'
+    git show HEAD:resources/planner/hausplaner/hausplaner.css | grep -cE '^\.hp-'
+  commit: "b4f69517"
+  schwere: P2
+  wirkung: |
+    Die Regel ist die aelteste UI-Regel des Repositoriums und in CLAUDE.md eigens
+    hervorgehoben. 175 Klassen sind in AUF-38 entstanden, ohne dass eine davon im
+    Styleguide angelegt wurde - und der Styleguide ist laut derselben Regel die
+    "Referenzflaeche der visuellen Regression". Was dort nicht steht, wird beim
+    Screenshot-Diff je Welle nicht mit geschossen: die Insel hat keine
+    Regressionsflaeche.
+  eigenarbeit: TEILWEISE - 60 der 175 Klassen stammen aus meinen eigenen
+    AUF-38-Scheiben (2, 3, 4, Nachzug). Urteil beim Evaluator.
+```
+
+### PB-024 · P2 · Die Insel führt eine eigene Palette, nicht an die CRM-Tokens verdrahtet
+
+```yaml
+befund:
+  id: PB-024
+  datei: "docs/architektur/ui-bauordnung.md Z14 gegen resources/planner/hausplaner/app/studioDaten.ts"
+  stelle: "Regel 3: 'Farbwerte nur ueber Tokens (var(--sa-...) bzw. daran verdrahtete Scope-Tokens wie --al-...)'"
+  behauptung: "Scope-Tokens sind erlaubt - aber DARAN VERDRAHTET."
+  gemessen: |
+    studioDaten.ts:  42 Hexwerte, 0 Verweise auf --sa-
+    hausplaner.css:  93 x var(--hp-...), 0 x var(--sa-...)
+    Die --hp-Variablen entstehen zur Laufzeit aus T (tokenVariablen.ts) - also aus
+    den 42 Hexwerten, nicht aus den CRM-Tokens.
+    Gegenprobe, dass es die CRM-Tokens gibt: 134 Blade-Dateien nutzen --sa-.
+  befehl: |
+    git show HEAD:resources/planner/hausplaner/app/studioDaten.ts | grep -coE '#[0-9a-fA-F]{3,8}'
+    git show HEAD:resources/planner/hausplaner/app/studioDaten.ts | grep -c 'sa-'
+    git grep -l -- '--sa-' HEAD -- 'resources/views' | wc -l
+  commit: "b4f69517"
+  schwere: P2
+  wirkung: |
+    Die Regel erlaubt Scope-Tokens ausdruecklich - aber als ABLEITUNG. Hier ist der
+    Scope eine zweite Quelle: aendert das CRM seinen Akzent, folgt die Insel nicht.
+    Das ist die "zweite Wahrheit" auf Palette-Ebene, und sie ist heute schon
+    sichtbar: der Akzent der Insel ist #12807d, die Marke #7fae1c - ob das die
+    CRM-Werte sind, kann niemand pruefen, weil kein Verweis existiert.
+  eigenarbeit: nein - T stammt aus dem Insel-Bestand, nicht aus meinen Scheiben
+```
+
+### PB-025 · P3 · Die UI-Bauordnung nennt eine Token-Datei, die es nicht gibt
+
+```yaml
+befund:
+  id: PB-025
+  datei: "docs/architektur/ui-bauordnung.md"
+  stelle: "Z15 (Ein-Schreiber-Regel)"
+  behauptung: "Styleguide-View + Token-Dateien (partials/sa-ui.blade.php,
+    arbeitsliste/_tokens.blade.php, ...) sind ein eigener Strang."
+  gemessen: |
+    resources/views/admin/partials/sa-ui.blade.php     FEHLT
+    resources/views/admin/arbeitsliste/_tokens.blade.php  vorhanden (3 sa-Nennungen)
+    Tatsaechlich verteilen sich die sa-Tokens auf 134 Blade-Dateien.
+  befehl: |
+    git cat-file -e HEAD:resources/views/admin/partials/sa-ui.blade.php ; echo $?
+    git grep -l -- '--sa-' HEAD -- 'resources/views' | wc -l
+  commit: "b4f69517"
+  schwere: P3
+  wirkung: |
+    Die Ein-Schreiber-Regel schuetzt eine Datei, die es nicht gibt. Wer sie sucht,
+    findet sie nicht und muss raten, wo die Tokens wohnen - die Antwort ist "in 134
+    Dateien", also nirgends zentral. Das ist derselbe Fall wie PB-020 (Schema nennt
+    ein Skript, das es nicht gibt), nur eine Ebene hoeher: hier nennt eine
+    Bau-Ordnung den Ort, den sie schuetzt.
+  eigenarbeit: nein
+```
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | **PB-025** — eine genannte Datei existiert nicht |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | **PB-024** — zwei Paletten für dasselbe Produkt, nicht verdrahtet |
+| **L4 Kausalität** | **PB-023** — die Kette *Styleguide → visuelle Regression* erreicht die Insel nicht |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | **PB-023** — wer die Regel befolgt, müsste 175 Klassen nachtragen; das sagt ihm niemand |
+
+**`bauordnung.md`, `gap-analyse-3d-planer.md`, `bauordnung-monteur-app.md`: in dieser Runde nur auf
+Existenz und Struktur geprüft** — die zehn Fragen sind ausformuliert (Runde 20). *Inhaltlich gegen
+den Code gehalten habe ich sie nicht; sie bleiben auf der Liste.*
+
+**Ballbesitz: Planner** (PB-024, PB-025) · **Evaluator** (PB-023, `eigenarbeit` an 60 von 175).
