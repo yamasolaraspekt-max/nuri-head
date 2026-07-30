@@ -33,7 +33,9 @@ const FLAECHEN = [
   // AUF-48 Scheibe 4b: die Werkzeug-Liste der Schiene ist nach `rahmen/GruppenzeileUndSchiene.tsx`
   // gezogen. Die Sperr-Fassung ist zeichengleich dieselbe.
   { name: 'Werkzeug-Navi', datei: 'rahmen/GruppenzeileUndSchiene.tsx', muster: /opacity: GESPERRT_DECKKRAFT, cursor: GESPERRT_ZEIGER/ },
-  { name: 'Palette-Eintrag', datei: 'HausplanerApp.tsx', muster: /eintrag\.enabled \? FARBEN\.text : GESPERRT_BESCHRIFTUNG/ },
+  // AUF-48 Scheibe 4e: die Befehlspalette ist nach `rahmen/FussUndUeberlagerungen.tsx` gezogen.
+  // Die Sperr-Fassung ist zeichengleich dieselbe.
+  { name: 'Palette-Eintrag', datei: 'rahmen/FussUndUeberlagerungen.tsx', muster: /eintrag\.enabled \? FARBEN\.text : GESPERRT_BESCHRIFTUNG/ },
   { name: 'Geschoss löschen', datei: 'dashboard/GeschossFlaeche.tsx', muster: /GESPERRT_DECKKRAFT : 1, cursor: s\.anzahl <= 1 \? GESPERRT_ZEIGER/ },
   { name: 'Menü-Eintrag', datei: 'dashboard/WerkzeugGruppenMenue.tsx', muster: /zustand\.enabled \? 1 : GESPERRT_DECKKRAFT/ },
   { name: 'Berechnen', datei: 'EngineFlaeche.tsx', muster: /background: fehlt\.length > 0 \? GESPERRT_GRUND/ },
@@ -126,7 +128,7 @@ test('K6: jede gesperrte Fläche trägt ein nicht-farbliches, nicht zeigerabhän
   // Ein Mauszeiger existiert für Tastatur- und Touch-Bedienung nicht.
   const belege: Array<[string, string, RegExp]> = [
     ['Werkzeug-Navi', 'rahmen/GruppenzeileUndSchiene.tsx', /aria-disabled=\{!zustand\.enabled\}/],
-    ['Palette-Eintrag', 'HausplanerApp.tsx', /aria-disabled=\{!eintrag\.enabled\}/],
+    ['Palette-Eintrag', 'rahmen/FussUndUeberlagerungen.tsx', /aria-disabled=\{!eintrag\.enabled\}/],
     ['Geschoss löschen', 'dashboard/GeschossFlaeche.tsx', /disabled=\{s\.anzahl <= 1\}/],
     ['Menü-Eintrag', 'dashboard/WerkzeugGruppenMenue.tsx', /aria-disabled=\{!zustand\.enabled\}/],
     ['Berechnen', 'EngineFlaeche.tsx', /disabled=\{fehlt\.length > 0\}/],
