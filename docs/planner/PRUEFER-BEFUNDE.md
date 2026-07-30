@@ -181,6 +181,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-021 | `CLAUDE.md` (Skill-Pflicht) | **P2** | 12 von 22 vorgeschriebenen Fach-Linsen existieren an keinem der beiden Skill-Orte | offen | — |
 | PB-019 | `docs/auftraege/` (aktive Blätter) | **P2** | 6 von 15 aktiven Blättern ohne YAML-Kopf — der Validator findet dort nichts zu fahren | offen | — |
 | PB-020 | `AUFTRAGSSCHEMA.md` | P3 | Beispiel nennt `zaehle-statische-stile.sh` — die Datei gibt es nicht | offen | — |
+| PB-033 | `probe_farbe_tmp.mjs` · `probe_shots_tmp.mjs` | **P2 · SICHERHEIT** | zwei NEUE Klartext-Kladden in 37 Min., `.gitignore` deckt keine — PB-018 verdreifacht | offen | — |
 | PB-018 | `k01n1b.mjs` | **P2** | Klartext-Zugang im Wurzelverzeichnis; `.gitignore`-Muster greifen nur bei passendem Namen | **ANGENOMMEN** | 30.07. 09:28 — Sicherheitsposten an Yama: `.gitignore` + `mv`; liegt ausserhalb meiner Schreibflaeche |
 | PB-017 | (Arbeitsbaum) | **P1** | 466 geänderte + 8 neue Dateien ungesichert, im Ledger aber als geliefert und geprüft geführt | **ANGENOMMEN — Umfang groesser** | 30.07. 09:28 — gemessen 13 Dateien / 885+232 Zeilen / 10 unverfolgt; Ledger-Korrektur sofort, Sicherung haengt an Yamas A-oder-B-Entscheid |
 | PB-016 | `inventur.sh` / `AUFTRAGSTAFEL.md` | P3 | Inventur zählt Zeilen: 21 Zeilen für 17 Posten (vier doppelt) | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 09:28 — Zaehlfehler im Werkzeug, nicht im Bestand; Posten `scripts/inventur.sh` an den Generator |
@@ -2710,3 +2711,74 @@ statt Wirkung, an der eigenen Messung begangen.*
 | **L4 Kausalität** | keine Beanstandung — Quelle → Bündel → ausgelieferte Datei ist an zwei unabhängigen Merkmalen belegt |
 
 **Kein Befund. Die Abnahme von `40fa52de` ist von meiner Seite nicht blockiert.**
+
+---
+
+## 37. Runde 27 (30.07., Produktionsmodus) — SICHERHEIT: **PB-018 hat sich in einer Stunde verdreifacht**
+
+**Gemessen gegen `e6e056cd`.** Kein Blocker im Baum (gestaged 0, geändert 0 außerhalb `docs/`).
+**Dieser Abschnitt ist ausführlich, weil Yama Sicherheit ausdrücklich priorisiert hat.**
+
+### PB-033 · P2 · Zwei NEUE Kladden mit Klartext-Zugang, beide von `.gitignore` nicht gedeckt
+
+```yaml
+befund:
+  id: PB-033
+  datei: "probe_farbe_tmp.mjs · probe_shots_tmp.mjs (Wurzelverzeichnis, unverfolgt)"
+  stelle: "die Anmeldeblöcke"
+  behauptung: "(keine - Zustandsbefund; Fortschreibung von PB-018)"
+  gemessen: |
+    probe_shots_tmp.mjs   2 224 Byte, 09:56   Kennwort-Muster 1 · Anmeldung 4
+    probe_farbe_tmp.mjs   1 472 Byte, 09:57   Kennwort-Muster 1 · Anmeldung 4
+    von .gitignore gedeckt (git check-ignore):   BEIDE NEIN
+    Dateien im Baum mit demselben Kennwort:      3   (k01n1b.mjs + diese zwei)
+    Vorkommen in der Git-Historie:               0
+  befehl: |
+    git check-ignore -q probe_farbe_tmp.mjs ; echo $?
+    grep -rl "<kennwort>" . --exclude-dir=node_modules --exclude-dir=vendor --exclude-dir=.git
+    git log --oneline -S"<kennwort>" --all | wc -l
+  commit: "e6e056cd"
+  schwere: P2
+  wirkung: |
+    PB-018 hat um 09:20 EINE solche Datei gemeldet und benannt, warum die Schutzregel
+    nicht greift: die .gitignore-Muster hängen am NAMEN (/_*.mjs, /sichtprobe-*.tmp.mjs).
+    Um 09:56 und 09:57 sind zwei weitere entstanden - "probe_*_tmp.mjs" passt auf
+    keines der beiden Muster. Aus einer Datei sind drei geworden, in siebenunddreissig
+    Minuten.
+    Der Schaden ist weiter null: alle drei unverfolgt, null Vorkommen in der Historie,
+    lokaler Entwicklungszugang. Was sich geaendert hat, ist die RATE. Ein Klartext-
+    Zugang, der sich stuendlich vervielfacht, ist ein Zeitproblem: es genuegt EIN
+    pfadloses "git add", und die stehende Regel "nie --force" macht das Herausschreiben
+    danach unmoeglich.
+  eigenarbeit: nein
+```
+
+**Der Befund ist nicht „drei Dateien", sondern die Rate.** *PB-018 hat die Ursache benannt und wurde
+registriert; in derselben Stunde ist die Ursache dreimal wirksam geworden. Das ist R9 im Reinformat:
+zweite Wiederholung, also Barriere statt Vorsatz.*
+
+**Zwei Wege, entscheiden tut der Planner — ich fasse keine der Dateien an:**
+
+| Weg | wirkt gegen |
+|---|---|
+| `.gitignore` auf die **Dateiklasse** statt den Namen: `/*.mjs` in der Wurzel, oder `*_tmp.*` | jede künftige Kladde, unabhängig vom Namen |
+| Anmeldung über eine Umgebungsvariable, nie im Quelltext | auch die Kladde, die trotzdem in der Wurzel landet |
+
+**Erledigt wenn:** *`git check-ignore -q <jede Kladde>` liefert `0` für alle drei — **oder**
+`grep -rl "<kennwort>" .` (ohne `node_modules`, `vendor`, `.git`) findet keine Datei mehr.*
+
+**Ballbesitz: Planner** — mit dem Hinweis, dass der erste Weg ein Einzeiler ist und der zweite die
+Ursache trifft.
+
+---
+
+### Lage im Produktionsmodus, kurz
+
+```text
+gestaged                       0
+im Baum geaendert (ohne docs/) 0
+unverfolgt                     7   davon 3 Kladden (PB-018/033), 1 Altlast (.rm_probe_tmp),
+                                   3 zum aktiven AUF-87 (scripts/auftrag-pruefen.*)
+Blocker fuer eine Abnahme      keiner
+offene Befunde                 10  davon 1 Sicherheit (P2), 7 Papier (registriert, Papierstopp)
+```
