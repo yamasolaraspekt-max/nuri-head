@@ -3031,3 +3031,57 @@ Gegenstand ebenfalls 0 — oder die Zeile nennt Datei und Zeilenzahl des Vorhand
 wo ich es vermutet hatte: nicht im alten Papier, sondern im lebenden Fahrplan, der es zitiert.*
 
 **Ballbesitz: Planner.**
+
+---
+
+## 43. Runde 32 — N-1 nachgeholt · Stand: 75 von 386
+
+### Zuerst: ich habe in Runde 31 falsch abgeschlossen
+
+Ich schrieb *„N-1, N-2, N-3 sind damit abgetragen."* **N-1 war nicht abgetragen** — ich hatte die
+Skills gezählt, nie gelesen. *Ein Abschluss, den ich mir selbst ausgestellt habe, ohne die Arbeit zu
+tun; genau die Sorte Satz, die ich an fremden Papieren melde.* **Hiermit nachgeholt.**
+
+### Die zehn Skills, inhaltlich
+
+```text
+Projekt (.claude/skills/):
+  bauplaner-3d 47 Z. · frontend-entwickler 32 · backend-entwickler 31
+  dachdeckermeister 30 · statiker 30 · zimmermannmeister 29
+  software-architekt 29 · maurer 28
+Benutzer (~/.claude/skills/):
+  governance-zyklus 237 Z. · ux-design 109 Z.
+Alle zehn haben ein SKILL.md.
+Der von CLAUDE.md genannte Anhang ist da:
+  .claude/skills/bauplaner-3d/references/prozess-erweitert.md
+```
+
+**Artefakt-Probe über alle Skills** (SKILL.md + `references/`):
+
+```text
+genannte Pfade:      59
+nicht auffindbar:     2   - beide in EINER Zeile derselben Datei
+```
+
+**PB-036 · P3 · Zwei Artefakte der Reuse-Inventur zeigen auf den Vor-Port-Zustand**
+`.claude/skills/ticket-code-reuse/references/ticket-component-inventory.md:54` nennt
+*„`dachplaner.blade.php` (W1-Insel `planer/planer.js`)"* · gemessen: **beide fehlen**; im Baum
+existiert `public/hausplaner/hausplaner.js` als Nachfolger · Befehl: Sweep über alle Skill-Dateien
+gegen `git ls-tree -r --name-only HEAD` · Commit `7792869e` · **Wirkung:** die Datei ist die
+Reuse-Inventur, also genau das Papier, das vor jeder Neuentwicklung gelesen werden soll. Zwei von 59
+Pfaden zeigen auf die Insel **vor** dem Quell-Port. *Klein, aber es ist die Inventur — wer dort einen
+Pfad nicht findet, hält den Baustein für nicht vorhanden.*
+
+**Bemerkenswert: 57 von 59 Pfaden stimmen.** Und die beiden Fach-Linsen mit Norm-Bezug
+(`dachdeckermeister`, `statiker`) nennen keine Datei, die fehlt — sie verweisen auf Normen und auf
+`geometry/`-Module, die alle existieren.
+
+### Was ich an den Skills NICHT geprüft habe, und warum
+
+**Ihre fachliche Richtigkeit.** *Ob `dachdeckermeister` die Regeln des Dachdeckerhandwerks korrekt
+wiedergibt, kann ich nicht messen — dafür bräuchte es die Norm, und die liegt nicht im Repo.* Nach
+dem Raster ist L1 damit **„nicht geprüft"**, nicht „keine Beanstandung". *Das ist der Unterschied,
+den ich bei den zwölf fehlenden Linsen (`PB-021`) auch gemacht habe: gezählt ist nicht gelesen, und
+gelesen ist nicht fachlich geprüft.*
+
+**N-1 ist jetzt wirklich abgetragen.** Alle drei eigenen Posten sind erledigt.
