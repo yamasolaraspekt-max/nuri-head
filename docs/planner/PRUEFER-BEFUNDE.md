@@ -3823,3 +3823,40 @@ Lage, nicht als Vorgang: eine Migration im Index ist die teuerste Art von Beifan
 nächsten `migrate` läuft.*
 
 **Meine eigenen Commits nennen weiter ihre Pfade** — auch dieser.
+
+---
+
+## 58. Runde 43 — die neue AUF-88-Migration gegen Dauerdirektive 1 und Frage 3 · **keine Beanstandung**
+
+**Gemessen gegen `58e955f1`.** Im Baum liegt eine **neue Migration** (36 Z., 10:55, noch gestaged):
+`add_projektbezug_to_plan_uploads`. *Eine Migration im Index ist die Sorte Arbeit, bei der ein Fehler
+teuer wird — sie läuft beim nächsten `migrate`. Deshalb sofort geprüft, nicht beim nächsten Takt.*
+
+```php
+// up()
+Schema::table('plan_uploads', function (Blueprint $table) {
+    $table->foreignId('lead_alternative_add_id')->nullable()
+        ->after('heizlast_projekt_id')
+        ->constrained('lead_alternative_adds')->nullOnDelete();
+});
+// down()
+$table->dropConstrainedForeignId('lead_alternative_add_id');
+```
+
+| Prüfpunkt | Ergebnis |
+|---|---|
+| **Dauerdirektive 1** — nur additiv, keine Mutation von Bestandsdaten | **erfüllt** — eine neue Spalte, `nullable()`, kein `dropColumn`, kein `->change()`, kein `update`/`delete` |
+| **Frage 3** — echter FK + Index je `_id`-Spalte | **erfüllt** — `->constrained('lead_alternative_adds')`; `foreignId()` legt den Index selbst an |
+| **Frage 7** — echtes `down()` | **erfüllt** — `dropConstrainedForeignId` nimmt Constraint **und** Spalte zurück |
+| **Löschverhalten** | `nullOnDelete()` — *das Objekt darf verschwinden, der Upload bleibt und verliert nur den Bezug. Kein `cascade`, also kein stiller Datenverlust* |
+
+**Und der Kopf der Migration nennt seine Wahrheit:** *„… ist in diesem Bestand `LeadAlternativeAdd`
+(dieselbe Wahrheit wie die Route `hausplaner.objekt.*`) … Kein neues Ablagemodell (`nicht_ziel` des
+Auftrags)."* **Das ist genau die Anbindung, die `PB-023`/`PB-024` an anderer Stelle vermisst haben** —
+hier wird der vorhandene Anker benutzt und der Verzicht auf ein zweites Modell ausdrücklich begründet.
+
+**Kein Befund.** *Bemerkenswert: `foreignId()->constrained()` ist dieselbe Schreibweise, die mich in
+Runde 39 einen falschen Befund gekostet hätte. Diesmal habe ich sie erkannt, ohne zu zählen.*
+
+**Lage sonst:** Gate `1410/1410` · unverfolgt **0** · drei Dateien gestaged (AUF-88), Lage unverändert
+gegenüber Runde 42.
