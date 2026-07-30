@@ -3860,3 +3860,50 @@ Runde 39 einen falschen Befund gekostet hätte. Diesmal habe ich sie erkannt, oh
 
 **Lage sonst:** Gate `1410/1410` · unverfolgt **0** · drei Dateien gestaged (AUF-88), Lage unverändert
 gegenüber Runde 42.
+
+---
+
+## 59. Runde 44 — der neue Upload-Weg (AUF-88-P1) · **keine Beanstandung, und einer der besseren Stände heute**
+
+**Gemessen gegen `732ae64f`.** Der Upload-Pfad liegt im Baum (drei gestagte, vier geänderte Dateien).
+*Ein Upload ist die klassische Stelle für „dem Dateinamen geglaubt" — deshalb geprüft, solange er noch
+nicht committet ist.*
+
+| Prüfpunkt | Ergebnis |
+|---|---|
+| `$request->all()` in den drei neuen Dateien | **0** |
+| Validierung vorhanden | **ja** — `$request->validate([...])`, zwei Regeln plus zwei Prüf-Verschlüsse |
+| Größenschranke | `max:51200` (50 MB) |
+| **Endung geprüft** | ja — Positivliste (DWG, DXF, PDF, PNG, JPG, TIFF) |
+| **Inhalt geprüft** | **ja** — `DateiSignatur::passtZuEndung($kopf, $endung)` liest die **ersten 8 Byte** und vergleicht sie mit der Endung |
+| Wann | **VOR dem Speichern**, nicht im Job danach |
+| Ownership | eigener Schritt: `Rule::exists` prüft nur Existenz, das Recht prüft `hasPermission('Hausplaner','update')` mit `abort(403)` |
+| Löschverhalten des neuen FK | `nullOnDelete()` — kein stiller Datenverlust (Runde 43) |
+
+### Warum ich das hervorhebe, statt es nur abzuhaken
+
+**Drei Dinge stehen hier so, wie sie in vielen der heute geprüften Papiere gefordert und selten belegt
+waren:**
+
+1. **Eine Wahrheit, zwei Aufrufstellen.** Der Kommentar sagt es selbst: *„`DateiSignatur` ist dieselbe
+   Erkennung, die `PlanKlassifizieren` bereits benutzt — eine Wahrheit, zwei Aufrufstellen."*
+   **Das ist die Regel, deren Verletzung `PB-014`, `PB-024` und `PB-035` gemeldet haben** — hier
+   eingehalten und benannt.
+2. **Die Grenze der eigenen Prüfung ist im Code notiert:** *„`Rule::exists` prüft nur, dass die Zeile
+   existiert (Existenz), nicht, dass der Nutzer sie benutzen darf (Zugehörigkeit) — das
+   Ownership-Gate steht darum als eigener Schritt unten."* **Genau die Unterscheidung, die ich in
+   Runde 37 selbst erst nach zwei Messungen getroffen habe.**
+3. **Die Signaturprüfung wurde vom Job nach vorn gezogen** — mit Begründung: *„§3 des Master-Prompts
+   verbietet, sich allein auf die Endung zu verlassen."*
+
+**Kein Befund.**
+
+### Was das für PB-021 bedeutet — ein Zusammenhang, den ich melden muss
+
+**`aufnahme-dateiplattform` (Runde 5, sauber) hat gemessen: „Virenprüfung §14 — 0 Treffer, es gibt
+keine."** Der Upload-Weg wird jetzt gebaut, und **die Inhaltsprüfung deckt Umbenennung ab, nicht
+Schadcode.** *Das ist kein Widerspruch und kein Befund — das Papier führt FILE-02 (Sicherheit) als
+eigenen, noch offenen Schritt, und die Endungs-Positivliste schließt ausführbare Dateien aus.*
+**Ich nenne es, weil die nächste Stufe DWG-, IFC- und STEP-Leser sind** — und das Papier selbst sagt:
+*„Ohne ihn darf FILE-05 bis FILE-07 gar nicht beginnen."* **Das ist eine Reihenfolge, die jemand im
+Auge behalten muss; heute ist sie eingehalten.**
