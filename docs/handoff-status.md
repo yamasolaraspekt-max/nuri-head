@@ -24465,3 +24465,157 @@ Commit ist genau die Barriere, die R13 verlangt.**
 
 **Registerzeilen ohne Abhandlung (Produktionsmodus):** PB-024 bis PB-031 — *empfangen ·
 klassifiziert · zurückgestellt.*
+
+---
+
+## 2026-07-30, 09:58 CEST — GENERATOR: Nachtrag zu `40fa52de` — auf Rückfrage „hast du nichts übersehen" echte Screenshots nachgeholt
+
+*Meine Meldung um 09:53 stützte N-02/N-03/N-04 auf DOM-Abfragen, nicht auf die im Auftrag verlangten
+`Bildschirmfoto`-Belege. Auf Yamas Rückfrage vier echte Screenshots gemacht (1440 zu/offen, 1024,
+Geschoss-Wähler offen) und selbst angesehen, nicht nur den DOM gelesen.*
+
+**Ein Fehlalarm bei mir selbst, aufgeklärt, nicht bloß behauptet:** Im Thumbnail wirkte der
+Überlauf-Knopf grünflächig gefüllt. `getComputedStyle` nachgemessen:
+`backgroundColor: rgb(255,255,255)`, `color: rgb(35,42,49)` — nur `.hp-ok-punkt` ist grün
+(`rgb(19,122,73)`, 8 px). Stimmt mit dem Code überein; der erste Eindruck war ein Trugschluss der
+Bildkompression, kein Bug.
+
+**Ein echter Befund, außerhalb meines Scopes:** Bei 1024 px bricht der Geschoss-Wähler-Knopf
+(„Erdgeschoss · ±0 mm · 1 von 1") auf zwei Zeilen um. Ursache liegt in `GeschossFlaeche.tsx` — nicht
+in `pfade` von T3 oder T3-N1, von mir nicht berührt. **N-04 bleibt davon unberührt** (Speichern
+sichtbar, kein horizontaler Scroll, nichts abgeschnitten — die Staleness-Pille kann jetzt gar nicht
+mehr abgeschnitten werden, weil sie im Menü sitzt), es ist ein Schönheitsfehler außerhalb des
+Auftrags, keine Regression durch N1. *Gemeldet, nicht repariert — dieselbe Regel wie bei den
+1024/375-Nebenbefunden des Evaluators zu T3.*
+
+Screenshots liegen im Scratch der Sitzung, auf Wunsch reproduzierbar (Objekt 203, Expertenmodus,
+Puppeteer headless).
+
+---
+
+VOTUM: auftrag=AUF-83-T3+T3-N1 rolle=evaluator ergebnis=GRUEN commit=40fa52de datum=2026-07-30T09:5x
+
+## ⇒ EVALUATOR — AUF-83-T3-N1: **GRÜN, unabhängig am Generator-SHA gemessen** (30.07., CEST)
+
+*Prüfstand nach der neuen Regel (`e327e4d9`): frischer Worktree an `40fa52de`, nicht der
+Arbeitsbaum. `git worktree add ../eval-auf83-t3 40fa52de`, `node_modules`/`vendor`/`.env`/`storage`/
+`public/build` per Hardlink hineinkopiert (memory-Regel: kopieren, nie symlinken). Diff-Umfang
+selbst geprüft: `git diff --stat 40fa52de^..40fa52de` → 18 Dateien, deckt sich mit der
+Generator-Meldung, keine fremde Datei drin.*
+
+### K-10 — Gates, im isolierten Worktree, nicht im geteilten Baum
+
+```text
+tsc:hausplaner              Exit 0
+schema:hausplaner:check     Exit 0
+test:hausplaner             1394 / 0
+test:hausplaner:dom         19 / 0   (3 neu: N-03 Überlauf-Menü)
+build:hausplaner            Exit 0
+phpunit UebernahmeKnopfTest  8 / 0, 67 Assertions
+```
+**GRÜN**, deckt sich mit der Generator-Quittung 09:53.
+
+### Nebenbefund des Generators geprüft: ist das committete Bündel frisch gebaut?
+
+Zweiter isolierter Worktree, `npm run build:hausplaner` frisch gefahren, `md5` vorher/nachher:
+```text
+public/hausplaner/hausplaner.js    d1287be9c06fc2267ffe7db27248bc9d   (Commit == Neubau)
+public/hausplaner/hausplaner.css   61b3737a5a038b7b319621d21e1d84ba   (Commit == Neubau)
+```
+**Byte-identisch.** Das committete Bündel ist kein Altstand — beantwortet den Generator-Hinweis zu
+R18 mit Beleg statt Vertrauen.
+
+### K-08 — die Nachbesserung, nachgemessen statt geglaubt
+
+Isolierter Laravel-Server aus dem Worktree (`php artisan serve --port=8899`, dieselbe DB, rein
+lesend, kein Speichern), derselbe Selektor wie in meiner T3-Messung
+(`[data-schiene][0].parentElement`), Objekt 203, 1440×900, Expertenmodus, zweimal gemessen:
+
+```text
+Vorher (d78c2466, meine T3-Messung):        594 px
+Nachher T3 ohne N1 (mein Rot vom 08:47):     574 px   (−20, das widerlegte Kriterium)
+Nachher T3+N1 (40fa52de, jetzt gemessen):    596 px   (zweimal identisch)
+```
+
+**+2 px über der Ausgangsbasis — ein echter, wenn auch kleiner Gewinn, kein bloßes Zurückrudern
+zur alten Zahl.** Deckt sich mit der Generator-Behauptung „596,4 px, +2,1 px" innerhalb der
+Rundungstoleranz. **K-08 jetzt GRÜN, mit Gegen-Beweis statt Bericht.**
+
+### 1024 px — mein eigener Nebenbefund aus der T3-Runde, nachgeprüft
+
+```text
+scrollWidth == innerWidth == 1024   (kein horizontaler Überlauf mehr)
+```
+Screenshot bestätigt: Überlauf-Knopf „● Gespeichert ▾" ersetzt jetzt bei JEDER Breite (auch 1440 px)
+die drei einzelnen Elemente — geöffnet zeigt er alle drei unverändert: „Gespeichert"-Pille,
+„Übernommen — VERALTET"-Pille, „In Auslegung übernehmen"-Knopf. Kein Informationsverlust, nur
+Verlagerung hinter ein Menü, gleiches Muster wie beim Geschoss-Wähler. **Behoben, mit Beleg.**
+
+Zwei Restpunkte, beide vom Generator selbst schon gemeldet und von mir nicht erneut vertieft:
+Geschoss-Wähler-Knopf bricht bei 1024 px auf zwei Zeilen (`GeschossFlaeche.tsx`, außerhalb des
+T3/N1-Scopes) — Schönheitsfehler, keine Regression. 375 px nicht erneut gegen `d78c2466` gegengeprüft
+(bereits in meiner T3-Meldung als „von AUF-70 geerbt, nicht T3-verursacht" eingeordnet).
+
+### Urteil
+
+**Alle neun T3-Kriterien plus die N1-Nachbesserung GRÜN**, am eingefrorenen Commit gemessen, nicht
+am Arbeitsbaum. Kein Kriterium offen. Worktrees nach der Messung entfernt (`git worktree remove`),
+Arbeitsbaum unberührt.
+
+**Kein Commit, kein Push von mir.** Ballbesitz: **Yama** — Merge-Entscheidung (Tor 2).
+
+---
+
+## 30.07.2026, 10:05 CEST — der Generator hat zwei Dinge, und meine eigene Messung war fast ein Fehlalarm
+
+**VOTUM: auftrag=AUF-83-T5+AUF-87 rolle=planner ergebnis=FREIGEGEBEN commit=folgt datum=2026-07-30**
+
+```text
+1. AUF-87: drei Dateien seit 07:29/08:14 unverfolgt  ->  jetzt committen (Fassung B)
+   scripts/auftrag-pruefen.mjs (17597 B) · scripts/auftrag-pruefen.sh · scripts/__tests__/
+2. AUF-83-T5: Sperre gefallen. Sie endete mit dem BAU von T3 — T3 ist seit 40fa52de
+   gebaut und committet.
+```
+
+**T3/T3-N1 liegen gleichzeitig beim Evaluator** (`eval-auf83-t3` auf `40fa52de`). **Das ist kein
+Parallelbetrieb** — sein Prüfstand ist ein Commit und kann vom Weiterbauen nicht zerstört werden.
+*Genau dafür war Fassung B da.*
+
+### Beinahe-Fehlalarm, offengelegt
+
+```text
+npm run test:hausplaner:dom     13 Tests, 11 gruen, 2 ROT
+Ursache gemessen:               esbuild in node_modules ist fuer die andere Plattform gebaut
+                                „...into a Docker image that runs Linux, or by copying node_modules"
+```
+
+**Zwei rote DOM-Tests, und ich war einen Schritt davon entfernt, einen Nachbesserungsauftrag gegen
+einen möglicherweise intakten Commit zu schreiben.** Der Mount ist Yamas Rechner, `node_modules`
+gehört dorthin — aus dem Container gefahren ist das Ergebnis wertlos.
+
+> **Regel für mich, ab sofort:** *Testbefehle im Auftragsblatt sind für den Bauenden, nicht für mich.*
+> Ich fahre sie nicht, um ein Urteil zu bilden. **Der Prüfer hat dieselbe Klasse eine Runde vorher
+> offengelegt — Anker gegen eine erzeugte Datei. Zwei Beinahe-P1 an einem Vormittag, beide aus der
+> eigenen Messung.**
+
+### Zur Barriere des Prüfers — gegengemessen, ob sie mich trifft
+
+```text
+Anker (^ oder $) gegen erzeugte Dateien in meinen 14 aktiven Auftragsblaettern:  0
+```
+
+**Angenommen und übernommen, ohne Änderung an einem Blatt.**
+
+### PB-019 — mit Gegenmessung entschärft
+
+```text
+scripts/auftrag-pruefen.mjs:320
+  '   KEIN KOPF (kein Fehler — aeltere Blaetter haben keinen)'
+```
+
+**Der Validator meldet den fehlenden Kopf ausdrücklich, er schweigt nicht.** PB-019 ist damit kein
+False-Green (F-14), sondern eine Entwurfsfrage: sollen ältere Blätter Köpfe bekommen? **Bleibt
+registriert, kein Handlungsbedarf im Produktionsmodus.**
+
+**Registriert ohne Abhandlung:** PB-027 · PB-028 (Blatt gegen Tafel) · PB-017 (P3, deckt sich mit
+Punkt 1 oben und erledigt sich mit dem AUF-87-Commit).
