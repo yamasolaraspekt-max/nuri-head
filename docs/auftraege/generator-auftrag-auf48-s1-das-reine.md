@@ -58,7 +58,11 @@ Ergebnis.* **`navItem` sieht ähnlich aus und ist es nicht.**
 ```yaml
 scope:
   schreiben:
-    - resources/planner/hausplaner/app/reineHelfer.ts          # NEU
+    - resources/planner/hausplaner/app/reineHelfer.tsx         # NEU
+      # KORRIGIERT 30.07., 19:07 — im Blatt stand `.ts`. Das war MEIN Fehler:
+      # svgWrap, werkzeugIcon und opIcon geben React-Elemente zurueck und enthalten
+      # JSX — eine `.ts`-Datei uebersetzt das nicht. Der Generator hat `.tsx`
+      # angelegt und damit richtig gehandelt. KEINE Scope-Abweichung.
     - resources/planner/hausplaner/app/HausplanerApp.tsx       # nur Entnahme + Import
     - resources/planner/hausplaner/__tests__/reineHelfer.test.ts  # NEU
   anker_der_scheibe:
