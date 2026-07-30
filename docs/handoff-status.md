@@ -21663,3 +21663,37 @@ Und die Erfahrung dieses Tages sagt: Vorsätze wiederholen sich vier- bis fünfm
 
 > *Deshalb steht M1 an erster Stelle und nicht M4: das Werkzeug, das prüft, ist mehr wert als die
 > Regel, die es verlangt.*
+
+---
+
+## ⇒ YAMA-ENTSCHEID zum Maßnahmenplan (30.07., 07:25 CEST)
+
+**Beide Fragen beantwortet, beide nach der Empfehlung:**
+
+### 1. Reihenfolge: M1 und M2 kommen direkt nach T3 — vor T5
+
+```text
+JETZT     AUF-83-T3        im Bau
+DANN      AUF-87           scripts/auftrag-pruefen.sh        ein halber Tag
+DANN      AUF-87-N1        scripts/bestand.sh                zwei Stunden
+DANN      AUF-83-T5 · AUF-88-P1 · AUF-48 Scheibe 1 · AUF-50 Stufe 1
+```
+
+**Ab dem Validator gilt das Tor: kein Auftragsblatt wird übergeben, bevor er darüber gelaufen ist
+und seine Rohausgabe im Blatt steht.** Das betrifft zuerst mich.
+
+**T5 und AUF-88-P1 verschieben sich um einen Tag.** *Die fünf Rückweisungen von heute haben
+ungefähr denselben Tag gekostet — nur ohne bleibenden Ertrag.*
+
+### 2. Takt: Wache alle drei Minuten, neues Blatt höchstens stündlich
+
+**Der Takt bleibt in voller Frequenz als Wache** — `git log`, `git status`, Ledger lesen,
+Meldungen einordnen, Sperren lösen. *Reaktionszeit war heute der Grund, warum niemand leerlief.*
+
+**Was wegfällt, ist der Schreibdruck.** Zwischen den Runden wird gelesen und gemessen.
+**Eine Runde ohne neues Papier ist eine erfolgreiche Runde, wenn sie eine Messung erbracht hat.**
+
+> **Das ist ab sofort Teil des Regelwerks als Selbstauflage des Planners** — und es ist die
+> einzige der sieben Maßnahmen, die Yama selbst genehmigen musste, weil der Takt von ihm kam.
+
+**Letztes Blatt: `AUF-88-P1`, 06:58. Nächstes frühestens 07:58.**

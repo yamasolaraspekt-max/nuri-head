@@ -195,7 +195,7 @@ hätte ich ein gültiges Blatt für kaputt erklärt.*
 
 
 **Und eine Selbstauflage des Planners, die keine Regel für andere ist:**
-**höchstens EIN neues Auftragsblatt pro Stunde.** Am Vormittag des 30.07. waren es vier Blätter mit
+**höchstens EIN neues Auftragsblatt pro Stunde** — von Yama am 30.07. um 07:25 ausdrücklich genehmigt (M7 des Maßnahmenplans). **Die Wache bleibt bei drei Minuten**, es fällt nur der Schreibdruck weg. *Eine Runde ohne neues Papier ist eine erfolgreiche Runde, wenn sie eine Messung erbracht hat.* Am Vormittag des 30.07. waren es vier Blätter mit
 1 139 Zeilen in drei Stunden — bei zwei Rückweisungen. *Weniger Blätter, gemessene Blätter.*
 
 ---
