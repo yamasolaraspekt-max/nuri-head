@@ -23806,3 +23806,226 @@ haben.
 > **Er hat in sechs Minuten eine Fläche geprüft, die ich seit gestern als offene Leseaufgabe
 > führe.** *Das ist der Ertrag der Unabhängigkeit: er hat keine Erinnerung daran, was ich damals
 > gemeint habe.*
+
+---
+
+VOTUM: auftrag=AUF-83-T3 rolle=evaluator ergebnis=ROT (ein P1) commit=kein-Commit datum=2026-07-30T08:47
+
+## ⇒ EVALUATOR — AUF-83-T3: K-10/K-09/K-07/K-01/K-03/K-05/K-05b GRÜN, **K-08 ROT — Verlust statt Gewinn** (30.07., 08:47 CEST)
+
+*Frische Instanz, Rolle Evaluator auf Yamas Wort übernommen. Ballbesitz laut Ledger 23667:
+K-08-Objektseite, K-09-Dateiliste, Sichtprobe. Kein Vorwissen aus diesem Baum übernommen — jede
+Zahl unten selbst gefahren, nicht aus der Quittung des Generators geglaubt.*
+
+### 0. Wächter zuerst: der Baum ist während der Messung viermal gewandert
+
+HEAD stand bei Beginn auf `fccb2020`, bei Abschluss auf `65f087b4`. Dazwischen liefen vier fremde
+Commits (`f45bde30`, `67ac4ea0`, `28a02209`, `a49b0f9c`, `65f087b4`) — alle vom parallel laufenden
+**PRUEFER**-Strang (`docs/planner/PRUEFER-BEFUNDE.md`, sechs-Linsen-Audit, eigene Rolle, nicht
+Evaluator) plus einer Regelklarstellung in `docs/agents/regeln/{kern,generator}.md`
+(„Committen ist Pflicht, Pushen ist verboten"). **Keiner der fünf Commits berührt eine Datei aus
+dem T3-Scope** (`git show --stat` je Commit geprüft) — die Messung unten bleibt gültig, weil der
+gemessene Gegenstand (der unveränderte Arbeitsbaum-Diff) über die ganze Sitzung stabil blieb.
+Notiert, nicht interpretiert: **committet habe ich nichts, unabhängig davon, was die neue
+Regelklarstellung sagt** — das ist mein eigener Umgang mit einem Governance-Punkt, der Yamas Wort
+braucht, nicht meine Einstufung dieser Sitzung.
+
+### K-10 — Gates, selbst gefahren (nicht aus der Quittung übernommen)
+
+```text
+npm run tsc:hausplaner              Exit 0
+npm run schema:hausplaner:check     Exit 0
+npm run test:hausplaner             1394 / 0
+npm run test:hausplaner:dom         16 / 0
+npm run build:hausplaner            Exit 0
+vendor/bin/phpunit .../UebernahmeKnopfTest.php   8 / 0, 67 Assertions
+```
+Deckt sich exakt mit der Quittung des Generators (08:33) — keine Abweichung gefunden. **GRÜN.**
+
+### K-09 — Dateiliste, jede Datei angesehen statt nur gezählt
+
+```text
+grep -rl 'HausplanerApp\|HausplanerStudio\|GeschossFlaeche' resources/planner/hausplaner/__tests__/
+  → 30 Dateien (deckt sich mit der korrigierten Zahl aus 67ac4ea0, nicht mit den 27 im Auftrag)
+```
+Von den 30 ist **genau eine** im Arbeitsbaum verändert (`stilschicht.test.ts`), der Rest unberührt —
+per `git status` gegengeprüft, keine zweite Modifikation gefunden. Die eine Änderung am Diff
+gelesen: `T2/K-03`-Test wurde nicht geschwächt, sondern **umgehängt und verschärft** — er prüft jetzt
+zusätzlich (zwei neue `doesNotMatch`), dass Objektidentität/Übernehmen-Knopf im alten Blade-Ort
+NICHT mehr stehen, on top of der Prüfung, dass sie am neuen Ort stehen. **GRÜN.**
+
+### K-07 — Scheibe 7, selbst gemessen
+
+```text
+node scripts/statische-inline-stile.mjs .../HausplanerApp.tsx
+  → 138 gesamt / 78 statisch / 78 offen
+```
+Deckt sich mit dem Ausgangswert. Kein Anstieg. **GRÜN.**
+
+### K-01, K-03, K-05, K-05b — Sichtprobe an einem echten Objekt (203, "EVALUATOR-MESSWELLE")
+
+Puppeteer, Chrome headless, 1440×900, eingeloggt als Admin, Objektseite → Expertenmodus-Tab
+geklickt (Übersicht ist die Standardansicht der Studio-Schale, das ist keine Abweichung von T3).
+
+- **K-01**: Screenshot bestätigt genau drei Zeilen innerhalb `HausplanerApp` (die
+  `hp-studio-kopf`-Zeile mit dem Übersicht/Geführt/Experte-Schalter liegt EINE Ebene darüber, in der
+  Studio-Schale, und war nie Teil von T3s „drei Zeilen"-Zusage). Zeile 1: Geschoss-Wähler,
+  Objektname „EVALUATOR-MESSWELLE", Übernehmen-Knopf, Staleness-Pille „VERALTET", Gespeichert-Pille,
+  Speichern-Knopf. Zeile 2: Arbeitsbereiche + Suchen ⌘K. Zeile 3: die eine Werkzeugzeile.
+  `document.querySelector('.hp-bar')` → `null` auf der echten Objektseite. **GRÜN.**
+- **K-03**: Geschoss-Wähler geöffnet (Screenshot) — Liste mit Höhenlage, „+ Geschoss",
+  „Duplizieren", „− Löschen". **Eine echte Duplizierung ausgeführt**: STAPEL 1→2 GESCHOSSE, neuer
+  Eintrag „Erdgeschoss (Kopie) · +2700 mm", „0 darüber · 1 darunter" — mit Screenshot belegt, nicht
+  behauptet. Nicht gespeichert (kein Strg+S), also keine Schreibung auf die Arbeits-DB. **GRÜN.**
+- **K-05**: Screenshot zeigt „Import & Nachzeichnen · noch nicht" (gedämpft) · Architektur ·
+  Bauphysik · Heizung · Elektro · PV — Quelle laut Diff `arbeitsbereiche.ts`, nicht neu erfunden.
+  **GRÜN.**
+- **K-05b**: „Suchen ⌘K" in Zeile 2 angeklickt → `[role="dialog"]` erscheint. Derselbe Aufruf wie
+  der bestehende ⌘K-Griff (laut Diff, nicht zweite Aktivierungslogik). **GRÜN.**
+
+### K-08 — Zeichenbereich gewinnt Höhe: **GEMESSEN, WIDERLEGT**
+
+**Selektor** (stabil über beide Commits, `data-schiene` existierte schon vor T3):
+`document.querySelectorAll('[data-schiene]')[0].parentElement` — das ist exakt `inhaltRef` aus
+`buehnenHoehe.ts`/`HausplanerApp.tsx:1427`.
+
+**Vorher** — Commit `d78c2466` (letzter Insel/Blade-Commit vor T3, per R22 `git show
+d78c2466:<pfad>` in die drei betroffenen Dateien gespielt, Objektseite 203, 1440×900,
+Expertenmodus, zweimal gemessen zur Reproduktion):
+```text
+inhaltRect: { width: 1083, height: 594, top: 451 }   (zweimal identisch)
+hp-bar: vorhanden (1×, "EVALUATOR-MESSWELLE" · "In Auslegung übernehmen")
+```
+
+**Nachher** — aktueller Arbeitsbaum (T3, unverändert seit Generator-Quittung 08:33), exakt
+dieselben Bedingungen, dreimal gemessen zur Reproduktion:
+```text
+inhaltRect: { width: 1083, height: 574, top: 382 }   (dreimal identisch)
+hp-bar: nicht vorhanden
+```
+
+**Ergebnis: −20 px. Ein Verlust, kein Gewinn.** Die Zeile beginnt zwar 69 px weiter oben (`top`
+451→382 — der Wegfall von `hp-bar` schlägt hier durch), aber die neue Zeile 1 innerhalb
+`HausplanerApp` (Geschoss + Objektname + Übernehmen-Knopf + zwei Pillen + Speichern-Knopf in einer
+Reihe) beansprucht mehr Höhe, als `hp-bar` je beansprucht hat — netto negativ.
+
+**Restauriert und verifiziert**: Backup vor dem Tausch (`md5` von
+`public/hausplaner/{hausplaner.js,hausplaner.css}` + `objekt.blade.php`), nach dem Rücktausch
+`md5`-identisch mit dem Backup — der Arbeitsbaum steht exakt wie vor der Messung, keine Spur der
+Vorher-Version geblieben, `php artisan view:clear` beidseitig gefahren.
+
+**Das ist kein Rundungsfehler und keine zweite Ausprägung des Studio-Befunds (−2 px) — es ist
+derselbe Fehlbetrag, nur an dem Ort, wo laut Auftrag der eigentliche Gewinn stehen sollte**, weil
+dort (anders als im Studio) tatsächlich eine ganze Zeile (`hp-bar`) wegfällt. Fällt der Gewinn selbst
+dort aus, ist die Aussage „Der Zeichenbereich gewinnt messbar Höhe" (P1) **nicht erfüllt** — im
+Gegenteil.
+
+**Nebenbefund, nicht K-08-blockierend**: bei 1024 px läuft die neue Zeile 1 aus dem Fenster
+(Pille „Szene geändert seit Übernahme" wird abgeschnitten, Speichern-Knopf nicht mehr sichtbar
+ohne Scroll) — Screenshot liegt vor. K-01/K-03/K-05 sind explizit nur für 1440 px geprüft, das ist
+also kein K-01-Fehlschlag, aber ein reales Risiko der neuen, volleren Zeile 1 bei mittlerer
+Fensterbreite. Bei 375 px ist die ganze Kopf-/Werkzeugregion so hoch gestapelt, dass die Leinwand
+ohne Scrollen nicht sichtbar ist — das dürfte allerdings von AUF-70 geerbt sein (die Werkzeugzeile
+allein nimmt bei 375 px schon zwei Zeilen), nicht von T3 verursacht; nicht gegengeprüft gegen
+`d78c2466`, deshalb hier als Beobachtung und nicht als T3-Befund geführt.
+
+### Urteil
+
+**8 von 9 geprüften Kriterien GRÜN** (K-01, K-03, K-05, K-05b, K-07, K-09, K-10 plus die
+Reproduktion selbst). **K-08 ROT, mit reproduzierbarem Gegen-Beweis** (zweimal Vorher, dreimal
+Nachher, identische Werte). Nach dem Prüfrahmen braucht Rot denselben Belegstandard wie Grün — er
+steht oben vollständig, kein Bauchgefühl.
+
+**Das blockiert die Welle**, bis geklärt ist, ob (a) K-08 als Kriterium fällt/neu geschnitten wird
+(der Planner hat Vergleichbares bei K-01/K-02/K-04 schon getan, wenn ein Kriterium sich als falsch
+geschnitten erwies), oder (b) Zeile 1 tatsächlich verschlankt werden muss, um den versprochenen
+Gewinn einzulösen. **Das ist eine Planner-Entscheidung, keine Generator-Nacharbeit auf Verdacht** —
+ich baue nichts nach, ich messe und melde.
+
+**Kein Commit, kein Push** — von mir, unabhängig von der neuen Klarstellung in `kern.md`/
+`generator.md`; die betrifft den Generator-Workflow, nicht meine Rolle, und ich handle nicht auf
+eine Regeländerung, die während meiner eigenen Prüfung unter mir landete, ohne das hier ausdrücklich
+zu benennen.
+
+**Ballbesitz: Planner** — Entscheidung zu K-08 (Kriterium schneiden oder Zeile 1 schlanker bauen).
+Alle Artefakte (Screenshots, Messwerte, MD5-Belege) liegen in dieser Sitzung vor, auf Wunsch aus dem
+Scratch in ein festes Verzeichnis kopierbar.
+
+---
+
+VOTUM: auftrag=AUF-83-T3 rolle=planner ergebnis=ANGENOMMEN commit=a49b0f9c datum=2026-07-30T08:55
+VOTUM: auftrag=AUF-83-T3-N1 rolle=planner ergebnis=PLANUNGSREIF commit=a49b0f9c datum=2026-07-30T08:55
+
+## ⇒ PLANNER — K-08 fällt nicht. Das Ziel ist verfehlt, nicht das Kriterium falsch (30.07., 08:55 CEST)
+
+**Empfangsquittung:** *empfangen 08:50 · verstanden · nichts blockiert · Entscheidung sofort, weil
+der Ballbesitz bei mir liegt und ein Bauender wartet.*
+
+### Das Votum ist die beste Prüfarbeit dieses Projekts
+
+**Acht von neun grün, K-08 rot — und jedes Stück davon ist belegt:**
+
+- **Alle Gates selbst gefahren**, nicht aus der Quittung geglaubt. Keine Abweichung.
+- **K-09: alle 30 Dateien EINZELN angesehen**, nicht gezählt. Genau eine ist verändert
+  (`stilschicht.test.ts`) — und sie ist **verschärft statt geschwächt**: zwei neue `doesNotMatch`
+  prüfen zusätzlich, dass Objektidentität und Übernehmen-Knopf am **alten** Ort nicht mehr stehen.
+- **Sichtprobe an einem echten Objekt**, mit **ausgeführter Duplizierung** (Stapel 1 → 2) statt
+  einer Behauptung. Nicht gespeichert — kein Schreiben auf die Arbeits-DB.
+- **K-08 mit `git archive d78c2466` gemessen** — genau R22 — **zweimal vorher, dreimal nachher,
+  identische Werte**, und der Arbeitsbaum danach per `md5` nachweislich restauriert.
+
+> **594 px vorher · 574 px nachher · −20 px.**
+> *Die Zeile beginnt 69 px höher, weil `hp-bar` wegfällt. Aber die neue Zeile 1 frisst mehr, als
+> `hp-bar` je beansprucht hat.*
+
+**Und er hat den Wächter vorangestellt:** vier fremde Commits liefen während seiner Messung, er hat
+je Commit `git show --stat` geprüft und belegt, dass keiner den T3-Scope berührt. *Eine Messung aus
+einem wandernden Baum ist keine Messung — er hat das nicht behauptet, sondern ausgeschlossen.*
+
+### Meine Entscheidung, und sie ist unbequem
+
+**K-08 fällt nicht.**
+
+**Ich habe an T3 drei Kriterien anders geschnitten — K-01, K-02, K-04. Alle drei waren FALSCH
+GESCHNITTEN:** die Arbeit war schon getan, oder das Kriterium verlangte etwas, das seine eigene
+Grenze verletzte.
+
+**K-08 ist nicht falsch geschnitten. Es ist VERFEHLT.** Das ist der ganze Unterschied.
+
+> Yama, 29.07., in einem Satz: *„der Zeichenbereich soll mehr Platz bekommen."*
+
+**K-08 ist nicht ein Kriterium unter neun. Es ist das Ziel des Auftrags.** *Ein Ziel fallen zu
+lassen, weil es rot gemessen wurde, wäre die teuerste Abkürzung, die dieses Projekt kennt — und sie
+wäre nach genau dem Muster gebaut, das wir heute den ganzen Tag abstellen.*
+
+### Die Ursache steht in meinem eigenen Blatt — und die Lösung stand in Yamas Auftrag
+
+**Gemessen trägt Zeile 1 heute SECHS Dinge:** Geschoss-Wähler · Objektname mit Adresse ·
+Übernehmen-Knopf · Staleness-Pille · Gespeichert-Pille · Speichern-Knopf.
+
+**Sechs Dinge in einer Reihe sind die 20 px** — und sie sind auch der Nebenbefund des Evaluators,
+dass die Zeile bei 1024 px aus dem Fenster läuft.
+
+**Yamas Punkt 2 vom 29.07. nennt für die Kopfleiste:**
+*„rechts Speicherstatus/Speichern/Undo/Redo/**Overflow**"*.
+
+```text
+grep -c 'overflow|Overflow|ueberlauf' HausplanerApp.tsx  →  16
+davon Ueberlauf-Menues:                                      0
+alle 16 sind die CSS-Eigenschaft
+```
+
+> **Das fehlende Stück ist nicht neu zu erfinden. Es stand von Anfang an im Auftrag — und ist
+> übersehen worden. Von mir.**
+
+### `AUF-83-T3-N1` liegt
+
+**N-01 ist der Kern:** die Bühne **muss höher als 594** werden. Kein Sollwert für den Zuwachs, er
+wird gemessen — **aber ≤ 594 ist rot.** · **N-02:** höchstens drei Dinge nebeneinander, der Rest ins
+Überlauf-Menü. · **N-03:** das Menü verliert nichts und erfindet nichts, mit Gegenprobe. ·
+**N-04:** bei 1024 px läuft nichts aus dem Fenster.
+
+**Nicht angetastet:** Zeile 2, Zeile 3 (AUF-70), und **kein Wegfall** von Objektname,
+Übernehmen-Knopf oder Staleness-Pille — sie sind die Zusage aus T2 und tragen Fachlogik.
+
+**Ballbesitz: Generator.**
