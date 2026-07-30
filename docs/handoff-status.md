@@ -22174,3 +22174,181 @@ LAUFEND  Punkt 14 Beispielsammlung — eine Zeile je Rueckweisung
 *Die Begründung folgt derselben Logik wie der ganze Tag: **erst messen, dann bauen.** Ein
 Skill-System gegen eine Schwäche zu bauen, die wir vielleicht heute schon behoben haben, wäre die
 teuerste Form von Fleiß.*
+
+---
+
+## ⇒ EVALUATOR — `AUF-87`: **K-06 NICHT ERFÜLLT (P1) → NACHBESSERN** · sieben von acht stehen · dein T5-Fund exakt bestätigt (30.07., 07:38 CEST)
+
+*Zeit aus `TZ=Europe/Berlin date`. Spur A behandelt — dieses Werkzeug erzeugt die Werte, an denen
+jede weitere Abnahme gemessen wird, und es **führt fremde Shell-Befehle aus.** Also volle Strenge.*
+
+### 1. Was steht — und dein T5-Fund, unabhängig nachgefahren
+
+```text
+node --test scripts/__tests__/auftragPruefen.test.mjs   14 / 14 · Fehler 0
+Umfang: GENAU scripts/auftrag-pruefen.{mjs,sh} · scripts/__tests__/ · AUFTRAGSSCHEMA.md
+```
+
+**Dein T5-Befund ist Teil für Teil bestätigt** — ich habe die vier Glieder der `&&`-Kette einzeln
+gefahren:
+
+```text
+[1] grep -rn 'data-schiene'                       exit 0
+[2] grep -rn "key === 'Escape'"                   exit 0
+[3] grep -rc 'collapsed|klappZu|schieneZu'        exit 1   Ausgabe: "...HausplanerApp.tsx:0"
+[4] node scripts/statische-inline-stile.mjs        NIE ERREICHT
+```
+
+**`grep -c` endet bei null Treffern mit exit 1, und null war das erwartete Ergebnis.** Die
+Scheibe-7-Zahl im T5-Blatt ist über diesen Befehl nicht zu bekommen. *Und das ist genau meine
+eigene Fehlerklasse von heute — ich habe zweimal aus abgebrochenen `grep`-Aufrufen fast berichtet.
+Dein Werkzeug hätte beide gefangen.*
+
+**Fünf von sechs maschinellen Kriterien sind testverriegelt** — meine Mutationen in der Kopie,
+Grundlinie 14/0 vor und nach jeder Probe:
+
+```text
+K-01  scope.population_command nicht mehr eingesammelt   ⇒ ROT (2 Zusagen)
+K-02  catch liefert OK statt FEHLSCHLAG                  ⇒ ROT
+K-03  VERDAECHTIG faellt weg                             ⇒ ROT
+K-04  kopfloses Blatt als Fehlschlag                     ⇒ ROT
+K-05  NICHT MASCHINELL faellt weg                        ⇒ ROT
+```
+
+**Inventur aus meinem eigenen Lauf über den Bestand** (streng lesend, `pruefeBlatt` bewusst
+gemieden, damit kein Befehl ausgeführt wird):
+
+```text
+89 Blaetter · 13 mit lesbarem YAML-Kopf · 75 eingesammelte Befehle · 4 davon gesperrt
+```
+
+### 2. `AUF-87-B1`, **P1** — die Zusage zur Denylist ist selbstbezüglich
+
+```js
+// scripts/__tests__/auftragPruefen.test.mjs:143
+for (const muster of DENYLIST) {
+  assert.equal(verbotenesMuster(`echo x && ${muster}etwas`), muster, `${muster} greift nicht`);
+}
+```
+
+**Sie iteriert über genau die Liste, die sie sichern soll.** Wer einen Eintrag löscht, verkürzt die
+Schleife — jede übrig gebliebene Behauptung hält weiter. Der einzige echte Wächter ist
+`assert.ok(DENYLIST.length >= 10)`, bei **11** Einträgen. Gemessen:
+
+```text
+'npm run build' geloescht  (11 → 10)   Suite 14 / 0   GRUEN   ← ein Muster darf lautlos verschwinden
++ 'git reset' geloescht    (11 →  9)   Suite 13 / 1   rot     ← erst der Zaehler schlaegt an
+'curl' ERSETZT statt geloescht (Laenge bleibt 11)
+                                       Suite 14 / 0   GRUEN
+                                       verbotenesMuster('curl http://x') ⇒ null
+```
+
+**Die dritte Zeile ist der Beweis:** *jedes* Muster lässt sich unschädlich machen, ohne dass eine
+einzige Zusage rot wird — es genügt, die Länge gleich zu lassen. **Die Barriere eines Werkzeugs,
+das `execSync` auf fremde Zeichenketten anwendet, ist damit nicht verriegelt.**
+
+> **Die Trennung, die mir wichtig ist:** die Gegenprobe im Blatt lautet wörtlich *„Die Denylist
+> leeren ⇒ die Zusage MUSS rot werden."* **Das erfüllst du** — Leeren fängt der Längen-Wächter.
+> Aber Leeren ist die *einzige* Mutation, die er fängt, und die Aussage des Kriteriums heißt
+> *„die Denylist greift, und sie schweigt nicht."* **Nach R2 zählt die Aussage, nicht die
+> Gestalt der Gegenprobe.** Deshalb `NICHT ERFÜLLT` — **und der Spezifikationsanteil gehört dem
+> Planner:** eine Gegenprobe, die die schwächste Mutation vorschreibt, verriegelt nichts.
+> *Zweite Ausprägung derselben Klasse in vier Tagen (vgl. „Ausnahmen testverriegelt, aber nie
+> alle Ausnahmen erfasst").*
+
+**Richtung, ich baue nicht:** eine Zusage darf die Liste, die sie prüft, nicht durchlaufen. Hier ist
+eine **ausgeschriebene zweite Kopie der 11 Muster im Test** das richtige Mittel — genau der Fall,
+in dem eine Doppelung erwünscht ist, weil der Test die *zweite Meinung* ist. Weicht die Quelle ab,
+wird es rot.
+
+### 3. `AUF-87-B2`, **P2** — die Denylist selbst hat Lücken, latent
+
+16 realistische Schreibweisen gegen `verbotenesMuster` geprüft, **9 schlüpfen durch**:
+
+```text
+GREIFT              echo x > datei · echo x >> datei · rm  -rf · /bin/rm · mv · git commit
+                    npm run build:hausplaner
+SCHLUEPFT DURCH  !! echo x >datei            Umleitung ohne Leerzeichen
+                 !! echo x >>docs/...        Anhaengen ohne Leerzeichen
+                 !! rm<TAB>-rf               Tabulator statt Leerzeichen
+                 !! git  commit              zwei Leerzeichen
+                 !! git switch main          moderner Ersatz fuer das gelistete git checkout
+                 !! npx vite build · tee · truncate · dd
+```
+
+**Ursache:** `befehl.includes(m)` mit `'> '`, `'rm '`, `'mv '` — die Muster tragen ein Leerzeichen,
+also greift keine Form ohne eines. **`git switch` ist die echte Auslassung:** `git checkout` steht
+auf der Liste, sein moderner Ersatz nicht.
+
+**Latent, nicht ausgelöst:** von den 75 Befehlen im Bestand schlüpft **keiner** durch, der schreibt.
+*Meine ersten zwei Treffer waren Fehlalarme meiner eigenen Regex — `url()->previous` enthält den
+Pfeil `->`, keine Umleitung. Ich habe sie verworfen, statt sie zu melden.*
+
+### 4. Voten je Kriterium
+
+| Kriterium | Votum | Grundlage |
+|---|---|---|
+| K-01 findet jeden Prüfbefehl, auch `scope` | **ERFÜLLT** | Mutation beißt (2 Zusagen rot) |
+| K-02 `exit != 0` ⇒ FEHLSCHLAG | **ERFÜLLT** | Mutation beißt |
+| K-03 `exit 0` + leer ⇒ VERDÄCHTIG | **ERFÜLLT** | Mutation beißt |
+| K-04 kein Kopf ⇒ eigene Meldung | **ERFÜLLT** | Mutation beißt |
+| K-05 `typ: visuell` ⇒ NICHT MASCHINELL | **ERFÜLLT** | Mutation beißt |
+| **K-06 Denylist greift und schweigt nicht** | **NICHT ERFÜLLT (P1)** | `curl` neutralisiert, Suite grün |
+| K-07 erster Lauf gemacht und berichtet | **ERFÜLLT** | T5-Fund Glied für Glied reproduziert, nicht behoben |
+| K-08 Gates ohne Regression, Umfang | **ERFÜLLT** | 14/0 · 1392/0 · dom 16/0 · tsc 0 · Umfang exakt |
+
+> ### GESAMTVOTUM `AUF-87`: **NACHBESSERN**
+> Sieben von acht Kriterien erfüllt, das Werkzeug tut seine Arbeit und hat beim ersten Lauf einen
+> echten toten Befehl gefunden. **Ein P1 blockiert: die Barriere ist nicht verriegelt.** Für ein
+> Werkzeug, das fremde Befehle ausführt, ist genau das der Punkt, der stehen muss — alles andere
+> daran ist gut gebaut. *`AUF-87-B2` (P2) darf in denselben Nachschlag oder in den Stapel, deine
+> Wahl.*
+
+**Ballbesitz: Generator** (`AUF-87-B1`, P1 · optional B2). **Planner:** die Gegenproben-Vorschrift
+im Blatt („die Denylist leeren") verriegelt die schwächste Mutation — dieselbe Klasse wie am
+Rohwert-Blatt. **Yama:** 18+ Commits auf keinem Remote, letzter gesicherter Stand `8ae4a1f5`.
+
+Kein Commit durch mich, kein Push, kein Tor 2, kein Produktivcode angefasst.
+
+---
+
+## ⇒ PLANNER — Ebene 2 ist vollständig (30.07., 07:42 CEST)
+
+**Keine neue Meldung im Ledger.** Der Generator baut sichtbar an AUF-87: `scripts/auftrag-pruefen.sh`,
+`scripts/auftrag-pruefen.mjs` und `scripts/__tests__/` liegen im Baum, dazu die vier
+T3-Zusagedateien. Noch keine Quittung dazu — **das ist kein Rückstand, das ist Bauzeit.**
+
+### Das Regelwerk hat jetzt alle drei Ebenen
+
+```text
+docs/agents/regeln/kern.md            97 Z.  Ebene 1 — immer geladen
+docs/agents/regeln/planner.md         ..     Ebene 2
+docs/agents/regeln/generator.md       ..     Ebene 2
+docs/agents/regeln/evaluator.md       ..     Ebene 2
+docs/agents/regeln/plan-reviewer.md  205 Z.  Ebene 2 — mit Startprompt
+```
+
+**Jedes Rollenblatt ist an gemessenen Fehlern verankert, nicht an guten Vorsätzen.**
+
+- **Der Planner** bekommt seine sieben wiederkehrenden Fehler als Tabelle mit Zähler — sechs davon
+  hat der Generator gefunden, nicht ich. *Das steht so drin, weil es der Grund für den Plan
+  Reviewer ist.*
+- **Der Generator** bekommt seine Quittung als feste Prüfliste und die Pflichtschleife
+  *erzeugen → öffnen → Inhalt prüfen → Syntax → Wirkung → erst dann weiter*. Dazu die Dinge, die
+  er meldet statt sie abzuhaken. *Sein Blatt beginnt mit dem, was er gut macht — weil es sonst
+  von der Tagesform abhängt.*
+- **Der Evaluator** bekommt die drei Mutationsstufen, `git archive` als Prüfstand und die
+  Empfangsquittung. *Die 40 Minuten Stille sind namentlich drin, mit ihrer Folge: ich habe in der
+  Zeit einen Wettlauf konstruiert, den es nicht gab.*
+
+**Ebene 3 (fachspezifisch: Dach, Datenbank, Sicherheit, 3D, Bedienbarkeit, Import/Export) ist noch
+leer.** Sie entsteht, wenn ein Fach zum zweiten Mal dieselbe Frage aufwirft — nicht auf Vorrat.
+
+### Zwei Beobachtungen aus dem Arbeitsbaum
+
+**1. `k01n1b.mjs` liegt im Wurzelverzeichnis des Repos.** Sieht nach einem Hilfsskript aus.
+*Keine Anweisung, nur eine Beobachtung — Streudateien im Wurzelverzeichnis landen irgendwann in
+einem Commit, dem sie nicht gehören.* Das Generator-Blatt sagt es jetzt allgemein.
+
+**2. `docs/auftraege/AUFTRAGSSCHEMA.md` ist um 13 Zeilen gewachsen** — das ist der Generator, der
+in Abschnitt 7 schreibt, wie in seiner Quittung angekündigt. **Nicht mitcommittet.**
