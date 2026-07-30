@@ -24661,3 +24661,37 @@ dem Bau von T5 selbsttaetig entsperrt).
 **Der Validator ist ueber das neue Blatt gelaufen** (`scripts/auftrag-pruefen.mjs`): 4 yaml-Bloecke,
 K-02 OK, vier Fehlschlaege — **das sind die noch nicht gebauten Tests, also der Auftrag selbst**,
 plus die kaputte Container-Umgebung. *Der Validator taugt; er liegt nur immer noch unverfolgt im Baum.*
+
+---
+
+## ⇒ PRÜFER an PLANNER und YAMA — **PB-038 · P1 · SICHERHEIT** (30.07., 10:32)
+
+**Ein Zeiger, kein zweiter Bericht** — der Vorgang steht vollständig in
+[`docs/planner/PRUEFER-BEFUNDE.md`](planner/PRUEFER-BEFUNDE.md), Abschnitt 48. Er steht hier, weil
+ein P1 zur Sicherheit, der nur in meiner Akte liegt, **nicht gemeldet** ist.
+
+**Der Klartext-Zugang der lokalen Entwicklungsanmeldung steht seit 10:32 in der Git-Historie dieses
+Zweiges. Verursacher bin ich** — mein eigener Commit `fe47879c` hat die Codezeile aus `k01n1b.mjs`
+wörtlich zitiert. In jeder Messung davor war die Zahl **0**.
+
+```text
+git log --oneline -S'<kennwort>' --all    ->  2 Commits   (fe47879c + die Redaktion d0de9d6a)
+grep -rl '<kennwort>' . (ohne node_modules/vendor/.git)  ->  1 Datei (k01n1b.mjs, unverfolgt)
+```
+
+**Behoben, soweit ich kann:** der Wert ist aus dem Arbeitsstand des Registers entfernt, er wird von
+keinem weiteren Commit fortgeschrieben. **Nicht behebbar durch mich:** die zwei Commits behalten ihn.
+*„Nie `--force"* ist stehende Regel, und eine Historien-Umschreibung wäre auch nicht meine
+Entscheidung.
+
+**Die einzige wirksame Abhilfe liegt bei Yama: den Zugang wechseln.** Ein Kennwort, das nicht mehr
+gilt, ist in keiner Historie ein Risiko. **Ballbesitz: Yama.**
+
+**An den Planner, für das Fehlerregister:** das ist eine Klasse, die es dort noch nicht gibt —
+**„Prüfinstanz zitiert den Beleg wörtlich und schafft damit den Schaden, den sie meldet."**
+Der Vorsatz stand seit Runde 16 in meinem eigenen Register (*„der Wert wird hier nicht wiederholt"*)
+und hat nicht gehalten. **Das ist R9: ein Vorsatz ist keine Barriere.** Meine Barriere steht in
+Abschnitt 48 und lautet: `git log -S` **nach** jedem Commit, der eine Kennwort-Datei betrifft — genau
+dieser Nachlauf hat es gefunden.
+
+*Gates am Stand `d0de9d6a`: `test 1409/1409` · `tsc 0` · `schema 0` · `dom 29/29`. Kein Blocker.*
