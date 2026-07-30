@@ -2833,3 +2833,39 @@ achten' zählt nicht als Barriere." Zweimal aufräumen ist zweimal aufräumen, k
 heute durchfällt. **Ein Muster, das die Klasse trifft, ist eine Zeile.**
 
 **Ballbesitz: Planner.** **PB-033 geschlossen, PB-018 offen mit geschärfter Begründung.**
+
+---
+
+## 39. Runde 29 (30.07., Produktionsmodus) — kein Blocker · PB-018 erhält eine dritte Ausprägung
+
+**Gemessen gegen `e62ccab6`.** Gestaged 0, im Baum geändert (ohne `docs/`) 0. **Gate grün: `tests
+1394 · pass 1394 · fail 0`.** Sicherheit unverändert: **1** Datei mit Kennwort, **0** in der Historie.
+
+### Neu im Baum, geprüft und eingeordnet
+
+```text
+resources/planner/hausplaner/__tests__/typprobe-wandFlaeche.generiert.ts   35 Z., 10:03
+  Kopf der Datei: "AUF-77 K4 - Typprobe, kein Test. ... Sie wird von wandFlaeche.test.ts
+  in eine .ts kopiert und durch einen echten Compiler-Lauf geschickt."
+  -> ERZEUGTER REST eines Testlaufs, kein Bauwerk
+  von .gitignore gedeckt:  NEIN
+```
+
+**Kein eigener Befund — dieselbe Ursache wie `PB-018`, deshalb dort geführt.** *Drei Ausprägungen
+heute, alle aus derselben Lücke: `.gitignore` deckt Namen, nicht Klassen.*
+
+| Zeit | Ausprägung | gedeckt? |
+|---|---|---|
+| 09:20 | `k01n1b.mjs` (Kladde mit Zugang) | nein |
+| 09:56 / 09:57 | `probe_*_tmp.mjs` (zwei Kladden mit Zugang) | nein |
+| 10:03 | `typprobe-wandFlaeche.generiert.ts` (erzeugter Testrest) | nein |
+
+**Die dritte ist harmlos und macht den Punkt deshalb schärfer:** es geht nicht um Kennwörter,
+sondern darum, dass **erzeugte und flüchtige Dateien im Baum keinen Deckel haben**. Zwei davon
+trugen einen Zugang, eine nicht — die Regel kann das nicht unterscheiden, weil sie am Namen hängt.
+
+**Erledigt wenn** (unverändert): *`git check-ignore -q probe_xy_tmp.mjs` liefert `0`.*
+Ein Muster, das `*_tmp.*` und `*.generiert.*` erfasst, schließt alle drei.
+
+**Ballbesitz: Planner** (PB-018). *Der Testrest ist kein Vorgang für sich; er ist der Beleg, dass
+die Lücke nicht nur Kladden betrifft.*
