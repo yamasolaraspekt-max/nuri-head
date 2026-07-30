@@ -2916,3 +2916,57 @@ zurückgestellt. Ich führe sie hier auf, damit sie nicht unter dem Stopp versch
 **Vorschlag zur Reihenfolge, wenn der Papierstopp es zulässt: N-2 zuerst.** *Von den drei ist die
 Bauordnung die einzige, deren Inhalt vor jedem Commit angewandt werden muss — dort wiegt eine
 veraltete Aussage am schwersten.*
+
+---
+
+## 41. Runde 30 — N-2 nachgeholt: `docs/architektur/` inhaltlich · Stand: 63 von 386
+
+**Gemessen gegen `6c06d822`.** *Der Posten, den ich mir in Runde 21 selbst schuldig geblieben bin.
+Papierstopp: kurz gehalten, Befunde registriert.*
+
+### `bauordnung.md` — trägt, mit zwei veralteten Zahlen
+
+| Behauptung | Gemessen |
+|---|---|
+| Herkunft `docs/audit/code-audit.md` | **vorhanden** |
+| `CompatibilityService.php:17` Konstruktor-DI | **Z17**, wörtlich `__construct(private HydraulicService …)` ✓ |
+| `NewLeadsController` **14k Z.**, **267** `DB::` | **14 060 Z.** ✓ · **338** `DB::` (+71) |
+| *„Nur **96/387** Controller klammern heute"* | **75 / 406** |
+
+**Die Regeln selbst sind unberührt** — sie sind Sollsätze, keine Messungen. **Was veraltet ist, sind
+die Ist-Belege daneben**, und sie sind in **beide** Richtungen daneben: `DB::` ist von 267 auf 338
+gestiegen, die Zahl der klammernden Controller von 96 auf **75 gefallen**, bei 406 statt 387
+Controllern.
+
+**PB-034 · P3 · Die Ist-Belege der Bauordnung sind veraltet, und die Lage hat sich verschlechtert**
+`docs/architektur/bauordnung.md` Z11/Z29 · behauptet `14k/267` und `96/387` · gemessen
+`14 060/338` und `75/406` · Befehl: `git show HEAD:app/Http/Controllers/Customer/NewLeadsController.php
+| grep -c 'DB::'` sowie `git grep -l 'DB::transaction' HEAD -- 'app/Http/Controllers' | wc -l` ·
+Commit `6c06d822` · **Wirkung:** die Zahlen begründen die Regeln 1.1 und 2.2. *Wer sie heute liest,
+hält den Zustand für besser, als er ist — von 387 Controllern klammerten 96, von 406 klammern 75.
+Das ist keine Papierfrage: 2.2 verlangt Klammerung für **jeden neuen** Schreibpfad, und die Zahl
+sagt, dass genau das nicht passiert.*
+
+### `gap-analyse-3d-planer.md` (16.07.) — überholt, aber sauber überholt
+
+| Behauptung | Gemessen |
+|---|---|
+| `src/planer/main.tsx` (playground) | **0 Treffer** — Nachfolger `resources/planner/hausplaner/main.tsx` **1** |
+| `grundriss_editor.blade.php` **1 092 Z.** | **1 092** ✓ |
+| `three 0.163 in package.json` | **^0.163.0** ✓ |
+| *„Vue-Plugin (**kein React**)"* | **React ^19.0.0**, 25 Dateien mit `from 'react'` |
+
+**Kein Befund.** Das Papier trägt Datum und Rolle im Kopf (*„2026-07-16 · Planner (Prüfung, kein
+Bau)"*) und beschreibt ausdrücklich einen **Vorher-Zustand vor dem Quell-Port**. Der Satz *„kein
+React"* war am 16.07. richtig; die React-Insel ist Yamas Freigabe **vom selben Tag**. *Eine
+Gap-Analyse, die ihre Lücke geschlossen sieht, ist erledigt, nicht falsch.*
+
+### `bauordnung-monteur-app.md` — nicht prüfbar, und das ist in Ordnung
+
+Kopf: *„Entwurf zur Abnahme durch Yama; danach eigene Welle mit eigenem Strang."* **Es gibt keinen
+Code, gegen den ich messen könnte** — die Monteur-App ist nicht gebaut. Nach dem Raster ist das
+**offener Umfang, kein Befund.** *Geprüft habe ich nur, dass der Bezug existiert:
+`konzepte/konzept-einsatzplanung-2026-07-16.md`.*
+
+**N-2 ist damit abgetragen.** Offen von meiner Liste bleiben **N-1** (zehn Skills inhaltlich) und
+**N-3** (`tool-dashboard` §6/§8/§9 gegen die Oberfläche).
