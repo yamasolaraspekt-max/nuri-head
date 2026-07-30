@@ -68,3 +68,80 @@ nur „unter dieser Lesart" belastbar. Nach dieser Entscheidung gilt:
 **Kein Produktivcode aus dieser Entscheidung** — Cowork/Planner schreibt nur `docs/`.
 Ballbesitz danach: **Generator** (D1, D2 nach AUF-48) · **Yama** (Reihenfolge, falls er sie
 anders will).
+
+---
+
+# NACHTRAG 21:30 — Topf 3 ist entschieden. Es sind alle sieben.
+
+**Der Evaluator hat AUF-50-D2 beantwortet** (Votum `ergebnis=GEMESSEN`, Hinweis
+`Landkarte-bestaetigt`). *Die Messung stand offen, weil ich sie am Papier nicht entscheiden
+wollte — hier ist sie, und sie fällt eindeutig aus.*
+
+## `aufriss` und `schnitt` legen KEINE Knoten an
+
+**Der entscheidende Beleg — nicht die Zahl der Fundstellen, sondern was sie sind:**
+
+```text
+toolTypes.ts:17
+  ViewType = '2d' | 'split' | '3d' | 'wandansicht' | 'schnitt' | 'fassade' | 'planblatt'
+```
+
+**`schnitt` ist im Typsystem als *Ansichtsart* deklariert, nicht als Entität.** Die übrigen
+Fundstellen sind Themenzuordnung, Leistenordnung und Katalogeintrag — **kein Modellpfad
+darunter.**
+
+**Dazu die Schema-Wahrheit:** `ObjectNode.objectType` führt elf Werte
+(`radiator · heat_pump_indoor · heat_pump_outdoor · buffer_tank · hot_water_tank · battery ·
+inverter · wallbox · furniture · sanitary · stair`) — **`elevation` und `section` sind nicht
+darunter.** *Was dort nicht steht, kann kein Knoten sein.*
+
+## Zwei Fallen, die er offengelegt hat — beide wären mir genauso passiert
+
+**1. Die Gegenprobe hat die Messung gerettet.** Sein erster Ansatz folgte der `commandId` aus dem
+Vertrag:
+```text
+grep ElevationCommand … -> 0      grep SectionCommand … -> 0
+grep WindowCommand   … -> 0   <- die GEGENPROBE, und sie liefert AUCH null
+```
+**Auch der bekannt funktionierende Fall liefert null** — `commandId` und `dienstMethode` sind
+reine Vertragsbegriffe, sie werden nirgends ausgeführt. *Ohne die Auflage hätte er „legen keine
+Knoten an" gemeldet und **die richtige Antwort aus dem falschen Grund** bekommen.*
+
+**2. Ein Zähler hätte das Gegenteil gesagt.** `grep -i elevation` liefert 6 Treffer. Einzeln
+angesehen: `elevation: number` ist die **Geschoss-Höhenlage** in mm, `crossSection` eine
+**Querschnittsfläche** in mm², `elevation_mm` wieder die Höhenlage. **Kein einziger Treffer
+betrifft eine Ansichts- oder Schnittdefinition.**
+
+## Folge für meine Entscheidung von 20:22
+
+| vorher | jetzt |
+|---|---|
+| Topf 1 (1) + Topf 2 (4) → Vertrag korrigieren | **Topf 3 fällt zu Topf 2.** |
+| Topf 3 (2) → offen, messen | **Alle sieben** Verträge bekommen `model.revision.increment` gestrichen. |
+| `fehlt: 21` mit Unschärfe von zwei | **`fehlt: 21` ist bestätigt.** Keine Unschärfe mehr. |
+
+**Der Bauvorrat für Stufe 3 steht.** *Das war der Zweck der ganzen Übung: nicht die sieben Fälle
+aufzuräumen, sondern die Zahl belastbar zu machen, gegen die geplant wird.*
+
+**AUF-50-D1 umfasst damit sieben Verträge statt fünf:** `kopieren` · `aufriss` · `schnitt` ·
+`kuechenplanung` · `material-aufnehmen` · `thermische-huelle` · `u-wert`.
+
+```yaml
+  - id: K-01
+    aussage: "Nach der Aenderung traegt KEINE ohne-modell-Marke mehr ein revision.increment."
+    befehl: >
+      Fuer jede Marke mit `ohne-modell` in werkzeugLandkarte.ts pruefen, ob ihr Vertrag
+      in werkzeugVertrag.ts `model.revision.increment` fuehrt.
+    erwartet: "0 von 42 — vorher waren es 7"
+    gegenbeweis: >
+      Setze `increment` bei EINEM der sieben zurueck. Meldet die Pruefung weiterhin 0,
+      misst sie nicht die Vertraege, sondern etwas anderes.
+  - id: K-02
+    aussage: "Nur der Seiteneffekt faellt, nicht der Vertrag."
+    erwartet: >
+      `familie` und `ergebnisse` bleiben unveraendert. *Bei `aufriss`/`schnitt` bleibt
+      `familie: create` stehen — sie erzeugen eine ANSICHT, nur eben keinen Knoten.
+      Wer hier mehr aendert, baut eine zweite Wahrheit statt einer Korrektur.*
+```
+
+**Ballbesitz: Generator** (AUF-50-D1, nach AUF-48) · **Planner** — erledigt, dieser Ball ist zu.
