@@ -182,7 +182,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-019 | `docs/auftraege/` (aktive Blätter) | **P2→P3** | Validator **benennt** `KEIN KOPF` (kein F-14) — aber `exit 0` ließe 6 aktive Blätter durch ein Gate | offen (herabgesetzt) | — |
 | PB-020 | `AUFTRAGSSCHEMA.md` | P3 | Beispiel nennt `zaehle-statische-stile.sh` — die Datei gibt es nicht | offen | — |
 | PB-033 | `probe_*_tmp.mjs` | ~~P2~~ | beide Kladden entfernt (3 → 1 Datei) | **ERLEDIGT** | 30.07. 10:0x |
-| PB-018 | `k01n1b.mjs` | **P2** | Klartext-Zugang im Wurzelverzeichnis; `.gitignore`-Muster greifen nur bei passendem Namen | **ANGENOMMEN** | 30.07. 09:28 — Sicherheitsposten an Yama: `.gitignore` + `mv`; liegt ausserhalb meiner Schreibflaeche |
+| PB-018 | `.gitignore` (Ursache) | ~~P2~~ | Klasse gedeckelt statt Namen — 5 Probennamen ignoriert, laufende Arbeit sichtbar | **ERLEDIGT** | 30.07. |
 | PB-017 | (Arbeitsbaum) | **P1** | 466 geänderte + 8 neue Dateien ungesichert, im Ledger aber als geliefert und geprüft geführt | **ANGENOMMEN — Umfang groesser** | 30.07. 09:28 — gemessen 13 Dateien / 885+232 Zeilen / 10 unverfolgt; Ledger-Korrektur sofort, Sicherung haengt an Yamas A-oder-B-Entscheid |
 | PB-016 | `inventur.sh` / `AUFTRAGSTAFEL.md` | P3 | Inventur zählt Zeilen: 21 Zeilen für 17 Posten (vier doppelt) | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 09:28 — Zaehlfehler im Werkzeug, nicht im Bestand; Posten `scripts/inventur.sh` an den Generator |
 | PB-015 | `AUFTRAGSTAFEL.md` | **P2** | zwei Posten tragen `⚡ AKTIV` (5 Vorkommen) — §1c verlangt genau einen | **ANGENOMMEN** | 30.07. 09:28 — AUF-38 traegt ⏸ ZURUECKGESTELLT; Barriere in §1c, Zaehlung ankert auf `^| **AUF-` → 1 |
@@ -194,6 +194,18 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-010 | `stilschicht.test.ts` | P3 | Wirkungs-Zusage prüft gegen 3 tote Bezeichner — **`eigenarbeit: ja`, Urteil beim Evaluator** | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 09:05 — kein Papier-, ein Testbefund; geht als Posten an den Generator |
 | PB-008 | `generator-auftrag-auf83-t2t3-kopfleiste.md` | P3 | aktives Blatt führt `T1a` als offenen Schritt — Code und Register führen ihn als erledigt (`97a2e2a4`) | **ANGENOMMEN** | 30.07. 09:05 — Blatt traegt HISTORISCH-Kopf, verbindlich sind T2/T3/T3-N1 |
 | PB-007 | `zuschnitt-auf48-hausplanerapp-zerlegen.md` | P2 | Schnittkanten als absolute Zeilennummern — am Commit korrekt, im Baum schon 4/62 Zeilen abgewandert | **ANGENOMMEN** | 30.07. 09:05 — Zuschnitt §7: Schnittkanten ueber Namen statt Zeilennummern |
+| PB-026 | `docs/agents/regeln/kern.md` | P3 | Z1 sagt „NACHRANGIG", Z11 weiter „IMMER geladen" — zehn Zeilen auseinander | offen | — |
+| PB-027 | `…b01-ai-workflow-sichern.md` | **P2** | Blatt `status: aktiv`, Tafel `⏸ ZURÜCKGESTELLT` (F-08b) | offen | — |
+| PB-028 | `…vorherbilder-und-auf86…md` | P3 | Blatt `status: aktiv`, hat keine Tafelzeile | offen | — |
+| PB-029 | `~/wissensregister/register.md` | P3 | `CODE-001` zeigt nach `~/Projekte/` — Verzeichnis existiert nicht | offen | — |
+| PB-030 | `~/wissensregister/kategorien/` | P3 | acht Verweise mit `…`/`{` abgekürzt, gegen das eigene Schema | offen | — |
+| PB-031 | `docs/*.md` (Sammel) | P3 | 68 von 923 genannten Code-Pfaden nicht auffindbar (Papierstopp) | offen | — |
+| PB-032 | (Index) | ~~P1~~ | 7 Dateien gestaged → committet in `40fa52de`, kein Beifang | **ERLEDIGT** | 30.07. 09:53 |
+| PB-034 | `bauordnung.md` | P3 | Ist-Belege veraltet **und verschlechtert**: `DB::` 267→338, Klammern 96/387→**75/406** | offen | — |
+| PB-035 | `fahrplan-dashboard-versionen.md` | **P2** | führt UI-9 als „❌ 0 Dateien" — Palette hat 191 Z., 2 Tests, 4 Konsumenten (F-07) | offen | — |
+| PB-036 | `ticket-code-reuse/references/…md` | P3 | 2 von 59 Skill-Pfaden zeigen auf den Vor-Port-Zustand | offen | — |
+| PB-037 | `buehnenBreite.test.ts:23` | ~~P1~~ | Filter auf die Subtraktion geschärft, Rechnung unberührt, Gate 1409/1409 | **ERLEDIGT** | 30.07. |
+| PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt — offen nur: Passwort wechseln | Repo **ERLEDIGT** · Yama | 30.07. |
 
 ---
 
@@ -1825,14 +1837,14 @@ selbst bleibt seine; ich lege die Zuordnung vor, nicht den Beschluss.*
 
 | Befund | Klasse | warum |
 |---|---|---|
-| PB-001 · PB-003 · PB-020 | **F-04** Zahl oder Artefakt behauptet statt gemessen | ein 422-Blocker, drei Bestandszahlen, ein Beispielbefehl — alle ohne Nachmessung |
-| PB-002 | **F-03** Messung älter als der Baum | mit einer Zuspitzung: nicht älter, sondern **anderer Ast** (Sicherungszweig) |
-| PB-004 · PB-008 | **F-07** Bestand nicht gemessen, sondern nachgebaut | „nicht verdrahtet" bei 9 Konsumenten · ein erledigter Schritt als kommender geführt |
-| PB-009 | **F-02** Sperre, die mehr sperrt als ihr Grund trägt | die Konflikttabelle sperrt `ConfigWizard.tsx`, das frei ist |
-| PB-010 | **F-06** Zusage prüft Gestalt statt Wirkung | drei Marker-Bezeichner, die es nicht mehr gibt |
-| PB-016 | **F-04** | die Inventur meldet 21 wo 17 stehen |
-| PB-019 | **F-14** der Befehl endet mit 0 und hat nichts getan | der Validator findet auf 6 von 15 aktiven Blättern nichts zu fahren |
-| PB-005 → PB-006 | *(zusammengeführt)* | PB-005 ist Teilmenge von PB-006 |
+| → PB-001 · PB-003 · PB-020 | **F-04** Zahl oder Artefakt behauptet statt gemessen | ein 422-Blocker, drei Bestandszahlen, ein Beispielbefehl — alle ohne Nachmessung |
+| → PB-002 | **F-03** Messung älter als der Baum | mit einer Zuspitzung: nicht älter, sondern **anderer Ast** (Sicherungszweig) |
+| → PB-004 · PB-008 | **F-07** Bestand nicht gemessen, sondern nachgebaut | „nicht verdrahtet" bei 9 Konsumenten · ein erledigter Schritt als kommender geführt |
+| → PB-009 | **F-02** Sperre, die mehr sperrt als ihr Grund trägt | die Konflikttabelle sperrt `ConfigWizard.tsx`, das frei ist |
+| → PB-010 | **F-06** Zusage prüft Gestalt statt Wirkung | drei Marker-Bezeichner, die es nicht mehr gibt |
+| → PB-016 | **F-04** | die Inventur meldet 21 wo 17 stehen |
+| → PB-019 | **F-14** der Befehl endet mit 0 und hat nichts getan | der Validator findet auf 6 von 15 aktiven Blättern nichts zu fahren |
+| → PB-005 → PB-006 | *(zusammengeführt)* | PB-005 ist Teilmenge von PB-006 |
 
 ### Passt in KEINE vorhandene Klasse (7 von 20)
 
@@ -3973,3 +3985,67 @@ und die Rückwirkung), **an allen sechs erfüllt, und das bevor er committet ist
 nicht meine — aber sie findet keinen Stolperstein von mir.*
 
 **Lage:** gestaged 3 · im Baum 4 · unverfolgt **0** · Insel-Gate `1410/1410` · PHP `801`.
+
+---
+
+## 62. Runde 47 — **PB-039 · P2: mein eigenes Register war unvollständig, und zwar durch F-14**
+
+**Gemessen gegen `d5f88b4f`.** *Der Befund richtet sich gegen mich und mein Werkzeug. Er gehört
+gemeldet, weil das Register die Grundlage jeder Antwort des Planners ist.*
+
+### Was ich gemessen habe
+
+```text
+Befunde mit eigenem Abschnitt (YAML `id:`)      35
+Befunde mit einer Registerzeile                 26
+Differenz                                        8   PB-026 · 027 · 028 · 029 · 030 · 032 · 035 · 037
+   (+ vier weitere, die ich als Fliesstext gefuehrt hatte: 031 · 034 · 036 · 038)
+```
+
+**Acht Befunde — darunter zwei P2 und zwei geschlossene P1 — hatten keine Zeile im Register.** Ich
+habe in meinen Berichten *„PB-032 ERLEDIGT"* und *„PB-037 ERLEDIGT"* gemeldet; **das Register sagte
+das nicht.**
+
+### Die Ursache, und sie ist die Klasse, die ich anderen vorhalte
+
+**Meine Einträge entstanden mit `str.replace(anker, neu)`, wobei der Anker eine bestehende
+Registerzeile war.** Der Planner hat diese Zeilen zwischenzeitlich umgeschrieben (Votum-Marker
+ergänzt) — **damit traf mein Anker nicht mehr, `replace` schrieb nichts, und der Commit lief mit 0
+durch.**
+
+> **F-14: „Der Schreibvorgang scheitert, der Commit gelingt trotzdem."** Zähler im Register: **3**,
+> und `PB-011` hat gemeldet, dass er zu niedrig steht. **Meine Fälle machen ihn deutlich höher.**
+
+**Und beim Reparieren ist es mir zweimal erneut passiert:** die Einfügung landete in der
+Zuordnungstabelle (weil ich „nach der letzten PB-Zeile" statt „in Abschnitt 6" gesagt habe), und mein
+eigenes Pfeil-Präfix hat sie danach unsichtbar gemacht. **Dreimal derselbe Fehler in einer Runde.**
+
+### Behoben, und diesmal dreifach gegengeprüft
+
+```text
+Zeilen im Register (Abschnitt 6, eingegrenzt)        38
+verschiedene IDs                                     38      -> Zeile == Posten
+Abschnitt vorhanden, Registerzeile fehlt             (leer)
+offen 21 · ERLEDIGT 5 · ANGENOMMEN 15
+```
+
+**Zusätzlich behoben: die Zuordnungstabelle kollidierte mit dem Register-Muster** (`| PB-0xx |` in
+beiden). Ihre Zellen tragen jetzt ein `→`, damit ein `grep` das Register eindeutig zählt. *Das ist
+`PB-016` — „Zeile ≠ Posten" — in meinem eigenen Dokument, und ich habe es an derselben Stelle
+gefunden, an der ich es dem Skript vorgehalten habe.*
+
+### Meine Barriere, und sie ist keine Absicht mehr
+
+**Nach jedem Registerschreiben laufen drei Zählungen, bevor ich committe:**
+
+```text
+1. Zeilen im Register  ==  verschiedene IDs          (Zeile == Posten)
+2. Abschnitte mit `id:` minus Registerzeilen  ==  leer  (nichts unregistriert)
+3. der geschriebene Text ist im File auffindbar          (der Schreibvorgang hat gewirkt)
+```
+
+**Punkt 3 ist der, der heute gefehlt hat.** *`PB-012` verlangt vom Planner eine Barriere statt eines
+Vorsatzes; hier ist meine, und sie besteht aus drei Befehlen statt aus einem Satz.*
+
+**Ballbesitz: Prüfer** (behoben) — **gemeldet, weil der Planner auf ein Register geantwortet hat, das
+acht Zeilen zu wenig hatte.**
