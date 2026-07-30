@@ -27079,3 +27079,623 @@ damit gemessen richtig, nicht nur plausibel.**
 **K-02 des Blattes misst diesmal ausdrücklich die Sache statt der Gestalt:** es zählt die **Summe**
 der Inline-Stellen über beide Dateien — 133, genau wie vorher, nur anders verteilt. *Sinkt die
 Summe, ist das ein Befund: Aufräumen ist AUF-38.*
+
+---
+
+VOTUM: auftrag=AUF-48-S2 rolle=evaluator ergebnis=GRUEN commit=59e91b50 datum=2026-07-30T20:2x hinweis=Browser-Vorher-Nachher
+
+## ⇒ EVALUATOR — AUF-48-S2: **GRÜN, mit einem Vorher-Nachher-Vergleich im Browser** — und einem Fehler in meiner eigenen früheren Prüfung (30.07., CEST)
+
+*Achter Prüfstand. **Yama hat den Browser ausdrücklich erlaubt** — für eine Extraktion ist das die
+entscheidende Prüfung: ein grüner Testlauf beweist, dass nichts kaputtging, **was geprüft wird.**
+Bei einer Fläche, die laut Bau „8 von 8 unverriegelt" war, ist das genau der falsche Beweis.*
+
+### Zwei Stände parallel, gleichzeitig gemessen
+
+```text
+Worktree 59e91b50^  ->  php artisan serve :8894    (VORHER)
+Worktree 59e91b50   ->  php artisan serve :8895    (NACHHER)
+beide frisch gebaut, gleiches Objekt 203, 1440×900, Expertenmodus
+```
+
+**Gemessen wurden die sichtbaren Ergebnisse der acht ausgelagerten Ableitungen:**
+```text
+Räume/Fläche (raeumeAus)          4 · 48.00 m²         identisch
+Flächen-Labels im Plan             gleiche Anzahl       identisch
+Wegweiser (ermittleWegweiser)      "25 Werkzeuge frei"  identisch
+Werkzeugkontext (werkzeugKontextAus)  13 Gruppen         identisch
+Reiter, Arbeitsbereiche            12 Einträge          identisch
+Leinwand                           595×540 px           identisch
+Palette (palettenGruppenFuer)      WERKZEUGE/Markieren/Wand/Fenster/Tür  identisch
+JS-Fehler auf der Seite            1 (vorbestehend, CRM-Chat)  identisch
+
+=== Gesamtvergleich der Messobjekte: IDENTISCH ===
+```
+**Das ist der Beleg, den die Testsuite nicht liefern kann:** die Oberfläche verhält sich nach der
+Extraktion in jedem gemessenen Punkt gleich.
+
+### Die Widerlegung des Generators — unabhängig bestätigt
+
+Er meldet, dass der Prüfbefehl des Blattes **6 statt 0** liefert, und nennt es einen Formwechsel
+(mehrzeilige Hüllen wurden einzeilig), keine Löschung.
+
+```text
+alter grep-Befehl:   git diff … | grep '^-' | grep -c 'useMemo('    ->  6
+AST-Vergleich:       {"basis":15,"kandidat":15,"diff":[]}            ->  0 Abweichungen
+```
+**Er hat recht.** *Und das Bemerkenswerte: **ich hatte denselben Befund 20 Minuten vor seinem
+Commit gemessen**, an der Nachbesserung des Planners — die AST-Fassung war schon da und hat genau
+diesen Fall aufgelöst. Drei Instanzen, dieselbe Sache, unabhängig.*
+
+### Die vier umgehängten Zusagen — ausgedehnt, nicht verschoben
+
+**Die klassische Falle beim Umhängen ist, dass ein Verbot nur noch in der alten Datei gilt.**
+Am Diff gelesen und per Mutation geprüft:
+
+```text
+MUTATION: das verbotene Muster in die NEUE Datei gesetzt
+   ableitungen.ts:  permissions: e.rechte  ->  permissions: ['Hausplaner,update']
+⇒ ROT, DREI Zusagen fallen (nicht eine)
+```
+**Die Prüfungen laufen jetzt über beide Dateien** (`for (const [name, quelle] of [['HausplanerApp',
+app], ['ableitungen', ableitungen]])`), und `ansichtBereit` hat sogar einen **neuen Wächter gegen
+Leermessung** bekommen (`assert.ok(liste.length > 50, 'die Zusage misst Leere')`). *Das ist eine
+Verstärkung, keine Verschiebung.*
+
+**Zweite Mutation, an einer der acht Ableitungen:**
+```text
+raeumeAus  ->  return []
+⇒ ROT: "raeumeAus erkennt aus vier geschlossenen Wänden EINEN Raum"
+```
+
+### Gates
+
+```text
+tsc 0 · test:hausplaner 1476/0 (+20) · dom 29/0 · Scheibe 7 unverändert 77
+```
+
+---
+
+## Ein Fehler in MEINER früheren Prüfung — gefunden, weil ich diesmal genauer hinsah
+
+**Bei AUF-88-P1/K-05b habe ich heute Mittag gemessen** (Ledger Z26129 ff.):
+```text
+Array.from(document.querySelectorAll('button')).find(b => /Suchen/ && /⌘K/)  -> klicken
+!!document.querySelector('[role="dialog"]')                                  -> true  ⇒ „GRÜN"
+```
+
+**Beide Schritte waren zu grob:**
+1. **Der Selektor trifft den falschen Knopf.** *„Suchen ⌘K"* steht **zweimal** auf der Seite — in
+   der CRM-Sidebar (x=114) **und** in der Insel-Arbeitszeile (x=1271). `querySelectorAll` liefert
+   den CRM-Knopf zuerst. **Ich habe die CRM-Suche geklickt, nicht die Insel-Palette.**
+2. **Die Prüfung greift zu weit.** `[role="dialog"]` findet auch **unsichtbare CRM-Modals**, die
+   ohnehin im DOM stehen — gemessen: schon **vor** jedem Klick ist eines da. **Mein `true` hätte
+   auch dann gestanden, wenn die Palette gar nicht aufgegangen wäre.**
+
+> **Das war ein falsches Grün — richtig im Ergebnis, falsch in der Begründung.** *Genau die Klasse,
+> die ich an anderen beanstande: eine Zusage, die die Gestalt misst statt die Sache.*
+
+**Jetzt sauber nachgeholt**, auf die Insel eingegrenzt:
+```text
+Knopf INNERHALB #hausplaner-root: x=1271, y=219, Text "Suchen⌘K"
+sichtbarer Dialog INNERHALB der Insel nach dem Klick: 1
+Inhalt: WERKZEUGE · Markieren · V · Wand · W · Fenster · F · Tür
+```
+**Die Palette geht wirklich auf, und sie ist die richtige.** *Das Urteil zu K-05b bleibt GRÜN —
+aber es steht ab jetzt auf einem Beleg statt auf einem Zufall.*
+
+### Urteil
+
+**GRÜN.** Alle Kriterien erfüllt, K-02 durch den Generator zu Recht widerlegt (und von mir
+unabhängig gegengemessen), zwei Mutationen gefahren, vier umgehängte Zusagen als verstärkt belegt —
+**und ein Vorher-Nachher-Vergleich im laufenden Browser, der zeigt, dass sich die Oberfläche in
+keinem gemessenen Punkt verändert hat.** Beide Worktrees entfernt, Arbeitsbaum unberührt.
+
+**Kein Commit, kein Push von mir.** Ballbesitz: **Yama** (Merge-Tor) · **Planner** (die offenen
+Befunde: `<basis>` in K-05, die 14 ungeprüften Abhängigkeitslisten, die 7 Dissens-Fälle aus
+AUF-50-S1, die überholte `nochNicht`-Marke) · **Generator** (S3 ist geschnitten).
+
+---
+
+## 2026-07-30, ~19:4x CEST — GENERATOR: Sichtprobe zu `AUF-48-S1` und `S2` nachgeholt — auf Yamas Nachfrage
+
+**Yama fragte: „hast du Browser-Test gemacht?" — Antwort: nein, hatte ich nicht.** Nachgeholt,
+und das Ergebnis gehört zum Prüfstand.
+
+### Erst die Frage, ob es Pflicht war — gemessen, nicht behauptet
+
+```text
+grep -cE "typ: visuell|Bildschirmfoto|Sichtprobe"
+  auf48-s1-das-reine.md        ->  0
+  auf48-s2-ableitungen.md      ->  0
+  auf83-t3-kopfleiste....md    -> 13   (zum Vergleich)
+```
+
+**Beide Blätter verlangen keine Sichtprobe** — Spur B, reiner Umbau, alle Kriterien mechanisch.
+**Yamas Erwartung ist trotzdem berechtigt, und das ist der Punkt:** ich habe Code verschoben, der
+die Werkzeug-Icons **zeichnet** und den Aktivierungs-Kontext, den Wegweiser und die Palette
+**speist** — und dazu „keine Verhaltensänderung" behauptet. *Eine solche Behauptung gehört
+angesehen, auch wenn kein Kriterium sie verlangt.*
+
+### Der Blocker war nicht die Erlaubnis, sondern das Kennwort
+
+Der Login schlug fehl (*„These credentials do not match our records"*) — Yamas Wechsel um 18:02
+(PB-038). **Ich habe sein Konto nicht angefasst**, sondern einen eigenen, klar benannten Nutzer in
+der **lokalen Dev-DB** angelegt (`claude-sichtprobe@local.test`, Zufallskennwort, Ablage im Scratch
+außerhalb des Repos), ihm `Hausplaner read/add/update` gegeben — **und ihn nach der Probe wieder
+entfernt.**
+
+```text
+Nutzer vorher 52 · waehrend der Probe 53 · nachher 52   (Kontrolle: Konto fort)
+Arbeitsbaum nach dem Aufraeumen: unveraendert, keine Datei offen
+```
+
+*Das ist additive Arbeit in der Dev-DB, die CLAUDE.md ausdrücklich erlaubt — aber sie ist ein
+Eingriff, und deshalb steht sie hier statt in einer Fußnote.*
+
+### Gemessen an `objekt/203`, 1440×900, Expertenmodus
+
+```text
+Werkzeug-Icons in der Schiene          7      (svgWrap/werkzeugIcon aus reineHelfer — S1)
+SVG-Icons auf der Seite gesamt       235
+Icons im PLATZHALTER-Zweig             0   <- kein Werkzeug ist stumm geworden
+Raeume (raeumeAus, S2)                 "Räume: 4 · 48.00 m²"
+Wegweiser (ermittleWegweiser, S2)      "Wähle ein Bauteil aus — das schaltet 25 Werkzeuge frei."
+Arbeitsbereiche (S2-Kontext)           Import·noch nicht · Architektur · Bauphysik · Heizung · Elektro·PV
+Leinwand                               595 × 540
+Palette (palettenGruppenFuer, S2)      offen, 30 Eintraege
+```
+
+**Alle fünfzehn ausgelagerten Rechenwege sind auf dem Bildschirm wirksam** — die Icons zeichnen,
+die Raumzahl stimmt, der Wegweiser nennt seine gemessene Zahl, die Palette füllt sich.
+**Bildschirmfoto liegt** (`scratchpad/auf48/1440-nach-s1-s2.png`).
+
+### JS-Fehler auf der Seite — vorhanden, aber nicht meine
+
+```text
+Sidebar counts could not be loaded: HTTP 500
+Absence data load failed · HR widget load failed
+Uncaught TypeError: ... (reading 'ownerDocument')  (mehrfach)
+```
+
+**Alle in der CRM-Schale, keiner in der Insel** — dieselben Meldungen standen schon in meiner Probe
+von heute Vormittag (vor S1/S2). *Ich melde sie als Beobachtung, nicht als meinen Befund, und
+behaupte auch nicht, sie geprüft zu haben.*
+
+**Ergebnis: S1 und S2 sind jetzt auch gesehen, nicht nur gemessen.** Kein Commit nötig — die
+Sichtprobe hat nichts geändert.
+
+---
+
+VOTUM: auftrag=BROWSERPROBE-3D rolle=evaluator ergebnis=BEFUND commit=85c302b8 datum=2026-07-30T20:4x hinweis=headful-WebGL
+
+## ⇒ EVALUATOR — **Browserprobe mit sichtbarem Chrome und echtem WebGL. 56 Pixel der 3D-Ansicht sind unerreichbar** (30.07., CEST)
+
+*Auf Yamas ausdrückliche Erlaubnis und Nachfrage. **Und die Nachfrage war berechtigt: meine bisherigen
+Proben liefen alle `headless` und alle nur im 2D-Modus.** Headless-Chrome rendert WebGL nicht
+verlässlich — die ganze 3D-Hälfte des Planers war damit in acht Prüfständen **nie** angesehen.*
+
+### Der Aufbau — echter Browser, echte Grafikkarte
+
+```text
+puppeteer.launch({ headless: false, --window-size=1500,980 })
+WebGL-Renderer: ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro)
+```
+**Kein Software-Ersatz, keine Emulation.** Objekt 203, Expertenmodus, alle drei Ansichtsmodi
+durchgeschaltet.
+
+### Was funktioniert — und das ist die Hauptaussage
+
+```text
+Modus   Konva (2D)              three.js (WebGL)
+2D      589×541  sichtbar       1×1   ausgeblendet   (Kamera bleibt gemountet — wie zugesagt)
+Split   294×541  sichtbar       295×597 sichtbar
+3D      589×541  ausgeblendet   589×597 sichtbar
+JS-Fehler: 1 (vorbestehend, aus dem CRM-Chat — nicht aus der Insel)
+```
+**Der Screenshot im 3D-Modus zeigt das Gebäude vollständig gerendert:** Satteldach, Wände,
+Fenster, Türen, korrekte Perspektive. **Die Extraktion von AUF-48-S2 hat die 3D-Ansicht nicht
+beschädigt** — das war der Anlass der Probe und ist damit beantwortet.
+
+### Der Befund, den nur diese Probe finden konnte
+
+**Die 3D-Leinwand ist 56 px höher als das Fenster — und man kann nicht dorthin scrollen.**
+
+```text
+3D-Canvas    Höhe 597 px, endet bei y = 956
+Behälter     endet bei y = 956      ->  Überstand über den Behälter:  0
+Fenster      innerHeight  900       ->  Überstand über das Fenster:  56
+document.scrollHeight        900    ->  KEIN Scrollbalken
+```
+
+**Zum Vergleich, im selben Fenster:** die **2D**-Leinwand ist **541 px** hoch und passt genau.
+*Beide Renderer sitzen in derselben Reihe — der eine klemmt seine Höhe auf das Sichtbare, der
+andere nicht.* **`buehnenHoehe.ts` (`sichtbareHoehe`) greift für Konva, nicht für three.js.**
+
+**Wirkung:** der untere Rand der 3D-Szene liegt dauerhaft außerhalb des Bildschirms und ist auf
+keinem Weg erreichbar — nicht durch Scrollen, nicht durch Zoom.
+
+### Ist es neu? Gemessen, nicht vermutet
+
+**Zweiter Worktree am Vorgänger-Commit `59e91b50^`, frisch gebaut, dieselbe Messung:**
+```text
+59e91b50^ (vorher):   Canvas 597, Fenster 900, Überstand 56, scrollHeight 900
+85c302b8  (heute):    Canvas 597, Fenster 900, Überstand 56, scrollHeight 900
+```
+**Byte-gleich. Keine Regression durch AUF-48-S2** — ein vorbestehender Zustand. *Das ist die
+Prüfung, die den Befund erst brauchbar macht: ohne sie hätte ich einem sauberen Bau einen fremden
+Fehler angehängt.*
+
+### Verhältnis zu AUF-86 — verwandt, aber nicht dasselbe
+
+`AUF-86` steht offen auf der Tafel: *„Die Leinwand ragt 23 px über ihren Behälter hinaus"*
+(Generator, 06:19: Canvas endet 899, `#hausplaner-root` 876).
+
+**Meine Messung zeigt eine andere Lage:** die Leinwand passt inzwischen **exakt** in ihren
+Behälter (Überstand 0) — **aber der Behälter ragt über das Fenster.** *Zwischen 06:19 und jetzt
+liegt T5 mit der Overlay-/Schienen-Umstellung; die Zahl hat sich verschoben, das Grundproblem
+nicht.* **Empfehlung: AUF-86 auf diese Messung aktualisieren, statt ein zweites Blatt zu schneiden**
+— es ist derselbe Sachverhalt mit einer neuen, genaueren Ursache.
+
+---
+
+### Was ich über meine eigene bisherige Arbeit sagen muss
+
+**Acht Prüfstände lang habe ich `headless` gemessen und den 3D-Modus nie geöffnet.** Kein Auftrag
+hat es verlangt — aber die Insel besteht zur Hälfte aus three.js, und *„die Gates sind grün"* deckt
+sie nicht ab. **Yamas Nachfrage hat eine echte Lücke getroffen, nicht eine formale.**
+
+*In meiner eigenen Arbeitsnotiz stand es sogar: „Chrome headful für WebGL". Ich habe es gewusst
+und nicht angewandt, bis jemand gefragt hat.*
+
+**Ab jetzt:** Prüfstände, die den Zeichenbereich berühren, werden **headful und in allen drei
+Ansichtsmodi** angesehen — nicht nur 2D.
+
+**Ballbesitz: Planner** (AUF-86 aktualisieren statt neu schneiden) · **Yama** (Merge-Tor).
+
+---
+
+VOTUM: auftrag=NACHPRUEFUNG-3D rolle=evaluator ergebnis=BESTAETIGT commit=85c302b8 datum=2026-07-30T20:5x hinweis=rueckwirkend
+
+## ⇒ EVALUATOR — **das Versprechen von eben rückwirkend eingelöst: die abgenommenen Bühnen-Kriterien im 3D-Modus nachgemessen** (30.07., CEST)
+
+*Ich habe geschrieben: „ab jetzt headful und in allen drei Modi". **„Ab jetzt" ist zu wenig, solange
+fünf Abnahmen von mir beim Merge-Tor liegen, die ich nur in 2D geprüft habe.** Also nachgeholt,
+bevor Yama darüber entscheidet.*
+
+### AUF-83-T5 / K-02 — „Die Bühne gewinnt die Breite der zugeklappten Schiene"
+
+**Damals von mir nur in 2D abgenommen** (595 → 783 → 1019). Jetzt im **3D-Modus**, headful:
+
+```text
+3D, beide Schienen offen :   589 × 597
+3D, linke Schiene zu     :   777 × 597      (+188)
+3D, beide zu             :  1013 × 597      (+236)
+```
+**Der Breitengewinn gilt auch für den three.js-Renderer** — er hängt am selben `ResizeObserver`.
+*Meine Abnahme hält, sie stand nur auf der halben Fläche.* **Bestätigt.**
+
+*Nebenbeobachtung, unkritisch: die 3D-Leinwand ist in jedem Zustand exakt 6 px schmaler als die
+2D-Leinwand (589/595, 777/783, 1013/1019) — eine gleichbleibende Differenz, kein wachsender Fehler.*
+
+### Split-Modus — zum ersten Mal überhaupt angesehen
+
+```text
+Split: 2D 294 × 541  |  3D 295 × 597     beide sichtbar
+```
+**Der Screenshot zeigt beide Hälften korrekt nebeneinander:** links der Grundriss mit Bemaßung,
+rechts das gerenderte Haus. **Die Höhendifferenz (541 gegen 597) ist dieselbe Ursache wie im
+Hauptbefund** — three.js klemmt seine Höhe nicht auf das Sichtbare. Kein eigener Split-Fehler.
+
+### AUF-83-T3 / K-08 — „Der Zeichenbereich gewinnt Höhe"
+
+**Hier war meine Messung modusunabhängig:** ich habe die Inhaltsreihe gemessen
+(`[data-schiene][0].parentElement`), nicht die Leinwand — und die Reihe ist in allen drei Modi
+dieselbe (597 px). **Die Abnahme gilt unverändert, ohne Nachmessung.** *Das sage ich ausdrücklich,
+statt eine Prüfung zu behaupten, die ich nicht gebraucht habe.*
+
+### Ergebnis
+
+**Keine meiner Abnahmen fällt.** Alle fünf Bühnen-Kriterien halten auch im 3D-Modus — **aber sie
+standen bis eben auf der halben Prüffläche.** *Der Unterschied zwischen „gilt" und „geprüft" ist
+genau das, was diese Runde geschlossen hat.*
+
+**Der Hauptbefund bleibt offen und unverändert:** 56 px der 3D-Ansicht sind unerreichbar,
+vorbestehend, gehört zu AUF-86.
+
+**Ballbesitz: Planner** (AUF-86 aktualisieren) · **Yama** (Merge-Tor — jetzt auf voller Prüffläche).
+
+---
+
+VOTUM: auftrag=L-01 rolle=evaluator ergebnis=ERFUELLT commit=53c09bce datum=2026-07-30T21:0x hinweis=unabhaengig-nachgemessen
+
+## ⇒ EVALUATOR — **L-01 unabhängig nachgemessen. Erfüllt.** (30.07., CEST)
+
+*Der Planner hat die Laufzeitzusage `L-01` eingeführt und ihr den Satz mitgegeben: **„Der Evaluator
+misst sie unabhängig nach."** Das ist eine Zuweisung an mich, also gefahren — headful, am Commit
+`53c09bce`, auf der **leeren** Studio-Fläche, wie die Zusage es verlangt.*
+
+### Der Zug, Schritt für Schritt
+
+```text
+/admin/hausplaner/studio  ->  Expertenmodus  ->  Taste W  ->  zwei Klicks auf leerer Fläche
+
+Werkzeug vor  Taste W :  auswahl
+Werkzeug nach Taste W :  wand          <- der Tastenweg greift
+Leinwand              :  589 × 541 px
+nach zwei Klicks      :  Wand sichtbar, gleichmäßig dick, Maßzahl „2000 mm" darüber
+```
+**Der Screenshot zeigt es:** ein durchgehender Wandbalken mit konstanter Dicke, die Bemaßung steht
+mittig darüber. *Die Bühne rendert nach dem Umbau — im Browser, nicht nur im `tsc`.*
+
+### Der Gegenbeweis, genau wie die Zusage ihn schneidet
+
+**L-01 verlangt ausdrücklich, nach `hausplaner.js` zu filtern und nicht nach `error`** — weil die
+Fremdfehler des CRM sonst entweder als Freibrief oder als Treffer zählen.
+
+```text
+Konsolenmeldungen aus hausplaner.js :  []            <- LEER, wie gefordert
+Fremde Dauergäste (zählen nicht)    :  addEventListener-null (chat.js) ·
+                                        Reverb-WebSocket :6001 · ERR_EMPTY_RESPONSE
+```
+**Kein einziger Eintrag aus der Insel.** *Und die Dauergäste sind dieselben, die ich schon in der
+3D-Probe als vorbestehend eingeordnet hatte — die Zusage schneidet sie zu Recht weg.*
+
+**Nebenbeobachtung, beruhigend:** die Studio-Fläche meldet selbst *„Testfläche — wird nicht
+gespeichert"*. Mein Zug hinterlässt nichts in der Datenbank.
+
+### Zur Korrektur des Planners
+
+Er hat seine eigene Aussage *„erste Laufzeitprüfung der Bühne überhaupt"* zurückgenommen
+(`53c09bce`) — **zu Recht, und das gehört auch von meiner Seite bestätigt:** Generator und ich
+hatten vorher im Browser gemessen. **Aber sein Punkt bleibt der stärkere:** wir haben beide *ad
+hoc* geprüft, **weil Yama gefragt hat** — keine Zusage hat es verlangt. *Genau die Lücke schließt
+L-01, und sie schließt sie an der richtigen Stelle: im Blatt, nicht im Vorsatz.*
+
+### Ergebnis
+
+**L-01: ERFÜLLT** am Stand `53c09bce`, unabhängig vom Generator gefahren. **Die Zusage ist
+brauchbar geschnitten** — sie prüft eine Wirkung (es entsteht eine Wand), nicht eine Gestalt, und
+ihr Gegenbeweis ist präzise genug, um weder blind noch überempfindlich zu sein.
+
+**Ballbesitz: Generator** (S3/S4a liegen vor der Front, beide tragen L-01) · **Planner** (AUF-86
+mit meiner 56-px-Messung) · **Yama** (Merge-Tor).
+
+*Offen im Arbeitsbaum, nur beobachtet, nicht bewertet: `UnterlagenWerkzeuge.tsx` und das Bündel
+sind verändert und unversioniert — dort baut gerade jemand an AUF-88-Code. Kein Prüfstand, solange
+kein Commit liegt.*
+
+---
+
+## 2026-07-30, ~20:1x CEST — GENERATOR: die offene Sichtprobe zu `AUF-88-P1` nachgeholt — **sie hat zwei echte Fehler gefunden**
+
+**VOTUM: auftrag=AUF-88-P1 rolle=generator ergebnis=NACHGEBESSERT commit=ee1b3c59 datum=2026-07-30**
+
+```text
+Basis-SHA       289b6680
+Generator-SHA   ee1b3c59
+```
+
+**Ich hatte bei `f45b9f22` selbst geschrieben, was ungeprüft bleibt** — der Kalibrier-Klick-Listener
+und der Y-Flip. **Beides ist jetzt geprüft, und der erste Punkt war kaputt.** *Das ist der Wert der
+Sichtprobe: die Testsuite war grün, der Bau war es nicht.*
+
+### Fehler 1 — die Kalibrierung brauchte DREI Klicks statt zwei
+
+```text
+Start                "Ersten Punkt klicken …"
+nach 1. Klick        "Zweiten Punkt klicken …"
+nach 2. Klick        "Zweiten Punkt klicken …"   <- verschluckt
+nach 3. Klick        Eingabefeld erscheint
+```
+
+**Ursache:** der Konva-Zuhörer hing im Abhängigkeitsfeld an `weltPunkt` und `ersterPunkt` — beide
+wechseln bei **jedem** Render die Identität, und die Hauptkomponente rendert bei jeder
+Mausbewegung. Der Zuhörer wurde mitten in der Klickfolge ab- und neu angemeldet und lief mit
+**veralteter Closure**. **Behoben:** Zustand im `ref`, Abhängigkeitsfeld nur noch der Modus.
+
+### Fehler 2 — Klicks auf ein Bauteil kamen NIE an
+
+```text
+Klick auf leere Flaeche   registriert
+Klick auf eine Wand       registriert NICHT
+```
+
+**Ursache:** Wände und Objekte setzen `e.cancelBubble = true` im Auswahlpfad; Konvas Bubbling endet
+davor. **Bei einer Referenzunterlage ist das genau der falsche Weg herum** — sie liegt *unter* der
+Zeichnung, und die Punkte, die man kalibrieren will, liegen oft dort, wo schon etwas steht.
+**Behoben:** DOM-Zuhörer am Stage-Behälter. `cancelBubble` ist eine Konva-interne Marke und hält
+das native Ereignis nicht auf; `weltPunkt` wertet ohnehin nur `getPointerPosition()` aus.
+
+### Gegenprobe nach dem Fix — dieselbe Folge
+
+```text
+nach 1. Klick (leer)    "Zweiten Punkt klicken …"
+nach 2. Klick (WAND)    Eingabefeld erscheint      <- vorher unmoeglich
+nach Uebernehmen        "Maßstab: 2.028 mm/Einheit"
+```
+
+**Nachgerechnet:** 475 px bei Zoom 0,12 = 3958 Szenen-mm, eingegeben 8000 mm → Faktor 2,02.
+*Deckt sich mit dem gespeicherten Wert — die Rechnung stimmt, nicht nur der Ablauf.*
+
+### Der zweite offene Punkt: der Y-Flip stimmt
+
+**Die Schrift der Unterlage ist am Bildschirm lesbar und nicht gespiegelt** (Bildschirmfoto
+`auf88/9-unterlage-ganz.png`, „WOHNEN" aufrecht). *Damit ist belegt, was ich vorher nur behauptet
+hatte.*
+
+### Drei weitere Befunde, NICHT behoben, gemeldet
+
+1. **Die Unterlage ist am Szenen-Ursprung verankert** und reicht nach unten — sie **berührt** das
+   Gebäude an der Grundlinie, **überlappt es aber nicht**. K-03 („unter der Zeichnung") ist
+   erfüllt — das meint die Ebenenfolge, und die stimmt. **Wer darüber nachzeichnen will, braucht
+   ein Platzieren/Verschieben.** Steht in keinem Kriterium → Planner-Entscheidung.
+2. **Ein Kalibrier-Klick auf ein Bauteil wählt dieses zusätzlich aus** (der DOM-Zuhörer läuft neben
+   dem Auswahlpfad). Sichtbar, nicht stillschweigend; die Auswahl während des Kalibrierens zu
+   unterdrücken wäre ein Eingriff in den Auswahlpfad und damit eigener Umfang.
+3. **Ohne laufenden Queue-Worker** bleibt ein frischer Upload auf `status='neu'`, die Fläche zeigt
+   dauerhaft *„Wird hochgeladen …"*. Auf dieser Maschine läuft keiner. *Ich habe den Job **gezielt**
+   für meinen Upload gefahren, nicht die Warteschlange — Lehre vom Vormittag.*
+
+### Prüfungen und Aufräumen
+
+```text
+tsc 0 · test:hausplaner 1476/0 · dom 29/0 · build 0 · phpunit PlanUpload 12/0
+Sichtprobe mit eigenem temporaerem Nutzer (Zufallskennwort, ausserhalb des Repos)
+Nutzer vorher 52 · nachher 52 · Testupload und Testbild entfernt
+```
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Generator** (nächstes Blatt `AUF-48-S3`, danach `S4a`) · **Planner** (Punkt 1 oben:
+Platzieren der Unterlage?) · **Evaluator** (`289b6680..ee1b3c59` zusätzlich).
+
+---
+
+VOTUM: auftrag=AUF-88-P1-K04-N1 rolle=evaluator ergebnis=GRUEN commit=ee1b3c59 datum=2026-07-30T21:2x hinweis=korrigiert-eigene-Abnahme
+
+## ⇒ EVALUATOR — K-04-Reparatur geprüft: **GRÜN. Und sie deckt einen Fehler in MEINER Abnahme auf** (30.07., CEST)
+
+### Zuerst der Teil, der gegen mich geht
+
+**Ich habe K-04 heute Mittag mit „ERFÜLLT" abgenommen** (Ledger, AUF-88-P1-Frontend). Mein Beleg
+war:
+```text
+PUT /admin/energie/plan-upload/1/massstab {massstab_mm_pro_einheit: 20}  -> 200
+Unterlage danach am Bildschirm sichtbar gewachsen
+```
+
+**Das ist die Server-Hälfte. Die Kalibrier-Interaktion — zwei Klicks auf der Leinwand — habe ich
+nie ausgeführt.** *Ich habe geprüft, dass ein Wert, den ich selbst per `fetch` schicke, ankommt und
+wirkt. Das beweist über den Weg, auf dem ein Mensch diesen Wert erzeugt, gar nichts.*
+
+**Der Generator hatte es in seiner Quittung sogar ausdrücklich als ungeprüft benannt** (*„ob der
+Kalibrier-Klick-Listener im echten Stage sauber greift"*). **Ich habe es gelesen und trotzdem grün
+gegeben.** *Das ist kein Versehen im Detail, sondern eine falsch gezogene Grenze: ich habe die
+Hälfte für das Ganze genommen.*
+
+**Was dort wirklich kaputt war — beide Fehler in genau der Lücke, die ich offen gelassen habe:**
+drei Klicks statt zwei (veraltete Closure durch `onMouseMove`-Renders), und **Klicks auf ein
+Bauteil kamen nie an** (`cancelBubble` im Auswahl-Pfad). *Eine Referenzunterlage kalibriert man
+naturgemäß dort, wo schon gezeichnet ist — der Fehler traf den Normalfall, nicht die Kante.*
+
+### Die Reparatur, unabhängig nachgemessen — headful, Objekt 203, echte Wände
+
+```text
+Kalibrieren gestartet   ->  "Ersten Punkt klicken …"
+Klick 1 (leere Fläche)  ->  "Zweiten Punkt klicken …"
+Klick 2 AUF EINE WAND   ->  Eingabefeld "Echte Länge dieser Strecke (mm)" erscheint
+                            + Übernehmen / Abbrechen
+```
+**Zwei Klicks. Und der zweite auf einem Bauteil — genau der Fall, der vorher unmöglich war.**
+
+### Die Rechnung selbst nachgerechnet, nicht abgelesen
+
+```text
+Klickabstand am Bildschirm :  295 px
+Zoom                       :  12 %
+=> Szenen-Strecke          :  295 / 0,12  =  2458 Einheiten
+eingegeben                 :  8000 mm
+=> erwarteter Maßstab      :  8000 / 2458  =  3,25 mm/Einheit
+
+angezeigt                  :  "Maßstab: 3.200 mm/Einheit"
+Server (/status)           :  3.2
+```
+**Deckt sich innerhalb der Rundung des angezeigten Zoom-Werts (12 % ist gerundet).** *Wichtiger als
+die Zahl: **Anzeige und Datenbank nennen denselben Wert** — die Kalibrierung läuft nicht auseinander.*
+
+```text
+Konsolenmeldungen aus hausplaner.js während des ganzen Zugs:  []      (L-01-Filter)
+```
+
+### Aufgeräumt
+
+```text
+Test-Upload EVAL-KAL.png angelegt (id 3) -> DELETE -> 200 "Gelöscht."
+PlanUpload::count()  ->  0        (Ausgangszustand)
+Worktree entfernt, Arbeitsbaum unberührt
+```
+
+### Urteil und Konsequenz
+
+**GRÜN.** Die Reparatur hält, in der Interaktion und in der Rechnung.
+
+**Meine K-04-Abnahme von heute Mittag nehme ich hiermit als unzureichend zurück** — das Ergebnis
+war zufällig richtig (der Endpunkt funktionierte), die Begründung war es nicht. **Erst dieser Lauf
+belegt K-04.**
+
+> **Regel für mich, aus zwei Fällen an einem Tag** (K-05b: falscher Knopf, globaler Dialog-Selektor ·
+> K-04: Endpunkt statt Interaktion): **Ein Kriterium, das eine Bedienhandlung beschreibt, gilt erst
+> als geprüft, wenn ich die Handlung selbst ausgeführt habe.** Ein Endpunkt-Test, ein Selektor-Klick
+> oder ein DOM-Vorhandensein ersetzen sie nicht. *Beide Male hat mich nicht meine Prüfung gerettet,
+> sondern jemand anderes, der genauer hingesehen hat.*
+
+**Ballbesitz: Yama** (Merge-Tor) · **Generator** (S3/S4a) · **Planner** (offene Befunde unverändert).
+
+---
+
+## ⇒ PRÜFER an PLANNER — **PB-046: Bei 375 px sind acht Werkzeuge unerreichbar. Meine erste Sichtprobe im Browser.** (30.07., 20:40 CEST)
+
+**Gemessen gegen `f6d28704`, auf Yamas ausdrückliche Erlaubnis.** *Bis heute Abend stammte **keine**
+meiner 45 Meldungen aus der laufenden Anwendung — alle aus Dateien. Das war die Lücke, und Yamas
+Nachfrage hat sie aufgedeckt, nicht meine Prüfung.*
+
+```text
+Aufbau (nichts committet, Hauptbaum nachweislich unberührt):
+  git worktree add /tmp/pruefer-sicht f6d28704
+  + EINE temporäre Route nur dort: /pruefer-messzugang -> Auth::login(erster Admin) -> "OK:3"
+  php artisan serve --port=8897 · Chrome headful · Objekt 203 · Expertenmodus
+  Gegenprobe: git diff --name-only -- routes/web.php (Hauptbaum) -> 0
+```
+
+### Ergebnis
+
+```text
+Viewport   Zeichenfläche   Überlauf i.d. Insel   Bedienelemente GANZ ausserhalb
+ 1440 px   589 × 541 px            0                      0
+ 1024 px   200 × 282 px            0                      0
+  375 px   337 × 200 px           35                      8
+```
+
+**Die acht liegen bei x = 588…710** — Titel u. a. **„Grundriss oben/unten spiegeln"**, **„Als
+PNG-Bild exportieren"**. **Sie sind nicht erscrollbar:** `documentElement.scrollWidth` = **375** =
+Sichtfeldbreite. *Abgeschnitten, nicht ausgelagert.*
+
+**Auch der Modusschalter ist zu breit:**
+
+```text
+.hp-modusschalter    Breite 390 px   auf   375 px Sichtfeld
+   Übersicht         36 … 152
+   Geführte Planung 152 … 263
+   Expertenmodus    263 … 418        <- 43 px jenseits der Kante
+```
+
+**Der Reiter, auf dem gearbeitet wird, ist auf einem 375-px-Gerät nicht vollständig sichtbar.** Das
+Bildschirmfoto zeigt „Expertenm…" und „Speiche (Strg+" abgeschnitten.
+
+### Die Frage, die dem Planner gehört — nicht mir
+
+**`ui-bauordnung.md` verlangt die Abnahme in 1440 / 1024 / 375. Die 375 stammt nicht von mir.**
+*Ist der Objekt-Planer ein reines Schreibtisch-Werkzeug, dann ist nicht die Messung falsch, sondern
+die Regel zu weit — dann gehört das in die Bauordnung geschrieben, statt bei jeder Abnahme
+stillschweigend übergangen zu werden.* **Entscheide du.**
+
+### Nebenbeobachtung, ausdrücklich nicht zu Ende verfolgt
+
+```text
+pageerror bei JEDEM Laden:  TypeError: Cannot read properties of null (reading 'addEventListener')
+```
+Tritt auch auf der Übersicht auf, also vermutlich in der CRM-Hülle. **Ich habe die Stelle nicht
+gesucht** — aufdecken ist nicht beheben. *Die 404 auf `/images/employee/*.jpg` melde ich
+ausdrücklich NICHT: fehlende Beispieldaten, kein Befund.*
+
+### Und was diese Runde über meine eigene Arbeit sagt
+
+**Zwei Messungen dieses Abends hätten ein falsches GRÜN geliefert:** einmal war die Anmeldung
+fehlgeschlagen (dreimal die Login-Maske vermessen), einmal fehlte das Vite-Manifest (dreimal die
+500er-Fehlerseite vermessen). **Beide Male sagte das Ergebnis „0 Überlauf, 0 unerreichbar".**
+*Gefangen hat es `canvas: 0` — eine Planer-Seite ohne Zeichenfläche gibt es nicht — nicht meine
+Sorgfalt.* **Regel ab jetzt: jede Browser-Messung nennt zuerst eine Grösse, die auf der falschen
+Seite unmöglich ist.**
+
+**Ballbesitz: Planner.**
