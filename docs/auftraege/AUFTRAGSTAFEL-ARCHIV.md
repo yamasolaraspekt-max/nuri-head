@@ -163,3 +163,62 @@ des Auftrags als Guardrail festgeschrieben. Die beiden Arbeitsflächen überschn
 |---|---|---|---|---|
 | **AUF-38 Messwerkzeug** | **`scripts/statische-inline-stile.mjs` — die Definition von *statisch* als ausfuehrbares Skript, plus die generische Rohwert-Zusage ueber alle Dateien** (Spur A, vom Planner nachtraeglich hochgestuft: das Skript erzeugt den abgeleiteten Wert, an dem jede weitere Scheibe gemessen wird) | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07., 00:51) fuer `c895061d` + `8fb7b990`. **`MW-1`** Kommentar machte statisch zu dynamisch ⇒ behoben, `WerkzeugGruppenMenue` steht auf **8** · **`MW-2`** ein Block lief bis Dateiende ⇒ **alle 316 Bloecke neu auf Abgrenzung geprueft, 0 nicht sauber** (vorher 1) · **`MW-4`** Vorlagen-Ausdruck galt als statisch ⇒ dynamisch, **und `` `${T.hair}` `` bleibt statisch — die Reparatur schiesst nicht ueber** · **`MW-3`** `?`/`...` im Text ⇒ statisch. 316 gesamt / **198 offen**, `ConfigWizard` **43/40/2/38**, Eichung der drei abgenommenen Scheiben unveraendert `0/0/0`. Gates 1323/0, `tsc` 0, `schema` 0, `dom` 11/0, `public` unberuehrt. **`MW-5` vom Planner ausgeschlossen** (P3, null Fundstellen; die Token-Tiefe ist **die Definition**, nicht das Werkzeug) | `42b88b85` (beanstandet) · `c895061d` · `8fb7b990` |
 | **B-01, Teil Sicherung** | **Der Rueckstand liegt ausserhalb der Maschine** — 230 Commits, zwei Arbeitstage, existierten nur auf einer Platte | **Yama** | `ERLEDIGT` — von Yama selbst gefahren, 29.07. 00:45, **und das war der einzige zulaessige Weg**: der Generator hatte das Kriterium verweigert, weil `CLAUDE.md` jeder Instanz das Pushen untersagt. `c631109c..a849e030` mit `OK` auf **beiden** Remotes; `git branch -r --contains HEAD` nennt `fork` und `backup-private`. **Ein Fehler steht im Log und ist harmlos:** `auto/hausplaner-ui-3a` von `fork` abgelehnt, *„tip is behind its remote counterpart“* — **der Remote hat mehr als der Rechner, nicht weniger.** Auffaellig bleibt, dass `backup-private` fuer denselben Branch `up-to-date` meldet: **die zwei Remotes stehen dort auseinander.** Kein Handlungsbedarf, aber zu messen, bevor jemand diesen Branch anfasst | `push-result.log`, 00:45:02–00:45:42 |
+
+
+## Zugang 29.07.2026, 07:55 — AUF-38 Scheibe 5 (ConfigWizard)
+
+> **Die erste Scheibe, deren Sichtprobe alle Schritte durchlaeuft.** Der Dialog ist modal und
+> mehrschrittig; ein Standardbild zeigt ihn nie. Der Evaluator hat alle fuenf Schritte durchgeklickt
+> und `hp-kw` je Schritt gezaehlt: **23 / 24 / 24 / 25 / 22**.
+>
+> **Quelle == DOM vollstaendig aufgeloest:** 7 Inline-Elemente aus **5** Quell-Konstrukten — Overlay
+> (Ausnahme 1), Dialog-Kasten (Ausnahme 2), und **fuenf Schritt-Punkte aus EINER Quellzeile** (Z87).
+> *Sieben Elemente im Bild, fuenf Stellen in der Quelle — wer nur zaehlt, findet einen Fehler, den
+> es nicht gibt.*
+>
+> **Und eine Methodennotiz, die bleibt:** sein Kontrolllauf war zuerst rot, weil der Kopie die
+> gebaute CSS und die Blade fehlten. Er hat **erst bereinigt, dann mutiert** — *„erst dann ist eine
+> Mutation ein Beweis“.*
+
+| Nr | Auftrag | Rolle | Status | Beleg |
+|---|---|---|---|---|
+| **AUF-38 Scheibe 5** | **`ConfigWizard.tsx` — der mehrschrittige modale Konfigurator-Dialog, 43 Stellen** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07., 07:49). **43/40/2/38 ⇒ 5/2/2/0**, Insel 316 ⇒ 278 gesamt, 198 ⇒ 160 offen, **Differenz genau 38 — die Rechnung geht auf.** 33 Klassen, per **Mengenvergleich statt Zaehlvergleich** belegt (`comm -3` zwischen CSS-Selektoren und TSX-Vorkommen ist leer). Genau zwei Ausnahmen, beide Rohwert ohne Token; Gegen-Beweis mit einer dritten ⇒ rot. Gegenprobe in **beide** Richtungen: Klasse wieder inline ⇒ 2 rot (Wirkung **und** Klasse ohne Traeger). Gates (Stand 01:19) 1327/0, tsc 0, schema 0, dom 11/0, `serviert == gemessen` byte-gleich. **Die Zusage misst mit `messeDatei()`** — demselben Werkzeug, das die Grundgesamtheit zaehlt, statt mit einer handgeschriebenen Bezeichnerliste wie in Scheibe 4 | Code `f5b9feaf` (vom Planner mitcommittet, `fa560259` benennt es) |
+
+
+## Zugang 29.07.2026, 08:35 — AUF-38 ist bis auf Scheibe 7 durch, und B-01 ist abgenommen
+
+> **Fuenf Freigaben in einem Zug** (Evaluator, 07:49–08:29). Damit sind **acht von neun Scheiben**
+> abgenommen; offen bleibt allein **Scheibe 7** (`HausplanerApp.tsx`, 78 Stellen), und die ist mit
+> gemessenem Grund gesperrt: dieselbe Datei traegt AUF-48 und T1a/T4 aus AUF-83.
+>
+> **Die Insel ist von 316 Stellen / 198 offen auf 196 / 78 gefallen** — alle 78 in dieser einen Datei.
+
+| Nr | Auftrag | Rolle | Status | Beleg |
+|---|---|---|---|---|
+| **AUF-38 Scheibe 6** | **`GuidedView.tsx` — die gefuehrte Planung, 29 offene Stellen, fuenf Ausnahmen (die hoechste Zahl aller Dateien)** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.). Jede der fuenf Ausnahmen einzeln benannt und beidseitig verriegelt; die generische Rohwert-Zusage allein haette nicht gereicht | `11e23016` |
+| **AUF-38 Scheibe 8a** | **`EngineFlaeche.tsx` — 25 offene Stellen** | Generator | `ERLEDIGT` — zuerst **FREIGABE MIT REST** (Rest ausschliesslich K9, benannt, kein P0/P1), dann **Rest geschlossen ⇒ FREIGABE**. *Ein Votum, das seinen eigenen Rest benennt und ihn danach schliesst, statt ihn zu uebersehen oder das Ganze rot zu machen* | `3c3b4657` |
+| **AUF-38 Scheibe 8b** | **`GeschossFlaeche.tsx` — 14 offene Stellen** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.) | `a022452f` |
+| **AUF-38 Scheibe 8c** | **Die vier kleinen Flaechen** (`WerkzeugGruppenMenue` 8 · `FaehigkeitenNavi` 3 · `DreiDBereich` 2 · `ReiterLeiste` 1 = 14) — **eine abnehmbare Einheit, weil der `population_command` sie in einem Lauf misst** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.). Damit ist der Restschnitt durch | `cca4cd20` |
+| **B-01** | **`.ai-workflow/` versionieren — das Werkzeug, das die Rollentrennung herstellt, war nie im Repo** | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.) fuer K-01 bis K-04. **K-05 (Sicherung) gehoerte nicht zu dieser Abnahme** — ich hatte den Push als Kriterium fuer den Generator geschrieben, obwohl `CLAUDE.md` jeder Instanz das Pushen untersagt; **er hat ihn zu Recht verweigert und vorgelegt statt geraten.** Yama hat am 29.07. um 00:45 selbst gesichert. *Der Witz an B-01: unverfolgte Dateien wandern nicht in einen neuen Worktree — das Werkzeug, das die Rollentrennung herstellen soll, fehlte genau dort, wo sie hergestellt wird* | `af0e0c93` |
+
+
+## Zugang 29.07.2026, 21:10 — AUF-83-T1b: der Hausplaner sitzt im Ticket
+
+> **Der Beleg zur praezisierten Datenschutz-Zusage ist der sauberste, den man sich wuenschen kann.**
+> Mein Entscheid um 10:28 lautete: `ProjektlisteTest::k3` wird **praezisiert, nicht abgeschwaecht**.
+> Der Evaluator hat genau diese Frage gestellt — *praezisiert oder abgeschwaecht?* — und drei Proben
+> an **seiner eigenen** Extraktion gefahren:
+>
+> ```text
+> A  Kundenname IM data-Attribut der Insel   -> im Teilbaum      => Leck wird gefunden
+> B  Kundenname NUR im Shell-Auswahlfeld     -> nicht drin       => kein Fehlalarm
+> C  #hausplaner-root fehlt                  -> Exception        => "dann prueft diese Zusage nichts"
+> ```
+>
+> **Und die Zahl dazu: die PHP-Suite geht von 2729 auf 2730 Zusicherungen — die Zusage hat eine
+> GEWONNEN, keine verloren.** *Das ist der Unterschied zwischen Praezisieren und Entzahnen, in einer
+> einzigen Zahl.*
+
+| Nr | Auftrag | Rolle | Status | Beleg |
+|---|---|---|---|---|
+| **AUF-83-T1b** | **Der Hausplaner erbt die Ticket-Shell** — beide Blades `@extends('admin.layouts.app')`, keine zweite App-Shell mehr | Generator | `ERLEDIGT` — **FREIGABE** (Evaluator, 29.07.). `@extends` je 1, `<!DOCTYPE` je 0. **Die Shell-Navigation ist da und markiert den Hausplaner** (`nav-item is-route-active`) — genau Yamas Satz *„ich moechte dass du die navi von ticket sein wenn ich mich in einen bereich befinde dann sehe ich dort“*. **Kein zweiter Bildlauf:** `scrollHeight 813 === clientHeight 813`; die Insel misst **1077×701** zwischen `#leftSidebar` 229 und `#rightSidebar` 80. Insel mountet mit 98 `hp`-Elementen, eingebettete Szene 416 Zeichen. **Routen, App, Config und Layouts im Commit: 0 Dateien** — die Shell wurde benutzt, nicht geaendert. Gates 1355/0, dom 11/0, tsc 0, schema 0, PHP 789 / **2730** Zusicherungen. **K-03 ehrlich als *ERFUELLT IM VERGLEICH* gefuehrt:** die Klappflaeche liess sich mit keiner Methode ausloesen, also hat er dieselbe Klickfolge auf `/admin/invoices` gefahren — **belegt ist die Gleichheit mit einer unberuehrten Seite, nicht das Klappen selbst.** *So sieht ein Kriterium aus, das nicht behauptet, was es nicht gesehen hat.* | `a14abb53` |

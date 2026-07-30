@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hausplaner-Studio — Vollentwurf · AUF-83</title>
+<style>
+  :root{
+    --bg:#f5f7f8; --surface:#fff; --surface2:#f7f9fa; --surface3:#eef2f3;
+    --ink:#232a31; --muted:#697079; --faint:#a7aeb7;
+    --hair:#edf0f2; --hair2:#dfe3e6; --stift:#8b949e;
+    --accent:#12807d; --accentSoft:#e6f2f1;
+    --sa-gruen:#94C11C; --sa-blau:#2B4290;
+    --warnInk:#b45309; --warnBg:#fff7ed; --warnBd:#fed7aa;
+    --rot:#c63533; --rotBg:#fdeceb;
+    --f1:0 1px 2px rgba(28,50,55,.10);
+    --f2:0 10px 34px rgba(28,50,55,.12);
+    --f3:0 18px 50px rgba(28,50,55,.16);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--bg);color:var(--ink);padding:40px 30px 90px;
+       font:14px/1.6 Inter,-apple-system,"Segoe UI",system-ui,sans-serif}
+  .huelle{max-width:1240px;margin:0 auto}
+  h1{font-size:24px;font-weight:800;letter-spacing:-.35px;margin:0 0 7px}
+  .lead{color:var(--muted);font-size:13.5px;margin:0;max-width:80ch}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+       background:var(--surface);border:1px solid var(--hair2);border-radius:5px;padding:1px 5px}
+  .lead code{font-size:11.5px}
+
+  section{margin-top:46px}
+  .kap{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+  .kap h2{font-size:17px;font-weight:800;margin:0;letter-spacing:-.2px}
+  .nr{font-size:11px;font-weight:800;color:var(--accent);background:var(--accentSoft);
+      border-radius:6px;padding:3px 8px;letter-spacing:.4px}
+  .kap .rechts{margin-left:auto;font-size:12.5px;color:var(--faint)}
+  .kaptext{color:var(--muted);font-size:13px;margin:0 0 16px;max-width:86ch}
+
+  /* ===== Bildschirm ===== */
+  .schirm{border:1px solid var(--hair2);border-radius:14px;overflow:hidden;background:var(--surface);
+          box-shadow:var(--f2);position:relative}
+  .fuss{display:flex;gap:16px;align-items:center;padding:8px 15px;background:var(--surface2);
+        border-top:1px solid var(--hair);font-size:11.5px;color:var(--faint)}
+  .fuss b{color:var(--muted)}
+  .fuss .sp{margin-left:auto}
+
+  /* ===== Leiste 1 ===== */
+  .topbar{display:flex;align-items:center;gap:10px;height:48px;padding:0 13px;
+          background:#fff;border-bottom:1px solid var(--hair)}
+  .marke{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14.5px;letter-spacing:-.1px}
+  .marke .z{width:26px;height:26px;border-radius:8px;background:var(--accentSoft);color:var(--accent);
+            display:grid;place-items:center;flex:0 0 auto}
+  .tr{width:1px;height:21px;background:var(--hair2);flex:0 0 auto}
+  .fu{flex:1}
+  .proj{font-weight:700;font-size:13.5px;white-space:nowrap}
+  .proj small{color:var(--muted);font-weight:600;margin-left:5px}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;
+        background:var(--surface2);border:1px solid var(--hair2);border-radius:9px;padding:6px 10px;white-space:nowrap}
+  .chip .sub{color:var(--muted);font-weight:600}
+  .badge{font-size:10.5px;font-weight:800;color:var(--warnInk);background:var(--warnBg);
+         border:1px solid var(--warnBd);border-radius:999px;padding:3px 9px;white-space:nowrap}
+  .seg{display:flex;background:var(--surface2);border:1px solid var(--hair2);border-radius:11px;padding:3px;gap:2px}
+  .seg button{border:0;background:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--muted);
+              border-radius:8px;padding:6px 13px;cursor:default}
+  .seg button.an{background:#fff;color:var(--ink);box-shadow:var(--f1)}
+  .stat{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);white-space:nowrap}
+  .pkt{width:8px;height:8px;border-radius:50%;background:var(--sa-gruen);flex:0 0 auto}
+  .ik{width:30px;height:30px;border-radius:9px;border:1px solid var(--hair2);background:#fff;
+      display:grid;place-items:center;color:var(--muted);flex:0 0 auto}
+  .ik.aus{color:var(--faint);background:var(--surface2)}
+  .prim{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:#fff;
+        background:var(--accent);border:0;border-radius:9px;padding:8px 13px;cursor:default}
+  .ys{width:30px;height:30px;border-radius:50%;background:#dfe4ea;display:grid;place-items:center;
+      font-size:11.5px;font-weight:800;color:#5b636d;flex:0 0 auto}
+
+  /* ===== Leiste 2: Arbeitsbereiche + Ansicht + Werkzeuge ===== */
+  .zeile2{display:flex;align-items:center;gap:9px;height:42px;padding:0 13px;
+          background:var(--surface2);border-bottom:1px solid var(--hair)}
+  .bereiche{display:flex;gap:2px}
+  .bereiche button{border:0;background:none;font:inherit;font-size:12.5px;font-weight:700;
+                   color:var(--muted);border-radius:8px;padding:5px 11px;cursor:default;white-space:nowrap}
+  .bereiche button.an{background:#fff;color:var(--ink);box-shadow:var(--f1)}
+  .bereiche button.aus{color:var(--faint)}
+  .wzg{display:flex;align-items:center;gap:3px}
+  .wzg .b{width:29px;height:29px;border-radius:8px;display:grid;place-items:center;color:var(--muted);
+          background:#fff;border:1px solid var(--hair2)}
+  .wzg .b.an{background:var(--accent);border-color:var(--accent);color:#fff}
+  .wzg .b.zu{color:var(--faint);background:var(--surface3);border-color:var(--hair2);opacity:.6}
+  .wzg .gt{width:1px;height:19px;background:var(--hair2);margin:0 4px}
+  .kbd{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--faint);
+       border:1px solid var(--hair2);background:#fff;border-radius:7px;padding:4px 8px;white-space:nowrap}
+  .kbd b{font-family:ui-monospace,Menlo,monospace;color:var(--muted);font-weight:700}
+
+  /* ===== Bühne ===== */
+  .buehne{display:flex;position:relative;background:var(--bg)}
+  .rail{width:46px;flex:0 0 auto;background:#fff;border-right:1px solid var(--hair);
+        display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:5px}
+  .rail .r{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:var(--muted)}
+  .rail .r.an{background:var(--accentSoft);color:var(--accent)}
+  .rail .sp{height:1px;width:22px;background:var(--hair);margin:3px 0}
+
+  .plan{flex:1;position:relative;overflow:hidden;
+        background:linear-gradient(var(--hair) 1px,transparent 1px) 0 0/26px 26px,
+                   linear-gradient(90deg,var(--hair) 1px,transparent 1px) 0 0/26px 26px,var(--bg)}
+  .plan svg{position:absolute;inset:0;width:100%;height:100%}
+  .planfuss{position:absolute;left:11px;bottom:9px;display:flex;gap:6px;align-items:center;
+            font-size:11px;color:var(--muted);background:rgba(255,255,255,.92);
+            border:1px solid var(--hair2);border-radius:8px;padding:4px 9px}
+
+  /* ===== Panels ===== */
+  .pl{width:214px;flex:0 0 auto;background:#fff;border-right:1px solid var(--hair);
+      display:flex;flex-direction:column}
+  .pr{width:246px;flex:0 0 auto;background:#fff;border-left:1px solid var(--hair);
+      display:flex;flex-direction:column}
+  .pkopf{display:flex;align-items:center;gap:6px;padding:8px 11px;border-bottom:1px solid var(--hair)}
+  .pkopf .tt{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);font-weight:800}
+  .pkopf .zu{margin-left:auto;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;
+             color:var(--faint);border:1px solid var(--hair2)}
+  .reiter{display:flex;gap:2px;padding:7px 8px;border-bottom:1px solid var(--hair);flex-wrap:wrap}
+  .reiter span{font-size:11.5px;font-weight:700;color:var(--muted);padding:5px 9px;border-radius:8px;
+               display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+  .reiter span.an{background:var(--accentSoft);color:var(--accent)}
+  .reiter .we{width:6px;height:6px;border-radius:50%;background:var(--faint)}
+  .pinhalt{padding:10px 11px;overflow:hidden}
+  .gruppe{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--faint);
+          font-weight:800;margin:0 0 7px;display:flex;align-items:center;gap:6px}
+  .gruppe .n{background:var(--surface3);border-radius:5px;padding:1px 6px;color:var(--muted);
+             letter-spacing:0;text-transform:none;font-size:10.5px}
+  .baum{list-style:none;margin:0 0 12px;padding:0;font-size:12.5px}
+  .baum li{display:flex;align-items:center;gap:7px;padding:4px 6px;border-radius:7px;color:var(--ink)}
+  .baum li.an{background:var(--accentSoft);color:var(--accent);font-weight:700}
+  .baum li .ic{color:var(--faint);display:grid;place-items:center}
+  .baum li.an .ic{color:var(--accent)}
+  .baum li .z{margin-left:auto;color:var(--faint);font-size:11px}
+  .feld{margin-bottom:9px}
+  .feld label{display:block;font-size:11px;color:var(--muted);margin-bottom:3px}
+  .feld .w{border:1px solid var(--hair2);border-radius:7px;padding:6px 9px;font-size:12.5px;
+           font-weight:600;background:var(--surface2);display:flex;justify-content:space-between}
+  .feld .w em{font-style:normal;color:var(--faint);font-weight:500}
+  .leerflaeche{border:1px dashed var(--hair2);border-radius:9px;padding:11px;background:var(--surface2)}
+  .leerflaeche .zst{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;
+                    color:var(--warnInk);background:var(--warnBg);border:1px solid var(--warnBd);
+                    border-radius:999px;padding:2px 8px;margin-bottom:7px}
+  .leerflaeche p{margin:0;font-size:11.5px;color:var(--muted);line-height:1.5}
+  .befund{display:flex;gap:8px;align-items:flex-start;font-size:12px;padding:8px 9px;border-radius:8px;
+          background:var(--rotBg);color:#8c2523;margin-bottom:7px}
+  .befund .p{width:7px;height:7px;border-radius:50%;background:var(--rot);margin-top:5px;flex:0 0 auto}
+
+  /* ===== Overlay-Variante ===== */
+  .schwebend{position:absolute;top:9px;bottom:9px;width:250px;background:#fff;
+             border:1px solid var(--hair2);border-radius:12px;box-shadow:var(--f3);
+             display:flex;flex-direction:column;overflow:hidden;z-index:4}
+  .schwebend.links{left:56px}
+  .schwebend.rechts{right:9px}
+  .griff{position:absolute;top:50%;transform:translateY(-50%);width:22px;height:52px;background:#fff;
+         border:1px solid var(--hair2);display:grid;place-items:center;color:var(--faint);z-index:3}
+  .griff.l{left:46px;border-radius:0 9px 9px 0;border-left:0}
+  .griff.r{right:0;border-radius:9px 0 0 9px;border-right:0}
+
+  /* ===== Palette ===== */
+  .schleier{position:absolute;inset:0;background:rgba(35,42,49,.30);z-index:8}
+  .palette{position:absolute;left:50%;top:64px;transform:translateX(-50%);width:520px;background:#fff;
+           border-radius:14px;box-shadow:var(--f3);overflow:hidden;z-index:9;border:1px solid var(--hair2)}
+  .palette .such{display:flex;align-items:center;gap:10px;padding:13px 15px;border-bottom:1px solid var(--hair)}
+  .palette .such input{border:0;outline:0;font:inherit;font-size:14.5px;flex:1;color:var(--ink);background:none}
+  .palette .grp{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);
+                font-weight:800;padding:9px 15px 4px}
+  .palette .tr2{display:flex;align-items:center;gap:10px;padding:8px 15px;font-size:13px}
+  .palette .tr2.an{background:var(--accentSoft)}
+  .palette .tr2 .ic{color:var(--muted);display:grid;place-items:center}
+  .palette .tr2.an .ic{color:var(--accent)}
+  .palette .tr2 .weg{margin-left:auto;font-size:11px;color:var(--faint)}
+  .palette .tr2 .gesperrt{margin-left:auto;font-size:10.5px;font-weight:700;color:var(--warnInk);
+                          background:var(--warnBg);border:1px solid var(--warnBd);border-radius:999px;padding:2px 8px}
+  .palette .fussz{padding:8px 15px;border-top:1px solid var(--hair);font-size:11px;color:var(--faint);
+                  display:flex;gap:14px}
+
+  /* ===== klein ===== */
+  .klein{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+  .geraet{border:1px solid var(--hair2);border-radius:14px;overflow:hidden;background:#fff;box-shadow:var(--f1)}
+  .geraet .titel{font-size:11.5px;color:var(--faint);padding:7px 12px;background:var(--surface2);
+                 border-bottom:1px solid var(--hair);font-weight:700}
+  .tabbar{display:flex;height:44px;border-top:1px solid var(--hair);background:#fff}
+  .tabbar div{flex:1;display:grid;place-items:center;color:var(--faint);gap:2px;font-size:9.5px;font-weight:700}
+  .tabbar div.an{color:var(--accent)}
+  .blatt{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:14px 14px 0 0;
+         box-shadow:0 -10px 34px rgba(28,50,55,.14);padding:9px 12px 12px;z-index:5}
+  .blatt .hg{width:34px;height:4px;border-radius:99px;background:var(--hair2);margin:0 auto 9px}
+
+  /* ===== Tabellen / Kästen ===== */
+  table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;background:var(--surface);
+        border:1px solid var(--hair2);border-radius:12px;overflow:hidden;margin-top:14px}
+  th{text-align:left;padding:10px 13px;background:var(--surface2);font-size:10.5px;letter-spacing:.5px;
+     text-transform:uppercase;color:var(--faint);font-weight:800;border-bottom:1px solid var(--hair2)}
+  td{padding:11px 13px;border-bottom:1px solid var(--hair);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  td.q{white-space:nowrap;font-weight:700;color:var(--accent);font-size:12px}
+  td.m{color:var(--muted)}
+  .kasten{border-left:3px solid var(--accent);background:var(--accentSoft);border-radius:0 11px 11px 0;
+          padding:14px 17px;margin-top:22px;font-size:13px}
+  .kasten.warn{border-left-color:var(--warnInk);background:var(--warnBg)}
+  .kasten p{margin:0 0 8px} .kasten p:last-child{margin:0}
+  .fussnote{margin-top:34px;padding-top:18px;border-top:1px solid var(--hair2);color:var(--muted);font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="huelle">
+
+<h1>Hausplaner-Studio — Vollentwurf</h1>
+<p class="lead">AUF-83 · Planner, 29.07.2026 · Alle Bestandteile aus dem Repo: Arbeitsbereiche aus
+<code>arbeitsbereiche.ts</code>, Panel-Reiter samt Zustand und Hinweistext aus <code>panelTabs.ts</code>,
+Projektbaum aus <code>projektBaum.ts</code>, Geschoss-Beschriftung aus <code>geschossStapel.ts</code>,
+Icons aus <code>studioDaten.ts</code>, Befehlspalette aus <code>dashboard/palette.ts</code>.
+Jede Gestaltungsentscheidung unten in §7 auf ihren Inventur-Befund zurückgeführt.</p>
+
+<!-- ══════════ 1 ══════════ -->
+<section>
+  <div class="kap"><span class="nr">01</span><h2>Der Bildschirm heute</h2>
+    <span class="rechts">Expertenmodus · 1440 px</span></div>
+  <p class="kaptext">Drei Kopfschichten (46 + 62 + 33 px), die linke Spalte macht laut Expertenmodus-Befund B1
+  <b>drei Jobs in einer scrollenden Wurst</b> — Werkzeuge, Fähigkeiten, Projekt —, und der vierte Panel-Reiter
+  „Historie“ wird bei schmalem Fenster abgeschnitten (B3).</p>
+
+  <div class="schirm">
+    <div class="topbar" style="height:46px;background:#fff;border-bottom:1px solid #e5e7eb">
+      <span style="font-size:14px;font-weight:800">Hausplaner · Studio</span>
+      <span style="font-size:12.5px;font-weight:600;color:#374151;border:1px solid #d1d5db;border-radius:8px;padding:5px 11px">‹ Zurück</span>
+      <span class="fu"></span>
+      <span class="badge" style="font-size:11.5px;padding:4px 12px">Testfläche — wird NICHT gespeichert</span>
+    </div>
+    <div class="topbar" style="height:62px">
+      <span class="marke"><span class="z"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span>Hausplaner<span style="color:var(--muted);font-weight:600">· Solar Aspekt</span></span>
+      <span class="stat"><span class="pkt"></span>Testfläche — wird nicht gespeichert</span>
+      <span class="fu"></span>
+      <span class="seg"><button>Übersicht</button><button class="an">Expertenmodus</button></span>
+      <span class="ys">YS</span>
+    </div>
+    <div class="topbar" style="height:33px;gap:10px">
+      <span style="display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;color:var(--accent)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>Zur geführten Planung</span>
+      <span style="font-size:12.5px;color:var(--muted)">Experte — alle Werkzeuge, Projektbaum und Eigenschaften. Dasselbe Modell und dieselbe Revision.</span>
+    </div>
+    <div class="buehne" style="height:214px">
+      <div class="pl" style="width:220px">
+        <div class="pinhalt" style="padding:9px 10px">
+          <p class="gruppe">Werkzeuge <span class="n">9</span></p>
+          <ul class="baum">
+            <li class="an"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 16 2-6 6-2z"/></svg></span>Markieren</li>
+            <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v18M12 3v18M16 3v18"/></svg></span>Wand</li>
+            <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M9 4v12M15 4v12"/></svg></span>Fenster</li>
+          </ul>
+          <p class="gruppe">Fähigkeiten <span class="n">37 in 9 Gruppen</span></p>
+          <ul class="baum">
+            <li><span class="ic">▸</span>Horizont…</li>
+            <li><span class="ic">▸</span>Vertikal z…</li>
+            <li><span class="ic">▸</span>Sparren-…</li>
+          </ul>
+          <p style="font-size:11px;color:var(--rot);margin:2px 0 0;font-weight:700">↓ Projekt erst nach 2× 10 Scroll-Ticks</p>
+        </div>
+      </div>
+      <div class="plan">
+        <svg viewBox="0 0 560 214" preserveAspectRatio="xMidYMid meet">
+          <g stroke="#5b636d" stroke-width="6" fill="none" stroke-linecap="square">
+            <path d="M118 40 H408"/><path d="M408 40 V166"/><path d="M408 166 H118"/>
+            <path d="M118 166 V116"/><path d="M118 88 V40"/><path d="M284 40 V166"/></g>
+          <path d="M118 88 V116" stroke="#12807d" stroke-width="6"/>
+          <path d="M228 40 H268" stroke="#fff" stroke-width="8"/><path d="M228 40 H268" stroke="#8b949e" stroke-width="2.2"/>
+          <path d="M228 36 H268 M228 44 H268" stroke="#8b949e" stroke-width="1.2"/>
+          <path d="M284 116 A28 28 0 0 0 312 88" stroke="#a7aeb7" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
+          <path d="M284 116 V88" stroke="#fff" stroke-width="8"/>
+          <text x="182" y="106" fill="#697079" font-size="12.5" font-weight="700" font-family="Inter,sans-serif">Wohnen</text>
+          <text x="182" y="123" fill="#a7aeb7" font-size="11" font-family="Inter,sans-serif">24,30 m²</text>
+          <text x="332" y="106" fill="#697079" font-size="12.5" font-weight="700" font-family="Inter,sans-serif">Küche</text>
+          <text x="332" y="123" fill="#a7aeb7" font-size="11" font-family="Inter,sans-serif">11,80 m²</text>
+        </svg>
+      </div>
+      <div class="pr" style="width:268px">
+        <div class="reiter" style="flex-wrap:nowrap;overflow:hidden">
+          <span class="an">Allgemein</span><span>Beziehungen</span><span>Prüfungen</span>
+          <span style="opacity:.35;position:relative">Histo<span style="position:absolute;right:-2px;top:0;bottom:0;width:14px;background:linear-gradient(90deg,transparent,#fff)"></span></span>
+        </div>
+        <div class="pinhalt">
+          <div class="feld"><label>Wandstärke</label><div class="w">24,0 cm</div></div>
+          <div class="feld"><label>Mauerwerk</label><div class="w">Kalksandstein</div></div>
+          <p style="font-size:11px;color:var(--rot);margin:6px 0 0;font-weight:700">B3 — „Historie“ ist gekappt, obwohl vier Reiter definiert sind</p>
+        </div>
+      </div>
+    </div>
+    <div class="fuss"><b>141 px</b> Kopf · linke Spalte mit 3 Jobs · 4. Panel-Reiter unsichtbar
+      <span class="sp">Ist-Zustand</span></div>
+  </div>
+</section>
+
+<!-- ══════════ 2 ══════════ -->
+<section>
+  <div class="kap"><span class="nr">02</span><h2>Der Entwurf</h2>
+    <span class="rechts">Expertenmodus · 1440 px · Panels angedockt</span></div>
+  <p class="kaptext">Eine Kopfleiste (48 px) und eine Arbeitszeile (42 px) statt dreier Kopfschichten. Die linke
+  Spalte trägt <b>drei Reiter</b> statt drei gestapelter Jobs. Rechts stehen alle <b>vier</b> Panel-Reiter mit
+  ihrem echten Zustand aus <code>panelTabs.ts</code> — „Beziehungen“ und „Historie“ tragen sichtbar
+  <em>in Entwicklung</em> und ihren Hinweissatz, statt zu fehlen.</p>
+
+  <div class="schirm">
+    <!-- Leiste 1 -->
+    <div class="topbar">
+      <span class="marke"><span class="z"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span>Hausplaner</span>
+      <span class="tr"></span>
+      <span class="proj">Solar Aspekt <small>· H-2041</small></span>
+      <span class="chip">Erdgeschoss <span class="sub">· ±0 mm</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+      <span class="badge">Testfläche</span>
+      <span class="fu"></span>
+      <span class="seg"><button>Übersicht</button><button>Geführt</button><button class="an">Experte</button></span>
+      <span class="fu"></span>
+      <span class="stat"><span class="pkt"></span>Gespeichert · Rev. 1</span>
+      <span class="ik"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></span>
+      <span class="ik aus"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></span>
+      <button class="prim"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Speichern</button>
+      <span class="ik"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg></span>
+      <span class="ys">YS</span>
+    </div>
+
+    <!-- Leiste 2 -->
+    <div class="zeile2">
+      <span class="bereiche">
+        <button class="aus">Import</button><button class="an">Architektur</button>
+        <button>Bauphysik</button><button>Heizung</button><button>Elektro · PV</button>
+      </span>
+      <span class="tr"></span>
+      <span class="seg" style="padding:2px"><button style="padding:5px 11px" class="an">2D</button><button style="padding:5px 11px">Split</button><button style="padding:5px 11px">3D</button></span>
+      <span class="tr"></span>
+      <span class="wzg">
+        <span class="b an"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 16 2-6 6-2z"/></svg></span>
+        <span class="b"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v18M12 3v18M16 3v18"/></svg></span>
+        <span class="b"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M9 4v12M15 4v12"/></svg></span>
+        <span class="b"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M6 12V6a2 2 0 0 1 4 0"/></svg></span>
+        <span class="gt"></span>
+        <span class="b"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15h18M8 3v6"/></svg></span>
+        <span class="b zu" title="Voraussetzung fehlt: kein Geschoss"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M4 20V9l8-5 8 5v11"/></svg></span>
+        <span class="gt"></span>
+        <span class="b"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12h16M4 12l4-4M4 12l4 4"/></svg></span>
+      </span>
+      <span class="fu"></span>
+      <span class="kbd"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Suchen <b>⌘K</b></span>
+    </div>
+
+    <div class="buehne" style="height:340px">
+      <!-- links -->
+      <div class="pl">
+        <div class="reiter">
+          <span class="an">Werkzeuge</span><span>Projekt</span><span>Fachplaner</span>
+        </div>
+        <div class="pinhalt">
+          <p class="gruppe">Zeichnen <span class="n">4</span></p>
+          <ul class="baum">
+            <li class="an"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 16 2-6 6-2z"/></svg></span>Markieren<span class="z">V</span></li>
+            <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v18M12 3v18M16 3v18"/></svg></span>Wand<span class="z">W</span></li>
+            <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M9 4v12M15 4v12"/></svg></span>Fenster<span class="z">F</span></li>
+            <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M6 12V6a2 2 0 0 1 4 0"/></svg></span>Tür<span class="z">T</span></li>
+          </ul>
+          <p class="gruppe">Bauteile <span class="n">3</span></p>
+          <ul class="baum">
+            <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M4 20V9l8-5 8 5v11"/></svg></span>Dach<span class="z">D</span></li>
+            <li><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15h18M8 3v6"/></svg></span>Treppe<span class="z">R</span></li>
+            <li style="opacity:.55"><span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 4v16M4 12h16"/></svg></span>Fassade
+              <span class="z" title="Voraussetzung fehlt: keine Außenwand">gesperrt</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Plan -->
+      <div class="plan">
+        <svg viewBox="0 0 560 340" preserveAspectRatio="xMidYMid meet">
+          <g stroke="#5b636d" stroke-width="7" fill="none" stroke-linecap="square">
+            <path d="M108 58 H418"/><path d="M418 58 V262"/><path d="M418 262 H108"/>
+            <path d="M108 262 V182"/><path d="M108 138 V58"/><path d="M282 58 V262"/>
+            <path d="M282 190 H418"/></g>
+          <path d="M108 138 V182" stroke="#12807d" stroke-width="7"/>
+          <path d="M198 58 H248" stroke="#fff" stroke-width="9"/><path d="M198 58 H248" stroke="#8b949e" stroke-width="2.4"/>
+          <path d="M198 53 H248 M198 63 H248" stroke="#8b949e" stroke-width="1.3"/>
+          <path d="M332 58 H380" stroke="#fff" stroke-width="9"/><path d="M332 58 H380" stroke="#8b949e" stroke-width="2.4"/>
+          <path d="M332 53 H380 M332 63 H380" stroke="#8b949e" stroke-width="1.3"/>
+          <path d="M282 182 A44 44 0 0 0 326 138" stroke="#a7aeb7" stroke-width="1.6" fill="none" stroke-dasharray="4 4"/>
+          <path d="M282 182 V138" stroke="#fff" stroke-width="9"/>
+          <text x="170" y="164" fill="#697079" font-size="13.5" font-weight="700" font-family="Inter,sans-serif">Wohnen</text>
+          <text x="170" y="183" fill="#a7aeb7" font-size="12" font-family="Inter,sans-serif">24,30 m²</text>
+          <text x="322" y="128" fill="#697079" font-size="13.5" font-weight="700" font-family="Inter,sans-serif">Küche</text>
+          <text x="322" y="147" fill="#a7aeb7" font-size="12" font-family="Inter,sans-serif">11,80 m²</text>
+          <text x="322" y="232" fill="#697079" font-size="13.5" font-weight="700" font-family="Inter,sans-serif">Bad</text>
+          <text x="322" y="251" fill="#a7aeb7" font-size="12" font-family="Inter,sans-serif">6,40 m²</text>
+          <g stroke="#12807d" stroke-width="1.4" fill="none">
+            <path d="M108 292 H282"/><path d="M108 287 V297"/><path d="M282 287 V297"/></g>
+          <rect x="164" y="282" width="62" height="17" fill="#f5f7f8"/>
+          <text x="170" y="295" fill="#12807d" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">3,48 m</text>
+          <g stroke="#a7aeb7" stroke-width="1.2" fill="none">
+            <path d="M282 292 H418"/><path d="M282 287 V297"/><path d="M418 287 V297"/></g>
+          <rect x="322" y="282" width="58" height="17" fill="#f5f7f8"/>
+          <text x="328" y="295" fill="#697079" font-size="11.5" font-family="Inter,sans-serif">2,72 m</text>
+        </svg>
+        <div class="planfuss">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h18M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4"/></svg>
+          1 : 50 · Raster 25 cm · Fang an Wandachse
+        </div>
+      </div>
+
+      <!-- rechts -->
+      <div class="pr">
+        <div class="reiter">
+          <span class="an">Allgemein</span>
+          <span><span class="we"></span>Beziehungen</span>
+          <span>Prüfungen</span>
+          <span><span class="we"></span>Historie</span>
+        </div>
+        <div class="pinhalt">
+          <p class="gruppe">Wand 3 <span class="n">Außenwand</span></p>
+          <div class="feld"><label>Wandstärke</label><div class="w">24,0 cm <em>KS</em></div></div>
+          <div class="feld"><label>Länge · Höhe</label><div class="w">3,48 m <em>· 2,75 m</em></div></div>
+          <div class="feld"><label>U-Wert</label><div class="w">0,24 W/m²K <em>berechnet</em></div></div>
+          <p class="gruppe" style="margin-top:14px">Prüfungen <span class="n">1 Befund</span></p>
+          <div class="befund"><span class="p"></span><span>Öffnung 2 liegt 4 cm über der Wandoberkante — Aktion wurde abgelehnt.</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="fuss"><b>90 px</b> Kopf (48 + 42) · linke Spalte mit 3 Reitern · alle 4 Panel-Reiter sichtbar
+      <span class="sp">Entwurf</span></div>
+  </div>
+</section>
+
+<!-- ══════════ 3 ══════════ -->
+<section>
+  <div class="kap"><span class="nr">03</span><h2>Panels als Überlagerung</h2>
+    <span class="rechts">Punkt 4 des Auftrags</span></div>
+  <p class="kaptext">Beide Panels lassen sich unabhängig zuklappen. Im Overlay-Zustand schweben sie über der
+  Fläche, statt sie zusammenzudrücken — <b>der Plan behält seine Breite</b>. Am Rand bleibt je ein Griff stehen,
+  <code>Esc</code> schließt das oberste. Der Zustand liegt pro Arbeitsbereich in <code>localStorage</code>,
+  nach dem Muster von <code>arbeitsbereichSpeicher.ts</code>.</p>
+
+  <div class="schirm">
+    <div class="topbar" style="height:44px">
+      <span class="marke"><span class="z"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span>Hausplaner</span>
+      <span class="tr"></span><span class="proj">Solar Aspekt</span>
+      <span class="chip">Erdgeschoss <span class="sub">· ±0 mm</span></span>
+      <span class="fu"></span>
+      <span class="seg"><button>Übersicht</button><button>Geführt</button><button class="an">Experte</button></span>
+      <span class="fu"></span><span class="stat"><span class="pkt"></span>Gespeichert</span>
+      <button class="prim">Speichern</button><span class="ys">YS</span>
+    </div>
+    <div class="buehne" style="height:300px">
+      <div class="rail">
+        <span class="r an"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 16 2-6 6-2z"/></svg></span>
+        <span class="r"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v18M12 3v18M16 3v18"/></svg></span>
+        <span class="r"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M9 4v12M15 4v12"/></svg></span>
+        <span class="r"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M6 12V6a2 2 0 0 1 4 0"/></svg></span>
+        <span class="sp"></span>
+        <span class="r"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M4 20V9l8-5 8 5v11"/></svg></span>
+      </div>
+      <div class="plan">
+        <svg viewBox="0 0 700 300" preserveAspectRatio="xMidYMid meet">
+          <g stroke="#5b636d" stroke-width="7" fill="none" stroke-linecap="square">
+            <path d="M150 50 H540"/><path d="M540 50 V236"/><path d="M540 236 H150"/>
+            <path d="M150 236 V162"/><path d="M150 120 V50"/><path d="M368 50 V236"/>
+            <path d="M368 170 H540"/></g>
+          <path d="M150 120 V162" stroke="#12807d" stroke-width="7"/>
+          <path d="M244 50 H300" stroke="#fff" stroke-width="9"/><path d="M244 50 H300" stroke="#8b949e" stroke-width="2.4"/>
+          <path d="M244 45 H300 M244 55 H300" stroke="#8b949e" stroke-width="1.3"/>
+          <path d="M430 50 H486" stroke="#fff" stroke-width="9"/><path d="M430 50 H486" stroke="#8b949e" stroke-width="2.4"/>
+          <path d="M430 45 H486 M430 55 H486" stroke="#8b949e" stroke-width="1.3"/>
+          <path d="M368 162 A42 42 0 0 0 410 120" stroke="#a7aeb7" stroke-width="1.6" fill="none" stroke-dasharray="4 4"/>
+          <path d="M368 162 V120" stroke="#fff" stroke-width="9"/>
+          <text x="228" y="146" fill="#697079" font-size="14" font-weight="700" font-family="Inter,sans-serif">Wohnen</text>
+          <text x="228" y="165" fill="#a7aeb7" font-size="12" font-family="Inter,sans-serif">24,30 m²</text>
+          <text x="428" y="114" fill="#697079" font-size="14" font-weight="700" font-family="Inter,sans-serif">Küche</text>
+          <text x="428" y="133" fill="#a7aeb7" font-size="12" font-family="Inter,sans-serif">11,80 m²</text>
+          <text x="428" y="212" fill="#697079" font-size="14" font-weight="700" font-family="Inter,sans-serif">Bad</text>
+          <text x="428" y="231" fill="#a7aeb7" font-size="12" font-family="Inter,sans-serif">6,40 m²</text>
+        </svg>
+        <div class="planfuss">1 : 50 · <b style="color:var(--accent);margin-left:4px">volle Breite — Panels drücken nicht</b></div>
+      </div>
+      <span class="griff l"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      <div class="schwebend rechts">
+        <div class="pkopf"><span class="tt">Eigenschaften</span>
+          <span class="zu"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+        <div class="reiter"><span class="an">Allgemein</span><span><span class="we"></span>Beziehungen</span><span>Prüfungen</span><span><span class="we"></span>Historie</span></div>
+        <div class="pinhalt">
+          <p class="gruppe">Wand 3 <span class="n">Außenwand</span></p>
+          <div class="feld"><label>Wandstärke</label><div class="w">24,0 cm <em>KS</em></div></div>
+          <div class="feld"><label>Länge · Höhe</label><div class="w">3,48 m <em>· 2,75 m</em></div></div>
+          <div class="leerflaeche" style="margin-top:12px">
+            <span class="zst"><span style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>in Entwicklung</span>
+            <p>Zeigt später, woran ein Bauteil hängt: Wand ↔ Öffnung, Geschoss, Dachfläche.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fuss"><b>Links zu</b> — nur der Griff bleibt · <b>rechts als Overlay</b> — der Plan behält seine Breite
+      <span class="sp">Esc schließt das oberste Overlay</span></div>
+  </div>
+
+  <div class="kasten warn">
+    <p><strong>Das ist der Punkt, an dem der Entwurf auf Code trifft.</strong> Heute rechnet
+    <code>HausplanerApp.tsx:369</code> die Planbreite als <code>innerWidth − 220 − 268</code>. Klappt ein Panel zu,
+    <em>erfährt der Plan es nicht</em> — er rechnet weiter mit 488 px Abzug.</p>
+    <p>Damit dieser Bildschirm entstehen kann, muss die Breite vom <em>Behälter</em> kommen statt vom Fenster.
+    Dieselbe Rechnung steckt in der Höhe: die Blades setzen <code>min-height: calc(100vh − 46px)</code>.
+    <strong>Das ist T1a/T4 — ein eigener Schritt und zugleich der erste Zerlegungsschritt von AUF-48.</strong></p>
+  </div>
+</section>
+
+<!-- ══════════ 4 ══════════ -->
+<section>
+  <div class="kap"><span class="nr">04</span><h2>Befehlspalette</h2>
+    <span class="rechts">Punkt 5 · existiert bereits im Code</span></div>
+  <p class="kaptext">Die Palette ist <b>nicht neu zu bauen</b> — <code>dashboard/palette.ts</code> speist sie aus der
+  Werkzeug-Registry, es gibt keine zweite Aktivierungslogik. Was fehlt, ist die <b>Erreichbarkeit</b>: ein sichtbarer
+  Einstieg in der Arbeitszeile. Gesperrte Werkzeuge erscheinen mit ihrem Grund, statt zu verschwinden — das ist die
+  Regel aus <code>werkzeugZustand.ts</code>.</p>
+
+  <div class="schirm" style="height:300px">
+    <div class="topbar" style="height:44px;filter:blur(.4px)">
+      <span class="marke"><span class="z"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span>Hausplaner</span>
+      <span class="tr"></span><span class="proj">Solar Aspekt</span>
+      <span class="chip">Erdgeschoss <span class="sub">· ±0 mm</span></span><span class="fu"></span>
+      <span class="seg"><button>Übersicht</button><button>Geführt</button><button class="an">Experte</button></span>
+      <span class="fu"></span><button class="prim">Speichern</button><span class="ys">YS</span>
+    </div>
+    <div class="buehne" style="height:255px"><div class="plan"></div></div>
+    <div class="schleier"></div>
+    <div class="palette">
+      <div class="such">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input value="dach" readonly>
+        <span class="kbd"><b>Esc</b></span>
+      </div>
+      <div class="grp">Werkzeuge</div>
+      <div class="tr2 an"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M4 20V9l8-5 8 5v11"/></svg></span>Dach zeichnen<span class="weg">Architektur · D</span></div>
+      <div class="tr2"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 20h18M6 20V12l6-5 6 5v8"/><path d="M9 20v-5h6v5"/></svg></span>Dachgaube setzen<span class="gesperrt">kein Dach im Modell</span></div>
+      <div class="tr2"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M5 8l7-5 7 5"/></svg></span>Dachneigung ändern<span class="weg">Architektur</span></div>
+      <div class="grp">Springe zu</div>
+      <div class="tr2"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg></span>Arbeitsbereich „Bauphysik“<span class="weg">Wechseln</span></div>
+      <div class="tr2"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Geschoss „1. Obergeschoss“<span class="weg">+2 750 mm</span></div>
+      <div class="fussz"><span><b>↑↓</b> wählen</span><span><b>↵</b> ausführen</span><span><b>⌘K</b> öffnen</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 5 ══════════ -->
+<section>
+  <div class="kap"><span class="nr">05</span><h2>Tablet und Telefon</h2>
+    <span class="rechts">1024 px · 375 px</span></div>
+  <p class="kaptext">Die drei Pflicht-Viewports stehen seit dem Layout-Fahrplan L7 fest. Bei 1024 px werden beide
+  Panels grundsätzlich zu Overlays; bei 375 px wird das rechte Panel zum <b>Bottom Sheet</b> und die
+  Arbeitsbereiche wandern in eine Tab-Leiste unten. Die Inventur hat hier einmal einen Überlauf von
+  <b>283 px</b> gemessen (Befund B5, als AUF-46 behoben) — deshalb ist 375 px kein Nachgedanke.</p>
+
+  <div class="klein">
+    <div class="geraet">
+      <div class="titel">Tablet · 1024 px — Panels als Overlay, Werkzeuge in der Schiene</div>
+      <div class="schirm" style="border:0;border-radius:0;box-shadow:none">
+        <div class="topbar" style="height:44px;gap:8px">
+          <span class="marke" style="font-size:13.5px"><span class="z" style="width:23px;height:23px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg></span>Hausplaner</span>
+          <span class="chip" style="font-size:11.5px;padding:5px 8px">EG <span class="sub">±0</span></span>
+          <span class="fu"></span>
+          <span class="seg" style="padding:2px"><button style="padding:5px 9px;font-size:11.5px">Übers.</button><button style="padding:5px 9px;font-size:11.5px">Gef.</button><button class="an" style="padding:5px 9px;font-size:11.5px">Exp.</button></span>
+          <span class="fu"></span>
+          <span class="ik" style="width:27px;height:27px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg></span>
+          <span class="ik" style="width:27px;height:27px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg></span>
+          <span class="ys" style="width:27px;height:27px;font-size:10.5px">YS</span>
+        </div>
+        <div class="zeile2" style="height:38px">
+          <span class="bereiche"><button class="an" style="font-size:11.5px;padding:4px 9px">Architektur</button><button style="font-size:11.5px;padding:4px 9px">Bauphysik</button><button style="font-size:11.5px;padding:4px 9px">Heizung</button></span>
+          <span class="tr"></span>
+          <span class="seg" style="padding:2px"><button class="an" style="padding:4px 9px;font-size:11.5px">2D</button><button style="padding:4px 9px;font-size:11.5px">3D</button></span>
+          <span class="fu"></span><span class="kbd" style="padding:3px 7px">⌘K</span>
+        </div>
+        <div class="buehne" style="height:196px">
+          <div class="rail" style="width:40px">
+            <span class="r an" style="width:28px;height:28px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 16 2-6 6-2z"/></svg></span>
+            <span class="r" style="width:28px;height:28px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v18M12 3v18M16 3v18"/></svg></span>
+            <span class="r" style="width:28px;height:28px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M9 4v12M15 4v12"/></svg></span>
+            <span class="r" style="width:28px;height:28px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M4 20V9l8-5 8 5v11"/></svg></span>
+          </div>
+          <div class="plan">
+            <svg viewBox="0 0 380 196" preserveAspectRatio="xMidYMid meet">
+              <g stroke="#5b636d" stroke-width="6" fill="none" stroke-linecap="square">
+                <path d="M70 38 H300"/><path d="M300 38 V158"/><path d="M300 158 H70"/>
+                <path d="M70 158 V110"/><path d="M70 82 V38"/><path d="M196 38 V158"/></g>
+              <path d="M70 82 V110" stroke="#12807d" stroke-width="6"/>
+              <path d="M140 38 H176" stroke="#fff" stroke-width="8"/><path d="M140 38 H176" stroke="#8b949e" stroke-width="2"/>
+              <text x="112" y="102" fill="#697079" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">Wohnen</text>
+              <text x="228" y="102" fill="#697079" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">Küche</text>
+            </svg>
+          </div>
+          <span class="griff r"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="geraet">
+      <div class="titel">Telefon · 375 px — Eigenschaften als Bottom Sheet</div>
+      <div class="schirm" style="border:0;border-radius:0;box-shadow:none;position:relative">
+        <div class="topbar" style="height:44px;gap:7px;padding:0 10px">
+          <span class="ik" style="width:27px;height:27px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>
+          <span style="font-weight:800;font-size:13px">Solar Aspekt</span>
+          <span class="chip" style="font-size:11px;padding:4px 7px">EG</span>
+          <span class="fu"></span>
+          <span class="stat" style="font-size:11px"><span class="pkt"></span></span>
+          <span class="ik" style="width:27px;height:27px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg></span>
+        </div>
+        <div class="buehne" style="height:214px">
+          <div class="plan">
+            <svg viewBox="0 0 340 214" preserveAspectRatio="xMidYMid meet">
+              <g stroke="#5b636d" stroke-width="6" fill="none" stroke-linecap="square">
+                <path d="M56 26 H272"/><path d="M272 26 V116"/><path d="M272 116 H56"/>
+                <path d="M56 116 V76"/><path d="M56 54 V26"/><path d="M176 26 V116"/></g>
+              <path d="M56 54 V76" stroke="#12807d" stroke-width="6"/>
+              <text x="96" y="80" fill="#697079" font-size="11" font-weight="700" font-family="Inter,sans-serif">Wohnen</text>
+              <text x="206" y="80" fill="#697079" font-size="11" font-weight="700" font-family="Inter,sans-serif">Küche</text>
+            </svg>
+          </div>
+          <div class="blatt">
+            <div class="hg"></div>
+            <div class="reiter" style="padding:0 0 7px;border-bottom:1px solid var(--hair)">
+              <span class="an" style="font-size:11px">Allgemein</span><span style="font-size:11px"><span class="we"></span>Bezieh.</span><span style="font-size:11px">Prüf.</span><span style="font-size:11px"><span class="we"></span>Hist.</span>
+            </div>
+            <div style="padding-top:9px">
+              <div class="feld" style="margin-bottom:7px"><label>Wandstärke</label><div class="w" style="padding:5px 8px;font-size:12px">24,0 cm <em>KS</em></div></div>
+              <div class="feld" style="margin-bottom:0"><label>Länge</label><div class="w" style="padding:5px 8px;font-size:12px">3,48 m</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="an"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v18M12 3v18M16 3v18"/></svg>Werkz.</div>
+          <div><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 21V8l7-4 7 4v13"/></svg>Projekt</div>
+          <div><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>Bereiche</div>
+          <div><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Suchen</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 6 ══════════ -->
+<section>
+  <div class="kap"><span class="nr">06</span><h2>Höhenbilanz</h2></div>
+  <table>
+    <tr><th>Schicht</th><th>heute</th><th>Entwurf</th><th>Bemerkung</th></tr>
+    <tr><td>Blade <code>.hp-bar</code></td><td>46 px</td><td class="q">entfällt</td><td class="m">Zurück-Link wandert in die Ticket-Navigation, sobald T1 kommt — bis dahin bleibt er</td></tr>
+    <tr><td>Insel <code>.hp-studio-kopf</code></td><td>62 px</td><td class="q">48 px</td><td class="m">nimmt Projekt, Geschoss, Speicherstand und Verlauf mit auf</td></tr>
+    <tr><td>Insel <code>.hp-experte-leiste</code></td><td>33 px</td><td class="q">entfällt</td><td class="m">Rückweg ist der Modusschalter, Erklärtext wird Popover</td></tr>
+    <tr><td>Arbeitszeile <em>(neu)</em></td><td>—</td><td class="q">42 px</td><td class="m">Arbeitsbereiche · 2D/Split/3D · Werkzeuge · Suche — heute in der Geschosszeile verstreut (Inventur B1: 13 Bedienelemente, vier Aufgaben)</td></tr>
+    <tr><td><strong>zusammen</strong></td><td><strong>141 px</strong></td><td class="q"><strong>90 px</strong></td><td class="m"><strong>+51 px</strong> für die Fläche — und die Geschosszeile im Plan verschwindet zusätzlich</td></tr>
+  </table>
+  <div class="kasten">
+    <p><strong>Die Zahl ist geschätzt.</strong> Gemessen wird sie per <code>getBoundingClientRect</code>
+    vorher/nachher als Kriterium K‑05. <strong>Wächst die Bühne nicht, ist das der Befund</strong> und geht
+    zurück an den Planner, statt als „aufgeräumt“ durchzugehen.</p>
+    <p>Der Entwurf gewinnt <em>weniger</em> Höhe als der erste Vorschlag (51 statt 93 px), weil er eine
+    Arbeitszeile <em>hinzufügt</em>. Dafür verschwindet die 13-teilige Geschosszeile aus dem Plan, und die
+    linke Spalte hört auf, drei Jobs zu stapeln. <strong>Das ist der ehrlichere Handel.</strong></p>
+  </div>
+</section>
+
+<!-- ══════════ 7 ══════════ -->
+<section>
+  <div class="kap"><span class="nr">07</span><h2>Jede Entscheidung, und woher sie kommt</h2></div>
+  <table>
+    <tr><th>Im Entwurf</th><th>Befund</th><th>Quelle</th></tr>
+    <tr><td>Linke Spalte bekommt <strong>drei Reiter</strong> (Werkzeuge · Projekt · Fachplaner)</td>
+        <td class="q">B1</td>
+        <td class="m">„Die linke Spalte macht drei Jobs“ — Werkzeuge (9) → Fähigkeiten (37 in 9 Gruppen) → Projekt, in <em>einer</em> scrollenden Spalte. Der Projektbrowser war erst nach 2 × 10 Scroll-Ticks sichtbar. <code>ux-befund-expertenmodus</code></td></tr>
+    <tr><td>Panel-Reiterzeile <strong>bricht um, kappt nicht</strong>; alle vier Reiter sichtbar</td>
+        <td class="q">B3</td>
+        <td class="m">Bei 1375 px fehlte „Historie“, obwohl <code>PANEL_TABS</code> vier Einträge hat und sechs Tests das belegen. „Ein Reiter, den man nicht sehen kann, existiert für den Nutzer nicht.“</td></tr>
+    <tr><td>Leere Reiter zeigen <strong>Zustand + Hinweissatz</strong> statt zu fehlen</td>
+        <td class="q">panelTabs</td>
+        <td class="m">Der Zustand steht als Datum im Code: <code>beziehungen</code> und <code>historie</code> sind <code>in_entwicklung</code> und tragen je einen Satz, was dort stehen wird. Kein Blindtext, kein „keine Daten“.</td></tr>
+    <tr><td>Gesperrte Werkzeuge tragen <strong>ihren Grund</strong> (Titel + Palette)</td>
+        <td class="q">B4</td>
+        <td class="m">„Ein gekapptes Label trägt zwingend ein <code>title</code>, sonst ist es informationslos.“ Dazu <code>werkzeugZustand.ts</code>: ehrliche Zustände statt Verstecken.</td></tr>
+    <tr><td><strong>Geschoss + Höhenlage</strong> in der Kopfleiste</td>
+        <td class="q">B1 (Layout)</td>
+        <td class="m">Die Geschosszeile trug 13 Bedienelemente und vier unabhängige Aufgaben; die Höhenlage wurde im Modell geführt, aber nirgends gezeigt. „Das Geschoss ist das Tor“ — es entsperrt 34 von 110 Werkzeugen.</td></tr>
+    <tr><td><strong>Fünf Arbeitsbereiche</strong> als eigene Zeile</td>
+        <td class="q">Bestand</td>
+        <td class="m"><code>arbeitsbereiche.ts</code> führt sie bereits: Import &amp; Nachzeichnen · Architektur · Bauphysik · Heizung · Elektro · PV. Sie waren nur nicht sichtbar.</td></tr>
+    <tr><td><strong>⌘K</strong> mit sichtbarem Einstieg</td>
+        <td class="q">Bestand</td>
+        <td class="m"><code>dashboard/palette.ts</code> speist aus der Registry, <code>tools/trefferSuche.ts</code> sucht. Nicht bauen — erreichbar machen.</td></tr>
+    <tr><td>Panels als <strong>Overlay</strong>, Zustand je Arbeitsbereich</td>
+        <td class="q">Auftrag 4</td>
+        <td class="m">Muster liegt vor: <code>arbeitsbereichSpeicher.ts</code> und <code>angeheftet.ts</code> speichern bereits pro Bereich in <code>localStorage</code>. „Pro Nutzer“ wäre ein Backend-Anschluss — Tor 1.</td></tr>
+    <tr><td><strong>375 px</strong> mitgezeichnet</td>
+        <td class="q">B5</td>
+        <td class="m">Dort lief die Startseite einmal <strong>283 px</strong> über (<code>scrollWidth 658</code> bei <code>innerWidth 375</code>), 43 Elemente über dem Rand. Behoben als AUF-46 — und deshalb kein Nachgedanke mehr.</td></tr>
+  </table>
+</section>
+
+<!-- ══════════ 8 ══════════ -->
+<section>
+  <div class="kap"><span class="nr">08</span><h2>Was der Entwurf nicht zeigt</h2></div>
+  <table>
+    <tr><th>Fehlt bewusst</th><th>Warum</th></tr>
+    <tr><td><strong>Kontextmenüs und Doppelklick</strong></td>
+        <td class="m">Gemessen: <code>onContextMenu</code> und <code>onDoubleClick</code> — <strong>0 Treffer</strong> in der ganzen Insel. Das ist ein neues Bedienmuster, kein Aufräumen. Eigener Auftrag, sonst wird aus „aufräumen“ ein Neubau.</td></tr>
+    <tr><td><strong>Ticket-Navigation</strong></td>
+        <td class="m">Existiert nicht — beide Blades haben <code>0× @extends</code>. Das ist <strong>T1</strong> und liegt bei Yama: Layout-Vererbung an einer Anwendung mit ~3000 Kunden.</td></tr>
+    <tr><td><strong>Import &amp; Nachzeichnen</strong></td>
+        <td class="m">Der Bereich ist im Entwurf ausgegraut, weil er heute nur aus <em>Namen</em> besteht: Kalibrierung, Vertrauensstufen, Referenz-Layer, Nachzeichnen-Flyout fehlen vollständig (<code>Vertrauen</code>: 0 Fundstellen). Eigener Fahrplan, nicht ein Posten.</td></tr>
+    <tr><td><strong>Prüfungscenter mit Liste</strong></td>
+        <td class="m">Der Store hält heute genau <em>eine</em> Meldung (<code>letzteAblehnung</code>). Deshalb zeigt der Entwurf einen Befund, nicht sieben. Mehr verlangt eine Store-Änderung — Spur A, eigener Posten.</td></tr>
+    <tr><td><strong>Versionen &amp; Verlauf</strong></td>
+        <td class="m">Der Server legt Planungsstände bereits an, listet und stellt sie wieder her — <code>objekt.blade.php</code> setzt <code>data-snapshots-url</code>, drei Routen arbeiten. <em>Die Insel liest davon kein Zeichen.</em> Der Reiter „Historie“ spricht diese Naht aus, statt sie zu verstecken.</td></tr>
+  </table>
+</section>
+
+<p class="fussnote">Freigabe heißt: <strong>so schneide ich die Auftragsblätter</strong> — T2/T3 (Kopfleiste,
+Spur B, sofort), T1a/T4 (Maße vom Behälter, Spur A, zugleich erster Zerlegungsschritt von AUF‑48), T5 (Overlays,
+Escape-Stapel, Zustand). Änderst du etwas am Entwurf, ändern sich die Blätter mit — <strong>es ist noch nichts
+gebaut</strong>, und das Blatt steht auf <code>GESPERRT</code>.</p>
+
+</div>
+</body>
+</html>

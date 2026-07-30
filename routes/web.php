@@ -5685,6 +5685,12 @@ Route::middleware(['auth'])->group(function () {
         ->name('energie.plan-upload.destroy');
     Route::get('/admin/energie/plan-upload/{planUpload}/bild', [\App\Http\Controllers\Energie\PlanUploadController::class, 'bild'])
         ->name('energie.plan-upload.bild');
+    // AUF-88-P1 / K-04: die Kalibrierung (zwei Punkte + bekannte Länge → Maßstab) speichern.
+    Route::put('/admin/energie/plan-upload/{planUpload}/massstab', [\App\Http\Controllers\Energie\PlanUploadController::class, 'massstab'])
+        ->name('energie.plan-upload.massstab');
+    // AUF-88-P1: Status abfragen (Polling nach dem Hochladen, während die Queue klassifiziert).
+    Route::get('/admin/energie/plan-upload/{planUpload}/status', [\App\Http\Controllers\Energie\PlanUploadController::class, 'status'])
+        ->name('energie.plan-upload.status');
 });
 
 

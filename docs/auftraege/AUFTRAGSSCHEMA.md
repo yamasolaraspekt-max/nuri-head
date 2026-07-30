@@ -40,7 +40,10 @@ scope:
   # Eine Zahl im Auftrag ist eine Messung zum Zeitpunkt des Schreibens und veraltet;
   # ein Befehl misst zum Pruefzeitpunkt neu. (Lehre vom 26.07.: "20 genannt, 34 gemessen".)
   population_command: "./scripts/zaehle-statische-stile.sh app/HausplanerStudio.tsx"
-  population_at_writing: 19         # Messung des Planners, ausdruecklich KEINE Bedingung
+  # population_at_writing:  ENTFAELLT seit 30.07.2026 (R19).
+  #   Grund: der Planner hat die Zahl fuenfmal an einem Tag behauptet statt gemessen (F-04).
+  #   Ein Auftrag nennt den BEFEHL. Wer die Zahl braucht, faehrt ihn — und das ist der
+  #   Bauende, weil er eine falsche Zahl sofort bezahlt und der Planner nie.
   pfade:
     - resources/planner/hausplaner/app/HausplanerStudio.tsx
   ausschluesse: []                  # jeder Ausschluss braucht 'grund' und 'entschieden_von'
@@ -208,6 +211,19 @@ bekaempfen.
 sonst baute ich das Werkzeug, das meine eigene Arbeit prueft.
 
 Reihenfolge:
+
+> **VOLLZUG, 30.07.2026 (AUF-87):** `scripts/auftrag-pruefen.sh` **ist gebaut** — allerdings mit
+> einem anderen Zuschnitt als Punkt 2 unten. **Er prueft AUSFUEHRBARKEIT** (laeuft der Befehl,
+> welcher Exitcode, ist die Ausgabe leer, steht er auf der Denylist, ist er ueberhaupt maschinell)
+> in **fuenf Stufen**: `OK` · `VERDAECHTIG` (exit 0, aber keine Ausgabe) · `FEHLSCHLAG` ·
+> `UEBERSPRUNGEN` (Denylist) · `NICHT MASCHINELL` (visuelle Kriterien). Ein Blatt **ohne** Kopf ist
+> kein Fehler — 67 der 80 Blaetter haben keinen.
+>
+> **Die fuenf STRUKTUR-Pruefungen aus Punkt 2 sind damit NICHT erledigt.** Sie fangen etwas
+> anderes: dass ein Kriterium ueberhaupt einen Befehl hat, dass ein `absence`-Kriterium einen
+> `presence`-Partner hat, dass genau ein Auftrag aktiv ist. **Beides zusammen ergibt erst das
+> Gate**; der Unterschied stand im Blatt von AUF-87 nicht und ist beim Bauen aufgefallen.
+> *Offen als eigener Posten.*
 
 1. **Dieses Schema** (liegt hiermit).
 2. **Auftrag an den Generator:** `scripts/auftrag-pruefen.sh` mit **fuenf** harten Pruefungen —

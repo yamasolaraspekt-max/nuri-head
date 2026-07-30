@@ -72,7 +72,14 @@ test('K7: eine nicht-leere Liste rendert unverändert — Zeichen für Zeichen',
   // Der Inhalt der Karte ist unangetastet: Titel, Detail, Warnzeichen, Trennlinie.
   assert.match(q, /\{s\.aufgaben\.map\(\(a\) => \(/);
   assert.match(q, /\{a\.titel\}/);
-  assert.match(q, /\{a\.detail && <div style=\{\{ fontSize: 12\.5, color: T\.muted \}\}>\{a\.detail\}<\/div>\}/);
+  // **Nachgezogen in AUF-38 Scheibe 6:** das Detail trug seinen Stil inline und traegt ihn jetzt
+  // als `.hp-gf-detail`. **Die Aussage dieser Zusage ist der Inhalt, nicht die Gestalt** — dass das
+  // Detail ueberhaupt gerendert wird, und nur wenn es eines gibt. Der Stil wird deshalb dort
+  // geprueft, wo er wohnt: in der Stilschicht.
+  assert.match(q, /\{a\.detail && <div className="hp-gf-detail">\{a\.detail\}<\/div>\}/);
+  const stil = readFileSync(new URL('../hausplaner.css', import.meta.url), 'utf8');
+  assert.match(stil, /\.hp-gf-detail \{[^}]*font-size: 12\.5px[^}]*color: var\(--hp-muted\)[^}]*\}/,
+    'die Werte des Details sind beim Umzug verlorengegangen');
   assert.match(q, /a\.warn \? T\.warnInk : T\.ink/);
 });
 

@@ -24,10 +24,12 @@ import { aufloeseDarstellung } from '../app/tools/auswahlDarstellung';
 import { mehrfachUebersicht, benenne } from '../app/tools/auswahlUebersicht';
 import { toolNach } from '../app/tools/toolRegistry';
 import type { SceneNode } from '../../hausplaner/domain/scene.types';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-const appQuelle = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const appQuelle = ohneKommentare(zerlegteApp());
 
 // --- K4: die Ableitung aus der Eingabe ----------------------------------------------------------
 test('K4: Shift→add · Strg/Cmd→toggle · Alt→remove · sonst replace', () => {

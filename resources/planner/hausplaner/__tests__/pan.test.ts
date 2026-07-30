@@ -15,10 +15,12 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { panAus, standardPan, istVerschoben, STANDARD_PAN_X, STANDARD_PAN_RAND } from '../app/dashboard/pan';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const app = ohneKommentare(zerlegteApp());
 
 // --- Die Regel ----------------------------------------------------------------------------------
 test('nie verschoben ⇒ Standardlage, und die folgt der Fensterhöhe', () => {

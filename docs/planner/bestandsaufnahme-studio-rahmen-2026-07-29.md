@@ -1,3 +1,25 @@
+> # ⛔ HISTORISCH — die Konflikttabelle beschreibt einen Bestand von gestern Abend
+>
+> **Planner, 30.07.2026, 09:05. Auf `PB-009`, nachgemessen und bestätigt.**
+>
+> | Papier sagt | gemessen (`HEAD`) |
+> |---|---|
+> | `HausplanerStudio.tsx` 217 Zeilen | **159** |
+> | Studio-Navigation klappbar (`navZu`) | **0 Treffer im Produktivcode** — es gibt sie nicht mehr |
+> | `studio.blade.php` trägt `hp-scratch` | **0** — von T2 absichtlich entfernt |
+> | `ConfigWizard.tsx`: *„Scheibe 5 läuft gerade"* | **angehalten**, Quittung `TRÄGT NICHT` |
+> | Anker `HausplanerApp.tsx:1371 / :1793` | tragen heute anderen Inhalt |
+>
+> **Der gefährlichste Teil ist die Konflikttabelle**, und zwar aus dem Grund, für den es sie gibt:
+> *sie soll zwei Schreiber auf einer Datei verhindern.* **Sie führt `ConfigWizard.tsx` als besetzt,
+> obwohl die Scheibe angehalten ist — sie sperrt eine freie Datei.** Und sie beschreibt eine
+> klappbare Navigation als Muster zum Abschauen, die es nicht mehr gibt.
+>
+> **Für den aktuellen Stand gilt die Auftragstafel, nicht dieses Papier.**
+
+
+---
+
 # ⇒ PLANNER — Bestandsaufnahme zum Auftrag „Topbar und Sidebars aufräumen"
 
 **Vom:** Planner · **29.07.2026, 01:00 CEST** · **Auftrag:** Yama —

@@ -19,12 +19,30 @@
  */
 import React, { useRef } from 'react';
 import { T } from '../studioDaten';
+import { GESPERRT_BESCHRIFTUNG, GESPERRT_DECKKRAFT } from './gesperrtStil';
 
 export interface ReiterEintrag {
   id: string;
   label: string;
   /** Ein Satz für den Tooltip: was dieser Reiter zeigt. Ohne ihn ist ein Reiter eine Behauptung. */
   hinweis?: string;
+  /**
+   * AUF-83-T3 / K-05 — **der Grund, warum dieser Reiter noch nichts trägt.**
+   *
+   * **Optional, und das ist die ganze Auflage:** `ReiterLeiste` hat drei Nutzer (Panel-Reiter,
+   * Schienen-Reiter, Arbeitsbereiche — AUF-27). Wer das Feld nicht setzt, bekommt **exakt** das
+   * heutige Verhalten; eine Zusage in `reiterLeisteGeteilt.test.ts` belegt das, statt es zu
+   * behaupten.
+   *
+   * **Ein Satz, kein `true`.** Ein Merker sagt *dass*, der Satz sagt *warum* — und K-05 verlangt
+   * ausdrücklich, dass der Reiter „das auch sagt". Ein ausgegrauter Reiter ohne Begründung ist
+   * eine Sackgasse mit Beschriftung.
+   *
+   * **Es sperrt nicht.** Der Reiter bleibt anwählbar und tastaturbedienbar — ausgegraut ist eine
+   * Aussage über den Inhalt, keine Entziehung der Bedienung. Ein `disabled` hier risse ein Loch
+   * in die Pfeiltasten-Navigation der beiden anderen Nutzer.
+   */
+  nochNicht?: string;
 }
 
 interface Props {
@@ -48,7 +66,7 @@ export function ReiterLeiste({ reiter, aktiv, setAktiv, ariaLabel, panelId, reit
     // statt gekappt zu werden. Ein Reiter, der „Fachpla…" heisst, ist kein Reiter.
     <div
       role="tablist" aria-label={ariaLabel}
-      style={{ display: 'flex', flexWrap: 'wrap', gap: 2, borderBottom: `1px solid ${T.hair}`, marginBottom: 12 }}
+      className="hp-rl-leiste"
     >
       {reiter.map((tab, i) => {
         const aktivT = tab.id === aktiv;
@@ -57,7 +75,7 @@ export function ReiterLeiste({ reiter, aktiv, setAktiv, ariaLabel, panelId, reit
             key={tab.id} type="button" role="tab" aria-selected={aktivT} tabIndex={aktivT ? 0 : -1}
             id={reiterId(tab.id)} aria-controls={panelId}
             ref={(el) => { reiterRefs.current[tab.id] = el; }}
-            title={tab.hinweis}
+            title={tab.nochNicht ? `${tab.label} — ${tab.nochNicht}` : tab.hinweis}
             onClick={() => setAktiv(tab.id)}
             onKeyDown={(e) => {
               if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
@@ -77,9 +95,16 @@ export function ReiterLeiste({ reiter, aktiv, setAktiv, ariaLabel, panelId, reit
               border: 'none', borderBottom: `2px solid ${aktivT ? T.brandInk : 'transparent'}`,
               fontWeight: aktivT ? 800 : 600, color: aktivT ? T.ink : T.muted,
               overflowWrap: 'anywhere', whiteSpace: 'normal',
+              // AUF-83-T3 / K-05: die Deckkraft kommt aus `gesperrtStil.ts` (AUF-71), nicht aus
+              // einer sechsten Meinung darüber, wie „noch nicht" aussieht. Genau dieser Wert war
+              // schon einmal an fünf Stellen verschieden — 0,6 · 0,4 · 0,45.
+              opacity: tab.nochNicht ? GESPERRT_DECKKRAFT : undefined,
             }}
           >
             {tab.label}
+            {/* **„sagt das auch"** — der sichtbare Teil des Kriteriums. Ohne ihn wäre der Reiter
+                nur blass, und Blässe allein ist keine Auskunft (WCAG 1.4.1: nicht nur Farbe). */}
+            {tab.nochNicht && <span style={{ marginLeft: 5, fontWeight: 600, color: GESPERRT_BESCHRIFTUNG }}>· noch nicht</span>}
           </button>
         );
       })}

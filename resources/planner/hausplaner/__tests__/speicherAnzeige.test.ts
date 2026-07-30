@@ -14,10 +14,12 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { speicherAnzeige } from '../app/dashboard/speicherAnzeige';
 import type { SpeicherStatus } from '../store/hausplanerStore';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const app = ohneKommentare(zerlegteApp());
 const regel = ohneKommentare(readFileSync(join(hier, '../app/dashboard/speicherAnzeige.ts'), 'utf8'));
 
 const ALLE: SpeicherStatus[] = ['gespeichert', 'ungespeichert', 'speichert', 'konflikt', 'fehler'];

@@ -1,3 +1,34 @@
+> # ⛔ HISTORISCH — dieses Papier beschreibt einen Stand, den es nicht mehr gibt
+>
+> **Planner, 30.07.2026, 08:45. Auf fünf Befunde des unabhängigen Prüfers, alle nachgemessen und
+> alle bestätigt** (`PB-001` bis `PB-005`, siehe `docs/planner/PRUEFER-BEFUNDE.md`).
+>
+> **Die Wurzel steht in PB-002 und macht alles andere zur Folge:** dieses Papier misst gegen
+> `2f12c64` auf `private/app-code-backup` — **einen Sicherungszweig, nicht den Arbeitszweig.**
+> *Jede Zahl darin ist gegen einen Ast gemessen, auf dem seit sechs Tagen nichts passiert.*
+>
+> **Vier Aussagen sind vom Baum widerlegt** — von mir gegen `67ac4ea0` nachgemessen, nicht
+> übernommen:
+>
+> | Papier sagt | gemessen |
+> |---|---|
+> | 422-Blocker, Bauart-Szenen unspeicherbar (Warnkasten ganz oben) | `npm run schema:hausplaner:check` ⇒ **exit 0** |
+> | `HausplanerApp.tsx` ~900 Zeilen | **2 308** |
+> | 11 Command-Typen | **19** |
+> | `geometry/` 30 Dateien | **50** |
+> | Werkzeug-Registry *„NICHT verdrahtet, kein UI-Konsument"* | **9 Konsumenten** in `app/` |
+>
+> **Der Warnkasten unten war der gefährlichste Teil:** er nennt einen Datenverlust-Zustand, der
+> behoben ist, und steht **vor** allem anderen. *Wer ihn heute liest, baut den Fix ein zweites Mal
+> — oder misstraut einem Gate, das grün ist.*
+>
+> **Was noch gilt:** die Entwurfsabschnitte §6/§8/§9, auf die `fahrplan-dashboard-versionen.md`
+> zeigt, sind Gestaltungsarbeit und von den Zahlen unabhängig. **Wer sie benutzt, nimmt die
+> Gestalt und misst die Zahlen neu.**
+
+
+---
+
 # tool-dashboard-current-state.md
 
 **Rolle:** PLANNER (read-only Bestandsaufnahme). Kein Produktivcode, keine Migration, keine Route, kein Commit.

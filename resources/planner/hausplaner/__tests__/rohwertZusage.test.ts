@@ -167,13 +167,31 @@ test('AUF38-MW-3: `?` und `...` IM Text machen eine Stelle nicht dynamisch', () 
   assert.equal(istStatisch("style={{ ...grund, cursor: 'default' }}"), false, 'echter Spread');
 });
 
-test('AUF38-MW-1: die Fundstelle WerkzeugGruppenMenue Z82 wird als statisch gezählt', () => {
-  // Nur Literale und `T.*`, aber kommentiert — und deshalb vom Werkzeug nicht gezählt. An dieser
-  // Stelle ist der Befund entstanden; sie hält fest, dass die Zählung sie wieder sieht.
-  const pfad = 'resources/planner/hausplaner/app/dashboard/WerkzeugGruppenMenue.tsx';
-  const block = stilBloecke(readFileSync(pfad, 'utf8')).find((b) => b.zeile === 82);
-  assert.ok(block, 'die Stelle ist verschwunden — dann gehört diese Zusage nachgeführt');
-  assert.equal(istStatisch(block!.text), true, 'Z82 ist statisch und offen');
+test('AUF38-MW-1: an JEDEM kommentierten Block der Insel aendert der Kommentar die Einstufung nicht', () => {
+  // **Nachgeführt in AUF-38 Scheibe 8c.** Diese Zusage hing an einer Fundstelle:
+  // `WerkzeugGruppenMenue` Z82, dem kommentierten, sonst rein statischen Block, an dem der Befund
+  // entstand. **Scheibe 8c hat genau ihn in eine Klasse geholt** — und die Zusage ging rot, mit
+  // dem Satz, der dafür dranstand. *Sie hat funktioniert; sie hing nur am Einzelfall.*
+  //
+  // Jetzt steht die Eigenschaft statt der Stelle: **für jeden Block, der einen Kommentar trägt,
+  // muss die Einstufung dieselbe sein wie ohne ihn.** Das gilt auch, wenn die Insel gerade keinen
+  // kommentierten *statischen* Block mehr hat — heute sind es sechs, alle dynamisch.
+  const geprueft: string[] = [];
+  for (const pfad of tsxDateien()) {
+    const roh = readFileSync(pfad, 'utf8');
+    const maske = ohneKommentare(roh);
+    for (const block of stilBloecke(roh)) {
+      const start = maske.indexOf(block.text);
+      if (start < 0) continue;
+      const mitKommentar = roh.slice(start, start + block.text.length);
+      if (mitKommentar === block.text) continue;          // dieser Block trägt keinen Kommentar
+      geprueft.push(`${pfad}:${block.zeile}`);
+      assert.equal(istStatisch(mitKommentar), istStatisch(block.text),
+        `${pfad}:${block.zeile} — der Kommentar veraendert die Einstufung`);
+    }
+  }
+  assert.ok(geprueft.length > 0,
+    'kein einziger kommentierter Stil-Block mehr gefunden — dann misst diese Zusage nichts');
 });
 
 test('ein `//` INNERHALB einer Zeichenkette ist kein Kommentar', () => {

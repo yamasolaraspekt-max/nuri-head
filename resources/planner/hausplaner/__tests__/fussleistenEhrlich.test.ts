@@ -34,12 +34,16 @@ const ohneKommentare = (s: string): string =>
 const lies = (p: string): string => ohneKommentare(readFileSync(join(hier, '../app/', p), 'utf8'));
 const app = lies('HausplanerApp.tsx');
 const studio = lies('HausplanerStudio.tsx');
+/** AUF-48 Scheibe 4b: die Schiene samt Fuss wohnt jetzt hier. **Als DRITTE Quelle, nicht als
+ *  Ersatz** — die Vertröstungs-Zusagen unten müssen weiterhin alle Flächen abdecken, sonst würde
+ *  eine Vertröstung schlicht dadurch zulässig, dass sie eine Datei weiter zieht. */
+const schiene = lies('rahmen/GruppenzeileUndSchiene.tsx');
 
 const VERTROESTUNGEN = ['folgen', 'folgt', 'in Kürze', 'demnächst', 'coming soon', 'geplant'];
 
 // --- Die Vertröstung ist weg ----------------------------------------------------------------------
 test('keine der beiden Fußleisten verspricht noch etwas', () => {
-  for (const [name, quelle] of [['HausplanerApp', app], ['HausplanerStudio', studio]] as const) {
+  for (const [name, quelle] of [['HausplanerApp', app], ['HausplanerStudio', studio], ['GruppenzeileUndSchiene', schiene]] as const) {
     assert.ok(!quelle.includes('Module folgen'), `${name}: „Module folgen" steht noch da`);
     assert.ok(!quelle.includes('Erweiterbar'), `${name}: „Erweiterbar" ohne Inhalt sagt nichts`);
   }
@@ -47,7 +51,7 @@ test('keine der beiden Fußleisten verspricht noch etwas', () => {
 
 test('und auch sonst steht in keiner der beiden Dateien eine Vertröstung als Anzeigetext', () => {
   // Geprüft werden die Zeichenketten in Anführungszeichen, nicht der Code drumherum.
-  for (const [name, quelle] of [['HausplanerApp', app], ['HausplanerStudio', studio]] as const) {
+  for (const [name, quelle] of [['HausplanerApp', app], ['HausplanerStudio', studio], ['GruppenzeileUndSchiene', schiene]] as const) {
     const texte = quelle.match(/>[^<>{}]{12,}</g) ?? [];
     for (const t of texte) {
       for (const wort of VERTROESTUNGEN) {
@@ -59,7 +63,7 @@ test('und auch sonst steht in keiner der beiden Dateien eine Vertröstung als An
 
 // --- Was jetzt dort steht -------------------------------------------------------------------------
 test('die Schiene zeigt den Satz ihres eigenen Reiters — wiederverwendet, nicht neu geschrieben', () => {
-  assert.match(app, /\{schienenReiter\(schienenTab\)\?\.hinweis\}/,
+  assert.match(schiene, /\{schienenReiter\(schienenTab\)\?\.hinweis\}/,
     'der Fuss liest die vorhandenen Daten');
   // Und die Daten taugen dafür: jeder Reiter hat einen Satz, keiner vertröstet.
   for (const r of SCHIENEN_REITER) {
@@ -76,12 +80,25 @@ test('jeder der drei Reiter hat einen eigenen Satz — der Fuss wechselt wirklic
   assert.equal(new Set(saetze).size, 3);
 });
 
-test('die Studio-Navigation ZÄHLT, statt zu versprechen', () => {
-  assert.match(studio, /\{PROJ\.length\} Projekt-Einstiege/);
-  assert.match(studio, /\{FACH\.length\} Fachplaner mit \{FACH\.reduce/,
-    'die Untermodule werden gerechnet, nicht abgetippt');
-  // Keine Zahl im Text: eine abgetippte Zahl veraltet still.
+test('das Studio verspricht auch OHNE Navigation nichts, was es nicht zählt', () => {
+  // **Nachgezogen in AUF-83-T2.** Die Zusage prüfte den Fuß der Studio-Navigation — *„3
+  // Projekt-Einstiege · 5 Fachplaner mit 20 Untermodulen"*, gerechnet statt abgetippt. **Mit der
+  // zweiten Navigation ist auch ihr Fuß gefallen**, und damit die Stelle, an der gezählt wurde.
+  //
+  // **Die Absicht bleibt und ist die eigentliche Aussage:** an dieser Fläche steht keine Zahl und
+  // kein Versprechen, das nicht aus den Daten kommt. Das galt vorher für den gezählten Fuß und
+  // gilt jetzt für seine Abwesenheit — geprüft wird deshalb die Abwesenheit **beider** Formen.
+  // *(Die Zählung selbst kehrt mit T3 zurück, wenn `FACH` in die Arbeitszeile wandert.)*
   assert.doesNotMatch(studio, />\s*\d+ Projekt-Einstiege/, 'keine feste Zahl im Markup');
+  assert.doesNotMatch(studio, /Erweiterbar|weitere Module folgen|folgt bald/,
+    'ein Versprechen auf später sagt über den Inhalt nichts — genau das war AUF-56');
+});
+
+test('die Daten der Navigation sind NICHT gelöscht — nur ihre Darstellung', () => {
+  // Der ausdrückliche Ausschluss aus AUF-83-T2: `FACH` und `PROJ` bleiben, sie wandern mit T3 in
+  // die Arbeitszeile. **Wären sie mitgefallen, hätte T2 stillschweigend T3 vorweggenommen.**
+  assert.ok(PROJ.length > 0, 'die Projekt-Einstiege sind fort — das war nicht beauftragt');
+  assert.ok(FACH.length > 0, 'die Fachplaner sind fort — das war nicht beauftragt');
 });
 
 test('die gezählten Werte stimmen mit den Daten überein', () => {

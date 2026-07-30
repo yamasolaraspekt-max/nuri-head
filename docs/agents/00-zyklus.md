@@ -1,3 +1,21 @@
+> **⚠ EBENE 1 GILT ZUSÄTZLICH — dieses Blatt ist seit 30.07.2026 nicht mehr allein gültig.**
+>
+> **Lies zuerst** [`docs/agents/regeln/kern.md`](regeln/kern.md) — die rollenübergreifenden
+> Kernregeln, die Gates und die sechs Aussagetypen. **Danach dein Rollenblatt** in
+> `docs/agents/regeln/` (`planner.md` · `generator.md` · `evaluator.md` · `plan-reviewer.md`).
+>
+> **Dieses Blatt hier bleibt gültig für alles, was dort nicht steht** — Verfahren,
+> Übergabeformate, die 10 Fragen, die Fachagenten, die Laufzeiten.
+>
+> **Bei Widerspruch gilt die ÄLTERE Regel, bis Yama entschieden hat.** Der eine bekannte
+> Widerspruch ist der **Commit-Zeitpunkt** — er kostete am 30.07. elf Stunden und ist in
+> `docs/planner/PRUEFER-BEFUNDE.md` (PB-013/PB-014) gemessen und offen an Yama gestellt.
+>
+> *Warum dieser Kasten hier steht: die neue Ablage war von jedem Startpfad aus mit **null
+> Verweisen** unerreichbar. Ein Regelwerk, das niemand findet, ist kein Regelwerk.*
+
+---
+
 > **⚠ Der Ablauf gilt ab 27.07.2026, 21:30 nach `docs/agents/00-REGELWERK.md`.**
 > Dieses Dokument bleibt als Herkunft und fuer alles gueltig, was dort nicht geregelt ist.
 > **Bei Widerspruch gewinnt `00-REGELWERK.md`.**
@@ -41,12 +59,12 @@ EVALUATOR ──►  dreifach: (A) Richtigkeit  (B) Bauordnung 10 Fragen  (C) Gr
 
 1. **Getrennte Instanzen — Generator ≠ Evaluator ZWINGEND.** Der Evaluator ist immer eine frische Instanz, nie dieselbe, die gebaut hat. (Betriebsordnung 3.2: „frische Instanz je Prüfung".)
 2. **Jede Übergabe schriftlich mit Belegen.** Planner→Generator: das Paket mit 7 Feldern. Generator→Evaluator: Gelesen-Liste + Änderungen + Test + 10-Fragen-Selbstprüfung. Evaluator→zurück: Votum + Protokoll mit selbst erzeugten Belegen. Kein mündliches „passt schon".
-3. **Yama ist finaler Freigeber vor jedem Produktiv-Commit.** Evaluator-FREIGABE ist eine Commit-**Empfehlung**; committet wird erst nach Yama-Bestätigung. (Restgrenze Betriebsordnung 2.2.)
+3. **Yama ist finaler Freigeber vor jedem MERGE nach `main` und vor jedem Deploy.** *(ENTSCHEIDUNG Yama, 30.07.2026, 09:45 — vorher stand hier „vor jedem Produktiv-Commit"; das hat den Bau blockiert.)* Der Generator committet seinen geprueften Scope selbst auf die Aufgaben-Branch. **Ein Commit ist ein pruefbarer Zwischenstand, kein Freigabeakt.** Evaluator-FREIGABE ist eine **Merge-Empfehlung** an Yama.
 4. **Eskalation an Yama bei Dissens.** Planner↔Evaluator-Konflikt, Weichen-/Direktiven-Zweifel, Restgrenze berührt → Strang stoppt, Yama entscheidet, Antwort wird Entscheidung.
 5. **Pflicht-Stopp = Haupt-Taktgeber.** Geschwindigkeit entsteht durch den geschlossenen Kreislauf, nicht durch das Aufweichen von Gates.
 6. **Beweis statt Bericht** (Evaluator misst selbst) · **kein `git add -A`** · **kein Beifang** (Bestandsdaten-Mutation nur als eigener Yama-Posten) · **TABU** (Nuriva/Video/Invoice-Zone/Legacy) unberührt · **Testanzahl sinkt nie**.
 7. **Evaluator strikt read-only — keine Schreib-/git-Werkzeuge.** Der Evaluator (und jeder Prüf-Subagent) führt KEINE git-Schreibbefehle aus (`add`, `commit`, `push`, `reset`, `rebase`, `checkout`, `stash`, `tag`, `restore`) und ändert KEINE Dateien. Er nutzt nur lesende Werkzeuge und liefert ausschließlich **Befund / Votum (FREIGABE/NACHBESSERN/ABLEHNEN) / Auflagen** — nie einen Commit oder Push. Erlaubt sind nur read-only-Prüfungen (Diff/Log/Show/Grep/Tests).
-8. **Kein Push ohne ausdrückliche Yama-Freigabe.** Lokale Commits sind nach Freigabe erlaubt; **Push ist IMMER ein eigener, separater, ausdrücklich freigegebener Schritt.** Kein automatischer Push nach Commit, kein `--force`/force-push ohne explizite Yama-Freigabe.
+8. **Kein Push, kein Merge nach `main`, kein Arbeiten auf `main` — aus keiner Instanz.** Lokale Commits auf der Aufgaben-Branch sind **Pflicht des Bauenden** *(ENTSCHEIDUNG Yama, 30.07.2026, 09:45)*; **Push ist IMMER ein eigener, separater, ausdrücklich freigegebener Schritt.** Kein automatischer Push nach Commit, kein `--force`/force-push ohne explizite Yama-Freigabe.
 
 **Fundament — alle drei Rollen laden es immer (read-only):** `docs/architektur/bauordnung.md` · `docs/architektur-entscheidungen.md` · `docs/glossar.md` · `docs/audit/code-audit.md` · `docs/BETRIEBSORDNUNG.md` · `CLAUDE.md`. Sobald vorhanden zusätzlich: `docs/zielbild-domaenen.md` + die Wächter-Skills.
 

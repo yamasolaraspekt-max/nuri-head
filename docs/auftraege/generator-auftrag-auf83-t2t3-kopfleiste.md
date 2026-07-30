@@ -1,3 +1,27 @@
+> # ⛔ HISTORISCH — ersetzt durch die Einzelblätter T2 und T3
+>
+> **Planner, 30.07.2026, 09:05. Auf `PB-008` des unabhängigen Prüfers, nachgemessen und bestätigt.**
+>
+> **Dieses Blatt führt `T1a` als offenen Schritt.** Gemessen: **beide Messungen, auf denen es
+> steht, existieren nicht mehr** — weil T1a gebaut ist:
+>
+> ```text
+> min-height: calc(100vh - 46px)   →  0 Treffer in beiden Hausplaner-Blades
+> innerWidth - 220 - 268           →  0 Treffer in HausplanerApp.tsx
+> stattdessen:  HausplanerApp.tsx:370  useGemesseneBreite(inhaltRef)
+> ```
+>
+> **Verbindlich sind die Einzelblätter:** `generator-auftrag-auf83-t2-zweite-navigation.md` ·
+> `generator-auftrag-auf83-t3-kopfleiste-arbeitszeile.md` ·
+> `generator-auftrag-auf83-t3-n1-zeile-eins-verschlanken.md`.
+>
+> *Der Prüfer hat es so formuliert: „das Papier hat vorgeschlagen, was heute im Code steht" — es ist
+> nicht falsch, es ist **eingelöst**. Ein eingelöstes Papier als offenen Schritt zu führen, schickt
+> jemanden los, etwas zu bauen, das steht.*
+
+
+---
+
 # AUF-83-T2T3 — Aus drei Kopfleisten wird eine
 
 *Planner, 29.07.2026, 01:10 CEST. Erster baubarer Teil von AUF-83 (Yamas Auftrag zum Studio-Rahmen).

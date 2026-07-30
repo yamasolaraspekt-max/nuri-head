@@ -31,7 +31,7 @@ export function FaehigkeitenNavi(
         if (items.length === 0) return null;
         return (
           <div key={g.id}>
-            <div style={{ padding: '8px 12px 3px', fontSize: 10.5, fontWeight: 600, color: T.muted, textTransform: 'uppercase', letterSpacing: 0.3 }}>
+            <div className="hp-fn-rubrik">
               {g.label}
             </div>
             {items.map((f) => {
@@ -60,7 +60,7 @@ export function FaehigkeitenNavi(
                 >
                   {/* AUF-26/B4: umbrechen statt kappen. „Horizont…", „Sparren-…" sind informationslos; zwei
                       Zeilen kosten weniger als ein unlesbarer Eintrag. Der `title` der Zeile bleibt. */}
-                  <span style={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere', whiteSpace: 'normal', lineHeight: 1.25 }}>{f.label}</span>
+                  <span className="hp-fn-label">{f.label}</span>
                   <ZustandBadge zustand={f.zustand} />
                 </button>
               );
@@ -68,7 +68,7 @@ export function FaehigkeitenNavi(
           </div>
         );
       })}
-      <div style={{ padding: '10px 12px', fontSize: 11, color: T.faint, borderTop: `1px solid ${T.hair}`, marginTop: 8 }}>
+      <div className="hp-fn-fuss">
         Jeder Eintrag sichtbar · „schläft" = Bedien-Panel folgt (Batch 1–3).
       </div>
     </div>

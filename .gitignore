@@ -8,6 +8,9 @@
 .env
 .env.backup
 .env.production
+# PB-044: die Testumgebung traegt dieselben Zugangsdaten wie `.env` und gehoert
+# genauso wenig ins Repo. Der Eintrag steht hier, BEVOR die Datei angelegt wurde.
+.env.testing
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -70,3 +73,13 @@ _to_delete/
 # Instanzen (§10.2); der Wächter darf sie ausserdem nicht selbst committen (AUF-75, Kante 2).
 /docs/fortschritt.html
 /docs/inventur.html
+
+# ── PB-038 (Yama, 30.07., Weg A): Kladden und Proben deckeln ───────────────────
+# Der Schutz hing bisher am NAMEN (/_*.mjs, /sichtprobe-*.tmp.mjs). Drei Dateien
+# eines Vormittags passten auf keines der Muster — zwei davon trugen einen Zugang
+# im Klartext. Ab jetzt wird die KLASSE gedeckelt, nicht die Namenswahl.
+/*.mjs
+/*_tmp.*
+/*.tmp.*
+/.rm_probe_tmp
+resources/planner/hausplaner/__tests__/*.generiert.ts

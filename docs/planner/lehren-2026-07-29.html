@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Was dieser Tag gelehrt hat — Regeln und Effizienz</title>
+<style>
+  :root{
+    --bg:#f5f7f8; --surface:#fff; --surface2:#f7f9fa;
+    --ink:#232a31; --muted:#697079; --faint:#a7aeb7;
+    --hair:#edf0f2; --hair2:#dfe3e6;
+    --accent:#12807d; --accentSoft:#e6f2f1;
+    --gruen:#94C11C; --blau:#2B4290;
+    --warnInk:#b45309; --warnBg:#fff7ed; --warnBd:#fed7aa;
+    --rot:#c63533; --rotBg:#fdeceb;
+    --f1:0 1px 2px rgba(28,50,55,.08);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--bg);color:var(--ink);padding:40px 26px 90px;
+       font:14px/1.65 Inter,-apple-system,"Segoe UI",system-ui,sans-serif}
+  .h{max-width:1000px;margin:0 auto}
+  h1{font-size:25px;font-weight:800;letter-spacing:-.4px;margin:0 0 8px}
+  .lead{color:var(--muted);font-size:14px;margin:0;max-width:78ch}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+       background:var(--surface);border:1px solid var(--hair2);border-radius:5px;padding:1px 5px}
+  section{margin-top:44px}
+  .kap{display:flex;align-items:baseline;gap:11px;margin-bottom:8px}
+  .kap h2{font-size:18px;font-weight:800;margin:0;letter-spacing:-.25px}
+  .nr{font-size:10.5px;font-weight:800;color:var(--accent);background:var(--accentSoft);
+      border-radius:6px;padding:3px 8px;letter-spacing:.4px}
+  .kaptext{color:var(--muted);font-size:13.5px;margin:0 0 16px;max-width:85ch}
+
+  .zahlen{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:8px}
+  .z{background:var(--surface);border:1px solid var(--hair2);border-radius:12px;padding:14px 15px;box-shadow:var(--f1)}
+  .z .t{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);font-weight:800;margin-bottom:6px}
+  .z .v{font-size:28px;font-weight:800;letter-spacing:-.9px;line-height:1;font-variant-numeric:tabular-nums}
+  .z .n{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.45}
+  .z.gut .v{color:var(--accent)} .z.rot .v{color:var(--rot)} .z.warn .v{color:var(--warnInk)}
+
+  table{border-collapse:separate;border-spacing:0;width:100%;font-size:13.5px;background:var(--surface);
+        border:1px solid var(--hair2);border-radius:12px;overflow:hidden;box-shadow:var(--f1);margin-top:10px}
+  th{text-align:left;padding:10px 13px;background:var(--surface2);font-size:10.5px;letter-spacing:.5px;
+     text-transform:uppercase;color:var(--faint);font-weight:800;border-bottom:1px solid var(--hair2)}
+  td{padding:12px 13px;border-bottom:1px solid var(--hair);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  td.m{color:var(--muted)} td.z{text-align:center;font-variant-numeric:tabular-nums;font-weight:800;white-space:nowrap}
+  .n3{color:var(--rot)} .n2{color:var(--warnInk)}
+  .wer{display:inline-block;font-size:10px;font-weight:800;border-radius:999px;padding:2px 8px;white-space:nowrap}
+  .wer.p{background:var(--rotBg);color:var(--rot)}
+  .wer.g{background:#eef2fb;color:var(--blau)}
+  .wer.u{background:var(--surface2);color:var(--muted);border:1px solid var(--hair2)}
+
+  .regel{background:var(--surface);border:1px solid var(--hair2);border-left:3px solid var(--accent);
+         border-radius:0 12px 12px 0;padding:15px 18px;margin-top:13px;box-shadow:var(--f1)}
+  .regel h3{margin:0 0 6px;font-size:14.5px;font-weight:800;display:flex;align-items:baseline;gap:9px}
+  .regel h3 .k{font-size:10px;font-weight:800;color:#fff;background:var(--accent);border-radius:5px;
+               padding:2px 7px;letter-spacing:.4px}
+  .regel p{margin:0 0 8px;font-size:13.5px} .regel p:last-child{margin:0}
+  .regel .alt{color:var(--muted);font-size:12.5px}
+  .regel.neu{border-left-color:var(--gruen)}
+  .regel.neu h3 .k{background:#6f9110}
+
+  .kasten{border-left:3px solid var(--warnInk);background:var(--warnBg);border-radius:0 11px 11px 0;
+          padding:15px 18px;margin-top:20px;font-size:13.5px}
+  .kasten.gut{border-left-color:var(--accent);background:var(--accentSoft)}
+  .kasten p{margin:0 0 9px} .kasten p:last-child{margin:0}
+  .fussn{margin-top:36px;padding-top:18px;border-top:1px solid var(--hair2);color:var(--faint);font-size:12.5px}
+  @media(max-width:720px){.zahlen{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="h">
+
+<h1>Was dieser Tag gelehrt hat</h1>
+<p class="lead">Planner, 29.07.2026, 10:35 CEST · Ausgewertet wurde das Protokoll von 00:00 bis 10:30,
+nicht die Erinnerung. Jede Fehlerklasse unten ist gezählt, jede Regel hat einen Auslöser mit Uhrzeit.</p>
+
+<!-- ══ 1 ══ -->
+<section>
+  <div class="kap"><span class="nr">01</span><h2>Der Tag in Zahlen</h2></div>
+  <div class="zahlen">
+    <div class="z gut"><div class="t">Freigaben</div><div class="v">10</div>
+      <div class="n">Scheiben 4, 2-Nachzug, 5, 6, 8a, 8b, 8c · Messwerkzeug · B-01 · Sicherung</div></div>
+    <div class="z"><div class="t">Commits</div><div class="v">44</div>
+      <div class="n">davon <strong>11</strong> mit Produktivcode — <strong>33 sind Verwaltung</strong></div></div>
+    <div class="z rot"><div class="t">Rückweisungen</div><div class="v">28</div>
+      <div class="n">Nachbesserungen und Quittungen <code>TRÄGT NICHT</code></div></div>
+    <div class="z warn"><div class="t">Lock-Reste</div><div class="v">28</div>
+      <div class="n">alle aus meinen Commits — <code>unlink</code> scheitert auf dem Mount</div></div>
+  </div>
+  <div class="kasten">
+    <p><strong>Die aussagekräftigste Zahl ist 11 von 44.</strong> Auf jeden Commit mit Produktivcode
+    kommen drei mit Verwaltung. Ein Teil davon ist der Preis der Nachvollziehbarkeit und richtig so —
+    aber <strong>ein erheblicher Teil sind Korrekturen an meiner eigenen Arbeit</strong>: zwei
+    zurückgewiesene Auftragsfassungen, drei zu enge Sperren, zwei unbrauchbare Entwürfe.</p>
+    <p><strong>Die Bauenden waren nie der Engpass.</strong> Der Generator hat zwischen 07:50 und 08:18
+    vier Scheiben durchgezogen — vier Dateien, je von n offenen Stellen auf 0, in 28 Minuten. Er war
+    genau dann schnell, wenn die Aufträge vor ihm lagen.</p>
+  </div>
+</section>
+
+<!-- ══ 2 ══ -->
+<section>
+  <div class="kap"><span class="nr">02</span><h2>Die Fehlerklassen, gezählt</h2></div>
+  <p class="kaptext">Regel R9 sagt: bei der <em>zweiten</em> Wiederholung kommt eine Barriere, kein
+  dritter Vorsatz. Vier Klassen haben die Zwei überschritten — und niemand hat mitgezählt, weil der
+  Zähler fehlt.</p>
+  <table>
+    <tr><th>Fehlerklasse</th><th style="text-align:center">×</th><th>bei</th><th>was jedes Mal passiert ist</th></tr>
+    <tr><td><strong>Suche nach Muster statt nach Menge</strong><br><span style="color:var(--muted);font-size:12.5px">geerbte Zusagen übersehen</span></td>
+        <td class="z n3">4</td><td><span class="wer g">Generator</span> <span class="wer p">Planner</span></td>
+        <td class="m">Erst <code>style</code>/<code>inline</code> gesucht → Zusagen übersehen, die nur die Eigenschaft nennen. Dann Eigenschaftsnamen → Zusagen übersehen, die über Variablen lesen. Dann Zahlen → Zusagen übersehen, die den Ausdruck zitieren. <strong>Jedes Mal war die Antwort ein besseres Muster.</strong></td></tr>
+    <tr><td><strong>Sperre, die mehr sperrt als ihr Grund trägt</strong></td>
+        <td class="z n3">3</td><td><span class="wer p">Planner</span></td>
+        <td class="m">Grund war <em>„das Bündel darf sich nicht bewegen"</em>, gesperrt wurde <em>das Bauen</em>. Grund war <em>„T1a muss gebaut sein"</em>, gesperrt wurde <em>bis abgenommen</em>. <strong>Jedes Mal wartete ein Bauender auf einen Prüfenden.</strong></td></tr>
+    <tr><td><strong>Messung älter als der Baum</strong></td>
+        <td class="z n3">3</td><td><span class="wer p">Planner</span></td>
+        <td class="m">Gemessen, dann minutenlang geschrieben, während zwei Instanzen committen. Eine Sperre, ein Auftragsblatt und eine Tafelzeile standen beim Hinlegen schon falsch.</td></tr>
+    <tr><td><strong>Zahl oder Artefakt behauptet statt gemessen</strong></td>
+        <td class="z n3">3</td><td><span class="wer p">Planner</span></td>
+        <td class="m">„+93 px" als Feststellung statt Schätzung · ein P1-Kriterium gegen eine Testdatei, <strong>die es nicht gibt</strong> · „die Scheiben räumen das ohnehin ab" — es waren 58 Stellen, alle in der gesperrten Datei.</td></tr>
+    <tr><td><strong>Beifang im Index</strong></td>
+        <td class="z n2">2</td><td><span class="wer g">Generator</span> <span class="wer p">Planner</span></td>
+        <td class="m">Ein Commit nimmt die gestagte Arbeit eines anderen mit. Die Regel <em>„Index vor dem Commit lesen"</em> ließ das Fenster <em>zwischen</em> Lesen und Committen offen.</td></tr>
+    <tr><td><strong>Zusage prüft Gestalt statt Wirkung</strong></td>
+        <td class="z n3">6</td><td><span class="wer u">Bestand</span></td>
+        <td class="m">Eine Zusage hält den gebauten Zustand fest statt der Absicht — und geht beim Umbau rot, <strong>ohne dass ein Fehler vorliegt</strong>. Sechs Mal in AUF-38. Das ist eine Eigenschaft des Bestands, kein Einzelfall.</td></tr>
+    <tr><td><strong>Bestand nicht gemessen, sondern nachgebaut</strong></td>
+        <td class="z n3">3</td><td><span class="wer p">Planner</span></td>
+        <td class="m">Eigene Inventuren nicht gelesen · vorhandene Icons nicht benutzt · <strong>die zwei klappbaren Ticket-Seitenleisten nachgebaut, die es längst gibt</strong>.</td></tr>
+  </table>
+  <div class="kasten">
+    <p><strong>Fünf von sieben Klassen gehen auf den Planner.</strong> Das ist die unbequeme, aber
+    nützliche Erkenntnis: <strong>der Engpass sitzt vor dem Bauen, nicht danach.</strong> Deshalb
+    zielen die Regeln unten auf die Qualität des Auftrags — und <em>nicht</em> auf mehr Prüfung
+    dahinter. Mehr Prüfung hätte heute nichts beschleunigt; sie hätte dieselben Fehler nur später
+    gefunden.</p>
+  </div>
+</section>
+
+<!-- ══ 3 ══ -->
+<section>
+  <div class="kap"><span class="nr">03</span><h2>Sieben Regeln — jede mit ihrem Auslöser</h2></div>
+  <p class="kaptext">Keine davon ist ein Vorsatz. Jede ist entweder mechanisch prüfbar oder sie
+  ändert die Form, in der etwas geschrieben wird — denn Prosa in einem langen Dokument ändert
+  Verhalten nicht; das ist heute dreimal belegt.</p>
+
+  <div class="regel neu">
+    <h3><span class="k">R10</span>Eine Sperre nennt eine Bedingung, keinen Meilenstein — und endet mit dem <em>Bau</em></h3>
+    <p>Wer sperrt, schreibt <strong>den Zustand</strong> hin, der die Sperre aufhebt, nicht das
+    nächste Ereignis im Kalender. „Bis T1a <em>gebaut</em> ist" statt „bis T1a <em>abgenommen</em> ist" —
+    außer der Sperrgrund nennt die Abnahme ausdrücklich, etwa weil ein Votum den Folgeauftrag umschreibt.</p>
+    <p class="alt"><strong>Auslöser:</strong> 3× · zuletzt 10:05, T1b stand gesperrt, obwohl T1a seit
+    09:58 gebaut war. Geht die Vorbedingung rot, wird der Folgeauftrag mitgezogen — <strong>das kostet
+    weniger als Stillstand.</strong></p>
+  </div>
+
+  <div class="regel neu">
+    <h3><span class="k">R11</span>Jedes Kriterium, das etwas benennt, trägt den Befehl, der es belegt — <em>ausgeführt vor dem Hinlegen</em></h3>
+    <p>Nennt ein Kriterium eine Datei, eine Zusage, eine Zeile oder eine Zahl, dann steht der Befehl
+    daneben <strong>und der Planner hat ihn gefahren</strong>, bevor das Blatt liegt.</p>
+    <p class="alt"><strong>Auslöser:</strong> 08:29 — ich schrieb ein P1-Kriterium gegen
+    <code>breiten.test.ts</code> mit <code>innerWidth</code>. Beides existiert nicht; der Prüfbefehl
+    liefert <code>exit 1</code>. <strong>Eine stumme Zusage — ausgerechnet in dem Auftrag, der gegen
+    stumme Zusagen gebaut wird.</strong> Ein einziger ausgeführter Befehl hätte die Rückweisung erspart.</p>
+  </div>
+
+  <div class="regel neu">
+    <h3><span class="k">R12</span>Geerbte Zusagen werden über die <em>Menge</em> gesucht, nicht über ein Muster</h3>
+    <p>Die Quittung nennt <strong>die Liste der Testdateien, die die betroffene Datei einlesen</strong> —
+    und jede ist angesehen. Nicht die Trefferzahl eines Suchbegriffs. Für
+    <code>HausplanerApp.tsx</code> sind das 22 Dateien.</p>
+    <p class="alt"><strong>Auslöser:</strong> 4× · Die Barriere stammt vom Generator selbst:
+    <em>„Was jedes Mal getragen hätte: die Tests, die die Datei einlesen, tatsächlich anzusehen —
+    alle 21, nicht nur die, die mein Muster trifft."</em> Die Menge ist mechanisch bestimmt und
+    hängt nicht daran, ob jemand das richtige Wort wählt.</p>
+  </div>
+
+  <div class="regel neu">
+    <h3><span class="k">R13</span><code>git commit -- &lt;pfade&gt;</code> statt <code>git add</code> + <code>git commit</code></h3>
+    <p>Committet werden genau die genannten Pfade aus dem Arbeitsbaum; der Index bleibt unberührt.
+    Damit ist es <strong>strukturell unmöglich</strong>, fremde gestagte Arbeit mitzunehmen.</p>
+    <p class="alt"><strong>Auslöser:</strong> 2× · Die Regel <em>„Index vor dem Commit lesen"</em> war
+    richtig und trug trotzdem nicht — sie ließ das Fenster <em>zwischen</em> Lesen und Committen offen,
+    und in einem Baum mit drei Schreibern ist dieses Fenster der Normalfall.
+    <strong>Der Unterschied zwischen Regel und Barriere: die Regel verlangt Aufmerksamkeit im
+    richtigen Moment, die Barriere braucht keine.</strong></p>
+  </div>
+
+  <div class="regel neu">
+    <h3><span class="k">R14</span>Gemessen wird unmittelbar vor dem Schreiben, nicht am Anfang des Gedankens</h3>
+    <p><code>git log -1</code> und <code>git status</code> direkt vor jedem Eintrag in Tafel oder
+    Ledger. Und bei Tafelzeilen zuerst prüfen, ob der Bauende sie schon gesetzt hat.</p>
+    <p class="alt"><strong>Auslöser:</strong> 3× · Der Befund ist nicht Unaufmerksamkeit, sondern
+    <strong>Taktung</strong>: ich messe einmal und schreibe dann minutenlang, während zwei Instanzen
+    im selben Baum committen.</p>
+  </div>
+
+  <div class="regel neu">
+    <h3><span class="k">R15</span>Vor jedem Entwurf wird die Shell der Heimat-App gemessen</h3>
+    <p>Layout-Datei, Seitenleisten, Navigationseinträge, Klappzustände — <em>und</em> die eigenen
+    Papiere in <code>docs/planner/</code>. Beides, nicht eins von beidem.</p>
+    <p class="alt"><strong>Auslöser:</strong> 3× an einer einzigen Aufgabe · Ich habe die zwei
+    klappbaren Ticket-Seitenleisten <strong>nachgebaut, die es seit Langem gibt</strong> — und damit
+    genau die zweite App-Shell entworfen, die der Auftrag verbietet. Meine frühere Auflage
+    (<em>„erst den Bestand lesen"</em>) griff zu kurz: sie nannte nur <code>docs/planner/</code>,
+    nicht den Code.</p>
+  </div>
+
+  <div class="regel neu">
+    <h3><span class="k">R16</span>Leerlauf eines Bauenden ist ein Planner-Fehler, kein Zustand</h3>
+    <p><strong>Mindestens zwei baubare Aufträge liegen jederzeit vor der Front.</strong> Steht ein
+    Bauender still, ist der Grund immer einer von zweien: der nächste Auftrag fehlt, oder eine Sperre
+    ist zu eng. Beides gehört mir.</p>
+    <p class="alt"><strong>Auslöser:</strong> 2× · <em>„generator hat nichts zutun"</em> (00:31) und
+    <em>„er hat nicht zutun weil du faul bist"</em> (10:03). Beide Male stimmte es, und beide Male war
+    die Ursache nicht Tempo, sondern eine der beiden Sorten.</p>
+  </div>
+</section>
+
+<!-- ══ 4 ══ -->
+<section>
+  <div class="kap"><span class="nr">04</span><h2>Der größte Effizienzhebel liegt bereit und wird nicht benutzt</h2></div>
+  <p class="kaptext">Drei verschiedene Probleme dieses Tages haben <strong>eine</strong> gemeinsame
+  Ursache — und das Werkzeug dagegen liegt seit heute Nacht im Repo.</p>
+  <table>
+    <tr><th>Was passiert ist</th><th>Ursache</th></tr>
+    <tr><td><strong>Der Evaluator konnte die Gates von Scheibe 5 nicht mehr nachfahren</strong> — der Baum war beim Prüfen schon auf Scheibe 6 weitergelaufen. Er hat das Votum mit den festgehaltenen Zahlen geschrieben und die Zeitlücke offengelegt. <em>Diesmal ohne Schaden.</em></td>
+        <td class="m">ein Baum, drei Rollen</td></tr>
+    <tr><td><strong>Zweimal Beifang im Index</strong> — ein Commit nahm die gestagte Arbeit eines anderen mit.</td>
+        <td class="m">ein Index, drei Rollen</td></tr>
+    <tr><td><strong>28 Lock-Reste</strong>, die der Generator regelkonform beiseiteräumt — für ein Problem, das nicht seines ist.</td>
+        <td class="m">ein <code>.git</code>, drei Rollen</td></tr>
+  </table>
+  <div class="kasten gut">
+    <p><strong><code>.ai-workflow/</code> legt Worktrees je Rolle an.</strong> Es ist seit
+    <code>af0e0c93</code> versioniert und seit 08:29 abgenommen — <strong>und es wird nicht benutzt</strong>
+    (<code>.ai-workflow/tasks/</code> ist leer, die 7 vorhandenen Worktrees stammen aus früheren Strängen).</p>
+    <p><strong>Der Witz an B-01 war schon einmal derselbe:</strong> unverfolgte Dateien wandern nicht in
+    einen neuen Worktree — <em>das Werkzeug, das die Rollentrennung herstellen soll, fehlte genau dort,
+    wo sie hergestellt wird.</em> Jetzt liegt es im Repo und wird trotzdem nicht gezogen.</p>
+    <p><strong>Vorschlag, und es ist der einzige Punkt, der deine Entscheidung braucht:</strong>
+    Evaluator und Generator arbeiten je auf einem eigenen Baum. Dann darf der Bauende weiterlaufen,
+    während der Prüfende misst — <strong>und keine der drei Zeilen oben passiert noch einmal.</strong>
+    Eine offene Frage bleibt: <code>detect_base</code> liefert heute <code>main</code> statt der
+    Integrationsbasis (<strong>B-02</strong>, 66 Commits Rückstand). Das gehört vorher repariert,
+    sonst startet jeder neue Baum veraltet.</p>
+  </div>
+</section>
+
+<!-- ══ 5 ══ -->
+<section>
+  <div class="kap"><span class="nr">05</span><h2>Was heute nachweislich funktioniert hat</h2></div>
+  <p class="kaptext">Damit die Bilanz stimmt: nicht alles war Reibung. Drei Mechanismen haben
+  messbar bezahlt.</p>
+  <table>
+    <tr><th>Mechanismus</th><th>Beleg</th></tr>
+    <tr><td><strong>Die Readiness-Quittung</strong> — der Bauende prüft den Auftrag, <em>bevor</em> er baut</td>
+        <td class="m"><strong>Zweimal einen Mangel gefangen, bevor Code entstand:</strong> eine fehlende Definition (<em>„statisch"</em>) und ein nicht existierender Prüfgegenstand. Beides hätte sonst erst der Evaluator gefunden — nach dem Bauen, nach dem Bündel, nach der Sichtprobe. <strong>Das ist der mit Abstand billigste Fundort.</strong></td></tr>
+    <tr><td><strong>Die generische Barriere statt Einzelflicken</strong></td>
+        <td class="m">Zwei Befunde (Toast, Gradient) fielen mit <em>einem</em> Test, und die Zusage fängt zusätzlich den Rückfall, den vorher nichts gefangen hätte. <strong>Per-Scheibe-Zusagen skalieren nicht — das ist jetzt belegt, nicht behauptet.</strong></td></tr>
+    <tr><td><strong>Eskalieren statt entscheiden</strong></td>
+        <td class="m">Der Generator hat den Push verweigert (<code>CLAUDE.md</code> verbietet ihn jeder Instanz) und T1b nicht committet, weil eine Datenschutz-Zusage rot war. <em>„Eine Regel, die man bei Eile beugt, ist bei Eile nicht da."</em> Beide Male lag die Frage danach dort, wo sie hingehört.</td></tr>
+  </table>
+</section>
+
+<!-- ══ 6 ══ -->
+<section>
+  <div class="kap"><span class="nr">06</span><h2>Was noch fehlt: der Zähler</h2></div>
+  <div class="kasten">
+    <p><strong>R9 verlangt bei der zweiten Wiederholung eine Barriere — aber niemand zählt mit.</strong>
+    Vier Klassen haben heute die Zwei überschritten, und jedes Mal ist es erst aufgefallen, als jemand
+    sich zufällig erinnerte. Ich habe die Lehre zu einer Klasse aufgeschrieben und
+    <strong>zwanzig Minuten später dieselbe Klasse selbst wiederholt.</strong></p>
+    <p><strong>Deshalb entsteht als Nächstes <code>docs/auftraege/FEHLERKLASSEN.md</code>:</strong> eine
+    Zeile je Klasse, ein Zähler, das Datum des letzten Vorkommens und die Barriere, falls sie steht.
+    Wer eine Klasse einträgt, sieht sofort, ob sie die Zwei reißt. <strong>Ohne Träger ist R9 ein
+    Vorsatz — und Vorsätze haben heute viermal nicht getragen.</strong></p>
+  </div>
+</section>
+
+<p class="fussn">Ausgewertet: <code>docs/handoff-status.md</code> (00:00–10:30), Tafel, Archiv, git-Protokoll.
+Die Zahlen stammen aus dem Repo, nicht aus der Erinnerung.</p>
+
+</div>
+</body>
+</html>

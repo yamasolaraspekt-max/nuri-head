@@ -22,9 +22,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
-const quelle = readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8');
+const quelle = zerlegteApp();
 const ohneKommentare = (s: string): string =>
   s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^\s*\/\/.*$/gm, '');
 

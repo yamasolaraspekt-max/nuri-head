@@ -65,6 +65,35 @@ export const TREPPE_FARBEN = {
   bg: '#ffffff',
 } as const;
 
+/**
+ * AUF-48 Scheibe 4a — **die Rollen-Farben, umgezogen aus `HausplanerApp.tsx`.**
+ *
+ * Sie standen dort auf Modulebene und wurden 77-mal benutzt. Der Kopfrahmen braucht zwei davon
+ * (`auswahl`, `gedaempft`); importierte er sie aus `HausplanerApp`, entstünde ein Ringschluss —
+ * die Hauptfunktion importiert ja den Kopfrahmen. **Umgezogen, nicht verdoppelt:** es gibt
+ * weiterhin genau eine Definition, und sie steht jetzt dort, wo `T` und `TREPPE_FARBEN` schon
+ * stehen. *Kein Wert hat sich geändert.*
+ */
+export const FARBEN = {
+  text: T.ink, gedaempft: T.muted, linie: T.faint, raster: T.canvasGrid, rasterGrob: T.canvasGridStrong,
+  wand: T.canvasWall, wandFuellung: T.canvasWallFill, auswahl: T.brand, raum: T.brandGhost,
+  warnung: T.warnInk, gefahr: T.errInk, erfolg: T.okInk,
+} as const;
+
+/**
+ * AUF-48 Scheibe 4a — **die Token-Tabelle der Bedienknöpfe, ebenfalls umgezogen.**
+ *
+ * `opKnopfBild` (rein, getestet) nennt **Token-Namen**, keine Farben — das ist Absicht und bleibt
+ * so. Erst diese Tabelle macht daraus Farben. Sie hatte zwei Nutzer: `opStil` (mit der
+ * Bedien-Werkzeugleiste in den Kopfrahmen gezogen) und `knopf()` (bleibt in der Hauptfunktion).
+ * **Zwei Nutzer, eine Tabelle** — die Alternative wäre eine zweite Wahrheit über dieselben sechs
+ * Farben gewesen. *Kein Wert hat sich geändert.*
+ */
+export const OP_TOKEN: Record<string, string> = {
+  brandInk: T.brandInk, brandWash: T.brandWash, surface: T.surface, hair2: T.hair2,
+  ink: FARBEN.text, faint: T.faint,
+};
+
 export type StudioModus = 'start' | 'guided' | 'expert';
 
 export interface FachHub {

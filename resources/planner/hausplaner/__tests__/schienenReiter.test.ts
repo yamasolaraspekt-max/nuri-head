@@ -19,11 +19,13 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { SCHIENEN_REITER, SCHIENE_STANDARD, schienenReiter, type SchienenReiterId } from '../app/dashboard/schienenReiter';
 import { alleFaehigkeiten } from '../app/tools/faehigkeiten';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 /** Siehe `leisteAusZonen.test.ts`: erklärende Kommentare dürfen den Befund nicht auslösen. */
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-const appQuelle = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const appQuelle = ohneKommentare(zerlegteApp());
 const naviQuelle = ohneKommentare(readFileSync(join(hier, '../app/FaehigkeitenNavi.tsx'), 'utf8'));
 
 // --- K3: genau drei Reiter, feste Reihenfolge, Standard `werkzeuge` ----------------------------

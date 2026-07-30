@@ -20,10 +20,21 @@ import { VORBEDINGUNGEN, FAEHIGKEIT_ANSICHT_BEREIT, FAEHIGKEIT_PROJEKT_OFFEN, re
 import { WERKZEUG_VERTRAEGE } from '../app/tools/werkzeugVertrag';
 import { resolveToolState } from '../app/tools/activation';
 import type { AktivierungsKontext, ToolDefinition } from '../app/tools/toolTypes';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
-const app = readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
-  .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+const ohneKommentare = (s: string): string =>
+  s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+const app = ohneKommentare(zerlegteApp());
+/**
+ * **AUF-48 Scheibe 2 — umgehängt, nicht geschwächt.** Die Fähigkeitsliste wird seit der Zerlegung
+ * in `ableitungen.werkzeugKontextAus` gebaut; `stageBreite` wird weiterhin in `HausplanerApp`
+ * gemessen und dorthin übergeben. **Die geprüfte Eigenschaft ist unverändert** — die Fähigkeit
+ * steht bedingt in der Liste, und die Breite wird an genau einer Stelle bestimmt. *Nur der Ort,
+ * an dem man das nachliest, ist ein anderer.*
+ */
+const ableitungen = ohneKommentare(readFileSync(join(hier, '../app/ableitungen.ts'), 'utf8'));
 
 /** Die fuenf Werkzeuge, die an der Zeichenflaeche haengen — aus den Vertraegen gelesen, nicht getippt. */
 const anDerFlaeche = WERKZEUG_VERTRAEGE
@@ -38,11 +49,17 @@ test('gemessen: genau fuenf Werkzeuge haengen an der Zeichenflaeche', () => {
 // --- Die Bindung -----------------------------------------------------------------------------------
 test('die Faehigkeit steht NICHT mehr unbedingt in der Liste', () => {
   // Der ganze Posten in einer Zusage: vorher stand hier der nackte Name.
-  assert.match(app, /\.\.\.\(stageBreite > 0 \? \[FAEHIGKEIT_ANSICHT_BEREIT\] : \[\]\)/);
+  // AUF-48-S2: die Liste wohnt jetzt in `ableitungen.werkzeugKontextAus` — dort steht `stageBreite`
+  // als Feld der Eingaben (`e.stageBreite`), die Bedingung selbst ist unveraendert.
+  assert.match(ableitungen, /\.\.\.\(e\.stageBreite > 0 \? \[FAEHIGKEIT_ANSICHT_BEREIT\] : \[\]\)/);
   // **Nur in der Faehigkeiten-Liste gemessen, nicht in der ganzen Datei.** Mein erster Anlauf
   // suchte die nackte Zeile ueberall — und fand den IMPORT. Ein Zaehler, der den Import fuer einen
   // Eintrag haelt, misst die falsche Sache.
-  const liste = app.slice(app.indexOf('capabilities: ['), app.indexOf('}),', app.indexOf('capabilities: [')));
+  const liste = ableitungen.slice(
+    ableitungen.indexOf('capabilities: ['),
+    ableitungen.indexOf('});', ableitungen.indexOf('capabilities: [')),
+  );
+  assert.ok(liste.length > 50, 'die Faehigkeitsliste wurde nicht gefunden — die Zusage misst Leere');
   assert.doesNotMatch(liste, /^\s*FAEHIGKEIT_ANSICHT_BEREIT,$/m, 'kein unbedingter Eintrag mehr');
   assert.match(liste, /stageBreite > 0/, 'die Bedingung steht in der Liste selbst');
 });
@@ -51,12 +68,18 @@ test('die Breite wird an EINER Stelle bestimmt — kein zweiter Ort', () => {
   // **Die BUEHNENbreite**, nicht jede Groesse, die zufaellig `breite` heisst: in einem Handler
   // steht `const breite = vorlage.breite` fuer die Fensterbreite eines Bauteils. Mein erster
   // Anlauf zaehlte beide und meldete zwei Wahrheiten, wo eine ist.
-  const stellen = app.match(/const breite = \(typeof window/g) ?? [];
-  assert.equal(stellen.length, 1, `die Buehnenbreite wird an ${stellen.length} Stellen gerechnet`);
+  // **Nachgezogen in AUF-83-T1a:** die Buehnenbreite wird nicht mehr gerechnet, sondern gemessen
+  // (`buehnenBreite.ts`). **Die Aussage bleibt dieselbe** — sie wird an EINER Stelle bestimmt.
+  // Geprueft wird deshalb die Bestimmung, nicht die alte Formel.
+  const stellen = app.match(/const breite = buehnenBreite\(/g) ?? [];
+  assert.equal(stellen.length, 1, `die Buehnenbreite wird an ${stellen.length} Stellen bestimmt`);
   assert.equal((app.match(/const stageBreite = /g) ?? []).length, 1);
-  // Und sie steht VOR der Faehigkeiten-Liste — sonst waere sie dort noch nicht bekannt.
-  assert.ok(app.indexOf('const stageBreite = ') < app.indexOf('capabilities: ['),
+  // Und sie steht VOR ihrer Verwendung — sonst waere sie dort noch nicht bekannt.
+  // **AUF-48-S2: die Verwendung ist der Aufruf, nicht mehr die Liste selbst** (die wohnt jetzt in
+  // `ableitungen.ts`). Die Aussage ist dieselbe: erst messen, dann uebergeben.
+  assert.ok(app.indexOf('const stageBreite = ') < app.indexOf('werkzeugKontextAus({'),
     'die Messung muss vor ihrer Verwendung stehen');
+  assert.match(app, /stageBreite,\n\s*\}\),/, 'stageBreite wird an den Kontextbau uebergeben');
 });
 
 test('und sie steht in den Abhaengigkeiten — sonst bliebe die Faehigkeit stehen', () => {
@@ -126,8 +149,17 @@ test('die Hoehe wird bewusst nicht geprueft — sie kann gar nicht 0 werden', ()
 });
 
 test('der 3D-Modus sperrt die fuenf NICHT — dort ist die Leinwand versteckt, nicht kaputt', () => {
-  // `breite` haengt am Fenster, nicht am Modus. Waere die Bedingung an die sichtbare 2D-Leinwand
-  // gebunden, waeren die Messwerkzeuge in 3D faelschlich gesperrt.
-  assert.match(app, /const breite = \(typeof window/);
+  // `breite` haengt am **Behaelter**, nicht am Modus. Waere die Bedingung an die sichtbare
+  // 2D-Leinwand gebunden, waeren die Messwerkzeuge in 3D faelschlich gesperrt.
+  //
+  // **Nachgezogen in AUF-83-T1a:** frueher stand hier die Fensterrechnung als Beleg dafuer, dass
+  // die Breite modusunabhaengig ist. Seit T1a kommt sie aus der Messung der Inhaltsreihe — die
+  // ist es genauso. **Geprueft wird die Eigenschaft, nicht die Formel:** die Zeile, die `breite`
+  // bestimmt, darf `modus` nicht nennen.
+  const zeile = app.split('\n').find((z) => z.includes('const breite = buehnenBreite('));
+  assert.ok(zeile, 'die Bestimmung der Buehnenbreite ist fort');
+  assert.doesNotMatch(zeile, /modus/, 'die Breite darf nicht am Modus haengen');
+  assert.match(app, /const gemesseneBreite = useGemesseneBreite\(inhaltRef\)/,
+    'gemessen wird die Inhaltsreihe — sie steht in jedem Modus');
   assert.doesNotMatch(app, /modus === '3d' \? \[\] : \[FAEHIGKEIT_ANSICHT_BEREIT\]/);
 });

@@ -24,11 +24,13 @@ import { enablePatches } from 'immer';
 import { opKnopfBild, unterschiede } from '../app/dashboard/opKnopfZustand';
 import { useHausplanerStore } from '../store/hausplanerStore';
 import type { SceneDocument, WallNode } from '../domain/scene.types';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 enablePatches(); // ohne das Plugin gibt es keine inversen Patches — die Umkehr liefe stumm ins Leere
 
 const hier = dirname(fileURLToPath(import.meta.url));
-const quelle = readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8');
+const quelle = zerlegteApp();
 const ohneKommentare = (s: string): string =>
   s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^\s*\/\/.*$/gm, '');
 

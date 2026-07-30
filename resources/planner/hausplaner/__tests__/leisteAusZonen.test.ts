@@ -19,6 +19,8 @@ import { dirname, join } from 'node:path';
 import { zoneTools, zoneToolsIn, praesentation, TOOL_PRESENTATION_RULES, type ToolPresentationRule } from '../app/tools/toolPresentation';
 import { TOOL_DEFINITIONS, werkzeugTools, shortcutKollisionen, toolNach } from '../app/tools/toolRegistry';
 import { katalogTool } from '../app/tools/toolCatalog';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 
@@ -29,8 +31,10 @@ const hier = dirname(fileURLToPath(import.meta.url));
  */
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 
-const appQuelle = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const appQuelle = ohneKommentare(zerlegteApp());
 const zonenQuelle = ohneKommentare(readFileSync(join(hier, '../app/tools/toolPresentation.ts'), 'utf8'));
+/** AUF-48 Scheibe 2: die Rail-Ableitung wohnt hier — die Zaehlung laeuft ueber beide Dateien. */
+const ableitungenQuelle = ohneKommentare(readFileSync(join(hier, '../app/ableitungen.ts'), 'utf8'));
 
 // --- 1) Der Umbau ist verhaltensneutral (Abnahmekriterium 6) ----------------------------------
 test('Leiste == Fix-Zone: dieselben ids in derselben Reihenfolge wie die alte Registry-Quelle', () => {
@@ -43,14 +47,26 @@ test('Leiste == Fix-Zone: dieselben ids in derselben Reihenfolge wie die alte Re
 // --- 2) Es gibt nur noch EINE zuständige Stelle (Abnahmekriterium 5) ---------------------------
 test('die Leiste liest zoneTools, nicht mehr werkzeugTools', () => {
   assert.doesNotMatch(appQuelle, /werkzeugTools\(\)/, 'werkzeugTools darf in der App nicht mehr vorkommen');
+  assert.doesNotMatch(ableitungenQuelle, /werkzeugTools\(\)/, 'auch nicht in den Ableitungen');
   // Seit I4 zwei Aufrufe: die Fix-Zone selbst und die Rail (fix + persönlich Angeheftetes).
-  // Beide stehen in einem useMemo — der Punkt von P9 war der Render-Pfad, nicht die Anzahl.
-  const treffer = appQuelle.match(/zoneTools\(/g) ?? [];
-  assert.equal(treffer.length, 2, 'Fix-Zone und Rail-Ableitung');
+  //
+  // **AUF-48 Scheibe 2: die Rail-Ableitung ist nach `ableitungen.leisteMitAngehefteten` gezogen.**
+  // Die Aussage bleibt: **zwei** Aufrufe insgesamt, jeder an seinem Ort — einer in der App
+  // (memoisiert), einer in der reinen Funktion. Gezählt wird deshalb über BEIDE Dateien; ein
+  // dritter Aufruf wäre weiterhin ein zweiter Ort für dieselbe Frage.
+  const treffer = [...(appQuelle.match(/zoneTools\(/g) ?? []), ...(ableitungenQuelle.match(/zoneTools\(/g) ?? [])];
+  assert.equal(treffer.length, 2, 'Fix-Zone (App) und Rail-Ableitung (ableitungen.ts)');
+  // In der App gehört der Aufruf weiterhin in ein `useMemo` — der Punkt von P9 war der Render-Pfad.
   for (const m of appQuelle.matchAll(/zoneTools\('fix'\)/g)) {
     const davor = appQuelle.slice(Math.max(0, m.index - 200), m.index);
-    assert.match(davor, /useMemo/, 'jeder Aufruf gehört in ein useMemo, nicht in den JSX-Ausdruck');
+    assert.match(davor, /useMemo/, 'jeder Aufruf in der App gehört in ein useMemo, nicht in den JSX-Ausdruck');
   }
+  // Und in der reinen Funktion steht er in einer benannten Funktion, nicht auf Modulebene —
+  // sonst liefe er einmal beim Laden und wäre gegen geänderte Regelsätze blind (der Grund, aus dem
+  // ein Modul-Cache hier ausdrücklich verboten ist).
+  const railStelle = ableitungenQuelle.indexOf("zoneTools('fix')");
+  assert.ok(railStelle > ableitungenQuelle.indexOf('export function leisteMitAngehefteten'),
+    'der Rail-Aufruf steht nicht in seiner Funktion');
 });
 
 // --- 3) §8.2 / P9: memoisiert am Aufrufort, KEIN Modul-Cache ----------------------------------

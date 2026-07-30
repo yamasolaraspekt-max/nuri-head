@@ -1,3 +1,21 @@
+> **⚠ EBENE 1 GILT ZUSÄTZLICH — dieses Blatt ist seit 30.07.2026 nicht mehr allein gültig.**
+>
+> **Lies zuerst** [`docs/agents/regeln/kern.md`](regeln/kern.md) — die rollenübergreifenden
+> Kernregeln, die Gates und die sechs Aussagetypen. **Danach dein Rollenblatt** in
+> `docs/agents/regeln/` (`planner.md` · `generator.md` · `evaluator.md` · `plan-reviewer.md`).
+>
+> **Dieses Blatt hier bleibt gültig für alles, was dort nicht steht** — Verfahren,
+> Übergabeformate, die 10 Fragen, die Fachagenten, die Laufzeiten.
+>
+> **Bei Widerspruch gilt die ÄLTERE Regel, bis Yama entschieden hat.** Der eine bekannte
+> Widerspruch ist der **Commit-Zeitpunkt** — er kostete am 30.07. elf Stunden und ist in
+> `docs/planner/PRUEFER-BEFUNDE.md` (PB-013/PB-014) gemessen und offen an Yama gestellt.
+>
+> *Warum dieser Kasten hier steht: die neue Ablage war von jedem Startpfad aus mit **null
+> Verweisen** unerreichbar. Ein Regelwerk, das niemand findet, ist kein Regelwerk.*
+
+---
+
 > **⚠ Der Ablauf gilt ab 27.07.2026, 21:30 nach `docs/agents/00-REGELWERK.md`.**
 > Dieses Dokument bleibt als Herkunft und fuer alles gueltig, was dort nicht geregelt ist.
 > **Bei Widerspruch gewinnt `00-REGELWERK.md`.**

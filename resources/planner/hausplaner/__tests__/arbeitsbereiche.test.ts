@@ -28,10 +28,12 @@ import { resolveToolState } from '../app/tools/activation';
 import { ladeArbeitsbereich, speichereArbeitsbereich, ARBEITSBEREICH_SCHLUESSEL } from '../app/state/arbeitsbereichSpeicher';
 import { umschalten } from '../app/state/angeheftet';
 import type { AktivierungsKontext } from '../app/tools/toolTypes';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-const appQuelle = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const appQuelle = ohneKommentare(zerlegteApp());
 
 /** Erwartete Themenmenge je Bereich — fest verdrahtet aus der Tabelle des Auftrags. */
 const ERWARTET: Record<string, string[]> = {

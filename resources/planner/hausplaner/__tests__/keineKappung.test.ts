@@ -14,21 +14,30 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
-const app = readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8');
+const app = zerlegteApp();
 const navi = readFileSync(join(hier, '../app/FaehigkeitenNavi.tsx'), 'utf8');
 // AUF-27: die Reiterzeile steht seit dem Schienen-Umbau in der gemeinsamen `ReiterLeiste` — eine
 // Leiste, zwei Benutzer. Der Messpunkt wandert mit; die Zusage bleibt dieselbe.
 const leiste = readFileSync(join(hier, '../app/dashboard/ReiterLeiste.tsx'), 'utf8');
+/** Die Stilschicht — seit AUF-38 wohnen die statischen Stile dort, nicht mehr inline. */
+const stilschicht = readFileSync(join(hier, '../hausplaner.css'), 'utf8');
 
 test('B3: die Reiterzeile bricht um — sie kappt nicht', () => {
   // Über den Element-Block statt zeilenweise: das Attribut steht auf einer anderen Zeile als der
   // Stil. `[\s\S]*?>` endet am ersten `>` — die Stile enthalten `${…}`-Templates, an denen eine
   // `[^}]*`-Klammer abbräche; genau daran ist mein erster Testentwurf gescheitert.
+  // **Nachgezogen in AUF-38 Scheibe 8c:** der Umbruch stand als Inline-Stil und steht jetzt als
+  // `.hp-rl-leiste` in `hausplaner.css`. **Die Absicht ist unveraendert** — ohne Umbruch faellt
+  // der vierte Reiter aus dem Bild. Geprueft wird die Eigenschaft dort, wo sie wohnt.
   const block = leiste.match(/<div\s*\n\s*role="tablist"[\s\S]*?\n\s*>/);
   assert.ok(block, 'Reiterzeile nicht gefunden');
-  assert.match(block[0], /flexWrap: 'wrap'/, 'ohne Umbruch verschwindet der vierte Reiter aus dem Bild');
+  assert.match(block[0], /className="hp-rl-leiste"/, 'die Reiterzeile traegt ihre Klasse nicht mehr');
+  assert.match(stilschicht, /\.hp-rl-leiste \{[^}]*flex-wrap: wrap[^}]*\}/,
+    'ohne Umbruch verschwindet der vierte Reiter aus dem Bild');
   // AUF-27 / Kante 3: drei Reiter in 220 px. Umbrechen, nicht kappen — auch INNERHALB eines Wortes,
   // sonst heisst der dritte Reiter „Fachpla…".
   const knopf = leiste.match(/<button\n[\s\S]*?role="tab"[\s\S]*?\n\s*>/);
@@ -38,10 +47,23 @@ test('B3: die Reiterzeile bricht um — sie kappt nicht', () => {
 });
 
 test('B3: das Eigenschaften-Panel bricht lange Wörter um, statt sie abzuschneiden', () => {
-  const panel = app.split('\n').find((l) => l.includes('width: 268,'));
-  assert.ok(panel, 'Panel-Container nicht gefunden');
-  assert.match(panel, /overflowWrap: 'anywhere'/, 'sonst bricht der Hinweistext mitten im Wort ab');
-  assert.match(panel, /boxSizing: 'border-box'/, 'Padding darf die 268 px nicht sprengen');
+  // **Nachgezogen in AUF-83-T1a.** Die Zeile wurde bisher über die **Zahl** `width: 268,` gesucht.
+  // Seit T1a ist diese Zahl keine tragende Größe mehr: die Bühnenbreite wird gemessen, nicht aus
+  // ihr gerechnet. **Eine Zusage, die an einer Zahl hängt, die niemand mehr braucht, fällt beim
+  // nächsten Aufräumen mit „Panel-Container nicht gefunden" — ohne dass ein Fehler vorliegt.**
+  // Gesucht wird deshalb über das, was das Panel *ist*: eine Schiene mit linker Trennlinie.
+  //
+  // **Ein zweites Mal umgehängt in AUF-83-T5.** Der Container ist klappbar geworden — `data-schiene`
+  // steht jetzt bedingt (`{...(istSchmal && schienen.rechts ? {} : { 'data-schiene': true })}`,
+  // kein Overlay ⇒ die Zeichenkette bleibt im Quelltext), und `borderLeft` steht seither auf einer
+  // eigenen Zeile innerhalb des Öffnungs-Tags. Eine Ein-Zeilen-Suche findet das Element nicht mehr;
+  // gesucht wird jetzt über den ganzen Block, dasselbe Muster wie bei der Reiterzeile oben.
+  const block = app.match(/<div\n\s*\{\.\.\.\(istSchmal && schienen\.rechts[\s\S]*?\n\s*>/);
+  assert.ok(block, 'Eigenschaften-Panel nicht gefunden — trägt es seine Schienen-Markierung nicht mehr?');
+  assert.match(block[0], /data-schiene/, 'die Schienen-Markierung fehlt im Block');
+  assert.match(block[0], /borderLeft/, 'die linke Trennlinie fehlt im Block');
+  assert.match(block[0], /overflowWrap: 'anywhere'/, 'sonst bricht der Hinweistext mitten im Wort ab');
+  assert.match(block[0], /boxSizing: 'border-box'/, 'Padding darf die Breite nicht sprengen');
 });
 
 test('B3: die Spiegel-Schaltflächen können nicht mehr kappen — es gibt sie nicht mehr', () => {
@@ -63,12 +85,17 @@ test('B3: die Spiegel-Schaltflächen können nicht mehr kappen — es gibt sie n
 });
 
 test('B4: das Fähigkeiten-Label bricht um — kein ellipsis, kein overflow:hidden', () => {
-  const label = navi.match(/<span style=\{\{ flex: 1[^}]*\}\}>\{f\.label\}<\/span>/);
-  assert.ok(label, 'Label-Span nicht gefunden');
-  assert.doesNotMatch(label[0], /textOverflow: 'ellipsis'/, '„Horizont…" ist informationslos');
-  assert.doesNotMatch(label[0], /whiteSpace: 'nowrap'/);
-  assert.doesNotMatch(label[0], /overflow: 'hidden'/);
-  assert.match(label[0], /overflowWrap: 'anywhere'/);
+  // **Nachgezogen in AUF-38 Scheibe 8c:** der Stil des Labels steht jetzt als `.hp-fn-label`.
+  // **Die Absicht ist unveraendert:** umbrechen statt kappen — „Horizont…" ist informationslos.
+  // Geprueft wird deshalb die Regel in der Schicht, nicht der Inline-Stil.
+  const label = navi.match(/<span className="hp-fn-label">\{f\.label\}<\/span>/);
+  assert.ok(label, 'Label-Span nicht gefunden — traegt er seine Klasse nicht mehr?');
+  const regel = stilschicht.match(/\.hp-fn-label \{[^}]*\}/);
+  assert.ok(regel, '.hp-fn-label fehlt in der Stilschicht');
+  assert.doesNotMatch(regel[0], /text-overflow: ellipsis/, '„Horizont…" ist informationslos');
+  assert.doesNotMatch(regel[0], /white-space: nowrap/);
+  assert.doesNotMatch(regel[0], /overflow: hidden/);
+  assert.match(regel[0], /overflow-wrap: anywhere/);
 });
 
 test('B4: die Zeile trägt weiterhin einen title — der Umbruch ersetzt ihn nicht', () => {

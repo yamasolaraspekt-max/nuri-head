@@ -20,10 +20,12 @@ import { TOOL_KATALOG } from '../app/tools/toolCatalog';
 import { TOOL_DEFINITIONS } from '../app/tools/toolRegistry';
 import { themaVonWerkzeug } from '../app/tools/werkzeugThemen';
 import { vertrag } from '../app/tools/werkzeugVertrag';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const app = ohneKommentare(zerlegteApp());
 const ALLE = [...TOOL_DEFINITIONS, ...TOOL_KATALOG];
 
 /** Die vier entfernten Icon-Knöpfe und das Werkzeug, das sie doppelt hatten. */

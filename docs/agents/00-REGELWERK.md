@@ -1,3 +1,19 @@
+> **⚠ ES GIBT SEIT 30.07.2026 EINE ZWEITE ABLAGE — und dieses Blatt hat den älteren Anspruch.**
+>
+> `docs/agents/regeln/` (`kern.md` · `planner.md` · `generator.md` · `evaluator.md` ·
+> `plan-reviewer.md`, zusammen 736 Zeilen) ist am 30.07. früh entstanden, **ohne dass geprüft
+> wurde, ob es dieses Blatt hier schon gibt.** Das ist ein Planner-Fehler der Klasse
+> *„neu gebaut statt wiederverwendet"* — Befund **PB-014**.
+>
+> **Bis zur Zusammenführung gilt:** dieses Blatt ist die **Arbeitsgrundlage** (R1–R22, die zwei
+> Spuren, der Ablauf, die Rollenabschnitte). Die Blätter in `regeln/` **schärfen** einzelne
+> Punkte und **ersetzen nichts**. **Bei Widerspruch gilt dieses Blatt**, bis Yama entschieden hat.
+>
+> Der eine bekannte Widerspruch ist der **Commit-Zeitpunkt** — gemessen in
+> `docs/planner/PRUEFER-BEFUNDE.md` (PB-013/PB-014) und offen an Yama gestellt.
+
+---
+
 # REGELWERK — gültig ab **28.07.2026, 23:30 (CEST)**
 
 > *Richtiggestellt 23:40: der Kopf trug „27.07., 21:30“. Meine Zeitquelle war die UTC-Uhr des Containers — zwei Stunden zurück und dadurch auch einen Tag daneben. Yama hat es bemerkt, nicht ich.*
@@ -144,6 +160,59 @@ Jede stammt aus einem Schaden vom 27.07.2026.
 | **R7** | **Rohe Zahlen ja, Urteile nein.** Wer baut, misst und berichtet. Wer prüft, urteilt. |
 | **R8** | **Fehlender Beleg = nicht geprüft. Nie erfüllt.** |
 | **R9** | **Bei der zweiten Wiederholung derselben Fehlerklasse muss vor dem nächsten gleichartigen Auftrag eine technische oder strukturelle Barriere stehen** — Validator, Gate, Pflichtfeld, Test, Linter, Hook, Vorlage, Rollensperre. **Ein Absatz, ein Hinweis oder „künftig darauf achten“ zählt nicht als Barriere.** |
+
+---
+
+## 3b. Die Regeln R10 bis R18 — entstanden am 29./30.07.2026
+
+**Warum sie hier stehen und nicht mehr nur im Ledger:** am 30.07. um 07:05 gemessen —
+`R10` bis `R18` kamen im Regelwerk **null Mal** vor und im Ledger (21 233 Zeilen) zwischen einmal
+und fünfzehnmal. **Eine Regel, die nur im Ledger steht, existiert nicht.** *Das war die erste
+Erkenntnis aus Yamas Frage nach unserer Oberflächlichkeit.*
+
+Die Spalte **Form** sagt, ob die Regel nur Aufmerksamkeit verlangt (⚠ Vorsatz) oder ob sie
+mechanisch greift (✅ Barriere). **Der Tagesbeleg ist eindeutig: Barrieren hörten sofort auf zu
+wiederholen, Vorsätze wiederholten sich vier- bis fünfmal.**
+
+| # | Regel | Form |
+|---|---|---|
+| **R10** | **Eine Sperre nennt den Zustand, der sie aufhebt, und endet mit dem BAU der Vorbedingung — nicht mit ihrer Abnahme.** *Zusatz vom 29.07.:* **es sei denn, der Folgeauftrag zerstört einen Prüfstand, den die offene Abnahme braucht.** Prüffrage vor jedem Entsperren: *braucht die offene Abnahme einen Zustand, den der nächste Auftrag verändert?* | ⚠ Vorsatz |
+| **R11** | **Jedes Kriterium trägt den Befehl, der es belegt — und der Planner hat ihn gefahren, bevor das Blatt liegt.** | ⚠ Vorsatz (wird Barriere mit AUF-87) |
+| **R12** | **Nicht nach Mustern suchen, sondern die Menge aufzählen lassen.** Die Quittung nennt die **Liste der Testdateien, die die betroffene Datei einlesen** — nicht die Trefferzahl eines Suchbegriffs. | ✅ Barriere |
+| **R13** | **`git commit -- <pfade>` statt `git add` + `git commit`.** Der Index bleibt unberührt, fremde Arbeit kann nicht mitgenommen werden. | ✅ Barriere |
+| **R14** | **`git log -1` und `git status` unmittelbar vor dem Schreiben.** Bei Tafelzeilen zuerst prüfen, ob der Bauende sie schon gesetzt hat. | ⚠ Vorsatz |
+| **R15** | **Vor jedem Entwurf die Shell der Heimat-App messen** — Layout, Seitenleisten, Navigationseinträge, Klappzustände — **und `docs/planner/` lesen.** | ⚠ Vorsatz |
+| **R16** | **Mindestens zwei baubare Aufträge liegen jederzeit vor der Front.** Leerlauf eines Bauenden ist ein Fehlzustand, keine Ruhe. | ⚠ Vorsatz |
+| **R17** | **Der Auftrag nennt im Kopf die abgenommenen Zusagen, die dieselbe Fläche verriegeln** (`geerbte_zusagen`) — gefunden mit demselben Befehl wie R12. **Der Planner fährt ihn, bevor das Blatt liegt.** *R12 bewahrt den Bauenden davor, geerbte Zusagen zu übersehen; R17 bewahrt den Planner davor, sie zu überschreiben.* | ⚠ Vorsatz |
+| **R18** | **Solange eine Sichtprobe BEAUFTRAGT ist, bewegt niemand `public/hausplaner/*`** — und keine Blade, die ohne Bau sofort wirkt. **„Beauftragt" zählt wie „läuft".** | ⚠ Vorsatz |
+
+### R19 bis R21 — die drei Änderungen vom 30.07., 07:10
+
+Sie kommen aus Yamas Frage *„wie kann man die Schwäche von dir, Generator und Evaluator beheben"*
+und sind in `docs/planner/warum-wir-oberflaechlich-arbeiten-2026-07-30.md` begründet.
+
+| # | Regel | Form |
+|---|---|---|
+| **R19** | **NEU GEFASST 30.07., 07:30 — die erste Fassung war zu grob.** Verboten ist nicht die Zahl, sondern die **unbelegte oder veraltete** Zahl. Eine Zahl darf im Auftrag stehen, wenn sie einen `measurement:`-Block trägt: `command` · `observed_value` · `observed_at_commit` · `observed_at` · `freshness_rule` · `purpose`. **Weicht der Commit von HEAD ab, wird vor Ausführung neu gemessen.** *Yamas Korrektur an meiner Regel, und sie ist besser: sie erhält die Information und bindet sie an einen Beweis.* ~~Alte Fassung: ein Auftrag enthält keine Zahl, nur den Befehl.~~ `population_at_writing` fällt aus dem Auftragsschema — es wird nicht sorgfältiger ausgefüllt, sondern gestrichen. *Begründung: der Bauende bezahlt eine falsche Zahl sofort, der Planner nie. Die Messung gehört zu dem, der die Rechnung bekommt.* | ✅ Barriere (Feld existiert nicht mehr) |
+| **R20** | **Nach jedem erzeugenden Befehl wird das ERGEBNIS gelesen, nie der Rückgabewert.** Gilt für alle drei Rollen. *Drei Ausprägungen an einem Tag: ein Heredoc verschluckte fünf Namen, zwei Ledger-Einträge gingen verloren, und der Commit lief jedes Mal grün durch.* | ⚠ Vorsatz |
+| **R21** | **Eine Mutation gilt erst als Gegenprobe, wenn die Datei danach noch LÄDT.** Ein Rot aus einer zerlegten Datei beweist nichts. *Vom Evaluator an sich selbst gefunden, zweimal.* | ⚠ Vorsatz |
+| **R22** | **Ein Vorher-Stand ist ein Commit, kein Zeitpunkt.** Wer einen Vorher-Nachher-Beleg braucht, nennt den **Commit**, aus dem er ihn holt (`git archive <commit>` in ein Verzeichnis, dort bauen und messen) — **nicht die Uhrzeit, bis zu der jemand fertig sein muss.** *Damit lösen sich F-12 und ein Großteil von F-13 mechanisch auf: ein Folgeauftrag kann einen Commit nicht zerstören. Entstanden am 30.07., nachdem ich zwischen Generator und Evaluator einen Wettlauf aufgemacht hatte, den der Bestand gar nicht verlangte.* | ✅ Barriere |
+**Erweiterung von R21, 30.07. 07:15 — sie gilt nicht nur für Mutationen, sondern für jede Probe.**
+An mir selbst gefunden: ich habe den `population_command` von T5 nachgefahren und **0 Dateien**
+gemessen, wo 6 Fundstellen in 4 Dateien stehen. **Nicht das Blatt war falsch, meine Probe war es** —
+verschachtelte Anführungszeichen in meiner eigenen Kommandozeile. *Hätte ich das Ergebnis geglaubt,
+hätte ich ein gültiges Blatt für kaputt erklärt.*
+
+> **R21 (erweitert): Eine Probe zählt erst, wenn sie nachweislich funktioniert.**
+> Für Mutationen heißt das: die Datei muss danach noch laden. **Für Messungen heißt das: den Befehl
+> genau so fahren, wie er im Blatt steht — nicht in eine eigene Schachtelung eingebaut.**
+> *Dieselbe Klasse wie die zwei zu groben Mutationen des Evaluators: ein Ergebnis aus einem
+> kaputten Werkzeug ist kein Ergebnis.*
+
+
+**Und eine Selbstauflage des Planners, die keine Regel für andere ist:**
+**höchstens EIN neues Auftragsblatt pro Stunde** — von Yama am 30.07. um 07:25 ausdrücklich genehmigt (M7 des Maßnahmenplans). **Die Wache bleibt bei drei Minuten**, es fällt nur der Schreibdruck weg. *Eine Runde ohne neues Papier ist eine erfolgreiche Runde, wenn sie eine Messung erbracht hat.* Am Vormittag des 30.07. waren es vier Blätter mit
+1 139 Zeilen in drei Stunden — bei zwei Rückweisungen. *Weniger Blätter, gemessene Blätter.*
 
 ---
 

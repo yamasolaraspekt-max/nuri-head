@@ -1,11 +1,29 @@
+> **⚠ EBENE 1 GILT ZUSÄTZLICH — dieses Blatt ist seit 30.07.2026 nicht mehr allein gültig.**
+>
+> **Lies zuerst** [`docs/agents/regeln/kern.md`](regeln/kern.md) — die rollenübergreifenden
+> Kernregeln, die Gates und die sechs Aussagetypen. **Danach dein Rollenblatt** in
+> `docs/agents/regeln/` (`planner.md` · `generator.md` · `evaluator.md` · `plan-reviewer.md`).
+>
+> **Dieses Blatt hier bleibt gültig für alles, was dort nicht steht** — Verfahren,
+> Übergabeformate, die 10 Fragen, die Fachagenten, die Laufzeiten.
+>
+> **Bei Widerspruch gilt die ÄLTERE Regel, bis Yama entschieden hat.** Der eine bekannte
+> Widerspruch ist der **Commit-Zeitpunkt** — er kostete am 30.07. elf Stunden und ist in
+> `docs/planner/PRUEFER-BEFUNDE.md` (PB-013/PB-014) gemessen und offen an Yama gestellt.
+>
+> *Warum dieser Kasten hier steht: die neue Ablage war von jedem Startpfad aus mit **null
+> Verweisen** unerreichbar. Ein Regelwerk, das niemand findet, ist kein Regelwerk.*
+
+---
+
 > **⚠ Der Ablauf gilt ab 27.07.2026, 21:30 nach `docs/agents/00-REGELWERK.md`.**
 > Dieses Dokument bleibt als Herkunft und fuer alles gueltig, was dort nicht geregelt ist.
 > **Bei Widerspruch gewinnt `00-REGELWERK.md`.**
 
 # 02 — GENERATOR (Umsetzung)
 
-> **Rolle im Zyklus:** zweite Station. Baut **genau EIN** vom Planner definiertes und von Yama abgenommenes Arbeitspaket — nicht mehr, nicht weniger. **Committet NIE selbst**; vor jedem Commit ein Pflicht-Stopp an den Evaluator.
-> **Verhältnis zur Governance:** baut **strikt nach `docs/architektur/bauordnung.md`** (die 10-Fragen-§5-Checkliste ist Pflicht vor Commit) und setzt CLAUDE.md-Dauerdirektiven + Weichen durch. Entspricht der Rolle BAUER aus `docs/BETRIEBSORDNUNG.md` (3.1): darf nur nach Prüfer/Evaluator-Freigabe committen.
+> **Rolle im Zyklus:** zweite Station. Baut **genau EIN** vom Planner definiertes und von Yama abgenommenes Arbeitspaket — nicht mehr, nicht weniger. **Committet seinen geprueften Auftrags-Scope selbst** — ausschliesslich auf der zugewiesenen Aufgaben-Branch bzw. im isolierten Worktree. **Er merged niemals nach `main` und gibt seinen eigenen Commit nie frei.** *(ENTSCHEIDUNG Yama, 30.07.2026, 09:45 — ersetzt „Committet NIE selbst".)*
+> **Verhältnis zur Governance:** baut **strikt nach `docs/architektur/bauordnung.md`** (die 10-Fragen-§5-Checkliste ist Pflicht vor Commit) und setzt CLAUDE.md-Dauerdirektiven + Weichen durch. Entspricht der Rolle BAUER aus `docs/BETRIEBSORDNUNG.md` (3.1): committet den eigenen Scope auf der Aufgaben-Branch; **Freigabe und Merge bleiben fremd.** *(ENTSCHEIDUNG Yama, 30.07.2026, 09:45)*
 
 ---
 
@@ -91,7 +109,7 @@ Ein einzelnes Arbeitspaket in die **kleinste sinnvolle additive Umsetzung** brin
 2. **Kleinste sinnvolle additive Umsetzung.** Nur was das Paket verlangt. Neue Tabellen/Spalten additiv (nullable/Default). Bestehende Wahrheit andocken statt duplizieren. **Kein Beifang** (keine „bei der Gelegenheit"-Änderungen).
 3. **Verhaltens-Test gegen `ticket_testing`.** Der Test prüft **Verhalten** (DB-Zustand / berechneter Wert / HTTP 403 / Exception), nicht „200 OK / läuft". Test-DB ist strukturell `ticket_testing` (`phpunit.xml force="true"`) — nie die Dev-DB. Bei Seedern: Idempotenz- + Teardown-Beweis. **Testanzahl sinkt nie**, kein Test wird geschwächt/geskippt.
 4. **Selbstprüfung gegen die 10 Fragen — dokumentiert.** Jede der 10 Fragen (unten) einzeln beantworten, mit Beleg (Datei:Zeile / Testname / Migrations-`down()`). Rot bei einer Frage → zurück zu Schritt 2, nicht zur Übergabe.
-5. **VOR Commit: Pflicht-Stopp an den Evaluator.** Meldung mit: commit-fertigem Stand (kein Commit!) · Datei-/Änderungsliste · Gelesen-Liste · Test(s) + echte Ausgabe · ausgefüllte 10-Fragen-Selbstprüfung · dokumentierten Entscheidungen/Abweichungen. **Der Generator committet NIE selbst** — erst nach Evaluator-FREIGABE + Yama-Bestätigung (s. `00-zyklus.md`).
+5. **Commit, dann Uebergabe** *(ENTSCHEIDUNG Yama, 30.07.2026, 09:45)*. Vor dem Commit: vollstaendigen Diff lesen · Scope pruefen · erzeugte Inhalte kontrollieren · relevante Tests fahren · **nur freigegebene Pfade** stagen. Meldung mit: **Basis-SHA und Generator-SHA** · Datei-/Änderungsliste · Gelesen-Liste · Test(s) + echte Ausgabe · ausgefüllte 10-Fragen-Selbstprüfung · dokumentierten Entscheidungen/Abweichungen. **Der Commit ist ein Pruefstand, keine Freigabe.** Der Evaluator prueft `git diff <basis-sha>..<generator-sha>` in einem frischen Worktree. Merge und Deploy: nur Yama.
 
 ---
 
@@ -119,7 +137,7 @@ Ein einzelnes Arbeitspaket in die **kleinste sinnvolle additive Umsetzung** brin
 - **Test(s)** — Name + was verhaltensmäßig geprüft wird + echte Ausgabe (grün, Anzahl ≥ Vorgänger).
 - **10-Fragen-Selbstprüfung** — je Frage grün/rot + Beleg.
 - **Entscheidungen/Abweichungen** — offen deklariert (nie still).
-- **Commit-fertiger Stand** — Branch/Diff, **noch nicht committet**.
+- **Generator-Commit** — Branch, **Basis-SHA**, **Generator-SHA**, Produkt- und Testdateien getrennt.
 
 ---
 
