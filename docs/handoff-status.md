@@ -26426,3 +26426,52 @@ mit einer eigenen Mutation gegen.
 
 **Und eine Lehre aus S1 ist eingearbeitet:** `.ts` ist diesmal **geprüft**, nicht angenommen — keine
 dieser Ableitungen gibt JSX zurück. *In S1 stand `.ts` im Blatt und war mein Fehler.*
+
+---
+
+## 30.07.2026, 19:20 CEST — ENTSCHEIDUNG YAMA: AUF-84 fällt weg, Fokus auf AUF-48 und AUF-38.
+
+**VOTUM: auftrag=PRIORITAET rolle=yama ergebnis=ENTSCHIEDEN commit=folgt datum=2026-07-30**
+
+**Yama, wörtlich:** *„die AUF 84 wird nicht zur zeit gemacht ich habe genug beispiel kunden hier als
+seeder … die 3000 kunden wird nicht hier hochgeladen … ausserdem ich möchte dass du die aufagben
+48, 38 erledigt dein focus darauf legen seitdenn sind die anderen vorher zu erledigen"*
+
+### Eine Korrektur an meiner eigenen Sprache, und sie ist wichtig
+
+**Ich habe heute mehrfach „~3000 Kunden, echte Daten" geschrieben. Das war falsch.** Es sind
+**Seeder-Beispielkunden** auf Yamas Rechner; die Anwendung läuft lokal, die Übertragung in den
+Produktivbetrieb kommt erst, *„wenn alles funktioniert, da sind wir sehr weit entfernt"*.
+
+> **Die Sorgfaltsstufe bleibt hoch — aber aus dem richtigen Grund.** Nicht weil heute Kundendaten
+> in Gefahr wären, sondern weil dieser Code später der Produktivstand wird. *Wer mit einer falschen
+> Dringlichkeit argumentiert, verliert sie irgendwann auch dort, wo sie stimmt.*
+> **Wer etwas an einem Kunden ausprobieren will, nimmt den Seeder.**
+
+**AUF-84 (die Shell schreibt alle Kunden in jede Admin-Seite) wird zurückgestellt** — kein Befund,
+kein Risiko, nur derzeit ohne Anlass.
+
+### Die Reihenfolge, die daraus folgt — und sie ist nicht beliebig
+
+```text
+1. AUF-48 S2  Ableitungen        Blatt liegt (bb8ef3a7)      <- laeuft als naechstes
+2. AUF-48 S3  Tasten und Effekte
+3. AUF-48 S4  das JSX
+4. AUF-38 S7  133 Inline-Stellen in HausplanerApp.tsx
+```
+
+**AUF-38 Scheibe 7 ist seit Tagen gesperrt — und zwar genau durch AUF-48.** Gemessen gegen
+`f7441518`:
+
+```text
+Inline-Stellen im Hausplaner gesamt   222
+davon in HausplanerApp.tsx            133   <- Scheibe 7
+naechstgroesste Datei danach           27   (ein Test), dann 12, 8, 5, 5, 5, 4
+```
+
+> **Sechzig Prozent aller offenen Inline-Stellen liegen in der einen Datei, die AUF-48 gerade
+> zerlegt.** *Die beiden Aufträge sind nicht zwei Themen, sondern eines: erst zerlegen, dann
+> aufräumen. In der ungeteilten Datei wäre Scheibe 7 ein Eingriff über 2447 Zeilen.*
+
+**Yamas Fokus deckt sich damit exakt mit der technischen Reihenfolge.** Es gibt nichts, was
+vorzuziehen wäre — außer der Abnahme, und die läuft parallel.
