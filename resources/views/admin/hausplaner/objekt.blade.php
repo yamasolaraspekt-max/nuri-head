@@ -156,7 +156,16 @@
      ], JSON_UNESCAPED_UNICODE) }}"
      data-speichern-url="{{ route('hausplaner.objekt.speichern', $objekt) }}"
      data-snapshots-url="{{ route('hausplaner.objekt.snapshots.liste', $objekt) }}"
-     data-katalog-url="{{ route('hausplaner.objekt.katalog') }}">
+     data-katalog-url="{{ route('hausplaner.objekt.katalog') }}"
+     {{-- AUF-88-P1: die Referenzunterlage (PDF/Bild), dieselbe Naht wie `data-objektkopf`. `null`,
+          wenn noch nichts hochgeladen wurde — die Insel erfindet nichts, sie zeigt, was da ist.
+          `hochladenUrl` traegt die Objekt-Zuordnung schon im Ziel (ein Formularfeld weniger, das
+          die Insel sonst selbst zusammensetzen muesste). --}}
+     data-unterlage="{{ json_encode([
+         'objektId' => $objekt->id,
+         'hochladenUrl' => route('energie.plan-upload.store'),
+         'aktuelle' => $hpUnterlage,
+     ], JSON_UNESCAPED_UNICODE) }}">
     <div class="hp-skeleton">
         <h1>Hausplaner — {{ $objekt->object_name ?: ('Objekt #' . $objekt->id) }}</h1>
         <p>Foundation aktiv. Der 2D/3D-Editor mountet hier; die Szene ist bereits eingebettet und versioniert.</p>

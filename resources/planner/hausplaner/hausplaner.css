@@ -494,3 +494,23 @@
 .hp-schiene-overlay { position: absolute; top: 0; bottom: 0; z-index: 40; box-shadow: 0 0 24px var(--hp-canvas-wall-ghost); }
 .hp-schiene-overlay--links { left: 0; }
 .hp-schiene-overlay--rechts { right: 0; }
+
+/* --- AUF-88-P1 — Referenzunterlage: Hochladen, Kalibrieren, Herkunft ------------------------------
+ *
+ * Sitzt im „Import & Nachzeichnen"-Arbeitsbereich (K-07), keine eigene Flaeche, kein Dialog-Rahmen
+ * — dieselbe Denke wie bei `GeschossFlaeche`: eine Gruppe von Feldern in der Schiene, nicht
+ * darueber. Farbe nur ueber Token; kein `:hover` (Stilschicht-Regel, `stilschicht.test.ts:399`).
+ */
+.hp-unterlage-feld { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--hp-hair); }
+.hp-unterlage-rubrik { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--hp-faint); }
+.hp-unterlage-datei-input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hp-unterlage-knopf { font-size: 12.5px; padding: 6px 10px; border-radius: 8px; cursor: pointer; border: 1px solid var(--hp-control-border); background: var(--hp-surface); color: var(--hp-ink); text-align: left; }
+.hp-unterlage-herkunft { font-size: 12px; color: var(--hp-ink); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hp-unterlage-datum { color: var(--hp-muted); font-weight: 500; }
+.hp-unterlage-massstab { font-size: 11.5px; color: var(--hp-muted); font-variant-numeric: tabular-nums; }
+.hp-unterlage-hinweis { font-size: 11.5px; color: var(--hp-warn-ink); background: var(--hp-warn-soft); border-radius: 6px; padding: 6px 8px; line-height: 1.4; }
+.hp-unterlage-kalibrierung { display: flex; flex-direction: column; gap: 6px; background: var(--hp-surface2); border: 1px solid var(--hp-hair); border-radius: 8px; padding: 8px; }
+.hp-unterlage-laenge-label { display: flex; flex-direction: column; gap: 4px; font-size: 11.5px; color: var(--hp-muted); }
+.hp-unterlage-laenge-eingabe { box-sizing: border-box; width: 100%; font-size: 12.5px; padding: 5px 8px; border-radius: 6px; border: 1px solid var(--hp-hair); }
+.hp-unterlage-knopfreihe { display: flex; gap: 6px; }
+.hp-unterlage-fehler { font-size: 11.5px; color: var(--hp-err-ink); }

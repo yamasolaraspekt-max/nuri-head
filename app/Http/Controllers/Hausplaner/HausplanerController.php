@@ -53,7 +53,30 @@ class HausplanerController extends Controller
             // AUF-78: NUR hier. Die Studio-Route traegt kein Hausplaner-Recht (nur `auth`) —
             // wer die Liste dorthin durchreicht, zeigt sie jedem angemeldeten Nutzer.
             'hpProjekte' => $this->hausplanerProjekte(),
+            // AUF-88-P1: die zuletzt hochgeladene Referenzunterlage dieses Objekts, fertig vom
+            // Server — dieselbe Naht wie `hpProjekte`, kein Lade-Fetch aus der Insel.
+            'hpUnterlage' => $this->hausplanerUnterlage($objekt),
         ]);
+    }
+
+    /**
+     * AUF-88-P1 / K-05 — die zuletzt hochgeladene Referenzunterlage dieses Objekts, oder `null`.
+     *
+     * **Nur EIN Datensatz, der neueste.** Mehrere Unterlagen gleichzeitig zu tragen ist außerhalb
+     * des Auftrags (`nicht_ziel`: „ein Dialog reicht für einen Weg") — der Nutzer lädt eine neue
+     * hoch, wenn die alte nicht mehr passt.
+     *
+     * **Kein Bildinhalt hier** — nur die URL zum bestehenden `bild()`-Endpunkt, der seinerseits
+     * das Ownership-Gate trägt. Diese Methode gibt keine Bilddaten frei, nur Metadaten.
+     */
+    private function hausplanerUnterlage(LeadAlternativeAdd $objekt): ?array
+    {
+        $upload = \App\Models\PlanUpload::query()
+            ->where('lead_alternative_add_id', $objekt->id)
+            ->latest()
+            ->first();
+
+        return $upload?->alsUnterlage();
     }
 
     /**

@@ -47,6 +47,9 @@ import { ObjektkopfUeberlauf } from './dashboard/ObjektkopfUeberlauf';
 import { useEscapeEbene } from './dashboard/escapeStapel';
 import { SchienenSchalter } from './dashboard/SchienenSchalter';
 import { ladeSchienen, speichereSchienen, SCHIENEN_STANDARD, type SchienenSeite, type SchienenZustand } from './state/schienenSpeicher';
+import { UnterlagenEbene } from './unterlage/UnterlagenEbene';
+import { MASSSTAB_STANDARD } from './unterlage/kalibrierung';
+import { UnterlagenWerkzeuge } from './unterlage/UnterlagenWerkzeuge';
 import { gruppenFuer } from './dashboard/werkzeugGruppen';
 import { ladeArbeitsbereich, speichereArbeitsbereich } from './state/arbeitsbereichSpeicher';
 import {
@@ -58,7 +61,7 @@ import { befundeAus, BEFUNDE_LEER, BEFUNDE_UMFANG } from './dashboard/befunde';
 import { palettenGruppen, palettenFlach, PALETTE_LEER, type PaletteEintrag } from './dashboard/palette';
 import { stapel } from './dashboard/geschossStapel';
 import { usePlannerUiStore } from './state/uiState';
-import { toolFuerShortcut, toolNach } from './tools/toolRegistry';
+import { toolFuerShortcut, toolNach, WORKSPACE_IMPORT } from './tools/toolRegistry';
 import { zoneTools } from './tools/toolPresentation';
 import { WERKZEUG_GRUPPEN } from './dashboard/werkzeugGruppen';
 import { WerkzeugGruppenMenue } from './dashboard/WerkzeugGruppenMenue';
@@ -420,6 +423,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const activeWorkspace = usePlannerUiStore((s) => s.activeWorkspace);
   /** AUF-83-T3 / K-01 — der Objektkopf aus dem Blade. Im Studio `null`: dort gibt es kein Objekt. */
   const objektkopf = usePlannerUiStore((s) => s.objektkopf);
+  /** AUF-88-P1 — die Referenzunterlage aus dem Blade. Im Studio `null`: dort gibt es kein Objekt. */
+  const unterlage = usePlannerUiStore((s) => s.unterlage);
   /**
    * AUF-34 — Arbeitsbereich wählen und merken. **Kein zweiter Zustand:** die Wahrheit bleibt
    * `activeWorkspace` im UI-Store; `localStorage` ist nur ein Gedächtnis über den Neuladen hinweg
@@ -1546,6 +1551,17 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               <span style={{ flex: '1 1 120px', minWidth: 0 }}>{wegweiser.satz}</span>
             </div>
           )}
+          {/* AUF-88-P1 / K-07 — der Einstieg sitzt HIER, im „Import & Nachzeichnen"-Arbeitsbereich
+              aus AUF-83-T3, nicht in einer neuen Kopfleiste (Master-Prompt §17). Ohne Objekt
+              (Studio) gibt es keine Unterlage — `unterlage` bleibt dann `null`. */}
+          {activeWorkspace === WORKSPACE_IMPORT && unterlage && (
+            <UnterlagenWerkzeuge
+              unterlage={unterlage}
+              csrfToken={store.getState().csrfToken ?? ''}
+              stageRef={stageRef}
+              weltPunkt={weltPunkt}
+            />
+          )}
           {/* Welle A2 (§19/UI-4): Die Leiste bezieht ihre Zugehörigkeit AUSSCHLIESSLICH aus der
               Präsentationsschicht — `zoneTools('fix')` statt `werkzeugTools()`. Vorher entschieden
               zwei Mechanismen unabhängig über dieselbe Frage (`art` in der Registry UND `zone` in den
@@ -1681,6 +1697,18 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           onDragEnd={(e) => { if (e.target === e.currentTarget) setPan({ x: e.target.x(), y: e.target.y() }); }}
         >
           <Layer>
+            {/* AUF-88-P1 / K-03 — die Referenzunterlage: ALS ERSTES Kind, also die unterste
+                Ebene. `scaleY={-1}` kontert denselben Y-Flip, den auch `Text` hier kontert
+                (die Stage dreht mit `scaleY={-zoom}` auf CAD-Konvention Y-hoch) — ohne ihn
+                stünde ein gescanntes Blatt auf dem Kopf. */}
+            {unterlage?.aktuelle?.bildUrl && (
+              <Group scaleY={-1}>
+                <UnterlagenEbene
+                  bildUrl={unterlage.aktuelle.bildUrl}
+                  massstabMmProEinheit={unterlage.aktuelle.massstabMmProEinheit ?? MASSSTAB_STANDARD}
+                />
+              </Group>
+            )}
             {rasterAn && rasterLinien}
             {massElemente}
 

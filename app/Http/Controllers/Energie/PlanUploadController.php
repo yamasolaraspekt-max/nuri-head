@@ -94,7 +94,11 @@ class PlanUploadController extends Controller
 
         PlanKlassifizieren::dispatch($upload);
 
-        return response()->json(['id' => $upload->id, 'message' => 'Hochgeladen — wird klassifiziert.']);
+        // Dieselbe Form wie `status()` und der Seitenaufruf — die Insel kann sie ohne zweites
+        // Feld direkt in `aktualisiereUnterlage` ablegen, plus `id`/`message` fürs Polling.
+        return response()->json(array_merge($upload->alsUnterlage(), [
+            'id' => $upload->id, 'message' => 'Hochgeladen — wird klassifiziert.',
+        ]));
     }
 
     /**
@@ -117,6 +121,19 @@ class PlanUploadController extends Controller
         $planUpload->update($daten);
 
         return response()->json(['massstab_mm_pro_einheit' => $planUpload->massstab_mm_pro_einheit]);
+    }
+
+    /**
+     * AUF-88-P1 — der aktuelle Stand für die Insel, zum Nachfragen nach dem Hochladen. Die
+     * Klassifikation läuft über die Queue (`PlanKlassifizieren::dispatch`); dieser Endpunkt ist,
+     * womit die Insel nachfragt, ob sie schon fertig ist — dieselbe Form wie beim Seitenaufruf
+     * (`PlanUpload::alsUnterlage()`), eine Wahrheit für beide Aufrufstellen.
+     */
+    public function status(PlanUpload $planUpload): JsonResponse
+    {
+        abort_unless($planUpload->user_id === auth()->id(), 403);
+
+        return response()->json($planUpload->alsUnterlage());
     }
 
     public function destroy(PlanUpload $planUpload): JsonResponse
