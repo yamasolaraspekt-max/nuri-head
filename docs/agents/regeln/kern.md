@@ -1,3 +1,11 @@
+> **⚠ NACHRANGIG — die Arbeitsgrundlage ist [`docs/agents/00-REGELWERK.md`](../00-REGELWERK.md).**
+>
+> Dieses Blatt ist am 30.07.2026 entstanden, **ohne zu prüfen, dass es das Regelwerk schon gibt**
+> (377 Zeilen, gültig seit 28.07., R1–R22). **Bei Widerspruch gilt das Regelwerk**, bis Yama
+> entschieden hat — Befund **PB-014**. Was hier steht, **schärft** und **ersetzt nicht**.
+
+---
+
 # KERNREGELN — Ebene 1
 
 **Eine Seite. Diese Regeln werden IMMER geladen, von allen Rollen, vor jedem Vorgang.**
@@ -88,12 +96,21 @@ nächster erwarteter Status`.
 
 ## Betriebsgrenzen (unverhandelbar)
 
-- **Committen ist PFLICHT, pushen ist VERBOTEN.** Das sind zwei verschiedene Dinge, und die
-  Verwechslung hat am 30.07. elf Stunden Arbeit im Arbeitsbaum liegen lassen.
-  **Wer baut, committet seinen eigenen Stand** (`git commit -- <pfade>`) — sonst ist die Arbeit
-  weder übergeben noch gesichert noch prüfbar. **`umgesetzt` ohne Commit gibt es nicht.**
-  **Kein `git push` aus irgendeiner Instanz**, auch nicht nach grüner Abnahme — pushen macht
-  ausschließlich Yama.
+- **Der Commit-Zeitpunkt ist STRITTIG und liegt bei Yama — bis dahin gilt die ältere Regel.**
+  Ich hatte hier am 30.07., 08:33 geschrieben *„Committen ist PFLICHT"* und als Grund genannt,
+  es habe nirgends gestanden, dass committen erwartet wird. **Das ist gemessen falsch.**
+  `docs/agents/02-generator.md:7` sagt seit dem 28.07. wörtlich **„Committet NIE selbst"**,
+  Zeile 94 verlangt einen **Pflicht-Stopp vor dem Commit**, Zeile 122 einen
+  **„commit-fertigen Stand — noch nicht committet"**, und `docs/agents/00-zyklus.md:42` macht
+  **Yama zum finalen Freigeber vor jedem Produktiv-Commit.**
+  **Die elf Stunden waren kein Versäumnis, sondern Regelbefolgung** — und meine Gegenregel stand
+  in einer Datei, die kein Startpfad nennt (Befund PB-013).
+  **Bis zu Yamas Entscheid gilt: der Generator committet nach Evaluator-FREIGABE, nicht davor.**
+  Der Fall, um den es wirklich ging, bleibt trotzdem falsch: **ein abgenommener Stand, der
+  danach nicht committet wird.** Nach der Freigabe ist der Commit fällig, nicht optional.
+- **Pushen ist verboten** — **kein `git push` aus irgendeiner Instanz**, auch nicht nach grüner
+  Abnahme. Pushen macht ausschließlich Yama. *Diese Hälfte ist unstrittig; beide Regelsätze
+  sagen dasselbe.*
 - **Niemals `git add -A` oder `.`** — `git commit -- <pfade>`.
 - **Kein `rm`/`unlink` auf dem Mount** — `mv` nach `_to_delete/` bzw. `.git/_locks_beiseite/`.
 - **Persistierte Schema-Werte nicht umbenennen** (`type: wall|window|door|ceiling`, `objectType`,

@@ -1,3 +1,11 @@
+> **⚠ NACHRANGIG — die Arbeitsgrundlage ist [`docs/agents/00-REGELWERK.md`](../00-REGELWERK.md).**
+>
+> Dieses Blatt ist am 30.07.2026 entstanden, **ohne zu prüfen, dass es das Regelwerk schon gibt**
+> (377 Zeilen, gültig seit 28.07., R1–R22). **Bei Widerspruch gilt das Regelwerk**, bis Yama
+> entschieden hat — Befund **PB-014**. Was hier steht, **schärft** und **ersetzt nicht**.
+
+---
+
 # EVALUATOR — Ebene 2
 
 **Lies zuerst `kern.md`. Diese Datei ergänzt sie, sie ersetzt sie nicht.**

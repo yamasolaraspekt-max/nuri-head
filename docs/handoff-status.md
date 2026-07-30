@@ -24112,3 +24112,59 @@ Papiere mit HISTORISCH-Kopf seit heute: 3
 ```
 
 **Alle zehn Befunde tragen `befehl` und `commit`. Keinen musste ich ablehnen.**
+
+---
+
+## 30.07.2026, 09:20 CEST — PB-013/PB-014: das Regelwerk war unerreichbar, und es gibt drei davon
+
+**VOTUM: auftrag=PB-013+PB-014 rolle=planner ergebnis=ANGENOMMEN commit=folgt datum=2026-07-30**
+
+**Der unabhängige Prüfer hat in Runde 11 zwei P1 gemeldet, und beide treffen Papiere von heute
+früh — meine eigenen.**
+
+```text
+git grep -l 'regeln/kern' HEAD           → 5 Treffer, davon 0 auf dem Startpfad
+grep -c 'regeln/' docs/agents/0*.md      → 0 0 0 0 0 0 0 0 0   (alle neun Blaetter)
+CLAUDE.md:17 nennt                        00-zyklus · 01-planner · 02-generator · 03-evaluator
+```
+
+**Und die Struktur ist eine Stufe schlechter als gemeldet: es sind drei Regelsätze, nicht zwei.**
+`docs/agents/00-REGELWERK.md` (377 Z., gültig seit 28.07., trägt R1–R22) nennt sich selbst *„die
+Arbeitsgrundlage für Planner, Generator und Evaluator"* — **und ist erreichbar.** Meine 736 Zeilen
+in `regeln/` sind am 30.07. entstanden, **ohne dass ich geprüft habe, ob es das schon gibt.**
+
+### Der Widerspruch, der elf Stunden gekostet hat — gemessen, nicht vermutet
+
+```text
+docs/agents/02-generator.md:7    „Committet NIE selbst; vor jedem Commit ein Pflicht-Stopp"
+docs/agents/02-generator.md:122  „Commit-fertiger Stand — noch nicht committet."
+docs/agents/00-zyklus.md:42      „Yama ist finaler Freigeber vor jedem Produktiv-Commit."
+docs/agents/regeln/kern.md       „Committen ist PFLICHT."          (meine Fassung, 08:33)
+```
+
+> **Meine Erklärung von 08:33 — *„nirgends stand, dass committen erwartet wird"* — ist falsch.
+> Es stand da, seit dem 28.07., und es stand umgekehrt. Die Instanz hat nicht geschlampt,
+> sondern befolgt.** Das ist F-04, achte Ausprägung: eine HYPOTHESIS als FACT ausgegeben, in
+> genau dem Absatz, in dem ich eine Ursache erklärt habe.
+
+### Was ich getan habe — alles in `docs/`, kein Produktionscode, CLAUDE.md unberührt
+
+```text
+5 Startblaetter   Kopfkasten „EBENE 1 GILT ZUSAETZLICH"  → Gegenprobe 5x 1 Treffer
+00-REGELWERK.md   Kopfkasten „es gibt eine zweite Ablage, dieses Blatt hat den aelteren Anspruch"
+regeln/*.md (5)   Kopfkasten „NACHRANGIG — Arbeitsgrundlage ist 00-REGELWERK.md"
+kern.md           die Commit-Regel richtiggestellt: strittig, bis Yama entscheidet gilt die aeltere
+regeln/generator.md §7  neu geschrieben — mit den vier gemessenen Zeilen statt meiner Vermutung
+```
+
+### ⚠ AN YAMA — eine Entscheidung: wer committet wann?
+
+**A** (gilt heute): Generator committet nie selbst, erst nach FREIGABE + Yama-Bestätigung.
+**B** (meine Fassung): Generator committet sofort, die Abnahme urteilt über den Commit.
+
+**Empfehlung B mit Auflage** — nicht aus Bequemlichkeit, sondern weil **R22 einen Commit als
+Vorher-Stand verlangt**; unter A kann der Evaluator keinen Prüfstand herstellen, den ein
+Folgeauftrag nicht zerstört. Auflage: nur Arbeitszweig, **pushen bleibt bei Yama**, Tor 2
+unberührt. **Bis zum Entscheid gilt A** — ich setze meine eigene Fassung nicht durch.
+
+**Ballbesitz:** Yama (eine Entscheidung) · Planner (PB-011/012/015 offen) · Generator (AUF-83-T3-N1)

@@ -1,3 +1,11 @@
+> **⚠ NACHRANGIG — die Arbeitsgrundlage ist [`docs/agents/00-REGELWERK.md`](../00-REGELWERK.md).**
+>
+> Dieses Blatt ist am 30.07.2026 entstanden, **ohne zu prüfen, dass es das Regelwerk schon gibt**
+> (377 Zeilen, gültig seit 28.07., R1–R22). **Bei Widerspruch gilt das Regelwerk**, bis Yama
+> entschieden hat — Befund **PB-014**. Was hier steht, **schärft** und **ersetzt nicht**.
+
+---
+
 # GENERATOR — Ebene 2
 
 **Lies zuerst `kern.md`. Diese Datei ergänzt sie, sie ersetzt sie nicht.**
@@ -91,23 +99,42 @@ geprüft hast) · Rework Rate · New-Regression Rate · **Caught-Before-Build Ra
 ein eigenes Bündel zurückgestellt, bevor es jemand merkte.
 
 ---
-
-## 7. Committen gehört zu „umgesetzt" — es ist kein Extraschritt
+## 7. Wann du committest — die Regel ist strittig, und das musst du wissen
 
 **Am 30.07. hat eine frische Instanz `AUF-83-T3` vollständig gebaut, alle Gates grün gefahren und
 gemeldet: *„Kein Commit, kein Push."*** Damit lagen **20 fertige Dateien elf Stunden im
-Arbeitsbaum**, ohne dass jemand sie prüfen, sichern oder übernehmen konnte.
+Arbeitsbaum**.
 
-**Der Grund ist verständlich und die Regel war schuld:** in den Betriebsgrenzen stand groß
-*„Niemals pushen"* — und nirgends stand, dass **committen erwartet wird.**
+**Ich habe hier zuerst geschrieben, die Regel sei schuld, weil nirgends stand, dass committen
+erwartet wird. Das war eine Vermutung, und sie ist gemessen falsch:**
 
-> **Zwei verschiedene Dinge:**
-> **`git commit -- <pfade>` ist deine Pflicht.** Ohne Commit ist die Arbeit weder übergeben noch
-> gesichert noch prüfbar — und der Evaluator kann keinen Prüfstand herstellen.
-> **`git push` ist verboten**, auch nach grüner Abnahme. Das macht ausschließlich Yama.
+```text
+docs/agents/02-generator.md:7    „Committet NIE selbst; vor jedem Commit ein Pflicht-Stopp
+                                  an den Evaluator."
+docs/agents/02-generator.md:94   „VOR Commit: Pflicht-Stopp ... commit-fertigem Stand (kein Commit!)"
+docs/agents/02-generator.md:122  „Commit-fertiger Stand — Branch/Diff, noch nicht committet."
+docs/agents/00-zyklus.md:42      „Yama ist finaler Freigeber vor jedem Produktiv-Commit."
+```
 
-**Deine Meldung `umgesetzt` enthält deshalb immer den Commit-Hash.** Ohne Hash ist sie unvollständig
-und geht zurück.
+> **Die Instanz hat nicht geschlampt. Sie hat die Datei befolgt, die CLAUDE.md ihr nennt.**
+> Meine Gegenregel stand in `docs/agents/regeln/`, und **kein Startpfad nennt dieses
+> Verzeichnis** (Befund PB-013, gemessen: null Verweise in allen neun Blättern von
+> `docs/agents/`).
 
-*Nachweis, dass es vorher schon so war: fünf Commits vom 29.07. tragen deine Handschrift —
-`97a2e2a4`, `a14abb53`, `45656ac1`, `86059540`, `d78c2466`.*
+**Was für dich bis zu Yamas Entscheid gilt:**
+
+```text
+bauen  →  Gates fahren  →  melden mit commit-fertigem Stand  →  Evaluator
+       →  FREIGABE      →  DANN committen (git commit -- <pfade>)  →  Hash melden
+```
+
+**Zwei Dinge bleiben davon unberührt:**
+
+1. **Nach der Freigabe ist der Commit fällig, nicht optional.** Ein abgenommener Stand, der im
+   Arbeitsbaum liegen bleibt, ist weder gesichert noch übernehmbar — genau das war der Schaden.
+2. **`git push` ist verboten**, auch nach grüner Abnahme. Das macht ausschließlich Yama.
+   *Hier sind sich beide Regelsätze einig.*
+
+**Und wenn du wartest, sagst du es.** Eine Zeile — *„gebaut, warte auf Evaluator-FREIGABE vor
+Commit"* — hätte die elf Stunden auf zehn Minuten verkürzt. **Stille sieht von außen aus wie
+Stillstand, und ich habe sie am 30.07. dreimal als solchen gedeutet.**

@@ -1,3 +1,19 @@
+> **⚠ ES GIBT SEIT 30.07.2026 EINE ZWEITE ABLAGE — und dieses Blatt hat den älteren Anspruch.**
+>
+> `docs/agents/regeln/` (`kern.md` · `planner.md` · `generator.md` · `evaluator.md` ·
+> `plan-reviewer.md`, zusammen 736 Zeilen) ist am 30.07. früh entstanden, **ohne dass geprüft
+> wurde, ob es dieses Blatt hier schon gibt.** Das ist ein Planner-Fehler der Klasse
+> *„neu gebaut statt wiederverwendet"* — Befund **PB-014**.
+>
+> **Bis zur Zusammenführung gilt:** dieses Blatt ist die **Arbeitsgrundlage** (R1–R22, die zwei
+> Spuren, der Ablauf, die Rollenabschnitte). Die Blätter in `regeln/` **schärfen** einzelne
+> Punkte und **ersetzen nichts**. **Bei Widerspruch gilt dieses Blatt**, bis Yama entschieden hat.
+>
+> Der eine bekannte Widerspruch ist der **Commit-Zeitpunkt** — gemessen in
+> `docs/planner/PRUEFER-BEFUNDE.md` (PB-013/PB-014) und offen an Yama gestellt.
+
+---
+
 # REGELWERK — gültig ab **28.07.2026, 23:30 (CEST)**
 
 > *Richtiggestellt 23:40: der Kopf trug „27.07., 21:30“. Meine Zeitquelle war die UTC-Uhr des Containers — zwei Stunden zurück und dadurch auch einen Tag daneben. Yama hat es bemerkt, nicht ich.*

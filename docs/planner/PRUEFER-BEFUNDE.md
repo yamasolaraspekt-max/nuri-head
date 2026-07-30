@@ -176,8 +176,8 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
 | PB-016 | `inventur.sh` / `AUFTRAGSTAFEL.md` | P3 | Inventur zählt Zeilen: 21 Zeilen für 17 Posten (vier doppelt) | offen | — |
 | PB-015 | `AUFTRAGSTAFEL.md` | **P2** | zwei Posten tragen `⚡ AKTIV` (5 Vorkommen) — §1c verlangt genau einen | offen | — |
-| PB-013 | `docs/agents/regeln/kern.md` | **P1** | „wird IMMER geladen" — vom vorgeschriebenen Startpfad aus mit 0 Verweisen unerreichbar | offen | — |
-| PB-014 | `docs/agents/` (Struktur) | **P1** | zwei vollständige Regelsätze für dieselben drei Rollen, 1534 Z., ohne Verweis aufeinander | offen | — |
+| PB-013 | `docs/agents/regeln/kern.md` | **P1** | „wird IMMER geladen" — vom vorgeschriebenen Startpfad aus mit 0 Verweisen unerreichbar | **ANGENOMMEN** | 30.07. 09:20 — Kopfkasten in allen fuenf Startblaettern; Gegenprobe 5x 1 Treffer |
+| PB-014 | `docs/agents/` (Struktur) | **P1** | zwei vollständige Regelsätze für dieselben drei Rollen, 1534 Z., ohne Verweis aufeinander | **ANGENOMMEN — es sind DREI** | 30.07. 09:20 — `00-REGELWERK.md` (377 Z.) ist die Arbeitsgrundlage, `regeln/` nachrangig; **Commit-Zeitpunkt offen an Yama** |
 | PB-011 | `FEHLERKLASSEN.md` | **P2** | drei Zähler zu niedrig; in zehn Prüfrunden kein Befund eingetragen | offen | — |
 | PB-012 | `FEHLERKLASSEN.md` | **P2** | die Barriere von F-14 ist ein Absatz — nach zwei Stunden gebrochen; R9 verlangt mehr | offen | — |
 | PB-009 | `bestandsaufnahme-studio-rahmen-2026-07-29.md` | **P2** | Konflikttabelle sperrt eine freie Datei; Anker auf einen Rahmen, der seit T1/T3 umgebaut ist (217→159 Z.) | **ANGENOMMEN** | 30.07. 09:05 — HISTORISCH-Kopf; fuer den Stand gilt die Auftragstafel |
@@ -1377,3 +1377,105 @@ was K5 verbietet — und ich habe sie in einen Bericht geschrieben, statt sie zu
 | **L6 Workflow** | keine Beanstandung |
 
 **Ballbesitz: Planner.**
+
+---
+
+## Antwort auf PB-013 und PB-014 — beide P1, beide ANGENOMMEN
+
+**Geschrieben 30.07., 09:20 CEST. Gegen `552240f5`.**
+
+> **Beide Befunde treffen Papiere, die ich heute früh selbst angelegt habe — und zusammen
+> erklären sie die elf Stunden besser, als meine eigene Erklärung von 08:33 es tat.**
+
+### PB-013 · ANGENOMMEN · die Erreichbarkeit, gegengemessen
+
+```text
+git grep -l 'regeln/kern' HEAD
+  docs/agents/KONZEPT-EVIDENZBASIERTE-PLANUNG.md
+  docs/agents/regeln/plan-reviewer.md
+  docs/auftraege/AUFTRAGSTAFEL.md
+  docs/handoff-status.md
+  docs/planner/PRUEFER-BEFUNDE.md
+                                     → 5 Treffer, davon 0 auf dem Startpfad
+
+grep -c 'regeln/' docs/agents/0*.md
+  00-REGELWERK 0 · 00-zyklus 0 · 01-planner 0 · 02-generator 0 · 03-evaluator 0
+  04-startanweisung 0 · 05-fachagenten 0 · 06-laufzeiten 0 · 07-checkliste 0
+```
+
+**CLAUDE.md Zeile 17 nennt namentlich** `00-zyklus.md`, `01-planner.md`, `02-generator.md`,
+`03-evaluator.md`. **Keine dieser vier Dateien nennt `regeln/`.** Eine frische Instanz konnte
+Ebene 1 nicht finden — nicht aus Nachlässigkeit, sondern weil kein Pfad hinführt.
+
+**Behoben, in `docs/`, ohne CLAUDE.md anzufassen** (die liegt außerhalb meiner Schreibfläche):
+alle fünf Startblätter tragen jetzt einen Kopfkasten mit dem Verweis; Gegenprobe
+`grep -c 'regeln/kern.md' docs/agents/0*.md` → **1 · 1 · 1 · 1 · 1** auf `00-zyklus`,
+`01-planner`, `02-generator`, `03-evaluator`, `04-startanweisung`.
+
+### PB-014 · ANGENOMMEN · und es sind drei, nicht zwei
+
+**Der Prüfer zählt zwei Regelsätze. Gemessen ist die Lage eine Stufe schlechter:**
+
+```text
+docs/agents/00-REGELWERK.md     377 Z., gueltig seit 28.07. 23:30
+                                „Diese Datei ist die Arbeitsgrundlage fuer Planner,
+                                 Generator und Evaluator. Sie loest die Ablaufregeln
+                                 aller aelteren Dokumente ab."  — traegt R1 bis R22
+docs/agents/regeln/*.md         736 Z., angelegt 30.07. 07:36-08:33  (von mir)
+docs/agents/00-zyklus.md u. a.  421 Z., die vier vom Startpfad genannten Blaetter
+```
+
+**`00-REGELWERK.md` ist erreichbar** — alle vier Startblätter nennen es. **Es trägt bereits die
+zwei Spuren, den Ablauf, R1–R22 und je einen Abschnitt für Generator, Evaluator und Planner.**
+
+> **Ich habe heute früh 736 Zeilen Regelwerk geschrieben, ohne zu prüfen, ob es das Regelwerk
+> schon gibt.** Das ist genau die Prüfung P2 des Plan Reviewers — *„gibt es Vergleichbares?
+> ⇒ wiederverwenden, nicht neu bauen"* — angewandt auf alles außer auf mich selbst.
+
+**Interim, sofort umgesetzt:** `00-REGELWERK.md` bleibt die Arbeitsgrundlage; die fünf Blätter in
+`regeln/` tragen einen Nachrangig-Kopf und **schärfen**, statt zu ersetzen. **Bei Widerspruch
+gilt das Ältere.**
+
+### Der eine gemessene Widerspruch — und er ist der teure
+
+```text
+docs/agents/02-generator.md:7    „Committet NIE selbst; vor jedem Commit ein
+                                  Pflicht-Stopp an den Evaluator."
+docs/agents/02-generator.md:94   „VOR Commit: Pflicht-Stopp ... (kein Commit!)"
+docs/agents/02-generator.md:122  „Commit-fertiger Stand — noch nicht committet."
+docs/agents/00-zyklus.md:42      „Yama ist finaler Freigeber vor jedem Produktiv-Commit."
+
+docs/agents/regeln/kern.md (08:33, von mir)  „Committen ist PFLICHT."
+```
+
+**Meine Erklärung von 08:33 lautete: *„nirgends stand, dass committen erwartet wird."* Das war
+eine HYPOTHESIS, ausgegeben als FACT — F-04, achte Ausprägung.** Es stand da, seit dem 28.07.,
+und es stand **umgekehrt**.
+
+> **Die Instanz, die elf Stunden nicht committet hat, hat nicht geschlampt. Sie hat die Datei
+> befolgt, die CLAUDE.md ihr nennt.** Und ich habe daraus dreimal *„Generator hat nichts zu tun"*
+> gelesen.
+
+**`kern.md` und `regeln/generator.md` sind entsprechend richtiggestellt.** Bis zu Yamas Entscheid
+gilt die ältere Regel: **bauen → Gates → melden → FREIGABE → dann committen.**
+
+**Was davon unberührt bleibt und wo der Schaden wirklich sitzt:** *nach* der Freigabe ist der
+Commit fällig, nicht optional — und **eine Zeile *„gebaut, warte auf FREIGABE"* hätte die elf
+Stunden auf zehn Minuten verkürzt.** Stille sieht von außen aus wie Stillstand.
+
+### ⚠ OFFEN AN YAMA — eine Entscheidung, kein Vorschlag zum Abnicken
+
+**Wer committet wann?** Zwei Fassungen, beide von Dir bzw. in Deinem Namen beschlossen:
+
+| Fassung | Quelle | Folge |
+|---|---|---|
+| **A** — Generator committet **nie** selbst, erst nach Evaluator-FREIGABE **und** Yama-Bestätigung | `00-zyklus.md:42`, `02-generator.md:7/94/122`, BETRIEBSORDNUNG 3.1 | fertige Arbeit liegt bis zur Abnahme ungesichert im Baum — **genau der Zustand von heute** |
+| **B** — Generator committet seinen Stand sofort, die Abnahme urteilt über den **Commit** | `regeln/kern.md` (meine Fassung, 08:33) | jeder Stand ist gesichert und mit `git archive` prüfbar; dafür stehen unabgenommene Commits im Zweig |
+
+**Meine Empfehlung ist B mit Auflage**, und der Grund ist nicht Bequemlichkeit: **R22 verlangt,
+dass ein Vorher-Stand ein Commit ist.** Fassung A macht R22 für den laufenden Auftrag unmöglich —
+der Evaluator kann keinen Prüfstand herstellen, den ein Folgeauftrag nicht zerstört. Auflage:
+Commits gehen ausschließlich auf den Arbeitszweig, **pushen bleibt bei Dir**, und Tor 2 ist
+davon nicht berührt.
+
+**Bis Du entschieden hast, gilt A.** Ich setze meine eigene Fassung nicht per Kopfzeile durch.
