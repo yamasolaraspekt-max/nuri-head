@@ -172,7 +172,8 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-002 | `tool-dashboard-current-state.md` | P2 | gemessen gegen Sicherungszweig, nicht gegen den Arbeitszweig | offen | — |
 | PB-003 | `tool-dashboard-current-state.md` | P2 | drei Bestandszahlen daneben: 900↔2370 Z., 11↔19 Commands, 30↔50 Dateien | offen | — |
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | offen | — |
-| PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | offen | — |
+| PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | offen · **Teilmenge von PB-006** | — |
+| PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | offen | — |
 
 ---
 
@@ -376,3 +377,80 @@ gekostet hat, nur diesmal auf der Prüfseite.*
 Die sechs Tage Alter sagen nichts über die Haltbarkeit — `tool-dashboard-current-state.md` vom
 selben Tag ist an vier Stellen überholt, dieses hier an keiner. Der Unterschied ist nicht das
 Datum, sondern dass dieses Papier **gepflegt** wurde: der AUF-34-Nachtrag steht drin.*
+
+---
+
+## 9. Runde 3 (30.07.) — PB-006, und eine Korrektur an meinem eigenen PB-005
+
+**Gemessen gegen `d536301d`.**
+
+### Zuerst die Korrektur: PB-005 hat mit dem falschen Maß gemessen
+
+PB-005 zählte *„Papiere ohne eingehenden Verweis aus `docs/`"* und fand elf. **Das Maß war zu
+schwach.** Ich habe beim Weitersuchen gesehen, dass die fünf Papiere, die ich als *„wird noch
+referenziert"* aussortiert hatte, **ausschließlich von anderen toten Papieren** referenziert
+werden — `ticket-reuse-matrix.md` etwa nur von `claude-skill-roadmap.md`, und die hat selbst null
+eingehende Verweise.
+
+*Ein Verweis von einem toten Papier hält nichts am Leben.* **PB-005 bleibt gültig, ist aber eine
+Teilmenge von PB-006** und sollte mit ihm zusammen bearbeitet werden.
+
+### PB-006 · P3 · Ein Drittel der Prüffläche ist von keinem lebenden Dokument erreichbar
+
+```yaml
+befund:
+  id: PB-006
+  datei: "docs/planner/ (Sammelbefund, ersetzt und erweitert PB-005)"
+  stelle: "23 von 65 Eintraegen"
+  behauptung: "(keine - Mengenbefund)"
+  gemessen: |
+    65 Eintraege in docs/planner/
+    42 von einem LEBENDEN Dokument erreichbar
+    23 von keinem  (35 %)
+    Verteilung nach letzter Aenderung:
+      19.07. 11 · 23.07. 6 · 25.07. 1 · 26.07. 1 · 28.07. 3 · 29.07. 1
+  befehl: |
+    cat docs/handoff-status.md docs/auftraege/*.md docs/agents/*.md \
+        CLAUDE.md docs/arbeitskompass-ticket.md > /tmp/lebend.txt
+    for f in $(ls docs/planner/); do
+      grep -q "$f" /tmp/lebend.txt || echo "$f"; done
+  commit: "d536301d"
+  schwere: P3
+  wirkung: "Die Prueflaeche ist um ein Drittel groesser als der Bestand, den irgendjemand benutzt.
+    Jede Pruefrunde - meine wie die des Planners - sichtet 23 Papiere, auf die kein Ledger, keine
+    Tafel, kein Auftragsblatt und keine Regel zeigt."
+  eigenarbeit: nein
+```
+
+**Der Teil, der nicht nach Altlast aussieht — und der eigentliche Grund für diesen Befund:**
+
+| Datei | zuletzt geändert | erreichbar von einem lebenden Dokument |
+|---|---|---|
+| `fortschritt-2026-07-29.html` | **29.07.** | nein |
+| `ablauf-und-regeln-vorschlag-2026-07-27.md` | **28.07.** | nein |
+| `regelwerk-pruefer-einordnung-2026-07-27.md` | **28.07.** | nein |
+| `ai-workflow-pruefbefund-2026-07-27.md` | **28.07.** | nein |
+
+**Vier Papiere aus den letzten zwei Tagen, auf die nichts zeigt.** Das ist kein Aufräum-Thema,
+sondern ein laufender Vorgang: *das Papier entsteht, wird im Ledger als Fließtext erwähnt — und
+danach findet es niemand mehr über seinen Namen.* `regelwerk-pruefer-einordnung-2026-07-27.md` ist
+die Einordnung, aus der **diese Rolle hier** hervorgegangen ist; sie ist über keinen Dateinamen
+auffindbar.
+
+**Erledigt wenn:** *für jedes Papier in `docs/planner/` gilt entweder — sein Name kommt in
+mindestens einem lebenden Dokument vor, oder es steht in einem Verzeichnis/Abschnitt, der es
+ausdrücklich als historisch führt.* Messbar mit dem Befehl oben: die Liste ist leer oder alle
+verbliebenen Einträge liegen unter dem Historisch-Pfad.
+
+### Die sechs Linsen an dieser Fläche
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | nicht geprüft — dieser Befund misst Erreichbarkeit, nicht Inhalt |
+| **L2 Effizienz** | PB-006 — die Prüffläche ist um 55 % größer als der benutzte Bestand |
+| **L3 Konsistenz** | keine Beanstandung |
+| **L4 Kausalität** | PB-006 — die Kette *Papier → Verweis → Leser* reißt bei 23 von 65 |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | keine Beanstandung — kein Arbeitsweg betroffen |
+
+**Ballbesitz: Planner.**
