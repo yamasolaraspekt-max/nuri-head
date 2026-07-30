@@ -30377,3 +30377,70 @@ Runde.*
 
 **Ballbesitz: Planner** (die vier offenen Befunde aus 02:3x) · **Generator** (Z-01 weiter) ·
 **Yama** (nichts von mir).
+
+---
+
+## Planner — 31.07.2026, 00:45 · Antwort auf den Prüferbericht: die Reihenfolge ändert sich
+
+**Der Prüfer hat den Merge abgelehnt, und er hat recht.** Nachgemessen, mit meinen eigenen
+Befehlen — die Zahlen weichen ab, weil ich von einem anderen Zeitpunkt aus zähle; **die Aussagen
+sind identisch:**
+
+```text
+wc -c < storage/logs/laravel.log                          229 233 746   (er: dieselbe Zahl)
+config/logging.php:57  'channels' => ['single']           unveraendert
+ls app/rahmen/MindestbreiteHinweis.tsx                    existiert NICHT
+git log --since='29.07. 06:00'                            257 Commits
+   davon -- resources app tests routes public database     27  = 10,5 %
+ls docs/planner/*.md                                       57
+find resources/views -name '*.blade.php'                  805   (er: 803)
+```
+
+### 1. Die Reihenfolge für den Generator ändert sich — ab dem nächsten Blatt
+
+**PB-043 Teil 2 zuerst.** *Es ist der einzige offene Posten, dessen Kosten steigen, während wir
+warten.* Zwischen 22:20 (219 MB laut Blatt) und jetzt sind **rund 10 MB dazugekommen** — die
+Datei schrumpft nie wieder, und jede alte Fehlermeldung liegt tiefer begraben.
+
+**AUF-91 danach.** Das Blatt liegt seit 22:20 geschnitten, gebaut ist **null**. Der Prüfer nennt
+es beim Namen: *acht Werkzeuge sind auf dem Telefon abgeschnitten und nicht erscrollbar.*
+
+**AUF-38-P1 läuft gerade** und wird zu Ende gebaut — nicht unterbrochen. *Schutzregel: wer
+angefangen hat, macht fertig; ein halber Umbau ist schlechter als ein später fertiger.*
+
+### 2. Der Satz, der schwerer wiegt als die drei Posten
+
+```text
+Blades im CRM      805   ->  im Browser gesehen:  1
+Papiere in docs/planner  57   ->  einzeln durchgesehen: ~14
+```
+
+**Auf der EINEN geprüften Seite lagen acht unerreichbare Werkzeuge.** Bei 805 ungeprüften Seiten
+ist die Frage nicht, *ob* dort etwas liegt.
+
+**Was hier NICHT hilft:** die Browserprüfung auf viele Instanzen verteilen. Sie braucht die
+laufende App auf Yamas Rechner; Agenten in der Cloud erreichen `ticket.test` nicht. *Derselbe
+Grund, aus dem 50 Agenten nicht parallel bauen können.*
+
+**Was hilft:** die 805 Blades **statisch vorsortieren**, bevor jemand hineinsieht — feste
+Pixelbreiten, `min-width` über 1024, Tabellen ohne Umbruch, absolute Positionen, Elemente außerhalb
+des Sichtfelds. Das ist reines Lesen, das skaliert, und es macht aus 805 eine Rangliste. **Dann
+sieht sich eine Instanz die dreißig riskantesten in drei Viewports an statt achthundertfünf.**
+*Vorschlag an Yama, nicht beschlossen — er entscheidet, ob das jetzt dran ist oder nach dem
+Hausplaner-Frontend.*
+
+### 3. PB-042 — der Takt, und mein Anteil daran
+
+**10,5 % Produktivcode über 257 Commits.** Ich bin heute Nacht der größte Papier-Erzeuger
+gewesen: von meinen Commits seit 23:09 war **keiner** Produktivcode — es waren Quelle,
+Bestandsaufnahme, vier Blätter auf Validator-Schema, zwei Registerkorrekturen, ein Fahrplan.
+
+*Davon war einiges nötig — der Validator, den kein Blatt fütterte, hat in vier von vier Blättern
+ein totes Kriterium freigelegt. Aber „nötig" ist nicht dasselbe wie „dringend", und der Prüfer
+zählt zu Recht das Verhältnis und nicht meine Begründung.*
+
+**Ab jetzt: kein Planner-Commit mehr, der nicht ein liegendes Blatt beweglich macht.**
+
+**Ballbesitz: Generator** (AUF-38-P1 fertigbauen → **dann PB-043 Teil 2** → AUF-91) ·
+**Evaluator** (AUF-25 seit dem 25.07.) · **Yama** (Papierstopp · PB-042 · Blade-Vorsortierung
+ja/nein) · **Planner** (wartet, schneidet nichts).
