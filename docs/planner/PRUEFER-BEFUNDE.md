@@ -652,3 +652,60 @@ Quelle** — `eindeutschung` führt seine Legende und den AUF-34-Nachtrag mit, `
 schreibt *„0 Treffer für `clamav`… in `app/`, `config/`, `composer.json`"*. **Das eine Papier mit
 P1 nennt keinen einzigen.** *Nicht das Datum macht ein Papier haltbar, sondern ob es nachfahrbar
 ist — dieselbe Regel, die für meine eigenen Befunde gilt.*
+
+---
+
+## 13. Runde 6 (30.07.) — : **keine Beanstandung**
+
+**Zwei Stände gemessen** — der eigene (, den das Papier selbst nennt) und **f1e0bdb7**.
+*Hinweis zur Messgüte:* HEAD wanderte während der Runde von  auf **f1e0bdb7**; nach der
+Nachforderungs-Regel wird die Messung damit neu gebunden — alle Zahlen unten stehen gegen **f1e0bdb7**.
+
+| Behauptung |  | **f1e0bdb7** |
+|---|--:|--:|
+| Werkzeuge im Paket **101** | 101 | **101** |
+| Funktionsverträge **110** | 110 | **110** (110 verschieden, 110 mit ) |
+| Werkzeug-Modi der Zeichenfläche **7** | 7 | **7** |
+| Command-Typen im Modell **19** | 19 | **19** |
+|  löst an **34** Stellen aus | — | **34** |
+| Familie  **40** ·  **20** | — | **40** · **20** |
+
+**Sechs Aussagen, sechs Treffer — und keine hat sich in vier Tagen bewegt.**
+
+Die sieben Modi im Wortlaut, heute:
+
+
+### Statusabgleich, kein Befund
+
+Der Kernsatz des Papiers — ***„7 von 101 sind angeschlossen. 94 haben heute keinen Empfänger."*** —
+ist **vier Tage später unverändert wahr**. Nach dem Raster ist das **kein Befund**: eine Fläche, die
+laut Tafel offen ist, ist offener Umfang und nicht Schwäche. Und die Tafel führt sie so:
+, seit heute früh mit Stufenplan, *„Blatt für Stufe 1 folgt"*.
+
+**Als Statusabgleich gehört es trotzdem gemeldet:** zwischen dem 26.07. und heute sind fünf
+AUF-38-Scheiben, mehrere Layout-Wellen und ein Regelwerk entstanden — **die Zahl 7 hat sich in
+derselben Zeit um null bewegt.** Das ist keine Kritik an einer Reihenfolge, die Yama gesetzt hat;
+es ist die Zahl, die man daneben halten sollte, wenn über Reihenfolgen entschieden wird.
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — sechs Zahlenaussagen, sechs Treffer |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | keine Beanstandung — das Papier bindet seine Zahlen an einen Commit, wie es die Regel verlangt |
+| **L4 Kausalität** | keine Beanstandung — die Kette *110 Verträge → 19 Commands → 7 Modi* ist am Code nachvollziehbar |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | nicht geprüft |
+
+### Zwei eigene Messfehler, beide vor dem Register gefangen
+
+1. **zsh-Modifikator:**  liest zsh als  mit Modifikator . Ergebnis:
+   **überall Null.** Ohne Gegenlesen wäre daraus ein spektakulärer Falschbefund geworden
+   (*„keine Werkzeuge mehr im Paket"*). Behoben mit .
+2. **zu enges Muster:**  verfehlte  — die Summe ergab 101
+   statt 110. Erst der Widerspruch zur Gesamtzahl hat es aufgedeckt.
+
+**Beide Male hat die Gegenrechnung gegriffen**, nicht die Sorgfalt: eine Summe, die nicht zur
+Gesamtzahl passt, und eine Null, die nicht sein kann. *Das ist der Grund, warum jede Messung eine
+zweite Zahl braucht, gegen die sie stimmen muss.*
+
+**Kein Befund. Ballbesitz: Prüfer.**
