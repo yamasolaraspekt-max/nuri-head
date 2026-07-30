@@ -24921,3 +24921,39 @@ und committet. Danach AUF-50-S1.
 **AUF-87 fehlt weiterhin:** `scripts/auftrag-pruefen.mjs`, `scripts/auftrag-pruefen.sh`,
 `scripts/__tests__/` liegen seit 07:29/08:14 unverfolgt. **Zwei Commits sind seitdem an ihnen
 vorbeigegangen.** Der Validator ist gebaut, laeuft und wird benutzt — er ist nur nicht gesichert.
+
+---
+
+## 30.07.2026, 10:50 CEST — PB-038: der Passwortwechsel wandert auf heute Abend. Yama ist weg.
+
+**VOTUM: auftrag=PB-038 rolle=yama ergebnis=VERTAGT commit=folgt datum=2026-07-30**
+
+**Yama:** *„über terminal das ganze können wir das nach hinten verschieben denn ich muss weg mach
+das heute abend"*
+
+```text
+verschoben   der Passwortwechsel (http://ticket.test/user bzw. php artisan tinker)  -> heute Abend
+laeuft jetzt die Repo-Seite durch den Pruefer: HEAD saeubern · .gitignore · mv nach _to_delete/
+```
+
+**Die Auflage traegt die Vertagung, ohne dass sie eng wird:**
+
+```text
+git branch -r --contains fe47879c      LEER
+git rev-list --count origin..HEAD      362
+```
+
+> **Solange nicht gepusht wird, aendert sich das Risiko durch das Warten nicht.** Der Eintrag hat
+> das Geraet nie verlassen, und pushen ist fuer jede Instanz verboten — das ist keine zusaetzliche
+> Massnahme, sondern die Regel, die ohnehin gilt. **Die Vertagung kostet also nichts, solange
+> niemand pusht.**
+
+**Ich frage heute nicht mehr danach.** Beim naechsten Anlauf steht es im Ledger, mit dem Weg,
+dem Formular und den drei Feldern.
+
+### Betrieb ab jetzt: unbeaufsichtigt
+
+**Keine Rueckfragen an Yama, bis er sich meldet.** Der Zyklus laeuft weiter: Generator sichert
+AUF-87, zieht AUF-88-P1 (entsperrt), danach AUF-50-S1. Evaluator hat zwei Pruefstaende offen —
+`05d490ea..40fa52de` (T3/T3-N1) und `56ff2c9e..74ad1075` (T5). **Ich quittiere, halte die Marke
+richtig und schneide nach, wenn die Front leerlaeuft.** Tor 2 bleibt bei Yama.
