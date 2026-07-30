@@ -3085,3 +3085,51 @@ den ich bei den zwölf fehlenden Linsen (`PB-021`) auch gemacht habe: gezählt i
 gelesen ist nicht fachlich geprüft.*
 
 **N-1 ist jetzt wirklich abgetragen.** Alle drei eigenen Posten sind erledigt.
+
+---
+
+## 44. Runde 33 — die Gates selbst · Stand: 79 von 386 · **keine Beanstandung**
+
+**Gemessen gegen `4e666bb7`.** *Wenn ein Gate still nichts tut, ist jede grüne Meldung wertlos — und
+alle Berichte in diesem Repositorium stehen auf diesen fünf Zeilen.*
+
+| Gate | exit | tut es Arbeit? |
+|---|--:|---|
+| `tsc:hausplaner` | **0** | ja — `tsconfig.hausplaner.json` `include: ['resources/planner']`, also die ganze Insel inklusive `__tests__` |
+| `schema:hausplaner:check` | **0** | **ja, und das war die offene Frage** — siehe unten |
+| `test:hausplaner` | **0** | ja — `tests 1394 · pass 1394 · fail 0` |
+| `test:hausplaner:dom` | **0** | ja — `tests 19 · pass 19 · fail 0` |
+
+### Der Schema-Check gibt keine Ausgabe — und ist trotzdem ein echtes Gate
+
+**Das war der Verdacht:** ein Befehl, der mit 0 endet und nichts schreibt, ist von einem Befehl, der
+nichts tut, nicht zu unterscheiden (F-14). **Gelesen in `scripts/hausplaner-schema.mts`:**
+
+```ts
+const inhalt = `${JSON.stringify(schema, null, 2)}\n`;   // aus Zod neu erzeugt
+if (process.argv.includes('--check')) {
+  const vorhanden = await readFile(ziel, 'utf8').catch(() => '');
+  if (vorhanden !== inhalt) {
+    console.error('Hausplaner-JSON-Schema ist nicht aktuell. …');
+    process.exitCode = 1;
+  }
+}
+```
+
+**Er erzeugt das Schema aus dem Zod-Spiegel im Speicher, liest die Datei und vergleicht sie
+byteweise.** Bei Abweichung: Meldung **und** `exitCode 1`. **Schweigen bei Erfolg ist hier korrekt**,
+nicht verdächtig — 25 Zeilen, kein Zweig, der still durchläuft. *Und das ist derselbe Vertrag, den
+Runde 12 auf der PHP-Seite belegt hat: eine Schemadatei, von beiden Seiten gelesen, keine Kopie.*
+
+### Was ich NICHT prüfen konnte, und warum ich es sage
+
+**`build:hausplaner` habe ich nicht ausgeführt.** Es schreibt `public/hausplaner/hausplaner.js` und
+`.css` — **ein Prüfer, der baut, verändert den Baum, den er messen soll**, und im schlimmsten Fall
+landet sein Bauergebnis im Commit eines anderen (F-05).
+
+**Das ist eine echte Lücke in meiner Prüfung, und sie bleibt:** das einzige Gate, dessen Ergebnis
+ausgeliefert wird, ist von mir nicht verifizierbar, ohne meine Rolle zu verlassen. *Ersatzweise habe
+ich in Runde 26 das Ergebnis geprüft statt den Erzeuger — 188 gegen 188 CSS-Klassen und ein
+eindeutiges Literal im Bündel. Das belegt, dass der Bau gelaufen ist, nicht dass er korrekt läuft.*
+
+**Kein Befund. Die fünf Gates tragen, soweit ich sie ohne Eingriff messen kann.**
