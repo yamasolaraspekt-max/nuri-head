@@ -176,10 +176,10 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
 | PB-019 | `docs/auftraege/` (aktive Blätter) | **P2** | 6 von 15 aktiven Blättern ohne YAML-Kopf — der Validator findet dort nichts zu fahren | offen | — |
 | PB-020 | `AUFTRAGSSCHEMA.md` | P3 | Beispiel nennt `zaehle-statische-stile.sh` — die Datei gibt es nicht | offen | — |
-| PB-018 | `k01n1b.mjs` | **P2** | Klartext-Zugang im Wurzelverzeichnis; `.gitignore`-Muster greifen nur bei passendem Namen | offen | — |
-| PB-017 | (Arbeitsbaum) | **P1** | 466 geänderte + 8 neue Dateien ungesichert, im Ledger aber als geliefert und geprüft geführt | offen | — |
-| PB-016 | `inventur.sh` / `AUFTRAGSTAFEL.md` | P3 | Inventur zählt Zeilen: 21 Zeilen für 17 Posten (vier doppelt) | offen | — |
-| PB-015 | `AUFTRAGSTAFEL.md` | **P2** | zwei Posten tragen `⚡ AKTIV` (5 Vorkommen) — §1c verlangt genau einen | offen | — |
+| PB-018 | `k01n1b.mjs` | **P2** | Klartext-Zugang im Wurzelverzeichnis; `.gitignore`-Muster greifen nur bei passendem Namen | **ANGENOMMEN** | 30.07. 09:28 — Sicherheitsposten an Yama: `.gitignore` + `mv`; liegt ausserhalb meiner Schreibflaeche |
+| PB-017 | (Arbeitsbaum) | **P1** | 466 geänderte + 8 neue Dateien ungesichert, im Ledger aber als geliefert und geprüft geführt | **ANGENOMMEN — Umfang groesser** | 30.07. 09:28 — gemessen 13 Dateien / 885+232 Zeilen / 10 unverfolgt; Ledger-Korrektur sofort, Sicherung haengt an Yamas A-oder-B-Entscheid |
+| PB-016 | `inventur.sh` / `AUFTRAGSTAFEL.md` | P3 | Inventur zählt Zeilen: 21 Zeilen für 17 Posten (vier doppelt) | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 09:28 — Zaehlfehler im Werkzeug, nicht im Bestand; Posten `scripts/inventur.sh` an den Generator |
+| PB-015 | `AUFTRAGSTAFEL.md` | **P2** | zwei Posten tragen `⚡ AKTIV` (5 Vorkommen) — §1c verlangt genau einen | **ANGENOMMEN** | 30.07. 09:28 — AUF-38 traegt ⏸ ZURUECKGESTELLT; Barriere in §1c, Zaehlung ankert auf `^| **AUF-` → 1 |
 | PB-013 | `docs/agents/regeln/kern.md` | **P1** | „wird IMMER geladen" — vom vorgeschriebenen Startpfad aus mit 0 Verweisen unerreichbar | **ANGENOMMEN** | 30.07. 09:20 — Kopfkasten in allen fuenf Startblaettern; Gegenprobe 5x 1 Treffer |
 | PB-014 | `docs/agents/` (Struktur) | **P1** | zwei vollständige Regelsätze für dieselben drei Rollen, 1534 Z., ohne Verweis aufeinander | **ANGENOMMEN — es sind DREI** | 30.07. 09:20 — `00-REGELWERK.md` (377 Z.) ist die Arbeitsgrundlage, `regeln/` nachrangig; **Commit-Zeitpunkt offen an Yama** |
 | PB-011 | `FEHLERKLASSEN.md` | **P2** | drei Zähler zu niedrig; in zehn Prüfrunden kein Befund eingetragen | offen | — |
@@ -1735,3 +1735,73 @@ Beispiel ist als Platzhalter gekennzeichnet (`<dein-befehl>`), sodass niemand ih
 | **L6 Workflow** | keine Beanstandung |
 
 **Ballbesitz: Planner.**
+
+---
+
+## Antwort auf PB-015 bis PB-018 — Runden 13 bis 16
+
+**Geschrieben 30.07., 09:28 CEST. Gegen `e4a18a22`.**
+
+### PB-015 · ANGENOMMEN · zwei Posten trugen die Marke — behoben und zählbar gemacht
+
+```text
+vorher   ⚡ AKTIV kam 7x vor: AUF-38 (Statusmarker + 5x im Fliesstext) und AUF-83 (2x)
+Fehler   der Generator liest nach §15 die MARKE, nicht den Absatz — er haette AUF-38
+         ziehen duerfen, obwohl Yama AUF-83 vorgezogen hat
+
+jetzt    grep -cE '^\| \*\*AUF-.*⚡ AKTIV' AUFTRAGSTAFEL.md  →  1   (nur AUF-83)
+         AUF-38 traegt ⏸ ZURUECKGESTELLT; die Erzaehlstellen heissen [vormals ⚡]
+```
+
+**Und die Barriere ist der Befehl, nicht der Vorsatz** (§1c, neuer Absatz): die Zählung anchor't
+auf `^| **AUF-`, damit der Regeltext sich nicht selbst mitzählt. *Mein erster Versuch tat genau
+das — die Probe stand auf 3, gemessen kamen 4 heraus, weil mein eigenes Beispiel mitzählte.
+Achte Ausprägung davon, dass eine Probe erst zählt, wenn sie nachweislich funktioniert.*
+
+### PB-016 · ANGENOMMEN, ABER ANDERS GESCHNITTEN · P3, gesammelt
+
+Die Inventur zählt **Zeilen**, nicht Posten — vier Posten belegen zwei Zeilen. Das ist ein
+Zählfehler im Werkzeug, nicht im Bestand. **Geht als kleiner Posten an den Generator**
+(`scripts/inventur.sh`), nicht als Papierkorrektur: die Tafel ist richtig, der Zähler ist falsch.
+
+### PB-017 · ANGENOMMEN · und der Umfang ist größer als gemeldet
+
+```text
+git diff --shortstat        13 Dateien, 885 Einfuegungen, 232 Loeschungen
+git status --porcelain '??' 10 unverfolgte Pfade (8 Arbeit + 2 Streudateien)
+
+Pruefer meldete 466 geaenderte Zeilen — gemessen sind es 1117 (885+232).
+Seine Messung war frueher; die Richtung stimmt, die Zahl ist inzwischen groesser.
+```
+
+**Der größte Einzelposten ist `docs/abnahme-evaluator-haertung-2026-07-25.md` mit 406 neuen
+Zeilen** — ein Abnahmebericht, der nur im Arbeitsbaum existiert. **Vor dem Deploy ist der Remote
+die einzige Kopie außerhalb der Maschine; „nicht committet" heißt hier nicht unordentlich,
+sondern kein Backup.**
+
+> **Dieser Befund ist die Rechnung für den offenen Streit aus PB-013/PB-014.** Unter Fassung A
+> (Generator committet nie selbst) ist genau dieser Zustand **regelkonform** — und trotzdem ist er
+> der teuerste im ganzen Register. **Das ist das Argument für Fassung B, und es kommt nicht von
+> mir, sondern vom Prüfer.**
+
+**Der Ledger-Teil des Befunds ist unabhängig davon mein Fehler und wird sofort korrigiert:** ich
+habe Arbeit als *geliefert und geprüft* geführt, die nicht committet war. **Ab jetzt trägt jede
+Liefer- oder Abnahmezeile im Ledger den Commit-Hash oder das Wort `UNCOMMITTET`.**
+
+### PB-018 · ANGENOMMEN · Sicherheitsbefund, und die Behebung liegt außerhalb meiner Schreibfläche
+
+```text
+k01n1b.mjs           27 Zeilen im Wurzelverzeichnis, unverfolgt, ein Sichtprobe-Skript
+grep -c 'password|passwort|login|@'   →  4 Treffer
+git check-ignore -v k01n1b.mjs        →  NICHT IGNORIERT
+.rm_probe_tmp                          →  NICHT IGNORIERT
+```
+
+**Das Risiko ist nicht das Skript, sondern die nächste Instanz, die `git add -A` fährt** —
+verboten nach R13, aber R13 ist ein Vorsatz und kein Riegel. **Landen die Zugangsdaten einmal in
+der Historie, sind sie ohne History-Rewrite nicht mehr herauszuholen**, und der Zweig ist
+gepusht.
+
+**Ich fasse die Datei nicht an** (`.gitignore` und das Wurzelverzeichnis liegen außerhalb `docs/`,
+und `rm` ist auf dem Mount verboten). **Geht als P2-Sicherheitsposten an Yama** — zwei Zeilen in
+`.gitignore` und ein `mv` nach `_to_delete/`, beides zehn Sekunden.

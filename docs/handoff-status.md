@@ -24168,3 +24168,51 @@ Folgeauftrag nicht zerstört. Auflage: nur Arbeitszweig, **pushen bleibt bei Yam
 unberührt. **Bis zum Entscheid gilt A** — ich setze meine eigene Fassung nicht durch.
 
 **Ballbesitz:** Yama (eine Entscheidung) · Planner (PB-011/012/015 offen) · Generator (AUF-83-T3-N1)
+
+---
+
+## 30.07.2026, 09:28 CEST — PB-015 bis PB-018 beantwortet; ein Sicherheitsposten geht an Yama
+
+**VOTUM: auftrag=PB-015..PB-018 rolle=planner ergebnis=ANGENOMMEN commit=folgt datum=2026-07-30**
+
+**Vier Befunde aus den Prüferrunden 13 bis 16. Alle vier stimmen.**
+
+```text
+PB-015  P2  zwei Posten trugen ⚡ AKTIV  → BEHOBEN, und die Marke ist jetzt zaehlbar
+PB-016  P3  Inventur zaehlt Zeilen statt Posten  → Posten an den Generator
+PB-017  P1  fertige Arbeit nur im Arbeitsbaum   → gemessen groesser als gemeldet
+PB-018  P2  Klartext-Zugang im Wurzelverzeichnis, nicht ignoriert  → AN YAMA
+```
+
+**PB-015 behoben:** `grep -cE '^\| \*\*AUF-.*⚡ AKTIV' AUFTRAGSTAFEL.md` → **1** (AUF-83).
+AUF-38 trägt `⏸ ZURUECKGESTELLT`, die fünf Erzählstellen heißen `[vormals ⚡]`. **Barriere in §1c:**
+die Zählung ankert auf `^| **AUF-`, damit der Regeltext sich nicht selbst mitzählt — *mein erster
+Versuch tat genau das.*
+
+**PB-017, gemessen:** `13 Dateien, 885 Einfügungen, 232 Löschungen, 10 unverfolgte Pfade`. Der
+Prüfer meldete 466 Zeilen; die Richtung stimmt, die Zahl ist inzwischen größer. Größter
+Einzelposten: `docs/abnahme-evaluator-haertung-2026-07-25.md` mit **406 neuen Zeilen** — ein
+Abnahmebericht, den es nur im Arbeitsbaum gibt.
+
+> **Dieser Befund ist die Rechnung für den offenen A-oder-B-Streit.** Unter Fassung A ist der
+> Zustand regelkonform und trotzdem der teuerste im Register: **keine Kopie außerhalb der
+> Maschine.** Das Argument für B kommt damit nicht von mir, sondern vom Prüfer.
+
+**Meine eigene Korrektur daraus:** ich habe im Ledger Arbeit als *geliefert und geprüft* geführt,
+die nicht committet war. **Ab sofort trägt jede Liefer- und Abnahmezeile den Commit-Hash oder das
+Wort `UNCOMMITTET`.**
+
+### ⚠ SICHERHEITSPOSTEN AN YAMA — P2, zehn Sekunden Arbeit, außerhalb meiner Schreibfläche
+
+```text
+k01n1b.mjs        27 Z. im Wurzelverzeichnis, unverfolgt, Sichtprobe-Skript
+                  4 Treffer auf password|passwort|login|@
+git check-ignore  NICHT IGNORIERT   (auch .rm_probe_tmp nicht)
+```
+
+**Das Risiko ist nicht das Skript, sondern das nächste `git add -A`.** R13 verbietet es, aber R13
+ist ein Vorsatz und kein Riegel. Einmal in der Historie sind die Daten ohne History-Rewrite nicht
+mehr herauszuholen. **Ich fasse es nicht an** — Wurzelverzeichnis und `.gitignore` liegen außerhalb
+`docs/`, `rm` ist auf dem Mount verboten.
+
+**Ballbesitz:** Yama (A-oder-B · Sicherheitsposten) · Planner (PB-011/012 offen) · Generator (AUF-83-T3-N1)
