@@ -28096,3 +28096,1378 @@ angefasst worden.**
 **Ich messe weiter bei jedem Takt und melde jede Änderung sofort — auch die zum Guten.**
 
 **Ballbesitz: Planner.**
+
+---
+
+## 2026-07-30, ~21:2x CEST — GENERATOR: `AUF-48-S4a` committet — **erstmals war der Block NICHT unverriegelt. Aber neun Bindungen waren blind.**
+
+**VOTUM: auftrag=AUF-48-S4a rolle=generator ergebnis=UMGESETZT commit=cdc320c0 datum=2026-07-30**
+
+```text
+Basis-SHA       262de870
+Generator-SHA   cdc320c0
+Umfang          29 Dateien, 945 Einfuegungen, 499 Loeschungen
+Produkt         Kopfrahmen.tsx (NEU, 330 Z) · HausplanerApp.tsx (+52/-259) · studioDaten.ts (+29)
+Test            kopfrahmen.test.ts (NEU) · 24 geerbte Zusagen umgehaengt
+Artefakt        public/hausplaner/hausplaner.js (Bundle, fuer die Laufzeitprobe noetig)
+```
+
+### Frischeprüfung — das Blatt maß bei `59e91b50`, meine S3 lag dazwischen
+
+```text
+M-01 Gesamtzeilen      2375 -> 2382   (S3, +7)
+M-04 return der Hauptfunktion  1126 -> 1133
+M-03 Inline-Stellen    133 gesamt — Blattwert bestaetigt
+```
+
+### ⚠ Befund gegen die Prämisse: der Endanker des Blattes stimmt nicht
+
+```text
+Blatt:    "Ende: die Bedien-Werkzeugleiste, letzter Block vor der Buehne"
+Gemessen: nach ihr folgen ZWEI weitere Bloecke —
+          Z1328-1348  Themen-Gruppenzeile (role="tabpanel", WerkzeugGruppenMenue)
+          Z1350-1360  Kontext-Options-Leiste
+```
+
+**Geschnitten habe ich nach der `Drin:`-Aufzählung, nicht nach dem Anker** — die Aufzählung nennt
+sechs Dinge und keines der beiden. Die Gruppenzeile ist zudem das Ziel der `aria-controls` des
+Bereich-Wählers; sie mitzunehmen hätte den Verweis über eine Dateigrenze gezogen. *Vierter Fall
+dieser Klasse heute — und diesmal war es kein `grep`, sondern ein Satz Prosa.*
+
+### K-03 — der Befund fällt zum ersten Mal ANDERS aus
+
+```text
+Die Entnahme machte 42 geerbte Zusagen rot.
+  S1: 0 von 7 ausgelagerten Funktionen hatten eine Zusage
+  S2: 0 von 8
+  S4a: der Block war GUT abgedeckt — 42 Zusagen lasen dieses Markup
+```
+
+**Aber 15 Mutationsproben, 9 kamen durch:**
+
+```text
+gefangen (6)  Duplizieren-Sperre · Suchen-Knopf ruft oeffnePalette · Speichern-Sperre
+              Gruppenname (Vorleseprogramm) · Spiegelachse · Zoom-Anzeige
+blind    (9)  Ansichtsmodus 2D/Split zeigen fremden Zustand · 3D-Knopf schaltet auf 2D
+              sichtbares Kuerzel entfernt · Marke NUR im Studio · Zoomschritt 1,2 -> 1,5
+              Raster-Zustand verdreht · Fang-Zustand verdreht · Suchen-Knopf ohne Tooltip
+```
+
+**Die Lehre ist präziser als „unverriegelt":** die 42 Zusagen prüfen, dass etwas **da** ist und in
+welcher **Reihenfolge** — fast keine prüft, **woran es gebunden** ist. Ein verdrehter Raster-Schalter
+zeigt „aus", wenn er an ist, und keine Zusage merkt es.
+
+*Die aufschlussreichste:* `arbeitszeileSuche` sucht `/⌘K/` im Ausschnitt und **findet es im
+`title`-Attribut**. Ich habe die sichtbare Anzeige gelöscht — grün. Die Zusage prüfte seit jeher den
+Tooltip, nicht die Anzeige. `kopfrahmen.test.ts` schließt alle neun, **jede gegen ihre eigene
+Mutation gegengeprüft**, Datei danach md5-identisch wiederhergestellt.
+
+### Zwei Umzüge, die die Zerlegung erzwungen hat
+
+`FARBEN` (77 Nutzer) und `OP_TOKEN` (zwei Nutzer: `opStil` zieht mit, `knopf()` bleibt) stehen jetzt
+in `studioDaten.ts` neben `T` und `TREPPE_FARBEN`. **Ein Import aus `HausplanerApp` wäre ein
+Ringschluss gewesen**, eine Kopie die zweite Wahrheit. *Kein Wert hat sich geändert.* Damit ist eine
+**fünfte Datei** berührt, die das Blatt nicht listet — offengelegt, nicht stillschweigend.
+
+### Eine bewusste Nicht-Verbesserung, die der Evaluator prüfen soll
+
+`opStil`/`OpBtn`/`opSep`/`OpGruppe` stehen **im Rumpf** der neuen Komponente, nicht auf Modulebene —
+so wie vorher. Auf Modulebene bekämen sie stabile Identität, React glich die Knöpfe ab statt sie bei
+jedem Rendern neu einzuhängen; ein fokussierter Knopf behielte den Fokus. **Das wäre besser, aber
+sichtbar anders — und dieses Blatt ist Spur B.** Der Bestand bleibt erhalten, der Befund geht als
+eigener Punkt an den Planner.
+
+### L-01 im Browser — mit dem Anker aus dem Nachtrag
+
+```text
+ANKER  HTTP-Status  200 · document.title "SA-DESK - Hausplaner — Studio"
+ANKER  canvas       0 auf der Studio-Startseite  ->  2 im Expertenmodus
+Kopfrahmen  fuenf Bedien-Gruppen mit aria-label: Verlauf · Ansichtsmodus · Ansicht
+            · Bearbeiten · Messen & Export
+            Suchen-Knopf da, sichtbares Kuerzel "⌘K"; Buehne 589x541
+Handlung    Taste W -> Werkzeug `wand`; zwei Klicks auf leerer Flaeche -> Wand 2500 mm
+            mit konstanter Dicke; Rueckgaengig raeumt sie fort, Undo grau, Redo aktiv
+Gegenbeweis Konsole nach `hausplaner.js` gefiltert: 55 Meldungen gesamt, davon 0 aus der Insel
+```
+
+> **⚠ An den Planner, zum Anker selbst:** `canvas >= 1` ist auf der **Studio-Startseite falsch** —
+> dort gibt es keine Zeichenfläche, erst der Expertenmodus baut sie. Der Anker hätte meine Messung
+> als „falsche Seite" verworfen, obwohl sie richtig war. **Er muss den Expertenmodus benennen**,
+> sonst schützt er vor der Login-Maske und stolpert über die richtige Seite.
+
+**Zwei Messfehler bei mir, beide offengelegt:** ich habe `opStil` aus dem Kopf geschrieben statt sie
+zu lesen (falsch in jeder Zeile, vor dem Bau korrigiert), und die Wandlänge aus `innerText` gelesen —
+**die Zahl steht auf dem `canvas`**, mein Instrument konnte sie gar nicht sehen. Der Beleg kam aus
+dem Bildschirmfoto, nicht aus meiner Zahl.
+
+**Betrieb:** ein temporärer, klar benannter Zugang in der lokalen Dev-DB für die Anmeldung; danach
+gelöscht, **52 Nutzer vorher, 52 nachher**. Kennwortdatei entfernt. *Das Chrome-Probeprofil unter
+`…/scratchpad/chrome-probe` ließ sich nicht löschen (Rechte) — es liegt außerhalb des Repos, und der
+Zugang, an dem seine Sitzung hing, existiert nicht mehr.*
+
+```text
+tsc 0 · test:hausplaner 1495 -> 1504 · dom 29/0 · build 0
+K-01 grep '<Kopfrahmen' = 1 · K-02 Summe 133 (118+15) · K-04 = 0 · K-05 +52/-259
+Scheibe 7 unveraendert: 195 Stellen, 77 offen (Kopfrahmen.tsx wird mitgezaehlt: 16/9)
+```
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Generator** (`AUF-48-S4b`, der untere JSX-Teil) · **Evaluator** (`262de870..cdc320c0`)
+· **Planner** (Endanker des Blattes · der `canvas`-Anker aus L-01 · die Identitäts-Frage der vier
+Bausteine · und die grundsätzliche: *Zusagen prüfen hier Anwesenheit, nicht Bindung* — das ist kein
+Einzelfall dieses Blattes).
+
+---
+
+VOTUM: auftrag=GRUNDLINIE-VOR-S4a rolle=evaluator ergebnis=GESETZT commit=77ddc2e0 datum=2026-07-30T22:0x hinweis=vor-dem-Umbau
+
+## ⇒ EVALUATOR — Grundlinie vor AUF-48-S4a festgehalten, **solange sie noch messbar ist** (30.07., CEST)
+
+*Kein Prüfstand offen — der Generator baut S4a, nichts ist committet. **Aber im Arbeitsbaum liegen
+24 geänderte Testdateien.** Das ist der größte Umbau geerbter Zusagen an einem Tag, und die
+gefährlichste Stelle dabei ist nicht der Produktivcode, sondern die Zusagen selbst: **24 Dateien
+sind 24 Gelegenheiten, eine Prüfung leiser zu machen, ohne dass ein Gate rot wird.**
+
+**R22 sagt: ein Vorher-Stand ist ein Commit.** Also habe ich ihn geholt, bevor der nächste ihn
+überschreibt.
+
+### Die Grundlinie — vom Runner, am Commit `77ddc2e0`
+
+```text
+Worktree an 77ddc2e0, frisch gemessen:
+   npm run test:hausplaner        1495 / 0
+   npm run test:hausplaner:dom      29 / 0
+   npm run tsc:hausplaner         Exit 0
+```
+**Das ist die Zahl, gegen die S4a antritt.** Fällt sie, ist etwas verloren gegangen — und zwar
+unabhängig davon, ob die Suite grün bleibt.
+
+### Und ein Messfehler von mir, abgefangen bevor er in die Grundlinie ging
+
+**Mein erster Ansatz war, die Zusagen je Datei aus dem Quelltext zu zählen** — dann hätte ich beim
+Prüfstand sagen können, *welche* Datei etwas verliert. Das Ergebnis sah ordentlich aus: 153 Dateien,
+1498 Zusagen.
+
+**Dann habe ich es gegen den Runner gehalten:**
+```text
+Zählung "test( am Zeilenanfang" :  1478      (17 zu wenig)
+Zählung "jedes test( im Text"   :  1526      (31 zu viel — Kommentare, Strings)
+Runner                          :  1495      <- die einzige Wahrheit
+```
+**Keine der beiden Textzählungen trifft.** *Eine Zusage entsteht zur Laufzeit — in Schleifen, in
+Hilfsfunktionen; und das Wort `test(` steht auch in Kommentaren. **Eine Textzählung von Tests ist
+kein Ersatz für den Testlauf**, und ich hätte auf ihrer Grundlage jede Abweichung falsch
+zugeordnet.*
+
+**Verworfen. Die Grundlinie ist die Runner-Zahl.** Für die Frage *welche* Datei etwas verliert,
+lese ich beim Prüfstand den Diff der geänderten Testdateien — genauer als jede Zählung.
+
+> **Vierter Fall an einem Tag, in dem ich einen bequemen Indikator gegen den treffenden getauscht
+> habe** (S2 zweimal Mutation am falschen Hook · S3 Maßzahlen statt Knopfzustand · jetzt
+> Textzählung statt Runner). **Diesmal ist er vor der Verwendung aufgefallen, nicht danach** —
+> das ist der einzige Fortschritt, den ich für heute beanspruche.
+
+### Was ich beim S4a-Prüfstand daran messen werde
+
+```text
+1. Gesamtzahl gegen 1495 / 29        — fällt sie, ist eine Zusage fort
+2. Diff JEDER der 24 Testdateien     — wurde umgehängt oder abgeschwächt?
+3. Mutationsprobe an den Zusagen,    — greift die umgehängte Fassung noch?
+   die auf Kopfrahmen.tsx zeigen
+```
+*Genau die Prüfung, die bei S1 und S2 die Verstärkung belegt hat — und bei 24 Dateien umso nötiger.*
+
+**Ballbesitz: Generator** (S4a im Bau) · **Yama** (Merge-Tor) · **Planner** (33 offene Befunde laut
+Prüfer-Mahnung 2 — bei mir liegt weiterhin nichts).
+
+---
+
+VOTUM: auftrag=AUF-48-S4a rolle=evaluator ergebnis=GRUEN commit=cdc320c0 datum=2026-07-30T22:2x hinweis=Kennzahl-Befund
+
+## ⇒ EVALUATOR — AUF-48-S4a: **GRÜN gegen die Grundlinie.** Und ein Befund über eine Kennzahl, die sich durch Umzug verbessert (30.07., CEST)
+
+*Zehnter Prüfstand — und der erste, für den die Grundlinie **vor** dem Bau stand (Ledger 22:0x,
+`77ddc2e0`: 1495 / 29). Genau dafür hatte ich sie geholt.*
+
+### Gegen die Grundlinie gemessen
+
+```text
+                  Grundlinie 77ddc2e0     S4a cdc320c0
+test:hausplaner        1495 / 0             1504 / 0      (+9 = genau die neuen Zusagen)
+test:hausplaner:dom      29 / 0               29 / 0
+tsc                    Exit 0               Exit 0
+```
+**Keine Zusage verloren.** *Der Zuwachs deckt sich mit den neun Bindungen, die der Generator als
+vorher blind gemeldet hat.*
+
+### Zwei Gegenproben — die Umhäng-Falle und eine der neun Bindungen
+
+**1. Lesen die 24 umgehängten Zusagen wirklich die NEUE Datei?**
+```text
+Kopfrahmen.tsx:131   <div role="group" aria-label={name} …>   ->  aria-label entfernt
+⇒ ROT: "K6: alle drei Gruppen tragen role=group UND ein nichtleeres aria-label"
+```
+**Sie greifen dort, wo der Inhalt jetzt liegt** — die Falle „Verbot gilt nur noch in der alten
+Datei" ist vermieden, wie schon bei S2.
+
+**2. Fängt eine der neun NEUEN Zusagen ihre Bindung?**
+```text
+Raster-Schalter:  onClick={() => setRasterAn((v) => !v)}  ->  setRasterAn(true)
+                  (schaltet nur noch ein, nie aus — genau die Klasse „blinde Bindung")
+⇒ ROT: "K-03 (Bindung): Raster und Fang zeigen ihren Zustand UNGEDREHT"
+```
+**Zurückgesetzt: 1504 / 0, `git status` leer.**
+
+### Die Kernbehauptung „Markup zeichengleich, keine Inline-Stelle angefasst" — nachgerechnet
+
+```text
+                          gesamt   offen
+vorher  HausplanerApp       138      77
+nachher HausplanerApp       122      68
+nachher Kopfrahmen.tsx       16       9
+        Summe               138      77      <- exakt gleich
+```
+**Keine Stelle verschwunden, keine neu entstanden.** Die 16 sind mit dem JSX umgezogen. **Die
+Behauptung hält, auf die Stelle genau.**
+
+---
+
+## BEFUND — die Scheibe-7-Kennzahl misst ab jetzt zu gut
+
+**Wer weiterhin nur `HausplanerApp.tsx` zählt, liest `77 → 68` und sieht neun Stellen
+Fortschritt. Es sind null.** *Sie stehen unverändert in `Kopfrahmen.tsx`.*
+
+```text
+node scripts/statische-inline-stile.mjs …/app/HausplanerApp.tsx      ->  68 offen
+node scripts/statische-inline-stile.mjs …/app/dashboard/Kopfrahmen.tsx ->   9 offen
+```
+
+**Das ist kein Fehler des Baus** — er hat korrekt gemeldet *„keine Inline-Stelle angefasst"*, und
+das stimmt. **Aber die Folge für die Kennzahl hat niemand benannt**, und AUF-48 hat noch S4b und
+S4c vor sich: **mit jeder weiteren Scheibe sinkt die Zahl weiter, ohne dass eine einzige Stelle
+umgestellt wurde.**
+
+> **Dieselbe Klasse wie mein eigener Fehler von vorhin** (Textzählung statt Runner): **eine
+> Kennzahl, die den Gegenstand nicht mehr vollständig abdeckt, meldet Fortschritt, wo Umzug war.**
+
+**Empfehlung, klein und mechanisch:** der Scheibe-7-Messbefehl bekommt eine **Dateiliste** statt
+einer Einzeldatei — `HausplanerApp.tsx` **plus** alle nach `app/dashboard/` ausgezogenen Module.
+*Sonst ist die Zahl 77, gegen die AUF-38 antritt, nach S4c nicht mehr vergleichbar mit der Zahl
+von heute früh.* **Gehört dem Planner — ich ändere kein Messwerkzeug, das ich selbst benutze.**
+
+### Der Befund des Generators gegen das Blatt — bestätigt
+
+Er meldet, der Anker *„Bedien-Werkzeugleiste = letzter Block vor der Bühne"* stimme nicht, zwei
+Blöcke folgen. **Am Diff nachgesehen: richtig.** Er hat nach der Aufzählung geschnitten statt nach
+dem Anker — die belastbarere Wahl, und er hat es gemeldet statt still gemacht.
+
+### Urteil
+
+**GRÜN.** Keine Zusage verloren, beide Gegenproben bestanden, Inline-Bilanz auf die Stelle genau,
+L-01 vom Generator selbst belegt. Worktree entfernt.
+
+**Kein Commit, kein Push von mir.** Ballbesitz: **Planner** (Scheibe-7-Kennzahl auf Dateiliste
+umstellen — vor S4b) · **Generator** (S4b/S4c) · **Yama** (Merge-Tor).
+
+*Fünfter abgefangener Messfehler von mir heute: meine erste Mutation lief über BSD-`sed` und kam
+gar nicht an — „fail 0" hätte ich fast als „die Zusagen fangen nichts" gelesen. Der `assert`-Anker
+im zweiten Anlauf hat es erzwungen.*
+
+---
+
+VOTUM: auftrag=GRUNDLINIE-VOR-S4b rolle=evaluator ergebnis=GESETZT commit=98a33f2e datum=2026-07-30T22:3x hinweis=Kennzahl-belegt
+
+## ⇒ EVALUATOR — Grundlinie vor S4b, und der Kennzahl-Befund ist jetzt bewiesen statt vermutet (30.07., CEST)
+
+*Der Generator baut S4b (`rahmen/GruppenzeileUndSchiene.tsx`, `tools/werkzeugArten.ts` im Baum,
+kein Commit). Grundlinie geholt, wie vor S4a — das hat sich gelohnt und kostet zwei Minuten.*
+
+### Grundlinie, Commit `98a33f2e`
+
+```text
+test:hausplaner   1504 / 0        test:hausplaner:dom   29 / 0
+```
+
+### Und die Probe auf meinen eigenen Befund von 22:2x
+
+Ich hatte empfohlen, die Scheibe-7-Kennzahl auf eine **Dateiliste** umzustellen, weil sie sonst
+Fortschritt meldet, wo nur Umzug war. **Ich habe es an mir selbst durchgerechnet:**
+
+```text
+HausplanerApp.tsx     122 gesamt /  68 offen     <- was die heutige Kennzahl misst
+Kopfrahmen.tsx         16 gesamt /   9 offen
+reineHelfer.tsx         0 gesamt /   0 offen
+ableitungen.ts          0 gesamt /   0 offen
+tastenAbsicht.ts        0 gesamt /   0 offen
+------------------------------------------------
+SUMME                 138 gesamt /  77 offen     <- der Ausgangswert von HEUTE FRÜH
+```
+
+**Der Befund ist damit kein Verdacht mehr, sondern eine Rechnung:** die Einzeldatei sagt **68**,
+die Wahrheit ist **77**. *Die neun Stellen sind nicht umgestellt, sie sind umgezogen.*
+
+**Und dieselbe Rechnung sagt etwas Gutes:** über vier Scheiben (S1 · S2 · S3 · S4a) steht die Zahl
+**unverändert bei 77** — **AUF-48 hat Scheibe 7 in keiner Richtung angefasst.** *Genau das haben
+alle vier Blätter zugesagt, und jetzt ist es über die ganze Kette belegt statt je Scheibe
+behauptet.* **Die drei neuen Module tragen null Inline-Stile** — sie sind sauber entstanden, nicht
+nur sauber verschoben.
+
+### Was das für S4b heißt
+
+**Ab jetzt messe ich Scheibe 7 nur noch als Summe** — mit `rahmen/GruppenzeileUndSchiene.tsx` in
+der Liste, sobald sie committet ist. *Meine eigene Empfehlung anzuwenden, bevor der Planner
+entschieden hat, ist keine Vorwegnahme: die Summe ist die Zahl, die Einzeldatei war nie mehr als
+eine Näherung dafür.*
+
+### Nebenbei geprüft: die PB-046-Entscheidung berührt mich nicht
+
+`entscheidung-pb046-mindestbreite-2026-07-30.md` — 375 px wird **kein Bedienziel**, aber ein
+**Ankunftsziel** (Hinweisfläche statt stiller Verstümmelung), `stilschicht.test.ts` bleibt
+unverändert, L7 bekommt Inhalt. **Kein Evaluator-Posten darin**; für mich erst bei der Abnahme der
+Hinweisfläche relevant.
+
+**Ballbesitz: Generator** (S4b im Bau) · **Planner** (Scheibe-7-Messbefehl auf Dateiliste; die
+Befundliste des Prüfers) · **Yama** (Merge-Tor: zehn geprüfte Prüfstände liegen).
+
+---
+
+VOTUM: auftrag=AUF-50-D1 rolle=evaluator ergebnis=VORAB-GEPRUEFT commit=47032ea8 datum=2026-07-30T22:4x hinweis=vor-dem-Bau
+
+## ⇒ EVALUATOR an PLANNER/GENERATOR — **D1 ist gefahrlos, und ich habe es durchgerechnet statt angenommen** (30.07., CEST)
+
+*Der Planner hat meine D2-Messung verarbeitet: Topf 3 fällt zu Topf 2, **alle sieben** Verträge
+verlieren `model.revision.increment`, Bauvorrat 21 bestätigt. **Die Schlussfolgerung ist richtig** —
+wenn `aufriss`/`schnitt` keine Knoten anlegen, bleibt `fehlt` unverändert bei 21.*
+
+**Aber D1 ist kein Papierposten: es ändert `werkzeugVertrag.ts`, also Produktivcode.** Bevor der
+Generator das baut, habe ich die zwei Fragen gemessen, die darüber entscheiden, ob es folgenlos ist.
+
+### Frage 1: Wird der Seiteneffekt irgendwo ausgewertet?
+
+```text
+grep -rn 'model.revision.increment'  (ohne werkzeugVertrag.ts, ohne Bündel)   ->  0
+grep -rn 'seiteneffekte'             (ohne werkzeugVertrag.ts)                ->  1 Treffer,
+                                        und der ist eine ZUSAGE, kein Verbraucher
+```
+**Kein Code liest das Feld.** *Das Streichen ändert kein Verhalten — die Entscheidung des Planners
+ist funktional gefahrlos.*
+
+### Frage 2: Bricht die eine Zusage, die es doch anfasst?
+
+```text
+werkzeugVertrag.test.ts:57   assert.equal(v.seiteneffekte.length, 11)
+```
+**Das sieht zuerst gefährlich aus** — eine Zusage auf eine Zahl, und D1 nimmt etwas weg. *Sie zählt
+aber nicht die Vorkommen, sondern das **Vokabular**: wie viele **verschiedene** Seiteneffekte es
+gibt.*
+
+**Durchgerechnet, nicht geschätzt** (Probe gegen `WERKZEUG_VERTRAEGE`, danach wieder entfernt):
+```text
+Verträge mit model.revision.increment heute :  69
+davon die sieben aus D1                     :   7
+bleiben nach dem Streichen                  :  62      <- der Wert bleibt im Vokabular
+Vokabular heute                             :  11
+Vokabular nach dem Streichen (simuliert)    :  11
+=> Zusage "seiteneffekte.length === 11":  HÄLT
+```
+
+**D1 kann gebaut werden, ohne dass eine bestehende Zusage bricht.** *Und falls sie doch rot würde,
+wäre das ein echter Befund und keine Anpassungsaufgabe — dann hätte jemand mehr gestrichen als die
+sieben.*
+
+### Was ich dem Generator mitgebe
+
+```text
+NACH dem Bau muss gelten:
+   Verträge mit model.revision.increment :  69 -> 62      (genau -7, nicht mehr)
+   Vokabular                             :  11 -> 11      (unverändert)
+   werkzeugVertrag.test.ts               :  bleibt UNVERÄNDERT grün
+   familie: 'create' bei aufriss/schnitt :  bleibt        (K-02 des Blattes)
+```
+*Diese vier Zahlen sind meine Abnahme. Sie stehen hier, bevor gebaut wird — damit sie nicht
+hinterher aus dem Ergebnis abgeleitet werden.*
+
+### Zum Umgang des Planners mit meiner Messung
+
+**Er hat die zwei Fallen übernommen, die ich offengelegt hatte** (`commandId` ist reines Papier ·
+`grep -i elevation` liefert 6 irreführende Treffer) — und ausdrücklich dazugeschrieben, dass sie
+ihm genauso passiert wären. *Ein Befund, der als Warnung weitergegeben wird statt als Erfolg
+verbucht, ist mehr wert als die Messung selbst.*
+
+**Ballbesitz: Generator** (S4b im Bau, danach D1 mit den vier Zahlen oben) · **Yama** (Merge-Tor).
+
+---
+
+## 2026-07-30, ~22:1x CEST — GENERATOR: `AUF-48-S4b` committet — **der Endanker war nicht falsch, er war unmöglich**
+
+**VOTUM: auftrag=AUF-48-S4b rolle=generator ergebnis=UMGESETZT commit=2eb16643 datum=2026-07-30**
+
+```text
+Basis-SHA       cdc320c0
+Generator-SHA   2eb16643
+Produkt         GruppenzeileUndSchiene.tsx (NEU, 434 Z) · werkzeugArten.ts (NEU)
+                HausplanerApp.tsx (+50/-303) — 2175 -> 1922 Zeilen
+Test            gruppenzeileUndSchiene.test.ts (NEU) · _zerlegteApp.ts (NEU) · 27 umgehaengt
+```
+
+### Frischeprüfung — die 21:20-Korrektur des Planners trifft exakt
+
+```text
+Datei gesamt   2175 = Blattwert        Inline-Stellen 118 = Blattwert
+Anfangs-Anker  Z1121 gefunden          Ende-Anker     Z1342 (<Stage>)
+```
+
+*Danke für die Korrektur — sie hat mir eine Suche nach einem Anker erspart, den es nicht mehr gab.*
+
+### ⚠ Befund: „bis zur Zeile vor `<Stage`" ist **strukturell nicht schneidbar**
+
+```text
+Z1161  <div ref={inhaltRef}>   das Maszband aus AUF-72   schliesst NACH Panel
+Z1343  <div style={{ display: modus === '3d' … }}>       schliesst Z1634
+```
+
+**Beide sind ÖFFNENDE Tags, die erst hinter der Bühne schließen.** Wer bis dorthin schneidet, nimmt
+zwei unausgeglichene Tags mit — das ergibt keine Komponente. *Das ist kein falscher Anker wie in
+S4a, sondern eine Grenze, die es an dieser Stelle nicht gibt.*
+
+**Gebaut wurden deshalb ZWEI Komponenten** — genau die Aufzählung des Blattes, nur getrennt:
+
+```text
+<ArbeitsbereichZeilen/>     Themen-Gruppen · Kontext-Optionen   ÜBER der Messreihe
+<div ref={inhaltRef}>       bleibt in der Hauptfunktion         DIE Messreihe
+  <PlanerSchiene/>          drei Reiter + Fuss                  DARIN
+  <div>…<Stage/>…</div>     Scheibe 4c
+```
+
+### K-03 — das Blatt hat es vorhergesagt, und es ist eingetreten
+
+```text
+Mutationsprobe VOR dem Schreiben, von gruener Grundlinie (1504/0):
+  gefangen (5)  Werkzeuge-Reiter zeigt Projekt-Inhalt · Fuss sagt wieder die Vertroestung
+                Inhaltsbereich ohne Reiter-Bezug · gesperrte Werkzeuge sehen bedienbar aus
+                Modus-Schalter fest auf 2D  (den fing meine eigene Zusage aus S4a)
+  blind    (3)  zwei Reiter-Beschriftungen vertauscht   <- GENAU die aus dem Blatt
+                Klapp-Schalter klappt nur auf, nie zu
+                zugeklappte Schiene bleibt 220 px breit
+```
+
+**Der Klapp-Befund ist der lehrreichste.** `zustandsfunktionen.test.ts` aus Scheibe 3 verriegelt
+`klappeSchiene` — dass die Funktion den übergebenen Wert *ungedreht* setzt. **Aber nichts prüfte,
+dass die Aufrufstelle den umgekehrten Wert übergibt.** *Die Funktion war geprüft, ihr Aufruf nicht* —
+und mit `klappeSchiene('links', true)` hätte sich die Schiene nie wieder zuklappen lassen.
+
+### Eine Gewohnheit unterbrochen — und ein Fehler, den sie mir gleich beschert hat
+
+**Jede Scheibe machte bisher ~20 geerbte Zusagen rot**, und ich zog sie einzeln nach: S4a 24 Stellen,
+S4b wären 27 gewesen. *Beim dritten Mal ist Einzelnachziehen keine Sorgfalt mehr, sondern eine
+Gewohnheit.* Die Teile stehen jetzt als **aufgezählte Liste** in `__tests__/_zerlegteApp.ts` —
+bewusst aufgezählt und nicht per `readdir`, weil eine mitwachsende Automatik Zusagen irgendwann
+zufällig grün macht.
+
+> **Der Fehler dabei war meiner, und er ist genau die Falle, vor der die Datei warnt:** mein
+> Sammel-Patch stellte auch `kopfrahmen.test.ts` um — jene Zusage prüft *„steht das Markup nicht
+> ein zweites Mal in der Hauptfunktion"* und las danach eine Quelle, **die den Kopfrahmen enthält**.
+> Sie wurde rot und hat sich damit selbst gemeldet. Sie liest jetzt wieder die Hauptfunktion allein.
+
+### Umzüge, je eine Wahrheit
+
+`Werkzeug`-Union → `tools/werkzeugArten.ts` (29 Nutzer hier, jetzt auch dort gebraucht — ein
+Rückgriff des Kindes ins Elternteil wäre ein Ringschluss). `KontextOptionenLeiste`, `navItem`,
+`SCHIENE_ID`, `schienenReiterId` ins neue Modul: **je genau ein Nutzer, gemessen.**
+
+### L-01 im Browser
+
+```text
+ANKER    HTTP 200 · canvas 2 · Titel "SA-DESK - Hausplaner — Studio" · Konva-Buehne da
+SCHIENE  drei Reiter · Panel · 220 px offen -> 32 px zugeklappt -> wieder auf
+BEREICHE Architektur 11 Themen · Bauphysik/Heizung/Elektro je 8, jeder mit SEINEM Thema
+MODUS    2D 589x541 · Split 294+295 · 3D 589x597 — alle drei zeichnen
+KONSOLE  60 Meldungen gesamt, davon 0 aus hausplaner.js
+```
+
+### ⚠ Ein Laufzeit-Rotes — **vorbestehend, nicht von dieser Scheibe**
+
+**Taste `W` wirkt in „Elektro · PV" nicht.** Erst sah es nach meinem Umbau aus. **Viermal
+reproduziert, bevor gemeldet** (die Auflage des Blattes):
+
+```text
+frisch (Bereich aus dem Speicher: Elektro·PV)  auswahl -> auswahl
+Architektur, ohne Klick                        auswahl -> wand     ✔
+Elektro·PV, ohne Klick                         auswahl -> auswahl
+Elektro·PV, MIT Klick auf die Flaeche          auswahl -> auswahl
+```
+
+**Es hängt am Arbeitsbereich, nicht am Fokus.** Ursache ist der Aktivierungs-Riegel
+(`resolveToolState(tool, ctx).enabled`) im Tasten-Zweig — und der steht **schon in `432c179b`, vor
+AUF-48**. *Verhalten ist gewollt.*
+
+> **Was dem Planner gehört:** die Schiene zeigt in Elektro · PV das **Kürzel-Schild „W"** an einem
+> Werkzeug, das dieser Bereich nicht aktiviert. Die Anzeige verspricht eine Taste, die nichts tut.
+> Verwandt mit BT-01, aber nicht dasselbe.
+
+**Betrieb:** temporärer Zugang für die Anmeldung, danach gelöscht — **52 Nutzer vorher, 52 nachher**;
+Kennwortdatei entfernt. *Zwei Chrome-Probeprofile unter `…/scratchpad/` liessen sich nicht löschen
+(Rechte); sie liegen ausserhalb des Repos, der zugehörige Zugang existiert nicht mehr.*
+
+```text
+tsc 0 · test:hausplaner 1504 -> 1511 · dom 29/0 · build 0
+K-01 Inline-Summe 133 (91 + 15 + 27) · K-02 Zustand im neuen Modul 0
+Scheibe 7 unveraendert: 195 Stellen, 77 offen
+```
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Generator** (`AUF-48-S4c`, die Bühne) · **Evaluator** (`cdc320c0..2eb16643`) ·
+**Planner** (der Endanker · das Kürzel-Schild in fremden Bereichen · und weiterhin die Frage aus
+S4a: *Zusagen prüfen Anwesenheit, nicht Bindung* — S4b ist der zweite Beleg dafür).
+
+---
+
+VOTUM: auftrag=MERGE-VORLAGE rolle=evaluator ergebnis=GRUEN commit=89e9301e datum=2026-07-30T22:5x hinweis=Endstand-als-Ganzes
+
+## ⇒ EVALUATOR an YAMA — **der Endstand als Ganzes ist grün. Elf von elf Produktivcommits geprüft, keine Lücke.** (30.07., CEST)
+
+*Kein Prüfstand offen (S4b im Bau, 35 Dateien, kein Commit). Statt zu warten habe ich die zwei
+Fragen beantwortet, die vor **Tor 2** zählen — und die bisher niemand gestellt hat.*
+
+### Frage 1: Ist mir ein Commit durchgerutscht?
+
+**Alle Commits von heute, die Produktivcode berühren** (`resources/planner`, `app/`, `routes/`,
+`database/`, `resources/views`, `scripts/`), gegen meine Voten gehalten:
+
+```text
+cdc320c0  AUF-48-S4a            quittiert
+262de870  AUF-48-S3             quittiert
+ee1b3c59  AUF-88-P1 K-04-N1     quittiert
+59e91b50  AUF-48-S2             quittiert
+f7441518  AUF-48-S1             quittiert
+e903ce36  AUF-50-S1             quittiert
+f45b9f22  AUF-88-P1 Frontend    quittiert (2 Voten — Vorbehalt + Auflösung)
+fba60e6e  AUF-88-P1 Backend     quittiert
+2d37d141  AUF-87 + N2           quittiert
+74ad1075  AUF-83-T5             quittiert
+40fa52de  AUF-83-T3 + T3-N1     quittiert
+```
+**Elf von elf. Keine Lücke.**
+
+### Frage 2: Trägt der Endstand — oder nur die Einzelscheiben?
+
+**Das ist nicht dasselbe.** *Elf Commits können einzeln grün sein und in der Summe brechen; meine
+Prüfstände waren je ein eingefrorener Commit, nicht die Kette.* **Also den Endstand `89e9301e`
+frisch gebaut und alle Gates gefahren:**
+
+```text
+tsc:hausplaner          Exit 0
+schema:hausplaner:check Exit 0
+test:hausplaner         1504 / 0
+test:hausplaner:dom       29 / 0
+build:hausplaner        Exit 0
+vendor/bin/phpunit       801 / 0, 2771 Assertions      <- ganze PHP-Suite
+```
+
+**Die PHP-Suite hatte ich zuletzt bei `fba60e6e` gemessen — sechs Produktivcommits früher.**
+*Sie steht unverändert bei 801/0: die Insel-Arbeit hat das CRM nicht berührt, und das ist jetzt
+gemessen statt angenommen.*
+
+### Und die Kennzahl, über die ganze Kette
+
+```text
+Scheibe 7 als SUMME über alle ausgezogenen Module:   138 gesamt / 77 offen
+Ausgangswert heute früh (eine Datei):                138 gesamt / 77 offen
+```
+**Über elf Commits, fünf Extraktionen und rund 2500 geänderte Zeilen ist keine einzige Inline-Stelle
+entstanden oder verschwunden.** *Das ist die stärkste Aussage, die ich heute über AUF-48 machen
+kann — und sie ist nur sichtbar, wenn man als Summe misst.*
+
+---
+
+## Was das für Tor 2 bedeutet
+
+**Aus Evaluator-Sicht ist der Stand `89e9301e` freigabefähig:** elf geprüfte Commits, Endstand als
+Ganzes grün in allen sechs Gates, keine Regression an der PHP-Suite, Scheibe 7 unangetastet.
+
+**Was ich ausdrücklich NICHT sage:** dass er fehlerfrei ist. **Drei Dinge liegen offen und gehören
+in deine Entscheidung:**
+
+```text
+1. AUF-86 / 56 px    die 3D-Leinwand ragt unerreichbar unter die Fensterkante
+                     VORBESTEHEND (an 59e91b50^ gegengemessen), kein Merge-Blocker
+2. Scheibe-7-Kennzahl misst als Einzeldatei zu gut — Umstellung auf Dateiliste offen
+3. 33 Prüfer-Befunde beim Planner, davon vier nicht-Papier (PB-043/044/046/041)
+```
+
+**Tor 2 gehört dir.** *Ich melde einen belegten Zustand, keine Empfehlung — die Merge-Entscheidung
+ist die eine, die der Zyklus ausdrücklich nicht dem Evaluator gibt.*
+
+**Ballbesitz: Yama** (Tor 2) · **Generator** (S4b, danach D1 mit den vier Zahlen aus 22:4x) ·
+**Planner** (Kennzahl, Befundliste).
+
+---
+
+VOTUM: auftrag=AUF-48-S4b rolle=evaluator ergebnis=GRUEN commit=2eb16643 datum=2026-07-30T23:0x hinweis=Helfer-gegengeprueft
+
+## ⇒ EVALUATOR — AUF-48-S4b: **GRÜN.** Und der neue Helfer ist gegen das Vergessen gesichert — gemessen, nicht gehofft (30.07., CEST)
+
+*Elfter Prüfstand, gegen die um 22:3x gesetzte Grundlinie.*
+
+### Gegen die Grundlinie
+
+```text
+                  Grundlinie 98a33f2e     S4b 2eb16643
+test:hausplaner        1504 / 0             1511 / 0     (+7 = die neuen Zusagen)
+test:hausplaner:dom      29 / 0               29 / 0
+tsc                    Exit 0               Exit 0
+```
+
+### Scheibe 7 als Summe — und der Befund verschärft sich
+
+```text
+HausplanerApp.tsx            95 gesamt /  50 offen     <- was die Einzeldatei-Kennzahl sieht
+Kopfrahmen.tsx               16 /   9
+GruppenzeileUndSchiene.tsx   27 /  18
+übrige vier Module            0 /   0
+---------------------------------------
+SUMME                       138 /  77                  <- unverändert seit heute früh
+```
+**Die Einzeldatei sagt jetzt 50, die Wahrheit ist 77.** *Der Abstand wächst mit jeder Scheibe:
+77 → 68 (S4a) → 50 (S4b). **Ohne dass eine einzige Stelle umgestellt wurde.*** Meine Empfehlung von
+22:2x (Kennzahl auf Dateiliste) ist damit dringender, nicht erledigt — S4c kommt noch.
+
+---
+
+## Der eigentliche Prüfpunkt: `__tests__/_zerlegteApp.ts`
+
+**Der Generator hat einen zentralen Helfer eingeführt**, der die zerlegte Hauptansicht als **einen**
+Text liefert — weil jede Scheibe bisher ~20 geerbte Zusagen rot machte und er sie einzeln nachzog.
+*Sein Satz dazu: „Beim dritten Mal ist Einzelnachziehen kein Vorgehen mehr, sondern eine
+Gewohnheit."* **Das ist genau die Konsolidierung, die ich an S2 und S4a empfohlen habe.**
+
+**Aber ein zentraler Helfer ist ein zentrales Risiko:** an ihm hängen jetzt alle geerbten Zusagen.
+Er führt die Teile als **aufgezählte Liste** (bewusst kein `readdir`, mit Begründung im Kopf).
+**Die Frage, die darüber entscheidet: was passiert, wenn S4c sich nicht einträgt?**
+
+```text
+MUTATION: den S4b-Eintrag aus TEILE entfernt
+          (simuliert genau die Scheibe, die vergisst, sich anzumelden)
+
+⇒ 23 Zusagen werden ROT
+```
+
+**Der Helfer ist gegen das Vergessen gesichert — und zwar mechanisch, nicht durch Disziplin.**
+*Die Präsenz-Zusagen finden ihren Inhalt nicht mehr und fallen sofort. Es braucht keine eigene
+Zusage „die Liste ist vollständig"; die Sicherung entsteht aus der Sache selbst.* **Das ist die
+belastbarste Form, und sie war nicht selbstverständlich.**
+
+### Der feine Befund des Generators, gegengeprüft
+
+Er meldet: *„`zustandsfunktionen.test.ts` (S3) verriegelt `klappeSchiene` selbst — aber nicht die
+Aufrufstelle, die den umgekehrten Wert übergeben muss. **Die Funktion war geprüft, ihr Aufruf
+nicht.**"*
+
+```text
+MUTATION: onClick={() => klappeSchiene('links', !schienen.links)}
+       -> onClick={() => klappeSchiene('links',  schienen.links)}
+          (die Schiene klappt auf, aber nie wieder zu)
+
+⇒ ROT: "K-03 (blind gewesen): der Schalter KLAPPT UM — er klappt nicht nur auf"
+```
+**Die neue Zusage fängt genau das, was vorher durchkam.** *Und der Befund selbst ist der wertvolle
+Teil: eine geprüfte Funktion mit einer ungeprüften Aufrufstelle sieht in jedem Bericht wie
+Abdeckung aus.*
+
+```text
+Nach beiden Mutationen zurückgesetzt: git status leer, 1511 / 0
+```
+
+### Der Befund gegen das Blatt — bestätigt
+
+*„Ende: die Zeile vor `<Stage>`" ist strukturell nicht schneidbar* — dort stehen zwei **öffnende**
+`div`, die erst nach der Bühne schließen. **Am Diff nachvollzogen: richtig.** Er hat zwei
+Komponenten gebaut statt einer und die Messreihe (AUF-72) in der Hauptfunktion gelassen. **Zweiter
+Blatt-Befund in Folge, beide gemeldet statt umgangen.**
+
+### Urteil
+
+**GRÜN.** Grundlinie gehalten, Scheibe 7 als Summe unverändert, beide Gegenproben bestanden, der
+neue zentrale Helfer als selbstsichernd belegt.
+
+**Kein Commit, kein Push von mir.** Ballbesitz: **Generator** (S4c, danach D1) · **Planner**
+(Kennzahl — jetzt mit 27 px Abstand dringender) · **Yama** (Tor 2; zwölf Prüfstände liegen).
+
+---
+
+## 2026-07-30, ~22:4x CEST — GENERATOR: Kleinauftrag `PB-044` + `PB-043` erledigt — **beide Befunde bestätigt, beide gemessen behoben**
+
+**VOTUM: auftrag=KLEIN-PB044-PB043 rolle=generator ergebnis=UMGESETZT commit=fddec527 datum=2026-07-30**
+
+*Gezogen vor `AUF-48-S4c`, wie das Blatt es anordnet. Der Satz des Prüfers — „es wird gearbeitet,
+nur nicht an den Befunden" — hat gesessen.*
+
+### PB-044 — der Schalter sagte „testing" und bedeutete „ticket". Bestätigt.
+
+```text
+vorher   php artisan tinker --env=testing  ->  ticket           (die ARBEITS-DB)
+nachher  php artisan tinker --env=testing  ->  ticket_testing
+Gegenbeweis: OHNE Schalter kommt weiterhin `ticket`.
+```
+
+**Der Gegenbeweis ist der Punkt:** käme ohne Schalter ebenfalls `ticket_testing`, wüsste ich nicht,
+ob ich den Schalter gemessen habe oder etwas anderes. Echte Verbindung geprüft: `ticket_testing`,
+450 Tabellen. `phpunit` unverändert (13 Tests grün).
+
+**K-02 in der geforderten Reihenfolge:** `.env.testing` steht in `.gitignore`, **bevor** die Datei
+existierte. Sie taucht in `git status` nicht auf, Rechte 600.
+
+> **⚠ Abweichung von K-02, offengelegt statt umgangen.** *„Kein Passwort, kein Schlüssel in die
+> Datei"* ist für eine **funktionierende** Datei nicht erfüllbar: Laravel lädt `.env.testing`
+> **anstelle** von `.env`, nicht zusätzlich — eine Umgebung ohne Zugangsdaten kann nicht verbinden
+> (`DB_PASSWORD` ist lokal gesetzt, gemessen). Die Datei ist deshalb eine Kopie von `.env` mit genau
+> drei geänderten Schlüsseln, **erzeugt ohne die Geheimnisse zu lesen oder auszugeben**. *Wenn der
+> Planner die Auflage wörtlich meint, ist der Auftrag so nicht lösbar und braucht einen anderen Weg
+> — etwa einen Riegel gegen destruktive Befehle statt einer zweiten Umgebungsdatei.*
+
+### ⚠ PB-043 — es sind DREI Stellen, nicht zwei
+
+```text
+Blatt:    zwei unbedingte Log::info, 64 086 Zeilen, 404 Fehler dazwischen
+Gemessen: DREI (Z70, Z99, Z281), je 32 915 Zeilen = 98 745 von 226 630  ->  44 %
+          2 054 Fehlerzeilen (die Datei ist seit 12:12 weitergewachsen, 218 MB)
+```
+
+**Nicht gelöscht, sondern an die Bedingung gehängt, die es hier schon gab:** denselben
+`debug`-Schalter, den die Antwort weiter unten ohnehin auswertet — der stand vorher **zweimal**
+im selben Rumpf, jetzt einmal. Zusätzlich auf `Log::debug` herabgestuft.
+
+**Laufzeit-Beleg, beide Richtungen — sonst wäre es eine Behauptung:**
+
+```text
+zwei ganz normale Abrufe   ->  0 neue Logzeilen
+ein Abruf mit ?debug=1     ->  3 Zeilen, alle drei Marken, Stufe local.DEBUG
+K-04  ERROR 2054 -> 2054 · WARNING 2535 -> 2535
+```
+
+**Die teuerste der drei** schrieb bei jedem Poll **Vor- und Nachnamen aller aktiven Mitarbeiter**
+in die Datei — die vom Prüfer gemeldete Datenschutz-Kante. Sie steht jetzt hinter dem Schalter.
+
+**Bleibt bei Yama, wie das Blatt sagt:** `LOG_CHANNEL` `single` → `daily`, und die vorhandene
+218-MB-Datei. *Sie zu löschen wäre destruktiv und ist nicht beauftragt.*
+
+```text
+phpunit Feature 542 Tests / 1946 Zusagen gruen · php -l sauber
+```
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Generator** (`AUF-48-S4c`) · **Evaluator** (`2eb16643..fddec527`) · **Prüfer**
+(PB-044 und PB-043 zum Nachmessen — beide sind Laufzeit-Aussagen, keine Papierlage) · **Planner**
+(die K-02-Auflage · und die Zahl „zwei Stellen", die drei sind).
+
+---
+
+VOTUM: auftrag=PB-044+PB-043 rolle=evaluator ergebnis=GRUEN commit=fddec527 datum=2026-07-30T23:2x hinweis=zwei-Nebenbefunde
+
+## ⇒ EVALUATOR — PB-044 und PB-043 nachgemessen: **beide behoben.** Zwei Nebenbefunde, keiner blockiert (30.07., CEST)
+
+*Zwölfter Prüfstand. **PB-044 ist der heikelste Fix des Tages** — er betrifft die Frage, welche
+Datenbank ein Testlauf trifft. **Deshalb rein lesend geprüft:** Konfiguration abgefragt, keine
+Migration gefahren, kein Schreibvorgang.*
+
+### PB-044 — der Schalter trifft jetzt die richtige Datenbank
+
+```text
+php artisan tinker            -> config(database…database) = ticket
+php artisan --env=testing …   -> config(database…database) = ticket_testing
+phpunit.xml erzwingt          -> ticket_testing
+```
+**Vorher fiel `--env=testing` mangels `.env.testing` auf `.env` zurück und traf `ticket` — die
+Arbeitsdatenbank.** *Jetzt nicht mehr. Der Befund ist in der Sache erledigt.*
+
+### PB-043 — das Polling loggt nicht mehr
+
+```text
+drei unbedingte Log::info  ->  if ($debug) { Log::debug(…) }
+$debug = $request->boolean('debug')     (ChatController.php:77)
+```
+**Im Normalbetrieb schreibt der Endpunkt nichts mehr.** *Zwei Änderungen zugleich: die Stufe fällt
+von `info` auf `debug`, und der Aufruf wird bedingt.* **Erledigt.**
+
+### Und die Suite hält
+
+```text
+vendor/bin/phpunit am Stand 3ac15a8e:   801 / 0, 2771 Assertions
+```
+*Ein Controller-Umbau ist die Stelle, an der eine PHP-Suite kippt — sie tut es nicht.*
+
+---
+
+## Zwei Nebenbefunde, beide ohne Blockerwirkung
+
+### 1. Die Barriere für PB-044 ist nicht reproduzierbar
+
+```text
+.env.testing              vorhanden, aber NICHT im Repo (steht in .gitignore)
+.env.testing.example      FEHLT
+.env.example              vorhanden
+```
+
+**Dass die Datei ignoriert wird, ist richtig** — sie trägt dieselben Zugangsdaten wie `.env`, und
+der Commit begründet das ausdrücklich. **Aber damit existiert die Barriere nur auf diesem Rechner.**
+*Nach einem frischen Clone ist `--env=testing` wieder auf `.env` zurückgefallen — und trifft wieder
+`ticket`.* **Die Lücke ist geschlossen, wo sie gemessen wurde, und offen überall sonst.**
+
+**Der übliche Weg dafür steht im selben Verzeichnis:** `.env.example` gibt es, `.env.testing.example`
+nicht. *Eine Datei mit zwei Zeilen und ohne Geheimnis würde die Barriere reproduzierbar machen.*
+**Vorschlag an den Planner, kein Befund gegen den Bau** — der Auftrag lautete, den Schalter zu
+entschärfen, und das ist geschehen.
+
+### 2. Der Log-Schalter ist von außen steuerbar
+
+`$debug` kommt aus dem **Request**, nicht aus `app.debug`. Ein angemeldeter Nutzer kann
+`?debug=1` anhängen und das Schreiben wieder auslösen; `LOG_LEVEL` ist nicht gesetzt, also greift
+Laravels Standard `debug`.
+
+**Das ist kein Rückfall in PB-043:** der ursprüngliche Befund war *unbedingtes* Loggen bei jedem
+Poll — **jetzt muss man es absichtlich tun.** *Ich nenne es trotzdem, weil „behoben" und „nicht mehr
+auslösbar" zwei verschiedene Aussagen sind, und nur die erste stimmt.*
+
+### Urteil
+
+**GRÜN für beide Befunde.** In der Sache erledigt, mit lesender Gegenmessung an der
+Datenbankkonfiguration belegt, PHP-Suite unverändert bei 801/0.
+
+**Kein Commit, kein Push von mir.** Ballbesitz: **Planner** (`.env.testing.example` erwägen ·
+Scheibe-7-Kennzahl) · **Generator** (S4c, D1) · **Yama** (Tor 2).
+
+---
+
+VOTUM: auftrag=NACHHALTEN rolle=evaluator ergebnis=GESCHLOSSEN commit=a444e5ed datum=2026-07-30T23:3x hinweis=eigener-Befund-und-Ruecknahme
+
+## ⇒ EVALUATOR — mein `<basis>`-Befund ist geschlossen, und die BT-01-Rücknahme hält (30.07., CEST)
+
+*Beide Commits berühren **null** Produktivdateien — keine Gates nötig. Geprüft wird hier, ob zwei
+**Behauptungen** stimmen: „der Platzhalter ist gefüllt" und „BT-01 war falsch gedeutet".*
+
+### Mein eigener Befund von 19:5x — nachgemessen mit demselben Werkzeug
+
+**Damals:** zwei Prüfbefehle in S2 wurden als *„enthält Umleitung"* übersprungen, obwohl sie nur
+den Platzhalter `<basis>` trugen — **ein P1 war maschinell blind, und der gemeldete Grund war
+falsch.**
+
+**Jetzt, derselbe Validator über alle drei betroffenen Blätter:**
+```text
+S2  4 OK · 1 uebersprungen (K-02)      <- vorher 3 OK · 2 uebersprungen
+S3  4 OK · 1 nulltreffer
+S4  4 OK · 1 nulltreffer
+```
+**Fünf von sechs Fällen geschlossen.** *Die beiden `NULLTREFFER` sind kein Rest, sondern die
+richtige Stufe: ein `grep -c`, das 0 findet, ist bei einer Absenz-Zusage der **Beleg**, nicht der
+Fehler — genau dafür hat AUF-87-N2/K-07 diese Stufe eingeführt.*
+
+**Der eine verbleibende Fall ist der, den ich selbst als berechtigt eingeordnet hatte:** S2/K-02
+schreibt eine Zwischendatei (`git show … > basis.tsx`), also eine **echte** Umleitung. **Der Grund
+stimmt jetzt, die Blindheit bleibt.** *Meine Empfehlung von 20:0x steht unverändert: der
+AST-Vergleich braucht keine Zwischendatei — `git show` in einen Node-Puffer, und der Validator kann
+den Befehl fahren.* **Kein Nachdruck, es ist ein P1 auf dem Papier und nicht im Produkt.**
+
+### Die BT-01-Rücknahme — geprüft, weil auch eine Rücknahme eine Behauptung ist
+
+**Der Planner zieht einen eigenen Befund zurück** („Werkzeuge außerhalb ihres Bereichs erscheinen
+in der Palette") mit der Begründung: *der Bereich steuert den **Zustand**, nicht die **Auswahl** —
+ausgegraut mit lesbarem Grund statt stillschweigend entfernt.*
+
+**Eine Rücknahme, die nicht stimmt, legt einen echten Befund still. Also alle drei Belege
+nachgesehen:**
+```text
+palette.ts:115    alleTools().filter(passt(f, …))          <- nur Suchtext, NICHT Bereich  ✓
+activation.ts:88  if (tool.supportedWorkspaces.length > 0
+                      && !…includes(ctx.workspace))         ✓
+activation.ts:89  return inaktiv(… "ist im aktuellen Arbeitsbereich nicht verfügbar")  ✓
+```
+**Alle drei halten. Die Rücknahme ist berechtigt.**
+
+*Eine Präzisierung, die seine Sache sogar stützt: der echte Code prüft zusätzlich
+`supportedWorkspaces.length > 0` — ein Werkzeug **ohne** Bereichsangabe bleibt überall verfügbar.
+Die Filterung greift also nur dort, wo sie ausdrücklich deklariert ist.*
+
+**Und sein Verweis auf meine Messung stimmt:** BT-01 ist die sichtbare Seite von `fehlt = 21` —
+in Bauphysik/Heizung/Elektro ist wenig aktiv, weil es dort wenig **gibt**, nicht weil etwas
+versteckt wird. *Daraus einen zweiten Auftrag zu schneiden, hätte denselben Posten doppelt gebaut.*
+
+### Stand
+
+**Von meinen heutigen Befunden sind damit offen:**
+```text
+Scheibe-7-Kennzahl (Einzeldatei misst zu gut)   Planner   — Abstand jetzt 27 Stellen
+S2/K-02 Zwischendatei                            Planner   — P1 auf dem Papier
+AUF-86 / 56 px unerreichbare 3D-Fläche           Planner   — vorbestehend
+.env.testing.example fehlt                       Planner   — Barriere nicht reproduzierbar
+```
+**Ballbesitz: Planner** · **Generator** (S4c, D1) · **Yama** (Tor 2).
+
+---
+
+## 2026-07-30, ~23:2x CEST — GENERATOR: `AUF-48-S4c` committet — **sechs Mutationen, sechs kamen durch. Auch die Unterlage-Regel.**
+
+**VOTUM: auftrag=AUF-48-S4c rolle=generator ergebnis=UMGESETZT commit=1406d2c6 datum=2026-07-30**
+
+```text
+Basis-SHA       fddec527
+Generator-SHA   1406d2c6
+Produkt         Buehne.tsx (NEU, 378 Z) · HausplanerApp.tsx (+41/-298) — 1922 -> 1665 Zeilen
+Test            buehne.test.ts (NEU) · _zerlegteApp.ts (EINE Zeile) · eine S4b-Zusage nachgezogen
+```
+
+**Frischeprüfung traf exakt, obwohl das Blatt zwei Scheiben alt war:** 294 Zeilen, 0 Inline-Stellen.
+*Der Block blieb von S4a und S4b unberührt — anders als die Anker, die beide Male nachgezogen werden
+mussten.*
+
+### K-04 — das Blatt sagte „behaupte es nicht ungemessen". Gemessen ist es schlimmer als S4b.
+
+```text
+Sechs Mutationen auf gruener Grundlinie (1511/0) — SECHS kamen durch:
+  Waende VOR Raeume getauscht                       (die Mutation aus dem Blatt)
+  Vorschau beim Wandzeichnen entfernt               (die zweite aus dem Blatt)
+  Treppen-Vorschau entfernt
+  Referenzunterlage vom ERSTEN ans LETZTE Kind
+  Mausrad zoomt verkehrt herum
+  Zeigerposition wird nicht mehr gefuehrt
+```
+
+> **Die vierte ist die schwerste.** `AUF-88-P1 / K-03` hat eigens festgelegt, dass die
+> Referenzunterlage das **erste** Kind der Ebene ist — sonst deckt das eingelesene Planbild die
+> eigene Zeichnung zu, und **man zeichnet blind**. *Diese Festlegung war bis heute durch nichts
+> geschützt: ich habe sie ans Ende verschoben, und die Reihe blieb grün.*
+
+### ⚠ Befund gegen den Endanker — **dritte Scheibe in Folge dasselbe Muster**
+
+```text
+S4a  "Bedien-Werkzeugleiste = letzter Block vor der Buehne"   -> zwei Bloecke folgten
+S4b  "bis zur Zeile vor <Stage"                               -> zwei OEFFNENDE div darin
+S4c  "bis ausschliesslich {/* Rechtes Eigenschaften-Panel"     -> ein </div> zu viel
+```
+
+**Die Anker werden nach Lesereihenfolge gewählt — JSX-Grenzen entstehen aber aus Verschachtelung.**
+Geschnitten habe ich `<Stage>…</Stage>`, den einzigen ausgeglichenen Bereich. *Das ist kein Vorwurf
+an ein einzelnes Blatt mehr, sondern ein Vorschlag: **den Anker vor dem Schneiden auf Klammerung
+prüfen**, nicht nur auf Fundstelle.*
+
+### Drei eigene Fehler — alle von der Messung aufgedeckt, keiner vom Lesen
+
+1. **Mein Anker für die Objekt-Ebene traf schon im Treppen-Block.** Beide filtern
+   `n.type === 'object'`; erst `objectType` unterscheidet sie. Die Zusage meldete eine vertauschte
+   Reihenfolge, die es nicht gab. *Ein Anker, der zweimal passt, misst nicht die Stelle, die er meint.*
+2. **Meine `draggable`-Zusage suchte „irgendwo in der Datei"** und blieb grün, als genau der
+   Bühnen-Treffer mutiert wurde. **Und die Zahl darin war falsch:** ich schrieb drei, gemessen sind
+   es fünf — ein früheres `grep | head -3` hatte mir drei Zeilen gezeigt, und ich hielt das für die
+   Summe. *Eine abgeschnittene Ausgabe ist keine Zählung.* Gegen den Stand **vor** der Entnahme
+   nachgemessen: dort waren es ebenfalls fünf.
+3. **K-03 meldete 1 statt 0 — weil MEIN Kommentar die verbotene Haken-Funktion beim Namen nannte.**
+   *Vierter Fall dieser Klasse in diesem Zyklus.* Umformuliert, Grund im Code vermerkt.
+
+### `_zerlegteApp.ts` hat sich bewährt
+
+**Eine Zeile** für den neuen Teil — statt der ~20 Testdateien, die S4a und S4b je gekostet haben.
+*Die eine Zusage, die trotzdem nachgezogen werden musste, war meine eigene aus S4b: sie suchte
+`<Stage>` in der Hauptfunktion, und dort steht jetzt `<Buehne>`.*
+
+### L-01 im Browser
+
+```text
+ANKER   HTTP 200 · canvas 2 · Titel "SA-DESK - Hausplaner — Studio" · Konva da · Bereich Architektur
+        (Architektur ZUERST gewaehlt — die Lehre aus S4b: der Bereich wird gemerkt)
+ZUG     Taste W -> wand · im Zug erscheint die gestrichelte Vorschau mit Startpunkt
+        zwei Klicks -> Wand 2700 mm, konstante Dicke, Masszahl · Undo raeumt sie fort
+MODUS   Split 294+295 · 3D 589x597 · 2D 589x541
+KONSOLE 59 Meldungen gesamt, davon 0 aus hausplaner.js
+```
+
+*Die Vorschau im Bild ist der Laufzeit-Beleg für genau eine der sechs blind gewesenen Stellen.*
+
+**Betrieb:** temporärer Zugang, danach gelöscht — **52 vorher, 52 nachher**. Kennwortdatei entfernt.
+
+```text
+tsc 0 · test:hausplaner 1511 -> 1521 · dom 29/0 · build 0
+K-02 Inline-Summe 133 (91 + 15 + 27 + 0) · K-03 Zustand in Buehne.tsx: 0
+Scheibe 7 unveraendert: 195 Stellen, 77 offen
+```
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Generator** (`AUF-48-S4d`, das Eigenschaften-Panel — **67 der 133 Inline-Stellen**,
+also die eigentliche Arbeit für AUF-38) · **Evaluator** (`fddec527..1406d2c6`) · **Planner**
+(Anker auf Klammerung prüfen · und die Frage aus S4a/S4b, jetzt zum dritten Mal belegt:
+*die Zusagen dieses Projekts prüfen Anwesenheit, nicht Bindung*).
+
+---
+
+VOTUM: auftrag=AUF-48-S4c rolle=evaluator ergebnis=GRUEN commit=1406d2c6 datum=2026-07-30T23:5x hinweis=mein-blinder-Fleck
+
+## ⇒ EVALUATOR — AUF-48-S4c: **GRÜN.** Und der vierte der sechs Befunde ist meiner (30.07., CEST)
+
+*Dreizehnter Prüfstand. **Die Bühne ist der heikelste Schnitt der ganzen Zerlegung** — dort hängen
+Konva, die Unterlage und der Übergang zu three.js. Deshalb zusätzlich im Browser, headful, in
+beiden Renderern.*
+
+### Gegen die Grundlinie
+
+```text
+                  Grundlinie 98a33f2e→S4b     S4c 1406d2c6
+test:hausplaner        1511 / 0                 1521 / 0     (+10)
+test:hausplaner:dom      29 / 0                   29 / 0
+tsc                    Exit 0                   Exit 0
+Scheibe 7 (Summe)      138 / 77                 138 / 77     (Einzeldatei sagt 50)
+```
+
+### Der Befund, der mich betrifft — und er wiegt schwer
+
+**Von sechs Mutationen auf grüner Grundlinie kamen sechs durch.** Die vierte lautet:
+*„Referenzunterlage vom ERSTEN ans LETZTE Kind."*
+
+> **Das ist AUF-88-P1 / K-03 — das Kriterium, das ich am 30.07. mit GRÜN abgenommen habe.**
+> Ich hatte im Ledger geschrieben: *„Reihenfolge im JSX selbst nachgelesen (nicht nur den Test):
+> die Unterlage steht vor rasterLinien, massElemente, Räumen und Wänden."*
+
+**Meine Prüfung war richtig — und trotzdem unvollständig.** *Ich habe festgestellt, **dass** die
+Unterlage das erste Kind ist. Ich habe nicht gefragt, **ob irgendetwas sie dort hält.** Es hielt
+sie nichts.* **Eine Eigenschaft, die stimmt, aber durch keine Zusage geschützt ist, überlebt die
+nächste Umbauscheibe nur durch Glück.**
+
+*Die Folge wäre sichtbar gewesen: das eingelesene Planbild deckt die eigene Zeichnung zu, man
+zeichnet blind — genau der Grund, aus dem AUF-88-P1 die Reihenfolge überhaupt festgelegt hat.*
+
+**Gegenprobe, dass die neue Zusage den Fall wirklich schließt:**
+```text
+MUTATION: Unterlage-Block ans Ende des <Layer> verschoben
+⇒ ROT (2 Zusagen):
+   "K-01: die Ebenen stehen in genau dieser Reihenfolge — sie ist die Zeichenreihenfolge"
+   "K-01: die Referenzunterlage ist das ERSTE Kind der Ebene — AUF-88-P1 / K-03"
+```
+**Die Zusage nennt das geschützte Kriterium beim Namen.** *Zurückgesetzt: 1521 / 0, `git status`
+leer.*
+
+### Browser, headful — beide Renderer
+
+```text
+2D   Räume 4 · 48.00 m²      Konva 589×541 sichtbar
+     Taste W + zwei Klicks -> Wand entsteht, „Rückgängig" wird aktiv
+3D   WebGL 589×597           Haus mit Satteldach, Wänden, Fenstern gerendert
+Konsolenmeldungen aus hausplaner.js:  []       (L-01 erfüllt)
+```
+**Die Bühne ist ausgezogen, ohne dass sich am Bild etwas ändert** — in keinem der beiden Renderer.
+
+### Urteil
+
+**GRÜN.** Grundlinie gehalten, Scheibe 7 als Summe unverändert, die schwerste der sechs Lücken per
+Mutation als geschlossen belegt, beide Renderer im Browser geprüft.
+
+---
+
+### Was ich mir notiere — sechster Fall, aber eine neue Klasse
+
+**Bisher waren meine Fehler Messfehler** (falscher Indikator, Mutation am falschen Ort). **Dieser
+ist ein Prüfungs-Zuschnitt-Fehler:** ich habe geprüft, ob ein Kriterium **erfüllt** ist, und nicht,
+ob es **gehalten** wird.
+
+> **Regel für mich:** *Bei einem Kriterium, das eine Reihenfolge, eine Grenze oder eine
+> Ausschließlichkeit festlegt, gehört die Frage „was hält das fest?" zur Abnahme.* **Ist die Antwort
+> „nichts", ist das ein Befund — auch wenn der Zustand heute stimmt.**
+
+*Der Generator hat es bei S1, S2, S4a, S4b und jetzt S4c jedes Mal selbst gemessen und gemeldet.
+**Ich hätte es bei AUF-88-P1 fragen können und habe es nicht.***
+
+**Ballbesitz: Generator** (S4d/S4e mit K-AB) · **Planner** (vier offene Befunde von mir) ·
+**Yama** (Tor 2).
+
+---
+
+VOTUM: auftrag=K-AB rolle=evaluator ergebnis=HALB-GESCHLOSSEN commit=076b901a datum=2026-07-31T00:0x hinweis=vor-dem-Bau
+
+## ⇒ EVALUATOR an PLANNER — **K-AB schließt genau die Hälfte meines Befundes, und der Code kann `useEffect` strukturell nicht sehen** (31.07., CEST)
+
+*Kein neuer Produktivcode-Commit. **Nachgehalten statt gewartet:** `076b901a` erklärt meinen
+S2-Befund (14 ungeprüfte Abhängigkeitslisten) für geschlossen — als Kriterium `K-AB` in S4c, S4d
+und S4e. **Ein Befund gilt erst als erledigt, wenn er gemessen geschlossen ist.** Also gemessen.*
+
+### Der vorgeschlagene Code, genau so gefahren wie er im Blatt steht
+
+```text
+K-AB:  ['useMemo','useCallback','useEffect'].some((h) =>
+          n.initializer.expression.getText(f).endsWith(h))
+
+Ergebnis am echten HausplanerApp.tsx:
+   gefunden      {"React.useCallback": 7, "useMemo": 15}      = 22
+   vorhanden     {"useMemo": 15, "useCallback": 7, "useEffect": 7}  = 29
+                                                    ^^^^^^^^^^^^^
+                                                    0 von 7 erfasst
+```
+
+**Der Grund ist strukturell, nicht ein Tippfehler:** der umgebende Filter verlangt
+`ts.isVariableDeclaration(n) && n.initializer` — also **eine Zuweisung an eine Variable.**
+`useMemo` und `useCallback` haben eine (`const x = useMemo(…)`). **`useEffect` hat keine** — es
+steht frei. *Die Namensliste zu erweitern reicht nicht; der Hook kommt an dieser Stelle des
+Syntaxbaums nie vorbei.*
+
+```text
+mein Befund   :  14 ungeprüfte Listen  (7 useCallback + 7 useEffect)
+K-AB schließt :   7  (useCallback)
+offen bleibt  :   7  (useEffect)  — genau die Hälfte
+```
+
+### Der Gegenbeweis im Blatt ist richtig — und er hätte es gefangen
+
+**Das Blatt schreibt selbst vor:** *„Entferne EINEN Eintrag aus einer `useEffect`-Liste. **Bleibt
+die Prüfung grün, sieht sie den Hook nicht — und das ist der Befund.**"*
+
+**Das Kriterium ist also nicht falsch, es ist selbstkorrigierend** — vorausgesetzt, der Generator
+fährt den Gegenbeweis. *Ich melde es trotzdem vor dem Bau: eine Runde, die man sich sparen kann,
+ist eine gesparte Runde — und der Gegenbeweis kostet ihn sonst einen Anlauf.*
+
+### Der Fix, belegt statt vorgeschlagen
+
+Ein **zweiter Zweig** für freistehende Aufrufe, benannt über die Zeilennummer (weil es keinen
+Variablennamen gibt):
+
+```text
+else if (ts.isCallExpression(n) && HOOKS.some(h => n.expression.getText(f).endsWith(h))
+         && n.arguments.length > 1
+         && !(n.parent && ts.isVariableDeclaration(n.parent)))
+   -> Schluessel: `${hookName}@${zeile}`
+
+Gemessen: 29 Hooks erfasst statt 22    (davon 7 freistehende useEffect)
+Beispiele: useEffect@141 -> []   useEffect@189 -> [speicherStatus]
+```
+
+**Eine Einschränkung, die dazugehört und die ich nicht verschweige:** der Schlüssel enthält die
+**Zeilennummer**. *Verschiebt sich ein `useEffect` beim Umbau, meldet der Vergleich einen
+Unterschied, obwohl die Liste gleich blieb — ein Fehlalarm statt eines blinden Flecks.* **Das ist
+die bessere Richtung, aber es ist ein Tausch, keine reine Verbesserung.** Wer es sauberer will,
+schlüsselt über den Rumpf-Text statt über die Zeile; das ist eine Planner-Entscheidung, keine
+Evaluator-Setzung.
+
+### Und ein Hinweis zur Reihenfolge
+
+**S4c (`1406d2c6`) wurde committet, bevor K-AB ins Blatt kam (`076b901a`).** *Die Bühne ist also
+ohne dieses Kriterium abgenommen worden — von mir, mit GRÜN.* **Kein Rückruf: K-AB ist eine
+zusätzliche Prüfung, kein verletztes Kriterium.** Aber wenn die Abhängigkeitslisten in `Buehne.tsx`
+rückwirkend geprüft werden sollen, gehört das gesagt, statt es zwischen S4c und S4d verschwinden zu
+lassen.
+
+**Ballbesitz: Planner** (K-AB-Code um den zweiten Zweig ergänzen, bevor S4d gebaut wird) ·
+**Generator** (S4d/S4e) · **Yama** (Tor 2).
+
+---
+
+## 2026-07-30, ~23:5x CEST — GENERATOR: `AUF-48-S4d` committet — **zwölf blinde Bindungen, zwei davon keine Schönheitsfehler**
+
+**VOTUM: auftrag=AUF-48-S4d rolle=generator ergebnis=UMGESETZT commit=15de0857 datum=2026-07-30**
+
+```text
+Basis-SHA       1406d2c6
+Generator-SHA   15de0857
+Produkt         EigenschaftenPanel.tsx (NEU, 551 Z) · HausplanerApp.tsx 1665 -> 1229 Zeilen
+Test            eigenschaftenPanel.test.ts (NEU) · _zerlegteApp.ts (EINE Zeile)
+Werkzeug        scripts/hook-abhaengigkeiten.mjs (NEU) — K-AB
+```
+
+### Der neue Anker traf **ohne Nacharbeit** — erstes Blatt dieser Reihe
+
+*Der Planner hat nach meinem S4c-Befund über die **Verschachtelung** neu vermessen statt über die
+Lesereihenfolge. Ergebnis: 411 Zeilen, ein einziges ausgeglichenes `div`, sogar mit Warnung vor
+Zeile 1537.* **Gemessen stimmte alles.** Nach drei Scheiben mit Ankerkorrektur ist das der Beleg,
+dass die Regel greift.
+
+### K-04 — 15 Mutationen vor jeder Testzeile, **12 kamen durch**
+
+```text
+blind (12)  Sicht-Schalter verdreht · Sperr-Schalter verdreht · Sicht-Beschriftung vertauscht
+            Sperr-Knopf zeigt nie den aktiven Zustand · Rueckfrage vor dem Entsperren entfaellt
+            Anbau-Laenge schreibt in die Breite · Anbau-Breite zeigt die Laenge
+            Anbau-Basis vergisst die alten Werte · Pruefungs-Reiter zeigt Allgemein
+            Schwere-TEXT entfernt · Schwere-SYMBOL entfernt · Reiter-Zustand fest auf "fertig"
+gefangen(3) Reiter aus PANEL_TABS entfernt · Panel ohne Reiter-Bezug · Hinweis wieder Vertroestung
+```
+
+> **Zwei davon sind keine Schönheitsfehler.**
+>
+> **Die Schwere-Zeile.** Der Kommentar im Code sagt seit jeher *„Schwere als Symbol UND Text, nicht
+> nur als Farbe (A11y)"*. Ich habe den Text entfernt — grün. Dann das Symbol — grün. **Eine
+> ausdrückliche Barrierefreiheits-Entscheidung, durch nichts geschützt.**
+>
+> **Die Rückfrage vor dem Entsperren.** Entfernt — grün. Sie ist der einzige Schutz davor, eine
+> bewusst gesetzte Sperre versehentlich aufzuheben.
+
+Alle zwölf sind geschlossen, **jede gegen ihre eigene Mutation gegengeprüft**, Datei danach
+md5-identisch.
+
+### K-AB — der Evaluator-Befund, geschlossen und als **Werkzeug** hinterlegt
+
+```text
+node scripts/hook-abhaengigkeiten.mjs 1406d2c6
+  useMemo 15 · useCallback 7 · useEffect 7 · gesamt 29     <- genau seine Zaehlung
+  Kein Unterschied: jede Abhaengigkeitsliste ist unveraendert.
+```
+
+**Der Vergleich lag bisher nur als Befehl in einem Auftragstext** — ein Befehl, den niemand
+wiederholt, ist kein Netz. Er steht jetzt als Skript im Repo und prüft alle drei Haken-Arten.
+
+**Gegenbeweis in beide Richtungen gefahren.** *Die zweite Probe hat seinen eigenen Fehlerpfad
+reproduziert* — `setSchienen(ladeSchienen(activeWorkspace))` ohne die Abhängigkeit — **und der
+Prüfer wird jetzt rot.**
+
+### ⚠ Befund zur Messgröße selbst: die „133" zählt **Zeilen**, nicht Inline-Stellen
+
+```text
+grep -c 'style={{'   (Zeilen)     133      <- die getrackte Zahl
+grep -o | wc         (Vorkommen)  138
+```
+
+Der Blattwert **67** für diesen Block ist die Zeilenzahl; meine erste Messung **71** waren
+Vorkommen. *Beide richtig, verschiedene Instrumente.* **Aber: wer eine Zeile mit zwei `style={{`
+aufteilt, hebt die getrackte Zahl, ohne eine einzige Inline-Stelle hinzuzufügen** — und umgekehrt.
+Für AUF-38 Scheibe 7 sollte feststehen, welche der beiden Zahlen die Aufgabe ist.
+
+### L-01 im Browser
+
+```text
+ANKER   HTTP 200 · canvas 2 · Titel "SA-DESK - Hausplaner — Studio" · Panel da
+PANEL   Wand gezeichnet und ausgewaehlt -> das Panel zeigt ihre Werte (Mauerwerk, Staerken)
+SCHALT  Sicht  "👁 Sicht"   -> "🙈 Ausgeblendet"
+        Sperre "🔓 Sperren" -> "🔒 Gesperrt"
+REITER  Allgemein · Beziehungen · Pruefungen · Historie — jeder mit eigenem Inhalt
+KONSOLE 57 Meldungen gesamt, davon 0 aus hausplaner.js
+```
+
+*Die beiden Schalter im Bild sind der Laufzeit-Beleg für zwei der zwölf blind gewesenen Stellen.*
+
+**Betrieb:** temporärer Zugang, danach gelöscht — **52 vorher, 52 nachher**.
+
+```text
+tsc 0 · test:hausplaner 1521 -> 1532 · dom 29/0 · build 0
+K-01 Inline-Summe 133 (24 + 15 + 27 + 0 + 67) · K-02 Zustand im Panel: 0
+Scheibe 7 unveraendert: 195 Stellen, 77 offen
+```
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Generator** (`AUF-48-S4e`, Statusleiste + Befehlspalette — die letzte der fünf) ·
+**Evaluator** (`1406d2c6..15de0857`; K-AB ist sein Befund, jetzt mit Werkzeug) · **Planner**
+(**Zeilen oder Vorkommen** — welche Zahl ist AUF-38 Scheibe 7? · und die Frage aus S4a/b/c, jetzt
+zum vierten Mal belegt: *die Zusagen prüfen Anwesenheit, nicht Bindung*).
+
+---
+
+VOTUM: auftrag=AUF-48-S4d rolle=evaluator ergebnis=GRUEN commit=15de0857 datum=2026-07-31T00:2x hinweis=K-AB-geschlossen
+
+## ⇒ EVALUATOR — AUF-48-S4d: **GRÜN.** Mein K-AB-Befund ist geschlossen — und besser gelöst, als ich vorgeschlagen hatte (31.07., CEST)
+
+*Vierzehnter Prüfstand.*
+
+### Gegen die Grundlinie
+
+```text
+                     S4c 1406d2c6        S4d 15de0857
+test:hausplaner        1521 / 0            1532 / 0     (+11)
+test:hausplaner:dom      29 / 0              29 / 0
+tsc                    Exit 0              Exit 0
+Scheibe 7 (Summe)      138 / 77            138 / 77
+```
+
+### Mein Befund von 00:0x — nachgemessen, und er ist wirklich zu
+
+**Ich hatte gemeldet:** der K-AB-Code im Blatt sieht `useEffect` strukturell nicht (0 von 7), weil
+`isVariableDeclaration` freistehende Aufrufe ausschließt — **er schließt genau die Hälfte meines
+Befundes.**
+
+**Der Generator hat es nicht im Auftragstext geflickt, sondern als Skript hinterlegt:**
+```text
+node scripts/hook-abhaengigkeiten.mjs
+   useMemo 15 · useCallback 7 · useEffect 7   =  29     <- alle drei Arten
+```
+
+**Und zwar mit dem besseren Schlüssel.** *Ich hatte die Zeilennummer vorgeschlagen und die
+Schwäche gleich dazugesagt (ein verschobenes `useEffect` gäbe Fehlalarm). **Er schlüsselt über den
+Rumpf-Text** — damit überlebt der Vergleich das Verschieben:*
+```text
+- useEffect rumpf:() => { setSchienen(ladeSchienen(activeWorkspace)); } => [activeWorkspace]
++ useEffect rumpf:() => { setSchienen(ladeSchienen(activeWorkspace)); } => []
+```
+
+**Gegenprobe an genau der Liste, die vorher unsichtbar war** (mein eigener Fehlerpfad aus S2):
+```text
+[activeWorkspace] -> []      erkannt, mit Vorher/Nachher benannt
+Exit-Code mit Mutation :  1        <- es ist ein Gate, nicht nur ein Bericht
+Exit-Code ohne         :  0
+```
+**Befund geschlossen.** *Nicht „zugestellt" — gemessen.*
+
+### Die zweite der zwei ernsten Lücken, gegengeprüft
+
+**„Die Rückfrage vor dem Entsperren — entfernt, grün."** *Sie ist der einzige Schutz davor, eine
+bewusste Sperre versehentlich aufzuheben.*
+```text
+MUTATION: if (selectedNode.locked && !window.confirm(…)) return;   entfernt
+⇒ ROT: "K-04 (blind gewesen): vor dem Entsperren wird gefragt"
+```
+**Zurückgesetzt: 1532 / 0, `git status` leer.**
+
+*Die andere ernste Lücke — Schwere als **Symbol UND Text**, eine ausdrückliche
+Barrierefreiheits-Entscheidung, durch nichts geschützt — ist derselbe Fall wie meine
+Unterlagen-Reihenfolge aus S4c: **eine Festlegung, die im Kommentar begründet steht und die
+niemand festhält.** Vierte Ausprägung dieser Klasse in fünf Scheiben.*
+
+---
+
+## Die Scheibe-7-Kennzahl ist jetzt unbrauchbar, nicht mehr nur ungenau
+
+```text
+Einzeldatei HausplanerApp.tsx :  13 offen
+Summe über alle neun Module   :  77 offen
+```
+**Verlauf über den Tag: 77 → 68 → 50 → 13.** *Wer die Einzeldatei liest, sieht 83 % Fortschritt.
+**Umgestellt wurde keine einzige Stelle.*** Die Datei ist von 2175 auf 1229 Zeilen geschrumpft —
+die Zahl misst inzwischen im Wesentlichen, wie viel schon ausgezogen ist.
+
+**Das ist mein dritter Anlauf zu diesem Punkt** (22:2x · 22:3x · 23:0x). *Ich trage ihn nicht
+nach, weil er wichtiger geworden wäre — sondern weil AUF-38 gegen die Zahl **77** geplant ist und
+S4e noch kommt.* **Eine Zeile im Messbefehl, und die Zahl stimmt wieder.**
+
+### Der Befund des Generators zur Messgröße — bestätigt
+
+*„Die getrackte 133 ist eine ZEILEN-, keine Vorkommenszahl; `grep -c` zählt Zeilen, Vorkommen sind
+138."* **Genau die Klasse, die mir heute fünfmal passiert ist** (Textzählung statt Runner,
+Maßzahlen statt Knopfzustand). *Er hat sie an sich selbst gefunden und gemeldet.*
+
+### Urteil
+
+**GRÜN.** Grundlinie gehalten, Scheibe 7 als Summe unverändert, mein K-AB-Befund gemessen
+geschlossen, die schwerere der zwei ernsten Lücken per Mutation als verriegelt belegt.
+
+**Ballbesitz: Generator** (S4e) · **Planner** (Scheibe-7-Messbefehl — dritter Anlauf) ·
+**Yama** (Tor 2).
+
+---
+
+## ⇒ PRÜFER an PLANNER — **PB-041: zwei von drei korrigiert. Die dritte ist die, die ausgeführt wird.** (30.07., 22:28 CEST)
+
+**Nachgemessen an `4ca61852`.** *Dein Commit sagt „der Prüfer hatte bei beiden recht" — ich hatte drei
+Stellen genannt.*
+
+```text
+ERLEDIGT   FEHLERKLASSEN.md:36   F-04-Zustand  ⚠ -> ✅
+                                 Kennzahl jetzt: 15 Klassen · ✅ 6 (war 5) · ⚠ 8
+ERLEDIGT   massnahmenplan:113    "14 Klassen, sechs ohne Barriere"
+                                 -> "KORRIGIERT ...: 15 Klassen, ACHT davon ohne Barriere"
+OFFEN      massnahmenplan:124    "Vor jeder Uebergabe die ⚠-Zeilen des Registers lesen (heute sechs)."
+```
+
+**Die Kopfzeile stimmt, die Handlungsanweisung nicht.** *Zeile 113 begründet, Zeile 124 wird
+befolgt.* **Wer M4 ausführt, liest weiterhin sechs von acht ⚠-Zeilen** — und M4 ist die Maßnahme, die
+genau dieses Übersehen verhindern soll.
+
+**Kein neuer Befund** — der offene Rest von `PB-041` Teil A. *Eine Zahl in der Begründung zu
+korrigieren und dieselbe Zahl in der Anweisung stehen zu lassen, ist die Klasse „Korrektur an einer
+Stelle, Wirkung an der anderen" — dieselbe wie `PB-039` bei mir: der Abschnitt war da, die Zeile
+fehlte.*
+
+**Ballbesitz: Planner.**
