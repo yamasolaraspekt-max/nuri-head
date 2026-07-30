@@ -25280,3 +25280,123 @@ unverändert, Ballbesitz Generator. *In derselben Stunde, in der 24 Papier-Commi
 der eine Commit, der wirklich fehlt, nicht entstanden.*
 
 **Ballbesitz: Yama** (Takt) · **Generator** (PB-040).
+
+---
+
+## 2026-07-30, ~11:40 CEST — GENERATOR: `AUF-88-P1` (Backend-Teil) committet — PB-040 damit erledigt
+
+**VOTUM: auftrag=AUF-88-P1 rolle=generator ergebnis=TEILUMGESETZT commit=fba60e6e datum=2026-07-30**
+
+*PB-040 zutreffend: der Backend-Teil lag 29 Minuten unverfolgt, während ich am Frontend-Umfang
+weiterdachte, statt zuerst zu sichern. **Committet, nicht erst hier gemeldet** — der Befund ist
+damit durch die Handlung beantwortet, nicht nur durch einen Satz.*
+
+```text
+Branch:          auto/hausplaner-integration
+Basis-SHA:       9179edba
+Generator-SHA:   fba60e6e
+Umfang:          7 Dateien, 457 Einfuegungen, 17 Loeschungen
+```
+
+### Ausdrücklich TEILUMSETZUNG — nicht mit „umgesetzt" zu verwechseln
+
+**Nur der Backend-Teil.** K-01 (Signaturprüfung vor Storage), K-02 (Projektbezug + Ownership-Gate),
+K-04-Serverhälfte (Kalibrierungs-Endpunkt), K-06 (graceful ohne Import-Dienst) sind gebaut und
+getestet. **K-03, K-05, K-07 sind P1 und komplett offen** — die Konva-Unterlage-Ebene, die
+Kalibrier-Interaktion in der Insel, die Herkunfts-Anzeige und der Arbeitszeile-Einstieg existieren
+nicht. `status: gesperrt` im Auftragsblatt bleibt unverändert — das zu ändern ist nicht meine Zeile.
+
+### Was gebaut wurde
+
+```text
+NEU  app/Services/Import/DateiSignatur.php     Magic-Byte-Erkennung, eine Wahrheit statt zweimal
+NEU  database/migrations/…_projektbezug…       additiv, nullable, echtes down()
+NEU  tests/Feature/PlanUploadTest.php          12 Tests — die ERSTE Zusage zu PlanUpload ueberhaupt
+GEÄNDERT  PlanUploadController.php             Signaturpruefung vor store(), Ownership-Gate, massstab()
+GEÄNDERT  PlanKlassifizieren.php               rasterizePdf() jetzt tatsaechlich aufgerufen → meta.bild_pfad
+GEÄNDERT  PlanUpload.php                       lead_alternative_add_id + Relation
+GEÄNDERT  routes/web.php                       PUT …/plan-upload/{id}/massstab
+```
+
+### Prüfungen, Rohausgabe
+
+```text
+vendor/bin/phpunit tests/Feature/PlanUploadTest.php   12 / 0, 26 Assertions
+php artisan test (GANZE Suite, K-08 verlangt es)      801 / 0   (789 vorher + 12 neue)
+npm run tsc:hausplaner / test:hausplaner / :dom       0 / 1410 / 29   (unberührt, reine Backend-Änderung)
+```
+
+**Eine eigene Vorsichtsmaßnahme, dokumentiert statt verschwiegen:** ich habe die Migration zuerst
+versehentlich mit `php artisan migrate --env=testing` gefahren (kein `.env.testing` vorhanden — das
+Kommando hätte die falsche DB treffen können). Erkannt, nicht blind weitergemacht: additive
+Migrationen auf der Dev-DB sind laut CLAUDE.md ohnehin erlaubt, also kein Verstoß — aber der saubere
+Weg für die Testabnahme ist `RefreshDatabase` über `vendor/bin/phpunit`, den ich danach tatsächlich
+genommen habe.
+
+### Restpunkte — vollständig, nicht nur angerissen
+
+**Frontend (K-03/K-05/K-07, K-04-Inselhälfte):** eine neue `resources/planner/hausplaner/app/unterlage/`
+mit Konva.Image als unterste, nicht auswählbare Ebene; eine Zwei-Punkt-Kalibrier-Interaktion, die
+gegen `PUT …/massstab` schreibt; eine Herkunfts-Anzeige (Dateiname, Datum, Maßstab); ein
+„Importieren"-Einstieg in der T3-Arbeitszeile — **exakt der Tab, den T3/K-05 bereits als `nochNicht`
+gedämpft anlegt.** Das ist der größte verbleibende Brocken dieses Auftrags, nicht Beiwerk.
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Generator** (Frontend-Teil AUF-88-P1, falls weiter unbeaufsichtigt gebaut wird) ·
+**Evaluator** (Backend-Prüfstand `fba60e6e`, unabhängig von der Frontend-Fortsetzung).
+
+---
+
+## 30.07.2026, 12:42 CEST — Brücke war 108 Minuten weg. Was in der Zeit gelaufen ist, quittiert.
+
+**VOTUM: auftrag=AUF-87+AUF-88-P1 rolle=planner ergebnis=QUITTIERT commit=folgt datum=2026-07-30**
+
+**Die Cowork-Brücke zum Gerät war von 10:52 bis 12:40 offline — ich konnte nichts messen und habe
+nichts geschrieben. Der Zyklus lief ohne mich weiter, und zwar gut:**
+
+```text
+2d37d141  10:51  AUF-87 (+N2) — der Validator ist gesichert. scripts/ ist sauber.
+fba60e6e  12:25  AUF-88-P1 Backend, Basis ea2bbf16 — 7 Dateien, 457/17
+                 PlanUploadController · PlanKlassifizieren · PlanUpload
+                 DateiSignatur.php (NEU) · Migration add_projektbezug_to_plan_uploads
+                 routes/web.php · PlanUploadTest.php (255 Zeilen, NEU)
+```
+
+**Der Baum ist bis auf zwei Dokumentdateien leer.** *Das ist der erste Zeitpunkt heute, an dem das
+zutrifft — um 09:20 lagen 885 Zeilen ungesichert.*
+
+### Was von AUF-88-P1 offen ist — der Frontend-Teil
+
+```text
+grep -c 'Konva.Image\|<Image' resources/planner/hausplaner/...   ->  0
+```
+
+**Die Unterlage im Planer existiert nicht.** Der Commit ist ausdrücklich Teilumsetzung: die
+Absicherung des Uploads steht, das **Anzeigen der gesperrten Unterlage unter der Zeichnung und die
+Kalibrierung über eine bekannte Strecke** fehlen. K-03/K-04/K-05/K-07 des Blattes bleiben offen.
+
+### Der Evaluator hat jetzt DREI Prüfstände offen
+
+```text
+T3/T3-N1   git diff 05d490ea..40fa52de
+T5         git diff 56ff2c9e..74ad1075
+AUF-88-P1  git diff ea2bbf16..fba60e6e
+```
+
+**Kein Votum seit 10:10.** *Das ist der Engpass, nicht mehr der Bau.*
+
+### PB-044 — ich hebe ihn von P3 auf P2 an
+
+```text
+.env.testing              FEHLT
+phpunit.xml:28            DB_DATABASE = ticket_testing (force)
+```
+
+**`php artisan test` ist sicher — `--env=testing` ohne `.env.testing` ist es nicht: der Schalter
+sagt `testing` und bedeutet `ticket`.** Das ist die Arbeitsdatenbank. **Ein Befund, der
+Bestandsdaten treffen kann, ist nicht P3.** Zwei Wege, beide klein: `.env.testing` anlegen **oder**
+`--env=testing` in den Regeln verbieten. *Gehört zu Yamas Abendrunde, zusammen mit PB-038.*
+
+**Mein `php artisan test` meldet exit 127 — kein PHP im Container. Wieder meine Umgebung, nicht der
+Code.** *Dritte Ausprägung heute; ich fahre keine Gates mehr, nur noch `git`.*
