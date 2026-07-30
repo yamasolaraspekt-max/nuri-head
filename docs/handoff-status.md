@@ -25879,3 +25879,208 @@ b24b7752..e903ce36   AUF-50-S1     K-01 gegen 110, nicht gegen 111
 **Die Generator-Front ist damit leer.** Nächster Schnitt: **AUF-48 Scheibe 1** — Zuschnitt liegt in
 `docs/planner/zuschnitt-auf48-hausplanerapp-zerlegen.md`, Schnittkanten über **Namen**, nicht über
 Zeilennummern (PB-007).
+
+---
+
+## 2026-07-30, ~18:5x CEST — GENERATOR: die Restblätter durchgemessen. Zwei sind längst erfüllt, eines ist **blockiert — und die Zahl dahinter hat sich fast verdoppelt**
+
+*Nach AUF-50-S1 die verbleibenden `status: aktiv`-Blätter durchgesehen, statt auf ein neues zu
+warten. **Nichts davon gebaut** — zwei brauchen nichts mehr, eines darf ich nicht.*
+
+### 1. `AUF-38-MW-N2` — vollständig erfüllt, NICHT von mir
+
+Alle drei Verhaltensbefunde sind behoben und verriegelt. **Gemessen, nicht angenommen:**
+
+```text
+istStatisch("style={{ width: `${breite}px` }}")      -> false   K-01 (MW-4) ✓
+istStatisch("style={{ content: '?' }}")              -> true    K-02 (MW-3) ✓
+istStatisch("style={{ fontFamily: 'Foo ... Bar' }}") -> true    K-02 (MW-3) ✓
+rohwertZusage.test.ts:148/160  die Zusagen existieren, 16/0 gruen
+K-03  der Reichweite-Satz steht im Kopf des Skripts (114 .ts, genau eine mit style={{)
+K-05  StartView 0 offen · HausplanerStudio 0 offen · FachFlaeche 0 offen  — Eichung haelt
+```
+
+**Ich führe das NICHT als eigene Leistung** — dieselbe Regel wie bei T3/K-02–K-04 („bereits erfüllt
+durch AUF-43, nicht als eigene Leistung berichten"). **Nur das `status`-Feld ist veraltet.**
+
+**Nebenbei die neue Zahl für K-04** (der Auftrag verlangt sie): **195 Stellen / 77 offen** — beim
+Schreiben des Blattes waren es 316 / 198. Die Scheiben dazwischen haben gewirkt.
+
+### 2. `B-01` — K-01 bis K-04 erfüllt, K-05 **darf ich nicht ausführen**
+
+```text
+git status --porcelain .ai-workflow  ->  0      (nichts offen)
+git ls-files .ai-workflow            ->  15     (versioniert)
+K-02 absence:  git grep '/Users/' -- .ai-workflow   ->  leer
+K-02 presence-Partner: derselbe Befehl ohne Pfadfilter -> Treffer (der Befehl KANN finden)
+K-03: bash -n ueber alle fuenf Skripte -> keine Fehlerzeile; git ls-files -s -> 100755
+```
+
+**K-05 verlangt einen Push.** CLAUDE.md verbietet ihn ausnahmslos: *„Niemals pushen — kein
+`git push` aus irgendeiner Instanz, auch nicht nach grüner Abnahme; pushen macht ausschließlich
+Yama."* Das Blatt nennt zwar Yamas eigenes Skript als „einzigen zugelassenen Weg" — **bei Konflikt
+gilt die Betriebsordnung, nicht der Auftragstext.** Ich habe es nicht ausgeführt und auch nichts
+von Hand nachgeholt.
+
+### ⚠ 3. Und das ist der eigentliche Befund dieser Runde — die Zahl hinter K-05
+
+```text
+git branch -r --contains HEAD                                    ->  LEER
+git rev-list --count origin/auto/hausplaner-integration..HEAD    ->  400
+letzter gesicherter Stand:  432c179b, 26.07. 13:20
+HEAD:                       8e7c57b9, 30.07. 18:39
+ungesicherte Tage:          26. · 27. · 28. · 29. · 30.07.
+```
+
+**Als B-01 geschrieben wurde (29.07., 00:40), waren es 223 Commits. Jetzt sind es 400.** Der
+Auftrag sagt es selbst und es stimmt heute doppelt:
+
+> *„Vor dem Deploy ist der Remote die einzige Kopie außerhalb der Maschine; ‚nicht gepusht' heißt
+> hier nicht unordentlich, sondern **kein Backup**."*
+
+**Fünf Arbeitstage liegen auf genau einer Platte.** Alles, was heute gebaut wurde — T3, T3-N1, T5,
+AUF-87, AUF-88-P1 in beiden Teilen, AUF-50-S1 — ist in dieser Zahl enthalten. **Ein
+Plattenschaden kostet nicht einen Auftrag, sondern die Woche.**
+
+*Ich melde das als Zahl, nicht als Drängen: **die Handlung gehört Yama**, und die Regel, die mich
+hier bremst, ist dieselbe, die heute Vormittag den PB-038-Zugang davor bewahrt hat, das Gerät zu
+verlassen. Sie ist richtig — sie hat nur eine Kehrseite, die mit jedem Tag größer wird.*
+
+### Ballbesitz
+
+**Yama** — B-01/K-05 (`./push-integration-sicher.command`), die einzige Handlung, die den
+400-Commit-Rückstand schließt. Dazu weiterhin: Merge-Tor, Browser-Sichtprobe AUF-88-P1.
+
+**Planner** — `AUF-48 Scheibe 1` hat **noch kein Auftragsblatt**; `zuschnitt-auf48-…md` sagt selbst
+*„Kein Auftragsblatt, sondern der Schnitt davor. Aus ihm entstehen die Scheiben-Blätter."*
+Außerdem offen: die sechs `stillgelegt`-Meldungen aus AUF-50-S1 und der Zuschnitt von Stufe 2/3
+(Stufe 3 ist ausdrücklich bis zur **Abnahme** von Stufe 1 gesperrt, nicht nur bis zum Bau).
+
+**Evaluator** — fünf Prüfstände.
+
+**Generator (ich) — Front leer, und diesmal ohne Rest.** Kein Blatt mehr offen, das ich bauen
+dürfte: zwei erfüllt, eines regelgesperrt, das nächste ungeschnitten. *Ich schreibe mir keines
+selbst — das ist die Rollengrenze.*
+
+---
+
+VOTUM: auftrag=AUF-50-S1 rolle=evaluator ergebnis=GRUEN-MIT-BEFUND commit=e903ce36 datum=2026-07-30T18:5x
+
+## ⇒ EVALUATOR — AUF-50-S1: **GRÜN**, und ein Befund, den kein Test fangen konnte (30.07., CEST)
+
+*Sechster Prüfstand der Session. Worktree an `e903ce36`, `node_modules` per Hardlink. Diff selbst
+geprüft: 2 Dateien, 332 Zeilen, beide neu — kein Produktivcode am Planer angefasst, wie zugesagt.*
+
+### Gates und Zahlen, selbst nachgezählt statt übernommen
+
+```text
+tsc:hausplaner        Exit 0
+test:hausplaner       1440 / 0    (+12 gegenüber AUF-88-FE — genau die neuen Zusagen)
+test:hausplaner:dom     29 / 0    (unberührt)
+
+grep -c "werkzeugId: '" werkzeugVertrag.ts           110
+WERKZEUG_LANDKARTE.length                            110
+Marken: ohne-modell 42 · deckt 41 · fehlt 21 · stillgelegt 6   →  Summe 110 ✓
+```
+**Die 110-statt-111-Korrektur des Generators ist richtig** — selbst nachgezählt, die alte Zahl
+zählte die Interface-Deklaration mit. **GRÜN.**
+
+### Gegenbeweise unabhängig wiederholt (nicht der Generator-Meldung geglaubt)
+
+```text
+K-03  'fenster' → ADD_NODE_ERFUNDEN   ⇒ ROT: "deckt-Marken mit unbekanntem Befehl:
+                                        fenster → ADD_NODE_ERFUNDEN"   (nennt die id ✓)
+K-01  Eintrag 'fenster' gelöscht      ⇒ ROT, 4 Zusagen fallen, id wird genannt
+Zurückgesetzt: md5 identisch zum Original, 1440/0 grün, git status leer
+```
+Beide tragenden Kriterien sind wirklich verriegelt. **GRÜN.**
+
+### BEFUND — die Landkarte widerspricht in 7 Fällen dem Vertrag, auf dem sie aufbaut
+
+**Kein Test kann das fangen, weil kein Test die Einordnung prüft — nur ihre Vollständigkeit und die
+Existenz der genannten Befehle.** Ich habe deshalb die Marke gegen den harten Indikator im Vertrag
+gemessen: den Seiteneffekt `model.revision.increment`.
+
+```text
+Verträge mit `model.revision.increment`:  69
+   davon deckt 39 · fehlt 17 · stillgelegt 6 · ohne-modell 7   ← die letzten sind der Befund
+
+Die 7:  kopieren · aufriss · schnitt · kuechenplanung
+        material-aufnehmen · thermische-huelle · u-wert
+```
+
+**Drei davon tragen `familie: 'create'` und `ergebnisse: ['createdObjectIds']`** (`aufriss`,
+`schnitt`, `kuechenplanung`) — der Vertrag sagt also wörtlich, sie **erzeugen Objekte**, die
+Landkarte sagt „ändert das Modell überhaupt nicht".
+
+**Die Begründungen des Generators sind fachlich vertretbar, jede einzelne** — *„eine Schnittansicht
+ist eine Darstellung, kein Knoten"*, *„Pipette: liest eine Eigenschaft"*, *„Kopieren allein ändert
+nichts, erst das Einfügen legt an"*. **Ich halte keine davon für falsch.** Der Befund ist nicht
+„falsch eingeordnet", sondern:
+
+> **Die Landkarte trifft in 7 Fällen eine fachliche Entscheidung GEGEN den Vertrag — und diese
+> Entscheidung steht nirgends als solche.** Sie steht in einer `begruendung`-Zeile, die aussieht wie
+> eine Erklärung, nicht wie ein Dissens. *Wer die Landkarte später liest, sieht die Marke; wer den
+> Vertrag liest, sieht das Gegenteil. Beide halten sich für die Wahrheit.*
+
+**Warum das zählt: die Zahl `fehlt: 21` ist der Bauvorrat für Stufe 3.** Entscheidet der Planner in
+einem der drei `create`-Fälle anders als der Generator, wächst der Vorrat. Die Zahl ist damit
+belastbar **unter dieser Lesart** — nicht absolut.
+
+**Kein ROT.** Das Kriterium K-01 verlangt „genau eine Marke je Vertrag", nicht „die Marke stimmt
+mit dem Vertrag überein" — der Auftrag hat diese Prüfung nie verlangt, sie war meine Idee. Ein Rot
+dafür wäre eine nachgeschobene Anforderung. **Es ist ein Befund für den Planner, kein Mangel am
+Bau.**
+
+### Empfehlung an den Planner (nicht selbst umgesetzt — Rollengrenze)
+
+Entweder die 7 Fälle ausdrücklich als **entschiedenen Dissens** in der Landkarte kennzeichnen
+(ein Feld `abweichend_vom_vertrag: true` mit Begründung), **oder** die Seiteneffekte der 7 Verträge
+korrigieren. *Beides ist klein. Was nicht klein ist: es später zu finden, wenn Stufe 3 gegen die
+Zahl 21 gebaut hat.*
+
+### Urteil
+
+**GRÜN.** Alle fünf Kriterien erfüllt, zwei Gegenbeweise unabhängig wiederholt und bestanden, die
+Grundgesamtheit selbst nachgezählt. **Ein Befund über die Landkarte, nicht gegen sie** — er trifft
+eine Prüfung, die der Auftrag nicht verlangt hat, und gehört deshalb dem Planner, nicht dem
+Generator. Worktree entfernt, Arbeitsbaum unberührt.
+
+**Kein Commit, kein Push von mir.** Ballbesitz: **Planner** (die 7 Dissens-Fälle vor Stufe 3) ·
+**Yama** (Merge-Tor).
+
+**Weiterhin offen aus dem Prüfstand davor:** die vier visuellen Kriterien von AUF-88-P1-Frontend
+brauchen `HP_PROBE_PASS` in der Umgebung. Ohne den Zugang kann ich sie nicht schließen.
+
+---
+
+## 30.07.2026, 18:47 CEST — AUF-48-S1 geschnitten. Die Front ist wieder zwei tief.
+
+**VOTUM: auftrag=AUF-48-S1 rolle=planner ergebnis=BLATT_LIEGT commit=folgt datum=2026-07-30**
+
+**Neu: `docs/auftraege/generator-auftrag-auf48-s1-das-reine.md`** (152 Zeilen, Spur B). Die sieben
+reinen Funktionen wandern aus `HausplanerApp.tsx` in ein eigenes Modul, drei tote Stilkonstanten
+fallen.
+
+```yaml
+measurement:
+  observed_at_commit: 8e7c57b9
+  M-01 Zeilen HausplanerApp.tsx   2511    # am 30.07. 09:05 waren es 2308
+  M-02 navGrp / navHub / navSub    1/1/1  # je nur die eigene Definition — tot
+  M-03 navItem                     2      # Definition PLUS Verwendung — BLEIBT
+```
+
+**Die Schnittkanten stehen als NAMEN, nicht als Zeilennummern** — `svgWrap` · `werkzeugIcon` ·
+`opIcon` · `uuid` · `istWand` · `istOeffnung` · `lotAufWand`. *Das ist die Lehre aus PB-007: eine
+Zeilennummer ist ein Zeitstempel in anderer Schreibweise. Die Datei ist seit der Korrektur um
+weitere 141 Zeilen gewachsen — die Namen haben gehalten, die Nummern nicht.*
+
+**Die geerbte Zusage ist die Liste, nicht die Zahl** (R9-Barriere): **28 Testdateien** lesen
+`HausplanerApp` ein, gefahren mit `git grep -l`. Darunter `stilschicht.test.ts` — der
+wahrscheinlichste Kandidat, der beim Entfernen der drei toten Konstanten anschlägt. **Schlägt sie
+an, ist das der Beweis, dass die Zusage greift, kein Fehler des Auftrags.**
+
+**Der Validator ist gelaufen:** 4 yaml-Blöcke, K-01 und K-02 OK, K-03 Fehlschlag (npm im Container),
+K-04 übersprungen (Platzhalter `<basis>`, den der Evaluator füllt).
+
+**Der Engpass bleibt unverändert: fünf Prüfstände, kein Votum seit 10:10.**
