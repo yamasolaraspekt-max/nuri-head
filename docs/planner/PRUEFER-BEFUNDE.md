@@ -3650,3 +3650,68 @@ Fälle gehören dazugezählt.**
 
 **Kein Befund.** Fragen 3 und 7 sind an den Hausplaner-Migrationen erfüllt, Dauerdirektive 1
 eingehalten: **null Zeilen Bestandsdaten angefasst.**
+
+---
+
+## 55. Runde 40 — Bauordnung §5 Fragen 5 und 9 · **keine Beanstandung** · damit sind alle zehn am Hausplaner gemessen
+
+**Gemessen gegen `5dae3c7a`.** *Diesmal jedes Muster in mehreren Schreibweisen — die Lehre aus den
+vier F-01-Fällen, angewandt.*
+
+### Frage 5 — serverseitig validiert, kein Massenzuweisungs-Loch
+
+```text
+$request->all()   ·  request()->all()  ·  $request->input()      ->  je 0 Treffer
+->all()                                                          ->  1 Treffer
+   HausplanerController.php:98  ->all()   = Abschluss einer Query/Collection, NICHT der Request
+guarded = []  ·  guarded=[]  ·  $guarded  (Hausplaner-Modelle)   ->  je 0
+fillable stattdessen                                             ->  4 Modelle
+```
+
+**Die Validierung liegt in `SpeichereHausplanerDokumentRequest`** — in Runde 12 gemessen: elf
+Abweisungsfälle, 422 ohne Mutation. **Frage 5 erfüllt.**
+
+### Frage 9 — Blades stellen nur dar, kein neuer Inline-JS-Fachcode
+
+```text
+studio.blade.php  (103 Z.)   <script type="application/json"> (Szene)  +  type="module" (Buendel)
+objekt.blade.php  (182 Z.)   dieselbe Paarung
+<script> OHNE type-Attribut  ->  0        (also nirgends echtes Inline-JS)
+```
+
+**Die Szene kommt als eingebettetes JSON, der Code als Modul-Bündel** — genau das Muster, das der
+`laravel-planner-integration`-Skill verlangt (*„Blade-Mount + eingebettete Szene, kein Lade-Fetch"*).
+**Frage 9 erfüllt.**
+
+### Zwei Zählartefakte, die ich unterwegs korrigiert habe
+
+**Erstens: „3 `<script>`-Blöcke in `objekt.blade.php`"** — einer davon ist eine **Kommentarzeile**, die
+das Muster beschreibt. **Zweitens: „8 JS-Konstrukte in Nicht-Modul-Skripten"** — mein `awk`-Bereich
+von `<script` bis `</script>` verschluckte das halbe Blade; die acht Treffer sind Blade-Direktiven
+(`@include`, `@if`) und PHP-Array-Zeilen. **Beide gefunden, weil ich die Zahl nicht stehen ließ,
+sondern nach der Fundstelle gefragt habe.**
+
+*Dreizehnte und vierzehnte vermiedene Fehlmeldung — und die richtige Antwort war beide Male dieselbe:
+**nicht die Zahl melden, sondern die Zeile ansehen, die sie erzeugt hat.***
+
+---
+
+### Bilanz: die zehn Fragen der Bauordnung, am Hausplaner vollständig gemessen
+
+| Frage | Ergebnis | Runde |
+|---|---|---|
+| **1** Logik im Service, Controller dünn | erfüllt — 342 Z. Controller, zwei Schreibstellen, Rest in Actions | 38 |
+| **2** Naht über stabile Anker | erfüllt — `alternative_id` mit FK **und** `unique` | 39 |
+| **3** FK + Index je `_id` | erfüllt — beide Spalten, beide Formen | 39 |
+| **4** `auth` + Berechtigung je Schreibroute | erfüllt — 9 Routen, je Aktion gestuft | 37 |
+| **5** validiert, kein `all()`, kein `guarded` | **erfüllt** | **40** |
+| **6** Mehr-Tabellen-Schreiben in `DB::transaction` | erfüllt — Klammer im Dienst, wo geschrieben wird | 38 |
+| **7** additiv, echtes `down()` | erfüllt — null Bestandsdaten angefasst | 39 |
+| **8** Verhaltens-Test gegen `ticket_testing` | erfüllt — 11 Abweisungsfälle + 409 | 12 |
+| **9** Blades stellen nur dar | **erfüllt** | **40** |
+| **10** Bestand unangetastet, kein `git add -A` | erfüllt — 0 Mutationen, meine Commits nennen Pfade | 39 · laufend |
+
+**Zehn von zehn erfüllt, kein Befund.** *Und das ist der Teil, der mir an dieser Bilanz auffällt:
+`PB-034` hat gemeldet, dass die **Ist-Belege** der Bauordnung veraltet sind (`96/387` → `75/406`) —
+aber die **Regeln** hält der Hausplaner vollständig ein. **Das Papier hinkt seinem eigenen Code
+nach, nicht umgekehrt.***
