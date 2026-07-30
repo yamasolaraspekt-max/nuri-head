@@ -34,8 +34,12 @@ measurement:
   werte:
     - id: M-01
       command: "git show <commit>:resources/planner/hausplaner/app/tools/werkzeugVertrag.ts | grep -c 'umkehrbar:'"
-      observed_value: 111
+      observed_value: 110
       purpose: "Grundgesamtheit der Vertraege"
+      # KORRIGIERT 30.07., 18:38 — hier stand 111. Mein Befehl zaehlte `umkehrbar:`
+      # und hat die TYPDEKLARATION der Schnittstelle mitgezaehlt. Mit Anfuehrungszeichen
+      # gezaehlt (`werkzeugId: '`) sind es 110 — und 110 eindeutige ids.
+      # Der Stufenplan vom 26.07. hatte recht, meine Nachmessung war falsch.
     - id: M-02
       command: "git show <commit>:resources/planner/hausplaner/app/tools/werkzeugVertrag.ts | grep -c 'umkehrbar: false'"
       observed_value: 33
@@ -83,7 +87,7 @@ was der Befehl leisten muesste.
 ```yaml
 kriterien:
   - id: K-01
-    aussage: "Jeder der 111 Vertraege traegt genau eine Marke."
+    aussage: "Jeder der 110 Vertraege traegt genau eine Marke."   # 111 war mein Zaehlfehler
     typ: structural
     kritikalitaet: P1
     pruefung:

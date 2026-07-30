@@ -25643,3 +25643,239 @@ df445125..f45b9f22   AUF-88-P1 Frontend
 ```
 
 **Nächster Auftrag für den Generator: AUF-50-S1** (`generator-auftrag-auf50-s1-werkzeug-landkarte.md`).
+
+---
+
+VOTUM: auftrag=AUF-88-P1-Frontend rolle=evaluator ergebnis=GRUEN-MIT-VORBEHALT commit=f45b9f22 datum=2026-07-30T18:4x
+
+## ⇒ EVALUATOR — AUF-88-P1 Frontend: **Code GRÜN, Sichtprobe BLOCKIERT** (30.07., CEST)
+
+*Fünfter Prüfstand der Session. Worktree an `f45b9f22`, Hardlink-Kopien wie gehabt. Diff selbst
+geprüft: 17 Dateien, 892/194 — deckt sich mit der Generator-Meldung, keine fremde Datei.*
+
+**Die drei offenen Prüfstände davor (T3/T3-N1, T5, AUF-88-P1-Backend) sind bereits abgeschlossen
+und GRÜN** (Ledger Z24496, Z24963, Z25128, Z25442). Die Zeile „Vier Prüfstände beim Evaluator" in
+`4aaf1688` ist damit überholt — nur dieser fünfte war offen.
+
+### Gates, selbst gefahren
+
+```text
+tsc:hausplaner            Exit 0
+schema:hausplaner:check   Exit 0
+test:hausplaner           1428 / 0   (+18 gegenüber T5, deckt sich mit der Meldung)
+test:hausplaner:dom       29 / 0
+build:hausplaner          Exit 0
+Scheibe 7                 138 / 77 offen — unverändert gegenüber T5, kein Anstieg
+```
+
+### K-04 — Gegen-Beweis geführt, nicht nur den mitgelieferten Test geglaubt
+
+`berechneMassstab` mutiert (`return alterMassstab * (laenge/gemessen)` → `return alterMassstab`):
+```text
+Mutiert:  3 Failures — genau die drei Wirkungs-Tests, darunter die im Auftrag ausdrücklich
+          geforderte Gegenprobe „Strecke halbieren ⇒ Maßstab verdoppelt sich" (1 !== 50)
+          Die drei Kanten-Tests (identische Punkte, Länge ≤ 0, alter Maßstab ≤ 0) bleiben grün —
+          korrekt, sie prüfen das Nicht-Rechnen.
+Zurück:   1428 / 0 grün, git diff leer
+```
+**Die Rechnung ist wirklich verriegelt** — der Test würde bei einer konstanten Rückgabe fallen.
+**GRÜN.** Die gewählte Lösung (alten Maßstab *skalieren* statt aus Pixeln neu rechnen) ist im
+Modulkopf begründet und vermeidet eine zweite Pixel-Wahrheit neben den Szenen-mm — sachlich
+richtig.
+
+### K-03 — am Code geprüft, dass die Unterlage wirklich unten und gesperrt liegt
+
+```text
+HausplanerApp.tsx:1699-1710   <Layer> → ERSTES Kind ist <Group scaleY={-1}><UnterlagenEbene …>
+UnterlagenEbene.tsx           listening={false} am <KonvaImage>, kein onClick, kein Modellzugriff
+                              ohne Bild: `return null` (kein Platzhalter)
+```
+Reihenfolge im JSX selbst nachgelesen (nicht nur den Test): die Unterlage steht vor `rasterLinien`,
+`massElemente`, Räumen und Wänden — sie ist die unterste Ebene. `scaleY={-1}` kontert denselben
+Y-Flip, den `Text` an 8 weiteren Stellen derselben Datei kontert (`Stage scaleY={-zoom}`) —
+konsistent mit dem Bestand, nicht erfunden. **GRÜN am Code.**
+
+### Was ich NICHT prüfen konnte — und warum das offen bleibt
+
+**Die Sichtprobe ist blockiert, aus demselben Grund wie beim Generator: das Passwort wurde
+gewechselt (PB-038, Weg A), und `HP_PROBE_PASS` ist in meiner Umgebung nicht gesetzt.**
+
+```text
+echo ${HP_PROBE_PASS:-nein}   →  nein
+```
+Isolierten Server aus dem Worktree gestartet (`:8897`, HTTP 200), Probe-Skript geschrieben — es
+bricht bewusst mit Exit 3 ab, statt ein Passwort zu raten oder aus einer Datei zu lesen. **Damit
+bleiben ungeprüft:**
+- **K-03 visuell** — liegt die Unterlage am echten Bildschirm richtig herum? (`scaleY={-1}` ist
+  nach den Regeln des Bestands gebaut, aber ein Vorzeichenfehler fällt nur im Bild auf.)
+- **K-05 (`typ: visuell`, mir zugewiesen)** — Herkunftsanzeige (Dateiname/Datum/Maßstab) am Plan.
+- **K-07 (`typ: visuell`)** — Einstieg in der Arbeitszeile, weiterhin genau drei Zeilen.
+- Ob der Kalibrier-Klick-Listener im echten Stage greift und Upload+Polling durchläuft.
+
+**Das ist genau derselbe Punkt, den der Generator an sich selbst offengelegt hat** — er ist damit
+nicht abgearbeitet, sondern zweimal bestätigt. *Ein Kriterium `typ: visuell` gilt nicht als erfüllt,
+weil zweimal jemand nicht hinsehen konnte.*
+
+### Urteil
+
+**GRÜN MIT VORBEHALT.** Alles maschinell Prüfbare ist grün, K-04 mit echtem Gegen-Beweis, K-03 am
+Code belegt. **Die vier visuellen Punkte bleiben offen und blockieren die Vollständigkeit von
+AUF-88-P1** — nicht seine Korrektheit, soweit sie messbar ist.
+
+**Was ich von Yama brauche, um sie zu schließen:** `HP_PROBE_PASS` in der Umgebung (der Weg, den
+der Prüfer für seine Kladden bereits gebaut hat und den der Ledger als Auflage festhält). Dann
+fahre ich die Sichtprobe in drei Viewports nach, ohne dass irgendetwas neu gebaut werden muss.
+
+**Kein Commit, kein Push von mir.** Ballbesitz: **Yama** (Zugang für die Sichtprobe + Merge-Tor) ·
+**Generator** (frei für AUF-50-S1 — dieser Vorbehalt blockiert ihn nicht).
+
+---
+
+## 2026-07-30, ~18:4x CEST — GENERATOR: `AUF-50-S1` committet — **die Zahl steht: `fehlt: 21`**
+
+**VOTUM: auftrag=AUF-50-S1 rolle=generator ergebnis=UMGESETZT commit=e903ce36 datum=2026-07-30**
+
+```text
+Branch:          auto/hausplaner-integration
+Basis-SHA:       b24b7752
+Generator-SHA:   e903ce36
+Umfang:          2 Dateien, 332 Einfuegungen, 0 Loeschungen — kein Produktivcode am Planer
+```
+
+### Das Produkt der Stufe
+
+```text
+deckt        41   ein Befehl in applyCommand leistet es heute schon
+fehlt        21   braucht einen neuen Modellbefehl  <- DER BAUVORRAT
+ohne-modell  42   aendert das Gebaeudemodell ueberhaupt nicht
+stillgelegt   6   gehoert nicht in den Bauplaner
+             ---
+             110
+```
+
+**Die Vermutung des Stufenplans hat sich bestätigt:** der größte Teil der Bauteil-Verträge ist
+durch `ADD_NODE` mit unterschiedlichem `objectType`/`type` gedeckt. **Die 21 `fehlt` zerfallen in
+drei Gruppen, und das ist die eigentlich nützliche Aussage für Stufe 3:**
+
+```text
+7   fehlende ObjectNode-Typen (pumpe, leuchte, schalter, steckdose, verteiler,
+    pv-modul, unterzug)  ->  Typ ergaenzen, dann deckt ADD_NODE  (der billige Teil)
+10  Geometrie-Operationen ohne Befehl (drehen, skalieren, ausrichten, verteilen,
+    teilen, trimmen, verbinden, verlaengern, versatz, gruppieren)  (der teure Teil)
+4   fehlende Schemafelder/Knoten (bemassen, nordrichtung-setzen,
+    erkennung-bestaetigen, kommentar)  ->  Schema-Vorgang, nicht nur Befehl
+```
+
+### ⚠ Abweichung von der Auftragszahl — gemessen statt übernommen (P-04)
+
+**Der Auftrag nennt 111 Verträge. Es sind 110.**
+
+```text
+grep -c 'umkehrbar:'      -> 111   <- zaehlt die INTERFACE-Deklaration mit (werkzeugVertrag.ts:40)
+grep -c "werkzeugId: '"   -> 110
+Objektliterale ausgezaehlt -> 110
+```
+
+**Der ursprüngliche Stufenplan hatte recht; die Korrektur auf 111 war der Zählfehler**, nicht ein
+Wachstum der Datei. Die Landkarte führt 110 Einträge, und die Zusage prüft gegen
+`WERKZEUG_VERTRAEGE.length` statt gegen eine abgeschriebene Zahl — sie bleibt also richtig, wenn
+wirklich einmal ein Vertrag dazukommt.
+
+### MELDUNG an den Planner (Auflage `stillgelegt`)
+
+**Sechs Verträge sind freie 2D-Zeichenprimitive** (`bogen`, `kreis`, `linie`, `polygon`,
+`polylinie`, `rechteck`). Im Gebäudemodell ist jeder Knoten ein Bauteil — eine freie Linie hat kein
+Gegenstück. **Marke gesetzt, Vertrag NICHT entfernt**, wie im Auftrag verlangt.
+
+### Gegenbeweise, alle drei gefahren und bestanden
+
+```text
+K-01  Eintrag 'wand' entfernt      -> ROT, nennt die id ("Vertraege ohne Landkarteneintrag: wand")
+K-02  fuenfte Marke 'vielleicht'   -> tsc TS2322 "not assignable to type 'LandkartenMarke'"
+K-03  Befehl 'ADD_WALL_ERFUNDEN'   -> ROT ("deckt-Marken mit unbekanntem Befehl: wand -> …")
+danach zurueckgesetzt, md5 identisch zum Original
+```
+
+**K-03 ist das tragende Kriterium** (*„eine Landkarte, die auf Befehle zeigt, die es nicht gibt, ist
+schlimmer als keine"*) — der Test liest die `case`-Zweige aus `applyCommand.ts`, nicht aus einer
+abgeschriebenen Liste.
+
+### Prüfungen
+
+```text
+Frischepruefung vorab:  alle fuenf Messwerte unveraendert (111/33/19/1419/424)
+npm run tsc:hausplaner            Exit 0
+npm run test:hausplaner           1428 -> 1440  (+12, genau die neuen Zusagen)
+npm run test:hausplaner:dom       29 / 0        unveraendert
+K-05 Gegenbeweis:                 git diff --stat gegen Basis -> NULL Zeilen ausserhalb
+                                  der zwei neuen Dateien
+K-04:                             git log -1 --pretty=%B | grep -c 'fehlt:'  ->  1
+```
+
+`applyCommand.ts` wurde **gelesen, nicht geändert** — der Ausschluss des Auftrags ist eingehalten.
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Planner** (Entscheidung über die sechs `stillgelegt`-Meldungen und den Zuschnitt von
+Stufe 2/3 auf Basis der 21) · **Evaluator** (Prüfstand `b24b7752..e903ce36`).
+
+---
+
+## 30.07.2026, 18:38 CEST — AUF-50-S1 committet. Die Zahl existiert. Und meine Grundgesamtheit war falsch.
+
+**VOTUM: auftrag=AUF-50-S1 rolle=generator ergebnis=UMGESETZT commit=e903ce36 datum=2026-07-30**
+
+```text
+Basis-SHA      b24b7752
+Generator-SHA  e903ce36   (30.07. 18:34)
+Umfang         2 Dateien, 332 Einfuegungen, 0 Loeschungen
+Produkt        app/tools/werkzeugLandkarte.ts (207 Z., NEU)
+Tests          __tests__/werkzeugLandkarte.test.ts (125 Z., NEU)
+K-04 erfuellt  git log -1 --pretty=%B | grep -c 'fehlt:'  ->  1
+```
+
+**Das Ergebnis der Stufe — die Zahl, die es vorher nicht gab:**
+
+```text
+deckt        41   ein vorhandener Modellbefehl leistet es
+ohne-modell  42   Ansicht, Auswahl, Messen — beruehrt das Modell nie
+fehlt        21   der eigentliche Bauvorrat
+stillgelegt   6   gehoert nicht in einen Bauplaner
+             ───
+             110
+```
+
+> **83 von 110 brauchen keinen neuen Modellbefehl.** Bei ihnen ist der Weg zum funktionierenden
+> Knopf **Verdrahtung, nicht Neubau.** Nur 21 verlangen echte neue Logik.
+
+### Mein Zählfehler im eigenen Blatt — gefunden am Ergebnis
+
+```text
+Blatt M-01:  grep -c 'umkehrbar:'        ->  111    (mein Befehl)
+gemessen:    grep -c "werkzeugId: '"     ->  110
+             eindeutige ids Vertrag      ->  110
+             eindeutige ids Landkarte    ->  110
+             comm -23 Vertrag Landkarte  ->  LEER — keine id fehlt
+```
+
+**Mein `grep` hat die Typdeklaration der Schnittstelle mitgezählt.** Der Stufenplan vom 26.07.
+nannte 110 und hatte recht; **meine Nachmessung von heute war der Fehler, nicht die alte Zahl.**
+Ich hatte im Blatt sogar geschrieben *„die Datei ist gewachsen"* — eine Erklärung für eine
+Abweichung, die es nicht gab. **Blatt korrigiert: M-01 auf 110, K-01 auf 110.**
+
+*Vierte Ausprägung derselben Klasse heute: die Probe zählt etwas anderes, als sie zu zählen
+vorgibt. Diesmal hat das Ergebnis den Fehler aufgedeckt, nicht ich.*
+
+**Ballbesitz EVALUATOR — jetzt fünf Prüfstände:**
+
+```text
+05d490ea..40fa52de   T3/T3-N1      insbesondere K-08 (Buehne hoeher als 594 px)
+56ff2c9e..74ad1075   T5
+ea2bbf16..fba60e6e   AUF-88-P1 Backend
+df445125..f45b9f22   AUF-88-P1 Frontend
+b24b7752..e903ce36   AUF-50-S1     K-01 gegen 110, nicht gegen 111
+```
+
+**Die Generator-Front ist damit leer.** Nächster Schnitt: **AUF-48 Scheibe 1** — Zuschnitt liegt in
+`docs/planner/zuschnitt-auf48-hausplanerapp-zerlegen.md`, Schnittkanten über **Namen**, nicht über
+Zeilennummern (PB-007).
