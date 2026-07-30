@@ -230,6 +230,20 @@ class UebernahmeKnopfTest extends TestCase
 
     // ---- Staleness-Anzeige --------------------------------------------------------------------
 
+    /**
+     * AUF-83-T3 / K-01 — **derselbe Nachweis, an der Stelle, an der die Wahrheit jetzt ankommt.**
+     *
+     * Der Status stand bis heute als Text in `objekt.blade.php`; mit T3 ist er in die Kopfleiste
+     * der Insel gewandert und wird ueber `data-objektkopf` geliefert — dieselbe Naht wie
+     * `data-projekte`, dasselbe Lesemuster wie in `ProjektlisteTest`.
+     *
+     * **Die Zusage ist dabei schaerfer geworden, nicht weicher.** Vorher genuegte, dass irgendwo
+     * auf der Seite ein Satz stand. Jetzt wird die **Struktur** geprueft: der Status als Feld, die
+     * Revision als Zahl — ein vertippter Satz waere frueher durchgegangen, ein falsches Feld nicht.
+     *
+     * *Der Ort hat sich geaendert, die geprueste Wirkung nicht: der Stand kippt nie ⇒ aktuell ⇒
+     * veraltet, geliefert von `ErmittleUebernahmeStatus` und von niemandem sonst.*
+     */
     public function test_staleness_kippt_nie_aktuell_veraltet(): void
     {
         $alt = $this->objekt(750);
@@ -239,13 +253,17 @@ class UebernahmeKnopfTest extends TestCase
         $this->grant($u, ['is_read' => 1, 'is_update' => 1]);
 
         // 1) Noch nie übernommen.
-        $this->actingAs($u)->get("/admin/hausplaner/objekt/{$alt}")
-            ->assertOk()->assertSee('Noch nie übernommen');
+        $this->assertSame(
+            ['status' => 'nie', 'revision' => null],
+            $this->objektkopf($u, $alt),
+        );
 
         // 2) Übernehmen ⇒ aktuell (Szene Rev. 1).
         $this->actingAs($u)->post("/admin/hausplaner/objekt/{$alt}/uebernehmen")->assertRedirect();
-        $this->actingAs($u)->get("/admin/hausplaner/objekt/{$alt}")
-            ->assertOk()->assertSee('Übernommen — aktuell (Szene Rev. 1)');
+        $this->assertSame(
+            ['status' => 'aktuell', 'revision' => 1],
+            $this->objektkopf($u, $alt),
+        );
 
         // 3) Szene über den ECHTEN Speicherpfad ändern (Wand verschoben) ⇒ VERALTET.
         $geaendert = $this->zweiRaumSzene($alt);
@@ -254,8 +272,41 @@ class UebernahmeKnopfTest extends TestCase
             'base_revision' => 1, 'schema_version' => 2, 'scene' => $geaendert,
         ])->assertOk();
 
-        $this->actingAs($u)->get("/admin/hausplaner/objekt/{$alt}")
-            ->assertOk()->assertSee('Übernommen — VERALTET (Szene geändert seit Übernahme)');
+        // **Ein Fund, den die alte Anzeige verdeckt hat:** `szene_revision` fuehrt hier die
+        // AKTUELLE Szenen-Revision (2), nicht die uebernommene (1). Der veraltet-Zweig des Blades
+        // zeigte gar keine Zahl, deshalb ist es nie aufgefallen. **Die Kopfleiste zeigt sie
+        // ebenfalls nur bei `aktuell`** — eine Revisionsnummer neben „VERALTET" liesse offen,
+        // welche der beiden gemeint ist. Festgehalten, damit der Wert nicht eines Tages
+        // versehentlich als „uebernommene Version" gelesen wird.
+        $this->assertSame(
+            ['status' => 'veraltet', 'revision' => 2],
+            $this->objektkopf($u, $alt),
+        );
+    }
+
+    /**
+     * Der Objektkopf aus dem ausgelieferten Markup — Status und Revision.
+     *
+     * Lesemuster woertlich aus `ProjektlisteTest` uebernommen (`preg_match` +
+     * `html_entity_decode`), damit nicht zwei Tests dasselbe Attribut verschieden lesen.
+     */
+    private function objektkopf(\App\Models\User $u, int $objektId): array
+    {
+        $antwort = $this->actingAs($u)->get("/admin/hausplaner/objekt/{$objektId}");
+        $antwort->assertOk();
+
+        preg_match('/data-objektkopf="([^"]*)"/', $antwort->getContent(), $treffer);
+        $this->assertNotEmpty($treffer, 'data-objektkopf fehlt im Markup');
+        $kopf = json_decode(html_entity_decode($treffer[1], ENT_QUOTES), true);
+        $this->assertIsArray($kopf, 'data-objektkopf ist kein lesbares JSON');
+
+        // Der ganze Kopf muss tragen, nicht nur die zwei Felder: ein fehlender Name oder ein
+        // fehlendes Ziel liesse einen Knopf ohne Wirkung in der Kopfleiste stehen.
+        $this->assertNotSame('', $kopf['name'] ?? '', 'der Objektname fehlt');
+        $this->assertStringContainsString('/uebernehmen', $kopf['uebernehmenUrl'] ?? '');
+        $this->assertIsBool($kopf['szeneLeer'] ?? null);
+
+        return ['status' => $kopf['status'] ?? null, 'revision' => $kopf['revision'] ?? null];
     }
 
     public function test_zweite_uebernahme_nach_aenderung_version_additiv_altversion_unveraendert(): void

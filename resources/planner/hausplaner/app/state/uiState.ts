@@ -16,6 +16,7 @@ import { create } from 'zustand';
 import { WORKSPACE_ARCHITEKTUR } from '../tools/toolRegistry';
 import type { WorkspaceId } from '../tools/toolTypes';
 import type { ProjektEintrag } from './projekte';
+import type { Objektkopf } from './objektkopf';
 
 export interface PlannerUiState {
   /** Aktives Werkzeug (id aus der Tool-Registry). Ersetzt das lokale `werkzeug` in HausplanerApp. */
@@ -35,6 +36,14 @@ export interface PlannerUiState {
    * aus AUF-40 Teil A, keine Beispielzeile.
    */
   projekte: ProjektEintrag[];
+  /**
+   * AUF-83-T3 / K-01 — der Objektkopf (Name, Adresse, Übernahme), **wie das Blade ihn liefert**.
+   *
+   * Grundzustand ist `null`, und das ist keine Notlage: das **Studio hat kein Objekt** (Scratch,
+   * kein `data-speichern-url`). Fehlt der Kopf, zeigt die Kopfleiste Projekt und Geschoss — wie
+   * bisher. Ein erfundener Objektname wäre genau die Sorte Anzeige, die AUF-40 entfernt hat.
+   */
+  objektkopf: Objektkopf | null;
 
   setActiveTool: (id: string) => void;
   setActiveWorkspace: (id: WorkspaceId) => void;
@@ -42,6 +51,8 @@ export interface PlannerUiState {
   setRechte: (rechte: string[]) => void;
   /** Die gelesenen Projekte hinterlegen. Wie bei den Rechten: nur ablegen, nichts ableiten. */
   setProjekte: (projekte: ProjektEintrag[]) => void;
+  /** Den gelesenen Objektkopf hinterlegen. Wie Rechte und Projekte: nur ablegen, nichts ableiten. */
+  setObjektkopf: (kopf: Objektkopf | null) => void;
   /** Auf den Grundzustand zurücksetzen (Mount/Neuladen). */
   reset: () => void;
 }
@@ -58,9 +69,11 @@ export const usePlannerUiStore = create<PlannerUiState>((set) => ({
   // weder löschen noch wiederherstellen.
   rechte: [],
   projekte: [],
+  objektkopf: null,
   setActiveTool: (id) => set({ activeToolId: id }),
   setActiveWorkspace: (id) => set({ activeWorkspace: id }),
   setRechte: (rechte) => set({ rechte }),
   setProjekte: (projekte) => set({ projekte }),
+  setObjektkopf: (objektkopf) => set({ objektkopf }),
   reset: () => set({ ...DEFAULTS }),
 }));

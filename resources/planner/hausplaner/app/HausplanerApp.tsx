@@ -42,6 +42,8 @@ import { brauchtOptionen } from './tools/werkzeugVertrag';
 import { ReiterLeiste } from './dashboard/ReiterLeiste';
 import { SCHIENEN_REITER, SCHIENE_STANDARD, schienenReiter, type SchienenReiterId } from './dashboard/schienenReiter';
 import { ARBEITSBEREICHE, arbeitsbereich } from './dashboard/arbeitsbereiche';
+import { kopfzeile } from './state/objektkopf';
+import { ObjektkopfUeberlauf } from './dashboard/ObjektkopfUeberlauf';
 import { gruppenFuer } from './dashboard/werkzeugGruppen';
 import { ladeArbeitsbereich, speichereArbeitsbereich } from './state/arbeitsbereichSpeicher';
 import {
@@ -102,7 +104,10 @@ const schienenReiterId = (id: string): string => `hp-schiene-tab-${id}`;
 const BEREICH_ID = 'hp-bereich-gruppenzeile';
 const bereichReiterId = (id: string): string => `hp-bereich-tab-${id}`;
 /** Die Bereiche als Reiter-Daten — einmal auf Modulebene, nicht bei jedem Render neu gebaut. */
-const bereichReiter = ARBEITSBEREICHE.map((b) => ({ id: b.id, label: b.label, hinweis: b.hinweis }));
+// AUF-83-T3 / K-05: `nochNicht` wird **durchgereicht, nicht gesetzt**. Die Aussage „Import besteht
+// heute aus Namen" gehört zu den Arbeitsbereichen; ein Literal an dieser Stelle wäre die zweite
+// Wahrheit darüber, was ein Bereich kann.
+const bereichReiter = ARBEITSBEREICHE.map((b) => ({ id: b.id, label: b.label, hinweis: b.hinweis, nochNicht: b.nochNicht }));
 
 const FARBEN = {
   text: T.ink, gedaempft: T.muted, linie: T.faint, raster: T.canvasGrid, rasterGrob: T.canvasGridStrong,
@@ -330,6 +335,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const [offeneEngine, setOffeneEngine] = useState<string | null>(null);
   /** AUF-43: ob die Geschoss-Fläche offen ist. Reine Bedien-Anzeige, kein Modellzustand. */
   const [geschossOffen, setGeschossOffen] = useState(false);
+  /** AUF-83-T3-N1 — der Überlauf für Übernehmen-Knopf, Staleness-Pille und Speicherstatus. */
+  const [objektkopfMenuOffen, setObjektkopfMenuOffen] = useState(false);
   /** I4: persoenlich angeheftete Werkzeuge (★). Liegt in localStorage, NIE im Szenendokument —
    *  eine Vorliebe des Bedieners ist keine Eigenschaft des Gebaeudes. */
   const [angeheftet, setAngeheftet] = useState<Set<string>>(() => ladeAngeheftet());
@@ -384,6 +391,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   // Arbeitsbereich (UI-State) · Ansicht (store.modus) · Auswahltypen (Modell). Rechte sind im
   // Editor angenommen; die Werkzeugleisten-Werkzeuge (art='werkzeug') prüfen ohnehin keine Rechte.
   const activeWorkspace = usePlannerUiStore((s) => s.activeWorkspace);
+  /** AUF-83-T3 / K-01 — der Objektkopf aus dem Blade. Im Studio `null`: dort gibt es kein Objekt. */
+  const objektkopf = usePlannerUiStore((s) => s.objektkopf);
   /**
    * AUF-34 — Arbeitsbereich wählen und merken. **Kein zweiter Zustand:** die Wahrheit bleibt
    * `activeWorkspace` im UI-Store; `localStorage` ist nur ein Gedächtnis über den Neuladen hinweg
@@ -1181,7 +1190,11 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   return (
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', color: FARBEN.text, height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
       {/* Werkzeugleiste — neutral, Marke nur für Primäraktion */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: T.surface, borderBottom: `1px solid ${T.hair}` }}>
+      {/* AUF-83-T3-N1: vertikales Innenmass von 10px auf 8px — der einzige Hebel, der Zeile 1
+          SELBST betrifft, ohne einen ihrer Inhalte zu verkleinern oder zu verstecken. Gemessen
+          gegen `d78c2466` (R22): schliesst die letzten 1,9 px, die trotz Ueberlauf-Umbau noch
+          zwischen Vorher und Nachher standen. */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', background: T.surface, borderBottom: `1px solid ${T.hair}` }}>
         {!imStudio && (
           <span style={{ display: 'flex', alignItems: 'center', gap: 9, marginRight: 8 }}>
             <span style={{ width: 26, height: 26, borderRadius: 7, background: FARBEN.auswahl, display: 'grid', placeItems: 'center', color: T.ink }}>{svgWrap(<><path d="M3 11l9-7 9 7" /><path d="M5 10v10h14V10" /></>)}</span>
@@ -1229,8 +1242,40 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             }
           }}
         />
+        {/* AUF-83-T3 / K-01 — **der Objektkopf, umgezogen aus `objekt.blade.php`.**
+            T2 hat den doppelten Teil jener Leiste abgeräumt und diesen ausdrücklich stehen lassen:
+            *„Objektname mit Adresse und der Übernehmen-Knopf samt Staleness-Pille … wandert mit T3
+            in die Kopfleiste, dorthin, wo ohnehin Projekt · Geschoss steht."*
+            **Im Studio steht hier nichts** — dort gibt es kein Objekt (Scratch, kein
+            `data-speichern-url`), und `objektkopf` bleibt `null`. Ein erfundener Name wäre genau
+            die Anzeige, die AUF-40 entfernt hat. */}
+        {objektkopf && (
+          <span className="hp-ok-name" title={kopfzeile(objektkopf)}>{kopfzeile(objektkopf)}</span>
+        )}
+        {/* Der Füller steht EINMAL und außerhalb der Bedingung — er trennt links von rechts in
+            beiden Fällen. Ihn in beide Zweige zu kopieren hätte zwei statische Inline-Stellen aus
+            einer gemacht und Scheibe 7 von 78 auf 79 gehoben; die Auflage lässt sie fallen oder
+            gleich bleiben, nicht steigen. */}
         <span style={{ flex: 1 }} />
-        <span style={{ fontSize: 12, fontWeight: 600, padding: '4px 12px', borderRadius: 999, color: statusPill.farbe, background: statusPill.grund }}>{statusPill.text}</span>
+        {/* AUF-83-T3-N1 — **der Überlauf.** K-08 war rot: sechs Dinge in einer Reihe kosteten
+            20 px, mehr als der Wegfall von `hp-bar` zurückgab. Übernehmen-Knopf, Staleness-Pille
+            und Speicherstatus sind jetzt hinter EINEM Knopf, nicht drei eigene Flächen — dasselbe
+            Muster wie beim Geschoss-Wähler (`GeschossFlaeche`), nicht neu erfunden. Nichts fällt
+            weg: alle drei Elemente stehen unverändert im geöffneten Menü, mit demselben `action`,
+            demselben Status und ohne zweite Statusquelle. */}
+        {objektkopf ? (
+          <ObjektkopfUeberlauf
+            objektkopf={objektkopf}
+            speicherstatus={statusPill}
+            csrfToken={store.getState().csrfToken ?? ''}
+            offen={objektkopfMenuOffen}
+            setOffen={setObjektkopfMenuOffen}
+          />
+        ) : (
+          // Im Studio gibt es keinen Objektkopf — die Zeile trug hier schon vorher nur den
+          // Speicherstatus, drei Dinge insgesamt (Geschoss · Status · Speichern). Unverändert.
+          <span style={{ fontSize: 12, fontWeight: 600, padding: '4px 12px', borderRadius: 999, color: statusPill.farbe, background: statusPill.grund }}>{statusPill.text}</span>
+        )}
         <button
           type="button"
           onClick={() => void store.getState().save()}
@@ -1266,6 +1311,21 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             reiterId={bereichReiterId}
           />
         </div>
+        {/* AUF-83-T3 / K-05b — die Befehlspalette bekommt einen sichtbaren Einstieg.
+            **Erreichbar machen, nicht bauen:** derselbe `oeffnePalette`-Aufruf, den das Kürzel in
+            Z1042 schon benutzt — kein zweiter Auslöser, keine zweite Logik.
+            Er steht in DIESER Zeile und nicht in der Werkzeugzeile darunter, weil
+            `eineWerkzeugzeile.test.ts` deren sechzehn Knöpfe (2·3·6·4·1) festhält; ein
+            siebzehnter dort hätte eine abgenommene Zusage aus AUF-70 gebrochen. */}
+        <button
+          type="button"
+          className="hp-az-suchen"
+          onClick={oeffnePalette}
+          title="Befehle und Werkzeuge durchsuchen (⌘K / Strg+K)"
+        >
+          Suchen
+          <span className="hp-az-kuerzel">⌘K</span>
+        </button>
       </div>
 
       {/* Bedien-Werkzeugleiste — Icons, jedes mit Tooltip + Funktionsbeschreibung */}

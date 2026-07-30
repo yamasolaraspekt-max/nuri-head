@@ -421,3 +421,59 @@
 /* Reiterzeile. `flex-wrap: wrap` traegt die geerbte Zusage B2 aus `keineKappung`: drei Reiter in
  * 220 px brechen um, statt dass der dritte aus dem Bild faellt. */
 .hp-rl-leiste { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--hp-hair); margin-bottom: 12px; }
+
+/* --- AUF-83-T3 / K-05b — der Einstieg in die Befehlspalette --------------------------------------
+ *
+ * **Erreichbar machen, nicht bauen.** Der Knopf ruft `oeffnePalette` — denselben Aufruf, den der
+ * ⌘K-Griff schon benutzt. Eine zweite Aktivierungslogik waere der Fehler, den das Kriterium
+ * ausdruecklich verbietet.
+ *
+ * **Er sitzt in der Arbeitsbereich-Zeile, nicht in der Werkzeugzeile** — und das ist keine
+ * Geschmacksfrage: `eineWerkzeugzeile.test.ts` haelt die Werkzeugzeile bei SECHZEHN Knoepfen
+ * (2·3·6·4·1) fest. Ein siebzehnter dort waere eine abgenommene Zusage gebrochen.
+ *
+ * `className` statt Inline-Stil ist die Auflage des Blattes vom 30.07., 06:20: neues Markup in
+ * `HausplanerApp` zieht an AUF-38 mit, statt Scheibe 7 wachsen zu lassen.
+ *
+ * **KEIN Schwebezustand hier — und das ist keine Auslassung.** Mein erster Entwurf trug einen,
+ * und die geerbte Zusage `stilschicht.test.ts:399` ist darauf rot geworden: diese Stilschicht ist
+ * bewusst frei davon, weil die Insel Zeiger- und Zustandswerte in React haelt (`StartView.tsx`:
+ * `boxShadow: hover ? … : …`). Ein CSS-`:hover` waere die zweite Stelle, an der ein Zustand
+ * entsteht. **Ich habe mein Markup angepasst, nicht die Zusage** — ein Schwebezustand fuer diesen
+ * Knopf waere ein eigener Posten. */
+.hp-az-suchen { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; cursor: pointer; border: 1px solid var(--hp-control-border); background: var(--hp-surface); color: var(--hp-muted); }
+.hp-az-kuerzel { font-size: 10.5px; border: 1px solid var(--hp-control-border); border-radius: 4px; padding: 1px 5px; white-space: nowrap; }
+
+/* --- AUF-83-T3 / K-01 — der Objektkopf in der Kopfleiste ----------------------------------------
+ *
+ * **Umgezogen, nicht neu erfunden.** Name, Adresse, Uebernehmen-Knopf und Staleness-Pille standen
+ * bis heute in einer eigenen Blade-Leiste ueber der Insel (`objekt.blade.php`). T2 hat den
+ * doppelten Teil dieser Leiste abgeraeumt und diesen ausdruecklich stehen lassen, mit dem Vermerk
+ * *„wandert mit T3 in die Kopfleiste"*. Das ist der Umzug.
+ *
+ * **Es bleiben genau drei Zeilen.** Der Kopf nimmt Platz in Zeile 1, keine vierte kommt hinzu —
+ * `min-width: 0` und `text-overflow` sorgen dafuer, dass ein langer Objektname die Zeile nicht
+ * aufblaeht, sondern gekuerzt wird. *Eine vierte Zeile waere Hoehe, die K-08 gerade gewinnen soll.*
+ *
+ * Farben nur als Token; der gesperrte Zustand kommt aus `gesperrtStil.ts` (AUF-71) und steht
+ * deshalb NICHT hier. */
+.hp-ok-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 700; color: var(--hp-ink); }
+.hp-ok-pille { flex: 0 0 auto; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; white-space: nowrap; border: 1px solid transparent; }
+.hp-ok-pille--aktuell { color: var(--hp-ok-ink); background: var(--hp-ok-soft); border-color: var(--hp-ok-border); }
+.hp-ok-pille--veraltet { color: var(--hp-warn-ink); background: var(--hp-warn-soft); }
+.hp-ok-pille--nie { color: var(--hp-muted); background: var(--hp-hair2); }
+.hp-ok-knopf { flex: 0 0 auto; font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 8px; cursor: pointer; border: 1px solid var(--hp-control-border); background: var(--hp-surface); color: var(--hp-ink); }
+/* Das Uebernahme-Formular ist ein Formular und kein Abstandhalter — `margin: 0` nimmt ihm den
+ * Browser-Standardabstand, der die Kopfleiste sonst um eine Zeilenhoehe aufblaehte. */
+.hp-ok-form { flex: 0 0 auto; margin: 0; }
+
+/* --- AUF-83-T3-N1 — der Ueberlauf: Uebernehmen-Knopf, Staleness-Pille, Speicherstatus ------------
+ *
+ * **Dasselbe Anker-Menue-Muster wie `.hp-gs-anker`/`.hp-gs-menue`** (GeschossFlaeche, AUF-43) —
+ * keine zweite Menue-Optik. **Rechts verankert (`right: 0`), nicht links:** der Knopf sitzt nahe
+ * am rechten Rand von Zeile 1; ein linksbuendiges Menue liefe bei 1024 px aus dem Fenster (N-04).
+ */
+.hp-ok-anker { position: relative; display: inline-flex; flex: 0 0 auto; }
+.hp-ok-ueberlauf-knopf { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; cursor: pointer; border: 1px solid var(--hp-control-border); background: var(--hp-surface); color: var(--hp-ink); }
+.hp-ok-punkt { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.hp-ok-menue { position: absolute; top: 100%; right: 0; z-index: 70; margin-top: 5px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; background: var(--hp-surface); border: 1px solid var(--hp-hair); border-radius: 12px; box-shadow: 0 10px 28px var(--hp-canvas-wall-ghost); padding: 10px; min-width: 240px; max-width: 92vw; }

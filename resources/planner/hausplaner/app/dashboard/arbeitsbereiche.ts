@@ -35,6 +35,17 @@ export interface Arbeitsbereich {
   hinweis: string;
   /** Themen, die NUR hier erscheinen. Die durchgängigen kommen aus `DURCHGAENGIGE_THEMEN`. */
   themen: readonly string[];
+  /**
+   * AUF-83-T3 / K-05 — **der Grund, warum dieser Bereich noch nichts trägt.**
+   *
+   * **Die Aussage gehört hierher und nicht in die Bildschirm-Ebene.** „Import besteht heute aus
+   * Namen, nicht aus Funktion" ist eine Aussage über den *Arbeitsbereich*; in `HausplanerApp:105`
+   * gesetzt wäre sie die zweite Wahrheit darüber, was ein Bereich kann. *(Der Planner hat die
+   * Datei am 30.07. um 06:45 genau dafür freigegeben.)*
+   *
+   * Wer das Feld nicht setzt, ändert nichts — `ReiterLeiste` liest es optional.
+   */
+  nochNicht?: string;
 }
 
 /**
@@ -59,6 +70,10 @@ export const ARBEITSBEREICHE: readonly Arbeitsbereich[] = [
     label: 'Import & Nachzeichnen',
     hinweis: 'Vorlage laden, kalibrieren, Grundriss nachzeichnen und erkennen lassen.',
     themen: ['06-import-erkennung'],
+    // K-05: **der einzige Bereich, der heute nur aus Namen besteht.** Der Reiter bleibt anwählbar
+    // — er zeigt dann sein Thema, wie bisher; ausgegraut sagt, dass dahinter noch keine Funktion
+    // steht, statt es den Nutzer selbst herausfinden zu lassen.
+    nochNicht: 'Die Werkzeuge sind benannt, aber noch nicht gebaut.',
   },
   {
     id: WORKSPACE_ARCHITEKTUR,

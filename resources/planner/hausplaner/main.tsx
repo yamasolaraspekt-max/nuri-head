@@ -16,6 +16,7 @@ import { useHausplanerStore } from './store/hausplanerStore';
 import { usePlannerUiStore } from './app/state/uiState';
 import { leseRechte, RECHTE_ATTRIBUT } from './app/state/rechte';
 import { leseProjekte, PROJEKTE_ATTRIBUT } from './app/state/projekte';
+import { leseObjektkopf, OBJEKTKOPF_ATTRIBUT } from './app/state/objektkopf';
 import { setzePaketZiel, PAKETE_URL_ATTRIBUT } from './app/state/paketSpeichern';
 import { setzeTokenVariablen } from './app/stil/tokenVariablen';
 import { sceneDocumentSchema, validateSceneIntegrity, migriereSzene } from './domain/validation';
@@ -78,6 +79,9 @@ if (mount && szenenElement) {
       usePlannerUiStore.getState().setRechte(leseRechte(mount.dataset[RECHTE_ATTRIBUT]));
       // AUF-78: dieselbe Naht — die Liste kommt fertig aus dem Controller, hier wird nur gelesen.
       usePlannerUiStore.getState().setProjekte(leseProjekte(mount.dataset[PROJEKTE_ATTRIBUT]));
+      // AUF-83-T3 / K-01: dieselbe Naht — der Objektkopf wandert aus der Blade-Leiste in die
+      // Kopfleiste der Insel. Fehlt das Attribut (Studio: kein Objekt), bleibt er `null`.
+      usePlannerUiStore.getState().setObjektkopf(leseObjektkopf(mount.dataset[OBJEKTKOPF_ATTRIBUT]));
       // AUF-81: dieselbe Naht — ohne Ziel wird nicht gespeichert und nichts behauptet.
       setzePaketZiel(mount.dataset[PAKETE_URL_ATTRIBUT] ?? null, csrf);
       // AUF-38 Scheibe 1: die Tokens als CSS-Variablen — erzeugt aus `T`, nicht abgeschrieben.

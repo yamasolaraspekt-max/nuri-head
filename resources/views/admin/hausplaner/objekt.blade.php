@@ -86,33 +86,30 @@
     im Studio zu beheben hiesse, zwei Hausplaner-Flaechen mit verschiedenem Kopf zu hinterlassen —
     genau die zweite Wahrheit, gegen die dieser Auftrag laeuft.
 --}}
-<div class="hp-bar">
-    <span class="hp-obj">{{ $objekt->object_name ?: ('Objekt #' . $objekt->id) }}{{ $objekt->full_address ? ' · ' . $objekt->full_address : '' }}</span>
+{{--
+    AUF-83-T3 / K-01 — **die Leiste ist fort; ihr Inhalt steht jetzt in der Kopfleiste der Insel.**
 
-    {{-- W-A: expliziter Übernehmen-Knopf (Operanden-Gate: Fachentscheidung, Vorschlag + Bestätigung,
-         KEIN Automatismus) + Staleness-Pill. Wahrheit: ErmittleUebernahmeStatus (source_hash der
-         aktiven Profil-Version vs. Hash der aktuellen Szene) — keine zweite Statusquelle im Blade. --}}
-    @php($szeneLeer = empty($dokument->scene_json['nodes'] ?? []))
-    <form class="hp-uebernahme" method="POST" action="{{ route('hausplaner.objekt.uebernehmen', $objekt) }}">
-        @csrf
-        <button type="submit" class="hp-uebernehmen" @disabled($szeneLeer)
-                title="Übernimmt die Szenen-Geometrie als neue Version in die Auslegung (gebaeude_geometrie).">
-            In Auslegung übernehmen
-        </button>
-    </form>
-    @if ($szeneLeer)
-        <span class="hp-hinweis">Keine Szene vorhanden — erst zeichnen und speichern.</span>
-    @endif
-    @if (($uebernahme['status'] ?? 'nie') === 'aktuell')
-        <span class="hp-pill hp-pill--aktuell">Übernommen — aktuell (Szene Rev. {{ $uebernahme['szene_revision'] }})</span>
-    @elseif (($uebernahme['status'] ?? 'nie') === 'veraltet')
-        <span class="hp-pill hp-pill--veraltet">Übernommen — VERALTET (Szene geändert seit Übernahme)</span>
-    @else
-        <span class="hp-pill hp-pill--nie">Noch nie übernommen</span>
-    @endif
+    T2 hat den doppelten Teil dieser Leiste abgeraeumt (Marke, Zurueck-Link) und den einzigartigen
+    ausdruecklich stehen lassen, mit dem Vermerk zwei Absaetze weiter oben: *„er wandert mit T3 in
+    die Kopfleiste, dorthin, wo ohnehin Projekt · Geschoss steht."* **Das ist dieser Umzug.**
 
-    <span class="hp-abnahme">In Abnahme — Browser-Sichtproben ausstehend</span>
-</div>
+    * **Fort:** die eigene Zeile ueber der Insel. Sie war eine vierte Zeile ueber dem Zeichenbereich
+      und hat genau die Hoehe gekostet, die K-08 gewinnen soll.
+    * **Geblieben ist jeder Inhalt** — Name, Adresse, Uebernehmen-Knopf, Staleness-Pille — nur eine
+      Zeile hoeher, in `HausplanerApp`.
+    * **Der Weg ist die vorhandene Naht** (`data-objektkopf`, gelesen in `main.tsx`), dieselbe wie
+      `data-rechte` und `data-projekte`. Kein neuer Mechanismus, so wie es der Kommentar am
+      Mount-Knoten seit AUF-64 verlangt.
+    * **Die Wahrheit bleibt, wo sie war:** `ErmittleUebernahmeStatus` liefert den Status, das Blade
+      reicht ihn weiter. Weder Blade noch Insel leiten ihn aus der Szene ab — das waere die zweite
+      Statusquelle, die dieser Datei ausdruecklich verboten ist.
+    * **Der Hinweis „Keine Szene vorhanden"** ist in den `title` des gesperrten Knopfes gewandert:
+      er stand als eigener Text daneben und sagte dasselbe wie der gesperrte Zustand.
+    * **Der Satz „In Abnahme — Browser-Sichtproben ausstehend"** faellt ersatzlos. Er ist eine
+      Aussage ueber den BAUZUSTAND, nicht ueber das Objekt, und gehoert damit in den Ledger und
+      nicht auf die Flaeche des Nutzers — dieselbe Regel wie bei den Vertroestungen aus AUF-56.
+--}}
+@php($szeneLeer = empty($dokument->scene_json['nodes'] ?? []))
 
 {{-- W-A: Ergebnis der Übernahme als Flash in Nutzersprache (z. B. „3 Räume übernommen, Version 4."). --}}
 @if (session('hausplaner_uebernahme'))
@@ -145,6 +142,18 @@
      {{-- AUF-81: Ziel fuer das Speichern von Konfigurator-Paketen. Nur hier, nicht auf der
           Studio-Flaeche — dieselbe Ueberlegung wie bei der Projektliste (AUF-78). --}}
      data-pakete-url="{{ route('hausplaner.objekt.pakete.speichern') }}"
+     {{-- AUF-83-T3 / K-01: der Objektkopf in EINEM Attribut — Name, Adresse, Ziel und
+          Uebernahme-Stand. Dieselbe Naht wie `data-projekte`, und wie dort gilt: fertig vom
+          Server, die Insel rechnet nichts nach. Nur `$szeneLeer` ist eine Frage an die Szene, und
+          die stand vorher an genau derselben Stelle. --}}
+     data-objektkopf="{{ json_encode([
+         'name' => $objekt->object_name ?: ('Objekt #' . $objekt->id),
+         'adresse' => $objekt->full_address ?: '',
+         'uebernehmenUrl' => route('hausplaner.objekt.uebernehmen', $objekt),
+         'status' => $uebernahme['status'] ?? 'nie',
+         'revision' => $uebernahme['szene_revision'] ?? null,
+         'szeneLeer' => $szeneLeer,
+     ], JSON_UNESCAPED_UNICODE) }}"
      data-speichern-url="{{ route('hausplaner.objekt.speichern', $objekt) }}"
      data-snapshots-url="{{ route('hausplaner.objekt.snapshots.liste', $objekt) }}"
      data-katalog-url="{{ route('hausplaner.objekt.katalog') }}">

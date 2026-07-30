@@ -725,13 +725,31 @@ test('T2/K-03: die Hausplaner-Marke ist fort — in der Insel UND in BEIDEN Blad
   assert.doesNotMatch(OBJEKT_BLADE, /‹ Zurück/, 'der doppelte Zurueck-Weg ist zurueck');
 });
 
-test('T2/K-03: der EINZIGARTIGE Inhalt der Objektleiste bleibt stehen', () => {
-  // **Die Grenze des Entscheids.** Objektname mit Adresse und der Uebernehmen-Knopf sind kein
-  // Doppel der Shell — sie wandern mit T3 in die Kopfleiste. Faellt hier etwas davon, hat T2
-  // still T3 vorweggenommen und dabei Funktion entfernt statt Wiederholung.
-  assert.match(OBJEKT_BLADE, /class="hp-obj"/, 'die Objektidentitaet ist fort');
-  assert.match(OBJEKT_BLADE, /class="hp-uebernehmen"/, 'der Uebernehmen-Knopf ist fort');
-  assert.match(OBJEKT_BLADE, /hp-pill--aktuell|hp-pill--veraltet/, 'die Staleness-Pille ist fort');
+test('T2/K-03: der EINZIGARTIGE Inhalt der Objektleiste ist NICHT verloren — er steht jetzt in der Kopfleiste', () => {
+  // **Diese Zusage hat ihren eigenen Nachfolger benannt.** Ihr Wortlaut lautete: *„Objektname mit
+  // Adresse und der Uebernehmen-Knopf sind kein Doppel der Shell — **sie wandern mit T3 in die
+  // Kopfleiste**. Faellt hier etwas davon, hat T2 still T3 vorweggenommen und dabei Funktion
+  // entfernt statt Wiederholung."*
+  //
+  // **T3 hat den angekuendigten Umzug ausgefuehrt.** Die Zusage wird deshalb nicht geloescht,
+  // sondern **umgehaengt**: sie prueft weiterhin genau dieselbe Sache — dass keiner der drei
+  // Inhalte auf dem Weg verloren ging —, nur am neuen Ort. *Eine Zusage zu streichen, weil der
+  // Bau sie eingeholt hat, ist genau der Moment, in dem eine Funktion still verschwindet.*
+  //
+  // **Ein zweites Mal umgehaengt durch AUF-83-T3-N1:** K-08 war rot (Zeile 1 kostete Hoehe statt
+  // sie zu gewinnen), der Uebernehmen-Knopf und die Staleness-Pille sind seither hinter einem
+  // Ueberlauf-Knopf in einer eigenen Datei (`ObjektkopfUeberlauf.tsx`) — nicht geloescht, nur ein
+  // zweites Mal umgezogen. Der Objektname bleibt sichtbar in `HausplanerApp.tsx`.
+  const app = readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8');
+  const ueberlauf = readFileSync(join(hier, '../app/dashboard/ObjektkopfUeberlauf.tsx'), 'utf8');
+  assert.match(app, /className="hp-ok-name"/, 'die Objektidentitaet ist auf dem Weg verloren gegangen');
+  assert.match(ueberlauf, /In Auslegung übernehmen/, 'der Uebernehmen-Knopf ist auf dem Weg verloren gegangen');
+  assert.match(ueberlauf, /hp-ok-pille--\$\{objektkopf\.status\}/, 'die Staleness-Pille ist auf dem Weg verloren gegangen');
+  // Und im Blade steht keiner von ihnen mehr — sonst stuenden sie zweimal.
+  assert.doesNotMatch(OBJEKT_BLADE, /class="hp-obj"/, 'die Objektidentitaet steht doppelt');
+  assert.doesNotMatch(OBJEKT_BLADE, /class="hp-uebernehmen"/, 'der Uebernehmen-Knopf steht doppelt');
+  // Und in HausplanerApp.tsx selbst steht der Knopf nicht mehr doppelt neben dem Ueberlauf.
+  assert.doesNotMatch(app, /In Auslegung übernehmen/, 'der Uebernehmen-Knopf steht jetzt doppelt (App UND Ueberlauf)');
 });
 
 test('T2/K-02: der Testflaechen-Hinweis steht nicht mehr in der Blade-Leiste', () => {
