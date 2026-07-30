@@ -3390,3 +3390,49 @@ Klartext im Baum:      1 Datei
 aufgenommen ist, damit die Lage nicht später als „gemeldet und erledigt" gelesen wird. **Ballbesitz
 unverändert: Yama** (Zugang wechseln). *Solange das nicht entschieden ist, bleibt der Befund offen —
 er verjährt nicht dadurch, dass die Gates grün sind.*
+
+---
+
+## 50. PB-038 — die Gegenmessung des Planners geprüft, und sie hält. **Meine Einordnung war unvollständig.**
+
+**Gemessen gegen `6cafeffd`.** *Nach dem Raster wird eine Antwort geprüft, nicht geglaubt. Geprüft —
+und sie stimmt.*
+
+**Der Planner hat gemessen, was ich nicht gemessen habe:**
+
+```text
+git branch -r --contains fe47879c              LEER          (selbst nachgefahren)
+git rev-parse --short origin/auto/hausplaner-integration   432c179b
+HEAD ist ... Commits VOR dem Remote            365           (er nannte 362, seither drei dazu)
+Remote ist ... Commits vor HEAD                0
+git log -S'<kennwort>' --remotes               0 Treffer
+```
+
+**Sein Satz trifft den Kern, und mein Befund traf ihn nicht:**
+
+> *„Die Kenngröße ist nicht ‚steht es in der Historie', sondern ‚ist die Historie draußen'. Sie ist
+> es nicht."*
+
+**Ich habe „in der Historie" gemessen und daraus „dauerhaft" geschlossen.** Beides stimmt für sich —
+aber die Folge, die ich daran gehängt habe, hing an einer Annahme, die ich nicht geprüft habe: dass
+die Historie irgendwann geteilt wird. **Gemessen ist sie auf keinem Remote, in keinem Remote-Zweig,
+und der Zweig ist seit 365 Commits nicht gepusht.**
+
+**Und die Barriere, die das auffängt, ist die, die ich den ganzen Vormittag als Bremse erlebt habe:**
+*„nie pushen — pushen macht ausschließlich Yama."* **Dieselbe Regel, die PB-017 verursacht hat
+(466 ungesicherte Zeilen), hält hier den Schaden im Rechner.** *Das gehört gesagt: eine Regel, die
+an einer Stelle Kosten macht, war an der anderen die einzige Rettung.*
+
+### Was das für die Schwere heißt
+
+**Ich setze PB-038 von P1 auf P2** — nicht weil es weniger schlimm ist, dass ich es verursacht habe,
+sondern weil die **Wirkung** kleiner ist als von mir behauptet: kein Remote, kein Deploy, ein
+lokaler Zugang. *Eine Schwere, die auf einer ungeprüften Annahme steht, ist selbst ein Befund.*
+
+**Was unverändert bleibt:** die Wahl gehört Yama, und Weg **A** (Zugang wechseln, Historie lassen)
+ist der einzige, der ohne `--force` auskommt. **Weg B ist keine Option** — Umschreiben verlangt
+`--force`, und das ist verboten; 365 unveröffentlichte Commits neu zu schreiben wäre außerdem ein
+Risiko, das den Anlass um Größenordnungen übersteigt.
+
+**Ballbesitz: Yama.** *Meine Empfehlung, erstmals ausgesprochen, weil hier keine Fachentscheidung
+dahintersteht, sondern eine Kostenrechnung: Weg A.*
