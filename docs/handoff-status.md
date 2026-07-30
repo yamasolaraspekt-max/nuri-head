@@ -24216,3 +24216,66 @@ mehr herauszuholen. **Ich fasse es nicht an** — Wurzelverzeichnis und `.gitign
 `docs/`, `rm` ist auf dem Mount verboten.
 
 **Ballbesitz:** Yama (A-oder-B · Sicherheitsposten) · Planner (PB-011/012 offen) · Generator (AUF-83-T3-N1)
+
+---
+
+## 30.07.2026, 09:45 CEST — ENTSCHEIDUNG YAMA: Fassung B kontrolliert · Papierstopp ja
+
+**VOTUM: auftrag=COMMIT-REGEL rolle=yama ergebnis=ENTSCHIEDEN commit=folgt datum=2026-07-30**
+
+```text
+B — der Generator committet selbst, aber nur auf isolierter Aufgaben-Branch.
+Papierstopp — ja, ausser Auftraegen, Quittungen, Evaluation und Sicherheit.
+```
+
+**Ein Commit ist ein prüfbarer Zwischenstand, kein Freigabeakt.** Merge nach `main` und Deploy
+bleiben Tor 2 und gehören Yama allein.
+
+**Umgesetzt in den Regelblättern:**
+
+```text
+00-zyklus.md Regel 3   „vor jedem Produktiv-Commit" -> „vor jedem MERGE und Deploy"
+00-zyklus.md Regel 8   kein Push, kein Merge, kein Arbeiten auf main; Commit ist Pflicht
+02-generator.md:25     „Committet NIE selbst" -> committet den geprueften Scope auf der Branch
+02-generator.md:112    Pflicht-Stopp vor Commit -> Commit, dann Uebergabe mit Basis- und Ergebnis-SHA
+02-generator.md:140    „commit-fertiger Stand" -> Generator-Commit mit beiden SHAs
+regeln/kern.md         Betriebsgrenzen neu gefasst
+regeln/generator.md §7 die Reihenfolge und die Uebergabeform
+AUFTRAGSTAFEL.md       Marke traegt die Sofortanweisung an Generator und Evaluator
+```
+
+**Gemessen, damit niemand einen Zweig anlegt, den es schon gibt:**
+
+```text
+git rev-parse --abbrev-ref HEAD        auto/hausplaner-integration
+git rev-list --left-right --count main...HEAD    0   103
+```
+
+**Der Arbeitszweig ist bereits isoliert** — 103 Commits vor `main`, 0 dahinter. Die Bedingung der
+Entscheidung ist ohne weiteren Schritt erfüllt.
+
+### PB-018 bewertet (unabhängig vom Papierstopp, wie angewiesen)
+
+```text
+git log --all -- k01n1b.mjs        leer  -> die Datei war NIE committet, kein History-Rewrite noetig
+Treffer                            1x @gmail.  ·  2x login  ·  1x password
+Zieladresse                        2 Treffer auf localhost/.test/.local  -> lokaler Zugang
+```
+
+**Bewertung: von P2 auf P3 herabgestuft, mit einer Auflage.** Kein Produktionszugang, nichts in
+der Historie, der Zweig ist sauber. **Das verbleibende Risiko ist nicht der Zweig, sondern die
+Wiederverwendung des Passworts** — steht dasselbe Passwort woanders, ist es dort das Problem.
+**Zwei Zeilen `.gitignore` (`k01n1b.mjs`, `.rm_probe_tmp`) und ein `mv` nach `_to_delete/`
+schließen es**; beides liegt außerhalb der Planner-Schreibfläche und gehört Yama oder dem Generator.
+
+### Papierstopp — was ich ab jetzt nicht mehr schreibe
+
+**Keine Regel-, Konzept-, Meta- oder Analysepapiere.** Erlaubt: kurze Auftragsblätter · Quittungen ·
+Ledgerzeilen · Evaluatorberichte · P0/P1- und Sicherheitsbefunde. **P2/P3-Papierbefunde werden nur
+noch registriert:** `Befund empfangen · klassifiziert · zurueckgestellt wegen Produktionsmodus`.
+
+**Offen zurückgestellt:** PB-011 · PB-012 · PB-019 · PB-020 · PB-021 · PB-023 — alle P2/P3, alle
+über Papier, keiner blockiert Code.
+
+**Ballbesitz: Generator** (13 Dateien committen, beide SHAs melden) → **Evaluator** (Prüfstand aus
+dem Commit) → **Yama** (Merge).

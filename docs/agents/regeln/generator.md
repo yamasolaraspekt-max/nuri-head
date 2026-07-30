@@ -98,43 +98,33 @@ geprüft hast) · Rework Rate · New-Regression Rate · **Caught-Before-Build Ra
 **Ausgangswert 30.07.:** drei Planungsfehler vor dem Bau gefunden, zwei Aufträge zurückgewiesen,
 ein eigenes Bündel zurückgestellt, bevor es jemand merkte.
 
----
-## 7. Wann du committest — die Regel ist strittig, und das musst du wissen
+---## 7. Dein Commit — die Regel ist seit 30.07., 09:45 entschieden
 
-**Am 30.07. hat eine frische Instanz `AUF-83-T3` vollständig gebaut, alle Gates grün gefahren und
-gemeldet: *„Kein Commit, kein Push."*** Damit lagen **20 fertige Dateien elf Stunden im
-Arbeitsbaum**.
-
-**Ich habe hier zuerst geschrieben, die Regel sei schuld, weil nirgends stand, dass committen
-erwartet wird. Das war eine Vermutung, und sie ist gemessen falsch:**
+**Entscheidung Yama:** *„Der Generator committet selbst, aber nur auf isolierter Aufgaben-Branch."*
+Damit fällt die alte Fassung *„Committet NIE selbst"*.
 
 ```text
-docs/agents/02-generator.md:7    „Committet NIE selbst; vor jedem Commit ein Pflicht-Stopp
-                                  an den Evaluator."
-docs/agents/02-generator.md:94   „VOR Commit: Pflicht-Stopp ... commit-fertigem Stand (kein Commit!)"
-docs/agents/02-generator.md:122  „Commit-fertiger Stand — Branch/Diff, noch nicht committet."
-docs/agents/00-zyklus.md:42      „Yama ist finaler Freigeber vor jedem Produktiv-Commit."
+bauen → Diff vollstaendig lesen → Scope pruefen → erzeugte Inhalte kontrollieren
+      → betroffene Tests fahren → NUR freigegebene Pfade stagen
+      → git commit -- <pfade>  → Basis-SHA und Generator-SHA melden
 ```
 
-> **Die Instanz hat nicht geschlampt. Sie hat die Datei befolgt, die CLAUDE.md ihr nennt.**
-> Meine Gegenregel stand in `docs/agents/regeln/`, und **kein Startpfad nennt dieses
-> Verzeichnis** (Befund PB-013, gemessen: null Verweise in allen neun Blättern von
-> `docs/agents/`).
+**Der Commit ist ein Prüfstand, keine Freigabe.** Der Evaluator prüft
+`git diff <basis-sha>..<generator-sha>` in einem frischen Worktree — deshalb braucht er ihn.
 
-**Was für dich bis zu Yamas Entscheid gilt:**
+**Was du nie tust:** auf `main` arbeiten · nach `main` mergen · pushen · deinen eigenen Commit
+freigeben · Tests abschwächen · fremde Änderungen mitcommitten · ungeprüfte Dateien mitnehmen.
+
+**Deine Übergabe:**
 
 ```text
-bauen  →  Gates fahren  →  melden mit commit-fertigem Stand  →  Evaluator
-       →  FREIGABE      →  DANN committen (git commit -- <pfade>)  →  Hash melden
+GENERATOR-UEBERGABE
+Auftrag · Branch · Basis-SHA · Generator-SHA
+Geaenderte Dateien: Produktdateien / Testdateien getrennt
+Ausgefuehrte Pruefungen (mit Rohausgabe)
+Bekannte Restpunkte · Scope-Abweichungen: keine / aufgelistet
 ```
 
-**Zwei Dinge bleiben davon unberührt:**
-
-1. **Nach der Freigabe ist der Commit fällig, nicht optional.** Ein abgenommener Stand, der im
-   Arbeitsbaum liegen bleibt, ist weder gesichert noch übernehmbar — genau das war der Schaden.
-2. **`git push` ist verboten**, auch nach grüner Abnahme. Das macht ausschließlich Yama.
-   *Hier sind sich beide Regelsätze einig.*
-
-**Und wenn du wartest, sagst du es.** Eine Zeile — *„gebaut, warte auf Evaluator-FREIGABE vor
-Commit"* — hätte die elf Stunden auf zehn Minuten verkürzt. **Stille sieht von außen aus wie
-Stillstand, und ich habe sie am 30.07. dreimal als solchen gedeutet.**
+**Und wenn du wartest, sagst du es.** Eine Zeile kostet zehn Sekunden. Am 30.07. hat die Stille
+zwölf Stunden gekostet — nicht weil du falsch gehandelt hast, sondern weil niemand sah, worauf
+du wartest.

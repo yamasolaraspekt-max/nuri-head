@@ -96,21 +96,14 @@ nächster erwarteter Status`.
 
 ## Betriebsgrenzen (unverhandelbar)
 
-- **Der Commit-Zeitpunkt ist STRITTIG und liegt bei Yama — bis dahin gilt die ältere Regel.**
-  Ich hatte hier am 30.07., 08:33 geschrieben *„Committen ist PFLICHT"* und als Grund genannt,
-  es habe nirgends gestanden, dass committen erwartet wird. **Das ist gemessen falsch.**
-  `docs/agents/02-generator.md:7` sagt seit dem 28.07. wörtlich **„Committet NIE selbst"**,
-  Zeile 94 verlangt einen **Pflicht-Stopp vor dem Commit**, Zeile 122 einen
-  **„commit-fertigen Stand — noch nicht committet"**, und `docs/agents/00-zyklus.md:42` macht
-  **Yama zum finalen Freigeber vor jedem Produktiv-Commit.**
-  **Die elf Stunden waren kein Versäumnis, sondern Regelbefolgung** — und meine Gegenregel stand
-  in einer Datei, die kein Startpfad nennt (Befund PB-013).
-  **Bis zu Yamas Entscheid gilt: der Generator committet nach Evaluator-FREIGABE, nicht davor.**
-  Der Fall, um den es wirklich ging, bleibt trotzdem falsch: **ein abgenommener Stand, der
-  danach nicht committet wird.** Nach der Freigabe ist der Commit fällig, nicht optional.
-- **Pushen ist verboten** — **kein `git push` aus irgendeiner Instanz**, auch nicht nach grüner
-  Abnahme. Pushen macht ausschließlich Yama. *Diese Hälfte ist unstrittig; beide Regelsätze
-  sagen dasselbe.*
+- **Der Generator committet selbst — auf der Aufgaben-Branch, niemals nach `main`.**
+  *(Entscheidung Yama, 30.07.2026, 09:45 — sie beendet den Streit von heute früh.)*
+  **Ein Commit ist ein prüfbarer Zwischenstand, kein Freigabeakt.** Wer baut, liest vor dem
+  Commit den vollständigen Diff, prüft den Scope, fährt die betroffenen Tests, stagt **nur
+  freigegebene Pfade** (`git commit -- <pfade>`) und meldet **Basis-SHA und Generator-SHA**.
+  Der Evaluator prüft `git diff <basis>..<generator>` in einem frischen Worktree.
+- **Niemand merged nach `main`, niemand pusht, niemand gibt den eigenen Commit frei.**
+  Merge und Deploy sind Tor 2 und gehören Yama allein.
 - **Niemals `git add -A` oder `.`** — `git commit -- <pfade>`.
 - **Kein `rm`/`unlink` auf dem Mount** — `mv` nach `_to_delete/` bzw. `.git/_locks_beiseite/`.
 - **Persistierte Schema-Werte nicht umbenennen** (`type: wall|window|door|ceiling`, `objectType`,
