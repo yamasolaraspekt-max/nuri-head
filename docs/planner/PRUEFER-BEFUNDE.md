@@ -211,6 +211,8 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-043 | `ChatController.php:70,281` + `config/logging.php:21,57` | Zwei unbedingte `Log::info` in einem gepollten Endpunkt schreiben **64 086** Zeilen in ein **212 MB** grosses, nicht rotierendes Log | **P2** | offen | Planner |
 | PB-044 | `--env=testing` ohne `.env.testing` | Ein Schalter, der auf die Test-Umgebung zeigt, trifft **stillschweigend die Arbeits-DB** | **P3** | offen | Planner |
 | PB-045 | mein eigener Messbefehl | `--date=format:` zeigt die Zone des Committers — **45 von 116** heutigen Commits zwei Stunden zu früh | **P3** | **ERLEDIGT** (Barriere gesetzt) | Prüfer |
+| PB-039 | `PRUEFER-BEFUNDE.md` (mein Register) | Acht Befunde hatten einen Abschnitt, aber **keine Zeile** — Ursache F-14 (`str.replace` traf nicht) | **P2** | **ERLEDIGT** (38 Zeilen = 38 IDs) | Prüfer |
+| PB-042 | (Betrieb) `git log` | **109 Commits heute, 2 davon Produktivcode, 66 von mir** — docs/Code 7:1, mein Register allein 4 265 Z. | **P2** | offen | **Yama** (Takt) |
 
 ---
 
@@ -4396,3 +4398,41 @@ als P1, vom Planner mit der besseren Kenngröße auf P2 heruntergestuft (*„ist
 nicht *„steht es in der Historie?"*), und heute Abend von Yama zu Ende gebracht.
 
 **Ballbesitz: keiner.**
+
+---
+
+## 70. Runde 168 — **Yamas Frage hat ein Loch in meiner eigenen Barriere gefunden**
+
+**18:30 CEST.** Yama fragt nach der Zahl der Befunde. Beim Zählen: **`PB-039` und `PB-042` hatten
+keine Registerzeile.**
+
+```text
+Abschnitte/Meldungen mit PB-Nummer  minus  Registerzeilen
+   -> PB-039  (nur Abschnitt in diesem Dokument)
+   -> PB-042  (nur im Ledger, gar nicht im Register)
+```
+
+**`PB-039` ist der Befund „acht Befunde hatten keinen Registereintrag".** Er selbst hatte keinen.
+
+### Warum meine Barriere das durchgelassen hat
+
+Meine drei Zählungen prüfen: *(1)* Zeile == Posten · *(2)* Abschnitte **mit YAML-`id:`** minus
+Registerzeilen · *(3)* Text auffindbar. **Prüfung 2 sucht nach `^  id: PB-0xx` — meine neueren
+Abschnitte tragen die Nummer aber nur in der Überschrift.** Die Barriere maß eine Teilmenge und meldete
+sie als Ganzes.
+
+> **Eine Barriere, die eine Teilmenge prüft, ist keine Barriere — sie ist eine Beruhigung.** *Das ist
+> derselbe Satz, den ich in `PB-012` dem Planner geschrieben habe.*
+
+**Verschärft, sofort:** Prüfung 2 zählt ab jetzt **jede PB-Nummer im Dokument und im Ledger** gegen die
+Registerzeilen, nicht nur die mit `id:`-Kopf:
+
+```text
+comm -23 <(grep -oE 'PB-0[0-9]+' <datei> | sort -u) <(registerzeilen | sort -u)   ==  leer
+```
+
+**Gefunden hat es nicht meine Barriere, sondern Yamas Frage.** *Zum zweiten Mal heute ist mein
+Register durch eine Rückfrage von außen korrigiert worden und nicht durch die Prüfung, die genau dafür
+da ist.*
+
+**Ballbesitz: Prüfer** (behoben, Barriere verschärft).
