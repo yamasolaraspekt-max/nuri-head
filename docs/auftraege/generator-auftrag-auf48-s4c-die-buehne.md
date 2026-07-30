@@ -91,3 +91,65 @@ S4c  DIESES BLATT             1549–1842   294 Z.    0 Inline
 S4d  Eigenschaften-Panel      1843–2255   413 Z.   67 Inline   <- die Haelfte der Datei
 S4e  Statusleiste+Palette     2256–2382   127 Z.   20 Inline
 ```
+
+
+---
+
+## KORREKTUR 21:42 — die Naht neu gesetzt, nachdem der Generator meinen Endanker in S4b widerlegt hat
+
+**Sein Befund zu S4b (P-04, zweite Stelle):** *„Ende: die Zeile vor `<Stage>` ist strukturell
+nicht schneidbar. Dort stehen ZWEI OEFFNENDE `div`, beide schliessen erst NACH der Buehne. Wer
+bis dorthin schneidet, nimmt unausgeglichene Tags mit."* **Er hat recht, und die Ursache ist
+meine Schnittmethode:** ich schneide nach **Kommentar-Ankern** und habe die **Tag-Bilanz** nie
+geprueft. *Ein Anker, der einen Block halbiert, ist kein Schnitt.*
+
+### Fuer S4c neu gemessen — und diesmal richtig
+
+**Mein erster Versuch war unbrauchbar:** eine Regex-Bilanz ueber oeffnende und schliessende Tags
+meldete **-21** fuer eine Datei, die fehlerfrei baut. *Ein Messwert, der einem funktionierenden
+Stand widerspricht, ist ein Messfehler und keine Entdeckung — ich habe ihn deshalb nicht
+gemeldet, sondern anders gemessen.*
+
+**Ueber die Einrueckung, gegen `2eb16643`:**
+
+```text
+Zeile 1088   <div style={{ display: modus === '3d' ? 'none' : 'block', width: stageBreite, … }}>   Einrueckung 8
+Zeile 1089   <Stage                                                                                Einrueckung 8
+Zeile 1381   </div>   auf derselben Einrueckung 8   ->  schliesst VOR dem Panel-Anker (1383)
+```
+
+**Die Buehnen-Huelle schliesst bei 1381, der Panel-Anker steht bei 1383.** *Der Schnitt ist also
+moeglich* — aber **nicht so, wie das Blatt ihn beschrieb.**
+
+### Die neuen Naehte
+
+| Naht | Anker | war vorher |
+|---|---|---|
+| Anfang | **`<div style={{ display: modus === '3d' ? …`** — die Huelle, **nicht** `<Stage` | `<Stage` |
+| Ende | die Zeile **nach** dem `</div>` auf derselben Einrueckung | „vor dem Panel-Anker" |
+
+**Warum die Huelle mit muss:** sie traegt `display` nach Ansichtsmodus und `width: stageBreite`.
+*Bleibt sie in der Hauptfunktion, muss die neue Komponente `modus` und `stageBreite` nur
+durchreichen, um sie nirgends zu benutzen — und die Hauptfunktion behaelt ein `div`, dessen
+einziger Inhalt eine fremde Komponente ist. Das ist kein Schnitt, sondern eine Naht mitten im
+Bauteil.*
+
+```yaml
+  - id: K-06
+    aussage: "Der Schnitt ist tag-ausgeglichen."
+    nachweis: >
+      Vor dem Schneiden: pruefe, dass Anfangs- und Endanker auf DERSELBEN Einrueckung liegen und
+      dass zwischen ihnen kein Block beginnt, der spaeter schliesst.
+    gegenbeweis: >
+      Faellt `npm run tsc:hausplaner` mit einem Tag-Fehler, war die Naht falsch gesetzt —
+      und dann ist das ein Befund gegen DIESES Blatt, nicht gegen deinen Bau. Melde ihn so.
+
+  - id: K-07
+    aussage: "`_zerlegteApp.ts` kennt das neue Modul."
+    befehl: "grep -c \"app/rahmen/Buehne.tsx\" resources/planner/hausplaner/__tests__/_zerlegteApp.ts"
+    erwartet: "1"
+    gegenbeweis: >
+      Setze eine verbotene Zeichenkette in das NEUE Modul, OHNE es in TEILE einzutragen,
+      und lass die Absenz-Zusagen laufen. Bleiben sie gruen, ist die Liste die Luecke.
+      *Der Kopf der Datei begruendet zu Recht, warum kein `readdir` — aber eine von Hand
+      gepflegte Liste braucht eine Zusage gegen das Vergessen. Das ist sie.*
