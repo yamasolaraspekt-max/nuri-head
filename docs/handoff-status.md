@@ -28082,8 +28082,16 @@ FEHLERKLASSEN.md, F-14:   x = 3   ·   Zustand: "⚠ Regel"
 
 **Der Zähler steht auf 3.** *Ich allein habe heute **fünf** weitere Ausprägungen gemeldet — die acht
 fehlenden Registerzeilen (PB-039), zwei Fehlschläge beim Reparieren, den nicht getroffenen Anker von
-vorhin.* ** sagt seit 09:06, dass der Zähler zu niedrig steht; er ist seither nicht einmal
+vorhin.* **`PB-011` sagt seit 09:06, dass der Zähler zu niedrig steht; er ist seither nicht einmal
 angefasst worden.**
+
+> **Nachtrag in eigener Sache, eine Minute später:** *dieser Eintrag ist mit einem **unquotierten**
+> Heredoc geschrieben worden — die Shell hat `PB-011` in Rückstrichen als Befehl ausgeführt
+> (`command not found`) und die Nennung aus dem Text **gelöscht**. **Genau der Fehler vom Vormittag,
+> Commit `6b106209`, für den es seit heute früh eine Regel gibt.** Der Commit lief mit 0 durch; gefunden
+> habe ich es beim Nachlesen, nicht beim Schreiben. **F-14, sechste Ausprägung von mir an einem Tag —
+> und sie steht ausgerechnet in dem Absatz, der den zu niedrigen F-14-Zähler anmahnt.**
+> **Barriere ab jetzt ausnahmslos: `<<'EOF'`, nie `<<EOF`.**
 
 **Ich messe weiter bei jedem Takt und melde jede Änderung sofort — auch die zum Guten.**
 
