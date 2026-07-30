@@ -65,11 +65,30 @@ hier wird sie angewandt, nicht neu erfunden.*
 
 ## Kriterien
 
+*Auf das Validator-Schema umgestellt am 30.07. 23:27 (VORLAGE-Regel 8). Vorher meldete
+`node scripts/auftrag-pruefen.mjs` fuer dieses Blatt: „KEIN PRUEFBEFEHL im Kopf gefunden".*
+
 ```yaml
+scope:
+  datei: resources/planner/hausplaner/app/rahmen/EigenschaftenPanel.tsx
+  population_command: "node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/rahmen/EigenschaftenPanel.tsx | tail -1"
+  ausschluesse:
+    - stelle: "style={bezeichner} (56 bis 58 Stellen im Panel)"
+      grund: "Das Messwerkzeug kennt diese Form nicht; eine Zahl, die kein Abnahmebefehl erreicht, ist ein Posten, der auf nichts zeigt. Eigenes Blatt AUF-38-P3, das zuerst das Werkzeug erweitert."
+      entschieden_von: planner
+    - stelle: "__tests__/eigenschaftenPanel.test.ts"
+      grund: "S4d hat dort zwei ungeschuetzte A11y-Entscheidungen geschlossen. Die Datei wird nicht angefasst."
+      entschieden_von: planner
+
+kriterien:
   - id: K-01
+    typ: absence
+    kritikalitaet: P1
     aussage: "Im Panel bleibt keine offene statische Inline-Stelle."
-    befehl: "node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/rahmen/EigenschaftenPanel.tsx | tail -1"
-    erwartet: "davon 0 offen"
+    pruefung:
+      befehl: "node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/rahmen/EigenschaftenPanel.tsx | tail -1"
+      erwartet: "davon 0 offen"
+    ausgangswert: "71 Stellen insgesamt, davon 37 offen (gemessen 30.07. 23:15)"
     gegenbeweis: >
       Die Null allein ist erreichbar, indem man Stellen dynamisch macht statt sie umzustellen.
       Deshalb zaehlt der GESAMTWERT mit: er muss von 71 auf 34 fallen, also um genau die 37
@@ -77,63 +96,98 @@ hier wird sie angewandt, nicht neu erfunden.*
       statische Stelle in eine dynamische verwandelt statt in die Stilschicht gehoben.
 
   - id: K-01b
+    typ: coverage
     aussage: "Ausserhalb des Panels hat sich nichts bewegt."
-    befehl: "node scripts/statische-inline-stile.mjs | tail -1"
-    erwartet: "158 Stellen insgesamt, davon 40 offen."
+    pruefung:
+      befehl: "node scripts/statische-inline-stile.mjs | tail -1"
+      erwartet: "158 Stellen insgesamt, davon 40 offen."
+    ausgangswert: "195 Stellen insgesamt, davon 77 offen"
     gegenbeweis: >
-      Heute: 195 gesamt, 77 offen. 195-37=158, 77-37=40. Steht dort weniger als 40 offen, ist
-      ausserhalb des Auftrags mitgeraeumt worden - das ist kein Bonus, sondern eine ungeprueft
-      geaenderte Datei. Steht dort mehr, ist eine Stelle in eine Nachbardatei gewandert.
+      195-37=158, 77-37=40. Steht dort weniger als 40 offen, ist ausserhalb des Auftrags
+      mitgeraeumt worden - kein Bonus, sondern eine ungeprueft geaenderte Datei. Steht dort
+      mehr, ist eine Stelle in eine Nachbardatei gewandert.
 
   - id: K-02
-    aussage: "Kein roher Farbwert, keine rohe Groesse in den neuen Regeln."
-    befehl: "grep -cE '#[0-9a-fA-F]{3,6}|rgb\\(' in den neu hinzugefuegten CSS-Zeilen"
-    erwartet: >
-      0 — jede Farbe kommt aus `var(--hp-…)`. *Das ist die Regel aus Scheibe 1-3 und der
-      Grund, warum die Stilschicht ueberhaupt etwas wert ist.*
+    typ: absence
+    aussage: "Kein roher Farbwert in den neuen CSS-Regeln."
+    pruefung:
+      befehl: "git diff main -- public/hausplaner/hausplaner.css | grep '^+' | grep -oE '#[0-9a-fA-F]{3,6}|rgb[(]' | wc -l"
+      erwartet: "0"
+    ausgangswert: "0 (heute ist die Datei gegenueber main unveraendert)"
+    gegenbeweis: >
+      Der Befehl misst gegen main, nicht gegen den Arbeitsbaum - sonst waere er nach dem
+      Commit blind. Zum Gegenbeweis eine Zeile mit einem rohen Wert einfuegen: der Zaehler
+      muss steigen. Jede Farbe kommt aus var(--hp-...); das ist die Regel aus Scheibe 1-3
+      und der Grund, warum die Stilschicht ueberhaupt etwas wert ist.
 
   - id: K-03
+    typ: behavioural
+    kritikalitaet: P1
     aussage: "Die Verriegelung der Stilschicht bleibt gruen."
-    befehl: "npm run test:hausplaner -- --filter=stilschicht"
-    erwartet: >
-      gruen, 171 Zusagen unveraendert. **Besonders `assert.doesNotMatch(quelle, /@media/)`** —
-      die Zusage, die *„Responsive ist L7"* traegt. Wer sie bricht, hat den falschen Weg genommen.
+    ausgefuehrt_von: generator
+    pruefung:
+      typ: gate
+      schritte: "npm run test:hausplaner -- --filter=stilschicht"
+      erwartet: >
+        gruen, 171 Zusagen unveraendert. Besonders assert.doesNotMatch(quelle, /@media/) -
+        die Zusage, die "Responsive ist L7" traegt. Wer sie bricht, hat den falschen Weg genommen.
+    begruendung: "Gate - der Planner faehrt keine npm-Laeufe; der Bauende fuehrt sie aus und legt die Rohausgabe bei."
 
   - id: K-04
-    aussage: "Das Panel sieht gleich aus — gemessen, nicht betrachtet."
-    nachweis: >
-      Vor und nach dem Umbau: ein Bauteil auswaehlen und `getBoundingClientRect()` von
-      Panel, Reiterleiste und erstem Feld notieren. **Die Werte muessen gleich sein.**
+    typ: behavioural
+    aussage: "Das Panel sieht gleich aus - gemessen, nicht betrachtet."
+    pruefung:
+      typ: browser
+      schritte: >
+        Vor und nach dem Umbau ein Bauteil auswaehlen und getBoundingClientRect() von Panel,
+        Reiterleiste und erstem Feld notieren. Die Werte muessen gleich sein.
     gegenbeweis: >
-      Aendere EINE Klasse absichtlich (etwa `padding`) und miss erneut. Bleiben die Werte
+      Aendere EINE Klasse absichtlich (etwa padding) und miss erneut. Bleiben die Werte
       gleich, misst die Probe nicht, was sie zu messen behauptet.
 
   - id: K-05
+    typ: behavioural
     aussage: "Die Mutationsprobe kommt VOR den Tests."
+    pruefung:
+      typ: verfahren
+      schritte: >
+        Mindestens 8 Mutationen an dem, was der Umbau anfasst: eine Klasse am falschen
+        Element, zwei Klassen vertauscht, eine Regel ohne Wirkung. Wie viele kommen durch?
     gegenbeweis: >
-      Mindestens 8 Mutationen an dem, was der Umbau anfasst: eine Klasse am falschen
-      Element · zwei Klassen vertauscht · eine Regel ohne Wirkung. **Wie viele kommen durch?**
-      *In AUF-48 waren es ueber acht Scheiben 38 von 52. Die Zahl gehoert in den Bericht,
-      auch wenn sie 0 ist.*
+      In AUF-48 waren es ueber acht Scheiben 38 von 52. Die Zahl gehoert in den Bericht,
+      auch wenn sie 0 ist.
 
   - id: K-06
+    typ: behavioural
+    kritikalitaet: P1
     aussage: "Die A11y-Entscheidungen des Panels ueberleben."
-    befehl: "npm run test:hausplaner -- --filter=eigenschaftenPanel"
-    erwartet: "gruen, Zahl der Zusagen UNVERAENDERT"
-    hinweis: >
-      **S4d hat gemessen, dass zwei davon durch nichts geschuetzt waren**, und sie geschlossen:
-      *Schwere als Symbol UND Text* sowie *die Rueckfrage vor dem Entsperren*.
-      `eigenschaftenPanel.test.ts` haelt sie jetzt — **diese Datei wird nicht angefasst.**
+    ausgefuehrt_von: generator
+    pruefung:
+      typ: gate
+      schritte: "npm run test:hausplaner -- --filter=eigenschaftenPanel"
+      erwartet: "gruen, Zahl der Zusagen UNVERAENDERT"
+    begruendung: >
+      S4d hat gemessen, dass zwei Zusagen durch nichts geschuetzt waren, und sie geschlossen:
+      Schwere als Symbol UND Text sowie die Rueckfrage vor dem Entsperren.
 
   - id: L-01
-    nachweis: >
-      npm run build:hausplaner, dann /admin/hausplaner/studio → Expertenmodus →
-      Wand zeichnen → auswaehlen → Panel zeigt ihre Werte, Reiter wechseln,
-      Sicht- und Sperrschalter reagieren.
+    typ: presence
+    aussage: "Browsertest gefahren, an http://ticket.test."
+    pruefung:
+      typ: browser
+      schritte: >
+        npm run build:hausplaner, dann /admin/hausplaner/studio, Expertenmodus, Wand zeichnen,
+        auswaehlen, Panel zeigt ihre Werte, Reiter wechseln, Sicht- und Sperrschalter reagieren.
+        Drei Pflicht-Viewports: 1440, 1024, 375.
+
   - id: L-01-anker
-    nachweis: >
-      VOR jeder anderen Zahl: HTTP 200 · querySelectorAll('canvas') mindestens 1 ·
-      document.title enthaelt "Hausplaner". Auch melden, wenn alles gut aussah.
+    typ: presence
+    aussage: "Die Seite ist ueberhaupt da, bevor irgendeine Zahl abgelesen wird."
+    pruefung:
+      typ: browser
+      schritte: >
+        VOR jeder anderen Zahl: HTTP 200, querySelectorAll('canvas') mindestens 1,
+        document.title enthaelt "Hausplaner". Auch melden, wenn alles gut aussah.
 ```
 
 ## Danach
