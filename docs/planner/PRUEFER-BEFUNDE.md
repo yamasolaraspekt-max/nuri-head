@@ -3264,7 +3264,7 @@ Einzelfall.*
 
 | Datei | Zeit | Zugang |
 |---|---|---|
-| `k01n1b.mjs` | **07:36** | `p.type('input[name="password"]', 'Admin@1234')` — **Klartext** |
+| `k01n1b.mjs` | **07:36** | `p.type('input[name="password"]', '<kennwort>')` — **Klartext** |
 | `probe_t5_tmp.mjs` | **10:30** | `const PASS = process.env.HP_PROBE_PASS` — **Variable** |
 | `probe_t5b_tmp.mjs` | **10:30** | dieselbe Form |
 
@@ -3291,10 +3291,65 @@ diese nimmt ihr den Inhalt.*
    *Der Schaden daraus ist jetzt geringer — eine Kladde ohne Zugang, die versehentlich committet
    wird, ist Ballast, kein Sicherheitsvorfall.*
 
-**Erledigt wenn** (neu gefasst, weil die Lage sich geändert hat): *`grep -rl "Admin@1234" .` (ohne
+**Erledigt wenn** (neu gefasst, weil die Lage sich geändert hat): *`grep -rl "<kennwort>" .` (ohne
 `node_modules`, `vendor`, `.git`) findet keine Datei mehr.* **Die `.gitignore`-Hälfte setze ich von
 P2 auf P3 herab** — sie ist jetzt Aufräumen, nicht Sicherheit.
 
 **PB-018 bleibt offen, aber nur noch mit einer Datei und einer Aufräumfrage.** *Von der
 Sicherheitsseite ist der Weg gegangen, den ich als den besseren benannt hatte — und niemand hat mir
 das gemeldet; ich habe es beim Nachmessen gefunden. Das ist die richtige Reihenfolge.*
+
+---
+
+## 48. **PB-038 · P1 · SICHERHEIT — ich habe den Zugang selbst in die Historie gebracht**
+
+**Gemessen gegen `fe47879c`. Der Verursacher bin ich.**
+
+```text
+git log --oneline -S'<kennwort>' --all
+  -> fe47879c   PRUEFER Runde 35 ... (30.07. 10:32)
+git show --name-only fe47879c
+  -> docs/planner/PRUEFER-BEFUNDE.md
+```
+
+**Was passiert ist:** in Runde 35 habe ich die Zeile aus `k01n1b.mjs` **wörtlich** in die Tabelle
+geschrieben, um den Unterschied zur neuen Fassung zu zeigen — **mit dem Kennwort darin**. Der Commit
+ist um 10:32 gelaufen. **Vorher war die Zahl in jeder Messung 0; jetzt ist sie 1.**
+
+**Und ich hatte es besser gewusst.** In Runde 16, beim ersten Sicherheitsbefund, steht wörtlich in
+`PB-018`: *„(Z8/Z9 — der Wert wird hier nicht wiederholt)."* **Dieselbe Datei, dieselbe Regel,
+neunzehn Runden später gebrochen.**
+
+### Was ich getan habe und was das nicht heilt
+
+**Getan:** den Wert im Arbeitsstand des Registers durch `<kennwort>` ersetzt — damit trägt ihn kein
+weiterer Commit mehr fort.
+
+**Nicht geheilt, und das ist der Punkt:** **`fe47879c` behält ihn.** *„Nie `--force"* ist eine
+stehende Regel; eine Historien-Umschreibung ist ausgeschlossen und wäre auch nicht meine
+Entscheidung. **Der Zugang steht dauerhaft in der Geschichte dieses Zweiges** — genau der Zustand,
+den `PB-018` seit 09:20 als das eigentliche Risiko benannt hat, und den ich mit demselben Satz
+begründet habe: *„in diese Historie käme er dauerhaft."*
+
+### Einordnung, ohne sie kleiner zu machen
+
+**Mildernd, gemessen:** es ist der **lokale** Entwicklungszugang (`ticket.test`), die App ist nicht
+ausgeliefert, der Zweig ist nicht gepusht (`git log origin` unverändert — Push macht nur Yama), und
+`k01n1b.mjs` selbst ist weiter unverfolgt.
+
+**Nicht mildernd:** *ich bin die Instanz, die den Befund geschrieben hat.* Ein Prüfer, der die
+Lücke benennt und sie dann selbst auslöst, hat nicht nur einen Fehler gemacht — er hat den Beleg
+dafür geliefert, dass **Wissen ohne Barriere nicht schützt**. Genau das ist der Inhalt von `PB-012`
+und R9, und ich habe ihn an mir selbst bewiesen.
+
+**Erledigt wenn:** *Yama entscheidet, ob der Zugang gewechselt wird.* **Das ist die einzige Abhilfe,
+die den Commit unschädlich macht** — ein Kennwort, das nicht mehr gilt, ist in keiner Historie ein
+Risiko. **Ballbesitz: Yama.** *Alles andere kann ich nicht anbieten.*
+
+### Die Barriere für mich, sofort und ohne Auftrag
+
+**Ab jetzt: kein Zitat aus einer Datei, die Zugangsdaten führt.** Belegt wird mit `Datei:Zeile` und
+`grep -c`, nie mit dem Wortlaut. *Das stand seit Runde 16 als Vorsatz in meinem eigenen Register —
+und ein Vorsatz zählt nach R9 nicht als Barriere. Die Barriere ist: bei jedem Befund, der eine
+Kennwort-Datei betrifft, wird `git log -S` NACH dem Commit gefahren, nicht davor.* **Genau dieser
+Nachlauf hat es aufgedeckt.**
