@@ -3907,3 +3907,46 @@ eigenen, noch offenen Schritt, und die Endungs-Positivliste schließt ausführba
 **Ich nenne es, weil die nächste Stufe DWG-, IFC- und STEP-Leser sind** — und das Papier selbst sagt:
 *„Ohne ihn darf FILE-05 bis FILE-07 gar nicht beginnen."* **Das ist eine Reihenfolge, die jemand im
 Auge behalten muss; heute ist sie eingehalten.**
+
+---
+
+## 60. Runde 45 — Frage 8 am Upload-Weg · **keine Beanstandung** · und der Test benennt seine eigene Lücke
+
+**Gemessen gegen `1a01fb41`.** *Frage 8 der zehn: „Gibt es einen Verhaltens-Test gegen
+`ticket_testing`?"*
+
+```text
+tests/Feature/PlanUploadTest.php        255 Z. · 12 Testfaelle
+phpunit.xml:28   DB_DATABASE = ticket_testing  force="true"     (die Testdatenbank ist erzwungen)
+phpunit.xml:23   BCRYPT_ROUNDS = 4
+php artisan test --filter=PlanUploadTest   ->  12 passed (26 assertions), 16,32s
+```
+
+**Zwölf von zwölf grün, gegen die erzwungene Testdatenbank. Frage 8 erfüllt.**
+
+### Was die Testnamen abdecken — und einer davon ist der beste des Tages
+
+| Test | deckt |
+|---|---|
+| `eine_umbenannte_datei_wird_abgelehnt_**und_liegt_nicht_auf_der_platte**` | die Ablehnung **schreibt nichts** — derselbe Gedanke wie `assert422OhneMutation` (Runde 12) |
+| `eine_echte_pdf_signatur_wird_angenommen` · `ein_bild_mit_pdf_endung_wird_abgelehnt` | beide Richtungen, nicht nur die verbotene |
+| `ein_nutzer_mit_/ohne_hausplaner_update_darf_…` · `ein_upload_ohne_projektbezug_bleibt_moeglich` | das Ownership-Gate in **drei** Lagen, inklusive „ohne Bezug bleibt erlaubt" |
+| `ein_unbekanntes_projekt_wird_abgelehnt` · `ein_massstab_von_null_oder_darunter_wird_abgelehnt` | Kanten statt Normalfall |
+| `ohne_konfigurierten_import_dienst_bleibt_die_klassifikation_graceful` | der Fall, in dem ein Dienst fehlt — kein Absturz |
+
+**Und der bemerkenswerteste:**
+
+```text
+test_dwg_und_dxf_haben_keine_verlaessliche_signatur_und_werden_ueber_die_endung_angenommen
+```
+
+**Der Test schreibt seine eigene Schwäche in den Namen.** DWG und DXF können nicht am Inhalt geprüft
+werden, also gilt für sie die Endung — **und das steht nicht in einem Kommentar, sondern in einer
+Zusage, die bei jedem Lauf mitläuft.** *Wer die Lücke später schließen will, findet sie, ohne sie zu
+suchen. Und wer sie versehentlich zu schließen glaubt, bekommt einen roten Test.*
+
+**Das ist die Bauart, die ich heute an vielen Stellen vermisst habe** — `PB-010`, `PB-035`, `PB-037`
+sind alle Fälle, in denen eine Zusage etwas festhielt, ohne zu sagen, was sie **nicht** deckt.
+
+**Kein Befund.** *Der Upload-Weg ist damit an Fragen 3, 4, 5, 7 und 8 gemessen und an allen fünf
+erfüllt — geprüft, bevor er committet ist.*
