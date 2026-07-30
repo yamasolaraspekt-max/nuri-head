@@ -5,6 +5,37 @@
 
 ---
 
+## Die wichtigste Regel dieser Anleitung — **ein Befehl, dann warten**
+
+**Entscheidung Yama, 30.07. 22:52, nach dem Reset-Zwischenfall:**
+
+> *„ab jetzt mergen wir anders damit dieses problem nicht mehr auftaucht, du gibst mir nur
+> eins ache die füge ich terminal an, dann schicke ich dir ein kopie hier dann gibst du mir
+> den zweiten befehl — nicht viele befehle in einem text, nur eins"*
+
+**Der Ablauf ab sofort:**
+
+1. Der Planner gibt **genau einen** Befehl.
+2. Yama führt ihn aus und schickt die Ausgabe zurück.
+3. Der Planner liest die Ausgabe, prüft sie **und gibt erst dann den nächsten.**
+
+**Warum das die richtige Lehre ist, und nicht nur Vorsicht:** meine Fassung von 22:34 lieferte
+fünf Befehle in einem Block. Yama hat sie als Ganzes eingefügt — und der eine Befehl darin, der
+im falschen Verzeichnis stand, lief mit durch, **ohne dass irgendjemand dazwischen etwas hätte
+sehen können.** Ein Block ist genau so sicher wie sein schwächster Befehl, und niemand liest
+ihn Zeile für Zeile, wenn er als Ganzes zum Einfügen dasteht.
+
+*Ein Befehl je Nachricht kostet ein paar Minuten. Der Zwischenfall vom 30.07. hat vier Minuten
+gekostet, in denen 231 Commits nur im Reflog standen — und es hätte auch anders ausgehen können.*
+
+**Zusatz, der daraus folgt:** die Befehlsblöcke weiter unten stehen als **Nachschlagewerk**, nicht
+als Kopiervorlage. *Wer sie am Stück einfügt, hat die Regel gebrochen, die über ihnen steht.*
+
+**Und:** ein Befehl, der ein Verzeichnis wechselt, wird **nie** mit einem anderen zusammengefasst.
+*Genau dort ist es passiert.*
+
+---
+
 ## Die zwei Fehler, die diese Anleitung teuer gemacht haben
 
 **Beide standen in meiner Fassung vom 30.07., 22:34. Beide sind an dem Abend eingetreten.**
