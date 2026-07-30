@@ -27030,3 +27030,52 @@ den Rückgabewert.
 **Im Blatt steht diesmal ein Absatz über die Prüfbefehle selbst:** meldet einer etwas Unerwartetes,
 soll er zuerst prüfen, ob der Befehl die Sache misst oder die Gestalt — *und wenn er die Gestalt
 misst, es sagen und anders messen. Das ist kein Ungehorsam, das ist die Arbeit.*
+
+---
+
+## 30.07.2026, 19:54 CEST — S4 geteilt und S4a geschnitten, ohne auf S3 zu warten.
+
+**VOTUM: auftrag=AUF-48-S4a rolle=planner ergebnis=BLATT_LIEGT commit=folgt datum=2026-07-30**
+
+**Ich habe meine eigene Begründung von vor sieben Minuten überprüft und verworfen.** Ich hatte
+geschrieben, S4 lasse sich erst schneiden, wenn S3 gezogen ist, *„weil das JSX mit jeder Scheibe
+schrumpft"*. **Gemessen stimmt das nicht:** S3 nimmt einen `useEffect` heraus, kein JSX.
+
+> **Dieselbe Klasse zum zweiten Mal an einem Abend: eine Regel weiter angewandt, als ihr Grund
+> trägt.** *Sperren enden mit ihrem Grund, nicht mit Gewohnheit — das steht seit dem 29.07. in
+> meinen eigenen Regeln.*
+
+### Scheibe 4 war zu groß und wird geteilt
+
+```yaml
+measurement:
+  observed_at_commit: 59e91b50
+  M-01 HausplanerApp.tsx            2375 Zeilen
+  M-02 JSX-Block ab dem return       1250 Zeilen   # 53 Prozent der Datei
+  M-03 style={{ im JSX                120         # im ganzen Rest der Datei: 13
+  M-04 Hauptfunktion beginnt bei      249, ihr return bei 1126 — NICHT das return bei 232
+```
+
+**Als ein Auftrag wäre das kein Schnitt, sondern ein Umzug.** Geteilt an der Naht, die im Code
+schon steht: **S4a** ist der obere Rahmen (Werkzeugzeile, Objektkopf, Überlauf,
+Arbeitsbereich-Wähler, Bedien-Werkzeugleiste), **S4b** ist alles ab der Bühne.
+
+**M-04 ist der Fund, der mich fast einen Auftrag gekostet hätte:** die Datei hat **zwei**
+`return (` auf gleicher Einrückung. Das erste bei 232 gehört `KontextOptionenLeiste`, nicht der
+Hauptfunktion. **Hätte ich das erste genommen, wäre der Schnitt 2144 statt 1250 Zeilen groß
+gewesen — und quer durch eine fremde Komponente gelaufen.**
+
+### Und die Reihenfolge zu AUF-38 ist damit belegt, nicht behauptet
+
+```text
+Inline-Stellen im JSX-Block         120
+im ganzen Rest der Datei             13
+```
+
+**120 der 133 offenen Stellen liegen in genau dem Block, den S4a und S4b zerlegen.** Wer sie
+vorher abräumte, müsste sie danach ein zweites Mal anfassen. **Yamas Fokus „erst 48, dann 38" ist
+damit gemessen richtig, nicht nur plausibel.**
+
+**K-02 des Blattes misst diesmal ausdrücklich die Sache statt der Gestalt:** es zählt die **Summe**
+der Inline-Stellen über beide Dateien — 133, genau wie vorher, nur anders verteilt. *Sinkt die
+Summe, ist das ein Befund: Aufräumen ist AUF-38.*
