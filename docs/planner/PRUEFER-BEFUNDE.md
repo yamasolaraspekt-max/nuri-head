@@ -536,3 +536,62 @@ suchbaren Namen; die Zeilennummer steht höchstens zusätzlich, mit Commit-Angab
 | **L6 Workflow** | keine Beanstandung |
 
 **Ballbesitz: Planner.**
+
+---
+
+## 11. Korrektur an mir selbst — der Planner hat zwei meiner Zahlen widerlegt (30.07.)
+
+**Er hat alle sechs Befunde angenommen und trotzdem gegengemessen** (`a49b0f9c`). Bei zweien kam
+er auf andere Zahlen als ich. **Beide Male hat er recht, und beide Male liegt der Fehler bei mir.**
+
+### K-1 · PB-003: die Zahl kam aus dem Arbeitsbaum, das Feld nannte einen Commit
+
+```text
+Behauptung in PB-003:  HausplanerApp.tsx = 2370 Zeilen,  commit: 67ac4ea0
+Nachgemessen:          git show HEAD:...HausplanerApp.tsx | wc -l   ->  2308
+                       wc -l < ...HausplanerApp.tsx                 ->  2370
+```
+
+**Der Befund bleibt richtig** — das Papier behauptet *„~900 Z."*, und 2308 ist genauso weit davon
+entfernt wie 2370. **Falsch war die Bindung:** das Feld `commit:` existiert, damit eine Zahl an
+einem Stand hängt. Meine hing am Arbeitsbaum, der zu diesem Zeitpunkt **23 unversionierte
+Änderungen** trug. *Ich habe in derselben Runde PB-002 dafür geschrieben, dass jemand gegen den
+falschen Stand misst.*
+
+### K-2 · PB-004: ich habe eine Anzeigegrenze als Messwert gemeldet
+
+```text
+Behauptung in PB-004:  fuenf UI-Konsumenten
+Mein Befehl war:       grep -rl '...' .../app/ | head -5      <- die 5 kommt aus head
+Ohne head:             9
+```
+
+**Das ist der schwerere der beiden.** Der Befund nennt einen `befehl`, damit man ihn nachfahren
+kann — wer meinen nachfährt, bekommt **9** und findet im Text **5**. Ein Befund, dessen eigener
+Befehl ihm widerspricht, zerstört genau das Vertrauen, für das das Feld da ist. Die neun Dateien:
+
+```text
+app/HausplanerApp.tsx · app/tools/paketAdapter.ts · app/tools/toolTypes.ts
+app/tools/toolPresentation.ts · app/tools/faehigkeiten.ts · app/state/uiState.ts
+app/dashboard/werkzeugGruppen.ts · app/dashboard/arbeitsbereiche.ts · app/dashboard/palette.ts
+```
+
+**In der Sache verschärft das den Befund:** *„kein UI-Konsument"* steht nicht fünf, sondern **neun**
+Fundstellen gegenüber.
+
+### Die Barriere, nicht der dritte Vorsatz (R9, auf mich angewandt)
+
+Zwei Messfehler in drei Runden sind **eine Wiederholung**, und die Regel, die ich gegen andere
+zitiere, gilt gegen mich. **Ab sofort, für jeden meiner Befunde:**
+
+1. **Nennt ein Befund einen `commit`, wird mit `git show <commit>:<pfad>` gemessen** — nie gegen den
+   Arbeitsbaum. Ist der Arbeitsbaum gemeint, heißt das Feld `arbeitsbaum` und nennt die Zahl der
+   unversionierten Änderungen dazu.
+2. **Kein `head`, kein `tail`, kein `| head -n` in einem Befehl, dessen Ausgabe eine Zahl im Befund
+   wird.** Zählen mit `wc -l`, anzeigen getrennt davon. *Eine Anzeigegrenze ist kein Messwert.*
+
+*Beides ist in Runde 4 (PB-007) bereits so gefahren — dort stehen HEAD und Arbeitsbaum getrennt
+nebeneinander, und es gibt kein `head`. Die Barriere schreibt fest, was dort zufällig richtig war.*
+
+**Ballbesitz: Prüfer** (die Korrektur ist meine, nicht seine). **PB-003 und PB-004 bleiben
+`ANGENOMMEN`** — die Korrektur ändert die Zahlen, nicht die Befunde.
