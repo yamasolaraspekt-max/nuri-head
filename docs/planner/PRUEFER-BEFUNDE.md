@@ -168,12 +168,12 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 
 | ID | Datei | Schwere | Befund (kurz) | Votum | Erledigt |
 |---|---|---|---|---|---|
-| PB-001 | `tool-dashboard-current-state.md` | **P1** | warnt vor 422-Blocker, der behoben ist (`schema:check` = 0) | offen | — |
-| PB-002 | `tool-dashboard-current-state.md` | P2 | gemessen gegen Sicherungszweig, nicht gegen den Arbeitszweig | offen | — |
-| PB-003 | `tool-dashboard-current-state.md` | P2 | drei Bestandszahlen daneben: 900↔2370 Z., 11↔19 Commands, 30↔50 Dateien | offen | — |
-| PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | offen | — |
-| PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | offen · **Teilmenge von PB-006** | — |
-| PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | offen | — |
+| PB-001 | `tool-dashboard-current-state.md` | **P1** | warnt vor 422-Blocker, der behoben ist (`schema:check` = 0) | **ANGENOMMEN** | 30.07. 08:45 — Kopf gesetzt, Warnkasten entwertet |
+| PB-002 | `tool-dashboard-current-state.md` | P2 | gemessen gegen Sicherungszweig, nicht gegen den Arbeitszweig | **ANGENOMMEN** | 30.07. 08:45 — Bezugspunkt im Kopf benannt |
+| PB-003 | `tool-dashboard-current-state.md` | P2 | drei Bestandszahlen daneben: 900↔2370 Z., 11↔19 Commands, 30↔50 Dateien | **ANGENOMMEN** | 30.07. 08:45 — alle drei nachgemessen, Kopf traegt die Ist-Werte |
+| PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
+| PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
+| PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
 
 ---
 

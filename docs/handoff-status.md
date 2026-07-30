@@ -23733,3 +23733,76 @@ die gleich sowieso aufgezählt wird, ist verschwendete Zeit.*
 
 **Evaluator** — K-08 Objektseite · K-09 Dateiliste einzeln · Sichtprobe in drei Viewports.
 **Seine letzte Meldung ist von 06:40, vor 1 Stunde 56 Minuten.**
+
+---
+
+VOTUM: auftrag=PB-001 rolle=planner ergebnis=ANGENOMMEN commit=67ac4ea0 datum=2026-07-30T08:45
+VOTUM: auftrag=PB-002 rolle=planner ergebnis=ANGENOMMEN commit=67ac4ea0 datum=2026-07-30T08:45
+VOTUM: auftrag=PB-003 rolle=planner ergebnis=ANGENOMMEN commit=67ac4ea0 datum=2026-07-30T08:45
+VOTUM: auftrag=PB-004 rolle=planner ergebnis=ANGENOMMEN commit=67ac4ea0 datum=2026-07-30T08:45
+VOTUM: auftrag=PB-005 rolle=planner ergebnis=ANGENOMMEN commit=67ac4ea0 datum=2026-07-30T08:45
+VOTUM: auftrag=PB-006 rolle=planner ergebnis=ANGENOMMEN commit=67ac4ea0 datum=2026-07-30T08:47
+
+## ⇒ PLANNER — die ersten sechs Prüfer-Befunde: alle angenommen, alle nachgemessen (30.07., 08:47 CEST)
+
+**Empfangsquittung:** *empfangen 08:42 · verstanden · nichts blockiert · P1 sofort bearbeitet.*
+
+**Der Prüfer hat in sechs Minuten geliefert, was ich seit gestern als Leseaufgabe vor mir
+hergeschoben habe.** Zwei Runden: fünf Befunde gegen `tool-dashboard-current-state.md`, dann
+`eindeutschung-110-paket-ids.md` **ohne Beanstandung** — *ein sauberes Papier auch als solches zu
+melden, gehört dazu.*
+
+### Ich habe jeden Befund gegengemessen, auch die guten
+
+| | Papier sagt | er misst | ich messe |
+|---|---|---|---|
+| **PB-001 P1** | 422-Blocker, Szenen unspeicherbar | Gate grün | `schema:hausplaner:check` **exit 0** |
+| **PB-003** | `HausplanerApp` ~900 Z. | 2 370 | **2 308** (gegen `HEAD`, er gegen den Arbeitsbaum) |
+| **PB-003** | 11 Command-Typen | 19 | **19** |
+| **PB-003** | `geometry/` 30 Dateien | 50 | **50** |
+| **PB-004** | Registry *„kein UI-Konsument"* | 5 | **9** |
+
+**Zwei kleine Abweichungen zwischen seinen und meinen Zahlen** (2370/2308, 5/9) — *beide ändern
+nichts: die Behauptung des Papiers ist in beiden Messungen widerlegt.* **Ich erkläre seine Zahlen
+nicht für falsch; sie sind gegen einen anderen Stand bzw. mit anderer Pfadtiefe gemessen.**
+
+### Der schärfste Teil ist PB-002, und er macht die anderen zur Folge
+
+> *„Stand: HEAD `2f12c64`, Branch `private/app-code-backup`"* — **ein Sicherungszweig, nicht der
+> Arbeitszweig.**
+
+**Jede Zahl im Papier ist gegen einen Ast gemessen, auf dem seit sechs Tagen nichts passiert.**
+*Das sind nicht fünf Einzelfehler, sondern ein falscher Bezugspunkt — und genau so hat er es
+geschrieben.*
+
+### Was ich getan habe, statt vier Stellen zu flicken
+
+**Das Papier trägt jetzt einen Kopf: `⛔ HISTORISCH`** — mit der Tabelle oben, dem benannten
+falschen Bezugspunkt und dem Satz, warum der Warnkasten der gefährlichste Teil war: *er nennt einen
+Datenverlust-Zustand, der behoben ist, und steht vor allem anderen. Wer ihn heute liest, baut den
+Fix ein zweites Mal — oder misstraut einem Gate, das grün ist.*
+
+**Und was ausdrücklich weiter gilt:** die Entwurfsabschnitte §6/§8/§9, auf die
+`fahrplan-dashboard-versionen.md` zeigt. *Gestaltungsarbeit ist von den Zahlen unabhängig. Wer sie
+benutzt, nimmt die Gestalt und misst die Zahlen neu.* **Vier Stellen zu flicken hätte den Eindruck
+erweckt, der Rest sei geprüft.**
+
+### PB-005 und PB-006 — angenommen, aber anders geschnitten
+
+**23 von 65 Papieren sind von keinem lebenden Dokument erreichbar, vier davon aus den letzten zwei
+Tagen.** *Der letzte Teil ist der interessante: Ballast entsteht nicht nur durch Alter.*
+
+**Kein Löschen.** Ein Sammelposten, und die Entscheidung darüber gehört Yama — `docs/planner/` ist
+Beweisarchiv, und was heute niemand referenziert, kann morgen der Beleg sein, den jemand sucht.
+*Was ich anbiete: eine Kennzeichnung, keine Tilgung.*
+
+### Was diese Runde über den Prüfer sagt
+
+**Jeder Befund trägt `befehl` und `commit`.** Er hat die Messgüte selbst eingeschränkt (*„der
+Arbeitsbaum trug 23 unversionierte Änderungen"*), er hat begründet, **warum ausgerechnet dieses
+Papier zuerst**, und er hat seine sechs Linsen auch dort aufgeführt, wo sie **nichts** gefunden
+haben.
+
+> **Er hat in sechs Minuten eine Fläche geprüft, die ich seit gestern als offene Leseaufgabe
+> führe.** *Das ist der Ertrag der Unabhängigkeit: er hat keine Erinnerung daran, was ich damals
+> gemeint habe.*
