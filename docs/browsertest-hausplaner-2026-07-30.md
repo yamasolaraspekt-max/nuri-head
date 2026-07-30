@@ -126,3 +126,49 @@ Laufzeitzusage neben den statischen. Wortlaut zum Übernehmen:
 Der Generator kann diese Zusage selbst fahren (er hat den Browser und den Build).
 Der Evaluator misst sie unabhängig nach. Ich als Planner fahre keine Gates —
 dieses Protokoll ist eine **Beobachtung im Browser**, kein Gate-Lauf.
+
+---
+
+# KORREKTUR 20:15 — meine Kernaussage oben war falsch
+
+**Ich habe geschrieben: „erste Laufzeitprüfung der Bühne überhaupt". Das stimmt nicht.**
+
+Um 20:12 habe ich den Ledger gelesen — er lag die ganze Zeit modifiziert im Arbeitsbaum,
+325 ungestagete Zeilen, und ich habe ihn nicht aufgeschlagen, bevor ich meine Behauptung
+committet habe. Darin steht:
+
+- **Der Generator hat um ~19:4x eine Sichtprobe zu S1 und S2 nachgeholt** — ausdrücklich, weil
+  **Yama ihn danach gefragt hatte**, vor mir. Er hat zuerst gemessen, ob die Blätter eine
+  Sichtprobe überhaupt verlangen (`grep -cE "typ: visuell|Bildschirmfoto|Sichtprobe"` → 0 und 0,
+  gegen 13 bei einem älteren Blatt) und trotzdem geprüft: *„Eine solche Behauptung gehört
+  angesehen, auch wenn kein Kriterium sie verlangt."*
+- **Der Evaluator hat AUF-48-S2 mit einem Vorher-Nachher-Vergleich im laufenden Browser
+  abgenommen** — zwei Worktrees (`59e91b50^` und `59e91b50`), zwei Server auf :8894 und :8895,
+  beide frisch gebaut, gleiches Objekt 203, 1440×900. Acht Messpunkte, alle identisch.
+- **Der Evaluator hat eine Browserprobe mit sichtbarem Chrome und echtem WebGL gefahren** und
+  dabei gefunden, dass **56 px der 3D-Ansicht unerreichbar** sind.
+- **Der Evaluator hat einen eigenen früheren Fehlbefund aufgedeckt:** sein `querySelectorAll`
+  für „Suchen ⌘K" traf den **CRM**-Knopf statt den der Insel, und `[role="dialog"]` stand schon
+  **vor** jedem Klick auf `true`. Ein falsches Grün, richtig im Ergebnis, falsch in der Begründung.
+
+**Was an meiner Aussage haltbar bleibt — und nur das:** keine *Zusage in einem Auftragsblatt*
+hat je eine Laufzeitprobe verlangt. Das ist gemessen (0 und 0 im grep des Generators) und
+begründet die Pflichtzusage L-01 weiterhin. Aber „keine Zusage verlangt es" ist etwas völlig
+anderes als „niemand hat je geprüft" — und ich habe das zweite geschrieben.
+
+**Das ist mein neunter Messfehler heute, und die Klasse ist wieder dieselbe:** eine Aussage über
+den Gesamtstand getroffen, ohne die eine Quelle zu lesen, die sie widerlegt. Der Ledger lag
+offen im Baum. `git status` hat ihn mir in derselben Runde angezeigt, in der ich die Behauptung
+schrieb. Ich habe die Zeile gesehen und nicht hineingesehen.
+
+**Regel daraus, ab sofort:** bevor ich eine Aussage über den Stand *der anderen* treffe, lese ich
+`git diff -- docs/handoff-status.md`. Nicht `git status` — der zeigt nur, **dass** etwas da ist.
+
+## Was von meiner Runde neu bleibt
+
+| | |
+|---|---|
+| **BT-01** | **neu.** Der Evaluator hat die Palette nur im Bereich Architektur verglichen („WERKZEUGE/Markieren/Wand/Fenster/Tür identisch"). Dass sie beim **Bereichswechsel** nicht mitwechselt, hat vor mir niemand gemessen. |
+| **BT-03** | **bestätigt fremd.** Der Evaluator zählt denselben Fehler als „1 (vorbestehend, CRM-Chat)" in beiden Ständen. Deckt sich. |
+| **L-01** | **bleibt.** Beide haben *ad hoc* geprüft, weil Yama fragte. Keine Zusage hat es verlangt. Genau das schliesst L-01. |
+| L-5, L-7 | Doppelarbeit. Der Evaluator hatte 3D und Bühne bereits gemessen, gründlicher als ich. |
