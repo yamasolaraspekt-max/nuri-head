@@ -3606,3 +3606,47 @@ Dienst, und das ist die Schicht, die Frage 9 („Logik im Service, Controller d�
 Controller ist echt, die fehlende Klammer in der Action ist echt — und beide sind richtig so, weil
 die Klammer dort sitzt, wo geschrieben wird.* **Eine Messung, die an der ersten Schicht stehen
 bleibt, meldet einen Fehler, der eine Ebene tiefer behoben ist.**
+
+---
+
+## 54. Runde 39 — Bauordnung §5 Fragen 3 und 7 an den Hausplaner-Migrationen · **keine Beanstandung**
+
+**Gemessen gegen `7c18873b`.** *Frage 3: „Neue `_id`-Spalte bekommt einen echten FK und einen Index."
+Frage 7: „Neue Spalten additiv, echtes `down()`."* Dazu **Dauerdirektive 1** — kein `UPDATE`/`DELETE`
+auf Bestandsdaten.
+
+**Zwei Migrationen, beide vollständig:**
+
+```text
+2026_07_16 create_hausplaner_foundation_tables      87 Z.
+  down():  dropIfExists(snapshots) -> catalog_items -> documents   (Sturzreihenfolge, echt)
+  FK:      1   ·   Indizes: 3   ·   Mutation von Bestandsdaten: 0
+
+2026_07_26 create_hausplaner_configurator_packages  70 Z.
+  down():  dropIfExists(configurator_packages)                     (echt)
+  FK:      2   ·   Indizes: 1   ·   Mutation von Bestandsdaten: 0
+```
+
+### „Drei Tabellen, nur ein FK" — geprüft, und es ist vollständig
+
+**Das war der verdächtige Punkt.** Aufgelöst, Spalte für Spalte:
+
+| Tabelle | `_id`-Spalte | FK | Index |
+|---|---|---|---|
+| `hausplaner_documents` | `alternative_id` | **Z43** `->foreign('alternative_id')` | `unique('alternative_id')` — Z37 |
+| `hausplaner_snapshots` | `hausplaner_document_id` | **`foreignId()->constrained()`** — Z52, `cascadeOnDelete` | `index([document_id, revision])` — Z60 |
+| `hausplaner_catalog_items` | *keine* | — | `index('category')` |
+
+**Der „eine FK" war eine Zählartefakt meiner Suche:** `grep 'foreign('` findet die ausgeschriebene
+Form, **nicht** `foreignId()->constrained()`. **Beide `_id`-Spalten haben einen echten FK, beide einen
+Index, und die Katalogtabelle hat keine Fremdschlüsselspalte, also auch keine Pflicht.**
+
+*Zwölfte vermiedene Fehlmeldung — und die dritte, deren Ursache ein Suchmuster war, das eine
+gleichwertige Schreibweise nicht kennt (nach `head -5`, dem Zeilenanker und dem Klassennamen).*
+**Das Muster meiner Fehler ist inzwischen so einheitlich, dass es eine eigene Zeile im
+Fehlerregister verdient:** *„Suchmuster kennt nur eine von mehreren gleichwertigen Schreibweisen."*
+Sie steht bereits als **F-01** dort — *„Suche nach Muster statt nach Menge"*, Zähler 4. **Meine vier
+Fälle gehören dazugezählt.**
+
+**Kein Befund.** Fragen 3 und 7 sind an den Hausplaner-Migrationen erfüllt, Dauerdirektive 1
+eingehalten: **null Zeilen Bestandsdaten angefasst.**
