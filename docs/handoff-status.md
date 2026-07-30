@@ -23540,3 +23540,65 @@ aussieht.*
 Votum lieferte 0** — mein Muster war zu eng. *Statt es zu glauben, habe ich die Zeile im Ledger
 aufgeschlagen: Z19485, FREIGABE, 29.07. 21:34.* **Siebter Werkzeugfehler-Kandidat, diesmal vor dem
 Schluss gefangen statt danach.**
+
+---
+
+VOTUM: auftrag=BILANZ-VORMITTAG rolle=planner ergebnis=NICHT-NOTWENDIG commit=acb27b6f datum=2026-07-30T08:20
+
+## ⇒ PLANNER — der wichtigste Befund des Vormittags, und er war die ganze Zeit sichtbar (30.07., 08:20 CEST)
+
+**Gemessen, nicht gefühlt:**
+
+```text
+letzter Produktivcode-Commit:   d78c2466   29.07., 21:26
+seitdem vergangen:              10 Stunden 54 Minuten
+Produktivdateien im Baum:       20   (davon 5 neue Zusagedateien)
+geschrieben zwischen:           06:28 und 08:14
+davon T3 fertig seit:           07:13
+```
+
+**In diesen elf Stunden ist kein einziges Produktivcode-Commit gelandet.** Was committet wurde,
+war ausschließlich `docs/` — **und zwar von mir.**
+
+### Die Bilanz, ungeschönt
+
+**Heute Vormittag habe ich produziert:** ein Regelwerk auf drei Ebenen, ein Konzept, vier
+Rollenblätter, einen Prüfer-Eingang, zwei Auftragsblätter, ein Dutzend Register-Korrekturen.
+
+**In derselben Zeit ist null Produktivcode gelandet.**
+
+> **Das ist genau das Muster, vor dem Yamas eigener Befund warnt:** *„der Planner optimiert auf
+> sichtbare Aktivität statt auf Entscheidungsqualität."*
+> **Ich habe die Aktivität nicht abgestellt, sondern verlagert** — von langen Auftragsblättern zu
+> Register-Politur. *Beides sieht nach Arbeit aus. Beides landet nicht im Produkt.*
+
+**Die Register-Arbeit war richtig** — sieben Steuerungsmarken und drei tote Ballbesitze waren echte
+Fehler. **Sie war nur nicht der Engpass.**
+
+### Der Engpass ist, dass fertige Arbeit nicht landet
+
+**Drei Erklärungen sind mit der Messung vereinbar, und ich behaupte keine:**
+
+1. Der Bauende wartet auf etwas, das ich nicht gegeben habe.
+2. Er ist blockiert (`529` um 08:10 gemeldet).
+3. Er hält bewusst zurück, weil ein Gate nicht grün ist.
+
+**Was ich NICHT tue:** in seinen halbfertigen Baum greifen, seine Gates fahren oder für ihn
+committen. *Das wäre Rollenbruch, und es würde die Ursache verdecken statt sie zu beheben.*
+
+**Was ich getan habe:** T3 und AUF-87 um 08:05 ausdrücklich freigegeben, die Sperre R18 um 07:12
+aufgehoben, zwei baubare Aufträge bereitgelegt. **Von meiner Seite steht nichts im Weg — und wenn
+doch, dann weiß ich nicht, was.**
+
+### Was ich Yama vorlege
+
+**Eine Zahl, keine Vermutung:** seit 10 Stunden 54 Minuten landet kein Produktivcode, obwohl
+20 Dateien fertig im Baum liegen. **Das ist die Kennzahl, die zählt** — nicht die Anzahl meiner
+Regeln.
+
+*Und die ehrliche Selbsteinschätzung dazu: mein Beitrag zu diesem Vormittag liegt vollständig in
+`docs/`. **Das ist meine Rolle, aber es ist kein Ergebnis.***
+
+### Nebenbefund
+
+`k01n1b.mjs` liegt seit 07:36 im Wurzelverzeichnis des Repos. *Weiterhin nur eine Beobachtung.*
