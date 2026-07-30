@@ -21697,3 +21697,178 @@ Meldungen einordnen, Sperren lösen. *Reaktionszeit war heute der Grund, warum n
 > einzige der sieben Maßnahmen, die Yama selbst genehmigen musste, weil der Takt von ihm kam.
 
 **Letztes Blatt: `AUF-88-P1`, 06:58. Nächstes frühestens 07:58.**
+
+---
+
+## 2026-07-30, 07:26 CEST — GENERATOR: QUITTUNG zu `AUF-87` (Validator) — **TRÄGT**, mit drei Befunden
+
+*Zeit gemessen. Gezogen nach Yamas Entscheid: M1 direkt nach T3.*
+
+```text
+QUITTUNG
+Task:              AUF-87 — scripts/auftrag-pruefen.sh
+Auftragsversion:   b9f80087
+Je Kriterium — Prüfverfahren vorhanden?
+  K-01 JA · K-02 JA · K-03 JA · K-04 JA · K-05 JA · K-06 JA · K-07 JA · K-08 JA
+Grundgesamtheit ausführbar:   JA — gefahren, Zahlen unten
+Kriterien mit fehlendem Feld: KEINE
+Widersprüche:                 EINER (Befund 2) — kein Blocker, aber du entscheidest
+Nicht ausführbare Punkte:     KEINE
+Ergebnis:                     TRÄGT
+```
+
+```text
+population_command gefahren:
+  ls docs/auftraege/{generator,evaluator}-auftrag-*.md | wc -l   →  80
+  grep -l 'pruefung:' docs/auftraege/*.md | wc -l                →  13
+js-yaml im Baum: 4.1.1  ✓ (keine Nachinstallation nötig)
+scripts/__tests__/: existiert noch nicht — ich lege ihn an
+```
+
+### Befund 1 — `pfade` nennt einen Abschnitt, den es nicht gibt
+
+`docs/auftraege/AUFTRAGSSCHEMA.md   # NUR der Abschnitt "Wie geprueft wird"`. **Diesen Abschnitt
+gibt es nicht.** Die Datei hat neun: *0 Warum · 1 Der Kopf · 2 Die Prueftypen · 3 Wer prueft was ·
+4 Das Votum · 5 Wiederholungsfehler · 6 Aufwand · 7 Was als Naechstes zu bauen ist · 8 Was das
+Schema NICHT loest.* **Ich schreibe in §7** — dort steht der Validator als offener Posten, dort
+gehört sein Vollzug hin.
+
+### Befund 2 — das Schema und dein Blatt beschreiben ZWEI VERSCHIEDENE Validatoren
+
+**Dein Blatt prüft AUSFÜHRBARKEIT:** läuft der Befehl, was ist sein Exitcode, ist seine Ausgabe
+leer, steht er auf der Denylist, ist er überhaupt maschinell.
+
+**`AUFTRAGSSCHEMA.md §7` verlangt fünf STRUKTUR-Prüfungen** — und die stehen in keinem deiner acht
+Kriterien:
+
+```text
+1. genau EIN Auftrag mit status: aktiv
+2. jedes Kriterium hat typ UND pruefung.befehl (oder manual MIT Begruendung)
+3. jedes P0/P1-Kriterium vom Typ absence hat einen presence/behavioural-Partner
+4. jedes coverage-Kriterium hat ein population_command, und der Befehl ist ausfuehrbar
+5. jeder Eintrag unter ausschluesse hat grund UND entschieden_von
+```
+
+**Beide sind sinnvoll, und sie fangen Verschiedenes.** Prüfung 3 ist genau die R2-Regel, an der wir
+uns heute mehrfach gerieben haben; Prüfung 1 hätte gefangen, dass zwei Blätter gleichzeitig
+`status: aktiv` trugen.
+
+**Ich baue, was in deinem Blatt steht** — den Umfang erweitere ich nicht eigenmächtig. *Die fünf
+Strukturprüfungen sind eine Zeile Entscheidung wert: als `AUF-87-N2` hinterher, oder jetzt mit
+hinein. Mein Rat: hinterher — sie brauchen einen eigenen Zuschnitt, und der Validator ist ohne sie
+schon wirksam.*
+
+### Befund 3 — deine Herkunftszahl ist zu klein, aber sie ist keine Bedingung mehr
+
+`population_at_writing_ALT` sagt *„über 40 Blätter"*; gemessen sind es **80**, davon **13** mit
+`pruefung:`. **Nach R19 ist das ein Herkunftsnachweis und keine Bedingung** — ich melde die
+gemessene Zahl und übernehme deine nicht, mehr ist hier nicht zu tun. *Der Validator wird über 80
+Blätter laufen, nicht über 40; 67 davon haben keinen Kopf und müssen als `KEIN KOPF` durchgehen,
+nicht als Fehlschlag. **Das ist genau K-04, und es ist jetzt das häufigste Ergebnis, nicht der
+Randfall.***
+
+**Ich baue jetzt.** Kein Commit, kein Push.
+
+---
+
+## ⇒ PLANNER — Yamas Systemvorschlag ist vollständig eingearbeitet (30.07., 07:32 CEST)
+
+**Yama hat ein vollständiges Systemkonzept geliefert und verlangt, es vollständig zu
+berücksichtigen. Ich nehme es vollständig an** — einschließlich der zwei Punkte, die meine eigene
+Arbeit von heute früh korrigieren.
+
+### Neue Dateien
+
+```text
+docs/agents/KONZEPT-EVIDENZBASIERTE-PLANUNG.md   389 Zeilen — ersetzt den Massnahmenplan
+docs/agents/regeln/kern.md                        97 Zeilen — Ebene 1, IMMER geladen
+```
+
+### Der Kernbefund, den ich annehme
+
+> *Die Ursache ist kein Charaktermangel, sondern ein schlecht konstruiertes Arbeitssystem: der
+> Prozess belohnt schnelles Schreiben, versteckt Regeln, lässt Messungen veralten und verhindert
+> Fehler nicht mechanisch.*
+
+**Das System vermischt fünf Tätigkeiten in einem Takt** — beobachten, Bestand verstehen,
+entscheiden, formulieren, melden. **Der Planner optimiert dadurch auf sichtbare Aktivität statt
+auf Entscheidungsqualität.** *Das erklärt die Messung dieses Tages besser als meine eigene
+Diagnose.*
+
+### Zwei Korrekturen an mir, beide berechtigt
+
+**1. R19 war zu grob.** *„Keine Zahl im Auftrag"* löst ein Problem und erzeugt ein neues — Zahlen
+sind oft notwendig. **Verboten ist die unbelegte oder veraltete Zahl, nicht die Zahl.** Neu:
+
+```yaml
+measurement:
+  command: "..."
+  observed_value: 2
+  observed_at_commit: "39855b52"
+  observed_at: "2026-07-30T07:17:00+02:00"
+  freshness_rule: "must_match_current_head"
+  purpose: "scope boundary"
+```
+
+**Weicht der Commit von HEAD ab, wird vor Ausführung neu gemessen.** *Das erhält die Information
+und bindet sie an einen Beweis — besser als mein Verbot.* R19 ist im Regelwerk neu gefasst.
+
+**2. Die Stundengrenze war wieder ein Zeitmaß.** Ab sofort gilt: **ein Auftrag entsteht
+ereignisbasiert, wenn das Readiness-Gate grün ist** — kein Mindest- und kein Höchstmaß.
+*Zeitmaße waren die Ursache; eine neue Zeitgrenze wäre dieselbe Falle mit anderem Wert.*
+
+### Was neu gilt
+
+- **Grundformel:** `Bestand → Messung → Abweichung → Entscheidung → erst dann Auftrag`
+- **Vier Gates** vor jedem Auftrag: Bestand · Abweichung · Wirkung · Prüfbarkeit.
+  **Fehlt ein Nachweis: `NICHT PLANUNGSREIF`** — nicht *„vorsichtiger sein"*.
+- **Drei Phasen:** Discovery (read-only) → Decision → Build Contract.
+  **Der Standardfall in Phase 2 ist nicht „neu bauen".**
+- **Sechs Aussagetypen:** `FACT · MEASUREMENT · INFERENCE · HYPOTHESIS · DECISION · OPEN QUESTION`.
+  *Eine Hypothese darf nicht als Fakt in einen Bauauftrag gelangen.*
+- **Kommunikations-SLA:** eilige Aufträge brauchen keine sofortige Lösung, aber eine sofortige
+  Empfangsquittung. *`EVAL-A` lag heute 40 Minuten ohne eine, und ich habe in der Zeit einen
+  Wettlauf konstruiert, den es nicht gab.*
+- **Regelwerk auf drei Ebenen.** `regeln/kern.md` ist Ebene 1 und wird immer geladen.
+  **Der Ledger bleibt Historie — er ist kein Regelwerk.**
+
+### Zwei Punkte brauchen Yamas Entscheidung
+
+1. **Der Plan Reviewer** (`Planner → Plan Reviewer → Generator → Evaluator`) **braucht eine vierte
+   Instanz.** *Der Generator darf einen Auftrag ablehnen — aber er sollte nicht der Erste sein,
+   der offensichtliche Planungsfehler entdeckt.* Bis dahin übernimmt der Evaluator die Planprüfung
+   als getrennten Vorgang.
+2. **Die Punkte 11–14 der Umsetzung** (Skill-System, automatische Kennzahlen, CI-Blockade,
+   Beispielsammlung) sind mehrere Tage und konkurrieren mit der Layout-Kette und der
+   Dateiplattform. **Reihenfolge gehört Yama.**
+
+---
+
+## ⇒ PLANNER — drei Antworten auf die AUF-87-Quittung (30.07., 07:32 CEST)
+
+**Empfangsquittung nach der neuen SLA:** *empfangen 07:30 · verstanden · nichts blockiert ·
+Antwort sofort, weil zwei Befunde auf eine Zeile von mir warten.*
+
+**Befund 1 angenommen.** Den Abschnitt *„Wie geprueft wird"* gibt es nicht — selbst nachgesehen,
+`AUFTRAGSSCHEMA.md` hat neun Abschnitte. **`pfade` nennt jetzt Abschnitt 7.** *Sechste Ausprägung
+von F-04: ein Artefakt benannt, das ich nicht geprüft hatte.*
+
+**Befund 2 — dein Rat gilt.** Es sind inzwischen drei Listen: dein Blatt (Ausführbarkeit),
+Schema §7 (fünf Strukturprüfungen), Konzept §8 (Evidenz, Konflikt, Reuse, Freshness).
+**Entscheid: drei Stufen desselben Werkzeugs, jede für sich abnehmbar.**
+
+```text
+AUF-87      Ausfuehrbarkeit   im Bau, Umfang unveraendert
+AUF-87-N2   Struktur          Blatt folgt, wenn das Gate gruen ist
+AUF-87-N3   Evidenz           danach
+```
+
+*Zwei der fünf Strukturprüfungen begründen, warum N2 nicht verfällt:* **Prüfung 1** (genau ein
+`status: aktiv`) hätte die vier stehengebliebenen `status:` gefangen; **Prüfung 3** (jedes
+P1-`absence` braucht einen `presence`-Partner) ist wörtlich die Regel, an der T2 gescheitert wäre.
+
+**Befund 3 — nichts zu tun, aber eine Verschärfung.** Dein Nebensatz ist ein Entwurfsbefund:
+*„67 haben keinen Kopf … das ist jetzt das häufigste Ergebnis, nicht der Randfall."*
+**K-04 verlangt jetzt eine aggregierte Meldung**: eine Zeile mit Anzahl, die Liste hinter einem
+Schalter. **Ein Werkzeug, das bei jedem Lauf 67 Warnungen ausgibt, wird abgeschaltet** — und dann
+fängt es auch die 13 nicht mehr, für die es gebaut ist.

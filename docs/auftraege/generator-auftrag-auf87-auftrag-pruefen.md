@@ -38,7 +38,7 @@ scope:
   pfade:
     - scripts/auftrag-pruefen.sh
     - scripts/__tests__/auftragPruefen.test.mjs      # oder der uebliche Ort fuer Skript-Zusagen
-    - docs/auftraege/AUFTRAGSSCHEMA.md               # NUR der Abschnitt "Wie geprueft wird"
+    - docs/auftraege/AUFTRAGSSCHEMA.md               # KORRIGIERT 30.07. 07:32 auf deinen Befund 1: NUR Abschnitt 7 ("Was als Naechstes zu bauen ist"). Den von mir genannten Abschnitt gibt es nicht — sechste Auspraegung von F-04, und du hast sie gemeldet statt sie zu umgehen.
   ausschluesse:
     - stelle: "alle bestehenden Auftragsblaetter"
       grund: >
@@ -197,3 +197,53 @@ läuft; R17 verlangt, dass der Planner ihn überhaupt schreibt.*
 2. **T5** — liegt, gesperrt bis T3 gebaut ist und der K-08-Wert steht.
 3. **Dieses Blatt (AUF-87)** — der Validator. *Er berührt keine einzige Datei der Layout-Kette;
    fällt T3 oder T5 auf eine Rückfrage zurück, kann er dazwischenlaufen, ohne etwas zu blockieren.*
+
+---
+
+## NACHTRAG 30.07., 07:32 — drei Antworten auf deine Quittung
+
+**Empfangsquittung zuerst** (die neue SLA aus dem Konzept): *empfangen 07:30 · verstanden ·
+nichts blockiert · Antwort sofort, weil du auf zwei davon wartest.*
+
+### Befund 1 — angenommen, das Blatt ist korrigiert
+
+**Den Abschnitt gibt es nicht.** Selbst nachgesehen: `AUFTRAGSSCHEMA.md` hat neun Abschnitte,
+keiner heißt *„Wie geprueft wird"*. **`pfade` nennt jetzt Abschnitt 7** — dort steht der Validator
+als offener Posten, dort gehört sein Vollzug hin. *Sechste Ausprägung von F-04: ich habe ein
+Artefakt benannt, das ich nicht geprüft hatte.*
+
+### Befund 2 — dein Rat gilt, und aus zwei Listen werden drei Stufen
+
+**Du hast recht, dass es zwei verschiedene Validatoren sind.** Inzwischen sind es drei Listen:
+dein Blatt (Ausführbarkeit), `AUFTRAGSSCHEMA §7` (fünf Strukturprüfungen), und seit 07:30 das
+Konzept `KONZEPT-EVIDENZBASIERTE-PLANUNG.md §8` (Evidenz, Konflikt, Reuse, Freshness).
+
+> **Entscheid: drei Stufen desselben Werkzeugs, jede für sich abnehmbar (R5).**
+>
+> | | Umfang | Zustand |
+> |---|---|---|
+> | **AUF-87** | **Ausführbarkeit** — drei Meldungsstufen, Denylist | **im Bau, unverändert** |
+> | **AUF-87-N2** | **Struktur** — die fünf Prüfungen aus Schema §7 | Blatt folgt, wenn das Gate grün ist |
+> | **AUF-87-N3** | **Evidenz** — Freshness gegen HEAD, Ticket-Konflikt, Reuse, unbelegte Zahl | Blatt folgt danach |
+>
+> **Dein Umfang bleibt, wie er ist. Ich erweitere ihn nicht.**
+
+*Zwei der fünf Strukturprüfungen sind besonders viel wert und begründen, warum N2 kommt und nicht
+verfällt:* **Prüfung 1** (*genau ein Auftrag mit `status: aktiv`*) hätte die vier Fälle gefangen,
+in denen ein `status:` stehengeblieben ist. **Prüfung 3** (*jedes P1-`absence` braucht einen
+`presence`-Partner*) ist wörtlich die Regel, an der T2 gescheitert wäre, hätte der Evaluator nicht
+von Hand die Navigation zurückgeholt.
+
+### Befund 3 — nichts zu tun, aber eine Verschärfung an K-04
+
+**Nach R19 ist die Herkunftszahl keine Bedingung** — du hast die gemessene genommen, das ist
+richtig, mehr ist nicht zu tun.
+
+**Aber dein Nebensatz ist ein Entwurfsbefund:** *„67 davon haben keinen Kopf … das ist jetzt das
+häufigste Ergebnis, nicht der Randfall."*
+
+> **K-04 wird verschärft: `KEIN KOPF` wird AGGREGIERT gemeldet, nicht je Datei.**
+> Eine Zeile mit der Anzahl und, auf Wunsch, die Liste hinter einem Schalter.
+> **Ein Werkzeug, das bei jedem Lauf 67 Warnungen ausgibt, wird abgeschaltet** — und dann fängt
+> es auch die 13 nicht mehr, für die es gebaut ist. *Das ist dieselbe Klasse wie „keine stille
+> Kappung", nur andersherum: nicht zu wenig melden, sondern zu viel.*
