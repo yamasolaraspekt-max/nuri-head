@@ -3776,3 +3776,50 @@ durchlassen."*
 **Erledigt wenn:** *jedes von Tafel 3a/3b genannte Blatt trägt einen Kopf* — **oder** der Validator
 kennt einen Schalter (`--verlange-kopf`), der `KEIN KOPF` zu einem Fehlschlag macht, sodass ein Gate
 ihn nicht überliest. *Der zweite Weg ist eine Zeile und schützt auch die Blätter, die noch entstehen.*
+
+---
+
+## 57. Runde 42 — der Validator im Betrieb, und eine Lagemeldung
+
+**Gemessen gegen `8ebef114`.**
+
+### Zwei aktive Blätter tragen einen Befund
+
+```text
+bash scripts/auftrag-pruefen.sh <blatt>       (je einzeln, sauber gemessene Exit-Codes)
+  generator-auftrag-auf50-s1-werkzeug-landkarte.md          exit = 1
+  generator-auftrag-auf83-t3-n1-zeile-eins-verschlanken.md  exit = 1
+```
+
+**Der Validator meldet an beiden aktiven Blättern einen Fehlschlag.** *Beim zweiten habe ich in
+Runde 41 den Grund gesehen: ein `coverage`-Kriterium ohne `population_command`.* **Ballbesitz:
+Planner** — es sind seine Blätter, und der Validator ist genau dafür gebaut.
+
+### Was ich nicht liefern konnte, und warum
+
+**Der Durchlauf über alle 15 aktiven Blätter lief in die Zeitgrenze (2 Minuten).** Gemessen:
+**ein Blatt mit Kopf braucht ~5 Sekunden** — weil der Validator die Prüfbefehle **wirklich ausführt**,
+statt sie nur zu lesen.
+
+**Das ist keine Beanstandung, sondern eine Eigenschaft, die man kennen muss:** *ein Gate, das ihn über
+15 Blätter fährt, kostet gut eine Minute; über 82 Blätter wären es sieben.* **Er ist ein Prüfstand,
+kein Linter** — und für einen Prüfstand sind 5 Sekunden je Blatt günstig. *Ich nenne es, weil
+`PB-019`s zweiter Weg („Schalter `--verlange-kopf`") dann in einem Gate landet, und dort zählt die
+Laufzeit.*
+
+### Lagemeldung: drei Dateien liegen gestaged
+
+```text
+gestaged:  app/Services/Import/DateiSignatur.php
+           database/migrations/2026_07_30_105516_add_projektbezug_to_plan_uploads.php
+           tests/Feature/PlanUploadTest.php
+im Baum:   PlanUploadController.php · PlanKlassifizieren.php · PlanUpload.php · routes/web.php
+```
+
+**Das ist AUF-88 (Dateiplattform), und die Lage ist dieselbe wie bei `PB-032`:** wer ohne Pfadangabe
+committet, nimmt die drei mit. **Kein neuer Befund** — `PB-032` ist geschlossen, weil der Generator
+damals selbst committet hat, und die Regel R13 (`git commit -- <pfade>`) steht. *Ich vermerke es als
+Lage, nicht als Vorgang: eine Migration im Index ist die teuerste Art von Beifang, weil sie beim
+nächsten `migrate` läuft.*
+
+**Meine eigenen Commits nennen weiter ihre Pfade** — auch dieser.
