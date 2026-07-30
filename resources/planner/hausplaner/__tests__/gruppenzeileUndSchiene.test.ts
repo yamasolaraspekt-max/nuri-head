@@ -115,5 +115,6 @@ test('K-01 (Grenze): die Messreihe ist NICHT mitgewandert — sie umschliesst au
   // Und die Bühne steht weiterhin in derselben Reihe wie die Schiene — Geschwister, nicht verschachtelt.
   const reihe = app.indexOf('<div ref={inhaltRef}');
   assert.ok(app.indexOf('<PlanerSchiene', reihe) > reihe, 'die Schiene steht nicht mehr in der Messreihe');
-  assert.ok(app.indexOf('<Stage', reihe) > reihe, 'die Bühne steht nicht mehr in der Messreihe');
+  // AUF-48 Scheibe 4c: die Buehne ist selbst ausgezogen; in der Messreihe steht jetzt ihr Aufruf.
+  assert.ok(app.indexOf('<Buehne', reihe) > reihe, 'die Bühne steht nicht mehr in der Messreihe');
 });

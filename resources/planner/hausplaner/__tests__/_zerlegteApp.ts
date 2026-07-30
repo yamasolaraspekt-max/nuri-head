@@ -32,6 +32,7 @@ export const TEILE = [
   'app/HausplanerApp.tsx',
   'app/dashboard/Kopfrahmen.tsx',            // AUF-48-S4a: Werkzeugzeile, Bereich-Wähler, Bedienleiste
   'app/rahmen/GruppenzeileUndSchiene.tsx',   // AUF-48-S4b: Themen-Gruppen, Kontext-Optionen, Schiene
+  'app/rahmen/Buehne.tsx',                   // AUF-48-S4c: die Konva-Ebenen des 2D-Grundrisses
 ] as const;
 
 /** Der rohe Text eines einzelnen Teils. */
