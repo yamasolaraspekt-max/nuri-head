@@ -236,7 +236,7 @@ Rollentrennung.**
 | PB-040 | `db` + Ledger | Eine gelaufene Migration lag in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | **ERLEDIGT** (A: `fba60e6e` · B: Ledger 12:28) | — |
 | PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4 trägt die Zahlen von **vor** der 08:12-Korrektur; F-04s Barriere-Zelle ist überholt; `bestand.sh`/`VORLAGE.md` fehlen | **P2** | offen | Planner |
 | PB-043 | `ChatController.php:70,281` + `config/logging.php:21,57` | Zwei unbedingte `Log::info` in einem gepollten Endpunkt schreiben **64 086** Zeilen in ein **212 MB** grosses, nicht rotierendes Log | **P2** | offen | Planner |
-| PB-044 | `--env=testing` ohne `.env.testing` | Ein Schalter, der auf die Test-Umgebung zeigt, trifft **stillschweigend die Arbeits-DB** | **P3** | offen | Planner |
+| PB-044 | `--env=testing` ohne `.env.testing` | Ein Schalter, der auf die Test-Umgebung zeigt, traf **stillschweigend die Arbeits-DB** | P3→**P2** (Planner) | **ERLEDIGT** 21:43 — nachgemessen | — |
 | PB-045 | mein eigener Messbefehl | `--date=format:` zeigt die Zone des Committers — **45 von 116** heutigen Commits zwei Stunden zu früh | **P3** | **ERLEDIGT** (Barriere gesetzt) | Prüfer |
 | PB-039 | `PRUEFER-BEFUNDE.md` (mein Register) | Acht Befunde hatten einen Abschnitt, aber **keine Zeile** — Ursache F-14 (`str.replace` traf nicht) | **P2** | **ERLEDIGT** (38 Zeilen = 38 IDs) | Prüfer |
 | PB-042 | (Betrieb) `git log` | **109 Commits heute, 2 davon Produktivcode, 66 von mir** — docs/Code 7:1, mein Register allein 4 265 Z. | **P2** | offen | **Yama** (Takt) |
@@ -4649,3 +4649,48 @@ FOLGE:       L7 braucht keinen neuen Inhalt, sondern eine Tafelzeile, die auf
 
 **Ballbesitz: Planner.** *Wenn er die Prämisse korrigiert, ist seine Entscheidung vollständig belegt —
 und ich schliesse PB-046 in dem Moment, in dem AUF-91 die Sperre sichtbar macht.*
+
+---
+
+## 74. Runde 232 — **PB-044 ERLEDIGT. Der erste Befund, den eine Mahnung geschlossen hat.**
+
+**Nachgemessen 21:43 CEST (`date`) — ohne eine einzige Zeile der Datei zu lesen.**
+
+```text
+.env.testing                          vorhanden, 137 Zeilen
+DB_DATABASE=ticket_testing                1     <- die Sperre steht
+DB_DATABASE=ticket                        0     <- die Falle ist zu
+APP_ENV=testing                           1
+Zeilen mit Passwort/Schluessel            3     <- gezaehlt, NICHT gelesen
+von git ignoriert                        ja     <- keine Zugangsdaten in der Historie
+```
+
+**`--env=testing` bedeutet jetzt, was es sagt.** Vorher fiel Laravel ohne diese Datei auf `.env`
+zurück und traf die Arbeits-DB `ticket`; die Test-DB war allein in `phpunit.xml` erzwungen, also nur
+für den Weg über `phpunit`.
+
+**Die Prüfung selbst folgt meiner PB-038-Barriere:** *ich habe `grep -c` gezählt und `Datei:Zeile`
+genannt — kein Wert wurde wiederholt, keine Zeile zitiert.* **Eine Umgebungsdatei prüft man mit
+Zählungen, nicht mit Augen.** Dass sie von `git check-ignore` erfasst ist, habe ich mitgemessen: die
+drei Geheimnis-Zeilen können nicht in die Historie geraten — genau der Fehler, den ich heute Vormittag
+selbst gemacht habe.
+
+### Der Weg, in Zahlen
+
+```text
+12:29   PB-044 gemeldet, P3
+~12:4x  Planner hebt auf P2 — er hielt ihn fuer schwerer als ich
+21:07   MAHNUNG 2: ".env.testing ist eine Datei mit einer Zeile"
+21:26   als Kleinauftrag geschnitten
+21:43   gebaut und nachgemessen                          -> 9h 14min von Meldung bis Behebung
+                                                            36 min von der Mahnung bis zur Behebung
+```
+
+**Das ist der Beleg für Yamas Regel von heute Abend.** *Neun Stunden lag der Befund; er bewegte sich
+nicht, weil er zugestellt war, sondern weil jemand dahinter blieb.* **Melden reicht nicht. Nachhalten
+schliesst.**
+
+**Es bleiben vier offene Nicht-Papier-Befunde:** `PB-043` (Log, geschnitten) · `PB-041`
+(`bestand.sh`/`VORLAGE.md`) · `PB-046` (375 px, P3 mit Ziel, AUF-91) · `PB-042` (Takt, bei Yama).
+
+**Ballbesitz: keiner** — geschlossen.
