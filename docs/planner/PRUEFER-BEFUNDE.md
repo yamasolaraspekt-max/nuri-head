@@ -930,3 +930,58 @@ Skript-Zusage danebengestellt — **aber die alte Liste steht weiter da und prü
 | **L6 Workflow** | keine Beanstandung |
 
 **Ballbesitz: Planner** (PB-009) · **Evaluator** (PB-010, `eigenarbeit`).
+
+---
+
+## 16. Runde 9 (30.07.) — `inventur-werkzeug-icons-2026-07-25.md`: **keine Beanstandung**
+
+**Gemessen gegen `8f423b2b`.**
+
+| Behauptung | Gemessen |
+|---|---|
+| **9** Werkzeuge, die die Leiste wirklich rendert (`toolRegistry.ts`) | **9** |
+| **54** Einträge im Katalog (`toolCatalog.ts`) | **stillgelegt** — `toolCatalog.ts` ist heute ein 25-Zeilen-Weiterreichen des 110er-Pakets; die 54 liegen als Trail in `toolCatalogStillgelegt.ts` |
+| **110** im neuen Paket (`src/tool-registry.json`) | Pfad existiert nicht mehr — das Paket ist `werkzeugPaket.ts` (101) + Registry (9) = **110** |
+
+**Kein Befund.** Die 54 beschreiben den Zustand **vor** I2/AUF-21, und **der Code sagt das selbst**:
+*„Vorher standen hier 54 aus einem InDesign-Paket abgeleitete Einträge … Sie sind stillgelegt, nicht
+gelöscht."* Zitiert wird das Papier nur von **abgeschlossener** Arbeit (`I1`, Archiv-Einträge AUF-20
+und AUF-21). Nach dem Raster ist eine historische Aufnahme, die als Herkunft zitiert wird, keine
+Schwäche.
+
+### Die Icon-Abdeckung, weil sie sichtbar brechen würde
+
+```text
+Werkzeug-IDs (Paket 101 + Registry 9)   110
+SVG-Dateien in public/hausplaner/icons/tools/   111
+IDs ohne Icon-Datei                       0
+Icon-Dateien ohne Werkzeug                1   (_sprite)
+```
+
+**Lückenlos.** *Nebenbefund ohne Wirkung, geprüft und verworfen:* das Feld `icon` im Paket führt
+`icons/<id>.svg`, die Dateien liegen unter `icons/tools/`. **Das Feld wird nicht als URL benutzt** —
+`werkzeugGruppen.ts:100` baut den Pfad aus der `id`: `/hausplaner/icons/tools/${t.id}.svg`, und der
+Kommentar darüber nennt genau diesen Grund. Kein Bild bricht.
+
+### Dritte Beinahe-Fehlmeldung, wieder von der Gegenrechnung gefangen
+
+Mein erster Abgleich verglich `icons/<id>.svg` gegen `icons/tools/<id>.svg` und meldete
+**101 fehlende Icons**. Gefangen hat es nicht die Sorgfalt, sondern die Unmöglichkeit: *101 kaputte
+Icons in einer Oberfläche, die täglich benutzt wird, hätte jemand gesehen.*
+
+**Damit ist das Muster dreimal aufgetreten** (Runde 2: falsche Spalte · Runde 6: zsh-Modifikator und
+zu enges Muster · Runde 9: Pfad-Präfix). **Jedes Mal war es die Extraktion, nie die Bewertung**, und
+jedes Mal hat eine zweite Zahl es gefangen. Die Barriere aus §11 deckt es bereits ab; die Zahl
+gehört trotzdem ins Register, weil sie zeigt, **wo** die Prüfarbeit fehleranfällig ist: nicht im
+Urteil, sondern im `grep`.
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | keine Beanstandung — der stillgelegte Katalog steht als Trail daneben, nicht als zweite Wahrheit |
+| **L4 Kausalität** | keine Beanstandung — Werkzeug → Icon-Datei ist lückenlos |
+| **L5 Plausibilität** | keine Beanstandung *(und zum dritten Mal die Linse, die meinen eigenen Fehler fing)* |
+| **L6 Workflow** | nicht geprüft |
+
+**Kein Befund.**
