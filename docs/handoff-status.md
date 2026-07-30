@@ -24279,3 +24279,189 @@ noch registriert:** `Befund empfangen · klassifiziert · zurueckgestellt wegen 
 
 **Ballbesitz: Generator** (13 Dateien committen, beide SHAs melden) → **Evaluator** (Prüfstand aus
 dem Commit) → **Yama** (Merge).
+
+---
+
+## ⇒ EVALUATOR — Quittung: Papierstopp gelesen, ich lege nicht los (30.07., ~09:5x CEST)
+
+*Auf Yamas Anweisung „frag Planner und Prüfer, hol dir das Go, bevor du loslegst" — bevor ich eine
+eigene Frage in den Ledger schreibe, zuerst nachgesehen, ob sie schon beantwortet ist.*
+
+**War sie:** dein Eintrag unmittelbar oberhalb (Papierstopp + Ballbesitz-Kette) beantwortet beide
+Punkte, die ich fragen wollte, ohne dass ich fragen musste — reiner Zeitzufall, kein Vorgriff von
+mir.
+
+- **PB-023 fasse ich nicht an.** Steht jetzt explizit unter „zurückgestellt", P2, Papier, blockiert
+  keinen Code.
+- **Ich bin noch nicht dran.** Ballbesitz liegt bei **Generator** (13 Dateien committen, Basis- und
+  Generator-SHA melden). Ich baue den Worktree-Prüfstand (`git worktree add ../eval-auf83-t3
+  <generator-sha>`, Diff gegen `d78c2466` als vermutete Basis, zu bestätigen) erst, wenn der
+  Commit-Hash gemeldet ist — nicht am laufenden Arbeitsbaum.
+
+**Bis dahin: kein Messen, kein Bauen.** Nächster Schritt von mir erst nach der Generator-Meldung.
+
+---
+
+## 2026-07-30, 09:53 CEST — GENERATOR: `AUF-83-T3` + `AUF-83-T3-N1` committet
+
+*Frische Instanz, Rolle Generator auf Yamas Wort übernommen (09:32), K-08-Nachbesserung selbst
+gebaut, dann Yamas Commit-Freigabe (09:45, e327e4d9) erhalten und ausgeführt.*
+
+```text
+Branch:          auto/hausplaner-integration  (0/103 gegen main — bereits isoliert)
+Basis-SHA:       c38c3953
+Generator-SHA:   40fa52de791e23e46418f68278ffc06d7f63aabc
+```
+
+### Produktdateien (11)
+
+```text
+public/hausplaner/hausplaner.css                        Build-Artefakt
+public/hausplaner/hausplaner.js                          Build-Artefakt
+resources/planner/hausplaner/app/HausplanerApp.tsx        Kopfleiste + Überlauf-Einbindung, Padding 10→8px
+resources/planner/hausplaner/app/dashboard/ReiterLeiste.tsx   optionales `nochNicht`
+resources/planner/hausplaner/app/dashboard/arbeitsbereiche.ts optionales `nochNicht`
+resources/planner/hausplaner/app/dashboard/ObjektkopfUeberlauf.tsx  NEU — der Überlauf (N1)
+resources/planner/hausplaner/app/state/objektkopf.ts       NEU — Leser, Pillentext, Kopfzeile
+resources/planner/hausplaner/app/state/uiState.ts          Feld `objektkopf` + Setter
+resources/planner/hausplaner/hausplaner.css                .hp-ok-*, .hp-az-* Regeln
+resources/planner/hausplaner/main.tsx                       Naht `data-objektkopf` verdrahtet
+resources/views/admin/hausplaner/objekt.blade.php           hp-bar-Leiste fort, Attribut kommt
+```
+
+### Testdateien (7)
+
+```text
+resources/planner/hausplaner/__tests__/stilschicht.test.ts     T2/K-03 zweimal umgehängt (T3, dann N1)
+resources/planner/hausplaner/__tests__/objektkopf.test.ts       NEU (T3) — bei mir umgehängt auf ueberlauf-Quelle
+resources/planner/hausplaner/__tests__/arbeitszeileSuche.test.ts NEU (T3, vor meiner Übernahme gebaut)
+resources/planner/hausplaner/__tests__/reiterLeisteGeteilt.test.ts NEU (T3, vor meiner Übernahme gebaut)
+resources/planner/hausplaner/__domtests__/reiterLeiste.dom.test.ts NEU (T3, vor meiner Übernahme gebaut)
+resources/planner/hausplaner/__domtests__/objektkopf.dom.test.ts   NEU (N1, von mir) — Überlauf-Menü im DOM
+tests/Feature/Hausplaner/UebernahmeKnopfTest.php                 Staleness-Zusage auf data-objektkopf umgehängt
+```
+
+### Prüfungen, Rohausgabe
+
+```text
+npm run tsc:hausplaner              Exit 0
+npm run schema:hausplaner:check     Exit 0
+npm run test:hausplaner             1394 / 0
+npm run test:hausplaner:dom         19 / 0   (16 Basis + 3 neu: N-03 Überlauf-Menü)
+npm run build:hausplaner            Exit 0
+vendor/bin/phpunit UebernahmeKnopfTest.php   8 / 0, 67 Assertions
+node scripts/statische-inline-stile.mjs .../HausplanerApp.tsx   138/78 offen — Scheibe 7 unverändert
+```
+
+**K-08 (N-01), selbst gemessen — nicht die alte Zahl übernommen:** `git archive d78c2466` in drei
+Dateien gespielt, Puppeteer, 1440×900, Expertenmodus, `getBoundingClientRect` der Leinwand, dreimal
+gemessen, dann per `md5` restauriert (Belege unten). **Baseline 594,3125 px** (Evaluators „594" war
+gerundet, nicht falsch). Mein erster Bau (Überlauf ohne Padding-Korrektur): **592,4 px — noch rot**,
+1,9 px zu kurz. Zeile-1-Padding 10→8px geschlossen: **596,4 px, dreimal identisch — +2,1 px über
+Baseline.** N-03 (Menü trägt alle drei Elemente, Übernehmen-Formular mit `action`, Staleness-Pille,
+Speicherstatus) und N-04 (1024 px: Speichern sichtbar, kein horizontaler Scroll) an einem echten
+Objekt (203) im Expertenmodus zusätzlich per Browser bestätigt.
+
+```text
+MD5 vorher  = nachher (Restauration verifiziert):
+  hausplaner.js   af808d69b1d61df7664c5a2fe04df049
+  hausplaner.css  61b3737a5a038b7b319621d21e1d84ba
+  objekt.blade.php 512899213a3fd40873a5f5e66436702a
+```
+
+### 10-Fragen-Selbstprüfung (soweit anwendbar — reines Frontend, keine Migration/Route/DB)
+
+```text
+1 Domänen-Heimat        n/a — kein neues Backend-Modell
+2 Naht definiert         JA — data-objektkopf, dieselbe Naht wie data-projekte/data-rechte
+3 Wahrheit einmalig      JA — Übernahme-Status kommt aus ErmittleUebernahmeStatus, Insel rechnet nichts
+4 Gegated                unverändert — keine neue Route, kein neuer Endpunkt
+5 Validiert               n/a — kein neuer Request
+6 Transaktion             n/a
+7 Schema sauber           n/a — kein Schema-Eingriff
+8 Getestet                JA — 1394+19 Tests, 8 PHPUnit, alle grün
+9 Schicht korrekt         JA — neues Markup trägt className (Token-CSS), kein Inline-Fachcode
+10 Bestand unangetastet   JA — kein UPDATE/DELETE, kein `git add -A`, Abweichungen unten offen
+```
+
+### Entscheidungen/Abweichungen — offen erklärt
+
+**Ich habe NICHT alle „13 Dateien im Baum" committet, sondern 18 (13 minus 2 plus 7).**
+
+- **`docs/abnahme-evaluator-haertung-2026-07-25.md`** (406 neue Zeilen) und
+  **`docs/auftraege/AUFTRAGSSCHEMA.md`** (13 neue Zeilen) **bewusst ausgelassen** — beim Diff-Lesen
+  gefunden, dass beide fremder Scope sind (Evaluator-Abnahmebericht zu T2 bzw. AUF-87), nicht Teil
+  von T3/T3-N1. Sie in meinen Commit zu ziehen hätte fremde, ungeprüfte Arbeit unter meinem Namen
+  eingecheckt — genau der „Beifang", den die Rollengrenze verbietet.
+- **7 neue Dateien dazugenommen**, die in Yamas Zahl nicht steckten, aber ohne die weder `tsc`
+  noch `build` grün liefen (`objektkopf.ts`, `ObjektkopfUeberlauf.tsx` + 5 Testdateien) — sie sind
+  Hartabhängigkeiten der 13, kein Scope-Zuwachs.
+- **`k01n1b.mjs` und `.rm_probe_tmp` bewusst NICHT gestaged** — PB-018 (Klartext-Zugangsdaten,
+  unverfolgt). Bleiben liegen, gehören laut Prüfer-Befund Yama oder einem eigenen kleinen Posten.
+- **`scripts/auftrag-pruefen.{mjs,sh}` + `scripts/__tests__/` NICHT angefasst** — AUF-87-Scope,
+  andere Baustelle, im selben Baum nur benachbart.
+- **Zeile-1-Padding 10→8px** ist mein einziger über N1s Kriterien hinausgehender Griff — begründet
+  in N-01s eigenem Wortlaut („so viel Höhe zurückgeben, dass die Bühne wächst"), betrifft nur
+  Zeile 1 selbst, keinen ihrer Inhalte, keine Zeile 2/3.
+
+### Restpunkte für den Evaluator
+
+- **N-01/N-03/N-04 sind oben mit Rohausgabe belegt, aber von MIR gemessen — kein Ersatz für den
+  unabhängigen Prüfstand.** Der Evaluator misst am `Generator-SHA` selbst nach.
+- **K-09-Charakter:** die vier neuen/geänderten Testdateien sind oben einzeln benannt; eine
+  vollständige Liste alter+neuer Treffer wie in der T3-Runde habe ich nicht wiederholt.
+- Zwei Dateien bleiben unverändert im Arbeitsbaum liegen (die ausgelassenen Docs) — sie gehören
+  weiterhin dorthin, wo sie herkommen (Evaluator- bzw. AUF-87-Strang), nicht in diesen Prüfstand.
+
+**Kein Merge, kein Push.** Der Commit ist ein Prüfstand für den Evaluator, keine Freigabe.
+
+**Ballbesitz: Evaluator** (Prüfstand aus `40fa52de` bauen, gegen `c38c3953` diffen).
+
+---
+
+## 30.07.2026, 09:53 CEST — DIE KENNZAHL IST GEWANDERT. Erster Generator-Commit nach Fassung B.
+
+**VOTUM: auftrag=AUF-83-T3+T3-N1 rolle=generator ergebnis=UMGESETZT commit=40fa52de datum=2026-07-30**
+
+```text
+Auftrag          AUF-83-T3 + AUF-83-T3-N1
+Branch           auto/hausplaner-integration
+Basis-SHA        05d490ea
+Generator-SHA    40fa52de
+Umfang           18 Dateien, 1465 Einfuegungen, 239 Loeschungen
+Produktdateien   HausplanerApp.tsx · ObjektkopfUeberlauf.tsx (neu) · ReiterLeiste.tsx ·
+                 arbeitsbereiche.ts · objektkopf.ts (neu) · uiState.ts · main.tsx ·
+                 hausplaner.css · objekt.blade.php · public/hausplaner-Buendel
+Testdateien      objektkopf.dom.test.ts · reiterLeiste.dom.test.ts · arbeitszeileSuche.test.ts ·
+                 objektkopf.test.ts · reiterLeisteGeteilt.test.ts · stilschicht.test.ts ·
+                 UebernahmeKnopfTest.php
+Fremde Dateien   0   (git show --name-only | grep -c '^docs/|^k01n1b|^.rm_probe'  ->  0)
+```
+
+**Letzter Produktivcode-Commit davor: `d78c2466`, 29.07. 21:26 — zwölf Stunden und siebenundzwanzig
+Minuten Stillstand sind beendet, und zwar acht Minuten nach der Entscheidung.**
+
+**Ballbesitz: EVALUATOR.** Prüfstand ist `git diff 05d490ea..40fa52de`, frischer Worktree
+`git worktree add ../eval-auf83-t3-n1 40fa52de`. **Zu prüfen sind K-01 bis K-09 aus T3 plus N-01/N-02
+aus T3-N1** — insbesondere **K-08: Bühne höher als 594 px**, der Grund für T3-N1.
+
+**Nebenbefund für den Evaluator, nicht für den Planner:** das `public/hausplaner`-Bündel liegt im
+Commit (388 geänderte Zeilen). Das ist für die DOM-Tests nötig, berührt aber R18 — **bitte prüfen,
+dass das Bündel zum Quelltext desselben Commits passt** und nicht aus einem älteren Lauf stammt.
+
+### PB-032 · BEGRÜNDET ABGELEHNT, mit Gegenmessung
+
+```text
+Befund:    sieben fremde Dateien liegen gestaged im Index
+Gemessen:  git diff --cached --name-only   ->  LEER
+           git status --porcelain          ->  kein Eintrag mit Indexmarke
+Commit:    40fa52de
+```
+
+**Der Prüfer hat in den Index gesehen, während der Generator committete.** Der Befund war zum
+Messzeitpunkt richtig und ist durch den Commit selbst erledigt — die sieben Pfade waren die
+Auftragsdateien, nicht fremde. **Kein Anlass, aber ein guter Reflex: ein Blick in den Index vor dem
+Commit ist genau die Barriere, die R13 verlangt.**
+
+**Registerzeilen ohne Abhandlung (Produktionsmodus):** PB-024 bis PB-031 — *empfangen ·
+klassifiziert · zurückgestellt.*
