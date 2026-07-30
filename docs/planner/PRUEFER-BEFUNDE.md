@@ -235,7 +235,7 @@ Rollentrennung.**
 | PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt | **GESCHLOSSEN** — Yama hat gewechselt (18:02, `67903953`) | 30.07. |
 | PB-040 | `db` + Ledger | Eine gelaufene Migration lag in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | **ERLEDIGT** (A: `fba60e6e` · B: Ledger 12:28) | — |
 | PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4 trägt die Zahlen von **vor** der 08:12-Korrektur; F-04s Barriere-Zelle ist überholt; `bestand.sh`/`VORLAGE.md` fehlen | **P2** | offen | Planner |
-| PB-043 | `ChatController.php:70,281` + `config/logging.php:21,57` | Zwei unbedingte `Log::info` in einem gepollten Endpunkt schreiben **64 086** Zeilen in ein **212 MB** grosses, nicht rotierendes Log | **P2** | offen | Planner |
+| PB-043 | `ChatController.php` + `config/logging.php:57` | **Teil 1 ERLEDIGT** (`fddec527`, 21:48): drei — nicht zwei — `Log::info` hängen jetzt am `?debug=1`-Schalter · **Teil 2 offen: `single` ohne Rotation, 218 MB**; ~~zwei unbedingte `Log::info` schreiben 64 086 Zeilen in ein nicht rotierendes Log | **P2** | offen | Planner |
 | PB-044 | `--env=testing` ohne `.env.testing` | Ein Schalter, der auf die Test-Umgebung zeigt, traf **stillschweigend die Arbeits-DB** | P3→**P2** (Planner) | **ERLEDIGT** 21:43 — nachgemessen | — |
 | PB-045 | mein eigener Messbefehl | `--date=format:` zeigt die Zone des Committers — **45 von 116** heutigen Commits zwei Stunden zu früh | **P3** | **ERLEDIGT** (Barriere gesetzt) | Prüfer |
 | PB-039 | `PRUEFER-BEFUNDE.md` (mein Register) | Acht Befunde hatten einen Abschnitt, aber **keine Zeile** — Ursache F-14 (`str.replace` traf nicht) | **P2** | **ERLEDIGT** (38 Zeilen = 38 IDs) | Prüfer |
@@ -4694,3 +4694,52 @@ schliesst.**
 (`bestand.sh`/`VORLAGE.md`) · `PB-046` (375 px, P3 mit Ziel, AUF-91) · `PB-042` (Takt, bei Yama).
 
 **Ballbesitz: keiner** — geschlossen.
+
+---
+
+## 75. Runde 234 — **PB-043 Teil 1 erledigt, nachgemessen. Und mein Zähler stand zu niedrig.**
+
+**21:49 CEST (`date`), Commit `fddec527`.**
+
+```text
+ChatController.php:78   $debug = $request->boolean('debug');
+                :80     if ($debug) { Log::debug('[Chat] … IN',  …) }
+                :115                  Log::debug('[Chat] employees fetched', …)
+                :299                  Log::debug('[Chat] … OUT', …)
+Umfang: 45 Einfuegungen / 21 Loeschungen · committet 21:48
+```
+
+**Nicht gelöscht, sondern an eine Bedingung gehängt, die es dort schon gab** — denselben
+`?debug=1`-Schalter, den die Antwort ohnehin auswertet. *Wer die Diagnose braucht, bekommt sie; wer
+pollt, erzeugt keine Zeile.* **Das ist Reuse statt Löschen und besser als das, was mein Befund
+verlangt hat** — ich hatte nur „unbedingt" beanstandet, nicht gesagt, wohin damit.
+
+### Ein Befund gegen meinen eigenen Befund
+
+```text
+meine Meldung 12:12:   "zwei unbedingte Log::info"
+gemessen im Bau:       drei  (der dritte: 'employees fetched', Z. 115)
+meine Zahlen:          64 086 Zeilen · 212 MB
+seine Zahlen:          3 × 32 915 Zeilen = 44 % einer 218-MB-Datei · 2 054 echte Fehlermeldungen
+```
+
+**Mein Grep suchte nach `getEmployeesAndGroups` statt nach `Log::info` im Endpunkt** — der dritte trug
+den Namen nicht. **Zähler zu niedrig: genau die Klasse, die ich in `PB-011` dem Planner vorhalte, und
+die ich heute schon in `PB-041` an mir selbst gefunden habe.**
+
+> *Ein Befund, der die Menge zu klein angibt, wird trotzdem behoben — aber er hätte auch zu klein
+> behoben werden können. **Der Bauende hat nachgezählt, ich nicht.***
+
+### Teil 2 bleibt offen, und er ist der teurere
+
+```text
+config/logging.php:57   'channels' => ['single']     <- unveraendert, keine Rotation
+config/logging.php:68   'daily' => days: 14          <- steht ungenutzt vier Zeilen tiefer
+storage/logs/laravel.log                 218 MB      <- unveraendert
+git show fddec527 -- config/logging.php  ->  leer    <- die Datei wurde nicht angefasst
+```
+
+**Die Quelle ist zugedreht, das Fass bleibt voll und ohne Boden.** *Ohne Rotation wächst die Datei
+weiter — langsamer, aber unbegrenzt, und die 2 054 Fehlermeldungen bleiben begraben.*
+
+**Ballbesitz: Planner** (Teil 2).
