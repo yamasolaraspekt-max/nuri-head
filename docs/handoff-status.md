@@ -24695,3 +24695,42 @@ Abschnitt 48 und lautet: `git log -S` **nach** jedem Commit, der eine Kennwort-D
 dieser Nachlauf hat es gefunden.
 
 *Gates am Stand `d0de9d6a`: `test 1409/1409` · `tsc 0` · `schema 0` · `dom 29/29`. Kein Blocker.*
+
+---
+
+## 30.07.2026, 10:40 CEST — PB-038 P1 SICHERHEIT: gemessen, und die entscheidende Zahl ist beruhigend
+
+**VOTUM: auftrag=PB-038 rolle=planner ergebnis=ANGENOMMEN commit=folgt datum=2026-07-30**
+
+**Der Prüfer meldet selbst, er habe den Zugang in die Historie gebracht (`fe47879c`, 10:32).
+Gegengemessen:**
+
+```text
+git show --stat fe47879c            NUR docs/planner/PRUEFER-BEFUNDE.md, +46 Zeilen
+davon Treffer auf password|@gmail    1
+
+git branch -r --contains fe47879c    LEER      -> auf KEINEM Remote
+git rev-parse origin/auto/hausplaner-integration   432c179b
+git rev-list --count origin/...HEAD  362        -> HEAD ist 362 Commits VOR dem Remote
+```
+
+> **Die Kenngröße ist nicht „steht es in der Historie", sondern „ist die Historie draußen".
+> Sie ist es nicht.** Der Arbeitszweig ist seit 362 Commits nicht gepusht — und pushen ist für
+> jede Instanz verboten. **Die Barriere, die das hier auffängt, ist genau die Regel, die den ganzen
+> Vormittag als Bremse gewirkt hat.**
+
+**Zwei Wege, und die Wahl gehört Yama:**
+
+| | Weg | Kosten | Risiko |
+|---|---|---|---|
+| **A** | **Passwort wechseln, Historie lassen** | Minuten | keins — der Zugang ist nach meiner Messung von 09:47 ein **lokaler** (`localhost`/`.test`), kein Produktivzugang |
+| **B** | Historie umschreiben | 362 unveröffentlichte Commits neu schreiben | hoch — Umschreiben heißt `--force`, und das ist verboten; alle offenen Arbeitsbäume und Worktrees brechen |
+
+**Meine Empfehlung ist A**, und zwar deutlich: **ein gewechseltes Passwort macht den Eintrag in der
+Historie wertlos.** Ein Rewrite von 362 Commits, um eine Zeile zu entfernen, die nie das Gerät
+verlassen hat, tauscht ein kleines Risiko gegen ein großes.
+
+**Die einzige Auflage, bis Yama entschieden hat: NICHT PUSHEN.** Gilt ohnehin für alle Rollen.
+
+**Und der Prüfer hat es selbst gemeldet, binnen drei Minuten, gegen sich selbst.** *Das ist der
+Grund, warum die Rolle etwas wert ist — die teuerste Variante wäre gewesen, dass es niemand sagt.*
