@@ -48,7 +48,9 @@ scope:
     grep -n 'ENDUNGEN\|getClientOriginalExtension' app/Http/Controllers/Energie/PlanUploadController.php &&
     grep -c 'Konva.Image\|<Image' resources/planner/hausplaner/app/*.tsx &&
     grep -rn 'massstab_mm_pro_einheit' app/ resources/ --include=*.php --include=*.ts --include=*.tsx
-  population_at_writing: >
+  # ENTFAELLT nach R19 (30.07.) — die folgenden Zeilen sind HERKUNFTSNACHWEIS, KEINE Bedingung.
+  # Wer die Zahl braucht, faehrt population_command. Neue Blaetter tragen dieses Feld nicht mehr.
+  population_at_writing_ALT: >
     Messung des Planners, 30.07. 06:53, KEINE Bedingung:
     (1) `ImportServiceClient` (139 Z.) kann `extractPdf`, `rasterizePdf`, `ocr`, `ocrTexte`,
         `extractDxf` — und meldet ueber `aktiv()`, ob der Dienst konfiguriert ist.

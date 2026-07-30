@@ -21286,3 +21286,201 @@ Bestand, sondern in meiner Formulierung.**
 **Kein neues Auftragsblatt in dieser Runde.** Das letzte war `AUF-88-P1` um 06:58; das nächste
 frühestens um 07:58. *Was hier steht, ist eine Korrektur an bestehenden Blättern — und sie kam
 aus dem Lesen des Arbeitsbaums, nicht aus dem Schreiben eines neuen Papiers.*
+
+---
+
+## ⇒ EVALUATOR — AUF-83-T3: **K-05 FREIGABE · K-05b FREIGABE** · deine ⌘K-Messung bestätigt · **und ich habe dein Bündel bewegt** (30.07., 07:12 CEST)
+
+*Zeit aus `TZ=Europe/Berlin date`. Nach R19.1 habe ich zu jeder deiner Behauptungen vorab den Befehl
+benannt, der sie widerlegen würde — keiner hat sie widerlegt.*
+
+### 0. Zuerst mein Fehler, weil er dich betrifft und frisch ist
+
+**Ich habe `npm run build:hausplaner` als Gate gefahren. Das Gate schreibt.**
+
+```text
+dein Bau 06:58   js 5df40de94e44a74c  1 421 855 B   css 1c473e94867f3a15  17 211 B
+mein Bau 07:11   js 6f8703c28a7b6c37  1 423 484 B   css 788a93c269baa7b5  17 938 B
+                                          +1 629 B                            +727 B
+Ursache: Quellstand hat sich nach deinem Bau bewegt —
+  main.tsx 07:03 · hausplaner.css 07:03 · HausplanerApp.tsx 07:10  (deine K-01-Arbeit)
+⇒ Das liegende Buendel traegt jetzt HALBFERTIGE K-01-Arbeit und ist MEIN Erzeugnis, nicht deins.
+```
+
+**Ich stelle es nicht wieder her.** `git checkout -- public/hausplaner` würde auf HEAD zurückfallen
+und damit auch deinen 06:58-Bau löschen; der ist nirgends verwahrt. **Nur du kannst den Stand
+wiederherstellen** — bitte neu bauen, wenn K-01 einen berichtsfähigen Punkt erreicht.
+
+**Meine Sichtprobe ist davon unberührt:** sie lief 07:05–07:09 gegen *dein* Bündel, geholt per
+`fetch(cache:'reload')`, **vor** meinem Bau.
+
+> **R19.5 — neu, aus diesem Fehler.** *Ein Evaluator fährt nur lesende Gates auf einem geteilten
+> Baum.* `test:*`, `tsc:*`, `schema:*:check` lesen. **`build:*` schreibt ein geteiltes Artefakt** und
+> läuft ausschließlich in einer commit-exakten Kopie. — Das ist dieselbe Familie wie R18, und ich
+> habe sie eine Stunde nach R19 gebrochen. Handgriff, nicht Disziplin: der Bau gehört in die Kopie.
+
+### 1. Deine vier ⌘K-Behauptungen — alle unabhängig bestätigt, eine präzisiert
+
+| Behauptung | Mein Gegen-Befehl | Ergebnis |
+|---|---|---|
+| **drei** Handler | vollständiger `grep` über Shell+Insel | **bestätigt** — 7492 · 7979 · `HausplanerApp:1040` |
+| beide feuern, Insel per Reihenfolge | eigene Fokus-**Abtastung** (8 ms) statt `focusin` | **bestätigt** — Spur `searchInput` → `Befehl suchen …` |
+| Übersicht/Geführt: Shell gewinnt | Meta+K dort; widerlegt, wenn Palette öffnet | **bestätigt** — Endfokus `searchInput`, keine Palette |
+| Knopf nur im Expertenmodus | `.hp-az-suchen` in Übersicht zählen | **bestätigt** — 0 dort, 1 im Expertenmodus |
+
+**Präzisierung, keine Widerlegung:** du schriebst *„`HausplanerApp` ist nicht eingehängt"*. Gemessen
+ist **React eingehängt** (`__react*` an der Wurzel, 10 467 B Markup), aber **`HausplanerApp` nicht
+gerendert** (0 Leinwand, Modus-Auswahl). Der Handler entsteht erst mit dem Modus — deine Folgerung
+hält, der Mechanismus heißt „nicht gerendert", nicht „nicht eingehängt". *Für die Behebung ist der
+Unterschied wichtig: es gibt kein Fenster ohne React, sondern eines ohne Studio.*
+
+**Mein Fastfehler dabei, protokolliert weil er R19 belegt:** Platte 1 421 855 B, Browser 1 420 504 —
+ich hatte den Befund „Auslieferung ≠ Platte" fast geschrieben. Ursache: **5 Emoji** (🔒🙈👁🔒🔓),
+die JS als UTF-16 doppelt zählt. `1 420 499 + 5 = 1 420 504`. **Identischer Stand.**
+
+### 2. Abnahme AUF-83-T3
+
+**Gates, von mir gefahren:** `tsc:hausplaner` exit 0 · `schema:hausplaner:check` exit 0 ·
+`test:hausplaner:dom` **16/0** · Insel-Suite **1380/2 ROT**.
+
+**Das Rot ist NICHT deins und blockiert nicht.** Beide roten Zusagen stehen in
+`__tests__/objektkopf.test.ts` — **unversioniert, geschrieben 07:10:16**, also nach deinem Bericht:
+`K-01: die Blade-Leiste ist fort` und `T2/K-03: der EINZIGARTIGE Inhalt der Objektleiste bleibt
+stehen`. Test-first-Rot einer laufenden Scheibe. **Meine Abnahmegrundlage ist einzeln grün:**
+`arbeitszeileSuche` 7/0 · `reiterLeisteGeteilt` 9/0 · `eineWerkzeugzeile` 14/0.
+
+**K-05 — die Dämpfung: `ERFÜLLT`.** Sichtprobe am gebauten Stand, 1440 px:
+
+```text
+Import & Nachzeichnen·   Deckkraft 0.60   Titel "Import & Nachzeichnen — Die Werkzeuge si..."
+Architektur              1.00      Bauphysik 1.00     Heizung 1.00     Elektro · PV 1.00
+⇒ GENAU EINER gedaempft, und genau der richtige.
+```
+
+Vier eigene Mutationen, Grundlinie 9/0 vor und nach, jede Ersetzung nachweislich angewandt:
+
+```text
+disabled am Reiter                  (1) ⇒ ROT  "das Merkmal SPERRT nicht — die Bedienung bleibt vollstaendig"
+abgetippte Deckkraft statt Token    (2) ⇒ ROT  "liest aus der EINEN Quelle, statt eine sechste Meinung zu erfinden"
+nochNicht auch bei einem zweiten    (1) ⇒ ROT  "und GENAU Import — die anderen vier sind unberuehrt"
+Grund in HausplanerApp gesetzt      (5) ⇒ ROT  "HausplanerApp REICHT den Grund durch, statt ihn zu setzen"
+```
+
+**K-05b — der Suchen-Knopf: `ERFÜLLT`.** Sichtprobe: Text `Suchen⌘K`, `.hp-az-kuerzel` = `⌘K`,
+Titel *„Befehle und Werkzeuge durchsuchen (⌘K / Strg+K)"*. Vier Mutationen, Grundlinie 7/0:
+
+```text
+onClick -> eigener setState  (1) ⇒ ROT  "er ruft `oeffnePalette` — denselben Aufruf wie das Kuerzel"
+className -> Inline-Stil     (1) ⇒ ROT  "das neue Markup traegt className, keinen Inline-Stil"
+Rohfarbe in .hp-az-suchen    (1) ⇒ ROT  "die Stilschicht nennt keine Rohfarbe — nur Tokens"
+.hp-az-kuerzel entfernt      (1) ⇒ ROT  "die Klassen sind in der Stilschicht auch definiert"
+```
+
+**Keine Kappung, keine vierte Zeile** — gegen meinen Vorher-Stand:
+
+```text                Vorher (a7751fc3)        Nachher (5df40de9)
+#hausplaner-root       1077x701                 1077x701      unveraendert
+hp-wg- Knoepfe         23                       23            unveraendert
+.hp-az-suchen          0                        1
+Dokument-Bildlauf      813/813                  813/813       kein zweiter
+Leinwand               589x451                  589x450       -1 px
+```
+
+**Der Ein-Pixel-Unterschied an der Leinwand ist der einzige Rest.** Ich nenne ihn, statt ihn
+wegzurunden: er liegt in der Größenordnung einer Rundung und bricht nichts, aber er ist eine
+Änderung, und `keineKappung` deckt ihn nicht ab. **Kein Blocker.**
+
+> ### GESAMTVOTUM AUF-83-T3: **FREIGABE**
+> K-05 `ERFÜLLT` · K-05b `ERFÜLLT`. Beide Sichtproben gefahren, acht eigene Gegen-Beweise, alle
+> beißend. Kein P0/P1 offen. *Damit sind meine zwei Voten von 06:40/06:46 (`NACHBESSERN` bzw.
+> `NICHT PRÜFBAR`) abgelöst — beide beruhten auf dem ungebauten Bündel, nicht auf deiner Arbeit.*
+
+### 3. Zwei Befunde, die kein Kriterium abdeckt
+
+**`AUF-89` (neu, P2) — drei Shell-Layouts im Views-Baum, alle versioniert.**
+
+```text
+app.blade.php          386 383 B   11 189 Z
+app.blade copy.php     439 625 B   11 903 Z   19 159 Zeilen anders
+app.blade copy 2.php   377 365 B   10 952 Z    1 096 Zeilen anders
+alle drei: 24.07. 19:37 · alle drei VERSIONIERT
+Referenzen auf die Kopien: 0   (Gegenprobe: derselbe Befehl findet 360x "layouts.app" — er misst)
+```
+
+**Kein Laufzeit-Risiko** — unreferenziert, Blade rendert sie nicht. **Aber 817 KB toter Zwilling des
+zentralsten Layouts**, und beide tragen eigene ⌘K-Handler. *Wer nach einem Selektor sucht, findet
+ihn dreimal und ändert womöglich die falsche Datei.* Genau die Fehlerklasse, die uns diese Woche
+mehrfach Zeit gekostet hat. **Zur Planner-Entscheidung, Löschen wäre ein eigener Posten.**
+
+**`F-15` (Fehlerklasse) — das geteilte Gate kann test-first-Rot nicht von Regression unterscheiden.**
+Ich habe heute 1380/2 gesehen und stand eine Messung davor, „Suite rot" gegen dich zu berichten.
+Nur weil ich die Namen aufgelöst habe, kam heraus: fremde, absichtlich rote Scheibe. **Ein Evaluator,
+der während eines laufenden Baus abnimmt, sieht immer Rot und kann die Ursache nicht am Zähler
+erkennen.** Vorschlag: test-first-Zusagen tragen bis zur Umsetzung eine Markierung (`{ todo: true }`
+o. ä.), damit der Zähler die Frage beantwortet statt sie zu stellen. **Planner.**
+
+### 4. Ballbesitz
+
+**Generator:** K-01 weiterbauen · **das Bündel neu bauen, wenn du soweit bist** (ich habe es bewegt).
+**Planner:** ⌘K-Auflösung · `AUF-89` · `F-15` · die Vorher-Wert-Barriere · `AUF-87` vorziehen.
+**Yama:** **18+ Commits auf keinem Remote** — letzter gesicherter Stand `8ae4a1f5`, 29.07. 07:59.
+
+Kein Commit durch mich, kein Push, kein Tor 2.
+
+---
+
+## ⇒ PLANNER — Weckerrunde 07:12: gelesen statt geschrieben, und zwei Funde (30.07., 07:15 CEST)
+
+**Keine neue Meldung.** Der Generator baut weiter — inzwischen vier neue Zusagedateien im Baum
+(`arbeitszeileSuche`, `reiterLeisteGeteilt`, `reiterLeiste.dom`, `objektkopf`) plus
+`app/state/objektkopf.ts`. Er arbeitet an K-01 und K-05 gleichzeitig.
+
+**Kein neues Auftragsblatt in dieser Runde** (Selbstauflage). Stattdessen habe ich die
+`population_command` meiner vier offenen Blätter **von Hand nachgefahren** — die Selbstprüfung,
+die AUF-87 später automatisch machen soll.
+
+### Fund 1 — meine eigene Probe war kaputt, nicht das Blatt
+
+Beim Nachfahren von T5 maß ich **0 Dateien** für die Escape-Fundstellen. Im Blatt stehen **6 in 4
+Dateien**. **Der Befehl aus dem Blatt stimmt** — meine eigene Kommandozeile hatte verschachtelte
+Anführungszeichen und lieferte still ein falsches Ergebnis.
+
+> **Hätte ich das geglaubt, hätte ich ein gültiges Blatt für kaputt erklärt.**
+
+**R21 ist entsprechend erweitert:** *eine Probe zählt erst, wenn sie nachweislich funktioniert.*
+Für Mutationen heißt das, die Datei muss danach noch laden. **Für Messungen heißt das, den Befehl
+genau so zu fahren, wie er im Blatt steht** — nicht in eine eigene Schachtelung eingebaut.
+*Dieselbe Klasse wie die zwei zu groben Mutationen des Evaluators: ein Ergebnis aus einem kaputten
+Werkzeug ist kein Ergebnis.*
+
+### Fund 2 — die Reichweite von AUF-87 ist kleiner, als ich geschrieben habe
+
+Mein Blatt sagt *„über 40 Blätter"*. Gemessen:
+
+```text
+ls docs/auftraege/{generator,evaluator}-auftrag-*.md | wc -l   → 80
+grep -l 'pruefung:' docs/auftraege/*.md | wc -l                → 13
+```
+
+**80 Blätter liegen, aber nur 13 tragen einen YAML-Prüfkopf.** Der Validator kann also 13 prüfen,
+nicht 80 — *und das ist kein Argument gegen ihn, sondern gegen meine Formulierung.* Die 67 anderen
+sind älter als das Schema vom 27.07.; sie bekommen von ihm die Meldung `KEIN KOPF`, wie in K-04
+vorgesehen.
+
+### R19 ist auf die bestehenden Blätter angewandt
+
+`population_at_writing` heißt in allen vier offenen Blättern jetzt `population_at_writing_ALT` und
+trägt darüber den Satz: **Herkunftsnachweis, KEINE Bedingung.** *Neue Blätter tragen das Feld nicht
+mehr — es steht seit heute nicht mehr im Schema.*
+
+### Die drei geprüften Befehle, die tragen
+
+```text
+T3       sed 1195,1240p + statische-inline-stile.mjs      beide exit 0
+T5       data-schiene 2 · Escape 6 in 4 · collapsed 0     wie im Blatt
+AUF-88-P1  ENDUNGEN 2 · Konva.Image 0 · massstab 3        wie im Blatt
+```
+
+*Vier Blätter, ein falscher Satz, eine kaputte eigene Probe. **Das ist der Ertrag einer Runde, in
+der ich nichts Neues geschrieben habe** — und er ist höher als der der letzten drei Runden, in
+denen ich geschrieben habe.*

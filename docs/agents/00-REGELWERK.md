@@ -181,6 +181,18 @@ und sind in `docs/planner/warum-wir-oberflaechlich-arbeiten-2026-07-30.md` begr�
 | **R20** | **Nach jedem erzeugenden Befehl wird das ERGEBNIS gelesen, nie der Rückgabewert.** Gilt für alle drei Rollen. *Drei Ausprägungen an einem Tag: ein Heredoc verschluckte fünf Namen, zwei Ledger-Einträge gingen verloren, und der Commit lief jedes Mal grün durch.* | ⚠ Vorsatz |
 | **R21** | **Eine Mutation gilt erst als Gegenprobe, wenn die Datei danach noch LÄDT.** Ein Rot aus einer zerlegten Datei beweist nichts. *Vom Evaluator an sich selbst gefunden, zweimal.* | ⚠ Vorsatz |
 | **R22** | **Ein Vorher-Stand ist ein Commit, kein Zeitpunkt.** Wer einen Vorher-Nachher-Beleg braucht, nennt den **Commit**, aus dem er ihn holt (`git archive <commit>` in ein Verzeichnis, dort bauen und messen) — **nicht die Uhrzeit, bis zu der jemand fertig sein muss.** *Damit lösen sich F-12 und ein Großteil von F-13 mechanisch auf: ein Folgeauftrag kann einen Commit nicht zerstören. Entstanden am 30.07., nachdem ich zwischen Generator und Evaluator einen Wettlauf aufgemacht hatte, den der Bestand gar nicht verlangte.* | ✅ Barriere |
+**Erweiterung von R21, 30.07. 07:15 — sie gilt nicht nur für Mutationen, sondern für jede Probe.**
+An mir selbst gefunden: ich habe den `population_command` von T5 nachgefahren und **0 Dateien**
+gemessen, wo 6 Fundstellen in 4 Dateien stehen. **Nicht das Blatt war falsch, meine Probe war es** —
+verschachtelte Anführungszeichen in meiner eigenen Kommandozeile. *Hätte ich das Ergebnis geglaubt,
+hätte ich ein gültiges Blatt für kaputt erklärt.*
+
+> **R21 (erweitert): Eine Probe zählt erst, wenn sie nachweislich funktioniert.**
+> Für Mutationen heißt das: die Datei muss danach noch laden. **Für Messungen heißt das: den Befehl
+> genau so fahren, wie er im Blatt steht — nicht in eine eigene Schachtelung eingebaut.**
+> *Dieselbe Klasse wie die zwei zu groben Mutationen des Evaluators: ein Ergebnis aus einem
+> kaputten Werkzeug ist kein Ergebnis.*
+
 
 **Und eine Selbstauflage des Planners, die keine Regel für andere ist:**
 **höchstens EIN neues Auftragsblatt pro Stunde.** Am Vormittag des 30.07. waren es vier Blätter mit

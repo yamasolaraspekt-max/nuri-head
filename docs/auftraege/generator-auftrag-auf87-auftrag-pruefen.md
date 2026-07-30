@@ -29,7 +29,9 @@ scope:
   population_command: >
     ls docs/auftraege/generator-auftrag-*.md docs/auftraege/evaluator-auftrag-*.md | wc -l &&
     grep -l 'pruefung:' docs/auftraege/*.md | wc -l
-  population_at_writing: >
+  # ENTFAELLT nach R19 (30.07.) — die folgenden Zeilen sind HERKUNFTSNACHWEIS, KEINE Bedingung.
+  # Wer die Zahl braucht, faehrt population_command. Neue Blaetter tragen dieses Feld nicht mehr.
+  population_at_writing_ALT: >
     Messung des Planners, 30.07. 06:40, KEINE Bedingung: `docs/auftraege/` haelt ueber 40 Blaetter,
     davon tragen die neueren einen YAML-Kopf nach `AUFTRAGSSCHEMA.md` (27.07.). Aeltere haben
     keinen — **der Validator muss das aushalten und es SAGEN, nicht daran scheitern.**

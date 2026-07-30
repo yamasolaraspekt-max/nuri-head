@@ -28,7 +28,9 @@ scope:
   population_command: >
     sed -n '1195,1240p' resources/planner/hausplaner/app/HausplanerApp.tsx &&
     node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/HausplanerApp.tsx
-  population_at_writing: >
+  # ENTFAELLT nach R19 (30.07.) — die folgenden Zeilen sind HERKUNFTSNACHWEIS, KEINE Bedingung.
+  # Wer die Zahl braucht, faehrt population_command. Neue Blaetter tragen dieses Feld nicht mehr.
+  population_at_writing_ALT: >
     KORRIGIERT 29.07., 21:40 — meine Zahl war ueberholt, und ich hatte sie nicht nachgemessen.
     ICH SCHRIEB: 13 Bedienelemente in vier Aufgaben (Layout-Inventur vom 25.07., Befund B1).
     GEMESSEN (Generator, 21:31, unmittelbar vor dem Schreiben nach R14):

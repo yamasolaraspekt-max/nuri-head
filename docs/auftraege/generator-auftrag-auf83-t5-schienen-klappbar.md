@@ -43,7 +43,9 @@ scope:
     grep -rn "key === 'Escape'" resources/planner/hausplaner/app --include=*.ts --include=*.tsx &&
     grep -rc 'collapsed\|klappZu\|schieneZu' resources/planner/hausplaner/app/HausplanerApp.tsx &&
     node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/HausplanerApp.tsx
-  population_at_writing: >
+  # ENTFAELLT nach R19 (30.07.) — die folgenden Zeilen sind HERKUNFTSNACHWEIS, KEINE Bedingung.
+  # Wer die Zahl braucht, faehrt population_command. Neue Blaetter tragen dieses Feld nicht mehr.
+  population_at_writing_ALT: >
     Gemessen vom Planner am 30.07. um 06:03, nicht aus einer aelteren Inventur uebernommen
     (F-04, vierte Auspraegung war genau das):
     (1) ZWEI Schienen tragen `data-schiene` — `HausplanerApp.tsx:1373` (links, `width: 220`) und
