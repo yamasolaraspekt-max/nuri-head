@@ -22991,3 +22991,69 @@ Steuerungsmarken in der Tafel:  1
 **Das Beispiel im neuen Kopf ist eingerückt und zählt nicht mit** — die Regel von 07:54 hält bei
 ihrer ersten Anwendung durch jemand anderen als ihren Anlass. *Diesmal war ich dieser jemand, aber
 sie hat gehalten, ohne dass ich daran denken musste.*
+
+---
+
+VOTUM: auftrag=AUF-87-N2 rolle=planner ergebnis=PLANUNGSREIF commit=13eac260 datum=2026-07-30T08:05
+
+## ⇒ PLANNER — Yama meldet Leerlauf, und er hat recht. Mein Fehler war eine Vermutung (30.07., 08:05 CEST)
+
+**Yama, 08:04: „generator hat nichts zutun."** Zum dritten Mal muss er mir das sagen.
+
+**Und diesmal weiß ich genau, was ich falsch gemacht habe.** Ich habe seit 07:42 gemessen, dass
+23 Dateien unverändert im Baum liegen, und daraus geschlossen: *„vermutlich ein längerer Bau- oder
+Testlauf."* Das habe ich in drei Ledger-Einträgen wiederholt.
+
+> **Das war eine HYPOTHESIS, und ich habe sie als FACT geschrieben.**
+> Genau die Trennung, die seit 07:30 in den Kernregeln steht — *„eine Hypothese darf nicht als
+> Fakt in einen Bauauftrag gelangen"* — und ich habe sie in meiner eigenen Lagebeurteilung
+> verletzt. **Eine unveränderte Dateizahl ist kein Bauzyklus. Sie ist eine unveränderte Dateizahl.**
+
+*Messen hätte eine Zeile gekostet: `ls -la` auf die Dateien. Die Zeitstempel sagen 05:29 und 05:50
+UTC — der Validator ist seit einer Stunde fertig.*
+
+### Was ich sofort getan habe
+
+**`AUF-87-N2` liegt** (`generator-auftrag-auf87-n2-struktur.md`, 177 Zeilen, acht Kriterien,
+Spur B, berührt nur `scripts/`). Die Gates waren grün, ich hatte nur nicht hingesehen:
+
+- **Gate A:** die fünf Prüfungen stehen wörtlich in `AUFTRAGSSCHEMA §7`, Punkt 2.
+- **Gate B:** der Generator hat selbst gemeldet, dass sie nicht erledigt sind — im Schema, in
+  seinem eigenen Vollzugsvermerk.
+- **Gate D:** jede der fünf ist ein Testfall, kein Wunsch.
+
+### Und der Validator läuft bereits — ich habe ihn gefahren
+
+```text
+bash scripts/auftrag-pruefen.sh <T5-Blatt>
+  9 Eintraege: 2 OK · 0 verdaechtig · 5 Fehlschlag · 1 uebersprungen · 1 nicht maschinell
+```
+
+**Er hat am ersten Tag zwei Fehler des Planners gefunden, bevor er abgenommen war:**
+
+**1. `HINWEIS: 2 yaml-Bloecke, geprueft wurde der ERSTE.`**
+**Meine ganze R19-Umstellung ist für ihn unsichtbar** — die Messblöcke, die ich um 07:52 in T5 und
+AUF-88-P1 geschrieben habe, stehen in einem zweiten Block. *Ein Werkzeug, das die Hälfte nicht
+sieht, meldet Vollständigkeit, die es nicht hat.* → **K-06**
+
+**2. `FEHLSCHLAG scope.population_command exit 1`** — obwohl ich denselben Befehl heute zweimal
+selbst gefahren habe. **Der Grund:** die `&&`-Kette endet mit `grep 'collapsed|klappZu|schieneZu'`,
+und der findet **0** — genau das ist das gewünschte Ergebnis, es beweist die Lücke. `grep` liefert
+dafür exit 1 und reißt die Kette.
+
+> **Der Befehl ist richtig, sein Exitcode ist es nicht.** Ein Validator, der das nicht
+> unterscheidet, macht aus jeder bewiesenen Lücke einen Fehlschlag — **und wird abgeschaltet.**
+> → **K-07**, und wie er es löst, entscheidet der Generator.
+
+### Was jetzt vor ihm liegt
+
+```text
+AUF-87-N2   aktiv, sofort baubar, beruehrt nur scripts/
+AUF-83-T3   gebaut, nicht committet — bitte committen und melden. R18 ist seit 07:12 aufgehoben:
+            der Pruefstand ist der Commit d78c2466, nicht der Arbeitsbaum.
+AUF-87      gebaut, nicht committet — dito.
+```
+
+**Und die Lehre, die ins Rollenblatt gehört:** *bevor ich „er baut noch" schreibe, messe ich die
+Zeitstempel. Ein stiller Baum ist kein Beweis für Arbeit — er ist genauso gut ein Beweis für
+Warten.*
