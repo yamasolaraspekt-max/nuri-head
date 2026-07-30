@@ -22,6 +22,7 @@
  * sehen (kein DOM), und das steht hier, statt es zu verschweigen.
  */
 import { useEffect, type RefObject } from 'react';
+import { useEscapeEbene } from './escapeStapel';
 
 /**
  * Was als fokussierbar gilt. Bewusst **ohne** `[tabindex="-1"]`: solche Elemente sind programmatisch
@@ -54,6 +55,11 @@ export function useDialogFokus(
   huelle: RefObject<HTMLElement | null>,
   onSchliessen: () => void,
 ): void {
+  // AUF-83-T5 / K-03: Escape läuft über den geteilten Stapel, nicht über einen eigenen Listener.
+  // `aktiv=true` fest ist hier richtig — dieser Hook läuft nur, solange der Aufrufer den Dialog
+  // überhaupt rendert (`{offen && <Dialog/>}`), der Hook-Aufruf SELBST ist also schon die Bedingung.
+  useEscapeEbene('dialog', true, onSchliessen);
+
   useEffect(() => {
     const vorher = document.activeElement as HTMLElement | null;
     const knoten = huelle.current;
@@ -66,7 +72,6 @@ export function useDialogFokus(
     }
 
     const beiTaste = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape') { onSchliessen(); return; }
       if (e.key !== 'Tab') return;
       const k = huelle.current;
       if (!k) return;
@@ -83,7 +88,7 @@ export function useDialogFokus(
       // Zurückgeben, wo er herkam — aber nur, wenn das Element noch im Dokument steht.
       if (vorher && document.contains(vorher)) vorher.focus();
     };
-  }, [huelle, onSchliessen]);
+  }, [huelle]);
 }
 
 /**

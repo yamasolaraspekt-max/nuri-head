@@ -50,10 +50,18 @@ test('B3: das Eigenschaften-Panel bricht lange Wörter um, statt sie abzuschneid
   // ihr gerechnet. **Eine Zusage, die an einer Zahl hängt, die niemand mehr braucht, fällt beim
   // nächsten Aufräumen mit „Panel-Container nicht gefunden" — ohne dass ein Fehler vorliegt.**
   // Gesucht wird deshalb über das, was das Panel *ist*: eine Schiene mit linker Trennlinie.
-  const panel = app.split('\n').find((l) => l.includes('data-schiene') && l.includes('borderLeft'));
-  assert.ok(panel, 'Eigenschaften-Panel nicht gefunden — trägt es seine Schienen-Markierung nicht mehr?');
-  assert.match(panel, /overflowWrap: 'anywhere'/, 'sonst bricht der Hinweistext mitten im Wort ab');
-  assert.match(panel, /boxSizing: 'border-box'/, 'Padding darf die 268 px nicht sprengen');
+  //
+  // **Ein zweites Mal umgehängt in AUF-83-T5.** Der Container ist klappbar geworden — `data-schiene`
+  // steht jetzt bedingt (`{...(istSchmal && schienen.rechts ? {} : { 'data-schiene': true })}`,
+  // kein Overlay ⇒ die Zeichenkette bleibt im Quelltext), und `borderLeft` steht seither auf einer
+  // eigenen Zeile innerhalb des Öffnungs-Tags. Eine Ein-Zeilen-Suche findet das Element nicht mehr;
+  // gesucht wird jetzt über den ganzen Block, dasselbe Muster wie bei der Reiterzeile oben.
+  const block = app.match(/<div\n\s*\{\.\.\.\(istSchmal && schienen\.rechts[\s\S]*?\n\s*>/);
+  assert.ok(block, 'Eigenschaften-Panel nicht gefunden — trägt es seine Schienen-Markierung nicht mehr?');
+  assert.match(block[0], /data-schiene/, 'die Schienen-Markierung fehlt im Block');
+  assert.match(block[0], /borderLeft/, 'die linke Trennlinie fehlt im Block');
+  assert.match(block[0], /overflowWrap: 'anywhere'/, 'sonst bricht der Hinweistext mitten im Wort ab');
+  assert.match(block[0], /boxSizing: 'border-box'/, 'Padding darf die Breite nicht sprengen');
 });
 
 test('B3: die Spiegel-Schaltflächen können nicht mehr kappen — es gibt sie nicht mehr', () => {

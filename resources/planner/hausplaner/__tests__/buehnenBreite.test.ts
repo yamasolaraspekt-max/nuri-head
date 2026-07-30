@@ -24,9 +24,15 @@ test('K-01: die Breitenrechnung nennt kein `innerWidth` mehr', () => {
   // **Die Wirkung, nicht die Gestalt:** nicht „die neue Zeile existiert", sondern „die alte
   // Rechnung gibt es nicht mehr". Eine Zusage, die nur das Neue prüft, bleibt grün, wenn das Alte
   // danebenstehen bleibt.
+  //
+  // **Nachgeschärft in AUF-83-T5.** `innerWidth` kommt seither ein zweites Mal vor —
+  // `useIstSchmal` fragt `window.innerWidth < 1024` für die Overlay-Schwelle (K-05), das ist
+  // KEIN Zusammenzählen von Schienenbreiten. Die alte Regression hatte die Form `innerWidth - Zahl`
+  // (eine Subtraktion); genau die bleibt verboten, ein Vergleich (`<`, `>=`, …) ist eine andere
+  // Aussage und nicht die Konstante, die dieses Kriterium verbietet.
   const codeZeilen = app.split('\n').filter((z) => !z.trim().startsWith('*') && !z.trim().startsWith('//'));
-  const rechnung = codeZeilen.filter((z) => z.includes('innerWidth') && z.includes('const'));
-  assert.deepEqual(rechnung, [], `die Fensterrechnung steht noch:\n${rechnung.join('\n')}`);
+  const rechnung = codeZeilen.filter((z) => z.includes('const') && /innerWidth\s*-\s*\d/.test(z));
+  assert.deepEqual(rechnung, [], `die Fensterrechnung (Subtraktion) steht noch:\n${rechnung.join('\n')}`);
 });
 
 test('K-01 (presence-Partner): die Bühne bezieht ihre Breite aus dem Modul', () => {

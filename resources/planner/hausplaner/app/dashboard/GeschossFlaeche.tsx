@@ -28,6 +28,7 @@ import { GESPERRT_DECKKRAFT, GESPERRT_ZEIGER } from './gesperrtStil';
 import { T } from '../studioDaten';
 import { stapel, kurzfassung, type StapelEintrag } from './geschossStapel';
 import type { Level } from '../../domain/scene.types';
+import { useEscapeEbene } from './escapeStapel';
 
 interface Props {
   levels: readonly Level[];
@@ -62,16 +63,18 @@ export function GeschossFlaeche({
   // Wechselt das aktive Geschoss, folgt das Namensfeld — sonst benennt man das falsche um.
   useEffect(() => { setName(s.aktiv?.name ?? ''); }, [s.aktiv?.id, s.aktiv?.name]);
 
-  // Klick daneben und Esc schließen — wie beim Gruppen-Menü, kein zweites Verhalten.
+  // AUF-83-T5 / K-03: Escape läuft über den geteilten Stapel (Ebene „menue") — sonst schlösse ein
+  // Escape dieses Menü UND z. B. die Befehlspalette gleichzeitig, wenn beide offen sind.
+  useEscapeEbene('menue', offen, () => setOffen(false));
+
+  // Klick daneben — unverändert, das ist keine Escape-Frage.
   useEffect(() => {
     if (!offen) return undefined;
     const beiKlick = (e: MouseEvent): void => {
       if (huelle.current && !huelle.current.contains(e.target as Node)) setOffen(false);
     };
-    const beiTaste = (e: KeyboardEvent): void => { if (e.key === 'Escape') setOffen(false); };
     document.addEventListener('mousedown', beiKlick);
-    document.addEventListener('keydown', beiTaste);
-    return () => { document.removeEventListener('mousedown', beiKlick); document.removeEventListener('keydown', beiTaste); };
+    return () => { document.removeEventListener('mousedown', beiKlick); };
   }, [offen, setOffen]);
 
   const uebernehmen = (): void => {

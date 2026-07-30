@@ -21,6 +21,7 @@ import { resolveToolState } from '../tools/activation';
 import type { AktivierungsKontext } from '../tools/toolTypes';
 import { WERKZEUG_GRUPPEN, iconPfad, type WerkzeugGruppe } from './werkzeugGruppen';
 import { werkzeugAnzeige, ANZEIGE_ZEICHEN, ANZEIGE_TEXT } from '../tools/werkzeugZustand';
+import { useEscapeEbene } from './escapeStapel';
 
 interface Props {
   offen: string | null;
@@ -40,16 +41,18 @@ interface Props {
 export function WerkzeugGruppenMenue({ offen, setOffen, kontext, aktivId, angeheftet, onAnheften, gruppen = WERKZEUG_GRUPPEN }: Props): React.ReactElement {
   const huelle = useRef<HTMLSpanElement>(null);
 
-  // Klick daneben und Esc schließen das Menü — sonst bleibt es beim Weiterarbeiten im Weg stehen.
+  // AUF-83-T5 / K-03: Escape läuft über den geteilten Stapel (Ebene „menue") — dieselbe Begründung
+  // wie bei `GeschossFlaeche`.
+  useEscapeEbene('menue', offen !== null, () => setOffen(null));
+
+  // Klick daneben — unverändert.
   useEffect(() => {
     if (!offen) return undefined;
     const beiKlick = (e: MouseEvent): void => {
       if (huelle.current && !huelle.current.contains(e.target as Node)) setOffen(null);
     };
-    const beiTaste = (e: KeyboardEvent): void => { if (e.key === 'Escape') setOffen(null); };
     document.addEventListener('mousedown', beiKlick);
-    document.addEventListener('keydown', beiTaste);
-    return () => { document.removeEventListener('mousedown', beiKlick); document.removeEventListener('keydown', beiTaste); };
+    return () => { document.removeEventListener('mousedown', beiKlick); };
   }, [offen, setOffen]);
 
   return (

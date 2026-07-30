@@ -44,7 +44,10 @@ test('K3: keine andere feste Zahl ist an ihre Stelle getreten', () => {
   assert.doesNotMatch(zeile[0], /\d{2,}/, 'eine Zahl in dieser Zeile wäre die nächste Konstante');
   // Und die Messung hängt wirklich am tragenden Element.
   assert.match(q, /const gemesseneHoehe = useGemesseneHoehe\(inhaltRef\);/);
-  assert.match(q, /<div ref=\{inhaltRef\} style=\{\{ flex: 1, overflow: 'hidden', display: 'flex' \}\}>/);
+  // AUF-83-T5: `position: 'relative'` ist dazugekommen — die Reihe trägt jetzt den Anker für eine
+  // Schiene, die bei schmalem Fenster als Overlay darüber liegt (K-05). Dieselben drei Werte wie
+  // vorher, an derselben Stelle, nur nicht mehr die einzigen drei.
+  assert.match(q, /<div ref=\{inhaltRef\} style=\{\{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex' \}\}>/);
 });
 
 // --- K9: die Kante beim ersten Rendern ----------------------------------------------------------

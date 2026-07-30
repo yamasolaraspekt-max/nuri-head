@@ -44,6 +44,9 @@ import { SCHIENEN_REITER, SCHIENE_STANDARD, schienenReiter, type SchienenReiterI
 import { ARBEITSBEREICHE, arbeitsbereich } from './dashboard/arbeitsbereiche';
 import { kopfzeile } from './state/objektkopf';
 import { ObjektkopfUeberlauf } from './dashboard/ObjektkopfUeberlauf';
+import { useEscapeEbene } from './dashboard/escapeStapel';
+import { SchienenSchalter } from './dashboard/SchienenSchalter';
+import { ladeSchienen, speichereSchienen, SCHIENEN_STANDARD, type SchienenSeite, type SchienenZustand } from './state/schienenSpeicher';
 import { gruppenFuer } from './dashboard/werkzeugGruppen';
 import { ladeArbeitsbereich, speichereArbeitsbereich } from './state/arbeitsbereichSpeicher';
 import {
@@ -122,6 +125,30 @@ const navHub: React.CSSProperties = { fontSize: 12.5, fontWeight: 600, color: T.
 const navSub: React.CSSProperties = { fontSize: 12.5, color: T.muted, padding: '6px 12px 6px 22px' };
 // Batch 0: die frühere FACHPLANER-Attrappe (inerte `geplant`-Labels) ist durch die datengetriebene
 // Fähigkeiten-Navi (app/tools/faehigkeiten.ts + FaehigkeitenNavi) ersetzt — eine Wahrheit, mit Zustand.
+
+/**
+ * AUF-83-T5 / K-05 — ist das Fenster zu schmal, damit eine Schiene den Platz noch VERDRÄNGEN darf?
+ *
+ * **Die Schwelle ist 1024 px, wörtlich aus dem Auftrag:** „ab 1024 px verdrängt eine offene
+ * Schiene wie heute. Darunter liegt sie über der Bühne." `max-width: 1023px` ist deshalb die
+ * Grenze, nicht 1024 — bei genau 1024 gilt noch die verdrängende (heutige) Regel.
+ *
+ * **`matchMedia` statt ein eigener `resize`-Zuhörer:** das Ereignis `change` feuert nur, wenn die
+ * Schwelle wirklich über- oder unterschritten wird, nicht bei jedem Pixel — dieselbe Ökonomie wie
+ * der `ResizeObserver` in `buehnenBreite.ts`, nur für eine Schwelle statt eine Zahl.
+ */
+function useIstSchmal(): boolean {
+  const [schmal, setSchmal] = useState(() => (typeof window === 'undefined' ? false : window.innerWidth < 1024));
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return undefined;
+    const abfrage = window.matchMedia('(max-width: 1023px)');
+    const aktualisieren = (): void => setSchmal(abfrage.matches);
+    aktualisieren();
+    abfrage.addEventListener('change', aktualisieren);
+    return () => abfrage.removeEventListener('change', aktualisieren);
+  }, []);
+  return schmal;
+}
 
 // SVG-Icons (frei/Feather-Stil, nachgezeichnet) — einheitlich 24er-Viewbox, stroke=currentColor.
 function svgWrap(children: React.ReactNode): React.ReactElement {
@@ -407,6 +434,34 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     const gemerkt = ladeArbeitsbereich();
     if (gemerkt) usePlannerUiStore.getState().setActiveWorkspace(gemerkt);
   }, []);
+  /**
+   * AUF-83-T5 / K-04 — der Klappzustand beider Schienen, je Arbeitsbereich gemerkt.
+   *
+   * **Dasselbe Muster wie `activeWorkspace` oben:** die Wahrheit ist lokaler Zustand
+   * (`useState`), `localStorage` ist nur das Gedächtnis über einen Neuladen hinweg. Wechselt der
+   * Arbeitsbereich, wird NEU geladen — wer in „Elektro · PV" zugeklappt hat, findet
+   * „Architektur" unverändert, weil dessen eigener Eintrag gelesen wird.
+   */
+  const [schienen, setSchienen] = useState<SchienenZustand>(SCHIENEN_STANDARD);
+  useEffect(() => {
+    setSchienen(ladeSchienen(activeWorkspace));
+  }, [activeWorkspace]);
+  const klappeSchiene = React.useCallback((seite: SchienenSeite, offen: boolean) => {
+    setSchienen((alt) => {
+      const neu = { ...alt, [seite]: offen };
+      speichereSchienen(activeWorkspace, neu);
+      return neu;
+    });
+  }, [activeWorkspace]);
+  /** AUF-83-T5 / K-05: unter 1024 px legt sich eine offene Schiene über die Bühne. */
+  const istSchmal = useIstSchmal();
+  /**
+   * AUF-83-T5 / K-03 — eine offene Schiene ist nur dann eine „Ebene", wenn sie gerade als
+   * Overlay liegt (schmales Fenster). Verdrängend (≥1024 px) ist sie normales, dauerhaftes
+   * Layout — ein Escape soll dort nicht versehentlich die Leiste zuklappen, während man zeichnet.
+   */
+  useEscapeEbene('schiene', istSchmal && schienen.links, () => klappeSchiene('links', false));
+  useEscapeEbene('schiene', istSchmal && schienen.rechts, () => klappeSchiene('rechts', false));
   /** Die Gruppen des gewählten Bereichs — durchgängige plus gebundene, in Themen-Reihenfolge. */
   const sichtbareGruppen = useMemo(() => gruppenFuer(activeWorkspace), [activeWorkspace]);
   /**
@@ -1010,26 +1065,38 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     }
   }
 
+  // AUF-83-T5 / K-03 — Escape läuft über den geteilten Stapel, nicht über eine feste Reihenfolge
+  // von if/else-Zweigen hier. **Rang**: Palette schlägt Werkzeug-Reset, das die niedrigste Stufe
+  // der Rangfolge ist (`RANGFOLGE` in `escapeStapel.ts`) — `aktiv=true` fest ist richtig, weil der
+  // Stapel selbst entscheidet, ob gerade eine höhere Ebene (Palette/Dialog/Menü/Schiene) dran ist;
+  // Werkzeug-Reset gewinnt nur, wenn KEINE von ihnen offen ist.
+  useEscapeEbene('palette', paletteOffen, schliessePalette);
+  // AUF-83-T5-Nachbesserung: `useCallback` mit leeren Abhängigkeiten — eine Inline-Funktion hier
+  // wäre bei JEDEM Render neu, und `HausplanerApp` rendert in Mausbewegungs-Frequenz. Ohne
+  // Memoisierung meldete sich diese Ebene bei jeder Bewegung ab und wieder an (`escapeStapel.ts`
+  // vergleicht Objektidentität in seinem Effekt-Abhängigkeitsfeld) — funktional meist harmlos,
+  // aber unnötige Listener-Kirchgänge, und beim Debuggen einer echten Race genau das Rauschen,
+  // das eine Ursache verdeckt.
+  const setzeWerkzeugZurueck = React.useCallback(() => {
+    setWandStart(null);
+    setTreppeStart(null);
+    setWerkzeug('auswahl');
+  }, []);
+  useEscapeEbene('werkzeug-reset', true, setzeWerkzeugZurueck);
+
   useEffect(() => {
     function taste(e: KeyboardEvent): void {
       if ((e.target as HTMLElement)?.tagName === 'INPUT') {
         return;
       }
       // Kante 8: solange die Palette offen ist, dürfen die Werkzeug-Kürzel NICHT durchschlagen —
-      // sonst wechselt ein Tastendruck im Filterfeld das Werkzeug. Esc schließt (auch ohne Fokus
-      // im Feld, etwa nach einem Klick auf den Hintergrund).
+      // sonst wechselt ein Tastendruck im Filterfeld das Werkzeug. Escape schließt die Palette
+      // über den Stapel oben (auch ohne Fokus im Feld, etwa nach einem Klick auf den Hintergrund) —
+      // hier wird nur noch verhindert, dass irgendeine andere Taste durchschlägt.
       if (paletteOffenRef.current) {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          schliessePalette();
-        }
         return;
       }
-      if (e.key === 'Escape') {
-        setWandStart(null);
-        setTreppeStart(null);
-        setWerkzeug('auswahl');
-      } else if (e.key === 'Delete' || e.key === 'Backspace') {
+      if (e.key === 'Delete' || e.key === 'Backspace') {
         for (const id of store.getState().selectedNodeIds) {
           store.getState().executeCommand({ type: 'REMOVE_NODE', nodeId: id });
         }
@@ -1070,7 +1137,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     window.addEventListener('keydown', taste);
 
     return () => window.removeEventListener('keydown', taste);
-  }, [store, oeffnePalette, schliessePalette]);
+  }, [store, oeffnePalette]);
 
   if (!scene || !level) {
     return <div style={{ padding: 24, color: FARBEN.text }}>Szene nicht geladen.</div>;
@@ -1422,23 +1489,42 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       {/* AUF-72: DIESE Reihe ist das Maßband. Ihre Höhe ist das Fenster minus der Zeilen darüber
           und hängt NICHT von der Bühne ab (`overflow: hidden`) — deshalb kann die Messung sich
           nicht selbst verschieben. */}
-      <div ref={inhaltRef} style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
+      <div ref={inhaltRef} style={{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex' }}>
         {/* L1: Planer-Schiene — AUF-27: DREI REITER statt drei gestapelter Blöcke.
             Vorher trugen Werkzeuge, Fachplaner und Projektbrowser eine gemeinsame Scroll-Höhe;
             der Projektbrowser war erst nach rund 20 Scroll-Ticks sichtbar. Jetzt ist immer genau
             ein Abschnitt sichtbar, und die Scroll-Höhe gehört dem Abschnitt, nicht der Spalte:
             `overflow` sitzt am Inhaltsbereich, NICHT mehr an dieser Spalte.
             Die Reiterleiste ist die gemeinsame `ReiterLeiste` (dasselbe Muster wie im
-            Eigenschaften-Panel, AUF-19) — kein zweiter Tab-Mechanismus. */}
-        <div data-schiene style={{ width: 220, flex: '0 0 auto', background: T.surface, borderRight: `1px solid ${T.hair}`, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <ReiterLeiste
-            reiter={SCHIENEN_REITER}
-            aktiv={schienenTab}
-            setAktiv={(id) => setSchienenTab(id as SchienenReiterId)}
-            ariaLabel="Planer-Bereiche"
-            panelId={SCHIENE_ID}
-            reiterId={schienenReiterId}
-          />
+            Eigenschaften-Panel, AUF-19) — kein zweiter Tab-Mechanismus.
+            AUF-83-T5 / K-01/K-02/K-05: klappbar. **`data-schiene` fehlt bewusst, wenn diese
+            Schiene gerade als Overlay liegt** (schmales Fenster, offen) — dort nimmt sie keinen
+            Platz aus der Reihe, und `buehnenBreite.ts` darf ihre Breite dann nicht abziehen; siehe
+            die Begründung bei `useIstSchmal`. */}
+        <div
+          {...(istSchmal && schienen.links ? {} : { 'data-schiene': true })}
+          className={istSchmal && schienen.links ? 'hp-schiene-overlay hp-schiene-overlay--links' : undefined}
+          style={{
+            width: schienen.links ? 220 : 32, flex: '0 0 auto', background: T.surface,
+            borderRight: `1px solid ${T.hair}`, display: 'flex', flexDirection: 'column', overflow: 'hidden',
+          }}
+        >
+          <div className="hp-schiene-kopf">
+            {schienen.links && <div className="hp-schiene-kopf-reiter"><ReiterLeiste
+              reiter={SCHIENEN_REITER}
+              aktiv={schienenTab}
+              setAktiv={(id) => setSchienenTab(id as SchienenReiterId)}
+              ariaLabel="Planer-Bereiche"
+              panelId={SCHIENE_ID}
+              reiterId={schienenReiterId}
+            /></div>}
+            <SchienenSchalter seite="links" offen={schienen.links} label="Planer-Bereiche" onClick={() => klappeSchiene('links', !schienen.links)} />
+          </div>
+          {/* Zugeklappt bleibt nur der Schalter stehen — der Inhalt kostet dann weder Höhe noch
+              Fokus-Stopps, die niemand sieht (dieselbe Überlegung wie bei GeschossFlaeche/K-06:
+              gesperrter Inhalt wird nicht unsichtbar mitgerendert). */}
+          {schienen.links && (
+          <>
           {/* DER Inhaltsbereich der drei Reiter: eine Rolle, eine id, eigene Scroll-Höhe.
               `aria-labelledby` nennt den gerade aktiven Reiter. */}
           <div
@@ -1569,6 +1655,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               nirgends; sichtbar gemacht statt neu erfunden. Kein zweiter Text, keine zweite
               Wahrheit. */}
           <div style={{ padding: '10px 12px', fontSize: 11, color: T.muted, borderTop: `1px solid ${T.canvasGrid}`, flex: '0 0 auto' }}>{schienenReiter(schienenTab)?.hinweis}</div>
+          </>
+          )}
         </div>
         <div style={{ display: modus === '3d' ? 'none' : 'block', width: stageBreite, borderRight: modus === 'split' ? `1px solid ${T.hair}` : 'none' }}>
         <Stage
@@ -1853,11 +1941,28 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         </Stage>
         </div>
         <DreiDBereich sichtbar={modus !== '2d'} />
-        {/* Rechtes Eigenschaften-Panel (immer sichtbar; Dach-Parameter oder Kontext) */}
+        {/* Rechtes Eigenschaften-Panel — AUF-83-T5 / K-01/K-02/K-05/K-06: klappbar, wie die linke
+            Schiene. Der alte Kommentar „immer sichtbar" beschrieb ab diesem Auftrag das Gegenteil
+            des Verhaltens und ist deshalb fort (K-06) — ein Kommentar, der die alte Wahrheit
+            weiterträgt, wird geglaubt. */}
         {/* AUF-26/B3: `overflowWrap` + `boxSizing` — Text bricht um, statt im Wort abgeschnitten zu
             werden. Ein Hinweis, der bei „…brauch" endet, ist kein Hinweis. */}
-        <div data-schiene style={{ width: 268, flex: '0 0 auto', background: T.surface, borderLeft: `1px solid ${T.hair}`, padding: 14, overflowY: 'auto', overflowWrap: 'anywhere', boxSizing: 'border-box', fontSize: 12.5, color: FARBEN.text }}>
-          <div style={{ fontWeight: 800, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '.04em', color: FARBEN.gedaempft, marginBottom: 8 }}>Eigenschaften</div>
+        <div
+          {...(istSchmal && schienen.rechts ? {} : { 'data-schiene': true })}
+          className={istSchmal && schienen.rechts ? 'hp-schiene-overlay hp-schiene-overlay--rechts' : undefined}
+          style={{
+            width: schienen.rechts ? 268 : 32, flex: '0 0 auto', background: T.surface,
+            borderLeft: `1px solid ${T.hair}`, padding: schienen.rechts ? 14 : 0,
+            overflowY: schienen.rechts ? 'auto' : 'hidden', overflowWrap: 'anywhere',
+            boxSizing: 'border-box', fontSize: 12.5, color: FARBEN.text,
+          }}
+        >
+          <div className="hp-schiene-kopf">
+            {schienen.rechts && <div style={{ fontWeight: 800, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '.04em', color: FARBEN.gedaempft, marginBottom: 8, flex: 1, minWidth: 0 }}>Eigenschaften</div>}
+            <SchienenSchalter seite="rechts" offen={schienen.rechts} label="Eigenschaften" onClick={() => klappeSchiene('rechts', !schienen.rechts)} />
+          </div>
+          {schienen.rechts && (
+          <>
           {/* Dashboard v2.2 (§20 / UI-5): Reiter aus PANEL_TABS (Daten, nicht Markup). Seit AUF-27
               rendert sie die gemeinsame `ReiterLeiste` — dieselbe Verdrahtung wie die Schiene,
               inklusive der AUF-19-Nacharbeiten (aria-controls, Pfeiltasten, Fokusnachführung).
@@ -2244,6 +2349,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             </>
           )}
           </div>
+          </>
+          )}
         </div>
       </div>
 
@@ -2283,7 +2390,15 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
               placeholder="Befehl suchen … (↑↓ wählen, Enter ausführen, Esc schließt)"
               onChange={(e) => { setPaletteFilter(e.target.value); setPaletteIndex(0); }}
               onKeyDown={(e) => {
-                if (e.key === 'Escape') { e.preventDefault(); schliessePalette(); return; }
+                // AUF-83-T5 / K-03: das Schließen läuft über den Escape-Stapel (`useEscapeEbene
+                // ('palette', …)` weiter oben in `HausplanerApp`) — der lauscht auf `document` und
+                // wird von JEDEM Escape-Druck erreicht, auch bei Fokus in diesem Feld. Ein zweiter,
+                // direkter `schliessePalette()`-Aufruf hier war die Ursache eines echten Fehlers:
+                // Er löste einen Render aus, der GeschossFlaeches Stapel-Eintrag ABMELDETE UND NEU
+                // ANMELDETE, bevor der Stapel-Listener selbst zum Zug kam — die Palette war dann
+                // aus der Rangliste verschwunden, und das rangniedrigere Menü gewann fälschlich.
+                // `preventDefault` bleibt: manche Browser leeren ein Textfeld nativ bei Escape.
+                if (e.key === 'Escape') { e.preventDefault(); return; }
                 if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
                   e.preventDefault();
                   if (paletteListe.length === 0) return;

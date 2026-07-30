@@ -477,3 +477,20 @@
 .hp-ok-ueberlauf-knopf { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; cursor: pointer; border: 1px solid var(--hp-control-border); background: var(--hp-surface); color: var(--hp-ink); }
 .hp-ok-punkt { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .hp-ok-menue { position: absolute; top: 100%; right: 0; z-index: 70; margin-top: 5px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; background: var(--hp-surface); border: 1px solid var(--hp-hair); border-radius: 12px; box-shadow: 0 10px 28px var(--hp-canvas-wall-ghost); padding: 10px; min-width: 240px; max-width: 92vw; }
+
+/* --- AUF-83-T5 — beide Schienen klappbar, Escape mit Rangfolge ----------------------------------
+ *
+ * **Der Schalter** sitzt in beiden Zustaenden an derselben Stelle (Kopf der Schiene) — ein Knopf,
+ * kein zweiter Mechanismus, dieselbe Bedienung links wie rechts. Farbe nur ueber Token.
+ *
+ * **Der Overlay-Zustand** gilt NUR unter 1024 px UND nur waehrend die Schiene offen ist (K-05):
+ * `position: absolute` nimmt sie aus dem Flex-Fluss von `inhaltRef` — die Buehne behaelt ihre
+ * Breite, die Schiene legt sich darueber. Deshalb traegt `HausplanerApp.tsx` in genau diesem
+ * Zustand auch KEIN `data-schiene` an diesem Knoten: `buehnenBreite.ts` soll eine Breite, die
+ * gerade nicht aus dem Fluss genommen wurde, nicht faelschlich abziehen. */
+.hp-schiene-kopf { display: flex; align-items: center; flex: 0 0 auto; }
+.hp-schiene-kopf-reiter { flex: 1; min-width: 0; }
+.hp-schiene-schalter { flex: 0 0 auto; width: 28px; height: 28px; display: grid; place-items: center; font-size: 15px; font-weight: 700; cursor: pointer; border: none; border-radius: 6px; }
+.hp-schiene-overlay { position: absolute; top: 0; bottom: 0; z-index: 40; box-shadow: 0 0 24px var(--hp-canvas-wall-ghost); }
+.hp-schiene-overlay--links { left: 0; }
+.hp-schiene-overlay--rechts { right: 0; }
