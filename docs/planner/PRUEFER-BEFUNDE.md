@@ -241,6 +241,7 @@ Rollentrennung.**
 | PB-039 | `PRUEFER-BEFUNDE.md` (mein Register) | Acht Befunde hatten einen Abschnitt, aber **keine Zeile** — Ursache F-14 (`str.replace` traf nicht) | **P2** | **ERLEDIGT** (38 Zeilen = 38 IDs) | Prüfer |
 | PB-042 | (Betrieb) `git log` | **109 Commits heute, 2 davon Produktivcode, 66 von mir** — docs/Code 7:1, mein Register allein 4 265 Z. | **P2** | offen | **Yama** (Takt) |
 | PB-046 | Objekt-Planer @ **375 px** (Browser) | 8 Bedienelemente ausserhalb, kein Bildlauf; **Planner: 375 = Ankunfts-, kein Bedienziel** → AUF-91 | **P2→P3** (Begründung geprüft, sie trägt) | offen mit Ziel | Planner |
+| PB-047 | `SidebarCountController.php:16,29,162` | `$user?->name` ist ein **String**, der Parameter fordert `?int` — **464 `local.ERROR`**, die Seitenleisten-Zahlen kommen nie an | **P2** | offen | Planner |
 
 ---
 
@@ -4795,3 +4796,56 @@ PB-042  bei Yama         — der Takt
 **Ein einziger technischer Rest.** *Die Quelle ist zu, das Fass hat noch keinen Boden.*
 
 **Ballbesitz: Planner** (PB-043 Teil 2).
+
+---
+
+## 77. Runde 294 — **PB-047 · P2: die Seitenleisten-Zahlen scheitern seit dem 07.07. — 464 Mal, und niemand hat es gesehen**
+
+**Gemessen 00:55 CEST (`date`) gegen `8b96d696`.** *Gefunden beim Nachhalten von `PB-043`: ich wollte
+wissen, **wer** die 47 036 Byte je Takt schreibt.*
+
+```text
+tail storage/logs/laravel.log
+   [2026-07-31 00:46:58] local.ERROR: SidebarCountController::countInquiryUnpublished():
+      Argument #1 ($employeeId) must be of type ?int, string given,
+      called in .../SidebarCountController.php on line 29
+
+Vorkommen in der Datei     464
+   30.07.                   57
+   31.07. (bis 00:55)       14
+erster Eintrag         07.07.2026 07:07    -> seit 24 Tagen
+```
+
+### Die Kette, Zeile für Zeile
+
+```text
+SidebarCountController.php:16    $employeeId = $user?->name;          <- users.name traegt die
+                                                                        employees.id als STRING
+                          :29    countInquiryUnpublished($employeeId)
+                          :162   private function countInquiryUnpublished(?int $employeeId = null, ...)
+                                                                     ^^^^ TypeError
+routes/web.php:440   GET /api/sidebar-counts   (auth)                <- wird von der Oberflaeche gepollt
+```
+
+**`users.name` speichert die verknüpfte `employees.id` — als Zeichenkette.** *Diese Eigenart ist
+bekannt und dokumentiert; hier trifft sie auf eine typisierte Signatur, und der Aufruf stirbt.*
+
+### Warum das mehr ist als ein Logeintrag
+
+**Der Endpunkt liefert die Zähler der Seitenleiste.** Reisst er bei `my_inquiries_unpublished`, kommt
+**die ganze JSON-Antwort nicht zustande** — nicht nur dieser eine Wert. *Die Zahlen neben den
+Menüpunkten sind für den Benutzer die Antwort auf „habe ich etwas zu tun".*
+
+> **Was ich NICHT gemessen habe:** wie sich das an der Oberfläche zeigt — ob die Zahlen fehlen,
+> veraltet stehen bleiben oder ob ein anderer Weg sie nachliefert. **Dafür müsste ich die Seitenleiste
+> im Browser ansehen, und das habe ich nicht.** *Die Schwere P2 steht deshalb auf der gemessenen
+> Kette, nicht auf einer vermuteten Wirkung.*
+
+### Und was es über PB-043 sagt
+
+**Ich habe heute Mittag geschrieben: „404 Fehlermeldungen liegen zwischen 64 086 Poll-Zeilen
+begraben."** *Hier ist einer davon — 464 Mal, seit dem 07.07., in einem Log, das niemand liest, weil es
+229 MB gross ist.* **`PB-043` war nie ein Aufräum-Befund. Er war der Grund, warum dieser hier 24 Tage
+unentdeckt blieb.**
+
+**Ballbesitz: Planner.**
