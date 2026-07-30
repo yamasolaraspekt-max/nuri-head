@@ -207,6 +207,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-037 | `buehnenBreite.test.ts:23` | ~~P1~~ | Filter auf die Subtraktion geschärft, Rechnung unberührt, Gate 1409/1409 | **ERLEDIGT** | 30.07. |
 | PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt — offen nur: Passwort wechseln | Repo **ERLEDIGT** · Yama | 30.07. |
 | PB-040 | `db` + Ledger | Eine gelaufene Migration liegt in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | offen | Generator |
+| PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4 trägt die Zahlen von **vor** der 08:12-Korrektur; F-04s Barriere-Zelle ist überholt; `bestand.sh`/`VORLAGE.md` fehlen | **P2** | offen | Planner |
 
 ---
 
@@ -4141,3 +4142,73 @@ ohne gesetztes `DB_DATABASE` läuft.**
 
 **Ballbesitz: Prüfer** (Barriere gesetzt) — **gemeldet, weil eine Prüfinstanz, die ihre eigenen
 Regelbrüche verschweigt, ihre Befunde entwertet.**
+
+---
+
+## 65. Runde 49 — **PB-041 · P2: der Maßnahmenplan von heute — drei Stellen, gemessen** *(Papierstopp: knapp gehalten)*
+
+**Gemessen 11:33 CEST gegen `8f7ee0c3`.** `docs/planner/massnahmenplan-2026-07-30.md` (253 Z.), das
+frischeste Papier im Haus und dasjenige, das steuert, was als Nächstes gebaut wird.
+
+### A — M4 trägt die Zahlen von **vor** der eigenen Korrektur
+
+```text
+Z. 22 (§0, korrigiert 08:12):  "Fehlerklassen mit Barriere  5 von 15"
+Z. 113 (M4):                   "Das Register hat heute 14 Klassen, sechs davon ohne Barriere"
+Z. 124 (M4, Schritt 1):        "die ⚠-Zeilen des Registers lesen (heute sechs)"
+
+gemessen an docs/auftraege/FEHLERKLASSEN.md:
+   Klassen 15 · ✅ 5 · ⚠ 8 · ❌ 2 · Summe 15     <- genau die korrigierten Werte aus §0
+```
+
+**Die Korrektur ist in §0 eingetragen und in M4 nicht.** Wer M4 wörtlich befolgt, liest **sechs von
+acht** ⚠-Zeilen — und M4 ist die Maßnahme, die genau das Übersehen verhindern soll. *Die Anweisung
+zur Eingangsprüfung nennt die Grundgesamtheit zu klein.*
+
+### B — die Barriere-Zelle von F-04 ist überholt, und die Kennzahl liest aus ihr
+
+```text
+FEHLERKLASSEN.md, F-04:  "⚠ Regel, keine Barriere — `scripts/auftrag-pruefen.sh` steht aus"
+git cat-file -e HEAD:scripts/auftrag-pruefen.sh   ->  vorhanden (AUF-87, Evaluator GRÜN)
+```
+
+**Das Werkzeug, dessen Fehlen die Zelle als Grund nennt, ist gebaut und abgenommen.** Die
+Leitkennzahl *„Fehlerklassen mit Barriere 5 von 15 → 11 von 15"* wird aus dieser Spalte gezählt —
+**sie steht also zu niedrig, und der Fortschritt des Tages ist unsichtbar.** *Kein Rechenfehler,
+sondern eine Zelle, die nach dem Bau nicht nachgeführt wurde.*
+
+### C — M2 und M3 existieren nicht; M3 war „heute, kostet keinen Bau"
+
+```text
+scripts/auftrag-pruefen.sh   da  (1 Commit)     <- M1 erledigt
+scripts/bestand.sh           FEHLT              <- M2, "direkt nach M1", zwei Stunden
+docs/auftraege/VORLAGE.md    FEHLT              <- M3, "heute", "kostet keinen Bau", eine Stunde
+```
+
+**M1 ist fertig und grün, M2 und M3 sind vier Stunden nach dem Papier nicht angefangen.** M3 hängt an
+keinem Bau und trägt die Kennzahl, die auf **jedes** weitere Blatt wirkt (Ø 285 → ≤ 120). *Das ist
+Statusabgleich, kein Vorwurf — aber die Reihenfolge in §2 nennt M3 unter „SOFORT, ohne Bau".*
+
+### L1–L6
+
+**L3 Konsistenz** — A und B: dieselbe Zahl an zwei Orten, einer nachgeführt, einer nicht. ·
+**L4 Kausalität** — B: die Kennzahl misst eine Spalte statt den Zustand, den sie beschreibt. ·
+**L6 Workflow** — A: die Anweisung nennt eine zu kleine Grundgesamtheit, also übersieht der Befolgende
+zwei Klassen. · **L1/L2/L5** — keine Beanstandung; die Maßnahmen selbst sind sachlich, und §4
+(„M4/M5/M7 sind Vorsätze") benennt ihre eigene Schwäche zutreffend.
+
+### Und ein Beinahe-Fehlbefund von mir, offengelegt
+
+**Mein erster Zählbefehl war `^\| \*\*F-[0-9]+\*\*` — der übersieht `F-08b`.** Ergebnis: „14
+Klassen, 7 ⚠" — womit ich die Korrektur des Planners (*15 · 5 · 8 · 2*) für falsch gehalten hätte.
+**Sie ist richtig; mein Muster war zu eng.**
+
+> Dasselbe Muster wie am Vormittag (`familie: '[a-z]+'` übersah `assign-or-calculate`). **Gefangen hat
+> es die Unplausibilität — 5+7+2 = 14, aber die Summenprobe passte nicht zu vier Feldern.**
+
+**Barriere, ab jetzt vor jedem Zählbefund:** die Teilsummen müssen die Gesamtzahl ergeben; ergeben sie
+sie nicht, ist **zuerst mein Muster verdächtig**, nicht das Papier. *Das ist R21 des Regelwerks, auf
+meine eigene Zählung angewandt — und ohne diese Probe hätte ich einen P2 gegen eine saubere Korrektur
+geschrieben.*
+
+**Ballbesitz: Planner** (A, B) · **Statusabgleich** (C).
