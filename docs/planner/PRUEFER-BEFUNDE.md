@@ -3487,3 +3487,67 @@ Gegenteil meiner Rolle. **Ballbesitz bleibt bei Yama, für diesen einen Schritt.
 
 **PB-038: Repo-Seite erledigt. PB-018 damit auch** — die Ursache, die ich um 09:20 benannt und um
 10:03 als dritte Ausprägung belegt habe, ist mit Schritt 2 geschlossen.
+
+---
+
+## 52. Runde 37 — die Schreibrouten des Hausplaners gegen Bauordnung §5 Frage 4 · **keine Beanstandung**
+
+**Gemessen gegen `9bfa8212`.** Nicht Papier: der Schreibweg des Produkts. *Frage 4 der zehn lautet
+„Trägt jede Schreibroute `auth` + Berechtigung? Sind sensible Daten hinter einem Gate?"*
+
+### Jede Schreibroute ist gegatet — vollständig
+
+```text
+PUT  /objekt/{objekt}/dokument                        auth + permission:Hausplaner,update  + whereNumber
+POST /objekt/{objekt}/uebernehmen                     auth + permission:Hausplaner,update  + whereNumber
+POST /objekt/{objekt}/snapshots                       auth + permission:Hausplaner,update  + whereNumber
+POST /objekt/{objekt}/snapshots/{id}/wiederherstellen auth + permission:Hausplaner,update  + 2x whereNumber
+POST /konfigurator-pakete                             auth + permission:Hausplaner,add
+Lesen (seite · snapshots.liste · katalog · pakete.*)  auth + permission:Hausplaner,read
+```
+
+**Zwei Routen tragen nur `auth`, ohne `permission:`** — `hausplaner.studio` und
+`hausplaner.dachplaner`. **Kein Befund:** die erste ist die Testfläche (*„Leere Scratch-Szene, KEINE
+Persistenz"*, und `studio.blade.php` führt kein `data-speichern-url` — von mir in Runde 21 gemessen),
+die zweite ist ein `redirect()`. **Nichts davon schreibt.**
+
+### Die Frage, die ich für gefährlich hielt — und was die Messung ergab
+
+**Der Controller prüft die Organisation nicht.** `speichern(… LeadAlternativeAdd $objekt)` löst per
+Route-Model-Binding auf; `authorize()` der Anfrage-Klasse gibt `true` zurück; kein `company_id`,
+`branch_id` oder `organisation` im Controller. **Das sieht nach der klassischen Lücke aus** — ein
+Nutzer mit `update`-Recht schreibt am Objekt einer fremden Organisation.
+
+**Sie kann nicht existieren, weil es keine Organisationen gibt:**
+
+```text
+lead_alternative_adds  ->  keine Spalte company_id / branch_id / organisation / tenant_id
+                           (139 Spalten gelesen; einzige Bindung: lead_id -> new_leads)
+Lead-Model             ->  0 Treffer auf company_id|branch_id
+gap-analyse-3d-planer  ->  "kein Tenant-System"   (von mir in Runde 30 gegen den Code geprueft)
+```
+
+**Wo es keine Mandanten gibt, kann kein Mandant den anderen lesen.** *Ich hätte hier beinahe einen
+P1 geschrieben — die zehnte vermiedene Fehlmeldung, und die einzige, bei der nicht die Zerlegung
+schuld war, sondern eine Annahme über die Architektur.*
+
+**Was der Controller stattdessen prüft, und es ist die richtige Kante:**
+`scene['projectId'] !== $objektId` ⇒ *„Die Szene gehört nicht zu diesem Objekt."* **Das verhindert,
+dass eine Szene an ein fremdes Objekt geschrieben wird** — die Verwechslung, die in einem
+Ein-Mandanten-System tatsächlich passieren kann.
+
+### Was ich NICHT geprüft habe
+
+**Ob `hasPermission()` selbst korrekt entscheidet.** Das ist das Rechtesystem des CRM — nach meiner
+eigenen Landkarte **sieben überlappende Rollen-/Rang-Systeme**. Eine Prüfung davon ist eine eigene
+Runde und nicht diese. **L1 für diesen Teil: nicht geprüft**, nicht „keine Beanstandung".
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — jede Schreibroute gegatet, jede ID beschränkt |
+| **L3 Konsistenz** | keine Beanstandung — dasselbe Muster auf allen neun Routen |
+| **L4 Kausalität** | keine Beanstandung — die Kette *Route → Middleware → Recht → Objekt* ist geschlossen |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L2/L6** | nicht betroffen |
+
+**Kein Befund.**
