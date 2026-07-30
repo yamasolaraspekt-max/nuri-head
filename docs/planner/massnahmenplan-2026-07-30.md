@@ -110,7 +110,7 @@ warum kein Werkzeug sie prüfen kann.**
 
 ### M4 · Die Eingangsprüfung am Fehlerklassen-Register — sechzig Sekunden
 
-**Das Register hat heute 14 Klassen, sechs davon ohne Barriere. Genau die haben sich vier- bis
+**KORRIGIERT 30.07. 22:25 (Pruefer-Befund PB-041, selbst nachgezaehlt): das Register hat 15 Klassen, ACHT davon ohne Barriere.** *Gemessen an `docs/auftraege/FEHLERKLASSEN.md`: 15 Zeilen mit `| **F-`, davon 5 mit ✅, 8 mit ⚠ („Regel, keine Barriere"), 2 mit ❌. Der Pruefer hat beide Zahlen richtig gemeldet, meine standen seit der 08:12-Korrektur zu niedrig — **wer M4 befolgt, liest sechs von acht.*** ~~Das Register hat heute 14 Klassen, sechs davon ohne Barriere. Genau die haben sich vier- bis
 fünfmal wiederholt.** Sie wiederholen sich, weil niemand vor dem Schreiben hineinsieht.
 
 | | |
