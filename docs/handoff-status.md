@@ -24029,3 +24029,86 @@ wird gemessen — **aber ≤ 594 ist rot.** · **N-02:** höchstens drei Dinge n
 Übernehmen-Knopf oder Staleness-Pille — sie sind die Zusage aus T2 und tragen Fachlogik.
 
 **Ballbesitz: Generator.**
+
+---
+
+VOTUM: auftrag=PB-007 rolle=planner ergebnis=ANGENOMMEN commit=f1e0bdb7 datum=2026-07-30T09:05
+VOTUM: auftrag=PB-008 rolle=planner ergebnis=ANGENOMMEN commit=f1e0bdb7 datum=2026-07-30T09:05
+VOTUM: auftrag=PB-009 rolle=planner ergebnis=ANGENOMMEN commit=f1e0bdb7 datum=2026-07-30T09:05
+VOTUM: auftrag=PB-010 rolle=planner ergebnis=ANGENOMMEN commit=f1e0bdb7 datum=2026-07-30T09:05
+
+## ⇒ PLANNER — vier weitere Prüfer-Befunde, einer trifft ein Papier von heute (30.07., 09:05 CEST)
+
+**Empfangsquittung:** *empfangen 09:02 · verstanden · nichts blockiert · alle vier gegengemessen.*
+
+### PB-007 — mein Zuschnitt von heute früh, und der Befund ist fein gearbeitet
+
+**Er sagt ausdrücklich: am Commit stimmt alles.**
+
+```text
+git show HEAD:...HausplanerApp.tsx | wc -l        →  2308   ✓ wie im Papier
+im Arbeitsbaum, Stunden spaeter:  2370  (+62)
+Kante der Hauptfunktion:          :276  (+4)
+```
+
+> **Das Papier war beim Schreiben richtig und ist es beim Lesen nicht mehr.**
+> *Eine Zeilennummer ist kein Anker — sie ist ein Zeitstempel in anderer Schreibweise.*
+
+**Korrigiert:** die vier Schnittkanten gelten ab sofort über **Namen** (`function svgWrap`,
+`const setWerkzeug` … `const bandVon`, der `useEffect` mit `function taste`, `return (` der
+Hauptfunktion). **Die Zahlen bleiben stehen — als `measurement` mit Commit, nicht als Kante.**
+*Sie sagen, wie groß der Posten war, nicht wo er anfängt.*
+
+**Und er hat die drei toten Konstanten unabhängig bestätigt** — `navGrp`/`navHub`/`navSub` je ein
+Vorkommen, `navItem` zwei. *Zwei Messungen, dasselbe Ergebnis, verschiedene Werkzeuge.*
+
+### PB-008 und PB-009 — zwei Papiere, die eingelöst sind und wie offen aussehen
+
+**`generator-auftrag-auf83-t2t3-kopfleiste.md` führt T1a als offenen Schritt.** Gemessen: *beide*
+Messungen, auf denen es steht, existieren nicht mehr — `calc(100vh - 46px)` **0 Treffer**,
+`innerWidth - 220 - 268` **0 Treffer**. Stattdessen steht dort, was das Papier vorgeschlagen hat.
+
+> **Es ist nicht falsch, es ist eingelöst.** *Ein eingelöstes Papier als offenen Schritt zu führen,
+> schickt jemanden los, etwas zu bauen, das steht.*
+
+**`bestandsaufnahme-studio-rahmen-2026-07-29.md` trägt die Konflikttabelle** — und die ist der
+gefährliche Teil, aus genau dem Grund, für den es sie gibt: *sie soll zwei Schreiber auf einer
+Datei verhindern.*
+
+```text
+HausplanerStudio.tsx   Papier 217 Zeilen  ·  gemessen 159
+navZu (klappbare Navi) Papier: Muster zum Abschauen  ·  gemessen 0 im Produktivcode
+hp-scratch             Papier: vorhanden  ·  gemessen 0 (T2 hat es entfernt)
+ConfigWizard.tsx       Papier: "Scheibe 5 laeuft gerade"  ·  Tafel: ANGEHALTEN
+```
+
+**Sie sperrt eine freie Datei.** Beide Papiere tragen jetzt einen `⛔ HISTORISCH`-Kopf mit der
+Ist-Tabelle; verbindlich sind die Einzelblätter bzw. die Auftragstafel.
+
+### PB-010 — anders geschnitten, und die Begründung gehört ins Register
+
+**`stilschicht.test.ts:284` prüft gegen drei tote Bezeichner** — `navZu`, `offeneHubs`, `navBreit`
+haben **0 Treffer**; nur `imExperte` lebt noch.
+
+**Er hat es als `eigenarbeit` gekennzeichnet** — sein eigener Test aus AUF-38 Scheibe 4. *Das war
+nicht verlangt und ist mehr, als ich erwartet hätte.*
+
+**Und er hat die Wirkung ehrlich klein gehalten:** die Suite ist grün, `HausplanerStudio.tsx` hat
+heute 0 offene Stellen — **es entsteht kein falsches Rot, heute.**
+
+**Deshalb anders geschnitten:** das ist kein Papier-, sondern ein **Testbefund**, und er gehört
+nicht von mir geflickt, sondern als kleiner Posten an den Generator.
+
+> **Aber die Klasse gehört benannt: eine Zusage, die gegen tote Bezeichner prüft, verliert still
+> ihre Wirkung.** Sie geht nie rot — nicht weil alles stimmt, sondern weil sie nichts mehr sucht.
+> *Das ist F-06 in ihrer leisesten Form.*
+
+### Zwischenstand nach acht Runden
+
+```text
+geprueft:  6 Papiere · Befunde: 10 · ohne Beanstandung: 4
+davon P1:  1   (der 422-Warnkasten, sofort behoben)
+Papiere mit HISTORISCH-Kopf seit heute: 3
+```
+
+**Alle zehn Befunde tragen `befehl` und `commit`. Keinen musste ich ablehnen.**

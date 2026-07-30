@@ -174,10 +174,10 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
-| PB-009 | `bestandsaufnahme-studio-rahmen-2026-07-29.md` | **P2** | Konflikttabelle sperrt eine freie Datei; Anker auf einen Rahmen, der seit T1/T3 umgebaut ist (217→159 Z.) | offen | — |
-| PB-010 | `stilschicht.test.ts` | P3 | Wirkungs-Zusage prüft gegen 3 tote Bezeichner — **`eigenarbeit: ja`, Urteil beim Evaluator** | offen | — |
-| PB-008 | `generator-auftrag-auf83-t2t3-kopfleiste.md` | P3 | aktives Blatt führt `T1a` als offenen Schritt — Code und Register führen ihn als erledigt (`97a2e2a4`) | offen | — |
-| PB-007 | `zuschnitt-auf48-hausplanerapp-zerlegen.md` | P2 | Schnittkanten als absolute Zeilennummern — am Commit korrekt, im Baum schon 4/62 Zeilen abgewandert | offen | — |
+| PB-009 | `bestandsaufnahme-studio-rahmen-2026-07-29.md` | **P2** | Konflikttabelle sperrt eine freie Datei; Anker auf einen Rahmen, der seit T1/T3 umgebaut ist (217→159 Z.) | **ANGENOMMEN** | 30.07. 09:05 — HISTORISCH-Kopf; fuer den Stand gilt die Auftragstafel |
+| PB-010 | `stilschicht.test.ts` | P3 | Wirkungs-Zusage prüft gegen 3 tote Bezeichner — **`eigenarbeit: ja`, Urteil beim Evaluator** | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 09:05 — kein Papier-, ein Testbefund; geht als Posten an den Generator |
+| PB-008 | `generator-auftrag-auf83-t2t3-kopfleiste.md` | P3 | aktives Blatt führt `T1a` als offenen Schritt — Code und Register führen ihn als erledigt (`97a2e2a4`) | **ANGENOMMEN** | 30.07. 09:05 — Blatt traegt HISTORISCH-Kopf, verbindlich sind T2/T3/T3-N1 |
+| PB-007 | `zuschnitt-auf48-hausplanerapp-zerlegen.md` | P2 | Schnittkanten als absolute Zeilennummern — am Commit korrekt, im Baum schon 4/62 Zeilen abgewandert | **ANGENOMMEN** | 30.07. 09:05 — Zuschnitt §7: Schnittkanten ueber Namen statt Zeilennummern |
 
 ---
 

@@ -152,3 +152,35 @@ Scheibe 4   gesperrt bis Scheibe 2 und 3 stehen
 **Scheibe 1 bekommt als Nächstes ein Blatt** — sobald T3 gebaut ist und der Prüfstand des
 Evaluators steht. *Vorher wäre es das dritte Blatt in derselben Datei zur selben Zeit, und genau
 das verbietet §13.*
+
+---
+
+## 7. Korrektur, 30.07. 09:05 — Schnittkanten als ANKER, nicht als Zeilennummern
+
+**Auf `PB-007` des Prüfers, nachgemessen und bestätigt.** Sein Befund ist genau richtig eingeordnet:
+
+```text
+am COMMIT stimmt alles:   git show HEAD:...HausplanerApp.tsx | wc -l   →  2308
+im ARBEITSBAUM, Stunden spaeter:
+  Gesamtzeilen   2370  (+62)
+  Hauptfunktion  :276  (+4)  ← die Kante des groessten Postens ist gewandert
+```
+
+**Das Papier war beim Schreiben richtig und ist es beim Lesen nicht mehr.** *Eine Zeilennummer ist
+kein Anker, sie ist ein Zeitstempel in anderer Schreibweise.*
+
+> ### Die Schnittkanten gelten ab sofort über NAMEN, nicht über Zeilen
+>
+> | Scheibe | Anker |
+> |---|---|
+> | **1** Das Reine | `function svgWrap` · `function werkzeugIcon` · `function opIcon` · `const uuid` · `function istWand` · `function istOeffnung` · `function lotAufWand` — **und die drei toten `navGrp`/`navHub`/`navSub`** |
+> | **2** Abgeleitete Werte | alles zwischen `const setWerkzeug` und `const bandVon` |
+> | **3** Tasten und Effekte | der `useEffect` mit `function taste` bis einschließlich `Delete`/`Backspace` |
+> | **4** Das JSX | ab `return (` der Hauptfunktion bis zum Dateiende |
+>
+> **Die Zahlen aus §1 bleiben stehen — als `measurement` mit Commit, nicht als Kante.**
+> *Sie sagen, wie groß der Posten war, nicht wo er anfängt.*
+
+**Und der Prüfer hat die drei toten Konstanten unabhängig bestätigt:** `navGrp`, `navHub`, `navSub`
+je **ein** Vorkommen (nur die Definition), `navItem` **zwei** (Definition + eine Verwendung).
+*Zwei Messungen, dasselbe Ergebnis, verschiedene Werkzeuge.*
