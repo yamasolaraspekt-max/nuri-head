@@ -27,6 +27,12 @@ const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string =>
   s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^\s*\/\/.*$/gm, '');
 const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+/**
+ * AUF-48 Scheibe 3: die Zuordnung „welche Taste bedeutet was" wohnt jetzt in `tastenAbsicht.ts`.
+ * **Die geprüfte Eigenschaft ist unverändert** — ⌘K öffnet die Palette, und der Knopf ist ein
+ * zweiter Griff an derselben Klinke. *Nur liegt der Beleg dafür jetzt in zwei Dateien.*
+ */
+const tasten = ohneKommentare(readFileSync(join(hier, '../app/tastenAbsicht.ts'), 'utf8'));
 const css = readFileSync(join(hier, '../hausplaner.css'), 'utf8');
 
 /** Die Arbeitsbereich-Zeile: von ihrer Überschrift bis zum Beginn der Werkzeugzeile. */
@@ -64,8 +70,15 @@ test('K-05b (Grenze): es gibt weiterhin GENAU EINEN Ort, der die Palette öffnet
   assert.match(app, /const oeffnePalette = React\.useCallback\(/, '`oeffnePalette` ist fort');
   // Und das Kürzel benutzt sie unverändert weiter — der Knopf ist ein ZWEITER Griff an
   // DERSELBEN Klinke, kein Ersatz.
-  assert.match(app, /e\.key\.toLowerCase\(\) === 'k'[\s\S]{0,400}?oeffnePalette\(\)/,
-    'der ⌘K-Griff ruft `oeffnePalette` nicht mehr');
+  //
+  // **AUF-48-S3: die Kette läuft jetzt über zwei Dateien**, und beide Glieder werden geprüft.
+  // Vorher stand `e.key.toLowerCase() === 'k'` direkt neben `oeffnePalette()`; heute bildet
+  // `tastenAbsicht` die Taste auf eine Absicht ab, und die Komponente führt sie aus.
+  // *Die Aussage ist dieselbe: ⌘K landet bei `oeffnePalette`, und nirgends sonst.*
+  assert.match(tasten, /kleines === 'k'[\s\S]{0,120}?'palette-oeffnen'/,
+    '⌘K bildet nicht mehr auf die Absicht `palette-oeffnen` ab');
+  assert.match(app, /case 'palette-oeffnen':[\s\S]{0,120}?oeffnePalette\(\)/,
+    'die Absicht `palette-oeffnen` ruft `oeffnePalette` nicht mehr');
 });
 
 // --- Der Ort ist Teil der Wirkung -----------------------------------------------------------------

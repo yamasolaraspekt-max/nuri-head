@@ -69,7 +69,9 @@ import { befundeAus, BEFUNDE_LEER, BEFUNDE_UMFANG } from './dashboard/befunde';
 import { palettenGruppen, palettenFlach, PALETTE_LEER, type PaletteEintrag } from './dashboard/palette';
 import { stapel } from './dashboard/geschossStapel';
 import { usePlannerUiStore } from './state/uiState';
-import { toolFuerShortcut, toolNach, WORKSPACE_IMPORT } from './tools/toolRegistry';
+import { toolNach, WORKSPACE_IMPORT } from './tools/toolRegistry';
+// AUF-48 Scheibe 3: die reine Abbildung Taste -> Absicht.
+import { tastenAbsicht } from './tastenAbsicht';
 import { zoneTools } from './tools/toolPresentation';
 import { WERKZEUG_GRUPPEN } from './dashboard/werkzeugGruppen';
 import { WerkzeugGruppenMenue } from './dashboard/WerkzeugGruppenMenue';
@@ -955,40 +957,42 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
 
   useEffect(() => {
     function taste(e: KeyboardEvent): void {
-      if ((e.target as HTMLElement)?.tagName === 'INPUT') {
-        return;
+      // AUF-48 Scheibe 3: WELCHE Absicht die Taste trägt, entscheidet die reine Abbildung
+      // `tastenAbsicht`. WER sie ausführt, bleibt hier — dort liegen Store und Zustand.
+      const absicht = tastenAbsicht({
+        key: e.key,
+        ctrlKey: e.ctrlKey,
+        metaKey: e.metaKey,
+        zielIstEingabe: (e.target as HTMLElement)?.tagName === 'INPUT',
+        paletteOffen: paletteOffenRef.current,
+      });
+      if (absicht.preventDefault) {
+        e.preventDefault();
       }
-      // Kante 8: solange die Palette offen ist, dürfen die Werkzeug-Kürzel NICHT durchschlagen —
-      // sonst wechselt ein Tastendruck im Filterfeld das Werkzeug. Escape schließt die Palette
-      // über den Stapel oben (auch ohne Fokus im Feld, etwa nach einem Klick auf den Hintergrund) —
-      // hier wird nur noch verhindert, dass irgendeine andere Taste durchschlägt.
-      if (paletteOffenRef.current) {
-        return;
-      }
-      if (e.key === 'Delete' || e.key === 'Backspace') {
-        for (const id of store.getState().selectedNodeIds) {
-          store.getState().executeCommand({ type: 'REMOVE_NODE', nodeId: id });
-        }
-        store.getState().selectNodes([]);
-      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
-        e.preventDefault();
-        store.getState().undo();
-      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') {
-        e.preventDefault();
-        store.getState().redo();
-      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-        e.preventDefault();
-        void store.getState().save();
-      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-        // Dashboard v2.5 (§30 / UI-9): Command-Palette. Der Zweig steht VOR dem Kürzel-Zweig,
-        // sonst griffe „K" (Registry-Kürzel von „Decke") auch mit Strg/⌘ — der bisherige
-        // Kürzel-Zweig prüft die Modifikatoren nicht. OHNE Modifikator bleibt „K" = Decke.
-        e.preventDefault();
-        oeffnePalette();
-      } else {
-        // UI-3: Werkzeug-Tastenkürzel aus der Registry (eine Quelle), Aktivierung respektiert.
-        const tool = toolFuerShortcut(e.key);
-        if (tool && tool.art === 'werkzeug') {
+      switch (absicht.art) {
+        case 'loeschen':
+          for (const id of store.getState().selectedNodeIds) {
+            store.getState().executeCommand({ type: 'REMOVE_NODE', nodeId: id });
+          }
+          store.getState().selectNodes([]);
+          break;
+        case 'rueckgaengig':
+          store.getState().undo();
+          break;
+        case 'wiederholen':
+          store.getState().redo();
+          break;
+        case 'speichern':
+          void store.getState().save();
+          break;
+        case 'palette-oeffnen':
+          oeffnePalette();
+          break;
+        case 'werkzeug': {
+          // UI-3: die Aktivierung wird weiterhin respektiert — sie braucht den Kontext aus den
+          // Stores und gehört deshalb hierher, nicht in die Abbildung.
+          const tool = toolNach(absicht.werkzeugId!);
+          if (!tool) break;
           const ctx = baueAktivierungsKontext({
             workspace: usePlannerUiStore.getState().activeWorkspace,
             view: store.getState().modus as ViewType,
@@ -1000,7 +1004,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             setTreppeStart(null);
             setWerkzeug(tool.id as Werkzeug);
           }
+          break;
         }
+        default:
+          break;
       }
     }
     window.addEventListener('keydown', taste);
