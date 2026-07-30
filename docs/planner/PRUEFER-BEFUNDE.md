@@ -25,6 +25,48 @@ das ich heute geschrieben habe.
 
 ---
 
+## 0b. Gegenquittung des PRÜFERS (30.07.2026)
+
+**Rolle angenommen.** Gelesen habe ich vor dieser Zusage: Yamas Aktivierung, diesen Eingang
+vollständig (§0–§6), das Prüfraster mit den sechs Linsen. *Eine Rolle zu bestätigen, die man nicht
+gelesen hat, wäre genau der Fehler, gegen den sie gebaut ist.*
+
+```text
+Empfangen:        30.07.
+Verstanden:       ja
+Blockiert:        nein
+Erster Befund:    folgt nach der ersten Messrunde — Register vor Antwort (§6)
+```
+
+**Was ich tue:** die Papiere gegen den **Bestand** halten und melden. **Was ich nicht tue:** bauen,
+beheben, Ursachen zu Ende ermitteln. *Aufdecken ist nicht beheben; eine Prüfinstanz, die nebenbei
+repariert, hat ihre Unabhängigkeit verkauft.* **Ballbesitz bleibt in jedem Befund beim Planner.**
+
+**Ich halte mich an die Form aus §3** — fehlt ein Feld, ist es kein Befund. **`befehl` und `commit`
+sind nicht Beiwerk, sondern der Befund selbst:** was ich ohne nachfahrbaren Befehl schreibe, ist
+eine Meinung, und Meinungen gehören hier nicht ins Register. **Jede Fläche geht durch alle sechs
+Linsen**; eine Linse ohne Fund wird ausdrücklich als *keine Beanstandung* abgehakt, denn eine
+fehlende Linse ist von einer sauberen Fläche nicht zu unterscheiden.
+
+**Und was ausdrücklich KEIN Befund ist**, damit das Register tragfähig bleibt: Geschmack ohne zweite
+widersprechende Fundstelle · ungemessene Behauptung · fehlende Doku (höchstens `P3`) · eine Fläche,
+die laut Ledger absichtlich noch offen ist — das ist Statusabgleich · eine heutige Regel rückwirkend
+auf abgenommenen Bestand.
+
+### Ein Interessenkonflikt, den ich selbst melde, bevor er auffällt
+
+**Ich habe als GENERATOR an AUF-38 gebaut** — Scheiben 2, 3, 4, das Messskript, die generische
+Rohwert-Zusage. Ein Teil der Prüffläche ist damit **meine eigene frühere Arbeit**.
+
+*Ein Prüfer, der sein eigenes Werk prüft, ist genau die Konstruktion, gegen die diese Rolle
+eingerichtet wurde.* Deshalb: **Befunde, die meine eigene Generator-Arbeit treffen, kennzeichne ich
+im Register mit `eigenarbeit: ja`** und lege das Urteil dem **Evaluator** vor, nicht mir selbst.
+Meine Messung darf dort die Vorlage sein — nie die Entscheidung.
+
+**Unabhängigkeit ist der ganze Wert dieser Rolle. Sie hält nur, solange sie auch gegen mich gilt.**
+
+---
+
 ## 1. Die Prüffläche, gemessen
 
 ```text
