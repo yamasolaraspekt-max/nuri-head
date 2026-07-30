@@ -174,6 +174,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-007 | `zuschnitt-auf48-hausplanerapp-zerlegen.md` | P2 | Schnittkanten als absolute Zeilennummern — am Commit korrekt, im Baum schon 4/62 Zeilen abgewandert | offen | — |
 
 ---
 
@@ -452,5 +453,86 @@ verbliebenen Einträge liegen unter dem Historisch-Pfad.
 | **L4 Kausalität** | PB-006 — die Kette *Papier → Verweis → Leser* reißt bei 23 von 65 |
 | **L5 Plausibilität** | keine Beanstandung |
 | **L6 Workflow** | keine Beanstandung — kein Arbeitsweg betroffen |
+
+**Ballbesitz: Planner.**
+
+---
+
+## 10. Runde 4 (30.07.) — zwei Flächen: eine sauber, ein Formbefund
+
+**Gemessen gegen `28a02209`.**
+
+### `ux-befund-layout-alle-ebenen-2026-07-25.md` — keine Beanstandung
+
+Das **am häufigsten aus Auftragsblättern zitierte** Papier (fünf Verweise). Es ist ein
+**Befund**-Papier vom 25.07., und seine neun Befunde sind längst zu Aufträgen geworden (AUF-39, 40,
+43, 44, 45, 46). *Dass die beschriebenen Zustände behoben sind, ist kein Fehler des Papiers.*
+
+**Entscheidend war, wie darauf gezeigt wird** — und alle fünf Verweise sind **Herkunftsangaben**:
+*„… B1"*, *„Vorher gelesen: …"*, *„(Befund B5)"*. **Keiner benutzt es als Ist-Zustand.** Nach dem
+Raster wäre ein Befund hier ein *nacherfundener Auftrag*: die Fläche ist korrekt zitiert.
+
+```sh
+grep -rn "ux-befund-layout-alle-ebenen" docs/auftraege/    # 5 Treffer, alle Herkunft
+```
+
+### PB-007 · P2 · Ein Schnittplan in absoluten Zeilennummern zerfällt, während er gelesen wird
+
+```yaml
+befund:
+  id: PB-007
+  datei: "docs/planner/zuschnitt-auf48-hausplanerapp-zerlegen.md"
+  stelle: "§1 Zeilen 15-42 (die Schnittkanten) - geschrieben 30.07., 04:35"
+  behauptung: |
+    2308 Zeilen gesamt · HausplanerApp ab :272 · Zustand :299-374 ·
+    abgeleitete Werte :375-572 · Tasten und Effekte :1004-1180 · JSX :1181-2308
+  gemessen: |
+    Am COMMIT stimmt alles: git show HEAD:...HausplanerApp.tsx | wc -l  -> 2308
+    Im ARBEITSBAUM, wenige Stunden spaeter:
+      Gesamtzeilen        2370   (+62)
+      HausplanerApp ab    :276   (+4, die Kante des groessten Postens)
+    Die drei toten Konstanten sind bestaetigt: navGrp/navHub/navSub je 1 Vorkommen
+    (= nur die Definition), navItem 2 (Definition + 1 Verwendung).
+  befehl: |
+    wc -l < resources/planner/hausplaner/app/HausplanerApp.tsx
+    git show HEAD:resources/planner/hausplaner/app/HausplanerApp.tsx | wc -l
+    grep -nE 'export function HausplanerApp' resources/planner/hausplaner/app/HausplanerApp.tsx
+    for c in navGrp navHub navSub navItem; do
+      echo "$c $(grep -c "\b$c\b" resources/planner/hausplaner/app/HausplanerApp.tsx)"; done
+  commit: "28a02209"
+  schwere: P2
+  wirkung: |
+    Der Zuschnitt ist die Vorlage fuer vier Bau-Scheiben. Wer Scheibe 2 als ":375-572"
+    ausschneidet, nimmt im heutigen Baum die falschen Zeilen - die Kante des groessten
+    Postens ist bereits um 4 Zeilen gewandert, das Dateiende um 62. Entweder schneidet der
+    Bauende falsch, oder er misst alles neu - dann hat der Zuschnitt keine Arbeit gespart.
+  eigenarbeit: nein
+```
+
+**Das ist ausdrücklich kein Sorgfaltsbefund.** Das Papier war bei seinem Commit **exakt richtig**,
+in jeder einzelnen Zahl, inklusive der drei toten Konstanten. **Der Mangel ist die Form:** absolute
+Zeilennummern sind an eine Datei gebunden, die sich stündlich ändert — und in diesem Fall lagen
+zwischen Messung und meiner Nachmessung **wenige Stunden und 62 Zeilen**.
+
+**Der bessere Weg, benannt** (L3 verlangt ihn): die Schnittkanten an **Namen** hängen statt an
+Zahlen — *„von `export function HausplanerApp` bis zum ersten `return (`"*, *„alle `useMemo`/
+`useCallback` innerhalb der Funktion"*, *„der JSX-Block ab dem Wurzel-`return`"*. Das sind dieselben
+Grenzen, aber sie wandern mit. Die Zeilennummern dürfen als **Orientierung** danebenstehen, mit dem
+Commit, an dem sie galten — so, wie es das Auftragsschema für Zahlen ohnehin verlangt: *Messung zum
+Zeitpunkt des Schreibens, keine Bedingung.*
+
+**Erledigt wenn:** *jede der vier Scheiben im Zuschnitt nennt ihre Grenze durch einen im Code
+suchbaren Namen; die Zeilennummer steht höchstens zusätzlich, mit Commit-Angabe daneben.*
+
+### Die sechs Linsen an `zuschnitt-auf48`
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — alle Zahlen waren am Commit korrekt |
+| **L2 Effizienz** | PB-007 — der Zuschnitt spart nur Arbeit, solange seine Kanten halten |
+| **L3 Konsistenz** | PB-007 — Zeilennummer als Anker widerspricht der eigenen Regel „Zahl = Messung, keine Bedingung" |
+| **L4 Kausalität** | PB-007 — die Kette *Plan → Schnitt* reißt an der ersten Kante (`:272` ↔ `:276`) |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | keine Beanstandung |
 
 **Ballbesitz: Planner.**
