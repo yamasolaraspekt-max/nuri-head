@@ -98,8 +98,26 @@ kriterien:
     typ: structural
     kritikalitaet: P1
     pruefung:
-      befehl: "git diff <basis> HEAD -- resources/planner/hausplaner/app/HausplanerApp.tsx | grep '^-' | grep -c 'useMemo('"
-      erwartet: "0 — keine Huelle wurde geloescht; die Diff-Zeilen betreffen nur die Rumpfinhalte"
+      befehl: >
+        git show <basis>:resources/planner/hausplaner/app/HausplanerApp.tsx >
+        /private/tmp/auf48-s2-basis.tsx &&
+        ./scripts/node-runtime.sh -e 'const fs=require("fs"),ts=require("typescript");
+        const collect=(p)=>{const s=fs.readFileSync(p,"utf8"),
+        f=ts.createSourceFile(p,s,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),o={};
+        const walk=(n)=>{if(ts.isVariableDeclaration(n)&&ts.isIdentifier(n.name)&&n.initializer&&
+        ts.isCallExpression(n.initializer)&&n.initializer.expression.getText(f).endsWith("useMemo")){
+        o[n.name.text]=(n.initializer.arguments[1]?.getText(f)||"").replace(/\s+/g," ")}
+        ts.forEachChild(n,walk)};walk(f);return o};
+        const a=collect("/private/tmp/auf48-s2-basis.tsx"),
+        b=collect("resources/planner/hausplaner/app/HausplanerApp.tsx"),
+        names=[...new Set([...Object.keys(a),...Object.keys(b)])].sort(),
+        diff=names.filter((n)=>a[n]!==b[n]).map((n)=>({name:n,basis:a[n],kandidat:b[n]}));
+        console.log(JSON.stringify({basis:Object.keys(a).length,kandidat:Object.keys(b).length,diff},null,2));
+        if(Object.keys(a).length!==Object.keys(b).length||diff.length)process.exit(1);'
+      erwartet: >
+        Exit 0 und {"basis":15,"kandidat":15,"diff":[]} — die AST-Pruefung vergleicht die
+        tatsaechlichen Hooks und ihre zweiten Argumente. Zeilenumbrueche und Kommentare sind damit
+        bedeutungslos; eine geloeschte Huelle oder geaenderte Abhaengigkeitsliste wird rot.
     gegenbeweis: >
       Eine Abhaengigkeitsliste kuerzen — mindestens eine Zusage muss rot werden.
       **Wird keine rot, ist das ein meldepflichtiger Befund** (siehe K-04).

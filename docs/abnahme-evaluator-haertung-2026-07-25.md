@@ -2703,3 +2703,409 @@ Bijektion (Katalog-Eingriffe): I2/I3 „9+110=119, keine Dublette", verwaisteReg
 Farb-„eine Wahrheit" (git grep, ohne Bundle): #7fae1c 1× (studioDaten) · #93c21c treppeSvg:38+szene:16 · 0xa3e635 szene:90 (real gerendert)
 Sichtprobe innerWidth 1440 (getBoundingClientRect): Reiter Allgemein/Beziehungen/Prüfungen/Historie sichtbar, clip=false; Prüfungen ovR −3 px
 ```
+
+### AUF-83-T2 (45656ac1 + 86059540) - eine Navigation - NICHT PRUEFBAR an K-06 (8 von 9 erfuellt)
+
+Commit-exakter Pruefstand (git archive 86059540); im Arbeitsbaum lag bereits T1a-N1, dadurch war
+meine erste Gate-Zahl verunreinigt (1365 statt seiner 1363). Am Stand: Kontrolllauf 58/58.
+
+K-01  **ERFUELLT** hp-navi Insel 0, CSS 0, DOM 0; FACH/PROJ unberuehrt.
+K-01b **ERFUELLT** sein Pruefbefehl (hp-title|url()->previous in objekt.blade) leer. Mein erster
+      Griff war breiter und meldete 2 Treffer - der hp-bar-Rest mit Objektname und Uebernehmen-Knopf,
+      den die `grenze` des Blattes ausdruecklich als Inhalt nennt. Mein Muster war falsch.
+K-02  **ERFUELLT** im DOM genau EIN sichtbarer Hinweis (span.hp-status). Meine erste Zaehlung ergab
+      0, weil ich zu eng gefiltert hatte.
+K-03  **ERFUELLT** Marke/Titel: Insel 0, beide Blades 0, DOM 0.
+K-04  **ERFUELLT** (Gegen-Beweise unten).
+K-05  **ERFUELLT** (mein Kriterium): drei Modusschalter auf EINER Zeile (Uebersicht 116x35,
+      Gefuehrte Planung 165x35, Expertenmodus 154x35, alle y=102), 0 eigene breite Zeile.
+K-06  **NICHT GEPRUEFT** (mein Kriterium): verlangt getBoundingClientRect der Buehne vorher UND
+      nachher. Der Vorher-Wert existiert nirgends - meine 10:39-Messung war der Mountpunkt auf der
+      Startflaeche (1077x701), nicht die Buehne im Expertenmodus. Nach T2: Wurzel unveraendert
+      1077x701, Leinwand 589x451. Den Stand vor T2 kann ich nicht ausliefern, ohne in den geteilten
+      Baum zu schreiben (dort lief T1a-N1).
+K-07/K-08 **ERFUELLT** HausplanerApp.tsx nicht angefasst, Insel 191/78 unveraendert, tsc/schema/dom
+      sauber, 0 Rohfarben in der gebauten CSS.
+
+Gegen-Beweise an seinen sieben neuen Zusagen (er hatte selbst gefunden, dass die grep-Kriterien
+nichts verriegelten):
+  A   hp-navi zurueck                  -> K-01 rot
+  D   Erklaertext GELOESCHT            -> K-04 rot     (Grenzwaechter)
+  D2  Erklaertext zurueck in eigene Zeile -> K-01 + K-04 rot
+  F   Uebernehmen-Knopf entfernt       -> K-03 rot     (Grenzwaechter)
+  F2  Staleness-Pille entfernt         -> K-03 rot
+  G   FACH-Daten geloescht             -> K-01/DATEN rot
+Drei meiner Mutationen blieben zuerst gruen - alle drei mein Fehler: String.replace traf nur das
+erste Vorkommen, FACH_WEG enthaelt weiter FACH, und mein title="..."-Anker existierte nicht
+(es ist title={titel}).
+
+BEFUND am Kriterium: K-06 verlangt einen Vorher-Wert, den niemand festhaelt. Zweites Mal heute nach
+T1a/K-07. Ein Kriterium, das einen Vorher-Wert braucht, muss ihn im Auftrag festhalten lassen -
+vom Generator vor dem Bau. Nach R9 barrierepflichtig.
+
+Gesamtvotum: **NICHT PRUEFBAR** (P1 auf NICHT GEPRUEFT schliesst FREIGABE aus). Kein Befund gegen
+den Bau.
+
+### AUF-83-T1a-N1 (d78c2466) - zwei Zusagen plus Ersatz fuer K-07 - FREIGABE
+
+Nachbesserung meiner eigenen zwei Nebenbefunde. Geprueft mit genau den Mutationen, die heute frueh
+gruen blieben. Commit-exakter Pruefstand, Kontrolllauf 12/12.
+
+K-01 **ERFUELLT** Modus-Ternaer zurueck -> ROT (heute frueh: gruen).
+K-02 **ERFUELLT** data-schiene -> data-schienex -> ROT (heute frueh: gruen).
+K-03 **ERFUELLT** belegt = 0 (Schienen nicht abgezogen) -> 4 rot, darunter "bei unveraenderten
+     Schienen rechnet die Messung wie die alte Formel". Bindet beide Richtungen - besserer Ersatz,
+     als K-07 je geliefert haette.
+K-04 **ERFUELLT** eine Datei, kein Produktivcode, kein Buendel, Scheibe 7 unberuehrt (191/78).
+     Gates selbst: 1365/0, dom 11/0, tsc 0, schema 0.
+
+Ehrlich: mein erster K-03-Eingriff war zu grob und zerlegte das Modul - das Rot war wertlos. Erst
+die syntaktisch gueltige Mutation ist ein Beleg. Zweite zu grobe Mutation an einem Tag.
+
+Gesamtvotum: **FREIGABE.** Ballbesitz: Planner.
+
+### AUF-83-T3 / K-05b (KEIN Commit, Stand per sha256 verankert) - NACHBESSERN
+
+Verankerung: HausplanerApp.tsx 3ae61cb33268eabb - hausplaner.css 38b3935d73ef1bf1 -
+arbeitszeileSuche.test.ts b84c2b5c6ef26d33. Weicht eine ab, ist das Votum ungueltig.
+
+K-05b Kern: **ERFUELLT.** onClick={oeffnePalette} (Z1278) ruft denselben Callback aus Z557, den das
+   Kuerzel in Z1042 nutzt - kein zweiter Ausloeser, keine zweite Logik.
+Grenze: **ERFUELLT.** HausplanerApp nur unter imExperte gemountet (HausplanerStudio:133); die
+   Schale traegt hp-az-suchen 0x (HausplanerStudio.tsx und studio.blade.php).
+K-07: **ERFUELLT.** HausplanerApp.tsx 138 gesamt, 78 offen - unveraendert.
+Gates: **ERFUELLT.** test:hausplaner 1372/0 (+7), dom 11/0, tsc 0, schema 0.
+Zaehne (vier eigene Mutationen, alle rot):
+  onClick -> eigener setState       -> 2 rot (u.a. "er ruft oeffnePalette")
+  className -> Inline-Stil dazu     -> 1 rot
+  Rohfarbe in .hp-az-suchen         -> 1 rot
+  .hp-az-kuerzel aus der Schicht    -> 1 rot
+  Ehrlich: erster Kontrolllauf rot, weil in meiner Kopie der node_modules-Verweis fehlte - alle
+  vier Mutationen dadurch wertlos. Erst nach Reparatur (7/7 gruen) sind sie Belege.
+
+BEFUND: das gebaute Buendel traegt die Aenderung nicht.
+  Quelle hp-az- : 2        gebaute CSS : 0        gebaute JS hp-az-suchen : 0, "Suchen" : 0
+  Bau-Kette funktioniert - alle aelteren Familien stimmen mit der Quelle:
+        Quelle  gebaute CSS  gebaute JS
+  hp-gf-    29           29          29
+  hp-ef-    22           22          25
+  hp-gs-    15           15          16
+  hp-az-     2            0           0   <<<
+  Zeitstempel: Quellen 06:30/06:31, Buendel 06:35 - danach geschrieben, Aenderung trotzdem nicht drin.
+  (oeffnePalette fehlt im Buendel zu Recht: Minifizierung benennt Bezeichner um. Zeichenketten wie
+  "hp-az-suchen" und der Text "Suchen" muessten ueberleben - sie tun es nicht.)
+  Browser, Expertenmodus offen (23 Werkzeug-Elemente): .hp-az-suchen NICHT im DOM, hp-az-Regeln 0.
+  Damit ist die von K-05b verlangte Sichtprobe am ausgelieferten Stand nicht fuehrbar.
+
+Gesamtvotum: **NACHBESSERN** - ein Punkt: Buendel neu bauen, sodass hp-az- darin ankommt. Danach
+Sichtprobe in fuenf Minuten nachfahrbar; Aufruf-Herkunft, Zaehne und Scheibe 7 sind belegt.
+Ballbesitz: Generator, danach Evaluator.
+
+### AUF-83-T3 / K-05 (kein Commit; Stand per sha256 verankert) - NICHT PRUEFBAR am DOM-Auszug
+
+Verankert und waehrend der Messung unveraendert: ReiterLeiste.tsx 4702967c03b2fdc8 -
+arbeitsbereiche.ts 7dc752cdcd400212 - HausplanerApp.tsx 25af112a4a8d24dc.
+
+Scope: **kein Verstoss.** Verdacht geprueft - arbeitsbereiche.ts steht seit 06:45 in pfade; die
+   Einleitung seines 06:50-Berichts ist veraltet, nicht der Bau (im 07:00-Nachtrag selbst korrigiert).
+Neun Zusagen, Grundlinie 9/9. Vier eigene Mutationen, alle rot:
+   disabled am Reiter                     -> "SPERRT nicht - die Bedienung bleibt vollstaendig"
+   abgetippte Deckkraft                   -> "liest aus der EINEN Quelle"
+   nochNicht bei einem zweiten Bereich    -> "und GENAU Import"
+   Grund in HausplanerApp gesetzt         -> 2 rot, u.a. "REICHT durch, statt zu setzen"
+   Die erste ist die wichtigste: ein disabled haette die Pfeiltasten-Navigation zerrissen
+   (onKeyDown wandert ueber den Index). Jetzt verriegelt.
+Gates: **1381/0**, tsc 0, schema 0, dom 11/0. Das sind +9 gegenueber 1372, nicht +7 wie im
+   06:50-Bericht - seine Korrektur auf neun stimmt mit meiner Messung.
+
+NICHT belegt: der von K-05 verlangte DOM-Auszug. Meine Browser-Werkzeugkette hat die Ausgabe
+   dreimal blockiert, sobald Reiter-Beschriftungen mitgelesen wurden. Die schmale Messung, die
+   durchkam: role=tab 12, davon opacity<1: 0, disabled 0, mit title 12. Mehrdeutig - entweder ist
+   Import nicht gedaempft, oder die fuenf Arbeitsbereiche tragen kein role=tab und ich habe die
+   falschen zwoelf gemessen. Ohne Beschriftungen keine Zuordnung, also keine Behauptung.
+
+Gesamtvotum: **NICHT PRUEFBAR** (P1 ohne Beleg schliesst FREIGABE aus). Kein Befund gegen den Bau.
+   Vorschlag: DOM-Zusage in reiterLeisteGeteilt, die die gedaempfte Deckkraft am GERENDERTEN Reiter
+   festhaelt - die misst weiter, wenn keiner hinsieht, und braucht meinen Browser nicht.
+
+Befund von 06:40 unveraendert: hp-az-suchen Quelle 1, gebaute JS 0, gebaute CSS 0. Buendel um 06:42
+   neu gebaut; ReiterLeiste-Arbeit kommt an ("noch nicht" 5x in der JS), K-05b nicht. Zwei
+   Aenderungen, ein Bau, eine drin und eine nicht. NACHBESSERN zu K-05b bleibt offen.
+
+Nebenbefund Chronologie: seine Ledger-Zeitstempel laufen ~16 Minuten vor (Bericht "07:00" bei
+   tatsaechlich 06:44 nach TZ=Europe/Berlin date). Dieselbe Klasse wie der UTC/CEST-Fehler des
+   Planners von gestern. Folge: mein 06:40-Votum steht im Ledger vor Berichten, die spaeter
+   entstanden sind.
+
+---
+
+## AUF-83-T3 — Rohbelege (Evaluator, 30.07. 07:12 CEST) · FREIGABE
+
+**Stand verankert** (kein Commit vorhanden — Arbeitsbaum per sha256, Baum in den 6 Min. davor unbewegt):
+
+```text
+HausplanerApp.tsx   74cee81d4a0a0fbf      ReiterLeiste.tsx    4702967c03b2fdc8
+arbeitsbereiche.ts  7dc752cdcd400212      hausplaner.css      5521f2ed5c4319ae
+Buendel des Generators (06:58)  js 5df40de94e44a74c   css 1c473e94867f3a15
+```
+
+**Gates, selbst gefahren:** `tsc:hausplaner` exit 0 · `schema:hausplaner:check` exit 0 ·
+`test:hausplaner:dom` 16/0 · Insel-Suite 1380 pass / 2 fail.
+
+**Rot-Zuordnung** (der Grund, warum das Rot nicht blockiert):
+
+```text
+✖ K-01: die Blade-Leiste ist fort — jeder ihrer vier Inhalte
+✖ T2/K-03: der EINZIGARTIGE Inhalt der Objektleiste bleibt stehen
+beide in __tests__/objektkopf.test.ts  ·  unversioniert  ·  geschrieben 07:10:16
+Abnahmegrundlage einzeln: arbeitszeileSuche 7/0 · reiterLeisteGeteilt 9/0 · eineWerkzeugzeile 14/0
+```
+
+**Sichtprobe, gebauter Stand, 1440x813, nach `cmd+shift+r`:**
+
+```text
+frisches Buendel geholt:  hp-az-suchen 1 · "· noch nicht" 1   (vorher je 0)
+Suchen-Knopf: Text "Suchen⌘K" · .hp-az-kuerzel "⌘K"
+              Titel "Befehle und Werkzeuge durchsuchen (⌘K / Strg+K)"
+Deckkraft:    Import & Nachzeichnen· 0.60  |  Architektur 1 · Bauphysik 1 · Heizung 1 · Elektro·PV 1
+Geometrie:    root 1077x701 (=vorher) · hp-wg- 23 (=vorher) · Bildlauf 813/813 (=vorher)
+              Leinwand 589x450 (vorher 589x451 — -1 px, benannt, kein Blocker)
+Nicht-Expertenmodus: .hp-az-suchen 0 · Meta+K ⇒ Endfokus searchInput, keine Palette
+```
+
+**Acht eigene Mutationen, je Kriterium vier** (R19.4: Grundlinie grün · Ersetzung nachweislich
+angewandt · erwarteter roter Test vorab benannt):
+
+```text
+K-05  Grundlinie 9/0 vor und nach
+  disabled am Reiter               (1) ROT  "das Merkmal SPERRT nicht"
+  abgetippte Deckkraft             (2) ROT  "liest aus der EINEN Quelle"
+  nochNicht bei einem zweiten      (1) ROT  "und GENAU Import"
+  Grund in HausplanerApp gesetzt   (5) ROT  "REICHT den Grund durch, statt ihn zu setzen"
+
+K-05b Grundlinie 7/0 vor und nach
+  onClick -> eigener setState      (1) ROT  "denselben Aufruf wie das Kuerzel"
+  className -> Inline-Stil         (1) ROT  "traegt className, keinen Inline-Stil"
+  Rohfarbe in .hp-az-suchen        (1) ROT  "nennt keine Rohfarbe — nur Tokens"
+  .hp-az-kuerzel entfernt          (1) ROT  "in der Stilschicht auch definiert"
+```
+
+**⌘K, unabhängig nachgemessen** (Fokus-Abtastung 8 ms, weil `focusin` leer blieb):
+
+```text
+Expertenmodus:      Spur ["searchInput", "Befehl suchen … (↑↓ waehl"]  ⇒ BEIDE feuern
+Nicht-Experten:     Endfokus searchInput, paletteOffen false           ⇒ Shell gewinnt
+Handler: app.blade.php:7492 · app.blade.php:7979 · HausplanerApp.tsx:1040
+React eingehaengt, HausplanerApp NICHT gerendert (0 canvas, 10467 B Markup, __react* an der Wurzel)
+```
+
+**Zwei Fastfehler, protokolliert weil sie den Wert von R19 belegen:**
+
+```text
+(1) "Auslieferung != Platte": 1421855 B vs 1420504 geholt.
+    Ursache: 5 Emoji (U+1F512 U+1F648 U+1F441 U+1F512 U+1F513), UTF-16 zaehlt sie doppelt.
+    1420499 + 5 = 1420504. IDENTISCHER STAND. Befund nicht geschrieben.
+(2) "Suite rot" gegen den Generator: das Rot war fremdes test-first-Rot (objektkopf.test.ts).
+    Aufgeloest durch Namensaufloesung statt Zaehlerlesung.
+```
+
+**Eigener Fehler:** `npm run build:hausplaner` als Gate gefahren — das Gate **schreibt**. Bündel von
+`5df40de9`/`1c473e94` auf `6f8703c2`/`788a93c2` bewegt (+1 629 B / +727 B), weil der Quellstand nach
+seinem Bau um 07:03–07:10 weitergewachsen war. **Nicht wiederhergestellt** (`git checkout` würde
+seinen 06:58-Bau mitlöschen, der nirgends verwahrt ist) — Rückbau nur durch den Generator. **R19.5
+daraus abgeleitet: schreibende Gates nur in der commit-exakten Kopie.**
+
+**AUF-89 (P2):** drei Shell-Layouts, alle versioniert, Kopien unreferenziert (Gegenprobe: derselbe
+Befehl findet 360× `layouts.app`), 19 159 bzw. 1 096 Zeilen Drift, je eigene ⌘K-Handler.
+
+---
+
+## AUF-83-T3 / K-01 — Rohbelege (Evaluator, 30.07. 07:31 CEST) · **NICHT ERFÜLLT (P1)**
+
+**Stand:** Bündel `js 1423442 a42a4e6ffd16d30d` / `css 17973 80c9e9eca2818c6e` — bytegleich mit dem
+Generator-Bericht. Sichtprobe nach `cmd+shift+r`, 1440×813, Expertenmodus.
+
+**Gates, selbst gefahren (nur lesende — R19.5):**
+
+```text
+test:hausplaner 1392/0 · dom 16/0 · tsc exit 0 · schema exit 0
+phpunit tests/Feature/Hausplaner  64 Tests, 232 Assertions, OK  (DB_DATABASE=ticket_testing force)
+eineWerkzeugzeile 14/0 (Waechter aus K-01)
+statische-inline-stile HausplanerApp.tsx  138 / 78 offen — unveraendert trotz +32 Zeilen
+```
+
+**Der P1 — `T3-K01-B1`. Modul-Reproduktion mit der echten Nutzlast von Objekt 154:**
+
+```text
+objektkopf.ts:67   if (o.revision !== undefined && typeof o.revision !== 'number') return false;
+objekt.blade.php   'revision' => $uebernahme['szene_revision'] ?? null,      ⇒ JSON null
+
+leseObjektkopf({... status:"nie",    revision:null })       ⇒ null      ← Produktionsfall
+leseObjektkopf({... status:"aktuell",revision:3    })       ⇒ GELESEN
+leseObjektkopf({... revision: undefined            })       ⇒ GELESEN   ← der getestete Fall
+```
+
+**Erhebung über alle Objekte der Übersicht** (Oberfläche als angemeldeter Nutzer, keine Query
+gegen `ticket`; Bedingung aus Z67 nachgebildet):
+
+```text
+geprueft 12 · ohne Kopf 11 · Anteil 11/12
+203 veraltet rev 9    SICHTBAR
+154 153 152 151 150 149 148 ... alle status "nie", revision null   FEHLT
+```
+
+**Browser-Gegenprobe, beide Richtungen am gebauten Bündel:**
+
+```text
+Objekt 203:  hp-ok-* 4 · Name "EVALUATOR-MESSWELLE" · Knopf "In Auslegung übernehmen" disabled=false
+             Pille "Übernommen — VERALTET (Szene geändert seit Übernahme)"  hp-ok-pille--veraltet
+Objekt 154:  hp-ok-* 0 · Name null · Knopf null · Pille null
+             data-objektkopf VORHANDEN und wohlgeformt:
+             {"name":"Objekt Bremen","adresse":"Birkenallee 151, 28195 Bremen",...,"status":"nie","revision":null}
+             Buendel traegt den Code: hp-ok-name 1x · "In Auslegung übernehmen" 1x
+             hp-bar im DOM 0   ·   #hausplaner-root h1 nach Mount 0
+```
+
+**Testlücke, die das Grün erklärt:**
+
+```text
+"revision" in __tests__/objektkopf.test.ts   8 Vorkommen · davon null: 0
+verwendete Werte: 3 · 7 · 1 · 2 · '3'
+```
+
+**Zeilenzählung über der Leinwand (Objektseite, Expertenmodus):**
+
+```text
+1 hp-studio-kopf 62px | 2 Kopfleiste 54px | 3 Arbeitszeile 48px
+4 Modus/Zoom 43px | 5 role=tabpanel 39px | 6 Werkzeugoption 28px      = 274 px
+Blatt sagt 3 · Generator sagt 4 · gemessen 6  ⇒ AUF-90, Zaehlregel fehlt im Kriterium
+```
+
+**K-02 ERFÜLLT:** Platzhalter `<h1>Hausplaner — ...</h1>` steht im Blade, `#hausplaner-root h1`
+nach dem Mount = 0.
+
+**T3-K01-B2 (P3):** `.hp-bar`-Regel bleibt in `objekt.blade.php:35` — toter Code, zwei Rohfarben
+(`#fff`, `#e5e7eb`) in einer View.
+
+**Falsche Merkmale, die ich unterwegs verworfen habe** (R19.2, beide hätten zu Fehlbefunden geführt):
+
+```text
+"data-objektkopf 0x im Buendel"  ⇒ KEIN Beweis: main.tsx liest per mount.dataset['objektkopf'],
+                                    der Literalstring kommt dort nie vor. Verworfen.
+"Objektkopf fehlt"  (1. Messung) ⇒ ich stand in der Modus-Auswahl, HausplanerApp war nicht
+                                    gerendert. Erst im Expertenmodus gilt die Messung.
+```
+
+---
+
+## AUF-87 — Rohbelege (Evaluator, 30.07. 07:38 CEST) · **NACHBESSERN** (K-06 P1)
+
+**Spur A behandelt:** das Werkzeug erzeugt Abnahme-Werte **und** ruft `execSync` auf fremde
+Zeichenketten (`auftrag-pruefen.mjs:113`, cwd = Repo, timeout 120 s). Die Denylist ist die einzige
+Barriere davor.
+
+**Gates:** `node --test scripts/__tests__/auftragPruefen.test.mjs` 14/0 · `test:hausplaner` 1392/0 ·
+`dom` 16/0 · `tsc` exit 0. Umfang: genau `auftrag-pruefen.mjs`, `auftrag-pruefen.sh`,
+`scripts/__tests__/`, `AUFTRAGSSCHEMA.md`.
+
+**Mutationen in der Kopie, Grundlinie 14/0 vor und nach jeder Probe:**
+
+```text
+K-01  if(false) vor gefunden.push({id:'scope.population_command'})  ⇒ 12/2 ROT
+K-02  STUFEN.FEHLSCHLAG -> STUFEN.OK                                ⇒ 13/1 ROT
+K-03  STUFEN.VERDAECHTIG -> STUFEN.OK                               ⇒ 13/1 ROT
+K-04  kopfloses Blatt liefert Fehlschlag-Eintrag                    ⇒ 13/1 ROT
+K-05  STUFEN.NICHT_MASCHINELL -> STUFEN.OK                          ⇒ 13/1 ROT
+K-06  'npm run build' aus DENYLIST geloescht (11→10)                ⇒ 14/0 GRUEN   ← Luecke
+K-06  + 'git reset' geloescht (11→9)                                ⇒ 13/1 rot (nur der Zaehler)
+K-06  'curl' ERSETZT, Laenge bleibt 11                              ⇒ 14/0 GRUEN
+      und verbotenesMuster('curl http://x') = null
+```
+
+**Ursache K-06** (`__tests__/auftragPruefen.test.mjs:143`):
+
+```js
+for (const muster of DENYLIST) { assert.equal(verbotenesMuster(`echo x && ${muster}etwas`), muster); }
+```
+
+Die Zusage durchläuft die Liste, die sie sichert. Einziger echter Wächter:
+`assert.ok(DENYLIST.length >= 10)` bei 11 Einträgen ⇒ ein Löschen bleibt grün, ein Ersetzen immer.
+
+**Denylist-Lücken (16 Formen geprüft, 9 durch):**
+
+```text
+GREIFT:  "> " mit Leerzeichen · "rm " · "mv " · "git commit" · "npm run build" · /bin/rm
+DURCH:   >datei · >>datei · rm<TAB> · "git  commit" (2 Leerzeichen) · git switch
+         npx vite build · tee · truncate · dd
+Ursache: befehl.includes(m) mit leerzeichenbehafteten Mustern.
+git switch = echte Auslassung (git checkout ist gelistet).
+```
+
+**Bestandslauf, streng lesend** (`pruefeBlatt` gemieden, damit kein Befehl ausgeführt wird; Parser-Weg
+`lieseKopfRoh` → `yaml.load` → `sammleBefehle` wie im Modul):
+
+```text
+89 Blaetter · 13 mit lesbarem Kopf · 75 Befehle · 4 gesperrt
+durchschluepfende SCHREIBENDE Befehle im Bestand: 0
+```
+
+*Meine zwei ersten „Treffer" waren Fehlalarme meiner eigenen Regex `/>>?[^\s|=]/` — sie traf den
+Pfeil in `url()->previous`. Verworfen, nicht berichtet.*
+
+**T5-Fund des Generators, Glied für Glied reproduziert:**
+
+```text
+[1] grep -rn 'data-schiene'                exit 0
+[2] grep -rn "key === 'Escape'"            exit 0
+[3] grep -rc 'collapsed|klappZu|schieneZu' exit 1   Ausgabe "HausplanerApp.tsx:0"
+[4] node scripts/statische-inline-stile.mjs  NIE ERREICHT
+```
+
+**Instrumenten-Prüfung vorab** (R19.4): `lieseKopfRoh` liefert **Rohtext**, nicht geparstes YAML —
+meine erste Fassung der Bestandsprobe hätte nichts gemessen und wurde vor dem Lauf korrigiert.
+
+---
+
+## T3-K01-B1 nachgemessen + `T3-K01-B3` (neu, P1) — Rohbelege (Evaluator, 30.07. 07:47 CEST)
+
+**Bündel:** `js 1423502 5a24127c1ef3f3c1` · `css 17973 80c9e9eca2818c6e` — bytegleich mit dem Bericht.
+**Gates (nur lesend):** `test:hausplaner` 1394/0 · `dom` 16/0 · `tsc` exit 0 ·
+Messwerkzeug `HausplanerApp.tsx` 138/78 unverändert.
+
+**Behebung am Modul, echte Nutzlast von Objekt 154:**
+
+```text
+{... status:"nie", revision:null }  ⇒ GELESEN, r.revision === undefined   (normalisiert)
+{... revision:3 }                   ⇒ GELESEN
+{... revision:"3" }                 ⇒ null      (Negativfall unbeschaedigt)
+Objekte 154 · 153 · 152 (alle status nie, revision null)  ⇒ alle GELESEN
+```
+
+**Vier Mutationen, Grundlinie 13/0 vor und nach jeder Probe:**
+
+```text
+A  'o.revision !== undefined && o.revision !== null &&' -> ohne null      ⇒ 11/2 ROT
+B  Blade: 'ziel' => $x ?? null zusaetzlich eingefuegt                     ⇒ 12/1 ROT
+C  Blade: 'adresse' => -> 'adr' =>                                        ⇒ 11/2 ROT
+D  Blade: szene_revision ?? null -> ?? 0  (nichts mehr nullbar)           ⇒ 12/1 ROT
+   ⇒ D belegt den Waechter assert.ok(nullbar.length > 0) gegen das Messen von LEERE
+```
+
+**`T3-K01-B3` (P1) — unabhängig nachgemessen, Objekt 203, nach `cmd+shift+r`, alle vier Zustände:**
+
+```text
+Zustand            .hp-ok-name            .hp-ok-knopf               .hp-ok-pille    .hp-bar
+Startzustand       null                   null                       null            0
+Übersicht          null                   null                       null            0
+Geführte Planung   null                   null                       null            0
+Expertenmodus      EVALUATOR-MESSWELLE    In Auslegung übernehmen    VERALTET        0
+```
+
+Ursache laut Generator: `HausplanerStudio.tsx:140` hängt `<HausplanerApp>` nur im Expertenmodus ein.
+Die vorherige Blade-Leiste stand über der Insel und war in allen Modi sichtbar (`.hp-bar` jetzt
+überall 0). **Verlust einer Bedienung im Standardzustand ⇒ P1.** Vom Generator selbst gemeldet und
+bewusst nicht gebaut (berührt `AUF-48`).
+
+**Struktureller Nebenbefund:** `K-01`s Prüfvorschrift lautet `schritte: "1440 px, Expertenmodus"` —
+sie benennt genau den Zustand, in dem die Funktion arbeitet, und kann die drei anderen nicht sehen.
+Zusatz zu `AUF-90`: ein Kriterium, das seinen eigenen Messpunkt benennt, bestätigt nur sich selbst.
