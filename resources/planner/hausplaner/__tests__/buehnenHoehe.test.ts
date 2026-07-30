@@ -20,16 +20,13 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buehnenHoehe, sichtbareHoehe, ERSATZ_HOEHE, MIN_HOEHE } from '../app/dashboard/buehnenHoehe';
 import { standardPan, panAus } from '../app/dashboard/pan';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string =>
   s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^\s*\/\/.*$/gm, '');
-const quelle = (readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
-  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
-  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
-  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
-  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
-  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8'));
+const quelle = zerlegteApp();
 const regel = readFileSync(join(hier, '../app/dashboard/buehnenHoehe.ts'), 'utf8');
 
 // --- K3: die Konstante ist weg -----------------------------------------------------------------

@@ -17,7 +17,18 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
+/**
+ * **AUF-48 Scheibe 4b: die Leiste ist mit ihrer Zeile umgezogen** — nach
+ * `rahmen/GruppenzeileUndSchiene.tsx`. **Die geprüfte Eigenschaft ist unverändert und sie ist der
+ * Kern dieses Tests:** die Komponente steht auf MODULEBENE, nicht im Rumpf. *Genau deshalb ist der
+ * Umzug hierher der Prüfort — nicht die Datei, aus der sie kam.*
+ */
 const quelle = readFileSync(
+  join(dirname(fileURLToPath(import.meta.url)), '../app/rahmen/GruppenzeileUndSchiene.tsx'),
+  'utf8',
+);
+/** Für die Absenz-Zusage: im Rumpf von `HausplanerApp` darf sie erst recht nicht stehen. */
+const hauptfunktion = readFileSync(
   join(dirname(fileURLToPath(import.meta.url)), '../app/HausplanerApp.tsx'),
   'utf8',
 );
@@ -36,8 +47,10 @@ test('KontextOptionenLeiste ist auf Modulebene deklariert (Spalte 0)', () => {
 
 test('KontextOptionenLeiste ist NICHT im Rumpf von HausplanerApp deklariert', () => {
   // Rumpf-Deklarationen sind eingerückt; genau die sind hier verboten.
-  assert.doesNotMatch(quelle, /^\s+const KontextOptionenLeiste\s*=/m);
-  assert.doesNotMatch(quelle, /^\s+function KontextOptionenLeiste\(/m);
+  for (const wo of [quelle, hauptfunktion]) {
+    assert.doesNotMatch(wo, /^\s+const KontextOptionenLeiste\s*=/m);
+    assert.doesNotMatch(wo, /^\s+function KontextOptionenLeiste\(/m);
+  }
 });
 
 test('die Werte kommen als explizite Props, nicht über Closure (Kante 3: keine vergessene Prop)', () => {

@@ -33,6 +33,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp, teil } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 /** **Ohne Kommentare gemessen.** Die Erklärung oben nennt Bezeichner beim Namen; ein Test, der rohen
@@ -41,7 +43,7 @@ const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string =>
   s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^\s*\/\/.*$/gm, '');
 const kopf = ohneKommentare(readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8'));
-const app = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+const app = ohneKommentare(zerlegteApp());
 
 // --- K-01: der Kopfrahmen ist ausgezogen, und die Hauptfunktion ruft ihn --------------------------
 
@@ -56,9 +58,12 @@ test('K-01: die Hauptfunktion ruft den Kopfrahmen — genau einmal', () => {
 test('K-01: die drei Zeilen sind WIRKLICH ausgezogen — nicht kopiert', () => {
   // Ohne diesen Partner bliebe K-01 grün, wenn das Markup an beiden Orten stünde. Dann sähe die
   // Oberfläche doppelt aus, und beide Fassungen drifteten auseinander.
+  // **Diese Zusage darf NICHT die zerlegte Ansicht lesen** — die enthält den Kopfrahmen ja.
+  // Sie fragt: steht es ein ZWEITES Mal in der Hauptfunktion? Also nur diese eine Datei.
+  const nurApp = teil('app/HausplanerApp.tsx');
   for (const marke of ['Speichern (Strg+S)', 'hp-az-suchen', '<OpGruppe name="Verlauf">']) {
     assert.ok(kopf.includes(marke), `\`${marke}\` steht nicht im Kopfrahmen`);
-    assert.ok(!app.includes(marke), `\`${marke}\` steht noch ein zweites Mal in der Hauptfunktion`);
+    assert.ok(!nurApp.includes(marke), `\`${marke}\` steht noch ein zweites Mal in der Hauptfunktion`);
   }
 });
 

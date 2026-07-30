@@ -12,6 +12,8 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { RANGFOLGE, oberste, type EscapeEbenenArt } from '../app/dashboard/escapeStapel';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 
@@ -62,7 +64,7 @@ test('K-03 (Befund T5-K03-B1): die Palette schließt sich NUR über den Stapel �
   // deshalb steht der Beleg hier als Quelltext-Zusage: das Filterfeld darf `schliessePalette`
   // nicht mehr direkt im `onKeyDown` aufrufen. Gefunden mit einem echten Browser (Puppeteer,
   // Objekt 203, Palette + Geschoss-Menü gleichzeitig offen, Escape gedrückt), nicht am Quelltext.
-  const app = readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8');
+  const app = zerlegteApp();
   const zeilen = app.split('\n').filter((z) => !z.trim().startsWith('*') && !z.trim().startsWith('//'));
   const direkterAufruf = zeilen.filter((z) => z.includes("'Escape'") && z.includes('schliessePalette()'));
   assert.deepEqual(direkterAufruf, [],

@@ -16,16 +16,13 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { leseObjektkopf, pillenText, kopfzeile, OBJEKTKOPF_ATTRIBUT } from '../app/state/objektkopf';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string =>
   s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^\s*\/\/.*$/gm, '');
-const app = ohneKommentare((readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
-  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
-  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
-  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
-  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
-  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8')));
+const app = ohneKommentare(zerlegteApp());
 /** AUF-83-T3-N1 — der Übernehmen-Knopf, die Staleness-Pille und ihr `disabled`-Zustand wohnen seit
  *  dem Überlauf-Umbau hier, nicht mehr in `HausplanerApp.tsx`. Der Objektname bleibt dort. */
 const ueberlauf = ohneKommentare(readFileSync(join(hier, '../app/dashboard/ObjektkopfUeberlauf.tsx'), 'utf8'));
@@ -251,10 +248,16 @@ test('K-01 (Auflage): der Bau hat KEINE Zeile hinzugefügt — über dem Zeichen
       .filter((z) => /^ {6}<(div|button|span|form)\b/.test(z) || /^ {6}\{[a-zA-Z]/.test(z));
   };
   const kopf = ohneKommentare(readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8'));
-  const rein = ohneKommentare(readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8'));
+  const rein = ohneKommentare(zerlegteApp());
+  // **AUF-48 Scheibe 4b: jetzt sind es DREI Dateien.** Die vierte Zeile — die Themen-Gruppen —
+  // ist mit `ArbeitsbereichZeilen` weitergezogen. *Die Summe ist die Aussage, nicht der Ort.*
+  const zeilenModul = ohneKommentare(readFileSync(join(hier, '../app/rahmen/GruppenzeileUndSchiene.tsx'), 'utf8'));
   const imKopfrahmen = zeilen(kopf, kopf.indexOf('    <>'), kopf.indexOf('    </>'));
   const inDerApp = zeilen(rein, rein.indexOf('<Kopfrahmen'), rein.indexOf('<div ref={inhaltRef}'));
-  const geschwister = [...imKopfrahmen, ...inDerApp];
+  const inDenZeilen = zeilen(zeilenModul,
+    zeilenModul.indexOf('export function ArbeitsbereichZeilen'),
+    zeilenModul.indexOf('export interface PlanerSchieneEigenschaften'));
+  const geschwister = [...imKopfrahmen, ...inDenZeilen, ...inDerApp];
   assert.equal(geschwister.length, 4,
-    `${geschwister.length} Elemente über dem Zeichenbereich statt vier (${imKopfrahmen.length} im Kopfrahmen, ${inDerApp.length} in der Hauptfunktion):\n${geschwister.map((z) => z.trim().slice(0, 70)).join('\n')}`);
+    `${geschwister.length} Elemente über dem Zeichenbereich statt vier (${imKopfrahmen.length} im Kopfrahmen, ${inDenZeilen.length} in den Bereichszeilen, ${inDerApp.length} in der Hauptfunktion):\n${geschwister.map((z) => z.trim().slice(0, 70)).join('\n')}`);
 });

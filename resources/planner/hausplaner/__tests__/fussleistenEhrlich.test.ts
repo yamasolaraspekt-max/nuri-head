@@ -34,12 +34,16 @@ const ohneKommentare = (s: string): string =>
 const lies = (p: string): string => ohneKommentare(readFileSync(join(hier, '../app/', p), 'utf8'));
 const app = lies('HausplanerApp.tsx');
 const studio = lies('HausplanerStudio.tsx');
+/** AUF-48 Scheibe 4b: die Schiene samt Fuss wohnt jetzt hier. **Als DRITTE Quelle, nicht als
+ *  Ersatz** — die Vertröstungs-Zusagen unten müssen weiterhin alle Flächen abdecken, sonst würde
+ *  eine Vertröstung schlicht dadurch zulässig, dass sie eine Datei weiter zieht. */
+const schiene = lies('rahmen/GruppenzeileUndSchiene.tsx');
 
 const VERTROESTUNGEN = ['folgen', 'folgt', 'in Kürze', 'demnächst', 'coming soon', 'geplant'];
 
 // --- Die Vertröstung ist weg ----------------------------------------------------------------------
 test('keine der beiden Fußleisten verspricht noch etwas', () => {
-  for (const [name, quelle] of [['HausplanerApp', app], ['HausplanerStudio', studio]] as const) {
+  for (const [name, quelle] of [['HausplanerApp', app], ['HausplanerStudio', studio], ['GruppenzeileUndSchiene', schiene]] as const) {
     assert.ok(!quelle.includes('Module folgen'), `${name}: „Module folgen" steht noch da`);
     assert.ok(!quelle.includes('Erweiterbar'), `${name}: „Erweiterbar" ohne Inhalt sagt nichts`);
   }
@@ -47,7 +51,7 @@ test('keine der beiden Fußleisten verspricht noch etwas', () => {
 
 test('und auch sonst steht in keiner der beiden Dateien eine Vertröstung als Anzeigetext', () => {
   // Geprüft werden die Zeichenketten in Anführungszeichen, nicht der Code drumherum.
-  for (const [name, quelle] of [['HausplanerApp', app], ['HausplanerStudio', studio]] as const) {
+  for (const [name, quelle] of [['HausplanerApp', app], ['HausplanerStudio', studio], ['GruppenzeileUndSchiene', schiene]] as const) {
     const texte = quelle.match(/>[^<>{}]{12,}</g) ?? [];
     for (const t of texte) {
       for (const wort of VERTROESTUNGEN) {
@@ -59,7 +63,7 @@ test('und auch sonst steht in keiner der beiden Dateien eine Vertröstung als An
 
 // --- Was jetzt dort steht -------------------------------------------------------------------------
 test('die Schiene zeigt den Satz ihres eigenen Reiters — wiederverwendet, nicht neu geschrieben', () => {
-  assert.match(app, /\{schienenReiter\(schienenTab\)\?\.hinweis\}/,
+  assert.match(schiene, /\{schienenReiter\(schienenTab\)\?\.hinweis\}/,
     'der Fuss liest die vorhandenen Daten');
   // Und die Daten taugen dafür: jeder Reiter hat einen Satz, keiner vertröstet.
   for (const r of SCHIENEN_REITER) {

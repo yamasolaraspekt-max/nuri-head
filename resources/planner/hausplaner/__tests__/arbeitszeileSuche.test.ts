@@ -19,6 +19,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 /** **Ohne Kommentare gemessen** — die Erklärung nebenan nennt `oeffnePalette` und `⌘K` beim
@@ -26,12 +28,7 @@ const hier = dirname(fileURLToPath(import.meta.url));
  *  Die Falle hat in diesem Zyklus mehrfach zugeschlagen. */
 const ohneKommentare = (s: string): string =>
   s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^\s*\/\/.*$/gm, '');
-const app = ohneKommentare((readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
-  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
-  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
-  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
-  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
-  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8')));
+const app = ohneKommentare(zerlegteApp());
 /**
  * AUF-48 Scheibe 3: die Zuordnung „welche Taste bedeutet was" wohnt jetzt in `tastenAbsicht.ts`.
  * **Die geprüfte Eigenschaft ist unverändert** — ⌘K öffnet die Palette, und der Knopf ist ein

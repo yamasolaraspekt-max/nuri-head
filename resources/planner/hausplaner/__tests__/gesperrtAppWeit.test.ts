@@ -30,7 +30,9 @@ const lies = (p: string): string => ohneKommentare(readFileSync(join(hier, '../a
 
 /** Die fünf Flächen, die den gesperrten Zustand darstellen — Stelle für Stelle aus der Inventur. */
 const FLAECHEN = [
-  { name: 'Werkzeug-Navi', datei: 'HausplanerApp.tsx', muster: /opacity: GESPERRT_DECKKRAFT, cursor: GESPERRT_ZEIGER/ },
+  // AUF-48 Scheibe 4b: die Werkzeug-Liste der Schiene ist nach `rahmen/GruppenzeileUndSchiene.tsx`
+  // gezogen. Die Sperr-Fassung ist zeichengleich dieselbe.
+  { name: 'Werkzeug-Navi', datei: 'rahmen/GruppenzeileUndSchiene.tsx', muster: /opacity: GESPERRT_DECKKRAFT, cursor: GESPERRT_ZEIGER/ },
   { name: 'Palette-Eintrag', datei: 'HausplanerApp.tsx', muster: /eintrag\.enabled \? FARBEN\.text : GESPERRT_BESCHRIFTUNG/ },
   { name: 'Geschoss löschen', datei: 'dashboard/GeschossFlaeche.tsx', muster: /GESPERRT_DECKKRAFT : 1, cursor: s\.anzahl <= 1 \? GESPERRT_ZEIGER/ },
   { name: 'Menü-Eintrag', datei: 'dashboard/WerkzeugGruppenMenue.tsx', muster: /zustand\.enabled \? 1 : GESPERRT_DECKKRAFT/ },
@@ -123,7 +125,7 @@ test('die Variante kommt aus derselben Datei — es gibt keine zweite Quelle', (
 test('K6: jede gesperrte Fläche trägt ein nicht-farbliches, nicht zeigerabhängiges Merkmal', () => {
   // Ein Mauszeiger existiert für Tastatur- und Touch-Bedienung nicht.
   const belege: Array<[string, string, RegExp]> = [
-    ['Werkzeug-Navi', 'HausplanerApp.tsx', /aria-disabled=\{!zustand\.enabled\}/],
+    ['Werkzeug-Navi', 'rahmen/GruppenzeileUndSchiene.tsx', /aria-disabled=\{!zustand\.enabled\}/],
     ['Palette-Eintrag', 'HausplanerApp.tsx', /aria-disabled=\{!eintrag\.enabled\}/],
     ['Geschoss löschen', 'dashboard/GeschossFlaeche.tsx', /disabled=\{s\.anzahl <= 1\}/],
     ['Menü-Eintrag', 'dashboard/WerkzeugGruppenMenue.tsx', /aria-disabled=\{!zustand\.enabled\}/],

@@ -36,14 +36,11 @@ import {
   ladeArbeitsbereich, speichereArbeitsbereich, ARBEITSBEREICH_SCHLUESSEL,
 } from '../app/state/arbeitsbereichSpeicher';
 import { ladeSchienen, speichereSchienen, SCHIENEN_STANDARD } from '../app/state/schienenSpeicher';
+// AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
+import { zerlegteApp } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
-const app = (readFileSync(join(hier, '../app/HausplanerApp.tsx'), 'utf8')
-  // AUF-48 Scheibe 4a: der Kopfrahmen (Werkzeugzeile, Arbeitsbereich-Waehler,
-  // Bedien-Werkzeugleiste) ist nach `dashboard/Kopfrahmen.tsx` ausgezogen. **Beide Dateien
-  // werden gelesen** — die geprueften Eigenschaften sind unveraendert, und eine Absenz-Zusage
-  // darf nicht dadurch gruen werden, dass Inhalt eine Datei weiter gewandert ist.
-  + readFileSync(join(hier, '../app/dashboard/Kopfrahmen.tsx'), 'utf8'))
+const app = zerlegteApp()
   .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 
 /** Ein In-Memory-`localStorage` — dieselbe Technik wie in `schienenSpeicher.test.ts`. */
