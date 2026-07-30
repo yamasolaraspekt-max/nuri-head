@@ -40,6 +40,8 @@ scope:
     - resources/planner/hausplaner/app/HausplanerStudio.tsx
     - resources/planner/hausplaner/app/HausplanerApp.tsx        # NUR die Geschosszeile
     - resources/planner/hausplaner/app/dashboard/GeschossFlaeche.tsx
+    - resources/planner/hausplaner/app/dashboard/ReiterLeiste.tsx   # 30.07. aufgenommen, siehe K-05 auflage_geteilte_leiste
+    - resources/views/admin/hausplaner/objekt.blade.php          # Objektname + Uebernehmen-Knopf wandern (Zusage aus T2)
     - resources/planner/hausplaner/hausplaner.css
   ausschluesse:
     - stelle: "alles in HausplanerApp.tsx ausser der Geschosszeile und der neuen Arbeitszeile"
@@ -71,18 +73,61 @@ scope:
 
 kriterien:
   - id: K-01
-    aussage: "Die Geschosszeile im Zeichenbereich ist fort."
-    typ: absence
+    status: NEU GESCHNITTEN 30.07. 06:45 — DER ALTE WORTLAUT WAR FALSCH
+    aussage: "Die Kopfleiste traegt das DOKUMENT vollstaendig — und es bleiben genau drei Zeilen."
+    typ: presence
     kritikalitaet: P1
+    entscheid_30_07_0645: >
+      **DEIN BEFUND 1 IST BERECHTIGT, UND DER FEHLER IST MEINER — nicht AUF-70s.** Ich habe
+      nachgemessen, was heute steht, statt es aus dem Entwurf abzuleiten:
+      Zeile 1 `HausplanerApp.tsx:1184` = Marke/Geschoss/Status/Speichern (das DOKUMENT).
+      Zeile 2 `:1256` = `ARBEITSBEREICH` + `ReiterLeiste` mit den fuenf Bereichen (AUF-34/27).
+      Zeile 3 `:1270` = die eine Werkzeugzeile mit 16 Knoepfen in 2·3·6·4·1 (AUF-70).
+      **Die drei Zeilen, die T3 zu bauen versprach, STEHEN BEREITS — und Zeile 2 IST die
+      Arbeitszeile.** Mein K-01 wollte Inhalte aus Zeile 3 nach oben ziehen, die AUF-70 vor drei
+      Tagen bewusst nach unten gezogen hat.
+      **Und Yamas eigener freigegebener Entwurf gibt AUF-70 recht, nicht mir:** Punkt 3 lautet
+      *„Workspace + 2D/Split/3D + kompakte Werkzeugleiste"* — die Modusschalter gehoeren dort
+      ausdruecklich in die Arbeitszeile, genau wo AUF-70 sie hat. **Keine der vier Zusagen wird
+      gebrochen.**
     pruefung:
       typ: visuell
-      schritte: "1440 px, Expertenmodus, Zeichenbereich"
+      schritte: "1440 px, Expertenmodus"
       erwartet: >
-        Ueber dem Plan steht keine eigene Zeile mit Geschoss-Bedienung mehr. Die 13 Elemente sind
-        verteilt: Rueckgaengig/Wiederholen/Speichern in die Kopfleiste, 2D/Split/3D in die
-        Arbeitszeile, Geschoss-Waehler in die Kopfleiste, Anlegen/Duplizieren/Loeschen in sein Menue.
-    beleg: Bildschirmfoto vorher/nachher + Zaehlung der Bedienelemente
+        Die Kopfleiste (Zeile 1) traegt links **Projekt UND Geschoss**, rechts Status und
+        Speichern. **Heute fehlt das Projekt: gemessen 0 Fundstellen fuer einen Projektnamen in
+        `HausplanerApp.tsx`.** Dazu wandern **Objektname mit Adresse und der Uebernehmen-Knopf
+        samt Staleness-Pille** aus `objekt.blade.php` hierher — das ist die offene Zusage aus T2
+        (`objekt.blade.php:81` sagt es selbst: *„Bleibt … wandert mit T3"*).
+      und_zwar_ohne: >
+        **Es bleiben GENAU DREI Zeilen.** Keine vierte. Wer Inhalt hinzufuegt, nimmt Platz aus
+        Zeile 1 — nicht aus der Hoehe der Buehne.
+    beleg: Bildschirmfoto vorher/nachher + DOM-Auszug der drei Zeilen
     ausgefuehrt_von: evaluator
+    gegenprobe: >
+      `npm run test:hausplaner -- --filter=eineWerkzeugzeile` **MUSS gruen bleiben** — alle vier
+      Zusagen von AUF-70 (16 Knoepfe, 2·3·6·4·1, Gruppenreihenfolge, Dokumentzeile ohne Werkzeuge).
+      **Wird eine davon rot, ist der Bau falsch, nicht die Zusage.**
+
+  - id: K-01b
+    status: WILLENSFRAGE — GEHT AN YAMA, BLOCKIERT DEN BAU NICHT
+    aussage: "Rueckgaengig und Wiederholen: Kopfleiste oder Werkzeugzeile?"
+    typ: behavioural
+    kritikalitaet: P2
+    pruefung:
+      typ: entscheidung
+      erwartet: "keine — der Bau laeuft ohne diese Antwort weiter"
+    begruendung: >
+      **Das ist der EINZIGE echte Widerspruch, und er gehoert nicht mir.** Yamas Auftragspunkt 2
+      nennt fuer die Kopfleiste *„rechts Speicherstatus/Speichern/Undo/Redo/Overflow"*.
+      AUF-70 hat Rueckgaengig und Wiederholen bewusst in die Werkzeugzeile gezogen, mit der
+      Begruendung *„Rueckgaengig zuerst: es ist die Rettungsleine und gehoert an den Anfang"* —
+      und mit vier abgenommenen Zusagen verriegelt.
+      **Beide sind vertretbar. Bis Yama entscheidet, gilt AUF-70** — der abgenommene Stand
+      schlaegt den unentschiedenen. *Ein Auftrag, der eine abgenommene Zusage nebenbei
+      zurueckdreht, hat sie nie ernst genommen.*
+      Faellt die Entscheidung fuer die Kopfleiste, ist das ein **eigener Auftrag mit Begruendung,
+      warum der zweite Entwurf den ersten schlaegt** — nicht ein Nebensatz in diesem hier.
 
   - id: K-02
     status: BEREITS ERFUELLT DURCH AUF-43      # bestaetigt vom Planner, 21:40
@@ -148,9 +193,26 @@ kriterien:
       `auswahlDarstellung.ts`). Bestandscode-first: anzeigen, nicht bauen.
 
   - id: K-05
-    aussage: "Die Arbeitszeile fuehrt die fuenf Arbeitsbereiche."
+    status: ZU DREI VIERTELN BEREITS ERFUELLT DURCH AUF-34/AUF-27 — GEKUERZT AUF DEN REST
+    aussage: "Die Arbeitszeile fuehrt die fuenf Arbeitsbereiche — und Import sagt, dass er noch nicht traegt."
     typ: presence
     kritikalitaet: P1
+    entscheid_30_07_0645: >
+      **F-04, fuenfte Auspraegung, und wieder hast du sie gemeldet statt abgehakt.** Gemessen:
+      `HausplanerApp.tsx:1256-1269` rendert `ARBEITSBEREICH` + `ReiterLeiste` aus
+      `bereichReiter` (`:105`), gespeist aus `dashboard/arbeitsbereiche.ts` — **genau die
+      geforderte Quelle und genau die fuenf.** Das steht seit AUF-34.
+      **Offen ist nur die zweite Haelfte:** *„Import ist ausgegraut und sagt das auch."*
+      Gemessen: `arbeitsbereiche.ts` kennt **kein** Feld fuer gesperrt, `ReiterLeiste.tsx`
+      **keinen** gesperrten Reiter. Das ist echter Bau, kein Nachtrag.
+      **`ReiterLeiste.tsx` wird in `pfade` aufgenommen** — mit Auflage, siehe unten. Es abzutrennen
+      waere sauberer im Papier und teurer in der Sache: ein Auftrag, der ein Feld ergaenzt, und ein
+      zweiter, der es benutzt, sind zwei Wartezeiten fuer eine Zeile Code.
+    auflage_geteilte_leiste: >
+      **`ReiterLeiste` hat drei Nutzer** (Panel-Reiter, Schienen-Reiter, Arbeitsbereiche — AUF-27).
+      Das gesperrte Merkmal ist **optional**: wer es nicht setzt, bekommt exakt das heutige
+      Verhalten. **Eine Zusage belegt, dass die beiden anderen Nutzer unveraendert sind** — nicht
+      die Behauptung, sie seien es.
     pruefung:
       typ: visuell
       erwartet: >
@@ -246,7 +308,11 @@ kriterien:
       befehl: "grep -rl 'HausplanerApp\\|HausplanerStudio\\|GeschossFlaeche' resources/planner/hausplaner/__tests__/"
       erwartet: "die LISTE steht in der Quittung, jede Datei angesehen"
     beleg: Dateiliste + je Datei ein Satz
-    barriere: "R9-Barriere vom 29.07., 10:00. Bei HausplanerApp allein sind es 22 Dateien."
+    barriere: >
+      R12-Barriere vom 29.07., 10:00. **Korrigiert 30.07. 06:45 auf deine Messung:** der
+      `pruefung.befehl` sucht DREI Namen und liefert **27** Dateien — 22 fuer `HausplanerApp`
+      allein, 7 fuer `HausplanerStudio`, 3 fuer `GeschossFlaeche`. **Meine 22 war die Zahl eines
+      anderen Befehls.** Du hast die gemessene genommen statt meiner, und daraus kam Befund 1.
 
   - id: K-10
     aussage: "Gates ohne Regression."

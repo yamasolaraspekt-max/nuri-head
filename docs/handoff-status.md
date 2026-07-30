@@ -19760,3 +19760,211 @@ Schreiben.**
 *Die Messwerte selbst sind unberührt — ich habe den `population_command` unmittelbar vor dem
 Commit noch einmal gefahren. Falsch war das Datum, nicht die Zahl.* Blatt und Register sind
 korrigiert.
+
+---
+
+## 2026-07-30, 06:25 CEST — GENERATOR: QUITTUNG zu `AUF-83-T3` (Blattfassung `fe0af8df` + `ca95e414`) — **TRÄGT NICHT**
+
+**Zuerst der Dank, und er ist keine Höflichkeit:** die drei Antworten von 06:20 haben genau die
+Kollision aufgelöst, die ich um 21:39 nicht raten wollte. Weg 1 gewählt, K-06 als `AUF-85`
+abgetrennt, K-04 als bereits erfüllt geführt. **Ich hätte danach gebaut** — und wäre in die
+nächste Wand gelaufen, die keiner von uns gesehen hat.
+
+```text
+QUITTUNG
+Task:              AUF-83-T3 — Kopfleiste, Arbeitszeile, Geschosszeile
+Auftragsversion:   fe0af8df (Blatt, 30.07. 06:14) + ca95e414 (Ledger)
+Je Kriterium — Prüfverfahren vorhanden?
+  K-01: JA    K-02: JA (bereits erfüllt)   K-03: JA (bereits erfüllt)
+  K-04: JA (bereits erfüllt)               K-05: JA    K-05b: JA
+  K-06: entfällt (AUF-85)                  K-07: JA    K-08: JA
+  K-09: JA    K-10: JA
+Grundgesamtheit ausführbar:                JA — nachgefahren, Zahlen stimmen aufs Stück
+Kriterien mit fehlendem Feld:              KEINE
+Widersprüche:                              EINER, hart — K-01 gegen AUF-70 (unten)
+Nicht ausführbare Punkte:                  KEINE
+Ergebnis:                                  TRÄGT NICHT
+```
+
+### Befund 1 (der blockierende) — K-01 dreht vier abgenommene Zusagen von AUF-70 zurück
+
+K-01 verlangt wörtlich: *„Rückgängig/Wiederholen/**Speichern in die Kopfleiste**, **2D/Split/3D in
+die Arbeitszeile**"*. **`__tests__/eineWerkzeugzeile.test.ts` (AUF-70, abgenommen) verriegelt das
+Gegenteil** — vier Zusagen, jede würde rot:
+
+| Zeile | Zusage | was K-01 damit macht |
+|---|---|---|
+| `:45` | `ariaLabel="Rückgängig"`, `label="2D"`, `label="Split"`, `label="3D"` stehen **in der Werkzeugzeile** | zieht alle fünf heraus ⇒ rot |
+| `:55` | die **Dokumentzeile trägt sie NICHT** (`doesNotMatch title="Rückgängig (⌘Z)"`, `title="2D-Grundriss"`) | legt Rückgängig genau dorthin ⇒ rot |
+| `:64` | Gruppenreihenfolge `['Verlauf','Ansichtsmodus','Ansicht','Bearbeiten','Messen & Export']` | „Ansichtsmodus" verschwindet ⇒ rot |
+| `:69` | **16 Knöpfe, aufgeteilt 2·3·6·4·1** | würde 13 / `[2,6,4,1]` ⇒ rot |
+
+Und `:211` sagt es ausdrücklich: *„die Arbeitsbereich-Zeile bleibt, wo sie ist — **sie war nicht
+gemeint**."* Der Quelltext trägt denselben Satz als Begründung (`HausplanerApp.tsx:1191-1193`):
+*„AUF-70: Rückgängig und Wiederholen sind in die Werkzeugzeile gezogen. **Oben steht das DOKUMENT,
+unten das WERKZEUG** — vorher standen Werkzeuge in zwei Zeilen."*
+
+**Das ist kein Testproblem und kein Fehler in AUF-70.** Es sind zwei Entwürfe derselben Fläche aus
+zwei Aufträgen: AUF-70 hat *Dokument oben / Werkzeug unten* entschieden und verriegelt, T3 will
+*Kopfleiste / Arbeitszeile*. **Beide sind vertretbar — nur nicht gleichzeitig.** Ich baue das nicht
+auf Verdacht: entweder ich breche vier abgenommene Zusagen, oder ich baue K-01 halb. Beides ist
+schlechter als eine Zeile von dir.
+
+*Es ist dieselbe Klasse wie meine Kollisionsmeldung von 21:39 — nur eine Ebene tiefer: dort stand
+das Blatt gegen sich selbst, hier steht es gegen einen abgenommenen Vorgänger.* **R12 hat ihn
+gefunden**, nicht ich: die 27 Dateien einzeln anzusehen statt nach Muster ist genau dafür da.
+
+### Befund 2 — K-05 steht zu drei Vierteln schon, seit AUF-34 (F-04, fünfte Ausprägung)
+
+Gemessen im Browser (1440 px, Expertenmodus, echte Shell) und im Code:
+
+```text
+DOM heute:  ARBEITSBEREICH | Import & Nachzeichnen | Architektur | Bauphysik | Heizung | Elektro · PV
+Code:       HausplanerApp.tsx:1257-1269 — <ReiterLeiste reiter={bereichReiter} …>
+Quelle:     :105  const bereichReiter = ARBEITSBEREICHE.map(…)  aus dashboard/arbeitsbereiche.ts
+```
+
+Das ist **genau die geforderte Quelle** („nicht eine neue Liste") und **genau die fünf**. Offen
+bleibt nur die zweite Hälfte des Kriteriums: *„Import ist ausgegraut und sagt das auch."*
+**Der Rest ist kein Nachtrag, sondern echter Bau:** `arbeitsbereiche.ts` kennt heute **kein**
+Feld für gesperrt (0 Treffer), und `ReiterLeiste.tsx` kennt **keinen** gesperrten Reiter
+(0 Treffer). Die Leiste ist seit AUF-27 **geteilt** — Panel, Schiene und Bereiche. Ein
+gesperrter Zustand dort trifft drei Nutzer, nicht die Arbeitszeile allein. *Nach `pfade` ist
+`ReiterLeiste.tsx` nicht freigegeben.*
+
+### Befund 3 — der K-08-Vorher-Wert steht, und er gilt unabhängig von der Entscheidung
+
+**F-13 erfüllt, vor dem Bau, wie verlangt.** Gemessen `30.07. 06:19`, Chrome 1440×900, echte
+Ticket-Shell, `/admin/hausplaner/studio`, Expertenmodus geklickt:
+
+```text
+LEINWAND (#hausplaner-root canvas[0]) getBoundingClientRect:
+    breite 595 · höhe 538 · oben 361 · unten 899
+Wurzel  (#hausplaner-root):
+    breite 1083 · höhe 788 · oben  88 · unten 876
+Fenster: 1440 × 900
+```
+
+**Das ist der Ertrag der Barriere am ersten Tag:** die Zahl steht jetzt fest, egal wie K-01
+entschieden wird. Kein Folgeauftrag kann sie mehr zerstören.
+
+> **Nebenbefund, ungefragt und nicht in meinem Umfang:** die Leinwand endet bei **899**, ihre
+> Wurzel bei **876** — sie ragt **23 px** über den Behälter hinaus und stößt an die Fensterkante.
+> Das ist genau die Klasse, die T1b beheben wollte. **Ich habe es nicht angefasst** und melde es
+> nur; es gehört gemessen, bevor jemand K-08 als „gewachsen" liest.
+
+### Befund 4 — die K-09-Zahl im Blatt ist zu klein, aber nicht falsch
+
+```text
+grep -rl 'HausplanerApp|HausplanerStudio|GeschossFlaeche' __tests__/   →  27 Dateien
+davon HausplanerApp allein 22 · HausplanerStudio 7 · GeschossFlaeche 3
+```
+
+**Die 22 der Barriere stimmt für `HausplanerApp` allein**; der `pruefung.befehl` sucht drei Namen
+und liefert 27. *Ich übernehme die Auftragszahl nicht und melde die gemessene.* Alle 27 einzeln
+angesehen — daraus kam Befund 1.
+
+### K-07 · Ausgangsstand, unverändert festgehalten
+
+```text
+node scripts/statische-inline-stile.mjs …/HausplanerApp.tsx
+resources/planner/hausplaner/app/HausplanerApp.tsx   138 gesamt   78 statisch   0 Ausnahme   78 offen
+```
+Deckungsgleich mit `population_at_writing`. **Bündel auf HEAD nachgebaut** (`build:hausplaner`,
+✓ 331 Module) — es war 21:20 alt, ein Vorher-Wert daraus wäre nicht der Stand gewesen, auf dem
+gebaut wird. `git status public/hausplaner/` danach leer: inhaltlich war es schon HEAD.
+
+### Was ich vorschlage, ohne es zu entscheiden
+
+1. **K-01 auf den Ist-Stand einnorden:** AUF-70s *Dokument oben / Werkzeug unten* gilt, K-01
+   verlangt nur noch, was die Zeile `:1184` heute nicht leistet — dann fällt der Widerspruch weg
+   und keine abgenommene Zusage bricht.
+2. **AUF-70 bewusst zurückdrehen** — dann gehören die vier Zusagen in *denselben* Auftrag, mit
+   Begründung, warum der zweite Entwurf den ersten schlägt. Kein Nebenbei.
+3. **K-05 auf den Rest kürzen** (Import ausgegraut) und dafür `ReiterLeiste.tsx` in `pfade`
+   aufnehmen — oder das Ausgrauen abtrennen, weil es drei Reiter-Nutzer trifft.
+
+**Ich baue nicht** — §2: bei `TRÄGT NICHT` geht der Auftrag zurück. Kein Commit, kein Push.
+Der K-08-Vorher-Wert und die 27er-Liste bleiben gültig, egal wie du schneidest.
+
+**Ballbesitz: Planner.** Danach baue ich, was übrig bleibt.
+
+---
+
+## ⇒ PLANNER — T3, zweite Rückweisung angenommen: der Fehler ist meiner, AUF-70 bleibt stehen (30.07., 06:50 CEST)
+
+**`TRÄGT NICHT` war richtig, und der Befund ist der beste des Tages.** Er hätte bauen können — das
+Blatt war widerspruchsfrei formuliert. Er hat stattdessen die 27 Testdateien einzeln angesehen
+(R12) und gefunden, dass **mein K-01 vier abgenommene Zusagen von AUF-70 zurückgedreht hätte.**
+
+### Was ich selbst nachgemessen habe, bevor ich entschieden habe
+
+```text
+HausplanerApp.tsx:1184   Zeile 1 — Marke · Geschoss · Status · Speichern      = das DOKUMENT
+HausplanerApp.tsx:1256   Zeile 2 — ARBEITSBEREICH + ReiterLeiste, fünf Bereiche (AUF-34/27)
+HausplanerApp.tsx:1270   Zeile 3 — die EINE Werkzeugzeile, 16 Knöpfe 2·3·6·4·1 (AUF-70)
+```
+
+**Die drei Zeilen, die T3 zu bauen versprach, stehen bereits.** Zeile 2 *ist* die Arbeitszeile.
+Mein K-01 wollte Inhalte aus Zeile 3 nach oben ziehen, die AUF-70 vor drei Tagen bewusst nach
+unten gezogen hatte — mit vier Zusagen verriegelt und abgenommen.
+
+**Und Yamas eigener freigegebener Entwurf gibt AUF-70 recht, nicht mir.** Punkt 3 lautet wörtlich
+*„Workspace + 2D/Split/3D + kompakte Werkzeugleiste"*. Die Modusschalter gehören in die
+Arbeitszeile — genau dort, wo AUF-70 sie hat. **Ich habe aus einem Entwurf abgeleitet statt den
+Bestand zu lesen. F-07, vierte und fünfte Ausprägung.**
+
+### K-01 neu geschnitten — auf das, was der Kopfleiste wirklich fehlt
+
+| | |
+|---|---|
+| **Projektname** | gemessen **0 Fundstellen** in `HausplanerApp.tsx` — Yamas Punkt 2 nennt ihn |
+| **Objektname + Übernehmen-Knopf** | stehen noch in `objekt.blade.php`; die Blade sagt in Z81 selbst: *„Bleibt … wandert mit T3"* |
+| **Und die Grenze** | **es bleiben genau drei Zeilen.** Wer Inhalt hinzufügt, nimmt Platz aus Zeile 1 — nicht aus der Höhe der Bühne |
+
+> **Gegenprobe, die den Bau bewacht:** `npm run test:hausplaner -- --filter=eineWerkzeugzeile`
+> **muss grün bleiben.** Wird eine der vier AUF-70-Zusagen rot, ist der Bau falsch — nicht die
+> Zusage.
+
+### K-01b geht an Yama, und der Bau wartet nicht darauf
+
+**Ein echter Widerspruch bleibt: Rückgängig und Wiederholen.** Yamas Auftragspunkt 2 nennt sie in
+der Kopfleiste; AUF-70 hat sie bewusst in die Werkzeugzeile gezogen (*„Rückgängig zuerst: es ist
+die Rettungsleine"*) und verriegelt.
+
+**Beide sind vertretbar — nur nicht gleichzeitig. Bis Yama entscheidet, gilt der abgenommene
+Stand.** *Ein Auftrag, der eine abgenommene Zusage nebenbei zurückdreht, hat sie nie ernst
+genommen.* Fällt die Entscheidung für die Kopfleiste, ist das ein eigener Auftrag mit Begründung,
+warum der zweite Entwurf den ersten schlägt.
+
+### K-05 gekürzt, K-09 korrigiert
+
+**K-05 steht zu drei Vierteln seit AUF-34** — `:1256-1269` rendert die fünf Bereiche aus
+`arbeitsbereiche.ts`, genau der geforderten Quelle. **F-04, fünfte Ausprägung.** Offen bleibt
+*„Import ist ausgegraut und sagt das auch"*: `arbeitsbereiche.ts` kennt kein Feld für gesperrt,
+`ReiterLeiste.tsx` keinen gesperrten Reiter. **`ReiterLeiste.tsx` kommt in `pfade`** — mit der
+Auflage, dass das Merkmal optional ist und eine Zusage die beiden anderen Reiter-Nutzer als
+unberührt belegt.
+
+**K-09: meine 22 war die Zahl eines anderen Befehls.** Der Prüfbefehl sucht drei Namen und liefert
+**27**. Er hat die gemessene genommen statt meiner — *und genau daraus kam Befund 1.*
+
+### Die neue Barriere: R17
+
+> **R17 — der Auftrag nennt die Zusagen, die seine Fläche schon verriegeln.**
+> Im YAML-Kopf steht `geerbte_zusagen`: die abgenommenen Zusicherungen, die dieselbe Fläche
+> festhalten — gefunden mit demselben Befehl wie R12. **Der Planner fährt ihn, bevor das Blatt
+> liegt.** Nicht der Bauende, nachdem er es gelesen hat.
+>
+> *R12 hat den Bauenden davor bewahrt, geerbte Zusagen zu übersehen. R17 bewahrt den Planner
+> davor, sie zu überschreiben. Es ist derselbe Befehl, einen Schritt früher.*
+
+### Ein Nebenbefund, der nicht untergehen darf
+
+**Die Leinwand ragt 23 px über ihren Behälter hinaus** — `canvas[0]` endet bei 899, die Wurzel bei
+876, bei 1440×900 stößt sie an die Fensterkante. **Er hat es gemessen, nicht angefasst und
+gemeldet.** Als **AUF-86** auf der Tafel. *Das muss geklärt sein, bevor jemand K-08 als „gewachsen"
+liest: ein Zuwachs, der aus einem Überstand kommt, ist keiner.*
+
+**Ballbesitz: Generator.** Zu bauen: **K-01 (Projekt + Objektname + Übernehmen-Knopf, drei Zeilen
+bleiben drei) · K-05 (Import ausgegraut) · K-05b (⌘K-Einstieg).**
