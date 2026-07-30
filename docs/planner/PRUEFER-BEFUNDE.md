@@ -174,6 +174,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-022 | `arbeitskompass-ticket.md` | **P2** | kennt 0 von 9 laufenden Posten; letzte Lage vom 21.07., CLAUDE.md schickt aber dorthin | offen | — |
 | PB-021 | `CLAUDE.md` (Skill-Pflicht) | **P2** | 12 von 22 vorgeschriebenen Fach-Linsen existieren an keinem der beiden Skill-Orte | offen | — |
 | PB-019 | `docs/auftraege/` (aktive Blätter) | **P2** | 6 von 15 aktiven Blättern ohne YAML-Kopf — der Validator findet dort nichts zu fahren | offen | — |
 | PB-020 | `AUFTRAGSSCHEMA.md` | P3 | Beispiel nennt `zaehle-statische-stile.sh` — die Datei gibt es nicht | offen | — |
@@ -1940,5 +1941,101 @@ Qualität ohne Messung wäre genau die Sorte, die dieses Register nicht führt.*
 | **L4 Kausalität** | **PB-021** — die Kette *Pflicht → Linse → Fachurteil* endet bei zwölf Themen am ersten Glied |
 | **L5 Plausibilität** | keine Beanstandung |
 | **L6 Workflow** | **PB-021** — wer der Regel folgt, sucht zwölfmal vergeblich und weiß nicht, ob er weitermachen darf |
+
+**Ballbesitz: Planner.**
+
+---
+
+## 27. Runde 20 (30.07.) — die drei obersten Dokumente
+
+**Gemessen gegen `c5c8e5fd`.**
+
+### Was trägt
+
+**Alle vier von `CLAUDE.md` als bindend genannten Fundamente existieren** — das war nicht
+selbstverständlich, nachdem `PB-021` zwölf genannte Skills nicht gefunden hat:
+
+```text
+docs/BETRIEBSORDNUNG.md          90 Z.   Gates G1-G9 alle neun vorhanden
+docs/architektur/bauordnung.md   96 Z.   §5 "die 10 Fragen" - alle zehn ausformuliert
+docs/arbeitskompass-ticket.md   198 Z.
+~/wissensregister/register.md            vorhanden, dazu ideensammlung.md
+```
+
+**Die zehn Fragen sind keine Überschrift, sondern zehn Fragen** — Domänen-Heimat, Naht, Wahrheit
+einmalig, Gegated, Validiert, Transaktion, Schema additiv, Getestet, Schicht, Bestand unangetastet.
+*Inhaltlich habe ich sie nicht bewertet; ich habe gezählt, dass sie da sind.*
+
+### PB-022 · P2 · Der Arbeitskompass kennt keinen einzigen laufenden Posten
+
+```yaml
+befund:
+  id: PB-022
+  datei: "docs/arbeitskompass-ticket.md"
+  stelle: "das ganze Dokument; letzte Aenderung 21.07."
+  behauptung: |
+    CLAUDE.md: "Bei jeder groesseren Aufgabe zuerst docs/arbeitskompass-ticket.md
+    pruefen und die Aufgabe dort einordnen: aktueller Fokus, naechster Schritt,
+    Blocker oder Parkplatz. Keine neue grosse Baustelle ohne Eintrag."
+  gemessen: |
+    Nennungen im Kompass gegen Nennungen auf der Tafel:
+      AUF-38  Kompass 0  /  Tafel  9
+      AUF-48  Kompass 0  /  Tafel  7
+      AUF-50  Kompass 0  /  Tafel  4
+      AUF-83  Kompass 0  /  Tafel 13
+      AUF-84  Kompass 0  /  Tafel  1
+      AUF-85  Kompass 0  /  Tafel  3
+      AUF-86  Kompass 0  /  Tafel  2
+      AUF-87  Kompass 0  /  Tafel  2
+      AUF-88  Kompass 0  /  Tafel  1
+    Neun von neun laufenden Posten: null Treffer.
+    Juengste Fokusangabe im Kompass: "Fokusentscheidung Yama vom 2026-07-21".
+  befehl: |
+    for a in AUF-38 AUF-48 AUF-50 AUF-83 AUF-84 AUF-85 AUF-86 AUF-87 AUF-88; do
+      echo "$a $(grep -c $a docs/arbeitskompass-ticket.md) $(grep -c $a docs/auftraege/AUFTRAGSTAFEL.md)"
+    done
+  commit: "c5c8e5fd"
+  schwere: P2
+  wirkung: |
+    Der Kompass ist laut CLAUDE.md die Stelle, an der eine neue Instanz nachsieht,
+    woran gerade gearbeitet wird. Wer das heute tut, findet den Stand vom 21.07. und
+    keinen der neun laufenden Posten - und die Regel "keine neue grosse Baustelle ohne
+    Eintrag" ist damit neun Mal nicht eingehalten worden, ohne dass es auffiel.
+    Die Tafel hat die Aufgabe faktisch uebernommen. Das ist kein Schaden, solange
+    beide dasselbe sagen - aber CLAUDE.md schickt den Leser zum Kompass, nicht zur
+    Tafel, und der Kompass sagt nichts.
+  eigenarbeit: nein
+```
+
+**Zwei Wege, entscheiden tut der Planner:**
+
+| Weg | Folge |
+|---|---|
+| Kompass nachziehen und weiterführen | zweite Pflegestelle neben der Tafel — PB-014 zeigt, was daraus wird |
+| Kompass ausdrücklich auf die Tafel verweisen | eine Wahrheit; der Kompass behält seine Rolle als Fokus- und Parkplatz-Papier, ohne Postenliste |
+
+*Ich empfehle keinen — aber die Frage ist dieselbe wie bei PB-014, und sie sollte einmal für alle
+Navigationspapiere beantwortet werden, nicht dreimal einzeln.*
+
+**Erledigt wenn:** *entweder jeder Posten aus Tafel 3a/3b ist im Kompass auffindbar, **oder** der
+Kompass nennt die Auftragstafel ausdrücklich als führende Postenliste und verzichtet auf eigene
+Einträge.*
+
+### Ein Nebenbefund ohne eigenen Vorgang
+
+**Die Selbstprüfung gegen die zehn Fragen ist nirgends belegt:** Ledger **1** Treffer, Tafel **0**,
+Auftragsblätter **6**. `bauordnung.md` §4.1 nennt sie *„Pflicht-Stopp vor Produktiv-Commit"*.
+**Ich schreibe daraus keinen Befund**, weil die Regel den Nachweis nicht verlangt — sie verlangt die
+Prüfung. *Eine nicht dokumentierte Prüfung ist von einer nicht durchgeführten nicht zu
+unterscheiden; das ist eine Beobachtung, keine Messung.*
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — alle vier Fundamente existieren und sind inhaltlich gefüllt |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | **PB-022** — CLAUDE.md schickt zum Kompass, gearbeitet wird nach der Tafel |
+| **L4 Kausalität** | **PB-022** — die Kette *„zuerst einordnen" → Eintrag* ist neun von neun Mal nicht entstanden |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | **PB-022** — wer der Regel folgt, liest neun Tage alte Lage |
 
 **Ballbesitz: Planner.**
