@@ -22,12 +22,41 @@ Blatt je Datei — und dieses ist das erste, weil es zwei Drittel traegt.**
 Datei                      rahmen/EigenschaftenPanel.tsx     551 Zeilen
 letzter Commit             15de0857 (30.07. 22:17, AUF-48-S4d)
 Tests, die sie einlesen    __tests__/eigenschaftenPanel.test.ts · __tests__/_zerlegteApp.ts
-style={{                    71
-style={bezeichner}          58    <- BEIDE Schreibweisen (Evaluator-Auflage zu AUF-38)
-className=                   2
-                           ---
-SUMME                      129    von 196 ueber alle sechs Dateien
+
+DIE FUEHRENDE ZAHL - gemessen 30.07. 23:15 mit dem Messwerkzeug, nicht mit grep:
+
+  node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/rahmen/EigenschaftenPanel.tsx
+  ->  71 Stellen insgesamt, davon 37 OFFEN
+
+  node scripts/statische-inline-stile.mjs
+  ->  195 Stellen insgesamt, davon 77 offen     (das Panel traegt 37 davon, also 48 %)
+
+Danebenstehend, NICHT Gegenstand dieses Blattes (Begruendung unten):
+  style={bezeichner} im Panel      56 (mein grep) / 58 (Messung des Evaluators)
+  className=                        2
 ```
+
+## Die Entscheidung: EINE fuehrende Zahl, und es ist `37 offen von 71`
+
+*Der Evaluator hat am frisch geschnittenen Blatt zu Recht angemerkt, dass zwei Zahlen darin
+Verschiedenes meinen: das Blatt plante gegen `129 von 196`, die Abnahme misst `37 offen von 71`.
+**Beide sind richtig und beantworten verschiedene Fragen** - „wie viele `style`-Attribute gibt es"
+gegen „wie viele davon sind statisch und damit umstellbar".*
+
+**Massgeblich ist, was die Abnahme messen kann.** `scripts/statische-inline-stile.mjs` kennt genau
+eine Form: den `style={{…}}`-Block. Eine Zahl im Blatt, die kein Abnahmebefehl erreicht, ist ein
+Posten, der auf nichts zeigt.
+
+**Damit ist `style={bezeichner}` NICHT Gegenstand von AUF-38-P1.** Das hebt eine fruehere
+Evaluator-Auflage zu AUF-38 auf („BEIDE Schreibweisen") - **offen, nicht stillschweigend.** Der
+Grund: ein `style={bezeichner}` verweist auf eine Variable; ob deren Inhalt statisch ist, kann
+das Werkzeug heute nicht entscheiden. Die Auflage verlangte also etwas, das kein Befehl belegt.
+
+**Der Posten verschwindet nicht, er bekommt ein eigenes Blatt:** AUF-38-P3 - zuerst das Werkzeug
+um die Bezeichner-Form erweitern, dann messen, dann umstellen. In dieser Reihenfolge, sonst
+wiederholt sich genau der Fehler, den der Evaluator hier gefunden hat.
+
+**Widerspruch bitte vor dem Bau, nicht bei der Abnahme.**
 
 **Die Stilschicht existiert und ist erprobt:** `public/hausplaner/hausplaner.css` mit **207**
 `hp-*`-Klassen, gespeist aus `app/stil/tokenVariablen.ts`, verriegelt durch
@@ -38,15 +67,23 @@ hier wird sie angewandt, nicht neu erfunden.*
 
 ```yaml
   - id: K-01
-    aussage: "Die Zahl faellt, und zwar in BEIDEN Schreibweisen."
-    befehl: >
-      In EigenschaftenPanel.tsx: Vorkommen von `style={{` (grep -o) und von
-      `style={bezeichner}` (Muster style=\{(?!\{)[A-Za-z_]).
-    erwartet: "0 und 0"
+    aussage: "Im Panel bleibt keine offene statische Inline-Stelle."
+    befehl: "node scripts/statische-inline-stile.mjs resources/planner/hausplaner/app/rahmen/EigenschaftenPanel.tsx | tail -1"
+    erwartet: "davon 0 offen"
     gegenbeweis: >
-      Danach die SUMME ueber alle sechs zerlegten Dateien zaehlen: sie muss um genau
-      129 gefallen sein (196 -> 67). **Faellt sie um mehr, ist Inhalt verschwunden;
-      faellt sie um weniger, ist etwas in eine Nachbardatei gewandert.**
+      Die Null allein ist erreichbar, indem man Stellen dynamisch macht statt sie umzustellen.
+      Deshalb zaehlt der GESAMTWERT mit: er muss von 71 auf 34 fallen, also um genau die 37
+      offenen. Faellt er weiter, ist Inhalt verschwunden; faellt er weniger, wurde eine
+      statische Stelle in eine dynamische verwandelt statt in die Stilschicht gehoben.
+
+  - id: K-01b
+    aussage: "Ausserhalb des Panels hat sich nichts bewegt."
+    befehl: "node scripts/statische-inline-stile.mjs | tail -1"
+    erwartet: "158 Stellen insgesamt, davon 40 offen."
+    gegenbeweis: >
+      Heute: 195 gesamt, 77 offen. 195-37=158, 77-37=40. Steht dort weniger als 40 offen, ist
+      ausserhalb des Auftrags mitgeraeumt worden - das ist kein Bonus, sondern eine ungeprueft
+      geaenderte Datei. Steht dort mehr, ist eine Stelle in eine Nachbardatei gewandert.
 
   - id: K-02
     aussage: "Kein roher Farbwert, keine rohe Groesse in den neuen Regeln."
