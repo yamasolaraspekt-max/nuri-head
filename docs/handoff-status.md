@@ -21484,3 +21484,182 @@ AUF-88-P1  ENDUNGEN 2 · Konva.Image 0 · massstab 3        wie im Blatt
 *Vier Blätter, ein falscher Satz, eine kaputte eigene Probe. **Das ist der Ertrag einer Runde, in
 der ich nichts Neues geschrieben habe** — und er ist höher als der der letzten drei Runden, in
 denen ich geschrieben habe.*
+
+---
+
+## 2026-07-30, 07:21 CEST — GENERATOR: `AUF-83-T3 / K-01` **umgesetzt** — der Objektkopf ist umgezogen, und die Bühne verliert 2 px
+
+*Zeit gemessen. Bündel neu gebaut, wie du gebeten hast — es trägt jetzt meinen vollständigen Stand.*
+
+```text
+Bündel 07:20:37   js 1 423 442 B  sha a42a4e6ffd16d30d   css 17 973 B  sha 80c9e9eca2818c6e
+```
+
+### Was gebaut wurde
+
+```text
+app/state/objektkopf.ts                     NEU   die Naht: lesen, prüfen, Pillentext
+app/state/uiState.ts                        +12   ein Feld, ein Setzer — wie `rechte`/`projekte`
+main.tsx                                    +4    verdrahtet an derselben Naht
+app/HausplanerApp.tsx                       +32   der Kopf in ZEILE 1
+hausplaner.css                              +28   .hp-ok-*
+views/admin/hausplaner/objekt.blade.php     −27/+35   die Leiste fällt, das Attribut kommt
+__tests__/objektkopf.test.ts                NEU   11 Zusagen
+tests/Feature/Hausplaner/UebernahmeKnopfTest.php   die Staleness-Zusage umgehängt
+__tests__/stilschicht.test.ts               T2/K-03 umgehängt
+```
+
+### Evidenz
+
+```text
+npm run test:hausplaner        1381 → 1392 · Fehler 0   (+11 = genau meine Zusagen)
+npm run test:hausplaner:dom    16 / 0
+vendor/bin/phpunit tests/Feature/Hausplaner   64 Tests, 232 Assertions, OK
+npm run tsc:hausplaner         Exit 0        npm run build:hausplaner   Exit 0
+Messwerkzeug HausplanerApp     138 / 78 offen — UNVERÄNDERT
+DER WÄCHTER aus K-01:          eineWerkzeugzeile 14 / 14 grün, vorher wie nachher
+```
+
+### Der Befund, der gegen meinen eigenen Bau spricht — 2 px
+
+**Studio, 1440×900, Expertenmodus, gemessen am gebauten Bündel:**
+
+```text
+Leinwand vorher (meine K-08-Messung 06:19):  595 × 538
+Leinwand nachher:                            595 × 536      −2 px
+kein zweiter Bildlauf (900/900) · Wurzel 1083 × 788 unverändert
+```
+
+**Die Bühne ist im Studio 2 px KLEINER geworden, nicht größer.** Ursache ist meine eigene Arbeit:
+der `Suchen ⌘K`-Knopf (29 px) und der Zusatz *„· noch nicht"* machen Zeile 2 minimal höher als
+eine Zeile aus reinen Reitern.
+
+**Das ist kein Widerspruch zu K-08, aber es ist auch kein Erfolg:** K-08 misst den Gewinn aus dem
+Wegfall der Blade-Leiste — und **die gibt es nur auf der Objektseite**. Im Studio fällt nichts weg,
+es kommt nur etwas hinzu. *Ich melde die Zahl, statt sie auf der Seite zu messen, auf der sie gut
+aussieht.*
+
+> **Was ich NICHT belegen konnte: die Objektseite.** Ich habe keine Objekt-ID ohne DB-Abfrage —
+> `data-projekte` ist im Studio leer, und es gibt dort keinen Objektlink. Eine Probe-Query gegen
+> die Arbeits-DB verbietet die Disziplinregel. **Dort liegt der eigentliche Gewinn** (die ganze
+> `hp-bar`-Zeile fällt), und dort ist der Beleg ohnehin dir zugewiesen.
+
+### Was die Sichtprobe im Studio positiv zeigt
+
+```text
+kopfImDom false · uebernehmenImDom false     ⇒ das Studio bleibt ohne Objektkopf (kein Objekt da)
+suchenKnopf true                              ⇒ K-05b sichtbar
+importGedaempft ["Import & Nachzeichnen· noch nicht"]   ⇒ K-05 sichtbar, GENAU einer
+```
+
+### Drei Zusagen von Fremden, die mein Bau berührt hat
+
+**Ich habe keine davon geschwächt** — zwei umgehängt, eine ergänzt. Alle drei Dateien stehen
+**nicht** in `pfade`; ich melde es als Umfangs-Berührung, nicht als Erweiterung:
+
+1. **`UebernahmeKnopfTest::test_staleness_kippt_nie_aktuell_veraltet`** — prüfte den Status als
+   Text auf der Seite. Der Text ist umgezogen, die Wirkung nicht. **Neu und schärfer:** sie liest
+   `data-objektkopf` (Lesemuster wörtlich aus `ProjektlisteTest`) und prüft die **Struktur** —
+   Status als Feld, Revision als Zahl. *Ein vertippter Satz wäre vorher durchgegangen.*
+2. **`stilschicht.test.ts` / `T2/K-03`** — sie hatte ihren eigenen Nachfolger benannt: *„sie
+   wandern mit T3 in die Kopfleiste"*. **Umgehängt statt gelöscht:** sie prüft weiter, dass keiner
+   der drei Inhalte verloren ging — jetzt am neuen Ort, plus dass sie im Blade nicht doppelt stehen.
+3. **`objektkopf.test.ts`** ist neu und ersetzt nichts.
+
+### Zwei Funde beim Bauen, die nicht meine sind
+
+**a) `szene_revision` heißt bei `veraltet` etwas anderes als bei `aktuell`.** Mein Test erwartete
+Revision 1 (die übernommene) und bekam 2 (die aktuelle Szene). **Der alte Blade-Zweig zeigte dort
+gar keine Zahl — deshalb ist es nie aufgefallen.** Die Kopfleiste zeigt sie ebenfalls nur bei
+`aktuell`; eine Zahl neben „VERALTET" liesse offen, welche der beiden gemeint ist. Festgehalten in
+zwei Zusagen, damit der Wert nicht eines Tages als „übernommene Version" gelesen wird.
+
+**b) Über dem Zeichenbereich stehen VIER Elemente, nicht drei.** Der K-01-Entscheid von 06:45
+zählt drei (Kopfleiste · Arbeitsbereich · Werkzeugzeile). Das vierte ist die
+**Werkzeuggruppen-Zeile** (`role="tabpanel"`, `WerkzeugGruppenMenue`, `HausplanerApp:1389`) — sie
+stand dort **vor** diesem Bau.
+
+> *Ich habe die Auflage deshalb so verriegelt, wie sie gemeint ist* — **„wer Inhalt hinzufügt,
+> nimmt Platz aus Zeile 1, nicht aus der Höhe der Bühne"**: die Zusage zählt die Elemente über dem
+> Zeichenbereich und geht rot, sobald eines dazukommt. **Ob der Sollwert drei oder vier heißt,
+> entscheidest du** — meine Zahl ist der gemessene Ist-Stand, nicht der aus dem Blatt.
+
+### Eine eigene Gegenprobe, die zuerst NICHT gebissen hat
+
+Meine erste Fassung der Drei-Zeilen-Zusage prüfte nur die **Reihenfolge** der drei Anker. Ich habe
+testweise eine vierte Zeile eingezogen — **sie blieb grün.** Neu gefasst auf eine Zählung, dann
+biss dieselbe Probe. *Eine Zusage, die die Auflage nicht fängt, ist genau die Sorte, die ich an
+fremden Blättern beanstande; sie fällt nur auf, wenn man die Gegenprobe wirklich fährt.*
+
+Ebenso: die Blade-Zusage schlug zuerst auf **meinen eigenen Erklärungskommentar** an (er zitiert
+den entfernten Satz). Vierte Ausprägung der Kommentar-Falle bei mir — für `.tsx` habe ich den
+Helfer längst, für Blade hatte ich ihn vergessen.
+
+### Und dein Bündel-Fehler
+
+**Kein Vorwurf, und deine R19.5 ist die richtige Antwort.** Der 06:58-Stand war tatsächlich
+nirgends verwahrt — *das* ist die eigentliche Lücke, und sie ist meine: ich habe ein Artefakt
+gebaut und keine Kopie davon abgelegt. **Ab jetzt sichere ich jeden berichteten Bündelstand in den
+Scratchpad**, bevor ich weiterarbeite. Dann kostet ein fremder Bau eine Zeile `cp` statt einer
+Rekonstruktion.
+
+**Kein Commit, kein Push. Offen aus T3: nur noch die Abnahme von K-01.**
+
+---
+
+## ⇒ PLANNER — Maßnahmenplan: sieben Maßnahmen mit Schritten und Messgröße (30.07., 07:20 CEST)
+
+**Yamas Einwand zum Papier von 07:10 war berechtigt und präzise:** *„ich habe keine
+Lösungsvorschläge, die eure Arbeit optimiert … und die Schritte sind nicht formuliert."*
+
+**Er hat recht. Das Papier hat diagnostiziert und nicht geplant.** `docs/planner/massnahmenplan-2026-07-30.md`
+ist die Nachlieferung: sieben Maßnahmen, jede mit **was · wer · Schritte · Messgröße**.
+*Eine Maßnahme ohne Messgröße steht nicht drin.*
+
+### Zuerst der Ausgangswert, sonst ist „besser" nicht überprüfbar
+
+| Kennzahl | heute (00:00–07:20) | Ziel bis 06.08. |
+|---|---|---|
+| Rückweisungen | **5** | ≤ 1 pro Tag |
+| Kriterien, die *bereits erfüllt* waren | **4** | **0** |
+| Wiederholungen je Klasse ohne Barriere | **4–5** | ≤ 1 |
+| Zeilen Auftragstext je baubarem Auftrag | **≈ 285** | ≤ 120 |
+| Fehlerklassen mit Barriere | **6 von 14** | 11 von 14 |
+| Regeln nur im Ledger | war **9**, jetzt **0** | 0 |
+
+**Alle sechs stehen in `git log`, im Register und in `wc -l`** — niemand muss sie schätzen.
+*Ab jetzt einmal wöchentlich, freitags, in einer Zeile.*
+
+### Die sieben Maßnahmen
+
+- **M1 · Der Validator** (`AUF-87`, Blatt liegt) — aus *„hast du gemessen?"* wird ein Befehl, der
+  fehlschlägt. Drei Stufen: FEHLSCHLAG · VERDÄCHTIG · NICHT MASCHINELL. **Danach das Tor: kein
+  Blatt ohne Validatorlauf.** *Von den fünf Rückweisungen heute hätte er drei gefangen.*
+- **M2 · `scripts/bestand.sh`** — gegen F-07, die teuerste Klasse. Vor jedem Kriterium ein
+  Protokoll: Zeilen, letzter Commit, **die Testdateien, die die Datei einlesen**, Verträge, offene
+  Posten auf denselben Pfaden. **Rohausgabe ins Blatt, bevor ein Kriterium formuliert wird.**
+- **M3 · `docs/auftraege/VORLAGE.md`** — feste Felder statt freier Prosa, **ein Kriterium = ein
+  Befehl = eine Zeile**, Obergrenze 120 Zeilen. *Wer mehr braucht, hat zwei Aufträge.*
+- **M4 · Eingangsprüfung am Register** — vor jeder Übergabe die sechs ⚠-Zeilen lesen und je einen
+  Halbsatz schreiben, warum dieser Vorgang nicht hineinläuft. Kostet eine Minute.
+- **M5 · Die Quittung wird eine Prüfliste** — fünf Punkte in fester Reihenfolge. *Der Generator
+  hat heute zweimal einen Fehler vor dem Bau gefunden; das ist der wirksamste Filter, den wir
+  haben, und er ist bisher ungeregelt.*
+- **M6 · Die Gegenprobe beweist sich selbst** (R21) — läuft die Datei nach der Mutation noch?
+  Und: ein unerwartetes Ergebnis heißt zuerst *„mein Werkzeug ist kaputt"*.
+- **M7 · Takt trennen** — Wache alle 3 Minuten, neues Blatt höchstens stündlich. **Braucht Yamas
+  Zustimmung, weil der Takt von ihm kommt.**
+
+### Reihenfolge — und die eine unbequeme Entscheidung darin
+
+**M1 und M2 kommen VOR `AUF-83-T5`, obwohl T5 fertig geschnitten daliegt.** Zusammen kosten sie
+einen Tag und wirken auf jeden weiteren Auftrag. *Die fünf Rückweisungen von heute haben ungefähr
+denselben Tag gekostet — nur ohne bleibenden Ertrag.*
+
+### Was ich nicht verspreche
+
+**Vier der sieben Maßnahmen sind mechanisch (M1, M2, M3, M6) — drei sind Vorsätze (M4, M5, M7).**
+Und die Erfahrung dieses Tages sagt: Vorsätze wiederholen sich vier- bis fünfmal, bevor sie halten.
+
+> *Deshalb steht M1 an erster Stelle und nicht M4: das Werkzeug, das prüft, ist mehr wert als die
+> Regel, die es verlangt.*
