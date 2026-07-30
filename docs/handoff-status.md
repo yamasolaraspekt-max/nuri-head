@@ -20037,3 +20037,162 @@ zurück, kann er dazwischenlaufen, ohne etwas zu blockieren.
 
 **R16 ist eingehalten, und diesmal mit Abstand: drei baubare Aufträge vor der Front, zwei beim
 Prüfenden.**
+
+---
+
+## 2026-07-30, 06:35 CEST — GENERATOR: `AUF-83-T3 / K-05b` **umgesetzt** — der Einstieg in die Palette
+
+**Auf Yamas Wort gebaut, nachdem ich zu breit blockiert hatte.** Meine Quittung von 06:25 sagte
+`TRÄGT NICHT` für den ganzen Auftrag, obwohl nur K-01 kollidierte. **Nachgemessen:
+`eineWerkzeugzeile.test.ts` schneidet ihre Zeile ab `<OpGruppe name="Verlauf">`** — die
+Arbeitsbereich-Zeile liegt davor und ist von keiner der vier Zusagen berührt. *Ein Befund an einem
+Kriterium ist kein Befund an allen; das war meiner.*
+
+Der neue K-01-Schnitt von 06:45 bestätigt es unabhängig: **Zeile 2 IST die Arbeitszeile.** Genau
+dort sitzt der Bau.
+
+### Was gebaut wurde
+
+```text
+resources/planner/hausplaner/app/HausplanerApp.tsx        +15   (der Knopf in Zeile 2)
+resources/planner/hausplaner/hausplaner.css               +22   (.hp-az-suchen, .hp-az-kuerzel)
+resources/planner/hausplaner/__tests__/arbeitszeileSuche.test.ts   NEU, 7 Zusagen
+```
+
+### Evidenz
+
+```text
+Befehl:      npm run tsc:hausplaner                        Exit 0
+Befehl:      npm run schema:hausplaner:check               Exit 0
+Befehl:      npm run test:hausplaner
+             Tests vorher 1365 · nachher 1372 · Fehler 0   (+7 = genau meine Zusagen)
+Befehl:      npm run test:hausplaner:dom                   Tests 11 · Fehler 0
+Befehl:      npm run build:hausplaner                      ✓ 331 Module, built in 1.20s
+K-07:        node scripts/statische-inline-stile.mjs …/HausplanerApp.tsx
+             138 gesamt · 78 offen — UNVERÄNDERT (die Auflage lautet: fallen oder gleich bleiben)
+```
+
+**Der Vorher-Zähler ist gemessen, nicht gerechnet:** meine drei Dateien in den Scratchpad kopiert,
+auf HEAD zurückgesetzt, Suite gefahren (1365), zurückgespielt, `diff -q` gegen die Sicherung —
+dreimal *identisch*. *Ich habe in diesem Zyklus schon einmal eigene Arbeit mit `git checkout`
+vernichtet; seitdem läuft jede Rückdreh-Probe so.*
+
+### Sichtprobe — vorher/nachher am selben Knopf
+
+```text
+1440 px, Expertenmodus, echte Ticket-Shell, /admin/hausplaner/studio
+VOR DEM KLICK   knopfDa true · text "Suchen ⌘K" · lage x1221 y209 101×29 · paletteOffen FALSE
+NACH DEM KLICK  paletteOffen TRUE · "WERKZEUGE | Markieren V | Wand W | Fenster F | Tür T | …"
+Bilder: k05b-1-knopf.png · k05b-2-palette.png
+```
+
+> **Der erste Beleg war wertlos, und ich sage das, statt ihn zu behalten:** mein Selektor
+> (`input[placeholder*="uch"], [role="dialog"]`) meldete `paletteOffen: true` **schon vor dem
+> Klick** — er traf ein anderes Suchfeld. Ein Beleg, der vor der Handlung schon zutrifft, belegt
+> die Handlung nicht. Neu gemessen gegen `[aria-label="Befehle suchen"]`, dem Kennzeichen der
+> Palette selbst.
+
+### Gegenproben — jede Zusage musste beweisen, dass sie zubeißt
+
+| Probe | Erwartung | Ergebnis |
+|---|---|---|
+| Knopf entfernt | die drei Zusagen, die ihn brauchen, fallen | **3 rot** — Einstieg · `oeffnePalette` · `className` |
+| `onClick` durch `setPaletteOffen(true)` ersetzt | die Grenze fällt, obwohl das Bild gleich bliebe | **2 rot** — Aufruf · *„genau EIN Ort öffnet"* |
+| Knopf in die Werkzeugzeile geschoben | die Ortszusage fällt | **1 rot** — *„steht NICHT in der Werkzeugzeile"* |
+
+**Die zweite Probe ist die, auf die es ankommt:** der Knopf blieb sichtbar, das Bild identisch —
+und trotzdem rot. *Die Zusage misst die Wirkung, nicht die Gestalt.*
+
+> **Und ein ehrlicher Abstrich an meiner eigenen Kollisionsanalyse:** in Probe 3 blieb AUF-70s
+> 16-Knopf-Zusage **grün**. Sie zählt `<OpBtn `, mein Knopf ist ein `<button>` — sie hätte ihn
+> nicht gefangen. **Nur meine eigene Ortszusage hält den Platz.** An K-01 ändert das nichts (dort
+> würden echte `<OpBtn label="2D">` verschwinden), aber der Satz *„ein siebzehnter dort hätte eine
+> abgenommene Zusage gebrochen"* war für **diesen** Knopf zu stark.
+
+### Ein Bruch, der beim Bauen auffiel — und den ich NICHT weggeräumt habe
+
+Mein erster Entwurf trug `.hp-az-suchen:hover`. **`stilschicht.test.ts:399` wurde rot:** die
+Stilschicht ist bewusst frei von `hover`, weil die Insel Zeiger- und Zustandswerte in React hält
+(`StartView.tsx`: `boxShadow: hover ? … : …`). Ein CSS-`:hover` wäre die zweite Stelle, an der ein
+Zustand entsteht.
+
+**Ich habe mein Markup angepasst, nicht die Zusage.** Der Knopf hat heute keinen Schwebezustand;
+das wäre ein eigener Posten. *Die Zusage war eine geerbte, die ich nicht kannte — sie hat genau
+das getan, wofür sie da ist. Wer sie stattdessen aufweicht, damit sein Markup durchgeht, hat den
+Test in dem Moment entwertet, in dem er ihn gebraucht hätte.*
+
+### Was NICHT gebaut wurde, und warum
+
+- **K-01 (neu geschnitten 06:45)** — braucht `objekt.blade.php` (Objektname, Adresse,
+  Übernehmen-Knopf aus T2). **Steht nicht in `pfade`.** Kein Griff dorthin ohne deine Zeile.
+- **K-05, zweite Hälfte** (*„Import ist ausgegraut und sagt das auch"*) — `arbeitsbereiche.ts`
+  kennt kein Feld dafür (0 Treffer), `ReiterLeiste.tsx` keinen gesperrten Reiter (0 Treffer), und
+  die Leiste ist seit AUF-27 **geteilt** (Panel · Schiene · Bereiche). **`ReiterLeiste.tsx` steht
+  nicht in `pfade`.**
+- **K-06** — abgetrennt als `AUF-85`, nicht angefasst.
+
+**Kein Commit** (Yamas Wort steht aus), **kein Push**. Bündel neu gebaut, weil es 21:20 alt war —
+der K-08-Vorher-Wert von 06:19 stammt aus dem nachgebauten Stand, nicht aus dem alten.
+
+---
+
+## ⇒ PLANNER — Weckerrunde 06:35: nichts Neues gemeldet, also vorgearbeitet — AUF-48 hat einen Zuschnitt
+
+**Stand der Meldungen:** keine. Der Generator baut T3 (`HausplanerApp.tsx`, `hausplaner.css` und
+eine neue Zusage `arbeitszeileSuche.test.ts` liegen ungespeichert im Baum). Kein Votum, keine
+Quittung. **Also nicht gewartet.**
+
+### Gemessen an HEAD, nicht am Arbeitsbaum — und das ist hier keine Formalie
+
+`git show HEAD:…/HausplanerApp.tsx`. **Der Generator schreibt gerade in dieser Datei.** Ein Maß aus
+dem Arbeitsbaum wäre bis zu seinem nächsten Speichern falsch gewesen — *das ist F-03, die Klasse,
+die ich heute früh selbst zum vierten Mal ausgelöst habe.*
+
+```text
+2308 Zeilen · 2036 davon in EINER Funktion · 46 Hooks
+  78 offene Inline-Stellen · 0 className= · 22 Testdateien lesen sie ein
+```
+
+**Die Datei hat oberhalb der Hauptfunktion bereits Struktur** — Icons, Geometrie-Helfer und
+`KontextOptionenLeiste` stehen getrennt. Der Posten ist die eine Funktion ab `:272`.
+
+### Vier Scheiben, von außen nach innen
+
+**1) Das Reine zuerst** — Icons und Geometrie-Helfer, ohne Zustand, ohne Hooks. Eine Verschiebung,
+keine Umschreibung. *Der eigentliche Ertrag ist nicht die Zeilenzahl, sondern die Antwort auf die
+Frage: **halten die 22 geerbten Zusagen einen Umzug aus?** Diese Antwort will ich haben, bevor
+etwas Riskantes bewegt wird.*
+
+**2) Die abgeleiteten Werte** — rund 18 `useMemo`/`useCallback`, mit einer Zusage je Rückgabewert,
+die den **alten** Wert festhält. Nicht die Behauptung, es sei dasselbe.
+
+**3) Tasten und Effekte** — **nach T5**, weil dort die Escape-Rangfolge entsteht. **Und hier sitzt
+ein offener P1, der bisher keinen Posten hatte:** `Strg+W` zeichnet eine Wand, die Modifikatoren
+schlagen durch. *Er wird in dieser Scheibe behoben, namentlich — nicht nebenbei.*
+
+**4) Das JSX** — zuletzt, und mit Absicht: die 78 Inline-Stellen stecken fast alle dort.
+**Wer das JSX zerlegt, löst Scheibe 7 von AUF-38 mit auf.** Wer es umgekehrt versucht, stellt Stile
+in einer Datei um, die es zwei Wochen später nicht mehr gibt.
+
+### Ein Fund, der beim Messen abfiel
+
+**Drei Stilkonstanten haben nach T2 keine Verwendung mehr:** `navGrp`, `navHub`, `navSub` — je
+**0** Treffer. Nur `navItem` lebt noch, einmal, in `:1418`. Sie stammen aus der Studio-eigenen
+Navigation, die T2 entfernt hat. **Sie fallen in Scheibe 1**, damit niemand sie mitschleppt und
+dabei für tragend hält. *Derselbe Fall wie die 15 verwaisten CSS-Regeln bei T2.*
+
+### Warum AUF-48 der eigentliche Engpass ist
+
+| Wartet auf AUF-48 | worauf genau |
+|---|---|
+| **AUF-38 Scheibe 7** | 78 Inline-Stellen — fallen mit Scheibe 4 |
+| **AUF-85** | braucht `oeffnePalette` außerhalb der Komponente — Scheibe 3 |
+| **AUF-50** | die Werkzeugschicht baut auf zerlegten Dateien auf |
+| **P1** | `Strg+W` zeichnet Wand — Scheibe 3 |
+| **P1** | `auswahlDarstellung.griffe` wird berechnet und nie gezeichnet — Scheibe 4 |
+
+**Vier Posten und zwei P1-Befunde hängen an einer Datei.** *Das ist die Begründung, nicht die
+Zeilenzahl.*
+
+**Kein Blatt für Scheibe 1 heute** — es wäre das dritte in derselben Datei zur selben Zeit, und
+genau das verbietet §13. Es kommt, sobald T3 gebaut ist und der Prüfstand des Evaluators steht.
