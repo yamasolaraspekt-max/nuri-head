@@ -655,32 +655,46 @@ ist — dieselbe Regel, die für meine eigenen Befunde gilt.*
 
 ---
 
-## 13. Runde 6 (30.07.) — : **keine Beanstandung**
+## 13. Runde 6 (30.07.) — `bestandsaufnahme-auf50-werkzeuge-2026-07-26.md`: **keine Beanstandung**
 
-**Zwei Stände gemessen** — der eigene (, den das Papier selbst nennt) und **f1e0bdb7**.
-*Hinweis zur Messgüte:* HEAD wanderte während der Runde von  auf **f1e0bdb7**; nach der
-Nachforderungs-Regel wird die Messung damit neu gebunden — alle Zahlen unten stehen gegen **f1e0bdb7**.
+**Zwei Stände gemessen** — der eigene (`72e3d31`, den das Papier selbst nennt) und `f1e0bdb7`.
+*Hinweis zur Messgüte:* HEAD wanderte während der Runde von `ef3169d5` auf `f1e0bdb7`; nach der
+Nachforderungs-Regel wird die Messung damit neu gebunden — alle Zahlen unten stehen gegen
+`f1e0bdb7`.
 
-| Behauptung |  | **f1e0bdb7** |
+| Behauptung | `72e3d31` | `f1e0bdb7` |
 |---|--:|--:|
 | Werkzeuge im Paket **101** | 101 | **101** |
-| Funktionsverträge **110** | 110 | **110** (110 verschieden, 110 mit ) |
+| Funktionsverträge **110** | 110 | **110** (110 verschieden, 110 mit `familie`) |
 | Werkzeug-Modi der Zeichenfläche **7** | 7 | **7** |
 | Command-Typen im Modell **19** | 19 | **19** |
-|  löst an **34** Stellen aus | — | **34** |
-| Familie  **40** ·  **20** | — | **40** · **20** |
+| `app/` löst an **34** Stellen aus | — | **34** |
+| Familie `create` **40** · `modify` **20** | — | **40** · **20** |
 
 **Sechs Aussagen, sechs Treffer — und keine hat sich in vier Tagen bewegt.**
 
 Die sieben Modi im Wortlaut, heute:
 
+```ts
+type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe' | 'decke';
+```
+
+Befehle:
+
+```sh
+git show "$C":resources/planner/hausplaner/app/tools/werkzeugPaket.ts | grep -cE "id: '"
+git show "$C":resources/planner/hausplaner/app/tools/werkzeugVertrag.ts | grep -cE "werkzeugId: '"
+git show "$C":resources/planner/hausplaner/app/HausplanerApp.tsx | grep -A4 "type Werkzeug"
+git show "$C":resources/planner/hausplaner/domain/commands.types.ts | grep -oE "'[A-Z][A-Z_]+'" | sort -u | wc -l
+git grep -h -oE "type: '[A-Z][A-Z_]+'" "$C" -- 'resources/planner/hausplaner/app' | wc -l
+```
 
 ### Statusabgleich, kein Befund
 
 Der Kernsatz des Papiers — ***„7 von 101 sind angeschlossen. 94 haben heute keinen Empfänger."*** —
 ist **vier Tage später unverändert wahr**. Nach dem Raster ist das **kein Befund**: eine Fläche, die
 laut Tafel offen ist, ist offener Umfang und nicht Schwäche. Und die Tafel führt sie so:
-, seit heute früh mit Stufenplan, *„Blatt für Stufe 1 folgt"*.
+`AUF-50 · OFFEN OHNE AUFTRAG`, seit heute früh mit Stufenplan, *„Blatt für Stufe 1 folgt"*.
 
 **Als Statusabgleich gehört es trotzdem gemeldet:** zwischen dem 26.07. und heute sind fünf
 AUF-38-Scheiben, mehrere Layout-Wellen und ein Regelwerk entstanden — **die Zahl 7 hat sich in
@@ -696,16 +710,22 @@ es ist die Zahl, die man daneben halten sollte, wenn über Reihenfolgen entschie
 | **L5 Plausibilität** | keine Beanstandung |
 | **L6 Workflow** | nicht geprüft |
 
-### Zwei eigene Messfehler, beide vor dem Register gefangen
+### Drei eigene Fehler in dieser Runde, alle vor dem Register gefangen
 
-1. **zsh-Modifikator:**  liest zsh als  mit Modifikator . Ergebnis:
-   **überall Null.** Ohne Gegenlesen wäre daraus ein spektakulärer Falschbefund geworden
-   (*„keine Werkzeuge mehr im Paket"*). Behoben mit .
-2. **zu enges Muster:**  verfehlte  — die Summe ergab 101
-   statt 110. Erst der Widerspruch zur Gesamtzahl hat es aufgedeckt.
+1. **zsh-Modifikator:** `git show $c:pfad` liest zsh als `$c` mit dem Modifikator `:r`.
+   Ergebnis: **überall Null.** Ohne Gegenlesen wäre daraus ein spektakulärer Falschbefund geworden
+   (*„keine Werkzeuge mehr im Paket"*). Behoben durch Anführungszeichen um beide Teile.
+2. **zu enges Muster:** `familie: '[a-z]+'` verfehlte `'assign-or-calculate'` — die Summe ergab 101
+   statt 110. Aufgedeckt hat es der Widerspruch zur Gesamtzahl, nicht die Sorgfalt.
+3. **unquotierter Heredoc:** dieser Abschnitt wurde beim ersten Schreiben von der Shell
+   *ausgeführt* statt geschrieben — jedes Fragment in Rückwärts-Anführungszeichen verschwand.
+   Der Commit `6b106209` trägt die zerpflückte Fassung; diese hier ersetzt sie.
 
-**Beide Male hat die Gegenrechnung gegriffen**, nicht die Sorgfalt: eine Summe, die nicht zur
-Gesamtzahl passt, und eine Null, die nicht sein kann. *Das ist der Grund, warum jede Messung eine
-zweite Zahl braucht, gegen die sie stimmen muss.*
+**Die Barriere wächst um einen dritten Punkt:** *ein Heredoc, dessen Text Rückwärts-Anführungszeichen
+oder `$` enthält, wird gequotet* (`<<'PY'`). Punkte 1 und 2 stehen schon in §11.
+
+**Und die Lehre, die über alle drei geht:** zweimal hat nicht die Sorgfalt gerettet, sondern eine
+**zweite Zahl, gegen die die erste stimmen musste** — eine Summe gegen eine Gesamtzahl, eine Null
+gegen die Erwartung. *Deshalb braucht jede Messung eine Gegenrechnung, auch die des Prüfers.*
 
 **Kein Befund. Ballbesitz: Prüfer.**
