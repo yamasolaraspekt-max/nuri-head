@@ -32,7 +32,6 @@ import { type Pan } from './dashboard/pan';
 import { einpassen, knotenPunkte } from './dashboard/einpassen';
 import { buehnenHoehe, useGemesseneHoehe } from './dashboard/buehnenHoehe';
 import { buehnenBreite, useGemesseneBreite } from './dashboard/buehnenBreite';
-import { GESPERRT_ZEIGER, GESPERRT_BESCHRIFTUNG } from './dashboard/gesperrtStil';
 import { speicherAnzeige, type AnzeigeArt } from './dashboard/speicherAnzeige';
 import { naechsterSchritt, wegweiserSatz } from './tools/naechsterSchritt';
 import { TOOL_DEFINITIONS } from './tools/toolRegistry';
@@ -54,6 +53,8 @@ import { Buehne } from './rahmen/Buehne';
 // `aktiverTab` bleibt HIER (K-02: kein Zustand ins Panel) — deshalb bleibt auch sein Typ.
 import { type PanelTabId } from './dashboard/panelTabs';
 import { EigenschaftenPanel } from './rahmen/EigenschaftenPanel';
+// AUF-48 Scheibe 4e: Statusleiste, Befehlspalette, Engine-Flaeche.
+import { FussUndUeberlagerungen } from './rahmen/FussUndUeberlagerungen';
 import { useEscapeEbene } from './dashboard/escapeStapel';
 import { ladeSchienen, speichereSchienen, SCHIENEN_STANDARD, type SchienenSeite, type SchienenZustand } from './state/schienenSpeicher';
 // AUF-48 Scheibe 1: die sieben reinen Funktionen wohnen jetzt daneben — unveraendert, nur umgezogen.
@@ -72,7 +73,7 @@ import {
 } from './tools/vorbedingungen';
 import { projektBaum } from './dashboard/projektBaum';
 import { befundeAus } from './dashboard/befunde';
-import { palettenGruppen, palettenFlach, PALETTE_LEER, type PaletteEintrag } from './dashboard/palette';
+import { palettenGruppen, palettenFlach, type PaletteEintrag } from './dashboard/palette';
 import { stapel } from './dashboard/geschossStapel';
 import { usePlannerUiStore } from './state/uiState';
 import { toolNach, WORKSPACE_IMPORT } from './tools/toolRegistry';
@@ -1100,130 +1101,30 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         />
       </div>
 
-      {/* Statusleiste */}
-      <div style={{ display: 'flex', gap: 16, alignItems: 'center', padding: '7px 14px', background: T.surface, borderTop: `1px solid ${T.hair}`, fontSize: 12, color: FARBEN.gedaempft }}>
-        <span>x {cursor.x} mm · y {cursor.y} mm</span>
-        <span>Zoom {(zoom * 100).toFixed(0)} %</span>
-        <span>Räume: {raeume.length} · Fläche gesamt: {(raeume.reduce((s, r) => s + r.flaecheMm2, 0) / 1_000_000).toFixed(2)} m²</span>
-        {werkzeug === 'wand' && <span style={{ color: FARBEN.text }}>{wandStart ? 'Klick = nächster Wandpunkt · Esc beendet den Zug' : 'Klick setzt den Wandanfang'}</span>}
-        {(werkzeug === 'fenster' || werkzeug === 'tuer') && <span style={{ color: FARBEN.text }}>Klick nahe einer Wand platziert die Öffnung</span>}
-        {werkzeug === 'dach' && <span style={{ color: FARBEN.text }}>Klick legt ein Dach über den Gebäude-Umriss (ein Dach je Geschoss) — dann in 3D umschalten</span>}
-        {werkzeug === 'treppe' && <span style={{ color: FARBEN.text }}>{treppeStart ? 'Klick = Ende der Lauflinie (Richtung = aufwärts) · Esc bricht ab' : 'Klick setzt den Anfang der Treppen-Lauflinie'}</span>}
-        <span style={{ flex: 1 }} />
-        {letzteAblehnung && <span style={{ color: FARBEN.warnung, fontWeight: 600 }}>✋ {letzteAblehnung}</span>}
-        <span style={{ color: T.muted }}>Strg/⌘+K · Befehle</span>
-      </div>
-
-      {/* Dashboard v2.5 (§30 / UI-9): Command-Palette. Overlay `position: fixed` — außerhalb des
-          Flusses, damit die Studio-Shell nicht überläuft (Kante 10). Bewusst KEINE im Rumpf
-          definierte Komponente (Befund B1): das Filterfeld ist fokussierbar und würde sonst bei
-          jedem Render neu montiert — der Fokus ginge bei jedem Tastendruck verloren.
-          A11y in v2: role=dialog, aria-modal, aria-label, Autofokus, Esc. Ein vollständiger
-          Fokus-Käfig (Tab-Zyklus, Fokus-Rückgabe) ist v6 und wird hier NICHT gebaut. */}
-      {paletteOffen && (
-        <div
-          style={{ position: 'fixed', inset: 0, zIndex: 60, background: T.canvasWallGhost, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: '12vh' }}
-          onMouseDown={(e) => { if (e.target === e.currentTarget) schliessePalette(); }}
-        >
-          <div
-            role="dialog" aria-modal="true" aria-label="Befehle suchen"
-            onMouseDown={(e) => e.stopPropagation()}
-            style={{ width: 460, maxWidth: '92vw', background: T.surface, border: `1px solid ${T.controlBorder}`, borderRadius: 12, boxShadow: `0 12px 34px ${T.canvasWallGhost}`, overflow: 'hidden' }}
-          >
-            <input
-              autoFocus type="text" value={paletteFilter}
-              aria-label="Befehl filtern"
-              placeholder="Befehl suchen … (↑↓ wählen, Enter ausführen, Esc schließt)"
-              onChange={(e) => { setPaletteFilter(e.target.value); setPaletteIndex(0); }}
-              onKeyDown={(e) => {
-                // AUF-83-T5 / K-03: das Schließen läuft über den Escape-Stapel (`useEscapeEbene
-                // ('palette', …)` weiter oben in `HausplanerApp`) — der lauscht auf `document` und
-                // wird von JEDEM Escape-Druck erreicht, auch bei Fokus in diesem Feld. Ein zweiter,
-                // direkter `schliessePalette()`-Aufruf hier war die Ursache eines echten Fehlers:
-                // Er löste einen Render aus, der GeschossFlaeches Stapel-Eintrag ABMELDETE UND NEU
-                // ANMELDETE, bevor der Stapel-Listener selbst zum Zug kam — die Palette war dann
-                // aus der Rangliste verschwunden, und das rangniedrigere Menü gewann fälschlich.
-                // `preventDefault` bleibt: manche Browser leeren ein Textfeld nativ bei Escape.
-                if (e.key === 'Escape') { e.preventDefault(); return; }
-                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-                  e.preventDefault();
-                  if (paletteListe.length === 0) return;
-                  const d = e.key === 'ArrowDown' ? 1 : -1;
-                  setPaletteIndex((paletteMarkiert + d + paletteListe.length) % paletteListe.length);
-                  return;
-                }
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  const treffer = paletteListe[paletteMarkiert];
-                  if (treffer) aktivierePaletteEintrag(treffer);
-                }
-              }}
-              style={{ width: '100%', boxSizing: 'border-box', padding: '11px 14px', fontSize: 13.5, border: 'none', borderBottom: `1px solid ${T.hair}`, color: FARBEN.text, background: T.surface }}
-            />
-            <div style={{ maxHeight: '46vh', overflowY: 'auto', padding: 6 }}>
-              {paletteListe.length === 0 ? (
-                /* Kante 7 / AUF-67: kein leerer Kasten — und der Leerzustand spricht JE ART aus,
-                   was los ist. So lernt man nebenbei, wonach die Palette ueberhaupt sucht. */
-                <div style={{ padding: '10px' }}>
-                  {paletteGruppen.map((g) => (
-                    <div key={g.art} style={{ fontSize: 12.5, color: T.muted, padding: '3px 0' }}>{g.leer}</div>
-                  ))}
-                </div>
-              ) : (
-                paletteGruppen.filter((g) => g.eintraege.length > 0).map((gruppe) => (
-                  <div key={gruppe.art}>
-                    {/* AUF-67: die Art steht als Ueberschrift — sonst stuenden Werkzeug und
-                        Geschoss ununterscheidbar untereinander. */}
-                    <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.faint, padding: '10px 10px 4px' }}>{gruppe.titel}</div>
-                    {gruppe.eintraege.map((eintrag) => {
-                  const i = paletteListe.indexOf(eintrag);
-                  const markiert = i === paletteMarkiert;
-                  return (
-                    <button
-                      key={`${eintrag.art}:${eintrag.id}`} type="button" tabIndex={-1}
-                      aria-disabled={!eintrag.enabled}
-                      title={eintrag.enabled ? eintrag.label : (eintrag.grund ?? eintrag.label)}
-                      onMouseEnter={() => setPaletteIndex(i)}
-                      onClick={() => aktivierePaletteEintrag(eintrag)}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: 8, width: '100%', textAlign: 'left',
-                        padding: '7px 10px', border: 'none', borderRadius: 8, fontSize: 12.5,
-                        /* Markierung als Hintergrund UND Schriftschnitt, nicht nur farblich. */
-                        background: markiert ? T.brandWash : 'transparent',
-                        fontWeight: markiert ? 700 : 500,
-                        color: eintrag.enabled ? FARBEN.text : GESPERRT_BESCHRIFTUNG,
-                        cursor: eintrag.enabled ? 'pointer' : GESPERRT_ZEIGER,
-                      }}
-                    >
-                      <span style={{ flex: '0 0 auto', minWidth: 74 }}>{eintrag.label}</span>
-                      {/* Der Grund steht als sichtbarer TEXT, nicht nur als Ausgrauen (§28). */}
-                      {!eintrag.enabled && <span style={{ flex: 1, fontSize: 11, color: T.warnInk }}>{eintrag.grund}</span>}
-                      {eintrag.enabled && <span style={{ flex: 1, fontSize: 11, color: T.faint, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{eintrag.zusatz ?? ''}</span>}
-                      {eintrag.shortcut && <span style={{ flex: '0 0 auto', fontSize: 10.5, color: T.muted, border: `1px solid ${T.controlBorder}`, borderRadius: 4, padding: '1px 5px' }}>{eintrag.shortcut}</span>}
-                    </button>
-                  );
-                    })}
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* AUF-33/L2: die Fläche einer Rechen-Engine. Sie liegt hier und nicht im Studio, weil der
-          Auslöser hier liegt — der Fachplaner-Reiter der linken Schiene. Kopf, Zweck, Zurück und
-          Escape kommen aus derselben `FlaechenHuelle` wie die L4-Flächen (AUF-25), kein zweiter
-          Rahmen. Unbekannte Engine ⇒ nichts, kein Wurf. */}
-      {offeneEngine && enginePanel(offeneEngine) && (
-        <EngineFlaeche
-          panel={enginePanel(offeneEngine)!}
-          gruppe={faehigkeitNach(offeneEngine)?.gruppe ?? 'Fachplaner'}
-          zustand={faehigkeitNach(offeneEngine)?.zustand ?? 'in_entwicklung'}
-          zurueck="Zurück zum Planer"
-          onZurueck={() => setOffeneEngine(null)}
-        />
-      )}
+      {/* AUF-48 Scheibe 4e — **Statusleiste, Befehlspalette und Engine-Flaeche** wohnen jetzt in
+          `rahmen/FussUndUeberlagerungen.tsx`. 124 Zeilen, zeichengleich entnommen.
+          **Der Zustand der Palette bleibt HIER** (K-02), und der Escape-Weg ebenfalls: er haengt
+          am Escape-Stapel weiter oben, nicht am Markup. */}
+      <FussUndUeberlagerungen
+        cursor={cursor}
+        zoom={zoom}
+        raeume={raeume}
+        werkzeug={werkzeug}
+        wandStart={wandStart}
+        treppeStart={treppeStart}
+        letzteAblehnung={letzteAblehnung}
+        paletteOffen={paletteOffen}
+        paletteFilter={paletteFilter}
+        setPaletteFilter={setPaletteFilter}
+        setPaletteIndex={setPaletteIndex}
+        paletteGruppen={paletteGruppen}
+        paletteListe={paletteListe}
+        paletteMarkiert={paletteMarkiert}
+        schliessePalette={schliessePalette}
+        aktivierePaletteEintrag={aktivierePaletteEintrag}
+        offeneEngine={offeneEngine}
+        setOffeneEngine={setOffeneEngine}
+      />
     </div>
   );
 }

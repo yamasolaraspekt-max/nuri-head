@@ -36,46 +36,96 @@ Oberflaeche, die **funktionstuechtig aussieht und acht Werkzeuge verschweigt.**
 
 ## Kriterien
 
+*Auf das Validator-Schema umgestellt am 30.07. 23:29 (VORLAGE-Regel 8). **Dabei musste eine
+Festlegung nachgeholt werden:** K-04 nannte als Befehl `grep ... <die neue Datei>` — einen
+Platzhalter in einem ausfuehrbaren Block, VORLAGE-Regel 3. Der Dateiname stand nirgends im
+Blatt. **Der Planner legt ihn hiermit fest:**
+`resources/planner/hausplaner/app/rahmen/MindestbreiteHinweis.tsx`.*
+
 ```yaml
+scope:
+  datei: resources/planner/hausplaner/app/rahmen/MindestbreiteHinweis.tsx
+  population_command: "grep -c 'buehnenBreite' resources/planner/hausplaner/app/dashboard/buehnenBreite.ts"
+  ausschluesse:
+    - stelle: "@media in der Stilschicht"
+      grund: "__tests__/stilschicht.test.ts:114 verbietet Medienabfragen mit der Begruendung Responsive ist L7. Die Schwelle kommt aus der gemessenen Behaelterbreite, nicht aus CSS."
+      entschieden_von: planner
+    - stelle: "Bedienbarkeit unter 1024 px herstellen"
+      grund: "L7 bleibt vertagt. Dieses Blatt macht die Sperre ehrlich, es hebt sie nicht auf."
+      entschieden_von: yama
+
+kriterien:
   - id: K-01
+    typ: behavioural
+    kritikalitaet: P1
     aussage: "Unter 1024 px erscheint eine Hinweisflaeche, darueber nicht."
-    nachweis: >
-      Bei 375 px und 800 px: eine sichtbare Flaeche mit einem Satz und dem Weg zurueck.
-      Bei 1024 px und 1440 px: unveraendert, KEIN zusaetzliches Element im DOM.
+    pruefung:
+      typ: browser
+      schritte: >
+        Bei 375 px und 800 px eine sichtbare Flaeche mit einem Satz und dem Weg zurueck.
+        Bei 1024 px und 1440 px unveraendert, KEIN zusaetzliches Element im DOM.
     gegenbeweis: >
-      Miss bei 1023 und bei 1024 px. Springt die Flaeche nicht genau dort, ist die
-      Schwelle nicht die, die im Kriterium steht.
+      Miss bei 1023 und bei 1024 px. Springt die Flaeche nicht genau dort, ist die Schwelle
+      nicht die, die im Kriterium steht.
 
   - id: K-02
+    typ: behavioural
+    kritikalitaet: P1
     aussage: "Die Verriegelung gegen Medienabfragen bleibt bestehen."
-    befehl: "npm run test:hausplaner -- --filter=stilschicht"
-    erwartet: "gruen, 0 rote Faelle"
-    hinweis: >
-      Die Schwelle kommt aus der GEMESSENEN Behaelterbreite. `buehnenBreite.ts` misst sie
-      bereits per ResizeObserver (`getBoundingClientRect`) — der Schalter existiert, er muss
-      nur gelesen werden. **Kein zweiter Messweg.**
+    ausgefuehrt_von: generator
+    pruefung:
+      typ: gate
+      schritte: "npm run test:hausplaner -- --filter=stilschicht"
+      erwartet: "gruen, 0 rote Faelle"
+    begruendung: >
+      Die Schwelle kommt aus der GEMESSENEN Behaelterbreite. buehnenBreite.ts misst sie
+      bereits per ResizeObserver ueber getBoundingClientRect - der Schalter existiert, er
+      muss nur gelesen werden. Kein zweiter Messweg.
 
   - id: K-03
+    typ: presence
     aussage: "Der Hinweis ist ehrlich, nicht endgueltig."
-    nachweis: >
-      Der Satz nennt (a) dass der Planer eine Mindestbreite braucht, (b) welche,
-      und (c) den Weg zurueck. **Er behauptet nicht, dass es nie gehen wird** —
-      L7 ist eine Vertagung, keine Absage.
+    pruefung:
+      typ: verfahren
+      schritte: >
+        Der Satz nennt (a) dass der Planer eine Mindestbreite braucht, (b) welche, und (c) den
+        Weg zurueck. Er behauptet nicht, dass es nie gehen wird - L7 ist eine Vertagung,
+        keine Absage.
 
   - id: K-04
+    typ: absence
     aussage: "Die Hinweisflaeche haengt an keinem Zustand."
-    befehl: "grep -cE 'useState|usePlannerUiStore|localStorage' <die neue Datei>"
-    erwartet: "0 — sie liest die gemessene Breite und sonst nichts"
+    pruefung:
+      befehl: "grep -oE 'useState|usePlannerUiStore|localStorage' resources/planner/hausplaner/app/rahmen/MindestbreiteHinweis.tsx | wc -l"
+      erwartet: "0"
+    hinweis: >
+      ACHTUNG, selbst nachgemessen und die eigene Erwartung korrigiert: der Validator meldet
+      hier heute OK, obwohl die Datei noch gar nicht existiert. grep schreibt seinen Fehler
+      nach stderr, wc -l zaehlt null Zeilen und endet mit 0 - der Befehl sieht erfolgreich aus.
+      Das ist genau der zweite, gefaehrlichere Fall aus dem Kopf von auftrag-pruefen.mjs.
+      DESHALB gilt fuer K-04 zusaetzlich: die Datei muss existieren.
+      Pruefung: ls resources/planner/hausplaner/app/rahmen/MindestbreiteHinweis.tsx
+    gegenbeweis: >
+      Sie liest die gemessene Breite und sonst nichts. Zum Gegenbeweis ein useState einbauen:
+      der Zaehler muss auf 1 springen.
 
   - id: L-01
+    typ: presence
     aussage: "Die Buehne rendert bei normaler Breite unveraendert."
-    nachweis: >
-      npm run build:hausplaner, dann /admin/hausplaner/studio bei 1440 px →
-      Expertenmodus → Taste W → zwei Klicks auf LEERER Flaeche → Wand mit Masszahl.
+    pruefung:
+      typ: browser
+      schritte: >
+        npm run build:hausplaner, dann /admin/hausplaner/studio bei 1440 px, Expertenmodus,
+        Taste W, zwei Klicks auf LEERER Flaeche, Wand mit Masszahl.
+
   - id: L-01-anker
-    nachweis: >
-      VOR jeder anderen Zahl: HTTP 200 · querySelectorAll('canvas') mindestens 1 ·
-      document.title enthaelt "Hausplaner". Auch melden, wenn alles gut aussah.
+    typ: presence
+    aussage: "Die Seite ist ueberhaupt da, bevor irgendeine Zahl abgelesen wird."
+    pruefung:
+      typ: browser
+      schritte: >
+        VOR jeder anderen Zahl: HTTP 200, querySelectorAll('canvas') mindestens 1,
+        document.title enthaelt "Hausplaner". Auch melden, wenn alles gut aussah.
 ```
 
 ## Vorbehalt

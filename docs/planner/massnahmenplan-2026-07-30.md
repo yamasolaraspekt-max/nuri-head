@@ -110,7 +110,7 @@ warum kein Werkzeug sie prüfen kann.**
 
 ### M4 · Die Eingangsprüfung am Fehlerklassen-Register — sechzig Sekunden
 
-**Das Register hat heute 14 Klassen, sechs davon ohne Barriere. Genau die haben sich vier- bis
+**KORRIGIERT 30.07. 22:25 (Pruefer-Befund PB-041, selbst nachgezaehlt): das Register hat 15 Klassen, ACHT davon ohne Barriere.** *Gemessen an `docs/auftraege/FEHLERKLASSEN.md`: 15 Zeilen mit `| **F-`, davon 5 mit ✅, 8 mit ⚠ („Regel, keine Barriere"), 2 mit ❌. Der Pruefer hat beide Zahlen richtig gemeldet, meine standen seit der 08:12-Korrektur zu niedrig — **wer M4 befolgt, liest sechs von acht.*** ~~Das Register hat heute 14 Klassen, sechs davon ohne Barriere. Genau die haben sich vier- bis
 fünfmal wiederholt.** Sie wiederholen sich, weil niemand vor dem Schreiben hineinsieht.
 
 | | |
@@ -121,7 +121,14 @@ fünfmal wiederholt.** Sie wiederholen sich, weil niemand vor dem Schreiben hine
 
 **Schritte:**
 
-1. Vor jeder Übergabe die **⚠-Zeilen** des Registers lesen (heute sechs).
+1. Vor jeder Übergabe die **⚠-Zeilen** des Registers lesen — **heute ACHT.**
+   *(Korrigiert 30.07. 22:31, zweiter Teil des Prüfer-Befundes PB-041: hier stand „sechs".
+   Ich hatte um 22:25 die Kopfzeile berichtigt und diese Handlungsanweisung stehen lassen —
+   **Korrektur an einer Stelle, Wirkung an der anderen**, wie der Prüfer es genannt hat.
+   Wer M4 ausführt, hätte weiterhin sechs von acht gelesen.)*
+   **Die Zahl steht hier nicht fest:** gemessen wird sie mit
+   `grep -c "⚠" docs/auftraege/FEHLERKLASSEN.md` — *damit sie nicht wieder veraltet,
+   während sie erklärt, wie man Veralten vermeidet.*
 2. Je Zeile **ein Halbsatz** im Blatt bzw. in der Quittung: *warum dieser Vorgang nicht
    hineinläuft.*
 3. Wer keinen Halbsatz findet, hat die Klasse getroffen — dann zuerst das beheben.
