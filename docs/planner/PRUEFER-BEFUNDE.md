@@ -174,6 +174,8 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-019 | `docs/auftraege/` (aktive Blätter) | **P2** | 6 von 15 aktiven Blättern ohne YAML-Kopf — der Validator findet dort nichts zu fahren | offen | — |
+| PB-020 | `AUFTRAGSSCHEMA.md` | P3 | Beispiel nennt `zaehle-statische-stile.sh` — die Datei gibt es nicht | offen | — |
 | PB-018 | `k01n1b.mjs` | **P2** | Klartext-Zugang im Wurzelverzeichnis; `.gitignore`-Muster greifen nur bei passendem Namen | offen | — |
 | PB-017 | (Arbeitsbaum) | **P1** | 466 geänderte + 8 neue Dateien ungesichert, im Ledger aber als geliefert und geprüft geführt | offen | — |
 | PB-016 | `inventur.sh` / `AUFTRAGSTAFEL.md` | P3 | Inventur zählt Zeilen: 21 Zeilen für 17 Posten (vier doppelt) | offen | — |
@@ -1639,6 +1641,96 @@ Vorgang.
 | **L2 Effizienz** | keine Beanstandung |
 | **L3 Konsistenz** | **PB-018** — die Kladden-Konvention gilt für zwei Namensmuster, nicht für die Dateiklasse |
 | **L4 Kausalität** | **PB-018** — die Kette *Schutzregel → geschützte Datei* greift nur bei passendem Namen |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | keine Beanstandung |
+
+**Ballbesitz: Planner.**
+
+---
+
+## 24. Runde 17 (30.07.) — das Auftragsschema gegen die Blätter, die davon leben
+
+**Gemessen gegen `e4a18a22`.**
+
+**Was ausdrücklich KEIN Befund ist:** von 82 Auftragsblättern tragen nur **11** den YAML-Kopf. Die
+übrigen 71 sind **älter als das Schema** (angelegt heute). *Eine heute geltende Regel ist kein
+Auftrag, alten Bestand umzubauen* — nach dem Raster Regel-Rückwirkung, höchstens ein Hinweis.
+
+**Gemessen habe ich deshalb nur die Blätter, die auf der lebenden Tafel stehen.**
+
+### PB-019 · P2 · Sechs der fünfzehn aktiven Blätter haben keinen Kopf, den der Validator lesen kann
+
+```yaml
+befund:
+  id: PB-019
+  datei: "docs/auftraege/ (die von Tafel 3a/3b genannten Blaetter)"
+  stelle: "YAML-Kopf 'auftrag:' in den ersten 20 Zeilen"
+  behauptung: |
+    AUF-87 (Tafelstatus 'aktiv'): "Der Validator - scripts/auftrag-pruefen.sh.
+    Faehrt jeden Pruefbefehl aus dem YAML-Kopf eines Auftragsblatts."
+  gemessen: |
+    Von der lebenden Tafel (3a/3b) genannte Blaetter:  15
+    davon mit YAML-Kopf:                                9
+    ohne Kopf:                                          6
+      generator-auftrag-auf38-inline-styles.md
+      generator-auftrag-auf38-mw-kommentare.md
+      generator-auftrag-auf38-scheibe3.md
+      generator-auftrag-auf40-start-und-persistenz.md
+      generator-auftrag-auf83-t1b-ticket-shell.md
+      generator-auftrag-auf83-t2t3-kopfleiste.md
+  befehl: |
+    git show HEAD:docs/auftraege/AUFTRAGSTAFEL.md \
+      | awk '/^### 3a\./{d=1} /^### 3c\./{d=0} d' \
+      | grep -oE '(generator|evaluator)-auftrag-[a-z0-9.-]+\.md' | sort -u
+    # je Blatt:  git show HEAD:docs/auftraege/<blatt> | head -20 | grep -c '^auftrag:'
+  commit: "e4a18a22"
+  schwere: P2
+  wirkung: |
+    Der Validator ist der Kern von AUF-87 und die Barriere hinter der Readiness-
+    Quittung. Auf sechs von fuenfzehn aktiven Blaettern findet er nichts zu fahren -
+    darunter beide AUF-83-Blaetter, an denen gerade gebaut wird, und die drei
+    AUF-38-Blaetter. Ein Validator, der die aktiven Faelle nicht erreicht, meldet
+    "nichts zu pruefen" und sieht dabei aus wie Erfolg - dieselbe Klasse wie F-14
+    ("der Befehl endet mit 0 und hat nichts getan").
+  eigenarbeit: nein
+```
+
+**Erledigt wenn:** *jedes von Tafel 3a/3b genannte Blatt trägt in den ersten 20 Zeilen `auftrag:` —
+oder der Validator meldet fehlenden Kopf als **Fehler**, nicht als „nichts zu prüfen".*
+*Der zweite Weg ist der billigere und der ehrlichere.*
+
+### PB-020 · P3 · Das Schema führt als Beispiel einen Befehl, den es nicht gibt
+
+```yaml
+befund:
+  id: PB-020
+  datei: "docs/auftraege/AUFTRAGSSCHEMA.md"
+  stelle: "Z42 population_command, Z57/Z66 pruefung.befehl"
+  behauptung: "population_command: './scripts/zaehle-statische-stile.sh app/HausplanerStudio.tsx'"
+  gemessen: |
+    scripts/zaehle-statische-stile.sh   existiert nicht
+    scripts/statische-inline-stile.mjs  existiert (das gebaute Werkzeug)
+  befehl: "ls scripts/zaehle-statische-stile.sh scripts/statische-inline-stile.mjs"
+  commit: "e4a18a22"
+  schwere: P3
+  wirkung: |
+    Das Schema ist die Vorlage, aus der Blaetter abgeschrieben werden - es zeigt am
+    Beispiel AUF-38-S4, wie ein Kopf auszusehen hat. Wer das Beispiel uebernimmt,
+    traegt einen population_command ein, der beim ersten Lauf fehlschlaegt. Und es
+    ist genau die Klasse, die das Schema selbst verhindern soll: ein Artefakt
+    genannt, das niemand geprueft hat (F-04).
+  eigenarbeit: nein
+```
+
+**Erledigt wenn:** *jeder im Schema als Beispiel genannte Pfad ist mit `ls` auffindbar — oder das
+Beispiel ist als Platzhalter gekennzeichnet (`<dein-befehl>`), sodass niemand ihn abschreibt.*
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | **PB-020** — ein Beispielbefehl ohne Datei dahinter |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | **PB-019** — Anspruch des Validators und Zustand der aktiven Blätter fallen auseinander |
+| **L4 Kausalität** | **PB-019** — die Kette *Blatt → Kopf → Prüfbefehl* reißt bei 6 von 15 am ersten Glied |
 | **L5 Plausibilität** | keine Beanstandung |
 | **L6 Workflow** | keine Beanstandung |
 
