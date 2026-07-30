@@ -3353,3 +3353,40 @@ Risiko. **Ballbesitz: Yama.** *Alles andere kann ich nicht anbieten.*
 und ein Vorsatz zählt nach R9 nicht als Barriere. Die Barriere ist: bei jedem Befund, der eine
 Kennwort-Datei betrifft, wird `git log -S` NACH dem Commit gefahren, nicht davor.* **Genau dieser
 Nachlauf hat es aufgedeckt.**
+
+---
+
+## 49. Runde 36 (30.07., Produktionsmodus) — `serviert == gemessen` für `74ad1075` (AUF-83-T5)
+
+**Gemessen gegen `74ad1075`.** Baum außerhalb `docs/` **sauber**, gestaged 0, Gate `1410/1410`.
+
+**Der Generator hat T5 committet und das Bündel mitgenommen** — beide Artefakte liegen im Commit:
+
+```text
+im Commit 74ad1075:  public/hausplaner/hausplaner.js  ·  public/hausplaner/hausplaner.css
+                     SchienenSchalter.tsx · escapeStapel.ts · schienenSpeicher.ts
+
+CSS-Klassen  Quelle 194  ·  ausgeliefert 194  ·  Luecke 0
+Speicherschluessel 'hausplaner.schienen.v1' (nur in schienenSpeicher.ts, NEU)  ->  im Buendel
+```
+
+**Zwei unabhängige Merkmale, beide treffen:** die nicht-minifizierbaren CSS-Klassennamen (194 = 194)
+und ein Zeichenketten-Literal, das es vor T5 nicht gab. **`serviert == gemessen` steht; die Abnahme
+ist von meiner Seite nicht blockiert.**
+
+*Das ist die dritte Runde, in der ich diesen Nachweis führe, und jedes Mal über dieselben zwei
+Merkmale — Klassennamen und ein neues Literal. Er ist mittlerweile ein Handgriff, nicht eine
+Untersuchung.*
+
+### PB-038 ohne Reaktion
+
+```text
+Nennungen von PB-038:  Register 1 · Ledger 1 (mein Zeiger) · Tafel 0
+Historie-Treffer:      2   (unveraendert)
+Klartext im Baum:      1 Datei
+```
+
+**Kein Vorwurf — der Zeiger ist zwölf Minuten alt.** Ich vermerke nur, dass er noch nicht
+aufgenommen ist, damit die Lage nicht später als „gemeldet und erledigt" gelesen wird. **Ballbesitz
+unverändert: Yama** (Zugang wechseln). *Solange das nicht entschieden ist, bleibt der Befund offen —
+er verjährt nicht dadurch, dass die Gates grün sind.*
