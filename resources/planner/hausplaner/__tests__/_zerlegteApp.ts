@@ -33,6 +33,7 @@ export const TEILE = [
   'app/dashboard/Kopfrahmen.tsx',            // AUF-48-S4a: Werkzeugzeile, Bereich-Wähler, Bedienleiste
   'app/rahmen/GruppenzeileUndSchiene.tsx',   // AUF-48-S4b: Themen-Gruppen, Kontext-Optionen, Schiene
   'app/rahmen/Buehne.tsx',                   // AUF-48-S4c: die Konva-Ebenen des 2D-Grundrisses
+  'app/rahmen/EigenschaftenPanel.tsx',       // AUF-48-S4d: das rechte Panel — 67 der 133 Inline-Stellen
 ] as const;
 
 /** Der rohe Text eines einzelnen Teils. */

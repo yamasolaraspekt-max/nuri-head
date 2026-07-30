@@ -15,17 +15,14 @@ import { Line, Text } from 'react-konva';
 import type Konva from 'konva';
 import { useHausplanerStore } from '../store/hausplanerStore';
 import type { ObjectNode, OpeningNode, RoofNode, RoofAnbauMasse, SceneNode, WallNode } from '../domain/scene.types';
-import { istVerschneidungsForm } from '../domain/roofShape';
 // AUF-48 Scheibe 4a: FARBEN steht jetzt neben `T` — der Kopfrahmen braucht sie auch,
 // und ein Import aus dieser Datei waere ein Ringschluss. Umgezogen, nicht verdoppelt.
-import { T, FARBEN, OP_TOKEN } from './studioDaten';
+import { T, FARBEN } from './studioDaten';
 import { erkenneRaeume } from '../geometry/roomDetection';
 import { bemassung } from '../geometry/bemassung';
 import { wandLaenge, wandBaender, type Punkt } from '../geometry/wallGeometry';
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
-import { ZustandBadge } from './studioUi';
-import { PANEL_TABS, type PanelTabId } from './dashboard/panelTabs';
 import { aufloeseAuswahlmodus, wendeAuswahlAn, klickInsLeere } from './tools/auswahlModus';
 import { mehrfachUebersicht } from './tools/auswahlUebersicht';
 import { EngineFlaeche } from './EngineFlaeche';
@@ -36,7 +33,6 @@ import { einpassen, knotenPunkte } from './dashboard/einpassen';
 import { buehnenHoehe, useGemesseneHoehe } from './dashboard/buehnenHoehe';
 import { buehnenBreite, useGemesseneBreite } from './dashboard/buehnenBreite';
 import { GESPERRT_ZEIGER, GESPERRT_BESCHRIFTUNG } from './dashboard/gesperrtStil';
-import { opKnopfBild } from './dashboard/opKnopfZustand';
 import { speicherAnzeige, type AnzeigeArt } from './dashboard/speicherAnzeige';
 import { naechsterSchritt, wegweiserSatz } from './tools/naechsterSchritt';
 import { TOOL_DEFINITIONS } from './tools/toolRegistry';
@@ -46,7 +42,6 @@ import { brauchtOptionen } from './tools/werkzeugVertrag';
 // AUF-48 Scheibe 4b: die sieben Werkzeugarten wohnen bei den Werkzeug-Modulen —
 // die ausgelagerte Schiene braucht sie auch, und ein Rueckgriff hierher waere ein Ringschluss.
 import type { Werkzeug } from './tools/werkzeugArten';
-import { ReiterLeiste } from './dashboard/ReiterLeiste';
 import { SCHIENE_STANDARD, type SchienenReiterId } from './dashboard/schienenReiter';
 import { arbeitsbereich } from './dashboard/arbeitsbereiche';
 // AUF-48 Scheibe 4a: der obere Rahmen des JSX.
@@ -55,8 +50,11 @@ import { Kopfrahmen } from './dashboard/Kopfrahmen';
 import { ArbeitsbereichZeilen, PlanerSchiene } from './rahmen/GruppenzeileUndSchiene';
 // AUF-48 Scheibe 4c: die Konva-Ebenen des 2D-Grundrisses.
 import { Buehne } from './rahmen/Buehne';
+// AUF-48 Scheibe 4d: das rechte Eigenschaften-Panel.
+// `aktiverTab` bleibt HIER (K-02: kein Zustand ins Panel) — deshalb bleibt auch sein Typ.
+import { type PanelTabId } from './dashboard/panelTabs';
+import { EigenschaftenPanel } from './rahmen/EigenschaftenPanel';
 import { useEscapeEbene } from './dashboard/escapeStapel';
-import { SchienenSchalter } from './dashboard/SchienenSchalter';
 import { ladeSchienen, speichereSchienen, SCHIENEN_STANDARD, type SchienenSeite, type SchienenZustand } from './state/schienenSpeicher';
 // AUF-48 Scheibe 1: die sieben reinen Funktionen wohnen jetzt daneben — unveraendert, nur umgezogen.
 import { uuid, istWand, istOeffnung, lotAufWand } from './reineHelfer';
@@ -73,7 +71,7 @@ import {
   FAEHIGKEIT_ANSICHT_BEREIT,
 } from './tools/vorbedingungen';
 import { projektBaum } from './dashboard/projektBaum';
-import { befundeAus, BEFUNDE_LEER, BEFUNDE_UMFANG } from './dashboard/befunde';
+import { befundeAus } from './dashboard/befunde';
 import { palettenGruppen, palettenFlach, PALETTE_LEER, type PaletteEintrag } from './dashboard/palette';
 import { stapel } from './dashboard/geschossStapel';
 import { usePlannerUiStore } from './state/uiState';
@@ -88,14 +86,10 @@ import { baueAktivierungsKontext } from './tools/toolContext';
 import type { ObjectType, ViewType } from './tools/toolTypes';
 import { versetzteWand, spiegelteWand, bbox as punkteBbox, achsenMitte, type Achse } from '../geometry/editierGeometrie';
 import { dupliziereGeschoss } from '../geometry/geschossVorlage';
-import { berechneTreppe } from '../geometry/treppenBerechnung';
 import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../geometry/treppeObjekt';
-import { PROFIL_KATALOG, VERGLASUNG_KATALOG, berechneUw, rcMachbar, preisFenster, profilNach, verglasungNach, type OeffnungsArt, type RcKlasse } from '../geometry/fensterProdukt';
-import { FENSTER_BAUARTEN, TUER_BAUARTEN, fensterBauartNach, tuerBauartNach } from '../geometry/oeffnungsBauarten';
-import { TREPPEN_BAUARTEN, treppenBauartNach } from '../geometry/treppenBauarten';
 
 // Basis-URL der Icon-Assets — aus dem Bundle-Standort abgeleitet (traegt Subpfad/Domain).
-const ICON_BASE = new URL('.', import.meta.url).href;
+  // AUF-48 Scheibe 4d: `ICON_BASE` ist mit dem Eigenschaften-Panel umgezogen.
 
 
 /**
@@ -110,8 +104,8 @@ const ICON_BASE = new URL('.', import.meta.url).href;
  * eines Tages zweimal im Baum, ist das Präfix die Stelle, an der eine Instanz-Nummer eingezogen
  * wird — nicht 20 verstreute Zeichenketten.
  */
-const PANEL_ID = 'hp-eigenschaften-panel';
-const reiterId = (id: PanelTabId): string => `hp-eigenschaften-tab-${id}`;
+  // AUF-48 Scheibe 4d: `PANEL_ID` ist mit dem Eigenschaften-Panel umgezogen.
+  // AUF-48 Scheibe 4d: `reiterId` ist mit dem Eigenschaften-Panel umgezogen.
 
 // AUF-48 Scheibe 4b: `SCHIENE_ID` und `schienenReiterId` sind mit der Schiene umgezogen.
 
@@ -424,47 +418,20 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
 
   // D-c: genau EIN ausgewähltes Dach ⇒ Parameter-Panel; Änderungen laufen als UPDATE_ROOF-Command.
   const selectedRoof = scene?.roofs?.find((r) => primaerId === r.id) ?? null;
-  function aktualisiereDach(changes: Partial<RoofNode>): void {
-    if (selectedRoof) {
-      store.getState().executeCommand({ type: 'UPDATE_ROOF', roofId: selectedRoof.id, changes });
-    }
-  }
+  // AUF-48 Scheibe 4d: `aktDach` ist mit dem Eigenschaften-Panel umgezogen.
 
   // P2b-1: Mauerwerk-Katalog (materialId-Wert + Anzeige) + gängige Wandstärken (mm).
-  const MAUERWERK = [
-    { id: 'ziegel', label: 'Ziegel (Hochlochziegel)' },
-    { id: 'kalksandstein', label: 'Kalksandstein (KS)' },
-    { id: 'porenbeton', label: 'Porenbeton' },
-    { id: 'leichtbeton', label: 'Leichtbeton (Bims)' },
-    { id: 'stahlbeton', label: 'Stahlbeton' },
-    { id: 'holzstaender', label: 'Holzständerwand' },
-  ] as const;
-  const WANDSTAERKEN = [115, 150, 175, 240, 300, 365] as const;
+  // AUF-48 Scheibe 4d: `MAUERWERK` ist mit dem Eigenschaften-Panel umgezogen.
+  // AUF-48 Scheibe 4d: `WANDSTAERKEN` ist mit dem Eigenschaften-Panel umgezogen.
 
   // P2b-1: genau EINE ausgewählte Wand ⇒ Mauerwerk-/Stärke-Panel; Änderungen als UPDATE_NODE (additiv).
   const selectedWall = waende.find((w) => primaerId === w.id) ?? null;
-  function aktualisiereWand(changes: Partial<WallNode>): void {
-    if (selectedWall) {
-      store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedWall.id, changes });
-    }
-  }
+  // AUF-48 Scheibe 4d: `aktWand` ist mit dem Eigenschaften-Panel umgezogen.
   // Bearbeiten: Wand-Laenge exakt setzen -> Wandende entlang der Achse verschieben (MOVE_NODE).
-  function setzeWandLaenge(neu: number): void {
-    if (!selectedWall || !(neu > 0)) return;
-    const dx = selectedWall.end.x - selectedWall.start.x;
-    const dy = selectedWall.end.y - selectedWall.start.y;
-    const len = Math.hypot(dx, dy);
-    if (len === 0) return;
-    const end = { x: Math.round(selectedWall.start.x + (dx / len) * neu), y: Math.round(selectedWall.start.y + (dy / len) * neu) };
-    store.getState().executeCommand({ type: 'MOVE_NODE', nodeId: selectedWall.id, position: { start: selectedWall.start, end } });
-  }
+  // AUF-48 Scheibe 4d: `setzeLaenge` ist mit dem Eigenschaften-Panel umgezogen.
   // P2b-4: genau EINE ausgewählte Öffnung ⇒ Öffnungs-Panel (Tür: Anschlag/Öffnung); UPDATE_NODE (additiv).
   const selectedOpening = (nodes.find((n) => istOeffnung(n) && primaerId === n.id) ?? null) as OpeningNode | null;
-  function aktualisiereOeffnung(changes: Partial<OpeningNode>): void {
-    if (selectedOpening) {
-      store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedOpening.id, changes });
-    }
-  }
+  // AUF-48 Scheibe 4d: `aktOeffnung` ist mit dem Eigenschaften-Panel umgezogen.
   // Treppe (objectType 'stair'): genau EIN ausgewaehltes Treppen-Objekt -> Panel; UPDATE_NODE (additiv).
   const selectedStair = (nodes.find(
     (n): n is ObjectNode => n.type === 'object' && n.objectType === 'stair'
@@ -478,14 +445,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   // Dashboard v1 §5: genau EIN selektierter Node (Wand/Öffnung/Objekt/Treppe) → Auge/Schloss verdrahten.
   const selectedNode = primaerId ? (nodes.find((n) => n.id === primaerId) ?? null) : null;
   const selectedStairParams: TreppeParams | null = selectedStair ? parametereZuTreppe(selectedStair.parameters) : null;
-  function aktualisiereTreppe(aenderung: Partial<TreppeParams>): void {
-    if (!selectedStair || !selectedStairParams) return;
-    const neu = { ...selectedStairParams, ...aenderung };
-    store.getState().executeCommand({
-      type: 'UPDATE_NODE', nodeId: selectedStair.id,
-      changes: { parameters: treppeZuParametern(neu) },
-    });
-  }
+  // AUF-48 Scheibe 4d: `aktTreppe` ist mit dem Eigenschaften-Panel umgezogen.
   // Editier-Operationen: Bewegen laeuft ueber das Ziehen (unten am Node); hier Loeschen/Duplizieren/Spiegeln.
   function loescheAuswahl(): void {
     for (const id of selectedNodeIds) {
@@ -910,20 +870,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * `opKnopfBild` bleibt die einzige Beschreibung der drei Zustände; diese Funktion steuert nur
    * die Geometrie des Textknopfes bei (Polsterung, Schriftgröße) — nicht seine Zustandsfarben.
    */
-  const knopf = (aktiv: boolean, gesperrt = false): React.CSSProperties => {
-    const b = opKnopfBild(aktiv, gesperrt);
-    return {
-      padding: '6px 12px', fontSize: 12.5, fontWeight: 600, borderRadius: 8,
-      border: `1px solid ${b.rahmenToken ? OP_TOKEN[b.rahmenToken] : T.controlBorder}`,
-      background: OP_TOKEN[b.grundToken],
-      color: OP_TOKEN[b.iconToken],
-      opacity: b.deckkraft,
-      cursor: b.cursor,
-    };
-  };
+  // AUF-48 Scheibe 4d: `knopf` ist mit dem Eigenschaften-Panel umgezogen.
 
-  const panelLabel: React.CSSProperties = { display: 'block', color: FARBEN.gedaempft, marginBottom: 8 };
-  const panelInput: React.CSSProperties = { width: '100%', marginTop: 3, padding: '5px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}`, fontSize: 12.5 };
+  // AUF-48 Scheibe 4d: `panelLabel` ist mit dem Eigenschaften-Panel umgezogen.
+  // AUF-48 Scheibe 4d: `panelInput` ist mit dem Eigenschaften-Panel umgezogen.
 
   const railIcon = (w: string): string => (({ auswahl: '\u2196', wand: '\u25AC', fenster: '\u25A2', tuer: '\u25D7', dach: '\u25B3' } as Record<string, string>)[w] ?? '\u2022');
   const railBtn = (aktiv: boolean): React.CSSProperties => ({
@@ -1123,417 +1073,31 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         />
         </div>
         <DreiDBereich sichtbar={modus !== '2d'} />
-        {/* Rechtes Eigenschaften-Panel — AUF-83-T5 / K-01/K-02/K-05/K-06: klappbar, wie die linke
-            Schiene. Der alte Kommentar „immer sichtbar" beschrieb ab diesem Auftrag das Gegenteil
-            des Verhaltens und ist deshalb fort (K-06) — ein Kommentar, der die alte Wahrheit
-            weiterträgt, wird geglaubt. */}
-        {/* AUF-26/B3: `overflowWrap` + `boxSizing` — Text bricht um, statt im Wort abgeschnitten zu
-            werden. Ein Hinweis, der bei „…brauch" endet, ist kein Hinweis. */}
-        <div
-          {...(istSchmal && schienen.rechts ? {} : { 'data-schiene': true })}
-          className={istSchmal && schienen.rechts ? 'hp-schiene-overlay hp-schiene-overlay--rechts' : undefined}
-          style={{
-            width: schienen.rechts ? 268 : 32, flex: '0 0 auto', background: T.surface,
-            borderLeft: `1px solid ${T.hair}`, padding: schienen.rechts ? 14 : 0,
-            overflowY: schienen.rechts ? 'auto' : 'hidden', overflowWrap: 'anywhere',
-            boxSizing: 'border-box', fontSize: 12.5, color: FARBEN.text,
-          }}
-        >
-          <div className="hp-schiene-kopf">
-            {schienen.rechts && <div style={{ fontWeight: 800, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '.04em', color: FARBEN.gedaempft, marginBottom: 8, flex: 1, minWidth: 0 }}>Eigenschaften</div>}
-            <SchienenSchalter seite="rechts" offen={schienen.rechts} label="Eigenschaften" onClick={() => klappeSchiene('rechts', !schienen.rechts)} />
-          </div>
-          {schienen.rechts && (
-          <>
-          {/* Dashboard v2.2 (§20 / UI-5): Reiter aus PANEL_TABS (Daten, nicht Markup). Seit AUF-27
-              rendert sie die gemeinsame `ReiterLeiste` — dieselbe Verdrahtung wie die Schiene,
-              inklusive der AUF-19-Nacharbeiten (aria-controls, Pfeiltasten, Fokusnachführung).
-              `allgemein` zeigt den unveränderten Panelinhalt. */}
-          <ReiterLeiste
-            reiter={PANEL_TABS}
-            aktiv={aktiverTab}
-            setAktiv={(id) => setAktiverTab(id as PanelTabId)}
-            ariaLabel="Eigenschaften-Bereiche"
-            panelId={PANEL_ID}
-            reiterId={(id) => reiterId(id as PanelTabId)}
-          />
-          {/* B3 (Nacharbeit N3): DER Inhaltsbereich der Reiter. Bis hierher trug er keine Rolle —
-              die Reiterleiste versprach ein Tabpanel, das im Baum nicht existierte. `aria-labelledby`
-              zeigt auf den GERADE aktiven Reiter, `id` ist das Ziel aller vier `aria-controls`. */}
-          <div role="tabpanel" id={PANEL_ID} aria-labelledby={reiterId(aktiverTab)}>
-          {aktiverTab === 'pruefungen' ? (
-            /* Dashboard v2.4 (§34 / UI-10): Prüfungscenter. Die Liste kommt aus `befundeAus`
-               (rein, getestet) und hat heute 0 oder 1 Eintrag — der Store hält genau EINE
-               Ablehnung. Was NICHT geführt wird, steht ehrlich unter der Liste, statt eine
-               Historie vorzutäuschen. */
-            <div style={{ color: FARBEN.gedaempft, lineHeight: 1.6 }}>
-              {befunde.length === 0 ? (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, marginBottom: 12 }}>
-                  <span>{BEFUNDE_LEER}</span>
-                  <ZustandBadge zustand="verfuegbar" />
-                </div>
-              ) : (
-                <ul style={{ listStyle: 'none', margin: '0 0 12px', padding: 0 }}>
-                  {befunde.map((b) => (
-                    <li key={b.id} style={{ display: 'flex', gap: 6, alignItems: 'flex-start', padding: '6px 8px', marginBottom: 6, borderRadius: 8, background: T.errSoft, border: `1px solid ${T.errBorder}`, color: T.errInk }}>
-                      {/* Schwere als Symbol UND Text, nicht nur als Farbe (A11y). */}
-                      <span aria-hidden style={{ fontWeight: 700 }}>✋</span>
-                      <span><strong style={{ fontWeight: 700 }}>Abgelehnt</strong> – {b.text}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <div style={{ fontSize: 11, color: T.muted, borderTop: `1px solid ${T.hair}`, paddingTop: 8 }}>{BEFUNDE_UMFANG}</div>
-            </div>
-          ) : aktiverTab !== 'allgemein' ? (
-            <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>
-              <div style={{ marginBottom: 8 }}>{PANEL_TABS.find((t) => t.id === aktiverTab)?.hinweis}</div>
-              <ZustandBadge zustand={PANEL_TABS.find((t) => t.id === aktiverTab)?.zustand ?? 'in_entwicklung'} />
-            </div>
-          ) : (
-            <>
-          {/* AUF-35a / Kante 4: Bei MEHRFACHauswahl zeigt das Panel eine Übersicht mit Anzahl je Typ
-              statt Einzelfelder zu raten. Die Zählung kommt aus `mehrfachUebersicht` (rein,
-              getestet); das Markup bleibt dünn. Darunter laufen die Einzelfelder wie bisher weiter —
-              sie zeigen das PRIMÄROBJEKT, also das zuletzt gewählte. */}
-          {auswahlUebersicht.gesamt > 1 && (
-            <div style={{ marginBottom: 12, padding: '8px 10px', borderRadius: 8, background: T.surface2, border: `1px solid ${T.hair}` }}>
-              <div style={{ fontWeight: 700, marginBottom: 4 }}>{auswahlUebersicht.gesamt} Objekte gewählt</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
-                {auswahlUebersicht.typen.map((t) => (
-                  <span key={t.typ} style={{ fontSize: 11.5, padding: '2px 7px', borderRadius: 999, background: T.brandWash, color: T.brandInk }}>
-                    {t.bezeichnung}
-                  </span>
-                ))}
-              </div>
-              {auswahlUebersicht.gesperrt > 0 && (
-                <div style={{ fontSize: 11.5, color: FARBEN.gedaempft }}>🔒 {auswahlUebersicht.gesperrt} davon gesperrt — wählbar, aber nicht bearbeitbar.</div>
-              )}
-              <div style={{ fontSize: 11.5, color: FARBEN.gedaempft }}>
-                Unten stehen die Eigenschaften des zuletzt gewählten Objekts.
-              </div>
-            </div>
-          )}
-          {/* Dashboard v1 §5: Sicht (Auge) + Sperre (Schloss) je selektiertem Node → vorhandene Commands
-              SET_NODES_SICHTBAR/SET_NODES_GESPERRT. Zustand als Text UND Symbol (A11y). Entsperren fragt nach. */}
-          {selectedNode && (
-            <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
-              <button type="button" style={knopf(false)} title={selectedNode.visible === false ? 'Einblenden' : 'Ausblenden'} aria-label="Sicht umschalten"
-                onClick={() => store.getState().executeCommand({ type: 'SET_NODES_SICHTBAR', nodeIds: [selectedNode.id], sichtbar: selectedNode.visible === false })}>
-                {selectedNode.visible === false ? '🙈 Ausgeblendet' : '👁 Sicht'}
-              </button>
-              <button type="button" style={knopf(selectedNode.locked === true)} title={selectedNode.locked ? 'Entsperren' : 'Sperren'} aria-label="Sperre umschalten"
-                onClick={() => { if (selectedNode.locked && !window.confirm('Objekt ist gesperrt — entsperren?')) return; store.getState().executeCommand({ type: 'SET_NODES_GESPERRT', nodeIds: [selectedNode.id], gesperrt: !selectedNode.locked }); }}>
-                {selectedNode.locked ? '🔒 Gesperrt' : '🔓 Sperren'}
-              </button>
-            </div>
-          )}
-          {selectedRoof ? (
-            <>
-              <div style={{ fontWeight: 700, marginBottom: 10 }}>Dach</div>
-              <label style={panelLabel}>Dachform
-                <select value={selectedRoof.roofType} onChange={(e) => aktualisiereDach({ roofType: e.target.value as RoofNode['roofType'] })} style={panelInput}>
-                  <option value="sattel">Satteldach</option>
-                  <option value="walm">Walmdach</option>
-                  <option value="pult">Pultdach</option>
-                  <option value="flach">Flachdach</option>
-                  <option value="l-shape">L-Dach</option>
-                  <option value="t-shape">T-Dach</option>
-                  <option value="u-shape">U-Dach</option>
-                </select>
-              </label>
-              <label style={panelLabel}>Neigung (°)
-                <input type="number" min={0} max={89} value={selectedRoof.neigungGrad} onChange={(e) => aktualisiereDach({ neigungGrad: Math.max(0, Math.min(89, Number(e.target.value))) })} style={panelInput} />
-              </label>
-              <label style={panelLabel}>First-Richtung (° Azimut, Nord=0)
-                <input type="number" value={selectedRoof.firstAzimutGrad} onChange={(e) => aktualisiereDach({ firstAzimutGrad: Number(e.target.value) })} style={panelInput} />
-              </label>
-              <label style={panelLabel}>Überstand (mm)
-                <input type="number" min={0} value={selectedRoof.ueberstandMm} onChange={(e) => aktualisiereDach({ ueberstandMm: Math.max(0, Math.round(Number(e.target.value))) })} style={panelInput} />
-              </label>
-              {/* Verdrahtung #1: L/T/U-Anbaumaße (verdrahten den schon abgenommenen Verschneidungs-Render an die UI).
-                  Operanden-Gate: fehlende/≤0 Maße rendern NICHT — mit konkretem Grund markiert, kein erfundener Wert. */}
-              {istVerschneidungsForm(selectedRoof.roofType) && (() => {
-                const a = selectedRoof.anbau;
-                const istU = selectedRoof.roofType === 'u-shape';
-                const setzeAnbau = (feld: keyof RoofAnbauMasse, wert: number): void => {
-                  const basis: RoofAnbauMasse = { length: a?.length ?? 0, width: a?.width ?? 0, lengthB: a?.lengthB, widthB: a?.widthB };
-                  basis[feld] = Math.max(0, Math.round(wert));
-                  aktualisiereDach({ anbau: basis });
-                };
-                const fehlt = !a || !(a.length > 0) || !(a.width > 0) || (istU && (!(a.lengthB && a.lengthB > 0) || !(a.widthB && a.widthB > 0)));
-                return (
-                  <>
-                    <div style={{ fontWeight: 700, margin: '12px 0 6px' }}>Anbau / Verschneidung</div>
-                    <label style={panelLabel}>Außenmaß Länge (mm)
-                      <input type="number" min={0} value={a?.length ?? ''} onChange={(e) => setzeAnbau('length', Number(e.target.value))} style={panelInput} />
-                    </label>
-                    <label style={panelLabel}>Außenmaß Breite (mm)
-                      <input type="number" min={0} value={a?.width ?? ''} onChange={(e) => setzeAnbau('width', Number(e.target.value))} style={panelInput} />
-                    </label>
-                    {istU && (
-                      <>
-                        <label style={panelLabel}>Innenhof/Kerbe Länge (mm)
-                          <input type="number" min={0} value={a?.lengthB ?? ''} onChange={(e) => setzeAnbau('lengthB', Number(e.target.value))} style={panelInput} />
-                        </label>
-                        <label style={panelLabel}>Innenhof/Kerbe Breite (mm)
-                          <input type="number" min={0} value={a?.widthB ?? ''} onChange={(e) => setzeAnbau('widthB', Number(e.target.value))} style={panelInput} />
-                        </label>
-                      </>
-                    )}
-                    {fehlt && (
-                      <div style={{ fontSize: 11, color: FARBEN.warnung, marginTop: 2 }}>
-                        ⚠ {istU
-                          ? 'U-Dach braucht alle vier Maße > 0 (Außen Länge/Breite + Innenhof/Kerbe Länge/Breite) — sonst rendert es nicht.'
-                          : 'L/T-Dach braucht Außenmaß Länge und Breite > 0 — sonst rendert es nicht.'}
-                      </div>
-                    )}
-                  </>
-                );
-              })()}
-              <button type="button" style={{ ...knopf(false), width: '100%', marginTop: 4 }} onClick={() => { store.getState().executeCommand({ type: 'REMOVE_ROOF', roofId: selectedRoof.id }); store.getState().selectNodes([]); }}>Dach entfernen</button>
-            </>
-          ) : selectedWall ? (
-            <>
-              <div style={{ fontWeight: 700, marginBottom: 10 }}>Wand</div>
-              <label style={panelLabel}>Mauerwerk
-                <select value={selectedWall.construction?.materialId ?? ''} onChange={(e) => aktualisiereWand({ construction: { ...(selectedWall.construction ?? {}), materialId: e.target.value } })} style={panelInput}>
-                  <option value="">— wählen —</option>
-                  {MAUERWERK.map((m) => (<option key={m.id} value={m.id}>{m.label}</option>))}
-                </select>
-              </label>
-              <label style={panelLabel}>Wandstärke (mm)
-                <select value={WANDSTAERKEN.includes(selectedWall.thickness as typeof WANDSTAERKEN[number]) ? selectedWall.thickness : ''} onChange={(e) => aktualisiereWand({ thickness: Number(e.target.value) })} style={panelInput}>
-                  {!WANDSTAERKEN.includes(selectedWall.thickness as typeof WANDSTAERKEN[number]) && (<option value="">{selectedWall.thickness} mm (aktuell)</option>)}
-                  {WANDSTAERKEN.map((d) => (<option key={d} value={d}>{d} mm</option>))}
-                </select>
-              </label>
-              <label style={panelLabel}>Höhe (mm)
-                <input type="number" min={100} value={selectedWall.height} onChange={(e) => aktualisiereWand({ height: Math.max(100, Math.round(Number(e.target.value))) })} style={panelInput} />
-              </label>
-              <label style={panelLabel}>Länge (mm)
-                <input type="number" min={1} value={Math.round(Math.hypot(selectedWall.end.x - selectedWall.start.x, selectedWall.end.y - selectedWall.start.y))} onChange={(e) => setzeWandLaenge(Math.max(1, Math.round(Number(e.target.value))))} style={panelInput} />
-              </label>
-              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Länge ändern verschiebt das Wandende entlang der Achse. Bewegen: Wand im Plan ziehen.</div>
-              <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
-                <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={dupliziere}>Duplizieren</button>
-                <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
-              </div>
-            </>
-          ) : selectedOpening ? (
-            <>
-              <div style={{ fontWeight: 700, marginBottom: 10 }}>{selectedOpening.type === 'door' ? 'Tür' : selectedOpening.type === 'window' ? 'Fenster' : 'Öffnung'}</div>
-              {(selectedOpening.type === 'window' || selectedOpening.type === 'door') && (() => {
-                const istFenster = selectedOpening.type === 'window';
-                const katalog = istFenster ? FENSTER_BAUARTEN : TUER_BAUARTEN;
-                const aktuellTyp = selectedOpening.produkt?.typ;
-                const waehleTyp = (t: (typeof katalog)[number]): void => {
-                  const prod = selectedOpening.produkt ?? {};
-                  const aend: NonNullable<OpeningNode['produkt']> = { ...prod, typ: t.id };
-                  if (t.oeffnungsArt) aend.oeffnungsArt = t.oeffnungsArt;
-                  aktualisiereOeffnung({ produkt: aend });
-                };
-                return (
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', color: T.muted, marginBottom: 6 }}>Bauart</div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, maxHeight: 220, overflowY: 'auto', paddingRight: 2 }}>
-                      {katalog.map((t) => {
-                        const aktivT = aktuellTyp === t.id;
-                        return (
-                          <button key={t.id} type="button" title={t.label} onClick={() => waehleTyp(t)}
-                            style={{ display: 'grid', gap: 3, placeItems: 'center', padding: 5, borderRadius: 8, cursor: 'pointer',
-                              border: `1.5px solid ${aktivT ? T.brandInk : T.controlBorder}`, background: aktivT ? T.brandWash : T.surface }}>
-                            <img src={`${ICON_BASE}icons/${istFenster ? 'fenster' : 'tuer'}/${t.datei}`} alt={t.label} loading="lazy" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                            <span style={{ fontSize: 8.5, lineHeight: 1.15, color: aktivT ? FARBEN.text : T.muted, textAlign: 'center', height: 20, overflow: 'hidden' }}>{t.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                    {aktuellTyp && (
-                      <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 6 }}>Bauart: <strong style={{ color: FARBEN.text }}>{(istFenster ? fensterBauartNach(aktuellTyp) : tuerBauartNach(aktuellTyp))?.label ?? aktuellTyp}</strong></div>
-                    )}
-                  </div>
-                );
-              })()}
-              {selectedOpening.type === 'door' && (
-                <>
-                  <label style={panelLabel}>Anschlag (Angel)
-                    <select value={selectedOpening.anschlag ?? 'links'} onChange={(e) => aktualisiereOeffnung({ anschlag: e.target.value as 'links' | 'rechts' })} style={panelInput}>
-                      <option value="links">links</option>
-                      <option value="rechts">rechts</option>
-                    </select>
-                  </label>
-                  <label style={panelLabel}>Öffnungsrichtung
-                    <select value={selectedOpening.oeffnung ?? 'innen'} onChange={(e) => aktualisiereOeffnung({ oeffnung: e.target.value as 'innen' | 'aussen' })} style={panelInput}>
-                      <option value="innen">nach innen</option>
-                      <option value="aussen">nach außen</option>
-                    </select>
-                  </label>
-                </>
-              )}
-              <label style={panelLabel}>Breite (mm)
-                <input type="number" min={100} value={selectedOpening.width} onChange={(e) => aktualisiereOeffnung({ width: Math.max(100, Math.round(Number(e.target.value))) })} style={panelInput} />
-              </label>
-              <label style={panelLabel}>Höhe (mm)
-                <input type="number" min={100} value={selectedOpening.height} onChange={(e) => aktualisiereOeffnung({ height: Math.max(100, Math.round(Number(e.target.value))) })} style={panelInput} />
-              </label>
-              <label style={panelLabel}>Brüstungshöhe (mm)
-                <input type="number" min={0} value={selectedOpening.sillHeight ?? 0} onChange={(e) => aktualisiereOeffnung({ sillHeight: Math.max(0, Math.round(Number(e.target.value))) })} style={panelInput} />
-              </label>
-              <label style={panelLabel}>Position ab Wandanfang (mm)
-                <input type="number" min={0} value={selectedOpening.offsetFromWallStart} onChange={(e) => aktualisiereOeffnung({ offsetFromWallStart: Math.max(0, Math.round(Number(e.target.value))) })} style={panelInput} />
-              </label>
-              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 10 }}>Maße direkt hier ändern — oder die Öffnung im Plan entlang der Wand ziehen.</div>
-              {(selectedOpening.type === 'window' || selectedOpening.type === 'door') && (() => {
-                const prod = selectedOpening.produkt ?? {};
-                const prof = profilNach(prod.profilId ?? '') ?? PROFIL_KATALOG[0];
-                const verg = verglasungNach(prod.verglasungId ?? '') ?? VERGLASUNG_KATALOG[0];
-                const oa = (prod.oeffnungsArt ?? 'dreh-kipp') as OeffnungsArt;
-                const rc = (prod.rc ?? 'ohne') as RcKlasse;
-                const uw = berechneUw({ breiteMm: selectedOpening.width, hoeheMm: selectedOpening.height, uf: prof.uf, ug: verg.ug, ansichtsbreiteMm: prof.ansichtsbreiteMm });
-                const rcOk = rcMachbar(rc, verg);
-                const preis = preisFenster({ breiteMm: selectedOpening.width, hoeheMm: selectedOpening.height, profil: prof, verglasung: verg, oeffnungsArt: oa, rc });
-                const setP = (aend: Partial<NonNullable<OpeningNode['produkt']>>) => aktualisiereOeffnung({ produkt: { ...prod, ...aend } });
-                return (
-                  <div style={{ marginTop: 12, paddingTop: 10, borderTop: `1px solid ${T.hair}` }}>
-                    <div style={{ fontWeight: 700, marginBottom: 8 }}>Produkt (Fensterbau)</div>
-                    <label style={panelLabel}>Profilsystem
-                      <select value={prof.id} onChange={(e) => setP({ profilId: e.target.value })} style={panelInput}>
-                        {PROFIL_KATALOG.map((p) => (<option key={p.id} value={p.id}>{p.name}</option>))}
-                      </select>
-                    </label>
-                    <label style={panelLabel}>Verglasung
-                      <select value={verg.id} onChange={(e) => setP({ verglasungId: e.target.value })} style={panelInput}>
-                        {VERGLASUNG_KATALOG.map((v) => (<option key={v.id} value={v.id}>{v.name}</option>))}
-                      </select>
-                    </label>
-                    <label style={panelLabel}>Öffnungsart
-                      <select value={oa} onChange={(e) => setP({ oeffnungsArt: e.target.value as OeffnungsArt })} style={panelInput}>
-                        <option value="fest">fest</option>
-                        <option value="dreh">Dreh</option>
-                        <option value="kipp">Kipp</option>
-                        <option value="dreh-kipp">Dreh-Kipp</option>
-                      </select>
-                    </label>
-                    <label style={panelLabel}>Einbruchschutz (RC)
-                      <select value={rc} onChange={(e) => setP({ rc: e.target.value as RcKlasse })} style={panelInput}>
-                        <option value="ohne">ohne</option>
-                        <option value="RC1N">RC1N</option>
-                        <option value="RC2N">RC2N</option>
-                        <option value="RC2">RC2</option>
-                        <option value="RC3">RC3</option>
-                      </select>
-                    </label>
-                    <div style={{ marginTop: 8, padding: 10, background: T.bg, border: `1px solid ${T.hair}`, borderRadius: 8, fontSize: 12, lineHeight: 1.7, color: FARBEN.text }}>
-                      <div>U-Wert (U<sub>w</sub>): <strong>{uw.uw.toFixed(2)}</strong> W/(m²·K)</div>
-                      <div>RC {rc === 'ohne' ? '' : rc}: <strong style={{ color: rc === 'ohne' ? FARBEN.gedaempft : rcOk ? FARBEN.erfolg : FARBEN.gefahr }}>{rc === 'ohne' ? 'kein Nachweis' : rcOk ? 'mit dieser Verglasung möglich' : 'Verglasung reicht nicht'}</strong></div>
-                      <div>Preis (netto): <strong>{preis.gesamt.toLocaleString('de-DE')} €</strong></div>
-                      <div style={{ fontSize: 10.5, color: FARBEN.gedaempft, marginTop: 4 }}>Rahmen {preis.rahmen} € · Glas {preis.glas} € · Beschlag {preis.beschlag} € · RC {preis.rcAufpreis} €</div>
-                      <div style={{ fontSize: 10.5, color: FARBEN.gedaempft, marginTop: 4 }}>Katalogwerte sind Platzhalter bis zu den echten Schüco-Daten.</div>
-                    </div>
-                  </div>
-                );
-              })()}
-              <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
-                <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={dupliziere}>Duplizieren</button>
-                <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
-              </div>
-            </>
-          ) : selectedStair && selectedStairParams ? (
-            <>
-              <div style={{ fontWeight: 700, marginBottom: 10 }}>Treppe</div>
-              {(() => {
-                const aktuellTyp = selectedStairParams.typ;
-                return (
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', color: T.muted, marginBottom: 6 }}>Bauart</div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, maxHeight: 200, overflowY: 'auto', paddingRight: 2 }}>
-                      {TREPPEN_BAUARTEN.map((t) => {
-                        const aktivT = aktuellTyp === t.id;
-                        return (
-                          <button key={t.id} type="button" title={t.label} onClick={() => aktualisiereTreppe({ typ: t.id })}
-                            style={{ display: 'grid', gap: 3, placeItems: 'center', padding: 5, borderRadius: 8, cursor: 'pointer',
-                              border: `1.5px solid ${aktivT ? T.brandInk : T.controlBorder}`, background: aktivT ? T.brandWash : T.surface }}>
-                            <img src={`${ICON_BASE}icons/treppe/${t.datei}`} alt={t.label} loading="lazy" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                            <span style={{ fontSize: 8.5, lineHeight: 1.15, color: aktivT ? FARBEN.text : T.muted, textAlign: 'center', height: 20, overflow: 'hidden' }}>{t.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                    {aktuellTyp && (
-                      <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 6 }}>Bauart: <strong style={{ color: FARBEN.text }}>{treppenBauartNach(aktuellTyp)?.label ?? aktuellTyp}</strong></div>
-                    )}
-                  </div>
-                );
-              })()}
-              {(() => {
-                const erg = berechneTreppe({ geschosshoehe: selectedStairParams.geschosshoehe, laufbreite: selectedStairParams.laufbreite, gewuenschteSteigung: selectedStairParams.gewuenschteSteigung, bereich: selectedStairParams.bereich, verfuegbareLauflaenge: Math.hypot(selectedStairParams.endX - selectedStairParams.startX, selectedStairParams.endY - selectedStairParams.startY) || undefined });
-                return (
-                  <div style={{ marginBottom: 10, padding: 10, background: erg.bestanden ? T.okSoft : T.errSoft, border: `1px solid ${erg.bestanden ? T.okBorder : T.errBorder}`, borderRadius: 8, fontSize: 11.5, lineHeight: 1.6, color: FARBEN.text }}>
-                    <div><strong>{erg.anzahlSteigungen}</strong> Steigungen · <strong>{erg.anzahlAuftritte}</strong> Auftritte</div>
-                    <div>Steigung {erg.steigungshoehe} mm · Auftritt {erg.auftritt} mm</div>
-                    <div>Schrittmaß {erg.schrittmass} mm · {erg.bestanden ? 'DIN 18065 erfüllt' : 'DIN 18065 verletzt'}</div>
-                  </div>
-                );
-              })()}
-              <label style={panelLabel}>Nutzungsbereich
-                <select value={selectedStairParams.bereich} onChange={(e) => aktualisiereTreppe({ bereich: e.target.value as TreppeParams['bereich'] })} style={panelInput}>
-                  <option value="wohnung">Wohnung</option>
-                  <option value="gebaeude">Gebäude</option>
-                  <option value="aussen">außen</option>
-                </select>
-              </label>
-              <label style={panelLabel}>Laufbreite (mm)
-                <input type="number" min={500} value={selectedStairParams.laufbreite} onChange={(e) => aktualisiereTreppe({ laufbreite: Math.max(500, Math.round(Number(e.target.value))) })} style={panelInput} />
-              </label>
-              <label style={panelLabel}>Geschosshöhe (mm)
-                <input type="number" min={2000} value={selectedStairParams.geschosshoehe} onChange={(e) => aktualisiereTreppe({ geschosshoehe: Math.max(2000, Math.round(Number(e.target.value))) })} style={panelInput} />
-              </label>
-              <label style={panelLabel}>Ziel-Steigungshöhe (mm, optional)
-                <input type="number" min={0} value={selectedStairParams.gewuenschteSteigung ?? ''} onChange={(e) => { const v = Math.round(Number(e.target.value)); aktualisiereTreppe({ gewuenschteSteigung: v > 0 ? v : undefined }); }} style={panelInput} />
-              </label>
-              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Stufung wird automatisch nach DIN 18065 gerechnet. Bewegen: Treppe im Plan ziehen.</div>
-              <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
-                <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
-              </div>
-            </>
-          ) : selectedObjekt ? (
-            <>
-              <div style={{ fontWeight: 700, marginBottom: 10 }}>{String(selectedObjekt.parameters['objekt.label'] ?? 'Objekt')}</div>
-              <label style={panelLabel}>Länge (mm)
-                <input type="number" min={100} value={Number(selectedObjekt.parameters['objekt.laenge']) || 0} onChange={(e) => store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedObjekt.id, changes: { parameters: { ...selectedObjekt.parameters, 'objekt.laenge': Math.max(100, Math.round(Number(e.target.value))) } } })} style={panelInput} />
-              </label>
-              <label style={panelLabel}>Höhe (mm)
-                <input type="number" min={100} value={Number(selectedObjekt.parameters['objekt.hoehe']) || 0} onChange={(e) => store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedObjekt.id, changes: { parameters: { ...selectedObjekt.parameters, 'objekt.hoehe': Math.max(100, Math.round(Number(e.target.value))) } } })} style={panelInput} />
-              </label>
-              <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Bewegen: im Plan ziehen.</div>
-              <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
-                <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
-              </div>
-            </>
-          ) : (
-            <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>
-              {/* AUF-59: Hier standen zwei ausgeschriebene Knöpfe „↔ Links/Rechts" und „↕ Oben/Unten"
-                  (117x43, ohne `title`) — dieselbe Handlung wie die beiden Spiegel-Icons in der
-                  Bedienzeile, mit derselben Sperrbedingung. Gemessen war es dieselbe Funktion,
-                  nicht eine zweite: `spiegeleGrundriss('vertikal'/'horizontal')`, `waende.length === 0`.
-                  Der Text weicht dem vorhandenen Icon — die Funktion bleibt, sie steht eine Zeile
-                  höher und nimmt dort keinen Panel-Platz weg. */}
-              <div style={{ fontSize: 11.5, marginBottom: 10 }}>Objekt anklicken (Auswahl-Werkzeug) = markieren; dann ziehen zum Bewegen, oder Duplizieren/Löschen.</div>
-              <div style={{ fontSize: 12 }}>Werkzeug: <strong style={{ color: FARBEN.text }}>{werkzeug}</strong></div>
-              <div style={{ fontSize: 12 }}>Geschoss: <strong style={{ color: FARBEN.text }}>{level.name}</strong></div>
-              <div style={{ fontSize: 12 }}>Räume: {raeume.length} · {(raeume.reduce((acc, r) => acc + r.flaecheMm2, 0) / 1_000_000).toFixed(2)} m²</div>
-              <div style={{ marginTop: 12, padding: 10, background: T.bg, border: `1px solid ${T.hair}`, borderRadius: 8, fontSize: 11.5 }}>
-                Ein Dach auswählen zeigt hier seine Parameter. Ablauf: Wand ziehen (W) → Dach (D) über den Umriss → 3D.
-              </div>
-            </div>
-          )}
-            </>
-          )}
-          </div>
-          </>
-          )}
-        </div>
+        {/* AUF-48 Scheibe 4d — **das Eigenschaften-Panel wohnt jetzt in
+            `rahmen/EigenschaftenPanel.tsx`.** 411 Zeilen, zeichengleich entnommen; mit ihm die
+            Helfer, die nur es benutzt hat. **Die Reihe darum bleibt HIER** — sie ist das Maszband
+            aus AUF-72 und traegt auch Buehne und 3D-Bereich. */}
+        <EigenschaftenPanel
+          aktiverTab={aktiverTab}
+          setAktiverTab={setAktiverTab}
+          istSchmal={istSchmal}
+          schienen={schienen}
+          klappeSchiene={klappeSchiene}
+          level={level}
+          werkzeug={werkzeug}
+          raeume={raeume}
+          befunde={befunde}
+          auswahlUebersicht={auswahlUebersicht}
+          selectedNode={selectedNode}
+          selectedWall={selectedWall}
+          selectedOpening={selectedOpening}
+          selectedRoof={selectedRoof}
+          selectedStair={selectedStair}
+          selectedStairParams={selectedStairParams}
+          selectedObjekt={selectedObjekt}
+          dupliziere={dupliziere}
+          loescheAuswahl={loescheAuswahl}
+        />
       </div>
 
       {/* Statusleiste */}
