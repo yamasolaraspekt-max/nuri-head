@@ -102,6 +102,16 @@ nächster erwarteter Status`.
   Commit den vollständigen Diff, prüft den Scope, fährt die betroffenen Tests, stagt **nur
   freigegebene Pfade** (`git commit -- <pfade>`) und meldet **Basis-SHA und Generator-SHA**.
   Der Evaluator prüft `git diff <basis>..<generator>` in einem frischen Worktree.
+- **Kein Ball bleibt liegen** *(Yama, 30.07., 19:07: „es darf nichts liegen bleiben egal wer die
+  aufgabe hat muss sofort erledigen, damit wir schnell weiter kommen")*.
+  **Jede Übergabe nennt einen Ballbesitzer und eine Uhrzeit.** Wer den Ball hat, fängt sofort an
+  oder sagt in einer Zeile, warum nicht und wann.
+  **Der Planner führt in jeder Wachrunde eine Ballbesitz-Uhr:** Rolle · Gegenstand · seit wann ·
+  läuft oder still. **Ein Ball, der ohne Wort still liegt, wird beim nächsten Blick gemeldet** —
+  nicht einmalig, sondern bis er sich bewegt.
+  **Die einzige Ausnahme ist die, die Yama selbst gesetzt hat:** P2/P3-Befunde an Papier werden
+  im Produktionsmodus registriert und nicht abgehandelt. *Sie blockieren nichts — deshalb hat er
+  sie gestoppt.* **Alles, was Code, Abnahme oder Sicherheit blockiert, wird sofort erledigt.**
 - **Niemand merged nach `main`, niemand pusht, niemand gibt den eigenen Commit frei.**
   Merge und Deploy sind Tor 2 und gehören Yama allein.
 - **Niemals `git add -A` oder `.`** — `git commit -- <pfade>`.

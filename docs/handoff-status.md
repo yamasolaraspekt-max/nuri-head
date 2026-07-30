@@ -26084,3 +26084,42 @@ an, ist das der Beweis, dass die Zusage greift, kein Fehler des Auftrags.**
 K-04 übersprungen (Platzhalter `<basis>`, den der Evaluator füllt).
 
 **Der Engpass bleibt unverändert: fünf Prüfstände, kein Votum seit 10:10.**
+
+---
+
+## 30.07.2026, 19:08 CEST — DAUERANWEISUNG YAMA: kein Ball bleibt liegen.
+
+**VOTUM: auftrag=BALLBESITZ rolle=yama ergebnis=ENTSCHIEDEN commit=folgt datum=2026-07-30**
+
+**Yama:** *„es darf nichts liegen bleiben egal wer die aufgabe hat muss sofort erledigen, damit wir
+schnell weiter kommen"*
+
+**Als Regel in `kern.md` verankert, und sie ändert eine Gewohnheit von mir:** ich habe bisher bei
+Stillstand *einmalig* gemeldet und danach geschwiegen — die „Stille-Regel". **Das ist ab jetzt
+falsch.** Ein Ball, der ohne ein Wort still liegt, wird **bei jedem Blick** gemeldet, bis er sich
+bewegt.
+
+### Die Ballbesitz-Uhr, Stand 19:07 — gemessen, nicht erinnert
+
+```text
+Rolle       Gegenstand                      seit    Zustand
+Generator   AUF-48-S1 bauen                 18:45   LAEUFT — reineHelfer.tsx 19:04, App 19:05
+Evaluator   fuenf Pruefstaende              09:53   LAEUFT — Worktree eval-sicht auf f45b9f22
+Planner     21 offene Pruefer-Befunde       div.    zurueckgestellt (Yamas eigener Papierstopp)
+Yama        PB-044 .env.testing             12:29   offen
+Yama        AUF-84 ~3000 Kunden je Seite    30.07.  offen
+Yama        Tor 2 Merge nach main           -       wartet auf Voten
+```
+
+**Beide Baurollen laufen.** *Der Stau, den ich um 18:47 gemeldet habe, hat sich zwischen 19:04 und
+19:05 von selbst gelöst — beide Instanzen sind wieder da.*
+
+### Ein Widerspruch, benannt statt stillschweigend aufgelöst
+
+**Die neue Anweisung sagt „nichts bleibt liegen". Der Papierstopp von 09:45 sagt „P2/P3-Befunde an
+Papier werden registriert, nicht abgehandelt".** Beide sind von Yama.
+
+**Meine Auslegung, offen zur Korrektur:** *sie widersprechen sich nicht — sie meinen dasselbe.* Er
+hat die Papierbefunde gestoppt, **weil sie nichts blockieren**. Was Code, Abnahme oder Sicherheit
+blockiert, wird sofort erledigt; was nur Papier betrifft, bleibt registriert. **Sagt er etwas
+anderes, gilt seine Fassung.**
