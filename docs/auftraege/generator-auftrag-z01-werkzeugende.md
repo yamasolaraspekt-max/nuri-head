@@ -189,3 +189,51 @@ Wenn Z-05 (Polygonwerkzeug) ein drittes Werkzeug mit Zwischenzustand bringt, wir
 `werkzeugEnde.ts` das Interface — dann getragen von drei Nutzern statt von keinem.
 
 **Bindend:** Der Generator meldet „umgesetzt", nie „grün". Die Abnahme fährt der Evaluator.
+
+---
+
+## Nachtrag des Planners zu Schritt 0 — eine Beobachtung, die dem Quelltext widerspricht
+
+*Gelesen 31.07. ~00:00 aus `docs/browsertest-z01-2026-07-31.md`. **Der Bericht ist gut** — die
+Geometrie direkt aus der Bühne zu lesen statt Bildschirmfotos zu vergleichen, ist genau der
+Unterschied zwischen Messen und Betrachten. Und die nicht reproduzierbare Einzelbeobachtung
+offenzulegen, obwohl sie in die Gegenrichtung zeigt, ist der Teil, den die meisten weglassen.*
+
+**Ein Punkt darin passt aber nicht zum Code, und er entscheidet, was gebaut werden muss:**
+
+```text
+Bericht, E2E:  Fensterwerkzeug geklickt
+               -> Werkzeug wechselt auf `fenster`
+               -> Reststrich SICHTBAR, bis der Zeiger die Buehne wieder betritt
+
+Quelltext:     Buehne.tsx  {werkzeug === 'wand' && wandStart && ( ...Vorschau... )}
+               GruppenzeileUndSchiene.tsx:334  onClick -> setWerkzeug(...)
+                                                          setWandStart(null)
+```
+
+**Steht das Werkzeug auf `fenster`, ist die Bedingung falsch — die Vorschau dürfte gar nicht mehr
+im Baum sein.** Sie war aber sichtbar. Dafür gibt es genau zwei Erklärungen, und sie verlangen
+verschiedene Bauten:
+
+**(a) Der geklickte Weg räumt nicht auf.** Dann ist es ein fünfter Aufrufer neben den vier
+bekannten — und K-01 fängt ihn, sobald das Aufräumen an *einer* Stelle sitzt. *Welcher Weg war
+es: die Werkzeugleiste, das Gruppenmenü, die Befehlspalette oder eine Taste?*
+
+**(b) Der Zustand ist richtig, das Bild ist alt.** Konva zeichnet die Ebene nicht neu, weil kein
+Ereignis mehr eintrifft — die Linie liegt dann nur noch als **Pixel** auf der Fläche, nicht als
+Knoten im Baum. *Dann behebt kein Aufräumen der Welt den Fehler*, und es braucht zusätzlich ein
+erzwungenes Neuzeichnen der Ebene beim Verlassen.
+
+**Die Unterscheidung kostet einen Befehl** und gehört vor den Bau, nicht danach:
+
+```text
+Nach dem Werkzeugwechsel, bei sichtbarem Reststrich, in der Konsole:
+  stage.find('Line').length      und      stage.findOne('Layer').getChildren().length
+```
+
+**Ist der Knoten weg und der Strich trotzdem da, ist es (b).** Ist er noch da, ist es (a) — dann
+bitte den Aufrufer benennen, damit K-01 ihn nachweislich einschließt.
+
+*Der Auftrag ändert sich dadurch nicht; er bekommt nur die Zusage dazu, die zum tatsächlichen
+Mechanismus passt. Ein Aufräumen, das den richtigen Zustand herstellt und ein altes Bild
+stehenlässt, wäre grün und trotzdem falsch.*
