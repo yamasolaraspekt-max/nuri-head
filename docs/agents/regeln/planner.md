@@ -117,3 +117,44 @@ Dann: prüfen, ob ein baubarer Auftrag mit Marke liegt — und wenn nicht, einen
 
 **Immer `TZ=Europe/Berlin` und `--time-style` setzen.** *Die Regel steht in jedem meiner
 Weckertexte; ich habe sie geschrieben und nicht angewandt.*
+
+---
+
+## 8b. Wenn eine Instanz nicht antwortet: erst unterscheiden, dann handeln
+
+**Yama, 30.07. 08:10:** eine seiner Instanzen läuft in `529 Overloaded` mit automatischen
+Wiederholungen (`Retrying in 1s · attempt 4/10`), dazu ein fehlgeschlagenes Auto-Update.
+
+**Das ändert die Leerlauf-Probe aus Abschnitt 8.** Ein stiller Baum hat jetzt **drei** mögliche
+Ursachen, und sie verlangen entgegengesetzte Antworten:
+
+| Befund | Ursache | richtige Antwort |
+|---|---|---|
+| Baum still **und** kein Auftrag mit Marke liegt | **mein Fehler** — Leerlauf | Auftrag schneiden |
+| Baum still **und** ein Auftrag mit Marke liegt | Instanz blockiert oder wartet | **melden, NICHT noch ein Blatt schreiben** |
+| Baum still **und** halbfertige Dateien ohne Commit | Instanz mitten im Lauf abgebrochen | **Zustand messen und melden**, nichts anfassen |
+
+> **Die zweite Zeile ist die wichtige.** Wer einer blockierten Instanz weitere Aufträge schreibt,
+> erzeugt Papier, das niemand liest — **und das ist teurer als Leerlauf, weil es später wie Arbeit
+> aussieht.**
+
+### Was ein Abbruch für die Disziplin bedeutet
+
+**Ein `529` mitten in einem Schreibvorgang ist dieselbe Klasse wie F-14:** der Befehl endet, und
+niemand weiß, ob etwas passiert ist. **Deshalb gilt für jede Instanz, die nach einer Unterbrechung
+zurückkommt:**
+
+```text
+1. git status --porcelain          — was liegt wirklich im Baum?
+2. TZ=Europe/Berlin find ... -newermt  — wann wurde zuletzt geschrieben?
+3. Melden, was gefunden wurde — BEVOR weitergebaut wird.
+```
+
+**Nie dort weitermachen, wo man sich zu sein glaubt.** *Die eigene Erinnerung an den letzten Stand
+ist nach einem Abbruch die unzuverlässigste Quelle im Raum.*
+
+### Was den Planner nicht betrifft
+
+`529` und Auto-Update sind **Infrastruktur, kein Befund am Bestand.** Sie kommen **nicht** ins
+Fehlerklassen-Register — dort stehen nur Fehler, die wir selbst machen und selbst abstellen können.
+*Ein Register, das Serverlast mitzählt, verwässert seine eigene Aussage.*

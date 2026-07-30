@@ -23188,3 +23188,135 @@ Dann wird geprüft, ob ein baubarer Auftrag mit Marke liegt, und wenn nicht, wir
 > Beweis für Warten**, und die Zeitstempel sagen, welches von beidem.
 
 *Ab jetzt steht die Probe im Weckertext, nicht in meiner Aufmerksamkeit.*
+
+---
+
+## 2026-07-30, 08:08 CEST — GENERATOR: QUITTUNG zu `AUF-87-N2` — **TRÄGT**, ein Kriterium ist bei mir nicht prüfbar
+
+*Zeit gemessen.*
+
+```text
+ERGEBNIS: TRÄGT
+Task:              AUF-87-N2 — die fünf Strukturprüfungen
+Auftragsversion:   54d2cd00
+Je Kriterium — Prüfverfahren vorhanden?
+  K-01 JA · K-02 JA · K-03 JA · K-04 JA · K-05 JA · K-06 JA · K-07 JA · K-08 siehe unten
+Grundgesamtheit ausführbar:   JA — `ls scripts/__tests__/` → auftragPruefen.test.mjs (wächst, wird nicht ersetzt)
+Rückwärts-Probe ausführbar:   JA — das AUF-38-Scheibe-3-Blatt liegt in `e5b061e1`
+Kriterien mit fehlendem Feld: KEINE
+Widersprüche:                 KEINE
+Nicht ausführbare Punkte:     EINER (K-08, unten) — kein Blocker
+```
+
+**Das Blatt ist scharf geschnitten, und zwei seiner Kriterien sind Antworten auf Funde, die eine
+Stunde alt sind.** K-06 und K-07 stehen dort, weil mein erster Bestandslauf sie gemeldet hat.
+*Beide treffen deine Blätter, und du hast sie in ein Kriterium gegen mein Werkzeug übersetzt statt
+in eine Reparatur deiner Blätter — das ist die richtige Richtung.*
+
+### Der eine nicht prüfbare Punkt: K-08
+
+```yaml
+befehl: "git show --name-only --pretty=format: HEAD && …"
+erwartet: "genau die zwei Pfade aus scope"
+```
+
+**`git show HEAD` zeigt deinen letzten Commit, nicht meine Arbeit.** Gemessen:
+
+```text
+git show --name-only --pretty=format: HEAD
+  docs/agents/regeln/planner.md
+  docs/handoff-status.md
+```
+
+**Ich committe nicht** (Yamas Wort steht aus), also stand und steht meine Arbeit nie in `HEAD`.
+*Dieselbe Zeile steht schon in AUF-87/K-08 und ist dort aus demselben Grund ins Leere gelaufen —
+sie ist von einem Blatt ins nächste kopiert worden.*
+
+**Ich prüfe stattdessen `git status --short` gegen die `pfade`** und berichte die Abweichung, wie
+bisher. *Die Aussage des Kriteriums — „nichts außerhalb des Scopes" — bleibt prüfbar; nur ihr
+Befehl passt nicht zu einer Rolle, die nicht committet.* **Kein Grund für `TRÄGT NICHT`**: das
+Kriterium ist erfüllbar, sein Prüfbefehl gehört korrigiert.
+
+### Zu K-07 — meine Wahl, und ich melde sie vorab
+
+Du lässt mir drei Wege für den erwarteten Nulltreffer. **Ich nehme keinen davon allein**, sondern
+den, der ohne Änderung an deinen Blättern auskommt:
+
+> **Der Validator erkennt eine `&&`-Kette und meldet, WELCHES Glied bricht.** Bricht ein
+> `grep`/`grep -c` mit Exitcode **1** (= „nichts gefunden", nicht „Fehler"), wird die Stufe
+> **`NULLTREFFER`** statt `FEHLSCHLAG` — mit dem Hinweis, dass die Kette dort endet und die
+> folgenden Glieder **nicht gelaufen sind.**
+
+**Warum so:** `|| true` und `;` verlangen, dass jemand 89 Blätter anfasst; `erwarteter_nulltreffer:
+true` verlangt ein neues Kopffeld und dass der Schreibende vorher weiß, welches Glied null liefert.
+**Beides verschiebt die Arbeit auf den Menschen für einen Fall, den das Werkzeug selbst erkennen
+kann.** *Und die Unterscheidung, auf die es ankommt, bleibt sichtbar: `exit 1` von `grep` ist etwas
+anderes als `exit 127` von einem Befehl, den es nicht gibt.*
+
+**Ich baue jetzt. Kein Commit, kein Push.**
+
+---
+
+VOTUM: auftrag=LAGEBEURTEILUNG rolle=planner ergebnis=NICHT-PRUEFBAR commit=a7b7ec33 datum=2026-07-30T08:10
+
+## ⇒ PLANNER — eine dritte Ursache für den stillen Baum, und sie war weder gemessen noch vermutet (30.07., 08:10 CEST)
+
+**Yama meldet: eine seiner Instanzen läuft in `529 Overloaded` mit automatischen Wiederholungen**
+(`Retrying in 1s · attempt 4/10`), dazu ein fehlgeschlagenes Auto-Update.
+
+**Damit hat der stille Baum drei mögliche Ursachen, und ich hatte zwei davon behauptet:**
+
+```text
+07:42-08:04   ich schrieb dreimal:  "vermutlich ein laengerer Baulauf"     — falsch
+08:05         ich schrieb:          "er wartet, mein Fehler, kein Auftrag" — moeglich
+08:10         Yama meldet:          529, Instanz in Wiederholungsschleife  — moeglich
+```
+
+**Beide letzten sind mit derselben Messung vereinbar.** *Ich habe die zweite als Tatsache
+geschrieben, weil sie mich beschuldigte — und eine Selbstbeschuldigung ist kein Beweis. Sie fühlt
+sich nur wie einer an.*
+
+### Die Lage, jetzt gemessen
+
+```text
+juengste Aenderung im Baum:  07:50   (scripts/auftrag-pruefen.mjs)
+jetzt:                       08:08
+Auftrag mit Marke liegt:     ja  — >>> AUF-83-T3 <<<, dazu AUF-87-N2 aktiv
+```
+
+**Ein Auftrag mit Marke liegt.** Nach der neuen Unterscheidung heißt das: **es ist NICHT
+Auftragsmangel.** Entweder wartet die Instanz, oder sie kommt nicht durch.
+
+### Was daraus als Regel folgt — Abschnitt 8b im Planner-Blatt
+
+| Befund | Ursache | richtige Antwort |
+|---|---|---|
+| still **und** kein Auftrag mit Marke | mein Fehler | Auftrag schneiden |
+| still **und** ein Auftrag mit Marke liegt | Instanz blockiert oder wartet | **melden, NICHT noch ein Blatt schreiben** |
+| still **und** halbfertige Dateien ohne Commit | mitten im Lauf abgebrochen | Zustand messen und melden, nichts anfassen |
+
+> **Die zweite Zeile ist die wichtige, und sie geht gegen meinen Reflex.** Wer einer blockierten
+> Instanz weitere Aufträge schreibt, erzeugt Papier, das niemand liest — **teurer als Leerlauf,
+> weil es später wie Arbeit aussieht.**
+
+**Für diese Lage heißt das konkret: ich schreibe jetzt KEIN weiteres Blatt.** Zwei liegen bereit.
+
+### Und die Auflage für jede Instanz nach einem Abbruch
+
+**Ein `529` mitten im Schreiben ist dieselbe Klasse wie F-14** — der Befehl endet, und niemand
+weiß, ob etwas passiert ist.
+
+```text
+1. git status --porcelain
+2. TZ=Europe/Berlin find ... -newermt
+3. Melden, was gefunden wurde — BEVOR weitergebaut wird.
+```
+
+**Nie dort weitermachen, wo man sich zu sein glaubt.** *Die eigene Erinnerung an den letzten Stand
+ist nach einem Abbruch die unzuverlässigste Quelle im Raum.*
+
+### Was ausdrücklich NICHT ins Register kommt
+
+**`529` und Auto-Update sind Infrastruktur, kein Befund am Bestand.** Sie kommen **nicht** in
+`FEHLERKLASSEN.md`. *Ein Register, das Serverlast mitzählt, verwässert seine eigene Aussage — dort
+stehen nur Fehler, die wir selbst machen und selbst abstellen können.*
