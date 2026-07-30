@@ -150,3 +150,40 @@ niemals nach `main` mergen, niemals pushen, nur eigene Pfade stagen.
 **Meldet ein Pruefbefehl etwas Unerwartetes: pruefe zuerst, ob er die Sache misst oder die Gestalt.**
 *In S2 hat mein K-02 sechs geloeschte Huellen gemeldet, wo es einen Formwechsel gab. Du hast es
 erkannt und widerlegt — mach das wieder.*
+
+---
+
+## NACHTRAG 30.07. 20:10 — Laufzeitzusage (Yama: „ihr müsst auch browser test vornehmen")
+
+Bis heute Abend hat **keine** Zusage in diesem Auftrag geprüft, ob die App im Browser noch
+startet. Alle waren `grep`, `tsc`, `node:test` — Aussagen über den Quelltext. Ich habe die
+Bühne um 20:05 selbst im Browser geöffnet und den Ausgangszustand belegt
+(`docs/browsertest-hausplaner-2026-07-30.md`): Taste **W** wechselt das Werkzeug auf `wand`,
+zwei Klicks erzeugen eine Wand von **2500 mm** mit konstanter Dicke, `cmd+z` räumt die Fläche,
+3D rendert. Aus `hausplaner.js` kam **kein einziger** Konsolenfehler.
+
+Diese Zusage kommt zu den bestehenden hinzu — sie ersetzt keine:
+
+```yaml
+  - id: L-01
+    aussage: "Die Bühne rendert nach dem Umbau noch — im Browser, nicht nur im tsc."
+    nachweis: >
+      npm run build:hausplaner, dann http://ticket.test/admin/hausplaner/studio
+      → Expertenmodus → Taste W → zwei Klicks auf LEERER Fläche.
+      Erwartet: Werkzeug wechselt auf `wand`, Wand mit konstanter Dicke, Masszahl erscheint,
+      Undo räumt sie wieder fort.
+    gegenbeweis: >
+      Browserkonsole nach `hausplaner.js` filtern — NICHT nach `error`. Zwei Fehler aus
+      `chat-*.js` (addEventListener auf null, Reverb-WS) sind Dauergäste der Vue-Hauptapp
+      und gehören NICHT hierher: weder als Treffer noch als Freibrief.
+    warnung: >
+      Ein Laufzeitbefund gilt erst nach einem Zug auf LEERER Fläche. Beim ersten Versuch
+      entstanden bei mir keilförmige Wände — das war ein Artefakt meiner eigenen Klickfolge,
+      kein Fehler. Ich war einen Satz davon entfernt, ihn zu melden. Reproduziere, bevor du
+      etwas Laufzeit-Rotes meldest.
+```
+
+**Bedingung, die vorher nachgewiesen sein muss:** der Hausplaner ist ein statisches
+Insel-Bundle (`public/hausplaner/hausplaner.js`, feste Namen). Der Browser zeigt den zuletzt
+**gebauten** Stand, nicht den Quellstand. Ohne vorheriges `npm run build:hausplaner` prüfst du
+einen Stand von vorhin und nennst ihn grün.

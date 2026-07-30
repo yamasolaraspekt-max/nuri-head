@@ -396,3 +396,39 @@ zusätzliche unabhängige Abnahme kann eine Freigabe nur härten, nie weichmache
   es bequemer wäre, es selbst zu entscheiden.
 - Sie **ersetzt den Ledger nicht.** Wer nur die Tafel liest, hat die Belege nicht gelesen.
 - Sie **drängelt nicht.** Ein Auftrag auf `OFFEN` ist ein Angebot, kein Weckruf.
+
+---
+
+## STAND 30.07. 20:10 — BROWSERTEST EINGEFÜHRT · EVALUATOR IST WIEDER AM BALL
+
+**Yama 20:02: „ihr müsst auch browser test vornehmen du kannst chrome eröffnen."** — erledigt,
+Protokoll in `docs/browsertest-hausplaner-2026-07-30.md`. Ab jetzt trägt jedes Blatt, das
+`resources/planner/hausplaner/` anfasst, die Laufzeitzusage **L-01**. In S3 und S4a bereits
+nachgetragen.
+
+**Die Lücke, die das schliesst:** bis 20:05 hat keine einzige Zusage in keinem Blatt geprüft,
+ob die App im Browser noch startet. `tsc` grün und 1476 Tests grün sagen **nichts** darüber,
+ob die Bühne rendert. AUF-38 und AUF-48 bauen `HausplanerApp.tsx` seit Tagen um.
+
+**Getragen (im Browser belegt, Stand `59e91b50`):** Studio lädt · Geführte Planung Schritt 2/11 ·
+Expertenmodus vollständig · **Taste W wirkt** · Wand 2500 mm mit Rasterfang · Undo/Redo ·
+3D rendert · aus `hausplaner.js` kein Konsolenfehler.
+
+**Neue Befunde (blockieren AUF-48 NICHT):**
+
+| ID | Befund | Gehört zu |
+|---|---|---|
+| BT-01 | Palette wechselt nicht mit dem Bereich — in Bauphysik/Heizung/Elektro·PV dieselben sieben Architektur-Werkzeuge, sechs ausgegraut, nur „Markieren" nutzbar | eigener Auftrag NACH AUF-48; sichtbare Wirkung des unverriegelten `waehleBereich` (S3-K-03) |
+| BT-02 | Wand meldet „keine Optionen hinterlegt · in Entwicklung" | deckt sich mit AUF-50-S1 (ohne-modell 42) |
+| BT-03 | zwei JS-Fehler auf **jeder** Seite aus `chat-*.js` (addEventListener auf null · Reverb-WS ws://ticket.test:6001) | **nicht** Hausplaner — Vue-Hauptapp, an die ticket-Heimat |
+| BT-04 | „Leave site?" auf der Testfläche, die „wird nicht gespeichert" anzeigt | klein |
+
+**EVALUATOR IST WIEDER AM BALL — nach zehn Stunden Stille.** Worktree `../eval-3dnach`
+auf `85c302b8`, **locked**, und `docs/handoff-status.md` ist im Baum modifiziert: er schreibt
+gerade. Erstes Lebenszeichen seit 10:10. Sieben Prüfstände lagen bei ihm.
+*Ballbesitz: Evaluator, seit 10:10 · läuft wieder seit ~20:05.*
+
+**Ein Fehlbefund, den die Reproduktion abgefangen hat:** die ersten Wände kamen keilförmig
+heraus. Das war ein Artefakt meiner eigenen Klickfolge, kein Geometriefehler — auf leerer
+Fläche kam eine tadellose Wand. **Regel:** ein Laufzeitbefund gilt erst nach einem Zug auf
+leerer Fläche.
