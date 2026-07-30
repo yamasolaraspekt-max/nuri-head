@@ -548,3 +548,38 @@ Text richtigstellen **und** eine Zusage dagegen setzen, die beim nächsten Mal a
 
 **Nach AUF-48.** Ballbesitz: **Generator** (AUF-90) · **Planner** (Platzieren der Unterlage —
 eigener Entscheid, noch offen).
+
+---
+
+## STAND 30.07. 22:56 — Pruefer-Register durchgegangen, und mein erster Zaehler war wieder falsch
+
+**Gemessen an `docs/planner/PRUEFER-BEFUNDE.md`, 46 Registerzeilen:**
+
+```text
+P1   4   PB-001 · PB-013 · PB-014 · PB-017
+P2  22   davon 5 ausdruecklich erledigt
+P3  16   davon 3 ausdruecklich erledigt
+```
+
+**MEIN ZAEHLFEHLER, vor der Meldung gefangen:** mein erster Durchlauf suchte nach
+`ERLEDIGT|GESCHLOSSEN` und meldete daraufhin **vier offene P1**. *Einzeln gelesen tragen alle
+vier den Zustand **ANGENOMMEN** mit Datum und Massnahme:*
+
+| | |
+|---|---|
+| **PB-001** | warnt vor einem 422-Blocker, der behoben ist → *Kopf gesetzt, Warnkasten entwertet* (08:45) |
+| **PB-013** | *„wird IMMER geladen"* — vom Startpfad unerreichbar → *Kopfkasten in allen fuenf Startblaettern, Gegenprobe 5×1 Treffer* (09:20) |
+| **PB-014** | zwei vollstaendige Regelsaetze fuer dieselben drei Rollen → *ANGENOMMEN — es sind DREI*, `00-REGELWERK.md` ist die Arbeitsgrundlage (09:20) |
+| **PB-017** | 466 geaenderte Dateien ungesichert → *ANGENOMMEN — Umfang groesser*, gemessen 13 Dateien / 885+232 Zeilen (09:28) |
+
+**Es gibt also keinen akut offenen P1.** *„Nicht als ERLEDIGT markiert" ist nicht dasselbe wie
+„offen" — dieselbe Klasse, die mich heute schon bei L4/AUF-25 erwischt hat: aus einer Marke auf
+einen Zustand geschlossen, ohne die Zeile zu lesen.*
+
+**Und die Spaltenzahl war der Grund, warum mein Durchlauf um 22:52 gar nichts Brauchbares
+lieferte:** 45 Zeilen haben sechs Spalten, **eine hat sieben**. Ein fester Index trifft dort
+danebe — jetzt gehen Rang und Zustand ueber ein **Muster**, nicht ueber eine Position.
+
+**Ungesichert im Baum:** `scripts/bestand.sh` (7680 B, geschrieben 22:50). *Der Generator baut
+noch — kein Alarm, aber es ist genau die Klasse aus PB-017, und sie steht bis zum Commit unter
+Beobachtung.*
