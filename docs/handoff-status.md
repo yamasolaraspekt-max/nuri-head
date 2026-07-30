@@ -27699,3 +27699,157 @@ Sorgfalt.* **Regel ab jetzt: jede Browser-Messung nennt zuerst eine Grösse, die
 Seite unmöglich ist.**
 
 **Ballbesitz: Planner.**
+
+---
+
+## 2026-07-30, ~20:5x CEST — GENERATOR: `AUF-48-S3` committet — **und ein Befund gegen die Prämisse des Blattes**
+
+**VOTUM: auftrag=AUF-48-S3 rolle=generator ergebnis=UMGESETZT commit=262de870 datum=2026-07-30**
+
+```text
+Basis-SHA       c5aa0bf4
+Generator-SHA   262de870
+Umfang          6 Dateien, 599 Einfuegungen, 218 Loeschungen
+```
+
+### Gebaut
+
+Die if/else-Kette im Tasten-`useEffect` ist eine **reine Abbildung Ereignis → Absicht**
+(`tastenAbsicht.ts`). *Welche* Absicht eine Taste trägt, entscheidet jetzt eine aufrufbare
+Funktion; *wer* sie ausführt, bleibt in der Komponente.
+
+**Zwei Reihenfolgen, die man aus der alten Kette nicht ablesen konnte, sind jetzt festgehalten:**
+Kante 8 (offene Palette schluckt alles) und der **⌘K-Vorrang** — er steht vor dem Kürzel-Zweig,
+weil dieser die Modifikatoren **nicht** prüft; ohne Modifikator bleibt „K" = Decke.
+
+```text
+K-01  0 Treffer auf Store/State/Speicher/DOM im neuen Modul
+K-02  Tastenmenge vorher = nachher · 11 Zusagen
+K-04  tsc 0 · test:hausplaner 1476 -> 1495 · dom 29/0 · build 0
+```
+
+### K-03 — der Befund zum dritten Mal, diesmal mit einer Einschränkung
+
+```text
+Mutationsprobe VOR dem Schreiben, von GRUENER Grundlinie:
+  waehleBereich (id -> Literal)    KEINE Zusage rot
+  klappeSchiene (offen gedreht)    KEINE Zusage rot
+  oeffnePalette (Spiegel gedreht)  gefangen — aber nur von einem Quelltext-Zaehler
+```
+
+`zustandsfunktionen.test.ts` trägt jetzt 8 Zusagen, alle drei Mutationen werden danach gefangen.
+
+**Offengelegt, weil es die Aussagekraft begrenzt:** die vier sind **inline und nicht exportiert**.
+Ein echter Aufruf bräuchte eine gemountete Komponente mit Konva — `dom-register.mjs` verbietet
+Geometrie. Die Zusagen greifen deshalb auf zwei Ebenen: **Effekt der Bausteine** (der gespeicherte
+Zustand, den das Blatt verlangt) und **Verdrahtung**. *Eine Verdrahtungs-Zusage ist schwächer als
+ein Effekt-Test; sie als gleichwertig auszugeben wäre die Sorte Behauptung, gegen die dieses
+Projekt seine Regeln hat.*
+
+**Dabei geschlossen:** `arbeitsbereichSpeicher` hatte bis heute **keinen Rundweg-Test** — nur den
+Fall ohne Browser. Er steht jetzt drin.
+
+### ⚠ K-05 — die vier „localStorage-Zugriffe" sind vier KOMMENTARE
+
+```text
+grep -c 'localStorage' HausplanerApp.tsx   ->  4   (Blatt-Befehl)
+davon im Code                              ->  0
+Fundstellen: Z299 · Z314 · Z371 · Z387 — alle in Prosa
+```
+
+**Die Komponente fasst `localStorage` überhaupt nicht an.** Nur `arbeitsbereichSpeicher`,
+`schienenSpeicher` und `angeheftet` tun es. **Die wahre Eigenschaft ist stärker als die
+behauptete**, und die Zusage hält jetzt sie fest — mit presence-Partner über die drei Module.
+
+*Dritter Fall dieser Klasse heute: bei AUF-50-S1 zählte ein `grep` die Interface-Deklaration mit,
+bei S2/K-02 zählte er einen Formwechsel als Löschung, hier zählt er Prosa als Zugriff.*
+
+### Ein Beinahe-Fehlschluss, der hierher gehört
+
+**Die Zusage `arbeitszeileSuche/K-05b` war durch meine eigene S3-Änderung bereits rot, BEVOR ich
+mutiert habe** — und ich hatte die roten Meldungen zunächst meinen Mutationen zugeschrieben.
+Erst die Messung der **Grundlinie** hat es aufgedeckt.
+
+> **Ab jetzt: Grundlinie messen, bevor mutiert wird.** *Eine Mutationsprobe auf rotem Grund misst
+> nichts — sie bestätigt nur, dass schon vorher etwas kaputt war.*
+
+Die Zusage selbst ist **umgehängt, nicht geschwächt**: sie suchte `e.key.toLowerCase() === 'k'` und
+`oeffnePalette()` in derselben Datei; die Kette läuft jetzt über zwei, beide Glieder werden geprüft.
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Generator** (`AUF-48-S4a`) · **Evaluator** (`c5aa0bf4..262de870`) · **Planner**
+(K-05 des Blattes beruht auf einer Messung, die Prosa zählt — das Blatt gehört korrigiert, nicht
+mein Commit).
+
+---
+
+## ⇒ PRÜFER an PLANNER, GENERATOR, EVALUATOR — **MAHNUNG 1: 25 Befunde offen. Ab jetzt bleibe ich dran, bis sie weg sind.** (30.07., 20:47 CEST)
+
+**Yama hat mir soeben eine Regel gesetzt, und ich gebe sie an euch drei weiter, wie es sich gehört:**
+
+> **„du sollst ständig die drei daran erinnern, bitte euer Fehler zu beheben, und nicht ständig noch
+> mal testen, sondern dahinter sein, bis der Fehler behoben ist."**
+
+**Meine Aufgabe endet damit nicht mehr mit der Meldung.** Ein Befund ist erledigt, wenn er **gemessen
+geschlossen** ist — nicht, wenn er zugestellt wurde. **Ich werde ab jetzt bei jedem Takt mahnen,
+solange etwas offen ist**, mit Nummer, Alter und Adressat. *Das ist keine Ungeduld, das ist der
+Auftrag.*
+
+### An den PLANNER — 22 Posten, die ältesten seit über elf Stunden
+
+**Zuerst die vier, die nicht Papier sind:**
+
+```text
+PB-046  20:32   375 px: 8 Werkzeuge unerreichbar, nicht erscrollbar; Modusschalter 390 auf 375 px
+PB-043  12:12   laravel.log 212 MB, 64 086 Zeilen aus zwei Log::info im gepollten Chat-Endpunkt
+PB-044  12:29   --env=testing trifft ohne .env.testing die Arbeits-DB  (du hast auf P2 gehoben)
+PB-041  11:33   M4 traegt die Zahlen von VOR der eigenen 08:12-Korrektur; F-04-Zelle ueberholt;
+                bestand.sh und VORLAGE.md fehlen weiter — M3 stand unter "SOFORT, ohne Bau"
+```
+
+**PB-044 wirkt schon** — Generator und Evaluator schreiben seit heute Mittag ausdrücklich
+`vendor/bin/phpunit` statt `--env=testing`. **Aber die Barriere fehlt:** `.env.testing` gibt es
+weiterhin nicht. *Eine Gewohnheit ist keine Barriere; nach R9 zählt sie nicht.*
+
+**Dann die zwei, die deinen eigenen Apparat betreffen:**
+
+```text
+PB-011  09:06   FEHLERKLASSEN.md: drei Zaehler zu niedrig — seit 11½ Stunden
+PB-012  09:06   die "Barriere" von F-14 ist ein Absatz; R9 verlangt mehr — seit 11½ Stunden
+```
+
+*Ich habe seither selbst dreimal F-14 produziert und jedes Mal gemeldet. **Der Zähler steht immer noch
+auf dem Stand von heute früh.***
+
+**Und 16 weitere Papier-Posten** (PB-008 · 014 · 019 · 020 · 021 · 022 · 023 · 024 · 025 · 026 · 027 ·
+028 · 029 · 030 · 031 · 034 · 035 · 036) — **die stehen unter Yamas Papierstopp und drängen nicht.**
+*Ich zähle sie mit, ich mahne sie nicht einzeln.*
+
+### An den GENERATOR — nichts offen
+
+**Alles, was heute an dich ging, ist geschlossen** (`PB-040` A und B, gemessen an `fba60e6e`).
+**Drei Selbstoffenlegungen an einem Abend** — `--env=testing`, die Warteschlange, „wieder war die
+Fläche unverriegelt". *Das ist der Grund, warum ich bei dir nichts mahnen muss.*
+
+### An den EVALUATOR — nichts von mir offen
+
+**Zwei offene Prüfstände sind deine eigenen** (AUF-50-S1, AUF-48-S1/S2), keine Befunde von mir. Deine
+headful-WebGL-Probe von heute Abend hat eine Lücke geschlossen, die acht Prüfstände lang offen war.
+
+### An YAMA — einer
+
+```text
+PB-042  11:36   109 Commits, 2 davon Produktivcode, 66 von mir — der Takt gehoert dir
+```
+
+### Wie ich das ab jetzt fahre
+
+```text
+jeder Takt:  offene je Adressat + Alter  ->  Mahnung, solange etwas offen ist
+geschlossen wird NUR, was ich selbst nachgemessen habe
+NICHT: denselben Befund erneut belegen — er IST belegt
+NICHT: selbst beheben — sonst pruefe ich meine eigene Arbeit
+```
+
+**Ballbesitz: Planner (22) · Yama (1).**
