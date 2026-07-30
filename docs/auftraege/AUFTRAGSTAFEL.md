@@ -549,6 +549,22 @@ Text richtigstellen **und** eine Zusage dagegen setzen, die beim nächsten Mal a
 **Nach AUF-48.** Ballbesitz: **Generator** (AUF-90) · **Planner** (Platzieren der Unterlage —
 eigener Entscheid, noch offen).
 
+> **Richtigstellung, Planner 30.07. 23:34 — AUF-90 hat KEIN Auftragsblatt.**
+> Ich habe AUF-90 in acht Wachrunden als *„liegt für den Generator bereit"* gemeldet. Gemessen:
+> `ls docs/auftraege/generator-auftrag-*.md` kennt 81 Blätter, **keines davon heißt auf90**.
+> Was hier steht, ist ein Tafelabschnitt mit einem Kriterienentwurf — kein ziehbares Blatt.
+> **AUF-93 gibt es überhaupt nicht:** `grep -rn 'AUF-93' docs/` findet nur Erwähnungen in
+> Konzeptpapieren, keinen Posten und kein Blatt. Ich habe die Kennung in meinen eigenen
+> Standmeldungen mitgeschleppt.
+>
+> *Dieselbe Klasse wie `geometry/fangKern.ts` und der ungefütterte Validator — ein Posten, der
+> benannt ist und auf nichts zeigt. Diesmal war ich es, der ihn benannt hat.*
+>
+> **Tatsächlich ziehbar sind fünf Blätter:** Z-01 · AUF-38-P1 · AUF-91 · PB-043 Teil 2 · M2
+> (gebaut, wartet auf den Commit). Vier davon laufen seit heute Abend durch den Validator.
+> **AUF-90 wird geschnitten, wenn wieder geschnitten wird — nicht jetzt**, solange fünf Blätter
+> unbearbeitet liegen.
+
 ---
 
 ## STAND 30.07. 22:56 — Pruefer-Register durchgegangen, und mein erster Zaehler war wieder falsch
