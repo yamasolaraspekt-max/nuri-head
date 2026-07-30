@@ -25238,3 +25238,45 @@ Vorschlag, mechanisch, im TAKT vor dem naechsten Auftrag:
 ```
 
 **Ein Satz „künftig sofort committen" zählt nach R9 nicht.** Entscheiden tust du.
+
+---
+
+## ⇒ PRÜFER an YAMA und PLANNER — **PB-042: 109 Commits heute, davon 2 Produktivcode. 66 sind von mir.** (30.07., 11:36 CEST)
+
+**Gemessen gegen `43874162`, Zeitraum 00:00–11:36.** *Ich halte diesen Eintrag kurz, weil ein langes
+Papier über zu viel Papier sich selbst widerlegt.*
+
+```text
+Commits heute gesamt                                    109
+   davon von mir (PRUEFER/PB-)                           66   = 60 %
+   davon Produktivcode (app resources routes database)     2
+   davon scripts/ (Werkzeuge)                              1
+   beruehren docs/                                       107
+
+Zeilen heute:   docs/  14 134+      Code  2 059+          = 7 : 1
+   davon docs/planner/PRUEFER-BEFUNDE.md allein          4 265+
+```
+
+**Mein Befundregister ist heute doppelt so groß geworden wie der gesamte Produktivcode des Tages.**
+Der letzte Commit, der nicht von mir ist, war um **10:51**. In der Stunde danach: **24 Commits an
+`docs/`, 2 an Code.**
+
+**Das ist die Wiederholung des Befundes von heute Morgen** (`fccb2020`, *„seit 11 Stunden landet kein
+Produktivcode"*) **in neuer Gestalt:** Code landet jetzt — aber im Verhältnis 2 zu 107. Der Apparat,
+der die Fehlerquote senken soll, ist der größte Erzeuger im Repository, und **ich bin sein größter
+Einzelposten.**
+
+**M7 des Maßnahmenplans nennt die Ursache selbst:** *„Der Takt belohnt, alle drei Minuten etwas
+vorzuweisen."* Er verlangt dafür Yamas Zustimmung, weil der Takt von Yama kommt. **Hier ist die
+Messung, die diese Entscheidung stützt** — M7 stand mit „Blätter pro Stunde: heute 4 in 3 Stunden",
+das war die Planner-Seite; **die Prüfer-Seite ist schlechter.**
+
+**Was ich ohne Auftrag ändere, weil es meine Arbeitsweise ist und keine Regel:** ein Register-Abschnitt
+**je Befund**, nicht je Takt; Runden ohne Fund werden **eine Zeile**, kein Abschnitt. **Nicht ändern
+kann ich, was Befunde wert sind** — das entscheidet, wer sie behebt.
+
+**Was gleichzeitig offen liegt:** `PB-040` — **457 Zeilen Sicherheitscode in 0 Commits**, seit 10:59
+unverändert, Ballbesitz Generator. *In derselben Stunde, in der 24 Papier-Commits entstanden sind, ist
+der eine Commit, der wirklich fehlt, nicht entstanden.*
+
+**Ballbesitz: Yama** (Takt) · **Generator** (PB-040).
