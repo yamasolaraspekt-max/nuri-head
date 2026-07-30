@@ -205,7 +205,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-035 | `fahrplan-dashboard-versionen.md` | **P2** | führt UI-9 als „❌ 0 Dateien" — Palette hat 191 Z., 2 Tests, 4 Konsumenten (F-07) | offen | — |
 | PB-036 | `ticket-code-reuse/references/…md` | P3 | 2 von 59 Skill-Pfaden zeigen auf den Vor-Port-Zustand | offen | — |
 | PB-037 | `buehnenBreite.test.ts:23` | ~~P1~~ | Filter auf die Subtraktion geschärft, Rechnung unberührt, Gate 1409/1409 | **ERLEDIGT** | 30.07. |
-| PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt — offen nur: Passwort wechseln | Repo **ERLEDIGT** · Yama | 30.07. |
+| PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt | **GESCHLOSSEN** — Yama hat gewechselt (18:02, `67903953`) | 30.07. |
 | PB-040 | `db` + Ledger | Eine gelaufene Migration lag in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | **ERLEDIGT** (A: `fba60e6e` · B: Ledger 12:28) | — |
 | PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4 trägt die Zahlen von **vor** der 08:12-Korrektur; F-04s Barriere-Zelle ist überholt; `bestand.sh`/`VORLAGE.md` fehlen | **P2** | offen | Planner |
 | PB-043 | `ChatController.php:70,281` + `config/logging.php:21,57` | Zwei unbedingte `Log::info` in einem gepollten Endpunkt schreiben **64 086** Zeilen in ein **212 MB** grosses, nicht rotierendes Log | **P2** | offen | Planner |
@@ -4372,3 +4372,27 @@ immer  --date=format-local:'%H:%M'    (meine Zone)  oder  %ct  (Epoch, zonenfrei
 sondern eine Anzeige — und die Barriere ist ein Flag, kein Vorsatz.*
 
 **Ballbesitz: Prüfer** (erledigt) — **gemeldet, weil jede Dauer-Aussage dieses Tages daran hängt.**
+
+---
+
+## 69. Runde 161 — **PB-038 geschlossen. Der Befund, den ich selbst verursacht habe, ist zu Ende geführt.**
+
+**18:07 CEST, gegen `67903953`.** *Kein neuer Befund; eine Schließung, und sie gehört ins Register,
+weil ich ihn eröffnet habe.*
+
+Yama hat das Passwort gewechselt (Ledger 18:02). Damit ist **Weg A vollständig** — der eine Schritt,
+den keine Instanz übernehmen durfte, ist getan; die Repo-Seite lag bei mir und war seit heute Vormittag
+erledigt.
+
+**Was ich selbst nachmessen kann, habe ich nachgemessen** (Redaktion im Stand, `k01n1b.mjs` fort,
+`.gitignore` greift für beide Namen, `git branch -r --contains fe47879c` → **0**). **Den Wechsel selbst
+kann ich nicht messen** — dafür müsste ich die Zugangsdaten ansehen, und genau das ist die Barriere,
+die aus diesem Befund entstanden ist. *Ich schließe ihn also auf Yamas Handlung, nicht auf eine eigene
+Messung, und sage das hier ausdrücklich, statt eine Prüfung zu behaupten, die ich nicht geführt habe.*
+
+**Der Tag mit diesem Befund in einem Satz:** *ich habe eine Zeile wörtlich zitiert, die ich zwei Runden
+vorher selbst als nicht-zitierbar markiert hatte* — gefunden per `git log -S` nach dem Commit, gemeldet
+als P1, vom Planner mit der besseren Kenngröße auf P2 heruntergestuft (*„ist die Historie draußen?"*,
+nicht *„steht es in der Historie?"*), und heute Abend von Yama zu Ende gebracht.
+
+**Ballbesitz: keiner.**
