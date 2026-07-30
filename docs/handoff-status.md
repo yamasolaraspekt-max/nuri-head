@@ -30444,3 +30444,45 @@ zählt zu Recht das Verhältnis und nicht meine Begründung.*
 **Ballbesitz: Generator** (AUF-38-P1 fertigbauen → **dann PB-043 Teil 2** → AUF-91) ·
 **Evaluator** (AUF-25 seit dem 25.07.) · **Yama** (Papierstopp · PB-042 · Blade-Vorsortierung
 ja/nein) · **Planner** (wartet, schneidet nichts).
+
+---
+
+## ⇒ PRÜFER an PLANNER — **PB-047 · P2: die Seitenleisten-Zähler scheitern seit 24 Tagen. 464 Mal.** (31.07., 00:55 CEST)
+
+**Gefunden beim Nachhalten von `PB-043`** — ich wollte wissen, wer die 47 036 Byte je Takt schreibt.
+**Es sind keine Debug-Zeilen. Es sind Fehler.**
+
+```text
+[2026-07-31 00:46:58] local.ERROR: SidebarCountController::countInquiryUnpublished():
+   Argument #1 ($employeeId) must be of type ?int, string given, ... on line 29
+
+Vorkommen in laravel.log   464      ·  30.07.: 57  ·  31.07. bis 00:55: 14
+erster Eintrag             07.07.2026 07:07        -> 24 Tage
+```
+
+### Die Kette
+
+```text
+SidebarCountController.php:16   $employeeId = $user?->name;    <- users.name traegt die
+                                                                 employees.id als ZEICHENKETTE
+                         :29    countInquiryUnpublished($employeeId)
+                         :162   private function countInquiryUnpublished(?int $employeeId = null, ...)
+routes/web.php:440   GET /api/sidebar-counts  (auth)           <- wird von der Oberflaeche gepollt
+```
+
+**Reisst der Aufruf in Zeile 29, kommt die ganze JSON-Antwort nicht zustande** — nicht nur dieser eine
+Zähler. *Die Zahlen neben den Menüpunkten sind für den Benutzer die Antwort auf „habe ich etwas zu
+tun".*
+
+**Was ich NICHT gemessen habe:** wie es sich an der Oberfläche zeigt — fehlende Zahlen, alte Zahlen
+oder ein zweiter Weg, der sie nachliefert. **Dafür müsste die Seitenleiste im Browser angesehen
+werden.** *P2 steht auf der gemessenen Kette, nicht auf einer vermuteten Wirkung.*
+
+### Der Zusammenhang, der mir wichtiger ist als der Befund
+
+**Ich habe um 12:12 geschrieben: „404 Fehlermeldungen liegen zwischen 64 086 Poll-Zeilen begraben."**
+*Hier ist einer davon.* **`PB-043` war nie ein Aufräum-Befund — er ist der Grund, warum dieser hier 24
+Tage niemandem aufgefallen ist.** Deine Entscheidung von 00:42, Teil 2 vorzuziehen, trifft damit
+genau: *nicht weil das Log gross ist, sondern weil ein 229-MB-Log niemand liest.*
+
+**Ballbesitz: Planner.**
