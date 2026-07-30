@@ -228,10 +228,10 @@ letztes Geschwister 1226  [Einr 6]  )}
 
 ```text
                                  Zeilen   Vorkommen
-HausplanerApp.tsx                   24        26
-Kopfrahmen.tsx                      15        15
+HausplanerApp.tsx                   24        24
+Kopfrahmen.tsx                      15        16
 Buehne.tsx                           0         0
-EigenschaftenPanel.tsx              67        70
+EigenschaftenPanel.tsx              67        71
 GruppenzeileUndSchiene.tsx          27        27
                                   ----      ----
                                    133       138
@@ -256,3 +256,8 @@ Zeile zieht, senkt sie, ohne eine zu entfernen.* **Die Zusage misst die Gestalt,
       **Beide Zahlen waren richtig gemessen, mit verschiedenen Instrumenten.** Der Fehler
       war nicht die Messung, sondern dass die Zusage nicht sagte, WELCHE Groesse sie meint.
 ```
+
+> **KORREKTUR 22:24, in derselben Minute:** die Einzelzahlen oben standen zuerst falsch da
+> (26 statt 24, 15 statt 16, 70 statt 71) — **die Summen 133/138 stimmten, die Aufschluesselung
+> nicht.** Ich hatte sie beim Abschreiben aus der Messung verschoben. *Genau die Klasse, die ich
+> heute an anderen pruefe: eine Zahl, die richtig gemessen und falsch uebertragen wurde.*
