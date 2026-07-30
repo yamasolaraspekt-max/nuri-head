@@ -20321,3 +20321,226 @@ Genau deshalb steht sie als Regel und nicht als Befund gegen ihn.*
 
 *Ein stilles Bündel ist kein Leerlauf. Leerlauf wäre, ihn auf den Evaluator warten zu lassen,
 obwohl zwei Kriterien freigegeben sind.*
+
+---
+
+## ⇒ EVALUATOR — `AUF-83-T3 / K-05b`: **NACHBESSERN** — der Code trägt, das Bündel nicht (30.07., 06:40 CEST)
+
+**Kein Commit vorhanden**, also kein `git archive`-Prüfstand. Ich habe den Stand deshalb mit
+Prüfsummen verankert; **weicht eine davon ab, ist dieses Votum ungültig:**
+
+```text
+HausplanerApp.tsx           3ae61cb33268eabb
+hausplaner.css (Quelle)     38b3935d73ef1bf1
+arbeitszeileSuche.test.ts   b84c2b5c6ef26d33
+```
+
+### Der Code ist richtig, und das sage ich zuerst
+
+**K-05b, Kern des Kriteriums: ERFÜLLT.** `onClick={oeffnePalette}` (Z1278) ruft **denselben
+Callback** aus Z557, den das Kürzel in Z1042 benutzt. **Kein zweiter Auslöser, keine zweite
+Logik** — genau das, was das Blatt verlangt.
+**Die Grenze hält:** `HausplanerApp` wird nur unter `imExperte` gemountet (`HausplanerStudio:133`),
+und die Schale trägt `hp-az-suchen` **0×** (weder `HausplanerStudio.tsx` noch `studio.blade.php`).
+**K-07 ERFÜLLT:** `HausplanerApp.tsx` 138 gesamt · **78 offen — unverändert**, Scheibe 7 unberührt.
+**Gates selbst gefahren:** `test:hausplaner` **1372/0** (+7 = genau seine Zusagen) · dom 11/0 ·
+tsc 0 · schema 0.
+**Seine sieben Zusagen haben Zähne** — vier eigene Mutationen, alle rot an der richtigen Stelle:
+
+```text
+onClick -> eigener setState        => 2 rot, darunter "er ruft oeffnePalette — denselben Aufruf"
+className -> zusaetzlicher Inline  => 1 rot
+Rohfarbe in .hp-az-suchen          => 1 rot
+.hp-az-kuerzel aus der Schicht     => 1 rot
+```
+
+*Ehrlich zu meiner Arbeit: mein erster Kontrolllauf war rot, weil in meiner Kopie der
+`node_modules`-Verweis fehlte — alle vier Mutationen waren damit wertlos. Erst nach der Reparatur
+(7/7 grün) sind sie Belege. Dritter zu grober Anlauf in diesem Zyklus; ich prüfe die Grundlinie
+inzwischen immer zuerst.*
+
+### Der Befund: das gebaute Bündel trägt die Änderung nicht
+
+```text
+Quell-CSS   hp-az-  : 2        gebaute CSS  hp-az-  : 0
+HausplanerApp.tsx   : 1        gebaute JS   hp-az-suchen : 0 · "Suchen" : 0
+```
+
+**Und die Bau-Kette funktioniert — nur diese Änderung fehlt.** Alle älteren Familien stehen im
+Bündel in genau den Zahlen der Quelle:
+
+```text
+        Quelle   gebaute CSS   gebaute JS
+hp-gf-      29            29           29
+hp-ef-      22            22           25
+hp-gs-      15            15           16
+hp-az-       2             0            0     <<<
+```
+
+**Zeitstempel:** Quellen 06:30/06:31, Bündel 06:35 — es ist *danach* geschrieben und enthält die
+Änderung trotzdem nicht. *(`oeffnePalette` fehlt im Bündel zu Recht: Minifizierung benennt
+Bezeichner um. Zeichenketten wie `"hp-az-suchen"` und der sichtbare Text `Suchen` müssten
+überleben — sie tun es nicht.)*
+
+**Die Folge trifft genau dieses Kriterium.** K-05b verlangt als Beleg *„Bildschirmfoto + der
+geöffnete Dialog"*. Im Browser gemessen, Expertenmodus offen (23 Werkzeug-Elemente im DOM):
+`.hp-az-suchen` **nicht im DOM**, `hp-az-`Regeln im Dokument **0**. **Die Sichtprobe ist am
+ausgelieferten Stand nicht führbar** — nicht weil der Knopf falsch gebaut wäre, sondern weil er
+nicht ausgeliefert wird. *serviert ≠ Quelle.*
+
+**Gesamtvotum: `NACHBESSERN`.** Ein Punkt, und er ist klein: **das Bündel neu bauen, sodass
+`hp-az-` darin ankommt.** Danach fahre ich die Sichtprobe in fünf Minuten nach — Herkunft des
+Aufrufs, Zähne der Zusagen und Scheibe 7 sind schon belegt und bleiben es.
+
+*Kein Vorwurf, sondern eine Messung: dein `build:hausplaner ✓ 331 Module` von 06:35 steht im
+Bericht, und das Ergebnis widerspricht ihm. Möglich ist ein Lauf vor der letzten Quelländerung.
+Was ich nicht tue, ist selbst bauen — das wäre Produktivarbeit und würde zugleich den Beleg
+zerstören.*
+
+Ballbesitz: **Generator** (Bündel), danach ich für die Sichtprobe.
+Kein Commit durch mich, kein Push, kein Tor 2.
+
+---
+
+## 2026-07-30, 06:50 CEST — GENERATOR: `AUF-83-T3 / K-05` **halb umgesetzt** — die geteilte Leiste kann es jetzt
+
+**Gebaut wurde der Teil, der in `pfade` steht.** Was fehlt, ist eine Zeile in
+`dashboard/arbeitsbereiche.ts` — die Datei ist nicht freigegeben (Befund 3 der Quittung von 06:40).
+
+```text
+resources/planner/hausplaner/app/dashboard/ReiterLeiste.tsx           +33
+resources/planner/hausplaner/__tests__/reiterLeisteGeteilt.test.ts    NEU, 7 Zusagen
+```
+
+### Was das Merkmal ist — und was es bewusst nicht ist
+
+`ReiterEintrag.nochNicht?: string` — **ein Satz, kein `true`.** Ein Merker sagt *dass*, der Satz
+sagt *warum*, und K-05 verlangt ausdrücklich, dass der Reiter „das auch sagt". Wirkung: gedämpfte
+Deckkraft **aus `gesperrtStil.ts` (AUF-71)**, ein sichtbares *„· noch nicht"* am Reiter, der Grund
+im Tooltip.
+
+**Es sperrt nicht.** Der Reiter bleibt anwählbar und tastaturbedienbar. Ein `disabled` hätte ein
+Loch in die Pfeiltasten-Navigation gerissen — `onKeyDown` wandert über den Index, ein
+übersprungener Reiter wäre für die Tastatur unerreichbar. *„Ausgegraut" ist eine Aussage über den
+Inhalt, keine Entziehung der Bedienung.*
+
+**Die Deckkraft ist gelesen, nicht gewählt:** genau dieser Wert stand vor AUF-71 an fünf Stellen
+verschieden (0,6 · 0,4 · 0,45). Eine abgetippte Zahl wäre die sechste gewesen.
+
+### Evidenz
+
+```text
+npm run tsc:hausplaner            Exit 0
+npm run test:hausplaner           Tests 1372 → 1379 · Fehler 0   (+7 = genau meine Zusagen)
+npm run test:hausplaner:dom       Tests 11 · Fehler 0
+npm run build:hausplaner          Exit 0, built in 1.22s
+Messwerkzeug:  HausplanerApp 138/78 offen UNVERÄNDERT · ReiterLeiste 2 Stellen / 0 offen
+```
+
+### Gegenproben
+
+| Probe | Ergebnis |
+|---|---|
+| Schienen-Reiter setzt `nochNicht` | **rot** — die Auflage-Zusage fällt |
+| `nochNicht?` zur Pflicht gemacht (`nochNicht:`) | **2 rot** — Vertrag der geteilten Leiste gebrochen |
+
+### Der Fund an mir selbst — dritter toter Anker in Folge
+
+**Meine erste Fassung der Auflage-Zusage prüfte nichts.** Sie schnitt mit
+`app.indexOf('const panelReiter')` — **diesen Bezeichner gibt es nicht.** `indexOf` gab `-1`, der
+Ausschnitt war leer, die Zusage grün. Und `SCHIENEN_REITER` traf die **Import-Zeile 43** statt der
+Aufrufstelle 1390.
+
+**Das ist die dritte Ausprägung derselben Klasse bei mir** — nach `hp-ef-wert` ⊂ `hp-ef-wertzeile`
+(Scheibe 8a) und `data-schiene` ⊂ `data-schienex` (T1a-N1). *Ein Anker, den niemand gegengeprüft
+hat, misst Leere und meldet Grün.*
+
+**Diesmal ist es aufgefallen, und zwar durch die Zeile, die ihn prüft:** ich hatte
+`assert.ok(app.includes('const PANEL_TABS'), 'der Anker ist tot')` daneben gestellt — sie wurde
+rot, bevor irgendeine Gegenprobe lief. `PANEL_TABS` wird aus `dashboard/panelTabs.ts` importiert.
+
+> **Die Regel, die ich daraus für mich mitnehme, und sie kostet zwei Zeilen:** *jede Zusage, die
+> einen Ausschnitt bildet, prüft ZUERST, dass der Ausschnitt nicht leer ist.* Die neue Fassung
+> beginnt mit `assert.deepEqual(stellen, ['bereichReiter','SCHIENEN_REITER','PANEL_TABS'])` und
+> prüft je Datei `quelle.length > 0`. **Ohne diesen Vorsatz wäre meine Gegenprobe wertlos gewesen**
+> — sie war schon vor der Mutation rot, und das habe ich nur gesehen, weil ich sie gefahren bin.
+
+### Und die letzte Zeile, die noch fehlt — sie meldet sich selbst
+
+Die siebte Zusage hält den Ist-Stand fest: **heute setzt niemand das Merkmal.** Sobald
+`arbeitsbereiche.ts` es für Import setzt, **geht sie rot** — dann ist K-05 fertig und die Zeile
+gehört gelöscht. *Eine Lücke, die sich selbst meldet, ist besser als eine, an die sich jemand
+erinnern muss.*
+
+**Bündel steht auf HEAD** (nach dem Bau erneut zurückgesetzt, `git status public/hausplaner/`
+leer) — die Vorher-Bilder von `EVAL-2026-07-30-A` sind weiterhin möglich. **Kein Commit, kein
+Push.** K-01 wartet weiter auf Teil A.
+
+---
+
+## ⇒ PLANNER — Weckerrunde 06:40: nichts Neues, also der Stufenplan zu AUF-50 (30.07., 06:45 CEST)
+
+**Stand der Meldungen:** keine. Der Generator baut, was ich freigegeben habe — `ReiterLeiste.tsx`
+plus eine neue Zusage `reiterLeisteGeteilt.test.ts` liegen im Baum, **`public/hausplaner/*` ist
+unberührt.** *R18 hält, drei Minuten nachdem sie aufgeschrieben wurde.* Vom Evaluator liegt noch
+nichts; Teil A ist der kritische Pfad.
+
+### Die Zahl „110 gegen 19" ist zum ersten Mal aufgeschlüsselt
+
+**Sie geht seit Tagen durch die Berichte, und niemand — ich eingeschlossen — hat sie je zerlegt.**
+Heute gemessen:
+
+```text
+110 Vertraege · 19 Modellbefehle
+ 77 umkehrbar: true    ← aendern das Modell
+ 33 umkehrbar: false   ← Ansicht, Auswahl, Messen: brauchen KEINEN Befehl
+```
+
+**33 der 110 brauchen überhaupt keinen Modellbefehl.** Und von den 40 `create`-Verträgen sind
+vermutlich die meisten `ADD_NODE` mit unterschiedlichem `type` — *vermutlich, und genau das misst
+Stufe 1, statt es zu behaupten.*
+
+### Die wichtigste Messung ist eine Entscheidung, die schon getroffen wurde
+
+`werkzeugVertrag.ts` sagt es selbst:
+
+> *„Hier entsteht kein zweiter Ausführungsweg. Es gibt kein `runTool`, keinen Dispatcher …
+> Ein zweiter Weg daneben verlöre Undo und die Ablehnungsprüfung — das wäre der teuerste Fehler
+> des ganzen Pakets."*
+
+**Gemessen: es gibt keinen Dispatcher. AUF-50 baut deshalb keinen.** *Wer aus 110 Verträgen einen
+Dispatcher macht, hat 110 Wege am `applyCommand` vorbei — und verliert Undo in einem Bauplaner.*
+
+**Was schon steht und benutzt wird:** 4 240 Zeilen Werkzeugschicht — Aktivierungs-Engine ohne DOM,
+12 Vorbedingungen, Darstellung, Zustand als Daten, Fähigkeiten-Registry. **Der Unterbau ist da.
+Was fehlt, ist die Ausführung.**
+
+### Vier Stufen
+
+**1) Die Landkarte.** Je Vertrag eine von vier Marken — `deckt` · `fehlt` · `ohne-modell` ·
+`stillgelegt` — als Daten, nicht als Prosa. **Ergebnis ist eine Zahl, die es heute nicht gibt: wie
+viele Befehle wirklich fehlen.** *Kein Produktivcode; sie kollidiert mit nichts und ist damit der
+einzige Teil der Werkzeug-Baustelle, der neben der Layout-Kette herlaufen darf.*
+
+**2) Die 33 ohne Modellbezug.** Billigste und sichtbarste Arbeit: Messen misst, Auswählen zeigt
+Griffe. *Hier liegt der offene P1 `auswahlDarstellung.griffe` — berechnet und nie gezeichnet,
+zweiter Fall dieser Art nach der Höhenlage.* Braucht AUF-48 Scheibe 4.
+
+**3) `deckt`.** Werkzeuge, deren Modellbefehl existiert und die trotzdem nichts tun — nur die
+Verbindung, über `applyCommand`. *Erfahrungsgemäß der Sprung, den ein Nutzer als „jetzt geht es"
+beschreibt.*
+
+**4) `fehlt`.** Die neuen Modellbefehle, Paket für Paket, Spur A, mit inversen Patches und
+Ablehnungsprüfung. **Der einzige Teil, dessen Umfang ich heute nicht kenne — weil Stufe 1 ihn erst
+misst.**
+
+### Was ausdrücklich nicht im Plan steht
+
+**Keine Aufwandsschätzung.** Sie käme vor Stufe 1 und wäre geraten — *und geratene Zahlen sind
+F-04, die Klasse mit fünf Ausprägungen.*
+
+**Und kein „alle 110 werden funktionieren".** Manche werden `stillgelegt`; `toolCatalogStillgelegt.ts`
+führt so etwas bereits. *Das ist ein Ergebnis, kein Scheitern — ein Bauplaner braucht keine
+Bézier-Kurven.*
+
+**Nächstes Blatt: AUF-50 Stufe 1.** Sie ist frei, sobald sie eines hat.
