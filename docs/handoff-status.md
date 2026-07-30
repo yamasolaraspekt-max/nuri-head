@@ -24876,3 +24876,48 @@ neue Passwort.
 **Kein `git filter-repo`, kein `rebase`, kein `--force`, kein Push.** Die Historie bleibt, wie sie
 ist. **Gemessen 10:40:** `git branch -r --contains fe47879c` leer, HEAD 362 Commits vor
 `origin/auto/hausplaner-integration` — der Eintrag hat das Gerät nie verlassen.
+
+---
+
+## 30.07.2026, 10:47 CEST — AUF-83-T5 committet. Und meine Kennzahl war blind.
+
+**VOTUM: auftrag=AUF-83-T5 rolle=generator ergebnis=UMGESETZT commit=74ad1075 datum=2026-07-30**
+
+```text
+Auftrag        AUF-83-T5 — beide Schienen klappbar, Escape mit Rangfolge
+Branch         auto/hausplaner-integration
+Basis-SHA      56ff2c9e
+Generator-SHA  74ad1075   (30.07. 10:40)
+Umfang         17 Dateien, 1041 Einfuegungen, 239 Loeschungen
+Produkt        HausplanerApp.tsx · SchienenSchalter.tsx (neu) · escapeStapel.ts (neu) ·
+               schienenSpeicher.ts (neu) · GeschossFlaeche.tsx · WerkzeugGruppenMenue.tsx ·
+               dialogFokus.ts · hausplaner.css · public/hausplaner-Buendel
+Tests          escapeStapel.dom.test.ts (neu) · schienen.dom.test.ts (neu) ·
+               escapeStapel.test.ts (neu) · schienenSpeicher.test.ts (neu) ·
+               buehnenBreite · buehnenHoehe · keineKappung
+Fremde Pfade   0
+```
+
+**Die Escape-Rangfolge steht: Palette > Dialog > Menue > Schiene > Reset.** *Der Befund vom
+29.07. war „Escape gibt es fuenfmal ohne Rangfolge" — er ist damit erledigt.*
+
+### Mein eigener Messfehler, sofort korrigiert
+
+```text
+blinde Kennzahl   git log -1 -- resources/js resources/views app tests routes   ->  40fa52de (09:53)
+richtige Kennzahl git log -1 -- resources app tests routes public database      ->  74ad1075 (10:40)
+```
+
+> **`resources/planner` — das ganze Hausplaner-Verzeichnis — fehlte in meiner Pfadliste.**
+> Ich habe sieben Minuten lang „kein Produktivcode seit 09:53" gemeldet, waehrend der groesste
+> Commit des Tages schon lag. **Achte Ausprägung derselben Klasse: die Probe war kaputt, nicht der
+> Bestand.** Die Pfadliste heisst ab sofort `resources app tests routes public database`.
+
+### Zwei Anschluesse
+
+**AUF-88-P1 ist entsperrt** — der Sperrgrund nannte den **BAU** von T3 und T5, beide sind gebaut
+und committet. Danach AUF-50-S1.
+
+**AUF-87 fehlt weiterhin:** `scripts/auftrag-pruefen.mjs`, `scripts/auftrag-pruefen.sh`,
+`scripts/__tests__/` liegen seit 07:29/08:14 unverfolgt. **Zwei Commits sind seitdem an ihnen
+vorbeigegangen.** Der Validator ist gebaut, laeuft und wird benutzt — er ist nur nicht gesichert.
