@@ -3213,3 +3213,42 @@ sondern *„die Zeile, die `breite` bildet, nennt `innerWidth`"* — oder positi
 
 **Ballbesitz: Generator** (die Zusage schärfen) · **Planner** (F-06-Zähler auf 7, und das ist die
 zweite Wiederholung nach `PB-010` — R9).
+
+---
+
+## 46. Nachmessung — **PB-037 erledigt, und zwar an der richtigen Seite**
+
+**Gemessen gegen `dbbfad57`.** *Der Befund lag rund eine Wachrunde.*
+
+```text
+npm run test:hausplaner        tests 1409 · pass 1409 · fail 0     (vorher 1392/1394)
+buehnenBreite.test.ts          geaendert  -> die Zusage hat nachgegeben
+HausplanerApp.tsx Z404/405     buehnenBreite(gemesseneBreite)      -> unveraendert
+innerWidth                     1 Treffer, Z141, die Schwelle       -> unveraendert
+```
+
+**Mein „Erledigt wenn" lautete: `fail 0`, ohne dass die Rechnung angefasst wird. Genau so ist es
+eingetreten** — beide Bedingungen erfüllt, keine korrekte Arbeit zurückgenommen, keine Zusage
+abgeschaltet.
+
+### Der neue Filter, und warum er besser ist
+
+```ts
+// alt:  z.includes('innerWidth') && z.includes('const')
+// neu:  z.includes('const') && /innerWidth\s*-\s*\d/.test(z)
+```
+
+**Er verbietet jetzt die Subtraktion, nicht das Wort.** Die Begründung steht als Kommentar daneben
+und benennt den Unterschied selbst: *„Die alte Regression hatte die Form `innerWidth - Zahl` (eine
+Subtraktion); genau die bleibt verboten, ein Vergleich (`<`, `>=`, …) ist eine andere Aussage."*
+
+**Das ist der Unterschied zwischen Gestalt und Wirkung, diesmal richtig getroffen:** die verbotene
+*Rechnung* ist eine Subtraktion mit einer festen Zahl — eine *Schwelle* ist ein Vergleich und war nie
+gemeint. **Und die Zusage sagt jetzt selbst, warum sie sich geändert hat**, statt es zu verschweigen.
+
+*Damit hat sie den Kern behalten und die Fehlmeldung verloren — der einzige der drei Wege, den ich
+als richtig benannt hatte.*
+
+**PB-037 geschlossen.** F-06 bleibt trotzdem eine Wiederholung für das Register (Ballbesitz Planner):
+*der Vorsatz stand über dem Filter, und der Filter hielt ihn nicht ein. Das ist die Klasse, nicht der
+Einzelfall.*
