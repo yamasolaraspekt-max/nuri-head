@@ -3252,3 +3252,49 @@ als richtig benannt hatte.*
 **PB-037 geschlossen.** F-06 bleibt trotzdem eine Wiederholung für das Register (Ballbesitz Planner):
 *der Vorsatz stand über dem Filter, und der Filter hielt ihn nicht ein. Das ist die Klasse, nicht der
 Einzelfall.*
+
+---
+
+## 47. Runde 35 (30.07., Produktionsmodus) — PB-018: **die eine Hälfte ist behoben, gemessen**
+
+**Gemessen gegen `a54289bd`.** Alle Gates grün: `test 1409/1409` · `tsc 0` · `schema 0` ·
+`dom 29/29`. Kein Blocker.
+
+### Der Zugang wandert aus dem Quelltext — Generation für Generation
+
+| Datei | Zeit | Zugang |
+|---|---|---|
+| `k01n1b.mjs` | **07:36** | `p.type('input[name="password"]', 'Admin@1234')` — **Klartext** |
+| `probe_t5_tmp.mjs` | **10:30** | `const PASS = process.env.HP_PROBE_PASS` — **Variable** |
+| `probe_t5b_tmp.mjs` | **10:30** | dieselbe Form |
+
+```text
+Dateien mit Klartext-Kennwort im Baum:  1   (nur die aelteste)
+Kladden im Wurzelverzeichnis:           3
+Vorkommen in der Historie:              0
+```
+
+**Das ist der zweite der beiden Wege, die `PB-018` vorgeschlagen hat** — *„Anmeldung über eine
+Umgebungsvariable, nie im Quelltext"* — und er ist ohne Auftrag umgesetzt worden, an den neuen
+Kladden. **Damit kann keine neue Kladde mehr einen Zugang tragen, unabhängig davon, wie sie heißt.**
+
+*Das ist die stärkere der beiden Abhilfen: die `.gitignore`-Variante hätte die Datei nur versteckt,
+diese nimmt ihr den Inhalt.*
+
+### Was offen bleibt, präzisiert
+
+**Zwei Reste, beide klein und beide benannt:**
+
+1. **`k01n1b.mjs` trägt den Klartext weiter** — die einzige verbliebene Datei. *Sie ist von 07:36,
+   also älter als die neue Gewohnheit.*
+2. **`.gitignore` deckt die Kladden weiter nicht** (`probe_xy_tmp.mjs` fällt in der Probe durch).
+   *Der Schaden daraus ist jetzt geringer — eine Kladde ohne Zugang, die versehentlich committet
+   wird, ist Ballast, kein Sicherheitsvorfall.*
+
+**Erledigt wenn** (neu gefasst, weil die Lage sich geändert hat): *`grep -rl "Admin@1234" .` (ohne
+`node_modules`, `vendor`, `.git`) findet keine Datei mehr.* **Die `.gitignore`-Hälfte setze ich von
+P2 auf P3 herab** — sie ist jetzt Aufräumen, nicht Sicherheit.
+
+**PB-018 bleibt offen, aber nur noch mit einer Datei und einer Aufräumfrage.** *Von der
+Sicherheitsseite ist der Weg gegangen, den ich als den besseren benannt hatte — und niemand hat mir
+das gemeldet; ich habe es beim Nachmessen gefunden. Das ist die richtige Reihenfolge.*
