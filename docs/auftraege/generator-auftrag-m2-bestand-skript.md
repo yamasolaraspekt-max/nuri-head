@@ -61,6 +61,9 @@ etwas geurteilt, das es längst gab.*
       Weicht sie ab, ist entweder die Zahl ueberholt oder das Skript sucht nach einem Muster
       statt nach der Menge. **Beides gehoert gemeldet, nicht stillschweigend angepasst.**
       *F-01 ist genau diese Fehlerklasse.*
+    abweichung_geklaert: >
+      Der Planner hat die Abweichung am 30.07. 23:20 gemessen, BEVOR quittiert wird — sie
+      liegt an der Zahl, nicht am Skript. Belege unten unter „Die 22 und die 35".
 
   - id: K-03
     aussage: "Das Skript liest, es schreibt nicht."
@@ -84,3 +87,35 @@ bevor jemand hindurchgegangen ist, sperrt nur.* **Eigener Posten danach.**
 
 **Reihenfolge: nach AUF-48**, gern vor den restlichen Papierposten — *es macht jedes weitere
 Blatt besser, und heute Abend hat sein Fehlen dreimal gekostet.*
+
+## Die 22 und die 35 — die Abweichung ist geklaert (Planner, 30.07. 23:20)
+
+Das Skript meldet fuer `HausplanerApp.tsx` **16 direkt · 29 indirekt · 35 zusammen**.
+Das Blatt nannte **22**. Beide Zahlen sind richtig — sie beschreiben **verschiedene Dateien**.
+
+```text
+befehl:  git grep -l 'HausplanerApp' c8ef4a6d -- resources/planner/hausplaner/__tests__ | wc -l
+         (c8ef4a6d = letzter Commit vor dem 29.07. 12:00, dem Stand von R12)
+ergebnis: 22
+
+befehl:  git cat-file -e c8ef4a6d:resources/planner/hausplaner/__tests__/_zerlegteApp.ts
+ergebnis: existiert nicht
+
+befehl:  git show c8ef4a6d:resources/planner/hausplaner/app/HausplanerApp.tsx | wc -l
+ergebnis: 2308 Zeilen        (heute: 1130)
+```
+
+**AUF-48 hat die Datei in acht Module zerlegt.** Die Tests sind den Modulen gefolgt: was am
+29.07. `HausplanerApp.tsx` direkt einlas, liest heute `Kopfrahmen.tsx` oder
+`GruppenzeileUndSchiene.tsx`. Die direkte Zahl faellt deshalb von 22 auf 16 — und der Weg,
+den es am 29.07. gar nicht gab, kommt hinzu: `__tests__/_zerlegteApp.ts` reicht die Datei an
+**29** weitere Tests durch.
+
+*16 und 29 ergeben zusammen nicht 45, sondern 35 — die Ueberschneidung wird abgezogen. Dass
+das Skript diese Unterscheidung ueberhaupt trifft, ist der Punkt: eine einzige Zahl haette
+hier wieder wie ein Widerspruch ausgesehen.*
+
+**Fuer die Abnahme heisst das:** Die Abweichung ist **kein K-02-Verstoss**. Das Skript sucht
+die Menge, nicht ein Muster. Zu korrigieren ist die Zahl **22** im Register R12/F-01 — sie
+gilt fuer einen Dateizustand, den es seit dem 30.07. nicht mehr gibt.
+
