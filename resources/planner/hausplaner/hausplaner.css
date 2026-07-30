@@ -514,3 +514,14 @@
 .hp-unterlage-laenge-eingabe { box-sizing: border-box; width: 100%; font-size: 12.5px; padding: 5px 8px; border-radius: 6px; border: 1px solid var(--hp-hair); }
 .hp-unterlage-knopfreihe { display: flex; gap: 6px; }
 .hp-unterlage-fehler { font-size: 11.5px; color: var(--hp-err-ink); }
+
+/**
+ * Z-01 — der Hinweis, dass ein Zug pausiert.
+ *
+ * **Als Klasse und nicht als Inline-Stil**, obwohl seine Nachbarn in der Statusleiste alle inline
+ * sind: die stehende Auflage aus AUF-83-T3 sagt, neues Markup traegt `className`, damit AUF-38
+ * nicht wieder aufraeumen muss, was gerade erst entstanden ist. **Meine erste Fassung war ein
+ * Inline-Stil und hat die getrackte Zahl von 20 auf 21 gehoben** — die eigene Zusage aus S4e hat
+ * das gefangen, bevor es jemand anders tun musste.
+ */
+.hp-pause-hinweis { font-weight: 600; color: var(--hp-warn-ink); }

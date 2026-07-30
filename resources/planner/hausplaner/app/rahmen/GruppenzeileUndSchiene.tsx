@@ -234,9 +234,8 @@ export interface PlanerSchieneEigenschaften {
   railWerkzeuge: ReturnType<typeof leisteMitAngehefteten>;
   werkzeug: Werkzeug;
   werkzeugKontext: React.ComponentProps<typeof WerkzeugGruppenMenue>['kontext'];
-  setWerkzeug: (w: Werkzeug) => void;
-  setWandStart: (p: null) => void;
-  setTreppeStart: (p: null) => void;
+  /** Z-01: der EINE Ort, an dem ein Werkzeug endet. Die Schiene raeumt nicht mehr selbst auf. */
+  beendeWerkzeug: (neu: Werkzeug) => void;
   setOffeneEngine: (id: string) => void;
   baum: ReturnType<typeof projektBaum>;
   selectedNodeIds: readonly string[];
@@ -246,7 +245,7 @@ export interface PlanerSchieneEigenschaften {
 export function PlanerSchiene({
   istSchmal, schienen, klappeSchiene, schienenTab, setSchienenTab, wegweiser, activeWorkspace,
   unterlage, stageRef, weltPunkt, railWerkzeuge, werkzeug, werkzeugKontext,
-  setWerkzeug, setWandStart, setTreppeStart, setOffeneEngine, baum, selectedNodeIds, waehleAn,
+  beendeWerkzeug, setOffeneEngine, baum, selectedNodeIds, waehleAn,
 }: PlanerSchieneEigenschaften): React.ReactElement {
   return (
     <>
@@ -331,7 +330,7 @@ export function PlanerSchiene({
             title={zustand.enabled ? `${tool.label} (${tool.shortcut ?? ''}) — ${tool.helpText}` : `${tool.label} — ${zustand.reason}`}
             aria-disabled={!zustand.enabled}
             aria-pressed={aktiv}
-            onClick={() => { if (!zustand.enabled) return; setWerkzeug(tool.id as typeof werkzeug); setWandStart(null); setTreppeStart(null); }}
+            onClick={() => { if (!zustand.enabled) return; beendeWerkzeug(tool.id as Werkzeug); }}
             style={{ ...navItem(aktiv), ...(zustand.enabled ? {} : { opacity: GESPERRT_DECKKRAFT, cursor: GESPERRT_ZEIGER }) }}>
             <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>{werkzeugIcon(tool.id)}</span>
             <span style={{ flex: 1 }}>{tool.label}</span>
@@ -351,7 +350,7 @@ export function PlanerSchiene({
       {schienenTab === 'fachplaner' && (
         <FaehigkeitenNavi
           activeToolId={werkzeug}
-          onAktivieren={(id) => { setWerkzeug(id as Werkzeug); setWandStart(null); setTreppeStart(null); }}
+          onAktivieren={(id) => beendeWerkzeug(id as Werkzeug)}
           onEngine={(id) => setOffeneEngine(id)}
         />
       )}

@@ -63,8 +63,12 @@ const FOLGE: ReadonlyArray<readonly [string, string]> = [
   // die es nicht gab. *Ein Anker, der zweimal passt, misst nicht die Stelle, die er meint.*
   ['Treppen', "n.objectType === 'stair'"],
   ['Objekte', "n.objectType !== 'stair'"],
-  ['Vorschau Treppe', "werkzeug === 'treppe' && treppeStart"],
-  ['Vorschau Wand', "werkzeug === 'wand' && wandStart"],
+  // **Z-01 hat die Form dieser zwei Bedingungen geaendert, nicht ihre Aussage.** Vorher stand
+  // `werkzeug === 'wand' && wandStart`; jetzt entscheidet `zeigtVorschau` zusaetzlich, ob der
+  // Zeiger ueberhaupt auf der Flaeche steht. **Der Anker greift deshalb die Ebene ueber ihren
+  // Inhalt**, nicht ueber die Bedingung davor — sonst misst er die Gestalt der Bedingung.
+  ['Vorschau Treppe', 'treppeStart.x, treppeStart.y'],
+  ['Vorschau Wand', 'mitWinkelSnap(wandStart, cursor)'],
 ];
 
 test('K-01: die Ebenen stehen in genau dieser Reihenfolge — sie ist die Zeichenreihenfolge', () => {
@@ -117,8 +121,14 @@ test('K-02: die Bühne trägt KEINE Inline-Stelle — Konva arbeitet über Props
 
 test('K-04 (blind gewesen): beide Vorschauen beim Zeichnen sind da', () => {
   // Ohne sie zieht man eine Wand blind: kein Strich, keine Länge, bis der zweite Klick sitzt.
-  assert.match(buehne, /werkzeug === 'wand' && wandStart && \(/, 'die Vorschau beim Wandzeichnen fehlt');
-  assert.match(buehne, /werkzeug === 'treppe' && treppeStart && \(/, 'die Vorschau beim Treppezeichnen fehlt');
+  // **Z-01: beide haengen jetzt ZUSAETZLICH daran, ob der Zeiger auf der Flaeche steht.**
+  // Vorher blieb die Vorschau stehen, wo der Zeiger die Flaeche zuletzt beruehrt hat — der
+  // "lange Strich" aus Yamas Meldung. Die alte Zusage haette den Umbau nicht ueberlebt und
+  // ihn auch nicht gefordert; diese fordert ihn.
+  assert.match(buehne, /zeigtVorschau\(\{ wandStart, treppeStart, zeigerDrinnen \}, 'wand'\) && wandStart && werkzeug === 'wand'/,
+    'die Vorschau beim Wandzeichnen fehlt oder haengt nicht mehr am Zeiger-Zustand');
+  assert.match(buehne, /zeigtVorschau\(\{ wandStart, treppeStart, zeigerDrinnen \}, 'treppe'\) && treppeStart && werkzeug === 'treppe'/,
+    'die Vorschau beim Treppezeichnen fehlt oder haengt nicht mehr am Zeiger-Zustand');
   // Und die Wand-Vorschau rastet mit — sonst zeigt sie etwas anderes als das, was entsteht.
   assert.match(buehne, /mitWinkelSnap\(wandStart, cursor\)/, 'die Vorschau folgt nicht demselben Winkel-Fang wie die Wand');
 });

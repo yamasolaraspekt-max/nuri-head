@@ -43,6 +43,8 @@ export interface FussEigenschaften {
   wandStart: Punkt | null;
   treppeStart: { x: number; y: number } | null;
   letzteAblehnung: string | null;
+  /** Z-01: der Satz, wenn ein Zug pausiert — `null`, wenn nichts zu sagen ist. */
+  pausenHinweis: string | null;
   // --- Befehlspalette ---
   paletteOffen: boolean;
   paletteFilter: string;
@@ -61,7 +63,7 @@ export interface FussEigenschaften {
 }
 
 export function FussUndUeberlagerungen({
-  cursor, zoom, raeume, werkzeug, wandStart, treppeStart, letzteAblehnung,
+  cursor, zoom, raeume, werkzeug, wandStart, treppeStart, letzteAblehnung, pausenHinweis,
   paletteOffen, paletteFilter, setPaletteFilter, setPaletteIndex,
   paletteGruppen, paletteListe, paletteMarkiert, schliessePalette, aktivierePaletteEintrag,
   offeneEngine, setOffeneEngine,
@@ -77,6 +79,9 @@ export function FussUndUeberlagerungen({
     {(werkzeug === 'fenster' || werkzeug === 'tuer') && <span style={{ color: FARBEN.text }}>Klick nahe einer Wand platziert die Öffnung</span>}
     {werkzeug === 'dach' && <span style={{ color: FARBEN.text }}>Klick legt ein Dach über den Gebäude-Umriss (ein Dach je Geschoss) — dann in 3D umschalten</span>}
     {werkzeug === 'treppe' && <span style={{ color: FARBEN.text }}>{treppeStart ? 'Klick = Ende der Lauflinie (Richtung = aufwärts) · Esc bricht ab' : 'Klick setzt den Anfang der Treppen-Lauflinie'}</span>}
+    {/* Z-01: der pausierte Zug wird BENANNT. Schritt 0 hat gemessen, dass die Vorschau stehen
+        blieb, ohne dass irgendetwas sagte, dass die Aktion noch laeuft. */}
+    {pausenHinweis && <span className="hp-pause-hinweis">{pausenHinweis}</span>}
     <span style={{ flex: 1 }} />
     {letzteAblehnung && <span style={{ color: FARBEN.warnung, fontWeight: 600 }}>✋ {letzteAblehnung}</span>}
     <span style={{ color: T.muted }}>Strg/⌘+K · Befehle</span>
