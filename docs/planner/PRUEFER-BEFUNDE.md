@@ -213,6 +213,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-045 | mein eigener Messbefehl | `--date=format:` zeigt die Zone des Committers — **45 von 116** heutigen Commits zwei Stunden zu früh | **P3** | **ERLEDIGT** (Barriere gesetzt) | Prüfer |
 | PB-039 | `PRUEFER-BEFUNDE.md` (mein Register) | Acht Befunde hatten einen Abschnitt, aber **keine Zeile** — Ursache F-14 (`str.replace` traf nicht) | **P2** | **ERLEDIGT** (38 Zeilen = 38 IDs) | Prüfer |
 | PB-042 | (Betrieb) `git log` | **109 Commits heute, 2 davon Produktivcode, 66 von mir** — docs/Code 7:1, mein Register allein 4 265 Z. | **P2** | offen | **Yama** (Takt) |
+| PB-046 | Objekt-Planer @ **375 px** (Browser) | **8 Bedienelemente vollständig ausserhalb** des Sichtfelds, kein waagerechter Bildlauf; Modusschalter **390 px breit** auf 375 px | **P2** | offen | Planner |
 
 ---
 
@@ -4436,3 +4437,85 @@ Register durch eine Rückfrage von außen korrigiert worden und nicht durch die 
 da ist.*
 
 **Ballbesitz: Prüfer** (behoben, Barriere verschärft).
+
+---
+
+## 71. Runde 208 — **PB-046 · P2: meine erste Sichtprobe im Browser. Bei 375 px sind acht Werkzeuge unerreichbar.**
+
+**Gemessen 20:35 CEST gegen `f6d28704`, auf Yamas ausdrückliche Erlaubnis.** *Es ist die erste Messung
+meiner Rolle, die nicht aus Dateien stammt, sondern aus der laufenden Anwendung.*
+
+### Aufbau — nichts committet, nichts am Arbeitsbaum
+
+```text
+git worktree add /tmp/pruefer-sicht f6d28704     <- Wegwerf-Prüfstand
++ EINE temporäre Route NUR dort: /pruefer-messzugang -> Auth::login(erster Admin) -> "OK:3"
+php artisan serve --port=8897                    <- eigener Server, nicht ticket.test
+Chrome headful (System-Chrome), Objekt 203, Expertenmodus
+Gegenprobe: git diff --name-only -- routes/web.php im Hauptbaum -> 0
+```
+
+### Das Ergebnis, drei Viewports
+
+```text
+Viewport   Zeichenfläche   Überlauf in der Insel   Bedienelemente ganz ausserhalb
+ 1440 px   589 × 541 px             0                        0
+ 1024 px   200 × 282 px             0                        0
+  375 px   337 × 200 px            35                        8
+```
+
+**Bei 375 px liegen acht Werkzeuge vollständig ausserhalb des Sichtfelds** — gemessen an ihren
+Koordinaten, u. a. bei x = 588…620, 626…658, 678…710. Mit Titeln wie **„Grundriss oben/unten
+spiegeln"** und **„Als PNG-Bild exportieren"**.
+
+**Und sie sind nicht erscrollbar:** `document.documentElement.scrollWidth` = **375** = Sichtfeldbreite.
+*Es gibt keinen waagerechten Bildlauf, mit dem der Benutzer sie erreichen könnte — sie sind
+abgeschnitten, nicht ausgelagert.*
+
+**Auch der Modusschalter selbst ist zu breit:**
+
+```text
+.hp-modusschalter   links 32 · rechts 422 · Breite 390 px    (Sichtfeld 375 px)
+   Übersicht         36 … 152
+   Geführte Planung 152 … 263
+   Expertenmodus    263 … 418     <- 43 px jenseits der rechten Kante
+```
+
+**Der Reiter, auf dem die eigentliche Arbeit stattfindet, ist auf einem 375-px-Gerät nicht vollständig
+sichtbar.**
+
+### Warum das ein Befund ist und nicht Geschmack
+
+**`docs/architektur/ui-bauordnung.md` verlangt die Abnahme in genau drei Viewports —
+1440 / 1024 / 375.** Die Zahl 375 stammt nicht von mir. *Sollte der Objekt-Planer als reines
+Schreibtisch-Werkzeug gedacht sein, ist nicht die Messung falsch, sondern die Regel zu weit — dann
+gehört das in die Bauordnung geschrieben, statt bei jeder Abnahme stillschweigend übergangen zu
+werden.* **Diese Entscheidung gehört dem Planner, nicht mir.**
+
+### Nebenbeobachtung, nicht zu Ende verfolgt
+
+```text
+pageerror bei JEDEM Laden der Objektseite:
+   TypeError: Cannot read properties of null (reading 'addEventListener')
+```
+
+**Ich habe die Stelle nicht lokalisiert** — *aufdecken ist nicht beheben.* Sie tritt auch auf der
+Übersicht auf, also vermutlich in der CRM-Hülle, nicht in der Insel. **Die 404 auf
+`/images/employee/*.jpg` und `/notification/short.mp3` melde ich ausdrücklich NICHT als Befund** — das
+sind fehlende Beispieldaten im Entwicklungsstand.
+
+### Was diese Runde über meine bisherigen sagt
+
+**Zwei meiner eigenen Messungen an diesem Abend hätten ein falsches Grün geliefert:**
+
+```text
+1. Anmeldung fehlgeschlagen -> dreimal die Login-Maske vermessen -> "0 Überlauf, 0 unerreichbar"
+2. Vite-Manifest fehlte    -> HTTP 500 -> dreimal die Fehlerseite vermessen -> ebenfalls "sauber"
+```
+
+**Beide Male hat `canvas: 0` sie gefangen, nicht meine Sorgfalt** — eine Planer-Seite ohne
+Zeichenfläche gibt es nicht. *Ich schreibe die Probe deshalb als Regel fest: **jede Browser-Messung
+nennt zuerst eine Grösse, die auf der falschen Seite unmöglich ist** (hier: Anzahl `canvas`,
+Seitentitel, HTTP-Status). Ohne diesen Anker ist ein grünes Ergebnis wertlos.*
+
+**Ballbesitz: Planner.**
