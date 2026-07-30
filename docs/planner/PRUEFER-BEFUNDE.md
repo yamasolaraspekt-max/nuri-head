@@ -174,6 +174,8 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-011 | `FEHLERKLASSEN.md` | **P2** | drei Zähler zu niedrig; in zehn Prüfrunden kein Befund eingetragen | offen | — |
+| PB-012 | `FEHLERKLASSEN.md` | **P2** | die Barriere von F-14 ist ein Absatz — nach zwei Stunden gebrochen; R9 verlangt mehr | offen | — |
 | PB-009 | `bestandsaufnahme-studio-rahmen-2026-07-29.md` | **P2** | Konflikttabelle sperrt eine freie Datei; Anker auf einen Rahmen, der seit T1/T3 umgebaut ist (217→159 Z.) | **ANGENOMMEN** | 30.07. 09:05 — HISTORISCH-Kopf; fuer den Stand gilt die Auftragstafel |
 | PB-010 | `stilschicht.test.ts` | P3 | Wirkungs-Zusage prüft gegen 3 tote Bezeichner — **`eigenarbeit: ja`, Urteil beim Evaluator** | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 09:05 — kein Papier-, ein Testbefund; geht als Posten an den Generator |
 | PB-008 | `generator-auftrag-auf83-t2t3-kopfleiste.md` | P3 | aktives Blatt führt `T1a` als offenen Schritt — Code und Register führen ihn als erledigt (`97a2e2a4`) | **ANGENOMMEN** | 30.07. 09:05 — Blatt traegt HISTORISCH-Kopf, verbindlich sind T2/T3/T3-N1 |
@@ -985,3 +987,92 @@ Urteil, sondern im `grep`.
 | **L6 Workflow** | nicht geprüft |
 
 **Kein Befund.**
+
+---
+
+## 17. Runde 10 (30.07.) — das Fehlerklassen-Register selbst
+
+**Gemessen gegen `8ad89ce2`.** Neue Fläche, nicht `docs/planner/`: **`docs/auftraege/FEHLERKLASSEN.md`**
+— das Register, das §2 dieses Eingangs mir selbst als Maßstab nennt. **An seinen Zählern hängt R9:**
+*„Bei der zweiten Wiederholung derselben Fehlerklasse muss eine Barriere stehen."* Ein Zähler, der
+zu niedrig steht, löst keine Barriere aus.
+
+### PB-011 · P2 · Die Zähler laufen dem Baum hinterher, und der Prüfer taucht in keinem auf
+
+```yaml
+befund:
+  id: PB-011
+  datei: "docs/auftraege/FEHLERKLASSEN.md"
+  stelle: "Spalte 'Zaehler', Zeilen 33-47"
+  behauptung: "F-14 = 3 (zuletzt 30.07. 06:58) · F-12 = 4 (06:38) · F-06 = 6 (29.07. 09:59)"
+  gemessen: |
+    F-14 "Schreibvorgang scheitert, Commit gelingt trotzdem":
+      Zaehler 3, letzter Eintrag 06:58. Vorfall 6b106209 um 08:55 - unquotierter
+      Heredoc, Shell fuehrte den Text aus, Commit lief mit rc=0 durch.
+      Treffer auf "6b106209" im Register: 0 · im Ledger: 0.   -> wahr ist 4
+    F-12 "Der vorlaufende Baum kostet eine Messung":
+      Zaehler 4. In Runde 6 wanderte HEAD waehrend meiner Messung von ef3169d5
+      auf f1e0bdb7 - im Register nicht erfasst (0 Treffer).   -> wahr ist mindestens 5
+    F-06 "Zusage prueft Gestalt statt Wirkung":
+      Zaehler 6, zuletzt 29.07. PB-010 ist eine weitere Auspraegung.  -> mindestens 7
+    Nennungen von Pruefer-Befunden im ganzen Register: 0
+  befehl: |
+    grep -c "6b106209" docs/auftraege/FEHLERKLASSEN.md docs/handoff-status.md
+    grep -c "PB-0" docs/auftraege/FEHLERKLASSEN.md
+    git log -1 --format='%ad' --date=format:'%d.%m %H:%M' -- docs/auftraege/FEHLERKLASSEN.md
+  commit: "8ad89ce2"
+  schwere: P2
+  wirkung: |
+    R9 loest an der ZWEITEN Wiederholung aus. Ein Zaehler, der eine Auspraegung nicht
+    kennt, verzoegert die Barriere um genau diese eine - und die naechste Wiederholung
+    ist die, die man haette verhindern koennen. Dass in zehn Pruefrunden kein einziger
+    Befund in eine Klasse eingetragen wurde, heisst: der Pruefer speist das Register
+    nicht, obwohl er die Fehlerklassen als Maßstab vorgesetzt bekommt (§2).
+  eigenarbeit: teilweise - zwei der drei Auspraegungen sind meine
+```
+
+### PB-012 · P2 · Die Barriere von F-14 ist ein Absatz — und sie hat nach zwei Stunden versagt
+
+```yaml
+befund:
+  id: PB-012
+  datei: "docs/auftraege/FEHLERKLASSEN.md"
+  stelle: "F-14, Spalte 'Barriere'"
+  behauptung: "Jeder Fliesstext geht in einen dreifach angefuehrten Rohstring, nie in
+    Zeichenkettenverkettung. Und die eigentliche Barriere: nach jedem Schreibskript
+    git status lesen, BEVOR committet wird."
+  gemessen: |
+    Barriere eingetragen  30.07. 06:58
+    Verstoss              30.07. 08:55  (6b106209, zwei Stunden spaeter)
+    Der Verstoss stammt von einer Instanz, die das Register nie gelesen hatte -
+    es steht in keinem Startblock, in keinem Takt-Text und in keiner Rollenakte.
+  befehl: |
+    git log -1 --format='%ad' --date=format:'%d.%m %H:%M' 6b106209
+    grep -rl "FEHLERKLASSEN.md" docs/agents/ docs/auftraege/AUFTRAGSTAFEL.md
+  commit: "8ad89ce2"
+  schwere: P2
+  wirkung: |
+    R9 sagt woertlich: "Ein Absatz, ein Hinweis oder 'kuenftig darauf achten' zaehlt
+    NICHT als Barriere." Die Barriere von F-14 ist genau das - eine Verhaltensregel in
+    einem Dokument. Sie hat den naechsten Vorfall nicht verhindert, und zwar nicht aus
+    Nachlaessigkeit, sondern weil die handelnde Instanz das Dokument nicht kannte.
+    Eine Barriere, die vom Lesen abhaengt, ist eine Bitte.
+  eigenarbeit: nein
+```
+
+**Der Vorschlag, entscheiden tut der Planner:** was F-14 verlangt — *nach jedem Schreibskript
+`git status` lesen, bevor committet wird* — ist **mechanisierbar**. Ein Schreibskript, das die
+Zieldatei nach dem Schreiben gegen ein erwartetes Merkmal prüft (Zeilenzahl gewachsen, Marker
+vorhanden) und bei Abweichung mit ungleich Null endet, macht aus der Bitte eine Sperre. *Ich baue
+es nicht — ich melde, dass die vorhandene Fassung R9 nicht genügt.*
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | PB-011 — drei Zähler zu niedrig |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | PB-012 — das Register verletzt seine eigene Regel R9 |
+| **L4 Kausalität** | **PB-012** — die Kette *Barriere → Verhalten* reißt nachweislich: 06:58 eingetragen, 08:55 gebrochen |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | PB-011 — der Prüfer ist als Speiser des Registers nirgends vorgesehen |
+
+**Ballbesitz: Planner.**
