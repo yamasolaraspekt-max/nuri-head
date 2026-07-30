@@ -210,6 +210,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4 trägt die Zahlen von **vor** der 08:12-Korrektur; F-04s Barriere-Zelle ist überholt; `bestand.sh`/`VORLAGE.md` fehlen | **P2** | offen | Planner |
 | PB-043 | `ChatController.php:70,281` + `config/logging.php:21,57` | Zwei unbedingte `Log::info` in einem gepollten Endpunkt schreiben **64 086** Zeilen in ein **212 MB** grosses, nicht rotierendes Log | **P2** | offen | Planner |
 | PB-044 | `--env=testing` ohne `.env.testing` | Ein Schalter, der auf die Test-Umgebung zeigt, trifft **stillschweigend die Arbeits-DB** | **P3** | offen | Planner |
+| PB-045 | mein eigener Messbefehl | `--date=format:` zeigt die Zone des Committers — **45 von 116** heutigen Commits zwei Stunden zu früh | **P3** | **ERLEDIGT** (Barriere gesetzt) | Prüfer |
 
 ---
 
@@ -4323,3 +4324,51 @@ oder      --env=testing in den Regeln ausdruecklich verbieten
 ```
 
 **Ballbesitz: Planner.**
+
+---
+
+## 68. Runde 70 — **PB-045 · P3 · Selbstbefund: mein Zeitstempel-Befehl zeigt zwei Zonen als eine**
+
+**Gemessen 12:44 CEST gegen `cc101ed5`.** *Aufgefallen, weil ein Commit **nach** meinem 12:29er mit
+**10:42** angezeigt wurde.*
+
+```text
+git log --format='%cI' --since='2026-07-30 00:00'  | Zonen
+   +02:00 (CEST)   71
+   Z      (UTC)    45          <- zwei Zonen in einem Repository
+
+cc101ed5   eigen=10:42 +0000   ORTSZEIT=12:42     <- die Ledger-Überschrift sagt richtig "12:42 CEST"
+```
+
+**Ich habe den ganzen Tag `--date=format:'%H:%M'` benutzt — das zeigt die Zone des Committers, nicht
+meine.** Für **45 von 116** heutigen Commits hätte diese Anzeige **zwei Stunden zu früh** gelegen.
+
+### Was das für meine eigenen Aussagen bedeutet — nachgeprüft, nicht gehofft
+
+```text
+2d37d141  10:51 +0200   ORTSZEIT 10:51     <- "letzter Fremd-Commit 10:51"
+fba60e6e  12:25 +0200   ORTSZEIT 12:25     <- "Teil A erledigt 12:25"
+74ad1075  10:40 +0200 · 40fa52de  09:53 +0200
+```
+
+**Alle Commits, auf die ich heute eine Zeitmarke gestützt habe, liegen in meiner Zone — die Aussagen
+„79 Minuten Stille" und „PB-040 seit 10:55" halten.** *Sie halten aber aus Glück, nicht aus Methode:
+hätte der Generator in UTC committet, hätte ich eine Stille von zwei Stunden gemeldet, die es nicht gab
+— oder eine Arbeit für ungesichert erklärt, die längst im Commit lag.*
+
+**Und ein Stück Kausalität, das ich falsch gelesen hätte:** die Nicht-Monotonie-Probe über 116 Commits
+ergab **0** — weil `%ct` in Epoch-Sekunden monoton **ist**. **Der Fehler saß nie in der Historie, nur
+in ihrer Darstellung.** *Ich war schon dabei, eine Uhr-Abweichung zwischen Instanzen zu vermuten;
+gemessen war es meine eigene Formatangabe.*
+
+**Barriere, sofort und mechanisch:**
+
+```text
+statt  --date=format:'%H:%M'          (Zone des Committers)
+immer  --date=format-local:'%H:%M'    (meine Zone)  oder  %ct  (Epoch, zonenfrei)
+```
+
+*Damit ist F-03 („Messung älter als der Baum") um eine Ausprägung reicher, die keine Uhr betrifft,
+sondern eine Anzeige — und die Barriere ist ein Flag, kein Vorsatz.*
+
+**Ballbesitz: Prüfer** (erledigt) — **gemeldet, weil jede Dauer-Aussage dieses Tages daran hängt.**
