@@ -174,6 +174,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-015 | `AUFTRAGSTAFEL.md` | **P2** | zwei Posten tragen `⚡ AKTIV` (5 Vorkommen) — §1c verlangt genau einen | offen | — |
 | PB-013 | `docs/agents/regeln/kern.md` | **P1** | „wird IMMER geladen" — vom vorgeschriebenen Startpfad aus mit 0 Verweisen unerreichbar | offen | — |
 | PB-014 | `docs/agents/` (Struktur) | **P1** | zwei vollständige Regelsätze für dieselben drei Rollen, 1534 Z., ohne Verweis aufeinander | offen | — |
 | PB-011 | `FEHLERKLASSEN.md` | **P2** | drei Zähler zu niedrig; in zehn Prüfrunden kein Befund eingetragen | offen | — |
@@ -1239,3 +1240,67 @@ schlechtere.
 nach dem Namen statt nach der Wirkung. **Alle vier in der Extraktion, keiner im Urteil.** Und der
 vierte ist der lehrreichste, weil er dieselbe Verwechslung ist, die `K9` den Zusagen verbietet:
 *Gestalt statt Wirkung geprüft.* **Ich habe die Regel, die ich prüfe, beim Prüfen gebrochen.**
+
+---
+
+## 20. Runde 13 (30.07.) — die Auftragstafel gegen ihre eigene Kardinalregel
+
+**Gemessen gegen `552240f5`.**
+
+### PB-015 · P2 · Zwei Posten tragen `⚡ AKTIV`, einer davon laut eigenem Text „vormals aktiv"
+
+```yaml
+befund:
+  id: PB-015
+  datei: "docs/auftraege/AUFTRAGSTAFEL.md"
+  stelle: "§1c (Z146-160) gegen die Postenzeilen Z293 (AUF-38) und Z295 (AUF-83)"
+  behauptung: "Auf dieser Tafel traegt GENAU EIN Posten die Markierung ⚡ AKTIV.
+    Der Generator zieht nur diesen."
+  gemessen: |
+    Postenzeilen mit der Marke:            2   (AUF-38 Z293, AUF-83 Z295)
+    Vorkommen der Marke in diesen Zeilen:  5
+    Im Einzelnen:
+      AUF-38  "⚡ AKTIV · SCHEIBE 3 ABGENOMMEN - FREIGABE (Evaluator, 28.07.)"
+      AUF-38  "⚡ AKTIV · [vormals aktiv: AUF-38 SCHEIBE 8a (EngineFlaeche) ...]"
+      AUF-38  (Fliesstext: "die Marke stand auf ⚡ AKTIV" - Erzaehlung, keine Marke)
+      AUF-83  "⚡ AKTIV - VORGEZOGEN (Yama, 29.07., 08:20) >>> AUF-83-T3-N1 <<<"
+      AUF-83  "T1b (⚡ AKTIV, Sperre gefallen, generator-auftrag-auf83-t1b-ticket-shell.md)"
+  befehl: |
+    git show HEAD:docs/auftraege/AUFTRAGSTAFEL.md | grep -E '^\| \*\*[A-Z]+-[0-9]' | grep -c '⚡ AKTIV'
+    git show HEAD:docs/auftraege/AUFTRAGSTAFEL.md | grep -E '^\| \*\*[A-Z]+-[0-9]' | grep -o '⚡ AKTIV' | wc -l
+  commit: "552240f5"
+  schwere: P2
+  wirkung: |
+    §1c existiert, weil am 25.07. der falsche Posten gezogen wurde - "nicht aus
+    Nachlaessigkeit, sondern weil beides gleich aussah. Ein Wort auf der Tafel
+    unterscheidet sie." Heute steht dieses Wort an zwei Posten und fuenf Stellen.
+    Eine Instanz, die die Regel woertlich befolgt - "zieh den mit der Marke" - findet
+    zwei Zeilen. Dass AUF-38 eine davon ausdruecklich als "vormals aktiv" fuehrt,
+    hilft nur dem, der den Fliesstext liest; die Regel verweist auf die MARKE.
+  eigenarbeit: nein
+```
+
+**Die Zeile weiß es besser als die Tafel.** In derselben AUF-38-Zelle steht die Lehre eines
+früheren Vorfalls: *„… indem er die **Marke** liest; die Marke stand auf `⚡ AKTIV`. Meine Sperre
+stand als **Satz im Fließtext** derselben Zelle. **Zwei widersprüchliche …"*** — damals Marke gegen
+Fließtext, **heute Marke gegen Marke.** Dieselbe Klasse, eine Stufe härter: der Fließtext kann eine
+Marke nicht mehr entschärfen, wenn zwei Marken nebeneinanderstehen.
+
+**Erledigt wenn:** *`grep -E '^\| \*\*[A-Z]+-[0-9]' AUFTRAGSTAFEL.md | grep -o '⚡ AKTIV' | wc -l`
+liefert genau `1`.* Erzählende Erwähnungen im Fließtext gehören dann in eine andere Schreibweise
+(z. B. „die Marke") — sonst zählt der Befehl sie mit, und die Regel bleibt unprüfbar.
+
+**Ein Vorschlag, entscheiden tut der Planner:** dieselbe Zeile ist mechanisch prüfbar. Als Wächter
+im Gate — *„genau eine Marke, sonst rot"* — wäre §1c das erste Mal eine **Barriere** statt einer
+Regel. Das ist genau der Punkt aus `PB-012`, hier mit einem Einzeiler lösbar.
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — beide Posten sind sachlich richtig beschrieben |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | **PB-015** — die Tafel widerspricht ihrer eigenen §1c |
+| **L4 Kausalität** | **PB-015** — die Kette *Marke → gezogener Posten* ist nicht mehr eindeutig |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | **PB-015** — wer die Regel wörtlich befolgt, findet zwei Ziele |
+
+**Ballbesitz: Planner.**
