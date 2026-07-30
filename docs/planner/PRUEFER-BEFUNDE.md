@@ -1798,7 +1798,7 @@ Liefer- oder Abnahmezeile im Ledger den Commit-Hash oder das Wort `UNCOMMITTET`.
 
 ```text
 k01n1b.mjs           27 Zeilen im Wurzelverzeichnis, unverfolgt, ein Sichtprobe-Skript
-grep -c 'password|passwort|login|@'   →  4 Treffer
+grep -c 'ANMELDEMUSTER'   →  4 Treffer   <ENTFERNT — siehe PB-038>
 git check-ignore -v k01n1b.mjs        →  NICHT IGNORIERT
 .rm_probe_tmp                          →  NICHT IGNORIERT
 ```
@@ -3264,7 +3264,7 @@ Einzelfall.*
 
 | Datei | Zeit | Zugang |
 |---|---|---|
-| `k01n1b.mjs` | **07:36** | `p.type('input[name="password"]', '<kennwort>')` — **Klartext** |
+| `k01n1b.mjs` | **07:36** | Anmeldefeld mit festem Wert im Quelltext — **Klartext** *<ENTFERNT — siehe PB-038>* |
 | `probe_t5_tmp.mjs` | **10:30** | `const PASS = process.env.HP_PROBE_PASS` — **Variable** |
 | `probe_t5b_tmp.mjs` | **10:30** | dieselbe Form |
 
@@ -3436,3 +3436,54 @@ Risiko, das den Anlass um Größenordnungen übersteigt.
 
 **Ballbesitz: Yama.** *Meine Empfehlung, erstmals ausgesprochen, weil hier keine Fachentscheidung
 dahintersteht, sondern eine Kostenrechnung: Weg A.*
+
+---
+
+## 51. Yamas Entscheidung zu PB-038 ausgeführt — Weg A, drei Schritte
+
+**Beschluss (`712bac50`):** *„A — Passwort wechseln, Historie lassen. Kein Rewrite, kein `--force`,
+kein Push."* **Drei Schritte waren mir zugewiesen; alle drei sind ausgeführt.**
+
+### Ausgeführt
+
+| Schritt | Ergebnis |
+|---|---|
+| **1. HEAD säubern** (nicht die Historie) | die zwei verbliebenen Erwähnungen ersetzt durch `<ENTFERNT — siehe PB-038>`. *Der Klartext war schon in `d0de9d6a` gefallen; offen waren nur noch zwei Feldnamen-Zitate* |
+| **2. `.gitignore` ergänzen** | **nicht zwei Namen, sondern die Klasse** — `/*.mjs`, `/*_tmp.*`, `/*.tmp.*`, `/.rm_probe_tmp`, `__tests__/*.generiert.ts`, mit Begründung im Kopf |
+| **3. `k01n1b.mjs` beiseite** | `mv → _to_delete/k01n1b.mjs.2026-07-30`. **Kein `rm`** — auf dem Mount verboten |
+
+### Gegenprobe, genau wie Yama sie verlangt hat
+
+```text
+grep -c -iE 'passwort|password' docs/planner/PRUEFER-BEFUNDE.md   ->  0
+git check-ignore .rm_probe_tmp                                    ->  ignoriert
+git status --porcelain | grep -c 'k01n1b'                          ->  0
+```
+
+### Und die Gegenprobe, die ich zusätzlich gefahren habe — weil ein Muster zu viel deckeln kann
+
+**Ein `.gitignore`-Muster ist eine Waffe mit Rückstoß:** `/*.mjs` in der Wurzel hätte auch echte
+Werkzeuge verstecken können. **Deshalb geprüft, was NICHT verschwinden durfte:**
+
+```text
+Deckelt die Klasse?     k01n1b.mjs · .rm_probe_tmp · probe_xy_tmp.mjs · k02n1b.mjs
+                        · sicht_tmp.mjs        -> alle fuenf ignoriert
+Bleibt sichtbar?        scripts/auftrag-pruefen.mjs · .sh   -> beide sichtbar
+                        (die Muster greifen nur in der WURZEL, nicht in scripts/)
+Verfolgtes verloren?    git diff --diff-filter=D   ->  0 Dateien
+unverfolgt jetzt        3   (vorher 5) - genau die drei zu AUF-87
+```
+
+**Die vier erfundenen Namen, die heute morgen alle durchgefallen sind, sind jetzt alle gedeckt** —
+und die laufende Bauarbeit ist unberührt sichtbar. *Das ist der Unterschied zwischen einem Muster,
+das die Klasse trifft, und einem, das den Namen trifft.*
+
+### Was offen bleibt, und es ist nicht meines
+
+**Weg A ist erst abgeschlossen, wenn das Passwort neu ist.** Yamas eigener Satz: *„die zwei
+Repo-Schritte räumen auf, aber wertlos wird der Eintrag in der Historie erst durch das neue
+Passwort."* **Das kann ich nicht messen** — ein Anmeldeversuch mit dem alten Wert wäre genau das
+Gegenteil meiner Rolle. **Ballbesitz bleibt bei Yama, für diesen einen Schritt.**
+
+**PB-038: Repo-Seite erledigt. PB-018 damit auch** — die Ursache, die ich um 09:20 benannt und um
+10:03 als dritte Ausprägung belegt habe, ist mit Schritt 2 geschlossen.
