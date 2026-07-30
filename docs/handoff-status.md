@@ -22663,7 +22663,7 @@ messbar** — sie ist die einzige der sieben Kennzahlen, die keine Vorarbeit bra
 ### Die Vorbedingung — eine Zeile, und sie steht ab sofort in den Kernregeln
 
 ```text
-VOTUM: auftrag=AUF-83-T3 rolle=generator ergebnis=TRAEGT-NICHT commit=fe0af8df datum=2026-07-30T06:25
+  VOTUM: auftrag=AUF-83-T3 rolle=generator ergebnis=TRAEGT-NICHT commit=fe0af8df datum=2026-07-30T06:25    <- BEISPIEL, eingerueckt (30.07. 07:54 korrigiert)
 ```
 
 **Feste Felder, feste Werte, keine Umlaute, keine Leerzeichen im Wert.** Die Prosa darunter bleibt,
@@ -22685,3 +22685,158 @@ einem einzigen `grep`, ohne zweite Buchführung.**
 `^VOTUM:` gesucht habe und die Zeile in einem Zitatblock steht. **Zweite Ausprägung von „meine
 Probe war kaputt, nicht die Datei"** — R21 in ihrer erweiterten Fassung, an mir selbst, zwei
 Stunden nachdem ich sie geschrieben habe.*
+
+---
+
+VOTUM: auftrag=AUF-83-T5 rolle=planner ergebnis=TRAEGT commit=5d16765c datum=2026-07-30T07:52
+VOTUM: auftrag=AUF-88-P1 rolle=planner ergebnis=TRAEGT commit=5d16765c datum=2026-07-30T07:52
+
+## ⇒ PLANNER — zwei Blätter auf den Messblock umgestellt (30.07., 07:52 CEST)
+
+**Erste Anwendung der Votumszeile — zwei Zeilen oben, und sie sind die ersten im ganzen Ledger.**
+*Wer eine Konvention aufstellt und sie selbst nicht anwendet, hat sie nicht aufgestellt.*
+
+**Keine neue Meldung.** Der Generator hat 23 Dateien im Baum, unverändert seit 07:42 — vermutlich
+ein längerer Test- oder Baulauf. Kein Rückstand.
+
+### Umgestellt: T5 und AUF-88-P1
+
+**Bewusst NICHT umgestellt: T3 und AUF-87.** *An beiden wird gerade gebaut. Ein Blatt unter einem
+Bauenden zu ändern, ist dieselbe Klasse wie ein Bündel unter einem Prüfenden zu bewegen — sie
+kommen dran, wenn ihr Bauzyklus endet.*
+
+### Alle Zahlen gegen den COMMITTETEN Stand gemessen, nicht gegen den Arbeitsbaum
+
+```text
+T5        data-schiene            2   ·   Klappzustand   0
+          Escape                  6 in 4 Dateien (HausplanerApp 3 · Geschoss 1 · Werkzeug 1 · Dialog 1)
+AUF-88-P1 Endungspruefung         2   ·   massstab_mm_pro_einheit   2 Dateien
+          Zusagen zu PlanUpload   0
+```
+
+**`git show HEAD:…` statt `cat`** — im Arbeitsbaum liegen 23 halb fertige Dateien, und eine Zahl
+aus einem halb geschriebenen Zustand ist keine Zahl.
+
+**Jede trägt jetzt Befehl, Wert, Commit `5d16765c`, Zeitpunkt, Freshness-Regel und Zweck.**
+Weicht der Commit beim Bau von HEAD ab, werden die Befehle neu gefahren: gleicher Wert ⇒ in
+Ordnung, anderer Wert ⇒ zurück an den Planner.
+
+### Die wichtigste der sechs Messungen
+
+```yaml
+- id: M-03
+  command: "git grep -l 'PlanUpload' HEAD -- tests | wc -l"
+  observed_value: 0
+  purpose: "geerbte_zusagen (R17) — es gibt KEINE"
+```
+
+*Sie ist beim Abnehmen die Antwort auf die Frage, ob AUF-88-P1 getan hat, was es verspricht:
+**aus 0 muss eine Zahl größer 0 werden.** Eine Kennzahl, die ihren eigenen Erfolg misst.*
+
+---
+
+## 2026-07-30, 07:51 CEST — GENERATOR: `AUF-87-B1` (P1) und `AUF-87-B2` (P2) **behoben** — die Zusage befragt nicht mehr sich selbst
+
+*Zeit gemessen.*
+
+### 1. Dein Befund war der schärfste des Tages, und er trifft meine eigene Beanstandung
+
+**`for (const muster of DENYLIST)` iteriert über die Liste, die es sichern soll.** Deine Messung
+sagt alles: `curl` **ersetzt** statt gelöscht — Länge bleibt 11, Suite 14/0 **grün**,
+`verbotenesMuster('curl http://x')` ⇒ `null`. *Jedes einzelne Muster ließ sich lautlos
+unschädlich machen.* **Genau die Klasse, die ich heute an zwei fremden Blättern beanstandet habe.**
+
+**Behoben mit dem Mittel, das du nennst: eine ausgeschriebene zweite Kopie im Test.**
+
+```js
+const ERWARTETE_MUSTER = ['git commit', …, 'wget'];   // 17, ausgeschrieben
+assert.deepEqual([...DENYLIST].sort(), [...ERWARTETE_MUSTER].sort());
+```
+
+**Und die Gegenprobe, die vorher grün blieb, ist jetzt rot:**
+
+```text
+'curl' ERSETZT (Länge bleibt)   ⇒  2 rot   ← die Lücke, die du gefunden hast
+'rm'   GELÖSCHT (Länge sinkt)   ⇒  3 rot
+```
+
+Dazu prüft **jedes** Muster einzeln an einem Befehl, der es wirklich enthält — 17 ausgeschriebene
+Paare, keine Iteration über die Quelle.
+
+### 2. `AUF-87-B2` gleich mit — die Erkennung war eine Zeichenketten-Suche
+
+Deine neun Durchschlüpfer kamen alle aus `befehl.includes('rm ')`: **das Leerzeichen im Muster.**
+Statt der Suche steht jetzt je Muster ein Ausdruck:
+
+```text
+Wortmuster (rm, mv, dd)     nur als eigenes Wort   → fängt `rm -rf`, nicht `npm` oder `format`
+Zwei-Wort-Muster            beliebiger Zwischenraum → `git  commit` ist `git commit`
+umleitung                   > und >> in jeder Form  → auch `echo x >datei`
+```
+
+**Alle neun sind zu; `git switch` und `wget` sind ergänzt, dazu `truncate`, `dd`, `tee`,
+`npx vite build`.** Die Liste hat 17 Einträge statt 11.
+
+> **Der Preis der Verschärfung ist gemessen, nicht behauptet:** eine eigene Zusage prüft acht
+> harmlose Befehle (`npm run test:hausplaner`, `grep -rn "format" src`, `git log`, …) auf **kein**
+> Anschlagen. *Eine Denylist, die alles fängt, ist sicher und unbrauchbar — und wird abgeschaltet.*
+
+**Am Bestand ändert die schärfere Liste nichts:** derselbe Lauf über T3 meldet unverändert
+`13 Einträge · 1 übersprungen (K-10, npm run build) · 9 nicht maschinell`. Keine neuen
+Falsch-Positiven.
+
+### 3. Was ich beim Aufräumen an mir selbst gefunden habe
+
+Mein Einfügen hat die Zusage *„ein schreibender Befehl wird ÜBERSPRUNGEN"* **zweimal** in die Datei
+gelegt. **Beide waren grün, also fiel es keinem Gate auf** — ein Testzähler, der von 14 auf 17
+steigt, sieht nach mehr Deckung aus. Entfernt; die Datei hat jetzt **16** Zusagen.
+
+### Gates
+
+```text
+node --test scripts/__tests__/auftragPruefen.test.mjs    16 / 16 · Fehler 0
+npm run test:hausplaner   1394 / 0        npm run tsc:hausplaner   Exit 0
+Bestandslauf T3           unverändert gegenüber dem Lauf von 07:32
+```
+
+**Zum verbleibenden Fehlschlag im eigenen Blatt:** `K-07` meldet `exit 1`, weil sein Prüfbefehl den
+Lauf über T3 **und T5** fährt — und T5s `population_command` bricht an `grep -c` mit null Treffern
+ab. **Das ist der Fund, nicht ein Defekt:** der Validator meldet korrekt, dass ein fremdes Blatt
+einen toten Befehl trägt. *Er bleibt so lange rot, bis das T5-Blatt repariert ist — und das ist
+genau die Absicht.*
+
+**Kein Commit, kein Push.** Ballbesitz: **Evaluator** (Nachmessung B1/B2).
+
+---
+
+## ⇒ PLANNER — die Votumszeile hatte am ersten Tag einen Fehler, und sie hat ihn selbst gezeigt (30.07., 07:54 CEST)
+
+**Ich habe zwei Voten geschrieben. `grep -c "^VOTUM: auftrag="` lieferte drei.**
+
+Die dritte war **das Beispiel aus der Regel selbst** — sie stand am Zeilenanfang und war von einem
+echten Datensatz nicht zu unterscheiden.
+
+> **Ein Beispiel, das wie ein Datensatz aussieht, IST ein Datensatz, sobald jemand zählt.**
+
+**Dritte Ausprägung von F-09 („Text wird gemessen, nicht Absicht") — diesmal im Mechanismus, der
+genau das verhindern sollte.** *Sechs Minuten nach seiner Einführung.*
+
+**Behoben:** eine echte Votumszeile steht **am Zeilenanfang**, jedes Beispiel wird um **zwei
+Leerzeichen eingerückt**. Kostet nichts, ist mit `grep '^VOTUM: '` mechanisch. Das Beispiel im
+Ledger ist eingerückt, die Regel steht in den Kernregeln. **Zähler jetzt: 2.**
+
+### Und ein zweites Mal dieselbe Klasse, an mir selbst
+
+Meine Prüfung dieser Änderung suchte `eingerueckt`, die Datei schreibt `eingerückt`. **Ergebnis 0,
+obwohl die Zeile dasteht.**
+
+**Das ist heute der dritte Fall von „meine Probe war kaputt, nicht die Datei"** — und alle drei
+haben zu einem falschen Schluss geführt, den ich fast geglaubt hätte.
+
+> **Zusatz zu R21:** *Umlaute sind eine Probenfalle.* Wer einen deutschen Text prüft, sucht die
+> Zeichenkette, die wirklich dort steht — oder ein Stück ohne Umlaut. **Ein unerwartetes `0` ist
+> zuerst ein Verdacht gegen das eigene Werkzeug.**
+
+*Beides zusammen ist der Ertrag dieser Runde: eine Konvention, die am ersten Tag ihren eigenen
+Fehler gezeigt hat, und eine Regel, die zum dritten Mal an mir selbst gegriffen hat. **Keine Zeile
+Produktivcode, aber zwei falsche Zahlen weniger.***

@@ -260,3 +260,39 @@ gemessen und welche geraten ist.*
 - **Nicht, wie die Virenprüfung aussieht.** Sie bleibt offen und steht in der Aufnahme.
 
 *Ein schmaler Schnitt, der nebenbei die Architektur festlegt, ist kein schmaler Schnitt.*
+
+---
+
+## MESSBLOCK nach R19 (neu gefasst) — 30.07., 07:52
+
+**Gemessen gegen den committeten Stand `5d16765c`, nicht gegen den Arbeitsbaum.**
+
+```yaml
+measurements:
+  - id: M-01
+    command: "git show HEAD:app/Http/Controllers/Energie/PlanUploadController.php | grep -c 'ENDUNGEN\\|getClientOriginalExtension'"
+    observed_value: 2
+    observed_at_commit: "5d16765c"
+    observed_at: "2026-07-30T07:52:00+02:00"
+    freshness_rule: "must_match_current_head"
+    purpose: "gap proof — die Annahme prueft die Dateiendung, die Magic Bytes erst im Job danach"
+
+  - id: M-02
+    command: "git grep -l 'massstab_mm_pro_einheit' HEAD -- app resources | wc -l"
+    observed_value: 2
+    observed_at_commit: "5d16765c"
+    observed_at: "2026-07-30T07:52:00+02:00"
+    freshness_rule: "must_match_current_head"
+    purpose: "reuse proof — das Feld EXISTIERT; die Kalibrierung war vorgesehen und nie gebaut"
+
+  - id: M-03
+    command: "git grep -l 'PlanUpload' HEAD -- tests | wc -l"
+    observed_value: 0
+    observed_at_commit: "5d16765c"
+    observed_at: "2026-07-30T07:52:00+02:00"
+    freshness_rule: "must_match_current_head"
+    purpose: "geerbte_zusagen (R17) — es gibt KEINE. Dieser Auftrag verriegelt die Flaeche als Erster"
+```
+
+**M-03 ist die wichtigste der drei.** *Sie ist beim Abnehmen die Antwort auf die Frage, ob dieser
+Auftrag getan hat, was er versprochen hat: aus 0 muss eine Zahl größer 0 werden.*

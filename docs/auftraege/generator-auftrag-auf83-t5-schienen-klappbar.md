@@ -272,3 +272,44 @@ Endpunkt und Autorisierung — dieselbe Klasse wie AUF-78 und AUF-40 B, und die 
    hätte der Validator abgefangen.*
 
 **R16 ist damit eingehalten: zwei baubare Aufträge liegen vor der Front, nicht einer.**
+
+---
+
+## MESSBLOCK nach R19 (neu gefasst) — 30.07., 07:52
+
+**`population_at_writing_ALT` oben ist ab hier nur noch Herkunftsnachweis.**
+Verbindlich ist dieser Block: **jede Zahl mit Befehl, Wert, Commit, Zeitpunkt und Freshness-Regel.**
+
+> **Gemessen gegen den COMMITTETEN Stand** (`git show HEAD:…`), nicht gegen den Arbeitsbaum —
+> dort baut der Generator gerade an T3, und eine Zahl aus einem halb geschriebenen Zustand ist
+> keine Zahl.
+
+```yaml
+measurements:
+  - id: M-01
+    command: "git show HEAD:resources/planner/hausplaner/app/HausplanerApp.tsx | grep -c 'data-schiene'"
+    observed_value: 2
+    observed_at_commit: "5d16765c"
+    observed_at: "2026-07-30T07:52:00+02:00"
+    freshness_rule: "must_match_current_head"
+    purpose: "scope boundary — es sind genau zwei Schienen, keine dritte"
+
+  - id: M-02
+    command: "git show HEAD:resources/planner/hausplaner/app/HausplanerApp.tsx | grep -c 'collapsed\\|klappZu\\|schieneZu'"
+    observed_value: 0
+    observed_at_commit: "5d16765c"
+    observed_at: "2026-07-30T07:52:00+02:00"
+    freshness_rule: "must_match_current_head"
+    purpose: "gap proof — die Insel hat KEINEN Klappzustand; die Ticket-Shell hat welche, die Insel nicht"
+
+  - id: M-03
+    command: "je Datei: git show HEAD:<pfad> | grep -c \"key === 'Escape'\""
+    observed_value: "HausplanerApp 3 · GeschossFlaeche 1 · WerkzeugGruppenMenue 1 · dialogFokus 1 = 6 in 4 Dateien"
+    observed_at_commit: "5d16765c"
+    observed_at: "2026-07-30T07:52:00+02:00"
+    freshness_rule: "must_match_current_head"
+    purpose: "vorher_wert fuer K-03 — die Rangfolge ist heute die Reihenfolge des Anhaengens"
+```
+
+**Weicht `observed_at_commit` beim Bau von HEAD ab, werden alle drei Befehle neu gefahren.**
+Gleicher Wert ⇒ in Ordnung. Anderer Wert ⇒ das Blatt geht zurück an den Planner.

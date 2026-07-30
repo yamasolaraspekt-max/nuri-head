@@ -131,3 +131,11 @@ nicht Absicht" — und sie hätte hier ihre dritte Ausprägung bekommen.*
 **Was das kostet:** eine Zeile je Votum. **Was es liefert:** Rejection Rate, Already-Satisfied
 Rate, No-Build-Detection Rate, Time-to-Verdict, Wiederholungsrate und die Rollenverteilung —
 **alle aus `grep '^VOTUM: ' docs/handoff-status.md`**, ohne zweite Buchführung.
+
+**Und die Regel, die am ersten Tag nötig wurde:** eine **echte** Votumszeile steht **am
+Zeilenanfang**. **Jedes Beispiel wird um zwei Leerzeichen eingerückt.**
+
+*Gemessen 30.07., 07:54: `grep -c "^VOTUM: auftrag="` lieferte **3**, obwohl nur **2** Voten
+geschrieben waren — die dritte war das Beispiel aus der Regel selbst. **Ein Beispiel, das wie ein
+Datensatz aussieht, IST ein Datensatz, sobald jemand zählt.** Dritte Ausprägung von „Text wird
+gemessen, nicht Absicht" — diesmal im Mechanismus, der genau das verhindern sollte.*
