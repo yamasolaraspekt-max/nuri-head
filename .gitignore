@@ -8,6 +8,9 @@
 .env
 .env.backup
 .env.production
+# PB-044: die Testumgebung traegt dieselben Zugangsdaten wie `.env` und gehoert
+# genauso wenig ins Repo. Der Eintrag steht hier, BEVOR die Datei angelegt wurde.
+.env.testing
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

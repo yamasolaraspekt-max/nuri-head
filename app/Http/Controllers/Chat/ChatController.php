@@ -67,11 +67,22 @@ class ChatController extends Controller
         $authEmployeeId = (int) auth()->user()->name;
         $customerId = $request->integer('customer_id') ?: null;
 
-        Log::info('[Chat] getEmployeesAndGroups IN', [
-            'auth_user_id' => $authUserId,
-            'auth_employee_id' => $authEmployeeId,
-            'customer_id' => $customerId,
-        ]);
+        // PB-043: Dieser Endpunkt wird gepollt. Drei unbedingte `Log::info` schrieben je 32 915
+        // Zeilen — zusammen 44 % einer 218-MB-Logdatei ohne Rotation, in der 2 054 echte
+        // Fehlermeldungen begraben lagen.
+        //
+        // **Nicht geloescht, sondern an die Bedingung gehaengt, die es hier schon gab:** derselbe
+        // `debug`-Schalter, den die Antwort weiter unten auswertet. Wer die Diagnose braucht, ruft
+        // `?debug=1` — wie bisher; wer nur pollt, erzeugt keine Zeile mehr.
+        $debug = $request->boolean('debug');
+
+        if ($debug) {
+            Log::debug('[Chat] getEmployeesAndGroups IN', [
+                'auth_user_id' => $authUserId,
+                'auth_employee_id' => $authEmployeeId,
+                'customer_id' => $customerId,
+            ]);
+        }
 
         $pinnedUserIds = Schema::hasTable('pinned_private_chats')
             ? DB::table('pinned_private_chats')
@@ -96,17 +107,23 @@ class ChatController extends Controller
             })
             ->get();
 
-        Log::info('[Chat] employees fetched', [
-            'count' => $users->count(),
-            'map' => $users->map(fn(User $user) => [
-                'user_id' => $user->id,
-                'employee_id' => (int) $user->name,
-                'emp_has_row' => (bool) $user->employee,
-                'emp_status' => $user->employee->status ?? null,
-                'emp_name' => optional($user->employee)->name,
-                'emp_lastname' => optional($user->employee)->lastname,
-            ])->values()->all(),
-        ]);
+        // PB-043: **Die teuerste der drei.** Sie schrieb bei JEDEM Abruf Vorname und Nachname
+        // aller aktiven Mitarbeiter in die Logdatei — der Prüfer hat das ausdrücklich als
+        // Datenschutz-Kante gemeldet. Hinter dem `debug`-Schalter bleibt die Diagnose erhalten,
+        // ohne dass Namen bei jedem Poll auf die Platte gehen.
+        if ($debug) {
+            Log::debug('[Chat] employees fetched', [
+                'count' => $users->count(),
+                'map' => $users->map(fn(User $user) => [
+                    'user_id' => $user->id,
+                    'employee_id' => (int) $user->name,
+                    'emp_has_row' => (bool) $user->employee,
+                    'emp_status' => $user->employee->status ?? null,
+                    'emp_name' => optional($user->employee)->name,
+                    'emp_lastname' => optional($user->employee)->lastname,
+                ])->values()->all(),
+            ]);
+        }
 
         $employees = $users
             ->map(function (User $user) use ($authUserId, $pinnedUserIds) {
@@ -278,12 +295,16 @@ class ChatController extends Controller
             ->sortByDesc('last_msg_at')
             ->values();
 
-        Log::info('[Chat] getEmployeesAndGroups OUT', [
-            'employees_returned' => $employees->count(),
-            'groups_returned' => $groups->count(),
-        ]);
+        if ($debug) {
+            Log::debug('[Chat] getEmployeesAndGroups OUT', [
+                'employees_returned' => $employees->count(),
+                'groups_returned' => $groups->count(),
+            ]);
+        }
 
-        if ($request->boolean('debug')) {
+        // PB-043: dieselbe Bedingung wie oben — vorher stand hier `$request->boolean('debug')`
+        // ein zweites Mal. Ein Ausdruck, eine Wahrheit.
+        if ($debug) {
             return response()->json([
                 'employees' => $employees,
                 'groups' => $groups,
