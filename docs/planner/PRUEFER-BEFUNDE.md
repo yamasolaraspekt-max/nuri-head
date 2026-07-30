@@ -2970,3 +2970,64 @@ Code, gegen den ich messen könnte** — die Monteur-App ist nicht gebaut. Nach 
 
 **N-2 ist damit abgetragen.** Offen von meiner Liste bleiben **N-1** (zehn Skills inhaltlich) und
 **N-3** (`tool-dashboard` §6/§8/§9 gegen die Oberfläche).
+
+---
+
+## 42. Runde 31 — N-3 nachgeholt · Stand: 65 von 386
+
+**Gemessen gegen `ba69f432`.** *Der dritte Posten, den ich mir schuldig war.*
+
+### Meine Sorge aus Runde 4 war ungenau — und ich sage das zuerst
+
+Ich hatte notiert, `§6/§8/§9` dienten als **Design-Vorlage**, während die Oberfläche vier
+Layout-Wellen weiter sei. **§6 ist kein Design, sondern ein Zielbild mit fünf Prinzipien**, §8 sind
+Umsetzungsslices, §9 Abnahmekriterien. *Prinzipien verfallen nicht wie ein Bildschirmfoto.* Von den
+fünf Prinzipien halten vier; das fünfte ist bereits als `PB-024` erfasst (ein Token-System).
+
+**Geprüft und sauber:** *„React-Scope bleibt im gekapselten Insel-Bundle"* — **0** Dateien mit
+`from 'react'` außerhalb von `resources/planner/hausplaner/`.
+
+### PB-035 · P2 · Ein lebender Fahrplan führt gebaute Flächen als „❌ 0 Dateien"
+
+```yaml
+befund:
+  id: PB-035
+  datei: "docs/fahrplan-dashboard-versionen.md"
+  stelle: "Z64 (UI-9), Z60 (UI-6), Z63 (UI-8b) - die Statusspalte"
+  behauptung: |
+    Z64: "UI-9 Command-Palette (§30) | ❌ 0 Dateien | -"
+    Z60: "UI-6 Arbeitsbereiche (§9) | Keim | activeWorkspace existiert, hat aber real
+          genau EINEN Wert"
+    Z63: "UI-8b Sichtbarkeit/Sperre (§33) | halb | Commands da - kein Panel"
+  gemessen: |
+    UI-9:  app/dashboard/palette.ts                    191 Zeilen
+           __tests__/palette.test.ts · __tests__/paletteNavigation.test.ts
+           Konsumenten von palettenGruppen/palettenEintraege/PALETTE_ARTEN:  4 Dateien
+           dazu ein eigenes Auftragsblatt (AUF-67) und ein Icon (befehlspalette.svg)
+    UI-6:  app/dashboard/arbeitsbereiche.ts  139 Zeilen, ARBEITSBEREICHE mit
+           MEHREREN Eintraegen (Import & Nachzeichnen · Architektur · Bauphysik ·
+           Heizung · Elektro/PV ...)
+    Fahrplan zuletzt geaendert:  25.07. 11:30  - vor AUF-34 und AUF-67
+  befehl: |
+    git ls-tree -r --name-only HEAD | grep -i palette
+    git grep -l "palettenGruppen\|palettenEintraege\|PALETTE_ARTEN" HEAD -- 'resources/planner/hausplaner' | wc -l
+    git show HEAD:resources/planner/hausplaner/app/dashboard/arbeitsbereiche.ts | awk '/^export const ARBEITSBEREICHE/,0' | grep -c "label: '"
+  commit: "ba69f432"
+  schwere: P2
+  wirkung: |
+    Der Fahrplan ist ein LEBENDES Dokument - er wird aus einem Auftragsblatt als
+    "Grundlage" zitiert und haelt das Ist-Inventar mit Haken. "❌ 0 Dateien" gegen eine
+    Flaeche, die 191 Zeilen, zwei Testdateien, vier Konsumenten und ein eigenes
+    abgenommenes Auftragsblatt hat, ist die Fehlerklasse F-07 in ihrer teuersten Form:
+    wer das liest, plant den Bau einer Palette, die es gibt. Das ist genau der Fall,
+    den CLAUDE.md am TopologieGate festhaelt - beinahe ein zweites Mal gebaut.
+  eigenarbeit: nein
+```
+
+**Erledigt wenn:** *für jede Zeile mit `❌ 0 Dateien` liefert ein `git grep` auf den genannten
+Gegenstand ebenfalls 0 — oder die Zeile nennt Datei und Zeilenzahl des Vorhandenen.*
+
+**N-1, N-2, N-3 sind damit abgetragen.** *N-3 hat dabei mehr gefunden als erwartet — aber nicht dort,
+wo ich es vermutet hatte: nicht im alten Papier, sondern im lebenden Fahrplan, der es zitiert.*
+
+**Ballbesitz: Planner.**
