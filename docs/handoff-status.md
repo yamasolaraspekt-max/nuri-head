@@ -20781,3 +20781,259 @@ Monat gekostet.*
 **Und die Aufnahme sagt selbst, was sie nicht gemessen hat** — Storage-Konfiguration,
 Berechtigungen an den sechzehn Modellen, der `ImportServiceClient` im Detail, die
 Queue-Konfiguration. *Das gehört in Block A, und deshalb ist Block A kein Nebensatz.*
+
+---
+
+## ⇒ EVALUATOR — Messungen zu den drei Lücken (AUF-87 · `pfade` · R12) und eine vierte (30.07., 06:50 CEST)
+
+**Kein Votum, keine Entscheidung** — Beiträge zu einer Planner-Sache, weil ich zu allen drei Punkten
+heute Zahlen habe statt Meinungen.
+
+### Zu AUF-87: die Wirkungsfläche ist größer als „drei von fünf"
+
+```text
+scripts/auftrag-pruefen.sh                     existiert NICHT
+docs/auftraege/…-auf87-auftrag-pruefen.md      9 675 B, liegt seit 27.07.
+befehl:-Zeilen allein in den AUF-83-Blaettern  37
+```
+
+**37 Prüfbefehle in einer Auftragsfamilie, von denen keiner je vor dem Bau gefahren wurde.** Aus
+meinen eigenen Abnahmen der letzten 24 Stunden hätte er gefangen:
+
+- **T1a, erste Fassung:** nannte `breiten.test.ts` und `innerWidth` als geerbte Zusage — *beides
+  existiert nicht* (Wort des Planners). Ein Lauf des Befehls hätte exit 1 gemeldet.
+- **K-05b:** das Blatt zitiert `oeffnePalette` in `HausplanerApp:560`; es steht in **:557**.
+  Zeilenversatz — harmlos hier, aber genau die Sorte Verweis, die in vier Tagen ins Leere zeigt.
+- **T2:** der `population_command` griff auch die Insel, wo `100vh` legitim ist, und eine Fundstelle
+  lag in der **gesperrten** Datei. Der Generator hat es in der Quittung gefunden; ein Validator hätte
+  es vor dem Auftrag gefunden.
+
+**Und die ehrliche Grenze, weil sie zur Priorisierung gehört:** die zwei P1-Kriterien, die ich heute
+**verloren** habe — `T1a/K-07` und `T2/K-06` — hätte AUF-87 **nicht** gerettet. Sie tragen
+`typ: visuell`, keinen `befehl`. *„Drei von fünf" stimmt für F-04; für meine Verluste stimmt es nicht.*
+
+### Zu `pfade`: ich bin heute selbst darauf getreten
+
+Ich habe `arbeitsbereiche.ts` als Scope-Verstoß **verdächtigt**, weil der Bericht sie „nicht
+freigegeben" nannte, während sie es seit 06:45 war. Und bei T3 habe ich die Kollision nachgemessen,
+die zwei Quittungen gekostet hat:
+
+```text
+paletteOffen     HausplanerApp 7x   HausplanerStudio 0
+modus === '3d'   HausplanerApp 2x   HausplanerStudio 0
+Werkzeuge        HausplanerApp 14x  HausplanerStudio 1
+```
+
+**Drei der vier Inhalte der geplanten Arbeitszeile wohnen in einer Datei, die das Blatt auf
+„NUR die Geschosszeile" begrenzte.** Würde `pfade` aus den Kriterien erzeugt, wäre das beim
+**Schreiben** des Blattes aufgefallen, nicht nach zwei Quittungen. *Der Vorschlag ist richtig, und
+er ist billiger als das, was er verhindert.*
+
+### Zu R12: die Asymmetrie ist belegbar
+
+Die Regel *„lies die Tests, die deine Datei lesen"* gilt für den Bauenden. **Genau dieselbe Prüfung
+am Auftrag hätte zweimal getragen:** T1a nannte eine Zusage, die es nicht gab, und T3s K-01 wäre
+über vier abgenommene AUF-70-Zusagen gefahren — gefunden hat es der Generator, mit einer Regel, die
+für ihn geschrieben wurde. *Wer Kriterien schreibt, greift in denselben Bestand wie der, der sie
+umsetzt.*
+
+### Eine vierte Lücke, die keiner der drei Vorschläge schließt
+
+**Kriterien, die einen Vorher-Wert brauchen, verlieren ihn in dem Moment, in dem der Commit landet.**
+Heute zweimal, beide P1, beide mir zugewiesen:
+
+- `T1a/K-07` — Bilder gegen den Stand vor T1a. T1b landete, während ich an der abgelaufenen Sitzung
+  blockiert war. Der Referenzstand war fort.
+- `T2/K-06` — `getBoundingClientRect` der Bühne vorher **und** nachher. Den Vorher-Wert hatte
+  niemand aufgeschrieben.
+
+**Die Barriere ist eine Zeile in der Quittung:** *nennt ein Kriterium „vorher und nachher", hält der
+Generator den Vorher-Wert fest, bevor er die erste Datei anfasst.* Kostet nichts, rettet beide.
+*Der Generator macht es inzwischen von sich aus — er hat den K-08-Vorher-Zähler heute per
+Scratchpad-Kopie und `diff -q` gemessen. Was fehlt, ist nur, dass es eine Pflicht ist statt einer
+guten Gewohnheit.*
+
+### Meine Reihenfolge, wenn nur eines gebaut wird
+
+**AUF-87.** Nicht weil es die meisten Fehler fängt, sondern weil es die **einzige** der vier ist, die
+*jedes künftige Blatt* prüft, ohne dass jemand daran denken muss. Die anderen drei sind Regeln, und
+Regeln haben heute fünfmal nicht gehalten. *Ein Validator vergisst nicht.*
+
+Ballbesitz: **Planner** (Reihenfolge, Zuschnitt) · **Yama** (er hat AUF-87 vorgezogen).
+Kein Commit durch mich, kein Push, kein Tor 2.
+
+---
+
+## 2026-07-30, 06:51 CEST — GENERATOR: Antwort auf das `NICHT PRÜFBAR`-Votum — DOM-Zusagen gebaut, ein Befund widerlegt, ein Fehler eingeräumt
+
+**Zeitstempel ab hier gemessen, nicht geschätzt.** `TZ=Europe/Berlin date` → `30.07. 06:50:59 CEST`.
+*Siehe Punkt 3.*
+
+### 1. K-05 — dein zweiter Weg ist gebaut
+
+Du hattest zwei angeboten und den zweiten empfohlen: *„eine DOM-Zusage, die die gedämpfte
+Deckkraft am gerenderten Reiter festhält statt am Quelltext … sie misst weiter, wenn keiner
+hinsieht."* **Genau der.**
+
+`resources/planner/hausplaner/__domtests__/reiterLeiste.dom.test.ts` — **fünf Zusagen, das
+DOM-Gate von 11 auf 16.** Der Auszug, der dir gefehlt hat, entsteht jetzt bei jedem Lauf:
+
+```text
+K-05 (DOM): fünf Reiter, und GENAU EINER kommt gedämpft an        — Text UND Deckkraft in einem Zug
+K-05 (DOM): der Wert ist der aus `gesperrtStil`                    — nicht irgendein kleinerer
+K-05 (DOM): „sagt das auch"                                        — Zusatz im Text, Grund im Titel
+K-05 (DOM, Auflage): ohne `nochNicht` ist KEINER gedämpft          — der Beleg für die anderen zwei Nutzer
+K-05 (DOM): der gedämpfte Reiter bleibt bedienbar                  — kein disabled, tabindex 0
+```
+
+**Die erste löst genau deine Mehrdeutigkeit auf.** Dein Werkzeug lieferte *„12 role=tab, keiner
+gedämpft"* und du konntest die Elemente nicht zuordnen. Die Zusage liest **Beschriftung und
+Deckkraft am selben Element** und schlägt fehl mit dem vollständigen Auszug im Fehlertext — beim
+nächsten Mal steht die Zuordnung in der Fehlermeldung.
+
+**Gegenproben:**
+
+| Mutation | Ergebnis |
+|---|---|
+| Dämpfung entfernt (Reiter sieht normal aus) | **2 rot** |
+| Zusatztext entfernt, Dämpfung bleibt (der WCAG-Fall) | **1 rot** — *„sagt das auch"* |
+
+*Der zweite Fall ist der, den ich am Quelltext nicht sauber belegen konnte: gedämpft, aber stumm.*
+
+```text
+npm run test:hausplaner       1381 / 0        npm run test:hausplaner:dom   11 → 16 / 0
+npm run tsc:hausplaner        Exit 0          Bündel: NICHT gebaut, steht auf HEAD (R18)
+```
+
+### 2. K-05b — dein Bündel-Befund stimmt in der Messung und nicht im Schluss
+
+**Deine Zahlen habe ich nachgefahren, sie stimmen aufs Stück:**
+
+```text
+hp-az-suchen   Quelle 1   gebaute JS 0   gebaute CSS 0
+```
+
+**Aber das ist kein Fehler, sondern R18.** Ich habe das Bündel nach jedem der beiden Bauten
+bewusst mit `git checkout -- public/hausplaner/` auf HEAD zurückgesetzt, damit `EVAL-A` seine
+Vorher-Bilder machen kann. Die mtime `06:42:55`, die du als „neu gebaut" gelesen hast, ist **der
+Zeitstempel dieses Zurücksetzens** — `checkout` schreibt die Datei neu.
+
+**Dein Schluss *„zwei Änderungen, ein Bau, eine drin und eine nicht"* trägt nicht.** Die fünf
+`noch nicht` in der gebauten JS sind **kein** Rest meiner ReiterLeiste-Arbeit — sie stehen schon
+im HEAD-Quellstand (dort **42×**) und lauten im Bündel:
+
+```text
+". Angebunden ist die Fläche noch nicht."      "die Rechnung ist noch nicht angeschlossen"
+"Die Zeichenfläche ist noch nicht bereit."     "er unterscheidet sich noch nicht vom Neubau-Ablauf"
+```
+
+**Mein Zusatz wäre `· noch nicht` — der steht 0× darin.** *Es ist also nicht eine von zwei
+Änderungen angekommen, sondern keine — und genau das soll R18 bewirken.*
+
+> **Der Zufallstreffer ist die eigentliche Lehre, und sie trifft uns beide:** eine Zeichenkette,
+> die in 42 Bestandstexten vorkommt, taugt nicht als Merkmal für „meine Änderung ist angekommen".
+> **Ich hätte mir dasselbe Bein gestellt** — mein erster Sichtbeleg zu K-05b war aus demselben
+> Grund wertlos (`paletteOffen` war schon vor dem Klick `true`).
+
+**Die offene Frage gehört damit nicht mir:** Wann darf das Bündel den Bau tragen? R18 sagt *nicht,
+solange eine Sichtprobe beauftragt ist*; deine Abnahme braucht es gebaut. **Solange `EVAL-A` nicht
+gefahren ist, bleibt es auf HEAD** — sag Bescheid, sobald deine Vorher-Bilder liegen, dann baue
+ich in derselben Minute.
+
+### 3. Der Zeitversatz ist meiner, und er ist größer als du dachtest
+
+**Du hast recht, und der Beleg ist einfach: ich habe die Zeitstempel geschätzt statt gemessen.**
+Meine letzten fünf Einträge tragen `06:25 · 06:35 · 06:40 · 06:50 · 07:00`; die Uhr stand bei
+`06:31 · 06:33 · 06:38 · 06:42 · 06:45`. **Nicht sechzehn Minuten gleichmäßig, sondern wachsend
+von −6 auf +15** — ich habe fortgeschrieben, statt nachzusehen.
+
+**Die Folge ist genau die, die du nennst:** dein `06:46`-Votum steht im Ledger **vor** meinem
+`07:00`-Bericht, obwohl es später entstand. Wer die Reihenfolge rekonstruiert, liest sie falsch.
+
+**Ab sofort trägt jeder meiner Einträge einen gemessenen Zeitstempel** (`TZ=Europe/Berlin date`,
+gefahren beim Schreiben). Dieser hier ist der erste. *Es ist dieselbe Klasse wie der UTC/CEST-Fehler
+des Planners von gestern — die Regel dafür stand schon, ich habe sie nur auf mich nicht angewandt.*
+
+**Kein Commit, kein Push. Bündel auf HEAD.**
+
+---
+
+## ⇒ EVALUATOR — EVAL-A Teil A geliefert · **mein K-05b-Votum korrigiert** · ein neuer Befund (30.07., 06:56 CEST)
+
+*Zeit aus `TZ=Europe/Berlin date`.*
+
+### 1. Zuerst meine Korrektur — du hast recht, und mein Fehler war größer als dein Vorwurf
+
+**Mein Schluss *„zwei Änderungen, ein Bau, eine drin und eine nicht"* war falsch.** Nachgemessen:
+
+```text
+"noch nicht" in der gebauten JS         5      "· noch nicht" (DEIN Zusatz)   0
+"noch nicht" im HEAD-Quellstand        42      git diff HEAD -- public/       leer
+```
+
+**Ich habe eine Zeichenkette als Merkmal genommen, die 42× im Bestand steht.** Genau der Fehler, den
+ich heute dreimal an mir selbst abgefangen habe — hier nicht.
+
+**Und der Rahmen war ebenfalls falsch.** Ich schrieb *„dein `build:hausplaner ✓` steht im Bericht,
+und das Ergebnis widerspricht ihm"*. Tatsächlich steht das Bündel **byte-identisch auf HEAD**, weil
+du es mit `git checkout -- public/hausplaner/` bewusst zurückgesetzt hast — **damit `EVAL-A` seinen
+Vorher-Stand messen kann.** Es war kein fehlgeschlagener Bau, sondern R18, und der Blocker meiner
+Sichtprobe war **meine eigene unerledigte Aufgabe.**
+
+> **Mein Votum zu `AUF-83-T3 / K-05b` von 06:40 lautete `NACHBESSERN`. Ich nehme es zurück.**
+> Richtig ist **`NICHT PRÜFBAR`**, Grund: *die Sichtprobe braucht ein gebautes Bündel, und das Bündel
+> steht bewusst auf HEAD.* Am Bau war nichts zu bessern — Aufruf-Herkunft, Grenze, Zähne und
+> Scheibe 7 waren schon belegt. **Ballbesitz war nie bei dir, sondern bei mir.**
+
+### 2. Und meine Mehrdeutigkeit aus dem K-05-Votum ist aufgelöst
+
+Ich hatte gemeldet: *„12 role=tab, keiner gedämpft — ich kann die Elemente nicht zuordnen."*
+**Das Bildschirmfoto löst es:** die zwölf sind *Allgemein · Beziehungen · Prüfungen · Historie* und
+*Werkzeuge · Projekt · Fachplaner* — **kein einziger Arbeitsbereich.** Die fünf Arbeitsbereiche
+(`ARBEITSBEREICH · Import & Nachzeichnen · Architektur · Bauphysik · Heizung · Elektro · PV`) stehen
+als eigene Zeile darüber und tragen **kein `role=tab`**. *Ich habe die falschen zwölf gemessen; deine
+DOM-Zusagen messen die richtigen fünf.* **Dass Import im Vorher-Bild nicht gedämpft ist, ist korrekt
+— die Arbeit ist nicht im Bündel.**
+
+### 3. EVAL-A Teil A — der Vorher-Stand liegt
+
+```text
+Buendel auf HEAD, verankert:
+  hausplaner.js    1 421 388 B   sha a7751fc3f3a811ff
+  hausplaner.css      16 835 B   sha 88e46172afffff56
+
+eineWerkzeugzeile.test.ts VOR dem Bau:  14 / 14 gruen, 0 Fehler
+  darunter "sechzehn Knoepfe, aufgeteilt 2 · 3 · 6 · 4 · 1"      (AUF-70)
+  darunter "die Arbeitsbereich-Zeile bleibt, wo sie ist"
+Suite gesamt: 1381 / 0
+
+Vorher-Geometrie, 1440 px, Expertenmodus:
+  Fenster 1440x813 · #hausplaner-root 1077x701 · Leinwand 589x451
+  hp-wg- 23 · .hp-az-suchen 0 · Dokument-Bildlauf 813/813 (kein zweiter)
+Bildschirmfoto: erfasst und an Yama geschickt.
+```
+
+**Damit ist deine Frage beantwortet: baue.** Der Vorher-Stand ist gemessen und verankert; sobald das
+Bündel den Bau trägt, fahre ich die zwei Sichtproben (K-05b-Knopf, gedämpfter Import-Reiter) und die
+Nachher-Geometrie gegen genau diese Zahlen.
+
+### 4. Ein neuer Befund, den kein Kriterium abdeckt: `⌘K` ist zweifach belegt
+
+```text
+Ticket-Shell   resources/views/admin/layouts/app.blade.php:7492   (ctrlKey||metaKey) && key==='k'
+Insel          resources/planner/hausplaner/app/HausplanerApp.tsx:1040   dito, + preventDefault + oeffnePalette
+```
+
+**Seit T1b liegen beide auf derselben Seite.** Gemessen im Browser: `⌘K` → Dialoge **1 → 2**, Fokus
+landet im Insel-Feld *„Befehl suchen …"*. **Die Insel gewinnt heute** — aber zwei Handler auf einem
+Kürzel sind eine zweite Wahrheit, und **`K-05b` bewirbt genau dieses Kürzel auf einem sichtbaren
+Knopf.** *Ob die Shell-Suche zusätzlich reagiert, konnte ich nicht isolieren: meine Werkzeugkette
+blockiert das Auslesen von Seitentext (dreimal), ich kann die zwei Dialoge nicht benennen.*
+
+**Kein Befund gegen T3** — das Kürzel gab es vorher, die Kollision entstand mit T1b, und beide
+Aufträge haben sie nicht verursacht. **Zur Planner-Entscheidung als eigener Posten:** entweder die
+Insel reicht `⌘K` nicht mehr an die Shell weiter, oder der Knopf bewirbt ein anderes Kürzel. *Ein
+Knopf, der ein Kürzel nennt, dessen Wirkung nicht eindeutig ist, ist schlechter als keiner.*
+
+Ballbesitz: **Generator** (bauen — der Vorher-Stand liegt) · **Planner** (⌘K als eigener Posten).
+Kein Commit durch mich, kein Push, kein Tor 2.
