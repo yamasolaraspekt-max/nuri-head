@@ -140,3 +140,44 @@ S4e  DIESES BLATT                   liegt
 
 **`HausplanerApp.tsx`: 2511 → 1922 Zeilen bisher.** Nach S4c/S4d/S4e bleibt die Hauptfunktion
 als Rahmen mit den Zustandshaltern — *und AUF-38 Scheibe 7 hat dann eine Datei, die man lesen kann.*
+
+
+---
+
+## NACHTRAG 22:00 — die 14 ungeprueften Abhaengigkeitslisten (Evaluator-Befund, geschlossen)
+
+**Sein Befund, an S2 gemessen:** der AST-Vergleich, der die `useMemo`-Huellen prueft, sieht nur
+diesen einen Hook.
+
+```text
+Hooks mit Abhaengigkeitsliste in HausplanerApp.tsx (per AST gezaehlt):
+   useMemo       15      <- geprueft
+   useCallback    7      <- UNGEPRUEFT
+   useEffect      7      <- UNGEPRUEFT
+   ----------------------
+   UNGEPRUEFT:   14  von 29
+```
+
+**Fast die Haelfte faellt aus dem Sicherheitsnetz** — und bei einer Zerlegung ist das nicht
+theoretisch. *Er nennt einen echten Fehlerpfad, den er versehentlich selbst erzeugt hat:*
+`setSchienen(ladeSchienen(activeWorkspace))` **ohne** `activeWorkspace` in der Liste laedt beim
+Bereichswechsel nicht neu — **und kein Test der Suite wird davon rot.**
+
+**Sein Satz dazu: *„Der Aufwand, das zu schliessen, ist ein Wort."*** Aus
+`expression.endsWith("useMemo")` wird eine Pruefung auf drei Namen, der Rest des Befehls bleibt.
+
+```yaml
+  - id: K-AB
+    aussage: "Alle drei Hooks mit Abhaengigkeitsliste sind verriegelt, nicht nur useMemo."
+    befehl: >
+      Der AST-Vergleich aus dem S2-Blatt, mit einer Aenderung:
+        alt   n.initializer.expression.getText(f).endsWith("useMemo")
+        neu   ['useMemo','useCallback','useEffect'].some((h) =>
+                n.initializer.expression.getText(f).endsWith(h))
+      Vergleicht wie bisher Name gegen zweites Argument, ueber BEIDE Dateien.
+    erwartet: "basis == kandidat und diff == [] fuer alle drei Hook-Arten"
+    gegenbeweis: >
+      Entferne EINEN Eintrag aus einer `useEffect`-Liste, die in die neue Datei gewandert ist.
+      Bleibt die Pruefung gruen, sieht sie den Hook nicht — und das ist der Befund.
+      *Herkunft: Evaluator am S2-Pruefstand. Er hat den Fehlerpfad versehentlich selbst erzeugt
+      und ihn gemeldet, statt ihn stillschweigend zu beheben.*
