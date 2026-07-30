@@ -179,7 +179,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-025 | `ui-bauordnung.md` | P3 | schützt `partials/sa-ui.blade.php` — die Datei gibt es nicht | offen | — |
 | PB-022 | `arbeitskompass-ticket.md` | **P2** | kennt 0 von 9 laufenden Posten; letzte Lage vom 21.07., CLAUDE.md schickt aber dorthin | offen | — |
 | PB-021 | `CLAUDE.md` (Skill-Pflicht) | **P2** | 12 von 22 vorgeschriebenen Fach-Linsen existieren an keinem der beiden Skill-Orte | offen | — |
-| PB-019 | `docs/auftraege/` (aktive Blätter) | **P2** | 6 von 15 aktiven Blättern ohne YAML-Kopf — der Validator findet dort nichts zu fahren | offen | — |
+| PB-019 | `docs/auftraege/` (aktive Blätter) | **P2→P3** | Validator **benennt** `KEIN KOPF` (kein F-14) — aber `exit 0` ließe 6 aktive Blätter durch ein Gate | offen (herabgesetzt) | — |
 | PB-020 | `AUFTRAGSSCHEMA.md` | P3 | Beispiel nennt `zaehle-statische-stile.sh` — die Datei gibt es nicht | offen | — |
 | PB-033 | `probe_*_tmp.mjs` | ~~P2~~ | beide Kladden entfernt (3 → 1 Datei) | **ERLEDIGT** | 30.07. 10:0x |
 | PB-018 | `k01n1b.mjs` | **P2** | Klartext-Zugang im Wurzelverzeichnis; `.gitignore`-Muster greifen nur bei passendem Namen | **ANGENOMMEN** | 30.07. 09:28 — Sicherheitsposten an Yama: `.gitignore` + `mv`; liegt ausserhalb meiner Schreibflaeche |
@@ -3715,3 +3715,64 @@ sondern nach der Fundstelle gefragt habe.**
 `PB-034` hat gemeldet, dass die **Ist-Belege** der Bauordnung veraltet sind (`96/387` → `75/406`) —
 aber die **Regeln** hält der Hausplaner vollständig ein. **Das Papier hinkt seinem eigenen Code
 nach, nicht umgekehrt.***
+
+---
+
+## 56. Runde 41 — **PB-019 durch Ausführung entschieden.** Meine Sorge war zur Hälfte falsch.
+
+**Gemessen gegen `9179edba`.** AUF-87s Validator ist committet (`scripts/auftrag-pruefen.{mjs,sh}`,
+17 597 + 549 Byte, beide im Commit) — **damit ist PB-019 zum ersten Mal nicht argumentierbar, sondern
+ausführbar.** *Vorher geprüft, dass er nur liest: keine `writeFile`/`mkdir`/`unlink`-Aufrufe.*
+
+### Was PB-019 behauptet hat und was die Ausführung zeigt
+
+**Meine Behauptung:** *„Ein Validator, der die aktiven Fälle nicht erreicht, meldet ‚nichts zu prüfen'
+und **sieht dabei aus wie Erfolg** — dieselbe Klasse wie F-14."*
+
+```text
+bash scripts/auftrag-pruefen.sh <blatt OHNE Kopf>
+  ── generator-auftrag-auf38-scheibe3.md
+     KEIN KOPF (kein Fehler — aeltere Blaetter haben keinen)
+  exit = 0
+```
+
+**Der zweite Teil meiner Behauptung ist falsch.** Er sieht **nicht** aus wie Erfolg: er sagt
+ausdrücklich `KEIN KOPF` **und nennt den Grund**. *Das ist genau das Gegenteil von F-14 — ein Befehl,
+der benennt, was er nicht getan hat.*
+
+**Der erste Teil bleibt richtig:** die sechs kopflosen aktiven Blätter werden nicht geprüft, und
+`exit 0` heißt, dass ein Gate sie durchließe.
+
+### Und die Gegenprobe, die zeigt, dass er wirklich arbeitet
+
+```text
+bash scripts/auftrag-pruefen.sh <blatt MIT Kopf>
+  STRUKTUR S-04    N-01   coverage ohne `population_command` und ohne eigenen Befehl
+  NICHT MASCHINELL N-01   typ: visuell · ausgefuehrt_von: evaluator
+  OK               N-03   40 Zeile(n)
+  OK               N-05   1478 Zeile(n)
+  ── 5 Eintraege: 2 OK · 0 Fehlschlag · 3 nicht maschinell · 1 STRUKTUR-Befund
+  exit = 1
+```
+
+**Er findet einen echten Strukturmangel am aktiven Blatt** (ein `coverage`-Kriterium ohne
+`population_command`) und **er unterscheidet „nicht maschinell prüfbar" von „geprüft und in Ordnung"**
+— die Unterscheidung, an der die meisten Gates scheitern. `exit 1` bei Fehlschlägen, `exit 0` sonst.
+
+### Eine eigene Messfalle, die ich in derselben Runde hatte
+
+**Mein erster Lauf meldete für beide Fälle `exit=0`.** Falsch — `$?` nach einer Pipe ist der Status
+von `sed`, nicht der des Skripts. Sauber gemessen: **ohne Kopf 0, mit Kopf 1.**
+
+*Fünfzehnte vermiedene Fehlmeldung, und dieselbe Familie wie die vier F-01-Fälle: nicht das Urteil,
+sondern das Messwerkzeug. Diesmal war es die Shell selbst.*
+
+### PB-019 neu gefasst
+
+**Von P2 auf P3**, mit geänderter Begründung: *nicht „der Validator täuscht Erfolg vor" — sondern
+„sechs aktive Blätter sind seiner Prüfung entzogen, und sein `exit 0` würde sie in einem Gate
+durchlassen."*
+
+**Erledigt wenn:** *jedes von Tafel 3a/3b genannte Blatt trägt einen Kopf* — **oder** der Validator
+kennt einen Schalter (`--verlange-kopf`), der `KEIN KOPF` zu einem Fehlschlag macht, sodass ein Gate
+ihn nicht überliest. *Der zweite Weg ist eine Zeile und schützt auch die Blätter, die noch entstehen.*
