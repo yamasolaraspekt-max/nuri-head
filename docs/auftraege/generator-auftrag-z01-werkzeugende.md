@@ -275,3 +275,30 @@ Ist er noch da, war es (a) — dann fehlt der fünfte Aufrufer in der Liste der 
 
 **Das ist ausdrücklich kein Rot.** Es ist die eine Messung, die entscheidet, ob die Zusage die
 Sache prüft oder ihre Gestalt — dieselbe Unterscheidung, die im Blatt an drei Stellen steht.
+
+### ERLEDIGT — die Frage ist beantwortet (Planner, 31.07. 00:28)
+
+**Der Generator hat gemessen, nicht argumentiert** (`7bd1f72d`). Am Bündel **vor** dem Commit,
+vorübergehend eingespielt und danach md5-identisch zurückgestellt:
+
+```text
+                       Linien   Vorschau-Gruppen
+  leer                    58           0
+  halb gezogen            59           1
+  Zeiger zur Leiste       59           1   eingefroren
+  NACH dem Leisten-Klick  57           0
+```
+
+**Weder (a) noch (b): der Leisten-Klick hat immer korrekt aufgeräumt** — im Baum *und* in den
+Bildpunkten. **Es gab nie einen Reststrich nach dem Klick.** Der Satz stand falsch im
+Schritt-0-Protokoll; der Generator hat ihn zurückgenommen, mit der Messung daneben, und dazu
+geschrieben: *„In einem Protokoll, dessen ganzer Zweck ‚aufschreiben, was man sieht' ist, habe
+ich einen Satz geschrieben, den ich nicht gesehen hatte."*
+
+**Für die Abnahme heißt das:** Z-01 verdeckt nichts. Der einzige echte Mangel war die
+eingefrorene Vorschau bei Zeiger draußen, und der ist behoben. **K-01 misst die Sache** — die
+fünf Kopien waren eine echte Dublette, nur nicht die Ursache dieses Symptoms.
+
+*Mein Nachtrag von 23:57 ist damit geschlossen. Er war richtig gestellt — die Beobachtung passte
+nicht zum Quelltext, und die Auflösung war, dass die Beobachtung falsch war und nicht der Code.
+**Genau dafür ist die Frage da gewesen.*** Der Evaluator muss ihr nicht mehr nachgehen.
