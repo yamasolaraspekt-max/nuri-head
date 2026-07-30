@@ -1180,3 +1180,62 @@ geschieht.*
 | **L6 Workflow** | PB-013 — wer neu anfängt, liest den falschen Satz und weiß es nicht |
 
 **Ballbesitz: Planner.**
+
+---
+
+## 19. Runde 12 (30.07.) — die schichtübergreifende Kette Zod → Schema → PHP: **keine Beanstandung**
+
+**Gemessen gegen `6c5fbb8b`.** Keine Papierfläche, sondern die **Behauptung**, die `CLAUDE.md` und
+der `bauplaner-3d`-Skill gemeinsam aufstellen: *„Zod ändern ⇒ IMMER regenerieren, sonst 422."* Das
+ist der Vertrag zwischen Insel und Server — **die Stelle, an der Datenverlust entstünde**, und
+zugleich die, vor der `PB-001` fälschlich als offener Blocker warnte.
+
+**Die Kette, Glied für Glied am Code:**
+
+```text
+domain/validation.ts (Zod)
+  -> npm run schema:hausplaner        erzeugt scene-document-v2.schema.json
+  -> npm run schema:hausplaner:check  Teil von build UND test  (package.json:7-10)
+  -> SceneDocumentValidator.php:12    const SCHEMA_PATH = 'resources/.../scene-document-v2.schema.json'
+                              :42    file_get_contents(base_path(self::SCHEMA_PATH))
+  -> SpeichereHausplanerDokumentRequest.php   ruft den Validator im Speicherweg
+```
+
+**Kein Glied fehlt, und keines liest eine Kopie** — der PHP-Validator liest genau die Datei, die der
+Generator erzeugt. *Eine zweite Wahrheit gäbe es hier, wenn jemand das Schema nach `app/` kopiert
+hätte; das ist nicht der Fall.*
+
+**Und der Vertrag ist geprüft** — `tests/Feature/Hausplaner/HausplanerSpeichernNutzlastTest.php`:
+
+| Abgewiesen wird | |
+|---|---|
+| unbekanntes Zukunftsfeld ohne Schemawechsel · Float-Millimeter · unbekannter Node-Typ · Nullwand · verwaiste Öffnung · überstehende Öffnung · fremde `projectId` · abweichende Hüllen-/Szenen-Version · abweichende Revision · gewechselte Dokument-ID · übergroße Szene | **11 Fälle, alle 422** |
+| Revisionskonflikt | **409**, mit erwarteter Revision im Rumpf |
+
+**Das Beste daran ist der Hilfssatz `assert422OhneMutation`:** er prüft nicht nur den Statuscode,
+sondern dass `scene_json`, Revision und Checksum **unverändert bleiben**. *Eine Ablehnung, die
+nebenbei schreibt, wäre schlimmer als eine Annahme* — und genau das kann hier niemand mehr
+versehentlich einbauen.
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | keine Beanstandung — **eine** Schemadatei, von beiden Seiten gelesen, keine Kopie |
+| **L4 Kausalität** | keine Beanstandung — die Kette ist an jedem Glied belegt und am Ende getestet |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | keine Beanstandung — die Ablehnung schreibt nichts, der Nutzer verliert nichts |
+
+**Kein Befund.**
+
+### Vierte Beinahe-Fehlmeldung — und diesmal wäre sie ein P2 gewesen
+
+Mein erster Griff war `git grep -ln "SceneDocumentValidator" -- tests` → **leer**, und daraus wäre
+*„der wichtigste Vertrag der Insel hat keinen Test"* geworden. **Der Test prüft das Verhalten über
+die Route, nicht die Klasse über ihren Namen** — und das ist die bessere Bauart, nicht die
+schlechtere.
+
+**Das Muster ist jetzt viermal dasselbe:** falsche Spalte · zsh-Modifikator · Pfad-Präfix · Suche
+nach dem Namen statt nach der Wirkung. **Alle vier in der Extraktion, keiner im Urteil.** Und der
+vierte ist der lehrreichste, weil er dieselbe Verwechslung ist, die `K9` den Zusagen verbietet:
+*Gestalt statt Wirkung geprüft.* **Ich habe die Regel, die ich prüfe, beim Prüfen gebrochen.**
