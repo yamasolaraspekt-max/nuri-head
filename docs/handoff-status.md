@@ -22352,3 +22352,152 @@ einem Commit, dem sie nicht gehören.* Das Generator-Blatt sagt es jetzt allgeme
 
 **2. `docs/auftraege/AUFTRAGSSCHEMA.md` ist um 13 Zeilen gewachsen** — das ist der Generator, der
 in Abschnitt 7 schreibt, wie in seiner Quittung angekündigt. **Nicht mitcommittet.**
+
+---
+
+## 2026-07-30, 07:43 CEST — GENERATOR: `T3-K01-B1` **behoben** — und beim Nachmessen ein zweiter Befund, der schwerer wiegt
+
+*Zeit gemessen. Bündel neu gebaut: `js 1 423 502 B  sha 5a24127c1ef3f3c1` · `css 17 973 B  sha 80c9e9eca2818c6e` — und diesmal gesichert.*
+
+### 1. Dein Befund war richtig, und die Ursache ist genau die, die du benennst
+
+```ts
+// vorher — prüfte nur `undefined`
+if (o.revision !== undefined && typeof o.revision !== 'number') return false;
+// jetzt
+if (o.revision !== undefined && o.revision !== null && typeof o.revision !== 'number') return false;
+```
+
+Dazu wird `null` beim Lesen zu „nicht gesetzt" normalisiert, damit das Feld keinen Wert trägt, den
+sein Typ nicht kennt.
+
+**Belegt an genau deinen Objekten, am gebauten Bündel, Expertenmodus:**
+
+```text
+203   veraltet  rev 9      KOPF SICHTBAR | Übernommen — VERALTET (Szene geändert seit Übernahme)
+154   nie       rev null   KOPF SICHTBAR | Noch nie übernommen
+153   nie       rev null   KOPF SICHTBAR | Noch nie übernommen
+```
+
+**Zwei neue Zusagen, und die Gegenprobe stellt den Originalfehler wieder her ⇒ beide rot:**
+
+```text
+K-01 (Befund T3-K01-B1): `revision: null` ist „fehlt" — der Kopf wird GELESEN
+K-01: die FELDLISTE des Blades und die des Lesers sind dieselbe — gemessen, nicht behauptet
+```
+
+**Die zweite ist die wichtigere.** Sie liest die Feldnamen **aus dem Blade** und prüft: *jedes Feld,
+das dort mit `?? null` gesendet wird, muss der Leser vertragen.* Nicht „revision darf null sein",
+sondern die Verallgemeinerung. *Kein Gate konnte den Fehler sehen, weil kein Test je die echte
+Nutzlast gelesen hat — meine Fälle waren erfunden. **Das war die Lücke, nicht die eine Zeile.***
+
+### 2. Der zweite Befund, und er ist meiner: der Kopf ist nur im EXPERTENMODUS da
+
+Beim Nachmessen ohne Modus-Klick fehlte der Kopf auf **allen** Objekten, auch auf 203. Diagnose:
+
+```text
+Objektseite startet in "Übersicht" · #hausplaner-root gemountet · 3 Knöpfe (Übersicht/Geführt/Experte)
+data-objektkopf: vorhanden und vollständig      .hp-ok-name: FEHLT
+nach Klick auf Expertenmodus:                   .hp-ok-name: DA
+```
+
+**`HausplanerStudio.tsx:140` hängt `<HausplanerApp>` nur im Expertenmodus ein** — derselbe
+strukturelle Punkt, an dem K-06 zu `AUF-85` abgetrennt wurde. **Mein Objektkopf sitzt in
+`HausplanerApp` und erbt diese Grenze.**
+
+> **Das ist eine Verschlechterung gegenüber vorher, und sie steht in keinem Kriterium.** Die
+> Blade-Leiste stand **über** der Insel und war in **allen drei Modi** sichtbar. Jetzt sind
+> Objektname, Übernehmen-Knopf und Staleness-Pille in *Übersicht* und *Geführte Planung*
+> **gar nicht mehr erreichbar** — und *Übersicht* ist der Startzustand.
+>
+> **Mir ist es beim Bauen nicht aufgefallen, weil ich in jeder eigenen Sichtprobe zuerst den
+> Expertenmodus geklickt habe.** Dein Messweg hat es sichtbar gemacht, meiner nicht.
+
+**Ich behebe es nicht von mir aus.** Die Auflösung heißt entweder *der Kopf wandert in die Schale*
+(dann ist er wieder in allen Modi da — aber das ist Zustand hochziehen, also `AUF-48`), oder
+*T3 nimmt die Einschränkung bewusst an* (dann gehört ein Satz ins Blatt, warum der Objektname im
+Startzustand nicht mehr sichtbar ist). **Zur Planner-Entscheidung — mit der Messung, nicht mit
+einer Vermutung.**
+
+### 3. Ein geerbter Test hat meinen Testfall gefangen, und er hatte recht
+
+Mein neuer Fall trug die echte Adresse `…/objekt/154/uebernehmen` als Nutzlast.
+**`projektKlick.test.ts / K4` wurde rot:** *„jeder Treffer im Baum ist ein DATEIPFAD, keine
+Adresse"*. Die Zusage kann eine Testnutzlast nicht von einem echten Ziel unterscheiden — und genau
+deshalb ist sie richtig geschnitten. **Adresse verkürzt auf `/x/uebernehmen`; für den Befund zählt
+`revision: null`, nicht der Inhalt der URL.**
+
+### Gates
+
+```text
+npm run test:hausplaner       1392 → 1394 · Fehler 0     (+2 = die zwei neuen Zusagen)
+npm run test:hausplaner:dom   16 / 0
+phpunit tests/Feature/Hausplaner   64 Tests, 232 Assertions, OK
+npm run tsc:hausplaner  Exit 0     npm run build:hausplaner  Exit 0
+Messwerkzeug HausplanerApp    138 / 78 — UNVERÄNDERT
+```
+
+**Kein Commit, kein Push.** Ballbesitz: **Evaluator** (Nachmessung von B1) · **Planner** (Befund 2:
+der Kopf nur im Expertenmodus).
+
+---
+
+## ⇒ PLANNER — Yama hat einen unabhängigen Prüfer aktiviert (30.07., 07:45 CEST)
+
+**Meldung von Yama, 07:44:** *„ich habe unabhängig von euch zwei einen Prüfer aktiviert, dass er
+alle eure alten und neuen Sachen in planner prüft und Mängel oder Fehler mit Erklärung an dich
+weitergibt."*
+
+### Empfangsquittung — nach der eigenen SLA, die heute früh beschlossen wurde
+
+```text
+Empfangen:        30.07., 07:45
+Verstanden:       ja
+Blockiert:        nein
+Naechster Status: jeder Befund bekommt binnen einer Wachrunde eine Empfangszeile
+                  und binnen einer Stunde ein begruendetes Votum.
+```
+
+**Das ist die Rolle, um die ich heute früh selbst gebeten habe** — und dass sie **unabhängig von
+mir** läuft, ist genau der Punkt. *Sechs von sieben Fehlerklassen des Planners hat heute jemand
+anderes gefunden, nie ich selbst.*
+
+### Die Prüffläche, gemessen
+
+```text
+ls docs/planner/ | wc -l                          →  64 Dateien
+cat docs/planner/*.md docs/planner/*.html | wc -l  →  9 862 Zeilen
+zwanzig Papiere stammen vom 24.07., 19:37 — sechs Tage alt
+```
+
+**Diese zwanzig sind vor AUF-27, AUF-34, AUF-36, AUF-43, AUF-70 und der ganzen Layout-Kette
+geschrieben worden.** Die Wahrscheinlichkeit, dass sie den heutigen Bestand korrekt beschreiben,
+ist gering — und **niemand hat sie seither gegen den Baum gehalten.**
+
+*Das stand seit gestern als offene Leseaufgabe auf meiner Liste. Sie ist jetzt in besseren Händen:
+ein Unabhängiger hat nicht die Erinnerung daran, was ich damals gemeint habe.*
+
+### Was ich eingerichtet habe
+
+**`docs/planner/PRUEFER-BEFUNDE.md`** — Eingang, Form, Antwortpflicht, Fristen:
+
+- **Form eines Befunds:** Datei · Stelle · Behauptung · Gemessen · **Befehl** · **Commit** ·
+  Schwere · Wirkung. *Das Wichtigste ist `befehl` und `commit` — ein Befund ohne nachfahrbaren
+  Befehl ist eine Meinung, und dieselbe Regel, die für meine Aufträge gilt, gilt für die Befunde
+  gegen sie.*
+- **Vier Antwortwerte:** `ANGENOMMEN` · `ANGENOMMEN, ABER ANDERS GESCHNITTEN` ·
+  `BEGRÜNDET ABGELEHNT` **mit Gegenmessung** · `BEREITS BEHOBEN` mit Hash.
+  *Eine Ablehnung ohne Befehl ist eine Ausrede.*
+- **Fristen:** P1 sofort, P2 in derselben Wachrunde eingeordnet, P3 gesammelt.
+- **Drei Sonderfälle:** trifft ein Befund ein **aktives** Auftragsblatt, geht sofort eine Nachricht
+  an den Generator — *ein halb gebauter falscher Umfang ist teurer als eine Unterbrechung.*
+  Trifft er eine unbekannte Fehlerklasse, wird sie angelegt. Wiederholt sie sich, greift R9:
+  **Barriere, nicht dritter Vorsatz.**
+
+### Und die Zusage, die dazugehört
+
+**Ich verteidige nicht.** Ein Befund, der stimmt, wird angenommen — auch wenn er ein Papier trifft,
+das ich vor zwanzig Minuten geschrieben habe.
+
+*Zwei der heutigen Korrekturen kamen von Yama und trafen meine eigenen Regeln von vor einer Stunde.
+Beide waren richtig. Das ist der Maßstab.*
