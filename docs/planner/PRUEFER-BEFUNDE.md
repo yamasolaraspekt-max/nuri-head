@@ -174,6 +174,8 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
+| PB-013 | `docs/agents/regeln/kern.md` | **P1** | „wird IMMER geladen" — vom vorgeschriebenen Startpfad aus mit 0 Verweisen unerreichbar | offen | — |
+| PB-014 | `docs/agents/` (Struktur) | **P1** | zwei vollständige Regelsätze für dieselben drei Rollen, 1534 Z., ohne Verweis aufeinander | offen | — |
 | PB-011 | `FEHLERKLASSEN.md` | **P2** | drei Zähler zu niedrig; in zehn Prüfrunden kein Befund eingetragen | offen | — |
 | PB-012 | `FEHLERKLASSEN.md` | **P2** | die Barriere von F-14 ist ein Absatz — nach zwei Stunden gebrochen; R9 verlangt mehr | offen | — |
 | PB-009 | `bestandsaufnahme-studio-rahmen-2026-07-29.md` | **P2** | Konflikttabelle sperrt eine freie Datei; Anker auf einen Rahmen, der seit T1/T3 umgebaut ist (217→159 Z.) | **ANGENOMMEN** | 30.07. 09:05 — HISTORISCH-Kopf; fuer den Stand gilt die Auftragstafel |
@@ -1074,5 +1076,107 @@ es nicht — ich melde, dass die vorhandene Fassung R9 nicht genügt.*
 | **L4 Kausalität** | **PB-012** — die Kette *Barriere → Verhalten* reißt nachweislich: 06:58 eingetragen, 08:55 gebrochen |
 | **L5 Plausibilität** | keine Beanstandung |
 | **L6 Workflow** | PB-011 — der Prüfer ist als Speiser des Registers nirgends vorgesehen |
+
+**Ballbesitz: Planner.**
+
+---
+
+## 18. Runde 11 (30.07.) — zwei Regelwerke für dieselben Rollen
+
+**Gemessen gegen `96ff85e3`.** Fläche: `docs/agents/regeln/kern.md`, das §2 dieses Eingangs mir als
+Maßstab nennt.
+
+### PB-013 · P1 · „Wird IMMER geladen, von allen Rollen" — vom vorgeschriebenen Startpfad aus unerreichbar
+
+```yaml
+befund:
+  id: PB-013
+  datei: "docs/agents/regeln/kern.md"
+  stelle: "Zeile 3"
+  behauptung: "Eine Seite. Diese Regeln werden IMMER geladen, von allen Rollen, vor jedem Vorgang."
+  gemessen: |
+    Treffer auf "kern.md" in:
+      CLAUDE.md                                  0
+      docs/agents/00-REGELWERK.md                0
+      docs/agents/01-planner.md                  0
+      docs/agents/02-generator.md                0
+      docs/agents/03-evaluator.md                0
+      docs/agents/04-claude-code-startanweisung  0
+    CLAUDE.md schreibt als Startlektuere vor:
+      docs/agents/00-zyklus.md · 04-claude-code-startanweisung.md
+      · 05-fachagenten-produkt-architektur-frontend.md
+    Keines dieser drei nennt kern.md. Erreichbar ist es nur ueber Ledger, Tafel,
+    Auftragsblaetter und die Dateien in demselben Verzeichnis.
+  befehl: |
+    grep -c "kern.md" CLAUDE.md docs/agents/0*.md
+    grep -oE "docs/agents/[0-9a-z-]+\.md" CLAUDE.md | sort -u
+  commit: "96ff85e3"
+  schwere: P1
+  wirkung: |
+    Eine Regel, die sich fuer universell erklaert und vom vorgeschriebenen Startpfad
+    nicht erreichbar ist, gilt fuer niemanden, der neu anfaengt. Ich bin der Beleg:
+    elf Pruefrunden, und ich habe kern.md erst in dieser Runde gelesen - obwohl §2
+    dieses Eingangs es mir nennt und ich es haette lesen muessen.
+    Dieselbe Mechanik wie PB-012, eine Ebene hoeher.
+  eigenarbeit: nein
+```
+
+### PB-014 · P1 · Zwei vollständige Regelsätze für dieselben drei Rollen, ohne Verweis aufeinander
+
+```yaml
+befund:
+  id: PB-014
+  datei: "docs/agents/ (Strukturbefund)"
+  stelle: "docs/agents/*.md gegen docs/agents/regeln/*.md"
+  behauptung: "(keine - es gibt zwei Saetze, und beide gelten)"
+  gemessen: |
+    Satz A - von CLAUDE.md vorgeschrieben:
+      00-zyklus.md      100 Z.  28.07. 21:30
+      01-planner.md     103 Z.  28.07. 21:30
+      02-generator.md   134 Z.  28.07. 23:40
+      03-evaluator.md    84 Z.  28.07. 21:30
+      00-REGELWERK.md   377 Z.  30.07. 05:29
+    Satz B - von kern.md als "immer geladen" bezeichnet:
+      kern.md           146 Z.  30.07. 06:34
+      planner.md        160 Z.  30.07. 06:08
+      generator.md      113 Z.  30.07. 06:34
+      evaluator.md      112 Z.  30.07. 05:40
+      plan-reviewer.md  205 Z.  30.07. 05:37
+    Verweise von Satz A auf Satz B: 0
+    Verweise von CLAUDE.md auf Satz B: 0
+    Zusammen 1534 Zeilen Regeln fuer drei Rollen, in zwei Ablagen.
+  befehl: |
+    ls docs/agents/*.md docs/agents/regeln/*.md
+    grep -c "regeln/" docs/agents/0*.md CLAUDE.md
+  commit: "96ff85e3"
+  schwere: P1
+  wirkung: |
+    "Eine Wahrheit je Sachverhalt" ist die erste Dauerregel dieses Repositoriums.
+    Hier stehen zwei Wahrheiten ueber die Rollen selbst. Welche gilt, haengt davon ab,
+    welchen Pfad eine Instanz zufaellig zuerst liest - der vorgeschriebene fuehrt zu
+    Satz A, die aktuellen Auftragsblaetter fuehren zu Satz B. Zwei Instanzen koennen
+    beide regelkonform arbeiten und trotzdem Verschiedenes tun.
+    Beleg aus dem Bestand: Satz A fuehrt die Rollengrenze "der Generator prueft seine
+    eigene Arbeit nicht" (02-generator.md); in Satz B (regeln/generator.md) kommt
+    dieselbe Formulierung nicht vor.
+  eigenarbeit: nein
+```
+
+**Was ich NICHT behaupte:** dass Satz B falsch ist oder Satz A veraltet. **Welcher führt, ist eine
+Planner-Entscheidung** — ich melde, dass es zwei gibt und dass keiner den anderen nennt. *Ein
+Befund, der die Ablösung gleich mitentscheidet, hätte den Planner ersetzt statt ihm zugearbeitet.*
+
+**Erledigt wenn:** *`grep -c "regeln/kern.md" CLAUDE.md` liefert mindestens 1, **oder** die Dateien
+unter `docs/agents/regeln/` tragen im Kopf, welcher der beiden Sätze führt und was mit dem anderen
+geschieht.*
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — der Inhalt beider Sätze ist in sich stimmig |
+| **L2 Effizienz** | 1534 Zeilen Regeln für drei Rollen in zwei Ablagen |
+| **L3 Konsistenz** | **PB-014** — zwei Wahrheiten über die Rollen selbst |
+| **L4 Kausalität** | **PB-013** — die Kette *Regel → Leser* ist am vorgeschriebenen Startpfad unterbrochen |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | PB-013 — wer neu anfängt, liest den falschen Satz und weiß es nicht |
 
 **Ballbesitz: Planner.**
