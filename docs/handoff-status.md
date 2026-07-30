@@ -23057,3 +23057,134 @@ AUF-87      gebaut, nicht committet — dito.
 **Und die Lehre, die ins Rollenblatt gehört:** *bevor ich „er baut noch" schreibe, messe ich die
 Zeitstempel. Ein stiller Baum ist kein Beweis für Arbeit — er ist genauso gut ein Beweis für
 Warten.*
+
+---
+
+## 2026-07-30, 08:06 CEST — GENERATOR: `AUF-87 / K-07` **vollständig** — der Lauf über den ganzen Bestand, und er findet acht Blätter
+
+*Zeit gemessen. Nachgeholt: mein Bericht von 07:32 hatte K-07 mit **zwei** Blättern beantwortet. Das Kriterium sagt „der echte Bestand". Es sind **89**.*
+
+```text
+bash scripts/auftrag-pruefen.sh docs/auftraege/*.md      EXIT 1
+89 Blätter geprüft
+  76  KEIN KOPF                (kein Fehler — die älteren haben keinen)
+   0  KOPF UNLESBAR
+   1  Kopf ohne Prüfbefehl
+  15  FEHLSCHLAG   in 8 Blättern
+   2  VERDÄCHTIG
+   6  ÜBERSPRUNGEN (Denylist)
+```
+
+**Und zuerst die Korrektur an mir:** in der Quittung von 07:26 stand *„80 Blätter, davon 13 mit
+`pruefung:`"*. **Es sind 89.** Ich habe `generator-auftrag-*` und `evaluator-auftrag-*` gezählt —
+der `population_command` deines Blattes zählt genau so, und ich habe ihn übernommen, statt zu
+fragen, ob er die Menge trifft. *Der Validator läuft über `docs/auftraege/*.md`, und das sind neun
+Blätter mehr.*
+
+### Die acht Blätter mit totem Befehl
+
+```text
+1  AUFTRAGSSCHEMA.md                          exit 127  ← Befehl EXISTIERT NICHT
+2  …auf83-t1a-masse-vom-behaelter.md          3 × exit 1
+3  …auf83-t2-zweite-navigation.md             4 × exit 1
+4  …auf83-t2t3-kopfleiste.md                  2 × exit 1
+5  …auf83-t5-schienen-klappbar.md             1 × exit 1   (gemeldet 07:32 und 07:55)
+6  …auf87-auftrag-pruefen.md                  1 × exit 1   (mein eigenes: K-07 fährt T5 mit)
+7  …auf88-p1-pdf-als-referenz.md              1 × exit 1   ← LIEGT UNGEBAUT
+8  …b01-ai-workflow-sichern.md                1 × exit 1 + 1 verdächtig
+```
+
+**Zwei Funde stechen heraus:**
+
+**a) `AUFTRAGSSCHEMA.md` nennt ein Skript, das es nicht gibt.**
+
+```text
+$ ./scripts/zaehle-statische-stile.sh app/HausplanerStudio.tsx     exit 127
+$ ls scripts/zaehle-statische-stile.sh                             existiert nicht
+```
+
+*`exit 127` heißt „Befehl nicht gefunden" — das ist die härteste Form des toten Befehls, und sie
+steht ausgerechnet im **Schema**, das allen anderen Blättern vorschreibt, wie geprüft wird.*
+Das heutige Werkzeug heißt `scripts/statische-inline-stile.mjs`.
+
+**b) `AUF-88-P1` liegt ungebaut und trägt schon einen toten `population_command.`**
+
+```text
+$ grep -n 'ENDUNGEN\|getClientOriginalExtension' app/Http/Controllers/Energie/PlanUploadController.php && grep …    exit 1
+```
+
+**Das ist genau der Fall, für den du dieses Werkzeug bestellt hast:** ein Blatt, nach dem noch
+niemand gebaut hat, dessen Grundgesamtheit aber nicht reproduzierbar ist. **Es wäre die sechste
+F-04-Ausprägung geworden** — jetzt steht sie vorher da.
+
+### Was ich NICHT getan habe
+
+**Kein einziges dieser acht Blätter angefasst.** Der Ausschluss ist eindeutig: *„Findet er in einem
+alten Blatt einen toten Befehl: melden, nicht beheben. Sonst wäre der erste Lauf ein Massenumbau."*
+*Sieben davon sind deine, eines meines — und auch meines repariere ich nicht, weil sein Fehlschlag
+ein fremdes Blatt meldet, nicht einen Defekt.*
+
+### Zwei Beobachtungen zum Werkzeug selbst
+
+**Die 76 kopflosen Blätter kosten nichts** und erzeugen keine Meldung außer ihrer eigenen — K-04
+trägt im echten Betrieb, nicht nur im Test.
+
+**Die Laufzeit ist der Preis:** ein voller Lauf fährt jeden Prüfbefehl wirklich, auch
+`npm run test:hausplaner`. *Für den Alltag ist der Lauf über **ein** Blatt gedacht — der volle
+Bestand ist eine Inventur, keine Routine.*
+
+**Rohausgabe:** `bestandslauf.txt` im Scratchpad, 89 Berichte ungekappt.
+
+**Kein Commit, kein Push.**
+
+---
+
+VOTUM: auftrag=LEDGER-KORREKTUR rolle=planner ergebnis=BEHOBEN commit=54d2cd00 datum=2026-07-30T08:08
+
+## ⇒ PLANNER — Korrektur an meiner eigenen Korrektur von vor drei Minuten (30.07., 08:08 CEST)
+
+**Im Eintrag von 08:05 steht: *„Die Zeitstempel sagen 05:29 und 05:50 UTC — der Validator ist seit
+einer Stunde fertig."***
+
+**Das ist falsch, und der Fehler ist die Zeitzone.**
+
+```text
+TZ=Europe/Berlin ls -lt --time-style='+%H:%M' scripts/auftrag-pruefen.mjs
+  → 07:50
+```
+
+**05:50 UTC ist 07:50 CEST.** Der Validator war beim Schreiben meines Eintrags **sechzehn Minuten**
+alt, nicht eine Stunde. Ich habe eine rohe `ls -la`-Ausgabe gelesen — die zeigt UTC — und die Zahl
+unbesehen als Ortszeit weitergegeben.
+
+> **Siebte Ausprägung von „Zahl behauptet statt gemessen" — und zwar in genau dem Absatz, in dem
+> ich eine Vermutung als Tatsache gerügt habe.**
+> *Die Regel `TZ=Europe/Berlin beim Messen` steht in jedem einzelnen meiner Weckertexte. Ich habe
+> sie geschrieben und nicht angewandt.*
+
+### Was sich dadurch ändert — und was nicht
+
+**Nicht ändert sich:** Yamas Meldung stimmt, der Generator hatte nichts zu tun, und die Ursache ist
+meine. `AUF-87-N2` liegt, T3 und AUF-87 sind freigegeben.
+
+**Ändert sich die Größenordnung:** er stand **rund fünfzehn Minuten** ohne Auftrag, nicht eine
+Stunde. *Das macht meinen Fehler nicht kleiner — es macht ihn genauer. Ein Vorwurf mit falscher
+Zahl ist auch dann ein schlechter Vorwurf, wenn er gegen mich selbst geht.*
+
+### Die Barriere, die daraus folgt
+
+**Nicht „sorgfältiger lesen", sondern ein Befehl im Weckertext:**
+
+```text
+TZ=Europe/Berlin find resources scripts app tests -newermt '2026-07-30 05:00' \
+  -type f -printf '%TH:%TM %p\n' | sort -r | head -3
+```
+
+**Ist die jüngste Änderung älter als sechs Minuten — zwei Wachrunden —, wartet der Bauende.**
+Dann wird geprüft, ob ein baubarer Auftrag mit Marke liegt, und wenn nicht, wird einer geschnitten.
+
+> **Und das Verbot, das dazugehört: nie wieder „vermutlich ein Baulauf" schreiben.**
+> Dreimal war es falsch. **Ein stiller Baum ist kein Beweis für Arbeit — er ist genauso gut ein
+> Beweis für Warten**, und die Zeitstempel sagen, welches von beidem.
+
+*Ab jetzt steht die Probe im Weckertext, nicht in meiner Aufmerksamkeit.*

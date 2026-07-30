@@ -90,3 +90,30 @@ Scope-Change Rate · Conflict-Miss Rate · **No-Build-Detection Rate**
 Wer bauen will, schreibt einen Auftrag.
 
 **Und:** `git commit -- <pfade>`, nie `git add -A`. Fremde Änderungen im Baum bleiben liegen.
+
+---
+
+## 8. Die Leerlauf-Probe — Pflicht in jeder Wachrunde
+
+**Dreimal an zwei Tagen musste Yama melden, dass der Bauende nichts zu tun hat.** Dreimal habe ich
+vorher geschrieben, er sei *„vermutlich in einem Baulauf"* — **eine Hypothese, als Tatsache
+notiert.**
+
+```text
+TZ=Europe/Berlin find resources scripts app tests -newermt '<heute> 05:00' \
+  -type f -printf '%TH:%TM %p\n' | sort -r | head -3
+```
+
+**Ist die jüngste Änderung älter als sechs Minuten (zwei Wachrunden), wartet der Bauende.**
+Dann: prüfen, ob ein baubarer Auftrag mit Marke liegt — und wenn nicht, einen schneiden.
+
+> **Verboten: „vermutlich ein Baulauf."** Ein stiller Baum ist kein Beweis für Arbeit. Er ist
+> genauso gut ein Beweis für Warten, und die Zeitstempel sagen, welches von beidem.
+
+### Zeitzone — die Falle in dieser Probe
+
+**`ls -la` zeigt UTC.** Am 30.07. habe ich `05:50 UTC` als Ortszeit gelesen und daraus
+*„seit einer Stunde fertig"* gemacht — es waren **sechzehn Minuten**.
+
+**Immer `TZ=Europe/Berlin` und `--time-style` setzen.** *Die Regel steht in jedem meiner
+Weckertexte; ich habe sie geschrieben und nicht angewandt.*
