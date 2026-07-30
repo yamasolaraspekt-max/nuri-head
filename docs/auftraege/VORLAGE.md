@@ -33,10 +33,22 @@ und der ungelesene Teil ist immer der mit den Kriterien.*
 ## Kriterien
 
 ​```yaml
+scope:
+  population_command: "<der Befehl, der die Grundgesamtheit zählt>"
+  ausschluesse:
+    - stelle: "<was draußen bleibt>"
+      grund: "<warum>"
+      entschieden_von: planner
+
+kriterien:
   - id: K-01
+    typ: absence | presence | behavioural | coverage
+    kritikalitaet: P1
     aussage: "<was gilt, wenn es fertig ist — als prüfbare Aussage>"
-    befehl: "<ausführbar, ohne Platzhalter>"
-    erwartet: "<Zahl oder Zeichenkette>"
+    pruefung:
+      befehl: "<ausführbar, ohne Platzhalter>"
+      erwartet: "<Zahl oder Zeichenkette>"
+    ausgangswert: "<der HEUTE gemessene Wert — sonst weiß niemand, ob sich etwas bewegt hat>"
     gegenbeweis: >
       <Wie man es zu widerlegen versucht. Ohne diesen Punkt ist es keine Zusage,
        sondern eine Hoffnung.>
@@ -74,3 +86,29 @@ und der ungelesene Teil ist immer der mit den Kriterien.*
   fertig und unsichtbar).*
 - **Bei jeder neuen Barriere prüfen, ob sie sich selbst trifft.** *Die `⚡ AKTIV`-Zählung zählte
   ihre eigene Zeile mit; die Platzhalter-Barriere schlug auf ihre eigene Erklärung an.*
+
+## Regel 8 — das Blatt muss durch den Validator laufen (30.07. 23:25)
+
+**Befund:** `node scripts/auftrag-pruefen.mjs` meldete bei **allen fünf** bereitliegenden Blättern
+*„KEIN PRUEFBEFEHL im Kopf gefunden"* — auch bei denen, die ich heute geschrieben habe. Der
+Validator aus AUF-87 liest `kriterien[].pruefung.befehl`; diese Vorlage erzeugte ein flaches
+`befehl:` eine Ebene höher. **Zwei gute Werkzeuge, die sich nicht getroffen haben** — dasselbe
+Muster wie `geometry/fangKern.ts`, das seit Tagen existiert und von nichts aufgerufen wird.
+
+**Deshalb gilt ab jetzt:** ein Blatt ist erst abgebbar, wenn
+
+```sh
+node scripts/auftrag-pruefen.mjs docs/auftraege/<blatt>.md
+```
+
+**keinen** `Fehlschlag` und **keinen** `UEBERSPRUNGEN` meldet. Zwei Dinge, die dabei auffallen:
+
+- **Umleitungen (`2>&1`, `2>/dev/null`) lassen den Befehl überspringen** — die Denylist greift.
+  Ein übersprungener Befehl sieht im Bericht harmlos aus und ist ungeprüft.
+- **`grep -c` liefert bei null Treffern `exit 1`** und wird als `NULLTREFFER` gemeldet, obwohl
+  null bei einem `absence`-Kriterium genau das Ziel ist. `grep -o … | wc -l` gibt dieselbe Zahl
+  und läuft sauber durch. **`|| true` ist der falsche Ausweg** — es versteckt auch echte Fehler.
+
+*`VERDAECHTIG` darf stehen bleiben, wenn der Befehl auf etwas zeigt, das dieser Auftrag erst
+erschafft — dann gehört ein `hinweis:` daneben, der sagt, wann die Meldung verschwinden muss.*
+

@@ -74,69 +74,107 @@ Yamas eigene Standardempfehlung, übernommen:
 
 ## Kriterien
 
+*Kopf nach `AUFTRAGSSCHEMA §7` — maschinell lesbar durch `node scripts/auftrag-pruefen.mjs`.
+**Warum die Form sich ändert:** der Validator aus AUF-87 fand in ALLEN fünf bereitliegenden
+Blättern „KEIN PRUEFBEFEHL im Kopf". Das Werkzeug ist gut, die Blätter fütterten es nur nicht.*
+
 ```yaml
+scope:
+  datei: resources/planner/hausplaner/app/rahmen/Buehne.tsx
+  population_command: "grep -rc 'setWandStart(null)' resources/planner/hausplaner/app/HausplanerApp.tsx"
+  ausschluesse:
+    - stelle: "InteractiveTool mit zwoelf Methoden (Prompt-Abschnitt 8 vollstaendig)"
+      grund: "Nur zwei Werkzeuge haben heute einen Zwischenzustand. Zwoelf Methoden fuer zwei Nutzer waeren ein Posten, der auf nichts zeigt."
+      entschieden_von: planner
+    - stelle: "Anschluss von geometry/fangKern.ts"
+      grund: "Eigene Scheibe Z-02; ein Fangzustand kann erst geloescht werden, wenn es einen Ort gibt, der loescht."
+      entschieden_von: planner
+
+kriterien:
   - id: K-01
-    aussage: "Es gibt genau einen Ort, der ein Werkzeug beendet; kein Aufrufer räumt selbst auf."
-    befehl: "cd resources/planner/hausplaner && grep -rn 'setWandStart(null)' --include=*.ts --include=*.tsx app/ | grep -v werkzeugEnde | wc -l"
-    erwartet: "0"
+    typ: absence
+    kritikalitaet: P1
+    aussage: "Es gibt genau einen Ort, der ein Werkzeug beendet; kein Aufrufer raeumt selbst auf."
+    pruefung:
+      befehl: "grep -rn 'setWandStart(null)' --include=*.ts --include=*.tsx resources/planner/hausplaner/app/ | grep -v werkzeugEnde | wc -l"
+      erwartet: "0"
+    ausgangswert: "5 (HausplanerApp 494, 778, 829 - GruppenzeileUndSchiene 334, 354)"
     gegenbeweis: >
-      Grep zählt Gestalt, nicht Sache (VORLAGE-Regel 6). Zusätzlich: den Rückfall-Effekt
-      auslösen (Werkzeug wand aktiv, halb gezogen, in die 3D-Ansicht wechseln) und prüfen,
-      dass wandStart danach null ist. Fängt der Test das nicht, ist K-01 wertlos.
+      Grep zaehlt Gestalt, nicht Sache. Zusaetzlich den Rueckfall ausloesen - Werkzeug wand
+      aktiv, halb gezogen, in die 3D-Ansicht wechseln - und pruefen, dass wandStart danach
+      null ist. Faengt der Test das nicht, ist K-01 wertlos.
 
   - id: K-02
-    aussage: "Der Rückfall auf auswahl in HausplanerApp.tsx läuft über denselben Ort wie die Leiste."
-    befehl: "cd resources/planner/hausplaner && grep -c \"setActiveTool('auswahl')\" app/HausplanerApp.tsx"
-    erwartet: "0"
+    typ: absence
+    kritikalitaet: P1
+    aussage: "Der Rueckfall auf auswahl laeuft ueber denselben Ort wie die Leiste."
+    pruefung:
+      befehl: "grep -o \"setActiveTool('auswahl')\" resources/planner/hausplaner/app/HausplanerApp.tsx | wc -l"
+      erwartet: "0"
+    ausgangswert: "1 (Zeile 371, der Rueckfall-Effekt)"
     gegenbeweis: >
-      Eine Umbenennung würde den Zähler auch auf 0 bringen, ohne dass sich etwas ändert.
-      Deshalb: den Aufruf im Rückfall-Effekt bewusst wieder auf den alten direkten Weg
-      setzen und zeigen, dass der neue Test dabei ROT wird.
+      Eine Umbenennung braechte den Zaehler auch auf 0. Deshalb: den Aufruf bewusst wieder auf
+      den alten direkten Weg setzen und zeigen, dass der neue Test dabei ROT wird.
 
   - id: K-03
-    aussage: "Die Bühne behandelt das Verlassen des Zeigers."
-    befehl: "cd resources/planner/hausplaner && grep -c 'onMouseLeave' app/rahmen/Buehne.tsx"
-    erwartet: "1"
+    typ: presence
+    aussage: "Die Buehne behandelt das Verlassen des Zeigers."
+    pruefung:
+      befehl: "grep -o 'onMouseLeave' resources/planner/hausplaner/app/rahmen/Buehne.tsx | wc -l"
+      erwartet: "1"
+    ausgangswert: "0"
     gegenbeweis: >
-      Handler anhängen und leer lassen erfüllt den Zähler. Der Beweis ist K-04, nicht dieser.
+      Einen leeren Handler anzuhaengen erfuellt den Zaehler. Der Beweis ist K-04, nicht dieser.
 
   - id: K-04
-    aussage: "Zeiger draußen heißt: keine Vorschaugeometrie wird gezeichnet, Startpunkt bleibt."
-    befehl: "cd resources/planner/hausplaner && node --test __tests__/werkzeugEnde.test.ts 2>&1 | tail -3"
-    erwartet: "pass"
+    typ: behavioural
+    kritikalitaet: P1
+    aussage: "Zeiger draussen heisst: keine Vorschaugeometrie, Startpunkt bleibt."
+    pruefung:
+      befehl: "cd resources/planner/hausplaner && node --test __tests__/werkzeugEnde.test.ts | tail -4"
+      erwartet: "pass, 0 fail"
+    hinweis: >
+      Der Validator meldet hier heute "exit 0, aber KEINE Ausgabe" - richtig, denn die
+      Testdatei entsteht erst in diesem Auftrag. Nach dem Bau muss die Meldung verschwinden.
+      Bleibt sie, laeuft der Test nicht, und K-04 ist eine Hoffnung.
     gegenbeweis: >
-      Mutation, vor den Tests gefahren (VORLAGE-Regel 5): in werkzeugEnde.ts die Bedingung
-      für 'zeigerDrinnen' auf true festnageln. Mindestens ein Test muss fallen. Fällt keiner,
-      prüft die Zusage die Gestalt und nicht die Funktion.
+      Mutation VOR den Tests: in werkzeugEnde.ts die Bedingung fuer zeigerDrinnen auf true
+      festnageln. Mindestens ein Test muss fallen. Faellt keiner, prueft die Zusage die Gestalt
+      und nicht die Funktion.
 
   - id: K-05
-    aussage: "Der Zustand ist für den Nutzer benannt, nicht nur intern."
-    befehl: "cd resources/planner/hausplaner && grep -rn 'Zeichnung pausiert' app/ | wc -l"
-    erwartet: "1"
+    typ: presence
+    aussage: "Der pausierte Zustand ist fuer den Nutzer benannt, nicht nur intern."
+    pruefung:
+      befehl: "grep -rn 'Zeichnung pausiert' resources/planner/hausplaner/app/ | wc -l"
+      erwartet: "1"
+    ausgangswert: "0"
     gegenbeweis: >
-      Der Text muss beim pausierten Zustand ERSCHEINEN, nicht nur im Quelltext stehen.
-      Im Browsertest ablesen und im Protokoll notieren, in welchem Element er auftaucht.
+      Der Text muss ERSCHEINEN, nicht nur im Quelltext stehen. Im Browsertest ablesen und
+      notieren, in welchem Element er auftaucht.
 
   - id: K-06
-    aussage: "Escape verhält sich unverändert — der bestehende Weg wird nicht doppelt gebaut."
-    befehl: "cd resources/planner/hausplaner && grep -c 'useEscapeEbene' app/HausplanerApp.tsx"
-    erwartet: "5"
+    typ: presence
+    aussage: "Der bestehende Escape-Weg wird benutzt, nicht ein zweiter gebaut."
+    pruefung:
+      befehl: "grep -o 'useEscapeEbene' resources/planner/hausplaner/app/HausplanerApp.tsx | wc -l"
+      erwartet: "5"
+    ausgangswert: "5 - VIER Ebenen (Z. 314, 315, 770, 782) PLUS die Import-Zeile 58, die der Zaehler mitzaehlt. Selbst nachgemessen und dabei meinen ersten Wert 4 korrigiert."
     gegenbeweis: >
-      Selbst nachgezählt (VORLAGE-Regel 4) — und dabei korrigiert: der Zähler steht heute auf
-      5, nicht auf 4. Es sind vier Ebenen (Z. 314, 315, 770, 782) PLUS die Import-Zeile 58,
-      die der Zähler mitzählt. Mein erster Wert war die Zahl der Ebenen, nicht die des Befehls.
-      Wird eine fünfte Ebene angelegt, ist der Escape-Weg zweimal da — genau die verwaiste
-      zweite Wahrheit, gegen die dieser Auftrag antritt.
+      Wird eine fuenfte Ebene angelegt, steigt der Zaehler auf 6 - dann ist der Escape-Weg
+      zweimal da, genau die verwaiste zweite Wahrheit, gegen die dieser Auftrag antritt.
 
   - id: L-01
+    typ: presence
     aussage: "Browsertest gefahren, an http://ticket.test, nicht an 127.0.0.1:8000."
-    befehl: "cd resources/planner/hausplaner && ls ../../../docs/browsertest-z01-*.md | wc -l"
-    erwartet: "1"
+    pruefung:
+      befehl: "find docs -maxdepth 1 -name 'browsertest-z01-*.md' | wc -l"
+      erwartet: "1"
     gegenbeweis: >
-      Protokoll ohne Beobachtung ist eine Behauptung. Es muss die drei Pflicht-Viewports
-      (1440 / 1024 / 375) nennen, Schritt 0 beantworten und Yamas E2E-Fall wörtlich abfahren:
-      Wandzeichnung starten -> Maus aus Canvas zur Toolbar -> Fensterwerkzeug anklicken ->
-      kein Reststrich sichtbar -> Fensterwerkzeug aktiv -> alter Preview-State leer.
+      Ein Protokoll ohne Beobachtung ist eine Behauptung. Es nennt die drei Pflicht-Viewports
+      1440 / 1024 / 375, beantwortet Schritt 0 und faehrt Yamas E2E-Fall woertlich ab:
+      Wandzeichnung starten, Maus aus dem Canvas zur Toolbar, Fensterwerkzeug anklicken,
+      kein Reststrich sichtbar, Fensterwerkzeug aktiv, alter Preview-State leer.
 ```
 
 ## Vorbehalt / Reihenfolge
