@@ -208,6 +208,7 @@ P3  → gesammelt. Sammelkorrektur, wenn drei zusammenkommen.
 | PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt — offen nur: Passwort wechseln | Repo **ERLEDIGT** · Yama | 30.07. |
 | PB-040 | `db` + Ledger | Eine gelaufene Migration liegt in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | offen | Generator |
 | PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4 trägt die Zahlen von **vor** der 08:12-Korrektur; F-04s Barriere-Zelle ist überholt; `bestand.sh`/`VORLAGE.md` fehlen | **P2** | offen | Planner |
+| PB-043 | `ChatController.php:70,281` + `config/logging.php:21,57` | Zwei unbedingte `Log::info` in einem gepollten Endpunkt schreiben **64 086** Zeilen in ein **212 MB** grosses, nicht rotierendes Log | **P2** | offen | Planner |
 
 ---
 
@@ -4217,3 +4218,50 @@ meine eigene Zählung angewandt — und ohne diese Probe hätte ich einen P2 geg
 geschrieben.*
 
 **Ballbesitz: Planner** (A, B) · **Statusabgleich** (C).
+
+---
+
+## 66. Runde 61 — **PB-043 · P2: 212 MB Log, davon 64 086 Zeilen aus zwei Debug-Zeilen im Chat-Polling**
+
+**Gemessen 12:13 CEST gegen `6b8a7fa0`.** *Gefunden nicht in einem Papier, sondern weil ich nachsah,
+ob überhaupt noch etwas im Haus läuft — das Laravel-Log war die einzige Spur.*
+
+```text
+ls -lh storage/logs/laravel.log                      ->  212M   (eine Datei)
+grep -c 'getEmployeesAndGroups' storage/logs/laravel.log  ->  64 086
+grep -c 'local.ERROR' ...                            ->     404   (davon heute: 0)
+Zeilen in 12:00-12:11                                ->      36   = laufender Betrieb
+
+app/Http/Controllers/Chat/ChatController.php:70   Log::info('[Chat] ... IN',  [auth_user_id, auth_employee_id, customer_id])
+app/Http/Controllers/Chat/ChatController.php:281  Log::info('[Chat] ... OUT', [employees_returned, groups_returned])
+   -> beide unbedingt, kein `config('app.debug')`, kein Level-Gate
+
+config/logging.php:21   'default' => env('LOG_CHANNEL', 'stack')
+config/logging.php:57   'stack' => channels: ['single']        <- eine Datei, keine Rotation
+config/logging.php:68   'daily' => days: 14                    <- existiert, ist aber nicht die Vorgabe
+```
+
+**Der Endpunkt wird vom Frontend gepollt, und jeder Aufruf schreibt zwei Zeilen.** 64 086 Zeilen aus
+zwei Anweisungen — **das ist keine Protokollierung, das ist ein Nebenprodukt.**
+
+### Wirkung, in dieser Reihenfolge
+
+**L4 Kausalität — das Log erfüllt seinen Zweck nicht mehr.** 404 Fehlermeldungen liegen zwischen
+64 086 Poll-Zeilen. *Wer einen Fehler sucht, findet ihn nicht; heute wäre es leicht gewesen, denn
+heute gab es **0** Fehler — aber das weiß man erst, wenn man 212 MB filtert.*
+
+**L2 Effizienz — unbegrenztes Wachstum ohne Rotation.** Der `single`-Treiber schreibt in **eine**
+Datei. Der `daily`-Kanal mit 14 Tagen ist konfiguriert und **wird nicht benutzt**. *Der billigere Weg
+steht in derselben Datei, vier Zeilen tiefer.*
+
+**Datenschutz-Kante, nüchtern:** in jeder IN-Zeile stehen `auth_user_id`, `auth_employee_id` und
+`customer_id`. Das sind **Kennungen, keine Inhalte und keine Zugangsdaten** — aber es sind
+personenbezogene Kennungen in einer Klartextdatei, die nie gelöscht wird. *Ich melde das als Kante,
+nicht als Leck; die Einordnung gehört dem Planner.*
+
+**Was ich NICHT behaupte:** dass die Hetzner-Produktion dasselbe tut. `LOG_CHANNEL` kommt aus der
+Umgebung, und die dortige habe ich nicht gesehen und werde sie nicht ansehen. **Die Messung gilt für
+diesen Rechner; die Vorgabe im Code gilt überall, wo nichts anderes gesetzt ist.** *Das ist der
+Unterschied zwischen einem Befund und einer Warnung — und der Grund, warum hier P2 steht und nicht P1.*
+
+**Ballbesitz: Planner.**
