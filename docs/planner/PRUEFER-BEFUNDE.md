@@ -3133,3 +3133,83 @@ ich in Runde 26 das Ergebnis geprüft statt den Erzeuger — 188 gegen 188 CSS-K
 eindeutiges Literal im Bündel. Das belegt, dass der Bau gelaufen ist, nicht dass er korrekt läuft.*
 
 **Kein Befund. Die fünf Gates tragen, soweit ich sie ohne Eingriff messen kann.**
+
+---
+
+## 45. Runde 34 (30.07., Produktionsmodus) — **PB-037 · P1: zwei rote Zusagen ohne Fehler dahinter**
+
+**Gemessen gegen `12e98bdb`.** *Ausführlich, weil es einen Generator-Commit blockiert — genau das,
+was Yama priorisiert hat.*
+
+**Der Baum ist rot: `tests 1394 · pass 1392 · fail 2`.** Eine Stunde vorher: 1394/1394.
+
+```text
+✖ K-01: die Breitenrechnung nennt kein `innerWidth` mehr
+    AssertionError: "die Fensterrechnung steht noch"
+✖ K3: keine andere feste Zahl ist an ihre Stelle getreten
+    AssertionError: input did not match /<div ref=\{inhaltRef\} style=\{\{ flex: 1, overflow: 'h/
+```
+
+### Es gibt keine Regression. Ich habe es gemessen.
+
+```text
+innerWidth in HausplanerApp.tsx:  1 Treffer, Zeile 141
+  const [schmal, setSchmal] = useState(() =>
+    (typeof window === 'undefined' ? false : window.innerWidth < 1024));
+
+Die Breitenrechnung selbst, Zeile 404/405:
+  const gemesseneBreite = useGemesseneBreite(inhaltRef);
+  const breite = buehnenBreite(gemesseneBreite);
+```
+
+**Die Bühnenbreite kommt weiter aus dem Behälter** — T1a ist unberührt. Zeile 141 ist eine
+**Schwelle** (`< 1024`), keine Breitenrechnung, und der Code sagt es zwei Zeilen darüber selbst:
+*„der `ResizeObserver` in `buehnenBreite.ts`, nur für eine Schwelle statt eine Zahl."*
+
+### PB-037 · P1 · Die Zusage prüft ein Muster, nicht die Rechnung — und ihr eigener Kommentar sagt das Gegenteil
+
+```yaml
+befund:
+  id: PB-037
+  datei: "resources/planner/hausplaner/__tests__/buehnenBreite.test.ts:23"
+  stelle: "K-01, der Filter"
+  behauptung: |
+    Kommentar der Zusage: "**Die Wirkung, nicht die Gestalt:** nicht 'die neue Zeile
+    existiert', sondern 'die alte Rechnung gibt es nicht mehr'."
+    Filter:  codeZeilen.filter(z => z.includes('innerWidth') && z.includes('const'))
+  gemessen: |
+    Der Filter trifft JEDE const-Zeile, die innerWidth erwaehnt - auch eine Schwelle,
+    die nichts mit der Buehnenbreite zu tun hat (Z141, `< 1024`).
+    Die Buehnenbreite selbst: buehnenBreite(useGemesseneBreite(inhaltRef)), Z404/405.
+    Treffer innerWidth gesamt: 1 (die Schwelle).  Regression: keine.
+  befehl: |
+    grep -n "innerWidth" resources/planner/hausplaner/app/HausplanerApp.tsx
+    grep -nE "gemesseneBreite|buehnenBreite" resources/planner/hausplaner/app/HausplanerApp.tsx
+  commit: "12e98bdb"
+  schwere: P1
+  wirkung: |
+    Das Gate ist rot, ohne dass ein Fehler vorliegt. Fuer den Bauenden gibt es drei
+    Wege, und zwei davon sind Schaden:
+      (a) er nimmt korrekte Arbeit zurueck, um das Gate gruen zu bekommen
+      (b) er schaltet die Zusage ab - verboten, und die Zusage hat einen echten Kern
+      (c) er schaerft den Filter auf die Rechnung statt auf das Wort
+    Nur (c) ist richtig, und nur (c) sieht nach Mehrarbeit aus. Ein rotes Gate ohne
+    Fehler erzieht dazu, Gates nicht zu glauben - das ist der eigentliche Schaden.
+    Zweite Zusage (K3) pinnt ein JSX-Literal woertlich; dieselbe Klasse, klarer Fall.
+  eigenarbeit: nein
+```
+
+**Das ist F-06 in seiner reinsten Form** — *„Zusage prüft Gestalt statt Wirkung"*, Zähler im Register
+**6**. Und diese hier trägt den Satz *„Die Wirkung, nicht die Gestalt"* **als eigenen Kommentar über
+dem Filter, der die Gestalt prüft.** *Der Vorsatz war richtig, die Umsetzung ist das Gegenteil davon.*
+
+**Erledigt wenn:** *`npm run test:hausplaner` liefert `fail 0`, **ohne** dass `buehnenBreite.ts`,
+`useGemesseneBreite` oder Zeile 404/405 verändert wurden* — die Zusage muss sich bewegen, nicht der
+Code.
+
+**Der bessere Filter, benannt** (L3 verlangt ihn): nicht *„eine `const`-Zeile nennt `innerWidth`"*,
+sondern *„die Zeile, die `breite` bildet, nennt `innerWidth`"* — oder positiv: *`breite` entsteht aus
+`buehnenBreite(...)`*. **Das prüft die Rechnung und lässt jede Schwelle in Ruhe.**
+
+**Ballbesitz: Generator** (die Zusage schärfen) · **Planner** (F-06-Zähler auf 7, und das ist die
+zweite Wiederholung nach `PB-010` — R9).
