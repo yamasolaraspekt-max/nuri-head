@@ -2546,3 +2546,60 @@ Häufigste: `wp_material_sets.json` (4×), `index1.blade.php` (2×), `src/tool-r
 **Befehl:** Sweep über `docs/*.md`, jeder Pfad in Rückwärts-Anführungszeichen mit Code-Endung gegen
 `git ls-tree -r --name-only HEAD`. **Commit:** `c38c3953`.
 *Drei davon (`auftrag-pruefen.*`) sind PB-017, nicht eigenständig.* **Keine weitere Ausführung.**
+
+---
+
+## 34. Runde 25 (30.07., Produktionsmodus) — PB-032: **sieben Dateien liegen scharf im Index**
+
+**Gemessen gegen `05d490ea`.** Kurzfassung nach Papierstopp — dies ist P1 und blockiert, also
+ausführlich.
+
+### PB-032 · P1 · Der Index trägt fremde, gestagte Arbeit — jeder pfadlose Commit nimmt sie mit
+
+```yaml
+befund:
+  id: PB-032
+  datei: "(Index-Zustand, kein Dokument)"
+  stelle: "git diff --cached gegen 05d490ea"
+  behauptung: "(keine - Zustandsbefund)"
+  gemessen: |
+    gestaged (A):  7 Dateien
+      resources/planner/hausplaner/__domtests__/objektkopf.dom.test.ts
+      resources/planner/hausplaner/__domtests__/reiterLeiste.dom.test.ts
+      resources/planner/hausplaner/__tests__/arbeitszeileSuche.test.ts
+      resources/planner/hausplaner/__tests__/objektkopf.test.ts
+      resources/planner/hausplaner/__tests__/reiterLeisteGeteilt.test.ts
+      resources/planner/hausplaner/app/dashboard/ObjektkopfUeberlauf.tsx
+      resources/planner/hausplaner/app/state/objektkopf.ts
+    nur im Baum geaendert:  13
+    unverfolgt:              5   (darunter scripts/auftrag-pruefen.{mjs,sh}, scripts/__tests__/)
+    F-05 "Beifang im Index" - Zaehler im Register: 2
+  befehl: |
+    git diff --cached --name-only | wc -l
+    git diff --name-only | wc -l
+    git status --porcelain | grep -c '^??'
+  commit: "05d490ea"
+  schwere: P1
+  wirkung: |
+    Ein `git commit -m "..."` OHNE Pfadangabe committet diese sieben Dateien mit -
+    gleichgueltig, wer den Befehl abschickt und was er meinte. Das ist F-05, und der
+    Zaehler steht bereits auf 2: R9 verlangt hier eine Barriere, nicht einen dritten
+    Vorsatz. Die Lage ist heute schaerfer als bei den ersten beiden Vorfaellen, weil
+    drei Rollen gleichzeitig in denselben Baum schreiben und die Commit-Erlaubnis seit
+    09:44 erteilt ist - es committet also mehr als vorher.
+    Fuer eine Abnahme ist der Stand ausserdem weiterhin nicht reproduzierbar: das
+    Gestagte ist nicht committet, und die 13 nur-im-Baum-Aenderungen gehoeren
+    demselben Vorgang.
+  eigenarbeit: nein
+```
+
+**Was ich selbst tue, damit ich nicht der Verursacher bin:** jeder meiner Commits nennt seine Pfade
+ausdrücklich (`git commit -- <pfad>`), auch dieser. *Das ist keine Vorsichtsmaßnahme, sondern die
+stehende Regel R13 — sie ist der Grund, warum ich in 25 Runden keinen Beifang produziert habe.*
+
+**Erledigt wenn:** *`git diff --cached --name-only | wc -l` liefert `0`* — entweder weil committet
+oder weil zurückgenommen wurde. **Ballbesitz: Generator.**
+
+**Zur Sicherheit (PB-018), unverändert nachgemessen:** `k01n1b.mjs` liegt weiter im
+Wurzelverzeichnis, **unverfolgt**, **null Vorkommen in der Historie**. Kein neuer Schaden, keine
+Entwarnung — die Lage ist dieselbe wie in Runde 16.
