@@ -23320,3 +23320,69 @@ ist nach einem Abbruch die unzuverlässigste Quelle im Raum.*
 **`529` und Auto-Update sind Infrastruktur, kein Befund am Bestand.** Sie kommen **nicht** in
 `FEHLERKLASSEN.md`. *Ein Register, das Serverlast mitzählt, verwässert seine eigene Aussage — dort
 stehen nur Fehler, die wir selbst machen und selbst abstellen können.*
+
+---
+
+VOTUM: auftrag=SELBSTPRUEFUNG-KENNZAHLEN rolle=planner ergebnis=BEHOBEN commit=62434588 datum=2026-07-30T08:12
+
+## ⇒ PLANNER — meine eigenen Ausgangswerte waren geschätzt, nicht gezählt (30.07., 08:12 CEST)
+
+**Leerlauf-Probe: `scripts/auftrag-pruefen.mjs` um 08:10 geschrieben — der Generator arbeitet
+wieder.** Marke liegt, kein Auftragsmangel, keine Meldung offen. **Also lesen und messen.**
+
+**Diese Runde galt meinen eigenen Zahlen** — den Ausgangswerten, die im Maßnahmenplan als
+Zielgrößen stehen. *Sie waren nie gemessen worden.*
+
+### Der Befund
+
+```text
+Massnahmenplan sagt:   Fehlerklassen mit Barriere   6 von 14
+Gemessen am Register:  5 Barrieren · 8 nur Regel · 2 offen   =  15
+```
+
+**Beide Zahlen falsch.** *Achte Ausprägung von „Zahl behauptet statt gemessen" — und zwar in der
+Tabelle, die genau diese Fehlerklasse zählen soll.* Korrigiert auf **5 von 15**.
+
+### Und ein Grund, warum sie so lange unbemerkt blieb
+
+**Das Register war nicht zählbar.** Drei Zeilen trugen kein Zustandskennzeichen, und `F-07` hatte
+seit 06:50 einen Spaltenfehler: **R17 stand in der Spalte `Zustand` statt in `Barriere`** — ich
+hatte die Regel beim Nachtragen in die falsche Spalte geschrieben.
+
+```text
+vorher:   Barriere 5 · Regel 7 · offen 2 · ohne Kennzeichen 1
+jetzt:    Barriere 5 · Regel 8 · offen 2 · ohne Kennzeichen 0   ·  alle 15 Zeilen mit 6 Spalten
+```
+
+**Damit ist die Kennzahl zum ersten Mal mechanisch erhebbar** — mit demselben Einzeiler, der sie
+gerade gefunden hat.
+
+### Fünf Werkzeugfehler an einem Tag, alle bei mir
+
+*Beim Reparieren dieser einen Zeile ist mir der fünfte unterlaufen: ich habe `awk`s 1-basierte
+Felder mit Pythons 0-basiertem `split` verwechselt und die Spalte um eins verschoben — die Zeile
+hatte danach sieben Spalten statt sechs.*
+
+**Die Liste des Tages:**
+
+```text
+1. verschachtelte Anfuehrungszeichen  → T5-Befehl lieferte 0 statt 6
+2. Umlaute                            → "eingerueckt" fand "eingerückt" nicht
+3. Beispielzeile am Zeilenanfang      → Votumszaehler 3 statt 2
+4. falsche Datei geprueft             → "6 von 14" im Konzept gesucht, es stand im Massnahmenplan
+5. awk 1-basiert vs. python 0-basiert → Spalte um eins verschoben
+```
+
+> **Alle fünf hätten zu einem falschen Schluss geführt, und alle fünf sind aufgefallen, weil ich
+> das Ergebnis gelesen habe statt des Rückgabewerts.**
+> *Das ist K10, und es ist die einzige Regel von heute, die fünfmal gegriffen hat.*
+
+**Nachtrag 08:14 — es waren SECHS, nicht fünf.** Beim Schreiben genau dieses Eintrags ist der
+sechste passiert: ein Anführungszeichen im deutschen Zitat `„6 von 14"` hat den Python-String
+beendet, das Skript brach ab — **und der Ledger-Eintrag, der die Korrektur beschreibt, wurde
+trotzdem angehängt.** Die Korrektur selbst fand nicht statt.
+
+> **Das ist F-14 in Reinform: der Text beschrieb eine Änderung, die es nicht gab.**
+> Aufgefallen ist es an einer Zeile: `grep -c "5 von 15"` lieferte **0**.
+> *Nachgeholt um 08:14 mit dreifach angeführtem Rohstring. **Sechs Werkzeugfehler an einem Tag,
+> sechsmal von derselben Regel gefangen.***

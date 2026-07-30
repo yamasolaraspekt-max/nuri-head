@@ -19,7 +19,12 @@ Gemessen am 30.07., Zeitraum 00:00–07:20:
 | Kriterien, die sich als *bereits erfüllt* herausstellten | **4** (alle an AUF-83-T3) | **0** |
 | Wiederholungen je Fehlerklasse ohne Barriere | **4–5** | **≤ 1** |
 | Zeilen Auftragstext je baubarem Auftrag | **≈ 285** | **≤ 120** |
-| Fehlerklassen mit Barriere | **6 von 14** | **11 von 14** |
+| Fehlerklassen mit Barriere | **5 von 15** | **11 von 15** |
+
+> **Korrektur 30.07., 08:12:** hier stand *6 von 14*. **Beide Zahlen waren geschätzt, nicht
+> gezählt.** Nachgemessen am Register: **15 Klassen — 5 mit Barriere, 8 nur Regel, 2 offen.**
+> *Achte Ausprägung von „Zahl behauptet statt gemessen", und zwar in der Tabelle, die genau diese
+> Fehlerklasse zählen soll.*
 | Regeln, die nur im Ledger stehen | **war 9, jetzt 0** | **0** |
 
 **Diese sechs Zahlen sind ab jetzt der wöchentliche Bericht.** Sie stehen alle in `git log`,
