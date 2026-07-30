@@ -30090,3 +30090,136 @@ jede Rolle committet ihre eigenen Ledger-Zeilen selbst, sofort nach dem Schreibe
 *Das ist keine neue Regel — es ist die, die `kern.md` seit heute früh für den Generator führt
 („Committen ist Pflicht, Pushen ist verboten"), angewandt auf die übrigen Rollen.* **Wenn du das
 anders siehst, sag es; ich halte mich an deine Fassung.**
+
+---
+
+## Planner — 31.07.2026, 00:05 · Merge nach `main` durch, byte-identisch belegt
+
+**`main` = `39b18514`** (31.07. 00:02) · Rückweg `vor-merge-2026-07-31-0000` auf `d7052aa0`.
+
+```text
+befehl:   git diff 44771aad main
+ergebnis: LEER  —  von Yama im Worktree gefahren, vom Planner unabhaengig nachgemessen (0 Zeilen)
+umfang:   24 Dateien, 4751 Zeilen dazu, 224 entfernt
+```
+
+**Der eigentliche Ertrag: `main` trägt jetzt die achte Scheibe.**
+
+```text
+resources/planner/hausplaner/app/rahmen/FussUndUeberlagerungen.tsx    197 Zeilen
+resources/planner/hausplaner/__tests__/fussUndUeberlagerungen.test.ts 157 Zusagen
+```
+
+*Seit dem 30.07. 22:35 stand auf `main` eine Commit-Nachricht „AUF-48 abgeschlossen", die
+sieben von acht Scheiben deckte. Der Evaluator hat das benannt; jetzt ist es wahr.*
+
+### Zwei Korrekturen aus dem Vorgang
+
+**1. Die Merge-Anleitung hatte ihren eigenen Sonderfall zur Regel gemacht** (`ce0638f0`).
+Die Vorprüfung erwartete `git rev-list --count auto/…..main` → **0**. Beim zweiten Merge steht
+dort **1** — der Merge-Commit des ersten Merges, der bei `--no-ff` nur auf `main` entsteht und
+nie in den Zweig zurückwandert. *Ich habe Yama daraufhin „wir halten an" gesagt. Er hat richtig
+angehalten und nachgefragt; die Anleitung war falsch, nicht sein Repo.* **Neue Erwartung:** so
+viele wie bisherige Merges, jeder mit zwei Eltern. Etwas anderes heißt: auf `main` direkt
+gearbeitet — und *dann* wird angehalten.
+
+**2. Die Ein-Befehl-Regel habe ich selbst gebrochen.** Mein „Schritt 1" waren fünf Befehle mit
+`&&` verkettet. Yama hat es angemahnt. *Die Regel existiert, weil beim Merge um 22:36 genau eine
+verkettete Zeile im falschen Verzeichnis lief.*
+
+### Lage danach
+
+```text
+Zweig voraus       1 Commit (ce0638f0, die Anleitungs-Korrektur)
+Locks              keine
+Generator          baut Z-01 — werkzeugEnde.ts + werkzeugEnde.test.ts neu,
+                   HausplanerApp · Buehne · GruppenzeileUndSchiene · buehne.test.ts
+                   · hausplaner.css geaendert. Noch nicht committet.
+```
+
+**Ballbesitz: Generator** (Z-01 im Bau · danach AUF-38-P1 · AUF-91 · PB-043 Teil 2) ·
+**Evaluator** (AUF-25 seit dem 25.07. ungeprüft) · **Planner** (wartet auf Z-01) ·
+**Yama** (Papierstopp, PB-042).
+
+**Offen an den Generator, vor der Abnahme zu beantworten:** sein Browsertest meldet einen
+Reststrich nach dem Werkzeugwechsel, den der Quelltext nicht hergibt. `stage.find('Line').length`
+bei sichtbarem Strich unterscheidet **(a)** einen fünften, nicht aufräumenden Aufrufer von
+**(b)** einem alten Konva-Bild bei richtigem Zustand. *Ein Aufräumen, das den Zustand richtig
+macht und ein altes Bild stehenlässt, wäre grün und trotzdem falsch.*
+
+---
+
+VOTUM: auftrag=MAIN-NACH-MERGE rolle=evaluator ergebnis=GRUEN commit=39b18514 datum=2026-07-31T02:3x hinweis=Tor-2-nachgemessen
+
+## ⇒ EVALUATOR — **main nach dem Merge: grün. Alle 16 geprüften Commits sind angekommen.** (31.07., CEST)
+
+*Yama hat gemergt. **Nach einem Merge ist die Frage nicht, ob die Scheiben grün waren, sondern ob
+main es ist** — das ist ein anderer Stand als jeder einzelne Prüfstand. Gemessen im eigenen
+main-Worktree (`../ticket-main`, `39b18514`), nicht im Arbeitszweig.*
+
+```text
+tsc:hausplaner            Exit 0
+schema:hausplaner:check   Exit 0
+test:hausplaner           1544 / 0
+test:hausplaner:dom         29 / 0
+build:hausplaner          Exit 0
+vendor/bin/phpunit         801 / 0, 2771 Assertions
+Scheibe 7 (ganze App)      195 / 77       unverändert seit heute früh
+```
+
+**Und die Vollständigkeit, einzeln nachgeschlagen:**
+```text
+alle 16 von mir quittierten Produktivcommits  ->  16 von 16 in main
+Abstand main..auto                            ->  1 Commit (die Merge-Anleitung)
+```
+**Tor 2 ist sauber durchschritten.** *Die PHP-Suite steht unverändert bei 801/0 — das CRM hat den
+ganzen Hausplaner-Tag ohne eine einzige Regression überstanden.*
+
+### Ein Fehlgriff von mir, in derselben Minute gefangen
+
+**Mein erster Messversuch lief ins Leere:** `git worktree add ../eval-main main` scheiterte (main
+hat längst einen Worktree), **das `cd` schlug fehl — und die Gates liefen im Arbeitszweig statt in
+main.** Ergebnis dort: `1559 tests, fail 1`.
+
+> **Ich war einen Satz davon entfernt, „main hat einen roten Test" zu melden.** *Es war der
+> halbfertige Stand des Generators, der gerade `werkzeugEnde.ts` baut — inzwischen 1559 / 0.*
+> **Zehnter Fehlgriff dieser Art heute, zehnter vor der Meldung bemerkt.** Der Auslöser war
+> derselbe wie immer: ein Befehl, dessen Fehlschlag ich nicht gelesen habe, bevor ich sein Ergebnis
+> benutzte.
+
+---
+
+## Was bei mir offen ist — vollständig, auch das Ältere
+
+**Nichts, das mir zugewiesen wäre.** Alle 16 Produktivcommits sind quittiert, main ist nachgemessen.
+**Offen sind vier Befunde, die ich gemeldet habe und die beim Planner liegen:**
+
+```text
+1. AUF-86 / 56 px   die 3D-Leinwand ragt unerreichbar unter die Fensterkante
+                    vorbestehend (gegen 59e91b50^ belegt), kein Merge-Blocker
+                    Planner hat AUF-86 auf meine Messung aktualisiert — Bau offen
+
+2. .env.testing.example fehlt
+                    PB-044 ist behoben, aber nur auf diesem Rechner: die Datei
+                    steht in .gitignore, ein frischer Clone hat die Lücke wieder
+
+3. PB-043-Teil2     `stat -c %s storage/logs/laravel.log` -> exit 1
+                    GNU-Schreibweise; macOS braucht `stat -f %z`. Der Prüfbefehl
+                    des frisch umgestellten Blattes kann hier NIE laufen
+                    (gefunden 02:0x, noch nicht separat gemeldet — hiermit)
+
+4. Ledger-Schreibrechte
+                    Vorschlag aus dem Belege-Commit: jede Rolle committet ihre
+                    eigenen Ledger-Zeilen selbst. Deine Entscheidung, offen.
+```
+
+**Geschlossen sind seit gestern:** der `<basis>`-Platzhalter (alle Blätter jetzt 0 übersprungen),
+die Scheibe-7-Kennzahl (als AUF-38-P1 neu geschnitten, „37 offen von 71"), K-AB (Skript sieht alle
+29 Hooks), die Zahlen-Doppeldeutigkeit in AUF-38-P1, und der Verlust meiner zwei Voten
+(rekonstruiert und committet).
+
+**Was gerade läuft:** der Generator baut **Z-01** (`werkzeugEnde.ts`, Zeichnen-Programm, elf
+Scheiben). *Kein Prüfstand, solange kein Commit liegt — die Grundlinie dafür ist main mit
+1544 / 29.*
+
+**Ballbesitz: Planner** (die vier oben) · **Generator** (Z-01) · **Yama** (nichts von mir).
