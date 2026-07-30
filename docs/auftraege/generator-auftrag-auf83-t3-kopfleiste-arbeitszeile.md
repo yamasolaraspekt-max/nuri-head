@@ -42,11 +42,27 @@ scope:
     - resources/planner/hausplaner/app/dashboard/GeschossFlaeche.tsx
     - resources/planner/hausplaner/hausplaner.css
   ausschluesse:
-    - stelle: "alles in HausplanerApp.tsx ausser der Geschosszeile"
+    - stelle: "alles in HausplanerApp.tsx ausser der Geschosszeile und der neuen Arbeitszeile"
       grund: >
-        AUF-38 Scheibe 7 und AUF-48 beanspruchen dieselbe Datei. Faellt beim Bauen eine
-        Inline-Stelle im Weg auf: melden, nicht mitnehmen.
+        **PRAEZISIERT 30.07., 06:20 — auf deine Kollisionsmeldung hin, und du hattest recht.**
+        Der alte Wortlaut *„NUR die Geschosszeile"* und das Ziel *„eine Arbeitszeile mit
+        2D/Split/3D, Werkzeugen und Suche"* konnten nicht beide stimmen: drei der vier Inhalte
+        wohnen in `HausplanerApp` (gemessen: Ansichtsmodus, Werkzeugleiste, `paletteOffen:347` /
+        `oeffnePalette:560` / ⌘K-Griff:1037). Nur `arbeitsbereiche.ts` steht frei.
+        **Die Arbeitszeile wird DORT gebaut, wo ihre Inhalte wohnen — in `HausplanerApp`.**
+        Sie in die Schale zu heben hiesse, Zustand hochzuziehen; das ist AUF-48, nicht diese
+        Kopfleiste.
+        **Der Ausschluss wird damit nicht aufgehoben, sondern messbar gemacht:** angefasst werden
+        die Geschosszeile und die neue Arbeitszeile. Faellt eine FREMDE Inline-Stelle im Weg auf:
+        melden, nicht mitnehmen. AUF-48 bleibt unberuehrt.
       entschieden_von: planner
+      auflage: >
+        **Neues Markup traegt `className`, keine Inline-Stile.** Gemessen: `HausplanerApp.tsx`
+        hat heute **0 `className=`** — sie ist vollstaendig inline gestylt, und genau das ist
+        Scheibe 7. Die Stilschicht liegt bereit (`resources/planner/hausplaner/hausplaner.css`,
+        `build:hausplaner` erzeugt `public/hausplaner/hausplaner.css`).
+        **Damit zieht T3 an AUF-38 mit, statt mit ihm zu kollidieren:** die Zahl der offenen
+        Stellen muss **fallen oder gleich bleiben (78), sie darf nicht steigen.**
     - stelle: "Kontextmenues und Doppelklick"
       grund: >
         Gemessen 0 `onContextMenu` und 0 `onDoubleClick` in der ganzen Insel. Ein neues
@@ -110,9 +126,18 @@ kriterien:
       behauptet, sie falle weg.
 
   - id: K-04
+    status: BEREITS ERFUELLT DURCH AUF-43
     aussage: "Die Hoehenlage ist sichtbar."
     typ: presence
     kritikalitaet: P2
+    entscheid_30_07_0620: >
+      **DEINE ZWEITE MESSUNG STIMMT — es ist das DRITTE Kriterium, das AUF-43 schon erledigt hat.**
+      Mein Blatt sagte *„der Wert wird berechnet und nirgends gezeigt"*; gemessen stimmt nur die
+      erste Haelfte. Gezeigt wird er an genau den zwei Orten, die K-04 verlangt:
+      `GeschossFlaeche.tsx:113` (`kurzfassung` am Waehler: „Erdgeschoss · ±0 mm · 1 von 3"),
+      `:100` (`hoehenLabel` in jeder Zeile der Liste), `:87` (im Titel-Attribut).
+      **Wird als bereits erfuellt gefuehrt, nicht als deine Leistung** — dieselbe Regel wie bei
+      K-02 und K-03.
     pruefung:
       typ: visuell
       erwartet: "Am Waehler und in der Liste steht die Hoehenlage (`±0 mm`, `+2 750 mm`)."
@@ -138,9 +163,22 @@ kriterien:
       eine Benennung statt zweier.
 
   - id: K-06
+    status: ABGETRENNT NACH AUF-85 — NICHT IN DIESEM AUFTRAG BAUEN
     aussage: "Die Befehlspalette ist sichtbar erreichbar."
     typ: presence
     kritikalitaet: P2
+    entscheid_30_07_0620: >
+      **DEIN HARTER FALL IST WIRKLICH HART, UND DU HAST RICHTIG NICHT GERATEN.** Gemessen:
+      `HausplanerStudio.tsx:140` haengt `<HausplanerApp imStudio />` **nur im Expertenmodus** ein.
+      In *Uebersicht* und *Gefuehrt* gibt es die Palette gar nicht — es ist dort nichts da, das
+      man erreichbar machen koennte. Ein Einstieg in der Schale muesste sie also ERZEUGEN, und
+      das ist genau die zweite Aktivierungslogik, die die Grenze dieses Kriteriums verbietet.
+      **Ein Kriterium, dessen Erfuellung seine eigene Grenze verletzt, ist falsch geschnitten —
+      das ist meiner, nicht deiner.**
+      **ENTSCHEID: K-06 wird abgetrennt als `AUF-85` und haengt an AUF-48** (Zerlegung von
+      `HausplanerApp`), nicht an dieser Kopfleiste. Im Expertenmodus bekommt die Arbeitszeile
+      ihren `Suchen ⌘K`-Einstieg **innerhalb von `HausplanerApp`** — das ist K-05b unten und
+      braucht keine zweite Logik, weil `oeffnePalette:560` dort lokal liegt.
     pruefung:
       typ: visuell
       erwartet: "Ein Einstieg in der Arbeitszeile (`Suchen ⌘K`), der die vorhandene Palette oeffnet."
@@ -148,6 +186,21 @@ kriterien:
     grenze: >
       **Nicht bauen — erreichbar machen.** `dashboard/palette.ts` speist aus der Registry,
       `tools/trefferSuche.ts` sucht. Eine zweite Aktivierungslogik waere ein Fehler.
+
+  - id: K-05b
+    aussage: "Die Arbeitszeile traegt den Einstieg `Suchen ⌘K` — im Expertenmodus, in HausplanerApp."
+    typ: presence
+    kritikalitaet: P2
+    pruefung:
+      typ: visuell
+      erwartet: >
+        Ein sichtbarer Einstieg in der Arbeitszeile oeffnet die vorhandene Palette ueber
+        `oeffnePalette` (`HausplanerApp:560`). **Kein zweiter Ausloeser, keine zweite Logik** —
+        derselbe Aufruf, den der ⌘K-Griff in `:1037` schon benutzt.
+    beleg: Bildschirmfoto + der geoeffnete Dialog + Herkunft des Aufrufs im Diff
+    grenze: >
+      Der Ersatz fuer das abgetrennte K-06, und er ist kleiner: **nur im Expertenmodus**, weil es
+      die Palette nur dort gibt. Die Schale bekommt NICHTS.
 
   - id: K-07
     aussage: "Scheibe 7 ist unberuehrt."
