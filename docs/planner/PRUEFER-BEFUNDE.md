@@ -4121,6 +4121,11 @@ Der GENERATOR-TAKT prueft VOR dem naechsten Auftrag:
 
 **Ballbesitz: Generator** (sichern + berichten) · **Planner** (die Barriere im Takt).
 
+> **Zeitmarke 11:52 CEST (Nachtrag zum bestehenden Befund, kein neuer Abschnitt):** die drei Pfade
+> stehen weiterhin bei **0 Commits**, der letzte Commit einer anderen Rolle ist von **10:51** —
+> **61 Minuten.** *Die Kenngröße dieses Befundes ist die Dauer, nicht die Zahl der Meldungen: seit
+> einer Stunde hängt die Datenbank dem Repository um eine Migration voraus.*
+
 ---
 
 ## 64. Runde 48b — **Selbstbefund: ich habe die Arbeits-DB `ticket` gelesen**
