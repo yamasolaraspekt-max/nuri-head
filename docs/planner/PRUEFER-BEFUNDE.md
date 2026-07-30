@@ -1805,3 +1805,63 @@ gepusht.
 **Ich fasse die Datei nicht an** (`.gitignore` und das Wurzelverzeichnis liegen außerhalb `docs/`,
 und `rm` ist auf dem Mount verboten). **Geht als P2-Sicherheitsposten an Yama** — zwei Zeilen in
 `.gitignore` und ein `mv` nach `_to_delete/`, beides zehn Sekunden.
+
+---
+
+## 25. Runde 18 (30.07.) — Zwischenbilanz: die zwanzig Befunde, den Fehlerklassen zugeordnet
+
+**Gemessen gegen `63115d06`.** Kein neuer Befund. **`PB-011` hat gezeigt, dass in zehn Runden kein
+einziger Befund in eine Fehlerklasse eingetragen wurde** — hier ist die Zuordnung, damit der Planner
+sein Register führen kann, ohne meine siebzehn Abschnitte noch einmal zu lesen. *Die Klassifizierung
+selbst bleibt seine; ich lege die Zuordnung vor, nicht den Beschluss.*
+
+### Passt in eine vorhandene Klasse (11 von 20)
+
+| Befund | Klasse | warum |
+|---|---|---|
+| PB-001 · PB-003 · PB-020 | **F-04** Zahl oder Artefakt behauptet statt gemessen | ein 422-Blocker, drei Bestandszahlen, ein Beispielbefehl — alle ohne Nachmessung |
+| PB-002 | **F-03** Messung älter als der Baum | mit einer Zuspitzung: nicht älter, sondern **anderer Ast** (Sicherungszweig) |
+| PB-004 · PB-008 | **F-07** Bestand nicht gemessen, sondern nachgebaut | „nicht verdrahtet" bei 9 Konsumenten · ein erledigter Schritt als kommender geführt |
+| PB-009 | **F-02** Sperre, die mehr sperrt als ihr Grund trägt | die Konflikttabelle sperrt `ConfigWizard.tsx`, das frei ist |
+| PB-010 | **F-06** Zusage prüft Gestalt statt Wirkung | drei Marker-Bezeichner, die es nicht mehr gibt |
+| PB-016 | **F-04** | die Inventur meldet 21 wo 17 stehen |
+| PB-019 | **F-14** der Befehl endet mit 0 und hat nichts getan | der Validator findet auf 6 von 15 aktiven Blättern nichts zu fahren |
+| PB-005 → PB-006 | *(zusammengeführt)* | PB-005 ist Teilmenge von PB-006 |
+
+### Passt in KEINE vorhandene Klasse (7 von 20)
+
+**Das ist der eigentliche Ertrag dieser Bilanz** — sieben Befunde beschreiben etwas, das das
+Register bisher nicht kennt:
+
+| Befund | Vorschlag für eine Klasse |
+|---|---|
+| **PB-006** | **Papier ohne Leser** — 23 von 65 Dateien sind von keinem lebenden Dokument erreichbar, vier davon aus den letzten zwei Tagen |
+| **PB-007** | **Anker an der Zeilennummer statt am Namen** — ein Schnittplan, der stündlich zerfällt; am Commit exakt, im Baum um 4/62 Zeilen daneben |
+| **PB-011** | **Das Register, das Wiederholungen zählt, zählt nicht mit** — R9 löst an der zweiten aus, drei Zähler stehen zu niedrig |
+| **PB-012** | **Barriere, die vom Lesen abhängt** — F-14s Barriere wurde zwei Stunden nach ihrer Eintragung gebrochen, von einer Instanz, die sie nicht kannte |
+| **PB-013 · PB-014** | **Zwei Wahrheiten über die Regeln selbst** — 1534 Zeilen Rollenregeln in zwei Ablagen, keine nennt die andere |
+| **PB-015** | **Marke gegen Marke** — §1c kannte bisher nur *Marke gegen Fließtext*; zwei Marken kann kein Fließtext mehr entschärfen |
+| **PB-017** | **Berichtet ohne Stand** — 466 Zeilen und acht neue Dateien, im Register als geliefert und geprüft geführt, von keinem Commit getragen |
+| **PB-018** | **Schutz, der an der Namenswahl hängt** — die Kladden-Muster greifen bei `_probe.mjs`, nicht bei `k01n1b.mjs` |
+
+### Was mir an der Verteilung auffällt — als Beobachtung, nicht als Befund
+
+**Elf der zwanzig treffen Papier, neun treffen das Verfahren selbst.** Ich war als Prüfer der
+*Papiere* angesetzt; die härteren Funde liegen daneben — im Register, in der Tafel, in den Regeln,
+im Arbeitsbaum. **Sechs der sieben klassenlosen Befunde gehören in diese zweite Gruppe.**
+
+*Das ist keine Kritik an der Zuweisung.* Es ist die Zahl, die man kennen sollte, wenn entschieden
+wird, wo die nächste Prüfrunde ansetzt.
+
+### Und die Zahl über mich selbst
+
+**Fünf Beinahe-Fehlmeldungen in achtzehn Runden**, alle vor dem Register gefangen: falsche Spalte ·
+zsh-Modifikator · zu enges Muster · Pfad-Präfix · Suche nach dem Namen statt nach der Wirkung.
+Dazu **zwei Zahlen, die der Planner widerlegt hat** (PB-003, PB-004) und **eine Zahl aus dem
+Gedächtnis** (Runde 13).
+
+**Acht Fehler, alle in der Extraktion, keiner im Urteil.** Gefangen hat sie nie die Sorgfalt,
+sondern immer eine zweite Zahl, gegen die die erste stimmen musste. *Wenn aus dieser Bilanz eine
+Regel für die Prüfrolle folgt, dann diese.*
+
+**Ballbesitz: Planner.**
