@@ -2287,3 +2287,98 @@ Folge. **Auch das ist Beobachtung, kein Befund:** die Regel ist bindend, wo sie 
 | **L6 Workflow** | keine Beanstandung |
 
 **Ballbesitz: Planner.**
+
+---
+
+## 31. Runde 23 (30.07.) — die 15 aktiven Auftragsblätter · Stand: 54 von 386
+
+**Gemessen gegen `7bacf838`.**
+
+### Was trägt: die Artefakt-Probe
+
+```text
+Von den 15 Blaettern genannte Datei-Pfade:   67
+nicht im Commit auffindbar:                   3
+davon erklaert:
+  objektkopf.ts, objektkopf.test.ts   im Arbeitsbaum vorhanden  -> PB-017, kein neuer Befund
+  schienenSpeicher.ts                 im Blatt als "# NEU" markiert -> offener Umfang
+uebrig als echter Fehler:                     0
+```
+
+**Alle 67 Pfade sind erklärbar.** *Ohne den Zwischenschritt „ist es im Arbeitsbaum, ist es als NEU
+markiert?" hätte ich hier drei Befunde geschrieben, von denen keiner einer ist.*
+
+### PB-027 · P2 · Ein Blatt sagt `aktiv`, die Tafel sagt `ZURÜCKGESTELLT`
+
+```yaml
+befund:
+  id: PB-027
+  datei: "docs/auftraege/generator-auftrag-b01-ai-workflow-sichern.md"
+  stelle: "YAML-Kopf Z8"
+  behauptung: "status: aktiv"
+  gemessen: |
+    Blatt (Z7-8):  id: B-01 · status: aktiv
+    Tafel:         "⏸ ZURUECKGESTELLT (vormals [vormals ⚡], zurueckgestellt 30.07.,
+                    09:26 zugunsten AUF-83 - §1c verlangt genau ...)"
+  befehl: |
+    head -12 docs/auftraege/generator-auftrag-b01-ai-workflow-sichern.md | grep status:
+    git show HEAD:docs/auftraege/AUFTRAGSTAFEL.md | grep -F 'b01-ai-workflow'
+  commit: "7bacf838"
+  schwere: P2
+  wirkung: |
+    Genau F-08b, die Klasse mit eigenem Eintrag im Fehlerregister: "Eine Entscheidung
+    aendert den Auftrag - und steht nur in Tafel und Ledger, nicht im Blatt."
+    Die Zurueckstellung ist um 09:26 auf der Tafel eingetragen worden; das Blatt fuehrt
+    sich weiter als aktiv. Wer das Blatt oeffnet - und AUF-87s Validator faehrt genau
+    den Kopf - liest "aktiv" und baut.
+  eigenarbeit: nein
+```
+
+### PB-028 · P3 · Ein Blatt mit `status: aktiv` steht auf keiner Tafelzeile
+
+```yaml
+befund:
+  id: PB-028
+  datei: "docs/auftraege/evaluator-auftrag-vorherbilder-und-auf86-2026-07-30.md"
+  stelle: "YAML-Kopf; Titel 'EVALUATOR - Zwei Messungen, die JETZT faellig sind'"
+  behauptung: "status: aktiv"
+  gemessen: |
+    Treffer auf "vorherbilder" in AUFTRAGSTAFEL.md:  1  (nur der Dateiname in einem
+      Fliesstext, keine eigene Postenzeile)
+    Treffer im Ledger:                               1
+    Das Blatt fuehrt sich als aktiv und ist ueber die Tafel nicht als Posten auffindbar.
+  befehl: |
+    grep -ci vorherbilder docs/auftraege/AUFTRAGSTAFEL.md docs/handoff-status.md
+  commit: "7bacf838"
+  schwere: P3
+  wirkung: |
+    §1c regelt, welcher Posten gezogen wird - ueber die Marke auf der Tafel. Ein
+    aktives Blatt, das dort keine Zeile hat, ist an dieser Steuerung vorbei: es kann
+    weder gezogen noch zurueckgestellt werden, weil es fuer die Tafel nicht existiert.
+    Niedrigere Schwere als PB-027, weil es ein EVALUATOR-Blatt ist und der Evaluator
+    seine Messungen nicht ueber die Marke zieht.
+  eigenarbeit: nein
+```
+
+### Der Rest der Statusprobe — ohne Beanstandung
+
+| Blatt | Kopf | Tafel |
+|---|---|---|
+| `auf83-t3-n1-zeile-eins-verschlanken` | `aktiv` | `aktiv` ✓ |
+| `auf83-t5-schienen-klappbar` | `gesperrt` | `gesperrt` ✓ |
+| `auf87-auftrag-pruefen` · `auf87-n2-struktur` | `aktiv` | `aktiv` ✓ |
+| `auf88-p1-pdf-als-referenz` | `gesperrt` | `gesperrt` ✓ |
+
+**Vier von vier mit Kopf stimmen überein.** *Die sechs ohne Kopf sind `PB-019` — dort kann nichts
+abweichen, weil nichts dasteht.*
+
+| Linse | Ergebnis |
+|---|---|
+| **L1 Inhalt** | keine Beanstandung — 67 von 67 Pfaden erklärbar |
+| **L2 Effizienz** | keine Beanstandung |
+| **L3 Konsistenz** | **PB-027**, **PB-028** — Blatt gegen Tafel |
+| **L4 Kausalität** | **PB-027** — die Kette *Entscheidung → Blatt → Bauender* endet auf der Tafel |
+| **L5 Plausibilität** | keine Beanstandung |
+| **L6 Workflow** | **PB-028** — ein Posten außerhalb der Steuerung |
+
+**Ballbesitz: Planner.**
