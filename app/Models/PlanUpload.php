@@ -13,8 +13,9 @@ class PlanUpload extends Model
 {
     /** @var list<string> */
     protected $fillable = [
-        'user_id', 'heizlast_projekt_id', 'original_name', 'pfad', 'mime', 'groesse_bytes',
-        'typ', 'status', 'massstab_mm_pro_einheit', 'kandidat_geometrie', 'konfidenz', 'meta',
+        'user_id', 'heizlast_projekt_id', 'lead_alternative_add_id', 'original_name', 'pfad',
+        'mime', 'groesse_bytes', 'typ', 'status', 'massstab_mm_pro_einheit', 'kandidat_geometrie',
+        'konfidenz', 'meta',
     ];
 
     /**
@@ -34,6 +35,16 @@ class PlanUpload extends Model
     public function heizlastProjekt(): BelongsTo
     {
         return $this->belongsTo(HeizlastProjekt::class);
+    }
+
+    /**
+     * AUF-88-P1 / K-02 — das Hausplaner-Objekt, dem diese Referenzunterlage zugeordnet ist.
+     *
+     * @return BelongsTo<LeadAlternativeAdd, $this>
+     */
+    public function hausplanerObjekt(): BelongsTo
+    {
+        return $this->belongsTo(LeadAlternativeAdd::class, 'lead_alternative_add_id');
     }
 
     /** @return BelongsTo<User, $this> */

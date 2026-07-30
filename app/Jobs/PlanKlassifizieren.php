@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\PlanUpload;
+use App\Services\Import\DateiSignatur;
 use App\Services\Import\ImportServiceClient;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -76,27 +77,47 @@ class PlanKlassifizieren implements ShouldQueue
             }
         }
 
+        // AUF-88-P1 / K-03 — PDF als Referenzunterlage: `PlanUploadController::bild()` liest für
+        // `typ !== 'bild'` bereits `meta.bild_pfad`; bislang setzte ihn niemand. Eigener try/catch,
+        // getrennt von der Vektor-Extraktion oben — misslingt die Rasterung, bleibt die
+        // Kandidaten-Geometrie trotzdem stehen, und umgekehrt.
+        if ($typ === 'pdf') {
+            try {
+                $raster = $importService->rasterizePdf($upload->pfad);
+                $bildPfad = 'plan-uploads/raster/'.$upload->id.'.png';
+                Storage::put($bildPfad, $raster['png']);
+                $upload->update([
+                    'meta' => array_merge((array) $upload->meta, [
+                        'bild_pfad' => $bildPfad,
+                        'bild_breite' => $raster['breite'],
+                        'bild_hoehe' => $raster['hoehe'],
+                        'bild_quelle_seite' => $raster['quelle_seite'],
+                        'bild_seiten_gesamt' => $raster['seiten_gesamt'],
+                    ]),
+                ]);
+            } catch (Throwable $e) {
+                $upload->update([
+                    'meta' => array_merge((array) $upload->meta, ['rasterung_fehler' => $e->getMessage()]),
+                ]);
+            }
+        }
+
         // typ === 'bild': Rasterbild-Vermessung (reines GD) ist im ticket nicht portiert →
         // bleibt graceful bei status='klassifiziert'.
     }
 
     /**
      * Liest die ersten Bytes und liefert einen (nicht autoritativen) Magic-Hinweis.
+     *
+     * AUF-88-P1: die Erkennung selbst liegt jetzt in `DateiSignatur` — eine Wahrheit mit der
+     * Prüfung, die `PlanUploadController::store()` VOR dem Speichern fährt.
      */
     private function magicHinweis(string $pfad): ?string
     {
         if (! Storage::exists($pfad)) {
             return null;
         }
-        $kopf = substr((string) Storage::get($pfad), 0, 8);
 
-        return match (true) {
-            str_starts_with($kopf, '%PDF') => 'pdf',
-            str_starts_with($kopf, "\x89PNG") => 'png',
-            str_starts_with($kopf, "\xFF\xD8\xFF") => 'jpg',
-            str_starts_with($kopf, 'II*') || str_starts_with($kopf, "MM\x00*") => 'tiff',
-            str_starts_with($kopf, 'AC10') => 'dwg',
-            default => null,
-        };
+        return DateiSignatur::erkenne(substr((string) Storage::get($pfad), 0, 8));
     }
 }

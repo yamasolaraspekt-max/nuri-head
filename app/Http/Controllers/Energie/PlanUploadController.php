@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\PlanKlassifizieren;
 use App\Models\HeizlastProjekt;
 use App\Models\PlanUpload;
+use App\Services\Import\DateiSignatur;
 use App\Services\Import\ImportServiceClient;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -45,18 +46,45 @@ class PlanUploadController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'datei' => ['required', 'file', 'max:51200', function (string $attr, mixed $value, callable $fail) {
-                if (! in_array(strtolower($value->getClientOriginalExtension()), self::ENDUNGEN, true)) {
-                    $fail('Dateityp nicht erlaubt (DWG, DXF, PDF, PNG, JPG, TIFF).');
-                }
-            }],
+            'datei' => [
+                'required', 'file', 'max:51200',
+                function (string $attr, mixed $value, callable $fail) {
+                    if (! in_array(strtolower($value->getClientOriginalExtension()), self::ENDUNGEN, true)) {
+                        $fail('Dateityp nicht erlaubt (DWG, DXF, PDF, PNG, JPG, TIFF).');
+                    }
+                },
+                // AUF-88-P1 / K-01 — die Signaturprüfung läuft jetzt VOR dem Speichern, nicht erst
+                // im Job danach. §3 des Master-Prompts verbietet, sich allein auf die Endung zu
+                // verlassen. `DateiSignatur` ist dieselbe Erkennung, die `PlanKlassifizieren`
+                // bereits benutzt — eine Wahrheit, zwei Aufrufstellen.
+                function (string $attr, mixed $value, callable $fail) {
+                    $endung = strtolower($value->getClientOriginalExtension());
+                    $kopf = file_get_contents($value->getRealPath(), false, null, 0, 8);
+                    if ($kopf !== false && ! DateiSignatur::passtZuEndung($kopf, $endung)) {
+                        $fail('Der Dateiinhalt passt nicht zur Endung — die Datei könnte umbenannt oder beschädigt sein.');
+                    }
+                },
+            ],
             'heizlast_projekt_id' => ['nullable', Rule::exists('heizlast_projekte', 'id')],
+            // AUF-88-P1 / K-02 — der Hausplaner-Projektbezug. `Rule::exists` prüft nur, dass die
+            // Zeile existiert (Existenz), nicht, dass der Nutzer sie benutzen darf (Zugehörigkeit)
+            // — das Ownership-Gate steht darum als eigener Schritt unten, nicht im Regelwerk hier.
+            'lead_alternative_add_id' => ['nullable', Rule::exists('lead_alternative_adds', 'id')],
         ]);
+
+        // Ownership-Gate (Bauordnung ticket: keine ID aus dem Request ohne Gate). Dieselbe
+        // Berechtigung, mit der die Objektseite selbst gegated ist (`permission:Hausplaner,update`
+        // an `hausplaner.objekt.*`) — ein fremdes Projekt zuzuweisen verlangt dieselbe Berechtigung,
+        // die das Objekt auch sonst zu ändern erlaubt.
+        if ($request->filled('lead_alternative_add_id') && ! $request->user()->hasPermission('Hausplaner', 'update')) {
+            abort(403, 'Keine Berechtigung, eine Referenzunterlage einem Hausplaner-Objekt zuzuordnen.');
+        }
 
         $datei = $request->file('datei');
         $upload = PlanUpload::create([
             'user_id' => $request->user()->id, // Besitzer-Bindung (Sicherheitsschuld A-3d)
             'heizlast_projekt_id' => $request->integer('heizlast_projekt_id') ?: null,
+            'lead_alternative_add_id' => $request->integer('lead_alternative_add_id') ?: null,
             'original_name' => $datei->getClientOriginalName(),
             'pfad' => $datei->store('plan-uploads'),
             'mime' => $datei->getMimeType() ?? $datei->getClientMimeType(),
@@ -67,6 +95,28 @@ class PlanUploadController extends Controller
         PlanKlassifizieren::dispatch($upload);
 
         return response()->json(['id' => $upload->id, 'message' => 'Hochgeladen — wird klassifiziert.']);
+    }
+
+    /**
+     * AUF-88-P1 / K-04 — die Kalibrierung speichern. `massstab_mm_pro_einheit` existiert als Feld
+     * seit der ersten Migration (A-3c), aber es gab nie einen Schreibweg dafür — die Insel
+     * berechnet den Wert (zwei Punkte + bekannte Länge), dieser Endpunkt hält ihn fest.
+     *
+     * Kein zweiter Ort für die Rechnung: der Wert kommt fertig gerechnet an, dieselbe Regel wie
+     * bei `data-objektkopf` — der Server nimmt entgegen, was die Insel rechnet, er rechnet nicht
+     * nach.
+     */
+    public function massstab(Request $request, PlanUpload $planUpload): JsonResponse
+    {
+        abort_unless($planUpload->user_id === auth()->id(), 403);
+
+        $daten = $request->validate([
+            'massstab_mm_pro_einheit' => ['required', 'numeric', 'gt:0'],
+        ]);
+
+        $planUpload->update($daten);
+
+        return response()->json(['massstab_mm_pro_einheit' => $planUpload->massstab_mm_pro_einheit]);
     }
 
     public function destroy(PlanUpload $planUpload): JsonResponse
