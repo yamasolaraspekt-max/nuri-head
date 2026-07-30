@@ -19968,3 +19968,72 @@ liest: ein Zuwachs, der aus einem Überstand kommt, ist keiner.*
 
 **Ballbesitz: Generator.** Zu bauen: **K-01 (Projekt + Objektname + Übernehmen-Knopf, drei Zeilen
 bleiben drei) · K-05 (Import ausgegraut) · K-05b (⌘K-Einstieg).**
+
+---
+
+## ⇒ PLANNER — beide Warteschlangen aufgefüllt (30.07., 06:55 CEST)
+
+**Yamas Anweisung von 06:30:** *„so viele Aufgaben wie möglich an Generator und Evaluator … und
+arbeite vorausschauend."* Dazu ein Wecker im 3-Minuten-Takt, der läuft.
+
+### Der Evaluator hatte nichts. Das war ein Fehlzustand, nicht Ruhe.
+
+**`EVAL-2026-07-30-A+B` liegt** — und Teil A ist eilig, aus einem Grund, der heute schon zweimal
+Geld gekostet hat:
+
+> **Der Generator baut T3 gerade.** Landet sein Commit, bevor der Vorher-Stand gemessen ist, ist
+> **K-01 nicht mehr prüfbar** — das wäre die **dritte** Ausprägung derselben Sache an zwei Tagen
+> (T1a/K-07 und T2/K-06 sind beide genau so verloren gegangen).
+
+**Teil A** hält fest: sechs Bilder in drei Viewports (Studio *und* Objektseite, denn dort stehen
+Objektname und Übernehmen-Knopf heute noch), die **drei Zeilenhöhen als Zahlen** — und
+`eineWerkzeugzeile` **grün belegt, bevor gebaut wird.** *Ein Grün nach dem Bau beweist nichts, wenn
+niemand das Grün davor gesehen hat.*
+
+**Teil B** vermisst AUF-86, den gemeldeten 23-px-Überstand: reproduzierbar? welcher Viewport?
+Ursache in der Insel oder in der Shell? Und seit wann — gemessen an `a14abb53` und `97a2e2a4`, per
+`git archive`, **nicht per Auschecken**, weil der Baum geteilt ist. *Ein Höhengewinn, der aus einem
+Überstand kommt, ist keiner; deshalb steht diese Messung vor der T3-Abnahme.*
+
+### Der Generator hat jetzt drei Blätter statt zwei
+
+**`AUF-87` — der Validator, den ich seit dem 27.07. schulde.**
+
+`scripts/auftrag-pruefen.sh` fährt jeden Prüfbefehl aus dem YAML-Kopf und meldet in **drei** Stufen:
+
+| Stufe | Fall |
+|---|---|
+| **FEHLSCHLAG** | `exit != 0` — der Befehl greift ins Leere |
+| **VERDÄCHTIG** | `exit 0`, aber **leere Ausgabe** — *der gefährlichere Fall: er sieht aus wie Erfolg* |
+| **NICHT MASCHINELL** | `typ: visuell` — kein grünes Häkchen, sondern die Liste dessen, was ein Mensch ansehen muss |
+
+**Gemessen an den fünf Rückweisungen der letzten 24 Stunden hätte er drei gefangen:** T1a/K-05
+(`grep` mit `exit 1`), die vier Tage alte T3-Grundgesamtheit, und meinen T2-Ausschluss ohne Beleg.
+**Zwei hätte er nicht gefangen** — und das ist kein Argument gegen ihn, sondern die Begründung für
+**R17**: *der Validator prüft, ob ein Befehl läuft; R17 verlangt, dass der Planner ihn überhaupt
+schreibt.*
+
+**Zwei Dinge stehen ausdrücklich im Kopf, weil sie sonst später als Selbstverständlichkeit
+durchgingen:**
+
+- **Eine Denylist.** Kein `git commit/push/add`, kein `rm`, keine Umleitung — **übersprungen mit
+  Grund, nicht verschwiegen.** *Die Blätter sind heute vertrauenswürdig; das Werkzeug soll es auch
+  dann noch sein, wenn eines es nicht ist.*
+- **Er darf nicht so tun, als hätte er alles geprüft.** Ein Blatt aus lauter `visuell`-Kriterien
+  bekommt von ihm kein Grün. *Sonst ersetzt das Werkzeug die Prüfung, statt sie vorzubereiten —
+  und das wäre die nächste Fehlerklasse, nicht die Lösung der letzten.*
+
+**Und er berührt keine einzige Datei der Layout-Kette.** Fällt T3 oder T5 auf eine Rückfrage
+zurück, kann er dazwischenlaufen, ohne etwas zu blockieren.
+
+### Stand der Warteschlangen
+
+| Rolle | Jetzt | Danach | Danach |
+|---|---|---|---|
+| **Generator** | AUF-83-T3 (K-01 · K-05 · K-05b) | **AUF-87** Validator | AUF-83-T5 |
+| **Evaluator** | **EVAL-A** Vorher-Stand *(eilig)* | **EVAL-B** AUF-86 vermessen | Abnahme T3 |
+| **Planner** | AUF-48 Zuschnitt · AUF-50 Stufenplan · AUF-86 Blatt | | |
+| **Yama** | **AUF-84** (~3000 `<option>` je Seite) · **T3/K-01b** (Rückgängig oben oder unten) · Tor 2 | | |
+
+**R16 ist eingehalten, und diesmal mit Abstand: drei baubare Aufträge vor der Front, zwei beim
+Prüfenden.**
