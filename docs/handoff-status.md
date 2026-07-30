@@ -24957,3 +24957,284 @@ dem Formular und den drei Feldern.
 AUF-87, zieht AUF-88-P1 (entsperrt), danach AUF-50-S1. Evaluator hat zwei Pruefstaende offen —
 `05d490ea..40fa52de` (T3/T3-N1) und `56ff2c9e..74ad1075` (T5). **Ich quittiere, halte die Marke
 richtig und schneide nach, wenn die Front leerlaeuft.** Tor 2 bleibt bei Yama.
+
+---
+
+VOTUM: auftrag=AUF-83-T5 rolle=evaluator ergebnis=GRUEN commit=74ad1075 datum=2026-07-30T10:5x
+
+## ⇒ EVALUATOR — AUF-83-T5: **GRÜN**, zwei literale Prüfbefehle liefern Treffer, in der Sache beide unbedenklich (30.07., CEST)
+
+*Zweiter Prüfstand der Session, nach demselben Verfahren wie T3/T3-N1: frischer Worktree an
+`74ad1075` (`git worktree add ../eval-auf83-t5 74ad1075`), `node_modules`/`vendor`/`.env`/`storage`/
+`public/build` per Hardlink. Codeumfang selbst geprüft: `git diff --stat 74ad1075^..74ad1075` → 17
+Dateien, `git show --name-only --pretty=format: HEAD` deckt sich exakt mit `scope.pfade` +
+der offengelegten Abweichung `SchienenSchalter.tsx`. Basis laut Ledger `56ff2c9e..74ad1075` umfasst
+zusätzlich reine PRUEFER-Doku-Commits dazwischen — für den Codeumfang zählt der Einzelcommit.*
+
+### K-08 — Gates, im isolierten Worktree
+
+```text
+tsc:hausplaner              Exit 0
+schema:hausplaner:check     Exit 0
+test:hausplaner             1410 / 0   (+16 seit T3-N1: escapeStapel, schienenSpeicher, angepasste Bestandstests)
+test:hausplaner:dom         29 / 0     (+10: escapeStapel.dom, schienen.dom)
+build:hausplaner            Exit 0
+Scheibe 7                   138 gesamt / 77 offen   (78→77, Abnahme erlaubt UND belegt: Z1373 stand
+                             bereits auf der offenen Liste, der linke Schienen-Container musste
+                             zwangsläufig angefasst werden — hier sogar eine Stelle geschlossen,
+                             keine neue offen)
+```
+Pfadliste exakt wie deklariert, keine fremde Datei. **GRÜN.**
+
+### K-07 — Dateiliste
+
+```text
+grep -rl 'HausplanerApp' __tests__/ __domtests__/  →  28 Dateien (Auftrag nannte 22, veraltet wie
+  bei T3 — Zahl wächst mit jedem Ticket, das ist kein Fehler)
+```
+Davon geändert: `buehnenBreite.test.ts`, `buehnenHoehe.test.ts`, `keineKappung.test.ts` — alle drei
+Diffs gelesen: keine Schwächung, sondern **Nachschärfung auf denselben Sinn** (buehnenBreite: von
+„kein `innerWidth`" auf „keine `innerWidth`-Subtraktion", weil K-05 jetzt einen legitimen Vergleich
+`innerWidth < 1024` einführt; buehnenHoehe: derselbe Match-String, nur um das neue `position:
+relative` ergänzt; keineKappung: Ein-Zeilen-Suche auf Block-Suche umgestellt, weil das JSX jetzt
+mehrzeilig ist — dieselben vier geprüften Eigenschaften bleiben). **GRÜN.**
+
+### K-06 und K-02 — zwei literale Prüfbefehle schlagen an, in der Sache beide unbedenklich
+
+```text
+grep -n 'immer sichtbar' HausplanerApp.tsx        → 1 Treffer (Z1945)
+grep -c 'innerWidth' HausplanerApp.tsx            → 1 Treffer (Z141)
+```
+**Beide Kriterien verlangen wörtlich „kein Treffer" bzw. „⇒ 0" — beide liefern einen.** Genau
+hingesehen, statt am Zahlenwert zu urteilen:
+- **K-06:** Z1945 ist kein stehengebliebener Irrtum, sondern ein NEUER Kommentar, der die ALTE
+  Phrase in Anführungszeichen zitiert, um zu erklären, warum sie entfernt wurde — die Textstelle,
+  die K-06 verbieten will (eine unwidersprochen falsche Behauptung), existiert nicht mehr.
+- **K-02:** Z141 ist `window.innerWidth < 1024` — ein Schwellenwert-Vergleich für K-05s
+  Overlay-Umschaltung, keine zweite Breitenrechnung. Das verbotene Muster (`innerWidth - Zahl` als
+  Ersatz für `buehnenBreite.ts`) kommt weiterhin nicht vor — durch `buehnenBreite.test.ts` selbst
+  jetzt schärfer geprüft als vorher.
+
+**Beide Kriterien wurden als reine Text-`grep`s geschrieben, bevor die legitimen neuen
+Verwendungen entstanden — dieselbe Klasse, die T2/T3 schon zeigten (Kriterium prüft die Form, nicht
+die Absicht).** Ich werte beide als **erfüllt in der Sache**, aber ich schreibe die wörtliche
+Abweichung hier auf, statt sie zu verschweigen — F-06 in Reinform, wie der Prüfer es bei
+`buehnenBreite.test.ts:K-01` selbst schon benannt hat.
+
+### K-01/K-02 — echte Sichtprobe, nicht nur Testlauf geglaubt
+
+Puppeteer, Objekt 203, 1440×900, Expertenmodus, `.hp-schiene-schalter--links/--rechts` einzeln
+geklickt:
+```text
+Start:                              links=true  rechts=true
+Links zu:                           links=false rechts=true    (rechts unberührt)
+Beide zu:                           links=false rechts=false
+Links wieder auf:                   links=true  rechts=false   (rechts bleibt zu — Unabhängigkeit belegt)
+```
+Screenshot „beide zu" zeigt die Bühne sichtbar breiter (ein zweiter Raum + Dach 35° wird sichtbar,
+der bei „beide offen" abgeschnitten war) — visueller Beleg für den Breitengewinn, zusätzlich zum
+Gate-Test. **GRÜN.**
+
+### K-03 — Gegen-Beweis aktiv geführt, nicht nur den mitgelieferten Test geglaubt
+
+`RANGFOLGE` in `escapeStapel.ts` mutiert (`palette,dialog,menue,…` → `menue,dialog,palette,…`):
+```text
+Vorher (Original):     test escapeStapel  →  1410/0 grün
+Nach Mutation:          AssertionError „palette sollte dialog schlagen" — ROT
+Zurückgesetzt:          1410/0 grün, git diff leer (Datei exakt wiederhergestellt)
+```
+Der Test *bricht* wirklich, wenn die Rangfolge falsch ist — kein Test, der nur Struktur prüft.
+**GRÜN, mit echtem Gegen-Beweis statt Vertrauen in den mitgelieferten Test.**
+
+### K-04 — durch Gate abgedeckt
+
+`schienenSpeicher.test.ts` läuft in den 1410 grünen Tests mit (Whitelist-Read, kein Wurf ohne
+`localStorage`, Schlüssel `hausplaner.schienen.v1`) — nicht zusätzlich eigenständig mutiert, das
+Muster ist identisch zu `arbeitsbereichSpeicher.ts`, bereits an T3 mit Gegen-Beweis geprüft.
+
+### K-05 — Sichtprobe, drei Viewports
+
+```text
+1440 px:  beide Schienen frei ein-/ausklappbar (oben belegt)
+1024 px:  offene Schiene verdrängt weiterhin (kein Overlay) — wie gefordert, Screenshot liegt vor
+375 px:   .hp-schiene-overlay-Klasse aktiv, scrollWidth == innerWidth == 375 (kein horizontaler
+          Überlauf)
+```
+**GRÜN.** Nebenbefund, nicht T5-verursacht: bei 375 px nimmt die gestapelte Kopf-/Werkzeugregion
+so viel Höhe, dass die Bühne ohne Scrollen nicht sichtbar ist — dieselbe, bereits in meiner
+T3-Meldung als „von AUF-70 geerbt" eingeordnete Beobachtung. Nicht erneut vertieft.
+
+### Urteil
+
+**Alle acht Kriterien GRÜN**, am eingefrorenen Commit `74ad1075` gemessen, zwei davon (K-06/K-02)
+mit einer präzise benannten Wörtlich-vs-Sinn-Abweichung, die die Sache nicht verletzt. Ein echter
+Gegen-Beweis geführt (K-03, Mutation), eine reale Unabhängigkeitsprobe im Browser (K-01/K-02).
+Worktree entfernt, Arbeitsbaum unberührt.
+
+**Kein Commit, kein Push von mir.** Ballbesitz: **Yama** — Merge-Entscheidung für beide offenen
+Prüfstände (T3/T3-N1 UND T5) liegt jetzt vor.
+
+---
+
+## 2026-07-30, ~10:55 CEST — GENERATOR: `AUF-87` (+N2) gesichert — der Validator lag seit 07:29 unverfolgt
+
+**VOTUM: auftrag=AUF-87 rolle=generator ergebnis=UMGESETZT commit=2d37d141 datum=2026-07-30**
+
+*Auf „unbeaufsichtigter Betrieb, Generator sichert AUF-87 zuerst" gezogen. Nicht selbst gebaut —
+eine frühere Instanz hatte es bereits fertiggestellt (27/27 Tests grün, unverfolgt seit 08:14). Vor
+dem Commit selbst geprüft, nicht blind übernommen.*
+
+```text
+Branch:          auto/hausplaner-integration
+Basis-SHA:       9bfa8212
+Generator-SHA:   2d37d141
+Produkt:         scripts/auftrag-pruefen.mjs · scripts/auftrag-pruefen.sh · docs/auftraege/AUFTRAGSSCHEMA.md
+Test:            scripts/__tests__/auftragPruefen.test.mjs
+```
+
+### Eigene Prüfung vor dem Commit
+
+```text
+node --test scripts/__tests__/auftragPruefen.test.mjs    27 / 0
+npm run tsc:hausplaner / test:hausplaner / test:hausplaner:dom   0 / 1410 / 29   (unberührt — Kontrollmessung)
+```
+
+**K-07 real gefahren** (nicht nur den Test geglaubt):
+```text
+bash scripts/auftrag-pruefen.sh \
+  docs/auftraege/generator-auftrag-auf83-t3-kopfleiste-arbeitszeile.md \
+  docs/auftraege/generator-auftrag-auf83-t5-schienen-klappbar.md
+```
+**Ertrag, roh gemeldet statt repariert** (per `nicht_ziel` explizit nicht mein Scope): T3-N1 trägt
+weiterhin `status: aktiv`, T5 weiterhin `status: gesperrt` — beide längst committet
+(`40fa52de`/`74ad1075`). **Zwei veraltete Statusfelder, genau die Fehlerklasse, gegen die dieses
+Werkzeug gebaut wurde.** Gehört dem Planner.
+
+**Denylist überflogen** (`execSync` auf Befehle aus Markdown-Köpfen ist ein reales Werkzeug mit
+realer Reichweite): Wortform-Erkennung statt Teilstring (block­iert auch `git  commit` mit zwei
+Leerzeichen, `git switch`), 12 Muster inkl. `rm`/`mv`/`chmod`/Umleitung/`curl`/`wget`/`npm run
+build`. Explizit als Sorgfaltsmaßnahme gegen Versehen deklariert, nicht als Sandbox gegen
+Böswilligkeit — deckt sich mit dem einzigen Betriebsfall (lokale, selbstgeschriebene
+Auftragsblätter). Keine Beanstandung.
+
+**Abweichung offen erklärt:** `scripts/auftrag-pruefen.mjs` steht nicht wörtlich in `pfade` (nur
+die `.sh`) — notwendige Begleitdatei, der Wrapper importiert sie direkt, ohne sie ist nichts
+lauffähig. Dieselbe Klasse wie `SchienenSchalter.tsx` bei T5.
+
+**Kein Merge, kein Push.**
+
+---
+
+VOTUM: auftrag=AUF-87+N2 rolle=evaluator ergebnis=GRUEN commit=2d37d141 datum=2026-07-30T11:1x
+
+## ⇒ EVALUATOR — AUF-87 + AUF-87-N2: **GRÜN**, dritter Prüfstand der Session (30.07., CEST)
+
+*Worktree an `2d37d141` (`git worktree add ../eval-auf87 2d37d141`), `node_modules` per Hardlink —
+`vendor`/`.env`/Server diesmal nicht nötig, reines CLI-/Node-Werkzeug ohne Laravel-Route. Diff
+selbst geprüft: `git diff --stat 2d37d141^..2d37d141` → 4 Dateien, deckt sich mit der
+Generator-Meldung.*
+
+### Gates, selbst gefahren
+
+```text
+node --test scripts/__tests__/auftragPruefen.test.mjs   27 / 0
+tsc:hausplaner                                          Exit 0
+test:hausplaner                                         1410 / 0   (Kontrollmessung, unberührt)
+test:hausplaner:dom                                      29 / 0   (Kontrollmessung, unberührt)
+```
+Deckt sich mit der Generator-Quittung. **GRÜN.**
+
+### K-07 (AUF-87) — der reale Lauf, Zeile für Zeile selbst gelesen, nicht nur den Zähler geglaubt
+
+```text
+bash scripts/auftrag-pruefen.sh <T3-Blatt> <T5-Blatt>
+```
+32 Zeilen Rohausgabe geprüft. T3: 3 OK · 1 übersprungen (`npm run build`, korrekt) · 9 nicht
+maschinell (`typ: visuell`, korrekt als Mensch-Aufgabe markiert). T5: 6 OK · 1 NULLTREFFER
+(`grep …schieneZu` liefert 0 — genau der bewiesene Mangel, den T5 beheben sollte, nicht mit
+FEHLSCHLAG verwechselt) · 1 übersprungen · 1 nicht maschinell. Danach genau **eine** Zeile
+`STRUKTUR S-01 genau ein aktiver Auftrag: …t3…` — **das ist kein Abbruch, sondern das korrekte
+Ergebnis:** S-02 bis S-05 laufen pro Blatt (Zeile 328 im Skript) und hätten dort gestanden, hätten
+sie etwas gefunden; bei beiden Blättern fanden sie nichts, S-01 wird erst am Ende über die Menge
+beider Dateien entschieden. **Ich habe das zunächst für einen Bug gehalten (Ausgabe endet
+unvermittelt) und den Skriptcode gelesen, um mich selbst zu widerlegen — das Verhalten ist
+beabsichtigt (Kommentar Z366: „S-01 gilt über die Menge, nicht je Blatt").**
+
+### Gegen-Beweis, aktiv geführt: die Denylist blockiert wirklich, nicht nur im mitgelieferten Test
+
+Eigenes Testblatt mit `pruefung.befehl: "git commit -m 'sollte NIE laufen'"` gegen den echten
+Validator gefahren:
+```text
+Ausgabe:          UEBERSPRUNGEN K-01   enthaelt "git commit"
+Realer Beweis:    git log --oneline -1 im echten Repo davor/danach — KEIN neuer Commit, der Befehl
+                  lief nicht. Nicht nur „Skript sagt übersprungen", sondern „Repo zeigt: nichts
+                  passiert".
+```
+**GRÜN, mit echtem Gegen-Beweis statt Vertrauen in die Denylist-Zeile im Code.**
+
+### Ertrag des Generators nachvollzogen, nicht blind übernommen
+
+„T3-N1 trägt weiterhin `status: aktiv`, T5 weiterhin `status: gesperrt`, obwohl längst committet"
+— **selbst am Klartext beider Blätter geprüft: stimmt.** Explizit außerhalb des Scopes von AUF-87/N2
+(„prüft Ausführbarkeit/Struktur, nicht Richtigkeit des Inhalts") — korrekt als Fund für den Planner
+weitergereicht, nicht selbst repariert.
+
+### Urteil
+
+**Alle acht (AUF-87) plus acht (N2) Kriterien in der Sache erfüllt**, am eingefrorenen Commit
+gemessen. Ein aktiver Gegen-Beweis gegen den sicherheitsrelevanten Teil (Denylist) geführt statt nur
+den mitgelieferten Test zu glauben. Scope-Abweichung (`auftrag-pruefen.mjs` fehlt wörtlich in
+`pfade`) bereits vom Generator offengelegt, gleiche Klasse wie bei T5 — kein eigener Befund nötig.
+
+**Kein Commit, kein Push von mir.** Ballbesitz: **Yama** — jetzt drei fertige Prüfstände
+(T3/T3-N1 · T5 · AUF-87+N2) zur Merge-Entscheidung.
+
+**Ballbesitz: Generator** (AUF-88-P1 als Nächstes, laut Planner-Vorgabe „unbeaufsichtigter Betrieb").
+
+---
+
+## ⇒ PRÜFER an GENERATOR — **PB-040: 457 Zeilen Sicherheitscode liegen in 0 Commits, die Migration ist trotzdem gelaufen** (30.07., 11:28 CEST)
+
+**Gemessen gegen `c7b65d85`. Ich melde es hier, weil du das Ledger liest und nicht mein Register** —
+mein voriger Eintrag stand nur in `docs/planner/PRUEFER-BEFUNDE.md`, und ein blockierender Befund im
+falschen Postfach ist kein Befund. *(Das ist mein Fehler in der Zustellung, nicht in der Messung.)*
+
+```text
+git log --all --oneline -- database/migrations/2026_07_30_105516_add_projektbezug_to_plan_uploads.php
+   -> 0 Commits
+git log --all --oneline -- app/Services/Import/DateiSignatur.php   -> 0
+git log --all --oneline -- tests/Feature/PlanUploadTest.php        -> 0
+
+php artisan migrate:status | grep projektbezug
+   -> ... [25] Ran            <- die Spalte ist in der Datenbank
+git grep -l plan_uploads HEAD -- database/migrations
+   -> nur 2026_07_08_180006_create_plan_uploads_table.php   <- im Repository ist sie nicht
+```
+
+**Zwei Wahrheiten über dasselbe Schema.** Wer HEAD liest, findet die Spalte nicht; wer die Datenbank
+liest, findet sie. **Der `down()`-Weg hängt an einer Datei, die kein Commit kennt.**
+
+Umfang: **355+ gestaged · 102+ / 17- im Baum**, jüngste Änderung **10:59**, also seit **29 Minuten**
+unverändert. Letzter Ledger-Eintrag (Z. 25192): *„Ballbesitz: Generator (AUF-88-P1 als Nächstes)"* —
+`grep -c 'GENERATOR.*AUF-88'` ⇒ **0**. **Der Evaluator hat keinen SHA, gegen den er messen kann.**
+
+**Was ich NICHT tue:** committen, aufräumen, stagen. *Aufdecken ist nicht beheben* — sonst nehme ich
+dir die Arbeit ab und prüfe hinterher meine eigene. **Ballbesitz: Generator.**
+
+**Zur Sache selbst habe ich nichts einzuwenden** — AUF-88-P1 habe ich in den Runden 43–46 an sechs
+der zehn Bauordnungs-Fragen gemessen, ohne Beanstandung (Endung **und** Inhalt, `abort(403)` als
+eigener Schritt, additiv/nullable/echtes `down()`, PHP-Suite 801 gegen 789, Differenz genau +12).
+**Das ist Prüfer-Arbeit und ersetzt die Abnahme nicht.**
+
+### An den PLANNER — R9: zweite Wiederholung der PB-018-Klasse, also eine Barriere statt eines Appells
+
+PB-018 war *„der Validator lag seit 07:29 unverfolgt"*. Derselbe Zustand, vier Stunden später.
+
+```text
+Vorschlag, mechanisch, im TAKT vor dem naechsten Auftrag:
+   git status --porcelain -- app database routes tests   > 0
+   und  git log --all -- <diese Pfade>                  == 0
+=> der offene Posten ist der BERICHT zum letzten Auftrag, nicht der naechste Auftrag.
+```
+
+**Ein Satz „künftig sofort committen" zählt nach R9 nicht.** Entscheiden tust du.
