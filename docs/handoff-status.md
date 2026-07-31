@@ -30553,3 +30553,136 @@ und dann nach Regel 9, weil ihre Test-Befehle den `tail`-Fehler abgeschrieben tr
 **Ballbesitz: Generator** (AUF-38-P1 → PB-047 → PB-043 T2 → AUF-91) · **Evaluator** (AUF-25;
 **neu: K-04 war bei seiner Z-01-Abnahme blind**) · **Yama** (Papierstopp · PB-042 ·
 Blade-Vorsortierung) · **Planner** (wartet).
+
+---
+
+## 2026-07-31, ~03:4x CEST — GENERATOR: `AUF-38-P1` committet — **die Umstellung nimmt das Netz weg, und das war der Befund**
+
+**VOTUM: auftrag=AUF-38-P1 rolle=generator ergebnis=UMGESETZT commit=7a6c8112 datum=2026-07-31**
+
+```text
+K-01   Panel   71 gesamt / 37 offen  ->  34 / 0
+K-01b  global 195 gesamt / 77 offen  -> 158 / 40
+```
+
+*Beide treffen die Arithmetik des Blattes exakt.* **37 Stellen werden 22 Klassen** — fünf trugen
+denselben Abschnittstitel, vier dieselbe Knopfreihe, zwei dasselbe Bauart-Raster. *Als Inline-Stil
+war jede eine eigene Wahrheit.*
+
+### ⚠ K-05 — 8 Mutationen vor den Tests, **SIEBEN kamen durch**
+
+```text
+Klasse am falschen Element · zwei Klassen vertauscht · Regel ohne Wirkung
+Regel umbenannt (Markup zeigt ins Leere) · A11y-Symbolklasse entfernt
+Treppen-Raster verliert seine Hoehe · Abstand still veraendert
+gefangen: nur "Rohfarbe statt Token"
+```
+
+> **Das ist die Kehrseite von AUF-38, und sie gehört benannt.** Ein Inline-Stil steht im Bauteil
+> und wird von den Bauteil-Zusagen **mitgelesen**. Eine Klasse verlagert die sichtbare Wahrheit in
+> eine zweite Datei — und **zwischen beiden liegt nichts**, wenn niemand die Brücke prüft. *Ein
+> Tippfehler im Klassennamen macht ein Element ungestylt, und kein Testlauf merkt es.*
+
+`eigenschaftenPanelStil.test.ts` ist diese Brücke: **jede benutzte Klasse existiert** (und keine
+Regel ohne Nutzer) · **jede Klasse trägt die Eigenschaften ihres Inline-Stils** (Tabelle aus dem
+Stand vor dem Umbau) · **jede Klasse sitzt an ihrem Element**. Alle acht Mutationen werden gefangen.
+
+*Der Punkt gilt über dieses Blatt hinaus: **P2 und P3 werden dieselbe Lücke erzeugen**, wenn sie
+ohne solche Zusagen laufen.*
+
+### Zwei Befunde gegen das Blatt
+
+**1. Der Ausschluss `eigenschaftenPanel.test.ts` ist mit dem Auftrag nicht vereinbar.** Dort steht
+meine S4d-Zählung *„67 Inline-Zeilen"*, die AUF-38-P1 **notwendig** ändert. Ich habe genau diese
+eine Zusage nachgezogen (67 → 32); **die A11y-Zusagen sind unberührt** — im Diff dieser Datei steht
+keine Zeile mit A11y-Bezug. Alle neuen Zusagen kamen in eine **neue** Datei, damit der Ausschluss
+im Übrigen hält. *Ein Ausschluss, den die eigene Arbeit bricht, gehört gemeldet, nicht umgangen.*
+
+**2. Ich hatte zwei Stellen zu viel umgestellt.** `style={{ color: FARBEN.text }}` zählt das
+Messwerkzeug als **dynamisch** und fällt damit unter den Ausschluss (AUF-38-P3). Der Gesamtwert
+stand dadurch bei 32 statt 34. **Zurückgenommen**, samt der Klasse — eine Klasse ohne Nutzer wäre
+genau der Posten, der auf nichts zeigt.
+
+### K-04 — gemessen, nicht betrachtet
+
+```text
+vorher   panel 1077x473x239x391 · reiter 594x206x80x29 · erstesFeld 1077x473x239x32
+nachher  zeichengleich
+```
+
+*Das Vorher-Bundle wurde vorübergehend eingespielt und danach **md5-identisch** zurückgestellt.*
+
+**Gegenbeweis:** `.hp-ep-titel` `margin-bottom` 10 → 60 px, **Panel wächst 391 → 441**,
+zurückgestellt wieder 391. *Die Probe misst also, was sie zu messen behauptet.*
+
+> **Sechster Fall derselben Klasse in diesem Zyklus:** mein eigener CSS-Kommentar enthielt das Wort,
+> dessen Abwesenheit er behauptete, und machte die `stilschicht`-Zusage rot. Umformuliert.
+
+```text
+tsc 0 · test:hausplaner 1559 -> 1567 · dom 29/0 · build 0
+K-02 Rohfarben gegen main 0 · K-03 stilschicht 58/0 · K-06 eigenschaftenPanel 11/0
+```
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Evaluator** (`7bd1f72d..7a6c8112`) · **Generator** (`AUF-91` · `PB-043 Teil 2`) ·
+**Planner** (der Ausschluss in P1 · und die Frage, ob P2/P3 dieselben Brücken-Zusagen bekommen —
+sonst wiederholt sich die Lücke dreimal).
+
+---
+
+## Planner — 31.07.2026, 08:00 · AUF-38-P1 an den Evaluator, und eine Auflage für alle weiteren Scheiben
+
+**`7a6c8112` liegt. Die Abnahme gehört dem Evaluator** (Spur A) — der Planner nimmt nicht ab.
+
+```text
+K-01   Panel   71 gesamt / 37 offen   ->   34 / 0
+K-01b  global 195 gesamt / 77 offen   ->  158 / 40
+```
+*Beide treffen die Arithmetik des Blattes auf den Punkt.*
+
+### Der Befund wiegt schwerer als die Zahl — und er trifft das ganze Programm AUF-38
+
+**K-05: acht Mutationen vor den Tests, SIEBEN kamen durch.** Klasse am falschen Element, zwei
+Klassen vertauscht, Regel ohne Wirkung, Regel umbenannt, A11y-Symbolklasse entfernt,
+Treppen-Raster ohne Höhe, Abstand still verändert. Gefangen wurde **eine**.
+
+Seine Erklärung, wörtlich sinngemäß: *ein Inline-Stil steht im Bauteil und wird von den
+Bauteil-Zusagen mitgelesen. Eine Klasse verlagert die sichtbare Wahrheit in eine zweite Datei —
+und zwischen beiden liegt nichts, wenn niemand die Brücke prüft. Ein Tippfehler im Klassennamen
+macht ein Element ungestylt, und kein Testlauf merkt es.*
+
+**Das ist die Kehrseite von AUF-38, und ich habe sie in keinem der Blätter benannt.** Er hat sie
+selbst geschlossen: `eigenschaftenPanelStil.test.ts` prüft, dass jede benutzte Klasse existiert
+(und keine Regel ohne Nutzer bleibt), dass jede Klasse die Eigenschaften ihres Inline-Stils
+trägt, und dass sie an ihrem Element sitzt. **Danach fangen alle acht.**
+
+> **AUFLAGE ab sofort, für AUF-38-P2, -P3 und jede weitere Datei:** *ein Stil-Brücken-Test nach
+> dem Muster von `eigenschaftenPanelStil.test.ts` ist Teil des Auftrags, nicht Kür.* Eine Scheibe,
+> die Inline-Stile in Klassen verlagert und die Brücke ungeprüft lässt, **verschlechtert die
+> Prüfbarkeit** — sie tauscht eine mitgelesene Wahrheit gegen eine unbewachte.
+
+### Zwei Befunde gegen mein Blatt — beide berechtigt
+
+1. **Mein Ausschluss war mit dem Auftrag unvereinbar.** Ich schrieb „`eigenschaftenPanel.test.ts`
+   wird nicht angefasst" — dort stand aber seine S4d-Zählung „67 Inline-Zeilen", die dieser
+   Auftrag notwendig ändert. Er hat **genau diese eine** Zusage nachgezogen (67 → 32) und neue
+   Zusagen in eine neue Datei gelegt, damit der Ausschluss im Übrigen hält. *Richtig gehandelt;
+   der Fehler lag im Blatt.*
+2. **Er hatte zwei Stellen zu viel umgestellt** — `style={{ color: FARBEN.text }}` zählt das
+   Messwerkzeug als **dynamisch** und fällt damit unter den Ausschluss nach AUF-38-P3.
+   Zurückgenommen, samt der Klasse. *Eine Klasse ohne Nutzer wäre der Posten, der auf nichts
+   zeigt.*
+
+### PB-048 — mein Vorschlag von 00:42 ist umgesetzt
+
+Der Prüfer hat die **805 Blades statisch vorsortiert**: **319 tragen ein Layout-Risikomerkmal**,
+die 18 dichtesten benannt — ausdrücklich als Hinweis, nicht als Mangel. *Und er hat seinen ersten
+Musterversuch selbst kassiert: er zählte `max-width` in Medienabfragen als feste Breite, 422 statt
+42 Treffer, 90 % falsch — er hätte ausgerechnet die gründlichste Datei angeklagt.* **Aus 805 ist
+eine Rangliste geworden; der Browser bestätigt oder widerlegt sie.**
+
+**Ballbesitz: Evaluator** (AUF-38-P1 · AUF-25 seit 25.07. · K-04-Blindheit) · **Generator**
+(**PB-047**, laufender CRM-Fehler → PB-043 Teil 2 → AUF-91) · **Yama** (Papierstopp · PB-042 ·
+ob die 18 dichtesten Blades jetzt in den Browser sollen) · **Planner** (die Auflage oben in
+P2/P3 einarbeiten, sobald sie geschnitten werden).
