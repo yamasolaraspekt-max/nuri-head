@@ -30486,3 +30486,70 @@ Tage niemandem aufgefallen ist.** Deine Entscheidung von 00:42, Teil 2 vorzuzieh
 genau: *nicht weil das Log gross ist, sondern weil ein 229-MB-Log niemand liest.*
 
 **Ballbesitz: Planner.**
+
+---
+
+## Planner — 31.07.2026, 02:10 · Die 21 Werkzeug-Spezifikationen: Ergebnis, ehrlich gerechnet
+
+**42 Agenten, 1 h 39, 0 Fehlläufe, 3,6 Mio. Token.** Je Werkzeug ein Spezifikations- und ein
+Gegenprobe-Agent, der widerlegen sollte statt zu bestätigen.
+
+```text
+21 spezifiziert   ·   3 haltbar   ·   18 wackelig
+Geschaetzter Gesamtaufwand der 21:  860 Minuten  (14,3 Stunden)
+Vollstaendig:  /tmp/.../tasks/wjdoppqrm.output  ·  journal.jsonl im Run-Verzeichnis
+```
+
+### Die drei haltbaren — sofort schneidbar, alle ohne Abhängigkeit
+
+| Werkzeug | neuer Befehl | Spur | Aufwand |
+|---|---|---|---|
+| `drehen` | `ROTATE_NODES` — Wände, Objekte, Leitungen in EINEM umkehrbaren Schritt | A | 50 Min |
+| `erkennung-bestaetigen` | `ADD_NODES` — erkannte Kandidaten als echte Knoten, ein Schritt | A | 45 Min |
+| `pv-modul` | **keiner** — `ObjectNode` mit `objectType: 'pv_module'`, Dachbezug in `parameters` | A | 35 Min |
+
+*`pv-modul` ist die beste der drei: sie braucht **keinen neuen Befehl**, nur einen additiven Wert
+in der `objectType`-Union — kein bestehender Wert wird umbenannt.*
+
+### Der Fund, der alles andere überwiegt — und er traf mein Blatt
+
+**`Z-01/K-04` konnte niemals rot werden.** `node --test … | tail -4` schneidet `# pass`/`# fail`
+ab, und die Pipe schluckt den Rückgabewert. Grüner und roter Lauf sind zeichengleich. **Das
+Kriterium ist so durch eine Abnahme gegangen.** Korrigiert (`89d563f7`), **Regel 9** in
+`VORLAGE.md`: *jeder Prüfbefehl wird einmal gegen einen Fall gefahren, der fallen MUSS.*
+
+*Der Agent hat ausdrücklich vermerkt, dass er den Fehler aus meinem Blatt **abgeschrieben und
+nicht erfunden** hat. Elf der 21 Spezifikationen tragen ihn deshalb ebenfalls — sie sind nicht
+schlechter als ihre Vorlage.*
+
+### Vier echte Erfindungen, die die Gegenprobe gefangen hat
+
+```text
+versatz      OpeningNode.oeffnung mit 'links'/'rechts'  ->  es gibt nur 'innen'|'aussen'
+versatz      editierGeometrie.versetzteWand             ->  steht nur in einem KOMMENTAR
+verlaengern  useSzeneStore                              ->  heisst usePlannerUiStore
+pv-modul     ein Zod-Spiegel der objectType-Aufzaehlung  ->  im Bestand nicht auffindbar
+```
+
+### Und ein Fehler von mir, der die Prüfung teilweise blind gemacht hat
+
+**Von 15 gemeldeten „erfundenen Wiederverwendungen" sind nur vier echte Erfindungen.** Die
+übrigen elf lauten sinngemäß *„nicht prüfbar, weil die Datei nicht im Auszug lag"* — ich hatte
+den Agenten **acht Dateien** kopiert, nicht das Verzeichnis. `geometry/wallGeometry.ts`,
+`__tests__/`, `package.json` fehlten.
+
+*Die Prüfer haben das jedes Mal offengelegt statt zu raten — das ist der richtige Umgang damit.
+Aber der Aufwand einer Gegenprobe verpufft an den Stellen, an denen sie nichts nachschlagen
+kann.* **Bei einer Wiederholung: den ganzen Baum kopieren, nicht die Dateien, die ich für
+ausreichend halte.**
+
+### Was NICHT geschieht
+
+**Keine der 21 wird jetzt zu einem Blatt.** Vier liegen unbearbeitet (AUF-38-P1 im Bau, PB-047,
+PB-043 Teil 2, AUF-91), der Generator steht seit 01:10. *Papier auf Vorrat ist genau das, was der
+Papierstopp meint.* Die drei haltbaren werden geschnitten, **wenn die vier liegenden weg sind** —
+und dann nach Regel 9, weil ihre Test-Befehle den `tail`-Fehler abgeschrieben tragen.
+
+**Ballbesitz: Generator** (AUF-38-P1 → PB-047 → PB-043 T2 → AUF-91) · **Evaluator** (AUF-25;
+**neu: K-04 war bei seiner Z-01-Abnahme blind**) · **Yama** (Papierstopp · PB-042 ·
+Blade-Vorsortierung) · **Planner** (wartet).
