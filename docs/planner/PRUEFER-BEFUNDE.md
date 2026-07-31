@@ -235,7 +235,7 @@ Rollentrennung.**
 | PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt | **GESCHLOSSEN** — Yama hat gewechselt (18:02, `67903953`) | 30.07. |
 | PB-040 | `db` + Ledger | Eine gelaufene Migration lag in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | **ERLEDIGT** (A: `fba60e6e` · B: Ledger 12:28) | — |
 | PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4-Zahlen, F-04-Zelle, `bestand.sh`, `VORLAGE.md` | **P2** | **ERLEDIGT** 22:49 — alle fünf Punkte nachgemessen | — |
-| PB-043 | `ChatController.php` + `config/logging.php:57` | **Teil 1 ERLEDIGT** (`fddec527`, 21:48): drei — nicht zwei — `Log::info` hängen jetzt am `?debug=1`-Schalter · **Teil 2 offen: `single` ohne Rotation, 218 MB**; ~~zwei unbedingte `Log::info` schreiben 64 086 Zeilen in ein nicht rotierendes Log | **P2** | offen | Planner |
+| PB-043 | `ChatController.php` + `config/logging.php` | **ERLEDIGT**: Teil 1 (`fddec527`) `Log::info` am `?debug=1`-Schalter · Teil 2 (`9e294323`) Stapel schreibt in `daily`, 14 Tage; ~~zwei unbedingte `Log::info` schreiben 64 086 Zeilen in ein nicht rotierendes Log | **P2** | offen | Planner |
 | PB-044 | `--env=testing` ohne `.env.testing` | Ein Schalter, der auf die Test-Umgebung zeigt, traf **stillschweigend die Arbeits-DB** | P3→**P2** (Planner) | **ERLEDIGT** 21:43 — nachgemessen | — |
 | PB-045 | mein eigener Messbefehl | `--date=format:` zeigt die Zone des Committers — **45 von 116** heutigen Commits zwei Stunden zu früh | **P3** | **ERLEDIGT** (Barriere gesetzt) | Prüfer |
 | PB-039 | `PRUEFER-BEFUNDE.md` (mein Register) | Acht Befunde hatten einen Abschnitt, aber **keine Zeile** — Ursache F-14 (`str.replace` traf nicht) | **P2** | **ERLEDIGT** (38 Zeilen = 38 IDs) | Prüfer |
@@ -4915,3 +4915,44 @@ kein Fehler — es ist ein **Verdacht**, den erst der Browser bestätigt oder au
 ausdrücklich als Hinweis, nicht als Mangel.**
 
 **Ballbesitz: Planner** (ob und in welcher Reihenfolge diese 18 angesehen werden).
+
+---
+
+## 79. Runde 437 — **PB-043 vollständig erledigt. Der letzte technische Befund ist geschlossen.**
+
+**Nachgemessen 08:01 CEST gegen `9e294323`.**
+
+```text
+config/logging.php:70   'channels' => ['daily']      (war ['single'])
+config/logging.php:81   'daily' => …  :85  'days' => 14
+Commit 9e294323 (07:59)  14 Einfuegungen, 1 Loeschung — eine Zeile Wirkung, dreizehn Zeilen Begruendung
+```
+
+**Der Kommentar im Code nennt die Messung, nicht die Absicht:** *„Vorher stand hier `['single']`: EINE
+Datei ohne Boden. Gemessen waren das 229 327 818 Bytes (219 MB), in denen 2 099 Fehlermeldungen
+begraben lagen."*
+
+> **Er hat meine Zahl übernommen und weitergezählt:** ich hatte 2 054 Fehler gemeldet, er misst 2 099.
+> *Der Unterschied sind die 45, die seit meiner Messung dazugekommen sind — darunter die 14
+> Sidebar-Fehler aus `PB-047`.* **Eine Zahl, die zwischen zwei Messungen wächst, ist ein Beleg, kein
+> Widerspruch.**
+
+### Damit ist die Lage bei den Nicht-Papier-Befunden
+
+```text
+PB-038  GESCHLOSSEN   Passwort (Yama)
+PB-040  ERLEDIGT      457 Zeilen gesichert + Bericht
+PB-041  ERLEDIGT      fuenf Punkte, VORLAGE.md + bestand.sh
+PB-044  ERLEDIGT      .env.testing
+PB-043  ERLEDIGT      Teil 1 Quelle · Teil 2 Rotation
+PB-047  geschnitten   Sidebar-TypeError seit 24 Tagen — gebaut ist nichts
+PB-046  P3 mit Ziel   AUF-91 liegt, gebaut ist nichts
+PB-042  bei Yama      der Takt
+PB-048  Hinweis       18 Blades zur Sichtprobe vorsortiert
+```
+
+**Die alte Datei bleibt liegen** — `daily` schreibt ab jetzt in neue Tagesdateien, aber die 219 MB
+verschwinden nicht von selbst. *Das ist kein Mangel, sondern eine Aufräumfrage; ich melde sie als
+Beobachtung, nicht als Befund.*
+
+**Ballbesitz: keiner** — geschlossen.
