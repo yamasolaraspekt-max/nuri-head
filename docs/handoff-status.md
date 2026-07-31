@@ -1,5 +1,14 @@
 # Handoff-Status (Ledger) — Hausplaner 3D / UI
 
+> **⚠ AB 31.07.2026, 10:30 IST DIESE DATEI ARCHIV.**
+> **Wo wir stehen, steht in `docs/STAND.md`** — eine Seite, die ÜBERSCHRIEBEN wird.
+> *Grund: diese Datei ist append-only auf 1,7 MB gewachsen. Eine zurückgenommene Aussage bleibt
+> darin stehen, die Richtigstellung steht 800 Zeilen später, und niemand liest beides. Genau das
+> hat Yama am 31.07. als „Gedächtnisverlust" benannt, und er hatte recht.*
+> **Hier wird weiter chronologisch angehängt** — Berichte, Voten, Belege. **Aber der STAND wird
+> nicht hier gesucht.** Wer eine Aussage von hier zitiert, prüft zuerst Abschnitt 4 von
+> `STAND.md`: ZURÜCKGENOMMEN.
+
 > **Zweck:** Eine Wahrheit über **wer am Ball ist**, **wie gearbeitet wird** und **was chronologisch geschah**.
 > Jede Rolle liest beim Start ZUERST dieses Ledger (Arbeitsprinzipien + Kette), macht genau ihren Schritt,
 > hinterlässt einen Bericht, hängt eine Journal-Zeile an, weckt die nächste Rolle, stoppt.
