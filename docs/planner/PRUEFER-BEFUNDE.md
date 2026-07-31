@@ -242,6 +242,7 @@ Rollentrennung.**
 | PB-042 | (Betrieb) `git log` | **109 Commits heute, 2 davon Produktivcode, 66 von mir** — docs/Code 7:1, mein Register allein 4 265 Z. | **P2** | offen | **Yama** (Takt) |
 | PB-046 | Objekt-Planer @ **375 px** (Browser) | 8 Bedienelemente ausserhalb, kein Bildlauf; **Planner: 375 = Ankunfts-, kein Bedienziel** → AUF-91 | **P2→P3** (Begründung geprüft, sie trägt) | offen mit Ziel | Planner |
 | PB-047 | `SidebarCountController.php:16,29,162` | `$user?->name` ist ein **String**, der Parameter fordert `?int` — **464 `local.ERROR`**, die Seitenleisten-Zahlen kommen nie an | **P2** | offen | Planner |
+| PB-048 | `resources/views/**` (805 Blades) | **Vorsortierung statt Sichtprobe**: 319 Blades tragen ein Layout-Risikomerkmal, die 18 dichtesten benannt — und mein erstes Muster war zu **90 %** falsch | **Hinweis** (kein Mangel) | offen | Planner |
 
 ---
 
@@ -4849,3 +4850,68 @@ begraben."** *Hier ist einer davon — 464 Mal, seit dem 07.07., in einem Log, d
 unentdeckt blieb.**
 
 **Ballbesitz: Planner.**
+
+---
+
+## 78. Runde 435 — **PB-048: die 805 Blades vorsortiert. Und 90 % meiner ersten Messung waren Unsinn.**
+
+**Gemessen 07:5x CEST gegen `fcde5afc`.** *Umsetzung des Planner-Vorschlags von 00:42: die Fläche
+statisch vorsortieren, damit eine Instanz die dreißig riskantesten ansieht statt achthundertfünf.*
+
+### Erst die Grundgesamtheit, sauber abgegrenzt
+
+```text
+alle *.blade.php                898
+davon unter resources/views/    805     <- die Zahl des Planners
+davon ausserhalb                 93
+```
+
+*Meine „803" von gestern und seine „805" waren dieselbe Menge, verschieden abgegrenzt; 898 ist das
+Ganze. **Kein Widerspruch, nur zwei Schnitte.***
+
+### Der Fehlschlag, und er ist der Kern dieser Runde
+
+```text
+erstes Muster:  (?:min-)?width:\s*(\d{3,5})px      ->  422 Treffer >1024px
+```
+
+**Das Muster trifft auch `max-width: 1200px`** — denn `max-width` **enthält** `width`. Damit habe ich
+**Medienabfrage-Grenzen als feste Elementbreiten gezählt.**
+
+```text
+korrigiert:  (?<!-)(?:min-)?width\s*:\s*(\d{3,5})px   + Zeilen mit @media verworfen
+             ->  42 Treffer
+
+90 % meiner Treffer waren das GEGENTEIL dessen, was ich suchte:
+Belege für Anpassungsfähigkeit, gezaehlt als Beleg für Starrheit.
+```
+
+**Die Spitze der ersten Liste war `admin/dashboard/employee/mobile.blade.php`** — ich stand davor, sie
+als *„die Mobil-Ansicht ist die unbeweglichste Datei im Haus"* zu melden. **Gemessen: sie hat 25
+Medienabfragen — mehr als jede andere.** *Sie stand ganz oben, weil sie am gründlichsten gebaut ist.*
+
+> **Gefangen hat es nicht die Sorgfalt, sondern die Nachprüfung am Einzelfall:** ich habe die acht
+> Fundstellen der Spitzendatei aufgeschlagen, bevor ich sie zitiert habe. **Ohne diesen Blick wäre der
+> Befund veröffentlicht worden — und er hätte genau die Datei angeklagt, die es am besten macht.**
+
+### Das belastbare Ergebnis
+
+```text
+805 Blades · 319 mit mindestens einem Merkmal · Punktsumme 1616
+Merkmale: feste Breite >1024px (x3) · <table ohne responsive-Huelle (x2) · gar keine Medienabfrage (+4)
+
+  46  admin/email/lead.blade.php                     23 Tabellen ohne Huelle
+  21  admin/offer/configuration/offer/config         1x 1580px · 9 Tabellen
+  14  admin/energie/energiekonzept_dokument           7 Tabellen
+  14  admin/master_sets/index                         2x 1100px · 4 Tabellen
+  13  admin/planner/index                             1x 1120px · 5 Tabellen
+  12  admin/checklist/.../pvgis · admin/product/type/type   je 4 Tabellen, KEINE Medienabfrage
+  11  admin/deal/material-list  (3x bis 1550px) · brand_department · distributor_department
+  10  zehn weitere, u.a. heizkoerper/konfigurator, invoices/mahnwesen (beide ohne Medienabfrage)
+```
+
+**Das ist kein Mangelbefund, sondern eine Rangliste für die Sichtprobe.** *Ein `<table>` ohne Hülle ist
+kein Fehler — es ist ein **Verdacht**, den erst der Browser bestätigt oder ausräumt.* **Ich melde ihn
+ausdrücklich als Hinweis, nicht als Mangel.**
+
+**Ballbesitz: Planner** (ob und in welcher Reihenfolge diese 18 angesehen werden).
