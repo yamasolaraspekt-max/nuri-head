@@ -131,8 +131,8 @@ kriterien:
     kritikalitaet: P1
     aussage: "Zeiger draussen heisst: keine Vorschaugeometrie, Startpunkt bleibt."
     pruefung:
-      befehl: "cd resources/planner/hausplaner && node --test __tests__/werkzeugEnde.test.ts | tail -4"
-      erwartet: "pass, 0 fail"
+      befehl: "cd resources/planner/hausplaner && node --test __tests__/werkzeugEnde.test.ts | grep -E '^# (pass|fail)'"
+      erwartet: "# pass mindestens 1, # fail 0"
     hinweis: >
       Der Validator meldet hier heute "exit 0, aber KEINE Ausgabe" - richtig, denn die
       Testdatei entsteht erst in diesem Auftrag. Nach dem Bau muss die Meldung verschwinden.
@@ -302,3 +302,38 @@ fünf Kopien waren eine echte Dublette, nur nicht die Ursache dieses Symptoms.
 *Mein Nachtrag von 23:57 ist damit geschlossen. Er war richtig gestellt — die Beobachtung passte
 nicht zum Quelltext, und die Auflösung war, dass die Beobachtung falsch war und nicht der Code.
 **Genau dafür ist die Frage da gewesen.*** Der Evaluator muss ihr nicht mehr nachgehen.
+
+---
+
+## K-04 WAR MESS-BLIND — nachträglich korrigiert (Planner, 31.07. 02:05)
+
+**Der Befehl konnte niemals rot werden.** Gefunden von einem Gegenprobe-Agenten, der ihn nicht
+las, sondern **ausführte** — und der ausdrücklich vermerkte, dass er den Fehler hier
+abgeschrieben und nicht erfunden hat. Selbst nachgestellt, Node v22:
+
+```text
+GRUEN,  node --test x.test.mjs | tail -4      ROT,   node --test x.test.mjs | tail -4
+  # cancelled 0                                 # cancelled 0
+  # skipped 0                                   # skipped 0
+  # todo 0                                      # todo 0
+  # duration_ms 115.45                          # duration_ms 105.98
+  Exit der Pipe: 0                              Exit der Pipe: 0
+```
+
+**Zeichengleich.** Die Zeilen `# pass` und `# fail` stehen davor und werden von `tail -4`
+abgeschnitten. Und die Pipe schluckt den Rückgabewert: ohne Pipe endet der rote Lauf mit **1**,
+mit `| tail -4` mit **0**.
+
+**Damit hat K-04 in der abgenommenen Fassung nichts geprüft.** *Der Evaluator hat Z-01 zu Recht
+grün gegeben — seine eigenen Messungen (Linienzahlen in zwei Worktrees, Klick ohne Mausbewegung)
+waren echt. Aber die Zusage K-04 im Blatt war eine Hoffnung, kein Beweis.*
+
+**Korrigiert auf** `| grep -E '^# (pass|fail)'` — das zeigt beide Zahlen und schneidet nichts ab.
+
+**Die Lehre, in einem Satz:** *Ein Prüfbefehl muss einmal gegen einen ABSICHTLICH ROTEN Fall
+gefahren werden, bevor er in ein Blatt kommt. „Läuft durch" ist nicht „misst".* Das ist Regel 9
+für `VORLAGE.md`.
+
+**Nicht betroffen:** `auf87-auftrag-pruefen.md` und `auf87-n2-struktur.md` rufen `node --test`
+**ohne Pipe** — dort trägt der Rückgabewert.
+

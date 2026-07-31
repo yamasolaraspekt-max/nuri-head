@@ -112,3 +112,37 @@ node scripts/auftrag-pruefen.mjs docs/auftraege/<blatt>.md
 *`VERDAECHTIG` darf stehen bleiben, wenn der Befehl auf etwas zeigt, das dieser Auftrag erst
 erschafft — dann gehört ein `hinweis:` daneben, der sagt, wann die Meldung verschwinden muss.*
 
+
+## Regel 9 — der Prüfbefehl wird einmal gegen einen ABSICHTLICH ROTEN Fall gefahren (31.07. 02:05)
+
+**Befund, an meinem eigenen Blatt.** `Z-01/K-04` stand auf
+
+```sh
+node --test __tests__/werkzeugEnde.test.ts | tail -4     # erwartet: "pass, 0 fail"
+```
+
+Nachgestellt mit Node v22, ein grüner und ein absichtlich roter Lauf:
+
+```text
+beide Male:  # cancelled 0 · # skipped 0 · # todo 0 · # duration_ms …
+             Exit der Pipe: 0
+```
+
+**Zeichengleich.** `# pass` und `# fail` liegen davor und werden abgeschnitten; die Pipe schluckt
+den Rückgabewert (ohne Pipe: `1`, mit Pipe: `0`). **Das Kriterium konnte nicht rot werden — und
+es ist so durch eine Abnahme gegangen.**
+
+**Deshalb:** bevor ein `befehl:` in ein Blatt kommt, wird er **einmal gegen einen Fall gefahren,
+der fallen MUSS.** Zeigt er dann dieselbe Ausgabe wie im guten Fall, ist er kein Prüfbefehl,
+sondern Zierrat.
+
+**Die drei Fallen, die das in diesem Projekt ausgelöst haben:**
+
+| Falle | Wirkung | Ausweg |
+|---|---|---|
+| `\| tail -n` auf Test-Zusammenfassungen | schneidet `# pass`/`# fail` ab | `\| grep -E '^# (pass\|fail)'` |
+| jede Pipe | schluckt den Rückgabewert | Zahlen ausgeben statt auf den Exit-Code bauen |
+| `grep -c` bei null Treffern | `exit 1`, meldet `NULLTREFFER` | `grep -o … \| wc -l` |
+
+*Regel 5 verlangt einen Gegenbeweis für die Zusage. Regel 9 verlangt ihn für den Befehl, der sie
+misst. **Ein Gegenbeweis, den ein blinder Befehl fährt, ist selbst blind.***
