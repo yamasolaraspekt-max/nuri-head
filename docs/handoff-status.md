@@ -30686,3 +30686,131 @@ eine Rangliste geworden; der Browser bestätigt oder widerlegt sie.**
 (**PB-047**, laufender CRM-Fehler → PB-043 Teil 2 → AUF-91) · **Yama** (Papierstopp · PB-042 ·
 ob die 18 dichtesten Blades jetzt in den Browser sollen) · **Planner** (die Auflage oben in
 P2/P3 einarbeiten, sobald sie geschnitten werden).
+
+---
+
+## 2026-07-31, ~04:0x CEST — GENERATOR: `PB-043 Teil 2` committet — **das Fass hat einen Boden**
+
+**VOTUM: auftrag=PB-043-TEIL2 rolle=generator ergebnis=UMGESETZT commit=9e294323 datum=2026-07-31**
+
+*Teil 1 (`fddec527`) hat die Quelle zugedreht, das Fass blieb voll. Eine Zeile schliesst es.*
+
+```text
+selbst gemessen   laravel.log  229 327 818 Bytes (219 MB) · 2 099 ERROR-Zeilen · 0 Tagesdateien
+                  `daily` vollstaendig konfiguriert — Pfad, Level, 14 Tage — UNBENUTZT
+geaendert         'stack' schreibt in ['daily'] statt ['single']
+```
+
+### K-01 — in **beide** Richtungen belegt
+
+```text
+mit der Vorgabe      laravel.log  +0   ·  laravel-2026-07-31.log entsteht, +66
+LOG_CHANNEL=single   laravel.log  +67  ·  Tagesdatei +0
+wieder mit Vorgabe   laravel.log  +0   ·  Tagesdatei +67
+```
+
+*Der Gegenbeweis ist der Punkt: eine Probe, die nur die gewünschte Richtung zeigt, misst
+möglicherweise etwas ganz anderes.*
+
+### ⚠ K-03 — eine Abweichung, gemeldet statt geglättet
+
+Das Kriterium erwartet **„unverändert"**; gemessen sind es **2099 → 2100**. **Die eine Zeile ist
+mein eigener Gegenbeweis** — `LOG_CHANNEL=single` schreibt naturgemäß in die alte Datei.
+Nachgezählt: **ERROR-Zeilen ohne meine Marke = 2099**, also exakt der Ausgangswert. *Nichts ist
+verloren; eine Zeile ist dazugekommen, und sie ist als Probe erkennbar.*
+
+### Die 219-MB-Datei bleibt liegen
+
+Löschen ist ausgeschlossen. **Verschieben wäre erlaubt, ist aber nicht nötig:** sie wächst nicht
+mehr, und ihre 2 099 Befunde bleiben dort auffindbar, wo jeder sie sucht. *Soll sie beiseite, ist
+das ein eigener Handgriff mit genanntem Ziel — kein Beifang dieses Auftrags.*
+
+```text
+K-02  'days' => 14 unveraendert — nicht heimlich hochgesetzt
+K-04  keine Log-Zeile aus dem Bestand in diesem Bericht, nur Kanalnamen und Zahlen
+php -l sauber · phpunit Feature 542 Tests / 1946 Zusagen gruen
+```
+
+**Nicht in diesem Auftrag:** was `LOG_CHANNEL` auf Hetzner sagt — Umgebungsvariable, Yamas
+Entscheidung. Geändert wurde nur die **Vorgabe**.
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Evaluator** (`7a6c8112..9e294323`) · **Generator** (`AUF-91` — der letzte offene
+Posten meiner Spalte) · **Yama** (`LOG_CHANNEL` auf dem Server, wenn dort dasselbe gelten soll).
+
+---
+
+VOTUM: auftrag=AUF-38-P1 rolle=evaluator ergebnis=GRUEN commit=7a6c8112 datum=2026-07-31T01:1x hinweis=Bruecke-beidseitig
+
+## ⇒ EVALUATOR — AUF-38-P1: **GRÜN.** Die führende Zahl trägt, und die Stil-Brücke ist beidseitig verriegelt (31.07., CEST)
+
+*Achtzehnter Prüfstand. **Das ist der Auftrag, bei dem ich um 01:2x die eine führende Zahl
+durchgesetzt hatte** („37 offen von 71" statt „129 von 196"). Jetzt zeigt sich, ob sie trägt.*
+
+### Die zwei Zahlen des Blattes, selbst nachgemessen
+
+```text
+                       Blatt sagt        gemessen
+Panel                  71/37 -> 34/0     34 Stellen, 0 offen     ✓
+global                 195/77 -> 158/40  158 gesamt, 40 offen    ✓
+```
+**Beide treffen auf die Stelle.** *Die Arithmetik geht auf (71−37=34, 195−37=158) — und weil die
+Zahl vor dem Bau eindeutig war, misst die Abnahme jetzt dasselbe wie der Bau.* **Das war der ganze
+Zweck des Befundes.**
+
+```text
+Gates: test 1567 / 0 · dom 29 / 0 · tsc 0 · build 0
+```
+
+### Der Befund des Bauenden ist der wichtigere Teil — und er ist geschlossen
+
+Er meldet: **8 Mutationen vor den Tests, SIEBEN kamen durch.** *Begründung, und sie sitzt: **ein
+Inline-Stil steht im Bauteil und wird von den Bauteil-Zusagen mitgelesen. Eine Klasse verlagert die
+Wirkung in eine zweite Datei** — und niemand prüfte, ob die Brücke hält.*
+
+**Gegenprobe an genau dieser Brücke:**
+```text
+MUTATION: eine CSS-Regel umbenannt (.hp-ep-befund-leer -> …-tot)
+          -> das Markup zeigt ins Leere
+
+⇒ ROT (2):  "K-05: jede benutzte hp-ep-Klasse ist in der Stilschicht auch definiert"
+            "K-05: keine hp-ep-Regel ohne Nutzer — eine Klasse, die niemand trägt, ist tot"
+```
+**Beide Richtungen sind verriegelt** — Klasse ohne Regel **und** Regel ohne Nutzer. *Eine
+einseitige Prüfung hätte die Hälfte der Fälle durchgelassen.*
+
+### Sichtprobe — wirken die Klassen wirklich?
+
+*Eine Klasse kann definiert sein und trotzdem nichts tun. Deshalb `getComputedStyle` am laufenden
+Panel, nicht nur die Datei gelesen:*
+```text
+Panel sichtbar · Elemente mit hp-ep-Klasse vorhanden
+Beispielprobe: hp-ep-kennzahl -> fontSize 12px, display block   (Regel greift)
+Reiter unverändert: Allgemein · Beziehungen · Prüfungen · Historie
+Konsole aus hausplaner.js: []
+```
+**Das Panel sieht aus wie vorher.** *37 Inline-Stellen sind zu 22 Klassen geworden, ohne dass sich
+am Bild etwas ändert — genau das war die Zusage.*
+
+### Ein Beinahe-Befund von mir, gefangen
+
+**Mein Brücken-Abgleich meldete zunächst zwei tote Klassen:** `hp-eigenschaften-panel` und
+`hp-eigenschaften-tab-`. **Nachgesehen, bevor ich es schrieb:**
+```text
+Z47  const PANEL_ID = 'hp-eigenschaften-panel';
+Z48  const reiterId = (id) => `hp-eigenschaften-tab-${id}`;
+```
+**Beides sind DOM-IDs für `aria-controls`, keine Stilklassen.** *Mein `grep hp-[a-z0-9-]+` kann
+das nicht unterscheiden — die zweite endet sogar auf `-`, weil sie eine Vorlage ist.* **Zwölfter
+Fehlgriff dieser Art heute, zwölfter vor der Meldung bemerkt.**
+
+### Zur Auflage des Planners
+
+*„Ein Stil-Brücken-Test ist ab sofort Teil des Auftrags, nicht Kür."* **Aus Abnahmesicht richtig
+und für mich verwertbar:** *ich kann bei P2/P3 dieselbe Mutation fahren (Regel umbenennen) und
+erwarte dieselben zwei roten Zusagen.* **Damit ist die Prüfung für die nächsten Scheiben
+vorgezeichnet, statt jedes Mal neu erfunden zu werden.**
+
+**Ballbesitz: Generator** (P2/P3 mit Brücken-Test) · **Planner** (die drei Befunde aus 02:3x, davon
+`stat` inzwischen behoben) · **Yama** (nichts von mir).
