@@ -525,3 +525,66 @@
  * das gefangen, bevor es jemand anders tun musste.
  */
 .hp-pause-hinweis { font-weight: 600; color: var(--hp-warn-ink); }
+
+/* ══════════════════════════════════════════════════════════════════════════════════════════════
+ * AUF-38-P1 — das Eigenschaften-Panel. 37 offene statische Inline-Stellen werden 22 Klassen.
+ *
+ * **Weniger Klassen als Stellen, und das ist der Ertrag:** fuenf Stellen trugen denselben
+ * Abschnittstitel, vier dieselbe Knopfreihe, zwei dasselbe Bauart-Raster. Als Inline-Stil war
+ * jede davon eine eigene Wahrheit, die man einzeln haette aendern muessen.
+ *
+ * **Jede Farbe kommt aus `var(--hp-…)`** — die Variablen werden aus `T` erzeugt
+ * (`app/stil/tokenVariablen.ts`), damit `studioDaten.ts` die einzige Farbwahrheit bleibt.
+ * Ein roher Wert hier waere eine zweite, die still altert.
+ *
+ * **Keine Medienabfrage** — Responsive ist L7 und ausdruecklich nicht dieser Auftrag;
+ * `stilschicht.test.ts` haelt das mit einer eigenen Zusage fest.
+ *
+ * *(Der Begriff steht hier bewusst NICHT in seiner Code-Schreibweise: die Zusage ist ein schlichtes
+ * `doesNotMatch`, und mein erster Kommentar hat sie rot gemacht — mit dem Satz, dass es die Sache
+ * nicht gibt. Sechster Fall dieser Klasse in diesem Zyklus.)*
+ * ══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* Prüfungen — Befunde */
+.hp-ep-befund-leer { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 12px; }
+.hp-ep-befundliste { list-style: none; margin: 0 0 12px; padding: 0; }
+.hp-ep-befund { display: flex; gap: 6px; align-items: flex-start; padding: 6px 8px; margin-bottom: 6px; border-radius: 8px; background: var(--hp-err-soft); border: 1px solid var(--hp-err-border); color: var(--hp-err-ink); }
+/* Schwere als Symbol UND Text (A11y, S4d/K-04) — beide fett, damit die Schwere auch ohne Farbe traegt. */
+.hp-ep-schwere-symbol { font-weight: 700; }
+.hp-ep-schwere-text { font-weight: 700; }
+.hp-ep-umfang { font-size: 11px; color: var(--hp-muted); border-top: 1px solid var(--hp-hair); padding-top: 8px; }
+
+/* Platzhalter-Reiter */
+.hp-ep-hinweis { margin-bottom: 8px; }
+
+/* Mehrfachauswahl (AUF-35a) */
+.hp-ep-mehrfach { margin-bottom: 12px; padding: 8px 10px; border-radius: 8px; background: var(--hp-surface2); border: 1px solid var(--hp-hair); }
+.hp-ep-mehrfach-zahl { font-weight: 700; margin-bottom: 4px; }
+.hp-ep-typreihe { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.hp-ep-typ { font-size: 11.5px; padding: 2px 7px; border-radius: 999px; background: var(--hp-brand-wash); color: var(--hp-brand-ink); }
+
+/* Wiederkehrende Bausteine — je einmal statt vier- bis fuenfmal */
+.hp-ep-titel { font-weight: 700; margin-bottom: 10px; }
+.hp-ep-untertitel { font-weight: 700; margin: 12px 0 6px; }
+.hp-ep-knopfreihe { display: flex; gap: 6px; margin-top: 8px; }
+.hp-ep-knopfreihe-unten { display: flex; gap: 6px; margin-bottom: 12px; }
+.hp-ep-feldgruppe { margin-bottom: 12px; }
+.hp-ep-rubrik { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--hp-muted); margin-bottom: 6px; }
+
+/* Bauart-Raster: gleiche Form, zwei Hoehen — der Unterschied steht in EINER Zeile, nicht in zweien */
+.hp-ep-bauartraster { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-height: 220px; overflow-y: auto; padding-right: 2px; }
+.hp-ep-bauartraster--treppe { max-height: 200px; }
+.hp-ep-bauartbild { width: 100%; height: auto; display: block; }
+
+/* Produkt-Abschnitt (Fensterbau) */
+.hp-ep-abschnitt { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--hp-hair); }
+.hp-ep-abschnitt-titel { font-weight: 700; margin-bottom: 8px; }
+
+/* Leerzustand des Panels */
+.hp-ep-lesehinweis { font-size: 11.5px; margin-bottom: 10px; }
+.hp-ep-kennzahl { font-size: 12px; }
+/* `hp-ep-kennwert` stand hier und ist wieder fort: die zwei Stellen, die sie tragen sollte,
+   sind `style={{ color: FARBEN.text }}` — vom Messwerkzeug als DYNAMISCH gezaehlt und damit
+   ausserhalb dieses Auftrags (Ausschluss: `style={bezeichner}`, eigenes Blatt AUF-38-P3).
+   Eine Klasse ohne Nutzer waere genau der Posten, der auf nichts zeigt. */
+.hp-ep-fusskasten { margin-top: 12px; padding: 10px; background: var(--hp-bg); border: 1px solid var(--hp-hair); border-radius: 8px; font-size: 11.5px; }
