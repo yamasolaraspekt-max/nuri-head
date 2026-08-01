@@ -32528,3 +32528,136 @@ eine Zeile in der Ersetzungskette; sie gehört dem, der das Werkzeug gebaut hat.
 
 **Ballbesitz: Planner** (Blade-Lücke der Barriere · die drei Befunde aus `8d5008f1`) ·
 **Generator** (frei — Z-02 und Z-05 stehen auf `bereit`).
+
+---
+
+## ⇒ PRÜFER — **PB-023 ist zu, von mir nachgemessen. Und mein erster Messversuch war wieder falsch** (01.08., 12:59 CEST)
+
+**`8d5008f1` (12:55) bringt meinen Befund PB-023 zu Ende: die Insel liegt auf der Referenzflaeche.**
+
+```text
+Familien in Abschnitt 9:  hp-ok- hp-ep- hp-ef- hp-gz- hp-wg- hp-schiene- hp-fn- hp-mb-   = 8
+Bruecke, von MIR nachgezaehlt:
+   hp-Klassen in echten class="..."-Attributen   43
+   davon ohne Regel in hausplaner.css             0
+Feature-Suite von MIR gefahren:
+   php artisan test tests/Feature/Styleguide/HausplanerInselTest.php  ->  7 bestanden, 115 Zusagen
+```
+
+### Der Fehlgriff, den ich offenlege, weil er meine Zahl gewesen waere
+
+**Mein erster Zaehlversuch meldete 55 Klassen, davon 11 ohne Regel — das haette wie ein Widerspruch
+zu seiner Zusage ausgesehen.**
+```text
+falsch:  grep -oE 'hp-[a-z0-9-]+' ueber die ganze Datei
+         -> faengt Fliesstext-Nennungen ("die Familie hp-ef-") und Variablennamen (--hp-bg)
+richtig: nur die Werte echter class="..."-Attribute
+         -> 43 / 0, deckungsgleich mit seiner Angabe
+```
+**Dreizehnter Fehlgriff dieser Art, dreizehnter vor der Meldung bemerkt.** *Die Regel dahinter ist
+immer dieselbe: ein Muster faengt Zeichen, nicht Bedeutung — und wer die Bedeutung meint, muss den
+Ort mitmessen, an dem sie steht.*
+
+### Was der Bauende an meinem eigenen Befund gefunden hat, und was ich dazu sage
+
+**Sein BEFUND 1 trifft PB-024, nicht PB-023:** *von zwoelf zuordenbaren Farbpaaren sind elf
+verschieden; zwoelf `var(--sa-)`-Verweise sind nicht zu haben, ohne dass die Insel anders aussieht.*
+**Das ist derselbe Kern wie bei der Canvas-Messung von 11:32 — mein Befund PB-024 hat gemessen, DASS
+die Insel nicht am Entwurfssystem haengt, aber nicht geprueft, ob das Anhaengen ohne sichtbare Folge
+moeglich ist.** *Es ist es nicht.* **Die Entscheidung, ob die Insel dabei anders aussehen darf,
+ist eine Gestaltungsfrage und gehoert Yama — nicht mir und nicht dem Bauenden.**
+
+**PB-023: ERLEDIGT. PB-024: bleibt offen und liegt jetzt sauber begruendet beim Planner.**
+
+**Register: 48 Zeilen · 27 erledigt · 4 offen** (PB-029/030 Wissensregister · PB-042 Takt · PB-048 Hinweis).
+
+---
+
+VOTUM: auftrag=EIGENE-RESTPOSTEN rolle=evaluator ergebnis=GESCHLOSSEN commit=8767188d datum=2026-08-01T13:0x hinweis=nichts-bleibt-uebrig
+
+## ⇒ EVALUATOR — **meine zwei Restposten sind zu. Einer davon war größer, als er ist.** (01.08., CEST)
+
+*Yama: „es darf nicht übrig bleiben." **Beide nachgemessen statt abgehakt.***
+
+---
+
+### Restposten 3 — die fünf sperrenden Blätter: **kein Mangel, sondern eine irreführende Meldung**
+
+**Ich hatte gemeldet: „fünf von mir abgenommene Blätter sperren den Validator" und die zweite
+Sperrbedingung als zu weit bezeichnet. Nachgemessen — der Befund war größer, als er ist:**
+
+```text
+AUFTRAGSSCHEMA.md schreibt die VERSCHACHTELTE Form vor:
+     pruefung:
+       befehl: "…"
+
+aktive Blätter                    1
+   davon schema-konform           1
+   davon flach (nicht konform)    0
+
+die fünf flachen                  alle abgeschlossen, keines aktiv
+                                  exit 1 — nachgemessen, sperren weiterhin
+```
+
+> **Der Validator ist im Recht.** *Die flache Schreibweise ist **nicht schema-konform**; dass er sie
+> nicht liest, ist keine Lücke, sondern die Regel.* **Kein aktives Blatt ist betroffen — es gibt
+> kein Betriebsrisiko.**
+
+**Was bleibt, ist die Meldung:** *„KEIN PRUEFBEFEHL im Kopf gefunden" ist irreführend — die Befehle
+sind da, nur in der alten Form.* **Richtiger wäre „Prüfbefehle nicht schema-konform (`befehl:`
+statt `pruefung.befehl:`)".**
+
+**Damit stufe ich meinen eigenen Befund herab:** *von „die Sperre ist zu weit" auf **„die Meldung
+nennt den falschen Grund"** — P3, kosmetisch.* **Meine Empfehlung an den Planner (Zeile 374
+einschränken) ziehe ich zurück:** *sie hätte ein korrektes Verhalten aufgeweicht.* **Der Posten ist
+für mich geschlossen; was bleibt, ist ein Satz Meldungstext und gehört dem Generator.**
+
+*Das ist das zweite Mal heute, dass ein Befund von mir bei genauerem Hinsehen kleiner wurde
+(PB-025 war der erste). **Beide Male hatte ich die Norm nicht gelesen, bevor ich die Abweichung
+meldete.***
+
+---
+
+### Restposten 2 — die flüchtigen Belege: **gesichert, aber nur die, die etwas beweisen**
+
+```text
+55 Screenshots in /tmp
+   davon zu ABGESCHLOSSENEN, grünen Abnahmen         52   -> nicht archiviert
+   davon zu einem OFFENEN Befund                      3   -> gesichert
+```
+
+```text
+~/evaluator-belege/2026-08-01/
+   auf86-3d-ueberstand-1440.png        318 KB   die 56-px-Messung (offener Befund)
+   auf86-split-hoehendifferenz.png     294 KB   541 gegen 597 im Split
+   auf91-hinweisflaeche-800.png        136 KB   die Aussage unter 1024 px
+```
+
+**Warum nicht alle 55:** *jedes grüne Votum nennt Befehl, Objekt-Id, Viewport und Vorgehen — es ist
+**reproduzierbar**, und ein Bild zu einer abgeschlossenen Abnahme beweist nichts, was der Text nicht
+sagt.* **Archiviert wird, was einen offenen Befund trägt.** *Das ist eine Entscheidung, keine
+Bequemlichkeit: ein Archiv, das alles aufhebt, wird nicht gelesen.*
+
+*Ausserhalb des Repositoriums, weil Binärdateien einen Arbeitszweig aufblähen — und ausserhalb von
+`/tmp`, weil das der Punkt war.*
+
+---
+
+## Stand meiner Selbstinventur
+
+```text
+1. zwei Urteile geschuldet (PB-010 / PB-023)        GESCHLOSSEN  12:2x, beide bestätigt
+2. flüchtige Belege                                 GESCHLOSSEN  drei gesichert, Rest begründet verworfen
+3. fünf sperrende Blätter                           GESCHLOSSEN  Befund herabgestuft, Empfehlung zurückgezogen
+4. bequemer Indikator statt treffender              GESCHLOSSEN  zaehle.mjs ersetzt grep -c
+```
+**Nichts offen.** *Und zwei der vier waren am Ende kleiner als gemeldet — **das ist kein guter
+Schnitt für einen Prüfer.** Ich habe zweimal eine Abweichung gemeldet, ohne vorher die Norm zu
+lesen, gegen die sie abweicht.*
+
+> **Regel für mich, aus beiden Fällen:** *bevor ich eine Abweichung melde, lese ich die Vorschrift,
+> von der sie abweicht — Schema, Bauordnung oder Blatt. **Eine Abweichung ohne Norm ist eine
+> Meinung.***
+
+**Ballbesitz: Generator** (Meldungstext im Validator, P3 · Z-02/Z-05/Z-06 · PB-023-Blatt) ·
+**Planner** (Schwere PB-023) · **Yama** (nichts von mir).
