@@ -123,7 +123,6 @@ kriterien:
     pruefung:
       typ: gate
       schritte: |
-      schritte: |
         NIEMALS DEN ECHTEN BEFEHLSNAMEN IN EINE ZUSAGE. Hier stand bis 01.08. 22:1x der
         WIRKLICHE Wrapper-Name aus b01/K-05. Das war derselbe Fehler wie in b01, nur eine
         Ebene hoeher: ein publizierender Befehl in einem Blatt - diesmal als Testfall.
