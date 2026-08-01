@@ -18,6 +18,7 @@ import { join } from 'node:path';
 import {
   pruefeBlatt, sammleBefehle, lieseKopfRoh, lieseAlleBloecke, zaehleBloecke, verbotenesMuster,
   bericht, strukturBefunde, aktiveBlaetter, baubareBlaetter, vergleicheErwartung, baumStand, brechendesGlied, STUFEN, DENYLIST,
+  gateMuster, pruefeEintrag, GATE_MUSTER,
 } from '../auftrag-pruefen.mjs';
 
 const verz = mkdtempSync(join(tmpdir(), 'auf87-'));
@@ -536,4 +537,41 @@ test('S-10: baumStand liefert einen SHA oder null — nie einen Fehler', () => {
   const s = baumStand();
   assert.ok(s === null || /^[0-9a-f]{40}$/.test(s), `unerwartet: ${s}`);
   assert.equal(baumStand('/gibt/es/nicht'), null, 'ausserhalb eines Repos ist es null, kein Wurf');
+});
+
+// --- GATE: Testsuiten und Buildketten gehoeren nicht in den Validator-Lauf (01.08.2026) ----------
+
+test('GATE: ein npm-run-Befehl wird NICHT gefahren, sondern als Gate gemeldet', () => {
+  const e = pruefeEintrag({ id: 'K-X', befehl: 'npm run test:hausplaner -- --filter=stilschicht' }, verz);
+  assert.equal(e.stufe, STUFEN.NICHT_MASCHINELL, 'ein Gate ist nicht maschinell geprueft');
+  assert.match(e.hinweis, /GATE/, 'die Meldung sagt, WARUM er nicht lief');
+  assert.match(e.hinweis, /npm run/, 'sie nennt das Muster');
+});
+
+test('GATE: php artisan zaehlt genauso', () => {
+  assert.equal(gateMuster('php artisan test --filter=Unterlage'), 'php artisan');
+});
+
+test('GATE (Gegenprobe ROT): ein harmloser Befehl wird weiterhin AUSGEFUEHRT', () => {
+  const e = pruefeEintrag({ id: 'K-Y', befehl: 'echo zwei' }, verz);
+  assert.equal(e.stufe, STUFEN.OK, 'sonst prueft der Validator gar nichts mehr');
+  assert.equal(e.ausgabe, 'zwei');
+  assert.equal(gateMuster('echo zwei'), null);
+});
+
+test('GATE (Gegenprobe ROT): `npm` OHNE `run` ist kein Gate — die Wortform greift', () => {
+  assert.equal(gateMuster('node scripts/zaehle.mjs datei npm'), null,
+    'sonst faengt das Muster jedes Blatt, das das Wort npm nur erwaehnt');
+});
+
+test('GATE: die Denylist hat Vorrang — `npm run build` bleibt UEBERSPRUNGEN, nicht Gate', () => {
+  const e = pruefeEintrag({ id: 'K-Z', befehl: 'npm run build:hausplaner' }, verz);
+  assert.equal(e.stufe, STUFEN.UEBERSPRUNGEN, 'Bauen veraendert etwas - das ist der schaerfere Grund');
+  assert.match(e.hinweis, /npm run build/);
+});
+
+test('GATE: die Liste steht im Werkzeug, nicht im Blatt', () => {
+  assert.ok(GATE_MUSTER.includes('npm run'));
+  assert.ok(GATE_MUSTER.includes('php artisan'));
+  assert.ok(!GATE_MUSTER.includes('node'), 'node ist der Validator selbst - nie ein Gate');
 });

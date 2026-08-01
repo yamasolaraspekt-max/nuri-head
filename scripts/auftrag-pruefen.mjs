@@ -51,6 +51,24 @@ export const DENYLIST = [
 ];
 
 /**
+ * **Muster, die ein GATE bezeichnen — kein Sicherheitsproblem, sondern eine Zustaendigkeitsfrage.**
+ *
+ * Getrennt von der Denylist, weil der Grund ein anderer ist. Die Denylist haelt Befehle zurueck,
+ * die etwas *veraendern*. Diese Liste haelt Befehle zurueck, die *jemand anders faehrt*: die
+ * Testsuiten und Buildketten gehoeren zum Generator und zum Evaluator, nicht in einen
+ * Struktur-Validator, den der Planner startet.
+ *
+ * **Der Anlass, 01.08.2026, gemessen:** ueber `docs/auftraege/` standen **46** `pruefung.befehl`
+ * mit `npm run` — der Verzeichnislauf haette sie alle ausgefuehrt und kam auf der Geraete-VM in
+ * 45 Sekunden nicht durch. Die Blaetter deswegen einzeln umzubauen waeren 46 Vorsaetze gewesen;
+ * **R9 verlangt an dieser Stelle eine Barriere.** Ein Wort statt 46 Dateien.
+ *
+ * *Ein Gate wird gemeldet, nicht verschwiegen — es zaehlt als NICHT MASCHINELL, damit niemand
+ * es fuer geprueft haelt.*
+ */
+export const GATE_MUSTER = ['npm run', 'npx', 'yarn', 'pnpm', 'php artisan', 'composer'];
+
+/**
  * Wie ein Muster erkannt wird — **als Wortform, nicht als Zeichenkette.**
  *
  * **Befund `AUF-87-B2` (P2), und er war berechtigt:** die erste Fassung suchte mit
@@ -139,6 +157,11 @@ export function verbotenesMuster(befehl) {
   return DENYLIST.find((m) => musterAusdruck(m).test(befehl)) ?? null;
 }
 
+/** Bezeichnet der Befehl ein Gate (Testsuite, Build, Artisan)? Liefert das Muster. */
+export function gateMuster(befehl) {
+  return GATE_MUSTER.find((m) => musterAusdruck(m).test(befehl)) ?? null;
+}
+
 /** Einen einzelnen Eintrag bewerten — ohne zu werfen. */
 export function pruefeEintrag(eintrag, arbeitsverzeichnis) {
   if (!eintrag.befehl) {
@@ -150,6 +173,13 @@ export function pruefeEintrag(eintrag, arbeitsverzeichnis) {
   const muster = verbotenesMuster(eintrag.befehl);
   if (muster) {
     return { ...eintrag, stufe: STUFEN.UEBERSPRUNGEN, hinweis: `enthaelt "${muster}"` };
+  }
+  const gate = gateMuster(eintrag.befehl);
+  if (gate) {
+    return {
+      ...eintrag, stufe: STUFEN.NICHT_MASCHINELL,
+      hinweis: `GATE: faehrt "${gate}" — gehoert zum Generator, nicht in den Validator-Lauf`,
+    };
   }
   try {
     const ausgabe = execSync(eintrag.befehl, {
