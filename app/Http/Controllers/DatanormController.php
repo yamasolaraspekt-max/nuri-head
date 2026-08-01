@@ -44,6 +44,6 @@ class DatanormController extends Controller
             ];
         }
 
-        return view('datanorm.upload', compact('parsedData'));
+        return view('admin.datanorm.upload', compact('parsedData'));
     }
 }

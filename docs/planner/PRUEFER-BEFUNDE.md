@@ -201,13 +201,13 @@ Rollentrennung.**
 | PB-004 | `tool-dashboard-current-state.md` | P2 | „Registry NICHT verdrahtet" — fünf UI-Konsumenten gemessen | **ANGENOMMEN** | 30.07. 08:45 — 9 Konsumenten gemessen, Kopf korrigiert |
 | PB-005 | `docs/planner/` (Sammel) | P3 | elf Papiere vom 24.07. ohne eingehenden Verweis | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | Sammelposten, kein Loeschen — siehe Ledger 08:45 |
 | PB-006 | `docs/planner/` (Sammel) | P3 | **23 von 65** Papieren von keinem lebenden Dokument erreichbar — darunter **vier** aus den letzten zwei Tagen | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 08:47 — Sammelposten mit PB-005, kein Loeschen |
-| PB-023 | `ui-bauordnung.md` | **P2** | 175 `hp-`-Klassen, 0 im Styleguide — keine Regressionsfläche; **eigenarbeit an 60** | offen | — |
-| PB-024 | `ui-bauordnung.md` / `studioDaten.ts` | **P2** | Insel-Palette: 42 Hexwerte, 0 Verweise auf `--sa-` — nicht verdrahtet | offen | — |
-| PB-025 | `ui-bauordnung.md` | P3 | schützt `partials/sa-ui.blade.php` — die Datei gibt es nicht | offen | — |
-| PB-022 | `arbeitskompass-ticket.md` | **P2** | kennt 0 von 9 laufenden Posten; letzte Lage vom 21.07., CLAUDE.md schickt aber dorthin | offen | — |
-| PB-021 | `CLAUDE.md` (Skill-Pflicht) | **P2** | 12 von 22 vorgeschriebenen Fach-Linsen existieren an keinem der beiden Skill-Orte | offen | — |
-| PB-019 | `docs/auftraege/` (aktive Blätter) | **P2→P3** | Validator **benennt** `KEIN KOPF` (kein F-14) — aber `exit 0` ließe 6 aktive Blätter durch ein Gate | offen (herabgesetzt) | — |
-| PB-020 | `AUFTRAGSSCHEMA.md` | P3 | Beispiel nennt `zaehle-statische-stile.sh` — die Datei gibt es nicht | offen | — |
+| PB-023 | `ui-bauordnung.md` | **P2** | 175 `hp-`-Klassen, 0 im Styleguide — keine Regressionsfläche; **eigenarbeit an 60** | **ERLEDIGT** (`8d5008f1`) — von mir nachgemessen: 8 Familien, **43 Klassen in echten class-Attributen, 0 ohne Regel**; Feature-Suite 7/115 gruen | Pruefer |
+| PB-024 | `ui-bauordnung.md` / `studioDaten.ts` | **P2** | Insel-Palette: 42 Hexwerte, 0 Verweise auf `--sa-` — nicht verdrahtet | **GESCHNITTEN** (`56abee2f`) — selbes Blatt | Generator |
+| PB-025 | `ui-bauordnung.md` | P3 | schützt `partials/sa-ui.blade.php` — die Datei gibt es nicht | **WIDERLEGT — mein Fehler** (`9e76e758`): sie liegt unter `admin/layouts/partials/`, ich hatte `resources/views/partials/` geprüft | Prüfer |
+| PB-022 | `arbeitskompass-ticket.md` | **P2** | kennt 0 von 9 laufenden Posten; letzte Lage vom 21.07., CLAUDE.md schickt aber dorthin | **ERLEDIGT** (`56abee2f`) — nachgemessen: Datei zuletzt 01.08. 11:12 | Prüfer |
+| PB-021 | `CLAUDE.md` (Skill-Pflicht) | **P2** | 12 von 22 vorgeschriebenen Fach-Linsen existieren an keinem der beiden Skill-Orte | **ERLEDIGT** (`56abee2f`) — CLAUDE.md nennt nur noch vorhandene; die 12 stehen als Korrektur namentlich da | Prüfer |
+| PB-019 | `docs/auftraege/` (aktive Blätter) | **P2→P3** | Validator **benennt** `KEIN KOPF` (kein F-14) — aber `exit 0` ließe 6 aktive Blätter durch ein Gate | **ERLEDIGT** (`56abee2f`) — Gegenprobe von mir: Blatt ohne Kopf mit `status: aktiv` gibt **EXIT 1**; zwei echte Blätter sperren | Prüfer |
+| PB-020 | `AUFTRAGSSCHEMA.md` | P3 | Beispiel nennt `zaehle-statische-stile.sh` — die Datei gibt es nicht | **ERLEDIGT** (`9e76e758`) — beide genannten Skripte existieren, von mir nachgezählt | Prüfer |
 | PB-033 | `probe_*_tmp.mjs` | ~~P2~~ | beide Kladden entfernt (3 → 1 Datei) | **ERLEDIGT** | 30.07. 10:0x |
 | PB-018 | `.gitignore` (Ursache) | ~~P2~~ | Klasse gedeckelt statt Namen — 5 Probennamen ignoriert, laufende Arbeit sichtbar | **ERLEDIGT** | 30.07. |
 | PB-017 | (Arbeitsbaum) | **P1** | 466 geänderte + 8 neue Dateien ungesichert, im Ledger aber als geliefert und geprüft geführt | **ANGENOMMEN — Umfang groesser** | 30.07. 09:28 — gemessen 13 Dateien / 885+232 Zeilen / 10 unverfolgt; Ledger-Korrektur sofort, Sicherung haengt an Yamas A-oder-B-Entscheid |
@@ -215,22 +215,22 @@ Rollentrennung.**
 | PB-015 | `AUFTRAGSTAFEL.md` | **P2** | zwei Posten tragen `⚡ AKTIV` (5 Vorkommen) — §1c verlangt genau einen | **ANGENOMMEN** | 30.07. 09:28 — AUF-38 traegt ⏸ ZURUECKGESTELLT; Barriere in §1c, Zaehlung ankert auf `^ **AUF- → 1 |
 | PB-013 | `docs/agents/regeln/kern.md` | **P1** | „wird IMMER geladen" — vom vorgeschriebenen Startpfad aus mit 0 Verweisen unerreichbar | **ANGENOMMEN** | 30.07. 09:20 — Kopfkasten in allen fuenf Startblaettern; Gegenprobe 5x 1 Treffer |
 | PB-014 | `docs/agents/` (Struktur) | **P1** | zwei vollständige Regelsätze für dieselben drei Rollen, 1534 Z., ohne Verweis aufeinander | **ANGENOMMEN — es sind DREI** | 30.07. 09:20 — `00-REGELWERK.md` (377 Z.) ist die Arbeitsgrundlage, `regeln/` nachrangig; **Commit-Zeitpunkt offen an Yama** |
-| PB-011 | `FEHLERKLASSEN.md` | **P2** | drei Zähler zu niedrig; in zehn Prüfrunden kein Befund eingetragen | offen | — |
-| PB-012 | `FEHLERKLASSEN.md` | **P2** | die Barriere von F-14 ist ein Absatz — nach zwei Stunden gebrochen; R9 verlangt mehr | offen | — |
+| PB-011 | `FEHLERKLASSEN.md` | **P2** | drei Zähler zu niedrig; in zehn Prüfrunden kein Befund eingetragen | **ERLEDIGT** (`56abee2f`) — F-09 steht auf 8 mit Datum 01.08.; die Zeile führt sich selbst als offen ohne Barriere | Prüfer |
+| PB-012 | `FEHLERKLASSEN.md` | **P2** | die Barriere von F-14 ist ein Absatz — nach zwei Stunden gebrochen; R9 verlangt mehr | **ERLEDIGT mit Restnotiz** (`56abee2f`) — drei Regeln, davon nur Punkt 2 (`assert`) wirklich mechanisch; F-15 neu für die durchkommenden Mutationen | Prüfer |
 | PB-009 | `bestandsaufnahme-studio-rahmen-2026-07-29.md` | **P2** | Konflikttabelle sperrt eine freie Datei; Anker auf einen Rahmen, der seit T1/T3 umgebaut ist (217→159 Z.) | **ANGENOMMEN** | 30.07. 09:05 — HISTORISCH-Kopf; fuer den Stand gilt die Auftragstafel |
-| PB-010 | `stilschicht.test.ts` | P3 | Wirkungs-Zusage prüft gegen 3 tote Bezeichner — **`eigenarbeit: ja`, Urteil beim Evaluator** | **ANGENOMMEN, ABER ANDERS GESCHNITTEN** | 30.07. 09:05 — kein Papier-, ein Testbefund; geht als Posten an den Generator |
+| PB-010 | `stilschicht.test.ts` | P3 | Wirkungs-Zusage prüft gegen 3 tote Bezeichner — **`eigenarbeit: ja`, Urteil beim Evaluator** | **ERLEDIGT** (`81a87923`) — von mir nachgemessen: Liste raus, `istStatisch` entscheidet; die alten Namen stehen nur noch im Begruendungstext (6 Nennungen, 0 in der Regel); Suite 58/0 | Pruefer |
 | PB-008 | `generator-auftrag-auf83-t2t3-kopfleiste.md` | P3 | aktives Blatt führt `T1a` als offenen Schritt — Code und Register führen ihn als erledigt (`97a2e2a4`) | **ANGENOMMEN** | 30.07. 09:05 — Blatt traegt HISTORISCH-Kopf, verbindlich sind T2/T3/T3-N1 |
 | PB-007 | `zuschnitt-auf48-hausplanerapp-zerlegen.md` | P2 | Schnittkanten als absolute Zeilennummern — am Commit korrekt, im Baum schon 4/62 Zeilen abgewandert | **ANGENOMMEN** | 30.07. 09:05 — Zuschnitt §7: Schnittkanten ueber Namen statt Zeilennummern |
-| PB-026 | `docs/agents/regeln/kern.md` | P3 | Z1 sagt „NACHRANGIG", Z11 weiter „IMMER geladen" — zehn Zeilen auseinander | offen | — |
-| PB-027 | `…b01-ai-workflow-sichern.md` | **P2** | Blatt `status: aktiv`, Tafel `⏸ ZURÜCKGESTELLT` (F-08b) | offen | — |
-| PB-028 | `…vorherbilder-und-auf86…md` | P3 | Blatt `status: aktiv`, hat keine Tafelzeile | offen | — |
+| PB-026 | `docs/agents/regeln/kern.md` | P3 | Z1 sagt „NACHRANGIG", Z11 weiter „IMMER geladen" — zehn Zeilen auseinander | **ERLEDIGT** (`9e76e758`) — Z11/Z12 aufgelöst, Befund im Text genannt | Prüfer |
+| PB-027 | `…b01-ai-workflow-sichern.md` | **P2** | Blatt `status: aktiv`, Tafel `⏸ ZURÜCKGESTELLT` (F-08b) | **ERLEDIGT** (`56abee2f`) — Blatt trägt `status: zurueckgestellt` mit Grund | Prüfer |
+| PB-028 | `…vorherbilder-und-auf86…md` | P3 | Blatt `status: aktiv`, hat keine Tafelzeile | **ERLEDIGT** (`56abee2f`) — Tafelzeile `EVAL-2026-07-30-A+B` angelegt | Prüfer |
 | PB-029 | `~/wissensregister/register.md` | P3 | `CODE-001` zeigt nach `~/Projekte/` — Verzeichnis existiert nicht | offen | — |
 | PB-030 | `~/wissensregister/kategorien/` | P3 | acht Verweise mit `…`/`{` abgekürzt, gegen das eigene Schema | offen | — |
-| PB-031 | `docs/*.md` (Sammel) | P3 | 68 von 923 genannten Code-Pfaden nicht auffindbar (Papierstopp) | offen | — |
+| PB-031 | `docs/*.md` (Sammel) | P3 | 68 von 923 genannten Code-Pfaden nicht auffindbar (Papierstopp) | **ERLEDIGT** (`0a588d7b`) — von mir gefahren: **57 von 996**; das Werkzeug ueberspringt jetzt historische Papiere (3 Marken) und Platzhalter. Die vorherige Steigerung kam von den Richtigstellungen selbst | Pruefer |
 | PB-032 | (Index) | ~~P1~~ | 7 Dateien gestaged → committet in `40fa52de`, kein Beifang | **ERLEDIGT** | 30.07. 09:53 |
-| PB-034 | `bauordnung.md` | P3 | Ist-Belege veraltet **und verschlechtert**: `DB::` 267→338, Klammern 96/387→**75/406** | offen | — |
-| PB-035 | `fahrplan-dashboard-versionen.md` | **P2** | führt UI-9 als „❌ 0 Dateien" — Palette hat 191 Z., 2 Tests, 4 Konsumenten (F-07) | offen | — |
-| PB-036 | `ticket-code-reuse/references/…md` | P3 | 2 von 59 Skill-Pfaden zeigen auf den Vor-Port-Zustand | offen | — |
+| PB-034 | `bauordnung.md` | P3 | Ist-Belege veraltet **und verschlechtert**: `DB::` 267→338, Klammern 96/387→**75/406** | **ERLEDIGT** (`9e76e758`) — §2.2 trägt jetzt 75/406 mit Messdatum 01.08. | Prüfer |
+| PB-035 | `fahrplan-dashboard-versionen.md` | **P2** | führt UI-9 als „❌ 0 Dateien" — Palette hat 191 Z., 2 Tests, 4 Konsumenten (F-07) | **ERLEDIGT** (`9e76e758`) — Zeile führt jetzt ✅ gebaut mit 191 Z./2 Tests | Prüfer |
+| PB-036 | `ticket-code-reuse/references/…md` | P3 | 2 von 59 Skill-Pfaden zeigen auf den Vor-Port-Zustand | **ERLEDIGT** (`56abee2f`) — Zeile 54 nennt beide nicht mehr; sie stehen nur noch im Korrekturtext | Prüfer |
 | PB-037 | `buehnenBreite.test.ts:23` | ~~P1~~ | Filter auf die Subtraktion geschärft, Rechnung unberührt, Gate 1409/1409 | **ERLEDIGT** | 30.07. |
 | PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt | **GESCHLOSSEN** — Yama hat gewechselt (18:02, `67903953`) | 30.07. |
 | PB-040 | `db` + Ledger | Eine gelaufene Migration lag in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | **ERLEDIGT** (A: `fba60e6e` · B: Ledger 12:28) | — |
@@ -240,8 +240,8 @@ Rollentrennung.**
 | PB-045 | mein eigener Messbefehl | `--date=format:` zeigt die Zone des Committers — **45 von 116** heutigen Commits zwei Stunden zu früh | **P3** | **ERLEDIGT** (Barriere gesetzt) | Prüfer |
 | PB-039 | `PRUEFER-BEFUNDE.md` (mein Register) | Acht Befunde hatten einen Abschnitt, aber **keine Zeile** — Ursache F-14 (`str.replace` traf nicht) | **P2** | **ERLEDIGT** (38 Zeilen = 38 IDs) | Prüfer |
 | PB-042 | (Betrieb) `git log` | **109 Commits heute, 2 davon Produktivcode, 66 von mir** — docs/Code 7:1, mein Register allein 4 265 Z. | **P2** | offen | **Yama** (Takt) |
-| PB-046 | Objekt-Planer @ **375 px** (Browser) | 8 Bedienelemente ausserhalb, kein Bildlauf; **Planner: 375 = Ankunfts-, kein Bedienziel** → AUF-91 | **P2→P3** (Begründung geprüft, sie trägt) | offen mit Ziel | Planner |
-| PB-047 | `SidebarCountController.php:16,29,162` | `$user?->name` ist ein **String**, der Parameter fordert `?int` — **464 `local.ERROR`**, die Seitenleisten-Zahlen kommen nie an | **P2** | offen | Planner |
+| PB-046 | Objekt-Planer @ **375 px** (Browser) | 8 Bedienelemente ausserhalb, kein Bildlauf; **Planner: 375 = Ankunfts-, kein Bedienziel** → AUF-91 | **P2→P3** (Begründung geprüft, sie trägt) | **ERLEDIGT nach Ziel** — `154e4867`; Ziel war *sagen*, nicht *bedienbar machen*. Überlauf besteht fort (Beobachtung) | Prüfer |
+| PB-047 | `SidebarCountController.php:16,29,162` | `$user?->name` ist ein **String**, der Parameter fordert `?int` — **464 `local.ERROR`**, die Seitenleisten-Zahlen kommen nie an | **P2** | **ERLEDIGT** — `1b0b61a5`, von mir nachgemessen (Runde 635) | Prüfer |
 | PB-048 | `resources/views/**` (805 Blades) | **Vorsortierung statt Sichtprobe**: 319 Blades tragen ein Layout-Risikomerkmal, die 18 dichtesten benannt — und mein erstes Muster war zu **90 %** falsch | **Hinweis** (kein Mangel) | offen | Planner |
 
 ---

@@ -517,7 +517,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ids/search', [IdsSearchController::class, 'form'])->name('ids.search.form');
     Route::get('/ids/search/inline', [IdsSearchController::class, 'forms'])->name('ids.search.form.inline');
     Route::get('/ids/local-search', [IdsController::class, 'localSearch'])->name('ids.local_search');
-    Route::post('/ids/search/inline-forward', [IdsSearchController::class, 'forwardToShopInline'])->name('ids.search.forward.inline');
     Route::get('/admin/offers/folders/{folder}/ids/request-price', [IdsSearchController::class, 'requestPriceForMaterial'])->name('admin.offers.folders.ids.request-price');
     Route::post('/ids/search/forward', [IdsSearchController::class, 'forwardToShop'])->name('ids.search.forward');
     Route::get('/ids/results/{batchId}', [IdsController::class, 'results'])->name('ids.results');

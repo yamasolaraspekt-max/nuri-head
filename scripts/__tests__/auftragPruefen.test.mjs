@@ -667,3 +667,26 @@ test('W-01: eine Zahl im Befehl ueberlebt den Schutz der Zeichenketten', () => {
   assert.equal(nichtErlaubtesGlied('head -n 3 datei'), null);
   assert.deepEqual(befehlsGlieder("head -n 3 'a b'"), ["head -n 3 'a b'"]);
 });
+
+test('W-01 (Befund des Planners): `git --no-optional-locks` ist die vorgeschriebene Form und muss laufen', () => {
+  // **Meine erste Fassung las die ersten ZWEI Woerter** — bei `git --no-optional-locks diff …`
+  // also das Paar `git --no-optional-locks`. Nicht auf der Liste, also uebersprungen. *Das ist
+  // ausgerechnet die Form, die die Bauordnung vorschreibt; vier Blaetter benutzen sie, und alle
+  // vier waeren stumm gescheitert.* Der Planner hat es gefunden, nicht ich.
+  assert.equal(nichtErlaubtesGlied('git --no-optional-locks diff --name-only HEAD | wc -l'), null);
+  assert.equal(nichtErlaubtesGlied('git --no-optional-locks log --oneline -1'), null);
+  assert.equal(nichtErlaubtesGlied('git -C /tmp status --porcelain'), null);
+  assert.equal(nichtErlaubtesGlied('git -c core.pager=cat log --oneline -1'), null);
+});
+
+test('W-01: die Optionen-Aufloesung oeffnet KEINE Luecke — und schliesst sogar eine', () => {
+  // **Der Punkt, an dem es haette kippen koennen.** Wer an Optionen vorbeiliest, koennte auch am
+  // Schutz vorbeilesen. Tut er nicht: nach der Aufloesung ist das Paar `git push`, und das steht
+  // nicht auf der Erlaubnisliste.
+  assert.equal(nichtErlaubtesGlied('git --no-optional-locks ' + 'push origin main'), 'git push');
+  assert.equal(nichtErlaubtesGlied('git --no-optional-locks ' + 'commit -m x'), 'git commit');
+  // **Und das ist mehr als vorher:** die Denylist sucht die zwei Woerter NEBENEINANDER — mit einer
+  // Option dazwischen findet sie nichts. Ohne die Erlaubnisliste liefe dieser Befehl.
+  assert.equal(verbotenesMuster('git --no-optional-locks ' + 'push origin main'), null,
+    'die Denylist faengt die Form mit Option — dann misst diese Zusage nichts');
+});

@@ -173,20 +173,52 @@ export function befehlsGlieder(befehl) {
 }
 
 /**
+ * **Der Unterbefehl von `git`, an den Optionen VORBEI.**
+ *
+ * **Befund des Planners gegen meine erste Fassung, und er trifft:** sie las die ersten zwei
+ * Woerter. `git --no-optional-locks diff …` ergibt damit das Paar `git --no-optional-locks` —
+ * nicht auf der Liste, also uebersprungen. *Das ist ausgerechnet die Form, die die Bauordnung
+ * vorschreibt;* vier Blaetter benutzen sie, und alle vier waeren stumm gescheitert.
+ *
+ * **Die Auflösung darf keine Luecke oeffnen.** Nach dieser Funktion ist `git --no-optional-locks
+ * push` das Paar `git push` — und faellt durch, weil `git push` nicht auf der Erlaubnisliste
+ * steht. *Die Denylist allein haette es NICHT gefangen: ihr Muster `git push` sucht die zwei
+ * Woerter nebeneinander, und dazwischen stand eine Option.*
+ */
+function gitUnterbefehl(woerter) {
+  let i = 1;
+  while (i < woerter.length && woerter[i].startsWith('-')) {
+    // `-C <pfad>` und `-c <name=wert>` nehmen ein Argument mit.
+    if (woerter[i] === '-C' || woerter[i] === '-c') {
+      i += 1;
+    }
+    i += 1;
+  }
+
+  return woerter[i] ?? '';
+}
+
+/**
  * **Das erste Glied, das NICHT auf der Erlaubnisliste steht** — oder `null`, wenn alle erlaubt sind.
  *
- * Geprueft wird das fuehrende Wort, bei `git` die ersten ZWEI Woerter. *Ein Glied, das mit `./`
- * oder `bash` beginnt, faellt damit durch, ohne dass jemand seinen Inhalt kennen muesste — und
- * genau das ist der Punkt.*
+ * Geprueft wird das fuehrende Wort, bei `git` das Wortpaar aus `git` und seinem Unterbefehl.
+ * *Ein Glied, das mit `./` oder `bash` beginnt, faellt durch, ohne dass jemand seinen Inhalt
+ * kennen muesste — und genau das ist der Punkt.*
  */
 export function nichtErlaubtesGlied(befehl) {
   for (const glied of befehlsGlieder(befehl)) {
     const rein = glied.replace(/^[({\s]+/, '');
     const woerter = rein.split(/\s+/);
     const eins = woerter[0] ?? '';
-    const zwei = woerter.slice(0, 2).join(' ');
+    const istGit = eins === 'git';
+    const zwei = istGit ? `git ${gitUnterbefehl(woerter)}` : woerter.slice(0, 2).join(' ');
     if (ALLOWLIST.includes(zwei) || ALLOWLIST.includes(eins)) {
       continue;
+    }
+    // Bei `git` nennt die Meldung das PAAR, nicht nur das Wort `git`. *Ein „nicht erlaubt: git"
+    // laesst offen, welcher Unterbefehl gemeint war — und schickt den naechsten Leser suchen.*
+    if (istGit) {
+      return zwei.trim();
     }
 
     return eins || glied;
