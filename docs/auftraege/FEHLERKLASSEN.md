@@ -43,8 +43,39 @@ egal, wie müde jemand ist.
 | **F-12** | **Der vorlaufende Baum kostet eine Messung** — der Pruefende misst einen Stand, den der Bauende schon verlassen hat | **4** | 30.07. 06:38 | **R10-Zusatz** + **R18 (neu)** — eine Sperre endet mit dem Bau, **es sei denn, der Folgeauftrag zerstoert einen Pruefstand**, den die offene Abnahme braucht · **R18, 30.07.:** solange eine Sichtprobe **beauftragt** ist, bewegt niemand `public/hausplaner/*` und keine Blade, die ohne Bau sofort wirkt — **beauftragt zaehlt wie laufend** | ⚠ Regel · **beim dritten Mal wurde eine Messung vernichtet; beim vierten hat der Bauende es SELBST gesehen und zurueckgestellt, bevor es jemand merkte — erste Auspraegung, die niemanden etwas gekostet hat** |
 | **F-13** | **Kriterium mit Vorher-Bezug, dessen Vorher-Wert niemand festhalten musste** — das Blatt verlangt *„waechst gegenueber vorher“*, der Ausgangswert steht nirgends; beim Abnehmen ist er nicht mehr zu beschaffen | **2** | 29.07. 21:40 | **`vorher_wert_pflicht`** — traegt ein Kriterium einen Vorher-Bezug, **haelt der Generator den Ausgangswert in der Readiness-Quittung fest, VOR dem Bau**, in einer Zeile. Ohne diese Zeile ist der Bau nicht begonnen | ✅ steht (ab AUF-83-T3, K-08) |
 | **F-14** | **Der Schreibvorgang scheitert, der Commit gelingt trotzdem** — ein Python-Heredoc bricht an einem Anführungszeichen im Fließtext ab (`SyntaxError`), das nachfolgende `git commit` läuft mit `rc=0` durch und committet nur, was vorher schon geschrieben war. **Das Ergebnis sieht aus wie Erfolg** | **3** | 30.07. 06:58 | Jeder Fließtext geht in einen dreifach angeführten Rohstring, nie in Zeichenkettenverkettung. **Und die eigentliche Barriere: nach jedem Schreibskript `git status` lesen, BEVOR committet wird** | ⚠ Regel · *dieselbe Klasse wie „verdächtig statt Fehlschlag" in AUF-87: der Befehl endet mit 0 und hat nichts getan* |
-| **F-09** | **Text wird gemessen, nicht Absicht** — eine verbotene Zeichenfolge steht im Kommentar, der erklärt, warum sie verboten ist; die Zusage zählt sie mit | **2** | 29.07. 10:22 | — | ❌ offen |
+| **F-09** | **Text wird gemessen, nicht Absicht** — eine verbotene Zeichenfolge steht im Kommentar, der erklärt, warum sie verboten ist; die Zusage zählt sie mit | **8** | 01.08. 10:5x | — |  ❌ offen |
 | **F-10** | **Lock-Reste auf dem Mount** — `unlink` scheitert, jeder Commit lässt `HEAD.lock` liegen, ein anderer räumt sie weg | **28** | 29.07. 10:28 | Locks werden **im selben Aufruf** beiseitegelegt wie der Commit | ⚠ mildert, behebt nicht |
+
+| **F-15** | **Die Wahrheit wandert in eine zweite Datei, und zwischen beiden liegt nichts** — ein Inline-Stil wird von den Bauteil-Zusagen mitgelesen; eine Klasse verlagert das Sichtbare in die Stilschicht, und ein Tippfehler im Klassennamen macht ein Element ungestylt, ohne dass ein Testlauf rot wird | **2** | 01.08. 10:50 | **Stil-Brücken-Test ist Pflichtteil jedes Blattes**, das Stile in Klassen verlagert — er prüft *benutzt ⇔ definiert*, *Regel trägt die ersetzten Eigenschaften*, *Klasse sitzt am richtigen Element* | ✅ Barriere steht (AUF-38-P1 `eigenschaftenPanelStil.test.ts`, P2 `gruppenzeileUndSchieneStil.test.ts`) |
+
+**Warum F-15 hier steht, obwohl die Barriere schon greift:** *die Zahl `7 von 8 Mutationen kamen durch`
+ist am 31.07. (P1) und am 01.08. (P2) **auf die Ziffer genau zweimal** aufgetreten — und es gab keine
+Klasse dafür (`grep -ci mutation FEHLERKLASSEN.md` → 1, und das war ein Nebensatz). **Eine Klasse, die
+erst nach der Barriere eingetragen wird, hat ihren Zweck verfehlt** — sie soll die Wiederholung sichtbar
+machen, bevor jemand sie zufällig bemerkt. Eingetragen auf Befund PB-012.
+
+---
+
+## F-14 hat jetzt eine Barriere, keinen Absatz mehr
+
+**Befund PB-012:** *„die Barriere von F-14 ist ein Absatz — nach zwei Stunden gebrochen; R9 verlangt mehr."*
+**Das stimmt.** Ein Absatz, der um Sorgfalt bittet, ist kein Schutz.
+
+**F-14 lautet:** der Schreibvorgang scheitert (Python-Heredoc bricht an einem Anführungszeichen ab), das
+nachfolgende `git commit` läuft trotzdem — und committet den *alten* Stand als wäre er der neue.
+
+**Die Barriere, ab sofort verbindlich für alle drei Rollen:**
+
+1. **Schreiben und Committen sind NIE derselbe Aufruf.** Kein `python3 - << 'ENDE' … ENDE && git commit`.
+   Der Schreibaufruf endet, sein Rückgabewert wird gesehen, erst dann kommt der nächste.
+2. **Jeder Schreibaufruf endet mit einer Behauptung, die er selbst prüft** — `assert alt in t` vor dem
+   Ersetzen und eine Ausgabe danach. *Ein Ersetzen, das nichts trifft, ist ein stiller Fehlschlag; ein
+   `assert` macht daraus einen lauten.*
+3. **Vor dem Commit steht `git status --porcelain`** und die geänderte Datei muss darin auftauchen.
+   *Steht sie nicht da, hat der Schreibvorgang nichts getan — und der Commit hätte eine Lüge belegt.*
+
+**Warum das eine Barriere und kein Vorsatz ist:** Punkt 1 und 2 machen den Fehlschlag *sichtbar, ohne dass
+jemand daran denken muss*. Der Aufruf bricht ab und sagt es. Genau das hat am 30.07. gefehlt.
 
 ---
 
@@ -53,6 +84,22 @@ egal, wie müde jemand ist.
 **F-03, F-04, F-07, F-08 sind Vorsätze.** Sie verlangen, dass jemand im richtigen Moment daran denkt —
 und genau das hat heute viermal nicht getragen. **Sie sind die nächste Arbeit an diesem Register**,
 nicht sein Ergebnis.
+
+**F-04 hat seit dem 01.08. ein zweites Werkzeug — `scripts/pfade-pruefen.sh`.**
+
+*Befund PB-031: „68 von 923 genannten Code-Pfaden nicht auffindbar."* Das Skript liest alle
+Markdown-Dateien, sammelt jeden in Backticks genannten Code-Pfad und meldet, welcher ins Leere zeigt.
+**Gemessen 01.08.: 75 von 1016** — die Zahl des Prüfers unabhängig bestätigt.
+
+**Zwei Fallen, die beim Bauen dieses Skripts zugeschnappt sind, und beide gehören hierher:**
+
+1. *Erster Lauf: **751** tote Verweise.* Die Papiere nennen Pfade oft relativ zur Insel-Wurzel
+   (`app/dashboard/palette.ts` meint `resources/planner/hausplaner/app/…`). **Das ist F-09 in Reinform:
+   die Gestalt wurde gemessen, nicht die Sache.**
+2. *Zweiter Lauf: **601**.* `docs/_playground-archiv/` ist das Archiv einer **anderen App** — ihre Pfade
+   gegen diesen Baum zu prüfen misst nichts.
+
+**Hätte ich die 751 gemeldet, wäre daraus ein Alarm geworden, den niemand hätte abstellen können.**
 
 **Für zwei davon gibt es einen naheliegenden Weg:**
 
