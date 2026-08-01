@@ -170,6 +170,18 @@ kriterien:
       schritte: |
         VOR jeder anderen Zahl: HTTP 200, querySelectorAll('canvas') mindestens 1,
         document.title enthaelt "Hausplaner".
+
+  - id: K-09
+    typ: behavioural
+    aussage: "Die drei Zaehlbefehle wurden EINMAL ohne Pipe gefahren, mit genanntem Exitcode."
+    ausgefuehrt_von: generator
+    pruefung:
+      typ: verfahren
+      schritte: |
+        K-01, K-02 und K-03 enden auf `| tail -1`. Die Pipe schluckt den Exitcode des Skripts -
+        ein Absturz saehe aus wie eine Messung. Einmal je Befehl OHNE die Pipe fahren und den
+        Exitcode in den Beleg schreiben. Erwartet 0 bei allen dreien.
+      erwartet: "drei Exitcodes im Beleg, alle 0"
 ```
 
 ## Danach

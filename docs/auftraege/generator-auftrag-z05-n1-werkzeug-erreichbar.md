@@ -190,6 +190,13 @@ kriterien:
       befehl: "node scripts/zaehle.mjs resources/planner/hausplaner/app/tools/toolRegistry.ts \"'polygon'\""
       erwartet: "0"
     ausgangswert: "0"
+    gegenbeweis: |
+      WARUM N1-06 und N1-07 KEIN `kritikalitaet: P1` tragen - offen benannt, nicht umgangen:
+      S-07 sperrt ein Kriterium, dessen Messung schon vor dem Bau der Zielwert ist, aber NUR bei
+      P1. Beide sind echte Invarianten: sie sind heute 0 und sollen 0 bleiben. Mit P1 wuerde S-07
+      jedes Mal sperren, obwohl nichts falsch ist - S-07 kann ein P1-absence-Kriterium mit
+      konstantem Zielwert strukturell nicht zulassen. Das ist ein Befund am Werkzeug, nicht am
+      Blatt. Der Evaluator misst beide trotzdem; ein Wachsen auf 1 ist rot.
 
   - id: N1-08
     typ: behavioural
