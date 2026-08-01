@@ -33074,3 +33074,32 @@ belegt; ich habe eine davon unabhängig wiederholt — die schärfste, Regel-for
 **Dritte Datei, dieselbe 7-von-8-Quote — die P1-Erkenntnis ist damit dreifach bestätigt und der
 Stil-Brücken-Test bleibt Pflicht für P4/P5.** Ballbesitz: Generator (P4/P5, Z-03/Z-04) · Yama
 (nichts von mir).
+
+---
+
+## PLANNER — 01.08.2026, 19:4x · Z-05-N1 geschnitten, drei eigene Blattfehler behoben
+
+**Auftrag Z-05-N1** `docs/auftraege/generator-auftrag-z05-n1-werkzeug-erreichbar.md` — **Spur A**,
+**Heimat: ticket**, `status: aktiv` (S-01), geschnitten in `e061e017`.
+
+**Entscheidung:** `kontur` wird der achte `art: 'werkzeug'`-Eintrag in `toolRegistry.ts`, Kürzel `U`
+(gemessen frei: 0), gebunden an `07-architektur`, Fix-Zone 7 → 8. **Die Bilanz wird getrennt, nicht
+hochgezählt:** `PAKET 110 + EIGENE.length` statt einer nackten `111` — sonst fällt ein
+verschwundenes Paket-Werkzeug nicht mehr auf. `polygon` bleibt stillgelegt.
+
+**Abnahmekriterien:** N1-01…N1-04 (Registry / Thema / Vertrag / Präsentationsregel, Ausgangswert je 0),
+N1-05 (`grep -ro ', 110[,)]' … | wc -l` von 9 auf 1), N1-06/N1-07 (absence), N1-08 (Fix-Zone 7→8 **und**
+ihre Rot-Gegenprobe 6→7), N1-09 Insel-Suite, N1-10 Mutationsprobe, L-01 Browser mit Partnermessung.
+Jeder Zähler hat einen Partner mit Treffer ≠ 0 (Regel A).
+
+**Drei eigene Fehler, zuerst benannt:**
+1. Z-05 verlangte in L-01 Browser-Erreichbarkeit, die mit seinen drei `scope.dateien` nicht zu
+   erreichen war. Der Generator hat es in `264ab9dc` blockiert zurückgegeben — **richtig.** L-01 ist
+   nach Z-05-N1 verschoben, Z-05 steht auf `gebaut` und ist auf K-01…K-06 abstimmbar.
+2. AUF-38-P4+P5 trug den Ausgangswert 140/22 aus der Zeit vor P3 (S-08). Jetzt 128/10 → 118/0.
+3. Z-03+Z-04 hatte vier Backslashes statt zwei; der Zähler mass dadurch 0 statt 1 (S-07). Behoben.
+
+**Ballbesitz:** Generator → Z-05-N1. Evaluator → Z-05 (ohne L-01).
+**An Yama:** **48 ungepushte Commits** (`git rev-list --count fork/auto/hausplaner-integration..auto/hausplaner-integration`,
+19:37) · `docs/planner/PRUEFER-BEFUNDE.md` liegt seit 13:04 uncommittet (fremder Pfad) ·
+`git worktree prune` darf vom Mount aus **nie** laufen, dort gilt jeder Worktree als `prunable`.
