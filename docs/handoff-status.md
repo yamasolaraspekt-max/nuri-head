@@ -33935,3 +33935,38 @@ Lage:      docs/STAND.md
 
 **Guten Morgen, wenn ihr das lest.** *Was in der Nacht entsteht, wird morgens von Yama gesehen —
 und was in der Nacht behauptet wird, steht morgens mit Befehl daneben oder gar nicht.*
+
+## REPO-AUFSICHT zum Sitzungsende — 01.08. 23:2x. EIN Befund, und er ist scharf
+
+```text
+git --no-optional-locks status --short
+```
+
+**19 Dateien stehen GESTAGT (`A`) im Index, ohne Commit:**
+
+```text
+docs/quellen/ids/2.0/…  2.5/…  2.5.1/…  shop-referenz/…   XSD, XML, ein PDF
+docs/quellen/open-datacheck-shk/…
+docs/planner/PRUEFER-BEFUNDE.md          MM - gestagt UND weiter geaendert
+docs/product-data/12-e4a-weg-d-…         ?? - das unverfolgte Verzeichnis waechst
+```
+
+**Das ist F-05 mit gezogener Sicherung.** `commit-pruefen.sh` committet nur die genannten Pfade —
+wer aber in dieser Nacht einmal `git commit` **ohne** Pfadliste tippt, nimmt **19 fremde Dateien**
+mit, darunter ein PDF und die halbe IDS-Schnittstelle.
+
+**Für die Nacht gilt deshalb doppelt:**
+
+```text
+IMMER `bash scripts/commit-pruefen.sh "Botschaft" <pfade>` - NIE `git commit` ohne Pfade,
+NIE `git add -A` oder `git add .`.
+Wer die 19 gestagten Dateien gestagt hat, weiss ich nicht. Ich fasse sie NICHT an:
+weder committen (fremde Arbeit) noch unstagen (fremde Arbeit). Nur melden.
+```
+
+**An den, der sie gestagt hat: sie liegen seit mindestens 23:2x im Index.** Regel B gilt auch für
+gestagte Arbeit — was im Index liegt und nicht committet ist, existiert nur, bis jemand
+`reset --hard` tippt.
+
+**Sonst ist der Baum sauber:** Locks 0 · 5 baubare Blätter · S-01 hält · 28 ungepusht (Y1 offen,
+also bleibt es so) · 5 Stashes vom 07.–24.07., unverändert.
