@@ -32479,3 +32479,52 @@ Screenshots (2) und die fünf sperrenden Blätter (3, Ballbesitz Planner).*
 
 **Ballbesitz: Generator** (Z-02/Z-05/Z-06 geschnitten · PB-023-Blatt im Bau — `styleguide/index.blade.php`
 und `HausplanerInselTest.php` liegen im Baum) · **Planner** (Validator Zeile 374).
+
+---
+
+## Generator — PB-010 behoben, und ein Befund gegen die neue Barriere (2026-08-01)
+
+**PB-010 (`stilschicht.test.ts`, Scheibe 4 Wirkung).** Die handgeschriebene Namensliste ist raus,
+gemessen wird jetzt mit `messeDatei()` aus `scripts/statische-inline-stile.mjs` — **demselben
+Werkzeug, das die Grundgesamtheit zählt.** Die Begründung stand vier Absätze weiter unten in
+derselben Datei schon für Scheibe 5: *„Zwei Maßstäbe für dieselbe Sache sind der Fehler, nicht die
+Lösung."*
+
+**Die Liste war toter als gemeldet: fünf der acht Alternativen greifen an keiner Stelle** —
+`navZu`, `offeneHubs`, `navBreit` (die drei aus dem Urteil) **plus `\bp\.` und `\bf\.`**.
+
+**Der Schaden lag aber im lebenden Teil.** Mutationsprobe, fünf Mutationen:
+
+    vorher   4 gefangen, 1 BLIND   <- statischer Stil mit Fragezeichen IN EINER ZEICHENKETTE
+    nachher  5 gefangen, 0 blind
+
+*`\?` stand als erste Alternative und traf jedes Fragezeichen, auch eines in Anführungszeichen —
+ein völlig statischer Block galt dadurch als dynamisch. `istStatisch` entwertet Zeichenketten,
+bevor es auf `?` prüft.* Wiederherstellung md5-identisch.
+
+**Verhaltensneutral:** beide Wege urteilen heute gleich (0 offene Stellen).
+
+    tsc:hausplaner           EXIT 0
+    schema:hausplaner:check  EXIT 0
+    test:hausplaner          EXIT 0   pass 1583 · fail 0
+    test:hausplaner:dom      EXIT 0   pass 29
+    build:hausplaner         EXIT 0   Bündel-Abweichung: 0 Dateien
+
+---
+
+### ⚠ Befund gegen `scripts/zaehle.mjs` — die F-09-Barriere sieht keine Blade-Kommentare
+
+`ohneKommentare()` streift `/* */`, `<!-- -->`, `//` und optional `#` ab. **`{{-- --}}` fehlt.**
+An der Datei gemessen, die ich heute gebaut habe:
+
+    hp- gesamt in der Datei          90
+    davon in {{-- --}}-Kommentaren   10
+    zaehle.mjs meldet                88     <- streift nur die 2 aus dem CSS-Kommentar ab
+
+**285 View-Dateien im Repo nutzen diese Kommentarform**, und `scripts/__tests__/zaehle.test.mjs`
+deckt Blade nicht ab. Ein Werkzeug gegen F-09 hat damit genau dort ein Loch, wo Blade gezählt
+wird — und F-09 ist die Klasse, bei der ein Kommentar die Messung verfälscht. *Die Behebung ist
+eine Zeile in der Ersetzungskette; sie gehört dem, der das Werkzeug gebaut hat.*
+
+**Ballbesitz: Planner** (Blade-Lücke der Barriere · die drei Befunde aus `8d5008f1`) ·
+**Generator** (frei — Z-02 und Z-05 stehen auf `bereit`).
