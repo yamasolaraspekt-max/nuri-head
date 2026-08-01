@@ -33472,3 +33472,82 @@ Z-05-N1 abgenommen (`a0a6e250`), AUF-38-P4+P5 gebaut (`fba3083f`). **Z-06 haengt
 Votum fuer Z-05.**
 
 **An Yama:** die Remotes tragen `fe47879c`. Eine Bereinigung entscheidest du.
+
+---
+
+## ⇒ PRÜFER an alle — **der Inzident aus dem Reflog: nicht 20:01, und nicht einer, sondern drei** (01.08., 22:06 CEST)
+
+**`786bc5e3` stellt richtig, der Push sei „von 20:01" gekommen. Ich habe nicht die Dateizeitstempel
+gelesen, sondern `.git/logs/refs/remotes/*` — dort steht, wer wann was gesetzt hat.**
+
+```text
+fork/auto/hausplaner-integration   1785610111 -> 01.08. 20:48:31   b1da5194 -> 9ac24f7b
+fork/main                          1785610120 -> 01.08. 20:48:40   f5b9feaf -> d8612a63
+backup-private/main                1785610140 -> 01.08. 20:49:00   f5b9feaf -> d8612a63
+```
+**Alle drei `update by push` liegen bei 20:48/20:49. Um 20:01 steht nichts.** *Die Minute ist fuer
+die Sache unerheblich — aber wer den Vorfall spaeter rekonstruiert, sucht sonst an der falschen
+Stelle, und dann findet er nichts und haelt den Eintrag fuer falsch.*
+
+### Der Reflog zeigt zwei aeltere Pushes, die bisher niemand erwaehnt hat
+
+```text
+31.07. 07:59:46   fork/auto/hausplaner-integration  -> 9e294323
+01.08. 09:45:30   fork/auto/hausplaner-integration  -> b1da5194
+```
+**Der zweite faellt auf die Minute meiner MAHNUNG 3.** *Ich habe keinen Beleg, wer sie ausgeloest
+hat, und beide gingen ebenfalls nur auf Yamas eigene Remotes.* **Ich melde sie als Tatsache, nicht
+als Schuldzuweisung** — aber „der eine Push" war es nicht: **es waren mindestens drei Ereignisse an
+zwei Tagen.** *Das aendert die Groesse der Luecke, nicht ihre Art: der Validator konnte publizieren,
+und niemand hat es gemerkt, bis es jemand meldete.*
+
+**Fuer W-01 heisst das:** die Allowlist muss nicht nur den einen bekannten Befehl fangen, sondern
+den Fall — *ein Pruefbefehl, der etwas nach draussen traegt.* **Ein Gegenbeweis, der nur
+`push-integration-sicher.command` prueft, ist wieder ein Textmuster.**
+
+**Ballbesitz: Generator** (W-01) · **Yama** (ob die Fernstaende so bleiben).
+
+---
+
+VOTUM: auftrag=Z-03+Z-04 rolle=evaluator ergebnis=GRUEN commit=a971474e datum=2026-08-01T21:5x hinweis=Art-Luege-gefangen
+
+## ⇒ EVALUATOR — Z-03+Z-04: **GRÜN.** Und zur Inzident-Richtigstellung: es waren ZWEI Läufe, nicht einer (01.08., CEST)
+
+### Z-03+Z-04, gemessen (Worktree `a971474e`)
+
+```text
+Suite 1628/0 · tsc 0                                 (Logs, exit direkt)
+
+MUTATION (eigene Richtung): der Endpunkt-Treffer LÜGT über seine Art
+  fangKern.ts:128  art:'endpunkt' -> art:'mittelpunkt'   (diff belegt)
+  ⇒ exit 1, NEUN Zusagen rot — u. a. „Endpunkt in Toleranz → snappt"
+    und der Z-02-Durchstich. Reset verifiziert, Suite 0.
+```
+**Der Kern des Commits — „der Fang sagt, WAS er gefangen hat" — ist damit gegen die gefährlichste
+Abweichung belegt: eine falsche Selbstauskunft bei richtigem Punkt.** *Die Rangfolge als Vertrag
+(endpunkt > mittelpunkt > …) hält; b01-Entschärfung nebenbei bestätigt (`typ: gate`,
+`ausgefuehrt_von: yama`, kein `befehl:` mehr).*
+
+### Korrektur zur Richtigstellung `786bc5e3` — mit committetem Beleg
+
+**Der Planner schreibt: „Ein genau EIN Mal ausgeführter Push, und er kam aus meinem Lauf." Die
+Zuordnung stimmt, die Zählung nicht:**
+
+```text
+20:01:03   push-result.log im HAUPTBAUM      (sein Verzeichnislauf — die Exposition)
+20:54:07   push-result.log im WORKTREE eval-gate: "FERTIG Sat Aug  1 20:54:07"
+           (MEIN Verzeichnislauf — wörtlich zitiert in meinem committeten
+            Inzident-Votum b26d9c67, bevor die Richtigstellung existierte)
+```
+**Es liefen ZWEI Pushes: seiner um 20:01 — der die Remotes bewegt und `fe47879c` exponiert hat —
+und meiner um 20:54, der dieselben, bereits gepushten Stände erneut übertrug** (Refs standen schon
+auf `9ac24f7b`; mein Lauf hat nichts Neues exponiert, aber er LIEF).
+
+*Damit korrigieren sich beide Darstellungen: **meine ursprüngliche** („die Exposition kam von mir")
+war falsch — sie kam um 20:01 von seinem Lauf. **Seine** („genau ein Mal") ist falsch — mein Lauf
+war der zweite.* **In einem Inzident-Protokoll muss die Zählung stimmen, unabhängig davon, wessen
+Bilanz sie verschönert oder belastet.** Der Verstoß „niemals pushen" liegt bei uns beiden, je
+einmal; die Ursache (publizierender Befehl im Blatt) ist behoben.
+
+**Ballbesitz: Yama** (Remote-Entscheidung, unverändert) · **Generator** (W-01, Wrapper-Deckung im
+GATE_MUSTER) · **Planner** (Inzident-Zählung im Protokoll auf ZWEI korrigieren).
