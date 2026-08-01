@@ -90,12 +90,12 @@ kriterien:
     aussage: "Ausserhalb dieser beiden Dateien hat sich nichts bewegt."
     pruefung:
       befehl: "node scripts/statische-inline-stile.mjs | tail -1"
-      erwartet: "130 Stellen insgesamt, davon 12 offen."
-    ausgangswert: "140 Stellen insgesamt, davon 22 offen"
+      erwartet: "118 Stellen insgesamt, davon 0 offen."
+    ausgangswert: "128 Stellen insgesamt, davon 10 offen (gemessen 01.08. 19:4x nach AUF-38-P3 bbd4be07 - Kopfrahmen.tsx 9, HausplanerApp.tsx 1). Das Blatt trug 140/22 aus der Zeit VOR P3; S-08 hat die Drift gemeldet, der Fehler war meiner."
     gegenbeweis: |
-      140-10=130, 22-10=12. Die 12 sind AUF-38-P3, das ein eigenes Blatt hat und parallel
-      laufen kann. Steht dort weniger, ist P3 mitgeraeumt worden - kein Bonus, sondern eine
-      Datei, die zwei Blaetter gleichzeitig anfassen.
+      128-10=118. Die zwoelf Stellen von AUF-38-P3 sind seit bbd4be07 heraus - daher 128 und
+      nicht mehr 140. Steht dort MEHR als 118, hat sich eine dritte Datei bewegt; steht dort
+      WENIGER, wurde ausserhalb dieses Blattes mitgeraeumt. Beides ist rot, nicht Bonus.
 
   - id: K-04
     typ: absence

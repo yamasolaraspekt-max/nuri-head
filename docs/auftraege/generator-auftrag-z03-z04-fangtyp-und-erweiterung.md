@@ -68,7 +68,7 @@ kriterien:
     kritikalitaet: P1
     aussage: "Z-03 - die Fangart wird nicht mehr weggeworfen."
     pruefung:
-      befehl: "node scripts/zaehle.mjs resources/planner/hausplaner/app/HausplanerApp.tsx 'const \\\\{ punkt \\\\} = fange'"
+      befehl: "node scripts/zaehle.mjs resources/planner/hausplaner/app/HausplanerApp.tsx 'const \\{ punkt \\} = fange'"
       erwartet: "0"
     ausgangswert: "1 (gemessen 01.08. 19:4x)"
     gegenbeweis: |
