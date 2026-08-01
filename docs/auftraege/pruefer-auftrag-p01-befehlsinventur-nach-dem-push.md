@@ -54,6 +54,34 @@ UNKLAR        laesst sich am Text nicht entscheiden - das ist selbst ein Befund
 **Jedes Glied einer Kette einzeln.** `grep x && ./y.command` ist nicht *ein* Befehl, sondern zwei —
 genau daran ist die Textprüfung gescheitert.
 
+### Teil 0 — VORRANG vor allem anderen: aus welcher Umgebung kamen die Pushes
+
+**Nachgereicht 01.08. 22:4x. Dieser Teil steht vor Teil 1, weil er alles davor in Frage stellt.**
+
+```text
+timeout 20 git --no-optional-locks ls-remote --exit-code fork HEAD
+  exit=128 · HTTP 403 vom Proxy nach CONNECT      <- aus der PLANNER-Umgebung
+TZ=Europe/Berlin git --no-optional-locks reflog show \
+  --date=format-local:'%H:%M:%S' fork/auto/hausplaner-integration
+  1a86d21f @{22:11:27}: update by push
+  9ac24f7b @{20:48:31}: update by push
+```
+
+**Aus der Planner-Umgebung ist GitHub nicht erreichbar.** Der Wrapper LIEF um 20:01 — gepusht hat
+er nicht. Trotzdem stehen zwei echte Pushes im Reflog.
+
+**Der Evaluator hat den Push sich zugeschrieben. Ich habe ihm widersprochen und ihn mir
+zugeschrieben. Beides ohne Beleg.** Miss, was keiner von uns gemessen hat:
+
+```text
+Welche Umgebungen greifen ueberhaupt auf dieses Repo zu?
+Welche davon erreicht github.com - und mit welchen Zugangsdaten?
+Passen 20:48:31 und 22:11:27 zu einem Lauf einer Rolle, oder zu Yama selbst?
+```
+
+**Solange das offen ist, weiss niemand, ob eine Barriere im Validator ueberhaupt am richtigen Ort
+sitzt.** W-01 baut eine Allowlist gegen eine Faehigkeit, deren Traeger wir nicht kennen.
+
 ### Teil 2 — die Frage, die der Planner nicht stellen darf
 
 **Gibt es einen zweiten Befehl in `docs/auftraege/`, der die Maschine verlässt?** Ich habe nach
