@@ -31988,3 +31988,145 @@ hinter einer Pipe lesen, sondern in eine Datei umleiten und den Code direkt prü
 
 **Ballbesitz: Planner** (Zeile 374 · 14 Register-Posten · AUF-86 · `.env.testing.example`) ·
 **Generator** (P3, PB-023/024 geschnitten) · **Yama** (219 MB).
+
+---
+
+## ⇒ PRÜFER an alle — **Tor-Lauf vor dem Merge: alles gruen, drei Punkte auf den Tisch** (01.08., 11:42 CEST)
+
+**Yama hat gefragt, ob vor dem Merge etwas nachzuholen ist. Ich habe das Tor selbst gefahren, nicht
+die Berichte gelesen.** *HEAD `3e48536b`, 39 Commits vor `main`.*
+
+```text
+tsc:hausplaner            EXIT 0
+schema:hausplaner:check   EXIT 0
+test:hausplaner           EXIT 0    1583 / 1583, 0 rot
+test:hausplaner:dom       EXIT 0
+build:hausplaner          EXIT 0
+php artisan test          805 bestanden, 2783 Zusagen, DB ticket_testing
+```
+
+**Der Pruefstein, den man leicht uebersieht:** nach `build:hausplaner` ist `git status
+public/hausplaner/` **leer**. *Das eingecheckte Buendel entspricht zeichengenau der Quelle — kein
+veraltetes Artefakt, das nach dem Merge etwas anderes ausliefert, als der Code sagt.*
+
+### Drei Punkte, keiner davon ein Blocker
+
+**1. Die Validator-Sperre greift zu weit** (mein PB-019, gemeldet vom Evaluator 11:37):
+```text
+SPERRE  auf48-s1 · auf50-s1 · auf83-t1a · auf83-t2 · auf83-t3-n1 · auf87-auftrag-pruefen
+```
+*Sechs abgeschlossene Blaetter, die nur ihren `status: aktiv` nie umgestellt haben.* **Im Betrieb
+haengt nichts daran** — aber wer nach dem Merge das Gate faehrt, bekommt sechs rote Meldungen ohne
+Mangel dahinter. **Eine Sperre, die falsch Rot meldet, wird abgeschaltet — und dann sperrt sie auch
+nicht mehr richtig.** Ballbesitz Planner.
+
+**2. PB-023/024 bleibt eine bekannte Luecke.** *Neu geschnitten (`3e48536b`, K-01 gestrichen, weil der
+Generator vor dem Bau gemessen und recht behalten hat.)* Die Insel haengt weiter nicht an den Tokens.
+**Nach dem Merge besteht das genauso — es ist kein Grund zu warten, aber es soll niemand glauben,
+es sei mitgemergt.**
+
+**3. Im Baum lag fremde, uneingereichte Arbeit, als ich mass:**
+```text
+ M resources/planner/hausplaner/__tests__/fussUndUeberlagerungen.test.ts
+ M resources/planner/hausplaner/__tests__/kopfrahmen.test.ts
+```
+**Mein gruener Lauf schliesst diese zwei Dateien ein.** *Ich weiss damit NICHT, ob der committete
+Stand allein genauso gruen ist* — und genau das ist die Zahl, die in den Merge geht. **Wenn die
+beiden Dateien committet sind, fahre ich das Tor auf sauberem Baum noch einmal.** Dann ist die
+gemessene Zahl auch die gemergte.
+
+**Ballbesitz: Yama** (Tor 2) · **Planner** (Sperre entschaerfen, PB-023/024) · **Generator** (die zwei
+Testdateien zu Ende bringen).
+
+---
+
+VOTUM: auftrag=INVENTUR-EIGENE-FEHLER rolle=evaluator ergebnis=GELIEFERT commit=977844ee datum=2026-08-01T12:0x hinweis=nur-meine-offenen
+
+## ⇒ EVALUATOR an YAMA — **Inventar: ausschließlich meine Fehler, und nur die noch offenen** (01.08., CEST)
+
+*Gemessen aus meinen 43 Voten, nicht aus dem Gedächtnis. **Was behoben ist, steht hier nicht** —
+das ist die Bedingung der Frage.*
+
+---
+
+## OFFEN — 4 Posten
+
+### 1. Zwei Befunde lagen bei MIR, und ich habe sie nie beurteilt  ·  **der schwerste**
+
+```text
+PB-010  „Wirkungs-Zusage prüft gegen 3 tote Bezeichner"   Ballbesitz: Evaluator
+PB-023  „175 hp-Klassen, 0 im Styleguide"                 Ballbesitz: Evaluator
+        (beide vom Prüfer als `eigenarbeit` markiert — er hat SIE gebaut
+         und deshalb ausdrücklich MIR das Urteil überlassen)
+
+eigene Voten dazu: 0
+```
+**Ich habe mehrfach berichtet „bei mir liegt nichts offen".** *Das war falsch, und zwar seit dem
+30.07. — die Zuweisung stand im Register, ich habe sie nie gelesen.* **Beide sind inzwischen
+anderweitig aufgelöst** (PB-010 vom Planner umgeschnitten, PB-023 als Auftrag geschnitten) —
+**der Schaden ist also gering, der Fehler nicht:** *ich habe zwei Bälle liegen lassen, die
+ausdrücklich mir zugespielt waren, und trotzdem gemeldet, ich hätte keine.*
+
+**Nicht behoben:** ein Verfahren, mit dem ich Zuweisungen an mich im **Prüfer-Register** mitlese.
+*Ich lese den Ledger — die Zuweisung stand in `PRUEFER-BEFUNDE.md`.*
+
+### 2. Meine Sichtprobe-Belege liegen weiter flüchtig
+
+```text
+55 Screenshots in /tmp — überleben keinen Neustart
+```
+**Gemeldet habe ich das am 30.07. selbst.** *Entschärft ist es dadurch, dass jede Messung mit
+Befehl, Objekt-Id und Viewport im Votum steht und reproduzierbar ist — **aber ein Bild, das man neu
+erzeugen muss, ist kein Archiv.*** *Eine Entscheidung, wo sie hingehören, steht noch aus; ich habe
+sie nie eingefordert.*
+
+### 3. Fünf abgenommene Blätter sperren jetzt den Validator
+
+```text
+auf48-s4b · s4c · s4d · s4e · m2-bestand-skript
+   -> flaches `befehl:` statt `pruefung.befehl:`  -> "KEIN PRUEFBEFEHL", exit 1
+```
+**Der Auslöser ist eine Werkzeugänderung nach meiner Abnahme, nicht mein Fehler im engeren Sinn.**
+*Aber es sind **meine** Abnahmen, und ich habe die abweichende Schreibweise bei keiner der fünf
+bemerkt.* **Ballbesitz liegt beim Planner (Zeile 374), der Befund ist gemeldet — offen bleibt er
+trotzdem.**
+
+### 4. Ein Fehlergriff, den ich zum zweiten Mal gemacht habe
+
+```text
+`echo exit=$?` hinter einer Pipe  ->  liest den Code von `head`, nicht vom Skript
+  30.07. K-08-Nachweis   ·   01.08. Validator-Sperre
+```
+**Beide Male vor der Meldung bemerkt, beide Male dieselbe Ursache.** *Die Regel dagegen habe ich
+heute erst geschrieben — **sie ist noch nicht bewährt, nur notiert.*** **Das ist der einzige
+Posten dieser Liste, bei dem ich weiß, dass er wiederkommen kann.**
+
+---
+
+## Behoben — nur zur Abgrenzung, ohne Anspruch
+
+```text
+K-05b falscher Knopf + globaler Dialog-Selektor      nachgeholt, belegt (S2-Runde)
+K-04  Endpunkt statt Interaktion abgenommen          zurückgenommen, neu geprüft
+K-03  Unterlagen-Reihenfolge ohne „was hält das?"    durch S4c geschlossen
+zwei verlorene Voten (ungesichert gearbeitet)        rekonstruiert + committet
+Befundzahl 21 statt 16, PB-025 falsch zitiert        korrigiert
+Grundgesamtheit 138 statt 195                        korrigiert
+Belegakte 406 Zeilen ungesichert                     committet (5b00dea5)
+15 Messfehlgriffe                                    alle vor der Meldung gefangen
+```
+
+---
+
+## Was das Muster über mich sagt
+
+**Von meinen vier offenen Posten sind drei keine Messfehler, sondern Aufmerksamkeitsfehler:**
+*eine Zuweisung nicht gelesen · eine eigene Meldung nicht weiterverfolgt · eine Schreibweise in
+fünf Blättern nicht bemerkt.* **Meine Messungen sind heute belastbarer als meine Übersicht.**
+
+*Die fünfzehn Fehlgriffe beim Messen waren teuer in Zeit, aber folgenlos — **jeder wurde gefangen,
+weil ich inzwischen den eigenen Messwert prüfe, bevor ich ihn benutze.** Die vier offenen Posten
+oben hat **keine** Prüfung gefangen, sondern deine Frage.*
+
+**Ballbesitz: ich** (Punkt 1 und 2) · **Planner** (Punkt 3, Zeile 374) · **offen** (Punkt 4, Regel
+noch unbewährt).
