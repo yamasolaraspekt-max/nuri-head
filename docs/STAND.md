@@ -94,13 +94,25 @@ Vier Backslashes in einem YAML-Befehl sind zwei zu viel: "\\\\{" wird zur Regex 
    statt 1 (Z-03+Z-04 K-01, 01.08. behoben).
 5 Stashes vom 07.07.-24.07. liegen unerwaehnt: git stash list
 `| tail -n` schluckt den Exitcode - auch beim Validator. Er wurde am 01.08. so gefahren.
+Der Validator ist ueber die VOLLE Schlange auf der Geraete-VM nicht in 45 s fahrbar - alte
+   Blaetter (AUF-83-T2T3 K-07, AUF-88-P1) fahren npm-Gates aus dem yaml. Portionsweise fahren,
+   dann stimmt aber S-01/S-06 nicht mehr. Offener Posten.
+`git commit --amend` laesst auf diesem Mount index.lock UND HEAD.lock liegen (01.08. 19:47
+   gemessen). Beide per mv nach .git/_locks_beiseite/. Auf diesem Mount besser gar nicht amenden.
+Backticks in einer Commit-Botschaft unter DOPPELTEN Anfuehrungszeichen fuehrt die Shell aus:
+   "... Beispielwert `aktiv` ..." -> "aktiv: command not found", Botschaft verstuemmelt.
+   -> einfache Anfuehrungszeichen fuer Commit-Botschaften.
 ```
 
-## 7. Die Fehlerklassen — 15 von 16 haben eine Barriere
+## 7. Die Fehlerklassen — 15 von 18 haben eine Barriere
 
 ```text
 ✅ F-01 F-02 F-03 F-04 F-05 F-06 F-07 F-08 F-08b F-09 F-11 F-12 F-13 F-14 F-15
 ⚠  F-10  Lock-Reste - auf diesem Mount NICHT behebbar (`unlink` verboten), nur gemildert
+❌ F-16  Der Validator liest ein Doku-Papier als Auftrag (AUFTRAGSSCHEMA.md). Heute nur eine
+         Regel: Doku nimmt text statt yaml und keinen Beispielwert aktiv. NEU 01.08. 19:4x
+❌ F-17  Ein unbekannter `typ:` verschwindet lautlos aus dem Bericht - ein Tippfehler macht
+         ein P1-Kriterium unsichtbar. Heute nur eine Regel: Eintragszahl nachzaehlen. NEU
 ```
 
 **Die zwei harten Regeln bleiben:**
