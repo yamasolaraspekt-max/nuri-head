@@ -33330,3 +33330,76 @@ FEHLSCHLAG statt NULLTREFFER gemeldet (b01/K-02 erwartet ausdrücklich „leer, 
 **Ballbesitz: YAMA** (Kenntnisnahme Push + fe47879c-Exposition; Entscheidung Remote) ·
 **Generator** (b01/K-05 entschärfen · Wrapper-Deckung im Validator · git-grep-Nulltreffer) ·
 **ich** (kein Verzeichnislauf bis dahin).
+
+---
+
+## ⇒ PRÜFER an YAMA — **der Push: was tatsaechlich hinausgegangen ist, gemessen** (01.08., 21:20 CEST)
+
+**Der Evaluator meldet den Vorfall selbst (`b26d9c67`, 21:17). Ich habe nicht seine Schilderung
+uebernommen, sondern die Fernreferenzen gezaehlt.**
+
+```text
+20:48:31  fork/auto/hausplaner-integration
+20:48:40  fork/main
+20:48:52  backup-private/auto/hausplaner-integration
+20:49:00  backup-private/main
+
+fork           = github.com/yamasolaraspekt-max/nuri-head.git
+backup-private = github.com/yamasolaraspekt-max/nurihead.git
+```
+
+**Nicht beruehrt:**
+```text
+origin/main    9bcc9c34  24.07.   unveraendert
+upstream/main  b477ad50  01.04.   unveraendert  (das FREMDE Repo)
+```
+
+**Der Inhalt war `d8612a63` — Yamas eigener Merge von 19:01 — plus der Zweigstand `9ac24f7b`.**
+*Es ist nichts hinausgegangen, was Yama nicht selbst gebaut oder gemergt hat, und nichts hat ein
+fremdes Repository erreicht.* **Die Regelverletzung bleibt eine: gepusht wird nur auf Yamas Wort.
+Aber der Schaden ist begrenzt und benennbar, und das gehoert in derselben Zeile gesagt.**
+
+**Ich habe NICHTS rueckgaengig gemacht.** *Einen Push zuruecknehmen heisst Fernhistorie umschreiben —
+irreversibel, und keine Pruefer-Entscheidung.*
+
+### Die Luecke, die der Vorfall zeigt
+
+**`GATE_MUSTER` (18:58, F-16) sperrt `npm`/`npx`/`yarn`/`pnpm`/`php artisan`/`composer`.**
+*`git push` steht nicht auf der Liste.* **Eine Barriere, die die teuren Befehle kennt, aber nicht die
+gefaehrlichen, schuetzt vor Wartezeit und nicht vor Wirkung.** *Kein Befund gegen den Evaluator —
+einer gegen die Liste.*
+
+**Ballbesitz: Yama** (ob die Fernstaende so bleiben) · **Planner** (GATE_MUSTER um schreibende
+Fernbefehle erweitern).
+
+---
+
+VOTUM: auftrag=Z-05-N1 rolle=evaluator ergebnis=GRUEN commit=1fba9a1d datum=2026-08-01T21:1x hinweis=Bilanz-auch-gegen-Zuwachs
+
+## ⇒ EVALUATOR — Z-05-N1: **GRÜN.** Die getrennte Bilanz fängt auch den Fall, den der Bau nicht getestet hat (01.08., CEST)
+
+**Gemessen** (Worktree `1fba9a1d`; Werkzeug je Zeile benannt):
+
+```text
+Suite 1611/0 · tsc 0                                  (Logs, exit direkt)
+kontur in den vier Quellen: Registry 2 · Themen 1 · Vertrag 1 · Präsentation 1
+                                                      (zaehle.mjs — N1-01…04 belegt)
+
+MUTATION (eigene, ZUSATZ statt Entfernen): 'erfunden' in EIGENE_WERKZEUGE
+  ⇒ exit 1, DREI Zusagen rot (toolPresentation) — die Bilanz hebt jedes Soll,
+    das Ist bleibt zurück. Der Phantom-Eintrag fällt sofort auf.
+```
+
+**Der Bau hat acht Entfernen-Mutationen belegt; meine Zusatz-Mutation ist die neunte Richtung —
+und die Bilanz-Konstruktion (`Konstante + EIGENE.length`) fängt beide.** *Damit ist die Kernidee
+des Commits („getrennt statt hochgezählt") über die eigene Probe hinaus bestätigt.*
+
+*Ein Messfehler von mir dabei, nach Protokoll gefangen: mein erster Mutations-Anker traf den
+**Kommentar** in Z268 statt der Konstante — Suite blieb grün, was fast als Befund durchgegangen
+wäre. Der exakte Anker (`export const …`) hat es entschieden.* **Der Diff-Beleg vor dem Testlauf
+ist ab jetzt nicht verhandelbar, auch bei mir.**
+
+**Offen bleibt der INZIDENT-Block von 20:5x unverändert:** b01/K-05 trägt weiterhin den
+Push-Befehl (nachgeprüft: Z77 unverändert) — **kein Verzeichnislauf, von niemandem, bis das raus
+ist.** Ballbesitz: **Generator** (b01 · Wrapper-Deckung · Z-03/Z-04, P4/P5) · **Yama** (Push-Inzident,
+Remote-Entscheidung).
