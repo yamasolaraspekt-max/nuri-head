@@ -206,7 +206,16 @@ kriterien:
 
 **Rückweg:** eine Konstante und eine Funktion in einer Datei, kein Datenpfad, kein Schema — der
 Commit lässt sich zurückdrehen. **Aber der Rückweg liegt auf derselben Platte wie die Arbeit**,
-solange nicht gepusht ist; am 01.08. um 21:5x waren es 60 Commits.
+solange nicht gepusht ist. **Hier stand „am 01.08. um 21:5x waren es 60 Commits" — eine Zahl ohne
+Befehl, und sie war falsch.** Gemessen 22:09:
+
+```text
+git --no-optional-locks rev-list --count fork/auto/hausplaner-integration..auto/hausplaner-integration  ->  13
+```
+
+**Der ungewollte Push von 20:01 hat den Rueckstand auf null gesetzt.** Der Regelverstoss hat den
+offenen Posten geschlossen, auf den Yama seit Tagen wartete. *Das entschuldigt ihn nicht — es macht
+ihn nur schwerer zu benennen, und genau deshalb steht es hier.*
 
 **Entdeckung:** die Zahl der `UEBERSPRUNGEN` in einem Verzeichnislauf. Steht sie bei 0, prüft die
 Allowlist nichts; steht sie bei der Zahl der Einträge, prüft der Validator nichts mehr. *Beide

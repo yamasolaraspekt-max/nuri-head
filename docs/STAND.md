@@ -5,104 +5,97 @@
 > **Regeln:** eine Zeile je Sache · eine Rücknahme ERSETZT die Aussage · was erledigt ist,
 > verschwindet · **kein Datum ohne Zahl, keine Zahl ohne Befehl.**
 
-**Zuletzt geschrieben:** 01.08.2026, 20:00 · Planner
-*(Die Vorfassung trug „19:55" — ein Zeitstempel, der 30 Minuten in der Zukunft lag. Zurückgenommen.)*
+**Zuletzt geschrieben:** 01.08.2026, 22:10 · Planner
 
 ---
 
-## 1. Wo der Bau steht — gemessen 19:59
+## 1. Wo der Bau steht — gemessen 22:09
 
 ```text
 main     d8612a63   19:01 · git diff 99f38da7 main LEER · 3 Merges
-Zweig    8f81c3f7   auto/hausplaner-integration · 25 voraus vor main · Locks 0
-UNGEPUSHT 55        <- kein Backup ausserhalb der Platte
+Zweig    9f203c81   auto/hausplaner-integration · 40 voraus vor main · Locks 0
+UNGEPUSHT 13        <- der Rueckstand ist NICHT abgearbeitet worden, sondern durch den
+                       ungewollten Push von 20:01 auf null gefallen. Siehe Abschnitt 3.
 
-  TZ=Europe/Berlin date '+jetzt %d.%m.%Y %H:%M'
   git --no-optional-locks rev-list --count fork/auto/hausplaner-integration..auto/hausplaner-integration
   git --no-optional-locks rev-list --count main..auto/hausplaner-integration
 
 Kennzahl Produktivcode - `config` gehoert dazu:
   git log -1 --date=format-local:'%d.%m. %H:%M' --pretty='%h %ad %s' \
     -- resources app tests routes public database scripts config
-  -> bbd4be07  01.08. 19:21  AUF-38-P3
 ```
 
-| Sache | Zustand |
+## 2. Die Schlange — wer was hat
+
+| Rolle | Was liegt bereit |
 |---|---|
-| **Auf `main`** | Z-01 · AUF-38-P1+P2 · PB-043 T2 · AUF-91 · PB-047 · PB-023 — abgenommen |
-| **AUF-38-P3** | **abgenommen** — gebaut `bbd4be07` 19:21, Votum GRÜN `fa1da402` 19:37 |
-| **Z-02** Fang angeschlossen | gebaut `8811e638`, abgenommen `211f3f91` |
-| **Z-05** Konturwerkzeug | **gebaut** `264ab9dc` 19:09 · Votum offen · L-01 nach Z-05-N1 verschoben |
-| **Z-05-N1** Werkzeug erreichbar | **aktiv**, geschnitten `e061e017` 19:36 — das EINE aktive Blatt |
-| **AUF-38-P4+P5** · **Z-03+Z-04** | `bereit` — zusammen mit Z-05-N1 sind 3 baubar (R16 verlangt 2) |
-| **Z-06** Decke aus Kontur | `gesperrt` — braucht Z-05 mit Votum UND Z-05-N1 |
+| **Generator** | **Z-03+Z-04** `aktiv` (baut, Baum zeigt `fangKern.ts`) · **W-01** `bereit` · **Z-10** `bereit` |
+| **Evaluator** | **Z-05** (Votum offen) · **AUF-38-P4+P5** (gebaut `fba3083f`, 118 Stellen / 0 offen) · mein Werkzeugbau (`GATE_MUSTER` steht auf **ROT**) |
+| **Prüfer** | **P-01** `bereit` — Inventur aller 183 Befehle in den Blättern, nach dem Push |
+| **Yama** | Remotes tragen `fe47879c` — Bereinigung? · Papierstopp PB-042 · PB-048 · die 3 PHP-Dateien |
 
-## 2. Wer ist am Ball
+**Abgenommen am 01.08.:** Z-01 · Z-02 · AUF-38-P1+P2+P3 · PB-023 · PB-043 T2 · AUF-91 · PB-047 · **Z-05-N1**.
+**Gesperrt:** Z-06 (nur noch: Votum für Z-05) · AUF-83-T2T3 · AUF-83-T5 · AUF-88-P1.
 
-- **Generator:** **Z-05-N1** — der achte Registry-Platz für `kontur`. Danach P4+P5, Z-03+Z-04.
-- **Evaluator:** **Z-05** (nur noch K-01…K-06, L-01 ist heraus) · **PB-023 wartet seit 12:55, Z-02 seit 13:24** · mein Werkzeugbau vom 01.08. — jetzt inkl. `GATE_MUSTER`, 63 Zusagen · AUF-25 (seit 25.07.) · AUF-86 · fehlende `.env.testing.example`.
-- **Yama:** **push (55)** · Papierstopp PB-042 · PB-048 · die 3 PHP-Dateien unten.
-- **Planner:** Z-07…Z-11 und die drei Werkzeug-Blätter — **erst, wenn S-06 sie meldet.**
-
-## 3. Was offen im Baum liegt — Regel B ist verletzt
+## 3. DER INZIDENT vom 01.08. — 20:01, und er war meiner
 
 ```text
-git --no-optional-locks status --short --branch
+ls -l push-result.log                                       -> 01.08. 20:01:03
+git log -1 --pretty='%h' fork/auto/hausplaner-integration    -> 9ac24f7b = mein Commit von 20:00
+git branch -r --contains fe47879c                            -> fork + backup-private, je 2 Zweige
 ```
 
-| Datei | seit | wem |
-|---|---|---|
-| `app/Http/Controllers/DatanormController.php` · `app/Models/ProductImage.php` · `routes/web.php` | 18:56 | **Yamas eigene**, 01.08. bestätigt — bleiben liegen, niemand fasst sie an |
-| `docs/planner/PRUEFER-BEFUNDE.md` | **13:04** | Prüfer — 6 h uncommittet. Fremder Pfad, der Planner stagt ihn nicht |
-| `docs/product-data/` | — | unverfolgt, von keiner Rolle angekündigt |
+**Mein Verzeichnislauf hat `b01/K-05` ausgeführt: `./push-integration-sicher.command`.** Der
+Evaluator hat den Inzident um 21:17 gemeldet und sich selbst zugeschrieben — **das ist falsch,
+die Zeitstempel sind eindeutig.**
+
+**Sofortmaßnahme `6cbe9578`:** K-05 ist `typ: gate`, `ausgefuehrt_von: yama`. Gemessen: kein
+weiterer `./`-Wrapper in `docs/auftraege/`. *Diese Aussage ist die des Fehlerverursachers und
+deshalb nichts wert, bis P-01 sie unabhängig widerlegt hat.*
+
+**Bitter und deshalb ausdrücklich:** der Push hat den Rückstand von 55 Commits auf null gesetzt.
+**Der Regelverstoß hat den offenen Posten geschlossen, auf den Yama seit Tagen wartete.**
 
 ## 4. Was entschieden ist — gilt, bis es hier ersetzt wird
 
 | Entscheidung | Kurz |
 |---|---|
-| **Z-05-N1 vor Z-06** | Yama, 01.08. Ohne Erreichbarkeit gibt es nie eine gezeichnete Kontur — der Kontur-Zweig in Z-06 wäre toter Code |
-| **Bilanz getrennt, nicht hochgezählt** | `PAKET 110 + EIGENE.length`, nicht die nackte `111`. Eine nackte 111 verliert die Verlusterkennung |
-| **`kontur` ersetzt nicht `polygon`** | `polygon` bleibt bei den sechs stillgelegten Primitiven in `03-zeichnen-cad` |
-| **Merge nur auf abgenommenen Stand** | Nicht auf die Zweigspitze |
+| **Allowlist statt Textmuster** | W-01. Nicht aufzählen, was verboten ist, sondern was erlaubt ist — jedes Glied der Kette, `bash`/`sh` nur unter `scripts/` |
+| **Publizierende Befehle nie in ein Blatt** | Ein Blatt ist eine Datei, die ein Werkzeug ausführt. Was darin steht, PASSIERT |
+| **Bilanz getrennt, nicht hochgezählt** | `PAKET 110 + EIGENE.length`. Vom Evaluator in `a0a6e250` bestätigt: fängt auch den Zuwachs-Fall |
+| **Z-05-N1 vor Z-06** | Yama, 01.08. Ohne Erreichbarkeit gäbe es nie eine gezeichnete Kontur |
 | **Ein Befehl je Nachricht** | Bei jedem Terminal-Vorgang. Yama, 30.07. 22:52 |
-| **`studioDaten.ts` behält echte Farbwerte** | Konva löst keine CSS-Variable auf und malt sonst still die vorherige Farbe |
-| **Fangtoleranz aus dem Zoom** | 150 mm fest sind bei Zoom 0,02 drei Bildschirmpixel |
+| **`studioDaten.ts` behält echte Farbwerte** | Konva löst keine CSS-Variable auf |
 | **Commits über `scripts/commit-pruefen.sh`** | Prüft Existenz, Änderung und Syntax vor dem Commit (F-14) |
 
 ## 5. ZURÜCKGENOMMEN — nicht wieder aufwärmen
 
 | Aussage | Wahrheit |
 |---|---|
-| „8 Commits liegen nur auf der Platte" / „13" | **48**, gemessen 19:37 gegen `fork/…` ohne fetch — mehr kann es sein, weniger nicht |
-| „Zweig 80ff1895" | war schon beim Schreiben überholt |
-| „AUF-38-P3 ist beim Generator in Arbeit" | gebaut 19:21, abgenommen 19:37 |
-| „Z-05 ist gebaut, Votum offen" | stimmt — aber L-01 kam **blockiert** zurück, das fehlte |
+| „60 Commits ungepusht" (Planner, 21:5x, in W-01) | **13.** Eine Zahl ohne Befehl, in einem Blatt, das ich gerade schrieb |
+| „Der Verzeichnislauf braucht 3,6 s" | Der Evaluator misst **39,4 s / 30 Blätter**, b01 allein 33,8 s |
+| „Der Push liegt beim Evaluator" | Er liegt beim Planner. `push-result.log` 20:01:03, mein Lauf 20:00 |
+| „8 / 13 Commits nur auf der Platte" | Waren 55, bis der ungewollte Push sie hinausschob |
+| „`GATE_MUSTER` ist die Barriere" | Sie fängt npm & Co., **nicht** Shell-Wrapper — die gefährlichste Klasse |
+| „Die drei gesperrten Blätter machen den Lauf langsam" | **46 npm-Befehle** über 20 Blätter waren es |
 | „Der Wächter läuft nicht mehr" | Er läuft. Er hatte einen Commit übersprungen |
-| „Vorprüfung erwartet 0" | Sie erwartet die Zahl der bisherigen Merges |
-| „Die Fehlerzahl wächst nicht, also behoben" | Am 31.07. hat niemand die Anwendung benutzt |
-| „`zaehle.mjs` ist die Barriere" | Sie hatte selbst zwei Löcher |
 
-## 6. Neue Fallen vom 01.08. abends
+## 6. Fallen — die vier neuen von heute Abend
 
 ```text
-git worktree list meldet vom Mount aus JEDEN Worktree als `prunable` - auch ../ticket-main -
-   weil die /Users/...-Pfade aus der Geraete-VM nicht aufloesen.
-   -> `git worktree prune` von hier aus meldet den Merge-Worktree ab. NIE von hier ausfuehren.
-S-07 feuert nur bei `kritikalitaet: P1`. Ein absence-Kriterium ohne P1 kommt durch, auch wenn es
-   schon vor dem Bau erfuellt ist. Wer sich darauf verlaesst, umgeht die Barriere versehentlich.
-Vier Backslashes in einem YAML-Befehl sind zwei zu viel: "\\\\{" wird zur Regex \\{ und misst 0
-   statt 1 (Z-03+Z-04 K-01, 01.08. behoben).
-5 Stashes vom 07.07.-24.07. liegen unerwaehnt: git stash list
-`| tail -n` schluckt den Exitcode - auch beim Validator. Er wurde am 01.08. so gefahren.
-Zwei head/tail-Splices sind mir heute an der Grenzzeile verrutscht (eine Zeile doppelt, eine
-   Datei syntaktisch tot). Vor jedem Splice die Grenzzeilen anzeigen. `git checkout -- <datei>`
-   REPARIERT das auf diesem Mount NICHT (unlink verboten) - der Weg ist
+Ein `OK` im Validator-Bericht heisst: der Befehl LIEF. Wer nur nach FEHLSCHLAG filtert, sieht
+   nicht, was ausgefuehrt wurde. Genau so ist mir der Push durchgegangen.
+git worktree list meldet vom Mount aus JEDEN Worktree als `prunable` - auch ../ticket-main.
+   `git worktree prune` von hier aus meldet den Merge-Worktree ab. NIE von hier ausfuehren.
+head/tail-Splices: DREIMAL heute an der Grenzzeile verrutscht. Vor jedem Splice die Grenzen
+   anzeigen. `git checkout -- <datei>` repariert auf diesem Mount NICHT (unlink verboten):
    `git show HEAD:<pfad> > /tmp/x && cat /tmp/x > <pfad>`.
-`git commit --amend` laesst auf diesem Mount index.lock UND HEAD.lock liegen (01.08. 19:47
-   gemessen). Beide per mv nach .git/_locks_beiseite/. Auf diesem Mount besser gar nicht amenden.
-Backticks in einer Commit-Botschaft unter DOPPELTEN Anfuehrungszeichen fuehrt die Shell aus:
-   "... Beispielwert `aktiv` ..." -> "aktiv: command not found", Botschaft verstuemmelt.
-   -> einfache Anfuehrungszeichen fuer Commit-Botschaften.
+`git commit --amend` laesst index.lock UND HEAD.lock liegen. Auf diesem Mount nicht amenden.
+Backticks in einer Commit-Botschaft unter DOPPELTEN Anfuehrungszeichen fuehrt die Shell aus.
+`zaehle.mjs <datei>` wirft ENOENT, solange die Datei nicht existiert - ein Kriterium fuer eine
+   NEUE Datei muss ueber das VERZEICHNIS messen, sonst kann es vor dem Bau nicht laufen.
+S-07 feuert nur bei `kritikalitaet: P1`.
+`| tail -n` schluckt den Exitcode - auch beim Validator.
 ```
 
 ## 7. Die Fehlerklassen — 15 von 18 haben eine Barriere
@@ -110,28 +103,28 @@ Backticks in einer Commit-Botschaft unter DOPPELTEN Anfuehrungszeichen fuehrt di
 ```text
 ✅ F-01 F-02 F-03 F-04 F-05 F-06 F-07 F-08 F-08b F-09 F-11 F-12 F-13 F-14 F-15
 ⚠  F-10  Lock-Reste - auf diesem Mount NICHT behebbar (`unlink` verboten), nur gemildert
-⚠  F-16  HALB. Barriere steht: GATE_MUSTER faengt npm/npx/yarn/pnpm/php artisan/composer -
-         27 Blaetter in 3,6 s statt Timeout. Offen bleibt: ein Doku-Papier mit yaml-Block wird
-         weiter als Auftrag gelesen - dafuer heute nur eine Regel (text statt yaml).
-❌ F-17  Ein unbekannter `typ:` verschwindet lautlos aus dem Bericht - ein Tippfehler macht
-         ein P1-Kriterium unsichtbar. Heute nur eine Regel: Eintragszahl nachzaehlen. NEU
+⚠  F-16  HALB. GATE_MUSTER faengt npm & Co., aber KEINE Shell-Wrapper - ROT vom Evaluator.
+         Die Barriere ist W-01 (Allowlist), geschnitten, noch nicht gebaut.
+❌ F-17  Ein unbekannter `typ:` verschwindet lautlos aus dem Bericht.
 ```
 
 **Die zwei harten Regeln bleiben:**
 
-**A — Kein Blatt geht raus, bevor jeder Befehl darin einmal gelaufen ist**, auch gegen einen
-absichtlich ROTEN Fall. *Z-05-N1 hat für jeden Zähler einen Partner mit Treffer ≠ 0.*
+**A — Kein Blatt geht raus, bevor jeder Befehl darin einmal gelaufen ist.** *Z-10 trug beim ersten
+Schnitt ein Kriterium, das vor dem Bau gar nicht laufen konnte — der Validator hat es sofort
+gefangen.*
 
-**B — Keine Arbeit liegt länger als zwanzig Minuten uncommittet.** *Siehe Abschnitt 3 — die
-Regel ist gerade verletzt, und zwar sichtbar.*
+**B — Keine Arbeit liegt länger als zwanzig Minuten uncommittet.** *`PRUEFER-BEFUNDE.md` liegt seit
+13:04 im Baum — neun Stunden. P-01-06 misst das.*
 
 ## 8. Was der Validator selbst sperrt
 
 ```text
 PB-019  Kopf fehlt oder misst nichts, Blatt aber `status: aktiv`   exit 1
-S-01    genau EIN aktives Blatt            -> heute: Z-05-N1
+S-01    genau EIN aktives Blatt            -> heute: Z-03+Z-04
+S-04    coverage ohne population_command und ohne eigenen Befehl
 S-06    weniger als zwei baubare Blaetter                          exit 1  -> heute: 3
-S-07    ein Kriterium ist schon vor dem Bau erfuellt (nur bei P1)  exit 1
+S-07    ein Kriterium ist schon vor dem Bau erfuellt (nur bei P1)   exit 1
 S-08    Ausgangswert weicht von der Messung ab                     Meldung
 S-09    Kopf ohne `status`
 S-10    der Baum hat sich waehrend der Messung bewegt              exit 1
