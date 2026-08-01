@@ -88,9 +88,19 @@ kriterien:
     kritikalitaet: P1
     aussage: "K1 ZIEL - nur fork und backup-private. Niemals upstream."
     pruefung:
-      befehl: "git --no-optional-locks remote -v | grep -c upstream"
-      erwartet: "das Skript kennt upstream und lehnt es ab - der Remote existiert (2 Zeilen), er ist nur kein Ziel"
-    ausgangswert: "2 (fetch+push). upstream = raminsadid2021, fremdes Konto"
+      typ: gate
+      ausgefuehrt_von: generator
+      schritte: |
+        B3 - gegen die ENTSCHEIDUNGSFUNKTION, nicht gegen den Ausfuehrer:
+          zielErlaubt('upstream')         -> false    (raminsadid2021, fremdes Konto)
+          zielErlaubt('fork')             -> true
+          zielErlaubt('backup-private')   -> true
+          zielErlaubt('irgendwas')        -> false
+        Der Remote `upstream` EXISTIERT und bleibt konfiguriert - er ist nur nie ein Ziel.
+        Bewusst als Gate und nicht als Zaehler: `git remote -v` steht (noch) nicht auf der
+        Allowlist des Validators, und ein Kriterium, das der eigene Validator ueberspringt,
+        misst nichts.
+      erwartet: "vier Zusagen, davon zwei ROTE"
 
   - id: PW-02
     typ: presence
@@ -135,7 +145,7 @@ kriterien:
     kritikalitaet: P1
     aussage: "K5 ZUSTAND - keine Lock-Reste, der Baum hat sich waehrend der Messung nicht bewegt."
     pruefung:
-      befehl: "ls -1 .git/*.lock 2>/dev/null | wc -l"
+      befehl: "ls .git/ | grep '\\.lock$' | wc -l"
       erwartet: "0"
     ausgangswert: "0"
     gegenbeweis: |
