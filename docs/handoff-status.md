@@ -31664,3 +31664,75 @@ zweites, gröberes Netz unter dem feinen; kein Mangel, eher beruhigend.*
 
 **Ballbesitz: Generator** (P3, mit derselben Auflage) · **Planner** (19 Register-Posten + AUF-86 +
 `.env.testing.example`) · **Yama** (219-MB-Altdatei).
+
+---
+
+VOTUM: auftrag=BEFUNDZAEHLUNG-KORREKTUR rolle=evaluator ergebnis=KORRIGIERT commit=9e76e758 datum=2026-08-01T11:2x hinweis=eigene-Zahl-falsch
+
+## ⇒ EVALUATOR — **meine Zahl von vorhin war falsch, und ein Befund darin gab es nie** (01.08., CEST)
+
+*Yama hat gefragt, wie viele Fehler der Planner beheben muss. **Ich habe 21 gesagt und drei
+code-nahe Posten inhaltlich hervorgehoben.** Einer davon existierte nicht.*
+
+### Der Fehler
+
+**Ich zitierte PB-025: *„die Ein-Schreiber-Regel schützt eine Datei, die es nicht gibt."***
+
+```text
+gesucht (Befund):   resources/views/admin/partials/sa-ui.blade.php        -> fehlt
+wirklich:           resources/views/admin/layouts/partials/sa-ui.blade.php -> EXISTIERT
+ui-bauordnung.md Z15 nennt den RICHTIGEN Pfad — der Befund las ihn falsch.
+```
+**Der Planner hat ihn widerlegt und als eigenen Fehler eingetragen (`WIDERLEGT — mein Fehler`).**
+*Die Widerlegung habe ich nachgemessen: sie stimmt.*
+
+> **Mein Anteil daran:** *bei einer Zählfrage kann ich nicht jeden der 48 Befunde nachprüfen — aber
+> ich habe drei davon **herausgehoben und inhaltlich beschrieben**. **Wer einen Befund zitiert,
+> übernimmt ihn.*** Ich habe eine falsche Aussage weitergetragen, weil sie in einem Register stand,
+> das ich sonst selbst prüfe.
+
+### Die vier anderen Erledigungen — nachgemessen, alle vier halten
+
+```text
+PB-020  `zaehle-statische-stile.sh` im AUFTRAGSSCHEMA        0 Treffer   ✓
+PB-026  „IMMER geladen" in kern.md                            steht nur noch als ZITAT
+                                                              in der Korrektur; die Regel
+                                                              sagt „NACHRANGIG"            ✓
+PB-034  Ist-Belege                                            korrigiert                    ✓
+PB-035  „❌ 0 Dateien" in fahrplan-dashboard-versionen.md      0 Treffer in der Datei;
+                                                              die 6 Fundstellen liegen im
+                                                              Register und der Antwort      ✓
+```
+*Bei PB-026 und PB-035 hätte meine erste, grobe Messung „noch offen" gesagt — sie suchte den Text
+im ganzen Baum statt in der beanstandeten Datei. **Vierzehnter Fehlgriff, vierzehnter vor der
+Meldung bemerkt.***
+
+### Die berichtigte Zahl
+
+```text
+Register gesamt                              48
+erledigt/geschlossen/widerlegt               32      (vorher 27)
+------------------------------------------------
+offen laut Register                          16      (vorher 21)
+   ab PB-042  (Ballbesitz Yama, Takt)        -1
+   ab PB-048  (ausdrücklich Hinweis)         -1
+------------------------------------------------
+beim Planner                                 14
+   + meine zwei (AUF-86/56 px · .env.testing.example)  +2
+================================================
+SUMME BEIM PLANNER                           16      (statt 21)
+   0 × P1 · keiner blockiert einen Bau
+```
+
+**Und die code-nahen sind jetzt zwei, nicht drei:**
+```text
+PB-023  175 hp-Klassen, 0 im Styleguide -> keine visuelle Regressionsfläche
+PB-024  Insel-Palette: 42 Hexwerte, 0 Verweise auf --sa-   (nicht verdrahtet)
+PB-025  ENTFÄLLT — der Befund war falsch
+```
+
+*In derselben Stunde, in der ich die Zahl genannt habe, hat der Planner fünf Posten geschlossen.
+**Die Zahl war also schon beim Aussprechen im Fallen** — das gehört dazu, wenn man einen
+Arbeitsstand zählt statt einen Bestand.*
+
+**Ballbesitz: Planner** (16) · **Yama** (PB-042 Takt · 219-MB-Altdatei) · **Generator** (P3).
