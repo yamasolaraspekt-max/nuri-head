@@ -26,7 +26,7 @@
 
 2.1 **Jede Fach-Wahrheit existiert EINMAL.** Keine zweite Ableitungs-/Speicherlogik für denselben Sachverhalt. Anti-Vorbild: `deriveLeadStageId` (Kanon) vs. `normalizeCompanyStage` (Duplikat mit Fold-Divergenz) und die drei `lead_product_lists`-Speichern-Muster mit drei Default-Status. Neue Fach-Wahrheit → prüfen, ob sie schon existiert; wenn ja, dort andocken. Weichen-Änderung nur per Yama-Revision. *(Audit 1.4, 2.2c; CLAUDE.md „Eine Wahrheit")*
 
-2.2 **Mehr-Tabellen-Schreiben immer in `DB::transaction`.** Nur 96/387 Controller klammern heute. Jeder neue Schreibpfad über >1 Tabelle wird geklammert. Vorbild: `BuchungsEngine::festschreiben()`. *(Audit 2.2b)*
+2.2 **Mehr-Tabellen-Schreiben immer in `DB::transaction`.** Nur **75 von 406** Controller klammern heute (nachgemessen 01.08.2026: `grep -rl 'DB::transaction' app/Http/Controllers --include='*.php' | wc -l` gegen `find app/Http/Controllers -name '*.php' | wc -l`). *Der Beleg lautete bis dahin 96/387 — die Lage hat sich also **verschlechtert**, nicht verbessert: mehr Controller, weniger geklammert.* Jeder neue Schreibpfad über >1 Tabelle wird geklammert. Vorbild: `BuchungsEngine::festschreiben()`. *(Audit 2.2b)*
 
 2.3 **Neue Spalte/Beziehung: FK-Constraint + Index Pflicht.** Neue `_id`-Spalte bekommt einen echten FK (wo fachlich möglich) und einen Index. Anti-Vorbild: God-Table `lead_alternative_adds` (193 Sp., 1 FK), fehlende Indizes auf `personal_tasks.source_id/controller_id/task_id`. **SoftDelete-FK-Falle beachten:** FK schützt nicht vor soft-gelöschten Eltern → Löschpfad mitdenken. *(Audit 1D-B/C, 2.2b/d)*
 
