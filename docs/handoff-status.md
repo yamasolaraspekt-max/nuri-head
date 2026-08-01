@@ -32296,3 +32296,116 @@ Anlauf als „widerlegt" gemeldet — und einen echten Befund stillgelegt.*
 
 **Ballbesitz: Generator** (PB-010: Namensliste → Eigenschaft · PB-023: Blatt liegt) · **Planner**
 (Schwere von PB-023 erwägen).
+
+---
+
+## Generator — PB-023 umgesetzt, PB-024 blockiert und zurückgemeldet (2026-08-01)
+
+**Gebaut:** Abschnitt 9 des Styleguides trägt die Hausplaner-Insel mit **acht echten
+Klassenfamilien** (`hp-ok- hp-ep- hp-ef- hp-gz- hp-wg- hp-schiene- hp-fn- hp-mb-`), kein Nachbau
+mit `sg-`-Klassen. Dazu `tests/Feature/Styleguide/HausplanerInselTest.php`.
+
+    Tor 1  Insel-Suite   1583 / 1583
+    Tor 2  PHP-Suite      812 / 812   (2898 Zusagen; vorher 805 / 2783)
+    K-04   Familien im Styleguide   8   (verlangt >= 6)
+    Brücke 43 benutzte hp--Klassen, 0 ohne Regel — in der Quelle UND im gebauten Artefakt
+
+**Mutationsprobe vor den Zusagen: 8 Mutationen, ACHT kamen durch.** Über den Styleguide gab es
+vorher überhaupt keine Zusage. Nach den Zusagen: **8 von 8 gefangen**, Wiederherstellung
+md5-identisch. *Zwei Läufe waren nötig — Mutation 5 war beim ersten Mal wirkungslos (mein `.`
+traf das mehrbyte-Zeichen ✋ nicht) und meldete darum fälschlich „blind".*
+
+**Ein eigener Fehler, in der Gegenprobe gefangen:** meine erste Fassung prüfte den Verweis auf die
+Stilschicht mit `assertSee('hausplaner/hausplaner.css')` — und blieb grün, nachdem der `<link>`
+entfernt war, weil die Überschrift von Abschnitt 9 denselben Pfad als **sichtbaren Text** nennt.
+Die Zusage traf ein Muster, nicht die Sache. Jetzt wird das `<link>`-Element geprüft.
+
+---
+
+### ⚠ BEFUND 1 gegen das Blatt — K-01 und K-05 können nicht beide gelten
+
+K-01 verlangt **>= 12** `var(--sa-` in `hausplaner.css`. K-05 verlangt *„Nichts an der Insel sieht
+anders aus."* **Gemessen sind von zwölf zuordenbaren Paaren elf verschieden:**
+
+    accent      #12807d  ->  --sa-accent        #93c21c    ANDERS  (teal -> gruen)
+    accentSoft  #e6f2f1  ->  --sa-accent-light  #f4fae7    ANDERS
+    accentInk   #0c5f5d  ->  --sa-accent-ink    #ffffff    ANDERS
+    ok          #1a9e5f  ->  --sa-success       #10b981    ANDERS
+    okSoft      #e6f5ec  ->  --sa-success-bg    #ecfdf5    ANDERS
+    warn        #d98218  ->  --sa-warning       #f59e0b    ANDERS
+    warnSoft    #fdf2e3  ->  --sa-warning-bg    #fff7ed    ANDERS
+    warnInk     #9c5c0d  ->  --sa-warning-ink   #b45309    ANDERS
+    err         #d24b3e  ->  --sa-danger        #ef4444    ANDERS
+    errSoft     #fef2f2  ->  --sa-danger-bg     #fef2f2    GLEICH   <- das einzige
+    info        #2f6df0  ->  --sa-info          #6b7280    ANDERS  (blau -> grau)
+    infoSoft    #e9f0fd  ->  --sa-info-bg       #f3f4f6    ANDERS
+
+**Und die Verweise würden wirklich greifen:** die `--sa-`-Tokens stehen im `:root` der Shell
+(`partials/sa-ui.blade.php`), das die Studio-Seite über `admin.layouts.app` einbindet. Ein
+`var(--sa-accent)` in der Insel färbte die Aktionsfarbe von Teal auf Grün und die Info-Farbe von
+Blau auf Grau. **Zwölf Verweise sind also nicht zu haben, ohne dass die Insel anders aussieht.**
+
+*K-05 fiele das übrigens nicht auf:* sein Befehl ist `--filter=stilschicht`, und diese Zusagen
+prüfen Struktur (keine Rohfarbe, kein `@media`), nicht Farbwerte. **Die Aussage wäre verletzt und
+die Prüfung bliebe grün.**
+
+**Was der Planner entscheiden muss:** soll die Insel die CRM-Farbwelt übernehmen (dann ist K-05 zu
+streichen und es braucht einen Vorher/Nachher-Bildvergleich), oder bleibt die Insel bei ihrer
+Farbwelt (dann ist K-01 zu streichen und PB-024 wird ein reiner Benennungs-Posten)? **Das ist eine
+Gestaltungsentscheidung, keine Bau-Entscheidung — ich habe sie nicht getroffen.**
+
+---
+
+### ⚠ BEFUND 2 gegen das Blatt — der Ausgangswert von K-03 ist 1, nicht 0
+
+    K-01 var(--sa- in hausplaner.css : 0   (Blatt 0)   ok
+    K-02 var(-- in studioDaten.ts    : 0   (Blatt 0)   ok
+    K-03 DOM in tokenVariablen.ts    : 1   (Blatt 0)   ABWEICHUNG
+    K-04 hp- im Styleguide           : 0   (Blatt 0)   ok
+
+Gemessen an HEAD `7e2bf407`. Der eine Treffer ist echter Code, kein Kommentar:
+
+    tokenVariablen.ts:39
+      const el = ziel ?? (typeof document !== 'undefined' ? document.documentElement : null);
+
+**Die Absicht von K-03 ist erfüllt, sein Befehl misst etwas anderes.** Die Datei trennt sauber:
+`tokenVariablen()` rechnet und ist ohne Fenster prüfbar, `setzeTokenVariablen()` setzt und fasst
+`document` an — abgesichert mit `typeof document !== 'undefined'`. Eine Zusage „0 Treffer" wäre
+ab der ersten Messung rot, ohne dass etwas kaputt ist. **Der Befehl gehört auf die reine Funktion
+eingegrenzt, nicht die Datei auf null Treffer.**
+
+---
+
+### ⚠ BEFUND 3 — PB-023 liefert Struktur, nicht Farbe, und das liegt nicht am Blatt
+
+**Im Browser gemessen** (Chrome 1440 px, `setCacheEnabled(false)`, angemeldet):
+
+    Insel-Stilschicht geladen      JA
+    Familien im Baum               8
+    Sperre bleibt in ihrer Buehne  true  (248 px hoch, Seite 1000 px)
+    .hp-ok-pille--aktuell          rgba(0, 0, 0, 0)     <- durchsichtig
+    .hp-ep-befund                  rgba(0, 0, 0, 0)     <- durchsichtig
+    --hp-ok-soft / --hp-err-soft   NICHT DEFINIERT
+
+**Ursache im Code:** der `:root`-Block von `hausplaner.css` führt genau eine Zeile
+(`--hp-stilschicht: 1`). Alle Farbtokens setzt `setzeTokenVariablen()` zur **Laufzeit** — und
+`main.tsx:92` ruft sie erst, nachdem `#hausplaner-root` **und** `#hausplaner-scene` gefunden
+wurden. Auf dem Styleguide läuft das Bündel nicht, also löst jedes `var(--hp-…)` ins Leere auf.
+
+**Nicht behoben, und zwar bewusst.** Die Tokens im Blade nachzutragen wäre eine zweite Wahrheit
+neben `studioDaten.ts` — genau das, was K-02 verbietet. Der Weg ist ein Bauschritt, der die Tokens
+aus der einen Quelle erzeugt: **das ist PB-024-N2.**
+
+**Stattdessen steht ein ehrlicher Vermerk auf der Seite** und eine Zusage, die sich selbst
+retiriert: solange die Stilschicht die Tokens nicht führt, muss der Vermerk da sein — führt sie
+sie, muss er **weg**. Beide Richtungen sind gegengeprüft (Token eingesetzt ⇒ rot mit
+*„behauptet einen Mangel, den es nicht mehr gibt"*).
+
+*Ohne diesen Vermerk beglaubigte die Referenzfläche einen falschen Zustand: Maße und Struktur
+stimmen, die Farben nicht — und ein Screenshot-Diff hielte beides für abgesichert.*
+
+---
+
+**Ballbesitz: Planner** (Befund 1: Farbwelt-Entscheidung · Befund 2: K-03 neu fassen · Befund 3:
+PB-024-N2 einplanen) · **Generator** (PB-010: Namensliste → Eigenschaft, als Nächstes).
+**Nicht committet — wartet auf Yamas Wort.**
