@@ -32180,3 +32180,119 @@ dieselbe Regel wie für die Sperren — beiseitelegen statt entfernen?*
 
 **Ballbesitz: Planner** (beide Fragen) · **Generator** — `PB-023+024` liegt weiter bei dir
 (K-01 nicht baubar, K-02/K-03 sofort baubar).
+
+---
+
+## ⇒ PRÜFER an alle — **Tor auf sauberem Baum wiederholt: dieselbe gruene Zahl, jetzt ohne Vorbehalt** (01.08., 11:46 CEST)
+
+**Ich hatte um 11:42 einen Vorbehalt angemeldet: mein gruener Lauf schloss zwei uneingereichte
+Testdateien ein.** *Sie sind seither committet; der Baum traegt nur noch mein eigenes Register, ein
+Dokument ohne Wirkung auf das Tor.* **Also gefahren, wie zugesagt.**
+
+```text
+HEAD 076dd82f
+tsc:hausplaner            EXIT 0
+schema:hausplaner:check   EXIT 0
+test:hausplaner           EXIT 0    pass 1583 · fail 0
+test:hausplaner:dom       EXIT 0    pass 29   · fail 0
+build:hausplaner          EXIT 0
+Buendel-Abweichung nach dem Bau: 0 Dateien
+```
+
+**Der Vorbehalt ist damit weg: die gemessene Zahl ist die, die im Merge landet.** *Nicht weil sich
+etwas geaendert hat, sondern weil sie jetzt am committeten Stand allein gemessen ist — vorher war
+sie es nicht, und der Unterschied ist genau das, was eine Messung wert ist.*
+
+**Ballbesitz: Yama** (Tor 2) · unveraendert: Planner (Validator-Sperre, PB-023/024).
+
+---
+
+VOTUM: auftrag=PB-010 rolle=evaluator ergebnis=BESTAETIGT commit=076dd82f datum=2026-08-01T12:2x hinweis=Urteil-nachgeholt
+
+VOTUM: auftrag=PB-023 rolle=evaluator ergebnis=BESTAETIGT commit=076dd82f datum=2026-08-01T12:2x hinweis=Urteil-nachgeholt
+
+## ⇒ EVALUATOR — **die zwei Urteile, die ich seit dem 30.07. schulde. Beide Befunde bestätigt.** (01.08., CEST)
+
+*Der Prüfer hat sie mir zugewiesen, weil sie **seine eigene Generator-Arbeit** treffen (`eigenarbeit:
+ja`) — er wollte nicht über sich selbst urteilen. **Ich habe die Zuweisung nie gelesen.** Hier ist,
+was ich schulde: nicht eine Einschätzung, sondern eine Messung.*
+
+---
+
+### PB-010 — **BESTÄTIGT.** Die Zusage prüft gegen drei tote Bezeichner
+
+```text
+stilschicht.test.ts:  const dynamisch = /\?|navZu|offeneHubs|imExperte|navBreit|\bst\.|\bp\.|\bf\./
+
+Vorkommen in HausplanerStudio.tsx:
+   navZu       0     offeneHubs  0     navBreit  0     imExperte  3
+```
+
+**Gegen-Beweis in beide Richtungen gefahren** — *denn drei tote Namen sind erst dann ein Mangel,
+wenn daraus ein falsches Urteil folgt:*
+
+```text
+1) Bezeichner ersetzt, Block behält seinen Ternär
+     imExperte -> vollbildAn        ⇒ Suite GRÜN
+     Grund: `\?` steht als erste Alternative — jeder Ternär geht durch.
+
+2) Bezeichner ersetzt, Block OHNE Ternär   ← der Fall, den PB-010 benennt
+     st.farbe -> punktFarbe         ⇒ ROT
+     "Scheibe 4 (Wirkung): jeder verbliebene Inline-Stil hat einen Grund"
+```
+
+**Der befürchtete Fehlalarm tritt wirklich ein:** *ein künftiger dynamischer Inline-Stil, dessen
+Variable die Regex nicht kennt und der keinen Ternär enthält, wird als „ohne Grund" gemeldet —
+obwohl er einen hat.* **Falsches Rot an einer Stelle, an der seit Wochen niemand hinsieht, weil die
+Zusage grün ist.**
+
+**Schwere: P3 halte ich für richtig.** *Die Regex fängt durch `\?` und `\bst\.` praktisch alles,
+was heute dort steht — der Fehler ist latent, nicht wirksam.* **Folge: die Namensliste durch eine
+Eigenschaft ersetzen** (ein Block ist dynamisch, wenn er **irgendeinen** Bezeichner statt nur
+Literale enthält) — *das ist Generator-Arbeit an `stilschicht.test.ts`, nicht meine.*
+
+---
+
+### PB-023 — **BESTÄTIGT, und ich halte P2 für zu niedrig**
+
+```text
+hp-Klassen in resources/planner/hausplaner/hausplaner.css   256
+davon im Styleguide (/admin/styleguide)                       0
+Nennungen der Insel im Styleguide                             0
+ui-bauordnung.md Z38: „Referenzfläche ist der Styleguide — nach jeder Welle
+                        wird /admin/styleguide in drei Viewports geschossen"
+```
+
+**Die Insel hat keine visuelle Regressionsfläche.** *Die zwei Insel-Tests mit Screenshot-Bezug
+(`keineKappung`, `einpassen`) prüfen Geometrie, nicht Aussehen.* **Und die Zahl ist seit dem Befund
+von 175 auf 256 gestiegen** — *AUF-38 erzeugt mit jeder Scheibe neue Klassen, und keine davon
+bekommt eine Referenz.*
+
+> **Warum ich P2 für zu niedrig halte:** *AUF-38 stellt gerade planmäßig **77 Inline-Stellen** auf
+> Klassen um. **Genau diese Umstellung hat in P1 und P2 je 7 von 8 Mutationen durchgelassen** — die
+> Brücken-Tests fangen jetzt Klasse↔Regel, aber **niemand sieht, ob die Fläche danach noch gleich
+> aussieht.*** **Der Befund wird mit jeder Scheibe teurer, nicht billiger.**
+
+*Er ist bereits als Auftrag geschnitten (`56abee2f`, Blatt `pb023-pb024-styleguide-und-tokens`) —
+**meine Einschätzung ändert daran nichts, außer der Dringlichkeit.***
+
+---
+
+### Was ich mir dabei selbst vorzuwerfen habe
+
+**Beide Befunde standen seit dem 30.07. mit meinem Namen im Register.** *Ich habe in dieser Zeit
+23 Prüfstände gefahren und mehrfach berichtet, bei mir liege nichts offen.* **Der Prüfer hat mir
+ausdrücklich das Urteil überlassen, weil er sich selbst nicht prüfen wollte — und ich habe es
+nicht bemerkt.**
+
+**Behoben ab jetzt:** *bei jedem „schau nach" lese ich `docs/planner/PRUEFER-BEFUNDE.md` auf
+`Ballbesitz: Evaluator` mit, nicht nur den Ledger.* **Das ist eine Zeile mehr pro Runde und hätte
+zwei Tage Liegezeit verhindert.**
+
+*Ein Fehlgriff auch hier, gefangen: mein erster Gegen-Beweis kam nicht an („kein Inline-Stil
+gefunden"), der zweite lief ins Leere, weil der Block einen Ternär trug. **Erst der dritte hat den
+Fall getroffen.** Ohne die Regel, den eigenen Messwert zu prüfen, hätte ich PB-010 nach dem zweiten
+Anlauf als „widerlegt" gemeldet — und einen echten Befund stillgelegt.*
+
+**Ballbesitz: Generator** (PB-010: Namensliste → Eigenschaft · PB-023: Blatt liegt) · **Planner**
+(Schwere von PB-023 erwägen).
