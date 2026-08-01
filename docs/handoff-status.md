@@ -32409,3 +32409,73 @@ stimmen, die Farben nicht — und ein Screenshot-Diff hielte beides für abgesic
 **Ballbesitz: Planner** (Befund 1: Farbwelt-Entscheidung · Befund 2: K-03 neu fassen · Befund 3:
 PB-024-N2 einplanen) · **Generator** (PB-010: Namensliste → Eigenschaft, als Nächstes).
 **Nicht committet — wartet auf Yamas Wort.**
+
+---
+
+VOTUM: auftrag=zaehle.mjs rolle=evaluator ergebnis=GRUEN commit=8a0ebcfe datum=2026-08-01T12:4x hinweis=trifft-meine-Fehlerklasse
+
+## ⇒ EVALUATOR — `scripts/zaehle.mjs`: **GRÜN.** Und es ist die Barriere gegen meinen eigenen häufigsten Fehler (01.08., CEST)
+
+*Vierundzwanzigster Prüfstand. **Ein Werkzeug gegen F-09 („Text wird gemessen, nicht Absicht") und
+F-11 („Zeichenkette ohne Wortgrenze").** Das ist wörtlich die Klasse, die ich heute sechzehnmal
+getroffen habe.*
+
+```text
+node --test scripts/__tests__/zaehle.test.mjs   9 / 0
+```
+
+### Gegenprobe 1 — zählt es Kommentare mit? *(mein PB-026-Fehlurteil)*
+
+```text
+Datei:  // der frühere Satz "IMMER geladen" ist fort
+
+Standard (Kommentare aus)     -> 0
+--mit-kommentaren             -> 1
+```
+**Genau der Fall, in dem ich heute Vormittag „noch offen" gemeldet hätte.** *Ich zählte das **Zitat
+in der Korrektur** als Rückstand. Das Werkzeug zählt es standardmäßig nicht.*
+
+### Gegenprobe 2 — Wortgrenze *(mein Klassen-gegen-ID-Fehler)*
+
+```text
+Datei:  const PANEL_ID = "hp-panel";   und   <div className="hp-panel-kopf">
+
+ohne --wort  -> 2        <- so habe ich gezählt
+mit  --wort  -> 1        <- so ist es richtig
+```
+**Das ist mein Fehlgriff aus der AUF-38-P1-Abnahme, mechanisch verhindert.** *Damals hielt ich
+`hp-eigenschaften-panel` (eine DOM-ID) für eine tote Stilklasse und war einen Satz davon entfernt,
+es als Befund zu melden.*
+
+### Was ich am Werkzeug nicht bestätigen kann
+
+```text
+grep "process.exit"  ->  eine Stelle, exit 2 (Aufruffehler)
+kein Sollwert-Vergleich, kein exit 1 bei Abweichung
+```
+**Es ist ein Zähler, kein Gate.** *Der Commit nennt es „Barriere" — es **liefert** die richtige Zahl,
+aber es **sperrt** nichts. Wer es nicht aufruft, zählt weiter falsch.* **Kein Mangel am Bau — die
+Blätter rufen es in ihren `population_command` auf, und dort wirkt es.** *Ich benenne es, damit
+„Barriere" nicht mit „Gate" verwechselt wird: F-09 ist entschärft, wo gemessen wird, nicht überall.*
+
+---
+
+### Die Konsequenz, die ich selbst ziehe
+
+**Punkt 4 meiner Inventur von 12:0x lautete: „ich greife zum bequemen Indikator statt zum
+treffenden" — sechzehn Fälle an zwei Tagen.** *Ich habe dagegen Regeln notiert; **eine Regel gegen
+eine Gewohnheit ist schwach**.*
+
+```text
+Ab jetzt zähle ich in Befunden mit  node scripts/zaehle.mjs <datei> <muster> [--wort]
+statt mit  grep -c  —  und nenne den Aufruf im Votum.
+```
+**Das ersetzt zwei meiner Fehlerquellen durch ein Werkzeug, das jemand anders geprüft hat.**
+*Probe an einem echten Fall von heute: `hp-ep-` in der Insel-CSS = **25** Regeln — mit derselben
+Zählweise, die ich vorhin per `grep -oE` von Hand nachbauen musste.*
+
+**Von meinen vier offenen Posten schließt das den vierten.** *Offen bleiben: die flüchtigen
+Screenshots (2) und die fünf sperrenden Blätter (3, Ballbesitz Planner).*
+
+**Ballbesitz: Generator** (Z-02/Z-05/Z-06 geschnitten · PB-023-Blatt im Bau — `styleguide/index.blade.php`
+und `HausplanerInselTest.php` liegen im Baum) · **Planner** (Validator Zeile 374).
