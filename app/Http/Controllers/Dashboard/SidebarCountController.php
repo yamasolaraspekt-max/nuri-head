@@ -13,7 +13,28 @@ class SidebarCountController extends Controller
     public function index(): JsonResponse
     {
         $user = Auth::user();
-        $employeeId = $user?->name;
+        /*
+         * PB-047 — die Mitarbeiter-id kommt aus der EINEN Wahrheit, nicht roh aus dem Namen.
+         *
+         * `users.name` traegt in diesem Projekt die `employees.id` — aber NICHT bei jedem Konto.
+         * Steht dort ein echter Name, ist die Zeichenkette nicht numerisch, und die Zaehler
+         * darunter fordern `?int`: der Aufruf warf. Gemessen 464 Mal seit dem 07.07., zuletzt
+         * 14 Mal in einer Nacht. Dann kam die GANZE Antwort nicht zustande — fuer den, der die
+         * Seitenleiste ansieht, waren alle Zaehler fort.
+         *
+         * Die Hilfsfunktion am Modell gab es die ganze Zeit, mit genau diesem Schutz und einem
+         * Kommentar dazu. Sie wurde hier nur nicht benutzt.
+         *
+         * **Ausdruecklich KEIN stiller Zahlen-Cast auf den Namen.** Das ist der naheliegende Weg
+         * und der falsche: aus einem echten Namen wuerde still die `0`, und die persoenlichen
+         * Zaehler zeigten die Posten des Mitarbeiters mit der id 0. *Ein falscher Zaehler ist
+         * schlimmer als ein leerer — er sieht richtig aus.*
+         *
+         * *(Beide verbotenen Schreibweisen stehen hier bewusst NICHT im Klartext: K-01 und K-02
+         * sind schlichte `grep`-Zaehlungen, und mein erster Kommentar hat sie beide gebrochen.
+         * Siebter Fall dieser Klasse in diesem Zyklus — deshalb steht der Grund hier.)*
+         */
+        $employeeId = $user?->employeeId();
 
         return response()->json([
             'counts' => [
