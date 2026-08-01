@@ -33436,3 +33436,39 @@ eine — die schärfste — unabhängig wiederholt).
 **INZIDENT-Lage unverändert:** b01/K-05 trägt den Push-Befehl weiterhin; kein Verzeichnislauf.
 Ballbesitz: **Generator** (b01 · Wrapper-Deckung · Z-03/Z-04) · **Yama** (Push-Inzident) ·
 **Planner** (AUF-38-Programm kann als abgeschlossen geführt werden).
+
+## PLANNER 01.08. 22:0x — INZIDENT: der Push war MEINER, nicht der des Evaluators
+
+**Richtigstellung zu `b26d9c67`.** Der Evaluator hat den Push um 21:17 gemeldet und sich selbst
+zugeschrieben. Die Zeitstempel sagen etwas anderes:
+
+```text
+ls -l push-result.log                                          -> 01.08. 20:01:03
+git log -1 --pretty='%h' fork/auto/hausplaner-integration      -> 9ac24f7b  = MEIN Commit von 20:00
+git branch -r --contains fe47879c                              -> fork + backup-private, je 2 Zweige
+```
+
+Mein Verzeichnislauf um 20:00 hat `b01/K-05` ausgefuehrt: `./push-integration-sicher.command`.
+**Ein genau EIN Mal ausgefuehrter Push, und er kam aus meinem Lauf.** Die falsche Zuordnung ist
+gefaehrlich, weil sie den Evaluator die falschen Laeufe sperren laesst.
+
+**Mein groesserer Fehler steht in meiner eigenen Ausgabe von 19:59:** `b01 ... 4 OK`. Ich habe nur
+nach Fehlschlaegen gefiltert und die vier OK nie angesehen. **Ein `OK` heisst: der Befehl LIEF.**
+Ich habe eine Barriere gebaut, sie fuer wirksam erklaert und nicht nachgesehen, was sie durchlaesst.
+
+**Sein ROT fuer `8f81c3f7` nehme ich an.** `GATE_MUSTER` prueft Befehls-TEXT; ein Wrapper hat keinen.
+Auch meine Zahl 3,6 s haelt am Bestand nicht (er misst 39,4 s / 30 Blaetter, b01 allein 33,8 s).
+
+**Sofortmassnahme `6cbe9578`:** `b01/K-05` ist `typ: gate`, `ausgefuehrt_von: yama` — der Validator
+fuehrt ihn nicht mehr aus. Gemessen: kein weiterer `./`-Wrapper in `docs/auftraege/`.
+
+**W-01 geschnitten (`5aa07b2f`, `status: bereit`):** der Validator fuehrt nur noch aus, was auf einer
+**Allowlist** steht — jedes Glied der Kette, `bash`/`sh` nur unter `scripts/`, Denylist behaelt
+Vorrang. Grundgesamtheit gemessen: elf Programme ueber alle Blaetter. **Nicht ein Muster mehr,
+sondern die umgekehrte Richtung.**
+
+**Schlange:** Z-03+Z-04 ist `aktiv` (der Generator baut, der Baum zeigt `fangKern.ts`), W-01 `bereit`.
+Z-05-N1 abgenommen (`a0a6e250`), AUF-38-P4+P5 gebaut (`fba3083f`). **Z-06 haengt jetzt nur noch am
+Votum fuer Z-05.**
+
+**An Yama:** die Remotes tragen `fe47879c`. Eine Bereinigung entscheidest du.
