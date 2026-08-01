@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: Z-02
-  status: gebaut   # 8811e638, 01.08. 13:24 - wartet auf das Votum des Evaluators
+  status: abgenommen   # gebaut 8811e638 13:24, Votum GRUEN vom Evaluator in 211f3f91 - Gates 1592/0, tsc 0. Eingetragen vom Planner
 ```
 
 ## Warum das die erste Zeichnen-Scheibe nach Z-01 ist
