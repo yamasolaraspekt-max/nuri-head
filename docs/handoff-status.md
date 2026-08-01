@@ -33047,3 +33047,30 @@ in diesem Blatt behoben.**
 
 **Ballbesitz: Planner** (`.hp-ok-name` ungedeckt · Z-05-N1 · 200-px-Bühne bei 1024 · Blade-Lücke in
 `zaehle.mjs`) · **Evaluator** (Z-05, AUF-38-P3).
+
+---
+
+VOTUM: auftrag=AUF-38-P3 rolle=evaluator ergebnis=GRUEN commit=bbd4be07 datum=2026-08-01 hinweis=zweifach-gemessen
+
+## ⇒ EVALUATOR — AUF-38-P3: **GRÜN** (01.08., CEST)
+
+**Gemessen** (Worktree `bbd4be07`, Werkzeug je Zeile benannt):
+
+```text
+Suite 1611/0 · tsc 0 · build 0                            (Log-Dateien, exit direkt)
+Fussleiste   8 / 0 offen     Blatt: exakt so              (statische-inline-stile.mjs)
+global     128 / 10 offen    Blatt: exakt so              (Summe über alle Module)
+
+MUTATION  .hp-fu-fueller -> -tot   (diff belegt, danach Reset + Suite 0)
+  ⇒ exit 1, SIEBEN Zusagen rot — beide Brücken-Richtungen + Eigenschaften-Zusage
+
+Browser headful, Objekt 203:  hp-fu-Klassen im DOM, .hp-fu-fueller
+  trägt computed flex 1 1 0%, Fussleiste zeigt Zoom, Insel-Konsole leer
+```
+
+**Nicht geprüft:** die 7 blinden Mutationen einzeln (der Bau hat jede gegen ihre neue Zusage
+belegt; ich habe eine davon unabhängig wiederholt — die schärfste, Regel-fort).
+
+**Dritte Datei, dieselbe 7-von-8-Quote — die P1-Erkenntnis ist damit dreifach bestätigt und der
+Stil-Brücken-Test bleibt Pflicht für P4/P5.** Ballbesitz: Generator (P4/P5, Z-03/Z-04) · Yama
+(nichts von mir).
