@@ -32898,3 +32898,95 @@ geschnitten**, mit `toolRegistry.ts`, der Themen-Bindung und dem Katalog im Scop
 
 **Ballbesitz: Planner** (Z-05-N1 schneiden · 200-px-Bühne bei 1024 · Blade-Lücke in `zaehle.mjs` ·
 die drei Befunde aus `8d5008f1`) · **Evaluator** (Z-02, Z-05).
+
+---
+
+VOTUM: auftrag=PB-023-Umsetzung rolle=evaluator ergebnis=GRUEN commit=8d5008f1 datum=2026-08-01T14:0x hinweis=mein-Befund-geschlossen
+
+VOTUM: auftrag=Z-02 rolle=evaluator ergebnis=GRUEN commit=8811e638 datum=2026-08-01T14:0x hinweis=zweite-Wahrheit-fort
+
+VOTUM: auftrag=F-08-Barriere rolle=evaluator ergebnis=GRUEN commit=0dacf902 datum=2026-08-01T14:0x hinweis=sperrt-belegt
+
+## ⇒ EVALUATOR — **auf „bist du fertig": nein, drei waren offen. Jetzt sind sie es nicht mehr.** (01.08., CEST)
+
+*Ich habe die Frage nicht beantwortet, sondern gemessen — **drei Produktivcommits waren
+unquittiert**, darunter die Umsetzung meines eigenen Befundes.*
+
+---
+
+### PB-023 (`8d5008f1`) — **mein Befund von 12:2x ist geschlossen**
+
+*Ich hatte bestätigt: **256 hp-Klassen, 0 im Styleguide, keine visuelle Regressionsfläche** — und
+P2 für zu niedrig gehalten, weil AUF-38 gerade 77 Stellen umstellt.*
+
+```text
+hp- im Styleguide      0  ->  88
+acht Klassenfamilien:  hp-ok- 10 · hp-ep- 10 · hp-ef- 14 · hp-gz- 9
+                       hp-wg- 11 · hp-schiene- 5 · hp-fn- 4 · hp-mb- 7
+PHP-Suite              812 / 0, 2898 Zusagen   (vorher 805 / 2783)
+```
+
+**Gegenprobe — trägt die Referenzfläche wirklich?**
+```text
+MUTATION: Regel .hp-mb-flaeche aus der Stilschicht entfernt
+⇒ FAILURES! Tests: 7, Assertions: 78, Failures: 1
+```
+**Die Insel liegt jetzt auf der Referenzfläche, und die Fläche merkt es, wenn eine Klasse
+verschwindet.** *Und der gewählte Weg ist der richtige: **dieselben Klassennamen, keine
+`sg--`-Kopie** — eine Kopie altert getrennt vom Original, und der Screenshot-Diff beglaubigt dann
+eine Übereinstimmung, die es nicht mehr gibt.*
+
+### Z-02 (`8811e638`) — die zweite Fang-Wahrheit ist fort
+
+```text
+Gates                        1592 / 0 · tsc 0
+"150" mit Fang-Bezug in HausplanerApp.tsx      keine Fundstelle
+toleranzAusZoom(zoom) an der Aufrufstelle      HausplanerApp.tsx:638
+fangKern benutzt von                           HausplanerApp.tsx · tools/werkzeugEnde.ts
+```
+**Der Kern war gebaut und wurde von nichts benutzt — jetzt hängt die Toleranz am Zoom, und die
+feste 150-mm-Wahrheit daneben gibt es nicht mehr.** *Eine Wahrheit statt zweier, belegt.*
+
+### F-08-Barriere (`0dacf902`) — sperrt wirklich
+
+```text
+Zusagen 35 / 0   (vorher 31)
+ein einzelnes baubares Blatt geprüft  ->  exit 1
+```
+**Die Klasse, die der Planner nach eigener Aussage „heute Mittag selbst ausgelöst" hat, ist jetzt
+mechanisch gesperrt statt beschrieben.**
+
+---
+
+### Ein Fehlgriff, und diesmal an meinem eigenen neuen Werkzeug
+
+```text
+node scripts/zaehle.mjs …/hausplaner.css "^.hp-"   ->  0
+grep -cE "^\.hp-" …/hausplaner.css                 ->  256
+```
+**Ich habe `zaehle.mjs` einen Regex-Anker gegeben — es sucht Zeichenketten.** *Das Werkzeug hat
+korrekt geantwortet; der Fehler war meiner.* **Neunzehnter Fehlgriff — und der erste bei der
+Benutzung genau des Werkzeugs, das ich mir vor zwei Stunden zur Abhilfe verordnet habe.**
+
+> *Die Lehre ist nicht „das Werkzeug taugt nicht", sondern: **ein Werkzeug ersetzt keine
+> Vorstellung davon, was es tut.** Für Regex bleibt `grep` richtig, für Zeichenketten mit
+> Kommentar-/Wortgrenzen-Frage `zaehle.mjs`. Ich nenne ab jetzt im Votum, welches von beiden ich
+> benutzt habe und warum.*
+
+---
+
+## Antwort auf die Frage
+
+**Jetzt fertig — gemessen, nicht behauptet:**
+```text
+Produktivcommits der letzten Runde      6
+davon quittiert                          6
+offene Befunde bei mir                   0
+offene Zuweisungen im Prüfer-Register    0   (alle drei Stellen geprüft)
+```
+**Von meinen eigenen vier Inventurposten sind vier geschlossen, der Nachtrag (`zaehle.mjs`-Löcher)
+ist behoben.** *Was bei mir liegt, ist nichts — was ich gemeldet habe, liegt bei Generator und
+Planner.*
+
+**Ballbesitz: Generator** (Z-05/Z-06 geschnitten) · **Planner** (Meldungstext im Validator, P3) ·
+**Yama** (nichts von mir).
