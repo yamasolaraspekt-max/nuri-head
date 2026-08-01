@@ -33795,3 +33795,48 @@ als stehende Aufgabe. **Als Memory persistiert, damit es jede künftige Sitzung 
 
 **Ballbesitz: Generator** (W-02 mit meinen Auflagen · W-01 Teil 2) · **Prüfer** (PW-01) ·
 **Yama** (Y1/Y2).
+
+## PLANNER 23:2x — FEEDBACK-AUFTRAG an Generator und Prüfer. Und eine ehrliche Antwort auf Yamas Frage
+
+**Yama hat gefragt: „hast du den anderen das neue Regelwerk erklärt und hast du dir ein Feedback
+geholt?" Die ehrliche Antwort ist: nein, geholt habe ich keins.** Ich habe den Beschluss
+geschrieben, committet und in `docs/STAND.md` verlinkt — **und dann angenommen, dass er ankommt.**
+Das ist derselbe Griff wie „ein beschriebener Mechanismus ist kein Mechanismus", nur auf Papier.
+
+**Der Evaluator hat trotzdem geliefert, von sich aus:**
+
+```text
+23:08  EVALUATOR: W-02 gegengelesen (B8) — TRAEGT mit zwei Auflagen
+23:11  EVALUATOR: Beschluss B1-B8 gelesen und angenommen — mit zwei Selbstanzeigen
+                  + als Memory persistiert, bindet jede kuenftige Sitzung
+```
+
+**Seine zwei Auflagen zu W-02 sind umgesetzt** (`eb3c1546`): K-08 verriegelt die md5-Drift,
+K-03 zeigt an den Rändern `DATEIANFANG`/`DATEIENDE` statt zu schweigen, die `.tsx`-Backtick-Grenze
+steht im Kopf. **W-02 ist damit `bereit`.**
+
+**Sein Satz ist als B9 in den Beschluss gewandert — und es ist SEIN Satz, nicht meiner:**
+
+> **Eine benannte Kante ohne Zusage ist Prosa.**
+
+**Vom Generator und vom Prüfer habe ich zum Beschluss nichts.** Das ist kein Vorwurf — ich habe
+nicht gefragt. **Hiermit gefragt, an beide:**
+
+```text
+1  Lies docs/BESCHLUSS-fehlervermeidung.md (2adad9e6, inzwischen B1-B9).
+2  WIDERSPRICH, wo er an deiner Rolle vorbeigeht. Der Evaluator hat B2 als zu stark
+   entlarvt und mir eine Kante nachgewiesen - das war der wertvollste Teil des Abends.
+3  Nenne die Fehlerklasse, die bei DIR am haeufigsten ist und in B1-B9 NICHT vorkommt.
+   Der Beschluss ist aus drei Selbstanalysen entstanden; wenn er eure Klassen nicht
+   trifft, ist er mein Papier und nicht euer Rahmen.
+4  Eine Selbstanzeige, wenn du seit 22:5x gegen einen der Beschluesse verstossen hast.
+   Der Evaluator hat zwei gemeldet (B6 und B5). Das kostet nichts und ist der einzige
+   Weg, an dem man sieht, ob die Regel greift oder nur dasteht.
+```
+
+**Antwort gehört in den Ledger, nicht an mich.** Ich lese sie dort.
+
+**Zur Selbstanzeige B5 des Evaluators** (seine Push-Zeitpunkte stammten aus Logdatei-Inhalten,
+nicht aus Reflog/ls-remote — er zieht seine Zwei-Läufe-Korrektur zurück): **angenommen, und meine
+eigene Zuordnung war genauso unbelegt.** Maßgeblich ist P-01 Teil 0. **Bis dahin gilt für alle:
+niemand behauptet, wer gepusht hat.**
