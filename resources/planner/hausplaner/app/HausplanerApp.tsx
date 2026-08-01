@@ -55,6 +55,9 @@ import { type PanelTabId } from './dashboard/panelTabs';
 import { EigenschaftenPanel } from './rahmen/EigenschaftenPanel';
 // AUF-48 Scheibe 4e: Statusleiste, Befehlspalette, Engine-Flaeche.
 import { FussUndUeberlagerungen } from './rahmen/FussUndUeberlagerungen';
+// AUF-91: die ehrliche Sperre unter 1024 px. Sie liest `istSchmal` — den Schalter, den es
+// seit AUF-83-T5 gibt — und haelt selbst keinen Zustand.
+import { MindestbreiteHinweis } from './rahmen/MindestbreiteHinweis';
 import { useEscapeEbene } from './dashboard/escapeStapel';
 import { ladeSchienen, speichereSchienen, SCHIENEN_STANDARD, type SchienenSeite, type SchienenZustand } from './state/schienenSpeicher';
 // AUF-48 Scheibe 1: die sieben reinen Funktionen wohnen jetzt daneben — unveraendert, nur umgezogen.
@@ -1129,6 +1132,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           `rahmen/FussUndUeberlagerungen.tsx`. 124 Zeilen, zeichengleich entnommen.
           **Der Zustand der Palette bleibt HIER** (K-02), und der Escape-Weg ebenfalls: er haengt
           am Escape-Stapel weiter oben, nicht am Markup. */}
+      {/* AUF-91: liegt UEBER allem und erscheint nur unter 1024 px. Darueber rendert sie
+          `null` — kein zusaetzliches Element im Baum, nicht einmal ein verstecktes. */}
+      <MindestbreiteHinweis sichtbar={istSchmal} />
       <FussUndUeberlagerungen
         cursor={cursor}
         zoom={zoom}

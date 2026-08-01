@@ -588,3 +588,16 @@
    ausserhalb dieses Auftrags (Ausschluss: `style={bezeichner}`, eigenes Blatt AUF-38-P3).
    Eine Klasse ohne Nutzer waere genau der Posten, der auf nichts zeigt. */
 .hp-ep-fusskasten { margin-top: 12px; padding: 10px; background: var(--hp-bg); border: 1px solid var(--hp-hair); border-radius: 8px; font-size: 11.5px; }
+
+/* ══════════════════════════════════════════════════════════════════════════════════════════════
+ * AUF-91 — die Hinweisflaeche unter 1024 px.
+ *
+ * **Keine Medienabfrage.** Ob sie erscheint, entscheidet JavaScript (`useIstSchmal`, seit
+ * AUF-83-T5 in Gebrauch); die Stilschicht bekommt nur Klassen ohne Bedingung. Die Zusage
+ * "Responsive ist L7" bleibt damit gruen — sie faellt nicht, weil dieser Weg sie nicht braucht.
+ * ══════════════════════════════════════════════════════════════════════════════════════════════ */
+.hp-mb-flaeche { position: absolute; inset: 0; z-index: 40; display: flex; align-items: flex-start; justify-content: center; padding: 24px 16px; background: var(--hp-bg); overflow-y: auto; }
+.hp-mb-kasten { max-width: 460px; background: var(--hp-surface); border: 1px solid var(--hp-hair); border-radius: 12px; padding: 18px 20px; }
+.hp-mb-titel { margin: 0 0 10px; font-size: 15px; font-weight: 700; color: var(--hp-ink); }
+.hp-mb-satz { margin: 0 0 10px; font-size: 13px; line-height: 1.5; color: var(--hp-ink); }
+.hp-mb-fussnote { margin: 12px 0 0; font-size: 11.5px; line-height: 1.45; color: var(--hp-muted); }
