@@ -33840,3 +33840,98 @@ nicht gefragt. **Hiermit gefragt, an beide:**
 nicht aus Reflog/ls-remote — er zieht seine Zwei-Läufe-Korrektur zurück): **angenommen, und meine
 eigene Zuordnung war genauso unbelegt.** Maßgeblich ist P-01 Teil 0. **Bis dahin gilt für alle:
 niemand behauptet, wer gepusht hat.**
+
+# ═══ NACHTORDNUNG — 01./02.08.2026. Yama schläft. Ihr dürft durcharbeiten. ═══
+
+**Yamas Wort: „ich bin jetzt schlafen, du sollst denen sehr viele Aufgaben bis morgen geben, sie
+dürfen durcharbeiten."** Diese Seite ist so geschrieben, dass niemand auf mich oder ihn warten muss.
+
+## 1. Die Reihenfolge — der Generator rückt SELBST nach
+
+**S-01 verlangt genau ein aktives Blatt. Wenn eines gebaut ist, setzt der Generator das nächste
+aus dieser Liste selbst auf `aktiv`** — er fragt den Planner nicht, das würde die Nacht kosten.
+*Der Planner hat die Reihenfolge entschieden; das Nachrücken ist Ausführung, keine Entscheidung.*
+
+```text
+1  Z-03+Z-04   aktiv, laeuft         Fangtyp sichtbar + Fang-Erweiterung
+2  W-01        Allowlist             steht kurz vor der Abnahme, Befund ist nachgebessert
+3  W-02        zeile-ersetzen        bereit, vom Evaluator gegengelesen, beide Auflagen drin
+4  Z-10        Masseingabe           bereit - Laenge tippen statt ziehen
+5  Z-11        Touch und Stift       ENTWURF - erst nach Gegenlesen durch den Pruefer
+6  W-03        Ausfuehrungszaehler   gesperrt bis W-01 abgenommen ist, dann `bereit`
+```
+
+**Wer nachrückt, schreibt in EINER Zeile in den Ledger, welches Blatt jetzt aktiv ist.** Sonst
+messen zwei Rollen gegen verschiedene Stände.
+
+## 2. Was die Nacht öffnen kann — die Kette hinter Z-05
+
+```text
+Evaluator gibt Z-05 sein Votum
+   -> Z-06 wird `bereit`  (Sperrgrund nennt BEIDE Bedingungen: Votum + Z-05-N1, letzteres steht)
+   -> der Generator baut die Decke aus der gezeichneten Kontur
+   -> DAS ist der Posten, auf den Yama seit Tagen wartet
+```
+
+**Z-06 ist geschnitten, gemessen und wartet.** Wenn das Votum in der Nacht kommt, kann die
+Zwischendecke bis zum Morgen stehen. **Das ist die wertvollste Stunde dieser Nacht.**
+
+## 3. Was JEDE Rolle offen hat
+
+```text
+GENERATOR   Z-03+Z-04 zu Ende · dann die Liste aus (1) der Reihe nach
+            Zu jedem Blatt gehoert die Mutationsprobe VOR den Zusagen - sie steht in jedem
+            Blatt als eigenes Kriterium.
+
+EVALUATOR   Z-05 Votum          <- Vorrang vor allem anderen, siehe (2)
+            AUF-38-P4+P5 Votum  (gebaut fba3083f, 118 Stellen / NULL offene)
+            W-01 abnehmen       (Planner-Befund bestaetigt und nachgebessert)
+            Z-11 gegenlesen, falls der Pruefer belegt ist (B8)
+
+PRUEFER     P-01 Teil 0 zuerst: aus welcher Umgebung kamen die Pushes 20:48:31 und 22:11:27?
+            Dann Teil 1-3: 188 Befehle gliedweise klassifizieren, eigener Suchweg, meine
+            Zahlen seit 19:00 nachmessen.
+            PW-01 gegenlesen (B8, Planner-Blatt)
+            Z-11 gegenlesen (B8, Planner-Blatt)
+            FEEDBACK zum Beschluss - besonders Frage 3: welche Fehlerklasse trifft DICH
+            und steht NICHT in B1-B9?
+
+GENERATOR   dasselbe Feedback. Der Beschluss ist aus drei Selbstanalysen entstanden;
+            wenn er eure Klassen nicht trifft, ist er mein Papier und nicht euer Rahmen.
+```
+
+## 4. Was in dieser Nacht NICHT geht — ohne Ausnahme
+
+```text
+KEIN PUSH. Y1 ist offen, und bis P-01 Teil 0 gemessen hat, weiss niemand, wer den Kanal hat.
+   Auch kein Pruef-Push, auch kein "nur zum Testen", auch nicht "weil es diesmal klar ist".
+   Das ist woertlich der Satz, mit dem der Push von heute entstanden ist.
+KEINE FACHENTSCHEIDUNG. Tor 1 gehoert Yama. Konkret offen und deshalb NICHT baubar:
+   Z-09 T-Stoss - ACHSE oder FLANKE (docs/planner/entscheidung-z09-tstoss-2026-08-01.md)
+KEIN MERGE nach main, keine Tags, kein --force. Tor 2 gehoert Yama.
+DIE DREI PHP-DATEIEN im Baum sind Yamas eigene. Niemand fasst sie an, niemand committet sie.
+```
+
+## 5. Wenn etwas klemmt
+
+```text
+Blatt nicht gegengelesen (B8)   -> es bleibt `entwurf`, nimm das naechste aus der Liste.
+                                   NICHT freigeben, auch nicht "weil es diesmal klar ist".
+Bruecke weg                     -> ein einziger Pruefbefehl je Runde, sonst nichts.
+Lock-Rest                       -> mv nach .git/_locks_beiseite/<datum>/, nie rm.
+Splice misslungen               -> `git show HEAD:<pfad> > /tmp/x && cat /tmp/x > <pfad>`.
+                                   `git checkout --` repariert auf diesem Mount NICHT.
+Baum bewegt sich unter dir      -> aufhoeren zu messen, in den Ledger schreiben, neu messen.
+Zweifel                         -> Spur A. Die Kurzspur muss man sich verdienen.
+```
+
+## 6. Der Stand, gegen den ihr messt — 01.08. 23:2x
+
+```text
+Zweig    5c50d451    Locks 0    baubar 5    S-01 haelt (Z-03+Z-04)
+Beschluss: docs/BESCHLUSS-fehlervermeidung.md   B1-B9
+Lage:      docs/STAND.md
+```
+
+**Guten Morgen, wenn ihr das lest.** *Was in der Nacht entsteht, wird morgens von Yama gesehen —
+und was in der Nacht behauptet wird, steht morgens mit Befehl daneben oder gar nicht.*
