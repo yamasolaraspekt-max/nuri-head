@@ -31859,3 +31859,132 @@ Fenster prüfbar.
 **Ich baue nicht weiter, bis das entschieden ist** — beim falschen Weg fällt die gesamte
 Zeichenfläche still auf falsche Farben, und das sieht man erst im Browser. *Sag, welcher der beiden
 Wege gilt, oder schneide K-01 ab; K-02 und K-03 baue ich sofort.*
+
+---
+
+## ⇒ PRÜFER an PLANNER — **die Rueckgabe von PB-023/024 ist berechtigt, und sie trifft meinen eigenen Befund** (01.08., 11:34 CEST)
+
+**Der Generator gibt das Blatt zurueck, bevor er eine Zeile baut. Das ist die Regel, und er hat sie
+richtig angewendet.** *Seine erste Messung betrifft meinen Befund PB-024, also sage ich als dessen
+Urheber dazu, was daran haelt und was nicht.*
+
+### Was an PB-024 haelt
+
+**Die Insel haengt nicht am Entwurfssystem — das steht unveraendert.**
+```text
+var(--sa- im Insel-CSS   0
+Hexwerte in studioDaten  42
+```
+
+### Was an PB-024 NICHT haelt: die stillschweigende Annahme dahinter
+
+**Mein Befund lautete „42 Hexwerte, 0 Verweise auf `--sa-` — nicht verdrahtet". Er las sich, als
+waeren alle 42 gleich behandelbar. Das sind sie nicht.** *Ein Canvas nimmt keine CSS-Variable
+entgegen: `ctx.fillStyle = 'var(--sa-fg)'` wird verworfen, und gemalt wird die zuletzt gueltige
+Farbe — still falsch, nicht sichtbar leer.* **Dieselbe Klasse wie PB-047, und der Generator hat sie
+erkannt, bevor sie gebaut wurde.**
+
+**Ich haette diese Grenze in den Befund gehoert.** *Ein Befund, der einen Zustand misst, aber die
+Machbarkeit des Gegenteils nicht prueft, laedt zu einem Auftrag ein, den niemand bauen kann — genau
+das ist hier passiert, und es hat den Generator eine Ziehung und zwei Messungen gekostet.*
+
+### Eine gemessene Tatsache zur Entscheidung, ohne Empfehlung
+
+**Der Weg „Token einmal aufloesen, aufgeloesten Wert an Konva geben" existiert im Bestand nicht:**
+```text
+Befehl: grep -rn "getComputedStyle|getPropertyValue" resources/planner/hausplaner --include='*.ts*'
+        1 Treffer, und der steht in einem DOM-Test (dialogFokus.dom.test.ts:190)
+Im uebrigen CRM: 3 Blades nutzen getComputedStyle — es ist dort also kein Fremdkoerper.
+```
+**Das ist keine vierte Option, die ich vorschlage — es ist die Antwort auf die Frage, ob es sie im
+Haus schon gibt. Es gibt sie nicht.** *Ob sie gebaut wird, entscheidest du; ich messe nur, was da ist.*
+
+**Ballbesitz: Planner** (K-01-Entscheidung) · **Generator** (K-02/K-03 sind baubar, sagt er selbst).
+
+---
+
+VOTUM: auftrag=AUF-87-SPERRE rolle=evaluator ergebnis=GRUEN-MIT-BEFUND commit=0a588d7b datum=2026-08-01T11:4x hinweis=zweite-Bedingung-zu-weit
+
+## ⇒ EVALUATOR — die neue Validator-Sperre: **wirkt. Aber die zweite Bedingung sperrt fünf abgeschlossene Blätter** (01.08., CEST)
+
+*Dreiundzwanzigster Prüfstand. **Der Validator ist Werkzeug, das ich selbst benutze und als AUF-87
+abgenommen habe** — eine Änderung daran trifft jede meiner künftigen Messungen.*
+
+### Die Sperre wirkt — Gegenprobe gefahren
+
+```text
+node --test scripts/__tests__/auftragPruefen.test.mjs   31 / 0   (vorher 27)
+
+Probeblatt ohne YAML-Kopf, mit „status: aktiv" im Fließtext:
+  ⇒ "SPERRE  KEIN KOPF, aber `status: aktiv` — nach diesem Blatt wird gebaut (PB-019)"
+  ⇒ exit 1
+```
+**PB-019 ist damit wirklich geschlossen:** *das Gate redet nicht mehr, es sperrt.* **Genau die
+R9-Barriere, die der Befund verlangt hat.**
+
+---
+
+## BEFUND — die zweite Sperrbedingung fragt nicht nach `status`
+
+```text
+scripts/auftrag-pruefen.mjs:373   if (!e.kopf && e.aktivOhneKopf) fehlschlaege += 1;
+scripts/auftrag-pruefen.mjs:374   if (e.kopf && e.eintraege.length === 0) fehlschlaege += 1;
+                                                 ^^^^ kein `aktiv`-Vorbehalt
+```
+**Zeile 373 sperrt nur, wenn das Blatt sich `status: aktiv` nennt — Zeile 374 sperrt immer.**
+*Die Asymmetrie ist im Kommentar nicht begründet; PB-019 sprach ausdrücklich von **aktiven**
+Blättern („sechs aktive Blätter kämen so durch").*
+
+**Wen es trifft, gemessen:**
+```text
+Blätter mit flachem `befehl:` statt `pruefung.befehl:`      5
+   auf48-s4b · auf48-s4c · auf48-s4d · auf48-s4e · m2-bestand-skript
+   davon status: aktiv                                       0
+```
+**Alle fünf sind abgeschlossen — und alle fünf habe ich abgenommen.** *Sie tragen ihre Prüfbefehle
+im Kopf, nur in der flachen Schreibweise, die der Validator nicht liest.*
+
+```text
+Beispiel auf48-s4c:  4 Prüfbefehle in Block 1
+  ⇒ "SPERRE  KEIN PRUEFBEFEHL im Kopf gefunden"   ·   exit 1
+```
+**Das ist ein falsches Rot** — die gefährlichste Sorte, weil sie die Barriere unglaubwürdig macht.
+*Wer einen Sammellauf über `docs/auftraege/*.md` fährt, bekommt `exit 1`, obwohl **kein einziges
+aktives Blatt** einen Mangel hat.* **Und eine Sperre, die man gewohnheitsmäßig ignoriert, ist keine.**
+
+### Zwei Wege, beide klein — die Wahl gehört dem Planner
+
+```text
+a)  Zeile 374 denselben Vorbehalt geben:
+       if (e.kopf && e.eintraege.length === 0 && e.aktiv) …
+    -> deckt sich mit dem Wortlaut von PB-019, lässt Altblätter in Ruhe
+
+b)  die fünf Blätter auf `pruefung.befehl:` umschreiben
+    -> mehr Arbeit, ändert abgenommene Papiere nachträglich
+```
+*Ich empfehle (a) und ändere nichts selbst — es ist Werkzeug, das ich zum Prüfen benutze; wer sein
+eigenes Messgerät justiert, misst danach seine eigene Justage.*
+
+### Urteil
+
+**GRÜN für die Sperre**, sie tut was zugesagt und ist per Gegenprobe belegt. **Der Befund betrifft
+die Reichweite, nicht die Richtigkeit** — fünf abgeschlossene Blätter melden einen Mangel, den sie
+nicht haben.
+
+---
+
+### Zwei Fehlgriffe von mir in dieser Runde
+
+```text
+1. Sammellauf über alle Blätter lief in den Zeitablauf (2 min) — die Zahl „11 gesperrt"
+   aus dem Abbruch ist unvollständig und habe ich verworfen.
+2. Mein `echo exit=$?` stand hinter einer Pipe und las den Code von `head`, nicht vom
+   Skript: es meldete „exit=0", der echte Wert war 1.
+```
+*Der zweite ist derselbe Fehler wie gestern beim K-08-Nachweis. **Fünfzehnter Fehlgriff dieser Art,
+fünfzehnter vor der Meldung bemerkt** — aber die Wiederholung zeigt, dass „vor der Meldung
+gefangen" kein Fortschritt ist, solange der Griff derselbe bleibt. **Regel für mich: `$?` nie
+hinter einer Pipe lesen, sondern in eine Datei umleiten und den Code direkt prüfen.***
+
+**Ballbesitz: Planner** (Zeile 374 · 14 Register-Posten · AUF-86 · `.env.testing.example`) ·
+**Generator** (P3, PB-023/024 geschnitten) · **Yama** (219 MB).
