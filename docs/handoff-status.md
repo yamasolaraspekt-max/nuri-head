@@ -32990,3 +32990,60 @@ Planner.*
 
 **Ballbesitz: Generator** (Z-05/Z-06 geschnitten) · **Planner** (Meldungstext im Validator, P3) ·
 **Yama** (nichts von mir).
+
+---
+
+## Generator — AUF-38-P3 umgesetzt (2026-08-01)
+
+**Zwölf offene statische Inline-Stellen in `FussUndUeberlagerungen.tsx` sind zwölf `hp-fu-`-Klassen.**
+
+    K-01   8 Stellen insgesamt, davon 0 offen    (war 20 / 12)   ← Blatt: exakt so
+    K-01b  128 Stellen insgesamt, davon 10 offen (war 140 / 22)  ← Blatt: exakt so
+    K-02   Rohfarben im CSS-Diff gegen main: 0
+    K-04   fussUndUeberlagerungen 12 · gesperrtAppWeit 9 — unveraendert
+    K-05   stilschicht 58 / 0 · @media und !important in der Quelle: 0
+    Suite  1611 / 1611   (1603 + 8)   · tsc · schema · dom 29 · build alle EXIT 0
+
+**K-06 Mutationsprobe — 8 Mutationen, SIEBEN kamen durch.**
+
+    blind (7)  Klassenname mit Tippfehler · Klasse am falschen Element · Regel ohne Wirkung
+               Regel umbenannt · Abstand still veraendert · flex-Verhalten gedreht · Kappung fort
+    gefangen   nur "Rohfarbe statt Token" (4 rot) — die einzige, die schon eine Zusage hatte
+
+***Sieben von acht — dieselbe Zahl wie in P1 und in P2. Zum dritten Mal identisch.*** Das ist
+kein Zufall dreier Dateien, sondern die Eigenschaft der Umstellung selbst; sie steht als **F-15**
+im Register. Nach dem Brücken-Test: **8 von 8 gefangen**, Wiederherstellung md5-identisch.
+
+**Zwei geerbte Zusagen nachgezogen, beide mit Grund:**
+
+- *„die Palette liegt ausserhalb des Flusses — `fixed`, nicht `absolute`"* las den **Inline-Stil**.
+  Die Wahrheit ist eine Datei weiter gezogen — **F-15 in Reinform**. Sie prüft jetzt beide Seiten:
+  die Klasse sitzt am Element **und** die Regel trägt `position: fixed`, `inset: 0`, `z-index: 60`.
+  *Eines allein sagt nichts: eine Klasse ohne Regel ist ungestyltes Markup, eine Regel ohne Träger
+  ist wirkungslos.*
+- *„die Scheibe trägt 20 Inline-Vorkommen"* → **8**. Das ist der Auftrag, nicht ein Verlust.
+
+### L-01 im Browser — vor und nach dem Umbau, pixelgleich
+
+    Viewport 1440    FUSS 253,956 1083×32 · OVERLAY 0,0 1440×900 fixed z60 · KASTEN 490,108 460×459
+    Viewport 1024    FUSS 253,956  667×32 · OVERLAY 0,0 1024×900 fixed z60 · KASTEN 282,108 460×459
+    Viewport  375    Mindestbreiten-Sperre (AUF-91) liegt ueber dem Planer — nichts zu messen
+
+**Der Vorher-Stand wurde wirklich gebaut**, nicht erinnert: meine zwei Quelldateien beiseite,
+`git checkout HEAD --`, neu gebaut, gemessen, md5-geprüft zurück. *Die Selektoren sind strukturell
+(Text der Fussleiste, `[role="dialog"]`.parentElement) und nicht über die neuen Klassen — sonst
+fände das Skript im Vorher-Stand nichts und meldete den fehlenden Selektor als Änderung.*
+
+### ⚠ Nebenbefund, aus einer misslungenen Mutation gefallen
+
+Meine achte Mutation traf `perl s///` **ohne `/g`** und landete darum nicht in meiner Regel,
+sondern in der ersten Fundstelle: **`.hp-ok-name` (Z. 460)**. Ihr `text-overflow: ellipsis;
+white-space: nowrap;` entfernt — **kein einziger Test wurde rot.**
+
+*Die Kappung des Objektnamens in der Kopfleiste ist ungedeckt.* Ohne sie bläht ein langer Objektname
+die Zeile auf — genau das, was der Kommentar an dieser Regel zu verhindern verspricht (*„eine vierte
+Zeile wäre Höhe, die K-08 gerade gewinnen soll"*). Gehört als eigener Posten aufgenommen; **nicht
+in diesem Blatt behoben.**
+
+**Ballbesitz: Planner** (`.hp-ok-name` ungedeckt · Z-05-N1 · 200-px-Bühne bei 1024 · Blade-Lücke in
+`zaehle.mjs`) · **Evaluator** (Z-05, AUF-38-P3).

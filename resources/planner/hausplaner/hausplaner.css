@@ -656,3 +656,32 @@
 
 /* Schiene: Fuss */
 .hp-gz-fuss { padding: 10px 12px; font-size: 11px; color: var(--hp-muted); border-top: 1px solid var(--hp-canvas-grid); flex: 0 0 auto; }
+
+/* ══════════════════════════════════════════════════════════════════════════════════════════════
+ * AUF-38-P3 — Statusleiste, Befehlspalette und Engine-Flaeche. 12 offene statische Stellen
+ * werden 12 Klassen mit dem Praefix `hp-fu-`.
+ *
+ * **Die vorhandenen `hp-kontur-` und `hp-pause-` bleiben unberuehrt** — sie liegen schon in der
+ * Stilschicht, und wer sie umbenennt, bewegt Stellen, die dieses Blatt nicht misst.
+ *
+ * **Einheiten:** React schreibt `fontSize: 12.5` und meint 12.5px, `padding: 6` und meint 6px.
+ * Hier stehen sie ausgeschrieben — eine einheitenlose Zahl in CSS ist keine Laenge.
+ * ══════════════════════════════════════════════════════════════════════════════════════════════ */
+.hp-fu-fueller { flex: 1; }
+.hp-fu-befehlshinweis { color: var(--hp-muted); }
+
+/* Die Befehlspalette. `position: fixed` liegt ausserhalb des Flusses, damit die Studio-Schale
+ * nicht ueberlaeuft — das war Kante 10 und bleibt so. */
+.hp-fu-palette-flaeche { position: fixed; inset: 0; z-index: 60; background: var(--hp-canvas-wall-ghost); display: flex; align-items: flex-start; justify-content: center; padding-top: 12vh; }
+.hp-fu-palette-kasten { width: 460px; max-width: 92vw; background: var(--hp-surface); border: 1px solid var(--hp-control-border); border-radius: 12px; box-shadow: 0 12px 34px var(--hp-canvas-wall-ghost); overflow: hidden; }
+.hp-fu-palette-liste { max-height: 46vh; overflow-y: auto; padding: 6px; }
+.hp-fu-palette-leer { padding: 10px; }
+.hp-fu-gruppe-leer { font-size: 12.5px; color: var(--hp-muted); padding: 3px 0; }
+.hp-fu-gruppenkopf { font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--hp-faint); padding: 10px 10px 4px; }
+
+/* Ein Eintrag der Palette. Label fest, Grund/Zusatz fuellen, Kuerzel fest — die drei duerfen
+ * NICHT gleich verteilt werden, sonst springt das Kuerzel je nach Textlaenge. */
+.hp-fu-eintrag-label { flex: 0 0 auto; min-width: 74px; }
+.hp-fu-eintrag-grund { flex: 1; font-size: 11px; color: var(--hp-warn-ink); }
+.hp-fu-eintrag-zusatz { flex: 1; font-size: 11px; color: var(--hp-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hp-fu-eintrag-kuerzel { flex: 0 0 auto; font-size: 10.5px; color: var(--hp-muted); border: 1px solid var(--hp-control-border); border-radius: 4px; padding: 1px 5px; }

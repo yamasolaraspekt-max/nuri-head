@@ -88,9 +88,9 @@ export function FussUndUeberlagerungen({
         abgelehnten KOMMANDOS, und Z-05 fuehrt keines aus. */}
     {konturHinweis && <span className="hp-kontur-hinweis">{konturHinweis}</span>}
     {pausenHinweis && <span className="hp-pause-hinweis">{pausenHinweis}</span>}
-    <span style={{ flex: 1 }} />
+    <span className="hp-fu-fueller" />
     {letzteAblehnung && <span style={{ color: FARBEN.warnung, fontWeight: 600 }}>✋ {letzteAblehnung}</span>}
-    <span style={{ color: T.muted }}>Strg/⌘+K · Befehle</span>
+    <span className="hp-fu-befehlshinweis">Strg/⌘+K · Befehle</span>
   </div>
 
   {/* Dashboard v2.5 (§30 / UI-9): Command-Palette. Overlay `position: fixed` — außerhalb des
@@ -101,13 +101,13 @@ export function FussUndUeberlagerungen({
       Fokus-Käfig (Tab-Zyklus, Fokus-Rückgabe) ist v6 und wird hier NICHT gebaut. */}
   {paletteOffen && (
     <div
-      style={{ position: 'fixed', inset: 0, zIndex: 60, background: T.canvasWallGhost, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: '12vh' }}
+      className="hp-fu-palette-flaeche"
       onMouseDown={(e) => { if (e.target === e.currentTarget) schliessePalette(); }}
     >
       <div
         role="dialog" aria-modal="true" aria-label="Befehle suchen"
         onMouseDown={(e) => e.stopPropagation()}
-        style={{ width: 460, maxWidth: '92vw', background: T.surface, border: `1px solid ${T.controlBorder}`, borderRadius: 12, boxShadow: `0 12px 34px ${T.canvasWallGhost}`, overflow: 'hidden' }}
+        className="hp-fu-palette-kasten"
       >
         <input
           autoFocus type="text" value={paletteFilter}
@@ -139,13 +139,13 @@ export function FussUndUeberlagerungen({
           }}
           style={{ width: '100%', boxSizing: 'border-box', padding: '11px 14px', fontSize: 13.5, border: 'none', borderBottom: `1px solid ${T.hair}`, color: FARBEN.text, background: T.surface }}
         />
-        <div style={{ maxHeight: '46vh', overflowY: 'auto', padding: 6 }}>
+        <div className="hp-fu-palette-liste">
           {paletteListe.length === 0 ? (
             /* Kante 7 / AUF-67: kein leerer Kasten — und der Leerzustand spricht JE ART aus,
                was los ist. So lernt man nebenbei, wonach die Palette ueberhaupt sucht. */
-            <div style={{ padding: '10px' }}>
+            <div className="hp-fu-palette-leer">
               {paletteGruppen.map((g) => (
-                <div key={g.art} style={{ fontSize: 12.5, color: T.muted, padding: '3px 0' }}>{g.leer}</div>
+                <div key={g.art} className="hp-fu-gruppe-leer">{g.leer}</div>
               ))}
             </div>
           ) : (
@@ -153,7 +153,7 @@ export function FussUndUeberlagerungen({
               <div key={gruppe.art}>
                 {/* AUF-67: die Art steht als Ueberschrift — sonst stuenden Werkzeug und
                     Geschoss ununterscheidbar untereinander. */}
-                <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.07em', textTransform: 'uppercase', color: T.faint, padding: '10px 10px 4px' }}>{gruppe.titel}</div>
+                <div className="hp-fu-gruppenkopf">{gruppe.titel}</div>
                 {gruppe.eintraege.map((eintrag) => {
               const i = paletteListe.indexOf(eintrag);
               const markiert = i === paletteMarkiert;
@@ -174,11 +174,11 @@ export function FussUndUeberlagerungen({
                     cursor: eintrag.enabled ? 'pointer' : GESPERRT_ZEIGER,
                   }}
                 >
-                  <span style={{ flex: '0 0 auto', minWidth: 74 }}>{eintrag.label}</span>
+                  <span className="hp-fu-eintrag-label">{eintrag.label}</span>
                   {/* Der Grund steht als sichtbarer TEXT, nicht nur als Ausgrauen (§28). */}
-                  {!eintrag.enabled && <span style={{ flex: 1, fontSize: 11, color: T.warnInk }}>{eintrag.grund}</span>}
-                  {eintrag.enabled && <span style={{ flex: 1, fontSize: 11, color: T.faint, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{eintrag.zusatz ?? ''}</span>}
-                  {eintrag.shortcut && <span style={{ flex: '0 0 auto', fontSize: 10.5, color: T.muted, border: `1px solid ${T.controlBorder}`, borderRadius: 4, padding: '1px 5px' }}>{eintrag.shortcut}</span>}
+                  {!eintrag.enabled && <span className="hp-fu-eintrag-grund">{eintrag.grund}</span>}
+                  {eintrag.enabled && <span className="hp-fu-eintrag-zusatz">{eintrag.zusatz ?? ''}</span>}
+                  {eintrag.shortcut && <span className="hp-fu-eintrag-kuerzel">{eintrag.shortcut}</span>}
                 </button>
               );
                 })}

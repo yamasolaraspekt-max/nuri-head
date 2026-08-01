@@ -29,6 +29,9 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { TEILE, teil, ohneKommentare } from './_zerlegteApp';
 
+/** Die Stilschicht — seit AUF-38-P3 traegt sie einen Teil der Wahrheit dieser Datei. */
+const css = teil('hausplaner.css');
+
 const hier = dirname(fileURLToPath(import.meta.url));
 const fussRoh = teil('app/rahmen/FussUndUeberlagerungen.tsx');
 const fuss = ohneKommentare(fussRoh);
@@ -90,8 +93,19 @@ test('K-06 (blind gewesen): ein Klick neben die Palette schliesst sie — und ei
 test('K-06 (blind gewesen): die Palette liegt ausserhalb des Flusses — `fixed`, nicht `absolute`', () => {
   // Mutation: `position: 'absolute'`. Nichts wurde rot. Kante 10: als `absolute` richtet sich das
   // Overlay am nächsten positionierten Vorfahren aus — die Studio-Shell liefe über.
-  assert.match(fuss, /position: 'fixed', inset: 0, zIndex: 60/,
-    'das Overlay liegt nicht mehr ausserhalb des Flusses (Kante 10)');
+  //
+  // **AUF-38-P3 hat diese Wahrheit eine Datei weiter geschoben.** Sie stand als Inline-Stil hier
+  // und steht jetzt in `hausplaner.css`. *Die alte Fassung las nur den Inline-Stil und wurde rot,
+  // obwohl nichts kaputt ist — genau die Lage, aus der F-15 entstanden ist.* Geprüft wird
+  // deshalb jetzt BEIDES: die Klasse sitzt am Element, und die Regel trägt die Eigenschaft.
+  // Eines allein sagt nichts: eine Klasse ohne Regel ist ungestyltes Markup, eine Regel ohne
+  // Träger ist wirkungslos.
+  assert.match(fuss, /className="hp-fu-palette-flaeche"/, 'das Overlay trägt seine Klasse nicht mehr');
+  const regel = css.match(/\.hp-fu-palette-flaeche\s*\{([^}]*)\}/);
+  assert.ok(regel, 'die Regel der Palettenfläche fehlt in der Stilschicht');
+  assert.match(regel[1]!, /position: fixed/, 'das Overlay liegt nicht mehr ausserhalb des Flusses (Kante 10)');
+  assert.match(regel[1]!, /inset: 0/, 'das Overlay füllt den Bildschirm nicht mehr');
+  assert.match(regel[1]!, /z-index: 60/, 'das Overlay hat seine Stapelhöhe verloren');
 });
 
 test('K-06 (blind gewesen): die Palette ist ein Dialog — mit Rolle, Modus und Namen', () => {
@@ -163,9 +177,12 @@ test('K-01: die Hauptfunktion ruft die Scheibe — genau einmal, und trägt sie 
   }
 });
 
-test('K-01: die Scheibe trägt 20 Inline-Vorkommen — unverändert', () => {
+test('K-01: die Scheibe trägt 8 Inline-Vorkommen — 12 sind nach AUF-38-P3 Klassen', () => {
   // **Vorkommen, nicht Zeilen.** Der Planner hat das Kriterium nach meinem S4d-Befund korrigiert:
   // `grep -c` zählt Zeilen und bewegt sich schon, wenn jemand eine Zeile umbricht.
+  //
+  // **Die Zahl ist von 20 auf 8 gefallen, und das ist der Auftrag** (AUF-38-P3, K-01: *„8 Stellen
+  // insgesamt, davon 0 offen"*). Die verbliebenen acht sind DYNAMISCH und ausserhalb des Blattes.
   const vorkommen = (fussRoh.match(/style=\{\{/g) ?? []).length;
-  assert.equal(vorkommen, 20, `${vorkommen} Inline-Vorkommen statt 20`);
+  assert.equal(vorkommen, 8, `${vorkommen} Inline-Vorkommen statt 8`);
 });
