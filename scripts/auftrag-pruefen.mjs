@@ -124,18 +124,52 @@ export const ALLOWLIST = [
  * *Dieselbe Falle wie in `zaehle.mjs`, dieselbe Loesung.*
  */
 export function befehlsGlieder(befehl) {
-  const tresor = [];
-  const maskiert = String(befehl).replace(/(['"])(?:\\.|(?!\1)[^\\])*\1/g, (treffer) => {
-    tresor.push(treffer);
+  // **Getrennt wird in EINEM Durchgang, ohne Platzhalter.** Mein erster Entwurf legte die
+  // Zeichenketten in einen Tresor und setzte Zahlen als Marken ein — und `head -n 3 datei` traegt
+  // eine `3`. Der Ruecktausch machte daraus `head -n undefined datei`. *Die Zusage darunter hat
+  // genau das gefangen; ich hatte den Fehler vorher benannt und trotzdem stehen lassen.*
+  //
+  // Ein Platzhalter muss etwas sein, das im Bestand nicht vorkommen kann — es ist einfacher, gar
+  // keinen zu brauchen: der Scanner merkt sich, ob er gerade INNERHALB von Anfuehrungszeichen
+  // steht, und trennt nur ausserhalb.
+  const text = String(befehl);
+  const glieder = [];
+  let aktuell = '';
+  let anfuehrung = null;
 
-    return `${tresor.length - 1}`;
-  });
+  for (let i = 0; i < text.length; i += 1) {
+    const z = text[i];
+    if (anfuehrung) {
+      aktuell += z;
+      if (z === anfuehrung) {
+        anfuehrung = null;
+      }
+      continue;
+    }
+    if (z === "'" || z === '"') {
+      anfuehrung = z;
+      aktuell += z;
+      continue;
+    }
+    if (z === '|' || z === ';') {
+      glieder.push(aktuell);
+      aktuell = '';
+      if (z === '|' && text[i + 1] === '|') {
+        i += 1;
+      }
+      continue;
+    }
+    if (z === '&' && text[i + 1] === '&') {
+      glieder.push(aktuell);
+      aktuell = '';
+      i += 1;
+      continue;
+    }
+    aktuell += z;
+  }
+  glieder.push(aktuell);
 
-  return maskiert
-    .split(/\|\||&&|[|;]/)
-    .map((g) => g.trim())
-    .filter(Boolean)
-    .map((g) => g.replace(/(\d+)/g, (_, i) => tresor[Number(i)]));
+  return glieder.map((g) => g.trim()).filter(Boolean);
 }
 
 /**

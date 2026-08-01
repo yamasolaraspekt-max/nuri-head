@@ -18,8 +18,7 @@ import { join } from 'node:path';
 import {
   pruefeBlatt, sammleBefehle, lieseKopfRoh, lieseAlleBloecke, zaehleBloecke, verbotenesMuster,
   bericht, strukturBefunde, aktiveBlaetter, baubareBlaetter, vergleicheErwartung, baumStand, brechendesGlied, STUFEN, DENYLIST,
-  gateMuster, pruefeEintrag, GATE_MUSTER,
-} from '../auftrag-pruefen.mjs';
+  gateMuster, pruefeEintrag, GATE_MUSTER, nichtErlaubtesGlied, befehlsGlieder, ALLOWLIST } from '../auftrag-pruefen.mjs';
 
 const verz = mkdtempSync(join(tmpdir(), 'auf87-'));
 process.on('exit', () => { try { rmSync(verz, { recursive: true, force: true }); } catch { /* egal */ } });
@@ -596,4 +595,75 @@ test('GATE: die Liste steht im Werkzeug, nicht im Blatt', () => {
   assert.ok(GATE_MUSTER.includes('npm run'));
   assert.ok(GATE_MUSTER.includes('php artisan'));
   assert.ok(!GATE_MUSTER.includes('node'), 'node ist der Validator selbst - nie ein Gate');
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════════════════════
+// W-01 — die ERLAUBNISLISTE.
+//
+// **Mutationsprobe vor diesen Zusagen — 6 Mutationen, ZWEI kamen durch:**
+//
+//   blind (2)  nur das ERSTE Glied pruefen · `bash` auf die Liste
+//   gefangen   Allowlist ganz aus · Denylist NACH der Allowlist · UEBERSPRUNGEN still
+//              verschluckt · './' gilt als erlaubt
+//
+// **KEINE dieser Zusagen nennt einen Befehl, den es wirklich gibt.** Am 01.08. um 22:11 hat eine
+// Probe des Generators den ECHTEN Wrapper aus `b01/K-05` durch `execSync` geschickt und damit
+// veroeffentlicht — das Blatt hatte ihn als Fall genannt, und die Sperre war noch nicht
+// verdrahtet. *Ein Name, den es nicht gibt, prueft dieselbe Aussage und kann nichts ausloesen.*
+// ═══════════════════════════════════════════════════════════════════════════════════════════════
+
+test('W-01: ein Wrapper wird UEBERSPRUNGEN — sein Text sagt nichts ueber seine Wirkung', () => {
+  const e = pruefeEintrag({ id: 'K-1', befehl: './gibt-es-garantiert-nicht-xyz.command' }, verz);
+  assert.equal(e.stufe, STUFEN.UEBERSPRUNGEN);
+  assert.match(e.hinweis, /Erlaubnisliste/, 'die Meldung nennt den Grund nicht');
+  // presence-Partner nach R2: ein ERLAUBTER Befehl kommt sehr wohl durch.
+  assert.equal(pruefeEintrag({ id: 'K-2', befehl: 'echo hallo' }, verz).stufe, STUFEN.OK);
+});
+
+test('W-01: JEDES Glied einer Kette wird geprueft, nicht nur das erste', () => {
+  // Mutation „nur das ERSTE Glied pruefen" kam durch — und sie ist die gefaehrlichste der sechs:
+  // eine Kette, die harmlos anfaengt, duerfte dann hinten alles.
+  assert.equal(nichtErlaubtesGlied('echo a && ./gibt-es-garantiert-nicht-xyz.command'),
+    './gibt-es-garantiert-nicht-xyz.command', 'das zweite Glied wird nicht geprueft');
+  assert.equal(nichtErlaubtesGlied('grep -c x datei | ./fremd-xyz.sh'), './fremd-xyz.sh');
+  assert.equal(nichtErlaubtesGlied('echo a; ./fremd-xyz.sh'), './fremd-xyz.sh');
+  // presence-Partner: eine Kette aus lauter Erlaubtem faellt NICHT durch.
+  assert.equal(nichtErlaubtesGlied("grep -rh 'x' docs | sed 's/a/b/' | sort | uniq -c"), null);
+});
+
+test('W-01: `bash` steht NICHT auf der Liste — sonst darf jedes Skript wieder alles', () => {
+  // Mutation „bash auf die Liste" kam durch. **Sie macht die ganze Liste wertlos**, weil der
+  // Text `bash irgendwas.sh` genauso wenig ueber seine Wirkung sagt wie `./irgendwas.sh`.
+  assert.equal(nichtErlaubtesGlied('bash scripts/tu-was-xyz.sh'), 'bash');
+  assert.ok(!ALLOWLIST.includes('bash'), '`bash` ist auf die Erlaubnisliste geraten');
+  assert.ok(!ALLOWLIST.includes('sh'), '`sh` ist auf die Erlaubnisliste geraten');
+  assert.ok(!ALLOWLIST.includes('git'), 'ein blankes `git` waere die Luecke fuer die schreibenden Unterbefehle');
+  // presence-Partner: lesende git-Unterbefehle stehen sehr wohl drauf.
+  assert.ok(ALLOWLIST.includes('git diff') && ALLOWLIST.includes('git log'));
+});
+
+test('W-01: die Denylist behaelt Vorrang — der Grund in der Meldung bleibt der genaue', () => {
+  // Mutation „Denylist NACH der Allowlist" kam durch die vorhandenen Zusagen; diese hier haelt
+  // ausserdem fest, dass die MELDUNG den richtigen Grund nennt. *Ein „nicht auf der Liste" statt
+  // „enthaelt git commit" verschiebt die Ursache und schickt den naechsten Leser in die Irre.*
+  const e = pruefeEintrag({ id: 'K-1', befehl: 'git ' + 'commit -m x' }, verz);
+  assert.equal(e.stufe, STUFEN.UEBERSPRUNGEN);
+  assert.match(e.hinweis, /enthaelt/, 'die Denylist meldet nicht mehr ihren eigenen Grund');
+});
+
+test('W-01: ein `|` INNERHALB von Anfuehrungszeichen trennt nicht', () => {
+  // Ohne den Schutz zerfiele `node zaehle.mjs datei "'a'|'b'"` in Bruchstuecke, und eines davon
+  // saehe aus wie ein unbekannter Befehl — ein erlaubter Aufruf wuerde faelschlich uebersprungen.
+  assert.equal(nichtErlaubtesGlied('node scripts/zaehle.mjs datei "\'a\'|\'b\'"'), null);
+  assert.deepEqual(befehlsGlieder('node x "a|b"'), ['node x "a|b"']);
+  // presence-Partner: ausserhalb der Anfuehrungszeichen trennt er sehr wohl.
+  assert.equal(befehlsGlieder('echo a | sort').length, 2);
+});
+
+test('W-01: eine Zahl im Befehl ueberlebt den Schutz der Zeichenketten', () => {
+  // **Eigener Fehler, vor dem Bau gefunden:** mein erster Platzhalter war ` 0 `, ` 1 ` … — und
+  // `head -n 3 datei` traegt ` 3 `. Der Ruecktausch haette echten Inhalt durch eine fremde
+  // Zeichenkette ersetzt. *Ein Platzhalter muss etwas sein, das im Bestand nicht vorkommen kann.*
+  assert.equal(nichtErlaubtesGlied('head -n 3 datei'), null);
+  assert.deepEqual(befehlsGlieder("head -n 3 'a b'"), ["head -n 3 'a b'"]);
 });
