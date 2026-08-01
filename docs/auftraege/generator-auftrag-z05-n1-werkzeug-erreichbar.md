@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: Z-05-N1
-  status: aktiv   # das EINE aktive Blatt (S-01) - Z-05 ist gebaut, Yama hat am 01.08. die Reihenfolge entschieden
+  status: abgenommen   # gebaut 01.08., Votum GRUEN vom Evaluator in a0a6e250 21:43 - eingetragen vom Planner, nicht abgenommen vom Planner
 ```
 
 ## Warum es dieses Blatt gibt — und dass es mein Fehler ist

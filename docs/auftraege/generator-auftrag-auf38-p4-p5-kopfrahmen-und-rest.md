@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: AUF-38-P4+P5
-  status: bereit
+  status: gebaut   # fba3083f, 01.08. 21:31 - 118 Stellen, NULL offene. Wartet auf das Votum des Evaluators
 ```
 
 ## Warum P4 und P5 in EINEM Blatt
