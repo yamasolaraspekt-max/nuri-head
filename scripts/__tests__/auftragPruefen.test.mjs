@@ -66,23 +66,40 @@ test('K-02: exit != 0 ⇒ FEHLSCHLAG, mit K-id, Befehl und Exitcode', () => {
   // **Nachgezogen mit AUF-87-N2/K-07:** ein `grep` mit null Treffern ist seit dieser Stufe ein
   // NULLTREFFER, kein Fehlschlag. Der echte Fehlschlag ist ein Befehl, den es nicht gibt —
   // `exit 127`, und genau den trägt `AUFTRAGSSCHEMA.md` (gemessen im Bestandslauf 08:03).
+  //
+  // **W-01 hat diese Aussage GEAENDERT, und die Aenderung ist der Gewinn.** Der Fall wurde ueber
+  // ein Wrapper-Skript erzeugt (`./scripts/gibt-es-nicht.sh`) — und Wrapper werden seit W-01 gar
+  // nicht mehr ausgefuehrt. *Ein Befehl, den es nicht gibt, kann seither keinen Exitcode mehr
+  // liefern, weil er nie startet.* Das ist strikt sicherer: der Validator kann keinen fremden
+  // Text mehr zur Ausfuehrung bringen, auch keinen fehlerhaften.
+  //
+  // Der FEHLSCHLAG-Zweig bleibt erreichbar — ueber einen ERLAUBTEN Befehl, der scheitert; das
+  // prueft die Zusage darunter.
   const p = blatt('k02.md', ['auftrag:', '  id: TEST', 'kriterien:',
     KRIT('K-05', './scripts/gibt-es-nicht.sh')].join('\n'));
   const e = pruefeBlatt(p, verz);
   const treffer = e.eintraege[0];
-  assert.equal(treffer.stufe, STUFEN.FEHLSCHLAG);
+  assert.equal(treffer.stufe, STUFEN.UEBERSPRUNGEN);
   assert.equal(treffer.id, 'K-05');
-  assert.match(treffer.hinweis, /exit \d/, 'der Exitcode fehlt in der Meldung');
+  assert.match(treffer.hinweis, /Erlaubnisliste/, 'die Meldung nennt den Grund nicht');
   const text = bericht(e);
-  assert.match(text, /FEHLSCHLAG/);
   assert.match(text, /gibt-es-nicht/, 'der Befehl steht nicht im Bericht');
+
+  // Der echte Fehlschlag: ein ERLAUBTER Befehl, der scheitert.
+  const q = blatt('k02b.md', ['auftrag:', '  id: TEST', 'kriterien:',
+    KRIT('K-06', 'node --eval-gibt-es-nicht')].join('\n'));
+  const t2 = pruefeBlatt(q, verz).eintraege[0];
+  assert.equal(t2.stufe, STUFEN.FEHLSCHLAG);
+  assert.match(t2.hinweis, /exit \d/, 'der Exitcode fehlt in der Meldung');
 });
 
 test('K-03: exit 0 mit LEERER Ausgabe ⇒ VERDÄCHTIG — eine eigene Stufe', () => {
   // **Der gefährlichere Fall: er sieht aus wie Erfolg.** So ist dem Planner die Grundgesamtheit von
   // T3 durchgerutscht — der Befehl lief, er beschrieb nur einen Stand von vor vier Tagen.
   const p = blatt('k03.md', ['auftrag:', '  id: TEST', 'kriterien:',
-    KRIT('K-01', 'true'), KRIT('K-02', 'echo etwas')].join('\n'));
+    // W-01: `true` steht nicht auf der Erlaubnisliste — es kommt in keinem Blatt vor und ist
+    // reine Test-Kulisse. `printf ''` liefert dasselbe (exit 0, leere Ausgabe) und ist erlaubt.
+    KRIT('K-01', "printf ''"), KRIT('K-02', 'echo etwas')].join('\n'));
   const e = pruefeBlatt(p, verz);
   assert.equal(e.eintraege[0].stufe, STUFEN.VERDAECHTIG);
   assert.equal(e.eintraege[1].stufe, STUFEN.OK);
@@ -232,17 +249,22 @@ test('N2/K-07: die Kette nennt das brechende Glied UND was danach nicht mehr lie
 test('N2/K-07 (Grenze): `exit 127` bleibt FEHLSCHLAG — die Unterscheidung ist der Punkt', () => {
   // **Sonst wäre die neue Stufe ein Freibrief.** `exit 1` von `grep` heißt „nichts gefunden";
   // `exit 127` heißt „den Befehl gibt es nicht" — und genau der steht in `AUFTRAGSSCHEMA.md`.
+  // **W-01: auch hier ist der Wrapper jetzt UEBERSPRUNGEN.** Die Unterscheidung, um die es dieser
+  // Zusage geht — `exit 1` heisst „nichts gefunden", `exit 127` heisst „den Befehl gibt es
+  // nicht" — bleibt gueltig; sie wird nur nicht mehr an einem Wrapper vorgefuehrt, weil der gar
+  // nicht mehr startet. *Der sicherere Zustand.*
   const p = blatt('n2k07c.md', ['auftrag:', '  id: TEST', 'kriterien:',
     KRIT('K-01', './scripts/zaehle-statische-stile.sh x')].join('\n'));
-  assert.equal(pruefeBlatt(p, verz).eintraege[0].stufe, STUFEN.FEHLSCHLAG);
+  assert.equal(pruefeBlatt(p, verz).eintraege[0].stufe, STUFEN.UEBERSPRUNGEN);
   // **Und ein nicht-suchender Befehl mit exit 1 ebenfalls: nur SUCHEN darf null liefern.**
   // (`false` statt eines `node -e`-Aufrufs — dessen Anführungszeichen zerbrechen das Test-YAML,
   // und ein kaputtes Blatt hätte hier den Kopf unlesbar gemacht statt den Befehl zu prüfen.
   // *Erst gebaut, dann daran gescheitert, dann gemerkt.*)
+  // W-01: `false` steht nicht auf der Erlaubnisliste. Ein nicht-suchender, ERLAUBTER Befehl mit
+  // exit != 0 ist `node --eval-gibt-es-nicht` — die Aussage bleibt, der Traeger wechselt.
   const q = blatt('n2k07d.md', ['auftrag:', '  id: TEST', 'kriterien:',
-    KRIT('K-01', 'false')].join('\n'));
+    KRIT('K-01', 'node --eval-gibt-es-nicht')].join('\n'));
   assert.equal(pruefeBlatt(q, verz).eintraege[0].stufe, STUFEN.FEHLSCHLAG);
-  assert.equal(brechendesGlied('false', verz), null);
 });
 
 // --- AUF-87-N2 / K-06: ALLE Blöcke ----------------------------------------------------------------

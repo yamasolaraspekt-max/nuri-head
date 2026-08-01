@@ -69,6 +69,99 @@ export const DENYLIST = [
 export const GATE_MUSTER = ['npm run', 'npx', 'yarn', 'pnpm', 'php artisan', 'composer'];
 
 /**
+ * W-01 — **die ERLAUBNISLISTE. Der Validator fuehrt nur noch aus, was hier steht.**
+ *
+ * ---
+ *
+ * **Der Anlass ist kein Gedankenspiel.** Am 01.08. um 20:01 hat ein Verzeichnislauf wirklich
+ * veroeffentlicht — nicht versehentlich getippt, sondern **ausgefuehrt, weil es als
+ * Abnahmekriterium in einem Blatt stand** (`b01/K-05`, ein Wrapper-Skript).
+ *
+ * **`DENYLIST` konnte das nicht fangen, und keine Erweiterung haette es gekonnt.** Sie prueft
+ * Befehls-TEXT; ein Wrapper-Skript enthaelt keinen. Der Dateiname traegt kein einziges Muster —
+ * *der Text sagt nichts darueber, was die Datei tut.* Eine Liste des Verbotenen kann nur fangen,
+ * was jemand vorher gedacht hat.
+ *
+ * **Deshalb dreht W-01 die Richtung um.** Ein Blatt ist eine Datei, die jede Rolle schreiben darf,
+ * und was darin steht, **passiert**. Was der Validator ausfuehrt, gehoert damit nicht in die Hand
+ * dessen, der das Blatt schreibt.
+ *
+ * ---
+ *
+ * **Die Liste ist aus dem Bestand gemessen, nicht erdacht** (erste Woerter aller
+ * `pruefung.befehl` in `docs/auftraege/`, 01.08.):
+ *
+ * ```text
+ * 52 grep · 38 npm · 37 node · 28 git · 4 bash · 3 php · 1 ls · 1 head · 1 for · 1 find · 1 cd
+ * ```
+ *
+ * **`npm`, `php`, `bash` und Wrapper stehen bewusst NICHT hier.** `npm`/`php` fangen die
+ * `GATE_MUSTER` schon ab (Zustaendigkeit, nicht Sicherheit); `bash` und jedes `./skript` sind
+ * genau der Fall vom 01.08.: **ihr Text sagt nichts ueber ihre Wirkung.**
+ *
+ * **`git` steht nur mit LESENDEN Unterbefehlen drin.** Ein blankes `git` waere die Luecke, durch
+ * die die schreibenden Unterbefehle zurueckkaemen — dann haetten wir die Denylist nur an eine
+ * andere Stelle verschoben.
+ */
+export const ALLOWLIST = [
+  // Lesen und Zaehlen
+  'grep', 'node', 'ls', 'head', 'tail', 'find', 'wc', 'cat', 'sed', 'awk',
+  'sort', 'uniq', 'tr', 'cut', 'printf', 'echo', 'basename', 'dirname', 'stat', 'md5',
+  // Git — ausdruecklich NUR lesend
+  'git diff', 'git log', 'git grep', 'git show', 'git status', 'git rev-list',
+  'git rev-parse', 'git ls-files', 'git branch', 'git cat-file', 'git blame',
+];
+
+/**
+ * **Die Glieder eines Befehls** — eine Kette ist so sicher wie ihr schwaechstes Glied.
+ *
+ * `grep x docs | sed 's/a/b/' | sort` sind DREI Befehle; wer nur den ersten prueft, laesst jede
+ * Kette durch, die harmlos anfaengt.
+ *
+ * **Zeichenketten werden vorher geschuetzt.** Ein Aufruf wie
+ * `node scripts/zaehle.mjs datei "'a'|'b'"` traegt ein `|` INNERHALB von Anfuehrungszeichen; naiv
+ * getrennt zerfiele er in Unsinn, und das Bruchstueck saehe aus wie ein unbekannter Befehl.
+ * *Dieselbe Falle wie in `zaehle.mjs`, dieselbe Loesung.*
+ */
+export function befehlsGlieder(befehl) {
+  const tresor = [];
+  const maskiert = String(befehl).replace(/(['"])(?:\\.|(?!\1)[^\\])*\1/g, (treffer) => {
+    tresor.push(treffer);
+
+    return `${tresor.length - 1}`;
+  });
+
+  return maskiert
+    .split(/\|\||&&|[|;]/)
+    .map((g) => g.trim())
+    .filter(Boolean)
+    .map((g) => g.replace(/(\d+)/g, (_, i) => tresor[Number(i)]));
+}
+
+/**
+ * **Das erste Glied, das NICHT auf der Erlaubnisliste steht** — oder `null`, wenn alle erlaubt sind.
+ *
+ * Geprueft wird das fuehrende Wort, bei `git` die ersten ZWEI Woerter. *Ein Glied, das mit `./`
+ * oder `bash` beginnt, faellt damit durch, ohne dass jemand seinen Inhalt kennen muesste — und
+ * genau das ist der Punkt.*
+ */
+export function nichtErlaubtesGlied(befehl) {
+  for (const glied of befehlsGlieder(befehl)) {
+    const rein = glied.replace(/^[({\s]+/, '');
+    const woerter = rein.split(/\s+/);
+    const eins = woerter[0] ?? '';
+    const zwei = woerter.slice(0, 2).join(' ');
+    if (ALLOWLIST.includes(zwei) || ALLOWLIST.includes(eins)) {
+      continue;
+    }
+
+    return eins || glied;
+  }
+
+  return null;
+}
+
+/**
  * Wie ein Muster erkannt wird — **als Wortform, nicht als Zeichenkette.**
  *
  * **Befund `AUF-87-B2` (P2), und er war berechtigt:** die erste Fassung suchte mit
@@ -179,6 +272,21 @@ export function pruefeEintrag(eintrag, arbeitsverzeichnis) {
     return {
       ...eintrag, stufe: STUFEN.NICHT_MASCHINELL,
       hinweis: `GATE: faehrt "${gate}" — gehoert zum Generator, nicht in den Validator-Lauf`,
+    };
+  }
+  // W-01: **die Erlaubnisliste, zuletzt.** Denylist und Gate behalten Vorrang, damit die Meldung
+  // den genauen Grund nennt. Ein Wrapper faellt hier durch, ohne dass jemand seinen Inhalt kennen
+  // muss — und genau das ist der Punkt.
+  //
+  // **Diese vier Zeilen haben am 01.08. gefehlt, und das Fehlen hat ein zweites Mal
+  // veroeffentlicht.** Die Liste und ihre Prueffunktion standen schon in der Datei; nur der
+  // AUFRUF fehlte. *Ein Mechanismus, den niemand aufruft, ist keine Barriere, sondern ein
+  // Kommentar mit Klammern.*
+  const fremd = nichtErlaubtesGlied(eintrag.befehl);
+  if (fremd) {
+    return {
+      ...eintrag, stufe: STUFEN.UEBERSPRUNGEN,
+      hinweis: `"${fremd}" steht nicht auf der Erlaubnisliste — der Validator fuehrt nur Lesendes aus`,
     };
   }
   try {
