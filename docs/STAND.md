@@ -8,7 +8,7 @@
 > **Regeln für diese Datei:** eine Zeile je Sache · eine Rücknahme ERSETZT die Aussage · was
 > erledigt ist, verschwindet (es steht im Ledger) · **kein Datum ohne Zahl, keine Zahl ohne Befehl.**
 
-**Zuletzt geschrieben:** 01.08.2026, 10:10 · Planner
+**Zuletzt geschrieben:** 01.08.2026, 10:25 · Planner
 
 ---
 
@@ -43,12 +43,14 @@ PB-047  grep -oE 'user[?]-.name' app/Http/Controllers/Dashboard/SidebarCountCont
   ohne Votum**) · Z-01/K-04 mit dem korrigierten Befehl nachziehen · AUF-86 (56 px) ·
   fehlende `.env.testing.example`.
 - **Generator:** **PB-047** — das einzige, was den Merge noch von der Bauseite her sperrt.
+  **Danach liegt AUF-38-P2 bereit** (`7a421871`): 18 offene Inline-Stellen in
+  `GruppenzeileUndSchiene.tsx`, Stil-Brücken-Test als Pflichtteil.
 - **Prüfer:** eine offene **Rückfrage** zu AUF-91 (kein Befund): schlägt ein Objektkopf-Menü durch
   die Sperre, wenn man es bei ≥1024 px öffnet und dann schmaler zieht? Er hat es **nicht im Browser
   gesehen** und schreibt es deshalb bewusst nicht als Befund. Drei Zeilen Probe liegen im Ledger.
 - **Yama:** Papierstopp · PB-042 (Takt) · 18 dichteste Blades in den Browser?
-- **Planner:** schneidet erst wieder, wenn PB-047 weg ist. Danach: **AUF-38-P2** (mit
-  Stil-Brücken-Test als Pflichtteil) · die drei haltbaren Werkzeug-Blätter · **Z-02** (fangKern
+- **Planner:** **AUF-38-P2 ist geschnitten** (01.08. 10:25). Als Nächstes: die drei haltbaren
+  Werkzeug-Blätter (`drehen` · `erkennung-bestaetigen` · `pv-modul`) · **Z-02** (fangKern
   anschließen).
 
 ## 3. Was entschieden ist — gilt, bis es hier ersetzt wird
@@ -62,6 +64,7 @@ PB-047  grep -oE 'user[?]-.name' app/Http/Controllers/Dashboard/SidebarCountCont
 | **PB-047: kein `(int)`** | `user?->name` → `user?->employeeId()`. Ein `(int)` macht aus einem Namen still `0` |
 | **Stil-Brücken-Test** | Jede weitere Stil-Scheibe trägt ihn. Sonst kamen 7 von 8 Mutationen durch |
 | **`style={bezeichner}`** | Nicht Gegenstand von P1/P2. Eigenes Blatt P3, das zuerst das Messwerkzeug erweitert |
+| **AUF-38-P2 geschnitten** | `7a421871`. Restweg danach gemessen, nicht geschätzt: `FussUndUeberlagerungen` 12 offen · `Kopfrahmen` 9 · `HausplanerApp` 1 — zusammen **22**, genau der Erwartungswert von K-01b |
 | **21 Werkzeug-Spezifikationen** | 3 haltbar (`drehen` · `erkennung-bestaetigen` · `pv-modul`), 18 wackelig |
 
 ## 4. ZURÜCKGENOMMEN — nicht wieder aufwärmen
@@ -76,6 +79,7 @@ PB-047  grep -oE 'user[?]-.name' app/Http/Controllers/Dashboard/SidebarCountCont
 | „22 Testdateien lesen `HausplanerApp.tsx`" | 16 direkt, 29 indirekt, 35 zusammen |
 | „Die Fehlerzahl wächst nicht mehr, also ist es behoben" | Am 31.07. hat die Anwendung **null** echte Fehler geschrieben, weil sie **niemand benutzt hat**. Stille ist keine Gesundheit |
 | „`MindestbreiteHinweis.tsx` liegt unter `components/`" | Er liegt unter `app/rahmen/`. **Mein Prüfbefehl zeigte 25 Stunden lang auf einen Pfad, den es nie gab** — siehe §6 Nr. 11 |
+| „`FussUndUeberlagerungen` trägt keine offenen Stellen mehr" | **Sie trägt 12.** Der Satz stand im ersten Entwurf von AUF-38-P2 und ist beim Nachmessen vor dem Schneiden aufgefallen |
 
 ## 5. Zwei harte Regeln, die aus den Fehlern kommen
 
