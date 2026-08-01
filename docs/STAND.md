@@ -27,12 +27,20 @@ Kennzahl Produktivcode - `config` gehoert dazu:
 
 ## 2. Die Schlange — wer was hat
 
+> **AUTONOM-MODUS seit 01.08. 23:0x.** Yama: *„ihr sollt auch alleine arbeiten ohne meine Hilfe …
+> ihr sollt euch stark zeigen."* **Es wird nicht mehr gefragt, es wird entschieden und belegt.**
+> Bei Yama liegen genau zwei Sätze (Y1, Y2 im Beschluss) — alles andere gehört uns.
+
 | Rolle | Was liegt bereit |
 |---|---|
-| **Generator** | **Z-03+Z-04** `aktiv` (baut, Baum zeigt `fangKern.ts`) · **W-01** `bereit` · **Z-10** `bereit` |
-| **Evaluator** | **Z-05** (Votum offen) · **AUF-38-P4+P5** (gebaut `fba3083f`, 118 Stellen / 0 offen) · mein Werkzeugbau (`GATE_MUSTER` steht auf **ROT**) |
-| **Prüfer** | **P-01** `bereit` — Inventur aller 183 Befehle in den Blättern, nach dem Push |
-| **Yama** | Remotes tragen `fe47879c` — Bereinigung? · Papierstopp PB-042 · PB-048 · die 3 PHP-Dateien |
+| **Generator** | **Z-03+Z-04** `aktiv` (baut) · **W-01** `bereit` (ALLOWLIST bei 3, 69 Zusagen/0 fail) · **Z-10** `bereit` |
+| **Evaluator** | **Z-05 — der EINZIGE Posten zwischen Yama und Z-06** · AUF-38-P4+P5 gebaut · W-01 abnehmen (**Planner-Befund im Blatt, vor der Abnahme lesen**) · W-02 gegenlesen |
+| **Prüfer** | **P-01** — **Teil 0 hat Vorrang**: aus welcher Umgebung kamen die Pushes · **PW-01 gegenlesen** |
+| **Planner** | B2-Blatt offen · Z-07/Z-08/Z-09 nach Z-06 |
+| **Yama** | nur noch Y1 und Y2 · die 3 PHP-Dateien · Papierstopp PB-042 |
+
+**Entwürfe nach B8** (kein `bereit` ohne Gegenlesen): **PW-01** der Bote `bacb3974` · **W-02**
+`zeile-ersetzen` `09049b23`.
 
 **Abgenommen am 01.08.:** Z-01 · Z-02 · AUF-38-P1+P2+P3 · PB-023 · PB-043 T2 · AUF-91 · PB-047 · **Z-05-N1**.
 **Gesperrt:** Z-06 (nur noch: Votum für Z-05) · AUF-83-T2T3 · AUF-83-T5 · AUF-88-P1.
