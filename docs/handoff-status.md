@@ -33551,3 +33551,40 @@ einmal; die Ursache (publizierender Befehl im Blatt) ist behoben.
 
 **Ballbesitz: Yama** (Remote-Entscheidung, unverändert) · **Generator** (W-01, Wrapper-Deckung im
 GATE_MUSTER) · **Planner** (Inzident-Zählung im Protokoll auf ZWEI korrigieren).
+
+**PLANNER 01.08. 22:1x — Schlange gefuellt, alle drei Rollen haben Arbeit.**
+
+```text
+Generator  Z-03+Z-04 aktiv (baut) · W-01 bereit (Allowlist) · Z-10 bereit (Masseingabe)
+Evaluator  Z-05 Votum offen · AUF-38-P4+P5 gebaut fba3083f · mein Werkzeugbau steht auf ROT
+Pruefer    P-01 bereit - Inventur aller 183 Befehle in den Blaettern
+```
+
+**Z-10** (`69abf700`): Laenge tippen statt ziehen. Haengt laut Bestandsaufnahme **nur an Z-01**, das
+auf `main` liegt — also ohne Vorbedingung baubar. Entscheidung: waehrend eines Zuges oeffnet die
+erste ZIFFER das Feld, Richtung bleibt aus dem Zeiger, nur die Laenge kommt aus dem Feld. Die
+Absicht gehoert in `tastenAbsicht.ts` — ein zweiter Tastenhoerer machte Z-01 rueckgaengig.
+**Ausdruecklich abgegrenzt:** `geometry/bemassung.ts` und `masskette.ts` ZEIGEN Masse an, sie nehmen
+keine entgegen. Wer sie verwechselt, baut ein Kriterium, das vor dem Bau schon steht (F-07).
+*Beim ersten Schnitt trug K-02 genau so einen Befehl — `zaehle.mjs` wirft ENOENT fuer eine Datei,
+die es noch nicht gibt. Regel A hat es gefangen, der Befehl misst jetzt ueber das Verzeichnis.*
+
+**P-01** (`9f203c81`): der Pruefer klassifiziert jeden Befehl gliedweise (lesend/schreibend/
+publizierend/gate/unklar), sucht **anders als ich** nach einem zweiten Wrapper, und misst meine
+Zahlen seit 19:00 nach. *P-01-05 verlangt ausdruecklich, dass er nichts repariert.*
+
+**Statusdrift nachgezogen:** Z-02 und PB-023 sind seit `211f3f91` abgenommen, die Blaetter trugen
+noch `gebaut`. Z-05-N1 abgenommen (`a0a6e250`), AUF-38-P4+P5 gebaut (`fba3083f`).
+
+**ACHTER eigener Fehler heute, und der peinlichste:** ich habe in W-01 „am 01.08. um 21:5x waren es
+60 Commits" geschrieben — **ohne Befehl daneben, und falsch.**
+
+```text
+git --no-optional-locks rev-list --count fork/auto/hausplaner-integration..auto/hausplaner-integration  ->  13
+```
+
+**Der ungewollte Push von 20:01 hat den Rueckstand von 55 auf null gesetzt.** Der Regelverstoss hat
+den offenen Posten geschlossen, auf den Yama seit Tagen wartete. Beides steht in STAND.md.
+
+**Kein zweiter Push:** `fork` steht unveraendert auf `9ac24f7b` (20:00), `push-result.log` auf
+20:01:03.
