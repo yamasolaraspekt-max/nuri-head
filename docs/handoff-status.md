@@ -33149,3 +33149,33 @@ Bericht (Z-05 meldete 7 statt 9 Eintraege, ohne ein Wort). Beide Klassen haben *
 nur eine Regel — R9 gilt ab der zweiten Wiederholung.
 **Offen und benannt:** der Validator ist ueber die volle Schlange auf der Geraete-VM nicht in 45 s
 fahrbar (npm-Gates in AUF-83-T2T3 K-07 und AUF-88-P1); portionsweise fahren macht S-01/S-06 unbrauchbar.
+
+**PLANNER-NACHTRAG 20:0x — der 45-s-Posten ist geschlossen, und zwar mit einer Barriere statt 46 Vorsaetzen.**
+
+Gemessen: ueber `docs/auftraege/` standen **46** `pruefung.befehl` mit `npm run`. Der Validator fuhr sie
+alle aus — das war der Grund, warum der Verzeichnislauf auf der Geraete-VM nicht durchkam, und nicht die
+drei gesperrten Blaetter, die ich zuerst verdaechtigt hatte. **46 Blaetter einzeln umzubauen waeren 46
+Vorsaetze gewesen; R9 verlangt hier eine Barriere.**
+
+`GATE_MUSTER` in `scripts/auftrag-pruefen.mjs` (`8f81c3f7`): `npm run`, `npx`, `yarn`, `pnpm`,
+`php artisan`, `composer` werden als **GATE** gemeldet statt gefahren — getrennt von der Denylist, weil
+der Grund ein anderer ist (Zustaendigkeit, nicht Gefahr). Die Denylist behaelt Vorrang, `npm run build`
+bleibt UEBERSPRUNGEN.
+
+```text
+node --test scripts/__tests__/auftragPruefen.test.mjs scripts/__tests__/zaehle.test.mjs
+   -> 63 pass, 0 fail   (vorher 57; 6 neu, darunter ZWEI rote Gegenproben)
+node scripts/auftrag-pruefen.mjs $(grep -l '^  status:' docs/auftraege/*.md)
+   -> 27 Blaetter in 3,6 s · S-01 genau ein aktiver (Z-05-N1) · S-06 3 baubare
+```
+
+**GEBAUT, NICHT ABGENOMMEN.** Das ist Planner-Werkzeug und braucht ein Votum des Evaluators — zusammen
+mit dem uebrigen Werkzeugbau vom 01.08.
+
+**Was der Lauf jetzt sichtbar macht und was NICHT angefasst wurde:** 3 Fehlschlaege, ~15 Nulltreffer und
+ein S-04 auf `ruht`/`gesperrt`-Blaettern (u.a. AUF-87 K-07 ruft `scripts/auftrag-pruefen.sh` statt `.mjs`).
+**Bewusst liegen gelassen** — das Werkzeug repariert nichts, sonst waere der erste saubere Lauf ein
+Massenumbau von 27 Dateien. Sie stehen jetzt gemessen da, statt hinter einem Timeout zu verschwinden.
+
+**Z-06** nennt jetzt beide Sperrbedingungen: Votum fuer Z-05 **und** Z-05-N1 gebaut.
+**An Yama unveraendert: 55 ungepushte Commits.**
