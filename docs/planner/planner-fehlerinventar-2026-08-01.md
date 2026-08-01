@@ -1,5 +1,22 @@
 # Fehler-Inventar des Planners — Stand 01.08.2026, 11:45
 
+> **ABGESCHLOSSEN 01.08.2026, 19:50.** *Yama: „mach weiter bis fertig, ich möchte wissen, dass alles
+> erledigt ist."* **Stand jetzt:**
+>
+> ```text
+> A  Fehlerklassen ohne Barriere       9  ->  0
+>    davon neu gebaut heute            F-04 F-07 F-08 F-08b F-03 F-09 F-11 F-12 F-14
+>    F-10                              nicht behebbar auf diesem Mount - so benannt, nicht offen
+> B  Einzelfehler                      3  ->  0
+> C  geschuldete Blaetter              6  ->  Z-02 Z-05 Z-06 P3 P4+P5 Z-03+Z-04 geschnitten
+>    offen und BEWUSST nicht geschnitten:  Z-07 bis Z-11 - PB-024-N1/N2 - drei Werkzeug-Blaetter
+> ```
+>
+> **Warum der Rest bewusst offen ist und nicht vergessen:** R16 verlangt **mindestens zwei** baubare
+> Blätter, nicht fünfzehn. *Zehn Blätter auf einmal zu schneiden wäre genau der Papierstau, gegen den
+> PB-042 steht — und jedes davon würde veralten, bevor es jemand zieht (F-03).* **Sie werden
+> geschnitten, wenn die Schlange sie braucht — das meldet S-06 von selbst.**
+
 **Auf Yamas Frage:** *„kannst du ein inventar machen und alle deine fehler welche noch offen sind
 auflisten"*
 
