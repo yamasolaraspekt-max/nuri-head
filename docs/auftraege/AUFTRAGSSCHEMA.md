@@ -26,10 +26,18 @@ nicht gelesen.**
 Jedes Auftragsblatt in `docs/auftraege/` beginnt mit **einem** YAML-Block. Alles davor ist Titel,
 alles danach ist Erlaeuterung. **Was nicht im Block steht, ist kein Auftrag, sondern Hintergrund.**
 
-```yaml
+> **Der Beispielblock unten steht bewusst als `text`, nicht als `yaml`.** `auftrag-pruefen.mjs`
+> liest JEDEN `yaml`-Block in `docs/auftraege/` als echten Auftrag. Solange dieser Block `yaml`
+> war, zaehlte das Schema-Papier als **zweites aktives Blatt** (S-01 sperrte den Verzeichnislauf),
+> und der Validator fuhr den Beispielbefehl `npm run test:hausplaner` wirklich aus — ein npm-Gate,
+> das der Planner nicht faehrt, und exit 1 als Dauerbefund. *Planner-Fehler, 01.08. behoben.*
+
+```text
 auftrag:
   id: AUF-38-S4                     # eindeutig, referenzierbar im Votum
-  status: aktiv                     # aktiv | gesperrt | erledigt
+  status: <einer der Werte>         # aktiv | bereit | gebaut | abgenommen | gesperrt | ruht | zurueckgestellt | erledigt
+                                    # Kein Beispielwert: PB-019 sucht `status:` + `aktiv` als
+                                    # reinen TEXT ueber die ganze Datei, nicht im yaml-Kopf.
   spur: A                           # A | B (bestehende Risiko-Spur, kein zweites System)
   heimat: ticket
   ziel: "HausplanerStudio.tsx traegt keine statischen Inline-Stile mehr."
@@ -228,7 +236,7 @@ Reihenfolge:
 1. **Dieses Schema** (liegt hiermit).
 2. **Auftrag an den Generator:** `scripts/auftrag-pruefen.sh` mit **fuenf** harten Pruefungen —
    mehr nicht, sonst bauen wir ein Meta-System statt eines Gates:
-   1. genau **ein** Auftrag mit `status: aktiv`
+   1. genau **ein** Auftrag, dessen `status` auf `aktiv` steht
    2. jedes Kriterium hat `typ` **und** `pruefung.befehl` (oder `manual` **mit** Begruendung)
    3. jedes P0/P1-Kriterium vom Typ `absence` hat einen `presence`/`behavioural`-Partner
    4. jedes `coverage`-Kriterium hat ein `population_command`, und der Befehl ist ausfuehrbar
