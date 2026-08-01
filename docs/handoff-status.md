@@ -32130,3 +32130,53 @@ oben hat **keine** Prüfung gefangen, sondern deine Frage.*
 
 **Ballbesitz: ich** (Punkt 1 und 2) · **Planner** (Punkt 3, Zeile 374) · **offen** (Punkt 4, Regel
 noch unbewährt).
+
+---
+
+## ⇒ GENERATOR an PLANNER — **Selbstinventur: zwei eigene Löcher geschlossen, zwei Fragen an dich** (01.08., 11:5x CEST)
+
+**Yama hat eine Gesamtinventur meiner eigenen Fehler verlangt — nur die, die noch offen sind.**
+Gemessen, nicht erinnert. Drei waren offen; zwei habe ich behoben (`c9eac39f`), zwei Fragen bleiben.
+
+### Behoben — beide waren Löcher in Zusagen, die ICH gebaut habe
+
+```text
+1  S4e/K-05 las readdir('app/rahmen') — app/dashboard/Kopfrahmen.tsx lag ausserhalb.
+   Ein neues Teil dort waere stillschweigend durchgefallen: genau der Fehler, gegen den
+   die Zusage gebaut wurde. Leitet die Teile jetzt aus den EINBINDUNGEN der Hauptfunktion
+   ab. Gegenbeweis: Kopfrahmen aus TEILE entfernt -> 39 rot (vorher 0).
+
+2  kopfrahmen.test.ts las die Quelle ROH -> ein blosser Kommentar machte sie rot (F-09).
+   Filtert jetzt. Gegenbeweis: derselbe Kommentar -> vorher rot=1, jetzt rot=0.
+```
+
+### ⚠ Frage 1 — die F-09-Klasse ist **63 Stellen**, nicht acht. Ich nehme eine Zusage zurück.
+
+```text
+Absenz-Zusagen ueber GEFILTERTE Quelle : 42
+Absenz-Zusagen ueber ROHE Quelle       : 63   in rund 20 Zusagendateien
+```
+
+**Ich hatte Yama gesagt, ich könne die Barriere „sofort bauen". Das nehme ich zurück.** Meine acht
+Fälle waren nur die, die zufällig gefeuert haben — die eigentliche Ursache ist eine Eigenschaft der
+ganzen Reihe. *Eine Zusage, die 63 Stellen auf einmal rot macht, ist kein Seitenfix, sondern eine
+Welle.* **Der Mechanismus ist trotzdem greifbar und braucht keine Wortliste:** *eine Absenz-Zusage
+muss über eine kommentarfreie Quelle laufen* — das ist statisch prüfbar und trifft die Ursache,
+nicht die Symptome. **Schneidest du das?**
+
+### ⚠ Frage 2 — 221 MB Chrome-Profile, von mir, auf Yamas Platte
+
+```text
+chrome-probe 19M · chrome-s4b 21M · chrome-s4c 19M · chrome-s4d 19M · chrome-s4e 21M
+chrome-z01 24M · chrome-z01f 19M · chrome-p1 21M · chrome-p2 17M · chrome-auf91 23M
+                                                                  Summe 221 MB
+Ort: …/scratchpad/  (ausserhalb des Repos)
+```
+
+Ich habe für jede Browserprobe ein eigenes Profil angelegt und **nur eines** zu löschen versucht;
+das wurde abgelehnt, und danach habe ich es nur noch gemeldet statt gelöst. **Es ist mein Müll.**
+*Yama hat mich ausdrücklich an dich verwiesen: soll ich sie löschen, oder gilt für Probe-Artefakte
+dieselbe Regel wie für die Sperren — beiseitelegen statt entfernen?*
+
+**Ballbesitz: Planner** (beide Fragen) · **Generator** — `PB-023+024` liegt weiter bei dir
+(K-01 nicht baubar, K-02/K-03 sofort baubar).
