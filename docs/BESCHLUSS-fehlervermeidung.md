@@ -33,6 +33,7 @@ steht. Alles, was die Maschine verlässt, geht bis ganz nach rechts.**
 | **B5** | **Keine Aussage über eine Fähigkeit ohne einen Befehl, der sie ausübt.** Wer sagt „ich habe X getan" oder „X ist passiert", zeigt den Befehl, der es belegt — nicht die Datei, die danebenliegt | **3** | am 01.08. haben drei Rollen einen Push zugeordnet; `git ls-remote` hätte alle drei widerlegt | alle |
 | **B6** | **Keine Zeichenketten-Chirurgie an Dateien.** Kein `head`/`tail`-Splice, kein `perl -pi`, kein `python`-Ersetzen an Quell- oder Auftragsdateien. Ein neues Werkzeug unter `scripts/` (Arbeitstitel **zeile-ersetzen**) zeigt die Grenzzeilen, ersetzt, prüft die Datei danach und schreibt nur bei Erfolg | **4** | das Werkzeug existiert und wird benutzt | Planner schneidet, Generator baut |
 | **B7** | **Nach einem abgelehnten oder fehlgeschlagenen Aufruf wird die ganze Änderung neu hergeleitet** — nie ein erinnerter Teil davon wiederholt | **3** | *„Das war der Moment, in dem der Push entstand."* (Generator, 01.08.) | alle |
+| **B9** | **Eine benannte Kante ohne Zusage ist Prosa.** Jede Zeile der Kantenliste hat entweder ein Kriterium, das sie verriegelt, oder einen Halbsatz, warum bewusst keines | **3** | *Auflage des Evaluators beim ersten B8-Gegenlesen (01.08. 23:0x): W-02 nannte die md5-Drift und verriegelte sie nicht — daraus wurde K-08* | alle |
 
 **B3, B4, B5 und B7 stehen bewusst auf Stufe 3.** Sie sind Regeln, keine Mechanik — und Regeln
 halten nur, solange jemand daran denkt. **R9 gilt: bei der zweiten Wiederholung derselben Klasse

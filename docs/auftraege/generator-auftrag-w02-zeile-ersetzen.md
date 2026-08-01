@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: W-02
-  status: entwurf   # B8 - Werkzeug-Blatt, Gegenleser ist der Evaluator
+  status: bereit   # Beide Auflagen des Evaluators umgesetzt: K-08 (md5-Drift) neu, K-03 um DATEIANFANG/DATEIENDE erweitert, .tsx-Grenze in den Kopf. Planner, 01.08. 23:2x
   gegengelesen_von: evaluator
   gegengelesen_am: "2026-08-01 23:0x"
   befund: >
@@ -79,6 +79,12 @@ sondern **gar nicht geschrieben**. Das ist der Unterschied zwischen Stufe 3 und 
 **Kein `unlink`, kein `mv` über den Mount:** die Datei wird per Truncate-und-Schreiben ersetzt
 (`cat neu > ziel`-Semantik), weil `mv` auf diesem Mount an F-10 scheitert.
 
+**Bekannte Grenze, vom Evaluator benannt (23:0x) und in den Werkzeugkopf gehörend:** die
+Klammerbilanz für `.tsx` bricht an **Template-Literalen mit Backticks** — ein `` ` `` im String
+verschiebt die Zählung. *Deshalb ist die `.tsx`-Prüfung ausdrücklich eine Bilanz und keine
+Syntaxprüfung; sie fängt den groben Fall und nicht jeden. Wer sie für vollständig hält, verlässt
+sich auf etwas, das sie nicht leistet.*
+
 ## Nahtstellen
 
 ```text
@@ -146,7 +152,12 @@ kriterien:
       schritte: |
         md5 vor und nach `--zeigen` identisch, und die Ausgabe enthaelt die Zeilen
         von-1, von, bis und bis+1 - also die Grenzen, an denen ich viermal daneben lag.
-      erwartet: "md5 gleich, vier Grenzzeilen in der Ausgabe"
+        AUFLAGE des Evaluators (23:0x): die RAENDER ausdruecklich zeigen, nicht schweigen.
+          von = 1        -> es gibt keine Zeile 0    -> Ausgabe sagt "DATEIANFANG"
+          bis = letzte   -> es gibt keine bis+1      -> Ausgabe sagt "DATEIENDE"
+        Schweigt das Werkzeug an dieser Stelle, sieht der Rand aus wie eine leere Zeile -
+        und genau daraus entsteht die off-by-one-Klasse, gegen die es gebaut wird.
+      erwartet: "md5 gleich, vier Grenzzeilen; an den Raendern DATEIANFANG/DATEIENDE statt Leere"
 
   - id: K-04
     typ: behavioural
@@ -194,6 +205,27 @@ kriterien:
         bei false trotzdem schreiben · --zeigen schreibt doch · Zaun-Zaehlung ohne yaml-Ladeprobe ·
         Grenzen off-by-one (von statt von-1).
         Wie viele kommen durch?
+
+  - id: K-08
+    typ: behavioural
+    kritikalitaet: P1
+    aussage: "Der Baum darf sich zwischen Lesen und Schreiben nicht bewegt haben."
+    ausgefuehrt_von: generator
+    pruefung:
+      typ: gate
+      schritte: |
+        AUFLAGE des Evaluators (23:0x) - Kante 5 war benannt und unverriegelt.
+        *Eine benannte Kante ohne Zusage ist Prosa.*
+        Das Werkzeug merkt sich die md5 der Datei BEIM LESEN und vergleicht sie
+        unmittelbar VOR dem Schreiben:
+          md5(lesen) == md5(vor schreiben)   -> schreiben
+          md5 abweichend                     -> KEIN Schreiben, Meldung mit beiden Summen
+        Zusagen: gleiche Summe -> geschrieben · Datei zwischendurch veraendert -> NICHT
+        geschrieben UND byte-identisch zur Fremdaenderung (die fremde Arbeit ueberlebt).
+        Das ist derselbe Gedanke wie S-10 im Validator, eine Ebene tiefer: wer misst,
+        waehrend sich der Baum bewegt, misst nichts - wer SCHREIBT, waehrend er sich
+        bewegt, zerstoert.
+      erwartet: "zwei Zusagen, davon eine ROTE"
 ```
 
 ## Kantenliste
