@@ -14,7 +14,7 @@ auftrag:
 getippt — **ausgeführt, weil es als Abnahmekriterium in einem Blatt stand**:
 
 ```text
-b01/K-05   befehl: "./push-integration-sicher.command && cat push-result.log"
+b01/K-05   befehl: "./<der-push-wrapper>.command && cat <sein-log>"
 ```
 
 **Der Lauf war meiner** (Planner, 20:00). Der Evaluator hat den Inzident um 21:17 gemeldet und ihn
@@ -22,7 +22,7 @@ sich selbst zugeschrieben; die Zeitstempel sagen etwas anderes: `push-result.log
 geschrieben, und auf beiden Remotes steht `9ac24f7b` — mein Commit von 20:00.
 
 **Meine Barriere `GATE_MUSTER` (`8f81c3f7`) hat das nicht gefangen, und sie konnte es nicht.** Sie
-prüft **Befehls-Text**. Ein Wrapper-Skript enthält keinen Text: `./push-integration-sicher.command`
+prüft **Befehls-Text**. Ein Wrapper-Skript enthält keinen Text: `./<der-push-wrapper>.command`
 trägt weder `git push` noch `npm` noch sonst ein Muster. *Der Evaluator hat dafür ROT gegeben. Das
 ROT ist berechtigt und ich nehme es an.*
 
@@ -123,12 +123,19 @@ kriterien:
     pruefung:
       typ: gate
       schritte: |
-        Zusage mit dem ECHTEN Befehl aus b01/K-05:
-          pruefeEintrag({ befehl: './push-integration-sicher.command && cat push-result.log' })
+      schritte: |
+        NIEMALS DEN ECHTEN BEFEHLSNAMEN IN EINE ZUSAGE. Hier stand bis 01.08. 22:1x der
+        WIRKLICHE Wrapper-Name aus b01/K-05. Das war derselbe Fehler wie in b01, nur eine
+        Ebene hoeher: ein publizierender Befehl in einem Blatt - diesmal als Testfall.
+        Greift die Allowlist beim Entwickeln noch nicht, fuehrt `pruefeEintrag` ihn AUS.
+        Die Form ist der Pruefgegenstand, nicht der Name. Nimm einen Namen, der NICHTS tut:
+          pruefeEintrag({ befehl: './gibt-es-nicht.command && cat egal.log' })
           -> stufe UEBERSPRUNGEN, Hinweis nennt das nicht gelistete Programm
         Und die Umkehrung, die die Textpruefung nicht faengt:
-          'grep -n x datei && ./push-integration-sicher.command'
+          'grep -n x datei && ./gibt-es-nicht.command'
           -> ebenfalls UEBERSPRUNGEN, obwohl das ERSTE Glied erlaubt ist
+        Die Datei darf nicht existieren. Waere sie da und die Allowlist noch nicht scharf,
+        liefe sie.
       erwartet: "beide UEBERSPRUNGEN"
 
   - id: W-01-03
